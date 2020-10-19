@@ -75,7 +75,7 @@ jobs:
     - name: Build          
       run: |
         T_ID=${{ secrets.TELEMETRY_TRACK_ID }}; if [ -z "$T_ID" ]; then T_ID="''"; fi
-        bash ./build/ci/macos/build.sh -n ${{ github.run_id }} --telemetry $T_ID
+        bash ./build/ci/macos/build.sh -n ${{ github.run_id }} --telemetry $T_ID --build_mu4 OFF
     - name: Package 
       run: |
         S_S="${{ secrets.MAC_SIGN_CERTIFICATE_ENCRYPT_SECRET }}"; if [ -z "$S_S" ]; then S_S="''"; fi
