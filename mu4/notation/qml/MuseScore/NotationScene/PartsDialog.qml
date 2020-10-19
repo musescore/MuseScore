@@ -10,12 +10,16 @@ import MuseScore.NotationScene 1.0
 QmlDialog {
     id: root
 
-    width: 600
-    height: 370
+    width: 664
+    height: 558
 
     modal: true
 
+    title: qsTrc("notation", "Parts")
+
     Rectangle {
+        id: content
+
         anchors.fill: parent
 
         color: ui.theme.popupBackgroundColor
@@ -24,9 +28,11 @@ QmlDialog {
             id: partsModel
         }
 
-        ItemSelectionModel {
-            id: selectionModel
-            model: partsModel
+        QtObject {
+            id: privateProperties
+
+            readonly property int sideMargin: 36
+            readonly property int buttonsMargin: 24
         }
 
         Component.onCompleted: {
@@ -35,20 +41,21 @@ QmlDialog {
 
         ColumnLayout {
             anchors.fill: parent
-            anchors.margins: 20
 
-            spacing: 30
+            spacing: 0
 
             Item {
                 Layout.fillWidth: true
                 Layout.preferredHeight: childrenRect.height
+                Layout.topMargin: privateProperties.sideMargin
 
                 StyledTextLabel {
                     anchors.left: parent.left
+                    anchors.leftMargin: privateProperties.sideMargin
 
                     text: qsTrc("notation", "Parts")
 
-                    font.pixelSize: 18
+                    font.pixelSize: 28
                 }
 
                 FlatButton {
@@ -68,121 +75,29 @@ QmlDialog {
                     id: deleteButton
 
                     anchors.right: parent.right
+                    anchors.rightMargin: privateProperties.buttonsMargin
 
                     icon: IconCode.DELETE_TANK
 
                     onClicked: {
-                        partsModel.removeParts(selectionModel.selectedIndexes)
-                        selectionModel.clear()
+                        partsModel.removeSelectedParts()
                     }
                 }
             }
 
-            ListView {
-                id: view
-
-                Layout.preferredHeight: 200
+            PartsView {
                 Layout.fillWidth: true
 
-                spacing: 0
-
                 model: partsModel
-
-                boundsBehavior: Flickable.StopAtBounds
-                clip: true
-
-                readonly property int margin: 26
-
-                header: Item {
-                    width: parent.width
-                    height: childrenRect.height
-
-                    Column {
-                        anchors.bottom: parent.bottom
-                        anchors.bottomMargin: view.spacing
-
-                        width: parent.width
-
-                        spacing: 16
-
-                        StyledTextLabel {
-                            anchors.left: parent.left
-                            anchors.leftMargin: view.margin
-
-                            text: qsTrc("notation", "Name")
-                            font.capitalization: Font.AllUppercase
-                            font.pixelSize: 10
-                        }
-
-                        SeparatorLine {}
-                    }
-                }
-
-                delegate: Rectangle {
-                    id: partRect
-
-                    width: parent.width
-                    height: 40
-
-                    color: "transparent"
-                    opacity: 1
-
-                    StyledTextLabel {
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.left: parent.left
-                        anchors.leftMargin: view.margin
-
-                        text: model.title
-
-                        font.bold: true
-                    }
-
-                    SeparatorLine { anchors.bottom: parent.bottom }
-
-                    property bool selected: false
-
-                    Connections {
-                        target: selectionModel
-
-                        function onHasSelectionChanged() {
-                            if (!selectionModel.hasSelection) {
-                                selected = false
-                            }
-                        }
-                    }
-
-                    MouseArea {
-                        id: mouseArea
-
-                        anchors.fill: parent
-
-                        onClicked: {
-                            var index = partsModel.index(model.row, 0)
-                            selectionModel.select(index, ItemSelectionModel.Select)
-                            selected = !selected
-                        }
-                    }
-
-                    states: [
-                        State {
-                            name: "SELECTED"
-                            when: selected
-
-                            PropertyChanges {
-                                target: partRect
-                                color: ui.theme.accentColor
-                                opacity: ui.theme.buttonOpacityHit
-                            }
-                        }
-                    ]
-                }
             }
 
             Row {
                 Layout.preferredHeight: childrenRect.height
-                Layout.alignment: Qt.AlignRight
+                Layout.bottomMargin: privateProperties.buttonsMargin
+                Layout.rightMargin: privateProperties.buttonsMargin
+                Layout.alignment: Qt.AlignRight | Qt.AlignBottom
 
-                spacing: 16
+                spacing: 12
 
                 FlatButton {
                     text: qsTrc("notation", "Cancel")
@@ -197,7 +112,7 @@ QmlDialog {
 
                     onClicked: {
                         partsModel.apply()
-                        partsModel.openParts(selectionModel.selectedIndexes)
+                        partsModel.openSelectedParts()
                         root.hide()
                     }
                 }

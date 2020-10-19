@@ -26,6 +26,8 @@
 #include "context/iglobalcontext.h"
 #include "iexcerptnotation.h"
 
+class QItemSelectionModel;
+
 namespace mu::notation {
 class PartListModel : public QAbstractListModel
 {
@@ -42,20 +44,25 @@ public:
 
     Q_INVOKABLE void load();
     Q_INVOKABLE void createNewPart();
-    Q_INVOKABLE void removeParts(const QModelIndexList& indexes);
-    Q_INVOKABLE void openParts(const QModelIndexList& indexes);
+    Q_INVOKABLE void selectPart(int index);
+    Q_INVOKABLE void removeSelectedParts();
+    Q_INVOKABLE void openSelectedParts();
     Q_INVOKABLE void apply();
 
 private:
     IMasterNotationPtr masterNotation() const;
+    QList<int> selectedRows() const;
 
     enum Roles {
         RoleTitle = Qt::UserRole + 1,
+        RoleIsSelected,
+        RoleIsMain
     };
 
+    QItemSelectionModel* m_selectionModel = nullptr;
     QHash<int, QByteArray> m_roles;
-    std::vector<IExcerptNotationPtr> m_excerpts;
-    std::vector<IExcerptNotationPtr> m_excerptsToRemove;
+    QList<IExcerptNotationPtr> m_excerpts;
+    QList<IExcerptNotationPtr> m_excerptsToRemove;
 };
 }
 
