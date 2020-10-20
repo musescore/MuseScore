@@ -1249,13 +1249,11 @@ MidiActionList NotationParts::convertedMidiActions(const QList<Ms::NamedEventLis
         action.description = coreAction.descr;
 
         for (const Ms::MidiCoreEvent& midiCoreEvent: coreAction.events) {
-            midi::Event midiEvent;
-            midiEvent.setChannel(midiCoreEvent.channel());
-            midiEvent.setType(static_cast<midi::EventType>(midiCoreEvent.type()));
-
-            //!FIXME
-            //midiEvent.a = midiCoreEvent.dataA();
-            //midiEvent.b = midiCoreEvent.dataB();
+            midi::Event midiEvent(midiCoreEvent.channel(),
+                                  static_cast<midi::EventType>(midiCoreEvent.type()),
+                                  midiCoreEvent.dataA(),
+                                  midiCoreEvent.dataB()
+                                  );
 
             action.events.push_back(midiEvent);
         }
