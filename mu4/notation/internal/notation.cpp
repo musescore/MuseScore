@@ -38,6 +38,14 @@
 using namespace mu::notation;
 using namespace Ms;
 
+static const QString SUBTITLE_KEY("subtitle");
+static const QString COMPOSER_KEY("composer");
+static const QString LYRICIST_KEY("lyricist");
+static const QString COPYRIGHT_KEY("copyright");
+static const QString TRANSLATOR_KEY("translator");
+static const QString ARRANGER_KEY("arranger");
+static const QString CREATION_DATE_KEY("creationDate");
+
 Notation::Notation(Score* score)
 {
     m_scoreGlobal = new MScore(); //! TODO May be static?
@@ -119,15 +127,26 @@ Meta Notation::metaInfo() const
     Meta meta;
 
     meta.title = score()->title();
-    meta.subtitle = score()->metaTag("subtitle");
-    meta.composer = score()->metaTag("composer");
-    meta.lyricist = score()->metaTag("lyricist");
-    meta.copyright = score()->metaTag("copyright");
-    meta.translator = score()->metaTag("translator");
-    meta.arranger = score()->metaTag("arranger");
-    meta.creationDate = QDate::fromString(score()->metaTag("creationDate"), Qt::ISODate);
+    meta.subtitle = score()->metaTag(SUBTITLE_KEY);
+    meta.composer = score()->metaTag(COMPOSER_KEY);
+    meta.lyricist = score()->metaTag(LYRICIST_KEY);
+    meta.copyright = score()->metaTag(COPYRIGHT_KEY);
+    meta.translator = score()->metaTag(TRANSLATOR_KEY);
+    meta.arranger = score()->metaTag(ARRANGER_KEY);
+    meta.creationDate = QDate::fromString(score()->metaTag(CREATION_DATE_KEY), Qt::ISODate);
 
     return meta;
+}
+
+void Notation::setMetaInfo(const Meta& meta)
+{
+    score()->setMetaTag(SUBTITLE_KEY, meta.subtitle);
+    score()->setMetaTag(COMPOSER_KEY, meta.composer);
+    score()->setMetaTag(LYRICIST_KEY, meta.lyricist);
+    score()->setMetaTag(COPYRIGHT_KEY, meta.copyright);
+    score()->setMetaTag(TRANSLATOR_KEY, meta.translator);
+    score()->setMetaTag(ARRANGER_KEY, meta.translator);
+    score()->setMetaTag(CREATION_DATE_KEY, meta.creationDate.toString());
 }
 
 void Notation::setViewSize(const QSizeF& vs)

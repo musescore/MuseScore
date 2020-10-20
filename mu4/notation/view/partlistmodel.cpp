@@ -85,9 +85,50 @@ void PartListModel::createNewPart()
 
 void PartListModel::selectPart(int index)
 {
+    if (!isIndexValid(index)) {
+        return;
+    }
+
     QModelIndex modelIndex = this->index(index);
     m_selectionModel->select(modelIndex, QItemSelectionModel::SelectionFlag::Toggle);
     emit dataChanged(modelIndex, modelIndex);
+}
+
+void PartListModel::removePart(int index)
+{
+    if (!isIndexValid(index)) {
+        return;
+    }
+
+    beginRemoveRows(QModelIndex(), index, index);
+    m_excerpts.removeAt(index);
+    endRemoveRows();
+}
+
+void PartListModel::setPartTitle(int index, const QString& name)
+{
+    if (!isIndexValid(index)) {
+        return;
+    }
+
+    IExcerptNotationPtr notation = m_excerpts[index];
+    Meta meta = notation->metaInfo();
+
+    if (meta.title == name) {
+        return;
+    }
+
+    meta.title = name;
+    notation->setMetaInfo(meta);
+
+    QModelIndex modelIndex = this->index(index);
+    emit dataChanged(modelIndex, modelIndex);
+}
+
+void PartListModel::copyPart(int index)
+{
+    Q_UNUSED(index)
+    NOT_IMPLEMENTED;
 }
 
 void PartListModel::removeSelectedParts()
@@ -103,10 +144,7 @@ void PartListModel::removeSelectedParts()
 
     for (IExcerptNotationPtr excerpt : m_excerptsToRemove) {
         int row = m_excerpts.indexOf(excerpt);
-
-        beginRemoveRows(QModelIndex(), row, row);
-        m_excerpts.removeAt(row);
-        endRemoveRows();
+        removePart(row);
     }
 
     m_selectionModel->clear();
@@ -142,6 +180,11 @@ void PartListModel::apply()
     for (IExcerptNotationPtr excerpt: m_excerptsToRemove) {
         masterNotation()->removeExcerpt(excerpt);
     }
+}
+
+bool PartListModel::isIndexValid(int index) const
+{
+    return index > 0 && index < m_excerpts.size();
 }
 
 IMasterNotationPtr PartListModel::masterNotation() const
