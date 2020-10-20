@@ -46,6 +46,7 @@ UiEngine::UiEngine()
     m_interactiveProvider = std::make_shared<InteractiveProvider>();
     m_api = new QmlApi(this);
     m_tooltip = new QmlToolTip(this);
+    m_theme = new Theme(this);
 }
 
 UiEngine::~UiEngine()
@@ -70,17 +71,14 @@ void UiEngine::moveQQmlEngine(QQmlEngine* e)
     setup(e);
 }
 
-void UiEngine::setup(QQmlEngine* e)
+void UiEngine::setup(QQmlEngine* engine)
 {
     IF_ASSERT_FAILED_X(!m_engine, "UiEngine already inited") {
         return;
     }
-    m_engine = e;
 
-    if (!m_theme) {
-        m_theme = new QmlTheme(this);
-    }
-
+    m_engine = engine;
+    m_theme->init();
     m_engine->rootContext()->setContextProperty("ui", this);
     m_engine->rootContext()->setContextProperty("api", m_api);
 
@@ -129,7 +127,7 @@ QmlApi* UiEngine::api() const
     return m_api;
 }
 
-QmlTheme* UiEngine::theme() const
+Theme* UiEngine::theme() const
 {
     return m_theme;
 }

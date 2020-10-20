@@ -24,7 +24,7 @@
 #include <memory>
 
 #include "../iuiengine.h"
-#include "../view/qmltheme.h"
+#include "../view/theme.h"
 #include "../view/qmltooltip.h"
 #include "../view/qmltranslation.h"
 #include "../view/interactiveprovider.h"
@@ -32,25 +32,24 @@
 
 class QQmlEngine;
 
-namespace mu {
-namespace framework {
+namespace mu::framework {
 class UiEngine : public QObject, public IUiEngine
 {
     Q_OBJECT
 
-    Q_PROPERTY(QmlTheme * theme READ theme NOTIFY themeChanged)
+    Q_PROPERTY(Theme * theme READ theme NOTIFY themeChanged)
     Q_PROPERTY(QmlToolTip * tooltip READ tooltip CONSTANT)
 
     // for internal use
     Q_PROPERTY(InteractiveProvider * _interactiveProvider READ interactiveProvider_property CONSTANT)
 
 public:
-    ~UiEngine();
+    ~UiEngine() override;
 
     static UiEngine* instance();
 
     QmlApi* api() const;
-    QmlTheme* theme() const;
+    Theme* theme() const;
     QmlToolTip* tooltip() const;
     InteractiveProvider* interactiveProvider_property() const;
     std::shared_ptr<InteractiveProvider> interactiveProvider() const;
@@ -67,23 +66,22 @@ public:
     void moveQQmlEngine(QQmlEngine* e);
 
 signals:
-    void themeChanged(QmlTheme* theme);
+    void themeChanged(Theme* theme);
 
 private:
     UiEngine();
 
     QQmlEngine* engine();
-    void setup(QQmlEngine* e);
+    void setup(QQmlEngine* engine);
 
     QQmlEngine* m_engine = nullptr;
     QStringList m_sourceImportPaths;
-    QmlTheme* m_theme = nullptr;
+    Theme* m_theme = nullptr;
     QmlTranslation* m_translation = nullptr;
     std::shared_ptr<InteractiveProvider> m_interactiveProvider = nullptr;
     QmlApi* m_api = nullptr;
     QmlToolTip* m_tooltip = nullptr;
 };
-}
 }
 
 #endif // MU_FRAMEWORK_UIENGINE_H

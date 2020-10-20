@@ -84,8 +84,7 @@ QColor PaletteConfiguration::foregroundColor() const
 
 QColor PaletteConfiguration::elementsColor() const
 {
-    const QmlTheme* theme = UiEngine::instance()->theme();
-    return theme ? theme->fontPrimaryColor() : QColor();
+    return theme()->fontPrimaryColor();
 }
 
 mu::ValCh<PaletteConfiguration::PaletteConfig> PaletteConfiguration::paletteConfig(const QString& paletteId) const

@@ -46,7 +46,7 @@ StyledPopup {
             }
 
             FlatButton {
-                text: qsTrc("palette", "Cancel")
+                text: qsTrc("global", "Cancel")
 
                 width: parent.width / 2
 
