@@ -244,18 +244,6 @@ struct Event {
         return EventType::ME_INVALID;
     }
 
-    [[deprecated]] void setType(EventType type)
-    {
-        std::set<EventType> supportedTypes
-            = { EventType::ME_NOTEOFF, EventType::ME_NOTEON, EventType::ME_POLYAFTER, EventType::ME_CONTROLLER, EventType::ME_PROGRAM,
-                EventType::ME_AFTERTOUCH, EventType::ME_PITCHBEND };
-        assert(supportedTypes.find(type) != supportedTypes.end());
-
-        Opcode code = static_cast<Opcode>(type >> 4);
-        setMessageType(MessageType::ChannelVoice10);
-        setOpcode(code);
-    }
-
     channel_t channel() const
     {
         assertChannelVoice();
@@ -1024,6 +1012,19 @@ private:
     {
         size_t scaleBits = (srcBits - dstBits);
         return srcVal >> scaleBits;
+    }
+
+    //TODO: remove with deprecated constructors
+    void setType(EventType type)
+    {
+        std::set<EventType> supportedTypes
+            = { EventType::ME_NOTEOFF, EventType::ME_NOTEON, EventType::ME_POLYAFTER, EventType::ME_CONTROLLER, EventType::ME_PROGRAM,
+                EventType::ME_AFTERTOUCH, EventType::ME_PITCHBEND };
+        assert(supportedTypes.find(type) != supportedTypes.end());
+
+        Opcode code = static_cast<Opcode>(type >> 4);
+        setMessageType(MessageType::ChannelVoice10);
+        setOpcode(code);
     }
 
     std::array<uint32_t, 4> m_data = { { 0, 0, 0, 0 } };
