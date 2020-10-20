@@ -135,6 +135,17 @@ const std::vector<Action> NotationActions::m_actions = {
     Action("load-style",
            QT_TRANSLATE_NOOP("action", "Load Style"),
            ShortcutContext::NotationActive
+           ),
+    Action("view-mode-page",
+           QT_TRANSLATE_NOOP("action", "Page View"),
+           ShortcutContext::NotationActive),
+    Action("view-mode-continuous",
+           QT_TRANSLATE_NOOP("action", "Continuous View"),
+           ShortcutContext::NotationActive
+           ),
+    Action("view-mode-single",
+           QT_TRANSLATE_NOOP("action", "Single Page"),
+           ShortcutContext::NotationActive
            )
 };
 
