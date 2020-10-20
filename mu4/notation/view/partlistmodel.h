@@ -44,12 +44,17 @@ public:
 
     Q_INVOKABLE void load();
     Q_INVOKABLE void createNewPart();
-    Q_INVOKABLE void selectPart(int index);
     Q_INVOKABLE void removeSelectedParts();
     Q_INVOKABLE void openSelectedParts();
     Q_INVOKABLE void apply();
 
+    Q_INVOKABLE void selectPart(int index);
+    Q_INVOKABLE void removePart(int index);
+    Q_INVOKABLE void setPartTitle(int index, const QString& name);
+    Q_INVOKABLE void copyPart(int index);
+
 private:
+    bool isIndexValid(int index) const;
     IMasterNotationPtr masterNotation() const;
     QList<int> selectedRows() const;
 

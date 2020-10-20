@@ -41,6 +41,12 @@ ExcerptNotation::~ExcerptNotation()
     setScore(nullptr);
 }
 
+void ExcerptNotation::setMetaInfo(const Meta& meta)
+{
+    m_excerpt->setTitle(meta.title);
+    Notation::setMetaInfo(meta);
+}
+
 Ms::Excerpt* ExcerptNotation::excerpt() const
 {
     return m_excerpt;

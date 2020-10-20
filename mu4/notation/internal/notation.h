@@ -46,6 +46,7 @@ public:
     static void init();
 
     Meta metaInfo() const override;
+    void setMetaInfo(const Meta& meta) override;
 
     void setViewSize(const QSizeF& vs) override;
     void setViewMode(const ViewMode& viewMode) override;

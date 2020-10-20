@@ -43,6 +43,7 @@ public:
     virtual ~INotation() = default;
 
     virtual Meta metaInfo() const = 0;
+    virtual void setMetaInfo(const Meta& meta) = 0;
 
     virtual void setViewSize(const QSizeF& vs) = 0;
     virtual void setViewMode(const ViewMode& vm) = 0;

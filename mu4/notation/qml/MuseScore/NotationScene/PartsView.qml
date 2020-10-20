@@ -91,6 +91,10 @@ Column {
 
                 TextInputField {
                     currentText: model.title
+
+                    onCurrentTextEdited: {
+                        root.model.setPartTitle(model.index, newTextValue)
+                    }
                 }
             }
 
@@ -183,6 +187,10 @@ Column {
 
                 MenuItem {
                     text: qsTrc("notation", "Delete score")
+
+                    onTriggered: {
+                        root.model.removePart(model.index)
+                    }
                 }
 
                 MenuItem {

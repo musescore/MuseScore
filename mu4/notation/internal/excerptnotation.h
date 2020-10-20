@@ -34,6 +34,8 @@ public:
     explicit ExcerptNotation(Ms::Excerpt* excerpt);
     ~ExcerptNotation() override;
 
+    void setMetaInfo(const Meta& meta) override;
+
     Ms::Excerpt* excerpt() const;
 
 private:
