@@ -134,6 +134,7 @@ endif (NOT APPLE AND NOT MINGW AND NOT MSVC)
 
 option(AEOLUS        "Enable pipe organ synthesizer"      OFF)
 option(ZERBERUS      "Enable experimental SFZ sampler"    ON)
+option(USE_ZITA_REVERB "Enable Zita Reverb audio effect"    ON)
 option(OSC           "Enable OSC remote control protocol" ON)
 option(AVSOMR        "Enable AVSOMR import"               OFF) # AVSOMR - optical music recognition by audirevis
 option(OMR           "Enable PDF import"                  OFF) # OMR - optical music recognition
@@ -379,6 +380,10 @@ endif(DOWNLOAD_SOUNDFONT)
 if (BUILD_FOR_WINSTORE)
   set(FOR_WINSTORE 1)
 endif(BUILD_FOR_WINSTORE)
+
+if (USE_ZITA_REVERB)
+    add_definitions(-DZITA_REVERB)
+endif(USE_ZITA_REVERB)
 
 ##
 ## freetype2 >= 2.5.2

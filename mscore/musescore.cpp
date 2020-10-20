@@ -3983,11 +3983,19 @@ MasterSynthesizer* synthesizerFactory()
       ms->registerSynthesizer(createZerberus());
 #endif
       ms->registerEffect(0, new NoEffect);
+
+#ifdef ZITA_REVERB
       ms->registerEffect(0, new ZitaReverb);
+#endif
+
       ms->registerEffect(0, new Compressor);
       // ms->registerEffect(0, new Freeverb);
       ms->registerEffect(1, new NoEffect);
+
+#ifdef ZITA_REVERB
       ms->registerEffect(1, new ZitaReverb);
+#endif
+
       ms->registerEffect(1, new Compressor);
       // ms->registerEffect(1, new Freeverb);
       ms->setEffect(0, 1);
