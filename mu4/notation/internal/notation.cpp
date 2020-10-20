@@ -145,8 +145,13 @@ void Notation::setMetaInfo(const Meta& meta)
     score()->setMetaTag(LYRICIST_KEY, meta.lyricist);
     score()->setMetaTag(COPYRIGHT_KEY, meta.copyright);
     score()->setMetaTag(TRANSLATOR_KEY, meta.translator);
-    score()->setMetaTag(ARRANGER_KEY, meta.translator);
+    score()->setMetaTag(ARRANGER_KEY, meta.arranger);
     score()->setMetaTag(CREATION_DATE_KEY, meta.creationDate.toString());
+}
+
+INotationPtr Notation::clone() const
+{
+    return std::make_shared<Notation>(score()->clone());
 }
 
 void Notation::setViewSize(const QSizeF& vs)

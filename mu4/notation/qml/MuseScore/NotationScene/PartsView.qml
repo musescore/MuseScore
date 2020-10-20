@@ -62,6 +62,7 @@ Column {
         model: root.model
 
         boundsBehavior: Flickable.StopAtBounds
+        interactive: height < contentHeight
         clip: true
 
         readonly property int margin: 26
@@ -178,14 +179,18 @@ Column {
                 y: showVoicesPopupButton.y + showVoicesPopupButton.height
             }
 
-            Menu {
+            ContextMenu {
                 id: contextMenu
 
-                MenuItem {
+                StyledMenuItem {
                     text: qsTrc("notation", "Duplicate")
+
+                    onTriggered: {
+                        root.model.copyPart(model.index)
+                    }
                 }
 
-                MenuItem {
+                StyledMenuItem {
                     text: qsTrc("notation", "Delete score")
 
                     onTriggered: {
@@ -193,7 +198,7 @@ Column {
                     }
                 }
 
-                MenuItem {
+                StyledMenuItem {
                     text: qsTrc("notation", "Rename")
 
                     onTriggered: {

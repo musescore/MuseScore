@@ -505,73 +505,63 @@ void MasterNotation::initExcerpts()
         }
     }
 
+    ExcerptNotationList excerpts;
     for (Excerpt* excerpt: master->excerpts()) {
-        m_excerpts.push_back(std::make_shared<ExcerptNotation>(excerpt));
+        excerpts.push_back(std::make_shared<ExcerptNotation>(excerpt));
     }
 
-    m_excerptsChanged.notify();
+    m_excerpts.set(excerpts);
 }
 
-std::vector<IExcerptNotationPtr> MasterNotation::excerpts() const
+mu::ValCh<ExcerptNotationList> MasterNotation::excerpts() const
 {
-    std::vector<IExcerptNotationPtr> result;
+    return m_excerpts;
+}
 
-    for (auto excerpt: m_excerpts) {
-        result.push_back(static_cast<IExcerptNotationPtr>(excerpt));
+void MasterNotation::setExcerpts(const ExcerptNotationList& excerpts)
+{
+    removeMissingExcerpts(excerpts);
+    createNewExcerpts(excerpts);
+
+    m_excerpts.set(excerpts);
+}
+
+void MasterNotation::removeMissingExcerpts(const ExcerptNotationList& allExcerpts)
+{
+    IDList partsToRemove;
+
+    for (IExcerptNotationPtr excerpt : m_excerpts.val) {
+        bool missingExcerpt = std::find(allExcerpts.begin(), allExcerpts.end(), excerpt) == allExcerpts.end();
+
+        if (!missingExcerpt) {
+            continue;
+        }
+
+        excerpt->setOpened(false);
+
+        for (const Part* part: excerpt->parts()->partList()) {
+            partsToRemove << part->id();
+        }
     }
 
-    return result;
+    parts()->removeParts(partsToRemove);
 }
 
-Notification MasterNotation::excerptsChanged() const
-{
-    return m_excerptsChanged;
-}
-
-IExcerptNotationPtr MasterNotation::appendExcerpt(const Meta& meta)
-{
-    MasterScore* master = masterScore();
-    if (!master) {
-        return nullptr;
-    }
-
-    Excerpt* excerpt = new Excerpt(master);
-    excerpt->setPartScore(new Score(excerpt->oscore()));
-    excerpt->setTitle(meta.title);
-    Excerpt::createExcerpt(excerpt);
-
-    master->addExcerpt(excerpt);
-
-    std::shared_ptr<ExcerptNotation> excerptNotation = std::make_shared<ExcerptNotation>(excerpt);
-    m_excerpts.push_back(excerptNotation);
-    m_excerptsChanged.notify();
-
-    return excerptNotation;
-}
-
-void MasterNotation::removeExcerpt(IExcerptNotationPtr excerpt)
+void MasterNotation::createNewExcerpts(const ExcerptNotationList& allExcerpts)
 {
     MasterScore* master = masterScore();
     if (!master) {
         return;
     }
 
-    excerpt->setOpened(false);
+    for (IExcerptNotationPtr excerptNotation : allExcerpts) {
+        bool newExcerpt = std::find(m_excerpts.val.begin(), m_excerpts.val.end(), excerptNotation) == m_excerpts.val.end();
 
-    for (size_t i = 0; i < m_excerpts.size(); ++i) {
-        if (static_cast<IExcerptNotationPtr>(m_excerpts[i]) == excerpt) {
-            master->deleteExcerpt(m_excerpts[i]->excerpt());
-            m_excerpts.erase(m_excerpts.begin() + i);
-            break;
+        if (newExcerpt) {
+            Excerpt* excerpt = new Excerpt(master);
+            excerpt->setPartScore(new Score(master));
+            static_cast<ExcerptNotation*>(excerptNotation.get())->setExcerpt(excerpt);
+            Excerpt::createExcerpt(excerpt);
         }
     }
-
-    IDList partsIdList;
-    for (const Part* part: excerpt->parts()->partList()) {
-        partsIdList << part->id();
-    }
-
-    parts()->removeParts(partsIdList);
-
-    m_excerptsChanged.notify();
 }

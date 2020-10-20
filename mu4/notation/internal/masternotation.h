@@ -30,7 +30,6 @@ class MasterScore;
 }
 
 namespace mu::notation {
-class ExcerptNotation;
 class MasterNotation : public IMasterNotation, public Notation
 {
     INJECT(notation, INotationReadersRegister, readers)
@@ -45,10 +44,8 @@ public:
 
     Ret createNew(const ScoreCreateOptions& scoreOptions) override;
 
-    std::vector<IExcerptNotationPtr> excerpts() const override;
-    async::Notification excerptsChanged() const override;
-    IExcerptNotationPtr appendExcerpt(const Meta& meta) override;
-    void removeExcerpt(IExcerptNotationPtr excerpt) override;
+    ValCh<ExcerptNotationList> excerpts() const override;
+    void setExcerpts(const ExcerptNotationList& excerpts) override;
 
 private:
     Ms::MasterScore* masterScore() const;
@@ -59,6 +56,9 @@ private:
 
     void initExcerpts();
 
+    void removeMissingExcerpts(const ExcerptNotationList& allExcerpts);
+    void createNewExcerpts(const ExcerptNotationList& allExcerpts);
+
     void initParts(Ms::MasterScore* score, const QList<instruments::InstrumentTemplate>& instrumentTemplates);
     void initStaff(Ms::Staff* staff, const instruments::InstrumentTemplate& instrumentTemplate,const instruments::StaffType* staffType,
                    int cidx);
@@ -67,8 +67,7 @@ private:
     void numberInstrumentNames(Ms::MasterScore* score);
 
 private:
-    std::vector<std::shared_ptr<ExcerptNotation> > m_excerpts;
-    async::Notification m_excerptsChanged;
+    ValCh<ExcerptNotationList> m_excerpts;
 };
 }
 

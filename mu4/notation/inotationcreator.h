@@ -20,10 +20,11 @@
 #define MU_NOTATION_INOTATIONCREATOR_H
 
 #include "imasternotation.h"
+#include "iexcerptnotation.h"
+
 #include "modularity/imoduleexport.h"
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class INotationCreator : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(INotationCreator)
@@ -32,8 +33,8 @@ public:
     virtual ~INotationCreator() = default;
 
     virtual IMasterNotationPtr newMasterNotation() const = 0;
+    virtual IExcerptNotationPtr newExcerptNotation() const = 0;
 };
-}
 }
 
 #endif // MU_NOTATION_INOTATIONCREATOR_H
