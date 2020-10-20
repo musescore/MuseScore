@@ -136,13 +136,13 @@ static const StyleVal2 style206[] = {
     { Sid::noteBarDistance,             Spatium(1.0) },
     { Sid::measureSpacing,              QVariant(1.2) },
     { Sid::staffLineWidth,              Spatium(0.08) },        // 0.09375
-    { Sid::ledgerLineWidth,             Spatium(0.16) },       // 0.1875
-    { Sid::ledgerLineLength,            Spatium(.6) },       // notehead width + this value
+    { Sid::ledgerLineWidth,             Spatium(0.16) },        // 0.1875
+    { Sid::ledgerLineLength,            Spatium(.76) },         // notehead width + this value
     { Sid::accidentalDistance,          Spatium(0.22) },
     { Sid::accidentalNoteDistance,      Spatium(0.22) },
-    { Sid::beamWidth,                   Spatium(0.5) },             // was 0.48
-    { Sid::beamDistance,                QVariant(0.5) },            // 0.25sp
-    { Sid::beamMinLen,                  QVariant(1.32) },        // 1.316178 exactly notehead width
+    { Sid::beamWidth,                   Spatium(0.5) },         // was 0.48
+    { Sid::beamDistance,                QVariant(0.5) },        // 0.25sp
+    { Sid::beamMinLen,                  QVariant(1.32) },       // 1.316178 exactly notehead width
     { Sid::beamNoSlope,                 QVariant(false) },
     { Sid::dotMag,                      QVariant(1.0) },
     { Sid::dotNoteDistance,             QVariant(0.35) },
