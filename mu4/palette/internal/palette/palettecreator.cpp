@@ -579,6 +579,12 @@ PalettePanel* PaletteCreator::newAccidentalsPalettePanel(bool defaultPalettePane
     ik->setAction(QByteArray("add-parentheses"), action->icon());
     sp->append(ik, adapter()->actionHelp("add-parentheses"));
 
+    ik = new Icon(gscore);
+    ik->setIconType(IconType::BRACES);
+    action = adapter()->getAction("add-braces");
+    ik->setAction(QByteArray("add-braces"), action->icon());
+    sp->append(ik, adapter()->actionHelp("add-braces"));
+
     return sp;
 }
 

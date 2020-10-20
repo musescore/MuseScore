@@ -536,6 +536,7 @@ private:
     void cmdIncDecDuration(int nSteps, bool stepDotted = false);
     void cmdAddBracket();
     void cmdAddParentheses();
+    void cmdAddBraces();
     void resetUserStretch();
 
     void createMMRest(Measure*, Measure*, const Fraction&);

@@ -3603,6 +3603,16 @@ Shortcut Shortcut::_sc[] = {
     },
     {
         MsWidget::SCORE_TAB,
+        STATE_NORMAL | STATE_NOTE_ENTRY,
+        "add-braces",
+        QT_TRANSLATE_NOOP("action","Add Braces to Element"),
+        QT_TRANSLATE_NOOP("action","Add braces to element"),
+        0,
+        Icons::braces_ICON,
+        Qt::WindowShortcut
+    },
+    {
+        MsWidget::SCORE_TAB,
         STATE_NORMAL,
         "toggle-mmrest",
         QT_TRANSLATE_NOOP("action","Toggle 'Create Multimeasure Rest'"),

@@ -28,6 +28,7 @@ StyledPopup {
                 { textRole: qsTr("None"), valueRole: AccidentalTypes.BRACKET_TYPE_NONE },
                 { textRole: qsTr("Parenthesis"), valueRole: AccidentalTypes.BRACKET_TYPE_PARENTHESIS },
                 { textRole: qsTr("Bracket"), valueRole: AccidentalTypes.BRACKET_TYPE_SQUARE },
+                { textRole: qsTr("Brace"), valueRole: AccidentalTypes.BRACKET_TYPE_ROUND },
             ]
 
             delegate: FlatRadioButton {
