@@ -22,8 +22,8 @@ jobs:
         else
         export found=1
         fi
-        echo "::set-env name=BASEREF::${BASEREF}"
-        echo "::set-env name=found::${found}"
+        echo "BASEREF=$BASEREF" >> $GITHUB_ENV
+        echo "found=$found" >> $GITHUB_ENV
     - name: Retrieve base commit for push commit
       if: github.event_name == 'push'
       run: |
@@ -33,8 +33,8 @@ jobs:
         else
         export found=1
         fi
-        echo "::set-env name=BASEREF::${BASEREF}"
-        echo "::set-env name=found::${found}"
+        echo "BASEREF=$BASEREF" >> $GITHUB_ENV
+        echo "found=$found" >> $GITHUB_ENV
     - name: Install dependencies
       if: contains( env.found, '1')
       run: |
@@ -48,9 +48,9 @@ jobs:
       run: |
         sed -i 's/travis_retry//g' build/travis/job1_Tests/environment.sh
         source build/travis/job1_Tests/environment.sh
-        echo "::set-env name=PATH::${PATH}"
-        echo "::set-env name=QT_PLUGIN_PATH::${QT_PLUGIN_PATH}"
-        echo "::set-env name=QML2_IMPORT_PATH::${QML2_IMPORT_PATH}"
+        echo "PATH=$PATH" >> $GITHUB_ENV
+        echo "QT_PLUGIN_PATH=$QT_PLUGIN_PATH" >> $GITHUB_ENV
+        echo "QML2_IMPORT_PATH=$QML2_IMPORT_PATH" >> $GITHUB_ENV
         git checkout -- build/travis/job1_Tests/environment.sh
     - name: Build
       if: contains( env.found, '1')
@@ -102,7 +102,7 @@ jobs:
         echo "Please carefully review the new visual test results in the uploaded artifact that can be found here: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
         echo "Failure signal skipped because 'vtests' label is applied to the PR"
         export VTEST_DIFF_FOUND=false
-        echo "::set-env name=VTEST_DIFF_FOUND::${VTEST_DIFF_FOUND}"
+        echo "VTEST_DIFF_FOUND=$VTEST_DIFF_FOUND" >> $GITHUB_ENV
     - name: Emit failure signal for PR if differences are found
       if: github.event_name == 'pull_request' && contains( env.found, '1') && contains( env.VTEST_DIFF_FOUND, 'true')
       run: |

@@ -4,7 +4,6 @@ on:
   pull_request:
     branches:
     - 3.x
-    - my/3.x
   schedule:
     - cron: '0 4 */1 * *' # At 04:00 on every day-of-month
   workflow_dispatch:
@@ -75,6 +74,10 @@ jobs:
       shell: bash
       run: |
         bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os windows -v 3
+    - name: AppCast
+      shell: bash
+      run: |
+        bash ./build/ci/tools/sparkle_appcast_gen.sh -p windows   
     - name: Upload artifacts on GitHub
       if: ${{ always() }}
       uses: actions/upload-artifact@v2
@@ -148,7 +151,12 @@ jobs:
       if: env.DO_PUBLISH == 'true'
       shell: bash
       run: |
-        bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os windows -v 3          
+        bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os windows -v 3
+    - name: AppCast
+      if: env.DO_BUILD == 'true'
+      shell: bash
+      run: |
+        bash ./build/ci/tools/sparkle_appcast_gen.sh -p windows        
     - name: Upload artifacts on GitHub
       if: env.DO_BUILD == 'true'
       uses: actions/upload-artifact@v2
@@ -212,15 +220,20 @@ jobs:
       run: |      
         build\ci\windows\package.bat -b 32 --portable ON 
     - name: Checksum 
+      shell: bash
       if: env.DO_BUILD == 'true'
       run: |
         bash ./build/ci/tools/checksum.sh     
-      shell: cmd
     - name: Publish package
       if: env.DO_PUBLISH == 'true'
       shell: bash
       run: |
-        bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os windows -v 3     
+        bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os windows -v 3   
+    - name: AppCast
+      if: env.DO_BUILD == 'true'
+      shell: bash
+      run: |
+        bash ./build/ci/tools/sparkle_appcast_gen.sh -p windows       
     - name: Upload artifacts on GitHub
       if: env.DO_BUILD == 'true'
       uses: actions/upload-artifact@v2

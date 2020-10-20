@@ -4,7 +4,6 @@ on:
   pull_request:
     branches:
     - 3.x
-    - my/3.x
   schedule:
     - cron: '0 4 */1 * *' # At 04:00 on every day-of-month
   workflow_dispatch:
@@ -90,6 +89,9 @@ jobs:
       if: env.DO_PUBLISH == 'true'
       run: |
         sudo bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os macos -v 3
+    - name: AppCast
+      run: |
+        bash ./build/ci/tools/sparkle_appcast_gen.sh -p macos        
     - name: Upload artifacts on GitHub
       uses: actions/upload-artifact@v2
       with:

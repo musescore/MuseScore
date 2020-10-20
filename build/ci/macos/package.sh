@@ -78,7 +78,3 @@ fi
 mv $DMGFILE $ARTIFACTS_DIR/$ARTIFACT_NAME
 
 bash ./build/ci/tools/make_artifact_name_env.sh $ARTIFACT_NAME
-bash ./build/ci/tools/make_publish_url_env.sh -p macosx -a $ARTIFACT_NAME
-
-PUBLISH_URL="$(cat $ARTIFACTS_DIR/env/publish_url.env)"
-bash ./build/ci/tools/sparkle_appcast_gen.sh -p macos -u $PUBLISH_URL
