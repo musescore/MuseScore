@@ -339,6 +339,8 @@ internal file sanity check log (JSON)
 MPEG Layer III (lossy compressed audio)
 .It Li mpos
 measure positions (XML)
+.It Li mposx
+measure positions in pixel unit (XML)
 .It Li mscx
 uncompressed MuseScore file
 .It Li mscz
@@ -358,6 +360,8 @@ Individual files, one per score page, with a hyphen-minus followed
 by the page number placed before the file extension, will be generated.
 .It Li spos
 segment positions (XML)
+.It Li spos
+segment positions in pixel unit (XML)
 .It Li svg
 scalable vector graphics (image)
 .It Li wav

@@ -48,7 +48,7 @@ static void saveMeasureEvents(XmlWriter& xml, Measure* m, int offset)
 //    output in 100 dpi
 //---------------------------------------------------------
 
-bool MuseScore::savePositions(Score* score, QIODevice* device, bool segments)
+bool MuseScore::savePositions(Score* score, QIODevice* device, bool segments, bool dpiScaling)
       {
       segs.clear();
       XmlWriter xml(score, device);
@@ -57,7 +57,7 @@ bool MuseScore::savePositions(Score* score, QIODevice* device, bool segments)
       xml.stag("elements");
       int id = 0;
 
-      qreal ndpi = ((qreal) preferences.getDouble(PREF_EXPORT_PNG_RESOLUTION) / DPI) * 12.0;
+      qreal ndpi = dpiScaling ? ((qreal) preferences.getDouble(PREF_EXPORT_PNG_RESOLUTION) / DPI) * 12.0 : 1;
       if (segments) {
             for (Segment* s = score->firstMeasureMM()->first(SegmentType::ChordRest);
                s; s = s->next1MM(SegmentType::ChordRest)) {
@@ -142,7 +142,7 @@ bool MuseScore::savePositions(Score* score, QIODevice* device, bool segments)
       return true;
       }
 
-bool MuseScore::savePositions(Score* score, const QString& name, bool segments)
+bool MuseScore::savePositions(Score* score, const QString& name, bool segments, bool dpiScaling)
       {
       QFile fp(name);
       if (!fp.open(QIODevice::WriteOnly)) {
