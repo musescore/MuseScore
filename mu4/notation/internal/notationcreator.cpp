@@ -19,10 +19,16 @@
 #include "notationcreator.h"
 
 #include "masternotation.h"
+#include "excerptnotation.h"
 
 using namespace mu::notation;
 
 IMasterNotationPtr NotationCreator::newMasterNotation() const
 {
     return std::make_shared<MasterNotation>();
+}
+
+IExcerptNotationPtr NotationCreator::newExcerptNotation() const
+{
+    return std::make_shared<ExcerptNotation>();
 }

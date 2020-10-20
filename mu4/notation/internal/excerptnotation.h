@@ -31,15 +31,23 @@ namespace mu::notation {
 class ExcerptNotation : public IExcerptNotation, public Notation
 {
 public:
+    explicit ExcerptNotation() = default;
     explicit ExcerptNotation(Ms::Excerpt* excerpt);
+
     ~ExcerptNotation() override;
 
+    void setExcerpt(Ms::Excerpt* excerpt);
+
+    Meta metaInfo() const override;
     void setMetaInfo(const Meta& meta) override;
 
-    Ms::Excerpt* excerpt() const;
+    INotationPtr clone() const override;
 
 private:
+    bool isInited() const;
+
     Ms::Excerpt* m_excerpt = nullptr;
+    Meta m_metaInfo;
 };
 }
 

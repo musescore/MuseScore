@@ -48,6 +48,8 @@ public:
     Meta metaInfo() const override;
     void setMetaInfo(const Meta& meta) override;
 
+    INotationPtr clone() const override;
+
     void setViewSize(const QSizeF& vs) override;
     void setViewMode(const ViewMode& viewMode) override;
     ViewMode viewMode() const override;

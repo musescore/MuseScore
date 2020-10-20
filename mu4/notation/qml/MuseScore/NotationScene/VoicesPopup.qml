@@ -9,12 +9,10 @@ StyledPopup {
     property var voicesVisibility: [ true, true, true, true ]
 
     height: contentColumn.implicitHeight + bottomPadding + topPadding
-    width: 200
+    width: contentColumn.implicitWidth + leftPadding + rightPadding
 
     Column {
         id: contentColumn
-
-        width: parent.width
 
         spacing: 18
 

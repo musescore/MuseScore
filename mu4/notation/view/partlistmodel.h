@@ -25,6 +25,7 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "iexcerptnotation.h"
+#include "inotationcreator.h"
 
 class QItemSelectionModel;
 
@@ -34,6 +35,7 @@ class PartListModel : public QAbstractListModel
     Q_OBJECT
 
     INJECT(notation, context::IGlobalContext, context)
+    INJECT(notation, INotationCreator, notationCreator)
 
 public:
     explicit PartListModel(QObject* parent = nullptr);
@@ -50,13 +52,17 @@ public:
 
     Q_INVOKABLE void selectPart(int index);
     Q_INVOKABLE void removePart(int index);
-    Q_INVOKABLE void setPartTitle(int index, const QString& name);
+    Q_INVOKABLE void setPartTitle(int index, const QString& title);
     Q_INVOKABLE void copyPart(int index);
 
 private:
+    void setTitle(INotationPtr notation, const QString& title);
+
     bool isIndexValid(int index) const;
     IMasterNotationPtr masterNotation() const;
     QList<int> selectedRows() const;
+
+    void insertExcerpt(int destinationIndex, IExcerptNotationPtr excerpt);
 
     enum Roles {
         RoleTitle = Qt::UserRole + 1,
@@ -67,7 +73,7 @@ private:
     QItemSelectionModel* m_selectionModel = nullptr;
     QHash<int, QByteArray> m_roles;
     QList<IExcerptNotationPtr> m_excerpts;
-    QList<IExcerptNotationPtr> m_excerptsToRemove;
+    IExcerptNotationPtr m_currentExcerpt;
 };
 }
 

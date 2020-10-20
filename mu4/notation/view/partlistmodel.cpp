@@ -40,7 +40,7 @@ void PartListModel::load()
 {
     beginResetModel();
 
-    for (IExcerptNotationPtr excerpt : masterNotation()->excerpts()) {
+    for (IExcerptNotationPtr excerpt : masterNotation()->excerpts().val) {
         m_excerpts << excerpt;
     }
 
@@ -78,9 +78,13 @@ void PartListModel::createNewPart()
     Meta meta;
     meta.title = qtrc("notation", "Part");
 
-    IExcerptNotationPtr excerpt = masterNotation()->appendExcerpt(meta);
+    IExcerptNotationPtr excerpt = notationCreator()->newExcerptNotation();
+
+    excerpt->setMetaInfo(meta);
     excerpt->setOpened(true);
-    context()->setCurrentNotation(excerpt);
+
+    insertExcerpt(m_excerpts.size(), excerpt);
+    m_currentExcerpt = excerpt;
 }
 
 void PartListModel::selectPart(int index)
@@ -105,7 +109,7 @@ void PartListModel::removePart(int index)
     endRemoveRows();
 }
 
-void PartListModel::setPartTitle(int index, const QString& name)
+void PartListModel::setPartTitle(int index, const QString& title)
 {
     if (!isIndexValid(index)) {
         return;
@@ -114,11 +118,11 @@ void PartListModel::setPartTitle(int index, const QString& name)
     IExcerptNotationPtr notation = m_excerpts[index];
     Meta meta = notation->metaInfo();
 
-    if (meta.title == name) {
+    if (meta.title == title) {
         return;
     }
 
-    meta.title = name;
+    meta.title = title;
     notation->setMetaInfo(meta);
 
     QModelIndex modelIndex = this->index(index);
@@ -127,8 +131,24 @@ void PartListModel::setPartTitle(int index, const QString& name)
 
 void PartListModel::copyPart(int index)
 {
-    Q_UNUSED(index)
-    NOT_IMPLEMENTED;
+    if (!isIndexValid(index)) {
+        return;
+    }
+
+    INotationPtr copy = m_excerpts[index]->clone();
+    Meta meta = copy->metaInfo();
+    meta.title += qtrc("notation", " (copy)");
+
+    copy->setMetaInfo(meta);
+
+    insertExcerpt(index + 1, std::dynamic_pointer_cast<IExcerptNotation>(copy));
+}
+
+void PartListModel::insertExcerpt(int destinationIndex, IExcerptNotationPtr excerpt)
+{
+    beginInsertRows(QModelIndex(), destinationIndex, destinationIndex);
+    m_excerpts.insert(destinationIndex, excerpt);
+    endInsertRows();
 }
 
 void PartListModel::removeSelectedParts()
@@ -138,11 +158,13 @@ void PartListModel::removeSelectedParts()
         return;
     }
 
-    for (int row : selectedRows()) {
-        m_excerptsToRemove.push_back(m_excerpts[row]);
+    ExcerptNotationList excerptsToRemove;
+
+    for (int row : rows) {
+        excerptsToRemove.push_back(m_excerpts[row]);
     }
 
-    for (IExcerptNotationPtr excerpt : m_excerptsToRemove) {
+    for (IExcerptNotationPtr excerpt : excerptsToRemove) {
         int row = m_excerpts.indexOf(excerpt);
         removePart(row);
     }
@@ -161,7 +183,7 @@ void PartListModel::openSelectedParts()
         m_excerpts[row]->setOpened(true);
     }
 
-    context()->setCurrentNotation(m_excerpts[rows.last()]);
+    m_currentExcerpt = m_excerpts[rows.last()];
 }
 
 QList<int> PartListModel::selectedRows() const
@@ -177,9 +199,15 @@ QList<int> PartListModel::selectedRows() const
 
 void PartListModel::apply()
 {
-    for (IExcerptNotationPtr excerpt: m_excerptsToRemove) {
-        masterNotation()->removeExcerpt(excerpt);
+    ExcerptNotationList result;
+
+    for (IExcerptNotationPtr excerpt : m_excerpts) {
+        result.push_back(excerpt);
     }
+
+    masterNotation()->setExcerpts(result);
+    m_currentExcerpt->setOpened(true);
+    context()->setCurrentNotation(m_currentExcerpt);
 }
 
 bool PartListModel::isIndexValid(int index) const

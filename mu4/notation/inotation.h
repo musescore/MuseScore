@@ -37,6 +37,10 @@ class QRect;
 
 namespace mu {
 namespace notation {
+
+class INotation;
+using INotationPtr = std::shared_ptr<INotation>;
+
 class INotation
 {
 public:
@@ -44,6 +48,8 @@ public:
 
     virtual Meta metaInfo() const = 0;
     virtual void setMetaInfo(const Meta& meta) = 0;
+
+    virtual INotationPtr clone() const = 0;
 
     virtual void setViewSize(const QSizeF& vs) = 0;
     virtual void setViewMode(const ViewMode& vm) = 0;
@@ -81,8 +87,6 @@ public:
     // notify
     virtual async::Notification notationChanged() const = 0;
 };
-
-using INotationPtr = std::shared_ptr<INotation>;
 }
 }
 
