@@ -45,6 +45,8 @@ public:
     Meta metaInfo() const override;
 
     void setViewSize(const QSizeF& vs) override;
+    void setViewMode(const ViewMode& viewMode) override;
+    ViewMode viewMode() const override;
     void paint(QPainter* painter) override;
     QRectF previewRect() const override;
 

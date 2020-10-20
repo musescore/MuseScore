@@ -8,6 +8,7 @@ ComboBox {
 
     property bool isExpanded: false
     property bool isIndeterminate: false
+    property bool opensUpward: false
     property alias textRoleName: root.textRole
     property string valueRoleName: "valueRole"
     property var value
@@ -173,7 +174,7 @@ ComboBox {
     popup: Popup {
         id: popup
 
-        y: 0
+        y: root.opensUpward ? -(contentListView.height - contentListView.contentHeight) : 0
 
         padding: 0
         margins: 0

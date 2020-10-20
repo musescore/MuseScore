@@ -5,6 +5,7 @@
         <file>view/resources/icons/go-next.svg</file>
         <file>view/resources/icons/go-previous.svg</file>
         <file>qml/MuseScore/NotationScene/ZoomControl.qml</file>
+        <file>qml/MuseScore/NotationScene/ViewModeControl.qml</file>
         <file>qml/MuseScore/NotationScene/NotationAccessibilityInfo.qml</file>
         <file>qml/MuseScore/NotationScene/NotationSwitchButton.qml</file>
         <file>qml/MuseScore/NotationScene/NotationSwitchPanel.qml</file>

@@ -109,6 +109,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/notationviewinputcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/view/zoomcontrolmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/zoomcontrolmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/viewmodecontrolmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/viewmodecontrolmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationaccessibilitymodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/notationaccessibilitymodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationtoolbarmodel.cpp

@@ -11,7 +11,15 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
     }
 
+    ViewModeControl {
+        id: viewModeControl
+        anchors.right: zoomControl.left
+        anchors.rightMargin: 20
+        anchors.verticalCenter: parent.verticalCenter
+    }
+
     ZoomControl {
+        id: zoomControl
         anchors.right: parent.right
         anchors.rightMargin: 20
         anchors.verticalCenter: parent.verticalCenter
