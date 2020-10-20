@@ -122,7 +122,7 @@ QmlDialog {
                 spacing: 4
 
                 FlatButton {
-                    text: qsTrc("palette", "Cancel")
+                    text: qsTrc("global", "Cancel")
 
                     width: parent.width / 2
 
@@ -133,7 +133,7 @@ QmlDialog {
                 }
 
                 FlatButton {
-                    text: qsTrc("palette", "Ok")
+                    text: qsTrc("global", "Ok")
 
                     width: parent.width / 2
 

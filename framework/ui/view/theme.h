@@ -17,21 +17,18 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_FRAMEWORK_QMLTHEME_H
-#define MU_FRAMEWORK_QMLTHEME_H
+#ifndef MU_FRAMEWORK_THEME_H
+#define MU_FRAMEWORK_THEME_H
 
 #include <QObject>
-#include <QPalette>
-#include <QColor>
-#include <QFont>
 
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
+#include "ui/itheme.h"
 #include "async/asyncable.h"
 
-namespace mu {
-namespace framework {
-class QmlTheme : public QObject, public async::Asyncable
+namespace mu::framework {
+class Theme : public QObject, public ITheme, public async::Asyncable
 {
     Q_OBJECT
 
@@ -61,56 +58,35 @@ class QmlTheme : public QObject, public async::Asyncable
     Q_PROPERTY(QFont musicalFont READ musicalFont NOTIFY themeChanged)
 
 public:
-    enum StyleKeys {
-        BACKGROUND_PRIMARY_COLOR = 0,
-        BACKGROUND_SECONDARY_COLOR,
-        POPUP_BACKGROUND_COLOR,
-        TEXT_FIELD_COLOR,
-        ACCENT_COLOR,
-        STROKE_COLOR,
-        BUTTON_COLOR,
-        FONT_PRIMARY_COLOR,
-        FONT_SECONDARY_COLOR,
+    Theme(QObject* parent = nullptr);
 
-        ACCENT_OPACITY_NORMAL,
-        ACCENT_OPACITY_HOVER,
-        ACCENT_OPACITY_HIT,
-
-        BUTTON_OPACITY_NORMAL,
-        BUTTON_OPACITY_HOVER,
-        BUTTON_OPACITY_HIT,
-
-        ITEM_OPACITY_DISABLED
-    };
-
-    QmlTheme(QObject* parent = nullptr);
-
+    void init();
     void update();
 
-    QColor backgroundPrimaryColor() const;
-    QColor backgroundSecondaryColor() const;
-    QColor popupBackgroundColor() const;
-    QColor textFieldColor() const;
-    QColor accentColor() const;
-    QColor strokeColor() const;
-    QColor buttonColor() const;
-    QColor fontPrimaryColor() const;
-    QColor fontSecondaryColor() const;
-    QFont font() const;
-    QFont musicalFont() const;
+    QColor backgroundPrimaryColor() const override;
+    QColor backgroundSecondaryColor() const override;
+    QColor popupBackgroundColor() const override;
+    QColor textFieldColor() const override;
+    QColor accentColor() const override;
+    QColor strokeColor() const override;
+    QColor buttonColor() const override;
+    QColor fontPrimaryColor() const override;
+    QColor fontSecondaryColor() const override;
+    QFont font() const override;
+    QFont musicalFont() const override;
 
-    qreal accentOpacityNormal() const;
-    qreal accentOpacityHover() const;
-    qreal accentOpacityHit() const;
+    qreal accentOpacityNormal() const override;
+    qreal accentOpacityHover() const override;
+    qreal accentOpacityHit() const override;
 
-    qreal buttonOpacityNormal() const;
-    qreal buttonOpacityHover() const;
-    qreal buttonOpacityHit() const;
+    qreal buttonOpacityNormal() const override;
+    qreal buttonOpacityHover() const override;
+    qreal buttonOpacityHit() const override;
 
-    qreal itemOpacityDisabled() const;
+    qreal itemOpacityDisabled() const override;
 
 signals:
-    void themeChanged();
+    void themeChanged() override;
 
 private:
     QHash<int, QVariant> currentThemeProperites() const;
@@ -122,6 +98,5 @@ private:
     QFont m_musicalFont;
 };
 }
-}
 
-#endif // MU_FRAMEWORK_QMLTHEME_H
+#endif // MU_FRAMEWORK_THEME_H

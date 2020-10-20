@@ -105,8 +105,9 @@ ListView {
     property var expandedPopupIndex: null // TODO: or use selection model? That would allow to preserve popups on removing palettes
 
     onExpandedPopupIndexChanged: {
-        if (footerItem)
-            footerItem.height = 0;
+        if (footerItem) {
+            footerItem.height = 0
+        }
     }
 
     onCurrentIndexChanged: {

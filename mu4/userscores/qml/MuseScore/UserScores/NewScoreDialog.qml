@@ -59,7 +59,7 @@ QmlDialog {
                 height: buttons.buttonHeight
                 width: buttons.buttonWidth
 
-                text: qsTrc("userscores", "Cancel")
+                text: qsTrc("global", "Cancel")
 
                 onClicked: {
                     root.reject()
