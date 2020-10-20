@@ -90,7 +90,9 @@ target_link_libraries(${MODULE}
 
 if (MODULE_HAS_C_CODE)
 
-    set_target_properties( ${MODULE} PROPERTIES COMPILE_FLAGS "-fPIC")
+    if (NOT MSVC)
+        set_target_properties( ${MODULE} PROPERTIES COMPILE_FLAGS "-fPIC")
+    endif (NOT MSVC)
 
 else(MODULE_HAS_C_CODE)
 
