@@ -149,7 +149,7 @@ bool MuseScore::savePositions(Score* score, const QString& name, bool segments, 
             qDebug("Open <%s> failed", qPrintable(name));
             return false;
             }
-      return savePositions(score, &fp, segments);
+      return savePositions(score, &fp, segments, dpiScaling);
       }
 }
 
