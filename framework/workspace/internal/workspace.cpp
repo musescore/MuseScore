@@ -118,9 +118,9 @@ Ret Workspace::read()
     return make_ret(Ret::Code::Ok);
 }
 
-Ret Workspace::readWorkspace(const QByteArray& data)
+Ret Workspace::readWorkspace(const QByteArray& xmlData)
 {
-    Ms::XmlReader xml(data);
+    Ms::XmlReader xml(xmlData);
 
     while (xml.readNextStartElement()) {
         if (xml.name() != "museScore") {
