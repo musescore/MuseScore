@@ -21,7 +21,6 @@
 
 #include <QObject>
 
-#include "qmltheme.h"
 #include "qmllauncher.h"
 
 namespace mu {
@@ -29,6 +28,7 @@ namespace framework {
 class QmlApi : public QObject
 {
     Q_OBJECT
+
     Q_PROPERTY(QmlLauncher * launcher READ launcher CONSTANT)
 
 public:

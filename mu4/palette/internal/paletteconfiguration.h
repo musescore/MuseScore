@@ -23,17 +23,17 @@
 
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
+#include "ui/itheme.h"
 #include "notation/inotationconfiguration.h"
 
 namespace mu::palette {
 class PaletteConfiguration : public IPaletteConfiguration
 {
     INJECT(palette, framework::IUiConfiguration, uiConfiguration)
+    INJECT(palette, framework::ITheme, theme)
     INJECT(palette, notation::INotationConfiguration, notationConfiguration)
 
 public:
-    PaletteConfiguration() = default;
-
     void init();
 
     double guiScale() const override;

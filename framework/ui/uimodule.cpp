@@ -7,7 +7,6 @@
 #include "internal/uiengine.h"
 #include "internal/uiconfiguration.h"
 #include "internal/interactiveuriregister.h"
-#include "view/qmltheme.h"
 #include "view/qmltooltip.h"
 #include "view/iconcodes.h"
 #include "view/musicalsymbolcodes.h"
@@ -34,6 +33,7 @@ void UiModule::registerExports()
 {
     ioc()->registerExport<IUiConfiguration>(moduleName(), new UiConfiguration());
     ioc()->registerExportNoDelete<IUiEngine>(moduleName(), UiEngine::instance());
+    ioc()->registerExportNoDelete<ITheme>(moduleName(), UiEngine::instance()->theme());
     ioc()->registerExport<IInteractiveProvider>(moduleName(), UiEngine::instance()->interactiveProvider());
     ioc()->registerExport<IInteractiveUriRegister>(moduleName(), new InteractiveUriRegister());
 }
@@ -57,7 +57,7 @@ void UiModule::registerResources()
 void UiModule::registerUiTypes()
 {
     qmlRegisterUncreatableType<UiEngine>("MuseScore.Ui", 1, 0, "UiEngine", "Cannot create an UiEngine");
-    qmlRegisterUncreatableType<QmlTheme>("MuseScore.Ui", 1, 0, "QmlTheme", "Cannot create a QmlTheme");
+    qmlRegisterUncreatableType<Theme>("MuseScore.Ui", 1, 0, "QmlTheme", "Cannot create a QmlTheme");
     qmlRegisterUncreatableType<QmlToolTip>("MuseScore.Ui", 1, 0, "QmlToolTip", "Cannot create a QmlToolTip");
     qmlRegisterUncreatableType<IconCode>("MuseScore.Ui", 1, 0, "IconCode", "Cannot create an IconCode");
     qmlRegisterUncreatableType<MusicalSymbolCodes>("MuseScore.Ui", 1, 0, "MusicalSymbolCodes",
