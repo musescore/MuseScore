@@ -25,6 +25,8 @@
 #include "io/path.h"
 
 namespace mu::notation {
+using ExcerptNotationList = std::vector<IExcerptNotationPtr>;
+
 class IMasterNotation : virtual public INotation
 {
 public:
@@ -33,10 +35,8 @@ public:
 
     virtual Ret createNew(const ScoreCreateOptions& scoreInfo) = 0;
 
-    virtual std::vector<IExcerptNotationPtr> excerpts() const = 0;
-    virtual async::Notification excerptsChanged() const = 0;
-    virtual IExcerptNotationPtr appendExcerpt(const Meta& meta) = 0;
-    virtual void removeExcerpt(IExcerptNotationPtr excerpt) = 0;
+    virtual ValCh<ExcerptNotationList> excerpts() const = 0;
+    virtual void setExcerpts(const ExcerptNotationList& excerpts) = 0;
 };
 
 using IMasterNotationPtr = std::shared_ptr<IMasterNotation>;

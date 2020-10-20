@@ -65,8 +65,8 @@ QmlDialog {
                     anchors.rightMargin: 8
 
                     onClicked: {
-                        partsModel.apply()
                         partsModel.createNewPart()
+                        partsModel.apply()
                         root.hide()
                     }
                 }
@@ -111,8 +111,8 @@ QmlDialog {
                     text: qsTrc("notation", "Open")
 
                     onClicked: {
-                        partsModel.apply()
                         partsModel.openSelectedParts()
+                        partsModel.apply()
                         root.hide()
                     }
                 }

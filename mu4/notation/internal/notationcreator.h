@@ -21,14 +21,13 @@
 
 #include "../inotationcreator.h"
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class NotationCreator : public INotationCreator
 {
 public:
     IMasterNotationPtr newMasterNotation() const override;
+    IExcerptNotationPtr newExcerptNotation() const override;
 };
-}
 }
 
 #endif // MU_NOTATION_NOTATIONCREATOR_H
