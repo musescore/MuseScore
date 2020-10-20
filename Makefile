@@ -40,6 +40,7 @@ BUILD_WEBENGINE="ON"  # Override with "OFF" to disable.
 USE_SYSTEM_FREETYPE="OFF" # Override with "ON" to enable. Requires freetype >= 2.5.2.
 COVERAGE="OFF"        # Override with "ON" to enable.
 DOWNLOAD_SOUNDFONT="ON"   # Override with "OFF" to disable latest soundfont download.
+USE_ZITA_REVERB="ON"
 
 UPDATE_CACHE="TRUE"# Override if building a DEB or RPM, or when installing to a non-standard location.
 NO_RPATH="FALSE"# Package maintainers may want to override this (e.g. Debian)
@@ -70,6 +71,7 @@ release:
    	  -DBUILD_WEBENGINE="${BUILD_WEBENGINE}"   \
    	  -DUSE_SYSTEM_FREETYPE="${USE_SYSTEM_FREETYPE}" \
    	  -DDOWNLOAD_SOUNDFONT="${DOWNLOAD_SOUNDFONT}"   \
+	  -DUSE_ZITA_REVERB="${USE_ZITA_REVERB}"   \
   	  -DCMAKE_SKIP_RPATH="${NO_RPATH}"     ..; \
       make lrelease;                             \
       make -j ${CPUS};                           \
@@ -101,6 +103,7 @@ debug:
    	  -DUSE_SYSTEM_FREETYPE="${USE_SYSTEM_FREETYPE}"      \
       -DCOVERAGE="${COVERAGE}"                 \
    	  -DDOWNLOAD_SOUNDFONT="${DOWNLOAD_SOUNDFONT}"        \
+	  -DUSE_ZITA_REVERB="${USE_ZITA_REVERB}"   \
   	  -DCMAKE_SKIP_RPATH="${NO_RPATH}"     ..;            \
       make lrelease;                                        \
       make -j ${CPUS};                                      \
