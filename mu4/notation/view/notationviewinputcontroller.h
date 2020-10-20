@@ -24,6 +24,7 @@
 #include "../inotationconfiguration.h"
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
+#include "context/iglobalcontext.h"
 #include "notation/inotationinteraction.h"
 #include "notation/inotationplayback.h"
 #include "playback/iplaybackcontroller.h"
@@ -59,6 +60,7 @@ class NotationViewInputController : public actions::Actionable
     INJECT(notation, INotationConfiguration, configuration)
     INJECT(notation, actions::IActionsDispatcher, dispatcher)
     INJECT(notation, playback::IPlaybackController, playbackController)
+    INJECT(notation, context::IGlobalContext, globalContext)
 
 public:
     NotationViewInputController(IControlledView* view);
@@ -77,11 +79,15 @@ public:
     void dropEvent(QDropEvent* ev);
 
 private:
+    std::shared_ptr<INotation> currentNotation() const;
+
     void zoomIn();
     void zoomOut();
 
     int currentZoomIndex() const;
     void setZoom(int zoomPercentage, const QPoint& pos = QPoint());
+
+    void setViewMode(const ViewMode& viewMode);
 
     bool canReceiveAction(const actions::ActionName& actionName) const override;
 

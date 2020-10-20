@@ -32,6 +32,7 @@
 #include "libmscore/part.h"
 #include "libmscore/staff.h"
 #include "libmscore/stafftype.h"
+#include "libmscore/score.h"
 
 #include "instruments/instrumentstypes.h"
 
@@ -42,6 +43,7 @@ using ElementType = Ms::ElementType;
 using DurationType = Ms::TDuration::DurationType;
 using SelectType = Ms::SelectType;
 using Pad = Ms::Pad;
+using ViewMode = Ms::LayoutMode;  // Accomodate inconsistent convention from v3
 using PitchMode = Ms::UpDownMode;
 using StyleId = Ms::Sid;
 using Key = Ms::Key;
@@ -54,13 +56,15 @@ using StaffType = Ms::StaffTypes;
 using StaffList = QList<const Staff*>;
 using PartList = QList<const Part*>;
 
-enum class DragMode {
+enum class DragMode
+{
     BothXY = 0,
     OnlyX,
     OnlyY
 };
 
-enum class MoveDirection {
+enum class MoveDirection
+{
     Undefined = 0,
     Left,
     Right,
@@ -68,7 +72,8 @@ enum class MoveDirection {
     Down
 };
 
-enum class MoveSelectionType {
+enum class MoveSelectionType
+{
     Undefined = 0,
     Element,
     Chord,
@@ -117,6 +122,12 @@ struct ScoreCreateOptions {
 
     io::path templatePath;
     instruments::InstrumentList instruments;
+};
+
+struct ViewModeOption {
+    QString displayString;
+    QString actionString;
+    ViewMode viewMode;
 };
 }
 }

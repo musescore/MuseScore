@@ -52,14 +52,28 @@ Notation::Notation(Score* score)
     m_playback = new NotationPlayback(this);
     m_elements = new NotationElements(this);
 
-    m_interaction->noteAdded().onNotify(this, [this]() { notifyAboutNotationChanged(); });
-    m_interaction->dragChanged().onNotify(this, [this]() { notifyAboutNotationChanged(); });
-    m_interaction->textEditingChanged().onNotify(this, [this]() { notifyAboutNotationChanged(); });
-    m_interaction->dropChanged().onNotify(this, [this]() { notifyAboutNotationChanged(); });
+    m_interaction->noteAdded().onNotify(this, [this]() {
+        notifyAboutNotationChanged();
+    });
+    m_interaction->dragChanged().onNotify(this, [this]() {
+        notifyAboutNotationChanged();
+    });
+    m_interaction->textEditingChanged().onNotify(this, [this]() {
+        notifyAboutNotationChanged();
+    });
+    m_interaction->dropChanged().onNotify(this, [this]() {
+        notifyAboutNotationChanged();
+    });
 
-    m_midiInput->noteChanged().onNotify(this, [this]() { notifyAboutNotationChanged(); });
-    m_style->styleChanged().onNotify(this, [this]() { notifyAboutNotationChanged(); });
-    m_parts->partsChanged().onNotify(this, [this]() { notifyAboutNotationChanged(); });
+    m_midiInput->noteChanged().onNotify(this, [this]() {
+        notifyAboutNotationChanged();
+    });
+    m_style->styleChanged().onNotify(this, [this]() {
+        notifyAboutNotationChanged();
+    });
+    m_parts->partsChanged().onNotify(this, [this]() {
+        notifyAboutNotationChanged();
+    });
 
     if (score) {
         setScore(score);
@@ -121,6 +135,26 @@ Meta Notation::metaInfo() const
 void Notation::setViewSize(const QSizeF& vs)
 {
     m_viewSize = vs;
+}
+
+void Notation::setViewMode(const ViewMode& viewMode)
+{
+    if (!m_score) {
+        return;
+    }
+
+    score()->setLayoutMode(viewMode);
+    score()->doLayout();
+    notifyAboutNotationChanged();
+}
+
+ViewMode Notation::viewMode() const
+{
+    if (!m_score) {
+        return ViewMode::PAGE;
+    }
+
+    return score()->layoutMode();
 }
 
 QRectF Notation::previewRect() const

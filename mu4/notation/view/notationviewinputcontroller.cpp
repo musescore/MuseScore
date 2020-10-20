@@ -39,7 +39,21 @@ NotationViewInputController::NotationViewInputController(IControlledView* view)
     if (dispatcher()) {
         dispatcher()->reg(this, "zoomin", this, &NotationViewInputController::zoomIn);
         dispatcher()->reg(this, "zoomout", this, &NotationViewInputController::zoomOut);
+        dispatcher()->reg(this, "view-mode-page", [this]() {
+            setViewMode(ViewMode::PAGE);
+        });
+        dispatcher()->reg(this, "view-mode-continuous", [this]() {
+            setViewMode(ViewMode::LINE);
+        });
+        dispatcher()->reg(this, "view-mode-single", [this]() {
+            setViewMode(ViewMode::SYSTEM);
+        });
     }
+}
+
+std::shared_ptr<INotation> NotationViewInputController::currentNotation() const
+{
+    return globalContext()->currentNotation();
 }
 
 void NotationViewInputController::zoomIn()
@@ -83,6 +97,16 @@ void NotationViewInputController::setZoom(int zoomPercentage, const QPoint& pos)
     configuration()->setCurrentZoom(correctedZoom);
 
     m_view->setZoom(zoomPercentage, pos);
+}
+
+void NotationViewInputController::setViewMode(const ViewMode& viewMode)
+{
+    auto notation = currentNotation();
+    if (!notation) {
+        return;
+    }
+
+    notation->setViewMode(viewMode);
 }
 
 bool NotationViewInputController::canReceiveAction(const ActionName&) const
