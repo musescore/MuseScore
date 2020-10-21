@@ -94,6 +94,8 @@ private:
     void initFont();
     void initMusicalFont();
 
+    void setupWidgetTheme();
+
     QFont m_font;
     QFont m_musicalFont;
 };

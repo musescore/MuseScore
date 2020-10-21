@@ -102,10 +102,14 @@ void Theme::init()
 
     initFont();
     initMusicalFont();
+
+    setupWidgetTheme();
 }
 
 void Theme::update()
 {
+    setupWidgetTheme();
+
     emit themeChanged();
 }
 
@@ -242,4 +246,23 @@ void Theme::initMusicalFont()
 
         update();
     });
+}
+
+void Theme::setupWidgetTheme()
+{
+    QPalette palette(QApplication::palette());
+    palette.setColor(QPalette::Window, backgroundPrimaryColor());
+    palette.setColor(QPalette::WindowText, fontPrimaryColor());
+    palette.setColor(QPalette::Base, backgroundSecondaryColor());
+    palette.setColor(QPalette::AlternateBase, backgroundSecondaryColor());
+    palette.setColor(QPalette::Text, fontPrimaryColor());
+    palette.setColor(QPalette::Button, backgroundSecondaryColor());
+    palette.setColor(QPalette::ButtonText, fontPrimaryColor());
+    palette.setColor(QPalette::ToolTipBase, popupBackgroundColor());
+    palette.setColor(QPalette::ToolTipText, fontPrimaryColor());
+    palette.setColor(QPalette::Highlight, accentColor());
+    palette.setColor(QPalette::HighlightedText, fontPrimaryColor());
+    palette.setColor(QPalette::PlaceholderText, fontPrimaryColor());
+
+    QApplication::setPalette(palette);
 }
