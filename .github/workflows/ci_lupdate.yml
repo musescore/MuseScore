@@ -1,0 +1,51 @@
+name: CI_Run_lupdate_to_tx
+
+on:
+  pull_request:
+    branches:
+    - 3.x  
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Publish to Transifex: on - publish'
+        required: false
+        default: 'off'
+jobs:
+  lupdate:
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Clone repository
+      uses: actions/checkout@v2
+    - name: "Configure workflow"
+      run: |
+        DO_PUBLISH='false'
+        if [ "${{ github.event.inputs.publish }}" == "on" ]; then 
+          DO_PUBLISH='true'
+          if [ -z "${{ secrets.TRANSIFEX_USER }}" ]; then 
+            echo "warning: not set TRANSIFEX_USER, publish disabled" 
+            DO_PUBLISH='false'
+          fi  
+          if [ -z "${{ secrets.TRANSIFEX_PASSWORD }}" ]; then 
+            echo "warning: not set TRANSIFEX_PASSWORD, publish disabled" 
+            DO_PUBLISH='false'
+          fi  
+        fi
+
+        echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
+        echo "DO_PUBLISH: $DO_PUBLISH"
+  
+    - name: Setup environment
+      run: |
+        sudo bash ./build/ci/lupdate/setup.sh 
+    - name: Run lupdate
+      run: |
+        sudo bash ./build/ci/lupdate/run_lupdate.sh
+    - name: Publish to Transifex
+      if: env.DO_PUBLISH == 'true'
+      run: |
+        sudo bash ./build/ci/lupdate/publish_to_tx.sh -u ${{ secrets.TRANSIFEX_USER }} -p ${{ secrets.TRANSIFEX_PASSWORD }}
+    - name: Upload artifacts on GitHub
+      uses: actions/upload-artifact@v2
+      with:
+        name: MuseScore_tsfiles_${{ github.run_id }}
+        path: ./share/locale

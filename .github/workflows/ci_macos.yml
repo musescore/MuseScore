@@ -39,7 +39,7 @@ jobs:
         echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
 
         DO_PUBLISH='false'
-        if [ "${{ github.event.inputs.build_mode }}" == "on" ]; then 
+        if [ "${{ github.event.inputs.publish }}" == "on" ]; then 
           DO_PUBLISH='true'
           if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then 
             echo "warning: not set OSUOSL_SSH_ENCRYPT_SECRET, publish disabled" 
