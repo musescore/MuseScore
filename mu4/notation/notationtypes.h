@@ -40,6 +40,7 @@ namespace mu {
 namespace notation {
 using Element = Ms::Element;
 using ElementType = Ms::ElementType;
+using Measure = Ms::Measure;
 using DurationType = Ms::TDuration::DurationType;
 using SelectType = Ms::SelectType;
 using Pad = Ms::Pad;
@@ -53,7 +54,8 @@ using Part = Ms::Part;
 using Staff = Ms::Staff;
 using StaffType = Ms::StaffTypes;
 using NoteHead = Ms::NoteHead;
-using PreferSharpFlat = Ms::PreferSharpFlat;
+using SharpFlat = Ms::PreferSharpFlat;
+using Fraction = Ms::Fraction;
 
 using StaffList = QList<const Staff*>;
 using PartList = QList<const Part*>;
@@ -143,7 +145,14 @@ struct SearchCommand
 };
 using SearchCommands = QList<SearchCommand>;
 
-struct StaffUpdateOptions {
+struct SelectionRange {
+    int startStaffIndex = 0;
+    int endStaffIndex = 0;
+    Fraction startTick;
+    Fraction endTick;
+};
+
+struct StaffConfig {
     bool visible = false;
     int linesCount = 0;
     double lineDistance = 0.0;

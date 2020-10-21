@@ -54,6 +54,7 @@ private:
 
     void deleteSelection();
     void openPageStyle();
+    void openStaffProperties();
 };
 }
 }

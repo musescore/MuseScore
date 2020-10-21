@@ -33,7 +33,7 @@ FocusScope {
                     icon.name: hintIcon
 
                     onTriggered: {
-                        notationView.handleAction(name)
+                        Qt.callLater(notationView.handleAction, name)
                     }
                 }
             }

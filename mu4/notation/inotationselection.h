@@ -36,6 +36,8 @@ public:
     virtual Element* element() const = 0;
     virtual std::vector<Element*> elements() const = 0;
 
+    virtual SelectionRange range() const = 0;
+
     virtual QRectF canvasBoundingRect() const = 0;
 };
 

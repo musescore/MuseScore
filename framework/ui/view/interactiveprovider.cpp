@@ -192,10 +192,20 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(cons
         return result;
     }
 
-    connect(dialog, &QDialog::finished, [this, objectId, dialog](int finishStatus) {
+    connect(dialog, &QDialog::finished, [this, objectId, dialog](int code) {
         QVariantMap status;
-        status["errcode"] = static_cast<int>(Ret::Code::Ok);
-        status["value"] = finishStatus;
+
+        QDialog::DialogCode dialogCode = static_cast<QDialog::DialogCode>(code);
+        switch (dialogCode) {
+        case QDialog::Rejected: {
+            status["errcode"] = static_cast<int>(Ret::Code::Cancel);
+            break;
+        }
+        case QDialog::Accepted: {
+            status["errcode"] = static_cast<int>(Ret::Code::Ok);
+            break;
+        }
+        }
 
         onPopupClose(objectId, status);
         dialog->deleteLater();

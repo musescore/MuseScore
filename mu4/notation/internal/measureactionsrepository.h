@@ -19,11 +19,15 @@
 #ifndef MU_NOTATION_MEASUREACTIONSREPOSITORY_H
 #define MU_NOTATION_MEASUREACTIONSREPOSITORY_H
 
+#include "modularity/ioc.h"
+#include "actions/iactionsregister.h"
 #include "inotationactionsrepository.h"
 
 namespace mu::notation {
 class MeasureActionsRepository : public INotationActionsRepository
 {
+    INJECT(shortcuts, actions::IActionsRegister, actionRegister)
+
 public:
     actions::ActionList actions() const override;
 };
