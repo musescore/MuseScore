@@ -590,7 +590,7 @@ PaletteWorkspace::PaletteWorkspace(PaletteTreeModel* user, PaletteTreeModel* mas
       if (userPalette)
             connect(userPalette, &PaletteTreeModel::treeChanged, this, &PaletteWorkspace::userPaletteChanged);
 
-      preferencesListenerID = preferences.addOnSetListener([this](const QString& key, const QVariant& value) {
+      preferencesListenerID = preferences.addOnSetListener([this](const QString& key, const QVariant& /*value*/) {
             if (key == PREF_APP_USESINGLEPALETTE)
                   emit singlePaletteChanged();
             });
