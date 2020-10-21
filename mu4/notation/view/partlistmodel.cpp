@@ -57,7 +57,7 @@ QVariant PartListModel::data(const QModelIndex& index, int role) const
 
 int PartListModel::rowCount(const QModelIndex&) const
 {
-    return m_excerpts.size();
+    return int(m_excerpts.size());
 }
 
 QHash<int, QByteArray> PartListModel::roleNames() const
