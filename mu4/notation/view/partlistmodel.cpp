@@ -212,7 +212,7 @@ void PartListModel::apply()
 
 bool PartListModel::isIndexValid(int index) const
 {
-    return index > 0 && index < m_excerpts.size();
+    return index >= 0 && index < m_excerpts.size();
 }
 
 IMasterNotationPtr PartListModel::masterNotation() const
