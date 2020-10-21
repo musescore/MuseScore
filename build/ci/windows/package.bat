@@ -185,11 +185,6 @@ IF %DO_SIGN% == ON (
 )
 
 bash ./build/ci/tools/make_artifact_name_env.sh %ARTIFACT_NAME%
-bash ./build/ci/tools/make_publish_url_env.sh -p windows -a %ARTIFACT_NAME%
-
-SET /p PUBLISH_URL=<%ARTIFACTS_DIR%\env\publish_url.env
-
-bash ./build/ci/tools/sparkle_appcast_gen.sh -p windows -u %PUBLISH_URL%
 
 :: DEBUG SYM
 ECHO "Debug symbols generating.."

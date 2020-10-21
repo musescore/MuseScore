@@ -74,6 +74,10 @@ jobs:
       shell: bash
       run: |
         bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os windows -v 4
+    - name: AppCast
+      shell: bash
+      run: |
+        bash ./build/ci/tools/sparkle_appcast_gen.sh -p windows 
     - name: Upload artifacts on GitHub
       if: ${{ always() }}
       uses: actions/upload-artifact@v2
@@ -141,7 +145,11 @@ jobs:
   #     if: env.DO_PUBLISH == 'true'
   #     shell: cmd
   #     run: |
-  #       build\ci\windows\publish.bat --secret ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
+  #       build\ci\windows\publish.bat --secret ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}
+  #   - name: AppCast
+  #     shell: bash
+  #     run: |
+  #       bash ./build/ci/tools/sparkle_appcast_gen.sh -p windows 
   #   - name: Upload artifacts on GitHub
   #     if: env.DO_BUILD == 'true'
   #     uses: actions/upload-artifact@v2
@@ -205,6 +213,10 @@ jobs:
   #     run: |
   #       build\ci\windows\publish.bat --secret ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} 
   #     shell: cmd
+  #   - name: AppCast
+  #     shell: bash
+  #     run: |
+  #       bash ./build/ci/tools/sparkle_appcast_gen.sh -p windows 
   #   - name: Upload artifacts on GitHub
   #     if: env.DO_BUILD == 'true'
   #     uses: actions/upload-artifact@v2

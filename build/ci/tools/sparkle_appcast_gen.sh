@@ -21,6 +21,7 @@ if [ -z "$ARTIFACT_PATH" ]; then ARTIFACT_PATH=$ARTIFACTS_DIR/$(cat $ARTIFACTS_D
 if [ -z "$BUILD_VERSION" ]; then BUILD_VERSION="$(cat $ARTIFACTS_DIR/env/build_version.env)"; fi
 if [ -z "$BUILD_REVISION" ]; then BUILD_REVISION="$(cat $ARTIFACTS_DIR/env/build_revision.env)"; fi
 if [ -z "$RELEASE_CHANNEL" ]; then RELEASE_CHANNEL="$(cat $ARTIFACTS_DIR/env/release_channel.env)"; fi
+if [ -z "$UPDATE_URL" ]; then UPDATE_URL="$(cat $ARTIFACTS_DIR/env/publish_url.env)"; fi
 
 # check args
 if [ -z "$PLATFORM" ]; then echo "error: not set PLATFORM"; exit 1; fi
@@ -28,7 +29,7 @@ if [ -z "$ARTIFACT_PATH" ]; then echo "error: not set ARTIFACT_PATH"; exit 1; fi
 if [ -z "$BUILD_VERSION" ]; then echo "error: not set BUILD_VERSION"; exit 1; fi
 if [ -z "$BUILD_REVISION" ]; then echo "error: not set BUILD_REVISION"; exit 1; fi
 if [ -z "$RELEASE_CHANNEL" ]; then echo "error: not set RELEASE_CHANNEL"; exit 1; fi
-if [ -z "$UPDATE_URL" ]; then echo "error: not set UPDATE_URL"; exit 1; fi
+if [ -z "$UPDATE_URL" ]; then echo "warning: not set UPDATE_URL"; UPDATE_URL="url/to/update"; fi
 
 echo "MAJOR_VERSION: $MAJOR_VERSION"
 echo "PLATFORM: $PLATFORM"
