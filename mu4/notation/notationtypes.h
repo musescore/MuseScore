@@ -52,6 +52,8 @@ using TimeSigType = Ms::TimeSigType;
 using Part = Ms::Part;
 using Staff = Ms::Staff;
 using StaffType = Ms::StaffTypes;
+using NoteHead = Ms::NoteHead;
+using PreferSharpFlat = Ms::PreferSharpFlat;
 
 using StaffList = QList<const Staff*>;
 using PartList = QList<const Part*>;
@@ -140,6 +142,28 @@ struct SearchCommand
         : searchElementType(searchElementType), code(code), description(description) {}
 };
 using SearchCommands = QList<SearchCommand>;
+
+struct StaffUpdateOptions {
+    bool visible = false;
+    int linesCount = 0;
+    double lineDistance = 0.0;
+    QColor linesColor;
+    bool visibleLines = false;
+    qreal userDistance = 0.0;
+    double scale = 0.0;
+    bool showIfEmpty = false;
+    bool showClef = false;
+    bool showTimeSignature = false;
+    bool showKeySignature = false;
+    bool showBarlines = false;
+    bool showStemless = false;
+    bool showLedgerLinesPitched = false;
+    bool hideSystemBarline = false;
+    bool mergeMatchingRests = false;
+    Staff::HideMode hideMode = Staff::HideMode::AUTO;
+    NoteHead::Scheme noteheadScheme = NoteHead::Scheme::HEAD_AUTO;
+    Ms::ClefTypeList clefType;
+};
 
 inline QString staffTypeToString(StaffType type)
 {
