@@ -80,6 +80,10 @@ jobs:
       run: |
         if [ "$BUILD_MODE" == "nightly_build" ]; then VER=3; else VER=4; fi
         bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os windows -v $VER
+    - name: AppCast
+      shell: bash
+      run: |
+        bash ./build/ci/tools/sparkle_appcast_gen.sh -p windows 
     - name: Upload artifacts on GitHub
       if: ${{ always() }}
       uses: actions/upload-artifact@v2

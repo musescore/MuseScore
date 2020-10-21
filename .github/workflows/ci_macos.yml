@@ -95,6 +95,9 @@ jobs:
       run: |
         if [ "$BUILD_MODE" == "nightly_build" ]; then VER=3; else VER=4; fi
         sudo bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os macos -v $VER
+    - name: AppCast
+      run: |
+        bash ./build/ci/tools/sparkle_appcast_gen.sh -p macos   
     - name: Upload artifacts on GitHub
       uses: actions/upload-artifact@v2
       with:
