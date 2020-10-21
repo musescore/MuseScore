@@ -464,7 +464,7 @@ MidiData NotationPlayback::playNoteMidiData(const Ms::Note* note) const
     auto event = Event(Event::Opcode::NoteOn);
     event.setChannel(channel);
     event.setNote(pitch);
-    event.setVelocityFraction(0.63); //as 80 for 127 scale
+    event.setVelocityFraction(0.63f); //as 80 for 127 scale
     chunk.events.insert({ chunk.beginTick, event });
 
     event.setOpcode(Event::Opcode::NoteOff);
@@ -500,7 +500,7 @@ MidiData NotationPlayback::playChordMidiData(const Ms::Chord* chord) const
         auto event = Event(Event::Opcode::NoteOn);
         event.setChannel(channel);
         event.setNote(pitch);
-        event.setVelocityFraction(0.63); //as 80 for 127 scale
+        event.setVelocityFraction(0.63f); //as 80 for 127 scale
         chunk.events.insert({ chunk.beginTick, event });
 
         event.setOpcode(Event::Opcode::NoteOff);
@@ -542,7 +542,7 @@ MidiData NotationPlayback::playHarmonyMidiData(const Ms::Harmony* harmony) const
 
     auto noteOn = Event(Event::Opcode::NoteOn);
     noteOn.setChannel(channel);
-    noteOn.setVelocityFraction(0.63); //as 80 for 127 scale
+    noteOn.setVelocityFraction(0.63f); //as 80 for 127 scale
 
     auto noteOff = Event(Event::Opcode::NoteOff);
     noteOff.setChannel(channel);

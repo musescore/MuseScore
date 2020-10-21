@@ -195,11 +195,11 @@ MsczMetaReader::RawMeta MsczMetaReader::doReadRawMeta(QXmlStreamReader& xmlReade
         } else if (tag == "Staff") {
             if (meta.titleStyle.isEmpty()) {
                 while (xmlReader.readNextStartElement()) {
-                    const QStringRef& tag(xmlReader.name());
-                    if (tag == "HBox"
-                        || tag == "VBox"
-                        || tag == "TBox"
-                        || tag == "FBox") {
+                    const QStringRef& bTag(xmlReader.name());
+                    if (bTag == "HBox"
+                        || bTag == "VBox"
+                        || bTag == "TBox"
+                        || bTag == "FBox") {
                         RawMeta boxMeta = doReadBox(xmlReader);
 
                         meta.titleStyle = boxMeta.titleStyle;
