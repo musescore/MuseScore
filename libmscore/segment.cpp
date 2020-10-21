@@ -948,7 +948,7 @@ qreal Segment::widthInStaff(int staffIdx, SegmentType t) const
       if (nextSeg)
             nextSegX = nextSeg->x();
       else {
-            Segment* lastSeg = measure()->last();
+            Segment* lastSeg = measure()->lastEnabled();
             if (lastSeg->segmentType() & t)
                   nextSegX = lastSeg->x() + lastSeg->width();
             else

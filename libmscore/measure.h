@@ -148,6 +148,7 @@ class Measure final : public MeasureBase {
       Segment* firstEnabled() const        { return _segments.first(ElementFlag::ENABLED); }
 
       Ms::Segment* last() const            { return _segments.last(); }
+      Segment* lastEnabled() const         { return _segments.last(ElementFlag::ENABLED); }
       SegmentList& segments()              { return _segments; }
       const SegmentList& segments() const  { return _segments; }
 

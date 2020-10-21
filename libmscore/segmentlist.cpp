@@ -222,5 +222,18 @@ Segment* SegmentList::first(ElementFlag flags) const
             }
       return nullptr;
       }
+
+//---------------------------------------------------------
+//   last
+//---------------------------------------------------------
+
+Segment* SegmentList::last(ElementFlag flags) const
+      {
+      for (Segment* s = _last; s; s = s->prev()) {
+            if (s->flag(flags))
+                  return s;
+            }
+      return nullptr;
+      }
 }
 
