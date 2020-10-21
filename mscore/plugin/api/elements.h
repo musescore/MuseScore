@@ -16,6 +16,7 @@
 #include "scoreelement.h"
 #include "libmscore/element.h"
 #include "libmscore/chord.h"
+#include "libmscore/hook.h"
 #include "libmscore/lyrics.h"
 #include "libmscore/measure.h"
 #include "libmscore/note.h"
@@ -23,6 +24,8 @@
 #include "libmscore/page.h"
 #include "libmscore/segment.h"
 #include "libmscore/staff.h"
+#include "libmscore/stem.h"
+#include "libmscore/stemslash.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/accidental.h"
 #include "libmscore/musescoreCore.h"
@@ -610,19 +613,53 @@ class Tuplet : public DurationElement {
       };
 
 //---------------------------------------------------------
+//   ChordRest
+//    ChordRest wrapper
+//---------------------------------------------------------
+
+class ChordRest : public DurationElement {
+      Q_OBJECT
+      /**
+       * Lyrics corresponding to this chord or rest, if any.
+       * Before 3.6 version this property was only available for \ref Chord objects.
+       */
+      Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Element>  lyrics     READ lyrics  )
+      /**
+       * Beam which covers this chord/rest, if such exists.
+       * \since MuseScore 3.6
+       */
+      Q_PROPERTY(Ms::PluginAPI::Element*                   beam       READ beam    )
+
+   public:
+      /// \cond MS_INTERNAL
+      ChordRest(Ms::ChordRest* c = nullptr, Ownership own = Ownership::PLUGIN)
+         : DurationElement(c, own) {}
+
+      Ms::ChordRest* chordRest() { return toChordRest(e); }
+
+      QQmlListProperty<Element> lyrics() { return wrapContainerProperty<Element>(this, chordRest()->lyrics()); } // TODO: special type for Lyrics?
+      Element* beam() { return wrap(chordRest()->beam()); }
+      /// \endcond
+      };
+
+//---------------------------------------------------------
 //   Chord
 //    Chord wrapper
 //---------------------------------------------------------
 
-class Chord : public DurationElement {
+class Chord : public ChordRest {
       Q_OBJECT
+      /// List of grace notes (grace chords) belonging to this chord.
       Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Chord>    graceNotes READ graceNotes)
+      /// List of notes belonging to this chord.
       Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Note>     notes      READ notes     )
-      Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Element>  lyrics     READ lyrics    ) // TODO: move to ChordRest
-      //Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Element>  stem       READ stem      )
-      //Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Element>  stemSlash  READ stemSlash )
-      //Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Element>  beam       READ beam      )
-      //Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Element>  hook       READ hook      )
+      /// Stem of this chord, if exists. \since MuseScore 3.6
+      Q_PROPERTY(Ms::PluginAPI::Element*                   stem       READ stem      )
+      /// Stem slash of this chord, if exists. Stem slashes are present in grace notes of type acciaccatura.
+      /// \since MuseScore 3.6
+      Q_PROPERTY(Ms::PluginAPI::Element*                   stemSlash  READ stemSlash )
+      /// Hook on a stem of this chord, if exists. \since MuseScore 3.6
+      Q_PROPERTY(Ms::PluginAPI::Element*                   hook       READ hook      )
       /// The NoteType of the chord.
       /// \since MuseScore 3.2.1
       Q_PROPERTY(Ms::NoteType                              noteType   READ noteType)
@@ -633,18 +670,16 @@ class Chord : public DurationElement {
    public:
       /// \cond MS_INTERNAL
       Chord(Ms::Chord* c = nullptr, Ownership own = Ownership::PLUGIN)
-         : DurationElement(c, own) {}
+         : ChordRest(c, own) {}
 
       Ms::Chord* chord() { return toChord(e); }
       const Ms::Chord* chord() const { return toChord(e); }
 
       QQmlListProperty<Chord> graceNotes()     { return wrapContainerProperty<Chord>(this, chord()->graceNotes()); }
       QQmlListProperty<Note> notes()           { return wrapContainerProperty<Note>(this, chord()->notes());       }
-      QQmlListProperty<Element> lyrics()       { return wrapContainerProperty<Element>(this, chord()->lyrics());   } // TODO: move to ChordRest // TODO: special type for Lyrics?
-      //QQmlListProperty<Element> stem()         { return wrapContainerProperty<Element>(this, chord()->stem());      }
-      //QQmlListProperty<Element> stemSlash()    { return wrapContainerProperty<Element>(this, chord()->stemSlash()); }
-      //QQmlListProperty<Element> beam()         { return wrapContainerProperty<Element>(this, chord()->beam());      }
-      //QQmlListProperty<Element> hook()         { return wrapContainerProperty<Element>(this, chord()->hook());      }
+      Element* stem()                          { return wrap(chord()->stem());      }
+      Element* stemSlash()                     { return wrap(chord()->stemSlash()); }
+      Element* hook()                          { return wrap(chord()->hook());      }
       Ms::NoteType noteType()                  { return chord()->noteType(); }
       Ms::PlayEventType playEventType()        { return chord()->playEventType(); }
       void setPlayEventType(Ms::PlayEventType v);
