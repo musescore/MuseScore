@@ -189,48 +189,17 @@ void AlsaMidiInPort::doProcess()
             continue;
         }
 
-        switch (seqv->type) {
-        case SND_SEQ_EVENT_SYSEX:
-            NOT_IMPLEMENTED;
-            continue;
-        case SND_SEQ_EVENT_NOTEOFF:
-            e.setType(EventType::ME_NOTEOFF);
-            e.setChannel(seqv->data.note.channel);
-            e.setNote(seqv->data.note.note);
-            e.setVelocity(seqv->data.note.velocity);
-            break;
-        case SND_SEQ_EVENT_NOTEON:
-            e.setType(EventType::ME_NOTEON);
-            e.setChannel(seqv->data.note.channel);
-            e.setNote(seqv->data.note.note);
-            e.setVelocity(seqv->data.note.velocity);
-            break;
-        case SND_SEQ_EVENT_KEYPRESS:
-            NOT_IMPLEMENTED;
-            continue;
-        case SND_SEQ_EVENT_CONTROLLER:
-            e.setType(EventType::ME_CONTROLLER);
-            e.setChannel(seqv->data.note.channel);
-            e.setIndex(seqv->data.control.param);
-            e.setData(seqv->data.control.value);
-            break;
-        case SND_SEQ_EVENT_PGMCHANGE:
-            e.setType(EventType::ME_PROGRAM);
-            e.setChannel(seqv->data.note.channel);
-            e.setProgram(seqv->data.control.value);
-            break;
-        case SND_SEQ_EVENT_CHANPRESS:
-            NOT_IMPLEMENTED;
-            continue;
-        case SND_SEQ_EVENT_PITCHBEND: {
-            e.setType(EventType::ME_PITCHBEND);
-            e.setChannel(seqv->data.note.channel);
-            e.setData(seqv->data.control.value + 8192);
-        }
-        break;
-        default:
-            continue;
-        }
+        auto rawData = seqv->data.raw32;
+        union {
+            unsigned char byte[4];
+            uint32_t full;
+        } unionRawData;
+        unionRawData.byte[0] = rawData.d[0];
+        unionRawData.byte[1] = rawData.d[1];
+        unionRawData.byte[2] = rawData.d[2];
+        unionRawData.byte[3] = 0;
+        e = Event::fromMIDI10Package(unionRawData.full);
+
         e = e.toMIDI20();
         if (e) {
             m_eventReceived.send({ static_cast<tick_t>(seqv->time.tick), e });
