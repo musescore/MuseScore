@@ -2,7 +2,7 @@
 
 echo "Build Linux MuseScore AppImage"
 
-set -x
+#set -x
 trap 'echo Build failed; exit 1' ERR
 
 TELEMETRY_TRACK_ID=""

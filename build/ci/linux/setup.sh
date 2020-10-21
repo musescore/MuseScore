@@ -3,7 +3,7 @@
 # For maximum AppImage compatibility, build on the oldest Linux distribution
 # that still receives security updates from its manufacturer.
 
-echo "Setup Linux docker image for build AppImage"
+echo "Setup Linux build environment"
 trap 'echo Setup failed; exit 1' ERR
 
 
