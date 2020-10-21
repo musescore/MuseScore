@@ -147,9 +147,9 @@ enum class ElementType {
 //---------------------------------------------------------
 //   AccidentalType
 //---------------------------------------------------------
-// NOTE: keep this in sync with with accList array
+// NOTE: keep this in sync with with accList array in accidentals.cpp
 
-enum class AccidentalType : char {
+enum class AccidentalType : unsigned char {
       ///.\{
       NONE,
       FLAT,
@@ -174,6 +174,8 @@ enum class AccidentalType : char {
       SHARP2_ARROW_DOWN,
       FLAT2_ARROW_UP,
       FLAT2_ARROW_DOWN,
+      ARROW_DOWN,
+      ARROW_UP,
 
       // Stein-Zimmermann
       MIRRORED_FLAT,
@@ -241,6 +243,20 @@ enum class AccidentalType : char {
       QUARTER_FLAT_EQUAL_TEMPERED,
       QUARTER_SHARP_EQUAL_TEMPERED,
 
+      FLAT_17,
+      SHARP_17,
+      FLAT_19,
+      SHARP_19,
+      FLAT_23,
+      SHARP_23,
+      FLAT_31,
+      SHARP_31,
+      FLAT_53,
+      SHARP_53,
+      //EQUALS_ALMOST,
+      //EQUALS,
+      //TILDE,
+
       // Persian
       SORI,
       KORON,
@@ -268,6 +284,34 @@ enum class AccidentalType : char {
       EIGHT_TWELFTH_SHARP,
       NINE_TWELFTH_FLAT,
       NINE_TWELFTH_SHARP,
+
+      // (Spartan) Sagittal
+      SAGITTAL_5V7KD,
+      SAGITTAL_5V7KU,
+      SAGITTAL_5CD,
+      SAGITTAL_5CU,
+      SAGITTAL_7CD,
+      SAGITTAL_7CU,
+      SAGITTAL_25SDD,
+      SAGITTAL_25SDU,
+      SAGITTAL_35MDD,
+      SAGITTAL_35MDU,
+      SAGITTAL_11MDD,
+      SAGITTAL_11MDU,
+      SAGITTAL_11LDD,
+      SAGITTAL_11LDU,
+      SAGITTAL_35LDD,
+      SAGITTAL_35LDU,
+      SAGITTAL_FLAT25SU,
+      SAGITTAL_SHARP25SD,
+      SAGITTAL_FLAT7CU,
+      SAGITTAL_SHARP7CD,
+      SAGITTAL_SHARP5CD,
+      SAGITTAL_SHARP5V7KD,
+      SAGITTAL_FLAT5CU,
+      SAGITTAL_FLAT5V7KU,
+      SAGITTAL_FLAT,
+      SAGITTAL_SHARP,
 
       END
       ///\}

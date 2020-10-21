@@ -1034,6 +1034,7 @@ InspectorAccidental::InspectorAccidental(QWidget* parent)
       a.bracket->addItem(tr("None", "no accidental bracket type"), int(AccidentalBracket::NONE));
       a.bracket->addItem(tr("Parenthesis"), int(AccidentalBracket::PARENTHESIS));
       a.bracket->addItem(tr("Bracket"), int(AccidentalBracket::BRACKET));
+      a.bracket->addItem(tr("Brace"), int(AccidentalBracket::BRACE));
 
       const std::vector<InspectorPanel> ppList = { { a.title, a.panel } };
       mapSignals(iiList, ppList);

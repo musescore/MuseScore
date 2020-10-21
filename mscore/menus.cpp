@@ -628,6 +628,12 @@ PalettePanel* MuseScore::newAccidentalsPalettePanel(bool defaultPalettePanel)
       ik->setAction(QByteArray("add-parentheses"), action->icon());
       sp->append(ik, s->help());
 
+      ik = new Icon(gscore);
+      ik->setIconType(IconType::BRACES);
+      s = Shortcut::getShortcut("add-braces");
+      action = s->action();
+      ik->setAction(QByteArray("add-braces"), action->icon());
+      sp->append(ik, s->help());
       return sp;
       }
 
