@@ -490,12 +490,25 @@ LineSegment* LineSegment::rebaseAnchor(Grip grip, Segment* newSeg)
                   startTick = newSeg->tick();
             }
 
-      if (l->tick() != startTick)
+      bool anchorChanged = false;
+
+      if (l->tick() != startTick) {
             l->undoChangeProperty(Pid::SPANNER_TICK, startTick);
+            anchorChanged = true;
+            }
 
-      l->undoChangeProperty(Pid::SPANNER_TICKS, endTick - startTick);
+      const Fraction ticksLength = endTick - startTick;
 
-      if (newSeg->system() == oldSystem) {
+      if (ticksLength != l->ticks()) {
+            l->undoChangeProperty(Pid::SPANNER_TICKS, ticksLength);
+            anchorChanged = true;
+            }
+
+      if (newSeg->system() != oldSystem) {
+            l->layout();
+            return left ? l->frontSegment() : l->backSegment();
+            }
+      else if (anchorChanged) {
             const QPointF delta = left ? deltaRebaseLeft(oldSeg, newSeg) : deltaRebaseRight(oldSeg, newSeg, track2staff(l->effectiveTrack2()));
             if (left) {
                   setOffset(offset() + delta);
@@ -505,10 +518,6 @@ LineSegment* LineSegment::rebaseAnchor(Grip grip, Segment* newSeg)
             else {
                   _offset2 += delta;
                   }
-            }
-      else {
-            l->layout();
-            return left ? l->frontSegment() : l->backSegment();
             }
 
       return nullptr;
