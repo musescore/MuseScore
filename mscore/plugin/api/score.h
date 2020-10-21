@@ -48,7 +48,11 @@ class Score : public Ms::PluginAPI::ScoreElement {
       Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Excerpt>  excerpts   READ excerpts)
       /** First measure of the score (read only) */
       Q_PROPERTY(Ms::PluginAPI::Measure*        firstMeasure      READ firstMeasure)
-      /** First multimeasure rest measure of the score (read only).\n \since MuseScore 3.2 */
+      /**
+       * First multimeasure rest measure of the score (read only).
+       * \see \ref Measure.nextMeasureMM
+       * \since MuseScore 3.2
+       */
       Q_PROPERTY(Ms::PluginAPI::Measure*        firstMeasureMM    READ firstMeasureMM)
       /** Number of harmony items (chord symbols) in the score (read only).\n \since MuseScore 3.2 */
       Q_PROPERTY(int                            harmonyCount      READ harmonyCount)
@@ -61,7 +65,11 @@ class Score : public Ms::PluginAPI::ScoreElement {
       Q_PROPERTY(int                            keysig            READ keysig)
       /** Last measure of the score (read only) */
       Q_PROPERTY(Ms::PluginAPI::Measure*        lastMeasure       READ lastMeasure)
-      /** Last multimeasure rest measure of the score (read only).\n \since MuseScore 3.2 */
+      /**
+       * Last multimeasure rest measure of the score (read only).
+       * \see \ref Measure.prevMeasureMM
+       * \since MuseScore 3.2
+       */
       Q_PROPERTY(Ms::PluginAPI::Measure*        lastMeasureMM     READ lastMeasureMM)
       /** Last score segment (read only) */
       Q_PROPERTY(Ms::PluginAPI::Segment*        lastSegment       READ lastSegment) // TODO: make it function? Was property in 2.X, but firstSegment is a function...
