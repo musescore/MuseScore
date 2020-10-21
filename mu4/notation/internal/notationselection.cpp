@@ -77,11 +77,11 @@ QRectF NotationSelection::canvasBoundingRect() const
     }
 
     QRectF rect;
-    for (const Ms::Element* el: els) {
+    for (const Ms::Element* elm: els) {
         if (rect.isNull()) {
-            rect = el->canvasBoundingRect();
+            rect = elm->canvasBoundingRect();
         } else {
-            rect = rect.united(el->canvasBoundingRect());
+            rect = rect.united(elm->canvasBoundingRect());
         }
     }
 
