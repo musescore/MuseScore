@@ -1,0 +1,1396 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>EditPitchBase</class>
+ <widget class="QDialog" name="EditPitchBase">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>735</width>
+    <height>446</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Note Selection</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Select Note:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTableWidget" name="tableWidget">
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::DoubleClicked</set>
+     </property>
+     <property name="dragDropOverwriteMode">
+      <bool>false</bool>
+     </property>
+     <property name="rowCount">
+      <number>11</number>
+     </property>
+     <property name="columnCount">
+      <number>13</number>
+     </property>
+     <attribute name="horizontalHeaderDefaultSectionSize">
+      <number>50</number>
+     </attribute>
+     <attribute name="horizontalHeaderMinimumSectionSize">
+      <number>20</number>
+     </attribute>
+     <attribute name="verticalHeaderDefaultSectionSize">
+      <number>32</number>
+     </attribute>
+     <row>
+      <property name="text">
+       <string>Octave 9</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>Octave 8</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>Octave 7</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>Octave 6</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>Octave 5</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>Octave 4</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>Octave 3</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>Octave 2</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>Octave 1</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>Octave 0</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>Octave -1</string>
+      </property>
+     </row>
+     <column>
+      <property name="text">
+       <string>C</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>C♯</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>D</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>E♭</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>E</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>F</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>F♯</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>G</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>A♭</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>A</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>B♭</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>B</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>»C</string>
+      </property>
+     </column>
+     <item row="0" column="0">
+      <property name="text">
+       <string>C 9</string>
+      </property>
+     </item>
+     <item row="0" column="1">
+      <property name="text">
+       <string>C♯ 9</string>
+      </property>
+     </item>
+     <item row="0" column="2">
+      <property name="text">
+       <string>D 9</string>
+      </property>
+     </item>
+     <item row="0" column="3">
+      <property name="text">
+       <string>E♭ 9</string>
+      </property>
+     </item>
+     <item row="0" column="4">
+      <property name="text">
+       <string>E 9</string>
+      </property>
+     </item>
+     <item row="0" column="5">
+      <property name="text">
+       <string>F 9</string>
+      </property>
+     </item>
+     <item row="0" column="6">
+      <property name="text">
+       <string>F♯ 9</string>
+      </property>
+     </item>
+     <item row="0" column="7">
+      <property name="text">
+       <string>G 9</string>
+      </property>
+     </item>
+     <item row="0" column="8">
+      <property name="flags">
+       <set>NoItemFlags</set>
+      </property>
+     </item>
+     <item row="0" column="9">
+      <property name="flags">
+       <set>NoItemFlags</set>
+      </property>
+     </item>
+     <item row="0" column="10">
+      <property name="flags">
+       <set>NoItemFlags</set>
+      </property>
+     </item>
+     <item row="0" column="11">
+      <property name="flags">
+       <set>NoItemFlags</set>
+      </property>
+     </item>
+     <item row="0" column="12">
+      <property name="flags">
+       <set>NoItemFlags</set>
+      </property>
+     </item>
+     <item row="1" column="0">
+      <property name="text">
+       <string>C 8</string>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="1" column="1">
+      <property name="text">
+       <string>C♯ 8</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="1" column="2">
+      <property name="text">
+       <string>D 8</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="1" column="3">
+      <property name="text">
+       <string>E♭ 8</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="1" column="4">
+      <property name="text">
+       <string>E 8</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="1" column="5">
+      <property name="text">
+       <string>F 8</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="1" column="6">
+      <property name="text">
+       <string>F♯ 8</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="1" column="7">
+      <property name="text">
+       <string>G 8</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="1" column="8">
+      <property name="text">
+       <string>A♭ 8</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="1" column="9">
+      <property name="text">
+       <string>A 8</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="1" column="10">
+      <property name="text">
+       <string>B♭ 8</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="1" column="11">
+      <property name="text">
+       <string>B 8</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="1" column="12">
+      <property name="text">
+       <string>C 9</string>
+      </property>
+      <property name="flags">
+       <set>NoItemFlags</set>
+      </property>
+     </item>
+     <item row="2" column="0">
+      <property name="text">
+       <string>C 7</string>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="2" column="1">
+      <property name="text">
+       <string>C♯ 7</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="2" column="2">
+      <property name="text">
+       <string>D 7</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="2" column="3">
+      <property name="text">
+       <string>E♭ 7</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="2" column="4">
+      <property name="text">
+       <string>E 7</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="2" column="5">
+      <property name="text">
+       <string>F 7</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="2" column="6">
+      <property name="text">
+       <string>F♯ 7</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="2" column="7">
+      <property name="text">
+       <string>G 7</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="2" column="8">
+      <property name="text">
+       <string>A♭ 7</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="2" column="9">
+      <property name="text">
+       <string>A 7</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="2" column="10">
+      <property name="text">
+       <string>B♭ 7</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="2" column="11">
+      <property name="text">
+       <string>B 7</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="2" column="12">
+      <property name="text">
+       <string>C 8</string>
+      </property>
+      <property name="flags">
+       <set>NoItemFlags</set>
+      </property>
+     </item>
+     <item row="3" column="0">
+      <property name="text">
+       <string>C 6</string>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="3" column="1">
+      <property name="text">
+       <string>C♯ 6</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="3" column="2">
+      <property name="text">
+       <string>D 6</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="3" column="3">
+      <property name="text">
+       <string>E♭ 6</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="3" column="4">
+      <property name="text">
+       <string>E 6</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="3" column="5">
+      <property name="text">
+       <string>F 6</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="3" column="6">
+      <property name="text">
+       <string>F♯ 6</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="3" column="7">
+      <property name="text">
+       <string>G 6</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="3" column="8">
+      <property name="text">
+       <string>A♭ 6</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="3" column="9">
+      <property name="text">
+       <string>A 6</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="3" column="10">
+      <property name="text">
+       <string>B♭ 6</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="3" column="11">
+      <property name="text">
+       <string>B 6</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="3" column="12">
+      <property name="text">
+       <string>C 7</string>
+      </property>
+      <property name="flags">
+       <set>NoItemFlags</set>
+      </property>
+     </item>
+     <item row="4" column="0">
+      <property name="text">
+       <string>C 5</string>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="4" column="1">
+      <property name="text">
+       <string>C♯ 5</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="4" column="2">
+      <property name="text">
+       <string>D 5</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="4" column="3">
+      <property name="text">
+       <string>E♭ 5</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="4" column="4">
+      <property name="text">
+       <string>E 5</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="4" column="5">
+      <property name="text">
+       <string>F 5</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="4" column="6">
+      <property name="text">
+       <string>F♯ 5</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="4" column="7">
+      <property name="text">
+       <string>G 5</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="4" column="8">
+      <property name="text">
+       <string>A♭ 5</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="4" column="9">
+      <property name="text">
+       <string>A 5</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="4" column="10">
+      <property name="text">
+       <string>B♭ 5</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="4" column="11">
+      <property name="text">
+       <string>B 5</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="4" column="12">
+      <property name="text">
+       <string>C 6</string>
+      </property>
+      <property name="flags">
+       <set>NoItemFlags</set>
+      </property>
+     </item>
+     <item row="5" column="0">
+      <property name="text">
+       <string>C 4</string>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="5" column="1">
+      <property name="text">
+       <string>C♯ 4</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="5" column="2">
+      <property name="text">
+       <string>D 4</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="5" column="3">
+      <property name="text">
+       <string>E♭ 4</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="5" column="4">
+      <property name="text">
+       <string>E 4</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="5" column="5">
+      <property name="text">
+       <string>F 4</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="5" column="6">
+      <property name="text">
+       <string>F♯ 4</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="5" column="7">
+      <property name="text">
+       <string>G 4</string>
+      </property>
+      <property name="icon">
+       <iconset resource="musescore.qrc">
+        <normaloff>:/data/icons/clef.svg</normaloff>:/data/icons/clef.svg</iconset>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="5" column="8">
+      <property name="text">
+       <string>A♭ 4</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="5" column="9">
+      <property name="text">
+       <string>A 4</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="5" column="10">
+      <property name="text">
+       <string>B♭ 4</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="5" column="11">
+      <property name="text">
+       <string>B 4</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="5" column="12">
+      <property name="text">
+       <string>C 5</string>
+      </property>
+      <property name="flags">
+       <set>NoItemFlags</set>
+      </property>
+     </item>
+     <item row="6" column="0">
+      <property name="text">
+       <string>C 3</string>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="6" column="1">
+      <property name="text">
+       <string>C♯ 3</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="6" column="2">
+      <property name="text">
+       <string>D 3</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="6" column="3">
+      <property name="text">
+       <string>E♭ 3</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="6" column="4">
+      <property name="text">
+       <string>E 3</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="6" column="5">
+      <property name="text">
+       <string>F 3</string>
+      </property>
+      <property name="icon">
+       <iconset resource="musescore.qrc">
+        <normaloff>:/data/icons/clef-bass.svg</normaloff>:/data/icons/clef-bass.svg</iconset>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="6" column="6">
+      <property name="text">
+       <string>F♯ 3</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="6" column="7">
+      <property name="text">
+       <string>G 3</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="6" column="8">
+      <property name="text">
+       <string>A♭ 3</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="6" column="9">
+      <property name="text">
+       <string>A 3</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="6" column="10">
+      <property name="text">
+       <string>B♭ 3</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="6" column="11">
+      <property name="text">
+       <string>B 3</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="6" column="12">
+      <property name="text">
+       <string>C 4</string>
+      </property>
+      <property name="flags">
+       <set>NoItemFlags</set>
+      </property>
+     </item>
+     <item row="7" column="0">
+      <property name="text">
+       <string>C 2</string>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="7" column="1">
+      <property name="text">
+       <string>C♯ 2</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="7" column="2">
+      <property name="text">
+       <string>D 2</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="7" column="3">
+      <property name="text">
+       <string>E♭ 2</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="7" column="4">
+      <property name="text">
+       <string>E 2</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="7" column="5">
+      <property name="text">
+       <string>F 2</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="7" column="6">
+      <property name="text">
+       <string>F♯ 2</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="7" column="7">
+      <property name="text">
+       <string>G 2</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="7" column="8">
+      <property name="text">
+       <string>A♭ 2</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="7" column="9">
+      <property name="text">
+       <string>A 2</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="7" column="10">
+      <property name="text">
+       <string>B♭ 2</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="7" column="11">
+      <property name="text">
+       <string>B 2</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="7" column="12">
+      <property name="text">
+       <string>C 3</string>
+      </property>
+      <property name="flags">
+       <set>NoItemFlags</set>
+      </property>
+     </item>
+     <item row="8" column="0">
+      <property name="text">
+       <string>C 1</string>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="8" column="1">
+      <property name="text">
+       <string>C♯ 1</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="8" column="2">
+      <property name="text">
+       <string>D 1</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="8" column="3">
+      <property name="text">
+       <string>E♭ 1</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="8" column="4">
+      <property name="text">
+       <string>E 1</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="8" column="5">
+      <property name="text">
+       <string>F 1</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="8" column="6">
+      <property name="text">
+       <string>F♯ 1</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="8" column="7">
+      <property name="text">
+       <string>G 1</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="8" column="8">
+      <property name="text">
+       <string>A♭ 1</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="8" column="9">
+      <property name="text">
+       <string>A 1</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="8" column="10">
+      <property name="text">
+       <string>B♭ 1</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="8" column="11">
+      <property name="text">
+       <string>B 1</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="8" column="12">
+      <property name="text">
+       <string>C 2</string>
+      </property>
+      <property name="flags">
+       <set>NoItemFlags</set>
+      </property>
+     </item>
+     <item row="9" column="0">
+      <property name="text">
+       <string>C 0</string>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="9" column="1">
+      <property name="text">
+       <string>C♯ 0</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="9" column="2">
+      <property name="text">
+       <string>D 0</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="9" column="3">
+      <property name="text">
+       <string>E♭ 0</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="9" column="4">
+      <property name="text">
+       <string>E 0</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="9" column="5">
+      <property name="text">
+       <string>F 0</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="9" column="6">
+      <property name="text">
+       <string>F♯ 0</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="9" column="7">
+      <property name="text">
+       <string>G 0</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="9" column="8">
+      <property name="text">
+       <string>A♭ 0</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="9" column="9">
+      <property name="text">
+       <string>A 0</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="9" column="10">
+      <property name="text">
+       <string>B♭ 0</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="9" column="11">
+      <property name="text">
+       <string>B 0</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="9" column="12">
+      <property name="text">
+       <string>C 1</string>
+      </property>
+      <property name="flags">
+       <set>NoItemFlags</set>
+      </property>
+     </item>
+     <item row="10" column="0">
+      <property name="text">
+       <string>C -1</string>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="10" column="1">
+      <property name="text">
+       <string>C♯ -1</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="10" column="2">
+      <property name="text">
+       <string>D -1</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="10" column="3">
+      <property name="text">
+       <string>E♭ -1</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="10" column="4">
+      <property name="text">
+       <string>E -1</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="10" column="5">
+      <property name="text">
+       <string>F -1</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="10" column="6">
+      <property name="text">
+       <string>F♯ -1</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="10" column="7">
+      <property name="text">
+       <string>G -1</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="10" column="8">
+      <property name="text">
+       <string>A♭ -1</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="10" column="9">
+      <property name="text">
+       <string>A -1</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="10" column="10">
+      <property name="text">
+       <string>B♭ -1</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="10" column="11">
+      <property name="text">
+       <string>B -1</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item row="10" column="12">
+      <property name="text">
+       <string>C 0</string>
+      </property>
+      <property name="flags">
+       <set>NoItemFlags</set>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="musescore.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>EditPitchBase</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>EditPitchBase</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
