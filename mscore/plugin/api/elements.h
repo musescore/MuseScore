@@ -775,11 +775,26 @@ class Measure : public Element {
 
       // TODO: to MeasureBase?
 //       Q_PROPERTY(bool         lineBreak         READ lineBreak   WRITE undoSetLineBreak)
+      /// Next measure.
       Q_PROPERTY(Ms::PluginAPI::Measure* nextMeasure       READ nextMeasure)
-//       Q_PROPERTY(Ms::Measure* nextMeasureMM     READ nextMeasureMM)
+      /// Next measure, accounting for multimeasure rests.
+      /// This property may differ from \ref nextMeasure if multimeasure rests
+      /// are enabled. If next measure is a multimeasure rest, this property
+      /// points to the multimeasure rest measure while \ref nextMeasure in the
+      /// same case will point to the first underlying empty measure. Therefore
+      /// if visual properties of a measure are needed (as opposed to logical
+      /// score structure) this property should be preferred.
+      /// \see \ref Score.firstMeasureMM
+      /// \since MuseScore 3.6
+      Q_PROPERTY(Ms::PluginAPI::Measure* nextMeasureMM     READ nextMeasureMM)
 //       Q_PROPERTY(bool         pageBreak         READ pageBreak   WRITE undoSetPageBreak)
+      /// Previous measure.
       Q_PROPERTY(Ms::PluginAPI::Measure* prevMeasure       READ prevMeasure)
-//       Q_PROPERTY(Ms::Measure* prevMeasureMM     READ prevMeasureMM)
+      /// Previous measure, accounting for multimeasure rests.
+      /// See \ref nextMeasureMM for a reference on multimeasure rests.
+      /// \see \ref Score.lastMeasureMM
+      /// \since MuseScore 3.6
+      Q_PROPERTY(Ms::PluginAPI::Measure* prevMeasureMM     READ prevMeasureMM)
 
       /// List of measure-related elements: layout breaks, jump/repeat markings etc.
       /// \since MuseScore 3.3
@@ -798,6 +813,9 @@ class Measure : public Element {
 
       Measure* prevMeasure() { return wrap<Measure>(measure()->prevMeasure(), Ownership::SCORE); }
       Measure* nextMeasure() { return wrap<Measure>(measure()->nextMeasure(), Ownership::SCORE); }
+
+      Measure* prevMeasureMM() { return wrap<Measure>(measure()->prevMeasureMM(), Ownership::SCORE); }
+      Measure* nextMeasureMM() { return wrap<Measure>(measure()->nextMeasureMM(), Ownership::SCORE); }
 
       QQmlListProperty<Element> elements() { return wrapContainerProperty<Element>(this, measure()->el()); }
       /// \endcond
