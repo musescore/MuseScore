@@ -59,6 +59,19 @@ std::vector<Element*> NotationSelection::elements() const
     return els;
 }
 
+SelectionRange NotationSelection::range() const
+{
+    const Ms::Selection& selection = score()->selection();
+
+    SelectionRange range;
+    range.startStaffIndex = selection.staffStart();
+    range.endStaffIndex = selection.staffEnd();
+    range.startTick = selection.tickStart();
+    range.endTick = selection.tickEnd();
+
+    return range;
+}
+
 QRectF NotationSelection::canvasBoundingRect() const
 {
     if (isNone()) {

@@ -48,7 +48,7 @@ public:
     virtual void setStaffVisible(const ID& staffId, bool visible) = 0;
     virtual void setVoiceVisible(const ID& staffId, int voiceIndex, bool visible) = 0;
     virtual void setPartName(const ID& partId, const QString& name) = 0;
-    virtual void setPartSharpFlat(const ID& partId, const PreferSharpFlat& sharpFlat) = 0;
+    virtual void setPartSharpFlat(const ID& partId, const SharpFlat& sharpFlat) = 0;
     virtual void setPartTransposition(const ID& partId, const instruments::Interval& transpose) = 0;
     virtual void setInstrumentName(const ID& instrumentId, const ID& fromPartId, const QString& name) = 0;
     virtual void setInstrumentAbbreviature(const ID& instrumentId, const ID& fromPartId, const QString& abbreviature) = 0;
@@ -56,7 +56,7 @@ public:
     virtual void setCutawayEnabled(const ID& staffId, bool enabled) = 0;
     virtual void setSmallStaff(const ID& staffId, bool smallStaff) = 0;
 
-    virtual void updateStaff(const ID& staffId, const StaffUpdateOptions& options) = 0;
+    virtual void setStaffConfig(const ID& staffId, const StaffConfig& config) = 0;
 
     virtual void removeParts(const IDList& partsIds) = 0;
     virtual void removeInstruments(const IDList& instrumentsIds, const ID& fromPartId) = 0;

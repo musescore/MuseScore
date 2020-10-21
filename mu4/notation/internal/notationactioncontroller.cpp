@@ -50,6 +50,7 @@ void NotationActionController::init()
     dispatcher()->reg(this, "delete", this, &NotationActionController::deleteSelection);
 
     dispatcher()->reg(this, "edit-style", this, &NotationActionController::openPageStyle);
+    dispatcher()->reg(this, "staff-properties", this, &NotationActionController::openStaffProperties);
 }
 
 bool NotationActionController::canReceiveAction(const actions::ActionName&) const
@@ -216,4 +217,15 @@ void NotationActionController::deleteSelection()
 void NotationActionController::openPageStyle()
 {
     interactive()->open("musescore://notation/style");
+}
+
+void NotationActionController::openStaffProperties()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    int staffIdx = interaction->selection()->range().startStaffIndex;
+    interactive()->open("musescore://notation/staffproperties?staffIdx=" + QString::number(staffIdx).toStdString());
 }

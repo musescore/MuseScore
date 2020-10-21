@@ -207,7 +207,7 @@ void NotationParts::setPartName(const ID& partId, const QString& name)
     m_partsChanged.notify();
 }
 
-void NotationParts::setPartSharpFlat(const ID& partId, const Ms::PreferSharpFlat& sharpFlat)
+void NotationParts::setPartSharpFlat(const ID& partId, const SharpFlat& sharpFlat)
 {
     Part* part = this->part(partId);
     if (!part) {
@@ -505,7 +505,7 @@ void NotationParts::setSmallStaff(const ID& staffId, bool smallStaff)
     m_partsChanged.notify();
 }
 
-void NotationParts::updateStaff(const ID& staffId, const StaffUpdateOptions& options)
+void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config)
 {
     Staff* staff = this->staff(staffId);
 
@@ -515,25 +515,25 @@ void NotationParts::updateStaff(const ID& staffId, const StaffUpdateOptions& opt
 
     startEdit();
 
-    staff->setVisible(options.visible);
-    staff->undoChangeProperty(Ms::Pid::COLOR, options.linesColor);
-    staff->setInvisible(options.visibleLines);
-    staff->setUserDist(options.userDistance);
-    staff->undoChangeProperty(Ms::Pid::MAG, options.scale);
-    staff->setShowIfEmpty(options.showIfEmpty);
-    staff->staffType(Ms::Fraction(0, 1))->setLines(options.linesCount);
-    staff->staffType(Ms::Fraction(0, 1))->setLineDistance(Ms::Spatium(options.lineDistance));
-    staff->staffType(Ms::Fraction(0, 1))->setGenClef(options.showClef);
-    staff->staffType(Ms::Fraction(0, 1))->setGenTimesig(options.showTimeSignature);
-    staff->staffType(Ms::Fraction(0, 1))->setGenKeysig(options.showKeySignature);
-    staff->staffType(Ms::Fraction(0, 1))->setShowBarlines(options.showBarlines);
-    staff->staffType(Ms::Fraction(0, 1))->setStemless(options.showStemless);
-    staff->staffType(Ms::Fraction(0, 1))->setShowLedgerLines(options.showLedgerLinesPitched);
-    staff->staffType(Ms::Fraction(0, 1))->setNoteHeadScheme(options.noteheadScheme);
-    staff->setHideSystemBarLine(options.hideSystemBarline);
-    staff->setMergeMatchingRests(options.mergeMatchingRests);
-    staff->setHideWhenEmpty(options.hideMode);
-    staff->setDefaultClefType(options.clefType);
+    staff->setVisible(config.visible);
+    staff->undoChangeProperty(Ms::Pid::COLOR, config.linesColor);
+    staff->setInvisible(config.visibleLines);
+    staff->setUserDist(config.userDistance);
+    staff->undoChangeProperty(Ms::Pid::MAG, config.scale);
+    staff->setShowIfEmpty(config.showIfEmpty);
+    staff->staffType(Ms::Fraction(0, 1))->setLines(config.linesCount);
+    staff->staffType(Ms::Fraction(0, 1))->setLineDistance(Ms::Spatium(config.lineDistance));
+    staff->staffType(Ms::Fraction(0, 1))->setGenClef(config.showClef);
+    staff->staffType(Ms::Fraction(0, 1))->setGenTimesig(config.showTimeSignature);
+    staff->staffType(Ms::Fraction(0, 1))->setGenKeysig(config.showKeySignature);
+    staff->staffType(Ms::Fraction(0, 1))->setShowBarlines(config.showBarlines);
+    staff->staffType(Ms::Fraction(0, 1))->setStemless(config.showStemless);
+    staff->staffType(Ms::Fraction(0, 1))->setShowLedgerLines(config.showLedgerLinesPitched);
+    staff->staffType(Ms::Fraction(0, 1))->setNoteHeadScheme(config.noteheadScheme);
+    staff->setHideSystemBarLine(config.hideSystemBarline);
+    staff->setMergeMatchingRests(config.mergeMatchingRests);
+    staff->setHideWhenEmpty(config.hideMode);
+    staff->setDefaultClefType(config.clefType);
     score()->undo(new Ms::ChangeStaff(staff));
 
     apply();

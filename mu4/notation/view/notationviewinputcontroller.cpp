@@ -158,6 +158,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* ev)
 
     m_interactData.beginPoint = logicPos;
     m_interactData.hitElement = m_view->notationInteraction()->hitElement(logicPos, hitWidth());
+    m_interactData.hitStaffIndex = m_view->notationInteraction()->hitStaffIndex(logicPos);
 
     if (playbackController()->isPlaying()) {
         if (m_interactData.hitElement) {
@@ -177,14 +178,14 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* ev)
                 st = SelectType::ADD;
             }
 
-            m_view->notationInteraction()->select(m_interactData.hitElement, st);
+            m_view->notationInteraction()->select(m_interactData.hitElement, st, m_interactData.hitStaffIndex);
         }
     } else {
         m_view->notationInteraction()->clearSelection();
     }
 
     if (ev->button() == Qt::MouseButton::RightButton) {
-        ElementType type = m_interactData.hitElement ? m_interactData.hitElement->type() : ElementType::PAGE;
+        ElementType type = selectionType();
         m_view->showContextMenu(type, ev->pos());
     }
 
@@ -389,4 +390,16 @@ void NotationViewInputController::dropEvent(QDropEvent* ev)
 float NotationViewInputController::hitWidth() const
 {
     return configuration()->selectionProximity() * 0.5 / m_view->scale();
+}
+
+ElementType NotationViewInputController::selectionType() const
+{
+    ElementType type = ElementType::INVALID;
+    if (m_interactData.hitElement) {
+        type = m_interactData.hitElement->type();
+    } else {
+        type = ElementType::PAGE;
+    }
+
+    return type;
 }

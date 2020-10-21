@@ -94,12 +94,15 @@ private:
     struct InteractData {
         QPoint beginPoint;
         Element* hitElement = nullptr;
+        int hitStaffIndex = 0;
     };
 
     bool isDragAllowed() const;
     void startDragElements(ElementType etype, const QPointF& eoffset);
 
     float hitWidth() const;
+
+    ElementType selectionType() const;
 
     IControlledView* m_view = nullptr;
     InteractData m_interactData;
