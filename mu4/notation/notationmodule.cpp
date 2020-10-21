@@ -49,6 +49,7 @@
 #include "ui/uitypes.h"
 #include "view/widgets/editstyle.h"
 #include "view/widgets/measureproperties.h"
+#include "view/widgets/editstaff.h"
 
 using namespace mu::notation;
 using namespace mu::notation;
@@ -96,6 +97,8 @@ void NotationModule::resolveImports()
 
         ir->registerUri(Uri("musescore://notation/measureproperties"),
                         ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<MeasurePropertiesDialog>("MeasurePropertiesDialog")));
+        ir->registerUri(Uri("musescore://notation/staffproperties"),
+                        ContainerMeta(ContainerType::QWidgetDialog, EditStaff::metaTypeId()));
 
         ir->registerUri(Uri("musescore://notation/parts"),
                         ContainerMeta(ContainerType::QmlDialog, "MuseScore/NotationScene/PartsDialog.qml"));
@@ -119,6 +122,7 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<SearchPopupModel>("MuseScore.NotationScene", 1, 0, "SearchPopupModel");
 
     qRegisterMetaType<EditStyle>("EditStyle");
+    qRegisterMetaType<EditStaff>("EditStaff");
 
     framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(notation_QML_IMPORT);
 }

@@ -63,6 +63,16 @@ struct PitchRange
     PitchRange() = default;
     PitchRange(int min, int max)
         : min(min), max(max) {}
+
+    bool operator ==(const PitchRange& other) const
+    {
+        return min == other.min && max == other.max;
+    }
+
+    bool operator !=(const PitchRange& other) const
+    {
+        return !operator ==(other);
+    }
 };
 
 struct MidiAction
