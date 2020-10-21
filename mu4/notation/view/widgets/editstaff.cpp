@@ -436,7 +436,7 @@ void EditStaff::setStaffIdx(int staffIdx)
     emit staffIdxChanged(m_staffIdx);
 }
 
-INotationParts* EditStaff::notationParts() const
+INotationPartsPtr EditStaff::notationParts() const
 {
     return globalContext()->currentNotation()->parts();
 }
@@ -459,7 +459,7 @@ void EditStaff::updateCurrentStaff()
 
 Staff* EditStaff::staff(int staffIndex) const
 {
-    INotationParts* notationParts = this->notationParts();
+    INotationPartsPtr notationParts = this->notationParts();
     if (!notationParts) {
         return nullptr;
     }
@@ -482,7 +482,7 @@ Staff* EditStaff::staff(int staffIndex) const
 
 mu::instruments::Instrument EditStaff::instrument() const
 {
-    INotationParts* notationParts = this->notationParts();
+    INotationPartsPtr notationParts = this->notationParts();
     if (!notationParts) {
         return mu::instruments::Instrument();
     }
@@ -504,27 +504,27 @@ mu::instruments::Instrument EditStaff::instrument() const
 
 void EditStaff::applyStaffProperties()
 {
-    StaffUpdateOptions updateOptions;
-    updateOptions.linesColor = color->color();
-    updateOptions.visibleLines = invisible->isChecked();
-    updateOptions.userDistance = spinExtraDistance->value() * m_orgStaff->score()->spatium();
-    updateOptions.scale = mag->value() / 100.0;
-    updateOptions.showIfEmpty = showIfEmpty->isChecked();
-    updateOptions.linesCount = lines->value();
-    updateOptions.lineDistance = lineDistance->value();
-    updateOptions.showClef = showClef->isChecked();
-    updateOptions.showTimeSignature = showTimesig->isChecked();
-    updateOptions.showKeySignature = editStaffTypeDialog->getStaffType().genKeysig();
-    updateOptions.showBarlines = showBarlines->isChecked();
-    updateOptions.showStemless = editStaffTypeDialog->getStaffType().stemless();
-    updateOptions.showLedgerLinesPitched = editStaffTypeDialog->getStaffType().showLedgerLines();
-    updateOptions.noteheadScheme = editStaffTypeDialog->getStaffType().noteHeadScheme();
-    updateOptions.hideSystemBarline = hideSystemBarLine->isChecked();
-    updateOptions.mergeMatchingRests = mergeMatchingRests->isChecked();
-    updateOptions.hideMode = Staff::HideMode(hideMode->currentIndex());
-    updateOptions.clefType = m_instrument.clefs[m_orgStaff->rstaff()];
+    StaffConfig config;
+    config.linesColor = color->color();
+    config.visibleLines = invisible->isChecked();
+    config.userDistance = spinExtraDistance->value() * m_orgStaff->score()->spatium();
+    config.scale = mag->value() / 100.0;
+    config.showIfEmpty = showIfEmpty->isChecked();
+    config.linesCount = lines->value();
+    config.lineDistance = lineDistance->value();
+    config.showClef = showClef->isChecked();
+    config.showTimeSignature = showTimesig->isChecked();
+    config.showKeySignature = editStaffTypeDialog->getStaffType().genKeysig();
+    config.showBarlines = showBarlines->isChecked();
+    config.showStemless = editStaffTypeDialog->getStaffType().stemless();
+    config.showLedgerLinesPitched = editStaffTypeDialog->getStaffType().showLedgerLines();
+    config.noteheadScheme = editStaffTypeDialog->getStaffType().noteHeadScheme();
+    config.hideSystemBarline = hideSystemBarLine->isChecked();
+    config.mergeMatchingRests = mergeMatchingRests->isChecked();
+    config.hideMode = Staff::HideMode(hideMode->currentIndex());
+    config.clefType = m_instrument.clefs[m_orgStaff->rstaff()];
 
-    notationParts()->updateStaff(m_orgStaff->id(), updateOptions);
+    notationParts()->setStaffConfig(m_orgStaff->id(), config);
 
     // TODO
     //    notationParts()->setStaffType(m_staff->id(), *(m_staff->staffType(Fraction(0, 1))));
@@ -587,12 +587,12 @@ void EditStaff::applyPartProperties()
         notationParts()->setPartName(m_partId, newPartName);
     }
 
-    bool preferSharpFlatChanged = (part->preferSharpFlat() != PreferSharpFlat(preferSharpFlat->currentIndex()));
+    bool preferSharpFlatChanged = (part->preferSharpFlat() != SharpFlat(preferSharpFlat->currentIndex()));
     // instrument becomes non/octave-transposing, preferSharpFlat isn't useful anymore
     if ((iList->currentIndex() == 0) || (iList->currentIndex() == 25)) {
-        notationParts()->setPartSharpFlat(m_partId, PreferSharpFlat::DEFAULT);
+        notationParts()->setPartSharpFlat(m_partId, SharpFlat::DEFAULT);
     } else {
-        notationParts()->setPartSharpFlat(m_partId, PreferSharpFlat(preferSharpFlat->currentIndex()));
+        notationParts()->setPartSharpFlat(m_partId, SharpFlat(preferSharpFlat->currentIndex()));
     }
 
     if (v1 != v2 || preferSharpFlatChanged) {

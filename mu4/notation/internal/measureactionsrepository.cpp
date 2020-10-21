@@ -18,13 +18,13 @@
 //=============================================================================
 #include "measureactionsrepository.h"
 
-#include "log.h"
-
 using namespace mu::notation;
 using namespace mu::actions;
 
 ActionList MeasureActionsRepository::actions() const
 {
-    NOT_IMPLEMENTED;
-    return ActionList();
+    ActionList actions;
+    actions.push_back(actionRegister()->action("staff-properties"));
+
+    return actions;
 }

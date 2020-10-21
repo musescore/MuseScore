@@ -70,7 +70,8 @@ public:
 
     // Select
     Element* hitElement(const QPointF& pos, float width) const override;
-    void select(Element* element, SelectType type, int staffIndex = 0) override;
+    int hitStaffIndex(const QPointF& pos) const override;
+    void select(Element* e, SelectType type, int staffIdx = 0) override;
     INotationSelectionPtr selection() const override;
     void clearSelection() override;
     async::Notification selectionChanged() const override;
@@ -134,6 +135,14 @@ private:
                                  QPointF pt = QPointF(), bool pasteMode = false);
     void cmdAddSlur(const Ms::Slur* slurTemplate = nullptr);
     void addSlur(Ms::ChordRest* cr1, Ms::ChordRest* cr2, const Ms::Slur* slurTemplate);
+
+    struct HitMeasureData
+    {
+        int staffIndex = -1;
+        Ms::Measure* measure = nullptr;
+    };
+
+    HitMeasureData hitMeasure(const QPointF& pos) const;
 
     struct DragData
     {

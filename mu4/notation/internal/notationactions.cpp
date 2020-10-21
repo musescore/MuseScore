@@ -150,6 +150,10 @@ const std::vector<Action> NotationActions::m_actions = {
     Action("find",
            QT_TRANSLATE_NOOP("action", "Find"),
            ShortcutContext::NotationActive
+           ),
+    Action("staff-properties",
+           QT_TRANSLATE_NOOP("action", "Staff/Part Properties"),
+           ShortcutContext::NotationActive
            )
 };
 

@@ -43,7 +43,7 @@ public:
     void setStaffVisible(const ID& staffId, bool visible) override;
     void setVoiceVisible(const ID& staffId, int voiceIndex, bool visible) override;
     void setPartName(const ID& partId, const QString& name) override;
-    void setPartSharpFlat(const ID& partId, const PreferSharpFlat& sharpFlat) override;
+    void setPartSharpFlat(const ID& partId, const SharpFlat& sharpFlat) override;
     void setPartTransposition(const ID& partId, const instruments::Interval& transpose) override;
     void setInstrumentName(const ID& instrumentId, const ID& fromPartId, const QString& name) override;
     void setInstrumentAbbreviature(const ID& instrumentId, const ID& fromPartId, const QString& abbreviature) override;
@@ -51,7 +51,7 @@ public:
     void setCutawayEnabled(const ID& staffId, bool enabled) override;
     void setSmallStaff(const ID& staffId, bool smallStaff) override;
 
-    void updateStaff(const ID& staffId, const StaffUpdateOptions& options) override;
+    void setStaffConfig(const ID& staffId, const StaffConfig& config) override;
 
     void removeParts(const IDList& partsIds) override;
     void removeInstruments(const IDList& instrumentsIds, const ID& fromPartId) override;

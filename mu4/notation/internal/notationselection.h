@@ -41,6 +41,8 @@ public:
     Element* element() const override;
     std::vector<Element*> elements() const override;
 
+    SelectionRange range() const override;
+
     QRectF canvasBoundingRect() const override;
 
 private:

@@ -391,6 +391,11 @@ Element* NotationInteraction::hitElement(const QPointF& pos, float width) const
     return ll.first();
 }
 
+int NotationInteraction::hitStaffIndex(const QPointF& pos) const
+{
+    return hitMeasure(pos).staffIndex;
+}
+
 Ms::Page* NotationInteraction::point2page(const QPointF& p) const
 {
     if (score()->layoutMode() == Ms::LayoutMode::LINE) {
@@ -475,9 +480,30 @@ QList<Ms::Element*> NotationInteraction::hitElements(const QPointF& p_in, float 
 
     if (!ll.empty()) {
         std::sort(ll.begin(), ll.end(), NotationInteraction::elementIsLess);
+    } else {
+        Ms::Measure* measure = hitMeasure(p_in).measure;
+        if (measure) {
+            ll << measure;
+        }
     }
 
     return ll;
+}
+
+NotationInteraction::HitMeasureData NotationInteraction::hitMeasure(const QPointF& pos) const
+{
+    int staffIndex;
+    Segment* segment;
+    QPointF offset;
+    Measure* measure = score()->pos2measure(pos, &staffIndex, 0, &segment, &offset);
+
+    HitMeasureData result;
+    if (measure && measure->staffLines(staffIndex)->canvasBoundingRect().contains(pos)) {
+        result.measure = measure;
+        result.staffIndex = staffIndex;
+    }
+
+    return result;
 }
 
 bool NotationInteraction::elementIsLess(const Ms::Element* e1, const Ms::Element* e2)

@@ -86,7 +86,7 @@ signals:
     void staffIdxChanged(int staffIdx);
 
 private:
-    INotationParts* notationParts() const;
+    INotationPartsPtr notationParts() const;
 
     int staffIdx() const;
     void updateCurrentStaff();
