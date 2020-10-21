@@ -22,6 +22,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/part.h"
 #include "libmscore/drumset.h"
+#include "preferences.h"
 
 
 namespace Ms {
@@ -116,7 +117,7 @@ void PianoKeyboard::paintEvent(QPaintEvent* /*event*/)
                   QRectF rect(-_ypos + off2, 0, off2 - off1, height());
                   p.drawRect(rect);
 
-                  if (degree == 0 && noteHeight > fontSize + 2) {
+                  if (preferences.getBool(PREF_UI_PIANO_SHOWPITCHHELP) && degree == 0 && noteHeight > fontSize + 2) {
                         QRectF rectText(rect.x() + 1, rect.y(), rect.height() - 2, rect.width() - 2);
                         QTransform xform = p.transform();
                         p.rotate(90);
@@ -138,7 +139,7 @@ void PianoKeyboard::paintEvent(QPaintEvent* /*event*/)
 
                               p.drawText(rectText, Qt::AlignBottom | Qt::AlignLeft, noteName);
                               }
-                        else if (degree == 0) {
+                        else if (preferences.getBool(PREF_UI_PIANO_SHOWPITCHHELP) && degree == 0) {
                               QRectF rectText(rect.x(), rect.y(), rect.width() - 4, rect.height() - 1);
                               p.drawText(rectText, Qt::AlignRight | Qt::AlignBottom, noteName);
                               }

@@ -237,6 +237,7 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_UI_APP_SHOWSTATUSBAR,                            new BoolPreference(true)},
             {PREF_UI_APP_USENATIVEDIALOGS,                         new BoolPreference(true)},
             {PREF_UI_PIANO_HIGHLIGHTCOLOR,                         new ColorPreference(QColor(0x0065BF))},
+            {PREF_UI_PIANO_SHOWPITCHHELP,                          new BoolPreference(true)},
             {PREF_UI_SCORE_NOTE_DROPCOLOR,                         new ColorPreference(QColor(0x0065BF))},
             {PREF_UI_SCORE_DEFAULTCOLOR,                           new ColorPreference(QColor(Qt::black))}, //"#000000"
             {PREF_UI_SCORE_FRAMEMARGINCOLOR,                       new ColorPreference(QColor(0xA0A0A4))},
@@ -600,6 +601,7 @@ QMap<QString, QVariant> Preferences::getDefaultLocalPreferences() {
                         PREF_UI_APP_SHOWSTATUSBAR,
                         PREF_UI_APP_USENATIVEDIALOGS,
                         PREF_UI_PIANO_HIGHLIGHTCOLOR,
+                        PREF_UI_PIANO_SHOWPITCHHELP,
                         PREF_UI_SCORE_NOTE_DROPCOLOR,
                         PREF_UI_SCORE_DEFAULTCOLOR,
                         PREF_UI_SCORE_FRAMEMARGINCOLOR,
