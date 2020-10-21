@@ -1,9 +1,9 @@
 name: CI_Run_lupdate_to_tx
 
 on:
-  pull_request:
-    branches:
-    - 3.x  
+  # pull_request:
+  #   branches:
+  #   - 3.x  
   workflow_dispatch:
     inputs:
       publish:
@@ -12,7 +12,7 @@ on:
         default: 'off'
 jobs:
   lupdate:
-    runs-on: ubuntu-18.04
+    runs-on: macos-10.15
     steps:
     - name: Clone repository
       uses: actions/checkout@v2
