@@ -310,6 +310,9 @@ Element* wrap(Ms::Element* e, Ownership own)
         return wrap<Page>(toPage(e), own);
     default:
         if (e->isDurationElement()) {
+            if (e->isChordRest()) {
+                return wrap<ChordRest>(toChordRest(e), own);
+            }
             return wrap<DurationElement>(toDurationElement(e), own);
         }
         break;
