@@ -1,11 +1,12 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
-import QtQml.Models 2.11
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.NotationScene 1.0
+
+import "internal"
 
 QmlDialog {
     id: root
@@ -87,6 +88,11 @@ QmlDialog {
 
             PartsView {
                 Layout.fillWidth: true
+                Layout.fillHeight: true
+                Layout.topMargin: 38
+
+                //! NOTE: experimental value
+                partListHeight: Math.max(root.height / 1.6, 340)
 
                 model: partsModel
             }
