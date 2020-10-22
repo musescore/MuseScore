@@ -200,6 +200,7 @@
         <file>data/icons/triangleDown.svg</file>
         <file>data/icons/triangleUp.svg</file>
         <file>data/icons/arrowsMoveToTop.svg</file>
+        <file>data/icons/arrowsMoveToBottom.svg</file>
         <file>data/win_opengl_buglist.json</file>
         <file>data/icons/bin.svg</file>
         <file>data/icons/braces.svg</file>

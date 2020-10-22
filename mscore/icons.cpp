@@ -166,7 +166,8 @@ static const char* iconNames[] = {
       "bug.svg",
       "bin.svg",
       "note_timewise.svg",
-      "arrowsMoveToTop.svg"
+      "arrowsMoveToTop.svg",
+      "arrowsMoveToBottom.svg",
       };
 
 //---------------------------------------------------------
