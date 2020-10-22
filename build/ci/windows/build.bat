@@ -67,7 +67,7 @@ CALL msvc_build.bat relwithdebinfo %TARGET_PROCESSOR_BITS% %BUILD_NUMBER% || exi
 CALL msvc_build.bat installrelwithdebinfo %TARGET_PROCESSOR_BITS% %BUILD_NUMBER% || exit \b 1
 
 
-bash ./build/ci/tools/make_release_channel_env.sh 
+bash ./build/ci/tools/make_release_channel_env.sh -c %MUSESCORE_BUILD_CONFIG%
 bash ./build/ci/tools/make_version_env.sh %BUILD_NUMBER%
 bash ./build/ci/tools/make_revision_env.sh
 bash ./build/ci/tools/make_branch_env.sh
