@@ -80,9 +80,9 @@ class Part : public Ms::PluginAPI::ScoreElement {
       /// \since MuseScore 3.2.1
       Q_PROPERTY(QString                        partName             READ partName)
       /// Whether part is shown or hidden.
-      /// Note that this property was writeable in MuseScore v2.x
+      /// This property is writeable since MuseScore 3.6 (and was writable in MuseScore 2.x)
       /// \since MuseScore 3.2.1
-      Q_PROPERTY(bool                           show                 READ show)
+      Q_PROPERTY(bool                           show                 READ show            WRITE setShow)
 
       /**
        * List of instruments in this part.
@@ -112,6 +112,7 @@ class Part : public Ms::PluginAPI::ScoreElement {
       QString shortName() const { return part()->shortName(); }
       QString partName() const { return part()->partName(); }
       bool show() const { return part()->show(); }
+      void setShow(bool val) { set(Pid::VISIBLE, val); }
 
       InstrumentListProperty instruments();
       /// \endcond
