@@ -52,6 +52,7 @@ Enum* PluginAPI::noteValueTypeEnum = nullptr;
 Enum* PluginAPI::segmentTypeEnum = nullptr;
 Enum* PluginAPI::spannerAnchorEnum = nullptr;
 Enum* PluginAPI::symIdEnum = nullptr;
+Enum* PluginAPI::harmonyTypeEnum = nullptr;
 
 //---------------------------------------------------------
 //   PluginAPI

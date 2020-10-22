@@ -373,6 +373,12 @@ class Element : public Ms::PluginAPI::ScoreElement {
       API_PROPERTY( posAbove,                POS_ABOVE                 )
       API_PROPERTY_T( int, voice,            VOICE                     )
       API_PROPERTY_READ_ONLY( position,      POSITION                  ) // TODO: needed?
+      /**
+       * For chord symbols, chord symbol type, one of
+       * PluginAPI::PluginAPI::HarmonyType values.
+       * \since MuseScore 3.6
+       */
+      API_PROPERTY( harmonyType,             HARMONY_TYPE              )
 
       qreal offsetX() const { return element()->offset().x() / element()->spatium(); }
       qreal offsetY() const { return element()->offset().y() / element()->spatium(); }
