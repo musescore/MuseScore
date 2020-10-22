@@ -42,7 +42,6 @@ class IconCode
 
 public:
     enum class Code : char16_t {
-        TRASH = 0xE812,
         SMALL_ARROW_UP = 0xEF10,
         SMALL_ARROW_RIGHT = 0xEF11,
         SMALL_ARROW_DOWN = 0xEF12,
@@ -65,6 +64,7 @@ public:
         OPEN_FILE = 0xEF23,
         SHARE_FILE = 0xEF24,
         CLOUD_FILE = 0xEF25,
+        PAGE = 0xF3A5,
         REWIND = 0xEF26,
         MIXER = 0xEF27,
         CONFIGURE = 0xEF28,
