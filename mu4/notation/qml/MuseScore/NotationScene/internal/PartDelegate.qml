@@ -27,7 +27,8 @@ Item {
         height: parent.height
         width: height
 
-        iconCode: IconCode.NEW_FILE
+        // TODO: replace temporary icon of main score
+        iconCode: root.isMain ? IconCode.CONFIGURE : IconCode.NEW_FILE
     }
 
     Component {
