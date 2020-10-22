@@ -25,10 +25,8 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "context/iglobalcontext.h"
-#include "notation/imasternotation.h"
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class NotationSwitchListModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
@@ -61,9 +59,7 @@ private:
     };
 
     QList<INotationPtr> m_notations;
-    QHash<int, QByteArray> m_roles;
 };
-}
 }
 
 #endif // MU_NOTATION_NOTATIONSWITCHLISTMODEL_H

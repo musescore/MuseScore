@@ -19,8 +19,6 @@
 
 #include "partlistmodel.h"
 
-#include "iexcerptnotation.h"
-
 #include "log.h"
 #include "translation.h"
 
@@ -28,12 +26,18 @@
 
 using namespace mu::notation;
 
+static QString notationToKey(INotationPtr notation)
+{
+    std::stringstream stream;
+    stream << static_cast<const void*>(notation.get());
+    QString key = QString::fromStdString(stream.str());
+
+    return key;
+}
+
 PartListModel::PartListModel(QObject* parent)
     : QAbstractListModel(parent), m_selectionModel(new QItemSelectionModel(this))
 {
-    m_roles.insert(RoleTitle, "title");
-    m_roles.insert(RoleIsSelected, "isSelected");
-    m_roles.insert(RoleIsMain, "isMain");
 }
 
 void PartListModel::load()
@@ -43,6 +47,10 @@ void PartListModel::load()
     m_notations << masterNotation();
     for (IExcerptNotationPtr excerpt : masterNotation()->excerpts().val) {
         m_notations << excerpt;
+    }
+
+    for (INotationPtr notation : m_notations) {
+        m_voicesVisibility[notationToKey(notation)] = voicesVisibility(notation);
     }
 
     endResetModel();
@@ -63,9 +71,46 @@ QVariant PartListModel::data(const QModelIndex& index, int role) const
         return m_selectionModel->isSelected(index);
     case RoleIsMain:
         return notation == masterNotation();
+    case RoleVoicesVisibility:
+        return m_voicesVisibility[notationToKey(notation)];
+    case RoleVoicesTitle:
+        return formatVoicesTitle(notation);
     }
 
     return QVariant();
+}
+
+QString PartListModel::formatVoicesTitle(INotationPtr notation) const
+{
+    QVariantList voicesVisibility = m_voicesVisibility[notationToKey(notation)];
+    QStringList voices;
+
+    for (int voiceIndex = 0; voiceIndex < voicesVisibility.size(); ++voiceIndex) {
+        bool visible = voicesVisibility[voiceIndex].toBool();
+
+        if (visible) {
+            voices << QString::number(voiceIndex + 1);
+        }
+    }
+
+    if (voices.isEmpty()) {
+        return qtrc("notation", "None");
+    } else if (voices.size() == voicesVisibility.size()) {
+        return qtrc("notation", "All");
+    }
+
+    return voices.join(", ");
+}
+
+QVariantList PartListModel::voicesVisibility(INotationPtr notation) const
+{
+    QVariantList visibility;
+
+    for (int voiceIndex = 0; voiceIndex < VOICES; ++voiceIndex) {
+        visibility << notation->parts()->voiceVisible(voiceIndex);
+    }
+
+    return visibility;
 }
 
 int PartListModel::rowCount(const QModelIndex&) const
@@ -75,7 +120,15 @@ int PartListModel::rowCount(const QModelIndex&) const
 
 QHash<int, QByteArray> PartListModel::roleNames() const
 {
-    return m_roles;
+    static const QHash<int, QByteArray> roles {
+        { RoleTitle, "title" },
+        { RoleIsSelected, "isSelected" },
+        { RoleIsMain, "isMain" },
+        { RoleVoicesVisibility, "voicesVisibility" },
+        { RoleVoicesTitle, "voicesTitle" }
+    };
+
+    return roles;
 }
 
 void PartListModel::createNewPart()
@@ -131,6 +184,28 @@ void PartListModel::setPartTitle(int index, const QString& title)
     meta.title = title;
     notation->setMetaInfo(meta);
 
+    notifyAboutNotationChanged(index);
+}
+
+void PartListModel::setVoicesVisibility(int index, const QVariantList& visibility)
+{
+    if (!isIndexValid(index)) {
+        return;
+    }
+
+    INotationPtr notation = m_notations[index];
+    QString key = notationToKey(notation);
+
+    if (m_voicesVisibility[key] == visibility) {
+        return;
+    }
+
+    m_voicesVisibility[key] = visibility;
+    notifyAboutNotationChanged(index);
+}
+
+void PartListModel::notifyAboutNotationChanged(int index)
+{
     QModelIndex modelIndex = this->index(index);
     emit dataChanged(modelIndex, modelIndex);
 }
@@ -213,13 +288,24 @@ void PartListModel::apply()
         if (excerpt) {
             newExcerpts.push_back(excerpt);
         }
+
+        applyVoicesVisibility(notation);
     }
 
     masterNotation()->setExcerpts(newExcerpts);
+    context()->setCurrentNotation(m_currentNotation);
+}
 
-    if (m_currentNotation) {
-        m_currentNotation->setOpened(true);
-        context()->setCurrentNotation(m_currentNotation);
+void PartListModel::applyVoicesVisibility(INotationPtr notation) const
+{
+    QVariantList newVoicesVisibility = m_voicesVisibility[notationToKey(notation)];
+    if (voicesVisibility(notation) == newVoicesVisibility) {
+        return;
+    }
+
+    for (int voiceIndex = 0; voiceIndex < newVoicesVisibility.size(); ++voiceIndex) {
+        bool visible = newVoicesVisibility[voiceIndex].toBool();
+        notation->parts()->setVoiceVisible(voiceIndex, visible);
     }
 }
 

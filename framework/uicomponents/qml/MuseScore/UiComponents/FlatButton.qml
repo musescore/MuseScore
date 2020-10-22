@@ -56,6 +56,8 @@ FocusableItem {
 
         StyledIconLabel {
             id: buttonIcon
+
+            font.pixelSize: root.iconPixelSize
         }
 
         StyledTextLabel {

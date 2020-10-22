@@ -11,8 +11,6 @@ FlatButton {
     property var popupAvailableWidth
     readonly property int popupContentHeight: popup.isOpened ? popup.implicitHeight + popup.arrowHeight : 0
 
-    iconPixelSize: 16
-
     Layout.fillWidth: true
     Layout.minimumWidth: (popupAvailableWidth - 4) / 2
 

@@ -79,6 +79,11 @@ void GlobalContext::setCurrentNotation(const INotationPtr& notation)
     }
 
     m_currentNotation = notation;
+
+    if (m_currentNotation) {
+        m_currentNotation->setOpened(true);
+    }
+
     m_currentNotationChanged.notify();
 }
 
