@@ -213,8 +213,8 @@ subdirs (
         libmscore/tuplet
 #        libmscore/text        work in progress...
         libmscore/utils
-#        mscore/workspaces     Not working on CI (not support createPlatformOpenGLContext!)
-#        mscore/palette        Not working on CI (not support createPlatformOpenGLContext!)
+        mscore/workspaces
+        mscore/palette
         importmidi
         capella
         biab
