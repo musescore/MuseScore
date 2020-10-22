@@ -32,6 +32,8 @@ using namespace mu::async;
 using namespace mu::notation;
 using namespace mu::instruments;
 
+static const Ms::Fraction DEFAULT_TICK = Ms::Fraction(0, 1);
+
 NotationParts::NotationParts(IGetScore* getScore, Notification selectionChangedNotification)
     : m_getScore(getScore), m_partsNotifier(new ChangedNotifier<const Part*>())
 {
@@ -490,7 +492,7 @@ void NotationParts::setCutawayEnabled(const ID& staffId, bool enabled)
 void NotationParts::setSmallStaff(const ID& staffId, bool smallStaff)
 {
     Staff* staff = this->staff(staffId);
-    Ms::StaffType* staffType = staff->staffType(Ms::Fraction(0, 1));
+    Ms::StaffType* staffType = staff->staffType(DEFAULT_TICK);
 
     if (!staff || !staffType) {
         return;
@@ -521,15 +523,15 @@ void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config)
     staff->setUserDist(config.userDistance);
     staff->undoChangeProperty(Ms::Pid::MAG, config.scale);
     staff->setShowIfEmpty(config.showIfEmpty);
-    staff->staffType(Ms::Fraction(0, 1))->setLines(config.linesCount);
-    staff->staffType(Ms::Fraction(0, 1))->setLineDistance(Ms::Spatium(config.lineDistance));
-    staff->staffType(Ms::Fraction(0, 1))->setGenClef(config.showClef);
-    staff->staffType(Ms::Fraction(0, 1))->setGenTimesig(config.showTimeSignature);
-    staff->staffType(Ms::Fraction(0, 1))->setGenKeysig(config.showKeySignature);
-    staff->staffType(Ms::Fraction(0, 1))->setShowBarlines(config.showBarlines);
-    staff->staffType(Ms::Fraction(0, 1))->setStemless(config.showStemless);
-    staff->staffType(Ms::Fraction(0, 1))->setShowLedgerLines(config.showLedgerLinesPitched);
-    staff->staffType(Ms::Fraction(0, 1))->setNoteHeadScheme(config.noteheadScheme);
+    staff->staffType(DEFAULT_TICK)->setLines(config.linesCount);
+    staff->staffType(DEFAULT_TICK)->setLineDistance(Ms::Spatium(config.lineDistance));
+    staff->staffType(DEFAULT_TICK)->setGenClef(config.showClef);
+    staff->staffType(DEFAULT_TICK)->setGenTimesig(config.showTimeSignature);
+    staff->staffType(DEFAULT_TICK)->setGenKeysig(config.showKeySignature);
+    staff->staffType(DEFAULT_TICK)->setShowBarlines(config.showBarlines);
+    staff->staffType(DEFAULT_TICK)->setStemless(config.showStemless);
+    staff->staffType(DEFAULT_TICK)->setShowLedgerLines(config.showLedgerLinesPitched);
+    staff->staffType(DEFAULT_TICK)->setNoteHeadScheme(config.noteheadScheme);
     staff->setHideSystemBarLine(config.hideSystemBarline);
     staff->setMergeMatchingRests(config.mergeMatchingRests);
     staff->setHideWhenEmpty(config.hideMode);
@@ -542,6 +544,37 @@ void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config)
     m_partsChanged.notify();
 }
 
+bool NotationParts::voiceVisible(int voiceIndex) const
+{
+    for (const Part* part : score()->parts()) {
+        for (Staff* staff : *part->staves()) {
+            if (staff->voiceVisible(voiceIndex)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+void NotationParts::setVoiceVisible(int voiceIndex, bool visible)
+{
+    if (voiceVisible(voiceIndex) == visible) {
+        return;
+    }
+
+    startEdit();
+
+    for (const Part* part : score()->parts()) {
+        for (Staff* staff : *part->staves()) {
+            doSetStaffVoiceVisible(staff, voiceIndex, visible);
+        }
+    }
+
+    apply();
+    m_partsChanged.notify();
+}
+
 void NotationParts::setVoiceVisible(const ID& staffId, int voiceIndex, bool visible)
 {
     Staff* staff = this->staff(staffId);
@@ -550,6 +583,18 @@ void NotationParts::setVoiceVisible(const ID& staffId, int voiceIndex, bool visi
     }
 
     startEdit();
+    doSetStaffVoiceVisible(staff, voiceIndex, visible);
+    apply();
+
+    notifyAboutStaffChanged(staffId);
+    m_partsChanged.notify();
+}
+
+void NotationParts::doSetStaffVoiceVisible(Staff* staff, int voiceIndex, bool visible)
+{
+    if (staff->voiceVisible(voiceIndex) == visible) {
+        return;
+    }
 
     Ms::SegmentType segmentType = Ms::SegmentType::ChordRest;
     for (const Ms::Segment* segment = score()->firstSegment(segmentType); segment; segment = segment->next1(segmentType)) {
@@ -565,11 +610,6 @@ void NotationParts::setVoiceVisible(const ID& staffId, int voiceIndex, bool visi
     }
 
     staff->setVoiceVisible(voiceIndex, visible);
-
-    apply();
-
-    notifyAboutStaffChanged(staffId);
-    m_partsChanged.notify();
 }
 
 void NotationParts::appendDoublingInstrument(const Instrument& instrument, const ID& destinationPartId)
@@ -1344,7 +1384,7 @@ void NotationParts::initStaff(Staff* staff, const Instrument& instrument, const 
         pst = Ms::StaffType::getDefaultPreset(instrument.staffGroup);
     }
 
-    Ms::StaffType* stt = staff->setStaffType(Ms::Fraction(0, 1), *pst);
+    Ms::StaffType* stt = staff->setStaffType(DEFAULT_TICK, *pst);
     if (cleffIndex >= MAX_STAVES) {
         stt->setSmall(false);
     } else {

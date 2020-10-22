@@ -94,7 +94,6 @@ InspectorSectionView {
                 width: (parent.width - popupButtonsRow.spacing)/ 2
 
                 icon: IconCode.AUDIO
-                iconPixelSize: 16
                 text: qsTr("Playback")
 
                 onClicked: {
@@ -124,7 +123,6 @@ InspectorSectionView {
                 width: (parent.width - popupButtonsRow.spacing)/ 2
 
                 icon: IconCode.POSITION_ARROWS
-                iconPixelSize: 16
                 text: qsTr("Appearance")
 
                 onClicked: {

@@ -26,8 +26,7 @@
 #include "async/notifylist.h"
 #include "retval.h"
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 using ID = QString;
 using IDList = QList<ID>;
 
@@ -41,11 +40,13 @@ public:
     virtual async::NotifyList<const Staff*> staffList(const ID& partId, const ID& instrumentId) const = 0;
 
     virtual ValCh<bool> canChangeInstrumentVisibility(const ID& instrumentId, const ID& fromPartId) const = 0;
+    virtual bool voiceVisible(int voiceIndex) const = 0;
 
     virtual void setInstruments(const instruments::InstrumentList& instruments) = 0;
     virtual void setPartVisible(const ID& partId, bool visible) = 0;
     virtual void setInstrumentVisible(const ID& instrumentId, const ID& fromPartId, bool visible) = 0;
     virtual void setStaffVisible(const ID& staffId, bool visible) = 0;
+    virtual void setVoiceVisible(int voiceIndex, bool visible) = 0;
     virtual void setVoiceVisible(const ID& staffId, int voiceIndex, bool visible) = 0;
     virtual void setPartName(const ID& partId, const QString& name) = 0;
     virtual void setPartSharpFlat(const ID& partId, const SharpFlat& sharpFlat) = 0;
@@ -82,7 +83,6 @@ public:
 };
 
 using INotationPartsPtr = std::shared_ptr<INotationParts>;
-}
 }
 
 #endif // MU_NOTATION_INOTATIONPARTS_H

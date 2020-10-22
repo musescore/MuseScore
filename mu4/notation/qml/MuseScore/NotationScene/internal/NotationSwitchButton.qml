@@ -35,14 +35,13 @@ FlatRadioButton {
         }
 
         FlatButton {
-            Layout.fillHeight: true
-            Layout.topMargin: 1
-            Layout.bottomMargin: 1
-            Layout.preferredWidth: width
-            Layout.alignment: Qt.AlignRight
+            Layout.preferredHeight: 14
+            Layout.preferredWidth: height
+            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
 
             normalStateColor: "transparent"
             icon: IconCode.CLOSE_X_ROUNDED
+            iconPixelSize: 12
             onClicked: root.closeRequested()
         }
 
