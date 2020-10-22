@@ -5,13 +5,14 @@ trap 'echo Run tests failed; exit 1' ERR
 
 . ./../musescore_environment.sh
 
-cd build.release/mtest
+cd build.debug/mtest
 
-# vnc is the only tested platform plugin that allows to run
-# mscore executable in the used Travis environment.
-export QT_QPA_PLATFORM=vnc
+# run the mtests in "minimal" platform for headless systems
+# enable fonts handling
+export QT_QPA_PLATFORM=minimal:enable_fonts
+# if AddressSanitizer was used, disable leak detection
 export ASAN_OPTIONS=detect_leaks=0
 
 make -j2
 
-xvfb-run -a ctest -j2 --output-on-failure
+ctest -j2 --output-on-failure
