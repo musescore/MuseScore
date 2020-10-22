@@ -25,10 +25,10 @@ ENV_FILE=./../musescore_tx2s3_environment.sh
 rm -f ${ENV_FILE}
 
 echo "Install Qt (lrelease)"
-qt_version="598"
+qt_version="5151"
 QT_PATH="$HOME/Qt/${qt_version}"
 mkdir -p "${QT_PATH}"
-wget -q --show-progress -O qt5.zip "https://s3.amazonaws.com/utils.musescore.org/qt${qt_version}.zip"
+wget -q --show-progress -O qt5.zip "https://s3.amazonaws.com/utils.musescore.org/Qt${qt_version}_gcc64.7z"
 7z x -y qt5.zip -o"${QT_PATH}"
 
 export PATH=${QT_PATH}/bin:$PATH
