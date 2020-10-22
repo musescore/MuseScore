@@ -35,8 +35,7 @@ class QString;
 class QPainter;
 class QRect;
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 
 class INotation;
 using INotationPtr = std::shared_ptr<INotation>;
@@ -87,7 +86,6 @@ public:
     // notify
     virtual async::Notification notationChanged() const = 0;
 };
-}
 }
 
 #endif // MU_NOTATION_INOTATION_H

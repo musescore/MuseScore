@@ -31,8 +31,7 @@ class MScore;
 class Score;
 }
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class NotationInteraction;
 class NotationPlayback;
 class Notation : virtual public INotation, public IGetScore, public async::Asyncable
@@ -102,7 +101,6 @@ private:
 
     async::Notification m_notationChanged;
 };
-}
 }
 
 #endif // MU_NOTATION_NOTATION_H

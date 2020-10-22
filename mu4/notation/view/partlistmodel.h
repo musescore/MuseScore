@@ -24,7 +24,6 @@
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
-#include "iexcerptnotation.h"
 #include "inotationcreator.h"
 
 class QItemSelectionModel;
@@ -53,9 +52,13 @@ public:
     Q_INVOKABLE void selectPart(int index);
     Q_INVOKABLE void removePart(int index);
     Q_INVOKABLE void setPartTitle(int index, const QString& title);
+    Q_INVOKABLE void setVoicesVisibility(int index, const QVariantList& visibility);
     Q_INVOKABLE void copyPart(int index);
 
 private:
+    QString formatVoicesTitle(INotationPtr notation) const;
+    QVariantList voicesVisibility(INotationPtr notation) const;
+
     void setTitle(INotationPtr notation, const QString& title);
 
     bool isIndexValid(int index) const;
@@ -63,16 +66,22 @@ private:
     QList<int> selectedRows() const;
 
     void insertNotation(int destinationIndex, INotationPtr notation);
+    void notifyAboutNotationChanged(int index);
+
+    void applyVoicesVisibility(INotationPtr notation) const;
 
     enum Roles {
         RoleTitle = Qt::UserRole + 1,
         RoleIsSelected,
-        RoleIsMain
+        RoleIsMain,
+        RoleVoicesVisibility,
+        RoleVoicesTitle
     };
 
     QItemSelectionModel* m_selectionModel = nullptr;
     QHash<int, QByteArray> m_roles;
     QList<INotationPtr> m_notations;
+    QHash<QString /* notation key */, QVariantList /* voices */> m_voicesVisibility;
     INotationPtr m_currentNotation;
 };
 }

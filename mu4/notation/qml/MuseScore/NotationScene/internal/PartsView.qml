@@ -74,6 +74,8 @@ Column {
             currentPartIndex: view.currentIndex
             isSelected: model.isSelected
             isMain: model.isMain
+            voicesVisibility: model.voicesVisibility
+            voicesTitle: model.voicesTitle
 
             onPartClicked: {
                 root.model.selectPart(model.index)
@@ -82,6 +84,10 @@ Column {
 
             onTitleChanged: {
                 root.model.setPartTitle(model.index, title)
+            }
+
+            onVoicesVisibilityChangeRequested: {
+                root.model.setVoicesVisibility(model.index, voicesVisibility)
             }
 
             onRemovePartRequested: {

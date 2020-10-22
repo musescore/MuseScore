@@ -22,8 +22,7 @@
 #include "inotationparts.h"
 #include "async/asyncable.h"
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class IGetScore;
 class NotationParts : public INotationParts, public async::Asyncable
 {
@@ -36,11 +35,13 @@ public:
     async::NotifyList<const Staff*> staffList(const ID& partId, const ID& instrumentId) const override;
 
     ValCh<bool> canChangeInstrumentVisibility(const ID& instrumentId, const ID& fromPartId) const override;
+    bool voiceVisible(int voiceIndex) const override;
 
     void setInstruments(const instruments::InstrumentList& instruments) override;
     void setPartVisible(const ID& partId, bool visible) override;
     void setInstrumentVisible(const ID& instrumentId, const ID& fromPartId, bool visible) override;
     void setStaffVisible(const ID& staffId, bool visible) override;
+    void setVoiceVisible(int voiceIndex, bool visible) override;
     void setVoiceVisible(const ID& staffId, int voiceIndex, bool visible) override;
     void setPartName(const ID& partId, const QString& name) override;
     void setPartSharpFlat(const ID& partId, const SharpFlat& sharpFlat) override;
@@ -114,6 +115,7 @@ private:
 
     void doMovePart(const ID& sourcePartId, const ID& destinationPartId, InsertMode mode = Before);
     void doSetStaffVisible(Staff* staff, bool visible);
+    void doSetStaffVoiceVisible(Staff* staff, int voiceIndex, bool visible);
     void doRemoveParts(const IDList& partsIds);
     void doRemoveInstruments(const IDList& instrumentsIds, Part* fromPart);
     void doSetPartName(Part* part, const QString& name);
@@ -175,7 +177,6 @@ private:
     mutable QHash<InstrumentKey, async::ChangedNotifier<const Staff*>*> m_instrumentsNotifiersHash;
     mutable QHash<InstrumentKey, ValCh<bool> > m_canChangeInstrumentsVisibilityHash;
 };
-}
 }
 
 namespace Ms {

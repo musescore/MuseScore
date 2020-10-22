@@ -20,13 +20,10 @@
 #include "notationswitchlistmodel.h"
 
 using namespace mu::notation;
-using namespace mu::notation;
-using namespace mu::framework;
 
 NotationSwitchListModel::NotationSwitchListModel(QObject* parent)
     : QAbstractListModel(parent)
 {
-    m_roles.insert(RoleTitle, "title");
 }
 
 void NotationSwitchListModel::load()
@@ -67,6 +64,7 @@ void NotationSwitchListModel::loadNotations()
     }
 
     m_notations << masterNotation();
+    listenNotationOpeningStatus(masterNotation());
 
     for (IExcerptNotationPtr excerpt: masterNotation()->excerpts().val) {
         if (excerpt->opened().val) {
@@ -83,6 +81,10 @@ void NotationSwitchListModel::listenNotationOpeningStatus(INotationPtr notation)
 {
     notation->opened().ch.onReceive(this, [this, notation](bool opened) {
         if (opened) {
+            if (m_notations.contains(notation)) {
+                return;
+            }
+
             beginInsertRows(QModelIndex(), m_notations.size(), m_notations.size());
             m_notations << notation;
             endInsertRows();
@@ -123,7 +125,11 @@ int NotationSwitchListModel::rowCount(const QModelIndex&) const
 
 QHash<int, QByteArray> NotationSwitchListModel::roleNames() const
 {
-    return m_roles;
+    static const QHash<int, QByteArray> roles {
+        { RoleTitle, "title" }
+    };
+
+    return roles;
 }
 
 void NotationSwitchListModel::setCurrentNotation(int index)

@@ -12,9 +12,12 @@ Item {
     property bool isSelected: false
     property bool isMain: false
     property int currentPartIndex: -1
+    property alias voicesVisibility: voicesPopup.voicesVisibility
+    property alias voicesTitle: voicesLabel.text
 
     signal copyPartRequested()
     signal removePartRequested()
+    signal voicesVisibilityChangeRequested()
     signal partClicked()
 
     height: 42
@@ -96,11 +99,12 @@ Item {
     }
 
     StyledTextLabel {
+        id: voicesLabel
+
         anchors.left: showVoicesPopupButton.right
         anchors.leftMargin: 8
         height: parent.height
 
-        text: voicesPopup.visibleVoicesTitle
         horizontalAlignment: Qt.AlignLeft
     }
 
@@ -126,6 +130,10 @@ Item {
 
         x: showVoicesPopupButton.x + showVoicesPopupButton.width / 2 - width / 2
         y: showVoicesPopupButton.y + showVoicesPopupButton.height
+
+        onVoicesVisibilityChangeRequested: {
+            root.voicesVisibilityChangeRequested()
+        }
     }
 
     ContextMenu {
@@ -211,6 +219,7 @@ Item {
             hoverEnabled: true
 
             onClicked: {
+                voicesPopup.close()
                 root.partClicked()
             }
         }

@@ -279,6 +279,7 @@ public:
     void setPlaybackVoice(int voice, bool val) { _playbackVoice[voice] = val; }
 
     std::array<bool, VOICES> visibilityVoices() const { return _visibilityVoices; }
+    bool voiceVisible(int voice) const { return _visibilityVoices[voice]; }
     void setVoiceVisible(int voice, bool visible) { _visibilityVoices[voice] = visible; }
 
 #ifndef NDEBUG
