@@ -294,7 +294,7 @@ void Zerberus::allNotesOff(int channel)
 
 bool Zerberus::loadSoundFonts(const QStringList& sl)
       {
-      foreach (const QString& s, sl) {
+      for (const QString& s : sl) {
             if (!loadInstrument(s))
                   return false;
             }
