@@ -62,7 +62,7 @@ private:
     IMasterNotationPtr masterNotation() const;
     QList<int> selectedRows() const;
 
-    void insertExcerpt(int destinationIndex, IExcerptNotationPtr excerpt);
+    void insertNotation(int destinationIndex, INotationPtr notation);
 
     enum Roles {
         RoleTitle = Qt::UserRole + 1,
@@ -72,8 +72,8 @@ private:
 
     QItemSelectionModel* m_selectionModel = nullptr;
     QHash<int, QByteArray> m_roles;
-    QList<IExcerptNotationPtr> m_excerpts;
-    IExcerptNotationPtr m_currentExcerpt;
+    QList<INotationPtr> m_notations;
+    INotationPtr m_currentNotation;
 };
 }
 
