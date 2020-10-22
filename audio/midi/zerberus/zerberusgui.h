@@ -68,6 +68,7 @@ class ZerberusGui : public Ms::SynthesizerGui, Ui::ZerberusGui {
       
    private slots:
       void soundFontTopClicked();
+      void soundFontBottomClicked();
       void soundFontUpClicked();
       void soundFontDownClicked();
       void soundFontAddClicked();

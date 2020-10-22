@@ -28,35 +28,35 @@
    </property>
    <item row="0" column="1">
     <layout class="QVBoxLayout" name="verticalLayout_6">
-	 <property name="spacing">
+     <property name="spacing">
       <number>0</number>
      </property>
      <item>
-       <widget class="QToolButton" name="soundFontTop">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="focusPolicy">
-         <enum>Qt::TabFocus</enum>
-        </property>
-        <property name="toolTip">
-         <string>Move SoundFont to Top</string>
-        </property>
-        <property name="accessibleDescription">
-         <string/>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../mscore/musescore.qrc">
-          <normaloff>:/data/icons/object-select.svg</normaloff>:/data/icons/object-select.svg</iconset>
-        </property>
-       </widget>
-      </item>
+      <widget class="QToolButton" name="soundFontTop">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="toolTip">
+        <string>Move SoundFont to Top</string>
+       </property>
+       <property name="accessibleDescription">
+        <string/>
+       </property>
+       <property name="text">
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../../../mscore/musescore.qrc">
+         <normaloff>:/data/icons/arrowsMoveToTop.svg</normaloff>:/data/icons/arrowsMoveToTop.svg</iconset>
+       </property>
+      </widget>
+     </item>
      <item>
       <widget class="QToolButton" name="soundFontUp">
        <property name="sizePolicy">
@@ -78,8 +78,8 @@
         <string notr="true"/>
        </property>
        <property name="icon">
-        <iconset resource="../mscore/musescore.qrc">
-         <normaloff>:/data/icons/arrowsMoveToTop.svg</normaloff>:/data/icons/arrowsMoveToTop.svg</iconset>
+        <iconset resource="../../../mscore/musescore.qrc">
+         <normaloff>:/data/icons/arrow_up.svg</normaloff>:/data/icons/arrow_up.svg</iconset>
        </property>
       </widget>
      </item>
@@ -101,8 +101,34 @@
         <string notr="true"/>
        </property>
        <property name="icon">
-        <iconset resource="../mscore/musescore.qrc">
+        <iconset resource="../../../mscore/musescore.qrc">
          <normaloff>:/data/icons/arrow_down.svg</normaloff>:/data/icons/arrow_down.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="soundFontBottom">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+       <property name="toolTip">
+        <string>Move SoundFont to Bottom</string>
+       </property>
+       <property name="accessibleDescription">
+        <string/>
+       </property>
+       <property name="text">
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="../../../mscore/musescore.qrc">
+         <normaloff>:/data/icons/arrowsMoveToBottom.svg</normaloff>:/data/icons/arrowsMoveToBottom.svg</iconset>
        </property>
       </widget>
      </item>
@@ -148,13 +174,12 @@
     </layout>
    </item>
    <item row="0" column="0">
-    <widget class="QListWidget" name="files">
-    </widget>
+    <widget class="QListWidget" name="files"/>
    </item>
   </layout>
  </widget>
  <resources>
-  <include location="../mscore/musescore.qrc"/>
+  <include location="../../../mscore/musescore.qrc"/>
  </resources>
  <connections/>
 </ui>
