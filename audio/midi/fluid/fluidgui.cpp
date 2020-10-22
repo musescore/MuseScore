@@ -163,10 +163,7 @@ void FluidGui::moveSoundfontInTheList(int currentIdx, int targetIdx)
             fluid()->removeSoundFont(sfName);
 
       sfonts.move(currentIdx, targetIdx);
-      fluid()->loadSoundFonts(sfonts);
-      sfonts = fluid()->soundFonts();
-      soundFonts->clear();
-      soundFonts->addItems(sfonts);
+      loadSoundFontsAsync(sfonts);
       soundFonts->setCurrentRow(targetIdx);
       emit sfChanged();
       }
@@ -218,6 +215,20 @@ void FluidGui::soundFontDownClicked()
       }
 
 //---------------------------------------------------------
+//   loadSoundFontsAsync
+//---------------------------------------------------------
+
+void FluidGui::loadSoundFontsAsync(QStringList sfonts)
+      {
+      QFuture<bool> future = QtConcurrent::run(fluid(), &FluidS::Fluid::loadSoundFonts, sfonts);
+      _futureWatcher.setFuture(future);
+      _progressTimer->start(1000);
+      _progressDialog->exec();
+
+      synthesizerChanged();
+      }
+
+//---------------------------------------------------------
 //   soundFontDeleteClicked
 //---------------------------------------------------------
 
@@ -258,7 +269,7 @@ void FluidGui::soundFontAddClicked()
       QFileInfoList l = FluidS::Fluid::sfFiles();
 
       SfListDialog ld(this);
-      foreach (const QFileInfo& fi, l)
+      for (const QFileInfo& fi : l)
             ld.add(fi.fileName(), fi.absoluteFilePath());
       if (!ld.exec())
             return;
@@ -316,7 +327,6 @@ void FluidGui::loadSf()
                                  tr("SoundFont %1 already loaded").arg(sfPath));
             }
       else {
-
             _loadedSfName = sfName;
             _loadedSfPath = sfPath;
             QFuture<bool> future = QtConcurrent::run(fluid(), &FluidS::Fluid::addSoundFont, sfPath);

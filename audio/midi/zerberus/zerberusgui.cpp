@@ -285,7 +285,7 @@ void ZerberusGui::soundFontAddClicked()
       QFileInfoList l = Zerberus::sfzFiles();
 
       SfzListDialog ld(this);
-      foreach (const QFileInfo& fi, l)
+      for (const QFileInfo& fi : l)
             ld.add(fi.fileName(), fi.absoluteFilePath());
       if (!ld.exec())
             return;
