@@ -16,6 +16,7 @@
 #include "config.h"
 #include "../qmlplugin.h"
 #include "enums.h"
+#include "libmscore/harmony.h"
 #include "libmscore/lyrics.h"
 #include "libmscore/mscore.h"
 #include "libmscore/utils.h"
@@ -162,6 +163,9 @@ class PluginAPI : public Ms::QmlPlugin {
       /// Contains Ms::SymId enumeration values
       /// \since MuseScore 3.5
       DECLARE_API_ENUM( SymId,            symIdEnum,              Ms::SymId                 )
+      /// Contains Ms::HarmonyType enumeration values
+      /// \since MuseScore 3.6
+      DECLARE_API_ENUM( HarmonyType,      harmonyTypeEnum,        Ms::HarmonyType           )
 
       QFile logFile;
 
