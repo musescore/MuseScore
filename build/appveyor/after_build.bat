@@ -1,5 +1,5 @@
 :: Print ccache statistics
-ccache.exe -s
+REM ccache.exe -s
 
 CD C:\MuseScore
 
