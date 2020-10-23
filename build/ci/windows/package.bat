@@ -47,8 +47,8 @@ IF %BUILD_WIN_PORTABLE% == ON (
 
 :: Setup package type
 IF %BUILD_WIN_PORTABLE% == ON    ( SET PACKAGE_TYPE="portable") ELSE (
-IF %BUILD_MODE% == devel_build   ( SET PACKAGE_TYPE="dir") ELSE (
-IF %BUILD_MODE% == nightly_build ( SET PACKAGE_TYPE="msi") ELSE (
+IF %BUILD_MODE% == devel_build   ( SET PACKAGE_TYPE="7z") ELSE (
+IF %BUILD_MODE% == nightly_build ( SET PACKAGE_TYPE="7z") ELSE (
 IF %BUILD_MODE% == testing_build ( SET PACKAGE_TYPE="msi") ELSE (    
 IF %BUILD_MODE% == stable_build  ( SET PACKAGE_TYPE="msi") ELSE ( 
     ECHO "Unknown BUILD_MODE: %BUILD_MODE%"
@@ -102,11 +102,11 @@ IF %PACKAGE_TYPE% == "dir" (  GOTO PACK_DIR ) ELSE (
 :: ============================
 :PACK_7z
 ECHO "Start 7z packing..."
-7z a MuseScore.7z %INSTALL_DIR%
+SET ARTIFACT_NAME=MuseScore-%BUILD_VERSION%-%TARGET_PROCESSOR_ARCH%
+RENAME %INSTALL_DIR% %ARTIFACT_NAME%
+7z a %ARTIFACTS_DIR%\%ARTIFACT_NAME%.7z %ARTIFACT_NAME%
 
-SET ARTIFACT_NAME=MuseScore-%BUILD_VERSION%-%TARGET_PROCESSOR_ARCH%.7z
-COPY MuseScore.7z %ARTIFACTS_DIR%\%ARTIFACT_NAME% /Y 
-bash ./build/ci/tools/make_artifact_name_env.sh %ARTIFACT_NAME%
+bash ./build/ci/tools/make_artifact_name_env.sh %ARTIFACT_NAME%.7z
 ECHO "Finished 7z packing"
 GOTO END_SUCCESS
 
