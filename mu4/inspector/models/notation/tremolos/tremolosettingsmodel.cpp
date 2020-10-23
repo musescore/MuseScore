@@ -12,7 +12,7 @@ TremoloSettingsModel::TremoloSettingsModel(QObject* parent, IElementRepositorySe
 
 void TremoloSettingsModel::createProperties()
 {
-    m_strokeStyle = buildPropertyItem(Ms::Pid::TREMOLO_STROKE_STYLE);
+    m_style = buildPropertyItem(Ms::Pid::TREMOLO_STYLE);
 }
 
 void TremoloSettingsModel::requestElements()
@@ -22,15 +22,15 @@ void TremoloSettingsModel::requestElements()
 
 void TremoloSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_strokeStyle);
+    loadPropertyItem(m_style);
 }
 
 void TremoloSettingsModel::resetProperties()
 {
-    m_strokeStyle->resetToDefault();
+    m_style->resetToDefault();
 }
 
-PropertyItem* TremoloSettingsModel::strokeStyle() const
+PropertyItem* TremoloSettingsModel::style() const
 {
-    return m_strokeStyle;
+    return m_style;
 }
