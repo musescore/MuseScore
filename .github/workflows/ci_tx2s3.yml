@@ -5,7 +5,7 @@ on:
     branches:
     - 3.x_off
   schedule:
-    - cron:  '0 */6 * * *' # Every 6 hour
+    - cron: '*/15 * * * *' # Every 15 minutes
   workflow_dispatch:
 
 jobs:
