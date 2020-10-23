@@ -68,7 +68,7 @@ tresult ConnectionProxy::disconnect(IConnectionPoint* destination)
 tresult ConnectionProxy::notify(IMessage* message)
 {
     if (m_destination) {
-        if (m_thread == pthread_self()) {
+        if (m_threadID == std::this_thread::get_id()) {
             return m_destination->notify(message);
         }
     }

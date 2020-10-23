@@ -29,12 +29,26 @@ if [ "$BUILD_MODE" == "nightly_build" ]; then MUSESCORE_BUILD_CONFIG=dev; fi
 if [ "$BUILD_MODE" == "testing_build" ]; then MUSESCORE_BUILD_CONFIG=testing; fi
 if [ "$BUILD_MODE" == "stable_build" ]; then MUSESCORE_BUILD_CONFIG=release; fi
 
+if [ -z "$VST3_SDK_PATH" ]; then 
+echo "warning: not set VST3_SDK_PATH, build VST module disabled"
+BUILD_VST=OFF
+else
+BUILD_VST=ON
+fi
+
 echo "MUSESCORE_BUILD_CONFIG: $MUSESCORE_BUILD_CONFIG"
 echo "BUILD_NUMBER: $BUILD_NUMBER"
 echo "TELEMETRY_TRACK_ID: $TELEMETRY_TRACK_ID"
 echo "BUILD_UI_MU4: $BUILD_UI_MU4"
+echo "VST3_SDK_PATH: $VST3_SDK_PATH"
 
-make -f Makefile.osx ci MUSESCORE_BUILD_CONFIG=$MUSESCORE_BUILD_CONFIG BUILD_NUMBER=$BUILD_NUMBER TELEMETRY_TRACK_ID=$TELEMETRY_TRACK_ID BUILD_UI_MU4=${BUILD_UI_MU4}
+make -f Makefile.osx ci MUSESCORE_BUILD_CONFIG=$MUSESCORE_BUILD_CONFIG \
+                        BUILD_NUMBER=$BUILD_NUMBER \
+                        TELEMETRY_TRACK_ID=$TELEMETRY_TRACK_ID \
+                        BUILD_UI_MU4=$BUILD_UI_MU4 \
+                        BUILD_VST=$BUILD_VST \
+                        VST3_SDK_PATH=$VST3_SDK_PATH
+
 
 
 bash ./build/ci/tools/make_release_channel_env.sh -c $MUSESCORE_BUILD_CONFIG

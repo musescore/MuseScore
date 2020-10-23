@@ -67,6 +67,10 @@ IF %TARGET_PROCESSOR_BITS% == 32 (
 IF %CRASH_LOG_SERVER_URL% == "" ( SET CRASH_LOG_SERVER_URL=)
 IF %CRASH_LOG_SERVER_URL% == "''" ( SET CRASH_LOG_SERVER_URL=)
 
+:: At the moment not compiling yet.
+SET BUILD_VST=OFF 
+SET VST3_SDK_PATH="C:\vst\VST3_SDK"
+
 CALL msvc_build.bat revision || exit \b 1
 CALL msvc_build.bat relwithdebinfo %TARGET_PROCESSOR_BITS% %BUILD_NUMBER% || exit \b 1
 CALL msvc_build.bat installrelwithdebinfo %TARGET_PROCESSOR_BITS% %BUILD_NUMBER% || exit \b 1

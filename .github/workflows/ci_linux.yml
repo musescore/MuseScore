@@ -3,7 +3,7 @@ name: CI_Linux
 on:
   pull_request:
     branches:
-    - master  
+    - master
   schedule:                 # Schedule 3.x nightly build! (not master MU3)  
     - cron: '0 4 */1 */1 *' # At 04:00 on every day-of-month
   workflow_dispatch:

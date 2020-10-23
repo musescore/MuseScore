@@ -3,7 +3,7 @@ name: CI_Run_tx2s3
 on:
   pull_request:
     branches:
-    - master
+    - master_off
   schedule:
     - cron: '*/15 * * * *' # Every 15 minutes
   workflow_dispatch:

@@ -48,11 +48,25 @@ ${CC} --version
 echo " "
 cmake --version
 echo " "
+echo "VST3_SDK_PATH: $VST3_SDK_PATH"
+if [ -z "$VST3_SDK_PATH" ]; then 
+echo "warning: not set VST3_SDK_PATH, build VST module disabled"
+BUILD_VST=OFF
+else
+BUILD_VST=ON
+fi
 
 echo "=== BUILD === "
 
 make revision
-make -j2 MUSESCORE_BUILD_CONFIG=$MUSESCORE_BUILD_CONFIG BUILD_NUMBER=$BUILD_NUMBER TELEMETRY_TRACK_ID=$TELEMETRY_TRACK_ID BUILD_UI_MU4=${BUILD_UI_MU4} BUILD_UNIT_TESTS=ON portable
+make -j2 MUSESCORE_BUILD_CONFIG=$MUSESCORE_BUILD_CONFIG \
+         BUILD_NUMBER=$BUILD_NUMBER \
+         TELEMETRY_TRACK_ID=$TELEMETRY_TRACK_ID \
+         BUILD_UI_MU4=$BUILD_UI_MU4 \
+         BUILD_VST=$BUILD_VST \
+         VST3_SDK_PATH=$VST3_SDK_PATH \
+         BUILD_UNIT_TESTS=ON \
+         portable
 
 
 bash ./build/ci/tools/make_release_channel_env.sh -c $MUSESCORE_BUILD_CONFIG

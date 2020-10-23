@@ -20,6 +20,7 @@
 #ifndef MU_VST_PLUGINPARAMETER_H
 #define MU_VST_PLUGINPARAMETER_H
 
+#include <string>
 #include "pluginterfaces/vst/ivsteditcontroller.h"
 
 namespace mu {
