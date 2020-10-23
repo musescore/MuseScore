@@ -55,7 +55,6 @@ public:
     };
 
     explicit InstrumentPanelTreeModel(QObject* parent = nullptr);
-    ~InstrumentPanelTreeModel() override;
 
     Q_INVOKABLE void load();
     Q_INVOKABLE void selectRow(const QModelIndex& rowIndex, const bool isMultipleSelectionModeOn);
@@ -99,12 +98,16 @@ private slots:
     void updateRemovingAvailability();
 
 private:
+    void clear();
+
+    notation::IDList currentNotationPartIdList() const;
+
     AbstractInstrumentPanelTreeItem* loadPart(const notation::Part* part);
     AbstractInstrumentPanelTreeItem* loadInstrument(const Instrument& instrument, const QString& partId,const QString& partName);
 
     AbstractInstrumentPanelTreeItem* modelIndexToItem(const QModelIndex& index) const;
 
-    void updatePartItem(PartTreeItem* item, const notation::Part* part);
+    void updatePartItem(AbstractInstrumentPanelTreeItem* item, const notation::Part* part);
     void updateInstrumentItem(InstrumentTreeItem* item, const mu::instruments::Instrument& instrument, const QString& partId,
                               const QString& partName);
     void updateStaffItem(StaffTreeItem* item, const mu::notation::Staff* staff);
@@ -119,6 +122,7 @@ private:
     AbstractInstrumentPanelTreeItem* m_rootItem = nullptr;
     QItemSelectionModel* m_selectionModel = nullptr;
 
+    mu::notation::INotationParts* m_masterNotationParts = nullptr;
     mu::notation::INotationParts* m_notationParts = nullptr;
 
     bool m_isMovingUpAvailable = false;

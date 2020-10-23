@@ -228,7 +228,12 @@ void System::layoutSystem(qreal xo1)
             continue;
         }
         for (int staffIdx = firstSysStaffOfPart(p); staffIdx <= lastSysStaffOfPart(p); ++staffIdx) {
-            for (InstrumentName* t : _staves[staffIdx]->instrumentNames) {
+            SysStaff* staff = this->staff(staffIdx);
+            if (!staff) {
+                continue;
+            }
+
+            for (InstrumentName* t : staff->instrumentNames) {
                 t->layout();
                 qreal w = t->width() + point(instrumentNameOffset);
                 if (w > xoff2) {
@@ -777,7 +782,7 @@ void System::layout2()
                     s2 = staff(staffIdx);
                     for (int i = staffIdx + nstaves - 1; i > 0; --i) {
                         SysStaff* s3 = staff(i);
-                        if (s3->show()) {
+                        if (s3 && s3->show()) {
                             s2 = s3;
                             break;
                         }
@@ -1235,6 +1240,15 @@ qreal System::staffYpage(int staffIdx) const
 qreal System::staffCanvasYpage(int staffIdx) const
 {
     return _staves[staffIdx]->y() + y() + page()->canvasPos().y();
+}
+
+SysStaff* System::staff(int staffIdx) const
+{
+    if (staffIdx >= 0 && staffIdx < _staves.size()) {
+        return _staves[staffIdx];
+    }
+
+    return nullptr;
 }
 
 //---------------------------------------------------------
