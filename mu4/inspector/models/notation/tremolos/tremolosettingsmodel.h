@@ -7,7 +7,7 @@ class TremoloSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem * strokeStyle READ strokeStyle CONSTANT)
+    Q_PROPERTY(PropertyItem * style READ style CONSTANT)
 
 public:
     explicit TremoloSettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -17,10 +17,10 @@ public:
     void loadProperties() override;
     void resetProperties() override;
 
-    PropertyItem* strokeStyle() const;
+    PropertyItem* style() const;
 
 private:
-    PropertyItem* m_strokeStyle = nullptr;
+    PropertyItem* m_style = nullptr;
 };
 
 #endif // TREMOLOSETTINGSMODEL_H

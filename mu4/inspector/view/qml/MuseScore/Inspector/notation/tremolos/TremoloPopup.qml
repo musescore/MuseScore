@@ -17,7 +17,7 @@ StyledPopup {
         id: contentColumn
 
         titleText: qsTr("Style (between notes)")
-        propertyItem: root.model ? root.model.strokeStyle : null
+        propertyItem: root.model ? root.model.style : null
 
         RadioButtonGroup {
             id: radioButtonList
@@ -27,18 +27,18 @@ StyledPopup {
 
             model: [
                 { iconRole: IconCode.TREMOLO_STYLE_DEFAULT, typeRole: TremoloTypes.STYLE_DEFAULT },
-                { iconRole: IconCode.TREMOLO_STYLE_ALL_STROKES_ATTACHED, typeRole: TremoloTypes.STYLE_ALL_STROKES_ATTACHED },
-                { iconRole: IconCode.TREMOLO_STYLE_SINGLE_STROKE_ATTACHED, typeRole: TremoloTypes.STYLE_SINGLE_STROKE_ATTACHED }
+                { iconRole: IconCode.TREMOLO_STYLE_TRADITIONAL, typeRole: TremoloTypes.STYLE_TRADITIONAL },
+                { iconRole: IconCode.TREMOLO_STYLE_TRADITIONAL_ALTERNATE, typeRole: TremoloTypes.STYLE_TRADITIONAL_ALTERNATE }
             ]
 
             delegate: FlatRadioButton {
                 ButtonGroup.group: radioButtonList.radioButtonGroup
 
-                checked: root.model && !root.model.strokeStyle.isUndefined ? root.model.strokeStyle.value === modelData["typeRole"]
-                                                                         : false
+                checked: root.model && !root.model.style.isUndefined ? root.model.style.value === modelData["typeRole"]
+                                                                     : false
 
                 onToggled: {
-                    root.model.strokeStyle.value = modelData["typeRole"]
+                    root.model.style.value = modelData["typeRole"]
                 }
 
                 StyledIconLabel {
