@@ -376,8 +376,8 @@ void Accidental::layout()
                   case AccidentalBracket::NONE: // can't happen
                         break;
                   }
-            SymElement e(id, 0.0, _bracket == AccidentalBracket::BRACE ? spatium() * 0.4 : 0.0);
-            el.append(e);
+            SymElement se(id, 0.0, _bracket == AccidentalBracket::BRACE ? spatium() * 0.4 : 0.0);
+            el.append(se);
             r |= symBbox(id);
             }
 
@@ -403,8 +403,8 @@ void Accidental::layout()
                         break;
                   }
             x = r.x()+r.width();
-            SymElement e(id, x, _bracket == AccidentalBracket::BRACE ? spatium() * 0.4 : 0.0);
-            el.append(e);
+            SymElement se(id, x, _bracket == AccidentalBracket::BRACE ? spatium() * 0.4 : 0.0);
+            el.append(se);
             r |= symBbox(id).translated(x, 0.0);
             }
       setbbox(r);
