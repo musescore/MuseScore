@@ -2381,19 +2381,19 @@ void Timeline::updateGridFromCmdState()
             return;
             }
 
-      const CmdState& state = _score->cmdState();
+      const CmdState& cState = _score->cmdState();
 
-      const bool layoutChanged = state.layoutRange();
+      const bool layoutChanged = cState.layoutRange();
 
       if (!layoutChanged) {
             updateGridView();
             return;
             }
 
-      const bool layoutAll = layoutChanged && (state.startTick() < Fraction(0, 1) || state.endTick() < Fraction(0, 1));
+      const bool layoutAll = layoutChanged && (cState.startTick() < Fraction(0, 1) || cState.endTick() < Fraction(0, 1));
 
-      const int startMeasure = layoutAll ? 0 : _score->tick2measure(state.startTick())->measureIndex();
-      const int endMeasure = layoutAll ? _score->nmeasures() : (_score->tick2measure(state.endTick())->measureIndex() + 1);
+      const int startMeasure = layoutAll ? 0 : _score->tick2measure(cState.startTick())->measureIndex();
+      const int endMeasure = layoutAll ? _score->nmeasures() : (_score->tick2measure(cState.endTick())->measureIndex() + 1);
 
       updateGrid(startMeasure, endMeasure);
       }
