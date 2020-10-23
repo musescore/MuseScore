@@ -53,6 +53,8 @@ private:
     void moveText(INotationInteractionPtr interaction, const actions::ActionName& action);
 
     void deleteSelection();
+    void undo();
+    void redo();
     void openPageStyle();
     void openStaffProperties();
 };

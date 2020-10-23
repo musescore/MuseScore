@@ -205,7 +205,7 @@ mu::Ret EditStaffType::doLoadScore(MasterScore* score, const mu::io::path& path)
     }
     score->updateChannel();
     //score->updateExpressive(MuseScore::synthesizer("Fluid"));
-    score->setSaved(false);
+    score->setSaved(true);
     score->update();
 
     if (!score->sanityCheck(QString())) {

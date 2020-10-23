@@ -21,12 +21,53 @@
 
 #include "log.h"
 #include "libmscore/score.h"
+#include "libmscore/undo.h"
 
 using namespace mu::notation;
 
 NotationUndoStack::NotationUndoStack(IGetScore* getScore)
     : m_getScore(getScore)
 {
+}
+
+bool NotationUndoStack::canUndo() const
+{
+    IF_ASSERT_FAILED(m_getScore && m_getScore->score()) {
+        return false;
+    }
+
+    return m_getScore->score()->undoStack()->canUndo();
+}
+
+void NotationUndoStack::undo()
+{
+    IF_ASSERT_FAILED(m_getScore && m_getScore->score()) {
+        return;
+    }
+
+    m_getScore->score()->undoRedo(true, nullptr);
+    m_getScore->score()->masterScore()->setSaved(isStackClean());
+    notifyAboutStackStateChanged();
+}
+
+bool NotationUndoStack::canRedo() const
+{
+    IF_ASSERT_FAILED(m_getScore && m_getScore->score()) {
+        return false;
+    }
+
+    return m_getScore->score()->undoStack()->canRedo();
+}
+
+void NotationUndoStack::redo()
+{
+    IF_ASSERT_FAILED(m_getScore && m_getScore->score()) {
+        return;
+    }
+
+    m_getScore->score()->undoRedo(false, nullptr);
+    m_getScore->score()->masterScore()->setSaved(isStackClean());
+    notifyAboutStackStateChanged();
 }
 
 void NotationUndoStack::prepareChanges()
@@ -45,6 +86,8 @@ void NotationUndoStack::rollbackChanges()
     }
 
     m_getScore->score()->endCmd(false, true);
+    m_getScore->score()->masterScore()->setSaved(isStackClean());
+    notifyAboutStackStateChanged();
 }
 
 void NotationUndoStack::commitChanges()
@@ -54,4 +97,25 @@ void NotationUndoStack::commitChanges()
     }
 
     m_getScore->score()->endCmd();
+    m_getScore->score()->masterScore()->setSaved(isStackClean());
+    notifyAboutStackStateChanged();
+}
+
+mu::async::Notification NotationUndoStack::stackChanged() const
+{
+    return m_stackStateChanged;
+}
+
+void NotationUndoStack::notifyAboutStackStateChanged()
+{
+    m_stackStateChanged.notify();
+}
+
+bool NotationUndoStack::isStackClean() const
+{
+    IF_ASSERT_FAILED(m_getScore && m_getScore->score()) {
+        return true;
+    }
+
+    return m_getScore->score()->undoStack()->isClean();
 }

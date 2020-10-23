@@ -26,8 +26,9 @@
 
 #include "modularity/ioc.h"
 
-#include "../inotationinteraction.h"
-#include "../inotationconfiguration.h"
+#include "inotationinteraction.h"
+#include "inotationconfiguration.h"
+#include "inotationundostack.h"
 
 #include "scorecallbacks.h"
 #include "notationinputstate.h"
@@ -48,7 +49,7 @@ class NotationInteraction : public INotationInteraction
     INJECT(notation, INotationConfiguration, configuration)
 
 public:
-    NotationInteraction(Notation* notation);
+    NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack);
     ~NotationInteraction() override;
 
     void init();
@@ -161,6 +162,7 @@ private:
     };
 
     Notation* m_notation = nullptr;
+    INotationUndoStackPtr m_undoStack;
     ScoreCallbacks* m_scoreCallbacks = nullptr;
 
     async::Notification m_noteAdded;

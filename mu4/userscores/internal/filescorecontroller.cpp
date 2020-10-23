@@ -182,7 +182,7 @@ io::path FileScoreController::defaultSavingFilePath() const
         fileName = scoreMetaInfo.fileName;
     }
 
-    return configuration()->scoresPath() + "/" + fileName + DEFAULT_FILE_SUFFIX;
+    return configuration()->defaultSavingFilePath(fileName.toStdString());
 }
 
 void FileScoreController::prependToRecentScoreList(io::path filePath)

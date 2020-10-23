@@ -40,6 +40,8 @@ void NotationSwitchListModel::load()
         masterNotation()->excerpts().ch.onReceive(this, [this](ExcerptNotationList) {
             loadNotations();
         });
+
+        listenNotationSavingStatus(masterNotation());
     });
 
     context()->currentNotationChanged().onNotify(this, [this]() {
@@ -97,6 +99,16 @@ void NotationSwitchListModel::listenNotationOpeningStatus(INotationPtr notation)
     });
 }
 
+void NotationSwitchListModel::listenNotationSavingStatus(IMasterNotationPtr masterNotation)
+{
+    masterNotation->needSave().notification.onNotify(this, [this]() {
+        for (int i = 0; i < m_notations.size(); i++) {
+            QModelIndex index = this->index(i);
+            emit dataChanged(index, index, { RoleNeedSave });
+        }
+    });
+}
+
 IMasterNotationPtr NotationSwitchListModel::masterNotation() const
 {
     return context()->currentMasterNotation();
@@ -113,6 +125,7 @@ QVariant NotationSwitchListModel::data(const QModelIndex& index, int role) const
 
     switch (role) {
     case RoleTitle: return QVariant::fromValue(meta.title);
+    case RoleNeedSave: return QVariant::fromValue(masterNotation()->needSave().val);
     }
 
     return QVariant();
@@ -126,7 +139,8 @@ int NotationSwitchListModel::rowCount(const QModelIndex&) const
 QHash<int, QByteArray> NotationSwitchListModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles {
-        { RoleTitle, "title" }
+        { RoleTitle, "title" },
+        { RoleNeedSave, "needSave" }
     };
 
     return roles;

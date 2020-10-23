@@ -85,6 +85,15 @@ void NotationToolBarModel::load()
         onNotationChanged();
     });
 
+    globalContext()->currentMasterNotationChanged().onNotify(this, [this]() {
+        INotationUndoStackPtr undoStack = globalContext()->currentMasterNotation()->undoStack();
+        if (undoStack) {
+            undoStack->stackChanged().onNotify(this, [this]() {
+                updateState();
+            });
+        }
+    });
+
     playbackController()->isPlayingChanged().onNotify(this, [this]() {
         updateState();
     });
@@ -148,6 +157,12 @@ void NotationToolBarModel::updateState()
                 item.checked = false;
             }
         }
+    }
+
+    INotationUndoStackPtr undoStack = notation ? notation->undoStack() : nullptr;
+    if (undoStack) {
+        item("undo").enabled = undoStack->canUndo();
+        item("redo").enabled = undoStack->canRedo();
     }
 
     emit dataChanged(index(0), index(rowCount() - 1));
