@@ -50,6 +50,16 @@ jobs:
         echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
         echo "DO_PUBLISH: $DO_PUBLISH"
 
+        DO_CHECKSUM='true'
+        if [ "$BUILD_MODE" == "devel_build" ]; then DO_CHECKSUM='false'; fi
+        echo "DO_CHECKSUM=$DO_CHECKSUM" >> $GITHUB_ENV
+        echo "DO_CHECKSUM: $DO_CHECKSUM"
+
+        DO_APPCAST='true'
+        if [ "$BUILD_MODE" == "devel_build" ]; then DO_APPCAST='false'; fi
+        echo "DO_APPCAST=$DO_APPCAST" >> $GITHUB_ENV
+        echo "DO_APPCAST: $DO_APPCAST"
+
     - name: Setup environment
       run: |
         build\ci\windows\setup.bat
@@ -66,7 +76,8 @@ jobs:
         IF ${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD != 0 }} == true ( SET S_P=${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD }} ) ELSE ( SET S_P="''" )
         IF ${{ env.BUILD_MODE }} == stable_build ( SET GUID=${{ secrets.WIN_MSI_STABLE_GUID }} ) ELSE ( SET GUID=${{ secrets.WIN_MSI_TESTING_GUID }} )
         build\ci\windows\package.bat --signsecret %S_S% --signpass %S_P% --guid %GUID%
-    - name: Checksum 
+    - name: Checksum
+      if: env.DO_CHECKSUM == 'true' 
       run: |
         bash ./build/ci/tools/checksum.sh     
     - name: Publish package
@@ -75,6 +86,7 @@ jobs:
       run: |
         bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os windows -v 3
     - name: AppCast
+      if: env.DO_APPCAST == 'true'   
       shell: bash
       run: |
         bash ./build/ci/tools/sparkle_appcast_gen.sh -p windows   
