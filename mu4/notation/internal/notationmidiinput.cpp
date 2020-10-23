@@ -27,8 +27,8 @@
 
 using namespace mu::notation;
 
-NotationMidiInput::NotationMidiInput(IGetScore* getScore)
-    : m_getScore(getScore)
+NotationMidiInput::NotationMidiInput(IGetScore* getScore, INotationUndoStackPtr undoStack)
+    : m_getScore(getScore), m_undoStack(undoStack)
 {
 }
 
@@ -87,11 +87,11 @@ void NotationMidiInput::onNoteReceived(const midi::Event& e)
         }
     }
 
-    sc->startCmd();
+    m_undoStack->prepareChanges();
     sc->addMidiPitch(inputEv.pitch, inputEv.chord);
     sc->activeMidiPitches()->push_back(inputEv);
+    m_undoStack->commitChanges();
 
-    sc->endCmd();
     m_noteChanged.notify();
 }
 

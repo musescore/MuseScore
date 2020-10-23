@@ -46,6 +46,7 @@ Rectangle {
             id: button
 
             title: model.title
+            needSave: model.needSave
 
             ButtonGroup.group: notationsView.radioButtonGroup
             checked: model.index === notationsView.currentIndex

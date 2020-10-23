@@ -20,7 +20,7 @@
 #ifndef MU_SCENE_NOTATION_INOTATIONUNDOSTACK_H
 #define MU_SCENE_NOTATION_INOTATIONUNDOSTACK_H
 
-#include "modularity/imoduleexport.h"
+#include "async/notification.h"
 
 namespace mu {
 namespace notation {
@@ -29,9 +29,17 @@ class INotationUndoStack
 public:
     virtual ~INotationUndoStack() = default;
 
+    virtual bool canUndo() const = 0;
+    virtual void undo() = 0;
+
+    virtual bool canRedo() const = 0;
+    virtual void redo() = 0;
+
     virtual void prepareChanges() = 0;
     virtual void rollbackChanges() = 0;
     virtual void commitChanges() = 0;
+
+    virtual async::Notification stackChanged() const = 0;
 };
 
 using INotationUndoStackPtr = std::shared_ptr<INotationUndoStack>;

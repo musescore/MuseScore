@@ -30,12 +30,25 @@ class NotationUndoStack : public INotationUndoStack
 public:
     NotationUndoStack(IGetScore* getScore);
 
+    bool canUndo() const override;
+    void undo() override;
+
+    bool canRedo() const override;
+    void redo() override;
+
     void prepareChanges() override;
     void rollbackChanges() override;
     void commitChanges() override;
 
+    async::Notification stackChanged() const override;
+
 private:
+    void notifyAboutStackStateChanged();
+
+    bool isStackClean() const;
+
     IGetScore* m_getScore = nullptr;
+    async::Notification m_stackStateChanged;
 };
 }
 }
