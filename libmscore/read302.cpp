@@ -24,6 +24,7 @@
 #include "excerpt.h"
 #include "spanner.h"
 #include "scoreOrder.h"
+#include "measurebase.h"
 
 #ifdef OMR
 #include "omr/omr.h"
@@ -192,6 +193,7 @@ bool Score::read(XmlReader& e)
                         ex->setPartScore(s);
                         e.setLastMeasure(nullptr);
                         s->read(e);
+                        s->linkMeasures(m);
                         ex->setTracks(e.tracks());
                         m->addExcerpt(ex);
                         }
@@ -307,6 +309,27 @@ bool Score::read(XmlReader& e)
 
 //      createPlayEvents();
       return true;
+      }
+
+//---------------------------------------------------------
+// linkMeasures
+//---------------------------------------------------------
+
+void Score::linkMeasures(Score* score)
+      {
+      MeasureBase *mbMaster = score->first();
+      for (MeasureBase* mb = first(); mb; mb = mb->next()) {
+            if (!mb->isMeasure())
+                  continue;
+            while (mbMaster && !mbMaster->isMeasure())
+                  mbMaster = mbMaster->next();
+            if (!mbMaster) {
+                  qDebug("Measures in MasterScore and Score are not in sync.");
+                  break;
+                  }
+            mb->linkTo(mbMaster);
+            mbMaster = mbMaster->next();
+            }
       }
 
 //---------------------------------------------------------
