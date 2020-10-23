@@ -36,7 +36,6 @@ class QPainter;
 class QRect;
 
 namespace mu::notation {
-
 class INotation;
 using INotationPtr = std::shared_ptr<INotation>;
 

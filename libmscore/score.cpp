@@ -392,24 +392,25 @@ Score::~Score()
 
 Score* Score::clone()
 {
-    QBuffer buffer;
-    buffer.open(QIODevice::WriteOnly);
-    XmlWriter xml(this, &buffer);
-    xml.header();
+    Excerpt excerpt(masterScore());
+    excerpt.setParts(_parts);
+    excerpt.setTitle(title());
 
-    xml.stag("museScore version=\"" MSC_VERSION "\"");
-    write(xml, false);
-    xml.etag();
+    for (Part* part : _parts) {
+        for (int i = part->startTrack(), j = 0; i < part->endTrack(); i++, j++) {
+            excerpt.tracks().insert(i, j);
+        }
+    }
 
-    buffer.close();
+    Score* copy = new Score(masterScore());
+    excerpt.setPartScore(copy);
+    copy->_style = _style;
+    masterScore()->addExcerpt(&excerpt);
+    Excerpt::createExcerpt(&excerpt);
+    masterScore()->removeExcerpt(&excerpt);
+    excerpt.setPartScore(nullptr);
 
-    XmlReader r(buffer.buffer());
-    MasterScore* score = new MasterScore(style());
-    score->read1(r, true);
-
-    score->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
-    score->doLayout();
-    return score;
+    return copy;
 }
 
 //---------------------------------------------------------

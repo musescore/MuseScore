@@ -52,6 +52,10 @@ Excerpt::Excerpt(const Excerpt& ex, bool copyPartScore)
     : QObject(), _oscore(ex._oscore), _title(ex._title), _parts(ex._parts), _tracks(ex._tracks)
 {
     _partScore = (copyPartScore && ex._partScore) ? ex._partScore->clone() : nullptr;
+
+    if (_partScore) {
+        _partScore->setExcerpt(this);
+    }
 }
 
 //---------------------------------------------------------
@@ -1316,6 +1320,9 @@ QString Excerpt::createName(const QString& partName, QList<Excerpt*>& excerptLis
 void Excerpt::setPartScore(Score* s)
 {
     _partScore = s;
-    s->setExcerpt(this);
+
+    if (s) {
+        s->setExcerpt(this);
+    }
 }
 }

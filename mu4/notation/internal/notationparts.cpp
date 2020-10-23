@@ -546,9 +546,13 @@ void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config)
 
 bool NotationParts::voiceVisible(int voiceIndex) const
 {
+    if (!score()) {
+        return false;
+    }
+
     for (const Part* part : score()->parts()) {
         for (Staff* staff : *part->staves()) {
-            if (staff->voiceVisible(voiceIndex)) {
+            if (staff->isVoiceVisible(voiceIndex)) {
                 return true;
             }
         }
@@ -592,7 +596,7 @@ void NotationParts::setVoiceVisible(const ID& staffId, int voiceIndex, bool visi
 
 void NotationParts::doSetStaffVoiceVisible(Staff* staff, int voiceIndex, bool visible)
 {
-    if (staff->voiceVisible(voiceIndex) == visible) {
+    if (staff->isVoiceVisible(voiceIndex) == visible) {
         return;
     }
 
@@ -1045,7 +1049,11 @@ std::vector<Part*> NotationParts::availableParts(const Ms::Score* score) const
 {
     std::vector<Part*> parts;
 
-    std::vector<Part*> scoreParts = this->scoreParts(score);
+    if (!score()) {
+        return parts;
+    }
+
+    std::vector<Part*> scoreParts = this->scoreParts(score());
     parts.insert(parts.end(), scoreParts.begin(), scoreParts.end());
 
     std::vector<Part*> excerptParts = this->excerptParts(score);

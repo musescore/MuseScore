@@ -101,5 +101,5 @@ void MidiModule::registerUiTypes()
 
 void MidiModule::onInit()
 {
-    ///s_synthesizerController.init();
+    s_synthesizerController.init();
 }
