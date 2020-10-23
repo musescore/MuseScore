@@ -111,12 +111,11 @@ Steinberg::tresult PluginEditorView::resizeView(Steinberg::IPlugView* view, Stei
 
 void PluginEditorView::attachOriginalView()
 {
-
 #ifdef Q_OS_MAC
     FIDString platformType = kPlatformTypeNSView;
-#elif Q_OS_IOS
+#elif defined(Q_OS_IOS)
     FIDString platformType = kPlatformTypeUIView;
-#elif Q_OS_WIN
+#elif defined(Q_OS_WIN)
     FIDString platformType = kPlatformTypeHWND;
 #elif defined(Q_OS_LINUX)
     FIDString platformType = kPlatformTypeX11EmbedWindowID;
