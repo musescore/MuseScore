@@ -122,11 +122,13 @@ private:
     std::vector<const Staff*> staves(const Part* part, const ID& instrumentId) const;
     std::vector<Staff*> staves(const IDList& stavesIds) const;
 
-    std::vector<Part*> availableParts() const;
+    std::vector<Part*> availableParts(const Ms::Score* score) const;
     std::vector<Part*> scoreParts(const Ms::Score* score) const;
     std::vector<Part*> excerptParts(const Ms::Score* score) const;
 
     void appendPart(Part* part);
+    int resolvePartIndex(Part* part) const;
+
     void appendStaves(Part* part, const instruments::Instrument& instrument);
 
     void removeMissingInstruments(const IDList& selectedInstrumentIds);

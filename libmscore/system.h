@@ -140,7 +140,7 @@ public:
     const QList<SysStaff*>* staves() const { return &_staves; }
     qreal staffYpage(int staffIdx) const;
     qreal staffCanvasYpage(int staffIdx) const;
-    SysStaff* staff(int staffIdx) const { return _staves[staffIdx]; }
+    SysStaff* staff(int staffIdx) const;
 
     bool pageBreak() const;
 

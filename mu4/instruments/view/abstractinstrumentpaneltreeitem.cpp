@@ -95,6 +95,11 @@ QList<AbstractInstrumentPanelTreeItem*> AbstractInstrumentPanelTreeItem::childre
     return m_children;
 }
 
+bool AbstractInstrumentPanelTreeItem::isEmpty() const
+{
+    return m_children.isEmpty();
+}
+
 AbstractInstrumentPanelTreeItem* AbstractInstrumentPanelTreeItem::childAtId(const QString& id) const
 {
     for (AbstractInstrumentPanelTreeItem* item: m_children) {
@@ -221,12 +226,11 @@ void AbstractInstrumentPanelTreeItem::setIsVisible(bool isVisible)
     }
 
     m_isVisible = isVisible;
+    emit isVisibleChanged(isVisible);
 
-    for (int i = 0; i < childCount(); ++i) {
-        childAtRow(i)->setIsVisible(isVisible);
+    for (auto child : m_children) {
+        child->setIsVisible(isVisible);
     }
-
-    emit isVisibleChanged(m_isVisible);
 }
 
 void AbstractInstrumentPanelTreeItem::setId(const QString& id)

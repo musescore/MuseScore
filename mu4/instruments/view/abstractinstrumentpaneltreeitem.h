@@ -60,8 +60,11 @@ public:
     void setParentItem(AbstractInstrumentPanelTreeItem* parent);
 
     QList<AbstractInstrumentPanelTreeItem*> childrenItems() const;
+    bool isEmpty() const;
+
     AbstractInstrumentPanelTreeItem* childAtId(const QString& id) const;
     AbstractInstrumentPanelTreeItem* childAtRow(const int row) const;
+
     void appendChild(AbstractInstrumentPanelTreeItem* child);
     void insertChild(AbstractInstrumentPanelTreeItem* child, const int beforeRow);
     void replaceChild(AbstractInstrumentPanelTreeItem* child, const int row);
@@ -96,7 +99,7 @@ private:
     QString m_id;
     QString m_title;
     InstrumentTreeItemType::ItemType m_type = InstrumentTreeItemType::ItemType::UNDEFINED;
-    bool m_isVisible = true;
+    bool m_isVisible = false;
     bool m_canChangeVisibility = false;
 
     notation::INotationParts* m_notationParts = nullptr;

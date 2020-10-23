@@ -180,6 +180,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
 
         for (Staff* staff : *part->staves()) {
             Staff* s = new Staff(score);
+            s->setId(staff->id());
             s->setPart(p);
 //                  s->setStaffType(0, *staff->staffType(0));              // TODO
             s->init(staff);
@@ -1078,7 +1079,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
 //    staves are potentially in different scores
 //---------------------------------------------------------
 
-void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& stick, const Fraction& etick)
+void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& startTick, const Fraction& endTick)
 {
     Score* oscore = srcStaff->score();
     Score* score  = dstStaff->score();
@@ -1093,10 +1094,10 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& stic
         tracks  = ex->tracks();
     }
 
-    Measure* m1   = oscore->tick2measure(stick);
-    Measure* m2   = oscore->tick2measure(etick);
+    Measure* m1   = oscore->tick2measure(startTick);
+    Measure* m2   = oscore->tick2measure(endTick);
 
-    if (m2->tick() < etick) { // end of score
+    if (m2->tick() < endTick) { // end of score
         m2 = 0;
     }
 
@@ -1132,6 +1133,12 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& stic
                     }
                 }
             }
+        }
+    }
+
+    if (map.isEmpty()) {
+        for (int i = sTrack; i < eTrack; i++) {
+            map.insert(i, dstStaffIdx * VOICES + i % VOICES);
         }
     }
 
@@ -1231,7 +1238,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& stic
 
     for (auto i : oscore->spanner()) {
         Spanner* s = i.second;
-        if (!(s->tick() >= stick && s->tick2() < etick)) {
+        if (!(s->tick() >= startTick && s->tick2() < endTick)) {
             continue;
         }
 
