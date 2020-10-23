@@ -604,8 +604,6 @@ static Tid tidForCreditWords(const CreditWords* const word, std::vector<const Cr
         }
         return Tid::TITLE;                      // no better title candidate found
     }
-
-    return Tid::DEFAULT;                        // not reached
 }
 
 //---------------------------------------------------------
