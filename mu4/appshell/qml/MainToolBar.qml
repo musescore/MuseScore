@@ -18,7 +18,7 @@ Rectangle {
         },
         {
             title: qsTrc("appshell", "Sequencer"),
-            uri: "musescore://notation/parts"
+            uri: "musescore://sequencer"
         },
         {
             title: qsTrc("appshell", "Publish"),

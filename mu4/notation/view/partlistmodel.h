@@ -81,7 +81,7 @@ private:
     QItemSelectionModel* m_selectionModel = nullptr;
     QHash<int, QByteArray> m_roles;
     QList<INotationPtr> m_notations;
-    QHash<QString /* notation key */, QVariantList /* voices */> m_voicesVisibility;
+    QHash<QString /* notation key */, QVariantList /* voices */> m_updatedVoicesVisibility;
     INotationPtr m_currentNotation;
 };
 }

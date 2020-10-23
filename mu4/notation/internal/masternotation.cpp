@@ -555,9 +555,10 @@ void MasterNotation::createNewExcerpts(const ExcerptNotationList& allExcerpts)
     }
 
     for (IExcerptNotationPtr excerptNotation : allExcerpts) {
-        bool newExcerpt = std::find(m_excerpts.val.begin(), m_excerpts.val.end(), excerptNotation) == m_excerpts.val.end();
+        bool isNewExcerpt = std::find(m_excerpts.val.begin(), m_excerpts.val.end(), excerptNotation) == m_excerpts.val.end();
+        bool isEmpty = excerptNotation->parts()->partList().empty();
 
-        if (newExcerpt) {
+        if (isNewExcerpt && isEmpty) {
             Excerpt* excerpt = new Excerpt(master);
             excerpt->setPartScore(new Score(master));
             static_cast<ExcerptNotation*>(excerptNotation.get())->setExcerpt(excerpt);

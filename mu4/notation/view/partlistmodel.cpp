@@ -50,7 +50,7 @@ void PartListModel::load()
     }
 
     for (INotationPtr notation : m_notations) {
-        m_voicesVisibility[notationToKey(notation)] = voicesVisibility(notation);
+        m_updatedVoicesVisibility[notationToKey(notation)] = voicesVisibility(notation);
     }
 
     endResetModel();
@@ -72,7 +72,7 @@ QVariant PartListModel::data(const QModelIndex& index, int role) const
     case RoleIsMain:
         return notation == masterNotation();
     case RoleVoicesVisibility:
-        return m_voicesVisibility[notationToKey(notation)];
+        return m_updatedVoicesVisibility[notationToKey(notation)];
     case RoleVoicesTitle:
         return formatVoicesTitle(notation);
     }
@@ -82,7 +82,7 @@ QVariant PartListModel::data(const QModelIndex& index, int role) const
 
 QString PartListModel::formatVoicesTitle(INotationPtr notation) const
 {
-    QVariantList voicesVisibility = m_voicesVisibility[notationToKey(notation)];
+    QVariantList voicesVisibility = m_updatedVoicesVisibility[notationToKey(notation)];
     QStringList voices;
 
     for (int voiceIndex = 0; voiceIndex < voicesVisibility.size(); ++voiceIndex) {
@@ -196,11 +196,11 @@ void PartListModel::setVoicesVisibility(int index, const QVariantList& visibilit
     INotationPtr notation = m_notations[index];
     QString key = notationToKey(notation);
 
-    if (m_voicesVisibility[key] == visibility) {
+    if (m_updatedVoicesVisibility[key] == visibility) {
         return;
     }
 
-    m_voicesVisibility[key] = visibility;
+    m_updatedVoicesVisibility[key] = visibility;
     notifyAboutNotationChanged(index);
 }
 
@@ -229,6 +229,7 @@ void PartListModel::insertNotation(int destinationIndex, INotationPtr notation)
 {
     beginInsertRows(QModelIndex(), destinationIndex, destinationIndex);
     m_notations.insert(destinationIndex, notation);
+    m_updatedVoicesVisibility[notationToKey(notation)] = voicesVisibility(notation);
     endInsertRows();
 }
 
@@ -298,7 +299,7 @@ void PartListModel::apply()
 
 void PartListModel::applyVoicesVisibility(INotationPtr notation) const
 {
-    QVariantList newVoicesVisibility = m_voicesVisibility[notationToKey(notation)];
+    QVariantList newVoicesVisibility = m_updatedVoicesVisibility[notationToKey(notation)];
     if (voicesVisibility(notation) == newVoicesVisibility) {
         return;
     }
