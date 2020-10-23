@@ -255,6 +255,31 @@ BracketType Staff::innerBracket() const
     return t;
 }
 
+bool Staff::playbackVoice(int voice) const
+{
+    return _playbackVoice[voice];
+}
+
+void Staff::setPlaybackVoice(int voice, bool val)
+{
+    _playbackVoice[voice] = val;
+}
+
+std::array<bool, VOICES> Staff::visibilityVoices() const
+{
+    return _visibilityVoices;
+}
+
+bool Staff::isVoiceVisible(int voice) const
+{
+    return _visibilityVoices[voice];
+}
+
+void Staff::setVoiceVisible(int voice, bool visible)
+{
+    _visibilityVoices[voice] = visible;
+}
+
 //---------------------------------------------------------
 //   cleanupBrackets
 //---------------------------------------------------------

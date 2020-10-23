@@ -275,12 +275,12 @@ public:
 
     BracketType innerBracket() const;
 
-    bool playbackVoice(int voice) const { return _playbackVoice[voice]; }
-    void setPlaybackVoice(int voice, bool val) { _playbackVoice[voice] = val; }
+    bool playbackVoice(int voice) const;
+    void setPlaybackVoice(int voice, bool val);
 
-    std::array<bool, VOICES> visibilityVoices() const { return _visibilityVoices; }
-    bool voiceVisible(int voice) const { return _visibilityVoices[voice]; }
-    void setVoiceVisible(int voice, bool visible) { _visibilityVoices[voice] = visible; }
+    std::array<bool, VOICES> visibilityVoices() const;
+    bool isVoiceVisible(int voice) const;
+    void setVoiceVisible(int voice, bool visible);
 
 #ifndef NDEBUG
     void dumpClefs(const char* title) const;
