@@ -211,6 +211,8 @@ Item {
                 horizontalAlignment: Text.AlignLeft
 
                 text: model ? model.itemRole.title : ""
+                opacity: model && model.itemRole.isVisible ? 1 : 0.75
+
                 font.bold: model ? delegateType === InstrumentTreeItemType.PART && model.itemRole.isVisible : false
                 font.pixelSize: 12
             }
