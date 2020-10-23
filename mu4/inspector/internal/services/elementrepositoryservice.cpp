@@ -336,9 +336,9 @@ QList<Ms::Element*> ElementRepositoryService::findTremolos() const
 
     for (Ms::Element* element : m_elementList) {
         if (element->isTremolo()) {
-            // the tremolo section currently only has a stroke style setting
-            // so only tremolos which can have custom stroke styles make it appear
-            if (Ms::toTremolo(element)->customStrokeStyleApplicable()) {
+            // the tremolo section currently only has a style setting
+            // so only tremolos which can have custom styles make it appear
+            if (Ms::toTremolo(element)->customStyleApplicable()) {
                 resultList << element;
             }
         }

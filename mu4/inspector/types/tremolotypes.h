@@ -8,13 +8,13 @@ class TremoloTypes
     Q_GADGET
 
 public:
-    enum class TremoloStrokeStyle {
+    enum class TremoloStyle {
         STYLE_DEFAULT,
-        STYLE_ALL_STROKES_ATTACHED,
-        STYLE_SINGLE_STROKE_ATTACHED
+        STYLE_TRADITIONAL,
+        STYLE_TRADITIONAL_ALTERNATE
     };
 
-    Q_ENUM(TremoloStrokeStyle)
+    Q_ENUM(TremoloStyle)
 };
 
 #endif // TREMOLOTYPES_H
