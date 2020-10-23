@@ -360,6 +360,7 @@ void Accidental::layout()
       setMag(m);
 
       m = magS();
+      qreal x = 0.0;
 
       if (_bracket != AccidentalBracket::NONE) {
             SymId id = SymId::noSym;
@@ -379,15 +380,16 @@ void Accidental::layout()
             SymElement se(id, 0.0, _bracket == AccidentalBracket::BRACE ? spatium() * 0.4 : 0.0);
             el.append(se);
             r |= symBbox(id);
+            x += symAdvance(id);
             }
 
       SymId s = symbol();
-      qreal x = r.x()+r.width();
       SymElement e(s, x, 0.0);
       el.append(e);
       r |= symBbox(s).translated(x, 0.0);
 
       if (_bracket != AccidentalBracket::NONE) {
+            x += symAdvance(s);
             SymId id = SymId::noSym;
             switch (_bracket) {
                   case AccidentalBracket::PARENTHESIS:
@@ -402,7 +404,6 @@ void Accidental::layout()
                   case AccidentalBracket::NONE: // can't happen
                         break;
                   }
-            x = r.x()+r.width();
             SymElement se(id, x, _bracket == AccidentalBracket::BRACE ? spatium() * 0.4 : 0.0);
             el.append(se);
             r |= symBbox(id).translated(x, 0.0);
