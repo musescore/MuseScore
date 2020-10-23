@@ -28,8 +28,8 @@ enum class TremoloType : signed char {
       };
 
 // only applicable to minim two-note tremolo in non-TAB staves
-enum class TremoloStrokeStyle : signed char {
-      DEFAULT = 0, ALL_STROKES_ATTACHED, SINGLE_STROKE_ATTACHED
+enum class TremoloStyle : signed char {
+      DEFAULT = 0, TRADITIONAL, TRADITIONAL_ALTERNATE
       };
 
 //---------------------------------------------------------
@@ -44,7 +44,7 @@ class Tremolo final : public Element {
       QPainterPath path;
 
       int _lines;       // derived from _subtype
-      TremoloStrokeStyle _strokeStyle    { TremoloStrokeStyle::DEFAULT };
+      TremoloStyle _style    { TremoloStyle::DEFAULT };
 
       QPainterPath basePath() const;
       void computeShape();
@@ -104,10 +104,10 @@ class Tremolo final : public Element {
 
       QString accessibleInfo() const override;
 
-      TremoloStrokeStyle strokeStyle() const    { return _strokeStyle; }
-      void setStrokeStyle(TremoloStrokeStyle v) { _strokeStyle = v;    }
+      TremoloStyle style() const { return _style; }
+      void setStyle(TremoloStyle v) { _style = v; }
 
-      bool customStrokeStyleApplicable() const;
+      bool customStyleApplicable() const;
 
       QVariant getProperty(Pid propertyId) const override;
       bool setProperty(Pid propertyId, const QVariant&) override;
