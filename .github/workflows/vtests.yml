@@ -42,7 +42,6 @@ jobs:
         sudo apt-get install libasound2-dev portaudio19-dev libmp3lame-dev libsndfile1-dev libportmidi-dev
         sudo apt-get install libssl-dev libpulse-dev libfreetype6-dev libfreetype6
         sudo apt-get install libdrm-dev libgl1-mesa-dev libegl1-mesa-dev
-        sudo apt-get install ccache
     - name: Setup the environment
       if: contains( env.found, '1')
       run: |

@@ -29,7 +29,7 @@ IF NOT EXIST dependencies.7z ( START " " /wait "C:\cygwin64\bin\wget.exe" --no-c
 START " " /wait "7z" x -y dependencies.7z > nul
 CD dependencies
 XCOPY Jack "C:\Program Files (x86)\Jack" /E /I /Y
-XCOPY ccache "C:\ccache" /E /I /Y
+REM XCOPY ccache "C:\ccache" /E /I /Y
 
 CD C:\MuseScore
 IF NOT EXIST dependencies.zip ( START " " /wait "C:\cygwin64\bin\wget.exe" --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/dependencies.7z" -O dependencies.zip )
@@ -58,7 +58,7 @@ git rev-parse --short=7 HEAD > mscore/revision.h
 SET /p MSREVISION=<mscore\revision.h
 
 :: set ccache dir
-SET CCACHE_DIR=C:\ccache\cache
+REM SET CCACHE_DIR=C:\ccache\cache
 
 IF "%BUILD_WIN_PORTABLE%" == "ON" (
 CD C:\MuseScore
