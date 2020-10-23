@@ -29,7 +29,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 static const ElementStyle tremoloStyle {
-      { Sid::tremoloStrokeStyle, Pid::TREMOLO_STROKE_STYLE }
+      { Sid::tremoloStyle, Pid::TREMOLO_STYLE }
       };
 
 //---------------------------------------------------------
@@ -189,7 +189,7 @@ QPainterPath Tremolo::basePath() const
       QPainterPath ppath;
       
       // first line
-      if (parent() && twoNotes() && (_strokeStyle == TremoloStrokeStyle::DEFAULT))
+      if (parent() && twoNotes() && (_style == TremoloStyle::DEFAULT))
             ppath.addRect(-nw2, 0.0, 2.0 * nw2, lw);
       else
             ppath.addRect(-w2, 0.0, 2.0 * w2, lw);
@@ -198,7 +198,7 @@ QPainterPath Tremolo::basePath() const
 
       // other lines
       for (int i = 1; i < _lines; i++) {
-            if (parent() && twoNotes() && (_strokeStyle != TremoloStrokeStyle::ALL_STROKES_ATTACHED))
+            if (parent() && twoNotes() && (_style != TremoloStyle::TRADITIONAL))
                   ppath.addRect(-nw2, ty, 2.0 * nw2, lw);
             else
                   ppath.addRect(-w2, ty, 2.0 * w2, lw);
@@ -285,8 +285,8 @@ extern std::pair<qreal, qreal> extendedStemLenWithTwoNoteTremolo(Tremolo*, qreal
 
 void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium)
       {
-      const bool defaultStyle = (!customStrokeStyleApplicable()) || (_strokeStyle == TremoloStrokeStyle::DEFAULT);
-      const bool isSingleStrokeAttached = (_strokeStyle == TremoloStrokeStyle::SINGLE_STROKE_ATTACHED);
+      const bool defaultStyle = (!customStyleApplicable()) || (_style == TremoloStyle::DEFAULT);
+      const bool isTraditionalAlternate = (_style == TremoloStyle::TRADITIONAL_ALTERNATE);
 
       //---------------------------------------------------
       //   Step 1: Calculate the position of the tremolo (x, y)
@@ -349,10 +349,10 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium)
 
       y = (y1 + y2) * .5;
       if (!_chord1->up()) {
-            y -= isSingleStrokeAttached ? lw * .5 : path.boundingRect().height() * .5;
+            y -= isTraditionalAlternate ? lw * .5 : path.boundingRect().height() * .5;
             }
       if (!_chord2->up()) {
-            y -= isSingleStrokeAttached ? lw * .5 : path.boundingRect().height() * .5;
+            y -= isTraditionalAlternate ? lw * .5 : path.boundingRect().height() * .5;
             }
 
       // compute the x coordinates of
@@ -422,19 +422,19 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium)
       qreal dx = x2 - x1;
       if (_chord1->beams() == 0 && _chord2->beams() == 0) {
             if (_chord1->up() && !_chord2->up()) {
-                  dy -= isSingleStrokeAttached ? lw : path.boundingRect().height();
+                  dy -= isTraditionalAlternate ? lw : path.boundingRect().height();
                   if (!defaultStyle)
                         dy += lw;
                   }
             else if (!_chord1->up() && _chord2->up()) {
-                  dy += isSingleStrokeAttached ? lw : path.boundingRect().height();
+                  dy += isTraditionalAlternate ? lw : path.boundingRect().height();
                   if (!defaultStyle)
                         dy -= lw;
                   }
             }
       // Make tremolo strokes less steep if two chords have the opposite stem directions,
       // except for two cases:
-      // 1. The tremolo doesn't have the default beam style.
+      // 1. The tremolo doesn't have the default style.
       // In this case tremolo strokes should attach to the ends of both stems, so no adjustment needed;
       // 2. The chords are on different staves and the tremolo is between them.
       // The layout should be improved by extending both stems, so changes are not needed here.
@@ -446,13 +446,13 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium)
 
       //---------------------------------------------------
       //   Step 5: Flip the tremolo strokes if necessary
-      //    By default, a SINGLE_STROKE_ATTACHED tremolo has its attached-to-stem stroke be above other strokes,
+      //    By default, a TRADITIONAL_ALTERNATE tremolo has its attached-to-stem stroke be above other strokes,
       //    see basePath().
       //    But if both chords have stems facing down,
       //    the tremolo should be flipped to have the attached-to-stem stroke be below other strokes.
       //---------------------------------------------------
 
-      if (isSingleStrokeAttached && !_chord1->up() && !_chord2->up()) {
+      if (isTraditionalAlternate && !_chord1->up() && !_chord2->up()) {
             QTransform rotateTransform;
             rotateTransform.translate(0.0, lw * .5);
             rotateTransform.rotate(180);
@@ -530,7 +530,7 @@ void Tremolo::write(XmlWriter& xml) const
             return;
       xml.stag(this);
       writeProperty(xml, Pid::TREMOLO_TYPE);
-      writeProperty(xml, Pid::TREMOLO_STROKE_STYLE);
+      writeProperty(xml, Pid::TREMOLO_STYLE);
       Element::writeProperties(xml);
       xml.etag();
       }
@@ -545,12 +545,12 @@ void Tremolo::read(XmlReader& e)
             const QStringRef& tag(e.name());
             if (tag == "subtype")
                   setTremoloType(e.readElementText());
-            // stroke style needs special handling other than readStyledProperty()
-            // to avoid calling customStrokeStyleApplicable() in setProperty()
-            // which cannot be called now because durationType() isn't defined yet
+            // Style needs special handling other than readStyledProperty()
+            // to avoid calling customStyleApplicable() in setProperty(),
+            // which cannot be called now because durationType() isn't defined yet.
             else if (tag == "strokeStyle") {
-                  setStrokeStyle(TremoloStrokeStyle(e.readInt()));
-                  setPropertyFlags(Pid::TREMOLO_STROKE_STYLE, PropertyFlags::UNSTYLED);
+                  setStyle(TremoloStyle(e.readInt()));
+                  setPropertyFlags(Pid::TREMOLO_STYLE, PropertyFlags::UNSTYLED);
                   }
             else if (readStyledProperty(e, tag))
                   ;
@@ -663,10 +663,10 @@ QString Tremolo::accessibleInfo() const
       }
 
 //---------------------------------------------------------
-//   customStrokeStyleApplicable
+//   customStyleApplicable
 //---------------------------------------------------------
 
-bool Tremolo::customStrokeStyleApplicable() const
+bool Tremolo::customStyleApplicable() const
       {
       return twoNotes()
          && (durationType().type() == TDuration::DurationType::V_HALF)
@@ -682,8 +682,8 @@ QVariant Tremolo::getProperty(Pid propertyId) const
       switch (propertyId) {
             case Pid::TREMOLO_TYPE:
                   return int(_tremoloType);
-            case Pid::TREMOLO_STROKE_STYLE:
-                  return int(_strokeStyle);
+            case Pid::TREMOLO_STYLE:
+                  return int(_style);
             default:
                   break;
             }
@@ -700,9 +700,9 @@ bool Tremolo::setProperty(Pid propertyId, const QVariant& val)
             case Pid::TREMOLO_TYPE:
                   setTremoloType(TremoloType(val.toInt()));
                   break;
-            case Pid::TREMOLO_STROKE_STYLE:
-                  if (customStrokeStyleApplicable())
-                        setStrokeStyle(TremoloStrokeStyle(val.toInt()));
+            case Pid::TREMOLO_STYLE:
+                  if (customStyleApplicable())
+                        setStyle(TremoloStyle(val.toInt()));
                   break;
             default:
                   return Element::setProperty(propertyId, val);
@@ -718,8 +718,8 @@ bool Tremolo::setProperty(Pid propertyId, const QVariant& val)
 QVariant Tremolo::propertyDefault(Pid propertyId) const 
       {
       switch (propertyId) {
-            case Pid::TREMOLO_STROKE_STYLE:
-                  return score()->styleI(Sid::tremoloStrokeStyle);
+            case Pid::TREMOLO_STYLE:
+                  return score()->styleI(Sid::tremoloStyle);
             default:
                   return Element::propertyDefault(propertyId);
             }
