@@ -28,6 +28,8 @@ static const Settings::Key SEARCH_PATHS("vst", "search_path");
 const std::string VSTConfiguration::DEFAULT_PATHS = "/Library/Audio/Plug-Ins/VST3";
 #elif Q_OS_WIN
 const std::string VSTConfiguration::DEFAULT_PATHS = "C:\Program Files (x86)\Common Files\VST3";
+#else
+const std::string VSTConfiguration::DEFAULT_PATHS = "";
 #endif
 
 void VSTConfiguration::init()
