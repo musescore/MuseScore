@@ -138,7 +138,7 @@ struct StyleVal2 {
       { Sid::measureSpacing,              QVariant(1.2) },
       { Sid::staffLineWidth,              Spatium(0.08) },      // 0.09375
       { Sid::ledgerLineWidth,             Spatium(0.16) },     // 0.1875
-      { Sid::ledgerLineLength,            Spatium(.6) },     // notehead width + this value
+      { Sid::ledgerLineLength,            Spatium(0.76) },     // notehead width + this value
       { Sid::accidentalDistance,          Spatium(0.22) },
       { Sid::accidentalNoteDistance,      Spatium(0.22) },
       { Sid::beamWidth,                   Spatium(0.5) },           // was 0.48

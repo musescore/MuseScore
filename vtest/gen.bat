@@ -56,7 +56,7 @@ IF NOT "%1"=="" (
    SET INSTALL_PATH=msvc.install_x64
    )
 
-set MSCORE=..\%INSTALL_PATH%\bin\musescore.exe
+set MSCORE=..\%INSTALL_PATH%\bin\musescore3.exe
 
 IF NOT EXIST ..\%INSTALL_PATH%\nul (
    echo "Current folder: ..\%INSTALL_PATH%"
