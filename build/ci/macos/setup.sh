@@ -83,6 +83,9 @@ mkdir -p $QT_MACOS
 unzip -qq qt5.zip -d $QT_MACOS
 rm qt5.zip
 
+wget -q --show-progress -O vst_sdk.7z "https://s3.amazonaws.com/utils.musescore.org/VST3_SDK_37.7z"
+7z x -y vst_sdk.7z -o"$HOME/vst"
+echo "VST3_SDK_PATH=$HOME/vst/VST3_SDK" >> $GITHUB_ENV
 
 #install sparkle
 export SPARKLE_VERSION=1.20.0

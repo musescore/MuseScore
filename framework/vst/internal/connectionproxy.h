@@ -19,7 +19,7 @@
 #ifndef MU_VST_CONNECTIONPROXY_H
 #define MU_VST_CONNECTIONPROXY_H
 
-#include <pthread.h>
+#include <thread>
 #include "base/source/fobject.h"
 #include "pluginterfaces/vst/ivstmessage.h"
 
@@ -45,7 +45,7 @@ private:
     Steinberg::IPtr<Steinberg::Vst::IConnectionPoint> m_source;
     Steinberg::IPtr<Steinberg::Vst::IConnectionPoint> m_destination;
 
-    pthread_t m_thread { pthread_self() };
+    std::thread::id m_threadID = std::this_thread::get_id();
 };
 }
 }

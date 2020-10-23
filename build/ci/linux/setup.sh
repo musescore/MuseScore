@@ -93,7 +93,6 @@ if [[ ! -d "${qt_dir}" ]]; then
   qt_url="https://s3.amazonaws.com/utils.musescore.org/Qt${qt_version}_gcc64.7z"
   wget -q --show-progress -O qt5.7z "${qt_url}"
   7z x -y qt5.7z -o"${qt_dir}"
-  rm -f qt5.7z
 fi
 qt_path="${PWD%/}/${qt_dir}"
 
@@ -136,17 +135,23 @@ echo export PATH="${PWD%/}/${cmake_dir}/bin:\${PATH}" >> ${ENV_FILE}
 export PATH="${PWD%/}/${cmake_dir}/bin:${PATH}"
 cmake --version
 
+##########################################################################
+# OTHER
+##########################################################################
+wget -q --show-progress -O vst_sdk.7z "https://s3.amazonaws.com/utils.musescore.org/VST3_SDK_37.7z"
+7z x -y vst_sdk.7z -o"$HOME/vst"
+echo export VST3_SDK_PATH="$HOME/vst/VST3_SDK" >> $ENV_FILE
 
 ##########################################################################
 # POST INSTALL
 ##########################################################################
 
-chmod +x "${ENV_FILE}"
+chmod +x "$ENV_FILE"
 
-# tidy up (reduce size of Docker image)
-apt-get clean autoclean
-apt-get autoremove --purge -y
-rm -rf /tmp/* /var/{cache,log,backups}/* /var/lib/apt/*
+# # tidy up (reduce size of Docker image)
+# apt-get clean autoclean
+# apt-get autoremove --purge -y
+# rm -rf /tmp/* /var/{cache,log,backups}/* /var/lib/apt/*
 
 df -k .
 echo "Setup script done"
