@@ -34,9 +34,10 @@ public:
     virtual io::path path() const = 0;
 
     virtual Ret createNew(const ScoreCreateOptions& scoreInfo) = 0;
-    virtual RetVal<bool> created() = 0;
+    virtual RetVal<bool> created() const = 0;
 
-    virtual Ret save(const io::path& path) = 0;
+    virtual Ret save(const io::path& path = io::path()) = 0;
+    virtual ValNt<bool> needSave() const = 0;
 
     virtual ValCh<ExcerptNotationList> excerpts() const = 0;
     virtual void setExcerpts(const ExcerptNotationList& excerpts) = 0;

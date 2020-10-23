@@ -21,6 +21,7 @@
 
 #include "../inotationmidiinput.h"
 #include "igetscore.h"
+#include "inotationundostack.h"
 
 namespace Ms {
 class Score;
@@ -31,7 +32,7 @@ namespace notation {
 class NotationMidiInput : public INotationMidiInput
 {
 public:
-    NotationMidiInput(IGetScore* getScore);
+    NotationMidiInput(IGetScore* getScore, INotationUndoStackPtr undoStack);
 
     void onMidiEventReceived(const midi::Event& e) override;
     async::Notification noteChanged() const override;
@@ -42,6 +43,7 @@ private:
     void onNoteReceived(const midi::Event& e);
 
     IGetScore* m_getScore = nullptr;
+    INotationUndoStackPtr m_undoStack;
     async::Notification m_noteChanged;
 };
 }

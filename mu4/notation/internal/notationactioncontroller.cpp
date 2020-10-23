@@ -48,6 +48,8 @@ void NotationActionController::init()
     dispatcher()->reg(this, "pitch-down-octave", [this](const ActionName& action) { moveAction(action); });
 
     dispatcher()->reg(this, "delete", this, &NotationActionController::deleteSelection);
+    dispatcher()->reg(this, "undo", this, &NotationActionController::undo);
+    dispatcher()->reg(this, "redo", this, &NotationActionController::redo);
 
     dispatcher()->reg(this, "edit-style", this, &NotationActionController::openPageStyle);
     dispatcher()->reg(this, "staff-properties", this, &NotationActionController::openStaffProperties);
@@ -212,6 +214,28 @@ void NotationActionController::deleteSelection()
     }
 
     interaction->deleteSelection();
+}
+
+void NotationActionController::undo()
+{
+    auto notation = currentNotation();
+    if (!notation) {
+        return;
+    }
+
+    notation->undoStack()->undo();
+    notation->notationChanged().notify();
+}
+
+void NotationActionController::redo()
+{
+    auto notation = currentNotation();
+    if (!notation) {
+        return;
+    }
+
+    notation->undoStack()->redo();
+    notation->notationChanged().notify();
 }
 
 void NotationActionController::openPageStyle()

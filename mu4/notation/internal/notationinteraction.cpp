@@ -50,8 +50,8 @@
 using namespace mu::notation;
 using namespace Ms;
 
-NotationInteraction::NotationInteraction(Notation* notation)
-    : m_notation(notation)
+NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack)
+    : m_notation(notation), m_undoStack(undoStack)
 {
     m_inputState = std::make_shared<NotationInputState>(notation);
     m_selection = std::make_shared<NotationSelection>(notation);
@@ -276,17 +276,17 @@ void NotationInteraction::padNote(const Pad& pad)
 {
     Ms::EditData ed;
     ed.view = m_scoreCallbacks;
-    score()->startCmd();
+    m_undoStack->prepareChanges();
     score()->padToggle(pad, ed);
-    score()->endCmd();
+    m_undoStack->commitChanges();
     m_inputStateChanged.notify();
 }
 
 void NotationInteraction::putNote(const QPointF& pos, bool replace, bool insert)
 {
-    score()->startCmd();
+    m_undoStack->prepareChanges();
     score()->putNote(pos, replace, insert);
-    score()->endCmd();
+    m_undoStack->commitChanges();
     m_noteAdded.notify();
 }
 
@@ -608,7 +608,7 @@ void NotationInteraction::startDrag(const std::vector<Element*>& elems,
         }
     }
 
-    score()->startCmd();
+    m_undoStack->prepareChanges();
 
     for (auto& g : m_dragData.dragGroups) {
         g->startDrag(m_dragData.ed);
@@ -699,7 +699,7 @@ void NotationInteraction::endDrag()
 
     m_dragData.reset();
     resetAnchorLines();
-    score()->endCmd();
+    m_undoStack->commitChanges();
     m_dragChanged.notify();
     //    updateGrips();
     //    if (editData.element->normalModeEditBehavior() == Element::EditBehavior::Edit
@@ -843,7 +843,7 @@ bool NotationInteraction::drop(const QPointF& pos, Qt::KeyboardModifiers modifie
     bool applyUserOffset = false;
     //bool triggerSpannerDropApplyTour = m_dropData.ed.dropElement->isSpanner();
     m_dropData.ed.dropElement->styleChanged();
-    score()->startCmd();
+    m_undoStack->prepareChanges();
     score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
     switch (m_dropData.ed.dropElement->type()) {
     case ElementType::VOLTA:
@@ -996,7 +996,7 @@ bool NotationInteraction::drop(const QPointF& pos, Qt::KeyboardModifiers modifie
     }
     m_dropData.ed.dropElement = nullptr;
     setDropTarget(nullptr);         // this also resets dropRectangle and dropAnchor
-    score()->endCmd();
+    m_undoStack->commitChanges();
     // update input cursor position (must be done after layout)
 //    if (noteEntryMode()) {
 //        moveCursor();
@@ -1040,11 +1040,7 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
 //    }
 //#endif
 
-    bool isCmdStarted = false;
-    if (!score->undoStack()->active()) {
-        score->startCmd();
-        isCmdStarted = true;
-    }
+    m_undoStack->prepareChanges();
 
     if (sel.isList()) {
         ChordRest* cr1 = sel.firstChordRest();
@@ -1315,14 +1311,8 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
         qDebug("unknown selection state");
     }
 
-    if (isCmdStarted) {
-        score->endCmd();
-//        if (adapter()->mscoreState() == STATE_NOTE_ENTRY_STAFF_DRUM) {
-//            adapter()->moveCursor();
-//        }
-    }/* else if (adapter()->mscoreState() & STATE_ALLTEXTUAL_EDIT) {
-        adapter()->setFocus();
-    }*/
+    m_undoStack->commitChanges();
+
     setDropTarget(nullptr);
 
     return true;
@@ -1384,7 +1374,7 @@ void NotationInteraction::cmdAddSlur(const Ms::Slur* slurTemplate)
         return;
     }
 
-    score()->startCmd();
+    m_undoStack->prepareChanges();
 
     ChordRest* cr1;
     ChordRest* cr2;
@@ -1444,7 +1434,7 @@ void NotationInteraction::cmdAddSlur(const Ms::Slur* slurTemplate)
             addSlur(cr1, cr2, slurTemplate);
         }
     }
-    score()->endCmd();
+    m_undoStack->commitChanges();
 }
 
 //! NOTE Copied from ScoreView::addSlur
@@ -1778,12 +1768,12 @@ void NotationInteraction::movePitch(MoveDirection d, PitchMode mode)
         return;
     }
 
-    score()->startCmd();
+    m_undoStack->prepareChanges();
 
     bool isUp = MoveDirection::Up == d;
     score()->upDown(isUp, mode);
 
-    score()->endCmd();
+    m_undoStack->commitChanges();
 
     m_dragChanged.notify();
 }
@@ -1795,7 +1785,7 @@ void NotationInteraction::moveText(MoveDirection d, bool quickly)
         return;
     }
 
-    score()->startCmd();
+    m_undoStack->prepareChanges();
 
     qreal step = quickly ? MScore::nudgeStep10 : MScore::nudgeStep;
     step = step * el->spatium();
@@ -1820,7 +1810,7 @@ void NotationInteraction::moveText(MoveDirection d, bool quickly)
         break;
     }
 
-    score()->endCmd();
+    m_undoStack->commitChanges();
 
     m_dragChanged.notify();
 }

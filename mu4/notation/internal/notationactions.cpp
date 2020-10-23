@@ -162,6 +162,14 @@ const std::vector<Action> NotationActions::m_actions = {
     Action("staff-properties",
            QT_TRANSLATE_NOOP("action", "Staff/Part Properties"),
            ShortcutContext::NotationActive
+           ),
+    Action("undo",
+           QT_TRANSLATE_NOOP("action", "Undo"),
+           ShortcutContext::NotationActive
+           ),
+    Action("redo",
+           QT_TRANSLATE_NOOP("action", "Redo"),
+           ShortcutContext::NotationActive
            )
 };
 

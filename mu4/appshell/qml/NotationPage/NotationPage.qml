@@ -18,7 +18,7 @@ DockPage {
         objectName: "notationToolBar"
 
         height: 40
-        width: 400
+        width: 500
         color: notationPage.color
 
         NotationToolBar {

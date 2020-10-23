@@ -32,6 +32,8 @@ public:
     MOCK_METHOD(void, setRecentScoreList, (const QStringList&), (override));
 
     MOCK_METHOD(io::paths, templatesDirPaths, (), (const, override));
+    MOCK_METHOD(io::path, scoresPath, (), (const, override));
+    MOCK_METHOD(io::path, defaultSavingFilePath, (const std::string&), (const, override));
 
     MOCK_METHOD(QColor, templatePreviewBackgroundColor, (), (const, override));
     MOCK_METHOD(async::Channel<QColor>, templatePreviewBackgroundColorChanged, (), (const, override));

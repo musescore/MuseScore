@@ -21,13 +21,14 @@
 
 #include "inotationparts.h"
 #include "async/asyncable.h"
+#include "inotationundostack.h"
 
 namespace mu::notation {
 class IGetScore;
 class NotationParts : public INotationParts, public async::Asyncable
 {
 public:
-    NotationParts(IGetScore* getScore, mu::async::Notification selectionChangedNotification);
+    NotationParts(IGetScore* getScore, mu::async::Notification selectionChangedNotification, INotationUndoStackPtr undoStack);
     ~NotationParts() override;
 
     async::NotifyList<const Part*> partList() const override;
@@ -170,6 +171,7 @@ private:
                              const ID& destinationInstrumentId, InsertMode mode = Before);
 
     IGetScore* m_getScore = nullptr;
+    INotationUndoStackPtr m_undoStack;
     async::Notification m_partsChanged;
 
     mutable async::ChangedNotifier<const Part*>* m_partsNotifier = nullptr;

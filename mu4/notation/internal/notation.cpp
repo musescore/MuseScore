@@ -51,12 +51,13 @@ Notation::Notation(Score* score)
     m_scoreGlobal = new MScore(); //! TODO May be static?
     m_opened.val = false;
 
-    m_interaction = std::make_shared<NotationInteraction>(this);
-    m_playback = std::make_shared<NotationPlayback>(this);
-    m_midiInput = std::make_shared<NotationMidiInput>(this);
-    m_accessibility = std::make_shared<NotationAccessibility>(this, m_interaction->selectionChanged());
-    m_parts = std::make_shared<NotationParts>(this, m_interaction->selectionChanged());
     m_undoStack = std::make_shared<NotationUndoStack>(this);
+
+    m_interaction = std::make_shared<NotationInteraction>(this, m_undoStack);
+    m_playback = std::make_shared<NotationPlayback>(this);
+    m_midiInput = std::make_shared<NotationMidiInput>(this, m_undoStack);
+    m_accessibility = std::make_shared<NotationAccessibility>(this, m_interaction->selectionChanged());
+    m_parts = std::make_shared<NotationParts>(this, m_interaction->selectionChanged(), m_undoStack);
     m_style = std::make_shared<NotationStyle>(this);
     m_elements = std::make_shared<NotationElements>(this);
 

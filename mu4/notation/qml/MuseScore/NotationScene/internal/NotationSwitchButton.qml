@@ -8,6 +8,7 @@ FlatRadioButton {
     id: root
 
     property string title: ""
+    property bool needSave: false
 
     signal closeRequested()
 
@@ -16,7 +17,7 @@ FlatRadioButton {
     pressedStateColor: selectedStateColor
     selectedStateColor: ui.theme.backgroundPrimaryColor
 
-    width: 110
+    width: 200
     radius: 0
 
     RowLayout {
@@ -30,7 +31,7 @@ FlatRadioButton {
 
             horizontalAlignment: Text.AlignLeft
 
-            text: root.title
+            text: root.title + (root.needSave ? "*" : "")
             font.pixelSize: 12
         }
 

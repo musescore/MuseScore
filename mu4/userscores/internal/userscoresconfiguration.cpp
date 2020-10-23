@@ -32,6 +32,8 @@ static const Settings::Key RECENT_LIST(module_name, "userscores/recentList");
 static const Settings::Key USER_TEMPLATES_PATH(module_name, "application/paths/myTemplates");
 static const Settings::Key USER_SCORES_PATH(module_name, "application/paths/myScores");
 
+static const QString DEFAULT_FILE_SUFFIX(".mscz");
+
 void UserScoresConfiguration::init()
 {
     settings()->addItem(USER_SCORES_PATH, Val(globalConfiguration()->sharePath().toStdString() + "Scores"));
@@ -71,7 +73,7 @@ io::paths UserScoresConfiguration::templatesDirPaths() const
 {
     io::paths dirs;
 
-    dirs.push_back(globalConfiguration()->sharePath() + "/templates");
+    dirs.push_back(globalConfiguration()->sharePath() + "templates");
     dirs.push_back(settings()->value(USER_TEMPLATES_PATH).toQString());
 
     io::paths temps = extensionsConfiguration()->templatesPaths();
@@ -83,6 +85,11 @@ io::paths UserScoresConfiguration::templatesDirPaths() const
 io::path UserScoresConfiguration::scoresPath() const
 {
     return settings()->value(USER_SCORES_PATH).toString();
+}
+
+io::path UserScoresConfiguration::defaultSavingFilePath(const std::string& fileName) const
+{
+    return scoresPath() + "/" + fileName + DEFAULT_FILE_SUFFIX;
 }
 
 QColor UserScoresConfiguration::templatePreviewBackgroundColor() const

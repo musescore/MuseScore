@@ -120,7 +120,7 @@ mu::Ret MasterNotation::doLoadScore(Ms::MasterScore* score,
     }
     score->updateChannel();
     //score->updateExpressive(MuseScore::synthesizer("Fluid"));
-    score->setSaved(false);
+    score->setSaved(true);
     score->setCreated(false);
     score->update();
 
@@ -489,7 +489,7 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
     return make_ret(Err::NoError);
 }
 
-mu::RetVal<bool> MasterNotation::created()
+mu::RetVal<bool> MasterNotation::created() const
 {
     RetVal<bool> result;
     if (!score()) {
@@ -511,10 +511,18 @@ mu::Ret MasterNotation::save(const mu::io::path& path)
         LOGE() << MScore::lastError;
     } else {
         score()->setCreated(false);
-        undoStack()->stateChanged().notify();
+        undoStack()->stackChanged().notify();
     }
 
     return ok;
+}
+
+mu::ValNt<bool> MasterNotation::needSave() const
+{
+    ValNt<bool> needSave;
+    needSave.val = !masterScore()->saved();
+    needSave.notification = undoStack()->stackChanged();
+    return needSave;
 }
 
 void MasterNotation::initExcerpts()
