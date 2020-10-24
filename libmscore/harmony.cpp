@@ -1628,7 +1628,7 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
                   }
             else if (a.type == RenderAction::RenderActionType::NOTE) {
                   QString c;
-                  int acc;
+                  AccidentalVal acc;
                   if (tpcIsValid(tpc))
                         tpc2name(tpc, noteSpelling, noteCase, c, acc);
                   else if (_function.size() > 0)

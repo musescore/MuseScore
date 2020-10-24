@@ -3846,12 +3846,8 @@ void Score::cmdAddPitch(const EditData& ed, int note, bool addFlag, bool insert)
             if (addFlag && el && el->isNote()) {
                   Chord* chord = toNote(el)->chord();
                   Note* n      = chord->upNote();
-                  octave = n->epitch() / 12;
                   int tpc = n->tpc();
-                  if (tpc == Tpc::TPC_C_BB || tpc == Tpc::TPC_C_B)
-                        ++octave;
-                  else if (tpc == Tpc::TPC_B_S || tpc == Tpc::TPC_B_SS)
-                        --octave;
+                  octave = (n->epitch() - int(tpc2alter(tpc))) / PITCH_DELTA_OCTAVE;
                   if (note <= tpc2step(tpc))
                         octave++;
                   }
