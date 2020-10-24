@@ -407,8 +407,8 @@ QString accSymId2MxmlString(const SymId id)
             case SymId::accidentalArrowDown:             s = "arrow-down";           break;
             case SymId::accidentalArrowUp:               s = "arrow-up";             break;
 
-            //case SymId::accidentalTripleSharp:           s = "triple-sharp";         break;
-            //case SymId::accidentalTripleFlat:            s = "triple-flat";          break;
+            case SymId::accidentalTripleSharp:           s = "triple-sharp";         break;
+            case SymId::accidentalTripleFlat:            s = "triple-flat";          break;
 
             case SymId::accidentalKucukMucennebSharp:    s = "slash-quarter-sharp";  break;
             case SymId::accidentalBuyukMucennebSharp:    s = "slash-sharp";          break;
@@ -470,8 +470,8 @@ SymId mxmlString2accSymId(const QString mxmlName)
       map["arrow-down"] = SymId::accidentalArrowDown;
       map["arrow-up"] = SymId::accidentalArrowUp;
 
-      //map["triple-sharp"] = SymId::accidentalTripleSharp;
-      //map["triple-flat"] = SymId::accidentalTripleFlat;
+      map["triple-sharp"] = SymId::accidentalTripleSharp;
+      map["triple-flat"] = SymId::accidentalTripleFlat;
 
       map["slash-quarter-sharp"] = SymId::accidentalKucukMucennebSharp;
       map["slash-sharp"] = SymId::accidentalBuyukMucennebSharp;
@@ -538,8 +538,8 @@ QString accidentalType2MxmlString(const AccidentalType type)
             case AccidentalType::ARROW_DOWN:         s = "arrow-down";           break;
             case AccidentalType::ARROW_UP:           s = "arrow-up";             break;
 
-            //case AccidentalType::SHARP3:             s = "triple-sharp";         break;
-            //case AccidentalType::FLAT3:              s = "triple-flat";          break;
+            case AccidentalType::SHARP3:             s = "triple-sharp";         break;
+            case AccidentalType::FLAT3:              s = "triple-flat";          break;
 
             case AccidentalType::SHARP_SLASH3:       s = "slash-quarter-sharp";  break;
             case AccidentalType::SHARP_SLASH2:       s = "slash-sharp";          break;
@@ -605,8 +605,8 @@ AccidentalType mxmlString2accidentalType(const QString mxmlName)
       map["arrow-down"] = AccidentalType::ARROW_DOWN;
       map["arrow-up"] = AccidentalType::ARROW_UP;
 
-      //map["triple-sharp"] = AccidentalType::SHARP3;
-      //map["triple-flat"] = AccidentalType::FLAT3;
+      map["triple-sharp"] = AccidentalType::SHARP3;
+      map["triple-flat"] = AccidentalType::FLAT3;
 
       map["slash-quarter-sharp"] = AccidentalType::SHARP_SLASH3; // MIRRORED_FLAT_SLASH; ?
       map["slash-sharp"] = AccidentalType::SHARP_SLASH2; // SHARP_SLASH; ?

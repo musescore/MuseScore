@@ -41,8 +41,8 @@ static Acc accList[] = {
       Acc(AccidentalVal::SHARP,      0, SymId::accidentalSharp),        // SHARP
       Acc(AccidentalVal::SHARP2,     0, SymId::accidentalDoubleSharp),  // SHARP2
       Acc(AccidentalVal::FLAT2,      0, SymId::accidentalDoubleFlat),   // FLAT2
-      //Acc(AccidentalVal::SHARP3,     0, SymId::accidentalTripleSharp),  // SHARP3
-      //Acc(AccidentalVal::FLAT3,      0, SymId::accidentalTripleFlat),   // FLAT3
+      Acc(AccidentalVal::SHARP3,     0, SymId::accidentalTripleSharp),  // SHARP3
+      Acc(AccidentalVal::FLAT3,      0, SymId::accidentalTripleFlat),   // FLAT3
       Acc(AccidentalVal::FLAT,       0, SymId::accidentalNaturalFlat),  // NATURAL_FLAT
       Acc(AccidentalVal::SHARP,      0, SymId::accidentalNaturalSharp), // NATURAL_SHARP
       Acc(AccidentalVal::SHARP2,     0, SymId::accidentalSharpSharp),   // SHARP_SHARP
@@ -420,8 +420,10 @@ AccidentalType Accidental::value2subtype(AccidentalVal v)
             case AccidentalVal::NATURAL: return AccidentalType::NONE;
             case AccidentalVal::SHARP:   return AccidentalType::SHARP;
             case AccidentalVal::SHARP2:  return AccidentalType::SHARP2;
+            case AccidentalVal::SHARP3:  return AccidentalType::SHARP3;
             case AccidentalVal::FLAT:    return AccidentalType::FLAT;
             case AccidentalVal::FLAT2:   return AccidentalType::FLAT2;
+            case AccidentalVal::FLAT3:   return AccidentalType::FLAT3;
             default:
                   qFatal("value2subtype: illegal accidental val %d", int(v));
             }
