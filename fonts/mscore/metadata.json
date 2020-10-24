@@ -1,6 +1,6 @@
 {
     "fontName": "Emmentaler",
-    "fontVersion": 0.1,
+    "fontVersion": 2.001,
 
     "engravingDefaults": {
         "arrowShaftThickness": 0.16,
@@ -36,7 +36,7 @@
         "4stringTabClef": {
             "alternates": [
                 {
-                    "codepoint": "U+F40D", 
+                    "codepoint": "U+F40D",
                     "name": "4stringTabClefSerif"
                 }
             ]
@@ -52,7 +52,7 @@
         "cClef": {
             "alternates": [
                 {
-                    "codepoint": "U+F473", 
+                    "codepoint": "U+F473",
                     "name": "cClefSmall"
                 }
             ]
@@ -60,7 +60,7 @@
         "fClef": {
             "alternates": [
                 {
-                    "codepoint": "U+F474", 
+                    "codepoint": "U+F474",
                     "name": "fClefSmall"
                 }
             ]
@@ -68,7 +68,7 @@
         "gClef": {
             "alternates": [
                 {
-                    "codepoint": "U+F472", 
+                    "codepoint": "U+F472",
                     "name": "gClefSmall"
                 }
             ]
@@ -1842,11 +1842,11 @@
         },
         "accidentalNatural": {
             "cutOutNE": [
-                0.13,
+                0.129,
                 0.82
             ],
             "cutOutSW": [
-                0.519,
+                0.527,
                 -0.82
             ]
         },
