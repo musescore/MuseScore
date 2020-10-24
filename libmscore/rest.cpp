@@ -588,7 +588,7 @@ int Rest::computeLineOffset(int lines)
             int line = up ? 10 : -10;
 
             // For compatibility reasons apply automatic collision avoidance only if y-offset is unchanged 
-            if (qFuzzyIsNull(offset().y())) {
+            if (qFuzzyIsNull(offset().y()) && autoplace()) {
                   int firstTrack = staffIdx() * 4;
                   int extraOffsetForFewLines = lines < 5 ? 2 : 0;
                   bool isMeasureRest = durationType().type() == TDuration::DurationType::V_MEASURE;
