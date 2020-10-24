@@ -496,6 +496,11 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                   nm->setNo(m->no());
                   nm->setNoOffset(m->noOffset());
                   nm->setBreakMultiMeasureRest(m->breakMultiMeasureRest());
+
+                  for (int dstStaffIdx = 0; dstStaffIdx < map.size(); ++dstStaffIdx) {
+                        nm->setStaffStemless(dstStaffIdx, m->stemless(map[dstStaffIdx]));
+                        }
+
 //TODO                  nm->setEndBarLineType(
 //                     m->endBarLineType(),
 //                     m->endBarLineGenerated(),

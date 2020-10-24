@@ -95,6 +95,8 @@ class TestParts : public QObject, public MTest
       void undoRemoveChordline();
       void undoRedoRemoveChordline();
 
+      void createPartStemless();
+
 //      void createPartImage();
 //      void addImage();
 //      void undoAddImage();
@@ -407,6 +409,11 @@ void TestParts::createPartSymbol()
 void TestParts::createPartChordline()
       {
       testPartCreation("part-chordline");
+      }
+
+void TestParts::createPartStemless()
+      {
+      testPartCreation("part-stemless");
       }
 
 #if 0
