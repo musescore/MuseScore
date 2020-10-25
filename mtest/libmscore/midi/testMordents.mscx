@@ -88,7 +88,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordent</subtype>
+              <subtype>ornamentShortTrill</subtype>
               </Articulation>
             <Note>
               <pitch>60</pitch>
@@ -98,7 +98,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordent</subtype>
+              <subtype>ornamentShortTrill</subtype>
               </Articulation>
             <Note>
               <Accidental>
@@ -115,7 +115,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordent</subtype>
+              <subtype>ornamentShortTrill</subtype>
               </Articulation>
             <Note>
               <pitch>64</pitch>
@@ -125,7 +125,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordent</subtype>
+              <subtype>ornamentShortTrill</subtype>
               </Articulation>
             <Note>
               <pitch>65</pitch>
@@ -139,7 +139,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordent</subtype>
+              <subtype>ornamentShortTrill</subtype>
               </Articulation>
             <Note>
               <Accidental>
@@ -152,7 +152,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordent</subtype>
+              <subtype>ornamentShortTrill</subtype>
               </Articulation>
             <Note>
               <pitch>67</pitch>
@@ -166,7 +166,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordent</subtype>
+              <subtype>ornamentShortTrill</subtype>
               </Articulation>
             <Note>
               <Accidental>
@@ -179,7 +179,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordent</subtype>
+              <subtype>ornamentShortTrill</subtype>
               </Articulation>
             <Note>
               <Accidental>
@@ -196,7 +196,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <pitch>72</pitch>
@@ -206,7 +206,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <Accidental>
@@ -223,7 +223,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <pitch>76</pitch>
@@ -233,7 +233,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <pitch>77</pitch>
@@ -247,7 +247,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <Accidental>
@@ -260,7 +260,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <pitch>79</pitch>
@@ -274,7 +274,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <Accidental>
@@ -287,7 +287,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <Accidental>
@@ -307,7 +307,7 @@
           <Chord>
             <durationType>whole</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <pitch>84</pitch>
@@ -328,7 +328,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordent</subtype>
+              <subtype>ornamentShortTrill</subtype>
               </Articulation>
             <Note>
               <pitch>60</pitch>
@@ -338,7 +338,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordent</subtype>
+              <subtype>ornamentShortTrill</subtype>
               </Articulation>
             <Note>
               <pitch>61</pitch>
@@ -352,7 +352,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordent</subtype>
+              <subtype>ornamentShortTrill</subtype>
               </Articulation>
             <Note>
               <Accidental>
@@ -365,7 +365,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordent</subtype>
+              <subtype>ornamentShortTrill</subtype>
               </Articulation>
             <Note>
               <pitch>65</pitch>
@@ -379,7 +379,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordent</subtype>
+              <subtype>ornamentShortTrill</subtype>
               </Articulation>
             <Note>
               <Accidental>
@@ -392,7 +392,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordent</subtype>
+              <subtype>ornamentShortTrill</subtype>
               </Articulation>
             <Note>
               <pitch>67</pitch>
@@ -406,7 +406,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordent</subtype>
+              <subtype>ornamentShortTrill</subtype>
               </Articulation>
             <Note>
               <pitch>70</pitch>
@@ -416,7 +416,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordent</subtype>
+              <subtype>ornamentShortTrill</subtype>
               </Articulation>
             <Note>
               <Accidental>
@@ -433,7 +433,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <pitch>72</pitch>
@@ -443,7 +443,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <pitch>73</pitch>
@@ -457,7 +457,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <Accidental>
@@ -470,7 +470,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <pitch>77</pitch>
@@ -484,7 +484,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <Accidental>
@@ -497,7 +497,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <pitch>79</pitch>
@@ -511,7 +511,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <pitch>82</pitch>
@@ -521,7 +521,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <Accidental>
@@ -541,7 +541,7 @@
           <Chord>
             <durationType>whole</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <pitch>84</pitch>
@@ -558,7 +558,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordent</subtype>
+              <subtype>ornamentShortTrill</subtype>
               </Articulation>
             <Note>
               <Accidental>
@@ -571,7 +571,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordent</subtype>
+              <subtype>ornamentShortTrill</subtype>
               </Articulation>
             <Note>
               <Accidental>
@@ -588,7 +588,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordent</subtype>
+              <subtype>ornamentShortTrill</subtype>
               </Articulation>
             <Note>
               <pitch>64</pitch>
@@ -598,7 +598,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordent</subtype>
+              <subtype>ornamentShortTrill</subtype>
               </Articulation>
             <Note>
               <Accidental>
@@ -615,7 +615,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordent</subtype>
+              <subtype>ornamentShortTrill</subtype>
               </Articulation>
             <Note>
               <Accidental>
@@ -629,7 +629,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordent</subtype>
+              <subtype>ornamentShortTrill</subtype>
               </Articulation>
             <Note>
               <Accidental>
@@ -646,7 +646,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordent</subtype>
+              <subtype>ornamentShortTrill</subtype>
               </Articulation>
             <Note>
               <Accidental>
@@ -659,7 +659,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordent</subtype>
+              <subtype>ornamentShortTrill</subtype>
               </Articulation>
             <Note>
               <Accidental>
@@ -676,7 +676,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <Accidental>
@@ -689,7 +689,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <Accidental>
@@ -706,7 +706,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <pitch>76</pitch>
@@ -716,7 +716,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <Accidental>
@@ -733,7 +733,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <Accidental>
@@ -747,7 +747,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <Accidental>
@@ -764,7 +764,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <Accidental>
@@ -777,7 +777,7 @@
           <Chord>
             <durationType>half</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <Accidental>
@@ -794,7 +794,7 @@
           <Chord>
             <durationType>whole</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <Accidental>

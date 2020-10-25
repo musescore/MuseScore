@@ -26,13 +26,13 @@ cmd next-chord
 palette Articulation symbol ornamentTrill
 cmd next-chord
 cmd next-chord
-palette Articulation symbol ornamentMordent
+palette Articulation symbol ornamentShortTrill
 cmd next-chord
 cmd next-chord
 cmd select-next-chord
 cmd select-next-chord
 cmd select-next-chord
-palette Articulation symbol ornamentMordent
+palette Articulation symbol ornamentShortTrill
 cmd next-chord
 cmd next-chord
 cmd select-next-chord
@@ -65,7 +65,7 @@ cmd prev-chord
 cmd prev-measure
 cmd prev-measure
 cmd prev-measure
-palette Articulation symbol ornamentMordentInverted
+palette Articulation symbol ornamentMordent
 cmd next-chord
 cmd next-chord
 palette Articulation symbol ornamentTremblement

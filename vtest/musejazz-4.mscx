@@ -210,7 +210,7 @@ p, li { white-space: pre-wrap; }
           <Chord>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>ornamentMordent</subtype>
+              <subtype>ornamentShortTrill</subtype>
               </Articulation>
             <Note>
               <pitch>67</pitch>

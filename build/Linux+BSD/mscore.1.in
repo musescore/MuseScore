@@ -518,7 +518,7 @@ SF3 (SoundFont with OGG Vorbis-compressed samples)
 .It
 SFZ (Sforzato soundfont)
 .It
-SMuFL (Standard Music Font Layout 1.20)
+SMuFL (Standard Music Font Layout 1.30)
 .El
 .Sh HISTORY
 MuseScore was split off the MusE sequencer in 2002 and has since
