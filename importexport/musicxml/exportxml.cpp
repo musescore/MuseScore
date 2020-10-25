@@ -1646,6 +1646,7 @@ static QString normalBarlineStyle(const BarLine* bl)
             case BarLineType::DOUBLE:
                   return "light-light";
             case BarLineType::END_REPEAT:
+            case BarLineType::REVERSE_END:
                   return "light-heavy";
             case BarLineType::BROKEN:
                   return "dashed";
@@ -1654,6 +1655,10 @@ static QString normalBarlineStyle(const BarLine* bl)
             case BarLineType::END:
             case BarLineType::END_START_REPEAT:
                   return "light-heavy";
+            case BarLineType::HEAVY:
+                  return "heavy";
+            case BarLineType::DOUBLE_HEAVY:
+                  return "heavy-heavy";
             default:
                   qDebug("bar subtype %d not supported", int(bst));
             }
@@ -1824,6 +1829,7 @@ void ExportMusicXml::barlineRight(const Measure* const m, const int strack, cons
                               _xml.tag("bar-style", QString("light-light"));
                               break;
                         case BarLineType::END_REPEAT:
+                        case BarLineType::REVERSE_END:
                               _xml.tag("bar-style", QString("light-heavy"));
                               break;
                         case BarLineType::BROKEN:
@@ -1835,6 +1841,12 @@ void ExportMusicXml::barlineRight(const Measure* const m, const int strack, cons
                         case BarLineType::END:
                         case BarLineType::END_START_REPEAT:
                               _xml.tag("bar-style", QString("light-heavy"));
+                              break;
+                        case BarLineType::HEAVY:
+                              _xml.tag("bar-style", QString("heavy"));
+                              break;
+                        case BarLineType::DOUBLE_HEAVY:
+                              _xml.tag("bar-style", QString("heavy-heavy"));
                               break;
                         default:
                               qDebug("ExportMusicXml::bar(): bar subtype %d not supported", int(bst));

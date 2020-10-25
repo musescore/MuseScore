@@ -878,16 +878,81 @@ Timeline::Timeline(TDockWidget* dockWidget, QWidget* parent)
                   "..#.#.."
                   };
 
+      static const char* reverseEndBarline[] = {
+                  "7 14 2 1",
+                  "# c #000000",
+                  ". c None",
+                  "##.#...",
+                  "##.#...",
+                  "##.#...",
+                  "##.#...",
+                  "##.#...",
+                  "##.#...",
+                  "##.#...",
+                  "##.#...",
+                  "##.#...",
+                  "##.#...",
+                  "##.#...",
+                  "##.#...",
+                  "##.#...",
+                  "##.#..."
+                  };
+
+      static const char* heavyBarline[] = {
+                  "6 14 2 1",
+                  "# c #000000",
+                  ". c None",
+                  "..##..",
+                  "..##..",
+                  "..##..",
+                  "..##..",
+                  "..##..",
+                  "..##..",
+                  "..##..",
+                  "..##..",
+                  "..##..",
+                  "..##..",
+                  "..##..",
+                  "..##..",
+                  "..##..",
+                  "..##.."
+                  };
+
+      static const char* doubleHeavyBarline[] = {
+                  "7 14 2 1",
+                  "# c #000000",
+                  ". c None",
+                  ".##.##.",
+                  ".##.##.",
+                  ".##.##.",
+                  ".##.##.",
+                  ".##.##.",
+                  ".##.##.",
+                  ".##.##.",
+                  ".##.##.",
+                  ".##.##.",
+                  ".##.##.",
+                  ".##.##.",
+                  ".##.##.",
+                  ".##.##.",
+                  ".##.##."
+                  };
+
       QPixmap* startRepeatPixmap = new QPixmap(startRepeat);
       QPixmap* endRepeatPixmap = new QPixmap(endRepeat);
       QPixmap* endBarlinePixmap = new QPixmap(endBarline);
       QPixmap* doubleBarlinePixmap = new QPixmap(doubleBarline);
+      QPixmap* reverseEndBarlinePixmap = new QPixmap(reverseEndBarline);
+      QPixmap* heavyBarlinePixmap = new QPixmap(heavyBarline);
+      QPixmap* doubleHeavyBarlinePixmap = new QPixmap(doubleHeavyBarline);
 
       _barlines[BarLineType::START_REPEAT] = startRepeatPixmap;
       _barlines[BarLineType::END_REPEAT] = endRepeatPixmap;
       _barlines[BarLineType::END] = endBarlinePixmap;
       _barlines[BarLineType::DOUBLE] = doubleBarlinePixmap;
-
+      _barlines[BarLineType::REVERSE_END] = reverseEndBarlinePixmap;
+      _barlines[BarLineType::HEAVY] = heavyBarlinePixmap;
+      _barlines[BarLineType::DOUBLE_HEAVY] = doubleHeavyBarlinePixmap;
       }
 
 //---------------------------------------------------------
@@ -1302,8 +1367,11 @@ void Timeline::barlineMeta(Segment* seg, int* stagger, int pos)
             switch (barline->barLineType()) {
                   case BarLineType::START_REPEAT:
                   case BarLineType::END_REPEAT:
-                  case BarLineType::DOUBLE:
                   case BarLineType::END:
+                  case BarLineType::DOUBLE:
+                  case BarLineType::REVERSE_END:
+                  case BarLineType::HEAVY:
+                  case BarLineType::DOUBLE_HEAVY:
                         repeatText = BarLine::userTypeName(barline->barLineType());
                         break;
                   case BarLineType::END_START_REPEAT:
@@ -1493,6 +1561,9 @@ bool Timeline::addMetaValue(int x, int pos, QString metaText, int row, ElementTy
           { BarLine::userTypeName(BarLineType::END_REPEAT), BarLineType::END_REPEAT },
           { BarLine::userTypeName(BarLineType::END), BarLineType::END },
           { BarLine::userTypeName(BarLineType::DOUBLE), BarLineType::DOUBLE },
+          { BarLine::userTypeName(BarLineType::REVERSE_END), BarLineType::REVERSE_END },
+          { BarLine::userTypeName(BarLineType::HEAVY), BarLineType::HEAVY },
+          { BarLine::userTypeName(BarLineType::DOUBLE_HEAVY), BarLineType::DOUBLE_HEAVY },
       };
 
       BarLineType barLineType = barLineTypes[metaText];
@@ -1516,6 +1587,9 @@ bool Timeline::addMetaValue(int x, int pos, QString metaText, int row, ElementTy
       if ((barLineType == BarLineType::END_REPEAT ||
            barLineType == BarLineType::END ||
            barLineType == BarLineType::DOUBLE ||
+           barLineType == BarLineType::REVERSE_END ||
+           barLineType == BarLineType::HEAVY ||
+           barLineType == BarLineType::DOUBLE_HEAVY ||
            std::get<2>(_repeatInfo))
           && !_collapsedMeta) {
             if (std::get<0>(_repeatInfo) > 0)
@@ -1876,8 +1950,11 @@ void Timeline::drawSelection()
                   BarLine* barline = toBarLine(element);
                   if (barline &&
                       (barline->barLineType() == BarLineType::END_REPEAT ||
+                       barline->barLineType() == BarLineType::END ||
                        barline->barLineType() == BarLineType::DOUBLE ||
-                       barline->barLineType() == BarLineType::END) &&
+                       barline->barLineType() == BarLineType::REVERSE_END ||
+                       barline->barLineType() == BarLineType::HEAVY ||
+                       barline->barLineType() == BarLineType::DOUBLE_HEAVY) &&
                       measure != _score->lastMeasure()) {
                         if (measure->prevMeasure())
                               measure = measure->prevMeasure();
