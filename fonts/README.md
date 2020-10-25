@@ -6,11 +6,13 @@ This directory contains the fonts used internally by MuseScore and the sources u
 
 ## Sub-directories
 
-* **bravura** The [_Bravura_](http://www.smufl.org/fonts/) fonts and the documentation for them and for SMuFL. These fonts are **not** maintained by the MuseScore community, please **DO NOT EDIT** these fonts. 
-* **gootville** The [_Gonville_ font](http://www.chiark.greenend.org.uk/~sgtatham/gonville/) for score musical symbols. This font is modified and maintained by the MuseScore project.
+* **bravura** The [_Bravura_](https://github.com/steinbergmedia/bravura/) fonts and the documentation for them. These fonts are **not** maintained by the MuseScore community, please **DO NOT EDIT** these fonts. 
+* **campania** The [_Campania_](https://github.com/MarcSabatella/Campania) font for Roman numeral analysis.  This font is not maintained by the MuseScore project, but it is open source and contributions from the MuseScore community are encouraged at the main site for the font.
+* **gootville** The [_Gonville_](http://www.chiark.greenend.org.uk/~sgtatham/gonville/) fonts for score musical symbols. This font is modified and maintained by the MuseScore project.
 * **mscore** The main font used in MuseScore scores for musical symbols (formerly known as [_Emmentaler_](http://lilypond.org/doc/v2.18/Documentation/notation/the-feta-font)), as well its counterpart used for texts.
 * **musejazz** The _MuseJazz_ and _MuseJazzText_ fonts used for notation and text in a handwritten style.  These are maintained by the MuseScore project.
-* **campania** The [_Campania_](https://github.com/MarcSabatella/Campania) font for Roman numeral analysis.  This font is not maintained by the MuseScore project, but it is open source and contributions from the MuseScore community are encouraged at the main site for the font.
+* **petaluma** The [_Petaluma_](https://github.com/steinbergmedia/petaluma/) fonts and the documentation for them. These fonts are **not** maintained by the MuseScore community, please **DO NOT EDIT** these fonts. 
+* **smufl** The [_SMuFL_](https://github.com/w3c/smufl/) files and documentation for [_SMuFL_](http://www.smufl.org). These are **not** maintained by the MuseScore community, please **DO NOT EDIT** these files. 
 
 Other files in the main **fonts** directories are for collateral fonts used by MuseScore for specific tasks. If an *.sfd* file is present, the font is maintained/customized by the MuseScore community.
 
