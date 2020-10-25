@@ -196,28 +196,35 @@ AccidentalVal AccidentalState::accidentalVal(int line, bool &error) const
 //    preset lines list with accidentals for given key
 //---------------------------------------------------------
 
+static const int ACC_STATE_NATURAL = int(AccidentalVal::NATURAL) - int(AccidentalVal::MIN);
+static const int ACC_STATE_FLAT = int(AccidentalVal::FLAT) - int(AccidentalVal::MIN);
+static const int ACC_STATE_SHARP = int(AccidentalVal::SHARP) - int(AccidentalVal::MIN);
+
 void AccidentalState::init(Key key)
       {
-      memset(state, int(AccidentalVal::MAX), MAX_ACC_STATE);
+      memset(state, ACC_STATE_NATURAL, MAX_ACC_STATE);
+      // The numerical value of key tells us the number of sharps (or flats, if negative) in the key signature
       if (key > 0) {
             for (int i = 0; i < int(key); ++i) {
-                  int idx = tpc2step(20 + i);
+                  // First F#, then C#, then G#, etc.
+                  int idx = tpc2step(Tpc::TPC_F_S + i);
                   for (int octave = 0; octave < (11 * 7); octave += 7) {
                         int j = idx + octave;
                         if (j >= MAX_ACC_STATE)
                               break;
-                        state[j] = 1 - int(AccidentalVal::MIN);
+                        state[j] = ACC_STATE_SHARP;
                         }
                   }
             }
       else {
             for (int i = 0; i > int(key); --i) {
-                  int idx = tpc2step(12 + i);
+                  // First Bb, then Eb, then Ab, etc.
+                  int idx = tpc2step(Tpc::TPC_B_B + i);
                   for (int octave = 0; octave < (11 * 7); octave += 7) {
-                        int j = idx + octave ;
+                        int j = idx + octave;
                         if (j >= MAX_ACC_STATE)
                               break;
-                        state[j] = -1 - int(AccidentalVal::MIN);
+                        state[j] = ACC_STATE_FLAT;
                         }
                   }
             }
@@ -230,7 +237,7 @@ void AccidentalState::init(Key key)
 void AccidentalState::init(const KeySigEvent& keySig, ClefType clef)
       {
       if (keySig.custom()) {
-            memset(state, int(AccidentalVal::MAX), MAX_ACC_STATE);
+            memset(state, ACC_STATE_NATURAL, MAX_ACC_STATE);
             for (const KeySym& s : keySig.keySymbols()) {
                   AccidentalVal a = sym2accidentalVal(s.sym);
                   int line = int(s.spos.y() * 2);
