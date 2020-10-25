@@ -633,6 +633,7 @@ bool Articulation::isOrnament() const
       {
       return _symId == SymId::ornamentTurn
           || _symId == SymId::ornamentTurnInverted
+          || _symId == SymId::ornamentTurnSlash
           || _symId == SymId::ornamentTrill
           || _symId == SymId::brassMuteClosed
           || _symId == SymId::ornamentMordent

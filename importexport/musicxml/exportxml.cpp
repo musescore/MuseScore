@@ -2544,6 +2544,7 @@ static QString symIdToOrnam(const SymId sid)
       {
       switch (sid) {
             case SymId::ornamentTurnInverted:
+            case SymId::ornamentTurnSlash:
                   return "inverted-turn";
                   break;
             case SymId::ornamentTurn:
