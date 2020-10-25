@@ -58,7 +58,6 @@ struct BeamFragment {
 Beam::Beam(Score* s)
    : Element(s)
       {
-      initElementStyle(&beamStyle);
       _direction       = Direction::AUTO;
       _up              = true;
       _distribute      = false;
@@ -73,6 +72,7 @@ Beam::Beam(Score* s)
       maxMove          = 0;
       _isGrace         = false;
       _cross           = false;
+      initElementStyle(&beamStyle);
       }
 
 //---------------------------------------------------------
