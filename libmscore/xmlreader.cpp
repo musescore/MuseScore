@@ -189,7 +189,6 @@ Fraction XmlReader::readFraction()
     if (!s.isEmpty()) {
         int i = s.indexOf('/');
         if (i == -1) {
-            qDebug("reading ticks <%s>", qPrintable(s));
             return Fraction::fromTicks(s.toInt());
         } else {
             z = s.left(i).toInt();
