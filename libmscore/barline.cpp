@@ -59,7 +59,10 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
             case BarLineType::NORMAL:
             case BarLineType::DOUBLE:
             case BarLineType::BROKEN:
-            case BarLineType::DOTTED: {
+            case BarLineType::DOTTED:
+            case BarLineType::REVERSE_END:
+            case BarLineType::HEAVY:
+            case BarLineType::DOUBLE_HEAVY: {
                   Segment* segment = bl->segment();
                   SegmentType segmentType = segment->segmentType();
                   if (segmentType == SegmentType::EndBarLine) {
@@ -202,6 +205,9 @@ const std::vector<BarLineTableItem> BarLine::barLineTable {
       { BarLineType::END,              Sym::symUserNames[int(SymId::barlineFinal)],         "end" },
       { BarLineType::END_START_REPEAT, Sym::symUserNames[int(SymId::repeatRightLeft)],      "end-start-repeat" },
       { BarLineType::DOTTED,           Sym::symUserNames[int(SymId::barlineDotted)],        "dotted" },
+      { BarLineType::REVERSE_END,      Sym::symUserNames[int(SymId::barlineReverseFinal)],  "reverse-end" },
+      { BarLineType::HEAVY,            Sym::symUserNames[int(SymId::barlineHeavy)],         "heavy" },
+      { BarLineType::DOUBLE_HEAVY,     Sym::symUserNames[int(SymId::barlineHeavyHeavy)],    "double-heavy" },
       };
 
 //---------------------------------------------------------
@@ -572,6 +578,36 @@ void BarLine::draw(QPainter* painter) const
                   qreal x = lw2 * .5;
                   painter->drawLine(QLineF(x, y1, x, y2));
                   x += score()->styleP(Sid::doubleBarDistance) * mag();
+                  painter->drawLine(QLineF(x, y1, x, y2));
+                  }
+                  break;
+
+            case BarLineType::REVERSE_END: {
+                  qreal lw = score()->styleP(Sid::endBarWidth) * mag();
+                  painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::FlatCap));
+                  qreal x = lw * .5;
+                  painter->drawLine(QLineF(x, y1, x, y2));
+
+                  qreal lw2 = score()->styleP(Sid::barWidth) * mag();
+                  painter->setPen(QPen(curColor(), lw2, Qt::SolidLine, Qt::FlatCap));
+                  x += score()->styleP(Sid::endBarDistance) * mag();
+                  painter->drawLine(QLineF(x, y1, x, y2));
+                  }
+                  break;
+
+            case BarLineType::HEAVY: {
+                  qreal lw = score()->styleP(Sid::endBarWidth) * mag();
+                  painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::FlatCap));
+                  painter->drawLine(QLineF(lw * .5, y1, lw * .5, y2));
+                  }
+                  break;
+
+            case BarLineType::DOUBLE_HEAVY: {
+                  qreal lw2 = score()->styleP(Sid::endBarWidth)    * mag();
+                  painter->setPen(QPen(curColor(), lw2, Qt::SolidLine, Qt::FlatCap));
+                  qreal x = lw2 * .5;
+                  painter->drawLine(QLineF(x, y1, x, y2));
+                  x += score()->styleP(Sid::endBarDistance) * mag();
                   painter->drawLine(QLineF(x, y1, x, y2));
                   }
                   break;
@@ -1195,6 +1231,9 @@ qreal BarLine::layoutWidth(Score* score, BarLineType type)
             case BarLineType::DOUBLE:
                   w = score->styleP(Sid::doubleBarWidth) + score->styleP(Sid::doubleBarDistance);
                   break;
+            case BarLineType::DOUBLE_HEAVY:
+                  w = score->styleP(Sid::endBarWidth) + score->styleP(Sid::endBarDistance);
+                  break;
             case BarLineType::END_START_REPEAT:
                   w = score->styleP(Sid::endBarDistance) * 2
                      + score->styleP(Sid::repeatBarlineDotSeparation) * 2
@@ -1208,6 +1247,7 @@ qreal BarLine::layoutWidth(Score* score, BarLineType type)
                      + dotwidth * .5;
                   break;
             case BarLineType::END:
+            case BarLineType::REVERSE_END:
                   w = (score->styleP(Sid::endBarWidth) + score->styleP(Sid::barWidth)) * .5
                      + score->styleP(Sid::endBarDistance);
                   break;
@@ -1215,6 +1255,9 @@ qreal BarLine::layoutWidth(Score* score, BarLineType type)
             case BarLineType::NORMAL:
             case BarLineType::DOTTED:
                   w = score->styleP(Sid::barWidth);
+                  break;
+            case BarLineType::HEAVY:
+                  w = score->styleP(Sid::endBarWidth);
                   break;
             }
       return w;
