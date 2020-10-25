@@ -3,8 +3,8 @@ FontName: MScore
 FullName: MScore for scores
 FamilyName: MScore
 Weight: Regular
-Copyright: MScore is Copyright (c)\n 2014-2014 Werner Schweer <ws@wschweer.de>\n 2014 John Pirie <jpirie23@gmail.com>\n 2013-2014 Maurizio M. Gavioli <mmg@vistamaresoft.com>\n 2013-2015 Nicolas Froment <lasconic@gmail.com>\n 2020 mirabilos <m@mirbsd.org>\nand published under the GPLv3 or later with font exception (see\nbelow, but substitute this font for "fonts included in LilyPond").\n\nParts of the font are derived from Parnassus, which is Copyright (c)\n 2005, 2013 Kristof Bastiaensen (www.resonata.be)\nand published under the GPL with font exception.\n\nParts of the font are derived from Emmentaler, which\nis part of GNU LilyPond and Copyright (c)\n 1997-2012, Han-Wen Nienhuys <hanwen@xs4all.nl\n 1997-2012, Jan Nieuwenhuizen <janneke@gnu.org>\n 2000-2012, Juergen Reuter <reuter@ipd.uka.de>\n 2011-2012, Bertrand Bordage <bordage.bertrand@gmail.com>\n 1998-2012, Mats Bengtsson <matsb@s3.kth.se>\n 1998-2012, Christian Mondrup <scancm@biobase.dk>\n\nGNU LilyPond is free software: you can redistribute it and/or modify it\nunder the terms of the GNU General Public License as published by the\nFree Software Foundation, either version 3 of the License, or (at your\noption) any later version.\n\nThis program is distributed in the hope that it will be useful, but\nWITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General\nPublic License for more details.\n\nYou should have received a copy of the GNU General Public License\nalong with this program. If not, see <http://www.gnu.org/licenses/>.\n\nThe following exceptions apply:\n\nIf you create a document which uses fonts included in LilyPond, and\nembed this font or unaltered portions of this font into the document,\nthen this font does not by itself cause the resulting document to be\ncovered by the GNU General Public License. This exception does not\nhowever invalidate any other reasons why the document might be covered\nby the GNU General Public License. If you modify one or more of the\nfonts, you may extend this exception to your version of the fonts but\nyou are not obliged to do so. If you do not wish to do so, delete this\nexception statement from your version.
-Version: 2.001
+Copyright: MScore is Copyright (c)\n 2013-2014 Werner Schweer <ws@wschweer.de>\n 2014 John Pirie <jpirie23@gmail.com>\n 2018 Matt McClinch <mattmcclinch@gmail.com>\n 2013-2018 Nicolas Froment <lasconic@gmail.com>\n 2013-2019 Maurizio M. Gavioli <mmg@vistamaresoft.com>\n 2018-2020 mirabilos <m@mirbsd.org>\nand published under the GPLv3 or later with font exception (see\nbelow, but substitute this font for "fonts included in LilyPond").\n\nParts of the font are derived from Parnassus, which is Copyright (c)\n 2005-2013 Kristof Bastiaensen (www.resonata.be)\nand published under the GPL with font exception.\n\nParts of the font are derived from Emmentaler, which\nis part of GNU LilyPond and Copyright (c)\n 1997-2012 Han-Wen Nienhuys <hanwen@xs4all.nl>\n 1997-2012 Jan Nieuwenhuizen <janneke@gnu.org>\n 2000-2012 Juergen Reuter <reuter@ipd.uka.de>\n 2011-2012 Bertrand Bordage <bordage.bertrand@gmail.com>\n 1998-2012 Mats Bengtsson <matsb@s3.kth.se>\n 1998-2012 Christian Mondrup <scancm@biobase.dk>\n\nGNU LilyPond is free software: you can redistribute it and/or modify it\nunder the terms of the GNU General Public License as published by the\nFree Software Foundation, either version 3 of the License, or (at your\noption) any later version.\n\nThis program is distributed in the hope that it will be useful, but\nWITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General\nPublic License for more details.\n\nYou should have received a copy of the GNU General Public License\nalong with this program. If not, see <http://www.gnu.org/licenses/>.\n\nThe following exceptions apply:\n\nIf you create a document which uses fonts included in LilyPond, and\nembed this font or unaltered portions of this font into the document,\nthen this font does not by itself cause the resulting document to be\ncovered by the GNU General Public License. This exception does not\nhowever invalidate any other reasons why the document might be covered\nby the GNU General Public License. If you modify one or more of the\nfonts, you may extend this exception to your version of the fonts but\nyou are not obliged to do so. If you do not wish to do so, delete this\nexception statement from your version.
+Version: 2.002
 DefaultBaseFilename: mscore
 ItalicAngle: 0
 UnderlinePosition: -51
@@ -12,7 +12,7 @@ UnderlineWidth: 51
 Ascent: 819
 Descent: 205
 InvalidEm: 0
-sfntRevision: 0x00020042
+sfntRevision: 0x00020084
 LayerCount: 2
 Layer: 0 1 "Back" 1
 Layer: 1 1 "Fore" 0
@@ -22,7 +22,7 @@ OS2Version: 3
 OS2_WeightWidthSlopeOnly: 0
 OS2_UseTypoMetrics: 1
 CreationTime: 1403170689
-ModificationTime: 1603520183
+ModificationTime: 1603588522
 PfmFamily: 17
 TTFWeight: 400
 TTFWidth: 5
@@ -2722,7 +2722,7 @@ Width: 688
 Flags: MW
 LayerCount: 2
 Fore
-Refer: 327 -1 N 1 0 0 1 140 -969 2
+Refer: 327 -1 S 1 0 0 1 140 -641 2
 Refer: 105 57442 N 1 0 0 1 0 0 2
 Validated: 1
 EndChar
@@ -6935,7 +6935,7 @@ Width: 688
 Flags: MW
 LayerCount: 2
 Fore
-Refer: 326 -1 N 1 0 0 1 79 -969 2
+Refer: 326 -1 N 1 0 0 1 79 -642 2
 Refer: 105 57442 N 1 0 0 1 0 0 2
 Validated: 1
 EndChar
