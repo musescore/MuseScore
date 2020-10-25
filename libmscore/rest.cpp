@@ -532,6 +532,18 @@ int Rest::computeLineOffset(int lines)
                   }
             }
 
+      if (offsetVoices) {
+            // if the staff contains slash notation then don't offset voices
+            int baseTrack = staffIdx() * VOICES;
+            for (int v = 0; v < VOICES; ++v) {
+                  Element* e = s->element(baseTrack + v);
+                  if (e && e->isChord() && toChord(e)->slash()) {
+                        offsetVoices = false;
+                        break;
+                        }
+                  }
+            }
+
       if (offsetVoices && staff()->mergeMatchingRests()) {
             // automatically merge matching rests in voices 1 & 2 if nothing in any other voice
             // this is not always the right thing to do do, but is useful in choral music
