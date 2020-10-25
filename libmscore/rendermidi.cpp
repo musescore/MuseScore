@@ -1729,6 +1729,7 @@ std::vector<OrnamentExcursion> excursions = {
       //                               styles          prefix                    sustainp
       { SymId::ornamentTurn,                any, _32nd, {},    {1,0,-1,0},   false, true, {}}
       ,{SymId::ornamentTurnInverted,        any, _32nd, {},    {-1,0,1,0},   false, true, {}}
+      ,{SymId::ornamentTurnSlash,           any, _32nd, {},    {-1,0,1,0},   false, true, {}}
       ,{SymId::ornamentTrill,           baroque, _32nd, {1,0}, {1,0},        true,  true, {}}
       ,{SymId::ornamentTrill,          defstyle, _32nd, {0,1}, {0,1},        true,  true, {}}
       ,{SymId::brassMuteClosed,         baroque, _32nd, {0,-1},{0, -1},      true,  true, {}}
