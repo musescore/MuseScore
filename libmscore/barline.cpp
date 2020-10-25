@@ -1302,7 +1302,7 @@ qreal BarLine::layoutWidth(Score* score, BarLineType type)
         w = score->styleP(Sid::doubleBarWidth) + score->styleP(Sid::doubleBarDistance);
         break;
     case BarLineType::DOUBLE_HEAVY:
-        w = score->styleP(Sid::endBarWidth) * 2 + score->styleP(Sid::endBarDistance);
+        w = score->styleP(Sid::endBarWidth) + score->styleP(Sid::endBarDistance);
         break;
     case BarLineType::END_START_REPEAT:
         w = score->styleP(Sid::endBarDistance) * 2
