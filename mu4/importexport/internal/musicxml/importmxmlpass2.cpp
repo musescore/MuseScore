@@ -1010,7 +1010,7 @@ static void addMordentToChord(const Notation& notation, ChordRest* cr)
     SymId articSym = SymId::noSym;   // legal but impossible ArticulationType value here indicating "not found"
     if (name == "inverted-mordent") {
         if ((attrLong == "" || attrLong == "no") && attrAppr == "" && attrDep == "") {
-            articSym = SymId::ornamentMordent;
+            articSym = SymId::ornamentShortTrill;
         } else if (attrLong == "yes" && attrAppr == "" && attrDep == "") {
             articSym = SymId::ornamentTremblement;
         } else if (attrLong == "yes" && attrAppr == "below" && attrDep == "") {
@@ -1024,7 +1024,7 @@ static void addMordentToChord(const Notation& notation, ChordRest* cr)
         }
     } else if (name == "mordent") {
         if ((attrLong == "" || attrLong == "no") && attrAppr == "" && attrDep == "") {
-            articSym = SymId::ornamentMordentInverted;
+            articSym = SymId::ornamentMordent;
         } else if (attrLong == "yes" && attrAppr == "" && attrDep == "") {
             articSym = SymId::ornamentPrallMordent;
         } else if (attrLong == "yes" && attrAppr == "below" && attrDep == "") {
