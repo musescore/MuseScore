@@ -1212,7 +1212,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>ornamentMordent</subtype>
+              <subtype>ornamentShortTrill</subtype>
               </Articulation>
             <Note>
               <pitch>72</pitch>
@@ -1222,7 +1222,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>ornamentMordent</subtype>
+              <subtype>ornamentShortTrill</subtype>
               </Articulation>
             <Note>
               <pitch>60</pitch>
@@ -1233,7 +1233,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <direction>up</direction>
-              <subtype>ornamentMordent</subtype>
+              <subtype>ornamentShortTrill</subtype>
               </Articulation>
             <Note>
               <pitch>72</pitch>
@@ -1244,7 +1244,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <direction>down</direction>
-              <subtype>ornamentMordent</subtype>
+              <subtype>ornamentShortTrill</subtype>
               </Articulation>
             <Note>
               <pitch>60</pitch>
@@ -1258,7 +1258,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <pitch>72</pitch>
@@ -1268,7 +1268,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <pitch>60</pitch>
@@ -1279,7 +1279,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <direction>up</direction>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <pitch>72</pitch>
@@ -1290,7 +1290,7 @@
             <durationType>quarter</durationType>
             <Articulation>
               <direction>down</direction>
-              <subtype>ornamentMordentInverted</subtype>
+              <subtype>ornamentMordent</subtype>
               </Articulation>
             <Note>
               <pitch>60</pitch>

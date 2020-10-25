@@ -707,14 +707,14 @@
             <subtype>ornamentTrill</subtype>
             </Articulation>
           </Cell>
+        <Cell name="Short trill">
+          <Articulation>
+            <subtype>ornamentShortTrill</subtype>
+            </Articulation>
+          </Cell>
         <Cell name="Mordent">
           <Articulation>
             <subtype>ornamentMordent</subtype>
-            </Articulation>
-          </Cell>
-        <Cell name="Inverted mordent">
-          <Articulation>
-            <subtype>ornamentMordentInverted</subtype>
             </Articulation>
           </Cell>
         <Cell name="Tremblement">
