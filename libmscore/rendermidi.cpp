@@ -1788,6 +1788,7 @@ std::vector<OrnamentExcursion> excursions = {
     //                               styles          prefix                    sustainp
     { SymId::ornamentTurn,                any, _32nd, {},    { 1,0,-1,0 },   false, true, {} },
     { SymId::ornamentTurnInverted,        any, _32nd, {},    { -1,0,1,0 },   false, true, {} },
+    { SymId::ornamentTurnSlash,           any, _32nd, {},    { -1,0,1,0 },   false, true, {} },
     { SymId::ornamentTrill,           baroque, _32nd, { 1,0 }, { 1,0 },        true,  true, {} },
     { SymId::ornamentTrill,          defstyle, _32nd, { 0,1 }, { 0,1 },        true,  true, {} },
     { SymId::brassMuteClosed,         baroque, _32nd, { 0,-1 },{ 0, -1 },      true,  true, {} },
@@ -1798,9 +1799,8 @@ std::vector<OrnamentExcursion> excursions = {
     { SymId::ornamentPrallMordent,        any, _32nd, {},    { 1,0,-1,0 },   false, true, {} },
     { SymId::ornamentLinePrall,           any, _32nd, { 2,2,2 },{ 1,0 },       true,  true, {} },
     { SymId::ornamentUpPrall,             any, _16th, { -1,0 },{ 1,0 },        true,  true, { 1,0 } },// p 144 Ex 152 [1]
-    { SymId::ornamentUpMordent,           any, _16th, { -1,0 },{ 1,0 },        true,  true, { -1,0 } }// p 144 Ex 152 [1]
-
-    ,{ SymId::ornamentPrecompMordentUpperPrefix, any, _16th, { 1,1,1,0 }, { 1,0 },    true,  true, {} },// p136 Cadence Appuyee [1] [2]
+    { SymId::ornamentUpMordent,           any, _16th, { -1,0 },{ 1,0 },        true,  true, { -1,0 } },// p 144 Ex 152 [1]
+    { SymId::ornamentPrecompMordentUpperPrefix, any, _16th, { 1,1,1,0 }, { 1,0 },    true,  true, {} },// p136 Cadence Appuyee [1] [2]
     { SymId::ornamentDownMordent,         any, _16th, { 1,1,1,0 }, { 1,0 },    true,  true, { -1, 0 } },// p136 Cadence Appuyee + mordent [1] [2]
     { SymId::ornamentPrallUp,             any, _16th, { 1,0 }, { 1,0 },        true,  true, { -1,0 } },// p136 Double Cadence [1]
     { SymId::ornamentPrallDown,           any, _16th, { 1,0 }, { 1,0 },        true,  true, { -1,0,0,0 } },// p144 ex 153 [1]
