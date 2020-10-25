@@ -942,6 +942,7 @@ PalettePanel* PaletteCreator::newOrnamentsPalettePanel()
     // do not include additional symbol-based fingerings (temporarily?) implemented as articulations
     static const std::vector<SymId> art {
         SymId::ornamentTurnInverted,
+        SymId::ornamentTurnSlash,
         SymId::ornamentTurn,
         SymId::ornamentTrill,
         SymId::ornamentMordent,
