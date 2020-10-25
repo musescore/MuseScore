@@ -26,9 +26,9 @@ namespace Ms {
 //---------------------------------------------------------
 
 enum class SymId {
-    // SMuFL standard symbol ID's
-
     noSym,
+
+    // SMuFL standard symbol IDs {{{
     fourStringTabClef,
     sixStringTabClef,
     accSagittal11LargeDiesisDown,
@@ -2820,6 +2820,7 @@ enum class SymId {
     windTrillKey,
     windVeryTightEmbouchure,
     windWeakAirPressure,
+    // SMuFL standard symbol IDs }}}
 
 //    EXTENSIONS
 //    SMuFL stylistic alternates which we need to access directly
@@ -2835,7 +2836,7 @@ enum class SymId {
     braceLarge,
     braceLarger,
 
-//    MuseScore local symbols, precomposed symbols to mimic some emmentaler glyphs
+//    MuseScore-local symbols, precomposed symbols to mimic some emmentaler glyphs
 
     ornamentPrallMordent,
     ornamentUpPrall,
