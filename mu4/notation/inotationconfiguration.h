@@ -38,6 +38,10 @@ public:
     virtual QColor backgroundColor() const = 0;
     virtual async::Channel<QColor> backgroundColorChanged() const = 0;
 
+    virtual QColor pageColor() const = 0;
+    virtual QColor borderColor() const = 0;
+    virtual int borderWidth() const = 0;
+
     virtual bool foregroundUseColor() const = 0;
     virtual QColor defaultForegroundColor() const = 0;
     virtual QColor foregroundColor() const = 0;
