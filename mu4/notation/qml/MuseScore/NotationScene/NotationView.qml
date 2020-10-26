@@ -5,6 +5,8 @@ import QtQuick.Controls 2.15
 import MuseScore.NotationScene 1.0
 import MuseScore.UiComponents 1.0
 
+import "internal"
+
 FocusScope {
     ColumnLayout {
         anchors.fill: parent
@@ -57,6 +59,12 @@ FocusScope {
 
         ContextMenu {
             id: contextMenu
+        }
+
+        SearchPopup {
+            id: searchPopup
+
+            Layout.fillWidth: true
         }
     }
 }

@@ -65,7 +65,7 @@ void MeasurePropertiesDialog::setIndex(int measureIndex)
         return;
     }
 
-    Ms::Measure* measure = m_notation->elements()->measureByIndex(measureIndex);
+    Ms::Measure* measure = m_notation->elements()->measure(measureIndex);
 
     if (!measure) {
         return;

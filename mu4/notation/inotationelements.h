@@ -4,7 +4,10 @@
 #include "modularity/imoduleexport.h"
 
 namespace Ms {
+class Element;
+class RehearsalMark;
 class Measure;
+class Page;
 }
 
 namespace mu {
@@ -14,7 +17,9 @@ class INotationElements
 public:
     virtual ~INotationElements() = default;
 
-    virtual Ms::Measure* measureByIndex(const int measureIndex) const = 0;
+    virtual Ms::Element* search(const std::string& searchCommand) const = 0;
+
+    virtual Ms::Measure* measure(const int measureIndex) const = 0;
 };
 }
 }

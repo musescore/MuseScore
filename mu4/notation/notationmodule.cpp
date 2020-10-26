@@ -43,6 +43,7 @@
 #include "view/notationtoolbarmodel.h"
 #include "view/notationswitchlistmodel.h"
 #include "view/partlistmodel.h"
+#include "view/searchpopupmodel.h"
 
 #include "ui/iinteractiveuriregister.h"
 #include "ui/uitypes.h"
@@ -115,6 +116,7 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<ViewModeControlModel>("MuseScore.NotationScene", 1, 0, "ViewModeControlModel");
     qmlRegisterType<NotationSwitchListModel>("MuseScore.NotationScene", 1, 0, "NotationSwitchListModel");
     qmlRegisterType<PartListModel>("MuseScore.NotationScene", 1, 0, "PartListModel");
+    qmlRegisterType<SearchPopupModel>("MuseScore.NotationScene", 1, 0, "SearchPopupModel");
 
     qRegisterMetaType<EditStyle>("EditStyle");
 
