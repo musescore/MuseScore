@@ -105,6 +105,21 @@ Channel<QColor> NotationConfiguration::backgroundColorChanged() const
     return m_backgroundColorChanged;
 }
 
+QColor NotationConfiguration::pageColor() const
+{
+    return QColor("#ffffff");
+}
+
+QColor NotationConfiguration::borderColor() const
+{
+    return QColor(0, 0, 0, 102);
+}
+
+int NotationConfiguration::borderWidth() const
+{
+    return 1;
+}
+
 bool NotationConfiguration::foregroundUseColor() const
 {
     return settings()->value(FOREGROUND_USE_COLOR).toBool();

@@ -234,6 +234,6 @@ void TemplatePaintView::paint(QPainter* painter)
     painter->scale(m_currentScaleFactor, m_currentScaleFactor);
 
     if (m_notation) {
-        m_notation->paint(painter);
+        m_notation->paint(painter, rect);
     }
 }

@@ -168,37 +168,91 @@ QRectF Notation::previewRect() const
     return pages.first()->bbox();
 }
 
-void Notation::paint(QPainter* painter)
+void Notation::paint(QPainter* painter, const QRectF& frameRect)
 {
-    const QList<Ms::Page*>& mspages = m_score->pages();
-
-    if (mspages.isEmpty()) {
-        painter->drawText(10, 10, "no pages");
+    const QList<Ms::Page*>& pages = score()->pages();
+    if (pages.empty()) {
         return;
     }
 
-    Ms::Page* page = mspages.first();
+    switch (score()->layoutMode()) {
+    case LayoutMode::LINE:
+    case LayoutMode::SYSTEM: {
+        bool paintBorders = false;
+        paintPages(painter, frameRect, { pages.first() }, paintBorders);
+        break;
+    }
+    case LayoutMode::FLOAT:
+    case LayoutMode::PAGE: {
+        bool paintBorders = !score()->printing();
+        paintPages(painter, frameRect, pages, paintBorders);
+    }
+    }
 
-    page->draw(painter);
+    m_interaction->paint(painter);
+}
 
-    painter->fillRect(page->bbox(), QColor("#ffffff"));
+void Notation::paintPages(QPainter* painter, const QRectF& frameRect, const QList<Ms::Page*>& pages, bool paintBorders) const
+{
+    for (Ms::Page* page : pages) {
+        QRectF pageRect(page->abbox().translated(page->pos()));
 
-    for (Ms::Element* element : page->elements()) {
+        if (pageRect.right() < frameRect.left()) {
+            continue;
+        }
+
+        if (pageRect.left() > frameRect.right()) {
+            break;
+        }
+
+        if (paintBorders) {
+            paintPageBorder(painter, page);
+        }
+
+        QPointF pagePosition(page->pos());
+        painter->translate(pagePosition);
+        painter->fillRect(page->bbox(), configuration()->pageColor());
+        paintElements(painter, page->elements());
+        painter->translate(-pagePosition);
+    }
+}
+
+void Notation::paintPageBorder(QPainter* painter, const Page* page) const
+{
+    QRectF boundingRect(page->canvasBoundingRect());
+
+    painter->setBrush(Qt::NoBrush);
+    painter->setPen(QPen(configuration()->borderColor(), configuration()->borderWidth()));
+    painter->drawRect(boundingRect);
+
+    if (!score()->showPageborders()) {
+        return;
+    }
+
+    painter->setBrush(Qt::NoBrush);
+    painter->setPen(MScore::frameMarginColor);
+    boundingRect.adjust(page->lm(), page->tm(), -page->rm(), -page->bm());
+    painter->drawRect(boundingRect);
+
+    if (!page->isOdd()) {
+        painter->drawLine(boundingRect.right(), 0.0, boundingRect.right(), boundingRect.bottom());
+    }
+}
+
+void Notation::paintElements(QPainter* painter, const QList<Element*>& elements) const
+{
+    for (const Ms::Element* element : elements) {
         if (!element->visible()) {
             continue;
         }
 
         element->itemDiscovered = false;
-        QPointF pos(element->pagePos());
+        QPointF elementPosition(element->pagePos());
 
-        painter->translate(pos);
-
+        painter->translate(elementPosition);
         element->draw(painter);
-
-        painter->translate(-pos);
+        painter->translate(-elementPosition);
     }
-
-    m_interaction->paint(painter);
 }
 
 mu::ValCh<bool> Notation::opened() const
