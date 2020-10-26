@@ -1,3 +1,5 @@
+//=============================================================================
+//  MuseScore
 //  Music Composition & Notation
 //
 //  Copyright (C) 2020 MuseScore BVBA and others
@@ -14,32 +16,30 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATION_NOTATIONELEMENTS_H
-#define MU_NOTATION_NOTATIONELEMENTS_H
+#include "searchpopupmodel.h"
 
-#include "inotationelements.h"
-#include "igetscore.h"
+#include "log.h"
 
-namespace mu {
-namespace notation {
-class NotationElements : public INotationElements
+using namespace mu::notation;
+
+void SearchPopupModel::load()
 {
-public:
-    NotationElements(IGetScore* getScore);
-
-    Ms::Element* search(const std::string& searchCommand) const override;
-
-    Ms::Measure* measure(const int measureIndex) const override;
-
-private:
-    Ms::Score* score() const;
-
-    Ms::RehearsalMark* rehearsalMark(const std::string& name) const;
-    Ms::Page* page(const int pageIndex) const;
-
-    IGetScore* m_getScore = nullptr;
-};
-}
+    dispatcher()->reg(this, "find", [this]() {
+        emit showPopupRequested();
+    });
 }
 
-#endif // MU_NOTATION_NOTATIONELEMENTS_H
+void SearchPopupModel::search(const QString& text)
+{
+    Ms::Element* element = notation()->elements()->search(text.toStdString());
+    if (element) {
+        notation()->interaction()->select(element, SelectType::SINGLE);
+    } else {
+        notation()->interaction()->clearSelection();
+    }
+}
+
+INotationPtr SearchPopupModel::notation() const
+{
+    return globalContext()->currentNotation();
+}

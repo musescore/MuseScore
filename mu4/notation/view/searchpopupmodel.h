@@ -1,3 +1,5 @@
+//=============================================================================
+//  MuseScore
 //  Music Composition & Notation
 //
 //  Copyright (C) 2020 MuseScore BVBA and others
@@ -14,32 +16,34 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATION_NOTATIONELEMENTS_H
-#define MU_NOTATION_NOTATIONELEMENTS_H
+#ifndef MU_NOTATION_SEARCHPOPUPMODEL_H
+#define MU_NOTATION_SEARCHPOPUPMODEL_H
 
-#include "inotationelements.h"
-#include "igetscore.h"
+#include <QObject>
 
-namespace mu {
-namespace notation {
-class NotationElements : public INotationElements
+#include "modularity/ioc.h"
+#include "actions/iactionsdispatcher.h"
+#include "actions/actionable.h"
+#include "context/iglobalcontext.h"
+
+namespace mu::notation {
+class SearchPopupModel : public QObject, public actions::Actionable
 {
+    Q_OBJECT
+
+    INJECT(notation, actions::IActionsDispatcher, dispatcher)
+    INJECT(notation, context::IGlobalContext, globalContext)
+
 public:
-    NotationElements(IGetScore* getScore);
+    Q_INVOKABLE void load();
+    Q_INVOKABLE void search(const QString& text);
 
-    Ms::Element* search(const std::string& searchCommand) const override;
-
-    Ms::Measure* measure(const int measureIndex) const override;
+signals:
+    void showPopupRequested();
 
 private:
-    Ms::Score* score() const;
-
-    Ms::RehearsalMark* rehearsalMark(const std::string& name) const;
-    Ms::Page* page(const int pageIndex) const;
-
-    IGetScore* m_getScore = nullptr;
+    INotationPtr notation() const;
 };
 }
-}
 
-#endif // MU_NOTATION_NOTATIONELEMENTS_H
+#endif // MU_NOTATION_SEARCHPOPUPMODEL_H

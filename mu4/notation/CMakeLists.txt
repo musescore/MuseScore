@@ -103,6 +103,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/pageactionsrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/inotationactionsrepositoryfactory.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/inotationactionsrepository.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/searchcommandsparser.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/searchcommandsparser.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationpaintview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/notationpaintview.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationviewinputcontroller.cpp
@@ -121,6 +123,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/notationswitchlistmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/partlistmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/partlistmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/searchpopupmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/searchpopupmodel.h
     )
 
 set(MODULE_UI
