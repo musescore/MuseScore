@@ -195,7 +195,7 @@ AccidentalVal AccidentalState::accidentalVal(int line, bool& error) const
         error = true;
         return AccidentalVal::NATURAL;
     }
-    return AccidentalVal((state[line] & 0x0f) - 2);
+    return AccidentalVal((state[line] & 0x0f) + int(AccidentalVal::MIN));
 }
 
 //---------------------------------------------------------
@@ -205,7 +205,7 @@ AccidentalVal AccidentalState::accidentalVal(int line, bool& error) const
 
 void AccidentalState::init(Key key)
 {
-    memset(state, 2, MAX_ACC_STATE);
+    memset(state, int(AccidentalVal::MAX), MAX_ACC_STATE);
     if (key > 0) {
         for (int i = 0; i < int(key); ++i) {
             int idx = tpc2step(20 + i);
@@ -214,7 +214,7 @@ void AccidentalState::init(Key key)
                 if (j >= MAX_ACC_STATE) {
                     break;
                 }
-                state[j] = 1 + 2;
+                state[j] = 1 - int(AccidentalVal::MIN);
             }
         }
     } else {
@@ -225,7 +225,7 @@ void AccidentalState::init(Key key)
                 if (j >= MAX_ACC_STATE) {
                     break;
                 }
-                state[j] = -1 + 2;
+                state[j] = -1 - int(AccidentalVal::MIN);
             }
         }
     }
@@ -248,7 +248,7 @@ void AccidentalState::init(const KeySigEvent& keySig, ClefType clef)
                 if (i >= MAX_ACC_STATE) {
                     break;
                 }
-                state[i] = int(a) + 2;
+                state[i] = int(a) - int(AccidentalVal::MIN);
             }
         }
     } else {
@@ -263,7 +263,7 @@ void AccidentalState::init(const KeySigEvent& keySig, ClefType clef)
 AccidentalVal AccidentalState::accidentalVal(int line) const
 {
     Q_ASSERT(line >= MIN_ACC_STATE && line < MAX_ACC_STATE);
-    return AccidentalVal((state[line] & 0x0f) - 2);
+    return AccidentalVal((state[line] & 0x0f) + int(AccidentalVal::MIN));
 }
 
 //---------------------------------------------------------
@@ -284,7 +284,7 @@ void AccidentalState::setAccidentalVal(int line, AccidentalVal val, bool tieCont
 {
     Q_ASSERT(line >= MIN_ACC_STATE && line < MAX_ACC_STATE);
     // casts needed to work around a bug in Xcode 4.2 on Mac, see #25910
-    Q_ASSERT(int(val) >= int(AccidentalVal::FLAT2) && int(val) <= int(AccidentalVal::SHARP2));
-    state[line] = (int(val) + 2) | (tieContext ? TIE_CONTEXT : 0);
+    Q_ASSERT(int(val) >= int(AccidentalVal::MIN) && int(val) <= int(AccidentalVal::MAX));
+    state[line] = (int(val) - int(AccidentalVal::MIN)) | (tieContext ? TIE_CONTEXT : 0);
 }
 }

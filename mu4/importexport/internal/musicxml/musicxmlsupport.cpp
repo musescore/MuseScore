@@ -409,7 +409,7 @@ QString accSymId2MxmlString(const SymId id)
         break;
     case SymId::accidentalDoubleSharp:           s = "double-sharp";
         break;
-    //case SymId::accidentalDoubleSharp:           s = "sharp-sharp"; break; // see abobe
+    //case SymId::accidentalDoubleSharp:           s = "sharp-sharp"; break; // see above
     //case SymId::accidentalDoubleFlat:            s = "double-flat"; break; // doesn't exist in MusicXML, but see below
     case SymId::accidentalDoubleFlat:            s = "flat-flat";
         break;
@@ -452,8 +452,10 @@ QString accSymId2MxmlString(const SymId id)
     case SymId::accidentalArrowUp:               s = "arrow-up";
         break;
 
-    //case SymId::accidentalTripleSharp:           s = "triple-sharp"; break;
-    //case SymId::accidentalTripleFlat:            s = "triple-flat"; break;
+    case SymId::accidentalTripleSharp:           s = "triple-sharp";
+        break;
+    case SymId::accidentalTripleFlat:            s = "triple-flat";
+        break;
 
     case SymId::accidentalKucukMucennebSharp:    s = "slash-quarter-sharp";
         break;
@@ -521,8 +523,8 @@ SymId mxmlString2accSymId(const QString mxmlName)
     map["arrow-down"] = SymId::accidentalArrowDown;
     map["arrow-up"] = SymId::accidentalArrowUp;
 
-    //map["triple-sharp"] = SymId::accidentalTripleSharp;
-    //map["triple-flat"] = SymId::accidentalTripleFlat;
+    map["triple-sharp"] = SymId::accidentalTripleSharp;
+    map["triple-flat"] = SymId::accidentalTripleFlat;
 
     map["slash-quarter-sharp"] = SymId::accidentalKucukMucennebSharp;
     map["slash-sharp"] = SymId::accidentalBuyukMucennebSharp;
@@ -569,7 +571,7 @@ QString accidentalType2MxmlString(const AccidentalType type)
         break;
     case AccidentalType::SHARP2:             s = "double-sharp";
         break;
-    //case AccidentalType::SHARP2:             s = "sharp-sharp"; break; // see abobe
+    //case AccidentalType::SHARP2:             s = "sharp-sharp"; break; // see above
     //case AccidentalType::FLAT2:              s = "double-flat"; break; // doesn't exist in MusicXML, but see below
     case AccidentalType::FLAT2:              s = "flat-flat";
         break;
@@ -612,8 +614,10 @@ QString accidentalType2MxmlString(const AccidentalType type)
     case AccidentalType::ARROW_UP:           s = "arrow-up";
         break;
 
-    //case AccidentalType::SHARP3:             s = "triple-sharp"; break;
-    //case AccidentalType::FLAT3:              s = "triple-flat"; break;
+    case AccidentalType::SHARP3:             s = "triple-sharp";
+        break;
+    case AccidentalType::FLAT3:              s = "triple-flat";
+        break;
 
     case AccidentalType::SHARP_SLASH3:       s = "slash-quarter-sharp";
         break;
@@ -681,8 +685,8 @@ AccidentalType mxmlString2accidentalType(const QString mxmlName)
     map["arrow-down"] = AccidentalType::ARROW_DOWN;
     map["arrow-up"] = AccidentalType::ARROW_UP;
 
-    //map["triple-sharp"] = AccidentalType::SHARP3;
-    //map["triple-flat"] = AccidentalType::FLAT3;
+    map["triple-sharp"] = AccidentalType::SHARP3;
+    map["triple-flat"] = AccidentalType::FLAT3;
 
     map["double-sharp-down"] = AccidentalType::SHARP2_ARROW_DOWN;
     map["double-sharp-up"] = AccidentalType::SHARP2_ARROW_UP;
