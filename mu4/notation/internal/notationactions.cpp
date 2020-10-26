@@ -146,6 +146,10 @@ const std::vector<Action> NotationActions::m_actions = {
     Action("view-mode-single",
            QT_TRANSLATE_NOOP("action", "Single Page"),
            ShortcutContext::NotationActive
+           ),
+    Action("find",
+           QT_TRANSLATE_NOOP("action", "Find"),
+           ShortcutContext::NotationActive
            )
 };
 
