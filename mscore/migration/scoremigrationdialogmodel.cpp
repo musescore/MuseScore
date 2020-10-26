@@ -85,13 +85,13 @@ void ScoreMigrationDialogModel::setAreInstrumentsImprovementsAllowed(bool areIns
     emit isApplyingAvailableChanged(isApplyingAvailable());
 }
 
-void ScoreMigrationDialogModel::setShouldNeverAskForThisScoreAgain(bool shouldNeverAskForThisScoreAgain)
+void ScoreMigrationDialogModel::setShouldNeverAskForThisScoreAgain(bool _shouldNeverAskForThisScoreAgain)
 {
-    if (!m_score || m_score->isQuallityUpgradeAllowed() == shouldNeverAskForThisScoreAgain)
+    if (!m_score || shouldNeverAskForThisScoreAgain() == _shouldNeverAskForThisScoreAgain)
         return;
 
-    m_score->setIsQuallityUpgradeAllowed(shouldNeverAskForThisScoreAgain);
-    emit shouldNeverAskForThisScoreAgainChanged(m_score->isQuallityUpgradeAllowed());
+    m_score->setIsQuallityUpgradeAllowed(!_shouldNeverAskForThisScoreAgain);
+    emit shouldNeverAskForThisScoreAgainChanged(_shouldNeverAskForThisScoreAgain);
     emit isApplyingAvailableChanged(isApplyingAvailable());
 }
 
