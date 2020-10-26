@@ -158,8 +158,10 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
       xml.tag("Division", MScore::division);
       xml.setCurTrack(-1);
 
-      if (isTopScore())                   // only top score
+      if (isTopScore()) {                   // only top score
+            xml.tag("isQuallityUpgradeAllowed", isQuallityUpgradeAllowed());
             style().save(xml, true);       // save only differences to buildin style
+            }
 
       xml.tag("showInvisible",   _showInvisible);
       xml.tag("showUnprintable", _showUnprintable);
@@ -274,8 +276,6 @@ void Score::write(XmlWriter& xml, bool selectionOnly)
       {
       if (isMaster()) {
             MasterScore* score = static_cast<MasterScore*>(this);
-
-            xml.tag("isQuallityUpgradeAllowed", score->isQuallityUpgradeAllowed());
 
             while (score->prev())
                   score = score->prev();
@@ -766,12 +766,13 @@ bool Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
       XmlWriter xml(this, f);
       xml.setWriteOmr(msczFormat);
       xml.header();
+
+      xml.stag("museScore version=\"" MSC_VERSION "\"");
+
       if (!MScore::testMode) {
-            xml.stag("museScore version=\"" MSC_VERSION "\"");
             xml.tag("programVersion", VERSION);
             xml.tag("programRevision", revision);
             }
-      xml.stag("museScore version=\"" MSC_VERSION "\"");
       write(xml, onlySelection);
       xml.etag();
       if (isMaster())
