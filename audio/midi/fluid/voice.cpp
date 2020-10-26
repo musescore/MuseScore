@@ -1982,14 +1982,14 @@ void Voice::updatePortamento(int fromkey, int tokey) {
             * (fromkey - root_pitch / 100.0f) + root_pitch;
       float PitchEnd = gen[GEN_SCALETUNE].val
             * (tokey - root_pitch / 100.0f) + root_pitch;
-      float pitchoffset = PitchBeg - PitchEnd;
-      setPortamento(samplesToNextTurningPoint(channel), pitchoffset);
+      float pitchOffset = PitchBeg - PitchEnd;
+      setPortamento(samplesToNextTurningPoint(channel), pitchOffset);
       }
 
-void Voice::setPortamento(unsigned int countinc, float pitchoffset) {
-      if (countinc) {
-            this->pitchoffset += pitchoffset;
-            this->pitchinc = pitchoffset/(_fluid->sampleRate()*(0.001f*countinc));//countinc;
+void Voice::setPortamento(unsigned int countInc, float pitchOffset) {
+      if (countInc) {
+            this->pitchoffset += pitchOffset;
+            this->pitchinc = pitchOffset / (_fluid->sampleRate() * (0.001f *countInc)); //countinc;
             }
       }
 }
