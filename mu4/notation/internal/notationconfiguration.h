@@ -39,6 +39,10 @@ public:
     QColor backgroundColor() const override;
     async::Channel<QColor> backgroundColorChanged() const override;
 
+    QColor pageColor() const override;
+    QColor borderColor() const override;
+    int borderWidth() const override;
+
     bool foregroundUseColor() const override;
     QColor foregroundColor() const override;
     QColor defaultForegroundColor() const override;

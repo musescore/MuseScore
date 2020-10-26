@@ -199,19 +199,19 @@ void NotationPaintView::showContextMenu(const ElementType& elementType, const QP
     emit openContextMenuRequested(menuItems, pos);
 }
 
-void NotationPaintView::paint(QPainter* p)
+void NotationPaintView::paint(QPainter* painter)
 {
     QRect rect(0, 0, width(), height());
-    p->fillRect(rect, m_backgroundColor);
+    painter->fillRect(rect, m_backgroundColor);
 
-    p->setTransform(m_matrix);
+    painter->setTransform(m_matrix);
 
     if (m_notation) {
-        m_notation->paint(p);
+        m_notation->paint(painter, toLogical(rect));
 
-        m_playbackCursor->paint(p);
+        m_playbackCursor->paint(painter);
     } else {
-        p->drawText(10, 10, "no notation");
+        painter->drawText(10, 10, "no notation");
     }
 }
 

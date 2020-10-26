@@ -47,7 +47,7 @@ public:
     virtual void setViewSize(const QSizeF& vs) = 0;
     virtual void setViewMode(const ViewMode& vm) = 0;
     virtual ViewMode viewMode() const = 0;
-    virtual void paint(QPainter* painter) = 0;
+    virtual void paint(QPainter* painter, const QRectF& frameRect) = 0;
     virtual QRectF previewRect() const = 0;
 
     virtual ValCh<bool> opened() const = 0;

@@ -23,6 +23,9 @@
 #include "igetscore.h"
 #include "async/asyncable.h"
 
+#include "modularity/ioc.h"
+#include "inotationconfiguration.h"
+
 namespace Ms {
 class MScore;
 class Score;
@@ -36,6 +39,8 @@ class NotationMidiInput;
 class NotationParts;
 class Notation : virtual public INotation, public IGetScore, public async::Asyncable
 {
+    INJECT(notation, INotationConfiguration, configuration)
+
 public:
     explicit Notation(Ms::Score* score = nullptr);
     ~Notation() override;
@@ -47,7 +52,7 @@ public:
     void setViewSize(const QSizeF& vs) override;
     void setViewMode(const ViewMode& viewMode) override;
     ViewMode viewMode() const override;
-    void paint(QPainter* painter) override;
+    void paint(QPainter* painter, const QRectF& frameRect) override;
     QRectF previewRect() const override;
 
     ValCh<bool> opened() const override;
@@ -78,6 +83,10 @@ protected:
 
 private:
     friend class NotationInteraction;
+
+    void paintPages(QPainter* painter, const QRectF& frameRect, const QList<Ms::Page*>& pages, bool paintBorders) const;
+    void paintPageBorder(QPainter* painter, const Ms::Page* page) const;
+    void paintElements(QPainter* painter, const QList<Element*>& elements) const;
 
     QSizeF viewSize() const;
 
