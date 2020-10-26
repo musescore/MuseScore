@@ -382,7 +382,7 @@ QString accSymId2MxmlString(const SymId id)
             case SymId::accidentalNatural:               s = "natural";              break;
             case SymId::accidentalFlat:                  s = "flat";                 break;
             case SymId::accidentalDoubleSharp:           s = "double-sharp";         break;
-            //case SymId::accidentalDoubleSharp:           s = "sharp-sharp";          break; // see abobe
+            //case SymId::accidentalDoubleSharp:           s = "sharp-sharp";          break; // see above
             //case SymId::accidentalDoubleFlat:            s = "double-flat";          break; // doesn't exist in MusicXML, but see below
             case SymId::accidentalDoubleFlat:            s = "flat-flat";            break;
             case SymId::accidentalNaturalSharp:          s = "natural-sharp";        break;
@@ -513,7 +513,7 @@ QString accidentalType2MxmlString(const AccidentalType type)
             case AccidentalType::NATURAL:            s = "natural";              break;
             case AccidentalType::FLAT:               s = "flat";                 break;
             case AccidentalType::SHARP2:             s = "double-sharp";         break;
-            //case AccidentalType::SHARP2:             s = "sharp-sharp";          break; // see abobe
+            //case AccidentalType::SHARP2:             s = "sharp-sharp";          break; // see above
             //case AccidentalType::FLAT2:              s = "double-flat";          break; // doesn't exist in MusicXML, but see below
             case AccidentalType::FLAT2:              s = "flat-flat";            break;
             case AccidentalType::NATURAL_SHARP:      s = "natural-sharp";        break;
