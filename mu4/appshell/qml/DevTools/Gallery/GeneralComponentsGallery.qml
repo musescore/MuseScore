@@ -8,7 +8,7 @@ import MuseScore.Ui 1.0
 Rectangle {
     id: root
 
-    color: ui.theme.backgroundColor
+    color: ui.theme.backgroundPrimaryColor
 
     Flickable {
         id: flickableWrapper
@@ -66,7 +66,8 @@ Rectangle {
         id: comboboxSample
 
         StyledComboBox {
-            property var currentValue
+
+            property var currValue
 
             width: 400
 
@@ -87,10 +88,10 @@ Rectangle {
                 { text: "Option 11", value: 11 }
             ]
 
-            currentIndex: indexOfValue(currentValue)
+            currentIndex: indexOfValue(currValue)
 
             onValueChanged: {
-                currentValue = value
+                currValue = value
             }
         }
     }
