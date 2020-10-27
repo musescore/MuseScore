@@ -177,32 +177,75 @@ void AlsaMidiInPort::process(AlsaMidiInPort* self)
 
 void AlsaMidiInPort::doProcess()
 {
-    snd_seq_event_t* seqv = nullptr;
-
+    snd_seq_event_t* ev = nullptr;
+    uint32_t data = 0;
+    uint32_t value = 0;
     Event e;
 
     while (m_running.load() && isConnected()) {
         std::this_thread::sleep_for(std::chrono::milliseconds(2));
 
-        snd_seq_event_input(m_alsa->midiIn, &seqv);
-        if (!seqv) {
+        snd_seq_event_input(m_alsa->midiIn, &ev);
+        if (!ev) {
             continue;
         }
 
-        auto rawData = seqv->data.raw32;
-        union {
-            unsigned char byte[4];
-            uint32_t full;
-        } unionRawData;
-        unionRawData.byte[0] = rawData.d[0];
-        unionRawData.byte[1] = rawData.d[1];
-        unionRawData.byte[2] = rawData.d[2];
-        unionRawData.byte[3] = 0;
-        e = Event::fromMIDI10Package(unionRawData.full);
+        switch (ev->type) {
+        case SND_SEQ_EVENT_SYSEX:
+        {
+            NOT_SUPPORTED;
+            continue;
+        }
+        case SND_SEQ_EVENT_NOTEOFF:
+            data = 0x80
+                   | (ev->data.note.channel & 0x0F)
+                   | ((ev->data.note.note & 0x7F) << 8)
+                   | ((ev->data.note.velocity & 0x7F) << 16);
+            break;
+        case SND_SEQ_EVENT_NOTEON:
+            data = 0x90
+                   | (ev->data.note.channel & 0x0F)
+                   | ((ev->data.note.note & 0x7F) << 8)
+                   | ((ev->data.note.velocity & 0x7F) << 16);
+            break;
+        case SND_SEQ_EVENT_KEYPRESS:
+            data = 0xA0
+                   | (ev->data.note.channel & 0x0F)
+                   | ((ev->data.note.note & 0x7F) << 8)
+                   | ((ev->data.note.velocity & 0x7F) << 16);
+            break;
+        case SND_SEQ_EVENT_CONTROLLER:
+            data = 0xB0
+                   | (ev->data.control.channel & 0x0F)
+                   | ((ev->data.control.param & 0x7F) << 8)
+                   | ((ev->data.control.value & 0x7F) << 16);
+            break;
+        case SND_SEQ_EVENT_PGMCHANGE:
+            data = 0xC0
+                   | (ev->data.control.channel & 0x0F)
+                   | ((ev->data.control.value & 0x7F) << 8);
+            break;
+        case SND_SEQ_EVENT_CHANPRESS:
+            data = 0xD0
+                   | (ev->data.control.channel & 0x0F)
+                   | ((ev->data.control.value & 0x7F) << 8);
+            break;
+        case SND_SEQ_EVENT_PITCHBEND:
+            value = ev->data.control.value + 8192;
+            data = 0xE0
+                   | (ev->data.note.channel & 0x0F)
+                   | ((value & 0x7F) << 8)
+                   | (((value >> 7) & 0x7F) << 16);
+            break;
+        default:
+            continue;
+        }
+
+        e = Event::fromMIDI10Package(data);
 
         e = e.toMIDI20();
         if (e) {
-            m_eventReceived.send({ static_cast<tick_t>(seqv->time.tick), e });
+            m_eventReceived.send({ static_cast<tick_t>(ev->time.tick), e });
         }
     }
 }
