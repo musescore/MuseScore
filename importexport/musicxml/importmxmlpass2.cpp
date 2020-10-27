@@ -3152,7 +3152,7 @@ static bool determineBarLineType(const QString& barStyle, const QString& repeat,
                   return false;
                   }
             }
-      else if (barStyle == "tick" || "short") {
+      else if ((barStyle == "tick") || (barStyle == "short")) {
             // handled later (as normal barline with different parameters)
             }
       else {

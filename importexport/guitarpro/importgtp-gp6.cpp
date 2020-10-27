@@ -1123,10 +1123,6 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                                       if (!currentProperty.firstChild().nodeName().compare("Enable"))
                                                             addPalmMute(note);
                                                       }
-                                                else if (argument == "Tapped") {
-                                                      if (!currentProperty.firstChild().nodeName().compare("Enable"))
-                                                            addTap(note);
-                                                      }
                                                 else if (!argument.compare("HarmonicType")) {
                                                       QString type;
                                                       auto inner = currentProperty.firstChildElement("HType");
