@@ -56,7 +56,7 @@ StaffType::StaffType()
 StaffType::StaffType(StaffTypes type, StaffGroup sg, const QString& xml, const QString& name, int lines, int stpOff, qreal lineDist,
                      bool genClef, bool showBarLines, bool stemless, bool genTimeSig, bool genKeySig,
                      bool showLedgerLines)
-    : _type(type), _group(sg), _xmlName(xml), _name(name),
+    : _group(sg), _type(type), _xmlName(xml), _name(name),
     _lines(lines),
     _stepOffset(stpOff),
     _lineDistance(Spatium(lineDist)),

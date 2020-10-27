@@ -144,6 +144,8 @@ class Measure final : public MeasureBase
 
     void readVoice(XmlReader& e, int staffIdx, bool irregular);
 
+    MStaff* mstaff(int staffIndex) const;
+
 public:
     Measure(Score* = 0);
     Measure(const Measure&);

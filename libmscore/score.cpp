@@ -2523,6 +2523,10 @@ void Score::splitStaff(int staffIdx, int splitPoint)
 
 void Score::cmdRemovePart(Part* part)
 {
+    if (!part) {
+        return;
+    }
+
     int sidx   = staffIdx(part);
     int n      = part->nstaves();
 
@@ -2563,6 +2567,18 @@ void Score::insertPart(Part* part, int idx)
 void Score::removePart(Part* part)
 {
     _parts.removeAt(_parts.indexOf(part));
+
+    if (_excerpt) {
+        for (Part* excerptPart : _excerpt->parts()) {
+            if (excerptPart->id() != part->id()) {
+                continue;
+            }
+
+            _excerpt->parts().removeOne(excerptPart);
+            break;
+        }
+    }
+
     masterScore()->rebuildMidiMapping();
     setInstrumentsChanged(true);
 }

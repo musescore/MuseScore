@@ -50,11 +50,28 @@ Item {
             }
         }
 
+        StyledTextLabel {
+            Layout.topMargin: 12
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            Layout.leftMargin: 20
+            Layout.rightMargin: 20
+
+            text: qsTrc("instruments", "There are no instruments in your score. To choose some, press <b>Add</b>, or use the shortcut <b>‘i’</b>")
+            visible: instrumentsTreeView.isEmpty
+
+            verticalAlignment: Qt.AlignTop
+            wrapMode: Text.WordWrap
+        }
+
         TreeView {
             id: instrumentsTreeView
 
             Layout.fillWidth: true
             Layout.fillHeight: true
+
+            property alias isEmpty: instrumentTreeModel.isEmpty
+            visible: !isEmpty
 
             model: InstrumentPanelTreeModel {
                 id: instrumentTreeModel

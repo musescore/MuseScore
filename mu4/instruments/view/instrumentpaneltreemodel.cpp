@@ -67,6 +67,8 @@ void InstrumentPanelTreeModel::clear()
     beginResetModel();
     m_rootItem->deleteLater();
     endResetModel();
+
+    emit isEmptyChanged();
 }
 
 void InstrumentPanelTreeModel::load()
@@ -158,6 +160,8 @@ void InstrumentPanelTreeModel::addInstruments()
     }
 
     m_masterNotationParts->setInstruments(instruments);
+
+    emit isEmptyChanged();
 }
 
 void InstrumentPanelTreeModel::moveSelectedRowsUp()
@@ -203,10 +207,9 @@ void InstrumentPanelTreeModel::removeSelectedRows()
 
     QModelIndexList selectedIndexList = m_selectionModel->selectedIndexes();
 
-    QModelIndex parentIndex = selectedIndexList.first().parent();
-
     for (const QModelIndex& selectedIndex : selectedIndexList) {
-        removeRows(selectedIndex.row(), 1, parentIndex);
+        AbstractInstrumentPanelTreeItem* item = modelIndexToItem(selectedIndex);
+        removeRows(item->row(), 1, selectedIndex.parent());
     }
 }
 
@@ -223,6 +226,8 @@ bool InstrumentPanelTreeModel::removeRows(int row, int count, const QModelIndex&
     parentItem->removeChildren(row, count, true);
 
     endRemoveRows();
+
+    emit isEmptyChanged();
 
     return true;
 }
@@ -383,6 +388,11 @@ bool InstrumentPanelTreeModel::isMovingDownAvailable() const
 bool InstrumentPanelTreeModel::isRemovingAvailable() const
 {
     return m_isRemovingAvailable;
+}
+
+bool InstrumentPanelTreeModel::isEmpty() const
+{
+    return m_rootItem ? m_rootItem->isEmpty() : false;
 }
 
 void InstrumentPanelTreeModel::setIsRemovingAvailable(bool isRemovingAvailable)
