@@ -624,6 +624,18 @@ void NotationParts::doRemoveParts(const IDList& partsIds)
 {
     for (const ID& partId: partsIds) {
         score()->cmdRemovePart(part(partId));
+
+        if (!score()->isMaster()) {
+            continue;
+        }
+
+        for (Ms::Score* score : score()->scoreList()) {
+            if (score == this->score()) {
+                continue;
+            }
+
+            score->cmdRemovePart(part(partId, score));
+        }
     }
 }
 

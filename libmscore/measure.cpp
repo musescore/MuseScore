@@ -246,13 +246,69 @@ void Measure::setScore(Score* score)
     }
 }
 
-bool Measure::hasVoices(int staffIdx) const { return _mstaves[staffIdx]->hasVoices(); }
-void Measure::setHasVoices(int staffIdx, bool v) { return _mstaves[staffIdx]->setHasVoices(v); }
-StaffLines* Measure::staffLines(int staffIdx) { return _mstaves[staffIdx]->lines(); }
-Spacer* Measure::vspacerDown(int staffIdx) const { return _mstaves[staffIdx]->vspacerDown(); }
-Spacer* Measure::vspacerUp(int staffIdx) const { return _mstaves[staffIdx]->vspacerUp(); }
-void Measure::setStaffVisible(int staffIdx, bool visible) { _mstaves[staffIdx]->setVisible(visible); }
-void Measure::setStaffStemless(int staffIdx, bool stemless) { _mstaves[staffIdx]->setStemless(stemless); }
+MStaff* Measure::mstaff(int staffIndex) const
+{
+    if (staffIndex >= 0 && staffIndex < _mstaves.size()) {
+        return _mstaves[staffIndex];
+    }
+
+    return nullptr;
+}
+
+bool Measure::hasVoices(int staffIdx) const
+{
+    MStaff* staff = mstaff(staffIdx);
+
+    return staff ? staff->hasVoices() : false;
+}
+
+void Measure::setHasVoices(int staffIdx, bool v)
+{
+    MStaff* staff = mstaff(staffIdx);
+
+    if (staff) {
+        staff->setHasVoices(v);
+    }
+}
+
+StaffLines* Measure::staffLines(int staffIdx)
+{
+    MStaff* staff = mstaff(staffIdx);
+
+    return staff ? staff->lines() : nullptr;
+}
+
+Spacer* Measure::vspacerDown(int staffIdx) const
+{
+    MStaff* staff = mstaff(staffIdx);
+
+    return staff ? staff->vspacerDown() : nullptr;
+}
+
+Spacer* Measure::vspacerUp(int staffIdx) const
+{
+    MStaff* staff = mstaff(staffIdx);
+
+    return staff ? staff->vspacerUp() : nullptr;
+}
+
+void Measure::setStaffVisible(int staffIdx, bool visible)
+{
+    MStaff* staff = mstaff(staffIdx);
+
+    if (staff) {
+        staff->setVisible(visible);
+    }
+}
+
+void Measure::setStaffStemless(int staffIdx, bool stemless)
+{
+    MStaff* staff = mstaff(staffIdx);
+
+    if (staff) {
+        staff->setStemless(stemless);
+    }
+}
 
 #ifndef NDEBUG
 bool Measure::corrupted(int staffIdx) const { return _mstaves[staffIdx]->corrupted(); }
