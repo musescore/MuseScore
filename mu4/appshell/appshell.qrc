@@ -23,5 +23,6 @@
         <file>qml/DevTools/Audio/MidiPorts.qml</file>
         <file>qml/DevTools/VST/VSTTests.qml</file>
         <file>qml/DevTools/Plugins/PluginsTests.qml</file>
+        <file>qml/DevTools/Gallery/GeneralComponentsGallery.qml</file>
     </qresource>
 </RCC>

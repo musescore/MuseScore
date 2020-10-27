@@ -5,6 +5,7 @@ import MuseScore.UiComponents 1.0
 
 import "./Interactive"
 import "./Audio"
+import "./Gallery"
 import "./NotationDialogs"
 import "./VST"
 import "./Plugins"
@@ -27,11 +28,12 @@ DockPage {
                 model: [
                     { "name": "interactive", "title": "Interactive" },
                     { "name": "audio", "title": "Audio" },
+                    { "name": "gallery", "title": "General Components Gallery" },
                     { "name": "synth", "title": "Synth" },
                     { "name": "midiports", "title": "Midi ports" },
                     { "name": "mu3dialogs", "title": "MU3Dialogs" },
                     { "name": "vst", "title": "VST" },
-                    { "name": "plugins", "title": "Plugins" },
+                    { "name": "plugins", "title": "Plugins" }
                 ]
 
                 onSelected: {
@@ -54,6 +56,7 @@ DockPage {
             case "interactive": currentComp = interactiveComp; break
             case "audio": currentComp = audioComp; break
             case "synth": currentComp = synthSettingsComp; break
+            case "gallery": currentComp = galleryComp; break
             case "midiports": currentComp = midiPortsComp; break
             case "mu3dialogs": currentComp = notationDialogs; break
             case "vst": currentComp = vstComponent; break
@@ -102,6 +105,12 @@ DockPage {
         Loader {
             source: "qrc:/qml/DevTools/VST/VSTTests.qml"
         }
+    }
+
+    Component {
+        id: galleryComp
+
+        GeneralComponentsGallery {}
     }
 
     Component {
