@@ -107,7 +107,7 @@ mu::Ret AlsaMidiInPort::connect(const MidiDeviceID& deviceID)
         disconnect();
     }
 
-    int err = snd_seq_open(&m_alsa->midiIn, "default", SND_SEQ_OPEN_INPUT, 0);
+    int err = snd_seq_open(&m_alsa->midiIn, "default", SND_SEQ_OPEN_INPUT, 0 /*block mode*/);
     if (err < 0) {
         return make_ret(Err::MidiFailedConnect, "failed open seq, err: " + std::string(snd_strerror(err)));
     }
@@ -183,9 +183,8 @@ void AlsaMidiInPort::doProcess()
     Event e;
 
     while (m_running.load() && isConnected()) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(2));
-
         snd_seq_event_input(m_alsa->midiIn, &ev);
+
         if (!ev) {
             continue;
         }
@@ -193,7 +192,7 @@ void AlsaMidiInPort::doProcess()
         switch (ev->type) {
         case SND_SEQ_EVENT_SYSEX:
         {
-            NOT_SUPPORTED;
+            NOT_SUPPORTED << "event type: SND_SEQ_EVENT_SYSEX";
             continue;
         }
         case SND_SEQ_EVENT_NOTEOFF:
@@ -238,6 +237,7 @@ void AlsaMidiInPort::doProcess()
                    | (((value >> 7) & 0x7F) << 16);
             break;
         default:
+            NOT_SUPPORTED << "event type: " << ev->type;
             continue;
         }
 
@@ -247,6 +247,8 @@ void AlsaMidiInPort::doProcess()
         if (e) {
             m_eventReceived.send({ static_cast<tick_t>(ev->time.tick), e });
         }
+
+        snd_seq_free_event(ev);
     }
 }
 
