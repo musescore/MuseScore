@@ -3240,7 +3240,7 @@ static bool determineBarLineType(const QString& barStyle, const QString& repeat,
             qDebug("empty bar type");             // TODO
             return false;
         }
-    } else if (barStyle == "tick" || "short") {
+    } else if ((barStyle == "tick") || (barStyle == "short")) {
         // handled later (as normal barline with different parameters)
     } else {
         qDebug("unsupported bar type <%s>", qPrintable(barStyle));           // TODO
