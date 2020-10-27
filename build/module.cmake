@@ -84,18 +84,22 @@ endif()
 
 set(MODULE_LINK ${QT_LIBRARIES} ${MODULE_LINK})
 
-target_link_libraries(${MODULE}
-    ${MODULE_LINK}
-    )
+target_link_libraries(${MODULE} ${MODULE_LINK} )
+
+set(LOCAL_MODULE_BUILD_PCH ${MODULE_BUILD_PCH})
 
 if (MODULE_HAS_C_CODE)
+
+    set(LOCAL_MODULE_BUILD_PCH OFF)
 
     if (NOT MSVC)
         set_target_properties( ${MODULE} PROPERTIES COMPILE_FLAGS "-fPIC")
     endif (NOT MSVC)
 
-else(MODULE_HAS_C_CODE)
+endif(MODULE_HAS_C_CODE)
 
+
+if (LOCAL_MODULE_BUILD_PCH)
     if (NOT MSVC)
         set_target_properties (${MODULE} PROPERTIES COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch")
     else (NOT MSVC)
@@ -112,7 +116,8 @@ else(MODULE_HAS_C_CODE)
         ADD_DEPENDENCIES(${MODULE} mops1)
         ADD_DEPENDENCIES(${MODULE} mops2)
     endif (NOT MSVC)
-
-endif()
+else (LOCAL_MODULE_BUILD_PCH)
+    set_target_properties(${MODULE} PROPERTIES COMPILE_FLAGS "-include ${PROJECT_SOURCE_DIR}/all.h")
+endif (LOCAL_MODULE_BUILD_PCH)
 
 

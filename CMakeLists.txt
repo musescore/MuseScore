@@ -20,7 +20,34 @@
 project(mscore)
 
 # Minimum tested, report if it works with older
-CMAKE_MINIMUM_REQUIRED(VERSION 3.3.0)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.4.0)
+
+find_program(CCACHE_PROGRAM ccache)
+if(CCACHE_PROGRAM)
+    message(STATUS "Using ccache")
+    # Set up wrapper scripts
+    set(C_LAUNCHER   "${CCACHE_PROGRAM}")
+    set(CXX_LAUNCHER "${CCACHE_PROGRAM}")
+    configure_file(build/launch-c.in   launch-c)
+    configure_file(build/launch-cxx.in launch-cxx)
+    execute_process(COMMAND chmod a+rx
+                     "${CMAKE_BINARY_DIR}/launch-c"
+                     "${CMAKE_BINARY_DIR}/launch-cxx"
+    )
+
+    if(CMAKE_GENERATOR STREQUAL "Xcode")
+        # Set Xcode project attributes to route compilation and linking
+        # through our scripts
+        set(CMAKE_XCODE_ATTRIBUTE_CC         "${CMAKE_BINARY_DIR}/launch-c")
+        set(CMAKE_XCODE_ATTRIBUTE_CXX        "${CMAKE_BINARY_DIR}/launch-cxx")
+        set(CMAKE_XCODE_ATTRIBUTE_LD         "${CMAKE_BINARY_DIR}/launch-c")
+        set(CMAKE_XCODE_ATTRIBUTE_LDPLUSPLUS "${CMAKE_BINARY_DIR}/launch-cxx")
+    else()
+        # Support Unix Makefiles and Ninja
+        set(CMAKE_C_COMPILER_LAUNCHER   "${CMAKE_BINARY_DIR}/launch-c")
+        set(CMAKE_CXX_COMPILER_LAUNCHER "${CMAKE_BINARY_DIR}/launch-cxx")
+    endif()
+ endif()
 
 include(build/functions.cmake) # library of CMake functions ("fn__" namespace)
 
@@ -168,6 +195,7 @@ set(TELEMETRY_TRACK_ID "" CACHE STRING "Telemetry track id")
 option(BUILD_PORTABLEAPPS "Windows build for PortableApps.com" OFF)
 option(BUILD_UI_MU4_WITH_MU3 "Build Modern UI MuseScore 4 and MU3 source code" OFF)
 option(BUILD_UNIT_TESTS "Build gtest unit test" OFF)
+option(MODULE_BUILD_PCH "Build using precompiled headers in MU4 modules" ON)
 option(QML_LOAD_FROM_SOURCE "Load qml files from source (not resource)" OFF)
 option(PACKAGE_FILE_ASSOCIATION "File types association" OFF)
 

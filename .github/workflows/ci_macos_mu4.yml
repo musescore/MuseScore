@@ -30,8 +30,17 @@ jobs:
         access_token: ${{ github.token }}
     - name: Clone repository
       uses: actions/checkout@v2
+    - name: Prepare ccache timestamp
+      id: ccache_cache_timestamp
+      run: |
+        NOW=$(date -u +"%F-%T")
+        echo "::set-output name=timestamp::${NOW}"
+    - name: Сcache cache files
+      uses: actions/cache@v2
       with:
-        fetch-depth: 3
+        path: ~/.ccache
+        key: ${{github.workflow}}-ccache-${{steps.ccache_cache_timestamp.outputs.timestamp}}
+        restore-keys: ${{github.workflow}}-ccache-  # restore ccache from either previous build on this branch or on master       
     - name: "Configure workflow"
       run: |
         bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ github.event.inputs.build_mode }}
@@ -70,10 +79,23 @@ jobs:
     - name: Setup environment
       run: |
         bash ./build/ci/macos/setup.sh
+    - name: Setup ccache
+      run: |
+        brew install ccache
+        mkdir -p ~/.ccache
+        echo "base_dir = ${GITHUB_WORKSPACE}" > ~/.ccache/ccache.conf
+        echo "compression = true" >> ~/.ccache/ccache.conf
+        echo "compression_level = 6" >> ~/.ccache/ccache.conf
+        echo "max_size = 2G" >> ~/.ccache/ccache.conf
+        cat ~/.ccache/ccache.conf
+        ccache -s
+        ccache -z    
     - name: Build          
       run: |
         T_ID=${{ secrets.TELEMETRY_TRACK_ID }}; if [ -z "$T_ID" ]; then T_ID="''"; fi
         bash ./build/ci/macos/build.sh -n ${{ github.run_id }} --telemetry $T_ID --build_mu4 ON
+        echo "============== ccache ==============="
+        ccache -s
     - name: Package 
       run: |
         S_S="${{ secrets.MAC_SIGN_CERTIFICATE_ENCRYPT_SECRET }}"; if [ -z "$S_S" ]; then S_S="''"; fi

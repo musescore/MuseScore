@@ -115,7 +115,6 @@ update-alternatives \
   --install /usr/bin/gcc gcc "/usr/bin/gcc-${gcc_version}" 40 \
   --slave /usr/bin/g++ g++ "/usr/bin/g++-${gcc_version}"
 
-#apt-get install -y --no-install-recommends g++
 echo export CC="/usr/bin/gcc-${gcc_version}" >> ${ENV_FILE}
 echo export CXX="/usr/bin/g++-${gcc_version}" >> ${ENV_FILE}
 

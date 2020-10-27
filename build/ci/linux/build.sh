@@ -56,7 +56,7 @@ else
 BUILD_VST=ON
 fi
 
-echo "=== BUILD === "
+echo "=== BUILD ==="
 
 make revision
 make -j2 MUSESCORE_BUILD_CONFIG=$MUSESCORE_BUILD_CONFIG \
@@ -66,6 +66,7 @@ make -j2 MUSESCORE_BUILD_CONFIG=$MUSESCORE_BUILD_CONFIG \
          BUILD_VST=$BUILD_VST \
          VST3_SDK_PATH=$VST3_SDK_PATH \
          BUILD_UNIT_TESTS=ON \
+         MODULE_BUILD_PCH=OFF \
          portable
 
 
