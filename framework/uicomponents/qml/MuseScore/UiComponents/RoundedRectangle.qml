@@ -15,6 +15,22 @@ Canvas {
         property color color: "#00000000"
     }
 
+    onTopLeftRadiusChanged: {
+        requestPaint()
+    }
+
+    onTopRightRadiusChanged: {
+        requestPaint()
+    }
+
+    onBottomRightRadiusChanged: {
+        requestPaint()
+    }
+
+    onBottomLeftRadiusChanged: {
+        requestPaint()
+    }
+
     onPaint: {
         roundRect(0, 0, width, height)
     }
