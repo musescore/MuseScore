@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 
 import MuseScore.NotationScene 1.0
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
 
 import "internal"
 
@@ -31,9 +32,12 @@ Rectangle {
             anchors.fill: parent
             model: items
 
-            NotationToolBarButton {
+            FlatButton {
                 text: modelData["title"]
                 icon: modelData["icon"]
+
+                normalStateColor: "transparent"
+                orientation: Qt.Horizontal
 
                 onClicked: {
                     api.launcher.open(modelData["uri"])
