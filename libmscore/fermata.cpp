@@ -41,11 +41,11 @@ static const ElementStyle fermataStyle {
 Fermata::Fermata(Score* s)
    : Element(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
-      initElementStyle(&fermataStyle);
       setPlacement(Placement::ABOVE);
       _symId         = SymId::noSym;
       _timeStretch   = 1.0;
       setPlay(true);
+      initElementStyle(&fermataStyle);
       }
 
 Fermata::Fermata(SymId id, Score* s)

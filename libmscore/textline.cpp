@@ -66,8 +66,6 @@ void TextLineSegment::layout()
 TextLine::TextLine(Score* s)
    : TextLineBase(s)
       {
-      initElementStyle(&textLineStyle);
-
       setBeginText("");
       setContinueText("");
       setEndText("");
@@ -80,6 +78,8 @@ TextLine::TextLine(Score* s)
       setEndHookType(HookType::NONE);
       setBeginHookHeight(Spatium(1.5));
       setEndHookHeight(Spatium(1.5));
+
+      initElementStyle(&textLineStyle);
 
       resetProperty(Pid::BEGIN_TEXT_PLACE);
       resetProperty(Pid::CONTINUE_TEXT_PLACE);

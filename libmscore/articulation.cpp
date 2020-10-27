@@ -42,13 +42,13 @@ static const ElementStyle articulationStyle {
 Articulation::Articulation(Score* s)
    : Element(s, ElementFlag::MOVABLE)
       {
-      initElementStyle(&articulationStyle);
       _symId         = SymId::noSym;
       _anchor        = ArticulationAnchor::TOP_STAFF;
       _direction     = Direction::AUTO;
       _up            = true;
       _ornamentStyle = MScore::OrnamentStyle::DEFAULT;
       setPlayArticulation(true);
+      initElementStyle(&articulationStyle);
       }
 
 Articulation::Articulation(SymId id, Score* s)
