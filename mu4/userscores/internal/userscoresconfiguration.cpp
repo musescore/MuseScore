@@ -29,10 +29,12 @@ using namespace mu::notation;
 static const std::string module_name("userscores");
 
 static const Settings::Key RECENT_LIST(module_name, "userscores/recentList");
-static const Settings::Key USER_TEMPLATES(module_name, "application/paths/myTemplates");
+static const Settings::Key USER_TEMPLATES_PATH(module_name, "application/paths/myTemplates");
+static const Settings::Key USER_SCORES_PATH(module_name, "application/paths/myScores");
 
 void UserScoresConfiguration::init()
 {
+    settings()->addItem(USER_SCORES_PATH, Val(globalConfiguration()->sharePath().toStdString() + "Scores"));
     settings()->valueChanged(RECENT_LIST).onReceive(nullptr, [this](const Val& val) {
         LOGD() << "RECENT_LIST changed: " << val.toString();
 
@@ -70,12 +72,17 @@ io::paths UserScoresConfiguration::templatesDirPaths() const
     io::paths dirs;
 
     dirs.push_back(globalConfiguration()->sharePath() + "/templates");
-    dirs.push_back(settings()->value(USER_TEMPLATES).toQString());
+    dirs.push_back(settings()->value(USER_TEMPLATES_PATH).toQString());
 
     io::paths temps = extensionsConfiguration()->templatesPaths();
     dirs.insert(dirs.end(), temps.begin(), temps.end());
 
     return dirs;
+}
+
+io::path UserScoresConfiguration::scoresPath() const
+{
+    return settings()->value(USER_SCORES_PATH).toString();
 }
 
 QColor UserScoresConfiguration::templatePreviewBackgroundColor() const

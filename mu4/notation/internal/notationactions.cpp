@@ -36,6 +36,14 @@ const std::vector<Action> NotationActions::m_actions = {
            QT_TRANSLATE_NOOP("action", "New Score"),
            ShortcutContext::Any
            ),
+    Action("file-save",
+           QT_TRANSLATE_NOOP("action", "Save Score"),
+           ShortcutContext::Any
+           ),
+    Action("file-save-as",
+           QT_TRANSLATE_NOOP("action", "Save Score As"),
+           ShortcutContext::Any
+           ),
     Action("note-input",
            QT_TRANSLATE_NOOP("action", "Note Input"),
            ShortcutContext::NotationActive

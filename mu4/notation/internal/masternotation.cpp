@@ -22,6 +22,7 @@
 #include <QFileInfo>
 
 #include "log.h"
+#include "translation.h"
 
 #include "libmscore/score.h"
 #include "libmscore/part.h"
@@ -50,6 +51,7 @@ Meta MasterNotation::metaInfo() const
     Meta meta = Notation::metaInfo();
 
     meta.fileName = masterScore()->fileInfo()->fileName();
+    meta.filePath = masterScore()->fileInfo()->filePath();
     meta.partsCount = masterScore()->excerpts().count();
 
     return meta;
@@ -119,6 +121,7 @@ mu::Ret MasterNotation::doLoadScore(Ms::MasterScore* score,
     score->updateChannel();
     //score->updateExpressive(MuseScore::synthesizer("Fluid"));
     score->setSaved(false);
+    score->setCreated(false);
     score->update();
 
     if (!score->sanityCheck(QString())) {
@@ -229,6 +232,7 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
         score = new MasterScore(scoreGlobal()->baseStyle());
     }
 
+    score->setName(qtrc("notation", "Untitled"));
     score->setCreated(true);
     setScore(score);
 
@@ -483,6 +487,34 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
     score->setExcerptsChanged(true);
 
     return make_ret(Err::NoError);
+}
+
+mu::RetVal<bool> MasterNotation::created()
+{
+    RetVal<bool> result;
+    if (!score()) {
+        result.ret = make_ret(Err::NoScore);
+        return result;
+    }
+
+    return RetVal<bool>::make_ok(score()->created());
+}
+
+mu::Ret MasterNotation::save(const mu::io::path& path)
+{
+    if (!path.empty()) {
+        score()->masterScore()->fileInfo()->setFile(path.toQString());
+    }
+
+    bool ok = score()->masterScore()->saveFile(true);
+    if (!ok) {
+        LOGE() << MScore::lastError;
+    } else {
+        score()->setCreated(false);
+        undoStack()->stateChanged().notify();
+    }
+
+    return ok;
 }
 
 void MasterNotation::initExcerpts()

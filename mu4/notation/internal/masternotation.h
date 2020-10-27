@@ -43,6 +43,9 @@ public:
     io::path path() const override;
 
     Ret createNew(const ScoreCreateOptions& scoreOptions) override;
+    RetVal<bool> created() override;
+
+    Ret save(const io::path& path = io::path()) override;
 
     ValCh<ExcerptNotationList> excerpts() const override;
     void setExcerpts(const ExcerptNotationList& excerpts) override;

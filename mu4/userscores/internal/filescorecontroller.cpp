@@ -16,31 +16,38 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "openscorecontroller.h"
+#include "filescorecontroller.h"
 
 #include <QObject>
 
 #include "log.h"
+#include "translation.h"
+
+static const QString DEFAULT_FILE_SUFFIX(".mscz");
 
 using namespace mu;
 using namespace mu::userscores;
 using namespace mu::notation;
+using namespace mu::framework;
 
-void OpenScoreController::init()
+void FileScoreController::init()
 {
-    dispatcher()->reg(this, "file-open", this, &OpenScoreController::openScore);
-    dispatcher()->reg(this, "file-import", this, &OpenScoreController::importScore);
-    dispatcher()->reg(this, "file-new", this, &OpenScoreController::newScore);
+    dispatcher()->reg(this, "file-open", this, &FileScoreController::openScore);
+    dispatcher()->reg(this, "file-import", this, &FileScoreController::importScore);
+    dispatcher()->reg(this, "file-new", this, &FileScoreController::newScore);
+
+    dispatcher()->reg(this, "file-save", this, &FileScoreController::saveScore);
+    dispatcher()->reg(this, "file-save-as", this, &FileScoreController::saveScoreAs);
 }
 
-void OpenScoreController::openScore(const actions::ActionData& args)
+void FileScoreController::openScore(const actions::ActionData& args)
 {
     io::path scorePath = args.count() > 0 ? args.arg<io::path>(0) : "";
 
     if (scorePath.empty()) {
         QStringList filter;
         filter << QObject::tr("MuseScore Files") + " (*.mscz *.mscx)";
-        scorePath = selectScoreFile(filter);
+        scorePath = selectScoreOpenningFile(filter);
         if (scorePath.empty()) {
             return;
         }
@@ -49,7 +56,7 @@ void OpenScoreController::openScore(const actions::ActionData& args)
     doOpenScore(scorePath);
 }
 
-void OpenScoreController::importScore()
+void FileScoreController::importScore()
 {
     QString allExt = "*.mscz *.mscx *.mxl *.musicxml *.xml *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx"
                      "*.ove *.scw *.bmw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp *.ptb *.mscz, *.mscx,";
@@ -68,7 +75,7 @@ void OpenScoreController::importScore()
            << QObject::tr("Power Tab Editor Files (experimental)") + " (*.ptb)"
            << QObject::tr("MuseScore Backup Files") + " (*.mscz, *.mscx,)";
 
-    io::path scorePath = selectScoreFile(filter);
+    io::path scorePath = selectScoreOpenningFile(filter);
 
     if (scorePath.empty()) {
         return;
@@ -77,7 +84,7 @@ void OpenScoreController::importScore()
     doOpenScore(scorePath);
 }
 
-void OpenScoreController::newScore()
+void FileScoreController::newScore()
 {
     Ret ret = interactive()->open("musescore://userscores/newscore").ret;
 
@@ -90,13 +97,53 @@ void OpenScoreController::newScore()
     }
 }
 
-io::path OpenScoreController::selectScoreFile(const QStringList& filter)
+void FileScoreController::saveScore()
 {
-    QString filterStr = filter.join(";;");
-    return interactive()->selectOpeningFile("Score", "", filterStr);
+    if (!globalContext()->currentMasterNotation()->created().val) {
+        doSaveScore();
+        return;
+    }
+
+    io::path defaultFilePath = defaultSavingFilePath();
+
+    io::path filePath = selectScoreSavingFile(defaultFilePath);
+    if (filePath.empty()) {
+        return;
+    }
+
+    if (io::syffix(filePath).empty()) {
+        filePath = filePath + DEFAULT_FILE_SUFFIX;
+    }
+
+    doSaveScore(filePath);
 }
 
-void OpenScoreController::doOpenScore(const io::path& filePath)
+void FileScoreController::saveScoreAs()
+{
+    io::path defaultFilePath = defaultSavingFilePath();
+    io::path selectedFilePath = selectScoreSavingFile(defaultFilePath);
+    if (selectedFilePath.empty()) {
+        return;
+    }
+
+    doSaveScore(selectedFilePath);
+}
+
+io::path FileScoreController::selectScoreOpenningFile(const QStringList& filter)
+{
+    QString filterStr = filter.join(";;");
+    return interactive()->selectOpeningFile(qtrc("userscores", "Score"), "", filterStr);
+}
+
+io::path FileScoreController::selectScoreSavingFile(const io::path& defaultFilePath)
+{
+    QString filter = QObject::tr("MuseScore Files") + " (*.mscz *.mscx)";
+    io::path filePath = interactive()->selectSavingFile(qtrc("userscores", "Save Score"), defaultFilePath, filter);
+
+    return filePath;
+}
+
+void FileScoreController::doOpenScore(const io::path& filePath)
 {
     auto notation = notationCreator()->newMasterNotation();
     IF_ASSERT_FAILED(notation) {
@@ -121,7 +168,24 @@ void OpenScoreController::doOpenScore(const io::path& filePath)
     interactive()->open("musescore://notation");
 }
 
-void OpenScoreController::prependToRecentScoreList(io::path filePath)
+void FileScoreController::doSaveScore(const io::path& filePath)
+{
+    globalContext()->currentMasterNotation()->save(filePath);
+}
+
+io::path FileScoreController::defaultSavingFilePath() const
+{
+    Meta scoreMetaInfo = globalContext()->currentMasterNotation()->metaInfo();
+
+    QString fileName = scoreMetaInfo.title;
+    if (fileName.isEmpty()) {
+        fileName = scoreMetaInfo.fileName;
+    }
+
+    return configuration()->scoresPath() + "/" + fileName + DEFAULT_FILE_SUFFIX;
+}
+
+void FileScoreController::prependToRecentScoreList(io::path filePath)
 {
     QStringList recentScoreList = configuration()->recentScoreList().val;
     QString path = filePath.toQString();

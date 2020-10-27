@@ -16,10 +16,10 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_USERSCORES_OPENSCORECONTROLLER_H
-#define MU_USERSCORES_OPENSCORECONTROLLER_H
+#ifndef MU_USERSCORES_FILESCORECONTROLLER_H
+#define MU_USERSCORES_FILESCORECONTROLLER_H
 
-#include "iopenscorecontroller.h"
+#include "ifilescorecontroller.h"
 #include "iuserscoresconfiguration.h"
 #include "modularity/ioc.h"
 #include "iinteractive.h"
@@ -30,7 +30,7 @@
 
 namespace mu {
 namespace userscores {
-class OpenScoreController : public IOpenScoreController, public actions::Actionable
+class FileScoreController : public IFileScoreController, public actions::Actionable
 {
     INJECT(scores, actions::IActionsDispatcher, dispatcher)
     INJECT(scores, framework::IInteractive, interactive)
@@ -45,13 +45,20 @@ public:
     void importScore() override;
     void newScore() override;
 
+    void saveScore() override;
+    void saveScoreAs() override;
+
 private:
-    io::path selectScoreFile(const QStringList& filter);
+    io::path selectScoreOpenningFile(const QStringList& filter);
+    io::path selectScoreSavingFile(const io::path& defaultFilePath = QString());
     void doOpenScore(const io::path& filePath);
+    void doSaveScore(const io::path& filePath = io::path());
+
+    io::path defaultSavingFilePath() const;
 
     void prependToRecentScoreList(io::path filePath);
 };
 }
 }
 
-#endif // MU_USERSCORES_OPENSCORECONTROLLER_H
+#endif // MU_USERSCORES_FILESCORECONTROLLER_H
