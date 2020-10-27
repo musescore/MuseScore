@@ -40,6 +40,7 @@ public:
     void setRecentScoreList(const QStringList& recentScoreList) override;
 
     io::paths templatesDirPaths() const override;
+    io::path scoresPath() const override;
 
     QColor templatePreviewBackgroundColor() const override;
     async::Channel<QColor> templatePreviewBackgroundColorChanged() const override;

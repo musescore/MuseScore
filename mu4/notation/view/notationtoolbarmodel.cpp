@@ -71,7 +71,11 @@ void NotationToolBarModel::load()
     m_items << makeItem(areg->action("note-input"))
             << makeItem(areg->action("pad-note-16"))
             << makeItem(areg->action("pad-note-8"))
-            << makeItem(areg->action("pad-note-4"));
+            << makeItem(areg->action("pad-note-4"))
+            << makeItem(areg->action("file-save"))
+            << makeItem(areg->action("file-save-as"))
+            << makeItem(areg->action("undo"))
+            << makeItem(areg->action("redo"));
 
     endResetModel();
 
