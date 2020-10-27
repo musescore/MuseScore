@@ -75,9 +75,7 @@ Notation::Notation(Score* score)
         notifyAboutNotationChanged();
     });
 
-    if (score) {
-        setScore(score);
-    }
+    setScore(score);
 }
 
 Notation::~Notation()
@@ -107,8 +105,11 @@ void Notation::init()
 void Notation::setScore(Ms::Score* score)
 {
     m_score = score;
-    m_interaction->init();
-    m_playback->init();
+
+    if (score) {
+        m_interaction->init();
+        m_playback->init();
+    }
 }
 
 MScore* Notation::scoreGlobal() const
