@@ -13,23 +13,20 @@ TabView {
     Rectangle {
         id: selectionHighlighting
 
+        x: {
+            if (root.currentIndex < 0) {
+                return
+            }
+
+            root.currentIndex * (root.width / count)
+        }
+
         height: 3
         width: parent.width / count
 
         color: ui.theme.accentColor
 
         radius: 2
-
-        Connections {
-            target: root
-
-            function onCurrentIndexChanged(currentIndex) {
-                if (currentIndex < 0)
-                    return
-
-                selectionHighlighting.x = currentIndex * (root.width / count)
-            }
-        }
 
         Behavior on x {
             NumberAnimation {
@@ -47,14 +44,15 @@ TabView {
             width: styleData.availableWidth / count
 
             StyledTextLabel {
-                id: inspectorTitle
+                id: titleLabel
 
                 width: parent.width
 
                 text: styleData.title
                 horizontalAlignment: Text.AlignHCenter
-                color: styleData.selected ? ui.theme.fontPrimaryColor : ui.theme.fontSecondaryColor
+                color: ui.theme.fontPrimaryColor
                 font.bold: true
+                opacity: styleData.selected ? ui.theme.buttonOpacityHit : ui.theme.buttonOpacityNormal
             }
         }
 
