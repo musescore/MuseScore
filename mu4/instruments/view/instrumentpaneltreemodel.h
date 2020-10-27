@@ -48,6 +48,7 @@ class InstrumentPanelTreeModel : public QAbstractItemModel, public async::Asynca
     Q_PROPERTY(bool isMovingUpAvailable READ isMovingUpAvailable WRITE setIsMovingUpAvailable NOTIFY isMovingUpAvailableChanged)
     Q_PROPERTY(bool isMovingDownAvailable READ isMovingDownAvailable WRITE setIsMovingDownAvailable NOTIFY isMovingDownAvailableChanged)
     Q_PROPERTY(bool isRemovingAvailable READ isRemovingAvailable WRITE setIsRemovingAvailable NOTIFY isRemovingAvailableChanged)
+    Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY isEmptyChanged)
 
 public:
     enum RoleNames {
@@ -66,8 +67,8 @@ public:
     bool isMovingUpAvailable() const;
     bool isMovingDownAvailable() const;
     bool isRemovingAvailable() const;
+    bool isEmpty() const;
 
-    bool removeRows(int row, int count, const QModelIndex& parent) override;
     Q_INVOKABLE bool moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent,
                               int destinationChild) override;
 
@@ -90,6 +91,7 @@ signals:
     void isMovingUpAvailableChanged(bool isMovingUpAvailable);
     void isMovingDownAvailableChanged(bool isMovingDownAvailable);
     void isRemovingAvailableChanged(bool isRemovingAvailable);
+    void isEmptyChanged();
 
 private slots:
     void updateRearrangementAvailability();
@@ -99,6 +101,7 @@ private slots:
 
 private:
     void clear();
+    bool removeRows(int row, int count, const QModelIndex& parent) override;
 
     notation::IDList currentNotationPartIdList() const;
 

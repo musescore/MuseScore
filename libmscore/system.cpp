@@ -1358,7 +1358,9 @@ qreal System::minDistance(System* s2) const
         }
     }
 
-    dist = qMax(dist, score()->staff(firstStaff)->userDist());
+    Staff* staff = score()->staff(firstStaff);
+    qreal userDist = staff ? staff->userDist() : 0.0;
+    dist = qMax(dist, userDist);
     fixedDownDistance = false;
 
     for (MeasureBase* mb1 : ml) {
@@ -1386,10 +1388,11 @@ qreal System::minDistance(System* s2) const
                 }
             }
         }
-        qreal sld = staff(lastStaff)->skyline().minDistance(s2->staff(firstStaff)->skyline());
-        sld -=  staff(lastStaff)->bbox().height() - minVerticalDistance;
+
+        SysStaff* sysStaff = this->staff(lastStaff);
+        qreal sld = sysStaff ? sysStaff->skyline().minDistance(s2->staff(firstStaff)->skyline()) : 0;
+        sld -= sysStaff ? sysStaff->bbox().height() - minVerticalDistance : 0;
         dist = qMax(dist, sld);
-//            dist = dist - staff(lastStaff)->bbox().height() + minVerticalDistance;
     }
     return dist;
 }
