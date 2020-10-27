@@ -29,7 +29,7 @@
 #include "view/scorethumbnail.h"
 #include "view/templatesmodel.h"
 #include "view/templatepaintview.h"
-#include "internal/openscorecontroller.h"
+#include "internal/filescorecontroller.h"
 #include "internal/userscoresconfiguration.h"
 #include "internal/templatesrepository.h"
 #include "ui/iinteractiveuriregister.h"
@@ -37,7 +37,7 @@
 using namespace mu::userscores;
 using namespace mu::framework;
 
-static OpenScoreController* s_openController = new OpenScoreController();
+static FileScoreController* s_fileController = new FileScoreController();
 static UserScoresConfiguration* s_userScoresConfiguration = new UserScoresConfiguration();
 
 static void userscores_init_qrc()
@@ -52,7 +52,7 @@ std::string UserScoresModule::moduleName() const
 
 void UserScoresModule::registerExports()
 {
-    ioc()->registerExport<IOpenScoreController>(moduleName(), s_openController);
+    ioc()->registerExport<IFileScoreController>(moduleName(), s_fileController);
     ioc()->registerExport<IUserScoresConfiguration>(moduleName(), s_userScoresConfiguration);
     ioc()->registerExport<ITemplatesRepository>(moduleName(), new TemplatesRepository());
 }
@@ -87,5 +87,5 @@ void UserScoresModule::registerUiTypes()
 void UserScoresModule::onInit()
 {
     s_userScoresConfiguration->init();
-    s_openController->init();
+    s_fileController->init();
 }

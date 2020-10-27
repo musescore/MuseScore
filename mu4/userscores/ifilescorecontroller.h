@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_USERSCORES_IOPENSCORECONTROLLER_H
-#define MU_USERSCORES_IOPENSCORECONTROLLER_H
+#ifndef MU_USERSCORES_IFILESCORECONTROLLER_H
+#define MU_USERSCORES_IFILESCORECONTROLLER_H
 
 #include <QVariantMap>
 
@@ -27,18 +27,21 @@
 
 namespace mu {
 namespace userscores {
-class IOpenScoreController : MODULE_EXPORT_INTERFACE
+class IFileScoreController : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IOpenScoreController)
+    INTERFACE_ID(IFileScoreController)
 
 public:
-    virtual ~IOpenScoreController() = default;
+    virtual ~IFileScoreController() = default;
 
     virtual void openScore(const actions::ActionData& args = actions::ActionData()) = 0;
     virtual void importScore() = 0;
     virtual void newScore() = 0;
+
+    virtual void saveScore() = 0;
+    virtual void saveScoreAs() = 0;
 };
 }
 }
 
-#endif // MU_USERSCORES_IOPENSCORECONTROLLER_H
+#endif // MU_USERSCORES_IFILESCORECONTROLLER_H
