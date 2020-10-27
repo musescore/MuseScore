@@ -37,6 +37,8 @@ ExcerptNotation::~ExcerptNotation()
 
     delete m_excerpt;
     m_excerpt = nullptr;
+
+    setScore(nullptr);
 }
 
 Ms::Excerpt* ExcerptNotation::excerpt() const
