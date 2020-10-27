@@ -2,6 +2,7 @@ import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Controls 1.5
 import QtQuick.Layouts 1.3
+
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
 
@@ -30,16 +31,21 @@ Rectangle {
 
                 model: [
                     { textRole: "StyledComboBox", componentRole: comboboxSample },
+                    { textRole: "StyledPopup", componentRole: popupSample },
                     { textRole: "CheckBox", componentRole: checkBoxSample },
                     { textRole: "ColorPicker", componentRole: colorPickerSample },
                     { textRole: "ExpandableBlank", componentRole: expandableBlankSample },
                     { textRole: "FlatButton", componentRole: flatButtonSample },
+                    { textRole: "ProgressButton", componentRole: progressButtonSample },
                     { textRole: "RadioButtonGroup + FlatRadioButton", componentRole: flatRadioButtonSample },
+                    { textRole: "RoundedRadioButton", componentRole: roundedRadioButtonSample },
                     { textRole: "IncrementalPropertyControl (Hidden icon, Icon left, Icon right)", componentRole: incrementalPropertyControlSample },
                     { textRole: "FlatToogleButton", componentRole: flatToogleButtonSample },
                     { textRole: "RoundedRectangle (which allows to round the particular corners)", componentRole: roundedRectangleSample },
                     { textRole: "TextInputField", componentRole: textInputFieldSample },
-                    { textRole: "TabPanel", componentRole: tabPanelSample }
+                    { textRole: "SearchField", componentRole: searchFieldSample },
+                    { textRole: "TabPanel", componentRole: tabPanelSample },
+                    { textRole: "GradientTabButton", componentRole: gradientTabButtonsSample }
                 ]
                 delegate: Column {
                     anchors.left: parent.left
@@ -92,6 +98,45 @@ Rectangle {
 
             onValueChanged: {
                 currValue = value
+            }
+        }
+    }
+
+    Component {
+        id: popupSample
+
+        Item {
+            width: root.width
+            height: 40
+
+            FlatButton {
+                id: popupButton
+
+                text: "Click to show popup"
+
+                onClicked: {
+                    if (popup.opened) {
+                        popup.close()
+                        return
+                    }
+
+                    popup.open()
+                }
+            }
+
+            StyledPopup {
+                id: popup
+
+                width: 200
+                height: 200
+
+                y: popupButton.y + popupButton.height
+
+                StyledTextLabel {
+                    text: "Hello, World!"
+
+                    anchors.centerIn: parent
+                }
             }
         }
     }
@@ -161,7 +206,67 @@ Rectangle {
             }
 
             FlatButton {
+                icon: IconCode.SAVE
+
+                text: "Text with icon"
+
+                orientation: Qt.Horizontal
+            }
+
+            FlatButton {
                 text: "Just text"
+            }
+
+            FlatButton {
+                icon: IconCode.SAVE
+            }
+
+            FlatButton {
+                icon: IconCode.SAVE
+
+                accentButton: true
+
+                text: "Accent button"
+            }
+
+            FlatButton {
+                icon: IconCode.SAVE
+
+                normalStateColor: "transparent"
+
+                text: "Transparent button"
+            }
+
+        }
+    }
+
+    Component {
+        id: progressButtonSample
+
+        ProgressButton {
+            Timer {
+                id: timer
+
+                interval: 1000
+                repeat: true
+
+                property int progress: 0
+
+                onTriggered: {
+                    progress += 10
+                    parent.setProgress(progress + "/100", false, progress, 100)
+
+                    if (progress === 100) {
+                        progress = 0
+                        stop()
+                    }
+                }
+            }
+
+            text: "Start processing"
+
+            onClicked: {
+                timer.start()
             }
         }
     }
@@ -228,6 +333,26 @@ Rectangle {
                         text: modelData["textRole"]
                     }
                 }
+            }
+        }
+    }
+
+    Component {
+        id: roundedRadioButtonSample
+
+        Row {
+            spacing: 12
+
+            RoundedRadioButton {
+                text: "Option 1"
+            }
+
+            RoundedRadioButton {
+                text: "Option 2"
+            }
+
+            RoundedRadioButton {
+                text: "Option 3"
             }
         }
     }
@@ -361,6 +486,12 @@ Rectangle {
     }
 
     Component {
+        id: searchFieldSample
+
+        SearchField {}
+    }
+
+    Component {
         id: tabPanelSample
 
         TabPanel {
@@ -414,6 +545,72 @@ Rectangle {
                     width: tabPanel.width
 
                     color: "black"
+                }
+            }
+        }
+    }
+
+    Component {
+        id: gradientTabButtonsSample
+
+        Row {
+            spacing: 30
+
+            Column {
+                GradientTabButton {
+                    title: "Tab 1"
+
+                    orientation: Qt.Horizontal
+
+                    width: 200
+
+                    iconComponent: StyledIconLabel {
+                        iconCode: IconCode.SAVE
+                    }
+
+                    checked: true
+                }
+
+                GradientTabButton {
+                    title: "Tab 2"
+
+                    width: 200
+
+                    orientation: Qt.Horizontal
+                }
+
+                GradientTabButton {
+                    title: "Tab 3"
+
+                    width: 200
+
+                    orientation: Qt.Horizontal
+                }
+            }
+
+            Column {
+                GradientTabButton {
+                    title: "Tab 1"
+
+                    width: 200
+
+                    iconComponent: StyledIconLabel {
+                        iconCode: IconCode.SAVE
+                    }
+
+                    checked: true
+                }
+
+                GradientTabButton {
+                    title: "Tab 2"
+
+                    width: 200
+                }
+
+                GradientTabButton {
+                    title: "Tab 3"
+
+                    width: 200
                 }
             }
         }
