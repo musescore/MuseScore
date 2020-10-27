@@ -8,12 +8,15 @@ FocusableItem {
     property alias text: textLabel.text
     property int iconPixelSize: buttonIcon.isEmpty ? 0 : 16
 
+    property int orientation: Qt.Vertical
+
     property bool accentButton: false
 
     QtObject {
         id: privateProperties
 
         property color defaultColor: accentButton ? ui.theme.accentColor : ui.theme.buttonColor
+        property bool isVertical: orientation === Qt.Vertical
     }
 
     property color normalStateColor: privateProperties.defaultColor
@@ -24,8 +27,8 @@ FocusableItem {
 
     signal clicked
 
-    height: contentWrapper.implicitHeight + 16
-    width: (Boolean(text) ? Math.max(contentWrapper.implicitWidth + 32, 132) : contentWrapper.implicitWidth + 16)
+    height: contentWrapper.height + 16
+    width: (Boolean(text) ? Math.max(contentWrapper.width + 32, privateProperties.isVertical ? 132 : 0) : contentWrapper.width + 16)
 
     opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
 
@@ -40,30 +43,64 @@ FocusableItem {
         radius: 3
     }
 
-    Column {
+    Item {
         id: contentWrapper
+
+        property int spacing: Boolean(root.icon) && Boolean(root.text) ? 4 : 0
 
         anchors.verticalCenter: parent ? parent.verticalCenter : undefined
         anchors.horizontalCenter: parent ? parent.horizontalCenter : undefined
 
-        height: implicitHeight
-
-        spacing: 4
+        height: !privateProperties.isVertical ? Math.max(buttonIcon.height, textLabel.height) : buttonIcon.height + textLabel.height + spacing
+        width: privateProperties.isVertical ? Math.max(textLabel.width, buttonIcon.width) : buttonIcon.width + textLabel.width + spacing
 
         StyledIconLabel {
             id: buttonIcon
-
-            anchors.horizontalCenter: parent.horizontalCenter
         }
 
         StyledTextLabel {
             id: textLabel
 
-            anchors.horizontalCenter: parent.horizontalCenter
             height: text === "" ? 0 : implicitHeight
-
             horizontalAlignment: Text.AlignHCenter
         }
+
+        states: [
+            State {
+                when: !privateProperties.isVertical
+                AnchorChanges {
+                    target: buttonIcon
+                    anchors.left: parent.left
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+                AnchorChanges {
+                    target: textLabel
+                    anchors.left: buttonIcon.right
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+                PropertyChanges {
+                    target: textLabel
+                    anchors.leftMargin: contentWrapper.spacing
+                }
+            },
+            State {
+                when: privateProperties.isVertical
+                AnchorChanges {
+                    target: buttonIcon
+                    anchors.top: parent.top
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+                AnchorChanges {
+                    target: textLabel
+                    anchors.top: buttonIcon.bottom
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+                PropertyChanges {
+                    target: textLabel
+                    anchors.leftMargin: contentWrapper.spacing
+                }
+            }
+        ]
     }
 
     MouseArea {
