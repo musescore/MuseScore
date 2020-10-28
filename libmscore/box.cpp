@@ -321,6 +321,16 @@ void Box::add(Element* e)
       MeasureBase::add(e);
       }
 
+QRectF Box::contentRect() const
+      {
+      QRectF result;
+
+      for (const Element* element : el())
+            result = result.united(element->bbox());
+
+      return result;
+      }
+
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
@@ -724,6 +734,16 @@ VBox::VBox(Score* score)
       setLineBreak(true);
       }
 
+qreal VBox::minHeight() const
+      {
+      return point(Spatium(10));
+      }
+
+qreal VBox::maxHeight() const
+      {
+      return point(Spatium(30));
+      }
+
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
@@ -731,11 +751,25 @@ VBox::VBox(Score* score)
 void VBox::layout()
       {
       setPos(QPointF());
+
       if (system())
             bbox().setRect(0.0, 0.0, system()->width(), point(boxHeight()));
       else
             bbox().setRect(0.0, 0.0, 50, 50);
-      Box::layout();
+
+      for (Element* e : el()) {
+            if (!e->isLayoutBreak())
+                  e->layout();
+            }
+
+      qreal contentHeight = contentRect().height();
+
+      if (contentHeight < minHeight())
+            contentHeight = minHeight();
+
+      setHeight(contentHeight);
+
+      MeasureBase::layout();
       }
 
 //---------------------------------------------------------

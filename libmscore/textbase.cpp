@@ -1804,7 +1804,11 @@ void TextBase::layout1()
                         // consider inner margins of frame
                         Box* b = toBox(parent());
                         yoff = b->topMargin()  * DPMM;
-                        h  = b->height() - yoff - b->bottomMargin() * DPMM;
+
+                        if (b->height() < bb.bottom())
+                              h = b->height() / 2 + bb.height();
+                        else
+                              h  = b->height() - yoff - b->bottomMargin() * DPMM;
                         }
                   else if (parent()->isPage()) {
                         Page* p = toPage(parent());
