@@ -497,10 +497,10 @@ void ScoreView::editTimeSigProperties(TimeSig* ts)
       TimeSigProperties tsp(r);
 
       if (tsp.exec()) {
+            ts->undoChangeProperty(Pid::TIMESIG_TYPE, int(r->timeSigType()));
             ts->undoChangeProperty(Pid::SHOW_COURTESY, r->showCourtesySig());
             ts->undoChangeProperty(Pid::NUMERATOR_STRING, r->numeratorString());
             ts->undoChangeProperty(Pid::DENOMINATOR_STRING, r->denominatorString());
-            ts->undoChangeProperty(Pid::TIMESIG_TYPE, int(r->timeSigType()));
             ts->undoChangeProperty(Pid::GROUPS, QVariant::fromValue<Groups>(r->groups()));
 
             if (r->sig() != ts->sig()) {
