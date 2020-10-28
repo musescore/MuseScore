@@ -97,7 +97,7 @@ FlatButton {
             numerator: root.model.timeSignature.numerator
             denominator: root.model.timeSignature.denominator
             availableDenominators: root.model.timeSignatureDenominators()
-            active: (root.model.timeSignatureType === AdditionalInfoModel.Fraction)
+            enabled: (root.model.timeSignatureType === AdditionalInfoModel.Fraction)
 
             onNumeratorSelected: {
                 root.model.setTimeSignatureNumerator(value)
