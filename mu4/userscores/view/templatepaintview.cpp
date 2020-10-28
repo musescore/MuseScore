@@ -122,6 +122,9 @@ void TemplatePaintView::load(const QString& templatePath)
     Ret ret = m_notation->load(m_templatePath);
     if (!ret) {
         LOGE() << ret.toString();
+        m_notation = nullptr;
+        update();
+        return;
     }
 
     scaleCanvas(INITIAL_SCALE_FACTOR);
