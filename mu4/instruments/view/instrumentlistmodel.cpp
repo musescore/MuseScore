@@ -97,8 +97,6 @@ QVariantList InstrumentListModel::families() const
 
 QVariantList InstrumentListModel::groups() const
 {
-    QVariantList result;
-
     bool allInstrumentsSelected = m_selectedFamilyId.isEmpty() || m_selectedFamilyId == ALL_INSTRUMENTS_ID;
     if (!isSearching() && allInstrumentsSelected) {
         return allInstrumentsGroupList();
@@ -117,8 +115,12 @@ QVariantList InstrumentListModel::groups() const
         }
     }
 
-    for (const QString& groupId: availableGroups) {
-        InstrumentGroup group = m_instrumentsMeta.groups[groupId];
+    QVariantList result;
+
+    for (const InstrumentGroup& group: sortedGroupList()) {
+        if (!availableGroups.contains(group.id)) {
+            continue;
+        }
 
         QVariantMap obj;
         obj[ID_KEY] = group.id;
@@ -132,7 +134,7 @@ QVariantList InstrumentListModel::groups() const
 
 QVariantList InstrumentListModel::instruments() const
 {
-    QVariantHash availableInstruments;
+    QVariantMap availableInstruments;
 
     for (const InstrumentTemplate& templ: m_instrumentsMeta.instrumentTemplates) {
         const Instrument& instrument = templ.instrument;
@@ -176,7 +178,16 @@ QVariantList InstrumentListModel::instruments() const
         availableInstruments.insert(instrumentId, instrumentObj);
     }
 
-    return availableInstruments.values();
+    QVariantList result = availableInstruments.values();
+
+    std::sort(result.begin(), result.end(), [](const QVariant& instrument1, const QVariant& instrument2) {
+        QString instrumentName1 = instrument1.toMap()[NAME_KEY].toString().toLower();
+        QString instrumentName2 = instrument2.toMap()[NAME_KEY].toString().toLower();
+
+        return instrumentName1 < instrumentName2;
+    });
+
+    return result;
 }
 
 void InstrumentListModel::selectFamily(const QString& family)
@@ -314,13 +325,28 @@ void InstrumentListModel::setInstrumentsMeta(const InstrumentsMeta& meta)
 QVariantList InstrumentListModel::allInstrumentsGroupList() const
 {
     QVariantList result;
-    for (const InstrumentGroup& group: m_instrumentsMeta.groups) {
+
+    for (const InstrumentGroup& group: sortedGroupList()) {
         QVariantMap obj;
         obj[ID_KEY] = group.id;
         obj[NAME_KEY] = group.name;
 
         result << obj;
     }
+
+    return result;
+}
+
+InstrumentGroupList InstrumentListModel::sortedGroupList() const
+{
+    InstrumentGroupList result = m_instrumentsMeta.groups.values();
+
+    std::sort(result.begin(), result.end(), [](const InstrumentGroup& group1, const InstrumentGroup& group2) {
+        QString name1 = group1.name.toLower();
+        QString name2 = group2.name.toLower();
+
+        return name1 < name2;
+    });
 
     return result;
 }

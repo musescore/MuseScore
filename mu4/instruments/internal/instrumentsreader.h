@@ -43,7 +43,7 @@ private:
     struct GroupMeta
     {
         InstrumentGroup group;
-        InstrumentTemplateHash templates;
+        InstrumentTemplateMap templates;
     };
 
     void loadGroupMeta(Ms::XmlReader& reader, InstrumentsMeta& generalMeta) const;
