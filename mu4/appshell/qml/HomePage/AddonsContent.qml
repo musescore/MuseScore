@@ -68,14 +68,16 @@ FocusScope {
 
                 visible: bar.canFilterByCategories
 
-                property string selectedCategory: Boolean(value)? value : ""
+                property string selectedCategory: Boolean(value) ? value : ""
 
-                displayText: qsTrc("appshell", "Category: ") + (selectedCategory !== "" ? selectedCategory : qsTrc("appshell", "any"))
+                displayText: qsTrc("appshell", "Category: ") + currentText
                 currentIndex: 0
 
                 function initModel() {
                     var categories = bar.categories()
                     var result = []
+
+                    result.push({ "text": qsTrc("appshell", "All"), "value": "" })
 
                     for (var i = 0; i < categories.length; ++i) {
                         var category = categories[i]
