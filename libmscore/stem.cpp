@@ -158,7 +158,7 @@ void Stem::draw(QPainter* painter) const
       const StaffType* stt = st ? st->staffType(chord()->tick()) : 0;
       bool useTab          = stt && stt->isTabStaff();
 
-      painter->setPen(QPen(curColor(), lineWidthMag(), Qt::SolidLine, Qt::RoundCap));
+      painter->setPen(QPen(curColor(), lineWidthMag(), Qt::SolidLine, Qt::FlatCap));
       painter->drawLine(line);
 
       if (!useTab)
