@@ -28,6 +28,10 @@ namespace Ms {
 enum class SymId {
     noSym,
 
+    // DO NOT edit the SMuFL standard symbol IDs (see below) manually!
+    // They are generated from fonttools/smufl2sym.{bat,sh} and then
+    // copied into this file!
+
     // SMuFL standard symbol IDs {{{
     fourStringTabClef,
     sixStringTabClef,
