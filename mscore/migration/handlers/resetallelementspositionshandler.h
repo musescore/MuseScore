@@ -4,11 +4,11 @@
 #include "migration/iscoremigrationhandler.h"
 
 class ResetAllElementsPositionsHandler : public IScoreMigrationHandler
-{
-public:
-    ResetAllElementsPositionsHandler() = default;
+      {
+   public:
+      ResetAllElementsPositionsHandler() = default;
 
-    bool handle(Ms::Score* score) override;
-};
+      bool handle(Ms::Score* score) override;
+      };
 
 #endif // RESETALLELEMENTSPOSITIONSHANDLER_H

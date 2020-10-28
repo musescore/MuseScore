@@ -4,11 +4,11 @@
 #include "migration/iscoremigrationhandler.h"
 
 class FirstSystemIndentationHandler : public IScoreMigrationHandler
-{
-public:
-    FirstSystemIndentationHandler() = default;
+      {
+   public:
+      FirstSystemIndentationHandler() = default;
 
-    bool handle(Ms::Score* score) override;
-};
+      bool handle(Ms::Score* score) override;
+      };
 
 #endif // FIRSTSYSTEMINDENTATIONHANDLER_H

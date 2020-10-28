@@ -4,11 +4,11 @@
 #include "migration/iscoremigrationhandler.h"
 
 class StaffVerticalJustificationHandler : public IScoreMigrationHandler
-{
-public:
-    StaffVerticalJustificationHandler() = default;
+      {
+   public:
+      StaffVerticalJustificationHandler() = default;
 
-    bool handle(Ms::Score* score) override;
-};
+      bool handle(Ms::Score* score) override;
+      };
 
 #endif // STAFFVERTICALJUSTIFICATIONHANDLER_H
