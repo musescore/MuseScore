@@ -42,26 +42,28 @@ FocusScope {
         id: contentWrapper
 
         anchors.fill: parent
-        anchors.margins: 12
+        anchors.margins: 20
 
-        spacing: 12
+        spacing: 20
 
         ColumnLayout {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignTop
 
-            spacing: 12
+            spacing: 20
 
             Text {
                 Layout.fillWidth: true
 
                 font.family: globalStyle.font.family
                 font.bold: true
-                font.pixelSize: 20
+                font.pixelSize: 26
                 wrapMode: Text.WordWrap
                 horizontalAlignment: Qt.AlignHCenter
+                Accessible.role: Accessible.StaticText
+                Accessible.name: text
 
-                text: qsTr("Try out improved style settings")
+                text: qsTr("Try our improved style settings")
             }
 
             Image {
@@ -83,6 +85,8 @@ FocusScope {
                 font.pixelSize: 14
                 wrapMode: Text.WordWrap
                 horizontalAlignment: Qt.AlignLeft
+                Accessible.role: Accessible.StaticText
+                Accessible.name: text
 
                 text: qsTr("Here are some big improvements you can apply to your score:")
             }
@@ -116,8 +120,10 @@ FocusScope {
                 font.pixelSize: 14
                 wrapMode: Text.WordWrap
                 horizontalAlignment: Qt.AlignLeft
+                Accessible.role: Accessible.StaticText
+                Accessible.name: text
 
-                text: qsTr("%1Learn more about these improvements%2").arg("<a href=\"https://musescore.com\">").arg("</a>")
+                text: qsTr("<a href=\"https://musescore.com\">Learn more</a>") // TODO link to official announcement
 
                 onLinkActivated: {
                     if (!root.model) {
