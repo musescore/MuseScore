@@ -64,6 +64,7 @@ class Box : public MeasureBase {
       virtual Element* drop(EditData&) override;
       virtual void add(Element* e) override;
 
+      QRectF contentRect() const;
       Spatium boxWidth() const        { return _boxWidth;     }
       void setBoxWidth(Spatium val)   { _boxWidth = val;      }
       Spatium boxHeight() const       { return _boxHeight;    }
@@ -142,6 +143,9 @@ class VBox : public Box {
 
       VBox* clone() const override      { return new VBox(*this); }
       ElementType type() const override { return ElementType::VBOX; }
+
+      qreal minHeight() const;
+      qreal maxHeight() const;
 
       void layout() override;
 
