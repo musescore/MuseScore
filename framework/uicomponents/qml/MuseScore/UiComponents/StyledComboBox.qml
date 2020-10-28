@@ -85,7 +85,7 @@ ComboBox {
                 bottomLeftRadius: delegateBackgroundRect.bottomLeftRadius
                 bottomRightRadius: delegateBackgroundRect.bottomRightRadius
 
-                color: highlighted ? ui.theme.accentColor : ui.theme.buttonColor
+                color: root.currentIndex === index ? ui.theme.accentColor : ui.theme.buttonColor
                 opacity: highlighted ? ui.theme.accentOpacityNormal : ui.theme.buttonOpacityNormal
             }
 
