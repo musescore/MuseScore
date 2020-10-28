@@ -46,7 +46,7 @@ private:
         InstrumentTemplateHash templates;
     };
 
-    GroupMeta readGroupMeta(Ms::XmlReader& reader, InstrumentsMeta& generalMeta) const;
+    void loadGroupMeta(Ms::XmlReader& reader, InstrumentsMeta& generalMeta) const;
     MidiArticulation readArticulation(Ms::XmlReader& reader) const;
     InstrumentGenre readGenre(Ms::XmlReader& reader) const;
     InstrumentTemplate readInstrumentTemplate(Ms::XmlReader& reader, InstrumentsMeta& generalMeta) const;
@@ -57,6 +57,7 @@ private:
     StringData readStringData(Ms::XmlReader& reader) const;
 
     void fillByDeffault(Instrument& instrument) const;
+    void initInstrument(Instrument& sourceInstrument, const Instrument& destinationInstrument) const;
 };
 }
 }

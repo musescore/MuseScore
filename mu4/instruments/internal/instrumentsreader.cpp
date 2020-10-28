@@ -48,14 +48,8 @@ RetVal<InstrumentsMeta> InstrumentsReader::readMeta(const io::path& path) const
         }
 
         while (reader.readNextStartElement()) {
-            if (reader.name() == "instrument-group"
-                || reader.name() == "InstrumentGroup") {
-                GroupMeta groupMeta = readGroupMeta(reader, meta);
-                meta.groups.insert(groupMeta.group.id, groupMeta.group);
-
-                for (auto it = groupMeta.templates.cbegin(); it != groupMeta.templates.cend(); ++it) {
-                    meta.instrumentTemplates.insert(it.key(), it.value());
-                }
+            if (reader.name() == "instrument-group" || reader.name() == "InstrumentGroup") {
+                loadGroupMeta(reader, meta);
             } else if (reader.name() == "Articulation") {
                 MidiArticulation articulation = readArticulation(reader);
                 meta.articulations.insert(articulation.name, articulation); // TODO: name?
@@ -74,10 +68,8 @@ RetVal<InstrumentsMeta> InstrumentsReader::readMeta(const io::path& path) const
     return result;
 }
 
-InstrumentsReader::GroupMeta InstrumentsReader::readGroupMeta(Ms::XmlReader& reader, InstrumentsMeta& generalMeta) const
+void InstrumentsReader::loadGroupMeta(Ms::XmlReader& reader, InstrumentsMeta& generalMeta) const
 {
-    GroupMeta meta;
-
     InstrumentGroup group;
     group.id = reader.attributes().value("id").toString();
     group.name = qApp->translate("InstrumentsXML", reader.attributes().value("name").toUtf8().data()); // TODO: translate
@@ -87,7 +79,7 @@ InstrumentsReader::GroupMeta InstrumentsReader::readGroupMeta(Ms::XmlReader& rea
         if (reader.name().toString().toLower() == "instrument") {
             InstrumentTemplate _template = readInstrumentTemplate(reader, generalMeta);
             _template.instrument.groupId = group.id;
-            meta.templates.insert(_template.id, _template);
+            generalMeta.instrumentTemplates.insert(_template.id, _template);
         } else if (reader.name() == "ref") {
             QString templateId = reader.readElementText();
             InstrumentTemplate newTemplate = generalMeta.instrumentTemplates[templateId];
@@ -105,9 +97,7 @@ InstrumentsReader::GroupMeta InstrumentsReader::readGroupMeta(Ms::XmlReader& rea
         group.id = group.name.toLower().replace(" ", "-");
     }
 
-    meta.group = group;
-
-    return meta;
+    generalMeta.groups.insert(group.id, group);
 }
 
 MidiArticulation InstrumentsReader::readArticulation(Ms::XmlReader& reader) const
@@ -166,19 +156,18 @@ InstrumentTemplate InstrumentsReader::readInstrumentTemplate(Ms::XmlReader& read
     while (reader.readNextStartElement()) {
         if (reader.name() == "longName" || reader.name() == "name") {
             int pos = reader.intAttribute("pos", 0);
-            for (QList<StaffName>::iterator i = instrument.longNames.begin(); i != instrument.longNames.end(); ++i) {
-                if ((*i).pos() == pos) {
-                    instrument.longNames.erase(i);
+            for (auto it = instrument.longNames.begin(); it != instrument.longNames.end(); ++it) {
+                if (it->pos() == pos) {
+                    instrument.longNames.erase(it);
                     break;
                 }
             }
             instrument.longNames << StaffName(qApp->translate("InstrumentsXML", reader.readElementText().toUtf8().data()), pos);
         } else if (reader.name() == "shortName" || reader.name() == "short-name") {
             int pos = reader.intAttribute("pos", 0);
-            for (QList<StaffName>::iterator i = instrument.shortNames.begin();
-                 i != instrument.shortNames.end(); ++i) {
-                if ((*i).pos() == pos) {
-                    instrument.shortNames.erase(i);
+            for (auto it = instrument.shortNames.begin(); it != instrument.shortNames.end(); ++it) {
+                if (it->pos() == pos) {
+                    instrument.shortNames.erase(it);
                     break;
                 }
             }
@@ -299,7 +288,7 @@ InstrumentTemplate InstrumentsReader::readInstrumentTemplate(Ms::XmlReader& read
             }
         } else if (reader.name() == "init") {
             QString templateId = reader.readElementText();
-            instrument = generalMeta.instrumentTemplates[templateId].instrument;
+            initInstrument(instrument, generalMeta.instrumentTemplates[templateId].instrument);
         } else if (reader.name() == "musicXMLid") {
             instrument.id = reader.readElementText();
         } else if (reader.name() == "genre") {
@@ -417,4 +406,38 @@ void InstrumentsReader::fillByDeffault(Instrument& instrument) const
     if (instrument.id.isEmpty()) {
         instrument.id = instrument.name.toLower().replace(" ", "-");
     }
+}
+
+void InstrumentsReader::initInstrument(Instrument& sourceInstrument, const Instrument& destinationInstrument) const
+{
+    sourceInstrument.id = destinationInstrument.id;
+    sourceInstrument.longNames = destinationInstrument.longNames;
+    sourceInstrument.shortNames = destinationInstrument.shortNames;
+    sourceInstrument.staves = destinationInstrument.staves;
+    sourceInstrument.extended = destinationInstrument.extended;
+
+    for (int i = 0; i < MAX_STAVES; ++i) {
+        sourceInstrument.clefs[i] = destinationInstrument.clefs[i];
+        sourceInstrument.staffLines[i] = destinationInstrument.staffLines[i];
+        sourceInstrument.smallStaff[i] = destinationInstrument.smallStaff[i];
+        sourceInstrument.bracket[i] = destinationInstrument.bracket[i];
+        sourceInstrument.bracketSpan[i] = destinationInstrument.bracketSpan[i];
+        sourceInstrument.barlineSpan[i] = destinationInstrument.barlineSpan[i];
+    }
+
+    sourceInstrument.amateurPitchRange = destinationInstrument.amateurPitchRange;
+    sourceInstrument.professionalPitchRange = destinationInstrument.professionalPitchRange;
+    sourceInstrument.transpose = destinationInstrument.transpose;
+    sourceInstrument.staffGroup = destinationInstrument.staffGroup;
+    sourceInstrument.staffTypePreset = destinationInstrument.staffTypePreset;
+    sourceInstrument.useDrumset = destinationInstrument.useDrumset;
+
+    if (destinationInstrument.drumset) {
+        sourceInstrument.drumset = new Drumset(*destinationInstrument.drumset);
+    }
+
+    sourceInstrument.stringData = destinationInstrument.stringData;
+    sourceInstrument.midiActions = destinationInstrument.midiActions;
+    sourceInstrument.channels = destinationInstrument.channels;
+    sourceInstrument.singleNoteDynamics = destinationInstrument.singleNoteDynamics;
 }
