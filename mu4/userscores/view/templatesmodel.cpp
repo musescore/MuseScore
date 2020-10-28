@@ -17,7 +17,12 @@ void TemplatesModel::load()
         LOGE() << templates.ret.toString();
     }
 
-    m_allTemplates = templates.val;
+    for (const Template& templ : templates.val) {
+        if (!templ.title.isEmpty()) {
+             m_allTemplates << templ;
+        }
+    }
+
     m_visibleTemplates = m_allTemplates;
 
     for (const Template& templ: m_allTemplates) {
