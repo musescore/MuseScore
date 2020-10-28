@@ -3,36 +3,33 @@
 #include "libmscore/mscore.h"
 
 ScoreMigrator_3_6::~ScoreMigrator_3_6()
-{
-    qDeleteAll(m_handlerList);
-}
+      {
+      qDeleteAll(m_handlerList);
+      }
 
 void ScoreMigrator_3_6::registerHandler(IScoreMigrationHandler* handler)
-{
-    m_handlerList << handler;
-}
+      {
+      m_handlerList << handler;
+      }
 
 void ScoreMigrator_3_6::migrateScore(Ms::Score* score)
-{
-    if (!score) {
-        return;
-    }
+      {
+      if (!score)
+            return;
 
-    score->startCmd();
+      score->startCmd();
 
-    bool successfulMigration = false;
+      bool successfulMigration = false;
 
-    for (IScoreMigrationHandler* handler : m_handlerList) {
-        successfulMigration = handler->handle(score);
+      for (IScoreMigrationHandler* handler : m_handlerList) {
+            successfulMigration = handler->handle(score);
 
-        if (!successfulMigration) {
-            break;
-        }
-    }
+            if (!successfulMigration)
+                  break;
+            }
 
-    if (successfulMigration) {
-        score->setMscVersion(Ms::MSCVERSION);
-    }
+      if (successfulMigration)
+            score->setMscVersion(Ms::MSCVERSION);
 
-    score->endCmd();
-}
+      score->endCmd();
+      }

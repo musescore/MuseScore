@@ -1,8 +1,8 @@
 #include "instrumentorderinghandler.h"
 
 bool InstrumentOrderingHandler::handle(Ms::Score* /*score*/)
-{
-    // TODO
+      {
+      // TODO
 
-    return true;
-}
+      return true;
+      }

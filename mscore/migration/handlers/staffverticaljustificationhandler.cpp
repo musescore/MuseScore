@@ -1,8 +1,8 @@
 #include "staffverticaljustificationhandler.h"
 
 bool StaffVerticalJustificationHandler::handle(Ms::Score* /*score*/)
-{
-    // TODO
+      {
+      // TODO
 
-    return true;
-}
+      return true;
+      }
