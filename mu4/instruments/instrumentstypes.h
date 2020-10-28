@@ -29,8 +29,7 @@
 #include "libmscore/instrument.h"
 #include "framework/midi/miditypes.h"
 
-namespace mu {
-namespace instruments {
+namespace mu::instruments {
 static constexpr int MAX_STAVES  = 4;
 
 using Interval = Ms::Interval;
@@ -168,7 +167,6 @@ struct InstrumentsMeta
     InstrumentGenreHash genres;
     MidiArticulationHash articulations;
 };
-}
 }
 
 Q_DECLARE_METATYPE(mu::instruments::Instrument)
