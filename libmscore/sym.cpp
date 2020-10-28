@@ -56,7 +56,7 @@ const std::array<const char*, int(SymId::lastSym)+1> Sym::symNames = { {
       // They are generated from fonttools/smufl2sym.{bat,sh} and then
       // copied into this file!
 
-      // SMuFL standard symbol IDs {{{
+      // SMuFL standard symbol names {{{
       "4stringTabClef",
       "6stringTabClef",
       "accSagittal11LargeDiesisDown",
@@ -2848,7 +2848,7 @@ const std::array<const char*, int(SymId::lastSym)+1> Sym::symNames = { {
       "windTrillKey",
       "windVeryTightEmbouchure",
       "windWeakAirPressure",
-      // SMuFL standard symbol IDs }}}
+      // SMuFL standard symbol names }}}
 
 //    EXTENSIONS
 //    SMuFL stylistic alternates which we need to access directly
@@ -2892,7 +2892,7 @@ const std::array<const char*, int(SymId::lastSym)+1> Sym::symUserNames = { {
       // copied into this file! Edit fonttools/smufl2sym-in-trans.json
       // to make more strings translatable!
 
-      // SMuFL standard symbol IDs {{{
+      // SMuFL standard symbol user names {{{
       "4-string tab clef",
       "6-string tab clef",
       QT_TRANSLATE_NOOP("symUserNames", "11 large diesis down, 3° down [46 EDO]"),
@@ -5684,7 +5684,7 @@ const std::array<const char*, int(SymId::lastSym)+1> Sym::symUserNames = { {
       "Trill key",
       "Very tight embouchure",
       "Very relaxed embouchure / weak air-pressure",
-      // SMuFL standard symbol IDs }}}
+      // SMuFL standard symbol user names }}}
 
 //    EXTENSIONS
 //    SMuFL stylistic alternates which we need to access directly

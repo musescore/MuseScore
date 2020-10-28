@@ -19,18 +19,18 @@ jq -f smufl2sym-cmd-debug.jq \
 } >smufl2sym-out-sym.h-SymId
 
 {
-	echo '      // SMuFL standard symbol IDs {{{'
+	echo '      // SMuFL standard symbol names {{{'
 	jq -f smufl2sym-cmd-symNames.jq \
 	    -r <../fonts/smufl/glyphnames.json
-	echo '      // SMuFL standard symbol IDs }}}'
+	echo '      // SMuFL standard symbol names }}}'
 } >smufl2sym-out-sym.cpp-symNames
 
 {
-	echo '      // SMuFL standard symbol IDs {{{'
+	echo '      // SMuFL standard symbol user names {{{'
 	jq -f smufl2sym-cmd-symUserNames.jq \
 	    --slurpfile tr smufl2sym-in-trans.json \
 	    -r <../fonts/smufl/glyphnames.json
-	echo '      // SMuFL standard symbol IDs }}}'
+	echo '      // SMuFL standard symbol user names }}}'
 } >smufl2sym-out-sym.cpp-symUserNames
 
 echo 'All done!'

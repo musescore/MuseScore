@@ -18,13 +18,13 @@ echo       // SMuFL standard symbol IDs {{{>smufl2sym-out-sym.h-SymId
 jq -f smufl2sym-cmd-SymId.jq -r <..\fonts\smufl\glyphnames.json >>smufl2sym-out-sym.h-SymId
 echo       // SMuFL standard symbol IDs }}}>>smufl2sym-out-sym.h-SymId
 
-echo       // SMuFL standard symbol IDs {{{>smufl2sym-out-sym.cpp-symNames
+echo       // SMuFL standard symbol names {{{>smufl2sym-out-sym.cpp-symNames
 jq -f smufl2sym-cmd-symNames.jq -r <..\fonts\smufl\glyphnames.json >>smufl2sym-out-sym.cpp-symNames
-echo       // SMuFL standard symbol IDs }}}>>smufl2sym-out-sym.cpp-symNames
+echo       // SMuFL standard symbol names }}}>>smufl2sym-out-sym.cpp-symNames
 
-echo       // SMuFL standard symbol IDs {{{>smufl2sym-out-sym.cpp-symUserNames
+echo       // SMuFL standard symbol user names {{{>smufl2sym-out-sym.cpp-symUserNames
 jq -f smufl2sym-cmd-symUserNames.jq --slurpfile tr smufl2sym-in-trans.json -r <..\fonts\smufl\glyphnames.json >>smufl2sym-out-sym.cpp-symUserNames
-echo       // SMuFL standard symbol IDs }}}>>smufl2sym-out-sym.cpp-symUserNames
+echo       // SMuFL standard symbol user names }}}>>smufl2sym-out-sym.cpp-symUserNames
 
 dos2unix smufl2sym-out-debug smufl2sym-out-sym.cpp-symNames smufl2sym-out-sym.cpp-symUserNames smufl2sym-out-sym.h-SymId
 
