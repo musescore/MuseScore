@@ -1,4 +1,4 @@
-import QtQuick 2.7
+import QtQuick 2.12
 import QtGraphicalEffects 1.0
 
 import MuseScore.Ui 1.0
@@ -103,7 +103,8 @@ Item {
         }
 
         Column {
-            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.left: parent.left
+            anchors.right: parent.right
 
             spacing: 4
 
@@ -111,6 +112,10 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 text: root.title
+
+                wrapMode: Text.WrapAnywhere
+                maximumLineCount: 1
+                width: parent.width
 
                 font.pixelSize: 14
             }
