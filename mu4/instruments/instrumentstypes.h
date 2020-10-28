@@ -72,22 +72,24 @@ struct MidiAction
 };
 using MidiActionList = QList<MidiAction>;
 
-using MidiArticulationHash = QHash<QString /*id*/, MidiArticulation>;
+using MidiArticulationMap = QMap<QString /*id*/, MidiArticulation>;
 
 struct InstrumentGroup
 {
     QString id;
     QString name;
-    bool extended;
+    bool extended = false;
 };
-using InstrumentGroupHash = QHash<QString /*id*/, InstrumentGroup>;
+
+using InstrumentGroupList = QList<InstrumentGroup>;
+using InstrumentGroupMap = QMap<QString /*id*/, InstrumentGroup>;
 
 struct InstrumentGenre
 {
     QString id;
     QString name;
 };
-using InstrumentGenreHash = QHash<QString /*id*/, InstrumentGenre>;
+using InstrumentGenreMap = QMap<QString /*id*/, InstrumentGenre>;
 
 struct Transposition
 {
@@ -157,15 +159,15 @@ struct InstrumentTemplate
     bool isValid() const { return !id.isEmpty(); }
 };
 
-using InstrumentTemplateHash = QHash<QString /*id*/, InstrumentTemplate>;
+using InstrumentTemplateMap = QMap<QString /*id*/, InstrumentTemplate>;
 using InstrumentTemplateList = QList<InstrumentTemplate>;
 
 struct InstrumentsMeta
 {
-    InstrumentTemplateHash instrumentTemplates;
-    InstrumentGroupHash groups;
-    InstrumentGenreHash genres;
-    MidiArticulationHash articulations;
+    InstrumentTemplateMap instrumentTemplates;
+    InstrumentGroupMap groups;
+    InstrumentGenreMap genres;
+    MidiArticulationMap articulations;
 };
 }
 

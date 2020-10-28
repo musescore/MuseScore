@@ -63,7 +63,7 @@ void InstrumentsRepository::load()
     for (const io::path& path: instrumentsPaths) {
         RetVal<std::vector<io::path> > files = fileSystem()->scanFiles(path, { QString("*.xml") }, IFileSystem::ScanMode::IncludeSubdirs);
         if (!files.ret) {
-            LOGW() << files.ret.code() << files.ret.text();
+            LOGE() << files.ret.toString();
         }
 
         for (const io::path& file: files.val) {
@@ -75,25 +75,26 @@ void InstrumentsRepository::load()
         RetVal<InstrumentsMeta> metaInstrument = reader()->readMeta(file);
 
         if (!metaInstrument.ret) {
+            LOGE() << metaInstrument.ret.toString();
             continue;
         }
 
-        const InstrumentTemplateHash& templates = metaInstrument.val.instrumentTemplates;
+        const InstrumentTemplateMap& templates = metaInstrument.val.instrumentTemplates;
         for (auto it = templates.cbegin(); it != templates.cend(); ++it) {
             m_instrumentsMeta.instrumentTemplates.insert(it.key(), it.value());
         }
 
-        const MidiArticulationHash& acticulations = metaInstrument.val.articulations;
+        const MidiArticulationMap& acticulations = metaInstrument.val.articulations;
         for (auto it = acticulations.cbegin(); it != acticulations.cend(); ++it) {
             m_instrumentsMeta.articulations.insert(it.key(), it.value());
         }
 
-        const InstrumentGenreHash& genres = metaInstrument.val.genres;
+        const InstrumentGenreMap& genres = metaInstrument.val.genres;
         for (auto it = genres.cbegin(); it != genres.cend(); ++it) {
             m_instrumentsMeta.genres.insert(it.key(), it.value());
         }
 
-        const InstrumentGroupHash& groups = metaInstrument.val.groups;
+        const InstrumentGroupMap& groups = metaInstrument.val.groups;
         for (auto it = groups.cbegin(); it != groups.cend(); ++it) {
             m_instrumentsMeta.groups.insert(it.key(), it.value());
         }
