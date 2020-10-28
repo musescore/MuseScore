@@ -19,7 +19,7 @@ void TemplatesModel::load()
 
     for (const Template& templ : templates.val) {
         if (!templ.title.isEmpty()) {
-             m_allTemplates << templ;
+            m_allTemplates << templ;
         }
     }
 
