@@ -14,6 +14,8 @@ ComboBox {
     property var value
     property var maxVisibleItemCount: 6
 
+    opacity: root.enabled ? 1 : ui.theme.itemOpacityDisabled
+
     function valueFromModel(index, roleName) {
 
         // Simple models (like JS array) with single predefined role name - modelData
