@@ -93,15 +93,10 @@ FlatButton {
                 }
             }
 
-            Rectangle {
-                anchors.left: parent.left
-                anchors.right: parent.right
-
-                height: 2
-
-                color: ui.theme.buttonColor
+            SeparatorLine {
+                anchors.leftMargin: -(parent.anchors.leftMargin + popup.leftPadding)
+                anchors.rightMargin: -(parent.anchors.rightMargin + popup.rightPadding)
             }
-
 
             Column {
                 anchors.left: parent.left
