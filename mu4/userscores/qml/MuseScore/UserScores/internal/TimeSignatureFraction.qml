@@ -8,7 +8,6 @@ Row {
     property var numerator: 0
     property var denominator: 0
     property var availableDenominators: null
-    property bool active: true
 
     signal numeratorSelected(var value)
     signal denominatorSelected(var value)
@@ -19,8 +18,6 @@ Row {
         id: control
 
         implicitWidth: 80
-
-        enabled: root.active
 
         iconMode: iconModeEnum.hidden
         currentValue: root.numerator
@@ -48,8 +45,6 @@ Row {
         id: timeComboBox
 
         implicitWidth: 90
-
-        enabled: root.active
 
         textRoleName: "text"
         valueRoleName: "value"

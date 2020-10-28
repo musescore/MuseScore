@@ -81,7 +81,7 @@ FlatButton {
                     numerator: root.model.pickupTimeSignature.numerator
                     denominator: root.model.pickupTimeSignature.denominator
                     availableDenominators: root.model.timeSignatureDenominators()
-                    active: withPickupMeasure.checked
+                    enabled: withPickupMeasure.checked
 
                     onNumeratorSelected: {
                         root.model.setPickupTimeSignatureNumerator(value)
