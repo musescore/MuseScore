@@ -115,7 +115,7 @@ void RecentScoresModel::updateRecentScores(const QStringList& recentScoresPathLi
 
         QVariantMap obj;
 
-        obj[SCORE_TITLE_KEY] = meta.val.title;
+        obj[SCORE_TITLE_KEY] = !meta.val.title.isEmpty() ? meta.val.title : meta.val.fileName;
         obj[SCORE_PATH_KEY] = path;
         obj[SCORE_THUMBNAIL_KEY] = meta.val.thumbnail;
         obj[SCORE_TIME_SINCE_CREATION_KEY] = DataFormatter::formatTimeSinceCreation(meta.val.creationDate);
