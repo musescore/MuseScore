@@ -13,6 +13,8 @@ Item {
 
     property bool isInstrumentSelected: privateProperties.currentInstrumentIndex != -1
 
+    signal selectInstrumentRequested(var instrumentId, var transposition)
+
     QtObject {
         id: privateProperties
 
@@ -103,6 +105,11 @@ Item {
 
                 onClicked: {
                     privateProperties.currentInstrumentIndex = index
+                }
+
+                onDoubleClicked: {
+                    var currentSelection = root.currentInstrument()
+                    root.selectInstrumentRequested(currentSelection.instrument.id, currentSelection.transposition)
                 }
             }
 
