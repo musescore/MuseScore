@@ -79,6 +79,10 @@ Rectangle {
                 instrumentsModel.setSearchText(search)
                 Qt.callLater(familyView.selectFirstGroup)
             }
+
+            onSelectInstrumentRequested: {
+                instrumentsModel.selectInstrument(instrumentId, transposition)
+            }
         }
 
         SeparatorLine { orientation: Qt.Vertical }

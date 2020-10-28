@@ -124,6 +124,10 @@ Item {
                 onClicked: {
                     root.currentInstrumentIndex = index
                 }
+
+                onDoubleClicked: {
+                    root.unselectInstrumentRequested(modelData.id)
+                }
             }
         }
     }
