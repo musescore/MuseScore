@@ -181,7 +181,7 @@ QVariantList InstrumentListModel::instruments() const
             instrumentTranspositions << obj;
         } else {
             instrumentTranspositions = availableInstruments[instrumentId].toMap().value(TRANSPOSITIONS_KEY).toList();
-            instrumentTranspositions << defaultInstrumentTranspositionItem();
+            instrumentTranspositions.prepend(defaultInstrumentTranspositionItem());
         }
 
         QVariantMap instrumentObj;
