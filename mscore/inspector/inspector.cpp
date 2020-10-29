@@ -569,7 +569,8 @@ InspectorVBox::InspectorVBox(QWidget* parent)
             { Pid::RIGHT_MARGIN,  0, vb.rightMargin,  vb.resetRightMargin  },
             { Pid::TOP_MARGIN,    0, vb.topMargin,    vb.resetTopMargin    },
             { Pid::BOTTOM_MARGIN, 0, vb.bottomMargin, vb.resetBottomMargin },
-            { Pid::BOX_HEIGHT,    0, vb.height,       0                    }
+            { Pid::BOX_HEIGHT,    0, vb.height,       0                    },
+            { Pid::BOX_AUTOSIZE,  0, vb.enableAutoSize, vb.resetAutoSize   }
             };
       pList = { { vb.title, vb.panel } };
       mapSignals();
