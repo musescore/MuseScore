@@ -33,6 +33,8 @@ public:
     virtual void rollbackChanges() = 0;
     virtual void commitChanges() = 0;
 };
+
+using INotationUndoStackPtr = std::shared_ptr<INotationUndoStack>;
 }
 }
 

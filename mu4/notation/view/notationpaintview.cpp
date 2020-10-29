@@ -102,9 +102,9 @@ void NotationPaintView::onCurrentNotationChanged()
 {
     if (m_notation) {
         m_notation->notationChanged().resetOnNotify(this);
-        INotationInteraction* ninteraction = m_notation->interaction();
-        ninteraction->inputStateChanged().resetOnNotify(this);
-        ninteraction->selectionChanged().resetOnNotify(this);
+        INotationInteractionPtr interaction = m_notation->interaction();
+        interaction->inputStateChanged().resetOnNotify(this);
+        interaction->selectionChanged().resetOnNotify(this);
     }
 
     m_notation = globalContext()->currentNotation();
@@ -119,11 +119,13 @@ void NotationPaintView::onCurrentNotationChanged()
     });
 
     onInputStateChanged();
-    INotationInteraction* ninteraction = notationInteraction();
-    ninteraction->inputStateChanged().onNotify(this, [this]() {
+
+    INotationInteractionPtr interaction = notationInteraction();
+    interaction->inputStateChanged().onNotify(this, [this]() {
         onInputStateChanged();
     });
-    ninteraction->selectionChanged().onNotify(this, [this]() {
+
+    interaction->selectionChanged().onNotify(this, [this]() {
         onSelectionChanged();
     });
 
@@ -143,8 +145,7 @@ void NotationPaintView::onViewSizeChanged()
 
 void NotationPaintView::onInputStateChanged()
 {
-    INotationInputState* is = notationInteraction()->inputState();
-    if (is->isNoteEnterMode()) {
+    if (notationInteraction()->inputState()->isNoteEnterMode()) {
         setAcceptHoverEvents(true);
     } else {
         setAcceptHoverEvents(false);
@@ -411,20 +412,14 @@ bool NotationPaintView::isInited() const
     return false;
 }
 
-INotationInteraction* NotationPaintView::notationInteraction() const
+INotationInteractionPtr NotationPaintView::notationInteraction() const
 {
-    if (m_notation) {
-        return m_notation->interaction();
-    }
-    return nullptr;
+    return m_notation ? m_notation->interaction() : nullptr;
 }
 
-INotationPlayback* NotationPaintView::notationPlayback() const
+INotationPlaybackPtr NotationPaintView::notationPlayback() const
 {
-    if (m_notation) {
-        return m_notation->playback();
-    }
-    return nullptr;
+    return m_notation ? m_notation->playback() : nullptr;
 }
 
 qreal NotationPaintView::width() const

@@ -54,31 +54,31 @@ public:
     virtual void setOpened(bool opened) = 0;
 
     // input (mouse)
-    virtual INotationInteraction* interaction() const = 0;
+    virtual INotationInteractionPtr interaction() const = 0;
 
     // input (midi)
-    virtual INotationMidiInput* midiInput() const = 0;
+    virtual INotationMidiInputPtr midiInput() const = 0;
 
     // undo stack
-    virtual INotationUndoStack* undoStack() const = 0;
+    virtual INotationUndoStackPtr undoStack() const = 0;
 
     // styles
-    virtual INotationStyle* style() const = 0;
+    virtual INotationStylePtr style() const = 0;
 
     // playback (midi)
-    virtual INotationPlayback* playback() const = 0;
+    virtual INotationPlaybackPtr playback() const = 0;
 
     // elements
-    virtual INotationElements* elements() const = 0;
+    virtual INotationElementsPtr elements() const = 0;
+
+    // accessibility
+    virtual INotationAccessibilityPtr accessibility() const = 0;
+
+    // parts
+    virtual INotationPartsPtr parts() const = 0;
 
     // notify
     virtual async::Notification notationChanged() const = 0;
-
-    // accessibility
-    virtual INotationAccessibility* accessibility() const = 0;
-
-    // parts
-    virtual INotationParts* parts() const = 0;
 };
 
 using INotationPtr = std::shared_ptr<INotation>;

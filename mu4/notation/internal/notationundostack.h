@@ -17,31 +17,27 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_NOTATION_INOTATIONSTYLE_H
-#define MU_NOTATION_INOTATIONSTYLE_H
+#ifndef MU_NOTATION_UNDOSTACK
+#define MU_NOTATION_UNDOSTACK
 
-#include "notationtypes.h"
-#include "async/notification.h"
+#include "inotationundostack.h"
+#include "igetscore.h"
 
 namespace mu {
 namespace notation {
-class INotationStyle
+class NotationUndoStack : public INotationUndoStack
 {
 public:
-    virtual ~INotationStyle() = default;
+    NotationUndoStack(IGetScore* getScore);
 
-    virtual QVariant styleValue(const StyleId& styleId) const = 0;
-    virtual QVariant defaultStyleValue(const StyleId& styleId) const = 0;
-    virtual void setStyleValue(const StyleId& styleId, const QVariant& newValue) = 0;
+    void prepareChanges() override;
+    void rollbackChanges() override;
+    void commitChanges() override;
 
-    virtual bool canApplyToAllParts() const = 0;
-    virtual void applyToAllParts() = 0;
-
-    virtual async::Notification styleChanged() const = 0;
+private:
+    IGetScore* m_getScore = nullptr;
 };
-
-using INotationStylePtr = std::shared_ptr<INotationStyle>;
 }
 }
 
-#endif // MU_NOTATION_INOTATIONSTYLE_H
+#endif // MU_NOTATION_UNDOSTACK

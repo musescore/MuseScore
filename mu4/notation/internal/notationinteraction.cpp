@@ -53,8 +53,8 @@ using namespace Ms;
 NotationInteraction::NotationInteraction(Notation* notation)
     : m_notation(notation)
 {
-    m_inputState = new NotationInputState(notation);
-    m_selection = new NotationSelection(notation);
+    m_inputState = std::make_shared<NotationInputState>(notation);
+    m_selection = std::make_shared<NotationSelection>(notation);
 
     m_scoreCallbacks = new ScoreCallbacks();
     m_dragData.ed.view = new ScoreCallbacks();
@@ -63,8 +63,6 @@ NotationInteraction::NotationInteraction(Notation* notation)
 
 NotationInteraction::~NotationInteraction()
 {
-    delete m_inputState;
-    delete m_selection;
     delete m_shadowNote;
     delete m_scoreCallbacks;
 }
@@ -297,7 +295,7 @@ mu::async::Notification NotationInteraction::noteAdded() const
     return m_noteAdded;
 }
 
-INotationInputState* NotationInteraction::inputState() const
+INotationInputStatePtr NotationInteraction::inputState() const
 {
     return m_inputState;
 }
@@ -525,17 +523,17 @@ bool NotationInteraction::elementIsLess(const Ms::Element* e1, const Ms::Element
     return e1->z() <= e2->z();
 }
 
-void NotationInteraction::select(Element* e, SelectType type, int staffIdx)
+void NotationInteraction::select(Element* element, SelectType type, int staffIndex)
 {
-    if (isTextEditingStarted() && e != m_textEditData.element) {
+    if (isTextEditingStarted() && element != m_textEditData.element) {
         endEditText();
     }
 
-    score()->select(e, type, staffIdx);
+    score()->select(element, type, staffIndex);
     m_selectionChanged.notify();
 }
 
-INotationSelection* NotationInteraction::selection() const
+INotationSelectionPtr NotationInteraction::selection() const
 {
     return m_selection;
 }

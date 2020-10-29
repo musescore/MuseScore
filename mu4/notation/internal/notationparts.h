@@ -29,6 +29,7 @@ class NotationParts : public INotationParts, public async::Asyncable
 {
 public:
     NotationParts(IGetScore* getScore, mu::async::Notification selectionChangedNotification);
+    ~NotationParts() override;
 
     async::NotifyList<const Part*> partList() const override;
     async::NotifyList<instruments::Instrument> instrumentList(const ID& partId) const override;
@@ -66,8 +67,6 @@ public:
     async::Notification partsChanged() const override;
 
 private:
-    ~NotationParts() override;
-
     struct InstrumentInfo
     {
         Ms::Fraction fraction = { -1, -1 };

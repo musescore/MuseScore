@@ -48,8 +48,8 @@ public:
     void updateNotation() override;
 
 private:
-    mu::notation::INotationUndoStack* undoStack() const;
-    mu::notation::INotationStyle* style() const;
+    mu::notation::INotationUndoStackPtr undoStack() const;
+    mu::notation::INotationStylePtr style() const;
 };
 }
 }

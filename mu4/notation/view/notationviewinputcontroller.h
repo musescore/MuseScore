@@ -51,8 +51,8 @@ public:
 
     virtual void showContextMenu(const ElementType& elementType, const QPoint& pos) = 0;
 
-    virtual INotationInteraction* notationInteraction() const = 0;
-    virtual INotationPlayback* notationPlayback() const = 0;
+    virtual INotationInteractionPtr notationInteraction() const = 0;
+    virtual INotationPlaybackPtr notationPlayback() const = 0;
 };
 
 class NotationViewInputController : public actions::Actionable

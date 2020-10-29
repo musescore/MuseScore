@@ -21,6 +21,8 @@ public:
 
     virtual Ms::Measure* measure(const int measureIndex) const = 0;
 };
+
+using INotationElementsPtr = std::shared_ptr<INotationElements>;
 }
 }
 
