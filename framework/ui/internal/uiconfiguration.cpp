@@ -100,5 +100,10 @@ float UiConfiguration::guiScaling() const
 {
     return mainWindow()->qMainWindow()->screen()->devicePixelRatio();
 }
+
+float UiConfiguration::physicalDotsPerInch() const
+{
+    return mainWindow()->qMainWindow()->screen()->physicalDotsPerInch();
+}
 }
 }

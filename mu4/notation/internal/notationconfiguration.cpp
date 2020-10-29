@@ -22,7 +22,9 @@
 #include "settings.h"
 
 #include "io/path.h"
+
 #include "libmscore/preferences.h"
+#include "libmscore/mscore.h"
 
 using namespace mu;
 using namespace mu::notation;
@@ -193,4 +195,9 @@ bool NotationConfiguration::isMidiInputEnabled() const
 float NotationConfiguration::guiScaling() const
 {
     return uiConfiguration()->guiScaling();
+}
+
+float NotationConfiguration::notationScaling() const
+{
+    return uiConfiguration()->physicalDotsPerInch() / Ms::DPI;
 }

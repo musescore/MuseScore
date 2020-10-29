@@ -63,6 +63,7 @@ public:
     virtual bool isMidiInputEnabled() const = 0;
 
     virtual float guiScaling() const = 0;
+    virtual float notationScaling() const = 0;
 };
 }
 }

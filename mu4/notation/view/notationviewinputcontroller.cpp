@@ -135,8 +135,7 @@ void NotationViewInputController::wheelEvent(QWheelEvent* ev)
     // Windows touch pad pinches also execute this
     if (keyState & Qt::ControlModifier) {
         int zoom = configuration()->currentZoom().val * qPow(1.1, steps);
-        QPoint pos = m_view->toLogical(ev->position().toPoint());
-        setZoom(zoom, pos);
+        setZoom(zoom, ev->position().toPoint());
     } else if (keyState & Qt::ShiftModifier) {
         m_view->scrollHorizontal(dy);
     } else {

@@ -50,6 +50,7 @@ public:
     async::Channel<int> musicalFontSizeChanged() override;
 
     float guiScaling() const override;
+    float physicalDotsPerInch() const override;
 
 private:
 

@@ -83,6 +83,8 @@ signals:
     void openContextMenuRequested(const QVariantList& items, const QPoint& pos);
 
 private:
+    double guiScale() const;
+
     bool canReceiveAction(const actions::ActionName& action) const override;
     void onCurrentNotationChanged();
     bool isInited() const;
