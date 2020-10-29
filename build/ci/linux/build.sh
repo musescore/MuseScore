@@ -66,22 +66,24 @@ fi
 
 echo "=== BUILD ==="
 
-make revision
-make -j2 $OPTIONS \
-        MUSESCORE_BUILD_CONFIG=$MUSESCORE_BUILD_CONFIG \
-        BUILD_NUMBER=$BUILD_NUMBER \
-        TELEMETRY_TRACK_ID=$TELEMETRY_TRACK_ID \
-        BUILD_UI_MU4=$BUILD_UI_MU4 \
-        BUILD_VST=$BUILD_VST \
-        VST3_SDK_PATH=$VST3_SDK_PATH \
-        BUILD_UNIT_TESTS=ON \
-        MODULE_BUILD_PCH=OFF \
-        $BUILDTYPE
+MUSESCORE_REVISION=$(git rev-parse --short=7 HEAD)
+
+make CPUS=2 \
+    MUSESCORE_BUILD_CONFIG=$MUSESCORE_BUILD_CONFIG \
+    MUSESCORE_REVISION=$MUSESCORE_REVISION \
+    BUILD_NUMBER=$BUILD_NUMBER \
+    TELEMETRY_TRACK_ID=$TELEMETRY_TRACK_ID \
+    BUILD_UI_MU4=$BUILD_UI_MU4 \
+    BUILD_VST=$BUILD_VST \
+    VST3_SDK_PATH=$VST3_SDK_PATH \
+    BUILD_UNIT_TESTS=ON \
+    MODULE_BUILD_PCH=OFF \
+    $BUILDTYPE
 
 
 bash ./build/ci/tools/make_release_channel_env.sh -c $MUSESCORE_BUILD_CONFIG
 bash ./build/ci/tools/make_version_env.sh $BUILD_NUMBER
-bash ./build/ci/tools/make_revision_env.sh
+bash ./build/ci/tools/make_revision_env.sh $MUSESCORE_REVISION
 bash ./build/ci/tools/make_branch_env.sh
 bash ./build/ci/tools/make_datetime_env.sh
 
