@@ -43,13 +43,12 @@ echo "BUILD_UI_MU4: $BUILD_UI_MU4"
 echo "VST3_SDK_PATH: $VST3_SDK_PATH"
 
 make -f Makefile.osx ci MUSESCORE_BUILD_CONFIG=$MUSESCORE_BUILD_CONFIG \
-                        BUILD_NUMBER=$BUILD_NUMBER \
+ 		        BUILD_NUMBER=$BUILD_NUMBER \
                         TELEMETRY_TRACK_ID=$TELEMETRY_TRACK_ID \
-                        BUILD_UI_MU4=$BUILD_UI_MU4 \
+			BUILD_UI_MU4=$BUILD_UI_MU4 \
                         BUILD_VST=$BUILD_VST \
                         VST3_SDK_PATH=$VST3_SDK_PATH \
                         MODULE_BUILD_PCH=OFF 
-
 
 bash ./build/ci/tools/make_release_channel_env.sh -c $MUSESCORE_BUILD_CONFIG
 bash ./build/ci/tools/make_version_env.sh $BUILD_NUMBER
