@@ -2888,8 +2888,6 @@ Score::FileError MasterScore::read114(XmlReader& e)
             }
             else if (tag == "playMode")
                   setPlayMode(PlayMode(e.readInt()));
-            else if (tag == "isQuallityUpgradeAllowed")
-                  setIsQuallityUpgradeAllowed(e.readBool());
             else if (tag == "SyntiSettings")
                   _synthesizerState.read(e);
             else if (tag == "Spatium")

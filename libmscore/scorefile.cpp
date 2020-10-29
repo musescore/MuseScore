@@ -158,10 +158,8 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
       xml.tag("Division", MScore::division);
       xml.setCurTrack(-1);
 
-      if (isTopScore()) {                   // only top score
-            xml.tag("isQuallityUpgradeAllowed", isQuallityUpgradeAllowed());
+      if (isTopScore())                    // only top score
             style().save(xml, true);       // save only differences to buildin style
-            }
 
       xml.tag("showInvisible",   _showInvisible);
       xml.tag("showUnprintable", _showUnprintable);
@@ -256,16 +254,6 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
 
       if (unhide)
           endCmd(true);
-      }
-
-bool Score::isQuallityUpgradeAllowed() const
-      {
-      return _isQuallityUpgradeAllowed;
-      }
-
-void Score::setIsQuallityUpgradeAllowed(const bool isAllowed)
-      {
-      _isQuallityUpgradeAllowed = isAllowed;
       }
 
 //---------------------------------------------------------

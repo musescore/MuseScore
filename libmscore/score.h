@@ -457,8 +457,6 @@ class Score : public QObject, public ScoreElement {
       QString _tmpName;                   ///< auto saved with this name if not empty
       QString _importedFilePath;          // file from which the score was imported, or empty
 
-      bool _isQuallityUpgradeAllowed { true };
-
       bool _showInvisible         { true  };
       bool _showUnprintable       { true  };
       bool _showFrames            { true  };
@@ -650,9 +648,6 @@ class Score : public QObject, public ScoreElement {
       const QList<Staff*>& staves() const    { return _staves; }
       int nstaves() const                    { return _staves.size(); }
       int ntracks() const                    { return _staves.size() * VOICES; }
-
-      bool isQuallityUpgradeAllowed() const;
-      void setIsQuallityUpgradeAllowed(const bool isAllowed);
 
       int staffIdx(const Part*) const;
       Staff* staff(int n) const              { return ((n >= 0) && (n < _staves.size())) ? _staves.at(n) : nullptr; }
