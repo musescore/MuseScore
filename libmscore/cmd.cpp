@@ -2117,11 +2117,13 @@ static void resetElementPosition(void*, Element* e)
 //   cmdResetAllPositions
 //---------------------------------------------------------
 
-void Score::cmdResetAllPositions()
+void Score::cmdResetAllPositions(bool undoable)
       {
-      startCmd();
+      if (undoable)
+            startCmd();
       scanElements(nullptr, resetElementPosition);
-      endCmd();
+      if (undoable)
+            endCmd();
       }
 
 //---------------------------------------------------------
