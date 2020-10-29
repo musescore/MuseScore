@@ -84,6 +84,9 @@ MuseScore is licensed under GPL version 2.0. See [LICENSE.GPL](https://github.co
     - **thirdparty/qt-google-analytics:**
     Clone from [qt-google-analytics](https://github.com/HSAnet/qt-google-analytics).
 
+    - **thirdparty/libcrashreporter-qt:**
+    Clone from [libcrashreporter-qt](https://github.com/dmitrio95/libcrashreporter-qt).
+
 
 ## Building
 **Read the developer handbook for a [complete build walkthrough](https://musescore.org/en/developers-handbook/compilation) and a list of dependencies.**
