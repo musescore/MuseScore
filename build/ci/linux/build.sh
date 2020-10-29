@@ -5,14 +5,14 @@ echo "Build Linux MuseScore AppImage"
 #set -x
 trap 'echo Build failed; exit 1' ERR
 
+df -k .
+
 TELEMETRY_TRACK_ID=""
 ARTIFACTS_DIR=build.artifacts
+BUILD_MODE=$(cat $ARTIFACTS_DIR/env/build_mode.env)
 # portable build is the default build
 BUILDTYPE=portable
 OPTIONS=""
-
-BUILD_MODE=$(cat $ARTIFACTS_DIR/env/build_mode.env)
-MUSESCORE_BUILD_CONFIG=dev
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
@@ -27,6 +27,7 @@ done
 if [ -z "$BUILD_NUMBER" ]; then echo "error: not set BUILD_NUMBER"; exit 1; fi
 if [ -z "$TELEMETRY_TRACK_ID" ]; then TELEMETRY_TRACK_ID=""; fi
 
+MUSESCORE_BUILD_CONFIG=dev
 if [ "$BUILD_MODE" == "devel_build" ]; then MUSESCORE_BUILD_CONFIG=dev; fi
 if [ "$BUILD_MODE" == "nightly_build" ]; then MUSESCORE_BUILD_CONFIG=dev; fi
 if [ "$BUILD_MODE" == "testing_build" ]; then MUSESCORE_BUILD_CONFIG=testing; fi
@@ -55,7 +56,11 @@ echo " "
 echo "=== BUILD === "
 
 make revision
-make -j2 $OPTIONS MUSESCORE_BUILD_CONFIG=$MUSESCORE_BUILD_CONFIG BUILD_NUMBER=$BUILD_NUMBER TELEMETRY_TRACK_ID=$TELEMETRY_TRACK_ID $BUILDTYPE
+make -j2 $OPTIONS \
+ 	 MUSESCORE_BUILD_CONFIG=$MUSESCORE_BUILD_CONFIG \
+	 BUILD_NUMBER=$BUILD_NUMBER \
+	 TELEMETRY_TRACK_ID=$TELEMETRY_TRACK_ID \
+	 $BUILDTYPE
 
 
 bash ./build/ci/tools/make_release_channel_env.sh -c $MUSESCORE_BUILD_CONFIG
@@ -63,3 +68,5 @@ bash ./build/ci/tools/make_version_env.sh $BUILD_NUMBER
 bash ./build/ci/tools/make_revision_env.sh
 bash ./build/ci/tools/make_branch_env.sh
 bash ./build/ci/tools/make_datetime_env.sh
+
+df -k .

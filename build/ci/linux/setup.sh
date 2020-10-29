@@ -6,6 +6,7 @@
 echo "Setup Linux build environment"
 trap 'echo Setup failed; exit 1' ERR
 
+df -k .
 
 # Go one-up from MuseScore root dir regardless of where script was run from:
 cd "$(dirname "$(readlink -f "${0}")")/../../../.."
@@ -136,12 +137,13 @@ cmake --version
 # POST INSTALL
 ##########################################################################
 
-chmod +x "${ENV_FILE}"
+chmod +x "$ENV_FILE"
 
-# tidy up (reduce size of Docker image)
-apt-get clean autoclean
-apt-get autoremove --purge -y
-rm -rf /tmp/* /var/{cache,log,backups}/* /var/lib/apt/*
+# # tidy up (reduce size of Docker image)
+# apt-get clean autoclean
+# apt-get autoremove --purge -y
+# rm -rf /tmp/* /var/{cache,log,backups}/* /var/lib/apt/*
 
+df -k .
 echo "Setup script done"
 

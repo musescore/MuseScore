@@ -53,7 +53,6 @@ CALL "wget.exe" -q --show-progress --no-check-certificate "https://s3.amazonaws.
 CALL "7z" x -y %TEMP_DIR%\musescore_dependencies_win32.7z "-o%TEMP_DIR%\musescore_dependencies_win32"
 SET JACK_DIR="C:\Program Files (x86)\Jack"
 XCOPY %TEMP_DIR%\musescore_dependencies_win32\dependencies\Jack %JACK_DIR% /E /I /Y
-
 SET PATH=%JACK_DIR%;%PATH% 
 
 CALL "wget.exe" -q --show-progress --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/dependencies.7z" -O  %TEMP_DIR%\dependencies.7z

@@ -28,10 +28,7 @@ jobs:
     - name: Clone repository
       uses: actions/checkout@v2
       with:
-        fetch-depth: 3
-    - name: Fetch submodules
-      run: |
-        git submodule update --init --recursive
+        submodules: 'true'
     - name: "Configure workflow"
       shell: bash
       run: |
@@ -40,7 +37,7 @@ jobs:
         echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
 
         DO_PUBLISH='false'
-        if [ "${{ github.event.inputs.publish }}" == "on" ]; then 
+        if [[ "${{ github.event.inputs.publish }}" == "on" || "$BUILD_MODE" == "nightly_build" ]]; then 
           DO_PUBLISH='true'
           if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then 
             echo "warning: not set OSUOSL_SSH_ENCRYPT_SECRET, publish disabled" 
@@ -89,7 +86,7 @@ jobs:
       if: env.DO_APPCAST == 'true'   
       shell: bash
       run: |
-        bash ./build/ci/tools/sparkle_appcast_gen.sh -p windows   
+        bash ./build/ci/tools/sparkle_appcast_gen.sh -p windows 
     - name: Upload artifacts on GitHub
       if: ${{ always() }}
       uses: actions/upload-artifact@v2
