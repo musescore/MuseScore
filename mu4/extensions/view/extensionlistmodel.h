@@ -57,10 +57,10 @@ public:
     Q_INVOKABLE void update(QString code);
     Q_INVOKABLE void openFullDescription(QString code);
 
-    Q_INVOKABLE QVariantMap extension(int index);
+    Q_INVOKABLE QVariantMap extension(QString code);
 
 signals:
-    void progress(const QString& status, bool indeterminate, qint64 current, qint64 total);
+    void progress(const QString& extensionCode, const QString& status, bool indeterminate, qint64 current, qint64 total);
     void finish(const QVariantMap& item);
 
 private:

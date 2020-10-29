@@ -77,7 +77,7 @@ Item {
         delegate: Item {
             id: item
 
-            width: parent ? parent.width : 0
+            width: ListView.view.width
             height: 40
 
             Rectangle {

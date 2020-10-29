@@ -71,7 +71,6 @@ FocusScope {
                 property string selectedCategory: Boolean(value) ? value : ""
 
                 displayText: qsTrc("appshell", "Category: ") + currentText
-                currentIndex: 0
 
                 function initModel() {
                     var categories = bar.categories()
