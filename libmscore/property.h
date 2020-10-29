@@ -114,8 +114,8 @@ enum class Pid {
       GROW_LEFT,
       GROW_RIGHT,
       BOX_HEIGHT,
-
       BOX_WIDTH,
+      BOX_AUTOSIZE,
       TOP_GAP,
       BOTTOM_GAP,
       LEFT_MARGIN,

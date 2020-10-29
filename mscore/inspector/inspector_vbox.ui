@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>265</width>
-    <height>239</height>
+    <height>263</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -415,6 +415,26 @@
        <widget class="Line" name="line">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="0">
+       <widget class="QCheckBox" name="enableAutoSize">
+        <property name="text">
+         <string>Enable Auto-Size</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="2">
+       <widget class="Ms::ResetButton" name="resetAutoSize" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'AutoSize&quot; value</string>
         </property>
        </widget>
       </item>
