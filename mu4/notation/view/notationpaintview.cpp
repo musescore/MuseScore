@@ -232,7 +232,9 @@ void NotationPaintView::adjustCanvasPosition(const QRectF& logicRect)
 
     posTL.setX(posTL.x() - 300);
     posTL.setY(posTL.y() - 300);
-    moveCanvasToPosition(posTL);
+
+    // TODO: fix adjusting
+    //moveCanvasToPosition(posTL);
 }
 
 void NotationPaintView::moveCanvasToPosition(const QPoint& logicPos)
