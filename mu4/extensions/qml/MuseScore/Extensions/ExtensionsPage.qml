@@ -17,13 +17,9 @@ Item {
     QtObject {
         id: privateProperties
 
-        property string selectedExtensionViewType: "undefined" // "installed" "notinstalled"
-        property int selectedExtensionIndex: -1
         property var selectedExtension: undefined
 
         function resetSelectedExtension() {
-            selectedExtensionIndex = -1
-            selectedExtensionViewType = "undefined"
             selectedExtension = undefined
         }
     }
@@ -32,9 +28,17 @@ Item {
         id: extensionListModel
 
         onProgress: {
+            if (privateProperties.selectedExtension.code !== extensionCode) {
+                return
+            }
+
             extensionPanel.setProgress(status, indeterminate, current, total)
         }
         onFinish: {
+            if (privateProperties.selectedExtension.code !== item.code) {
+                return
+            }
+
             privateProperties.selectedExtension = item
             extensionPanel.resetProgress()
         }
@@ -109,10 +113,7 @@ Item {
                 model: extensionListModel
                 visible: count > 0
 
-                selectedIndex: {
-                    return privateProperties.selectedExtensionViewType === "installed" ?
-                           privateProperties.selectedExtensionIndex : -1
-                }
+                selectedExtensionCode: Boolean(privateProperties.selectedExtension) ? privateProperties.selectedExtension.code : ""
 
                 filters: [
                     FilterValue {
@@ -128,9 +129,7 @@ Item {
                 ]
 
                 onClicked: {
-                    privateProperties.selectedExtensionViewType = "installed"
-                    privateProperties.selectedExtensionIndex = index
-                    privateProperties.selectedExtension = extensionListModel.extension(index)
+                    privateProperties.selectedExtension = extensionListModel.extension(extension.code)
 
                     extensionPanel.open()
                 }
@@ -147,10 +146,7 @@ Item {
                 model: extensionListModel
                 visible: count > 0
 
-                selectedIndex: {
-                    return privateProperties.selectedExtensionViewType === "notinstalled" ?
-                           privateProperties.selectedExtensionIndex : -1
-                }
+                selectedExtensionCode: Boolean(privateProperties.selectedExtension) ? privateProperties.selectedExtension.code : ""
 
                 filters: [
                     FilterValue {
@@ -166,9 +162,7 @@ Item {
                 ]
 
                 onClicked: {
-                    privateProperties.selectedExtensionViewType = "notinstalled"
-                    privateProperties.selectedExtensionIndex = index
-                    privateProperties.selectedExtension = extension
+                    privateProperties.selectedExtension = extensionListModel.extension(extension.code)
 
                     extensionPanel.open()
                 }
@@ -213,6 +207,10 @@ Item {
         hasUpdate: Boolean(selectedExtension) ? (selectedExtension.status === ExtensionStatus.NeedUpdate) : false
         neutralButtonTitle: qsTrc("languages", "View full description")
         background: flickable
+
+        onSelectedExtensionChanged: {
+            extensionPanel.resetProgress()
+        }
 
         additionalInfoModel: [
             {"title": qsTrc("languages", "Author:"), "value": qsTrc("languages", "MuseScore")},

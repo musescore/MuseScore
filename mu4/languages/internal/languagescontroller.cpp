@@ -61,6 +61,7 @@ RetCh<LanguageProgress> LanguagesController::install(const QString& languageCode
 
     m_languageFinishCh.onReceive(this, [this, languageCode](const Ret& ret) {
         if (!ret) {
+            m_languageProgressStatus.close();
             return;
         }
 

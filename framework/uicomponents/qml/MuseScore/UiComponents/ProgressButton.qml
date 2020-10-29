@@ -29,6 +29,7 @@ FocusableItem {
     }
 
     function resetProgress() {
+        value = 0.0
         indeterminate = false
     }
 

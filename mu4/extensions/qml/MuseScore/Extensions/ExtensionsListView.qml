@@ -14,7 +14,7 @@ Item {
 
     property alias filters: filterModel.filters
 
-    property int selectedIndex: -1
+    property string selectedExtensionCode: ""
 
     property int count: view.count
 
@@ -82,7 +82,7 @@ Item {
                 description: model.description
                 status: model.status
 
-                selected: selectedIndex === index
+                selected: selectedExtensionCode === model.code
 
                 onClicked: {
                     forceActiveFocus()
