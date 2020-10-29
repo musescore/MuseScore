@@ -42,15 +42,15 @@ private:
 
     bool canReceiveAction(const actions::ActionName& action) const override;
 
-    std::shared_ptr<INotation> currentNotation() const;
-    INotationInteraction* currentNotationInteraction() const;
+    INotationPtr currentNotation() const;
+    INotationInteractionPtr currentNotationInteraction() const;
 
     void toggleNoteInput();
     void padNote(const Pad& pad);
     void putNote(const actions::ActionData& data);
 
     void moveAction(const actions::ActionName& action);
-    void moveText(INotationInteraction* interaction, const actions::ActionName& action);
+    void moveText(INotationInteractionPtr interaction, const actions::ActionName& action);
 
     void deleteSelection();
     void openPageStyle();

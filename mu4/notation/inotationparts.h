@@ -76,6 +76,8 @@ public:
 
     virtual async::Notification partsChanged() const = 0;
 };
+
+using INotationPartsPtr = std::shared_ptr<INotationParts>;
 }
 }
 

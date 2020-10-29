@@ -28,7 +28,7 @@
 
 #include "notationinteraction.h"
 #include "notationplayback.h"
-#include "notationundostackcontroller.h"
+#include "notationundostack.h"
 #include "notationstyle.h"
 #include "notationelements.h"
 #include "notationaccessibility.h"
@@ -43,24 +43,27 @@ Notation::Notation(Score* score)
     m_scoreGlobal = new MScore(); //! TODO May be static?
     m_opened.val = false;
 
-    m_interaction = new NotationInteraction(this);
-    m_midiInput = new NotationMidiInput(this);
-    m_accessibility = new NotationAccessibility(this, m_interaction->selectionChanged());
-    m_parts = new NotationParts(this, m_interaction->selectionChanged());
-    m_undoStackController = new NotationUndoStackController(this);
-    m_style = new NotationStyle(this);
-    m_playback = new NotationPlayback(this);
-    m_elements = new NotationElements(this);
+    m_interaction = std::make_shared<NotationInteraction>(this);
+    m_playback = std::make_shared<NotationPlayback>(this);
+    m_midiInput = std::make_shared<NotationMidiInput>(this);
+    m_accessibility = std::make_shared<NotationAccessibility>(this, m_interaction->selectionChanged());
+    m_parts = std::make_shared<NotationParts>(this, m_interaction->selectionChanged());
+    m_undoStack = std::make_shared<NotationUndoStack>(this);
+    m_style = std::make_shared<NotationStyle>(this);
+    m_elements = std::make_shared<NotationElements>(this);
 
     m_interaction->noteAdded().onNotify(this, [this]() {
         notifyAboutNotationChanged();
     });
+
     m_interaction->dragChanged().onNotify(this, [this]() {
         notifyAboutNotationChanged();
     });
+
     m_interaction->textEditingChanged().onNotify(this, [this]() {
         notifyAboutNotationChanged();
     });
+
     m_interaction->dropChanged().onNotify(this, [this]() {
         notifyAboutNotationChanged();
     });
@@ -68,9 +71,11 @@ Notation::Notation(Score* score)
     m_midiInput->noteChanged().onNotify(this, [this]() {
         notifyAboutNotationChanged();
     });
+
     m_style->styleChanged().onNotify(this, [this]() {
         notifyAboutNotationChanged();
     });
+
     m_parts->partsChanged().onNotify(this, [this]() {
         notifyAboutNotationChanged();
     });
@@ -80,14 +85,6 @@ Notation::Notation(Score* score)
 
 Notation::~Notation()
 {
-    delete m_interaction;
-    delete m_midiInput;
-    delete m_accessibility;
-    delete m_undoStackController;
-    delete m_style;
-    delete m_playback;
-    delete m_elements;
-
     delete m_score;
 }
 
@@ -107,8 +104,8 @@ void Notation::setScore(Ms::Score* score)
     m_score = score;
 
     if (score) {
-        m_interaction->init();
-        m_playback->init();
+        static_cast<NotationInteraction*>(m_interaction.get())->init();
+        static_cast<NotationPlayback*>(m_playback.get())->init();
     }
 }
 
@@ -190,7 +187,7 @@ void Notation::paint(QPainter* painter, const QRectF& frameRect)
     }
     }
 
-    m_interaction->paint(painter);
+    static_cast<NotationInteraction*>(m_interaction.get())->paint(painter);
 }
 
 void Notation::paintPages(QPainter* painter, const QRectF& frameRect, const QList<Ms::Page*>& pages, bool paintBorders) const
@@ -275,32 +272,32 @@ void Notation::notifyAboutNotationChanged()
     m_notationChanged.notify();
 }
 
-INotationInteraction* Notation::interaction() const
+INotationInteractionPtr Notation::interaction() const
 {
     return m_interaction;
 }
 
-INotationMidiInput* Notation::midiInput() const
+INotationMidiInputPtr Notation::midiInput() const
 {
     return m_midiInput;
 }
 
-INotationUndoStack* Notation::undoStack() const
+INotationUndoStackPtr Notation::undoStack() const
 {
-    return m_undoStackController;
+    return m_undoStack;
 }
 
-INotationElements* Notation::elements() const
+INotationElementsPtr Notation::elements() const
 {
     return m_elements;
 }
 
-INotationStyle* Notation::style() const
+INotationStylePtr Notation::style() const
 {
     return m_style;
 }
 
-INotationPlayback* Notation::playback() const
+INotationPlaybackPtr Notation::playback() const
 {
     return m_playback;
 }
@@ -310,12 +307,12 @@ mu::async::Notification Notation::notationChanged() const
     return m_notationChanged;
 }
 
-INotationAccessibility* Notation::accessibility() const
+INotationAccessibilityPtr Notation::accessibility() const
 {
     return m_accessibility;
 }
 
-INotationParts* Notation::parts() const
+INotationPartsPtr Notation::parts() const
 {
     return m_parts;
 }

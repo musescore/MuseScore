@@ -32,6 +32,8 @@ public:
     virtual bool isNoteEnterMode() const = 0;
     virtual DurationType duration() const = 0;
 };
+
+using INotationInputStatePtr = std::shared_ptr<INotationInputState>;
 }
 }
 

@@ -62,7 +62,7 @@ std::shared_ptr<INotation> NotationActionController::currentNotation() const
     return globalContext()->currentNotation();
 }
 
-INotationInteraction* NotationActionController::currentNotationInteraction() const
+INotationInteractionPtr NotationActionController::currentNotationInteraction() const
 {
     auto notation = currentNotation();
     if (!notation) {
@@ -170,7 +170,7 @@ void NotationActionController::moveAction(const actions::ActionName& action)
     }
 }
 
-void NotationActionController::moveText(INotationInteraction* interaction, const actions::ActionName& action)
+void NotationActionController::moveText(INotationInteractionPtr interaction, const actions::ActionName& action)
 {
     MoveDirection direction = MoveDirection::Undefined;
     bool quickly = false;

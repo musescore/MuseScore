@@ -32,6 +32,8 @@ public:
     virtual void onMidiEventReceived(const midi::Event& e) = 0;
     virtual async::Notification noteChanged() const = 0;
 };
+
+using INotationMidiInputPtr = std::shared_ptr<INotationMidiInput>;
 }
 }
 

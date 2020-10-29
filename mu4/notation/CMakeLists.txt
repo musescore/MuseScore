@@ -58,8 +58,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/excerptnotation.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notation.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notation.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationundostackcontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationundostackcontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationundostack.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationundostack.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationstyle.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationstyle.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationcreator.cpp
