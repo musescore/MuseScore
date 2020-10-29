@@ -158,7 +158,7 @@ CrashReporter::CrashReporter( const QUrl& url, const QStringList& args )
         m_ui->progressBox->setVisible( true );
         m_ui->sendBox->setVisible( false );
 
-        m_ui->progressLabel->setText( tr( "Gathering debug information..." ) );
+        m_ui->progressLabel->setText( tr( "Gathering debug information…" ) );
         m_ui->progressBar->setRange( 0, 0 );
     }
 #endif
