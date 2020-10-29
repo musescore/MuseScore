@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
-OUT_DIR=$1
-ARTIFACTS_DIR="build.artifacts" # default output dir
+REVISION=$1
+ARTIFACTS_DIR=build.artifacts
 
-if [ -z "$1" ]; then OUT_DIR=${ARTIFACTS_DIR}/env; fi
+if [ -z "$REVISION" ]; then 
+    REVISION=$(git rev-parse --short=7 HEAD)
+fi
 
-export MUSESCORE_REVISION=$(cat mscore/revision.h)
+if [ -z "$REVISION" ]; then echo "error: not set REVISION"; exit 1; fi
 
-echo ${MUSESCORE_REVISION} > ${OUT_DIR}/build_revision.env
-cat ${OUT_DIR}/build_revision.env
+echo $REVISION > $ARTIFACTS_DIR/env/build_revision.env
+cat $ARTIFACTS_DIR/env/build_revision.env

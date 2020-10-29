@@ -15,7 +15,7 @@
 #include <fenv.h>
 #include <QStyleFactory>
 #include <QStandardPaths>
- #include <QDir>
+#include <QDir>
 
 #include "framework/global/modularity/ioc.h"
 #include "framework/ui/iuiengine.h"
@@ -7928,10 +7928,7 @@ QString MuseScore::fullVersion()
 
 MuseScoreApplication* MuseScoreApplication::initApplication(int& argc, char** argv)
 {
-    QFile f(":/revision.h");
-    f.open(QIODevice::ReadOnly);
-    revision = QString(f.readAll()).trimmed();
-    f.close();
+    revision = QString(MUSESCORE_REVISION).trimmed();
 
     const char* appName;
     const char* appName2;
