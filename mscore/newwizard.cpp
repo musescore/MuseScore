@@ -57,6 +57,7 @@ TimesigWizard::TimesigWizard(QWidget* parent)
       connect(tsCutTime,    SIGNAL(toggled(bool)), SLOT(cutTimeToggled(bool)));
       connect(tsFraction,   SIGNAL(toggled(bool)), SLOT(fractionToggled(bool)));
       pickupMeasure->setChecked(false); // checked in the UI file to enable screen reader on pickup duration controls
+      tempoGroup->setChecked(false);
 
       tsCommonTime->setIcon(*icons[int(Icons::timesig_common_ICON)]);
       tsCutTime->setIcon(*icons[int(Icons::timesig_allabreve_ICON)]);
