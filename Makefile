@@ -21,8 +21,10 @@ CPUS      := $(shell getconf _NPROCESSORS_ONLN 2>/dev/null || getconf NPROCESSOR
 
 PREFIX    = "/usr/local"
 VERSION   := $(shell cmake -P config.cmake | sed -n -e "s/^.*VERSION  *//p")
-BUILD_NUMBER=""
 
+MUSESCORE_BUILD_CONFIG="dev"
+MUSESCORE_REVISION=""
+BUILD_NUMBER=""
 TELEMETRY_TRACK_ID=""
 
 # Override SUFFIX and LABEL when multiple versions are installed to avoid conflicts.
@@ -63,6 +65,8 @@ release:
   	  -DCMAKE_INSTALL_PREFIX="${PREFIX}"       \
   	  -DMSCORE_INSTALL_SUFFIX="${SUFFIX}"      \
   	  -DMUSESCORE_LABEL="${LABEL}"             \
+	  -DMUSESCORE_BUILD_CONFIG="${MUSESCORE_BUILD_CONFIG}" \
+	  -DMUSESCORE_REVISION="${MUSESCORE_REVISION}" \
   	  -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}"   \
   	  -DTELEMETRY_TRACK_ID="${TELEMETRY_TRACK_ID}" \
   	  -DBUILD_LAME="${BUILD_LAME}"             \
@@ -148,7 +152,8 @@ clean:
 	-rm -rf win32build win32install
 
 revision:
-	@git rev-parse --short=7 HEAD > mscore/revision.h
+	$(eval MUSESCORE_REVISION=$(shell git rev-parse --short=7 HEAD))
+	@echo "MUSESCORE_REVISION: ${MUSESCORE_REVISION}"
 
 version:
 	@echo ${VERSION}
@@ -187,11 +192,7 @@ portable: install
 
 installdebug: debug
 	cd build.debug \
-	&& make install \
-	&& if [ ${UPDATE_CACHE} = "TRUE" ]; then \
-	     update-mime-database "${PREFIX}/share/mime"; \
-	     gtk-update-icon-cache -f -t "${PREFIX}/share/icons/hicolor"; \
-	fi
+	&& make install 
 
 uninstall:
 	cd build.release \

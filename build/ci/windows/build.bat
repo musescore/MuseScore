@@ -71,13 +71,15 @@ IF %CRASH_LOG_SERVER_URL% == "''" ( SET CRASH_LOG_SERVER_URL=)
 SET BUILD_VST=OFF 
 SET VST3_SDK_PATH="C:\vst\VST3_SDK"
 
-CALL msvc_build.bat revision || exit \b 1
+bash ./build/ci/tools/make_revision_env.sh 
+SET /p MUSESCORE_REVISION=<%ARTIFACTS_DIR%\env\release_channel.env
+
 CALL msvc_build.bat relwithdebinfo %TARGET_PROCESSOR_BITS% %BUILD_NUMBER% || exit \b 1
 CALL msvc_build.bat installrelwithdebinfo %TARGET_PROCESSOR_BITS% %BUILD_NUMBER% || exit \b 1
 
 
 bash ./build/ci/tools/make_release_channel_env.sh -c %MUSESCORE_BUILD_CONFIG%
 bash ./build/ci/tools/make_version_env.sh %BUILD_NUMBER%
-bash ./build/ci/tools/make_revision_env.sh
+bash ./build/ci/tools/make_revision_env.sh %MUSESCORE_REVISION%
 bash ./build/ci/tools/make_branch_env.sh
 bash ./build/ci/tools/make_datetime_env.sh

@@ -21,6 +21,8 @@ VERSION := $(cmake -P config.cmake | sed -n -e "s/^.*VERSION  *//p")
 BUILD_NUMBER = ""
 PREFIX=../applebuild
 TELEMETRY_TRACK_ID=""
+MUSESCORE_BUILD_CONFIG="dev"
+MUSESCORE_REVISION=""
 BUILD_UI_MU4="OFF"
 BUILD_VST="OFF"
 VST3_SDK_PATH=""
@@ -40,6 +42,8 @@ release:
     cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
           -DCMAKE_BUILD_TYPE=RELEASE \
           -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}" \
+          -DMUSESCORE_BUILD_CONFIG="${MUSESCORE_BUILD_CONFIG}" \
+          -DMUSESCORE_REVISION="${MUSESCORE_REVISION}" \          
           -DTELEMETRY_TRACK_ID="${TELEMETRY_TRACK_ID}" \
           -DBUILD_UI_MU4="${BUILD_UI_MU4}" \
 	    -DBUILD_VST="${BUILD_VST}" \
@@ -72,9 +76,6 @@ lupdate:
 lrelease:
 	cd build.release;xcodebuild -project ${XCODEPROJ} -target lrelease;
 
-revision:
-	@git rev-parse --short=7 HEAD > mscore/revision.h
-
 version:
 	@echo ${VERSION}
 
@@ -89,8 +90,8 @@ installdebug:
 package:
 	build/package_mac;
 
-ci: revision
-	mkdir build.release;     \
+ci: 
+    mkdir build.release;     \
     cd build.release;            \
     cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DCMAKE_BUILD_TYPE=RELEASE \
           -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}" -DBUILD_AUTOUPDATE=ON -DTELEMETRY_TRACK_ID="${TELEMETRY_TRACK_ID}" -DBUILD_UI_MU4="${BUILD_UI_MU4}" \
