@@ -128,7 +128,7 @@ void MU4InspectorAdapter::updateNotation()
     return context()->currentNotation()->notationChanged().notify();
 }
 
-INotationUndoStack* MU4InspectorAdapter::undoStack() const
+INotationUndoStackPtr MU4InspectorAdapter::undoStack() const
 {
     if (!context() || !context()->currentNotation()) {
         return nullptr;
@@ -137,7 +137,7 @@ INotationUndoStack* MU4InspectorAdapter::undoStack() const
     return context()->currentNotation()->undoStack();
 }
 
-INotationStyle* MU4InspectorAdapter::style() const
+INotationStylePtr MU4InspectorAdapter::style() const
 {
     if (!context() || !context()->currentNotation()) {
         return nullptr;

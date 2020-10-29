@@ -38,6 +38,8 @@ public:
 
     virtual QRectF canvasBoundingRect() const = 0;
 };
+
+using INotationSelectionPtr = std::shared_ptr<INotationSelection>;
 }
 }
 

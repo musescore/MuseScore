@@ -35,8 +35,6 @@ namespace mu {
 namespace notation {
 class NotationInteraction;
 class NotationPlayback;
-class NotationMidiInput;
-class NotationParts;
 class Notation : virtual public INotation, public IGetScore, public async::Asyncable
 {
     INJECT(notation, INotationConfiguration, configuration)
@@ -58,23 +56,16 @@ public:
     ValCh<bool> opened() const override;
     void setOpened(bool opened) override;
 
-    INotationInteraction* interaction() const override;
-
-    INotationMidiInput* midiInput() const override;
-
-    INotationUndoStack* undoStack() const override;
-
-    INotationElements* elements() const override;
-
-    INotationStyle* style() const override;
-
-    INotationPlayback* playback() const override;
+    INotationInteractionPtr interaction() const override;
+    INotationMidiInputPtr midiInput() const override;
+    INotationUndoStackPtr undoStack() const override;
+    INotationElementsPtr elements() const override;
+    INotationStylePtr style() const override;
+    INotationPlaybackPtr playback() const override;
+    INotationAccessibilityPtr accessibility() const override;
+    INotationPartsPtr parts() const override;
 
     async::Notification notationChanged() const override;
-
-    INotationAccessibility* accessibility() const override;
-
-    INotationParts* parts() const override;
 
 protected:
     Ms::Score* score() const override;
@@ -96,14 +87,15 @@ private:
     Ms::MScore* m_scoreGlobal = nullptr;
     Ms::Score* m_score = nullptr;
     ValCh<bool> m_opened;
-    NotationInteraction* m_interaction = nullptr;
-    INotationUndoStack* m_undoStackController = nullptr;
-    INotationStyle* m_style = nullptr;
-    NotationPlayback* m_playback = nullptr;
-    NotationMidiInput* m_midiInput = nullptr;
-    INotationAccessibility* m_accessibility = nullptr;
-    INotationElements* m_elements = nullptr;
-    INotationParts* m_parts = nullptr;
+
+    INotationInteractionPtr m_interaction;
+    INotationPlaybackPtr m_playback;
+    INotationUndoStackPtr m_undoStack;
+    INotationStylePtr m_style;
+    INotationMidiInputPtr m_midiInput;
+    INotationAccessibilityPtr m_accessibility;
+    INotationElementsPtr m_elements;
+    INotationPartsPtr m_parts;
 
     async::Notification m_notationChanged;
 };

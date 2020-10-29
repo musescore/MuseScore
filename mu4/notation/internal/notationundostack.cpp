@@ -17,31 +17,41 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_NOTATION_INOTATIONSTYLE_H
-#define MU_NOTATION_INOTATIONSTYLE_H
+#include "notationundostack.h"
 
-#include "notationtypes.h"
-#include "async/notification.h"
+#include "log.h"
+#include "libmscore/score.h"
 
-namespace mu {
-namespace notation {
-class INotationStyle
+using namespace mu::notation;
+
+NotationUndoStack::NotationUndoStack(IGetScore* getScore)
+    : m_getScore(getScore)
 {
-public:
-    virtual ~INotationStyle() = default;
-
-    virtual QVariant styleValue(const StyleId& styleId) const = 0;
-    virtual QVariant defaultStyleValue(const StyleId& styleId) const = 0;
-    virtual void setStyleValue(const StyleId& styleId, const QVariant& newValue) = 0;
-
-    virtual bool canApplyToAllParts() const = 0;
-    virtual void applyToAllParts() = 0;
-
-    virtual async::Notification styleChanged() const = 0;
-};
-
-using INotationStylePtr = std::shared_ptr<INotationStyle>;
-}
 }
 
-#endif // MU_NOTATION_INOTATIONSTYLE_H
+void NotationUndoStack::prepareChanges()
+{
+    IF_ASSERT_FAILED(m_getScore && m_getScore->score()) {
+        return;
+    }
+
+    m_getScore->score()->startCmd();
+}
+
+void NotationUndoStack::rollbackChanges()
+{
+    IF_ASSERT_FAILED(m_getScore && m_getScore->score()) {
+        return;
+    }
+
+    m_getScore->score()->endCmd(false, true);
+}
+
+void NotationUndoStack::commitChanges()
+{
+    IF_ASSERT_FAILED(m_getScore && m_getScore->score()) {
+        return;
+    }
+
+    m_getScore->score()->endCmd();
+}

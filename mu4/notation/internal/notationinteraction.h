@@ -60,7 +60,7 @@ public:
     void padNote(const Pad& pad) override;
     void putNote(const QPointF& pos, bool replace, bool insert) override;
     async::Notification noteAdded() const override;
-    INotationInputState* inputState() const override;
+    INotationInputStatePtr inputState() const override;
     async::Notification inputStateChanged() const override;
 
     // Shadow note
@@ -70,8 +70,8 @@ public:
 
     // Select
     Element* hitElement(const QPointF& pos, float width) const override;
-    void select(Element* e, SelectType type, int staffIdx = 0) override;
-    INotationSelection* selection() const override;
+    void select(Element* element, SelectType type, int staffIndex = 0) override;
+    INotationSelectionPtr selection() const override;
     void clearSelection() override;
     async::Notification selectionChanged() const override;
 
@@ -155,11 +155,11 @@ private:
     ScoreCallbacks* m_scoreCallbacks = nullptr;
 
     async::Notification m_noteAdded;
-    NotationInputState* m_inputState = nullptr;
+    INotationInputStatePtr m_inputState = nullptr;
     async::Notification m_inputStateChanged;
     Ms::ShadowNote* m_shadowNote = nullptr;
 
-    NotationSelection* m_selection = nullptr;
+    INotationSelectionPtr m_selection = nullptr;
     async::Notification m_selectionChanged;
 
     DragData m_dragData;

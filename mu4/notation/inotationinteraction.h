@@ -42,7 +42,7 @@ public:
     virtual void padNote(const Pad& pad) = 0;
     virtual void putNote(const QPointF& pos, bool replace, bool insert) = 0;
     virtual async::Notification noteAdded() const = 0;
-    virtual INotationInputState* inputState() const = 0;
+    virtual INotationInputStatePtr inputState() const = 0;
     virtual async::Notification inputStateChanged() const = 0;
 
     // Shadow note
@@ -52,8 +52,8 @@ public:
 
     // Select
     virtual Element* hitElement(const QPointF& pos, float width) const = 0;
-    virtual void select(Element* e, SelectType type, int staffIdx = 0) = 0;
-    virtual INotationSelection* selection() const = 0;
+    virtual void select(Element* element, SelectType type, int staffIndex = 0) = 0;
+    virtual INotationSelectionPtr selection() const = 0;
     virtual void clearSelection() = 0;
     virtual async::Notification selectionChanged() const = 0;
 
@@ -91,6 +91,8 @@ public:
 
     virtual void deleteSelection() = 0;
 };
+
+using INotationInteractionPtr = std::shared_ptr<INotationInteraction>;
 }
 }
 

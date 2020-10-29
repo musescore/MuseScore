@@ -47,6 +47,8 @@ public:
 
     virtual midi::MidiData playElementMidiData(const Element* e) const = 0;
 };
+
+using INotationPlaybackPtr = std::shared_ptr<INotationPlayback>;
 }
 }
 

@@ -74,8 +74,8 @@ public:
 
     void showContextMenu(const ElementType& elementType, const QPoint& pos) override;
 
-    notation::INotationInteraction* notationInteraction() const override;
-    notation::INotationPlayback* notationPlayback() const override;
+    INotationInteractionPtr notationInteraction() const override;
+    INotationPlaybackPtr notationPlayback() const override;
     // -----
 
 private slots:

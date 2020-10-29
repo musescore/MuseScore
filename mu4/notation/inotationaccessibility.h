@@ -31,6 +31,8 @@ public:
 
     virtual ValCh<std::string> accessibilityInfo() const = 0;
 };
+
+using INotationAccessibilityPtr = std::shared_ptr<INotationAccessibility>;
 }
 }
 
