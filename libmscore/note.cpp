@@ -2156,7 +2156,7 @@ void Note::updateAccidental(AccidentalState* as)
             int eRelLine = absStep(tpc(), epitch()+ottaveCapoFret());
             AccidentalVal relLineAccVal = as->accidentalVal(eRelLine, error);
             if (error) {
-                  qDebug("error accidetalVal");
+                  qDebug("error accidentalVal()");
                   return;
                   }
             if ((accVal != relLineAccVal) || hidden() || as->tieContext(eRelLine)) {

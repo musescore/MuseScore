@@ -622,7 +622,7 @@ class Score : public QObject, public ScoreElement {
       void cmdAddOttava(OttavaType);
       void cmdAddStretch(qreal);
       void cmdResetNoteAndRestGroupings();
-      void cmdResetAllPositions();
+      void cmdResetAllPositions(bool undoable = true);
       void cmdDoubleDuration()      { cmdIncDecDuration(-1, false); }
       void cmdHalfDuration()        { cmdIncDecDuration( 1, false); }
       void cmdIncDurationDotted()   { cmdIncDecDuration(-1, true); }
