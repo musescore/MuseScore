@@ -5,7 +5,7 @@ on:
     branches:
     - 3.x
   schedule:
-    - cron:  '0 4 */1 * *' # At 04:00 on every day-of-month
+    - cron: '0 4 */1 * *' # At 04:00 on every day-of-month
   workflow_dispatch:
     inputs:
       build_mode:
@@ -34,7 +34,7 @@ jobs:
         echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
 
         DO_PUBLISH='false'
-        if [ "${{ github.event.inputs.publish }}" == "on" ]; then 
+        if [[ "${{ github.event.inputs.publish }}" == "on" || "$BUILD_MODE" == "nightly_build" ]]; then 
           DO_PUBLISH='true'
           if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then 
             echo "warning: not set OSUOSL_SSH_ENCRYPT_SECRET, publish disabled" 
@@ -75,10 +75,6 @@ jobs:
         CFLAGS: "-fsanitize=address -fno-omit-frame-pointer"
         CXXFLAGS: "-fsanitize=address -fno-omit-frame-pointer"
     steps:
-    - name: Cancel Previous Runs
-      uses: styfle/cancel-workflow-action@0.5.0
-      with:
-        access_token: ${{ github.token }}
     - name: Clone repository
       uses: actions/checkout@v2
     - name: Setup environment

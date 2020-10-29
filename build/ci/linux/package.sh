@@ -3,6 +3,8 @@
 echo "Package MuseScore"
 trap 'echo Package failed; exit 1' ERR
 
+df -k .
+
 source ./../musescore_environment.sh
 
 ARTIFACTS_DIR=build.artifacts
@@ -54,5 +56,7 @@ APPIMAGE_FILE="$(ls $BUILD_DIR/*.AppImage)"
 mv $APPIMAGE_FILE $ARTIFACTS_DIR/$ARTIFACT_NAME.AppImage
 bash ./build/ci/tools/make_artifact_name_env.sh $ARTIFACT_NAME.AppImage
 fi
+
+df -k .
 
 echo "Package has finished!" 
