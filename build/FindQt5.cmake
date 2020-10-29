@@ -36,6 +36,8 @@ if (WIN32)
       )
 endif(WIN32)
 
+find_package(Qt5Core ${QT_MIN_VERSION} REQUIRED)
+
 foreach(_component ${_components})
   find_package(Qt5${_component})
   list(APPEND QT_LIBRARIES ${Qt5${_component}_LIBRARIES})
