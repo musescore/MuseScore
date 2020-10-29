@@ -34,8 +34,6 @@ QmlDialog {
 
             ChooseInstrumentsAndTemplatesPage {
                 id: chooseInstrumentsAndTemplatePage
-
-                anchors.fill: parent
             }
 
             ScoreInfoPage {

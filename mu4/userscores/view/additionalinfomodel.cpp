@@ -114,12 +114,20 @@ int AdditionalInfoModel::timeSignatureType() const
 
 void AdditionalInfoModel::setTimeSignatureNumerator(int numerator)
 {
+    if (m_timeSignature.numerator == numerator) {
+        return;
+    }
+
     m_timeSignature.numerator = numerator;
     setTimeSignature(m_timeSignature.toMap());
 }
 
 void AdditionalInfoModel::setTimeSignatureDenominator(int denominator)
 {
+    if (m_timeSignature.denominator == denominator) {
+        return;
+    }
+
     m_timeSignature.denominator = denominator;
     setTimeSignature(m_timeSignature.toMap());
 }
@@ -186,12 +194,20 @@ QVariantMap AdditionalInfoModel::pickupTimeSignature() const
 
 void AdditionalInfoModel::setPickupTimeSignatureNumerator(int numerator)
 {
+    if (m_pickupTimeSignature.numerator == numerator) {
+        return;
+    }
+
     m_pickupTimeSignature.numerator = numerator;
     setPickupTimeSignature(m_pickupTimeSignature.toMap());
 }
 
 void AdditionalInfoModel::setPickupTimeSignatureDenominator(int denominator)
 {
+    if (m_pickupTimeSignature.denominator == denominator) {
+        return;
+    }
+
     m_pickupTimeSignature.denominator = denominator;
     setPickupTimeSignature(m_pickupTimeSignature.toMap());
 }
