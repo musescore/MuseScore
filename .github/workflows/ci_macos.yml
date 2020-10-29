@@ -6,7 +6,7 @@ on:
   #   branches:
   #   - master
   schedule:                 # Schedule 3.x nightly build! (not master MU3)  
-    - cron: '0 4 */1 */1 *' # At 04:00 on every day-of-month
+    - cron: '0 4 */1 * *' # At 04:00 on every day-of-month
   workflow_dispatch:
     inputs:
       build_mode:
@@ -97,7 +97,7 @@ jobs:
         sudo bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os macos -v $VER
     - name: AppCast
       run: |
-        bash ./build/ci/tools/sparkle_appcast_gen.sh -p macos   
+        bash ./build/ci/tools/sparkle_appcast_gen.sh -p macos
     - name: Upload artifacts on GitHub
       uses: actions/upload-artifact@v2
       with:
