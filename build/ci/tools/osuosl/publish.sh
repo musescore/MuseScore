@@ -57,6 +57,10 @@ FTP_PATH=${OS}/${MAJOR_VERSION}x/${BUILD_DIR}
 echo "Copy ${ARTIFACTS_DIR}/${ARTIFACT_NAME} to $FTP_PATH"
 scp -oStrictHostKeyChecking=no -C -i $SSH_KEY $ARTIFACTS_DIR/$ARTIFACT_NAME musescore-nightlies@ftp-osl.osuosl.org:~/ftp/$FTP_PATH
 
+PUBLISH_URL=https://ftp.osuosl.org/pub/musescore-nightlies/$FTP_PATH
+echo $PUBLISH_URL > $ARTIFACTS_DIR/env/publish_url.env
+cat $ARTIFACTS_DIR/env/publish_url.env
+
 if [ "$BUILD_MODE" == "nightly_build" ]; then 
     # Delete old files
     echo "Delete old MuseScoreNightly files"
