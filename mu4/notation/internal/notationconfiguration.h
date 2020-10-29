@@ -63,6 +63,7 @@ public:
     bool isMidiInputEnabled() const override;
 
     float guiScaling() const override;
+    float notationScaling() const override;
 
 private:
     async::Channel<QColor> m_backgroundColorChanged;

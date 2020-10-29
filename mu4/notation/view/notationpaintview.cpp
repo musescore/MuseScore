@@ -34,10 +34,8 @@ NotationPaintView::NotationPaintView(QQuickItem* parent)
     setAcceptedMouseButtons(Qt::AllButtons);
     setAntialiasing(true);
 
-    // view
-    //! TODO
-    double mag  = 0.267;//preferences.getDouble(PREF_SCORE_MAGNIFICATION) * (mscore->physicalDotsPerInch() / DPI);
-    m_matrix = QTransform::fromScale(mag, mag);
+    setZoom(configuration()->currentZoom().val, QPoint());
+
     connect(this, &QQuickPaintedItem::widthChanged, this, &NotationPaintView::onViewSizeChanged);
     connect(this, &QQuickPaintedItem::heightChanged, this, &NotationPaintView::onViewSizeChanged);
 
@@ -261,25 +259,22 @@ void NotationPaintView::scrollHorizontal(int dx)
 
 void NotationPaintView::setZoom(int zoomPercentage, const QPoint& pos)
 {
-    //! TODO Zoom to point not completed
-    qreal mag = static_cast<qreal>(zoomPercentage) / 100.0;
-    qreal cmag = m_matrix.m11();
+    qreal newScale = static_cast<qreal>(zoomPercentage) / 100.0 * configuration()->notationScaling();
+    qreal currentScale = m_matrix.m11();
 
-    if (qFuzzyCompare(mag, cmag)) {
+    if (qFuzzyCompare(newScale, currentScale)) {
         return;
     }
 
-    qreal deltamag = mag / cmag;
+    QPoint pointBeforeScaling = toLogical(pos);
 
-    QPointF p1 = m_matrix.inverted().map(pos);
+    qreal deltaScale = newScale / currentScale;
+    m_matrix.scale(deltaScale, deltaScale);
 
-    m_matrix.setMatrix(mag, m_matrix.m12(), m_matrix.m13(), m_matrix.m21(),
-                       mag, m_matrix.m23(), m_matrix.dx() * deltamag, m_matrix.dy() * deltamag, m_matrix.m33());
+    QPoint pointAfterScaling = toLogical(pos);
 
-    QPointF p2 = m_matrix.inverted().map(pos);
-    QPointF p3 = p2 - p1;
-    int dx = std::lrint(p3.x() * cmag);
-    int dy = std::lrint(p3.y() * cmag);
+    int dx = pointAfterScaling.x() - pointBeforeScaling.x();
+    int dy = pointAfterScaling.y() - pointBeforeScaling.y();
 
     moveCanvas(dx, dy);
 }
@@ -377,23 +372,30 @@ void NotationPaintView::dropEvent(QDropEvent* ev)
 
 QPoint NotationPaintView::toLogical(const QPoint& point) const
 {
-    double scale = configuration()->guiScaling();
+    double scale = guiScale();
     QPoint scaledPoint(point.x() * scale, point.y() * scale);
 
     return m_matrix.inverted().map(scaledPoint);
 }
 
+double NotationPaintView::guiScale() const
+{
+    return configuration()->guiScaling();
+}
+
 QRect NotationPaintView::toLogical(const QRect& rect) const
 {
-    return m_matrix.inverted().mapRect(rect);
+    double scale = guiScale();
+
+    QRect scaledRect = rect;
+    scaledRect.setBottomRight(rect.bottomRight() * scale);
+
+    return m_matrix.inverted().mapRect(scaledRect);
 }
 
 bool NotationPaintView::isInited() const
 {
-    if (m_notation) {
-        return true;
-    }
-    return false;
+    return m_notation != nullptr;
 }
 
 INotationInteractionPtr NotationPaintView::notationInteraction() const

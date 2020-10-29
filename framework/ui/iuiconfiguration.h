@@ -55,6 +55,7 @@ public:
     virtual async::Channel<int> musicalFontSizeChanged() = 0;
 
     virtual float guiScaling() const = 0;
+    virtual float physicalDotsPerInch() const = 0;
 };
 }
 }
