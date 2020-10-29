@@ -104,12 +104,12 @@ void ExtensionListModel::install(QString code)
         return;
     }
 
-    installRet.ch.onReceive(this, [this](const ExtensionProgress& progress) {
-        emit this->progress(progress.status, progress.indeterminate, progress.current, progress.total);
+    installRet.ch.onReceive(this, [this, code](const ExtensionProgress& progress) {
+        emit this->progress(code, progress.status, progress.indeterminate, progress.current, progress.total);
     }, Asyncable::AsyncMode::AsyncSetRepeat);
 
-    installRet.ch.onClose(this, [this, index]() {
-        emit finish(extension(index));
+    installRet.ch.onClose(this, [this, code]() {
+        emit finish(extension(code));
     }, Asyncable::AsyncMode::AsyncSetRepeat);
 }
 
@@ -127,7 +127,7 @@ void ExtensionListModel::uninstall(QString code)
         return;
     }
 
-    emit finish(extension(index));
+    emit finish(extension(code));
 }
 
 void ExtensionListModel::update(QString code)
@@ -144,12 +144,12 @@ void ExtensionListModel::update(QString code)
         return;
     }
 
-    updateRet.ch.onReceive(this, [this](const ExtensionProgress& progress) {
-        emit this->progress(progress.status, progress.indeterminate, progress.current, progress.total);
+    updateRet.ch.onReceive(this, [this, code](const ExtensionProgress& progress) {
+        emit this->progress(code, progress.status, progress.indeterminate, progress.current, progress.total);
     }, Asyncable::AsyncMode::AsyncSetRepeat);
 
-    updateRet.ch.onClose(this, [this, index]() {
-        emit finish(extension(index));
+    updateRet.ch.onClose(this, [this, code]() {
+        emit finish(extension(code));
     }, Asyncable::AsyncMode::AsyncSetRepeat);
 }
 
@@ -164,8 +164,13 @@ void ExtensionListModel::openFullDescription(QString code)
     NOT_IMPLEMENTED;
 }
 
-QVariantMap ExtensionListModel::extension(int index)
+QVariantMap ExtensionListModel::extension(QString code)
 {
+    int index = itemIndexByCode(code);
+    if (index < 0 || index > m_list.count()) {
+        return QVariantMap();
+    }
+
     QVariantMap result;
 
     QHash<int,QByteArray> names = roleNames();

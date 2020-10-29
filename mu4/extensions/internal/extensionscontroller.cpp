@@ -51,11 +51,27 @@ ValCh<ExtensionsHash> ExtensionsController::extensions() const
 RetCh<ExtensionProgress> ExtensionsController::install(const QString& extensionCode)
 {
     RetCh<ExtensionProgress> result;
-    result.ret = make_ret(Err::NoError);
-    result.ch = m_extensionProgressStatus;
 
-    m_extensionFinishChannel.onReceive(this, [this, extensionCode](const Ret& ret) {
+    if (m_operationsHash.contains(extensionCode)) {
+        if (m_operationsHash[extensionCode].type != OperationType::Install) {
+            result.ret = make_ret(Err::ErrorAnotherOperationStarted);
+            return result;
+        }
+
+        result.ret = make_ret(Err::NoError);
+        result.ch = *m_operationsHash[extensionCode].progressChannel;
+        return result;
+    }
+
+    async::Channel<ExtensionProgress>* extensionProgressStatus = new async::Channel<ExtensionProgress>();
+    result.ch = *extensionProgressStatus;
+    result.ret = make_ret(Err::NoError);
+    m_operationsHash.insert(extensionCode, Operation(OperationType::Install, extensionProgressStatus));
+
+    async::Channel<Ret>* extensionFinishChannel = new async::Channel<Ret>();
+    extensionFinishChannel->onReceive(this, [this, extensionCode, extensionProgressStatus](const Ret& ret) {
         if (!ret) {
+            closeOperation(extensionCode, extensionProgressStatus);
             return;
         }
 
@@ -67,16 +83,15 @@ RetCh<ExtensionProgress> ExtensionsController::install(const QString& extensionC
         Ret updateConfigRet = configuration()->setExtensions(extensionHash);
         if (!updateConfigRet) {
             LOGE() << "Error when set extensions" << updateConfigRet.toString();
-            m_extensionProgressStatus.close();
+            closeOperation(extensionCode, extensionProgressStatus);
             return;
         }
 
         m_extensionChanged.send(extensionHash[extensionCode]);
-
-        m_extensionProgressStatus.close();
+        closeOperation(extensionCode, extensionProgressStatus);
     }, Asyncable::AsyncMode::AsyncSetRepeat);
 
-    QtConcurrent::run(this, &ExtensionsController::th_install, extensionCode, m_extensionProgressStatus, m_extensionFinishChannel);
+    QtConcurrent::run(this, &ExtensionsController::th_install, extensionCode, extensionProgressStatus, extensionFinishChannel);
 
     return result;
 }
@@ -84,11 +99,27 @@ RetCh<ExtensionProgress> ExtensionsController::install(const QString& extensionC
 RetCh<ExtensionProgress> ExtensionsController::update(const QString& extensionCode)
 {
     RetCh<ExtensionProgress> result;
-    result.ret = make_ret(Err::NoError);
-    result.ch = m_extensionProgressStatus;
 
-    m_extensionFinishChannel.onReceive(this, [this, extensionCode](const Ret& ret) {
+    if (m_operationsHash.contains(extensionCode)) {
+        if (m_operationsHash[extensionCode].type != OperationType::Update) {
+            result.ret = make_ret(Err::ErrorAnotherOperationStarted);
+            return result;
+        }
+
+        result.ret = make_ret(Err::NoError);
+        result.ch = *m_operationsHash[extensionCode].progressChannel;
+        return result;
+    }
+
+    async::Channel<ExtensionProgress>* extensionProgressStatus = new async::Channel<ExtensionProgress>();
+    result.ch = *extensionProgressStatus;
+    result.ret = make_ret(Err::NoError);
+    m_operationsHash.insert(extensionCode, Operation(OperationType::Update, extensionProgressStatus));
+
+    async::Channel<Ret>* extensionFinishChannel = new async::Channel<Ret>();
+    extensionFinishChannel->onReceive(this, [this, extensionCode, extensionProgressStatus](const Ret& ret) {
         if (!ret) {
+            closeOperation(extensionCode, extensionProgressStatus);
             return;
         }
 
@@ -100,16 +131,15 @@ RetCh<ExtensionProgress> ExtensionsController::update(const QString& extensionCo
         Ret updateConfigRet = configuration()->setExtensions(extensionHash);
         if (!updateConfigRet) {
             LOGE() << "Error when set extensions" << updateConfigRet.toString();
-            m_extensionProgressStatus.close();
+            closeOperation(extensionCode, extensionProgressStatus);
             return;
         }
 
         m_extensionChanged.send(extensionHash[extensionCode]);
-
-        m_extensionProgressStatus.close();
+        closeOperation(extensionCode, extensionProgressStatus);
     }, Asyncable::AsyncMode::AsyncSetRepeat);
 
-    QtConcurrent::run(this, &ExtensionsController::th_install, extensionCode, m_extensionProgressStatus, m_extensionFinishChannel);
+    QtConcurrent::run(this, &ExtensionsController::th_update, extensionCode, extensionProgressStatus, extensionFinishChannel);
 
     return result;
 }
@@ -214,7 +244,7 @@ RetVal<ExtensionsHash> ExtensionsController::correctExtensionsStates(ExtensionsH
 }
 
 RetVal<QString> ExtensionsController::downloadExtension(const QString& extensionCode,
-                                                        async::Channel<ExtensionProgress>& progressChannel) const
+                                                        async::Channel<ExtensionProgress>* progressChannel) const
 {
     RetVal<QString> result;
 
@@ -225,8 +255,8 @@ RetVal<QString> ExtensionsController::downloadExtension(const QString& extension
 
     async::Channel<Progress> downloadChannel = networkManagerPtr->progressChannel();
     downloadChannel.onReceive(new deto::async::Asyncable(), [&progressChannel](const Progress& progress) {
-        progressChannel.send(ExtensionProgress(DOWNLOADING_STATUS, progress.current,
-                                               progress.total));
+        progressChannel->send(ExtensionProgress(DOWNLOADING_STATUS, progress.current,
+                                                progress.total));
     });
 
     Ret getExtension = networkManagerPtr->get(configuration()->extensionFileServerUrl(extensionCode), &buff);
@@ -324,18 +354,18 @@ void ExtensionsController::th_refreshExtensions()
 }
 
 void ExtensionsController::th_install(const QString& extensionCode,
-                                      async::Channel<ExtensionProgress> progressChannel,
-                                      async::Channel<Ret> finishChannel)
+                                      async::Channel<ExtensionProgress>* progressChannel,
+                                      async::Channel<Ret>* finishChannel)
 {
-    progressChannel.send(ExtensionProgress(ANALYSING_STATUS, true));
+    progressChannel->send(ExtensionProgress(ANALYSING_STATUS, true));
 
     RetVal<QString> download = downloadExtension(extensionCode, progressChannel);
     if (!download.ret) {
-        finishChannel.send(download.ret);
+        finishChannel->send(download.ret);
         return;
     }
 
-    progressChannel.send(ExtensionProgress(ANALYSING_STATUS, true));
+    progressChannel->send(ExtensionProgress(ANALYSING_STATUS, true));
 
     QString extensionArchivePath = download.val;
 
@@ -344,41 +374,47 @@ void ExtensionsController::th_install(const QString& extensionCode,
         LOGE() << "Error unpack" << unpack.toString();
         fileSystem()->remove(extensionArchivePath);
 
-        finishChannel.send(unpack);
+        finishChannel->send(unpack);
         return;
     }
 
     fileSystem()->remove(extensionArchivePath);
 
-    finishChannel.send(make_ret(Err::NoError));
+    finishChannel->send(make_ret(Err::NoError));
 }
 
-void ExtensionsController::th_update(const QString& extensionCode, async::Channel<ExtensionProgress> progressChannel,
-                                     async::Channel<Ret> finishChannel)
+void ExtensionsController::th_update(const QString& extensionCode, async::Channel<ExtensionProgress>* progressChannel,
+                                     async::Channel<Ret>* finishChannel)
 {
-    progressChannel.send(ExtensionProgress(ANALYSING_STATUS, true));
+    progressChannel->send(ExtensionProgress(ANALYSING_STATUS, true));
 
     RetVal<QString> download = downloadExtension(extensionCode, progressChannel);
     if (!download.ret) {
-        finishChannel.send(download.ret);
+        finishChannel->send(download.ret);
     }
 
-    progressChannel.send(ExtensionProgress(ANALYSING_STATUS, true));
+    progressChannel->send(ExtensionProgress(ANALYSING_STATUS, true));
 
     QString extensionArchivePath = download.val;
 
     Ret remove = removeExtension(extensionCode);
     if (!remove) {
-        finishChannel.send(remove);
+        finishChannel->send(remove);
     }
 
     Ret unpack = extensionUnpacker()->unpack(extensionArchivePath, configuration()->extensionsSharePath().toQString());
     if (!unpack) {
         LOGE() << "Error unpack" << unpack.toString();
-        finishChannel.send(unpack);
+        finishChannel->send(unpack);
     }
 
     fileSystem()->remove(extensionArchivePath);
 
-    finishChannel.send(make_ret(Err::NoError));
+    finishChannel->send(make_ret(Err::NoError));
+}
+
+void ExtensionsController::closeOperation(const QString& extensionCode, async::Channel<ExtensionProgress>* progressChannel)
+{
+    progressChannel->close();
+    m_operationsHash.remove(extensionCode);
 }
