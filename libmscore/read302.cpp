@@ -69,8 +69,6 @@ bool Score::read(XmlReader& e)
                   }
             else if (tag == "showOmr")
                   masterScore()->setShowOmr(e.readInt());
-            else if (tag == "isQuallityUpgradeAllowed")
-                  masterScore()->setIsQuallityUpgradeAllowed(e.readBool());
             else if (tag == "playMode")
                   _playMode = PlayMode(e.readInt());
             else if (tag == "LayerTag") {

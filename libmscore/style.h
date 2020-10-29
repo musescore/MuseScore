@@ -1315,6 +1315,7 @@ enum class Sid {
       tupletMinDistance,
 
       autoplaceEnabled,
+      qualityUpgradeAllowed,
 
       STYLES
       ///\}

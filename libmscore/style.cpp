@@ -1326,7 +1326,7 @@ static const StyleType styleTypes[] {
       { Sid::tupletMinDistance,             "tupletMinDistance",             Spatium(0.5)  },
 
       { Sid::autoplaceEnabled,              "autoplaceEnabled",              true },
-
+      { Sid::qualityUpgradeAllowed,         "qualityUpgradeAllowed",         true }
       };
 
 MStyle  MScore::_baseStyle;

@@ -23,7 +23,7 @@ void ScoreMigrationDialogModel::apply()
       {
       setUpMigrationPolicy();
 
-      m_score->setIsQuallityUpgradeAllowed(!m_shouldNeverAskForThisScoreAgain);
+      m_score->setStyleValue(Ms::Sid::qualityUpgradeAllowed, !m_shouldNeverAskForThisScoreAgain);
       Ms::preferences.setPreference(PREF_IMPORT_SCORE_MIGRATION_ENABLED, !m_shouldNeverAskAgain);
 
       if (!m_shouldNeverAskAgain && !m_shouldNeverAskForThisScoreAgain)
