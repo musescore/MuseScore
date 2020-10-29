@@ -124,7 +124,7 @@ ComboBox {
 
     contentItem: Text {
         leftPadding: 12
-        rightPadding: root.indicator.width + root.spacing
+        rightPadding: 12
 
         text: root.displayText
         font: root.font

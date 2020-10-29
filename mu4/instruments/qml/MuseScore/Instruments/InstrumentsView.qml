@@ -77,7 +77,7 @@ Item {
         delegate: Item {
             id: item
 
-            width: parent.width
+            width: parent ? parent.width : 0
             height: 40
 
             Rectangle {
@@ -114,7 +114,7 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
 
                 height: 32
-                width: 50
+                width: 72
 
                 textRoleName: "text"
                 valueRoleName: "value"
