@@ -7,6 +7,7 @@ QmlDialog {
     id: root
 
     property var color: "#444444"
+    property bool isApplyColor: false
 
     width: 400
     height: 400
@@ -16,7 +17,7 @@ QmlDialog {
     Rectangle {
 
         anchors.fill: parent
-        color: root.color
+        color: root.isApplyColor ? root.color : "#666666"
 
         Column {
             anchors.centerIn: parent

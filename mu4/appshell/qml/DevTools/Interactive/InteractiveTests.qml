@@ -39,7 +39,7 @@ Rectangle {
             text: "[qml] Sample dialog"
             onClicked: {
                 console.log("qml: before open")
-                api.launcher.open("musescore://devtools/interactive/sample?color=#0F9D58")
+                api.launcher.open("musescore://devtools/interactive/sample?color=#0F9D58&isApplyColor=true")
                 console.log("qml: after open")
             }
         }
