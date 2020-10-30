@@ -29,7 +29,7 @@ class PartTreeItem : public AbstractInstrumentPanelTreeItem
 {
     Q_OBJECT
 public:
-    explicit PartTreeItem(notation::INotationParts* notationParts, QObject* parent = nullptr);
+    explicit PartTreeItem(notation::INotationPartsPtr notationParts, QObject* parent = nullptr);
 
     void moveChildren(const int sourceRow, const int count, AbstractInstrumentPanelTreeItem* destinationParent,
                       const int destinationRow) override;

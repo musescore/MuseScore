@@ -24,7 +24,7 @@ using namespace mu::instruments;
 using namespace mu::notation;
 
 AbstractInstrumentPanelTreeItem::AbstractInstrumentPanelTreeItem(const InstrumentTreeItemType::ItemType& type,
-                                                                 notation::INotationParts* notationParts, QObject* parent)
+                                                                 INotationPartsPtr notationParts, QObject* parent)
     : QObject(parent), m_notationParts(notationParts)
 {
     setType(type);
@@ -248,7 +248,7 @@ void AbstractInstrumentPanelTreeItem::setCanChangeVisibility(bool value)
     emit canChangeVisibilityChanged(value);
 }
 
-INotationParts* AbstractInstrumentPanelTreeItem::notationParts() const
+INotationPartsPtr AbstractInstrumentPanelTreeItem::notationParts() const
 {
     IF_ASSERT_FAILED(m_notationParts) {
         return nullptr;

@@ -125,8 +125,8 @@ private:
     AbstractInstrumentPanelTreeItem* m_rootItem = nullptr;
     QItemSelectionModel* m_selectionModel = nullptr;
 
-    mu::notation::INotationParts* m_masterNotationParts = nullptr;
-    mu::notation::INotationParts* m_notationParts = nullptr;
+    mu::notation::INotationPartsPtr m_masterNotationParts = nullptr;
+    mu::notation::INotationPartsPtr m_notationParts = nullptr;
 
     bool m_isMovingUpAvailable = false;
     bool m_isMovingDownAvailable = false;

@@ -126,7 +126,7 @@ void InstrumentSettingsModel::setAbbreviature(const QString& abbreviature)
     parts()->setInstrumentAbbreviature(m_instrumentId, m_partId, abbreviature);
 }
 
-INotationParts* InstrumentSettingsModel::parts() const
+INotationPartsPtr InstrumentSettingsModel::parts() const
 {
     if (globalContext()->currentNotation()) {
         return globalContext()->currentNotation()->parts();

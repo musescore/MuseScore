@@ -21,7 +21,7 @@
 using namespace mu::instruments;
 using namespace mu::notation;
 
-StaffControlTreeItem::StaffControlTreeItem(INotationParts* notationParts, QObject* parent)
+StaffControlTreeItem::StaffControlTreeItem(INotationPartsPtr notationParts, QObject* parent)
     : AbstractInstrumentPanelTreeItem(InstrumentTreeItemType::ItemType::CONTROL_ADD_STAFF, notationParts, parent)
 {
 }
