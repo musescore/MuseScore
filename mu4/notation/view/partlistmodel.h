@@ -36,12 +36,16 @@ class PartListModel : public QAbstractListModel
     INJECT(notation, context::IGlobalContext, context)
     INJECT(notation, INotationCreator, notationCreator)
 
+    Q_PROPERTY(bool hasSelection READ hasSelection NOTIFY selectionChanged)
+
 public:
     explicit PartListModel(QObject* parent = nullptr);
 
     QVariant data(const QModelIndex& index, int role) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QHash<int, QByteArray> roleNames() const override;
+
+    bool hasSelection() const;
 
     Q_INVOKABLE void load();
     Q_INVOKABLE void createNewPart();
@@ -54,6 +58,9 @@ public:
     Q_INVOKABLE void setPartTitle(int index, const QString& title);
     Q_INVOKABLE void setVoicesVisibility(int index, const QVariantList& visibility);
     Q_INVOKABLE void copyPart(int index);
+
+signals:
+    void selectionChanged();
 
 private:
     QString formatVoicesTitle(INotationPtr notation) const;
@@ -79,7 +86,6 @@ private:
     };
 
     QItemSelectionModel* m_selectionModel = nullptr;
-    QHash<int, QByteArray> m_roles;
     QList<INotationPtr> m_notations;
     QHash<QString /* notation key */, QVariantList /* voices */> m_updatedVoicesVisibility;
     INotationPtr m_currentNotation;

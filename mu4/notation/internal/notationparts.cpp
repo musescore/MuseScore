@@ -1049,11 +1049,11 @@ std::vector<Part*> NotationParts::availableParts(const Ms::Score* score) const
 {
     std::vector<Part*> parts;
 
-    if (!score()) {
+    if (!score) {
         return parts;
     }
 
-    std::vector<Part*> scoreParts = this->scoreParts(score());
+    std::vector<Part*> scoreParts = this->scoreParts(score);
     parts.insert(parts.end(), scoreParts.begin(), scoreParts.end());
 
     std::vector<Part*> excerptParts = this->excerptParts(score);

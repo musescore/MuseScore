@@ -38,6 +38,7 @@ static QString notationToKey(INotationPtr notation)
 PartListModel::PartListModel(QObject* parent)
     : QAbstractListModel(parent), m_selectionModel(new QItemSelectionModel(this))
 {
+    connect(m_selectionModel, &QItemSelectionModel::selectionChanged, this, &PartListModel::selectionChanged);
 }
 
 void PartListModel::load()
@@ -131,6 +132,11 @@ QHash<int, QByteArray> PartListModel::roleNames() const
     return roles;
 }
 
+bool PartListModel::hasSelection() const
+{
+    return m_selectionModel->hasSelection();
+}
+
 void PartListModel::createNewPart()
 {
     Meta meta;
@@ -153,6 +159,7 @@ void PartListModel::selectPart(int index)
 
     QModelIndex modelIndex = this->index(index);
     m_selectionModel->select(modelIndex, QItemSelectionModel::SelectionFlag::Toggle);
+
     emit dataChanged(modelIndex, modelIndex);
 }
 
