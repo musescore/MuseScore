@@ -31,6 +31,8 @@
 #include "eventswatcher.h"
 #include "modularity/ioc.h"
 
+#include "framework/global/widgetstatestore.h"
+
 using namespace mu::dock;
 
 static const QString windowQss = QString("QMainWindow { background: %1; } "
@@ -47,6 +49,7 @@ DockWindow::DockWindow(QQuickItem* parent)
 
     setFlag(QQuickItem::ItemHasContents, true);
     m_window = new QMainWindow();
+    m_window->setObjectName("mainWindow");
     m_window->setMinimumSize(800, 600);
     setWidth(1024);
     setHeight(800);
@@ -65,6 +68,8 @@ DockWindow::DockWindow(QQuickItem* parent)
     m_statusbar = new QStatusBar(m_window);
     m_statusbar->setSizeGripEnabled(false);
     m_window->setStatusBar(m_statusbar);
+
+    WidgetStateStore::restoreGeometry(m_window);
 
     connect(m_pages.notifier(), &framework::QmlListPropertyNotifier::appended, this, &DockWindow::onPageAppended);
     connect(this, &DockWindow::colorChanged, this, &DockWindow::updateStyle);
@@ -95,6 +100,8 @@ void DockWindow::onMainWindowEvent(QEvent* e)
         QResizeEvent* re = static_cast<QResizeEvent*>(e);
         setSize(QSizeF(re->size()));
         adjustPanelsSize(currentPage());
+    } else if (QEvent::Close == e->type()) {
+        WidgetStateStore::saveGeometry(m_window);
     }
 }
 
