@@ -58,7 +58,7 @@ inline Ret make_ret(Err e)
     case Err::ErrorExtensionNotFound: return Ret(retCode, trc("extensions", "Extension not found"));
     case Err::ErrorRemoveExtensionDirectory: return Ret(retCode, trc("extensions", "Error remove extension directory"));
     case Err::ErrorAnotherOperationStarted: return Ret(retCode,
-                                                       trc("extension", "Another operation on this expansion has already started"));
+                                                       trc("extension", "Another operation on this extension has already started"));
     case Err::UnpackDestinationReadOnly: return Ret(retCode, trc("extensions", "Cannot import extension on read-only storage"));
     case Err::UnpackNoFreeSpace: return Ret(retCode, trc("extensions", "Cannot import extension on full storage"));
     case Err::UnpackInvalidStructure: return Ret(retCode, trc("extensions", "Invalid archive structure"));

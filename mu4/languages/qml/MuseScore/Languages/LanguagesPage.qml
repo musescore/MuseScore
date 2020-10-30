@@ -33,11 +33,19 @@ Item {
         id: languageListModel
 
         onProgress: {
+            if (privateProperties.selectedLanguage.code !== languageCode) {
+                return
+            }
+
             panel.setProgress(status, indeterminate, current, total)
         }
         onFinish: {
-            panel.resetProgress()
+            if (privateProperties.selectedLanguage.code !== item.code) {
+                return
+            }
+
             privateProperties.selectedLanguage = item
+            panel.resetProgress()
         }
     }
 
@@ -146,7 +154,7 @@ Item {
             onClicked: {
                 forceActiveFocus()
 
-                privateProperties.selectedLanguage = languageListModel.language(index)
+                privateProperties.selectedLanguage = languageListModel.language(model.code)
                 panel.open()
             }
         }
@@ -184,6 +192,10 @@ Item {
         hasUpdate: Boolean(selectedLanguage) ? (selectedLanguage.status === LanguageStatus.NeedUpdate) : false
         neutralButtonTitle: qsTrc("languages", "Open language preferences")
         background: view
+
+        onSelectedLanguageChanged: {
+            panel.resetProgress()
+        }
 
         onInstallRequested: {
             Qt.callLater(languageListModel.install, selectedLanguage.code)

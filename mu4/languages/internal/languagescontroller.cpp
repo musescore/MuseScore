@@ -22,6 +22,7 @@
 #include <QTranslator>
 #include <QCoreApplication>
 #include <QtConcurrent>
+#include <QCryptographicHash>
 
 #include "log.h"
 #include "languageserrors.h"
@@ -33,6 +34,12 @@ using namespace mu::framework;
 static const QString DEFAULT_LANGUAGE("system");
 static const QString ANALYSING_STATUS = qtrc("languages", "Analysing...");
 static const QString DOWNLOADING_STATUS = qtrc("languages", "Downloading...");
+
+static const QStringList languageFileTypes = {
+    "mscore",
+    "instruments",
+    "tours"
+};
 
 void LanguagesController::init()
 {
@@ -56,12 +63,27 @@ ValCh<LanguagesHash> LanguagesController::languages() const
 RetCh<LanguageProgress> LanguagesController::install(const QString& languageCode)
 {
     RetCh<LanguageProgress> result;
-    result.ret = make_ret(Err::NoError);
-    result.ch = m_languageProgressStatus;
 
-    m_languageFinishCh.onReceive(this, [this, languageCode](const Ret& ret) {
+    if (m_operationsHash.contains(languageCode)) {
+        if (m_operationsHash[languageCode].type != OperationType::Install) {
+            result.ret = make_ret(Err::ErrorAnotherOperationStarted);
+            return result;
+        }
+
+        result.ret = make_ret(Err::NoError);
+        result.ch = *m_operationsHash[languageCode].progressChannel;
+        return result;
+    }
+
+    async::Channel<LanguageProgress>* languageProgressStatus = new async::Channel<LanguageProgress>();
+    result.ch = *languageProgressStatus;
+    result.ret = make_ret(Err::NoError);
+    m_operationsHash.insert(languageCode, Operation(OperationType::Install, languageProgressStatus));
+
+    async::Channel<Ret>* languageFinishChannel = new async::Channel<Ret>();
+    languageFinishChannel->onReceive(this, [this, languageCode, languageProgressStatus](const Ret& ret) {
         if (!ret) {
-            m_languageProgressStatus.close();
+            closeOperation(languageCode, languageProgressStatus);
             return;
         }
 
@@ -72,16 +94,62 @@ RetCh<LanguageProgress> LanguagesController::install(const QString& languageCode
         Ret updateConfigRet = configuration()->setLanguages(languageHash);
         if (!updateConfigRet) {
             LOGW() << updateConfigRet.toString();
-            m_languageProgressStatus.close();
+            closeOperation(languageCode, languageProgressStatus);
             return;
         }
 
         m_languageChanged.send(languageHash[languageCode]);
-
-        m_languageProgressStatus.close();
+        closeOperation(languageCode, languageProgressStatus);
     }, Asyncable::AsyncMode::AsyncSetRepeat);
 
-    QtConcurrent::run(this, &LanguagesController::th_install, languageCode, m_languageProgressStatus, m_languageFinishCh);
+    QtConcurrent::run(this, &LanguagesController::th_install, languageCode, languageProgressStatus, languageFinishChannel);
+
+    return result;
+}
+
+RetCh<LanguageProgress> LanguagesController::update(const QString& languageCode)
+{
+    RetCh<LanguageProgress> result;
+
+    if (m_operationsHash.contains(languageCode)) {
+        if (m_operationsHash[languageCode].type != OperationType::Install) {
+            result.ret = make_ret(Err::ErrorAnotherOperationStarted);
+            return result;
+        }
+
+        result.ret = make_ret(Err::NoError);
+        result.ch = *m_operationsHash[languageCode].progressChannel;
+        return result;
+    }
+
+    async::Channel<LanguageProgress>* languageProgressStatus = new async::Channel<LanguageProgress>();
+    result.ch = *languageProgressStatus;
+    result.ret = make_ret(Err::NoError);
+    m_operationsHash.insert(languageCode, Operation(OperationType::Install, languageProgressStatus));
+
+    async::Channel<Ret>* languageFinishChannel = new async::Channel<Ret>();
+    languageFinishChannel->onReceive(this, [this, languageCode, languageProgressStatus](const Ret& ret) {
+        if (!ret) {
+            closeOperation(languageCode, languageProgressStatus);
+            return;
+        }
+
+        LanguagesHash languageHash = this->languages().val;
+
+        languageHash[languageCode].status = LanguageStatus::Status::Installed;
+
+        Ret updateConfigRet = configuration()->setLanguages(languageHash);
+        if (!updateConfigRet) {
+            LOGW() << updateConfigRet.toString();
+            closeOperation(languageCode, languageProgressStatus);
+            return;
+        }
+
+        m_languageChanged.send(languageHash[languageCode]);
+        closeOperation(languageCode, languageProgressStatus);
+    }, Asyncable::AsyncMode::AsyncSetRepeat);
+
+    QtConcurrent::run(this, &LanguagesController::th_update, languageCode, languageProgressStatus, languageFinishChannel);
 
     return result;
 }
@@ -207,8 +275,8 @@ RetVal<LanguagesHash> LanguagesController::parseLanguagesConfig(const QByteArray
         Language language;
         language.code = key;
         language.name = value.value("name").toString();
-        language.fileName = value.value("file_name").toString();
-        language.fileSize = value.value("file_size").toDouble();
+        language.archiveFileName = value.value("file_name").toString();
+        language.files = parseLanguageFiles(value);
         language.status = LanguageStatus::Status::Undefined;
 
         result.val.insert(key, language);
@@ -217,10 +285,63 @@ RetVal<LanguagesHash> LanguagesController::parseLanguagesConfig(const QByteArray
     return result;
 }
 
+LanguageFiles LanguagesController::parseLanguageFiles(const QJsonObject& languageObject) const
+{
+    LanguageFiles files;
+
+    for (const QString& fileType: languageFileTypes) {
+        QJsonObject instrumentsFile = languageObject.value(fileType).toObject();
+        if (!instrumentsFile.isEmpty()) {
+            files << LanguageFile(instrumentsFile.value("file_name").toString(),
+                                  instrumentsFile.value("hash").toString());
+        }
+    }
+
+    return files;
+}
+
 bool LanguagesController::isLanguageExists(const QString& languageCode) const
 {
     io::paths files = configuration()->languageFilePaths(languageCode);
     return !files.empty();
+}
+
+bool LanguagesController::checkLanguageFilesHash(const QString& languageCode, const LanguageFiles& languageFiles) const
+{
+    io::paths filePaths = configuration()->languageFilePaths(languageCode);
+    int filesSize = static_cast<int>(filePaths.size());
+    if (filesSize != languageFiles.size()) {
+        return false;
+    }
+
+    QHash<QString, QString> filesHash;
+    for (const LanguageFile& file: languageFiles) {
+        filesHash.insert(file.name, file.hash);
+    }
+
+    QCryptographicHash localHash(QCryptographicHash::Sha1);
+    for (const io::path& filePath: filePaths) {
+        QString fileName = io::filename(filePath).toQString();
+        if (!filesHash.contains(fileName)) {
+            continue;
+        }
+
+        RetVal<QByteArray> fileBytes = fileSystem()->readFile(filePath);
+        if (!fileBytes.ret) {
+            LOGW() << fileBytes.ret.toString();
+            return false;
+        }
+
+        localHash.reset();
+        localHash.addData(fileBytes.val);
+        QString fileHash = QString(localHash.result().toHex());
+        QString actualHash = filesHash[fileName];
+        if (actualHash != fileHash) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 RetVal<LanguagesHash> LanguagesController::correctLanguagesStates(LanguagesHash& languages) const
@@ -231,8 +352,9 @@ RetVal<LanguagesHash> LanguagesController::correctLanguagesStates(LanguagesHash&
     QString currentLanguage = configuration()->currentLanguageCode();
 
     for (Language& language: languages) {
-        if (language.status == LanguageStatus::Status::Installed && !isLanguageExists(language.code)) {
-            language.status = LanguageStatus::Status::NoInstalled;
+        LanguageStatus::Status status = languageStatus(language);
+        if (status != language.status) {
+            language.status = status;
             isNeedUpdate = true;
         }
 
@@ -252,7 +374,20 @@ RetVal<LanguagesHash> LanguagesController::correctLanguagesStates(LanguagesHash&
     return result;
 }
 
-RetVal<QString> LanguagesController::downloadLanguage(const QString& languageCode, async::Channel<LanguageProgress>& progressChannel) const
+LanguageStatus::Status LanguagesController::languageStatus(const Language& language) const
+{
+    if (!isLanguageExists(language.code)) {
+        return LanguageStatus::Status::NoInstalled;
+    }
+
+    if (!checkLanguageFilesHash(language.code, language.files)) {
+        return LanguageStatus::Status::NeedUpdate;
+    }
+
+    return LanguageStatus::Status::Installed;
+}
+
+RetVal<QString> LanguagesController::downloadLanguage(const QString& languageCode, async::Channel<LanguageProgress>* progressChannel) const
 {
     RetVal<QString> result;
 
@@ -263,7 +398,7 @@ RetVal<QString> LanguagesController::downloadLanguage(const QString& languageCod
 
     async::Channel<Progress> downloadChannel = networkManagerPtr->progressChannel();
     downloadChannel.onReceive(new async::Asyncable(), [&progressChannel](const Progress& progress) {
-        progressChannel.send(LanguageProgress(DOWNLOADING_STATUS, progress.current, progress.total));
+        progressChannel->send(LanguageProgress(DOWNLOADING_STATUS, progress.current, progress.total));
     });
 
     Ret getLanguage = networkManagerPtr->get(configuration()->languageFileServerUrl(languageCode), &buff);
@@ -358,13 +493,9 @@ void LanguagesController::th_refreshLanguages()
     for (Language& language : actualLanguages.val) {
         if (resultLanguages.contains(language.code)) {
             Language& savedLanguage = resultLanguages[language.code];
+            savedLanguage = language;
 
-            if (!isLanguageExists(language.code)) {
-                savedLanguage.status = LanguageStatus::Status::NoInstalled;
-                continue;
-            }
-
-            savedLanguage.status = LanguageStatus::Status::Installed;
+            savedLanguage.status = languageStatus(savedLanguage);
         } else {
             language.status = LanguageStatus::Status::NoInstalled;
             resultLanguages.insert(language.code, language);
@@ -374,18 +505,18 @@ void LanguagesController::th_refreshLanguages()
     configuration()->setLanguages(resultLanguages);
 }
 
-void LanguagesController::th_install(const QString& languageCode, async::Channel<LanguageProgress> progressChannel,
-                                     async::Channel<Ret> finishChannel)
+void LanguagesController::th_install(const QString& languageCode, async::Channel<LanguageProgress>* progressChannel,
+                                     async::Channel<Ret>* finishChannel)
 {
-    progressChannel.send(LanguageProgress(ANALYSING_STATUS, true));
+    progressChannel->send(LanguageProgress(ANALYSING_STATUS, true));
 
     RetVal<QString> download = downloadLanguage(languageCode, progressChannel);
     if (!download.ret) {
-        finishChannel.send(download.ret);
+        finishChannel->send(download.ret);
         return;
     }
 
-    progressChannel.send(LanguageProgress(ANALYSING_STATUS, true));
+    progressChannel->send(LanguageProgress(ANALYSING_STATUS, true));
 
     QString languageArchivePath = download.val;
 
@@ -394,11 +525,47 @@ void LanguagesController::th_install(const QString& languageCode, async::Channel
         LOGE() << unpack.toString();
         fileSystem()->remove(languageArchivePath);
 
-        finishChannel.send(unpack);
+        finishChannel->send(unpack);
         return;
     }
 
     fileSystem()->remove(languageArchivePath);
 
-    finishChannel.send(make_ret(Err::NoError));
+    finishChannel->send(make_ret(Err::NoError));
+}
+
+void LanguagesController::th_update(const QString& languageCode, async::Channel<LanguageProgress>* progressChannel,
+                                    async::Channel<Ret>* finishChannel)
+{
+    progressChannel->send(LanguageProgress(ANALYSING_STATUS, true));
+
+    RetVal<QString> download = downloadLanguage(languageCode, progressChannel);
+    if (!download.ret) {
+        finishChannel->send(download.ret);
+    }
+
+    progressChannel->send(LanguageProgress(ANALYSING_STATUS, true));
+
+    QString languageArchivePath = download.val;
+
+    Ret remove = removeLanguage(languageCode);
+    if (!remove) {
+        finishChannel->send(remove);
+    }
+
+    Ret unpack = languageUnpacker()->unpack(languageCode, languageArchivePath, configuration()->languagesSharePath().toQString());
+    if (!unpack) {
+        LOGE() << "Error unpack" << unpack.toString();
+        finishChannel->send(unpack);
+    }
+
+    fileSystem()->remove(languageArchivePath);
+
+    finishChannel->send(make_ret(Err::NoError));
+}
+
+void LanguagesController::closeOperation(const QString& languageCode, async::Channel<LanguageProgress>* progressChannel)
+{
+    progressChannel->close();
+    m_operationsHash.remove(languageCode);
 }

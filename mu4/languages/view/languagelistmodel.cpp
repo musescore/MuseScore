@@ -28,7 +28,6 @@ LanguageListModel::LanguageListModel(QObject* parent)
 {
     m_roles.insert(rCode, "code");
     m_roles.insert(rName, "name");
-    m_roles.insert(rFileSize, "fileSize");
     m_roles.insert(rStatus, "status");
     m_roles.insert(rStatusTitle, "statusTitle");
     m_roles.insert(rIsCurrent, "isCurrent");
@@ -47,8 +46,6 @@ QVariant LanguageListModel::data(const QModelIndex& index, int role) const
         return QVariant::fromValue(item.code);
     case rName:
         return QVariant::fromValue(item.name);
-    case rFileSize:
-        return QVariant::fromValue(item.fileSize);
     case rStatus:
         return QVariant::fromValue(static_cast<int>(item.status));
     case rStatusTitle:
@@ -137,12 +134,35 @@ void LanguageListModel::install(QString code)
         return;
     }
 
-    installRet.ch.onReceive(this, [this](const LanguageProgress& progress) {
-        emit this->progress(progress.status, progress.indeterminate, progress.current, progress.total);
+    installRet.ch.onReceive(this, [this, code](const LanguageProgress& progress) {
+        emit this->progress(code, progress.status, progress.indeterminate, progress.current, progress.total);
     }, Asyncable::AsyncMode::AsyncSetRepeat);
 
-    installRet.ch.onClose(this, [this, index]() {
-        emit finish(language(index));
+    installRet.ch.onClose(this, [this, code]() {
+        emit finish(language(code));
+    }, Asyncable::AsyncMode::AsyncSetRepeat);
+}
+
+void LanguageListModel::update(QString code)
+{
+    int index = itemIndexByCode(code);
+
+    if (index < 0 || index > m_list.count()) {
+        return;
+    }
+
+    RetCh<LanguageProgress> updateRet = languagesController()->update(m_list.at(index).code);
+    if (!updateRet.ret) {
+        LOGE() << "Error" << updateRet.ret.code() << updateRet.ret.text();
+        return;
+    }
+
+    updateRet.ch.onReceive(this, [this, code](const LanguageProgress& progress) {
+        emit this->progress(code, progress.status, progress.indeterminate, progress.current, progress.total);
+    }, Asyncable::AsyncMode::AsyncSetRepeat);
+
+    updateRet.ch.onClose(this, [this, code]() {
+        emit finish(language(code));
     }, Asyncable::AsyncMode::AsyncSetRepeat);
 }
 
@@ -160,7 +180,7 @@ void LanguageListModel::uninstall(QString code)
         return;
     }
 
-    emit finish(language(index));
+    emit finish(language(code));
 }
 
 void LanguageListModel::openPreferences()
@@ -168,8 +188,14 @@ void LanguageListModel::openPreferences()
     interactive()->open("musescore://settings");
 }
 
-QVariantMap LanguageListModel::language(int index)
+QVariantMap LanguageListModel::language(QString code)
 {
+    int index = itemIndexByCode(code);
+
+    if (index < 0 || index > m_list.count()) {
+        return QVariantMap();
+    }
+
     QVariantMap result;
 
     QHash<int,QByteArray> names = roleNames();
@@ -199,7 +225,8 @@ QString LanguageListModel::languageStatusTitle(const Language& language) const
 {
     QStringList status;
 
-    if (language.status == LanguageStatus::Status::Installed) {
+    if (language.status == LanguageStatus::Status::Installed
+        || language.status == LanguageStatus::Status::NeedUpdate) {
         if (language.isCurrent) {
             status << qtrc("languages", "selected");
         } else {
