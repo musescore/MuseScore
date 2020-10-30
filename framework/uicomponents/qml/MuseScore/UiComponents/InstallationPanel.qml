@@ -170,7 +170,7 @@ PopupPanel {
                 ProgressButton {
                     id: installButton
 
-                    visible: !root.installed
+                    visible: !root.installed && !root.hasUpdate
 
                     text: qsTrc("uicomponents", "Install")
 
@@ -183,7 +183,7 @@ PopupPanel {
                 FlatButton {
                     id: uninstallButton
 
-                    visible: root.installed
+                    visible: root.installed || root.hasUpdate
 
                     text: qsTrc("uicomponents", "Uninstall")
 

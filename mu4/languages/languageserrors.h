@@ -33,6 +33,7 @@ enum class Err {
     ErrorDownloadLanguage,
     ErrorLanguageNotFound,
     ErrorRemoveLanguageDirectory,
+    ErrorAnotherOperationStarted,
 
     UnpackDestinationReadOnly,
     UnpackNoFreeSpace,
@@ -52,6 +53,8 @@ inline Ret make_ret(Err e)
     case Err::ErrorDownloadLanguage: return Ret(retCode, trc("languages", "Error download language"));
     case Err::ErrorLanguageNotFound: return Ret(retCode, trc("languages", "Language not found"));
     case Err::ErrorRemoveLanguageDirectory: return Ret(retCode, trc("languages", "Error remove language directory"));
+    case Err::ErrorAnotherOperationStarted: return Ret(retCode,
+                                                       trc("language", "Another operation on this language has already started"));
     case Err::UnpackDestinationReadOnly: return Ret(retCode, trc("languages", "Cannot import language on read-only storage"));
     case Err::UnpackNoFreeSpace: return Ret(retCode, trc("languages", "Cannot import language on full storage"));
     case Err::UnpackErrorRemovePreviousVersion: return Ret(retCode, trc("languages", "Error removing previous version"));

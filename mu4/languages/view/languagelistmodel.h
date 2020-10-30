@@ -41,7 +41,6 @@ public:
     enum Roles {
         rCode = Qt::UserRole + 1,
         rName,
-        rFileSize,
         rStatus,
         rStatusTitle,
         rIsCurrent
@@ -54,14 +53,15 @@ public:
 
     Q_INVOKABLE void load();
     Q_INVOKABLE void install(QString code);
+    Q_INVOKABLE void update(QString code);
     Q_INVOKABLE void uninstall(QString code);
 
     Q_INVOKABLE void openPreferences();
 
-    Q_INVOKABLE QVariantMap language(int index);
+    Q_INVOKABLE QVariantMap language(QString code);
 
 signals:
-    void progress(const QString& status, bool indeterminate, qint64 current, qint64 total);
+    void progress(const QString& languageCode, const QString& status, bool indeterminate, qint64 current, qint64 total);
     void finish(const QVariantMap& item);
 
 private:

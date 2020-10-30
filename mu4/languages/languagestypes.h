@@ -55,12 +55,31 @@ struct LanguageProgress
         : status(status), indeterminate(false), current(current), total(total) {}
 };
 
+struct LanguageFile
+{
+    QString name;
+    QString hash;
+
+    LanguageFile() = default;
+    LanguageFile(const QString& name, const QString& hash)
+        : name(name), hash(hash) {}
+
+    QJsonObject toJson() const
+    {
+        return { { "name", name },
+            { "hash", hash } };
+    }
+};
+using LanguageFiles = QList<LanguageFile>;
+
 struct Language
 {
     QString code;
     QString name;
-    QString fileName;
-    double fileSize = 0.0;
+    QString archiveFileName;
+
+    LanguageFiles files;
+
     bool isCurrent = false;
     LanguageStatus::Status status = LanguageStatus::Status::Undefined;
 
@@ -68,10 +87,16 @@ struct Language
 
     QJsonObject toJson() const
     {
-        return { { "name", name },
-            { "fileName", fileName },
-            { "fileSize", fileSize },
+        QJsonObject obj = { { "name", name },
+            { "fileName", archiveFileName },
             { "status", QString::number(static_cast<int>(status)) } };
+        QJsonArray filesArray;
+        for (const LanguageFile& file: files) {
+            filesArray << file.toJson();
+        }
+        obj["files"] = filesArray;
+
+        return obj;
     }
 };
 
