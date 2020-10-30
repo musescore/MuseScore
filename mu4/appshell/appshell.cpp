@@ -91,5 +91,9 @@ int AppShell::run(int argc, char** argv, std::function<void()> moduleSetup)
 
     engine->load(url);
 
-    return app.exec();
+    int code = app.exec();
+
+    framework::UiEngine::instance()->quit();
+
+    return code;
 }
