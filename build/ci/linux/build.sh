@@ -42,9 +42,8 @@ echo "OPTIONS: $OPTIONS"
 
 echo "=== ENVIRONMENT === "
 
-ENV_FILE=./../musescore_environment.sh
-cat ${ENV_FILE}
-. ${ENV_FILE}
+cat ./../musescore_environment.sh
+source ./../musescore_environment.sh
 
 echo " "
 ${CXX} --version 

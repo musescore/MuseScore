@@ -16,6 +16,10 @@ if [ -n "$VTEST_BROWSER" ]; then
       BROWSER="$VTEST_BROWSER"
 fi
 
+echo "MSCORE: $MSCORE"
+echo "BROWSER: $BROWSER"
+echo "VTEST_DIR: $VTEST_DIR"
+
 #
 # "compare" - image magick compare program
 #
@@ -83,7 +87,7 @@ DPI=130
 
 if [ -n "$VTEST_DIR" ]; then
 # SRC env variable needed for Github action vtests
-      echo "::set-env name=SRC::${SRC}"
+      echo "SRC=$SRC" >> $GITHUB_ENV
       DIR="$VTEST_DIR"
 else
       DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -113,6 +117,10 @@ echo "{}]" >> $JSON_FILE
 
 echo "Generate PNG files"
 $MSCORE -j $JSON_FILE -r $DPI >LOG 2>&1
+
+echo "LOG:"
+cat LOG
+echo "========"
 
 if [ "$VTEST_GEN_METADATA" = "1" ]
 then

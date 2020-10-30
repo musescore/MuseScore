@@ -17,47 +17,29 @@ jobs:
       if: github.event_name == 'pull_request'
       run: |
         export BASEREF=${{ github.event.pull_request.base.sha }}
-        if [ -z "$BASEREF" ]; then
-        export found=0
-        else
-        export found=1
-        fi
+        if [ -z "$BASEREF" ]; then export found=0; else export found=1; fi
         echo "BASEREF=$BASEREF" >> $GITHUB_ENV
         echo "found=$found" >> $GITHUB_ENV
     - name: Retrieve base commit for push commit
       if: github.event_name == 'push'
       run: |
         export BASEREF=$( git show -s --pretty=%P ${{ github.sha }} | head -c 10 )
-        if [ -z "$BASEREF" ]; then
-        export found=0
-        else
-        export found=1
-        fi
+        if [ -z "$BASEREF" ]; then export found=0; else export found=1; fi
         echo "BASEREF=$BASEREF" >> $GITHUB_ENV
         echo "found=$found" >> $GITHUB_ENV
-    - name: Install dependencies
-      if: contains( env.found, '1')
-      run: |
-        sudo apt-get update
-        sudo apt-get install libasound2-dev portaudio19-dev libmp3lame-dev libsndfile1-dev libportmidi-dev
-        sudo apt-get install libssl-dev libpulse-dev libfreetype6-dev libfreetype6
-        sudo apt-get install libdrm-dev libgl1-mesa-dev libegl1-mesa-dev
     - name: Setup the environment
       if: contains( env.found, '1')
       run: |
-        sed -i 's/travis_retry//g' build/travis/job1_Tests/environment.sh
-        source build/travis/job1_Tests/environment.sh
-        echo "PATH=$PATH" >> $GITHUB_ENV
-        echo "QT_PLUGIN_PATH=$QT_PLUGIN_PATH" >> $GITHUB_ENV
-        echo "QML2_IMPORT_PATH=$QML2_IMPORT_PATH" >> $GITHUB_ENV
-        git checkout -- build/travis/job1_Tests/environment.sh
+        sudo bash ./build/ci/linux/setup.sh
     - name: Build
       if: contains( env.found, '1')
       run: |
+        source ./../musescore_environment.sh
         make installdebug CPUS=2 PREFIX="$HOME/software" COVERAGE=ON
     - name: Build reference branch
       if: contains( env.found, '1')
       run: |
+        source ./../musescore_environment.sh
         mkdir -p "$HOME/softwarebase"
         git checkout $BASEREF
         make clean
@@ -65,6 +47,7 @@ jobs:
     - name: Run reference vtests
       if: contains( env.found, '1')
       run: |
+        source ./../musescore_environment.sh
         cd vtest
         export VTEST_MSCORE="$HOME/softwarebase/bin/mscore"
         export VTEST_BROWSER=ls
@@ -73,6 +56,7 @@ jobs:
     - name: Run vtests
       if: contains( env.found, '1')
       run: |
+        source ./../musescore_environment.sh
         git checkout -
         cd vtest
         mkdir -p compare
@@ -85,6 +69,7 @@ jobs:
     - name: Compare vtests
       if: contains( env.found, '1')
       run: |
+        source ./../musescore_environment.sh  
         cd vtest
         export VTEST_DIR=$(pwd)
         ./gen_compare
