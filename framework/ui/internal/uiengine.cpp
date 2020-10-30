@@ -55,6 +55,13 @@ UiEngine::~UiEngine()
     delete m_translation;
 }
 
+void UiEngine::quit()
+{
+    m_engine->quit();
+    delete m_engine;
+    m_engine = nullptr;
+}
+
 QQmlEngine* UiEngine::engine()
 {
     if (m_engine) {

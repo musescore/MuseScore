@@ -64,6 +64,7 @@ public:
     // ---
 
     void moveQQmlEngine(QQmlEngine* e);
+    void quit();
 
 signals:
     void themeChanged(Theme* theme);
