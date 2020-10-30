@@ -94,14 +94,30 @@ void DockWindow::onMainWindowEvent(QEvent* e)
     if (QEvent::Resize == e->type()) {
         QResizeEvent* re = static_cast<QResizeEvent*>(e);
         setSize(QSizeF(re->size()));
+        adjustPanelsSize(currentPage());
+    }
+}
+
+void DockWindow::adjustPanelsSize(DockPage* page)
+{
+    if (!page) {
+        return;
+    }
+
+    constexpr int additionalSideSpace = 200; //! NOTE: experimental value
+    bool needMinimize = qMainWindow()->width() <= qMainWindow()->minimumWidth() + additionalSideSpace;
+
+    for (DockPanel* panel : page->panels()) {
+        if (needMinimize) {
+            qMainWindow()->resizeDocks({ panel->widget().panel }, { panel->minimumWidth() }, Qt::Horizontal);
+        } else {
+            qMainWindow()->resizeDocks({ panel->widget().panel }, { panel->preferedWidth() }, Qt::Horizontal);
+        }
     }
 }
 
 void DockWindow::togglePage(DockPage* old, DockPage* current)
 {
-//    qInfo() << "old page: " << (old ? old->uri() : "null") << "new page: "
-//            << (current ? current->uri() : "null");
-
     if (old) {
         hidePage(old);
     }
@@ -111,27 +127,27 @@ void DockWindow::togglePage(DockPage* old, DockPage* current)
     }
 }
 
-void DockWindow::hidePage(DockPage* p)
+void DockWindow::hidePage(DockPage* page)
 {
-    p->setState(m_window->saveState());
+    page->setState(m_window->saveState());
 
     QList<QWidget*> widgetsToHide;
 
-    DockCentral* central = p->central();
+    DockCentral* central = page->central();
     if (central) {
         DockCentral::Widget cw = central->widget();
         m_central->removeWidget(cw.widget);
         widgetsToHide << cw.widget;
     }
 
-    QList<DockPanel*> panels = p->panels();
+    QList<DockPanel*> panels = page->panels();
     for (DockPanel* panel : panels) {
         DockPanel::Widget dw = panel->widget();
         m_window->removeDockWidget(dw.panel);
         widgetsToHide << dw.panel;
     }
 
-    DockToolBar* tool = p->toolbar();
+    DockToolBar* tool = page->toolbar();
     if (tool) {
         DockToolBar::Widget tw = tool->widget();
         m_window->removeToolBarBreak(tw.bar);
@@ -139,7 +155,7 @@ void DockWindow::hidePage(DockPage* p)
         widgetsToHide << tw.bar;
     }
 
-    DockStatusBar* status = p->statusbar();
+    DockStatusBar* status = page->statusbar();
     if (status) {
         DockStatusBar::Widget sw = status->widget();
         m_statusbar->removeWidget(sw.widget);
@@ -156,13 +172,13 @@ void DockWindow::hidePage(DockPage* p)
     m_window->repaint();
 }
 
-void DockWindow::showPage(DockPage* p)
+void DockWindow::showPage(DockPage* page)
 {
     QList<QWidget*> widgetsToShow;
     QList<QWidget*> widgetsToHide;
 
     // ToolBar
-    DockToolBar* tool = p->toolbar();
+    DockToolBar* tool = page->toolbar();
     if (tool) {
         DockToolBar::Widget tw = tool->widget();
         if (tw.breakArea != Qt::NoToolBarArea) {
@@ -173,7 +189,7 @@ void DockWindow::showPage(DockPage* p)
     }
 
     // StatusBar
-    DockStatusBar* status = p->statusbar();
+    DockStatusBar* status = page->statusbar();
     if (status) {
         DockStatusBar::Widget sw = status->widget();
         m_statusbar->setFixedHeight(sw.widget->height());
@@ -184,7 +200,7 @@ void DockWindow::showPage(DockPage* p)
     }
 
     // Panels
-    QList<DockPanel*> panels = p->panels();
+    QList<DockPanel*> panels = page->panels();
     for (DockPanel* panel : panels) {
         DockPanel::Widget dw = panel->widget();
         m_window->addDockWidget(dw.area, dw.panel);
@@ -213,14 +229,14 @@ void DockWindow::showPage(DockPage* p)
     }
 
     // Central
-    DockCentral* central = p->central();
+    DockCentral* central = page->central();
     if (central) {
         DockCentral::Widget cw = central->widget();
         m_central->addWidget(cw.widget);
         widgetsToShow << cw.widget;
     }
 
-    QByteArray state = p->state();
+    QByteArray state = page->state();
     if (!state.isEmpty()) {
         m_window->restoreState(state);
     }
