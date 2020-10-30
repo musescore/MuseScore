@@ -6,7 +6,7 @@
 echo "Setup Linux build environment"
 trap 'echo Setup failed; exit 1' ERR
 
-df -k .
+df -h .
 
 # Go one-up from MuseScore root dir regardless of where script was run from:
 cd "$(dirname "$(readlink -f "${0}")")/../../../.."
@@ -41,6 +41,7 @@ apt_packages_standard=(
   libasound2-dev 
   libfontconfig1-dev
   libfreetype6-dev
+  libfreetype6
   libgl1-mesa-dev
   libjack-dev
   libmp3lame-dev
@@ -68,6 +69,7 @@ apt_packages_runtime=(
   libxkbcommon-x11-0
   libxrandr2
   libxtst-dev
+  libdrm-dev
   )
 
 apt-get update # no package lists in Docker image
@@ -111,7 +113,6 @@ update-alternatives \
   --install /usr/bin/gcc gcc "/usr/bin/gcc-${gcc_version}" 40 \
   --slave /usr/bin/g++ g++ "/usr/bin/g++-${gcc_version}"
 
-#apt-get install -y --no-install-recommends g++
 echo export CC="/usr/bin/gcc-${gcc_version}" >> ${ENV_FILE}
 echo export CXX="/usr/bin/g++-${gcc_version}" >> ${ENV_FILE}
 
@@ -125,8 +126,7 @@ cmake_dir="cmake/${cmake_version}"
 if [[ ! -d "${cmake_dir}" ]]; then
   mkdir -p "${cmake_dir}"
   cmake_url="https://cmake.org/files/v${cmake_version%.*}/cmake-${cmake_version}-Linux-x86_64.tar.gz"
-  wget -q --show-progress --no-check-certificate -O - "${cmake_url}" \
-    | tar --strip-components=1 -xz -C "${cmake_dir}"
+  wget -q --show-progress --no-check-certificate -O - "${cmake_url}" | tar --strip-components=1 -xz -C "${cmake_dir}"
 fi
 echo export PATH="${PWD%/}/${cmake_dir}/bin:\${PATH}" >> ${ENV_FILE}
 export PATH="${PWD%/}/${cmake_dir}/bin:${PATH}"
@@ -137,13 +137,13 @@ cmake --version
 # POST INSTALL
 ##########################################################################
 
-chmod +x "$ENV_FILE"
+chmod +x "${ENV_FILE}"
 
 # # tidy up (reduce size of Docker image)
 # apt-get clean autoclean
 # apt-get autoremove --purge -y
 # rm -rf /tmp/* /var/{cache,log,backups}/* /var/lib/apt/*
 
-df -k .
+df -h .
 echo "Setup script done"
 
