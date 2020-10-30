@@ -28,6 +28,8 @@ DockPage {
             objectName: "resourcesPanel"
 
             width: 292
+            minimumWidth: 76
+
             color: ui.theme.backgroundPrimaryColor
 
             Rectangle {

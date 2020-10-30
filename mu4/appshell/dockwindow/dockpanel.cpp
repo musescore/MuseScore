@@ -39,18 +39,25 @@ DockPanel::~DockPanel()
 
 void DockPanel::onComponentCompleted()
 {
-    m_dock.panel->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    m_dock.panel->setFeatures(QDockWidget::DockWidgetMovable);
-    m_dock.panel->setObjectName("w_" + objectName());
-    m_dock.panel->setWidget(view());
-    m_dock.panel->setMinimumWidth(width());
-    m_dock.panel->setWindowTitle(m_title);
-    m_dock.panel->setStyleSheet(qss.arg(color().name()));
+    panel()->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    panel()->setFeatures(QDockWidget::DockWidgetMovable);
+    panel()->setObjectName("w_" + objectName());
+    panel()->setWidget(view());
+    panel()->setWindowTitle(m_title);
+    panel()->setStyleSheet(qss.arg(color().name()));
+
+    m_preferedWidth = width();
+
+    if (minimumWidth() == 0) {
+        panel()->setMinimumWidth(width());
+    }
+
+    panel()->setMaximumWidth(width());
 }
 
 void DockPanel::updateStyle()
 {
-    m_dock.panel->setStyleSheet(qss.arg(color().name()));
+    panel()->setStyleSheet(qss.arg(color().name()));
 }
 
 DockPanel::Widget DockPanel::widget() const
@@ -101,4 +108,29 @@ void DockPanel::setTabifyObjectName(QString tabify)
 
     m_dock.tabifyObjectName = tabify;
     emit tabifyObjectNameChanged(m_dock.tabifyObjectName);
+}
+
+int DockPanel::minimumWidth() const
+{
+    return panel()->minimumWidth();
+}
+
+int DockPanel::preferedWidth() const
+{
+    return m_preferedWidth;
+}
+
+void DockPanel::setMinimumWidth(int width)
+{
+    if (panel()->minimumWidth() == width) {
+        return;
+    }
+
+    panel()->setMinimumWidth(width);
+    emit minimumWidthChanged(width);
+}
+
+QDockWidget* DockPanel::panel() const
+{
+    return m_dock.panel;
 }
