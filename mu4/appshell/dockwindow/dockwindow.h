@@ -78,15 +78,15 @@ private slots:
     void updateStyle();
 
 private:
-
     void componentComplete() override;
 
     DockPage* page(const QString& uri) const;
     DockPage* currentPage() const;
 
     void togglePage(DockPage* old, DockPage* current);
-    void hidePage(DockPage* p);
-    void showPage(DockPage* p);
+    void hidePage(DockPage* page);
+    void showPage(DockPage* page);
+    void adjustPanelsSize(DockPage* page);
 
     QMainWindow* m_window = nullptr;
     EventsWatcher* m_eventsWatcher = nullptr;

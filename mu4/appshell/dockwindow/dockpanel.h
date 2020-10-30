@@ -29,17 +29,22 @@ namespace dock {
 class DockPanel : public DockView
 {
     Q_OBJECT
+
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
     Q_PROPERTY(Qt::DockWidgetArea area READ area WRITE setArea NOTIFY areaChanged)
     Q_PROPERTY(QString tabifyObjectName READ tabifyObjectName WRITE setTabifyObjectName NOTIFY tabifyObjectNameChanged)
+    Q_PROPERTY(int minimumWidth READ minimumWidth WRITE setMinimumWidth NOTIFY minimumWidthChanged)
 
 public:
     explicit DockPanel(QQuickItem* parent = nullptr);
-    ~DockPanel();
+    ~DockPanel() override;
 
     QString title() const;
     Qt::DockWidgetArea area() const;
     QString tabifyObjectName() const;
+
+    int minimumWidth() const;
+    int preferedWidth() const;
 
     struct Widget {
         QDockWidget* panel = nullptr;
@@ -53,20 +58,25 @@ public slots:
     void setTitle(QString title);
     void setArea(Qt::DockWidgetArea area);
     void setTabifyObjectName(QString tabifyObjectName);
+    void setMinimumWidth(int width);
 
 signals:
     void titleChanged(QString title);
     void areaChanged(Qt::DockWidgetArea area);
     void tabifyObjectNameChanged(QString tabifyObjectName);
+    void minimumWidthChanged(int width);
 
 protected:
     void onComponentCompleted() override;
     void updateStyle() override;
 
 private:
+    QDockWidget* panel() const;
 
     Widget m_dock;
     QString m_title;
+
+    int m_preferedWidth = 0;
 };
 }
 }
