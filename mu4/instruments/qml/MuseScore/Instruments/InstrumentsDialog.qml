@@ -7,11 +7,11 @@ import MuseScore.Instruments 1.0
 QmlDialog {
     id: root
 
-    property string canSelectMultipleInstruments: "true"
+    property bool canSelectMultipleInstruments: true
     property string focusableInstrumentId: ""
 
     height: 500
-    width: root.canSelectMultipleInstruments === "true" ? 900 : 600
+    width: root.canSelectMultipleInstruments ? 900 : 600
 
     title: qsTrc("instruments", "Instruments")
 
@@ -29,7 +29,7 @@ QmlDialog {
             anchors.bottom: buttons.top
             anchors.margins: 10
 
-            canSelectMultipleInstruments: root.canSelectMultipleInstruments === "true"
+            canSelectMultipleInstruments: root.canSelectMultipleInstruments
             focusableInstrumentId: root.focusableInstrumentId
         }
 

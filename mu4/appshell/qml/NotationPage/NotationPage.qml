@@ -31,7 +31,7 @@ DockPage {
             id: palettePanel
             objectName: "palettePanel"
 
-            title: "Palette"
+            title: qsTrc("appshell", "Palette")
             width: 294
             color: notationPage.color
 
@@ -42,7 +42,7 @@ DockPage {
             id: instrumentsPanel
             objectName: "instrumentsPanel"
 
-            title: "Instruments"
+            title: qsTrc("appshell", "Instruments")
             width: 294
             color: notationPage.color
 
@@ -57,7 +57,7 @@ DockPage {
             id: inspectorPanel
             objectName: "inspectorPanel"
 
-            title: "Inspector"
+            title: qsTrc("appshell", "Inspector")
             width: 294
             color: notationPage.color
 

@@ -149,7 +149,7 @@ void StaffSettingsModel::createLinkedStaff()
     }
 }
 
-INotationParts* StaffSettingsModel::parts() const
+INotationPartsPtr StaffSettingsModel::parts() const
 {
     if (globalContext()->currentNotation()) {
         return globalContext()->currentNotation()->parts();

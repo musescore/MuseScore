@@ -39,7 +39,7 @@ class AbstractInstrumentPanelTreeItem : public QObject
     Q_PROPERTY(bool isSelectable READ isSelectable NOTIFY isSelectableChanged)
 
 public:
-    explicit AbstractInstrumentPanelTreeItem(const InstrumentTreeItemType::ItemType& type, notation::INotationParts* notationParts,
+    explicit AbstractInstrumentPanelTreeItem(const InstrumentTreeItemType::ItemType& type, notation::INotationPartsPtr notationParts,
                                              QObject* parent = nullptr);
     virtual ~AbstractInstrumentPanelTreeItem();
 
@@ -90,7 +90,7 @@ signals:
     void isSelectableChanged(bool isSelectable);
 
 protected:
-    notation::INotationParts* notationParts() const;
+    notation::INotationPartsPtr notationParts() const;
 
 private:
     QList<AbstractInstrumentPanelTreeItem*> m_children;
@@ -102,7 +102,7 @@ private:
     bool m_isVisible = false;
     bool m_canChangeVisibility = false;
 
-    notation::INotationParts* m_notationParts = nullptr;
+    notation::INotationPartsPtr m_notationParts = nullptr;
 };
 }
 }

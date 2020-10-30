@@ -34,7 +34,7 @@ class InstrumentControlTreeItem : public AbstractInstrumentPanelTreeItem
     INJECT(instruments, framework::IInteractive, interactive)
 
 public:
-    explicit InstrumentControlTreeItem(notation::INotationParts* notationParts, QObject* parent = nullptr);
+    explicit InstrumentControlTreeItem(notation::INotationPartsPtr notationParts, QObject* parent = nullptr);
 
     Q_INVOKABLE void appendNewItem() override;
 
