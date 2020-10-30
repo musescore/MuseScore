@@ -79,6 +79,8 @@ QmlDialog {
 
                     icon: IconCode.DELETE_TANK
 
+                    enabled: partsModel.hasSelection
+
                     onClicked: {
                         partsModel.removeSelectedParts()
                     }
@@ -89,9 +91,7 @@ QmlDialog {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.topMargin: 38
-
-                //! NOTE: experimental value
-                partListHeight: Math.max(root.height / 1.6, 340)
+                Layout.bottomMargin: 24
 
                 model: partsModel
             }
@@ -114,6 +114,8 @@ QmlDialog {
 
                 FlatButton {
                     text: qsTrc("notation", "Open")
+
+                    enabled: partsModel.hasSelection
 
                     onClicked: {
                         partsModel.openSelectedParts()

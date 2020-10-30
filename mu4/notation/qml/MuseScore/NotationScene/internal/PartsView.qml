@@ -2,15 +2,15 @@ import QtQuick 2.9
 
 import MuseScore.UiComponents 1.0
 
-Column {
+Item {
     id: root
 
     property var model
-    property int partListHeight: 0
-
-    spacing: 0
 
     Column {
+        id: header
+
+        anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.leftMargin: 36
@@ -50,7 +50,8 @@ Column {
     ListView {
         id: view
 
-        height: root.partListHeight
+        anchors.top: header.bottom
+        anchors.bottom: parent.bottom
         width: parent.width
 
         spacing: 0
