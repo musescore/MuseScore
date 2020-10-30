@@ -64,7 +64,7 @@ signals:
     void cutawayEnabledChanged();
 
 private:
-    notation::INotationParts* parts() const;
+    notation::INotationPartsPtr parts() const;
 
     notation::ID m_staffId;
     bool m_isSmallStaff = false;

@@ -22,7 +22,7 @@ using namespace mu::instruments;
 using namespace mu::notation;
 using ItemType = InstrumentTreeItemType::ItemType;
 
-PartTreeItem::PartTreeItem(INotationParts* notationParts, QObject* parent)
+PartTreeItem::PartTreeItem(INotationPartsPtr notationParts, QObject* parent)
     : AbstractInstrumentPanelTreeItem(ItemType::PART, notationParts, parent)
 {
 }

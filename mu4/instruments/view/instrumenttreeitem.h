@@ -31,7 +31,7 @@ class InstrumentTreeItem : public AbstractInstrumentPanelTreeItem, public async:
     Q_OBJECT
 
 public:
-    explicit InstrumentTreeItem(notation::INotationParts* notationParts, QObject* parent = nullptr);
+    explicit InstrumentTreeItem(notation::INotationPartsPtr notationParts, QObject* parent = nullptr);
 
     Q_INVOKABLE QString partId() const;
     Q_INVOKABLE QString partName() const;

@@ -21,7 +21,7 @@
 using namespace mu::instruments;
 using namespace mu::notation;
 
-RootTreeItem::RootTreeItem(INotationParts* notationParts, QObject* parent)
+RootTreeItem::RootTreeItem(INotationPartsPtr notationParts, QObject* parent)
     : AbstractInstrumentPanelTreeItem(InstrumentTreeItemType::ItemType::ROOT, notationParts, parent)
 {
 }
