@@ -20,6 +20,7 @@
 
 #include <QDir>
 #include <QVariant>
+#include <QJsonArray>
 
 #include "log.h"
 #include "settings.h"
@@ -111,9 +112,18 @@ LanguagesHash LanguagesConfiguration::parseLanguagesConfig(const QByteArray& jso
         Language language;
         language.code = value.keys().first();
         language.name = lngMap.value("name").toString();
-        language.fileName = lngMap.value("fileName").toString();
-        language.fileSize = lngMap.value("fileSize").toDouble();
+        language.archiveFileName = lngMap.value("fileName").toString();
         language.status = static_cast<LanguageStatus::Status>(lngMap.value("status").toInt());
+
+        QVariantList files = lngMap.value("files").toList();
+        for (const QVariant& fileVar: files) {
+            QVariantMap fileObj = fileVar.toMap();
+            LanguageFile file;
+            file.name = fileObj["name"].toString();
+            file.hash = fileObj["hash"].toString();
+
+            language.files << file;
+        }
 
         result.insert(language.code, language);
     }
@@ -154,5 +164,5 @@ io::path LanguagesConfiguration::languageArchivePath(const QString& languageCode
 io::path LanguagesConfiguration::languageFileName(const QString& languageCode) const
 {
     ValCh<LanguagesHash> _languages = languages();
-    return _languages.val.value(languageCode).fileName;
+    return _languages.val.value(languageCode).archiveFileName;
 }

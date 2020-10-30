@@ -45,6 +45,7 @@ public:
 
     ValCh<LanguagesHash> languages() const override;
     RetCh<LanguageProgress> install(const QString& languageCode) override;
+    RetCh<LanguageProgress> update(const QString& languageCode) override;
     Ret uninstall(const QString& languageCode) override;
 
     RetVal<Language> currentLanguage() const override;
@@ -54,11 +55,15 @@ public:
 
 private:
     RetVal<LanguagesHash> parseLanguagesConfig(const QByteArray& json) const;
+    LanguageFiles parseLanguageFiles(const QJsonObject& languageObject) const;
+
     bool isLanguageExists(const QString& languageCode) const;
+    bool checkLanguageFilesHash(const QString& languageCode, const LanguageFiles& languageFiles) const;
 
     RetVal<LanguagesHash> correctLanguagesStates(LanguagesHash& languages) const;
+    LanguageStatus::Status languageStatus(const Language& language) const;
 
-    RetVal<QString> downloadLanguage(const QString& languageCode, async::Channel<LanguageProgress>& progressChannel) const;
+    RetVal<QString> downloadLanguage(const QString& languageCode, async::Channel<LanguageProgress>* progressChannel) const;
     Ret removeLanguage(const QString& languageCode) const;
 
     Ret loadLanguage(const QString& languageCode);
@@ -66,13 +71,33 @@ private:
     void resetLanguageByDefault();
 
     void th_refreshLanguages();
-    void th_install(const QString& languageCode, async::Channel<LanguageProgress> progressChannel,async::Channel<Ret> finishChannel);
+    void th_install(const QString& languageCode, async::Channel<LanguageProgress>* progressChannel, async::Channel<Ret>* finishChannel);
+    void th_update(const QString& languageCode, async::Channel<LanguageProgress>* progressChannel, async::Channel<Ret>* finishChannel);
+
+    void closeOperation(const QString& languageCode, async::Channel<LanguageProgress>* progressChannel);
+
+    enum OperationType
+    {
+        None,
+        Install,
+        Update
+    };
+
+    struct Operation
+    {
+        OperationType type = OperationType::None;
+        async::Channel<LanguageProgress>* progressChannel = nullptr;
+
+        Operation() = default;
+        Operation(const OperationType& type, async::Channel<LanguageProgress>* progressChannel)
+            : type(type), progressChannel(progressChannel) {}
+    };
 
 private:
     async::Channel<Language> m_languageChanged;
-    async::Channel<LanguageProgress> m_languageProgressStatus;
-    async::Channel<Ret> m_languageFinishCh;
     QList<QTranslator*> m_translatorList;
+
+    mutable QHash<QString, Operation> m_operationsHash;
 };
 }
 }
