@@ -342,6 +342,7 @@ void DockWindow::setCurrentPageUri(QString uri)
 
     if (m_isComponentComplete) {
         togglePage(page(m_currentPageUri), page(uri));
+        adjustPanelsSize(page(uri));
     }
 
     m_currentPageUri = uri;
