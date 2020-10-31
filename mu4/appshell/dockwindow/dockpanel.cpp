@@ -51,8 +51,6 @@ void DockPanel::onComponentCompleted()
     if (minimumWidth() == 0) {
         panel()->setMinimumWidth(width());
     }
-
-    panel()->setMaximumWidth(width());
 }
 
 void DockPanel::updateStyle()
