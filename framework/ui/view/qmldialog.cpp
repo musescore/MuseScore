@@ -78,6 +78,7 @@ void QmlDialog::componentComplete()
         m_view->setContent(QUrl(), m_content, obj);
 
         m_dialog->resize(m_view->size());
+        m_dialog->setMinimumSize(width(), height());
         widget->setParent(m_dialog);
         QHBoxLayout* layout = new QHBoxLayout(m_dialog);
         layout->setMargin(0);
