@@ -64,7 +64,7 @@ Item {
 
                 root.provider.onOpen(page.type)
 
-                if (Boolean(data.value("sync")) && data.value("sync") === 'true') {
+                if (Boolean(data.value("sync")) && data.value("sync") === true) {
                     obj.exec()
                 } else {
                     obj.show()
