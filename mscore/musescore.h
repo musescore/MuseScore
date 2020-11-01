@@ -744,8 +744,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool savePng(Score*, const QString& name);
       bool saveMidi(Score*, const QString& name);
       bool saveMidi(Score*, QIODevice*);
-      bool savePositions(Score*, const QString& name, bool segments);
-      bool savePositions(Score*, QIODevice*, bool segments);
+      bool savePositions(Score*, const QString& name, bool segments, bool legacyExport = true);
+      bool savePositions(Score*, QIODevice*, bool segments, bool legacyExport = true);
       bool saveMetadataJSON(Score*, const QString& name);
       QJsonObject saveMetadataJSON(Score*);
 

@@ -3,7 +3,7 @@
 .\"	mirabilos <m@mirbsd.org>
 .\" Published under the same terms as MuseScore itself.
 .\"-
-.Dd October 19, 2020
+.Dd November 1, 2020
 .Dt @MAN_MSCORE_UPPER@ 1
 .Os MuseScore
 .Sh NAME@Variables_substituted_by_CMAKE_on_installation@
@@ -339,6 +339,10 @@ internal file sanity check log (JSON)
 MPEG Layer III (lossy compressed audio)
 .It Li mpos
 measure positions (XML)
+.Pq legacy format
+.It Li mpx
+measure positions (XML)
+.Pq pixel offsets
 .It Li mscx
 uncompressed MuseScore file
 .It Li mscz
@@ -358,6 +362,10 @@ Individual files, one per score page, with a hyphen-minus followed
 by the page number placed before the file extension, will be generated.
 .It Li spos
 segment positions (XML)
+.Pq legacy format
+.It Li spx
+segment positions (XML)
+.Pq pixel offsets
 .It Li svg
 scalable vector graphics (image)
 .It Li wav

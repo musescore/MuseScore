@@ -3745,8 +3745,12 @@ static bool doConvert(Score *cs, const QString& fn)
 #endif
       else if (fn.endsWith(".spos"))
             return mscore->savePositions(cs, fn, true);
+      else if (fn.endsWith(".spx"))
+            return mscore->savePositions(cs, fn, true, false);
       else if (fn.endsWith(".mpos"))
             return mscore->savePositions(cs, fn, false);
+      else if (fn.endsWith(".mpx"))
+            return mscore->savePositions(cs, fn, false, false);
       else if (fn.endsWith(".mlog"))
             return cs->sanityCheck(fn);
       else if (fn.endsWith(".metajson"))

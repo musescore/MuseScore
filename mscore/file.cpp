@@ -2131,10 +2131,20 @@ bool MuseScore::saveAs(Score* cs_, bool saveCopy, const QString& path, const QSt
             // save positions of segments
             rv = savePositions(cs_, fn, true);
             }
+      else if (ext == "spx") {
+            cs_->switchToPageMode();
+            // save positions of segments
+            rv = savePositions(cs_, fn, true, false);
+            }
       else if (ext == "mpos") {
             cs_->switchToPageMode();
             // save positions of measures
             rv = savePositions(cs_, fn, false);
+            }
+      else if (ext == "mpx") {
+            cs_->switchToPageMode();
+            // save positions of measures
+            rv = savePositions(cs_, fn, false, false);
             }
       else if (ext == "mlog") {
             rv = cs_->sanityCheck(fn);
@@ -2809,8 +2819,8 @@ bool MuseScore::savePng(Score* score, QIODevice* device, int pageNumber, bool dr
             }
       else
             r = page->abbox();
-      int w = lrint(r.width()  * convDpi / DPI);
-      int h = lrint(r.height() * convDpi / DPI);
+      int w = qCeil(r.width()  * convDpi / DPI);
+      int h = qCeil(r.height() * convDpi / DPI);
 
       QImage printer(w, h, f);
       printer.setDotsPerMeterX(lrint((convDpi * 1000) / INCH));
