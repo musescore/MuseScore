@@ -11,6 +11,7 @@
 //=============================================================================
 
 #include "libmscore/score.h"
+#include "libmscore/page.h"
 #include "libmscore/measure.h"
 #include "libmscore/segment.h"
 #include "libmscore/repeatlist.h"
@@ -19,8 +20,6 @@
 #include "mscore/globals.h"
 #include "mscore/preferences.h"
 #include "mscore/musescore.h"
-
-
 
 namespace Ms {
 
@@ -76,19 +75,28 @@ bool MuseScore::savePositions(Score* score, QIODevice* device, bool segments, bo
       if (segments) {
             for (Segment* s = score->firstMeasureMM()->first(SegmentType::ChordRest);
                s; s = s->next1MM(SegmentType::ChordRest)) {
-                  // offset into the page, round down
-                  int x      = qFloor(s->pagePos().x() * ndpi);
-                  int y      = qFloor(s->pagePos().y() * ndpi);
+
                   // width/height, round up
                   qreal sx   = 0;
+                  qreal right_distance = 0;
+                  qreal left_distance = 0;
                   int tracks = score->nstaves() * VOICES;
                   for (int track = 0; track < tracks; track++) {
                         Element* e = s->element(track);
-                        if (e)
-                              sx = qMax(sx, e->width());
+                        if (e) {
+                              // compute the element with the largest offset to the right (end)
+                              right_distance = qMax(right_distance, e->offset().x() + e->shape().right());
+                              // compute the element with the smallest offset to the right (start, left if negative)
+                              left_distance = qMin(left_distance, e->offset().x());
+                              }
                         }
 
-                  int w    = qCeil(sx * ndpi);
+                  // offset into the page, round down
+                  int x = qFloor((s->pagePos().x() + left_distance) * ndpi);
+                  int y = qFloor(s->pagePos().y() * ndpi);
+
+                  // width = smallest element + largest offset
+                  int w    = qCeil((right_distance + abs(left_distance)) * ndpi);
                   int h    = qCeil(s->measure()->system()->height() * ndpi);
 
                   Page* p  = s->measure()->system()->page();
