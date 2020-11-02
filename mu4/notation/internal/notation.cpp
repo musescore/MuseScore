@@ -38,13 +38,42 @@
 using namespace mu::notation;
 using namespace Ms;
 
-static const QString SUBTITLE_KEY("subtitle");
-static const QString COMPOSER_KEY("composer");
-static const QString LYRICIST_KEY("lyricist");
-static const QString COPYRIGHT_KEY("copyright");
-static const QString TRANSLATOR_KEY("translator");
-static const QString ARRANGER_KEY("arranger");
-static const QString CREATION_DATE_KEY("creationDate");
+static const QString WORK_TITLE_TAG("workTitle");
+static const QString WORK_NUMBER_TAG("workNumber");
+static const QString SUBTITLE_TAG("subtitle");
+static const QString COMPOSER_TAG("composer");
+static const QString LYRICIST_TAG("lyricist");
+static const QString POET_TAG("poet");
+static const QString SOURCE_TAG("source");
+static const QString COPYRIGHT_TAG("copyright");
+static const QString TRANSLATOR_TAG("translator");
+static const QString ARRANGER_TAG("arranger");
+static const QString CREATION_DATE_TAG("creationDate");
+static const QString PLATFORM_TAG("platform");
+static const QString MOVEMENT_TITLE_TAG("movementTitle");
+static const QString MOVEMENT_NUMBER_TAG("movementNumber");
+
+static bool isStandardTag(const QString& tag)
+{
+    static const QSet<QString> standardTags {
+        WORK_TITLE_TAG,
+        WORK_NUMBER_TAG,
+        SUBTITLE_TAG,
+        COMPOSER_TAG,
+        LYRICIST_TAG,
+        POET_TAG,
+        SOURCE_TAG,
+        COPYRIGHT_TAG,
+        TRANSLATOR_TAG,
+        ARRANGER_TAG,
+        CREATION_DATE_TAG,
+        PLATFORM_TAG,
+        MOVEMENT_NUMBER_TAG,
+        MOVEMENT_TITLE_TAG
+    };
+
+    return standardTags.contains(tag);
+}
 
 Notation::Notation(Score* score)
 {
@@ -126,28 +155,48 @@ MScore* Notation::scoreGlobal() const
 Meta Notation::metaInfo() const
 {
     Meta meta;
+    auto allTags = score()->metaTags();
 
     meta.title = score()->title();
-    meta.subtitle = score()->metaTag(SUBTITLE_KEY);
-    meta.composer = score()->metaTag(COMPOSER_KEY);
-    meta.lyricist = score()->metaTag(LYRICIST_KEY);
-    meta.copyright = score()->metaTag(COPYRIGHT_KEY);
-    meta.translator = score()->metaTag(TRANSLATOR_KEY);
-    meta.arranger = score()->metaTag(ARRANGER_KEY);
-    meta.creationDate = QDate::fromString(score()->metaTag(CREATION_DATE_KEY), Qt::ISODate);
+    meta.subtitle = allTags[SUBTITLE_TAG];
+    meta.composer = allTags[COMPOSER_TAG];
+    meta.lyricist = allTags[LYRICIST_TAG];
+    meta.copyright = allTags[COPYRIGHT_TAG];
+    meta.translator = allTags[TRANSLATOR_TAG];
+    meta.arranger = allTags[ARRANGER_TAG];
+    meta.source = allTags[SOURCE_TAG];
+    meta.creationDate = QDate::fromString(allTags[CREATION_DATE_TAG], Qt::ISODate);
+    meta.platform = allTags[PLATFORM_TAG];
+    meta.musescoreVersion = score()->mscoreVersion();
+    meta.musescoreRevision = score()->mscoreRevision();
+    meta.mscVersion = score()->mscVersion();
+
+    for (const QString& tag : allTags.keys()) {
+        if (isStandardTag(tag)) {
+            continue;
+        }
+
+        meta.additionalTags[tag] = allTags[tag];
+    }
 
     return meta;
 }
 
 void Notation::setMetaInfo(const Meta& meta)
 {
-    score()->setMetaTag(SUBTITLE_KEY, meta.subtitle);
-    score()->setMetaTag(COMPOSER_KEY, meta.composer);
-    score()->setMetaTag(LYRICIST_KEY, meta.lyricist);
-    score()->setMetaTag(COPYRIGHT_KEY, meta.copyright);
-    score()->setMetaTag(TRANSLATOR_KEY, meta.translator);
-    score()->setMetaTag(ARRANGER_KEY, meta.arranger);
-    score()->setMetaTag(CREATION_DATE_KEY, meta.creationDate.toString());
+    score()->setMetaTag(SUBTITLE_TAG, meta.subtitle);
+    score()->setMetaTag(COMPOSER_TAG, meta.composer);
+    score()->setMetaTag(LYRICIST_TAG, meta.lyricist);
+    score()->setMetaTag(COPYRIGHT_TAG, meta.copyright);
+    score()->setMetaTag(TRANSLATOR_TAG, meta.translator);
+    score()->setMetaTag(ARRANGER_TAG, meta.arranger);
+    score()->setMetaTag(SOURCE_TAG, meta.source);
+    score()->setMetaTag(PLATFORM_TAG, meta.platform);
+    score()->setMetaTag(CREATION_DATE_TAG, meta.creationDate.toString());
+
+    for (const QString& key : meta.additionalTags.keys()) {
+        score()->setMetaTag(key, meta.additionalTags[key].toString());
+    }
 }
 
 INotationPtr Notation::clone() const
