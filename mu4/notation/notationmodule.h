@@ -21,12 +21,10 @@
 
 #include "modularity/imodulesetup.h"
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class NotationModule : public framework::IModuleSetup
 {
 public:
-
     std::string moduleName() const override;
 
     void registerExports() override;
@@ -35,7 +33,6 @@ public:
     void registerUiTypes() override;
     void onInit() override;
 };
-}
 }
 
 #endif // MU_NOTATION_NOTATIONMODULE_H

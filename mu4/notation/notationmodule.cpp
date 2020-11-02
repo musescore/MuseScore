@@ -52,6 +52,7 @@
 #include "view/widgets/measureproperties.h"
 #include "view/widgets/editstaff.h"
 #include "view/widgets/breaksdialog.h"
+#include "view/widgets/scoreproperties.h"
 
 using namespace mu::notation;
 using namespace mu::notation;
@@ -96,6 +97,9 @@ void NotationModule::resolveImports()
     if (ir) {
         ir->registerUri(Uri("musescore://notation/style"),
                         ContainerMeta(ContainerType::QWidgetDialog, EditStyle::metaTypeId()));
+
+        ir->registerUri(Uri("musescore://notation/properties"),
+                        ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<ScorePropertiesDialog>("ScorePropertiesDialog")));
 
         ir->registerUri(Uri("musescore://notation/measureproperties"),
                         ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<MeasurePropertiesDialog>("MeasurePropertiesDialog")));

@@ -30,5 +30,15 @@ Item {
                 api.launcher.open("musescore://notation/breaks")
             }
         }
+
+        FlatButton {
+            width: 220
+
+            text: qsTrc("devtools", "Score properties")
+
+            onClicked: {
+                api.launcher.open("musescore://notation/properties")
+            }
+        }
     }
 }
