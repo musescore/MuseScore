@@ -20,26 +20,21 @@
 #ifndef MU_NOTATION_VIEWMODECONTROLMODEL_H
 #define MU_NOTATION_VIEWMODECONTROLMODEL_H
 
-#include <QtQml>
-#include <QList>
-#include <QHash>
 #include <QAbstractListModel>
 
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
-#include "inotationconfiguration.h"
 #include "context/iglobalcontext.h"
 #include "async/asyncable.h"
 #include "notation/notationtypes.h"
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class ViewModeControlModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
     INJECT(notation, actions::IActionsDispatcher, dispatcher)
-    INJECT(notation, context::IGlobalContext, globalContext)
+    INJECT(notation, context::IGlobalContext, context)
 
     Q_PROPERTY(int currentViewModeId READ currentViewModeId WRITE setCurrentViewModeId NOTIFY currentViewModeIdChanged)
 
@@ -75,16 +70,10 @@ private:
     };
 
     int viewModeToId(const ViewMode& viewMode);
-    void onNotationChanged();
-
     int m_currentViewModeId = 0;  // default to page view
 
     QList<ViewModeOption> m_viewModeOptions;
-    QHash<int, QByteArray> m_roleNames;
-
-    async::Notification m_notationChanged;
 };
-}
 }
 
 #endif // MU_NOTATION_VIEWMODECONTROLMODEL_H

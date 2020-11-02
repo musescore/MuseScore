@@ -12,7 +12,10 @@ StyledComboBox {
     textRoleName: "nameRole"
     valueRoleName: "idRole"
     currentIndex: indexOfValue(model.currentViewModeId)
-    onValueChanged: model.currentViewModeId = value
+
+    onValueChanged: {
+        model.currentViewModeId = value
+    }
     
     model: ViewModeControlModel {
         id: model

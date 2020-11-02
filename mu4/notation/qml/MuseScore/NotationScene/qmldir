@@ -5,3 +5,4 @@ ViewModeControl 1.0 ViewModeControl.qml
 NotationAccessibilityInfo 1.0 NotationAccessibilityInfo.qml
 PartsDialog 1.0 PartsDialog.qml
 NotationModeToolBar 1.0 NotationModeToolBar.qml
+ConcertPitchControl 1.0 ConcertPitchControl.qml

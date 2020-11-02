@@ -18,36 +18,36 @@
 //=============================================================================
 
 #include "viewmodecontrolmodel.h"
-#include "notationtypes.h"
+
+#include "translation.h"
 
 using namespace mu::notation;
 
 ViewModeControlModel::ViewModeControlModel(QObject* parent)
     : QAbstractListModel(parent)
 {
-    m_roleNames.insert(IdRole, "idRole");
-    m_roleNames.insert(NameRole, "nameRole");
-    m_viewModeOptions << ViewModeOption { "Page View", "view-mode-page", ViewMode::PAGE }
-                      << ViewModeOption { "Continuous View", "view-mode-continuous", ViewMode::LINE }
-                      << ViewModeOption { "Single Page", "view-mode-single", ViewMode::SYSTEM };
+    m_viewModeOptions << ViewModeOption { qtrc("notation", "Page View"), "view-mode-page", ViewMode::PAGE }
+                      << ViewModeOption { qtrc("notation", "Continuous View"), "view-mode-continuous", ViewMode::LINE }
+                      << ViewModeOption { qtrc("notation", "Single Page"), "view-mode-single", ViewMode::SYSTEM };
 }
 
 void ViewModeControlModel::load()
 {
-    onNotationChanged();
-    m_notationChanged = globalContext()->currentNotationChanged();
-    m_notationChanged.onNotify(this, [this]() {
-        onNotationChanged();
+    updateState();
+
+    context()->currentNotationChanged().onNotify(this, [this]() {
+        updateState();
     });
 }
 
 int ViewModeControlModel::viewModeToId(const ViewMode& viewMode)
 {
     for (int i = 0; i < m_viewModeOptions.length(); ++i) {
-        if (m_viewModeOptions.at(i).viewMode == viewMode) {
+        if (m_viewModeOptions[i].viewMode == viewMode) {
             return i;
         }
     }
+
     return -1;
 }
 
@@ -66,14 +66,20 @@ QVariant ViewModeControlModel::data(const QModelIndex& index, int role) const
 
     switch (role) {
     case IdRole: return viewModeId;
-    case NameRole: return m_viewModeOptions.at(viewModeId).displayString;
-    default: return QVariant();
+    case NameRole: return m_viewModeOptions[viewModeId].displayString;
     }
+
+    return QVariant();
 }
 
 QHash<int, QByteArray> ViewModeControlModel::roleNames() const
 {
-    return m_roleNames;
+    static const QHash<int, QByteArray> roles {
+        { IdRole, "idRole" },
+        { NameRole, "nameRole" }
+    };
+
+    return roles;
 }
 
 int ViewModeControlModel::currentViewModeId() const
@@ -89,18 +95,9 @@ void ViewModeControlModel::setCurrentViewModeId(int newViewModeId)
     }
 }
 
-void ViewModeControlModel::onNotationChanged()
-{
-    std::shared_ptr<INotation> notation = globalContext()->currentNotation();
-
-    //! NOTE Unsubscribe from previous notation, if it was
-    m_notationChanged.resetOnNotify(this);
-    updateState();
-}
-
 void ViewModeControlModel::updateState()
 {
-    auto notation = globalContext()->currentNotation();
+    auto notation = context()->currentNotation();
     if (!notation) {
         return;
     }
