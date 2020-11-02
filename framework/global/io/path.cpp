@@ -101,6 +101,11 @@ mu::io::path mu::io::dirname(const mu::io::path& path)
     return QFileInfo(path.toQString()).dir().dirName();
 }
 
+mu::io::path mu::io::dirpath(const mu::io::path& path)
+{
+    return QFileInfo(path.toQString()).dir().path();
+}
+
 mu::io::path mu::io::escapeFileName(const mu::io::path& fn_)
 {
     //
