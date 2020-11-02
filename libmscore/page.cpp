@@ -353,34 +353,110 @@ QString Page::replaceTextMacros(const QString& s) const
                 d += masterScore()->fileInfo()->absoluteFilePath().toHtmlEscaped();
                 break;
             case 'd':
+#if (defined (_MSCVER) || defined (_MSC_VER))
+#pragma warning (push)
+#pragma warning (disable: 4996)
+#else
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
                 // ToDo for Qt 5.15: Qt::DefaultLocaleShortDate vs. QLocale ??
                 d += QDate::currentDate().toString(Qt::DefaultLocaleShortDate);
+#if (defined (_MSCVER) || defined (_MSC_VER))
+#pragma warning (pop)
+#else
+#pragma GCC diagnostic pop
+#endif
                 break;
             case 'D':
             {
                 QString creationDate = score()->metaTag("creationDate");
                 if (creationDate.isNull()) {
+#if (defined (_MSCVER) || defined (_MSC_VER))
+#pragma warning (push)
+#pragma warning (disable: 4996)
+#else
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
                     // ToDo for Qt 5.15: Qt::DefaultLocaleShortDate vs. QLocale ??
                     d += masterScore()->fileInfo()->birthTime().date().toString(Qt::DefaultLocaleShortDate);
+#if (defined (_MSCVER) || defined (_MSC_VER))
+#pragma warning (pop)
+#else
+#pragma GCC diagnostic pop
+#endif
                 } else {
+#if (defined (_MSCVER) || defined (_MSC_VER))
+#pragma warning (push)
+#pragma warning (disable: 4996)
+#else
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
                     // ToDo for Qt 5.15: Qt::DefaultLocaleShortDate vs. QLocale ??
                     d += QDate::fromString(creationDate, Qt::ISODate).toString(Qt::DefaultLocaleShortDate);
+#if (defined (_MSCVER) || defined (_MSC_VER))
+#pragma warning (pop)
+#else
+#pragma GCC diagnostic pop
+#endif
                 }
             }
             break;
             case 'm':
                 if (score()->dirty()) {
+#if (defined (_MSCVER) || defined (_MSC_VER))
+#pragma warning (push)
+#pragma warning (disable: 4996)
+#else
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
                     // ToDo for Qt 5.15: Qt::DefaultLocaleShortDate vs. QLocale ??
                     d += QTime::currentTime().toString(Qt::DefaultLocaleShortDate);
+#if (defined (_MSCVER) || defined (_MSC_VER))
+#pragma warning (pop)
+#else
+#pragma GCC diagnostic pop
+#endif
                 } else {
+#if (defined (_MSCVER) || defined (_MSC_VER))
+#pragma warning (push)
+#pragma warning (disable: 4996)
+#else
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
                     // ToDo for Qt 5.15: Qt::DefaultLocaleShortDate vs. QLocale ??
                     d += masterScore()->fileInfo()->lastModified().time().toString(Qt::DefaultLocaleShortDate);
+#if (defined (_MSCVER) || defined (_MSC_VER))
+#pragma warning (pop)
+#else
+#pragma GCC diagnostic pop
+#endif
                 }
                 break;
             case 'M':
                 if (score()->dirty()) {
+#if (defined (_MSCVER) || defined (_MSC_VER))
+#pragma warning (push)
+#pragma warning (disable: 4996)
+#else
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+                    // ToDo for Qt 5.15: Qt::DefaultLocaleShortDate vs. QLocale ??
                     d += QDate::currentDate().toString(Qt::DefaultLocaleShortDate);
                 } else {
+#if (defined (_MSCVER) || defined (_MSC_VER))
+#pragma warning (push)
+#pragma warning (disable: 4996)
+#else
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+                    // ToDo for Qt 5.15: Qt::DefaultLocaleShortDate vs. QLocale ??
                     d += masterScore()->fileInfo()->lastModified().date().toString(Qt::DefaultLocaleShortDate);
                 }
                 break;

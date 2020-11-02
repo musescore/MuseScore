@@ -75,8 +75,20 @@ void ApiInfo::createInstance()
     QByteArray clientId;
     if (f.open(QIODevice::ReadOnly)) {
         const QByteArray saveData = f.readAll();
+#if (defined (_MSCVER) || defined (_MSC_VER))
+#pragma warning (push)
+#pragma warning (disable: 4996)
+#else
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
         // ToDo for Qt 5.15: QJsonDocument::fromBinaryData vs. CBOR format ??
         const QJsonDocument d(QJsonDocument::fromBinaryData(saveData));
+#if (defined (_MSCVER) || defined (_MSC_VER))
+#pragma warning (pop)
+#else
+#pragma GCC diagnostic pop
+#endif
         QJsonObject saveObject = d.object();
         clientId = saveObject["clientId"].toString().toLatin1();
         f.close();
@@ -87,8 +99,20 @@ void ApiInfo::createInstance()
             QJsonObject saveObject;
             saveObject["clientId"] = QString(clientId);
             QJsonDocument saveDoc(saveObject);
+#if (defined (_MSCVER) || defined (_MSC_VER))
+#pragma warning (push)
+#pragma warning (disable: 4996)
+#else
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
             // ToDo for Qt 5.15: QJsonDocument::toBinaryData vs. CBOR format ??
             f.write(saveDoc.toBinaryData());
+#if (defined (_MSCVER) || defined (_MSC_VER))
+#pragma warning (pop)
+#else
+#pragma GCC diagnostic pop
+#endif
             f.close();
         }
     }
@@ -186,8 +210,20 @@ bool CloudManager::save()
     saveObject["accessToken"] = m_accessToken;
     saveObject["refreshToken"] = m_refreshToken;
     QJsonDocument saveDoc(saveObject);
+#if (defined (_MSCVER) || defined (_MSC_VER))
+#pragma warning (push)
+#pragma warning (disable: 4996)
+#else
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
     // ToDo for Qt 5.15: QJsonDocument::toBinaryData vs. CBOR format ??
     saveFile.write(saveDoc.toBinaryData());
+#if (defined (_MSCVER) || defined (_MSC_VER))
+#pragma warning (pop)
+#else
+#pragma GCC diagnostic pop
+#endif
     saveFile.close();
     return true;
 }
@@ -204,8 +240,20 @@ bool CloudManager::init()
         return false;
     }
     QByteArray saveData = loadFile.readAll();
+#if (defined (_MSCVER) || defined (_MSC_VER))
+#pragma warning (push)
+#pragma warning (disable: 4996)
+#else
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
     // ToDo for Qt 5.15: QJsonDocument::fromBinaryData vs. CBOR format ??
     QJsonDocument loadDoc(QJsonDocument::fromBinaryData(saveData));
+#if (defined (_MSCVER) || defined (_MSC_VER))
+#pragma warning (pop)
+#else
+#pragma GCC diagnostic pop
+#endif
     QJsonObject saveObject = loadDoc.object();
     m_accessToken = saveObject["accessToken"].toString();
     m_refreshToken = saveObject["refreshToken"].toString();
