@@ -324,7 +324,7 @@ void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, QSt
         }
         break;
     default:
-        qDebug("tpc2name(%d): acc %d", tpc, accVal);
+        qDebug("tpc2name(%d): acc %d", tpc, static_cast<int>(accVal));
         acc = "";
         break;
     }

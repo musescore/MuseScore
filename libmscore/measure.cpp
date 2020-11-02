@@ -248,7 +248,7 @@ void Measure::setScore(Score* score)
 
 MStaff* Measure::mstaff(int staffIndex) const
 {
-    if (staffIndex >= 0 && staffIndex < _mstaves.size()) {
+    if (staffIndex >= 0 && staffIndex < static_cast<int>(_mstaves.size())) {
         return _mstaves[staffIndex];
     }
 
