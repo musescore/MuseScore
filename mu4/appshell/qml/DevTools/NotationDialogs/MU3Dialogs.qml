@@ -40,5 +40,15 @@ Item {
                 api.launcher.open("musescore://notation/properties")
             }
         }
+
+        FlatButton {
+            width: 220
+
+            text: qsTrc("devtools", "Style dialog")
+
+            onClicked: {
+                api.launcher.open("musescore://notation/style")
+            }
+        }
     }
 }

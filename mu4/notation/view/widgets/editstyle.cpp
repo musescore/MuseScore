@@ -712,17 +712,34 @@ EditStyle::EditStyle(QWidget* parent)
         this->setMinimumSize(scr.width() / 2, scr.height() / 2);
     }
     hasShown = false;
+
+    adjustPagesStackSize(0);
+
     WidgetStateStore::restoreGeometry(this);
+}
+
+void EditStyle::adjustPagesStackSize(int currentPageIndex)
+{
+    QSize preferredSize = pageStack->widget(currentPageIndex)->sizeHint();
+    pageStack->setMinimumSize(preferredSize);
+
+    connect(pageStack, &QStackedWidget::currentChanged, [this](int currentIndex) {
+        QWidget* currentPage = pageStack->widget(currentIndex);
+        if (!currentPage) {
+            return;
+        }
+
+        pageStack->setMinimumSize(currentPage->sizeHint());
+
+        if (scrollArea) {
+            scrollArea->ensureVisible(0, 0);
+        }
+    });
 }
 
 EditStyle::EditStyle(const EditStyle& other)
     : QDialog(other.parentWidget())
 {
-}
-
-int EditStyle::metaTypeId()
-{
-    return QMetaType::type("EditStyle");
 }
 
 //---------------------------------------------------------
@@ -734,8 +751,9 @@ void EditStyle::showEvent(QShowEvent* ev)
     if (!hasShown && isTooBig) {
         // Add scroll bars to pageStack - this cannot be in the constructor
         // or the Header, Footer text input boxes size themselves too large.
-        QScrollArea* scrollArea = new QScrollArea(splitter);
+        scrollArea = new QScrollArea(splitter);
         scrollArea->setWidget(pageStack);
+        scrollArea->setWidgetResizable(true);
         hasShown = true;     // so that it only happens once
     }
     setValues();
