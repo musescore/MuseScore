@@ -6,7 +6,7 @@ import MuseScore.Ui 1.0
 Row {
     id: root
 
-    spacing: 8
+    spacing: 4
 
     ZoomControlModel {
         id: model
@@ -16,30 +16,31 @@ Row {
         model.load()
     }
 
-    StyledIconLabel {
-        width: 40
+    FlatButton {
+        icon: IconCode.ZOOM_IN
 
-        iconCode: IconCode.ZOOM_OUT
+        normalStateColor: "transparent"
 
-        MouseArea {
-            anchors.fill: parent
-            onClicked: model.zoomOut()
+        onClicked: {
+            model.zoomIn()
+        }
+    }
+
+    FlatButton {
+        icon: IconCode.ZOOM_OUT
+
+        normalStateColor: "transparent"
+
+        onClicked: {
+            model.zoomOut()
         }
     }
 
     StyledTextLabel {
+        height: parent.height
+
         width: 60
+
         text: model.currentZoom + " %"
-    }
-
-    StyledIconLabel {
-        width: 40
-
-        iconCode: IconCode.ZOOM_IN
-
-        MouseArea {
-            anchors.fill: parent
-            onClicked: model.zoomIn()
-        }
     }
 }

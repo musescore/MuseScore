@@ -1753,7 +1753,10 @@ void TextBase::insert(TextCursor* cursor, uint code)
     } else {
         s = QString(code);
     }
-    _layout[cursor->row()].insert(cursor, s);
+
+    if (cursor->row() < rows()) {
+        _layout[cursor->row()].insert(cursor, s);
+    }
 
     cursor->setColumn(cursor->column() + 1);
     cursor->clearSelection();
@@ -1811,10 +1814,15 @@ void TextBase::createLayout()
                 if (rows() <= cursor.row()) {
                     _layout.append(TextBlock());
                 }
-                if (_layout[cursor.row()].fragments().size() == 0) {
-                    _layout[cursor.row()].insertEmptyFragmentIfNeeded(&cursor);           // used to preserve the Font size of the line (font info is held in TextFragments, see PR #5881)
+
+                if (cursor.row() < rows()) {
+                    if (_layout[cursor.row()].fragments().size() == 0) {
+                        _layout[cursor.row()].insertEmptyFragmentIfNeeded(&cursor);           // used to preserve the Font size of the line (font info is held in TextFragments, see PR #5881)
+                    }
+
+                    _layout[cursor.row()].setEol(true);
                 }
-                _layout[cursor.row()].setEol(true);
+
                 cursor.setRow(cursor.row() + 1);
                 cursor.setColumn(0);
                 if (rows() <= cursor.row()) {

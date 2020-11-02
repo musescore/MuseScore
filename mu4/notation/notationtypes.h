@@ -128,12 +128,6 @@ struct ScoreCreateOptions {
     instruments::InstrumentList instruments;
 };
 
-struct ViewModeOption {
-    QString displayString;
-    QString actionString;
-    ViewMode viewMode;
-};
-
 struct SearchCommand
 {
     ElementType searchElementType = ElementType::INVALID;
