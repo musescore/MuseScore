@@ -76,8 +76,12 @@ bool MuseScore::savePositions(Score* score, QIODevice* device, bool segments, bo
             for (Segment* s = score->firstMeasureMM()->first(SegmentType::ChordRest);
                s; s = s->next1MM(SegmentType::ChordRest)) {
 
+                  // offset into the page, round down
+                  int x = qFloor((s->pagePos().x() + left_distance) * ndpi);
+                  int y = qFloor(s->pagePos().y() * ndpi);
+
                   // width/height, round up
-                  qreal sx   = 0;
+                  qreal sx = 0;
                   qreal right_distance = 0;
                   qreal left_distance = 0;
                   int tracks = score->nstaves() * VOICES;
@@ -90,10 +94,6 @@ bool MuseScore::savePositions(Score* score, QIODevice* device, bool segments, bo
                               left_distance = qMin(left_distance, e->offset().x());
                               }
                         }
-
-                  // offset into the page, round down
-                  int x = qFloor((s->pagePos().x() + left_distance) * ndpi);
-                  int y = qFloor(s->pagePos().y() * ndpi);
 
                   // width = smallest element + largest offset
                   int w    = qCeil((right_distance + abs(left_distance)) * ndpi);
@@ -175,4 +175,3 @@ bool MuseScore::savePositions(Score* score, const QString& name, bool segments, 
       return savePositions(score, &fp, segments, legacyExport);
       }
 }
-
