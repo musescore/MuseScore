@@ -47,7 +47,7 @@ enum Symbol
     NONE
 };
 
-enum StartStop
+enum class StartStop
 {
     ST_NONE,
     ST_START,
