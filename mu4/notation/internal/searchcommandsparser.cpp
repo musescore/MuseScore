@@ -93,7 +93,7 @@ SearchCommandsParser::SearchData SearchCommandsParser::parsePageCommand(const st
     }
 
     bool ok = false;
-    int pageIndex = qsearchCommand.mid(PAGE_CODE.size()).toInt(&ok);
+    int pageIndex = qsearchCommand.mid(static_cast<int>(PAGE_CODE.size())).toInt(&ok);
 
     if (ok) {
         data.elementType = ElementType::PAGE;
