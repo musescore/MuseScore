@@ -11,17 +11,22 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
     }
 
-    ViewModeControl {
-        id: viewModeControl
-        anchors.right: zoomControl.left
-        anchors.rightMargin: 20
-        anchors.verticalCenter: parent.verticalCenter
-    }
-
-    ZoomControl {
-        id: zoomControl
+    Row {
         anchors.right: parent.right
         anchors.rightMargin: 20
-        anchors.verticalCenter: parent.verticalCenter
+
+        spacing: 12
+
+        ConcertPitchControl {
+            anchors.verticalCenter: parent.verticalCenter
+        }
+
+        ViewModeControl {
+            anchors.verticalCenter: parent.verticalCenter
+        }
+
+        ZoomControl {
+            anchors.verticalCenter: parent.verticalCenter
+        }
     }
 }
