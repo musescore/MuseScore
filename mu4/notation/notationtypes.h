@@ -92,7 +92,8 @@ enum class BreaksSpawnIntervalType
     MeasuresInterval
 };
 
-struct Meta {
+struct Meta
+{
     QString fileName;
     QString filePath;
     QString title;
@@ -105,6 +106,14 @@ struct Meta {
     size_t partsCount = 0;
     QPixmap thumbnail;
     QDate creationDate;
+
+    QString source;
+    QString platform;
+    QString musescoreVersion;
+    int musescoreRevision = 0;
+    int mscVersion = 0;
+
+    QVariantMap additionalTags;
 };
 
 using MetaList = QList<Meta>;

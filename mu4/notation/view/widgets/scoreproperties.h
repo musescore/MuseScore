@@ -22,12 +22,17 @@
 
 #include "ui_scoreproperties.h"
 
+#include "modularity/ioc.h"
+#include "iinteractive.h"
+#include "context/iglobalcontext.h"
+#include "inotation.h"
+#include "framework/system/ifilesystem.h"
+
 namespace Ms {
 class Score;
 }
 
 namespace mu::notation {
-
 //---------------------------------------------------------
 //   MetaEditDialog
 ///   Dialog for editing metatags.
@@ -40,30 +45,37 @@ namespace mu::notation {
 
 class ScorePropertiesDialog : public QDialog, public Ui::ScorePropertiesDialog
 {
-      Q_OBJECT
+    Q_OBJECT
 
-      Ms::Score* m_score; /// the current score
-      bool m_dirty;   /// whether the editor has unsaved changes or not
+    INJECT(notation, framework::IInteractive, interactive)
+    INJECT(notation, context::IGlobalContext, context)
+    INJECT(notation, framework::IFileSystem, fileSystem)
 
-      virtual void closeEvent(QCloseEvent*) override;
+    bool m_dirty = false;     /// whether the editor has unsaved changes or not
 
-      bool isBuiltinTag(const QString& tag) const;
-      QPair<QLineEdit*, QLineEdit*> addTag(const QString& key, const QString& value, const bool builtinTag);
+    virtual void closeEvent(QCloseEvent*) override;
 
-      bool save();
-      void newClicked();
-      void setDirty(const bool dirty = true);
-      void openFileLocation();
+    bool isStandardTag(const QString& tag) const;
+    QPair<QLineEdit*, QLineEdit*> addTag(const QString& key, const QString& value);
 
-   public:
-      ScorePropertiesDialog(QWidget* parent = nullptr);
-      ScorePropertiesDialog(const ScorePropertiesDialog& dialog);
+    bool save();
+    void newClicked();
+    void setDirty(const bool dirty = true);
+    void openFileLocation();
 
-      void accept() override;
-      };
+    INotationPtr notation() const;
+
+    void initTags();
+    void saveMetaTags(const QVariantMap& tagsMap);
+
+public:
+    ScorePropertiesDialog(QWidget* parent = nullptr);
+    ScorePropertiesDialog(const ScorePropertiesDialog& dialog);
+
+    void accept() override;
+};
 }
 
 Q_DECLARE_METATYPE(mu::notation::ScorePropertiesDialog)
 
 #endif // MU_NOTATION_SCOREPROPERTIES_H
-

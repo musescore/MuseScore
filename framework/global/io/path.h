@@ -63,6 +63,7 @@ std::string syffix(const path& path);
 path filename(const path& path);
 path basename(const path& path);
 path dirname(const path& path);
+path dirpath(const path& path);
 
 path escapeFileName(const path& fn);
 }
