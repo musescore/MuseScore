@@ -93,6 +93,9 @@ include (CreatePrecompiledHeader)
 set(CMAKE_AUTOMOC     TRUE)
 set(USE_SSE           TRUE)
 
+set(MUSESCORE_REVISION "" CACHE STRING "Build revision")
+add_definitions(-DMUSESCORE_REVISION="${MUSESCORE_REVISION}")
+
 # Setup version number and general build settings
 SET(MUSESCORE_BUILD_CONFIG "dev" CACHE STRING "Build config")
 # Possible MUSESCORE_BUILD_CONFIG values:

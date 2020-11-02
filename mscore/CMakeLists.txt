@@ -39,8 +39,6 @@ if (NOT MSVC)
 endif (NOT MSVC)
 include (${PROJECT_SOURCE_DIR}/build/CopyFilesMacros.cmake)
 
-SET_SOURCE_FILES_PROPERTIES(revision.h PROPERTIES GENERATED TRUE)
-
 include_directories(
       ${CMAKE_CURRENT_BINARY_DIR}
       ${PROJECT_SOURCE_DIR}
@@ -177,7 +175,7 @@ add_library(mscoreapp STATIC
       pathlistdialog.h piano.h  pianotools.h
       openfilelocation.h
       playpanel.h preferences.h preferenceslistwidget.h prefsdialog.h
-      radiobuttongroupbox.h recordbutton.h resourceManager.h revision.h ruler.h scoreaccessibility.h
+      radiobuttongroupbox.h recordbutton.h resourceManager.h ruler.h scoreaccessibility.h
       scoreBrowser.h scoreInfo.h scorePreview.h scoretab.h scoreview.h searchComboBox.h
       selectdialog.h selectionwindow.h selectnotedialog.h selinstrument.h
       seq.h shortcut.h shortcutcapturedialog.h simplebutton.h splitstaff.h stafftextproperties.h

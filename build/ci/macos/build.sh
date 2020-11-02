@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 echo "Build MuseScore"
-set -x
+#set -x
 trap 'echo Build failed; exit 1' ERR
 SKIP_ERR=true
 
@@ -31,13 +31,18 @@ echo "MUSESCORE_BUILD_CONFIG: $MUSESCORE_BUILD_CONFIG"
 echo "BUILD_NUMBER: $BUILD_NUMBER"
 echo "TELEMETRY_TRACK_ID: $TELEMETRY_TRACK_ID"
 
-make -f Makefile.osx ci MUSESCORE_BUILD_CONFIG=$MUSESCORE_BUILD_CONFIG \
- 		        BUILD_NUMBER=$BUILD_NUMBER \
-                        TELEMETRY_TRACK_ID=$TELEMETRY_TRACK_ID
+MUSESCORE_REVISION=$(git rev-parse --short=7 HEAD)
+
+make -f Makefile.osx \
+    MUSESCORE_BUILD_CONFIG=$MUSESCORE_BUILD_CONFIG \
+    MUSESCORE_REVISION=$MUSESCORE_REVISION \
+    BUILD_NUMBER=$BUILD_NUMBER \
+    TELEMETRY_TRACK_ID=$TELEMETRY_TRACK_ID \
+    ci
 
 
 bash ./build/ci/tools/make_release_channel_env.sh -c $MUSESCORE_BUILD_CONFIG
 bash ./build/ci/tools/make_version_env.sh $BUILD_NUMBER
-bash ./build/ci/tools/make_revision_env.sh
+bash ./build/ci/tools/make_revision_env.sh $MUSESCORE_REVISION
 bash ./build/ci/tools/make_branch_env.sh
 bash ./build/ci/tools/make_datetime_env.sh

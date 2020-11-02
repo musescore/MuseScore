@@ -13,7 +13,6 @@
       <file alias="instruments.xml">../share/instruments/instruments.xml</file>
 
       <file>../mscore/data/mscore.png</file>
-      <file>../mscore/revision.h</file>
       <file>../mscore/data/musescore_logo_full.png</file>
 
       <file alias="schema/musicxml.xsd">../mscore/schema/musicxml.xsd</file>
