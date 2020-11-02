@@ -35,7 +35,7 @@ class QIODevice;
 namespace Bww {
 static const int maxBeamLevel = 3;
 
-enum BeamType
+enum class BeamType
 {
     BM_NONE,
     BM_BEGIN,
@@ -96,7 +96,7 @@ public:
     virtual void beginMeasure(const Bww::MeasureBeginFlags mbf) = 0;
     virtual void endMeasure(const Bww::MeasureEndFlags mef) = 0;
     virtual void note(const QString pitch, const QVector<BeamType> beamList,const QString type, const int dots,bool tieStart = false,
-                      bool tieStop = false,StartStop triplet = ST_NONE,bool grace = false) = 0;
+                      bool tieStop = false,StartStop triplet = StartStop::ST_NONE,bool grace = false) = 0;
     QString instrumentName() const { return "Bagpipe"; }
     int midiProgram() const { return 110; }
 };

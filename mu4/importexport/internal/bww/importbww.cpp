@@ -132,12 +132,12 @@ public:
     void endMeasure(const Bww::MeasureEndFlags mef);
     void header(const QString title, const QString type,const QString composer, const QString footer,const unsigned int temp);
     void note(const QString pitch, const QVector<Bww::BeamType> beamList,const QString type, const int dots,bool tieStart = false,
-              bool tieStop = false,StartStop triplet = ST_NONE,bool grace = false);
+              bool tieStop = false,StartStop triplet = StartStop::ST_NONE,bool grace = false);
     void setScore(Ms::Score* s) { score = s; }
     void tsig(const int beats, const int beat);
     void trailer();
 private:
-    void doTriplet(Ms::Chord* cr, StartStop triplet = ST_NONE);
+    void doTriplet(Ms::Chord* cr, StartStop triplet = StartStop::ST_NONE);
     static const int WHOLE_DUR = 64;                    ///< Whole note duration
     struct StepAlterOct {                               ///< MusicXML step/alter/oct values
         QChar s;
@@ -341,11 +341,11 @@ void MsScWriter::note(const QString pitch, const QVector<Bww::BeamType> beamList
     Ms::TDuration durationType(Ms::TDuration::DurationType::V_INVALID);
     durationType.setVal(ticks);
     qDebug() << "duration:" << durationType.name();
-    if (triplet != ST_NONE) {
+    if (triplet != StartStop::ST_NONE) {
         ticks = 2 * ticks / 3;
     }
 
-    Ms::Beam::Mode bm  = (beamList.at(0) == Bww::BM_BEGIN) ? Ms::Beam::Mode::BEGIN : Ms::Beam::Mode::AUTO;
+    Ms::Beam::Mode bm  = (beamList.at(0) == Bww::BeamType::BM_BEGIN) ? Ms::Beam::Mode::BEGIN : Ms::Beam::Mode::AUTO;
     Ms::Direction sd = Ms::Direction::AUTO;
 
     // create chord
@@ -492,16 +492,16 @@ void MsScWriter::trailer()
 
 void MsScWriter::doTriplet(Ms::Chord* cr, StartStop triplet)
 {
-    qDebug() << "MsScWriter::doTriplet(" << triplet << ")"
+    qDebug() << "MsScWriter::doTriplet(" << static_cast<int>(triplet) << ")"
     ;
 
-    if (triplet == ST_START) {
+    if (triplet == StartStop::ST_START) {
         tuplet = new Ms::Tuplet(score);
         tuplet->setTrack(0);
         tuplet->setRatio(Ms::Fraction(3, 2));
 //            tuplet->setTick(tick);
         currentMeasure->add(tuplet);
-    } else if (triplet == ST_STOP) {
+    } else if (triplet == StartStop::ST_STOP) {
         if (tuplet) {
             cr->setTuplet(tuplet);
             tuplet->add(cr);
@@ -509,16 +509,16 @@ void MsScWriter::doTriplet(Ms::Chord* cr, StartStop triplet)
         } else {
             qDebug("BWW::import: triplet stop without triplet start");
         }
-    } else if (triplet == ST_CONTINUE) {
+    } else if (triplet == StartStop::ST_CONTINUE) {
         if (!tuplet) {
             qDebug("BWW::import: triplet continue without triplet start");
         }
-    } else if (triplet == ST_NONE) {
+    } else if (triplet == StartStop::ST_NONE) {
         if (tuplet) {
             qDebug("BWW::import: triplet none inside triplet");
         }
     } else {
-        qDebug("unknown triplet type %d", triplet);
+        qDebug("unknown triplet type %d", static_cast<int>(triplet));
     }
     if (tuplet) {
         cr->setTuplet(tuplet);
