@@ -71,7 +71,7 @@ void MU4InspectorAdapter::showPageSettingsDialog()
 
 void MU4InspectorAdapter::showStyleSettingsDialog()
 {
-    NOT_IMPLEMENTED;
+    interactive()->open("musescore://notation/style");
 }
 
 void MU4InspectorAdapter::showTimeSignaturePropertiesDialog()

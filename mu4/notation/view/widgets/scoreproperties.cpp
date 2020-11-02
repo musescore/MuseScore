@@ -367,7 +367,7 @@ void ScorePropertiesDialog::saveMetaTags(const QVariantMap& tagsMap)
     meta.arranger = tagsMap[ARRANGER_TAG].toString();
     meta.composer = tagsMap[COMPOSER_TAG].toString();
     meta.copyright = tagsMap[COPYRIGHT_TAG].toString();
-    meta.creationDate = QDate::fromString(tagsMap[CREATION_DATE_TAG].toString(), Qt::ISODate);
+    meta.creationDate = QDate::fromString(tagsMap[CREATION_DATE_TAG].toString());
     meta.lyricist = tagsMap[LYRICIST_TAG].toString();
     meta.translator = tagsMap[TRANSLATOR_TAG].toString();
     meta.source = tagsMap[SOURCE_TAG].toString();

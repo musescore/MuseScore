@@ -96,7 +96,7 @@ void NotationModule::resolveImports()
     auto ir = framework::ioc()->resolve<framework::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerUri(Uri("musescore://notation/style"),
-                        ContainerMeta(ContainerType::QWidgetDialog, EditStyle::metaTypeId()));
+                        ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<EditStyle>("EditStyle")));
 
         ir->registerUri(Uri("musescore://notation/properties"),
                         ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<ScorePropertiesDialog>("ScorePropertiesDialog")));

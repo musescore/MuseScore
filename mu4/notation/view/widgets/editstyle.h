@@ -62,6 +62,7 @@ class EditStyle : public QDialog, private Ui::EditStyleBase
     INJECT(notation, mu::framework::IInteractive, interactive)
 
     QPushButton* buttonApplyToAllParts = nullptr;
+    QScrollArea* scrollArea = nullptr;
     QVector<StyleWidget> styleWidgets;
     bool isTooBig = false;
     bool hasShown = false;
@@ -77,6 +78,8 @@ class EditStyle : public QDialog, private Ui::EditStyleBase
     void setStyleValue(StyleId id, const QVariant& value);
 
     const StyleWidget& styleWidget(StyleId id) const;
+
+    void adjustPagesStackSize(int currentPageIndex);
 
     static const std::map<ElementType, EditStylePage> PAGES;
 
@@ -106,8 +109,6 @@ private slots:
 public:
     EditStyle(QWidget* = nullptr);
     EditStyle(const EditStyle&);
-
-    static int metaTypeId();
 };
 }
 }
