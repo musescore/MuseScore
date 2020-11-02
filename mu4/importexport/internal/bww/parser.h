@@ -50,15 +50,15 @@ struct NoteDescription
     NoteDescription(const QString _pitch, const QString _beam,
                     const QString _type, const int _dots,
                     bool _tieStart = false, bool _tieStop = false,
-                    StartStop _triplet = ST_NONE,
+                    StartStop _triplet = StartStop::ST_NONE,
                     bool _grace = false)
         : pitch(_pitch), beam(_beam),
         type(_type), dots(_dots),
         tieStart(_tieStart), tieStop(_tieStop),
         triplet(_triplet),
         grace(_grace),
-        beamState(ST_NONE),
-        beamList(maxBeamLevel, BM_NONE)
+        beamState(StartStop::ST_NONE),
+        beamList(maxBeamLevel, BeamType::BM_NONE)
     {}
 };
 

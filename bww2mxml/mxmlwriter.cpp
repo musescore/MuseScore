@@ -81,53 +81,53 @@ void MxmlWriter::beginMeasure(const Bww::MeasureBeginFlags mbf)
         ++regularMeasureNumber;
         strMeasureNumber.setNum(regularMeasureNumber);
     }
-    out << "    <measure number=\"" << strMeasureNumber << "\"" << implicit << ">" << endl;
+    out << "    <measure number=\"" << strMeasureNumber << "\"" << implicit << ">" << Qt::endl;
     if ((regularMeasureNumber + irregularMeasureNumber) != 1 && mbf.firstOfSystem) {
-        out << "      <print new-system=\"yes\"/>" << endl;
+        out << "      <print new-system=\"yes\"/>" << Qt::endl;
     }
     if (mbf.repeatBegin || mbf.endingFirst || mbf.endingSecond) {
-        out << "      <barline location=\"left\">" << endl;
+        out << "      <barline location=\"left\">" << Qt::endl;
         if (mbf.repeatBegin) {
-            out << "        <bar-style>heavy-light</bar-style>" << endl;
-            out << "        <repeat direction=\"forward\"/>" << endl;
+            out << "        <bar-style>heavy-light</bar-style>" << Qt::endl;
+            out << "        <repeat direction=\"forward\"/>" << Qt::endl;
         }
         if (mbf.endingFirst) {
-            out << "        <ending number=\"1\" type=\"start\"/>" << endl;
+            out << "        <ending number=\"1\" type=\"start\"/>" << Qt::endl;
             ending = 1;
         }
         if (mbf.endingSecond) {
-            out << "        <ending number=\"2\" type=\"start\"/>" << endl;
+            out << "        <ending number=\"2\" type=\"start\"/>" << Qt::endl;
             ending = 2;
         }
-        out << "      </barline>" << endl;
+        out << "      </barline>" << Qt::endl;
     }
     if ((regularMeasureNumber + irregularMeasureNumber) == 1) {
-        out << "      <attributes>" << endl;
-        out << "        <divisions>" << wholeDur() / 4 << "</divisions>" << endl;
-//      out << "        <key print-object=\"no\">" << endl;
-        out << "        <key>" << endl;
-        out << "          <fifths>2</fifths>" << endl;
-        out << "          <mode>major</mode>" << endl;
-        out << "        </key>" << endl;
-        out << "        <time>" << endl;
-        out << "          <beats>" << beats << "</beats>" << endl;
-        out << "          <beat-type>" << beat << "</beat-type>" << endl;
-        out << "        </time>" << endl;
-        out << "        <clef>" << endl;
-        out << "          <sign>G</sign>" << endl;
-        out << "          <line>2</line>" << endl;
-        out << "        </clef>" << endl;
-        out << "      </attributes>" << endl;
+        out << "      <attributes>" << Qt::endl;
+        out << "        <divisions>" << wholeDur() / 4 << "</divisions>" << Qt::endl;
+//      out << "        <key print-object=\"no\">" << Qt::endl;
+        out << "        <key>" << Qt::endl;
+        out << "          <fifths>2</fifths>" << Qt::endl;
+        out << "          <mode>major</mode>" << Qt::endl;
+        out << "        </key>" << Qt::endl;
+        out << "        <time>" << Qt::endl;
+        out << "          <beats>" << beats << "</beats>" << Qt::endl;
+        out << "          <beat-type>" << beat << "</beat-type>" << Qt::endl;
+        out << "        </time>" << Qt::endl;
+        out << "        <clef>" << Qt::endl;
+        out << "          <sign>G</sign>" << Qt::endl;
+        out << "          <line>2</line>" << Qt::endl;
+        out << "        </clef>" << Qt::endl;
+        out << "      </attributes>" << Qt::endl;
         if (tempo) {
-            out << "      <direction placement=\"above\">" << endl;
-            out << "        <direction-type>" << endl;
-            out << "          <metronome parentheses=\"no\">" << endl;
-            out << "            <beat-unit>quarter</beat-unit>" << endl;
-            out << "            <per-minute>" << tempo << "</per-minute>" << endl;
-            out << "          </metronome>" << endl;
-            out << "        </direction-type>" << endl;
-            out << "        <sound tempo=\"" << tempo << "\"/>" << endl;
-            out << "      </direction>" << endl;
+            out << "      <direction placement=\"above\">" << Qt::endl;
+            out << "        <direction-type>" << Qt::endl;
+            out << "          <metronome parentheses=\"no\">" << Qt::endl;
+            out << "            <beat-unit>quarter</beat-unit>" << Qt::endl;
+            out << "            <per-minute>" << tempo << "</per-minute>" << Qt::endl;
+            out << "          </metronome>" << Qt::endl;
+            out << "        </direction-type>" << Qt::endl;
+            out << "        <sound tempo=\"" << tempo << "\"/>" << Qt::endl;
+            out << "      </direction>" << Qt::endl;
         }
     }
 }
@@ -140,27 +140,27 @@ void MxmlWriter::endMeasure(const Bww::MeasureEndFlags mef)
 {
     // qDebug() << "MxmlWriter::endMeasure()";
     if (mef.repeatEnd || mef.endingEnd || mef.lastOfPart || mef.doubleBarLine) {
-        out << "      <barline location=\"right\">" << endl;
+        out << "      <barline location=\"right\">" << Qt::endl;
         if (mef.repeatEnd || mef.lastOfPart) {
-            out << "        <bar-style>light-heavy</bar-style>" << endl;
+            out << "        <bar-style>light-heavy</bar-style>" << Qt::endl;
         } else if (mef.doubleBarLine) {
-            out << "        <bar-style>light-light</bar-style>" << endl;
+            out << "        <bar-style>light-light</bar-style>" << Qt::endl;
         }
         if (mef.endingEnd) {
             if (ending == 1) {
-                out << "        <ending number=\"1\" type=\"stop\"/>" << endl;
+                out << "        <ending number=\"1\" type=\"stop\"/>" << Qt::endl;
             } else if (ending == 2) {
-                out << "        <ending number=\"2\" type=\"discontinue\"/>" << endl;
+                out << "        <ending number=\"2\" type=\"discontinue\"/>" << Qt::endl;
             } else {
                 // TODO: error message
             }
         }
         if (mef.repeatEnd) {
-            out << "        <repeat direction=\"backward\"/>" << endl;
+            out << "        <repeat direction=\"backward\"/>" << Qt::endl;
         }
-        out << "      </barline>" << endl;
+        out << "      </barline>" << Qt::endl;
     }
-    out << "    </measure>" << endl;
+    out << "    </measure>" << Qt::endl;
 }
 
 /**
@@ -186,90 +186,90 @@ void MxmlWriter::note(const QString pitch, QVector<BeamType> beamList,
     if (dots == 1) {
         dur = 3 * dur / 2;
     }
-    if (triplet != ST_NONE) {
+    if (triplet != StartStop::ST_NONE) {
         dur = 2 * dur / 3;
     }
-    out << "      <note>" << endl;
+    out << "      <note>" << Qt::endl;
     if (grace) {
-        out << "        <grace/>" << endl;
+        out << "        <grace/>" << Qt::endl;
     }
-    out << "        <pitch>" << endl;
-    out << "          <step>" << sao.s << "</step>" << endl;
+    out << "        <pitch>" << Qt::endl;
+    out << "          <step>" << sao.s << "</step>" << Qt::endl;
     if (sao.a) {
-        out << "          <alter>" << sao.a << "</alter>" << endl;
+        out << "          <alter>" << sao.a << "</alter>" << Qt::endl;
     }
-    out << "          <octave>" << sao.o << "</octave>" << endl;
-    out << "        </pitch>" << endl;
+    out << "          <octave>" << sao.o << "</octave>" << Qt::endl;
+    out << "        </pitch>" << Qt::endl;
     if (!grace) {
-        out << "        <duration>" << dur << "</duration>" << endl;
+        out << "        <duration>" << dur << "</duration>" << Qt::endl;
     }
     if (tieStart) {
-        out << "        <tie type=\"start\"/>" << endl;
+        out << "        <tie type=\"start\"/>" << Qt::endl;
     }
     if (tieStop) {
-        out << "        <tie type=\"stop\"/>" << endl;
+        out << "        <tie type=\"stop\"/>" << Qt::endl;
     }
-    out << "        <type>" << typeMap.value(type) << "</type>" << endl;
+    out << "        <type>" << typeMap.value(type) << "</type>" << Qt::endl;
     if (dots == 1) {
-        out << "        <dot/>" << endl;
+        out << "        <dot/>" << Qt::endl;
     }
-    if (triplet != ST_NONE) {
-        out << "        <time-modification>" << endl;
-        out << "          <actual-notes>3</actual-notes>" << endl;
-        out << "          <normal-notes>2</normal-notes>" << endl;
-        out << "        </time-modification>" << endl;
+    if (triplet != StartStop::ST_NONE) {
+        out << "        <time-modification>" << Qt::endl;
+        out << "          <actual-notes>3</actual-notes>" << Qt::endl;
+        out << "          <normal-notes>2</normal-notes>" << Qt::endl;
+        out << "        </time-modification>" << Qt::endl;
     }
     if (grace) {
-        out << "        <stem>up</stem>" << endl;
+        out << "        <stem>up</stem>" << Qt::endl;
     } else {
         if (type != "1") {
-            out << "        <stem>down</stem>" << endl;
+            out << "        <stem>down</stem>" << Qt::endl;
         }
     }
     for (int i = 0; i < maxBeamLevel; ++i) {
         QString s;
         switch (beamList.at(i)) {
-        case BM_BEGIN:         s = "begin";
+        case BeamType::BM_BEGIN:         s = "begin";
             break;
-        case BM_CONTINUE:      s = "continue";
+        case BeamType::BM_CONTINUE:      s = "continue";
             break;
-        case BM_END:           s = "end";
+        case BeamType::BM_END:           s = "end";
             break;
-        case BM_FORWARD_HOOK:  s = "forward hook";
+        case BeamType::BM_FORWARD_HOOK:  s = "forward hook";
             break;
-        case BM_BACKWARD_HOOK: s = "backward hook";
+        case BeamType::BM_BACKWARD_HOOK: s = "backward hook";
             break;
         default:               s = "";
             break;
         }
         if (s != "") {
             out << "        <beam number=\"" << i + 1 << "\">"
-                << s << "</beam>" << endl;
+                << s << "</beam>" << Qt::endl;
         } else {
             break;
         }
     }
-    if (tieStart || tieStop || triplet == ST_START || triplet == ST_STOP) {
-        out << "        <notations>" << endl;
+    if (tieStart || tieStop || triplet == StartStop::ST_START || triplet == StartStop::ST_STOP) {
+        out << "        <notations>" << Qt::endl;
         if (tieStart) {
-            out << "          <tied type=\"start\"/>" << endl;
+            out << "          <tied type=\"start\"/>" << Qt::endl;
         }
         if (tieStop) {
-            out << "          <tied type=\"stop\"/>" << endl;
+            out << "          <tied type=\"stop\"/>" << Qt::endl;
         }
-        if (triplet == ST_START) {
+        if (triplet == StartStop::ST_START) {
             if (type == "1" || type == "2" || type == "4") {
-                out << "          <tuplet type=\"start\" bracket=\"yes\"/>" << endl;
+                out << "          <tuplet type=\"start\" bracket=\"yes\"/>" << Qt::endl;
             } else {
-                out << "          <tuplet type=\"start\" bracket=\"no\"/>" << endl;
+                out << "          <tuplet type=\"start\" bracket=\"no\"/>" << Qt::endl;
             }
         }
-        if (triplet == ST_STOP) {
-            out << "          <tuplet type=\"stop\"/>" << endl;
+        if (triplet == StartStop::ST_STOP) {
+            out << "          <tuplet type=\"stop\"/>" << Qt::endl;
         }
-        out << "        </notations>" << endl;
+        out << "        </notations>" << Qt::endl;
     }
-    out << "      </note>" << endl;
+    out << "      </note>" << Qt::endl;
 }
 
 /**
@@ -292,38 +292,38 @@ void MxmlWriter::header(const QString title, const QString /* type */,
     tempo = temp;
 
     // write the header
-    out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
+    out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << Qt::endl;
     out << "<!DOCTYPE score-partwise PUBLIC "
         << "\"-//Recordare//DTD MusicXML 2.0 Partwise//EN\" "
-        << "\"http://www.musicxml.org/dtds/partwise.dtd\">" << endl;
-    out << "<score-partwise>" << endl;
-    out << "  <work>" << endl;
-    out << "    <work-title>" << title << "</work-title>" << endl;
+        << "\"http://www.musicxml.org/dtds/partwise.dtd\">" << Qt::endl;
+    out << "<score-partwise>" << Qt::endl;
+    out << "  <work>" << Qt::endl;
+    out << "    <work-title>" << title << "</work-title>" << Qt::endl;
     // TODO work-number is not allowed, replace
-    // out << "    <work-number>" << type << "</work-number>" << endl;
-    out << "  </work>" << endl;
-    out << "  <identification>" << endl;
-    out << "    <creator type=\"composer\">" << composer << "</creator>" << endl;
-    out << "    <rights>" << footer << "</rights>" << endl;
-    out << "    <encoding>" << endl;
-    out << "      <software>bww2mxml</software>" << endl;
+    // out << "    <work-number>" << type << "</work-number>" << Qt::endl;
+    out << "  </work>" << Qt::endl;
+    out << "  <identification>" << Qt::endl;
+    out << "    <creator type=\"composer\">" << composer << "</creator>" << Qt::endl;
+    out << "    <rights>" << footer << "</rights>" << Qt::endl;
+    out << "    <encoding>" << Qt::endl;
+    out << "      <software>bww2mxml</software>" << Qt::endl;
     // TODO fill in real date
-    // out << "      <encoding-date>TBD</encoding-date>" << endl;
-    out << "    </encoding>" << endl;
-    out << "  </identification>" << endl;
-    out << "  <part-list>" << endl;
-    out << "    <score-part id=\"P1\">" << endl;
-    out << "      <part-name>" << instrumentName() << "</part-name>" << endl;
-    out << "      <score-instrument id=\"P1-I1\">" << endl;
-    out << "        <instrument-name>" << instrumentName() << "</instrument-name>" << endl;
-    out << "      </score-instrument>" << endl;
-    out << "      <midi-instrument id=\"P1-I1\">" << endl;
-    out << "        <midi-channel>1</midi-channel>" << endl;
-    out << "        <midi-program>" << midiProgram() << "</midi-program>" << endl;
-    out << "      </midi-instrument>" << endl;
-    out << "    </score-part>" << endl;
-    out << "  </part-list>" << endl;
-    out << "  <part id=\"P1\">" << endl;
+    // out << "      <encoding-date>TBD</encoding-date>" << Qt::endl;
+    out << "    </encoding>" << Qt::endl;
+    out << "  </identification>" << Qt::endl;
+    out << "  <part-list>" << Qt::endl;
+    out << "    <score-part id=\"P1\">" << Qt::endl;
+    out << "      <part-name>" << instrumentName() << "</part-name>" << Qt::endl;
+    out << "      <score-instrument id=\"P1-I1\">" << Qt::endl;
+    out << "        <instrument-name>" << instrumentName() << "</instrument-name>" << Qt::endl;
+    out << "      </score-instrument>" << Qt::endl;
+    out << "      <midi-instrument id=\"P1-I1\">" << Qt::endl;
+    out << "        <midi-channel>1</midi-channel>" << Qt::endl;
+    out << "        <midi-program>" << midiProgram() << "</midi-program>" << Qt::endl;
+    out << "      </midi-instrument>" << Qt::endl;
+    out << "    </score-part>" << Qt::endl;
+    out << "  </part-list>" << Qt::endl;
+    out << "  <part id=\"P1\">" << Qt::endl;
 }
 
 /**
@@ -350,7 +350,7 @@ void MxmlWriter::trailer()
     // qDebug() << "MxmlWriter::trailer()"
     //    ;
 
-    out << "  </part>" << endl;
-    out << "</score-partwise>" << endl;
+    out << "  </part>" << Qt::endl;
+    out << "</score-partwise>" << Qt::endl;
 }
 } // namespace Bww

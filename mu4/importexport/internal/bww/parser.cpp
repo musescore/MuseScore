@@ -81,29 +81,29 @@ static void dumpBeams(QList<Bww::MeasureDescription> const& measures)
 
             beams += beam;
             switch (measures.at(j).notes.at(i).beamState) {
-            case Bww::ST_NONE:     beamStates += " ";
+            case Bww::StartStop::ST_NONE:     beamStates += " ";
                 break;
-            case Bww::ST_START:    beamStates += "[";
+            case Bww::StartStop::ST_START:    beamStates += "[";
                 break;
-            case Bww::ST_CONTINUE: beamStates += "_";
+            case Bww::StartStop::ST_CONTINUE: beamStates += "_";
                 break;
-            case Bww::ST_STOP:     beamStates += "]";
+            case Bww::StartStop::ST_STOP:     beamStates += "]";
                 break;
             default:               beamStates += " ";
             }
             for (int k = 0; k < 3; k++) {
                 switch (measures.at(j).notes.at(i).beamList.at(k)) {
-                case Bww::BM_NONE:          beamList[k] += " ";
+                case Bww::BeamType::BM_NONE:          beamList[k] += " ";
                     break;
-                case Bww::BM_BEGIN:         beamList[k] += "b";
+                case Bww::BeamType::BM_BEGIN:         beamList[k] += "b";
                     break;
-                case Bww::BM_CONTINUE:      beamList[k] += "c";
+                case Bww::BeamType::BM_CONTINUE:      beamList[k] += "c";
                     break;
-                case Bww::BM_END:           beamList[k] += "e";
+                case Bww::BeamType::BM_END:           beamList[k] += "e";
                     break;
-                case Bww::BM_FORWARD_HOOK:  beamList[k] += ">";
+                case Bww::BeamType::BM_FORWARD_HOOK:  beamList[k] += ">";
                     break;
-                case Bww::BM_BACKWARD_HOOK: beamList[k] += "<";
+                case Bww::BeamType::BM_BACKWARD_HOOK: beamList[k] += "<";
                     break;
                 default:                    beamList[k] += "?";
                 }
@@ -143,7 +143,7 @@ static void dumpMeasures(QList<Bww::MeasureDescription> const& measures)
                 << measures.at(j).notes.at(i).dots
                 << measures.at(j).notes.at(i).tieStart
                 << measures.at(j).notes.at(i).tieStop
-                << measures.at(j).notes.at(i).triplet
+                << static_cast<int>(measures.at(j).notes.at(i).triplet)
                 << measures.at(j).notes.at(i).grace
             ;
         }
@@ -170,7 +170,7 @@ static void calculateMeasureDurations(QList<Bww::MeasureDescription>& measures)
             if (measures.at(j).notes.at(i).dots) {
                 ticks = 3 * ticks / 2;
             }
-            if (measures.at(j).notes.at(i).triplet != Bww::ST_NONE) {
+            if (measures.at(j).notes.at(i).triplet != Bww::StartStop::ST_NONE) {
                 ticks = 2 * ticks / 3;
             }
             if (measures.at(j).notes.at(i).grace) {
@@ -184,7 +184,7 @@ static void calculateMeasureDurations(QList<Bww::MeasureDescription>& measures)
                 << measures.at(j).notes.at(i).dots
                 << measures.at(j).notes.at(i).tieStart
                 << measures.at(j).notes.at(i).tieStop
-                << measures.at(j).notes.at(i).triplet
+                << static_cast<int>(measures.at(j).notes.at(i).triplet)
                 << measures.at(j).notes.at(i).grace
                 << "->" << ticks
             ;
@@ -332,7 +332,7 @@ static void calculateHigherBeamStates(Bww::MeasureDescription& m)
             << m.notes.at(i).dots
             << m.notes.at(i).tieStart
             << m.notes.at(i).tieStop
-            << m.notes.at(i).triplet
+            << static_cast<int>(m.notes.at(i).triplet)
             << m.notes.at(i).grace
         ;
 
@@ -351,8 +351,8 @@ static void calculateHigherBeamStates(Bww::MeasureDescription& m)
                 continue; // note does not have a beam
             }
             // find beam level previous note
-            if (m.notes.at(i).beamList[0] == Bww::BM_CONTINUE
-                || m.notes.at(i).beamList[0] == Bww::BM_END) {
+            if (m.notes.at(i).beamList[0] == Bww::BeamType::BM_CONTINUE
+                || m.notes.at(i).beamList[0] == Bww::BeamType::BM_END) {
                 for (int j = i - 1; blp == -1 && j >= 0; --j) {
                     if (m.notes.at(j).grace) {
                         continue; // ignore grace notes
@@ -362,8 +362,8 @@ static void calculateHigherBeamStates(Bww::MeasureDescription& m)
             }
 
             // find beam level next note
-            if (m.notes.at(i).beamList[0] == Bww::BM_BEGIN
-                || m.notes.at(i).beamList[0] == Bww::BM_CONTINUE) {
+            if (m.notes.at(i).beamList[0] == Bww::BeamType::BM_BEGIN
+                || m.notes.at(i).beamList[0] == Bww::BeamType::BM_CONTINUE) {
                 for (int j = i + 1; bln == -1 && j < m.notes.size(); ++j) {
                     if (m.notes.at(j).grace) {
                         continue; // ignore grace notes
@@ -377,22 +377,22 @@ static void calculateHigherBeamStates(Bww::MeasureDescription& m)
                 << "blc" << blc
                 << "bln" << bln;
             for (int j = 2; j <= blc; ++j) {
-                Bww::BeamType bt = Bww::BM_NONE;
+                Bww::BeamType bt = Bww::BeamType::BM_NONE;
                 if (blp < j && bln >= j) {
-                    bt = Bww::BM_BEGIN;
+                    bt = Bww::BeamType::BM_BEGIN;
                 } else if (blp < j && bln < j) {
                     if (bln > 0) {
-                        bt = Bww::BM_FORWARD_HOOK;
+                        bt = Bww::BeamType::BM_FORWARD_HOOK;
                     } else if (blp > 0) {
-                        bt = Bww::BM_BACKWARD_HOOK;
+                        bt = Bww::BeamType::BM_BACKWARD_HOOK;
                     }
                 } else if (blp >= j && bln < j) {
-                    bt = Bww::BM_END;
+                    bt = Bww::BeamType::BM_END;
                 } else if (blp >= j && bln >= j) {
-                    bt = Bww::BM_CONTINUE;
+                    bt = Bww::BeamType::BM_CONTINUE;
                 }
                 m.notes[i].beamList[j - 1] = bt;
-                qDebug() << "beamList" << j - 1 << "=" << bt;
+                qDebug() << "beamList" << j - 1 << "=" << static_cast<int>(bt);
             }
         } // else
     } // for (int i = 0; i < m.notes.size(); ++i)
@@ -409,53 +409,54 @@ static void calculateHigherBeamStates(Bww::MeasureDescription& m)
 
 static void determineBeamStates(QList<Bww::MeasureDescription>& measures)
 {
-    enum State {
+    enum class State {
         NONE, LEFT, RIGHT
     };
     for (int j = 0; j < measures.size(); ++j) {
-        State state = NONE;
+        State state = State::NONE;
         for (int i = 0; i < measures.at(j).notes.size(); ++i) {
             QString beam = measures.at(j).notes.at(i).beam;
             // handle normal notes
             if (beam == "") {
-                measures[j].notes[i].beamState = Bww::ST_NONE;
-                measures[j].notes[i].beamList[0] = Bww::BM_NONE;
-                state = NONE;
+                measures[j].notes[i].beamState = Bww::StartStop::ST_NONE;
+                measures[j].notes[i].beamList[0] = Bww::BeamType::BM_NONE;
+                state = State::NONE;
             } else if (beam == "r") {
-                if (state == NONE) {
-                    measures[j].notes[i].beamState = Bww::ST_START;
-                    measures[j].notes[i].beamList[0] = Bww::BM_BEGIN;
-                    state = LEFT; // now in left part of beam
-                } else if (state == LEFT) {
-                    measures[j].notes[i].beamState = Bww::ST_CONTINUE;
-                    measures[j].notes[i].beamList[0] = Bww::BM_CONTINUE;
-                } else if (state == RIGHT) {
+                if (state == State::NONE) {
+                    measures[j].notes[i].beamState = Bww::StartStop::ST_START;
+                    measures[j].notes[i].beamList[0] = Bww::BeamType::BM_BEGIN;
+                    state = State::LEFT; // now in left part of beam
+                } else if (state == State::LEFT) {
+                    measures[j].notes[i].beamState = Bww::StartStop::ST_CONTINUE;
+                    measures[j].notes[i].beamList[0] = Bww::BeamType::BM_CONTINUE;
+                } else if (state == State::RIGHT) {
                     // shouldn't happen TODO report (internal?) error
                 }
             } else if (beam == "l") {
-                if (state == NONE) {
+                if (state == State::NONE) {
                     // shouldn't happen TODO report error
-                } else if (state == LEFT || state == RIGHT) {
+                } else if (state == State::LEFT || state == State::RIGHT) {
                     // if the beam does not end here (next note has beam "l")
                     // then beamState is CONTINUE else STOP
                     if (findNextNextNoteBeam(measures, j, i) == "l") {
-                        measures[j].notes[i].beamState = Bww::ST_CONTINUE;
-                        measures[j].notes[i].beamList[0] = Bww::BM_CONTINUE;
-                        state = RIGHT; // now in right part of beam
+                        measures[j].notes[i].beamList[0] = Bww::BeamType::BM_END;
+                        measures[j].notes[i].beamState = Bww::StartStop::ST_CONTINUE;
+                        measures[j].notes[i].beamList[0] = Bww::BeamType::BM_CONTINUE;
+                        state = State::RIGHT; // now in right part of beam
                     } else {
-                        measures[j].notes[i].beamState = Bww::ST_STOP;
-                        measures[j].notes[i].beamList[0] = Bww::BM_END;
-                        state = NONE; // now in right part of beam
+                        measures[j].notes[i].beamState = Bww::StartStop::ST_STOP;
+                        measures[j].notes[i].beamList[0] = Bww::BeamType::BM_END;
+                        state = State::NONE; // now in right part of beam
                     }
                 }
             }
             // handle grace notes
             else if (beam == "b") {
-                measures[j].notes[i].beamList[0] = Bww::BM_BEGIN;
+                measures[j].notes[i].beamList[0] = Bww::BeamType::BM_BEGIN;
             } else if (beam == "c") {
-                measures[j].notes[i].beamList[0] = Bww::BM_CONTINUE;
+                measures[j].notes[i].beamList[0] = Bww::BeamType::BM_CONTINUE;
             } else if (beam == "e") {
-                measures[j].notes[i].beamList[0] = Bww::BM_END;
+                measures[j].notes[i].beamList[0] = Bww::BeamType::BM_END;
             }
         }
         calculateHigherBeamStates(measures[j]);
@@ -660,14 +661,14 @@ void Parser::parseNote()
         lex.getSym();
     }
 
-    StartStop triplet = ST_NONE;
+    StartStop triplet = StartStop::ST_NONE;
     if (inTriplet) {
         if (tripletStart) {
-            triplet = ST_START;
+            triplet = StartStop::ST_START;
         } else if (tripletStop) {
-            triplet = ST_STOP;
+            triplet = StartStop::ST_STOP;
         } else {
-            triplet = ST_CONTINUE;
+            triplet = StartStop::ST_CONTINUE;
         }
     }
     qDebug() << " tie start" << tieStart << " tie stop" << tieStop;
@@ -723,7 +724,7 @@ void Parser::parseGraces()
     QStringList graces = lex.symValue().split(" ");
     for (int i = 0; i < graces.size(); ++i) {
         const QString beam = graceBeam(graces.size(), i);
-        NoteDescription noteDesc(graces.at(i), beam, c_type, dots, false, false, ST_NONE, true);
+        NoteDescription noteDesc(graces.at(i), beam, c_type, dots, false, false, StartStop::ST_NONE, true);
         if (measures.isEmpty()) {
             errorHandler("cannot append note: no measure");
         } else {
