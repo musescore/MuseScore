@@ -1388,5 +1388,23 @@ void ChordRest::undoAddAnnotation(Element* a)
       score()->undoAddElement(a);
       }
 
-}
+//---------------------------------------------------------
+//   sposBBox
+//---------------------------------------------------------
+QRectF ChordRest::sposBBox() const
+      {
+      QRectF box = Element::sposBBox();
 
+      for (Element* e : el())
+            box |= e->sposBBox();
+
+      for (Lyrics* l : _lyrics)
+            box |= l->sposBBox();
+
+      if (_tabDur)
+            box |= _tabDur->sposBBox();
+
+      return box;
+      }
+
+}

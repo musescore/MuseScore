@@ -2296,4 +2296,22 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
       return w;
       }
 
+//---------------------------------------------------------
+//   sposBBox
+//---------------------------------------------------------
+QRectF Segment::sposBBox() const
+      {
+      QRectF box = Element::sposBBox();
+
+      for (Element* e : _annotations)
+            if (e && e->isHarmony())
+                  box |= e->sposBBox();
+
+      for (Element* e : _elist)
+            if (e)
+                  box |= e->sposBBox();
+
+      return box;
+      }
+
 }           // namespace Ms

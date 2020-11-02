@@ -227,6 +227,7 @@ class Segment final : public Element {
       qreal minLeft() const;
       qreal minHorizontalDistance(Segment*, bool isSystemGap) const;
       qreal minHorizontalCollidingDistance(Segment* ns) const;
+      virtual QRectF sposBBox() const override;
 
       // some helper function
       ChordRest* cr(int track) const        { return toChordRest(_elist[track]); }

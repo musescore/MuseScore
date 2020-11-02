@@ -118,6 +118,7 @@ class Chord final : public ChordRest {
       void layoutArpeggio2();
       void layoutSpanners();
       void layoutSpanners(System* system, const Fraction& stick);
+      virtual QRectF sposBBox() const override;
 
       std::vector<Note*>& notes()                 { return _notes; }
       const std::vector<Note*>& notes() const     { return _notes; }

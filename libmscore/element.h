@@ -279,6 +279,7 @@ class Element : public ScoreElement {
       virtual qreal width() const                 { return bbox().width();     }
       virtual void setWidth(qreal v)              { _bbox.setWidth(v);         }
       QRectF abbox() const                        { return bbox().translated(pagePos());   }
+      virtual QRectF sposBBox() const             { return abbox();                        }
       QRectF pageBoundingRect() const             { return bbox().translated(pagePos());   }
       QRectF canvasBoundingRect() const           { return bbox().translated(canvasPos()); }
       virtual void setbbox(const QRectF& r) const { _bbox = r;           }

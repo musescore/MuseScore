@@ -442,7 +442,21 @@ void Rest::layout()
       }
 
 //---------------------------------------------------------
-//   layout
+//   sposBBox
+//---------------------------------------------------------
+
+QRectF Rest::sposBBox() const
+      {
+      QRectF box = ChordRest::sposBBox();
+
+      for (NoteDot* dot : _dots)
+            box |= dot->sposBBox();
+
+      return box;
+}
+
+//---------------------------------------------------------
+//   layoutDots
 //---------------------------------------------------------
 
 void Rest::layoutDots()

@@ -2123,6 +2123,26 @@ void Note::layout2()
       }
 
 //---------------------------------------------------------
+//   sposBBox
+//---------------------------------------------------------
+
+QRectF Note::sposBBox() const
+      {
+      QRectF box = Element::sposBBox();
+
+      if (_accidental)
+            box |= _accidental->sposBBox();
+
+      for (auto e : _el)
+            box |= e->sposBBox();
+
+      for (NoteDot* dot : _dots)
+            box |= dot->sposBBox();
+
+      return box;
+}
+
+//---------------------------------------------------------
 //   dotIsUp
 //---------------------------------------------------------
 

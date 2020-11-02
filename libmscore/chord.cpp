@@ -1822,6 +1822,39 @@ void Chord::layout()
       }
 
 //---------------------------------------------------------
+//   sposBBox
+//---------------------------------------------------------
+
+QRectF Chord::sposBBox() const
+      {
+      QRectF box = ChordRest::sposBBox();
+
+      for (Note* note : _notes)
+            box |= note->sposBBox();
+
+      for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
+            box |= ll->sposBBox();
+
+#define ADDBOX(e) if (e) box |= (e)->sposBBox()
+      ADDBOX(_stem);
+      ADDBOX(_hook);
+      ADDBOX(_stemSlash);
+      ADDBOX(_arpeggio);
+#undef ADDBOX
+
+      if (_tremolo && !_tremolo->twoNotes())
+            box |= _tremolo->abbox();
+
+      for (Chord* c : qAsConst(_graceNotes))
+            box |= c->sposBBox();
+
+      for (Articulation* a : _articulations)
+            box |= a->sposBBox();
+
+      return box;
+}
+
+//---------------------------------------------------------
 //   layoutPitched
 //---------------------------------------------------------
 
