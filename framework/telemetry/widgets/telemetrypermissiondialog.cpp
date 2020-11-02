@@ -35,8 +35,20 @@ TelemetryPermissionDialog::TelemetryPermissionDialog(QQmlEngine* engine)
 
     setFlags(Qt::Dialog | Qt::CustomizeWindowHint);   ///@note Hidding a native frame with 'X' close button
 
+#if (defined (_MSCVER) || defined (_MSC_VER))
+#pragma warning (push)
+#pragma warning (disable: 4996)
+#else
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
     // ToDo for Qt 5.15: QDesktopWidget::availableGeometry() vs. QGuiApplication::screens() ??
     QRect desktopRect = QApplication::desktop()->availableGeometry();
+#if (defined (_MSCVER) || defined (_MSC_VER))
+#pragma warning (pop)
+#else
+#pragma GCC diagnostic pop
+#endif
     QPoint center = desktopRect.center();
 
     setPosition(center.x() - minimumWidth() * 0.5, center.y() - minimumHeight() * 0.5);
