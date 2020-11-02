@@ -561,6 +561,19 @@ void NotationInteraction::select(Element* element, SelectType type, int staffInd
     m_selectionChanged.notify();
 }
 
+void NotationInteraction::select(std::vector<Element*> elements, SelectType type, int staffIndex)
+{
+    if (isTextEditingStarted()) {
+        endEditText();
+    }
+
+    for (Element* element: elements) {
+        score()->select(element, type, staffIndex);
+    }
+
+    m_selectionChanged.notify();
+}
+
 void NotationInteraction::selectAll()
 {
     score()->cmdSelectAll();

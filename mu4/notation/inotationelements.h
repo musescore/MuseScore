@@ -1,13 +1,14 @@
 #ifndef INOTATIONELEMENTS_H
 #define INOTATIONELEMENTS_H
 
+#include <vector>
+
 #include "modularity/imoduleexport.h"
+#include "notationtypes.h"
 
 namespace Ms {
 class Element;
-class RehearsalMark;
 class Measure;
-class Page;
 }
 
 namespace mu {
@@ -18,6 +19,7 @@ public:
     virtual ~INotationElements() = default;
 
     virtual Ms::Element* search(const std::string& searchCommand) const = 0;
+    virtual std::vector<Ms::Element*> searchSimilar(ElementPattern* searchPattern) const = 0;
 
     virtual Ms::Measure* measure(const int measureIndex) const = 0;
 };

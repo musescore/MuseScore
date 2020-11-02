@@ -57,6 +57,7 @@
 #include "view/widgets/breaksdialog.h"
 #include "view/widgets/scoreproperties.h"
 #include "view/widgets/transposedialog.h"
+#include "view/widgets/selectnotedialog.h"
 
 using namespace mu::notation;
 using namespace mu::notation;
@@ -118,6 +119,9 @@ void NotationModule::resolveImports()
         ir->registerUri(Uri("musescore://notation/transpose"),
                         ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<TransposeDialog>("TransposeDialog")));
 
+        ir->registerUri(Uri("musescore://notation/selectnote"),
+                        ContainerMeta(ContainerType::QWidgetDialog, SelectNoteDialog::metaTypeId()));
+
         ir->registerUri(Uri("musescore://notation/parts"),
                         ContainerMeta(ContainerType::QmlDialog, "MuseScore/NotationScene/PartsDialog.qml"));
 
@@ -150,6 +154,7 @@ void NotationModule::registerUiTypes()
 
     qRegisterMetaType<EditStyle>("EditStyle");
     qRegisterMetaType<EditStaff>("EditStaff");
+    qRegisterMetaType<SelectNoteDialog>("SelectNoteDialog");
 
     framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(notation_QML_IMPORT);
 }
