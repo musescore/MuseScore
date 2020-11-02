@@ -41,6 +41,7 @@ private:
 
     INotationPtr currentNotation() const;
     INotationInteractionPtr currentNotationInteraction() const;
+    INotationElementsPtr currentNotationElements() const;
 
     void toggleNoteInput();
     void padNote(const Pad& pad);
@@ -58,6 +59,11 @@ private:
 
     void undo();
     void redo();
+    
+    void selectAllSimilarElements();
+    void selectAllSimilarElementsInStaff();
+    void selectAllSimilarElementsInRange();
+    void openSelectionMoreOptions();
     void selectAll();
 
     void splitMeasure();
@@ -83,6 +89,8 @@ private:
 
     void pasteSelection(PastingType type = PastingType::Default);
     Fraction resolvePastingScale(const INotationInteractionPtr& interaction, PastingType type) const;
+
+    ElementPattern* defaultElementPattern(const Element* element) const;
 
     int lastSelectedMeasureIndex() const;
 };

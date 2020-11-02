@@ -34,13 +34,13 @@ class Chord;
 
 struct ElementPattern {
     QList<Element*> el;
-    int type;
-    int subtype;
-    int staffStart;
-    int staffEnd;   // exclusive
-    int voice;
-    const System* system;
-    bool subtypeValid;
+    int type = -1;
+    int subtype = 0;
+    int staffStart = 0;
+    int staffEnd = 0;   // exclusive
+    int voice = 0;
+    const System* system = nullptr;
+    bool subtypeValid = false;
     Fraction durationTicks;
 };
 
@@ -48,19 +48,14 @@ struct ElementPattern {
 //   NotePattern
 //---------------------------------------------------------
 
-struct NotePattern {
-    QList<Note*> el;
+struct NotePattern : ElementPattern {
     int pitch = -1;
     int string = STRING_NONE;
     int tpc = Tpc::TPC_INVALID;
     NoteHead::Group notehead = NoteHead::Group::HEAD_INVALID;
     TDuration durationType = TDuration();
     Fraction durationTicks;
-    NoteType type = NoteType::INVALID;
-    int staffStart;
-    int staffEnd;   // exclusive
-    int voice;
-    const System* system;
+    NoteType noteType = NoteType::INVALID;
 };
 
 //---------------------------------------------------------

@@ -75,6 +75,11 @@ void NotationActionController::init()
     dispatcher()->reg(this, "delete", this, &NotationActionController::deleteSelection);
     dispatcher()->reg(this, "undo", this, &NotationActionController::undo);
     dispatcher()->reg(this, "redo", this, &NotationActionController::redo);
+    
+    dispatcher()->reg(this, "select-similar", this, &NotationActionController::selectAllSimilarElements);
+    dispatcher()->reg(this, "select-similar-staff", this, &NotationActionController::selectAllSimilarElementsInStaff);
+    dispatcher()->reg(this, "select-similar-range", this, &NotationActionController::selectAllSimilarElementsInRange);
+    dispatcher()->reg(this, "select-dialog", this, &NotationActionController::openSelectionMoreOptions);
     dispatcher()->reg(this, "select-all", this, &NotationActionController::selectAll);
 
     dispatcher()->reg(this, "split-measure", this, &NotationActionController::splitMeasure);
@@ -117,6 +122,16 @@ INotationInteractionPtr NotationActionController::currentNotationInteraction() c
     }
 
     return notation->interaction();
+}
+
+INotationElementsPtr NotationActionController::currentNotationElements() const
+{
+    auto notation = currentNotation();
+    if (!notation) {
+        return nullptr;
+    }
+
+    return notation->elements();
 }
 
 void NotationActionController::toggleNoteInput()
@@ -350,6 +365,76 @@ void NotationActionController::redo()
     notation->undoStack()->redo();
 }
 
+void NotationActionController::selectAllSimilarElements()
+{
+    auto notationElements = currentNotationElements();
+    auto interaction = currentNotationInteraction();
+    if (!notationElements || !interaction) {
+        return;
+    }
+
+    Element* selectedElement = interaction->selection()->element();
+    if (!selectedElement) {
+        return;
+    }
+
+    ElementPattern* pattern = defaultElementPattern(selectedElement);
+    std::vector<Element*> elements = notationElements->searchSimilar(pattern);
+    if (elements.empty()) {
+        return;
+    }
+
+    interaction->clearSelection();
+
+    interaction->select(elements, SelectType::ADD);
+}
+
+void NotationActionController::selectAllSimilarElementsInStaff()
+{
+    auto notationElements = currentNotationElements();
+    auto interaction = currentNotationInteraction();
+    if (!notationElements || !interaction) {
+        return;
+    }
+
+    Element* selectedElement = interaction->selection()->element();
+    if (!selectedElement) {
+        return;
+    }
+
+    ElementPattern* pattern = defaultElementPattern(selectedElement);
+    pattern->staffStart = selectedElement->staffIdx();
+    pattern->staffEnd = pattern->staffStart + 1;
+
+    std::vector<Element*> elements = notationElements->searchSimilar(pattern);
+    if (elements.empty()) {
+        return;
+    }
+
+    interaction->clearSelection();
+
+    interaction->select(elements, SelectType::ADD);
+}
+
+void NotationActionController::selectAllSimilarElementsInRange()
+{
+    NOT_IMPLEMENTED;
+}
+
+void NotationActionController::openSelectionMoreOptions()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    bool isSelectionNote = interaction->selection()->element()->isNote();
+
+    if (isSelectionNote) {
+        interactive()->open("musescore://notation/selectnote");
+    }
+}
+
 void NotationActionController::selectAll()
 {
     auto interaction = currentNotationInteraction();
@@ -476,6 +561,31 @@ void NotationActionController::openTransposeDialog()
 void NotationActionController::openPartsDialog()
 {
     interactive()->open("musescore://notation/parts");
+}
+
+ElementPattern* NotationActionController::defaultElementPattern(const Element* element) const
+{
+    ElementPattern* pattern = new ElementPattern;
+    pattern->type = int(element->type());
+    pattern->subtype = 0;
+    pattern->subtypeValid = false;
+
+    if (element->type() == ElementType::NOTE) {
+        const Ms::Note* note = dynamic_cast<const Ms::Note*>(element);
+        if (note->chord()->isGrace()) {
+            pattern->subtype = -1;
+        } else {
+            pattern->subtype = element->subtype();
+        }
+    }
+
+    pattern->staffStart = -1;
+    pattern->staffEnd = -1;
+    pattern->voice   = -1;
+    pattern->system  = 0;
+    pattern->durationTicks = Ms::Fraction(-1, 1);
+
+    return pattern;
 }
 
 int NotationActionController::lastSelectedMeasureIndex() const

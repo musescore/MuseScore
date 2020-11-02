@@ -72,7 +72,8 @@ public:
     // Select
     Element* hitElement(const QPointF& pos, float width) const override;
     int hitStaffIndex(const QPointF& pos) const override;
-    void select(Element* element, SelectType type, int staffIndex = 0) override;
+    void select(Element* e, SelectType type, int staffIdx = 0) override;
+    void select(std::vector<Element*> elements, SelectType type, int staffIndex = 0) override;
     void selectAll() override;
     INotationSelectionPtr selection() const override;
     void clearSelection() override;

@@ -3519,7 +3519,7 @@ void Score::collectNoteMatch(void* data, Element* e)
         return;
     }
     Note* n = toNote(e);
-    if (p->type != NoteType::INVALID && p->type != n->noteType()) {
+    if (p->noteType != NoteType::INVALID && p->noteType != n->noteType()) {
         return;
     }
     if (p->pitch != -1 && p->pitch != n->pitch()) {
