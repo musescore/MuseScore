@@ -22,6 +22,7 @@ BUILD_NUMBER = ""
 PREFIX=../applebuild
 TELEMETRY_TRACK_ID=""
 MUSESCORE_BUILD_CONFIG="dev"
+MUSESCORE_REVISION=""
 
 XCODEPROJ = mscore.xcodeproj
 
@@ -32,22 +33,28 @@ ifneq ($(strip $(shell which xcpretty)),)
 endif
 
 release:
-	mkdir build.release;                               \
-    cd build.release;                                  \
-    cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DCMAKE_BUILD_TYPE=RELEASE \
-          -DMUSESCORE_BUILD_CONFIG="${MUSESCORE_BUILD_CONFIG}" -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}" -DTELEMETRY_TRACK_ID="${TELEMETRY_TRACK_ID}" \
-          .. -G Xcode; 			       \
-    xcodebuild -project ${XCODEPROJ} -target lrelease;                            \
-		$(FORMATTER_START) xcodebuild -project ${XCODEPROJ} -configuration Release -target ALL_BUILD $(FORMATTER_END);    \
+	@echo "Make release"; \
+	mkdir build.release; \
+	cd build.release; \
+	cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
+	-DCMAKE_BUILD_TYPE=RELEASE \
+	-DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}" \
+	-DMUSESCORE_BUILD_CONFIG="${MUSESCORE_BUILD_CONFIG}" \
+	-DMUSESCORE_REVISION="${MUSESCORE_REVISION}" \
+	-DTELEMETRY_TRACK_ID="${TELEMETRY_TRACK_ID}" \
+	.. -G Xcode; \
+	xcodebuild -project ${XCODEPROJ} -target lrelease; \
+	$(FORMATTER_START) xcodebuild -project ${XCODEPROJ} -configuration Release -target ALL_BUILD $(FORMATTER_END); \
 
 debug:
-	mkdir build.debug;                               \
-    cd build.debug;                            \
-    cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DCMAKE_BUILD_TYPE=DEBUG \
-          -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}"  \
-          .. -G Xcode; 			       \
-    xcodebuild -project ${XCODEPROJ} -target lrelease;                             \
-    $(FORMATTER_START) xcodebuild -project ${XCODEPROJ} -configuration Debug -target ALL_BUILD $(FORMATTER_END);       \
+	mkdir build.debug; \
+      cd build.debug; \
+      cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
+            -DCMAKE_BUILD_TYPE=DEBUG \
+            -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}" \
+            .. -G Xcode; 			       \
+      xcodebuild -project ${XCODEPROJ} -target lrelease; \
+      $(FORMATTER_START) xcodebuild -project ${XCODEPROJ} -configuration Debug -target ALL_BUILD $(FORMATTER_END); \
 
 xcode:
 	mkdir build.xcode;              \
@@ -63,9 +70,6 @@ lupdate:
 lrelease:
 	cd build.release;xcodebuild -project ${XCODEPROJ} -target lrelease;
 
-revision:
-	@git rev-parse --short=7 HEAD > mscore/revision.h
-
 version:
 	@echo ${VERSION}
 
@@ -80,14 +84,19 @@ installdebug:
 package:
 	build/package_mac;
 
-ci: revision
-	mkdir build.release;     \
-    cd build.release;            \
-    cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DCMAKE_BUILD_TYPE=RELEASE \
-          -DMUSESCORE_BUILD_CONFIG="${MUSESCORE_BUILD_CONFIG}" -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}" -DBUILD_AUTOUPDATE=ON -DTELEMETRY_TRACK_ID="${TELEMETRY_TRACK_ID}" \
-          .. -G Xcode;                                                  \
-    xcodebuild -project ${XCODEPROJ} -target lrelease;                  \
-    $(FORMATTER_START) xcodebuild -project ${XCODEPROJ} -configuration Release -target install $(FORMATTER_END);
+ci:
+	@echo "Make ci"; \
+	mkdir build.release; \
+	cd build.release; \
+	cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
+	-DCMAKE_BUILD_TYPE=RELEASE \
+	-DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}" \
+	-DMUSESCORE_BUILD_CONFIG="${MUSESCORE_BUILD_CONFIG}" \
+	-DMUSESCORE_REVISION="${MUSESCORE_REVISION}" \
+	-DTELEMETRY_TRACK_ID="${TELEMETRY_TRACK_ID}" \
+	.. -G Xcode; \
+	xcodebuild -project ${XCODEPROJ} -target lrelease; \
+	$(FORMATTER_START) xcodebuild -project ${XCODEPROJ} -configuration Release -target install $(FORMATTER_END);  
 
 #
 # clean out of source build

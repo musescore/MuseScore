@@ -23,6 +23,7 @@ PREFIX    = "/usr/local"
 VERSION   := $(shell cmake -P config.cmake | sed -n -e "s/^.*VERSION  *//p")
 
 MUSESCORE_BUILD_CONFIG="dev"
+MUSESCORE_REVISION=""
 BUILD_NUMBER=""
 TELEMETRY_TRACK_ID=""
 
@@ -59,6 +60,7 @@ release:
   	  -DMSCORE_INSTALL_SUFFIX="${SUFFIX}"      \
   	  -DMUSESCORE_LABEL="${LABEL}"             \
 	  -DMUSESCORE_BUILD_CONFIG="${MUSESCORE_BUILD_CONFIG}" \
+	  -DMUSESCORE_REVISION="${MUSESCORE_REVISION}" \
   	  -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}"   \
   	  -DTELEMETRY_TRACK_ID="${TELEMETRY_TRACK_ID}" \
   	  -DBUILD_LAME="${BUILD_LAME}"             \
@@ -99,8 +101,8 @@ debug:
    	  -DBUILD_PORTAUDIO="${BUILD_PORTAUDIO}"              \
    	  -DBUILD_WEBENGINE="${BUILD_WEBENGINE}"              \
    	  -DUSE_SYSTEM_FREETYPE="${USE_SYSTEM_FREETYPE}"      \
-      -DCOVERAGE="${COVERAGE}"                 \
-   	  -DDOWNLOAD_SOUNDFONT="${DOWNLOAD_SOUNDFONT}"        \
+          -DCOVERAGE="${COVERAGE}"                 \
+   	  -DDOWNLOAD_SOUNDFONT="${DOWNLOAD_SOUNDFONT}"      \
   	  -DCMAKE_SKIP_RPATH="${NO_RPATH}"     ..;            \
       make lrelease;                                        \
       make -j ${CPUS};                                      \
@@ -136,9 +138,6 @@ win32:
 clean:
 	-rm -rf build.debug build.release
 	-rm -rf win32build win32install
-
-revision:
-	@git rev-parse --short=7 HEAD > mscore/revision.h
 
 version:
 	@echo ${VERSION}
@@ -177,11 +176,7 @@ portable: install
 
 installdebug: debug
 	cd build.debug \
-	&& make install \
-	&& if [ ${UPDATE_CACHE} = "TRUE" ]; then \
-	     update-mime-database "${PREFIX}/share/mime"; \
-	     gtk-update-icon-cache -f -t "${PREFIX}/share/icons/hicolor"; \
-	fi
+	&& make install 
 
 uninstall:
 	cd build.release \
