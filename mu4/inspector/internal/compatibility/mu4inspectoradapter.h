@@ -6,12 +6,15 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "notation/inotation.h"
+#include "iinteractive.h"
 
 namespace mu {
 namespace inspector {
 class MU4InspectorAdapter : public IInspectorAdapter
 {
     INJECT(inspector, mu::context::IGlobalContext, context)
+    INJECT(inspector, mu::framework::IInteractive, interactive)
+
 public:
     MU4InspectorAdapter() = default;
 

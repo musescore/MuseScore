@@ -184,19 +184,23 @@ Meta Notation::metaInfo() const
 
 void Notation::setMetaInfo(const Meta& meta)
 {
-    score()->setMetaTag(SUBTITLE_TAG, meta.subtitle);
-    score()->setMetaTag(COMPOSER_TAG, meta.composer);
-    score()->setMetaTag(LYRICIST_TAG, meta.lyricist);
-    score()->setMetaTag(COPYRIGHT_TAG, meta.copyright);
-    score()->setMetaTag(TRANSLATOR_TAG, meta.translator);
-    score()->setMetaTag(ARRANGER_TAG, meta.arranger);
-    score()->setMetaTag(SOURCE_TAG, meta.source);
-    score()->setMetaTag(PLATFORM_TAG, meta.platform);
-    score()->setMetaTag(CREATION_DATE_TAG, meta.creationDate.toString());
+    QMap<QString, QString> tags {
+        { SUBTITLE_TAG, meta.subtitle },
+        { COMPOSER_TAG, meta.composer },
+        { LYRICIST_TAG, meta.lyricist },
+        { COPYRIGHT_TAG, meta.copyright },
+        { TRANSLATOR_TAG, meta.translator },
+        { ARRANGER_TAG, meta.arranger },
+        { SOURCE_TAG, meta.source },
+        { PLATFORM_TAG, meta.platform },
+        { CREATION_DATE_TAG, meta.creationDate.toString(Qt::ISODate) }
+    };
 
-    for (const QString& key : meta.additionalTags.keys()) {
-        score()->setMetaTag(key, meta.additionalTags[key].toString());
+    for (const QString& tag : meta.additionalTags.keys()) {
+        tags[tag] = meta.additionalTags[tag].toString();
     }
+
+    score()->setMetaTags(tags);
 }
 
 INotationPtr Notation::clone() const
