@@ -60,6 +60,28 @@ Ms::Element* NotationElements::search(const std::string& searchCommand) const
     return nullptr;
 }
 
+std::vector<Ms::Element*> NotationElements::searchSimilar(ElementPattern* searchPattern) const
+{
+    ElementPattern* pattern = searchPattern;
+
+    bool isNote = static_cast<Ms::NotePattern*>(searchPattern)->type == -1;
+
+    // todo: add check for range search
+
+    if (isNote) {
+        score()->scanElements(pattern, Ms::Score::collectNoteMatch);
+    } else {
+        score()->scanElements(pattern, Ms::Score::collectMatch);
+    }
+
+    std::vector<Element*> result;
+    for (Element* element: pattern->el) {
+        result.push_back(element);
+    }
+
+    return result;
+}
+
 Ms::RehearsalMark* NotationElements::rehearsalMark(const std::string& name) const
 {
     QString qname = QString::fromStdString(name).toLower();

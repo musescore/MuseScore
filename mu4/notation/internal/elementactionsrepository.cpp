@@ -29,6 +29,10 @@ ActionList ElementActionsRepository::actions() const
     actions.push_back(actionRegister()->action("paste"));
     actions.push_back(actionRegister()->action("swap"));
     actions.push_back(actionRegister()->action("delete"));
+    actions.push_back(actionRegister()->action("select-similar"));
+    actions.push_back(actionRegister()->action("select-similar-staff"));
+    actions.push_back(actionRegister()->action("select-similar-range"));
+    actions.push_back(actionRegister()->action("select-dialog"));
 
     return actions;
 }

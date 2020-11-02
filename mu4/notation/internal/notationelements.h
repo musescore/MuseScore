@@ -28,6 +28,7 @@ public:
     NotationElements(IGetScore* getScore);
 
     Ms::Element* search(const std::string& searchCommand) const override;
+    std::vector<Ms::Element*> searchSimilar(ElementPattern* searchPattern) const override;
 
     Ms::Measure* measure(const int measureIndex) const override;
 

@@ -33,6 +33,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/stafftype.h"
 #include "libmscore/score.h"
+#include "libmscore/chord.h"
 #include "libmscore/measure.h"
 
 #include "instruments/instrumentstypes.h"
@@ -60,6 +61,8 @@ using SharpFlat = Ms::PreferSharpFlat;
 using TransposeMode = Ms::TransposeMode;
 using TransposeDirection = Ms::TransposeDirection;
 using Fraction = Ms::Fraction;
+using ElementPattern = Ms::ElementPattern;
+using Chord = Ms::Chord;
 
 using StaffList = QList<const Staff*>;
 using PartList = QList<const Part*>;
