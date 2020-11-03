@@ -1906,7 +1906,7 @@ void renderChordArticulation(Chord* chord, QList<NoteEventList> & ell, int & gat
 
 static bool shouldRenderNote(Note* n)
       {
-      while (n->tieBack()) {
+      while (n->tieBack() && n != n->tieBack()->startNote()) {
             n = n->tieBack()->startNote();
             if (findFirstTrill(n->chord()))
                   // The previous tied note probably has events for this note too.
