@@ -190,6 +190,30 @@ const std::vector<Action> NotationActions::m_actions = {
     Action("redo",
            QT_TRANSLATE_NOOP("action", "Redo"),
            ShortcutContext::NotationActive
+           ),
+    Action("voice-x12",
+           QT_TRANSLATE_NOOP("action", "Exchange Voice 1-2"),
+           ShortcutContext::NotationActive
+           ),
+    Action("voice-x13",
+           QT_TRANSLATE_NOOP("action", "Exchange Voice 1-3"),
+           ShortcutContext::NotationActive
+           ),
+    Action("voice-x14",
+           QT_TRANSLATE_NOOP("action", "Exchange Voice 1-4"),
+           ShortcutContext::NotationActive
+           ),
+    Action("voice-x23",
+           QT_TRANSLATE_NOOP("action", "Exchange Voice 2-3"),
+           ShortcutContext::NotationActive
+           ),
+    Action("voice-x24",
+           QT_TRANSLATE_NOOP("action", "Exchange Voice 2-4"),
+           ShortcutContext::NotationActive
+           ),
+    Action("voice-x34",
+           QT_TRANSLATE_NOOP("action", "Exchange Voice 3-4"),
+           ShortcutContext::NotationActive
            )
 };
 

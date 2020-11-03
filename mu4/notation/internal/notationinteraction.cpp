@@ -1939,3 +1939,25 @@ void NotationInteraction::transpose(const TransposeOptions& options)
 
     m_notation->notifyAboutNotationChanged();
 }
+
+void NotationInteraction::swapVoices(int voiceIndex1, int voiceIndex2)
+{
+    if (voiceIndex1 == voiceIndex2) {
+        return;
+    }
+
+    if (!isVoiceIndexValid(voiceIndex1) || !isVoiceIndexValid(voiceIndex2)) {
+        return;
+    }
+
+    m_undoStack->prepareChanges();
+    score()->cmdExchangeVoice(voiceIndex1, voiceIndex2);
+    m_undoStack->commitChanges();
+
+    m_notation->notifyAboutNotationChanged();
+}
+
+bool NotationInteraction::isVoiceIndexValid(int voiceIndex) const
+{
+    return voiceIndex >= 0 && voiceIndex < VOICES;
+}

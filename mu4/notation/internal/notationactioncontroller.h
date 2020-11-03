@@ -26,8 +26,7 @@
 #include "inotation.h"
 #include "iinteractive.h"
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class NotationActionController : public actions::Actionable
 {
     INJECT(notation, actions::IActionsDispatcher, dispatcher)
@@ -35,11 +34,9 @@ class NotationActionController : public actions::Actionable
     INJECT(notation, framework::IInteractive, interactive)
 
 public:
-
     void init();
 
 private:
-
     bool canReceiveAction(const actions::ActionName& action) const override;
 
     INotationPtr currentNotation() const;
@@ -51,6 +48,8 @@ private:
 
     void moveAction(const actions::ActionName& action);
     void moveText(INotationInteractionPtr interaction, const actions::ActionName& action);
+
+    void swapVoices(int voiceIndex1, int voiceIndex2);
 
     void deleteSelection();
     void undo();
@@ -64,7 +63,6 @@ private:
     void openTransposeDialog();
     void openPartsDialog();
 };
-}
 }
 
 #endif // MU_NOTATION_NOTATIONACTIONCONTROLLER_H
