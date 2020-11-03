@@ -34,6 +34,9 @@
 #include "libmscore/stafftype.h"
 #include "libmscore/score.h"
 #include "libmscore/chord.h"
+#include "libmscore/articulation.h"
+#include "libmscore/slur.h"
+#include "libmscore/rest.h"
 #include "libmscore/measure.h"
 
 #include "instruments/instrumentstypes.h"
@@ -63,6 +66,10 @@ using TransposeDirection = Ms::TransposeDirection;
 using Fraction = Ms::Fraction;
 using ElementPattern = Ms::ElementPattern;
 using Chord = Ms::Chord;
+using Articulation = Ms::Articulation;
+using SlurSegment = Ms::SlurSegment;
+using Rest = Ms::Rest;
+using Fraction = Ms::Fraction;
 
 using StaffList = QList<const Staff*>;
 using PartList = QList<const Part*>;
@@ -161,6 +168,38 @@ struct SearchCommand
         : searchElementType(searchElementType), code(code), description(description) {}
 };
 using SearchCommands = QList<SearchCommand>;
+
+struct SearchElementOptions
+{
+    ElementType elementType = ElementType::INVALID;
+    int staffStart = -1;
+    int staffEnd = -1;
+    int voice = -1;
+    const Ms::System* system = nullptr;
+    Fraction durationTicks;
+
+    bool bySubtype = false;
+    int subtype = -1;
+
+    virtual ~SearchElementOptions() {}
+};
+
+struct SearchNoteOptions : SearchElementOptions
+{
+    int pitch = -1;
+    int string = Ms::STRING_NONE;
+    int tpc = Ms::Tpc::TPC_INVALID;
+    NoteHead::Group notehead = NoteHead::Group::HEAD_INVALID;
+    Ms::TDuration durationType = Ms::TDuration();
+    Ms::NoteType noteType = Ms::NoteType::INVALID;
+};
+
+struct SelectionRange {
+    int startStaffIndex = 0;
+    int endStaffIndex = 0;
+    Fraction startTick;
+    Fraction endTick;
+};
 
 struct StaffConfig
 {

@@ -28,7 +28,7 @@ public:
     NotationElements(IGetScore* getScore);
 
     Ms::Element* search(const std::string& searchCommand) const override;
-    std::vector<Ms::Element*> searchSimilar(ElementPattern* searchPattern) const override;
+    std::vector<Ms::Element*> searchSimilar(const SearchElementOptions* elementOptions) const override;
 
     Ms::Measure* measure(const int measureIndex) const override;
 
@@ -37,6 +37,12 @@ private:
 
     Ms::RehearsalMark* rehearsalMark(const std::string& name) const;
     Ms::Page* page(const int pageIndex) const;
+
+    std::vector<Ms::Element*> searchElements(const SearchElementOptions* elementOptions) const;
+    std::vector<Ms::Element*> searchNotes(const SearchElementOptions* elementOptions) const;
+
+    Ms::ElementPattern* constructElementPattern(const SearchElementOptions* elementOptions) const;
+    Ms::NotePattern* constructNotePattern(const SearchElementOptions* elementOptions) const;
 
     IGetScore* m_getScore = nullptr;
 };

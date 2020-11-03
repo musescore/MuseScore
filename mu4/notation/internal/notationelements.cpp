@@ -60,23 +60,17 @@ Ms::Element* NotationElements::search(const std::string& searchCommand) const
     return nullptr;
 }
 
-std::vector<Ms::Element*> NotationElements::searchSimilar(ElementPattern* searchPattern) const
+std::vector<Ms::Element*> NotationElements::searchSimilar(const SearchElementOptions* elementOptions) const
 {
-    ElementPattern* pattern = searchPattern;
-
-    bool isNote = static_cast<Ms::NotePattern*>(searchPattern)->type == -1;
+    std::vector<Ms::Element*> result;
 
     // todo: add check for range search
 
+    bool isNote = dynamic_cast<const SearchNoteOptions*>(elementOptions) != nullptr;
     if (isNote) {
-        score()->scanElements(pattern, Ms::Score::collectNoteMatch);
+        result = searchNotes(elementOptions);
     } else {
-        score()->scanElements(pattern, Ms::Score::collectMatch);
-    }
-
-    std::vector<Element*> result;
-    for (Element* element: pattern->el) {
-        result.push_back(element);
+        result = searchElements(elementOptions);
     }
 
     return result;
@@ -118,6 +112,34 @@ Ms::Page* NotationElements::page(const int pageIndex) const
     return score()->pages().at(pageIndex);
 }
 
+std::vector<Ms::Element*> NotationElements::searchElements(const SearchElementOptions* elementOptions) const
+{
+    Ms::ElementPattern* pattern = constructElementPattern(elementOptions);
+
+    score()->scanElements(pattern, Ms::Score::collectMatch);
+
+    std::vector<Element*> result;
+    for (Element* element: pattern->el) {
+        result.push_back(element);
+    }
+
+    return result;
+}
+
+std::vector<Ms::Element*> NotationElements::searchNotes(const SearchElementOptions* elementOptions) const
+{
+    Ms::NotePattern* pattern = constructNotePattern(elementOptions);
+
+    score()->scanElements(pattern, Ms::Score::collectNoteMatch);
+
+    std::vector<Element*> result;
+    for (Element* element: pattern->el) {
+        result.push_back(element);
+    }
+
+    return result;
+}
+
 Ms::Score* NotationElements::score() const
 {
     IF_ASSERT_FAILED(m_getScore) {
@@ -125,4 +147,39 @@ Ms::Score* NotationElements::score() const
     }
 
     return m_getScore->score();
+}
+
+ElementPattern* NotationElements::constructElementPattern(const SearchElementOptions* elementOptions) const
+{
+    ElementPattern* pattern = new ElementPattern;
+    pattern->type = static_cast<int>(elementOptions->elementType);
+    pattern->subtype = elementOptions->subtype;
+    pattern->subtypeValid = elementOptions->bySubtype;
+    pattern->staffStart = elementOptions->staffStart;
+    pattern->staffEnd = elementOptions->staffEnd;
+    pattern->voice   = elementOptions->voice;
+    pattern->system  = elementOptions->system;
+    pattern->durationTicks = elementOptions->durationTicks;
+
+    return pattern;
+}
+
+Ms::NotePattern* NotationElements::constructNotePattern(const SearchElementOptions* elementOptions) const
+{
+    const SearchNoteOptions* noteOptions = dynamic_cast<const SearchNoteOptions*>(elementOptions);
+
+    Ms::NotePattern* pattern = new Ms::NotePattern();
+    pattern->pitch = noteOptions->pitch;
+    pattern->string = noteOptions->string;
+    pattern->tpc = noteOptions->tpc;
+    pattern->notehead = noteOptions->notehead;
+    pattern->durationType = noteOptions->durationType;
+    pattern->durationTicks = noteOptions->durationTicks;
+    pattern->type = noteOptions->noteType;
+    pattern->staffStart = noteOptions->staffStart;
+    pattern->staffEnd = noteOptions->staffEnd;
+    pattern->voice = noteOptions->voice;
+    pattern->system = noteOptions->system;
+
+    return pattern;
 }
