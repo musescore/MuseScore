@@ -1925,3 +1925,15 @@ void NotationInteraction::setBreaksSpawnInterval(BreaksSpawnIntervalType interva
 
     m_notation->notifyAboutNotationChanged();
 }
+
+void NotationInteraction::transpose(const TransposeOptions& options)
+{
+    score()->startCmd();
+
+    score()->transpose(options.mode, options.direction, options.key, options.interval,
+                       options.needTransposeKeys, options.needTransposeChordNames, options.needTransposeDoubleSharpsFlats);
+
+    score()->endCmd();
+
+    m_notation->notifyAboutNotationChanged();
+}

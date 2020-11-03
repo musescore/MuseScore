@@ -23,6 +23,9 @@
 #include "ui_transposedialog.h"
 #include "libmscore/mscore.h"
 
+#include "modularity/ioc.h"
+#include "context/iglobalcontext.h"
+
 #include "notationtypes.h"
 
 namespace mu::notation {
@@ -34,21 +37,31 @@ class TransposeDialog : public QDialog, Ui::TransposeDialogBase
 {
     Q_OBJECT
 
-    virtual void hideEvent(QHideEvent*);
+    INJECT(notation, context::IGlobalContext, context)
+
+public:
+    TransposeDialog(QWidget* parent = 0);
+    TransposeDialog(const TransposeDialog& dialog);
 
 private slots:
     void transposeByKeyToggled(bool);
     void transposeByIntervalToggled(bool);
     void chromaticBoxToggled(bool val);
     void diatonicBoxToggled(bool val);
+    void apply();
 
-public:
-    TransposeDialog(QWidget* parent = 0);
-    TransposeDialog(const TransposeDialog& dialog);
+private:
+    void hideEvent(QHideEvent*) override;
 
-    void enableTransposeKeys(bool val) { transposeKeys->setEnabled(val); }
-    void enableTransposeToKey(bool val);
-    void enableTransposeChordNames(bool val);
+    INotationPtr notation() const;
+    INotationSelectionPtr selection() const;
+    INotationInteractionPtr interaction() const;
+
+    Key firstPitchedStaffKey() const;
+
+    void setEnableTransposeKeys(bool val) { transposeKeys->setEnabled(val); }
+    void setEnableTransposeToKey(bool val);
+    void setEnableTransposeChordNames(bool val);
     bool getTransposeKeys() const
     {
         return chromaticBox->isChecked()
@@ -69,6 +82,8 @@ public:
     Ms::TransposeMode mode() const;
     void setKey(Key k) { keyList->setCurrentIndex(int(k) + 7); }
     bool useDoubleSharpsFlats() const { return accidentalOptions->currentIndex() == 1; }
+
+    bool m_allSelected = false;
 };
 }
 

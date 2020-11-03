@@ -122,7 +122,7 @@ enum class PlaceText : char {
 //---------------------------------------------------------
 
 enum class TransposeDirection : char {
-    UP, DOWN, CLOSEST
+    UP, DOWN, CLOSEST, UNKNOWN
 };
 
 //---------------------------------------------------------
@@ -130,7 +130,7 @@ enum class TransposeDirection : char {
 //---------------------------------------------------------
 
 enum class TransposeMode : char {
-    TO_KEY, BY_INTERVAL, DIATONICALLY
+    TO_KEY, BY_INTERVAL, DIATONICALLY, UNKNOWN
 };
 
 //---------------------------------------------------------
