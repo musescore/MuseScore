@@ -112,6 +112,7 @@ public:
 
     void setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval = 0) override;
     void transpose(const TransposeOptions& options) override;
+    void swapVoices(int voiceIndex1, int voiceIndex2) override;
 
 private:
     Ms::Score* score() const;
@@ -140,6 +141,8 @@ private:
                                  QPointF pt = QPointF(), bool pasteMode = false);
     void cmdAddSlur(const Ms::Slur* slurTemplate = nullptr);
     void addSlur(Ms::ChordRest* cr1, Ms::ChordRest* cr2, const Ms::Slur* slurTemplate);
+
+    bool isVoiceIndexValid(int voiceIndex) const;
 
     struct HitMeasureData
     {
