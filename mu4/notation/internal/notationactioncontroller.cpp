@@ -75,7 +75,7 @@ void NotationActionController::init()
     dispatcher()->reg(this, "delete", this, &NotationActionController::deleteSelection);
     dispatcher()->reg(this, "undo", this, &NotationActionController::undo);
     dispatcher()->reg(this, "redo", this, &NotationActionController::redo);
-    
+
     dispatcher()->reg(this, "select-similar", this, &NotationActionController::selectAllSimilarElements);
     dispatcher()->reg(this, "select-similar-staff", this, &NotationActionController::selectAllSimilarElementsInStaff);
     dispatcher()->reg(this, "select-similar-range", this, &NotationActionController::selectAllSimilarElementsInRange);
@@ -378,8 +378,8 @@ void NotationActionController::selectAllSimilarElements()
         return;
     }
 
-    ElementPattern* pattern = defaultElementPattern(selectedElement);
-    std::vector<Element*> elements = notationElements->searchSimilar(pattern);
+    SearchElementOptions* options = elementSearchOptions(selectedElement);
+    std::vector<Element*> elements = notationElements->searchSimilar(options);
     if (elements.empty()) {
         return;
     }
@@ -402,11 +402,11 @@ void NotationActionController::selectAllSimilarElementsInStaff()
         return;
     }
 
-    ElementPattern* pattern = defaultElementPattern(selectedElement);
-    pattern->staffStart = selectedElement->staffIdx();
-    pattern->staffEnd = pattern->staffStart + 1;
+    SearchElementOptions* options = elementSearchOptions(selectedElement);
+    options->staffStart = selectedElement->staffIdx();
+    options->staffEnd = options->staffStart + 1;
 
-    std::vector<Element*> elements = notationElements->searchSimilar(pattern);
+    std::vector<Element*> elements = notationElements->searchSimilar(options);
     if (elements.empty()) {
         return;
     }
@@ -432,6 +432,8 @@ void NotationActionController::openSelectionMoreOptions()
 
     if (isSelectionNote) {
         interactive()->open("musescore://notation/selectnote");
+    } else {
+        interactive()->open("musescore://notation/selectelement");
     }
 }
 
@@ -563,29 +565,21 @@ void NotationActionController::openPartsDialog()
     interactive()->open("musescore://notation/parts");
 }
 
-ElementPattern* NotationActionController::defaultElementPattern(const Element* element) const
+SearchElementOptions* NotationActionController::elementSearchOptions(const Element* element) const
 {
-    ElementPattern* pattern = new ElementPattern;
-    pattern->type = int(element->type());
-    pattern->subtype = 0;
-    pattern->subtypeValid = false;
+    SearchElementOptions* options = new SearchElementOptions;
+    options->elementType = element->type();
 
     if (element->type() == ElementType::NOTE) {
         const Ms::Note* note = dynamic_cast<const Ms::Note*>(element);
         if (note->chord()->isGrace()) {
-            pattern->subtype = -1;
+            options->subtype = -1;
         } else {
-            pattern->subtype = element->subtype();
+            options->subtype = element->subtype();
         }
     }
 
-    pattern->staffStart = -1;
-    pattern->staffEnd = -1;
-    pattern->voice   = -1;
-    pattern->system  = 0;
-    pattern->durationTicks = Ms::Fraction(-1, 1);
-
-    return pattern;
+    return options;
 }
 
 int NotationActionController::lastSelectedMeasureIndex() const

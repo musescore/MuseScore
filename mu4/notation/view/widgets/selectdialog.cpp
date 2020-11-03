@@ -16,21 +16,16 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#include "selectdialog.h"
 
 /**
  \file
  Implementation of class Selection plus other selection related functions.
 */
 
-#include "libmscore/select.h"
-#include "selectnotedialog.h"
-#include "libmscore/element.h"
 #include "libmscore/system.h"
-#include "libmscore/score.h"
-#include "libmscore/chord.h"
-#include "libmscore/sym.h"
-#include "libmscore/segment.h"
-#include "libmscore/note.h"
+
+#include "notationtypes.h"
 
 #include "widgetstatestore.h"
 
@@ -40,119 +35,138 @@ using namespace mu::notation;
 //   SelectDialog
 //---------------------------------------------------------
 
-SelectNoteDialog::SelectNoteDialog(QWidget* parent)
+SelectDialog::SelectDialog(QWidget* parent)
     : QDialog(parent)
 {
-    setObjectName("SelectNoteDialog");
+    setObjectName("SelectDialog");
     setupUi(this);
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    m_note = dynamic_cast<Ms::Note*>(globalContext()->currentNotation()->interaction()->selection()->element());
+    m_element = globalContext()->currentNotation()->interaction()->selection()->element();
+    type->setText(qApp->translate("elementName", m_element->userName().toUtf8()));
 
-    notehead->setText(Ms::NoteHead::group2userName(m_note->headGroup()));
-    pitch->setText(m_note->tpcUserName());
-    string->setText(QString::number(m_note->string() + 1));
-    type->setText(m_note->noteTypeUserName());
-    durationType->setText(tr("%1 Note").arg(m_note->chord()->durationType().durationTypeUserName()));
-    durationTicks->setText(m_note->chord()->durationUserName());
-    name->setText(tpc2name(m_note->tpc(), Ms::NoteSpellingType::STANDARD, Ms::NoteCaseType::AUTO, false));
-    inSelection->setEnabled(m_note->score()->selection().isRange());
+    switch (m_element->type()) {
+    case ElementType::ACCIDENTAL:
+        subtype->setText(qApp->translate("accidental", m_element->subtypeName().toUtf8()));
+        break;
+    case ElementType::SLUR_SEGMENT:
+        subtype->setText(qApp->translate("elementName", m_element->subtypeName().toUtf8()));
+        break;
+    case ElementType::FINGERING:
+    case ElementType::STAFF_TEXT:
+        subtype->setText(qApp->translate("TextStyle", m_element->subtypeName().toUtf8()));
+        break;
+    case ElementType::ARTICULATION: { // comes translated, but from a different method
+        const Articulation* articulation = dynamic_cast<const Articulation*>(m_element);
+        subtype->setText(articulation->userName());
+        break;
+    }
+    // other come translated or don't need any or are too difficult to implement
+    default:
+        subtype->setText(m_element->subtypeName());
+        break;
+    }
+    sameSubtype->setEnabled(m_element->subtype() != -1);
+    subtype->setEnabled(m_element->subtype() != -1);
+    inSelection->setEnabled(m_element->score()->selection().isRange());
+    sameDuration->setEnabled(m_element->isRest());
 
     connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), SLOT(buttonClicked(QAbstractButton*)));
 
     WidgetStateStore::restoreGeometry(this);
 }
 
-SelectNoteDialog::SelectNoteDialog(const SelectNoteDialog& other)
+SelectDialog::SelectDialog(const SelectDialog& other)
     : QDialog(other.parentWidget())
 {
 }
 
-int SelectNoteDialog::metaTypeId()
+int SelectDialog::metaTypeId()
 {
-    return QMetaType::type("SelectNoteDialog");
+    return QMetaType::type("SelectDialog");
 }
 
-SearchNoteOptions* SelectNoteDialog::noteOptions() const
-{
-    SearchNoteOptions* options = new SearchNoteOptions();
-    if (sameNotehead->isChecked()) {
-        options->notehead = m_note->headGroup();
-    }
-    if (samePitch->isChecked()) {
-        options->pitch = m_note->pitch();
-    }
-    if (sameString->isChecked()) {
-        options->string = m_note->string();
-    }
-    if (sameName->isChecked()) {
-        options->tpc = m_note->tpc();
-    }
-    if (sameType->isChecked()) {
-        options->noteType = m_note->noteType();
-    }
-    if (sameDurationType->isChecked()) {
-        options->durationType = m_note->chord()->actualDurationType();
-    }
+//---------------------------------------------------------
+//   setPattern
+//---------------------------------------------------------
 
-    if (sameDurationTicks->isChecked()) {
-        options->durationTicks = m_note->chord()->actualTicks();
-    } else {
-        options->durationTicks = Ms::Fraction(-1, 1);
+SearchElementOptions* SelectDialog::elementOptions() const
+{
+    SearchElementOptions* options = new SearchElementOptions();
+    options->elementType = m_element->type();
+    options->subtype = m_element->subtype();
+    if (m_element->isSlurSegment()) {
+        const SlurSegment* slurSegment = dynamic_cast<const SlurSegment*>(m_element);
+        options->subtype = static_cast<int>(slurSegment->spanner()->type());
     }
 
     if (sameStaff->isChecked()) {
-        options->staffStart = m_note->staffIdx();
-        options->staffEnd = m_note->staffIdx() + 1;
+        options->staffStart = m_element->staffIdx();
+        options->staffEnd = m_element->staffIdx() + 1;
     } else if (inSelection->isChecked()) {
-        options->staffStart = m_note->score()->selection().staffStart();
-        options->staffEnd = m_note->score()->selection().staffEnd();
+        options->staffStart = m_element->score()->selection().staffStart();
+        options->staffEnd = m_element->score()->selection().staffEnd();
     } else {
         options->staffStart = -1;
         options->staffEnd = -1;
     }
 
-    options->voice = sameVoice->isChecked() ? m_note->voice() : -1;
-    options->system = nullptr;
+    if (sameDuration->isChecked() && m_element->isRest()) {
+        const Rest* rest = dynamic_cast<const Rest*>(m_element);
+        options->durationTicks = rest->actualTicks();
+    } else {
+        options->durationTicks = Fraction(-1, 1);
+    }
+
+    options->voice = sameVoice->isChecked() ? m_element->voice() : -1;
+    options->bySubtype = sameSubtype->isChecked();
+
     if (sameSystem->isChecked()) {
-        options->system = m_note->chord()->segment()->system();
+        options->system = elementSystem(m_element);
     }
 
     return options;
 }
 
-bool SelectNoteDialog::doReplace() const
+Ms::System* SelectDialog::elementSystem(const Element* element) const
+{
+    Element* _element = const_cast<Element*>(element);
+    do {
+        if (_element->type() == ElementType::SYSTEM) {
+            return dynamic_cast<Ms::System*>(_element);
+        }
+        _element = _element->parent();
+    } while (element);
+
+    return nullptr;
+}
+
+bool SelectDialog::doReplace() const
 {
     return replace->isChecked();
 }
 
-bool SelectNoteDialog::doAdd() const
+bool SelectDialog::doAdd() const
 {
     return add->isChecked();
 }
 
-bool SelectNoteDialog::doSubtract() const
+bool SelectDialog::doSubtract() const
 {
     return subtract->isChecked();
 }
 
-bool SelectNoteDialog::doFromSelection() const
+bool SelectDialog::doFromSelection() const
 {
     return fromSelection->isChecked();
 }
 
-bool SelectNoteDialog::isInSelection() const
+bool SelectDialog::isInSelection() const
 {
     return inSelection->isChecked();
 }
 
-void SelectNoteDialog::setSameStringVisible(bool v)
-{
-    sameString->setVisible(v);
-    string->setVisible(v);
-}
-
-void SelectNoteDialog::buttonClicked(QAbstractButton* button)
+void SelectDialog::buttonClicked(QAbstractButton* button)
 {
     switch (buttonBox->standardButton(button)) {
     case QDialogButtonBox::Ok:
@@ -171,18 +185,18 @@ void SelectNoteDialog::buttonClicked(QAbstractButton* button)
 //   hideEvent
 //---------------------------------------------------------
 
-void SelectNoteDialog::hideEvent(QHideEvent* event)
+void SelectDialog::hideEvent(QHideEvent* event)
 {
     WidgetStateStore::saveGeometry(this);
     QWidget::hideEvent(event);
 }
 
-std::shared_ptr<INotation> SelectNoteDialog::currentNotation() const
+std::shared_ptr<INotation> SelectDialog::currentNotation() const
 {
     return globalContext()->currentNotation();
 }
 
-INotationInteractionPtr SelectNoteDialog::currentNotationInteraction() const
+INotationInteractionPtr SelectDialog::currentNotationInteraction() const
 {
     auto notation = currentNotation();
     if (!notation) {
@@ -192,7 +206,7 @@ INotationInteractionPtr SelectNoteDialog::currentNotationInteraction() const
     return notation->interaction();
 }
 
-INotationElementsPtr SelectNoteDialog::currentNotationElements() const
+INotationElementsPtr SelectDialog::currentNotationElements() const
 {
     auto notation = currentNotation();
     if (!notation) {
@@ -202,7 +216,7 @@ INotationElementsPtr SelectNoteDialog::currentNotationElements() const
     return notation->elements();
 }
 
-void SelectNoteDialog::apply() const
+void SelectDialog::apply() const
 {
     auto notationElements = currentNotationElements();
     auto interaction = currentNotationInteraction();
@@ -215,7 +229,7 @@ void SelectNoteDialog::apply() const
         return;
     }
 
-    SearchElementOptions* options = noteOptions();
+    SearchElementOptions* options = this->elementOptions();
 
     std::vector<Element*> elements = notationElements->searchSimilar(options);
     if (elements.empty()) {
