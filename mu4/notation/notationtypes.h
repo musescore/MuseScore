@@ -55,6 +55,8 @@ using Staff = Ms::Staff;
 using StaffType = Ms::StaffTypes;
 using NoteHead = Ms::NoteHead;
 using SharpFlat = Ms::PreferSharpFlat;
+using TransposeMode = Ms::TransposeMode;
+using TransposeDirection = Ms::TransposeDirection;
 using Fraction = Ms::Fraction;
 
 using StaffList = QList<const Staff*>;
@@ -155,14 +157,16 @@ struct SearchCommand
 };
 using SearchCommands = QList<SearchCommand>;
 
-struct SelectionRange {
+struct SelectionRange
+{
     int startStaffIndex = 0;
     int endStaffIndex = 0;
     Fraction startTick;
     Fraction endTick;
 };
 
-struct StaffConfig {
+struct StaffConfig
+{
     bool visible = false;
     int linesCount = 0;
     double lineDistance = 0.0;
@@ -182,6 +186,17 @@ struct StaffConfig {
     Staff::HideMode hideMode = Staff::HideMode::AUTO;
     NoteHead::Scheme noteheadScheme = NoteHead::Scheme::HEAD_AUTO;
     Ms::ClefTypeList clefType;
+};
+
+struct TransposeOptions
+{
+    TransposeMode mode = TransposeMode::UNKNOWN;
+    TransposeDirection direction = TransposeDirection::UNKNOWN;
+    Key key = Key::C;
+    int interval = 0;
+    bool needTransposeKeys = false;
+    bool needTransposeChordNames = false;
+    bool needTransposeDoubleSharpsFlats = false;
 };
 
 inline QString staffTypeToString(StaffType type)

@@ -72,7 +72,7 @@ public:
     // Select
     Element* hitElement(const QPointF& pos, float width) const override;
     int hitStaffIndex(const QPointF& pos) const override;
-    void select(Element* e, SelectType type, int staffIdx = 0) override;
+    void select(Element* element, SelectType type, int staffIndex = 0) override;
     void selectAll() override;
     INotationSelectionPtr selection() const override;
     void clearSelection() override;
@@ -111,6 +111,7 @@ public:
     void deleteSelection() override;
 
     void setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval = 0) override;
+    void transpose(const TransposeOptions& options) override;
 
 private:
     Ms::Score* score() const;

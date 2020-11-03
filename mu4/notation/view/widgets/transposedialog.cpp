@@ -40,6 +40,20 @@ TransposeDialog::TransposeDialog(QWidget* parent)
     connect(chromaticBox,        &QGroupBox::clicked, this, &TransposeDialog::chromaticBoxToggled);
     connect(diatonicBox,         &QGroupBox::clicked, this, &TransposeDialog::diatonicBoxToggled);
 
+    if (selection()->isNone()) {
+        interaction()->selectAll();
+        m_allSelected = true;
+    }
+
+    // TRANSPOSE_TO_KEY and "transpose keys" is only possible if selection state is SelState::RANGE
+    bool rangeSelection = selection()->isRange();
+    setEnableTransposeKeys(rangeSelection);
+    setEnableTransposeToKey(rangeSelection);
+    setEnableTransposeChordNames(rangeSelection);
+    setKey(firstPitchedStaffKey());
+
+    connect(this, &TransposeDialog::accepted, this, &TransposeDialog::apply);
+
     WidgetStateStore::restoreGeometry(this);
 }
 
@@ -87,7 +101,7 @@ TransposeMode TransposeDialog::mode() const
 //   enableTransposeByKey
 //---------------------------------------------------------
 
-void TransposeDialog::enableTransposeToKey(bool val)
+void TransposeDialog::setEnableTransposeToKey(bool val)
 {
     transposeByKey->setEnabled(val);
     transposeByInterval->setChecked(!val);
@@ -98,7 +112,7 @@ void TransposeDialog::enableTransposeToKey(bool val)
 //   enableTransposeChordNames
 //---------------------------------------------------------
 
-void TransposeDialog::enableTransposeChordNames(bool val)
+void TransposeDialog::setEnableTransposeChordNames(bool val)
 {
     transposeChordNames->setEnabled(val);
     transposeChordNames->setChecked(val);
@@ -120,6 +134,8 @@ TransposeDirection TransposeDialog::direction() const
         return upInterval->isChecked() ? TransposeDirection::UP : TransposeDirection::DOWN;
     case TransposeMode::DIATONICALLY:
         return upDiatonic->isChecked() ? TransposeDirection::UP : TransposeDirection::DOWN;
+    case TransposeMode::UNKNOWN:
+        return TransposeDirection::UNKNOWN;
     }
     return TransposeDirection::UP;
 }
@@ -132,4 +148,79 @@ void TransposeDialog::hideEvent(QHideEvent* event)
 {
     WidgetStateStore::saveGeometry(this);
     QWidget::hideEvent(event);
+}
+
+INotationPtr TransposeDialog::notation() const
+{
+    return context()->currentNotation();
+}
+
+INotationInteractionPtr TransposeDialog::interaction() const
+{
+    return notation()->interaction();
+}
+
+INotationSelectionPtr TransposeDialog::selection() const
+{
+    return interaction()->selection();
+}
+
+void TransposeDialog::apply()
+{
+    TransposeOptions options;
+
+    options.mode = mode();
+    options.direction = direction();
+    options.key = transposeKey();
+    options.interval = transposeInterval();
+    options.needTransposeKeys = getTransposeKeys();
+    options.needTransposeChordNames = getTransposeChordNames();
+    options.needTransposeDoubleSharpsFlats = useDoubleSharpsFlats();
+
+    interaction()->transpose(options);
+
+    if (m_allSelected) {
+        interaction()->clearSelection();
+    }
+}
+
+Key TransposeDialog::firstPitchedStaffKey() const
+{
+    int startStaffIdx = 0;
+    int endStaffIdx   = 0;
+    Fraction startTick = Fraction(0,1);
+    SelectionRange range = selection()->range();
+
+    if (selection()->isRange()) {
+        startStaffIdx = range.startStaffIndex;
+        endStaffIdx = range.endStaffIndex;
+        startTick = range.startTick;
+    }
+
+    Key key = Key::C;
+
+    for (const Part* part : notation()->parts()->partList()) {
+        for (const Staff* staff : *part->staves()) {
+            if (staff->idx() < startStaffIdx || staff->idx() > endStaffIdx) {
+                continue;
+            }
+
+            if (staff->isPitchedStaff(startTick)) {
+                key = staff->key(startTick);
+                bool concertPitchEnabled = notation()->style()->styleValue(StyleId::concertPitch).toBool();
+
+                if (!concertPitchEnabled) {
+                    int diff = staff->part()->instrument(startTick)->transpose().chromatic;
+
+                    if (diff) {
+                        key = Ms::transposeKey(key, diff, staff->part()->preferSharpFlat());
+                    }
+                }
+
+                break;
+            }
+        }
+    }
+
+    return key;
 }
