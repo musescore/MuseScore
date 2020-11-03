@@ -58,6 +58,13 @@ void NotationActionController::init()
     dispatcher()->reg(this, "edit-info", this, &NotationActionController::openScoreProperties);
     dispatcher()->reg(this, "transpose", this, &NotationActionController::openTransposeDialog);
     dispatcher()->reg(this, "parts", this, &NotationActionController::openPartsDialog);
+
+    dispatcher()->reg(this, "voice-x12", [this]() { swapVoices(0, 1); });
+    dispatcher()->reg(this, "voice-x13", [this]() { swapVoices(0, 2); });
+    dispatcher()->reg(this, "voice-x14", [this]() { swapVoices(0, 3); });
+    dispatcher()->reg(this, "voice-x23", [this]() { swapVoices(1, 2); });
+    dispatcher()->reg(this, "voice-x24", [this]() { swapVoices(1, 3); });
+    dispatcher()->reg(this, "voice-x34", [this]() { swapVoices(2, 3); });
 }
 
 bool NotationActionController::canReceiveAction(const actions::ActionName&) const
@@ -209,6 +216,16 @@ void NotationActionController::moveText(INotationInteractionPtr interaction, con
     }
 
     interaction->moveText(direction, quickly);
+}
+
+void NotationActionController::swapVoices(int voiceIndex1, int voiceIndex2)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->swapVoices(voiceIndex1, voiceIndex2);
 }
 
 void NotationActionController::deleteSelection()
