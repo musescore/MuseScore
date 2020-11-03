@@ -13,6 +13,7 @@ set (WIDGETS_UI
     ${CMAKE_CURRENT_LIST_DIR}/scoreproperties.ui
     ${CMAKE_CURRENT_LIST_DIR}/transposedialog.ui
     ${CMAKE_CURRENT_LIST_DIR}/selectnotedialog.ui
+    ${CMAKE_CURRENT_LIST_DIR}/selectdialog.ui
     )
 
 set(WIDGETS_SRC
@@ -42,4 +43,6 @@ set(WIDGETS_SRC
     ${CMAKE_CURRENT_LIST_DIR}/transposedialog.h
     ${CMAKE_CURRENT_LIST_DIR}/selectnotedialog.cpp
     ${CMAKE_CURRENT_LIST_DIR}/selectnotedialog.h
+    ${CMAKE_CURRENT_LIST_DIR}/selectdialog.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/selectdialog.h
     )

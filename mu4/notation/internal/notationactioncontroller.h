@@ -59,7 +59,7 @@ private:
 
     void undo();
     void redo();
-    
+
     void selectAllSimilarElements();
     void selectAllSimilarElementsInStaff();
     void selectAllSimilarElementsInRange();
@@ -91,6 +91,7 @@ private:
     Fraction resolvePastingScale(const INotationInteractionPtr& interaction, PastingType type) const;
 
     ElementPattern* defaultElementPattern(const Element* element) const;
+    SearchElementOptions* elementSearchOptions(const Element* element) const;
 
     int lastSelectedMeasureIndex() const;
 };

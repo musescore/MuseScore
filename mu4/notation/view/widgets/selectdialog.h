@@ -16,32 +16,31 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATION_SELECTNOTEDIALOG_H
-#define MU_NOTATION_SELECTNOTEDIALOG_H
+#ifndef MU_NOTATION_SELECTDIALOG_H
+#define MU_NOTATION_SELECTDIALOG_H
 
-#include "ui_selectnotedialog.h"
+#include "ui_selectdialog.h"
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 
 namespace Ms {
-struct NotePattern;
-class Note;
+class System;
 }
 
 namespace mu::notation {
 //---------------------------------------------------------
-//   SelectNoteDialog
+//   SelectDialog
 //---------------------------------------------------------
 
-class SelectNoteDialog : public QDialog, Ui::SelectNoteDialog
+class SelectDialog : public QDialog, Ui::SelectDialog
 {
     Q_OBJECT
     INJECT(notation, context::IGlobalContext, globalContext)
 
 public:
-    SelectNoteDialog(QWidget* parent = nullptr);
-    SelectNoteDialog(const SelectNoteDialog& other);
+    SelectDialog(QWidget* parent = nullptr);
+    SelectDialog(const SelectDialog& other);
 
     static int metaTypeId();
 
@@ -50,7 +49,6 @@ public:
     bool doSubtract() const;
     bool doFromSelection() const;
     bool isInSelection() const;
-    void setSameStringVisible(bool v);
 
 private slots:
     void buttonClicked(QAbstractButton* button);
@@ -63,12 +61,11 @@ private:
     INotationElementsPtr currentNotationElements() const;
 
     void apply() const;
-    SearchNoteOptions* noteOptions() const;
+    SearchElementOptions* elementOptions() const;
 
-    const Ms::Note* m_note = nullptr;
+    Ms::System* elementSystem(const Element* element) const;
+
+    const Element* m_element = nullptr;
 };
-}
-
-Q_DECLARE_METATYPE(mu::notation::SelectNoteDialog)
-
-#endif // MU_NOTATION_SELECTNOTEDIALOG_H
+} // namespace Ms
+#endif

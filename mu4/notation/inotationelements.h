@@ -19,7 +19,7 @@ public:
     virtual ~INotationElements() = default;
 
     virtual Ms::Element* search(const std::string& searchCommand) const = 0;
-    virtual std::vector<Ms::Element*> searchSimilar(ElementPattern* searchPattern) const = 0;
+    virtual std::vector<Ms::Element*> searchSimilar(const SearchElementOptions* elementOptions) const = 0;
 
     virtual Ms::Measure* measure(const int measureIndex) const = 0;
 };
