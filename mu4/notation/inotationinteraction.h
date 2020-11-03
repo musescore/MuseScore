@@ -53,7 +53,7 @@ public:
     // Select
     virtual Element* hitElement(const QPointF& pos, float width) const = 0;
     virtual int hitStaffIndex(const QPointF& pos) const = 0;
-    virtual void select(Element* e, SelectType type, int staffIdx = 0) = 0;
+    virtual void select(Element* element, SelectType type, int staffIndex = 0) = 0;
     virtual void selectAll() = 0;
     virtual INotationSelectionPtr selection() const = 0;
     virtual void clearSelection() = 0;
@@ -94,6 +94,7 @@ public:
     virtual void deleteSelection() = 0;
 
     virtual void setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval = 0) = 0;
+    virtual void transpose(const TransposeOptions& options) = 0;
 };
 
 using INotationInteractionPtr = std::shared_ptr<INotationInteraction>;
