@@ -14,7 +14,7 @@ Item {
         FlatButton {
             width: 220
 
-            text: qsTrc("devtools", "Measure properties")
+            text: "Measure properties"
 
             onClicked: {
                 api.launcher.open("musescore://notation/measureproperties?index=0")
@@ -24,7 +24,7 @@ Item {
         FlatButton {
             width: 220
 
-            text: qsTrc("devtools", "Add/Remove System Breaks")
+            text: "Add/Remove System Breaks"
 
             onClicked: {
                 api.launcher.open("musescore://notation/breaks")
@@ -34,7 +34,7 @@ Item {
         FlatButton {
             width: 220
 
-            text: qsTrc("devtools", "Score properties")
+            text: "Score properties"
 
             onClicked: {
                 api.launcher.open("musescore://notation/properties")
@@ -44,10 +44,20 @@ Item {
         FlatButton {
             width: 220
 
-            text: qsTrc("devtools", "Style dialog")
+            text: "Style dialog"
 
             onClicked: {
                 api.launcher.open("musescore://notation/style")
+            }
+        }
+
+       FlatButton {
+            width: 220
+
+            text: "Transpose dialog"
+
+            onClicked: {
+                api.launcher.open("musescore://notation/transpose")
             }
         }
     }

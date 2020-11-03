@@ -53,6 +53,7 @@
 #include "view/widgets/editstaff.h"
 #include "view/widgets/breaksdialog.h"
 #include "view/widgets/scoreproperties.h"
+#include "view/widgets/transposedialog.h"
 
 using namespace mu::notation;
 using namespace mu::notation;
@@ -109,6 +110,9 @@ void NotationModule::resolveImports()
 
         ir->registerUri(Uri("musescore://notation/staffproperties"),
                         ContainerMeta(ContainerType::QWidgetDialog, EditStaff::metaTypeId()));
+
+        ir->registerUri(Uri("musescore://notation/transpose"),
+                        ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<TransposeDialog>("TransposeDialog")));
 
         ir->registerUri(Uri("musescore://notation/parts"),
                         ContainerMeta(ContainerType::QmlDialog, "MuseScore/NotationScene/PartsDialog.qml"));
