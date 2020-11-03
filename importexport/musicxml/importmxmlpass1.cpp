@@ -203,8 +203,6 @@ void MusicXMLParserPass1::initPartState(const QString& /* partId */)
       {
       _timeSigDura = Fraction(0, 0);       // invalid
       _octaveShifts.clear();
-      _firstInstrSTime = Fraction(0, 1);
-      _firstInstrId = "";
       }
 
 //---------------------------------------------------------
@@ -298,6 +296,7 @@ MusicXmlIntervalList MusicXMLParserPass1::getIntervals(const QString id) const
 /**
  Set default notehead, line and stem direction
  for instrument \a instrId in part \a id.
+ Called from pass 2, notehead, line and stemDirection are not read in pass 1.
  */
 
 void MusicXMLParserPass1::setDrumsetDefault(const QString& id,
@@ -306,11 +305,11 @@ void MusicXMLParserPass1::setDrumsetDefault(const QString& id,
                                             const int line,
                                             const Direction sd)
       {
-      if (_drumsets.contains(id)
-          && _drumsets[id].contains(instrId)) {
-            _drumsets[id][instrId].notehead = hg;
-            _drumsets[id][instrId].line = line;
-            _drumsets[id][instrId].stemDirection = sd;
+      if (_instruments.contains(id)
+          && _instruments[id].contains(instrId)) {
+            _instruments[id][instrId].notehead = hg;
+            _instruments[id][instrId].line = line;
+            _instruments[id][instrId].stemDirection = sd;
             }
       }
 
@@ -1809,7 +1808,7 @@ void MusicXMLParserPass1::scorePart()
             }
       else {
             _parts.insert(id, MusicXmlPart(id));
-            _drumsets.insert(id, MusicXMLDrumset());
+            _instruments.insert(id, MusicXMLInstruments());
             createPart(_score, id, _partMap);
             }
 
@@ -1850,11 +1849,11 @@ void MusicXMLParserPass1::scorePart()
                   // If instrId is missing, the device assignment affects all
                   // score-instrument elements in the score-part
                   if (instrId.isEmpty()) {
-                        for (auto it = _drumsets[id].cbegin(); it != _drumsets[id].cend(); ++it)
-                              _drumsets[id][it.key()].midiPort = port.toInt() - 1;
+                        for (auto it = _instruments[id].cbegin(); it != _instruments[id].cend(); ++it)
+                              _instruments[id][it.key()].midiPort = port.toInt() - 1;
                         }
-                  else if (_drumsets[id].contains(instrId))
-                        _drumsets[id][instrId].midiPort = port.toInt() - 1;
+                  else if (_instruments[id].contains(instrId))
+                        _instruments[id][instrId].midiPort = port.toInt() - 1;
 
                   _e.readElementText(); // empty string
                   }
@@ -1893,28 +1892,28 @@ void MusicXMLParserPass1::scoreInstrument(const QString& partId)
                          qPrintable(instrName)
                          );
                    */
-                  _drumsets[partId].insert(instrId, MusicXMLDrumInstrument(instrName));
+                  _instruments[partId].insert(instrId, MusicXMLInstrument(instrName));
                   // Element instrument-name is typically not displayed in the score,
                   // but used only internally
-                  if (_drumsets[partId].contains(instrId))
-                        _drumsets[partId][instrId].name = instrName;
+                  if (_instruments[partId].contains(instrId))
+                        _instruments[partId][instrId].name = instrName;
                   }
             else if (_e.name() == "instrument-sound") {
                   QString instrSound = _e.readElementText();
-                  if (_drumsets[partId].contains(instrId))
-                        _drumsets[partId][instrId].sound = instrSound;
+                  if (_instruments[partId].contains(instrId))
+                        _instruments[partId][instrId].sound = instrSound;
                   }
             else if (_e.name() == "virtual-instrument") {
                   while (_e.readNextStartElement()) {
                         if (_e.name() == "virtual-library") {
                               QString virtualLibrary = _e.readElementText();
-                              if (_drumsets[partId].contains(instrId))
-                                    _drumsets[partId][instrId].virtLib = virtualLibrary;
+                              if (_instruments[partId].contains(instrId))
+                                    _instruments[partId][instrId].virtLib = virtualLibrary;
                               }
                         else if (_e.name() == "virtual-name") {
                               QString virtualName = _e.readElementText();
-                              if (_drumsets[partId].contains(instrId))
-                                    _drumsets[partId][instrId].virtName = virtualName;
+                              if (_instruments[partId].contains(instrId))
+                                    _instruments[partId][instrId].virtName = virtualName;
                               }
                         else
                               skipLogCurrElem();
@@ -1953,8 +1952,8 @@ void MusicXMLParserPass1::midiInstrument(const QString& partId)
                         _logger->logError(QString("incorrect midi-channel: %1").arg(channel), &_e);
                         channel = 16;
                         }
-                  if (_drumsets[partId].contains(instrId))
-                        _drumsets[partId][instrId].midiChannel = channel - 1;
+                  if (_instruments[partId].contains(instrId))
+                        _instruments[partId][instrId].midiChannel = channel - 1;
                   }
             else if (_e.name() == "midi-program") {
                   int program = _e.readElementText().toInt();
@@ -1968,18 +1967,18 @@ void MusicXMLParserPass1::midiInstrument(const QString& partId)
                         _logger->logError(QString("incorrect midi-program: %1").arg(program), &_e);
                         program = 128;
                         }
-                  if (_drumsets[partId].contains(instrId))
-                        _drumsets[partId][instrId].midiProgram = program - 1;
+                  if (_instruments[partId].contains(instrId))
+                        _instruments[partId][instrId].midiProgram = program - 1;
                   }
             else if (_e.name() == "midi-unpitched") {
-                  if (_drumsets[partId].contains(instrId))
-                        _drumsets[partId][instrId].pitch = _e.readElementText().toInt() - 1;
+                  if (_instruments[partId].contains(instrId))
+                        _instruments[partId][instrId].unpitched = _e.readElementText().toInt() - 1;
                   }
             else if (_e.name() == "volume") {
                   double vol = _e.readElementText().toDouble();
                   if (vol >= 0 && vol <= 100) {
-                        if (_drumsets[partId].contains(instrId))
-                              _drumsets[partId][instrId].midiVolume = static_cast<int>((vol / 100) * 127);
+                        if (_instruments[partId].contains(instrId))
+                              _instruments[partId][instrId].midiVolume = static_cast<int>((vol / 100) * 127);
                         }
                   else
                         _logger->logError(QString("incorrect midi-volume: %1").arg(vol), &_e);
@@ -1987,8 +1986,8 @@ void MusicXMLParserPass1::midiInstrument(const QString& partId)
             else if (_e.name() == "pan") {
                   double pan = _e.readElementText().toDouble();
                   if (pan >= -90 && pan <= 90) {
-                        if (_drumsets[partId].contains(instrId))
-                              _drumsets[partId][instrId].midiPan = static_cast<int>(((pan + 90) / 180) * 127);
+                        if (_instruments[partId].contains(instrId))
+                              _instruments[partId][instrId].midiPan = static_cast<int>(((pan + 90) / 180) * 127);
                         }
                   else
                         _logger->logError(QString("incorrect midi-volume: %g1").arg(pan), &_e);
@@ -2069,7 +2068,7 @@ void MusicXMLParserPass1::part()
 
       //qDebug("lyric numbers: %s", qPrintable(_parts[id].lyricNumberHandler().toString()));
 
-      /*
+#if 0
       qDebug("instrument map:");
       for (auto& instr : _parts[id]._instrList) {
             qDebug("- %s '%s'", qPrintable(instr.first.print()), qPrintable(instr.second));
@@ -2095,7 +2094,7 @@ void MusicXMLParserPass1::part()
                          qPrintable(tick.print()), qPrintable(name), interval.diatonic, interval.chromatic);
                   }
             }
-      */
+#endif
 
       /*
       qDebug("voiceMapperStats: new staff");
@@ -2692,24 +2691,6 @@ void MusicXMLParserPass1::handleOctaveShift(const Fraction cTime,
       }
 
 //---------------------------------------------------------
-//   setFirstInstr
-//---------------------------------------------------------
-
-void MusicXMLParserPass1::setFirstInstr(const QString& id, const Fraction stime)
-      {
-      // check for valid arguments
-      if (id == "" || !stime.isValid() || stime < Fraction(0, 1))
-            return;
-
-      // check for no instrument found yet or new earliest start time
-      // note: compare using <= to catch instrument at t=0
-      if (_firstInstrId == "" || stime <= _firstInstrSTime) {
-            _firstInstrId = id;
-            _firstInstrSTime = stime;
-            }
-      }
-
-//---------------------------------------------------------
 //   notations
 //---------------------------------------------------------
 
@@ -3195,7 +3176,6 @@ void MusicXMLParserPass1::note(const QString& partId,
       staff--;
 
       // multi-instrument handling
-      setFirstInstr(instrId, sTime);
       QString prevInstrId = _parts[partId]._instrList.instrument(sTime);
       bool mustInsert = instrId != prevInstrId;
       /*
