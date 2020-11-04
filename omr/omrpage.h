@@ -150,7 +150,7 @@ class OmrStaff : public QRect {
       OmrClef clef() const                 { return _clef; }
       void setClef(const OmrClef& c)       { _clef = c; }
       OmrKeySig keySig() const             { return _keySig; }
-      void setKeySig(const OmrKeySig& s)   { _keySig = s; };
+      void setKeySig(const OmrKeySig& s)   { _keySig = s; }
       };
 
 //---------------------------------------------------------

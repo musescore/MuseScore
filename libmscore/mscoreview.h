@@ -48,18 +48,18 @@ class MuseScoreView {
       virtual void moveCursor()          {}
       virtual void showLoopCursors(bool) {}
 
-      virtual void adjustCanvasPosition(const Element*, bool /*playBack*/, int /*staffIdx*/ = -1) {};
+      virtual void adjustCanvasPosition(const Element*, bool /*playBack*/, int /*staffIdx*/ = -1) {}
       virtual void setScore(Score* s) { _score = s; }
       Score* score() const            { return _score; }
-      virtual void removeScore() {};
+      virtual void removeScore() {}
 
-      virtual void changeEditElement(Element*) {};
+      virtual void changeEditElement(Element*) {}
       virtual QCursor cursor() const { return QCursor(); }
-      virtual void setCursor(const QCursor&) {};
-      virtual void setDropRectangle(const QRectF&) {};
-      virtual void addSlur(ChordRest*, ChordRest*, const Slur* /* slurTemplate */) {};
-      virtual void startEdit(Element*, Grip /*startGrip*/) {};
-      virtual void startNoteEntryMode() {};
+      virtual void setCursor(const QCursor&) {}
+      virtual void setDropRectangle(const QRectF&) {}
+      virtual void addSlur(ChordRest*, ChordRest*, const Slur* /* slurTemplate */) {}
+      virtual void startEdit(Element*, Grip /*startGrip*/) {}
+      virtual void startNoteEntryMode() {}
       virtual void drawBackground(QPainter*, const QRectF&) const = 0;
       virtual void setDropTarget(const Element*) {}
 

@@ -81,8 +81,8 @@ struct SndConfig {
       int controller = -1;
       DynamicsRenderMethod method = DynamicsRenderMethod::SEG_START;
 
-      SndConfig() {};
-      SndConfig(bool use, int c, DynamicsRenderMethod me) : useSND(use), controller(c), method(me) {};
+      SndConfig() {}
+      SndConfig(bool use, int c, DynamicsRenderMethod me) : useSND(use), controller(c), method(me) {}
       };
 
 bool graceNotesMerged(Chord *chord);

@@ -103,7 +103,7 @@ inline PlayEvent* playEventWrap(Ms::NoteEvent* t, Note* parent)
 class QmlPlayEventsListAccess : public QQmlListProperty<PlayEvent> {
    public:
    QmlPlayEventsListAccess(QObject* obj, NoteEventList& container)
-         : QQmlListProperty<PlayEvent>(obj, &container, &append, &count, &at, &clear) {};
+         : QQmlListProperty<PlayEvent>(obj, &container, &append, &count, &at, &clear) {}
 
    static int count(QQmlListProperty<PlayEvent>* l)  { return int(static_cast<NoteEventList*>(l->data)->size()); }
    static PlayEvent* at(QQmlListProperty<PlayEvent>* l, int i) { return playEventWrap(&(*(static_cast<NoteEventList*>(l->data)))[i], reinterpret_cast<Note*>(l->object)); }

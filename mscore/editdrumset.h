@@ -66,7 +66,7 @@ private slots:
 class EditDrumsetTreeWidgetItem : public QTreeWidgetItem {
    public:
       EditDrumsetTreeWidgetItem(QTreeWidget * parent)
-         : QTreeWidgetItem(parent)  {};
+         : QTreeWidgetItem(parent)  {}
       virtual bool operator<(const QTreeWidgetItem & other) const;
 };
 

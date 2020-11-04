@@ -177,8 +177,8 @@ class ChordRest : public DurationElement {
       virtual Element* prevSegmentElement() override;
       virtual QString accessibleExtraInfo() const override;
       virtual Shape shape() const override;
-      virtual void layoutStem1() {};
-      virtual void computeUp()   { _up = true; };
+      virtual void layoutStem1() {}
+      virtual void computeUp()   { _up = true; }
 
       bool isFullMeasureRest() const { return _durationType == TDuration::DurationType::V_MEASURE; }
       virtual void removeMarkings(bool keepTremolo = false);

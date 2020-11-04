@@ -61,7 +61,7 @@ class TestWorkspaces : public QObject
       void cleanup();
 
       // tests on standard workspaces customization
-      void testEditPalette_data() { prepareStandardWorkspacesTestData(); };
+      void testEditPalette_data() { prepareStandardWorkspacesTestData(); }
       void testEditPalette();
       void testResetEditedPalette_data() { prepareStandardWorkspacesTestData(); }
       void testResetEditedPalette();

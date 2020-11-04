@@ -241,7 +241,7 @@ class PartChannelSettingsLink final : private ChannelListener {
       PartChannelSettingsLink(PartChannelSettingsLink&&);
       PartChannelSettingsLink& operator=(const PartChannelSettingsLink&) = delete;
       PartChannelSettingsLink& operator=(PartChannelSettingsLink&&);
-      ~PartChannelSettingsLink() {};
+      ~PartChannelSettingsLink() {}
 
       friend void swap(PartChannelSettingsLink&, PartChannelSettingsLink&);
       };

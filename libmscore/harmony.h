@@ -36,7 +36,7 @@ struct TextSegment {
       qreal width() const;
       QRectF boundingRect() const;
       QRectF tightBoundingRect() const;
-      QPointF pos() const { return QPointF(x, y) + offset; };
+      QPointF pos() const { return QPointF(x, y) + offset; }
 
       TextSegment()                { select = false; x = y = 0.0; }
       TextSegment(const QFont& f, qreal _x, qreal _y) : font(f), x(_x), y(_y), select(false) {}

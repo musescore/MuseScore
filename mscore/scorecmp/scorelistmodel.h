@@ -85,7 +85,7 @@ class ScoreVersionListModel : public QAbstractListModel {
       QVariant data(const QModelIndex& index, int role) const override;
 
       const MasterScore* score() const { return _score; }
-      const ScoreVersion& getScoreVersion(int idx) const { return _versions[idx]; };
+      const ScoreVersion& getScoreVersion(int idx) const { return _versions[idx]; }
       int getPosition(ScoreVersionIndex index) const;
 
    public slots:

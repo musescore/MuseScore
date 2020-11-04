@@ -29,7 +29,7 @@
 class ITC_mesg {
    public:
       ITC_mesg() {}
-      ITC_mesg(int) {};
+      ITC_mesg(int) {}
       };
 
 enum
