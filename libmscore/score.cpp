@@ -75,6 +75,7 @@
 #include "instrchange.h"
 #include "synthesizerstate.h"
 #include "image.h"
+#include "ambitus.h"
 
 namespace Ms {
 
@@ -2729,6 +2730,15 @@ void Score::mapExcerptTracks(QList<int> &dst)
 void Score::cmdConcertPitchChanged(bool flag, bool /*useDoubleSharpsFlats*/)
       {
       undoChangeStyleVal(Sid::concertPitch, flag);       // change style flag
+
+      for (Segment* segment = firstSegment(SegmentType::Ambitus); segment; segment = segment->next1(SegmentType::Ambitus)) {
+            for (Element* e : segment->elist()) {
+                  if (e && e->isAmbitus()) {
+                        Ambitus* a = toAmbitus(e);
+                        a->updateRange(); // TODO: honor manually modified ambitus
+                        }
+                  }
+            }
 
       for (Staff* staff : qAsConst(_staves)) {
             if (staff->staffType(Fraction(0,1))->group() == StaffGroup::PERCUSSION)       // TODO
