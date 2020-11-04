@@ -109,6 +109,7 @@ class TestRepeat : public QObject, public MTest
 
       void repeat56() { repeat("repeat56.mscx", "1;2;3;4; 2; 5;6;7; 5;6;7;8"); } // start of volta and start repeat on same measure
       void repeat57() { repeat("repeat57.mscx", "1;2;3"); } // no repeat, skip volta until section end, relates to #274690
+      void repeat58() { repeat("repeat58.mscx", "1;2; 1; 3;4;5; 4; 6;7"); } // duplicate voltas #311986
       };
 
 //---------------------------------------------------------
