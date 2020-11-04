@@ -35,6 +35,11 @@ Item {
 
     implicitHeight: childrenRect.height
 
+    function paletteSearchRequested () {
+        searchTextInput.forceActiveFocus()
+        searchTextInput.selectAll()
+    }
+
     RowLayout {
         width: parent.width
 
@@ -180,14 +185,6 @@ Item {
                 if (!paletteOptionsPopup.inMenuAction)
                     paletteOptionsPopup.visible = false;
             }
-        }
-    }
-
-    Connections {
-        target: mscore
-        onPaletteSearchRequested: {
-            searchTextInput.forceActiveFocus()
-            searchTextInput.selectAll()
         }
     }
 }

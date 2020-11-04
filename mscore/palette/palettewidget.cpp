@@ -120,7 +120,9 @@ void PaletteWidget::setupStyle()
 void PaletteWidget::activateSearchBox()
       {
       ensureQmlViewFocused();
-      qmlInterface->requestPaletteSearch();
+      const bool invoked = QMetaObject::invokeMethod(rootObject(), "requestPaletteSearch");
+      Q_UNUSED(invoked);
+      Q_ASSERT(invoked);
       }
 
 //---------------------------------------------------------
