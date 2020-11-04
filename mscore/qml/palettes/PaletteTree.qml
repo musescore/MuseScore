@@ -772,7 +772,7 @@ ListView {
 
     Connections {
         target: palettesWidget
-        function onHasFocusChanged() {
+        onHasFocusChanged: {
             if (!palettesWidget.hasFocus) {
                 paletteSelectionModel.clearSelection();
                 expandedPopupIndex = null;

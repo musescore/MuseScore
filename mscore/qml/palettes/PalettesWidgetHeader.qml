@@ -178,7 +178,7 @@ Item {
 
     Connections {
         target: palettesWidget
-        function onHasFocusChanged() {
+        onHasFocusChanged: {
             if (!palettesWidget.hasFocus) {
                 if (!palettesListPopup.inMenuAction)
                     palettesListPopup.visible = false;
