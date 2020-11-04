@@ -864,9 +864,9 @@ static Fraction calculateTupletDuration(const Tuplet* const t)
       foreach (DurationElement* de, t->elements()) {
             if (de->type() == ElementType::CHORD || de->type() == ElementType::REST) {
                   const auto cr = static_cast<ChordRest*>(de);
-                  const auto durationType = cr->actualDurationType();
-                  if (durationType.isValid() && !durationType.isMeasure()) {
-                        res += durationType.fraction();
+                  const auto fraction = cr->ticks(); // TODO : take care of nested tuplets
+                  if (fraction.isValid()) {
+                        res += fraction;
                         }
                   }
             }
@@ -4065,7 +4065,8 @@ static void addFiguredBassElemens(FiguredBassList& fbl, const Fraction noteStart
 static void addTremolo(ChordRest* cr,
                        const int tremoloNr, const QString& tremoloType,
                        Chord*& tremStart,
-                       MxmlLogger* logger, const QXmlStreamReader* const xmlreader)
+                       MxmlLogger* logger, const QXmlStreamReader* const xmlreader,
+                       Fraction& timeMod)
       {
       if (!cr->isChord())
             return;
@@ -4085,6 +4086,10 @@ static void addTremolo(ChordRest* cr,
                   else if (tremoloType == "start") {
                         if (tremStart) logger->logError("MusicXML::import: double tremolo start", xmlreader);
                         tremStart = static_cast<Chord*>(cr);
+                        // timeMod takes into account also the factor 2 of a two-note tremolo
+                        if (timeMod.isValid() && ((timeMod.denominator() % 2) == 0)) {
+                              timeMod.setDenominator(timeMod.denominator() / 2);
+                              }
                         }
                   else if (tremoloType == "stop") {
                         if (tremStart) {
@@ -4104,6 +4109,10 @@ static void addTremolo(ChordRest* cr,
                               tremolo->chord2()->setTicks(tremDur);
                               // add tremolo to first chord (only)
                               tremStart->add(tremolo);
+                              // timeMod takes into account also the factor 2 of a two-note tremolo
+                              if (timeMod.isValid() && ((timeMod.denominator() % 2) == 0)) {
+                                    timeMod.setDenominator(timeMod.denominator() / 2);
+                                    }
                               }
                         else logger->logError("MusicXML::import: double tremolo stop w/o start", xmlreader);
                         tremStart = nullptr;
@@ -4350,7 +4359,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       // - sTime for non-chord / first chord note
       // - prevTime for others
       auto noteStartTime = chord ? prevSTime : sTime;
-      const auto timeMod = mnd.timeMod();
+      auto timeMod = mnd.timeMod();
 
       // determine tuplet state, used twice (before and after note allocation)
       MxmlTupletFlags tupletAction;
@@ -4524,6 +4533,11 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             gac = gcl.size();
             }
 
+      // handle tremolo before handling tuplet (two note tremolos modify timeMod)
+      if (cr) {
+            addTremolo(cr, notations.tremoloNr(), notations.tremoloType(), _tremStart, _logger, &_e, timeMod);
+            }
+
       // handle tuplet state for the current chord or rest
       if (cr) {
             if (!chord && !grace) {
@@ -4574,9 +4588,6 @@ Note* MusicXMLParserPass2::note(const QString& partId,
 
       // add figured bass element
       addFiguredBassElemens(fbl, noteStartTime, msTrack, dura, measure);
-      if (cr) {
-            addTremolo(cr, notations.tremoloNr(), notations.tremoloType(), _tremStart, _logger, &_e);
-            }
 
       // don't count chord or grace note duration
       // note that this does not check the MusicXML requirement that notes in a chord
