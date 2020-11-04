@@ -177,6 +177,7 @@ class Segment final : public Element {
       std::vector<Element*> findAnnotations(ElementType type, int minTrack, int maxTrack);
       bool hasElements() const;
       bool hasElements(int minTrack, int maxTrack) const;
+      bool allElementsInvisible() const;
 
       qreal dotPosX(int staffIdx) const          { return _dotPosX[staffIdx];  }
       void setDotPosX(int staffIdx, qreal val)   { _dotPosX[staffIdx] = val;   }

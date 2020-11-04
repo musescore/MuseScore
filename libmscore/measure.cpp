@@ -4283,12 +4283,14 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
 
       while (s) {
             s->rxpos() = x;
-            if (!s->enabled() || !s->visible()) {
+            if (!s->enabled() || !s->visible() || s->allElementsInvisible()) {
                   s->setWidth(0);
                   s = s->next();
                   continue;
                   }
             Segment* ns = s->nextActive();
+            while (ns && ns->allElementsInvisible())
+                  ns = ns->nextActive();
             // end barline might be disabled
             // but still consider it for spacing of previous segment
             if (!ns)
@@ -4327,7 +4329,6 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
 
                         if (ps == fs)
                               ww = std::max(ww, ns->minLeft(ls) - s->x());
-
                         if (ww > w) {
                               // overlap !
                               // distribute extra space between segments ps - ss;
