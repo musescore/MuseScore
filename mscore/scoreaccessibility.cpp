@@ -292,7 +292,7 @@ void ScoreAccessibility::currentInfoChanged()
                         rez = QString("%1; %2").arg(rez).arg(staff);
                         }
                   else {
-                        rez = QString("%1; %2 (%3)").arg(rez).arg(staff).arg(staffName);
+                        rez = QString("%1; %2 (%3)").arg(rez).arg(staff).arg(staffName.replace('\n', ' ')); // no newlines in the status bar
                         }
                   if (e->staffIdx() != oldStaff)
                         optimizedStaff = QString("%1 (%2)").arg(staff).arg(staffName);
