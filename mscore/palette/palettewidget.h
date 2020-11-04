@@ -69,8 +69,6 @@ class PaletteQmlInterface : public QObject
 
       void notifyElementDraggedToScoreView() { emit elementDraggedToScoreView(); }
 
-      void requestPaletteSearch() { emit paletteSearchRequested(); }
-
       Q_INVOKABLE Qt::KeyboardModifiers keyboardModifiers() const { return QGuiApplication::keyboardModifiers(); }
       };
 

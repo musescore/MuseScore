@@ -30,7 +30,6 @@ Item {
     id: palettesWidget
 
     readonly property PaletteWorkspace paletteWorkspace: mscore.paletteWorkspace
-
     readonly property bool hasFocus: Window.activeFocusItem
 
     implicitHeight: 4 * palettesWidgetHeader.implicitHeight
@@ -40,6 +39,10 @@ Item {
 
     function applyCurrentPaletteElement() {
         paletteTree.applyCurrentElement();
+    }
+
+    function requestPaletteSearch () {
+        palettesWidgetHeader.paletteSearchRequested()
     }
 
     FocusChainBreak { id: focusBreaker }
