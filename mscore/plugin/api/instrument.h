@@ -240,8 +240,8 @@ class Instrument : public QObject {
       Instrument(Ms::Instrument* i, Ms::Part* p)
          : QObject(), _instrument(i), _part(p) {}
 
-      Ms::Instrument* instrument() { return _instrument; };
-      const Ms::Instrument* instrument() const { return _instrument; };
+      Ms::Instrument* instrument() { return _instrument; }
+      const Ms::Instrument* instrument() const { return _instrument; }
 
       Ms::Part* part() { return _part; }
 

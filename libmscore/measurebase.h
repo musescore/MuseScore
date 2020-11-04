@@ -172,7 +172,7 @@ class MeasureBase : public Element {
       bool hasCourtesyKeySig() const   { return flag(ElementFlag::KEYSIG);        }
       void setHasCourtesyKeySig(int v) { setFlag(ElementFlag::KEYSIG, v);         }
 
-      virtual void computeMinWidth() { };
+      virtual void computeMinWidth() { }
 
       int index() const;
       int measureIndex() const;

@@ -91,7 +91,7 @@ template <typename T, class Container>
 class QmlExcerptsListAccess : public QQmlListProperty<T> {
 public:
       QmlExcerptsListAccess(QObject* obj, Container& container)
-            : QQmlListProperty<T>(obj, &container, &count, &at) {};
+            : QQmlListProperty<T>(obj, &container, &count, &at) {}
 
       static int count(QQmlListProperty<T>* l)     { return int(static_cast<Container*>(l->data)->size()); }
       static T* at(QQmlListProperty<T>* l, int i)  { return excerptWrap<T>(static_cast<Container*>(l->data)->at(i)); }

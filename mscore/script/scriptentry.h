@@ -68,7 +68,7 @@ class CommandScriptEntry : public ScriptEntry {
       explicit CommandScriptEntry(const QString& cmd) : _command(cmd.toLatin1()) {}
       explicit CommandScriptEntry(const char* cmd) : _command(cmd) {}
       bool execute(ScriptContext& ctx) const override;
-      QString serialize() const override { return entryTemplate(SCRIPT_CMD).arg(_command.constData()); };
+      QString serialize() const override { return entryTemplate(SCRIPT_CMD).arg(_command.constData()); }
       };
 
 //---------------------------------------------------------

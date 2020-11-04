@@ -359,11 +359,11 @@ void Mod::dump() const
                   default:
                         printf("(unknown: %i)", lsrc1);
                   } /* switch src1 */
-            }; /* if not CC */
+            } /* if not CC */
       if (lflags1 & FLUID_MOD_NEGATIVE)
             printf("- ");
       else
-            {printf("+ ");};
+            printf("+ ");
       if (lflags1 & FLUID_MOD_BIPOLAR)
             printf("bip ");
       else
