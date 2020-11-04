@@ -21,7 +21,7 @@
 #include "types.h"
 #include "volta.h"
 
-#include <stack>
+#include <list>
 #include <utility> // std::pair
 
 namespace Ms {
@@ -266,7 +266,7 @@ void RepeatList::flatten()
     do {
         s->addMeasure(m);
         m = m->nextMeasure();
-    }while (m);
+    } while (m);
     push_back(s);
 
     _expanded = false;
@@ -307,6 +307,14 @@ public:
         repeatCount = (type == RepeatListElementType::REPEAT_START) ? 1 : 0;
     }
 
+    ~RepeatListElement()
+    {
+        // Voltas are cloned elements, we need to cleanup ourselves
+        if (repeatListElementType == RepeatListElementType::VOLTA_START) {
+            delete element;
+        }
+    }
+
     int getRepeatCount() const { return repeatCount; }
     void addToRepeatCount(int add) { repeatCount += add; }
 };
@@ -318,7 +326,6 @@ public:
 void RepeatList::collectRepeatListElements()
 {
     QList<RepeatListElement*>* sectionRLElements = new QList<RepeatListElement*>();
-    auto spannerIt = _score->spanner().cbegin();
 
     // Clear out previous listing
     for (QList<RepeatListElement*>* srle : _rlElements) {
@@ -338,97 +345,165 @@ void RepeatList::collectRepeatListElements()
     sectionRLElements->push_back(startFromRepeatMeasure);
     // Also trace down the final actual measure of this section (in case a frame follows)
     MeasureBase* sectionEndMeasureBase = nullptr;
-    // Used to track the actual end of a volta
-    std::stack<Volta const*> voltaStack;
+    // Used to track voltas; overlappings and real endings
+    Volta* volta;
+    std::list<Volta*> preProcessedVoltas;
 
-    // We only care about Volta within the spanner types, so forward the iterator to the first one
-    while ((spannerIt != _score->spanner().cend()) && !(((*spannerIt).second)->isVolta())) {
-        ++spannerIt;
+    // Voltas might overlap (duplicate entries on multiple staves or "real" overlaps)
+    // so we will pre-process them into cloned versions that handle those overlaps.
+    // This assumes that spanners are ordered from first to last tick-wise
+    for (const auto& spannerEntry : _score->spanner()) {
+        if ((spannerEntry.second)->isVolta()) {
+            volta = toVolta(spannerEntry.second)->clone();
+            if (preProcessedVoltas.empty()) { // First entry
+                preProcessedVoltas.push_back(volta);
+            } else { // Compare
+                std::list<Volta*> voltasToMerge;
+                // List all overlapping voltas
+                while ((!preProcessedVoltas.empty())
+                       && (volta->startMeasure()->tick() <= preProcessedVoltas.back()->endMeasure()->tick())
+                       ) {
+                    voltasToMerge.push_back(preProcessedVoltas.back());
+                    preProcessedVoltas.pop_back();
+                }
+
+                while (!voltasToMerge.empty()) {
+                    // We'll have to shorten the already stored volta and split its remainder for merging
+                    Volta* remainder = voltasToMerge.back()->clone();
+                    if (volta->startMeasure() != remainder->startMeasure()) {
+                        // First part is not empty
+                        voltasToMerge.back()->setEndElement(volta->startMeasure()->prevMeasure());
+                        remainder->setStartElement(volta->startMeasure());
+                        // Store it
+                        preProcessedVoltas.push_back(voltasToMerge.back());
+                    } //else {
+                    //    New volta and existing one start at the same moment, there is no first part, only a remainder
+                    //}
+                    voltasToMerge.pop_back();
+
+                    // remainder and volta now have the same start point
+                    // Compare the end points and make remainder end first
+                    if (volta->endMeasure()->tick() < remainder->endMeasure()->tick()) {
+                        Volta* swap = volta;
+                        volta = remainder;
+                        remainder = swap;
+                    }
+                    // Cross-section of the repeatList
+                    std::list<int> endings = remainder->endings().toStdList();
+                    endings.remove_if([&volta](const int& ending) {
+                            return !(volta->hasEnding(ending));
+                        });
+                    remainder->setEndings(QList<int>::fromStdList(endings));
+                    // Split and merge done
+                    preProcessedVoltas.push_back(remainder);
+                    if (volta->endMeasure() != remainder->endMeasure()) {
+                        // volta extends past the end of remainder -> move its startpoint after remainder
+                        volta->setStartElement(remainder->endMeasure()->nextMeasure());
+                    } else {
+                        // volta matched remainder endpoint, nothing left to merge from
+                        preProcessedVoltas.splice(preProcessedVoltas.cend(), voltasToMerge);
+                        delete volta;
+                        volta = nullptr;
+                    }
+                } // !voltasToMerge.empty()
+
+                if (volta != nullptr) {
+                    preProcessedVoltas.push_back(volta);
+                }
+            }
+        } // spanner->isVolta
     }
 
+    volta = nullptr;
     for (; mb; mb = mb->next()) {
         if (mb->isMeasure()) {
-            sectionEndMeasureBase = mb;       // ending measure of section is the most recently encountered actual Measure
+            sectionEndMeasureBase = mb; // ending measure of section is the most recently encountered actual Measure
 
             // Volta ?
-            if ((spannerIt != _score->spanner().cend()) && (toVolta((*spannerIt).second)->startMeasure() == mb)) {
-                if (!voltaStack.empty()) {
-                    //if (voltaStack.top()->endMeasure()->tick() < mb->tick()) {
+            if ((!preProcessedVoltas.empty()) && (preProcessedVoltas.front()->startMeasure() == mb)) {
+                if (volta != nullptr) {
+                    //if (volta->endMeasure()->tick() < mb->tick()) {
                     // The previous volta was supposed to end before us (open volta case) -> insert the end
-                    sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::VOLTA_END, voltaStack.top(),
-                                                                       toMeasure(mb->prevMeasure())));
-                    voltaStack.pop();
-                    //      }
-                    //else { // Overlapping voltas }
+                    sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::VOLTA_END,
+                                                                       volta, toMeasure(mb->prevMeasure())));
+                    //    volta = nullptr; // No need, replaced immediately further down
+                    //} else {
+                    // Overlapping voltas; this should not happen as preProcessedVoltas should've dealt with this already
+                    //}
                 }
                 // Now insert the start of the current volta
-                voltaStack.push(toVolta((*spannerIt).second));
-                sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::VOLTA_START, (*spannerIt).second, toMeasure(mb)));
-                // Forward iterator to next volta
-                do {
-                    ++spannerIt;
-                } while ((spannerIt != _score->spanner().cend()) && !(((*spannerIt).second)->isVolta()));
+                volta = preProcessedVoltas.front();
+                sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::VOLTA_START,
+                                                                   volta, toMeasure(mb)));
+                // Look for start of next volta
+                preProcessedVoltas.pop_front();
             }
             // Start
             if (mb->repeatStart()) {
-                if (!voltaStack.empty()) {
-                    if (voltaStack.top()->startMeasure() != toMeasure(mb)) {
+                if (volta != nullptr) {
+                    if (volta->startMeasure() != toMeasure(mb)) {
                         // Volta and Start repeat are not on the same measure
                         // assume the previous volta was supposed to end before us (open volta case) -> insert the end
                         // Warning: This might "break" a volta prematurely if its explicit notated end is later than this point
                         //          Consider splitting the volta or ignoring this repeat all together
-                        sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::VOLTA_END, voltaStack.top(),
-                                                                           toMeasure(mb->prevMeasure())));
-                        voltaStack.pop();
+                        sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::VOLTA_END,
+                                                                           volta, toMeasure(mb->prevMeasure())));
+                        volta = nullptr;
                     }
                     //else { // Volta and Start Repeat coincide on the same measure, see test::repeat56.mscx }
                 }
-                startFromRepeatMeasure = new RepeatListElement(RepeatListElementType::REPEAT_START, mb, toMeasure(mb));
+                startFromRepeatMeasure = new RepeatListElement(RepeatListElementType::REPEAT_START,
+                                                               mb, toMeasure(mb));
                 sectionRLElements->push_back(startFromRepeatMeasure);
             }
             // Jumps and Markers
             for (Element* e : mb->el()) {
                 if (e->isJump()) {
-                    sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::JUMP, e, toMeasure(mb)));
-                    if (!voltaStack.empty()) {
-                        if (voltaStack.top()->endMeasure()->tick() <= mb->tick()) {
+                    sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::JUMP,
+                                                                       e, toMeasure(mb)));
+                    if (volta != nullptr) {
+                        if (volta->endMeasure()->tick() <= mb->tick()) {
                             // The previous volta was supposed to end before us (open volta case) -> insert the end
-                            sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::VOLTA_END, voltaStack.top(),
-                                                                               toMeasure(mb)));
-                            voltaStack.pop();
-                        }
-                        //else { // Volta is spanning past this jump instruction }
+                            sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::VOLTA_END,
+                                                                               volta, toMeasure(mb)));
+                            volta = nullptr;
+                        } //else { // Volta is spanning past this jump instruction }
                     }
                 } else if (e->isMarker()) {
-                    RepeatListElement* markerRLE = new RepeatListElement(RepeatListElementType::MARKER, e, toMeasure(mb));
+                    RepeatListElement* markerRLE = new RepeatListElement(RepeatListElementType::MARKER,
+                                                                         e, toMeasure(mb));
                     // There may be multiple markers in the same measure and there is no guarantee we're reading
                     // them from left to right. The only way available to guess their order is to look at their
                     // text alignment and order them left to right
                     // At the same time, we should ensure Markers are evaluated before Jumps
-                    Align markerRLEalignmentH
-                        = static_cast<Align>(static_cast<char>(toMarker(e)->align()) & static_cast<char>(Align::HMASK));
+                    Align markerRLEalignmentH = static_cast<Align>(
+                        static_cast<char>(toMarker(e)->align()) & static_cast<char>(Align::HMASK)
+                        );
                     auto insertionIt = sectionRLElements->end() - 1;
                     while ((*insertionIt)->measure == markerRLE->measure) {
                         bool markerShouldGoBefore = false;
                         if (((*insertionIt)->repeatListElementType == RepeatListElementType::MARKER)
-                            && (markerRLEalignmentH != Align::RIGHT)             // We can be the end when right aligned
+                            && (markerRLEalignmentH != Align::RIGHT) // We can be the end when right aligned
                             ) {
-                            Align storedMarkerAlignmentH
-                                = static_cast<Align>(static_cast<char>(toMarker((*insertionIt)->element)->align())
-                                                     & static_cast<char>(Align::HMASK));
+                            Align storedMarkerAlignmentH = static_cast<Align>(
+                                static_cast<char>(toMarker((*insertionIt)->element)->align())
+                                & static_cast<char>(Align::HMASK)
+                                );
                             if (markerRLEalignmentH == Align::HCENTER) {
                                 markerShouldGoBefore = (storedMarkerAlignmentH == Align::RIGHT);
-                            } else {             //(markerRLEalignmentH == Align::LEFT)
+                            } else { //(markerRLEalignmentH == Align::LEFT)
                                 markerShouldGoBefore = (storedMarkerAlignmentH != Align::LEFT);
                             }
                         }
                         if (markerShouldGoBefore
                             || ((*insertionIt)->repeatListElementType == RepeatListElementType::JUMP)
                             ) {
-                            // Decrease position - this should always be possible as the list always starts with a REPEAT_START element
+                            // Decrease position
+                            // This should always be possible as the list always starts with a REPEAT_START element
                             Q_ASSERT(insertionIt != sectionRLElements->begin());
                             --insertionIt;
-                        } else {           // Found location after which we should go
+                        } else {
+                            // Found location after which we should go
                             break;
                         }
                     }
@@ -438,42 +513,51 @@ void RepeatList::collectRepeatListElements()
             }
             // End
             if (mb->repeatEnd()) {
-                sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::REPEAT_END, mb, toMeasure(mb)));
+                sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::REPEAT_END,
+                                                                   mb, toMeasure(mb)));
                 if (startFromRepeatMeasure != nullptr) {
                     startFromRepeatMeasure->addToRepeatCount(toMeasure(mb)->repeatCount() - 1);
                 }
-                if (!voltaStack.empty()) {
-                    //if (voltaStack.top()->endMeasure()->tick() < mb->tick()) {
+                if (volta != nullptr) {
+                    //if (volta->endMeasure()->tick() < mb->tick()) {
                     // The previous volta was supposed to end before us (open volta case) -> insert the end
-                    sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::VOLTA_END, voltaStack.top(), toMeasure(mb)));
-                    voltaStack.pop();
-                    //      }
-                    //else { // Volta is spanning over this end repeat, consider splitting the volta or ignoring this repeat all together }
+                    sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::VOLTA_END,
+                                                                       volta, toMeasure(mb)));
+                    volta = nullptr;
+                    //} else {
+                    //    // Volta is spanning over this end repeat, consider splitting the volta
+                    //    // or ignoring this repeat all together
+                    //}
                 }
             }
             // Volta end
-            if (!voltaStack.empty()
-                && (voltaStack.top()->endMeasure()->tick() == mb->tick())
-                && (voltaStack.top()->getProperty(Pid::END_HOOK_TYPE).value<HookType>() != HookType::NONE)) {
+            if ((volta != nullptr)
+                && (volta->endMeasure()->tick() == mb->tick())
+                && (volta->getProperty(Pid::END_HOOK_TYPE).value<HookType>() != HookType::NONE)
+                ) {
                 // end of closed volta
-                sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::VOLTA_END, voltaStack.top(), toMeasure(mb)));
-                voltaStack.pop();
+                sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::VOLTA_END,
+                                                                   volta, toMeasure(mb)));
+                volta = nullptr;
             }
         }
         // Section break (or end of score)
         if (mb->sectionBreak() || !mb->nextMeasure()) {
             if (sectionEndMeasureBase != nullptr) {
-                if (!voltaStack.empty()) {
-                    //if (voltaStack.top()->endMeasure()->tick() < mb->tick()) {
+                if (volta != nullptr) {
+                    //if (volta->endMeasure()->tick() < mb->tick()) {
                     // The previous volta was supposed to end before us (open volta case) -> insert the end
-                    sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::VOLTA_END, voltaStack.top(), toMeasure(mb)));
-                    voltaStack.pop();
-                    //      }
-                    //else { // Volta is spanning over this section break, consider splitting the volta and adding it again at the start of the next section }
+                    sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::VOLTA_END,
+                                                                       volta, toMeasure(mb)));
+                    volta = nullptr;
+                    //} else {
+                    //    // Volta is spanning over this section break, consider splitting the volta
+                    //    // and adding it again at the start of the next section
+                    //}
                 }
-                sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::SECTION_BREAK, mb,
-                                                                   toMeasure(sectionEndMeasureBase)));
-                sectionEndMeasureBase = nullptr;         // reset to indicate not having found the end for the next section
+                sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::SECTION_BREAK,
+                                                                   mb, toMeasure(sectionEndMeasureBase)));
+                sectionEndMeasureBase = nullptr; // reset to indicate not having found the end for the next section
                 // store section
                 _rlElements.push_back(sectionRLElements);
             }
@@ -482,14 +566,15 @@ void RepeatList::collectRepeatListElements()
                 sectionRLElements = new QList<RepeatListElement*>();
                 // First measure of a section/score is always used as a reference REPEAT_START point
                 // even if it doesn't have a start repeat
-                startFromRepeatMeasure
-                    = new RepeatListElement(RepeatListElementType::REPEAT_START, mb->nextMeasure(), toMeasure(mb->nextMeasure()));
+                startFromRepeatMeasure = new RepeatListElement(RepeatListElementType::REPEAT_START,
+                                                               mb->nextMeasure(), toMeasure(mb->nextMeasure()));
                 sectionRLElements->push_back(startFromRepeatMeasure);
                 // Loop will forward one measureBase, so return one now
                 // this logic aids in skipping multiple frames between sections
                 mb = mb->nextMeasure()->prev();
             } else {
-                break;         // no more measures -> done
+                // no more measures -> done
+                break;
             }
         }
     }
@@ -822,7 +907,7 @@ void RepeatList::unwind()
                                     QList<RepeatListElement*>::const_iterator findRepeatIt = repeatListElementIt;
                                     do {
                                         --findRepeatIt;
-                                    }while ((*findRepeatIt) != startRepeatReference);
+                                    } while ((*findRepeatIt) != startRepeatReference);
                                     ++findRepeatIt;                         // Start volta analysis past this start repeat
                                     Volta const* voltaReference = nullptr;
                                     int processedRepeatCount = 1;
@@ -890,7 +975,7 @@ void RepeatList::unwind()
                         rs->addMeasure((*repeatListElementIt)->measure);
 
                         continueAt.first = _rlElements.cend();                   // Clear this reference - processed
-                    } else {               // Nowhere to go to, break out of this section loop and onto the next section
+                    } else { // Nowhere to go to, break out of this section loop and onto the next section
                         repeatListElementIt = (*sectionIt)->cend();
                         continue;
                     }
