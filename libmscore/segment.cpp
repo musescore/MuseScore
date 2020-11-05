@@ -1073,7 +1073,7 @@ bool Segment::allElementsInvisible() const
             return false;
 
       for (Element* e : _elist) {
-            if (e && e->visible())
+            if (e && e->visible() && !qFuzzyCompare(e->width(), 0.0))
                   return false;
             }
 
