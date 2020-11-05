@@ -39,10 +39,6 @@ Score* NoteGroups::createScore(int n, TDuration::DurationType t, std::vector<Cho
     c.addKeySig(Key::C);
 
     TimeSig* nts = c.addTimeSig(_sig);
-    if (!nts) {
-        return c.score();
-    }
-
     if (!_z.isEmpty()) {
         nts->setNumeratorString(_z);
     }

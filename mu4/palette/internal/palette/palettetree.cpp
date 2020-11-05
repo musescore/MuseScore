@@ -1033,33 +1033,6 @@ static void paintIconElement(QPainter& painter, const QRect& rect, Element* e)
 }
 
 //---------------------------------------------------------
-//   paintPaletteElement
-/// Function object for use with Element::scanElements() to
-/// paint an element and its child elements.
-//---------------------------------------------------------
-
-void PaletteCellIconEngine::paintPaletteElement(void* data, Element* e)
-{
-    QPainter* p = static_cast<QPainter*>(data);
-    p->save();
-    p->translate(e->pos());   // necessary for drawing child elements
-
-    QColor color = configuration()->elementsColor();
-
-    QColor colorBackup = e->color();
-    e->undoSetColor(color);
-
-    QColor frameColorBackup = e->getProperty(Pid::FRAME_FG_COLOR).value<QColor>();
-    e->undoChangeProperty(Pid::FRAME_FG_COLOR, color);
-
-    e->draw(p);
-
-    e->undoSetColor(colorBackup);
-    e->undoChangeProperty(Pid::FRAME_FG_COLOR, frameColorBackup);
-    p->restore();
-}
-
-//---------------------------------------------------------
 //   paintScoreElement
 /// Paint a non-icon element centered at the origin of the
 /// painter's coordinate system. If alignToStaff is true then
@@ -1087,7 +1060,7 @@ void PaletteCellIconEngine::paintScoreElement(QPainter& p, Element* e, qreal spa
 
     p.translate(-1.0 * origin);   // shift coordinates so element is drawn at correct position
 
-    e->scanElements(&p, paintPaletteElement);
+    e->scanElements(&p, Palette::paintPaletteElement);
     p.restore();   // return painter to saved initial state
 }
 

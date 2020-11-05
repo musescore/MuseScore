@@ -157,8 +157,7 @@ void MCursor::addPart(const QString& instrument)
     staff->setPart(part);
     InstrumentTemplate* it = searchTemplate(instrument);
     if (it == 0) {
-        qDebug("Did not find instrument <%s>", qPrintable(instrument));
-        return;
+        qFatal("Did not find instrument <%s>", qPrintable(instrument));
     }
     part->initFromInstrTemplate(it);
     staff->init(it, 0, 0);

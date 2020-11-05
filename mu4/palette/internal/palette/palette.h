@@ -116,8 +116,6 @@ class Palette : public QWidget
 
     void applyElementAtPosition(QPoint pos, Qt::KeyboardModifiers modifiers);
 
-    static void paintPaletteElement(void* data, Element* e);
-
 private slots:
     void actionToggled(bool val);
 
@@ -182,6 +180,8 @@ public:
     void setShowContextMenu(bool val) { _showContextMenu = val; }
 
     static qreal paletteScaling();
+    static void paintPaletteElement(void* data, Element* element);
+
     int gridWidthM() const { return hgrid * paletteScaling(); }
     int gridHeightM() const { return vgrid * paletteScaling(); }
 
