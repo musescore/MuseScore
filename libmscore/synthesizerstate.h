@@ -86,11 +86,14 @@ public:
 
 static SynthesizerState defaultState = {
     { "master", {
-
 #ifdef ZITA_REVERB
-          { 0, "Zita1" },
+          {
+              0, "Zita1"
+          },
 #endif
-          { 2, "0.1" },
+          {
+              2, "0.1"
+          },
           { 3, "440" },
           { 4, "1" },
           { 5, "1" }
