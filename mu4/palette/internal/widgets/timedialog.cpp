@@ -66,7 +66,7 @@ TimeDialog::TimeDialog(QWidget* parent)
 
     _dirty = false;
 
-    if (globalConfiguration()->useFactorySettings() || !sp->read(globalConfiguration()->dataPath().toQString() + "/timesigs")) {
+    if (configuration()->useFactorySettings() || !sp->read(configuration()->timeSignaturesDirPath().toQString())) {
         Fraction sig(4,4);
         groups->setSig(sig, Groups::endings(sig), zText->text(), nText->text());
     }
@@ -117,11 +117,9 @@ void TimeDialog::showTimePalette(bool val)
 
 void TimeDialog::save()
 {
-    QString dataPath = globalConfiguration()->dataPath().toQString();
     QDir dir;
-    dir.mkpath(dataPath);
-    sp->write(dataPath + "/timesigs");
-    qDebug("TimeDialog::save(): %s", qPrintable(dataPath + "/timesigs"));
+    dir.mkpath(configuration()->timeSignaturesDirPath().toQString());
+    sp->write(configuration()->timeSignaturesDirPath().toQString());
 }
 
 //---------------------------------------------------------

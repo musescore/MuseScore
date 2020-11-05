@@ -323,12 +323,8 @@ KeyEditor::KeyEditor(QWidget* parent)
         sp->setCellReadOnly(i, true);
     }
 
-    if (!globalConfiguration()->useFactorySettings()) {
-        QString dataPath = globalConfiguration()->dataPath().toQString();
-        QString path = dataPath + "/keysigs";
-        if (!sp->read(path)) {
-            qDebug("KeyEditor: read <%s> failed", qPrintable(dataPath + "/keysigs.mpal"));
-        }
+    if (!configuration()->useFactorySettings()) {
+        sp->read(configuration()->keySignaturesDirPath().toQString());
     }
 }
 
@@ -393,9 +389,8 @@ void KeyEditor::showKeyPalette(bool val)
 
 void KeyEditor::save()
 {
-    QString dataPath = globalConfiguration()->dataPath().toQString();
     QDir dir;
-    dir.mkpath(dataPath);
-    sp->write(dataPath + "/keysigs");
+    dir.mkpath(configuration()->keySignaturesDirPath().toQString());
+    sp->write(configuration()->keySignaturesDirPath().toQString());
 }
 }

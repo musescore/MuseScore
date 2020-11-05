@@ -78,7 +78,8 @@ Item {
             text: "Master palette"
 
             onClicked: {
-                api.launcher.open("musescore://palette/masterpalette")
+                //! NOTE: important to launch master palette with sync = false
+                api.launcher.open("musescore://palette/masterpalette?sync=false")
             }
         }
     }

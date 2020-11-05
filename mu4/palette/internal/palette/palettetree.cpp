@@ -1128,9 +1128,9 @@ qreal PaletteCellIconEngine::paintStaff(QPainter& p, const QRect& rect, qreal sp
 //   paintBackground
 //---------------------------------------------------------
 
-static void paintBackground(QPainter& p, const QRect& r, bool selected, bool current)
+void PaletteCellIconEngine::paintBackground(QPainter& p, const QRect& r, bool selected, bool current)
 {
-    QColor c(MScore::selectColor[0]);
+    QColor c(configuration()->accentColor());
     if (current || selected) {
         c.setAlpha(selected ? 100 : 60);
         p.fillRect(r, c);

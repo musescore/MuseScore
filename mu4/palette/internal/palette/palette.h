@@ -116,6 +116,8 @@ class Palette : public QWidget
 
     void applyElementAtPosition(QPoint pos, Qt::KeyboardModifiers modifiers);
 
+    static void paintPaletteElement(void* data, Element* e);
+
 private slots:
     void actionToggled(bool val);
 
