@@ -766,7 +766,7 @@ bool PalettePanel::insertCell(int idx, PaletteCellPtr cell)
 
 QSize PalettePanel::scaledGridSize() const
 {
-    return gridSize() * Palette::guiMag();
+    return gridSize() * Palette::paletteScaling();
 }
 
 //---------------------------------------------------------

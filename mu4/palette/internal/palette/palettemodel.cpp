@@ -314,7 +314,7 @@ QVariant PaletteTreeModel::data(const QModelIndex& index, int role) const
             if (const PalettePanel* pp = iptrToPalettePanel(index.internalPointer())) {
                 extraMag = pp->mag();
             }
-            return QIcon(new PaletteCellIconEngine(cell, extraMag * Palette::guiMag()));
+            return QIcon(new PaletteCellIconEngine(cell, extraMag * Palette::paletteScaling()));
         }
         case PaletteCellRole:
             return QVariant::fromValue(cell.get());

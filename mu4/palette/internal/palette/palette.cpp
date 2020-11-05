@@ -252,9 +252,9 @@ void Palette::setMag(qreal val)
 //   guiMag
 //---------------------------------------------------------
 
-qreal Palette::guiMag()
+qreal Palette::paletteScaling()
 {
-    return configuration()->guiScale();
+    return configuration()->paletteScaling();
 }
 
 //---------------------------------------------------------
@@ -357,7 +357,7 @@ void Palette::setGrid(int hh, int vv)
     hgrid = hh;
     vgrid = vv;
     QSize s(hgrid, vgrid);
-    s *= guiMag();
+    s *= paletteScaling();
     setSizeIncrement(s);
     setBaseSize(s);
     setMinimumSize(s);
@@ -821,9 +821,8 @@ static void paintPaletteElement(void* data, Element* e)
 void Palette::paintEvent(QPaintEvent* /*event*/)
 {
     qreal _spatium = gscore->spatium();
-    qreal magS     = PALETTE_SPATIUM * extraMag * guiMag();
+    qreal magS     = PALETTE_SPATIUM * extraMag * paletteScaling();
     qreal mag      = magS / _spatium;
-//      qreal mag      = PALETTE_SPATIUM * extraMag / _spatium;
     gscore->setSpatium(SPATIUM20);
 
     QPainter p(this);
@@ -981,10 +980,8 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
 QPixmap Palette::pixmap(int paletteIdx) const
 {
     qreal _spatium = gscore->spatium();
-    qreal magS     = PALETTE_SPATIUM * extraMag * guiMag();
+    qreal magS     = PALETTE_SPATIUM * extraMag * paletteScaling();
     qreal mag      = magS / _spatium;
-//      qreal guiMag = guiScaling * preferences.getDouble(PREF_APP_PALETTESCALE);
-//      qreal mag      = PALETTE_SPATIUM * extraMag * guiMag / _spatium;
     PaletteCell* c = cellAt(paletteIdx);
     if (!c || !c->element) {
         return QPixmap();
@@ -1433,7 +1430,7 @@ int Palette::heightForWidth(int w) const
     if (rows <= 0) {
         rows = 1;
     }
-    qreal magS = PALETTE_SPATIUM * extraMag * guiMag();
+    qreal magS = PALETTE_SPATIUM * extraMag * paletteScaling();
     int h = lrint(_yOffset * 2 * magS);
     return rows * vgridM + h;
 }

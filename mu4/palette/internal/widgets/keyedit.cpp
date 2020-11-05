@@ -48,7 +48,7 @@ KeyCanvas::KeyCanvas(QWidget* parent)
     : QFrame(parent)
 {
     setAcceptDrops(true);
-    extraMag   = editScale * uiConfiguration()->guiScaling();
+    extraMag   = editScale * configuration()->paletteScaling();
     qreal mag  = PALETTE_SPATIUM * extraMag / gscore->spatium();
     _matrix    = QTransform(mag, 0.0, 0.0, mag, 0.0, 0.0);
     imatrix    = _matrix.inverted();
