@@ -79,6 +79,11 @@ QString GlobalConfiguration::getSharePath() const
 #endif
 }
 
+io::path GlobalConfiguration::logsPath() const
+{
+    return dataPath() + "/logs";
+}
+
 io::path GlobalConfiguration::backupPath() const
 {
     return settings()->value(BACKUP_PATH).toString();

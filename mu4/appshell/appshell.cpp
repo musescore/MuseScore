@@ -59,8 +59,6 @@ int AppShell::run(int argc, char** argv, std::function<void()> moduleSetup)
     QCoreApplication::setOrganizationDomain("musescore.org");
     QCoreApplication::setApplicationVersion(QString::fromStdString(framework::Version::fullVersion()));
 
-    qSetMessagePattern("%{function}: %{message}");
-
     moduleSetup();
 
     framework::settings()->load();

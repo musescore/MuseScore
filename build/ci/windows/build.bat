@@ -55,17 +55,18 @@ SET MSCORE_STABLE_BUILD="TRUE"
 SET "JACK_DIR=C:\Program Files (x86)\Jack"
 SET "QT_DIR=C:\Qt\5.15.1"
 
-IF %TARGET_PROCESSOR_BITS% == 32 ( 
-    ::SET "PATH=%QT_DIR%\msvc2015\bin;%JACK_DIR%;%PATH%"
-    ECHO "error: Not installed Qt 32"
-    EXIT /b 1
-) ELSE (
-    SET "PATH=%QT_DIR%\msvc2019_64\bin;%JACK_DIR%;%PATH%"
-)
+@REM IF %TARGET_PROCESSOR_BITS% == 32 ( 
+@REM     ::SET "PATH=%QT_DIR%\msvc2015\bin;%JACK_DIR%;%PATH%"
+@REM     ECHO "error: Not installed Qt 32"
+@REM     EXIT /b 1
+@REM ) ELSE (
+SET "PATH=%QT_DIR%\msvc2019_64\bin;%JACK_DIR%;%PATH%"
+@REM )
 
 :: Undefined CRASH_LOG_SERVER_URL if is it empty
-IF %CRASH_LOG_SERVER_URL% == "" ( SET CRASH_LOG_SERVER_URL=)
-IF %CRASH_LOG_SERVER_URL% == "''" ( SET CRASH_LOG_SERVER_URL=)
+@REM IF %CRASH_LOG_SERVER_URL% == "" ( SET CRASH_LOG_SERVER_URL=)
+@REM IF %CRASH_LOG_SERVER_URL% == "''" ( SET CRASH_LOG_SERVER_URL=)
+SET CRASH_LOG_SERVER_URL="ggg"
 
 :: At the moment not compiling yet.
 SET BUILD_VST=OFF 
