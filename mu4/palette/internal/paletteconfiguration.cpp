@@ -35,7 +35,7 @@ void PaletteConfiguration::init()
     settings()->addItem(PALETTE_USE_USER_FG_COLOR, Val(true));
 }
 
-double PaletteConfiguration::guiScale() const
+double PaletteConfiguration::paletteScaling() const
 {
     double pref = 1.0;
     Val val = settings()->value(PALETTE_SCALE);
@@ -43,15 +43,7 @@ double PaletteConfiguration::guiScale() const
         pref = val.toDouble();
     }
 
-    float guiScaling = uiConfiguration()->guiScaling();
-
-    if (guiScaling <= 1.0) {                    // low DPI: target is 100% life size
-        return pref * guiScaling;
-    } else if (guiScaling > 1.33) {             // high DPI: target is 75% life size
-        return pref * guiScaling * 0.75;
-    } else {                                    // medium high DPI: no target, scaling dependent on resolution
-        return pref;                            // (will be 75-100% range)
-    }
+    return pref;
 }
 
 bool PaletteConfiguration::isSinglePalette() const

@@ -29,14 +29,13 @@
 namespace mu::palette {
 class PaletteConfiguration : public IPaletteConfiguration
 {
-    INJECT(palette, framework::IUiConfiguration, uiConfiguration)
     INJECT(palette, framework::ITheme, theme)
     INJECT(palette, notation::INotationConfiguration, notationConfiguration)
 
 public:
     void init();
 
-    double guiScale() const override;
+    double paletteScaling() const override;
     bool isSinglePalette() const override;
     QColor foregroundColor() const override;
     QColor elementsColor() const override;
