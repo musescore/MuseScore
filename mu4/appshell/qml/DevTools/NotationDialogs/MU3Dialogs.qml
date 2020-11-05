@@ -1,4 +1,5 @@
 import QtQuick 2.7
+
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
 
@@ -68,6 +69,16 @@ Item {
 
             onClicked: {
                 api.launcher.open("musescore://notation/staffproperties?staffIdx=0")
+            }
+        }
+
+        FlatButton {
+            width: 220
+
+            text: "Master palette"
+
+            onClicked: {
+                api.launcher.open("musescore://palette/masterpalette")
             }
         }
     }

@@ -192,6 +192,12 @@ MasterPalette::MasterPalette(QWidget* parent)
     WidgetStateStore::restoreGeometry(this);
 }
 
+MasterPalette::MasterPalette(const MasterPalette& dialog)
+    : MasterPalette(dialog.parentWidget())
+{
+
+}
+
 //---------------------------------------------------------
 //   retranslate
 //---------------------------------------------------------
