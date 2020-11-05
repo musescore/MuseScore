@@ -24,22 +24,23 @@
 
 #include "modularity/ioc.h"
 #include "mu4/palette/ipaletteadapter.h"
-#include "iglobalconfiguration.h"
+#include "mu4/palette/ipaletteconfiguration.h"
 
 namespace Ms {
 class Palette;
 class PalettePanel;
 struct PaletteTree;
 
-struct IconAction {
-    IconType subtype;
-    const char* action;
+struct IconAction
+{
+    IconType subtype = IconType::NONE;
+    const char* action = nullptr;
 };
 
 class PaletteCreator
 {
     INJECT_STATIC(palette, mu::palette::IPaletteAdapter, adapter)
-    INJECT_STATIC(palette, mu::framework::IGlobalConfiguration, globalConfiguration)
+    INJECT_STATIC(palette, mu::palette::IPaletteConfiguration, configuration)
 
 public:
 

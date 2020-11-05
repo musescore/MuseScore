@@ -22,6 +22,7 @@
 #include "../ipaletteconfiguration.h"
 
 #include "modularity/ioc.h"
+#include "iglobalconfiguration.h"
 #include "ui/iuiconfiguration.h"
 #include "ui/itheme.h"
 #include "notation/inotationconfiguration.h"
@@ -30,15 +31,23 @@ namespace mu::palette {
 class PaletteConfiguration : public IPaletteConfiguration
 {
     INJECT(palette, framework::ITheme, theme)
+    INJECT(palette, framework::IGlobalConfiguration, globalConfiguration)
     INJECT(palette, notation::INotationConfiguration, notationConfiguration)
 
 public:
-    void init();
-
     double paletteScaling() const override;
     bool isSinglePalette() const override;
-    QColor foregroundColor() const override;
+
+    QColor elementsBackgroundColor() const override;
     QColor elementsColor() const override;
+    QColor gridColor() const override;
+    QColor accentColor() const override;
+
+    io::path keySignaturesDirPath() const override;
+    io::path timeSignaturesDirPath() const override;
+
+    bool useFactorySettings() const override;
+    bool enableExperimental() const override;
 
     ValCh<PaletteConfig> paletteConfig(const QString& paletteId) const override;
     void setPaletteConfig(const QString& paletteId, const PaletteConfig& config) override;

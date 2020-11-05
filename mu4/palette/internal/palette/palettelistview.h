@@ -59,10 +59,6 @@ public:
 
 protected:
     virtual void keyPressEvent(QKeyEvent* event) override;
-    virtual void changeEvent(QEvent* event) override;
-
-private:
-    void setupStyle();
 };
 }
 

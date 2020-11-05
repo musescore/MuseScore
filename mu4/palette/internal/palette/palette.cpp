@@ -805,12 +805,24 @@ PaletteCell* Palette::add(int idx, Element* s, const QString& name, QString tag,
 //   paintPaletteElement
 //---------------------------------------------------------
 
-static void paintPaletteElement(void* data, Element* e)
+void Palette::paintPaletteElement(void* data, Element* e)
 {
     QPainter* p = static_cast<QPainter*>(data);
     p->save();
-    p->translate(e->pos());
+    p->translate(e->pos());   // necessary for drawing child elements
+
+    QColor color = configuration()->elementsColor();
+
+    QColor colorBackup = e->color();
+    e->undoSetColor(color);
+
+    QColor frameColorBackup = e->getProperty(Pid::FRAME_FG_COLOR).value<QColor>();
+    e->undoChangeProperty(Pid::FRAME_FG_COLOR, color);
+
     e->draw(p);
+
+    e->undoSetColor(colorBackup);
+    e->undoChangeProperty(Pid::FRAME_FG_COLOR, frameColorBackup);
     p->restore();
 }
 
@@ -828,13 +840,9 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
     QPainter p(this);
     p.setRenderHint(QPainter::Antialiasing, true);
 
-    QColor bgColor = configuration()->foregroundColor();
-#if 1
-    p.setBrush(bgColor);
+    p.setPen(configuration()->gridColor());
     p.drawRoundedRect(0, 0, width(), height(), 2, 2);
-#else
-    p.fillRect(event->rect(), QColor(0xf6, 0xf0, 0xda));
-#endif
+
     //
     // draw grid
     //
@@ -848,7 +856,6 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
     int hhgrid = hgridM + (rightBorder / columns());
 
     if (_drawGrid) {
-        p.setPen(Qt::gray);
         for (int row = 1; row < rows(); ++row) {
             int x2 = row < rows() - 1 ? columns() * hhgrid : width();
             int y  = row * vgridM;
@@ -865,9 +872,7 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
     //
     // draw symbols
     //
-
-    // QPen pen(palette().color(QPalette::Normal, QPalette::Text));
-    QPen pen(Qt::black);
+    QPen pen(configuration()->elementsColor());
     pen.setWidthF(MScore::defaultStyle().value(Sid::staffLineWidth).toDouble() * magS);
 
     for (int idx = 0; idx < ccp()->size(); ++idx) {
@@ -875,7 +880,7 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
         QRect r      = idxRect(idx);
         QRect rShift = r.translated(0, yoffset);
         p.setPen(pen);
-        QColor c(MScore::selectColor[0]);
+        QColor c(configuration()->accentColor());
 
         if (idx == selectedIdx) {
             c.setAlphaF(0.5);
@@ -895,7 +900,7 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
 
         QString tag = cc->tag;
         if (!tag.isEmpty()) {
-            p.setPen(Qt::darkGray);
+            p.setPen(configuration()->gridColor());
             QFont f(p.font());
             f.setPointSize(12);
             p.setFont(f);
@@ -929,6 +934,7 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
             qreal w = hhgrid - 6;
             for (int i = 0; i < 5; ++i) {
                 qreal yy = y + i * magS;
+                p.setPen(configuration()->elementsColor());
                 p.drawLine(QLineF(x, yy, x + w, yy));
             }
         }
@@ -999,7 +1005,7 @@ QPixmap Palette::pixmap(int paletteIdx) const
     }
 
     QPixmap pm(w, h);
-    pm.fill(Qt::transparent);
+    pm.fill(configuration()->elementsBackgroundColor());
     QPainter p(&pm);
     p.setRenderHint(QPainter::Antialiasing, true);
 

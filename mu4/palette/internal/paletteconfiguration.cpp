@@ -28,12 +28,6 @@ using namespace mu::framework;
 
 static const Settings::Key PALETTE_SCALE("palette", "application/paletteScale");
 static const Settings::Key PALETTE_USE_SINGLE("palette", "application/useSinglePalette");
-static const Settings::Key PALETTE_USE_USER_FG_COLOR("palette", "ui/canvas/foreground/useColorInPalettes");
-
-void PaletteConfiguration::init()
-{
-    settings()->addItem(PALETTE_USE_USER_FG_COLOR, Val(true));
-}
 
 double PaletteConfiguration::paletteScaling() const
 {
@@ -51,32 +45,44 @@ bool PaletteConfiguration::isSinglePalette() const
     return settings()->value(PALETTE_USE_SINGLE).toBool();
 }
 
-QColor PaletteConfiguration::foregroundColor() const
+QColor PaletteConfiguration::elementsBackgroundColor() const
 {
-    //! NOTE Notation configuration may not exist when building in MU3 mode.
-    //! Because there is no `mu::notation` module in this mode.
-    //! For this case, let's add a workaround
-    if (!notationConfiguration()) {
-        static const Settings::Key FOREGROUND_COLOR("notation", "ui/canvas/foreground/color");
-        static const Settings::Key FOREGROUND_USE_USER_COLOR("notation", "ui/canvas/foreground/useColor");
-
-        if (settings()->value(PALETTE_USE_USER_FG_COLOR).toBool()) {
-            if (settings()->value(FOREGROUND_USE_USER_COLOR).toBool()) {
-                return settings()->value(FOREGROUND_COLOR).toQColor();
-            }
-        }
-        return QColor("#f9f9f9"); // default
-    }
-
-    if (settings()->value(PALETTE_USE_USER_FG_COLOR).toBool()) {
-        return notationConfiguration()->foregroundColor();
-    }
-    return notationConfiguration()->defaultForegroundColor();
+    return theme()->backgroundPrimaryColor();
 }
 
 QColor PaletteConfiguration::elementsColor() const
 {
     return theme()->fontPrimaryColor();
+}
+
+QColor PaletteConfiguration::gridColor() const
+{
+    return theme()->strokeColor();
+}
+
+QColor PaletteConfiguration::accentColor() const
+{
+    return theme()->accentColor();
+}
+
+mu::io::path PaletteConfiguration::keySignaturesDirPath() const
+{
+    return globalConfiguration()->dataPath() + "/keysigs";
+}
+
+mu::io::path PaletteConfiguration::timeSignaturesDirPath() const
+{
+    return globalConfiguration()->dataPath() + "/timesigs";
+}
+
+bool PaletteConfiguration::useFactorySettings() const
+{
+    return globalConfiguration()->useFactorySettings();
+}
+
+bool PaletteConfiguration::enableExperimental() const
+{
+    return globalConfiguration()->enableExperimental();
 }
 
 mu::ValCh<PaletteConfiguration::PaletteConfig> PaletteConfiguration::paletteConfig(const QString& paletteId) const

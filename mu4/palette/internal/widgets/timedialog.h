@@ -17,7 +17,7 @@
 #include "libmscore/fraction.h"
 
 #include "modularity/ioc.h"
-#include "iglobalconfiguration.h"
+#include "../ipaletteconfiguration.h"
 
 namespace Ms {
 class Palette;
@@ -34,11 +34,11 @@ class TimeDialog : public QWidget, Ui::TimeDialogBase
 {
     Q_OBJECT
 
-    INJECT(palette, mu::framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(palette, mu::palette::IPaletteConfiguration, configuration)
 
-    PaletteScrollArea* _timePalette;
-    Palette* sp;
-    bool _dirty;
+    PaletteScrollArea* _timePalette = nullptr;
+    Palette* sp = nullptr;
+    bool _dirty = false;
 
     int denominator() const;
     int denominator2Idx(int) const;

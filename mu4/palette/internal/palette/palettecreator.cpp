@@ -730,7 +730,7 @@ PalettePanel* PaletteCreator::newLayoutPalettePanel()
     StaffTypeChange* stc = new StaffTypeChange(gscore);
     sp->append(stc, QT_TRANSLATE_NOOP("palette", "Staff type change"));
 
-    if (globalConfiguration()->enableExperimental()) {
+    if (configuration()->enableExperimental()) {
         static const IconAction bpa[] = {
             { IconType::VFRAME,   "insert-vbox" },
             { IconType::HFRAME,   "insert-hbox" },
