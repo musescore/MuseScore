@@ -195,7 +195,6 @@ MasterPalette::MasterPalette(QWidget* parent)
 MasterPalette::MasterPalette(const MasterPalette& dialog)
     : MasterPalette(dialog.parentWidget())
 {
-
 }
 
 //---------------------------------------------------------

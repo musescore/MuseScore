@@ -66,6 +66,8 @@ ExampleView::ExampleView(QWidget* parent)
     sm->setInitialState(stateActive);
 
     sm->start();
+
+    m_defaultScaling = 0.9 * uiConfiguration()->physicalDotsPerInch() / DPI; // 90% of nominal
 }
 
 //---------------------------------------------------------
@@ -86,7 +88,7 @@ ExampleView::~ExampleView()
 
 void ExampleView::resetMatrix()
 {
-    double mag = 0.9 * uiConfiguration()->guiScaling() * (DPI_DISPLAY / DPI);    // 90% of nominal
+    double mag = m_defaultScaling;
     qreal _spatium = SPATIUM20 * mag;
     // example would normally be 10sp from top of page; this leaves 3sp margin above
     _matrix  = QTransform(mag, 0.0, 0.0, mag, _spatium, -_spatium * 7.0);
@@ -389,7 +391,7 @@ void ExampleView::mousePressEvent(QMouseEvent* event)
 
 QSize ExampleView::sizeHint() const
 {
-    qreal mag = 0.9 * uiConfiguration()->guiScaling() * (DPI_DISPLAY / DPI);
+    qreal mag = m_defaultScaling;
     qreal _spatium = SPATIUM20 * mag;
     // staff is 4sp tall with 3sp margin above; this leaves 3sp margin below
     qreal height = 10.0 * _spatium;

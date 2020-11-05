@@ -49,6 +49,8 @@ class ExampleView : public QFrame, public MuseScoreView
     QStateMachine* sm;
     QPointF startMove;
 
+    double m_defaultScaling = 0;
+
     void drawElements(QPainter& painter, const QList<Element*>& el);
     void setDropTarget(const Element* el) override;
 
