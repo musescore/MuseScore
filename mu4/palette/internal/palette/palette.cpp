@@ -805,25 +805,25 @@ PaletteCell* Palette::add(int idx, Element* s, const QString& name, QString tag,
 //   paintPaletteElement
 //---------------------------------------------------------
 
-void Palette::paintPaletteElement(void* data, Element* e)
+void Palette::paintPaletteElement(void* data, Element* element)
 {
-    QPainter* p = static_cast<QPainter*>(data);
-    p->save();
-    p->translate(e->pos());   // necessary for drawing child elements
+    QPainter* painter = static_cast<QPainter*>(data);
+    painter->save();
+    painter->translate(element->pos()); // necessary for drawing child elements
 
     QColor color = configuration()->elementsColor();
 
-    QColor colorBackup = e->color();
-    e->undoSetColor(color);
+    QColor colorBackup = element->color();
+    element->undoSetColor(color);
 
-    QColor frameColorBackup = e->getProperty(Pid::FRAME_FG_COLOR).value<QColor>();
-    e->undoChangeProperty(Pid::FRAME_FG_COLOR, color);
+    QColor frameColorBackup = element->getProperty(Pid::FRAME_FG_COLOR).value<QColor>();
+    element->undoChangeProperty(Pid::FRAME_FG_COLOR, color);
 
-    e->draw(p);
+    element->draw(painter);
 
-    e->undoSetColor(colorBackup);
-    e->undoChangeProperty(Pid::FRAME_FG_COLOR, frameColorBackup);
-    p->restore();
+    element->undoSetColor(colorBackup);
+    element->undoChangeProperty(Pid::FRAME_FG_COLOR, frameColorBackup);
+    painter->restore();
 }
 
 //---------------------------------------------------------

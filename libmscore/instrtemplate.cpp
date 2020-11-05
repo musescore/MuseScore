@@ -566,78 +566,6 @@ void InstrumentTemplate::setPitchRange(const QString& s, char* a, char* b) const
 }
 
 //---------------------------------------------------------
-//   saveInstrumentTemplates
-//---------------------------------------------------------
-
-bool saveInstrumentTemplates(const QString& instrTemplates)
-{
-    QFile qf(instrTemplates);
-    if (!qf.open(QIODevice::WriteOnly)) {
-        qDebug("cannot save instrument templates at <%s>", qPrintable(instrTemplates));
-        return false;
-    }
-    XmlWriter xml(0, &qf);
-    xml << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-    xml.stag("museScore");
-    foreach (const InstrumentGenre* genre, instrumentGenres) {
-        genre->write(xml);
-    }
-    xml << "\n";
-    foreach (const MidiArticulation& a, articulation) {
-        a.write(xml);
-    }
-    xml << "\n";
-    foreach (InstrumentGroup* group, instrumentGroups) {
-        xml.stag(QString("InstrumentGroup id=\"%1\"").arg(group->id));
-        xml.tag("name", group->name);
-        if (group->extended) {
-            xml.tag("extended", group->extended);
-        }
-        for (InstrumentTemplate* it : group->instrumentTemplates) {
-            it->write(xml);
-            xml << "\n";
-        }
-        xml.etag();
-        xml << "\n";
-    }
-    xml.etag();
-    qf.close();
-    return true;
-}
-
-//---------------------------------------------------------
-//   saveInstrumentTemplates1
-//---------------------------------------------------------
-
-bool saveInstrumentTemplates1(const QString& instrTemplates)
-{
-    QFile qf(instrTemplates);
-    if (!qf.open(QIODevice::WriteOnly)) {
-        qDebug("cannot save instrument templates at <%s>", qPrintable(instrTemplates));
-        return false;
-    }
-    XmlWriter xml(0, &qf);
-    xml << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-    xml.stag("museScore");
-    foreach (const InstrumentGenre* genre, instrumentGenres) {
-        genre->write1(xml);
-    }
-    foreach (InstrumentGroup* group, instrumentGroups) {
-        xml.stag(QString("InstrumentGroup id=\"%1\"").arg(group->id));
-        xml.tag("name", group->name);
-        for (InstrumentTemplate* it : group->instrumentTemplates) {
-            it->write1(xml);
-            xml << "\n";
-        }
-        xml.etag();
-        xml << "\n";
-    }
-    xml.etag();
-    qf.close();
-    return true;
-}
-
-//---------------------------------------------------------
 //   clearInstrumentTemplates
 //---------------------------------------------------------
 
@@ -698,7 +626,6 @@ bool loadInstrumentTemplates(const QString& instrTemplates)
             }
         }
     }
-    // saveInstrumentTemplates1("/home/ws/mops.xml");
     return true;
 }
 
