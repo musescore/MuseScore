@@ -21,7 +21,7 @@
 #define __KEYCANVAS_H__
 
 #include "modularity/ioc.h"
-#include "ui/iuiconfiguration.h"
+#include "ipaletteconfiguration.h"
 
 namespace Ms {
 class Accidental;
@@ -35,7 +35,7 @@ class KeyCanvas : public QFrame
 {
     Q_OBJECT
 
-    INJECT(palette, mu::framework::IUiConfiguration, uiConfiguration)
+    INJECT(palette, mu::palette::IPaletteConfiguration, configuration)
 
     Accidental* dragElement;
     Accidental* moveElement;

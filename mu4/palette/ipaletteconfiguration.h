@@ -34,7 +34,7 @@ class IPaletteConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IPaletteConfiguration() = default;
 
-    virtual double guiScale() const = 0;
+    virtual double paletteScaling() const = 0;
     virtual bool isSinglePalette() const = 0;
     virtual QColor foregroundColor() const = 0;
     virtual QColor elementsColor() const = 0;
