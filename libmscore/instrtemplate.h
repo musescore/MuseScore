@@ -124,7 +124,6 @@ extern QList<MidiArticulation> articulation;
 extern QList<InstrumentGroup*> instrumentGroups;
 extern void clearInstrumentTemplates();
 extern bool loadInstrumentTemplates(const QString& instrTemplates);
-extern bool saveInstrumentTemplates(const QString& instrTemplates);
 extern InstrumentTemplate* searchTemplate(const QString& name);
 extern InstrumentTemplate* searchTemplateForMusicXmlId(const QString& mxmlId);
 extern ClefType defaultClef(int patch);

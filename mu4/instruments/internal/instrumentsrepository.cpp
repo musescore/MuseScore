@@ -21,6 +21,8 @@
 #include "log.h"
 #include "translation.h"
 
+#include "libmscore/instrtemplate.h"
+
 using namespace mu;
 using namespace mu::instruments;
 using namespace mu::extensions;
@@ -71,8 +73,8 @@ void InstrumentsRepository::load()
         }
     }
 
-    for (const io::path& file: instrumentsFiles) {
-        RetVal<InstrumentsMeta> metaInstrument = reader()->readMeta(file);
+    for (const io::path& filePath: instrumentsFiles) {
+        RetVal<InstrumentsMeta> metaInstrument = reader()->readMeta(filePath);
 
         if (!metaInstrument.ret) {
             LOGE() << metaInstrument.ret.toString();
@@ -98,6 +100,8 @@ void InstrumentsRepository::load()
         for (auto it = groups.cbegin(); it != groups.cend(); ++it) {
             m_instrumentsMeta.groups.insert(it.key(), it.value());
         }
+
+        Ms::loadInstrumentTemplates(filePath.toQString());
     }
 
     for (InstrumentTemplate& instrumentTemplate: m_instrumentsMeta.instrumentTemplates) {
@@ -109,6 +113,8 @@ void InstrumentsRepository::load()
 
 void InstrumentsRepository::clear()
 {
+    Ms::clearInstrumentTemplates();
+
     m_instrumentsMeta.instrumentTemplates.clear();
     m_instrumentsMeta.genres.clear();
     m_instrumentsMeta.groups.clear();
