@@ -20,7 +20,7 @@
 #define MU_IO_PATH_H
 
 #include <QString>
-#include <QDebug>
+#include "framework/global/logstream.h"
 
 namespace mu {
 namespace io {
@@ -53,10 +53,10 @@ private:
     QByteArray m_path;
 };
 
-inline QDebug operator<<(QDebug debug, const mu::io::path& p)
+inline mu::log::Stream& operator<<(mu::log::Stream& s, const mu::io::path& p)
 {
-    debug << p.c_str();
-    return debug;
+    s << p.c_str();
+    return s;
 }
 
 std::string syffix(const path& path);

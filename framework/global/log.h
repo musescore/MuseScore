@@ -20,26 +20,10 @@
 #ifndef MU_FRAMEWORK_LOG_H
 #define MU_FRAMEWORK_LOG_H
 
-#include <QDebug>
-#include <thread>
-#include "runtime.h"
-
-inline QDebug operator<<(QDebug debug, const std::string& s)
-{
-    debug << s.c_str();
-    return debug;
-}
-
-inline QDebug operator<<(QDebug debug, const std::thread::id& id)
-{
-    debug << mu::runtime::toString(id);
-    return debug;
-}
-
-#define LOGD() qDebug() << "[" << mu::runtime::threadName() << "]"
-#define LOGI() qInfo() << "[" << mu::runtime::threadName() << "]"
-#define LOGW() qWarning() << "[" << mu::runtime::threadName() << "]"
-#define LOGE() qCritical() << "[" << mu::runtime::threadName() << "]"
+#ifndef HAW_LOGGER_QT_SUPPORT
+#define HAW_LOGGER_QT_SUPPORT
+#endif
+#include "thirdparty/haw_logger/logger/log_base.h"
 
 #define IF_ASSERT_FAILED_X(cond, msg) if (!(cond)) { \
         LOGE() << "\"ASSERT FAILED!\":" << msg << __FILE__ << __LINE__; \
@@ -54,8 +38,6 @@ inline QDebug operator<<(QDebug debug, const std::thread::id& id)
 } \
     if (!(cond)) \
 
-#define NOT_IMPLEMENTED LOGE() << "NOT IMPLEMENTED "
-#define NOT_SUPPORTED LOGE() << "NOT SUPPORTED "
 #define UNUSED(x) (void)x;
 
 #endif // MU_FRAMEWORK_LOG_H

@@ -21,10 +21,16 @@ set(MODULE global)
 
 include(${CMAKE_CURRENT_LIST_DIR}/modularity/modularity.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/async/async.cmake)
+include(${PROJECT_SOURCE_DIR}/thirdparty/haw_logger/logger/logger.cmake)
+
+set(MODULE_DEF
+    -DHAW_LOGGER_QT_SUPPORT
+)
 
 set(MODULE_SRC
     ${MODULARITY_SRC}
     ${ASYNC_SRC}
+    ${HAW_LOGGER_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/globalmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/globalmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iinteractive.h
@@ -32,6 +38,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/io/path.cpp
     ${CMAKE_CURRENT_LIST_DIR}/io/path.h
     ${CMAKE_CURRENT_LIST_DIR}/log.h
+    ${CMAKE_CURRENT_LIST_DIR}/logstream.h
     ${CMAKE_CURRENT_LIST_DIR}/dataformatter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dataformatter.h
     ${CMAKE_CURRENT_LIST_DIR}/val.cpp
@@ -63,6 +70,15 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/globalconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/interactive.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/interactive.h
-    )
+)
+
+set(FS_LIB )
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    set(FS_LIB stdc++fs)
+endif()
+
+set(MODULE_LINK
+    ${FS_LIB}
+)
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
