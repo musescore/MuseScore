@@ -68,7 +68,7 @@ target_include_directories(${MODULE} PUBLIC
 
 string(TOLOWER ${CMAKE_BUILD_TYPE} build_mode )
 if (build_mode STREQUAL "debug")
-    set(MODULE_DEF ${MODULE_DEF} -D_DEBUG)
+    # set(MODULE_DEF ${MODULE_DEF} -D_DEBUG) # This caused debug build failure under Windows
 else()
     set(MODULE_DEF ${MODULE_DEF} -DNDEBUG)
 endif()
