@@ -1400,8 +1400,11 @@ qreal Chord::defaultStemLength() const
                   if (sel > staffHlfHgt)                    // if stem ends below ('>') staff mid position,
                         sel = staffHlfHgt;                  // stretch it to mid position
                   stemLen = sel - dy;                       // actual stem length
-                  if (-stemLen < shortest)                  // is stem too short,
-                        stemLen = -shortest;                // lengthen it to shortest possible length
+                  qreal exposedLen = sel - ul * .5;         // portion extending above top note of chord
+                  if (-exposedLen < shortest) {             // if stem too short,
+                        qreal diff = shortest + exposedLen;
+                        stemLen -= diff;                    // lengthen it to shortest possible length
+                        }
                   }
             else {                        // stem down
                   qreal uy  = ul * .5;                      // note-side vert. pos.
@@ -1413,8 +1416,11 @@ qreal Chord::defaultStemLength() const
                   if (sel < staffHlfHgt)                    // if stem ends above ('<') staff mid position,
                         sel = staffHlfHgt;                  // stretch it to mid position
                   stemLen = sel - uy;                       // actual stem length
-                  if (stemLen < shortest)                   // if stem too short,
-                        stemLen = shortest;                 // lengthen it to shortest possible position
+                  qreal exposedLen = sel - dl * .5;         // portion extending below bottom note of chord
+                  if (exposedLen < shortest) {              // if stem too short,
+                        qreal diff = shortest - exposedLen;
+                        stemLen += diff;                    // lengthen it to shortest possible length
+                        }
                   }
             }
 
