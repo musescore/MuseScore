@@ -29,6 +29,7 @@
 
 #include "internal/mu4paletteadapter.h"
 #include "internal/paletteconfiguration.h"
+#include "internal/palette/masterpalette.h"
 
 #include "view/paletterootmodel.h"
 #include "view/palettepropertiesmodel.h"
@@ -88,6 +89,9 @@ void PaletteModule::resolveImports()
 
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
+        ir->registerUri(Uri("musescore://palette/masterpalette"),
+                        ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<Ms::MasterPalette>("MasterPallette")));
+
         ir->registerUri(Uri("musescore://palette/properties"),
                         ContainerMeta(ContainerType::QmlDialog, "MuseScore/Palette/PalettePropertiesDialog.qml"));
 
