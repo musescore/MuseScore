@@ -59,8 +59,13 @@ protected:
 
 public:
     MasterPalette(QWidget* parent = 0);
+    MasterPalette(const MasterPalette& dialog);
+
     void selectItem(const QString& s);
     QString selectedItem();
 };
 } // namespace Ms
+
+Q_DECLARE_METATYPE(Ms::MasterPalette)
+
 #endif
