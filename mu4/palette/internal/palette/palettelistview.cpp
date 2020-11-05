@@ -37,8 +37,6 @@ PaletteListView::PaletteListView(PalettePanel* panel, QWidget* parent)
 
     setModel(model);
     setRootIndex(parentCategory);
-
-    setupStyle();
 }
 
 //---------------------------------------------------------
@@ -108,34 +106,6 @@ void PaletteListView::keyPressEvent(QKeyEvent* event)
         } else {
             QListView::keyPressEvent(event);
         }
-    }
-}
-
-//---------------------------------------------------------
-//   PaletteListView::setupStyle
-//---------------------------------------------------------
-
-void PaletteListView::setupStyle()
-{
-    QPalette pal = palette();   // color palette
-    QColor c = configuration()->foregroundColor();
-    pal.setColor(QPalette::Base, c);
-    setPalette(pal);
-}
-
-//---------------------------------------------------------
-//   PaletteListView::changeEvent
-//---------------------------------------------------------
-
-void PaletteListView::changeEvent(QEvent* event)
-{
-    QListView::changeEvent(event);
-    switch (event->type()) {
-    case QEvent::StyleChange:
-        setupStyle();
-        break;
-    default:
-        break;
     }
 }
 } // namespace Ms

@@ -27,7 +27,7 @@ class KeyEditor;
 //   MasterPalette
 //---------------------------------------------------------
 
-class MasterPalette : public QWidget, Ui::MasterPalette
+class MasterPalette : public QDialog, Ui::MasterPalette
 {
     Q_OBJECT
 

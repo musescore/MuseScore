@@ -47,7 +47,6 @@ using namespace mu::palette;
 using namespace mu::framework;
 
 static std::shared_ptr<MU4PaletteAdapter> m_adapter = std::make_shared<MU4PaletteAdapter>();
-static std::shared_ptr<PaletteConfiguration> m_configuration = std::make_shared<PaletteConfiguration>();
 
 static void palette_init_qrc()
 {
@@ -65,7 +64,7 @@ void PaletteModule::registerExports()
     framework::ioc()->registerExport<IPaletteAdapter>(moduleName(), m_adapter);
 #endif
 
-    framework::ioc()->registerExport<IPaletteConfiguration>(moduleName(), m_configuration);
+    framework::ioc()->registerExport<IPaletteConfiguration>(moduleName(), std::make_shared<PaletteConfiguration>());
 
     // create a score for internal use
     using namespace Ms;
@@ -125,9 +124,6 @@ void PaletteModule::registerUiTypes()
 void PaletteModule::onInit()
 {
     using namespace Ms;
-
-    // init configuration
-    m_configuration->init();
 
     // load workspace
     PaletteWorkspaceSetup w;

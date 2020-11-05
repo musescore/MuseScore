@@ -25,6 +25,7 @@
 #include "modularity/imoduleexport.h"
 
 #include "retval.h"
+#include "io/path.h"
 
 namespace mu::palette {
 class IPaletteConfiguration : MODULE_EXPORT_INTERFACE
@@ -36,8 +37,17 @@ public:
 
     virtual double paletteScaling() const = 0;
     virtual bool isSinglePalette() const = 0;
-    virtual QColor foregroundColor() const = 0;
+
+    virtual QColor elementsBackgroundColor() const = 0;
     virtual QColor elementsColor() const = 0;
+    virtual QColor gridColor() const = 0;
+    virtual QColor accentColor() const = 0;
+
+    virtual io::path keySignaturesDirPath() const = 0;
+    virtual io::path timeSignaturesDirPath() const = 0;
+
+    virtual bool useFactorySettings() const = 0;
+    virtual bool enableExperimental() const = 0;
 
     struct PaletteConfig {
         QString name;

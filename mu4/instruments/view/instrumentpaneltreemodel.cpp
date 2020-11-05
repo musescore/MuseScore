@@ -145,9 +145,8 @@ void InstrumentPanelTreeModel::selectRow(const QModelIndex& rowIndex, const bool
 
 void InstrumentPanelTreeModel::addInstruments()
 {
-    interactive()->open("musescore://palette/masterpalette?sync=false");
+    mu::RetVal<Val> result = interactive()->open("musescore://instruments/select");
 
-    /*
     if (!result.ret) {
         LOGE() << result.ret.toString();
         return;
@@ -163,7 +162,6 @@ void InstrumentPanelTreeModel::addInstruments()
     m_masterNotationParts->setInstruments(instruments);
 
     emit isEmptyChanged();
-    */
 }
 
 void InstrumentPanelTreeModel::moveSelectedRowsUp()
