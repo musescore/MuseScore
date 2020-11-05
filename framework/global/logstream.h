@@ -16,29 +16,12 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "version.h"
+#ifndef MU_LOGSTREAM_H
+#define MU_LOGSTREAM_H
 
-#include "config.h"
-#include "stringutils.h"
-
-using namespace mu::framework;
-
-bool Version::unstable()
-{
-#ifdef MSCORE_UNSTABLE
-    return true;
-#else
-    return false;
-#endif
+#include "thirdparty/haw_logger/logger/logstream.h"
+namespace mu::log {
+using Stream = haw::logger::Stream;
 }
 
-std::string Version::fullVersion()
-{
-    std::string version(VERSION);
-    std::string versionLabel(VERSION_LABEL);
-    strings::replace(versionLabel, " ", "");
-    if (!versionLabel.empty()) {
-        version.append("-").append(versionLabel);
-    }
-    return version;
-}
+#endif // MU_LOGSTREAM_H
