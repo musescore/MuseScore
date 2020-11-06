@@ -1919,9 +1919,9 @@ void NotationInteraction::setBreaksSpawnInterval(BreaksSpawnIntervalType interva
     interval = intervalType == BreaksSpawnIntervalType::MeasuresInterval ? interval : 0;
     bool afterEachSystem = intervalType == BreaksSpawnIntervalType::AfterEachSystem;
 
-    score()->startCmd();
+    m_undoStack->prepareChanges();
     score()->addRemoveBreaks(interval, afterEachSystem);
-    score()->endCmd();
+    m_undoStack->commitChanges();
 
     m_notation->notifyAboutNotationChanged();
 }
