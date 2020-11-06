@@ -1978,6 +1978,46 @@ void NotationInteraction::joinSelectedMeasures()
     m_selectionChanged.notify();
 }
 
+void NotationInteraction::insertMeasures(int afterMeasureIndex, int count)
+{
+    Measure* measure = score()->crMeasure(afterMeasureIndex);
+
+    if (!measure) {
+        return;
+    }
+
+    score()->startCmd();
+    for (int i = 0; i < count; i++) {
+        score()->insertMeasure(ElementType::MEASURE, measure);
+    }
+    score()->endCmd();
+
+    clearSelection();
+
+    for (int i = afterMeasureIndex + 1; i <= afterMeasureIndex + count; i++) {
+        Measure* measure = score()->crMeasure(i - 1);
+        select(measure, SelectType::RANGE);
+    }
+}
+
+void NotationInteraction::appendMeasures(int count)
+{
+    int measureCount = score()->measures()->size();
+
+    score()->startCmd();
+    for (int i = 0; i < count; i++) {
+        score()->insertMeasure(ElementType::MEASURE, nullptr);
+    }
+    score()->endCmd();
+
+    clearSelection();
+
+    for (int i = measureCount; i < measureCount + count; i++) {
+        Measure* measure = score()->crMeasure(i - 1);
+        select(measure, SelectType::RANGE);
+    }
+}
+
 void NotationInteraction::copySelection()
 {
     if (!selection()->canCopy()) {
