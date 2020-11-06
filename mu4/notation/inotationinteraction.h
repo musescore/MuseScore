@@ -60,7 +60,7 @@ public:
     virtual async::Notification selectionChanged() const = 0;
 
     // Drag
-    using IsDraggable = std::function<bool (const Element*)>;
+    using IsDraggable = std::function<bool(const Element*)>;
     virtual bool isDragStarted() const = 0;
     virtual void startDrag(const std::vector<Element*>& elems, const QPointF& eoffset, const IsDraggable& isDrag) = 0;
     virtual void drag(const QPointF& fromPos, const QPointF& toPos, DragMode mode) = 0;
@@ -90,6 +90,10 @@ public:
     virtual void endEditText() = 0;
     virtual void changeTextCursorPosition(const QPointF& newCursorPos) = 0;
     virtual async::Notification textEditingChanged() const = 0;
+
+    // Measure
+    virtual void splitSelectedMeasure() = 0;
+    virtual void joinSelectedMeasures() = 0;
 
     virtual void copySelection() = 0;
     virtual void pasteSelection(const Fraction& scale = Fraction(1, 1)) = 0;

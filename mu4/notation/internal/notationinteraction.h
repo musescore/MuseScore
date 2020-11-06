@@ -108,6 +108,10 @@ public:
     void changeTextCursorPosition(const QPointF& newCursorPos) override;
     async::Notification textEditingChanged() const override;
 
+    // Measure
+    void splitSelectedMeasure() override;
+    void joinSelectedMeasures() override;
+
     void copySelection() override;
     void pasteSelection(const Fraction& scale = Fraction(1, 1)) override;
     void swapSelection() override;

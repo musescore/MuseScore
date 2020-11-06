@@ -39,6 +39,9 @@ public:
     int endStaffIndex() const override;
     Fraction endTick() const override;
 
+    int startMeasureIndex() const override;
+    int endMeasureIndex() const override;
+
     std::vector<QRectF> boundingArea() const override;
 
 private:
@@ -58,6 +61,12 @@ private:
 
     int sectionElementsMaxY(const RangeSection& selection) const;
     int sectionElementsMinY(const RangeSection& selection) const;
+
+    struct MeasureRange {
+        int startIndex = 0;
+        int endIndex = 0;
+    };
+    MeasureRange measureRange() const;
 
     IGetScore* m_getScore = nullptr;
 };

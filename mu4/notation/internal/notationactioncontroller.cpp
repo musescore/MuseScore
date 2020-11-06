@@ -76,6 +76,9 @@ void NotationActionController::init()
     dispatcher()->reg(this, "redo", this, &NotationActionController::redo);
     dispatcher()->reg(this, "select-all", this, &NotationActionController::selectAll);
 
+    dispatcher()->reg(this, "split-measure", this, &NotationActionController::splitMeasure);
+    dispatcher()->reg(this, "join-measures", this, &NotationActionController::joinSelectedMeasures);
+
     dispatcher()->reg(this, "edit-style", this, &NotationActionController::openPageStyle);
     dispatcher()->reg(this, "staff-properties", this, &NotationActionController::openStaffProperties);
     dispatcher()->reg(this, "add-remove-breaks", this, &NotationActionController::openBreaksDialog);
@@ -350,6 +353,26 @@ void NotationActionController::selectAll()
     }
 
     interaction->selectAll();
+}
+
+void NotationActionController::splitMeasure()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->splitSelectedMeasure();
+}
+
+void NotationActionController::joinSelectedMeasures()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->joinSelectedMeasures();
 }
 
 void NotationActionController::openPageStyle()

@@ -19,6 +19,8 @@
 #include "notationselection.h"
 
 #include "libmscore/score.h"
+#include "libmscore/segment.h"
+#include "libmscore/measure.h"
 
 #include "notationselectionrange.h"
 

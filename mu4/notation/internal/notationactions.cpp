@@ -211,6 +211,14 @@ const ActionList NotationActions::m_actions = {
     Action("voice-x34",
            QT_TRANSLATE_NOOP("action", "Exchange Voice 3-4"),
            ShortcutContext::NotationActive
+           ),
+    Action("split-measure",
+           QT_TRANSLATE_NOOP("action", "Split measure"),
+           ShortcutContext::NotationActive
+           ),
+    Action("join-measures",
+           QT_TRANSLATE_NOOP("action", "Join Selected Measures"),
+           ShortcutContext::NotationActive
            )
 };
 

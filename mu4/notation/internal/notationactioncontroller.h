@@ -60,6 +60,10 @@ private:
     void redo();
     void selectAll();
 
+
+    void splitMeasure();
+    void joinSelectedMeasures();
+
     void openPageStyle();
     void openStaffProperties();
     void openBreaksDialog();
