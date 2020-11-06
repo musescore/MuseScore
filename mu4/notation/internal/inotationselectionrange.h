@@ -35,6 +35,9 @@ public:
     virtual int endStaffIndex() const = 0;
     virtual Fraction endTick() const = 0;
 
+    virtual int startMeasureIndex() const = 0;
+    virtual int endMeasureIndex() const = 0;
+
     virtual std::vector<QRectF> boundingArea() const = 0;
 };
 
