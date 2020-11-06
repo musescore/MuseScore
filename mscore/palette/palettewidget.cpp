@@ -26,6 +26,7 @@
 #include "qml/nativetooltip.h"
 
 #include <QQmlContext>
+#include <QTimer>
 
 namespace Ms {
 
@@ -119,10 +120,13 @@ void PaletteWidget::setupStyle()
 
 void PaletteWidget::activateSearchBox()
       {
+      int delay = isFloating() ? 300 : 0;
       ensureQmlViewFocused();
-      const bool invoked = QMetaObject::invokeMethod(rootObject(), "requestPaletteSearch");
-      Q_UNUSED(invoked);
-      Q_ASSERT(invoked);
+      QTimer::singleShot(delay, this, [&](){
+          const bool invoked = QMetaObject::invokeMethod(rootObject(), "requestPaletteSearch");
+          Q_UNUSED(invoked);
+          Q_ASSERT(invoked);
+          });
       }
 
 //---------------------------------------------------------
