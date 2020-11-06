@@ -53,6 +53,7 @@ void NotationActionController::init()
 
     dispatcher()->reg(this, "edit-style", this, &NotationActionController::openPageStyle);
     dispatcher()->reg(this, "staff-properties", this, &NotationActionController::openStaffProperties);
+    dispatcher()->reg(this, "add-remove-breaks", this, &NotationActionController::openBreaksDialog);
 }
 
 bool NotationActionController::canReceiveAction(const actions::ActionName&) const
@@ -252,4 +253,9 @@ void NotationActionController::openStaffProperties()
 
     int staffIdx = interaction->selection()->range().startStaffIndex;
     interactive()->open("musescore://notation/staffproperties?staffIdx=" + QString::number(staffIdx).toStdString());
+}
+
+void NotationActionController::openBreaksDialog()
+{
+    interactive()->open("musescore://notation/breaks");
 }
