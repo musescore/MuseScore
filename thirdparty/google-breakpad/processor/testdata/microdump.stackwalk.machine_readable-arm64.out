@@ -1,0 +1,22 @@
+OS|Android|OS 64 VERSION INFO
+CPU|arm64||2
+GPU|||
+Crash||0x0|0
+Module|breakpad_unittests||breakpad_unittests|D6D1FEC9A15DE7F38A236898871A2E770|0x555f608000|0x555f6c7fff|0
+Module|libnetd_client.so||libnetd_client.so|7735F44BA6D7C27FD5C3636A43369B7C0|0x7f801f6000|0x7f80208fff|0
+Module|libstdc++.so||libstdc++.so|380C0B7CD8FA3F094BC3BA58A81CBAD00|0x7f80229000|0x7f8023cfff|0
+Module|libm.so||libm.so|F832D47D1E237E46D835991594DA6E890|0x7f8023d000|0x7f80279fff|0
+Module|liblog.so||liblog.so|C407B93F87A835BE05451FC7B0B3E65E0|0x7f8027b000|0x7f80293fff|0
+Module|libc.so||libc.so|479D5438753E27F019F2C9980DDBF4F30|0x7f80295000|0x7f80332fff|0
+Module|libsigchain.so||libsigchain.so|9DA3FF8EF9CA0FDC481292EE530DF6EC0|0x7f80341000|0x7f80353fff|0
+Module|linux-gate.so||linux-gate.so|672B2CD6CF8AF6C43BD70F2AB02B3D0C0|0x7f80358000|0x7f80359fff|0
+
+0|0|breakpad_unittests|MicrodumpWriterTest_Setup_Test::TestBody|/s/clank/src/out/Release/../../breakpad/src/client/linux/microdump_writer/microdump_writer_unittest.cc|77|0xc
+0|1|breakpad_unittests|testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void>|/s/clank/src/out/Release/../../testing/gtest/src/gtest.cc|2418|0x4
+0|2|breakpad_unittests|testing::Test::Run|/s/clank/src/out/Release/../../testing/gtest/src/gtest.cc|2435|0x14
+0|3|breakpad_unittests|testing::TestInfo::Run|/s/clank/src/out/Release/../../testing/gtest/src/gtest.cc|2610|0x4
+0|4|breakpad_unittests|testing::TestCase::Run|/s/clank/src/out/Release/../../testing/gtest/src/gtest.cc|2728|0x0
+0|5|breakpad_unittests|testing::internal::UnitTestImpl::RunAllTests|/s/clank/src/out/Release/../../testing/gtest/src/gtest.cc|4591|0x0
+0|6|breakpad_unittests|testing::UnitTest::Run|/s/clank/src/out/Release/../../testing/gtest/src/gtest.cc|2418|0x4
+0|7|breakpad_unittests|main|/s/clank/src/out/Release/../../testing/gtest/include/gtest/gtest.h|2326|0x0
+0|8|libc.so||||0x17388

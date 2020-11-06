@@ -1,4 +1,5 @@
 
+add_subdirectory(devtools)
 add_subdirectory(global)
 add_subdirectory(ui)
 add_subdirectory(uicomponents)
@@ -11,6 +12,8 @@ add_subdirectory(system)
 add_subdirectory(audio)
 add_subdirectory(midi)
 add_subdirectory(midi_old)
+
+add_subdirectory(../thirdparty/google-breakpad google-breakpad)
 
 if (BUILD_TELEMETRY_MODULE)
       add_subdirectory(telemetry)

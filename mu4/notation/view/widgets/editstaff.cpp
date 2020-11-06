@@ -39,7 +39,7 @@ using namespace mu::notation;
 using namespace mu::framework;
 
 namespace mu::notation {
-QChar iconCodeToChar(IconCode::Code code)
+static QChar iconCodeToChar(IconCode::Code code)
 {
     return QChar(static_cast<char16_t>(code));
 }

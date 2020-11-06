@@ -42,6 +42,7 @@ vtest/Thumbnails
 vtest/Pictures
 .vs
 dependencies
+mybuild.bat
 
 # Downloaded files during build process
 MuseScore_General.sf3

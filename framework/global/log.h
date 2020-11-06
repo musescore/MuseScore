@@ -23,7 +23,7 @@
 #ifndef HAW_LOGGER_QT_SUPPORT
 #define HAW_LOGGER_QT_SUPPORT
 #endif
-#include "thirdparty/haw_logger/logger/log_base.h"
+#include "framework/devtools/logger/log_base.h"
 
 #define IF_ASSERT_FAILED_X(cond, msg) if (!(cond)) { \
         LOGE() << "\"ASSERT FAILED!\":" << msg << __FILE__ << __LINE__; \

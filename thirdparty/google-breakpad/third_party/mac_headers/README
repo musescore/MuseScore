@@ -1,0 +1,2 @@
+These headers were copied from the Mac OS X 10.7 SDK to enable building
+the Mac dump_syms code that processes Mach-O files on Linux.

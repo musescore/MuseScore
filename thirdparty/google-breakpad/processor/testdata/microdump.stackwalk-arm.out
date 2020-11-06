@@ -1,0 +1,63 @@
+Operating system: Android
+                  OS VERSION INFO
+CPU: arm
+     2 CPUs
+
+GPU: OpenGL ES 3.0 V@104.0 AU@  (GIT@Id3510ff6dc)
+     Qualcomm
+     Adreno (TM) 330
+
+Crash reason:  
+Crash address: 0x0
+Process uptime: not available
+
+Thread 0 (crashed)
+ 0  breakpad_unittests!MicrodumpWriterTest_Setup_Test::TestBody [gtest.h : 1481 + 0x1]
+     r0 = 0x00000000    r1 = 0x00000000    r2 = 0x00000000    r3 = 0x00000000
+     r4 = 0xffea6900    r5 = 0xffea68f0    r6 = 0xffea68f8    r7 = 0xffea6904
+     r8 = 0xffea68e0    r9 = 0xffea6900   r10 = 0xffea6930   r12 = 0x00000000
+     fp = 0x00000ea2    sp = 0xffea68c0    lr = 0xaaaeb307    pc = 0xaaaeb307
+    Found by: given as instruction pointer in context
+ 1  breakpad_unittests!testing::Test::Run [gtest.cc : 2435 + 0x17]
+     r4 = 0xaab431dc    r5 = 0xab20d7d0    r6 = 0xab203478    r7 = 0x00000149
+     r8 = 0xab203588    r9 = 0xab20d7d0   r10 = 0xffea6f60    fp = 0xab2034d8
+     sp = 0xffea6f28    pc = 0xaab0a741
+    Found by: call frame info
+ 2  breakpad_unittests!testing::TestInfo::Run [gtest.cc : 2610 + 0x5]
+     r4 = 0xab205448    r5 = 0xab203478    r6 = 0xf6d21cdd    r7 = 0x00000149
+     r8 = 0xab203588    r9 = 0xab20d7d0   r10 = 0xffea6f60    fp = 0xab2034d8
+     sp = 0xffea6f50    pc = 0xaab0a875
+    Found by: call frame info
+ 3  breakpad_unittests!testing::TestCase::Run [gtest.cc : 2728 + 0x3]
+     r4 = 0xab2054c8    r5 = 0x00000000    r6 = 0xf6d21cdd    r7 = 0x00000149
+     r8 = 0xab203478    r9 = 0xab203588   r10 = 0x00000001    fp = 0xab2034d8
+     sp = 0xffea6f90    pc = 0xaab0a8fd
+    Found by: call frame info
+ 4  breakpad_unittests!testing::internal::UnitTestImpl::RunAllTests [gtest.cc : 4591 + 0x3]
+     r4 = 0xab203478    r5 = 0xab203588    r6 = 0x00000000    r7 = 0x00000001
+     r8 = 0x00000000    r9 = 0xab2047f0   r10 = 0x00000001    fp = 0xab2034d8
+     sp = 0xffea6fc0    pc = 0xaab0aafd
+    Found by: call frame info
+ 5  breakpad_unittests!testing::UnitTest::Run [gtest.cc : 2418 + 0x5]
+     r4 = 0x00000000    r5 = 0xab203478    r6 = 0x00000002    r7 = 0xaaae2c19
+     r8 = 0x00000000    r9 = 0x00000000   r10 = 0x00000000    fp = 0xffea706c
+     sp = 0xffea7018    pc = 0xaab09a61
+    Found by: call frame info
+ 6  breakpad_unittests!main [gtest.h : 2326 + 0x3]
+     r4 = 0xffea702c    r5 = 0xffea7074    r6 = 0x00000002    r7 = 0xaaae2c19
+     r8 = 0x00000000    r9 = 0x00000000   r10 = 0x00000000    fp = 0xffea706c
+     sp = 0xffea7028    pc = 0xaaae2c3b
+    Found by: call frame info
+ 7  libc.so + 0x11e9d
+     r4 = 0xffea7074    r5 = 0xffea7080    r6 = 0x00000002    r7 = 0xaaae2c19
+     r8 = 0x00000000    r9 = 0x00000000   r10 = 0x00000000    fp = 0xffea706c
+     sp = 0xffea7040    pc = 0xf7025e9f
+    Found by: call frame info
+
+Loaded modules:
+0xaaacd000 - 0xaab48fff  breakpad_unittests  ???
+0xf6fca000 - 0xf6fcdfff  libnetd_client.so  ???
+0xf6fee000 - 0xf6ff1fff  libstdc++.so  ???
+0xf6ff2000 - 0xf700afff  libm.so  ???
+0xf700c000 - 0xf7012fff  liblog.so  ???
+0xf7014000 - 0xf706dfff  libc.so  ???  (WARNING: No symbols, libc.so, 167F187B09A27F7444EF989603AAFD3D0)

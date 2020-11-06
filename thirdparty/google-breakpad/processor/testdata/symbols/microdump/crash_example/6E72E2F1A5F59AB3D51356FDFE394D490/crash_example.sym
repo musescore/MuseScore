@@ -1,0 +1,56 @@
+MODULE Linux mips 6E72E2F1A5F59AB3D51356FDFE394D490 crash_example
+FILE 0 /s/breakpad/src/tools/linux/crash_example.cc
+FUNC 80a8 9c 0 google_breakpad::MinidumpDescriptor::MinidumpDescriptor
+80a8 20 75 8
+80c8 38 78 8
+8100 10 78 8
+8110 14 78 8
+8124 10 78 8
+8134 10 78 8
+FUNC 815c a0 0 DumpCallback
+815c 2c 13 37
+8188 1c 14 37
+81a4 14 15 37
+81b8 1c 15 37
+81d4 14 17 37
+81e8 4 18 37
+81ec 10 19 37
+FUNC 81fc 2c 0 Leaf
+81fc 10 21 37
+820c 8 22 37
+8214 8 23 37
+821c 4 25 37
+8220 8 26 37
+FUNC 8228 58 0 blaTest
+8228 1c 28 37
+8244 c 29 37
+8250 20 30 37
+8270 10 31 37
+FUNC 8280 40 0 Crash
+8280 18 33 37
+8298 4 34 37
+829c 14 35 37
+82b0 10 36 37
+FUNC 831c f4 0 main
+831c 2c 40 37
+8348 c 40 37
+8354 18 41 37
+836c 34 43 37
+83a0 10 44 37
+83b0 4 45 37
+83b4 14 43 37
+83c8 18 45 37
+83e0 30 46 37
+PUBLIC 831c 0 main
+STACK CFI INIT 8228 58 .cfa: $sp 0 + .ra: $ra
+STACK CFI 822c .cfa: $sp 32 +
+STACK CFI 8234 $gp: .cfa -16 + ^ .ra: .cfa -8 + ^
+STACK CFI 827c $gp: $gp .cfa: $sp 0 + .ra: .ra
+STACK CFI INIT 8280 40 .cfa: $sp 0 + .ra: $ra
+STACK CFI 8284 .cfa: $sp 32 +
+STACK CFI 828c $gp: .cfa -16 + ^ .ra: .cfa -8 + ^
+STACK CFI 82bc $gp: $gp .cfa: $sp 0 + .ra: .ra
+STACK CFI INIT 831c f4 .cfa: $sp 0 + .ra: $ra
+STACK CFI 8320 .cfa: $sp 352 +
+STACK CFI 832c $gp: .cfa -16 + ^ $s0: .cfa -24 + ^ .ra: .cfa -8 + ^
+STACK CFI 840c $gp: $gp $s0: $s0 .cfa: $sp 0 + .ra: .ra

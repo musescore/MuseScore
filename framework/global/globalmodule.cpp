@@ -24,7 +24,6 @@
 #include "internal/globalconfiguration.h"
 
 #include "log.h"
-#include "thirdparty/haw_logger/logger/logdefdest.h"
 #include "version.h"
 
 #include "internal/interactive.h"
@@ -35,8 +34,6 @@
 
 using namespace mu::framework;
 
-static std::shared_ptr<GlobalConfiguration> s_globalConf = std::make_shared<GlobalConfiguration>();
-
 static Invoker s_asyncInvoker;
 
 std::string GlobalModule::moduleName() const
@@ -46,32 +43,12 @@ std::string GlobalModule::moduleName() const
 
 void GlobalModule::registerExports()
 {
-    ioc()->registerExport<IGlobalConfiguration>(moduleName(), s_globalConf);
+    ioc()->registerExport<IGlobalConfiguration>(moduleName(), new GlobalConfiguration());
     ioc()->registerExport<IInteractive>(moduleName(), new Interactive());
 }
 
 void GlobalModule::onInit()
 {
-    //! --- Setup logger ---
-    using namespace haw::logger;
-    Logger* logger = Logger::instance();
-    logger->clearDests();
-
-    //! Console
-    logger->addDest(new ConsoleLogDest(LogLayout("${time} | ${type|5} | ${thread} | ${tag|10} | ${message}")));
-
-    //! File, this creates a file named "data/logs/MuseScore_yyMMdd.log"
-    std::string logsPath = s_globalConf->logsPath().c_str();
-    LOGI() << "logs path: " << logsPath;
-    logger->addDest(new FileLogDest(logsPath, "MuseScore", "log",
-                                    LogLayout("${datetime} | ${type|5} | ${thread} | ${tag|10} | ${message}")));
-
-#ifndef NDEBUG
-    logger->setLevel(haw::logger::Debug);
-#else
-    logger->setLevel(haw::logger::Normal);
-#endif
-
     LOGI() << "=== Started MuseScore " << framework::Version::fullVersion() << " ===";
 
     Invoker::setup();

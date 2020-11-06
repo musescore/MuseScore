@@ -21,6 +21,7 @@
 #include "config.h"
 #include "runtime.h"
 
+#include "framework/devtools/devtoolsmodule.h"
 #include "framework/global/globalmodule.h"
 #include "framework/ui/uimodule.h"
 #include "framework/uicomponents/uicomponentsmodule.h"
@@ -67,6 +68,7 @@
 ModulesSetup::ModulesSetup()
 {
     m_modulesSetupList
+        << new mu::framework::DevToolsModule()
         << new mu::framework::GlobalModule()
         << new mu::framework::UiModule()
         << new mu::framework::UiComponentsModule()

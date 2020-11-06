@@ -1,0 +1,4 @@
+/*_test
+
+# Some tests create temp files.
+/tempfile.*

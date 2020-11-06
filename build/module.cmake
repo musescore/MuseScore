@@ -80,6 +80,9 @@ target_compile_definitions(${MODULE} PUBLIC
 
 if(NOT ${MODULE} MATCHES global)
     set(MODULE_LINK global ${MODULE_LINK})
+    if(NOT ${MODULE} MATCHES devtools)
+        set(MODULE_LINK devtools ${MODULE_LINK})
+    endif()
 endif()
 
 set(MODULE_LINK ${QT_LIBRARIES} ${MODULE_LINK})

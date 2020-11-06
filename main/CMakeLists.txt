@@ -99,6 +99,7 @@ set(LINK_LIB
     ${FREETYPE_LIB}
     ${QT_LIBRARIES}
     awl
+    devtools
     global
     global_old
     ui

@@ -278,6 +278,7 @@ endif (MSVC OR MINGW)
 target_link_libraries(mscoreapp
       inspector
       global
+      devtools
       global_old
       awl
       ${QTSINGLEAPPLICATION_LIBRARIES}

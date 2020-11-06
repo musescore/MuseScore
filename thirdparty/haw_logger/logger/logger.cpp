@@ -29,7 +29,6 @@ static const char COLON(':');
 static const char DOT('.');
 static const char HYPEN('-');
 static const char T('T');
-static const char SPACE(' ');
 
 static const std::string MAIN_THREAD("main_thread");
 

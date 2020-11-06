@@ -1,0 +1,19 @@
+OS|Android|OS VERSION INFO
+CPU|arm||2
+GPU|OpenGL ES 3.0 V@104.0 AU@  (GIT@Id3510ff6dc)|Qualcomm|Adreno (TM) 330
+Crash||0x0|0
+Module|breakpad_unittests||breakpad_unittests|DA7778FB66018A4E9B4110ED06E730D00|0xaaacd000|0xaab48fff|0
+Module|libnetd_client.so||libnetd_client.so|56B149396A4DAF176E26B4A85DA87BF30|0xf6fca000|0xf6fcdfff|0
+Module|libstdc++.so||libstdc++.so|DFCD7772F3A5BD1E84A50C4DBFDE6F570|0xf6fee000|0xf6ff1fff|0
+Module|libm.so||libm.so|AE3467401278371A956801500FC8187D0|0xf6ff2000|0xf700afff|0
+Module|liblog.so||liblog.so|0A492DEF82842051996A468D87F23F010|0xf700c000|0xf7012fff|0
+Module|libc.so||libc.so|167F187B09A27F7444EF989603AAFD3D0|0xf7014000|0xf706dfff|0
+
+0|0|breakpad_unittests|MicrodumpWriterTest_Setup_Test::TestBody|/s/clank/src/out_arm/Release/../../testing/gtest/include/gtest/gtest.h|1481|0x1
+0|1|breakpad_unittests|testing::Test::Run|/s/clank/src/out_arm/Release/../../testing/gtest/src/gtest.cc|2435|0x17
+0|2|breakpad_unittests|testing::TestInfo::Run|/s/clank/src/out_arm/Release/../../testing/gtest/src/gtest.cc|2610|0x5
+0|3|breakpad_unittests|testing::TestCase::Run|/s/clank/src/out_arm/Release/../../testing/gtest/src/gtest.cc|2728|0x3
+0|4|breakpad_unittests|testing::internal::UnitTestImpl::RunAllTests|/s/clank/src/out_arm/Release/../../testing/gtest/src/gtest.cc|4591|0x3
+0|5|breakpad_unittests|testing::UnitTest::Run|/s/clank/src/out_arm/Release/../../testing/gtest/src/gtest.cc|2418|0x5
+0|6|breakpad_unittests|main|/s/clank/src/out_arm/Release/../../testing/gtest/include/gtest/gtest.h|2326|0x3
+0|7|libc.so||||0x11e9d

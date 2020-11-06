@@ -20,7 +20,7 @@
 #define MU_IO_PATH_H
 
 #include <QString>
-#include "framework/global/logstream.h"
+#include "framework/devtools/logger/logstream.h"
 
 namespace mu {
 namespace io {

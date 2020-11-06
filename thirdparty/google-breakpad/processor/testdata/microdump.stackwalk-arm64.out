@@ -1,0 +1,113 @@
+Operating system: Android
+                  OS 64 VERSION INFO
+CPU: arm64
+     2 CPUs
+
+GPU: UNKNOWN
+
+Crash reason:  
+Crash address: 0x0
+Process uptime: not available
+
+Thread 0 (crashed)
+ 0  breakpad_unittests!MicrodumpWriterTest_Setup_Test::TestBody [microdump_writer_unittest.cc : 77 + 0xc]
+     x0 = 0x0000000000000000    x1 = 0x0000000000000000
+     x2 = 0x0000000000000000    x3 = 0x0000000000000000
+     x4 = 0x0000000000000000    x5 = 0x0000000000000000
+     x6 = 0x0000000000000000    x7 = 0x0000000000000000
+     x8 = 0x0000000000000000    x9 = 0x0000000000000000
+    x10 = 0x0000000000000000   x11 = 0x0000000000000000
+    x12 = 0x0000000000000000   x13 = 0x0000000000000000
+    x14 = 0x0000000000000000   x15 = 0x0000000000000000
+    x16 = 0x0000000000000000   x17 = 0x0000000000000000
+    x18 = 0x0000000000000000   x19 = 0x0000007fe2ba6a50
+    x20 = 0x0000007fe2ba65e0   x21 = 0x0000007fe2ba61e0
+    x22 = 0x000000555f6b4000   x23 = 0x0000007fe2ba6280
+    x24 = 0x0000007fe2ba6250   x25 = 0x000000555f6b4c51
+    x26 = 0x0000000000000e91   x27 = 0x0000007fe2ba6220
+    x28 = 0x0000007fe2ba61f0    fp = 0x0000007fe2ba6120
+     lr = 0x000000555f636f6c    sp = 0x0000007fe2ba6120
+     pc = 0x000000555f636f6c
+    Found by: given as instruction pointer in context
+ 1  breakpad_unittests!testing::internal::HandleExceptionsInMethodIfSupported<testing::Test, void> [gtest.cc : 2418 + 0x4]
+    x19 = 0x00000055955022d0   x20 = 0x00000055954ee170
+    x21 = 0x00000055954ee170   x22 = 0x00000055954ee390
+    x23 = 0x00000149f6d1624a   x24 = 0x000000555f6df000
+    x25 = 0x0000000000000001   x26 = 0x00000149f6d16249
+    x27 = 0x0000000000000001   x28 = 0x000000555f6b35c9
+     fp = 0x0000007fe2ba7a50    sp = 0x0000007fe2ba7a50
+     pc = 0x000000555f66323c
+    Found by: call frame info
+ 2  breakpad_unittests!testing::Test::Run [gtest.cc : 2435 + 0x14]
+    x19 = 0x00000055955022d0   x20 = 0x00000055954ee170
+    x21 = 0x00000055954ee170   x22 = 0x00000055954ee390
+    x23 = 0x00000149f6d1624a   x24 = 0x000000555f6df000
+    x25 = 0x0000000000000001   x26 = 0x00000149f6d16249
+    x27 = 0x0000000000000001   x28 = 0x000000555f6b35c9
+     fp = 0x0000007fe2ba7a80    sp = 0x0000007fe2ba7a80
+     pc = 0x000000555f66448c
+    Found by: call frame info
+ 3  breakpad_unittests!testing::TestInfo::Run [gtest.cc : 2610 + 0x4]
+    x19 = 0x00000055954f3890   x20 = 0x00000055955022d0
+    x21 = 0x00000055954ee170   x22 = 0x00000055954ee390
+    x23 = 0x00000149f6d1624a   x24 = 0x000000555f6df000
+    x25 = 0x0000000000000001   x26 = 0x00000149f6d16249
+    x27 = 0x0000000000000001   x28 = 0x000000555f6b35c9
+     fp = 0x0000007fe2ba7aa0    sp = 0x0000007fe2ba7aa0
+     pc = 0x000000555f6645b8
+    Found by: call frame info
+ 4  breakpad_unittests!testing::TestCase::Run [gtest.cc : 2728 + 0x0]
+    x19 = 0x00000055954f39a0   x20 = 0x00000055954ee170
+    x21 = 0x00000055954ee390   x22 = 0x0000000000000001
+    x23 = 0x00000149f6d1624a   x24 = 0x000000555f6df000
+    x25 = 0x0000000000000001   x26 = 0x00000149f6d16249
+    x27 = 0x0000000000000001   x28 = 0x000000555f6b35c9
+     fp = 0x0000007fe2ba7ae0    sp = 0x0000007fe2ba7ae0
+     pc = 0x000000555f664674
+    Found by: call frame info
+ 5  breakpad_unittests!testing::internal::UnitTestImpl::RunAllTests [gtest.cc : 4591 + 0x0]
+    x19 = 0x00000055954ee170   x20 = 0x0000000000000000
+    x21 = 0x00000055954ee390   x22 = 0x0000000000000002
+    x23 = 0x0000000000000000   x24 = 0x000000555f6df000
+    x25 = 0x0000000000000001   x26 = 0x00000149f6d16249
+    x27 = 0x0000000000000001   x28 = 0x000000555f6b35c9
+     fp = 0x0000007fe2ba7b20    sp = 0x0000007fe2ba7b20
+     pc = 0x000000555f66494c
+    Found by: call frame info
+ 6  breakpad_unittests!testing::UnitTest::Run [gtest.cc : 2418 + 0x4]
+    x19 = 0x0000000000000000   x20 = 0x00000055954ee170
+    x21 = 0x0000000000000002   x22 = 0x000000555f62b360
+    x23 = 0x0000000000000000   x24 = 0x0000000000000000
+    x25 = 0x0000000000000000   x26 = 0x0000000000000000
+    x27 = 0x0000000000000000   x28 = 0x0000000000000000
+     fp = 0x0000007fe2ba7bc0    sp = 0x0000007fe2ba7bc0
+     pc = 0x000000555f664b68
+    Found by: call frame info
+ 7  breakpad_unittests!main [gtest.h : 2326 + 0x0]
+    x19 = 0x0000007fe2ba7c1c   x20 = 0x0000007fe2ba7c88
+    x21 = 0x0000000000000002   x22 = 0x000000555f62b360
+    x23 = 0x0000000000000000   x24 = 0x0000000000000000
+    x25 = 0x0000000000000000   x26 = 0x0000000000000000
+    x27 = 0x0000000000000000   x28 = 0x0000000000000000
+     fp = 0x0000007fe2ba7bf0    sp = 0x0000007fe2ba7bf0
+     pc = 0x000000555f62b398
+    Found by: call frame info
+ 8  libc.so + 0x17388
+    x19 = 0x0000007fe2ba7ca0   x20 = 0x0000007fe2ba7c88
+    x21 = 0x0000000000000002   x22 = 0x000000555f62b360
+    x23 = 0x0000000000000000   x24 = 0x0000000000000000
+    x25 = 0x0000000000000000   x26 = 0x0000000000000000
+    x27 = 0x0000000000000000   x28 = 0x0000000000000000
+     fp = 0x0000007fe2ba7c20    sp = 0x0000007fe2ba7c20
+     pc = 0x0000007f802ac38c
+    Found by: call frame info
+
+Loaded modules:
+0x555f608000 - 0x555f6c7fff  breakpad_unittests  ???
+0x7f801f6000 - 0x7f80208fff  libnetd_client.so  ???
+0x7f80229000 - 0x7f8023cfff  libstdc++.so  ???
+0x7f8023d000 - 0x7f80279fff  libm.so  ???
+0x7f8027b000 - 0x7f80293fff  liblog.so  ???
+0x7f80295000 - 0x7f80332fff  libc.so  ???  (WARNING: No symbols, libc.so, 479D5438753E27F019F2C9980DDBF4F30)
+0x7f80341000 - 0x7f80353fff  libsigchain.so  ???
+0x7f80358000 - 0x7f80359fff  linux-gate.so  ???

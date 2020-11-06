@@ -1,0 +1,48 @@
+MODULE Linux mips 8F36148CC4647A8116CAF2A25F591F570 crash_example
+FILE 0 /home/rtrk/chromium_mips/chromium/src/out-android-mips/Debug/../../breakpad/src/tools/linux/crash_example.cc
+FUNC 2ea4 b4 0 google_breakpad::MinidumpDescriptor::MinidumpDescriptor
+2ea4 20 75 6
+2ec4 40 78 6
+2f04 18 78 6
+2f1c 14 78 6
+2f30 18 78 6
+2f48 10 78 6
+FUNC 2f6c c4 0 DumpCallback
+2f6c 28 13 33
+2f94 28 14 33
+2fbc 1c 15 33
+2fd8 28 15 33
+3000 1c 17 33
+301c 4 18 33
+3020 10 19 33
+FUNC 3030 28 0 Leaf
+3030 4 21 33
+3034 c 22 33
+3040 c 23 33
+304c 4 25 33
+3050 8 26 33
+FUNC 3058 60 0 blaTest
+3058 1c 28 33
+3074 c 29 33
+3080 28 30 33
+30a8 10 31 33
+FUNC 30b8 48 0 Crash
+30b8 18 33 33
+30d0 4 34 33
+30d4 1c 35 33
+30f0 10 36 33
+FUNC 316c 120 0 main
+316c 24 40 33
+3190 c 40 33
+319c 20 41 33
+31bc 40 43 33
+31fc 18 44 33
+3214 4 45 33
+3218 1c 43 33
+3234 20 45 33
+3254 38 46 33
+PUBLIC 316c 0 main
+STACK CFI INIT 30b8 48 .cfa: $sp 39792944 + .ra: $ra
+STACK CFI 30c8 .cfa: $sp 40 +
+STACK CFI 30d0 .ra: .cfa -4 + ^
+STACK CFI 30f8 .cfa: $sp 0 + .ra: .ra
