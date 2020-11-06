@@ -9,6 +9,7 @@ set (WIDGETS_UI
     ${CMAKE_CURRENT_LIST_DIR}/editstafftype.ui
     ${CMAKE_CURRENT_LIST_DIR}/editstringdata.ui
     ${CMAKE_CURRENT_LIST_DIR}/editpitch.ui
+    ${CMAKE_CURRENT_LIST_DIR}/breaksdialog.ui
     )
 
 set(WIDGETS_SRC
@@ -30,4 +31,6 @@ set(WIDGETS_SRC
     ${CMAKE_CURRENT_LIST_DIR}/editstringdata.h
     ${CMAKE_CURRENT_LIST_DIR}/editpitch.cpp
     ${CMAKE_CURRENT_LIST_DIR}/editpitch.h
+    ${CMAKE_CURRENT_LIST_DIR}/breaksdialog.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/breaksdialog.h
     )

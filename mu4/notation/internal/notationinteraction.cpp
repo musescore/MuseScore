@@ -559,6 +559,13 @@ void NotationInteraction::select(Element* element, SelectType type, int staffInd
     m_selectionChanged.notify();
 }
 
+void NotationInteraction::selectAll()
+{
+    score()->cmdSelectAll();
+
+    m_selectionChanged.notify();
+}
+
 INotationSelectionPtr NotationInteraction::selection() const
 {
     return m_selection;
@@ -1905,4 +1912,16 @@ void NotationInteraction::deleteSelection()
     score()->cmdDeleteSelection();
 
     m_selectionChanged.notify();
+}
+
+void NotationInteraction::setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval)
+{
+    interval = intervalType == BreaksSpawnIntervalType::MeasuresInterval ? interval : 0;
+    bool afterEachSystem = intervalType == BreaksSpawnIntervalType::AfterEachSystem;
+
+    score()->startCmd();
+    score()->addRemoveBreaks(interval, afterEachSystem);
+    score()->endCmd();
+
+    m_notation->notifyAboutNotationChanged();
 }

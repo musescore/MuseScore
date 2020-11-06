@@ -5,13 +5,30 @@ import MuseScore.Ui 1.0
 Item {
     id: root
 
-    FlatButton {
-        width: 140
+    Column {
+        anchors.fill: parent
+        anchors.margins: 20
 
-        text: qsTrc("devtools", "Measure properties")
+        spacing: 20
 
-        onClicked: {
-            api.launcher.open("musescore://notation/measureproperties?index=0")
+        FlatButton {
+            width: 220
+
+            text: qsTrc("devtools", "Measure properties")
+
+            onClicked: {
+                api.launcher.open("musescore://notation/measureproperties?index=0")
+            }
+        }
+
+        FlatButton {
+            width: 220
+
+            text: qsTrc("devtools", "Add/Remove System Breaks")
+
+            onClicked: {
+                api.launcher.open("musescore://notation/breaks")
+            }
         }
     }
 }
