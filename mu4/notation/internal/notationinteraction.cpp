@@ -1938,6 +1938,46 @@ mu::async::Notification NotationInteraction::textEditingChanged() const
     return m_textEditingChanged;
 }
 
+void NotationInteraction::splitSelectedMeasure()
+{
+    Element* selectedElement = m_selection->element();
+    if (!selectedElement) {
+        return;
+    }
+
+    if (!selectedElement->isNote() && !selectedElement->isRest()) {
+        return;
+    }
+
+    if (selectedElement->isNote()) {
+        selectedElement = dynamic_cast<Note*>(selectedElement)->chord();
+    }
+
+    ChordRest* chordRest = dynamic_cast<ChordRest*>(selectedElement);
+
+    score()->startCmd();
+    score()->cmdSplitMeasure(chordRest);
+    score()->endCmd();
+
+    m_selectionChanged.notify();
+}
+
+void NotationInteraction::joinSelectedMeasures()
+{
+    if (!m_selection->isRange()) {
+        return;
+    }
+
+    Measure* measureStart = score()->crMeasure(m_selection->range()->startMeasureIndex() - 1);
+    Measure* measureEnd = score()->crMeasure(m_selection->range()->endMeasureIndex() - 1);
+
+    score()->startCmd();
+    score()->cmdJoinMeasure(measureStart, measureEnd);
+    score()->endCmd();
+
+    m_selectionChanged.notify();
+}
+
 void NotationInteraction::copySelection()
 {
     if (!selection()->canCopy()) {
