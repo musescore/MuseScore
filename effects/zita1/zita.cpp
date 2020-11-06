@@ -497,17 +497,23 @@ void ZitaReverb::process (int nfram, float* inp, float* out)
 
 void ZitaReverb::setNValue(int idx, double value)
       {
+      float fvalue = static_cast<float>(value);
+      if (!std::isnormal(fvalue)) {
+            fvalue = pd[idx].init;
+      }
+      fvalue = std::min(pd[idx].min, fvalue);
+      fvalue = std::max(pd[idx].max, fvalue);
       switch (idx) {
-            case R_DELAY: set_delay(value); break;
-            case R_XOVER: set_xover(value); break;
-            case R_RTLOW: set_rtlow(value); break;
-            case R_RTMID: set_rtmid(value); break;
-            case R_FDAMP: set_fdamp(value); break;
-            case R_EQ1FR: set_eq1fr(value); break;
-            case R_EQ1GN: set_eq1gn(value); break;
-            case R_EQ2FR: set_eq2fr(value); break;
-            case R_EQ2GN: set_eq2gn(value); break;
-            case R_OPMIX: set_opmix(value); break;
+            case R_DELAY: set_delay(fvalue); break;
+            case R_XOVER: set_xover(fvalue); break;
+            case R_RTLOW: set_rtlow(fvalue); break;
+            case R_RTMID: set_rtmid(fvalue); break;
+            case R_FDAMP: set_fdamp(fvalue); break;
+            case R_EQ1FR: set_eq1fr(fvalue); break;
+            case R_EQ1GN: set_eq1gn(fvalue); break;
+            case R_EQ2FR: set_eq2fr(fvalue); break;
+            case R_EQ2GN: set_eq2gn(fvalue); break;
+            case R_OPMIX: set_opmix(fvalue); break;
             }
       }
 
