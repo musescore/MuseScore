@@ -85,6 +85,13 @@ enum class MoveSelectionType
     Track
 };
 
+enum class BreaksSpawnIntervalType
+{
+    AfterEachSystem = -1,
+    None = 0,
+    MeasuresInterval
+};
+
 struct Meta {
     QString fileName;
     QString filePath;
