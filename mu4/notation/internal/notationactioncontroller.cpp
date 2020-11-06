@@ -49,7 +49,10 @@ void NotationActionController::init()
 
     dispatcher()->reg(this, "cut", this, &NotationActionController::cutSelection);
     dispatcher()->reg(this, "copy", this, &NotationActionController::copySelection);
-    dispatcher()->reg(this, "paste", this, &NotationActionController::pasteSelection);
+    dispatcher()->reg(this, "paste", [this]() { pasteSelection(PastingType::Default); });
+    dispatcher()->reg(this, "paste-half", [this]() { pasteSelection(PastingType::Half); });
+    dispatcher()->reg(this, "paste-double", [this]() { pasteSelection(PastingType::Double); });
+    dispatcher()->reg(this, "paste-special", [this]() { pasteSelection(PastingType::Special); });
     dispatcher()->reg(this, "delete", this, &NotationActionController::deleteSelection);
     dispatcher()->reg(this, "undo", this, &NotationActionController::undo);
     dispatcher()->reg(this, "redo", this, &NotationActionController::redo);
@@ -75,7 +78,7 @@ bool NotationActionController::canReceiveAction(const actions::ActionName&) cons
     return true;
 }
 
-std::shared_ptr<INotation> NotationActionController::currentNotation() const
+INotationPtr NotationActionController::currentNotation() const
 {
     return globalContext()->currentNotation();
 }
@@ -247,14 +250,38 @@ void NotationActionController::copySelection()
     interaction->copySelection();
 }
 
-void NotationActionController::pasteSelection()
+void NotationActionController::pasteSelection(PastingType type)
 {
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
     }
 
-    interaction->pasteSelection();
+    Fraction scale = resolvePastingScale(interaction, type);
+    interaction->pasteSelection(scale);
+}
+
+Fraction NotationActionController::resolvePastingScale(const INotationInteractionPtr& interaction, PastingType type) const
+{
+    const Fraction DEFAULT_SCALE(1, 1);
+
+    switch (type) {
+    case PastingType::Default: return DEFAULT_SCALE;
+    case PastingType::Half: return Fraction(1, 2);
+    case PastingType::Double: return Fraction(2, 1);
+    case PastingType::Special:
+        Fraction scale = DEFAULT_SCALE;
+        Fraction duration = interaction->inputState()->duration().fraction();
+
+        if (duration.isValid() && !duration.isZero()) {
+            scale = duration * 4;
+            scale.reduce();
+        }
+
+        return scale;
+    }
+
+    return DEFAULT_SCALE;
 }
 
 void NotationActionController::deleteSelection()

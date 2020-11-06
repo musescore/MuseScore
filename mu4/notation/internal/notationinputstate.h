@@ -19,32 +19,26 @@
 #ifndef MU_NOTATION_NOTATIONINPUTSTATE_H
 #define MU_NOTATION_NOTATIONINPUTSTATE_H
 
-#include <map>
 #include "../inotationinputstate.h"
-
 #include "igetscore.h"
 
 namespace Ms {
 class Score;
 }
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class NotationInputState : public INotationInputState
 {
 public:
-    NotationInputState(IGetScore* getScore);
+    NotationInputState(const IGetScore* getScore);
 
     bool isNoteEnterMode() const override;
-    DurationType duration() const override;
+    Duration duration() const override;
 
 private:
-
     Ms::Score* score() const;
-
-    IGetScore* m_getScore = nullptr;
+    const IGetScore* m_getScore = nullptr;
 };
-}
 }
 
 #endif // MU_NOTATION_NOTATIONINPUTSTATE_H
