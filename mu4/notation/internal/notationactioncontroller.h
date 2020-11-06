@@ -57,6 +57,7 @@ private:
     void redo();
     void openPageStyle();
     void openStaffProperties();
+    void openBreaksDialog();
 };
 }
 }
