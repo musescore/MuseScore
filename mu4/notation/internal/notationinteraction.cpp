@@ -1952,12 +1952,12 @@ void NotationInteraction::copySelection()
     QApplication::clipboard()->setMimeData(mimeData);
 }
 
-void NotationInteraction::pasteSelection()
+void NotationInteraction::pasteSelection(const Fraction& scale)
 {
     m_undoStack->prepareChanges();
 
     const QMimeData* ms = QApplication::clipboard()->mimeData();
-    score()->cmdPaste(ms, nullptr, Ms::Fraction(1, 1));
+    score()->cmdPaste(ms, nullptr, scale);
 
     m_undoStack->commitChanges();
 

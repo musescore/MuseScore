@@ -23,7 +23,7 @@
 
 using namespace mu::notation;
 
-NotationInputState::NotationInputState(IGetScore* getScore)
+NotationInputState::NotationInputState(const IGetScore* getScore)
     : m_getScore(getScore)
 {
 }
@@ -38,7 +38,7 @@ bool NotationInputState::isNoteEnterMode() const
     return score()->inputState().noteEntryMode();
 }
 
-DurationType NotationInputState::duration() const
+Duration NotationInputState::duration() const
 {
-    return score()->inputState().duration().type();
+    return score()->inputState().duration();
 }

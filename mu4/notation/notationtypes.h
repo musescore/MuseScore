@@ -42,6 +42,7 @@ using Element = Ms::Element;
 using ElementType = Ms::ElementType;
 using Measure = Ms::Measure;
 using DurationType = Ms::TDuration::DurationType;
+using Duration = Ms::TDuration;
 using SelectType = Ms::SelectType;
 using Pad = Ms::Pad;
 using ViewMode = Ms::LayoutMode;  // Accomodate inconsistent convention from v3
