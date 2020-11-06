@@ -124,6 +124,18 @@ const std::vector<Action> NotationActions::m_actions = {
            QT_TRANSLATE_NOOP("action", "Paste"),
            ShortcutContext::NotationActive
            ),
+    Action("paste-half",
+           QT_TRANSLATE_NOOP("action", "Paste Half Duration"),
+           ShortcutContext::NotationActive
+           ),
+    Action("paste-double",
+           QT_TRANSLATE_NOOP("action", "Paste Double Duration"),
+           ShortcutContext::NotationActive
+           ),
+    Action("paste-special",
+           QT_TRANSLATE_NOOP("action", "Paste Special"),
+           ShortcutContext::NotationActive
+           ),
     Action("swap",
            QT_TRANSLATE_NOOP("action", "Swap"),
            ShortcutContext::NotationActive

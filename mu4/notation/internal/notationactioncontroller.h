@@ -53,7 +53,6 @@ private:
 
     void cutSelection();
     void copySelection();
-    void pasteSelection();
     void deleteSelection();
     void undo();
     void redo();
@@ -65,6 +64,16 @@ private:
     void openScoreProperties();
     void openTransposeDialog();
     void openPartsDialog();
+
+    enum class PastingType {
+        Default,
+        Half,
+        Double,
+        Special
+    };
+
+    void pasteSelection(PastingType type);
+    Fraction resolvePastingScale(const INotationInteractionPtr& interaction, PastingType type) const;
 };
 }
 
