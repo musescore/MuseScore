@@ -272,8 +272,8 @@ int NotationSelectionRange::sectionElementsMinY(const NotationSelectionRange::Ra
 NotationSelectionRange::MeasureRange NotationSelectionRange::measureRange() const
 {
     const Ms::Selection& selection = score()->selection();
-    Measure* startMeasure;
-    Measure* endMeasure;
+    Measure* startMeasure = nullptr;
+    Measure* endMeasure = nullptr;
     selection.measureRange(&startMeasure, &endMeasure);
 
     MeasureRange range;

@@ -21,5 +21,6 @@
         <file>qml/MuseScore/NotationScene/NoteInputBarCustomiseDialog.qml</file>
         <file>qml/MuseScore/NotationScene/internal/NoteInputBarActionDelegate.qml</file>
         <file>qml/MuseScore/NotationScene/internal/NoteInputBarSeparatorDelegate.qml</file>
+        <file>qml/MuseScore/NotationScene/SelectMeasuresCountDialog.qml</file>
     </qresource>
 </RCC>

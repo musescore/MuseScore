@@ -60,9 +60,12 @@ private:
     void redo();
     void selectAll();
 
-
     void splitMeasure();
     void joinSelectedMeasures();
+    void insertMeasure();
+    void insertMeasures();
+    void appendMeasure();
+    void appendMeasures();
 
     void openPageStyle();
     void openStaffProperties();
@@ -80,6 +83,8 @@ private:
 
     void pasteSelection(PastingType type = PastingType::Default);
     Fraction resolvePastingScale(const INotationInteractionPtr& interaction, PastingType type) const;
+
+    int lastSelectedMeasureIndex() const;
 };
 }
 
