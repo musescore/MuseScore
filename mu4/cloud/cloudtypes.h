@@ -48,7 +48,36 @@ struct AccountInfo {
         return !userName.isEmpty();
     }
 };
-}
-}
+
+struct ScoreInfo {
+    int id = 0;
+    QString title;
+    QString description;
+    bool isPrivate = false;
+    QString license;
+    QStringList tags;
+    QString url;
+
+    bool operator==(const ScoreInfo& another) const
+    {
+        bool equals = true;
+
+        equals &= (id == another.id);
+        equals &= (description == another.description);
+        equals &= (isPrivate == another.isPrivate);
+        equals &= (license == another.license);
+        equals &= (tags == another.tags);
+        equals &= (url == another.url);
+
+        return equals;
+    }
+
+    bool isValid() const
+    {
+        return id > 0 && !title.isEmpty();
+    }
+};
+} // namespace cloud
+} // namespace mu
 
 #endif // MU_CLOUD_ACCOUNTTYPES_H

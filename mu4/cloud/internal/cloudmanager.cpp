@@ -178,7 +178,7 @@ QUrl ApiInfo::getUpdateScoreInfoUrl(const QString& scoreId, const QString& acces
 //---------------------------------------------------------
 
 CloudManager::CloudManager(QAction* uploadAudioMenuAction, QProgressDialog* progress, QObject* parent)
-    : QObject(parent), m_networkManager(new QNetworkAccessManager(this)),
+    : QObject(parent), m_networkManager(new QNetworkAccessManager(this)), m_asyncWait(new AsyncWait(this)),
     m_uploadAudioMenuAction(uploadAudioMenuAction),
     m_progressDialog(progress)
 {
@@ -605,6 +605,7 @@ void CloudManager::onGetUserReply(QNetworkReply* reply, int code, const QJsonObj
             m_accountInfo.avatarUrl = QUrl(user.value("avatar_url").toString());
             m_accountInfo.sheetmusicUrl = QUrl(profileUrl + "/sheetmusic");
 
+            qInfo() << "Logged in as" << user.value("name").toString();
             emit getUserSuccess();
         } else {
             emit getUserError(tr("Wrong response from the server"));
@@ -612,6 +613,24 @@ void CloudManager::onGetUserReply(QNetworkReply* reply, int code, const QJsonObj
     } else {
         emit getUserError(tr("Error while getting user info: %1").arg(getErrorString(reply, user)));
     }
+}
+
+//---------------------------------------------------------
+//   syncGetUser
+//---------------------------------------------------------
+
+bool CloudManager::syncGetUser()
+{
+    connect(this, &CloudManager::getUserSuccess, m_asyncWait, &AsyncWait::success);
+    connect(this, &CloudManager::getUserError, m_asyncWait, &AsyncWait::failure);
+    getUser();
+    bool success = (m_asyncWait->exec() == 0);
+    disconnect(this, &CloudManager::getUserSuccess, m_asyncWait, &AsyncWait::success);
+    disconnect(this, &CloudManager::getUserError, m_asyncWait, &AsyncWait::failure);
+    if (!success) {
+        qWarning() << m_asyncWait->errorMsg();
+    }
+    return success;
 }
 
 //---------------------------------------------------------
@@ -644,31 +663,58 @@ void CloudManager::getScoreInfo(int nid)
 
 void CloudManager::onGetScoreInfoReply(QNetworkReply* reply, int code, const QJsonObject& score)
 {
-    if (code == HTTP_OK) {
-        if (score.value("user") != QJsonValue::Undefined) {
-            QJsonObject user = score.value("user").toObject();
-            QString title = score.value("title").toString();
-            QString description = score.value("description").toString();
-            QString sharing = score.value("sharing").toString();
-            QString license = score.value("license").toString();
-            QString tags = score.value("tags").toString();
-            QString url = score.value("custom_url").toString();
-            if (user.value("uid") != QJsonValue::Undefined) {
-                int uid = user.value("uid").toString().toInt();
-                if (uid == m_accountInfo.id) {
-                    emit getScoreSuccess(title, description, (sharing == "private"), license, tags, url);
-                } else {
-                    emit getScoreError("");
-                }
-            } else {
-                emit getScoreError("");
-            }
-        } else {
-            emit getScoreError("");
-        }
-    } else {
+    if (code != HTTP_OK) {
         emit getScoreError(getErrorString(reply, score));
+        return;
     }
+
+    for (QString key : { "id", "title", "user" }) {
+        if (score.value(key) == QJsonValue::Undefined) {
+            emit getScoreError(tr("Score info response: score missing '%1'").arg(key));
+            return;
+        }
+    }
+
+    QJsonObject user = score.value("user").toObject();
+
+    if (user.value("uid") == QJsonValue::Undefined) {
+        emit getScoreError(tr("Score info response: user missing '%1'").arg("uid"));
+        return;
+    }
+
+    int uid = user.value("uid").toString().toInt();
+
+    if (uid != m_accountInfo.id) {
+        emit getScoreError(tr("Score belongs to another user"));
+    }
+
+    m_scoreInfo.id = score.value("id").toString().toInt();
+    m_scoreInfo.title = score.value("title").toString();
+    m_scoreInfo.description = score.value("description").toString();
+    m_scoreInfo.isPrivate = (score.value("sharing").toString() == "private");
+    m_scoreInfo.license = score.value("license").toString();
+    m_scoreInfo.tags = score.value("tags").toString().split(QRegularExpression("\\s*,\\s*"), Qt::SkipEmptyParts);
+    m_scoreInfo.url = score.value("custom_url").toString();
+
+    emit getScoreSuccess(m_scoreInfo);
+}
+
+//---------------------------------------------------------
+//   syncGetScoreInfo
+//---------------------------------------------------------
+
+bool CloudManager::syncGetScoreInfo(int nid)
+{
+    connect(this, &CloudManager::getScoreSuccess, m_asyncWait, &AsyncWait::success);
+    connect(this, &CloudManager::getScoreError, m_asyncWait, &AsyncWait::failure);
+    getScoreInfo(nid);
+    bool success = (m_asyncWait->exec() == 0);
+    disconnect(this, &CloudManager::getScoreSuccess, m_asyncWait, &AsyncWait::success);
+    disconnect(this, &CloudManager::getScoreError, m_asyncWait, &AsyncWait::failure);
+    if (!success) {
+        qWarning() << m_asyncWait->errorMsg();
+    }
+    return success;
 }
 
 //---------------------------------------------------------
@@ -861,6 +907,24 @@ void CloudManager::onUploadReply(QNetworkReply* reply, int code, const QJsonObje
     } else {
         emit uploadError(tr("Cannot upload: %1").arg(getErrorString(reply, obj)));
     }
+}
+
+//---------------------------------------------------------
+//   syncGetScoreInfo
+//---------------------------------------------------------
+
+bool CloudManager::syncUpload(const QString& path, int nid, const QString& title)
+{
+    connect(this, &CloudManager::uploadSuccess, m_asyncWait, &AsyncWait::success);
+    connect(this, &CloudManager::uploadError, m_asyncWait, &AsyncWait::failure);
+    upload(path, nid, title);
+    bool success = (m_asyncWait->exec() == 0);
+    disconnect(this, &CloudManager::uploadSuccess, m_asyncWait, &AsyncWait::success);
+    disconnect(this, &CloudManager::uploadError, m_asyncWait, &AsyncWait::failure);
+    if (!success) {
+        qWarning() << m_asyncWait->errorMsg();
+    }
+    return success;
 }
 
 //---------------------------------------------------------
