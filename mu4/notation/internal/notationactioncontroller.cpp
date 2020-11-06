@@ -21,6 +21,7 @@
 #include <QPoint>
 
 #include "log.h"
+#include "notationtypes.h"
 
 using namespace mu::notation;
 using namespace mu::actions;
@@ -78,6 +79,10 @@ void NotationActionController::init()
 
     dispatcher()->reg(this, "split-measure", this, &NotationActionController::splitMeasure);
     dispatcher()->reg(this, "join-measures", this, &NotationActionController::joinSelectedMeasures);
+    dispatcher()->reg(this, "insert-measure", this, &NotationActionController::insertMeasure);
+    dispatcher()->reg(this, "insert-measures", this, &NotationActionController::insertMeasures);
+    dispatcher()->reg(this, "append-measure", this, &NotationActionController::appendMeasure);
+    dispatcher()->reg(this, "append-measures", this, &NotationActionController::appendMeasures);
 
     dispatcher()->reg(this, "edit-style", this, &NotationActionController::openPageStyle);
     dispatcher()->reg(this, "staff-properties", this, &NotationActionController::openStaffProperties);
@@ -375,6 +380,68 @@ void NotationActionController::joinSelectedMeasures()
     interaction->joinSelectedMeasures();
 }
 
+void NotationActionController::insertMeasure()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    int lastSelectedMeasureIndex = this->lastSelectedMeasureIndex();
+
+    if (lastSelectedMeasureIndex == -1) {
+        return;
+    }
+
+    interaction->insertMeasures(lastSelectedMeasureIndex, 1);
+}
+
+void NotationActionController::insertMeasures()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    int lastSelectedMeasureIndex = this->lastSelectedMeasureIndex();
+
+    if (lastSelectedMeasureIndex == -1) {
+        return;
+    }
+
+    RetVal<Val> measureCount = interactive()->open("musescore://notation/selectmeasurescount?operation=insert");
+    if (!measureCount.ret) {
+        return;
+    }
+
+    interaction->insertMeasures(lastSelectedMeasureIndex, measureCount.val.toInt());
+}
+
+void NotationActionController::appendMeasure()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->appendMeasures(1);
+}
+
+void NotationActionController::appendMeasures()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    RetVal<Val> measureCount = interactive()->open("musescore://notation/selectcountmeasures?operation=append");
+    if (!measureCount.ret) {
+        return;
+    }
+
+    interaction->appendMeasures(measureCount.val.toInt());
+}
+
 void NotationActionController::openPageStyle()
 {
     interactive()->open("musescore://notation/style");
@@ -409,4 +476,22 @@ void NotationActionController::openTransposeDialog()
 void NotationActionController::openPartsDialog()
 {
     interactive()->open("musescore://notation/parts");
+}
+
+int NotationActionController::lastSelectedMeasureIndex() const
+{
+    int result = -1;
+
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return result;
+    }
+
+    if (interaction->selection()->isRange()) {
+        result = interaction->selection()->range()->endMeasureIndex();
+    } else {
+        result = interaction->selection()->element()->findMeasure()->index();
+    }
+
+    return result;
 }

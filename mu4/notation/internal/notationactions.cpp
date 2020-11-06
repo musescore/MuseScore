@@ -219,6 +219,22 @@ const ActionList NotationActions::m_actions = {
     Action("join-measures",
            QT_TRANSLATE_NOOP("action", "Join Selected Measures"),
            ShortcutContext::NotationActive
+           ),
+    Action("insert-measure",
+           QT_TRANSLATE_NOOP("action", "Insert Measure"),
+           ShortcutContext::NotationActive
+           ),
+    Action("insert-measures",
+           QT_TRANSLATE_NOOP("action", "Insert Measures"),
+           ShortcutContext::NotationActive
+           ),
+    Action("append-measure",
+           QT_TRANSLATE_NOOP("action", "Append Measure"),
+           ShortcutContext::NotationActive
+           ),
+    Action("append-measures",
+           QT_TRANSLATE_NOOP("action", "Append Measures"),
+           ShortcutContext::NotationActive
            )
 };
 
