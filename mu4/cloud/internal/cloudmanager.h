@@ -22,6 +22,7 @@
 
 namespace Ms {
 class ApiRequest;
+class AsyncWait;
 
 //---------------------------------------------------------
 //   LoginManager
@@ -54,6 +55,7 @@ class CloudManager : public QObject
     QString m_refreshToken;
 
     mu::cloud::AccountInfo m_accountInfo;
+    mu::cloud::ScoreInfo m_scoreInfo;
 
     QString m_updateScoreDataPath;
 
@@ -62,6 +64,7 @@ class CloudManager : public QObject
     int m_uploadTryCount = 0;
 
     QProgressDialog* m_progressDialog = nullptr;
+    AsyncWait* m_asyncWait = nullptr;
 
     void onReplyFinished(ApiRequest*, RequestType);
     void handleReply(QNetworkReply*, RequestType);
@@ -88,8 +91,7 @@ signals:
     void getUserError(const QString& error);
     void getUserSuccess();
     void getScoreError(const QString& error);
-    void getScoreSuccess(const QString& title, const QString& description, bool priv, const QString& license,const QString& tags,
-                         const QString& url);
+    void getScoreSuccess(const mu::cloud::ScoreInfo& scoreInfo);
     void uploadError(const QString& error);
     void uploadSuccess(const QString& url, const QString& nid, const QString& vid);
     void tryLoginSuccess();
@@ -124,7 +126,13 @@ public:
     void getScoreInfo(int nid);
     void getMediaUrl(const QString& nid, const QString& vid, const QString& format);
 
+    // Synchronous methods
+    bool syncGetUser();
+    bool syncGetScoreInfo(int nid);
+    bool syncUpload(const QString& path, int nid, const QString& title);
+
     mu::cloud::AccountInfo accountInfo() const { return m_accountInfo; }
+    mu::cloud::ScoreInfo scoreInfo() const { return m_scoreInfo; }
 };
 }
 

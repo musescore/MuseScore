@@ -215,6 +215,7 @@ bool noWebView = false;
 bool exportScoreParts = false;
 bool saveScoreParts = false;
 bool ignoreWarnings = false;
+bool cliSaveOnline = false;
 bool exportScoreMedia = false;
 bool exportScoreMeta = false;
 bool exportScoreMp3 = false;
@@ -2099,7 +2100,11 @@ MuseScore::MuseScore()
     if (!converterMode && !pluginMode) {
         _progressDialog = new QProgressDialog(this);
         _loginManager = new CloudManager(getAction(saveOnlineMenuItem), _progressDialog, this);
-        _loginManager->init();
+        const bool initSuccess = _loginManager->init();
+
+        if (cliSaveOnline && !initSuccess) {
+            qFatal(qUtf8Printable(tr("No login creditials stored. Please sign-in via the GUI.")));
+        }
 
         connect(_loginManager, &CloudManager::loginDialogRequested, this, &MuseScore::showLoginDialog);
     }
@@ -4127,6 +4132,10 @@ static bool doProcessJob(QString jsonFile)
 
 static bool processNonGui(const QStringList& argv)
 {
+    if (cliSaveOnline) {
+        return mscore->saveOnline(argv);
+    }
+
     if (exportScoreMedia) {
         return mscore->exportAllMediaFiles(argv[0], highlightConfigPath);
     }
@@ -8091,6 +8100,7 @@ MuseScoreApplication::CommandLineParseResult MuseScoreApplication::parseCommandL
     parser.addOption(QCommandLineOption({ "E", "install-extension" },
                                         "Install an extension, load soundfont as default unless -e is passed too",
                                         "extension file"));
+    parser.addOption(QCommandLineOption("save-online", "Upload score(s) to their source URL. Replaces existing online score(s)."));
     parser.addOption(QCommandLineOption("score-media",
                                         "Export all media (excepting mp3) for a given score in a single JSON file and print it to stdout"));
     parser.addOption(QCommandLineOption("highlight-config", "Set highlight to svg, generated from a given score", "highlight-config"));
@@ -8255,6 +8265,15 @@ MuseScoreApplication::CommandLineParseResult MuseScoreApplication::parseCommandL
         } else {
             fprintf(stderr, "MP3 bitrate value '%s' not recognized, using default setting from preferences instead.\n", qPrintable(
                         temp));
+        }
+    }
+
+    if (parser.isSet("save-online")) {
+        cliSaveOnline = true;
+        MScore::noGui = true;
+
+        if (parser.positionalArguments().isEmpty()) {
+            qFatal("Must specify at least one score to save online.");
         }
     }
 
@@ -8981,7 +9000,7 @@ bool MuseScore::exportPartsPdfsToJSON(const QString& inFilePath, const QString& 
     jsonForPdfs["scoreFullBin"] = QString::fromLatin1(fullScoreData.toBase64());
 
     QJsonDocument jsonDoc(jsonForPdfs);
-    const QString& jsonPath{ outFilePath };
+    const QString& jsonPath { outFilePath };
     QFile file(jsonPath);
     res &= file.open(QIODevice::WriteOnly);
     if (res) {
