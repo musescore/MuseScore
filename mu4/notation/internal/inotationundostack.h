@@ -22,8 +22,7 @@
 
 #include "async/notification.h"
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class INotationUndoStack
 {
 public:
@@ -43,7 +42,6 @@ public:
 };
 
 using INotationUndoStackPtr = std::shared_ptr<INotationUndoStack>;
-}
 }
 
 #endif // MU_SCENE_NOTATION_INOTATIONUNDOSTACK_H

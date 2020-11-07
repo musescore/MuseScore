@@ -80,8 +80,7 @@ Notation::Notation(Score* score)
     m_scoreGlobal = new MScore(); //! TODO May be static?
     m_opened.val = false;
 
-    m_undoStack = std::make_shared<NotationUndoStack>(this);
-
+    m_undoStack = std::make_shared<NotationUndoStack>(this, m_notationChanged);
     m_interaction = std::make_shared<NotationInteraction>(this, m_undoStack);
     m_playback = std::make_shared<NotationPlayback>(this);
     m_midiInput = std::make_shared<NotationMidiInput>(this, m_undoStack);
