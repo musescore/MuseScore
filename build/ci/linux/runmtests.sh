@@ -5,7 +5,7 @@ trap 'echo Run tests failed; exit 1' ERR
 
 df -h .
 
-. ./../musescore_environment.sh
+source ./../musescore_environment.sh
 
 cd build.debug/mtest
 

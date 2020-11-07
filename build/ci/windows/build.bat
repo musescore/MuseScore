@@ -64,9 +64,8 @@ SET "PATH=%QT_DIR%\msvc2019_64\bin;%JACK_DIR%;%PATH%"
 @REM )
 
 :: Undefined CRASH_LOG_SERVER_URL if is it empty
-@REM IF %CRASH_LOG_SERVER_URL% == "" ( SET CRASH_LOG_SERVER_URL=)
-@REM IF %CRASH_LOG_SERVER_URL% == "''" ( SET CRASH_LOG_SERVER_URL=)
-SET CRASH_LOG_SERVER_URL="ggg"
+IF %CRASH_LOG_SERVER_URL% == "" ( SET CRASH_LOG_SERVER_URL=)
+IF %CRASH_LOG_SERVER_URL% == "''" ( SET CRASH_LOG_SERVER_URL=)
 
 :: At the moment not compiling yet.
 SET BUILD_VST=OFF 
@@ -81,6 +80,5 @@ CALL msvc_build.bat installrelwithdebinfo %TARGET_PROCESSOR_BITS% %BUILD_NUMBER%
 
 bash ./build/ci/tools/make_release_channel_env.sh -c %MUSESCORE_BUILD_CONFIG%
 bash ./build/ci/tools/make_version_env.sh %BUILD_NUMBER%
-bash ./build/ci/tools/make_revision_env.sh %MUSESCORE_REVISION%
 bash ./build/ci/tools/make_branch_env.sh
 bash ./build/ci/tools/make_datetime_env.sh
