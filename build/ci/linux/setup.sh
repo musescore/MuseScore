@@ -41,6 +41,7 @@ apt_packages_standard=(
   libasound2-dev 
   libfontconfig1-dev
   libfreetype6-dev
+  libfreetype6
   libgl1-mesa-dev
   libjack-dev
   libmp3lame-dev
@@ -68,6 +69,7 @@ apt_packages_runtime=(
   libxkbcommon-x11-0
   libxrandr2
   libxtst-dev
+  libdrm-dev
   libxcb-icccm4
   libxcb-image0
   libxcb-keysyms1

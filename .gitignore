@@ -28,6 +28,7 @@ DocLib
 build.qt5
 *.sfd~
 /.project
+mscore/revision.h
 .DS_Store
 CMakeLists.txt.user.*
 *.qmlc
