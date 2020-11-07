@@ -35,7 +35,7 @@ using namespace mu::instruments;
 static const Ms::Fraction DEFAULT_TICK = Ms::Fraction(0, 1);
 
 NotationParts::NotationParts(IGetScore* getScore, Notification selectionChangedNotification, INotationUndoStackPtr undoStack)
-    : m_getScore(getScore), m_partsNotifier(new ChangedNotifier<const Part*>()), m_undoStack(undoStack)
+    : m_getScore(getScore), m_undoStack(undoStack), m_partsNotifier(new ChangedNotifier<const Part*>())
 {
     selectionChangedNotification.onNotify(this, [this]() {
         updateCanChangeInstrumentsVisibility();

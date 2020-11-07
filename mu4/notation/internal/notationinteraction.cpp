@@ -1909,7 +1909,9 @@ mu::async::Notification NotationInteraction::textEditingChanged() const
 
 void NotationInteraction::deleteSelection()
 {
+    m_undoStack->prepareChanges();
     score()->cmdDeleteSelection();
+    m_undoStack->commitChanges();
 
     m_selectionChanged.notify();
 }
@@ -1928,12 +1930,12 @@ void NotationInteraction::setBreaksSpawnInterval(BreaksSpawnIntervalType interva
 
 void NotationInteraction::transpose(const TransposeOptions& options)
 {
-    score()->startCmd();
+    m_undoStack->prepareChanges();
 
     score()->transpose(options.mode, options.direction, options.key, options.interval,
                        options.needTransposeKeys, options.needTransposeChordNames, options.needTransposeDoubleSharpsFlats);
 
-    score()->endCmd();
+    m_undoStack->commitChanges();
 
     m_notation->notifyAboutNotationChanged();
 }

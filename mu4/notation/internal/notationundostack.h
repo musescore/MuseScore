@@ -23,12 +23,17 @@
 #include "inotationundostack.h"
 #include "igetscore.h"
 
-namespace mu {
-namespace notation {
+namespace Ms {
+class Score;
+class MasterScore;
+class UndoStack;
+}
+
+namespace mu::notation {
 class NotationUndoStack : public INotationUndoStack
 {
 public:
-    NotationUndoStack(IGetScore* getScore);
+    NotationUndoStack(IGetScore* getScore, async::Notification notationChanged);
 
     bool canUndo() const override;
     void undo() override;
@@ -43,14 +48,20 @@ public:
     async::Notification stackChanged() const override;
 
 private:
+    void notifyAboutNotationChanged();
     void notifyAboutStackStateChanged();
 
     bool isStackClean() const;
 
+    Ms::Score* score() const;
+    Ms::MasterScore* masterScore() const;
+    Ms::UndoStack* undoStack() const;
+
     IGetScore* m_getScore = nullptr;
+
+    async::Notification m_notationChanged;
     async::Notification m_stackStateChanged;
 };
-}
 }
 
 #endif // MU_NOTATION_UNDOSTACK
