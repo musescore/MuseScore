@@ -626,6 +626,7 @@ bool loadInstrumentTemplates(const QString& instrTemplates)
             }
         }
     }
+
     return true;
 }
 
