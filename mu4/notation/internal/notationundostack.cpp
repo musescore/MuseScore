@@ -20,73 +20,80 @@
 #include "notationundostack.h"
 
 #include "log.h"
+
 #include "libmscore/score.h"
 #include "libmscore/undo.h"
 
 using namespace mu::notation;
+using namespace mu::async;
 
-NotationUndoStack::NotationUndoStack(IGetScore* getScore)
-    : m_getScore(getScore)
+NotationUndoStack::NotationUndoStack(IGetScore* getScore, Notification notationChanged)
+    : m_getScore(getScore), m_notationChanged(notationChanged)
 {
 }
 
 bool NotationUndoStack::canUndo() const
 {
-    IF_ASSERT_FAILED(m_getScore && m_getScore->score()) {
+    IF_ASSERT_FAILED(undoStack()) {
         return false;
     }
 
-    return m_getScore->score()->undoStack()->canUndo();
+    return undoStack()->canUndo();
 }
 
 void NotationUndoStack::undo()
 {
-    IF_ASSERT_FAILED(m_getScore && m_getScore->score()) {
+    IF_ASSERT_FAILED(score()) {
         return;
     }
 
-    m_getScore->score()->undoRedo(true, nullptr);
-    m_getScore->score()->masterScore()->setSaved(isStackClean());
+    score()->undoRedo(true, nullptr);
+    masterScore()->setSaved(isStackClean());
+
+    notifyAboutNotationChanged();
     notifyAboutStackStateChanged();
 }
 
 bool NotationUndoStack::canRedo() const
 {
-    IF_ASSERT_FAILED(m_getScore && m_getScore->score()) {
+    IF_ASSERT_FAILED(undoStack()) {
         return false;
     }
 
-    return m_getScore->score()->undoStack()->canRedo();
+    return undoStack()->canRedo();
 }
 
 void NotationUndoStack::redo()
 {
-    IF_ASSERT_FAILED(m_getScore && m_getScore->score()) {
+    IF_ASSERT_FAILED(score()) {
         return;
     }
 
-    m_getScore->score()->undoRedo(false, nullptr);
-    m_getScore->score()->masterScore()->setSaved(isStackClean());
+    score()->undoRedo(false, nullptr);
+    masterScore()->setSaved(isStackClean());
+
+    notifyAboutNotationChanged();
     notifyAboutStackStateChanged();
 }
 
 void NotationUndoStack::prepareChanges()
 {
-    IF_ASSERT_FAILED(m_getScore && m_getScore->score()) {
+    IF_ASSERT_FAILED(score()) {
         return;
     }
 
-    m_getScore->score()->startCmd();
+    score()->startCmd();
 }
 
 void NotationUndoStack::rollbackChanges()
 {
-    IF_ASSERT_FAILED(m_getScore && m_getScore->score()) {
+    IF_ASSERT_FAILED(score()) {
         return;
     }
 
-    m_getScore->score()->endCmd(false, true);
-    m_getScore->score()->masterScore()->setSaved(isStackClean());
+    score()->endCmd(false, true);
+    masterScore()->setSaved(isStackClean());
+
     notifyAboutStackStateChanged();
 }
 
@@ -96,14 +103,35 @@ void NotationUndoStack::commitChanges()
         return;
     }
 
-    m_getScore->score()->endCmd();
-    m_getScore->score()->masterScore()->setSaved(isStackClean());
+    score()->endCmd();
+    masterScore()->setSaved(isStackClean());
+
     notifyAboutStackStateChanged();
 }
 
 mu::async::Notification NotationUndoStack::stackChanged() const
 {
     return m_stackStateChanged;
+}
+
+Ms::Score* NotationUndoStack::score() const
+{
+    return m_getScore->score();
+}
+
+Ms::MasterScore* NotationUndoStack::masterScore() const
+{
+    return score() ? score()->masterScore() : nullptr;
+}
+
+Ms::UndoStack* NotationUndoStack::undoStack() const
+{
+    return score() ? score()->undoStack() : nullptr;
+}
+
+void NotationUndoStack::notifyAboutNotationChanged()
+{
+    m_notationChanged.notify();
 }
 
 void NotationUndoStack::notifyAboutStackStateChanged()
@@ -113,9 +141,9 @@ void NotationUndoStack::notifyAboutStackStateChanged()
 
 bool NotationUndoStack::isStackClean() const
 {
-    IF_ASSERT_FAILED(m_getScore && m_getScore->score()) {
-        return true;
+    IF_ASSERT_FAILED(undoStack()) {
+        return false;
     }
 
-    return m_getScore->score()->undoStack()->isClean();
+    return undoStack()->isClean();
 }

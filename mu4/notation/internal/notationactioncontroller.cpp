@@ -228,7 +228,6 @@ void NotationActionController::undo()
     }
 
     notation->undoStack()->undo();
-    notation->notationChanged().notify();
 }
 
 void NotationActionController::redo()
@@ -239,7 +238,6 @@ void NotationActionController::redo()
     }
 
     notation->undoStack()->redo();
-    notation->notationChanged().notify();
 }
 
 void NotationActionController::selectAll()
