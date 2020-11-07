@@ -60,6 +60,7 @@ class XmlWriter;
 class ZoomBox;
 class NewWizard;
 class ExcerptsDialog;
+class ExportDialog;
 class SynthControl;
 class PianorollEditor;
 class DrumrollEditor;
@@ -287,6 +288,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QMenu* menuDebug;
 #endif
       AlbumManager* albumManager           { 0 };
+      ExportDialog* exportDialog           { 0 };
 
       QWidget* _searchDialog               { 0 };
       QComboBox* searchCombo;
@@ -450,6 +452,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void removeSessionFile();
       void editChordStyle();
       void startExcerptsDialog();
+      void showExportDialog(const QString& type = "");
       void initOsc();
       void editRaster();
       void showPianoKeyboard(bool);
