@@ -167,6 +167,10 @@ const std::vector<Action> NotationActions::m_actions = {
            QT_TRANSLATE_NOOP("action", "Add/remove system breaks"),
            ShortcutContext::NotationActive
            ),
+    Action("edit-info",
+           QT_TRANSLATE_NOOP("action", "Score Properties"),
+           ShortcutContext::NotationActive
+           ),
     Action("undo",
            QT_TRANSLATE_NOOP("action", "Undo"),
            ShortcutContext::NotationActive
