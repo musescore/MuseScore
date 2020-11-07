@@ -128,6 +128,10 @@ const std::vector<Action> NotationActions::m_actions = {
            QT_TRANSLATE_NOOP("action", "Swap"),
            ShortcutContext::NotationActive
            ),
+    Action("select-all",
+           QT_TRANSLATE_NOOP("action", "Select All"),
+           ShortcutContext::NotationActive
+           ),
     Action("delete",
            QT_TRANSLATE_NOOP("action", "Delete"),
            ShortcutContext::NotationActive,
@@ -142,6 +146,10 @@ const std::vector<Action> NotationActions::m_actions = {
            ),
     Action("load-style",
            QT_TRANSLATE_NOOP("action", "Load Style"),
+           ShortcutContext::NotationActive
+           ),
+    Action("transpose",
+           QT_TRANSLATE_NOOP("action", "Transpose"),
            ShortcutContext::NotationActive
            ),
     Action("view-mode-page",

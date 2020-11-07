@@ -21,7 +21,6 @@
 
 #include "framework/global/widgetstatestore.h"
 
-using namespace Ms;
 using namespace mu::notation;
 
 //---------------------------------------------------------
@@ -223,4 +222,43 @@ Key TransposeDialog::firstPitchedStaffKey() const
     }
 
     return key;
+}
+
+void TransposeDialog::setEnableTransposeKeys(bool val)
+{
+    transposeKeys->setEnabled(val);
+}
+
+bool TransposeDialog::getTransposeKeys() const
+{
+    return chromaticBox->isChecked()
+           ? transposeKeys->isChecked()
+           : keepDegreeAlterations->isChecked();
+}
+
+bool TransposeDialog::getTransposeChordNames() const
+{
+    return transposeChordNames->isChecked();
+}
+
+Key TransposeDialog::transposeKey() const
+{
+    return Key(keyList->currentIndex() - 7);
+}
+
+int TransposeDialog::transposeInterval() const
+{
+    return chromaticBox->isChecked()
+           ? intervalList->currentIndex()
+           : degreeList->currentIndex() + 1;
+}
+
+void TransposeDialog::setKey(Key k)
+{
+    keyList->setCurrentIndex(int(k) + 7);
+}
+
+bool TransposeDialog::useDoubleSharpsFlats() const
+{
+    return accidentalOptions->currentIndex() == 1;
 }
