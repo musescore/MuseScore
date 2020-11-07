@@ -53,12 +53,12 @@ FocusScope {
                     contextMenu.addMenuItem(action)
                 }
 
-                contextMenu.popup(pos.x, pos.y)
+                contextMenu.popup()
             }
-        }
 
-        ContextMenu {
-            id: contextMenu
+            ContextMenu {
+                id: contextMenu
+            }
         }
 
         SearchPopup {
