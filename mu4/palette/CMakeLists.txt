@@ -43,6 +43,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/paletteconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/paletteworkspacesetup.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/paletteworkspacesetup.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/paletteactions.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/paletteactions.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/paletteactionscontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/paletteactionscontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/view/paletterootmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/paletterootmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/palettepropertiesmodel.h

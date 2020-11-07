@@ -78,7 +78,8 @@ Item {
             text: "Master palette"
 
             onClicked: {
-                //! NOTE: important to launch master palette with sync = false
+                //! NOTE: it is important to launch master palette with sync = false
+                // for an ability to use drag & drop from this dialog
                 api.launcher.open("musescore://palette/masterpalette?sync=false")
             }
         }

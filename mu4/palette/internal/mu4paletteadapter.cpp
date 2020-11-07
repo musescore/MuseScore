@@ -53,7 +53,8 @@ QString MU4PaletteAdapter::actionHelp(const char* id) const
 void MU4PaletteAdapter::showMasterPalette(const QString& arg)
 {
     Q_UNUSED(arg);
-    NOT_IMPLEMENTED;
+
+    interactive()->open("musescore://palette/masterpalette?sync=false");
 }
 
 bool MU4PaletteAdapter::isSelected() const
