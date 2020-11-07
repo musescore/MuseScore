@@ -1039,6 +1039,15 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
                     // perform the drop
                     target->drop(ddata);
 
+                    TDuration durationType(duration);
+                    if (target->isChordRest()) {
+                        ChordRest* targetCR = dynamic_cast<ChordRest*>(target);
+                        score()->changeCRlen(targetCR, durationType);
+                    } else if (target->isNote()) {
+                        ChordRest* targetCR = dynamic_cast<Note*>(target)->chord();
+                        score()->changeCRlen(targetCR, durationType);
+                    }
+
                     // if the target is a rest rather than a note,
                     // a new note is generated, and nel becomes invalid as well
                     // (ChordRest::drop() will select it for us)
