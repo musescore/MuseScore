@@ -21,7 +21,6 @@
 #define MU_NOTATION_TRANSPOSEDIALOG_H
 
 #include "ui_transposedialog.h"
-#include "libmscore/mscore.h"
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
@@ -58,30 +57,17 @@ private:
     INotationInteractionPtr interaction() const;
 
     Key firstPitchedStaffKey() const;
-
-    void setEnableTransposeKeys(bool val) { transposeKeys->setEnabled(val); }
+    void setEnableTransposeKeys(bool val);
     void setEnableTransposeToKey(bool val);
     void setEnableTransposeChordNames(bool val);
-    bool getTransposeKeys() const
-    {
-        return chromaticBox->isChecked()
-               ? transposeKeys->isChecked()
-               : keepDegreeAlterations->isChecked();
-    }
-
-    bool getTransposeChordNames() const { return transposeChordNames->isChecked(); }
-    Key transposeKey() const { return Key(keyList->currentIndex() - 7); }
-    int transposeInterval() const
-    {
-        return chromaticBox->isChecked()
-               ? intervalList->currentIndex()
-               : degreeList->currentIndex() + 1;
-    }
-
-    Ms::TransposeDirection direction() const;
-    Ms::TransposeMode mode() const;
-    void setKey(Key k) { keyList->setCurrentIndex(int(k) + 7); }
-    bool useDoubleSharpsFlats() const { return accidentalOptions->currentIndex() == 1; }
+    bool getTransposeKeys() const;
+    bool getTransposeChordNames() const;
+    Key transposeKey() const;
+    int transposeInterval() const;
+    TransposeDirection direction() const;
+    TransposeMode mode() const;
+    void setKey(Key k);
+    bool useDoubleSharpsFlats() const;
 
     bool m_allSelected = false;
 };

@@ -55,10 +55,13 @@ private:
     void deleteSelection();
     void undo();
     void redo();
+    void selectAll();
+
     void openPageStyle();
     void openStaffProperties();
     void openBreaksDialog();
     void openScoreProperties();
+    void openTransposeDialog();
 };
 }
 }
