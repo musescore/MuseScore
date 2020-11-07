@@ -54,6 +54,7 @@ void NotationActionController::init()
     dispatcher()->reg(this, "edit-style", this, &NotationActionController::openPageStyle);
     dispatcher()->reg(this, "staff-properties", this, &NotationActionController::openStaffProperties);
     dispatcher()->reg(this, "add-remove-breaks", this, &NotationActionController::openBreaksDialog);
+    dispatcher()->reg(this, "edit-info", this, &NotationActionController::openScoreProperties);
 }
 
 bool NotationActionController::canReceiveAction(const actions::ActionName&) const
@@ -258,4 +259,9 @@ void NotationActionController::openStaffProperties()
 void NotationActionController::openBreaksDialog()
 {
     interactive()->open("musescore://notation/breaks");
+}
+
+void NotationActionController::openScoreProperties()
+{
+    interactive()->open("musescore://notation/properties");
 }

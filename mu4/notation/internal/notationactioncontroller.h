@@ -58,6 +58,7 @@ private:
     void openPageStyle();
     void openStaffProperties();
     void openBreaksDialog();
+    void openScoreProperties();
 };
 }
 }
