@@ -50,11 +50,13 @@ void NotationActionController::init()
     dispatcher()->reg(this, "delete", this, &NotationActionController::deleteSelection);
     dispatcher()->reg(this, "undo", this, &NotationActionController::undo);
     dispatcher()->reg(this, "redo", this, &NotationActionController::redo);
+    dispatcher()->reg(this, "select-all", this, &NotationActionController::selectAll);
 
     dispatcher()->reg(this, "edit-style", this, &NotationActionController::openPageStyle);
     dispatcher()->reg(this, "staff-properties", this, &NotationActionController::openStaffProperties);
     dispatcher()->reg(this, "add-remove-breaks", this, &NotationActionController::openBreaksDialog);
     dispatcher()->reg(this, "edit-info", this, &NotationActionController::openScoreProperties);
+    dispatcher()->reg(this, "transpose", this, &NotationActionController::openTransposeDialog);
 }
 
 bool NotationActionController::canReceiveAction(const actions::ActionName&) const
@@ -240,6 +242,16 @@ void NotationActionController::redo()
     notation->notationChanged().notify();
 }
 
+void NotationActionController::selectAll()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->selectAll();
+}
+
 void NotationActionController::openPageStyle()
 {
     interactive()->open("musescore://notation/style");
@@ -264,4 +276,9 @@ void NotationActionController::openBreaksDialog()
 void NotationActionController::openScoreProperties()
 {
     interactive()->open("musescore://notation/properties");
+}
+
+void NotationActionController::openTransposeDialog()
+{
+    interactive()->open("musescore://notation/transpose");
 }
