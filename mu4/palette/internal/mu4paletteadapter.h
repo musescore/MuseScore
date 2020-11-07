@@ -24,11 +24,13 @@
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
+#include "iinteractive.h"
 
 namespace mu::palette {
 class MU4PaletteAdapter : public IPaletteAdapter
 {
     INJECT(palette, context::IGlobalContext, globalContext)
+    INJECT(palette, framework::IInteractive, interactive)
 
 public:
     MU4PaletteAdapter();
