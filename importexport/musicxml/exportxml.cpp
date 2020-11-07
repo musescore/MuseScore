@@ -2253,10 +2253,13 @@ static void tupletStop(const Tuplet* const t, const int number, Notations& notat
 //   tupletStartStop
 //---------------------------------------------------------
 
-static void tupletStartStop(const ChordRest* const cr, Notations& notations, XmlWriter& xml)
+static void tupletStartStop(ChordRest* cr, Notations& notations, XmlWriter& xml)
       {
       const auto nesting = tupletNesting(cr);
-      const bool doActualAndNormal = (nesting > 1);
+      bool doActualAndNormal = (nesting > 1);
+      if (cr->isChord() && isTwoNoteTremolo(toChord(cr))) {
+            doActualAndNormal = true;
+            }
       for (int level = nesting - 1; level >= 0; --level) {
             const auto startTuplet = startTupletAtLevel(cr, level + 1);
             if (startTuplet)
