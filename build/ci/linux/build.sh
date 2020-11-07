@@ -46,9 +46,8 @@ echo "BUILD_UI_MU4: $BUILD_UI_MU4"
 
 echo "=== ENVIRONMENT === "
 
-ENV_FILE=./../musescore_environment.sh
-cat ${ENV_FILE}
-. ${ENV_FILE}
+cat ./../musescore_environment.sh
+source ./../musescore_environment.sh
 
 echo " "
 ${CXX} --version 
@@ -68,7 +67,7 @@ echo "=== BUILD ==="
 
 MUSESCORE_REVISION=$(git rev-parse --short=7 HEAD)
 
-make CPUS=2 \
+make CPUS=2 $OPTIONS \
     MUSESCORE_BUILD_CONFIG=$MUSESCORE_BUILD_CONFIG \
     MUSESCORE_REVISION=$MUSESCORE_REVISION \
     BUILD_NUMBER=$BUILD_NUMBER \

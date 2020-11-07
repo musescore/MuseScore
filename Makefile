@@ -114,7 +114,7 @@ debug:
    	  -DBUILD_PORTAUDIO="${BUILD_PORTAUDIO}"              \
    	  -DBUILD_WEBENGINE="${BUILD_WEBENGINE}"              \
    	  -DUSE_SYSTEM_FREETYPE="${USE_SYSTEM_FREETYPE}"      \
-      -DCOVERAGE="${COVERAGE}"                 			\
+   	  -DCOVERAGE="${COVERAGE}"                          \
    	  -DDOWNLOAD_SOUNDFONT="${DOWNLOAD_SOUNDFONT}"      \
 	  -DBUILD_UI_MU4="${BUILD_UI_MU4}"         			\
 	  -DUSE_ZITA_REVERB="${USE_ZITA_REVERB}"   \
@@ -153,10 +153,6 @@ win32:
 clean:
 	-rm -rf build.debug build.release
 	-rm -rf win32build win32install
-
-revision:
-	$(eval MUSESCORE_REVISION=$(shell git rev-parse --short=7 HEAD))
-	@echo "MUSESCORE_REVISION: ${MUSESCORE_REVISION}"
 
 version:
 	@echo ${VERSION}

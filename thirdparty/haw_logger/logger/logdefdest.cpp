@@ -10,7 +10,13 @@ namespace fs = std::filesystem;
 #include <experimental/filesystem>
 namespace fs = std::experimental::filesystem;
 #else
+#ifdef HAW_LOGGER_QT_SUPPORT
+#define USE_QT_DIR
+#include <QDir>
+#else
 #error compiler must either support c++17
+#endif
+
 #endif
 
 using namespace haw::logger;
@@ -60,6 +66,17 @@ void FileLogDest::rotate()
         m_file.close();
     }
 
+#ifdef USE_QT_DIR
+    QString path = QString::fromStdString(m_path);
+    if (!QDir(path).exists()) {
+        bool ok = QDir().mkpath(path);
+        assert(ok);
+        if (!ok) {
+            std::clog << "failed create dir: " << path.toStdString() << std::endl;
+            return;
+        }
+    }
+#else
     fs::path path = m_path;
     if (!fs::exists(path)) {
         bool ok = fs::create_directories(path);
@@ -69,6 +86,7 @@ void FileLogDest::rotate()
             return;
         }
     }
+#endif
 
     auto formatDate = [](const Date& d) {
                           std::string str;
@@ -95,7 +113,7 @@ void FileLogDest::rotate()
 
     m_file.open(filePath, std::ios_base::out | std::ios_base::app);
     if (!m_file.is_open()) {
-        std::clog << "failed open log file: " << path << std::endl;
+        std::clog << "failed open log file: " << m_path << std::endl;
     }
 }
 
