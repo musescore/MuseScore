@@ -28,10 +28,6 @@
 #include "inotation.h"
 #include "framework/system/ifilesystem.h"
 
-namespace Ms {
-class Score;
-}
-
 namespace mu::notation {
 //---------------------------------------------------------
 //   MetaEditDialog
@@ -68,11 +64,11 @@ class ScorePropertiesDialog : public QDialog, public Ui::ScorePropertiesDialog
     void initTags();
     void saveMetaTags(const QVariantMap& tagsMap);
 
+    void accept() override;
+
 public:
     ScorePropertiesDialog(QWidget* parent = nullptr);
     ScorePropertiesDialog(const ScorePropertiesDialog& dialog);
-
-    void accept() override;
 };
 }
 
