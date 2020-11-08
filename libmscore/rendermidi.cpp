@@ -1257,6 +1257,8 @@ void renderTremolo(Chord* chord, QList<NoteEventList>& ell)
       // render tremolo with multiple events
       if (chord->tremoloChordType() == TremoloChordType::TremoloFirstNote) {
             int t = MScore::division / (1 << (tremolo->lines() + chord->durationType().hooks()));
+            if (t == 0) // avoid crash on very short tremolo
+                  t = 1;
             SegmentType st = SegmentType::ChordRest;
             Segment* seg2 = seg->next(st);
             int track = chord->track();
@@ -1278,7 +1280,7 @@ void renderTremolo(Chord* chord, QList<NoteEventList>& ell)
             if (c2->type() == ElementType::CHORD) {
                   int notes2 = int(c2->notes().size());
                   int tnotes = qMax(notes, notes2);
-                  int tticks = chord->actualTicks().ticks() * 2; // use twice the size
+                  int tticks = chord->ticks().ticks() * 2; // use twice the size
                   int n = tticks / t;
                   n /= 2;
                   int l = 2000 * t / tticks;
