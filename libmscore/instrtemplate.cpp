@@ -320,7 +320,7 @@ void InstrumentTemplate::write(XmlWriter& xml) const
             a.write(xml, nullptr);
       for (const MidiArticulation& ma : articulation) {
             bool isGlobal = false;
-            for (const MidiArticulation& ga : qAsConst(Ms)::articulation) {
+            for (const MidiArticulation& ga : qAsConst(Ms::articulation)) {
                   if (ma == ga) {
                         isGlobal = true;
                         break;

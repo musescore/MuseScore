@@ -3675,7 +3675,7 @@ static void readStyle(MStyle* style, XmlReader& e)
                   style->chordList()->clear();
                   style->chordList()->read(e);
                   style->setCustomChordList(true);
-                  for (const ChordFont &f : qAsConst(style->chordList()->fonts)) {
+                  for (ChordFont f : style->chordList()->fonts) {
                         if (f.family == "MuseJazz") {
                               f.family = "MuseJazz Text";
                               }
