@@ -131,7 +131,7 @@ class WorkspacesManager {
       static void retranslateAll();
       
       static Workspace* findByName(const QString& name) {
-            for (auto w : m_workspaces) {
+            for (auto w : qAsConst(m_workspaces)) {
                   if (w->name() == name)
                         return w;
                   }
@@ -139,7 +139,7 @@ class WorkspacesManager {
             }
       
       static Workspace* findByTranslatableName(const QString& name) {
-            for (auto w : m_workspaces) {
+            for (auto w : qAsConst(m_workspaces)) {
                   if (w->translatableName() == name)
                         return w;
                   }

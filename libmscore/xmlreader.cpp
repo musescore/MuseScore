@@ -188,8 +188,8 @@ Fraction XmlReader::readFraction()
                   return Fraction::fromTicks(s.toInt());
                   }
             else {
-                  z = s.left(i).toInt();
-                  n = s.mid(i+1).toInt();
+                  z = s.leftRef(i).toInt();
+                  n = s.midRef(i+1).toInt();
                   }
             }
       return Fraction(z, n);
@@ -457,7 +457,7 @@ void XmlReader::addSpanner(int id, Spanner* s)
 
 void XmlReader::removeSpanner(const Spanner* s)
       {
-      for (auto i : _spanner) {
+      for (auto i : qAsConst(_spanner)) {
             if (i.second == s) {
                   _spanner.removeOne(i);
                   return;
@@ -471,7 +471,7 @@ void XmlReader::removeSpanner(const Spanner* s)
 
 Spanner* XmlReader::findSpanner(int id)
       {
-      for (auto i : _spanner) {
+      for (auto i : qAsConst(_spanner)) {
             if (i.first == id)
                   return i.second;
             }
@@ -484,7 +484,7 @@ Spanner* XmlReader::findSpanner(int id)
 
 int XmlReader::spannerId(const Spanner* s)
       {
-      for (auto i : _spanner) {
+      for (auto i : qAsConst(_spanner)) {
             if (i.second == s)
                   return i.first;
             }

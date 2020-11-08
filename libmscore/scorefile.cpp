@@ -92,7 +92,7 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
       QList<Part*> hiddenParts;
       bool unhide = false;
       if (styleB(Sid::createMultiMeasureRests)) {
-            for (Part* part : _parts) {
+            for (Part* part : qAsConst(_parts)) {
                   if (!part->show()) {
                         if (!unhide) {
                               startCmd();
@@ -216,7 +216,7 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
 
       // Let's decide: write midi mapping to a file or not
       masterScore()->checkMidiMapping();
-      for (const Part* part : _parts) {
+      for (const Part* part : qAsConst(_parts)) {
             if (!selectionOnly || ((staffIdx(part) >= staffStart) && (staffEnd >= staffIdx(part) + part->nstaves())))
                   part->write(xml);
             }
@@ -1026,7 +1026,7 @@ void Score::print(QPainter* painter, int pageNo)
 
       QList<Element*> ell = page->items(fr);
       std::stable_sort(ell.begin(), ell.end(), elementLessThan);
-      for (const Element* e : ell) {
+      for (const Element* e : qAsConst(ell)) {
             if (!e->visible())
                   continue;
             painter->save();

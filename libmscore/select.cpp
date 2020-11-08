@@ -331,7 +331,7 @@ void Selection::clear()
             return;
             }
 
-      for (Element* e : _el) {
+      for (Element* e : qAsConst(_el)) {
             if (e->isSpanner()) {   // TODO: only visible elements should be selectable?
                   Spanner* sp = toSpanner(e);
                   for (auto s : sp->spannerSegments())
@@ -544,7 +544,7 @@ void Selection::updateSelectedElements()
             _plannedTick2 = Fraction(-1,1);
             }
 
-      for (Element* e : _el)
+      for (Element* e : qAsConst(_el))
             e->setSelected(false);
       _el.clear();
 
@@ -670,7 +670,7 @@ void Selection::setRangeTicks(const Fraction& tick1, const Fraction& tick2, int 
 
 void Selection::update()
       {
-      for (Element* e : _el)
+      for (Element* e : qAsConst(_el))
             e->setSelected(true);
       updateState();
       }

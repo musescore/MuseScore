@@ -663,7 +663,7 @@ static QString text2syms(const QString& t)
                   }
             else {
                   // not found, move one char from res to in
-                  res += in.left(1);
+                  res += in.leftRef(1);
                   in.remove(0, 1);
                   }
             }
@@ -5967,7 +5967,7 @@ Notation Notation::notationWithAttributes(const QString& name, const QXmlStreamA
                                           const QString& parent, const SymId& symId)
       {
       Notation notation { name, parent, symId };
-      for (const auto attr : attributes) {
+      for (const auto &attr : attributes) {
             notation.addAttribute(attr.name(), attr.value());
             }
       return notation;
@@ -6198,7 +6198,7 @@ void MusicXMLParserNotations::addToScore(ChordRest* const cr, Note* const note, 
       // more than one dynamic ???
       // LVIFIX: check import/export of <other-dynamics>unknown_text</...>
       // TODO remove duplicate code (see MusicXml::direction)
-      for (const auto& d : _dynamicsList) {
+      for (const auto& d : qAsConst(_dynamicsList)) {
             auto dynamic = new Dynamic(_score);
             dynamic->setDynamicType(d);
 //TODO:ws            if (hasYoffset) dyn->textStyle().setYoff(yoffset);

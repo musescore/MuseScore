@@ -114,7 +114,7 @@ Beam::~Beam()
       //
       // delete all references from chords
       //
-      for (ChordRest* cr : _elements)
+      for (ChordRest* cr : qAsConst(_elements))
             cr->setBeam(0);
       qDeleteAll(beamSegments);
       qDeleteAll(fragments);
@@ -243,7 +243,7 @@ void Beam::draw(QPainter* painter) const
 void Beam::move(const QPointF& offset)
       {
       Element::move(offset);
-      for (QLineF* bs : beamSegments)
+      for (QLineF* bs : qAsConst(beamSegments))
             bs->translate(offset);
       }
 
@@ -317,7 +317,7 @@ void Beam::layout1()
             slope   = 0.0;
             _cross  = false;
             minMove = maxMove = 0;              // no cross-beaming in TAB's!
-            for (ChordRest* cr : _elements) {
+            for (ChordRest* cr : qAsConst(_elements)) {
                   if (cr->isChord()) {
                         // set members maxDuration, c1, c2
                         if (!maxDuration.isValid() || (maxDuration < cr->durationType()))
@@ -332,7 +332,7 @@ void Beam::layout1()
             if (_direction != Direction::AUTO)
                   _up = _direction == Direction::UP;
             else {
-                  for (ChordRest* cr :_elements) {
+                  for (ChordRest* cr :qAsConst(_elements)) {
                         if (cr->isChord()) {
                               c2 = toChord(cr);
                               _up = c2->up();
@@ -340,7 +340,7 @@ void Beam::layout1()
                               }
                         }
                   }
-            for (ChordRest* cr : _elements) {
+            for (ChordRest* cr : qAsConst(_elements)) {
                   cr->setUp(_up);
                   cr->layoutStem1();
                   }
@@ -357,7 +357,7 @@ void Beam::layout1()
             int upDnLimit = staff()->lines(Fraction(0,1)) - 1;           // was '4' hard-coded in following code
 
             int staffIdx = -1;
-            for (ChordRest* cr : _elements) {
+            for (ChordRest* cr : qAsConst(_elements)) {
                   qreal m = cr->small() ? score()->styleD(Sid::smallNoteMag) : 1.0;
                   mag     = qMax(mag, m);
                   if (cr->isChord()) {
@@ -422,7 +422,7 @@ void Beam::layout1()
             // leave initial guess alone for moved chords within a beam that crosses staves
             // otherwise, assume beam direction is stem direction
 
-            for (ChordRest* cr : _elements) {
+            for (ChordRest* cr : qAsConst(_elements)) {
                   const bool staffMove = cr->isChord() ? toChord(cr)->staffMove() : false;
                   if (!_cross || !staffMove) {
                         if (cr->up() != _up) {
@@ -455,7 +455,7 @@ void Beam::layoutGraceNotes()
       qreal graceMag   = score()->styleD(Sid::graceNoteMag);
       setMag(graceMag);
 
-      for (ChordRest* cr : _elements) {
+      for (ChordRest* cr : qAsConst(_elements)) {
             c2 = toChord(cr);
             if (c1 == 0)
                   c1 = c2;
@@ -492,7 +492,7 @@ void Beam::layoutGraceNotes()
 
       slope   = 0.0;
 
-      for (ChordRest* cr : _elements) {
+      for (ChordRest* cr : qAsConst(_elements)) {
             cr->setUp(_up);
             if (cr->isChord())
                   toChord(cr)->layoutStem1();            /* create stems needed to calculate horizontal spacing */
@@ -511,7 +511,7 @@ void Beam::layout()
       std::vector<ChordRest*> crl;
 
       int n = 0;
-      for (ChordRest* cr : _elements) {
+      for (ChordRest* cr : qAsConst(_elements)) {
             if (cr->measure()->system() != system) {
                   SpannerSegmentType st;
                   if (n == 0)
@@ -543,7 +543,7 @@ void Beam::layout()
 //            Shape& s       = cr->segment()->shape(staffIdx());
 //            QPointF offset = cr->pos() + cr->segment()->pos() + cr->segment()->measure()->pos();
 
-            for (const QLineF* bs : beamSegments) {
+            for (const QLineF* bs : qAsConst(beamSegments)) {
                   QPolygonF a(4);
                   a[0] = QPointF(bs->x1(), bs->y1());
                   a[1] = QPointF(bs->x2(), bs->y2());
@@ -1970,7 +1970,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
             qreal fuzz = _spatium * .4;   // something is wrong
 
             qreal by = y2 < y1 ? -1000000 : 1000000;
-            for (const QLineF* l : beamSegments) {
+            for (const QLineF* l : qAsConst(beamSegments)) {
                   if ((x2+fuzz) >= l->x1() && (x2-fuzz) <= l->x2()) {
                         qreal y = (x2 - l->x1()) * slope + l->y1();
                         by = y2 < y1 ? qMax(by, y) : qMin(by, y);
@@ -2017,7 +2017,7 @@ void Beam::spatiumChanged(qreal oldValue, qreal newValue)
       int idx = (!_up) ? 0 : 1;
       if (_userModified[idx]) {
             qreal diff = newValue / oldValue;
-            for (BeamFragment* f : fragments) {
+            for (BeamFragment* f : qAsConst(fragments)) {
                   f->py1[idx] = f->py1[idx] * diff;
                   f->py2[idx] = f->py2[idx] * diff;
                   }
@@ -2459,7 +2459,7 @@ void Beam::addSkyline(Skyline& sk)
       double ww      = lw2 / sin(M_PI_2 - atan(d));
       qreal _spatium = spatium();
 
-      for (const QLineF* beamSegment : beamSegments) {
+      for (const QLineF* beamSegment : qAsConst(beamSegments)) {
             qreal x = beamSegment->x1();
             qreal y = beamSegment->y1();
             qreal w = beamSegment->x2() - x;
@@ -2593,7 +2593,7 @@ void Beam::initBeamEditData(EditData& ed)
       qreal ydiff = 100000000.0;
       int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
       int i = 0;
-      for (BeamFragment* f : fragments) {
+      for (BeamFragment* f : qAsConst(fragments)) {
             qreal d = fabs(f->py1[idx] - pt.y());
             if (d < ydiff) {
                   ydiff = d;

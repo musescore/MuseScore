@@ -2453,7 +2453,7 @@ static void readVolta206(XmlReader& e, Volta* volta)
                   QString s = e.readElementText();
                   QStringList sl = s.split(",", QString::SkipEmptyParts);
                   volta->endings().clear();
-                  for (const QString& l : sl) {
+                  for (const QString& l : qAsConst(sl)) {
                         int i = l.simplified().toInt();
                         volta->endings().append(i);
                         }
@@ -3675,7 +3675,7 @@ static void readStyle(MStyle* style, XmlReader& e)
                   style->chordList()->clear();
                   style->chordList()->read(e);
                   style->setCustomChordList(true);
-                  for (ChordFont f : style->chordList()->fonts) {
+                  for (const ChordFont &f : qAsConst(style->chordList()->fonts)) {
                         if (f.family == "MuseJazz") {
                               f.family = "MuseJazz Text";
                               }

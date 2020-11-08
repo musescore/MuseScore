@@ -51,14 +51,14 @@ void MuseData::musicalAttribute(QString s, Part* part)
       QStringList al = s.mid(3).split(" ", QString::SkipEmptyParts);
       foreach(QString item, al) {
             if (item.startsWith("K:")) {
-                  int key = item.mid(2).toInt();
+                  int key = item.midRef(2).toInt();
                   KeySigEvent ke;
                   ke.setKey(Key(key));
                   for (Staff* staff : *(part->staves()))
                         staff->setKey(curTick, ke);
                   }
             else if (item.startsWith("Q:")) {
-                  _division = item.mid(2).toInt();
+                  _division = item.midRef(2).toInt();
                   }
             else if (item.startsWith("T:")) {
                   QStringList tl = item.mid(2).split("/");
@@ -84,7 +84,7 @@ void MuseData::musicalAttribute(QString s, Part* part)
                   int staffIdx = 1;
 //                  int col = 2;
                   if (item[1].isDigit()) {
-                        staffIdx = item.mid(1,1).toInt();
+                        staffIdx = item.midRef(1,1).toInt();
 //                        col = 3;
                         }
                   staffIdx -= 1;
@@ -127,14 +127,14 @@ void MuseData::readChord(Part*, const QString& s)
             else if (s[i] == 'f')
                   alter -= 1;
             else if (s[i].isDigit()) {
-                  octave = s.mid(i,1).toInt();
+                  octave = s.midRef(i,1).toInt();
                   break;
                   }
             }
       int staffIdx = 0;
       if (s.size() >= 24) {
             if (s[23].isDigit())
-                  staffIdx = s.mid(23,1).toInt() - 1;
+                  staffIdx = s.midRef(23,1).toInt() - 1;
             }
       int pitch = table[step] + alter + (octave + 1) * 12;
       if (pitch < 0)
@@ -201,7 +201,7 @@ void MuseData::readNote(Part* part, const QString& s)
             else if (s[i] == 'f')
                   alter -= 1;
             else if (s[i].isDigit()) {
-                  octave = s.mid(i,1).toInt();
+                  octave = s.midRef(i,1).toInt();
                   break;
                   }
             }
@@ -216,7 +216,7 @@ void MuseData::readNote(Part* part, const QString& s)
       int staffIdx = 0;
       if (s.size() >= 24) {
             if (s[23].isDigit())
-                  staffIdx = s.mid(23,1).toInt() - 1;
+                  staffIdx = s.midRef(23,1).toInt() - 1;
             }
       Staff* staff = part->staff(staffIdx);
       int gstaff   = staff->idx();
@@ -226,7 +226,7 @@ void MuseData::readNote(Part* part, const QString& s)
             pitch = 0;
       if (pitch > 127)
             pitch = 127;
-      Fraction ticks = Fraction::fromTicks((s.mid(5, 3).toInt() * MScore::division + _division/2) / _division);
+      Fraction ticks = Fraction::fromTicks((s.midRef(5, 3).toInt() * MScore::division + _division/2) / _division);
       Fraction tick  = curTick;
       curTick  += ticks;
 
@@ -443,7 +443,7 @@ QString MuseData::diacritical(QString s)
 
 void MuseData::readRest(Part* part, const QString& s)
       {
-      Fraction ticks = Fraction::fromTicks((s.mid(5, 3).toInt() * MScore::division + _division/2) / _division);
+      Fraction ticks = Fraction::fromTicks((s.midRef(5, 3).toInt() * MScore::division + _division/2) / _division);
 
       Fraction tick  = curTick;
       curTick  += ticks;
@@ -451,7 +451,7 @@ void MuseData::readRest(Part* part, const QString& s)
       int staffIdx = 0;
       if (s.size() >= 24) {
             if (s[23].isDigit())
-                  staffIdx = s.mid(23,1).toInt() - 1;
+                  staffIdx = s.midRef(23,1).toInt() - 1;
             }
       Staff* staff = part->staff(staffIdx);
       int gstaff   = staff->idx();
@@ -486,7 +486,7 @@ void MuseData::readRest(Part* part, const QString& s)
 
 void MuseData::readBackup(const QString& s)
       {
-      Fraction ticks = Fraction::fromTicks((s.mid(5, 3).toInt() * MScore::division + _division/2) / _division);
+      Fraction ticks = Fraction::fromTicks((s.midRef(5, 3).toInt() * MScore::division + _division/2) / _division);
       if (s[0] == 'b')
             curTick  -= ticks;
       else
@@ -631,7 +631,7 @@ int MuseData::countStaves(const QStringList& sl)
                         int staffIdx = 1;
                         if (s.size() >= 24) {
                               if (s[23].isDigit())
-                                    staffIdx = s.mid(23,1).toInt();
+                                    staffIdx = s.midRef(23,1).toInt();
                               }
                         if (staffIdx > staves)
                               staves = staffIdx;
@@ -696,7 +696,7 @@ bool MuseData::read(const QString& name)
                   continue;
                   }
             if (s[0] == 'a') {
-                  part.back().append(s.mid(1));
+                  part.back().append(s.midRef(1));
                   continue;
                   }
             part.append(s);

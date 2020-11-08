@@ -109,7 +109,7 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
       std::stable_sort(el.begin(), el.end(), elementLessThan);
 
       const Measure*_currentMeasure = 0;
-      for (const Element* e : el) {
+      for (const Element* e : qAsConst(el)) {
             e->itemDiscovered = 0;
             if (!e->visible() && !_score->showInvisible())
                   continue;
@@ -147,7 +147,7 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
       qreal _widthTimeSig = 0;
       qreal _xPosTimeSig  = 0;
 
-      for (const Element* e : el) {
+      for (const Element* e : qAsConst(el)) {
             e->itemDiscovered = 0;
             if (!e->visible() && !_score->showInvisible())
                   continue;
@@ -307,7 +307,7 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
       delete newElement;
 
       // This second pass draws the elements spaced evently using the width of the largest element
-      for (const Element* e : el) {
+      for (const Element* e : qAsConst(el)) {
             if (!e->visible() && !_score->showInvisible())
                   continue;
 

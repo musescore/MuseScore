@@ -525,7 +525,7 @@ void Preferences::setPreference(const QString key, QVariant value)
       {
       checkIfKeyExists(key);
       set(key, value);
-      for (const OnSetListener& l : _onSetListeners)
+      for (const OnSetListener& l : qAsConst(_onSetListeners))
           l(key, value);
       }
 
@@ -582,7 +582,7 @@ QMap<QString, QVariant> Preferences::getDefaultLocalPreferences() {
       bool tmp = useLocalPrefs;
       useLocalPrefs = false;
       QMap<QString, QVariant> defaultLocalPreferences;
-      for (QString s : {PREF_UI_CANVAS_BG_USECOLOR,
+      for (const QString &s : {PREF_UI_CANVAS_BG_USECOLOR,
                         PREF_UI_CANVAS_FG_USECOLOR,
                         PREF_UI_CANVAS_FG_USECOLOR_IN_PALETTES,
                         PREF_UI_CANVAS_BG_COLOR,

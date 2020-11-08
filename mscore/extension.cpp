@@ -31,7 +31,7 @@ QStringList Extension::getDirectoriesByType(const char* type)
       {
       QStringList result;
       QDir d(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS));
-      for (auto dd : d.entryInfoList(QDir::AllDirs | QDir::NoDotAndDotDot| QDir::Readable | QDir::NoSymLinks)) {
+      for (const auto &dd : d.entryInfoList(QDir::AllDirs | QDir::NoDotAndDotDot| QDir::Readable | QDir::NoSymLinks)) {
             QDir extensionsDir(dd.absoluteFilePath());
             auto extDir = extensionsDir.entryInfoList(QDir::AllDirs | QDir::NoDotAndDotDot| QDir::Readable | QDir::NoSymLinks, QDir::Name);
             // take the most recent version only

@@ -58,13 +58,13 @@ SFont::SFont(Fluid* f)
 
 SFont::~SFont()
       {
-      for(Sample* s : sample)
+      for(Sample* s : qAsConst(sample))
             delete s;
-      for(Preset* p : presets)
+      for(Preset* p : qAsConst(presets))
             delete p;
-      for(unsigned char* p : infos)
+      for(unsigned char* p : qAsConst(infos))
             delete[] p;
-      for(Instrument* i : instruments) {
+      for(Instrument* i : qAsConst(instruments)) {
 //            for(Zone* z : i->zones)
 //                  delete z;
             delete i;
@@ -82,7 +82,7 @@ bool SFont::read(const QString& s)
             return false;
 
       synth->setLoadProgress(0);
-      for (auto instrument : instruments) {
+      for (auto instrument : qAsConst(instruments)) {
             if (synth->loadWasCanceled())
                   return false;
 
@@ -90,7 +90,7 @@ bool SFont::read(const QString& s)
                   return false;
             }
 
-      for (auto preset : presets) {
+      for (auto preset : qAsConst(presets)) {
             if (synth->loadWasCanceled())
                   return false;
 
@@ -107,7 +107,7 @@ bool SFont::read(const QString& s)
 Preset* SFont::get_preset(int bank, int num)
       {
       bank -= _bankOffset;
-      for (Preset* p : presets) {
+      for (Preset* p : qAsConst(presets)) {
             if ((p->get_banknum() == bank) && (p->get_num() == num))
                   return p;
             }
@@ -133,7 +133,7 @@ Preset::Preset(SFont* s)
 Preset::~Preset()
       {
       delete _global_zone;
-      for(Zone* z : zones)
+      for(Zone* z : qAsConst(zones))
             delete z;
       }
 
@@ -152,19 +152,19 @@ void Preset::loadSamples()
             if (i->global_zone && i->global_zone->sample)
                   i->global_zone->sample->load();
 
-            for (Zone* iz : i->zones)
+            for (Zone* iz : qAsConst(i->zones))
                   iz->sample->load();
             }
 
       int currentInstrZone = 0;
       float instrSize = (float)zones.size(); //float is used to properly calculate progress
-      for (Zone* z : zones) {
+      for (Zone* z : qAsConst(zones)) {
             sfont->synth->setLoadProgress(currentInstrZone++ / instrSize * 100);
             Instrument* i = z->instrument;
             if (i->global_zone && i->global_zone->sample)
                   i->global_zone->sample->load();
 
-            for (Zone* iz : i->zones) {
+            for (Zone* iz : qAsConst(i->zones)) {
                   if (sfont->synth->globalTerminate()) {
                         if (locked)
                               sfont->synth->mutex.unlock();
@@ -191,7 +191,7 @@ bool Preset::noteon(Fluid* synth, unsigned id, int chan, int key, int vel, doubl
       Zone* global_preset_zone = global_zone();
 
       /* run thru all the zones of this preset */
-      for (Zone* preset_zone : zones) {
+      for (Zone* preset_zone : qAsConst(zones)) {
             /* check if the note falls into the key and velocity range of this
                preset */
             if (preset_zone->inside_range(key, vel)) {
@@ -246,7 +246,7 @@ bool Preset::noteon(Fluid* synth, unsigned id, int chan, int key, int vel, doubl
                               int mod_list_count = 0;
 
                               if (global_inst_zone){
-                                    for(Mod* mod1 : global_inst_zone->modlist)
+                                    for(Mod* mod1 : qAsConst(global_inst_zone->modlist))
                                           mod_list[mod_list_count++] = mod1;
                                     }
 
@@ -254,7 +254,7 @@ bool Preset::noteon(Fluid* synth, unsigned id, int chan, int key, int vel, doubl
                                * Replace modulators with the same definition in the list:
                                * SF 2.01 page 69, 'bullet' 8
                                */
-                              for(Mod* mod1 : inst_zone->modlist) {
+                              for(Mod* mod1 : qAsConst(inst_zone->modlist)) {
 	                              /* 'Identical' modulators will be deleted by setting their
 	                               *  list entry to 0.  The list length is known, 0
 	                               *  entries will be ignored later.  SF2.01 section 9.5.1
@@ -323,7 +323,7 @@ bool Preset::noteon(Fluid* synth, unsigned id, int chan, int key, int vel, doubl
                                * list. */
                               mod_list_count = 0;
                               if (global_preset_zone){
-                                    for(Mod* mod1 : global_preset_zone->modlist)
+                                    for(Mod* mod1 : qAsConst(global_preset_zone->modlist))
                                           mod_list[mod_list_count++] = mod1;
                                     }
 
@@ -331,7 +331,7 @@ bool Preset::noteon(Fluid* synth, unsigned id, int chan, int key, int vel, doubl
                                * out all identical modulators from the global preset zone
                                * (SF 2.01 page 69, second-last bullet) */
 
-                              for(Mod* mod1 : preset_zone->modlist) {
+                              for(Mod* mod1 : qAsConst(preset_zone->modlist)) {
                                     for (int i = 0; i < mod_list_count; i++) {
                                           if (mod_list[i] && test_identity(mod1,mod_list[i]))
                                                 mod_list[i] = 0;
@@ -377,7 +377,7 @@ bool Preset::importSfont()
             name = QString("Bank%1,Preset%2").arg(bank).arg(num);
 
       int idx = 0;
-      for(Zone* zone : zones) {
+      for(Zone* zone : qAsConst(zones)) {
             // zone->name = QString("%1/%2").arg(name).arg(idx);
             if (!zone->importZone())
                   return false;
@@ -395,7 +395,7 @@ bool Preset::importSfont()
 bool Instrument::import_sfont()
       {
       int idx = 0;
-      for(Zone* zone : zones) {
+      for(Zone* zone : qAsConst(zones)) {
             if (!zone->importZone())
                   return false;
             if ((idx == 0) && (zone->get_sample() == 0))
@@ -429,11 +429,11 @@ Zone::Zone()
 
 Zone::~Zone()
       {
-      for(Mod* m : modlist)
+      for(Mod* m : qAsConst(modlist))
             delete m;
-      for(SFGen* p : gen)
+      for(SFGen* p : qAsConst(gen))
             delete p;
-      for(SFMod* p : mod)
+      for(SFMod* p : qAsConst(mod))
             delete p;
       }
 
@@ -458,7 +458,7 @@ Instrument::Instrument()
 Instrument::~Instrument()
       {
       delete global_zone;
-      for(Zone* z : zones)
+      for(Zone* z : qAsConst(zones))
             delete z;
       }
 
@@ -468,7 +468,7 @@ Instrument::~Instrument()
 
 bool Zone::importZone()
       {
-      for (SFGen* sfgen : gen) {
+      for (SFGen* sfgen : qAsConst(gen)) {
             switch (sfgen->id) {
                   case GEN_KEYRANGE:
                         keylo = sfgen->amount.range.lo;
@@ -488,7 +488,7 @@ bool Zone::importZone()
             }
 
       // Import the modulators (only SF2.1 and higher)
-      for(SFMod* mod_src : mod) {
+      for(SFMod* mod_src : qAsConst(mod)) {
             Mod* mod_dest = new Mod;
             int type;
             // mod_dest->next = 0; /* pointer to next modulator, this is the end of the list now.*/
@@ -1062,7 +1062,7 @@ void SFont::load_pbag (int size)
       if (size % SFBAGSIZE || size == 0)	/* size is multiple of SFBAGSIZE? */
             throw(QString("Preset bag chunk size is invalid"));
 
-      for(Preset* p : presets) {
+      for(Preset* p : qAsConst(presets)) {
             for (int i = 0; i < p->zones.size(); ++i) {
 	            if ((size -= SFBAGSIZE) < 0)
 	                  throw(QString("1:Preset bag chunk size mismatch"));
@@ -1122,8 +1122,8 @@ void SFont::load_pbag (int size)
 
 void SFont::load_pmod (int size)
       {
-      for (Preset* p : presets) {
-            for(Zone* p2 : p->zones) {
+      for (Preset* p : qAsConst(presets)) {
+            for(Zone* p2 : qAsConst(p->zones)) {
                   for (int i = 0; i < p2->mod.size(); ++i) {
 	                  if ((size -= SFMODSIZE) < 0)
 		                  throw(QString("Preset modulator chunk size mismatch"));
@@ -1226,7 +1226,7 @@ static void sfont_zone_delete (QList<Zone*>* l, Zone * zone)
 
 void SFont::load_pgen (int size)
       {
-      for(Preset* p : presets) {
+      for(Preset* p : qAsConst(presets)) {
             bool gzone          = false;
             bool discarded      = false;
 
@@ -1397,7 +1397,7 @@ void SFont::load_ibag(int size)
       if (size % SFBAGSIZE || size == 0)	/* size is multiple of SFBAGSIZE? */
             throw(QString("Instrumentrument bag chunk size is invalid"));
 
-      for(Instrument* in : instruments) {
+      for(Instrument* in : qAsConst(instruments)) {
             int n = in->zones.size();
             for (int i = 0; i < n; ++i) {
 	            if ((size -= SFBAGSIZE) < 0) {
@@ -1455,8 +1455,8 @@ void SFont::load_ibag(int size)
 /* instrument modulator loader */
 void SFont::load_imod(int size)
       {
-      for(Instrument* i : instruments) {
-            for(Zone* p2 : i->zones) {
+      for(Instrument* i : qAsConst(instruments)) {
+            for(Zone* p2 : qAsConst(i->zones)) {
                   for (int k = 0; k < p2->mod.size(); ++k) {
                         if ((size -= SFMODSIZE) < 0)
                               throw(QString("Instrumentrument modulator chunk size mismatch"));
@@ -1490,7 +1490,7 @@ void SFont::load_imod(int size)
 
 void SFont::load_igen (int size)
       {
-      for(Instrument* instr : instruments) {
+      for(Instrument* instr : qAsConst(instruments)) {
             bool gzone     = false;
             bool discarded = false;
 
@@ -1680,8 +1680,8 @@ void SFont::load_shdr (int size)
 
 void SFont::fixup_pgen()
       {
-      for(Preset* p : presets) {
-            for(Zone* z : p->zones) {
+      for(Preset* p : qAsConst(presets)) {
+            for(Zone* z : qAsConst(p->zones)) {
                   if (z->instIdx) {        // load instrument #
                         z->instrument = instruments[z->instIdx-1];
                         if (!z->instrument)
@@ -1694,8 +1694,8 @@ void SFont::fixup_pgen()
 /* "fixup" (sample # -> sample ptr) sample references in instrument list */
 void SFont::fixup_igen()
       {
-      for(Instrument* p : instruments) {
-            for(Zone* z : p->zones) {
+      for(Instrument* p : qAsConst(instruments)) {
+            for(Zone* z : qAsConst(p->zones)) {
                   if (z->sampIdx) {
                         z->sample = sample[z->sampIdx - 1];
                         if (!z->sample)

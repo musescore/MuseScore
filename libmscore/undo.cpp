@@ -133,7 +133,7 @@ UndoCommand::~UndoCommand()
 
 void UndoCommand::cleanup(bool undo)
       {
-      for (auto c : childList)
+      for (auto c : qAsConst(childList))
             c->cleanup(undo);
       }
 
@@ -218,7 +218,7 @@ bool UndoCommand::hasUnfilteredChildren(const std::vector<UndoCommand::Filter>& 
 void UndoCommand::filterChildren(UndoCommand::Filter f, Element* target)
       {
       QList<UndoCommand*> acceptedList;
-      for (UndoCommand* cmd : childList) {
+      for (UndoCommand* cmd : qAsConst(childList)) {
             if (cmd->isFiltered(f, target))
                   delete cmd;
             else
@@ -261,7 +261,7 @@ UndoStack::UndoStack()
 UndoStack::~UndoStack()
       {
       int idx = 0;
-      for (auto c : list)
+      for (auto c : qAsConst(list))
             c->cleanup(idx++ < curIdx);
       qDeleteAll(list);
       }

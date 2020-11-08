@@ -51,6 +51,6 @@ ModulesSetup::ModulesSetup()
 
 void ModulesSetup::setup()
       {
-      for (AbstractModuleSetup* moduleSetup : m_modulesSetupList)
+      for (AbstractModuleSetup* moduleSetup : qAsConst(m_modulesSetupList))
             moduleSetup->setup();
       }

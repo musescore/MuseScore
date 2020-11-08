@@ -1726,7 +1726,7 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
       Measure* m    = s->tick2measure(tick());
       QList<int> sl = s->uniqueStaves();
 
-      for (int staffIdx : sl) {
+      for (int staffIdx : qAsConst(sl)) {
             int rests  = 0;
             int chords = 0;
             Rest* rest = 0;

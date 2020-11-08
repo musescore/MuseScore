@@ -4500,7 +4500,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
             // or other characters and write the runs.
             QString text;
             bool inDynamicsSym = false;
-            for (const auto ch : dynText) {
+            for (const auto ch : qAsConst(dynText)) {
                   const auto it = map.find(ch.unicode());
                   if (it != map.end()) {
                         // found a SMUFL single letter dynamics glyph
@@ -5307,7 +5307,7 @@ static void identification(XmlWriter& xml, Score const* const score)
       QStringList creators;
       // the creator types commonly found in MusicXML
       creators << "arranger" << "composer" << "lyricist" << "poet" << "translator";
-      for (QString type : creators) {
+      for (const QString &type : qAsConst(creators)) {
             QString creator = score->metaTag(type);
             if (!creator.isEmpty())
                   xml.tag(QString("creator type=\"%1\"").arg(type), creator);
@@ -6710,14 +6710,14 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                   _xml.tag(s, h->xmlKind());
                   QStringList l = h->xmlDegrees();
                   if (!l.isEmpty()) {
-                        for (QString tag : l) {
+                        for (QString tag : qAsConst(l)) {
                               QString degreeText;
                               if (h->xmlKind().startsWith("suspended")
                                   && tag.startsWith("add") && tag[3].isDigit()
                                   && !kindText.isEmpty() && kindText[0].isDigit()) {
                                     // hack to correct text for suspended chords whose kind text has degree information baked in
                                     // (required by some other applications)
-                                    int tagDegree = tag.mid(3).toInt();
+                                    int tagDegree = tag.midRef(3).toInt();
                                     QString kindTextExtension;
                                     for (int i = 0; i < kindText.length() && kindText[i].isDigit(); ++i)
                                           kindTextExtension[i] = kindText[i];

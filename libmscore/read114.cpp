@@ -1218,7 +1218,7 @@ static void readVolta114(XmlReader& e, Volta* volta)
                   QString s = e.readElementText();
                   QStringList sl = s.split(",", QString::SkipEmptyParts);
                   volta->endings().clear();
-                  for (const QString& l : sl) {
+                  for (const QString& l : qAsConst(sl)) {
                         int i = l.simplified().toInt();
                         volta->endings().append(i);
                         }
@@ -2712,7 +2712,7 @@ static void readStyle(MStyle* style, XmlReader& e)
             else if (tag == "ChordList") {
                   style->chordList()->clear();
                   style->chordList()->read(e);
-                  for (ChordFont f : style->chordList()->fonts) {
+                  for (const ChordFont &f : qAsConst(style->chordList()->fonts)) {
                         if (f.family == "MuseJazz") {
                               f.family = "MuseJazz Text";
                               }
@@ -3234,7 +3234,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
       // add invisible tempo text if necessary
       // some 1.3 scores have tempolist but no tempo text
       fixTicks();
-      for (auto i : tm) {
+      for (const auto &i : tm) {
             Fraction tick = Fraction::fromTicks(i.first);
             qreal tempo   = i.second.tempo;
             if (tempomap()->tempo(tick.ticks()) != tempo) {

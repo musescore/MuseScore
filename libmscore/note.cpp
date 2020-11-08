@@ -1860,7 +1860,7 @@ Element* Note::drop(EditData& data)
 
             case ElementType::GLISSANDO:
                   {
-                  for (auto ee : _spannerFor) {
+                  for (auto ee : qAsConst(_spannerFor)) {
                         if (ee->type() == ElementType::GLISSANDO) {
                               qDebug("there is already a glissando");
                               delete e;
@@ -2009,7 +2009,7 @@ void Note::setDotY(Direction pos)
             for (int i = 0; i < -n; ++i)
                   score()->undoRemoveElement(_dots.back());
             }
-      for (NoteDot* dot : _dots) {
+      for (NoteDot* dot : qAsConst(_dots)) {
             dot->layout();
             dot->rypos() = y;
             }
@@ -2090,7 +2090,7 @@ void Note::layout2()
                   }
             // apply to dots
             qreal xx = x + d;
-            for (NoteDot* dot : _dots) {
+            for (NoteDot* dot : qAsConst(_dots)) {
                   dot->rxpos() = xx;
                   xx += dd;
                   }
@@ -2273,12 +2273,12 @@ void Note::scanElements(void* data, void (*func)(void*, Element*), bool all)
             if (score()->tagIsValid(e->tag()))
                   e->scanElements(data, func, all);
             }
-      for (Spanner* sp : _spannerFor)
+      for (Spanner* sp : qAsConst(_spannerFor))
             sp->scanElements(data, func, all);
 
       if (!dragMode && _accidental)
             func(data, _accidental);
-      for (NoteDot* dot : _dots)
+      for (NoteDot* dot : qAsConst(_dots))
             func(data, dot);
       // see above - tie segments are still collected from System!
       //if (_tieFor && !_tieFor->spannerSegments().empty())
@@ -2299,10 +2299,10 @@ void Note::setTrack(int val)
             for (SpannerSegment* seg : _tieFor->spannerSegments())
                   seg->setTrack(val);
             }
-      for (Spanner* s : _spannerFor) {
+      for (Spanner* s : qAsConst(_spannerFor)) {
             s->setTrack(val);
             }
-      for (Spanner* s : _spannerBack) {
+      for (Spanner* s : qAsConst(_spannerBack)) {
             s->setTrack2(val);
             }
       for (Element* e : _el)
@@ -2311,7 +2311,7 @@ void Note::setTrack(int val)
             _accidental->setTrack(val);
       if (!chord())     // if note is dragged with shift+ctrl
             return;
-      for (NoteDot* dot : _dots)
+      for (NoteDot* dot : qAsConst(_dots))
             dot->setTrack(val);
       }
 
@@ -2510,7 +2510,7 @@ void Note::endDrag(EditData& ed)
             return;
             }
       for (Note* nn : tiedNotes()) {
-            for (const PropertyData& pd : ned->propertyData) {
+            for (const PropertyData& pd : qAsConst(ned->propertyData)) {
                   setPropertyFlags(pd.id, pd.f); // reset initial property flags state
                   score()->undoPropertyChanged(nn, pd.id, pd.data);
                   }
@@ -2903,7 +2903,7 @@ bool Note::setProperty(Pid propertyId, const QVariant& v)
 
 void Note::undoChangeDotsVisible(bool v)
       {
-      for (NoteDot* dot : _dots)
+      for (NoteDot* dot : qAsConst(_dots))
             dot->undoChangeProperty(Pid::VISIBLE, QVariant(v));
       }
 
@@ -3014,7 +3014,7 @@ void Note::setScore(Score* s)
             _tieFor->setScore(s);
       if (_accidental)
             _accidental->setScore(s);
-      for (NoteDot* dot : _dots)
+      for (NoteDot* dot : qAsConst(_dots))
             dot->setScore(s);
       for (Element* el : _el)
             el->setScore(s);
@@ -3207,7 +3207,7 @@ Element* Note::nextElement()
                   else if (tieValid(_tieFor))
                         return _tieFor->frontSegment();
                   else if (!_spannerFor.empty()) {
-                        for (auto i : _spannerFor) {
+                        for (auto i : qAsConst(_spannerFor)) {
                               if (i->type() == ElementType::GLISSANDO)
                                     return i->spannerSegments().front();
                               }
@@ -3217,7 +3217,7 @@ Element* Note::nextElement()
 
             case ElementType::TIE_SEGMENT:
                   if (!_spannerFor.empty()) {
-                      for (auto i : _spannerFor) {
+                      for (auto i : qAsConst(_spannerFor)) {
                             if (i->type() == ElementType::GLISSANDO)
                                   return i->spannerSegments().front();
                                   }
@@ -3233,7 +3233,7 @@ Element* Note::nextElement()
                   if (tieValid(_tieFor))
                         return _tieFor->frontSegment();
                   if (!_spannerFor.empty()) {
-                        for (auto i : _spannerFor) {
+                        for (auto i : qAsConst(_spannerFor)) {
                               if (i->isGlissando())
                                     return i->spannerSegments().front();
                               }
@@ -3246,7 +3246,7 @@ Element* Note::nextElement()
                   if (tieValid(_tieFor))
                         return _tieFor->frontSegment();
                   if (!_spannerFor.empty()) {
-                        for (auto i : _spannerFor) {
+                        for (auto i : qAsConst(_spannerFor)) {
                               if (i->isGlissando())
                                     return i->spannerSegments().front();
                               }
@@ -3302,7 +3302,7 @@ Element* Note::prevElement()
 Element* Note::lastElementBeforeSegment()
       {
       if (!_spannerFor.empty()) {
-            for (auto i : _spannerFor) {
+            for (auto i : qAsConst(_spannerFor)) {
                   if (i->type() == ElementType::GLISSANDO)
                         return i->spannerSegments().front();
                   }

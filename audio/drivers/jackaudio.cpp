@@ -806,7 +806,7 @@ void JackAudio::rememberAudioConnections()
 
 void JackAudio::restoreAudioConnections()
       {
-      for (auto p : ports)
+      for (auto p : qAsConst(ports))
             jack_port_disconnect(client, p);
 
       QList<QString> portList = inputPorts();
@@ -820,7 +820,7 @@ void JackAudio::restoreAudioConnections()
       if (!preferences.getBool(PREF_IO_JACK_REMEMBERLASTCONNECTIONS) || n == 0) {
             if (MScore::debugMode)
                   qDebug("Connecting to system ports...");
-            for (auto p : ports) {
+            for (auto p : qAsConst(ports)) {
                   const char* src = jack_port_name(p);
                   if (pi != portList.end()) {
                         connect(src, qPrintable(*pi));

@@ -1161,7 +1161,7 @@ void Score::layoutChords3(std::vector<Note*>& notes, const Staff* staff, Segment
 
             }
 
-      for (const AcEl& e : aclist) {
+      for (const AcEl& e : qAsConst(aclist)) {
             // even though we initially calculate accidental position relative to segment
             // we must record pos for accidental relative to note,
             // since pos is always interpreted relative to parent
@@ -1189,7 +1189,7 @@ void Score::beamGraceNotes(Chord* mainNote, bool after)
       Beam::Mode bm = Beam::Mode::AUTO;
       QVector<Chord*> graceNotes = after ? mainNote->graceNotesAfter() : mainNote->graceNotesBefore();
 
-      for (ChordRest* cr : graceNotes) {
+      for (ChordRest* cr : qAsConst(graceNotes)) {
             bm = Groups::endBeam(cr);
             if ((cr->durationType().type() <= TDuration::DurationType::V_QUARTER) || (bm == Beam::Mode::NONE)) {
                   if (beam) {
@@ -1287,7 +1287,7 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
       int staffIdx = 0;
       bool systemIsEmpty = true;
 
-      for (Staff* staff : _staves) {
+      for (Staff* staff : qAsConst(_staves)) {
             SysStaff* ss  = system->staff(staffIdx);
 
             Staff::HideMode hideMode = staff->hideWhenEmpty();
@@ -1359,7 +1359,7 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
             }
       Staff* firstVisible = nullptr;
       if (systemIsEmpty) {
-            for (Staff* staff : _staves) {
+            for (Staff* staff : qAsConst(_staves)) {
                   SysStaff* ss  = system->staff(staff->idx());
                   if (staff->showIfEmpty() && !ss->show()) {
                         ss->setShow(true);
@@ -1790,7 +1790,7 @@ static void layoutPage(Page* page, qreal restHeight)
 
       if (restHeight > 0.0) {                               // space left?
             qreal fill = restHeight / sList.size();
-            for (System* s : sList) {                       // allocate it to systems equally
+            for (System* s : qAsConst(sList)) {                       // allocate it to systems equally
                   qreal d = s->distance() + fill;
                   if ((d - s->height()) > maxDist)          // but don't exceed max system distance
                         d = qMax(maxDist + s->height(), s->distance());
@@ -3595,7 +3595,7 @@ void alignHarmonies(const System* system, const std::vector<Segment*>& sl, bool 
 
             void addToSkyline(const System* system)
                   {
-                  for (Element* e : modified) {
+                  for (Element* e : qAsConst(modified)) {
                         const Segment* s = toSegment(e->parent());
                         const MeasureBase* m = toMeasureBase(s->parent());
                         system->staff(e->staffIdx())->skyline().add(e->shape().translated(e->pos() + s->pos() + m->pos()));
@@ -4907,7 +4907,7 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
                   // lc.systemList  = _systems;
                   // _systems.clear();
 
-            for (System* s : _systems) {
+            for (System* s : qAsConst(_systems)) {
                   for (Bracket* b : s->brackets()) {
                         if (b->selected()) {
                               _selection.remove(b);

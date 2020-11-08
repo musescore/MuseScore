@@ -314,7 +314,7 @@ void Chord::undoUnlink()
             n->undoUnlink();
       for (Chord* gn : graceNotes())
             gn->undoUnlink();
-      for (Articulation* a : _articulations)
+      for (Articulation* a : qAsConst(_articulations))
             a->undoUnlink();
 /*      if (_glissando)
             _glissando->undoUnlink(); */
@@ -1188,7 +1188,7 @@ qreal Chord::centerX() const
 
 void Chord::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
-      for (Articulation* a : _articulations)
+      for (Articulation* a : qAsConst(_articulations))
             func(data, a);
       if (_hook)
             func(data, _hook );
@@ -1207,7 +1207,7 @@ void Chord::scanElements(void* data, void (*func)(void*, Element*), bool all)
       size_t n = _notes.size();
       for (size_t i = 0; i < n; ++i)
             _notes.at(i)->scanElements(data, func, all);
-      for (Chord* chord : _graceNotes)
+      for (Chord* chord : qAsConst(_graceNotes))
             chord->scanElements(data, func, all);
       for (Element* e : el())
             e->scanElements(data, func, all);
@@ -1529,7 +1529,7 @@ void Chord::layoutStem1()
 
 void Chord::layoutStem()
       {
-      for (Chord* c : _graceNotes)
+      for (Chord* c : qAsConst(_graceNotes))
             c->layoutStem();
       if (_beam)
             return;
@@ -1656,7 +1656,7 @@ bool Chord::underBeam() const
 
 void Chord::layout2()
       {
-      for (Chord* c : _graceNotes)
+      for (Chord* c : qAsConst(_graceNotes))
             c->layout2();
 
       const qreal mag = staff()->mag(this);
@@ -2133,7 +2133,7 @@ void Chord::layoutTablature()
       qreal minNoteDistance   = score()->styleP(Sid::minNoteDistance);
       qreal minTieLength      = score()->styleP(Sid::MinTieLength);
 
-      for (Chord* c : _graceNotes)
+      for (Chord* c : qAsConst(_graceNotes))
             c->layoutTablature();
 
       while (_ledgerLines) {
@@ -2799,7 +2799,7 @@ bool Chord::setProperty(Pid propertyId, const QVariant& v)
 
 Articulation* Chord::hasArticulation(const Articulation* aa)
       {
-      for (Articulation* a : _articulations) {
+      for (Articulation* a : qAsConst(_articulations)) {
             if (a->subtype() == aa->subtype())
                   return a;
             }
@@ -3425,7 +3425,7 @@ void Chord::layoutArticulations()
       //
 
       Articulation* prevArticulation = nullptr;
-      for (Articulation* a : _articulations) {
+      for (Articulation* a : qAsConst(_articulations)) {
             if (a->anchor() == ArticulationAnchor::CHORD) {
                   if (measure()->hasVoices(a->staffIdx(), tick(), actualTicks()))
                         a->setUp(up()); // if there are voices place articulation at stem
@@ -3560,7 +3560,7 @@ void Chord::layoutArticulations2()
       qreal distance1 = score()->styleP(Sid::propertyDistanceHead);
       chordTopY -= up() ? 0.5 * _spatium : distance1;
       chordBotY += up() ? distance1 : 0.5 * _spatium;
-      for (Articulation* a : _articulations) {
+      for (Articulation* a : qAsConst(_articulations)) {
             ArticulationAnchor aa = a->anchor();
             if (aa != ArticulationAnchor::CHORD && aa != ArticulationAnchor::TOP_CHORD && aa != ArticulationAnchor::BOTTOM_CHORD)
                   continue;
@@ -3590,7 +3590,7 @@ void Chord::layoutArticulations2()
 
       staffTopY = qMin(staffTopY, chordTopY - distance0 - 0.5 * _spatium);
       staffBotY = qMax(staffBotY, chordBotY + distance0 + 0.5 * _spatium);
-      for (Articulation* a : _articulations) {
+      for (Articulation* a : qAsConst(_articulations)) {
             ArticulationAnchor aa = a->anchor();
             if (aa == ArticulationAnchor::TOP_STAFF || aa == ArticulationAnchor::BOTTOM_STAFF) {
                   a->layout();
@@ -3607,7 +3607,7 @@ void Chord::layoutArticulations2()
                   a->doAutoplace();
                   }
             }
-      for (Articulation* a : _articulations) {
+      for (Articulation* a : qAsConst(_articulations)) {
             if (a->addToSkyline()) {
                   // the segment shape has already been calculated
                   // so measure width and spacing is already determined
@@ -3648,7 +3648,7 @@ void Chord::layoutArticulations3(Slur* slur)
       Segment* s = segment();
       Measure* m = measure();
       SysStaff* sstaff = m->system() ? m->system()->staff(vStaffIdx()) : nullptr;
-      for (Articulation* a : _articulations) {
+      for (Articulation* a : qAsConst(_articulations)) {
             if (a->layoutCloseToNote() || !a->autoplace() || !slur->addToSkyline())
                   continue;
             Shape aShape = a->shape().translated(a->pos() + pos() + s->pos() + m->pos());

@@ -319,7 +319,7 @@ RealizedHarmony::PitchMap RealizedHarmony::getIntervals(int rootTpc, bool litera
                   if (s[c].isDigit()) {
                         int alter = 0;
                         int cutoff = c;
-                        int deg = s.right(s.length() - c).toInt();
+                        int deg = s.rightRef(s.length() - c).toInt();
                         //account for if the flat/sharp is stuck to the end of add
                         if (c) {
                               if (s[c-1] == '#') {

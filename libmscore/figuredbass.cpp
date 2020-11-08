@@ -1317,7 +1317,7 @@ void FiguredBass::endEdit(EditData& ed)
       items.clear();
       QString normalizedText = QString();
       idx = 0;
-      for (QString str : list) {
+      for (QString str : qAsConst(list)) {
             FiguredBassItem* pItem = new FiguredBassItem(score(), idx++);
             if(!pItem->parse(str)) {            // if any item fails parsing
                   qDeleteAll(items);

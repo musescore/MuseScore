@@ -2053,7 +2053,7 @@ void Element::endDrag(EditData& ed)
       ElementEditData* eed = ed.getData(this);
       if (!eed)
             return;
-      for (PropertyData pd : eed->propertyData) {
+      for (const PropertyData &pd : qAsConst(eed->propertyData)) {
             setPropertyFlags(pd.id, pd.f); // reset initial property flags state
             PropertyFlags f = pd.f;
             if (f == PropertyFlags::STYLED)
@@ -2163,7 +2163,7 @@ void Element::endEditDrag(EditData& ed)
       ElementEditData* eed = ed.getData(this);
       bool changed = false;
       if (eed) {
-            for (PropertyData pd : eed->propertyData) {
+            for (const PropertyData &pd : qAsConst(eed->propertyData)) {
                   setPropertyFlags(pd.id, pd.f); // reset initial property flags state
                   if (score()->undoPropertyChanged(this, pd.id, pd.data))
                         changed = true;

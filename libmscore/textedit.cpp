@@ -774,7 +774,7 @@ void TextBase::endHexState(EditData& ed)
                   TextBlock& t = _layout[_cursor->row()];
                   QString ss   = t.remove(c1, hexState + 1, _cursor);
                   bool ok;
-                  int code     = ss.mid(1).toInt(&ok, 16);
+                  int code     = ss.midRef(1).toInt(&ok, 16);
                   _cursor->setColumn(c1);
                   _cursor->clearSelection();
                   if (ok)

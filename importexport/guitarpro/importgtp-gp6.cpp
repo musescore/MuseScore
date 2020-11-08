@@ -1931,7 +1931,7 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
                         auto voices          = voicesString.split(" ");
                         bool contentAdded    = false;
                         int voiceNum         = -1;
-                        for (auto currentVoice : voices) {
+                        for (const auto &currentVoice : qAsConst(voices)) {
                               // if the voice is not -1 then we set voice
                               if (currentVoice.compare("-1"))
                                     voice = getNode(currentVoice, partInfo->voices);

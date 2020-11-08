@@ -6267,13 +6267,13 @@ void initScoreFonts()
             const char* name = Sym::symNames[i];
             Sym::lnhash.insert(name, SymId(i));
             bool ok;
-            uint code = glyphNamesJson.value(name).toObject().value("codepoint").toString().mid(2).toUInt(&ok, 16);
+            uint code = glyphNamesJson.value(name).toObject().value("codepoint").toString().midRef(2).toUInt(&ok, 16);
             if (ok)
                   ScoreFont::_mainSymCodeTable[i] = code;
             else if (MScore::debugMode)
                   qDebug("codepoint not recognized for glyph %s", qPrintable(name));
             }
-      for (oldName i : oldNames)
+      for (oldName i : qAsConst(oldNames))
             Sym::lonhash.insert(i.name, SymId(i.symId));
       QFont::insertSubstitution("Leland Text",    "Bravura Text");
       QFont::insertSubstitution("Bravura Text",   "Leland Text");
@@ -6380,7 +6380,7 @@ void ScoreFont::load()
                error.offset, qPrintable(error.errorString()));
 
       QJsonObject oo = metadataJson.value("glyphsWithAnchors").toObject();
-      for (auto i : oo.keys()) {
+      for (const auto &i : oo.keys()) {
             constexpr qreal scale = SPATIUM20;
             QJsonObject ooo = oo.value(i).toObject();
             SymId symId = Sym::lnhash.value(i, SymId::noSym);
@@ -6391,7 +6391,7 @@ void ScoreFont::load()
                   continue;
                   }
             Sym* sym = &_symbols[int(symId)];
-            for (auto j : ooo.keys()) {
+            for (const auto &j : ooo.keys()) {
                   if (j == "stemDownNW") {
                         qreal x = ooo.value(j).toArray().at(0).toDouble();
                         qreal y = ooo.value(j).toArray().at(1).toDouble();
@@ -6449,7 +6449,7 @@ void ScoreFont::load()
             { "lyricLineThickness",            Sid::lyricsLineThickness },
             { "tupletBracketThickness",        Sid::tupletBracketWidth }
             };
-      for (auto i : oo.keys()) {
+      for (const auto &i : oo.keys()) {
             for (auto mapping : engravingDefaultsMapping) {
                   if (i == mapping.first)
                         _engravingDefaults.push_back(std::make_pair(mapping.second, oo.value(i).toDouble()));
@@ -6616,11 +6616,11 @@ void ScoreFont::load()
             if (i != oa.end()) {
                   QJsonArray oaa = i.value().toObject().value("alternates").toArray();
                   // locate the relevant altKey in alternate array
-                  for (auto j : oaa) {
+                  for (const auto &j : qAsConst(oaa)) {
                         QJsonObject jo = j.toObject();
                         if (jo.value("name") == c.altKey) {
                               Sym* sym = &_symbols[int(c.id)];
-                              int code = jo.value("codepoint").toString().mid(2).toInt(&ok, 16);
+                              int code = jo.value("codepoint").toString().midRef(2).toInt(&ok, 16);
                               if (ok)
                                     computeMetrics(sym, code);
                               break;
