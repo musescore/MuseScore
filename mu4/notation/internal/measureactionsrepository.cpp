@@ -27,6 +27,7 @@ ActionList MeasureActionsRepository::actions() const
     actions.push_back(actionRegister()->action("cut"));
     actions.push_back(actionRegister()->action("copy"));
     actions.push_back(actionRegister()->action("paste"));
+    actions.push_back(actionRegister()->action("swap"));
     actions.push_back(actionRegister()->action("delete"));
     actions.push_back(actionRegister()->action("staff-properties"));
 
