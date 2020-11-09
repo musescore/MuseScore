@@ -51,13 +51,23 @@ Item {
             }
         }
 
-       FlatButton {
+        FlatButton {
             width: 220
 
             text: "Transpose dialog"
 
             onClicked: {
                 api.launcher.open("musescore://notation/transpose")
+            }
+        }
+
+        FlatButton {
+            width: 220
+
+            text: "Staff/Part Properties"
+
+            onClicked: {
+                api.launcher.open("musescore://notation/staffproperties?staffIdx=0")
             }
         }
     }
