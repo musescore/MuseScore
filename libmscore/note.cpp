@@ -822,17 +822,27 @@ QString Note::tpcUserName(const int tpc, const int pitch, const bool explicitAcc
 
 QString Note::tpcUserName(const bool explicitAccidental) const
       {
-      const auto playbackPitch = ppitch();
-      const auto tpc1Str = tpcUserName(tpc1(), playbackPitch, explicitAccidental);
+      QString pitchName = tpcUserName(tpc(), epitch() + ottaveCapoFret(), explicitAccidental);
 
-      if ((epitch() == ppitch()) || concertPitch()) {
-            return tpc1Str;
+      if (fixed() && headGroup() == NoteHead::Group::HEAD_SLASH)
+            // see Note::accessibleInfo(), but we return what we have
+            return pitchName;
+      if (staff()->isDrumStaff(tick()) && part()->instrument()->drumset())
+            // see Note::accessibleInfo(), but we return what we have
+            return pitchName;
+      if (staff()->isTabStaff(tick()))
+            // no further translation
+            return pitchName;
+
+      QString pitchOffset;
+      if (tuning() != 0)
+            pitchOffset = QString::asprintf("%+.3f", tuning());
+
+      if (!concertPitch()) {
+            QString soundingPitch = tpcUserName(tpc1(), ppitch(), explicitAccidental);
+            return QObject::tr("%1 (sounding as %2%3)").arg(pitchName).arg(soundingPitch).arg(pitchOffset);
             }
-      else {
-            // Return both the written pitch and the playback pitch since they currently differ.
-            const auto tpc2Str = tpcUserName(tpc2(), playbackPitch - transposition(), explicitAccidental);
-            return QObject::tr("%1 (%2 concert)").arg(tpc2Str).arg(tpc1Str);
-            }
+      return pitchName + pitchOffset;
       }
 
 //---------------------------------------------------------
@@ -3019,7 +3029,6 @@ QString Note::accessibleInfo() const
       QString duration = chord()->durationUserName();
       QString voice = QObject::tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
       QString pitchName;
-      QString pitchOffset;
       QString onofftime;
       if (!_playEvents.empty()) {
             int on = _playEvents[0].ontime();
@@ -3034,18 +3043,9 @@ QString Note::accessibleInfo() const
             pitchName = qApp->translate("drumset", drumset->name(pitch()).toUtf8().constData());
       else if (staff()->isTabStaff(tick()))
             pitchName = QObject::tr("%1; String: %2; Fret: %3").arg(tpcUserName(false)).arg(QString::number(string() + 1)).arg(QString::number(fret()));
-      else {
+      else
             pitchName = tpcUserName(false);
-            if (tuning() != 0)
-                  pitchOffset = QString::asprintf("%+.3f", tuning());
-            if (!concertPitch()) {
-                  // tpcUserName equivalent for getting the sounding pitch
-                  QString soundingPitch = propertyUserValue(Pid::TPC1) + QString::number(((_pitch + ottaveCapoFret() - int(tpc2alter(tpc()))) / 12) - 1);
-                  // almost the same string as below
-                  return QObject::tr("%1; Pitch: %2 (sounding as %3%4); Duration: %5%6%7").arg(noteTypeUserName()).arg(pitchName).arg(soundingPitch).arg(pitchOffset).arg(duration).arg(onofftime).arg((chord()->isGrace() ? "" : QString("; %1").arg(voice)));
-                  }
-            }
-      return QObject::tr("%1; Pitch: %2%3; Duration: %4%5%6").arg(noteTypeUserName()).arg(pitchName).arg(pitchOffset).arg(duration).arg(onofftime).arg((chord()->isGrace() ? "" : QString("; %1").arg(voice)));
+      return QObject::tr("%1; Pitch: %2; Duration: %3%4%5").arg(noteTypeUserName()).arg(pitchName).arg(duration).arg(onofftime).arg((chord()->isGrace() ? "" : QString("; %1").arg(voice)));
       }
 
 //---------------------------------------------------------
