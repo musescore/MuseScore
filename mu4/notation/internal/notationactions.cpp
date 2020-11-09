@@ -152,6 +152,10 @@ const std::vector<Action> NotationActions::m_actions = {
            QT_TRANSLATE_NOOP("action", "Transpose"),
            ShortcutContext::NotationActive
            ),
+    Action("parts",
+           QT_TRANSLATE_NOOP("action", "Parts"),
+           ShortcutContext::NotationActive
+           ),
     Action("view-mode-page",
            QT_TRANSLATE_NOOP("action", "Page View"),
            ShortcutContext::NotationActive),
