@@ -110,6 +110,7 @@ public:
 
     void copySelection() override;
     void pasteSelection(const Fraction& scale = Fraction(1, 1)) override;
+    void swapSelection() override;
     void deleteSelection() override;
 
     void setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval = 0) override;

@@ -53,6 +53,7 @@ void NotationActionController::init()
     dispatcher()->reg(this, "paste-half", [this]() { pasteSelection(PastingType::Half); });
     dispatcher()->reg(this, "paste-double", [this]() { pasteSelection(PastingType::Double); });
     dispatcher()->reg(this, "paste-special", [this]() { pasteSelection(PastingType::Special); });
+    dispatcher()->reg(this, "swap", this, &NotationActionController::swapSelection);
     dispatcher()->reg(this, "delete", this, &NotationActionController::deleteSelection);
     dispatcher()->reg(this, "undo", this, &NotationActionController::undo);
     dispatcher()->reg(this, "redo", this, &NotationActionController::redo);
@@ -292,6 +293,16 @@ void NotationActionController::deleteSelection()
     }
 
     interaction->deleteSelection();
+}
+
+void NotationActionController::swapSelection()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->swapSelection();
 }
 
 void NotationActionController::undo()

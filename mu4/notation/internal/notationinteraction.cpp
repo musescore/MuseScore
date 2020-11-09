@@ -1956,12 +1956,59 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
 {
     m_undoStack->prepareChanges();
 
-    const QMimeData* ms = QApplication::clipboard()->mimeData();
-    score()->cmdPaste(ms, nullptr, scale);
+    const QMimeData* mimeData = QApplication::clipboard()->mimeData();
+    score()->cmdPaste(mimeData, nullptr, scale);
 
     m_undoStack->commitChanges();
 
     m_selectionChanged.notify();
+}
+
+void NotationInteraction::swapSelection()
+{
+    if (!selection()->canCopy()) {
+        return;
+    }
+
+    Ms::Selection& selection = score()->selection();
+    QString mimeType = selection.mimeType();
+
+    if (mimeType == mimeStaffListFormat) { // determine size of clipboard selection
+        const QMimeData* mimeData = this->selection()->mimeData();
+        QByteArray data = mimeData ? mimeData->data(mimeStaffListFormat) : QByteArray();
+        XmlReader reader(data);
+        reader.readNextStartElement();
+
+        Fraction tickLen = Fraction(0, 1);
+        int stavesCount = 0;
+
+        if (reader.name() == "StaffList") {
+            tickLen = Fraction::fromTicks(reader.intAttribute("len", 0));
+            stavesCount = reader.intAttribute("staves", 0);
+        }
+
+        if (tickLen > Fraction(0, 1)) { // attempt to extend selection to match clipboard size
+            Segment* segment = selection.startSegment();
+            Fraction startTick = selection.tickStart() + tickLen;
+            Segment* segmentAfter = score()->tick2leftSegment(startTick);
+
+            int staffIndex = selection.staffStart() + stavesCount - 1;
+            if (staffIndex >= score()->nstaves()) {
+                staffIndex = score()->nstaves() - 1;
+            }
+
+            startTick = selection.tickStart();
+            Fraction endTick = startTick + tickLen;
+            selection.extendRangeSelection(segment, segmentAfter, staffIndex, startTick, endTick);
+            selection.update();
+        }
+    }
+
+    QByteArray currentSelectionBackup(selection.mimeData());
+    pasteSelection();
+    QMimeData* mimeData = new QMimeData();
+    mimeData->setData(mimeType, currentSelectionBackup);
+    QApplication::clipboard()->setMimeData(mimeData);
 }
 
 void NotationInteraction::deleteSelection()
