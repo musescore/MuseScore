@@ -62,6 +62,7 @@ private:
     void openBreaksDialog();
     void openScoreProperties();
     void openTransposeDialog();
+    void openPartsDialog();
 };
 }
 }

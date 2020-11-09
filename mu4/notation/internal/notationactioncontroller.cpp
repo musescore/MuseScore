@@ -57,6 +57,7 @@ void NotationActionController::init()
     dispatcher()->reg(this, "add-remove-breaks", this, &NotationActionController::openBreaksDialog);
     dispatcher()->reg(this, "edit-info", this, &NotationActionController::openScoreProperties);
     dispatcher()->reg(this, "transpose", this, &NotationActionController::openTransposeDialog);
+    dispatcher()->reg(this, "parts", this, &NotationActionController::openPartsDialog);
 }
 
 bool NotationActionController::canReceiveAction(const actions::ActionName&) const
@@ -279,4 +280,9 @@ void NotationActionController::openScoreProperties()
 void NotationActionController::openTransposeDialog()
 {
     interactive()->open("musescore://notation/transpose");
+}
+
+void NotationActionController::openPartsDialog()
+{
+    interactive()->open("musescore://notation/parts");
 }
