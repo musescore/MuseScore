@@ -29,6 +29,11 @@ if (NOT VST3_SDK_PATH)
     message(FATAL_ERROR "VST3_SDK path is not setted")
 endif()
 
+#need to build vst in debug mode
+if (${APPLE} AND CMAKE_BUILD_TYPE MATCHES "Debug")
+    add_definitions(-D_DEBUG)
+endif()
+
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/vstmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/vstmodule.h
