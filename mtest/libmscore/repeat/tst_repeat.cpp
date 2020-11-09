@@ -109,7 +109,14 @@ class TestRepeat : public QObject, public MTest
 
       void repeat56() { repeat("repeat56.mscx", "1;2;3;4; 2; 5;6;7; 5;6;7;8"); } // start of volta and start repeat on same measure
       void repeat57() { repeat("repeat57.mscx", "1;2;3"); } // no repeat, skip volta until section end, relates to #274690
-      void repeat58() { repeat("repeat58.mscx", "1;2; 1; 3;4;5; 4; 6;7"); } // duplicate voltas #311986
+
+      void repeat58() { repeat("repeat58.mscx", "1;2; 1; 3;4;5; 4; 6;7"); } // duplicate voltas #311986 - single instrument
+      void repeat59() { repeat("repeat59.mscx", "1;2; 1; 3;4;5; 4; 6;7"); } // duplicate voltas #311986 - multiple instruments
+      void repeat60() { repeat("repeat60.mscx", "1;2;6;7; 1;2;3;6;7; 1;2;3;4;5;6;7; 1;2;3;6;7; 1;2;6;7; 1;7"); } // overlapping voltas
+      void repeat61() { repeat("repeat61.mscx", "1;2;3;6;7; 1;2;3;4;5;6;7; 1;2;3;6;7; 1;7"); } // overlapping voltas - nested
+      void repeat62() { repeat("repeat62.mscx", "1;5;6;7; 1;2;3;4;5;6;7; 1;5;6;7; 1;7"); } // overlapping voltas - same start
+      void repeat63() { repeat("repeat63.mscx", "1;2;3;7; 1;2;3;4;5;6;7; 1;2;3;7; 1;7"); } // overlapping voltas - same end
+      void repeat64() { repeat("repeat64.mscx", "1;2;3;7; 1;2;3;4;5;6;7; 1;2;3;7; 1;7"); } // overlapping voltas
       };
 
 //---------------------------------------------------------

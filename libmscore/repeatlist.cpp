@@ -354,7 +354,9 @@ void RepeatList::collectRepeatListElements()
                   else { // Compare
                         std::list<Volta *> voltasToMerge;
                         // List all overlapping voltas
-                        while (volta->startMeasure()->tick() <= preProcessedVoltas.back()->endMeasure()->tick()) {
+                        while (   (!preProcessedVoltas.empty())
+                               && (volta->startMeasure()->tick() <= preProcessedVoltas.back()->endMeasure()->tick())
+                              ){
                               voltasToMerge.push_back(preProcessedVoltas.back());
                               preProcessedVoltas.pop_back();
                               }
