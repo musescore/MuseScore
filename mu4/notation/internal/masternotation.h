@@ -20,8 +20,10 @@
 #define MU_NOTATION_MASTERNOTATION_H
 
 #include "../imasternotation.h"
-#include "modularity/ioc.h"
 #include "../inotationreadersregister.h"
+#include "../inotationwritersregister.h"
+
+#include "modularity/ioc.h"
 #include "notation.h"
 #include "retval.h"
 
@@ -33,6 +35,7 @@ namespace mu::notation {
 class MasterNotation : public IMasterNotation, public Notation
 {
     INJECT(notation, INotationReadersRegister, readers)
+    INJECT(notation, INotationWritersRegister, writers)
 
 public:
     explicit MasterNotation();

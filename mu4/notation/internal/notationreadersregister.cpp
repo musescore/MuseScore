@@ -20,16 +20,16 @@
 
 using namespace mu::notation;
 
-void NotationReadersRegister::reg(const std::vector<std::string>& syffixs, std::shared_ptr<INotationReader> reader)
+void NotationReadersRegister::reg(const std::vector<std::string>& suffixs, INotationReaderPtr reader)
 {
-    for (const std::string& s : syffixs) {
-        m_readers.insert({ s, reader });
+    for (const std::string& suffix : suffixs) {
+        m_readers.insert({ suffix, reader });
     }
 }
 
-std::shared_ptr<INotationReader> NotationReadersRegister::reader(const std::string& syffix)
+INotationReaderPtr NotationReadersRegister::reader(const std::string& suffix)
 {
-    auto it  = m_readers.find(syffix);
+    auto it = m_readers.find(suffix);
     if (it != m_readers.end()) {
         return it->second;
     }

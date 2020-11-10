@@ -16,28 +16,24 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATION_INOTATIONREADERSREGISTER_H
-#define MU_NOTATION_INOTATIONREADERSREGISTER_H
 
-#include <string>
-#include <vector>
+#ifndef MU_NOTATION_INOTATIONWRITERSREGISTER_H
+#define MU_NOTATION_INOTATIONWRITERSREGISTER_H
 
 #include "modularity/imoduleexport.h"
-#include "inotationreader.h"
+#include "inotationwriter.h"
 
 namespace mu::notation {
-class INotationReadersRegister : MODULE_EXPORT_INTERFACE
+class INotationWritersRegister : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(INotationReadersRegister)
+    INTERFACE_ID(INotationWritersRegister)
 
 public:
-    virtual ~INotationReadersRegister() = default;
+    virtual ~INotationWritersRegister() = default;
 
-    //! NOTE In the future, we need to replace the suffix with an enumerator
-    //! or a better structure describing the format.
-    virtual void reg(const std::vector<std::string>& suffixes, INotationReaderPtr reader) = 0;
-    virtual INotationReaderPtr reader(const std::string& suffix) = 0;
+    virtual void reg(const std::vector<std::string>& suffixes, INotationWriterPtr writer) = 0;
+    virtual INotationWriterPtr writer(const std::string& suffix) const = 0;
 };
 }
 
-#endif // MU_NOTATION_INOTATIONREADERSREGISTER_H
+#endif // MU_NOTATION_INOTATIONWRITERSREGISTER_H
