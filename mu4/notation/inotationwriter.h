@@ -21,6 +21,7 @@
 #define MU_NOTATION_INOTATIONWRITER_H
 
 #include "ret.h"
+#include "val.h"
 
 #include "async/channel.h"
 #include "global/progress.h"
@@ -34,7 +35,7 @@ namespace mu::notation {
 class INotationWriter
 {
 public:
-    using Options = std::map<std::string, std::string>;
+    using Options = std::map<int, Val>;
 
     virtual ~INotationWriter() = default;
 

@@ -55,6 +55,8 @@ public:
     void setExcerpts(const ExcerptNotationList& excerpts) override;
 
 private:
+    Ret exportScore(const io::path& path, const std::string& suffix);
+
     Ms::MasterScore* masterScore() const;
 
     Ret load(const io::path& path, const INotationReaderPtr& reader);

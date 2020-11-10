@@ -21,18 +21,14 @@
 
 #include "log.h"
 
+#include "libmscore/score.h"
+#include "musicxml/exportxml.h"
+
 using namespace mu::importexport;
 using namespace mu::framework;
 using namespace Ms;
 
-mu::Ret MusicXmlWriter::write(const Score& score, IODevice& destinationDevice, const Options& options)
+mu::Ret MusicXmlWriter::write(const Score& score, IODevice& destinationDevice, const Options&)
 {
-    UNUSED(score)
-    UNUSED(destinationDevice)
-    UNUSED(options)
-
-    NOT_IMPLEMENTED;
-
-    return Ret();
+    return saveXml(const_cast<Score*>(&score), &destinationDevice);
 }
-
