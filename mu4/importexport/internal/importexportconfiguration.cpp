@@ -49,3 +49,14 @@ bool ImportexportConfiguration::musicxmlImportLayout() const
 {
     return settings()->value(Settings::Key(module_name, "import/musicXML/importLayout")).toBool();
 }
+
+bool ImportexportConfiguration::musicxmlExportLayout() const
+{
+    return settings()->value(Settings::Key(module_name, "import/musicXML/exportLayout")).toBool();
+}
+
+ImportexportConfiguration::MusicxmlExportBreaksType ImportexportConfiguration::musicxmlExportBreaksType() const
+{
+    return static_cast<MusicxmlExportBreaksType>(settings()->value(Settings::Key(module_name, "import/musicXML/exportBreaks")).toInt());
+}
+

@@ -80,8 +80,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/musicxmlwriter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/mxlwriter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/mxlwriter.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/xmlwriter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/xmlwriter.h
     )
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/beatroot beatroot) # for midiimport

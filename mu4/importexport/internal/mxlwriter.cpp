@@ -21,17 +21,13 @@
 
 #include "log.h"
 
+#include "musicxml/exportxml.h"
+
 using namespace mu::importexport;
 using namespace mu::framework;
 using namespace Ms;
 
-mu::Ret MxlWriter::write(const Score& score, IODevice& destinationDevice, const Options& options)
+mu::Ret MxlWriter::write(const Score& score, IODevice& destinationDevice, const Options&)
 {
-    UNUSED(score)
-    UNUSED(destinationDevice)
-    UNUSED(options)
-
-    NOT_IMPLEMENTED;
-
-    return Ret();
+    return saveMxl(const_cast<Score*>(&score), &destinationDevice);
 }

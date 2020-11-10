@@ -44,7 +44,6 @@
 #include "internal/flacwriter.h"
 #include "internal/musicxmlwriter.h"
 #include "internal/mxlwriter.h"
-#include "internal/xmlwriter.h"
 
 #include "internal/importexportconfiguration.h"
 
@@ -87,11 +86,11 @@ void ImportExportModule::onInit()
         return;
     }
 
-    writers->reg({ "musicxml" }, std::make_shared<MusicXmlWriter>());
+    writers->reg({ "musicxml", "xml" }, std::make_shared<MusicXmlWriter>());
     writers->reg({ "mxl" }, std::make_shared<MxlWriter>());
-    writers->reg({ "xml" }, std::make_shared<XmlWriter>());
     writers->reg({ "mid", "midi", "kar" }, std::make_shared<NotationMidiWriter>());
     writers->reg({ "pdf" }, std::make_shared<PdfWriter>());
+    writers->reg({ "svg" }, std::make_shared<SvgWriter>());
     writers->reg({ "png" }, std::make_shared<PngWriter>());
     writers->reg({ "wav" }, std::make_shared<WaveWriter>());
     writers->reg({ "mp3" }, std::make_shared<Mp3Writer>());
