@@ -85,6 +85,8 @@ void NotationInteraction::paint(QPainter* p)
     drawAnchorLines(p);
 
     drawTextEditMode(p);
+
+    drawSelectionRange(p);
 }
 
 void NotationInteraction::startNoteEntry()
@@ -1679,6 +1681,35 @@ void NotationInteraction::drawTextEditMode(QPainter* painter)
     m_textEditData.element->drawEditMode(painter, m_textEditData);
 }
 
+void NotationInteraction::drawSelectionRange(QPainter* painter)
+{
+    if (!m_selection->isRange()) {
+        return;
+    }
+
+    painter->setBrush(Qt::NoBrush);
+
+    QColor selectionColor = configuration()->selectionColor();
+    qreal penWidth = 3.0 / painter->worldTransform().toAffine().m11();
+
+    QPen pen;
+    pen.setColor(selectionColor);
+    pen.setWidthF(penWidth);
+    pen.setStyle(Qt::SolidLine);
+    painter->setPen(pen);
+
+    std::vector<QRectF> rangeArea = m_selection->rangeBoundingArea();
+    for (const QRectF& rect: rangeArea) {
+        QPainterPath path;
+        path.addRoundedRect(rect, 6, 6);
+
+        QColor fillColor = selectionColor;
+        fillColor.setAlpha(10);
+        painter->fillPath(path, fillColor);
+        painter->drawPath(path);
+    }
+}
+
 void NotationInteraction::moveSelection(MoveDirection d, MoveSelectionType type)
 {
     IF_ASSERT_FAILED(MoveDirection::Left == d || MoveDirection::Right == d) {
@@ -1905,6 +1936,32 @@ void NotationInteraction::changeTextCursorPosition(const QPointF& newCursorPos)
 mu::async::Notification NotationInteraction::textEditingChanged() const
 {
     return m_textEditingChanged;
+}
+
+void NotationInteraction::copySelection()
+{
+    if (!selection()->canCopy()) {
+        return;
+    }
+
+    QMimeData* mimeData = selection()->mimeData();
+    if (!mimeData) {
+        return;
+    }
+
+    QApplication::clipboard()->setMimeData(mimeData);
+}
+
+void NotationInteraction::pasteSelection()
+{
+    m_undoStack->prepareChanges();
+
+    const QMimeData* ms = QApplication::clipboard()->mimeData();
+    score()->cmdPaste(ms, nullptr, Ms::Fraction(1, 1));
+
+    m_undoStack->commitChanges();
+
+    m_selectionChanged.notify();
 }
 
 void NotationInteraction::deleteSelection()

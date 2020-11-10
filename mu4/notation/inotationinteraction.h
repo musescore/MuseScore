@@ -91,6 +91,8 @@ public:
     virtual void changeTextCursorPosition(const QPointF& newCursorPos) = 0;
     virtual async::Notification textEditingChanged() const = 0;
 
+    virtual void copySelection() = 0;
+    virtual void pasteSelection() = 0;
     virtual void deleteSelection() = 0;
 
     virtual void setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval = 0) = 0;
