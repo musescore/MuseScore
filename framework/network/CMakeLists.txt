@@ -23,7 +23,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/networkmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/networkmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/networkerrors.h
-    ${CMAKE_CURRENT_LIST_DIR}/networktypes.h
     ${CMAKE_CURRENT_LIST_DIR}/inetworkmanager.h
     ${CMAKE_CURRENT_LIST_DIR}/inetworkmanagercreator.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/networkmanager.cpp

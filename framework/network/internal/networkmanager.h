@@ -25,8 +25,7 @@ class QNetworkAccessManager;
 class QNetworkRequest;
 class QNetworkReply;
 
-namespace mu {
-namespace framework {
+namespace mu::framework {
 class NetworkManager : public QObject, public INetworkManager
 {
     Q_OBJECT
@@ -35,13 +34,13 @@ public:
     explicit NetworkManager(QObject* parent = nullptr);
     ~NetworkManager() override;
 
-    Ret get(const QUrl& url, QIODevice* incommingData) override;
+    Ret get(const QUrl& url, IODevice* incommingData) override;
     Ret head(const QUrl& url) override;
-    Ret post(const QUrl& url, QIODevice* outgoingData, QIODevice* incommingData) override;
-    Ret put(const QUrl& url, QIODevice* outgoingData, QIODevice* incommingData) override;
-    Ret del(const QUrl& url, QIODevice* incommingData) override;
+    Ret post(const QUrl& url, IODevice* outgoingData, IODevice* incommingData) override;
+    Ret put(const QUrl& url, IODevice* outgoingData, IODevice* incommingData) override;
+    Ret del(const QUrl& url, IODevice* incommingData) override;
 
-    async::Channel<Progress> progressChannel() const override;
+    ProgressChannel progressChannel() const override;
 
     void abort() override;
 
@@ -57,15 +56,15 @@ private:
         DELETE_REQUEST
     };
 
-    Ret execRequest(RequestType requestType, const QUrl& url, QIODevice* incommingData = nullptr, QIODevice* outgoingData = nullptr);
-    QNetworkReply* receiveReply(RequestType requestType, const QNetworkRequest& request, QIODevice* outgoingData = nullptr);
+    Ret execRequest(RequestType requestType, const QUrl& url, IODevice* incommingData = nullptr, IODevice* outgoingData = nullptr);
+    QNetworkReply* receiveReply(RequestType requestType, const QNetworkRequest& request, IODevice* outgoingData = nullptr);
 
-    bool openIoDevice(QIODevice* device, QIODevice::OpenModeFlag flags);
-    void closeIoDevice(QIODevice* device);
+    bool openIoDevice(IODevice* device, QIODevice::OpenModeFlag flags);
+    void closeIoDevice(IODevice* device);
 
     bool isAborted() const;
 
-    void prepareReplyReceive(QNetworkReply* reply, QIODevice* incommingData);
+    void prepareReplyReceive(QNetworkReply* reply, IODevice* incommingData);
     void prepareReplyTransmit(QNetworkReply* reply);
 
     Ret waitForReplyFinished(QNetworkReply* reply, int timeoutMs);
@@ -73,13 +72,12 @@ private:
 
 private:
     QNetworkAccessManager* m_manager = nullptr;
-    QIODevice* m_incommingData = nullptr;
+    IODevice* m_incommingData = nullptr;
     QNetworkReply* m_reply = nullptr;
-    async::Channel<Progress> m_progressCh;
+    ProgressChannel m_progressCh;
 
     bool m_isAborted = false;
 };
-}
 }
 
 #endif // MU_FRAMEWORK_NETWORKMANAGER_H

@@ -25,8 +25,7 @@
 #include "retval.h"
 #include "io/path.h"
 
-namespace mu {
-namespace framework {
+namespace mu::framework {
 class IFileSystem : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IFileSystem)
@@ -48,7 +47,6 @@ public:
 
     virtual RetVal<QByteArray> readFile(const io::path& filePath) const = 0;
 };
-}
 }
 
 #endif // MU_FRAMEWORK_IFILESYSTEM_H

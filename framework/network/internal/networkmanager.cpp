@@ -23,7 +23,6 @@
 #include <QTimer>
 #include <QEventLoop>
 #include <QUrl>
-#include <QIODevice>
 
 #include "log.h"
 #include "networkerrors.h"
@@ -46,7 +45,7 @@ NetworkManager::~NetworkManager()
     }
 }
 
-Ret NetworkManager::get(const QUrl& url, QIODevice* incommingData)
+Ret NetworkManager::get(const QUrl& url, IODevice *incommingData)
 {
     return execRequest(GET_REQUEST, url, incommingData);
 }
@@ -56,31 +55,31 @@ Ret NetworkManager::head(const QUrl& url)
     return execRequest(HEAD_REQUEST, url);
 }
 
-Ret NetworkManager::post(const QUrl& url, QIODevice* outgoingData, QIODevice* incommingData)
+Ret NetworkManager::post(const QUrl& url, IODevice* outgoingData, IODevice* incommingData)
 {
     return execRequest(POST_REQUEST, url, incommingData, outgoingData);
 }
 
-Ret NetworkManager::put(const QUrl& url, QIODevice* outgoingData, QIODevice* incommingData)
+Ret NetworkManager::put(const QUrl& url, IODevice *outgoingData, IODevice *incommingData)
 {
     return execRequest(PUT_REQUEST, url, incommingData, outgoingData);
 }
 
-Ret NetworkManager::del(const QUrl& url, QIODevice* incommingData)
+Ret NetworkManager::del(const QUrl& url, IODevice* incommingData)
 {
     return execRequest(DELETE_REQUEST, url, incommingData);
 }
 
-Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, QIODevice* incommingData, QIODevice* outgoingData)
+Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, IODevice *incommingData, IODevice *outgoingData)
 {
     if (outgoingData) {
-        if (!openIoDevice(outgoingData, QIODevice::ReadOnly)) {
+        if (!openIoDevice(outgoingData, IODevice::ReadOnly)) {
             return make_ret(Err::FiledOpenIODeviceRead);
         }
     }
 
     if (incommingData) {
-        if (!openIoDevice(incommingData, QIODevice::WriteOnly)) {
+        if (!openIoDevice(incommingData, IODevice::WriteOnly)) {
             return make_ret(Err::FiledOpenIODeviceWrite);
         }
         m_incommingData = incommingData;
@@ -111,7 +110,7 @@ Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, QIODev
     return ret;
 }
 
-QNetworkReply* NetworkManager::receiveReply(RequestType requestType, const QNetworkRequest& request, QIODevice* outgoingData)
+QNetworkReply* NetworkManager::receiveReply(RequestType requestType, const QNetworkRequest& request, IODevice* outgoingData)
 {
     switch (requestType) {
     case GET_REQUEST: return m_manager->get(request);
@@ -139,7 +138,7 @@ void NetworkManager::abort()
     emit aborted();
 }
 
-bool NetworkManager::openIoDevice(QIODevice* device, QIODevice::OpenModeFlag flags)
+bool NetworkManager::openIoDevice(IODevice* device, IODevice::OpenModeFlag flags)
 {
     IF_ASSERT_FAILED(device) {
         return false;
@@ -152,7 +151,7 @@ bool NetworkManager::openIoDevice(QIODevice* device, QIODevice::OpenModeFlag fla
     return device->open(flags);
 }
 
-void NetworkManager::closeIoDevice(QIODevice* device)
+void NetworkManager::closeIoDevice(IODevice* device)
 {
     if (device && device->isOpen()) {
         device->close();
@@ -164,7 +163,7 @@ bool NetworkManager::isAborted() const
     return m_isAborted;
 }
 
-void NetworkManager::prepareReplyReceive(QNetworkReply* reply, QIODevice* incommingData)
+void NetworkManager::prepareReplyReceive(QNetworkReply* reply, IODevice* incommingData)
 {
     if (incommingData) {
         connect(reply, &QNetworkReply::downloadProgress, this, [this](const qint64 curr, const qint64 total) {
