@@ -238,7 +238,6 @@ void ScoreView::dragEnterEvent(QDragEnterEvent* event)
 
             Image* image = 0;
             if (u.scheme() == "file") {
-                  QFileInfo fi(u.path());
                   image = new Image(score());
                   QString str(u.toLocalFile());
                   image->load(str);

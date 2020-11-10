@@ -27,15 +27,15 @@ JSHighlighter::JSHighlighter(QTextDocument *parent)
     , m_markCaseSensitivity(Qt::CaseInsensitive)
       {
       // default color scheme
-      m_colors[QmlEdit::Normal]     = QColor("#000000");
-      m_colors[QmlEdit::Comment]    = QColor("#808080");
-      m_colors[QmlEdit::Number]     = QColor("#008000");
-      m_colors[QmlEdit::String]     = QColor("#800000");
-      m_colors[QmlEdit::Operator]   = QColor("#808000");
-      m_colors[QmlEdit::Identifier] = QColor("#000020");
-      m_colors[QmlEdit::Keyword]    = QColor("#000080");
-      m_colors[QmlEdit::BuiltIn]    = QColor("#008080");
-      m_colors[QmlEdit::Marker]     = QColor("#ffff00");
+      m_colors[QmlEdit::Normal]     = QColor(Qt::black); // "#000000"
+      m_colors[QmlEdit::Comment]    = QColor(0x808080); //Qt::darkGray
+      m_colors[QmlEdit::Number]     = QColor(0x008000); //Qt::darkGreen
+      m_colors[QmlEdit::String]     = QColor(0x800000); //Qt::darkRed
+      m_colors[QmlEdit::Operator]   = QColor(0x808000); //Qt::darkYellow
+      m_colors[QmlEdit::Identifier] = QColor(0x000020);
+      m_colors[QmlEdit::Keyword]    = QColor(0x000080); //Qt::darkBlue
+      m_colors[QmlEdit::BuiltIn]    = QColor(0x008080); //Qt::darkCyan
+      m_colors[QmlEdit::Marker]     = QColor(0xffff00); //Qt::yellow
 
       // https://developer.mozilla.org/en/JavaScript/Reference/Reserved_Words
 

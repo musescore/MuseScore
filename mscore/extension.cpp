@@ -36,8 +36,8 @@ QStringList Extension::getDirectoriesByType(const char* type)
             auto extDir = extensionsDir.entryInfoList(QDir::AllDirs | QDir::NoDotAndDotDot| QDir::Readable | QDir::NoSymLinks, QDir::Name);
             // take the most recent version only
             if (!extDir.isEmpty()) {
-                  QString typeDir = QString("%1/%2").arg(extDir.last().absoluteFilePath()).arg(type);
-                  if (QFileInfo(typeDir).exists())
+                  QString typeDir = QString("%1/%2").arg(extDir.last().absoluteFilePath(), type);
+                  if (QFileInfo::exists(typeDir))
                         result.append(typeDir);
                   }
             }
@@ -50,7 +50,7 @@ QStringList Extension::getDirectoriesByType(const char* type)
 
 bool Extension::isInstalled(QString extensionId)
       {
-      QDir extensionDir(QString("%1/%2").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId));
+      QDir extensionDir(QString("%1/%2").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS), extensionId));
       return extensionDir.exists();
       }
 
@@ -61,7 +61,7 @@ bool Extension::isInstalled(QString extensionId)
 QString Extension::getLatestVersion(QString extensionId)
       {
       QString result = "0.0";
-      QDir extensionDir(QString("%1/%2").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId));
+      QDir extensionDir(QString("%1/%2").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS), extensionId));
       auto extDir = extensionDir.entryInfoList(QDir::AllDirs | QDir::NoDotAndDotDot| QDir::Readable | QDir::NoSymLinks, QDir::Name);
       if (!extDir.isEmpty())
             result = extDir.last().fileName();

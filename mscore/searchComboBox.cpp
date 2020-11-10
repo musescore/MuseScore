@@ -105,7 +105,7 @@ QString AccessibleSearchBox::text(QAccessible::Text t) const
                         break;
                   }
             QString found = searchBox->found() ? "" : tr("Not found") + " ";
-            return QString("%1 %2 %3%4").arg(type).arg(value).arg(found).arg(mscore->currentScoreView()->score()->accessibleInfo());
+            return QString("%1 %2 %3%4").arg(type, value, found, mscore->currentScoreView()->score()->accessibleInfo());
             }
 
       return QAccessibleWidget::text(t);

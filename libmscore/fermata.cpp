@@ -385,7 +385,7 @@ qreal Fermata::mag() const
 
 QString Fermata::accessibleInfo() const
       {
-      return QString("%1: %2").arg(Element::accessibleInfo()).arg(userName());
+      return QString("%1: %2").arg(Element::accessibleInfo(), userName());
       }
 
 }

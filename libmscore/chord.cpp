@@ -3332,28 +3332,28 @@ QString Chord::accessibleExtraInfo() const
             if (!score()->selectionFilter().canSelect(c))
                   continue;
             for (const Note* n : c->notes())
-                  rez = QString("%1 %2").arg(rez).arg(n->screenReaderInfo());
+                  rez = QString("%1 %2").arg(rez, n->screenReaderInfo());
             }
 
       for (Articulation* a : articulations()) {
             if (!score()->selectionFilter().canSelect(a))
                   continue;
-            rez = QString("%1 %2").arg(rez).arg(a->screenReaderInfo());
+            rez = QString("%1 %2").arg(rez, a->screenReaderInfo());
             }
 
       if (arpeggio() && score()->selectionFilter().canSelect(arpeggio()))
-            rez = QString("%1 %2").arg(rez).arg(arpeggio()->screenReaderInfo());
+            rez = QString("%1 %2").arg(rez, arpeggio()->screenReaderInfo());
 
       if (tremolo() && score()->selectionFilter().canSelect(tremolo()))
-            rez = QString("%1 %2").arg(rez).arg(tremolo()->screenReaderInfo());
+            rez = QString("%1 %2").arg(rez, tremolo()->screenReaderInfo());
 
       foreach (Element* e, el()) {
             if (!score()->selectionFilter().canSelect(e))
                   continue;
-            rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
+            rez = QString("%1 %2").arg(rez, e->screenReaderInfo());
             }
 
-      return QString("%1 %2").arg(rez).arg(ChordRest::accessibleExtraInfo());
+      return QString("%1 %2").arg(rez, ChordRest::accessibleExtraInfo());
       }
 
 //---------------------------------------------------------

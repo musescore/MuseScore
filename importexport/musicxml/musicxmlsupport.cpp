@@ -145,8 +145,7 @@ QString MusicXMLInstrument::toString() const
              .arg(midiVolume)
              .arg(midiPan)
              .arg(unpitched)
-             .arg(name)
-             .arg(sound)
+             .arg(name, sound)
              .arg(int(notehead))
              .arg(line)
              .arg(int(stemDirection));
@@ -229,7 +228,7 @@ void domError(const QDomElement& e)
       int col = e.columnNumber();
       if (col != -1)
             m += QString("col:%1 ").arg(col);
-      m += QString("%1: Unknown Node <%2>, type %3").arg(s).arg(e.tagName()).arg(e.nodeType());
+      m += QString("%1: Unknown Node <%2>, type %3").arg(s, e.tagName()).arg(e.nodeType());
       if (e.isText())
             m += QString("  text node <%1>").arg(e.toText().data());
       qDebug("%s", qPrintable(m));

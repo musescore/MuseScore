@@ -989,7 +989,6 @@ Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError)
                   setMscVersion(sl[0].toInt() * 100 + sl[1].toInt());
 
                   if (!ignoreVersionError) {
-                        QString message;
                         if (mscVersion() > MSCVERSION)
                               return FileError::FILE_TOO_NEW;
                         if (mscVersion() < 114)

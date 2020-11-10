@@ -57,7 +57,7 @@ std::unique_ptr<ScriptEntry> ScoreTestScriptEntry::fromContext(const ScriptConte
             int scoreNum = 1;
             const QString templ("%1.mscx");
             fileName = templ.arg(QString::number(scoreNum));
-            while (QFileInfo(fileName).exists())
+            while (QFileInfo::exists(fileName))
                   fileName = templ.arg(QString::number(++scoreNum));
             }
 

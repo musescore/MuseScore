@@ -1779,9 +1779,9 @@ void ChordList::write(XmlWriter& xml) const
             for (const ChordSymbol &s : symbols) {
                   if (s.fontIdx == fontIdx) {
                         if (s.code.isNull())
-                              xml.tagE(QString("sym name=\"%1\" value=\"%2\"").arg(s.name).arg(s.value));
+                              xml.tagE(QString("sym name=\"%1\" value=\"%2\"").arg(s.name, s.value));
                         else
-                              xml.tagE(QString("sym name=\"%1\" code=\"0x%2\"").arg(s.name).arg(s.code.unicode(),0,16));
+                              xml.tagE(QString("sym name=\"%1\" code=\"0x%2\"").arg(s.name).arg(s.code.unicode(), 0, 16));
                         }
                   }
             xml.etag();
@@ -1819,7 +1819,7 @@ bool ChordList::read(const QString& name)
 #elif defined(Q_OS_ANDROID)
             path = QString(":/styles/%1").arg(name);
 #else
-            path = QString("%1styles/%2").arg(MScore::globalShare()).arg(name);
+            path = QString("%1styles/%2").arg(MScore::globalShare(), name);
 #endif
             }
       // default to chords_std.xml
@@ -1830,14 +1830,14 @@ bool ChordList::read(const QString& name)
 #elif defined(Q_OS_ANDROID)
             path = QString(":/styles/chords_std.xml");
 #else
-            path = QString("%1styles/%2").arg(MScore::globalShare()).arg("chords_std.xml");
+            path = QString("%1styles/%2").arg(MScore::globalShare(), "chords_std.xml");
 #endif
 
       if (name.isEmpty())
             return false;
       QFile f(path);
       if (!f.open(QIODevice::ReadOnly)) {
-            MScore::lastError = QObject::tr("Cannot open chord description:\n%1\n%2").arg(f.fileName()).arg(f.errorString());
+            MScore::lastError = QObject::tr("Cannot open chord description:\n%1\n%2").arg(f.fileName(), f.errorString());
             qDebug("ChordList::read failed: <%s>", qPrintable(path));
             return false;
             }
@@ -1872,7 +1872,7 @@ bool ChordList::write(const QString& name) const
       QFile f(info.filePath());
 
       if (!f.open(QIODevice::WriteOnly)) {
-            MScore::lastError = QObject::tr("Open chord description\n%1\nfailed: %2").arg(f.fileName()).arg(f.errorString());
+            MScore::lastError = QObject::tr("Open chord description\n%1\nfailed: %2").arg(f.fileName(), f.errorString());
             return false;
             }
 

@@ -40,7 +40,7 @@ const double MsSplashScreen::gradientDitherAmount { 0.25 };
 const std::tuple<QColor, QColor> MsSplashScreen::stableBuildGradientColors   { "#0885DD", "#0C70B6" };
 const std::tuple<QColor, QColor> MsSplashScreen::unstableBuildGradientColors { "#04426E", "#063759" };
 
-const QColor MsSplashScreen::textColor { "#CCFFFFFF" };
+const QColor MsSplashScreen::textColor { 0xCCFFFFFF };
 
 //---------------------------------------------------------
 //   MsSplashScreen constructor

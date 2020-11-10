@@ -114,7 +114,7 @@ QString ApiInfo::getOsInfo()
 ApiInfo::ApiInfo(const QByteArray _clientId, const QByteArray _apiKey)
    : clientId(_clientId),
    apiKey(_apiKey),
-   userAgent(QString(userAgentTemplate).arg(VERSION).arg(BUILD_NUMBER).arg(getOsInfo()).toLatin1())
+   userAgent(QString(userAgentTemplate).arg(VERSION, BUILD_NUMBER, getOsInfo()).toLatin1())
       {
       if (MScore::debugMode) {
             qWarning("clientId: %s", clientId.constData());
@@ -290,7 +290,7 @@ QString LoginManager::getErrorString(QNetworkReply* reply, const QJsonObject& ob
       {
       const QString err = reply ? reply->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString() : tr("Error");
       const QString msg = obj["message"].toString();
-      return QString("%1 (%2)").arg(err).arg(msg);
+      return QString("%1 (%2)").arg(err, msg);
       }
 
 /*------- TRY LOGIN ROUTINES ----------------------------*/

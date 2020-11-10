@@ -590,7 +590,7 @@ QString Dynamic::accessibleInfo() const
       else {
             s = dynamicTypeName();
             }
-      return QString("%1: %2").arg(Element::accessibleInfo()).arg(s);
+      return QString("%1: %2").arg(Element::accessibleInfo(), s);
       }
 
 //---------------------------------------------------------
@@ -606,7 +606,7 @@ QString Dynamic::screenReaderInfo() const
       else {
             s = dynamicTypeName();
             }
-      return QString("%1: %2").arg(Element::accessibleInfo()).arg(s);
+      return QString("%1: %2").arg(Element::accessibleInfo(), s);
       }
 }
 

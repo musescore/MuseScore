@@ -264,7 +264,7 @@ Element* Jump::prevSegmentElement()
 
 QString Jump::accessibleInfo() const
       {
-      return QString("%1: %2").arg(Element::accessibleInfo()).arg(this->jumpTypeUserName());
+      return QString("%1: %2").arg(Element::accessibleInfo(), this->jumpTypeUserName());
       }
 
 }

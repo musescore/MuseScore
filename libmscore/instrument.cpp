@@ -44,7 +44,7 @@ const std::initializer_list<Channel::Prop> PartChannelSettingsLink::excerptPrope
 
 void NamedEventList::write(XmlWriter& xml, const QString& n) const
       {
-      xml.stag(QString("%1 name=\"%2\"").arg(n).arg(name));
+      xml.stag(QString("%1 name=\"%2\"").arg(n, name));
       if (!descr.isEmpty())
             xml.tag("descr", descr);
       for (const MidiCoreEvent& e : events)

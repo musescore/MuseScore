@@ -573,9 +573,9 @@ QString TimeSig::accessibleInfo() const
                   timeSigString = QObject::tr("Cut time");
                   break;
             default:
-                  timeSigString = QObject::tr("%1/%2 time").arg(QString::number(numerator())).arg(QString::number(denominator()));
+                  timeSigString = QObject::tr("%1/%2 time").arg(QString::number(numerator()), QString::number(denominator()));
             }
-      return QString("%1: %2").arg(Element::accessibleInfo()).arg(timeSigString);
+      return QString("%1: %2").arg(Element::accessibleInfo(), timeSigString);
       }
 
 //---------------------------------------------------------

@@ -27,7 +27,7 @@ namespace Awl {
 //---------------------------------------------------------
 
 AbstractSlider::AbstractSlider(QWidget* parent)
-   : QWidget(parent), _scaleColor(Qt::darkGray), _scaleValueColor(QColor("#2456aa"))
+   : QWidget(parent), _scaleColor(Qt::darkGray), _scaleValueColor(QColor(0x2456aa))
       {
       __id         = 0;
       _value      = 0.5;

@@ -898,7 +898,7 @@ class Staff : public ScoreElement {
       API_PROPERTY_T( qreal, staffUserdist,  STAFF_USERDIST            )
 
       /** Part which this staff belongs to. */
-      Q_PROPERTY(Ms::PluginAPI::Part* part READ part);
+      Q_PROPERTY(Ms::PluginAPI::Part* part READ part)
 
    public:
       /// \cond MS_INTERNAL

@@ -395,7 +395,7 @@ void Volta::setTempo() const
 
 QString Volta::accessibleInfo() const
       {
-      return QString("%1: %2").arg(Element::accessibleInfo()).arg(text());
+      return QString("%1: %2").arg(Element::accessibleInfo(), text());
       }
 
 //---------------------------------------------------------

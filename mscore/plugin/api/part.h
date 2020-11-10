@@ -88,7 +88,7 @@ class Part : public Ms::PluginAPI::ScoreElement {
        * List of instruments in this part.
        * \since MuseScore 3.5
        */
-      Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Instrument> instruments READ instruments);
+      Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Instrument> instruments READ instruments)
 
    public:
       /// \cond MS_INTERNAL

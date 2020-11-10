@@ -1653,7 +1653,7 @@ Element* BarLine::prevSegmentElement()
 
 QString BarLine::accessibleInfo() const
       {
-      return QString("%1: %2").arg(Element::accessibleInfo()).arg(BarLine::userTypeName(barLineType()));
+      return QString("%1: %2").arg(Element::accessibleInfo(), BarLine::userTypeName(barLineType()));
       }
 
 //---------------------------------------------------------
@@ -1668,14 +1668,14 @@ QString BarLine::accessibleExtraInfo() const
       for (const Element* e : *el()) {
             if (!score()->selectionFilter().canSelect(e))
                   continue;
-            rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
+            rez = QString("%1 %2").arg(rez, e->screenReaderInfo());
             }
 
       for (const Element* e : seg->annotations()) {
             if (!score()->selectionFilter().canSelect(e))
                   continue;
             if (e->track() == track())
-                  rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
+                  rez = QString("%1 %2").arg(rez, e->screenReaderInfo());
             }
       Measure* m = seg->measure();
 
@@ -1684,11 +1684,11 @@ QString BarLine::accessibleExtraInfo() const
             for (const Element* e : m->el()) {
                   if (!score()->selectionFilter().canSelect(e)) continue;
                   if (e->type() == ElementType::JUMP)
-                        rez= QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
+                        rez= QString("%1 %2").arg(rez, e->screenReaderInfo());
                   if (e->type() == ElementType::MARKER) {
                         const Marker* m1 = toMarker(e);
                         if (m1->markerType() == Marker::Type::FINE)
-                              rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
+                              rez = QString("%1 %2").arg(rez, e->screenReaderInfo());
                         }
 
                   }
@@ -1701,7 +1701,7 @@ QString BarLine::accessibleExtraInfo() const
                         if (e->isMarker()) {
                               if (toMarker(e)->markerType() == Marker::Type::FINE)
                                     continue; //added above^
-                              rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
+                              rez = QString("%1 %2").arg(rez, e->screenReaderInfo());
                               }
                         }
                   }
@@ -1716,9 +1716,9 @@ QString BarLine::accessibleExtraInfo() const
                   continue;
             if (s->type() == ElementType::VOLTA) {
                   if (s->tick() == tick)
-                        rez = QObject::tr("%1 Start of %2").arg(rez).arg(s->screenReaderInfo());
+                        rez = QObject::tr("%1 Start of %2").arg(rez, s->screenReaderInfo());
                   if (s->tick2() == tick)
-                        rez = QObject::tr("%1 End of %2").arg(rez).arg(s->screenReaderInfo());
+                        rez = QObject::tr("%1 End of %2").arg(rez, s->screenReaderInfo());
                   }
             }
       return rez;

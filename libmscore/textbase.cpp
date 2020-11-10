@@ -611,7 +611,7 @@ void TextCursor::accessibileMessage(QString& accMsg, int oldRow, int oldCol, QSt
                   if (accMsg.isEmpty()) // no characters were skipped
                         accMsg = oldSelection;
                   else
-                        accMsg = QObject::tr("%1, %2").arg(accMsg).arg(oldSelection);
+                        accMsg = QObject::tr("%1, %2").arg(accMsg, oldSelection);
                   }
 
             return;
@@ -666,7 +666,7 @@ void TextCursor::accessibileMessage(QString& accMsg, int oldRow, int oldCol, QSt
             str2 = QObject::tr("%1 unselected").arg(str2);
             }
 
-      accMsg =  QObject::tr("%1, %2").arg(str1).arg(str2);
+      accMsg =  QObject::tr("%1, %2").arg(str1, str2);
       }
 
 //---------------------------------------------------------
@@ -2547,7 +2547,7 @@ QString TextBase::accessibleInfo() const
             s.truncate(20);
             s += "…";
             }
-      return  QString("%1: %2").arg(rez).arg(s);
+      return  QString("%1: %2").arg(rez, s);
       }
 
 //---------------------------------------------------------
@@ -2572,7 +2572,7 @@ QString TextBase::screenReaderInfo() const
                   break;
             }
       QString s = plainText().simplified();
-      return  QString("%1: %2").arg(rez).arg(s);
+      return  QString("%1: %2").arg(rez, s);
       }
 
 //---------------------------------------------------------

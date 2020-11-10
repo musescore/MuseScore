@@ -532,7 +532,7 @@ Pid Trill::propertyId(const QStringRef& name) const
 
 QString Trill::accessibleInfo() const
       {
-      return QString("%1: %2").arg(Element::accessibleInfo()).arg(trillTypeUserName());
+      return QString("%1: %2").arg(Element::accessibleInfo(), trillTypeUserName());
       }
 }
 

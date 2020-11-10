@@ -973,7 +973,7 @@ QFileInfoList Fluid::sfFiles()
       QFileInfoList l;
 
       QStringList pl = preferences.getString(PREF_APP_PATHS_MYSOUNDFONTS).split(";");
-      pl.prepend(QFileInfo(QString("%1%2").arg(mscoreGlobalShare).arg("sound")).absoluteFilePath());
+      pl.prepend(QFileInfo(QString("%1%2").arg(mscoreGlobalShare, "sound")).absoluteFilePath());
 
       // append extensions directory
       QStringList extensionsDir = Ms::Extension::getDirectoriesByType(Ms::Extension::soundfontsDir);

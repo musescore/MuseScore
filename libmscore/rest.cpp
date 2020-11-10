@@ -899,7 +899,7 @@ void Rest::setAccent(bool flag)
 QString Rest::accessibleInfo() const
       {
       QString voice = QObject::tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
-      return QObject::tr("%1; Duration: %2; %3").arg(Element::accessibleInfo()).arg(durationUserName()).arg(voice);
+      return QObject::tr("%1; Duration: %2; %3").arg(Element::accessibleInfo(), durationUserName(), voice);
       }
 
 //---------------------------------------------------------
@@ -911,7 +911,7 @@ QString Rest::screenReaderInfo() const
       Measure* m = measure();
       bool voices = m ? m->hasVoices(staffIdx()) : false;
       QString voice = voices ? QObject::tr("Voice: %1").arg(QString::number(track() % VOICES + 1)) : "";
-      return QString("%1 %2 %3").arg(Element::accessibleInfo()).arg(durationUserName()).arg(voice);
+      return QString("%1 %2 %3").arg(Element::accessibleInfo(), durationUserName(), voice);
       }
 
 //---------------------------------------------------------

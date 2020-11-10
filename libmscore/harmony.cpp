@@ -530,7 +530,7 @@ static int convertNote(const QString& s, NoteSpellingType noteSpelling, NoteCase
             case NoteSpellingType::SOLFEGGIO:
             case NoteSpellingType::FRENCH:
                   useSolfeggio = true;
-                  if (s.toLower().startsWith("sol"))
+                  if (s.startsWith("sol", Qt::CaseInsensitive))
                         acci = 3;
                   else
                         acci = 2;
@@ -1962,7 +1962,7 @@ QString Harmony::userName() const
 
 QString Harmony::accessibleInfo() const
       {
-      return QString("%1: %2").arg(userName()).arg(harmonyName());
+      return QString("%1: %2").arg(userName(), harmonyName());
       }
 
 //---------------------------------------------------------
@@ -1987,7 +1987,7 @@ QString Harmony::generateScreenReaderInfo() const
                   bool hasUpper = aux.contains('I') || aux.contains('V');
                   bool hasLower = aux.contains('i') || aux.contains('v');
                   if (hasLower && !hasUpper)
-                        rez = QString("%1 %2").arg(rez).arg(QObject::tr("lower case"));
+                        rez = QString("%1 %2").arg(rez, QObject::tr("lower case"));
                   aux = aux.toLower();
                   static std::vector<std::pair<QString, QString>> rnaReplacements {
                         { "vii", "7" },
@@ -2025,12 +2025,12 @@ QString Harmony::generateScreenReaderInfo() const
                   return rez;
             case HarmonyType::NASHVILLE:
                   if (!_function.isEmpty())
-                        rez = QString("%1 %2").arg(rez).arg(_function);
+                        rez = QString("%1 %2").arg(rez, _function);
                   break;
             case HarmonyType::STANDARD:
             default:
                   if (_rootTpc != Tpc::TPC_INVALID)
-                        rez = QString("%1 %2").arg(rez).arg(tpc2name(_rootTpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, true));
+                        rez = QString("%1 %2").arg(rez, tpc2name(_rootTpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, true));
             }
 
       if (const_cast<Harmony*>(this)->parsedForm() && !hTextName().isEmpty()) {
@@ -2043,14 +2043,14 @@ QString Harmony::generateScreenReaderInfo() const
                         s.replace("b", QObject::tr("♭"));
                   extension += s + " ";
                   }
-            rez = QString("%1 %2").arg(rez).arg(extension);
+            rez = QString("%1 %2").arg(rez, extension);
             }
       else {
-            rez = QString("%1 %2").arg(rez).arg(hTextName());
+            rez = QString("%1 %2").arg(rez, hTextName());
             }
 
       if (_baseTpc != Tpc::TPC_INVALID)
-            rez = QString("%1 / %2").arg(rez).arg(tpc2name(_baseTpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, true));
+            rez = QString("%1 / %2").arg(rez, tpc2name(_baseTpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, true));
 
       return rez;
       }

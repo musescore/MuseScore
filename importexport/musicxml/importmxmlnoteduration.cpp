@@ -109,7 +109,7 @@ QString mxmlNoteDuration::checkTiming(const QString& type, const bool rest, cons
       if (_dura.isValid() && calcDura.isValid()) {
             if (_dura != calcDura) {
                   errorStr = QString("calculated duration (%1) not equal to specified duration (%2)")
-                        .arg(calcDura.print()).arg(_dura.print());
+                        .arg(calcDura.print(), _dura.print());
                   //qDebug("rest %d type '%s' timemod %s", rest, qPrintable(type), qPrintable(_timeMod.print()));
 
                   if (rest && type == "whole" && _dura.isValid()) {
@@ -261,7 +261,7 @@ void mxmlNoteDuration::timeModification(QXmlStreamReader& e)
       else {
             _timeMod.set(1, 1);
             _logger->logError(QString("illegal time-modification: actual-notes %1 normal-notes %2")
-                              .arg(strActual).arg(strNormal), &e);
+                              .arg(strActual, strNormal), &e);
             }
       }
 

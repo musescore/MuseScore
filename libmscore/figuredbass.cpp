@@ -1648,7 +1648,7 @@ bool FiguredBass::readConfigFile(const QString& fileName)
 
       QFile fi(path);
       if (!fi.open(QIODevice::ReadOnly)) {
-            MScore::lastError = QObject::tr("Cannot open figured bass description:\n%1\n%2").arg(fi.fileName()).arg(fi.errorString());
+            MScore::lastError = QObject::tr("Cannot open figured bass description:\n%1\n%2").arg(fi.fileName(), fi.errorString());
             qDebug("FiguredBass::read failed: <%s>", qPrintable(path));
             return false;
             }

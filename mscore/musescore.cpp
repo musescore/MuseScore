@@ -2529,7 +2529,7 @@ void MuseScore::loadScoreList()
       QSettings s;
       for (int i = RECENT_LIST_SIZE-1; i >= 0; --i) {
             QString path = s.value(QString("recent-%1").arg(i),"").toString();
-            if (!path.isEmpty() && QFileInfo(path).exists()) {
+            if (!path.isEmpty() && QFileInfo::exists(path)) {
                   _recentScores.removeAll(path);
                   _recentScores.prepend(path);
                   }

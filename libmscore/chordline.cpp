@@ -396,7 +396,7 @@ QString ChordLine::accessibleInfo() const
       {
       QString rez = Element::accessibleInfo();
       if(chordLineType() != ChordLineType::NOTYPE)
-            rez = QString("%1: %2").arg(rez).arg(scorelineNames[static_cast<int>(chordLineType()) - 1]);
+            rez = QString("%1: %2").arg(rez, scorelineNames[static_cast<int>(chordLineType()) - 1]);
       return rez;
       }
 

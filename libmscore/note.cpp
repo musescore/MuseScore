@@ -840,7 +840,7 @@ QString Note::tpcUserName(const bool explicitAccidental) const
 
       if (!concertPitch() && transposition()) {
             QString soundingPitch = tpcUserName(tpc1(), ppitch(), explicitAccidental);
-            return QObject::tr("%1 (sounding as %2%3)").arg(pitchName).arg(soundingPitch).arg(pitchOffset);
+            return QObject::tr("%1 (sounding as %2%3)").arg(pitchName, soundingPitch, pitchOffset);
             }
       return pitchName + pitchOffset;
       }
@@ -1266,7 +1266,7 @@ void Note::draw(QPainter* painter) const
                   if (i < in->minPitchP() || i > in->maxPitchP())
                         painter->setPen(selected() ? Qt::darkRed : Qt::red);
                   else if (i < in->minPitchA() || i > in->maxPitchA())
-                        painter->setPen(selected() ? QColor("#565600") : Qt::darkYellow);
+                        painter->setPen(selected() ? QColor(0x565600) : Qt::darkYellow);
                   }
             // draw blank notehead to avoid staff and ledger lines
             if (_cachedSymNull != SymId::noSym) {
@@ -3042,10 +3042,10 @@ QString Note::accessibleInfo() const
       else if (staff()->isDrumStaff(tick()) && drumset)
             pitchName = qApp->translate("drumset", drumset->name(pitch()).toUtf8().constData());
       else if (staff()->isTabStaff(tick()))
-            pitchName = QObject::tr("%1; String: %2; Fret: %3").arg(tpcUserName(false)).arg(QString::number(string() + 1)).arg(QString::number(fret()));
+            pitchName = QObject::tr("%1; String: %2; Fret: %3").arg(tpcUserName(false), QString::number(string() + 1), QString::number(fret()));
       else
             pitchName = tpcUserName(false);
-      return QObject::tr("%1; Pitch: %2; Duration: %3%4%5").arg(noteTypeUserName()).arg(pitchName).arg(duration).arg(onofftime).arg((chord()->isGrace() ? "" : QString("; %1").arg(voice)));
+      return QObject::tr("%1; Pitch: %2; Duration: %3%4%5").arg(noteTypeUserName(), pitchName, duration, onofftime, (chord()->isGrace() ? "" : QString("; %1").arg(voice)));
       }
 
 //---------------------------------------------------------
@@ -3065,10 +3065,10 @@ QString Note::screenReaderInfo() const
       else if (staff()->isDrumStaff(tick()) && drumset)
             pitchName = qApp->translate("drumset", drumset->name(pitch()).toUtf8().constData());
       else if (staff()->isTabStaff(tick()))
-            pitchName = QObject::tr("%1; String: %2; Fret: %3").arg(tpcUserName(true)).arg(QString::number(string() + 1)).arg(QString::number(fret()));
+            pitchName = QObject::tr("%1; String: %2; Fret: %3").arg(tpcUserName(true), QString::number(string() + 1), QString::number(fret()));
       else
             pitchName = tpcUserName(true);
-      return QString("%1 %2 %3%4").arg(noteTypeUserName()).arg(pitchName).arg(duration).arg((chord()->isGrace() ? "" : QString("; %1").arg(voice)));
+      return QString("%1 %2 %3%4").arg(noteTypeUserName(), pitchName, duration, (chord()->isGrace() ? "" : QString("; %1").arg(voice)));
       }
 
 //---------------------------------------------------------
@@ -3079,39 +3079,39 @@ QString Note::accessibleExtraInfo() const
       {
       QString rez = "";
       if (accidental()) {
-            rez = QString("%1 %2").arg(rez).arg(accidental()->screenReaderInfo());
+            rez = QString("%1 %2").arg(rez, accidental()->screenReaderInfo());
             }
       if (!el().empty()) {
             for (Element* e : el()) {
                   if (!score()->selectionFilter().canSelect(e)) continue;
-                  rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
+                  rez = QString("%1 %2").arg(rez, e->screenReaderInfo());
                   }
             }
       if (tieFor())
-            rez = QObject::tr("%1 Start of %2").arg(rez).arg(tieFor()->screenReaderInfo());
+            rez = QObject::tr("%1 Start of %2").arg(rez, tieFor()->screenReaderInfo());
 
       if (tieBack())
-            rez = QObject::tr("%1 End of %2").arg(rez).arg(tieBack()->screenReaderInfo());
+            rez = QObject::tr("%1 End of %2").arg(rez, tieBack()->screenReaderInfo());
 
       if (!spannerFor().empty()) {
             for (Spanner* s : spannerFor()) {
                   if (!score()->selectionFilter().canSelect(s))
                         continue;
-                  rez = QObject::tr("%1 Start of %2").arg(rez).arg(s->screenReaderInfo());
+                  rez = QObject::tr("%1 Start of %2").arg(rez, s->screenReaderInfo());
                   }
             }
       if (!spannerBack().empty()) {
             for (Spanner* s : spannerBack()) {
                   if (!score()->selectionFilter().canSelect(s))
                         continue;
-                  rez = QObject::tr("%1 End of %2").arg(rez).arg(s->screenReaderInfo());
+                  rez = QObject::tr("%1 End of %2").arg(rez, s->screenReaderInfo());
                   }
             }
 
       // only read extra information for top note of chord
       // (it is reached directly on next/previous element)
       if (this == chord()->upNote())
-            rez = QString("%1 %2").arg(rez).arg(chord()->accessibleExtraInfo());
+            rez = QString("%1 %2").arg(rez, chord()->accessibleExtraInfo());
 
       return rez;
       }
