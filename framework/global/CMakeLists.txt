@@ -62,6 +62,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/uri.h
     ${CMAKE_CURRENT_LIST_DIR}/invoker.cpp
     ${CMAKE_CURRENT_LIST_DIR}/invoker.h
+    ${CMAKE_CURRENT_LIST_DIR}/progress.h
     ${CMAKE_CURRENT_LIST_DIR}/smuflranges.cpp
     ${CMAKE_CURRENT_LIST_DIR}/smuflranges.h
     ${CMAKE_CURRENT_LIST_DIR}/widgetstatestore.cpp

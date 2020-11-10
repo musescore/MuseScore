@@ -21,8 +21,7 @@
 
 #include "../ifilesystem.h"
 
-namespace mu {
-namespace framework {
+namespace mu::framework {
 class FileSystem : public IFileSystem
 {
 public:
@@ -39,7 +38,6 @@ private:
     Ret removeFile(const QString& path) const;
     Ret removeDir(const QString& path) const;
 };
-}
 }
 
 #endif // MU_FRAMEWORK_FILESYSTEM_H

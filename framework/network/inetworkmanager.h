@@ -21,31 +21,29 @@
 
 #include "ret.h"
 #include "async/channel.h"
-#include "networktypes.h"
+#include "global/progress.h"
+#include "system/iodevice.h"
 
 class QUrl;
-class QIODevice;
 
-namespace mu {
-namespace framework {
+namespace mu::framework {
 class INetworkManager
 {
 public:
     virtual ~INetworkManager() = default;
 
-    virtual Ret get(const QUrl& url, QIODevice* incommingData) = 0;
+    virtual Ret get(const QUrl& url, IODevice* incommingData) = 0;
     virtual Ret head(const QUrl& url) = 0;
-    virtual Ret post(const QUrl& url, QIODevice* outgoingData, QIODevice* incommingData) = 0;
-    virtual Ret put(const QUrl& url, QIODevice* outgoingData, QIODevice* incommingData) = 0;
-    virtual Ret del(const QUrl& url, QIODevice* incommingData) = 0;
+    virtual Ret post(const QUrl& url, IODevice* outgoingData, IODevice* incommingData) = 0;
+    virtual Ret put(const QUrl& url, IODevice* outgoingData, IODevice* incommingData) = 0;
+    virtual Ret del(const QUrl& url, IODevice* incommingData) = 0;
 
-    virtual async::Channel<Progress> progressChannel() const = 0;
+    virtual ProgressChannel progressChannel() const = 0;
 
     virtual void abort() = 0;
 };
 
 using INetworkManagerPtr = std::shared_ptr<INetworkManager>;
-}
 }
 
 #endif // MU_FRAMEWORK_INETWORKMANAGER_H

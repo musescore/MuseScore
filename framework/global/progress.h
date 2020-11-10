@@ -16,12 +16,16 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_NETWORKTYPES_H
-#define MU_FRAMEWORK_NETWORKTYPES_H
+#ifndef MU_FRAMEWORK_PROGRESS_H
+#define MU_FRAMEWORK_PROGRESS_H
 
-namespace mu {
-namespace framework {
-struct Progress {
+#include <string>
+
+#include "async/channel.h"
+
+namespace mu::framework {
+struct Progress
+{
     int64_t current = 0;
     int64_t total = 0;
     std::string status;
@@ -34,7 +38,8 @@ struct Progress {
 
     Progress() = default;
 };
-}
+
+using ProgressChannel = async::Channel<Progress>;
 }
 
-#endif // MU_FRAMEWORK_NETWORKTYPES_H
+#endif // MU_FRAMEWORK_PROGRESS_H

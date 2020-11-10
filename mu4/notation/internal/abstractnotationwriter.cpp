@@ -22,7 +22,6 @@
 #include "log.h"
 
 using namespace mu::notation;
-using namespace mu::async;
 using namespace mu::framework;
 
 void AbstractNotationWriter::abort()
@@ -30,7 +29,7 @@ void AbstractNotationWriter::abort()
     NOT_IMPLEMENTED;
 }
 
-Channel<Progress> AbstractNotationWriter::progress() const
+ProgressChannel AbstractNotationWriter::progress() const
 {
     return m_progress;
 }
