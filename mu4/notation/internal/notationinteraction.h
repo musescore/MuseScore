@@ -108,6 +108,8 @@ public:
     void changeTextCursorPosition(const QPointF& newCursorPos) override;
     async::Notification textEditingChanged() const override;
 
+    void copySelection() override;
+    void pasteSelection() override;
     void deleteSelection() override;
 
     void setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval = 0) override;
@@ -129,6 +131,7 @@ private:
     void resetAnchorLines();
     void drawAnchorLines(QPainter* painter);
     void drawTextEditMode(QPainter* painter);
+    void drawSelectionRange(QPainter* painter);
     void moveElementSelection(MoveDirection d);
 
     Element* dropTarget(Ms::EditData& ed) const;

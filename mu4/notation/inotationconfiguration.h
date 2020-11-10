@@ -50,6 +50,7 @@ public:
 
     virtual QColor anchorLineColor() const = 0;
     virtual QColor playbackCursorColor() const = 0;
+    virtual QColor selectionColor() const = 0;
 
     virtual int selectionProximity() const = 0;
 

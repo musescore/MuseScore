@@ -21,6 +21,7 @@
 
 #include <vector>
 #include <QRectF>
+#include <QMimeData>
 #include "notationtypes.h"
 
 namespace mu {
@@ -33,12 +34,17 @@ public:
     virtual bool isNone() const = 0;
     virtual bool isRange() const = 0;
 
+    virtual bool canCopy() const = 0;
+    virtual QMimeData* mimeData() const = 0;
+
     virtual Element* element() const = 0;
     virtual std::vector<Element*> elements() const = 0;
 
     virtual SelectionRange range() const = 0;
 
     virtual QRectF canvasBoundingRect() const = 0;
+
+    virtual std::vector<QRectF> rangeBoundingArea() const = 0;
 };
 
 using INotationSelectionPtr = std::shared_ptr<INotationSelection>;
