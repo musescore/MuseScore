@@ -17,21 +17,21 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_NOTATION_ABSTRACTNOTATIONWRITER_H
-#define MU_NOTATION_ABSTRACTNOTATIONWRITER_H
+#include "notationmidiwriter.h"
 
-#include "inotationwriter.h"
+#include "log.h"
 
-namespace mu::notation {
-class AbstractNotationWriter : public INotationWriter
+using namespace mu::importexport;
+using namespace mu::framework;
+using namespace Ms;
+
+mu::Ret NotationMidiWriter::write(const Score& score, IODevice& destinationDevice, const Options& options)
 {
-public:
-    void abort() override;
-    framework::ProgressChannel progress() const override;
+    UNUSED(score)
+    UNUSED(destinationDevice)
+    UNUSED(options)
 
-protected:
-    framework::ProgressChannel m_progress;
-};
+    NOT_IMPLEMENTED;
+
+    return Ret();
 }
-
-#endif // MU_NOTATION_NOTATIONWRITERSREGISTER_H

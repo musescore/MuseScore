@@ -42,6 +42,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iimportexportconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/importexportconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/importexportconfiguration.h
+    
     ${CMAKE_CURRENT_LIST_DIR}/internal/musicxmlreader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/musicxmlreader.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationmidireader.cpp
@@ -58,6 +59,29 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationbwwreader.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/guitarproreader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/guitarproreader.h
+    
+    ${CMAKE_CURRENT_LIST_DIR}/internal/svgwriter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/svgwriter.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/pngwriter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/pngwriter.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/pdfwriter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/pdfwriter.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/mp3writer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/mp3writer.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/wavewriter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/wavewriter.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/oggwriter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/oggwriter.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/flacwriter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/flacwriter.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationmidiwriter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationmidiwriter.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/musicxmlwriter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/musicxmlwriter.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/mxlwriter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/mxlwriter.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/xmlwriter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/xmlwriter.h
     )
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/beatroot beatroot) # for midiimport

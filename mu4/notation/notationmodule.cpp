@@ -32,6 +32,7 @@
 #include "actions/iactionsregister.h"
 #include "internal/notationactions.h"
 #include "internal/notationreadersregister.h"
+#include "internal/notationwritersregister.h"
 #include "internal/mscznotationreader.h"
 #include "internal/msczmetareader.h"
 #include "internal/notationactionsrepositoryfactory.h"
@@ -83,6 +84,7 @@ void NotationModule::registerExports()
     std::shared_ptr<INotationReadersRegister> readers = std::make_shared<NotationReadersRegister>();
     readers->reg({ "mscz", "mscx" }, std::make_shared<MsczNotationReader>());
     framework::ioc()->registerExport<INotationReadersRegister>(moduleName(), readers);
+    framework::ioc()->registerExport<INotationWritersRegister>(moduleName(), std::make_shared<NotationWritersRegister>());
 
     Notation::init();
 }
