@@ -16,28 +16,34 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATION_INOTATIONREADERSREGISTER_H
-#define MU_NOTATION_INOTATIONREADERSREGISTER_H
 
-#include <string>
-#include <vector>
+#ifndef MU_NOTATION_INOTATIONWRITER_H
+#define MU_NOTATION_INOTATIONWRITER_H
 
-#include "modularity/imoduleexport.h"
-#include "inotationreader.h"
+#include "ret.h"
 
-namespace mu::notation {
-class INotationReadersRegister : MODULE_EXPORT_INTERFACE
-{
-    INTERFACE_ID(INotationReadersRegister)
+#include "async/channel.h"
+#include "network/networktypes.h"
+#include "system/iodevice.h"
 
-public:
-    virtual ~INotationReadersRegister() = default;
-
-    //! NOTE In the future, we need to replace the suffix with an enumerator
-    //! or a better structure describing the format.
-    virtual void reg(const std::vector<std::string>& suffixes, INotationReaderPtr reader) = 0;
-    virtual INotationReaderPtr reader(const std::string& suffix) = 0;
-};
+namespace Ms {
+class Score;
 }
 
-#endif // MU_NOTATION_INOTATIONREADERSREGISTER_H
+namespace mu::notation {
+class INotationWriter
+{
+public:
+    using Options = std::map<std::string, std::string>;
+
+    virtual ~INotationWriter() = default;
+
+    virtual Ret write(const Ms::Score& score, framework::IODevice& destinationDevice, const Options& options = Options()) = 0;
+    virtual void abort() = 0;
+    virtual async::Channel<framework::Progress> progress() const = 0;
+};
+
+using INotationWriterPtr = std::shared_ptr<INotationWriter>;
+}
+
+#endif // MU_NOTATION_INOTATIONWRITER_H
