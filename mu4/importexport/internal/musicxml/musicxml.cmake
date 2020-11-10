@@ -1,6 +1,7 @@
 
 set (MUSICXML_SRC
     ${CMAKE_CURRENT_LIST_DIR}/exportxml.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/exportxml.h
     ${CMAKE_CURRENT_LIST_DIR}/importmxml.cpp
     ${CMAKE_CURRENT_LIST_DIR}/importmxml.h
     ${CMAKE_CURRENT_LIST_DIR}/importmxmllogger.cpp
