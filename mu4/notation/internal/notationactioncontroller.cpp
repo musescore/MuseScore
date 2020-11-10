@@ -47,6 +47,9 @@ void NotationActionController::init()
     dispatcher()->reg(this, "pitch-up-octave", [this](const ActionName& action) { moveAction(action); });
     dispatcher()->reg(this, "pitch-down-octave", [this](const ActionName& action) { moveAction(action); });
 
+    dispatcher()->reg(this, "cut", this, &NotationActionController::cutSelection);
+    dispatcher()->reg(this, "copy", this, &NotationActionController::copySelection);
+    dispatcher()->reg(this, "paste", this, &NotationActionController::pasteSelection);
     dispatcher()->reg(this, "delete", this, &NotationActionController::deleteSelection);
     dispatcher()->reg(this, "undo", this, &NotationActionController::undo);
     dispatcher()->reg(this, "redo", this, &NotationActionController::redo);
@@ -226,6 +229,32 @@ void NotationActionController::swapVoices(int voiceIndex1, int voiceIndex2)
     }
 
     interaction->swapVoices(voiceIndex1, voiceIndex2);
+}
+
+void NotationActionController::cutSelection()
+{
+    copySelection();
+    deleteSelection();
+}
+
+void NotationActionController::copySelection()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->copySelection();
+}
+
+void NotationActionController::pasteSelection()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->pasteSelection();
 }
 
 void NotationActionController::deleteSelection()

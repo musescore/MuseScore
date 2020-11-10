@@ -158,6 +158,11 @@ QColor NotationConfiguration::playbackCursorColor() const
     return c;
 }
 
+QColor NotationConfiguration::selectionColor() const
+{
+    return Ms::MScore::selectColor[0];
+}
+
 int NotationConfiguration::selectionProximity() const
 {
     return settings()->value(SELECTION_PROXIMITY).toInt();

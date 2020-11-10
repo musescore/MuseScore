@@ -38,6 +38,9 @@ public:
     bool isNone() const override;
     bool isRange() const override;
 
+    bool canCopy() const override;
+    QMimeData* mimeData() const override;
+
     Element* element() const override;
     std::vector<Element*> elements() const override;
 
@@ -45,9 +48,25 @@ public:
 
     QRectF canvasBoundingRect() const override;
 
-private:
+    std::vector<QRectF> rangeBoundingArea() const override;
 
+private:
     Ms::Score* score() const;
+
+    Ms::Segment* rangeStartSegment() const;
+    Ms::Segment* rangeEndSegment() const;
+
+    int selectionLastVisibleStaff() const;
+
+    struct RangeSection {
+        const Ms::System* system = nullptr;
+        const Ms::Segment* startSegment = nullptr;
+        const Ms::Segment* endSegment = nullptr;
+    };
+    std::vector<RangeSection> splitRangeBySections(const Ms::Segment* rangeStartSegment, const Ms::Segment* rangeEndSegment) const;
+
+    int sectionElementsMaxY(const RangeSection& selection) const;
+    int sectionElementsMinY(const RangeSection& selection) const;
 
     IGetScore* m_getScore = nullptr;
 };

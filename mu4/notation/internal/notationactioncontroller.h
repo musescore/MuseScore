@@ -51,6 +51,9 @@ private:
 
     void swapVoices(int voiceIndex1, int voiceIndex2);
 
+    void cutSelection();
+    void copySelection();
+    void pasteSelection();
     void deleteSelection();
     void undo();
     void redo();

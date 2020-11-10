@@ -67,11 +67,6 @@ NotationPaintView::NotationPaintView(QQuickItem* parent)
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         onCurrentNotationChanged();
     });
-
-    // test
-    dispatcher()->reg(this, "copy", [](const actions::ActionName&) {
-        LOGI() << "NotationPaintView copy";
-    });
 }
 
 NotationPaintView::~NotationPaintView()

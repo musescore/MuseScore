@@ -316,7 +316,25 @@ void Notation::paintPageBorder(QPainter* painter, const Page* page) const
 
 void Notation::paintElements(QPainter* painter, const QList<Element*>& elements) const
 {
-    for (const Ms::Element* element : elements) {
+    QList<Ms::Element*> sortedElements = elements;
+    std::sort(sortedElements.begin(), sortedElements.end(), [](Ms::Element* e1, Ms::Element* e2) {
+        if (e1->z() == e2->z()) {
+            if (e1->selected()) {
+                return false;
+            } else if (e2->selected()) {
+                return true;
+            } else if (!e1->visible()) {
+                return true;
+            } else if (!e2->visible()) {
+                return false;
+            } else {
+                return e1->track() > e2->track();
+            }
+        }
+        return e1->z() <= e2->z();
+    });
+
+    for (const Ms::Element* element : sortedElements) {
         if (!element->visible()) {
             continue;
         }
