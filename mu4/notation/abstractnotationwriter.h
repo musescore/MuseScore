@@ -27,10 +27,10 @@ class AbstractNotationWriter : public INotationWriter
 {
 public:
     void abort() override;
-    async::Channel<framework::Progress> progress() const override;
+    framework::ProgressChannel progress() const override;
 
 private:
-    async::Channel<framework::Progress> m_progress;
+    framework::ProgressChannel m_progress;
 };
 }
 

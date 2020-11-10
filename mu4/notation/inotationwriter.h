@@ -23,7 +23,7 @@
 #include "ret.h"
 
 #include "async/channel.h"
-#include "network/networktypes.h"
+#include "global/progress.h"
 #include "system/iodevice.h"
 
 namespace Ms {
@@ -40,7 +40,7 @@ public:
 
     virtual Ret write(const Ms::Score& score, framework::IODevice& destinationDevice, const Options& options = Options()) = 0;
     virtual void abort() = 0;
-    virtual async::Channel<framework::Progress> progress() const = 0;
+    virtual framework::ProgressChannel progress() const = 0;
 };
 
 using INotationWriterPtr = std::shared_ptr<INotationWriter>;

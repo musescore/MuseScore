@@ -22,7 +22,7 @@
 
 #include "pluginstypes.h"
 #include "retval.h"
-#include "network/networktypes.h"
+#include "global/progress.h"
 
 #include "modularity/imoduleexport.h"
 
