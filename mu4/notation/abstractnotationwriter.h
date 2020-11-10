@@ -16,28 +16,22 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATION_INOTATIONREADERSREGISTER_H
-#define MU_NOTATION_INOTATIONREADERSREGISTER_H
 
-#include <string>
-#include <vector>
+#ifndef MU_NOTATION_ABSTRACTNOTATIONWRITER_H
+#define MU_NOTATION_ABSTRACTNOTATIONWRITER_H
 
-#include "modularity/imoduleexport.h"
-#include "inotationreader.h"
+#include "inotationwriter.h"
 
 namespace mu::notation {
-class INotationReadersRegister : MODULE_EXPORT_INTERFACE
+class AbstractNotationWriter : public INotationWriter
 {
-    INTERFACE_ID(INotationReadersRegister)
-
 public:
-    virtual ~INotationReadersRegister() = default;
+    void abort() override;
+    async::Channel<framework::Progress> progress() const override;
 
-    //! NOTE In the future, we need to replace the suffix with an enumerator
-    //! or a better structure describing the format.
-    virtual void reg(const std::vector<std::string>& suffixes, INotationReaderPtr reader) = 0;
-    virtual INotationReaderPtr reader(const std::string& suffix) = 0;
+private:
+    async::Channel<framework::Progress> m_progress;
 };
 }
 
-#endif // MU_NOTATION_INOTATIONREADERSREGISTER_H
+#endif // MU_NOTATION_NOTATIONWRITERSREGISTER_H

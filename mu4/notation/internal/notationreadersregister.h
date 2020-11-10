@@ -22,20 +22,16 @@
 #include <map>
 #include "../inotationreadersregister.h"
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class NotationReadersRegister : public INotationReadersRegister
 {
 public:
-
-    void reg(const std::vector<std::string>& syffixs, std::shared_ptr<INotationReader> reader) override;
-    std::shared_ptr<INotationReader> reader(const std::string& syffix) override;
+    void reg(const std::vector<std::string>& suffixes, INotationReaderPtr reader) override;
+    INotationReaderPtr reader(const std::string& suffix) override;
 
 private:
-
-    std::map<std::string, std::shared_ptr<INotationReader> > m_readers;
+    std::map<std::string, INotationReaderPtr> m_readers;
 };
-}
 }
 
 #endif // MU_NOTATION_NOTATIONREADERSREGISTER_H
