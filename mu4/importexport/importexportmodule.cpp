@@ -21,6 +21,7 @@
 #include "log.h"
 #include "config.h"
 #include "modularity/ioc.h"
+
 #include "notation/inotationreadersregister.h"
 #include "internal/musicxmlreader.h"
 #include "internal/notationmidireader.h"
@@ -30,6 +31,20 @@
 #include "internal/overeader.h"
 #include "internal/notationbwwreader.h"
 #include "internal/guitarproreader.h"
+
+#include "notation/inotationwritersregister.h"
+#include "internal/musicxmlwriter.h"
+#include "internal/notationmidiwriter.h"
+#include "internal/pdfwriter.h"
+#include "internal/pngwriter.h"
+#include "internal/svgwriter.h"
+#include "internal/mp3writer.h"
+#include "internal/wavewriter.h"
+#include "internal/oggwriter.h"
+#include "internal/flacwriter.h"
+#include "internal/musicxmlwriter.h"
+#include "internal/mxlwriter.h"
+#include "internal/xmlwriter.h"
 
 #include "internal/importexportconfiguration.h"
 
@@ -66,5 +81,22 @@ void ImportExportModule::onInit()
     readers->reg({ "ove", "scw" }, std::make_shared<OveReader>());
     readers->reg({ "bmw", "bww" }, std::make_shared<NotationBwwReader>());
     readers->reg({ "gtp", "gp3", "gp4", "gp5", "gpx", "gp", "ptb" }, std::make_shared<GuitarProReader>());
+
+    auto writers = framework::ioc()->resolve<INotationWritersRegister>(moduleName());
+    IF_ASSERT_FAILED(writers) {
+        return;
+    }
+
+    writers->reg({ "musicxml" }, std::make_shared<MusicXmlWriter>());
+    writers->reg({ "mxl" }, std::make_shared<MxlWriter>());
+    writers->reg({ "xml" }, std::make_shared<XmlWriter>());
+    writers->reg({ "mid", "midi", "kar" }, std::make_shared<NotationMidiWriter>());
+    writers->reg({ "pdf" }, std::make_shared<PdfWriter>());
+    writers->reg({ "png" }, std::make_shared<PngWriter>());
+    writers->reg({ "wav" }, std::make_shared<WaveWriter>());
+    writers->reg({ "mp3" }, std::make_shared<Mp3Writer>());
+    writers->reg({ "ogg" }, std::make_shared<OggWriter>());
+    writers->reg({ "flac" }, std::make_shared<FlacWriter>());
+
 #endif
 }
