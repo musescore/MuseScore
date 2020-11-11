@@ -90,7 +90,8 @@ jobs:
       run: |
         IF ${{ secrets.TELEMETRY_TRACK_ID != 0 }} == true ( SET T_ID=${{ secrets.TELEMETRY_TRACK_ID }} ) ELSE ( SET T_ID="''" )
         IF ${{ secrets.CRASH_LOG_SERVER_URL != 0 }} == true ( SET C_URL=${{ secrets.CRASH_LOG_SERVER_URL }} ) ELSE ( SET C_URL="''" )
-        build\ci\windows\build.bat -n ${{ github.run_id }} --telemetry %T_ID% --crashurl %C_URL%
+        IF "%BUILD_MODE%"" != "nightly_build" (SET MU4_BUILD_OPT="--build_mu4 OFF" )
+        build\ci\windows\build.bat -n ${{ github.run_id }} --telemetry %T_ID% --crashurl %C_URL% %MU4_BUILD_OPT%
     - name: Package 
       if: env.DO_BUILD == 'true'
       shell: cmd

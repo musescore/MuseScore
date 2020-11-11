@@ -93,7 +93,8 @@ jobs:
       if: env.DO_BUILD == 'true'
       run: |
         T_ID=${{ secrets.TELEMETRY_TRACK_ID }}; if [ -z "$T_ID" ]; then T_ID="''"; fi
-        sudo bash ./build/ci/linux/build.sh -n ${{ github.run_id }} --telemetry $T_ID
+        if [ "$BUILD_MODE" != "nightly_build" ]; then MU4_BUILD_OPT="--build_mu4 OFF"; fi
+        sudo bash ./build/ci/linux/build.sh -n ${{ github.run_id }} --telemetry $T_ID $MU4_BUILD_OPT
     - name: Package 
       if: env.DO_BUILD == 'true'
       run: |
