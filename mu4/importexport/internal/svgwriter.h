@@ -27,6 +27,11 @@ class SvgWriter : public notation::AbstractNotationWriter
 {
 public:
     Ret write(const Ms::Score& score, framework::IODevice& destinationDevice, const Options& options = Options()) override;
+
+private:
+    using NotesColors = QHash<int /* noteIndex */, QColor>;
+
+    NotesColors parseNotesColors(const QVariant& obj) const;
 };
 }
 
