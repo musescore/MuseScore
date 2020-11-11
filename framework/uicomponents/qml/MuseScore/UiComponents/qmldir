@@ -29,3 +29,4 @@ RoundedRadioButton 1.0 RoundedRadioButton.qml
 InstallationPanel 1.0 InstallationPanel.qml
 StyledScrollBar 1.0 StyledScrollBar.qml
 GradientTabButton 1.0 GradientTabButton.qml
+GridViewSectional 1.0 GridViewSectional.qml
