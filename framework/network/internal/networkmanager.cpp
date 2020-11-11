@@ -45,7 +45,7 @@ NetworkManager::~NetworkManager()
     }
 }
 
-Ret NetworkManager::get(const QUrl& url, IODevice *incommingData)
+Ret NetworkManager::get(const QUrl& url, IODevice* incommingData)
 {
     return execRequest(GET_REQUEST, url, incommingData);
 }
@@ -60,7 +60,7 @@ Ret NetworkManager::post(const QUrl& url, IODevice* outgoingData, IODevice* inco
     return execRequest(POST_REQUEST, url, incommingData, outgoingData);
 }
 
-Ret NetworkManager::put(const QUrl& url, IODevice *outgoingData, IODevice *incommingData)
+Ret NetworkManager::put(const QUrl& url, IODevice* outgoingData, IODevice* incommingData)
 {
     return execRequest(PUT_REQUEST, url, incommingData, outgoingData);
 }
@@ -70,7 +70,7 @@ Ret NetworkManager::del(const QUrl& url, IODevice* incommingData)
     return execRequest(DELETE_REQUEST, url, incommingData);
 }
 
-Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, IODevice *incommingData, IODevice *outgoingData)
+Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, IODevice* incommingData, IODevice* outgoingData)
 {
     if (outgoingData) {
         if (!openIoDevice(outgoingData, IODevice::ReadOnly)) {

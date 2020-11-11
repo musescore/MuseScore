@@ -38,7 +38,6 @@ public:
     enum class OptionKey {
         PAGE_NUMBER,
         TRANSPARENT_BACKGROUND,
-        CANVAS_DPI,
         TRIM_MARGINS_SIZE,
         NOTES_COLORS
     };

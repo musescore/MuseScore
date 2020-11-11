@@ -22,11 +22,19 @@
 
 #include "notation/abstractnotationwriter.h"
 
+#include "../iimportexportconfiguration.h"
+#include "modularity/ioc.h"
+
 namespace mu::importexport {
 class PdfWriter : public notation::AbstractNotationWriter
 {
+    INJECT(importexport, IImportexportConfiguration, configuration)
+
 public:
     Ret write(const Ms::Score& score, framework::IODevice& destinationDevice, const Options& options = Options()) override;
+
+private:
+    QString documentTitle(const Ms::Score& score) const;
 };
 }
 

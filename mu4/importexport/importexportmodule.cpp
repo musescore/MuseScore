@@ -50,6 +50,8 @@
 using namespace mu::importexport;
 using namespace mu::notation;
 
+static std::shared_ptr<ImportexportConfiguration> s_configuration = std::make_shared<ImportexportConfiguration>();
+
 std::string ImportExportModule::moduleName() const
 {
     return "importexport";
@@ -57,11 +59,13 @@ std::string ImportExportModule::moduleName() const
 
 void ImportExportModule::registerExports()
 {
-    framework::ioc()->registerExport<IImportexportConfiguration>(moduleName(), new ImportexportConfiguration());
+    framework::ioc()->registerExport<IImportexportConfiguration>(moduleName(), s_configuration);
 }
 
 void ImportExportModule::onInit()
 {
+    s_configuration->init();
+
     //! NOTE The "importexport" module is linked when the BUILD_UI_MU4 is off
     //! So that the import/export implementation is linked and used in the old code.
     //! But of course there is no "INotationReadersRegister"
