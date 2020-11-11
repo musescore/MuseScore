@@ -39,9 +39,11 @@ static void initResources()
       Q_INIT_RESOURCE(qml);
       Q_INIT_RESOURCE(musescorefonts_MScore);
       Q_INIT_RESOURCE(musescorefonts_Gootville);
+      Q_INIT_RESOURCE(musescorefonts_Leland);
       Q_INIT_RESOURCE(musescorefonts_Bravura);
       Q_INIT_RESOURCE(musescorefonts_MuseJazz);
       Q_INIT_RESOURCE(musescorefonts_Campania);
+      Q_INIT_RESOURCE(musescorefonts_Edwin);
       Q_INIT_RESOURCE(musescorefonts_FreeSerif);
       Q_INIT_RESOURCE(musescorefonts_Free);
       Q_INIT_RESOURCE(musescorefonts_Petaluma);

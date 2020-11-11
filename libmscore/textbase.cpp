@@ -1486,7 +1486,7 @@ TextBase::TextBase(Score* s, Tid tid, ElementFlags f)
    : Element(s, f | ElementFlag::MOVABLE)
       {
       _tid                    = tid;
-      _family                 = "FreeSerif";
+      _family                 = "Edwin";
       _size                   = 10.0;
       _fontStyle              = FontStyle::Normal;
       _bgColor                = QColor(255, 255, 255, 0);
@@ -2693,6 +2693,7 @@ QFont TextBase::font() const
       QFont f(_family, m, bold() ? QFont::Bold : QFont::Normal, italic());
       if (underline())
             f.setUnderline(underline());
+
       return f;
       }
 

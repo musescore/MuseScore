@@ -305,6 +305,11 @@
                </property>
                <item>
                 <property name="text">
+                 <string notr="true">Leland</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
                  <string notr="true">Bravura</string>
                 </property>
                </item>

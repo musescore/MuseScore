@@ -97,7 +97,7 @@ static const StyleType styleTypes[] {
       { Sid::lyricsDashLineThickness, "lyricsDashLineThickness", Spatium(0.15) }, // in sp. units
       { Sid::lyricsDashYposRatio,     "lyricsDashYposRatio",     0.67          }, // the fraction of lyrics font x-height to raise the dashes above text base line
 
-      { Sid::lyricsOddFontFace,       "lyricsOddFontFace",       "FreeSerif" },
+      { Sid::lyricsOddFontFace,       "lyricsOddFontFace",       "Edwin" },
       { Sid::lyricsOddFontSize,       "lyricsOddFontSize",       11.0 },
       { Sid::lyricsOddFontSpatiumDependent, "lyricsOddFontSpatiumDependent", true },
       { Sid::lyricsOddFontStyle,      "lyricsOddFontStyle",      int(FontStyle::Normal) },
@@ -110,7 +110,7 @@ static const StyleType styleTypes[] {
       { Sid::lyricsOddFrameFgColor,   "lyricsOddFrameFgColor",   QColor(0, 0, 0, 255) },
       { Sid::lyricsOddFrameBgColor,   "lyricsOddFrameBgColor",   QColor(255, 255, 255, 0) },
 
-      { Sid::lyricsEvenFontFace,      "lyricsEvenFontFace",      "FreeSerif" },
+      { Sid::lyricsEvenFontFace,      "lyricsEvenFontFace",      "Edwin" },
       { Sid::lyricsEvenFontSize,      "lyricsEvenFontSize",      11.0 },
       { Sid::lyricsEvenFontSpatiumDependent, "lyricsEvenFontSpatiumDependent", true },
       { Sid::lyricsEvenFontStyle,     "lyricsEvenFontStyle",     int(FontStyle::Normal) },
@@ -221,7 +221,7 @@ static const StyleType styleTypes[] {
       { Sid::hairpinHeight,           "hairpinHeight",           Spatium(1.2) },
       { Sid::hairpinContHeight,       "hairpinContHeight",       Spatium(0.5) },
       { Sid::hairpinLineWidth,        "hairpinWidth",            Spatium(0.13) },
-      { Sid::hairpinFontFace,         "hairpinFontFace",         "FreeSerif" },
+      { Sid::hairpinFontFace,         "hairpinFontFace",         "Edwin" },
       { Sid::hairpinFontSize,         "hairpinFontSize",         12.0 },
       { Sid::hairpinFontSpatiumDependent, "hairpinFontSpatiumDependent", true },
       { Sid::hairpinFontStyle,        "hairpinFontStyle",        int(FontStyle::Italic) },
@@ -248,7 +248,7 @@ static const StyleType styleTypes[] {
       { Sid::pedalLineStyle,          "pedalListStyle",          QVariant(int(Qt::SolidLine)) },
       { Sid::pedalBeginTextOffset,    "pedalBeginTextOffset",    QPointF(0.0, 0.15) },
       { Sid::pedalHookHeight,         "pedalHookHeight",         Spatium(-1.2) },
-      { Sid::pedalFontFace,           "pedalFontFace",           "FreeSerif" },
+      { Sid::pedalFontFace,           "pedalFontFace",           "Edwin" },
       { Sid::pedalFontSize,           "pedalFontSize",           12.0 },
       { Sid::pedalFontSpatiumDependent, "pedalFontSpatiumDependent", true },
       { Sid::pedalFontStyle,          "pedalFontStyle",          int(FontStyle::Normal) },
@@ -295,7 +295,7 @@ static const StyleType styleTypes[] {
       { Sid::nashvilleNumberPosAbove,   "nashvilleNumberPosAbove",   QPointF(.0, -2.5) },
       { Sid::nashvilleNumberPosBelow,   "nashvilleNumberPosBelow",   QPointF(.0, 3.5) },
 
-      { Sid::chordSymbolAFontFace,      "chordSymbolAFontFace",      "FreeSerif" },
+      { Sid::chordSymbolAFontFace,      "chordSymbolAFontFace",      "Edwin" },
       { Sid::chordSymbolAFontSize,      "chordSymbolAFontSize",      12.0 },
       { Sid::chordSymbolAFontSpatiumDependent, "chordSymbolAFontSpatiumDependent", true },
       { Sid::chordSymbolAFontStyle,     "chordSymbolAFontStyle",     int(FontStyle::Normal) },
@@ -308,7 +308,7 @@ static const StyleType styleTypes[] {
       { Sid::chordSymbolAFrameFgColor,  "chordSymbolAFrameFgColor",  QColor(0, 0, 0, 255) },
       { Sid::chordSymbolAFrameBgColor,  "chordSymbolAFrameBgColor",  QColor(255, 255, 255, 0) },
 
-      { Sid::chordSymbolBFontFace,      "chordSymbolBFontFace",      "FreeSerif" },
+      { Sid::chordSymbolBFontFace,      "chordSymbolBFontFace",      "Edwin" },
       { Sid::chordSymbolBFontSize,      "chordSymbolBFontSize",      12.0 },
       { Sid::chordSymbolBFontSpatiumDependent, "chordSymbolBFontSpatiumDependent", true },
       { Sid::chordSymbolBFontStyle,     "chordSymbolBFontStyle",     int(FontStyle::Italic) },
@@ -334,7 +334,7 @@ static const StyleType styleTypes[] {
       { Sid::romanNumeralFrameFgColor,  "romanNumeralFrameFgColor",  QColor(0, 0, 0, 255) },
       { Sid::romanNumeralFrameBgColor,  "romanNumeralFrameBgColor",  QColor(255, 255, 255, 0) },
 
-      { Sid::nashvilleNumberFontFace,      "nashvilleNumberFontFace",      "FreeSerif" },
+      { Sid::nashvilleNumberFontFace,      "nashvilleNumberFontFace",      "Edwin" },
       { Sid::nashvilleNumberFontSize,      "nashvilleNumberFontSize",      12.0 },
       { Sid::nashvilleNumberFontSpatiumDependent, "nashvilleNumberFontSpatiumDependent", true },
       { Sid::nashvilleNumberFontStyle,     "nashvilleNumberFontStyle",     int(FontStyle::Normal) },
@@ -432,8 +432,8 @@ static const StyleType styleTypes[] {
       { Sid::MinTieLength,            "minTieLength",            Spatium(1.0) },
       { Sid::SlurMinDistance,         "slurMinDistance",         Spatium(0.5) },
       { Sid::SectionPause,            "sectionPause",            QVariant(qreal(3.0)) },
-      { Sid::MusicalSymbolFont,       "musicalSymbolFont",       QVariant(QString("Emmentaler")) },
-      { Sid::MusicalTextFont,         "musicalTextFont",         QVariant(QString("MScore Text")) },
+      { Sid::MusicalSymbolFont,       "musicalSymbolFont",       QVariant(QString("Leland")) },
+      { Sid::MusicalTextFont,         "musicalTextFont",         QVariant(QString("Leland Text")) },
 
       { Sid::showHeader,              "showHeader",              QVariant(false) },
       { Sid::headerFirstPage,         "headerFirstPage",         QVariant(false) },
@@ -459,7 +459,7 @@ static const StyleType styleTypes[] {
       { Sid::voltaHook,               "voltaHook",               Spatium(1.9) },
       { Sid::voltaLineWidth,          "voltaLineWidth",          Spatium(.1) },
       { Sid::voltaLineStyle,          "voltaLineStyle",          QVariant(int(Qt::SolidLine)) },
-      { Sid::voltaFontFace,           "voltaFontFace",           "FreeSerif" },
+      { Sid::voltaFontFace,           "voltaFontFace",           "Edwin" },
       { Sid::voltaFontSize,           "voltaFontSize",           11.0 },
       { Sid::voltaFontSpatiumDependent, "voltaFontSpatiumDependent", true },
       { Sid::voltaFontStyle,          "voltaFontStyle",          int(FontStyle::Bold) },
@@ -513,7 +513,7 @@ static const StyleType styleTypes[] {
       { Sid::ottavaLineWidth,         "ottavaLineWidth",         Spatium(.1) },
       { Sid::ottavaLineStyle,         "ottavaLineStyle",         QVariant(int(Qt::DashLine)) },
       { Sid::ottavaNumbersOnly,       "ottavaNumbersOnly",       true },
-      { Sid::ottavaFontFace,          "ottavaFontFace",          "FreeSerif" },
+      { Sid::ottavaFontFace,          "ottavaFontFace",          "Edwin" },
       { Sid::ottavaFontSize,          "ottavaFontSize",          10.0 },
       { Sid::ottavaFontSpatiumDependent, "ottavaFontSpatiumDependent", true },
       { Sid::ottavaFontStyle,         "ottavaFontStyle",         int(FontStyle::Normal) },
@@ -551,7 +551,7 @@ static const StyleType styleTypes[] {
       { Sid::tupletDirection,         "tupletDirection",         QVariant::fromValue<Direction>(Direction::AUTO) },
       { Sid::tupletNumberType,        "tupletNumberType",        int(TupletNumberType::SHOW_NUMBER) },
       { Sid::tupletBracketType,       "tupletBracketType",       int(TupletBracketType::AUTO_BRACKET) },
-      { Sid::tupletFontFace,          "tupletFontFace",          "FreeSerif" },
+      { Sid::tupletFontFace,          "tupletFontFace",          "Edwin" },
       { Sid::tupletFontSize,          "tupletFontSize",          10.0 },
       { Sid::tupletFontSpatiumDependent, "tupletFontSpatiumDependent", true },
       { Sid::tupletFontStyle,         "tupletFontStyle",         int(FontStyle::Italic) },
@@ -596,7 +596,7 @@ static const StyleType styleTypes[] {
       { Sid::jumpPosAbove,              "jumpPosAbove",              QPointF(.0, -2.0) },
       { Sid::markerPosAbove,            "markerPosAbove",            QPointF(.0, -2.0) },
 
-      { Sid::defaultFontFace,               "defaultFontFace",               "FreeSerif" },
+      { Sid::defaultFontFace,               "defaultFontFace",               "Edwin" },
       { Sid::defaultFontSize,               "defaultFontSize",               10.0  },
       { Sid::defaultFontSpatiumDependent,   "defaultFontSpatiumDependent",   true  },
       { Sid::defaultFontStyle,              "defaultFontStyle",              int(FontStyle::Normal) },
@@ -613,7 +613,7 @@ static const StyleType styleTypes[] {
       { Sid::defaultSystemFlag,             "defaultSystemFlag",             false },
       { Sid::defaultText,                   "defaultText",                   QString("")    },
 
-      { Sid::titleFontFace,                 "titleFontFace",                 "FreeSerif" },
+      { Sid::titleFontFace,                 "titleFontFace",                 "Edwin" },
       { Sid::titleFontSize,                 "titleFontSize",                 24.0 },
       { Sid::titleFontSpatiumDependent,     "titleFontSpatiumDependent",     false  },
       { Sid::titleFontStyle,                "titleFontStyle",                int(FontStyle::Normal) },
@@ -628,7 +628,7 @@ static const StyleType styleTypes[] {
       { Sid::titleFrameFgColor,             "titleFrameFgColor",             QColor(0, 0, 0, 255) },
       { Sid::titleFrameBgColor,             "titleFrameBgColor",             QColor(255, 255, 255, 0) },
 
-      { Sid::subTitleFontFace,              "subTitleFontFace",              "FreeSerif" },
+      { Sid::subTitleFontFace,              "subTitleFontFace",              "Edwin" },
       { Sid::subTitleFontSize,              "subTitleFontSize",              14.0 },
       { Sid::subTitleFontSpatiumDependent,  "subTitleFontSpatiumDependent",  false  },
       { Sid::subTitleFontStyle,             "subTitleFontStyle",             int(FontStyle::Normal) },
@@ -643,7 +643,7 @@ static const StyleType styleTypes[] {
       { Sid::subTitleFrameFgColor,          "subTitleFrameFgColor",          QColor(0, 0, 0, 255) },
       { Sid::subTitleFrameBgColor,          "subTitleFrameBgColor",          QColor(255, 255, 255, 0) },
 
-      { Sid::composerFontFace,              "composerFontFace",              "FreeSerif" },
+      { Sid::composerFontFace,              "composerFontFace",              "Edwin" },
       { Sid::composerFontSize,              "composerFontSize",              12.0 },
       { Sid::composerFontSpatiumDependent,  "composerFontSpatiumDependent",  false  },
       { Sid::composerFontStyle,             "composerFontStyle",             int(FontStyle::Normal) },
@@ -658,7 +658,7 @@ static const StyleType styleTypes[] {
       { Sid::composerFrameFgColor,          "composerFrameFgColor",          QColor(0, 0, 0, 255) },
       { Sid::composerFrameBgColor,          "composerFrameBgColor",          QColor(255, 255, 255, 0) },
 
-      { Sid::lyricistFontFace,              "lyricistFontFace",              "FreeSerif" },
+      { Sid::lyricistFontFace,              "lyricistFontFace",              "Edwin" },
       { Sid::lyricistFontSize,              "lyricistFontSize",              12.0 },
       { Sid::lyricistFontSpatiumDependent,  "lyricistFontSpatiumDependent",  false  },
       { Sid::lyricistFontStyle,             "lyricistFontStyle",             int(FontStyle::Normal) },
@@ -673,7 +673,7 @@ static const StyleType styleTypes[] {
       { Sid::lyricistFrameFgColor,          "lyricistFrameFgColor",          QColor(0, 0, 0, 255) },
       { Sid::lyricistFrameBgColor,          "lyricistFrameBgColor",          QColor(255, 255, 255, 0) },
 
-      { Sid::fingeringFontFace,             "fingeringFontFace",             "FreeSerif" },
+      { Sid::fingeringFontFace,             "fingeringFontFace",             "Edwin" },
       { Sid::fingeringFontSize,             "fingeringFontSize",             8.0 },
       { Sid::fingeringFontSpatiumDependent, "fingeringFontSpatiumDependent", true },
       { Sid::fingeringFontStyle,            "fingeringFontStyle",             int(FontStyle::Normal) },
@@ -687,7 +687,7 @@ static const StyleType styleTypes[] {
       { Sid::fingeringFrameBgColor,         "fingeringFrameBgColor",         QColor(255, 255, 255, 0) },
       { Sid::fingeringOffset,               "fingeringOffset",               QPointF() },
 
-      { Sid::lhGuitarFingeringFontFace,     "lhGuitarFingeringFontFace",     "FreeSerif" },
+      { Sid::lhGuitarFingeringFontFace,     "lhGuitarFingeringFontFace",     "Edwin" },
       { Sid::lhGuitarFingeringFontSize,     "lhGuitarFingeringFontSize",     8.0 },
       { Sid::lhGuitarFingeringFontSpatiumDependent, "lhGuitarFingeringFontSpatiumDependent", true },
       { Sid::lhGuitarFingeringFontStyle,    "lhGuitarFingeringFontStyle",    int(FontStyle::Normal) },
@@ -701,7 +701,7 @@ static const StyleType styleTypes[] {
       { Sid::lhGuitarFingeringFrameBgColor, "lhGuitarFingeringFrameBgColor", QColor(255, 255, 255, 0) },
       { Sid::lhGuitarFingeringOffset,       "lhGuitarFingeringOffset",       QPointF(-0.5, 0.0) },
 
-      { Sid::rhGuitarFingeringFontFace,     "rhGuitarFingeringFontFace",     "FreeSerif" },
+      { Sid::rhGuitarFingeringFontFace,     "rhGuitarFingeringFontFace",     "Edwin" },
       { Sid::rhGuitarFingeringFontSize,     "rhGuitarFingeringFontSize",     8.0 },
       { Sid::rhGuitarFingeringFontSpatiumDependent, "rhGuitarFingeringFontSpatiumDependent", true },
       { Sid::rhGuitarFingeringFontStyle,    "rhGuitarFingeringFontStyle",    int(FontStyle::Normal) },
@@ -715,7 +715,7 @@ static const StyleType styleTypes[] {
       { Sid::rhGuitarFingeringFrameBgColor, "rhGuitarFingeringFrameBgColor", QColor(255, 255, 255, 0) },
       { Sid::rhGuitarFingeringOffset,       "rhGuitarFingeringOffset",       QPointF() },
 
-      { Sid::stringNumberFontFace,          "stringNumberFontFace",          "FreeSerif" },
+      { Sid::stringNumberFontFace,          "stringNumberFontFace",          "Edwin" },
       { Sid::stringNumberFontSize,          "stringNumberFontSize",          8.0 },
       { Sid::stringNumberFontSpatiumDependent, "stringNumberFontSpatiumDependent", true },
       { Sid::stringNumberFontStyle,         "stringNumberFontStyle",         int(FontStyle::Normal) },
@@ -729,7 +729,7 @@ static const StyleType styleTypes[] {
       { Sid::stringNumberFrameBgColor,      "stringNumberFrameBgColor",      QColor(255, 255, 255, 0) },
       { Sid::stringNumberOffset,            "stringNumberOffset",            QPointF(0.0, 0.0) },
 
-      { Sid::longInstrumentFontFace,        "longInstrumentFontFace",       "FreeSerif" },
+      { Sid::longInstrumentFontFace,        "longInstrumentFontFace",       "Edwin" },
       { Sid::longInstrumentFontSize,        "longInstrumentFontSize",       12.0 },
       { Sid::longInstrumentFontSpatiumDependent, "longInstrumentFontSpatiumDependent", true },
       { Sid::longInstrumentFontStyle,       "longInstrumentFontStyle",      int(FontStyle::Normal) },
@@ -743,7 +743,7 @@ static const StyleType styleTypes[] {
       { Sid::longInstrumentFrameFgColor,    "longInstrumentFrameFgColor",   QColor(0, 0, 0, 255) },
       { Sid::longInstrumentFrameBgColor,    "longInstrumentFrameBgColor",   QColor(255, 255, 255, 0) },
 
-      { Sid::shortInstrumentFontFace,       "shortInstrumentFontFace",      "FreeSerif" },
+      { Sid::shortInstrumentFontFace,       "shortInstrumentFontFace",      "Edwin" },
       { Sid::shortInstrumentFontSize,       "shortInstrumentFontSize",      12.0 },
       { Sid::shortInstrumentFontSpatiumDependent, "shortInstrumentFontSpatiumDependent", true },
       { Sid::shortInstrumentFontStyle,      "shortInstrumentFontStyle",     int(FontStyle::Normal) },
@@ -757,7 +757,7 @@ static const StyleType styleTypes[] {
       { Sid::shortInstrumentFrameFgColor,   "shortInstrumentFrameFgColor",  QColor(0, 0, 0, 255) },
       { Sid::shortInstrumentFrameBgColor,   "shortInstrumentFrameBgColor",  QColor(255, 255, 255, 0) },
 
-      { Sid::partInstrumentFontFace,        "partInstrumentFontFace",       "FreeSerif" },
+      { Sid::partInstrumentFontFace,        "partInstrumentFontFace",       "Edwin" },
       { Sid::partInstrumentFontSize,        "partInstrumentFontSize",       18.0 },
       { Sid::partInstrumentFontSpatiumDependent, "partInstrumentFontSpatiumDependent", false },
       { Sid::partInstrumentFontStyle,       "partInstrumentFontStyle",      int(FontStyle::Normal) },
@@ -771,7 +771,7 @@ static const StyleType styleTypes[] {
       { Sid::partInstrumentFrameFgColor,    "partInstrumentFrameFgColor",   QColor(0, 0, 0, 255) },
       { Sid::partInstrumentFrameBgColor,    "partInstrumentFrameBgColor",   QColor(255, 255, 255, 0) },
 
-      { Sid::dynamicsFontFace,              "dynamicsFontFace",             "FreeSerif" },
+      { Sid::dynamicsFontFace,              "dynamicsFontFace",             "Edwin" },
       { Sid::dynamicsFontSize,              "dynamicsFontSize",             12.0 },
       { Sid::dynamicsFontSpatiumDependent,  "dynamicsFontSpatiumDependent", true },
       { Sid::dynamicsFontStyle,             "dynamicsFontStyle",            int(FontStyle::Italic) },
@@ -784,7 +784,7 @@ static const StyleType styleTypes[] {
       { Sid::dynamicsFrameFgColor,          "dynamicsFrameFgColor",         QColor(0, 0, 0, 255) },
       { Sid::dynamicsFrameBgColor,          "dynamicsFrameBgColor",         QColor(255, 255, 255, 0) },
 
-      { Sid::expressionFontFace,            "expressionFontFace",           "FreeSerif" },
+      { Sid::expressionFontFace,            "expressionFontFace",           "Edwin" },
       { Sid::expressionFontSize,            "expressionFontSize",           11.0 },
       { Sid::expressionFontSpatiumDependent, "expressionFontSpatiumDependent", true },
       { Sid::expressionFontStyle,           "expressionFontStyle",          int(FontStyle::Italic) },
@@ -799,7 +799,7 @@ static const StyleType styleTypes[] {
       { Sid::expressionFrameFgColor,        "expressionFrameFgColor",       QColor(0, 0, 0, 255) },
       { Sid::expressionFrameBgColor,        "expressionFrameBgColor",       QColor(255, 255, 255, 0) },
 
-      { Sid::tempoFontFace,                 "tempoFontFace",                "FreeSerif" },
+      { Sid::tempoFontFace,                 "tempoFontFace",                "Edwin" },
       { Sid::tempoFontSize,                 "tempoFontSize",                12.0 },
       { Sid::tempoFontSpatiumDependent,     "tempoFontSpatiumDependent",    true },
       { Sid::tempoFontStyle,                "tempoFontStyle",               int(FontStyle::Bold) },
@@ -817,7 +817,7 @@ static const StyleType styleTypes[] {
       { Sid::tempoFrameFgColor,             "tempoFrameFgColor",            QColor(0, 0, 0, 255) },
       { Sid::tempoFrameBgColor,             "tempoFrameBgColor",            QColor(255, 255, 255, 0) },
 
-      { Sid::metronomeFontFace,             "metronomeFontFace",            "FreeSerif" },
+      { Sid::metronomeFontFace,             "metronomeFontFace",            "Edwin" },
       { Sid::metronomeFontSize,             "metronomeFontSize",            12.0 },
       { Sid::metronomeFontSpatiumDependent, "metronomeFontSpatiumDependent", false },
       { Sid::metronomeFontStyle,            "metronomeFontStyle",           int(FontStyle::Bold) },
@@ -832,7 +832,7 @@ static const StyleType styleTypes[] {
       { Sid::metronomeFrameFgColor,         "metronomeFrameFgColor",        QColor(0, 0, 0, 255) },
       { Sid::metronomeFrameBgColor,         "metronomeFrameBgColor",        QColor(255, 255, 255, 0) },
 
-      { Sid::measureNumberFontFace,         "measureNumberFontFace",        "FreeSerif" },
+      { Sid::measureNumberFontFace,         "measureNumberFontFace",        "Edwin" },
       { Sid::measureNumberFontSize,         "measureNumberFontSize",        8.0 },
       { Sid::measureNumberFontSpatiumDependent, "measureNumberFontSpatiumDependent", true },
       { Sid::measureNumberFontStyle,        "measureNumberFontStyle",       int(FontStyle::Normal) },
@@ -850,7 +850,7 @@ static const StyleType styleTypes[] {
       { Sid::measureNumberFrameFgColor,     "measureNumberFrameFgColor",    QColor(0, 0, 0, 255) },
       { Sid::measureNumberFrameBgColor,     "measureNumberFrameBgColor",    QColor(255, 255, 255, 0) },
 
-      { Sid::translatorFontFace,            "translatorFontFace",           "FreeSerif" },
+      { Sid::translatorFontFace,            "translatorFontFace",           "Edwin" },
       { Sid::translatorFontSize,            "translatorFontSize",           11.0 },
       { Sid::translatorFontSpatiumDependent, "translatorFontSpatiumDependent", false },
       { Sid::translatorFontStyle,           "translatorFontStyle",          int(FontStyle::Normal) },
@@ -864,7 +864,7 @@ static const StyleType styleTypes[] {
       { Sid::translatorFrameFgColor,        "translatorFrameFgColor",       QColor(0, 0, 0, 255) },
       { Sid::translatorFrameBgColor,        "translatorFrameBgColor",       QColor(255, 255, 255, 0) },
 
-      { Sid::systemTextFontFace,            "systemFontFace",               "FreeSerif" },
+      { Sid::systemTextFontFace,            "systemFontFace",               "Edwin" },
       { Sid::systemTextFontSize,            "systemFontSize",               10.0 },
       { Sid::systemTextFontSpatiumDependent, "systemFontSpatiumDependent",  true },
       { Sid::systemTextFontStyle,           "systemFontStyle",              int(FontStyle::Normal) },
@@ -882,7 +882,7 @@ static const StyleType styleTypes[] {
       { Sid::systemTextFrameFgColor,        "systemFrameFgColor",           QColor(0, 0, 0, 255) },
       { Sid::systemTextFrameBgColor,        "systemFrameBgColor",           QColor(255, 255, 255, 0) },
 
-      { Sid::staffTextFontFace,             "staffFontFace",                "FreeSerif" },
+      { Sid::staffTextFontFace,             "staffFontFace",                "Edwin" },
       { Sid::staffTextFontSize,             "staffFontSize",                10.0 },
       { Sid::staffTextFontSpatiumDependent, "staffFontSpatiumDependent",    true },
       { Sid::staffTextFontStyle,            "staffFontStyle",               int(FontStyle::Normal) },
@@ -900,7 +900,7 @@ static const StyleType styleTypes[] {
       { Sid::staffTextFrameFgColor,         "staffFrameFgColor",            QColor(0, 0, 0, 255) },
       { Sid::staffTextFrameBgColor,         "staffFrameBgColor",            QColor(255, 255, 255, 0) },
 
-      { Sid::rehearsalMarkFontFace,         "rehearsalMarkFontFace",        "FreeSerif" },
+      { Sid::rehearsalMarkFontFace,         "rehearsalMarkFontFace",        "Edwin" },
       { Sid::rehearsalMarkFontSize,         "rehearsalMarkFontSize",        14.0 },
       { Sid::rehearsalMarkFontSpatiumDependent, "rehearsalMarkFontSpatiumDependent", true },
       { Sid::rehearsalMarkFontStyle,        "rehearsalMarkFontStyle",       int(FontStyle::Bold) },
@@ -917,7 +917,7 @@ static const StyleType styleTypes[] {
       { Sid::rehearsalMarkPosBelow,         "rehearsalMarkPosBelow",        QPointF(.0, 4.0) },
       { Sid::rehearsalMarkMinDistance,      "rehearsalMarkMinDistance",     Spatium(0.5) },
 
-      { Sid::repeatLeftFontFace,            "repeatLeftFontFace",           "FreeSerif" },
+      { Sid::repeatLeftFontFace,            "repeatLeftFontFace",           "Edwin" },
       { Sid::repeatLeftFontSize,            "repeatLeftFontSize",           20.0 },
       { Sid::repeatLeftFontSpatiumDependent, "repeatLeftFontSpatiumDependent", true },
       { Sid::repeatLeftFontStyle,           "repeatLeftFontStyle",          int(FontStyle::Normal) },
@@ -931,7 +931,7 @@ static const StyleType styleTypes[] {
       { Sid::repeatLeftFrameFgColor,        "repeatLeftFrameFgColor",       QColor(0, 0, 0, 255) },
       { Sid::repeatLeftFrameBgColor,        "repeatLeftFrameBgColor",       QColor(255, 255, 255, 0) },
 
-      { Sid::repeatRightFontFace,           "repeatRightFontFace",          "FreeSerif" },
+      { Sid::repeatRightFontFace,           "repeatRightFontFace",          "Edwin" },
       { Sid::repeatRightFontSize,           "repeatRightFontSize",          12.0 },
       { Sid::repeatRightFontSpatiumDependent, "repeatRightFontSpatiumDependent", true },
       { Sid::repeatRightFontStyle,          "repeatRightFontStyle",         int(FontStyle::Normal) },
@@ -945,7 +945,7 @@ static const StyleType styleTypes[] {
       { Sid::repeatRightFrameFgColor,       "repeatRightFrameFgColor",      QColor(0, 0, 0, 255) },
       { Sid::repeatRightFrameBgColor,       "repeatRightFrameBgColor",      QColor(255, 255, 255, 0) },
 
-      { Sid::frameFontFace,                 "frameFontFace",                "FreeSerif" },
+      { Sid::frameFontFace,                 "frameFontFace",                "Edwin" },
       { Sid::frameFontSize,                 "frameFontSize",                12.0 },
       { Sid::frameFontSpatiumDependent,     "frameFontSpatiumDependent",    false },
       { Sid::frameFontStyle,                "frameFontStyle",               int(FontStyle::Normal) },
@@ -959,14 +959,14 @@ static const StyleType styleTypes[] {
       { Sid::frameFrameFgColor,             "frameFrameFgColor",            QColor(0, 0, 0, 255) },
       { Sid::frameFrameBgColor,             "frameFrameBgColor",            QColor(255, 255, 255, 0) },
 
-      { Sid::textLineFontFace,              "textLineFontFace",             "FreeSerif" },
+      { Sid::textLineFontFace,              "textLineFontFace",             "Edwin" },
       { Sid::textLineFontSize,              "textLineFontSize",             12.0 },
       { Sid::textLineFontSpatiumDependent,  "textLineFontSpatiumDependent", true },
       { Sid::textLineFontStyle,             "textLineFontStyle",            int(FontStyle::Normal) },
       { Sid::textLineColor,                 "textLineColor",                QColor(0, 0, 0, 255) },
       { Sid::textLineTextAlign,             "textLineTextAlign",            QVariant::fromValue(Align::LEFT | Align::VCENTER) },
 
-      { Sid::glissandoFontFace,             "glissandoFontFace",            "FreeSerif" },
+      { Sid::glissandoFontFace,             "glissandoFontFace",            "Edwin" },
       { Sid::glissandoFontSize,             "glissandoFontSize",            QVariant(8.0) },
       { Sid::glissandoFontSpatiumDependent, "glissandoFontSpatiumDependent", true },
       { Sid::glissandoFontStyle,            "glissandoFontStyle",           int(FontStyle::Italic) },
@@ -982,7 +982,7 @@ static const StyleType styleTypes[] {
       { Sid::glissandoLineWidth,            "glissandoLineWidth",           Spatium(0.15) },
       { Sid::glissandoText,                 "glissandoText",                QString("gliss.") },
 
-      { Sid::bendFontFace,                  "bendFontFace",                 "FreeSerif" },
+      { Sid::bendFontFace,                  "bendFontFace",                 "Edwin" },
       { Sid::bendFontSize,                  "bendFontSize",                 8.0 },
       { Sid::bendFontSpatiumDependent,      "bendFontSpatiumDependent",     true },
       { Sid::bendFontStyle,                 "bendFontStyle",                int(FontStyle::Normal) },
@@ -998,7 +998,7 @@ static const StyleType styleTypes[] {
       { Sid::bendLineWidth,                 "bendLineWidth",                Spatium(0.15) },
       { Sid::bendArrowWidth,                "bendArrowWidth",               Spatium(.5) },
 
-      { Sid::headerFontFace,                "headerFontFace",               "FreeSerif" },
+      { Sid::headerFontFace,                "headerFontFace",               "Edwin" },
       { Sid::headerFontSize,                "headerFontSize",               8.0 },
       { Sid::headerFontSpatiumDependent,    "headerFontSpatiumDependent",   false },
       { Sid::headerFontStyle,               "headerFontStyle",              int(FontStyle::Normal) },
@@ -1012,7 +1012,7 @@ static const StyleType styleTypes[] {
       { Sid::headerFrameFgColor,            "headerFrameFgColor",           QColor(0, 0, 0, 255) },
       { Sid::headerFrameBgColor,            "headerFrameBgColor",           QColor(255, 255, 255, 0) },
 
-      { Sid::footerFontFace,                "footerFontFace",               "FreeSerif" },
+      { Sid::footerFontFace,                "footerFontFace",               "Edwin" },
       { Sid::footerFontSize,                "footerFontSize",               8.0 },
       { Sid::footerFontSpatiumDependent,    "footerFontSpatiumDependent",   false },
       { Sid::footerFontStyle,               "footerFontStyle",              int(FontStyle::Normal) },
@@ -1026,7 +1026,7 @@ static const StyleType styleTypes[] {
       { Sid::footerFrameFgColor,            "footerFrameFgColor",           QColor(0, 0, 0, 255) },
       { Sid::footerFrameBgColor,            "footerFrameBgColor",           QColor(255, 255, 255, 0) },
 
-      { Sid::instrumentChangeFontFace,      "instrumentChangeFontFace",     "FreeSerif" },
+      { Sid::instrumentChangeFontFace,      "instrumentChangeFontFace",     "Edwin" },
       { Sid::instrumentChangeFontSize,      "instrumentChangeFontSize",     12.0 },
       { Sid::instrumentChangeFontSpatiumDependent, "instrumentChangeFontSpatiumDependent", true },
       { Sid::instrumentChangeFontStyle,     "instrumentChangeFontStyle",    int(FontStyle::Bold) },
@@ -1044,7 +1044,7 @@ static const StyleType styleTypes[] {
       { Sid::instrumentChangeFrameFgColor,  "instrumentChangeFrameFgColor", QColor(0, 0, 0, 255) },
       { Sid::instrumentChangeFrameBgColor,  "instrumentChangeFrameBgColor", QColor(255, 255, 255, 0) },
 
-      { Sid::stickingFontFace,              "stickingFontFace",     "FreeSerif" },
+      { Sid::stickingFontFace,              "stickingFontFace",     "Edwin" },
       { Sid::stickingFontSize,              "stickingFontSize",     12.0 },
       { Sid::stickingFontSpatiumDependent,  "stickingFontSpatiumDependent", true },
       { Sid::stickingFontStyle,             "stickingFontStyle",    int(FontStyle::Normal) },
@@ -1069,7 +1069,7 @@ static const StyleType styleTypes[] {
       { Sid::figuredBassColor,              "figuredBassColor",             QColor(0, 0, 0, 255) },
 
       { Sid::user1Name,                     "user1Name",                    "" },
-      { Sid::user1FontFace,                 "user1FontFace",                "FreeSerif" },
+      { Sid::user1FontFace,                 "user1FontFace",                "Edwin" },
       { Sid::user1FontSize,                 "user1FontSize",                10.0 },
       { Sid::user1FontSpatiumDependent,     "user1FontSpatiumDependent",    true },
       { Sid::user1FontStyle,                "user1FontStyle",               int(FontStyle::Normal) },
@@ -1085,7 +1085,7 @@ static const StyleType styleTypes[] {
       { Sid::user1FrameBgColor,             "user1FrameBgColor",            QColor(255, 255, 255, 0) },
 
       { Sid::user2Name,                     "user2Name",                    "" },
-      { Sid::user2FontFace,                 "user2FontFace",                "FreeSerif" },
+      { Sid::user2FontFace,                 "user2FontFace",                "Edwin" },
       { Sid::user2FontSize,                 "user2FontSize",                10.0 },
       { Sid::user2FontSpatiumDependent,     "user2FontSpatiumDependent",    true },
       { Sid::user2FontStyle,                "user2FontStyle",               int(FontStyle::Normal) },
@@ -1101,7 +1101,7 @@ static const StyleType styleTypes[] {
       { Sid::user2FrameBgColor,             "user2FrameBgColor",            QColor(255, 255, 255, 0) },
 
       { Sid::user3Name,                     "user3Name",                    "" },
-      { Sid::user3FontFace,                 "user3FontFace",                "FreeSerif" },
+      { Sid::user3FontFace,                 "user3FontFace",                "Edwin" },
       { Sid::user3FontSize,                 "user3FontSize",                10.0 },
       { Sid::user3FontSpatiumDependent,     "user3FontSpatiumDependent",    true },
       { Sid::user3FontStyle,                "user3FontStyle",               int(FontStyle::Normal) },
@@ -1117,7 +1117,7 @@ static const StyleType styleTypes[] {
       { Sid::user3FrameBgColor,             "user3FrameBgColor",            QColor(255, 255, 255, 0) },
 
       { Sid::user4Name,                     "user4Name",                    "" },
-      { Sid::user4FontFace,                 "user4FontFace",                "FreeSerif" },
+      { Sid::user4FontFace,                 "user4FontFace",                "Edwin" },
       { Sid::user4FontSize,                 "user4FontSize",                10.0 },
       { Sid::user4FontSpatiumDependent,     "user4FontSpatiumDependent",    true },
       { Sid::user4FontStyle,                "user4FontStyle",               int(FontStyle::Normal) },
@@ -1133,7 +1133,7 @@ static const StyleType styleTypes[] {
       { Sid::user4FrameBgColor,             "user4FrameBgColor",            QColor(255, 255, 255, 0) },
 
       { Sid::user5Name,                     "user5Name",                    "" },
-      { Sid::user5FontFace,                 "user5FontFace",                "FreeSerif" },
+      { Sid::user5FontFace,                 "user5FontFace",                "Edwin" },
       { Sid::user5FontSize,                 "user5FontSize",                10.0 },
       { Sid::user5FontSpatiumDependent,     "user5FontSpatiumDependent",    true },
       { Sid::user5FontStyle,                "user5FontStyle",               int(FontStyle::Normal) },
@@ -1149,7 +1149,7 @@ static const StyleType styleTypes[] {
       { Sid::user5FrameBgColor,             "user5FrameBgColor",            QColor(255, 255, 255, 0) },
 
       { Sid::user6Name,                     "user6Name",                    "" },
-      { Sid::user6FontFace,                 "user6FontFace",                "FreeSerif" },
+      { Sid::user6FontFace,                 "user6FontFace",                "Edwin" },
       { Sid::user6FontSize,                 "user6FontSize",                10.0 },
       { Sid::user6FontSpatiumDependent,     "user6FontSpatiumDependent",    true },
       { Sid::user6FontStyle,                "user6FontStyle",               int(FontStyle::Normal) },
@@ -1165,7 +1165,7 @@ static const StyleType styleTypes[] {
       { Sid::user6FrameBgColor,             "user6FrameBgColor",            QColor(255, 255, 255, 0) },
 
       { Sid::user7Name,                     "user7Name",                    "" },
-      { Sid::user7FontFace,                 "user7FontFace",                "FreeSerif" },
+      { Sid::user7FontFace,                 "user7FontFace",                "Edwin" },
       { Sid::user7FontSize,                 "user7FontSize",                10.0 },
       { Sid::user7FontSpatiumDependent,     "user7FontSpatiumDependent",    true },
       { Sid::user7FontStyle,                "user7FontStyle",               int(FontStyle::Normal) },
@@ -1181,7 +1181,7 @@ static const StyleType styleTypes[] {
       { Sid::user7FrameBgColor,             "user7FrameBgColor",            QColor(255, 255, 255, 0) },
 
       { Sid::user8Name,                     "user8Name",                    "" },
-      { Sid::user8FontFace,                 "user8FontFace",                "FreeSerif" },
+      { Sid::user8FontFace,                 "user8FontFace",                "Edwin" },
       { Sid::user8FontSize,                 "user8FontSize",                10.0 },
       { Sid::user8FontSpatiumDependent,     "user8FontSpatiumDependent",    true },
       { Sid::user8FontStyle,                "user8FontStyle",               int(FontStyle::Normal) },
@@ -1197,7 +1197,7 @@ static const StyleType styleTypes[] {
       { Sid::user8FrameBgColor,             "user8FrameBgColor",            QColor(255, 255, 255, 0) },
 
       { Sid::user9Name,                     "user9Name",                    "" },
-      { Sid::user9FontFace,                 "user9FontFace",                "FreeSerif" },
+      { Sid::user9FontFace,                 "user9FontFace",                "Edwin" },
       { Sid::user9FontSize,                 "user9FontSize",                10.0 },
       { Sid::user9FontSpatiumDependent,     "user9FontSpatiumDependent",    true },
       { Sid::user9FontStyle,                "user9FontStyle",               int(FontStyle::Normal) },
@@ -1213,7 +1213,7 @@ static const StyleType styleTypes[] {
       { Sid::user9FrameBgColor,             "user9FrameBgColor",            QColor(255, 255, 255, 0) },
 
       { Sid::user10Name,                    "user10Name",                   "" },
-      { Sid::user10FontFace,                "user10FontFace",               "FreeSerif" },
+      { Sid::user10FontFace,                "user10FontFace",               "Edwin" },
       { Sid::user10FontSize,                "user10FontSize",               10.0 },
       { Sid::user10FontSpatiumDependent,    "user10FontSpatiumDependent",   true },
       { Sid::user10FontStyle,               "user10FontStyle",              int(FontStyle::Normal) },
@@ -1229,7 +1229,7 @@ static const StyleType styleTypes[] {
       { Sid::user10FrameBgColor,            "user10FrameBgColor",           QColor(255, 255, 255, 0) },
 
       { Sid::user11Name,                    "user11Name",                   "" },
-      { Sid::user11FontFace,                "user11FontFace",               "FreeSerif" },
+      { Sid::user11FontFace,                "user11FontFace",               "Edwin" },
       { Sid::user11FontSize,                "user11FontSize",               10.0 },
       { Sid::user11FontSpatiumDependent,    "user11FontSpatiumDependent",   true },
       { Sid::user11FontStyle,               "user11FontStyle",              int(FontStyle::Normal) },
@@ -1245,7 +1245,7 @@ static const StyleType styleTypes[] {
       { Sid::user11FrameBgColor,            "user11FrameBgColor",           QColor(255, 255, 255, 0) },
 
       { Sid::user12Name,                    "user12Name",                   "" },
-      { Sid::user12FontFace,                "user12FontFace",               "FreeSerif" },
+      { Sid::user12FontFace,                "user12FontFace",               "Edwin" },
       { Sid::user12FontSize,                "user12FontSize",               10.0 },
       { Sid::user12FontSpatiumDependent,    "user12FontSpatiumDependent",   true },
       { Sid::user12FontStyle,               "user12FontStyle",              int(FontStyle::Normal) },
@@ -1260,7 +1260,7 @@ static const StyleType styleTypes[] {
       { Sid::user12FrameFgColor,            "user12FrameFgColor",           QColor(0, 0, 0, 255) },
       { Sid::user12FrameBgColor,            "user12FrameBgColor",           QColor(255, 255, 255, 0) },
 
-      { Sid::letRingFontFace,               "letRingFontFace",              "FreeSerif" },
+      { Sid::letRingFontFace,               "letRingFontFace",              "Edwin" },
       { Sid::letRingFontSize,               "letRingFontSize",              10.0 },
       { Sid::letRingFontSpatiumDependent,   "letRingFontSpatiumDependent",  true },
       { Sid::letRingFontStyle,              "letRingFontStyle",             int(FontStyle::Normal) },
@@ -1282,7 +1282,7 @@ static const StyleType styleTypes[] {
       { Sid::letRingFrameBgColor,           "letRingFrameBgColor",          QColor(255, 255, 255, 0) },
       { Sid::letRingEndHookType,            "letRingEndHookType",           int(HookType::HOOK_90T) },
 
-      { Sid::palmMuteFontFace,              "palmMuteFontFace",              "FreeSerif" },
+      { Sid::palmMuteFontFace,              "palmMuteFontFace",              "Edwin" },
       { Sid::palmMuteFontSize,              "palmMuteFontSize",              10.0 },
       { Sid::palmMuteFontSpatiumDependent,  "palmMuteFontSpatiumDependent",  true },
       { Sid::palmMuteFontStyle,             "palmMuteFontStyle",             int(FontStyle::Normal) },

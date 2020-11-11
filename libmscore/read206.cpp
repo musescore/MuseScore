@@ -220,8 +220,8 @@ struct StyleVal2 {
       { Sid::SlurDottedWidth,             QVariant(.1) },
       { Sid::MinTieLength,                QVariant(1.0) },
       { Sid::SectionPause,                QVariant(qreal(3.0)) },
-      { Sid::MusicalSymbolFont,           QVariant(QString("Emmentaler")) },
-      { Sid::MusicalTextFont,             QVariant(QString("MScore Text")) },
+      { Sid::MusicalSymbolFont,           QVariant(QString("Leland")) },
+      { Sid::MusicalTextFont,             QVariant(QString("Leland Text")) },
       { Sid::showHeader,                  QVariant(false) },
       { Sid::headerFirstPage,             QVariant(false) },
       { Sid::headerOddEven,               QVariant(true) },
@@ -277,7 +277,7 @@ struct StyleVal2 {
       { Sid::rehearsalMarkFrameRound,     QVariant(20)    },
       { Sid::dynamicsFontStyle,           int(FontStyle::Italic) },
 
-//      { Sid::staffTextFontFace,           "FreeSerif" },
+//      { Sid::staffTextFontFace,           "Edwin" },
 //      { Sid::staffTextFontSize,           10.0 },
 //      { Sid::staffTextFontBold,           false },
 //      { Sid::staffTextFontItalic,         false },
@@ -425,7 +425,7 @@ void readPageFormat(MStyle* style, XmlReader& e)
 
 void readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, std::map<Sid, QVariant>>& excessStyles)
       {
-      QString family = "FreeSerif";
+      QString family = "Edwin";
       double size = 10;
       bool sizeIsSpatiumDependent = false;
       FontStyle fontStyle = FontStyle::Normal;

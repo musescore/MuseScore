@@ -102,6 +102,8 @@ if (APPLE)
 else (APPLE)
       QT5_ADD_RESOURCES (qrc_files musescore.qrc
             qml.qrc # TODO: replace with qtquick_compiler_add_resources on Qt >= 5.11
+            musescorefonts-Leland.qrc
+            musescorefonts-Edwin.qrc
             musescorefonts-MScore.qrc
             musescorefonts-Gootville.qrc
             musescorefonts-Bravura.qrc

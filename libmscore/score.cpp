@@ -254,7 +254,7 @@ Score::Score()
       _layer.append(l);
       _layerTags[0]   = "default";
 
-      _scoreFont = ScoreFont::fontFactory("emmentaler");
+      _scoreFont = ScoreFont::fontFactory("Leland");
 
       _fileDivision           = MScore::division;
       _style  = MScore::defaultStyle();

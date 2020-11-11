@@ -475,7 +475,7 @@ void BarLine::drawDots(QPainter* painter, qreal x) const
             const StaffType* st = staffType();
 
             //workaround to make new Bravura and Petaluma font work correctly with repeatDots
-            qreal offset = (score()->scoreFont()->name() == "Bravura" || score()->scoreFont()->name() == "Petaluma") ? 0 : 0.5 * score()->spatium() * mag();
+            qreal offset = (score()->scoreFont()->name() == "Bravura" || score()->scoreFont()->name() == "Petaluma" || score()->scoreFont()->name() == "Leland") ? 0 : 0.5 * score()->spatium() * mag();
             y1l          = st->doty1() * _spatium + offset;
             y2l          = st->doty2() * _spatium + offset;
             }
@@ -691,7 +691,7 @@ void BarLine::draw(QPainter* painter) const
             Measure* m = s->measure();
             if (m->isIrregular() && score()->markIrregularMeasures() && !m->isMMRest()) {
                   painter->setPen(MScore::layoutBreakColor);
-                  QFont f("FreeSerif");
+                  QFont f("Edwin");
                   f.setPointSizeF(12 * spatium() * MScore::pixelRatio / SPATIUM20);
                   f.setBold(true);
                   QString str = m->ticks() > m->timesig() ? "+" : "-";
