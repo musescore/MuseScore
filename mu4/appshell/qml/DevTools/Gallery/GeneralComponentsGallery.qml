@@ -45,7 +45,8 @@ Rectangle {
                     { textRole: "TextInputField", componentRole: textInputFieldSample },
                     { textRole: "SearchField", componentRole: searchFieldSample },
                     { textRole: "TabPanel", componentRole: tabPanelSample },
-                    { textRole: "GradientTabButton", componentRole: gradientTabButtonsSample }
+                    { textRole: "GradientTabButton", componentRole: gradientTabButtonsSample },
+                    { textRole: "GridView", componentRole: gridViewVertical }
                 ]
                 delegate: Column {
                     anchors.left: parent.left
@@ -614,5 +615,80 @@ Rectangle {
                 }
             }
         }
+    }
+
+    Component {
+        id: gridViewVertical
+
+        Item {
+
+            height: 320
+            width: 500
+
+            GridViewSectional {
+                id: gridView
+
+                height: parent.height
+                width: parent.width
+
+                orientation: Qt.Vertical
+
+                cellWidth: 100
+                cellHeight: 36
+
+                sectionWidth: 204
+                sectionHeight: 36
+                sectionRole: "sectionRole"
+
+                columns: 2
+
+                model: ListModel {
+                    ListElement {
+                        name: "Text 1"
+                        sectionRole: "Section 0"
+                    }
+                    ListElement {
+                        name: "Text 2"
+                        sectionRole: "Section 0"
+                    }
+                    ListElement {
+                        name: "Text 5"
+                        sectionRole: "Section 0"
+                    }
+                    ListElement {
+                        name: "Text 3"
+                        sectionRole: "Section 1"
+                    }
+                    ListElement {
+                        name: "Text 4"
+                        sectionRole: "Section 1"
+                    }
+                }
+
+                sectionDelegate: Rectangle {
+                    color: ui.theme.strokeColor
+
+                    property var itemData: Boolean(itemModel) ? itemModel : null
+
+                    width: gridView.sectionWidth
+                    height: gridView.sectionHeight
+
+                    StyledTextLabel {
+                        anchors.centerIn: parent
+                        text: Boolean(itemData) ? itemData : ""
+                    }
+                }
+
+                itemDelegate: FlatButton {
+                    property var item: Boolean(itemModel) ? itemModel : null
+
+                    width: gridView.cellWidth
+                    height: gridView.cellHeight
+
+                    text: Boolean(item) ? item.name : ""
+                }
+            }
+        }
+
     }
 }
