@@ -20,9 +20,9 @@
 
 using namespace mu::notation;
 
-void NotationReadersRegister::reg(const std::vector<std::string>& suffixs, INotationReaderPtr reader)
+void NotationReadersRegister::reg(const std::vector<std::string>& suffixes, INotationReaderPtr reader)
 {
-    for (const std::string& suffix : suffixs) {
+    for (const std::string& suffix : suffixes) {
         m_readers.insert({ suffix, reader });
     }
 }

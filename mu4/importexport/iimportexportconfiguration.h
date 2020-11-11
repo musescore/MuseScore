@@ -48,6 +48,13 @@ public:
     };
 
     virtual MusicxmlExportBreaksType musicxmlExportBreaksType() const = 0;
+
+    // Pdf
+    virtual int exportPdfDpiResolution() const = 0;
+
+    // Png
+    virtual double exportPngDpiResolution() const = 0;
+    virtual bool exportPngWithTransparentBackground() const = 0;
 };
 }
 

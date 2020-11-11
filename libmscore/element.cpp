@@ -1229,7 +1229,6 @@ void collectElements(void* data, Element* e)
     el->append(e);
 }
 
-
 void paintElement(QPainter& painter, const Element* element)
 {
     QPointF pos(element->pagePos());
@@ -1248,6 +1247,7 @@ void paintElements(QPainter& painter, const QList<Element*>& elements)
         paintElement(painter, element);
     }
 }
+
 //---------------------------------------------------------
 //   autoplace
 //---------------------------------------------------------
