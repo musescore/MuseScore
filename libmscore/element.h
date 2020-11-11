@@ -628,6 +628,9 @@ public:
 
 extern bool elementLessThan(const Element* const, const Element* const);
 extern void collectElements(void* data, Element* e);
+
+extern void paintElement(QPainter& painter, const Element* element);
+extern void paintElements(QPainter& painter, const QList<Element*>& elements);
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::ElementType);

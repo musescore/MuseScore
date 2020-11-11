@@ -1229,6 +1229,25 @@ void collectElements(void* data, Element* e)
     el->append(e);
 }
 
+
+void paintElement(QPainter& painter, const Element* element)
+{
+    QPointF pos(element->pagePos());
+    painter.translate(pos);
+    element->draw(&painter);
+    painter.translate(-pos);
+}
+
+void paintElements(QPainter& painter, const QList<Element*>& elements)
+{
+    for (Element* element : elements) {
+        if (!element->visible()) {
+            continue;
+        }
+
+        paintElement(painter, element);
+    }
+}
 //---------------------------------------------------------
 //   autoplace
 //---------------------------------------------------------
