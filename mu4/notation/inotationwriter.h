@@ -35,7 +35,14 @@ namespace mu::notation {
 class INotationWriter
 {
 public:
-    using Options = std::map<int, Val>;
+    enum class OptionKey {
+        PAGE_NUMBER,
+        TRANSPARENT_BACKGROUND,
+        CANVAS_DPI,
+        TRIM_MARGINS_SIZE
+    };
+
+    using Options = QMap<OptionKey, Val>;
 
     virtual ~INotationWriter() = default;
 
