@@ -31,5 +31,8 @@
         <file>qml/MuseScore/UiComponents/InstallationPanel.qml</file>
         <file>qml/MuseScore/UiComponents/StyledScrollBar.qml</file>
         <file>qml/MuseScore/UiComponents/GradientTabButton.qml</file>
+        <file>qml/MuseScore/UiComponents/GridViewSectional.qml</file>
+        <file>qml/MuseScore/UiComponents/internal/GridViewDelegate.qml</file>
+        <file>qml/MuseScore/UiComponents/internal/GridViewSection.qml</file>
     </qresource>
 </RCC>
