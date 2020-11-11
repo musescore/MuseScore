@@ -1,6 +1,7 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
    <qresource prefix="/">
+      <file alias="fonts/leland/metadata.json">../fonts/leland/metadata.json</file>
       <file alias="fonts/mscore/metadata.json">../fonts/mscore/metadata.json</file>
       <file alias="fonts/gootville/metadata.json">../fonts/gootville/metadata.json</file>
       <file alias="fonts/bravura/metadata.json">../fonts/bravura/bravura_metadata.json</file>

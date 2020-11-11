@@ -58,8 +58,8 @@ Score* NoteGroups::createScore(int n, TDuration::DurationType t, std::vector<Cho
 
       c.score()->parts().front()->setLongName("");
       c.score()->style().set(Sid::linearStretch, 1.3);
-      c.score()->style().set(Sid::MusicalSymbolFont, QString("Bravura"));
-      c.score()->style().set(Sid::MusicalTextFont, QString("Bravura Text"));
+      c.score()->style().set(Sid::MusicalSymbolFont, QString("Leland"));
+      c.score()->style().set(Sid::MusicalTextFont, QString("Leland Text"));
       c.score()->style().set(Sid::startBarlineSingle, true);
 
       StaffType* st = c.score()->staff(0)->staffType(Fraction(0,1));

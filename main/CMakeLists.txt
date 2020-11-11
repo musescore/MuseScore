@@ -500,6 +500,10 @@ if (APPLE)
       ../fonts/mscore/MScoreText.ttf
       ../fonts/musejazz/MuseJazzText.otf
       ../fonts/campania/Campania.otf
+      ../fonts/edwin/Edwin-Roman.otf
+      ../fonts/edwin/Edwin-Bold.otf
+      ../fonts/edwin/Edwin-Italic.otf
+      ../fonts/edwin/Edwin-BdIta.otf
       ../fonts/FreeSerif.ttf
       ../fonts/FreeSerifBold.ttf
       ../fonts/FreeSerifItalic.ttf
@@ -508,6 +512,8 @@ if (APPLE)
       ../fonts/mscoreTab.ttf
       ../fonts/mscore-BC.ttf
       ../fonts/bravura/BravuraText.otf
+      ../fonts/leland/Leland.otf
+      ../fonts/leland/LelandText.otf
       ../fonts/petaluma/PetalumaText.otf
       ../fonts/petaluma/PetalumaScript.otf
      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}fonts

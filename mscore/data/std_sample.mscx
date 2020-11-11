@@ -31,8 +31,8 @@
       <pedalLineWidth>0.16</pedalLineWidth>
       <slurEndWidth>0.1</slurEndWidth>
       <slurMidWidth>0.22</slurMidWidth>
-      <musicalSymbolFont>Bravura</musicalSymbolFont>
-      <musicalTextFont>Bravura Text</musicalTextFont>
+      <musicalSymbolFont>Leland</musicalSymbolFont>
+      <musicalTextFont>Leland Text</musicalTextFont>
       <voltaLineWidth>0.16</voltaLineWidth>
       <ottavaLineWidth>0.16</ottavaLineWidth>
       <tupletBracketWidth>0.16</tupletBracketWidth>

@@ -3,6 +3,7 @@
         <file>data/icons/edit.svg</file>
         <file alias="fonts/mscore/metadata.json">../fonts/mscore/metadata.json</file>
         <file alias="fonts/gootville/metadata.json">../fonts/gootville/metadata.json</file>
+        <file alias="fonts/leland/metadata.json">../fonts/leland/metadata.json</file>
         <file alias="fonts/bravura/metadata.json">../fonts/bravura/bravura_metadata.json</file>
         <file alias="fonts/musejazz/metadata.json">../fonts/musejazz/metadata.json</file>
         <file alias="fonts/petaluma/metadata.json">../fonts/petaluma/petaluma_metadata.json</file>

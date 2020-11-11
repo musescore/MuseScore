@@ -358,6 +358,10 @@ void MScore::init()
       static const char* fonts[] = {
             ":/fonts/musejazz/MuseJazzText.otf",
             ":/fonts/campania/Campania.otf",
+            ":/fonts/edwin/Edwin-Roman.otf",
+            ":/fonts/edwin/Edwin-Bold.otf",
+            ":/fonts/edwin/Edwin-Italic.otf",
+            ":/fonts/edwin/Edwin-BdIta.otf",
             ":/fonts/FreeSans.ttf",
             ":/fonts/FreeSerif.ttf",
             ":/fonts/FreeSerifBold.ttf",
@@ -365,6 +369,7 @@ void MScore::init()
             ":/fonts/FreeSerifBoldItalic.ttf",
             ":/fonts/mscoreTab.ttf",
             ":/fonts/mscore-BC.ttf",
+            ":/fonts/leland/LelandText.otf",
             ":/fonts/bravura/BravuraText.otf",
             ":/fonts/gootville/GootvilleText.otf",
             ":/fonts/mscore/MScoreText.ttf",

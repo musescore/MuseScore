@@ -400,7 +400,7 @@ void PianoKeyItem::paint(QPainter* p, const QStyleOptionGraphicsItem* /*o*/, QWi
             p->setBrush(type >= 7 ? Qt::black : Qt::white);
       p->drawPath(path());
       if (_pitch % 12 == 0) {
-            QFont f("FreeSerif", 6);
+            QFont f("Edwin", 6);
             p->setFont(f);
             QString text = "C" + QString::number((_pitch / 12) - 1);
             p->drawText(QRectF(KEY_WIDTH / 2, KEY_HEIGHT - 8, 0, 0),

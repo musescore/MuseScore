@@ -75,7 +75,7 @@ SymbolDialog::SymbolDialog(const QString& s, QWidget* parent)
       int currentIndex = 0;
       for (const ScoreFont& f : ScoreFont::scoreFonts()) {
             fontList->addItem(f.name());
-            if (f.name() == "Bravura")
+            if (f.name() == "Leland" || f.name() == "Bravura")
                   currentIndex = idx;
             ++idx;
             }
