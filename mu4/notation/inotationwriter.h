@@ -39,7 +39,8 @@ public:
         PAGE_NUMBER,
         TRANSPARENT_BACKGROUND,
         CANVAS_DPI,
-        TRIM_MARGINS_SIZE
+        TRIM_MARGINS_SIZE,
+        NOTES_COLORS
     };
 
     using Options = QMap<OptionKey, Val>;

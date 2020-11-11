@@ -62,6 +62,8 @@ set(MODULE_SRC
     
     ${CMAKE_CURRENT_LIST_DIR}/internal/svgwriter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/svgwriter.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/svggenerator.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/svggenerator.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/pngwriter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/pngwriter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/pdfwriter.cpp
