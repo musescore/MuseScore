@@ -20,43 +20,87 @@
 
 #include "settings.h"
 
-static const std::string module_name("importexport");
+#include "libmscore/mscore.h"
 
 using namespace mu::framework;
 using namespace mu::importexport;
 
+static const std::string module_name("importexport");
+
+static const Settings::Key SHORTEST_NOTE_KEY(module_name, "io/midi/shortestNote");
+static const Settings::Key IMPORT_OVERTUNE_CHARSET_KEY(module_name, "import/overture/charset");
+static const Settings::Key IMPORT_GUITARPRO_CHARSET_KEY(module_name, "import/guitarpro/charset");
+static const Settings::Key MUSICXML_IMPORT_BREAKS_KEY(module_name, "import/musicXML/importBreaks");
+static const Settings::Key MUSICXML_IMPORT_LAYOUT_KEY(module_name, "import/musicXML/importLayout");
+static const Settings::Key MUSICXML_EXPORT_LAYOUT_KEY(module_name, "export/musicXML/exportLayout");
+static const Settings::Key MUSICXML_EXPORT_BREAKS_TYPE_KEY(module_name, "export/musicXML/exportBreaks");
+static const Settings::Key EXPORT_PDF_DPI_RESOLUTION_KEY(module_name, "export/pdf/dpi");
+static const Settings::Key EXPORT_PNG_DPI_RESOLUTION_KEY(module_name, "export/png/resolution");
+static const Settings::Key EXPORT_PNG_USE_TRASNPARENCY_KEY(module_name, "export/png/useTransparency");
+
+void ImportexportConfiguration::init()
+{
+    settings()->addItem(SHORTEST_NOTE_KEY, Val(Ms::MScore::division / 4));
+
+    settings()->addItem(IMPORT_OVERTUNE_CHARSET_KEY, Val("GBK"));
+    settings()->addItem(IMPORT_GUITARPRO_CHARSET_KEY, Val("UTF-8"));
+
+    settings()->addItem(MUSICXML_IMPORT_BREAKS_KEY, Val(true));
+    settings()->addItem(MUSICXML_IMPORT_LAYOUT_KEY, Val(true));
+    settings()->addItem(MUSICXML_EXPORT_LAYOUT_KEY, Val(true));
+    settings()->addItem(MUSICXML_EXPORT_BREAKS_TYPE_KEY, Val(static_cast<int>(MusicxmlExportBreaksType::All)));
+
+    settings()->addItem(EXPORT_PNG_DPI_RESOLUTION_KEY, Val(Ms::DPI));
+    settings()->addItem(EXPORT_PNG_USE_TRASNPARENCY_KEY, Val(true));
+    settings()->addItem(EXPORT_PDF_DPI_RESOLUTION_KEY, Val(Ms::DPI));
+}
+
 int ImportexportConfiguration::midiShortestNote() const
 {
-    return settings()->value(Settings::Key(module_name, "io/midi/shortestNote")).toInt();
+    return settings()->value(SHORTEST_NOTE_KEY).toInt();
 }
 
 std::string ImportexportConfiguration::importOvertuneCharset() const
 {
-    return settings()->value(Settings::Key(module_name, "import/overture/charset")).toString();
+    return settings()->value(IMPORT_OVERTUNE_CHARSET_KEY).toString();
 }
 
 std::string ImportexportConfiguration::importGuitarProCharset() const
 {
-    return settings()->value(Settings::Key(module_name, "import/guitarpro/charset")).toString();
+    return settings()->value(IMPORT_GUITARPRO_CHARSET_KEY).toString();
 }
 
 bool ImportexportConfiguration::musicxmlImportBreaks() const
 {
-    return settings()->value(Settings::Key(module_name, "import/musicXML/importBreaks")).toBool();
+    return settings()->value(MUSICXML_IMPORT_BREAKS_KEY).toBool();
 }
 
 bool ImportexportConfiguration::musicxmlImportLayout() const
 {
-    return settings()->value(Settings::Key(module_name, "import/musicXML/importLayout")).toBool();
+    return settings()->value(MUSICXML_IMPORT_LAYOUT_KEY).toBool();
 }
 
 bool ImportexportConfiguration::musicxmlExportLayout() const
 {
-    return settings()->value(Settings::Key(module_name, "import/musicXML/exportLayout")).toBool();
+    return settings()->value(MUSICXML_EXPORT_LAYOUT_KEY).toBool();
 }
 
 ImportexportConfiguration::MusicxmlExportBreaksType ImportexportConfiguration::musicxmlExportBreaksType() const
 {
-    return static_cast<MusicxmlExportBreaksType>(settings()->value(Settings::Key(module_name, "import/musicXML/exportBreaks")).toInt());
+    return static_cast<MusicxmlExportBreaksType>(settings()->value(MUSICXML_EXPORT_BREAKS_TYPE_KEY).toInt());
 }
 
+int ImportexportConfiguration::exportPdfDpiResolution() const
+{
+    return settings()->value(EXPORT_PDF_DPI_RESOLUTION_KEY).toInt();
+}
+
+double ImportexportConfiguration::exportPngDpiResolution() const
+{
+    return settings()->value(EXPORT_PNG_DPI_RESOLUTION_KEY).toDouble();
+}
+
+bool ImportexportConfiguration::exportPngWithTransparentBackground() const
+{
+    return settings()->value(EXPORT_PNG_USE_TRASNPARENCY_KEY).toBool();
+}

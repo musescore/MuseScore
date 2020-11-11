@@ -21,17 +21,72 @@
 
 #include "log.h"
 
+#include "libmscore/score.h"
+
+#include <QPdfWriter>
+#include <QPainter>
+
 using namespace mu::importexport;
 using namespace mu::framework;
 using namespace Ms;
 
-mu::Ret PdfWriter::write(const Score& score, IODevice& destinationDevice, const Options& options)
+mu::Ret PdfWriter::write(const Score& score, IODevice& destinationDevice, const Options&)
 {
-    UNUSED(score)
-    UNUSED(destinationDevice)
-    UNUSED(options)
+    const_cast<Score&>(score).setPrinting(true);
+    MScore::pdfPrinting = true;
 
-    NOT_IMPLEMENTED;
+    QPdfWriter pdfWriter(&destinationDevice);
+    pdfWriter.setResolution(configuration()->exportPdfDpiResolution());
+    pdfWriter.setCreator("MuseScore Version: " VERSION);
+    pdfWriter.setTitle(documentTitle(score));
+    pdfWriter.setPageMargins(QMarginsF());
 
-    return Ret();
+    QPainter painter;
+    if (!painter.begin(&pdfWriter)) {
+        return false;
+    }
+
+    QSizeF size(score.styleD(Sid::pageWidth), score.styleD(Sid::pageHeight));
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setRenderHint(QPainter::TextAntialiasing, true);
+    painter.setViewport(QRect(0.0, 0.0, size.width() * pdfWriter.logicalDpiX(),
+                              size.height() * pdfWriter.logicalDpiY()));
+    painter.setWindow(QRect(0.0, 0.0, size.width() * DPI, size.height() * DPI));
+
+    double pixelRationBackup = MScore::pixelRatio;
+    MScore::pixelRatio = DPI / pdfWriter.logicalDpiX();
+
+    for (int pageNumber = 0; pageNumber < score.npages(); ++pageNumber) {
+        if (pageNumber > 0) {
+            pdfWriter.newPage();
+        }
+
+        const_cast<Score&>(score).print(&painter, pageNumber);
+    }
+
+    painter.end();
+    const_cast<Score&>(score).setPrinting(false);
+    MScore::pixelRatio = pixelRationBackup;
+    MScore::pdfPrinting = false;
+
+    return true;
+}
+
+QString PdfWriter::documentTitle(const Score& score) const
+{
+    QString title = score.metaTag("workTitle");
+    if (title.isEmpty()) { // workTitle unset?
+        title = score.masterScore()->title(); // fall back to (master)score's tab title
+    }
+
+    if (!score.isMaster()) { // excerpt?
+        QString partName = score.metaTag("partName");
+        if (partName.isEmpty()) { // partName unset?
+            partName = score.title(); // fall back to excerpt's tab title
+        }
+
+        title += " - " + partName;
+    }
+
+    return title;
 }

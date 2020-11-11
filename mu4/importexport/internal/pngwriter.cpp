@@ -53,7 +53,7 @@ mu::Ret PngWriter::write(const Score& score, IODevice& destinationDevice, const 
         pageRect = page->tbbox() + margins;
     }
 
-    const double CANVAS_DPI = options.value(OptionKey::CANVAS_DPI, Val(DPI)).toDouble();
+    const double CANVAS_DPI = configuration()->exportPngDpiResolution();
     int width = std::lrint(pageRect.width() * CANVAS_DPI / DPI);
     int height = std::lrint(pageRect.height() * CANVAS_DPI / DPI);
 

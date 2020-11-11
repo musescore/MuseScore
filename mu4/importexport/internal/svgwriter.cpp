@@ -153,7 +153,7 @@ mu::Ret SvgWriter::write(const Score& score, IODevice& destinationDevice, const 
 
     int lastNoteIndex = -1;
     for (int i = 0; i < PAGE_NUMBER; ++i) {
-        for (const Element* element: pages[i] -> elements()) {
+        for (const Element* element: pages[i]->elements()) {
             if (element->type() == ElementType::NOTE) {
                 lastNoteIndex++;
             }

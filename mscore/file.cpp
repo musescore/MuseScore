@@ -100,28 +100,6 @@ extern void importSoundfont(QString name);
 extern MasterSynthesizer* synti;
 
 //---------------------------------------------------------
-//   paintElement(s)
-//---------------------------------------------------------
-
-static void paintElement(QPainter& p, const Element* e)
-{
-    QPointF pos(e->pagePos());
-    p.translate(pos);
-    e->draw(&p);
-    p.translate(-pos);
-}
-
-static void paintElements(QPainter& p, const QList<Element*>& el)
-{
-    for (Element* e : el) {
-        if (!e->visible()) {
-            continue;
-        }
-        paintElement(p, e);
-    }
-}
-
-//---------------------------------------------------------
 //   createDefaultFileName
 //---------------------------------------------------------
 
