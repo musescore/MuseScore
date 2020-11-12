@@ -99,11 +99,11 @@ void EaseInOut::timeList(const int nbNotes, const int duration, QList<int>* time
       qreal space = qreal(duration);
       if (_easeIn == 0.0 && _easeOut == 0.0) {
             for (int n = 0; n <= nbNotes; n++) {
-                  times->push_back(static_cast<int>((static_cast<qreal>(n) / nNotes) * space));
+                  times->push_back(static_cast<int>(std::lround((static_cast<qreal>(n) / nNotes) * space)));
                   }
       } else {
             for (int n = 0; n <= nbNotes; n++) {
-                  times->push_back(static_cast<int>(XfromY(static_cast<qreal>(n) / nNotes) * space));
+                  times->push_back(static_cast<int>(std::lround(XfromY(static_cast<qreal>(n) / nNotes) * space)));
                  }
             }
       }

@@ -1684,7 +1684,7 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
                   // render the body, i.e. the glissando
                   for (int j = 0; j < b - 1; j++)
                         makeEvent(body[j], onTimes[j], onTimes[j + 1] - onTimes[j]);
-                  makeEvent(body[b - 1], onTimes[b-1], millespernote * b - onTimes[b-1]);
+                  makeEvent(body[b - 1], onTimes[b-1], (millespernote * b - onTimes[b-1]) + sustain);
                   }
             else {
                   // render the body, but not the final repetition
