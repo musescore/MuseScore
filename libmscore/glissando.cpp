@@ -45,8 +45,6 @@ static const ElementStyle glissandoElementStyle {
       { Sid::glissandoFontStyle,                 Pid::FONT_STYLE              },
       { Sid::glissandoLineWidth,                 Pid::LINE_WIDTH              },
       { Sid::glissandoText,                      Pid::GLISS_TEXT              },
-      //{ Sid::glissandoEaseIn,                    Pid::GLISS_EASEIN            },
-      //{ Sid::glissandoEaseOut,                   Pid::GLISS_EASEOUT           },
       };
 
 static const qreal      GLISS_PALETTE_WIDTH           = 4.0;
