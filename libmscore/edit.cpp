@@ -940,7 +940,8 @@ void Score::cmdRemoveTimeSig(TimeSig* ts)
       Score* rScore = masterScore();
       Measure* rm = rScore->tick2measure(m->tick());
       Segment* rs = rm->findSegment(SegmentType::TimeSig, s->tick());
-      rScore->undoRemoveElement(rs);
+      if (rs)
+            rScore->undoRemoveElement(rs);
 
       Measure* pm = m->prevMeasure();
       Fraction ns(pm ? pm->timesig() : Fraction(4,4));
@@ -5099,6 +5100,8 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, const Fraction& tick)
 
 void Score::undoRemoveElement(Element* element)
       {
+      if (!element)
+            return;
       QList<Segment*> segments;
       for (ScoreElement* ee : element->linkList()) {
             Element* e = static_cast<Element*>(ee);
