@@ -1,40 +1,44 @@
-import QtQuick 2.7
-import QtQuick.Controls 2.2
+import QtQuick 2.12
+import QtQuick.Controls 2.12
+
 import MuseScore.NotationScene 1.0
 import MuseScore.UiComponents 1.0
 
 Rectangle {
     id: root
 
-    Row {
+    GridViewSectional {
+        id: gridView
+
         anchors.fill: parent
 
-        Repeater {
-            anchors.fill: parent
-            model: toolModel
-            delegate: ToolButton {
-                id: control
-                text: titleRole
-                enabled: enabledRole
-                down: checkedRole
-                onClicked: toolModel.click(nameRole)
+        sectionRole: "sectionRole"
 
-                contentItem: StyledTextLabel {
-                    text: control.text
-                    font: control.font
-                    opacity: enabled ? 1.0 : 0.5
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    elide: Text.ElideRight
-                }
+        cellWidth: 36
+        cellHeight: cellWidth
 
-                background: Rectangle {
-                    implicitWidth: 40
-                    implicitHeight: 40
-                    color: control.enabled && (control.checked || control.highlighted) ? ui.theme.accentColor : ui.theme.buttonColor
-                    opacity: enabled ? ui.theme.accentOpacityNormal : ui.theme.itemOpacityDisabled
-                    visible: control.down || (control.enabled && (control.checked || control.highlighted))
-                }
+        sectionWidth: 2
+        sectionHeight: root.height
+
+        rows: 1
+
+        model: toolModel
+
+        sectionDelegate: Rectangle {
+            color: ui.theme.strokeColor
+        }
+
+        itemDelegate: FlatButton {
+            id: control
+
+            property var item: Boolean(itemModel) ? itemModel : null
+
+            normalStateColor: Boolean(item) && item.checkedRole ? ui.theme.accentColor : "transparent"
+
+            icon: Boolean(item) ? item.iconRole : null
+
+            onClicked: {
+                toolModel.click(item.nameRole)
             }
         }
     }
