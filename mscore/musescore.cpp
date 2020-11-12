@@ -521,7 +521,7 @@ void MuseScore::preferencesChanged(bool fromWorkspace, bool changeUI)
       // change workspace
       if (!fromWorkspace && preferences.getString(PREF_APP_WORKSPACE) != WorkspacesManager::currentWorkspace()->name()) {
             Workspace* workspace = WorkspacesManager::findByName(preferences.getString(PREF_APP_WORKSPACE));
-            
+
             if (workspace)
                   mscore->changeWorkspace(workspace);
             }
@@ -793,7 +793,7 @@ bool MuseScore::importExtension(QString path)
 
                   if (!sfzs.isEmpty())
                         synti->storeState();
-                  
+
                   s->gui()->synthesizerChanged();
                   }
 
@@ -816,7 +816,7 @@ bool MuseScore::importExtension(QString path)
                         }
                   if (!sfs.isEmpty())
                         synti->storeState();
-                  
+
                   s->gui()->synthesizerChanged();
                   }
             };
@@ -883,7 +883,7 @@ bool MuseScore::uninstallExtension(QString extensionId)
                   }
             if (found)
                   synti->storeState();
-            
+
             s->gui()->synthesizerChanged();
             }
       bool refreshWorkspaces = false;
@@ -913,7 +913,7 @@ bool MuseScore::uninstallExtension(QString extensionId)
             bool curWorkspaceDisappeared = false;
             if (WorkspacesManager::findByName(curWorkspaceName))
                   curWorkspaceDisappeared = true;
-            
+
             if (curWorkspaceDisappeared)
                   changeWorkspace(WorkspacesManager::workspaces().last());
             }
@@ -1288,7 +1288,7 @@ MuseScore::MuseScore()
       {
       feedbackTools = addToolBar("");
       feedbackTools->setObjectName("feedback-tools");
-	  // Forbid to move or undock the toolbar...
+      // Forbid to move or undock the toolbar...
       feedbackTools->setMovable(false);
       feedbackTools->setFloatable(false);
       // Add a spacer to align the buttons to the right side.
@@ -2119,7 +2119,7 @@ void MuseScore::retranslate()
       if (paletteWorkspace)
           paletteWorkspace->retranslate();
       }
-      
+
 //---------------------------------------------------------
 //   setMenuTitles
 //---------------------------------------------------------
@@ -2219,7 +2219,7 @@ void MuseScore::updateMenus()
       addPluginMenuEntries();
 #endif
       }
-      
+
 //---------------------------------------------------------
 //   resizeEvent
 //---------------------------------------------------------
@@ -7247,7 +7247,7 @@ bool MuseScore::saveMp3(Score* score, QIODevice* device, bool& wasCanceled)
                                           continue;
                                     e.setChannel(a->channel());
                                     int syntiIdx= synth->index(score->masterScore()->midiMapping(a->channel())->articulation()->synti());
-									synth->play(e, syntiIdx);
+                                    synth->play(e, syntiIdx);
                                     }
                               }
                         }
@@ -7434,7 +7434,7 @@ void MuseScore::updateUiStyleAndTheme()
       {
       // set UI Theme
       QApplication::setStyle(QStyleFactory::create("Fusion"));
-          
+
 #ifdef Q_OS_MAC
       // On Mac, update the color of the window title bars
       CocoaBridge::setWindowAppearanceIsDark(preferences.isThemeDark());
@@ -7541,60 +7541,19 @@ MuseScoreApplication* MuseScoreApplication::initApplication(int& argc, char** ar
             appName  = "MuseScore3";
             }
 
-#if defined(WIN_PORTABLE)
+      //! NOTE Disable cache for all platforms
+      //! Enabled qml cache on MacOS BigSur on ARM leads to a crash at the start
+      //! There were also crash problems on some Linux platforms when upgrading
+      //! In general, the Qml cache doesn't really matter.
+      //! Therefore, it is better to turn it off.
       qputenv("QML_DISABLE_DISK_CACHE", "true");
-#endif
+
       MuseScoreApplication* app = new MuseScoreApplication(appName2, argc, argv);
       QCoreApplication::setApplicationName(appName);
 
       QCoreApplication::setOrganizationName("MuseScore");
       QCoreApplication::setOrganizationDomain("musescore.org");
       QCoreApplication::setApplicationVersion(MuseScore::fullVersion());
-
-      { //! NOTE Check qml cache
-            QString qmlcachePath = qgetenv("QML_DISK_CACHE_PATH");
-            if (qmlcachePath.isEmpty()) {
-                qmlcachePath = QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + "/qmlcache";
-                }
-
-            QDir qmlcacheDir(qmlcachePath);
-            bool isNeedClearQmlCache = false;
-            bool isNeedWriteQmlRevision = false;
-            if (qmlcacheDir.exists()) {
-                QFile qmlcacheRefFile(qmlcacheDir.absolutePath() +"/qmlcache.revision");
-                if (qmlcacheRefFile.open(QIODevice::ReadOnly)) {
-                    QString qmlcacheRef = QString(qmlcacheRefFile.readAll()).trimmed();
-                    if (qmlcacheRef != revision)
-                        isNeedClearQmlCache = true;
-                    }
-                else {
-                    isNeedClearQmlCache = true;
-                    isNeedWriteQmlRevision = true;
-                    }
-
-                }
-            else {
-                isNeedWriteQmlRevision = true;
-                }
-
-            if (isNeedClearQmlCache) {
-                bool ok = qmlcacheDir.removeRecursively();
-                if (!ok)
-                    qCritical() << "failed clear qml cache dir: " << qmlcacheDir.absolutePath();
-                }
-
-            if (isNeedWriteQmlRevision) {
-                qmlcacheDir.mkpath(qmlcacheDir.absolutePath());
-                QFile qmlcacheRefFile(qmlcacheDir.absolutePath() +"/qmlcache.revision");
-                if (qmlcacheRefFile.open(QIODevice::WriteOnly)) {
-                    if (!qmlcacheRefFile.write(revision.toLatin1()))
-                        qCritical() << "failed write file: " << qmlcacheRefFile.fileName();
-                    }
-                else {
-                    qCritical() << "failed open file: " << qmlcacheRefFile.fileName();
-                    }
-                }
-      }
 
 #ifdef BUILD_CRASH_REPORTER
       {
@@ -8206,7 +8165,7 @@ void MuseScore::init(QStringList& argv)
                   Workspace* targetWorkspace = WorkspacesManager::visibleWorkspaces()[0];
                   if (targetWorkspace)
                         mscore->changeWorkspace(targetWorkspace, true);
-                  
+
                   preferences.setPreference(PREF_UI_APP_STARTUP_SHOWTOURS, sw->showTours());
                   delete sw;
 
@@ -8304,7 +8263,7 @@ void MuseScore::init(QStringList& argv)
 
       mscore->changeState(mscore->noScore() ? STATE_DISABLED : STATE_NORMAL);
       mscore->show();
-      
+
       if (!restoredSession || files) {
             showSplashMessage(sc, tr("Loading scores…"));
             loadScores(argv);
