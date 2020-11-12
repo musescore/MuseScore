@@ -253,7 +253,7 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
       xml.etag();
 
       if (unhide)
-          endCmd(true);
+            endCmd(true);
       }
 
 //---------------------------------------------------------
