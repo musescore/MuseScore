@@ -474,7 +474,7 @@ void BarLine::drawDots(QPainter* painter, qreal x) const
       else {
             const StaffType* st = staffType();
 
-            //workaround to make new Bravura and Petaluma font work correctly with repeatDots
+            //workaround to make new Bravura, Petaluma and Leland font work correctly with repeatDots
             qreal offset = (score()->scoreFont()->name() == "Bravura" || score()->scoreFont()->name() == "Petaluma" || score()->scoreFont()->name() == "Leland") ? 0 : 0.5 * score()->spatium() * mag();
             y1l          = st->doty1() * _spatium + offset;
             y2l          = st->doty2() * _spatium + offset;
