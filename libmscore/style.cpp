@@ -981,6 +981,8 @@ static const StyleType styleTypes[] {
       { Sid::glissandoFrameBgColor,         "glissandoFrameBgColor",        QColor(255, 255, 255, 0) },
       { Sid::glissandoLineWidth,            "glissandoLineWidth",           Spatium(0.15) },
       { Sid::glissandoText,                 "glissandoText",                QString("gliss.") },
+      { Sid::glissandoEaseIn,               "glissandoEaseIn",              0 },
+      { Sid::glissandoEaseOut,              "glissandoEaseOut",             0 },
 
       { Sid::bendFontFace,                  "bendFontFace",                 "Edwin" },
       { Sid::bendFontSize,                  "bendFontSize",                 8.0 },
