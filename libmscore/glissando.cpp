@@ -45,8 +45,6 @@ static const ElementStyle glissandoElementStyle {
       { Sid::glissandoFontStyle,                 Pid::FONT_STYLE              },
       { Sid::glissandoLineWidth,                 Pid::LINE_WIDTH              },
       { Sid::glissandoText,                      Pid::GLISS_TEXT              },
-      //{ Sid::glissandoEaseIn,                    Pid::GLISS_EASEIN            },
-      //{ Sid::glissandoEaseOut,                   Pid::GLISS_EASEOUT           },
       };
 
 static const qreal      GLISS_PALETTE_WIDTH           = 4.0;
@@ -165,7 +163,7 @@ Element* GlissandoSegment::propertyDelegate(Pid pid)
 //=========================================================
 
 Glissando::Glissando(Score* s)
-  : SLine(s, ElementFlag::MOVABLE)
+   : SLine(s, ElementFlag::MOVABLE)
       {
       setAnchor(Spanner::Anchor::NOTE);
       setDiagonal(true);
@@ -294,10 +292,9 @@ void Glissando::layout()
          // but ignore graces after, as they are not the first note of the system,
          // even if their segment is the first segment of the system
          && !(cr2->noteType() == NoteType::GRACE8_AFTER
-            || cr2->noteType() == NoteType::GRACE16_AFTER || cr2->noteType() == NoteType::GRACE32_AFTER)
+         || cr2->noteType() == NoteType::GRACE16_AFTER || cr2->noteType() == NoteType::GRACE32_AFTER)
          // also ignore if cr1 is a child of cr2, which means cr1 is a grace-before of cr2
-         && !(cr1->parent() == cr2))
-            {
+         && !(cr1->parent() == cr2)) {
             segm2->rxpos() -= GLISS_STARTOFSYSTEM_WIDTH * _spatium;
             segm2->rxpos2()+= GLISS_STARTOFSYSTEM_WIDTH * _spatium;
             }

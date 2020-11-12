@@ -462,7 +462,7 @@ QVariant propertyFromString(Pid id, QString value)
                         return QVariant(int(GlissandoStyle::BLACK_KEYS));
                   else if ( value == "diatonic")
                         return QVariant(int(GlissandoStyle::DIATONIC));
-                  else if ( value == "portamento") 
+                  else if ( value == "portamento")
                         return QVariant(int(GlissandoStyle::PORTAMENTO));
                   else // e.g., normally "Chromatic"
                         return QVariant(int(GlissandoStyle::CHROMATIC));
@@ -594,7 +594,7 @@ QVariant propertyFromString(Pid id, QString value)
                         qDebug("bad align text <%s>", qPrintable(sl[1]));
                         return QVariant();
                         }
-                  return  int(align);
+                  return int(align);
                   }
             case P_TYPE::CHANGE_METHOD:
                   return QVariant(int(ChangeMap::nameToChangeMethod(value)));
