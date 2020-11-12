@@ -27,8 +27,7 @@
 #include "io/path.h"
 #include "ret.h"
 
-namespace mu {
-namespace workspace {
+namespace mu::workspace {
 class Workspace : public IWorkspace
 {
     INJECT(workspace, IWorkspaceDataStreamRegister, streamRegister)
@@ -52,7 +51,6 @@ public:
     Ret write();
 
 private:
-
     Ret readWorkspace(const QByteArray& data);
 
     io::path m_file;
@@ -77,7 +75,8 @@ private:
     std::map<DataKey, AbstractDataPtr> m_data;
     async::Channel<AbstractDataPtr> m_dataChanged;
 };
-}
+
+using WorkspacePtr = std::shared_ptr<Workspace>;
 }
 
 #endif // MU_WORKSPACE_WORKSPACE_H

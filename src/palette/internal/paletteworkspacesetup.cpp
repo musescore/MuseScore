@@ -50,7 +50,7 @@ void PaletteWorkspaceSetup::setup()
                                   return true;
                               };
 
-    RetValCh<std::shared_ptr<workspace::IWorkspace> > workspace = workspaceManager()->currentWorkspace();
+    RetValCh<workspace::IWorkspacePtr> workspace = workspaceManager()->currentWorkspace();
     if (workspace.val) {
         bool ok = applyWorkspaceData(workspace.val);
         if (!ok) {
