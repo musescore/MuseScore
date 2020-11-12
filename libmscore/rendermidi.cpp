@@ -52,7 +52,7 @@
 #include "utils.h"
 #include "sym.h"
 #include "synthesizerstate.h"
-#include "EaseInOut.h"
+#include "easeInOut.h"
 #include "global/log.h"
 
 #include "audio/midi/event.h"
