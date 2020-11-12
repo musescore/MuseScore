@@ -26,9 +26,10 @@ using namespace mu;
 using namespace mu::workspace;
 using namespace mu::extensions;
 
-RetValCh<std::shared_ptr<IWorkspace> > WorkspaceManager::currentWorkspace() const
+RetValCh<IWorkspacePtr> WorkspaceManager::currentWorkspace() const
 {
-    RetValCh<std::shared_ptr<IWorkspace> > rv;
+    RetValCh<IWorkspacePtr> rv;
+
     if (!m_currentWorkspace) {
         rv.ret = make_ret(Ret::Code::UnknownError);
         rv.val = nullptr;
@@ -42,6 +43,20 @@ RetValCh<std::shared_ptr<IWorkspace> > WorkspaceManager::currentWorkspace() cons
     return rv;
 }
 
+RetValCh<IWorkspacePtrList> WorkspaceManager::allWorkspaces() const
+{
+    RetValCh<IWorkspacePtrList> result;
+
+    result.ret = make_ret(Ret::Code::Ok);
+    result.ch = m_workspacesChanged;
+
+    for (auto workspace : m_workspaces) {
+        result.val.push_back(workspace);
+    }
+
+    return result;
+}
+
 void WorkspaceManager::init()
 {
     RetCh<Extension> extensionChanged = extensionsController()->extensionChanged();
@@ -53,6 +68,10 @@ void WorkspaceManager::init()
         });
     }
 
+    configuration()->currentWorkspaceName().ch.onReceive(this, [this](const std::string&) {
+        setupCurrentWorkspace();
+    });
+
     load();
 }
 
@@ -60,19 +79,25 @@ void WorkspaceManager::load()
 {
     m_workspaces.clear();
 
-    std::vector<io::path> files = findWorkspaceFiles();
-    for (const io::path& f : files) {
-        auto w = std::make_shared<Workspace>(f);
-        m_workspaces.push_back(w);
+    io::paths files = findWorkspaceFiles();
+    IWorkspacePtrList workspaces;
+
+    for (const io::path& file : files) {
+        auto workspace = std::make_shared<Workspace>(file);
+        m_workspaces.push_back(workspace);
+        workspaces.push_back(workspace);
     }
 
     setupCurrentWorkspace();
+
+    m_workspacesChanged.send(workspaces);
 }
 
-std::vector<io::path> WorkspaceManager::findWorkspaceFiles() const
+io::paths WorkspaceManager::findWorkspaceFiles() const
 {
-    std::vector<io::path> files;
-    std::vector<io::path> paths = configuration()->workspacePaths();
+    io::paths files;
+    io::paths paths = configuration()->workspacePaths();
+
     for (const io::path& path : paths) {
         //! TODO Change on use IFileSystem
         QStringList flist = QDir(path.toQString()).entryList({ "*.workspace" }, QDir::Files);
@@ -85,46 +110,43 @@ std::vector<io::path> WorkspaceManager::findWorkspaceFiles() const
 
 void WorkspaceManager::setupCurrentWorkspace()
 {
-    std::string wsname = configuration()->currentWorkspaceName();
+    std::string workspaceName = configuration()->currentWorkspaceName().val;
 
-    std::shared_ptr<Workspace> w = findAndInit(wsname);
-    if (!w) {
-        LOGW() << "filed get workspace: " << wsname << ", will use Default";
-        w = findAndInit(std::string(DEFAULT_WORKSPACE_NAME));
+    WorkspacePtr workspace = findAndInit(workspaceName);
+    if (!workspace) {
+        LOGW() << "filed get workspace: " << workspaceName << ", will use Default";
+        workspace = findAndInit(std::string(DEFAULT_WORKSPACE_NAME));
     }
 
-//    IF_ASSERT_FAILED(w) {
-//        return;
-//    }
-
-    m_currentWorkspace = w;
-    m_currentWorkspaceChanged.send(w);
+    m_currentWorkspace = workspace;
+    m_currentWorkspaceChanged.send(workspace);
 }
 
-std::shared_ptr<Workspace> WorkspaceManager::findByName(const std::string& name) const
+WorkspacePtr WorkspaceManager::findByName(const std::string& name) const
 {
-    for (auto w : m_workspaces) {
-        if (w->name() == name) {
-            return w;
+    for (auto workspace : m_workspaces) {
+        if (workspace->name() == name) {
+            return workspace;
         }
     }
+
     return nullptr;
 }
 
-std::shared_ptr<Workspace> WorkspaceManager::findAndInit(const std::string& name) const
+WorkspacePtr WorkspaceManager::findAndInit(const std::string& name) const
 {
-    std::shared_ptr<Workspace> w = findByName(name);
-    if (!w) {
+    WorkspacePtr workspace = findByName(name);
+    if (!workspace) {
         return nullptr;
     }
 
-    if (!w->isInited()) {
-        Ret ret = w->read();
+    if (!workspace->isInited()) {
+        Ret ret = workspace->read();
         if (!ret) {
             LOGE() << "failed read workspace: " << name;
             return nullptr;
         }
     }
 
-    return w;
+    return workspace;
 }

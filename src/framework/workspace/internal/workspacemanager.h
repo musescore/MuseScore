@@ -19,8 +19,6 @@
 #ifndef MU_WORKSPACE_WORKSPACEMANAGER_H
 #define MU_WORKSPACE_WORKSPACEMANAGER_H
 
-#include <vector>
-
 #include "../iworkspacemanager.h"
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
@@ -28,32 +26,33 @@
 #include "workspace.h"
 #include "extensions/iextensionscontroller.h"
 
-namespace mu {
-namespace workspace {
+namespace mu::workspace {
 class WorkspaceManager : public IWorkspaceManager, async::Asyncable
 {
     INJECT(workspace, IWorkspaceConfiguration, configuration)
     INJECT(workspace, extensions::IExtensionsController, extensionsController)
 
 public:
-
-    RetValCh<std::shared_ptr<IWorkspace> > currentWorkspace() const override;
-
     void init();
+
+    RetValCh<IWorkspacePtr> currentWorkspace() const override;
+    RetValCh<IWorkspacePtrList> allWorkspaces() const override;
 
 private:
     void load();
 
-    std::vector<io::path> findWorkspaceFiles() const;
+    io::paths findWorkspaceFiles() const;
     void setupCurrentWorkspace();
 
-    std::shared_ptr<Workspace> findByName(const std::string& name) const;
-    std::shared_ptr<Workspace> findAndInit(const std::string& name) const;
+    WorkspacePtr findByName(const std::string& name) const;
+    WorkspacePtr findAndInit(const std::string& name) const;
 
-    std::shared_ptr<Workspace> m_currentWorkspace;
-    std::vector<std::shared_ptr<Workspace> > m_workspaces;
-    async::Channel<std::shared_ptr<IWorkspace> > m_currentWorkspaceChanged;
+    WorkspacePtr m_currentWorkspace;
+    std::vector<WorkspacePtr> m_workspaces;
+
+    async::Channel<IWorkspacePtr> m_currentWorkspaceChanged;
+    async::Channel<IWorkspacePtrList> m_workspacesChanged;
 };
 }
-}
+
 #endif // MU_WORKSPACE_WORKSPACEMANAGER_H

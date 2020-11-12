@@ -23,9 +23,9 @@
 
 #include "io/path.h"
 #include "modularity/imoduleexport.h"
+#include "retval.h"
 
-namespace mu {
-namespace workspace {
+namespace mu::workspace {
 class IWorkspaceConfiguration : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IWorkspaceConfiguration)
@@ -33,10 +33,11 @@ class IWorkspaceConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IWorkspaceConfiguration() = default;
 
-    virtual std::vector<io::path> workspacePaths() const = 0;
-    virtual std::string currentWorkspaceName() const = 0;
+    virtual io::paths workspacePaths() const = 0;
+
+    virtual ValCh<std::string> currentWorkspaceName() const = 0;
+    virtual void setCurrentWorkspaceName(const std::string& name) = 0;
 };
-}
 }
 
 #endif // MU_WORKSPACE_IWORKSPACECONFIGURATION_H

@@ -16,34 +16,38 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_WORKSPACE_WORKSPACECONFIGURATION_H
-#define MU_WORKSPACE_WORKSPACECONFIGURATION_H
 
-#include "../iworkspaceconfiguration.h"
-#include "modularity/ioc.h"
-#include "iglobalconfiguration.h"
-#include "extensions/iextensionsconfiguration.h"
+#ifndef MU_WORKSPACE_CURRENTWORKSPACEMODEL_H
+#define MU_WORKSPACE_CURRENTWORKSPACEMODEL_H
+
+#include <QObject>
+
+#include "iworkspaceconfiguration.h"
+#include "iinteractive.h"
 #include "async/asyncable.h"
+#include "modularity/ioc.h"
 
 namespace mu::workspace {
-class WorkspaceConfiguration : public IWorkspaceConfiguration, public async::Asyncable
+class CurrentWorkspaceModel : public QObject, public async::Asyncable
 {
-    INJECT(workspace, framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(workspace, extensions::IExtensionsConfiguration, extensionsConfiguration)
+    Q_OBJECT
+
+    INJECT(workspace, IWorkspaceConfiguration, configuration)
+    INJECT(workspace, framework::IInteractive, interactive)
+
+    Q_PROPERTY(QString currentWorkspaceName READ currentWorkspaceName NOTIFY currentWorkspaceNameChanged)
 
 public:
-    void init();
+    explicit CurrentWorkspaceModel(QObject* parent = nullptr);
 
-    io::paths workspacePaths() const override;
+    Q_INVOKABLE void load();
+    Q_INVOKABLE void selectWorkspace();
 
-    ValCh<std::string> currentWorkspaceName() const override;
-    void setCurrentWorkspaceName(const std::string& name) override;
+    QString currentWorkspaceName() const;
 
-private:
-    io::paths extensionsPaths() const;
-
-    async::Channel<std::string> m_currentWorkspaceNameChanged;
+signals:
+    void currentWorkspaceNameChanged();
 };
 }
 
-#endif // MU_WORKSPACE_WORKSPACECONFIGURATION_H
+#endif // MU_WORKSPACE_CURRENTWORKSPACEMODEL_H

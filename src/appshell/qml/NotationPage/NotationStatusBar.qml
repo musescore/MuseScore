@@ -1,6 +1,8 @@
 import QtQuick 2.7
-import MuseScore.NotationScene 1.0
+
 import MuseScore.UiComponents 1.0
+import MuseScore.NotationScene 1.0
+import MuseScore.Workspace 1.0
 
 Rectangle {
     id: root
@@ -16,6 +18,10 @@ Rectangle {
         anchors.rightMargin: 20
 
         spacing: 12
+
+        WorkspacesControl {
+            anchors.verticalCenter: parent.verticalCenter
+        }
 
         ConcertPitchControl {
             anchors.verticalCenter: parent.verticalCenter

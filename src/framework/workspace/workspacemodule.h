@@ -21,18 +21,17 @@
 
 #include "modularity/imodulesetup.h"
 
-namespace mu {
-namespace workspace {
+namespace mu::workspace {
 class WorkspaceModule : public framework::IModuleSetup
 {
 public:
-
     std::string moduleName() const override;
     void registerExports() override;
     void resolveImports() override;
+    void registerUiTypes() override;
+    void registerResources() override;
     void onInit() override;
 };
-}
 }
 
 #endif // MU_WORKSPACE_WORKSPACEMODULE_H
