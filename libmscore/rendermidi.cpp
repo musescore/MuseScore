@@ -52,6 +52,7 @@
 #include "utils.h"
 #include "sym.h"
 #include "synthesizerstate.h"
+#include "EaseInOut.h"
 #include "global/log.h"
 
 #include "audio/midi/event.h"
@@ -234,6 +235,16 @@ int toMilliseconds(float tempo, float midiTime) {
       }
 
 //---------------------------------------------------------
+//   Detects if a note is a start of a glissando
+//---------------------------------------------------------
+bool isGlissandoFor(const Note* note) {
+      for (Spanner* spanner : note->spannerFor())
+            if (spanner->type() == ElementType::GLISSANDO)
+                  return true;
+      return false;
+}
+
+//---------------------------------------------------------
 //   playNote
 //---------------------------------------------------------
 static void playNote(EventMap* events, const Note* note, int channel, int pitch,
@@ -248,46 +259,41 @@ static void playNote(EventMap* events, const Note* note, int channel, int pitch,
       ev.setNote(note);
       if (offTime < onTime)
             offTime = onTime;
+      events->insert(std::pair<int, NPlayEvent>(onTime, ev));
       // adds portamento for continuous glissando
       for (Spanner* spanner : note->spannerFor()) {
             if (spanner->type() == ElementType::GLISSANDO) {
                   Glissando *glissando = toGlissando(spanner);
-                  GlissandoStyle glissandoStyle = glissando->glissandoStyle();
-                  if (glissandoStyle == GlissandoStyle::PORTAMENTO) {
-                        //Changes the notes pitch to the next note's pitch, note-on is the eventual pitch
+                  if (glissando->glissandoStyle() == GlissandoStyle::PORTAMENTO) {
                         Note* nextNote = toNote(spanner->endElement());
-                        ev.setPitch(nextNote->pitch());
-
-                        int time = toMilliseconds(note->score()->tempo(note->tick()), offTime - onTime);
-                        int lsb = (time & 0x00FF);
-                        time = (time >> 8);
-                        int msb = (time & 0x00FF);
-
-                        NPlayEvent portamentoOn(ME_CONTROLLER, channel, CTRL_PORTAMENTO, MIDI_ON_SIGNAL);
-                        portamentoOn.setOriginatingStaff(staffIdx);
-                        NPlayEvent portamentoControl(ME_CONTROLLER, channel, CTRL_PORTAMENTO_CONTROL, pitch);
-                        portamentoControl.setOriginatingStaff(staffIdx);
-                        NPlayEvent portamentoTimeMSB(ME_CONTROLLER, channel, CTRL_PORTAMENTO_TIME_MSB, msb);
-                        portamentoTimeMSB.setOriginatingStaff(staffIdx);
-                        NPlayEvent portamentoTimeLSB(ME_CONTROLLER, channel, CTRL_PORTAMENTO_TIME_LSB, lsb);
-                        portamentoTimeLSB.setOriginatingStaff(staffIdx);
-                        
-                        ev.setPortamento(true);
-                        if (onTime == 0)
-                              onTime++;
-                        events->insert(std::pair<int, NPlayEvent>(onTime-1, portamentoOn));
-                        events->insert(std::pair<int, NPlayEvent>(onTime-1, portamentoControl));
-                        events->insert(std::pair<int, NPlayEvent>(onTime-1, portamentoTimeMSB));
-                        events->insert(std::pair<int, NPlayEvent>(onTime-1, portamentoTimeLSB));
-
-                        NPlayEvent portamentoOff(ME_CONTROLLER, channel, CTRL_PORTAMENTO, 0);
-                        portamentoOff.setOriginatingStaff(staffIdx);
-                        events->insert(std::pair<int, NPlayEvent>(offTime, portamentoOff));
+                        double pitch = double(note->pitch());
+                        double pitchDelta = (double(nextNote->pitch()) - pitch) * 50.0;
+                        double timeDelta = double(offTime - onTime);
+                        double timeStep = timeDelta / pitchDelta * 20.0;
+                        double t = 0.0;
+                        QList<int> onTimes;
+                        EaseInOut easeInOut(qreal(glissando->easeIn()) / 100.0, qreal(glissando->easeOut()) / 100.0);
+                        easeInOut.timeList(int((timeDelta + timeStep * 0.5) / timeStep), int(timeDelta), &onTimes);
+                        double nTimes = double(onTimes.size() - 1);
+                        for (double time : onTimes) {
+                              int p = int(pitch + (t / nTimes) * pitchDelta);
+                              int timeStamp = std::min(onTime + int(time), offTime - 1);
+                              int midiPitch = (p * 16384) / 1200 + 8192;
+                              NPlayEvent evb(ME_PITCHBEND, channel, midiPitch % 128, midiPitch / 128);
+                              evb.setOriginatingStaff(staffIdx);
+                              events->insert(std::pair<int, NPlayEvent>(timeStamp, evb));
+                              t += 1.0;
+                              }
+                        ev.setVelo(0);
+                        events->insert(std::pair<int, NPlayEvent>(offTime, ev));
+                        NPlayEvent evb(ME_PITCHBEND, channel, 0, 64); // 0:64 is 8192 - no pitch bend
+                        evb.setOriginatingStaff(staffIdx);
+                        events->insert(std::pair<int, NPlayEvent>(offTime, evb));
+                        return;
                   }
             }
       }
 
-      events->insert(std::pair<int, NPlayEvent>(onTime, ev));
       ev.setVelo(0);
       events->insert(std::pair<int, NPlayEvent>(offTime, ev));
       }
@@ -319,7 +325,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, qreal v
             Note* n = note->tieFor()->endNote();
             while (n) {
                   NoteEventList nel = n->playEvents();
-                  if (nel.size() == 1) {
+                  if (nel.size() == 1 && !isGlissandoFor(n)) {
                         // add value of this note to main note
                         // if we wish to suppress first note of ornament,
                         // then do this regardless of number of NoteEvents
@@ -350,7 +356,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, qreal v
             // its length was already added to previous note
             // if we wish to suppress first note of ornament
             // then change "nels == 1" to "i == 0", and change "break" to "continue"
-            if (tieBack && nels == 1)
+            if (tieBack && nels == 1 && !isGlissandoFor(note))
                   break;
             int p = pitch + e.pitch();
             if (p < 0)
@@ -1661,16 +1667,35 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
             ontime = makeEvent(prefix[j], ontime, tieForward(j,prefix));
 
       if (b > 0) {
-            // render the body, but not the final repetition
-            for (int r = 0; r < numrepeat-1; r++) {
-                  for (int j=0; j < b; j++)
-                        ontime = makeEvent(body[j], ontime, millespernote);
+            // Check that we are doing a glissando
+            bool isGlissando = false;
+            QList<int> onTimes;
+            for (Spanner* spanner : note->spannerFor()) {
+                  if (spanner->type() == ElementType::GLISSANDO) {
+                        Glissando* glissando = toGlissando(spanner);
+                        EaseInOut easeInOut(float(glissando->easeIn())/100.0, float(glissando->easeOut())/100.0);
+                        easeInOut.timeList(b, millespernote * b, &onTimes);
+                        isGlissando = true;
+                        break;
+                        }
                   }
-            // render the final repetition of body, but not the final note of the repition
-            for (int j = 0; j < b - 1; j++)
-                  ontime = makeEvent(body[j], ontime, millespernote);
-            // render the final note of the final repeat of body
-            ontime = makeEvent(body[b-1], ontime, millespernote+sustain);
+            if (isGlissando) {
+                  // render the body, i.e. the glissando
+                  for (int j = 0; j < b - 1; j++)
+                        makeEvent(body[j], onTimes[j], onTimes[j + 1] - onTimes[j]);
+                  makeEvent(body[b - 1], onTimes[b-1], millespernote * b - onTimes[b-1]);
+            } else {
+                  // render the body, but not the final repetition
+                  for (int r = 0; r < numrepeat - 1; r++) {
+                        for (int j = 0; j < b; j++)
+                              ontime = makeEvent(body[j], ontime, millespernote);
+                        }
+                  // render the final repetition of body, but not the final note of the repetition
+                  for (int j = 0; j < b - 1; j++)
+                        ontime = makeEvent(body[j], ontime, millespernote);
+                  // render the final note of the final repeat of body
+                  ontime = makeEvent(body[b - 1], ontime, millespernote + sustain);
+                  }
             }
       // render the suffix
       for (int j = 0; j < s; j++)

@@ -179,10 +179,13 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::REPEAT_START,            true,  0,                       P_TYPE::BOOL,                ""                                                    },
       { Pid::REPEAT_JUMP,             true,  0,                       P_TYPE::BOOL,                ""                                                    },
       { Pid::MEASURE_NUMBER_MODE,     false, "measureNumberMode",     P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "measure number mode") },
+
       { Pid::GLISS_TYPE,              false, "subtype",               P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "subtype")          },
       { Pid::GLISS_TEXT,              false, 0,                       P_TYPE::STRING,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "text")             },
-
       { Pid::GLISS_SHOW_TEXT,         false, 0,                       P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "showing text")     },
+      { Pid::GLISS_STYLE,             true,  "glissandoStyle",        P_TYPE::GLISS_STYLE,         DUMMY_QT_TRANSLATE_NOOP("propertyName", "glissando style") },
+      { Pid::GLISS_EASEIN,            false, "easeInSpin",          P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "ease in")          },
+      { Pid::GLISS_EASEOUT,           false, "easeOutSpin",         P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "ease out")         },
       { Pid::DIAGONAL,                false, 0,                       P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "diagonal")         },
       { Pid::GROUPS,                  false, 0,                       P_TYPE::GROUPS,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "groups")           },
       { Pid::LINE_STYLE,              false, "lineStyle",             P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "line style")       },
@@ -227,7 +230,6 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::ROLE,                    false, "role",                  P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "role")             },
       { Pid::TRACK,                   false, 0,                       P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "track")            },
 
-      { Pid::GLISSANDO_STYLE,         true,  "glissandoStyle",        P_TYPE::GLISSANDO_STYLE,     DUMMY_QT_TRANSLATE_NOOP("propertyName", "glissando style")  },
       { Pid::FRET_STRINGS,            true,  "strings",               P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "strings")          },
       { Pid::FRET_FRETS,              true,  "frets",                 P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "frets")            },
       { Pid::FRET_NUT,                true,  "showNut",               P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "show nut")         },
@@ -453,7 +455,7 @@ QVariant propertyFromString(Pid id, QString value)
             case P_TYPE::FONT:
             case P_TYPE::STRING:
                   return value;
-            case P_TYPE::GLISSANDO_STYLE: {
+            case P_TYPE::GLISS_STYLE: {
                   if ( value == "whitekeys")
                         return QVariant(int(GlissandoStyle::WHITE_KEYS));
                   else if ( value == "blackkeys")
@@ -639,7 +641,7 @@ QVariant readProperty(Pid id, XmlReader& e)
             case P_TYPE::FONT:
             case P_TYPE::STRING:
                   return QVariant(e.readElementText());
-            case P_TYPE::GLISSANDO_STYLE:
+            case P_TYPE::GLISS_STYLE:
             case P_TYPE::ORNAMENT_STYLE:
             case P_TYPE::DIRECTION:
             case P_TYPE::DIRECTION_H:
@@ -753,7 +755,7 @@ QString propertyToString(Pid id, QVariant value, bool mscx)
                               return "default";
                         }
                   break;
-            case P_TYPE::GLISSANDO_STYLE:
+            case P_TYPE::GLISS_STYLE:
                   switch (GlissandoStyle(value.toInt())) {
                         case GlissandoStyle::BLACK_KEYS:
                               return "blackkeys";

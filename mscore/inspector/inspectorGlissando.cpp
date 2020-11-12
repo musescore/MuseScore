@@ -28,7 +28,9 @@ InspectorGlissando::InspectorGlissando(QWidget* parent)
             { Pid::GLISS_TYPE,      0, g.type,           g.resetType           },
             { Pid::GLISS_TEXT,      0, g.text,           g.resetText           },
             { Pid::GLISS_SHOW_TEXT, 0, g.showText,       g.resetShowText       },
-            { Pid::GLISSANDO_STYLE, 0, g.glissandoStyle, g.resetGlissandoStyle },
+            { Pid::GLISS_STYLE,     0, g.glissandoStyle, g.resetGlissandoStyle },
+            { Pid::GLISS_EASEIN,    0, g.easeInSpin,     g.resetEaseIn         },
+            { Pid::GLISS_EASEOUT,   0, g.easeOutSpin,    g.resetEaseOut        },
             { Pid::PLAY,            0, g.playGlissando,  g.resetPlayGlissando  },
             { Pid::FONT_FACE,       0, g.fontFace,       g.resetFontFace       },
             { Pid::FONT_SIZE,       0, g.fontSize,       g.resetFontSize       },
@@ -54,6 +56,8 @@ void InspectorGlissando::setElement()
             }
       if (!g.showText->isChecked())
             g.textWidget->setVisible(false);
+      g.easeInSlider->setSliderPosition(g.easeInSpin->value());
+      g.easeOutSlider->setSliderPosition(g.easeOutSpin->value());
       }
 }
 

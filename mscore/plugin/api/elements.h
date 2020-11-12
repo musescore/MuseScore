@@ -261,6 +261,9 @@ class Element : public Ms::PluginAPI::ScoreElement {
       API_PROPERTY( glissType,               GLISS_TYPE                )
       API_PROPERTY( glissText,               GLISS_TEXT                )
       API_PROPERTY( glissShowText,           GLISS_SHOW_TEXT           )
+      API_PROPERTY( glissandoStyle,          GLISS_STYLE               )
+      API_PROPERTY( glissEaseIn,             GLISS_EASEIN              )
+      API_PROPERTY( glissEaseOut,            GLISS_EASEOUT             )
       API_PROPERTY( diagonal,                DIAGONAL                  )
       API_PROPERTY( groups,                  GROUPS                    )
       API_PROPERTY( lineStyle,               LINE_STYLE                )
@@ -299,7 +302,6 @@ class Element : public Ms::PluginAPI::ScoreElement {
       API_PROPERTY( durationType,            DURATION_TYPE             )
       API_PROPERTY( role,                    ROLE                      )
       API_PROPERTY_T( int, track,            TRACK                     )
-      API_PROPERTY( glissandoStyle,          GLISSANDO_STYLE           )
       API_PROPERTY( fretStrings,             FRET_STRINGS              )
       API_PROPERTY( fretFrets,               FRET_FRETS                )
       /*API_PROPERTY( fretBarre,               FRET_BARRE                )*/

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>349</width>
-    <height>260</height>
+    <height>253</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -391,6 +391,107 @@
         </layout>
        </widget>
       </item>
+      <item row="11" column="0" colspan="3">
+       <widget class="QWidget" name="textWidget" native="true">
+        <layout class="QGridLayout" name="gridLayout_4">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <property name="spacing">
+          <number>3</number>
+         </property>
+         <item row="0" column="0">
+          <widget class="QLabel" name="easeInLabel">
+           <property name="text">
+            <string>Ease In:</string>
+           </property>
+           <property name="buddy">
+            <cstring>easeInSlider</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QSlider" name="easeInSlider">
+           <property name="maximum">
+            <number>100</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QSpinBox" name="easeInSpin">
+           <property name="maximum">
+            <number>100</number>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="3">
+          <widget class="Ms::ResetButton" name="resetEaseIn" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="accessibleName">
+            <string>Reset 'Ease In' value</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="easeOutLabel">
+           <property name="text">
+            <string>Ease Out:</string>
+           </property>
+           <property name="buddy">
+            <cstring>easeOutSlider</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QSlider" name="easeOutSlider">
+           <property name="maximum">
+            <number>100</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2">
+          <widget class="QSpinBox" name="easeOutSpin">
+           <property name="maximum">
+            <number>100</number>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="3">
+          <widget class="Ms::ResetButton" name="resetEaseOut" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="accessibleName">
+            <string>Reset 'Ease Out' value</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -467,6 +568,70 @@
     <hint type="destinationlabel">
      <x>41</x>
      <y>168</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>easeInSlider</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>easeInSpin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>180</x>
+     <y>204</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>207</x>
+     <y>211</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>easeOutSlider</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>easeOutSpin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>174</x>
+     <y>231</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>208</x>
+     <y>234</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>easeInSpin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>easeInSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>272</x>
+     <y>205</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>172</x>
+     <y>202</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>easeOutSpin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>easeOutSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>284</x>
+     <y>231</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>181</x>
+     <y>223</y>
     </hint>
    </hints>
   </connection>
