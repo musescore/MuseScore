@@ -21,12 +21,14 @@
 
 #include <QObject>
 #include <QAbstractListModel>
+
 #include "modularity/ioc.h"
+#include "async/asyncable.h"
+#include "context/iglobalcontext.h"
 #include "actions/iactionsregister.h"
 #include "actions/iactionsdispatcher.h"
-#include "context/iglobalcontext.h"
 #include "playback/iplaybackcontroller.h"
-#include "async/asyncable.h"
+#include "workspace/iworkspacemanager.h"
 
 namespace mu {
 namespace notation {
@@ -37,6 +39,9 @@ class NotationToolBarModel : public QAbstractListModel, public async::Asyncable
     INJECT(notation, actions::IActionsDispatcher, dispatcher)
     INJECT(notation, context::IGlobalContext, globalContext)
     INJECT(notation, playback::IPlaybackController, playbackController)
+    INJECT(notation, workspace::IWorkspaceManager, workspaceManager)
+
+    Q_PROPERTY(int count READ rowCount NOTIFY countChanged)
 
 public:
     explicit NotationToolBarModel(QObject* parent = nullptr);
@@ -48,22 +53,36 @@ public:
     Q_INVOKABLE void load();
     Q_INVOKABLE void click(const QString& action);
 
+    Q_INVOKABLE QVariantMap get(int index);
+
+signals:
+    void countChanged(int count);
+
 private:
     enum Roles {
         NameRole = Qt::UserRole + 1,
+        IconRole,
+        SectionRole,
         TitleRole,
         EnabledRole,
         CheckedRole
     };
 
+    INotationPtr notation() const;
+
     void onNotationChanged();
     void updateState();
+    void updateInputState();
 
     struct ActionItem {
         actions::Action action;
+        QString section;
         bool enabled = false;
         bool checked = false;
     };
+
+    ActionItem makeItem(const actions::Action& action, const QString& section);
+    ActionItem makeAddItem();
 
     ActionItem& item(const actions::ActionName& name);
     QList<ActionItem> m_items;
