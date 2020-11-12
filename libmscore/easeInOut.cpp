@@ -86,10 +86,7 @@ qreal EaseInOut::tFromX(const qreal x) const {
 // constant. Thus, when computing the Y root there is only one case and the math simplifies to the
 // following simple expression.
 //-------------------------------------------------------------------------------------------------
-qreal EaseInOut::tFromY(const qreal y) const
-{
-      if (y == 0.0 || y == 1.0)
-            return y;
+qreal EaseInOut::tFromY(const qreal y) const {
       return 0.5 + std::cos((4.0 * M_PI + std::acos(1.0 - 2.0 * y)) / 3.0);
       }
 
@@ -97,8 +94,7 @@ qreal EaseInOut::tFromY(const qreal y) const
 // Given a number of note to place within the given duration, return the list of on-times for each
 // note given the current ease-in and ease-out parameters. The first note is at time 0 while the 
 //-------------------------------------------------------------------------------------------------
-void EaseInOut::timeList(const int nbNotes, const int duration, QList<int>* times) const
-{
+void EaseInOut::timeList(const int nbNotes, const int duration, QList<int>* times) const {
       qreal nNotes = qreal(nbNotes);
       qreal space = qreal(duration);
       if (_easeIn == 0.0 && _easeOut == 0.0) {
