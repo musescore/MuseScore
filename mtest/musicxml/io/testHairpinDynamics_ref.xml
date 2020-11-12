@@ -181,7 +181,7 @@
       <print new-system="yes"/>
       <direction placement="below">
         <direction-type>
-          <words font-family="FreeSerif" font-size="12" font-style="italic">begin</words>
+          <words font-family="Edwin" font-size="12" font-style="italic">begin</words>
           </direction-type>
         <direction-type>
           <wedge type="crescendo" number="1"/>
@@ -232,7 +232,7 @@
           <wedge type="stop" number="1"/>
           </direction-type>
         <direction-type>
-          <words font-family="FreeSerif" font-size="12" font-style="italic">end</words>
+          <words font-family="Edwin" font-size="12" font-style="italic">end</words>
           </direction-type>
         </direction>
       </measure>
@@ -295,7 +295,7 @@
           <wedge type="stop" number="1"/>
           </direction-type>
         <direction-type>
-          <words font-family="FreeSerif" font-size="12" font-style="italic">to </words>
+          <words font-family="Edwin" font-size="12" font-style="italic">to </words>
           </direction-type>
         <direction-type>
           <dynamics>
@@ -308,7 +308,7 @@
       <print new-system="yes"/>
       <direction placement="below">
         <direction-type>
-          <words font-family="FreeSerif" font-size="12" font-style="italic">cresc. from </words>
+          <words font-family="Edwin" font-size="12" font-style="italic">cresc. from </words>
           </direction-type>
         <direction-type>
           <dynamics>
@@ -316,7 +316,7 @@
             </dynamics>
           </direction-type>
         <direction-type>
-          <words font-family="FreeSerif" font-size="12" font-style="italic"> to </words>
+          <words font-family="Edwin" font-size="12" font-style="italic"> to </words>
           </direction-type>
         <direction-type>
           <dynamics>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
+<museScore version="3.02">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -88,18 +88,21 @@
       <user3FramePadding>0</user3FramePadding>
       <user3FrameWidth>0</user3FrameWidth>
       <user4Name>Style4</user4Name>
+      <user4FontFace>FreeSerif</user4FontFace>
       <user4FontSize>12</user4FontSize>
       <user4FontSpatiumDependent>0</user4FontSpatiumDependent>
       <user4Align>center,center</user4Align>
       <user4FramePadding>0</user4FramePadding>
       <user4FrameWidth>0</user4FrameWidth>
       <user5Name>Style5</user5Name>
+      <user5FontFace>FreeSerif</user5FontFace>
       <user5FontSize>15</user5FontSize>
       <user5FontSpatiumDependent>0</user5FontSpatiumDependent>
       <user5Align>left,bottom</user5Align>
       <user5FramePadding>0</user5FramePadding>
       <user5FrameWidth>0</user5FrameWidth>
       <user6Name>Style6</user6Name>
+      <user6FontFace>FreeSerif</user6FontFace>
       <user6FontSize>12</user6FontSize>
       <user6FontSpatiumDependent>0</user6FontSpatiumDependent>
       <user6FontStyle>1</user6FontStyle>
@@ -107,6 +110,7 @@
       <user6FramePadding>0</user6FramePadding>
       <user6FrameWidth>0</user6FrameWidth>
       <user7Name>Style7</user7Name>
+      <user7FontFace>FreeSerif</user7FontFace>
       <user7FontSize>12</user7FontSize>
       <user7FontSpatiumDependent>0</user7FontSpatiumDependent>
       <user7FontStyle>2</user7FontStyle>
@@ -468,18 +472,21 @@
         <user3FramePadding>0</user3FramePadding>
         <user3FrameWidth>0</user3FrameWidth>
         <user4Name>Style4</user4Name>
+        <user4FontFace>FreeSerif</user4FontFace>
         <user4FontSize>12</user4FontSize>
         <user4FontSpatiumDependent>0</user4FontSpatiumDependent>
         <user4Align>center,center</user4Align>
         <user4FramePadding>0</user4FramePadding>
         <user4FrameWidth>0</user4FrameWidth>
         <user5Name>Style5</user5Name>
+        <user5FontFace>FreeSerif</user5FontFace>
         <user5FontSize>15</user5FontSize>
         <user5FontSpatiumDependent>0</user5FontSpatiumDependent>
         <user5Align>left,bottom</user5Align>
         <user5FramePadding>0</user5FramePadding>
         <user5FrameWidth>0</user5FrameWidth>
         <user6Name>Style6</user6Name>
+        <user6FontFace>FreeSerif</user6FontFace>
         <user6FontSize>12</user6FontSize>
         <user6FontSpatiumDependent>0</user6FontSpatiumDependent>
         <user6FontStyle>1</user6FontStyle>
@@ -487,6 +494,7 @@
         <user6FramePadding>0</user6FramePadding>
         <user6FrameWidth>0</user6FrameWidth>
         <user7Name>Style7</user7Name>
+        <user7FontFace>FreeSerif</user7FontFace>
         <user7FontSize>12</user7FontSize>
         <user7FontSpatiumDependent>0</user7FontSpatiumDependent>
         <user7FontStyle>2</user7FontStyle>
@@ -702,18 +710,21 @@
         <user3FramePadding>0</user3FramePadding>
         <user3FrameWidth>0</user3FrameWidth>
         <user4Name>Style4</user4Name>
+        <user4FontFace>FreeSerif</user4FontFace>
         <user4FontSize>12</user4FontSize>
         <user4FontSpatiumDependent>0</user4FontSpatiumDependent>
         <user4Align>center,center</user4Align>
         <user4FramePadding>0</user4FramePadding>
         <user4FrameWidth>0</user4FrameWidth>
         <user5Name>Style5</user5Name>
+        <user5FontFace>FreeSerif</user5FontFace>
         <user5FontSize>15</user5FontSize>
         <user5FontSpatiumDependent>0</user5FontSpatiumDependent>
         <user5Align>left,bottom</user5Align>
         <user5FramePadding>0</user5FramePadding>
         <user5FrameWidth>0</user5FrameWidth>
         <user6Name>Style6</user6Name>
+        <user6FontFace>FreeSerif</user6FontFace>
         <user6FontSize>12</user6FontSize>
         <user6FontSpatiumDependent>0</user6FontSpatiumDependent>
         <user6FontStyle>1</user6FontStyle>
@@ -721,6 +732,7 @@
         <user6FramePadding>0</user6FramePadding>
         <user6FrameWidth>0</user6FrameWidth>
         <user7Name>Style7</user7Name>
+        <user7FontFace>FreeSerif</user7FontFace>
         <user7FontSize>12</user7FontSize>
         <user7FontSpatiumDependent>0</user7FontSpatiumDependent>
         <user7FontStyle>2</user7FontStyle>
@@ -960,18 +972,21 @@
         <user3FramePadding>0</user3FramePadding>
         <user3FrameWidth>0</user3FrameWidth>
         <user4Name>Style4</user4Name>
+        <user4FontFace>FreeSerif</user4FontFace>
         <user4FontSize>12</user4FontSize>
         <user4FontSpatiumDependent>0</user4FontSpatiumDependent>
         <user4Align>center,center</user4Align>
         <user4FramePadding>0</user4FramePadding>
         <user4FrameWidth>0</user4FrameWidth>
         <user5Name>Style5</user5Name>
+        <user5FontFace>FreeSerif</user5FontFace>
         <user5FontSize>15</user5FontSize>
         <user5FontSpatiumDependent>0</user5FontSpatiumDependent>
         <user5Align>left,bottom</user5Align>
         <user5FramePadding>0</user5FramePadding>
         <user5FrameWidth>0</user5FrameWidth>
         <user6Name>Style6</user6Name>
+        <user6FontFace>FreeSerif</user6FontFace>
         <user6FontSize>12</user6FontSize>
         <user6FontSpatiumDependent>0</user6FontSpatiumDependent>
         <user6FontStyle>1</user6FontStyle>
@@ -979,6 +994,7 @@
         <user6FramePadding>0</user6FramePadding>
         <user6FrameWidth>0</user6FrameWidth>
         <user7Name>Style7</user7Name>
+        <user7FontFace>FreeSerif</user7FontFace>
         <user7FontSize>12</user7FontSize>
         <user7FontSpatiumDependent>0</user7FontSpatiumDependent>
         <user7FontStyle>2</user7FontStyle>

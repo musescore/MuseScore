@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
+<museScore version="3.02">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -20,8 +20,10 @@
       <minSystemDistance>9</minSystemDistance>
       <maxSystemDistance>9</maxSystemDistance>
       <lyricsDashForce>0</lyricsDashForce>
+      <lyricsOddFontFace>FreeSerif</lyricsOddFontFace>
       <lyricsOddFramePadding>0</lyricsOddFramePadding>
       <lyricsOddFrameWidth>0</lyricsOddFrameWidth>
+      <lyricsEvenFontFace>FreeSerif</lyricsEvenFontFace>
       <lyricsEvenFramePadding>0</lyricsEvenFramePadding>
       <lyricsEvenFrameWidth>0</lyricsEvenFrameWidth>
       <frameSystemDistance>3</frameSystemDistance>
@@ -30,11 +32,14 @@
       <clefLeftMargin>0.64</clefLeftMargin>
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
       <barNoteDistance>1.2</barNoteDistance>
+      <hairpinFontFace>FreeSerif</hairpinFontFace>
       <hairpinFramePadding>0</hairpinFramePadding>
       <hairpinFrameWidth>0</hairpinFrameWidth>
+      <pedalFontFace>FreeSerif</pedalFontFace>
       <pedalFramePadding>0</pedalFramePadding>
       <pedalFrameWidth>0</pedalFrameWidth>
       <harmonyFretDist>0.5</harmonyFretDist>
+      <chordSymbolAFontFace>FreeSerif</chordSymbolAFontFace>
       <chordSymbolAFramePadding>0</chordSymbolAFramePadding>
       <chordSymbolAFrameWidth>0</chordSymbolAFrameWidth>
       <showHeader>1</showHeader>
@@ -46,129 +51,163 @@
       <evenFooterC>$C</evenFooterC>
       <oddFooterC>$C</oddFooterC>
       <oddFooterR></oddFooterR>
+      <voltaFontFace>FreeSerif</voltaFontFace>
       <voltaFontSize>10</voltaFontSize>
       <voltaFramePadding>0</voltaFramePadding>
       <voltaFrameWidth>0</voltaFrameWidth>
       <ottavaHookAbove>0.5</ottavaHookAbove>
       <ottavaHookBelow>-0.5</ottavaHookBelow>
+      <ottavaFontFace>FreeSerif</ottavaFontFace>
       <ottavaFontStyle>2</ottavaFontStyle>
       <ottavaFramePadding>0</ottavaFramePadding>
       <ottavaFrameWidth>0</ottavaFrameWidth>
       <keySigNaturals>1</keySigNaturals>
       <tupletVHeadDistance>0</tupletVHeadDistance>
       <tupletVStemDistance>0</tupletVStemDistance>
+      <tupletFontFace>FreeSerif</tupletFontFace>
       <tupletFontSize>9</tupletFontSize>
       <tupletFramePadding>0</tupletFramePadding>
       <tupletFrameWidth>0</tupletFrameWidth>
       <textLineFramePadding>0</textLineFramePadding>
       <textLineFrameWidth>0</textLineFrameWidth>
+      <defaultFontFace>FreeSerif</defaultFontFace>
       <defaultFontSpatiumDependent>0</defaultFontSpatiumDependent>
       <defaultAlign>left,baseline</defaultAlign>
       <defaultFramePadding>0</defaultFramePadding>
       <defaultFrameWidth>0</defaultFrameWidth>
       <defaultFrameRound>25</defaultFrameRound>
+      <titleFontFace>FreeSerif</titleFontFace>
       <titleFontStyle>1</titleFontStyle>
       <titleFramePadding>0</titleFramePadding>
       <titleFrameWidth>0</titleFrameWidth>
       <titleFrameRound>25</titleFrameRound>
+      <subTitleFontFace>FreeSerif</subTitleFontFace>
       <subTitleFontSize>13</subTitleFontSize>
       <subTitleFramePadding>0</subTitleFramePadding>
       <subTitleFrameWidth>0</subTitleFrameWidth>
       <subTitleFrameRound>25</subTitleFrameRound>
+      <composerFontFace>FreeSerif</composerFontFace>
       <composerFontSize>13</composerFontSize>
       <composerFontStyle>1</composerFontStyle>
       <composerFramePadding>0</composerFramePadding>
       <composerFrameWidth>0</composerFrameWidth>
       <composerFrameRound>25</composerFrameRound>
+      <lyricistFontFace>FreeSerif</lyricistFontFace>
       <lyricistFontSize>13</lyricistFontSize>
       <lyricistFramePadding>0</lyricistFramePadding>
       <lyricistFrameWidth>0</lyricistFrameWidth>
       <lyricistFrameRound>25</lyricistFrameRound>
+      <fingeringFontFace>FreeSerif</fingeringFontFace>
       <fingeringFramePadding>0</fingeringFramePadding>
       <fingeringFrameWidth>0</fingeringFrameWidth>
       <fingeringFrameRound>25</fingeringFrameRound>
+      <lhGuitarFingeringFontFace>FreeSerif</lhGuitarFingeringFontFace>
       <lhGuitarFingeringFramePadding>0</lhGuitarFingeringFramePadding>
       <lhGuitarFingeringFrameWidth>0</lhGuitarFingeringFrameWidth>
       <lhGuitarFingeringFrameRound>25</lhGuitarFingeringFrameRound>
+      <rhGuitarFingeringFontFace>FreeSerif</rhGuitarFingeringFontFace>
       <rhGuitarFingeringFontSize>10</rhGuitarFingeringFontSize>
       <rhGuitarFingeringFontStyle>3</rhGuitarFingeringFontStyle>
       <rhGuitarFingeringFramePadding>0</rhGuitarFingeringFramePadding>
       <rhGuitarFingeringFrameWidth>0</rhGuitarFingeringFrameWidth>
       <rhGuitarFingeringFrameRound>25</rhGuitarFingeringFrameRound>
+      <longInstrumentFontFace>FreeSerif</longInstrumentFontFace>
       <longInstrumentFontSize>11</longInstrumentFontSize>
       <longInstrumentFramePadding>0</longInstrumentFramePadding>
       <longInstrumentFrameWidth>0</longInstrumentFrameWidth>
+      <shortInstrumentFontFace>FreeSerif</shortInstrumentFontFace>
       <shortInstrumentFontSize>11</shortInstrumentFontSize>
       <shortInstrumentFramePadding>0</shortInstrumentFramePadding>
       <shortInstrumentFrameWidth>0</shortInstrumentFrameWidth>
+      <partInstrumentFontFace>FreeSerif</partInstrumentFontFace>
       <partInstrumentFramePadding>0</partInstrumentFramePadding>
       <partInstrumentFrameWidth>0</partInstrumentFrameWidth>
       <partInstrumentFrameRound>25</partInstrumentFrameRound>
+      <dynamicsFontFace>FreeSerif</dynamicsFontFace>
       <dynamicsFontStyle>0</dynamicsFontStyle>
       <dynamicsFramePadding>0</dynamicsFramePadding>
       <dynamicsFrameWidth>0</dynamicsFrameWidth>
+      <expressionFontFace>FreeSerif</expressionFontFace>
       <expressionFontSize>12</expressionFontSize>
       <expressionFramePadding>0</expressionFramePadding>
       <expressionFrameWidth>0</expressionFrameWidth>
+      <tempoFontFace>FreeSerif</tempoFontFace>
       <tempoFontSize>10</tempoFontSize>
       <tempoFontStyle>0</tempoFontStyle>
       <tempoFramePadding>0</tempoFramePadding>
       <tempoFrameWidth>0</tempoFrameWidth>
       <tempoFrameRound>25</tempoFrameRound>
+      <metronomeFontFace>FreeSerif</metronomeFontFace>
       <metronomeFramePadding>0</metronomeFramePadding>
       <metronomeFrameWidth>0</metronomeFrameWidth>
+      <measureNumberFontFace>FreeSerif</measureNumberFontFace>
       <measureNumberAlign>center,bottom</measureNumberAlign>
       <measureNumberFramePadding>0</measureNumberFramePadding>
       <measureNumberFrameWidth>0</measureNumberFrameWidth>
+      <translatorFontFace>FreeSerif</translatorFontFace>
       <translatorAlign>center,top</translatorAlign>
       <translatorFramePadding>0</translatorFramePadding>
       <translatorFrameWidth>0</translatorFrameWidth>
+      <systemFontFace>FreeSerif</systemFontFace>
       <systemAlign>left,top</systemAlign>
       <systemFramePadding>0</systemFramePadding>
       <systemFrameWidth>0</systemFrameWidth>
       <systemFrameRound>25</systemFrameRound>
+      <staffFontFace>FreeSerif</staffFontFace>
       <staffAlign>left,top</staffAlign>
       <staffPosAbove x="0" y="-4"/>
       <staffFramePadding>0</staffFramePadding>
       <staffFrameWidth>0</staffFrameWidth>
       <staffFrameRound>25</staffFrameRound>
+      <rehearsalMarkFontFace>FreeSerif</rehearsalMarkFontFace>
       <rehearsalMarkFontSize>10</rehearsalMarkFontSize>
       <rehearsalMarkFramePadding>0.1</rehearsalMarkFramePadding>
+      <repeatLeftFontFace>FreeSerif</repeatLeftFontFace>
       <repeatLeftFramePadding>0</repeatLeftFramePadding>
       <repeatLeftFrameWidth>0</repeatLeftFrameWidth>
       <repeatLeftFrameRound>25</repeatLeftFrameRound>
+      <repeatRightFontFace>FreeSerif</repeatRightFontFace>
       <repeatRightFontSize>10</repeatRightFontSize>
       <repeatRightFramePadding>0</repeatRightFramePadding>
       <repeatRightFrameWidth>0</repeatRightFrameWidth>
       <repeatRightFrameRound>25</repeatRightFrameRound>
+      <frameFontFace>FreeSerif</frameFontFace>
       <frameFontSize>11</frameFontSize>
       <frameFontSpatiumDependent>1</frameFontSpatiumDependent>
       <frameFramePadding>0</frameFramePadding>
       <frameFrameWidth>0</frameFrameWidth>
+      <textLineFontFace>FreeSerif</textLineFontFace>
       <textLineFontSize>9</textLineFontSize>
       <textLineTextAlign>right,center</textLineTextAlign>
+      <glissandoFontFace>FreeSerif</glissandoFontFace>
       <glissandoAlign>center,baseline</glissandoAlign>
       <glissandoFramePadding>0</glissandoFramePadding>
       <glissandoFrameWidth>0</glissandoFrameWidth>
+      <bendFontFace>FreeSerif</bendFontFace>
       <bendAlign>center,center</bendAlign>
       <bendFramePadding>0</bendFramePadding>
       <bendFrameWidth>0</bendFrameWidth>
+      <headerFontFace>FreeSerif</headerFontFace>
       <headerFontSize>11</headerFontSize>
       <headerAlign>center,top</headerAlign>
       <headerFramePadding>0</headerFramePadding>
       <headerFrameWidth>0</headerFrameWidth>
+      <footerFontFace>FreeSerif</footerFontFace>
       <footerFontSize>11</footerFontSize>
       <footerAlign>center,bottom</footerAlign>
       <footerFramePadding>0</footerFramePadding>
       <footerFrameWidth>0</footerFrameWidth>
+      <instrumentChangeFontFace>FreeSerif</instrumentChangeFontFace>
       <instrumentChangeAlign>left,bottom</instrumentChangeAlign>
       <instrumentChangeFramePadding>0</instrumentChangeFramePadding>
       <instrumentChangeFrameWidth>0</instrumentChangeFrameWidth>
       <user1Name>Position text</user1Name>
+      <user1FontFace>FreeSerif</user1FontFace>
       <user1FontSize>9</user1FontSize>
       <user1FramePadding>0</user1FramePadding>
       <user1FrameWidth>0</user1FrameWidth>
       <user2Name>Expression</user2Name>
+      <user2FontFace>FreeSerif</user2FontFace>
       <user2FontStyle>2</user2FontStyle>
       <user2FramePadding>0</user2FramePadding>
       <user2FrameWidth>0</user2FrameWidth>
