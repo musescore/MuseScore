@@ -18,6 +18,7 @@
 #=============================================================================
 
 set(MODULE workspace)
+set(MODULE_QRC workspace.qrc)
 
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/workspacemodule.cpp
@@ -28,6 +29,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iworkspaceconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/iworkspacedatastream.h
     ${CMAKE_CURRENT_LIST_DIR}/iworkspacedatastreamregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/workspacelistmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/workspacelistmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/currentworkspacemodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/currentworkspacemodel.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspaceconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspaceconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspace.cpp

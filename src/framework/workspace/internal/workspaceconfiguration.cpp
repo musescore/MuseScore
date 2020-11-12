@@ -31,11 +31,15 @@ static const Settings::Key CURRENT_WORKSPACE("workspace", "application/workspace
 void WorkspaceConfiguration::init()
 {
     settings()->setDefaultValue(CURRENT_WORKSPACE, Val(std::string(DEFAULT_WORKSPACE_NAME)));
+    settings()->valueChanged(CURRENT_WORKSPACE).onReceive(this, [this](const Val& name) {
+        m_currentWorkspaceNameChanged.send(name.toString());
+    });
 }
 
-std::vector<io::path> WorkspaceConfiguration::workspacePaths() const
+io::paths WorkspaceConfiguration::workspacePaths() const
 {
-    std::vector<io::path> paths;
+    io::paths paths;
+
     io::path sharePath = globalConfiguration()->sharePath() + "/workspaces";
     paths.push_back(sharePath);
 
@@ -48,9 +52,18 @@ std::vector<io::path> WorkspaceConfiguration::workspacePaths() const
     return paths;
 }
 
-std::string WorkspaceConfiguration::currentWorkspaceName() const
+ValCh<std::string> WorkspaceConfiguration::currentWorkspaceName() const
 {
-    return settings()->value(CURRENT_WORKSPACE).toString();
+    ValCh<std::string> result;
+    result.ch = m_currentWorkspaceNameChanged;
+    result.val = settings()->value(CURRENT_WORKSPACE).toString();
+
+    return result;
+}
+
+void WorkspaceConfiguration::setCurrentWorkspaceName(const std::string& name)
+{
+    settings()->setValue(CURRENT_WORKSPACE, Val(name));
 }
 
 io::paths WorkspaceConfiguration::extensionsPaths() const

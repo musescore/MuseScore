@@ -20,14 +20,11 @@
 #define MU_WORKSPACE_IWORKSPACE_H
 
 #include <memory>
-#include <QString>
-#include <QByteArray>
 
 #include "workspace/workspacetypes.h"
 #include "async/channel.h"
 
-namespace mu {
-namespace workspace {
+namespace mu::workspace {
 class IWorkspace
 {
 public:
@@ -36,7 +33,7 @@ public:
     virtual std::string name() const = 0;
     virtual std::string title() const = 0;
 
-    virtual AbstractDataPtr data(const std::string& tag,const std::string& name = std::string()) const = 0;
+    virtual AbstractDataPtr data(const std::string& tag, const std::string& name = std::string()) const = 0;
     virtual void addData(AbstractDataPtr data) = 0;
 
     //! NOTE Only methods associations with framework.
@@ -46,7 +43,9 @@ public:
 
     virtual async::Channel<AbstractDataPtr> dataChanged() const = 0;
 };
-}
+
+using IWorkspacePtr = std::shared_ptr<IWorkspace>;
+using IWorkspacePtrList = std::vector<IWorkspacePtr>;
 }
 
 #endif // MU_WORKSPACE_IWORKSPACE_H

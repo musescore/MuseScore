@@ -18,7 +18,12 @@
 //=============================================================================
 #include "workspacemodule.h"
 
+#include <QQmlEngine>
+
 #include "modularity/ioc.h"
+
+#include "framework/ui/iinteractiveuriregister.h"
+#include "framework/ui/iuiengine.h"
 
 #include "internal/workspaceconfiguration.h"
 #include "internal/workspacemanager.h"
@@ -27,11 +32,20 @@
 #include "internal/workspacesettingsstream.h"
 #include "internal/workspacetoolbarstream.h"
 
+#include "view/workspacelistmodel.h"
+#include "view/currentworkspacemodel.h"
+
 using namespace mu::workspace;
+using namespace mu::framework;
 
 static std::shared_ptr<WorkspaceManager> s_manager = std::make_shared<WorkspaceManager>();
 static std::shared_ptr<WorkspaceDataStreamRegister> s_streamRegister = std::make_shared<WorkspaceDataStreamRegister>();
 static std::shared_ptr<WorkspaceConfiguration> s_configuration = std::make_shared<WorkspaceConfiguration>();
+
+static void workspace_init_qrc()
+{
+    Q_INIT_RESOURCE(workspace);
+}
 
 std::string WorkspaceModule::moduleName() const
 {
@@ -40,15 +54,34 @@ std::string WorkspaceModule::moduleName() const
 
 void WorkspaceModule::registerExports()
 {
-    framework::ioc()->registerExport<IWorkspaceConfiguration>(moduleName(), s_configuration);
-    framework::ioc()->registerExport<IWorkspaceManager>(moduleName(), s_manager);
-    framework::ioc()->registerExport<WorkspaceDataStreamRegister>(moduleName(), s_streamRegister);
+    ioc()->registerExport<IWorkspaceConfiguration>(moduleName(), s_configuration);
+    ioc()->registerExport<IWorkspaceManager>(moduleName(), s_manager);
+    ioc()->registerExport<WorkspaceDataStreamRegister>(moduleName(), s_streamRegister);
 }
 
 void WorkspaceModule::resolveImports()
 {
     s_streamRegister->regStream(std::make_shared<WorkspaceSettingsStream>());
     s_streamRegister->regStream(std::make_shared<WorkspaceToolbarStream>());
+
+    auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
+    if (ir) {
+        ir->registerUri(Uri("musescore://workspace/select"),
+                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/Workspace/WorkspacesDialog.qml"));
+    }
+}
+
+void WorkspaceModule::registerResources()
+{
+    workspace_init_qrc();
+}
+
+void WorkspaceModule::registerUiTypes()
+{
+    qmlRegisterType<WorkspaceListModel>("MuseScore.Workspace", 1, 0, "WorkspaceListModel");
+    qmlRegisterType<CurrentWorkspaceModel>("MuseScore.Workspace", 1, 0, "CurrentWorkspaceModel");
+
+    ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(workspace_QML_IMPORT);
 }
 
 void WorkspaceModule::onInit()

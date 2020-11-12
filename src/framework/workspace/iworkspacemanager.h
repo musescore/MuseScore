@@ -24,17 +24,17 @@
 #include "retval.h"
 #include "iworkspace.h"
 
-namespace mu {
-namespace workspace {
+namespace mu::workspace {
 class IWorkspaceManager : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IWorkspaceManager)
+
 public:
     virtual ~IWorkspaceManager() = default;
 
-    virtual RetValCh<std::shared_ptr<IWorkspace> > currentWorkspace() const = 0;
+    virtual RetValCh<IWorkspacePtr> currentWorkspace() const = 0;
+    virtual RetValCh<IWorkspacePtrList> allWorkspaces() const = 0;
 };
-}
 }
 
 #endif // MU_WORKSPACE_IWORKSPACEMANAGER_H
