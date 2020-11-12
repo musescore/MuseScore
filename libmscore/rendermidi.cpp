@@ -266,14 +266,15 @@ static void playNote(EventMap* events, const Note* note, int channel, int pitch,
                   Glissando *glissando = toGlissando(spanner);
                   if (glissando->glissandoStyle() == GlissandoStyle::PORTAMENTO) {
                         Note* nextNote = toNote(spanner->endElement());
-                        double pitchDelta = (double(nextNote->pitch()) - pitch) * 50.0;
-                        double timeDelta = double(offTime - onTime);
+                        double pitchDelta = (static_cast<double>(nextNote->pitch()) - pitch) * 50.0;
+                        double timeDelta = static_cast<double>(offTime - onTime);
                         double timeStep = timeDelta / pitchDelta * 20.0;
                         double t = 0.0;
                         QList<int> onTimes;
-                        EaseInOut easeInOut(qreal(glissando->easeIn()) / 100.0, qreal(glissando->easeOut()) / 100.0);
-                        easeInOut.timeList(int((timeDelta + timeStep * 0.5) / timeStep), int(timeDelta), &onTimes);
-                        double nTimes = double(onTimes.size() - 1);
+                        EaseInOut easeInOut(static_cast<qreal>(glissando->easeIn()) / 100.0,
+                              static_cast<qreal>(glissando->easeOut()) / 100.0);
+                        easeInOut.timeList(static_cast<int>((timeDelta + timeStep * 0.5) / timeStep), int(timeDelta), &onTimes);
+                        double nTimes = static_cast<double>(onTimes.size() - 1);
                         for (double time : onTimes) {
                               int p = int(pitch + (t / nTimes) * pitchDelta);
                               int timeStamp = std::min(onTime + int(time), offTime - 1);
@@ -1672,7 +1673,8 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
             for (Spanner* spanner : note->spannerFor()) {
                   if (spanner->type() == ElementType::GLISSANDO) {
                         Glissando* glissando = toGlissando(spanner);
-                        EaseInOut easeInOut(float(glissando->easeIn())/100.0, float(glissando->easeOut())/100.0);
+                        EaseInOut easeInOut(static_cast<qreal>(glissando->easeIn())/100.0,
+                              static_cast<qreal>(glissando->easeOut())/100.0);
                         easeInOut.timeList(b, millespernote * b, &onTimes);
                         isGlissando = true;
                         break;
