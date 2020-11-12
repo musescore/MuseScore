@@ -28,9 +28,26 @@ using namespace mu::actions;
 void NotationActionController::init()
 {
     dispatcher()->reg(this, "note-input", this, &NotationActionController::toggleNoteInput);
+
+    dispatcher()->reg(this, "note-longa", [this]() { padNote(Pad::NOTE00); });
+    dispatcher()->reg(this, "note-breve", [this]() { padNote(Pad::NOTE0); });
+    dispatcher()->reg(this, "pad-note-1", [this]() { padNote(Pad::NOTE1); });
+    dispatcher()->reg(this, "pad-note-2", [this]() { padNote(Pad::NOTE2); });
     dispatcher()->reg(this, "pad-note-4", [this]() { padNote(Pad::NOTE4); });
     dispatcher()->reg(this, "pad-note-8", [this]() { padNote(Pad::NOTE8); });
     dispatcher()->reg(this, "pad-note-16", [this]() { padNote(Pad::NOTE16); });
+    dispatcher()->reg(this, "pad-note-32", [this]() { padNote(Pad::NOTE32); });
+    dispatcher()->reg(this, "pad-note-64", [this]() { padNote(Pad::NOTE64); });
+    dispatcher()->reg(this, "pad-note-128", [this]() { padNote(Pad::NOTE128); });
+    dispatcher()->reg(this, "pad-note-256", [this]() { padNote(Pad::NOTE256); });
+    dispatcher()->reg(this, "pad-note-512", [this]() { padNote(Pad::NOTE512); });
+    dispatcher()->reg(this, "pad-note-1024", [this]() { padNote(Pad::NOTE1024); });
+    dispatcher()->reg(this, "pad-dot", [this]() { padNote(Pad::DOT); });
+    dispatcher()->reg(this, "pad-dotdot", [this]() { padNote(Pad::DOTDOT); });
+    dispatcher()->reg(this, "pad-dot3", [this]() { padNote(Pad::DOT3); });
+    dispatcher()->reg(this, "pad-dot4", [this]() { padNote(Pad::DOT4); });
+    dispatcher()->reg(this, "pad-rest", [this]() { padNote(Pad::REST); });
+
     dispatcher()->reg(this, "put-note", this, &NotationActionController::putNote);
 
     //! NOTE For historical reasons, the name of the action does not match what needs to be done.
