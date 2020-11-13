@@ -14,7 +14,6 @@ RadioButtonGroup {
     orientation: Qt.Vertical
 
     property int sideMargin: 0
-    property var selectedWorkspace
 
     delegate: RoundedRadioButton {
         anchors.left: parent.left

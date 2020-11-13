@@ -40,7 +40,6 @@ void WorkspaceListModel::load()
     beginResetModel();
 
     RetValCh<IWorkspacePtrList> workspaces = workspacesManager()->allWorkspaces();
-
     if (!workspaces.ret) {
         LOGE() << workspaces.ret.toString();
     }
@@ -126,7 +125,19 @@ QHash<int, QByteArray> WorkspaceListModel::roleNames() const
 
 void WorkspaceListModel::createNewWorkspace()
 {
-    NOT_IMPLEMENTED;
+    RetVal<Val> obj = interactive()->open("musescore://workspace/create?sync=true");
+    if (!obj.ret) {
+        return;
+    }
+
+    IWorkspacePtr newWorkspace = obj.val.toQVariant().value<IWorkspacePtr>();
+    if (!newWorkspace) {
+        return;
+    }
+
+    beginInsertRows(QModelIndex(), m_workspaces.size(), m_workspaces.size());
+    m_workspaces << newWorkspace;
+    endInsertRows();
 }
 
 void WorkspaceListModel::selectWorkspace(int workspaceIndex)
@@ -159,7 +170,6 @@ void WorkspaceListModel::removeWorkspace(int workspaceIndex)
 
     beginRemoveRows(QModelIndex(), workspaceIndex, workspaceIndex);
     m_workspaces.removeAt(workspaceIndex);
-    NOT_IMPLEMENTED;
     endRemoveRows();
 }
 
