@@ -31,9 +31,10 @@ class Marker final : public TextBase {
             VARSEGNO,
             CODA,
             VARCODA,
-            CODETTA,
+            CODETTA, // not in SMuFL, but still needed for 1.x compatibility, rendered as a double coda
             FINE,
             TOCODA,
+            TOCODASYM,
             USER
             };
 

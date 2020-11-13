@@ -694,7 +694,7 @@ PalettePanel* MuseScore::newRepeatsPalettePanel()
       sp->append(rm, qApp->translate("symUserNames", Sym::symUserNames[int(SymId::repeat1Bar)]));
 
       for (int i = 0; i < markerTypeTableSize(); i++) {
-            if (markerTypeTable[i].type == Marker::Type::CODETTA) //not in smufl
+            if (markerTypeTable[i].type == Marker::Type::CODETTA) // not in SMuFL
                   continue;
 
             Marker* mk = new Marker(gscore);
