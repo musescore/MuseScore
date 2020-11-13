@@ -4735,7 +4735,8 @@ static void directionMarker(XmlWriter& xml, const Marker* const m)
             words = "Fine";
             sound = "fine=\"yes\"";
             }
-      else if (mtp == Marker::Type::TOCODA) {
+      else if (mtp == Marker::Type::TOCODA ||
+               mtp == Marker::Type::TOCODASYM) {
             if (m->xmlText() == "")
                   words = "To Coda";
             else
@@ -4810,8 +4811,9 @@ static void repeatAtMeasureStart(XmlWriter& xml, Attributes& attr, const Measure
                               attr.doAttr(xml, false);
                               directionMarker(xml, mk);
                               }
-                        else if (   mtp == Marker::Type::FINE
-                                    || mtp == Marker::Type::TOCODA
+                        else if (   mtp == Marker::Type::FINE ||
+                                    mtp == Marker::Type::TOCODA ||
+                                    mtp == Marker::Type::TOCODASYM
                                     ) {
                               // ignore
                               }
@@ -4846,7 +4848,9 @@ static void repeatAtMeasureStop(XmlWriter& xml, const Measure* const m, int stra
                         // filter out the markers at measure stop
                         const Marker* const mk = toMarker(e);
                         Marker::Type mtp = mk->markerType();
-                        if (mtp == Marker::Type::FINE || mtp == Marker::Type::TOCODA) {
+                        if (mtp == Marker::Type::FINE ||
+                            mtp == Marker::Type::TOCODA ||
+                            mtp == Marker::Type::TOCODASYM) {
                               directionMarker(xml, mk);
                               }
                         else if (mtp == Marker::Type::SEGNO || mtp == Marker::Type::CODA) {
