@@ -92,6 +92,8 @@ public:
     qreal utick2utime(int) const;
     void updateTempo();
     int ticks() const;
+
+    QList<RepeatSegment*>::const_iterator findRepeatSegmentFromUTick(int utick) const;
 };
 }     // namespace Ms
 #endif
