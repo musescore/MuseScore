@@ -1,18 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
+<museScore version="3.02">
   <Style>
-    <pageWidth>8.27008</pageWidth>
-    <pageHeight>11.6902</pageHeight>
-    <pagePrintableWidth>7.1874</pagePrintableWidth>
-    <pageEvenLeftMargin>0.492126</pageEvenLeftMargin>
-    <pageOddLeftMargin>0.590551</pageOddLeftMargin>
-    <pageEvenTopMargin>0.393701</pageEvenTopMargin>
-    <pageEvenBottomMargin>0.787402</pageEvenBottomMargin>
-    <pageOddTopMargin>0.590551</pageOddTopMargin>
-    <pageOddBottomMargin>0.787402</pageOddBottomMargin>
-    <pageTwosided>1</pageTwosided>
-    <staffUpperBorder>7</staffUpperBorder>
-    <staffLowerBorder>7</staffLowerBorder>
     <staffDistance>6.5</staffDistance>
     <akkoladeDistance>6.5</akkoladeDistance>
     <minSystemDistance>8.5</minSystemDistance>
@@ -46,7 +34,7 @@
     <lyricsOddFrameFgColor r="0" g="0" b="0" a="255"/>
     <lyricsOddFrameBgColor r="255" g="255" b="255" a="0"/>
     <lyricsEvenFontFace>Edwin</lyricsEvenFontFace>
-    <lyricsEvenFontSize>11</lyricsEvenFontSize>
+    <lyricsEvenFontSize>10</lyricsEvenFontSize>
     <lyricsEvenFontSpatiumDependent>1</lyricsEvenFontSpatiumDependent>
     <lyricsEvenFontStyle>0</lyricsEvenFontStyle>
     <lyricsEvenColor r="0" g="0" b="0" a="255"/>
@@ -67,9 +55,9 @@
     <barWidth>0.18</barWidth>
     <doubleBarWidth>0.18</doubleBarWidth>
     <endBarWidth>0.55</endBarWidth>
-    <doubleBarDistance>0.73</doubleBarDistance>
+    <doubleBarDistance>0.55</doubleBarDistance>
     <endBarDistance>0.915</endBarDistance>
-    <repeatBarlineDotSeparation>0.94</repeatBarlineDotSeparation>
+    <repeatBarlineDotSeparation>0.7</repeatBarlineDotSeparation>
     <repeatBarTips>0</repeatBarTips>
     <startBarlineSingle>0</startBarlineSingle>
     <startBarlineMultiple>1</startBarlineMultiple>
@@ -113,12 +101,12 @@
     <measureSpacing>1.5</measureSpacing>
     <staffLineWidth>0.11</staffLineWidth>
     <ledgerLineWidth>0.16</ledgerLineWidth>
-    <ledgerLineLength>0.42</ledgerLineLength>
+    <ledgerLineLength>0.55</ledgerLineLength>
     <accidentalDistance>0.3</accidentalDistance>
     <accidentalNoteDistance>0.3</accidentalNoteDistance>
     <beamWidth>0.5</beamWidth>
     <beamDistance>0.5</beamDistance>
-    <beamMinLen>1.2</beamMinLen>
+    <beamMinLen>1.3</beamMinLen>
     <beamNoSlope>0</beamNoSlope>
     <dotMag>1</dotMag>
     <dotNoteDistance>0.6</dotNoteDistance>
@@ -140,7 +128,7 @@
     <hairpinLinePosBelow x="0" y="4"/>
     <hairpinHeight>1.15</hairpinHeight>
     <hairpinContHeight>0.5</hairpinContHeight>
-    <hairpinWidth>0.11</hairpinWidth>
+    <hairpinWidth>0.12</hairpinWidth>
     <hairpinFontFace>Edwin</hairpinFontFace>
     <hairpinFontSize>10</hairpinFontSize>
     <hairpinFontSpatiumDependent>1</hairpinFontSpatiumDependent>
@@ -204,7 +192,7 @@
     <nashvilleNumberPosAbove x="0" y="-2.5"/>
     <nashvilleNumberPosBelow x="0" y="3.5"/>
     <chordSymbolAFontFace>Edwin</chordSymbolAFontFace>
-    <chordSymbolAFontSize>10</chordSymbolAFontSize>
+    <chordSymbolAFontSize>12</chordSymbolAFontSize>
     <chordSymbolAFontSpatiumDependent>1</chordSymbolAFontSpatiumDependent>
     <chordSymbolAFontStyle>0</chordSymbolAFontStyle>
     <chordSymbolAColor r="0" g="0" b="0" a="255"/>
@@ -303,10 +291,6 @@
     <minEmptyMeasures>2</minEmptyMeasures>
     <minMMRestWidth>4</minMMRestWidth>
     <mmRestNumberPos>-1.5</mmRestNumberPos>
-    <hideEmptyStaves>0</hideEmptyStaves>
-    <dontHidStavesInFirstSystm>0</dontHidStavesInFirstSystm>
-    <alwaysShowBracketsWhenEmptyStavesAreHidden>0</alwaysShowBracketsWhenEmptyStavesAreHidden>
-    <hideInstrumentNameIfOneInstrument>1</hideInstrumentNameIfOneInstrument>
     <gateTime>100</gateTime>
     <tenutoGateTime>100</tenutoGateTime>
     <staccatoGateTime>50</staccatoGateTime>
@@ -315,8 +299,8 @@
     <ArpeggioLineWidth>0.18</ArpeggioLineWidth>
     <ArpeggioHookLen>0.8</ArpeggioHookLen>
     <ArpeggioHiddenInStdIfTab>0</ArpeggioHiddenInStdIfTab>
-    <slurEndWidth>0.06</slurEndWidth>
-    <slurMidWidth>0.21</slurMidWidth>
+    <slurEndWidth>0.05</slurEndWidth>
+    <slurMidWidth>0.18</slurMidWidth>
     <slurDottedWidth>0.1</slurDottedWidth>
     <minTieLength>1</minTieLength>
     <slurMinDistance>0.5</slurMinDistance>
@@ -1109,6 +1093,5 @@
     <figuredBassMinDistance>0.5</figuredBassMinDistance>
     <tupletMinDistance>0.5</tupletMinDistance>
     <autoplaceEnabled>1</autoplaceEnabled>
-    <Spatium>1.5</Spatium>
     </Style>
   </museScore>

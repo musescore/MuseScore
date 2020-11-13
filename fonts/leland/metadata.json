@@ -16,16 +16,16 @@
         "pedalLineThickness": 0.11,
         "repeatBarlineDotSeparation": 0.7,
         "repeatEndingLineThickness": 0.11,
-        "slurEndpointThickness": 0.06,
-        "slurMidpointThickness": 0.21,
+        "slurEndpointThickness": 0.05,
+        "slurMidpointThickness": 0.18,
         "staffLineThickness": 0.11,
         "stemThickness": 0.11,
         "subBracketThickness": 0.11,
         "textEnclosureThickness": 0.11,
         "thickBarlineThickness": 0.55,
         "thinBarlineThickness": 0.18,
-        "tieEndpointThickness": 0.06,
-        "tieMidpointThickness": 0.21,
+        "tieEndpointThickness": 0.05,
+        "tieMidpointThickness": 0.18,
         "tupletBracketThickness": 0.1
     },
     "fontName": "Leland",
@@ -1851,6 +1851,36 @@
                 0.0
             ]
         },
+        "metNote8thUp": {
+            "bBoxNE": [
+                2.6658,
+                4.1732
+            ],
+            "bBoxSW": [
+                -0.0016,
+                -0.6108
+            ]
+        },
+        "metNoteHalfUp": {
+            "bBoxNE": [
+                1.492,
+                4.044
+            ],
+            "bBoxSW": [
+                -0.0016,
+                -0.604
+            ]
+        },
+        "metNoteQuarterUp": {
+            "bBoxNE": [
+                1.492,
+                4.044
+            ],
+            "bBoxSW": [
+                -0.0016,
+                -0.612
+            ]
+        },
         "note1024thDown": {
             "bBoxNE": [
                 1.492,
@@ -2093,12 +2123,12 @@
         },
         "noteheadBlack": {
             "bBoxNE": [
-                1.336,
-                0.544
+                1.3,
+                0.524
             ],
             "bBoxSW": [
                 0.0,
-                -0.544
+                -0.528
             ]
         },
         "noteheadDiamondBlack": {
@@ -2143,12 +2173,12 @@
         },
         "noteheadHalf": {
             "bBoxNE": [
-                1.332,
-                0.544
+                1.3,
+                0.524
             ],
             "bBoxSW": [
                 -0.0,
-                -0.54
+                -0.528
             ]
         },
         "noteheadNull": {
@@ -4276,6 +4306,15 @@
         "uniEAAE": {
             "codepoint": "0XEAAE"
         },
+        "uniECA3": {
+            "codepoint": "0XECA3"
+        },
+        "uniECA5": {
+            "codepoint": "0XECA5"
+        },
+        "uniECA7": {
+            "codepoint": "0XECA7"
+        },
         "uniED10": {
             "codepoint": "0XED10"
         },
@@ -4961,27 +5000,27 @@
         "noteheadBlack": {
             "cutOutNE": [
                 1.184,
-                0.46
+                0.42
             ],
             "cutOutNW": [
-                0.28,
-                0.32
+                0.276,
+                0.308
             ],
             "cutOutSE": [
-                1.056,
-                -0.3185
+                1.064,
+                -0.276
             ],
             "cutOutSW": [
-                0.148,
-                -0.46
+                0.152,
+                -0.456
             ],
             "stemDownNW": [
                 0.0,
                 -0.176
             ],
             "stemUpSE": [
-                1.336,
-                0.172
+                1.3,
+                0.168
             ]
         },
         "noteheadDiamondBlack": {
@@ -5007,26 +5046,26 @@
         "noteheadHalf": {
             "cutOutNE": [
                 1.184,
-                0.46
+                0.42
             ],
             "cutOutNW": [
                 0.276,
-                0.32
+                0.308
             ],
             "cutOutSE": [
                 1.064,
-                -0.313
+                -0.276
             ],
             "cutOutSW": [
                 0.152,
-                -0.46
+                -0.456
             ],
             "stemDownNW": [
                 0.0,
-                -0.164
+                -0.176
             ],
             "stemUpSE": [
-                1.332,
+                1.3,
                 0.168
             ]
         },
