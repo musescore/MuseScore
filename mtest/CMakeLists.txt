@@ -40,6 +40,7 @@ if (MSVC)
 endif (MSVC)
 
 QT5_ADD_RESOURCES(qrc_files ${PROJECT_SOURCE_DIR}/mtest/mtest.qrc
+            ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-Campania.qrc
             ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-Leland.qrc
             ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-Edwin.qrc
             ${PROJECT_SOURCE_DIR}/mscore/musescorefonts-MScore.qrc
