@@ -101,7 +101,7 @@ class RealizedHarmony {
 
       void update(int rootTpc, int bassTpc, int transposeOffset = 0); //updates the notes map
 
-      Fraction getActualDuration(HDuration durationType = HDuration::INVALID) const;
+      Fraction getActualDuration(int utick, HDuration durationType = HDuration::INVALID) const;
 
    private:
       PitchMap getIntervals(int rootTpc, bool literal = true) const;

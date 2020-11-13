@@ -21,6 +21,7 @@
 #include "types.h"
 #include "volta.h"
 
+#include <algorithm>
 #include <list>
 #include <utility> // std::pair
 
@@ -242,6 +243,17 @@ int RepeatList::utime2utick(qreal t) const
             qFatal("time %f not found in RepeatList", t);
             }
       return 0;
+      }
+
+///
+/// \brief Lookup the RepeatSegment containing the given utick
+///
+QList<RepeatSegment*>::const_iterator RepeatList::findRepeatSegmentFromUTick(int utick) const
+      {
+      return std::lower_bound(this->cbegin(), this->cend(), utick, [](RepeatSegment const * rs, int utick) {
+            // Skip RS where endtick is less than us
+            return utick > (rs->utick + rs->len());
+            });
       }
 
 //---------------------------------------------------------

@@ -11,18 +11,20 @@
 //=============================================================================
 
 #include "harmony.h"
-#include "pitchspelling.h"
-#include "score.h"
-#include "system.h"
-#include "measure.h"
-#include "segment.h"
+
 #include "chordlist.h"
-#include "mscore.h"
 #include "fret.h"
-#include "staff.h"
+#include "measure.h"
+#include "mscore.h"
 #include "part.h"
-#include "utils.h"
+#include "pitchspelling.h"
+#include "repeatlist.h"
+#include "score.h"
+#include "segment.h"
+#include "staff.h"
 #include "sym.h"
+#include "system.h"
+#include "utils.h"
 #include "xml.h"
 
 namespace Ms {
@@ -1056,42 +1058,68 @@ Harmony* Harmony::findPrev() const
       }
 
 //---------------------------------------------------------
-//   ticksTilNext
+//   ticksTillNext
 ///   finds ticks until the next chord symbol or end of score
+///
+///   utick is our current playback position to start from
 ///
 ///   stopAtMeasureEnd being set to true will have the loop
 ///   stop at measure end.
 //---------------------------------------------------------
-Fraction Harmony::ticksTilNext(bool stopAtMeasureEnd) const
+Fraction Harmony::ticksTillNext(int utick, bool stopAtMeasureEnd) const
       {
       Segment* seg = getParentSeg();
       Fraction duration = seg->ticks();
-      Segment* cur = seg->next1();
-      while (cur) {
-            if (stopAtMeasureEnd && (cur->measure() != seg->measure()))
-                  break; //limit by measure end
+      Segment* cur = seg->next();
+      auto rsIt = score()->repeatList().findRepeatSegmentFromUTick(utick);
 
-            //find harmony on same track
-            Element* e = cur->findAnnotation(ElementType::HARMONY, track(), track());
-            // no harmony; look for fret diagram
-            if (!e) {
-                  e = cur->findAnnotation(ElementType::FRET_DIAGRAM, track(), track());
-                  if (e)
-                        e = toFretDiagram(e)->harmony();
+      Measure const * currentMeasure = seg->measure();
+      Measure const * endMeasure = (stopAtMeasureEnd)? currentMeasure : (*rsIt)->lastMeasure();
+      Harmony const * nextHarmony = nullptr;
+
+      do {
+            // Loop over segments of this measure
+            while (cur) {
+                  //find harmony on same track
+                  Element* e = cur->findAnnotation(ElementType::HARMONY, track(), track());
+                  if (e) {
+                        nextHarmony = toHarmony(e);
+                        }
+                  else {// no harmony; look for fret diagram
+                        e = cur->findAnnotation(ElementType::FRET_DIAGRAM, track(), track());
+                        if (e) {
+                              nextHarmony = toFretDiagram(e)->harmony();
+                              }
+                        }
+                  if (nextHarmony != nullptr) {
+                        //we have found the next chord symbol
+                        break;
+                        }
+                  //keep adding the duration of the current segment
+                  //in case we are not able to find a next
+                  //chord symbol
+                  duration += cur->ticks();
+                  cur = cur->next();
                   }
-            if (e) {
-                  //we have found the next chord symbol
-                  //set duration to the difference between
-                  //the two chord symbols
-                  duration = e->tick() - tick();
-                  break;
+            // Move segment reference to next measure
+            if (currentMeasure != endMeasure) {
+                  currentMeasure = currentMeasure->nextMeasure();
+                  cur = (currentMeasure)? currentMeasure->first() : nullptr;
                   }
-            //keep adding the duration of the current segment
-            //in case we are not able to find a next
-            //chord symbol
-            duration += cur->ticks();
-            cur = cur->next1();
-            }
+            else { // End of repeatSegment or search boundary reached
+                  if (stopAtMeasureEnd) {
+                        break;
+                        }
+                  else { // move to next RepeatSegment
+                        if (++rsIt != score()->repeatList().end()) {
+                              currentMeasure = (*rsIt)->firstMeasure();
+                              endMeasure     = (*rsIt)->lastMeasure();
+                              cur = currentMeasure->first();
+                              }
+                        }
+                  }
+            } while ((nextHarmony == nullptr) && (cur != nullptr));
+
       return duration;
       }
 

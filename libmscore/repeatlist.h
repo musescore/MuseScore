@@ -91,6 +91,8 @@ class RepeatList: public QList<RepeatSegment*>
       qreal utick2utime(int) const;
       void updateTempo();
       int ticks() const;
+
+      QList<RepeatSegment*>::const_iterator findRepeatSegmentFromUTick(int utick) const;
       };
 
 
