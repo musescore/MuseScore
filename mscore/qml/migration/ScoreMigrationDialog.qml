@@ -58,6 +58,7 @@ FocusScope {
                 font.family: globalStyle.font.family
                 font.bold: true
                 font.pixelSize: 26
+                color: globalStyle.buttonText
                 wrapMode: Text.WordWrap
                 horizontalAlignment: Qt.AlignHCenter
                 Accessible.role: Accessible.StaticText
@@ -83,6 +84,7 @@ FocusScope {
                 font.family: globalStyle.font.family
                 font.bold: true
                 font.pixelSize: 14
+                color: globalStyle.buttonText
                 wrapMode: Text.WordWrap
                 horizontalAlignment: Qt.AlignLeft
                 Accessible.role: Accessible.StaticText
@@ -118,6 +120,7 @@ FocusScope {
                 font.family: globalStyle.font.family
                 font.bold: true
                 font.pixelSize: 14
+                color: globalStyle.buttonText
                 wrapMode: Text.WordWrap
                 horizontalAlignment: Qt.AlignLeft
                 Accessible.role: Accessible.StaticText
