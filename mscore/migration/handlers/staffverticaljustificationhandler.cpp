@@ -1,8 +1,11 @@
 #include "staffverticaljustificationhandler.h"
 
-bool StaffVerticalJustificationHandler::handle(Ms::Score* /*score*/)
+bool StaffVerticalJustificationHandler::handle(Ms::Score* score)
       {
-      // TODO
+      if (!score) {
+            return false;
+      }
+      score->undoChangeStyleVal(Ms::Sid::enableVerticalSpread, true);
 
       return true;
       }
