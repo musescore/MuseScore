@@ -21,4 +21,16 @@ CheckBox {
             source: "Tick_Icon.png"
         }
     }
+
+    contentItem: Text {
+        font.family: globalStyle.font.family
+        font.bold: true
+        font.pixelSize: 14
+        color: globalStyle.buttonText
+        wrapMode: Text.WordWrap
+        horizontalAlignment: Qt.AlignLeft
+        Accessible.role: Accessible.StaticText
+        Accessible.name: text
+    }
+
 }
