@@ -33,6 +33,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/workspacelistmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/currentworkspacemodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/currentworkspacemodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/newworkspacemodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/newworkspacemodel.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspaceconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspaceconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspace.cpp

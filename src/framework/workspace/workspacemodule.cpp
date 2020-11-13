@@ -34,6 +34,7 @@
 
 #include "view/workspacelistmodel.h"
 #include "view/currentworkspacemodel.h"
+#include "view/newworkspacemodel.h"
 
 using namespace mu::workspace;
 using namespace mu::framework;
@@ -68,6 +69,9 @@ void WorkspaceModule::resolveImports()
     if (ir) {
         ir->registerUri(Uri("musescore://workspace/select"),
                         ContainerMeta(ContainerType::QmlDialog, "MuseScore/Workspace/WorkspacesDialog.qml"));
+
+        ir->registerUri(Uri("musescore://workspace/create"),
+                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/Workspace/NewWorkspaceDialog.qml"));
     }
 }
 
@@ -80,6 +84,7 @@ void WorkspaceModule::registerUiTypes()
 {
     qmlRegisterType<WorkspaceListModel>("MuseScore.Workspace", 1, 0, "WorkspaceListModel");
     qmlRegisterType<CurrentWorkspaceModel>("MuseScore.Workspace", 1, 0, "CurrentWorkspaceModel");
+    qmlRegisterType<NewWorkspaceModel>("MuseScore.Workspace", 1, 0, "NewWorkspaceModel");
 
     ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(workspace_QML_IMPORT);
 }

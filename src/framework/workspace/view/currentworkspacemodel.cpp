@@ -37,7 +37,7 @@ void CurrentWorkspaceModel::load()
 
 void CurrentWorkspaceModel::selectWorkspace()
 {
-    RetVal<Val> result = interactive()->open("musescore://workspace/select");
+    RetVal<Val> result = interactive()->open("musescore://workspace/select?sync=true");
 
     if (!result.ret) {
         return;

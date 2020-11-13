@@ -48,4 +48,6 @@ using IWorkspacePtr = std::shared_ptr<IWorkspace>;
 using IWorkspacePtrList = std::vector<IWorkspacePtr>;
 }
 
+Q_DECLARE_METATYPE(mu::workspace::IWorkspacePtr)
+
 #endif // MU_WORKSPACE_IWORKSPACE_H
