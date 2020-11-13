@@ -8,7 +8,9 @@ This directory contains the fonts used internally by MuseScore and the sources u
 
 * **bravura** The [_Bravura_](https://github.com/steinbergmedia/bravura/) fonts and the documentation for them. These fonts are **not** maintained by the MuseScore community, please **DO NOT EDIT** these fonts. 
 * **campania** The [_Campania_](https://github.com/MarcSabatella/Campania) font for Roman numeral analysis.  This font is not maintained by the MuseScore project, but it is open source and contributions from the MuseScore community are encouraged at the main site for the font.
+* **edwin** The _Edwin_ text font family. This font is maintained by the MuseScore project.
 * **gootville** The [_Gonville_](http://www.chiark.greenend.org.uk/~sgtatham/gonville/) fonts for score musical symbols. This font is modified and maintained by the MuseScore project.
+* **leland** The _Leland_ font used in MuseScore scores for musical symbols. This is maintained by the MuseScore project.
 * **mscore** The main font used in MuseScore scores for musical symbols (formerly known as [_Emmentaler_](http://lilypond.org/doc/v2.18/Documentation/notation/the-feta-font)), as well its counterpart used for texts.
 * **musejazz** The _MuseJazz_ and _MuseJazzText_ fonts used for notation and text in a handwritten style.  These are maintained by the MuseScore project.
 * **petaluma** The [_Petaluma_](https://github.com/steinbergmedia/petaluma/) fonts and the documentation for them. These fonts are **not** maintained by the MuseScore community, please **DO NOT EDIT** these fonts. 
