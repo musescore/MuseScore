@@ -139,7 +139,7 @@ public:
 
     Harmony* findNext() const;
     Harmony* findPrev() const;
-    Fraction ticksTilNext(bool stopAtMeasureEnd = false) const;
+    Fraction ticksTillNext(int utick, bool stopAtMeasureEnd = false) const;
     Segment* getParentSeg() const;
 
     const ChordDescription* descr() const;

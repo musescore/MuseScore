@@ -679,7 +679,7 @@ static void renderHarmony(EventMap* events, Measure const* m, Harmony* h, int ti
 
     NPlayEvent ev(ME_NOTEON, channel->channel(), 0, velocity);
     ev.setHarmony(h);
-    Fraction duration = r.getActualDuration();
+    Fraction duration = r.getActualDuration(h->tick().ticks() + tickOffset);
 
     int onTime = h->tick().ticks() + tickOffset;
     int offTime = onTime + duration.ticks();
