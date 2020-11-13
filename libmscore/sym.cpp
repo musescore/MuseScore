@@ -6281,7 +6281,7 @@ void initScoreFonts()
       QFont::insertSubstitution("Gootville Text", "Leland Text");
       QFont::insertSubstitution("ScoreFont",      "Leland Text");
       QFont::insertSubstitution("MuseJazz Text",  "Leland Text");
-      QFont::insertSubstitution("Petaluma Text",  "Leland Text");
+      QFont::insertSubstitution("Petaluma Text",  "MuseJazz Text");
       ScoreFont::fallbackFont();   // load fallback font
       }
 
