@@ -1218,10 +1218,10 @@ void EditStyle::setValues()
       musicalTextFont->clear();
       // CAUTION: the second element, the itemdata, is a font family name!
       // It's also stored in score file as the musicalTextFont
-      musicalTextFont->addItem("Leland Text", "Leland Text");
       musicalTextFont->addItem("Bravura Text", "Bravura Text");
       musicalTextFont->addItem("Emmentaler Text", "MScore Text");
       musicalTextFont->addItem("Gonville Text", "Gootville Text");
+      musicalTextFont->addItem("Leland Text", "Leland Text");
       musicalTextFont->addItem("MuseJazz Text", "MuseJazz Text");
       musicalTextFont->addItem("Petaluma Text", "Petaluma Text");
       QString tfont(lstyle.value(Sid::MusicalTextFont).toString());
