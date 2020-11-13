@@ -21,6 +21,7 @@
 #include <QQmlEngine>
 #include <QDialog>
 #include <QHBoxLayout>
+#include <QApplication>
 
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
@@ -33,7 +34,7 @@ QmlDialog::QmlDialog(QQuickItem* parent)
     setFlag(QQuickItem::ItemHasContents, true);
     setErrCode(Ret::Code::Ok);
 
-    m_dialog = new QDialog();
+    m_dialog = new QDialog(QApplication::activeWindow());
 
     connect(m_dialog, &QDialog::finished, [this](int code) {
         QDialog::DialogCode dialogCode = static_cast<QDialog::DialogCode>(code);
