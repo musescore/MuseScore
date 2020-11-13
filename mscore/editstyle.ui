@@ -339,6 +339,11 @@
               <widget class="QComboBox" name="musicalTextFont">
                <item>
                 <property name="text">
+                 <string notr="true">Leland Text</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
                  <string notr="true">Bravura Text</string>
                 </property>
                </item>

@@ -18,6 +18,7 @@
 #=============================================================================
 
 install(FILES
+      Leland.mss
       MuseJazz.mss
       chords_std.xml
       chords_jazz.xml
