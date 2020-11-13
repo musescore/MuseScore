@@ -23,6 +23,7 @@
 #include <QAbstractListModel>
 
 #include "iworkspacemanager.h"
+#include "iinteractive.h"
 #include "modularity/ioc.h"
 
 #include "async/asyncable.h"
@@ -33,6 +34,7 @@ class WorkspaceListModel : public QAbstractListModel, public async::Asyncable
     Q_OBJECT
 
     INJECT(workspace, IWorkspaceManager, workspacesManager)
+    INJECT(workspace, framework::IInteractive, interactive)
 
     Q_PROPERTY(QVariant selectedWorkspace READ selectedWorkspace NOTIFY selectedWorkspaceChanged)
 

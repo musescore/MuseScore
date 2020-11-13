@@ -13,8 +13,6 @@ QmlDialog {
     width: 552
     height: 286
 
-    modal: true
-
     title: qsTrc("workspace", "Select workspace")
 
     Rectangle {
