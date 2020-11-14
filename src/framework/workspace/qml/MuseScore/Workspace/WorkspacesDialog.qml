@@ -22,13 +22,6 @@ QmlDialog {
 
         color: ui.theme.popupBackgroundColor
 
-        QtObject {
-            id: privateProperties
-
-            readonly property int sideMargin: 36
-            readonly property int buttonsMargin: 24
-        }
-
         WorkspaceListModel {
             id: workspacesModel
         }
@@ -38,22 +31,28 @@ QmlDialog {
         }
 
         ColumnLayout {
+            readonly property int leftMargin: 36
+            readonly property int rightMargin: 16
+
             anchors.fill: parent
+            anchors.topMargin: leftMargin
+            anchors.leftMargin: leftMargin
+            anchors.rightMargin: rightMargin
+            anchors.bottomMargin: rightMargin
 
             spacing: 0
 
             Item {
                 Layout.fillWidth: true
                 Layout.preferredHeight: childrenRect.height
-                Layout.topMargin: privateProperties.sideMargin
 
                 StyledTextLabel {
                     anchors.left: parent.left
-                    anchors.leftMargin: privateProperties.sideMargin
 
                     text: qsTrc("workspace", "Workspaces")
 
                     font.pixelSize: 24
+                    font.bold: true
                 }
 
                 FlatButton {
@@ -71,7 +70,6 @@ QmlDialog {
                     id: deleteButton
 
                     anchors.right: parent.right
-                    anchors.rightMargin: privateProperties.buttonsMargin
 
                     icon: IconCode.DELETE_TANK
 
@@ -84,35 +82,33 @@ QmlDialog {
             }
 
             StyledTextLabel {
-                Layout.fillWidth: true
-                Layout.leftMargin: privateProperties.sideMargin
                 Layout.topMargin: 20
-                Layout.bottomMargin: 16
+                Layout.fillWidth: true
 
                 text: qsTrc("workspace", "Use workspaces to save different arrangements of the MuseScore interface")
 
                 horizontalAlignment: Qt.AlignLeft
-
-                font.pixelSize: 12
             }
 
-            SeparatorLine {}
+            SeparatorLine {
+                Layout.topMargin: 16
+                Layout.leftMargin: -parent.leftMargin
+                Layout.rightMargin: -parent.rightMargin
+            }
 
             WorkspacesView {
-                id: view
-
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                Layout.bottomMargin: 20
+                Layout.leftMargin: -parent.leftMargin
+                Layout.rightMargin: -parent.rightMargin
+                leftPadding: parent.leftMargin
 
                 model: workspacesModel
-                sideMargin: privateProperties.sideMargin
             }
 
             Row {
+                Layout.topMargin: 20
                 Layout.preferredHeight: childrenRect.height
-                Layout.rightMargin: privateProperties.buttonsMargin
-                Layout.bottomMargin: 16
                 Layout.alignment: Qt.AlignRight | Qt.AlignBottom
 
                 spacing: 12
