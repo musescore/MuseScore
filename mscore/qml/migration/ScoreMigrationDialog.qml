@@ -94,7 +94,6 @@ FocusScope {
             }
 
             CheckBoxControl {
-                font: globalStyle.font
                 checked: root.model ? root.model.areStylingImprovementsAllowed : false
                 text: qsTr("Our professional style, spacing and font")
 
@@ -104,7 +103,6 @@ FocusScope {
             }
 
             CheckBoxControl {
-                font: globalStyle.font
                 checked: root.model ? root.model.areInstrumentsImprovementsAllowed : false
                 text: qsTr("Instrument ordering & bracketing (configurable in the \'instruments\' dialog)")
 
