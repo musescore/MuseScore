@@ -4061,6 +4061,22 @@ ChordRest* Score::cmdNextPrevSystem(ChordRest* cr, bool next)
       }
 
 //---------------------------------------------------------
+//   cmdNextPrevFrame
+//   Return next/previous [Vertical/Horizontal/Text] frame
+//   to be used as a navigation command
+//---------------------------------------------------------
+
+Box* Score::cmdNextPrevFrame(MeasureBase* currentMeasureBase, bool next) const
+      {
+            Box* selectedBox { nullptr };
+            while (!selectedBox && (currentMeasureBase = (next ? currentMeasureBase->next() : currentMeasureBase->prev()))) {
+                  if (currentMeasureBase->isBox())
+                        selectedBox = toBox(currentMeasureBase);
+                  }
+            return selectedBox;
+      }
+
+//---------------------------------------------------------
 //   setSoloMute
 //   called once at opening file, adds soloMute marks
 //---------------------------------------------------------
