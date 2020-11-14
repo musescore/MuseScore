@@ -3895,13 +3895,6 @@ System* Score::collectSystem(LayoutContext& lc)
             }
 
       hideEmptyStaves(system, lc.firstSystem);
-      bool allShown = true;
-      for (const SysStaff* ss : *system->staves()) {
-            if (!ss->show()) {
-                  allShown = false;
-                  break;
-                  }
-            }
       // Relayout system decorations to reuse space properly for
       // hidden staves' instrument names or other hidden elements.
       minWidth -= system->leftMargin();
