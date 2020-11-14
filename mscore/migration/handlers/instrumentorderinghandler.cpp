@@ -1,8 +1,8 @@
+#include "musescore.h"
 #include "instrumentorderinghandler.h"
 
 bool InstrumentOrderingHandler::handle(Ms::Score* /*score*/)
       {
-      // TODO
-
+      Ms::mscore->editInstrumentList();
       return true;
       }
