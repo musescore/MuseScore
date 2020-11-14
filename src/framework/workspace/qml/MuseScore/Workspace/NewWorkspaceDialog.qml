@@ -133,7 +133,7 @@ QmlDialog {
                 spacing: 12
 
                 FlatButton {
-                    text: qsTrc("workspace", "Cancel")
+                    text: qsTrc("global", "Cancel")
 
                     onClicked: {
                         root.reject()
@@ -141,7 +141,7 @@ QmlDialog {
                 }
 
                 FlatButton {
-                    text: qsTrc("workspace", "Create")
+                    text: qsTrc("global", "Create")
 
                     onClicked: {
                         root.ret = { errcode: 0, value: workspaceModel.createWorkspace() }
