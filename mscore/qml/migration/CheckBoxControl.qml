@@ -23,14 +23,15 @@ CheckBox {
     }
 
     contentItem: Text {
+        text: root.text
         font.family: globalStyle.font.family
-        font.bold: true
         font.pixelSize: 14
         color: globalStyle.buttonText
         wrapMode: Text.WordWrap
+        verticalAlignment: Qt.AlignVCenter
         horizontalAlignment: Qt.AlignLeft
+        leftPadding: root.indicator.width + root.spacing
         Accessible.role: Accessible.StaticText
         Accessible.name: text
     }
-
 }
