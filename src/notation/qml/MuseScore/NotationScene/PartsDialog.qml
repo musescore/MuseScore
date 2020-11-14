@@ -104,7 +104,7 @@ QmlDialog {
                 spacing: 12
 
                 FlatButton {
-                    text: qsTrc("notation", "Cancel")
+                    text: qsTrc("global", "Cancel")
 
                     onClicked: {
                         root.reject()
@@ -112,7 +112,7 @@ QmlDialog {
                 }
 
                 FlatButton {
-                    text: qsTrc("notation", "Open")
+                    text: qsTrc("global", "Open")
 
                     enabled: partsModel.hasSelection
 

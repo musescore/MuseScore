@@ -13,20 +13,20 @@ RadioButtonGroup {
     boundsBehavior: Flickable.StopAtBounds
     orientation: Qt.Vertical
 
-    property int sideMargin: 0
+    property int leftPadding: 0
 
     delegate: RoundedRadioButton {
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.leftMargin: root.sideMargin
+        leftPadding: root.leftPadding
 
         height: 46
+        spacing: 12
 
         StyledTextLabel {
             text: model.name
 
             horizontalAlignment: Qt.AlignLeft
-            font.pixelSize: 12
             font.bold: model.isSelected
         }
 
@@ -34,7 +34,6 @@ RadioButtonGroup {
 
         background: FlatRadioButton {
             anchors.fill: parent
-            anchors.leftMargin: -parent.anchors.leftMargin
 
             ButtonGroup.group: root.radioButtonGroup
             normalStateColor: "transparent"

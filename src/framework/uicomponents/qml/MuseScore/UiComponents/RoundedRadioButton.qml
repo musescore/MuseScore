@@ -16,7 +16,7 @@ RadioButton {
 
     contentItem: Item {
         anchors.fill: parent
-        anchors.leftMargin: root.indicator.width + root.spacing
+        anchors.leftMargin: root.indicator.width + root.spacing + root.leftPadding
 
         Loader {
             id: contentLoader
