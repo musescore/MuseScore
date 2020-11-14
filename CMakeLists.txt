@@ -94,6 +94,16 @@ set(CMAKE_AUTOMOC     TRUE)
 set(USE_SSE           TRUE)
 
 set(MUSESCORE_REVISION "" CACHE STRING "Build revision")
+
+# Set revision for local builds
+# Before need run 'make revision' or 'msvc_build.bat revision'
+if (MUSESCORE_REVISION STREQUAL "")
+    if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/local_build_revision.env")
+        file(READ "${CMAKE_CURRENT_LIST_DIR}/local_build_revision.env" MUSESCORE_REVISION)
+    endif()
+endif(MUSESCORE_REVISION STREQUAL "")
+message(STATUS "MUSESCORE_REVISION: ${MUSESCORE_REVISION}")
+
 add_definitions(-DMUSESCORE_REVISION="${MUSESCORE_REVISION}")
 
 # Setup version number and general build settings

@@ -142,6 +142,9 @@ clean:
 	-rm -rf build.debug build.release
 	-rm -rf win32build win32install
 
+revision:
+	@git rev-parse --short=7 HEAD > local_build_revision.env	
+
 version:
 	@echo ${VERSION}
 
