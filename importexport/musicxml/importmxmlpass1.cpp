@@ -1282,7 +1282,7 @@ void MusicXMLParserPass1::credit(CreditWordsList& credits)
       QString justify;
       QString halign;
       QString valign;
-      QString crtype;
+      QStringList crtypes;
       QString crwords;
       while (_e.readNextStartElement()) {
             if (_e.name() == "credit-words") {
@@ -1299,15 +1299,17 @@ void MusicXMLParserPass1::credit(CreditWordsList& credits)
                   crwords += nextPartOfFormattedString(_e);
                   }
             else if (_e.name() == "credit-type") {
-                  // multiple credit-type elements may be present in theory
-                  // in practice, no instances observed, use only the first
-                  if (crtype == "")
-                        crtype = _e.readElementText();
+                  // multiple credit-type elements may be present, supported by
+                  // e.g. Finale v26.3 for Mac.
+                  crtypes += _e.readElementText();
                   }
             else
                   skipLogCurrElem();
             }
       if (crwords != "") {
+            // as the meaning of multiple credit-types is undocumented,
+            // use credit-type only if exactly one was found
+            QString crtype = (crtypes.size() == 1) ? crtypes.at(0) : "";
             CreditWords* cw = new CreditWords(page, crtype, defaultx, defaulty, fontSize, justify, halign, valign, crwords);
             credits.append(cw);
             }
