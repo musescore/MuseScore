@@ -28,6 +28,7 @@ build.qt5
 *.sfd~
 /.project
 mscore/revision.h
+local_build_revision.env
 .DS_Store
 CMakeLists.txt.user.*
 *.qmlc

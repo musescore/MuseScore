@@ -70,6 +70,9 @@ lupdate:
 lrelease:
 	cd build.release;xcodebuild -project ${XCODEPROJ} -target lrelease;
 
+revision:
+	@git rev-parse --short=7 HEAD > local_build_revision.env
+
 version:
 	@echo ${VERSION}
 
