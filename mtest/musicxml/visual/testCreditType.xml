@@ -66,12 +66,21 @@
     <credit-type>subtitle</credit-type>
     <credit-words default-x="1134.19" default-y="1626.67" justify="right" valign="top" font-size="24">Subtitle right</credit-words>
     </credit>
+  <credit page="2">
+    <credit-type>page number</credit-type>
+    <credit-type>title</credit-type>
+    <credit-words default-x="1134.19" default-y="1626.67" justify="right" valign="top" font-size="12">Title with page number (2)</credit-words>
+    </credit>
   <credit page="1">
     <credit-type>rights</credit-type>
     <credit-words default-x="595.44" default-y="113.386" justify="center" valign="bottom" font-size="12">This file has a title frame containing title, subtitle, composer and lyricist credit-words in unusual locations.
 </credit-words>
     <credit-words>As these all have an associated credit-type element, the detected style (shown in the inspector) should still be correct.
 </credit-words>
+    </credit>
+  <credit page="2">
+    <credit-type>rights</credit-type>
+    <credit-words default-x="595.44" default-y="113.386" justify="center" valign="bottom">Copyright</credit-words>
     </credit>
   <part-list>
     <score-part id="P1">
@@ -90,7 +99,7 @@
       </score-part>
     </part-list>
   <part id="P1">
-    <measure number="1" width="239.74">
+    <measure number="1" width="1077.49">
       <print>
         <system-layout>
           <system-margins>
@@ -114,6 +123,22 @@
           <line>2</line>
           </clef>
         </attributes>
+      <note>
+        <rest measure="yes"/>
+        <duration>4</duration>
+        <voice>1</voice>
+        </note>
+      </measure>
+    <measure number="2" width="197.60">
+      <print new-page="yes">
+        <system-layout>
+          <system-margins>
+            <left-margin>0.00</left-margin>
+            <right-margin>879.89</right-margin>
+            </system-margins>
+          <top-system-distance>98.70</top-system-distance>
+          </system-layout>
+        </print>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
