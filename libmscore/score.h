@@ -848,6 +848,7 @@ class Score : public QObject, public ScoreElement {
       Element* nextElement();
       Element* prevElement();
       ChordRest* cmdNextPrevSystem(ChordRest*, bool);
+      Box* cmdNextPrevFrame(MeasureBase*, bool) const ;
 
       void cmd(const QAction*, EditData&);
       int fileDivision(int t) const { return ((qint64)t * MScore::division + _fileDivision/2) / _fileDivision; }
