@@ -6240,11 +6240,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
       if (ScriptRecorder* rec = getScriptRecorder())
             rec->recordCommand(cmd);
 
-      if (cmd == "instruments") {
-            editInstrList();
-            if (mixer)
-                  mixer->setScore(cs);
-            }
+      if (cmd == "instruments")
+            editInstrumentList();
       else if (cmd == "rewind") {
             if (cs) {
                   Fraction tick = loop() ? cs->loopInTick() : Fraction(0,1);
@@ -7029,6 +7026,17 @@ QMenu* MuseScore::createPopupMenu()
                   m->removeAction(a);
             }
       return m;
+      }
+
+//---------------------------------------------------------
+//   editInstrumentList
+//---------------------------------------------------------
+
+void MuseScore::editInstrumentList()
+      {
+      editInstrList();
+      if (mixer)
+            mixer->setScore(cs);
       }
 
 //---------------------------------------------------------

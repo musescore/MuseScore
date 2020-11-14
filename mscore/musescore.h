@@ -765,6 +765,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void addTempo();
       void addMetronome();
 
+      void editInstrumentList();
+
       SynthesizerState synthesizerState() const;
       static Synthesizer* synthesizer(const QString& name);
 
