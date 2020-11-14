@@ -2463,17 +2463,13 @@ void MusicXMLParserPass1::transpose(const QString& partId, const Fraction& tick)
       Q_ASSERT(_e.isStartElement() && _e.name() == "transpose");
 
       Interval interval;
-      bool diatonic = false;
-      bool chromatic = false;
       while (_e.readNextStartElement()) {
             int i = _e.readElementText().toInt();
             if (_e.name() == "diatonic") {
                   interval.diatonic = i;
-                  diatonic = true;
                   }
             else if (_e.name() == "chromatic") {
                   interval.chromatic = i;
-                  chromatic = true;
                   }
             else if (_e.name() == "octave-change") {
                   interval.diatonic += i * 7;

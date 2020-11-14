@@ -622,15 +622,15 @@ int InstrumentsWidget::findPrvItem(PartListItem* pli, int number)
       const int last = number ? number - 1 : partiturList->topLevelItemCount();
       QTreeWidgetItem* item = nullptr;
       for (int idx = 0; --number && (item = partiturList->topLevelItem(idx)); ++idx) {
-            PartListItem* pli = (PartListItem*)item;
-            if (pli->op == ListItemOp::I_DELETE)
+            PartListItem* p = (PartListItem*)item;
+            if (p->op == ListItemOp::I_DELETE)
                   continue;
-            if (order->instrumentIndex(pli->name(), pli->isSoloist()) == orderNumber)
+            if (order->instrumentIndex(pli->name(), p->isSoloist()) == orderNumber)
                   {
                   if (idx > currow)
                         return idx;
                   }
-            if (order->instrumentIndex(pli->name(), pli->isSoloist()) > orderNumber)
+            if (order->instrumentIndex(pli->name(), p->isSoloist()) > orderNumber)
                   return idx;
             }
       return last;
