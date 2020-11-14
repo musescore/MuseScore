@@ -364,7 +364,7 @@ QString ScoreOrder::getFamilyName(const InstrumentTemplate* instrTemplate, bool 
 QString ScoreOrder::getId() const
       {
       if (_customised)
-            return QString("%1-%2").arg(_id).arg(reinterpret_cast<ulong>(this), 0, 16);
+            return QString("%1-%2").arg(_id).arg(reinterpret_cast<quintptr>(this), 0, 16);
       else
             return _id;
       }
