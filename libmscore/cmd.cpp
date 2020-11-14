@@ -2410,12 +2410,16 @@ Element* Score::move(const QString& cmd)
 
             }
       else if (cmd == "next-measure") {
+            if (box && box->nextMeasure() && box->nextMeasure()->first())
+                  el = box->nextMeasure()->first()->nextChordRest(0, false);
             if (cr)
                   el = nextMeasure(cr);
             if (el && noteEntryMode())
                   _is.moveInputPos(el);
             }
       else if (cmd == "prev-measure") {
+            if (box && box->prevMeasure() && box->prevMeasure()->first())
+                  el = box->prevMeasure()->first()->nextChordRest(0, false);
             if (cr)
                   el = prevMeasure(cr);
             if (el && noteEntryMode())
