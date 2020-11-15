@@ -704,25 +704,11 @@
             <label>segno</label>
             </Marker>
           </Cell>
-        <Cell name="Segno variation">
-          <Marker>
-            <style>Repeat Text Left</style>
-            <text><sym>segnoSerpent1</sym></text>
-            <label>varsegno</label>
-            </Marker>
-          </Cell>
         <Cell name="Coda">
           <Marker>
             <style>Repeat Text Left</style>
             <text><sym>coda</sym></text>
             <label>codab</label>
-            </Marker>
-          </Cell>
-        <Cell name="Varied coda">
-          <Marker>
-            <style>Repeat Text Left</style>
-            <text><sym>codaSquare</sym></text>
-            <label>varcoda</label>
             </Marker>
           </Cell>
         <Cell name="Fine">
