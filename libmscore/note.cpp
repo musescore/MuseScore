@@ -838,7 +838,7 @@ QString Note::tpcUserName(const bool explicitAccidental) const
       if (tuning() != 0)
             pitchOffset = QString::asprintf("%+.3f", tuning());
 
-      if (!concertPitch()) {
+      if (!concertPitch() && transposition()) {
             QString soundingPitch = tpcUserName(tpc1(), ppitch(), explicitAccidental);
             return QObject::tr("%1 (sounding as %2%3)").arg(pitchName).arg(soundingPitch).arg(pitchOffset);
             }
