@@ -198,8 +198,6 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(styleFileButton,        &QToolButton::clicked, this, &PreferenceDialog::styleFileButtonClicked);
       connect(instrumentList1Button,  &QToolButton::clicked, this, &PreferenceDialog::selectInstrumentList1);
       connect(instrumentList2Button,  &QToolButton::clicked, this, &PreferenceDialog::selectInstrumentList2);
-      connect(scoreOrderList1Button,  &QToolButton::clicked, this, &PreferenceDialog::selectScoreOrderList1);
-      connect(scoreOrderList2Button,  &QToolButton::clicked, this, &PreferenceDialog::selectScoreOrderList2);
       connect(startWithButton,        &QToolButton::clicked, this, &PreferenceDialog::selectStartWith);
 
       defaultStyleButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
@@ -207,8 +205,6 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       styleFileButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
       instrumentList1Button->setIcon(*icons[int(Icons::fileOpen_ICON)]);
       instrumentList2Button->setIcon(*icons[int(Icons::fileOpen_ICON)]);
-      scoreOrderList1Button->setIcon(*icons[int(Icons::fileOpen_ICON)]);
-      scoreOrderList2Button->setIcon(*icons[int(Icons::fileOpen_ICON)]);
       startWithButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
 
       connect(shortcutList,   &QTreeWidget::itemActivated, this, &PreferenceDialog::defineShortcutClicked);
@@ -294,8 +290,6 @@ void PreferenceDialog::start()
                   new BoolPreferenceItem(PREF_APP_AUTOSAVE_USEAUTOSAVE, autoSave),
                   new StringPreferenceItem(PREF_APP_PATHS_INSTRUMENTLIST1, instrumentList1),
                   new StringPreferenceItem(PREF_APP_PATHS_INSTRUMENTLIST2, instrumentList2),
-                  new StringPreferenceItem(PREF_APP_PATHS_SCOREORDERLIST1, scoreOrderList1),
-                  new StringPreferenceItem(PREF_APP_PATHS_SCOREORDERLIST2, scoreOrderList2),
                   new StringPreferenceItem(PREF_APP_PATHS_MYIMAGES, myImages),
                   new StringPreferenceItem(PREF_APP_PATHS_MYPLUGINS, myPlugins),
                   new StringPreferenceItem(PREF_APP_PATHS_MYSCORES, myScores),
@@ -1013,42 +1007,6 @@ void PreferenceDialog::selectInstrumentList2()
          );
       if (!s.isNull())
             instrumentList2->setText(s);
-      }
-
-//---------------------------------------------------------
-//   selectScoreOrderList1
-//---------------------------------------------------------
-
-void PreferenceDialog::selectScoreOrderList1()
-      {
-      QString s = QFileDialog::getOpenFileName(
-         this,
-         tr("Choose Score Order List"),
-         scoreOrderList1->text(),
-         tr("Score Order List") + " (*.xml)",
-         0,
-         preferences.getBool(PREF_UI_APP_USENATIVEDIALOGS) ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog
-         );
-      if (!s.isNull())
-            scoreOrderList1->setText(s);
-      }
-
-//---------------------------------------------------------
-//   selectScoreOrderList2
-//---------------------------------------------------------
-
-void PreferenceDialog::selectScoreOrderList2()
-      {
-      QString s = QFileDialog::getOpenFileName(
-         this,
-         tr("Choose Score Order List"),
-         scoreOrderList2->text(),
-         tr("Score Order List") + " (*.xml)",
-         0,
-         preferences.getBool(PREF_UI_APP_USENATIVEDIALOGS) ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog
-         );
-      if (!s.isNull())
-            scoreOrderList2->setText(s);
       }
 
 //---------------------------------------------------------

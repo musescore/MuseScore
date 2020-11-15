@@ -81,7 +81,6 @@ class InstrumentChange;
 class Box;
 class Spanner;
 class BarLine;
-class ScoreOrder;
 enum class ClefType : signed char;
 enum class PlayEventType : char;
 class Excerpt;
@@ -1404,20 +1403,6 @@ class MoveTremolo : public UndoCommand {
    public:
       MoveTremolo(Score* s, Fraction c1, Fraction c2, Tremolo* tr, int t) : score(s), chord1Tick(c1), chord2Tick(c2), trem(tr), track(t) {}
       UNDO_NAME("MoveTremolo")
-      };
-
-//---------------------------------------------------------
-//   ChangeScoreOrder
-//---------------------------------------------------------
-
-class ChangeScoreOrder : public UndoCommand {
-      Score* score;
-      ScoreOrder* order;
-      void flip(EditData*) override;
-
-   public:
-      ChangeScoreOrder(Score* sc, ScoreOrder* so) : score(sc), order(so) {};
-      UNDO_NAME("ChangeScoreOrder")
       };
 
 }     // namespace Ms

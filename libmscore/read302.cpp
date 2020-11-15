@@ -23,7 +23,6 @@
 #include "barline.h"
 #include "excerpt.h"
 #include "spanner.h"
-#include "scoreOrder.h"
 
 #ifdef OMR
 #include "omr/omr.h"
@@ -51,7 +50,6 @@ bool Score::read(XmlReader& e)
             style().set(Sid::harmonyPlay, false);
             }
 
-      ScoreOrder* order { nullptr };
       while (e.readNextStartElement()) {
             e.setTrack(-1);
             const QStringRef& tag(e.name());
@@ -137,10 +135,6 @@ bool Score::read(XmlReader& e)
             else if (tag == "metaTag") {
                   QString name = e.attribute("name");
                   setMetaTag(name, e.readElementText());
-                  }
-            else if (tag == "Order") {
-                  order = new ScoreOrder(e.attribute("id"));
-                  order->read(e);
                   }
             else if (tag == "Part") {
                   Part* part = new Part(this);
@@ -278,20 +272,6 @@ bool Score::read(XmlReader& e)
                   }
             }
 #endif
-      if (order) {
-            ScoreOrder* defined = scoreOrders.findByName(order->getName());
-            if (defined)
-                  {
-                  if (defined->isScoreOrder(this)) {
-                        setScoreOrder(defined);
-                        delete order;
-                        }
-                  else {
-                        scoreOrders.addScoreOrder(order);
-                        setScoreOrder(order);
-                        }
-                  }
-            }
 
       if (!masterScore()->omr())
             masterScore()->setShowOmr(false);

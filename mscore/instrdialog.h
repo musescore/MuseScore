@@ -38,10 +38,7 @@ class InstrumentsDialog : public QDialog, public Ui::InstrumentsDialog {
       void init();
       void writeSettings();
       void genPartList(Score*);
-      void setBracketsAndBarlines(Score*);
       QTreeWidget* partiturList();
-      void setScoreOrder(ScoreOrder* order);
-      ScoreOrder* getScoreOrder();
       void buildInstrumentsList();
       };
 

@@ -12,7 +12,6 @@
       <file alias="fonts/fonts_figuredbass.xml">../fonts/fonts_figuredbass.xml</file>
 
       <file alias="instruments.xml">../share/instruments/instruments.xml</file>
-      <file alias="orders.xml">../share/instruments/orders.xml</file>
 
       <file>../mscore/data/mscore.png</file>
       <file>../mscore/data/musescore_logo_full.png</file>

@@ -35,8 +35,6 @@
 #include "libmscore/stafftype.h"
 #include "libmscore/undo.h"
 #include "libmscore/bracketItem.h"
-#include "libmscore/score.h"
-#include "libmscore/scoreOrder.h"
 
 namespace Ms {
 
@@ -174,33 +172,6 @@ void InstrumentsDialog::genPartList(Score* s)
       }
 
 //---------------------------------------------------------
-//   setScoreOrder
-//---------------------------------------------------------
-
-void InstrumentsDialog::setScoreOrder(ScoreOrder* order)
-      {
-      instrumentsWidget->setScoreOrder(order);
-      }
-
-//---------------------------------------------------------
-//   getScoreOrder
-//---------------------------------------------------------
-
-ScoreOrder* InstrumentsDialog::getScoreOrder()
-      {
-      return instrumentsWidget->getScoreOrder();
-      }
-
-//---------------------------------------------------------
-//   setBracketsAndBarlines
-//---------------------------------------------------------
-
-void InstrumentsDialog::setBracketsAndBarlines(Score* s)
-      {
-      instrumentsWidget->setBracketsAndBarlines(s);
-      }
-
-//---------------------------------------------------------
 //   partiturList
 //---------------------------------------------------------
 
@@ -245,7 +216,6 @@ void MuseScore::editInstrList()
       instrList->init();
       MasterScore* masterScore = cs->masterScore();
       instrList->genPartList(masterScore);
-      instrList->setScoreOrder(masterScore->scoreOrder());
       masterScore->startCmd();
       masterScore->deselectAll();
       int rv = instrList->exec();
@@ -261,7 +231,6 @@ void MuseScore::editInstrList()
             updateInputState(csv->score());
             }
       masterScore->inputState().setTrack(-1);
-      masterScore->undo(new ChangeScoreOrder(masterScore, instrList->getScoreOrder()));
 
       // keep the keylist of the first pitched staff to apply it to new ones
       KeyList tmpKeymap;
@@ -320,10 +289,9 @@ void MuseScore::editInstrList()
             if (pli->op == ListItemOp::I_DELETE)
                   masterScore->cmdRemovePart(pli->part);
             else if (pli->op == ListItemOp::ADD) {
-                  const InstrumentTemplate* t = pli->it;
+                  const InstrumentTemplate* t = ((PartListItem*)item)->it;
                   part = new Part(masterScore);
                   part->initFromInstrTemplate(t);
-                  part->setSoloist(pli->isSoloist());
                   masterScore->undo(new InsertPart(part, staffIdx));
 
                   pli->part = part;
@@ -354,7 +322,6 @@ void MuseScore::editInstrList()
                   }
             else {
                   part = pli->part;
-                  part->setSoloist(pli->isSoloist());
                   if (part->show() != pli->visible())
                         part->undoChangeProperty(Pid::VISIBLE, pli->visible());
                   for (int cidx = 0; pli->child(cidx); ++cidx) {
@@ -566,11 +533,6 @@ void MuseScore::editInstrList()
                         }
                   }
             }
-
-      // Recreate brackets and barlines.
-      instrList->setBracketsAndBarlines(masterScore);
-      for (Excerpt* excerpt : excerpts)
-            instrList->setBracketsAndBarlines(excerpt->partScore());
 
       masterScore->setLayoutAll();
       masterScore->endCmd();

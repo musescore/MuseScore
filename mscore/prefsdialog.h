@@ -74,8 +74,6 @@ class PreferenceDialog : public AbstractDialog, private Ui::PrefsDialogBase {
       void selectPartStyle();
       void selectInstrumentList1();
       void selectInstrumentList2();
-      void selectScoreOrderList1();
-      void selectScoreOrderList2();
       void selectStartWith();
       void resetShortcutClicked();
       void saveShortcutListClicked();

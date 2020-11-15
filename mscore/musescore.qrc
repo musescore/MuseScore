@@ -13,7 +13,6 @@
         <file alias="fonts/fonts_tablature.xml">../fonts/fonts_tablature.xml</file>
         <file alias="fonts/fonts_figuredbass.xml">../fonts/fonts_figuredbass.xml</file>
         <file alias="data/instruments.xml">../share/instruments/instruments.xml</file>
-        <file alias="data/orders.xml">../share/instruments/orders.xml</file>
         <file alias="themes/style_light_fusion.css">../share/themes/style_light_fusion.css</file>
         <file alias="themes/style_dark_fusion.css">../share/themes/style_dark_fusion.css</file>
         <file alias="themes/palette_light_fusion.json">../share/themes/palette_light_fusion.json</file>
