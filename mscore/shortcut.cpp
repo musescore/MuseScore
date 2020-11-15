@@ -1049,6 +1049,13 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
+         "prev-section",
+         QT_TRANSLATE_NOOP("action","Previous Section"),
+         QT_TRANSLATE_NOOP("action","Go to previous section")
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
          "prev-track",
          QT_TRANSLATE_NOOP("action","Previous Staff or Voice"),
          QT_TRANSLATE_NOOP("action","Previous staff or voice")
@@ -1080,6 +1087,13 @@ Shortcut Shortcut::_sc[] = {
          "next-frame",
          QT_TRANSLATE_NOOP("action","Next Frame"),
          QT_TRANSLATE_NOOP("action","Go to next frame")
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         "next-section",
+         QT_TRANSLATE_NOOP("action","Next Section"),
+         QT_TRANSLATE_NOOP("action","Go to next section")
          },
       {
          MsWidget::SCORE_TAB,

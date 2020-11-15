@@ -2443,6 +2443,16 @@ Element* Score::move(const QString& cmd)
             auto measureBase = cr ? cr->measure()->findMeasureBase() : box->findMeasureBase();
             el = measureBase ? cmdNextPrevFrame(measureBase, false) : nullptr;
             }
+      else if (cmd == "next-section") {
+            if (!(el = box))
+                  el = cr;
+            el = cmdNextPrevSection(el, true);
+            }
+      else if (cmd == "prev-section") {
+            if (!(el = box))
+                  el = cr;
+            el = cmdNextPrevSection(el, false);
+            }
       else if (cmd == "next-track" && cr) {
             el = nextTrack(cr);
             if (noteEntryMode())
