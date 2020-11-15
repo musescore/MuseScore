@@ -49,6 +49,7 @@ class ScoreOrderListModel : public QAbstractListModel {
       QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
       int rowCount(const QModelIndex& parent = QModelIndex()) const;
       QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+      void rebuildData();
 
       void setCustomisedOrder(ScoreOrder* order);
       };
@@ -155,6 +156,8 @@ class InstrumentTemplateListItem : public QTreeWidgetItem {
 
 class InstrumentsWidget : public QWidget, public Ui::InstrumentsWidget {
       Q_OBJECT
+
+      ScoreOrderListModel* _model;
 
       int findPrvItem(PartListItem* pli, int number=0);
       QTreeWidgetItem* movePartItem(int oldPos, int newPos);

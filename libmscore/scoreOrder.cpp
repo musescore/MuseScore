@@ -737,13 +737,25 @@ ScoreOrderList::ScoreOrderList()
       _orders.clear();
       ScoreOrder* custom = new ScoreOrder(QString("<custom>"), qApp->translate("ScoreOrder", "Custom"));
       custom->groups.append(new ScoreGroup(QString("<unsorted>"), QString(""), QString("")));
-      _orders.append(custom);
+      addScoreOrder(custom);
       }
 
 ScoreOrderList::~ScoreOrderList()
       {
       while (!_orders.isEmpty())
             delete _orders.takeFirst();
+      }
+
+//---------------------------------------------------------
+//   append
+//---------------------------------------------------------
+
+void ScoreOrderList::append(ScoreOrder* order)
+      {
+      if (_orders.empty() || !_orders.last()->isCustom())
+            _orders.append(order);
+      else
+            _orders.insert(_orders.size()-1, order);
       }
 
 //---------------------------------------------------------
@@ -772,7 +784,7 @@ ScoreOrder* ScoreOrderList::getById(const QString& id)
       ScoreOrder* order = findById(id);
       if (!order) {
             order = new ScoreOrder(id);
-            _orders.append(order);
+            addScoreOrder(order);
             }
       return order;
       }
@@ -866,7 +878,7 @@ void ScoreOrderList::addScoreOrder(ScoreOrder* order)
             return;
 
       if (!order->isCustomised()) {
-            _orders.append(order);
+            append(order);
             return;
             }
 
@@ -878,7 +890,7 @@ void ScoreOrderList::addScoreOrder(ScoreOrder* order)
                         }
                   }
             }
-      _orders.append(order);
+      append(order);
       }
 
 //---------------------------------------------------------
