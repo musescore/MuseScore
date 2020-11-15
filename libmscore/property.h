@@ -185,10 +185,13 @@ enum class Pid {
       REPEAT_START,
       REPEAT_JUMP,
       MEASURE_NUMBER_MODE,
+
       GLISS_TYPE,
       GLISS_TEXT,
-
       GLISS_SHOW_TEXT,
+      GLISS_STYLE,
+      GLISS_EASEIN,
+      GLISS_EASEOUT,
       DIAGONAL,
       GROUPS,
       LINE_STYLE,
@@ -233,7 +236,6 @@ enum class Pid {
       ROLE,
       TRACK,
 
-      GLISSANDO_STYLE,
       FRET_STRINGS,
       FRET_FRETS,
       FRET_NUT,
@@ -358,7 +360,7 @@ enum class Pid {
       FIRST_SYSTEM_INDENTATION,
 
       PATH, // for ChordLine to make its shape changes undoable
-      
+
       PREFER_SHARP_FLAT,
 
       END
@@ -394,7 +396,7 @@ enum class P_TYPE : char {
       GROUPS,
       SYMID,
       INT_LIST,
-      GLISSANDO_STYLE,
+      GLISS_STYLE,
       BARLINE_TYPE,
       HEAD_TYPE,        // enum class Notehead::Type
       HEAD_GROUP,       // enum class Notehead::Group
