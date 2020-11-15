@@ -14,11 +14,19 @@
 #define __IMPORTXMLFIRSTPASS_H__
 
 #include "libmscore/fraction.h"
+#include "libmscore/interval.h"
 #include "musicxmlsupport.h"
 
 namespace Ms {
 
 typedef QMap<QString, VoiceDesc> VoiceList;
+//using Intervals = std::map<Fraction, Interval>;
+
+class MusicXmlIntervalList : public std::map<Fraction, Interval> {
+public:
+      MusicXmlIntervalList() {}
+      Interval interval(const Fraction f) const;
+      };
 
 class MusicXmlInstrList : public std::map<Fraction, QString> {
 public:
@@ -56,6 +64,8 @@ public:
       Fraction measureDuration(int i) const;
       int nMeasures() const { return measureDurations.size(); }
       MusicXmlInstrList _instrList; // TODO: make private
+      MusicXmlIntervalList _intervals;                     ///< Transpositions
+      Interval interval(const Fraction f) const;
       int octaveShift(const int staff, const Fraction f) const;
       void addOctaveShift(const int staff, const int shift, const Fraction f);
       void calcOctaveShifts();

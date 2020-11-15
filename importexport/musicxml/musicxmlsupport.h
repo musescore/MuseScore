@@ -120,7 +120,7 @@ private:
       };
 
 //---------------------------------------------------------
-//   MusicXMLDrumInstrument
+//   MusicXMLInstrument
 //---------------------------------------------------------
 
 /**
@@ -128,15 +128,15 @@ private:
  Used for both a drum part and a (non-drum) multi-instrument part
  */
 
-struct MusicXMLDrumInstrument {
-      int pitch;                       // pitch read from MusicXML
-      QString name;                    // name read from MusicXML
-      QString sound;                   // sound read from MusicXML
-      QString virtLib;                 // virtual library read from MusicXML
-      QString virtName;                // virtualname read from MusicXML
-      int midiChannel;                 // channel read from MusicXML
+struct MusicXMLInstrument {
+      int unpitched;                   // midi-unpitched read from MusicXML
+      QString name;                    // instrument-name read from MusicXML
+      QString sound;                   // instrument-sound read from MusicXML
+      QString virtLib;                 // virtual-library read from MusicXML
+      QString virtName;                // virtual-name read from MusicXML
+      int midiChannel;                 // midi-channel read from MusicXML
       int midiPort;                    // port read from MusicXML
-      int midiProgram;                 // program read from MusicXML
+      int midiProgram;                 // midi-program read from MusicXML
       int midiVolume;                  // volume read from MusicXML
       int midiPan;                     // pan value read from MusicXML
       NoteHead::Group notehead;        ///< notehead symbol set
@@ -145,23 +145,25 @@ struct MusicXMLDrumInstrument {
 
       QString toString() const;
 
-      MusicXMLDrumInstrument()
-            : pitch(-1), name(), midiChannel(-1), midiPort(-1), midiProgram(-1), midiVolume(100), midiPan(63),
+      MusicXMLInstrument()      // required by QMap
+            : unpitched(-1), name(), midiChannel(-1), midiPort(-1), midiProgram(-1), midiVolume(100), midiPan(63),
             notehead(NoteHead::Group::HEAD_INVALID), line(0), stemDirection(Direction::AUTO) {}
-      MusicXMLDrumInstrument(QString s)
-            : pitch(-1), name(s), midiChannel(-1), midiPort(-1), midiProgram(-1), midiVolume(100), midiPan(63),
+      MusicXMLInstrument(QString s)
+            : unpitched(-1), name(s), midiChannel(-1), midiPort(-1), midiProgram(-1), midiVolume(100), midiPan(63),
             notehead(NoteHead::Group::HEAD_INVALID), line(0), stemDirection(Direction::AUTO) {}
-      MusicXMLDrumInstrument(int p, QString s, NoteHead::Group nh, int l, Direction d)
-            : pitch(p), name(s), midiChannel(-1), midiPort(-1), midiProgram(-1), midiVolume(100), midiPan(63),
+      /*
+      MusicXMLInstrument(int p, QString s, NoteHead::Group nh, int l, Direction d)
+            : unpitched(p), name(s), midiChannel(-1), midiPort(-1), midiProgram(-1), midiVolume(100), midiPan(63),
             notehead(nh), line(l), stemDirection(d) {}
+       */
       };
 
 /**
  A MusicXML drumset or set of instruments in a multi-instrument part.
  */
 
-typedef QMap<QString, MusicXMLDrumInstrument> MusicXMLDrumset;
-typedef QMapIterator<QString, MusicXMLDrumInstrument> MusicXMLDrumsetIterator;
+typedef QMap<QString, MusicXMLInstrument> MusicXMLInstruments;
+typedef QMapIterator<QString, MusicXMLInstrument> MusicXMLInstrumentsIterator;
 
 
 //---------------------------------------------------------

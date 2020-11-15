@@ -134,6 +134,7 @@ public:
       void attributes(const QString& partId, const Fraction cTime);
       void clef(const QString& partId);
       void time(const Fraction cTime);
+      void transpose(const QString& partId, const Fraction& tick);
       void divisions();
       void staves(const QString& partId);
       void direction(const QString& partId, const Fraction cTime);
@@ -157,16 +158,17 @@ public:
       bool hasPart(const QString& id) const;
       Part* getPart(const QString& id) const { return _partMap.value(id); }
       MusicXmlPart getMusicXmlPart(const QString& id) const { return _parts.value(id); }
-      MusicXMLDrumset getDrumset(const QString& id) const { return _drumsets.value(id); }
+      MusicXMLInstruments getInstruments(const QString& id) const { return _instruments.value(id); }
       void setDrumsetDefault(const QString& id, const QString& instrId, const NoteHead::Group hg, const int line, const Direction sd);
       MusicXmlInstrList getInstrList(const QString id) const;
+      MusicXmlIntervalList getIntervals(const QString id) const;
       Fraction getMeasureStart(const int i) const;
       int octaveShift(const QString& id, const int staff, const Fraction f) const;
       const CreditWordsList& credits() const { return _credits; }
 
 private:
       // functions
-      void setFirstInstr(const QString& id, const Fraction stime);
+      // none
 
       // generic pass 1 data
       QXmlStreamReader _e;
@@ -178,15 +180,13 @@ private:
       QVector<Fraction> _measureStart;          ///< Start time of each measure
       CreditWordsList _credits;                 ///< All credits collected
       PartMap _partMap;                         ///< TODO merge into MusicXmlPart ??
-      QMap<QString, MusicXMLDrumset> _drumsets; ///< Drumset for each part, mapped on part id
+      QMap<QString, MusicXMLInstruments> _instruments; ///< instruments for each part, mapped on part id
       Score* _score;                            ///< MuseScore score
       MxmlLogger* _logger;                      ///< Error logger
 
       // part specific data (TODO: move to part-specific class)
       Fraction _timeSigDura;                    ///< Measure duration according to last timesig read
       QMap<int, MxmlOctaveShiftDesc> _octaveShifts; ///< Pending octave-shifts
-      Fraction _firstInstrSTime;                ///< First instrument start time
-      QString _firstInstrId;                    ///< First instrument id
       QSize _pageSize;                          ///< Page width read from defaults
       };
 
