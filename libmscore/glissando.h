@@ -56,6 +56,8 @@ class Glissando final : public SLine {
       M_PROPERTY(bool, showText, setShowText)
       M_PROPERTY(bool, playGlissando, setPlayGlissando)
       M_PROPERTY(FontStyle, fontStyle, setFontStyle)
+      M_PROPERTY(int, easeIn, setEaseIn)
+      M_PROPERTY(int, easeOut, setEaseOut)
 
       static const std::array<const char *, 2> glissandoTypeNames;
 
