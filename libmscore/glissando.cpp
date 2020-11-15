@@ -293,7 +293,7 @@ void Glissando::layout()
          // but ignore graces after, as they are not the first note of the system,
          // even if their segment is the first segment of the system
          && !(cr2->noteType() == NoteType::GRACE8_AFTER
-            || cr2->noteType() == NoteType::GRACE16_AFTER || cr2->noteType() == NoteType::GRACE32_AFTER)
+         || cr2->noteType() == NoteType::GRACE16_AFTER || cr2->noteType() == NoteType::GRACE32_AFTER)
          // also ignore if cr1 is a child of cr2, which means cr1 is a grace-before of cr2
          && !(cr1->parent() == cr2)) {
             segm2->rxpos() -= GLISS_STARTOFSYSTEM_WIDTH * _spatium;
