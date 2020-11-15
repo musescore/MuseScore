@@ -4068,12 +4068,124 @@ ChordRest* Score::cmdNextPrevSystem(ChordRest* cr, bool next)
 
 Box* Score::cmdNextPrevFrame(MeasureBase* currentMeasureBase, bool next) const
       {
-            Box* selectedBox { nullptr };
-            while (!selectedBox && (currentMeasureBase = (next ? currentMeasureBase->next() : currentMeasureBase->prev()))) {
-                  if (currentMeasureBase->isBox())
-                        selectedBox = toBox(currentMeasureBase);
+      Box* selectedBox { nullptr };
+      while (!selectedBox && (currentMeasureBase = (next ? currentMeasureBase->next() : currentMeasureBase->prev()))) {
+            if (currentMeasureBase->isBox())
+                  selectedBox = toBox(currentMeasureBase);
+            }
+      return selectedBox;
+      }
+
+//---------------------------------------------------------
+//   cmdNextPrevSection
+//    Return [Box* or ChordRest*] of next/previous section
+//---------------------------------------------------------
+
+Element* Score::cmdNextPrevSection(Element* el, bool dir) const
+      {
+      auto currentMeasureBase = el->findMeasureBase();
+      auto destination = currentMeasureBase;
+      if (currentMeasureBase) {
+            // -----------------------
+            // Next Section of Score
+            // -----------------------
+            if (dir) {
+                  if ((destination = getNextPrevSectionBreak(currentMeasureBase, true))) {
+                        el = getScoreElementOfMeasureBase(destination->next());
+                        }
                   }
-            return selectedBox;
+            // -------------------------
+            // Previous Section of Score
+            // -------------------------
+            else {
+                  auto currentSegment = el->isChordRest() ? toChordRest(el)->segment() : nullptr;
+                  if ((destination = getNextPrevSectionBreak(currentMeasureBase, false))) {
+                        if (currentSegment) {
+                              if ((el = getScoreElementOfMeasureBase((score()->first() == destination) ? destination : destination->next()))) {
+                                    if (el->isChordRest() && (toChordRest(el)->segment() == currentSegment)) {
+                                          if ((destination = getNextPrevSectionBreak(destination, false))) {
+                                                el = !(destination->sectionBreak()) ? destination : getScoreElementOfMeasureBase(destination->next());
+                                                }
+                                          }
+                                    }
+                              }
+                        else if ((score()->first() != currentMeasureBase) && (el = getScoreElementOfMeasureBase(destination->next()))) {
+                              if (el->findMeasureBase() == currentMeasureBase) {
+                                    if ((destination = getNextPrevSectionBreak(destination, false))) {
+                                          el = !(destination->sectionBreak()) ? el : getScoreElementOfMeasureBase(destination->next());
+                                          }
+                                    }
+                              }
+                        }
+                  }
+            }
+      return el;
+      }
+
+//---------------------------------------------------------
+//   getNextPrevSectionBreak
+//    Condition: MeasureBase* must be valid before call
+//    If no previous section break exists selects first
+//    MeasureBase within score
+//---------------------------------------------------------
+
+MeasureBase* Score::getNextPrevSectionBreak(MeasureBase* mb, bool dir) const
+      {
+      auto destination = mb;
+      if (destination) {
+            if (dir) {
+                  // Find next section break
+                  auto endOfSection { false };
+                  while (!endOfSection) {
+                        if ((destination = destination->next()))
+                              endOfSection = destination->sectionBreak();
+                        else break;
+                        }
+                  }
+            else {
+                  // Find previous section break
+                  auto inCurrentSection { true };
+                  while (inCurrentSection && destination) {
+                        if (destination->index()) {
+                              // Safety: SegFaults if invoking prev() when index=0
+                              //         even when MeasureBase* is valid!
+                              destination = destination->prev();
+                              inCurrentSection = !(destination->sectionBreak());
+                              }
+                        else destination = nullptr;
+                        }
+                  if (inCurrentSection || !destination)
+                        destination = score()->first();
+                  }
+            }
+      return destination;
+      }
+
+
+//---------------------------------------------------------
+//   getScoreElementOfMeasureBase
+//    Helper function
+//    Get an Element* as Box or ChordRest depending on
+//    MeasureBase
+//---------------------------------------------------------
+
+Element* Score::getScoreElementOfMeasureBase(MeasureBase* mb) const
+      {
+      Element* el { nullptr };
+      ChordRest* cr { nullptr };
+      const Measure* currentMeasure { nullptr };
+      if (mb) {
+            if (mb->isBox())
+                  el = toBox(mb);
+            else if ((currentMeasure = mb->findMeasure())) {
+                  // Accommodate for MMRest
+                  if (score()->styleB(Sid::createMultiMeasureRests) && currentMeasure->hasMMRest())
+                        currentMeasure = currentMeasure->mmRest1();
+                  if ((cr = currentMeasure->first()->nextChordRest(0, false)))
+                        el = cr;
+                  }
+            }
+      return el;
       }
 
 //---------------------------------------------------------

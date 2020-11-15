@@ -2312,6 +2312,8 @@ void ScoreView::cmd(const char* s)
               "prev-system",
               "next-frame",
               "prev-frame",
+              "next-section",
+              "prev-section",
               "empty-trailing-measure",
               "top-staff"}, [](ScoreView* cv, const QByteArray& cmd) {
 
