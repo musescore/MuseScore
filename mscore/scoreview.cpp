@@ -329,7 +329,7 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
       a = getAction("edit-element");
       popup->addAction(a);
       a->setEnabled(obj->isEditable());
-      a->setVisible(obj->isEditable());
+      a->setVisible(a->isEnabled());
 
       createElementPropertyMenu(obj, popup);
 
@@ -422,7 +422,7 @@ void ScoreView::measurePopup(QContextMenuEvent* ev, Measure* obj)
       a = popup->addAction(tr("Edit Drumset…"));
       a->setData("edit-drumset");
       a->setEnabled(staff->part()->instrument(obj->tick())->drumset() != 0);
-      a->setVisible(staff->part()->instrument(obj->tick())->drumset() != 0);
+      a->setVisible(a->isEnabled());
 
       a = popup->addAction(tr("Piano Roll Editor…"));
       a->setData("pianoroll");
@@ -456,7 +456,7 @@ void ScoreView::measurePopup(QContextMenuEvent* ev, Measure* obj)
       a = popup->addAction(tr("Measure Properties…"));
       a->setData("props");
       a->setEnabled(!obj->isMMRest());
-      a->setVisible(!obj->isMMRest());
+      a->setVisible(a->isEnabled());
 
       popup->addSeparator();
 
