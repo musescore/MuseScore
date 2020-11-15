@@ -646,7 +646,7 @@ PalettePanel* PaletteCreator::newRepeatsPalettePanel()
     sp->append(rm, mu::qtrc("symUserNames", Sym::symUserNames[int(SymId::repeat1Bar)]));
 
     for (int i = 0; i < markerTypeTableSize(); i++) {
-        if (markerTypeTable[i].type == Marker::Type::CODETTA) {   //not in smufl
+        if (markerTypeTable[i].type == Marker::Type::CODETTA) {   // not in SMuFL
             continue;
         }
 
