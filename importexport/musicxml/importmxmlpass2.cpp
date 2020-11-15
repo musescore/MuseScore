@@ -914,7 +914,7 @@ static void handleTupletStart(const ChordRest* const cr, Tuplet*& tuplet,
       tuplet = new Tuplet(cr->score());
       tuplet->setTrack(cr->track());
       tuplet->setRatio(Fraction(actualNotes, normalNotes));
-      // tuplet->setTick(cr->tick());
+      tuplet->setTick(cr->tick());
       tuplet->setBracketType(tupletDesc.bracket);
       tuplet->setNumberType(tupletDesc.shownumber);
       // TODO type, placement, bracket
