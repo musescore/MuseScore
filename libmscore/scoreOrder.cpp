@@ -208,8 +208,10 @@ void ScoreOrder::init()
       _unsorted = nullptr;
       _groupMultiplier = 1;
       _customised = false;
-      for (auto ig : instrumentGroups)
-            _groupMultiplier += ig->instrumentTemplates.size();
+      if (!isCustom()) {
+            for (auto ig : instrumentGroups)
+                  _groupMultiplier += ig->instrumentTemplates.size();
+            }
 
       while (!groups.isEmpty())
             delete groups.takeFirst();

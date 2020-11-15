@@ -15,7 +15,6 @@
 
 #include "mscore.h"
 #include "instrument.h"
-#include "instrtemplate.h"
 #include "clef.h"
 #include "stringdata.h"
 
