@@ -35,6 +35,7 @@ const MarkerTypeItem markerTypeTable[] = {
     { Marker::Type::CODETTA, QT_TRANSLATE_NOOP("markerType", "Codetta") },
     { Marker::Type::FINE, QT_TRANSLATE_NOOP("markerType", "Fine") },
     { Marker::Type::TOCODA, QT_TRANSLATE_NOOP("markerType", "To Coda") },
+    { Marker::Type::TOCODASYM, QT_TRANSLATE_NOOP("markerType", "To Coda (Symbol)") },
     { Marker::Type::USER, QT_TRANSLATE_NOOP("markerType", "Custom") }
 };
 
@@ -102,6 +103,12 @@ void Marker::setMarkerType(Type t)
 
     case Type::TOCODA:
         txt = "To Coda";
+        initTid(Tid::REPEAT_RIGHT, true);
+        setLabel("coda");
+        break;
+
+    case Type::TOCODASYM:
+        txt = "To <font size=\"20\"/><sym>coda</sym>";
         initTid(Tid::REPEAT_RIGHT, true);
         setLabel("coda");
         break;
