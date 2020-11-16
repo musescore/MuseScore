@@ -435,9 +435,13 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                 tick = m->tick();
             }
         }
+        score()->startCmd();
         EditStaff editStaff(e->staff(), tick, 0);
         connect(&editStaff, SIGNAL(instrumentChanged()), mscore, SLOT(instrumentChanged()));
         editStaff.exec();
+        if (score()->undoStack()->active()) {
+            score()->endCmd();
+        }
     } else if (cmd.startsWith("layer-")) {
         int n = cmd.mid(6).toInt();
         uint mask = 1 << n;
@@ -467,10 +471,10 @@ void ScoreView::editTimeSigProperties(TimeSig* ts)
     if (tsp.exec()) {
         score()->startCmd();
 
+        ts->undoChangeProperty(Pid::TIMESIG_TYPE, int(r->timeSigType()));
         ts->undoChangeProperty(Pid::SHOW_COURTESY, r->showCourtesySig());
         ts->undoChangeProperty(Pid::NUMERATOR_STRING, r->numeratorString());
         ts->undoChangeProperty(Pid::DENOMINATOR_STRING, r->denominatorString());
-        ts->undoChangeProperty(Pid::TIMESIG_TYPE, int(r->timeSigType()));
         ts->undoChangeProperty(Pid::GROUPS, QVariant::fromValue<Groups>(r->groups()));
         if (r->sig() != ts->sig()) {
             score()->cmdAddTimeSig(ts->measure(), ts->staffIdx(), r, false);

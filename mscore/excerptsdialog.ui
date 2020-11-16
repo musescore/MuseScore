@@ -68,6 +68,9 @@
          </item>
          <item>
           <widget class="QToolButton" name="moveUpButton">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -91,6 +94,9 @@
          </item>
          <item>
           <widget class="QToolButton" name="moveDownButton">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -183,6 +189,9 @@
          </item>
          <item>
           <widget class="QPushButton" name="deleteButton">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="text">
             <string>Delete</string>
            </property>
@@ -241,6 +250,9 @@
           <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
             <widget class="QListWidget" name="instrumentList">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -272,6 +284,9 @@
              </item>
              <item>
               <widget class="QPushButton" name="addButton">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="accessibleDescription">
                 <string>Add instrument</string>
                </property>
@@ -282,6 +297,9 @@
              </item>
              <item>
               <widget class="QPushButton" name="removeButton">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="accessibleDescription">
                 <string>Remove instrument</string>
                </property>
