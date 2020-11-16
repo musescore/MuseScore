@@ -26,8 +26,7 @@
 #undef FILE_OPEN
 #endif
 
-namespace mu {
-namespace framework {
+namespace mu::framework {
 /**
  * @brief The IconCode class simplifies access to the icons from the icon font
  *
@@ -223,6 +222,10 @@ public:
 
     Q_ENUM(Code)
 };
+
+static inline QChar iconCodeToChar(IconCode::Code code)
+{
+    return QChar(static_cast<char16_t>(code));
 }
 }
 
