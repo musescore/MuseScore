@@ -125,6 +125,10 @@ QmlDialog {
                     text: qsTrc("workspace", "Select")
 
                     onClicked: {
+                        if (!workspacesModel.apply()) {
+                            return
+                        }
+
                         root.ret = { errcode: 0, value: workspacesModel.selectedWorkspace.name }
                         root.hide()
                     }

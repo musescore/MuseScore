@@ -141,7 +141,9 @@ QmlDialog {
                 }
 
                 FlatButton {
-                    text: qsTrc("global", "Create")
+                    text: qsTrc("global", "Select")
+
+                    enabled: workspaceModel.canCreateWorkspace
 
                     onClicked: {
                         root.ret = { errcode: 0, value: workspaceModel.createWorkspace() }
