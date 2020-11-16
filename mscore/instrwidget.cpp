@@ -949,7 +949,6 @@ void InstrumentsWidget::on_upButton_clicked()
                   }
             }
       updatePartIdx();
-//      setCustomScoreOrder();
       }
 
 //---------------------------------------------------------
@@ -1015,7 +1014,6 @@ void InstrumentsWidget::on_downButton_clicked()
                   }
             }
       updatePartIdx();
-//      setCustomScoreOrder();
       }
 
 //---------------------------------------------------------
@@ -1364,7 +1362,9 @@ void InstrumentsWidget::init()
       addLinkedStaffButton->setEnabled(false);
       addStaffButton->setEnabled(false);
 
+      int curIndex = scoreOrderComboBox->currentIndex();
       _model->rebuildData();
+      scoreOrderComboBox->setCurrentIndex(curIndex);
 
       // get last saved, user-selected instrument genre and set filter to it
       QSettings settings;
@@ -1393,15 +1393,6 @@ void InstrumentsWidget::setMakeSoloistButtonText()
       else
             makeSoloistButton->setText(InstrumentsWidget::tr("Make soloist"));
       partiturList->resizeColumnToContents(0);
-      }
-
-//---------------------------------------------------------
-//   setCustomScoreOrder
-//---------------------------------------------------------
-
-void InstrumentsWidget::setCustomScoreOrder()
-      {
-      scoreOrderComboBox->setCurrentIndex(0);
       }
 
 //---------------------------------------------------------

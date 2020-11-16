@@ -192,7 +192,6 @@ class InstrumentsWidget : public QWidget, public Ui::InstrumentsWidget {
       void updatePartIdx();
       void init();
       void setMakeSoloistButtonText();
-      void setCustomScoreOrder();
       void createInstruments(Score*);
       void numberInstrumentNames(Score*);
       void setScoreOrder(ScoreOrder* order);
