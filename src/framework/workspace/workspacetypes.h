@@ -25,10 +25,20 @@
 #include "val.h"
 
 namespace mu::workspace {
+
+enum class WorkspaceTag
+{
+    Arrangement,
+    Preferences,
+    Palettes,
+    Toolbar
+};
+
 struct AbstractData
 {
     virtual ~AbstractData() = default;
-    std::string tag;
+
+    WorkspaceTag tag;
     std::string name;
 };
 

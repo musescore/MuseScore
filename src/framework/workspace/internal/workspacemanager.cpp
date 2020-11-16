@@ -43,7 +43,7 @@ RetValCh<IWorkspacePtr> WorkspaceManager::currentWorkspace() const
     return rv;
 }
 
-RetValCh<IWorkspacePtrList> WorkspaceManager::allWorkspaces() const
+RetValCh<IWorkspacePtrList> WorkspaceManager::workspaces() const
 {
     RetValCh<IWorkspacePtrList> result;
 
@@ -55,6 +55,14 @@ RetValCh<IWorkspacePtrList> WorkspaceManager::allWorkspaces() const
     }
 
     return result;
+}
+
+Ret WorkspaceManager::setWorkspaces(const IWorkspacePtrList& workspaces)
+{
+    UNUSED(workspaces)
+    NOT_IMPLEMENTED;
+
+    return Ret();
 }
 
 void WorkspaceManager::init()

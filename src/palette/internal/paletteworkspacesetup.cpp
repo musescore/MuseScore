@@ -34,8 +34,8 @@ void PaletteWorkspaceSetup::setup()
     }
 
     Ms::PaletteWorkspace* paletteWorkspace = adapter()->paletteWorkspace();
-    auto applyWorkspaceData = [paletteWorkspace](std::shared_ptr<workspace::IWorkspace> w) {
-                                  std::shared_ptr<workspace::AbstractData> data = w->data("PaletteBox");
+    auto applyWorkspaceData = [paletteWorkspace](workspace::IWorkspacePtr w) {
+                                  workspace::AbstractDataPtr data = w->data(workspace::WorkspaceTag::Palettes);
                                   if (!data) {
                                       LOGE() << "no palette data in workspace: " << w->name();
                                       return false;
@@ -59,7 +59,7 @@ void PaletteWorkspaceSetup::setup()
         }
     }
 
-    workspace.ch.onReceive(nullptr, [paletteWorkspace, applyWorkspaceData](std::shared_ptr<workspace::IWorkspace> w) {
+    workspace.ch.onReceive(nullptr, [paletteWorkspace, applyWorkspaceData](workspace::IWorkspacePtr w) {
         bool ok = applyWorkspaceData(w);
         if (!ok) {
             std::unique_ptr<PaletteTree> tree(PaletteCreator::newDefaultPaletteTree());

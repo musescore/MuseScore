@@ -39,7 +39,7 @@ void WorkspaceListModel::load()
 
     beginResetModel();
 
-    RetValCh<IWorkspacePtrList> workspaces = workspacesManager()->allWorkspaces();
+    RetValCh<IWorkspacePtrList> workspaces = workspacesManager()->workspaces();
     if (!workspaces.ret) {
         LOGE() << workspaces.ret.toString();
     }
@@ -65,7 +65,7 @@ void WorkspaceListModel::load()
 
     endResetModel();
 
-    emit selectedWorkspaceChanged();
+    emit selectedWorkspaceChanged(selectedWorkspace());
 }
 
 QVariant WorkspaceListModel::selectedWorkspace() const
@@ -135,9 +135,13 @@ void WorkspaceListModel::createNewWorkspace()
         return;
     }
 
-    beginInsertRows(QModelIndex(), m_workspaces.size(), m_workspaces.size());
+    int newWorkspaceIndex = m_workspaces.size();
+
+    beginInsertRows(QModelIndex(), newWorkspaceIndex, newWorkspaceIndex);
     m_workspaces << newWorkspace;
     endInsertRows();
+
+    selectWorkspace(newWorkspaceIndex);
 }
 
 void WorkspaceListModel::selectWorkspace(int workspaceIndex)
@@ -159,7 +163,7 @@ void WorkspaceListModel::selectWorkspace(int workspaceIndex)
 
     emit dataChanged(previousModelIndex, previousModelIndex);
     emit dataChanged(currentModelIndex, currentModelIndex);
-    emit selectedWorkspaceChanged();
+    emit selectedWorkspaceChanged(selectedWorkspace());
 }
 
 void WorkspaceListModel::removeWorkspace(int workspaceIndex)
@@ -171,6 +175,23 @@ void WorkspaceListModel::removeWorkspace(int workspaceIndex)
     beginRemoveRows(QModelIndex(), workspaceIndex, workspaceIndex);
     m_workspaces.removeAt(workspaceIndex);
     endRemoveRows();
+}
+
+bool WorkspaceListModel::apply()
+{
+    IWorkspacePtrList newWorkspaceList;
+
+    for (const IWorkspacePtr& workspace : m_workspaces) {
+        newWorkspaceList.push_back(workspace);
+    }
+
+    Ret ret = workspacesManager()->setWorkspaces(newWorkspaceList);
+
+    if (!ret) {
+        LOGE() << ret.toString();
+    }
+
+    return ret;
 }
 
 bool WorkspaceListModel::isIndexValid(int index) const

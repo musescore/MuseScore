@@ -15,6 +15,14 @@ RadioButtonGroup {
 
     property int leftPadding: 0
 
+    Connections {
+        target: model
+
+        function onSelectedWorkspaceChanged(selectedWorkspace) {
+            root.positionViewAtIndex(selectedWorkspace.index, ListView.Center)
+        }
+    }
+
     delegate: RoundedRadioButton {
         anchors.left: parent.left
         anchors.right: parent.right
@@ -37,6 +45,8 @@ RadioButtonGroup {
 
             ButtonGroup.group: root.radioButtonGroup
             normalStateColor: "transparent"
+
+            checked: model.isSelected
 
             onClicked: {
                 root.model.selectWorkspace(model.index)

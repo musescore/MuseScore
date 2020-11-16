@@ -49,18 +49,17 @@ QmlDialog {
             FlatButton {
                 width: buttons.buttonWidth
 
-                text: qsTrc("instruments", "Cancel")
+                text: qsTrc("global", "Cancel")
 
                 onClicked: {
-                    root.ret = {errcode: 3}
-                    root.hide()
+                    root.reject()
                 }
             }
 
             FlatButton {
                 width: buttons.buttonWidth
 
-                text: qsTrc("instruments", "Ok")
+                text: qsTrc("global", "Ok")
 
                 onClicked: {
                     var selectedInstruments = instrumentsPage.selectedInstruments()

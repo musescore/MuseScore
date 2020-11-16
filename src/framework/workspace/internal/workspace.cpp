@@ -33,14 +33,14 @@ using namespace mu::framework;
 
 static constexpr std::string_view SOURCE_TAG("source");
 
-Workspace::Workspace(const io::path& file)
-    : m_file(file)
+Workspace::Workspace(const io::path& filePath)
+    : m_filePath(filePath)
 {
 }
 
 std::string Workspace::name() const
 {
-    return io::basename(m_file).toStdString();
+    return io::basename(m_filePath).toStdString();
 }
 
 std::string Workspace::title() const
@@ -48,7 +48,7 @@ std::string Workspace::title() const
     return name();
 }
 
-AbstractDataPtr Workspace::data(const std::string& tag, const std::string& name) const
+AbstractDataPtr Workspace::data(WorkspaceTag tag, const std::string& name) const
 {
     DataKey key { tag, name };
     auto it = m_data.find(key);
@@ -60,7 +60,7 @@ AbstractDataPtr Workspace::data(const std::string& tag, const std::string& name)
 
 Val Workspace::settingValue(const std::string& key) const
 {
-    std::shared_ptr<AbstractData> d = data("Preferences", "");
+    std::shared_ptr<AbstractData> d = data(WorkspaceTag::Preferences, "");
     if (!d) {
         return Val();
     }
@@ -80,7 +80,7 @@ Val Workspace::settingValue(const std::string& key) const
 
 std::vector<std::string> Workspace::toolbarActions(const std::string& toolbarName) const
 {
-    AbstractDataPtr d = data("Toolbar", toolbarName);
+    AbstractDataPtr d = data(WorkspaceTag::Toolbar, toolbarName);
     if (!d) {
         return std::vector<std::string>();
     }
@@ -113,7 +113,7 @@ bool Workspace::isInited() const
 
 Ret Workspace::read()
 {
-    WorkspaceFile f(m_file);
+    WorkspaceFile f(m_filePath);
     QByteArray data = f.readRootFile();
     if (data.isEmpty()) {
         return make_ret(Ret::Code::UnknownError);

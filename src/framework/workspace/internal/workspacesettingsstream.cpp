@@ -18,9 +18,10 @@
 //=============================================================================
 #include "workspacesettingsstream.h"
 
-#include "../workspacetypes.h"
+#include "global/xmlreader.h"
+#include "workspacetypes.h"
 
-#include "framework/global/xmlreader.h"
+#include "log.h"
 
 using namespace mu::workspace;
 using namespace mu::framework;
@@ -47,7 +48,7 @@ AbstractDataPtrList WorkspaceSettingsStream::read(IODevice& sourceDevice) const
 SettingsDataPtr WorkspaceSettingsStream::readSettings(XmlReader& reader) const
 {
     SettingsDataPtr settings = std::make_shared<SettingsData>();
-    settings->tag = SETTINGS_TAG;
+    settings->tag = WorkspaceTag::Preferences;
 
     while (reader.readNextStartElement()) {
         if (reader.tagName() != SETTING_TAG) {
@@ -64,6 +65,6 @@ SettingsDataPtr WorkspaceSettingsStream::readSettings(XmlReader& reader) const
 
 void WorkspaceSettingsStream::write(AbstractDataPtrList dataList, IODevice& destinationDevice) const
 {
-    Q_UNUSED(destinationDevice);
-    Q_UNUSED(dataList);
+    UNUSED(destinationDevice)
+    UNUSED(dataList)
 }

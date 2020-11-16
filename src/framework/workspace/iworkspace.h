@@ -33,15 +33,14 @@ public:
     virtual std::string name() const = 0;
     virtual std::string title() const = 0;
 
-    virtual AbstractDataPtr data(const std::string& tag, const std::string& name = std::string()) const = 0;
+    virtual AbstractDataPtr data(WorkspaceTag tag, const std::string& name = std::string()) const = 0;
     virtual void addData(AbstractDataPtr data) = 0;
+    virtual async::Channel<AbstractDataPtr> dataChanged() const = 0;
 
     //! NOTE Only methods associations with framework.
     //! Other methods (for other data) must be in the appropriate modules.
     virtual Val settingValue(const std::string& name) const = 0;
     virtual std::vector<std::string> toolbarActions(const std::string& toolbarName) const = 0;
-
-    virtual async::Channel<AbstractDataPtr> dataChanged() const = 0;
 };
 
 using IWorkspacePtr = std::shared_ptr<IWorkspace>;
