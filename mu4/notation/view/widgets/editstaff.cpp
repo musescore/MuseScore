@@ -38,13 +38,6 @@ using namespace Ms;
 using namespace mu::notation;
 using namespace mu::framework;
 
-namespace mu::notation {
-QChar iconCodeToChar(IconCode::Code code)
-{
-    return QChar(static_cast<char16_t>(code));
-}
-}
-
 static const QChar GO_UP_ICON = iconCodeToChar(IconCode::Code::ARROW_UP);
 static const QChar GO_DOWN_ICON = iconCodeToChar(IconCode::Code::ARROW_DOWN);
 static const QChar EDIT_ICON = iconCodeToChar(IconCode::Code::EDIT);
