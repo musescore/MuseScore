@@ -79,6 +79,8 @@ StaffType::StaffType(StaffGroup sg, const QString& xml, const QString& name, int
    TablatureSymbolRepeat symRepeat, bool linesThrough, TablatureMinimStyle minimStyle, bool onLines,
    bool showRests, bool stemsDown, bool stemThrough, bool upsideDown, bool showTabFingering, bool useNumbers, bool showBackTied)
       {
+      Q_UNUSED(invisible);
+      Q_UNUSED(color);
       _group   = sg;
       _xmlName = xml;
       _name    = name;
