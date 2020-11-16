@@ -45,10 +45,6 @@ AlignSelect::AlignSelect(QWidget* parent)
     g2->addButton(alignBaseline);
     g2->addButton(alignBottom);
 
-    auto iconCodeToChar = [](IconCode::Code code) -> QChar {
-                              return QChar(static_cast<char16_t>(code));
-                          };
-
     alignLeft->setText(iconCodeToChar(IconCode::Code::TEXT_ALIGN_LEFT));
     alignRight->setText(iconCodeToChar(IconCode::Code::TEXT_ALIGN_RIGHT));
     alignHCenter->setText(iconCodeToChar(IconCode::Code::TEXT_ALIGN_CENTER));

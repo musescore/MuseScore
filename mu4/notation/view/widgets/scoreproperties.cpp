@@ -38,11 +38,6 @@ static const QString TRANSLATOR_TAG("translator");
 static const QString ARRANGER_TAG("arranger");
 static const QString CREATION_DATE_TAG("creationDate");
 
-inline QChar iconCodeToChar(IconCode::Code code)
-{
-    return QChar(static_cast<char16_t>(code));
-}
-
 //---------------------------------------------------------
 //   MetaEditDialog
 //---------------------------------------------------------
