@@ -168,8 +168,6 @@ class Staff final : public ScoreElement {
 
       bool show() const;
       bool stemless(const Fraction&) const;
-      bool invisible() const         { return _invisible;   }
-      void setInvisible(bool val)    { _invisible = val;    }
       bool cutaway() const           { return _cutaway;     }
       void setCutaway(bool val)      { _cutaway = val;      }
       bool showIfEmpty() const       { return _showIfEmpty; }
@@ -223,6 +221,9 @@ class Staff final : public ScoreElement {
       void setLines(const Fraction&, int lines);
       qreal lineDistance(const Fraction&) const;
 
+      bool invisible(const Fraction&) const;
+      void setInvisible(const Fraction&, bool val);
+
       void setSlashStyle(const Fraction&, bool val);
       int middleLine(const Fraction&) const;
       int bottomLine(const Fraction&) const;
@@ -251,8 +252,8 @@ class Staff final : public ScoreElement {
       bool genKeySig();
       bool showLedgerLines(const Fraction&) const;
 
-      QColor color() const                { return _color; }
-      void setColor(const QColor& val)    { _color = val;    }
+      QColor color(const Fraction&) const;
+      void setColor(const Fraction&, const QColor& val);
       void undoSetColor(const QColor& val);
       void insertTime(const Fraction&, const Fraction& len);
 

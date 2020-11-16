@@ -259,6 +259,8 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::STAFF_SHOW_BARLINES,     false, "",                      P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "showing barlines") },
       { Pid::STAFF_SHOW_LEDGERLINES,  false, "",                      P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "showing ledgerlines") },
       { Pid::STAFF_STEMLESS,          false, "",                      P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "stemless")         },
+      { Pid::STAFF_INVISIBLE,         false, "",                      P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "invisible")        },
+      { Pid::STAFF_COLOR,             false, "color",                 P_TYPE::COLOR,               DUMMY_QT_TRANSLATE_NOOP("propertyName", "color")            },
 
       { Pid::HEAD_SCHEME,             false, "headScheme",            P_TYPE::HEAD_SCHEME,         DUMMY_QT_TRANSLATE_NOOP("propertyName", "notehead scheme")  },
       { Pid::STAFF_GEN_CLEF,          false, "",                      P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "generating clefs") },
@@ -274,7 +276,6 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::BRACKET_COLUMN,          false, "level",                 P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "level")            },
       { Pid::INAME_LAYOUT_POSITION,   false, "layoutPosition",        P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "layout position")  },
       { Pid::SUB_STYLE,               false, "style",                 P_TYPE::SUB_STYLE,           DUMMY_QT_TRANSLATE_NOOP("propertyName", "style")            },
-
       { Pid::FONT_FACE,               false, "family",                P_TYPE::FONT,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "family")           },
       { Pid::FONT_SIZE,               false, "size",                  P_TYPE::REAL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "size")             },
 //200

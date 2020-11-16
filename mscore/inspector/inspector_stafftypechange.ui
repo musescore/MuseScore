@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>248</width>
-    <height>372</height>
+    <height>431</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -79,117 +79,6 @@
       <property name="spacing">
        <number>3</number>
       </property>
-      <item row="7" column="1">
-       <widget class="QSpinBox" name="stepOffset">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="accessibleName">
-         <string>Step offset</string>
-        </property>
-        <property name="minimum">
-         <number>-8</number>
-        </property>
-        <property name="maximum">
-         <number>8</number>
-        </property>
-       </widget>
-      </item>
-      <item row="10" column="2">
-       <widget class="Ms::ResetButton" name="resetShowLedgerlines" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Show ledger lines' value</string>
-        </property>
-       </widget>
-      </item>
-      <item row="11" column="0" colspan="2">
-       <widget class="QCheckBox" name="stemless">
-        <property name="text">
-         <string>Stemless</string>
-        </property>
-       </widget>
-      </item>
-      <item row="12" column="2">
-       <widget class="Ms::ResetButton" name="resetNoteheadScheme" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Notehead scheme' value</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="label_5">
-        <property name="text">
-         <string>Scale:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="1">
-       <widget class="QDoubleSpinBox" name="lineDistance">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="accessibleName">
-         <string>Line distance</string>
-        </property>
-        <property name="suffix">
-         <string>sp</string>
-        </property>
-        <property name="singleStep">
-         <double>0.250000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="10" column="0" colspan="2">
-       <widget class="QCheckBox" name="showLedgerlines">
-        <property name="text">
-         <string>Show ledger lines</string>
-        </property>
-       </widget>
-      </item>
-      <item row="15" column="2">
-       <widget class="Ms::ResetButton" name="resetGenKeysig" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Generate key signatures' value</string>
-        </property>
-       </widget>
-      </item>
-      <item row="7" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>Step offset:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="1">
        <widget class="QDoubleSpinBox" name="yoffset">
         <property name="sizePolicy">
@@ -234,7 +123,51 @@
         </property>
        </widget>
       </item>
-      <item row="9" column="2">
+      <item row="3" column="2">
+       <widget class="Ms::ResetButton" name="resetScale" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Scale' value</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Offset:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="19" column="0" colspan="2">
+       <widget class="QCheckBox" name="genTimesig">
+        <property name="text">
+         <string>Generate time signatures</string>
+        </property>
+       </widget>
+      </item>
+      <item row="14" column="0" colspan="2">
+       <widget class="QCheckBox" name="showBarlines">
+        <property name="text">
+         <string>Show barlines</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" colspan="2">
+       <widget class="QCheckBox" name="small">
+        <property name="text">
+         <string>Small</string>
+        </property>
+       </widget>
+      </item>
+      <item row="14" column="2">
        <widget class="Ms::ResetButton" name="resetShowBarlines" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -244,6 +177,119 @@
         </property>
         <property name="accessibleName">
          <string>Reset 'Show barlines' value</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="2">
+       <widget class="Ms::ResetButton" name="resetLines" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Lines' value</string>
+        </property>
+       </widget>
+      </item>
+      <item row="20" column="2">
+       <widget class="Ms::ResetButton" name="resetGenKeysig" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Generate key signatures' value</string>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="2">
+       <widget class="Ms::ResetButton" name="resetColor" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Color' value</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Lines:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
+       <widget class="QDoubleSpinBox" name="lineDistance">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Line distance</string>
+        </property>
+        <property name="suffix">
+         <string>sp</string>
+        </property>
+        <property name="singleStep">
+         <double>0.250000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="2">
+       <widget class="Ms::ResetButton" name="resetStepOffset" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Step offset' value</string>
+        </property>
+       </widget>
+      </item>
+      <item row="15" column="2">
+       <widget class="Ms::ResetButton" name="resetShowLedgerlines" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Show ledger lines' value</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="1">
+       <widget class="QSpinBox" name="stepOffset">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Step offset</string>
+        </property>
+        <property name="minimum">
+         <number>-8</number>
+        </property>
+        <property name="maximum">
+         <number>8</number>
         </property>
        </widget>
       </item>
@@ -263,102 +309,6 @@
         </property>
         <property name="maximum">
          <number>14</number>
-        </property>
-       </widget>
-      </item>
-      <item row="14" column="0" colspan="2">
-       <widget class="QCheckBox" name="genTimesig">
-        <property name="text">
-         <string>Generate time signatures</string>
-        </property>
-       </widget>
-      </item>
-      <item row="7" column="2">
-       <widget class="Ms::ResetButton" name="resetStepOffset" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Step offset' value</string>
-        </property>
-       </widget>
-      </item>
-      <item row="11" column="2">
-       <widget class="Ms::ResetButton" name="resetStemless" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Stemless' value</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0" colspan="2">
-       <widget class="QCheckBox" name="small">
-        <property name="text">
-         <string>Small</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Lines:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="2">
-       <widget class="Ms::ResetButton" name="resetLines" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Lines' value</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_6">
-        <property name="text">
-         <string>Offset:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="0">
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>Line distance:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="12" column="1">
-       <widget class="QComboBox" name="noteheadScheme">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="accessibleName">
-         <string>Notehead scheme</string>
         </property>
        </widget>
       </item>
@@ -387,15 +337,44 @@
         </property>
        </widget>
       </item>
-      <item row="9" column="0" colspan="2">
-       <widget class="QCheckBox" name="showBarlines">
+      <item row="17" column="1">
+       <widget class="QComboBox" name="noteheadScheme">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Notehead scheme</string>
+        </property>
+       </widget>
+      </item>
+      <item row="16" column="2">
+       <widget class="Ms::ResetButton" name="resetStemless" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Stemless' value</string>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="0">
+       <widget class="QLabel" name="labelColor">
         <property name="text">
-         <string>Show barlines</string>
+         <string>Staff line color:</string>
+        </property>
+        <property name="buddy">
+         <cstring>color</cstring>
         </property>
        </widget>
       </item>
-      <item row="3" column="2">
-       <widget class="Ms::ResetButton" name="resetScale" native="true">
+      <item row="8" column="2">
+       <widget class="Ms::ResetButton" name="resetInvisible" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -403,67 +382,38 @@
          </sizepolicy>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Scale' value</string>
+         <string>Reset 'Invisible' value</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="2">
-       <widget class="Ms::ResetButton" name="resetYoffset" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Scale:</string>
         </property>
-        <property name="accessibleName">
-         <string>Reset 'Offset' value</string>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
-      <item row="8" column="0" colspan="3">
-       <widget class="Line" name="line_2">
+      <item row="16" column="0" colspan="2">
+       <widget class="QCheckBox" name="stemless">
+        <property name="text">
+         <string>Stemless</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0" colspan="3">
+       <widget class="Line" name="line">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
        </widget>
       </item>
-      <item row="15" column="0" colspan="2">
-       <widget class="QCheckBox" name="genKeysig">
-        <property name="text">
-         <string>Generate key signatures</string>
-        </property>
-       </widget>
-      </item>
-      <item row="13" column="2">
-       <widget class="Ms::ResetButton" name="resetGenClefs" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Generate clefs' value</string>
-        </property>
-       </widget>
-      </item>
-      <item row="13" column="0" colspan="2">
-       <widget class="QCheckBox" name="genClefs">
-        <property name="text">
-         <string>Generate clefs</string>
-        </property>
-       </widget>
-      </item>
-      <item row="14" column="2">
-       <widget class="Ms::ResetButton" name="resetGenTimesig" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Generate time signatures' value</string>
+      <item row="10" column="1">
+       <widget class="Awl::ColorLabel" name="color">
+        <property name="focusPolicy">
+         <enum>Qt::TabFocus</enum>
         </property>
        </widget>
       </item>
@@ -480,7 +430,7 @@
         </property>
        </widget>
       </item>
-      <item row="12" column="0">
+      <item row="17" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
          <string>Notehead scheme:</string>
@@ -490,10 +440,110 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="0" colspan="3">
-       <widget class="Line" name="line">
+      <item row="13" column="0" colspan="3">
+       <widget class="Line" name="line_2">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Line distance:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="Ms::ResetButton" name="resetYoffset" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Offset' value</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Step offset:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="19" column="2">
+       <widget class="Ms::ResetButton" name="resetGenTimesig" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Generate time signatures' value</string>
+        </property>
+       </widget>
+      </item>
+      <item row="17" column="2">
+       <widget class="Ms::ResetButton" name="resetNoteheadScheme" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Notehead scheme' value</string>
+        </property>
+       </widget>
+      </item>
+      <item row="15" column="0" colspan="2">
+       <widget class="QCheckBox" name="showLedgerlines">
+        <property name="text">
+         <string>Show ledger lines</string>
+        </property>
+       </widget>
+      </item>
+      <item row="20" column="0" colspan="2">
+       <widget class="QCheckBox" name="genKeysig">
+        <property name="text">
+         <string>Generate key signatures</string>
+        </property>
+       </widget>
+      </item>
+      <item row="18" column="2">
+       <widget class="Ms::ResetButton" name="resetGenClefs" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Generate clefs' value</string>
+        </property>
+       </widget>
+      </item>
+      <item row="18" column="0" colspan="2">
+       <widget class="QCheckBox" name="genClefs">
+        <property name="text">
+         <string>Generate clefs</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="0" colspan="2">
+       <widget class="QCheckBox" name="invisible">
+        <property name="text">
+         <string>Invisible staff lines</string>
         </property>
        </widget>
       </item>
@@ -503,6 +553,12 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>Awl::ColorLabel</class>
+   <extends>QPushButton</extends>
+   <header>awl/colorlabel.h</header>
+   <container>1</container>
+  </customwidget>
   <customwidget>
    <class>Ms::ResetButton</class>
    <extends>QWidget</extends>
@@ -518,6 +574,8 @@
   <tabstop>lines</tabstop>
   <tabstop>lineDistance</tabstop>
   <tabstop>stepOffset</tabstop>
+  <tabstop>invisible</tabstop>
+  <tabstop>color</tabstop>
   <tabstop>showBarlines</tabstop>
   <tabstop>showLedgerlines</tabstop>
   <tabstop>stemless</tabstop>

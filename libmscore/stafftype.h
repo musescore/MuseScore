@@ -185,6 +185,9 @@ class StaffType {
       qreal _userMag           { 1.0   };       // allowed 0.1 - 10.0
       Spatium _yoffset         { 0.0   };
       bool _small              { false };
+      bool _invisible          { false };
+      QColor _color            { QColor(Qt::black) };
+
       int _lines            = 5;
       int _stepOffset       = 0;
       Spatium _lineDistance = Spatium(1);
@@ -262,10 +265,10 @@ class StaffType {
       StaffType();
       StaffType(StaffGroup sg, const QString& xml, const QString& name, int lines, int stpOff, qreal lineDist,
             bool genClef, bool showBarLines, bool stemless, bool genTimeSig,
-            bool genKeySig, bool showLedgerLines);
+            bool genKeySig, bool showLedgerLines, bool invisible, const QColor& color);
 
       StaffType(StaffGroup sg, const QString& xml, const QString& name, int lines, int stpOff, qreal lineDist,
-            bool genClef, bool showBarLines, bool stemless, bool genTimesig,
+            bool genClef, bool showBarLines, bool stemless, bool genTimesig, bool invisible, const QColor& color,
             const QString& durFontName, qreal durFontSize, qreal durFontUserY, qreal genDur,
             const QString& fretFontName, qreal fretFontSize, qreal fretFontUserY, TablatureSymbolRepeat symRepeat,
             bool linesThrough, TablatureMinimStyle minimStyle, bool onLines, bool showRests,
@@ -295,8 +298,12 @@ class StaffType {
       bool showBarlines() const                { return _showBarlines;    }
       qreal userMag() const                    { return _userMag;         }
       bool small() const                       { return _small;           }
+      bool invisible() const                   { return _invisible;       }
+      const QColor& color() const              { return _color;           }
       void setUserMag(qreal val)               { _userMag = val;          }
       void setSmall(bool val)                  { _small = val;            }
+      void setInvisible(bool val)              { _invisible = val;        }
+      void setColor(const QColor& val)         { _color = val;            }
       Spatium yoffset() const                  { return _yoffset;         }
       void setYoffset(Spatium val)             { _yoffset = val;          }
       qreal spatium(Score*) const;

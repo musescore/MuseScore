@@ -64,7 +64,7 @@ void LedgerLine::layout()
       {
       setLineWidth(score()->styleP(Sid::ledgerLineWidth) * chord()->mag());
       if (staff())
-            setColor(staff()->color());
+            setColor(staff()->staffType(tick())->color());
       qreal w2 = _width * .5;
       if (vertical)
             bbox().setRect(-w2, 0, w2, _len);

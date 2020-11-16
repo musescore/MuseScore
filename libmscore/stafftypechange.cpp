@@ -144,6 +144,10 @@ QVariant StaffTypeChange::getProperty(Pid propertyId) const
                   return _staffType->userMag();
             case Pid::SMALL:
                   return _staffType->small();
+            case Pid::STAFF_INVISIBLE:
+                  return _staffType->invisible();
+            case Pid::STAFF_COLOR:
+                  return _staffType->color();
             case Pid::STAFF_YOFFSET:
                   return _staffType->yoffset();
             default:
@@ -204,6 +208,12 @@ bool StaffTypeChange::setProperty(Pid propertyId, const QVariant& v)
                         _staff->localSpatiumChanged(_spatium, spatium(), tick());
                   }
                   break;
+            case Pid::STAFF_INVISIBLE:
+                  _staffType->setInvisible(v.toBool());
+                  break;
+            case Pid::STAFF_COLOR:
+                  _staffType->setColor(v.value<QColor>());
+                  break;
             case Pid::STAFF_YOFFSET:
                   _staffType->setYoffset(v.value<Spatium>());
                   break;
@@ -248,6 +258,10 @@ QVariant StaffTypeChange::propertyDefault(Pid id) const
                   return 1.0;
             case Pid::SMALL:
                   return false;
+            case Pid::STAFF_INVISIBLE:
+                  return false;
+            case Pid::STAFF_COLOR:
+                  return QColor(Qt::black);
             case Pid::STAFF_YOFFSET:
                   return Spatium(0.0);
             default:
