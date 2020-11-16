@@ -28,8 +28,7 @@ namespace Ms {
 class Score;
 }
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class NotationSelection : public INotationSelection
 {
 public:
@@ -44,33 +43,16 @@ public:
     Element* element() const override;
     std::vector<Element*> elements() const override;
 
-    SelectionRange range() const override;
-
     QRectF canvasBoundingRect() const override;
 
-    std::vector<QRectF> rangeBoundingArea() const override;
+    INotationSelectionRangePtr range() const override;
 
 private:
     Ms::Score* score() const;
 
-    Ms::Segment* rangeStartSegment() const;
-    Ms::Segment* rangeEndSegment() const;
-
-    int selectionLastVisibleStaff() const;
-
-    struct RangeSection {
-        const Ms::System* system = nullptr;
-        const Ms::Segment* startSegment = nullptr;
-        const Ms::Segment* endSegment = nullptr;
-    };
-    std::vector<RangeSection> splitRangeBySections(const Ms::Segment* rangeStartSegment, const Ms::Segment* rangeEndSegment) const;
-
-    int sectionElementsMaxY(const RangeSection& selection) const;
-    int sectionElementsMinY(const RangeSection& selection) const;
-
     IGetScore* m_getScore = nullptr;
+    INotationSelectionRangePtr m_range;
 };
-}
 }
 
 #endif // MU_NOTATION_NOTATIONSELECTION_H

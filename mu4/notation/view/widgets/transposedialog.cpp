@@ -188,12 +188,12 @@ Key TransposeDialog::firstPitchedStaffKey() const
     int startStaffIdx = 0;
     int endStaffIdx   = 0;
     Fraction startTick = Fraction(0,1);
-    SelectionRange range = selection()->range();
+    INotationSelectionRangePtr range = selection()->range();
 
     if (selection()->isRange()) {
-        startStaffIdx = range.startStaffIndex;
-        endStaffIdx = range.endStaffIndex;
-        startTick = range.startTick;
+        startStaffIdx = range->startStaffIndex();
+        endStaffIdx = range->endStaffIndex();
+        startTick = range->startTick();
     }
 
     Key key = Key::C;

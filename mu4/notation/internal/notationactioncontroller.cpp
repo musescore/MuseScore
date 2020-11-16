@@ -347,7 +347,7 @@ void NotationActionController::openStaffProperties()
         return;
     }
 
-    int staffIdx = interaction->selection()->range().startStaffIndex;
+    int staffIdx = interaction->selection()->range()->startStaffIndex();
     interactive()->open("musescore://notation/staffproperties?staffIdx=" + QString::number(staffIdx).toStdString());
 }
 
