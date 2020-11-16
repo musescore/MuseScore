@@ -1255,12 +1255,12 @@ QString TextDiff::toString(DiffType dt, bool prefixLines) const
                   }
             else
                   lines[i] = QString("%1--%2")
-                        .arg(start[i]).arg(end[i]);
+                        .arg(start[i], end[i]);
             }
 
       return QString("@%1;%2\n%3")
-            .arg(lines[0]).arg(lines[1])
-            .arg(prefixLines ? addLinePrefix(text[idx], prefix) : text[idx]);
+            .arg(lines[0], lines[1],
+                  prefixLines ? addLinePrefix(text[idx], prefix) : text[idx]);
       }
 
 //---------------------------------------------------------
@@ -1334,7 +1334,7 @@ static QString describeContext(const ScoreElement* ctx)
 
 QString ContextChange::toString() const
       {
-      return QString("Context change: ctx1 (%1), ctx2(%2)").arg(describeContext(ctx[0])).arg(describeContext(ctx[1]));
+      return QString("Context change: ctx1 (%1), ctx2(%2)").arg(describeContext(ctx[0]), describeContext(ctx[1]));
       }
 
 //---------------------------------------------------------
@@ -1369,14 +1369,14 @@ QString ElementDiff::toString() const
       QString ctxDescr = describeContext(ctx[0]);
       switch(type) {
             case DiffType::DELETE:
-                  return QObject::tr("%1: removed element %2", "scorediff").arg(ctxDescr).arg(el[0]->userName());
+                  return QObject::tr("%1: removed element %2", "scorediff").arg(ctxDescr, el[0]->userName());
             case DiffType::INSERT:
-                  return QObject::tr("%1: inserted element %2", "scorediff").arg(ctxDescr).arg(el[1]->userName());
+                  return QObject::tr("%1: inserted element %2", "scorediff").arg(ctxDescr, el[1]->userName());
             case DiffType::REPLACE:
-                  return QObject::tr("%1: replaced element %2 with element %3", "scorediff").arg(ctxDescr).arg(el[0]->userName()).arg(el[1]->userName());
+                  return QObject::tr("%1: replaced element %2 with element %3", "scorediff").arg(ctxDescr, el[0]->userName(), el[1]->userName());
             case DiffType::EQUAL:
                   Q_ASSERT(el[0]->type() == el[1]->type());
-                  return QObject::tr("%1: equal element %2", "scorediff").arg(ctxDescr).arg(el[0]->userName());
+                  return QObject::tr("%1: equal element %2", "scorediff").arg(ctxDescr, el[0]->userName());
             }
       return ctxDescr;
       }
@@ -1413,14 +1413,14 @@ QString PropertyDiff::toString() const
                         t = QObject::tr("%1: property %2 is turned off", "scorediff");
                   else
                         t = QObject::tr("%1: property %2 is turned on", "scorediff");
-                  return t.arg(ctxDescr).arg(propName);
+                  return t.arg(ctxDescr, propName);
                   }
             default:
                   {
                   QString val1 = ctx[0]->propertyUserValue(pid);
                   QString val2 = ctx[1]->propertyUserValue(pid);
                   QString t = QObject::tr("%1: property %2 changed from %3 to %4", "scorediff");
-                  return t.arg(ctxDescr).arg(propName).arg(val1).arg(val2);
+                  return t.arg(ctxDescr, propName, val1, val2);
                   }
             }
       }
@@ -1449,12 +1449,11 @@ QString MarkupDiff::toString() const
       if (name == "metaTag") {
             QString tagName = info.toString();
             return QObject::tr("%1: %2 changed from %3 to %4", "scorediff")
-               .arg(ctxDescr).arg(tagName)
-               .arg(ctx[0]->score()->metaTag(tagName))
-               .arg(ctx[1]->score()->metaTag(tagName));
+               .arg(ctxDescr, tagName,
+                    ctx[0]->score()->metaTag(tagName), ctx[1]->score()->metaTag(tagName));
             }
       return QObject::tr("%1: markup changes: %2", "scorediff")
-         .arg(ctxDescr).arg(name);
+         .arg(ctxDescr, name);
       }
 }
 

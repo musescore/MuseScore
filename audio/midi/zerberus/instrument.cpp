@@ -43,8 +43,6 @@ Sample::~Sample()
 Sample* ZInstrument::readSample(const QString& s, MQZipReader* uz)
       {
       if (uz) {
-            QVector<MQZipReader::FileInfo> fi = uz->fileInfoList();
-
             buf = uz->fileData(s);
             if (buf.isEmpty()) {
                   printf("Sample::read: cannot read sample data <%s>\n", qPrintable(s));

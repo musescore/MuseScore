@@ -308,7 +308,7 @@ void Score::update(bool resetCmdState)
             CmdState& cs = ms->cmdState();
             if (updateAll || cs.updateAll()) {
                   for (Score* s : scoreList()) {
-                        for (MuseScoreView* v : s->viewer) {
+                        for (MuseScoreView* v : qAsConst(s->viewer)) {
                               v->updateAll();
                               }
                         }
@@ -317,7 +317,7 @@ void Score::update(bool resetCmdState)
                   // updateRange updates only current score
                   qreal d = spatium() * .5;
                   _updateState.refresh.adjust(-d, -d, 2 * d, 2 * d);
-                  for (MuseScoreView* v : viewer)
+                  for (MuseScoreView* v : qAsConst(viewer))
                         v->dataChanged(_updateState.refresh);
                   _updateState.refresh = QRectF();
                   }
@@ -343,7 +343,7 @@ void Score::update(bool resetCmdState)
 
 void Score::deletePostponed()
       {
-      for (ScoreElement* e : _updateState._deleteList) {
+      for (ScoreElement* e : qAsConst(_updateState._deleteList)) {
             if (e->isSystem()) {
                   System* s = toSystem(e);
                   for (SpannerSegment* ss : s->spannerSegments()) {
@@ -1317,7 +1317,7 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
       Chord* oc      = 0;
 
       bool first = true;
-      for (Fraction f2 : flist) {
+      for (Fraction f2 : qAsConst(flist)) {
             f  -= f2;
             makeGap(cr1->segment(), cr1->track(), f2, tuplet, first);
 
@@ -1477,7 +1477,7 @@ void Score::upDown(bool up, UpDownMode mode)
       {
       QList<Note*> el = selection().uniqueNotes();
 
-      for (Note* oNote : el) {
+      for (Note* oNote : qAsConst(el)) {
             Fraction tick     = oNote->chord()->tick();
             Staff* staff = oNote->staff();
             Part* part   = staff->part();
@@ -1621,7 +1621,7 @@ void Score::upDown(bool up, UpDownMode mode)
                   // because they're now harder to be re-entered due to the revised note-input workflow
                   if (mode != UpDownMode::OCTAVE) {
                         auto l = oNote->linkList();
-                        for (ScoreElement* e : l) {
+                        for (ScoreElement* e : qAsConst(l)) {
                               Note* ln = toNote(e);
                               if (ln->accidental())
                                     undo(new RemoveElement(ln->accidental()));
@@ -2228,7 +2228,7 @@ bool Score::processMidiInput()
             //after relayout
             Element* e = inputState().cr();
             if (e) {
-                  for(MuseScoreView* v : viewer)
+                  for(MuseScoreView* v : qAsConst(viewer))
                         v->adjustCanvasPosition(e, false);
                   }
             return true;
@@ -2464,7 +2464,7 @@ Element* Score::move(const QString& cmd)
                         select(el, SelectType::SINGLE, 0);
                   else
                         setPlayNote(false);
-                  for (MuseScoreView* view : viewer)
+                  for (MuseScoreView* view : qAsConst(viewer))
                         view->moveCursor();
                   }
             else {

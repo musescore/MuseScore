@@ -106,7 +106,7 @@ void GridCanvas::paintEvent(QPaintEvent* ev)
       pen.setColor(Qt::red); // not theme dependant
       painter.setPen(pen);
       // draw line between points
-      for (const PitchValue& v : m_points) {
+      for (const PitchValue& v : qAsConst(m_points)) {
             QPointF currentPoint = getPosition(v);
             // draw line only if there is a point before the current one
             if (lastPoint.x()) {
@@ -118,7 +118,7 @@ void GridCanvas::paintEvent(QPaintEvent* ev)
       painter.setPen(Qt::NoPen);
       painter.setBrush(QColor::fromRgb(32, 116, 189)); // Musescore blue
       // draw points
-      for (const PitchValue& v : m_points) {
+      for (const PitchValue& v : qAsConst(m_points)) {
             painter.drawEllipse(getPosition(v), GRIP_HALF_RADIUS, GRIP_HALF_RADIUS);
             }
 

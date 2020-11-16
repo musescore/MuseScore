@@ -220,7 +220,7 @@ Harmony::Harmony(const Harmony& h)
 
 Harmony::~Harmony()
       {
-      for (const TextSegment* ts : textList)
+      for (const TextSegment* ts : qAsConst(textList))
             delete ts;
       if (_parsedForm)
             delete _parsedForm;
@@ -532,7 +532,7 @@ static int convertNote(const QString& s, NoteSpellingType noteSpelling, NoteCase
             case NoteSpellingType::SOLFEGGIO:
             case NoteSpellingType::FRENCH:
                   useSolfeggio = true;
-                  if (s.toLower().startsWith("sol"))
+                  if (s.startsWith("sol", Qt::CaseInsensitive))
                         acci = 3;
                   else
                         acci = 2;
@@ -782,7 +782,7 @@ void Harmony::startEdit(EditData& ed)
             // convert chord symbol to plain text
             setPlainText(harmonyName());
             // clear rendering
-            for (const TextSegment* t : textList)
+            for (const TextSegment* t : qAsConst(textList))
                   delete t;
             textList.clear();
             }
@@ -927,7 +927,7 @@ void Harmony::setHarmony(const QString& s)
             }
       else {
             // unparseable chord, render as plain text
-            for (const TextSegment* ts : textList)
+            for (const TextSegment* ts : qAsConst(textList))
                   delete ts;
             textList.clear();
             setRootTpc(Tpc::TPC_INVALID);
@@ -1400,7 +1400,7 @@ QPoint Harmony::calculateBoundingRect()
             }
       else {
             QRectF bb;
-            for (TextSegment* ts : textList)
+            for (TextSegment* ts : qAsConst(textList))
                   bb |= ts->tightBoundingRect().translated(ts->x, ts->y);
 
             qreal yy = -bb.y();  // Align::TOP
@@ -1431,7 +1431,7 @@ QPoint Harmony::calculateBoundingRect()
                   newy = ypos;
                   }
 
-            for (TextSegment* ts : textList)
+            for (TextSegment* ts : qAsConst(textList))
                   ts->offset = QPointF(xx, yy);
 
             setbbox(bb.translated(xx, yy));
@@ -1721,7 +1721,7 @@ void Harmony::render()
       ChordList* chordList = score()->style().chordList();
 
       fontList.clear();
-      for (const ChordFont& cf : chordList->fonts) {
+      for (const ChordFont& cf : qAsConst(chordList->fonts)) {
             QFont ff(font());
             ff.setPointSizeF(ff.pointSizeF() * cf.mag);
             if (!(cf.family.isEmpty() || cf.family == "default"))
@@ -1731,7 +1731,7 @@ void Harmony::render()
       if (fontList.empty())
             fontList.append(font());
 
-      for (const TextSegment* s : textList)
+      for (const TextSegment* s : qAsConst(textList))
             delete s;
       textList.clear();
       qreal x = 0.0, y = 0.0;
@@ -1990,7 +1990,7 @@ QString Harmony::userName() const
 
 QString Harmony::accessibleInfo() const
       {
-      return QString("%1: %2").arg(userName()).arg(harmonyName());
+      return QString("%1: %2").arg(userName(), harmonyName());
       }
 
 //---------------------------------------------------------
@@ -2015,7 +2015,7 @@ QString Harmony::generateScreenReaderInfo() const
                   bool hasUpper = aux.contains('I') || aux.contains('V');
                   bool hasLower = aux.contains('i') || aux.contains('v');
                   if (hasLower && !hasUpper)
-                        rez = QString("%1 %2").arg(rez).arg(QObject::tr("lower case"));
+                        rez = QString("%1 %2").arg(rez, QObject::tr("lower case"));
                   aux = aux.toLower();
                   static std::vector<std::pair<QString, QString>> rnaReplacements {
                         { "vii", "7" },
@@ -2047,18 +2047,18 @@ QString Harmony::generateScreenReaderInfo() const
                         aux.replace(re, r.second);
                         }
                   // construct string one character at a time
-                  for (auto c : aux)
+                  for (auto c : qAsConst(aux))
                         rez = QString("%1 %2").arg(rez).arg(c);
                   }
                   return rez;
             case HarmonyType::NASHVILLE:
                   if (!_function.isEmpty())
-                        rez = QString("%1 %2").arg(rez).arg(_function);
+                        rez = QString("%1 %2").arg(rez, _function);
                   break;
             case HarmonyType::STANDARD:
             default:
                   if (_rootTpc != Tpc::TPC_INVALID)
-                        rez = QString("%1 %2").arg(rez).arg(tpc2name(_rootTpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, true));
+                        rez = QString("%1 %2").arg(rez, tpc2name(_rootTpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, true));
             }
 
       if (const_cast<Harmony*>(this)->parsedForm() && !hTextName().isEmpty()) {
@@ -2071,14 +2071,14 @@ QString Harmony::generateScreenReaderInfo() const
                         s.replace("b", QObject::tr("♭"));
                   extension += s + " ";
                   }
-            rez = QString("%1 %2").arg(rez).arg(extension);
+            rez = QString("%1 %2").arg(rez, extension);
             }
       else {
-            rez = QString("%1 %2").arg(rez).arg(hTextName());
+            rez = QString("%1 %2").arg(rez, hTextName());
             }
 
       if (_baseTpc != Tpc::TPC_INVALID)
-            rez = QString("%1 / %2").arg(rez).arg(tpc2name(_baseTpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, true));
+            rez = QString("%1 / %2").arg(rez, tpc2name(_baseTpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, true));
 
       return rez;
       }

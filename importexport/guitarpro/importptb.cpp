@@ -657,7 +657,7 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
                         chord->add(st);
                         }
                   bool has_hammer = false;
-                  for (auto n : beat->notes) {
+                  for (const auto &n : beat->notes) {
                         auto note = new Note(score);
                         chord->add(note);
                         if (n.dead) {
@@ -942,7 +942,7 @@ void PowerTab::ptSection::copyTracks(ptTrack* track)
                   continue;
                   }
 
-            for (auto rt : rhytm) {
+            for (const auto &rt : rhytm) {
                   auto newSig = chordTextMap.find(rt.position);
                   if (newSig != chordTextMap.end()) {
                         signature = newSig;

@@ -111,7 +111,7 @@ void PaletteWidget::setupStyle()
       if (preferences.getBool(PREF_UI_CANVAS_FG_USECOLOR) && preferences.getBool(PREF_UI_CANVAS_FG_USECOLOR_IN_PALETTES))
             qmlInterface->setPaletteBackground(preferences.getColor(PREF_UI_CANVAS_FG_COLOR));
       else
-            qmlInterface->setPaletteBackground(QColor("#f9f9f9"));
+            qmlInterface->setPaletteBackground(QColor(0xf9f9f9));
       }
 
 //---------------------------------------------------------

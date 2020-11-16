@@ -438,7 +438,7 @@ Pid Ottava::propertyId(const QStringRef& name) const
 
 QString Ottava::accessibleInfo() const
       {
-      return QString("%1: %2").arg(Element::accessibleInfo()).arg(ottavaDefault[static_cast<int>(ottavaType())].name);
+      return QString("%1: %2").arg(Element::accessibleInfo(), ottavaDefault[static_cast<int>(ottavaType())].name);
       }
 
 //---------------------------------------------------------

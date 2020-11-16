@@ -21,7 +21,7 @@ void ScoreMigrator_3_6::migrateScore(Ms::Score* score)
 
       bool successfulMigration = false;
 
-      for (IScoreMigrationHandler* handler : m_handlerList) {
+      for (IScoreMigrationHandler* handler : qAsConst(m_handlerList)) {
             successfulMigration = handler->handle(score);
 
             if (!successfulMigration)

@@ -266,7 +266,7 @@ void XmlWriter::tag(const QString& name, QVariant data)
                         *this << QString("<%1>%2/%3</%1>\n").arg(name).arg(f.numerator()).arg(f.denominator());
                         }
                   else if (strcmp(type, "Ms::Direction") == 0)
-                        *this << QString("<%1>%2</%1>\n").arg(name).arg(toString(data.value<Direction>()));
+                        *this << QString("<%1>%2</%1>\n").arg(name, toString(data.value<Direction>()));
                   else if (strcmp(type, "Ms::Align") == 0) {
                         // TODO: remove from here? (handled in Ms::propertyWritableValue())
                         Align a = Align(data.toInt());
@@ -286,7 +286,8 @@ void XmlWriter::tag(const QString& name, QVariant data)
                               v = "baseline";
                         else
                               v = "top";
-                        *this << QString("<%1>%2,%3</%1>\n").arg(name).arg(h).arg(v);
+                        *this << QString("<%1>%2,%3</%1>\n").arg(name)
+                                    .arg(h, v);
                         }
                   else {
                         qFatal("XmlWriter::tag: unsupported type %d %s", data.type(), type);

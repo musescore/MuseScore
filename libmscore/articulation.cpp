@@ -656,7 +656,7 @@ bool Articulation::isOrnament() const
 
 QString Articulation::accessibleInfo() const
       {
-      return QString("%1: %2").arg(Element::accessibleInfo()).arg(userName());
+      return QString("%1: %2").arg(Element::accessibleInfo(), userName());
       }
 
 //---------------------------------------------------------

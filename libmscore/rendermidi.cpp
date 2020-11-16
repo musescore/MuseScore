@@ -93,7 +93,7 @@ bool graceNotesMerged(Chord *chord);
 
 void Score::updateSwing()
       {
-      for (Staff* s : _staves) {
+      for (Staff* s : qAsConst(_staves)) {
             s->clearSwingList();
             }
       Measure* fm = firstMeasure();
@@ -113,7 +113,7 @@ void Score::updateSwing()
                   sp.swingRatio = st->swingParameters()->swingRatio;
                   sp.swingUnit = st->swingParameters()->swingUnit;
                   if (st->systemFlag()) {
-                        for (Staff* sta : _staves) {
+                        for (Staff* sta : qAsConst(_staves)) {
                               sta->insertIntoSwingList(s->tick(),sp);
                               }
                         }
@@ -129,7 +129,7 @@ void Score::updateSwing()
 
 void Score::updateCapo()
       {
-      for (Staff* s : _staves) {
+      for (Staff* s : qAsConst(_staves)) {
             s->clearCapoList();
             }
       Measure* fm = firstMeasure();
@@ -646,7 +646,7 @@ static void renderHarmony(EventMap* events, Measure const * m, Harmony* h, int t
       ev.setTuning(0.0);
 
       //add play events
-      for (int p : pitches) {
+      for (int p : qAsConst(pitches)) {
             ev.setPitch(p);
             ev.setVelo(velocity);
             events->insert(std::pair<int, NPlayEvent>(onTime, ev));
@@ -880,7 +880,7 @@ void Score::updateHairpin(Hairpin* h)
                         }
                   break;
             case Dynamic::Range::SYSTEM:
-                  for (Staff* s : _staves) {
+                  for (Staff* s : qAsConst(_staves)) {
                         s->velocities().addRamp(tick, tick2, veloChange, method, direction);
                         }
                   break;
@@ -900,7 +900,7 @@ void Score::updateVelo()
       if (!firstMeasure())
             return;
 
-      for (Staff* st : _staves) {
+      for (Staff* st : qAsConst(_staves)) {
             st->velocities().clear();
             st->velocityMultiplications().clear();
             }
@@ -1011,7 +1011,7 @@ void Score::updateVelo()
                   }
             }
 
-      for (Staff* st : _staves) {
+      for (Staff* st : qAsConst(_staves)) {
             st->velocities().cleanup();
             st->velocityMultiplications().cleanup();
             }

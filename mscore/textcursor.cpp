@@ -35,13 +35,13 @@ void PositionCursor::setType(CursorType t)
       _type = t;
       if (_type == CursorType::LOOP_IN) {
             // QColor cIn(Qt::green);
-            QColor cIn("#2456aa");
+            QColor cIn(0x2456aa);
             // cIn.setAlpha(90);
             setColor(cIn);
             }
       else if (_type == CursorType::LOOP_OUT) {
             // QColor cOut(Qt::red);
-            QColor cOut("#2456aa");
+            QColor cOut(0x2456aa);
             // cOut.setAlpha(90);
             setColor(cOut);
             }

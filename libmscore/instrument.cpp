@@ -44,7 +44,7 @@ const std::initializer_list<Channel::Prop> PartChannelSettingsLink::excerptPrope
 
 void NamedEventList::write(XmlWriter& xml, const QString& n) const
       {
-      xml.stag(QString("%1 name=\"%2\"").arg(n).arg(name));
+      xml.stag(QString("%1 name=\"%2\"").arg(n, name));
       if (!descr.isEmpty())
             xml.tag("descr", descr);
       for (const MidiCoreEvent& e : events)
@@ -1116,7 +1116,7 @@ void Instrument::updateVelocity(int* velocity, int /*channelIdx*/, const QString
 
 qreal Instrument::getVelocityMultiplier(const QString& name)
       {
-      for (const MidiArticulation& a : _articulation) {
+      for (const MidiArticulation& a : qAsConst(_articulation)) {
             if (a.name == name) {
                   return qreal(a.velocity) / 100;
                   }
@@ -1130,7 +1130,7 @@ qreal Instrument::getVelocityMultiplier(const QString& name)
 
 void Instrument::updateGateTime(int* gateTime, int /*channelIdx*/, const QString& name)
       {
-      for (const MidiArticulation& a : _articulation) {
+      for (const MidiArticulation& a : qAsConst(_articulation)) {
             if (a.name == name) {
                   *gateTime = a.gateTime;
                   break;
@@ -1483,9 +1483,9 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* t)
       Instrument instr;
       instr.setAmateurPitchRange(t->minPitchA, t->maxPitchA);
       instr.setProfessionalPitchRange(t->minPitchP, t->maxPitchP);
-      for (StaffName sn : t->longNames)
+      for (const StaffName &sn : t->longNames)
             instr.addLongName(StaffName(sn.name(), sn.pos()));
-      for (StaffName sn : t->shortNames)
+      for (const StaffName &sn : t->shortNames)
             instr.addShortName(StaffName(sn.name(), sn.pos()));
       instr.setTrackName(t->trackName);
       instr.setTranspose(t->transpose);

@@ -382,7 +382,7 @@ bool BBFile::read(const QString& name)
 Score::FileError importBB(MasterScore* score, const QString& name)
       {
       BBFile bb;
-      if(!QFileInfo(name).exists())
+      if(!QFileInfo::exists(name))
             return Score::FileError::FILE_NOT_FOUND;
       if (!bb.read(name)) {
             qDebug("Cannot open file <%s>", qPrintable(name));

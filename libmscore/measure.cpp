@@ -1726,7 +1726,7 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
       Measure* m    = s->tick2measure(tick());
       QList<int> sl = s->uniqueStaves();
 
-      for (int staffIdx : sl) {
+      for (int staffIdx : qAsConst(sl)) {
             int rests  = 0;
             int chords = 0;
             Rest* rest = 0;
@@ -3302,7 +3302,7 @@ Element* Measure::prevElementStaff(int staff)
 
 QString Measure::accessibleInfo() const
       {
-      return QString("%1: %2").arg(Element::accessibleInfo()).arg(QString::number(no() + 1));
+      return QString("%1: %2").arg(Element::accessibleInfo(), QString::number(no() + 1));
       }
 
 //-----------------------------------------------------------------------------

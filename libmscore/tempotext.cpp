@@ -289,10 +289,10 @@ void TempoText::updateTempo()
                   }
             else {
                  for (const TempoPattern& pa2 : tp) {
-                       QString key = QString("%1_%2").arg(pa.pattern).arg(pa2.pattern);
+                       QString key = QString("%1_%2").arg(pa.pattern, pa2.pattern);
                        QRegExp re2;
                        if (!regexps2.contains(key)) {
-                             re2 = QRegExp(QString("%1\\s*=\\s*%2\\s*").arg(pa.pattern).arg(pa2.pattern));
+                             re2 = QRegExp(QString("%1\\s*=\\s*%2\\s*").arg(pa.pattern, pa2.pattern));
                              regexps2[key] = re2;
                              }
                        re2 = regexps2.value(key);
@@ -471,10 +471,10 @@ QString TempoText::accessibleInfo() const
             dots1 = duration2userName(t1);
             if (x2 != -1) {
                   dots2 = duration2userName(t2);
-                  return QString("%1: %2 %3 = %4 %5").arg(Element::accessibleInfo()).arg(dots1).arg(QObject::tr("note")).arg(dots2).arg(QObject::tr("note"));
+                  return QString("%1: %2 %3 = %4 %5").arg(Element::accessibleInfo(), dots1, QObject::tr("note"), dots2, QObject::tr("note"));
                   }
             else
-                  return QString("%1: %2 %3 = %4").arg(Element::accessibleInfo()).arg(dots1).arg(QObject::tr("note")).arg(secondPart);
+                  return QString("%1: %2 %3 = %4").arg(Element::accessibleInfo(), dots1, QObject::tr("note"), secondPart);
             }
       else
             return TextBase::accessibleInfo();

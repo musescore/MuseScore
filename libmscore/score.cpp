@@ -388,7 +388,7 @@ void Score::onElementDestruction(Element* e)
             }
       score->selection().remove(e);
       score->cmdState().unsetElement(e);
-      for (MuseScoreView* v : score->viewer)
+      for (MuseScoreView* v : qAsConst(score->viewer))
             v->onElementDestruction(e);
       }
 
@@ -424,7 +424,7 @@ void Score::fixTicks()
       if (fm == 0)
             return;
 
-      for (Staff* staff : _staves)
+      for (Staff* staff : qAsConst(_staves))
             staff->clearTimeSig();
 
       if (isMaster()) {
@@ -969,7 +969,7 @@ QList<System*> Score::searchSystem(const QPointF& pos, const System* preferredSy
 Measure* Score::searchMeasure(const QPointF& p, const System* preferredSystem, qreal spacingFactor, qreal preferredSpacingFactor) const
       {
       QList<System*> systems = searchSystem(p, preferredSystem, spacingFactor, preferredSpacingFactor);
-      for (System* system : systems) {
+      for (System* system : qAsConst(systems)) {
             qreal x = p.x() - system->canvasPos().x();
             for (MeasureBase* mb : system->measures()) {
                   if (mb->isMeasure() && (x < (mb->x() + mb->bbox().width())))
@@ -1245,7 +1245,7 @@ void Score::spatiumChanged(qreal oldValue, qreal newValue)
       data[0] = oldValue;
       data[1] = newValue;
       scanElements(data, spatiumHasChanged, true);
-      for (Staff* staff : _staves)
+      for (Staff* staff : qAsConst(_staves))
             staff->spatiumChanged(oldValue, newValue);
       _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, newValue / SPATIUM20);
       }
@@ -2694,7 +2694,7 @@ void Score::cmdConcertPitchChanged(bool flag, bool /*useDoubleSharpsFlats*/)
       {
       undoChangeStyleVal(Sid::concertPitch, flag);       // change style flag
 
-      for (Staff* staff : _staves) {
+      for (Staff* staff : qAsConst(_staves)) {
             if (staff->staffType(Fraction(0,1))->group() == StaffGroup::PERCUSSION)       // TODO
                   continue;
             // if this staff has no transposition, and no instrument changes, we can skip it
@@ -3395,7 +3395,7 @@ void Score::selectSimilar(Element* e, bool sameStaff)
       score->scanElements(&pattern, collectMatch);
 
       score->select(0, SelectType::SINGLE, 0);
-      for (Element* ee : pattern.el)
+      for (Element* ee : qAsConst(pattern.el))
             score->select(ee, SelectType::ADD, 0);
       }
 
@@ -3428,7 +3428,7 @@ void Score::selectSimilarInRange(Element* e)
       score->scanElementsInRange(&pattern, collectMatch);
 
       score->select(0, SelectType::SINGLE, 0);
-      for (Element* ee : pattern.el)
+      for (Element* ee : qAsConst(pattern.el))
             score->select(ee, SelectType::ADD, 0);
       }
 
@@ -4960,7 +4960,7 @@ void MasterScore::updateExpressive(Synthesizer* synth)
       SynthesizerGroup g = s.group("master");
 
       int method = 1;
-      for (IdValue idVal : g) {
+      for (const IdValue &idVal : g) {
             if (idVal.id == 4) {
                   method = idVal.data.toInt();
                   break;
@@ -4980,7 +4980,7 @@ void MasterScore::updateExpressive(Synthesizer* synth, bool expressive, bool for
             SynthesizerState s = synthesizerState();
             SynthesizerGroup g = s.group("master");
 
-            for (IdValue idVal : g) {
+            for (const IdValue &idVal : g) {
                   if (idVal.id == 4) {
                         int method = idVal.data.toInt();
                         if (expressive == (method == 0))

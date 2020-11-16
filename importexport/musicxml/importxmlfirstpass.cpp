@@ -45,21 +45,18 @@ Fraction MusicXmlPart::measureDuration(int i) const
 QString MusicXmlPart::toString() const
       {
       auto res = QString("part id '%1' name '%2' print %3 abbr '%4' print %5 maxStaff %6\n")
-            .arg(id).arg(name).arg(printName).arg(abbr).arg(printAbbr).arg(_maxStaff);
+            .arg(id, name).arg(printName).arg(abbr).arg(printAbbr, _maxStaff);
 
       for (VoiceList::const_iterator i = voicelist.constBegin(); i != voicelist.constEnd(); ++i) {
             res += QString("voice %1 map staff data %2\n")
-                  .arg(i.key() + 1)
-                  .arg(i.value().toString());
+                  .arg(i.key() + 1, i.value().toString());
             }
 
       for (int i = 0; i < measureNumbers.size(); ++i) {
             if (i > 0)
                   res += "\n";
             res += QString("measure %1 duration %2 (%3)")
-                  .arg(measureNumbers.at(i))
-                  .arg(measureDurations.at(i).print())
-                  .arg(measureDurations.at(i).ticks());
+                  .arg(measureNumbers.at(i), measureDurations.at(i).print()).arg(measureDurations.at(i).ticks());
             }
 
       return res;
@@ -226,7 +223,7 @@ QString LyricNumberHandler::toString() const
       for (const auto& p : _numberToNo) {
             if (!res.isEmpty())
                   res += " ";
-            res += QString("%1:%2").arg(p.first).arg(p.second);
+            res += QString("%1:%2").arg(p.first, p.second);
             }
       return res;
       }

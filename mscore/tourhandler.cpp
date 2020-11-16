@@ -80,7 +80,7 @@ void OverlayWidget::paintEvent(QPaintEvent *)
             painterPath.addRect(parentWindow->rect());
 
       QPainterPath subPath = QPainterPath();
-      for (QWidget* w : widgets) {
+      for (QWidget* w : qAsConst(widgets)) {
             if (w->isVisible()) {
                   // Add widget and children visible region mapped to the parentWindow
                   QRegion region = w->visibleRegion() + w->childrenRegion();
@@ -187,7 +187,7 @@ void TourHandler::loadTour(XmlReader& tourXml)
             }
 
       allTours[tourName] = tour;
-      for (QString s : shortcuts)
+      for (const QString &s : shortcuts)
             shortcutToTour[s] = tour;
       }
 
@@ -197,7 +197,7 @@ void TourHandler::loadTour(XmlReader& tourXml)
 
 void TourHandler::resetCompletedTours()
       {
-      for (auto tour : allTours)
+      for (auto tour : qAsConst(allTours))
             tour->setCompleted(false);
       }
 
@@ -215,7 +215,7 @@ void TourHandler::readCompletedTours()
       QList<QString> completedTours;
       in >> completedTours;
 
-      for (QString tourName : completedTours)
+      for (const QString &tourName : qAsConst(completedTours))
             if (allTours.contains(tourName))
                   allTours.value(tourName)->setCompleted(true);
       }
@@ -405,7 +405,7 @@ void TourHandler::positionMessage(QList<QWidget*> widgets, QMessageBox* mbox)
 QList<QWidget*> TourHandler::getWidgetsByNames(Tour* tour, QList<QString> names)
       {
       QList<QWidget*> widgets;
-      for (QString name : names) {
+      for (const QString &name : names) {
             // First check internal storage for widget
             if (tour->hasNameForWidget(name))
                   widgets.append(tour->getWidgetsByName(name));

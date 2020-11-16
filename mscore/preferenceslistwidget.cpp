@@ -40,7 +40,7 @@ PreferencesListWidget::PreferencesListWidget(QWidget* parent)
 
 void PreferencesListWidget::loadPreferences()
       {
-      for (QString key : preferences.allPreferences().keys()) {
+      for (const QString &key : preferences.allPreferences().keys()) {
             Preference* pref = preferences.allPreferences().value(key);
 
             if (pref->showInAdvancedList()) {

@@ -663,7 +663,7 @@ static QString text2syms(const QString& t)
                   }
             else {
                   // not found, move one char from res to in
-                  res += in.left(1);
+                  res += in.leftRef(1);
                   in.remove(0, 1);
                   }
             }
@@ -1936,7 +1936,7 @@ void MusicXMLParserPass2::measure(const QString& partId,
                                   const Fraction time)
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "measure");
-      QString number = _e.attributes().value("number").toString();
+      //QString number = _e.attributes().value("number").toString();
       //qDebug("measure %s start", qPrintable(number));
 
       Measure* measure = findMeasure(_score, time);
@@ -2037,7 +2037,7 @@ void MusicXMLParserPass2::measure(const QString& partId,
                         Fraction tick = time + mTime;
 
                         TempoText* t = new TempoText(_score);
-                        t->setXmlText(QString("%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(TDuration::DurationType::V_QUARTER))).arg(tempo));
+                        t->setXmlText(QString("%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(TDuration::DurationType::V_QUARTER)), tempo));
                         t->setTempo(tpo);
                         t->setFollowText(true);
 
@@ -3008,11 +3008,9 @@ QString MusicXmlExtendedSpannerDesc::toString() const
       QString string;
       QTextStream(&string) << _sp;
       return QString("sp %1 tp %2 tick2 %3 track2 %4 %5 %6")
-             .arg(string)
-             .arg(_tick2.print())
+             .arg(string, _tick2.print())
              .arg(_track2)
-             .arg(_isStarted ? "started" : "")
-             .arg(_isStopped ? "stopped" : "")
+             .arg(_isStarted ? "started" : "", _isStopped ? "stopped" : "")
       ;
       }
 
@@ -4916,8 +4914,8 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
       double dy = -0.1 * _e.attributes().value("default-y").toDouble();
 #endif
       bool printObject = _e.attributes().value("print-object") != "no";
-      QString printFrame = _e.attributes().value("print-frame").toString();
-      QString printStyle = _e.attributes().value("print-style").toString();
+      //QString printFrame = _e.attributes().value("print-frame").toString();
+      //QString printStyle = _e.attributes().value("print-style").toString();
 
       QString kind, kindText, functionText, symbols, parens;
       QList<HDegree> degreeList;
@@ -5967,7 +5965,7 @@ Notation Notation::notationWithAttributes(const QString& name, const QXmlStreamA
                                           const QString& parent, const SymId& symId)
       {
       Notation notation { name, parent, symId };
-      for (const auto attr : attributes) {
+      for (const auto &attr : attributes) {
             notation.addAttribute(attr.name(), attr.value());
             }
       return notation;
@@ -6120,7 +6118,7 @@ void MusicXMLParserNotations::addNotation(const Notation& notation, ChordRest* c
                   if (notation.name() == "strong-accent") {
                         if (notationType != "" && notationType != "up" && notationType != "down") {
                               notationType = (const char*) 0;
-                              _logger->logError(QString("unknown %1 type %2").arg(notation.name()).arg(notationType), &_e);
+                              _logger->logError(QString("unknown %1 type %2").arg(notation.name(), notationType), &_e);
                               }
                         }
                   else if (notation.name() == "harmonic" || notation.name() == "delayed-turn"
@@ -6130,7 +6128,7 @@ void MusicXMLParserNotations::addNotation(const Notation& notation, ChordRest* c
                               }
                         if (placement != "above" && placement != "below") {
                               placement = (const char*) 0;
-                              _logger->logError(QString("unknown %1 placement %2").arg(notation.name()).arg(placement), &_e);
+                              _logger->logError(QString("unknown %1 placement %2").arg(notation.name(), placement), &_e);
                               }
                         }
                   else {
@@ -6198,7 +6196,7 @@ void MusicXMLParserNotations::addToScore(ChordRest* const cr, Note* const note, 
       // more than one dynamic ???
       // LVIFIX: check import/export of <other-dynamics>unknown_text</...>
       // TODO remove duplicate code (see MusicXml::direction)
-      for (const auto& d : _dynamicsList) {
+      for (const auto& d : qAsConst(_dynamicsList)) {
             auto dynamic = new Dynamic(_score);
             dynamic->setDynamicType(d);
 //TODO:ws            if (hasYoffset) dyn->textStyle().setYoff(yoffset);

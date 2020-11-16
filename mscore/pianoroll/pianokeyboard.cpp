@@ -256,7 +256,7 @@ void PianoKeyboard::mousePressEvent(QMouseEvent* event)
       uint modifiers = QGuiApplication::keyboardModifiers();
       bool bnCtrl = modifiers & Qt::ControlModifier;
       if (bnCtrl)
-            pitchHighlightToggled(curKeyPressed);
+            emit pitchHighlightToggled(curKeyPressed);
       else {
             curKeyPressed = pitch;
             emit keyPressed(curKeyPressed);

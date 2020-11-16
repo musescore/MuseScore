@@ -1173,7 +1173,7 @@ static QString text2syms(const QString& t)
                   }
             else {
                   // not found, move one char from res to in
-                  res += in.left(1);
+                  res += in.leftRef(1);
                   in.remove(0, 1);
                   }
             }
@@ -2393,7 +2393,7 @@ static bool determineTimeSig(MxmlLogger* logger, const QXmlStreamReader* const x
       else {
             if (!timeSymbol.isEmpty() && timeSymbol != "normal") {
                   logger->logError(QString("time symbol '%1' not recognized with beats=%2 and beat-type=%3")
-                                   .arg(timeSymbol).arg(beats).arg(beatType), xmlreader);
+                                   .arg(timeSymbol, beats, beatType), xmlreader);
                   return false;
                   }
 
@@ -2406,7 +2406,7 @@ static bool determineTimeSig(MxmlLogger* logger, const QXmlStreamReader* const x
       // determine if bts and btp are valid
       if (bts <= 0 || btp <=0) {
             logger->logError(QString("beats=%1 and/or beat-type=%2 not recognized")
-                             .arg(beats).arg(beatType), xmlreader);
+                             .arg(beats, beatType), xmlreader);
             return false;
             }
 
@@ -3377,7 +3377,7 @@ void MusicXMLParserPass1::timeModification(Fraction& timeMod)
       else {
             timeMod.set(1, 1);
             _logger->logError(QString("illegal time-modification: actual-notes %1 normal-notes %2")
-                              .arg(strActual).arg(strNormal), &_e);
+                              .arg(strActual, strNormal), &_e);
             }
       }
 

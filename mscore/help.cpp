@@ -72,11 +72,11 @@ void HelpQuery::textChanged(const QString& ss)
       if (s.isEmpty()) {
             if (!emptyState) {   // restore old menu entries
                   QList<QAction*> al = menu->actions();
-                  for (QAction* a : al) {
+                  for (QAction* a : qAsConst(al)) {
                         if (a != this)
                               menu->removeAction(a);
                         }
-                  for (QAction* a : actions) {
+                  for (QAction* a : qAsConst(actions)) {
                         if (a != this)
                               menu->addAction(a);
                         }
@@ -176,8 +176,8 @@ void MuseScore::showHelp(QString s)
       qDebug("showHelp <%s>", qPrintable(s));
       s = s.toLower();
       if (!s.isEmpty()) {
-            QString help = QString("https://musescore.org/redirect/help?tag=%1&locale=%2").arg(s).arg(getLocaleISOCode());
-            help += QString("&utm_source=desktop&utm_medium=contextual&utm_content=%1&utm_term=%2&utm_campaign=MuseScore%3").arg(rev.trimmed()).arg(s).arg(QString(VERSION));
+            QString help = QString("https://musescore.org/redirect/help?tag=%1&locale=%2").arg(s, getLocaleISOCode());
+            help += QString("&utm_source=desktop&utm_medium=contextual&utm_content=%1&utm_term=%2&utm_campaign=MuseScore%3").arg(rev.trimmed(), s, QString(VERSION));
             QDesktopServices::openUrl(QUrl(help));
             }
 #if 0

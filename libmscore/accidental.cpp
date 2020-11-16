@@ -584,7 +584,7 @@ QString Accidental::propertyUserValue(Pid pid) const
 
 QString Accidental::accessibleInfo() const
       {
-      return QString("%1: %2").arg(Element::accessibleInfo()).arg(Accidental::subtypeUserName());
+      return QString("%1: %2").arg(Element::accessibleInfo(), Accidental::subtypeUserName());
       }
 
 }

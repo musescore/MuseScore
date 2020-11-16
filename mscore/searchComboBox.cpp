@@ -46,7 +46,7 @@ void SearchComboBox::searchTextChanged(const QString& s)
             }
       else {
             if (s.size() >= 2 && s[0].toLower() == 'p' && s[1].isNumber()) {
-                  n = s.mid(1).toInt(&ok);
+                  n = s.midRef(1).toInt(&ok);
                   if (ok) {
                         setSearchType(SearchType::SEARCH_PAGE);
                         _found = cv->searchPage(n);
@@ -105,7 +105,7 @@ QString AccessibleSearchBox::text(QAccessible::Text t) const
                         break;
                   }
             QString found = searchBox->found() ? "" : tr("Not found") + " ";
-            return QString("%1 %2 %3%4").arg(type).arg(value).arg(found).arg(mscore->currentScoreView()->score()->accessibleInfo());
+            return QString("%1 %2 %3%4").arg(type, value, found, mscore->currentScoreView()->score()->accessibleInfo());
             }
 
       return QAccessibleWidget::text(t);

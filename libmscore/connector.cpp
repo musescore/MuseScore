@@ -324,7 +324,7 @@ void ConnectorInfoWriter::write()
       XmlWriter& xml = *_xml;
       if (!xml.canWrite(_connector))
             return;
-      xml.stag(QString("%1 type=\"%2\"").arg(tagName()).arg(_connector->name()));
+      xml.stag(QString("%1 type=\"%2\"").arg(tagName(), _connector->name()));
       if (isStart())
             _connector->write(xml);
       if (hasPrevious()) {

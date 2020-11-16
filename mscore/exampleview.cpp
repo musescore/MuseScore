@@ -195,7 +195,6 @@ void ExampleView::paintEvent(QPaintEvent* ev)
             p.setTransform(_matrix);
             QRectF fr = imatrix.mapRect(QRectF(r));
 
-            QRegion r1(r);
             Page* page = _score->pages().front();
             QList<Element*> ell = page->items(fr);
             std::stable_sort(ell.begin(), ell.end(), elementLessThan);

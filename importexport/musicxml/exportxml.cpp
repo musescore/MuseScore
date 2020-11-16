@@ -1587,7 +1587,7 @@ static void ending(XmlWriter& xml, Volta* v, bool left)
                         return;
                   }
             }
-      QString voltaXml = QString("ending number=\"%1\" type=\"%2\"").arg(number).arg(type);
+      QString voltaXml = QString("ending number=\"%1\" type=\"%2\"").arg(number, type);
       voltaXml += positioningAttributes(v, left);
       xml.tagE(voltaXml);
       }
@@ -3299,8 +3299,6 @@ void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* 
 #endif
 
       for (Note* note : nl) {
-            QString val;
-
             _attr.doAttr(_xml, false);
             QString noteTag = QString("note");
 
@@ -3775,7 +3773,7 @@ static bool findMetronome(const QList<TextFragment>& list,
             if (words.length() > pos2 + len2) {
                   QString s1 = words.mid(0, pos1);     // string to the left of metronome
                   QString s2 = words.mid(pos1, len1);  // first note
-                  QString s3 = words.mid(pos2, len2);  // equals sign
+                  //QString s3 = words.mid(pos2, len2);  // equals sign
                   QString s4 = words.mid(pos2 + len2); // string to the right of equals sign
                   /*
                   qDebug("found note and equals: '%s'%s'%s'%s'",
@@ -4279,7 +4277,7 @@ void ExportMusicXml::ottava(Ottava const* const ot, int staff, const Fraction& t
                         qDebug("ottava subtype %d not understood", int(st));
                   }
             if (sz && tp)
-                  octaveShiftXml = QString("octave-shift type=\"%1\" size=\"%2\" number=\"%3\"").arg(tp).arg(sz).arg(n + 1);
+                  octaveShiftXml = QString("octave-shift type=\"%1\" size=\"%2\" number=\"%3\"").arg(tp, sz).arg(n + 1);
             }
       else {
             if (st == OttavaType::OTTAVA_8VA || st == OttavaType::OTTAVA_8VB)
@@ -4500,7 +4498,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
             // or other characters and write the runs.
             QString text;
             bool inDynamicsSym = false;
-            for (const auto ch : dynText) {
+            for (const auto ch : qAsConst(dynText)) {
                   const auto it = map.find(ch.unicode());
                   if (it != map.end()) {
                         // found a SMUFL single letter dynamics glyph
@@ -5307,7 +5305,7 @@ static void identification(XmlWriter& xml, Score const* const score)
       QStringList creators;
       // the creator types commonly found in MusicXML
       creators << "arranger" << "composer" << "lyricist" << "poet" << "translator";
-      for (QString type : creators) {
+      for (const QString &type : qAsConst(creators)) {
             QString creator = score->metaTag(type);
             if (!creator.isEmpty())
                   xml.tag(QString("creator type=\"%1\"").arg(type), creator);
@@ -6710,14 +6708,14 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                   _xml.tag(s, h->xmlKind());
                   QStringList l = h->xmlDegrees();
                   if (!l.isEmpty()) {
-                        for (QString tag : l) {
+                        for (QString tag : qAsConst(l)) {
                               QString degreeText;
                               if (h->xmlKind().startsWith("suspended")
                                   && tag.startsWith("add") && tag[3].isDigit()
                                   && !kindText.isEmpty() && kindText[0].isDigit()) {
                                     // hack to correct text for suspended chords whose kind text has degree information baked in
                                     // (required by some other applications)
-                                    int tagDegree = tag.mid(3).toInt();
+                                    int tagDegree = tag.midRef(3).toInt();
                                     QString kindTextExtension;
                                     for (int i = 0; i < kindText.length() && kindText[i].isDigit(); ++i)
                                           kindTextExtension[i] = kindText[i];

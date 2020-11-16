@@ -238,7 +238,6 @@ void ScoreView::dragEnterEvent(QDragEnterEvent* event)
 
             Image* image = 0;
             if (u.scheme() == "file") {
-                  QFileInfo fi(u.path());
                   image = new Image(score());
                   QString str(u.toLocalFile());
                   image->load(str);
@@ -287,7 +286,7 @@ Element* ScoreView::getDropTarget(EditData& ed)
       {
       QList<Element*> el = elementsAt(ed.pos);
       setDropTarget(0);
-      for (Element* e : el) {
+      for (Element* e : qAsConst(el)) {
             if (e->isStaffLines()) {
                   if (el.size() > 2)      // is not first class drop target
                         continue;
@@ -593,7 +592,7 @@ void ScoreView::dropEvent(QDropEvent* event)
       else {
             qDebug("cannot drop this object: unknown mime type");
             QStringList sl = md->formats();
-            for (const QString& s : sl)
+            for (const QString& s : qAsConst(sl))
                   qDebug("  %s", qPrintable(s));
             _score->update();
             return;

@@ -403,7 +403,7 @@ void GuitarPro6::readChord(QDomNode* diagram, int track)
 
       // get the identifier to set as the domain in the map
       int id    = diagram->attributes().namedItem("id").toAttr().value().toInt();
-      auto name = diagram->attributes().namedItem("name").toAttr().value();
+//TODO-ws      auto name = diagram->attributes().namedItem("name").toAttr().value();
 
 //TODO-ws      fretDiagram->setChordName(name);
       QDomNode diagramNode = diagram->firstChild();
@@ -1931,7 +1931,7 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
                         auto voices          = voicesString.split(" ");
                         bool contentAdded    = false;
                         int voiceNum         = -1;
-                        for (auto currentVoice : voices) {
+                        for (const auto &currentVoice : qAsConst(voices)) {
                               // if the voice is not -1 then we set voice
                               if (currentVoice.compare("-1"))
                                     voice = getNode(currentVoice, partInfo->voices);
@@ -2363,7 +2363,6 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                                     volta->setTick(measure->tick());
                                     volta->setTick2(measure->tick() + measure->ticks());
 
-                                    QList<int> endings;
                                     const char* c = endNumbers.toUtf8().constData();
                                     while (c && *c)
                                           {

@@ -311,7 +311,7 @@ void Event::write(XmlWriter& xml) const
                               QString sex(_edata[1] ? "Minor" : "Major");
                               QString keyName(keyTable[key]);
                               xml.tag(QString("Key tick=\"%1\" key=\"%2\" sex=\"%3\"").arg(ontime()).arg(_edata[0]).arg(_edata[1]),
-                                 QString("%1 %2").arg(keyName).arg(sex));
+                                 QString("%1 %2").arg(keyName, sex));
                               }
                               break;
 

@@ -413,7 +413,7 @@ void ScoreView::mousePressEventNormal(QMouseEvent* ev)
                         // (if such an element exists)
                         QList<Element*> ll = elementsNear(editData.startMove);
                         bool found = false;
-                        for (Element* ee : ll) {
+                        for (Element* ee : qAsConst(ll)) {
                               if (found) {
                                     e = ee;
                                     if (!e->isMeasure())

@@ -549,7 +549,7 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                               //There are probably more destination tracks for the same source
                               QList<int> t = trackList.values(srcTrack);
 
-                              for (int track : t) {
+                              for (int track : qAsConst(t)) {
                                     //Clone KeySig TimeSig and Clefs if voice 1 of source staff is not mapped to a track
                                     Element* oef = oseg->element(srcTrack & ~3);
                                     if (oef && !oef->generated() && (oef->isTimeSig() || oef->isKeySig())
@@ -825,7 +825,7 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                         track1 += trackList.values(ii);
                         }
 
-                  for (int track : track1) {
+                  for (int track : qAsConst(track1)) {
                         if (!(track % VOICES))
                               cloneSpanner(s, score, track, track);
                         }

@@ -126,7 +126,7 @@ int ScoreGroup::index() const
 
 void ScoreGroup::dump() const
       {
-      QString fullName = _section.isEmpty() ? _id : QString("%1/%2").arg(_section).arg(_id);
+      QString fullName = _section.isEmpty() ? _id : QString("%1/%2").arg(_section, _id);
       std::cout << "      " << _index << " : ";
       if (_soloists)
             std::cout << fullName.toStdString();
@@ -516,11 +516,11 @@ void ScoreOrder::write(XmlWriter& xml) const
                         xml.etag();
                   if (!sg->section().isEmpty())
                         xml.stag(QString("section id=\"%1\" brackets=\"%2\" showSystemMarkings=\"%3\" barLineSpan=\"%4\" thinBrackets=\"%5\"")
-                                 .arg(sg->section())
-                                 .arg(sg->bracket ? "true" : "false")
-                                 .arg(sg->showSystemMarkings ? "true" : "false")
-                                 .arg(sg->barLineSpan ? "true" : "false")
-                                 .arg(sg->thinBracket ? "true" : "false"));
+                                 .arg(sg->section(),
+                                      sg->bracket ? "true" : "false",
+                                      sg->showSystemMarkings ? "true" : "false",
+                                      sg->barLineSpan ? "true" : "false",
+                                      sg->thinBracket ? "true" : "false"));
                   section = sg->section();
                   }
             sg->write(xml);

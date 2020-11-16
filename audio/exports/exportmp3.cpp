@@ -138,7 +138,7 @@ bool MP3Exporter::loadLibrary(AskUser askuser)
                    "the freely available LAME library. You must obtain %1 "
                    "separately (for details check the handbook), and then locate the file for MuseScore.\n"
                    "You only need to do this once.\n\n"
-                   "Would you like to locate %2 now?").arg(getLibraryName()).arg(getLibraryName()),
+                   "Would you like to locate %2 now?").arg(getLibraryName(), getLibraryName()),
                    QMessageBox::Yes|QMessageBox::No, QMessageBox::NoButton);
             if (ret == QMessageBox::Yes && findLibrary()) {
                   mLibraryLoaded = initLibrary(mLibPath);
