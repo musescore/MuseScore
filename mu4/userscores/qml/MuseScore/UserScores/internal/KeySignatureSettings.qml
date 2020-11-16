@@ -35,7 +35,6 @@ FlatButton {
         }
 
         StyledTextLabel {
-            font.pixelSize: 12
             text: model.keySignature.title
         }
     }

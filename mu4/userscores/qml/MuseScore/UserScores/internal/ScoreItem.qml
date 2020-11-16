@@ -125,7 +125,6 @@ Item {
 
                 anchors.horizontalCenter: parent.horizontalCenter
 
-                font.pixelSize: 12
                 font.capitalization: Font.AllUppercase
 
                 visible: !root.isAdd

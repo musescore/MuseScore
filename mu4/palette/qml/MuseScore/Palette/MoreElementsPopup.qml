@@ -259,8 +259,6 @@ StyledPopup {
             width: parent.width
             text: qsTrc("palette", "Drag items to the palette or directly on your score")
             wrapMode: Text.WordWrap
-            // make this label's font slightly smaller than other popup text
-            font.pointSize: ui.theme.font.pointSize * 0.8
         }
 
         FlatButton {

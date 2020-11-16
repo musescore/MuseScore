@@ -42,7 +42,6 @@ Rectangle {
                 horizontalAlignment: Text.AlignLeft
 
                 text: model ? model.itemRole.title : ""
-                font.pixelSize: 12
             }
         }
     }

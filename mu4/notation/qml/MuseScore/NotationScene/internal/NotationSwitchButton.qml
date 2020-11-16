@@ -32,7 +32,6 @@ FlatRadioButton {
             horizontalAlignment: Text.AlignLeft
 
             text: root.title + (root.needSave ? "*" : "")
-            font.pixelSize: 12
         }
 
         FlatButton {

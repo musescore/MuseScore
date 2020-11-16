@@ -80,8 +80,6 @@ Rectangle {
                         }
                         return root.description.substring(0, breakIndex + 1)
                     }
-
-                    font.pixelSize: 12
                 }
             }
         }
