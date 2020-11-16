@@ -532,13 +532,13 @@ static void setPartInstruments(MxmlLogger* logger, const QXmlStreamReader* const
                                Part* part, const QString& partId,
                                Score* score,
                                const MusicXmlInstrList& instrList,
-                               const MusicXmlIntervalList& intervalList,
+                               const MusicXmlIntervalList& intervList,
                                const MusicXMLInstruments& instruments)
       {
       if (instruments.empty()) {
             // no instrument details found, create a default instrument
             //qDebug("no instrument details");
-            updatePartWithInstrument(part, {}, intervalList.interval({ 0, 1 }));
+            updatePartWithInstrument(part, {}, intervList.interval({ 0, 1 }));
             return;
             }
 
@@ -555,7 +555,7 @@ static void setPartInstruments(MxmlLogger* logger, const QXmlStreamReader* const
             // -> only a single instrument is playing in the part
             //qDebug("single instrument");
             MusicXMLInstrument mxmlInstr = instruments.first();
-            updatePartWithInstrument(part, mxmlInstr, intervalList.interval({ 0, 1 }));
+            updatePartWithInstrument(part, mxmlInstr, intervList.interval({ 0, 1 }));
             return;
             }
 
@@ -568,7 +568,7 @@ static void setPartInstruments(MxmlLogger* logger, const QXmlStreamReader* const
             if (it == instrList.cbegin()) {
                   prevInstrId = (*it).second;        // first instrument id
                   MusicXMLInstrument mxmlInstr = instruments.value(prevInstrId);
-                  updatePartWithInstrument(part, mxmlInstr, intervalList.interval(tick));
+                  updatePartWithInstrument(part, mxmlInstr, intervList.interval(tick));
                   }
             else {
                   auto instrId = (*it).second;
@@ -597,7 +597,7 @@ static void setPartInstruments(MxmlLogger* logger, const QXmlStreamReader* const
                                                .arg(instrId).arg(tick.ticks()).arg(partId), xmlreader);
                         else {
                               MusicXMLInstrument mxmlInstr = instruments.value(instrId);
-                              updatePartWithInstrumentChange(part, mxmlInstr, intervalList.interval(tick), segment, track, tick);
+                              updatePartWithInstrumentChange(part, mxmlInstr, intervList.interval(tick), segment, track, tick);
                               }
                         }
                   prevInstrId = instrId;
