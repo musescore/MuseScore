@@ -141,7 +141,7 @@ class FretDiagram final : public Element {
       // Markers stored as K: string, V: marker struct
       MarkerMap _markers;
 
-      Harmony* _harmony  { 0 };
+      Harmony* _harmony  { nullptr };
 
       qreal stringLw;
       qreal nutLw;
