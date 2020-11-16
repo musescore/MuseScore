@@ -652,7 +652,7 @@
     <metronomeFrameRound>0</metronomeFrameRound>
     <metronomeFrameFgColor r="0" g="0" b="0" a="255"/>
     <metronomeFrameBgColor r="255" g="255" b="255" a="0"/>
-    <measureNumberFontFace>Nimbus Roman</measureNumberFontFace>
+    <measureNumberFontFace>Edwin</measureNumberFontFace>
     <measureNumberFontSize>9</measureNumberFontSize>
     <measureNumberFontSpatiumDependent>1</measureNumberFontSpatiumDependent>
     <measureNumberFontStyle>2</measureNumberFontStyle>
