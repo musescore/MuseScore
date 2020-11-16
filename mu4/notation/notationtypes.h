@@ -158,14 +158,6 @@ struct SearchCommand
 };
 using SearchCommands = QList<SearchCommand>;
 
-struct SelectionRange
-{
-    int startStaffIndex = 0;
-    int endStaffIndex = 0;
-    Fraction startTick;
-    Fraction endTick;
-};
-
 struct StaffConfig
 {
     bool visible = false;

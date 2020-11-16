@@ -74,6 +74,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationinputstate.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationselection.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationselection.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationselectionrange.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationselectionrange.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationelements.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationelements.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationactioncontroller.cpp
@@ -111,6 +113,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/inotationactionsrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/searchcommandsparser.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/searchcommandsparser.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/inotationselectionrange.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationpaintview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/notationpaintview.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationviewinputcontroller.cpp
