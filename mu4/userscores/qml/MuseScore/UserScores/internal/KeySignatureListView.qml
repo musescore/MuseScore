@@ -50,7 +50,6 @@ GridView {
             StyledTextLabel {
                 anchors.horizontalCenter: parent.horizontalCenter
 
-                font.pixelSize: 12
                 text: modelData.title
             }
         }

@@ -28,7 +28,6 @@ Item {
 
                 horizontalAlignment: Qt.AlignLeft
                 font.capitalization: Font.AllUppercase
-                font.pixelSize: 12
             }
 
             StyledTextLabel {
@@ -40,7 +39,6 @@ Item {
 
                 horizontalAlignment: Qt.AlignLeft
                 font.capitalization: Font.AllUppercase
-                font.pixelSize: 12
             }
         }
 

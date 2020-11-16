@@ -564,7 +564,7 @@ ListView {
             }
 
             DropArea {
-                anchors { fill: parent/*; margins: 10*/ }
+                anchors.fill: parent
                 keys: [ "application/musescore/palettetree" ]
                 onEntered: {
                     const idx = control.DelegateModel.itemsIndex;

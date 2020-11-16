@@ -65,7 +65,7 @@ Rectangle {
 
             font {
                 family: ui.theme.font.family
-                pointSize: ui.theme.font.pointSize
+                pixelSize: ui.theme.font.pixelSize
             }
 
             background: Item {}
