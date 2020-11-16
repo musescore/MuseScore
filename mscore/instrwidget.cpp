@@ -313,6 +313,15 @@ void StaffListItem::staffTypeChanged(int idx)
       }
 
 //---------------------------------------------------------
+//   id
+//---------------------------------------------------------
+
+QString PartListItem::id() const
+      {
+      return it ? it->id : part->instrument()->getId();
+      }
+
+//---------------------------------------------------------
 //   name
 //---------------------------------------------------------
 
@@ -624,8 +633,8 @@ int InstrumentsWidget::findPrvItem(PartListItem* pli, int number)
       {
       ScoreOrder* order = getScoreOrder();
 
-      int orderNumber = order->instrumentIndex(pli->name(), pli->isSoloist());
-      bool unsorted = order->instrumentInUnsortedSection(pli->name(), pli->isSoloist());
+      int orderNumber = order->instrumentIndex(pli->id(), pli->isSoloist());
+      bool unsorted = order->instrumentInUnsortedSection(pli->id(), pli->isSoloist());
       int currow { 0 };
       if (unsorted)
             currow = partiturList->currentIndex().row();
@@ -636,12 +645,12 @@ int InstrumentsWidget::findPrvItem(PartListItem* pli, int number)
             PartListItem* p = (PartListItem*)item;
             if (p->op == ListItemOp::I_DELETE)
                   continue;
-            if (order->instrumentIndex(pli->name(), p->isSoloist()) == orderNumber)
+            if (order->instrumentIndex(p->id(), p->isSoloist()) == orderNumber)
                   {
                   if (idx > currow)
                         return idx;
                   }
-            if (order->instrumentIndex(pli->name(), p->isSoloist()) > orderNumber)
+            if (order->instrumentIndex(p->id(), p->isSoloist()) > orderNumber)
                   return idx;
             }
       return last;
@@ -1342,7 +1351,7 @@ bool InstrumentsWidget::isScoreOrder(const ScoreOrder* order) const
             PartListItem* pli = (PartListItem*)item;
             if (pli->op == ListItemOp::I_DELETE)
                   continue;
-            indices << order->instrumentIndex(pli->name(), pli->isSoloist());
+            indices << order->instrumentIndex(pli->id(), pli->isSoloist());
             }
       return order->isScoreOrder(indices);
       }

@@ -36,7 +36,7 @@
           </StaffType>
         </Staff>
       <trackName>Piano, PIANO                               </trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Piano, PIANO                               </longName>
         <shortName>Pno.</shortName>
         <trackName>Piano</trackName>

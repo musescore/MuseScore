@@ -35,7 +35,7 @@
           </StaffType>
         </Staff>
       <trackName>Piano</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Piano</longName>
         <shortName>Pno.</shortName>
         <trackName>Piano</trackName>
@@ -87,7 +87,7 @@
           </StaffType>
         </Staff>
       <trackName>Flute</trackName>
-      <Instrument>
+      <Instrument id="flute">
         <longName>Flute</longName>
         <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
@@ -138,7 +138,7 @@
           </StaffType>
         </Staff>
       <trackName>B♭ Trumpet</trackName>
-      <Instrument>
+      <Instrument id="bb-trumpet">
         <longName>B♭ Trumpet</longName>
         <shortName>B♭ Tpt.</shortName>
         <trackName>B♭ Trumpet</trackName>
@@ -197,7 +197,7 @@
         <defaultClef>F</defaultClef>
         </Staff>
       <trackName>Tenor Trombone</trackName>
-      <Instrument>
+      <Instrument id="tenor-trombone">
         <longName>Tenor Trombone</longName>
         <shortName>T. Tbn.</shortName>
         <trackName>Tenor Trombone</trackName>

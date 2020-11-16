@@ -159,6 +159,7 @@ extern bool saveInstrumentTemplates(const QString& instrTemplates);
 extern InstrumentTemplate* searchTemplate(const QString& name);
 extern InstrumentTemplate* searchTemplateForMusicXmlId(const QString& mxmlId);
 extern InstrumentIndex searchTemplateIndexForTrackName(const QString& trackName);
+extern InstrumentIndex searchTemplateIndexForId(const QString& id);
 extern InstrumentGroup* searchInstrumentGroup(const QString& name);
 extern ClefType defaultClef(int patch);
 

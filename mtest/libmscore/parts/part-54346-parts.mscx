@@ -30,7 +30,7 @@
           </StaffType>
         </Staff>
       <trackName>B♭ Trumpet</trackName>
-      <Instrument>
+      <Instrument id="bb-trumpet">
         <longName>B♭ Trumpet</longName>
         <shortName>B♭ Tpt.</shortName>
         <trackName>B♭ Trumpet</trackName>
@@ -84,7 +84,7 @@
           </StaffType>
         </Staff>
       <trackName>C Trumpet</trackName>
-      <Instrument>
+      <Instrument id="c-trumpet">
         <longName>C Trumpet</longName>
         <shortName>C Tpt.</shortName>
         <trackName>C Trumpet</trackName>
@@ -291,7 +291,7 @@
             </StaffType>
           </Staff>
         <trackName>B♭ Trumpet</trackName>
-        <Instrument>
+        <Instrument id="bb-trumpet">
           <longName>B♭ Trumpet</longName>
           <shortName>B♭ Tpt.</shortName>
           <trackName>B♭ Trumpet</trackName>
@@ -469,7 +469,7 @@
             </StaffType>
           </Staff>
         <trackName>C Trumpet</trackName>
-        <Instrument>
+        <Instrument id="c-trumpet">
           <longName>C Trumpet</longName>
           <shortName>C Tpt.</shortName>
           <trackName>C Trumpet</trackName>

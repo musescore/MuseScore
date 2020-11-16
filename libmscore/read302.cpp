@@ -278,6 +278,12 @@ bool Score::read(XmlReader& e)
                   }
             }
 #endif
+      // Make sure every instrument has an instrumentId set.
+      for (Part* part : parts()) {
+            const InstrumentList* il = part->instruments();
+            for (auto it = il->begin(); it != il->end(); it++)
+                  static_cast<Instrument*>(it->second)->updateInstrumentId();
+            }
       if (order) {
             ScoreOrder* defined = scoreOrders.findByName(order->getName());
             if (defined)

@@ -37,7 +37,7 @@
         <defaultClef>F</defaultClef>
         </Staff>
       <trackName>String Synthesizer</trackName>
-      <Instrument>
+      <Instrument id="string-synthesizer">
         <longName>String Synthesizer</longName>
         <shortName>Synth.</shortName>
         <trackName>String Synthesizer</trackName>
@@ -114,7 +114,7 @@
         <defaultClef>F</defaultClef>
         </Staff>
       <trackName>Piano</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Piano</longName>
         <shortName>Pno.</shortName>
         <trackName>Piano</trackName>

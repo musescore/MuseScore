@@ -37,7 +37,7 @@
         <defaultClef>F</defaultClef>
         </Staff>
       <trackName>Electric Piano</trackName>
-      <Instrument>
+      <Instrument id="electric-piano">
         <longName>Electric Piano</longName>
         <shortName>El. Pno.</shortName>
         <trackName>Electric Piano</trackName>
@@ -107,7 +107,7 @@
         <defaultClef>F</defaultClef>
         </Staff>
       <trackName>Piano</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Piano</longName>
         <shortName>Pno.</shortName>
         <trackName>Piano</trackName>

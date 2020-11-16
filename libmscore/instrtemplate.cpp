@@ -771,6 +771,25 @@ InstrumentIndex searchTemplateIndexForTrackName(const QString& trackName)
       }
 
 //---------------------------------------------------------
+//   searchTemplateIndexForId
+//---------------------------------------------------------
+
+InstrumentIndex searchTemplateIndexForId(const QString& id)
+      {
+      int instIndex = 0;
+      int grpIndex = 0;
+      for (InstrumentGroup* g : instrumentGroups) {
+            for (InstrumentTemplate* it : g->instrumentTemplates) {
+                  if (it->id == id)
+                        return InstrumentIndex(grpIndex, instIndex, it);
+                  ++instIndex;
+                  }
+            ++grpIndex;
+            }
+      return InstrumentIndex(-1, -1, nullptr);
+      }
+
+//---------------------------------------------------------
 //   linkGenre
 //      link the current instrument template to the genre list specified by "genre"
 //      Each genre is a list of pointers to instrument templates

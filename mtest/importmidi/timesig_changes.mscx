@@ -29,7 +29,7 @@
           </StaffType>
         </Staff>
       <trackName>Piano, untitled</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Piano, untitled</longName>
         <shortName>Pno.</shortName>
         <trackName>Piano</trackName>

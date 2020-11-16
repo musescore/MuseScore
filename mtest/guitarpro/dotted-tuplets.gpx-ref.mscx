@@ -30,7 +30,7 @@
           </StaffType>
         </Staff>
       <trackName>Bells</trackName>
-      <Instrument>
+      <Instrument id="guitar-steel-treble-clef">
         <longName>Guitar</longName>
         <shortName>Guit.</shortName>
         <trackName>Acoustic Guitar (Treble Clef)</trackName>
@@ -286,7 +286,7 @@
             </StaffType>
           </Staff>
         <trackName></trackName>
-        <Instrument>
+        <Instrument id="guitar-steel-treble-clef">
           <longName>Guitar</longName>
           <shortName>Guit.</shortName>
           <trackName>Acoustic Guitar (Treble Clef)</trackName>

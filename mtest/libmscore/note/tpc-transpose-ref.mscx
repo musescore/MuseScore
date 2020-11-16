@@ -30,7 +30,7 @@
           </StaffType>
         </Staff>
       <trackName>B♭ Clarinet</trackName>
-      <Instrument>
+      <Instrument id="bb-clarinet">
         <longName>B♭ Clarinet</longName>
         <shortName>B♭ Cl.</shortName>
         <trackName>B♭ Clarinet</trackName>

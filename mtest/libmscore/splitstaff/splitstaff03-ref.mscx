@@ -29,7 +29,7 @@
           </StaffType>
         </Staff>
       <trackName>Flute</trackName>
-      <Instrument>
+      <Instrument id="flute">
         <longName>Flute</longName>
         <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
@@ -83,7 +83,7 @@
           </StaffType>
         </Staff>
       <trackName>Harp</trackName>
-      <Instrument>
+      <Instrument id="harp">
         <longName>Harp</longName>
         <shortName>Hrp.</shortName>
         <trackName>Harp</trackName>
@@ -134,7 +134,7 @@
         <defaultClef>F</defaultClef>
         </Staff>
       <trackName>Violoncello</trackName>
-      <Instrument>
+      <Instrument id="violoncello">
         <longName>Violoncello</longName>
         <shortName>Vlc.</shortName>
         <trackName>Violoncello</trackName>

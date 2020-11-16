@@ -32,7 +32,7 @@
         <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Tambourine</trackName>
-      <Instrument>
+      <Instrument id="tambourine">
         <longName>Tambourine</longName>
         <shortName>Tamb.</shortName>
         <trackName>Tambourine</trackName>
@@ -103,7 +103,7 @@
         <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Drumset</trackName>
-      <Instrument>
+      <Instrument id="drumset">
         <longName>Drumset</longName>
         <shortName>D. Set</shortName>
         <trackName>Drumset</trackName>

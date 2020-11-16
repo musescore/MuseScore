@@ -79,7 +79,7 @@
           </StaffType>
         </Staff>
       <trackName>Piano</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Desired</longName>
         <shortName>Desired</shortName>
         <trackName>Piano</trackName>

@@ -30,7 +30,7 @@
         <defaultClef>F</defaultClef>
         </Staff>
       <trackName>Piano, Track 1</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Piano, Track 1</longName>
         <shortName>Pno.</shortName>
         <trackName>Piano</trackName>

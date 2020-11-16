@@ -33,7 +33,7 @@
           </StaffType>
         </Staff>
       <trackName>Voice</trackName>
-      <Instrument>
+      <Instrument id="voice">
         <longName>Voice</longName>
         <shortName>Vo.</shortName>
         <trackName>Voice</trackName>

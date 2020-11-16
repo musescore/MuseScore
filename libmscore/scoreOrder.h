@@ -110,20 +110,19 @@ class ScoreOrder {
       void setCustomised();
 
       ScoreGroup* getGroup(const QString family, const QString instrumentGroup) const;
-      ScoreGroup* getGroup(const QString instrumentName, bool soloist) const;
+      ScoreGroup* getGroup(const QString instrumentId, bool soloist) const;
 
       void read(XmlReader& e);
       void write(XmlWriter& xml) const;
 
-      int instrumentIndex(const QString name, bool soloist) const;
-      bool instrumentInUnsortedSection(const QString name, bool soloist) const;
+      int instrumentIndex(const QString id, bool soloist) const;
+      bool instrumentInUnsortedSection(const QString id, bool soloist) const;
 
       void updateInstruments(const Score* score);
       void setBracketsAndBarlines(Score* score);
       bool isScoreOrder(const QList<int>& indices) const;
       bool isScoreOrder(const Score* score) const;
 
-      void debug(const QString& name, bool soloist) const;
       void dump() const;
       };
 
