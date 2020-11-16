@@ -147,7 +147,7 @@ io::paths LanguagesConfiguration::languageFilePaths(const QString& languageCode)
 {
     io::path languagesDirPath = languagesSharePath();
     QStringList filters = { QString("*%1.qm").arg(languageCode) };
-    RetVal<io::paths> files = fileSystem()->scanFiles(languagesDirPath, filters, IFileSystem::ScanMode::IncludeSubdirs);
+    RetVal<io::paths> files = fileSystem()->scanFiles(languagesDirPath, filters);
 
     if (!files.ret) {
         LOGW() << files.ret.toString();

@@ -18,13 +18,16 @@
 //=============================================================================
 #include "workspacemanager.h"
 
-#include <QDir>
-
 #include "log.h"
 
 using namespace mu;
 using namespace mu::workspace;
 using namespace mu::extensions;
+
+static bool containsWorkspace(const IWorkspacePtrList& list, const IWorkspacePtr& workspace)
+{
+    return std::find(list.cbegin(), list.cend(), workspace) != list.cend();
+}
 
 RetValCh<IWorkspacePtr> WorkspaceManager::currentWorkspace() const
 {
@@ -59,9 +62,87 @@ RetValCh<IWorkspacePtrList> WorkspaceManager::workspaces() const
 
 Ret WorkspaceManager::setWorkspaces(const IWorkspacePtrList& workspaces)
 {
-    UNUSED(workspaces)
-    NOT_IMPLEMENTED;
+    Ret ret = removeMissingWorkspaces(workspaces);
 
+    if (ret) {
+        ret = createInexistentWorkspaces(workspaces);
+    }
+
+    if (ret) {
+        m_workspacesChanged.send(workspaces);
+    }
+
+    return ret;
+}
+
+Ret WorkspaceManager::removeMissingWorkspaces(const IWorkspacePtrList& newWorkspaceList)
+{
+    RetValCh<IWorkspacePtrList> oldWorkspaceList = workspaces();
+    if (!oldWorkspaceList.ret) {
+        return oldWorkspaceList.ret;
+    }
+
+    for (const IWorkspacePtr& oldWorkspace : oldWorkspaceList.val) {
+        if (containsWorkspace(newWorkspaceList, oldWorkspace)) {
+            continue;
+        }
+
+        Ret ret = removeWorkspace(oldWorkspace);
+        if (!ret) {
+            return ret;
+        }
+    }
+
+    return make_ret(Ret::Code::Ok);
+}
+
+Ret WorkspaceManager::removeWorkspace(const IWorkspacePtr& workspace)
+{
+    std::string workspaceName = workspace->name();
+    if (!canRemoveWorkspace(workspaceName)) {
+        return make_ret(Ret::Code::Ok);
+    }
+
+    for (auto it = m_workspaces.begin(); it != m_workspaces.end(); ++it) {
+        if (it->get()->name() == workspaceName) {
+            m_workspaces.erase(it);
+            return fileSystem()->remove(it->get()->filePath());
+        }
+    }
+
+    return make_ret(Ret::Code::Ok);
+}
+
+bool WorkspaceManager::canRemoveWorkspace(const std::string& workspaceName) const
+{
+    return workspaceName != DEFAULT_WORKSPACE_NAME;
+}
+
+Ret WorkspaceManager::createInexistentWorkspaces(const IWorkspacePtrList& newWorkspaceList)
+{
+    RetValCh<IWorkspacePtrList> existentWorkspaces = workspaces();
+    if (!existentWorkspaces.ret) {
+        return existentWorkspaces.ret;
+    }
+
+    for (const IWorkspacePtr& workspace : newWorkspaceList) {
+        if (containsWorkspace(existentWorkspaces.val, workspace)) {
+            continue;
+        }
+
+        Ret ret = createWorkspace(workspace);
+        if (!ret) {
+            return ret;
+        }
+    }
+
+    return make_ret(Ret::Code::Ok);
+}
+
+Ret WorkspaceManager::createWorkspace(const IWorkspacePtr& workspace)
+{
+    UNUSED(workspace)
+    NOT_IMPLEMENTED;
     return Ret();
 }
 
@@ -103,17 +184,20 @@ void WorkspaceManager::load()
 
 io::paths WorkspaceManager::findWorkspaceFiles() const
 {
-    io::paths files;
-    io::paths paths = configuration()->workspacePaths();
+    io::paths result;
+    io::paths dirPaths = configuration()->workspacePaths();
 
-    for (const io::path& path : paths) {
-        //! TODO Change on use IFileSystem
-        QStringList flist = QDir(path.toQString()).entryList({ "*.workspace" }, QDir::Files);
-        for (const QString& f : flist) {
-            files.push_back(path + "/" + f);
+    for (const io::path& dirPath : dirPaths) {
+        RetVal<io::paths> files = fileSystem()->scanFiles(dirPath, { "*.workspace" });
+        if (!files.ret) {
+            LOGE() << files.ret.toString();
+            continue;
         }
+
+        result.insert(result.end(), files.val.begin(), files.val.end());
     }
-    return files;
+
+    return result;
 }
 
 void WorkspaceManager::setupCurrentWorkspace()

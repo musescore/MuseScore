@@ -46,6 +46,7 @@ public:
     std::vector<std::string> toolbarActions(const std::string& toolbarName) const override;
 
     bool isInited() const;
+    io::path filePath() const;
     Ret read();
     Ret write();
 

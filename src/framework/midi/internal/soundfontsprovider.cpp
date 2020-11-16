@@ -102,7 +102,7 @@ std::vector<io::path> SoundFontsProvider::soundFontPaths(SoundFontFormats format
 
     std::vector<io::path> soundFonts;
     for (const io::path& path : paths) {
-        RetVal<std::vector<io::path> > files = fileSystem()->scanFiles(path, filter, IFileSystem::ScanMode::IncludeSubdirs);
+        RetVal<io::paths> files = fileSystem()->scanFiles(path, filter);
         if (!files.ret) {
             continue;
         }
