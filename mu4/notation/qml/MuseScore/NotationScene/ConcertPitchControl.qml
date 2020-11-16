@@ -32,6 +32,8 @@ Row {
     }
 
     StyledTextLabel {
+        height: parent.height
+
         text: qsTrc("notation", "Concert pitch")
     }
 }
