@@ -111,10 +111,15 @@ bool Workspace::isInited() const
     return m_isInited;
 }
 
+io::path Workspace::filePath() const
+{
+    return m_filePath;
+}
+
 Ret Workspace::read()
 {
-    WorkspaceFile f(m_filePath);
-    QByteArray data = f.readRootFile();
+    WorkspaceFile file(m_filePath);
+    QByteArray data = file.readRootFile();
     if (data.isEmpty()) {
         return make_ret(Ret::Code::UnknownError);
     }

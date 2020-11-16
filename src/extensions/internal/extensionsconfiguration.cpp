@@ -145,7 +145,7 @@ io::path ExtensionsConfiguration::extensionFileName(const QString& extensionCode
 
 io::paths ExtensionsConfiguration::fileList(const io::path& directory, const QStringList& filters) const
 {
-    RetVal<io::paths> files = fileSystem()->scanFiles(directory, filters, IFileSystem::ScanMode::IncludeSubdirs);
+    RetVal<io::paths> files = fileSystem()->scanFiles(directory, filters);
     if (!files.ret) {
         LOGW() << files.ret.code() << files.ret.text();
     }

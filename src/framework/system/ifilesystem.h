@@ -19,8 +19,6 @@
 #ifndef MU_FRAMEWORK_IFILESYSTEM_H
 #define MU_FRAMEWORK_IFILESYSTEM_H
 
-#include <vector>
-
 #include "modularity/imoduleexport.h"
 #include "retval.h"
 #include "io/path.h"
@@ -43,7 +41,7 @@ public:
         IncludeSubdirs
     };
 
-    virtual RetVal<io::paths> scanFiles(const io::path& rootDir, const QStringList& filters, ScanMode mode) const = 0;
+    virtual RetVal<io::paths> scanFiles(const io::path& rootDir, const QStringList& filters, ScanMode mode = ScanMode::IncludeSubdirs) const = 0;
 
     virtual RetVal<QByteArray> readFile(const io::path& filePath) const = 0;
 };

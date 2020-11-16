@@ -23,6 +23,7 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "../iworkspaceconfiguration.h"
+#include "../system/ifilesystem.h"
 #include "workspace.h"
 #include "extensions/iextensionscontroller.h"
 
@@ -31,6 +32,7 @@ class WorkspaceManager : public IWorkspaceManager, async::Asyncable
 {
     INJECT(workspace, IWorkspaceConfiguration, configuration)
     INJECT(workspace, extensions::IExtensionsController, extensionsController)
+    INJECT(workspaces, framework::IFileSystem, fileSystem)
 
 public:
     void init();
@@ -42,6 +44,13 @@ public:
 
 private:
     void load();
+
+    Ret removeMissingWorkspaces(const IWorkspacePtrList& newWorkspaceList);
+    Ret removeWorkspace(const IWorkspacePtr& workspace);
+    bool canRemoveWorkspace(const std::string& workspaceName) const;
+
+    Ret createInexistentWorkspaces(const IWorkspacePtrList& newWorkspaceList);
+    Ret createWorkspace(const IWorkspacePtr& workspace);
 
     io::paths findWorkspaceFiles() const;
     void setupCurrentWorkspace();
