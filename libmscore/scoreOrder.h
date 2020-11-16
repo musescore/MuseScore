@@ -135,6 +135,8 @@ class ScoreOrderList {
    protected:
       QList<ScoreOrder*> _orders;
 
+      void append(ScoreOrder* order);
+
    public:
       ScoreOrderList();
       ~ScoreOrderList();

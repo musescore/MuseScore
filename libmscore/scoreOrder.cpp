@@ -208,8 +208,10 @@ void ScoreOrder::init()
       _unsorted = nullptr;
       _groupMultiplier = 1;
       _customised = false;
-      for (auto ig : instrumentGroups)
-            _groupMultiplier += ig->instrumentTemplates.size();
+      if (!isCustom()) {
+            for (auto ig : instrumentGroups)
+                  _groupMultiplier += ig->instrumentTemplates.size();
+            }
 
       while (!groups.isEmpty())
             delete groups.takeFirst();
@@ -238,7 +240,7 @@ bool ScoreOrder::readBoolAttribute(XmlReader& e, const char* name, bool defvalue
 
 void ScoreOrder::readName(XmlReader& e)
       {
-      _name = qApp->translate("ScoreOrder", e.readElementText().toUtf8().data());
+      _name = qApp->translate("OrderXML", e.readElementText().toUtf8().data());
       }
 
 //---------------------------------------------------------
@@ -257,7 +259,7 @@ void ScoreOrder::readInstrument(XmlReader& e)
             const QStringRef& tag(e.name());
             if (tag == "family") {
                   const QString id { e.attribute("id") };
-                  const QString name = qApp->translate("ScoreOrder", e.readElementText().toUtf8().data());
+                  const QString name = qApp->translate("OrderXML", e.readElementText().toUtf8().data());
                   instrumentMap.insert(instrumentId, InstrumentOverwrite(id, name));
                   }
             else {
@@ -385,7 +387,7 @@ QString ScoreOrder::getName() const
 QString ScoreOrder::getFullName() const
       {
       if (_customised)
-            return QString(QT_TRANSLATE_NOOP("ScoreOrder", "%1 (Customised)")).arg(_name);
+            return QString(QT_TRANSLATE_NOOP("OrderXML", "%1 (Customised)")).arg(_name);
       else
             return getName();
       }
@@ -733,15 +735,27 @@ void ScoreOrder::dump() const
 ScoreOrderList::ScoreOrderList()
       {
       _orders.clear();
-      ScoreOrder* custom = new ScoreOrder(QString("<custom>"), qApp->translate("ScoreOrder", "Custom"));
+      ScoreOrder* custom = new ScoreOrder(QString("<custom>"), qApp->translate("OrderXML", "Custom"));
       custom->groups.append(new ScoreGroup(QString("<unsorted>"), QString(""), QString("")));
-      _orders.append(custom);
+      addScoreOrder(custom);
       }
 
 ScoreOrderList::~ScoreOrderList()
       {
       while (!_orders.isEmpty())
             delete _orders.takeFirst();
+      }
+
+//---------------------------------------------------------
+//   append
+//---------------------------------------------------------
+
+void ScoreOrderList::append(ScoreOrder* order)
+      {
+      if (_orders.empty() || !_orders.last()->isCustom())
+            _orders.append(order);
+      else
+            _orders.insert(_orders.size()-1, order);
       }
 
 //---------------------------------------------------------
@@ -770,7 +784,7 @@ ScoreOrder* ScoreOrderList::getById(const QString& id)
       ScoreOrder* order = findById(id);
       if (!order) {
             order = new ScoreOrder(id);
-            _orders.append(order);
+            addScoreOrder(order);
             }
       return order;
       }
@@ -864,7 +878,7 @@ void ScoreOrderList::addScoreOrder(ScoreOrder* order)
             return;
 
       if (!order->isCustomised()) {
-            _orders.append(order);
+            append(order);
             return;
             }
 
@@ -876,7 +890,7 @@ void ScoreOrderList::addScoreOrder(ScoreOrder* order)
                         }
                   }
             }
-      _orders.append(order);
+      append(order);
       }
 
 //---------------------------------------------------------

@@ -84,7 +84,17 @@ QVariant ScoreOrderListModel::data(const QModelIndex& index, int role) const
       }
 
 //---------------------------------------------------------
-//   data
+//   rebuildData
+//---------------------------------------------------------
+
+void ScoreOrderListModel::rebuildData()
+      {
+      beginResetModel();
+      endResetModel();
+      }
+
+//---------------------------------------------------------
+//   setCustomisedOrder
 //---------------------------------------------------------
 
 void ScoreOrderListModel::setCustomisedOrder(ScoreOrder* order)
@@ -467,7 +477,8 @@ InstrumentsWidget::InstrumentsWidget(QWidget* parent)
    : QWidget(parent)
       {
       setupUi(this);
-      scoreOrderComboBox->setModel(new ScoreOrderListModel(&scoreOrders, this));
+      _model = new ScoreOrderListModel(&scoreOrders, this);
+      scoreOrderComboBox->setModel(_model);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
       instrumentList->setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -1352,6 +1363,8 @@ void InstrumentsWidget::init()
       downButton->setEnabled(false);
       addLinkedStaffButton->setEnabled(false);
       addStaffButton->setEnabled(false);
+
+      _model->rebuildData();
 
       // get last saved, user-selected instrument genre and set filter to it
       QSettings settings;
