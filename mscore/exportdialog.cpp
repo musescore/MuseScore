@@ -347,10 +347,177 @@ void MuseScore::showExportDialog(const QString& type)
 //---------------------------------------------------------
 
 void ExportDialog::accept()
-{
-      // TODO: Do the actual exporting
+      {
+      QString saveDialogTitle = tr("Export");
+
+      QString saveDirectory;
+      if (cs->masterScore()->fileInfo()->exists())
+            saveDirectory = cs->masterScore()->fileInfo()->dir().path();
+      else {
+            QSettings set;
+            if (mscore->lastSaveCopyDirectory.isEmpty())
+                  mscore->lastSaveCopyDirectory = set.value("lastSaveCopyDirectory", preferences.getString(PREF_APP_PATHS_MYSCORES)).toString();
+            saveDirectory = mscore->lastSaveCopyDirectory;
+            }
+      if (saveDirectory.isEmpty())
+            saveDirectory = preferences.getString(PREF_APP_PATHS_MYSCORES);
+      
+      QString saveFormat;
+      int currentIndex = fileTypeComboBox->currentIndex();
+      if (currentIndex == 0) {
+            saveFormat = "pdf";
+            if (pdfDpiSpinbox->value() != preferences.getInt(PREF_EXPORT_PDF_DPI))
+                  preferences.setPreference(PREF_EXPORT_PDF_DPI, pdfDpiSpinbox->value());
+      } else if (currentIndex == 1) {
+            saveFormat = "png";
+            if (pngDpiSpinbox->value() != preferences.getDouble(PREF_EXPORT_PNG_RESOLUTION))
+                  preferences.setPreference(PREF_EXPORT_PNG_RESOLUTION, pngDpiSpinbox->value());
+            if (pngTransparentBackgroundCheckBox->isChecked() != preferences.getBool(PREF_EXPORT_PNG_USETRANSPARENCY))
+                  preferences.setPreference(PREF_EXPORT_PNG_USETRANSPARENCY, pngTransparentBackgroundCheckBox->isChecked());
+      } else if (currentIndex == 2) {
+            saveFormat = "svg";
+      } else if (currentIndex <= 6) { // The audio formats share some settings
+            if (currentIndex == 3) {
+                  saveFormat = "mp3";
+                  if (mp3BitRate->currentData() != preferences.getInt(PREF_EXPORT_MP3_BITRATE))
+                        preferences.setPreference(PREF_EXPORT_MP3_BITRATE, mp3BitRate->currentData());
+            } else if (currentIndex == 4) {
+                  saveFormat = "wav";
+            } else if (currentIndex == 5) {
+                  saveFormat = "flac";
+            } else if (currentIndex == 6) {
+                  saveFormat = "ogg";
+            }
+            if (audioSampleRate->currentData() != preferences.getInt(PREF_EXPORT_AUDIO_SAMPLERATE))
+                  preferences.setPreference(PREF_EXPORT_AUDIO_SAMPLERATE, audioSampleRate->currentData());
+            if (audioNormaliseCheckBox->isChecked() != preferences.getBool(PREF_EXPORT_AUDIO_NORMALIZE))
+                  preferences.setPreference(PREF_EXPORT_AUDIO_NORMALIZE, audioNormaliseCheckBox->isChecked());
+      } else if (currentIndex == 7) {
+            saveFormat = "mid";
+            if (midiExpandRepeats->isChecked() != preferences.getBool(PREF_IO_MIDI_EXPANDREPEATS))
+                  preferences.setPreference(PREF_IO_MIDI_EXPANDREPEATS, midiExpandRepeats->isChecked());
+            if (midiExportRPNs->isChecked() != preferences.getBool(PREF_IO_MIDI_EXPORTRPNS))
+                  preferences.setPreference(PREF_IO_MIDI_EXPORTRPNS, midiExportRPNs->isChecked());
+      } else if (currentIndex == 8) {
+            if (musicxmlFileTypeComboBox->currentIndex() == 1)
+                  saveFormat = "musicxml";
+            else if (musicxmlFileTypeComboBox->currentIndex() == 2)
+                  saveFormat = "xml";
+            else
+                  saveFormat = "mxl";
+            if (musicxmlExportAllLayout->isChecked() && !preferences.getBool(PREF_EXPORT_MUSICXML_EXPORTLAYOUT))
+                  preferences.setPreference(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, true);
+            else if (musicxmlExportAllBreaks->isChecked() && preferences.musicxmlExportBreaks() != MusicxmlExportBreaks::ALL)
+                  preferences.setCustomPreference<MusicxmlExportBreaks>(PREF_EXPORT_MUSICXML_EXPORTBREAKS, MusicxmlExportBreaks::ALL);
+            else if (musicxmlExportManualBreaks->isChecked() && preferences.musicxmlExportBreaks() != MusicxmlExportBreaks::MANUAL)
+                  preferences.setCustomPreference<MusicxmlExportBreaks>(PREF_EXPORT_MUSICXML_EXPORTBREAKS, MusicxmlExportBreaks::MANUAL);
+            else if (musicxmlExportNoBreaks->isChecked() && preferences.musicxmlExportBreaks() != MusicxmlExportBreaks::NO)
+                  preferences.setCustomPreference<MusicxmlExportBreaks>(PREF_EXPORT_MUSICXML_EXPORTBREAKS, MusicxmlExportBreaks::NO);
+      } else if (currentIndex == 9)
+            saveFormat = "mscx";
+
+      QString filter;
+      if (saveFormat == "mid")
+            filter = "*.mid;*.midi;";
+      else
+            filter = "*." + saveFormat;
+
+      QString name;
+#ifdef Q_OS_WIN
+      if (QOperatingSystemVersion::current() <= QOperatingSystemVersion(QOperatingSystemVersion::Windows, 5, 1))    // XP
+            name = QString("%1/%2").arg(saveDirectory)
+                         .arg(cs->masterScore()->fileInfo()->completeBaseName());
+      else
+#endif
+      name = QString("%1/%2.%3").arg(saveDirectory)
+                   .arg(cs->masterScore()->fileInfo()->completeBaseName())
+                   .arg(saveFormat);
+
+      QString filename = mscore->getSaveScoreName(saveDialogTitle, name, filter);
+      if (filename.isEmpty())
+            return; // User cancels; keep Export dialog open
+
+      QFileInfo fileinfo(filename);
+      mscore->lastSaveCopyDirectory = fileinfo.absolutePath();
+      mscore->lastSaveCopyFormat = fileinfo.suffix();
+
+      QString suffix = fileinfo.suffix();
+      if (suffix.isEmpty()) {
+            QMessageBox::critical(this, tr("Export"), tr("Cannot determine file type."));
+            return; // Error occurred; keep Export dialog open
+            }
+
+      // At this moment, close the dialog
       QDialog::accept();
-}
+
+      QList<Score*> scores;
+      for (int i = 0; i < listWidget->count(); i++) {
+            ExportScoreItem* item = static_cast<ExportScoreItem*>(listWidget->item(i));
+            if (item->isChecked()) {
+                  scores.append(item->score());
+                  }
+            }
+      if (scores.count() == 0)
+            return; // Should never happen
+      
+      if (saveFormat == "pdf" && pdfOneFileRadioButton->isChecked()) {
+            // Export all selected scores as one pdf file
+            if (!mscore->savePdf(scores, filename))
+                  return;
+            
+            QMessageBox::information(this, tr("Export"), tr("Export was successful."));
+      } else {
+            // Export all selected scores as separate files
+            bool overwriteAll = false;
+            bool noToAll = false;
+            QString confirmReplaceTitle = tr("Confirm Replace");
+            QString confirmReplaceMessage = tr("\"%1\" already exists.\nDo you want to replace it?\n");
+            QString replaceAllButtonText = tr("Replace All");
+            QString replaceButtonText = tr("Replace");
+            QString skipButtonText = tr("Skip");
+            QString skipAllButtonText = tr("Skip All");
+            
+            for (Score* score : scores) {
+                  QString definitiveFilename;
+                  if (score->isMaster())
+                        definitiveFilename = filename;
+                  else
+                        definitiveFilename = QString("%1/%2-%3.%4").arg(fileinfo.absolutePath(),
+                                                                        fileinfo.completeBaseName(),
+                                                                        score->title(),
+                                                                        suffix);
+                  QFileInfo definitiveFileInfo = QFileInfo(definitiveFilename);
+                  if (definitiveFileInfo.exists()) {
+                        if (noToAll)
+                              continue;
+                        if (!overwriteAll) {
+                              QMessageBox msgBox(QMessageBox::Question,
+                                                 confirmReplaceTitle,
+                                                 confirmReplaceMessage.arg(QDir::toNativeSeparators(definitiveFilename)),
+                                                 QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No | QMessageBox::NoToAll);
+                              msgBox.setButtonText(QMessageBox::Yes, replaceButtonText);
+                              msgBox.setButtonText(QMessageBox::No, skipButtonText);
+                              msgBox.setButtonText(QMessageBox::YesToAll, replaceAllButtonText);
+                              msgBox.setButtonText(QMessageBox::NoToAll, skipAllButtonText);
+                              int responseCode = msgBox.exec();
+                              if (responseCode == QMessageBox::YesToAll)
+                                    overwriteAll = true;
+                              else if (responseCode == QMessageBox::NoToAll) {
+                                    noToAll = true;
+                                    continue;
+                                    }
+                              else if (responseCode == QMessageBox::No)
+                                    continue;
+                              }
+                        }
+                  if (!mscore->saveAs(score, true, definitiveFilename, suffix))
+                        return;
+                  }
+            
+            if(!noToAll)
+                  QMessageBox::information(this, tr("Export"), tr("Export was successful."));
+            }
+      }
 
 //---------------------------------------------------------
 //   showEvent

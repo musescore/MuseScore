@@ -116,17 +116,6 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_PLAY,
-         "file-part-export",
-         QT_TRANSLATE_NOOP("action","Export Parts…"),
-         QT_TRANSLATE_NOOP("action","Export parts"),
-         QT_TRANSLATE_NOOP("action","Save a copy of the score's parts in various formats"),
-         Icons::fileSave_ICON,
-         Qt::WindowShortcut,
-         ShortcutFlags::A_SCORE
-         },
-      {
-         MsWidget::MAIN_WINDOW,
          STATE_DISABLED | STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_PLAY,
          "file-import-pdf",
          QT_TRANSLATE_NOOP("action","Import PDF…"),

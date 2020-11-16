@@ -195,7 +195,7 @@
           <item row="2" column="0" colspan="2">
            <widget class="QRadioButton" name="pdfOneFileRadioButton">
             <property name="text">
-             <string>Everything together in one file</string>
+             <string>All scores combined into one file</string>
             </property>
            </widget>
           </item>

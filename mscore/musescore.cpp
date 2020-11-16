@@ -2726,7 +2726,6 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       setFocusProxy(cv);
 
       getAction("file-save")->setEnabled(cs->masterScore()->isSavable());
-      getAction("file-part-export")->setEnabled(cs->masterScore()->excerpts().size() > 0);
       getAction("show-invisible")->setChecked(cs->showInvisible());
       getAction("show-unprintable")->setChecked(cs->showUnprintable());
       getAction("show-frames")->setChecked(cs->showFrames());
@@ -4365,8 +4364,6 @@ void MuseScore::changeState(ScoreState val)
                   }
             }
 
-      if (getAction("file-part-export")->isEnabled())
-            getAction("file-part-export")->setEnabled(cs && cs->masterScore()->excerpts().size() > 0);
       if (getAction("join-measures")->isEnabled())
             getAction("join-measures")->setEnabled(cs && cs->masterScore()->excerpts().size() == 0);
       if (getAction("split-measure")->isEnabled())
@@ -6279,8 +6276,6 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             importScore();
       else if (cmd == "file-export")
             showExportDialog();
-      //else if (cmd == "file-part-export")
-            //exportParts();
       else if (cmd == "unroll-repeats")
             scoreUnrolled(cs->masterScore());
       else if (cmd == "quit")
