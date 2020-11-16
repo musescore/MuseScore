@@ -34,7 +34,7 @@ RetVal<Templates> TemplatesRepository::templates() const
 
     for (const io::path& dirPath: configuration()->templatesDirPaths()) {
         QStringList filters { "*.mscz", "*.mscx" };
-        RetVal<io::paths> files = fileSystem()->scanFiles(dirPath, filters, IFileSystem::ScanMode::IncludeSubdirs);
+        RetVal<io::paths> files = fileSystem()->scanFiles(dirPath, filters);
 
         if (!files.ret) {
             LOGE() << files.ret.toString();
