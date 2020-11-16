@@ -6,7 +6,7 @@
          "generator": "Visual Studio 16 2019 Win64",
          "configurationType": "RelWithDebInfo",
          "inheritEnvironments": [ "msvc_x64_x64" ],
-         "buildRoot": "${projectDir}\\msvc.build_x64", // "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}", 
+         "buildRoot": "${projectDir}\\msvc.build_x64", // "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}",
          "installRoot": "${projectDir}\\msvc.install_x64", // "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\install\\${name}",
          "cmakeCommandArgs": "-Wno-deprecated",
          "variables": [
