@@ -14,6 +14,7 @@
 #define __UPLOADSCOREDIALOG_H__
 
 #include "ui_uploadscoredialog.h"
+#include "../../mu4/cloud/cloudtypes.h"
 
 namespace Ms {
 class CloudManager;
@@ -37,8 +38,7 @@ private slots:
     void buttonBoxClicked(QAbstractButton* button);
     void uploadSuccess(const QString& url, const QString& nid, const QString& vid);
     void uploadError(const QString& error);
-    void onGetScoreSuccess(const QString& title, const QString& description, bool priv, const QString& license,const QString& tags,
-                           const QString& url);
+    void onGetScoreSuccess(const mu::cloud::ScoreInfo& scoreInfo);
     void onGetScoreError(const QString& error);
     void logout();
     void display();
