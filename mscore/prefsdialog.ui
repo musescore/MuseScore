@@ -90,7 +90,7 @@
       <string>Preferences Tab Manager</string>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <property name="accessibleName">
@@ -2708,11 +2708,11 @@
           </item>
           <item row="0" column="0">
            <widget class="QLabel" name="label_85">
-            <property name="text">
-             <string>Instrument list 1:</string>
-            </property>
             <property name="accessibleDescription">
              <string>Insert path to an instrument list file</string>
+            </property>
+            <property name="text">
+             <string>Instrument list 1:</string>
             </property>
            </widget>
           </item>
