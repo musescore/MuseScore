@@ -38,11 +38,6 @@ using namespace mu::notation;
 using namespace mu::notation;
 using namespace mu::framework;
 
-QChar iconCodeToChar(IconCode::Code code)
-{
-    return QChar(static_cast<char16_t>(code));
-}
-
 static const QChar GO_NEXT_ICON = iconCodeToChar(IconCode::Code::ARROW_RIGHT);
 static const QChar GO_PREV_ICON = iconCodeToChar(IconCode::Code::ARROW_LEFT);
 static const QChar OPEN_FILE_ICON = iconCodeToChar(IconCode::Code::OPEN_FILE);

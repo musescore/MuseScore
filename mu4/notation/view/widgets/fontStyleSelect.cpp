@@ -34,10 +34,6 @@ FontStyleSelect::FontStyleSelect(QWidget* parent)
 {
     setupUi(this);
 
-    auto iconCodeToChar = [](IconCode::Code code) -> QChar {
-                              return QChar(static_cast<char16_t>(code));
-                          };
-
     bold->setText(iconCodeToChar(IconCode::Code::TEXT_BOLD));
     italic->setText(iconCodeToChar(IconCode::Code::TEXT_ITALIC));
     underline->setText(iconCodeToChar(IconCode::Code::TEXT_UNDERLINE));
