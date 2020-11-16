@@ -36,7 +36,9 @@ public:
     void init();
 
     RetValCh<IWorkspacePtr> currentWorkspace() const override;
-    RetValCh<IWorkspacePtrList> allWorkspaces() const override;
+
+    RetValCh<IWorkspacePtrList> workspaces() const override;
+    Ret setWorkspaces(const IWorkspacePtrList& workspaces) override;
 
 private:
     void load();

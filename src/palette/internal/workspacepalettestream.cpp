@@ -18,6 +18,8 @@
 //=============================================================================
 #include "workspacepalettestream.h"
 
+#include "workspace/workspacetypes.h"
+
 #include "log.h"
 
 #include "libmscore/xml.h"
@@ -46,6 +48,7 @@ AbstractDataPtrList WorkspacePaletteStream::read(IODevice& sourceDevice) const
 PaletteWorkspaceDataPtr WorkspacePaletteStream::readPalettes(Ms::XmlReader& reader) const
 {
     PaletteWorkspaceDataPtr palettes = std::make_shared<PaletteWorkspaceData>();
+    palettes->tag = WorkspaceTag::Palettes;
     palettes->tree = std::unique_ptr<Ms::PaletteTree>(new Ms::PaletteTree);
     palettes->tree->read(reader);
 

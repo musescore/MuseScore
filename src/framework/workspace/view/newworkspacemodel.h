@@ -22,16 +22,24 @@
 
 #include <QObject>
 
+#include "internal/iworkspacecreator.h"
+#include "iworkspacemanager.h"
+#include "modularity/ioc.h"
+
 namespace mu::workspace {
 class NewWorkspaceModel : public QObject
 {
     Q_OBJECT
+
+    INJECT(workspace, IWorkspaceCreator, workspaceCreator)
+    INJECT(workspace, IWorkspaceManager, workspaceManager)
 
     Q_PROPERTY(QString workspaceName READ workspaceName WRITE setWorkspaceName NOTIFY workspaceNameChanged)
     Q_PROPERTY(bool importUiPreferences READ importUiPreferences WRITE setImportUiPreferences NOTIFY importUiPreferencesChanged)
     Q_PROPERTY(bool importUiArrangement READ importUiArrangement WRITE setImportUiArrangement NOTIFY importUiArrangementChanged)
     Q_PROPERTY(bool importPalettes READ importPalettes WRITE setImportPalettes NOTIFY importPalettesChanged)
     Q_PROPERTY(bool importToolbarCustomization READ importToolbarCustomization WRITE setImportToolbarCustomization NOTIFY importToolbarCustomizationChanged)
+    Q_PROPERTY(bool canCreateWorkspace READ canCreateWorkspace NOTIFY canCreateWorkspaceChanged)
 
 public:
     explicit NewWorkspaceModel(QObject* parent = nullptr);
@@ -44,6 +52,7 @@ public:
     bool importUiArrangement() const;
     bool importPalettes() const;
     bool importToolbarCustomization() const;
+    bool canCreateWorkspace() const;
 
 public slots:
     void setWorkspaceName(const QString& name);
@@ -58,6 +67,7 @@ signals:
     void importUiArrangementChanged(bool needImport);
     void importPalettesChanged(bool needImport);
     void importToolbarCustomizationChanged(bool needImport);
+    void canCreateWorkspaceChanged();
 
 private:
     QString m_workspaceName;

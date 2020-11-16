@@ -18,7 +18,10 @@
 //=============================================================================
 #include "workspacetoolbarstream.h"
 
-#include "framework/global/xmlreader.h"
+#include "global/xmlreader.h"
+#include "workspacetypes.h"
+
+#include "log.h"
 
 using namespace mu::workspace;
 using namespace mu::framework;
@@ -50,7 +53,7 @@ AbstractDataPtr WorkspaceToolbarStream::readToolbar(XmlReader& reader) const
 {
     ToolbarDataPtr toolbar = std::make_shared<ToolbarData>();
 
-    toolbar->tag = TOOLBAR_TAG;
+    toolbar->tag = WorkspaceTag::Toolbar;
     toolbar->name = reader.attribute(TOOLBAR_NAME_TAG);
 
     while (reader.readNextStartElement()) {
@@ -66,6 +69,6 @@ AbstractDataPtr WorkspaceToolbarStream::readToolbar(XmlReader& reader) const
 
 void WorkspaceToolbarStream::write(AbstractDataPtrList dataList, IODevice& destinationDevice) const
 {
-    Q_UNUSED(destinationDevice);
-    Q_UNUSED(dataList);
+    UNUSED(destinationDevice)
+    UNUSED(dataList)
 }

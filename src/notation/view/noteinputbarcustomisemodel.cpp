@@ -33,7 +33,6 @@ static const std::string SEPARATOR_LINE_TITLE("-------  Separator line  -------"
 static const std::string NOTE_INPUT_ACTION_NAME("note-input");
 static const std::string NOTE_INPUT_MODE_NAME("mode-note-input");
 
-static const std::string TOOLBAR_TAG("Toolbar");
 static const std::string NOTE_INPUT_TOOLBAR_NAME("noteInput");
 
 using namespace mu::notation;
@@ -517,13 +516,13 @@ std::vector<std::string> NoteInputBarCustomiseModel::currentActions() const
 
 std::vector<std::string> NoteInputBarCustomiseModel::currentWorkspaceActions() const
 {
-    RetValCh<std::shared_ptr<IWorkspace> > workspace = workspaceManager()->currentWorkspace();
+    RetValCh<IWorkspacePtr> workspace = workspaceManager()->currentWorkspace();
     if (!workspace.ret) {
         LOGE() << workspace.ret.toString();
         return {};
     }
 
-    AbstractDataPtr abstractData = workspace.val->data(TOOLBAR_TAG, NOTE_INPUT_TOOLBAR_NAME);
+    AbstractDataPtr abstractData = workspace.val->data(WorkspaceTag::Toolbar, NOTE_INPUT_TOOLBAR_NAME);
     ToolbarDataPtr toolbarData = std::dynamic_pointer_cast<ToolbarData>(abstractData);
     if (!toolbarData) {
         LOGE() << "Failed to get data of actions for " << NOTE_INPUT_TOOLBAR_NAME;
@@ -540,7 +539,7 @@ bool NoteInputBarCustomiseModel::actionFromNoteInputModes(const ActionName& acti
 
 void NoteInputBarCustomiseModel::saveActions()
 {
-    RetValCh<std::shared_ptr<IWorkspace> > workspace = workspaceManager()->currentWorkspace();
+    RetValCh<IWorkspacePtr> workspace = workspaceManager()->currentWorkspace();
     if (!workspace.ret) {
         LOGW() << workspace.ret.toString();
         return;
@@ -548,8 +547,8 @@ void NoteInputBarCustomiseModel::saveActions()
 
     std::vector<std::string> currentActions = this->currentActions();
 
-    std::shared_ptr<ToolbarData> toolbarData = std::make_shared<ToolbarData>();
-    toolbarData->tag = TOOLBAR_TAG;
+    ToolbarDataPtr toolbarData = std::make_shared<ToolbarData>();
+    toolbarData->tag = WorkspaceTag::Toolbar;
     toolbarData->name = NOTE_INPUT_TOOLBAR_NAME;
     toolbarData->actions = currentActions;
     workspace.val->addData(toolbarData);

@@ -63,6 +63,11 @@ bool NewWorkspaceModel::importToolbarCustomization() const
     return m_importToolbarCustomization;
 }
 
+bool NewWorkspaceModel::canCreateWorkspace() const
+{
+    return !m_workspaceName.isEmpty();
+}
+
 void NewWorkspaceModel::setWorkspaceName(const QString& name)
 {
     if (m_workspaceName == name) {
@@ -71,6 +76,7 @@ void NewWorkspaceModel::setWorkspaceName(const QString& name)
 
     m_workspaceName = name;
     emit workspaceNameChanged(name);
+    emit canCreateWorkspaceChanged();
 }
 
 void NewWorkspaceModel::setImportUiPreferences(bool needImport)
@@ -115,6 +121,34 @@ void NewWorkspaceModel::setImportToolbarCustomization(bool needImport)
 
 QVariant NewWorkspaceModel::createWorkspace()
 {
-    NOT_IMPLEMENTED;
-    return QVariant();
+    IWorkspacePtr newWorkspace = workspaceCreator()->newWorkspace(m_workspaceName.toStdString());
+    IWorkspacePtr currentWorkspace = workspaceManager()->currentWorkspace().val;
+
+    QList<WorkspaceTag> importedTags;
+
+    if (importUiPreferences()) {
+        importedTags << WorkspaceTag::Preferences;
+    }
+
+    if (importUiArrangement()) {
+        importedTags << WorkspaceTag::Arrangement;
+    }
+
+    if (importToolbarCustomization()) {
+        importedTags << WorkspaceTag::Toolbar;
+    }
+
+    if (importPalettes()) {
+        importedTags << WorkspaceTag::Palettes;
+    }
+
+    for (WorkspaceTag tag : importedTags) {
+        AbstractDataPtr data = currentWorkspace->data(tag);
+
+        if (data) {
+            newWorkspace->addData(data);
+        }
+    }
+
+    return QVariant::fromValue(newWorkspace);
 }

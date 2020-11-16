@@ -33,7 +33,9 @@ public:
     virtual ~IWorkspaceManager() = default;
 
     virtual RetValCh<IWorkspacePtr> currentWorkspace() const = 0;
-    virtual RetValCh<IWorkspacePtrList> allWorkspaces() const = 0;
+
+    virtual RetValCh<IWorkspacePtrList> workspaces() const = 0;
+    virtual Ret setWorkspaces(const IWorkspacePtrList& workspaces) = 0;
 };
 }
 

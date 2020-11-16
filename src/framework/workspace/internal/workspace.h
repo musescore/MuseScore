@@ -33,18 +33,17 @@ class Workspace : public IWorkspace
     INJECT(workspace, IWorkspaceDataStreamRegister, streamRegister)
 
 public:
-    Workspace(const io::path& file);
+    Workspace(const io::path& filePath);
 
     std::string name() const override;
     std::string title() const override;
 
-    AbstractDataPtr data(const std::string& tag, const std::string& name) const override;
+    AbstractDataPtr data(WorkspaceTag tag, const std::string& name) const override;
     void addData(AbstractDataPtr data) override;
+    async::Channel<AbstractDataPtr> dataChanged() const override;
 
     Val settingValue(const std::string& key) const override;
     std::vector<std::string> toolbarActions(const std::string& toolbarName) const override;
-
-    async::Channel<AbstractDataPtr> dataChanged() const override;
 
     bool isInited() const;
     Ret read();
@@ -53,13 +52,14 @@ public:
 private:
     Ret readWorkspace(const QByteArray& data);
 
-    io::path m_file;
+    io::path m_filePath;
     bool m_isInited = false;
     std::string m_title;
     std::string m_source;
 
-    struct DataKey {
-        std::string tag;
+    struct DataKey
+    {
+        WorkspaceTag tag;
         std::string name;
 
         inline bool operator ==(const DataKey& k) const { return k.tag == tag && k.name == name; }

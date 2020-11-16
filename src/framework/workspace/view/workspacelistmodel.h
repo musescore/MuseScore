@@ -48,12 +48,13 @@ public:
     QVariant selectedWorkspace() const;
 
     Q_INVOKABLE void load();
+    Q_INVOKABLE bool apply();
     Q_INVOKABLE void createNewWorkspace();
     Q_INVOKABLE void selectWorkspace(int workspaceIndex);
     Q_INVOKABLE void removeWorkspace(int workspaceIndex);
 
 signals:
-    void selectedWorkspaceChanged();
+    void selectedWorkspaceChanged(QVariant selectedWorkspace);
 
 private:
     QVariantMap workspaceToObject(IWorkspacePtr workspace) const;

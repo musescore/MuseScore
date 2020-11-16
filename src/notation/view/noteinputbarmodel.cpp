@@ -517,13 +517,13 @@ NoteInputBarModel::ActionItem NoteInputBarModel::makeAddItem(const QString& sect
 
 std::vector<std::string> NoteInputBarModel::currentWorkspaceActions() const
 {
-    RetValCh<std::shared_ptr<IWorkspace> > workspace = workspaceManager()->currentWorkspace();
+    RetValCh<IWorkspacePtr> workspace = workspaceManager()->currentWorkspace();
     if (!workspace.ret) {
         LOGE() << workspace.ret.toString();
         return {};
     }
 
-    AbstractDataPtr abstractData = workspace.val->data(TOOLBAR_TAG, NOTE_INPUT_TOOLBAR_NAME);
+    AbstractDataPtr abstractData = workspace.val->data(WorkspaceTag::Toolbar, NOTE_INPUT_TOOLBAR_NAME);
     ToolbarDataPtr toolbarData = std::dynamic_pointer_cast<ToolbarData>(abstractData);
     if (!toolbarData) {
         LOGE() << "Failed to get data of actions for " << NOTE_INPUT_TOOLBAR_NAME;
