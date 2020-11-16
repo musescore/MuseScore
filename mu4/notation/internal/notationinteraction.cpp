@@ -1698,7 +1698,7 @@ void NotationInteraction::drawSelectionRange(QPainter* painter)
     pen.setStyle(Qt::SolidLine);
     painter->setPen(pen);
 
-    std::vector<QRectF> rangeArea = m_selection->rangeBoundingArea();
+    std::vector<QRectF> rangeArea = m_selection->range()->boundingArea();
     for (const QRectF& rect: rangeArea) {
         QPainterPath path;
         path.addRoundedRect(rect, 6, 6);

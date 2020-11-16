@@ -16,37 +16,29 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATION_INOTATIONSELECTION_H
-#define MU_NOTATION_INOTATIONSELECTION_H
+#ifndef MU_NOTATION_INOTATIONSELECTIONRANGE_H
+#define MU_NOTATION_INOTATIONSELECTIONRANGE_H
 
 #include <vector>
 #include <QRectF>
-#include <QMimeData>
-
-#include "notationtypes.h"
-#include "internal/inotationselectionrange.h"
+#include "../notationtypes.h"
 
 namespace mu::notation {
-class INotationSelection
+class INotationSelectionRange
 {
 public:
-    virtual ~INotationSelection() = default;
+    virtual ~INotationSelectionRange() = default;
 
-    virtual bool isNone() const = 0;
-    virtual bool isRange() const = 0;
+    virtual int startStaffIndex() const = 0;
+    virtual Fraction startTick() const = 0;
 
-    virtual bool canCopy() const = 0;
-    virtual QMimeData* mimeData() const = 0;
+    virtual int endStaffIndex() const = 0;
+    virtual Fraction endTick() const = 0;
 
-    virtual Element* element() const = 0;
-    virtual std::vector<Element*> elements() const = 0;
-
-    virtual QRectF canvasBoundingRect() const = 0;
-
-    virtual INotationSelectionRangePtr range() const = 0;
+    virtual std::vector<QRectF> boundingArea() const = 0;
 };
 
-using INotationSelectionPtr = std::shared_ptr<INotationSelection>;
+using INotationSelectionRangePtr = std::shared_ptr<INotationSelectionRange>;
 }
 
-#endif // MU_NOTATION_INOTATIONSELECTION_H
+#endif // MU_NOTATION_INOTATIONSELECTIONRANGE_H
