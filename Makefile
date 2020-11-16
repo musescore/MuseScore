@@ -143,7 +143,7 @@ clean:
 	-rm -rf win32build win32install
 
 revision:
-	@git rev-parse --short=7 HEAD > local_build_revision.env	
+	@git rev-parse --short=7 HEAD | tr -d '\n' > local_build_revision.env
 
 version:
 	@echo ${VERSION}
