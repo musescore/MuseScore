@@ -16,6 +16,8 @@
 
 #include <QFileInfo>
 
+#include "mu4/cloud/internal/cloudmanager.h"
+
 #include "config.h"
 #include "globals.h"
 #include "musescore.h"
@@ -3548,6 +3550,81 @@ QByteArray MuseScore::exportPdfAsJSON(Score* score)
     }
 
     return pdfData.toBase64();
+}
+
+//---------------------------------------------------------
+//   parseSourceUrl
+//---------------------------------------------------------
+
+static void parseSourceUrl(const QString& sourceUrl, int& uid, int& nid)
+{
+    if (!sourceUrl.isEmpty()) {
+        QStringList sl = sourceUrl.split("/");
+        if (sl.length() >= 1) {
+            nid = sl.last().toInt();
+            if (sl.length() >= 3) {
+                uid = sl.at(sl.length() - 3).toInt();
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   saveOnline
+//---------------------------------------------------------
+
+bool MuseScore::saveOnline(const QStringList& inFilePaths)
+{
+    if (!_loginManager->syncGetUser()) {
+        return false;
+    }
+
+    bool all_successful = true;
+
+    for (auto path : inFilePaths) {
+        Score* score = mscore->readScore(path);
+        if (!score) {
+            all_successful = false;
+            continue;
+        }
+
+        int uid = 0;
+        int nid = 0;
+        parseSourceUrl(score->metaTag("source"), uid, nid);
+
+        if (nid <= 0) {
+            qCritical() << qUtf8Printable(tr("Error: '%1' tag missing or badly formed in %2").arg("source").arg(path));
+            all_successful = false;
+            continue;
+        }
+
+        if (uid && uid != _loginManager->accountInfo().id) {
+            qCritical() << qUtf8Printable(tr("Error: You are not the owner of the online score for %1").arg(path));
+            all_successful = false;
+            continue;
+        }
+
+        if (!_loginManager->syncGetScoreInfo(nid)) {
+            all_successful = false;
+            continue;
+        }
+        mu::cloud::ScoreInfo scoreInfo = _loginManager->scoreInfo();
+
+        QString tempPath = QDir::tempPath() + QString("/temp_%1.mscz").arg(QRandomGenerator::global()->generate() % 100000);
+        if (!mscore->saveAs(score, true, tempPath, "mscz")) {
+            all_successful = false;
+            continue;
+        }
+
+        if (!_loginManager->syncUpload(tempPath, nid, scoreInfo.title)) { // keep same title
+            all_successful = false;
+            continue;
+        }
+
+        qInfo() << qUtf8Printable(tr("Uploaded score")) << path;
+    }
+
+    return all_successful;
 }
 
 //---------------------------------------------------------

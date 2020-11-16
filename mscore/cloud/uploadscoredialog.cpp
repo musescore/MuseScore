@@ -70,8 +70,8 @@ UploadScoreDialog::UploadScoreDialog(CloudManager* loginManager)
     connect(_loginManager, SIGNAL(uploadSuccess(QString,QString,QString)), this,
             SLOT(uploadSuccess(QString,QString,QString)));
     connect(_loginManager, SIGNAL(uploadError(QString)), this, SLOT(uploadError(QString)));
-    connect(_loginManager, SIGNAL(getScoreSuccess(QString,QString,bool,QString,QString,QString)), this,
-            SLOT(onGetScoreSuccess(QString,QString,bool,QString,QString,QString)));
+    connect(_loginManager, SIGNAL(getScoreSuccess(mu::cloud::ScoreInfo)), this,
+            SLOT(onGetScoreSuccess(mu::cloud::ScoreInfo)));
     connect(_loginManager, SIGNAL(getScoreError(QString)), this, SLOT(onGetScoreError(QString)));
     connect(_loginManager, SIGNAL(tryLoginSuccess()), this, SLOT(display()));
     connect(_loginManager, &CloudManager::mediaUploadSuccess, this,
@@ -249,15 +249,14 @@ void UploadScoreDialog::display()
 //   onGetScoreSuccess
 //---------------------------------------------------------
 
-void UploadScoreDialog::onGetScoreSuccess(const QString& t, const QString& /*desc*/, bool /*priv*/,
-                                          const QString& /*lic*/, const QString& /*tag*/, const QString& url)
+void UploadScoreDialog::onGetScoreSuccess(const mu::cloud::ScoreInfo& scoreInfo)
 {
     // fill with score info
-    title->setText(t);
+    title->setText(scoreInfo.title);
     updateExistingCb->setChecked(true);
     updateExistingCb->setVisible(true);
     linkToScore->setVisible(true);
-    linkToScore->setText("[<a href=\"" + url + "\">" + tr("Link") + "</a>]");
+    linkToScore->setText("[<a href=\"" + scoreInfo.url + "\">" + tr("Link") + "</a>]");
     showOrHideUploadAudio();
     setVisible(true);
 }
