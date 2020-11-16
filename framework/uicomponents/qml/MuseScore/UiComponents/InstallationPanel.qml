@@ -111,7 +111,6 @@ PopupPanel {
             width: 585
             height: 88
 
-            font.pixelSize: 12
             opacity: 0.75
             wrapMode: Text.WordWrap
             verticalAlignment: Text.AlignTop
