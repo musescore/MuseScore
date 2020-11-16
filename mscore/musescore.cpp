@@ -7623,7 +7623,7 @@ MuseScoreApplication::CommandLineParseResult MuseScoreApplication::parseCommandL
       parser.addOption(QCommandLineOption({"M", "midi-operations"}, "Specify MIDI import operations file", "file"));
       parser.addOption(QCommandLineOption({"w", "no-webview"}, "No web view in start center"));
       parser.addOption(QCommandLineOption({"P", "export-score-parts"}, "Use with '-o <file>.pdf', export score and parts"));
-      parser.addOption(QCommandLineOption(      "no-fallback-font", "Don't use Leland as fallback musical font"));
+      parser.addOption(QCommandLineOption(      "no-fallback-font", "Don't use a fallback musical font"));
       parser.addOption(QCommandLineOption({"f", "force"}, "Use with '-o <file>', ignore warnings reg. score being corrupted or from wrong version"));
       parser.addOption(QCommandLineOption({"b", "bitrate"}, "Use with '-o <file>.mp3', sets bitrate, in kbps", "bitrate"));
       parser.addOption(QCommandLineOption({"E", "install-extension"}, "Install an extension, load soundfont as default unless -e is passed too", "extension file"));

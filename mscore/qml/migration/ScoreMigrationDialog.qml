@@ -165,7 +165,7 @@ FocusScope {
                 Layout.fillWidth: true
 
                 checked: root.model ? root.model.shouldNeverAskAgain : false
-                text: qsTr("Never ask this again")
+                text: qsTr("Remember my choice and don't ask again")
 
                 onToggled: {
                     root.model.shouldNeverAskAgain = checked

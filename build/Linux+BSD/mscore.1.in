@@ -3,7 +3,7 @@
 .\"	mirabilos <m@mirbsd.org>
 .\" Published under the same terms as MuseScore itself.
 .\"-
-.Dd October 19, 2020
+.Dd November 13, 2020
 .Dt @MAN_MSCORE_UPPER@ 1
 .Os MuseScore
 .Sh NAME@Variables_substituted_by_CMAKE_on_installation@
@@ -242,7 +242,7 @@ Print a conditioned diff between the given scores
 Display the full name, version and git revision of the application
 without starting the graphical user interface
 .It Fl \-no\-fallback\-font
-Don't use Bravura as fallback musical font
+Don't use a fallback musical font
 .It Fl \-raw\-diff
 Print a raw diff between the given scores
 .It Fl \-run\-test\-script
