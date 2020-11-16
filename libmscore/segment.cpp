@@ -1063,6 +1063,24 @@ bool Segment::hasElements(int minTrack, int maxTrack) const
       }
 
 //---------------------------------------------------------
+//   allElementsInvisible
+///  return true if all elements in the segment are invisible
+//---------------------------------------------------------
+
+bool Segment::allElementsInvisible() const
+      {
+      if (isType(SegmentType::BarLineType | SegmentType::ChordRest | SegmentType::Breath))
+            return false;
+
+      for (Element* e : _elist) {
+            if (e && e->visible() && !qFuzzyCompare(e->width(), 0.0))
+                  return false;
+            }
+
+      return true;
+      }
+
+//---------------------------------------------------------
 //   hasAnnotationOrElement
 ///  return true if an annotation of type type or and element is found in the track range
 //---------------------------------------------------------
