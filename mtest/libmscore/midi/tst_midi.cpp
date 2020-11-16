@@ -136,6 +136,7 @@ void TestMidi::events_data()
 //      QTest::newRow("testPedal") <<  "testPedal";
       // multi note tremolo
       QTest::newRow("testMultiNoteTremolo") << "testMultiNoteTremolo";
+      QTest::newRow("testMultiNoteTremoloTuplet") << "testMultiNoteTremoloTuplet";
       // Test Pauses
       QTest::newRow("testPauses") <<  "testPauses";
       QTest::newRow("testPausesRepeats") <<  "testPausesRepeats";
