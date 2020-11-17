@@ -37,12 +37,12 @@ release:
 	mkdir build.release; \
 	cd build.release; \
 	cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
-	-DCMAKE_BUILD_TYPE=RELEASE \
-	-DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}" \
-	-DMUSESCORE_BUILD_CONFIG="${MUSESCORE_BUILD_CONFIG}" \
-	-DMUSESCORE_REVISION="${MUSESCORE_REVISION}" \
-	-DTELEMETRY_TRACK_ID="${TELEMETRY_TRACK_ID}" \
-	.. -G Xcode; \
+	      -DCMAKE_BUILD_TYPE=RELEASE \
+	      -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}" \
+	      -DMUSESCORE_BUILD_CONFIG="${MUSESCORE_BUILD_CONFIG}" \
+	      -DMUSESCORE_REVISION="${MUSESCORE_REVISION}" \
+	      -DTELEMETRY_TRACK_ID="${TELEMETRY_TRACK_ID}" \
+	      .. -G Xcode; \
 	xcodebuild -project ${XCODEPROJ} -target lrelease; \
 	$(FORMATTER_START) xcodebuild -project ${XCODEPROJ} -configuration Release -target ALL_BUILD $(FORMATTER_END); \
 
@@ -92,12 +92,12 @@ ci:
 	mkdir build.release; \
 	cd build.release; \
 	cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
-	-DCMAKE_BUILD_TYPE=RELEASE \
-	-DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}" \
-	-DMUSESCORE_BUILD_CONFIG="${MUSESCORE_BUILD_CONFIG}" \
-	-DMUSESCORE_REVISION="${MUSESCORE_REVISION}" \
-	-DTELEMETRY_TRACK_ID="${TELEMETRY_TRACK_ID}" \
-	.. -G Xcode; \
+	      -DCMAKE_BUILD_TYPE=RELEASE \
+	      -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}" \
+	      -DMUSESCORE_BUILD_CONFIG="${MUSESCORE_BUILD_CONFIG}" \
+	      -DMUSESCORE_REVISION="${MUSESCORE_REVISION}" \
+	      -DTELEMETRY_TRACK_ID="${TELEMETRY_TRACK_ID}" \
+	      .. -G Xcode; \
 	xcodebuild -project ${XCODEPROJ} -target lrelease; \
 	$(FORMATTER_START) xcodebuild -project ${XCODEPROJ} -configuration Release -target install $(FORMATTER_END);  
 
