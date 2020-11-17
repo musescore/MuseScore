@@ -19,27 +19,18 @@
 
 #include "actioneventobserver.h"
 
-#include "qt-google-analytics/ganalytics.h"
-
 #include <QEvent>
 #include <QShortcutEvent>
 #include <QMenu>
 #include <QToolButton>
-#include "shortcut.h"
-#include "globals.h"
+#include "mscore/shortcut.h"
 
-//---------------------------------------------------------
-//   ActionEventObserver
-//---------------------------------------------------------
+using namespace mu::telemetry;
 
 ActionEventObserver::ActionEventObserver(QObject* parent)
     : QObject(parent)
 {
 }
-
-//---------------------------------------------------------
-//   extractActionData
-//---------------------------------------------------------
 
 QPair<QString, QString> ActionEventObserver::extractActionData(QObject* watched)
 {
@@ -79,10 +70,6 @@ QPair<QString, QString> ActionEventObserver::extractActionData(QObject* watched)
 
     return result;
 }
-
-//---------------------------------------------------------
-//   eventFilter
-//---------------------------------------------------------
 
 bool ActionEventObserver::eventFilter(QObject* watched, QEvent* event)
 {

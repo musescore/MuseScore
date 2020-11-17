@@ -17,32 +17,45 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef TELEMETRYSERVICE_H
-#define TELEMETRYSERVICE_H
+#ifndef MU_TELEMETRY_ACTIONEVENTOBSERVER_H
+#define MU_TELEMETRY_ACTIONEVENTOBSERVER_H
 
-#include "interfaces/itelemetryservice.h"
+#include <QObject>
+#include <QAction>
+#include <QPair>
 
-#include <QSettings>
+#include "mscore/globals.h"
 
-//---------------------------------------------------------
-//   TelemetryService
-//---------------------------------------------------------
+#include "modularity/ioc.h"
+#include "itelemetryservice.h"
 
-class TelemetryService : public ITelemetryService
+namespace mu::telemetry {
+class ActionEventObserver : public QObject
 {
-public:
-    TelemetryService();
+    Q_OBJECT
 
-    void sendEvent(const QString& category, const QString& action, const QString& label, const QVariant& value,
-                   const QVariantMap& customValues) override;
-    void sendException(const QString& exceptionDescription, bool exceptionFatal,const QVariantMap& customValues) override;
-    void startSession() override;
-    void endSession() override;
+    INJECT(telemetry, ITelemetryService, telemetryService)
+
+public:
+    static ActionEventObserver* instance()
+    {
+        static ActionEventObserver s;
+        return &s;
+    }
+
+    bool eventFilter(QObject* watched, QEvent* event) override;
+
+public slots:
+    void setScoreState(const Ms::ScoreState state);
 
 private:
-    bool isTelemetryAllowed() const;
+    Q_DISABLE_COPY(ActionEventObserver)
 
-    QSettings m_settings;
+    explicit ActionEventObserver(QObject* parent = nullptr);
+    QPair<QString, QString> extractActionData(QObject* watched);
+
+    Ms::ScoreState m_scoreState { Ms::STATE_INIT };
 };
+}
 
-#endif // TELEMETRYSERVICE_H
+#endif // MU_TELEMETRY_ACTIONEVENTOBSERVER_H

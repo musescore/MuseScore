@@ -23,9 +23,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 
-//---------------------------------------------------------
-//   TelemetryPermissionDialog
-//---------------------------------------------------------
+using namespace mu::telemetry;
 
 TelemetryPermissionDialog::TelemetryPermissionDialog(QQmlEngine* engine)
     : QQuickView(engine, nullptr)
@@ -66,10 +64,6 @@ TelemetryPermissionDialog::TelemetryPermissionDialog(QQmlEngine* engine)
     connect(rootObject(), SIGNAL(closeRequested()), this, SLOT(close()));
     connect(rootObject(), SIGNAL(closeRequested()), this, SIGNAL(closeRequested()));
 }
-
-//---------------------------------------------------------
-//   focusInEvent
-//---------------------------------------------------------
 
 void TelemetryPermissionDialog::focusInEvent(QFocusEvent* evt)
 {

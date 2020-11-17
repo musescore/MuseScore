@@ -17,30 +17,26 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef TELEMETRYPERMISSIONMODEL_H
-#define TELEMETRYPERMISSIONMODEL_H
+#ifndef MU_TELEMETRY_TELEMETRYPERMISSIONDIALOG_H
+#define MU_TELEMETRY_TELEMETRYPERMISSIONDIALOG_H
 
-#include <QObject>
-#include <QSettings>
-#include <QString>
+#include <QQuickView>
+#include <QQmlEngine>
+#include <QWidget>
 
-//---------------------------------------------------------
-//   TelemetryPermissionModel
-//---------------------------------------------------------
-
-class TelemetryPermissionModel : public QObject
+namespace mu::telemetry {
+class TelemetryPermissionDialog : public QQuickView
 {
     Q_OBJECT
 
+    void focusInEvent(QFocusEvent*) override;
+
 public:
-    explicit TelemetryPermissionModel(QObject* parent = nullptr);
+    explicit TelemetryPermissionDialog(QQmlEngine* engine);
 
-    Q_INVOKABLE void accept();
-    Q_INVOKABLE void reject();
-    Q_INVOKABLE void openLink(const QString& link);
-
-private:
-    QSettings m_settings;
+signals:
+    void closeRequested();
 };
+}
 
-#endif // TELEMETRYPERMISSIONMODEL_H
+#endif // MU_TELEMETRY_TELEMETRYPERMISSIONDIALOG_H

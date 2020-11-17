@@ -17,28 +17,35 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef TELEMETRYPERMISSIONDIALOG_H
-#define TELEMETRYPERMISSIONDIALOG_H
+#ifndef MU_TELEMETRY_ITELEMETRYSERVICE_H
+#define MU_TELEMETRY_ITELEMETRYSERVICE_H
 
-#include <QQuickView>
-#include <QQmlEngine>
-#include <QWidget>
+#include <QString>
+#include <QVariant>
+#include <QVariantMap>
+
+#include "modularity/imoduleexport.h"
 
 //---------------------------------------------------------
-//   TelemetryPermissionDialog
+//   ITelemetryService
 //---------------------------------------------------------
 
-class TelemetryPermissionDialog : public QQuickView
+class ITelemetryService : MODULE_EXPORT_INTERFACE
 {
-    Q_OBJECT
-
-    void focusInEvent(QFocusEvent*) override;
+    INTERFACE_ID(ITelemetryService)
 
 public:
-    explicit TelemetryPermissionDialog(QQmlEngine* engine);
 
-signals:
-    void closeRequested();
+    virtual ~ITelemetryService() = default;
+
+    virtual void sendEvent(const QString& category,const QString& action,const QString& label = QString(),
+                           const QVariant& value = QVariant(),const QVariantMap& customValues = QVariantMap()) = 0;
+
+    virtual void sendException(const QString& exceptionDescription,bool exceptionFatal = true,
+                               const QVariantMap& customValues = QVariantMap()) = 0;
+
+    virtual void startSession() = 0;
+    virtual void endSession() = 0;
 };
 
-#endif // TELEMETRYPERMISSIONDIALOG_H
+#endif // MU_TELEMETRY_ITELEMETRYSERVICE_H
