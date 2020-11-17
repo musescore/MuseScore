@@ -217,5 +217,3 @@ add_library(gcrashpad STATIC
 target_compile_definitions(gcrashpad PUBLIC ${CRASHPAD_DEF} )
 target_include_directories(gcrashpad PUBLIC ${CRASHPAD_INC} )
 target_link_libraries(gcrashpad ${CRASHPAD_LINK} )
-
-
