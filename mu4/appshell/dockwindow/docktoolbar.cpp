@@ -21,6 +21,8 @@
 
 #include <QToolBar>
 
+#include "eventswatcher.h"
+
 using namespace mu::dock;
 
 static const QString qss = QString("QToolBar { background: %1; border: 0; padding: 0; }");
@@ -29,11 +31,20 @@ DockToolBar::DockToolBar(QQuickItem* parent)
     : DockView(parent)
 {
     m_tool.bar = new QToolBar();
-    m_tool.bar->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
+    m_tool.bar->setAllowedAreas(Qt::AllToolBarAreas);
+    m_tool.bar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     connect(this, &QQuickItem::visibleChanged, this, [this]() {
         m_tool.bar->setVisible(isVisible());
     });
+
+    connect(m_tool.bar, &QToolBar::orientationChanged, [this](int orientation) {
+        emit orientationChanged(orientation);
+    });
+
+    m_eventsWatcher = new EventsWatcher(this);
+    m_tool.bar->installEventFilter(m_eventsWatcher);
+    connect(m_eventsWatcher, &EventsWatcher::eventReceived, this, &DockToolBar::onToolbarEvent);
 }
 
 DockToolBar::~DockToolBar()
@@ -47,8 +58,8 @@ void DockToolBar::onComponentCompleted()
     m_tool.bar->setStyleSheet(qss.arg(color().name()));
 
     QWidget* w = view();
-    w->setFixedHeight(height());
-    w->setFixedWidth(width());
+    w->setMinimumWidth(minimumWidth());
+    w->setMinimumHeight(minimumHeight());
     m_tool.bar->addWidget(w);
 }
 
@@ -57,7 +68,57 @@ void DockToolBar::updateStyle()
     m_tool.bar->setStyleSheet(qss.arg(color().name()));
 }
 
+void DockToolBar::onToolbarEvent(QEvent* e)
+{
+    if (QEvent::Resize == e->type()) {
+        QResizeEvent* re = static_cast<QResizeEvent*>(e);
+        view()->resize(re->size());
+    }
+}
+
 DockToolBar::Widget DockToolBar::widget() const
 {
     return m_tool;
+}
+
+int DockToolBar::orientation() const
+{
+    return m_tool.bar->orientation();
+}
+
+int DockToolBar::minimumHeight() const
+{
+    return m_minimumHeight;
+}
+
+int DockToolBar::minimumWidth() const
+{
+    return m_minimumWidth;
+}
+
+void DockToolBar::setMinimumHeight(int minimumHeight)
+{
+    if (m_minimumHeight == minimumHeight) {
+        return;
+    }
+
+    m_minimumHeight = minimumHeight;
+    if (view()) {
+        view()->setMinimumHeight(minimumHeight);
+    }
+
+    emit minimumHeightChanged(m_minimumHeight);
+}
+
+void DockToolBar::setMinimumWidth(int minimumWidth)
+{
+    if (m_minimumWidth == minimumWidth) {
+        return;
+    }
+
+    m_minimumWidth = minimumWidth;
+    if (view()) {
+        view()->setMinimumWidth(minimumWidth);
+    }
+    emit minimumWidthChanged(m_minimumWidth);
 }

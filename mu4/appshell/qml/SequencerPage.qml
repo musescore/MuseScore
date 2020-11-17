@@ -14,8 +14,8 @@ DockPage {
         id: seqToolBar
         objectName: "seqToolBar"
 
-        height: 40
-        width: 400
+        minimumWidth: 400
+        minimumHeight: 40
         color: sequencerPage.color
 
         Rectangle {

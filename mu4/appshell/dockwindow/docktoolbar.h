@@ -30,24 +30,46 @@ class DockToolBar : public DockView
 {
     Q_OBJECT
 
+    Q_PROPERTY(int orientation READ orientation NOTIFY orientationChanged)
+    Q_PROPERTY(int minimumHeight READ minimumHeight WRITE setMinimumHeight NOTIFY minimumHeightChanged)
+    Q_PROPERTY(int minimumWidth READ minimumWidth WRITE setMinimumWidth NOTIFY minimumWidthChanged)
+
 public:
     explicit DockToolBar(QQuickItem* parent = nullptr);
     ~DockToolBar();
 
     struct Widget {
         QToolBar* bar = nullptr;
-        Qt::ToolBarArea breakArea{ Qt::TopToolBarArea };
+        Qt::ToolBarArea breakArea { Qt::TopToolBarArea };
     };
 
     Widget widget() const;
+
+    int orientation() const;
+    int minimumHeight() const;
+    int minimumWidth() const;
+
+public slots:
+    void setMinimumHeight(int minimumHeight);
+    void setMinimumWidth(int minimumWidth);
+
+signals:
+    void orientationChanged(int orientation);
+    void minimumHeightChanged(int minimumHeight);
+    void minimumWidthChanged(int minimumWidth);
 
 protected:
     void onComponentCompleted() override;
     void updateStyle() override;
 
-private:
+private slots:
+    void onToolbarEvent(QEvent* e);
 
+private:
     Widget m_tool;
+    EventsWatcher* m_eventsWatcher = nullptr;
+    int m_minimumHeight = 0;
+    int m_minimumWidth = 0;
 };
 }
 }
