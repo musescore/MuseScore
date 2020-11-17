@@ -188,7 +188,7 @@ void Bracket::layout()
                   qreal w = score()->styleP(Sid::bracketWidth) * .5;
                   qreal x = -w;
 
-                  qreal bd   = _spatium * .25;
+                  qreal bd   = (score()->styleSt(Sid::MusicalSymbolFont) == "Leland") ? _spatium * .5 : _spatium * .25;
                   _shape.add(QRectF(x, -bd, w * 2, 2 * (h2+bd)));
                   _shape.add(symBbox(SymId::bracketTop).translated(QPointF(-w, -bd)));
                   _shape.add(symBbox(SymId::bracketBottom).translated(QPointF(-w, bd + 2*h2)));
@@ -255,7 +255,7 @@ void Bracket::draw(QPainter* painter) const
                   qreal h        = 2 * h2;
                   qreal _spatium = spatium();
                   qreal w        = score()->styleP(Sid::bracketWidth);
-                  qreal bd       = _spatium * .25;
+                  qreal bd       = (score()->styleSt(Sid::MusicalSymbolFont) == "Leland") ? _spatium * .5 : _spatium * .25;
                   QPen pen(curColor(), w, Qt::SolidLine, Qt::FlatCap);
                   painter->setPen(pen);
                   painter->drawLine(QLineF(0.0, -bd - w * .5, 0.0, h + bd + w * .5));
