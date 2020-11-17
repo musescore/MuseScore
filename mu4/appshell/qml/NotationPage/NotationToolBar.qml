@@ -8,20 +8,22 @@ import MuseScore.Ui 1.0
 Rectangle {
     id: root
 
+    property alias orientation: gridView.orientation
+
+    QtObject {
+        id: privatesProperties
+
+        property bool isHorizontal: orientation === Qt.Horizontal
+    }
+
     GridViewSectional {
-        anchors.left: parent.left
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
+        id: gridView
+        anchors.fill: parent
 
         sectionRole: "sectionRole"
 
         cellWidth: 36
         cellHeight: cellWidth
-
-        sectionWidth: 2
-        sectionHeight: root.height
-
-        rows: 1
 
         model: toolModel
 
@@ -43,14 +45,15 @@ Rectangle {
     }
 
     FlatButton {
-        anchors.right: parent.right
-        anchors.verticalCenter: parent.verticalCenter
+        id: customizeButton
+
+        anchors.margins: 8
 
         icon: IconCode.CONFIGURE
         normalStateColor: "transparent"
 
         onClicked: {
-            api.launcher.open("musescore://notation/noteinputbarcustomise")
+            api.launcher.open("musescore://notation/noteinputbar/customise")
         }
     }
 
@@ -61,4 +64,39 @@ Rectangle {
     Component.onCompleted: {
         toolModel.load()
     }
+
+    states: [
+        State {
+            when: privatesProperties.isHorizontal
+            PropertyChanges {
+                target: gridView
+                sectionWidth: 2
+                sectionHeight: root.height
+                rows: 1
+                columns: gridView.noLimit
+            }
+
+            AnchorChanges {
+                target: customizeButton
+                anchors.right: root.right
+                anchors.verticalCenter: root.verticalCenter
+            }
+        },
+        State {
+            when: !privatesProperties.isHorizontal
+            PropertyChanges {
+                target: gridView
+                sectionWidth: root.width
+                sectionHeight: 2
+                rows: gridView.noLimit
+                columns: 2
+            }
+
+            AnchorChanges {
+                target: customizeButton
+                anchors.bottom: root.bottom
+                anchors.right: root.right
+            }
+        }
+    ]
 }
