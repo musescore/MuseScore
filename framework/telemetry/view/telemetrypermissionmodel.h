@@ -17,47 +17,28 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MENUBAR_H
-#define MENUBAR_H
+#ifndef MU_TELEMETRY_TELEMETRYPERMISSIONMODEL_H
+#define MU_TELEMETRY_TELEMETRYPERMISSIONMODEL_H
 
 #include <QObject>
-#include <QAction>
-#include <QPair>
+#include <QSettings>
+#include <QString>
 
-#include "globals.h"
-
-#include "modularity/ioc.h"
-#include "interfaces/itelemetryservice.h"
-
-//---------------------------------------------------------
-//   ActionEventObserver
-//---------------------------------------------------------
-
-class ActionEventObserver : public QObject
+namespace mu::telemetry {
+class TelemetryPermissionModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(telemetry, ITelemetryService, telemetryService)
-
 public:
-    static ActionEventObserver* instance()
-    {
-        static ActionEventObserver s;
-        return &s;
-    }
+    explicit TelemetryPermissionModel(QObject* parent = nullptr);
 
-    bool eventFilter(QObject* watched, QEvent* event) override;
-
-public slots:
-    void setScoreState(const Ms::ScoreState state);
+    Q_INVOKABLE void accept();
+    Q_INVOKABLE void reject();
+    Q_INVOKABLE void openLink(const QString& link);
 
 private:
-    Q_DISABLE_COPY(ActionEventObserver)
-
-    explicit ActionEventObserver(QObject* parent = nullptr);
-    QPair<QString, QString> extractActionData(QObject* watched);
-
-    Ms::ScoreState m_scoreState { Ms::STATE_INIT };
+    QSettings m_settings;
 };
+}
 
-#endif // MENUBAR_H
+#endif // MU_TELEMETRY_TELEMETRYPERMISSIONMODEL_H

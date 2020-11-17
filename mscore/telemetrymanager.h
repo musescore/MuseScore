@@ -23,7 +23,7 @@
 #ifdef BUILD_TELEMETRY_MODULE
 
 #include "modularity/ioc.h"
-#include "framework/telemetry/interfaces/itelemetryservice.h"
+#include "framework/telemetry/itelemetryservice.h"
 
 namespace Ms {
 //---------------------------------------------------------

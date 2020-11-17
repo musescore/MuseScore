@@ -17,39 +17,30 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "telemetrysetup.h"
-
-#include <QQmlEngine>
-
-#include "modularity/ioc.h"
+#ifndef MU_TELEMETRY_TELEMETRYSERVICE_H
+#define MU_TELEMETRY_TELEMETRYSERVICE_H
 
 #include "itelemetryservice.h"
-#include "internal/telemetryservice.h"
-#include "view/telemetrypermissionmodel.h"
 
-using namespace mu::telemetry;
+#include <QSettings>
 
-static void telemetry_init_qrc()
+namespace mu::telemetry {
+class TelemetryService : public ITelemetryService
 {
-    Q_INIT_RESOURCE(telemetry);
+public:
+    TelemetryService() = default;
+
+    void sendEvent(const QString& category, const QString& action, const QString& label, const QVariant& value,
+                   const QVariantMap& customValues) override;
+    void sendException(const QString& exceptionDescription, bool exceptionFatal,const QVariantMap& customValues) override;
+    void startSession() override;
+    void endSession() override;
+
+private:
+    bool isTelemetryAllowed() const;
+
+    QSettings m_settings;
+};
 }
 
-std::string TelemetrySetup::moduleName() const
-{
-    return "telemetry";
-}
-
-void TelemetrySetup::registerResources()
-{
-    telemetry_init_qrc();
-}
-
-void TelemetrySetup::registerExports()
-{
-    mu::framework::ioc()->registerExport<ITelemetryService>("telemetry", new TelemetryService());
-}
-
-void TelemetrySetup::registerUiTypes()
-{
-    qmlRegisterType<TelemetryPermissionModel>("MuseScore.Telemetry", 3, 3, "TelemetryPermissionModel");
-}
+#endif // MU_TELEMETRY_TELEMETRYSERVICE_H

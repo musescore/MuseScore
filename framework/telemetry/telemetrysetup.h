@@ -17,20 +17,21 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef TELEMETRYSETUP_H
-#define TELEMETRYSETUP_H
+#ifndef MU_TELEMETRY_TELEMETRYSETUP_H
+#define MU_TELEMETRY_TELEMETRYSETUP_H
 
 #include "framework/global/modularity/imodulesetup.h"
 
+namespace mu::telemetry {
 class TelemetrySetup : public mu::framework::IModuleSetup
 {
 public:
-    TelemetrySetup();
 
     std::string moduleName() const override;
     void registerExports() override;
     void registerResources() override;
     void registerUiTypes() override;
 };
+}
 
-#endif // TELEMETRYSETUP_H
+#endif // MU_TELEMETRY_TELEMETRYSETUP_H

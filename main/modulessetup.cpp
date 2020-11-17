@@ -97,7 +97,7 @@ ModulesSetup::ModulesSetup()
 #endif
 
 #ifdef BUILD_TELEMETRY_MODULE
-        << new TelemetrySetup()
+        << new mu::telemetry::TelemetrySetup()
 #endif
 #ifdef AVSOMR
         << new Ms::Avs::AvsOmrSetup()
