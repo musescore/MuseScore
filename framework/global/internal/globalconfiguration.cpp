@@ -33,6 +33,11 @@ static const std::string module_name("global");
 
 static const Settings::Key BACKUP_PATH(module_name, "application/backup/subfolder");
 
+io::path GlobalConfiguration::appDirPath() const
+{
+    return io::path(QCoreApplication::applicationDirPath());
+}
+
 io::path GlobalConfiguration::sharePath() const
 {
     if (m_sharePath.empty()) {

@@ -27,6 +27,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/actioneventobserver.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/telemetryservice.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/telemetryservice.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dump/crashhandler.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dump/crashhandler.h
     ${CMAKE_CURRENT_LIST_DIR}/view/telemetrypermissiondialog.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/telemetrypermissiondialog.h
     ${CMAKE_CURRENT_LIST_DIR}/view/telemetrypermissionmodel.cpp
@@ -37,8 +39,14 @@ set(MODULE_QRC telemetry.qrc)
 
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml )
 
+set(MODULE_INCLUDE
+    ${PROJECT_SOURCE_DIR}/thirdparty/google_crashpad_client
+    ${PROJECT_SOURCE_DIR}/thirdparty/google_crashpad_client/third_party/mini_chromium/mini_chromium
+)
+
 set(MODULE_LINK
     qt-google-analytics
+    gcrashpad
 )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

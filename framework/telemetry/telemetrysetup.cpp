@@ -27,7 +27,14 @@
 #include "internal/telemetryservice.h"
 #include "view/telemetrypermissionmodel.h"
 
+#include "global/iglobalconfiguration.h"
+#include "internal/dump/crashhandler.h"
+
+#include "log.h"
+
 using namespace mu::telemetry;
+
+static CrashHandler s_crashHandler;
 
 static void telemetry_init_qrc()
 {
@@ -52,4 +59,25 @@ void TelemetrySetup::registerExports()
 void TelemetrySetup::registerUiTypes()
 {
     qmlRegisterType<TelemetryPermissionModel>("MuseScore.Telemetry", 3, 3, "TelemetryPermissionModel");
+}
+
+static void crash() { volatile int* a = (int*)(NULL); *a = 1; }
+
+void TelemetrySetup::onInit()
+{
+    auto globalConf = framework::ioc()->resolve<framework::IGlobalConfiguration>(moduleName());
+    IF_ASSERT_FAILED(globalConf) {
+        return;
+    }
+
+    io::path handlerFile = globalConf->appDirPath() + "/crashpad_handler";
+    io::path dumpsDir = globalConf->logsPath();
+    std::string sandboxUrl = "https://sentry.musescore.org/api/3/minidump/?sentry_key=1260147a791c40349bbf717b94dc29c4";
+
+    bool ok = s_crashHandler.start(handlerFile, dumpsDir, sandboxUrl);
+    if (!ok) {
+        LOGE() << "failed start crash handler";
+    }
+
+    //crash();
 }
