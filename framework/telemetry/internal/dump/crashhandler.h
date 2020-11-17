@@ -16,34 +16,35 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_GLOBALCONFIGURATION_H
-#define MU_FRAMEWORK_GLOBALCONFIGURATION_H
 
-#include "../iglobalconfiguration.h"
+#ifndef MU_TELEMETRY_CRASHHANDLER_H
+#define MU_TELEMETRY_CRASHHANDLER_H
 
-namespace mu {
-namespace framework {
-class GlobalConfiguration : public IGlobalConfiguration
+#include <string>
+
+#include "io/path.h"
+#include "modularity/ioc.h"
+#include "system/ifilesystem.h"
+
+namespace crashpad {
+class CrashpadClient;
+}
+
+namespace mu::telemetry {
+class CrashHandler
 {
+    INJECT(telemetry, framework::IFileSystem, fileSystem)
+
 public:
-    GlobalConfiguration() = default;
+    CrashHandler() = default;
+    ~CrashHandler();
 
-    io::path appDirPath() const override;
-    io::path sharePath() const override;
-    io::path dataPath() const override;
-    io::path logsPath() const override;
-    io::path backupPath() const override;
-
-    bool useFactorySettings() const override;
-    bool enableExperimental() const override;
+    bool start(const io::path& handlerFilePath,const io::path& dumpsDir,const std::string& serverUrl);
 
 private:
 
-    QString getSharePath() const;
-
-    mutable io::path m_sharePath;
-    mutable io::path m_dataPath;
+    crashpad::CrashpadClient* m_client = nullptr;
 };
 }
-}
-#endif // MU_FRAMEWORK_GLOBALCONFIGURATION_H
+
+#endif // MU_TELEMETRY_CRASHHANDLER_H
