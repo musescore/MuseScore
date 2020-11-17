@@ -12,12 +12,14 @@ ARTIFACTS_DIR=build.artifacts
 BUILD_MODE=""
 BUILDTYPE=portable # portable build is the default build
 OPTIONS=""
+BUILD_UI_MU4=ON    # not used, only for easier synchronization and compatibility
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -n|--number) BUILD_NUMBER="$2"; shift ;;
         --telemetry) TELEMETRY_TRACK_ID="$2"; shift ;;
         --build_mode) BUILD_MODE="$2"; shift ;;
+        --build_mu4) BUILD_UI_MU4="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -40,6 +42,7 @@ echo "TELEMETRY_TRACK_ID: $TELEMETRY_TRACK_ID"
 echo "BUILD_MODE: $BUILD_MODE"
 echo "BUILDTYPE: $BUILDTYPE"
 echo "OPTIONS: $OPTIONS"
+echo "BUILD_UI_MU4: $BUILD_UI_MU4"
 
 echo "=== ENVIRONMENT === "
 

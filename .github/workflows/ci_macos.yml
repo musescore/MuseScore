@@ -36,7 +36,6 @@ jobs:
       run: |
         bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ github.event.inputs.build_mode }}
         BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
-        echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
 
         DO_PUBLISH='false'
         if [[ "${{ github.event.inputs.publish }}" == "on" || "$BUILD_MODE" == "nightly_build" ]]; then 
@@ -46,8 +45,6 @@ jobs:
             DO_PUBLISH='false'
           fi  
         fi
-        echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
-        echo "DO_PUBLISH: $DO_PUBLISH" 
 
         DO_NOTARIZE='false'
         if [ "$BUILD_MODE" != "devel_build" ]; then 
@@ -61,17 +58,30 @@ jobs:
             DO_NOTARIZE='false'
           fi 
         fi
+
+        DO_BUILD='true'
+
+        echo "github.repository: ${{ github.repository }}"
+        echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
+        echo "BUILD_MODE: $BUILD_MODE"
+        echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
+        echo "DO_BUILD: $DO_BUILD"
         echo "DO_NOTARIZE=$DO_NOTARIZE" >> $GITHUB_ENV
         echo "DO_NOTARIZE: $DO_NOTARIZE"
+        echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
+        echo "DO_PUBLISH: $DO_PUBLISH"
     
     - name: Setup environment
+      if: env.DO_BUILD == 'true'
       run: |
         bash ./build/ci/macos/setup.sh
-    - name: Build          
+    - name: Build       
+      if: env.DO_BUILD == 'true'   
       run: |
         T_ID=${{ secrets.TELEMETRY_TRACK_ID }}; if [ -z "$T_ID" ]; then T_ID="''"; fi
         bash ./build/ci/macos/build.sh -n ${{ github.run_id }} --telemetry $T_ID
     - name: Package 
+      if: env.DO_BUILD == 'true'
       run: |
         S_S="${{ secrets.MAC_SIGN_CERTIFICATE_ENCRYPT_SECRET }}"; if [ -z "$S_S" ]; then S_S="''"; fi
         S_P="${{ secrets.MAC_SIGN_CERTIFICATE_PASSWORD }}"; if [ -z "$S_P" ]; then S_P="''"; fi
@@ -83,6 +93,7 @@ jobs:
         PW=${{ secrets.APPLE_PASSWORD }}; if [ -z "$PW" ]; then PW="''"; fi
         bash ./build/ci/macos/notarize.sh -u $USER -p $PW
     - name: Checksum 
+      if: env.DO_BUILD == 'true'
       run: |
         bash ./build/ci/tools/checksum.sh    
     - name: Publish package
@@ -90,9 +101,11 @@ jobs:
       run: |
         sudo bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os macos -v 3
     - name: AppCast
+      if: env.DO_BUILD == 'true'
       run: |
         bash ./build/ci/tools/sparkle_appcast_gen.sh -p macos
     - name: Upload artifacts on GitHub
+      if: env.DO_BUILD == 'true'
       uses: actions/upload-artifact@v2
       with:
         name: MuseScore_${{ github.run_id }}

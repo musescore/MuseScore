@@ -31,7 +31,8 @@ jobs:
       run: |
         sudo bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ github.event.inputs.build_mode }}
         BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
-        echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
+
+        DO_BUILD='true'
 
         DO_PUBLISH='false'
         if [[ "${{ github.event.inputs.publish }}" == "on" || "$BUILD_MODE" == "nightly_build" ]]; then 
@@ -42,20 +43,28 @@ jobs:
           fi  
         fi
 
+        echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
+        echo "BUILD_MODE: $BUILD_MODE"
+        echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
+        echo "DO_BUILD: $DO_BUILD"
         echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
         echo "DO_PUBLISH: $DO_PUBLISH"
 
     - name: Setup environment
+      if: env.DO_BUILD == 'true'
       run: |
         sudo bash ./build/ci/linux/setup.sh
     - name: Build
+      if: env.DO_BUILD == 'true'
       run: |
         T_ID=${{ secrets.TELEMETRY_TRACK_ID }}; if [ -z "$T_ID" ]; then T_ID="''"; fi
         sudo bash ./build/ci/linux/build.sh -n ${{ github.run_id }} --telemetry $T_ID
     - name: Package 
+      if: env.DO_BUILD == 'true'
       run: |
         sudo bash ./build/ci/linux/package.sh
     - name: Checksum 
+      if: env.DO_BUILD == 'true'
       run: |
         sudo bash ./build/ci/tools/checksum.sh
     - name: Publish package
@@ -63,6 +72,7 @@ jobs:
       run: |
         sudo bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os linux -v 3
     - name: Upload artifacts on GitHub
+      if: env.DO_BUILD == 'true'
       uses: actions/upload-artifact@v2
       with:
         name: MuseScore_${{ github.run_id }}
@@ -83,9 +93,7 @@ jobs:
     - name: Build
       run: |
         mkdir -p build.artifacts/env
-        touch build.artifacts/env/build_mode.env
-        T_ID=${{ secrets.TELEMETRY_TRACK_ID }}; if [ -z "$T_ID" ]; then T_ID="''"; fi
-        ./build/ci/linux/build.sh --build_mode mtests -n ${{ github.run_id }} --telemetry $T_ID
+        ./build/ci/linux/build.sh -n ${{ github.run_id }} --build_mode mtests
     - name: Run mtests 
       run: |
         ./build/ci/linux/runmtests.sh
