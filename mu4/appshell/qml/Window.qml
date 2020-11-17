@@ -33,8 +33,8 @@ DockWindow {
             id: mainToolBar
             objectName: "mainToolBar"
 
-            width: dockWindow.width/2
-            height: 48
+            minimumWidth: 600
+            minimumHeight: 48
             color: dockWindow.color
 
             MainToolBar {
@@ -50,8 +50,8 @@ DockWindow {
             id: notationToolBar
             objectName: "notationModeToolBar"
 
-            width: dockWindow.width / 2
-            height: 48
+            minimumWidth: 200
+            minimumHeight: 48
             color: dockWindow.color
 
             visible: dockWindow.currentPageUri !== home.uri
@@ -65,8 +65,8 @@ DockWindow {
             id: playToolBar
             objectName: "playToolBar"
 
-            width: dockWindow.width / 2
-            height: 32
+            minimumWidth: 100
+            minimumHeight: 48
             color: dockWindow.color
 
             visible: dockWindow.currentPageUri !== home.uri

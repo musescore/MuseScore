@@ -17,12 +17,17 @@ DockPage {
         id: notationToolBar
         objectName: "notationToolBar"
 
-        height: 40
-        width: 500
+        minimumWidth: orientation == Qt.Horizontal ? 600 : 96
+        minimumHeight: orientation == Qt.Horizontal ? 48 : 0
+
         color: notationPage.color
 
-        NotationToolBar {
+        content: NotationToolBar {
+            id: _toolbar
+            anchors.fill: parent
             color: notationToolBar.color
+
+            orientation: notationToolBar.orientation
         }
     }
 
