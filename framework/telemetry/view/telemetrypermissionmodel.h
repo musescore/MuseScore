@@ -25,10 +25,6 @@
 #include <QString>
 
 namespace mu::telemetry {
-<<<<<<< HEAD:framework/telemetry/view/telemetrypermissionmodel.h
-=======
-
->>>>>>> tidied up the telemetry module:framework/telemetry/view/telemetrypermissionmodel.h
 class TelemetryPermissionModel : public QObject
 {
     Q_OBJECT
@@ -45,9 +41,4 @@ private:
 };
 }
 
-<<<<<<< HEAD:framework/telemetry/view/telemetrypermissionmodel.h
-=======
-}
-
->>>>>>> tidied up the telemetry module:framework/telemetry/view/telemetrypermissionmodel.h
 #endif // MU_TELEMETRY_TELEMETRYPERMISSIONMODEL_H
