@@ -26,6 +26,22 @@ set(CRASHPAD_COMMON_SRC
     ${CRASHPAD_PATH}/util/file/file_reader.cc
 )
 
+set(CRASHPAD_COMMON_SRC
+    ${CHROMIUM_PATH}/base/logging.cc
+    ${CHROMIUM_PATH}/base/rand_util.cc
+    ${CHROMIUM_PATH}/base/files/file_path.cc
+    ${CHROMIUM_PATH}/base/strings/stringprintf.cc
+
+    ${CRASHPAD_PATH}/client/crash_report_database.cc
+    ${CRASHPAD_PATH}/client/settings.cc
+
+    ${CRASHPAD_PATH}/util/misc/uuid.cc
+    ${CRASHPAD_PATH}/util/misc/metrics.cc
+
+    ${CRASHPAD_PATH}/util/file/file_writer.cc
+    ${CRASHPAD_PATH}/util/file/file_reader.cc
+)
+
 if(LINUX)
     set(CRASHPAD_SRC
 
@@ -217,3 +233,4 @@ add_library(gcrashpad STATIC
 target_compile_definitions(gcrashpad PUBLIC ${CRASHPAD_DEF} )
 target_include_directories(gcrashpad PUBLIC ${CRASHPAD_INC} )
 target_link_libraries(gcrashpad ${CRASHPAD_LINK} )
+

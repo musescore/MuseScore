@@ -66,5 +66,6 @@ int main()
     }
 
     cout << "cpad good buy!" << endl;
+    
     return 0;
 }
