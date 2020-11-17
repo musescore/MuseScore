@@ -5,7 +5,7 @@ on:
   # pull_request:
   #   branches:
   #   - master
-  schedule:                 # Schedule 3.x nightly build! (not master MU3)  
+  schedule:               # Schedule 3.x nightly build! (not master MU3)  
     - cron: '0 4 */1 * *' # At 04:00 on every day-of-month
   workflow_dispatch:
     inputs:
@@ -81,7 +81,7 @@ jobs:
         echo "DO_NOTARIZE=$DO_NOTARIZE" >> $GITHUB_ENV
         echo "DO_NOTARIZE: $DO_NOTARIZE"
         echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
-        echo "DO_PUBLISH: $DO_PUBLISH"      
+        echo "DO_PUBLISH: $DO_PUBLISH"
     
     - name: Setup environment
       if: env.DO_BUILD == 'true'

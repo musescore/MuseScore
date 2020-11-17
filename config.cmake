@@ -23,11 +23,11 @@ SET(MUSESCORE_VERSION_MAJOR  "4")
 SET(MUSESCORE_VERSION_MINOR  "0")
 SET(MUSESCORE_VERSION_PATCH  "0")
 SET(MUSESCORE_VERSION_LABEL  "")
-SET(MUSESCORE_BUILD_CONFIG "dev")
-# Possible MUSESCORE_BUILD_CONFIG values:
-# - dev     - for development/nightly builds
-# - testing - for testing versions (alpha, beta, RC)
-# - release - for stable release builds
+
+message(STATUS "MUSESCORE_BUILD_CONFIG ${MUSESCORE_BUILD_CONFIG}")
+if (NOT MUSESCORE_BUILD_CONFIG)
+    SET(MUSESCORE_BUILD_CONFIG "dev")
+endif (NOT MUSESCORE_BUILD_CONFIG)
 
 include("${CMAKE_CURRENT_LIST_DIR}/build/config/${MUSESCORE_BUILD_CONFIG}.cmake")
 

@@ -7,13 +7,13 @@
 build.release
 build.debug
 build.qtc
-build.artifacts
 win32build
 win32install
 win64build
 win64install
 build.xcode
 applebuild
+build.artifacts
 MuseScorePortable
 /*.config
 /*.creator
@@ -29,6 +29,7 @@ build.qt5
 *.sfd~
 /.project
 mscore/revision.h
+local_build_revision.env
 .DS_Store
 CMakeLists.txt.user.*
 *.qmlc
