@@ -66,8 +66,16 @@
 
 ModulesSetup::ModulesSetup()
 {
+    //! NOTE `global module` must be first, because all dependent on it
+    //! `telemetry` must be second, because it install crash handler.
+    //! others modules order not important (must be)
+
     m_modulesSetupList
         << new mu::framework::GlobalModule()
+
+#ifdef BUILD_TELEMETRY_MODULE
+        << new mu::telemetry::TelemetrySetup()
+#endif
         << new mu::framework::UiModule()
         << new mu::framework::UiComponentsModule()
         << new mu::fonts::FontsModule()
@@ -96,9 +104,6 @@ ModulesSetup::ModulesSetup()
 #endif
 #endif
 
-#ifdef BUILD_TELEMETRY_MODULE
-        << new mu::telemetry::TelemetrySetup()
-#endif
 #ifdef AVSOMR
         << new Ms::Avs::AvsOmrSetup()
 #endif

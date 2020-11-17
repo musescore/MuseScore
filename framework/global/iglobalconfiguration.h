@@ -31,6 +31,7 @@ public:
 
     virtual ~IGlobalConfiguration() = default;
 
+    virtual io::path appDirPath() const = 0;
     virtual io::path sharePath() const = 0;
     virtual io::path dataPath() const = 0;
     virtual io::path logsPath() const = 0;

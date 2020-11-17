@@ -68,7 +68,7 @@ if(APPLE)
 
 endif(APPLE)
 
-add_library(gcrashpad STATIC ${BREAKPAD_SRC} )
+add_library(gcrashpad STATIC ${CRASHPAD_SRC} )
 
 target_compile_definitions(gcrashpad PUBLIC
     ${CRASHPAD_DEF}
