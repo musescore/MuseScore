@@ -47,6 +47,7 @@
     <chordSymbolBFontFace>Edwin</chordSymbolBFontFace>
     <chordSymbolBFontSize>10</chordSymbolBFontSize>
     <nashvilleNumberFontFace>Edwin</nashvilleNumberFontFace>
+    <enableIndentationOnFirstSystem>1</enableIndentationOnFirstSystem>
     <slurEndWidth>0.05</slurEndWidth>
     <slurMidWidth>0.18</slurMidWidth>
     <musicalSymbolFont>Leland</musicalSymbolFont>
@@ -70,7 +71,6 @@
     <dynamicsPosAbove x="0" y="-1.5"/>
     <dynamicsPosBelow x="0" y="2.5"/>
     <defaultFontFace>Edwin</defaultFontFace>
-    <defaultAlign>left,baseline</defaultAlign>
     <titleFontFace>Edwin</titleFontFace>
     <subTitleFontFace>Edwin</subTitleFontFace>
     <composerFontFace>Edwin</composerFontFace>
@@ -94,13 +94,9 @@
     <measureNumberFontFace>Edwin</measureNumberFontFace>
     <measureNumberFontSize>9</measureNumberFontSize>
     <measureNumberFontStyle>2</measureNumberFontStyle>
-    <measureNumberAlign>left,baseline</measureNumberAlign>
     <translatorFontFace>Edwin</translatorFontFace>
-    <translatorAlign>center,top</translatorAlign>
     <systemFontFace>Edwin</systemFontFace>
-    <systemAlign>left,top</systemAlign>
     <staffFontFace>Edwin</staffFontFace>
-    <staffAlign>left,top</staffAlign>
     <staffPosBelow x="0" y="2"/>
     <rehearsalMarkFontFace>Edwin</rehearsalMarkFontFace>
     <repeatLeftFontFace>Edwin</repeatLeftFontFace>
@@ -108,18 +104,13 @@
     <frameFontFace>Edwin</frameFontFace>
     <textLineFontFace>Edwin</textLineFontFace>
     <glissandoFontFace>Edwin</glissandoFontFace>
-    <glissandoAlign>center,baseline</glissandoAlign>
     <bendFontFace>Edwin</bendFontFace>
-    <bendAlign>center,bottom</bendAlign>
     <headerFontFace>Edwin</headerFontFace>
     <headerFontSize>10</headerFontSize>
     <headerFontStyle>1</headerFontStyle>
-    <headerAlign>center,top</headerAlign>
     <footerFontFace>Edwin</footerFontFace>
     <footerFontSize>9</footerFontSize>
-    <footerAlign>center,bottom</footerAlign>
     <instrumentChangeFontFace>Edwin</instrumentChangeFontFace>
-    <instrumentChangeAlign>left,bottom</instrumentChangeAlign>
     <stickingFontFace>Edwin</stickingFontFace>
     <user1FontFace>Edwin</user1FontFace>
     <user2FontFace>Edwin</user2FontFace>
@@ -137,5 +128,6 @@
     <palmMuteFontFace>Edwin</palmMuteFontFace>
     <fermataPosAbove x="0" y="-0.5"/>
     <fermataPosBelow x="0" y="0.5"/>
+    <qualityUpgradeAllowed>1</qualityUpgradeAllowed>
     </Style>
   </museScore>
