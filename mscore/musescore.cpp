@@ -185,8 +185,9 @@ Q_LOGGING_CATEGORY(undoRedo, "undoRedo", QtCriticalMsg);
 #endif
 
 #ifndef TELEMETRY_DISABLED
-#include "actioneventobserver.h"
-#include "widgets/telemetrypermissiondialog.h"
+#include "framework/telemetry/internal/actioneventobserver.h"
+#include "framework/telemetry/view/telemetrypermissiondialog.h"
+using namespace mu::telemetry;
 #endif
 #include "telemetrymanager.h"
 #include "global/context/scorestateobserver.h"

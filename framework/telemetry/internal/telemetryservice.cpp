@@ -17,22 +17,14 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "qt-google-analytics/ganalytics.h"
-#include "framework/preferencekeys.h"
 #include "telemetryservice.h"
+
+#include "thirdparty/qt-google-analytics/ganalytics.h"
+#include "framework/preferencekeys.h"
+
 #include "config.h"
 
-//---------------------------------------------------------
-//   TelemetryService
-//---------------------------------------------------------
-
-TelemetryService::TelemetryService()
-{
-}
-
-//---------------------------------------------------------
-//   sendEvent
-//---------------------------------------------------------
+using namespace mu::telemetry;
 
 void TelemetryService::sendEvent(const QString& category, const QString& action, const QString& label,
                                  const QVariant& value, const QVariantMap& customValues)
@@ -44,10 +36,6 @@ void TelemetryService::sendEvent(const QString& category, const QString& action,
     GAnalytics::instance(TELEMETRY_TRACK_ID)->sendEvent(category, action, label, value, customValues);
 }
 
-//---------------------------------------------------------
-//   sendException
-//---------------------------------------------------------
-
 void TelemetryService::sendException(const QString& exceptionDescription, bool exceptionFatal,
                                      const QVariantMap& customValues)
 {
@@ -58,10 +46,6 @@ void TelemetryService::sendException(const QString& exceptionDescription, bool e
     GAnalytics::instance(TELEMETRY_TRACK_ID)->sendException(exceptionDescription, exceptionFatal, customValues);
 }
 
-//---------------------------------------------------------
-//   startSession
-//---------------------------------------------------------
-
 void TelemetryService::startSession()
 {
     if (!isTelemetryAllowed()) {
@@ -71,10 +55,6 @@ void TelemetryService::startSession()
     GAnalytics::instance(TELEMETRY_TRACK_ID)->startSession();
 }
 
-//---------------------------------------------------------
-//   endSession
-//---------------------------------------------------------
-
 void TelemetryService::endSession()
 {
     if (!isTelemetryAllowed()) {
@@ -83,10 +63,6 @@ void TelemetryService::endSession()
 
     GAnalytics::instance(TELEMETRY_TRACK_ID)->endSession();
 }
-
-//---------------------------------------------------------
-//   isTelemetryAllowed
-//---------------------------------------------------------
 
 bool TelemetryService::isTelemetryAllowed() const
 {

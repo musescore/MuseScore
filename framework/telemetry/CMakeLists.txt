@@ -18,32 +18,27 @@
 #=============================================================================
 
 set(MODULE telemetry)
-set(LIBRARY_TYPE STATIC)
-message(STATUS "Configuring " ${MODULE})
 
-include_directories(
-      ${PROJECT_SOURCE_DIR}/thirdparty
-      ${PROJECT_SOURCE_DIR}/mscore
-      ${PROJECT_SOURCE_DIR}/framework/global
-      ${PROJECT_BINARY_DIR}
-      )
+set(MODULE_SRC
+    ${CMAKE_CURRENT_LIST_DIR}/telemetrysetup.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/telemetrysetup.h
+    ${CMAKE_CURRENT_LIST_DIR}/itelemetryservice.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/actioneventobserver.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/actioneventobserver.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/telemetryservice.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/telemetryservice.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/telemetrypermissiondialog.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/telemetrypermissiondialog.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/telemetrypermissionmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/telemetrypermissionmodel.h
+    )
 
-file(GLOB_RECURSE telemetry_SOURCES RELATIVE ${CMAKE_CURRENT_LIST_DIR} *.cpp)
-file(GLOB_RECURSE telemetry_HEADERS RELATIVE ${CMAKE_CURRENT_LIST_DIR} *.h)
+set(MODULE_QRC telemetry.qrc)
 
-find_package(Qt5QuickCompiler)
-qtquick_compiler_add_resources(RCC_SOURCES telemetry_resources.qrc)
+set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml )
 
-add_library(${MODULE} ${LIBRARY_TYPE}
-    ${telemetry_SOURCES}
-    ${telemetry_HEADERS}
-    ${RCC_SOURCES}
+set(MODULE_LINK
+    qt-google-analytics
 )
 
-target_link_libraries(${MODULE} global qt-google-analytics)
-
-if (MSVC)
-  set_target_properties (${MODULE} PROPERTIES
-    COMPILE_FLAGS "/wd4127 /wd26439 /wd5999" # ToDo for Qt 5.15: "... /wd26444 /wd26451 /wd26495 /wd26498 /wd26812" ??
-  )
-endif (MSVC)
+include(${PROJECT_SOURCE_DIR}/build/module.cmake)
