@@ -124,6 +124,12 @@ IF /I "%1"=="package" (
    GOTO :END
 )
 
+IF /I "%1"=="revision" (
+   echo revisionStep
+   git rev-parse --short=7 HEAD > local_build_revision.env
+   GOTO :END
+)
+
 IF /I "%1"=="clean" (
    for /d %%G in ("msvc.*") do rd /s /q "%%~G"
    for /d %%G in ("MuseScorePortable") do rd /s /q "%%~G"
