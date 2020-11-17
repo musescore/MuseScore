@@ -94,8 +94,9 @@ bool MidiArticulation::operator==(const MidiArticulation& i) const
 //   Instrument
 //---------------------------------------------------------
 
-Instrument::Instrument()
+Instrument::Instrument(QString id)
       {
+      _id = id;
       Channel* a = new Channel;
       a->setName(Channel::DEFAULT_NAME);
       _channel.append(a);
@@ -111,6 +112,7 @@ Instrument::Instrument()
 
 Instrument::Instrument(const Instrument& i)
       {
+      _id           = i._id;
       _longNames    = i._longNames;
       _shortNames   = i._shortNames;
       _trackName    = i._trackName;
@@ -139,6 +141,7 @@ void Instrument::operator=(const Instrument& i)
       _channel.clear();
       delete _drumset;
 
+      _id           = i._id;
       _longNames    = i._longNames;
       _shortNames   = i._shortNames;
       _trackName    = i._trackName;
@@ -214,7 +217,10 @@ void StaffName::read(XmlReader& e)
 
 void Instrument::write(XmlWriter& xml, const Part* part) const
       {
-      xml.stag("Instrument");
+      if (_id.isEmpty())
+            xml.stag("Instrument");
+      else
+            xml.stag(QString("Instrument id=\"%1\"").arg(_id));
       _longNames.write(xml, "longName");
       _shortNames.write(xml, "shortName");
 //      if (!_trackName.empty())
@@ -286,6 +292,7 @@ void Instrument::read(XmlReader& e, Part* part)
       bool readSingleNoteDynamics = false;
 
       _channel.clear();       // remove default channel
+      _id = e.attribute("id");
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "singleNoteDynamics") {
@@ -1480,7 +1487,7 @@ void Instrument::setTrackName(const QString& s)
 
 Instrument Instrument::fromTemplate(const InstrumentTemplate* t)
       {
-      Instrument instr;
+      Instrument instr(t->id);
       instr.setAmateurPitchRange(t->minPitchA, t->maxPitchA);
       instr.setProfessionalPitchRange(t->minPitchP, t->maxPitchP);
       for (const StaffName &sn : t->longNames)
@@ -1502,6 +1509,25 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* t)
       instr.setStringData(t->stringData);
       instr.setSingleNoteDynamics(t->singleNoteDynamics);
       return instr;
+      }
+
+//---------------------------------------------------------
+//  updateInstrumentId
+//---------------------------------------------------------
+
+void Instrument::updateInstrumentId()
+      {
+      if (!_id.isEmpty() || _instrumentId.isEmpty())
+            return;
+
+      for (InstrumentGroup* g : instrumentGroups) {
+            for (InstrumentTemplate* it : g->instrumentTemplates) {
+                  if (it->musicXMLid == instrumentId()) {
+                        _id = it->id;
+                        return;
+                        }
+                  }
+            }
       }
 
 //---------------------------------------------------------

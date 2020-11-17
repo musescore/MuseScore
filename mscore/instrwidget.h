@@ -72,6 +72,7 @@ class PartListItem : public QTreeWidgetItem {
       PartListItem(const InstrumentTemplate* i);
       PartListItem(const InstrumentTemplate* i, QTreeWidget* lv);
       PartListItem(const InstrumentTemplate* i, QTreeWidget* lv, QTreeWidgetItem* prv);
+      QString id() const;
       QString name() const;
       bool visible() const;
       void setVisible(bool val);
@@ -192,7 +193,6 @@ class InstrumentsWidget : public QWidget, public Ui::InstrumentsWidget {
       void updatePartIdx();
       void init();
       void setMakeSoloistButtonText();
-      void setCustomScoreOrder();
       void createInstruments(Score*);
       void numberInstrumentNames(Score*);
       void setScoreOrder(ScoreOrder* order);

@@ -254,6 +254,7 @@ class Instrument {
       StaffNameList _longNames;
       StaffNameList _shortNames;
       QString _trackName;
+      QString _id;
 
       char _minPitchA, _maxPitchA, _minPitchP, _maxPitchP;
       Interval _transpose;
@@ -271,7 +272,7 @@ class Instrument {
       bool _singleNoteDynamics;
 
    public:
-      Instrument();
+      Instrument(QString id="");
       Instrument(const Instrument&);
       void operator=(const Instrument&);
       ~Instrument();
@@ -288,6 +289,7 @@ class Instrument {
       bool operator==(const Instrument&) const;
       bool isDifferentInstrument(const Instrument& i) const;
 
+      QString getId() const                                 { return _id;         }
       void setMinPitchP(int v)                               { _minPitchP = v;     }
       void setMaxPitchP(int v)                               { _maxPitchP = v;     }
       void setMinPitchA(int v)                               { _minPitchA = v;     }
@@ -344,6 +346,8 @@ class Instrument {
       QString trackName() const;
       void setTrackName(const QString& s);
       static Instrument fromTemplate(const InstrumentTemplate* t);
+
+      void updateInstrumentId();
 
       bool singleNoteDynamics() const           { return _singleNoteDynamics; }
       void setSingleNoteDynamics(bool val)      { _singleNoteDynamics = val; }

@@ -30,7 +30,7 @@
           </StaffType>
         </Staff>
       <trackName>Track 3</trackName>
-      <Instrument>
+      <Instrument id="bass-guitar">
         <longName>Bass Guitar</longName>
         <shortName>B. Guit.</shortName>
         <trackName>Bass Guitar</trackName>
@@ -363,7 +363,7 @@ Puki Kuki</text>
             </StaffType>
           </Staff>
         <trackName></trackName>
-        <Instrument>
+        <Instrument id="bass-guitar">
           <longName>Bass Guitar</longName>
           <shortName>B. Guit.</shortName>
           <trackName>Bass Guitar</trackName>

@@ -30,7 +30,7 @@
           </StaffType>
         </Staff>
       <trackName>Track 1</trackName>
-      <Instrument>
+      <Instrument id="guitar-nylon-treble-clef">
         <longName>Guitar</longName>
         <shortName>Guit.</shortName>
         <trackName>Guitar (Treble Clef)</trackName>
@@ -335,7 +335,7 @@
             </StaffType>
           </Staff>
         <trackName></trackName>
-        <Instrument>
+        <Instrument id="guitar-nylon-treble-clef">
           <longName>Guitar</longName>
           <shortName>Guit.</shortName>
           <trackName>Guitar (Treble Clef)</trackName>

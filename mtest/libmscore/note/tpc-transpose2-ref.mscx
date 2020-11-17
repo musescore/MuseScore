@@ -30,7 +30,7 @@
           </StaffType>
         </Staff>
       <trackName>Alto Saxophone</trackName>
-      <Instrument>
+      <Instrument id="alto-saxophone">
         <longName>Alto Saxophone</longName>
         <shortName>A. Sax.</shortName>
         <trackName>Alto Saxophone</trackName>

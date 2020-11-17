@@ -32,7 +32,7 @@
           </StaffType>
         </Staff>
       <trackName>Voice</trackName>
-      <Instrument>
+      <Instrument id="voice">
         <longName>Voice</longName>
         <shortName>Vo.</shortName>
         <trackName>Voice</trackName>
@@ -84,7 +84,7 @@
         <defaultClef>F</defaultClef>
         </Staff>
       <trackName>Violoncello</trackName>
-      <Instrument>
+      <Instrument id="violoncello">
         <longName>Violoncello</longName>
         <shortName>Vc.</shortName>
         <trackName>Violoncello</trackName>
@@ -1359,7 +1359,7 @@
           <defaultClef>F</defaultClef>
           </Staff>
         <trackName>Violoncello</trackName>
-        <Instrument>
+        <Instrument id="violoncello">
           <longName>Violoncello</longName>
           <shortName>Vc.</shortName>
           <trackName>Violoncello</trackName>

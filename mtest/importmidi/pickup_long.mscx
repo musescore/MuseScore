@@ -29,7 +29,7 @@
           </StaffType>
         </Staff>
       <trackName>Horn in F</trackName>
-      <Instrument>
+      <Instrument id="horn">
         <longName>Horn in F</longName>
         <shortName>F Hn.</shortName>
         <trackName>Horn in F</trackName>

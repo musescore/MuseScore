@@ -29,7 +29,7 @@
           </StaffType>
         </Staff>
       <trackName>Flauta</trackName>
-      <Instrument>
+      <Instrument id="flute">
         <longName>Flauta</longName>
         <shortName>Fl.</shortName>
         <trackName>Flauta</trackName>

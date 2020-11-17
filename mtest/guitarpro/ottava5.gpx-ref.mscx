@@ -30,7 +30,7 @@
           </StaffType>
         </Staff>
       <trackName>Nylon Guitar</trackName>
-      <Instrument>
+      <Instrument id="guitar-nylon-treble-clef">
         <longName>Guitar</longName>
         <shortName>Guit.</shortName>
         <trackName>Guitar (Treble Clef)</trackName>
@@ -108,7 +108,7 @@
           </StaffType>
         </Staff>
       <trackName>Electric Guitar</trackName>
-      <Instrument>
+      <Instrument id="electric-guitar-treble-clef">
         <longName>Electric Guitar</longName>
         <shortName>El. Guit.</shortName>
         <trackName>Electric Guitar (Treble Clef)</trackName>
@@ -422,7 +422,7 @@
             </StaffType>
           </Staff>
         <trackName></trackName>
-        <Instrument>
+        <Instrument id="guitar-nylon-treble-clef">
           <longName>Guitar</longName>
           <shortName>Guit.</shortName>
           <trackName>Guitar (Treble Clef)</trackName>
@@ -688,7 +688,7 @@
             </StaffType>
           </Staff>
         <trackName></trackName>
-        <Instrument>
+        <Instrument id="electric-guitar-treble-clef">
           <longName>Electric Guitar</longName>
           <shortName>El. Guit.</shortName>
           <trackName>Electric Guitar (Treble Clef)</trackName>

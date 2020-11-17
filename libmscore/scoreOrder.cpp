@@ -349,6 +349,8 @@ void ScoreOrder::readSection(XmlReader& e)
 
 QString ScoreOrder::getFamilyName(const InstrumentTemplate* instrTemplate, bool soloist) const
       {
+      if (!instrTemplate)
+            return QString("<unsorted>");
       if (soloist)
            return QString("<soloists>");
       else if (instrumentMap.contains(instrTemplate->trackName.toLower()))
@@ -356,7 +358,7 @@ QString ScoreOrder::getFamilyName(const InstrumentTemplate* instrTemplate, bool 
       else if (instrTemplate->family)
             return instrTemplate->family->id;
       else
-            return QString("<orphan>");
+            return QString("<unsorted>");
       }
 
 //---------------------------------------------------------
@@ -441,13 +443,10 @@ ScoreGroup* ScoreOrder::getGroup(const QString family, const QString instrumentG
       return unsorted;
       }
 
-ScoreGroup* ScoreOrder::getGroup(const QString instrumentName, bool soloist) const
+ScoreGroup* ScoreOrder::getGroup(const QString id, const bool soloist) const
       {
-      InstrumentIndex ii = searchTemplateIndexForTrackName(instrumentName);
-      Q_ASSERT(ii.instrTemplate);
-
+      InstrumentIndex ii = searchTemplateIndexForId(id);
       QString family { getFamilyName(ii.instrTemplate, soloist) };
-
       return getGroup(family, instrumentGroups[ii.groupIndex]->id);
       }
 
@@ -534,22 +533,22 @@ void ScoreOrder::write(XmlWriter& xml) const
 //   instrumentIndex
 //---------------------------------------------------------
 
-int ScoreOrder::instrumentIndex(const QString name, bool soloist) const
+int ScoreOrder::instrumentIndex(const QString id, bool soloist) const
       {
-      ScoreGroup* sg = getGroup(name, soloist);
+      ScoreGroup* sg = getGroup(id, soloist);
       int groupIndex = sg ? sg->index() : _groupMultiplier;
       bool unsorted = sg && sg->isUnsorted();
 
-      return _groupMultiplier * groupIndex + (unsorted ?  0 : searchTemplateIndexForTrackName(name).instrIndex);
+      return _groupMultiplier * groupIndex + (unsorted ?  0 : searchTemplateIndexForId(id).instrIndex);
       }
 
 //---------------------------------------------------------
 //   instrumentInUnsortedSection
 //---------------------------------------------------------
 
-bool ScoreOrder::instrumentInUnsortedSection(const QString name, bool soloist) const
+bool ScoreOrder::instrumentInUnsortedSection(const QString id, bool soloist) const
       {
-      return soloist || getGroup(name, soloist)->isUnsorted();
+      return soloist || getGroup(id, soloist)->isUnsorted();
       }
 
 //---------------------------------------------------------
@@ -560,7 +559,7 @@ void ScoreOrder::updateInstruments(const Score* score)
       {
       for (Part* part : score->parts())
             {
-            InstrumentIndex ii = searchTemplateIndexForTrackName(part->instrument()->trackName());
+            InstrumentIndex ii = searchTemplateIndexForId(part->instrument()->getId());
             if (!ii.instrTemplate || !ii.instrTemplate->family)
                   continue;
 
@@ -589,9 +588,7 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
 
       for (Part* part : score->parts())
             {
-            InstrumentIndex ii = searchTemplateIndexForTrackName(part->instrument()->trackName());
-            Q_ASSERT(ii.instrTemplate);
-
+            InstrumentIndex ii = searchTemplateIndexForId(part->instrument()->getId());
             QString family { getFamilyName(ii.instrTemplate, part->soloist()) };
             ScoreGroup* sg = getGroup(family, instrumentGroups[ii.groupIndex]->id);
 
@@ -680,29 +677,9 @@ bool ScoreOrder::isScoreOrder(const Score* score) const
       {
       QList<int> indices;
       for (Part* part : score->parts())
-            indices << instrumentIndex(part->instrument()->trackName(), part->soloist());
+            indices << instrumentIndex(part->instrument()->getId(), part->soloist());
 
       return isScoreOrder(indices);
-      }
-
-//---------------------------------------------------------
-//   debug
-//---------------------------------------------------------
-
-void ScoreOrder::debug(const QString& name, bool soloist) const
-      {
-      InstrumentIndex ii = searchTemplateIndexForTrackName(name);
-      Q_ASSERT(ii.instrTemplate);
-
-      QString family { getFamilyName(ii.instrTemplate, soloist) };
-
-      ScoreGroup* sg = getGroup(family, instrumentGroups[ii.groupIndex]->id);
-      dump();
-      std::cout << ">> " << name.toStdString() << ": family = " << family.toStdString()
-                << ", group = " << (sg ? sg->index() : -1) << std::endl;
-
-      saveScoreOrders(QString("/scratch/MuseScoreDevelopment/InstrumentOrdering/tmp_order.xml"));
-
       }
 
 //---------------------------------------------------------
@@ -859,7 +836,7 @@ QList<ScoreOrder*> ScoreOrderList::searchScoreOrders(const Score* score) const
                   {
                   if (order->isCustom())
                         continue;
-                  indices << order->instrumentIndex(part->instrument()->trackName(), part->soloist());
+                  indices << order->instrumentIndex(part->instrument()->getId(), part->soloist());
                   if (order->isScoreOrder(indices))
                         orders << order;
                   }

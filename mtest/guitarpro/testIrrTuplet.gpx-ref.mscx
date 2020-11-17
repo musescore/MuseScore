@@ -30,7 +30,7 @@
           </StaffType>
         </Staff>
       <trackName>Gtr 2</trackName>
-      <Instrument>
+      <Instrument id="electric-guitar-treble-clef">
         <longName>Electric Guitar</longName>
         <shortName>El. Guit.</shortName>
         <trackName>Electric Guitar (Treble Clef)</trackName>
@@ -260,7 +260,7 @@
             </StaffType>
           </Staff>
         <trackName></trackName>
-        <Instrument>
+        <Instrument id="electric-guitar-treble-clef">
           <longName>Electric Guitar</longName>
           <shortName>El. Guit.</shortName>
           <trackName>Electric Guitar (Treble Clef)</trackName>

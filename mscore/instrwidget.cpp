@@ -313,6 +313,15 @@ void StaffListItem::staffTypeChanged(int idx)
       }
 
 //---------------------------------------------------------
+//   id
+//---------------------------------------------------------
+
+QString PartListItem::id() const
+      {
+      return it ? it->id : part->instrument()->getId();
+      }
+
+//---------------------------------------------------------
 //   name
 //---------------------------------------------------------
 
@@ -624,8 +633,8 @@ int InstrumentsWidget::findPrvItem(PartListItem* pli, int number)
       {
       ScoreOrder* order = getScoreOrder();
 
-      int orderNumber = order->instrumentIndex(pli->name(), pli->isSoloist());
-      bool unsorted = order->instrumentInUnsortedSection(pli->name(), pli->isSoloist());
+      int orderNumber = order->instrumentIndex(pli->id(), pli->isSoloist());
+      bool unsorted = order->instrumentInUnsortedSection(pli->id(), pli->isSoloist());
       int currow { 0 };
       if (unsorted)
             currow = partiturList->currentIndex().row();
@@ -636,12 +645,12 @@ int InstrumentsWidget::findPrvItem(PartListItem* pli, int number)
             PartListItem* p = (PartListItem*)item;
             if (p->op == ListItemOp::I_DELETE)
                   continue;
-            if (order->instrumentIndex(pli->name(), p->isSoloist()) == orderNumber)
+            if (order->instrumentIndex(p->id(), p->isSoloist()) == orderNumber)
                   {
                   if (idx > currow)
                         return idx;
                   }
-            if (order->instrumentIndex(pli->name(), p->isSoloist()) > orderNumber)
+            if (order->instrumentIndex(p->id(), p->isSoloist()) > orderNumber)
                   return idx;
             }
       return last;
@@ -949,7 +958,6 @@ void InstrumentsWidget::on_upButton_clicked()
                   }
             }
       updatePartIdx();
-//      setCustomScoreOrder();
       }
 
 //---------------------------------------------------------
@@ -1015,7 +1023,6 @@ void InstrumentsWidget::on_downButton_clicked()
                   }
             }
       updatePartIdx();
-//      setCustomScoreOrder();
       }
 
 //---------------------------------------------------------
@@ -1344,7 +1351,7 @@ bool InstrumentsWidget::isScoreOrder(const ScoreOrder* order) const
             PartListItem* pli = (PartListItem*)item;
             if (pli->op == ListItemOp::I_DELETE)
                   continue;
-            indices << order->instrumentIndex(pli->name(), pli->isSoloist());
+            indices << order->instrumentIndex(pli->id(), pli->isSoloist());
             }
       return order->isScoreOrder(indices);
       }
@@ -1364,7 +1371,9 @@ void InstrumentsWidget::init()
       addLinkedStaffButton->setEnabled(false);
       addStaffButton->setEnabled(false);
 
+      int curIndex = scoreOrderComboBox->currentIndex();
       _model->rebuildData();
+      scoreOrderComboBox->setCurrentIndex(curIndex);
 
       // get last saved, user-selected instrument genre and set filter to it
       QSettings settings;
@@ -1393,15 +1402,6 @@ void InstrumentsWidget::setMakeSoloistButtonText()
       else
             makeSoloistButton->setText(InstrumentsWidget::tr("Make soloist"));
       partiturList->resizeColumnToContents(0);
-      }
-
-//---------------------------------------------------------
-//   setCustomScoreOrder
-//---------------------------------------------------------
-
-void InstrumentsWidget::setCustomScoreOrder()
-      {
-      scoreOrderComboBox->setCurrentIndex(0);
       }
 
 //---------------------------------------------------------

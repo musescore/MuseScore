@@ -29,7 +29,7 @@
           </StaffType>
         </Staff>
       <trackName>Soprano, Staff</trackName>
-      <Instrument>
+      <Instrument id="soprano">
         <longName>Soprano, Staff</longName>
         <shortName>S.</shortName>
         <trackName>Soprano</trackName>
