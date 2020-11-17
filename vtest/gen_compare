@@ -79,4 +79,5 @@ cd ..
 if [ "$VTEST_DIFF_FOUND" = false ]; then
       rm -rf ./compare
 fi
-echo "::set-env name=VTEST_DIFF_FOUND::${VTEST_DIFF_FOUND}"
+
+echo "VTEST_DIFF_FOUND=$VTEST_DIFF_FOUND" >> $GITHUB_ENV
