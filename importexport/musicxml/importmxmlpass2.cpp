@@ -5016,14 +5016,11 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
                         if (_e.name() == "root-step") {
                               // attributes: print-style
                               step = _e.readElementText();
-                              /* TODO: check if this is required
-                              if (ee.hasAttribute("text")) {
-                                    QString rtext = ee.attribute("text");
-                                    if (rtext == "") {
+                              if (_e.attributes().hasAttribute("text")) {
+                                    if (_e.attributes().value("text").toString() == "") {
                                           invalidRoot = true;
+                                          }
                                     }
-                              }
-                               */
                               }
                         else if (_e.name() == "root-alter") {
                               // attributes: print-object, print-style
@@ -5050,11 +5047,13 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
                   // attributes: use-symbols  yes-no
                   //             text, stack-degrees, parentheses-degree, bracket-degrees,
                   //             print-style, halign, valign
-
                   kindText = _e.attributes().value("text").toString();
                   symbols = _e.attributes().value("use-symbols").toString();
                   parens = _e.attributes().value("parentheses-degrees").toString();
                   kind = _e.readElementText();
+                  if (kind == "none") {
+                        ha->setRootTpc(Tpc::TPC_INVALID);
+                        }
                   }
             else if (_e.name() == "inversion") {
                   // attributes: print-style
