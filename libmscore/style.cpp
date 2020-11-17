@@ -94,7 +94,7 @@ static const StyleType styleTypes[] {
       { Sid::lyricsMinDistance,       "lyricsMinDistance",       Spatium(0.0)  },
       { Sid::lyricsLineHeight,        "lyricsLineHeight",        1.0 },
       { Sid::lyricsDashMinLength,     "lyricsDashMinLength",     Spatium(0.4) },
-      { Sid::lyricsDashMaxLength,     "lyricsDashMaxLegth",      Spatium(0.8) },
+      { Sid::lyricsDashMaxLength,     "lyricsDashMaxLength",     Spatium(0.8) },
       { Sid::lyricsDashMaxDistance,   "lyricsDashMaxDistance",   Spatium(16.0) },
       { Sid::lyricsDashForce,         "lyricsDashForce",         QVariant(true) },
       { Sid::lyricsAlignVerseNumber,  "lyricsAlignVerseNumber",  true },
@@ -2913,6 +2913,8 @@ void MStyle::load(XmlReader& e)
                   _customChordList = true;
                   chordListTag = true;
                   }
+            else if (tag == "lyricsDashMaxLegth") // pre-3.6 typo
+                  set(Sid::lyricsDashMaxLength, e.readDouble());
             else if (!readProperties(e))
                   e.unknown();
             }
