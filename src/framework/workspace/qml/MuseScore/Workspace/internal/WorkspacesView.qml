@@ -24,8 +24,7 @@ RadioButtonGroup {
     }
 
     delegate: RoundedRadioButton {
-        anchors.left: parent.left
-        anchors.right: parent.right
+        width: ListView.view.width
         leftPadding: root.leftPadding
 
         height: 46
