@@ -1,6 +1,6 @@
 import QtQuick 2.7
-import MuseScore.NotationScene 1.0
 
+import MuseScore.NotationScene 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
 
@@ -9,6 +9,10 @@ Row {
 
     ConcertPitchControlModel {
         id: model
+
+        function toggleConcertPitch() {
+            model.concertPitchEnabled = !model.concertPitchEnabled
+        }
     }
 
     Component.onCompleted: {
@@ -16,24 +20,24 @@ Row {
     }
 
     CheckBox {
+        anchors.verticalCenter: parent.verticalCenter
+
         checked: model.concertPitchEnabled
 
-        width: 20
-
         onClicked: {
-            model.concertPitchEnabled = !checked
+            model.toggleConcertPitch()
         }
     }
 
-    StyledIconLabel {
-        width: 32
-
-        iconCode: IconCode.TUNING_FORK
-    }
-
-    StyledTextLabel {
-        height: parent.height
-
+    FlatButton {
+        icon: IconCode.TUNING_FORK
         text: qsTrc("notation", "Concert pitch")
+
+        orientation: Qt.Horizontal
+        normalStateColor: "transparent"
+
+        onClicked: {
+            model.toggleConcertPitch()
+        }
     }
 }
