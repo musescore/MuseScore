@@ -33,9 +33,9 @@ const JumpTypeTable jumpTypeTable[] = {
     { Jump::Type::DC,         "D.C.",         "start", "end",  "",      QT_TRANSLATE_NOOP("jumpType", "Da Capo") },
     { Jump::Type::DC_AL_FINE, "D.C. al Fine", "start", "fine", "",
       QT_TRANSLATE_NOOP("jumpType", "Da Capo al Fine") },
-    { Jump::Type::DC_AL_CODA, "D.C. al Coda", "start", "coda", "codab",
+    { Jump::Type::DC_AL_CODA, "D.C. al Coda", "start", "tocoda", "coda",
       QT_TRANSLATE_NOOP("jumpType", "Da Capo al Coda") },
-    { Jump::Type::DS_AL_CODA, "D.S. al Coda", "segno", "coda", "codab", QT_TRANSLATE_NOOP("jumpType", "D.S. al Coda") },
+    { Jump::Type::DS_AL_CODA, "D.S. al Coda", "segno", "tocoda", "coda",QT_TRANSLATE_NOOP("jumpType", "D.S. al Coda") },
     { Jump::Type::DS_AL_FINE, "D.S. al Fine", "segno", "fine", "",      QT_TRANSLATE_NOOP("jumpType", "D.S. al Fine") },
     { Jump::Type::DS,         "D.S.",         "segno", "end",  "",      QT_TRANSLATE_NOOP("jumpType", "D.S.") }
 };

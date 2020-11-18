@@ -2187,7 +2187,7 @@
           <Marker>
             <style>Repeat Text Left</style>
             <text><sym>coda</sym></text>
-            <label>codab</label>
+            <label>coda</label>
             </Marker>
           </Cell>
         <Cell name="Varied coda">
@@ -2208,7 +2208,7 @@
           <Marker>
             <style>Repeat Text Left</style>
             <text>To Coda</text>
-            <label>coda</label>
+            <label>tocoda</label>
             </Marker>
           </Cell>
         <Cell name="Da Capo">
@@ -2234,8 +2234,8 @@
             <style>Repeat Text Right</style>
             <text>D.C. al Coda</text>
             <jumpTo>start</jumpTo>
-            <playUntil>coda</playUntil>
-            <continueAt>codab</continueAt>
+            <playUntil>tocoda</playUntil>
+            <continueAt>coda</continueAt>
             </Jump>
           </Cell>
         <Cell name="D.S. al Coda">
@@ -2243,8 +2243,8 @@
             <style>Repeat Text Right</style>
             <text>D.S. al Coda</text>
             <jumpTo>segno</jumpTo>
-            <playUntil>coda</playUntil>
-            <continueAt>codab</continueAt>
+            <playUntil>tocoda</playUntil>
+            <continueAt>coda</continueAt>
             </Jump>
           </Cell>
         <Cell name="D.S. al Fine">

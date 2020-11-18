@@ -89,7 +89,7 @@ cmd next-measure
 cmd note-b
 cmd escape
 cmd select-next-chord
-palette Jump jumpTo segno playUntil coda
+palette Jump jumpTo segno playUntil tocoda
 
 cmd note-input
 cmd next-measure

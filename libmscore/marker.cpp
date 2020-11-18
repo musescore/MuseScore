@@ -82,7 +82,7 @@ void Marker::setMarkerType(Type t)
 
     case Type::CODA:
         txt = "<sym>coda</sym>";
-        setLabel("codab");
+        setLabel("coda");
         break;
 
     case Type::VARCODA:
@@ -104,13 +104,13 @@ void Marker::setMarkerType(Type t)
     case Type::TOCODA:
         txt = "To Coda";
         initTid(Tid::REPEAT_RIGHT, true);
-        setLabel("coda");
+        setLabel("tocoda");
         break;
 
     case Type::TOCODASYM:
         txt = "To <font size=\"20\"/><sym>coda</sym>";
         initTid(Tid::REPEAT_RIGHT, true);
-        setLabel("coda");
+        setLabel("tocoda");
         break;
 
     case Type::USER:
@@ -154,7 +154,7 @@ Marker::Type Marker::markerType(const QString& s) const
         return Type::SEGNO;
     } else if (s == "varsegno") {
         return Type::VARSEGNO;
-    } else if (s == "codab") {
+    } else if (s == "coda") {
         return Type::CODA;
     } else if (s == "varcoda") {
         return Type::VARCODA;
@@ -162,7 +162,7 @@ Marker::Type Marker::markerType(const QString& s) const
         return Type::CODETTA;
     } else if (s == "fine") {
         return Type::FINE;
-    } else if (s == "coda") {
+    } else if (s == "tocoda") {
         return Type::TOCODA;
     } else {
         return Type::USER;
