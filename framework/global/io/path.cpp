@@ -60,6 +60,11 @@ std::string path::toStdString() const
     return std::string(m_path.data());
 }
 
+std::wstring path::toStdWString() const
+{
+    return QString(m_path).toStdWString();
+}
+
 const char* path::c_str() const
 {
     return m_path.data();

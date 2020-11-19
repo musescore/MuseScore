@@ -27,7 +27,7 @@
 
 using namespace mu::cloud;
 
-static AccountController* m_accountController = new AccountController();
+static AccountController* m_accountController = nullptr;
 
 static void cloud_init_qrc()
 {
@@ -41,6 +41,7 @@ std::string CloudModule::moduleName() const
 
 void CloudModule::registerExports()
 {
+    m_accountController = new AccountController();
     framework::ioc()->registerExport<IAccountController>(moduleName(), m_accountController);
 }
 

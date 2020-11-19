@@ -80,7 +80,8 @@ bool ActionEventObserver::eventFilter(QObject* watched, QEvent* event)
             telemetryService()->sendEvent(actionData.first, actionData.second);
         } else if (event->type() == QEvent::Shortcut) {
             QShortcutEvent* shortCutEvent = static_cast<QShortcutEvent*>(event);
-            Ms::Shortcut* shortcut = Ms::Shortcut::getShortcutByKeySequence(shortCutEvent->key(), m_scoreState);
+            //! FIXME Need porting for MU4
+            Ms::Shortcut* shortcut = nullptr; //Ms::Shortcut::getShortcutByKeySequence(shortCutEvent->key(), m_scoreState);
 
             if (!shortcut) {
                 return false;
