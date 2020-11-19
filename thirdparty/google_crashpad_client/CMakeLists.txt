@@ -5,27 +5,34 @@ endif()
 set(CRASHPAD_PATH ${CMAKE_CURRENT_LIST_DIR})
 set(CHROMIUM_PATH ${CRASHPAD_PATH}/third_party/mini_chromium/mini_chromium)
 
-set(CRASHPAD_INC
-    ${CRASHPAD_PATH}
-    ${CRASHPAD_PATH}/third_party/mini_chromium/mini_chromium
+set(CRASHPAD_COMMON_SRC
+    ${CHROMIUM_PATH}/base/files/file_path.cc
+    ${CHROMIUM_PATH}/base/logging.cc
+        ${CHROMIUM_PATH}/base/strings/stringprintf.cc
+                ${CHROMIUM_PATH}/base/rand_util.cc
+
+    ${CRASHPAD_PATH}/client/crash_report_database.cc
+    ${CRASHPAD_PATH}/client/settings.cc
+
+
+            ${CRASHPAD_PATH}/util/misc/uuid.cc
+                    ${CRASHPAD_PATH}/util/misc/metrics.cc
+
+            ${CRASHPAD_PATH}/util/file/file_writer.cc
+            ${CRASHPAD_PATH}/util/file/file_reader.cc
 )
 
 if(LINUX)
     set(CRASHPAD_SRC
-        ${CHROMIUM_PATH}/base/files/file_path.cc
+
         ${CHROMIUM_PATH}/base/files/scoped_file.cc
-        ${CHROMIUM_PATH}/base/logging.cc
         ${CHROMIUM_PATH}/base/posix/safe_strerror.cc
-        ${CHROMIUM_PATH}/base/strings/stringprintf.cc
         ${CHROMIUM_PATH}/base/strings/string_number_conversions.cc
-        ${CHROMIUM_PATH}/base/rand_util.cc
         ${CHROMIUM_PATH}/base/files/file_util_posix.cc
 
         ${CRASHPAD_PATH}/client/client_argv_handling.cc
         ${CRASHPAD_PATH}/client/crashpad_client_linux.cc
-        ${CRASHPAD_PATH}/client/crash_report_database.cc
         ${CRASHPAD_PATH}/client/crash_report_database_generic.cc
-        ${CRASHPAD_PATH}/client/settings.cc
 
         ${CRASHPAD_PATH}/util/linux/scoped_pr_set_dumpable.cc
         ${CRASHPAD_PATH}/util/posix/signals.cc
@@ -47,11 +54,7 @@ if(LINUX)
         ${CRASHPAD_PATH}/util/misc/random_string.cc
         ${CRASHPAD_PATH}/util/misc/initialization_state_dcheck.cc
         ${CRASHPAD_PATH}/util/posix/scoped_dir.cc
-        ${CRASHPAD_PATH}/util/misc/uuid.cc
-        ${CRASHPAD_PATH}/util/file/file_writer.cc
-        ${CRASHPAD_PATH}/util/file/file_reader.cc
         ${CRASHPAD_PATH}/util/file/scoped_remove_file.cc
-        ${CRASHPAD_PATH}/util/misc/metrics.cc
     )
 
     set(CRASHPAD_DEF
@@ -61,21 +64,81 @@ if(LINUX)
 endif(LINUX)
 
 if(WIN32)
+    set(CRASHPAD_SRC
 
+        ${CHROMIUM_PATH}/base/synchronization/lock.cc
+        ${CHROMIUM_PATH}/base/synchronization/lock_impl_win.cc
+        ${CHROMIUM_PATH}/base/process/memory.cc
+        ${CHROMIUM_PATH}/base/strings/utf_string_conversions.cc
+        ${CHROMIUM_PATH}/base/strings/utf_string_conversion_utils.cc
+        ${CHROMIUM_PATH}/base/strings/string_util_win.cc
+        ${CHROMIUM_PATH}/base/scoped_clear_last_error_win.cc
+        ${CHROMIUM_PATH}/base/third_party/icu/icu_utf.cc
+
+        ${CRASHPAD_PATH}/client/crashpad_client_win.cc
+        ${CRASHPAD_PATH}/client/crash_report_database_win.cc
+
+        ${CRASHPAD_PATH}/util/win/scoped_process_suspend.cc
+        ${CRASHPAD_PATH}/util/win/registration_protocol_win.cc
+        ${CRASHPAD_PATH}/util/win/nt_internals.cc
+        ${CRASHPAD_PATH}/util/win/scoped_local_alloc.cc
+        ${CRASHPAD_PATH}/util/win/process_info.cc
+        ${CRASHPAD_PATH}/util/win/get_function.cc
+        ${CRASHPAD_PATH}/util/win/ntstatus_logging.cc
+        ${CRASHPAD_PATH}/util/win/handle.cc
+        ${CRASHPAD_PATH}/util/win/loader_lock.cc
+        ${CRASHPAD_PATH}/util/win/initial_client_data.cc
+        ${CRASHPAD_PATH}/util/win/command_line.cc
+        ${CRASHPAD_PATH}/util/win/scoped_handle.cc
+
+        ${CRASHPAD_PATH}/util/win/critical_section_with_debug_info.cc
+
+        ${CRASHPAD_PATH}/util/stdlib/aligned_allocator.cc
+        ${CRASHPAD_PATH}/util/stdlib/string_number_conversion.cc
+
+        ${CRASHPAD_PATH}/util/string/split_string.cc
+
+        ${CRASHPAD_PATH}/util/file/file_io.cc
+        ${CRASHPAD_PATH}/util/file/file_io_win.cc
+        ${CRASHPAD_PATH}/util/file/filesystem_win.cc
+        ${CRASHPAD_PATH}/util/file/directory_reader_win.cc
+        ${CRASHPAD_PATH}/util/file/scoped_remove_file.cc
+
+        ${CRASHPAD_PATH}/util/misc/random_string.cc
+        ${CRASHPAD_PATH}/util/misc/initialization_state_dcheck.cc
+        ${CRASHPAD_PATH}/util/misc/time_win.cc
+
+        ${CRASHPAD_PATH}/util/misc/capture_context_win.asm
+    )
+
+    enable_language(ASM_MASM)
+
+    set(CRASHPAD_DEF
+        -DOS_WIN
+        -DNOMINMAX
+        -DUNICODE
+        -DWIN32_LEAN_AND_MEAN
+        -DWIN32
+    )
 endif(WIN32)
 
 if(APPLE)
 
 endif(APPLE)
 
-add_library(gcrashpad STATIC ${CRASHPAD_SRC} )
+add_library(gcrashpad STATIC
+    ${CRASHPAD_COMMON_SRC}
+    ${CRASHPAD_SRC}
+)
 
 target_compile_definitions(gcrashpad PUBLIC
     ${CRASHPAD_DEF}
 )
 
 target_include_directories(gcrashpad PUBLIC
-    ${CRASHPAD_INC}
+    ${CRASHPAD_PATH}
+    ${CRASHPAD_PATH}/third_party/mini_chromium/mini_chromium
+    ${CRASHPAD_PATH}/compat/win
 )
 
 if(NOT MSVC)

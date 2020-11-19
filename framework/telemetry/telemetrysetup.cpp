@@ -70,14 +70,21 @@ void TelemetrySetup::onInit()
         return;
     }
 
-    io::path handlerFile = globalConf->appDirPath() + "/crashpad_handler";
-    io::path dumpsDir = globalConf->logsPath();
+#ifdef _MSC_VER
+    io::path handlerFile("crashpad_handler.com");
+#else
+    io::path handlerFile("crashpad_handler");
+#endif
+
+    io::path handlerPath = globalConf->appDirPath() + "/" + handlerFile;
+    io::path dumpsDir = globalConf->logsPath() + "/dumps";
     std::string sandboxUrl = "https://sentry.musescore.org/api/3/minidump/?sentry_key=1260147a791c40349bbf717b94dc29c4";
 
-    bool ok = s_crashHandler.start(handlerFile, dumpsDir, sandboxUrl);
+    bool ok = s_crashHandler.start(handlerPath, dumpsDir, sandboxUrl);
     if (!ok) {
         LOGE() << "failed start crash handler";
     }
 
-    //crash();
+    //! NOTE For test creating a dump
+    // crash();
 }
