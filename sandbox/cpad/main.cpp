@@ -18,7 +18,7 @@ static bool startCrashpad()
     base::FilePath database("crashpad");
     // Path to the out-of-process handler executable
     // base::FilePath handler("cpad_handler");
-    base::FilePath handler("crashpad_handler");
+    base::FilePath handler("/Users/musescore/Development/MuseScore/sandbox/build-cpad-Desktop_Qt_5_15_1_clang_64bit-Debug/crashpad_handler");
     // URL used to submit minidumps to
     std::string url("https://sentry.musescore.org/api/3/minidump/?sentry_key=1260147a791c40349bbf717b94dc29c4");
     // Optional annotations passed via --annotations to the handler
@@ -58,9 +58,10 @@ int main()
     int count = 1000000;
     for (int i = 0; i < count; ++i) {
         if (i == (count - 10)) {
-            cout << "before crash" << endl;
+           // cout << "before crash" << endl;
             crash();
-            cout << "after crash" << endl;
+            i = 0;
+         //   cout << "after crash" << endl;
         }
     }
 

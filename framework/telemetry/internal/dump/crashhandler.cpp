@@ -51,7 +51,7 @@ bool CrashHandler::start(const io::path& handlerFilePath, const io::path& dumpsD
 #ifdef _MSC_VER
     base::FilePath handler(handlerFilePath.toStdWString());
 #else
-    base::FilePath database(handlerFilePath.toStdString());
+    base::FilePath handler(handlerFilePath.toStdString());
 #endif
 
     // Optional annotations passed via --annotations to the handler
