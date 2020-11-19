@@ -589,12 +589,12 @@ void Tie::calculateDirection()
                                           tieAbove = notes[i];
                                     else if (compareNotesPos(notes[i], tieAbove) < 0)
                                           tieAbove = notes[i];
-                                    else if (noteDiff < 0) {
-                                          if (!tieBelow)
-                                                tieBelow = notes[i];
-                                          else if (compareNotesPos(notes[i], tieBelow) > 0)
-                                                tieBelow = notes[i];
-                                          }
+                                    }
+                              else if (noteDiff < 0) {
+                                    if (!tieBelow)
+                                          tieBelow = notes[i];
+                                    else if (compareNotesPos(notes[i], tieBelow) > 0)
+                                          tieBelow = notes[i];
                                     }
                               }
                         }
