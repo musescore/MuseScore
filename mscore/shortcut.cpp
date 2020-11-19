@@ -1094,6 +1094,13 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
+         "playback-position",
+         QT_TRANSLATE_NOOP("action","Playback Cursor Position"),
+         QT_TRANSLATE_NOOP("action","Go to recent playback cursor position")
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
          "empty-trailing-measure",
          QT_TRANSLATE_NOOP("action","First Empty Trailing Measure"),
          QT_TRANSLATE_NOOP("action","Go to first empty trailing measure")
