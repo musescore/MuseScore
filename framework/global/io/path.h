@@ -45,6 +45,7 @@ struct path {
 
     QString toQString() const;
     std::string toStdString() const;
+    std::wstring toStdWString() const;
     const char* c_str() const;
 
     static paths pathsFromString(const std::string& str, const std::string& delim = ";");

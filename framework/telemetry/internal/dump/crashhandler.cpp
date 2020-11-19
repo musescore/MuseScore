@@ -41,11 +41,18 @@ bool CrashHandler::start(const io::path& handlerFilePath, const io::path& dumpsD
     }
 
     // Cache directory that will store crashpad information and minidumps
+#ifdef _MSC_VER
+    base::FilePath database(dumpsDir.toStdWString());
+#else
     base::FilePath database(dumpsDir.toStdString());
+#endif
 
     // Path to the out-of-process handler executable
-    // base::FilePath handler("cpad_handler");
-    base::FilePath handler(handlerFilePath.toStdString());
+#ifdef _MSC_VER
+    base::FilePath handler(handlerFilePath.toStdWString());
+#else
+    base::FilePath database(handlerFilePath.toStdString());
+#endif
 
     // Optional annotations passed via --annotations to the handler
     std::map<std::string, std::string> annotations;
