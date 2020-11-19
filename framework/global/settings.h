@@ -20,27 +20,22 @@
 #define MU_FRAMEWORK_SETTINGS_H
 
 #include <string>
-#include <map>
-#include <functional>
-#include <QColor>
+#include <vector>
 
 #include "val.h"
 #include "async/channel.h"
 
 //! NOTE We are gradually abandoning Qt in non-GUI classes.
 //! This settings interface is almost independent of Qt,
-//! in the future, the `QColor` can be replaced with its own structure.
 //! QSettings are used only in the implementation for compatibility with current settings.
 //! Perhaps in the future this will be changed.
 
 class QSettings;
 
-namespace mu {
-namespace framework {
+namespace mu::framework {
 class Settings
 {
 public:
-
     static Settings* instance()
     {
         static Settings s;
@@ -49,68 +44,58 @@ public:
 
     struct Key
     {
-        std::string module;
+        std::string moduleName;
         std::string key;
+
         Key() = default;
-        Key(const std::string& m, const std::string& k)
-            : module(m), key(k)
-        {}
+        Key(std::string moduleName, std::string key);
 
-        bool isNull() const { return module.empty() || key.empty(); }
-
-        bool operator ==(const Key& k) const { return module == k.module && key == k.key; }
-
-        bool operator <(const Key& k) const
-        {
-            if (module != k.module) {
-                return module < k.module;
-            }
-            return key < k.key;
-        }
+        bool isNull() const;
+        bool operator==(const Key& k) const;
+        bool operator<(const Key& k) const;
     };
 
     struct Item
     {
         Key key;
-        Val val;
-        Val defaultVal;
-
-        Item() = default;
-        Item(const Key& k, const Val& defVal)
-            : key(k), val(defVal), defaultVal(defVal) {}
+        Val value;
+        Val defaultValue;
 
         bool isNull() const { return key.isNull(); }
     };
 
-    void addItem(const Item& findItem);
-    void addItem(const Key& key, const Val& val);
-    const Item& findItem(const Key& key) const;
-    const std::map<Key, Item>& items() const;
+    using Items = std::map<Key, Item>;
+
+    const Items& items() const;
 
     void reload();
     void load();
 
     Val value(const Key& key) const;
     Val defaultValue(const Key& key) const;
-    void setValue(const Key& key, const Val& val);
+
+    void setValue(const Key& key, const Val& value);
+    void setDefaultValue(const Key& key, const Val& value);
+
     async::Channel<Val> valueChanged(const Key& key) const;
 
 private:
-
     Settings();
     ~Settings();
 
-    Item& findItem(const Key& key);
+    Item& findItem(const Key& key) const;
+
+    Items readItems() const;
+    void writeValue(const Key& key, const Val& value);
 
     QSettings* m_settings = nullptr;
-    std::map<Key, Item> m_items;
+    mutable Items m_items;
     mutable std::map<Key, async::Channel<Val> > m_channels;
 };
 
 inline Settings* settings()
 {
     return Settings::instance();
-}
 }
 }
 

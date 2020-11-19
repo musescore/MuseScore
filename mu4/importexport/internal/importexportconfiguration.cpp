@@ -40,19 +40,19 @@ static const Settings::Key EXPORT_PNG_USE_TRASNPARENCY_KEY(module_name, "export/
 
 void ImportexportConfiguration::init()
 {
-    settings()->addItem(SHORTEST_NOTE_KEY, Val(Ms::MScore::division / 4));
+    settings()->setDefaultValue(SHORTEST_NOTE_KEY, Val(Ms::MScore::division / 4));
 
-    settings()->addItem(IMPORT_OVERTUNE_CHARSET_KEY, Val("GBK"));
-    settings()->addItem(IMPORT_GUITARPRO_CHARSET_KEY, Val("UTF-8"));
+    settings()->setDefaultValue(IMPORT_OVERTUNE_CHARSET_KEY, Val("GBK"));
+    settings()->setDefaultValue(IMPORT_GUITARPRO_CHARSET_KEY, Val("UTF-8"));
 
-    settings()->addItem(MUSICXML_IMPORT_BREAKS_KEY, Val(true));
-    settings()->addItem(MUSICXML_IMPORT_LAYOUT_KEY, Val(true));
-    settings()->addItem(MUSICXML_EXPORT_LAYOUT_KEY, Val(true));
-    settings()->addItem(MUSICXML_EXPORT_BREAKS_TYPE_KEY, Val(static_cast<int>(MusicxmlExportBreaksType::All)));
+    settings()->setDefaultValue(MUSICXML_IMPORT_BREAKS_KEY, Val(true));
+    settings()->setDefaultValue(MUSICXML_IMPORT_LAYOUT_KEY, Val(true));
+    settings()->setDefaultValue(MUSICXML_EXPORT_LAYOUT_KEY, Val(true));
+    settings()->setDefaultValue(MUSICXML_EXPORT_BREAKS_TYPE_KEY, Val(static_cast<int>(MusicxmlExportBreaksType::All)));
 
-    settings()->addItem(EXPORT_PNG_DPI_RESOLUTION_KEY, Val(Ms::DPI));
-    settings()->addItem(EXPORT_PNG_USE_TRASNPARENCY_KEY, Val(true));
-    settings()->addItem(EXPORT_PDF_DPI_RESOLUTION_KEY, Val(Ms::DPI));
+    settings()->setDefaultValue(EXPORT_PNG_DPI_RESOLUTION_KEY, Val(Ms::DPI));
+    settings()->setDefaultValue(EXPORT_PNG_USE_TRASNPARENCY_KEY, Val(true));
+    settings()->setDefaultValue(EXPORT_PDF_DPI_RESOLUTION_KEY, Val(Ms::DPI));
 }
 
 int ImportexportConfiguration::midiShortestNote() const

@@ -36,7 +36,7 @@ static const QString DEFAULT_FILE_SUFFIX(".mscz");
 
 void UserScoresConfiguration::init()
 {
-    settings()->addItem(USER_SCORES_PATH, Val(globalConfiguration()->sharePath().toStdString() + "Scores"));
+    settings()->setDefaultValue(USER_SCORES_PATH, Val(globalConfiguration()->sharePath().toStdString() + "Scores"));
     settings()->valueChanged(RECENT_LIST).onReceive(nullptr, [this](const Val& val) {
         LOGD() << "RECENT_LIST changed: " << val.toString();
 

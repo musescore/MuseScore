@@ -26,8 +26,9 @@
 using namespace mu::palette;
 using namespace mu::framework;
 
-static const Settings::Key PALETTE_SCALE("palette", "application/paletteScale");
-static const Settings::Key PALETTE_USE_SINGLE("palette", "application/useSinglePalette");
+static const std::string MODULE_NAME("palette");
+static const Settings::Key PALETTE_SCALE(MODULE_NAME, "application/paletteScale");
+static const Settings::Key PALETTE_USE_SINGLE(MODULE_NAME, "application/useSinglePalette");
 
 double PaletteConfiguration::paletteScaling() const
 {

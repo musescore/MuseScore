@@ -18,10 +18,10 @@
 //=============================================================================
 
 #include "settings.h"
-#include <QSettings>
-
 #include "config.h"
 #include "log.h"
+
+#include <QSettings>
 
 using namespace mu;
 using namespace mu::framework;
@@ -40,6 +40,7 @@ Settings::Settings()
 #ifndef Q_OS_MAC
     QSettings::setDefaultFormat(QSettings::IniFormat);
 #endif
+
     m_settings = new QSettings();
 }
 
@@ -48,39 +49,7 @@ Settings::~Settings()
     delete m_settings;
 }
 
-void Settings::addItem(const Item& item)
-{
-    m_items.insert({ item.key, item });
-}
-
-void Settings::addItem(const Key& key, const Val& val)
-{
-    m_items.insert({ key, Item(key, val) });
-}
-
-const Settings::Item& Settings::findItem(const Key& key) const
-{
-    auto it = m_items.find(key);
-    if (it != m_items.end()) {
-        return it->second;
-    }
-
-    static Item null;
-    return null;
-}
-
-Settings::Item& Settings::findItem(const Key& key)
-{
-    auto it = m_items.find(key);
-    if (it != m_items.end()) {
-        return it->second;
-    }
-
-    static Item null;
-    return null;
-}
-
-const std::map<Settings::Key, Settings::Item>& Settings::items() const
+const Settings::Items& Settings::items() const
 {
     return m_items;
 }
@@ -90,85 +59,112 @@ const std::map<Settings::Key, Settings::Item>& Settings::items() const
  */
 void Settings::reload()
 {
-    std::map<QString, Item& > items;
-    for (auto it = m_items.begin(); it != m_items.end(); ++it) {
-        Item& item = it->second;
-        items.insert({ QString::fromStdString(item.key.key), item });
-    }
+    Items items = readItems();
 
-    QStringList keys = m_settings->allKeys();
-    for (const QString& key : keys) {
-        auto it = items.find(key);
-        if (it == items.end()) {
-            continue;
-        }
-
-        Item& item = it->second;
-
-        QVariant val = m_settings->value(key);
-
-        setValue(item.key, Val::fromQVariant(val));
+    for (auto it = items.cbegin(); it != items.cend(); ++it) {
+        setValue(it->first, it->second.value);
     }
 }
 
 void Settings::load()
 {
-    std::map<QString, Item& > items;
-    for (auto it = m_items.begin(); it != m_items.end(); ++it) {
-        Item& item = it->second;
-        items.insert({ QString::fromStdString(item.key.key), item });
+    m_items = readItems();
+}
+
+Settings::Items Settings::readItems() const
+{
+    Items result;
+
+    for (const QString& key : m_settings->allKeys()) {
+        Item item;
+        item.key = Key(std::string(), key.toStdString());
+        item.value = Val::fromQVariant(m_settings->value(key));
+
+        result[item.key] = item;
     }
 
-    QStringList keys = m_settings->allKeys();
-    for (const QString& key : keys) {
-        auto it = items.find(key);
-        if (it == items.end()) {
-            // LOGW() << "not found item with key: " << key;
-            continue;
-        }
-
-        Item& item = it->second;
-        item.val = Val::fromQVariant(m_settings->value(key));
-        item.val.setType(item.defaultVal.type());
-    }
+    return result;
 }
 
 Val Settings::value(const Key& key) const
 {
-    const Item& item = findItem(key);
-    if (item.isNull()) {
-        return Val::fromQVariant(m_settings->value(QString::fromStdString(key.key)));
-    }
-
-    if (item.val.isNull()) {
-        return item.defaultVal;
-    }
-
-    return item.val;
+    return findItem(key).value;
 }
 
 Val Settings::defaultValue(const Key& key) const
 {
-    return findItem(key).defaultVal;
+    return findItem(key).defaultValue;
 }
 
-void Settings::setValue(const Key& key, const Val& val)
+void Settings::setValue(const Key& key, const Val& value)
 {
-    m_settings->setValue(QString::fromStdString(key.key), val.toQVariant());
+    writeValue(key, value);
 
     Item& item = findItem(key);
-    if (!item.isNull()) {
-        item.val = val;
+
+    if (item.isNull()) {
+        m_items[key] = Item{ key, value, value };
+    } else {
+        item.value = value;
     }
 
     auto it = m_channels.find(key);
     if (it != m_channels.end()) {
-        Channel<Val> ch = it->second;
-        ch.send(val);
+        Channel<Val> channel = it->second;
+        channel.send(value);
     }
+}
+
+void Settings::writeValue(const Key& key, const Val& value)
+{
+    // TODO: implement writing/reading first part of key (module name)
+    m_settings->setValue(QString::fromStdString(key.key), value.toQVariant());
+}
+
+void Settings::setDefaultValue(const Key& key, const Val& value)
+{
+    Item& item = findItem(key);
+
+    if (item.isNull()) {
+        m_items[key] = Item{ key, value, value };
+    } else {
+        item.defaultValue = value;
+    }
+}
+
+Settings::Item& Settings::findItem(const Key& key) const
+{
+    auto it = m_items.find(key);
+
+    if (it == m_items.end()) {
+        static Item null;
+        return null;
+    }
+
+    return it->second;
 }
 
 Channel<Val> Settings::valueChanged(const Key& key) const
 {
     return m_channels[key];
+}
+
+Settings::Key::Key(std::string moduleName, std::string key)
+    : moduleName(std::move(moduleName)), key(std::move(key))
+{
+}
+
+bool Settings::Key::operator==(const Key& k) const
+{
+    return key == k.key;
+}
+
+bool Settings::Key::operator<(const Key& k) const
+{
+    return key < k.key;
+}
+
+bool Settings::Key::isNull() const
+{
+    return key.empty();
 }

@@ -34,7 +34,7 @@ const std::string VSTConfiguration::DEFAULT_PATHS = "";
 
 void VSTConfiguration::init()
 {
-    settings()->addItem(SEARCH_PATHS, Val(VSTConfiguration::DEFAULT_PATHS));
+    settings()->setDefaultValue(SEARCH_PATHS, Val(VSTConfiguration::DEFAULT_PATHS));
 }
 
 std::string VSTConfiguration::searchPaths() const

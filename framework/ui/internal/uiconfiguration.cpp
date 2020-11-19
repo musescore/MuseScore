@@ -19,11 +19,11 @@ static const Settings::Key MUSICAL_FONT_SIZE_KEY(module_name, "ui/theme/musicalF
 
 UiConfiguration::UiConfiguration()
 {
-    settings()->addItem(THEME_TYPE_KEY, Val(static_cast<int>(ThemeType::LIGHT_THEME)));
-    settings()->addItem(FONT_FAMILY_KEY, Val("FreeSans"));
-    settings()->addItem(FONT_SIZE_KEY, Val(12));
-    settings()->addItem(MUSICAL_FONT_FAMILY_KEY, Val("Leland"));
-    settings()->addItem(MUSICAL_FONT_SIZE_KEY, Val(12));
+    settings()->setDefaultValue(THEME_TYPE_KEY, Val(static_cast<int>(ThemeType::LIGHT_THEME)));
+    settings()->setDefaultValue(FONT_FAMILY_KEY, Val("FreeSans"));
+    settings()->setDefaultValue(FONT_SIZE_KEY, Val(12));
+    settings()->setDefaultValue(MUSICAL_FONT_FAMILY_KEY, Val("Leland"));
+    settings()->setDefaultValue(MUSICAL_FONT_SIZE_KEY, Val(12));
 
     settings()->valueChanged(THEME_TYPE_KEY).onReceive(nullptr, [this](const Val& val) {
                 m_currentThemeTypeChannel.send(static_cast<ThemeType>(val.toInt()));
