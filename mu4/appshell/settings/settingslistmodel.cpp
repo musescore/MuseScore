@@ -37,10 +37,10 @@ QVariant SettingListModel::data(const QModelIndex& index, int role) const
 
     const Settings::Item& item = m_items.at(index.row());
     switch (role) {
-    case SectionRole: return QString::fromStdString(item.key.module);
+    case SectionRole: return QString::fromStdString(item.key.moduleName);
     case KeyRole: return QString::fromStdString(item.key.key);
-    case TypeRole: return typeToString(item.val.type());
-    case ValRole: return item.val.toQVariant();
+    case TypeRole: return typeToString(item.value.type());
+    case ValRole: return item.value.toQVariant();
     }
     return QVariant();
 }
@@ -67,7 +67,8 @@ void SettingListModel::load()
 
     m_items.clear();
 
-    const std::map<Settings::Key, Settings::Item>& items = settings()->items();
+    Settings::Items items = settings()->items();
+
     for (auto it = items.cbegin(); it != items.cend(); ++it) {
         m_items << it->second;
     }
@@ -79,11 +80,11 @@ void SettingListModel::changeVal(int idx, QVariant newVal)
 {
     LOGD() << "changeVal index: " << idx << ", newVal: " << newVal;
     Settings::Item& item = m_items[idx];
-    Val::Type type = item.val.type();
-    item.val = Val::fromQVariant(newVal);
-    item.val.setType(type);
+    Val::Type type = item.value.type();
+    item.value = Val::fromQVariant(newVal);
+    item.value.setType(type);
 
-    settings()->setValue(item.key, item.val);
+    settings()->setValue(item.key, item.value);
 
     emit dataChanged(index(idx), index(idx));
 }

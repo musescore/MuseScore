@@ -37,7 +37,7 @@ static const Settings::Key LANGUAGE("ui", "ui/application/language");
 
 void LanguagesConfiguration::init()
 {
-    settings()->addItem(LANGUAGE, Val("system"));
+    settings()->setDefaultValue(LANGUAGE, Val("system"));
     settings()->valueChanged(LANGUAGES_JSON).onReceive(nullptr, [this](const Val& val) {
         LanguagesHash languagesHash = parseLanguagesConfig(val.toQString().toLocal8Bit());
         m_languagesHashChanged.send(languagesHash);

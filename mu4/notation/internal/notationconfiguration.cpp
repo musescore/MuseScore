@@ -60,33 +60,33 @@ static const Settings::Key IS_MIDI_INPUT_ENABLED(module_name, "io/midi/enableInp
 
 void NotationConfiguration::init()
 {
-    settings()->addItem(ANCHORLINE_COLOR, Val(QColor("#C31989")));
+    settings()->setDefaultValue(ANCHORLINE_COLOR, Val(QColor("#C31989")));
 
-    settings()->addItem(BACKGROUND_COLOR, Val(QColor("#142433")));
+    settings()->setDefaultValue(BACKGROUND_COLOR, Val(QColor("#142433")));
     settings()->valueChanged(BACKGROUND_COLOR).onReceive(nullptr, [this](const Val& val) {
         LOGD() << "BACKGROUND_COLOR changed: " << val.toString();
         m_backgroundColorChanged.send(val.toQColor());
     });
 
-    settings()->addItem(FOREGROUND_COLOR, Val(QColor("#f9f9f9")));
+    settings()->setDefaultValue(FOREGROUND_COLOR, Val(QColor("#f9f9f9")));
     settings()->valueChanged(FOREGROUND_COLOR).onReceive(nullptr, [this](const Val& val) {
         LOGD() << "FOREGROUND_COLOR changed: " << val.toString();
         m_foregroundColorChanged.send(foregroundColor());
     });
 
-    settings()->addItem(FOREGROUND_USE_USER_COLOR, Val(true));
+    settings()->setDefaultValue(FOREGROUND_USE_USER_COLOR, Val(true));
     settings()->valueChanged(FOREGROUND_USE_USER_COLOR).onReceive(nullptr, [this](const Val& val) {
         LOGD() << "FOREGROUND_USE_USER_COLOR changed: " << val.toString();
         m_foregroundColorChanged.send(foregroundColor());
     });
 
-    settings()->addItem(CURRENT_ZOOM, Val(100));
+    settings()->setDefaultValue(CURRENT_ZOOM, Val(100));
     settings()->valueChanged(CURRENT_ZOOM).onReceive(nullptr, [this](const Val& val) {
         m_currentZoomChanged.send(val.toInt());
     });
 
-    settings()->addItem(SELECTION_PROXIMITY, Val(6));
-    settings()->addItem(IS_MIDI_INPUT_ENABLED, Val(false));
+    settings()->setDefaultValue(SELECTION_PROXIMITY, Val(6));
+    settings()->setDefaultValue(IS_MIDI_INPUT_ENABLED, Val(false));
 
     // libmscore
     preferences().setBackupDirPath(globalConfiguration()->backupPath().toQString());
