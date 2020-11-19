@@ -2509,6 +2509,51 @@ void ScoreView::cmd(const char* s)
                         cv->cmdGotoElement(e);
                         }
                   }},
+            {{"playback-position"}, [](ScoreView* cv, const QByteArray&) {
+                  ChordRest* cr { nullptr };
+                  Element* el { nullptr };
+                  int currentTrack = cv->score()->getSelectedElement() ?
+                                     cv->score()->getSelectedElement()->track() : 0;
+                  currentTrack = (currentTrack >= 0) ? currentTrack : 0;
+                  auto considerAllTracks { true }; // True : Consider all tracks instead of only voice-1 of first instrument
+                  auto next { false };             // False: Get current (rather than next) segment of playback cursor
+                  auto cursorPosition = cv->score()->repeatList().tick2utick(cv->score()->playPos().ticks());
+                  Fraction frac { Fraction::fromTicks(cursorPosition) };
+                  Segment* seg = next ? cv->score()->tick2rightSegment(frac, false) : cv->score()->tick2leftSegment(frac, false);
+
+                  if (seg) {
+                        if (seg->isChordRestType()) {
+                              if ((cr = seg->cr(currentTrack)))
+                                    el = cr;
+                              else {
+                                    for (int t = 0; t < cv->score()->ntracks(); t++) {
+                                          if ((cr = seg->cr(t))) {
+                                                el = cr;
+                                                break;
+                                                }
+                                          }
+                                    }
+                              }
+                        else {
+                              // Cycle through tracks if no CR* found
+                              if (considerAllTracks) {
+                                    for (int t = 0; t < cv->score()->ntracks(); t++) {
+                                          if ((cr = seg->cr(t))) {
+                                                el = cr;
+                                                break;
+                                                }
+                                          }
+                                    }
+                              // If still nothing found, get next CR*
+                              else el = seg->nextChordRest(0, false);
+                              }
+                        }
+                  if (el) {
+                        if (el->isChord())
+                              el = toChord(el)->upNote();
+                        cv->cmdGotoElement(el);
+                        }
+                  }},
             {{"rest", "rest-TAB"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdEnterRest();
                   }},
