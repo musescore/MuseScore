@@ -429,23 +429,24 @@ void ScoreOrder::setCustomised()
 ScoreGroup* ScoreOrder::getGroup(const QString family, const QString instrumentGroup) const
       {
       if (family.isEmpty())
-            return nullptr;
+            return _unsorted;
 
-      ScoreGroup* unsorted { _unsorted };
+      ScoreGroup* unsorted { nullptr };
       for (ScoreGroup* sg : groups) {
-            if (sg->id() == family)
+            if (!sg->isUnsorted() && (sg->id() == family))
                   return sg;
             if (sg->isUnsorted(instrumentGroup))
                   unsorted = sg;
-            if (sg->isUnsorted() && !unsorted)
-                  unsorted = sg;
             }
-      return unsorted;
+      return unsorted ? unsorted : _unsorted;
       }
 
 ScoreGroup* ScoreOrder::getGroup(const QString id, const bool soloist) const
       {
       InstrumentIndex ii = searchTemplateIndexForId(id);
+      if (!ii.instrTemplate)
+            return _unsorted;
+
       QString family { getFamilyName(ii.instrTemplate, soloist) };
       return getGroup(family, instrumentGroups[ii.groupIndex]->id);
       }
@@ -589,6 +590,9 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
       for (Part* part : score->parts())
             {
             InstrumentIndex ii = searchTemplateIndexForId(part->instrument()->getId());
+            if (!ii.instrTemplate)
+                  continue;
+
             QString family { getFamilyName(ii.instrTemplate, part->soloist()) };
             ScoreGroup* sg = getGroup(family, instrumentGroups[ii.groupIndex]->id);
 

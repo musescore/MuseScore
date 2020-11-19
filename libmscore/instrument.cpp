@@ -1520,14 +1520,44 @@ void Instrument::updateInstrumentId()
       if (!_id.isEmpty() || _instrumentId.isEmpty())
             return;
 
+      // When reading a score create with pre-3.6, instruments doesn't
+      // have an id define in the instrument. So try to find the instrumentId
+      // based on MusicXMLid.
+      // This requires a hack for instruments using MusicXMLid "strings.group"
+      // because there are multiple instrument using this same id.
+      // For these instruments, use the value of controller 32 of the "arco"
+      // channel to find the correct instrument.
+      const QString arco = QString("arco");
+      const bool groupHack = instrumentId() == QString("strings.group");
+      const int idxref = channelIdx(arco);
+      const int val32ref = (idxref < 0) ? -1 : channel(idxref)->bank();
+      QString fallback;
+
       for (InstrumentGroup* g : instrumentGroups) {
             for (InstrumentTemplate* it : g->instrumentTemplates) {
                   if (it->musicXMLid == instrumentId()) {
-                        _id = it->id;
-                        return;
+                        if (groupHack) {
+                              if (fallback.isEmpty())
+                                    // Instrument "Strings" doesn't have bank defined so
+                                    // if no "strings.group" instrument with requested bank
+                                    // is found, assume "Strings".
+                                    fallback = it->id;
+                              for (const Channel chan : it->channel) {
+                                    if ((chan.name() == arco) && (chan.bank() == val32ref)) {
+                                          _id = it->id;
+                                          return;
+                                          }
+                                    }
+                              }
+                        else {
+                              _id = it->id;
+                              return;
+                              }
                         }
                   }
             }
+
+      _id = fallback.isEmpty() ? QString("piano") : fallback;
       }
 
 //---------------------------------------------------------

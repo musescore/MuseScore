@@ -647,7 +647,7 @@ int InstrumentsWidget::findPrvItem(PartListItem* pli, int number)
                   continue;
             if (order->instrumentIndex(p->id(), p->isSoloist()) == orderNumber)
                   {
-                  if (idx > currow)
+                  if ((currow >= 0) && (idx > currow))
                         return idx;
                   }
             if (order->instrumentIndex(p->id(), p->isSoloist()) > orderNumber)
