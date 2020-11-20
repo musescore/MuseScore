@@ -153,7 +153,14 @@ public:
 
     System* system() const { return toSystem(parent()); }
     bool hasVoices(int staffIdx, Fraction stick, Fraction len) const;
+    bool hasVoices(int staffIdx) const;
+    void setHasVoices(int staffIdx, bool v);
 
+    StaffLines* staffLines(int staffIdx);
+    Spacer* vspacerDown(int staffIdx) const;
+    Spacer* vspacerUp(int staffIdx) const;
+    void setStaffVisible(int staffIdx, bool visible);
+    void setStaffStemless(int staffIdx, bool stemless);
 #ifndef NDEBUG
     bool corrupted(int staffIdx) const { return m_mstaves[staffIdx]->corrupted(); }
     void setCorrupted(int staffIdx, bool val) { m_mstaves[staffIdx]->setCorrupted(val); }
