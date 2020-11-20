@@ -12,6 +12,8 @@
 
 #include "inspectorGlissando.h"
 #include "libmscore/glissando.h"
+#include "libmscore/note.h"
+#include "libmscore/rendermidi.h"   // For counting the number of pitches in a glissando
 
 namespace Ms {
 
@@ -40,7 +42,7 @@ InspectorGlissando::InspectorGlissando(QWidget* parent)
             { g.title, g.panel }
             };
       mapSignals(iiList, ppList);
-      }
+}
 
 //---------------------------------------------------------
 //   setElement
@@ -58,6 +60,51 @@ void InspectorGlissando::setElement()
             g.textWidget->setVisible(false);
       g.easeInSlider->setSliderPosition(g.easeInSpin->value());
       g.easeOutSlider->setSliderPosition(g.easeOutSpin->value());
-      }
+      g.easeInOutCanvas->setEaseInOut(g.easeInSpin->value(), g.easeOutSpin->value());
+
+      GlissandoSegment* gs = inspector->element()->isGlissandoSegment() ? toGlissandoSegment(inspector->element()) : nullptr;
+      //Glissando* glissando = gs && gs->spanner()->isGlissando() ? toGlissando(gs->spanner()) : nullptr;
+      std::vector<int> body;
+      int nEvents = 25;
+      if (gs && glissandoPitchOffsets(gs->spanner(), &body))
+            nEvents = body.size();
+      //if (glissando && glissando->glissandoStyle() != GlissandoStyle::PORTAMENTO) {
+      //      Note* sn = toNote(glissando->startElement());
+      //      Note* en = toNote(glissando->endElement());
+      //      if (sn && en) {
+      //            nEvents = std::abs(sn->pitch() - en->pitch()) + 1;
+      //      }
+      //}
+      g.easeInOutCanvas->setEvents(nEvents);
+}
+
+//---------------------------------------------------------
+//   canvasChanged
+//---------------------------------------------------------
+
+void InspectorGlissando::valueChanged(int n)
+{
+      InspectorElementBase::valueChanged(n);
+      if (iList[n].t == Pid::GLISS_EASEIN || iList[n].t == Pid::GLISS_EASEOUT)
+            g.easeInOutCanvas->setEaseInOut(g.easeInSpin->value(), g.easeOutSpin->value());
+      else if (iList[n].t == Pid::GLISS_STYLE)
+            updateNbEvents();
+      update();
+}
+
+//---------------------------------------------------------
+//   updateNbEvents computes the number of pitch events in the glissanso given the glissando style.
+//   For example, all the half notes, only the white notes, only the black notes, etc
+//---------------------------------------------------------
+
+void InspectorGlissando::updateNbEvents() {
+      GlissandoSegment* gs = inspector->element()->isGlissandoSegment() ? toGlissandoSegment(inspector->element()) : nullptr;
+      std::vector<int> body;
+      int nEvents = 25;
+      if (gs && glissandoPitchOffsets(gs->spanner(), &body))
+            nEvents = body.size();
+      g.easeInOutCanvas->setEvents(nEvents);
+}
+
 }
 

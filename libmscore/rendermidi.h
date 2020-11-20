@@ -135,6 +135,9 @@ class MidiRenderer {
       static const int ARTICULATION_CONV_FACTOR { 100000 };
       };
 
+class Spanner;
+extern bool glissandoPitchOffsets(const Spanner* spanner, std::vector<int>* pitchOffsets);
+
 } // namespace Ms
 
 #endif

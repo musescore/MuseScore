@@ -30,15 +30,13 @@ class EaseInOut final {
       qreal       _easeOut;
 
 public:
-      typedef std::tuple<qreal, qreal> Ease2D;
-
       EaseInOut() : _easeIn(0.0), _easeOut(1.0) {}
       EaseInOut(qreal easeIn, qreal easeOut) : _easeIn(easeIn), _easeOut(easeOut) {}
 
       void SetEases(qreal easeIn, qreal easeOut) { _easeIn = easeIn; _easeOut = easeOut; }
-      qreal EvalX(const qreal t) const          { qreal tCompl = 1.0 - t;  return (3.0 * _easeIn * tCompl * tCompl + (3.0 - 3.0 * _easeOut * tCompl - 2.0 * t) * t) * t; }
+      qreal EvalX(const qreal t) const;// { qreal tCompl = 1.0 - t;  return (3.0 * _easeIn * tCompl * tCompl + (3.0 - 3.0 * _easeOut * tCompl - 2.0 * t) * t) * t; }
       qreal EvalY(const qreal t) const          { return -(t * t) * (2.0 * t - 3.0); }
-      Ease2D Eval(const qreal t) const          { return {EvalX(t), EvalY(t)}; }
+      QPointF Eval(const qreal t) const         { return {EvalX(t), EvalY(t)}; }
       qreal tFromX(const qreal x) const;
       qreal tFromY(const qreal y) const;
       qreal YfromX(const qreal x) const         { return EvalY(tFromX(x)); }
