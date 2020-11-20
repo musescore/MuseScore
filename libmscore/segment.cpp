@@ -1402,7 +1402,7 @@ Element* Segment::nextElementOfSegment(Segment* s, Element* e, int activeStaff)
                         (!next || next->staffIdx() != activeStaff)) {
                        next = s->element(++track);
                        }
-                 if (!next)
+                 if (!next || next->staffIdx() != activeStaff)
                        return nullptr;
                  if (next->isChord())
                        return toChord(next)->notes().back();
