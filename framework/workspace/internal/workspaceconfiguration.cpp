@@ -20,11 +20,18 @@
 
 #include "settings.h"
 
+#include "workspacetypes.h"
+
 using namespace mu;
 using namespace mu::workspace;
 using namespace mu::framework;
 
-static const Settings::Key CURRENT_WORKSPACE("workspace", "application/workspacer");
+static const Settings::Key CURRENT_WORKSPACE("workspace", "application/workspace");
+
+void WorkspaceConfiguration::init()
+{
+    settings()->setDefaultValue(CURRENT_WORKSPACE, Val(std::string(DEFAULT_WORKSPACE_NAME)));
+}
 
 std::vector<io::path> WorkspaceConfiguration::workspacePaths() const
 {

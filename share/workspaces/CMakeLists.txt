@@ -35,8 +35,7 @@ endfunction(build_workspace)
 
 set(GENERATED_WORKSPACES "") # create empty list
 
-build_workspace(Basic)
-build_workspace(Advanced)
+build_workspace(Default)
 
 # custom commands do not run unless something depends on their output
 add_custom_target(workspaces DEPENDS ${GENERATED_WORKSPACES})
