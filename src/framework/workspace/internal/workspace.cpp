@@ -60,7 +60,7 @@ AbstractDataPtr Workspace::data(WorkspaceTag tag, const std::string& name) const
 
 Val Workspace::settingValue(const std::string& key) const
 {
-    std::shared_ptr<AbstractData> d = data(WorkspaceTag::Preferences, "");
+    std::shared_ptr<AbstractData> d = data(WorkspaceTag::Settings, "");
     if (!d) {
         return Val();
     }

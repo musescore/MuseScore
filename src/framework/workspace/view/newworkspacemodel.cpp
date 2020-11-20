@@ -127,11 +127,11 @@ QVariant NewWorkspaceModel::createWorkspace()
     QList<WorkspaceTag> importedTags;
 
     if (importUiPreferences()) {
-        importedTags << WorkspaceTag::Preferences;
+        importedTags << WorkspaceTag::Settings;
     }
 
     if (importUiArrangement()) {
-        importedTags << WorkspaceTag::Arrangement;
+        importedTags << WorkspaceTag::UiArrangement;
     }
 
     if (importToolbarCustomization()) {
