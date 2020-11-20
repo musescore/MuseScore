@@ -78,7 +78,9 @@ void Hook::draw(QPainter* painter) const
       // hide if belonging to the second chord of a cross-measure pair
       if (chord() && chord()->crossMeasure() == CrossMeasure::SECOND)
             return;
-      Symbol::draw(painter);
+
+      painter->setPen(curColor());
+      drawSymbol(_sym, painter);
       }
 
 }
