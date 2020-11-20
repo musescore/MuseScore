@@ -78,10 +78,22 @@ if(LINUX)
         ${CRASHPAD_PATH}/util/linux/ptracer.cc
         ${CRASHPAD_PATH}/util/linux/scoped_ptrace_attach.cc
         ${CRASHPAD_PATH}/util/linux/thread_info.cc
+
+        ${CRASHPAD_PATH}/compat/linux/sys/mman_memfd_create.cc
     )
 
     set(CRASHPAD_DEF
         -DCRASHPAD_LSS_SOURCE_EMBEDDED
+    )
+
+    set(CRASHPAD_INC
+        ${CRASHPAD_INC}
+        ${CRASHPAD_PATH}/compat/linux
+    )
+
+    set(CRASHPAD_LINK
+        pthread
+        dl
     )
 
 endif(LINUX)
@@ -181,6 +193,8 @@ if(APPLE)
         ${CRASHPAD_PATH}/util/misc/random_string.cc
 
         ${CRASHPAD_PATH}/util/mac/xattr.cc
+        ${CRASHPAD_PATH}/util/mac/mac_util.cc
+        ${CRASHPAD_PATH}/util/mac/sysctl.cc
 
         ${CRASHPAD_PATH}/util/mach/bootstrap.cc
         ${CRASHPAD_PATH}/util/mach/notify_server.cc

@@ -3,20 +3,19 @@
 #include <iostream>
 #include <cassert>
 
-#if __has_include(<filesystem>)
-#include <filesystem>
-namespace fs = std::filesystem;
-#elif __has_include(<experimental/filesystem>)
-#include <experimental/filesystem>
-namespace fs = std::experimental::filesystem;
-#else
 #ifdef HAW_LOGGER_QT_SUPPORT
-#define USE_QT_DIR
-#include <QDir>
+    #define USE_QT_DIR
+    #include <QDir>
 #else
-#error compiler must either support c++17
-#endif
-
+    #if __has_include(<filesystem>)
+        #include <filesystem>
+        namespace fs = std::filesystem;
+    #elif __has_include(<experimental/filesystem>)
+        #include <experimental/filesystem>
+        namespace fs = std::experimental::filesystem;
+    #else
+        #error compiler must either support c++17
+    #endif
 #endif
 
 using namespace haw::logger;
