@@ -1367,7 +1367,6 @@ qreal Chord::defaultStemLength() const
             }
 
       qreal normalStemLen = small() ? 2.5 : 3.5;
-      normalStemLen += hookAdjustment(score()->styleSt(Sid::MusicalSymbolFont), hookIdx, up(), small());
       if (hookIdx && tab == 0) {
             if (up() && durationType().dots()) {
                   //
@@ -1603,11 +1602,9 @@ void Chord::layoutStem()
                   _hook->layout();
                   QPointF p(_stem->hookPos());
                   if (up()) {
-                        p.ry() -= _hook->bbox().top();
                         p.rx() -= _stem->width();
                         }
                   else {
-                        p.ry() -= _hook->bbox().bottom();
                         p.rx() -= _stem->width();
                         }
                   _hook->setPos(p);
