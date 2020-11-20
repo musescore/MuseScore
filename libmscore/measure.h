@@ -153,15 +153,7 @@ public:
 
     System* system() const { return toSystem(parent()); }
     bool hasVoices(int staffIdx, Fraction stick, Fraction len) const;
-    bool hasVoices(int staffIdx) const { return m_mstaves[staffIdx]->hasVoices(); }
-    void setHasVoices(int staffIdx, bool v) { return m_mstaves[staffIdx]->setHasVoices(v); }
 
-    StaffLines* staffLines(int staffIdx) { return m_mstaves[staffIdx]->lines(); }
-
-    Spacer* vspacerDown(int staffIdx) const { return m_mstaves[staffIdx]->vspacerDown(); }
-    Spacer* vspacerUp(int staffIdx) const { return m_mstaves[staffIdx]->vspacerUp(); }
-    void setStaffVisible(int staffIdx, bool visible) { m_mstaves[staffIdx]->setVisible(visible); }
-    void setStaffStemless(int staffIdx, bool stemless) { m_mstaves[staffIdx]->setStemless(stemless); }
 #ifndef NDEBUG
     bool corrupted(int staffIdx) const { return m_mstaves[staffIdx]->corrupted(); }
     void setCorrupted(int staffIdx, bool val) { m_mstaves[staffIdx]->setCorrupted(val); }
@@ -329,9 +321,9 @@ private:
     void computeMinWidth(Segment* s, qreal x, bool isSystemHeader);
 
     void readVoice(XmlReader& e, int staffIdx, bool irregular);
-    
+
     MStaff* mstaff(int staffIndex) const;
-    
+
     std::vector<MStaff*> m_mstaves;
     SegmentList m_segments;
     Measure* m_mmRest;          // multi measure rest which replaces a measure range
