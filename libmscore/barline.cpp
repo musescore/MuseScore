@@ -487,11 +487,11 @@ void BarLine::getY() const
     qreal yp = sysStaff1->y();
     qreal spatium1 = st1->spatium(score());
     qreal d  = st1->lineDistance().val() * spatium1;
-    qreal yy = measure->staffLines(staffIdx1)->y1() - yp;
+    qreal yy = measure->isStaffLines(staffIdx1)->y1() - yp;
     qreal lw = score()->styleS(Sid::staffLineWidth).val() * spatium1 * .5;
     y1       = yy + from * d * .5 - lw;
     if (staffIdx2 != staffIdx1) {
-        y2 = measure->staffLines(staffIdx2)->y1() - yp - to * d * .5;
+        y2 = measure->isStaffLines(staffIdx2)->y1() - yp - to * d * .5;
     } else {
         y2 = yy + (st1->lines() * 2 - 2 + to) * d * .5 + lw;
     }
