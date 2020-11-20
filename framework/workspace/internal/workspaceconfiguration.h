@@ -32,6 +32,7 @@ class WorkspaceConfiguration : public IWorkspaceConfiguration
     INJECT(workspace, extensions::IExtensionsConfiguration, extensionsConfiguration)
 
 public:
+    void init();
 
     std::vector<io::path> workspacePaths() const override;
     std::string currentWorkspaceName() const override;

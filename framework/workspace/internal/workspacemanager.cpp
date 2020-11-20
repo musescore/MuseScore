@@ -26,9 +26,6 @@ using namespace mu;
 using namespace mu::workspace;
 using namespace mu::extensions;
 
-static const std::string WORKSPACE_BASIC("Basic");
-static const std::string WORKSPACE_ADVANCED("Advanced");
-
 RetValCh<std::shared_ptr<IWorkspace> > WorkspaceManager::currentWorkspace() const
 {
     RetValCh<std::shared_ptr<IWorkspace> > rv;
@@ -92,8 +89,8 @@ void WorkspaceManager::setupCurrentWorkspace()
 
     std::shared_ptr<Workspace> w = findAndInit(wsname);
     if (!w) {
-        LOGW() << "filed get workspace: " << wsname << ", will use Basic";
-        w = findAndInit(WORKSPACE_BASIC);
+        LOGW() << "filed get workspace: " << wsname << ", will use Default";
+        w = findAndInit(std::string(DEFAULT_WORKSPACE_NAME));
     }
 
 //    IF_ASSERT_FAILED(w) {
