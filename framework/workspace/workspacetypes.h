@@ -46,6 +46,8 @@ struct ToolbarData : public AbstractData
     std::vector<std::string /*action*/> actions;
 };
 }
+
+static constexpr std::string_view DEFAULT_WORKSPACE_NAME("Default");
 }
 
 #endif // MU_WORKSPACE_WORKSPACETYPES_H
