@@ -968,7 +968,6 @@ class Score : public QObject, public ScoreElement {
 
       bool enableVerticalSpread() const;
       void setEnableVerticalSpread(bool val);
-      qreal minSystemDistance() const;
       qreal maxSystemDistance() const;
       ScoreOrder* scoreOrder() const        { return _scoreOrder;  }
       void setScoreOrder(ScoreOrder* order) { _scoreOrder = order; }

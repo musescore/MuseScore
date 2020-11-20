@@ -329,7 +329,7 @@ void System::layoutSystem(qreal xo1, const bool isFirstSystem)
       }
 
 //---------------------------------------------------------
-//   layoutBracketsVertical
+//   setMeasureHeight
 //---------------------------------------------------------
 
 void System::setMeasureHeight(qreal height)
@@ -346,7 +346,6 @@ void System::setMeasureHeight(qreal height)
                   toHBox(m)->layout2();
                   }
             else if (m->isTBox()) {
-      //            m->bbox().setRect(0.0, 0.0, m->width(), height);
                   toTBox(m)->layout();
                   }
             else
@@ -1352,7 +1351,7 @@ qreal System::minDistance(System* s2) const
             return s2->vbox()->topGap() + vbox()->bottomGap();
 
       qreal minVerticalDistance = score()->styleP(Sid::minVerticalDistance);
-      qreal dist                = score()->minSystemDistance();
+      qreal dist = score()->enableVerticalSpread() ? styleP(Sid::minSystemSpread) : styleP(Sid::minSystemDistance);
       int firstStaff;
       int lastStaff;
 

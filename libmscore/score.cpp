@@ -3451,18 +3451,6 @@ void Score::setEnableVerticalSpread(bool val)
       }
 
 //---------------------------------------------------------
-//   minSystemDistance
-//---------------------------------------------------------
-
-qreal Score::minSystemDistance() const
-      {
-      if (enableVerticalSpread())
-            return styleP(Sid::minStaffSpread) * styleD(Sid::spreadSystem);
-      else
-            return styleP(Sid::minSystemDistance);
-      }
-
-//---------------------------------------------------------
 //   maxSystemDistance
 //---------------------------------------------------------
 

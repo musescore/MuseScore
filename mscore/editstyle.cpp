@@ -118,10 +118,12 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::spreadSystem,            false, spreadSystem,            resetSpreadSystem        },
       { Sid::spreadSquareBracket,     false, spreadSquareBracket,     resetSpreadSquareBracket },
       { Sid::spreadCurlyBracket,      false, spreadCurlyBracket,      resetSpreadCurlyBracket  },
+      { Sid::minSystemSpread,         false, minSystemSpread,         resetMinSystemSpread     },
       { Sid::maxSystemSpread,         false, maxSystemSpread,         resetMaxSystemSpread     },
       { Sid::minStaffSpread,          false, minStaffSpread,          resetMinStaffSpread      },
       { Sid::maxStaffSpread,          false, maxStaffSpread,          resetMaxStaffSpread      },
       { Sid::maxAkkoladeDistance,     false, maxAkkoladeDistance,     resetMaxAkkoladeDistance },
+      { Sid::maxPageFillSpread,       false, maxPageFillSpread,       resetMaxPageFillSpread },
 
       { Sid::lyricsPlacement,         false, lyricsPlacement,         resetLyricsPlacement         },
       { Sid::lyricsPosAbove,          false, lyricsPosAbove,          resetLyricsPosAbove          },
@@ -1357,10 +1359,12 @@ void EditStyle::toggleVerticalJustificationStaves(bool checked)
       enableStyleWidget(Sid::spreadSystem, checked);
       enableStyleWidget(Sid::spreadSquareBracket, checked);
       enableStyleWidget(Sid::spreadCurlyBracket, checked);
+      enableStyleWidget(Sid::minSystemSpread, checked);
       enableStyleWidget(Sid::maxSystemSpread, checked);
       enableStyleWidget(Sid::minStaffSpread, checked);
       enableStyleWidget(Sid::maxStaffSpread, checked);
       enableStyleWidget(Sid::maxAkkoladeDistance, checked);
+      enableStyleWidget(Sid::maxPageFillSpread, checked);
       }
 
 //---------------------------------------------------------
