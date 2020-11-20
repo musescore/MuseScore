@@ -1841,71 +1841,69 @@ bool noteHasGlissando(Note *note)
       }
 
 //---------------------------------------------------------
+//   glissandoPitchOffsets
+//---------------------------------------------------------
+
+bool glissandoPitchOffsets(const Spanner* spanner, std::vector<int>* pitchOffsets)
+{
+      if (!spanner->endElement()->isNote())
+            return false;
+      const Glissando* glissando = toGlissando(spanner);
+      if (!glissando->playGlissando())
+            return false;
+      GlissandoStyle glissandoStyle = glissando->glissandoStyle();
+      if (glissandoStyle == GlissandoStyle::PORTAMENTO)
+            return false;
+      // only consider glissando connected to NOTE.
+      Note* noteStart = toNote(spanner->startElement());
+      Note* noteEnd = toNote(spanner->endElement());
+      int pitchStart = noteStart->ppitch();
+      int pitchEnd = noteEnd->ppitch();
+      if (pitchEnd == pitchStart)
+            return false;
+      int direction = pitchEnd > pitchStart ? 1 : -1;
+      pitchOffsets->clear();
+      if (glissandoStyle == GlissandoStyle::DIATONIC) {
+            int lineStart = noteStart->line();
+            int lineEnd = noteEnd->line() - direction;
+            // scale obeying accidentals
+            for (int line = lineStart, pitch = pitchStart; (direction == 1) ? (pitch < pitchEnd) : (pitch > pitchEnd); line -= direction) {
+                  int halfSteps = articulationExcursion(noteStart, noteEnd, lineStart - line);
+                  pitch = pitchStart + halfSteps;
+                  if ((direction == 1) ? (pitch < pitchEnd) : (pitch > pitchEnd))
+                        pitchOffsets->push_back(halfSteps);
+                  }
+            return pitchOffsets->size() > 0;
+            }
+      if (glissandoStyle == GlissandoStyle::CHROMATIC) {
+            for (int pitch = pitchStart; pitch != pitchEnd; pitch += direction)
+                  pitchOffsets->push_back(pitch - pitchStart);
+            return true;
+            }
+      static std::vector<bool> whiteNotes = { true, false, true, false, true, true, false, true, false, true, false, true };
+      int Cnote = 60; // pitch of middle C
+      bool notePick = glissandoStyle == GlissandoStyle::WHITE_KEYS;
+      for (int pitch = pitchStart; pitch != pitchEnd; pitch += direction) {
+            int idx = ((pitch - Cnote) + 1200) % 12;
+            if (whiteNotes[idx] == notePick)
+                  pitchOffsets->push_back(pitch - pitchStart);
+            }
+      return true;
+}
+
+//---------------------------------------------------------
 //   renderGlissando
 //---------------------------------------------------------
 
 void renderGlissando(NoteEventList* events, Note *notestart)
       {
       std::vector<int> empty = {};
-      int Cnote = 60; // pitch of middle C
-      int pitchstart = notestart->ppitch();
-      int linestart = notestart->line();
-
-      std::set<int> blacknotes = {  1,  3,    6, 8, 10};
-      std::set<int> whitenotes = {0,  2, 4, 5, 7,  9, 11};
-
+      std::vector<int> body;
       for (Spanner* spanner : notestart->spannerFor()) {
-            if (spanner->type() == ElementType::GLISSANDO) {
-                  Glissando *glissando = toGlissando(spanner);
-                  GlissandoStyle glissandoStyle = glissando->glissandoStyle();
-                  Element* ee = spanner->endElement();
-                  // handle this elsewhere in a different way
-                  if (glissandoStyle == GlissandoStyle::PORTAMENTO)
-                        continue;
-                  // only consider glissando connected to NOTE.
-                  if (glissando->playGlissando() && ElementType::NOTE == ee->type()) {
-                        std::vector<int> body;
-                        Note *noteend  = toNote(ee);
-                        int pitchend   = noteend->ppitch();
-                        bool direction = pitchend >  pitchstart;
-                        if (pitchend == pitchstart)
-                              continue; // next spanner
-                        if (glissandoStyle == GlissandoStyle::DIATONIC) { // scale obeying accidentals
-                              int line;
-                              int p = pitchstart;
-                              // iterate as long as we haven't past the pitchend.
-                              for (line = linestart; (direction) ? (p<pitchend) : (p>pitchend);
-                                 (direction) ? line-- : line++) {
-                                    int halfsteps = articulationExcursion(notestart, noteend, linestart - line);
-                                    p = pitchstart + halfsteps;
-                                    if (direction ? p < pitchend : p > pitchend)
-                                          body.push_back(halfsteps);
-                                    }
-                              }
-                        else {
-                              for (int p = pitchstart; direction ? p < pitchend : p > pitchend; p += (direction ? 1 : -1)) {
-                                    bool choose = false;
-                                    int mod = ((p - Cnote) + 1200) % 12;
-                                    switch (glissandoStyle) {
-                                          case GlissandoStyle::CHROMATIC:
-                                                choose = true;
-                                                break;
-                                          case GlissandoStyle::WHITE_KEYS: // white note
-                                                choose = (whitenotes.find(mod) != whitenotes.end());
-                                                break;
-                                          case GlissandoStyle::BLACK_KEYS: // black note
-                                                choose =  (blacknotes.find(mod) != blacknotes.end());
-                                                break;
-                                          default:
-                                                choose = false;
-                                          }
-                                    if (choose)
-                                          body.push_back(p - pitchstart);
-                                    }
-                              }
-                        renderNoteArticulation(events, notestart, true, MScore::division, empty, body, false, true, empty, 16, 0);
-                        }
-                  }
+            if (spanner->type() == ElementType::GLISSANDO
+            && toGlissando(spanner)->playGlissando()
+            && glissandoPitchOffsets(spanner, &body))
+                  renderNoteArticulation(events, notestart, true, MScore::division, empty, body, false, true, empty, 16, 0);
             }
       }
 

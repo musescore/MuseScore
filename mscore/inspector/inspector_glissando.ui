@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>349</width>
-    <height>253</height>
+    <height>436</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -489,6 +489,22 @@
            </property>
           </widget>
          </item>
+         <item row="2" column="0" colspan="3">
+          <widget class="Ms::EaseInOutCanvas" name="easeInOutCanvas">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>180</height>
+            </size>
+           </property>
+          </widget>
+         </item>
         </layout>
        </widget>
       </item>
@@ -508,6 +524,12 @@
    <class>Ms::FontStyleSelect</class>
    <extends>QWidget</extends>
    <header>inspector/fontStyleSelect.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Ms::EaseInOutCanvas</class>
+   <extends>QFrame</extends>
+   <header>easeinoutcanvas.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
@@ -530,12 +552,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>93</x>
-     <y>267</y>
+     <x>96</x>
+     <y>169</y>
     </hint>
     <hint type="destinationlabel">
-     <x>114</x>
-     <y>291</y>
+     <x>170</x>
+     <y>192</y>
     </hint>
    </hints>
   </connection>
@@ -546,12 +568,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>234</x>
-     <y>267</y>
+     <x>237</x>
+     <y>169</y>
     </hint>
     <hint type="destinationlabel">
-     <x>352</x>
-     <y>296</y>
+     <x>335</x>
+     <y>192</y>
     </hint>
    </hints>
   </connection>
@@ -562,12 +584,12 @@
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>45</x>
-     <y>156</y>
+     <x>48</x>
+     <y>64</y>
     </hint>
     <hint type="destinationlabel">
-     <x>41</x>
-     <y>168</y>
+     <x>44</x>
+     <y>149</y>
     </hint>
    </hints>
   </connection>
@@ -582,8 +604,8 @@
      <y>204</y>
     </hint>
     <hint type="destinationlabel">
-     <x>207</x>
-     <y>211</y>
+     <x>332</x>
+     <y>216</y>
     </hint>
    </hints>
   </connection>
@@ -598,8 +620,8 @@
      <y>231</y>
     </hint>
     <hint type="destinationlabel">
-     <x>208</x>
-     <y>234</y>
+     <x>332</x>
+     <y>241</y>
     </hint>
    </hints>
   </connection>
@@ -610,8 +632,8 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>272</x>
-     <y>205</y>
+     <x>332</x>
+     <y>216</y>
     </hint>
     <hint type="destinationlabel">
      <x>172</x>
@@ -626,12 +648,44 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>284</x>
-     <y>231</y>
+     <x>332</x>
+     <y>241</y>
     </hint>
     <hint type="destinationlabel">
      <x>181</x>
      <y>223</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>easeOutSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>easeOutSpin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>202</x>
+     <y>231</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>297</x>
+     <y>233</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>easeInSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>easeInSpin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>200</x>
+     <y>204</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>301</x>
+     <y>204</y>
     </hint>
    </hints>
   </connection>

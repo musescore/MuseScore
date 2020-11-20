@@ -28,7 +28,12 @@ class InspectorGlissando : public InspectorElementBase {
 
       Ui::InspectorGlissando g;
 
-   public:
+      void updateNbEvents();
+
+private slots:
+      void valueChanged(int);
+
+public:
       InspectorGlissando(QWidget* parent);
       virtual void setElement() override;
       };
