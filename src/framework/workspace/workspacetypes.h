@@ -28,8 +28,8 @@ namespace mu::workspace {
 
 enum class WorkspaceTag
 {
-    Arrangement,
-    Preferences,
+    UiArrangement,
+    Settings,
     Palettes,
     Toolbar
 };

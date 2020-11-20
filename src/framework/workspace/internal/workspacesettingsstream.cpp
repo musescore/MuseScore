@@ -48,7 +48,7 @@ AbstractDataPtrList WorkspaceSettingsStream::read(IODevice& sourceDevice) const
 SettingsDataPtr WorkspaceSettingsStream::readSettings(XmlReader& reader) const
 {
     SettingsDataPtr settings = std::make_shared<SettingsData>();
-    settings->tag = WorkspaceTag::Preferences;
+    settings->tag = WorkspaceTag::Settings;
 
     while (reader.readNextStartElement()) {
         if (reader.tagName() != SETTING_TAG) {

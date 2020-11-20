@@ -25,6 +25,9 @@
 #include "val.h"
 #include "async/channel.h"
 
+#include "isettingssource.h"
+#include "modularity/ioc.h"
+
 //! NOTE We are gradually abandoning Qt in non-GUI classes.
 //! This settings interface is almost independent of Qt,
 //! QSettings are used only in the implementation for compatibility with current settings.
@@ -35,6 +38,8 @@ class QSettings;
 namespace mu::framework {
 class Settings
 {
+    INJECT(framework, ISettingsSource, source)
+
 public:
     static Settings* instance();
 
