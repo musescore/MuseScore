@@ -29,6 +29,7 @@
 #include <vector>
 #include <algorithm>
 #include <windows.h>
+#include <shellapi.h>
 #endif
 
 #include <iostream>
