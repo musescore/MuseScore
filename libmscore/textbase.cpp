@@ -2527,7 +2527,7 @@ bool TextBase::mousePress(EditData& ed)
     if (!ted->cursor()->set(ed.startMove, shift ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor)) {
         return false;
     }
-    if (ed.buttons == Qt::MidButton) {
+    if (ed.buttons == Qt::MiddleButton) {
         paste(ed);
     }
     score()->setUpdateAll();

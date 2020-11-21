@@ -86,7 +86,7 @@ Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, IODevi
     }
 
     QNetworkRequest request(url);
-    request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
+    request.setAttribute(QNetworkRequest::RedirectPolicyAttribute, true);
 
     QNetworkReply* reply = receiveReply(requestType, request, outgoingData);
 

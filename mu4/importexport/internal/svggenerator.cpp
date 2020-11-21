@@ -1044,7 +1044,7 @@ bool SvgPaintEngine::begin(QPaintDevice*)
 
     // Stream the headers
     d->stream = new QTextStream(&d->header);
-    stream() << "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" << endl << SVG_BEGIN;
+    stream() << "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" << Qt::endl << SVG_BEGIN;
     if (d->viewBox.isValid()) {
         // viewBox has floating point values, size width/height is integer
         stream() << SVG_WIDTH << d->viewBox.width() << SVG_PX << SVG_QUOTE
@@ -1053,16 +1053,16 @@ bool SvgPaintEngine::begin(QPaintDevice*)
         stream() << SVG_VIEW_BOX << d->viewBox.left()
                  << SVG_SPACE << d->viewBox.top()
                  << SVG_SPACE << d->viewBox.width()
-                 << SVG_SPACE << d->viewBox.height() << SVG_QUOTE << endl;
+                 << SVG_SPACE << d->viewBox.height() << SVG_QUOTE << Qt::endl;
     }
     stream() << " xmlns=\"http://www.w3.org/2000/svg\""
                 " xmlns:xlink=\"http://www.w3.org/1999/xlink\""
-                " version=\"1.2\" baseProfile=\"tiny\">" << endl;
+                " version=\"1.2\" baseProfile=\"tiny\">" << Qt::endl;
     if (!d->attributes.title.isEmpty()) {
-        stream() << SVG_TITLE_BEGIN << d->attributes.title.toHtmlEscaped() << SVG_TITLE_END << endl;
+        stream() << SVG_TITLE_BEGIN << d->attributes.title.toHtmlEscaped() << SVG_TITLE_END << Qt::endl;
     }
     if (!d->attributes.description.isEmpty()) {
-        stream() << SVG_DESC_BEGIN << d->attributes.description.toHtmlEscaped() << SVG_DESC_END << endl;
+        stream() << SVG_DESC_BEGIN << d->attributes.description.toHtmlEscaped() << SVG_DESC_END << Qt::endl;
     }
 
 // <defs> is currently empty. It's necessary for gradients.
@@ -1093,7 +1093,7 @@ bool SvgPaintEngine::end()
     stream() << d->header;
 //    stream() << d->defs;
     stream() << d->body;
-    stream() << SVG_END << endl;
+    stream() << SVG_END << Qt::endl;
 
     delete d->stream;
     return true;
@@ -1153,7 +1153,7 @@ void SvgPaintEngine::writeImage(const QRectF& r, const QByteArray& imageData, co
              << SVG_PRESERVE_ASPECT << SVG_NONE << SVG_QUOTE;
 
     stream() << " xlink:href=\"data:" << mimeFormat << ";base64,"
-             << imageData.toBase64() << SVG_QUOTE << SVG_ELEMENT_END << endl;
+             << imageData.toBase64() << SVG_QUOTE << SVG_ELEMENT_END << Qt::endl;
 }
 
 void SvgPaintEngine::updateState(const QPaintEngineState& s)
@@ -1253,7 +1253,7 @@ void SvgPaintEngine::drawPath(const QPainterPath& p)
             stream() << SVG_SPACE;
         }
     }
-    stream() << SVG_QUOTE << SVG_ELEMENT_END << endl;
+    stream() << SVG_QUOTE << SVG_ELEMENT_END << Qt::endl;
 }
 
 void SvgPaintEngine::drawPolygon(const QPointF* points, int pointCount,
@@ -1276,7 +1276,7 @@ void SvgPaintEngine::drawPolygon(const QPointF* points, int pointCount,
                 stream() << SVG_SPACE;
             }
         }
-        stream() << SVG_QUOTE << SVG_ELEMENT_END << endl;
+        stream() << SVG_QUOTE << SVG_ELEMENT_END << Qt::endl;
     } else {
         path.closeSubpath();
         drawPath(path);
