@@ -74,9 +74,12 @@ set(MODULE_SRC
 )
 
 set(FS_LIB )
-if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    set(FS_LIB stdc++fs)
-endif()
+# The use of `filesystem` is disabled until
+# I figure out how to use it correctly for all platforms and compilers (including MinGW)
+# (igor.korsukov@gmail.com)
+#if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+#    set(FS_LIB stdc++fs)
+#endif()
 
 set(MODULE_LINK
     ${FS_LIB}
