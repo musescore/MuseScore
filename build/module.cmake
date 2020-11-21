@@ -113,8 +113,8 @@ if (LOCAL_MODULE_BUILD_PCH)
 
     # MSVC does not depend on mops1 & mops2 for PCH
     if (NOT MSVC)
-#        ADD_DEPENDENCIES(${MODULE} mops1)
-#        ADD_DEPENDENCIES(${MODULE} mops2)
+        ADD_DEPENDENCIES(${MODULE} mops1)
+        ADD_DEPENDENCIES(${MODULE} mops2)
     endif (NOT MSVC)
 else (LOCAL_MODULE_BUILD_PCH)
     set_target_properties(${MODULE} PROPERTIES COMPILE_FLAGS "-include ${PROJECT_SOURCE_DIR}/all.h")
