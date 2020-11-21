@@ -178,9 +178,9 @@ QUrl ApiInfo::getUpdateScoreInfoUrl(const QString& scoreId, const QString& acces
 //---------------------------------------------------------
 
 CloudManager::CloudManager(QAction* uploadAudioMenuAction, QProgressDialog* progress, QObject* parent)
-    : QObject(parent), m_networkManager(new QNetworkAccessManager(this)), m_asyncWait(new AsyncWait(this)),
-    m_uploadAudioMenuAction(uploadAudioMenuAction),
-    m_progressDialog(progress)
+    : QObject(parent), m_networkManager(new QNetworkAccessManager(this)),
+    m_uploadAudioMenuAction(uploadAudioMenuAction), m_progressDialog(progress),
+    m_asyncWait(new AsyncWait(this))
 {
     m_progressDialog->setWindowFlags(Qt::WindowFlags(Qt::Dialog | Qt::FramelessWindowHint | Qt::WindowTitleHint));
     m_progressDialog->setWindowModality(Qt::NonModal);
