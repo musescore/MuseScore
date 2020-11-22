@@ -44,7 +44,7 @@
 #include "libmscore/part.h"
 #include "libmscore/pedal.h"
 #include "libmscore/pitchspelling.h"
-#include "libmscore/repeat.h"
+#include "libmscore/measurerepeat.h"
 #include "libmscore/rest.h"
 #include "libmscore/score.h"
 #include "libmscore/segment.h"

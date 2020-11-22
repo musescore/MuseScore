@@ -16,6 +16,7 @@
 #include "libmscore/part.h"
 #include "libmscore/undo.h"
 #include "libmscore/measure.h"
+#include "libmscore/measurerepeat.h"
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
 #include "libmscore/breath.h"
@@ -53,6 +54,8 @@ class TestParts : public QObject, public MTest
     MasterScore* doRemoveSymbol();
     MasterScore* doAddChordline();
     MasterScore* doRemoveChordline();
+    MasterScore* doAddMeasureRepeat();
+    MasterScore* doRemoveMeasureRepeat();
 //      MasterScore* doAddImage();
 //      MasterScore* doRemoveImage();
 
@@ -94,6 +97,14 @@ private slots:
     void removeChordline();
     void undoRemoveChordline();
     void undoRedoRemoveChordline();
+
+    void createPartMeasureRepeat();
+    void addMeasureRepeat();
+    void undoAddMeasureRepeat();
+    void undoRedoAddMeasureRepeat();
+    void removeMeasureRepeat();
+    void undoRemoveMeasureRepeat();
+    void undoRedoRemoveMeasureRepeat();
 
     void createPartStemless();
 
@@ -414,6 +425,11 @@ void TestParts::createPartChordline()
     testPartCreation("part-chordline");
 }
 
+void TestParts::createPartMeasureRepeat()
+{
+    testPartCreation("part-measure-repeat");
+}
+
 void TestParts::createPartStemless()
 {
     testPartCreation("part-stemless");
@@ -500,7 +516,7 @@ MasterScore* TestParts::doRemoveBreath()
 
     Measure* m   = score->firstMeasure();
     Segment* s   = m->first()->next(SegmentType::Breath);
-    Breath* b   = static_cast<Breath*>(s->element(0));
+    Breath* b    = toBreath(s->element(0));
 
     score->select(b);
     score->startCmd();
@@ -557,7 +573,7 @@ MasterScore* TestParts::doAddFingering()
 
     Measure* m   = score->firstMeasure();
     Segment* s   = m->tick2segment(Fraction(1,4));
-    Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
+    Ms::Chord* chord = toChord(s->element(0));
     Note* note   = chord->upNote();
     EditData dd(0);
     Fingering* b = new Fingering(score);
@@ -616,10 +632,10 @@ MasterScore* TestParts::doRemoveFingering()
 
     Measure* m   = score->firstMeasure();
     Segment* s   = m->first()->next(SegmentType::ChordRest);
-    Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
+    Ms::Chord* chord = toChord(s->element(0));
     Note* note   = chord->upNote();
     Element* fingering = 0;
-    foreach (Element* e, note->el()) {
+    for (Element* e : note->el()) {
         if (e->type() == ElementType::FINGERING) {
             fingering = e;
             break;
@@ -680,7 +696,7 @@ MasterScore* TestParts::doAddSymbol()
 
     Measure* m   = score->firstMeasure();
     Segment* s   = m->tick2segment(Fraction(1,4));
-    Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
+    Ms::Chord* chord = toChord(s->element(0));
     Note* note   = chord->upNote();
     EditData dd(0);
     Symbol* b  = new Symbol(score);
@@ -739,10 +755,10 @@ MasterScore* TestParts::doRemoveSymbol()
 
     Measure* m   = score->firstMeasure();
     Segment* s   = m->first()->next(SegmentType::ChordRest);
-    Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
+    Ms::Chord* chord = toChord(s->element(0));
     Note* note   = chord->upNote();
     Element* se = 0;
-    foreach (Element* e, note->el()) {
+    for (Element* e : note->el()) {
         if (e->type() == ElementType::SYMBOL) {
             se = e;
             break;
@@ -803,7 +819,7 @@ MasterScore* TestParts::doAddChordline()
 
     Measure* m   = score->firstMeasure();
     Segment* s   = m->tick2segment(Fraction(1,4));
-    Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
+    Ms::Chord* chord = toChord(s->element(0));
     Note* note   = chord->upNote();
     EditData dd(0);
     ChordLine* b  = new ChordLine(score);
@@ -862,10 +878,10 @@ MasterScore* TestParts::doRemoveChordline()
 
     Measure* m   = score->firstMeasure();
     Segment* s   = m->first()->next(SegmentType::ChordRest);
-    Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
+    Ms::Chord* chord = toChord(s->element(0));
 
     Element* se = 0;
-    foreach (Element* e, chord->el()) {
+    for (Element* e : chord->el()) {
         if (e->type() == ElementType::CHORDLINE) {
             se = e;
             break;
@@ -916,6 +932,119 @@ void TestParts::undoRedoRemoveChordline()
     delete score;
 }
 
+//---------------------------------------------------------
+//   doAddMeasureRepeat
+//---------------------------------------------------------
+
+MasterScore* TestParts::doAddMeasureRepeat()
+{
+    MasterScore* score = readScore(DIR + "part-empty-parts.mscx");
+    Measure* m = score->firstMeasure()->nextMeasure();
+
+    score->startCmd();
+    score->cmdAddMeasureRepeat(m, 4, 0); // test with 4-measure repeat in first staff
+    score->setLayoutAll();
+    score->endCmd();
+
+    return score;
+}
+
+//---------------------------------------------------------
+//   addMeasureRepeat
+//---------------------------------------------------------
+
+void TestParts::addMeasureRepeat()
+{
+    MasterScore* score = doAddMeasureRepeat();
+    QVERIFY(saveCompareScore(score, "part-measure-repeat-add.mscx", DIR + "part-measure-repeat-add.mscx"));
+    delete score;
+}
+
+//---------------------------------------------------------
+//   undoAddMeasureRepeat
+//---------------------------------------------------------
+
+void TestParts::undoAddMeasureRepeat()
+{
+    MasterScore* score = doAddMeasureRepeat();
+
+    score->undoRedo(true, 0);
+
+    QVERIFY(saveCompareScore(score, "part-measure-repeat-uadd.mscx", DIR + "part-measure-repeat-uadd.mscx"));
+    delete score;
+}
+
+//---------------------------------------------------------
+//   undoRedoAddMeasureRepeat
+//---------------------------------------------------------
+
+void TestParts::undoRedoAddMeasureRepeat()
+{
+    MasterScore* score = doAddMeasureRepeat();
+
+    score->undoRedo(true, 0);
+    score->undoRedo(false, 0);
+
+    QVERIFY(saveCompareScore(score, "part-measure-repeat-uradd.mscx", DIR + "part-measure-repeat-uradd.mscx"));
+    delete score;
+}
+
+//---------------------------------------------------------
+//   doRemoveMeasureRepeat
+//---------------------------------------------------------
+
+MasterScore* TestParts::doRemoveMeasureRepeat()
+{
+    MasterScore* score = readScore(DIR + "part-measure-repeat-parts.mscx");
+
+    Measure* m = score->firstMeasure()->nextMeasure()->nextMeasure();
+    MeasureRepeat* mr = m->measureRepeatElement(0);
+    score->select(mr);
+
+    score->startCmd();
+    score->cmdDeleteSelection();
+    score->setLayoutAll();
+    score->endCmd();
+    return score;
+}
+
+//---------------------------------------------------------
+//   removeMeasureRepeat
+//---------------------------------------------------------
+
+void TestParts::removeMeasureRepeat()
+{
+    MasterScore* score = doRemoveMeasureRepeat();
+    QVERIFY(saveCompareScore(score, "part-measure-repeat-del.mscx", DIR + "part-measure-repeat-del.mscx"));
+    delete score;
+}
+
+//---------------------------------------------------------
+//   undoRemoveMeasureRepeat
+//---------------------------------------------------------
+
+void TestParts::undoRemoveMeasureRepeat()
+{
+    MasterScore* score = doRemoveMeasureRepeat();
+    score->undoRedo(true, 0);
+    QVERIFY(saveCompareScore(score, "part-measure-repeat-udel.mscx", DIR + "part-measure-repeat-udel.mscx"));
+    delete score;
+}
+
+//---------------------------------------------------------
+//   undoRedoRemoveMeasureRepeat
+//---------------------------------------------------------
+
+void TestParts::undoRedoRemoveMeasureRepeat()
+{
+    MasterScore* score = doRemoveMeasureRepeat();
+    score->undoRedo(true, 0);
+    score->undoRedo(false, 0);
+
+    QVERIFY(saveCompareScore(score, "part-measure-repeat-urdel.mscx", DIR + "part-measure-repeat-urdel.mscx"));
+    delete score;
+}
+
 #if 0
 //---------------------------------------------------------
 //   doAddImage
@@ -927,7 +1056,7 @@ MasterScore* TestParts::doAddImage()
 
     Measure* m   = score->firstMeasure();
     Segment* s   = m->tick2segment(MScore::division);
-    Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
+    Ms::Chord* chord = toChord(s->element(0));
     Note* note   = chord->upNote();
     EditData dd(0);
     RasterImage* b = new RasterImage(score);
@@ -986,10 +1115,10 @@ MasterScore* TestParts::doRemoveImage()
 
     Measure* m   = score->firstMeasure();
     Segment* s   = m->first()->next(SegChordRest);
-    Ms::Chord* chord = static_cast<Ms::Chord*>(s->element(0));
+    Ms::Chord* chord = toChord(s->element(0));
     Note* note   = chord->upNote();
     Element* fingering = 0;
-    foreach (Element* e, note->el()) {
+    for (Element* e : note->el()) {
         if (e->type() == IMAGE) {
             fingering = e;
             break;

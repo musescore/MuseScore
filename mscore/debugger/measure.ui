@@ -91,9 +91,6 @@
           <property name="textFormat">
            <enum>Qt::PlainText</enum>
           </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
          </widget>
         </item>
         <item row="0" column="2">
@@ -114,9 +111,6 @@
           <property name="textFormat">
            <enum>Qt::PlainText</enum>
           </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
          </widget>
         </item>
         <item row="0" column="5">
@@ -130,9 +124,6 @@
           <property name="textFormat">
            <enum>Qt::PlainText</enum>
           </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
          </widget>
         </item>
         <item row="0" column="8">
@@ -145,9 +136,6 @@
           </property>
           <property name="textFormat">
            <enum>Qt::PlainText</enum>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
          </widget>
         </item>
@@ -169,9 +157,6 @@
           <property name="textFormat">
            <enum>Qt::PlainText</enum>
           </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
          </widget>
         </item>
         <item row="1" column="5">
@@ -185,9 +170,6 @@
           <property name="textFormat">
            <enum>Qt::PlainText</enum>
           </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
          </widget>
         </item>
         <item row="1" column="8">
@@ -200,9 +182,6 @@
           </property>
           <property name="textFormat">
            <enum>Qt::PlainText</enum>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
          </widget>
         </item>
@@ -224,9 +203,6 @@
           <property name="textFormat">
            <enum>Qt::PlainText</enum>
           </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
          </widget>
         </item>
         <item row="2" column="5">
@@ -237,44 +213,15 @@
           <property name="text">
            <string notr="true">EndRep:</string>
           </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
          </widget>
         </item>
         <item row="2" column="8">
          <widget class="QSpinBox" name="repeatCount"/>
         </item>
-        <item row="3" column="3">
-         <widget class="QLabel" name="label_12">
-          <property name="toolTip">
-           <string notr="true"/>
-          </property>
-          <property name="text">
-           <string notr="true">mmRestCount</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="5">
-         <widget class="QSpinBox" name="mmRestCount">
-          <property name="minimum">
-           <number>-2</number>
-          </property>
-          <property name="maximum">
-           <number>99999</number>
-          </property>
-         </widget>
-        </item>
         <item row="4" column="6">
          <widget class="QLabel" name="label_16">
           <property name="text">
            <string notr="true">len:</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
          </widget>
         </item>
@@ -283,18 +230,12 @@
           <property name="text">
            <string notr="true">timesig:</string>
           </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
          </widget>
         </item>
         <item row="4" column="0">
          <widget class="QLabel" name="label_14">
           <property name="text">
            <string notr="true">tick:</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
          </widget>
         </item>
@@ -309,6 +250,40 @@
          <widget class="QLabel" name="len">
           <property name="text">
            <string notr="true">TextLabel</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="label_12">
+          <property name="toolTip">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string notr="true">mmRestCount:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2">
+         <widget class="QSpinBox" name="mmRestCount">
+          <property name="minimum">
+           <number>-2</number>
+          </property>
+          <property name="maximum">
+           <number>99999</number>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="5">
+         <widget class="QDoubleSpinBox" name="oldWidth">
+          <property name="maximum">
+           <double>10000.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="3">
+         <widget class="QLabel" name="label_10">
+          <property name="text">
+           <string>oldWidth:</string>
           </property>
          </widget>
         </item>
@@ -331,10 +306,10 @@
         <property name="spacing">
          <number>2</number>
         </property>
-        <item row="1" column="0">
-         <widget class="QCheckBox" name="pageBreak">
+        <item row="1" column="3">
+         <widget class="QPushButton" name="mmRest">
           <property name="text">
-           <string notr="true">Page Break</string>
+           <string notr="true">mmRest</string>
           </property>
          </widget>
         </item>
@@ -342,6 +317,75 @@
          <widget class="QCheckBox" name="breakMultiMeasureRest">
           <property name="text">
            <string notr="true">breakMultiMeasureRest</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QCheckBox" name="endRepeat">
+          <property name="text">
+           <string notr="true">EndRepeat</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1" colspan="2">
+         <widget class="QCheckBox" name="noBreak">
+          <property name="text">
+           <string>NoBreak (group with next)</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QCheckBox" name="pageBreak">
+          <property name="text">
+           <string notr="true">PageBreak</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QCheckBox" name="startRepeat">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string notr="true">StartRepeat</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QCheckBox" name="lineBreak">
+          <property name="text">
+           <string notr="true">SystemBreak</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QCheckBox" name="hasSystemHeader">
+          <property name="text">
+           <string notr="true">SystemHeader</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QCheckBox" name="hasSystemTrailer">
+          <property name="text">
+           <string notr="true">SystemTrailer</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QCheckBox" name="sectionBreak">
+          <property name="text">
+           <string notr="true">SectionBreak</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QCheckBox" name="hasCourtesyKeySig">
+          <property name="text">
+           <string notr="true">CourtesyKeySig</string>
           </property>
          </widget>
         </item>
@@ -358,69 +402,7 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="0">
-         <widget class="QCheckBox" name="lineBreak">
-          <property name="text">
-           <string notr="true">System Break</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QCheckBox" name="sectionBreak">
-          <property name="text">
-           <string notr="true">Section Break</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QCheckBox" name="startRepeat">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string notr="true">StartRepeat</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="3">
-         <widget class="QPushButton" name="mmRest">
-          <property name="text">
-           <string notr="true">mmRest</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="2">
-         <widget class="QCheckBox" name="endRepeat">
-          <property name="text">
-           <string notr="true">EndRepeat</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QCheckBox" name="hasSystemHeader">
-          <property name="text">
-           <string notr="true">SystemHeader</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QCheckBox" name="hasSystemTrailer">
-          <property name="text">
-           <string notr="true">SystemTrailer</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="2">
-         <widget class="QCheckBox" name="hasCourtesyKeySig">
-          <property name="text">
-           <string notr="true">CourtesyKeySig</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="3">
+        <item row="3" column="2">
          <widget class="QCheckBox" name="hasVoices">
           <property name="text">
            <string notr="true">hasVoices</string>

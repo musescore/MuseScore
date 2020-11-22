@@ -49,6 +49,12 @@ void Score::splitMeasure(Segment* segment)
         return;
     }
     Measure* measure = segment->measure();
+    for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+        if (measure->isMeasureRepeatGroup(staffIdx)) {
+            MScore::setError(CANNOT_SPLIT_MEASURE_REPEAT);
+            return;
+        }
+    }
 
     ScoreRange range;
     range.read(measure->first(), measure->last());

@@ -14,6 +14,7 @@
 #include "mtest/testutils.h"
 #include "libmscore/measure.h"
 #include "libmscore/page.h"
+#include "libmscore/rest.h"
 #include "libmscore/score.h"
 #include "libmscore/staff.h"
 #include "libmscore/system.h"
@@ -80,6 +81,10 @@ static void isLayoutDone(void* data, Element* e)
             // signature displayed. This is a valid exception.
             return;
         }
+    }
+    if (e->isRest() && toRest(e)->shouldNotBeDrawn()) {
+        // another valid exception
+        return;
     }
     // If layout of element is done it (usually?) has a valid
     // bounding box (bbox).

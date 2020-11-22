@@ -41,7 +41,7 @@
 #include "rest.h"
 #include "mmrest.h"
 #include "breath.h"
-#include "repeat.h"
+#include "measurerepeat.h"
 #include "utils.h"
 #include "read206.h"
 #include "excerpt.h"
@@ -3084,9 +3084,11 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                 sp->setTrack2(sv->track2);
             }
         } else if (tag == "RepeatMeasure") {
-            RepeatMeasure* rm = new RepeatMeasure(score);
+            MeasureRepeat* rm = new MeasureRepeat(score);
             rm->setTrack(e.track());
             readRest(rm, e);
+            rm->setNumMeasures(1);
+            m->setMeasureRepeatCount(1, staffIdx);
             segment = m->getSegment(SegmentType::ChordRest, e.tick());
             segment->add(rm);
             lastTick = e.tick();

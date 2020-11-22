@@ -1,0 +1,10 @@
+init init/MeasureRepeats.mscx
+cmd rewind
+cmd next-measure
+cmd next-measure
+cmd next-measure
+cmd next-measure
+cmd next-measure
+cmd next-measure
+palette TimeSig timesig 4/4
+test score measure_repeat_timesig.mscx

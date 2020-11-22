@@ -42,7 +42,8 @@ static const QList<Ms::ElementType> NOTATION_ELEMENT_TYPES = {
     Ms::ElementType::MMREST,
     Ms::ElementType::BEND,
     Ms::ElementType::TREMOLOBAR,
-    Ms::ElementType::TREMOLO
+    Ms::ElementType::TREMOLO,
+    Ms::ElementType::MEASURE_REPEAT
 };
 
 static const QList<Ms::ElementType> TEXT_ELEMENT_TYPES = {

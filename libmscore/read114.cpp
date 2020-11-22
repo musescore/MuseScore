@@ -43,7 +43,7 @@
 #include "tuplet.h"
 #include "spacer.h"
 #include "stafftext.h"
-#include "repeat.h"
+#include "measurerepeat.h"
 #include "breath.h"
 #include "tremolo.h"
 #include "utils.h"
@@ -1874,9 +1874,11 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                 sp->setTrack2(sv->track2);
             }
         } else if (tag == "RepeatMeasure") {
-            RepeatMeasure* rm = new RepeatMeasure(m->score());
+            MeasureRepeat* rm = new MeasureRepeat(m->score());
             rm->setTrack(e.track());
             readRest(m, rm, e);
+            rm->setNumMeasures(1);
+            m->setMeasureRepeatCount(1, staffIdx);
             segment = m->getSegment(SegmentType::ChordRest, e.tick());
             segment->add(rm);
             if (rm->actualTicks().isZero()) {     // might happen with 1.3 scores

@@ -122,12 +122,10 @@ static const StyleType styleTypes[] {
     { Sid::lyricsEvenFrameBgColor,  "lyricsEvenFrameBgColor",  QColor(255, 255, 255, 0) },
 
     { Sid::figuredBassFontFamily,   "figuredBassFontFamily",   QString("MScoreBC") },
-
-//      { Sid::figuredBassFontSize,     "figuredBassFontSize",     QVariant(8.0) },
     { Sid::figuredBassYOffset,      "figuredBassYOffset",      QVariant(6.0) },
     { Sid::figuredBassLineHeight,   "figuredBassLineHeight",   QVariant(1.0) },
     { Sid::figuredBassAlignment,    "figuredBassAlignment",    QVariant(0) },
-    { Sid::figuredBassStyle,        "figuredBassStyle",       QVariant(0) },
+    { Sid::figuredBassStyle,        "figuredBassStyle",        QVariant(0) },
     { Sid::systemFrameDistance,     "systemFrameDistance",     Spatium(7.0) },
     { Sid::frameSystemDistance,     "frameSystemDistance",     Spatium(7.0) },
     { Sid::minMeasureWidth,         "minMeasureWidth",         Spatium(5.0) },
@@ -184,6 +182,12 @@ static const StyleType styleTypes[] {
     { Sid::barAccidentalDistance,   "barAccidentalDistance",   Spatium(.3) },
     { Sid::noteBarDistance,         "noteBarDistance",         Spatium(1.0) },
     { Sid::measureSpacing,          "measureSpacing",          QVariant(1.2) },
+    { Sid::measureRepeatNumberPos,  "measureRepeatNumberPos",  Spatium(-1.5) },
+    { Sid::mrNumberSeries,          "mrNumberSeries",          QVariant(false) },
+    { Sid::mrNumberEveryXMeasures,  "mrNumberEveryXMeasures",  4 },
+    { Sid::mrNumberSeriesWithParentheses, "mrNumberSeriesWithParentheses", QVariant(true) },
+    { Sid::oneMeasureRepeatShow1,   "oneMeasureRepeatShow1",   QVariant(false) },
+    { Sid::fourMeasureRepeatShowExtenders, "fourMeasureRepeatShowExtenders", QVariant(false) },
     { Sid::staffLineWidth,          "staffLineWidth",          Spatium(0.08) },       // 0.09375
     { Sid::ledgerLineWidth,         "ledgerLineWidth",         Spatium(0.16) },       // 0.1875
     { Sid::ledgerLineLength,        "ledgerLineLength",        Spatium(.76) },        // notehead width + this value

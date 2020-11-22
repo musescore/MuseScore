@@ -156,6 +156,12 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
     break;
     case BarLineType::START_REPEAT: {
         Measure* m2 = m->isMMRest() ? m->mmRestFirst() : m;
+        for (int staffIdx = 0; staffIdx < m2->score()->nstaves(); ++staffIdx) {
+            if (m2->isMeasureRepeatGroupWithPrevM(staffIdx)) {
+                MScore::setError(CANNOT_SPLIT_MEASURE_REPEAT);
+                return;
+            }
+        }
         for (Score* lscore : m2->score()->scoreList()) {
             Measure* lmeasure = lscore->tick2measure(m2->tick());
             if (lmeasure) {
@@ -166,6 +172,12 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
     break;
     case BarLineType::END_REPEAT: {
         Measure* m2 = m->isMMRest() ? m->mmRestLast() : m;
+        for (int staffIdx = 0; staffIdx < m2->score()->nstaves(); ++staffIdx) {
+            if (m2->isMeasureRepeatGroupWithNextM(staffIdx)) {
+                MScore::setError(CANNOT_SPLIT_MEASURE_REPEAT);
+                return;
+            }
+        }
         for (Score* lscore : m2->score()->scoreList()) {
             Measure* lmeasure = lscore->tick2measure(m2->tick());
             if (lmeasure) {
@@ -176,6 +188,12 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
     break;
     case BarLineType::END_START_REPEAT: {
         Measure* m2 = m->isMMRest() ? m->mmRestLast() : m;
+        for (int staffIdx = 0; staffIdx < m2->score()->nstaves(); ++staffIdx) {
+            if (m2->isMeasureRepeatGroupWithNextM(staffIdx)) {
+                MScore::setError(CANNOT_SPLIT_MEASURE_REPEAT);
+                return;
+            }
+        }
         for (Score* lscore : m2->score()->scoreList()) {
             Measure* lmeasure = lscore->tick2measure(m2->tick());
             if (lmeasure) {

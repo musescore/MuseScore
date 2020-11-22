@@ -183,7 +183,7 @@ ScoreElement* Measure::treeParent() const
     // System > MMR > Measure
     if (isMMRest()) {  // this is MMR
         return system();
-    } else if (_mmRestCount < 0) {  // this is part of MMR
+    } else if (m_mmRestCount < 0) {  // this is part of MMR
         return const_cast<Measure*>(mmRest1());
     }
     // for a normal measure
@@ -210,7 +210,7 @@ ScoreElement* Measure::treeChild(int idx) const
         }
     }
 
-    Segment* seg = _segments.first();
+    Segment* seg = m_segments.first();
     while (seg) {
         if (idx == 0) {
             return seg;
@@ -220,9 +220,9 @@ ScoreElement* Measure::treeChild(int idx) const
     }
     int nstaves = score()->nstaves();
     for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-        if (_mstaves[staffIdx]->lines()) {
+        if (m_mstaves[staffIdx]->lines()) {
             if (idx == 0) {
-                return _mstaves[staffIdx]->lines();
+                return m_mstaves[staffIdx]->lines();
             }
             idx--;
         }
@@ -276,11 +276,11 @@ int Measure::treeChildCount() const
     if (isMMRest()) {
         numChildren += mmRestCount();
     }
-    numChildren += _segments.size();
+    numChildren += m_segments.size();
 
     int nstaves = score()->nstaves();
     for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-        if (_mstaves[staffIdx]->lines()) {
+        if (m_mstaves[staffIdx]->lines()) {
             numChildren++;
         }
         if (vspacerUp(staffIdx)) {

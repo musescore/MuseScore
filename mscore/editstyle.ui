@@ -118,6 +118,11 @@
       </item>
       <item>
        <property name="text">
+        <string>Measure Repeats</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
         <string>Beams</string>
        </property>
       </item>
@@ -264,7 +269,7 @@
           <property name="title">
            <string>Score</string>
           </property>
-          <layout class="QVBoxLayout" name="verticalLayout_6">
+          <layout class="QVBoxLayout" name="verticalLayout_5">
            <item>
             <layout class="QGridLayout" name="gridLayout">
              <item row="0" column="2">
@@ -277,26 +282,6 @@
                </property>
                <property name="checked">
                 <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_63">
-               <property name="text">
-                <string>Musical symbols font:</string>
-               </property>
-               <property name="buddy">
-                <cstring>musicalSymbolFont</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label_4">
-               <property name="text">
-                <string>Musical text font:</string>
-               </property>
-               <property name="buddy">
-                <cstring>musicalTextFont</cstring>
                </property>
               </widget>
              </item>
@@ -335,6 +320,39 @@
                </item>
               </widget>
              </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_4">
+               <property name="text">
+                <string>Musical text font:</string>
+               </property>
+               <property name="buddy">
+                <cstring>musicalTextFont</cstring>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="3">
+              <spacer name="horizontalSpacer_2">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_63">
+               <property name="text">
+                <string>Musical symbols font:</string>
+               </property>
+               <property name="buddy">
+                <cstring>musicalSymbolFont</cstring>
+               </property>
+              </widget>
+             </item>
              <item row="1" column="1">
               <widget class="QComboBox" name="musicalTextFont">
                <item>
@@ -364,18 +382,48 @@
                </item>
               </widget>
              </item>
-             <item row="0" column="3">
-              <spacer name="horizontalSpacer_2">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
                </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
+               <property name="text">
+                <string>Staff line thickness:</string>
                </property>
-              </spacer>
+               <property name="wordWrap">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <widget class="QToolButton" name="resetStaffLineWidth">
+               <property name="toolTip">
+                <string>Reset to default</string>
+               </property>
+               <property name="accessibleName">
+                <string>Reset 'Staff line thickness' value</string>
+               </property>
+               <property name="text">
+                <string notr="true"/>
+               </property>
+               <property name="icon">
+                <iconset resource="musescore.qrc">
+                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QDoubleSpinBox" name="staffLineWidth">
+               <property name="suffix">
+                <string extracomment="spatium unit">sp</string>
+               </property>
+               <property name="singleStep">
+                <double>0.100000000000000</double>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
@@ -2550,23 +2598,515 @@
        </layout>
       </widget>
       <widget class="QWidget" name="PageMeasure">
-       <layout class="QVBoxLayout" name="verticalLayout_4">
-        <property name="spacing">
-         <number>0</number>
-        </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
-         <widget class="QGroupBox" name="groupBox_3">
+         <widget class="QGroupBox" name="groupBox1">
           <property name="title">
            <string>Measure</string>
           </property>
-          <layout class="QGridLayout" name="gridLayout_9">
+          <layout class="QGridLayout" name="gridLayout_99">
+           <item row="9" column="1">
+            <widget class="QDoubleSpinBox" name="timesigLeftMargin">
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="18" column="2">
+            <widget class="QToolButton" name="resetSystemHeaderTimeSigDistance">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'System header with time signature distance' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="1">
+            <widget class="QDoubleSpinBox" name="minNoteDistance">
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="18" column="0">
+            <widget class="QLabel" name="label_112">
+             <property name="text">
+              <string>System header with time signature distance:</string>
+             </property>
+             <property name="indent">
+              <number>-1</number>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="2">
+            <widget class="QToolButton" name="resetNoteBarDistance">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Note to barline distance' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="9" column="0">
+            <widget class="QLabel" name="label_20">
+             <property name="text">
+              <string>Time signature left margin:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="10" column="0">
+            <widget class="QLabel" name="label_113">
+             <property name="text">
+              <string>Time signature to barline distance:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QToolButton" name="resetBarNoteDistance">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Note left margin' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="10" column="2">
+            <widget class="QToolButton" name="resetTimesigBarlineDistance">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Time signature to barline distance' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QToolButton" name="resetMinMeasureWidth">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Minimum measure width' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
            <item row="0" column="1">
-            <spacer name="horizontalSpacer_7">
+            <widget class="QDoubleSpinBox" name="measureSpacing">
+             <property name="decimals">
+              <number>3</number>
+             </property>
+             <property name="minimum">
+              <double>1.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="15" column="0">
+            <widget class="QLabel" name="label_109">
+             <property name="text">
+              <string>Key to time signature distance:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="15" column="2">
+            <widget class="QToolButton" name="resetKeyTimesigDistance">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Key to time signature distance' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="13" column="0">
+            <widget class="QLabel" name="label_94">
+             <property name="text">
+              <string>Clef to key distance:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="12" column="1">
+            <widget class="QDoubleSpinBox" name="clefBarlineDistance">
+             <property name="suffix">
+              <string extracomment="spatium unit">sp</string>
+             </property>
+             <property name="singleStep">
+              <double>0.010000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="13" column="1">
+            <widget class="QDoubleSpinBox" name="clefKeyDistance">
+             <property name="suffix">
+              <string extracomment="spatium unit">sp</string>
+             </property>
+             <property name="singleStep">
+              <double>0.010000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_12">
+             <property name="text">
+              <string>Note left margin:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="17" column="1">
+            <widget class="QDoubleSpinBox" name="systemHeaderDistance">
+             <property name="suffix">
+              <string extracomment="spatium unit">sp</string>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="label_13">
+             <property name="text">
+              <string>Note to barline distance:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QDoubleSpinBox" name="minMeasureWidth_2">
+             <property name="suffix">
+              <string extracomment="spatium unit">sp</string>
+             </property>
+             <property name="minimum">
+              <double>2.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_11">
+             <property name="text">
+              <string>Spacing (1=tight):</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QDoubleSpinBox" name="barNoteDistance">
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="0">
+            <widget class="QLabel" name="label_19">
+             <property name="text">
+              <string>Key signature left margin:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="14" column="2">
+            <widget class="QToolButton" name="resetClefTimesigDistance">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Clef to time signature distance' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="11" column="1">
+            <widget class="QDoubleSpinBox" name="clefKeyRightMargin">
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="singleStep">
+              <double>0.050000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="12" column="0">
+            <widget class="QLabel" name="label_53">
+             <property name="text">
+              <string>Clef to barline distance:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="1">
+            <widget class="QDoubleSpinBox" name="keysigLeftMargin">
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="17" column="0">
+            <widget class="QLabel" name="label_111">
+             <property name="text">
+              <string>System header distance:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="18" column="1">
+            <widget class="QDoubleSpinBox" name="systemHeaderTimeSigDistance">
+             <property name="suffix">
+              <string extracomment="spatium unit">sp</string>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="14" column="0">
+            <widget class="QLabel" name="label_108">
+             <property name="text">
+              <string>Clef to time signature distance:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="2">
+            <widget class="QToolButton" name="resetClefLeftMargin">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Clef left margin' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_61">
+             <property name="text">
+              <string>Barline to grace note distance:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="2">
+            <widget class="QToolButton" name="resetBarGraceDistance">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Barline to grace note distance' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="2">
+            <widget class="QToolButton" name="resetKeysigLeftMargin">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Key signature left margin' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="16" column="1">
+            <widget class="QDoubleSpinBox" name="keyBarlineDistance">
+             <property name="suffix">
+              <string extracomment="spatium unit">sp</string>
+             </property>
+             <property name="singleStep">
+              <double>0.010000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="9" column="2">
+            <widget class="QToolButton" name="resetTimesigLeftMargin">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Time signature left margin' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="15" column="1">
+            <widget class="QDoubleSpinBox" name="keyTimesigDistance">
+             <property name="suffix">
+              <string extracomment="spatium unit">sp</string>
+             </property>
+             <property name="singleStep">
+              <double>0.010000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="1">
+            <widget class="QDoubleSpinBox" name="barAccidentalDistance">
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QDoubleSpinBox" name="barGraceDistance">
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="1">
+            <widget class="QDoubleSpinBox" name="clefLeftMargin">
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="16" column="2">
+            <widget class="QToolButton" name="resetKeyBarlineDistance">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Key to barline distance' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="11" column="0">
+            <widget class="QLabel" name="label_21">
+             <property name="text">
+              <string>Clef/Key right margin:</string>
+             </property>
+             <property name="textFormat">
+              <enum>Qt::PlainText</enum>
+             </property>
+            </widget>
+           </item>
+           <item row="10" column="1">
+            <widget class="QDoubleSpinBox" name="timesigBarlineDistance">
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="11" column="2">
+            <widget class="QToolButton" name="resetClefKeyRightMargin">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Clef/Key right margin' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="3">
+            <spacer name="horizontalSpacer_21">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::Expanding</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -2576,940 +3116,165 @@
              </property>
             </spacer>
            </item>
-           <item row="0" column="0">
-            <layout class="QGridLayout" name="gridLayout_99">
-             <item row="13" column="1">
-              <widget class="QDoubleSpinBox" name="keyTimesigDistance">
-               <property name="suffix">
-                <string extracomment="spatium unit">sp</string>
-               </property>
-               <property name="singleStep">
-                <double>0.010000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item row="12" column="1">
-              <widget class="QDoubleSpinBox" name="clefTimesigDistance">
-               <property name="suffix">
-                <string extracomment="spatium unit">sp</string>
-               </property>
-               <property name="singleStep">
-                <double>0.010000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item row="11" column="1">
-              <widget class="QDoubleSpinBox" name="clefKeyDistance">
-               <property name="suffix">
-                <string extracomment="spatium unit">sp</string>
-               </property>
-               <property name="singleStep">
-                <double>0.010000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item row="11" column="0">
-              <widget class="QLabel" name="label_94">
-               <property name="text">
-                <string>Clef to key distance:</string>
-               </property>
-               <property name="buddy">
-                <cstring>clefKeyDistance</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="16" column="2">
-              <widget class="QToolButton" name="resetStaffLineWidth">
-               <property name="toolTip">
-                <string>Reset to default</string>
-               </property>
-               <property name="accessibleName">
-                <string>Reset 'Staff line thickness' value</string>
-               </property>
-               <property name="text">
-                <string notr="true"/>
-               </property>
-               <property name="icon">
-                <iconset resource="musescore.qrc">
-                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-               </property>
-              </widget>
-             </item>
-             <item row="9" column="2">
-              <widget class="QToolButton" name="resetClefKeyRightMargin">
-               <property name="toolTip">
-                <string>Reset to default</string>
-               </property>
-               <property name="accessibleName">
-                <string>Reset 'Clef/Key right margin' value</string>
-               </property>
-               <property name="text">
-                <string notr="true"/>
-               </property>
-               <property name="icon">
-                <iconset resource="musescore.qrc">
-                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-               </property>
-              </widget>
-             </item>
-             <item row="13" column="0">
-              <widget class="QLabel" name="label_109">
-               <property name="text">
-                <string>Key to time signature distance:</string>
-               </property>
-               <property name="buddy">
-                <cstring>keyTimesigDistance</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="8" column="2">
-              <widget class="QToolButton" name="resetTimesigLeftMargin">
-               <property name="toolTip">
-                <string>Reset to default</string>
-               </property>
-               <property name="accessibleName">
-                <string>Reset 'Time signature left margin' value</string>
-               </property>
-               <property name="text">
-                <string notr="true"/>
-               </property>
-               <property name="icon">
-                <iconset resource="musescore.qrc">
-                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-               </property>
-              </widget>
-             </item>
-             <item row="6" column="2">
-              <widget class="QToolButton" name="resetClefLeftMargin">
-               <property name="toolTip">
-                <string>Reset to default</string>
-               </property>
-               <property name="accessibleName">
-                <string>Reset 'Clef left margin' value</string>
-               </property>
-               <property name="text">
-                <string notr="true"/>
-               </property>
-               <property name="icon">
-                <iconset resource="musescore.qrc">
-                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-               </property>
-              </widget>
-             </item>
-             <item row="5" column="2">
-              <widget class="QToolButton" name="resetMinNoteDistance">
-               <property name="toolTip">
-                <string>Reset to default</string>
-               </property>
-               <property name="accessibleName">
-                <string>Reset 'Minimum note distance' value</string>
-               </property>
-               <property name="text">
-                <string notr="true"/>
-               </property>
-               <property name="icon">
-                <iconset resource="musescore.qrc">
-                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="2">
-              <widget class="QToolButton" name="resetNoteBarDistance">
-               <property name="toolTip">
-                <string>Reset to default</string>
-               </property>
-               <property name="accessibleName">
-                <string>Reset 'Note to barline distance' value</string>
-               </property>
-               <property name="text">
-                <string notr="true"/>
-               </property>
-               <property name="icon">
-                <iconset resource="musescore.qrc">
-                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-               </property>
-              </widget>
-             </item>
-             <item row="14" column="2">
-              <widget class="QToolButton" name="resetKeyBarlineDistance">
-               <property name="toolTip">
-                <string>Reset to default</string>
-               </property>
-               <property name="accessibleName">
-                <string>Reset 'Key to barline distance' value</string>
-               </property>
-               <property name="text">
-                <string notr="true"/>
-               </property>
-               <property name="icon">
-                <iconset resource="musescore.qrc">
-                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-               </property>
-              </widget>
-             </item>
-             <item row="12" column="2">
-              <widget class="QToolButton" name="resetClefTimesigDistance">
-               <property name="toolTip">
-                <string>Reset to default</string>
-               </property>
-               <property name="accessibleName">
-                <string>Reset 'Clef to time signature distance' value</string>
-               </property>
-               <property name="text">
-                <string notr="true"/>
-               </property>
-               <property name="icon">
-                <iconset resource="musescore.qrc">
-                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-               </property>
-              </widget>
-             </item>
-             <item row="14" column="1">
-              <widget class="QDoubleSpinBox" name="keyBarlineDistance">
-               <property name="suffix">
-                <string extracomment="spatium unit">sp</string>
-               </property>
-               <property name="singleStep">
-                <double>0.010000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item row="11" column="2">
-              <widget class="QToolButton" name="resetClefKeyDistance">
-               <property name="toolTip">
-                <string>Reset to default</string>
-               </property>
-               <property name="accessibleName">
-                <string>Reset 'Clef to key distance' value</string>
-               </property>
-               <property name="text">
-                <string notr="true"/>
-               </property>
-               <property name="icon">
-                <iconset resource="musescore.qrc">
-                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-               </property>
-              </widget>
-             </item>
-             <item row="13" column="2">
-              <widget class="QToolButton" name="resetKeyTimesigDistance">
-               <property name="toolTip">
-                <string>Reset to default</string>
-               </property>
-               <property name="accessibleName">
-                <string>Reset 'Key to time signature distance' value</string>
-               </property>
-               <property name="text">
-                <string notr="true"/>
-               </property>
-               <property name="icon">
-                <iconset resource="musescore.qrc">
-                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-               </property>
-              </widget>
-             </item>
-             <item row="15" column="0">
-              <widget class="QLabel" name="label_111">
-               <property name="text">
-                <string>System header distance:</string>
-               </property>
-               <property name="buddy">
-                <cstring>systemHeaderDistance</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="14" column="0">
-              <widget class="QLabel" name="label_110">
-               <property name="text">
-                <string>Key to barline distance:</string>
-               </property>
-               <property name="buddy">
-                <cstring>keyBarlineDistance</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="15" column="2">
-              <widget class="QToolButton" name="resetSystemHeaderDistance">
-               <property name="toolTip">
-                <string>Reset to default</string>
-               </property>
-               <property name="accessibleName">
-                <string>Reset 'System header distance' value</string>
-               </property>
-               <property name="text">
-                <string notr="true"/>
-               </property>
-               <property name="icon">
-                <iconset resource="musescore.qrc">
-                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-               </property>
-              </widget>
-             </item>
-             <item row="15" column="1">
-              <widget class="QDoubleSpinBox" name="systemHeaderDistance">
-               <property name="suffix">
-                <string extracomment="spatium unit">sp</string>
-               </property>
-               <property name="singleStep">
-                <double>0.100000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="5">
-              <widget class="QDoubleSpinBox" name="measureSpacing">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="decimals">
-                <number>3</number>
-               </property>
-               <property name="minimum">
-                <double>1.000000000000000</double>
-               </property>
-               <property name="singleStep">
-                <double>0.100000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item row="12" column="0">
-              <widget class="QLabel" name="label_108">
-               <property name="text">
-                <string>Clef to time signature distance:</string>
-               </property>
-               <property name="buddy">
-                <cstring>clefTimesigDistance</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="9" column="1">
-              <widget class="QDoubleSpinBox" name="clefKeyRightMargin">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="suffix">
-                <string>sp</string>
-               </property>
-               <property name="singleStep">
-                <double>0.050000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_89">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Minimum measure width:</string>
-               </property>
-               <property name="buddy">
-                <cstring>minMeasureWidth_2</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="2">
-              <widget class="QToolButton" name="resetBarAccidentalDistance">
-               <property name="toolTip">
-                <string>Reset to default</string>
-               </property>
-               <property name="accessibleName">
-                <string>Reset 'Barline to accidental distance' value</string>
-               </property>
-               <property name="text">
-                <string notr="true"/>
-               </property>
-               <property name="icon">
-                <iconset resource="musescore.qrc">
-                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-               </property>
-              </widget>
-             </item>
-             <item row="10" column="2">
-              <widget class="QToolButton" name="resetClefBarlineDistance">
-               <property name="toolTip">
-                <string>Reset to default</string>
-               </property>
-               <property name="accessibleName">
-                <string>Reset 'Clef to barline distance' value</string>
-               </property>
-               <property name="text">
-                <string notr="true"/>
-               </property>
-               <property name="icon">
-                <iconset resource="musescore.qrc">
-                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-               </property>
-              </widget>
-             </item>
-             <item row="7" column="2">
-              <widget class="QToolButton" name="resetKeysigLeftMargin">
-               <property name="toolTip">
-                <string>Reset to default</string>
-               </property>
-               <property name="accessibleName">
-                <string>Reset 'Key signature left margin' value</string>
-               </property>
-               <property name="text">
-                <string notr="true"/>
-               </property>
-               <property name="icon">
-                <iconset resource="musescore.qrc">
-                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="label_61">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Barline to grace note distance:</string>
-               </property>
-               <property name="buddy">
-                <cstring>barGraceDistance</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="2">
-              <widget class="QToolButton" name="resetMinMeasureWidth">
-               <property name="toolTip">
-                <string>Reset to default</string>
-               </property>
-               <property name="accessibleName">
-                <string>Reset 'Minimum measure width' value</string>
-               </property>
-               <property name="text">
-                <string notr="true"/>
-               </property>
-               <property name="icon">
-                <iconset resource="musescore.qrc">
-                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="2">
-              <widget class="QToolButton" name="resetBarGraceDistance">
-               <property name="toolTip">
-                <string>Reset to default</string>
-               </property>
-               <property name="accessibleName">
-                <string>Reset 'Barline to grace note distance' value</string>
-               </property>
-               <property name="text">
-                <string notr="true"/>
-               </property>
-               <property name="icon">
-                <iconset resource="musescore.qrc">
-                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="QDoubleSpinBox" name="barGraceDistance">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="suffix">
-                <string>sp</string>
-               </property>
-               <property name="singleStep">
-                <double>0.100000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="2">
-              <widget class="QToolButton" name="resetBarNoteDistance">
-               <property name="toolTip">
-                <string>Reset to default</string>
-               </property>
-               <property name="accessibleName">
-                <string>Reset 'Note left margin' value</string>
-               </property>
-               <property name="text">
-                <string notr="true"/>
-               </property>
-               <property name="icon">
-                <iconset resource="musescore.qrc">
-                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="1">
-              <widget class="QDoubleSpinBox" name="barAccidentalDistance">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="suffix">
-                <string>sp</string>
-               </property>
-               <property name="singleStep">
-                <double>0.100000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item row="16" column="1">
-              <widget class="QDoubleSpinBox" name="staffLineWidth">
-               <property name="suffix">
-                <string extracomment="spatium unit">sp</string>
-               </property>
-               <property name="singleStep">
-                <double>0.100000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="0">
-              <widget class="QLabel" name="label_102">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Barline to accidental distance:</string>
-               </property>
-               <property name="buddy">
-                <cstring>barAccidentalDistance</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="16" column="0">
-              <widget class="QLabel" name="label">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Staff line thickness:</string>
-               </property>
-               <property name="wordWrap">
-                <bool>false</bool>
-               </property>
-               <property name="buddy">
-                <cstring>staffLineWidth</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="10" column="1">
-              <widget class="QDoubleSpinBox" name="clefBarlineDistance">
-               <property name="suffix">
-                <string extracomment="spatium unit">sp</string>
-               </property>
-               <property name="singleStep">
-                <double>0.010000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item row="10" column="0">
-              <widget class="QLabel" name="label_53">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Clef to barline distance:</string>
-               </property>
-               <property name="buddy">
-                <cstring>clefBarlineDistance</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="9" column="0">
-              <widget class="QLabel" name="label_21">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Clef/Key right margin:</string>
-               </property>
-               <property name="textFormat">
-                <enum>Qt::PlainText</enum>
-               </property>
-               <property name="buddy">
-                <cstring>clefKeyRightMargin</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="8" column="1">
-              <widget class="QDoubleSpinBox" name="timesigLeftMargin">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="suffix">
-                <string>sp</string>
-               </property>
-               <property name="singleStep">
-                <double>0.100000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QDoubleSpinBox" name="barNoteDistance">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="suffix">
-                <string>sp</string>
-               </property>
-               <property name="singleStep">
-                <double>0.100000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="1">
-              <widget class="QDoubleSpinBox" name="noteBarDistance">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="suffix">
-                <string>sp</string>
-               </property>
-               <property name="singleStep">
-                <double>0.100000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item row="8" column="0">
-              <widget class="QLabel" name="label_20">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Time signature left margin:</string>
-               </property>
-               <property name="buddy">
-                <cstring>timesigLeftMargin</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="7" column="0">
-              <widget class="QLabel" name="label_19">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Key signature left margin:</string>
-               </property>
-               <property name="buddy">
-                <cstring>keysigLeftMargin</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label_12">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Note left margin:</string>
-               </property>
-               <property name="buddy">
-                <cstring>barNoteDistance</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="0">
-              <widget class="QLabel" name="label_13">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Note to barline distance:</string>
-               </property>
-               <property name="buddy">
-                <cstring>noteBarDistance</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="7" column="1">
-              <widget class="QDoubleSpinBox" name="keysigLeftMargin">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="suffix">
-                <string>sp</string>
-               </property>
-               <property name="singleStep">
-                <double>0.100000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item row="5" column="1">
-              <widget class="QDoubleSpinBox" name="minNoteDistance">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="suffix">
-                <string>sp</string>
-               </property>
-               <property name="singleStep">
-                <double>0.100000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item row="6" column="1">
-              <widget class="QDoubleSpinBox" name="clefLeftMargin">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="suffix">
-                <string>sp</string>
-               </property>
-               <property name="singleStep">
-                <double>0.100000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item row="5" column="0">
-              <widget class="QLabel" name="label_14">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Minimum note distance:</string>
-               </property>
-               <property name="buddy">
-                <cstring>minNoteDistance</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QDoubleSpinBox" name="minMeasureWidth_2">
-               <property name="suffix">
-                <string extracomment="spatium unit">sp</string>
-               </property>
-               <property name="minimum">
-                <double>2.000000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item row="6" column="0">
-              <widget class="QLabel" name="label_18">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Clef left margin:</string>
-               </property>
-               <property name="buddy">
-                <cstring>clefLeftMargin</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="4">
-              <widget class="QLabel" name="label_11">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Spacing (1=tight):</string>
-               </property>
-               <property name="buddy">
-                <cstring>measureSpacing</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="6">
-              <widget class="QToolButton" name="resetMeasureSpacing">
-               <property name="toolTip">
-                <string>Reset to default</string>
-               </property>
-               <property name="accessibleName">
-                <string>Reset 'Spacing' value</string>
-               </property>
-               <property name="text">
-                <string notr="true"/>
-               </property>
-               <property name="icon">
-                <iconset resource="musescore.qrc">
-                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-               </property>
-              </widget>
-             </item>
-             <item row="15" column="4">
-              <widget class="QLabel" name="label_112">
-               <property name="text">
-                <string>System header with time signature distance:</string>
-               </property>
-               <property name="indent">
-                <number>-1</number>
-               </property>
-               <property name="buddy">
-                <cstring>systemHeaderTimeSigDistance</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="3">
-              <spacer name="horizontalSpacer_25">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item row="15" column="6">
-              <widget class="QToolButton" name="resetSystemHeaderTimeSigDistance">
-               <property name="toolTip">
-                <string>Reset to default</string>
-               </property>
-               <property name="accessibleName">
-                <string>Reset 'System header with time signature distance' value</string>
-               </property>
-               <property name="text">
-                <string notr="true"/>
-               </property>
-               <property name="icon">
-                <iconset resource="musescore.qrc">
-                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-               </property>
-              </widget>
-             </item>
-             <item row="8" column="4">
-              <widget class="QLabel" name="label_113">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Time signature to barline distance:</string>
-               </property>
-               <property name="buddy">
-                <cstring>timesigBarlineDistance</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="15" column="5">
-              <widget class="QDoubleSpinBox" name="systemHeaderTimeSigDistance">
-               <property name="suffix">
-                <string extracomment="spatium unit">sp</string>
-               </property>
-               <property name="singleStep">
-                <double>0.100000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item row="8" column="6">
-              <widget class="QToolButton" name="resetTimesigBarlineDistance">
-               <property name="toolTip">
-                <string>Reset to default</string>
-               </property>
-               <property name="accessibleName">
-                <string>Reset 'Time signature to barline distance' value</string>
-               </property>
-               <property name="text">
-                <string notr="true"/>
-               </property>
-               <property name="icon">
-                <iconset resource="musescore.qrc">
-                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-               </property>
-              </widget>
-             </item>
-             <item row="8" column="5">
-              <widget class="QDoubleSpinBox" name="timesigBarlineDistance">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="suffix">
-                <string>sp</string>
-               </property>
-               <property name="singleStep">
-                <double>0.100000000000000</double>
-               </property>
-              </widget>
-             </item>
-            </layout>
+           <item row="13" column="2">
+            <widget class="QToolButton" name="resetClefKeyDistance">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Clef to key distance' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="16" column="0">
+            <widget class="QLabel" name="label_110">
+             <property name="text">
+              <string>Key to barline distance:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="label_102">
+             <property name="text">
+              <string>Barline to accidental distance:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="14" column="1">
+            <widget class="QDoubleSpinBox" name="clefTimesigDistance">
+             <property name="suffix">
+              <string extracomment="spatium unit">sp</string>
+             </property>
+             <property name="singleStep">
+              <double>0.010000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="2">
+            <widget class="QToolButton" name="resetMinNoteDistance">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Minimum note distance' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="2">
+            <widget class="QToolButton" name="resetBarAccidentalDistance">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Barline to accidental distance' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="0">
+            <widget class="QLabel" name="label_18">
+             <property name="text">
+              <string>Clef left margin:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1">
+            <widget class="QDoubleSpinBox" name="noteBarDistance">
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="0">
+            <widget class="QLabel" name="label_14">
+             <property name="text">
+              <string>Minimum note distance:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="17" column="2">
+            <widget class="QToolButton" name="resetSystemHeaderDistance">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'System header distance' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QToolButton" name="resetMeasureSpacing">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Spacing' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_89">
+             <property name="text">
+              <string>Minimum measure width:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="12" column="2">
+            <widget class="QToolButton" name="resetClefBarlineDistance">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Clef to barline distance' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
-        </item>
-        <item>
-         <spacer name="verticalSpacer_11">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
         </item>
        </layout>
       </widget>
@@ -4312,7 +4077,7 @@
              </property>
              <property name="icon">
               <iconset>
-               <normaloff>data/icons/edit-reset.svg</normaloff>data/icons/edit-reset.svg</iconset>
+               <normaloff>../../.designer/backup/data/icons/edit-reset.svg</normaloff>../../.designer/backup/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -4343,7 +4108,7 @@
              </property>
              <property name="icon">
               <iconset>
-               <normaloff>data/icons/edit-reset.svg</normaloff>data/icons/edit-reset.svg</iconset>
+               <normaloff>../../.designer/backup/data/icons/edit-reset.svg</normaloff>../../.designer/backup/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -4383,7 +4148,7 @@
              </property>
              <property name="icon">
               <iconset>
-               <normaloff>data/icons/edit-reset.svg</normaloff>data/icons/edit-reset.svg</iconset>
+               <normaloff>../../.designer/backup/data/icons/edit-reset.svg</normaloff>../../.designer/backup/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -4414,7 +4179,7 @@
              </property>
              <property name="icon">
               <iconset>
-               <normaloff>data/icons/edit-reset.svg</normaloff>data/icons/edit-reset.svg</iconset>
+               <normaloff>../../.designer/backup/data/icons/edit-reset.svg</normaloff>../../.designer/backup/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -4445,7 +4210,7 @@
              </property>
              <property name="icon">
               <iconset>
-               <normaloff>data/icons/edit-reset.svg</normaloff>data/icons/edit-reset.svg</iconset>
+               <normaloff>../../.designer/backup/data/icons/edit-reset.svg</normaloff>../../.designer/backup/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -4488,7 +4253,7 @@
                 </property>
                 <property name="icon">
                  <iconset>
-                  <normaloff>data/icons/edit-reset.svg</normaloff>data/icons/edit-reset.svg</iconset>
+                  <normaloff>../../.designer/backup/data/icons/edit-reset.svg</normaloff>../../.designer/backup/data/icons/edit-reset.svg</iconset>
                 </property>
                </widget>
               </item>
@@ -4522,7 +4287,7 @@
                 </property>
                 <property name="icon">
                  <iconset>
-                  <normaloff>data/icons/edit-reset.svg</normaloff>data/icons/edit-reset.svg</iconset>
+                  <normaloff>../../.designer/backup/data/icons/edit-reset.svg</normaloff>../../.designer/backup/data/icons/edit-reset.svg</iconset>
                 </property>
                </widget>
               </item>
@@ -4544,6 +4309,200 @@
            </size>
           </property>
          </spacer>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="PageMeasureRepeats">
+       <layout class="QGridLayout" name="gridLayout_48">
+        <item row="0" column="0">
+         <widget class="QGroupBox" name="groupBox_2">
+          <property name="title">
+           <string>Measure Repeats</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_47">
+           <item row="3" column="0" colspan="2">
+            <widget class="QCheckBox" name="fourMeasureRepeatShowExtenders">
+             <property name="text">
+              <string>Show extenders on 4-measure repeats</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_148">
+             <property name="text">
+              <string>Number position:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="2">
+            <widget class="QToolButton" name="resetFourMeasureRepeatShowExtenders">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Time signature to barline distance' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QToolButton" name="resetMeasureRepeatNumberPos">
+             <property name="text">
+              <string>...</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>data/icons/edit-reset.svg</normaloff>data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QToolButton" name="resetOneMeasureRepeatShow1">
+             <property name="text">
+              <string>...</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>data/icons/edit-reset.svg</normaloff>data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0" colspan="2">
+            <widget class="QCheckBox" name="oneMeasureRepeatShow1">
+             <property name="text">
+              <string>Show &quot;1&quot; on 1-measure repeats</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <spacer name="verticalSpacer_11">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="1" column="1">
+            <widget class="QDoubleSpinBox" name="measureRepeatNumberPos">
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="minimum">
+              <double>-99.989999999999995</double>
+             </property>
+             <property name="singleStep">
+              <double>0.500000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="3">
+            <spacer name="horizontalSpacer_19">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="4" column="0" colspan="3">
+            <widget class="QGroupBox" name="mrNumberSeries">
+             <property name="title">
+              <string>Number consecutive measure repeats</string>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_9">
+              <item row="1" column="0">
+               <widget class="QCheckBox" name="mrNumberSeriesWithParentheses">
+                <property name="text">
+                 <string>With parentheses</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QToolButton" name="resetMRNumberSeriesWithParentheses">
+                <property name="text">
+                 <string>...</string>
+                </property>
+                <property name="icon">
+                 <iconset>
+                  <normaloff>data/icons/edit-reset.svg</normaloff>data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0" colspan="2">
+               <layout class="QHBoxLayout" name="horizontalLayout_7">
+                <item>
+                 <widget class="QLabel" name="label_153">
+                  <property name="text">
+                   <string>Every</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QSpinBox" name="mrNumberEveryXMeasures">
+                  <property name="minimum">
+                   <number>1</number>
+                  </property>
+                  <property name="maximum">
+                   <number>10</number>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_154">
+                  <property name="text">
+                   <string>measures</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_7">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QToolButton" name="resetMRNumberEveryXMeasures">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                  <property name="icon">
+                   <iconset>
+                    <normaloff>data/icons/edit-reset.svg</normaloff>data/icons/edit-reset.svg</iconset>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -11037,8 +10996,6 @@
   <tabstop>radioKeySigNatAfter</tabstop>
   <tabstop>minMeasureWidth_2</tabstop>
   <tabstop>resetMinMeasureWidth</tabstop>
-  <tabstop>measureSpacing</tabstop>
-  <tabstop>resetMeasureSpacing</tabstop>
   <tabstop>barNoteDistance</tabstop>
   <tabstop>resetBarNoteDistance</tabstop>
   <tabstop>barGraceDistance</tabstop>
@@ -11055,8 +11012,6 @@
   <tabstop>resetKeysigLeftMargin</tabstop>
   <tabstop>timesigLeftMargin</tabstop>
   <tabstop>resetTimesigLeftMargin</tabstop>
-  <tabstop>timesigBarlineDistance</tabstop>
-  <tabstop>resetTimesigBarlineDistance</tabstop>
   <tabstop>clefKeyRightMargin</tabstop>
   <tabstop>resetClefKeyRightMargin</tabstop>
   <tabstop>clefBarlineDistance</tabstop>
@@ -11071,10 +11026,6 @@
   <tabstop>resetKeyBarlineDistance</tabstop>
   <tabstop>systemHeaderDistance</tabstop>
   <tabstop>resetSystemHeaderDistance</tabstop>
-  <tabstop>systemHeaderTimeSigDistance</tabstop>
-  <tabstop>resetSystemHeaderTimeSigDistance</tabstop>
-  <tabstop>staffLineWidth</tabstop>
-  <tabstop>resetStaffLineWidth</tabstop>
   <tabstop>showRepeatBarTips</tabstop>
   <tabstop>resetShowRepeatBarTips</tabstop>
   <tabstop>showStartBarlineSingle</tabstop>
@@ -11362,6 +11313,38 @@
     <hint type="destinationlabel">
      <x>395</x>
      <y>16</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mrNumberSeries</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>oneMeasureRepeatShow1</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>270</x>
+     <y>155</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>257</x>
+     <y>100</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mrNumberSeries</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>resetOneMeasureRepeatShow1</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>396</x>
+     <y>186</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>488</x>
+     <y>98</y>
     </hint>
    </hints>
   </connection>

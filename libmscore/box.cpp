@@ -15,7 +15,7 @@
 #include "text.h"
 #include "score.h"
 #include "barline.h"
-#include "repeat.h"
+#include "measurerepeat.h"
 #include "symbol.h"
 #include "system.h"
 #include "image.h"

@@ -31,7 +31,7 @@
 #include "slur.h"
 #include "tie.h"
 #include "stafftext.h"
-#include "repeat.h"
+#include "measurerepeat.h"
 #include "articulation.h"
 #include "arpeggio.h"
 #include "durationtype.h"
@@ -1102,7 +1102,7 @@ void Score::updateVelo()
 }
 
 //---------------------------------------------------------
-//   renderStaffSegment
+//   renderStaffChunk
 //---------------------------------------------------------
 
 void MidiRenderer::renderStaffChunk(const Chunk& chunk, EventMap* events, const StaffContext& sctx)
@@ -1114,9 +1114,15 @@ void MidiRenderer::renderStaffChunk(const Chunk& chunk, EventMap* events, const 
     Measure const* lastMeasure = start->prevMeasure();
 
     for (Measure const* m = start; m != end; m = m->nextMeasure()) {
-        if (lastMeasure && m->isRepeatMeasure(sctx.staff)) {
-            int offset = (m->tick() - lastMeasure->tick()).ticks();
-            collectMeasureEvents(events, lastMeasure, sctx, tickOffset + offset);
+        int staffIdx = sctx.staff->idx();
+        if (m->isMeasureRepeatGroup(staffIdx)) {
+            MeasureRepeat* mr = m->measureRepeatElement(staffIdx);
+            Measure const* playMeasure = lastMeasure;
+            for (int i = m->measureRepeatCount(staffIdx); i < mr->numMeasures() && playMeasure->prevMeasure(); ++i) {
+                playMeasure = playMeasure->prevMeasure();
+            }
+            int offset = (m->tick() - playMeasure->tick()).ticks();
+            collectMeasureEvents(events, playMeasure, sctx, tickOffset + offset);
         } else {
             lastMeasure = m;
             collectMeasureEvents(events, lastMeasure, sctx, tickOffset);
@@ -2567,7 +2573,7 @@ bool MidiRenderer::canBreakChunk(const Measure* last)
     // chunk at repeat measure.
     if (const Measure* next = last->nextMeasure()) {
         for (const Staff* staff : score->staves()) {
-            if (next->isRepeatMeasure(staff)) {
+            if (next->isMeasureRepeatGroup(staff->idx())) {
                 return false;
             }
         }

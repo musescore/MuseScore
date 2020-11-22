@@ -43,6 +43,7 @@
 #include "libmscore/lyrics.h"
 #include "libmscore/marker.h"
 #include "libmscore/measure.h"
+#include "libmscore/measurerepeat.h"
 #include "libmscore/mscore.h"
 #include "libmscore/note.h"
 #include "libmscore/part.h"
@@ -1376,6 +1377,10 @@ void MusicXMLParserPass2::initPartState(const QString& partId)
     _figBass = 0;
     _multiMeasureRestCount = -1;
     _extendedLyrics.init();
+
+    _nstaves = _pass1.getPart(partId)->nstaves();
+    _measureRepeatNumMeasures.assign(_nstaves, 0);
+    _measureRepeatCount.assign(_nstaves, 0);
 }
 
 //---------------------------------------------------------
@@ -1948,8 +1953,7 @@ static void addGraceChordsBefore(Chord* c, GraceChordList& gcl)
  Parse the /score-partwise/part/measure node.
  */
 
-void MusicXMLParserPass2::measure(const QString& partId,
-                                  const Fraction time)
+void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
 {
     Q_ASSERT(_e.isStartElement() && _e.name() == "measure");
     QString number = _e.attributes().value("number").toString();
@@ -2111,16 +2115,60 @@ void MusicXMLParserPass2::measure(const QString& partId,
     const Key key = _score->staff(scoreRelStaff)->keySigEvent(time).key();
     markUserAccidentals(scoreRelStaff, part->nstaves(), key, measure, alterMap);
 
-    // multi-measure rest handling
+    // multimeasure rest handling
     if (getAndDecMultiMeasureRestCount() == 0) {
         // measure is first measure after a multi-measure rest
         measure->setBreakMultiMeasureRest(true);
     }
 
+    setMeasureRepeats(scoreRelStaff, measure);
+
     // prevent tuplets from crossing measure boundaries
     resetTuplets(tuplets);
 
     Q_ASSERT(_e.isEndElement() && _e.name() == "measure");
+}
+
+//---------------------------------------------------------
+//   setMeasureRepeats
+//---------------------------------------------------------
+
+/**
+ Measure repeat handling, based on values set in measureStyle().
+ */
+
+void MusicXMLParserPass2::setMeasureRepeats(const int scoreRelStaff, Measure* measure)
+{
+    for (int i = 0; i < _nstaves; ++i) {
+        int staffIdx = scoreRelStaff + i;
+        int track = staff2track(staffIdx);
+        if (_measureRepeatNumMeasures[i]) {
+            // delete anything already added to measure
+            _score->makeGap(measure->first(SegmentType::ChordRest), track, measure->stretchedLen(_score->staff(staffIdx)), 0);
+
+            if (_measureRepeatCount[i] == _measureRepeatNumMeasures[i]) {
+                // starting a new one, not continuing a multi-measure group
+                _measureRepeatCount[i] = 1;
+            } else {
+                // continue building measure repeat group
+                ++_measureRepeatCount[i];
+            }
+
+            if (((_measureRepeatNumMeasures[i] % 2) && (_measureRepeatCount[i] - 1 == _measureRepeatNumMeasures[i] / 2))
+                || (!(_measureRepeatNumMeasures[i] % 2) && (_measureRepeatCount[i] == _measureRepeatNumMeasures[i] / 2))) {
+                // MeasureRepeat element goes in center measure of group if odd-numbered,
+                // or last measure of first half of group if even-numbered
+                _score->addMeasureRepeat(measure->tick(), track, _measureRepeatNumMeasures[i]);
+            } else {
+                // measures that are part of group but do not contain the element have undisplayed whole rests
+                _score->addRest(measure->tick(), track, TDuration(TDuration::DurationType::V_MEASURE), 0);
+            }
+        } else {
+            // measureStyle() hit a "stop" element most recently
+            _measureRepeatCount[i] = 0;
+        }
+        measure->setMeasureRepeatCount(_measureRepeatCount[i], staffIdx);
+    }
 }
 
 //---------------------------------------------------------
@@ -2149,7 +2197,7 @@ void MusicXMLParserPass2::attributes(const QString& partId, Measure* measure, co
         } else if (_e.name() == "key") {
             key(partId, measure, tick);
         } else if (_e.name() == "measure-style") {
-            measureStyle(measure);
+            measureStyle(partId, measure);
         } else if (_e.name() == "staff-details") {
             staffDetails(partId);
         } else if (_e.name() == "time") {
@@ -2309,12 +2357,28 @@ void MusicXMLParserPass2::staffTuning(StringData* t)
 
 /**
  Parse the /score-partwise/part/measure/measure-style node.
- Initializes the "in multi-measure rest" state
+ Initializes the "in multi-measure rest" state and the "in measure repeat" state
  */
 
-void MusicXMLParserPass2::measureStyle(Measure* measure)
+void MusicXMLParserPass2::measureStyle(const QString& partId, Measure* measure)
 {
     Q_ASSERT(_e.isStartElement() && _e.name() == "measure-style");
+
+    QStringRef staffNumberString = _e.attributes().value("number");
+
+    // by default, apply to all staves in part
+    int startStaff = 0;
+    int endStaff = _nstaves - 1;
+
+    // but if a staff number was specified in the measure-style tag, use that instead
+    if (!staffNumberString.isEmpty()) {
+        int staffNumber = staffNumberString.toInt();
+        if (staffNumber < 1 || staffNumber > _nstaves) {
+            _logger->logError(QString("measure-style staff number can only be int from 1 to _nstaves."));
+        }
+        --staffNumber; // convert to 0-based
+        endStaff = startStaff = staffNumber;
+    }
 
     while (_e.readNextStartElement()) {
         if (_e.name() == "multiple-rest") {
@@ -2325,6 +2389,22 @@ void MusicXMLParserPass2::measureStyle(Measure* measure)
                 measure->setBreakMultiMeasureRest(true);
             } else {
                 _logger->logError(QString("multiple-rest %1 not supported").arg(multipleRest), &_e);
+            }
+        } else if (_e.name() == "measure-repeat") {
+            QString startStop = _e.attributes().value("type").toString();
+            // note: possible "slashes" attribute is either redundant with numMeasures or not supported by MuseScore, so ignored either way
+            if (startStop == "start") {
+                int numMeasures = _e.readElementText().toInt();
+                for (int i = startStaff; i <= endStaff; i++) {
+                    _measureRepeatNumMeasures[i] = numMeasures;
+                    _measureRepeatCount[i] = numMeasures;   // measure repeat(s) haven't actually started yet in current measure, so this is a lie,
+                                                            // but if we pretend it's true then everything is set for the next measure to restart
+                }
+            } else { // "stop"
+                for (int i = startStaff; i <= endStaff; i++) {
+                    _measureRepeatNumMeasures[i] = 0;
+                }
+                _e.skipCurrentElement(); // since not reading any text inside stop tag, we are done with this element
             }
         } else {
             skipLogCurrElem();
