@@ -87,6 +87,7 @@ QT5_WRAP_UI (ui_headers
       note_groups.ui resourceManager.ui stafftypetemplates.ui
       startcenter.ui scorePreview.ui scoreBrowser.ui templateBrowser.ui
       breaksdialog.ui
+      exportdialog.ui
       toolbarEditor.ui workspacedialog.ui
 
       palette/createPalette.ui
@@ -161,11 +162,11 @@ add_library(mscoreapp STATIC
       abstractdialog.h accessibletoolbutton.h albummanager.h
       analyse.h articulationprop.h
       bendcanvas.h breaksdialog.h
-      chordview.h click.h continuouspanel.h downloadUtils.h
+      chordview.h click.h clickableLabel.h continuouspanel.h downloadUtils.h
       drumroll.h drumtools.h drumview.h editdrumset.h
       editinstrument.h editpitch.h editraster.h editstaff.h
       editstafftype.h editstringdata.h editstyle.h enableplayforwidget.h
-      exampleview.h excerptsdialog.h extension.h
+      exampleview.h excerptsdialog.h exportdialog.h extension.h
       file.h fotomode.h fretcanvas.h globals.h greendotbutton.h
       harmonycanvas.h harmonyedit.h help.h helpBrowser.h icons.h
       instrdialog.h instrwidget.h
@@ -193,6 +194,7 @@ add_library(mscoreapp STATIC
       stringutils.h stringutils.cpp
       scoreview.cpp editharmony.cpp editfiguredbass.cpp events.cpp
       editinstrument.cpp editstyle.cpp
+      clickableLabel.cpp
       icons.cpp
       instrdialog.cpp instrwidget.cpp
       debugger/debugger.cpp menus.cpp
@@ -208,6 +210,7 @@ add_library(mscoreapp STATIC
       editdrumset.cpp editstaff.cpp
       timesigproperties.cpp newwizard.cpp transposedialog.cpp
       excerptsdialog.cpp metaedit.cpp zoombox.cpp realizeharmonydialog.cpp
+      exportdialog.cpp
       exportaudio.cpp
       synthcontrol.cpp drumroll.cpp piano.cpp
       drumview.cpp scoretab.cpp keyedit.cpp harmonyedit.cpp

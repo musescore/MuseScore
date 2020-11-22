@@ -60,6 +60,7 @@ class XmlWriter;
 class ZoomBox;
 class NewWizard;
 class ExcerptsDialog;
+class ExportDialog;
 class SynthControl;
 class PianorollEditor;
 class DrumrollEditor;
@@ -287,6 +288,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QMenu* menuDebug;
 #endif
       AlbumManager* albumManager           { 0 };
+      ExportDialog* exportDialog           { 0 };
 
       QWidget* _searchDialog               { 0 };
       QComboBox* searchCombo;
@@ -450,6 +452,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void removeSessionFile();
       void editChordStyle();
       void startExcerptsDialog();
+      void showExportDialog(const QString& type = "");
       void initOsc();
       void editRaster();
       void showPianoKeyboard(bool);
@@ -716,8 +719,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void endCmd(bool undoRedo);
       void endCmd() override { endCmd(false); };
       void printFile();
-      void exportFile();
-      bool exportParts();
       virtual bool saveAs(Score*, bool saveCopy, const QString& path, const QString& ext);
       QString saveFilename(QString fn);
       bool savePdf(const QString& saveName);
