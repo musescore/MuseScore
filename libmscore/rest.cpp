@@ -506,11 +506,11 @@ int Rest::computeLineOffset(int lines)
                                 line = nline - extraOffsetForFewLines;
                                 if (note->accidentalType() != AccidentalType::NONE) {
                                     line--;
-                                } else if (!up && nline >= line) {
-                                    line = nline + extraOffsetForFewLines;
-                                    if (note->accidentalType() != AccidentalType::NONE) {
-                                        line++;
-                                    }
+                                }
+                            } else if (!up && nline >= line) {
+                                line = nline + extraOffsetForFewLines;
+                                if (note->accidentalType() != AccidentalType::NONE) {
+                                    line++;
                                 }
                             }
                         }
