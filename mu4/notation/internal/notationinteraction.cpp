@@ -799,7 +799,7 @@ bool NotationInteraction::isDropAccepted(const QPointF& pos, Qt::KeyboardModifie
     case ElementType::INSTRUMENT_CHANGE:
     case ElementType::REHEARSAL_MARK:
     case ElementType::JUMP:
-    case ElementType::REPEAT_MEASURE:
+    case ElementType::MEASURE_REPEAT:
     case ElementType::ICON:
     case ElementType::CHORD:
     case ElementType::SPACER:
@@ -951,7 +951,7 @@ bool NotationInteraction::drop(const QPointF& pos, Qt::KeyboardModifiers modifie
     case ElementType::INSTRUMENT_CHANGE:
     case ElementType::REHEARSAL_MARK:
     case ElementType::JUMP:
-    case ElementType::REPEAT_MEASURE:
+    case ElementType::MEASURE_REPEAT:
     case ElementType::ICON:
     case ElementType::NOTE:
     case ElementType::CHORD:
