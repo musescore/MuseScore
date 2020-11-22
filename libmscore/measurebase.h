@@ -70,6 +70,7 @@ class MeasureBase : public Element
     Fraction _tick         { Fraction(0, 1) };
     int _no                { 0 };         ///< Measure number, counting from zero
     int _noOffset          { 0 };         ///< Offset to measure number
+    qreal m_oldWidth       { 0 };         ///< Used to restore layout during recalculations in Score::collectSystem()
 
 protected:
     Fraction _len  { Fraction(0, 1) };    ///< actual length of measure
@@ -180,6 +181,9 @@ public:
 
     int index() const;
     int measureIndex() const;
+
+    void setOldWidth(qreal n) { m_oldWidth = n; }
+    qreal oldWidth() const { return m_oldWidth; }
 };
 }     // namespace Ms
 #endif

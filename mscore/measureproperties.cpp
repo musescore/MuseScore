@@ -21,7 +21,7 @@
 #include "libmscore/measure.h"
 #include "libmscore/sig.h"
 #include "libmscore/score.h"
-#include "libmscore/repeat.h"
+#include "libmscore/measurerepeat.h"
 #include "libmscore/undo.h"
 #include "libmscore/range.h"
 #include "musescore.h"

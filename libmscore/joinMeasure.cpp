@@ -27,6 +27,14 @@ void Score::cmdJoinMeasure(Measure* m1, Measure* m2)
     if (!m1 || !m2) {
         return;
     }
+
+    for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+        if (m1->isMeasureRepeatGroupWithPrevM(staffIdx) || m2->isMeasureRepeatGroupWithNextM(staffIdx)) {
+            MScore::setError(CANNOT_SPLIT_MEASURE_REPEAT);
+            return;
+        }
+    }
+
     if (m1->isMMRest()) {
         m1 = m1->mmRestFirst();
     }

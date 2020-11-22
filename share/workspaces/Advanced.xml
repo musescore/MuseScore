@@ -2165,9 +2165,20 @@
         <mag>0.65</mag>
         <grid>1</grid>
         <moreElements>0</moreElements>
-        <Cell name="Repeat last bar">
-          <RepeatMeasure>
-            </RepeatMeasure>
+        <Cell name="One-measure repeat">
+          <MeasureRepeat>
+            <subtype>1</subtype>
+            </MeasureRepeat>
+          </Cell>
+        <Cell name="Two-measure repeat">
+          <MeasureRepeat>
+            <subtype>2</subtype>
+            </MeasureRepeat>
+          </Cell>
+        <Cell name="Four-measure repeat">
+          <MeasureRepeat>
+            <subtype>4</subtype>
+            </MeasureRepeat>
           </Cell>
         <Cell name="Segno">
           <Marker>
@@ -3183,6 +3194,12 @@
             <subtype>section</subtype>
             </LayoutBreak>
           </Cell>
+        <Cell name="Group measures">
+          <mag>1.2</mag>
+          <LayoutBreak>
+            <subtype>nobreak</subtype>
+            </LayoutBreak>
+        </Cell>
         <Cell name="Staff spacer down">
           <mag>0.7</mag>
           <Spacer>

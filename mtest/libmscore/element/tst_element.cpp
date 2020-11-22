@@ -67,7 +67,7 @@ void TestElement::testIds()
         ElementType::LAYOUT_BREAK,
         ElementType::MARKER,
         ElementType::JUMP,
-        ElementType::REPEAT_MEASURE,
+        ElementType::MEASURE_REPEAT,
         ElementType::ICON,
         ElementType::NOTE,
         ElementType::SYMBOL,

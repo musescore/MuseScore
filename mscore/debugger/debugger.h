@@ -26,6 +26,7 @@
 #include "ui_page.h"
 #include "ui_text.h"
 #include "ui_measure.h"
+#include "ui_measurerepeat.h"
 #include "ui_segment.h"
 #include "ui_chord.h"
 #include "ui_chordrest.h"
@@ -299,6 +300,25 @@ private slots:
 
 public:
     RestView();
+    virtual void setElement(Element*);
+};
+
+//---------------------------------------------------------
+//   MeasureRepeatView
+//---------------------------------------------------------
+
+class MeasureRepeatView : public ShowElementBase
+{
+    Q_OBJECT
+
+    Ui::ChordRestBase crb;
+    Ui::MeasureRepeat mrb;
+
+private slots:
+    void firstOfGroupClicked();
+
+public:
+    MeasureRepeatView();
     virtual void setElement(Element*);
 };
 

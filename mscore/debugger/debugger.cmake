@@ -24,6 +24,7 @@ set (DEBUGGER_UI
     ${CMAKE_CURRENT_LIST_DIR}/line.ui
     ${CMAKE_CURRENT_LIST_DIR}/lyrics.ui
     ${CMAKE_CURRENT_LIST_DIR}/measure.ui
+    ${CMAKE_CURRENT_LIST_DIR}/measurerepeat.ui
     ${CMAKE_CURRENT_LIST_DIR}/note.ui
     ${CMAKE_CURRENT_LIST_DIR}/page.ui
     ${CMAKE_CURRENT_LIST_DIR}/rest.ui

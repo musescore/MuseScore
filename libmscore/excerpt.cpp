@@ -806,6 +806,15 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
         Staff* srcStaff = oscore->staff(map[dstStaffIdx]);
         Staff* dstStaff = score->staff(dstStaffIdx);
 
+        Measure* m = oscore->firstMeasure();
+        Measure* nm = score->firstMeasure();
+
+        while (m && nm) {
+            nm->setMeasureRepeatCount(m->measureRepeatCount(srcStaff->idx()), dstStaffIdx);
+            m = m->nextMeasure();
+            nm = nm->nextMeasure();
+        }
+
         if (srcStaff->primaryStaff()) {
             int span = srcStaff->barLineSpan();
             int sIdx = srcStaff->idx();
@@ -899,6 +908,8 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
     int dstStaffIdx = dstStaff->idx();
 
     for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
+        m->setMeasureRepeatCount(m->measureRepeatCount(srcStaffIdx), dstStaffIdx);
+
         int sTrack = srcStaffIdx * VOICES;
         int eTrack = sTrack + VOICES;
         for (int srcTrack = sTrack; srcTrack < eTrack; ++srcTrack) {
@@ -1152,6 +1163,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
 
     for (Measure* m = m1; m && (m != m2); m = m->nextMeasure()) {
         Measure* nm = score->tick2measure(m->tick());
+        nm->setMeasureRepeatCount(m->measureRepeatCount(srcStaffIdx), dstStaffIdx);
         for (int srcTrack : map.keys()) {
             TupletMap tupletMap;          // tuplets cannot cross measure boundaries
             int dstTrack = map.value(srcTrack);

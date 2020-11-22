@@ -255,8 +255,9 @@ private:
     void measChordNote(/*, const MxmlPhase2Note note, ChordRest& currChord */);
     void measChordFlush(/*, ChordRest& currChord */);
     void measure(const QString& partId, const Fraction time);
+    void setMeasureRepeats(const int scoreRelStaff, Measure* measure);
     void attributes(const QString& partId, Measure* measure, const Fraction& tick);
-    void measureStyle(Measure* measure);
+    void measureStyle(const QString& partId, Measure* measure);
     void barline(const QString& partId, Measure* measure, const Fraction& tick);
     void key(const QString& partId, Measure* measure, const Fraction& tick);
     void clef(const QString& partId, Measure* measure, const Fraction& tick);
@@ -324,6 +325,10 @@ private:
     FiguredBass* _figBass;                        ///< Current figured bass element (to attach to next note)
     int _multiMeasureRestCount;
     MusicXmlLyricsExtend _extendedLyrics;         ///< Lyrics with "extend" requiring fixup
+
+    int _nstaves;                                 ///< Number of staves in current part
+    std::vector<int> _measureRepeatNumMeasures;
+    std::vector<int> _measureRepeatCount;
 };
 
 //---------------------------------------------------------

@@ -33,6 +33,7 @@ import "bends"
 import "tremolobars"
 import "mmrests"
 import "tremolos"
+import "measurerepeats"
 
 InspectorSectionView {
     id: root
@@ -121,14 +122,14 @@ InspectorSectionView {
             model: root.model ? root.model.modelByType(Inspector.TYPE_ACCIDENTAL) : null
             onPopupContentHeightChanged: updateContentHeight(popupContentHeight)
         }
-		
+
         FretDiagramSettings {
             popupPositionX: mapToGlobal(grid.x, grid.y).x - mapToGlobal(x, y).x
             popupAvailableWidth: root.width
             model: root.model ? root.model.modelByType(Inspector.TYPE_FRET_DIAGRAM) : null
             onPopupContentHeightChanged: updateContentHeight(popupContentHeight)
         }
-		
+
         PedalSettings {
             popupPositionX: mapToGlobal(grid.x, grid.y).x - mapToGlobal(x, y).x
             popupAvailableWidth: root.width
@@ -273,6 +274,13 @@ InspectorSectionView {
             popupPositionX: mapToGlobal(grid.x, grid.y).x - mapToGlobal(x, y).x
             popupAvailableWidth: root.width
             model: root.model ? root.model.modelByType(Inspector.TYPE_TREMOLO) : null
+            onPopupContentHeightChanged: updateContentHeight(popupContentHeight)
+        }
+
+        MeasureRepeatSettings {
+            popupPositionX: mapToGlobal(grid.x, grid.y).x - mapToGlobal(x, y).x
+            popupAvailableWidth: root.width
+            model: root.model ? root.model.modelByType(Inspector.TYPE_MEASURE_REPEAT) : null
             onPopupContentHeightChanged: updateContentHeight(popupContentHeight)
         }
     }

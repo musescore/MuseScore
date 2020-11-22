@@ -876,7 +876,7 @@ PalettePanel::Type PalettePanel::guessType() const
         return Type::Fingering;
     case ElementType::MARKER:
     case ElementType::JUMP:
-    case ElementType::REPEAT_MEASURE:
+    case ElementType::MEASURE_REPEAT:
         return Type::Repeat;
     case ElementType::FRET_DIAGRAM:
         return Type::FretboardDiagram;

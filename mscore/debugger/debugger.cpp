@@ -29,6 +29,7 @@
 #include "libmscore/note.h"
 #include "libmscore/chord.h"
 #include "libmscore/measure.h"
+#include "libmscore/measurerepeat.h"
 #include "libmscore/text.h"
 #include "libmscore/hairpin.h"
 #include "libmscore/beam.h"
@@ -676,6 +677,8 @@ void Debugger::updateElement(Element* el)
             break;
         case ElementType::REST:             ew = new RestView;
             break;
+        case ElementType::MEASURE_REPEAT:   ew = new MeasureRepeatView;
+            break;
         case ElementType::CLEF:             ew = new ClefView;
             break;
         case ElementType::TIMESIG:          ew = new TimeSigView;
@@ -883,10 +886,12 @@ void MeasureView::setElement(Element* e)
     mb.lineBreak->setChecked(m->lineBreak());
     mb.pageBreak->setChecked(m->pageBreak());
     mb.sectionBreak->setChecked(m->sectionBreak());
+    mb.noBreak->setChecked(m->noBreak());
     mb.irregular->setChecked(m->irregular());
     mb.repeatCount->setValue(m->repeatCount());
     mb.breakMultiMeasureRest->setChecked(m->breakMultiMeasureRest());
     mb.mmRestCount->setValue(m->mmRestCount());
+    mb.oldWidth->setValue(m->oldWidth());
     mb.timesig->setText(m->timesig().print());
     mb.len->setText(m->ticks().print());
     mb.tick->setValue(m->tick().ticks());
@@ -1328,6 +1333,62 @@ void ShowNoteWidget::accidentalClicked()
 }
 
 //---------------------------------------------------------
+//   MeasureRepeatView
+//---------------------------------------------------------
+
+MeasureRepeatView::MeasureRepeatView()
+    : ShowElementBase()
+{
+    crb.setupUi(addWidget());
+    mrb.setupUi(addWidget());
+
+    connect(mrb.firstOfGroup, SIGNAL(clicked()), SLOT(firstOfGroupClicked()));
+}
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void MeasureRepeatView::setElement(Element* e)
+{
+    MeasureRepeat* mr = toMeasureRepeat(e);
+    ShowElementBase::setElement(e);
+
+    crb.tick->setText(mr->tick().print());
+    crb.ticks->setText(mr->actualTicks().print());
+    crb.duration->setText(mr->ticks().print());
+    crb.beamButton->setEnabled(false);
+    crb.beamMode->setEnabled(false);
+    crb.tupletButton->setEnabled(false);
+    crb.upFlag->setEnabled(false);
+    crb.attributes->clear();
+    crb.dots->setEnabled(false);
+    crb.durationType->setText(mr->durationType().name());
+    crb.move->setValue(mr->staffMove());
+
+    crb.lyrics->clear();
+    for (Lyrics* lyrics : mr->lyrics()) {
+        QString s;
+        s.setNum(qptrdiff(lyrics), 16);
+        QListWidgetItem* item = new QListWidgetItem(s);
+        item->setData(Qt::UserRole, QVariant::fromValue<void*>((void*)lyrics));
+        crb.lyrics->addItem(item);
+    }
+
+    mrb.subtype->setValue(mr->numMeasures());
+}
+
+//---------------------------------------------------------
+//   firstOfGroupClicked
+//---------------------------------------------------------
+
+void MeasureRepeatView::firstOfGroupClicked()
+{
+    MeasureRepeat* mr = toMeasureRepeat(element());
+    emit elementChanged(mr->firstMeasureOfGroup());
+}
+
+//---------------------------------------------------------
 //   RestView
 //---------------------------------------------------------
 
@@ -1680,7 +1741,7 @@ void SpannerView::startClicked()
 }
 
 //---------------------------------------------------------
-//   startClicked
+//   endClicked
 //---------------------------------------------------------
 
 void SpannerView::endClicked()

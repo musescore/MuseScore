@@ -43,7 +43,7 @@
 #include "pitchspelling.h"
 #include "line.h"
 #include "volta.h"
-#include "repeat.h"
+#include "measurerepeat.h"
 #include "ottava.h"
 #include "barline.h"
 #include "box.h"
@@ -1781,8 +1781,8 @@ MeasureBase* Score::measure(int idx) const
 
 //---------------------------------------------------------
 //   crMeasure
-//    Returns a measure containing chords an rests
-//    by its index skipping other MeasureBase descendants
+//    Returns a measure containing chords and/or rests
+//    by its index, skipping other MeasureBase descendants
 //---------------------------------------------------------
 
 Measure* Score::crMeasure(int idx) const
@@ -2075,7 +2075,7 @@ void MasterScore::addExcerpt(Excerpt* ex)
         }
     }
 
-    if (ex->tracks().isEmpty()) {                           // SHOULDN'T HAPPEN, protected in the UI, but it happens during read-in!!!
+    if (ex->tracks().isEmpty()) {   // SHOULDN'T HAPPEN, protected in the UI, but it happens during read-in!!!
         QMultiMap<int, int> tracks;
         for (Staff* s : score->staves()) {
             const LinkedElements* ls = s->links();
@@ -3134,7 +3134,7 @@ void Score::padToggle(Pad p, const EditData& ed)
             if (!cr) {
                 continue;
             }
-            if (cr->isRepeatMeasure() || cr->isMMRest()) {
+            if (cr->isMeasureRepeat() || cr->isMMRest()) {
                 canAdjustLength = false;
                 break;
             }
