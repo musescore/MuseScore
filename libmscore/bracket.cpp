@@ -283,7 +283,7 @@ void Bracket::draw(QPainter* painter) const
                   qreal w = 0.67 * score()->styleP(Sid::bracketWidth);
                   QPen pen(curColor(), w, Qt::SolidLine, Qt::FlatCap);
                   painter->setPen(pen);
-                  qreal bd = _spatium * .25;
+                  qreal bd = score()->styleP(Sid::staffLineWidth) * 0.5;
                   painter->drawLine(QLineF(0.0, -bd, 0.0, h + bd));
                   }
                   break;
