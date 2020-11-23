@@ -47,14 +47,17 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       timesig = t;
 
-      zText->setText(timesig->numeratorString());
-      nText->setText(timesig->denominatorString());
+      //zText->setText(timesig->numeratorString());
+      //nText->setText(timesig->denominatorString());
+      pText->setText(timesig->parserString());
       // set validators for numerator and denominator strings
       // which only accept '+', '(', ')', digits and some time symb conventional representations
-      QRegExp rx("[0-9+CO()\\x00A2\\x00D8\\x00BD\\x00BC]*");
+      // (should be in sync with validator in timedialog.cpp and inspector.cpp)
+      QRegExp rx("[0-9+CO()|=,x ~X\\*\\-\\[\\]\\.\\/\\x00A2\\x00D8\\x00BC\\x00BD\\x00BE\\xE097\\xE098\\xE099\\xE09A\\xE09B\\xE09C\\xE09D]*");
       QValidator *validator = new QRegExpValidator(rx, this);
-      zText->setValidator(validator);
-      nText->setValidator(validator);
+      //zText->setValidator(validator);
+      //nText->setValidator(validator);
+      pText->setValidator(validator);
 
       Fraction nominal = timesig->sig() / timesig->stretch();
       nominal.reduce();
@@ -65,6 +68,10 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
       nActual->setValue(sig.denominator());
       zNominal->setEnabled(false);
       nNominal->setEnabled(false);
+
+      //connect(zText,     SIGNAL(textChanged(const QString&)),    SLOT(textChanged()));
+      //connect(nText,     SIGNAL(textChanged(const QString&)),    SLOT(textChanged()));
+      connect(pText,     SIGNAL(textChanged(const QString&)),    SLOT(textChanged()));
 
        // TODO: fix http://musescore.org/en/node/42341
       // for now, editing of actual (local) time sig is disabled in dialog
@@ -116,8 +123,9 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
                         otherCombo->setCurrentIndex(idx);
 
                         // set the custom text fields to empty
-                        zText->setText(QString());
-                        nText->setText(QString());
+                        //zText->setText(QString());
+                        //nText->setText(QString());
+                        pText->setText(QString());
                         }
                   }
             idx++;
@@ -126,7 +134,7 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
       Groups g = t->groups();
       if (g.empty())
             g = Groups::endings(timesig->sig());     // initialize with default
-      groups->setSig(timesig->sig(), g, timesig->numeratorString(), timesig->denominatorString());
+      groups->setSig(timesig->sig(), g, /*timesig->numeratorString(), timesig->denominatorString(),*/ timesig->parserString());
 
       MuseScore::restoreGeometry(this);
       }
@@ -150,10 +158,12 @@ void TimeSigProperties::accept()
       timesig->setSig(actual, ts);
       timesig->setStretch(nominal / actual);
 
-      if (zText->text() != timesig->numeratorString())
+      /*if (zText->text() != timesig->numeratorString())
             timesig->setNumeratorString(zText->text());
       if (nText->text() != timesig->denominatorString())
-            timesig->setDenominatorString(nText->text());
+            timesig->setDenominatorString(nText->text());*/
+      if (pText->text() != timesig->parserString())
+            timesig->setParserString(pText->text());
 
       if (otherButton->isChecked()) {
             ScoreFont* scoreFont = timesig->score()->scoreFont();
@@ -176,6 +186,19 @@ void TimeSigProperties::hideEvent(QHideEvent* event)
       {
       MuseScore::saveGeometry(this);
       QWidget::hideEvent(event);
+      }
+
+//---------------------------------------------------------
+//   textChanged
+//---------------------------------------------------------
+
+void TimeSigProperties::textChanged()
+      {
+      // if text is changed, delete (old version) num/den strings
+      //timesig->setNumeratorString(QString());
+      //timesig->setDenominatorString(QString());
+      Fraction sig(timesig->sig());
+      groups->setSig(sig, Groups::endings(sig), /*zText->text(), nText->text(), */pText->text());
       }
 }
 

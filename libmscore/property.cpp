@@ -138,6 +138,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::ACCIDENTAL_TYPE,         true,  "subtype",               P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "type")             },
       { Pid::NUMERATOR_STRING,        false, "textN",                 P_TYPE::STRING,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "numerator string") },
       { Pid::DENOMINATOR_STRING,      false, "textD",                 P_TYPE::STRING,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "denominator string") },
+      { Pid::PARSER_STRING,           false, "textP",                 P_TYPE::STRING,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "parser string") },
       { Pid::FBPREFIX,                false, "prefix",                P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "prefix")           },
       { Pid::FBDIGIT,                 false, "digit",                 P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "digit")            },
       { Pid::FBSUFFIX,                false, "suffix",                P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "suffix")           },

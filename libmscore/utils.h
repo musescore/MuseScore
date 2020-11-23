@@ -88,6 +88,7 @@ extern int step2pitch(int step);
 
 extern Segment* skipTuplet(Tuplet* tuplet);
 extern std::vector<SymId> toTimeSigString(const QString&);
+extern std::vector<SymId> toTimeSigString(const QString& s, bool isSingleLine);
 extern Fraction actualTicks(Fraction duration, Tuplet* tuplet, Fraction timeStretch);
 
 }     // namespace Ms

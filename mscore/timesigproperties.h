@@ -38,6 +38,9 @@ class TimeSigProperties : public QDialog, public Ui::TimeSigProperties {
    public slots:
       virtual void accept();
 
+   //private slots:
+      void textChanged();
+
    public:
       TimeSigProperties(TimeSig*, QWidget* parent = 0);
       };
