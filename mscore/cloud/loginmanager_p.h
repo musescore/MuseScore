@@ -136,6 +136,34 @@ class ApiWebEngineRequestInterceptor : public QWebEngineUrlRequestInterceptor
 #endif
 
 //---------------------------------------------------------
+//   AsyncWait
+//---------------------------------------------------------
+
+class AsyncWait : public QEventLoop
+      {
+      Q_OBJECT
+      QString m_errorMsg;
+
+   public:
+      AsyncWait(QObject* parent = nullptr) : QEventLoop(parent) {}
+      QString errorMsg() { return m_errorMsg; }
+
+   public slots:
+
+      void success()
+            {
+            m_errorMsg = QString();
+            emit exit(0);
+            }
+
+      void failure(QString msg)
+            {
+            m_errorMsg = msg;
+            emit exit(1);
+            }
+      };
+
+//---------------------------------------------------------
 //   HttpStatus
 //---------------------------------------------------------
 
