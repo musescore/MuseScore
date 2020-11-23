@@ -31,6 +31,7 @@
 #include "internal/dump/crashhandler.h"
 
 #include "log.h"
+#include "config.h"
 
 using namespace mu::telemetry;
 
@@ -78,13 +79,17 @@ void TelemetrySetup::onInit()
 
     io::path handlerPath = globalConf->appDirPath() + "/" + handlerFile;
     io::path dumpsDir = globalConf->logsPath() + "/dumps";
-    std::string sandboxUrl = "https://sentry.musescore.org/api/3/minidump/?sentry_key=1260147a791c40349bbf717b94dc29c4";
+    std::string serverUrl(CRASH_REPORT_URL);
 
-    bool ok = s_crashHandler.start(handlerPath, dumpsDir, sandboxUrl);
+    LOGD() << "crash server url: " << serverUrl;
+
+    bool ok = s_crashHandler.start(handlerPath, dumpsDir, serverUrl);
     if (!ok) {
         LOGE() << "failed start crash handler";
+    } else {
+        LOGI() << "success start crash handler";
     }
 
     //! NOTE For test creating a dump
-    // crash();
+    crash();
 }
