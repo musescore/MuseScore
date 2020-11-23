@@ -50,3 +50,15 @@ set(MODULE_LINK
 )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+
+# === Install crashpad handler ===
+include(${PROJECT_SOURCE_DIR}/build/platform.cmake)
+
+set(CRASHPAD_HANDLER_PATH )
+if (PLATFORM_LINUX)
+    set(CRASHPAD_HANDLER_PATH crashpad_handler/linux/x86-64/crashpad_handler)
+endif(PLATFORM_LINUX)
+
+if (CRASHPAD_HANDLER_PATH)
+    install(PROGRAMS ${CMAKE_CURRENT_LIST_DIR}/${CRASHPAD_HANDLER_PATH} DESTINATION "bin")
+endif(CRASHPAD_HANDLER_PATH)
