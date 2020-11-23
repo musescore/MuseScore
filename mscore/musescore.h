@@ -749,6 +749,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool savePositions(Score*, QIODevice*, bool segments);
       bool saveMetadataJSON(Score*, const QString& name);
       QJsonObject saveMetadataJSON(Score*);
+      bool saveOnline(const QStringList& inFilePaths);
 
       /////The methods are used in the musescore.com backend
       bool exportAllMediaFiles(const QString& inFilePath, const QString& highlightConfigPath, const QString& outFilePath = "/dev/stdout");

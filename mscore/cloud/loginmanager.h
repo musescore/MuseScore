@@ -18,6 +18,7 @@
 namespace Ms {
 
 class ApiRequest;
+class AsyncWait;
 
 //---------------------------------------------------------
 //   LoginManager
@@ -47,7 +48,9 @@ class LoginManager : public QObject
       QString _refreshToken;
       QString _userName;
       QUrl _avatar;
+      QString _scoreTitle; // from last successful score info request
       int _uid = -1;
+      int _nid = -1; // from last successful score info request
 
       QString _updateScoreDataPath;
 
@@ -56,6 +59,7 @@ class LoginManager : public QObject
       int _uploadTryCount = 0;
 
       QProgressDialog* _progressDialog;
+      AsyncWait* m_asyncWait = nullptr;
 
       void onReplyFinished(ApiRequest*, RequestType);
       void handleReply(QNetworkReply*, RequestType);
@@ -106,13 +110,20 @@ class LoginManager : public QObject
       void getScoreInfo(int nid);
       void getMediaUrl(const QString& nid, const QString& vid, const QString& format);
 
+      // Synchronous methods
+      bool syncGetUser();
+      bool syncGetScoreInfo(int nid);
+      bool syncUpload(const QString& path, int nid, const QString& title);
+
       bool save();
       bool load();
 
       bool logout();
 
       const QString& userName() const { return _userName; }
+      const QString& scoreTitle() const { return _scoreTitle; }
       int uid() const { return _uid; }
+      int nid() const { return _nid; }
       const QUrl& avatar() const { return _avatar; }
       };
 }

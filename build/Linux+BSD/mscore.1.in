@@ -3,7 +3,7 @@
 .\"	mirabilos <m@mirbsd.org>
 .\" Published under the same terms as MuseScore itself.
 .\"-
-.Dd November 13, 2020
+.Dd November 23, 2020
 .Dt @MAN_MSCORE_UPPER@ 1
 .Os MuseScore
 .Sh NAME@Variables_substituted_by_CMAKE_on_installation@
@@ -46,6 +46,7 @@
 .Op Fl \-raw\-diff
 .Op Fl \-revert\-settings
 .Op Fl \-run\-test\-script
+.Op Fl \-save\-online
 .Op Fl \-score\-media
 .Op Fl \-highlight\-config
 .Op Fl \-score\-mp3
@@ -247,6 +248,11 @@ Don't use a fallback musical font
 Print a raw diff between the given scores
 .It Fl \-run\-test\-script
 Run script tests listed in the command line arguments
+.It Fl \-save\-online
+Upload score(s) to its source URL. There must already be an online score at
+that URL, and the user must be signed-in to the account it belongs to. The
+online score will be replaced with the uploaded file, but the title and
+description of the online score's webpage will not change.
 .It Fl \-score\-media
 Export all media (except MP3) for a given score
 as a single JSON document to stdout

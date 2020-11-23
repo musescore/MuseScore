@@ -152,10 +152,9 @@ QUrl ApiInfo::getUpdateScoreInfoUrl(const QString& scoreId, const QString& acces
 //---------------------------------------------------------
 
 LoginManager::LoginManager(QAction* uploadAudioMenuAction, QObject* parent)
- : QObject(parent), _networkManager(new QNetworkAccessManager(this)),
+ : QObject(parent), _networkManager(new QNetworkAccessManager(this)), m_asyncWait(new AsyncWait(this)),
    _uploadAudioMenuAction(uploadAudioMenuAction)
       {
-      load();
       _progressDialog = new QProgressDialog(mscore);
       _progressDialog->setWindowFlags(Qt::WindowFlags(Qt::Dialog | Qt::FramelessWindowHint | Qt::WindowTitleHint));
       _progressDialog->setWindowModality(Qt::NonModal);
@@ -518,6 +517,7 @@ void LoginManager::onGetUserReply(QNetworkReply* reply, int code, const QJsonObj
                   _userName = user.value("name").toString();
                   _uid = user.value("id").toString().toInt();
                   _avatar = QUrl(user.value("avatar_url").toString());
+                  qInfo() << "Logged in as" << _userName;
                   emit getUserSuccess();
                   }
             else
@@ -525,6 +525,24 @@ void LoginManager::onGetUserReply(QNetworkReply* reply, int code, const QJsonObj
             }
       else
             emit getUserError(tr("Error while getting user info: %1").arg(getErrorString(reply, user)));
+      }
+
+//---------------------------------------------------------
+//   syncGetUser
+//---------------------------------------------------------
+
+bool LoginManager::syncGetUser()
+      {
+      connect(this, &LoginManager::getUserSuccess, m_asyncWait, &AsyncWait::success);
+      connect(this, &LoginManager::getUserError, m_asyncWait, &AsyncWait::failure);
+      getUser();
+      bool success = (m_asyncWait->exec() == 0);
+      disconnect(this, &LoginManager::getUserSuccess, m_asyncWait, &AsyncWait::success);
+      disconnect(this, &LoginManager::getUserError, m_asyncWait, &AsyncWait::failure);
+      if (!success) {
+            qWarning() << m_asyncWait->errorMsg();
+            }
+      return success;
       }
 
 //---------------------------------------------------------
@@ -568,10 +586,14 @@ void LoginManager::onGetScoreInfoReply(QNetworkReply* reply, int code, const QJs
                   QString url = score.value("custom_url").toString();
                   if (user.value("uid") != QJsonValue::Undefined) {
                         int uid = user.value("uid").toString().toInt();
-                        if (uid == _uid)
+                        if (uid == _uid) {
+                              _scoreTitle = title;
+                              _nid = score.value("id").toString().toInt();
                               emit getScoreSuccess(title, description, (sharing == "private"), license, tags, url);
-                        else
+                              }
+                        else {
                               emit getScoreError("");
+                              }
                         }
                   else {
                        emit getScoreError("");
@@ -584,6 +606,24 @@ void LoginManager::onGetScoreInfoReply(QNetworkReply* reply, int code, const QJs
       else
             emit getScoreError(getErrorString(reply, score));
       }
+
+//---------------------------------------------------------
+//   syncGetScoreInfo
+//---------------------------------------------------------
+
+bool LoginManager::syncGetScoreInfo(int nid)
+{
+      connect(this, &LoginManager::getScoreSuccess, m_asyncWait, &AsyncWait::success);
+      connect(this, &LoginManager::getScoreError, m_asyncWait, &AsyncWait::failure);
+      getScoreInfo(nid);
+      bool success = (m_asyncWait->exec() == 0);
+      disconnect(this, &LoginManager::getScoreSuccess, m_asyncWait, &AsyncWait::success);
+      disconnect(this, &LoginManager::getScoreError, m_asyncWait, &AsyncWait::failure);
+      if (!success) {
+            qWarning() << m_asyncWait->errorMsg();
+            }
+      return success;
+}
 
 //---------------------------------------------------------
 //   getMediaUrl
@@ -776,6 +816,24 @@ void LoginManager::onUploadReply(QNetworkReply* reply, int code, const QJsonObje
             }
       else
             emit uploadError(tr("Cannot upload: %1").arg(getErrorString(reply, obj)));
+      }
+
+//---------------------------------------------------------
+//   syncGetScoreInfo
+//---------------------------------------------------------
+
+bool LoginManager::syncUpload(const QString& path, int nid, const QString& title)
+      {
+      connect(this, &LoginManager::uploadSuccess, m_asyncWait, &AsyncWait::success);
+      connect(this, &LoginManager::uploadError, m_asyncWait, &AsyncWait::failure);
+      upload(path, nid, title);
+      bool success = (m_asyncWait->exec() == 0);
+      disconnect(this, &LoginManager::uploadSuccess, m_asyncWait, &AsyncWait::success);
+      disconnect(this, &LoginManager::uploadError, m_asyncWait, &AsyncWait::failure);
+      if (!success) {
+            qWarning() << m_asyncWait->errorMsg();
+            }
+      return success;
       }
 
 //---------------------------------------------------------
