@@ -26,7 +26,6 @@
 #include "log.h"
 #include "modularity/ioc.h"
 #include "ui/internal/uiengine.h"
-#include "settings.h"
 #include "version.h"
 #include "config.h"
 
@@ -58,10 +57,6 @@ int AppShell::run(int argc, char** argv, std::function<void()> moduleSetup)
     QCoreApplication::setOrganizationName("MuseScore");
     QCoreApplication::setOrganizationDomain("musescore.org");
     QCoreApplication::setApplicationVersion(QString::fromStdString(framework::Version::fullVersion()));
-
-    //! NOTE: need to init settings before init of modules,
-    //! because modules can use settings in the moment of their init
-    framework::settings()->load();
 
     moduleSetup();
 
