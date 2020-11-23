@@ -2315,8 +2315,8 @@ Element* Score::move(const QString& cmd)
                                     }
                         break;
                         }
-                  case ElementType::HBOX: Q_FALLTHROUGH();
-                  case ElementType::VBOX: Q_FALLTHROUGH();
+                  case ElementType::HBOX: // fallthrough
+                  case ElementType::VBOX: // fallthrough
                   case ElementType::TBOX:
                         box = toBox(el);
                         break;
