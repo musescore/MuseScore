@@ -27,24 +27,24 @@ void UiConfiguration::init()
     settings()->setDefaultValue(MUSICAL_FONT_SIZE_KEY, Val(12));
 
     settings()->valueChanged(THEME_TYPE_KEY).onReceive(nullptr, [this](const Val& val) {
-                m_currentThemeTypeChannel.send(static_cast<ThemeType>(val.toInt()));
-            });
+        m_currentThemeTypeChannel.send(static_cast<ThemeType>(val.toInt()));
+    });
 
     settings()->valueChanged(FONT_FAMILY_KEY).onReceive(nullptr, [this](const Val& val) {
-                m_currentFontFamilyChannel.send(QString::fromStdString(val.toString()));
-            });
+        m_currentFontFamilyChannel.send(QString::fromStdString(val.toString()));
+    });
 
     settings()->valueChanged(FONT_SIZE_KEY).onReceive(nullptr, [this](const Val& val) {
-                m_currentFontSizeChannel.send(val.toInt());
-            });
+        m_currentFontSizeChannel.send(val.toInt());
+    });
 
     settings()->valueChanged(MUSICAL_FONT_FAMILY_KEY).onReceive(nullptr, [this](const Val& val) {
-                m_currentMusicalFontFamilyChannel.send(QString::fromStdString(val.toString()));
-            });
+        m_currentMusicalFontFamilyChannel.send(QString::fromStdString(val.toString()));
+    });
 
     settings()->valueChanged(MUSICAL_FONT_SIZE_KEY).onReceive(nullptr, [this](const Val& val) {
-                m_currentMusicalFontSizeChannel.send(val.toInt());
-            });
+        m_currentMusicalFontSizeChannel.send(val.toInt());
+    });
 }
 
 ThemeType UiConfiguration::themeType() const

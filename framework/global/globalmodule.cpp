@@ -33,6 +33,8 @@
 #include "runtime.h"
 #include "async/processevents.h"
 
+#include "settings.h"
+
 using namespace mu::framework;
 
 static std::shared_ptr<GlobalConfiguration> s_globalConf = std::make_shared<GlobalConfiguration>();
@@ -52,6 +54,10 @@ void GlobalModule::registerExports()
 
 void GlobalModule::onInit()
 {
+    //! NOTE: settings must be inited before initialization of any module
+    //! because modules can use settings at the moment of their initialization
+    settings()->load();
+
     //! --- Setup logger ---
     using namespace haw::logger;
     Logger* logger = Logger::instance();
