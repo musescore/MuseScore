@@ -32,7 +32,7 @@ elseif(PLATFORM_IS_LINUX)
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.h
     )
-elseif(PLATFORM_IS_OSX)
+elseif(PLATFORM_IS_MACOS)
     set(DRIVER_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/osxaudiodriver.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/osxaudiodriver.h

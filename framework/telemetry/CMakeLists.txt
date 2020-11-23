@@ -86,13 +86,12 @@ endif(BUILD_CRASHPAD_CLIENT)
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 
 # === Install crashpad handler ===
-set(CRASHPAD_HANDLER_PATH )
+set(CPAD_ROOT_PATH ${CMAKE_CURRENT_LIST_DIR}/crashpad_handler)
 if (PLATFORM_IS_LINUX)
-    set(CRASHPAD_HANDLER_PATH crashpad_handler/linux/x86-64/crashpad_handler)
+    install(PROGRAMS ${CPAD_ROOT_PATH}/linux/x86-64/crashpad_handler DESTINATION bin)
 elseif(PLATFORM_IS_WINDOWS)
-    set(CRASHPAD_HANDLER_PATH crashpad_handler/windows/x86-64/crashpad_handler.exe)
+    install(PROGRAMS ${CPAD_ROOT_PATH}/windows/x86-64/crashpad_handler.exe DESTINATION bin)
+elseif(PLATFORM_IS_MACOS)
+    install(PROGRAMS ${CPAD_ROOT_PATH}/macos/x86-64/crashpad_handler DESTINATION ${Mscore_SHARE_NAME}Contents/MacOS)
 endif()
 
-if (CRASHPAD_HANDLER_PATH)
-    install(PROGRAMS ${CMAKE_CURRENT_LIST_DIR}/${CRASHPAD_HANDLER_PATH} DESTINATION "bin")
-endif(CRASHPAD_HANDLER_PATH)

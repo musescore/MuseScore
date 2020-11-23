@@ -38,7 +38,7 @@ elseif(PLATFORM_IS_LINUX)
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidiinport.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidiinport.h
     )
-elseif(PLATFORM_IS_OSX)
+elseif(PLATFORM_IS_MACOS)
     set(DRIVER_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/coremidioutport.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/coremidioutport.h

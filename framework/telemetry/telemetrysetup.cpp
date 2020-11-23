@@ -91,8 +91,8 @@ void TelemetrySetup::onInit()
     }
 
     //! NOTE For test creating a dump
-     auto crash = []() { volatile int* a = (int*)(NULL); *a = 1; };
-     crash();
+    // auto crash = []() { volatile int* a = (int*)(NULL); *a = 1; };
+    // crash();
 
 #else
     LOGW() << "crash handling disabled";
