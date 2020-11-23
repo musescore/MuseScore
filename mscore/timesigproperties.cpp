@@ -46,15 +46,14 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
 
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       timesig = t;
+      pText->setText(timesig->parserString());
 
-      zText->setText(timesig->numeratorString());
-      nText->setText(timesig->denominatorString());
       // set validators for numerator and denominator strings
       // which only accept '+', '(', ')', digits and some time symb conventional representations
-      QRegExp rx("[0-9+CO()\\x00A2\\x00D8\\x00BD\\x00BC]*");
+      // (should be in sync with validator in timedialog.cpp and inspector.cpp)
+      QRegExp rx("[0-9+CO()|=,x ~X\\*\\-\\[\\]\\.\\/\\x00A2\\x00D8\\x00BC\\x00BD\\x00BE\\xE097\\xE098\\xE099\\xE09A\\xE09B\\xE09C\\xE09D]*");
       QValidator *validator = new QRegExpValidator(rx, this);
-      zText->setValidator(validator);
-      nText->setValidator(validator);
+      pText->setValidator(validator);
 
       Fraction nominal = timesig->sig() / timesig->stretch();
       nominal.reduce();
@@ -66,7 +65,9 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
       zNominal->setEnabled(false);
       nNominal->setEnabled(false);
 
-      // TODO: fix https://musescore.org/en/node/42341
+      connect(pText,     SIGNAL(textChanged(const QString&)),    SLOT(textChanged()));
+
+       // TODO: fix http://musescore.org/en/node/42341
       // for now, editing of actual (local) time sig is disabled in dialog
       // but more importantly, the dialog should make it clear that this is "local" change only
       // and not normally the right way to add 7/4 to a score
@@ -115,15 +116,12 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
             if (str.size() > 0) {
                   otherCombo->addItem(*icons[int(pt.icon)],"", int(pt.id));
                   // if time sig matches this symbol string, set as selected
-                  if (timesig->timeSigType() == TimeSigType::NORMAL && timesig->denominatorString().isEmpty()
-                     && timesig->numeratorString() == str) {
+                  if (timesig->timeSigType() == TimeSigType::NORMAL && timesig->parserString() == str) {
                         textButton->setChecked(false);
                         otherButton->setChecked(true);
                         otherCombo->setCurrentIndex(idx);
-
-                        // set the custom text fields to empty
-                        zText->setText(QString());
-                        nText->setText(QString());
+                        // set the custom text field to empty
+                        pText->setText(QString());
                         }
                   }
             idx++;
@@ -132,7 +130,7 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
       Groups g = t->groups();
       if (g.empty())
             g = Groups::endings(timesig->sig());     // initialize with default
-      groups->setSig(timesig->sig(), g, timesig->numeratorString(), timesig->denominatorString());
+      groups->setSig(timesig->sig(), g, timesig->parserString());
 
       MuseScore::restoreGeometry(this);
       }
@@ -156,17 +154,14 @@ void TimeSigProperties::accept()
       timesig->setSig(actual, ts);
       timesig->setStretch(nominal / actual);
 
-      if (zText->text() != timesig->numeratorString())
-            timesig->setNumeratorString(zText->text());
-      if (nText->text() != timesig->denominatorString())
-            timesig->setDenominatorString(nText->text());
+      if (pText->text() != timesig->parserString())
+            timesig->setParserString(pText->text());
 
       if (otherButton->isChecked()) {
             ScoreFont* scoreFont = timesig->score()->scoreFont();
             SymId symId = (SymId)( otherCombo->itemData(otherCombo->currentIndex()).toInt() );
-            // ...and set numerator to font string for symbol and denominator to empty string
-            timesig->setNumeratorString(scoreFont->toString(symId));
-            timesig->setDenominatorString(QString());
+            // set timesig string to font string for symbol
+            timesig->setParserString(scoreFont->toString(symId));
             }
 
       Groups g = groups->groups();
@@ -182,6 +177,17 @@ void TimeSigProperties::hideEvent(QHideEvent* event)
       {
       MuseScore::saveGeometry(this);
       QWidget::hideEvent(event);
+      }
+
+//---------------------------------------------------------
+//   textChanged
+//---------------------------------------------------------
+
+void TimeSigProperties::textChanged()
+      {
+      // if text is changed, delete (old version) num/den strings
+      Fraction sig(timesig->sig());
+      groups->setSig(sig, Groups::endings(sig), pText->text());
       }
 }
 

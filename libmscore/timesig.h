@@ -43,14 +43,14 @@ enum class TimeSigType : char {
 class TimeSig final : public Element {
       QString _numeratorString;     // calculated from actualSig() if !customText
       QString _denominatorString;
+      QString _parserString;         // Parsed single text field for custom text
 
-      std::vector<SymId> ns;
-      std::vector<SymId> ds;
+      std::vector<std::vector<SymId>> ns;
+      std::vector<std::vector<SymId>> ds;
 
-      QPointF pz;
-      QPointF pn;
-      QPointF pointLargeLeftParen;
-      QPointF pointLargeRightParen;
+      std::vector<QPointF> pns;
+      std::vector<QPointF> pds;
+
       Fraction _sig;
       Fraction _stretch;      // localSig / globalSig
       Groups _groups;
@@ -105,6 +105,9 @@ class TimeSig final : public Element {
 
       QString denominatorString() const  { return _denominatorString; }
       void setDenominatorString(const QString&);
+
+      QString parserString() const        { return _parserString;       }
+      void setParserString(const QString& a);
 
       void setLargeParentheses(bool v)    { _largeParentheses = v;    }
 

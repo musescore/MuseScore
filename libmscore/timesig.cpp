@@ -68,6 +68,7 @@ void TimeSig::setSig(const Fraction& f, TimeSigType st)
       _largeParentheses = false;
       _numeratorString.clear();
       _denominatorString.clear();
+      _parserString.clear();
       }
 
 //---------------------------------------------------------
@@ -119,6 +120,16 @@ void TimeSig::setDenominatorString(const QString& a)
             _denominatorString = a;
       }
 
+//   setParserString
+//    setSig() has to be called first
+//---------------------------------------------------------
+
+void TimeSig::setParserString(const QString& a)
+      {
+      if (_timeSigType ==  TimeSigType::NORMAL)
+            _parserString = a;
+      }
+
 //---------------------------------------------------------
 //   write TimeSig
 //---------------------------------------------------------
@@ -134,6 +145,9 @@ void TimeSig::write(XmlWriter& xml) const
       if (stretch() != Fraction(1,1)) {
             xml.tag("stretchN", stretch().numerator());
             xml.tag("stretchD", stretch().denominator());
+            }
+      if (!_parserString.isEmpty()) {
+            writeProperty(xml, Pid::PARSER_STRING);
             }
       writeProperty(xml, Pid::NUMERATOR_STRING);
       writeProperty(xml, Pid::DENOMINATOR_STRING);
@@ -204,6 +218,8 @@ void TimeSig::read(XmlReader& e)
                   setNumeratorString(e.readElementText());
             else if (tag == "textD")
                   setDenominatorString(e.readElementText());
+            else if (tag == "textP")
+                  setParserString(e.readElementText());
             else if (tag == "Groups")
                   _groups.read(e);
             else if (readStyledProperty(e, tag))
@@ -215,6 +231,14 @@ void TimeSig::read(XmlReader& e)
             _sig.set(z1+z2+z3+z4, n);
             }
       _stretch.reduce();
+      
+      // Read and Write num/den strings into parserString for backwards compatibility
+      if ( _timeSigType == TimeSigType::NORMAL && parserString().isEmpty() 
+          && (!numeratorString().isEmpty() || !denominatorString().isEmpty())) {
+            setParserString(numeratorString());
+            if (!denominatorString().isEmpty())
+                  setParserString(parserString() + "/" + denominatorString());
+            }
 
       // HACK: handle time signatures from scores before 3.5 differently on some special occasions.
       // See https://musescore.org/node/308139.
@@ -256,10 +280,6 @@ void TimeSig::layout()
       qreal _spatium = spatium();
 
       setbbox(QRectF());                  // prepare for an empty time signature
-      pointLargeLeftParen = QPointF();
-      pz = QPointF();
-      pn = QPointF();
-      pointLargeRightParen = QPointF();
 
       qreal lineDist;
       int   numOfLines;
@@ -269,12 +289,6 @@ void TimeSig::layout()
       if (_staff) {
             // if staff is without time sig, format as if no text at all
             if (!_staff->staffTypeForElement(this)->genTimesig()) {
-                  // reset position and box sizes to 0
-                  // qDebug("staff: no time sig");
-                  pointLargeLeftParen.rx() = 0.0;
-                  pn.rx() = 0.0;
-                  pz.rx() = 0.0;
-                  pointLargeRightParen.rx() = 0.0;
                   setbbox(QRectF());
                   // leave everything else as it is:
                   // draw() will anyway skip any drawing if staff type has no time sigs
@@ -297,48 +311,111 @@ void TimeSig::layout()
 
       // C and Ccut are placed at the middle of the staff: use yoff directly
       if (sigType ==  TimeSigType::FOUR_FOUR) {
-            pz = QPointF(0.0, yoff);
-            setbbox(symBbox(SymId::timeSigCommon).translated(pz));
-            ns.clear();
-            ns.push_back(SymId::timeSigCommon);
-            ds.clear();
+            pns = { QPoint(0.0, yoff) };
+            pds = pns;
+            setbbox(symBbox(SymId::timeSigCommon).translated(pns[0]));
+            ns = { {SymId::timeSigCommon} };
+            ds = { {} };
             }
       else if (sigType == TimeSigType::ALLA_BREVE) {
-            pz = QPointF(0.0, yoff);
-            setbbox(symBbox(SymId::timeSigCutCommon).translated(pz));
-            ns.clear();
-            ns.push_back(SymId::timeSigCutCommon);
-            ds.clear();
+            pns = { QPoint(0.0, yoff) };
+            pds = pns;
+            setbbox(symBbox(SymId::timeSigCutCommon).translated(pns[0]));
+            ns = { {SymId::timeSigCutCommon} };
+            ds = { {} };
             }
       else if (sigType == TimeSigType::CUT_BACH) {
-            pz = QPointF(0.0, yoff);
-            setbbox(symBbox(SymId::timeSigCut2).translated(pz));
-            ns.clear();
-            ns.push_back(SymId::timeSigCut2);
-            ds.clear();
+            pns = { QPoint(0.0, yoff) };
+            pds = pns;
+            setbbox(symBbox(SymId::timeSigCut2).translated(pns[0]));
+            ns = { {SymId::timeSigCut2} };
+            ds = { {} };
             }
       else if (sigType == TimeSigType::CUT_TRIPLE) {
-            pz = QPointF(0.0, yoff);
-            setbbox(symBbox(SymId::timeSigCut3).translated(pz));
-            ns.clear();
-            ns.push_back(SymId::timeSigCut3);
-            ds.clear();
+            pns = { QPoint(0.0, yoff) };
+            pds = pns;
+            setbbox(symBbox(SymId::timeSigCut3).translated(pns[0]));
+            ns = { {SymId::timeSigCut3} };
+            ds = { {} };
             }
-      else {
-            if (_numeratorString.isEmpty()) {
-                  ns = toTimeSigString(_numeratorString.isEmpty()   ? QString::number(_sig.numerator())   : _numeratorString);
-                  ds = toTimeSigString(_denominatorString.isEmpty() ? QString::number(_sig.denominator()) : _denominatorString);
+      else  {
+            if (!_parserString.isEmpty()) {
+                  QString pString = _parserString;
+                  // Replace bracketed [strings] with the respective symbols ('w h q e' will convert to note glyphs)
+                  pString.replace("[1/4]","\uE097");
+                  pString.replace("[1/2]","\uE098");
+                  pString.replace("[3/4]","\uE099");
+                  pString.replace("[1/3]","\uE09A");
+                  pString.replace("[2/3]","\uE09B");
+                  pString.replace("[1]","w");
+                  pString.replace("[1.]","w.");
+                  pString.replace("[2]","h");
+                  pString.replace("[2.]","h.");
+                  pString.replace("[4]","q");
+                  pString.replace("[4.]","q.");
+                  pString.replace("[8]","e");
+                  pString.replace("[8.]","e.");
+                  pString.replace("[16]","s");
+                  pString.replace("[16.]","s.");
+                  pString.remove(QRegExp("\\[([^]]+)\\]")); // eliminate unidentified bracketed [strings]
+
+                  // Parse time signature text:
+                  // Use '|' to separate timesig blocks of 'numerator/denominator'
+                  // (if a block's denominator is missing, block will be drawn centered to the staff. This is also the case for large parenthesis and '+' )
+
+                  pString.replace(QRegExp("(\\/[0-9whqe.]+)"),"\\1|");      // insert separator after denominators
+                  pString.replace(QRegExp("\\)([ +=x\\*\\-]+)"),")|\\1");   // insert separator between ')' and '+x=-'
+                  pString.replace(QRegExp("(\\|[ +=x\\*\\-]+)"),"\\1|");    // then after isolated '+x-='
+                  pString.replace(" ","| |");                       // split spaces
+                  // add separator after '(' with no matching ')' inside numerators (which include numbers, '+' and fractions) 
+                  pString.replace(QRegExp("\\(([0-9+\\xE097\\xE098\\xE099\\xE09A\\xE09B]+[\\/])+"), "(|\\1");
+
+                  // Create list of time signature blocks ('numerator/denominator', or just 'numerator' for center drawn glyphs like 'C', '+' or '(' )
+                  QStringList sList = pString.split("|", QString::SkipEmptyParts);
+
+                  // LOOP thru the sList and create the numerator and denominator strings and positions 
+                  ns.clear();
+                  ds.clear();
+                  pns.clear();
+                  pds.clear();
+
+                  for (int i=0; i < sList.size(); i++) {
+                        QStringList numDem = sList[i].split("/",QString::SkipEmptyParts);
+                        pns.push_back(QPointF());
+                        pds.push_back(QPointF());
+                        if (numDem.size() == 1) {
+                              ns.push_back(toTimeSigString(numDem[0], true)); // if no denominator, use large '()' and '+' (true)
+                              ds.push_back(toTimeSigString("", false));       // empty denominator timeSigString
+                              }
+                        else if (numDem.size() >= 2) {
+                              ns.push_back(toTimeSigString(numDem[0], false));
+                              ds.push_back(toTimeSigString(numDem[1], false));
+                              }
+                        else
+                              qDebug("no time signature strings detected");
+                        }
+
+                  // Convert first block to old num/den strings for backwards compatibility
+                  if (sList.size() > 0) {
+                        QStringList numDem = sList[0].split("/",QString::KeepEmptyParts);
+                        if (numDem.size() >= 1)
+                              setNumeratorString(numDem[0]);
+                        if (numDem.size() >= 2)
+                              setDenominatorString(numDem[1]);
+                        else
+                              setDenominatorString(QString());
+                        }
                   }
             else {
-                  ns = toTimeSigString(_numeratorString);
-                  ds = toTimeSigString(_denominatorString);
+                  // Use actual values
+                  pns = { QPointF() };
+                  pds = { QPointF() };
+                  ns = { toTimeSigString(QString::number(_sig.numerator()), false) };
+                  ds = { toTimeSigString(QString::number(_sig.denominator()), false) };
                   }
 
             ScoreFont* font = score()->scoreFont();
             QSizeF mag(magS() * _scale);
-
-            QRectF numRect = font->bbox(ns, mag);
-            QRectF denRect = font->bbox(ds, mag);
 
             // position numerator and denominator; vertical displacement:
             // number of lines is odd: 0.0 (strings are directly above and below the middle line)
@@ -346,34 +423,45 @@ void TimeSig::layout()
 
             qreal displ = (numOfLines & 1) ? 0.0 : (0.05 * _spatium);
 
-            //align on the wider
-            qreal pzY = yoff - (denRect.width() < 0.01 ? 0.0 : (displ + numRect.height() * .5));
-            qreal pnY = yoff + displ + denRect.height() * .5;
-
-            if (numRect.width() >= denRect.width()) {
-                  // numerator: one space above centre line, unless denomin. is empty (if so, directly centre in the middle)
-                  pz = QPointF(0.0, pzY);
-                  // denominator: horiz: centred around centre of numerator | vert: one space below centre line
-                  pn = QPointF((numRect.width() - denRect.width())*.5, pnY);
-                  }
-            else {
-                  // numerator: one space above centre line, unless denomin. is empty (if so, directly centre in the middle)
-                  pz = QPointF((denRect.width() - numRect.width())*.5, pzY);
-                  // denominator: horiz: centred around centre of numerator | vert: one space below centre line
-                  pn = QPointF(0.0, pnY);
-                  }
-
-            // centering of parenthesis so the middle of the parenthesis is at the divisor marking level
-            int centerY = yoff/2 + _spatium;
-            int widestPortion = numRect.width() > denRect.width() ? numRect.width() : denRect.width();
-            pointLargeLeftParen = QPointF(-_spatium, centerY);
-            pointLargeRightParen = QPointF(widestPortion + _spatium, centerY);
-
-            setbbox(numRect.translated(pz));   // translate bounding boxes to actual string positions
-            addbbox(denRect.translated(pn));
-            if (_largeParentheses) {
-                  addbbox(QRect(pointLargeLeftParen.x(), pointLargeLeftParen.y() - denRect.height(), _spatium / 2, numRect.height() + denRect.height()));
-                  addbbox(QRect(pointLargeRightParen.x(), pointLargeRightParen.y() - denRect.height(),  _spatium / 2, numRect.height() + denRect.height()));
+            // loop thru num/dem blocks to lay out positions and bounding boxes
+            setbbox(QRectF());
+            qreal xpos = 0.0;
+            for (int i = 0; i < ns.size(); i++) {
+                  QRectF nRect = font->bbox(ns[i], mag);
+                  QRectF dRect = font->bbox(ds[i], mag);
+                  // Handle special cases here:
+                  // SymId::space doesn't have a bbox, so add ::space _advance value (10.0) to the rect width
+                  if (ns[i].size() && ns[i][0] == SymId::space)
+                        nRect.adjust(0, 0, 10.0 * mag.width(), 0);  
+                  // else if ... (other special cases):
+                  //   TO DO:... "Emmentaler" parentheses have bad bboxes
+                  //   TO DO:... "Gonville" doesn't have big parentheses. 
+                  //   TO DO: * Both cases are problems with the font. It's better to fix the glyphs there
+                  // Adjust note symbols' bboxes in denominator so the glyphs are draw at a correct vertical pos. in the staff
+                  if (ds[i].size() && (ds[i][0] == SymId::metNoteQuarterDown || ds[i][0] == SymId::metNote8thDown 
+                      || ds[i][0] == SymId::metNoteHalfDown || ds[i][0] == SymId::metNote16thDown)) {
+                        dRect.adjust(0, 53 * mag.height(), 0, 0);
+                        if (ds[i].size() > 1 || ds[i][1] == SymId::metAugmentationDot)
+                              dRect.adjust(10 * mag.width(), 0, 0, 0);
+                        }
+                  // If denominator is absent, draw numerator vertically centered to staff, otherwise, above center line
+                  qreal pzY = yoff - (dRect.width() < 0.01 ? 0.0 : (displ + nRect.height() * .5));
+                  qreal pnY = yoff + displ + dRect.height() * .5;  //() missing?
+                  // Horizontally align numerator and denominator, centered on the wider:
+                  if (nRect.width() >= dRect.width()) {
+                        pns[i] = QPointF(0.0, pzY);
+                        pds[i] = QPointF((nRect.width() - dRect.width()) * .5, pnY);
+                        }
+                  else {
+                        pns[i] = QPointF((dRect.width() - nRect.width()) * .5, pzY);
+                        pds[i] = QPointF(0.0, pnY);
+                        }
+                  // add to bbox and advance xpos for the next block
+                  pns[i].rx() += xpos;
+                  pds[i].rx() += xpos;
+                  addbbox(nRect.translated(pns[i]));
+                  addbbox(dRect.translated(pds[i]));
+                  xpos += qMax(nRect.width(), dRect.width());
                   }
             }
       }
@@ -408,12 +496,10 @@ void TimeSig::draw(QPainter* painter) const
             return;
       painter->setPen(curColor());
 
-      drawSymbols(ns, painter, pz, _scale);
-      drawSymbols(ds, painter, pn, _scale);
-
-      if (_largeParentheses) {
-            drawSymbol(SymId::timeSigParensLeft,  painter, pointLargeLeftParen,  _scale.width());
-            drawSymbol(SymId::timeSigParensRight, painter, pointLargeRightParen, _scale.width());
+      // loop and draw t/s blocks 
+      for (int i = 0; i < ns.size(); i++) {
+            drawSymbols(ns[i], painter, pns[i], _scale);
+            drawSymbols(ds[i], painter, pds[i], _scale);
             }
       }
 
@@ -426,6 +512,7 @@ void TimeSig::setFrom(const TimeSig* ts)
       _timeSigType       = ts->timeSigType();
       _numeratorString   = ts->_numeratorString;
       _denominatorString = ts->_denominatorString;
+      _parserString      = ts->_parserString;
       _sig               = ts->_sig;
       _stretch           = ts->_stretch;
       }
@@ -465,6 +552,8 @@ QVariant TimeSig::getProperty(Pid propertyId) const
                   return numeratorString();
             case Pid::DENOMINATOR_STRING:
                   return denominatorString();
+            case Pid::PARSER_STRING:
+                  return parserString();
             case Pid::GROUPS:
                   return QVariant::fromValue(groups());
             case Pid::TIMESIG:
@@ -499,6 +588,9 @@ bool TimeSig::setProperty(Pid propertyId, const QVariant& v)
                   break;
             case Pid::DENOMINATOR_STRING:
                   setDenominatorString(v.toString());
+                  break;
+            case Pid::PARSER_STRING:
+                  setParserString(v.toString());
                   break;
             case Pid::GROUPS:
                   setGroups(v.value<Groups>());
@@ -610,6 +702,7 @@ bool TimeSig::operator==(const TimeSig& ts) const
          && (groups() == ts.groups())
          && (_numeratorString == ts._numeratorString)
          && (_denominatorString == ts._denominatorString)
+         && (_parserString == ts._parserString)
          ;
       }
 

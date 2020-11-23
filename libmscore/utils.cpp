@@ -1000,43 +1000,81 @@ Segment* skipTuplet(Tuplet* tuplet)
 
 std::vector<SymId> toTimeSigString(const QString& s)
       {
+      return toTimeSigString(s, false);       
+      }
+
+std::vector<SymId> toTimeSigString(const QString& s, bool isSingleLine)
+      {
       struct Dict {
             QChar code;
             SymId id;
             };
       static const std::vector<Dict> dict = {
-            { 43,    SymId::timeSigPlusSmall        },  // '+'
-            { 48,    SymId::timeSig0                },  // '0'
-            { 49,    SymId::timeSig1                },  // '1'
-            { 50,    SymId::timeSig2                },  // '2'
-            { 51,    SymId::timeSig3                },  // '3'
-            { 52,    SymId::timeSig4                },  // '4'
-            { 53,    SymId::timeSig5                },  // '5'
-            { 54,    SymId::timeSig6                },  // '6'
-            { 55,    SymId::timeSig7                },  // '7'
-            { 56,    SymId::timeSig8                },  // '8'
-            { 57,    SymId::timeSig9                },  // '9'
-            { 67,    SymId::timeSigCommon           },  // 'C'
-            { 40,    SymId::timeSigParensLeftSmall  },  // '('
-            { 41,    SymId::timeSigParensRightSmall },  // ')'
-            { 162,   SymId::timeSigCutCommon        },  // '¢'
-            { 189,   SymId::timeSigFractionHalf     },
-            { 188,   SymId::timeSigFractionQuarter  },
-            { 59664, SymId::mensuralProlation1      },
-            { 79,    SymId::mensuralProlation2      },  // 'O'
-            { 59665, SymId::mensuralProlation2      },
-            { 216,   SymId::mensuralProlation3      },  // 'Ø'
-            { 59666, SymId::mensuralProlation3      },
-            { 59667, SymId::mensuralProlation4      },
-            { 59668, SymId::mensuralProlation5      },
-            { 59670, SymId::mensuralProlation7      },
-            { 59671, SymId::mensuralProlation8      },
-            { 59673, SymId::mensuralProlation10     },
-            { 59674, SymId::mensuralProlation11     },
+            //code     id           
+            { 43,    SymId::timeSigPlusSmall             },  // '+'
+            { 48,    SymId::timeSig0                     },  // '0'
+            { 49,    SymId::timeSig1                     },  // '1'
+            { 50,    SymId::timeSig2                     },  // '2'
+            { 51,    SymId::timeSig3                     },  // '3'
+            { 52,    SymId::timeSig4                     },  // '4'
+            { 53,    SymId::timeSig5                     },  // '5'
+            { 54,    SymId::timeSig6                     },  // '6'
+            { 55,    SymId::timeSig7                     },  // '7'
+            { 56,    SymId::timeSig8                     },  // '8'
+            { 57,    SymId::timeSig9                     },  // '9'
+            { 67,    SymId::timeSigCommon                },  // 'C'
+            { 40,    SymId::timeSigParensLeftSmall       },  // '('
+            { 41,    SymId::timeSigParensRightSmall      },  // ')'
+            { 162,   SymId::timeSigCutCommon             },  // '¢'
+            { 59664, SymId::mensuralProlation1           },
+            { 79,    SymId::mensuralProlation2           },  // 'O'
+            { 59665, SymId::mensuralProlation2           },
+            { 216,   SymId::mensuralProlation3           },  // 'Ø'
+            { 59666, SymId::mensuralProlation3           },
+            { 59667, SymId::mensuralProlation4           },
+            { 59668, SymId::mensuralProlation5           },
+            { 59670, SymId::mensuralProlation7           },
+            { 59671, SymId::mensuralProlation8           },
+            { 59673, SymId::mensuralProlation10          },
+            { 59674, SymId::mensuralProlation11          },
+            { 188,   SymId::timeSigFractionQuarter       },  // '¼'
+            { 57495, SymId::timeSigFractionQuarter       }, 
+            { 189,   SymId::timeSigFractionHalf          },  // '½'
+            { 57496, SymId::timeSigFractionHalf          },
+            { 57497, SymId::timeSigFractionThreeQuarters },
+            { 190,   SymId::timeSigFractionThreeQuarters }, // '¾'
+            { 57498, SymId::timeSigFractionOneThird      },
+            { 57499, SymId::timeSigFractionTwoThirds     },
+            { 88,    SymId::timeSigX                     }, // 'X'
+            { 126,   SymId::timeSigOpenPenderecki        }, // '~'
+            { 32,    SymId::space                        }, // ' '
+            { 119,   SymId::metNoteWhole                 }, // 'w'
+            { 104,   SymId::metNoteHalfDown              }, // 'h'
+            { 113,   SymId::metNoteQuarterDown           }, // 'q'
+            { 101,   SymId::metNote8thDown               }, // 'e'
+            { 115,   SymId::metNote16thDown              }, // 's'
+            { 46,    SymId::metAugmentationDot           }, // '.'
+            { 61,    SymId::timeSigEquals                }, // '='
+            { 42,    SymId::timeSigMultiply              }, // '*'
+            { 120,   SymId::timeSigMultiply              }, // 'x'
+            { 45,    SymId::timeSigMinus                 }, // '-'
+            { 44,    SymId::timeSigComma                 }, // ','
+            { 57492, SymId::timeSigParensLeft            }, // E094 (big left parenthesis)
+            { 57493, SymId::timeSigParensRight           }, // E095 (big right parenthesis)
+            { 57484, SymId::timeSigPlus                  }, // E08C (big plus)
             };
 
+      QString str = s;
+
+      // Use large parentheses and '+' glyphs if in single line
+      if (isSingleLine) {
+            str.replace("(","\uE094"); 
+            str.replace(")","\uE095"); 
+            str.replace("+","\uE08C"); 
+            }
+      
       std::vector<SymId> d;
-      for (auto c : s) {
+      for (auto c : str) {
             for (const Dict& e : dict) {
                   if (c == e.code) {
                         d.push_back(e.id);

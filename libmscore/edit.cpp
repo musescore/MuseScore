@@ -821,6 +821,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                         nsig->undoChangeProperty(Pid::TIMESIG_TYPE, int(ts->timeSigType()));
                         nsig->undoChangeProperty(Pid::NUMERATOR_STRING, ts->numeratorString());
                         nsig->undoChangeProperty(Pid::DENOMINATOR_STRING, ts->denominatorString());
+                        nsig->undoChangeProperty(Pid::PARSER_STRING, ts->parserString());
                         nsig->undoChangeProperty(Pid::TIMESIG_STRETCH, QVariant::fromValue(ts->stretch()));
                         nsig->undoChangeProperty(Pid::GROUPS, QVariant::fromValue(ts->groups()));
                         nsig->setSelected(false);
@@ -894,6 +895,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                               nsig->undoChangeProperty(Pid::TIMESIG, QVariant::fromValue(ts->sig()));
                               nsig->undoChangeProperty(Pid::NUMERATOR_STRING, ts->numeratorString());
                               nsig->undoChangeProperty(Pid::DENOMINATOR_STRING, ts->denominatorString());
+                              nsig->undoChangeProperty(Pid::PARSER_STRING, ts->parserString());
 
                               // HACK do it twice to accommodate undo
                               nsig->undoChangeProperty(Pid::TIMESIG_TYPE, int(ts->timeSigType()));
