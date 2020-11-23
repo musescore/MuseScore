@@ -24,21 +24,21 @@ include(${CMAKE_CURRENT_LIST_DIR}/internal/zerberus/zerberus.cmake)
 
 
 include(${PROJECT_SOURCE_DIR}/build/platform.cmake)
-if (PLATFORM_WINDOWS)
+if (PLATFORM_IS_WINDOWS)
     set(DRIVER_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmidioutport.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmidioutport.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmidiinport.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmidiinport.h
     )
-elseif(PLATFORM_LINUX)
+elseif(PLATFORM_IS_LINUX)
     set(DRIVER_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidioutport.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidioutport.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidiinport.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidiinport.h
     )
-elseif(PLATFORM_OSX)
+elseif(PLATFORM_IS_OSX)
     set(DRIVER_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/coremidioutport.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/coremidioutport.h

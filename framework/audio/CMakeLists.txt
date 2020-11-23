@@ -22,17 +22,17 @@ set(MODULE mu4_audio)
 include(${PROJECT_SOURCE_DIR}/thirdparty/soloud/soloud.cmake)
 
 include(${PROJECT_SOURCE_DIR}/build/platform.cmake)
-if (PLATFORM_WINDOWS)
+if (PLATFORM_IS_WINDOWS)
     set(DRIVER_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmmdriver.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmmdriver.h
     )
-elseif(PLATFORM_LINUX)
+elseif(PLATFORM_IS_LINUX)
     set(DRIVER_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.h
     )
-elseif(PLATFORM_OSX)
+elseif(PLATFORM_IS_OSX)
     set(DRIVER_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/osxaudiodriver.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/osxaudiodriver.h
@@ -95,11 +95,11 @@ set(MODULE_INCLUDE
     ${SOLOUD_INC}
     )
 
-if(PLATFORM_WINDOWS)
+if(PLATFORM_IS_WINDOWS)
     set(MODULE_LINK winmm )
 endif()
 
-if(PLATFORM_LINUX)
+if(PLATFORM_IS_LINUX)
     set(MODULE_LINK pthread ${ALSA_LIB} )
 endif()
 

@@ -35,8 +35,6 @@
 
 using namespace mu::telemetry;
 
-static CrashHandler s_crashHandler;
-
 static void telemetry_init_qrc()
 {
     Q_INIT_RESOURCE(telemetry);
@@ -62,14 +60,16 @@ void TelemetrySetup::registerUiTypes()
     qmlRegisterType<TelemetryPermissionModel>("MuseScore.Telemetry", 3, 3, "TelemetryPermissionModel");
 }
 
-static void crash() { volatile int* a = (int*)(NULL); *a = 1; }
-
 void TelemetrySetup::onInit()
 {
     auto globalConf = framework::ioc()->resolve<framework::IGlobalConfiguration>(moduleName());
     IF_ASSERT_FAILED(globalConf) {
         return;
     }
+
+#ifdef BUILD_CRASHPAD_CLIENT
+
+    static CrashHandler s_crashHandler;
 
 #ifdef _MSC_VER
     io::path handlerFile("crashpad_handler.com");
@@ -91,5 +91,10 @@ void TelemetrySetup::onInit()
     }
 
     //! NOTE For test creating a dump
-    crash();
+    // auto void crash() =[]() { volatile int* a = (int*)(NULL); *a = 1; };
+    // crash();
+
+#else
+    LOGW() << "crash handling disabled";
+#endif
 }
