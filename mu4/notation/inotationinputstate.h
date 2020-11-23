@@ -32,6 +32,16 @@ public:
     virtual bool isPadActive(Pad pad) const = 0;
 
     virtual Duration duration() const = 0;
+
+    virtual void startNoteEntry() = 0;
+    virtual void endNoteEntry() = 0;
+    virtual void setNoteEntryMethod(NoteInputMethod method) = 0;
+    virtual void addNote(NoteName noteName, NoteAddingMode addingMode) = 0;
+    virtual void padNote(const Pad& pad)  = 0;
+    virtual void putNote(const QPointF& pos, bool replace, bool insert) = 0;
+
+    virtual async::Notification noteAdded() const = 0;
+    virtual async::Notification stateChanged() const = 0;
 };
 
 using INotationInputStatePtr = std::shared_ptr<INotationInputState>;

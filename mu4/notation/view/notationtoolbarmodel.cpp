@@ -138,7 +138,7 @@ void NotationToolBarModel::onNotationChanged()
     m_inputStateChanged.resetOnNotify(this);
 
     if (notation) {
-        m_inputStateChanged = notation->interaction()->inputStateChanged();
+        m_inputStateChanged = notation->interaction()->inputState()->stateChanged();
         m_inputStateChanged.onNotify(this, [this]() {
             updateState();
         });

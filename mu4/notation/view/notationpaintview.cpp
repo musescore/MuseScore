@@ -94,7 +94,7 @@ void NotationPaintView::onCurrentNotationChanged()
     if (m_notation) {
         m_notation->notationChanged().resetOnNotify(this);
         INotationInteractionPtr interaction = m_notation->interaction();
-        interaction->inputStateChanged().resetOnNotify(this);
+        interaction->inputState()->stateChanged().resetOnNotify(this);
         interaction->selectionChanged().resetOnNotify(this);
     }
 
@@ -112,7 +112,7 @@ void NotationPaintView::onCurrentNotationChanged()
     onInputStateChanged();
 
     INotationInteractionPtr interaction = notationInteraction();
-    interaction->inputStateChanged().onNotify(this, [this]() {
+    interaction->inputState()->stateChanged().onNotify(this, [this]() {
         onInputStateChanged();
     });
 

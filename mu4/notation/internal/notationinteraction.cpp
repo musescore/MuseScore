@@ -53,10 +53,9 @@ using namespace Ms;
 NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack)
     : m_notation(notation), m_undoStack(undoStack)
 {
-    m_inputState = std::make_shared<NotationInputState>(notation);
+    m_inputState = std::make_shared<NotationInputState>(notation, m_undoStack, m_selectionChanged);
     m_selection = std::make_shared<NotationSelection>(notation);
 
-    m_scoreCallbacks = new ScoreCallbacks();
     m_dragData.ed.view = new ScoreCallbacks();
     m_dropData.ed.view = new ScoreCallbacks();
 }
@@ -64,7 +63,6 @@ NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackP
 NotationInteraction::~NotationInteraction()
 {
     delete m_shadowNote;
-    delete m_scoreCallbacks;
 }
 
 void NotationInteraction::init()
@@ -91,81 +89,11 @@ void NotationInteraction::paint(QPainter* p)
 
 void NotationInteraction::startNoteEntry()
 {
-    //! NOTE Coped from `void ScoreView::startNoteEntry()`
-    Ms::InputState& is = score()->inputState();
-    is.setSegment(0);
-
-    if (score()->selection().isNone()) {
+    if (selection()->isNone()) {
         selectFirstTopLeftOrLast();
     }
 
-    //! TODO Find out what does and why.
-    Element* el = score()->selection().element();
-    if (!el) {
-        el = score()->selection().firstChordRest();
-    }
-
-    if (el == nullptr
-        || (el->type() != ElementType::CHORD && el->type() != ElementType::REST && el->type() != ElementType::NOTE)) {
-        // if no note/rest is selected, start with voice 0
-        int track = is.track() == -1 ? 0 : (is.track() / VOICES) * VOICES;
-        // try to find an appropriate measure to start in
-        Fraction tick = el ? el->tick() : Fraction(0,1);
-        el = score()->searchNote(tick, track);
-        if (!el) {
-            el = score()->searchNote(Fraction(0,1), track);
-        }
-    }
-
-    if (!el) {
-        return;
-    }
-
-    if (el->type() == ElementType::CHORD) {
-        Ms::Chord* c = static_cast<Ms::Chord*>(el);
-        Note* note = c->selectedNote();
-        if (note == 0) {
-            note = c->upNote();
-        }
-        el = note;
-    }
-    //! ---
-
-    TDuration d(is.duration());
-    if (!d.isValid() || d.isZero() || d.type() == TDuration::DurationType::V_MEASURE) {
-        is.setDuration(TDuration(TDuration::DurationType::V_QUARTER));
-    }
-    is.setAccidentalType(AccidentalType::NONE);
-
-    select({ el }, SelectType::SINGLE, 0);
-
-    is.setRest(false);
-    is.setNoteEntryMode(true);
-
-    //! TODO Find out why.
-    score()->setUpdateAll();
-    score()->update();
-    //! ---
-
-    Staff* staff = score()->staff(is.track() / VOICES);
-    switch (staff->staffType(is.tick())->group()) {
-    case StaffGroup::STANDARD:
-        break;
-    case StaffGroup::TAB: {
-        int strg = 0;                           // assume topmost string as current string
-        // if entering note entry with a note selected and the note has a string
-        // set InputState::_string to note physical string
-        if (el->type() == ElementType::NOTE) {
-            strg = (static_cast<Note*>(el))->string();
-        }
-        is.setString(strg);
-        break;
-    }
-    case StaffGroup::PERCUSSION:
-        break;
-    }
-
-    m_inputStateChanged.notify();
+    inputState()->startNoteEntry();
 }
 
 void NotationInteraction::selectFirstTopLeftOrLast()
@@ -260,14 +188,10 @@ void NotationInteraction::selectFirstTopLeftOrLast()
 
 void NotationInteraction::endNoteEntry()
 {
-    InputState& is = score()->inputState();
-    is.setNoteEntryMode(false);
-    if (is.slur()) {
-        const std::vector<SpannerSegment*>& el = is.slur()->spannerSegments();
-        if (!el.empty()) {
-            el.front()->setSelected(false);
-        }
-        is.setSlur(0);
+    inputState()->endNoteEntry();
+    hideShadowNote();
+}
+
     }
 
     hideShadowNote();
@@ -276,35 +200,17 @@ void NotationInteraction::endNoteEntry()
 
 void NotationInteraction::padNote(const Pad& pad)
 {
-    Ms::EditData ed;
-    ed.view = m_scoreCallbacks;
-    m_undoStack->prepareChanges();
-    score()->padToggle(pad, ed);
-    m_undoStack->commitChanges();
-    m_inputStateChanged.notify();
+    inputState()->padNote(pad);
 }
 
 void NotationInteraction::putNote(const QPointF& pos, bool replace, bool insert)
 {
-    m_undoStack->prepareChanges();
-    score()->putNote(pos, replace, insert);
-    m_undoStack->commitChanges();
-    m_noteAdded.notify();
-}
-
-mu::async::Notification NotationInteraction::noteAdded() const
-{
-    return m_noteAdded;
+    inputState()->putNote(pos, replace, insert);
 }
 
 INotationInputStatePtr NotationInteraction::inputState() const
 {
     return m_inputState;
-}
-
-mu::async::Notification NotationInteraction::inputStateChanged() const
-{
-    return m_inputStateChanged;
 }
 
 void NotationInteraction::showShadowNote(const QPointF& p)
