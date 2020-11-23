@@ -30,7 +30,7 @@ static const Settings::Key USERPATH_TO_PLUGINS(module_name, "application/paths/m
 static const Settings::Key INSTALLED_PLUGINS(module_name, "plugins/installedPlugins");
 static const std::string PLUGINS_DIR("/plugins");
 
-PluginsConfiguration::PluginsConfiguration()
+void PluginsConfiguration::init()
 {
     settings()->valueChanged(INSTALLED_PLUGINS).onReceive(nullptr, [this](const Val& val) {
         CodeKeyList installedPlugins = parseInstalledPlugins(val);

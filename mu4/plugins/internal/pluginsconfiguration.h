@@ -24,14 +24,13 @@
 #include "iglobalconfiguration.h"
 #include "val.h"
 
-namespace mu {
-namespace plugins {
+namespace mu::plugins {
 class PluginsConfiguration : public IPluginsConfiguration
 {
     INJECT(extensions, framework::IGlobalConfiguration, globalConfiguration)
 
 public:
-    PluginsConfiguration();
+    void init();
 
     io::paths pluginsDirPaths() const override;
 
@@ -43,7 +42,6 @@ private:
 
     async::Channel<CodeKeyList> m_installedPluginsChanged;
 };
-}
 }
 
 #endif // MU_PLUGINS_PLUGINSCONFIGURATION_H
