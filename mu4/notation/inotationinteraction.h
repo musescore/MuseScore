@@ -29,8 +29,7 @@
 #include "inotationinputstate.h"
 #include "inotationselection.h"
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class INotationInteraction
 {
 public:
@@ -41,9 +40,7 @@ public:
     virtual void endNoteEntry() = 0;
     virtual void padNote(const Pad& pad) = 0;
     virtual void putNote(const QPointF& pos, bool replace, bool insert) = 0;
-    virtual async::Notification noteAdded() const = 0;
     virtual INotationInputStatePtr inputState() const = 0;
-    virtual async::Notification inputStateChanged() const = 0;
 
     // Shadow note
     virtual void showShadowNote(const QPointF& p) = 0;
@@ -60,7 +57,7 @@ public:
     virtual async::Notification selectionChanged() const = 0;
 
     // Drag
-    using IsDraggable = std::function<bool (const Element*)>;
+    using IsDraggable = std::function<bool(const Element*)>;
     virtual bool isDragStarted() const = 0;
     virtual void startDrag(const std::vector<Element*>& elems, const QPointF& eoffset, const IsDraggable& isDrag) = 0;
     virtual void drag(const QPointF& fromPos, const QPointF& toPos, DragMode mode) = 0;
@@ -108,7 +105,6 @@ public:
 };
 
 using INotationInteractionPtr = std::shared_ptr<INotationInteraction>;
-}
 }
 
 #endif // MU_NOTATION_INOTATIONINTERACTION_H
