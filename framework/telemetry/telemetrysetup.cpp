@@ -72,7 +72,7 @@ void TelemetrySetup::onInit()
     static CrashHandler s_crashHandler;
 
 #ifdef _MSC_VER
-    io::path handlerFile("crashpad_handler.com");
+    io::path handlerFile("crashpad_handler.exe");
 #else
     io::path handlerFile("crashpad_handler");
 #endif
@@ -91,8 +91,8 @@ void TelemetrySetup::onInit()
     }
 
     //! NOTE For test creating a dump
-    // auto void crash() =[]() { volatile int* a = (int*)(NULL); *a = 1; };
-    // crash();
+     auto crash = []() { volatile int* a = (int*)(NULL); *a = 1; };
+     crash();
 
 #else
     LOGW() << "crash handling disabled";
