@@ -34,6 +34,8 @@ public:
     virtual ~IWorkspaceConfiguration() = default;
 
     virtual io::paths workspacePaths() const = 0;
+
+    virtual io::path userWorkspacesDirPath() const = 0;
     virtual io::path userWorkspacePath(const std::string& workspaceName) const = 0;
 
     virtual ValCh<std::string> currentWorkspaceName() const = 0;

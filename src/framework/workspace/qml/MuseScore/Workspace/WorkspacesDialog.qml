@@ -73,7 +73,7 @@ QmlDialog {
 
                     icon: IconCode.DELETE_TANK
 
-                    enabled: Boolean(workspacesModel.selectedWorkspace) && workspacesModel.selectedWorkspace.canRemove
+                    enabled: Boolean(workspacesModel.selectedWorkspace) && workspacesModel.selectedWorkspace.isRemovable
 
                     onClicked: {
                         workspacesModel.removeWorkspace(workspacesModel.selectedWorkspace.index)
@@ -123,6 +123,8 @@ QmlDialog {
 
                 FlatButton {
                     text: qsTrc("workspace", "Select")
+
+                    enabled: Boolean(workspacesModel.selectedWorkspace)
 
                     onClicked: {
                         if (!workspacesModel.apply()) {

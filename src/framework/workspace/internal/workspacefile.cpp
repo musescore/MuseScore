@@ -36,15 +36,15 @@ using namespace mu;
 using namespace mu::workspace;
 using namespace mu::framework;
 
-WorkspaceFile::WorkspaceFile(const io::path& filepath)
-    : m_filepath(filepath)
+WorkspaceFile::WorkspaceFile(const io::path& filePath)
+    : m_filePath(filePath)
 {}
 
 QByteArray WorkspaceFile::readRootFile()
 {
-    QFile f(m_filepath.toQString());
+    QFile f(m_filePath.toQString());
     if (!f.open(QIODevice::ReadOnly)) {
-        LOGE() << "failed open file: " << m_filepath;
+        LOGE() << "failed open file: " << m_filePath;
         return QByteArray();
     }
 
@@ -65,13 +65,13 @@ QByteArray WorkspaceFile::readRootFile()
     }
 
     if (rootfile.empty()) {
-        LOGE() << "not found root file: " << m_filepath;
+        LOGE() << "not found root file: " << m_filePath;
         return QByteArray();
     }
 
     QByteArray fileData = zip.fileData(QString::fromStdString(rootfile));
     if (fileData.isEmpty()) {
-        LOGE() << "failed read root file: " << m_filepath;
+        LOGE() << "failed read root file: " << m_filePath;
         return QByteArray();
     }
 
@@ -94,14 +94,14 @@ bool WorkspaceFile::writeRootFile(const std::string& name, const QByteArray& fil
         return false;
     }
 
-    QFile f(m_filepath.toQString());
+    QFile f(m_filePath.toQString());
     if (!f.open(QIODevice::WriteOnly)) {
-        LOGE() << "failed open file: " << m_filepath;
+        LOGE() << "failed open file: " << m_filePath;
         return false;
     }
 
     if (f.write(data) == 0) {
-        LOGE() << "failed write file: " << m_filepath;
+        LOGE() << "failed write file: " << m_filePath;
         return false;
     }
 

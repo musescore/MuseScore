@@ -31,6 +31,7 @@ public:
     void registerUiTypes() override;
     void registerResources() override;
     void onInit() override;
+    void onDeinit() override;
 };
 }
 

@@ -57,13 +57,15 @@ signals:
     void selectedWorkspaceChanged(QVariant selectedWorkspace);
 
 private:
+    void setSelectedWorkspace(IWorkspacePtr workspace);
+
     QVariantMap workspaceToObject(IWorkspacePtr workspace) const;
     bool isIndexValid(int index) const;
 
     enum Roles {
         RoleName = Qt::UserRole + 1,
         RoleIsSelected,
-        RoleCanRemove
+        RoleIsRemovable
     };
 
     QList<IWorkspacePtr> m_workspaces;
