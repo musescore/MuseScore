@@ -3557,6 +3557,13 @@ bool MuseScore::saveOnline(const QStringList& inFilePaths)
         return false;
     }
 
+    QTemporaryDir tempDir;
+    if (!tempDir.isValid()) {
+        qCritical() << qUtf8Printable(tr("Error: %1").arg(tempDir.errorString()));
+        return false;
+    }
+    QString tempPath = tempDir.path() + "/score.mscz";
+
     bool all_successful = true;
 
     for (auto path : inFilePaths) {
@@ -3588,7 +3595,6 @@ bool MuseScore::saveOnline(const QStringList& inFilePaths)
         }
         mu::cloud::ScoreInfo scoreInfo = _loginManager->scoreInfo();
 
-        QString tempPath = QDir::tempPath() + QString("/temp_%1.mscz").arg(QRandomGenerator::global()->generate() % 100000);
         if (!mscore->saveAs(score, true, tempPath, "mscz")) {
             all_successful = false;
             continue;
