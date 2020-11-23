@@ -46,12 +46,10 @@ RetValCh<IWorkspacePtr> WorkspaceManager::currentWorkspace() const
     return rv;
 }
 
-RetValCh<IWorkspacePtrList> WorkspaceManager::workspaces() const
+RetVal<IWorkspacePtrList> WorkspaceManager::workspaces() const
 {
-    RetValCh<IWorkspacePtrList> result;
-
+    RetVal<IWorkspacePtrList> result;
     result.ret = make_ret(Ret::Code::Ok);
-    result.ch = m_workspacesChanged;
 
     for (auto workspace : m_workspaces) {
         result.val.push_back(workspace);
@@ -68,16 +66,12 @@ Ret WorkspaceManager::setWorkspaces(const IWorkspacePtrList& workspaces)
         ret = createInexistentWorkspaces(workspaces);
     }
 
-    if (ret) {
-        m_workspacesChanged.send(workspaces);
-    }
-
     return ret;
 }
 
 Ret WorkspaceManager::removeMissingWorkspaces(const IWorkspacePtrList& newWorkspaceList)
 {
-    RetValCh<IWorkspacePtrList> oldWorkspaceList = workspaces();
+    RetVal<IWorkspacePtrList> oldWorkspaceList = workspaces();
     if (!oldWorkspaceList.ret) {
         return oldWorkspaceList.ret;
     }
@@ -120,7 +114,7 @@ bool WorkspaceManager::canRemoveWorkspace(const std::string& workspaceName) cons
 
 Ret WorkspaceManager::createInexistentWorkspaces(const IWorkspacePtrList& newWorkspaceList)
 {
-    RetValCh<IWorkspacePtrList> existentWorkspaces = workspaces();
+    RetVal<IWorkspacePtrList> existentWorkspaces = workspaces();
     if (!existentWorkspaces.ret) {
         return existentWorkspaces.ret;
     }
@@ -148,6 +142,11 @@ Ret WorkspaceManager::createWorkspace(const IWorkspacePtr& workspace)
 
 void WorkspaceManager::init()
 {
+    Ret ret = fileSystem()->makePath(configuration()->userWorkspacesDirPath());
+    if (!ret) {
+        LOGE() << ret.toString();
+    }
+
     RetCh<Extension> extensionChanged = extensionsController()->extensionChanged();
     if (extensionChanged.ret) {
         extensionChanged.ch.onReceive(this, [this](const Extension& newExtension) {
@@ -169,17 +168,13 @@ void WorkspaceManager::load()
     m_workspaces.clear();
 
     io::paths files = findWorkspaceFiles();
-    IWorkspacePtrList workspaces;
 
     for (const io::path& file : files) {
         auto workspace = std::make_shared<Workspace>(file);
         m_workspaces.push_back(workspace);
-        workspaces.push_back(workspace);
     }
 
     setupCurrentWorkspace();
-
-    m_workspacesChanged.send(workspaces);
 }
 
 io::paths WorkspaceManager::findWorkspaceFiles() const
@@ -202,6 +197,8 @@ io::paths WorkspaceManager::findWorkspaceFiles() const
 
 void WorkspaceManager::setupCurrentWorkspace()
 {
+    saveCurrentWorkspace();
+
     std::string workspaceName = configuration()->currentWorkspaceName().val;
 
     WorkspacePtr workspace = findAndInit(workspaceName);
@@ -241,4 +238,21 @@ WorkspacePtr WorkspaceManager::findAndInit(const std::string& name) const
     }
 
     return workspace;
+}
+
+void WorkspaceManager::deinit()
+{
+    saveCurrentWorkspace();
+}
+
+void WorkspaceManager::saveCurrentWorkspace()
+{
+    if (!m_currentWorkspace) {
+        return;
+    }
+
+    Ret ret = m_currentWorkspace->write();
+    if (!ret) {
+        LOGE() << ret.toString();
+    }
 }
