@@ -30,7 +30,6 @@
 #include "inotationconfiguration.h"
 #include "inotationundostack.h"
 
-#include "scorecallbacks.h"
 #include "notationinputstate.h"
 #include "notationselection.h"
 
@@ -41,8 +40,7 @@ namespace Ms {
 class ShadowNote;
 }
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class Notation;
 class NotationInteraction : public INotationInteraction
 {
@@ -60,9 +58,7 @@ public:
     void endNoteEntry() override;
     void padNote(const Pad& pad) override;
     void putNote(const QPointF& pos, bool replace, bool insert) override;
-    async::Notification noteAdded() const override;
     INotationInputStatePtr inputState() const override;
-    async::Notification inputStateChanged() const override;
 
     // Shadow note
     void showShadowNote(const QPointF& p) override;
@@ -183,11 +179,8 @@ private:
 
     Notation* m_notation = nullptr;
     INotationUndoStackPtr m_undoStack;
-    ScoreCallbacks* m_scoreCallbacks = nullptr;
 
-    async::Notification m_noteAdded;
     INotationInputStatePtr m_inputState = nullptr;
-    async::Notification m_inputStateChanged;
     Ms::ShadowNote* m_shadowNote = nullptr;
 
     INotationSelectionPtr m_selection = nullptr;
@@ -203,7 +196,6 @@ private:
     DropData m_dropData;
     async::Notification m_dropChanged;
 };
-}
 }
 
 #endif // MU_NOTATION_NOTATIONINTERACTION_H

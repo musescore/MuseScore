@@ -30,7 +30,7 @@
 
 namespace mu {
 namespace notation {
-class NotationInteraction;
+class NotationInputState;
 }
 }
 
@@ -509,7 +509,7 @@ private:
 
     //------------------
 
-    friend class mu::notation::NotationInteraction;
+    friend class mu::notation::NotationInputState;
 
     ChordRest* nextMeasure(ChordRest* element, bool selectBehavior = false, bool mmRest = false);
     ChordRest* prevMeasure(ChordRest* element, bool mmRest = false);

@@ -89,7 +89,7 @@ Notation::Notation(Score* score)
     m_style = std::make_shared<NotationStyle>(this);
     m_elements = std::make_shared<NotationElements>(this);
 
-    m_interaction->noteAdded().onNotify(this, [this]() {
+    m_interaction->inputState()->noteAdded().onNotify(this, [this]() {
         notifyAboutNotationChanged();
     });
 
