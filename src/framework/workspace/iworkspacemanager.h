@@ -34,7 +34,7 @@ public:
 
     virtual RetValCh<IWorkspacePtr> currentWorkspace() const = 0;
 
-    virtual RetValCh<IWorkspacePtrList> workspaces() const = 0;
+    virtual RetVal<IWorkspacePtrList> workspaces() const = 0;
     virtual Ret setWorkspaces(const IWorkspacePtrList& workspaces) = 0;
 };
 }

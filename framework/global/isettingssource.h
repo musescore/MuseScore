@@ -31,6 +31,8 @@ class ISettingsSource : MODULE_EXPORT_INTERFACE
     INTERFACE_ID(ISettingsSource)
 
 public:
+    virtual ~ISettingsSource() = default;
+
     virtual bool hasValue(const std::string& key) const = 0;
     virtual Val value(const std::string& key) const = 0;
     virtual void setValue(const std::string& key, const Val& value) = 0;

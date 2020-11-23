@@ -42,7 +42,7 @@ io::paths WorkspaceConfiguration::workspacePaths() const
 
     io::path sharePath = globalConfiguration()->sharePath() + "/workspaces";
     paths.push_back(sharePath);
-    paths.push_back(workspacesDataPath());
+    paths.push_back(userWorkspacesDirPath());
 
     std::vector<io::path> extensionsPath = this->extensionsPaths();
     paths.insert(paths.end(), extensionsPath.begin(), extensionsPath.end());
@@ -50,14 +50,14 @@ io::paths WorkspaceConfiguration::workspacePaths() const
     return paths;
 }
 
-io::path WorkspaceConfiguration::userWorkspacePath(const std::string& workspaceName) const
-{
-    return workspacesDataPath() + "/" + workspaceName + ".workspace";
-}
-
-io::path WorkspaceConfiguration::workspacesDataPath() const
+io::path WorkspaceConfiguration::userWorkspacesDirPath() const
 {
     return globalConfiguration()->dataPath() + "/workspaces";
+}
+
+io::path WorkspaceConfiguration::userWorkspacePath(const std::string& workspaceName) const
+{
+    return userWorkspacesDirPath() + "/" + workspaceName + ".workspace";
 }
 
 ValCh<std::string> WorkspaceConfiguration::currentWorkspaceName() const

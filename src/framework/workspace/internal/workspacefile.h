@@ -30,7 +30,7 @@ namespace mu::workspace {
 class WorkspaceFile
 {
 public:
-    WorkspaceFile(const io::path& filepath);
+    WorkspaceFile(const io::path& filePath);
 
     QByteArray readRootFile();
     bool writeRootFile(const std::string& name, const QByteArray& file);
@@ -51,7 +51,7 @@ private:
         std::string m_rootfile;
     };
 
-    io::path m_filepath;
+    io::path m_filePath;
 };
 }
 

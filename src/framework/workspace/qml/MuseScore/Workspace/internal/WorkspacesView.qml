@@ -19,7 +19,9 @@ RadioButtonGroup {
         target: model
 
         function onSelectedWorkspaceChanged(selectedWorkspace) {
-            root.positionViewAtIndex(selectedWorkspace.index, ListView.Center)
+            if (Boolean(selectedWorkspace)) {
+                root.positionViewAtIndex(selectedWorkspace.index, ListView.Contain)
+            }
         }
     }
 

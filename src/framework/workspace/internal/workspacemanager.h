@@ -36,14 +36,16 @@ class WorkspaceManager : public IWorkspaceManager, async::Asyncable
 
 public:
     void init();
+    void deinit();
 
     RetValCh<IWorkspacePtr> currentWorkspace() const override;
 
-    RetValCh<IWorkspacePtrList> workspaces() const override;
+    RetVal<IWorkspacePtrList> workspaces() const override;
     Ret setWorkspaces(const IWorkspacePtrList& workspaces) override;
 
 private:
     void load();
+    void saveCurrentWorkspace();
 
     Ret removeMissingWorkspaces(const IWorkspacePtrList& newWorkspaceList);
     Ret removeWorkspace(const IWorkspacePtr& workspace);
@@ -62,7 +64,6 @@ private:
     std::vector<WorkspacePtr> m_workspaces;
 
     async::Channel<IWorkspacePtr> m_currentWorkspaceChanged;
-    async::Channel<IWorkspacePtrList> m_workspacesChanged;
 };
 }
 

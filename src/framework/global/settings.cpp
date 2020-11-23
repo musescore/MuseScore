@@ -98,9 +98,13 @@ Val Settings::defaultValue(const Key& key) const
 
 void Settings::setValue(const Key& key, const Val& value)
 {
-    writeValue(key, value);
-
     Item& item = findItem(key);
+
+    if (!item.isNull() && item.value == value) {
+       return;
+    }
+
+    writeValue(key, value);
 
     if (item.isNull()) {
         m_items[key] = Item{ key, value, value };
