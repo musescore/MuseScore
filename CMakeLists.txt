@@ -224,6 +224,8 @@ add_definitions(-D_USE_MATH_DEFINES)
 
 message("[cmake] BUILD_UI_MU4: ${BUILD_UI_MU4}")
 
+message(STATUS "CMAKE_CXX_COMPILER_ID: ${CMAKE_CXX_COMPILER_ID}")
+
 if (MSCORE_UNSTABLE OR TELEMETRY_TRACK_ID STREQUAL "")
       message("Telemetry feature is disabled")
       message("Build is unstable = ${MSCORE_UNSTABLE}")

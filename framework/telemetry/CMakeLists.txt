@@ -27,8 +27,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/actioneventobserver.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/telemetryservice.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/telemetryservice.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/dump/crashhandler.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/dump/crashhandler.h
     ${CMAKE_CURRENT_LIST_DIR}/view/telemetrypermissiondialog.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/telemetrypermissiondialog.h
     ${CMAKE_CURRENT_LIST_DIR}/view/telemetrypermissionmodel.cpp
@@ -44,20 +42,54 @@ set(MODULE_INCLUDE
     ${PROJECT_SOURCE_DIR}/thirdparty/google_crashpad_client/third_party/mini_chromium/mini_chromium
 )
 
+add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/qt-google-analytics qt-google-analytics)
+
+
 set(MODULE_LINK
     qt-google-analytics
-    gcrashpad
 )
+
+# --- Crashpad ---
+# Not building with MinGW, so turned off for MinGW
+include(${PROJECT_SOURCE_DIR}/build/compiler.cmake)
+set(BUILD_CRASHPAD_CLIENT ON)
+if (COMPILER_IS_MINGW)
+    set(BUILD_CRASHPAD_CLIENT OFF)
+endif(COMPILER_IS_MINGW)
+
+if (BUILD_CRASHPAD_CLIENT)
+
+    set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/internal/dump/crashhandler.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/dump/crashhandler.h
+    )
+
+    set(MODULE_INCLUDE ${MODULE_INCLUDE}
+        ${PROJECT_SOURCE_DIR}/thirdparty/google_crashpad_client
+        ${PROJECT_SOURCE_DIR}/thirdparty/google_crashpad_client/third_party/mini_chromium/mini_chromium
+    )
+
+    set(MODULE_DEF ${MODULE_DEF}
+        -DBUILD_CRASHPAD_CLIENT
+    )
+
+    add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/google_crashpad_client google_crashpad_client)
+
+    set(MODULE_LINK ${MODULE_LINK}
+        gcrashpad
+    )
+
+endif(BUILD_CRASHPAD_CLIENT)
+# ----------------
+
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 
 # === Install crashpad handler ===
-include(${PROJECT_SOURCE_DIR}/build/platform.cmake)
-
 set(CRASHPAD_HANDLER_PATH )
-if (PLATFORM_LINUX)
+if (PLATFORM_IS_LINUX)
     set(CRASHPAD_HANDLER_PATH crashpad_handler/linux/x86-64/crashpad_handler)
-endif(PLATFORM_LINUX)
+endif(PLATFORM_IS_LINUX)
 
 if (CRASHPAD_HANDLER_PATH)
     install(PROGRAMS ${CMAKE_CURRENT_LIST_DIR}/${CRASHPAD_HANDLER_PATH} DESTINATION "bin")
