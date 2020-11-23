@@ -374,6 +374,7 @@ public:
     int ottaveCapoFret() const;
     int ppitch() const;             ///< playback pitch
     int epitch() const;             ///< effective pitch
+    bool mutePlayback(bool allowMuteBySelection) const;    ///< whether the note should be muted during the playback
     qreal tuning() const { return _tuning; }
     void setTuning(qreal v) { _tuning = v; }
     void undoSetTpc(int v);
