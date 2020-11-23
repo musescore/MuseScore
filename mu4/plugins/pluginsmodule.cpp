@@ -35,6 +35,8 @@
 using namespace mu::plugins;
 using namespace mu::framework;
 
+static std::shared_ptr<PluginsConfiguration> s_configuration = std::make_shared<PluginsConfiguration>();
+
 static void plugins_init_qrc()
 {
     Q_INIT_RESOURCE(plugins);
@@ -47,8 +49,8 @@ std::string PluginsModule::moduleName() const
 
 void PluginsModule::registerExports()
 {
-    framework::ioc()->registerExport<IPluginsService>(moduleName(), new PluginsService());
-    framework::ioc()->registerExport<IPluginsConfiguration>(moduleName(), new PluginsConfiguration());
+    ioc()->registerExport<IPluginsService>(moduleName(), new PluginsService());
+    ioc()->registerExport<IPluginsConfiguration>(moduleName(), s_configuration);
 }
 
 void PluginsModule::registerResources()
@@ -63,5 +65,10 @@ void PluginsModule::registerUiTypes()
 
     Ms::PluginAPI::PluginAPI::registerQmlTypes();
 
-    framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(plugins_QML_IMPORT);
+    ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(plugins_QML_IMPORT);
+}
+
+void PluginsModule::onInit()
+{
+    s_configuration->init();
 }

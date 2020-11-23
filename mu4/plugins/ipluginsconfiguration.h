@@ -25,8 +25,7 @@
 
 #include "io/path.h"
 
-namespace mu {
-namespace plugins {
+namespace mu::plugins {
 class IPluginsConfiguration : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IPluginsConfiguration)
@@ -39,7 +38,6 @@ public:
     virtual ValCh<CodeKeyList> installedPlugins() const = 0;
     virtual void setInstalledPlugins(const CodeKeyList& codeKeyList) = 0;
 };
-}
 }
 
 #endif // MU_PLUGINS_IPLUGINSCONFIGURATION_H

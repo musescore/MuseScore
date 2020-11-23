@@ -19,6 +19,8 @@
 
 using namespace mu::framework;
 
+static std::shared_ptr<UiConfiguration> s_configuration = std::make_shared<UiConfiguration>();
+
 static void ui_init_qrc()
 {
     Q_INIT_RESOURCE(ui);
@@ -31,7 +33,7 @@ std::string UiModule::moduleName() const
 
 void UiModule::registerExports()
 {
-    ioc()->registerExport<IUiConfiguration>(moduleName(), new UiConfiguration());
+    ioc()->registerExport<IUiConfiguration>(moduleName(), s_configuration);
     ioc()->registerExportNoDelete<IUiEngine>(moduleName(), UiEngine::instance());
     ioc()->registerExportNoDelete<ITheme>(moduleName(), UiEngine::instance()->theme());
     ioc()->registerExport<IInteractiveProvider>(moduleName(), UiEngine::instance()->interactiveProvider());
@@ -75,4 +77,5 @@ void UiModule::registerUiTypes()
 
 void UiModule::onInit()
 {
+    s_configuration->init();
 }
