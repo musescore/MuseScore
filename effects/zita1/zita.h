@@ -36,24 +36,24 @@ class Pareq
       void calcpar1 (int nsamp, float g, float f);
       void process1 (int nsamp, float*);
 
-      volatile int16_t  _touch0;
-      volatile int16_t  _touch1;
+      volatile int16_t  _touch0 = 0;
+      volatile int16_t  _touch1 = 0;
 #if 0 // not yet (?) used
       bool              _bypass;
 #endif
-      int               _state;
-      float             _fsamp;
+      int               _state = 0;
+      float             _fsamp = 0.f;
 
-      float             _g;
-      float             _g0, _g1;
-      float             _f;
-      float             _f0, _f1;
-      float             _c1, _dc1;
-      float             _c2, _dc2;
-      float             _gg, _dgg;
+      float             _g = 0.f;
+      float             _g0 = 0.f, _g1 = 0.f;
+      float             _f = 0.f;
+      float             _f0 = 0.f, _f1 = 0.f;
+      float             _c1 = 0.f, _dc1 = 0.f;
+      float             _c2 = 0.f, _dc2 = 0.f;
+      float             _gg = 0.f, _dgg = 0.f;
 
-      float             _z1 [MAXCH];
-      float             _z2 [MAXCH];
+      float             _z1 [MAXCH] = { 0.f, 0.f, 0.f, 0.f };
+      float             _z2 [MAXCH] = { 0.f, 0.f, 0.f, 0.f };
 
    public:
       Pareq();
@@ -87,10 +87,10 @@ class Diff1
       {
       friend class ZitaReverb;
 
-      int     _i;
-      float   _c;
+      int     _i = 0;
+      float   _c = 0.f;
       int     _size = 0;
-      float* _line = 0;
+      float* _line = nullptr;
 
       Diff1() {}
       ~Diff1();
@@ -126,12 +126,12 @@ class Filt1
             _shi += _whi * (x - _shi);
             return _gmf * _shi;
             }
-      float   _gmf;
-      float   _glo;
-      float   _wlo;
-      float   _whi;
-      float   _slo;
-      float   _shi;
+      float   _gmf = 0.f;
+      float   _glo = 0.f;
+      float   _wlo = 0.f;
+      float   _whi = 0.f;
+      float   _slo = 0.f;
+      float   _shi = 0.f;
       };
 
 //---------------------------------------------------------
@@ -155,9 +155,9 @@ class Delay
             if (_i == _size)
                   _i = 0;
             }
-      int     _i;
-      int     _size;
-      float  *_line;
+      int     _i = 0;
+      int     _size = 0;
+      float  *_line = nullptr;
       };
 
 //---------------------------------------------------------
@@ -187,10 +187,10 @@ class Vdelay
             if (_iw == _size)
                   _iw = 0;
             }
-      int     _ir;
-      int     _iw;
-      int     _size;
-      float* _line;
+      int     _ir = 0;
+      int     _iw = 0;
+      int     _size = 0;
+      float* _line = nullptr;
       };
 
 //---------------------------------------------------------
@@ -201,7 +201,7 @@ class ZitaReverb : public Effect
       {
       Q_OBJECT
 
-      float   _fsamp;
+      float   _fsamp = 0.f;
 
       Vdelay  _vdelay0;
       Vdelay  _vdelay1;
@@ -209,23 +209,23 @@ class ZitaReverb : public Effect
       Filt1   _filt1[8];
       Delay   _delay[8];
 
-      volatile int _cntA1;
-      volatile int _cntB1;
-      volatile int _cntC1;
-      int     _cntA2;
-      int     _cntB2;
-      int     _cntC2;
+      volatile int _cntA1 = 0;
+      volatile int _cntB1 = 0;
+      volatile int _cntC1 = 0;
+      int     _cntA2 = 0;
+      int     _cntB2 = 0;
+      int     _cntC2 = 0;
 
-      float   _ipdel;
-      float   _xover;
-      float   _rtlow;
-      float   _rtmid;
-      float   _fdamp;
-      float   _opmix;
-      float   _rgxyz;
+      float   _ipdel = 0.f;
+      float   _xover = 0.f;
+      float   _rtlow = 0.f;
+      float   _rtmid = 0.f;
+      float   _fdamp = 0.f;
+      float   _opmix = 0.f;
+      float   _rgxyz = 0.f;
 
-      float   _g0, _d0;
-      float   _g1, _d1;
+      float   _g0 = 0.f, _d0 = 0.f;
+      float   _g1 = 0.f, _d1 = 0.f;
 
       Pareq   _pareq1;
       Pareq   _pareq2;
@@ -233,8 +233,8 @@ class ZitaReverb : public Effect
       static float _tdiff1 [8];
       static float _tdelay [8];
 
-      int _fragm;
-      int _nsamp;
+      int _fragm = 0;
+      int _nsamp = 0;
 
       void prepare(int n);
 
