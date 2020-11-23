@@ -11051,7 +11051,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <controller ctrl="32" value="16"/> <!--Mandolin-->
-                        <program value="24"/> <!--Acoustic Guitar (nylon)-->
+                        <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
                   <genre>popular</genre>
             </Instrument>
@@ -11084,7 +11084,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <controller ctrl="32" value="16"/> <!--Mandolin-->
-                        <program value="24"/> <!--Acoustic Guitar (nylon)-->
+                        <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
             </Instrument>
             <Instrument id="alto-mandola">
@@ -11107,7 +11107,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <controller ctrl="32" value="16"/> <!--Mandolin-->
-                        <program value="24"/> <!--Acoustic Guitar (nylon)-->
+                        <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
             </Instrument>
             <Instrument id="tenor-mandola">
@@ -11129,7 +11129,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <controller ctrl="32" value="16"/> <!--Mandolin-->
-                        <program value="24"/> <!--Acoustic Guitar (nylon)-->
+                        <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
             </Instrument>
             <Instrument id="mandocello">
@@ -11151,7 +11151,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <controller ctrl="32" value="16"/> <!--Mandolin-->
-                        <program value="24"/> <!--Acoustic Guitar (nylon)-->
+                        <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
             </Instrument>
             <Instrument id="octave-mandolin">
@@ -11173,7 +11173,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <controller ctrl="32" value="16"/> <!--Mandolin-->
-                        <program value="24"/> <!--Acoustic Guitar (nylon)-->
+                        <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
             </Instrument>
             <Instrument id="shamisen">
