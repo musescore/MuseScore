@@ -2197,7 +2197,7 @@ void MusicXMLParserPass2::attributes(const QString& partId, Measure* measure, co
         } else if (_e.name() == "key") {
             key(partId, measure, tick);
         } else if (_e.name() == "measure-style") {
-            measureStyle(partId, measure);
+            measureStyle(measure);
         } else if (_e.name() == "staff-details") {
             staffDetails(partId);
         } else if (_e.name() == "time") {
@@ -2360,7 +2360,7 @@ void MusicXMLParserPass2::staffTuning(StringData* t)
  Initializes the "in multi-measure rest" state and the "in measure repeat" state
  */
 
-void MusicXMLParserPass2::measureStyle(const QString& partId, Measure* measure)
+void MusicXMLParserPass2::measureStyle(Measure* measure)
 {
     Q_ASSERT(_e.isStartElement() && _e.name() == "measure-style");
 

@@ -257,7 +257,7 @@ private:
     void measure(const QString& partId, const Fraction time);
     void setMeasureRepeats(const int scoreRelStaff, Measure* measure);
     void attributes(const QString& partId, Measure* measure, const Fraction& tick);
-    void measureStyle(const QString& partId, Measure* measure);
+    void measureStyle(Measure* measure);
     void barline(const QString& partId, Measure* measure, const Fraction& tick);
     void key(const QString& partId, Measure* measure, const Fraction& tick);
     void clef(const QString& partId, Measure* measure, const Fraction& tick);

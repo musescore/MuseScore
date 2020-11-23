@@ -3761,7 +3761,6 @@ System* Score::collectSystem(LayoutContext& lc)
     system->setWidth(systemWidth);
 
     // save state of measure
-    qreal curWidth = lc.curMeasure->width();
     bool curHeader = lc.curMeasure->header();
     bool curTrailer = lc.curMeasure->trailer();
     MeasureBase* breakMeasure = nullptr;
