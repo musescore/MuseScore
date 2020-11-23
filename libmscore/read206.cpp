@@ -142,7 +142,7 @@ struct StyleVal2 {
       { Sid::accidentalDistance,          Spatium(0.22) },
       { Sid::accidentalNoteDistance,      Spatium(0.22) },
       { Sid::beamWidth,                   Spatium(0.5) },           // was 0.48
-      { Sid::beamDistance,                QVariant(0.5) },          // 0.25sp
+      { Sid::beamDistance,                Spatium(0.25) },          // 0.25sp
       { Sid::beamMinLen,                  QVariant(1.32) },      // 1.316178 exactly notehead width
       { Sid::beamNoSlope,                 QVariant(false) },
       { Sid::dotMag,                      QVariant(1.0) },

@@ -205,7 +205,7 @@ static const StyleType styleTypes[] {
       { Sid::accidentalNoteDistance,  "accidentalNoteDistance",  Spatium(0.22) },
 
       { Sid::beamWidth,               "beamWidth",               Spatium(0.5)  },     // was 0.48
-      { Sid::beamDistance,            "beamDistance",            QVariant(0.5) },     // 0.25sp units
+      { Sid::beamDistance,            "beamDistance",            Spatium(0.25) },     // 0.25sp units
       { Sid::beamMinLen,              "beamMinLen",              Spatium(1.32) },     // 1.316178 exactly notehead widthen beams
       { Sid::beamNoSlope,             "beamNoSlope",             QVariant(false) },
 

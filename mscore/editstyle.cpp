@@ -305,7 +305,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::measureNumberPosAbove,    false, measureNumberPosAbove,        resetMeasureNumberPosAbove },
       { Sid::measureNumberPosBelow,    false, measureNumberPosBelow,        resetMeasureNumberPosBelow },
 
-      { Sid::beamDistance,             true,  beamDistance,                 0 },
+      { Sid::beamDistance,             false, beamDistance,                 0 },
       { Sid::beamNoSlope,              false, beamNoSlope,                  0 },
       { Sid::graceNoteMag,             true,  graceNoteSize,                resetGraceNoteSize  },
       { Sid::smallStaffMag,            true,  smallStaffSize,               resetSmallStaffSize },

@@ -1553,10 +1553,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
       QPointF _pagePos(pagePos());
       qreal beamMinLen = score()->styleP(Sid::beamMinLen) * mag();
 
-      if (beamLevels == 4)
-            _beamDist = score()->styleP(Sid::beamWidth) * (1 + score()->styleD(Sid::beamDistance)*4/3);
-      else
-            _beamDist = score()->styleP(Sid::beamWidth) * (1 + score()->styleD(Sid::beamDistance));
+      _beamDist = score()->styleS(Sid::beamDistance).val() * spatium();
 
       _beamDist *= mag();
       _beamDist *= c1->staff()->mag(c1);
@@ -1937,8 +1934,8 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                         x3 = x2 + len;
                         }
                   //feathered beams
-                  qreal yo   = py1 + bl * _beamDist * _grow1;
-                  qreal yoo  = py1 + bl * _beamDist * _grow2;
+                  qreal yo   = py1 + bl * 3 * _beamDist * _grow1;
+                  qreal yoo  = py1 + bl * 3 * _beamDist * _grow2;
                   qreal ly1  = (x2 - x1) * slope + yo;
                   qreal ly2  = (x3 - x1) * slope + yoo;
 

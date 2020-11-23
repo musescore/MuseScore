@@ -108,7 +108,7 @@ static const StyleVal2 style114[] = {
       { Sid::accidentalDistance,           QVariant(0.22) },
       { Sid::accidentalNoteDistance,       QVariant(0.22) },
       { Sid::beamWidth,                    QVariant(0.48) },
-      { Sid::beamDistance,                 QVariant(0.5) },
+      { Sid::beamDistance,                 Spatium(0.25) },
       { Sid::beamMinLen,                   QVariant(1.25) },
       { Sid::dotNoteDistance,              QVariant(0.35) },
       { Sid::dotRestDistance,              QVariant(0.25) },

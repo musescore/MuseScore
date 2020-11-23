@@ -5131,7 +5131,7 @@
            <item row="1" column="0">
             <widget class="QLabel" name="label_57">
              <property name="text">
-              <string>Beam distance (relative to beam thickness):</string>
+              <string>Beam distance:</string>
              </property>
             </widget>
            </item>
@@ -5171,16 +5171,22 @@
            <item row="1" column="1">
             <widget class="QDoubleSpinBox" name="beamDistance">
              <property name="suffix">
-              <string>%</string>
+              <string>sp</string>
              </property>
              <property name="decimals">
-              <number>1</number>
+              <number>2</number>
              </property>
              <property name="minimum">
-              <double>20.000000000000000</double>
+              <double>0.000000000000000</double>
              </property>
              <property name="maximum">
-              <double>400.000000000000000</double>
+              <double>99.989999999999995</double>
+             </property>
+             <property name="singleStep">
+              <double>0.010000000000000</double>
+             </property>
+             <property name="value">
+              <double>0.000000000000000</double>
              </property>
             </widget>
            </item>

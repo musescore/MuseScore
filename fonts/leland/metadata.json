@@ -2,7 +2,7 @@
     "engravingDefaults": {
         "arrowShaftThickness": 0.1,
         "barlineSeparation": 0.55,
-        "beamSpacing": 0.5,
+        "beamSpacing": 0.25,
         "beamThickness": 0.5,
         "bracketThickness": 0.44,
         "dashedBarlineDashLength": 0.6,
