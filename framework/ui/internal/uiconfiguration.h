@@ -25,42 +25,39 @@
 
 #include "modularity/ioc.h"
 
-namespace mu {
-namespace framework {
+namespace mu::framework {
 class UiConfiguration : public IUiConfiguration
 {
     INJECT(framework, IMainWindow, mainWindow)
 
 public:
-    UiConfiguration();
+    void init();
 
     ThemeType themeType() const override;
-    async::Channel<ThemeType> themeTypeChanged() override;
+    async::Channel<ThemeType> themeTypeChanged() const override;
 
     QString fontFamily() const override;
-    async::Channel<QString> fontFamilyChanged() override;
+    async::Channel<QString> fontFamilyChanged() const override;
 
     int fontSize() const override;
-    async::Channel<int> fontSizeChanged() override;
+    async::Channel<int> fontSizeChanged() const override;
 
     QString musicalFontFamily() const override;
-    async::Channel<QString> musicalFontFamilyChanged() override;
+    async::Channel<QString> musicalFontFamilyChanged() const override;
 
     int musicalFontSize() const override;
-    async::Channel<int> musicalFontSizeChanged() override;
+    async::Channel<int> musicalFontSizeChanged() const override;
 
     float guiScaling() const override;
     float physicalDotsPerInch() const override;
 
 private:
-
     async::Channel<ThemeType> m_currentThemeTypeChannel;
     async::Channel<QString> m_currentFontFamilyChannel;
     async::Channel<int> m_currentFontSizeChannel;
     async::Channel<QString> m_currentMusicalFontFamilyChannel;
     async::Channel<int> m_currentMusicalFontSizeChannel;
 };
-}
 }
 
 #endif // UICONFIGURATION_H

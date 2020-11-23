@@ -25,8 +25,7 @@
 #include "modularity/imoduleexport.h"
 #include "async/channel.h"
 
-namespace mu {
-namespace framework {
+namespace mu::framework {
 class IUiConfiguration : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IUiConfiguration)
@@ -40,24 +39,23 @@ public:
     virtual ~IUiConfiguration() = default;
 
     virtual ThemeType themeType() const = 0;
-    virtual async::Channel<ThemeType> themeTypeChanged() = 0;
+    virtual async::Channel<ThemeType> themeTypeChanged() const = 0;
 
     virtual QString fontFamily() const = 0;
-    virtual async::Channel<QString> fontFamilyChanged() = 0;
+    virtual async::Channel<QString> fontFamilyChanged() const = 0;
 
     virtual int fontSize() const = 0;
-    virtual async::Channel<int> fontSizeChanged() = 0;
+    virtual async::Channel<int> fontSizeChanged() const = 0;
 
     virtual QString musicalFontFamily() const = 0;
-    virtual async::Channel<QString> musicalFontFamilyChanged() = 0;
+    virtual async::Channel<QString> musicalFontFamilyChanged() const = 0;
 
     virtual int musicalFontSize() const = 0;
-    virtual async::Channel<int> musicalFontSizeChanged() = 0;
+    virtual async::Channel<int> musicalFontSizeChanged() const = 0;
 
     virtual float guiScaling() const = 0;
     virtual float physicalDotsPerInch() const = 0;
 };
-}
 }
 
 #endif // IUICONFIGURATION_H

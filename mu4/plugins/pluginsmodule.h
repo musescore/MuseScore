@@ -21,8 +21,7 @@
 
 #include "modularity/imodulesetup.h"
 
-namespace mu {
-namespace plugins {
+namespace mu::plugins {
 class PluginsModule : public framework::IModuleSetup
 {
 public:
@@ -31,8 +30,8 @@ public:
     void registerExports() override;
     void registerResources() override;
     void registerUiTypes() override;
+    void onInit() override;
 };
-}
 }
 
 #endif // MU_PLUGINS_PLUGINSSMODULE_H
