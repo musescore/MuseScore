@@ -142,9 +142,9 @@ EditStaffType::EditStaffType(QWidget* parent)
     WidgetStateStore::restoreGeometry(this);
 }
 
-void EditStaffType::setStaffType(const StaffType* staffType)
+void EditStaffType::setStaffType(const StaffType* stafftype)
 {
-    this->staffType = *staffType;
+    this->staffType = *stafftype;
 
     setValues();
 }
