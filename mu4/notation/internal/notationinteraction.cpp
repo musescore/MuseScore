@@ -46,6 +46,8 @@
 
 #include "masternotation.h"
 #include "scorecallbacks.h"
+#include "notationnoteinput.h"
+#include "notationselection.h"
 
 using namespace mu::notation;
 using namespace Ms;
@@ -53,11 +55,11 @@ using namespace Ms;
 NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack)
     : m_notation(notation), m_undoStack(undoStack)
 {
-    m_inputState = std::make_shared<NotationInputState>(notation, this, m_undoStack);
+    m_noteInput = std::make_shared<NotationNoteInput>(notation, this, m_undoStack);
     m_selection = std::make_shared<NotationSelection>(notation);
 
-    m_inputState->stateChanged().onNotify(this, [this]() {
-        if (!m_inputState->isNoteInputMode()) {
+    m_noteInput->stateChanged().onNotify(this, [this]() {
+        if (!m_noteInput->isNoteInputMode()) {
             hideShadowNote();
         }
     });
@@ -93,9 +95,9 @@ void NotationInteraction::paint(QPainter* p)
     drawSelectionRange(p);
 }
 
-INotationInputStatePtr NotationInteraction::inputState() const
+INotationNoteInputPtr NotationInteraction::noteInput() const
 {
-    return m_inputState;
+    return m_noteInput;
 }
 
 void NotationInteraction::showShadowNote(const QPointF& p)

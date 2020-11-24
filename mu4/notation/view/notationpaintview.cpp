@@ -94,7 +94,7 @@ void NotationPaintView::onCurrentNotationChanged()
     if (m_notation) {
         m_notation->notationChanged().resetOnNotify(this);
         INotationInteractionPtr interaction = m_notation->interaction();
-        interaction->inputState()->stateChanged().resetOnNotify(this);
+        interaction->noteInput()->stateChanged().resetOnNotify(this);
         interaction->selectionChanged().resetOnNotify(this);
     }
 
@@ -109,11 +109,11 @@ void NotationPaintView::onCurrentNotationChanged()
         update();
     });
 
-    onInputStateChanged();
+    onNoteInputStateChanged();
 
     INotationInteractionPtr interaction = notationInteraction();
-    interaction->inputState()->stateChanged().onNotify(this, [this]() {
-        onInputStateChanged();
+    interaction->noteInput()->stateChanged().onNotify(this, [this]() {
+        onNoteInputStateChanged();
     });
 
     interaction->selectionChanged().onNotify(this, [this]() {
@@ -134,9 +134,9 @@ void NotationPaintView::onViewSizeChanged()
     m_notation->setViewSize(QSizeF(p2.x() - p1.x(), p2.y() - p1.y()));
 }
 
-void NotationPaintView::onInputStateChanged()
+void NotationPaintView::onNoteInputStateChanged()
 {
-    if (notationInteraction()->inputState()->isNoteInputMode()) {
+    if (notationInteraction()->noteInput()->isNoteInputMode()) {
         setAcceptHoverEvents(true);
     } else {
         setAcceptHoverEvents(false);
@@ -159,7 +159,7 @@ bool NotationPaintView::isNoteEnterMode() const
         return false;
     }
 
-    return notationInteraction()->inputState()->isNoteInputMode();
+    return notationInteraction()->noteInput()->isNoteInputMode();
 }
 
 void NotationPaintView::showShadowNote(const QPointF& pos)

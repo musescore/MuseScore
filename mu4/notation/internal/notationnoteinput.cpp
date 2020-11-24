@@ -16,7 +16,7 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "notationinputstate.h"
+#include "notationnoteinput.h"
 
 #include "libmscore/score.h"
 #include "libmscore/input.h"
@@ -30,7 +30,7 @@
 using namespace mu::notation;
 using namespace mu::async;
 
-NotationInputState::NotationInputState(const IGetScore* getScore, INotationInteraction* interaction, INotationUndoStackPtr undoStack)
+NotationNoteInput::NotationNoteInput(const IGetScore* getScore, INotationInteraction* interaction, INotationUndoStackPtr undoStack)
     : m_getScore(getScore), m_interaction(interaction), m_undoStack(undoStack)
 {
     m_scoreCallbacks = new ScoreCallbacks();
@@ -40,17 +40,17 @@ NotationInputState::NotationInputState(const IGetScore* getScore, INotationInter
     });
 }
 
-NotationInputState::~NotationInputState()
+NotationNoteInput::~NotationNoteInput()
 {
     delete m_scoreCallbacks;
 }
 
-bool NotationInputState::isNoteInputMode() const
+bool NotationNoteInput::isNoteInputMode() const
 {
     return score()->inputState().noteEntryMode();
 }
 
-bool NotationInputState::isPadActive(Pad pad) const
+bool NotationNoteInput::isPadActive(Pad pad) const
 {
     switch (pad) {
     case Pad::NOTE00: return isDurationActive(DurationType::V_LONG);
@@ -76,12 +76,12 @@ bool NotationInputState::isPadActive(Pad pad) const
     return false;
 }
 
-Duration NotationInputState::duration() const
+Duration NotationNoteInput::duration() const
 {
     return score()->inputState().duration();
 }
 
-void NotationInputState::startNoteInput()
+void NotationNoteInput::startNoteInput()
 {
     //! NOTE Coped from `void ScoreView::startNoteEntry()`
     Ms::InputState& is = score()->inputState();
@@ -156,7 +156,7 @@ void NotationInputState::startNoteInput()
     m_stateChanged.notify();
 }
 
-void NotationInputState::endNoteInput()
+void NotationNoteInput::endNoteInput()
 {
     Ms::InputState& is = score()->inputState();
     is.setNoteEntryMode(false);
@@ -171,7 +171,7 @@ void NotationInputState::endNoteInput()
     m_stateChanged.notify();
 }
 
-void NotationInputState::setNoteInputMethod(NoteInputMethod method)
+void NotationNoteInput::setNoteInputMethod(NoteInputMethod method)
 {
     Ms::InputState& inputState = score()->inputState();
     inputState.setNoteEntryMethod(method);
@@ -179,7 +179,7 @@ void NotationInputState::setNoteInputMethod(NoteInputMethod method)
     m_stateChanged.notify();
 }
 
-void NotationInputState::addNote(NoteName noteName, NoteAddingMode addingMode)
+void NotationNoteInput::addNote(NoteName noteName, NoteAddingMode addingMode)
 {
     if (!isNoteInputMode()) {
         startNoteInput();
@@ -198,7 +198,7 @@ void NotationInputState::addNote(NoteName noteName, NoteAddingMode addingMode)
     m_stateChanged.notify();
 }
 
-void NotationInputState::padNote(const Pad& pad)
+void NotationNoteInput::padNote(const Pad& pad)
 {
     Ms::EditData ed;
     ed.view = m_scoreCallbacks;
@@ -210,7 +210,7 @@ void NotationInputState::padNote(const Pad& pad)
     m_stateChanged.notify();
 }
 
-void NotationInputState::putNote(const QPointF& pos, bool replace, bool insert)
+void NotationNoteInput::putNote(const QPointF& pos, bool replace, bool insert)
 {
     m_undoStack->prepareChanges();
     score()->putNote(pos, replace, insert);
@@ -219,27 +219,37 @@ void NotationInputState::putNote(const QPointF& pos, bool replace, bool insert)
     m_noteAdded.notify();
 }
 
-Notification NotationInputState::noteAdded() const
+void NotationNoteInput::toogleAccidental(AccidentalType accidentalType)
+{
+    Ms::EditData editData;
+    editData.view = m_scoreCallbacks;
+
+    score()->toggleAccidental(accidentalType, editData);
+
+    m_stateChanged.notify();
+}
+
+Notification NotationNoteInput::noteAdded() const
 {
     return m_noteAdded;
 }
 
-Notification NotationInputState::stateChanged() const
+Notification NotationNoteInput::stateChanged() const
 {
     return m_stateChanged;
 }
 
-Ms::Score* NotationInputState::score() const
+Ms::Score* NotationNoteInput::score() const
 {
     return m_getScore->score();
 }
 
-bool NotationInputState::isDurationActive(DurationType durationType) const
+bool NotationNoteInput::isDurationActive(DurationType durationType) const
 {
     return duration() == durationType;
 }
 
-void NotationInputState::updateInputState()
+void NotationNoteInput::updateInputState()
 {
     score()->inputState().update(score()->selection());
 

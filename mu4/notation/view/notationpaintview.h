@@ -112,7 +112,7 @@ private:
     void adjustCanvasPosition(const QRectF& logicRect);
     void moveCanvasToPosition(const QPoint& logicPos);
 
-    void onInputStateChanged();
+    void onNoteInputStateChanged();
     void onSelectionChanged();
 
     void onPlayingChanged();

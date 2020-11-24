@@ -16,10 +16,10 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATION_NOTATIONINPUTSTATE_H
-#define MU_NOTATION_NOTATIONINPUTSTATE_H
+#ifndef MU_NOTATION_NOTATIONNOTEINPUT_H
+#define MU_NOTATION_NOTATIONNOTEINPUT_H
 
-#include "../inotationinputstate.h"
+#include "../inotationnoteinput.h"
 #include "async/asyncable.h"
 #include "igetscore.h"
 #include "inotationinteraction.h"
@@ -31,11 +31,11 @@ class Score;
 
 namespace mu::notation {
 class ScoreCallbacks;
-class NotationInputState : public INotationInputState, public async::Asyncable
+class NotationNoteInput : public INotationNoteInput, public async::Asyncable
 {
 public:
-    NotationInputState(const IGetScore* getScore, INotationInteraction* interaction, INotationUndoStackPtr undoStack);
-    ~NotationInputState() override;
+    NotationNoteInput(const IGetScore* getScore, INotationInteraction* interaction, INotationUndoStackPtr undoStack);
+    ~NotationNoteInput() override;
 
     bool isNoteInputMode() const override;
     bool isPadActive(Pad pad) const override;
@@ -48,6 +48,7 @@ public:
     void addNote(NoteName noteName, NoteAddingMode addingMode) override;
     void padNote(const Pad& pad) override;
     void putNote(const QPointF& pos, bool replace, bool insert) override;
+    void toogleAccidental(AccidentalType accidentalType) override;
 
     async::Notification noteAdded() const override;
     async::Notification stateChanged() const override;
@@ -70,4 +71,4 @@ private:
 };
 }
 
-#endif // MU_NOTATION_NOTATIONINPUTSTATE_H
+#endif // MU_NOTATION_NOTATIONNOTEINPUT_H

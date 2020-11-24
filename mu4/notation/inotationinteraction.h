@@ -26,7 +26,7 @@
 #include "async/notification.h"
 
 #include "notationtypes.h"
-#include "inotationinputstate.h"
+#include "inotationnoteinput.h"
 #include "inotationselection.h"
 
 namespace mu::notation {
@@ -36,13 +36,7 @@ public:
     virtual ~INotationInteraction() = default;
 
     // Put notes
-    virtual void startNoteEntry() = 0;
-    virtual void endNoteEntry() = 0;
-    virtual void setNoteEntryMethod(NoteInputMethod method) = 0;
-    virtual void addNote(NoteName noteName, NoteAddingMode addingMode) = 0;
-    virtual void padNote(const Pad& pad) = 0;
-    virtual void putNote(const QPointF& pos, bool replace, bool insert) = 0;
-    virtual INotationInputStatePtr inputState() const = 0;
+    virtual INotationNoteInputPtr noteInput() const = 0;
 
     // Shadow note
     virtual void showShadowNote(const QPointF& p) = 0;
