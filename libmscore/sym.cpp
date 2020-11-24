@@ -2865,7 +2865,39 @@ const std::array<const char*, int(SymId::lastSym)+1> Sym::symNames = { {
       "braceLarge",
       "braceLarger",
 
-//    MuseScore-local symbols, precomposed symbols to mimic some Emmentaler glyphs
+//    SMuFL stylistic alternates for Large Time Signatures
+
+      "timeSig0Large",
+      "timeSig1Large",
+      "timeSig2Large",
+      "timeSig3Large",
+      "timeSig4Large",
+      "timeSig5Large",
+      "timeSig6Large",
+      "timeSig7Large",
+      "timeSig8Large",
+      "timeSig9Large",
+      "timeSigCommonLarge",
+      "timeSigCutCommonLarge",
+      "timeSigFractionHalfLarge",
+      "timeSigFractionOneThirdLarge",
+      "timeSigFractionQuarterLarge",
+      "timeSigFractionThreeQuartersLarge",
+      "timeSigFractionTwoThirdsLarge",
+      "timeSigOpenPendereckiLarge",
+      "timeSigParensLeftLarge",
+      "timeSigParensLeftSmallLarge",
+      "timeSigParensRightLarge",
+      "timeSigParensRightSmallLarge",
+      "timeSigPlusLarge",
+      "timeSigPlusSmallLarge",
+      "timeSigEqualsLarge",
+      "timeSigMultiplyLarge",
+      "timeSigMinusLarge",
+      "timeSigCommaLarge",
+      "timeSigXLarge",
+
+//    MuseScore local symbols, precomposed symbols to mimic some emmentaler glyphs
 
       "ornamentPrallMordent",       // ornamentPrecompTrillWithMordent ?
       "ornamentUpPrall",            // ornamentPrecompSlideTrillDAnglebert ?
@@ -6236,7 +6268,7 @@ void ScoreFont::draw(const std::vector<SymId>& ids, QPainter* p, const QSizeF& m
       QPointF pos(_pos);
       for (SymId id : ids) {
             draw(id, p, mag, pos, scale);
-            pos.rx() += (sym(id).advance() * mag.width());
+            pos.rx() += advance(id, mag.width());
             }
       }
 
@@ -6611,6 +6643,122 @@ void ScoreFont::load()
                   {     QString("brace"),
                         QString("braceLarger"),
                         SymId::braceLarger
+                  },
+                  {     QString("timeSig0"),
+                        QString("timeSig0Large"),
+                        SymId::timeSig0Large
+                  },
+                  {     QString("timeSig1"),
+                        QString("timeSig1Large"),
+                        SymId::timeSig1Large
+                  },
+                  {     QString("timeSig2"),
+                        QString("timeSig2Large"),
+                        SymId::timeSig2Large
+                  },
+                  {     QString("timeSig3"),
+                        QString("timeSig3Large"),
+                        SymId::timeSig3Large
+                  },
+                  {     QString("timeSig4"),
+                        QString("timeSig4Large"),
+                        SymId::timeSig4Large
+                  },
+                  {     QString("timeSig5"),
+                        QString("timeSig5Large"),
+                        SymId::timeSig5Large
+                  },
+                  {     QString("timeSig6"),
+                        QString("timeSig6Large"),
+                        SymId::timeSig6Large
+                  },
+                  {     QString("timeSig7"),
+                        QString("timeSig7Large"),
+                        SymId::timeSig7Large
+                  },
+                  {     QString("timeSig8"),
+                        QString("timeSig8Large"),
+                        SymId::timeSig8Large
+                  },
+                  {     QString("timeSig9"),
+                        QString("timeSig9Large"),
+                        SymId::timeSig9Large
+                  },
+                  {     QString("timeSigCommon"),
+                        QString("timeSigCommonLarge"),
+                        SymId::timeSigCommonLarge
+                  },
+                  {     QString("timeSigCutCommon"),
+                        QString("timeSigCutCommonLarge"),
+                        SymId::timeSigCutCommonLarge
+                  },
+                  {     QString("timeSigFractionHalf"),
+                        QString("timeSigFractionHalfLarge"),
+                        SymId::timeSigFractionHalfLarge
+                  },
+                  {     QString("timeSigFractionOneThird"),
+                        QString("timeSigFractionOneThirdLarge"),
+                        SymId::timeSigFractionOneThirdLarge
+                  },
+                  {     QString("timeSigFractionQuarter"),
+                        QString("timeSigFractionQuarterLarge"),
+                        SymId::timeSigFractionQuarterLarge
+                  },
+                  {     QString("timeSigFractionThreeQuarters"),
+                        QString("timeSigFractionThreeQuartersLarge"),
+                        SymId::timeSigFractionThreeQuartersLarge
+                  },
+                  {     QString("timeSigFractionTwoThirds"),
+                        QString("timeSigFractionTwoThirdsLarge"),
+                        SymId::timeSigFractionTwoThirdsLarge
+                  },
+                  {     QString("timeSigOpenPenderecki"),
+                        QString("timeSigOpenPendereckiLarge"),
+                        SymId::timeSigOpenPendereckiLarge
+                  },
+                  {     QString("timeSigParensLeft"),
+                        QString("timeSigParensLeftLarge"),
+                        SymId::timeSigParensLeftLarge
+                  },
+                  {     QString("timeSigParensLeftSmall"),
+                        QString("timeSigParensLeftSmallLarge"),
+                        SymId::timeSigParensLeftSmallLarge
+                  },
+                  {     QString("timeSigParensRight"),
+                        QString("timeSigParensRightLarge"),
+                        SymId::timeSigParensRightLarge
+                  },
+                  {     QString("timeSigParensRightSmall"),
+                        QString("timeSigParensRightSmallLarge"),
+                        SymId::timeSigParensRightSmallLarge
+                  },
+                  {     QString("timeSigPlus"),
+                        QString("timeSigPlusLarge"),
+                        SymId::timeSigPlusLarge
+                  },
+                  {     QString("timeSigPlusSmall"),
+                        QString("timeSigPlusSmallLarge"),
+                        SymId::timeSigPlusSmallLarge
+                  },
+                  {     QString("timeSigEquals"),
+                        QString("timeSigEqualsLarge"),
+                        SymId::timeSigEqualsLarge
+                  },
+                  {     QString("timeSigMultiply"),
+                        QString("timeSigMultiplyLarge"),
+                        SymId::timeSigMultiplyLarge
+                  },
+                  {     QString("timeSigMinus"),
+                        QString("timeSigMinusLarge"),
+                        SymId::timeSigMinusLarge
+                  },
+                  {     QString("timeSigComma"),
+                        QString("timeSigCommaLarge"),
+                        SymId::timeSigCommaLarge
+                  },
+                  {     QString("timeSigX"),
+                        QString("timeSigXLarge"),
+                        SymId::timeSigXLarge
                   }
             };
 
@@ -6745,7 +6893,7 @@ const QRectF ScoreFont::bbox(SymId id, qreal mag) const
 const QRectF ScoreFont::bbox(SymId id, const QSizeF& mag) const
       {
       if (useFallbackFont(id))
-            return fallbackFont()->bbox(id, mag.width());
+            return fallbackFont()->bbox(id, mag);
       QRectF r = sym(id).bbox();
       return QRectF(r.x() * mag.width(), r.y() * mag.height(), r.width() * mag.width(), r.height() * mag.height());
       }

@@ -41,14 +41,16 @@ enum class TimeSigType : char {
 class TimeSig final : public Element {
       QString _numeratorString;     // calculated from actualSig() if !customText
       QString _denominatorString;
+      QString _parserString;         // Parsed single text field for custom text
 
-      std::vector<SymId> ns;
-      std::vector<SymId> ds;
+      std::vector<std::vector<SymId>> ns;
+      std::vector<std::vector<SymId>> ds;
 
-      QPointF pz;
-      QPointF pn;
-      QPointF pointLargeLeftParen;
-      QPointF pointLargeRightParen;
+      std::vector<QPointF> pns;
+      std::vector<QPointF> pds;
+
+      //QPointF pointLargeLeftParen;
+      //QPointF pointLargeRightParen;
       Fraction _sig;
       Fraction _stretch;      // localSig / globalSig
       Groups _groups;
@@ -56,6 +58,7 @@ class TimeSig final : public Element {
       QSizeF _scale;
       TimeSigType _timeSigType;
       bool _showCourtesySig;
+      bool _largeTimeSig;
       bool _largeParentheses;
 
    public:
@@ -98,11 +101,17 @@ class TimeSig final : public Element {
       bool showCourtesySig() const       { return _showCourtesySig; }
       void setShowCourtesySig(bool v)    { _showCourtesySig = v;    }
 
+      int  largeTimeSig() const          { return _largeTimeSig;    } 
+      void setLargeTimeSig(bool v)       { _largeTimeSig = v;       }
+
       QString numeratorString() const    { return _numeratorString;   }
       void setNumeratorString(const QString&);
 
       QString denominatorString() const  { return _denominatorString; }
       void setDenominatorString(const QString&);
+
+      QString parserString() const        { return _parserString;       }
+      void setParserString(const QString& a);
 
       void setLargeParentheses(bool v)    { _largeParentheses = v;    }
 

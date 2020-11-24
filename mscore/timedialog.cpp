@@ -48,13 +48,21 @@ TimeDialog::TimeDialog(QWidget* parent)
       sp->setReadOnly(false);
       sp->setSelectable(true);
 
+      // (should be in sync with validator in timeproperties.cpp and inspector.cpp)
+      QRegExp rx("[0-9+CO()|=,x ~X\\*\\-\\[\\]\\.\\/\\x00A2\\x00D8\\x00BC\\x00BD\\x00BE\\xE097\\xE098\\xE099\\xE09A\\xE09B\\xE09C\\xE09D]*");
+      QValidator *validator = new QRegExpValidator(rx, this);
+      //zText->setValidator(validator);
+      pText->setValidator(validator);
+
+
       connect(zNominal,  SIGNAL(valueChanged(int)), SLOT(zChanged(int)));
       connect(nNominal,  SIGNAL(currentIndexChanged(int)), SLOT(nChanged(int)));
       connect(sp,        SIGNAL(boxClicked(int)),   SLOT(paletteChanged(int)));
       connect(sp,        SIGNAL(changed()),         SLOT(setDirty()));
       connect(addButton, SIGNAL(clicked()),         SLOT(addClicked()));
-      connect(zText,     SIGNAL(textChanged(const QString&)),    SLOT(textChanged()));
-      connect(nText,     SIGNAL(textChanged(const QString&)),    SLOT(textChanged()));
+      //connect(zText,     SIGNAL(textChanged(const QString&)),    SLOT(textChanged()));
+      //connect(nText,     SIGNAL(textChanged(const QString&)),    SLOT(textChanged()));
+      connect(pText,     SIGNAL(textChanged(const QString&)),    SLOT(textChanged()));
 
       _timePalette = new PaletteScrollArea(sp);
       QSizePolicy policy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -67,7 +75,7 @@ TimeDialog::TimeDialog(QWidget* parent)
 
       if (useFactorySettings || !sp->read(dataPath + "/timesigs")) {
             Fraction sig(4,4);
-            groups->setSig(sig, Groups::endings(sig), zText->text(), nText->text());
+            groups->setSig(sig, Groups::endings(sig), /*zText->text(), nText->text(),*/ pText->text());
             }
       for (int i = 0; i < sp->size(); ++i)      // cells can be changed
             sp->setCellReadOnly(i, false);
@@ -88,11 +96,13 @@ void TimeDialog::addClicked()
       ts->setGroups(groups->groups());
 
       // check for special text
-      if ((QString("%1").arg(zNominal->value()) != zText->text())
+      /*if ((QString("%1").arg(zNominal->value()) != zText->text())
          || (QString("%1").arg(denominator()) != nText->text())) {
             ts->setNumeratorString(zText->text());
             ts->setDenominatorString(nText->text());
-            }
+            }*/
+      if (!pText->text().isEmpty())
+            ts->setParserString(pText->text());
       // extend palette:
       sp->append(ts, "");
       sp->setSelected(sp->size() - 1);
@@ -129,7 +139,7 @@ void TimeDialog::zChanged(int val)
       {
       Q_UNUSED(val);
       Fraction sig(zNominal->value(), denominator());
-      groups->setSig(sig, Groups::endings(sig), zText->text(), nText->text());
+      groups->setSig(sig, Groups::endings(sig),/* zText->text(), nText->text(),*/ pText->text());
       }
 
 //---------------------------------------------------------
@@ -140,7 +150,7 @@ void TimeDialog::nChanged(int val)
       {
       Q_UNUSED(val);
       Fraction sig(zNominal->value(), denominator());
-      groups->setSig(sig, Groups::endings(sig), zText->text(), nText->text());
+      groups->setSig(sig, Groups::endings(sig), /*zText->text(), nText->text(),*/ pText->text());
       }
 
 //---------------------------------------------------------
@@ -191,16 +201,18 @@ void TimeDialog::paletteChanged(int idx)
       if (!e || e->type() != ElementType::TIMESIG) {
             zNominal->setEnabled(false);
             nNominal->setEnabled(false);
-            zText->setEnabled(false);
-            nText->setEnabled(false);
+            //zText->setEnabled(false);
+            //nText->setEnabled(false);
+            pText->setEnabled(false);
             groups->setEnabled(false);
             addButton->setEnabled(false);
             return;
             }
       zNominal->setEnabled(true);
       nNominal->setEnabled(true);
-      zText->setEnabled(true);
-      nText->setEnabled(true);
+      //zText->setEnabled(true);
+      //nText->setEnabled(true);
+      pText->setEnabled(true);
       groups->setEnabled(true);
       addButton->setEnabled(true);
 
@@ -210,9 +222,10 @@ void TimeDialog::paletteChanged(int idx)
             g = Groups::endings(sig);
       zNominal->setValue(sig.numerator());
       nNominal->setCurrentIndex(denominator2Idx(sig.denominator()));
-      zText->setText(e->numeratorString());
-      nText->setText(e->denominatorString());
-      groups->setSig(sig, g, zText->text(), nText->text());
+      //zText->setText(e->numeratorString());
+      //nText->setText(e->denominatorString());
+      pText->setText(e->parserString());
+      groups->setSig(sig, g, /*zText->text(), nText->text(),*/ pText->text());
       }
 
 //---------------------------------------------------------
@@ -222,7 +235,7 @@ void TimeDialog::paletteChanged(int idx)
 void TimeDialog::textChanged()
       {
       Fraction sig(zNominal->value(), denominator());
-      groups->setSig(sig, Groups::endings(sig), zText->text(), nText->text());
+      groups->setSig(sig, Groups::endings(sig), /*zText->text(), nText->text(),*/ pText->text());
       }
 
 

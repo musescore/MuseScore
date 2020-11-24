@@ -908,16 +908,23 @@ InspectorTimeSig::InspectorTimeSig(QWidget* parent)
       const std::vector<InspectorItem> iiList = {
             { Pid::LEADING_SPACE,  1, s.leadingSpace,   s.resetLeadingSpace  },
             { Pid::SHOW_COURTESY,  0, t.showCourtesy,   t.resetShowCourtesy  },
+            { Pid::TIMESIG_LARGE,  0, t.largeStyle,     t.resetLargeStyle    },
             { Pid::SCALE,          0, t.scale,          t.resetScale         },
+            { Pid::PARSER_STRING,  0, t.pText,          t.resetPText         },
 //          { Pid::TIMESIG,        0, t.timesigZ,       t.resetTimesig       },
 //          { Pid::TIMESIG,        0, t.timesigN,       t.resetTimesig       },
 //          { Pid::TIMESIG_GLOBAL, 0, t.globalTimesigZ, t.resetGlobalTimesig },
-//          { Pid::TIMESIG_GLOBAL, 0, t.globalTimesigN, t.resetGlobalTimesig }
+//          { Pid::TIMESIG_GLOBAL, 0, t.globalTimesigN, t.resetGlobalTimesig },
             };
       const std::vector<InspectorPanel> ppList = {
             { s.title, s.panel },
             { t.title, t.panel }
             };
+      // Validator (should be in sync with validator in timedialog.cpp and timesigproperties.cpp)
+      QRegExp rx("[0-9+CO()|=,x ~X\\*\\-\\[\\]\\.\\/\\x00A2\\x00D8\\x00BC\\x00BD\\x00BE\\xE097\\xE098\\xE099\\xE09A\\xE09B\\xE09C\\xE09D]*");
+      QValidator *validator = new QRegExpValidator(rx, this);
+      t.pText->setValidator(validator);
+
       mapSignals(iiList, ppList);
       connect(t.properties, SIGNAL(clicked()), SLOT(propertiesClicked()));
       }

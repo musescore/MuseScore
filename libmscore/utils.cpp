@@ -1000,46 +1000,84 @@ Segment* skipTuplet(Tuplet* tuplet)
 
 std::vector<SymId> toTimeSigString(const QString& s)
       {
+      return toTimeSigString(s,0, false);       
+      }
+
+std::vector<SymId> toTimeSigString(const QString& s, int isLarge, bool isSingleLine)
+      {
       struct Dict {
             QChar code;
-            SymId id;
+            SymId id[2];
             };
       static const std::vector<Dict> dict = {
-            { 43,    SymId::timeSigPlusSmall        },  // '+'
-            { 48,    SymId::timeSig0                },  // '0'
-            { 49,    SymId::timeSig1                },  // '1'
-            { 50,    SymId::timeSig2                },  // '2'
-            { 51,    SymId::timeSig3                },  // '3'
-            { 52,    SymId::timeSig4                },  // '4'
-            { 53,    SymId::timeSig5                },  // '5'
-            { 54,    SymId::timeSig6                },  // '6'
-            { 55,    SymId::timeSig7                },  // '7'
-            { 56,    SymId::timeSig8                },  // '8'
-            { 57,    SymId::timeSig9                },  // '9'
-            { 67,    SymId::timeSigCommon           },  // 'C'
-            { 40,    SymId::timeSigParensLeftSmall  },  // '('
-            { 41,    SymId::timeSigParensRightSmall },  // ')'
-            { 162,   SymId::timeSigCutCommon        },  // '¢'
-            { 189,   SymId::timeSigFractionHalf     },
-            { 188,   SymId::timeSigFractionQuarter  },
-            { 59664, SymId::mensuralProlation1      },
-            { 79,    SymId::mensuralProlation2      },  // 'O'
-            { 59665, SymId::mensuralProlation2      },
-            { 216,   SymId::mensuralProlation3      },  // 'Ø'
-            { 59666, SymId::mensuralProlation3      },
-            { 59667, SymId::mensuralProlation4      },
-            { 59668, SymId::mensuralProlation5      },
-            { 59670, SymId::mensuralProlation7      },
-            { 59671, SymId::mensuralProlation8      },
-            { 59673, SymId::mensuralProlation10     },
-            { 59674, SymId::mensuralProlation11     },
+            //code     id (normal)                          id (Large sans alt)            
+            { 43,    { SymId::timeSigPlusSmall,             SymId::timeSigPlusSmallLarge        }  },  // '+'
+            { 48,    { SymId::timeSig0,                     SymId::timeSig0Large                }  },  // '0'
+            { 49,    { SymId::timeSig1,                     SymId::timeSig1Large                }  },  // '1'
+            { 50,    { SymId::timeSig2,                     SymId::timeSig2Large                }  },  // '2'
+            { 51,    { SymId::timeSig3,                     SymId::timeSig3Large                }  },  // '3'
+            { 52,    { SymId::timeSig4,                     SymId::timeSig4Large                }  },  // '4'
+            { 53,    { SymId::timeSig5,                     SymId::timeSig5Large                }  },  // '5'
+            { 54,    { SymId::timeSig6,                     SymId::timeSig6Large                }  },  // '6'
+            { 55,    { SymId::timeSig7,                     SymId::timeSig7Large                }  },  // '7'
+            { 56,    { SymId::timeSig8,                     SymId::timeSig8Large                }  },  // '8'
+            { 57,    { SymId::timeSig9,                     SymId::timeSig9Large                }  },  // '9'
+            { 67,    { SymId::timeSigCommon,                SymId::timeSigCommonLarge           }  },  // 'C'
+            { 40,    { SymId::timeSigParensLeftSmall,       SymId::timeSigParensLeftSmallLarge  }  },  // '('
+            { 41,    { SymId::timeSigParensRightSmall,      SymId::timeSigParensRightSmallLarge }  },  // ')'
+            { 162,   { SymId::timeSigCutCommon,             SymId::timeSigCutCommonLarge        }  },  // '¢'
+            { 59664, { SymId::mensuralProlation1,           SymId::mensuralProlation1           }  },
+            { 79,    { SymId::mensuralProlation2,           SymId::mensuralProlation2           }  },  // 'O'
+            { 59665, { SymId::mensuralProlation2,           SymId::mensuralProlation2           }  },
+            { 216,   { SymId::mensuralProlation3,           SymId::mensuralProlation3           }  },  // 'Ø'
+            { 59666, { SymId::mensuralProlation3,           SymId::mensuralProlation3           }  },
+            { 59667, { SymId::mensuralProlation4,           SymId::mensuralProlation4           }  },
+            { 59668, { SymId::mensuralProlation5,           SymId::mensuralProlation5           }  },
+            { 59670, { SymId::mensuralProlation7,           SymId::mensuralProlation7           }  },
+            { 59671, { SymId::mensuralProlation8,           SymId::mensuralProlation8           }  },
+            { 59673, { SymId::mensuralProlation10,          SymId::mensuralProlation10          }  },
+            { 59674, { SymId::mensuralProlation11,          SymId::mensuralProlation11          }  },
+            { 188,   { SymId::timeSigFractionQuarter,       SymId::timeSigFractionQuarterLarge  }  },  // '¼'
+            { 57495, { SymId::timeSigFractionQuarter,       SymId::timeSigFractionQuarterLarge  }  }, 
+            { 189,   { SymId::timeSigFractionHalf,          SymId::timeSigFractionHalfLarge     }  },  // '½'
+            { 57496, { SymId::timeSigFractionHalf,          SymId::timeSigFractionHalfLarge     }  },
+            { 57497, { SymId::timeSigFractionThreeQuarters, SymId::timeSigFractionThreeQuartersLarge }  },
+            { 190,   { SymId::timeSigFractionThreeQuarters, SymId::timeSigFractionThreeQuartersLarge }  }, // '¾'
+            { 57498, { SymId::timeSigFractionOneThird,      SymId::timeSigFractionOneThirdLarge      }  },
+            { 57499, { SymId::timeSigFractionTwoThirds,     SymId::timeSigFractionTwoThirdsLarge     }  },
+            { 88,    { SymId::timeSigX,                     SymId::timeSigXLarge                     }  }, // 'X'
+            { 126,   { SymId::timeSigOpenPenderecki,        SymId::timeSigOpenPendereckiLarge        }  }, // '~'
+            { 32,    { SymId::space,                        SymId::space                             }  }, // ' '
+            { 119,   { SymId::metNoteWhole,                 SymId::metNoteWhole                      }  }, // 'w'
+            { 104,   { SymId::metNoteHalfDown,              SymId::metNoteHalfDown                   }  }, // 'h'
+            { 113,   { SymId::metNoteQuarterDown,           SymId::metNoteQuarterDown                }  }, // 'q'
+            { 101,   { SymId::metNote8thDown,               SymId::metNote8thDown                    }  }, // 'e'
+            { 115,   { SymId::metNote16thDown,              SymId::metNote16thDown                   }  }, // 's'
+            { 46,    { SymId::metAugmentationDot,           SymId::metAugmentationDot                }  }, // '.'
+            { 61,    { SymId::timeSigEquals,                SymId::timeSigEqualsLarge                }  }, // '='
+            { 42,    { SymId::timeSigMultiply,              SymId::timeSigMultiplyLarge              }  }, // '*'
+            { 120,   { SymId::timeSigMultiply,              SymId::timeSigMultiplyLarge              }  }, // 'x'
+            { 45,    { SymId::timeSigMinus,                 SymId::timeSigMinusLarge                 }  }, // '-'
+            { 44,    { SymId::timeSigComma,                 SymId::timeSigCommaLarge                 }  }, // ','
+            { 57492, { SymId::timeSigParensLeft,            SymId::timeSigParensLeftLarge            }  }, // E094 (big left parenthesis)
+            { 57493, { SymId::timeSigParensRight,           SymId::timeSigParensRightLarge           }  }, // E095 (big right parenthesis)
+            { 57484, { SymId::timeSigPlus,                  SymId::timeSigPlusLarge                  }  }, // E08C (big plus)
             };
 
+      QString str = s;
+
+      // Use large versions of parentheses and '+' glyphs if in single line / between time 'signature blocks'
+      if (isSingleLine) {
+            str.replace("(","\uE094"); 
+            str.replace(")","\uE095"); 
+            str.replace("+","\uE08C"); 
+            }
+      
       std::vector<SymId> d;
-      for (auto c : s) {
+      for (auto c : str) {
             for (const Dict& e : dict) {
                   if (c == e.code) {
-                        d.push_back(e.id);
+                        d.push_back(e.id[isLarge]);
                         break;
                         }
                   }

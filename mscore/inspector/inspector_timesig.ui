@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>218</width>
-    <height>143</height>
+    <height>177</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -79,6 +79,26 @@
       <property name="spacing">
        <number>3</number>
       </property>
+      <item row="6" column="0" colspan="3">
+       <widget class="QPushButton" name="properties">
+        <property name="text">
+         <string>Properties</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="Ms::ResetButton" name="resetScale" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Scale' values</string>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="0" colspan="2">
        <widget class="QCheckBox" name="showCourtesy">
         <property name="focusPolicy">
@@ -86,6 +106,29 @@
         </property>
         <property name="text">
          <string>Show courtesy</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" colspan="2">
+       <widget class="QCheckBox" name="largeStyle">
+        <property name="focusPolicy">
+         <enum>Qt::TabFocus</enum>
+        </property>
+        <property name="text">
+         <string>Large Time Signature Font</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="Ms::ResetButton" name="resetLargeStyle" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Show courtesy' value</string>
         </property>
        </widget>
       </item>
@@ -102,8 +145,14 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item row="3" column="0">
        <widget class="QLabel" name="label">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="text">
          <string>Scale:</string>
         </property>
@@ -112,7 +161,7 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
+      <item row="3" column="1">
        <widget class="Ms::ScaleSelect" name="scale" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -125,8 +174,25 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="2">
-       <widget class="Ms::ResetButton" name="resetScale" native="true">
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Text (appearance):</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0" colspan="2">
+       <widget class="QLineEdit" name="pText">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="2">
+       <widget class="Ms::ResetButton" name="resetPText" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -134,14 +200,7 @@
          </sizepolicy>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Scale' values</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0" colspan="3">
-       <widget class="QPushButton" name="properties">
-        <property name="text">
-         <string>Properties</string>
+         <string>Reset 'Show courtesy' value</string>
         </property>
        </widget>
       </item>

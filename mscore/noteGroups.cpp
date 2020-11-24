@@ -37,10 +37,12 @@ Score* NoteGroups::createScore(int n, TDuration::DurationType t, std::vector<Cho
       c.move(0, Fraction(0,1));
       c.addKeySig(Key::C);
       TimeSig* nts = c.addTimeSig(_sig);
-      if (!_z.isEmpty())
+      /*if (!_z.isEmpty())
             nts->setNumeratorString(_z);
       if (!_n.isEmpty())
-            nts->setDenominatorString(_n);
+            nts->setDenominatorString(_n);*/
+      if (!_p.isEmpty())
+            nts->setParserString(_p);
       GroupNode node {0, 0};
       Groups ng;
       ng.push_back(node);
@@ -110,11 +112,12 @@ NoteGroups::NoteGroups(QWidget* parent)
 //   setSig
 //---------------------------------------------------------
 
-void NoteGroups::setSig(Fraction sig, const Groups& g, const QString& z, const QString& n)
+void NoteGroups::setSig(Fraction sig, const Groups& g, /*const QString& z, const QString& n,*/ const QString& p)
       {
       _sig    = sig;
-      _z      = z;
-      _n      = n;
+      //_z      = z;
+      //_n      = n;
+      _p      = p;
       _groups = g;
       chords8.clear();
       chords16.clear();
@@ -153,7 +156,7 @@ Groups NoteGroups::groups()
 
 void NoteGroups::resetClicked()
       {
-      setSig(_sig, _groups, _z, _n);
+      setSig(_sig, _groups, /*_z, _n, */_p);
       }
 
 //---------------------------------------------------------

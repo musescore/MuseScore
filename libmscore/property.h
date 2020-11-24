@@ -105,6 +105,7 @@ enum class Pid {
       TIMESIG_NOMINAL,
 
       TIMESIG_ACTUAL,
+      TIMESIG_LARGE,
       NUMBER_TYPE,
       BRACKET_TYPE,
       NORMAL_NOTES,
@@ -144,6 +145,7 @@ enum class Pid {
       ACCIDENTAL_TYPE,
       NUMERATOR_STRING,
       DENOMINATOR_STRING,
+      PARSER_STRING,
       FBPREFIX,             // used for FiguredBassItem
       FBDIGIT,              //    "           "
       FBSUFFIX,             //    "           "

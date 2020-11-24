@@ -98,6 +98,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::TIMESIG_NOMINAL,         false, 0,                       P_TYPE::FRACTION,            DUMMY_QT_TRANSLATE_NOOP("propertyName", "nominal time signature") },
 
       { Pid::TIMESIG_ACTUAL,          true,  0,                       P_TYPE::FRACTION,            DUMMY_QT_TRANSLATE_NOOP("propertyName", "actual time signature") },
+      { Pid::TIMESIG_LARGE,           false, "largeTimeSig",          P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "large time signature") },
       { Pid::NUMBER_TYPE,             false, "numberType",            P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "number type")      },
       { Pid::BRACKET_TYPE,            false, "bracketType",           P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "bracket type")     },
       { Pid::NORMAL_NOTES,            false, "normalNotes",           P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "normal notes")     },
@@ -138,6 +139,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::ACCIDENTAL_TYPE,         true,  "subtype",               P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "type")             },
       { Pid::NUMERATOR_STRING,        false, "textN",                 P_TYPE::STRING,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "numerator string") },
       { Pid::DENOMINATOR_STRING,      false, "textD",                 P_TYPE::STRING,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "denominator string") },
+      { Pid::PARSER_STRING,           false, "textP",                 P_TYPE::STRING,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "parser string") },
       { Pid::FBPREFIX,                false, "prefix",                P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "prefix")           },
       { Pid::FBDIGIT,                 false, "digit",                 P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "digit")            },
       { Pid::FBSUFFIX,                false, "suffix",                P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "suffix")           },
