@@ -53,8 +53,14 @@ using namespace Ms;
 NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack)
     : m_notation(notation), m_undoStack(undoStack)
 {
-    m_inputState = std::make_shared<NotationInputState>(notation, m_undoStack, m_selectionChanged);
+    m_inputState = std::make_shared<NotationInputState>(notation, this, m_undoStack);
     m_selection = std::make_shared<NotationSelection>(notation);
+
+    m_inputState->stateChanged().onNotify(this, [this]() {
+        if (!m_inputState->isNoteInputMode()) {
+            hideShadowNote();
+        }
+    });
 
     m_dragData.ed.view = new ScoreCallbacks();
     m_dropData.ed.view = new ScoreCallbacks();
@@ -85,127 +91,6 @@ void NotationInteraction::paint(QPainter* p)
     drawTextEditMode(p);
 
     drawSelectionRange(p);
-}
-
-void NotationInteraction::startNoteEntry()
-{
-    if (selection()->isNone()) {
-        selectFirstTopLeftOrLast();
-    }
-
-    inputState()->startNoteEntry();
-}
-
-void NotationInteraction::selectFirstTopLeftOrLast()
-{
-    // choose page in current view (favor top left quadrant if possible)
-    // select first (top/left) chordrest of that page in current view
-    // or, CR at last selected position if that is in view
-    Page* page = nullptr;
-    QSizeF viewSize = m_notation->viewSize();
-    QList<QPointF> points;
-    points.append(QPoint(viewSize.width() * 0.25, viewSize.height() * 0.25));
-    points.append(QPoint(0.0, 0.0));
-    points.append(QPoint(0.0, viewSize.height()));
-    points.append(QPoint(viewSize.width(), 0.0));
-    points.append(QPoint(viewSize.width(), viewSize.height()));
-    for (const QPointF& point : points) {
-        page = point2page(point);
-        if (page) {
-            break;
-        }
-    }
-
-    if (page) {
-        ChordRest* topLeft = nullptr;
-        qreal tlY = 0.0;
-        Fraction tlTick = Fraction(0,1);
-        QRectF viewRect  = QRectF(0.0, 0.0, viewSize.width(), viewSize.height());
-        QRectF pageRect  = page->bbox().translated(page->x(), page->y());
-        QRectF intersect = viewRect & pageRect;
-        intersect.translate(-page->x(), -page->y());
-        QList<Element*> el = page->items(intersect);
-        ChordRest* lastSelected = score()->selection().currentCR();
-        for (Element* e : el) {
-            // loop through visible elements
-            // looking for the CR in voice 1 with earliest tick and highest staff position
-            // but stop we find the last selected CR
-            ElementType et = e->type();
-            if (et == ElementType::NOTE || et == ElementType::REST) {
-                if (e->voice()) {
-                    continue;
-                }
-                ChordRest* cr;
-                if (et == ElementType::NOTE) {
-                    cr = static_cast<ChordRest*>(e->parent());
-                    if (!cr) {
-                        continue;
-                    }
-                } else {
-                    cr = static_cast<ChordRest*>(e);
-                }
-                if (cr == lastSelected) {
-                    topLeft = cr;
-                    break;
-                }
-                // compare ticks rather than x position
-                // to make sure we favor earlier rather than later systems
-                // even though later system might have note farther to left
-                Fraction crTick = Fraction(0,1);
-                if (cr->segment()) {
-                    crTick = cr->segment()->tick();
-                } else {
-                    continue;
-                }
-                // compare staff Y position rather than note Y position
-                // to be sure we do not reject earliest note
-                // just because it is lower in pitch than subsequent notes
-                qreal crY = 0.0;
-                if (cr->measure() && cr->measure()->system()) {
-                    crY = cr->measure()->system()->staffYpage(cr->staffIdx());
-                } else {
-                    continue;
-                }
-                if (topLeft) {
-                    if (crTick <= tlTick && crY <= tlY) {
-                        topLeft = cr;
-                        tlTick = crTick;
-                        tlY = crY;
-                    }
-                } else {
-                    topLeft = cr;
-                    tlTick = crTick;
-                    tlY = crY;
-                }
-            }
-        }
-
-        if (topLeft) {
-            select({ topLeft }, SelectType::SINGLE);
-        }
-    }
-}
-
-void NotationInteraction::endNoteEntry()
-{
-    inputState()->endNoteEntry();
-    hideShadowNote();
-}
-
-    }
-
-    hideShadowNote();
-    m_inputStateChanged.notify();
-}
-
-void NotationInteraction::padNote(const Pad& pad)
-{
-    inputState()->padNote(pad);
-}
-
-void NotationInteraction::putNote(const QPointF& pos, bool replace, bool insert)
-{
-    inputState()->putNote(pos, replace, insert);
 }
 
 INotationInputStatePtr NotationInteraction::inputState() const

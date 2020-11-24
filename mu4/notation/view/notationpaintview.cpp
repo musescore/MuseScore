@@ -136,7 +136,7 @@ void NotationPaintView::onViewSizeChanged()
 
 void NotationPaintView::onInputStateChanged()
 {
-    if (notationInteraction()->inputState()->isNoteEnterMode()) {
+    if (notationInteraction()->inputState()->isNoteInputMode()) {
         setAcceptHoverEvents(true);
     } else {
         setAcceptHoverEvents(false);
@@ -159,7 +159,7 @@ bool NotationPaintView::isNoteEnterMode() const
         return false;
     }
 
-    return notationInteraction()->inputState()->isNoteEnterMode();
+    return notationInteraction()->inputState()->isNoteInputMode();
 }
 
 void NotationPaintView::showShadowNote(const QPointF& pos)
