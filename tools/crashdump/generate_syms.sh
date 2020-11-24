@@ -3,11 +3,12 @@
 # This is script for generate dump symbols.
 # Used on CI and can be used locally 
 
+HERE="${BASH_SOURCE%/*}"
 DUMSYMS_BIN=$(which dump_syms)
 BUILD_DIR=""
-SYMBOLS_DIR="../../build.symbols"
+SYMBOLS_DIR="$HERE/../../build.symbols"
 MSCORE_BIN=""
-GEN_SCRIPT="./internal/generate_breakpad_symbols.py"
+GEN_SCRIPT="$HERE/internal/generate_breakpad_symbols.py"
 SHOW_HELP=0
 
 while [[ "$#" -gt 0 ]]; do

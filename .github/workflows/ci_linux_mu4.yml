@@ -94,6 +94,10 @@ jobs:
       if: env.DO_BUILD == 'true'
       run: |
         sudo bash ./build/ci/linux/runutests.sh
+    - name: Generate dump symbols
+      if: env.DO_BUILD == 'true'
+      run: |
+        sudo bash ./build/ci/linux/dumpsyms.sh  
     - name: Package 
       if: env.DO_BUILD == 'true'
       run: |

@@ -136,6 +136,11 @@ echo export PATH="${PWD%/}/${cmake_dir}/bin:\${PATH}" >> ${ENV_FILE}
 export PATH="${PWD%/}/${cmake_dir}/bin:${PATH}"
 cmake --version
 
+# Dump syms
+wget -q --show-progress -O dump_syms.7z "https://s3.amazonaws.com/utils.musescore.org/breakpad/linux/x86-64/dump_syms.7z"
+7z x -y dump_syms.7z -o"$HOME/breakpad"
+echo export DUMPSYMS_BIN="$HOME/breakpad/dump_syms" >> $ENV_FILE
+
 ##########################################################################
 # OTHER
 ##########################################################################
