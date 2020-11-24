@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
+HERE="${BASH_SOURCE%/*}"
 STACKWALK_BIN=$(which minidump_stackwalk)
-SYMBOLS_DIR="../../build.symbols"
+SYMBOLS_DIR="$HERE/../../build.symbols"
 DUMP_FILE=""
 OUT_FILE=""
 SHOW_HELP=0
