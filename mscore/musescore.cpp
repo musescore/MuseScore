@@ -2001,7 +2001,7 @@ MuseScore::MuseScore()
             const bool loadSuccess = _loginManager->load();
 
             if (cliSaveOnline && !loadSuccess) {
-                  qFatal(qUtf8Printable(tr("No login creditials stored. Please sign-in via the GUI.")));
+                  qFatal(qUtf8Printable(tr("No login credentials stored. Please sign in via the GUI.")));
                   }
             }
 
