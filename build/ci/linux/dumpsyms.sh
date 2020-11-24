@@ -11,6 +11,7 @@ BUILD_DIR=build.release
 SYMBOLS_DIR=$ARTIFACTS_DIR/symbols
 MSCORE_BIN=$BUILD_DIR/main/mscore-portable
 
+
 echo "GEN_SCRIPT: $GEN_SCRIPT"
 echo "DUMPSYMS_BIN: $DUMPSYMS_BIN"
 echo "BUILD_DIR: $BUILD_DIR"
