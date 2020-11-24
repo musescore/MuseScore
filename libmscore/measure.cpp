@@ -540,7 +540,7 @@ bool Measure::showsMeasureNumberInAutoMode()
 
 //---------------------------------------------------------
 //   showsMeasureNumber
-///     Wheter the Measure shows a MeasureNumber
+///     Whether the Measure shows a MeasureNumber
 //---------------------------------------------------------
 
 bool Measure::showsMeasureNumber()
@@ -573,10 +573,7 @@ void Measure::layoutMeasureNumber()
     if (!nas) {
         //find first non invisible staff
         for (unsigned staffIdx = 0; staffIdx < m_mstaves.size(); ++staffIdx) {
-            MStaff* ms = m_mstaves[staffIdx];
-            SysStaff* ss  = system()->staff(staffIdx);
-            Staff* staff = score()->staff(staffIdx);
-            if (ms->visible() && staff->show() && ss->show()) {
+            if (visible(staffIdx)) {
                 nn = staffIdx;
                 break;
             }
