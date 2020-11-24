@@ -78,11 +78,17 @@
       <Family id="orff-percussion">
             <name>Orff Percussion</name>
       </Family>
+      <Family id="pitched-percussion">
+            <name>Pitched Percussion</name>
+      </Family>
       <Family id="unpitched-metal-percussion">
             <name>Unpitched Metal Percussion</name>
       </Family>
       <Family id="unpitched-wooden-percussion">
             <name>Unpitched Wooden Percussion</name>
+      </Family>
+      <Family id="drums">
+            <name>Drums</name>
       </Family>
       <Family id="other-percussion">
             <name>Other Percussion</name>
@@ -420,7 +426,7 @@
                   <genre>earlymusic</genre>
             </Instrument>
              <Instrument id="danso">
-                 <family>flutes</family>
+                  <family>flutes</family>
                   <longName>Danso</longName>
                   <shortName>Da.</shortName>
                   <description>Danso</description>
@@ -8140,6 +8146,22 @@
                   <genre>orchestra</genre>
                   <genre>choral</genre>
             </Instrument>
+            <Instrument id="soprano-c-clef">
+                  <family>voices</family>
+                  <trackName>Soprano (C Clef)</trackName>
+                  <longName>Soprano</longName>
+                  <shortName>S.</shortName>
+                  <description>Soprano (C Clef)</description>
+                  <musicXMLid>voice.soprano</musicXMLid>
+                  <clef>C1</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>60-79</aPitchRange>
+                  <pPitchRange>60-84</pPitchRange>
+                  <Channel>
+                        <program value="52"/> <!--Voice Aahs-->
+                  </Channel>
+                  <genre>earlymusic</genre>
+            </Instrument>
             <Instrument id="mezzo-soprano">
                   <family>voices</family>
                   <longName>Mezzo-soprano</longName>
@@ -8156,6 +8178,22 @@
                   <genre>common</genre>
                   <genre>orchestra</genre>
                   <genre>choral</genre>
+            </Instrument>
+            <Instrument id="mezzo-soprano-c-clef">
+                  <family>voices</family>
+                  <trackName>Mezzo-soprano (C Clef)</trackName>
+                  <longName>Mezzo-soprano</longName>
+                  <shortName>Mzs.</shortName>
+                  <description>Mezzo-soprano (C Clef)</description>
+                  <musicXMLid>voice.mezzo-soprano</musicXMLid>
+                  <clef>C2</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>57-77</aPitchRange>
+                  <pPitchRange>57-81</pPitchRange>
+                  <Channel>
+                        <program value="52"/> <!--Voice Aahs-->
+                  </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="alto">
                   <family>voices</family>
@@ -8174,6 +8212,22 @@
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
                   <genre>choral</genre>
+            </Instrument>
+            <Instrument id="alto-c-clef">
+                  <family>voices</family>
+                  <trackName>Alto (C Clef)</trackName>
+                  <longName>Alto</longName>
+                  <shortName>A.</shortName>
+                  <description>Alto (C Clef)</description>
+                  <musicXMLid>voice.alto</musicXMLid>
+                  <clef>C3</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>55-74</aPitchRange>
+                  <pPitchRange>52-77</pPitchRange>
+                  <Channel>
+                        <program value="52"/> <!--Voice Aahs-->
+                  </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="contralto">
                   <family>voices</family>
@@ -8224,6 +8278,22 @@
                   <genre>orchestra</genre>
                   <genre>choral</genre>
             </Instrument>
+            <Instrument id="tenor-c-clef">
+                  <family>voices</family>
+                  <trackName>Tenor (C Clef)</trackName>
+                  <longName>Tenor</longName>
+                  <shortName>T.</shortName>
+                  <description>Tenor (C Clef)</description>
+                  <musicXMLid>voice.tenor</musicXMLid>
+                  <clef>C4</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>48-69</aPitchRange>
+                  <pPitchRange>48-72</pPitchRange>
+                  <Channel>
+                        <program value="52"/> <!--Voice Aahs-->
+                  </Channel>
+                  <genre>earlymusic</genre>
+            </Instrument>
             <Instrument id="baritone">
                   <family>voices</family>
                   <longName>Baritone</longName>
@@ -8241,6 +8311,22 @@
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
                   <genre>choral</genre>
+            </Instrument>
+            <Instrument id="baritone-c-clef">
+                  <family>voices</family>
+                  <trackName>Baritone (C Clef)</trackName>
+                  <longName>Baritone</longName>
+                  <shortName>Bar.</shortName>
+                  <description>Baritone (C Clef)</description>
+                  <musicXMLid>voice.baritone</musicXMLid>
+                  <clef>C5</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>43-64</aPitchRange>
+                  <pPitchRange>41-65</pPitchRange>
+                  <Channel>
+                        <program value="52"/> <!--Voice Aahs-->
+                  </Channel>
+                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="bass">
                   <family>voices</family>
@@ -8301,86 +8387,6 @@
                   <genre>jazz</genre>
                   <genre>orchestra</genre>
                   <genre>choral</genre>
-            </Instrument>
-            <Instrument id="soprano-c-clef">
-                  <family>voices</family>
-                  <trackName>Soprano (C Clef)</trackName>
-                  <longName>Soprano</longName>
-                  <shortName>S.</shortName>
-                  <description>Soprano (C Clef)</description>
-                  <musicXMLid>voice.soprano</musicXMLid>
-                  <clef>C1</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>60-79</aPitchRange>
-                  <pPitchRange>60-84</pPitchRange>
-                  <Channel>
-                        <program value="52"/> <!--Voice Aahs-->
-                  </Channel>
-                  <genre>earlymusic</genre>
-            </Instrument>
-            <Instrument id="mezzo-soprano-c-clef">
-                  <family>voices</family>
-                  <trackName>Mezzo-soprano (C Clef)</trackName>
-                  <longName>Mezzo-soprano</longName>
-                  <shortName>Mzs.</shortName>
-                  <description>Mezzo-soprano (C Clef)</description>
-                  <musicXMLid>voice.mezzo-soprano</musicXMLid>
-                  <clef>C2</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>57-77</aPitchRange>
-                  <pPitchRange>57-81</pPitchRange>
-                  <Channel>
-                        <program value="52"/> <!--Voice Aahs-->
-                  </Channel>
-                  <genre>earlymusic</genre>
-            </Instrument>
-            <Instrument id="alto-c-clef">
-                  <family>voices</family>
-                  <trackName>Alto (C Clef)</trackName>
-                  <longName>Alto</longName>
-                  <shortName>A.</shortName>
-                  <description>Alto (C Clef)</description>
-                  <musicXMLid>voice.alto</musicXMLid>
-                  <clef>C3</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>55-74</aPitchRange>
-                  <pPitchRange>52-77</pPitchRange>
-                  <Channel>
-                        <program value="52"/> <!--Voice Aahs-->
-                  </Channel>
-                  <genre>earlymusic</genre>
-            </Instrument>
-            <Instrument id="tenor-c-clef">
-                  <family>voices</family>
-                  <trackName>Tenor (C Clef)</trackName>
-                  <longName>Tenor</longName>
-                  <shortName>T.</shortName>
-                  <description>Tenor (C Clef)</description>
-                  <musicXMLid>voice.tenor</musicXMLid>
-                  <clef>C4</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>48-69</aPitchRange>
-                  <pPitchRange>48-72</pPitchRange>
-                  <Channel>
-                        <program value="52"/> <!--Voice Aahs-->
-                  </Channel>
-                  <genre>earlymusic</genre>
-            </Instrument>
-            <Instrument id="baritone-c-clef">
-                  <family>voices</family>
-                  <trackName>Baritone (C Clef)</trackName>
-                  <longName>Baritone</longName>
-                  <shortName>Bar.</shortName>
-                  <description>Baritone (C Clef)</description>
-                  <musicXMLid>voice.baritone</musicXMLid>
-                  <clef>C5</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>43-64</aPitchRange>
-                  <pPitchRange>41-65</pPitchRange>
-                  <Channel>
-                        <program value="52"/> <!--Voice Aahs-->
-                  </Channel>
-                  <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="kazoo">
                   <longName>Kazoo</longName>
