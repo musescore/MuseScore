@@ -1580,7 +1580,7 @@ static void distributeStaves(Page* page)
                               }
                         --brackSpanNormal;
 
-                        const bool sameInstrument { staff->part()->instrumentId() == prvPart };
+                        const bool sameInstrument { staff->part()->instrument()->getId() == prvPart };
                         if (!curlyBracket && sameInstrument) {
                               if (prevVgd)
                                     prevVgd->addSpaceAroundCurlyBracket();  // Above { bracket.
@@ -1598,7 +1598,7 @@ static void distributeStaves(Page* page)
                               vbox = false;
                               }
 
-                        prvPart = staff->part()->instrumentId();
+                        prvPart = staff->part()->instrument()->getId();
                         prevYBottom = vgd->nextYPos(vgdl.size() == 0);
                         yBottom     = vgd->yBottom();
 
