@@ -135,11 +135,11 @@ void NotationToolBarModel::onNotationChanged()
 
     //! NOTE Unsubscribe from previous notation, if it was
     m_notationChanged.resetOnNotify(this);
-    m_inputStateChanged.resetOnNotify(this);
+    m_noteInputStateChanged.resetOnNotify(this);
 
     if (notation) {
-        m_inputStateChanged = notation->interaction()->inputState()->stateChanged();
-        m_inputStateChanged.onNotify(this, [this]() {
+        m_noteInputStateChanged = notation->interaction()->noteInput()->stateChanged();
+        m_noteInputStateChanged.onNotify(this, [this]() {
             updateState();
         });
     }
@@ -161,17 +161,17 @@ void NotationToolBarModel::updateState()
             item.checked = false;
         }
 
-        updateInputState();
+        updateNoteInputState();
     }
 
     emit dataChanged(index(0), index(rowCount() - 1));
 }
 
-void NotationToolBarModel::updateInputState()
+void NotationToolBarModel::updateNoteInputState()
 {
-    auto inputState = notation()->interaction()->inputState();
+    auto noteInput = notation()->interaction()->noteInput();
 
-    item("note-input").checked = inputState->isNoteInputMode();
+    item("note-input").checked = noteInput->isNoteInputMode();
 
     static QMap<actions::ActionName, Pad> noteInputActionPads = {
         { "note-longa", Pad::NOTE00 },
@@ -195,7 +195,7 @@ void NotationToolBarModel::updateInputState()
     };
 
     for (const actions::ActionName& actionName: noteInputActionPads.keys()) {
-        item(actionName).checked = inputState->isPadActive(noteInputActionPads[actionName]);
+        item(actionName).checked = noteInput->isPadActive(noteInputActionPads[actionName]);
     }
 }
 

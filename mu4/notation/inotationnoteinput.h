@@ -16,35 +16,36 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATION_INOTATIONINPUTSTATE_H
-#define MU_NOTATION_INOTATIONINPUTSTATE_H
+#ifndef MU_NOTATION_INOTATIONNOTEINPUT_H
+#define MU_NOTATION_INOTATIONNOTEINPUT_H
 
 #include "async/notification.h"
 #include "notationtypes.h"
 
 namespace mu::notation {
-class INotationInputState
+class INotationNoteInput
 {
 public:
-    virtual ~INotationInputState() = default;
+    virtual ~INotationNoteInput() = default;
 
-    virtual bool isNoteEnterMode() const = 0;
+    virtual bool isNoteInputMode() const = 0;
     virtual bool isPadActive(Pad pad) const = 0;
 
     virtual Duration duration() const = 0;
 
-    virtual void startNoteEntry() = 0;
-    virtual void endNoteEntry() = 0;
-    virtual void setNoteEntryMethod(NoteInputMethod method) = 0;
+    virtual void startNoteInput() = 0;
+    virtual void endNoteInput() = 0;
+    virtual void setNoteInputMethod(NoteInputMethod method) = 0;
     virtual void addNote(NoteName noteName, NoteAddingMode addingMode) = 0;
     virtual void padNote(const Pad& pad)  = 0;
     virtual void putNote(const QPointF& pos, bool replace, bool insert) = 0;
+    virtual void toogleAccidental(AccidentalType accidentalType) = 0;
 
     virtual async::Notification noteAdded() const = 0;
     virtual async::Notification stateChanged() const = 0;
 };
 
-using INotationInputStatePtr = std::shared_ptr<INotationInputState>;
+using INotationNoteInputPtr = std::shared_ptr<INotationNoteInput>;
 }
 
-#endif // MU_NOTATION_INOTATIONINPUTSTATE_H
+#endif // MU_NOTATION_INOTATIONNOTEINPUT_H

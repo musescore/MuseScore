@@ -31,9 +31,6 @@
 #include "inotationconfiguration.h"
 #include "inotationundostack.h"
 
-#include "notationinputstate.h"
-#include "notationselection.h"
-
 #include "libmscore/element.h"
 #include "libmscore/elementgroup.h"
 
@@ -55,7 +52,7 @@ public:
     void paint(QPainter* p);
 
     // Put notes
-    INotationInputStatePtr inputState() const override;
+    INotationNoteInputPtr noteInput() const override;
 
     // Shadow note
     void showShadowNote(const QPointF& p) override;
@@ -175,7 +172,7 @@ private:
     Notation* m_notation = nullptr;
     INotationUndoStackPtr m_undoStack;
 
-    INotationInputStatePtr m_inputState = nullptr;
+    INotationNoteInputPtr m_noteInput = nullptr;
     Ms::ShadowNote* m_shadowNote = nullptr;
 
     INotationSelectionPtr m_selection = nullptr;
