@@ -544,10 +544,7 @@ void Measure::layoutMeasureNumber()
       if (!nas) {
             //find first non invisible staff
             for (unsigned staffIdx = 0; staffIdx < _mstaves.size(); ++staffIdx) {
-                  MStaff* ms = _mstaves[staffIdx];
-                  SysStaff* ss  = system()->staff(staffIdx);
-                  Staff* staff = score()->staff(staffIdx);
-                  if (ms->visible() && staff->show() && ss->show()) {
+                  if (visible(staffIdx)) {
                         nn = staffIdx;
                         break;
                         }
