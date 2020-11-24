@@ -170,15 +170,8 @@ void NotationToolBarModel::updateState()
 void NotationToolBarModel::updateInputState()
 {
     auto inputState = notation()->interaction()->inputState();
-    if (!inputState->isNoteEnterMode()) {
-        for (ActionItem& item : m_items) {
-            item.checked = false;
-        }
 
-        return;
-    }
-
-    item("note-input").checked = true;
+    item("note-input").checked = inputState->isNoteInputMode();
 
     static QMap<actions::ActionName, Pad> noteInputActionPads = {
         { "note-longa", Pad::NOTE00 },

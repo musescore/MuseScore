@@ -25,6 +25,7 @@
 #include <QLineF>
 
 #include "modularity/ioc.h"
+#include "async/asyncable.h"
 
 #include "inotationinteraction.h"
 #include "inotationconfiguration.h"
@@ -42,7 +43,7 @@ class ShadowNote;
 
 namespace mu::notation {
 class Notation;
-class NotationInteraction : public INotationInteraction
+class NotationInteraction : public INotationInteraction, public async::Asyncable
 {
     INJECT(notation, INotationConfiguration, configuration)
 
@@ -54,10 +55,6 @@ public:
     void paint(QPainter* p);
 
     // Put notes
-    void startNoteEntry() override;
-    void endNoteEntry() override;
-    void padNote(const Pad& pad) override;
-    void putNote(const QPointF& pos, bool replace, bool insert) override;
     INotationInputStatePtr inputState() const override;
 
     // Shadow note
@@ -122,8 +119,6 @@ public:
 
 private:
     Ms::Score* score() const;
-
-    void selectFirstTopLeftOrLast();
 
     Ms::Page* point2page(const QPointF& p) const;
     QList<Element*> hitElements(const QPointF& p_in, float w) const;

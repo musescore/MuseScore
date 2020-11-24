@@ -70,6 +70,7 @@ using Articulation = Ms::Articulation;
 using SlurSegment = Ms::SlurSegment;
 using Rest = Ms::Rest;
 using Fraction = Ms::Fraction;
+using NoteInputMethod = Ms::NoteEntryMethod;
 
 using StaffList = QList<const Staff*>;
 using PartList = QList<const Part*>;
@@ -113,6 +114,22 @@ enum class BoxType
     Horizontal,
     Measure,
     Text
+};
+
+enum class NoteName {
+    C = 0,
+    D,
+    E,
+    F,
+    G,
+    A,
+    B
+};
+
+enum class NoteAddingMode {
+    CurrentChord,
+    NextChord,
+    InsertChord
 };
 
 struct Meta

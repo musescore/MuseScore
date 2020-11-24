@@ -338,6 +338,90 @@ const ActionList NotationActions::m_actions = {
     Action("interval-9",
            QT_TRANSLATE_NOOP("action", "Ninth Below"),
            ShortcutContext::NotationActive
+           ),
+    Action("note-c",
+           QT_TRANSLATE_NOOP("action", "C"),
+           ShortcutContext::NotationActive
+           ),
+    Action("note-d",
+           QT_TRANSLATE_NOOP("action", "D"),
+           ShortcutContext::NotationActive
+           ),
+    Action("note-e",
+           QT_TRANSLATE_NOOP("action", "E"),
+           ShortcutContext::NotationActive
+           ),
+    Action("note-f",
+           QT_TRANSLATE_NOOP("action", "F"),
+           ShortcutContext::NotationActive
+           ),
+    Action("note-g",
+           QT_TRANSLATE_NOOP("action", "G"),
+           ShortcutContext::NotationActive
+           ),
+    Action("note-a",
+           QT_TRANSLATE_NOOP("action", "A"),
+           ShortcutContext::NotationActive
+           ),
+    Action("note-b",
+           QT_TRANSLATE_NOOP("action", "B"),
+           ShortcutContext::NotationActive
+           ),
+    Action("chord-c",
+           QT_TRANSLATE_NOOP("action", "Add C to Chord"),
+           ShortcutContext::NotationActive
+           ),
+    Action("chord-d",
+           QT_TRANSLATE_NOOP("action", "Add D to Chord"),
+           ShortcutContext::NotationActive
+           ),
+    Action("chord-e",
+           QT_TRANSLATE_NOOP("action", "Add E to Chord"),
+           ShortcutContext::NotationActive
+           ),
+    Action("chord-f",
+           QT_TRANSLATE_NOOP("action", "Add F to Chord"),
+           ShortcutContext::NotationActive
+           ),
+    Action("chord-g",
+           QT_TRANSLATE_NOOP("action", "Add G to Chord"),
+           ShortcutContext::NotationActive
+           ),
+    Action("chord-a",
+           QT_TRANSLATE_NOOP("action", "Add A to Chord"),
+           ShortcutContext::NotationActive
+           ),
+    Action("chord-b",
+           QT_TRANSLATE_NOOP("action", "Add B to Chord"),
+           ShortcutContext::NotationActive
+           ),
+    Action("insert-c",
+           QT_TRANSLATE_NOOP("action", "Insert C"),
+           ShortcutContext::NotationActive
+           ),
+    Action("insert-d",
+           QT_TRANSLATE_NOOP("action", "Insert D"),
+           ShortcutContext::NotationActive
+           ),
+    Action("insert-e",
+           QT_TRANSLATE_NOOP("action", "Insert E"),
+           ShortcutContext::NotationActive
+           ),
+    Action("insert-f",
+           QT_TRANSLATE_NOOP("action", "Insert F"),
+           ShortcutContext::NotationActive
+           ),
+    Action("insert-g",
+           QT_TRANSLATE_NOOP("action", "Insert G"),
+           ShortcutContext::NotationActive
+           ),
+    Action("insert-a",
+           QT_TRANSLATE_NOOP("action", "Insert A"),
+           ShortcutContext::NotationActive
+           ),
+    Action("insert-b",
+           QT_TRANSLATE_NOOP("action", "Insert B"),
+           ShortcutContext::NotationActive
            )
 };
 
