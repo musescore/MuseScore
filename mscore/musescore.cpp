@@ -2104,7 +2104,7 @@ MuseScore::MuseScore()
         const bool initSuccess = _loginManager->init();
 
         if (cliSaveOnline && !initSuccess) {
-            qFatal(qUtf8Printable(tr("No login creditials stored. Please sign-in via the GUI.")));
+            qFatal(qUtf8Printable(tr("No login credentials stored. Please sign in via the GUI.")));
         }
 
         connect(_loginManager, &CloudManager::loginDialogRequested, this, &MuseScore::showLoginDialog);
