@@ -38,9 +38,8 @@ public:
     ~NotationNoteInput() override;
 
     bool isNoteInputMode() const override;
-    bool isPadActive(Pad pad) const override;
 
-    Duration duration() const override;
+    NoteInputState state() const override;
 
     void startNoteInput() override;
     void endNoteInput() override;
@@ -55,8 +54,6 @@ public:
 
 private:
     Ms::Score* score() const;
-
-    bool isDurationActive(DurationType durationType) const;
 
     void updateInputState();
 

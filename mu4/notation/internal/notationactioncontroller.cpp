@@ -81,6 +81,12 @@ void NotationActionController::init()
     dispatcher()->reg(this, "insert-a", [this]() { addNote(NoteName::A, NoteAddingMode::InsertChord); });
     dispatcher()->reg(this, "insert-b", [this]() { addNote(NoteName::B, NoteAddingMode::InsertChord); });
 
+    dispatcher()->reg(this, "flat2", [this]() { toggleAccidental(AccidentalType::FLAT2); });
+    dispatcher()->reg(this, "flat", [this]() { toggleAccidental(AccidentalType::FLAT); });
+    dispatcher()->reg(this, "nat", [this]() { toggleAccidental(AccidentalType::NATURAL); });
+    dispatcher()->reg(this, "sharp", [this]() { toggleAccidental(AccidentalType::SHARP); });
+    dispatcher()->reg(this, "sharp2", [this]() { toggleAccidental(AccidentalType::SHARP2); });
+
     dispatcher()->reg(this, "put-note", this, &NotationActionController::putNote);
 
     //! NOTE For historical reasons, the name of the action does not match what needs to be done.
@@ -249,6 +255,14 @@ void NotationActionController::putNote(const actions::ActionData& data)
     noteInput->putNote(pos, replace, insert);
 }
 
+void NotationActionController::toggleAccidental(AccidentalType type)
+{
+    auto noteInput = currentNotationNoteInput();
+    if (!noteInput) {
+        return;
+    }
+
+    noteInput->toogleAccidental(type);
 }
 
 void NotationActionController::moveAction(const actions::ActionName& action)
@@ -387,7 +401,7 @@ Fraction NotationActionController::resolvePastingScale(const INotationInteractio
     case PastingType::Double: return Fraction(2, 1);
     case PastingType::Special:
         Fraction scale = DEFAULT_SCALE;
-        Fraction duration = interaction->noteInput()->duration().fraction();
+        Fraction duration = interaction->noteInput()->state().duration.fraction();
 
         if (duration.isValid() && !duration.isZero()) {
             scale = duration * 4;

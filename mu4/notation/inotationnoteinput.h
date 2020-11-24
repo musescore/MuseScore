@@ -29,9 +29,8 @@ public:
     virtual ~INotationNoteInput() = default;
 
     virtual bool isNoteInputMode() const = 0;
-    virtual bool isPadActive(Pad pad) const = 0;
 
-    virtual Duration duration() const = 0;
+    virtual NoteInputState state() const = 0;
 
     virtual void startNoteInput() = 0;
     virtual void endNoteInput() = 0;

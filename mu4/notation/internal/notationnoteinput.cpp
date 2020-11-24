@@ -50,35 +50,13 @@ bool NotationNoteInput::isNoteInputMode() const
     return score()->inputState().noteEntryMode();
 }
 
-bool NotationNoteInput::isPadActive(Pad pad) const
+NoteInputState NotationNoteInput::state() const
 {
-    switch (pad) {
-    case Pad::NOTE00: return isDurationActive(DurationType::V_LONG);
-    case Pad::NOTE0: return isDurationActive(DurationType::V_BREVE);
-    case Pad::NOTE1: return isDurationActive(DurationType::V_WHOLE);
-    case Pad::NOTE2: return isDurationActive(DurationType::V_HALF);
-    case Pad::NOTE4: return isDurationActive(DurationType::V_QUARTER);
-    case Pad::NOTE8: return isDurationActive(DurationType::V_EIGHTH);
-    case Pad::NOTE16: return isDurationActive(DurationType::V_16TH);
-    case Pad::NOTE32: return isDurationActive(DurationType::V_32ND);
-    case Pad::NOTE64: return isDurationActive(DurationType::V_64TH);
-    case Pad::NOTE128: return isDurationActive(DurationType::V_128TH);
-    case Pad::NOTE256: return isDurationActive(DurationType::V_256TH);
-    case Pad::NOTE512: return isDurationActive(DurationType::V_512TH);
-    case Pad::NOTE1024: return isDurationActive(DurationType::V_1024TH);
-    case Pad::REST: /*todo*/ return false;
-    case Pad::DOT: /*todo*/ return false;
-    case Pad::DOTDOT: /*todo*/ return false;
-    case Pad::DOT3: /*todo*/ return false;
-    case Pad::DOT4: /*todo*/ return false;
-    }
+    NoteInputState noteInputState;
+    noteInputState.duration = score()->inputState().duration();
+    noteInputState.accidentalType = score()->inputState().accidentalType();
 
-    return false;
-}
-
-Duration NotationNoteInput::duration() const
-{
-    return score()->inputState().duration();
+    return noteInputState;
 }
 
 void NotationNoteInput::startNoteInput()
@@ -242,11 +220,6 @@ Notification NotationNoteInput::stateChanged() const
 Ms::Score* NotationNoteInput::score() const
 {
     return m_getScore->score();
-}
-
-bool NotationNoteInput::isDurationActive(DurationType durationType) const
-{
-    return duration() == durationType;
 }
 
 void NotationNoteInput::updateInputState()
