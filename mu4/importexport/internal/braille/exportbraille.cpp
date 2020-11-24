@@ -515,7 +515,7 @@ class ExportBraille
     QString brailleArticulation(Articulation* articulation);
     QString brailleFingeringAfter(Fingering* fingering);
     QString brailleGlissando(Note* note);
-    QString brailleRepeatMeasure(RepeatMeasure* repeatMeasure);
+    // FIXME RM QString brailleRepeatMeasure(RepeatMeasure* repeatMeasure);
     QString brailleVolta(Measure* measure, Volta* volta, int staffCount);
 
     QString brailleSlurBefore(ChordRest* chordRest, std::vector<Slur*>* slur);
@@ -1100,9 +1100,9 @@ QString ExportBraille::brailleMeasure(Measure* measure, int staffCount)
             out << brailleBreath(toBreath(el));
         } else if (el->isBarLine() && toBarLine(el) != lastBarline(measure, el->track())) {
             out << brailleBarline(toBarLine(el));
-        } else if (el->isRepeatMeasure()) {
+        }/* FIXME RM else if (el->isRepeatMeasure()) {
             out << brailleRepeatMeasure(toRepeatMeasure(el));
-        }
+        }*/
     }
 
     // Render the rest of the voices
@@ -2050,8 +2050,8 @@ QString ExportBraille::brailleArticulation(Articulation* articulation)
         return BRAILLE_TRILL;
     case SymId::ornamentMordent:
         return BRAILLE_MORDENT;
-    case SymId::ornamentMordentInverted:
-        return BRAILLE_INVERTED_MORDENT;
+// FIXME ornamentMordentInverted    case SymId::ornamentMordentInverted:
+//        return BRAILLE_INVERTED_MORDENT;
     case SymId::ornamentTremblement:
         return BRAILLE_TREBLEMENT;
     case SymId::ornamentPrallMordent:
@@ -2127,14 +2127,15 @@ QString ExportBraille::brailleGlissando(Note* note)
     return QString();
 }
 
-QString ExportBraille::brailleRepeatMeasure(RepeatMeasure* repeatMeasure)
-{
-    if (!repeatMeasure) {
-        return QString();
-    }
+// FIXME RM
+//QString ExportBraille::brailleRepeatMeasure(RepeatMeasure* repeatMeasure)
+//{
+//    if (!repeatMeasure) {
+//        return QString();
+//    }
 
-    return BRAILLE_MEASURE_REPEAT;
-}
+//    return BRAILLE_MEASURE_REPEAT;
+//}
 
 QString ExportBraille::brailleVolta(Measure* measure, Volta* volta, int staffCount)
 {
