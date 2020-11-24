@@ -1710,6 +1710,61 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY_STAFF_PITCHED | STATE_NOTE_ENTRY_STAFF_DRUM,
+         "sharp2-post",
+         QT_TRANSLATE_NOOP("action","Double ♯ (non-toggle)"),
+         QT_TRANSLATE_NOOP("action","Note input (non-toggle): Double ♯"),
+         QT_TRANSLATE_NOOP("action","Double ♯ (non-toggle)"),
+         Icons::sharpsharp_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CHECKABLE
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY_STAFF_PITCHED | STATE_NOTE_ENTRY_STAFF_DRUM,
+         "sharp-post",
+         QT_TRANSLATE_NOOP("action","♯ (non-toggle)"),
+         QT_TRANSLATE_NOOP("action","Note input (non-toggle): ♯"),
+         QT_TRANSLATE_NOOP("action","♯ (non-toggle)"),
+         Icons::sharp_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CHECKABLE
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY_STAFF_PITCHED | STATE_NOTE_ENTRY_STAFF_DRUM,
+         "nat-post",
+         QT_TRANSLATE_NOOP("action","♮ (non-toggle)"),
+         QT_TRANSLATE_NOOP("action","Note input (non-toggle): ♮"),
+         QT_TRANSLATE_NOOP("action","♮ (non-toggle)"),
+         Icons::natural_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CHECKABLE
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY_STAFF_PITCHED | STATE_NOTE_ENTRY_STAFF_DRUM,
+         "flat-post",
+         QT_TRANSLATE_NOOP("action","♭ (non-toggle)"),
+         QT_TRANSLATE_NOOP("action","Note input (non-toggle): ♭"),
+         QT_TRANSLATE_NOOP("action","♭ (non-toggle)"),
+         Icons::flat_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CHECKABLE
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY_STAFF_PITCHED | STATE_NOTE_ENTRY_STAFF_DRUM,
+         "flat2-post",
+         QT_TRANSLATE_NOOP("action","Double ♭ (non-toggle)"),
+         QT_TRANSLATE_NOOP("action","Note input (non-toggle): Double ♭"),
+         QT_TRANSLATE_NOOP("action","Double ♭ (non-toggle)"),
+         Icons::flatflat_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CHECKABLE
+         },
+      {
+         MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "acciaccatura",
          QT_TRANSLATE_NOOP("action","Acciaccatura"),
