@@ -51,6 +51,8 @@ private:
     void padNote(const Pad& pad);
     void putNote(const actions::ActionData& data);
 
+    void toggleAccidental(AccidentalType type);
+
     void moveAction(const actions::ActionName& action);
     void moveText(INotationInteractionPtr interaction, const actions::ActionName& action);
 

@@ -173,29 +173,47 @@ void NotationToolBarModel::updateNoteInputState()
 
     item("note-input").checked = noteInput->isNoteInputMode();
 
-    static QMap<actions::ActionName, Pad> noteInputActionPads = {
-        { "note-longa", Pad::NOTE00 },
-        { "note-breve", Pad::NOTE0 },
-        { "pad-note-1", Pad::NOTE1 },
-        { "pad-note-2", Pad::NOTE2 },
-        { "pad-note-4", Pad::NOTE4 },
-        { "pad-note-8", Pad::NOTE8 },
-        { "pad-note-16", Pad::NOTE16 },
-        { "pad-note-32", Pad::NOTE32 },
-        { "pad-note-64", Pad::NOTE64 },
-        { "pad-note-128", Pad::NOTE128 },
-        { "pad-note-256", Pad::NOTE256 },
-        { "pad-note-512", Pad::NOTE512 },
-        { "pad-note-1024", Pad::NOTE1024 },
-        { "pad-dot", Pad::DOT },
-        { "pad-dotdot", Pad::DOTDOT },
-        { "pad-dot3", Pad::DOT3 },
-        { "pad-dot4", Pad::DOT4 },
-        { "pad-rest", Pad::REST }
+    updateNoteDurationState();
+    updateNoteAccidentalState();
+}
+
+void NotationToolBarModel::updateNoteDurationState()
+{
+    auto noteInput = notation()->interaction()->noteInput();
+    static QMap<actions::ActionName, DurationType> noteInputDurations = {
+        { "note-longa", DurationType::V_LONG },
+        { "note-breve", DurationType::V_BREVE },
+        { "pad-note-1", DurationType::V_WHOLE },
+        { "pad-note-2", DurationType::V_HALF },
+        { "pad-note-4", DurationType::V_QUARTER },
+        { "pad-note-8", DurationType::V_EIGHTH },
+        { "pad-note-16", DurationType::V_16TH },
+        { "pad-note-32", DurationType::V_32ND },
+        { "pad-note-64", DurationType::V_64TH },
+        { "pad-note-128", DurationType::V_128TH },
+        { "pad-note-256", DurationType::V_256TH },
+        { "pad-note-512", DurationType::V_512TH },
+        { "pad-note-1024", DurationType::V_1024TH }
     };
 
-    for (const actions::ActionName& actionName: noteInputActionPads.keys()) {
-        item(actionName).checked = noteInput->isPadActive(noteInputActionPads[actionName]);
+    for (const actions::ActionName& actionName: noteInputDurations.keys()) {
+        item(actionName).checked = noteInput->state().duration.type() == noteInputDurations[actionName];
+    }
+}
+
+void NotationToolBarModel::updateNoteAccidentalState()
+{
+    auto noteInput = notation()->interaction()->noteInput();
+    static QMap<actions::ActionName, AccidentalType> noteInputAccidentals = {
+        { "flat2", AccidentalType::FLAT2 },
+        { "flat", AccidentalType::FLAT },
+        { "nat", AccidentalType::NATURAL },
+        { "sharp", AccidentalType::SHARP },
+        { "sharp2", AccidentalType::SHARP2 }
+    };
+
+    for (const actions::ActionName& actionName: noteInputAccidentals.keys()) {
+        item(actionName).checked = noteInput->state().accidentalType == noteInputAccidentals[actionName];
     }
 }
 

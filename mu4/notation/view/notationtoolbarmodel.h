@@ -71,6 +71,8 @@ private:
     void onNotationChanged();
     void updateState();
     void updateNoteInputState();
+    void updateNoteDurationState();
+    void updateNoteAccidentalState();
 
     struct ActionItem {
         actions::Action action;

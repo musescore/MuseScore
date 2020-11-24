@@ -71,6 +71,7 @@ using SlurSegment = Ms::SlurSegment;
 using Rest = Ms::Rest;
 using Fraction = Ms::Fraction;
 using NoteInputMethod = Ms::NoteEntryMethod;
+using AccidentalType = Ms::AccidentalType;
 
 using StaffList = QList<const Staff*>;
 using PartList = QList<const Part*>;
@@ -130,6 +131,12 @@ enum class NoteAddingMode {
     CurrentChord,
     NextChord,
     InsertChord
+};
+
+struct NoteInputState
+{
+    Duration duration;
+    AccidentalType accidentalType;
 };
 
 struct Meta
