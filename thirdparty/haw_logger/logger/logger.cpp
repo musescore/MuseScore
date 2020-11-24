@@ -29,7 +29,6 @@ static const char COLON(':');
 static const char DOT('.');
 static const char HYPEN('-');
 static const char T('T');
-static const char SPACE(' ');
 
 static const std::string MAIN_THREAD("main_thread");
 
@@ -305,7 +304,7 @@ void Logger::setupDefault()
 
 void Logger::write(const LogMsg& logMsg)
 {
-    std::lock_guard locker(m_mutex);
+    std::lock_guard<std::mutex> locker(m_mutex);
     if (isAsseptMsg(logMsg.type)) {
         for (LogDest* dest : m_dests) {
             dest->write(logMsg);
