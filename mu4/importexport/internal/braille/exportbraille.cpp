@@ -771,7 +771,7 @@ bool ExportBraille::ascendingChords(ClefType clefType)
     case ClefType::PERC2:          //Percussion
         return false;
     default:
-        return false;
+        break;
     }
     return false;
 }
@@ -1007,7 +1007,7 @@ QString ExportBraille::brailleBreath(Breath* breath)
     case SymId::caesuraCurved:
         return BRAILLE_CAESURA;
     default:
-        return QString();
+        break;
     }
     return QString();
 }
@@ -1238,7 +1238,7 @@ QString ExportBraille::brailleAccidentalType(AccidentalType accidental)
     case AccidentalType::SHARP_SLASH2:       return BRAILLE_ACC_SHARP;
     //TODO the rest of the accidentals
     default:
-        return QString();
+        break;
     }
     return QString();
 }
@@ -2077,7 +2077,7 @@ QString ExportBraille::brailleArticulation(Articulation* articulation)
         return BRAILLE_LINE_PRALL;
     //TODO. there are still more articulations
     default:
-        return QString();
+        break;
     }
     return QString();
 }
@@ -2468,7 +2468,7 @@ QString ExportBraille::brailleFermata(Fermata* fermata)
     case SymId::fermataLongBelow:
         return BRAILLE_LONG_FERMATA;
     default:
-        return QString();
+        break;
     }
     return QString();
 }
