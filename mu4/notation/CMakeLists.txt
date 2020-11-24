@@ -40,7 +40,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/abstractnotationwriter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/abstractnotationwriter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/inotationcreator.h
-    ${CMAKE_CURRENT_LIST_DIR}/inotationinputstate.h
+    ${CMAKE_CURRENT_LIST_DIR}/inotationnoteinput.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationselection.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationinteraction.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/inotationundostack.h
@@ -70,8 +70,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationcreator.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/scorecallbacks.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/scorecallbacks.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationinputstate.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationinputstate.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationnoteinput.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationnoteinput.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationselection.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationselection.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationselectionrange.cpp
