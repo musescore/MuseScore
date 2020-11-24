@@ -279,7 +279,6 @@ void Bracket::draw(QPainter* painter) const
                   break;
             case BracketType::LINE: {
                   qreal h = 2 * h2;
-                  qreal _spatium = spatium();
                   qreal w = 0.67 * score()->styleP(Sid::bracketWidth);
                   QPen pen(curColor(), w, Qt::SolidLine, Qt::FlatCap);
                   painter->setPen(pen);

@@ -152,8 +152,9 @@ QUrl ApiInfo::getUpdateScoreInfoUrl(const QString& scoreId, const QString& acces
 //---------------------------------------------------------
 
 LoginManager::LoginManager(QAction* uploadAudioMenuAction, QObject* parent)
- : QObject(parent), _networkManager(new QNetworkAccessManager(this)), m_asyncWait(new AsyncWait(this)),
-   _uploadAudioMenuAction(uploadAudioMenuAction)
+ : QObject(parent), _networkManager(new QNetworkAccessManager(this)), _uploadAudioMenuAction(uploadAudioMenuAction),
+   m_asyncWait(new AsyncWait(this))
+
       {
       _progressDialog = new QProgressDialog(mscore);
       _progressDialog->setWindowFlags(Qt::WindowFlags(Qt::Dialog | Qt::FramelessWindowHint | Qt::WindowTitleHint));
