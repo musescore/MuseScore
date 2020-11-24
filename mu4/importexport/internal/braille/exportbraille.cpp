@@ -232,9 +232,9 @@
 #define BRAILLE_INVERTED_TURN_NOTE      QString(",4l")
 
 // Table 16.C. Page 13. Music Braille Code 2015
-#define BRAILLE_MORDENT                 QString("\"6")
+#define BRAILLE_SHORT_TRILL             QString("\"6")
 #define BRAILLE_TREBLEMENT              QString(";6")
-#define BRAILLE_INVERTED_MORDENT        QString("\"6l")
+#define BRAILLE_MORDENT                 QString("\"6l")
 #define BRAILLE_PRALL_MORDENT           QString(";6l")
 
 // Table 16.D. Page 13. Music Braille Code 2015
@@ -515,7 +515,7 @@ class ExportBraille
     QString brailleArticulation(Articulation* articulation);
     QString brailleFingeringAfter(Fingering* fingering);
     QString brailleGlissando(Note* note);
-    QString brailleRepeatMeasure(RepeatMeasure* repeatMeasure);
+    QString brailleMeasureRepeat(MeasureRepeat* measureRepeat);
     QString brailleVolta(Measure* measure, Volta* volta, int staffCount);
 
     QString brailleSlurBefore(ChordRest* chordRest, std::vector<Slur*>* slur);
@@ -1100,8 +1100,8 @@ QString ExportBraille::brailleMeasure(Measure* measure, int staffCount)
             out << brailleBreath(toBreath(el));
         } else if (el->isBarLine() && toBarLine(el) != lastBarline(measure, el->track())) {
             out << brailleBarline(toBarLine(el));
-        } else if (el->isRepeatMeasure()) {
-            out << brailleRepeatMeasure(toRepeatMeasure(el));
+        } else if (el->isMeasureRepeat()) {
+            out << brailleMeasureRepeat(toMeasureRepeat(el));
         }
     }
 
@@ -1683,6 +1683,11 @@ QString ExportBraille::brailleBarline(BarLine* barline)
     case BarLineType::END_START_REPEAT:
         barlineBraille = BRAILLE_BARLINE_START_REPEAT + " " + BRAILLE_BARLINE_END_REPEAT;
         break;
+    case BarLineType::REVERSE_END:
+    //case BarLineType::REVERSE_FINALE: // duplicate of the above, alternative name
+    case BarLineType::HEAVY:
+    case BarLineType::DOUBLE_HEAVY:
+        break; // ToDo ?!
     }
 
     QString fermataBraille = QString();
@@ -2050,8 +2055,8 @@ QString ExportBraille::brailleArticulation(Articulation* articulation)
         return BRAILLE_TRILL;
     case SymId::ornamentMordent:
         return BRAILLE_MORDENT;
-    case SymId::ornamentMordentInverted:
-        return BRAILLE_INVERTED_MORDENT;
+    case SymId::ornamentShortTrill:
+        return BRAILLE_SHORT_TRILL;
     case SymId::ornamentTremblement:
         return BRAILLE_TREBLEMENT;
     case SymId::ornamentPrallMordent:
@@ -2127,9 +2132,9 @@ QString ExportBraille::brailleGlissando(Note* note)
     return QString();
 }
 
-QString ExportBraille::brailleRepeatMeasure(RepeatMeasure* repeatMeasure)
+QString ExportBraille::brailleMeasureRepeat(MeasureRepeat* measureRepeat)
 {
-    if (!repeatMeasure) {
+    if (!measureRepeat) {
         return QString();
     }
 
@@ -2481,6 +2486,7 @@ QString ExportBraille::brailleMarker(Marker* marker)
     case Marker::Type::FINE:
         return BRAILLE_FINE;
     case Marker::Type::TOCODA:
+    case Marker::Type::TOCODASYM:
         return BRAILLE_TOCODA;
     case Marker::Type::USER:
         return QString(">") + TextToUEBBraille().braille(marker->plainText().toLower()) + QString("> ");
