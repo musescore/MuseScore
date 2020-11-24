@@ -22,6 +22,7 @@
 #include "../inotationinputstate.h"
 #include "async/asyncable.h"
 #include "igetscore.h"
+#include "inotationinteraction.h"
 #include "inotationundostack.h"
 
 namespace Ms {
@@ -33,16 +34,18 @@ class ScoreCallbacks;
 class NotationInputState : public INotationInputState, public async::Asyncable
 {
 public:
-    NotationInputState(const IGetScore* getScore, INotationUndoStackPtr undoStack, mu::async::Notification selectionChangedNotification);
+    NotationInputState(const IGetScore* getScore, INotationInteraction* interaction, INotationUndoStackPtr undoStack);
     ~NotationInputState() override;
 
-    bool isNoteEnterMode() const override;
+    bool isNoteInputMode() const override;
     bool isPadActive(Pad pad) const override;
 
     Duration duration() const override;
 
-    void startNoteEntry() override;
-    void endNoteEntry() override;
+    void startNoteInput() override;
+    void endNoteInput() override;
+    void setNoteInputMethod(NoteInputMethod method) override;
+    void addNote(NoteName noteName, NoteAddingMode addingMode) override;
     void padNote(const Pad& pad) override;
     void putNote(const QPointF& pos, bool replace, bool insert) override;
 
@@ -57,6 +60,7 @@ private:
     void updateInputState();
 
     const IGetScore* m_getScore = nullptr;
+    INotationInteraction* m_interaction = nullptr;
     INotationUndoStackPtr m_undoStack;
 
     async::Notification m_stateChanged;
