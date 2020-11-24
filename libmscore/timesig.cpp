@@ -165,7 +165,7 @@ void TimeSig::write(XmlWriter& xml) const
 
 void TimeSig::read(XmlReader& e)
       {
-      int n=0, z1=0, z2=0, z3=0, z4=0;
+      int n = 0, z1 = 0, z2 = 0, z3 = 0, z4 = 0;
       bool old = false;
 
       while (e.readNextStartElement()) {
@@ -203,6 +203,20 @@ void TimeSig::read(XmlReader& e)
                         }
                   else
                         _timeSigType = TimeSigType(i);
+
+                  // Musejazz had by default a closing parenthesis after cut and common time signatures
+                  if (score()->mscVersion() <= 301) {
+                        if (masterScore()->scoreFont()->name() == "MuseJazz") {
+                              if (_timeSigType == TimeSigType::ALLA_BREVE) {
+                                    _timeSigType = TimeSigType::NORMAL;
+                                    setParserString("C)");
+                                    }
+                              else if (_timeSigType == TimeSigType::FOUR_FOUR) {
+                                    _timeSigType = TimeSigType::NORMAL;
+                                    setParserString("¢)");
+                                    }
+                              }
+                        }
                   }
             else if (tag == "showCourtesySig")
                   _showCourtesySig = e.readInt();
