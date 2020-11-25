@@ -70,10 +70,12 @@ InstrumentPanelTreeModel::~InstrumentPanelTreeModel()
 void InstrumentPanelTreeModel::clear()
 {
     beginResetModel();
+    m_selectionModel->clear();
     deleteItems();
     endResetModel();
 
     emit isEmptyChanged();
+    emit isAddingAvailableChanged(false);
 }
 
 void InstrumentPanelTreeModel::deleteItems()
@@ -120,6 +122,9 @@ void InstrumentPanelTreeModel::load()
     });
 
     endResetModel();
+
+    emit isEmptyChanged();
+    emit isAddingAvailableChanged(true);
 }
 
 IDList InstrumentPanelTreeModel::currentNotationPartIdList() const
@@ -399,6 +404,11 @@ bool InstrumentPanelTreeModel::isMovingDownAvailable() const
 bool InstrumentPanelTreeModel::isRemovingAvailable() const
 {
     return m_isRemovingAvailable;
+}
+
+bool InstrumentPanelTreeModel::isAddingAvailable() const
+{
+    return m_notationParts != nullptr;
 }
 
 bool InstrumentPanelTreeModel::isEmpty() const

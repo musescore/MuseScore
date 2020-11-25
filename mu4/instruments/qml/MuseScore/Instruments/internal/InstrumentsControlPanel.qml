@@ -9,8 +9,8 @@ RowLayout {
 
     property bool isMovingUpAvailable: false
     property bool isMovingDownAvailable: false
-    property bool isRearrangementAvailable: false
     property bool isRemovingAvailable: false
+    property bool isAddingAvailable: value
 
     signal addRequested()
     signal moveUpRequested()
@@ -21,7 +21,10 @@ RowLayout {
 
     FlatButton {
         Layout.fillWidth: true
+
         text: qsTrc("instruments", "Add")
+
+        enabled: root.isAddingAvailable
 
         onClicked: {
             root.addRequested()
