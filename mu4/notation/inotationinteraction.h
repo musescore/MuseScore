@@ -94,6 +94,8 @@ public:
     virtual void swapSelection() = 0;
     virtual void deleteSelection() = 0;
     virtual void flipSelection() = 0;
+    virtual void addTieToSelection() = 0;
+    virtual void addSlurToSelection() = 0;
 
     virtual void setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval = 0) = 0;
     virtual void transpose(const TransposeOptions& options) = 0;

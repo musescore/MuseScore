@@ -80,6 +80,20 @@ std::vector<Element*> NotationSelection::elements() const
     return els;
 }
 
+std::vector<Note*> NotationSelection::notes(NoteFilter filter) const
+{
+    switch (filter) {
+    case NoteFilter::All: return score()->selection().noteList();
+    case NoteFilter::WithTie: return score()->cmdTieNoteList(score()->selection(), false);
+    case NoteFilter::WithSlur: {
+        NOT_IMPLEMENTED;
+        return {};
+    }
+    }
+
+    return {};
+}
+
 QRectF NotationSelection::canvasBoundingRect() const
 {
     if (isNone()) {

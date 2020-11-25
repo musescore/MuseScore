@@ -45,6 +45,7 @@ namespace mu {
 namespace notation {
 using Element = Ms::Element;
 using ElementType = Ms::ElementType;
+using Note = Ms::Note;
 using Measure = Ms::Measure;
 using DurationType = Ms::TDuration::DurationType;
 using Duration = Ms::TDuration;
@@ -117,7 +118,8 @@ enum class BoxType
     Text
 };
 
-enum class NoteName {
+enum class NoteName
+{
     C = 0,
     D,
     E,
@@ -127,7 +129,8 @@ enum class NoteName {
     B
 };
 
-enum class NoteAddingMode {
+enum class NoteAddingMode
+{
     CurrentChord,
     NextChord,
     InsertChord
@@ -138,6 +141,14 @@ struct NoteInputState
     NoteInputMethod method;
     Duration duration;
     AccidentalType accidentalType;
+    bool withSlur = false;
+};
+
+enum class NoteFilter
+{
+    All,
+    WithTie,
+    WithSlur
 };
 
 struct Meta

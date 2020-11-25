@@ -41,6 +41,8 @@ public:
     virtual Element* element() const = 0;
     virtual std::vector<Element*> elements() const = 0;
 
+    virtual std::vector<Note*> notes(NoteFilter filter = NoteFilter::All) const = 0;
+
     virtual QRectF canvasBoundingRect() const = 0;
 
     virtual INotationSelectionRangePtr range() const = 0;
