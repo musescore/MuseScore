@@ -85,8 +85,8 @@ Item {
                 root.model.setPartTitle(model.index, title)
             }
 
-            onVoicesVisibilityChangeRequested: {
-                root.model.setVoicesVisibility(model.index, voicesVisibility)
+            onVoiceVisibilityChangeRequested: {
+                root.model.setVoiceVisible(model.index, voiceIndex, voiceVisible)
             }
 
             onRemovePartRequested: {

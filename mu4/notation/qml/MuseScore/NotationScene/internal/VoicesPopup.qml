@@ -7,7 +7,7 @@ StyledPopup {
     id: root
 
     property var voicesVisibility: [] // array of bool
-    signal voicesVisibilityChangeRequested()
+    signal voiceVisibilityChangeRequested(var voiceIndex, var voiceVisible)
 
     height: contentColumn.implicitHeight + bottomPadding + topPadding
     width: contentColumn.implicitWidth + leftPadding + rightPadding
@@ -36,7 +36,7 @@ StyledPopup {
                 onClicked: {
                     checked = !checked
                     root.voicesVisibility[model.index] = checked
-                    root.voicesVisibilityChangeRequested()
+                    root.voiceVisibilityChangeRequested(model.index, checked)
                 }
             }
         }

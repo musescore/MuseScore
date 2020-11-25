@@ -53,11 +53,11 @@ public:
     Q_INVOKABLE void openSelectedParts();
     Q_INVOKABLE void apply();
 
-    Q_INVOKABLE void selectPart(int index);
-    Q_INVOKABLE void removePart(int index);
-    Q_INVOKABLE void setPartTitle(int index, const QString& title);
-    Q_INVOKABLE void setVoicesVisibility(int index, const QVariantList& visibility);
-    Q_INVOKABLE void copyPart(int index);
+    Q_INVOKABLE void selectPart(int partIndex);
+    Q_INVOKABLE void removePart(int partIndex);
+    Q_INVOKABLE void setPartTitle(int partIndex, const QString& title);
+    Q_INVOKABLE void setVoiceVisible(int partIndex, int voiceIndex, bool visible);
+    Q_INVOKABLE void copyPart(int partIndex);
 
 signals:
     void selectionChanged();
@@ -68,14 +68,13 @@ private:
 
     void setTitle(INotationPtr notation, const QString& title);
 
-    bool isIndexValid(int index) const;
+    bool isNotationIndexValid(int index) const;
+
     IMasterNotationPtr masterNotation() const;
     QList<int> selectedRows() const;
 
     void insertNotation(int destinationIndex, INotationPtr notation);
     void notifyAboutNotationChanged(int index);
-
-    void applyVoicesVisibility(INotationPtr notation) const;
 
     enum Roles {
         RoleTitle = Qt::UserRole + 1,
@@ -87,7 +86,6 @@ private:
 
     QItemSelectionModel* m_selectionModel = nullptr;
     QList<INotationPtr> m_notations;
-    QHash<QString /* notation key */, QVariantList /* voices */> m_updatedVoicesVisibility;
     INotationPtr m_currentNotation;
 };
 }
