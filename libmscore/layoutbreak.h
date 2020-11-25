@@ -41,6 +41,7 @@ class LayoutBreak final : public Element {
       qreal _pause;
       bool _startWithLongNames;
       bool _startWithMeasureOne;
+      bool _firstSystemIdentation;
       Type _layoutBreakType;
 
       void draw(QPainter*) const override;
@@ -62,13 +63,15 @@ class LayoutBreak final : public Element {
       void write(XmlWriter&) const override;
       void read(XmlReader&) override;
 
-      Measure* measure() const            { return (Measure*)parent();   }
-      qreal pause() const                 { return _pause;               }
-      void setPause(qreal v)              { _pause = v;                  }
-      bool startWithLongNames() const     { return _startWithLongNames;  }
-      void setStartWithLongNames(bool v)  { _startWithLongNames = v;     }
-      bool startWithMeasureOne() const    { return _startWithMeasureOne; }
-      void setStartWithMeasureOne(bool v) { _startWithMeasureOne = v;    }
+      Measure* measure() const              { return (Measure*)parent();     }
+      qreal pause() const                   { return _pause;                 }
+      void setPause(qreal v)                { _pause = v;                    }
+      bool startWithLongNames() const       { return _startWithLongNames;    }
+      void setStartWithLongNames(bool v)    { _startWithLongNames = v;       }
+      bool startWithMeasureOne() const      { return _startWithMeasureOne;   }
+      void setStartWithMeasureOne(bool v)   { _startWithMeasureOne = v;      }
+      bool firstSystemIdentation() const    { return _firstSystemIdentation; }
+      void setFirstSystemIdentation(bool v) { _firstSystemIdentation = v;    }
 
       bool isPageBreak() const    { return _layoutBreakType == PAGE;    }
       bool isLineBreak() const    { return _layoutBreakType == LINE;    }

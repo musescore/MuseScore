@@ -82,6 +82,7 @@ struct LayoutContext {
       Score* score             { 0    };
       bool startWithLongNames  { true };
       bool firstSystem         { true };
+      bool firstSystemIndent   { true };
       Page* page               { 0 };
       int curPage              { 0 };      // index in Score->page()s
       Fraction tick            { 0, 1 };
@@ -103,7 +104,7 @@ struct LayoutContext {
       Fraction startTick;
       Fraction endTick;
 
-      LayoutContext(Score* s) : score(s) {}
+      LayoutContext(Score* s);
       LayoutContext(const LayoutContext&) = delete;
       LayoutContext& operator=(const LayoutContext&) = delete;
       ~LayoutContext();

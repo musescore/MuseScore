@@ -479,9 +479,10 @@ InspectorSectionBreak::InspectorSectionBreak(QWidget* parent)
       scb.setupUi(addWidget());
 
       iList = {
-            { Pid::PAUSE,                   0, scb.pause,               scb.resetPause               },
-            { Pid::START_WITH_LONG_NAMES,   0, scb.startWithLongNames,  scb.resetStartWithLongNames  },
-            { Pid::START_WITH_MEASURE_ONE,  0, scb.startWithMeasureOne, scb.resetStartWithMeasureOne }
+            { Pid::PAUSE,                    0, scb.pause,                  scb.resetPause                  },
+            { Pid::START_WITH_LONG_NAMES,    0, scb.startWithLongNames,     scb.resetStartWithLongNames     },
+            { Pid::START_WITH_MEASURE_ONE,   0, scb.startWithMeasureOne,    scb.resetStartWithMeasureOne    },
+            { Pid::FIRST_SYSTEM_INDENTATION, 0, scb.firstSystemIndentation, scb.resetFirstSystemIndentation }
             };
       pList = { { scb.title, scb.panel } };
       mapSignals();

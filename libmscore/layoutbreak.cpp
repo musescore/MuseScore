@@ -35,6 +35,7 @@ LayoutBreak::LayoutBreak(Score* score)
       _pause = 0.;
       _startWithLongNames = false;
       _startWithMeasureOne = false;
+      _firstSystemIdentation = false;
       _layoutBreakType = Type(propertyDefault(Pid::LAYOUT_BREAK).toInt());
 
       initElementStyle(&sectionBreakStyle);
@@ -42,17 +43,19 @@ LayoutBreak::LayoutBreak(Score* score)
       resetProperty(Pid::PAUSE);
       resetProperty(Pid::START_WITH_LONG_NAMES);
       resetProperty(Pid::START_WITH_MEASURE_ONE);
+      resetProperty(Pid::FIRST_SYSTEM_INDENTATION);
       lw = spatium() * 0.3;
       }
 
 LayoutBreak::LayoutBreak(const LayoutBreak& lb)
    : Element(lb)
       {
-      _layoutBreakType     = lb._layoutBreakType;
-      lw                   = lb.lw;
-      _pause               = lb._pause;
-      _startWithLongNames  = lb._startWithLongNames;
-      _startWithMeasureOne = lb._startWithMeasureOne;
+      _layoutBreakType       = lb._layoutBreakType;
+      lw                     = lb.lw;
+      _pause                 = lb._pause;
+      _startWithLongNames    = lb._startWithLongNames;
+      _startWithMeasureOne   = lb._startWithMeasureOne;
+      _firstSystemIdentation = lb._firstSystemIdentation;
       layout0();
       }
 
@@ -65,7 +68,7 @@ void LayoutBreak::write(XmlWriter& xml) const
       xml.stag(this);
       Element::writeProperties(xml);
 
-      for (auto id : { Pid::LAYOUT_BREAK, Pid::PAUSE, Pid::START_WITH_LONG_NAMES, Pid::START_WITH_MEASURE_ONE })
+      for (auto id : { Pid::LAYOUT_BREAK, Pid::PAUSE, Pid::START_WITH_LONG_NAMES, Pid::START_WITH_MEASURE_ONE, Pid::FIRST_SYSTEM_INDENTATION })
             writeProperty(xml, id);
 
       xml.etag();
@@ -87,6 +90,8 @@ void LayoutBreak::read(XmlReader& e)
                   readProperty(e, Pid::START_WITH_LONG_NAMES);
             else if (tag == "startWithMeasureOne")
                   readProperty(e, Pid::START_WITH_MEASURE_ONE);
+            else if (tag == "firstSystemIdentation")
+                  readProperty(e, Pid::FIRST_SYSTEM_INDENTATION);
             else if (!Element::readProperties(e))
                   e.unknown();
             }
@@ -251,6 +256,8 @@ QVariant LayoutBreak::getProperty(Pid propertyId) const
                   return _startWithLongNames;
             case Pid::START_WITH_MEASURE_ONE:
                   return _startWithMeasureOne;
+            case Pid::FIRST_SYSTEM_INDENTATION:
+                  return _firstSystemIdentation;
             default:
                   return Element::getProperty(propertyId);
             }
@@ -274,6 +281,9 @@ bool LayoutBreak::setProperty(Pid propertyId, const QVariant& v)
                   break;
             case Pid::START_WITH_MEASURE_ONE:
                   setStartWithMeasureOne(v.toBool());
+                  break;
+            case Pid::FIRST_SYSTEM_INDENTATION:
+                  setFirstSystemIdentation(v.toBool());
                   break;
             default:
                   if (!Element::setProperty(propertyId, v))
@@ -299,6 +309,8 @@ QVariant LayoutBreak::propertyDefault(Pid id) const
             case Pid::START_WITH_LONG_NAMES:
                   return true;
             case Pid::START_WITH_MEASURE_ONE:
+                  return true;
+            case Pid::FIRST_SYSTEM_INDENTATION:
                   return true;
             default:
                   return Element::propertyDefault(id);

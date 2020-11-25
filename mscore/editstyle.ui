@@ -575,7 +575,7 @@
                  <double>0.000000000000000</double>
                 </property>
                 <property name="maximum">
-                 <double>10.000000000000000</double>
+                 <double>1000.000000000000000</double>
                 </property>
                 <property name="singleStep">
                  <double>0.500000000000000</double>
