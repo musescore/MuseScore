@@ -33,10 +33,15 @@ public:
     NotationInputState(const IGetScore* getScore);
 
     bool isNoteEnterMode() const override;
+    bool isPadActive(Pad pad) const override;
+
     Duration duration() const override;
 
 private:
     Ms::Score* score() const;
+
+    bool isDurationActive(DurationType durationType) const;
+
     const IGetScore* m_getScore = nullptr;
 };
 }

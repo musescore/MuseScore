@@ -18,24 +18,29 @@ Item {
     property int sectionHeight: 0
     property string sectionRole: "sectionRole"
 
-    property int rows: -1
+    readonly property int noLimit: -1
+    property int rows: noLimit
     property int rowSpacing: 2
-    property int columns: -1
+    property int columns: noLimit
     property int columnSpacing: 2
 
-    function modelSections() {
-        var _sections = []
+    QtObject {
+        id: privateProperties
 
-        for (var i = 0; i < root.model.count; i++) {
-            var element = root.model.get(i)
+        function modelSections() {
+            var _sections = []
 
-            var section = element[sectionRole]
-            if (!_sections.includes(section)) {
-                _sections.push(section)
+            for (var i = 0; i < root.model.count; i++) {
+                var element = root.model.get(i)
+
+                var section = element[sectionRole]
+                if (!_sections.includes(section)) {
+                    _sections.push(section)
+                }
             }
-        }
 
-        return _sections
+            return _sections
+        }
     }
 
     Loader {
@@ -48,7 +53,7 @@ Item {
 
         Row {
             Repeater {
-                model: Boolean(root.model) ? modelSections() : []
+                model: Boolean(root.model) ? privateProperties.modelSections() : []
 
                 Row {
                     spacing: 2
@@ -89,7 +94,7 @@ Item {
 
         Column {
             Repeater {
-                model: Boolean(root.model) ? modelSections() : []
+                model: Boolean(root.model) ? privateProperties.modelSections() : []
 
                 Column {
                     spacing: 2

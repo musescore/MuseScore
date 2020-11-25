@@ -16,41 +16,42 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_WORKSPACE_WORKSPACETYPES_H
-#define MU_WORKSPACE_WORKSPACETYPES_H
+#include "actionnoteinputbaritem.h"
 
-#include <string>
-#include <vector>
-#include <map>
-#include "val.h"
+using namespace mu::notation;
+using namespace mu::framework;
 
-namespace mu {
-namespace workspace {
-struct AbstractData
+ActionNoteInputBarItem::ActionNoteInputBarItem(const ItemType& type, QObject* parent)
+    : AbstractNoteInputBarItem(type, parent)
 {
-    virtual ~AbstractData() = default;
-    std::string tag;
-    std::string name;
-};
-using AbstractDataPtr = std::shared_ptr<AbstractData>;
-
-//! NOTE Only data associations with framework.
-//! Other data must be in the appropriate modules.
-
-struct SettingsData : public AbstractData
-{
-    std::map<std::string /*key*/, Val> vals;
-};
-using SettingsDataPtr = std::shared_ptr<SettingsData>;
-
-struct ToolbarData : public AbstractData
-{
-    std::vector<std::string /*action*/> actions;
-};
-using ToolbarDataPtr = std::shared_ptr<ToolbarData>;
 }
 
-static constexpr std::string_view DEFAULT_WORKSPACE_NAME("Default");
+int ActionNoteInputBarItem::icon() const
+{
+    return static_cast<int>(m_icon);
 }
 
-#endif // MU_WORKSPACE_WORKSPACETYPES_H
+bool ActionNoteInputBarItem::checked() const
+{
+    return m_checked;
+}
+
+void ActionNoteInputBarItem::setIcon(IconCode::Code icon)
+{
+    if (m_icon == icon) {
+        return;
+    }
+
+    m_icon = icon;
+    emit iconChanged(this->icon());
+}
+
+void ActionNoteInputBarItem::setChecked(bool checked)
+{
+    if (m_checked == checked) {
+        return;
+    }
+
+    m_checked = checked;
+    emit checkedChanged(m_checked);
+}

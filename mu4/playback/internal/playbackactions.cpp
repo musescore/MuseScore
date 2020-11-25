@@ -24,7 +24,7 @@ using namespace mu::shortcuts;
 
 //! NOTE Only actions processed by notation
 
-const std::vector<Action> PlaybackActions::m_actions = {
+const mu::actions::ActionList PlaybackActions::m_actions = {
     Action("play",
            QT_TRANSLATE_NOOP("action", "Play"),
            ShortcutContext::Any

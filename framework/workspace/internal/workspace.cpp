@@ -44,9 +44,9 @@ std::string Workspace::title() const
     return name();
 }
 
-std::shared_ptr<AbstractData> Workspace::data(const std::string& tag, const std::string& name) const
+AbstractDataPtr Workspace::data(const std::string& tag, const std::string& name) const
 {
-    DataKey key{ tag, name };
+    DataKey key { tag, name };
     auto it = m_data.find(key);
     if (it != m_data.end()) {
         return it->second;
@@ -76,7 +76,7 @@ Val Workspace::settingValue(const std::string& key) const
 
 std::vector<std::string> Workspace::toolbarActions(const std::string& toolbarName) const
 {
-    std::shared_ptr<AbstractData> d = data("Toolbar", toolbarName);
+    AbstractDataPtr d = data("Toolbar", toolbarName);
     if (!d) {
         return std::vector<std::string>();
     }
@@ -89,10 +89,17 @@ std::vector<std::string> Workspace::toolbarActions(const std::string& toolbarNam
     return td->actions;
 }
 
-void Workspace::addData(std::shared_ptr<AbstractData> data)
+async::Channel<AbstractDataPtr> Workspace::dataChanged() const
 {
-    DataKey key{ data->tag, data->name };
+    return m_dataChanged;
+}
+
+void Workspace::addData(AbstractDataPtr data)
+{
+    DataKey key { data->tag, data->name };
     m_data[key] = data;
+
+    m_dataChanged.send(data);
 }
 
 bool Workspace::isInited() const
@@ -150,7 +157,7 @@ Ret Workspace::readWorkspace(const QByteArray& xmlData)
                     if (!data) {
                         LOGE() << "failed read: " << tag;
                     } else {
-                        DataKey key{ data->tag, data->name };
+                        DataKey key { data->tag, data->name };
                         m_data[key] = data;
                     }
                 }

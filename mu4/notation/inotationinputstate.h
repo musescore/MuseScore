@@ -19,6 +19,7 @@
 #ifndef MU_NOTATION_INOTATIONINPUTSTATE_H
 #define MU_NOTATION_INOTATIONINPUTSTATE_H
 
+#include "async/notification.h"
 #include "notationtypes.h"
 
 namespace mu::notation {
@@ -28,6 +29,8 @@ public:
     virtual ~INotationInputState() = default;
 
     virtual bool isNoteEnterMode() const = 0;
+    virtual bool isPadActive(Pad pad) const = 0;
+
     virtual Duration duration() const = 0;
 };
 

@@ -14,7 +14,7 @@ FocusableItem {
     signal clicked
 
     implicitHeight: contentRow.height
-    width: parent.width
+    implicitWidth: contentRow.width
 
     opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
 
@@ -22,7 +22,6 @@ FocusableItem {
         id: contentRow
 
         height: Math.max(box.height, label.implicitHeight)
-        width: parent.width
 
         spacing: 8
 
@@ -50,10 +49,12 @@ FocusableItem {
         StyledTextLabel {
             id: label
 
-            Layout.fillWidth: true
+            Layout.preferredWidth: implicitWidth
             Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
 
             horizontalAlignment: Text.AlignLeft
+
+            visible: Boolean(text)
         }
     }
 
