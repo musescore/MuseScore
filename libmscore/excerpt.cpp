@@ -495,7 +495,7 @@ void Excerpt::processLinkedClone(Element* ne, Score* score, int strack)
 //   cloneStaves
 //---------------------------------------------------------
 
-void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QMultiMap<int, int>& trackList)
+void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& sourceStavesIndexes, QMultiMap<int, int>& trackList)
 {
     TieMap tieMap;
 
@@ -530,8 +530,8 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
             nm->setNoOffset(m->noOffset());
             nm->setBreakMultiMeasureRest(m->breakMultiMeasureRest());
 
-            for (int dstStaffIdx = 0; dstStaffIdx < map.size(); ++dstStaffIdx) {
-                nm->setStaffStemless(dstStaffIdx, m->stemless(map[dstStaffIdx]));
+            for (int dstStaffIdx = 0; dstStaffIdx < sourceStavesIndexes.size(); ++dstStaffIdx) {
+                nm->setStaffStemless(dstStaffIdx, m->stemless(sourceStavesIndexes[dstStaffIdx]));
             }
 //TODO                  nm->setEndBarLineType(
 //                     m->endBarLineType(),
@@ -541,6 +541,11 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
 
             // Fraction ts = nm->len();
             int tracks = oscore->nstaves() * VOICES;
+
+            if (sourceStavesIndexes.isEmpty() && trackList.isEmpty()) {
+                tracks = 0;
+            }
+
             for (int srcTrack = 0; srcTrack < tracks; ++srcTrack) {
                 TupletMap tupletMap;            // tuplets cannot cross measure boundaries
 
@@ -801,9 +806,9 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
         nmbl->add(nmb);
     }
 
-    int n = map.size();
+    int n = sourceStavesIndexes.size();
     for (int dstStaffIdx = 0; dstStaffIdx < n; ++dstStaffIdx) {
-        Staff* srcStaff = oscore->staff(map[dstStaffIdx]);
+        Staff* srcStaff = oscore->staff(sourceStavesIndexes[dstStaffIdx]);
         Staff* dstStaff = score->staff(dstStaffIdx);
 
         Measure* m = oscore->firstMeasure();
@@ -832,7 +837,7 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
             }
             int eIdx = sIdx + span;
             for (int staffIdx = sIdx; staffIdx < eIdx; ++staffIdx) {
-                if (!map.contains(staffIdx)) {
+                if (!sourceStavesIndexes.contains(staffIdx)) {
                     --span;
                 }
             }
