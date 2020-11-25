@@ -8,7 +8,7 @@ Item {
     property var model: null
 
     property Component itemDelegate: Item {}
-    property string sectionRole: "section"
+    property string sectionRole: "sectionRole"
 
     property int cellWidth: 0
     property int cellHeight: 0
@@ -16,9 +16,9 @@ Item {
     property int sectionWidth: 0
     property int sectionHeight: 0
 
-    property int rows: -1
+    property int rows: 0
     property int rowSpacing: 2
-    property int columns: -1
+    property int columns: 0
     property int columnSpacing: 2
 
     width: gridView.width

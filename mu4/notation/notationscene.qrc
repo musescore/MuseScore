@@ -18,5 +18,8 @@
         <file>view/resources/data/tab_sample.mscx</file>
         <file>view/resources/icons/go-next.svg</file>
         <file>view/resources/icons/go-previous.svg</file>
+        <file>qml/MuseScore/NotationScene/NoteInputBarCustomiseDialog.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/NoteInputBarActionDelegate.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/NoteInputBarSeparatorDelegate.qml</file>
     </qresource>
 </RCC>

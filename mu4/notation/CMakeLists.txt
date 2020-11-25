@@ -136,6 +136,12 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/partlistmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/searchpopupmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/searchpopupmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/noteinputbarcustomisemodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/noteinputbarcustomisemodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/abstractnoteinputbaritem.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/abstractnoteinputbaritem.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/actionnoteinputbaritem.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/actionnoteinputbaritem.h
     )
 
 set(MODULE_UI
