@@ -204,6 +204,8 @@ void NotationToolBarModel::updateNoteInputState()
     updateNoteDotState();
     updateNoteDurationState();
     updateNoteAccidentalState();
+    updateTieState();
+    updateSlurState();
 }
 
 void NotationToolBarModel::updateNoteInputModeState()
@@ -274,6 +276,34 @@ void NotationToolBarModel::updateNoteAccidentalState()
     for (const actions::ActionName& actionName: noteInputAccidentals.keys()) {
         item(actionName).checked = noteInput->state().accidentalType == noteInputAccidentals[actionName];
     }
+}
+
+void NotationToolBarModel::updateTieState()
+{
+    auto selection = notation()->interaction()->selection();
+    std::vector<Note*> tiedNotes = selection->notes(NoteFilter::WithTie);
+    bool checked = !tiedNotes.empty();
+    for (const Note* note: tiedNotes) {
+        if (!note->tieFor()) {
+            checked = false;
+            break;
+        }
+    }
+
+    item("tie").checked = checked;
+}
+
+void NotationToolBarModel::updateSlurState()
+{
+    auto noteInput = notation()->interaction()->noteInput();
+    bool checked = false;
+    if (noteInput->isNoteInputMode()) {
+        checked = noteInput->state().withSlur;
+    } else {
+        NOT_IMPLEMENTED;
+    }
+
+    item("add-slur").checked = noteInput->state().withSlur;
 }
 
 bool NotationToolBarModel::isNoteInputModeAction(const ActionName& actionName) const

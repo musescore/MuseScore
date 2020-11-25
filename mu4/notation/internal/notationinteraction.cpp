@@ -916,7 +916,7 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
             LayoutBreak* breakElement = toLayoutBreak(element);
             score->cmdToggleLayoutBreak(breakElement->layoutBreakType());
         } else if (element->isSlur() && addSingle) {
-            cmdAddSlur(toSlur(element));
+            doAddSlur(toSlur(element));
         } else if (element->isSLine() && !element->isGlissando() && addSingle) {
             Segment* startSegment = cr1->segment();
             Segment* endSegment = cr2->segment();
@@ -1066,7 +1066,7 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
                 }
             }
         } else if (element->isSlur()) {
-            cmdAddSlur(toSlur(element));
+            doAddSlur(toSlur(element));
         } else if (element->isSLine() && element->type() != ElementType::GLISSANDO) {
             Segment* startSegment = sel.startSegment();
             Segment* endSegment = sel.endSegment();
@@ -1165,18 +1165,13 @@ void NotationInteraction::applyDropPaletteElement(Ms::Score* score, Ms::Element*
 }
 
 //! NOTE Copied from ScoreView::cmdAddSlur
-void NotationInteraction::cmdAddSlur(const Ms::Slur* slurTemplate)
+void NotationInteraction::doAddSlur(const Ms::Slur* slurTemplate)
 {
-    InputState& is = score()->inputState();
-    if (is.noteEntryMode() && is.slur()) {
-        const std::vector<SpannerSegment*>& el = is.slur()->spannerSegments();
-        if (!el.empty()) {
-            el.front()->setSelected(false);
-            // Now make sure that the slur segment is redrawn so that it does not *look* selected
-            m_selectionChanged.notify();
+    if (m_noteInput->isNoteInputMode()) {
+        if (m_noteInput->state().withSlur) {
+            m_noteInput->resetSlur();
+            return;
         }
-        is.setSlur(nullptr);
-        return;
     }
 
     m_undoStack->prepareChanges();
@@ -1210,8 +1205,16 @@ void NotationInteraction::cmdAddSlur(const Ms::Slur* slurTemplate)
                     cr2 = cr;
                 }
             }
+
             if (cr1 && (cr1 != cr2)) {
-                addSlur(cr1, cr2, slurTemplate);
+                Slur* slur = score()->addSlur(cr1, cr2, slurTemplate);
+
+                if (m_noteInput->isNoteInputMode()) {
+                    m_noteInput->addSlur(slur);
+                } else if (!cr2) {
+                    NOT_IMPLEMENTED;
+                    //startEditMode(ss);
+                }
             }
         }
     } else {
@@ -1236,53 +1239,18 @@ void NotationInteraction::cmdAddSlur(const Ms::Slur* slurTemplate)
             cr2 = 0;
         }
         if (cr1) {
-            addSlur(cr1, cr2, slurTemplate);
+            Slur* slur = score()->addSlur(cr1, cr2, slurTemplate);
+
+            if (m_noteInput->isNoteInputMode()) {
+                m_noteInput->addSlur(slur);
+            } else if (!cr2) {
+                NOT_IMPLEMENTED;
+                //startEditMode(ss);
+            }
         }
     }
+
     m_undoStack->commitChanges();
-}
-
-//! NOTE Copied from ScoreView::addSlur
-void NotationInteraction::addSlur(ChordRest* cr1, ChordRest* cr2, const Slur* slurTemplate)
-{
-    bool switchToSlur = false;
-    if (cr2 == 0) {
-        cr2 = nextChordRest(cr1);
-        if (cr2 == 0) {
-            cr2 = cr1;
-        }
-        switchToSlur = true;     // select slur for editing if last chord is not given
-    }
-
-    Slur* slur = slurTemplate ? slurTemplate->clone() : new Slur(cr1->score());
-    slur->setScore(cr1->score());
-    slur->setTick(cr1->tick());
-    slur->setTick2(cr2->tick());
-    slur->setTrack(cr1->track());
-    if (cr2->staff()->part() == cr1->staff()->part() && !cr2->staff()->isLinked(cr1->staff())) {
-        slur->setTrack2(cr2->track());
-    } else {
-        slur->setTrack2(cr1->track());
-    }
-    slur->setStartElement(cr1);
-    slur->setEndElement(cr2);
-
-    cr1->score()->undoAddElement(slur);
-    SlurSegment* ss = new SlurSegment(cr1->score());
-    ss->setSpannerSegmentType(SpannerSegmentType::SINGLE);
-    if (cr1 == cr2) {
-        ss->setSlurOffset(Grip::END, QPointF(3.0 * cr1->score()->spatium(), 0.0));
-    }
-    slur->add(ss);
-
-    InputState& is = score()->inputState();
-    if (is.noteEntryMode()) {
-        is.setSlur(slur);
-        ss->setSelected(true);
-    } else if (switchToSlur) {
-        NOT_IMPLEMENTED;
-        //startEditMode(ss);
-    }
 }
 
 //! NOTE Copied from ScoreView::dragLeaveEvent
@@ -1891,6 +1859,29 @@ void NotationInteraction::flipSelection()
     m_undoStack->prepareChanges();
     score()->cmdFlip();
     m_undoStack->commitChanges();
+
+    m_selectionChanged.notify();
+}
+
+void NotationInteraction::addTieToSelection()
+{
+    m_undoStack->prepareChanges();
+    if (noteInput()->isNoteInputMode()) {
+        score()->cmdAddTie();
+    } else {
+        score()->cmdToggleTie();
+    }
+    m_undoStack->commitChanges();
+
+    m_selectionChanged.notify();
+}
+
+void NotationInteraction::addSlurToSelection()
+{
+    m_undoStack->prepareChanges();
+    doAddSlur();
+    m_undoStack->commitChanges();
+
 
     m_selectionChanged.notify();
 }

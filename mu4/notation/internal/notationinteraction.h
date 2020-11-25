@@ -109,6 +109,8 @@ public:
     void swapSelection() override;
     void deleteSelection() override;
     void flipSelection() override;
+    void addTieToSelection() override;
+    void addSlurToSelection() override;
 
     void setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval = 0) override;
     void transpose(const TransposeOptions& options) override;
@@ -139,8 +141,7 @@ private:
 
     void applyDropPaletteElement(Ms::Score* score, Ms::Element* target, Ms::Element* e, Qt::KeyboardModifiers modifiers,
                                  QPointF pt = QPointF(), bool pasteMode = false);
-    void cmdAddSlur(const Ms::Slur* slurTemplate = nullptr);
-    void addSlur(Ms::ChordRest* cr1, Ms::ChordRest* cr2, const Ms::Slur* slurTemplate);
+    void doAddSlur(const Ms::Slur* slurTemplate = nullptr);
 
     bool isVoiceIndexValid(int voiceIndex) const;
 

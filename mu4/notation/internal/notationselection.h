@@ -20,7 +20,6 @@
 #define MU_NOTATION_NOTATIONSELECTION_H
 
 #include "../inotationselection.h"
-#include "../notationtypes.h"
 
 #include "igetscore.h"
 
@@ -42,6 +41,8 @@ public:
 
     Element* element() const override;
     std::vector<Element*> elements() const override;
+
+    std::vector<Note*> notes(NoteFilter filter) const override;
 
     QRectF canvasBoundingRect() const override;
 

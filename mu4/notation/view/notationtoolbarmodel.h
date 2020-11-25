@@ -78,6 +78,8 @@ private:
     void updateNoteDotState();
     void updateNoteDurationState();
     void updateNoteAccidentalState();
+    void updateTieState();
+    void updateSlurState();
 
     bool isNoteInputModeAction(const actions::ActionName& actionName) const;
     actions::Action currentNoteInputModeAction() const;

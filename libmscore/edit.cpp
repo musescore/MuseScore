@@ -437,6 +437,40 @@ Note* Score::addNote(Chord* chord, const NoteVal& noteVal, bool forceAccidental,
     return note;
 }
 
+Slur* Score::addSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, const Slur* slurTemplate)
+{
+    if (!secondChordRest) {
+        secondChordRest = nextChordRest(firstChordRest);
+        if (!secondChordRest) {
+            secondChordRest = firstChordRest;
+        }
+    }
+
+    Slur* slur = slurTemplate ? slurTemplate->clone() : new Slur(firstChordRest->score());
+    slur->setScore(firstChordRest->score());
+    slur->setTick(firstChordRest->tick());
+    slur->setTick2(secondChordRest->tick());
+    slur->setTrack(firstChordRest->track());
+    if (secondChordRest->staff()->part() == firstChordRest->staff()->part()
+        && !secondChordRest->staff()->isLinked(firstChordRest->staff())) {
+        slur->setTrack2(secondChordRest->track());
+    } else {
+        slur->setTrack2(firstChordRest->track());
+    }
+    slur->setStartElement(firstChordRest);
+    slur->setEndElement(secondChordRest);
+
+    firstChordRest->score()->undoAddElement(slur);
+    SlurSegment* ss = new SlurSegment(firstChordRest->score());
+    ss->setSpannerSegmentType(SpannerSegmentType::SINGLE);
+    if (firstChordRest == secondChordRest) {
+        ss->setSlurOffset(Grip::END, QPointF(3.0 * firstChordRest->score()->spatium(), 0.0));
+    }
+    slur->add(ss);
+
+    return slur;
+}
+
 //---------------------------------------------------------
 //   rewriteMeasures
 //    rewrite all measures from fm to lm (including)
