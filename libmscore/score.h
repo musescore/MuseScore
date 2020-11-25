@@ -515,7 +515,6 @@ private:
     ChordRest* prevMeasure(ChordRest* element, bool mmRest = false);
     void cmdSetBeamMode(Beam::Mode);
     void cmdResetStyle();
-    void cmdFlip();
     Note* getSelectedNote();
     ChordRest* upStaff(ChordRest* cr);
     ChordRest* downStaff(ChordRest* cr);
@@ -657,6 +656,7 @@ public:
     void cmdToggleLayoutBreak(LayoutBreak::Type);
     void cmdAddMeasureRepeat(Measure*, int numMeasures, int staffIdx);
     bool makeMeasureRepeatGroup(Measure*, int numMeasures, int staffIdx);
+    void cmdFlip();
 
     void addRemoveBreaks(int interval, bool lock);
 
