@@ -17,7 +17,7 @@ Item {
 
     signal copyPartRequested()
     signal removePartRequested()
-    signal voicesVisibilityChangeRequested()
+    signal voiceVisibilityChangeRequested(var voiceIndex, var voiceVisible)
     signal partClicked()
 
     height: 42
@@ -131,8 +131,8 @@ Item {
         x: showVoicesPopupButton.x + showVoicesPopupButton.width / 2 - width / 2
         y: showVoicesPopupButton.y + showVoicesPopupButton.height
 
-        onVoicesVisibilityChangeRequested: {
-            root.voicesVisibilityChangeRequested()
+        onVoiceVisibilityChangeRequested: {
+            root.voiceVisibilityChangeRequested(voiceIndex, voiceVisible)
         }
     }
 
