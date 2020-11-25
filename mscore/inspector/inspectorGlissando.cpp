@@ -88,14 +88,14 @@ void InspectorGlissando::updateEvents() {
       GlissandoSegment* gs = inspector->element()->isGlissandoSegment() ? toGlissandoSegment(inspector->element()) : nullptr;
       std::vector<int> body;
       int nEvents = 25;
-      if (gs && glissandoPitchOffsets(gs->spanner(), body)) {
+      int pitchStart = toNote(gs->spanner()->startElement())->ppitch();
+      int pitchEnd = toNote(gs->spanner()->endElement())->ppitch();
+      if (gs && glissandoPitchOffsets(gs->spanner(), body))
             nEvents = body.size();
-            Note* noteStart = toNote(gs->spanner()->startElement());
-            Note* noteEnd = toNote(gs->spanner()->endElement());
-            g.easeInOutCanvas->setPitchDelta(std::abs(noteEnd->ppitch() - noteStart->ppitch()) + 1);
-      }
-      g.easeInOutCanvas->setEvents(body);
       g.easeInOutCanvas->setNbEvents(nEvents);
+      g.easeInOutCanvas->setBottomPitch(pitchEnd > pitchStart ? pitchStart : pitchEnd);
+      g.easeInOutCanvas->setPitchDelta(std::abs(pitchEnd - pitchStart) + 1);
+      g.easeInOutCanvas->setEvents(body);
 }
 
 }

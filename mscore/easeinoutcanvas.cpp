@@ -63,6 +63,8 @@ void EaseInOutCanvas::paintEvent(QPaintEvent* ev)
 
       EaseInOut eio(static_cast<qreal>(m_easeIn) / 100.0, static_cast<qreal>(m_easeOut) / 100.0);
 
+      QString noteNames("C D EF G A B");
+
       QPainter painter(this);
       painter.setRenderHint(QPainter::Antialiasing, preferences.getBool(PREF_UI_CANVAS_MISC_ANTIALIASEDDRAWING));
 
@@ -74,47 +76,57 @@ void EaseInOutCanvas::paintEvent(QPaintEvent* ev)
       eventLinesColor.setAlphaF(0.5);
       QColor pitchLinesColor(Qt::gray);
       pitchLinesColor.setAlphaF(0.25);
+
+      // Color scheme based on the MuseScore blue.
       QColor borderLinesColor, warpLineColor, pitchFillColor, pitchGraphColor;
       if (preferences.isThemeDark()) {
             pitchFillColor.setRgbF(0.078, 0.284, 0.463);
             pitchGraphColor.setRgbF(0.125, 0.455, 0.741);
             warpLineColor.setRgbF(0.574, 0.368, 0.255);
             borderLinesColor.setRgbF(0.891, 0.932, 0.968);
-      }
+            }
       else {
             pitchFillColor.setRgbF(0.891, 0.932, 0.968);
             pitchGraphColor.setRgbF(0.125, 0.455, 0.741);
             warpLineColor.setRgbF(0.938, 0.691, 0.556);
             borderLinesColor.setRgbF(0.016, 0.057, 0.093);
-      }
+            }
 
       // this lambda takes as input a pitch value, and determines where what are its x and y coordinates
       auto getPosition = [this, graphWidth, graphHeight, leftPos, bottomPos](const QPointF& p) -> QPointF {
             return { leftPos + p.x() * graphWidth, bottomPos - p.y() * graphHeight };
-      };
+            };
 
-      // Draw the pitches staircase graph
-      if (m_events.size() > 1) {
-            pen.setWidth(3);
-            pen.setColor(pitchGraphColor);
-            painter.setPen(pen);
-            // draw line between points
-            qreal offset = m_events[m_events.size()-1] < 0 ? 1.0 : 0.0;
-            QPointF lastPoint = getPosition({0.0, offset + 0.0});
-            for (int i = 1; i < m_events.size(); i++) {
-                  qreal xPos = eio.XfromY(static_cast<qreal>(i) / nbEvents);
-                  qreal yPos = static_cast<qreal>(m_events[i]) / static_cast<qreal>(pitchDelta);
-                  QPointF currentPoint = getPosition({xPos, offset + yPos});
-                  painter.fillRect(lastPoint.x(), bottomPos, (currentPoint.x() - lastPoint.x()) + 1, lastPoint.y() - bottomPos, pitchFillColor);
-                  painter.drawLine(lastPoint, {currentPoint.x(), lastPoint.y()});
-                  lastPoint = currentPoint;
+      std::vector<QPointF> pitchPoints;
+      qreal offset = m_events[m_events.size() - 1] < 0 ? 1.0 : 0.0;
+      QPointF prevPoint, currPoint;
+      for (int i = 0; i < m_events.size(); i++) {
+            currPoint = getPosition({ eio.XfromY(static_cast<qreal>(i) / nbEvents), offset + static_cast<qreal>(m_events[i]) / static_cast<qreal>(pitchDelta) });
+            pitchPoints.push_back(currPoint);
             }
-            painter.fillRect(lastPoint.x(), bottomPos, (rightPos - lastPoint.x()) + 1, lastPoint.y() - bottomPos, pitchFillColor);
-            painter.drawLine(lastPoint, {rightPos, lastPoint.y()});
-      }
 
-      // draw half step horigontal lines in lighter gray
+      // Draw the pitches barchart graph in the background first
+      if (pitchPoints.size() > 1) {
+            prevPoint = pitchPoints[0];
+            for (int i = 1; i < pitchPoints.size(); i++) {
+                  currPoint = pitchPoints[i];
+                  painter.fillRect(prevPoint.x(), bottomPos, (currPoint.x() - prevPoint.x()) + 1, prevPoint.y() - bottomPos, pitchFillColor);
+                  prevPoint = currPoint;
+                  }
+            painter.fillRect(prevPoint.x(), bottomPos, (rightPos - prevPoint.x()) + 1, prevPoint.y() - bottomPos, pitchFillColor);
+            }
+
+      // draw time-warped vertical lines in lighter gray.
+      // These lines will move as ease-in and ease-out are adjusted.
       pen.setWidth(0);
+      pen.setColor(eventLinesColor);
+      painter.setPen(pen);
+      for (int i = 1; i < pitchPoints.size(); ++i) {
+            qreal xPos = pitchPoints[i].x();
+            painter.drawLine(xPos, topPos, xPos, bottomPos);
+            }
+
+      // draw half step horigontal lines in even lighter gray
       pen.setColor(pitchLinesColor);
       painter.setPen(pen);
       for (int i = 1; i < m_pitchDelta; ++i) {
@@ -122,27 +134,34 @@ void EaseInOutCanvas::paintEvent(QPaintEvent* ev)
             painter.drawLine(leftPos, yPos, rightPos, yPos);
             }
 
-      // draw time-warped vertical lines in lighter gray
-      pen.setWidth(0);
-      pen.setColor(eventLinesColor);
-      painter.setPen(pen);
-      for (int i = 1; i < m_nEvents; ++i) {
-            qreal xPos = leftPos + eio.XfromY(static_cast<qreal>(i) / nbEvents) * graphWidth;
-            painter.drawLine(xPos, topPos, xPos, bottomPos);
-      }
-
-      // Draw the Bezier transfer curve
+      // Draw the Bezier transfer curve. This warps the event times
+      // so this curve always go from lower left corner to upper-right corner.
       pen.setWidth(2);
       pen.setColor(warpLineColor);
       painter.setPen(pen);
-      QPointF lastPoint = getPosition({0.0, 0.0});
+      prevPoint = {leftPos, bottomPos};
       for (int i = 1; i <= 33; i++) {
-            QPointF currentPoint = getPosition(eio.Eval(static_cast<qreal>(i) / 33.0));
-            painter.drawLine(lastPoint, currentPoint);
-            lastPoint = currentPoint;
+            currPoint = getPosition(eio.Eval(static_cast<qreal>(i) / 33.0));
+            painter.drawLine(prevPoint, currPoint);
+            prevPoint = currPoint;
             }
 
-      // draw the graph frame after the other lines to cover them
+      // Draw the pitches level lines next so they cover the Bezier transfer curve.
+      if (pitchPoints.size() > 1) {
+            pen.setWidth(3);
+            pen.setCapStyle(Qt::FlatCap);
+            pen.setColor(pitchGraphColor);
+            painter.setPen(pen);
+            prevPoint = pitchPoints[0];
+            for (int i = 1; i < pitchPoints.size(); i++) {
+                  currPoint = pitchPoints[i];
+                  painter.drawLine(prevPoint, { currPoint.x(), prevPoint.y() });
+                  prevPoint = currPoint;
+                  }
+            painter.drawLine(prevPoint, { rightPos, prevPoint.y() });
+            }
+
+      // draw the graph frame after all the other graphics elements to cover them
       pen.setColor(borderLinesColor);
       pen.setWidth(1);
       painter.setPen(pen);
