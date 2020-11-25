@@ -425,7 +425,37 @@ bool TextBase::edit(EditData& ed)
                         case Qt::Key_H:
                               s = "\u266e"; // Unicode natural
                               break;
-                         case Qt::Key_Space:
+                        case Qt::Key_1:
+                              s = "\u1d163"; // Unicode 64th note
+                              break;
+                        case Qt::Key_2:
+                              s = "\u1d162"; // Unicode 32th note
+                              break;
+                        case Qt::Key_3:
+                              s = "\u1d161"; // Unicode 16th note
+                              break;
+                        case Qt::Key_4:
+                              s = "\u1d160"; // Unicode 8th note
+                              break;
+                        case Qt::Key_5:
+                              s = "\u1d15f"; // Unicode quarter note
+                              break;
+                        case Qt::Key_6:
+                              s = "\u1d15e"; // Unicode half note
+                              break;
+                        case Qt::Key_7:
+                              s = "\u1d15d"; // Unicode whole note
+                              break;
+                        case Qt::Key_8:
+                              s = "\u1d15c"; // Unicode double whole note
+                              break;
+                        case Qt::Key_9:
+                              s = "\u1d1b7"; // Unicode longa note
+                              break;
+                        case Qt::Key_Period:
+                              s = "\u1d16d"; // Unicode combining augmentation dot
+                              break;
+                        case Qt::Key_Space:
                               insertSym(ed, SymId::space);
                               return true;
                         case Qt::Key_F:
