@@ -117,6 +117,8 @@ public:
     void swapVoices(int voiceIndex1, int voiceIndex2) override;
     void addIntervalToSelectedNotes(int interval) override;
 
+    void changeSelectedNotesVoice(int voiceIndex) override;
+
 private:
     Ms::Score* score() const;
 
