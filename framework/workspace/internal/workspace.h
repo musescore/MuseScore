@@ -39,11 +39,13 @@ public:
     std::string name() const override;
     std::string title() const override;
 
-    std::shared_ptr<AbstractData> data(const std::string& tag, const std::string& name) const override;
-    void addData(std::shared_ptr<AbstractData> data) override;
+    AbstractDataPtr data(const std::string& tag, const std::string& name) const override;
+    void addData(AbstractDataPtr data) override;
 
     Val settingValue(const std::string& key) const override;
     std::vector<std::string> toolbarActions(const std::string& toolbarName) const override;
+
+    async::Channel<AbstractDataPtr> dataChanged() const override;
 
     bool isInited() const;
     Ret read();
@@ -72,7 +74,8 @@ private:
         }
     };
 
-    std::map<DataKey, std::shared_ptr<AbstractData> > m_data;
+    std::map<DataKey, AbstractDataPtr> m_data;
+    async::Channel<AbstractDataPtr> m_dataChanged;
 };
 }
 }

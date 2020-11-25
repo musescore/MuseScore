@@ -35,7 +35,7 @@ namespace notation {
 class NotationToolBarModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
-    INJECT(notation, actions::IActionsRegister, aregister)
+    INJECT(notation, actions::IActionsRegister, actionsRegister)
     INJECT(notation, actions::IActionsDispatcher, dispatcher)
     INJECT(notation, context::IGlobalContext, globalContext)
     INJECT(notation, playback::IPlaybackController, playbackController)
@@ -63,8 +63,6 @@ private:
         NameRole = Qt::UserRole + 1,
         IconRole,
         SectionRole,
-        TitleRole,
-        EnabledRole,
         CheckedRole
     };
 
@@ -81,8 +79,10 @@ private:
         bool checked = false;
     };
 
-    ActionItem makeItem(const actions::Action& action, const QString& section);
-    ActionItem makeAddItem();
+    ActionItem makeActionItem(const actions::Action& action, const QString& section);
+    ActionItem makeAddItem(const QString& section);
+
+    std::vector<std::string> currentWorkspaceActions() const;
 
     ActionItem& item(const actions::ActionName& name);
     QList<ActionItem> m_items;

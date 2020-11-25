@@ -25,7 +25,7 @@ using namespace mu::palette;
 using namespace mu::actions;
 using namespace mu::shortcuts;
 
-const std::vector<Action> PaletteActions::m_actions = {
+const mu::actions::ActionList PaletteActions::m_actions = {
     Action("masterpalette",
            QT_TRANSLATE_NOOP("action", "Master Palette"),
            ShortcutContext::Any

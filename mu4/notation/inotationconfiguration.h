@@ -26,8 +26,7 @@
 #include "retval.h"
 #include "io/path.h"
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class INotationConfiguration : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(INotationConfiguration)
@@ -65,8 +64,10 @@ public:
 
     virtual float guiScaling() const = 0;
     virtual float notationScaling() const = 0;
+
+    virtual std::vector<std::string> toolbarActions(const std::string& toolbarName) const = 0;
+    virtual void setToolbarActions(const std::string& toolbarName, const std::vector<std::string>& actions) = 0;
 };
-}
 }
 
 #endif // MU_NOTATION_INOTATIONCONFIGURATION_H

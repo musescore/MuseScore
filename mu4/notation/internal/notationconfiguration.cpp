@@ -58,6 +58,8 @@ static const Settings::Key STYLES_DIR_KEY(module_name, "application/paths/myStyl
 
 static const Settings::Key IS_MIDI_INPUT_ENABLED(module_name, "io/midi/enableInput");
 
+static const Settings::Key TOOLBAR_KEY(module_name, "ui/toolbar/");
+
 void NotationConfiguration::init()
 {
     settings()->setDefaultValue(ANCHORLINE_COLOR, Val(QColor("#C31989")));
@@ -205,4 +207,43 @@ float NotationConfiguration::guiScaling() const
 float NotationConfiguration::notationScaling() const
 {
     return uiConfiguration()->physicalDotsPerInch() / Ms::DPI;
+}
+
+std::vector<std::string> NotationConfiguration::toolbarActions(const std::string& toolbarName) const
+{
+    return parseToolbarActions(settings()->value(toolbarSettingsKey(toolbarName)).toString());
+}
+
+void NotationConfiguration::setToolbarActions(const std::string& toolbarName, const std::vector<std::string>& actions)
+{
+    QStringList qactions;
+    for (const std::string& action: actions) {
+        qactions << QString::fromStdString(action);
+    }
+
+    Val value(qactions.join(",").toStdString());
+    settings()->setValue(toolbarSettingsKey(toolbarName), value);
+}
+
+std::vector<std::string> NotationConfiguration::parseToolbarActions(const std::string& actions) const
+{
+    if (actions.empty()) {
+        return {};
+    }
+
+    std::vector<std::string> result;
+
+    QStringList actionsList = QString::fromStdString(actions).split(",");
+    for (const QString& action: actionsList) {
+        result.push_back(action.toStdString());
+    }
+
+    return result;
+}
+
+Settings::Key NotationConfiguration::toolbarSettingsKey(const std::string& toolbarName) const
+{
+    Settings::Key toolbarKey = TOOLBAR_KEY;
+    toolbarKey.key += toolbarName;
+    return toolbarKey;
 }
