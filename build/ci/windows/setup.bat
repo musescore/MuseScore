@@ -65,8 +65,8 @@ CALL "7z" x -y %TEMP_DIR%\VST3_SDK_37.7z "-oC:\vst"
 
 :: breakpad_tools
 ECHO "=== Install breakpad_tools ==="
-CALL "wget.exe" --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/dump_syms_32.7z" -O %TEMP_DIR%\dump_syms_32.7z
-CALL "7z" x -y %TEMP_DIR%\dump_syms_32.7z "-oC:\breakpad_tools"
+CALL "wget.exe" --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/breakpad/windows/x86/dump_syms.7z" -O %TEMP_DIR%\dump_syms.7z
+CALL "7z" x -y %TEMP_DIR%\dump_syms.7z "-oC:\breakpad_tools"
 
 IF %BUILD_WIN_PORTABLE% == ON (
 ECHO "=== Installing PortableApps.com Tools ==="
