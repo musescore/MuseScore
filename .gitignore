@@ -7,7 +7,6 @@
 build.release
 build.debug
 build.qtc
-build.artifacts
 build-*
 win32build
 win32install
@@ -16,6 +15,7 @@ win64install
 build.xcode
 applebuild
 build.artifacts
+build.symbols
 MuseScorePortable
 /*.config
 /*.creator

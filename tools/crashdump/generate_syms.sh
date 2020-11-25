@@ -8,8 +8,12 @@ DUMSYMS_BIN=$(which dump_syms)
 BUILD_DIR=""
 SYMBOLS_DIR="$HERE/../../build.symbols"
 MSCORE_BIN=""
-GEN_SCRIPT="$HERE/internal/generate_breakpad_symbols.py"
 SHOW_HELP=0
+
+GEN_SCRIPT="$HERE/posix/generate_breakpad_symbols.py"
+if [[ "$OSTYPE" == "cygwin" || "$OSTYPE" == "msys" ]]; then
+	GEN_SCRIPT="$HERE/win/generate_breakpad_symbols.py"
+fi
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
