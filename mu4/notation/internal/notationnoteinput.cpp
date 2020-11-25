@@ -56,6 +56,7 @@ NoteInputState NotationNoteInput::state() const
     noteInputState.method = score()->inputState().noteEntryMethod();
     noteInputState.duration = score()->inputState().duration();
     noteInputState.accidentalType = score()->inputState().accidentalType();
+    noteInputState.withSlur = score()->inputState().slur() != nullptr;
 
     return noteInputState;
 }
@@ -206,6 +207,32 @@ void NotationNoteInput::toogleAccidental(AccidentalType accidentalType)
     score()->toggleAccidental(accidentalType, editData);
 
     m_stateChanged.notify();
+}
+
+void NotationNoteInput::addSlur(Ms::Slur* slur)
+{
+    Ms::InputState& inputState = score()->inputState();
+    inputState.setSlur(slur);
+
+    std::vector<Ms::SpannerSegment*> slurSpannerSegments = slur->spannerSegments();
+    if (!slurSpannerSegments.empty()) {
+        slurSpannerSegments.back()->setSelected(true);
+    }
+}
+
+void NotationNoteInput::resetSlur()
+{
+    Ms::InputState& inputState = score()->inputState();
+    if (!inputState.slur()) {
+        return;
+    }
+
+    const std::vector<Ms::SpannerSegment*>& el = inputState.slur()->spannerSegments();
+    if (!el.empty()) {
+        el.front()->setSelected(false);
+    }
+
+    inputState.setSlur(nullptr);
 }
 
 Notification NotationNoteInput::noteAdded() const

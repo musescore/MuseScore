@@ -40,6 +40,9 @@ public:
     virtual void putNote(const QPointF& pos, bool replace, bool insert) = 0;
     virtual void toogleAccidental(AccidentalType accidentalType) = 0;
 
+    virtual void addSlur(Ms::Slur* slur) = 0;
+    virtual void resetSlur() = 0;
+
     virtual async::Notification noteAdded() const = 0;
     virtual async::Notification stateChanged() const = 0;
 };
