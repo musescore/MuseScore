@@ -110,6 +110,8 @@ void NotationActionController::init()
     dispatcher()->reg(this, "paste-special", [this]() { pasteSelection(PastingType::Special); });
     dispatcher()->reg(this, "swap", this, &NotationActionController::swapSelection);
     dispatcher()->reg(this, "delete", this, &NotationActionController::deleteSelection);
+    dispatcher()->reg(this, "flip", this, &NotationActionController::flipSelection);
+
     dispatcher()->reg(this, "undo", this, &NotationActionController::undo);
     dispatcher()->reg(this, "redo", this, &NotationActionController::redo);
 
@@ -417,6 +419,16 @@ void NotationActionController::swapSelection()
     }
 
     interaction->swapSelection();
+}
+
+void NotationActionController::flipSelection()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->flipSelection();
 }
 
 void NotationActionController::addInterval(int interval)
