@@ -32,6 +32,8 @@ class EaseInOutCanvas : public QFrame {
       int m_easeIn;
       int m_easeOut;
       int m_nEvents;
+      int m_pitchDelta;
+      std::vector<int> m_events;
 
       virtual void paintEvent(QPaintEvent*) override;
 
@@ -41,8 +43,12 @@ class EaseInOutCanvas : public QFrame {
       void setEaseInOut(const int easeIn, const int easeOut) { m_easeIn = easeIn; m_easeOut = easeOut; }
 
       /// number of lines to draw vertically
-      int Events() const             { return m_nEvents;    }
-      void setEvents(int nEvents)    { m_nEvents = nEvents; }
+      int NbEvents() const                            { return m_nEvents;    }
+      void setNbEvents(int nEvents)                   { m_nEvents = nEvents; }
+      int pitchDelta() const                          { return m_pitchDelta; }
+      void setPitchDelta(int pitchDelta)              { m_pitchDelta = pitchDelta; }
+      const std::vector<int>& Events() const          { return m_events; }
+      void setEvents(const std::vector<int>& events)  { m_events = events; }
 
    signals:
       void canvasChanged();
