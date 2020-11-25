@@ -41,8 +41,7 @@
 
 #include "instruments/instrumentstypes.h"
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 using Element = Ms::Element;
 using ElementType = Ms::ElementType;
 using Note = Ms::Note;
@@ -313,8 +312,7 @@ inline bool isNotesIntervalValid(int interval)
 
 inline bool isVoiceIndexValid(int voiceIndex)
 {
-    return voiceIndex >= 0 && voiceIndex < VOICES;
-}
+    return 0 <= voiceIndex && voiceIndex < VOICES;
 }
 }
 
