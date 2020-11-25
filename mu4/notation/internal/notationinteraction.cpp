@@ -1886,6 +1886,15 @@ void NotationInteraction::deleteSelection()
     m_selectionChanged.notify();
 }
 
+void NotationInteraction::flipSelection()
+{
+    m_undoStack->prepareChanges();
+    score()->cmdFlip();
+    m_undoStack->commitChanges();
+
+    m_selectionChanged.notify();
+}
+
 void NotationInteraction::setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval)
 {
     interval = intervalType == BreaksSpawnIntervalType::MeasuresInterval ? interval : 0;
