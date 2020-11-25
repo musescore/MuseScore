@@ -62,20 +62,7 @@ void InspectorGlissando::setElement()
       g.easeOutSlider->setSliderPosition(g.easeOutSpin->value());
       g.easeInOutCanvas->setEaseInOut(g.easeInSpin->value(), g.easeOutSpin->value());
 
-      GlissandoSegment* gs = inspector->element()->isGlissandoSegment() ? toGlissandoSegment(inspector->element()) : nullptr;
-      //Glissando* glissando = gs && gs->spanner()->isGlissando() ? toGlissando(gs->spanner()) : nullptr;
-      std::vector<int> body;
-      int nEvents = 25;
-      if (gs && glissandoPitchOffsets(gs->spanner(), &body))
-            nEvents = body.size();
-      //if (glissando && glissando->glissandoStyle() != GlissandoStyle::PORTAMENTO) {
-      //      Note* sn = toNote(glissando->startElement());
-      //      Note* en = toNote(glissando->endElement());
-      //      if (sn && en) {
-      //            nEvents = std::abs(sn->pitch() - en->pitch()) + 1;
-      //      }
-      //}
-      g.easeInOutCanvas->setEvents(nEvents);
+      updateEvents();
 }
 
 //---------------------------------------------------------
@@ -88,7 +75,7 @@ void InspectorGlissando::valueChanged(int n)
       if (iList[n].t == Pid::GLISS_EASEIN || iList[n].t == Pid::GLISS_EASEOUT)
             g.easeInOutCanvas->setEaseInOut(g.easeInSpin->value(), g.easeOutSpin->value());
       else if (iList[n].t == Pid::GLISS_STYLE)
-            updateNbEvents();
+            updateEvents();
       update();
 }
 
@@ -97,13 +84,18 @@ void InspectorGlissando::valueChanged(int n)
 //   For example, all the half notes, only the white notes, only the black notes, etc
 //---------------------------------------------------------
 
-void InspectorGlissando::updateNbEvents() {
+void InspectorGlissando::updateEvents() {
       GlissandoSegment* gs = inspector->element()->isGlissandoSegment() ? toGlissandoSegment(inspector->element()) : nullptr;
       std::vector<int> body;
       int nEvents = 25;
-      if (gs && glissandoPitchOffsets(gs->spanner(), &body))
+      if (gs && glissandoPitchOffsets(gs->spanner(), body)) {
             nEvents = body.size();
-      g.easeInOutCanvas->setEvents(nEvents);
+            Note* noteStart = toNote(gs->spanner()->startElement());
+            Note* noteEnd = toNote(gs->spanner()->endElement());
+            g.easeInOutCanvas->setPitchDelta(std::abs(noteEnd->ppitch() - noteStart->ppitch()) + 1);
+      }
+      g.easeInOutCanvas->setEvents(body);
+      g.easeInOutCanvas->setNbEvents(nEvents);
 }
 
 }

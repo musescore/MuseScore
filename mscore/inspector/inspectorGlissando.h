@@ -28,7 +28,7 @@ class InspectorGlissando : public InspectorElementBase {
 
       Ui::InspectorGlissando g;
 
-      void updateNbEvents();
+      void updateEvents();
 
 private slots:
       void valueChanged(int);
