@@ -43,7 +43,7 @@ public:
 
     void startNoteInput() override;
     void endNoteInput() override;
-    void setNoteInputMethod(NoteInputMethod method) override;
+    void toggleNoteInputMethod(NoteInputMethod method) override;
     void addNote(NoteName noteName, NoteAddingMode addingMode) override;
     void padNote(const Pad& pad) override;
     void putNote(const QPointF& pos, bool replace, bool insert) override;

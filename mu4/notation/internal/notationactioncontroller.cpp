@@ -30,13 +30,12 @@ static constexpr int INVALID_BOX_INDEX = -1;
 
 void NotationActionController::init()
 {
-    dispatcher()->reg(this, "note-input", this, &NotationActionController::toggleNoteInput);
-
     dispatcher()->reg(this, "note-input", [this]() { toggleNoteInputMethod(NoteInputMethod::STEPTIME); });
     dispatcher()->reg(this, "note-input-rhythm", [this]() { toggleNoteInputMethod(NoteInputMethod::RHYTHM); });
     dispatcher()->reg(this, "note-input-repitch", [this]() { toggleNoteInputMethod(NoteInputMethod::REPITCH); });
     dispatcher()->reg(this, "note-input-realtime-auto", [this]() { toggleNoteInputMethod(NoteInputMethod::REALTIME_AUTO); });
     dispatcher()->reg(this, "note-input-realtime-manual", [this]() { toggleNoteInputMethod(NoteInputMethod::REALTIME_MANUAL); });
+    dispatcher()->reg(this, "note-input-timewise", [this]() { toggleNoteInputMethod(NoteInputMethod::TIMEWISE); });
 
     dispatcher()->reg(this, "note-longa", [this]() { padNote(Pad::NOTE00); });
     dispatcher()->reg(this, "note-breve", [this]() { padNote(Pad::NOTE0); });
@@ -189,20 +188,6 @@ INotationNoteInputPtr NotationActionController::currentNotationNoteInput() const
     return interaction->noteInput();
 }
 
-void NotationActionController::toggleNoteInput()
-{
-    auto noteInput = currentNotationNoteInput();
-    if (!noteInput) {
-        return;
-    }
-
-    if (noteInput->isNoteInputMode()) {
-        noteInput->endNoteInput();
-    } else {
-        noteInput->startNoteInput();
-    }
-}
-
 void NotationActionController::toggleNoteInputMethod(NoteInputMethod method)
 {
     auto noteInput = currentNotationNoteInput();
@@ -210,11 +195,11 @@ void NotationActionController::toggleNoteInputMethod(NoteInputMethod method)
         return;
     }
 
-    if (noteInput->isNoteInputMode()) {
+    if (!noteInput->isNoteInputMode()) {
         noteInput->startNoteInput();
     }
 
-    noteInput->setNoteInputMethod(method);
+    noteInput->toggleNoteInputMethod(method);
 }
 
 void NotationActionController::addNote(NoteName note, NoteAddingMode addingMode)
