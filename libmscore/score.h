@@ -811,7 +811,7 @@ public:
     void deleteLater(ScoreElement* e) { _updateState._deleteList.push_back(e); }
     void deletePostponed();
 
-    void changeVoice(int);
+    void changeSelectedNotesVoice(int);
 
     void colorItem(Element*);
     QList<Part*>& parts() { return _parts; }

@@ -52,6 +52,8 @@ public:
     void addSlur(Ms::Slur* slur) override;
     void resetSlur() override;
 
+    void setCurrentVoiceIndex(int voiceIndex) override;
+
     async::Notification noteAdded() const override;
     async::Notification stateChanged() const override;
 
@@ -59,6 +61,7 @@ private:
     Ms::Score* score() const;
 
     void updateInputState();
+    void notifyAboutStateChanged();
 
     const IGetScore* m_getScore = nullptr;
     INotationInteraction* m_interaction = nullptr;

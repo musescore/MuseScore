@@ -149,6 +149,10 @@ void NotationActionController::init()
     dispatcher()->reg(this, "voice-x23", [this]() { swapVoices(1, 2); });
     dispatcher()->reg(this, "voice-x24", [this]() { swapVoices(1, 3); });
     dispatcher()->reg(this, "voice-x34", [this]() { swapVoices(2, 3); });
+    dispatcher()->reg(this, "voice-1", [this]() { changeVoice(0); });
+    dispatcher()->reg(this, "voice-2", [this]() { changeVoice(1); });
+    dispatcher()->reg(this, "voice-3", [this]() { changeVoice(2); });
+    dispatcher()->reg(this, "voice-4", [this]() { changeVoice(3); });
 
     for (int i = MIN_NOTES_INTERVAL; i <= MAX_NOTES_INTERVAL; ++i) {
         if (isNotesIntervalValid(i)) {
@@ -351,6 +355,25 @@ void NotationActionController::swapVoices(int voiceIndex1, int voiceIndex2)
     }
 
     interaction->swapVoices(voiceIndex1, voiceIndex2);
+}
+
+void NotationActionController::changeVoice(int voiceIndex)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    auto noteInput = interaction->noteInput();
+    if (!noteInput) {
+        return;
+    }
+
+    if (noteInput->isNoteInputMode()) {
+        noteInput->setCurrentVoiceIndex(voiceIndex);
+    } else {
+        interaction->changeSelectedNotesVoice(voiceIndex);
+    }
 }
 
 void NotationActionController::cutSelection()

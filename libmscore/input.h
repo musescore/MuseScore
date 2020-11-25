@@ -31,7 +31,7 @@ class Selection;
 //---------------------------------------------------------
 
 enum class NoteEntryMethod : char {
-    STEPTIME, REPITCH, RHYTHM, REALTIME_AUTO, REALTIME_MANUAL, TIMEWISE
+    UNKNOWN, STEPTIME, REPITCH, RHYTHM, REALTIME_AUTO, REALTIME_MANUAL, TIMEWISE
 };
 
 //---------------------------------------------------------

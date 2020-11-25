@@ -56,6 +56,7 @@ private:
     void moveText(INotationInteractionPtr interaction, const actions::ActionName& action);
 
     void swapVoices(int voiceIndex1, int voiceIndex2);
+    void changeVoice(int voiceIndex);
 
     void cutSelection();
     void copySelection();

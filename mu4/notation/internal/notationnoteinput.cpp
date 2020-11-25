@@ -57,6 +57,7 @@ NoteInputState NotationNoteInput::state() const
     noteInputState.duration = score()->inputState().duration();
     noteInputState.accidentalType = score()->inputState().accidentalType();
     noteInputState.withSlur = score()->inputState().slur() != nullptr;
+    noteInputState.currentVoiceIndex = score()->inputState().voice();
 
     return noteInputState;
 }
@@ -133,7 +134,7 @@ void NotationNoteInput::startNoteInput()
         break;
     }
 
-    m_stateChanged.notify();
+    notifyAboutStateChanged();
 }
 
 void NotationNoteInput::endNoteInput()
@@ -148,7 +149,7 @@ void NotationNoteInput::endNoteInput()
         is.setSlur(0);
     }
 
-    m_stateChanged.notify();
+    notifyAboutStateChanged();
 }
 
 void NotationNoteInput::toggleNoteInputMethod(NoteInputMethod method)
@@ -156,7 +157,7 @@ void NotationNoteInput::toggleNoteInputMethod(NoteInputMethod method)
     Ms::InputState& inputState = score()->inputState();
     inputState.setNoteEntryMethod(method);
 
-    m_stateChanged.notify();
+    notifyAboutStateChanged();
 }
 
 void NotationNoteInput::addNote(NoteName noteName, NoteAddingMode addingMode)
@@ -175,7 +176,7 @@ void NotationNoteInput::addNote(NoteName noteName, NoteAddingMode addingMode)
     score()->cmdAddPitch(editData, inote, addToUpOnCurrentChord, insertNewChord);
     m_undoStack->commitChanges();
 
-    m_stateChanged.notify();
+    notifyAboutStateChanged();
 }
 
 void NotationNoteInput::padNote(const Pad& pad)
@@ -187,7 +188,7 @@ void NotationNoteInput::padNote(const Pad& pad)
     score()->padToggle(pad, ed);
     m_undoStack->commitChanges();
 
-    m_stateChanged.notify();
+    notifyAboutStateChanged();
 }
 
 void NotationNoteInput::putNote(const QPointF& pos, bool replace, bool insert)
@@ -206,7 +207,26 @@ void NotationNoteInput::toogleAccidental(AccidentalType accidentalType)
 
     score()->toggleAccidental(accidentalType, editData);
 
-    m_stateChanged.notify();
+    notifyAboutStateChanged();
+}
+
+void NotationNoteInput::setCurrentVoiceIndex(int voiceIndex)
+{
+    if (!isVoiceIndexValid(voiceIndex)) {
+        return;
+    }
+
+    Ms::InputState& inputState = score()->inputState();
+    int track = (inputState.track() / VOICES) * VOICES + voiceIndex;
+
+    inputState.setTrack(track);
+
+    if (inputState.segment()) {
+        Ms::Segment* segment = inputState.segment()->measure()->first(Ms::SegmentType::ChordRest);
+        inputState.setSegment(segment);
+    }
+
+    notifyAboutStateChanged();
 }
 
 void NotationNoteInput::addSlur(Ms::Slur* slur)
@@ -254,5 +274,10 @@ void NotationNoteInput::updateInputState()
 {
     score()->inputState().update(score()->selection());
 
+    notifyAboutStateChanged();
+}
+
+void NotationNoteInput::notifyAboutStateChanged()
+{
     m_stateChanged.notify();
 }
