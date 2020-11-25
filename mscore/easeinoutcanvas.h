@@ -33,6 +33,7 @@ class EaseInOutCanvas : public QFrame {
       int m_easeOut;
       int m_nEvents;
       int m_pitchDelta;
+      int m_bottomPitch;
       std::vector<int> m_events;
 
       virtual void paintEvent(QPaintEvent*) override;
@@ -49,6 +50,8 @@ class EaseInOutCanvas : public QFrame {
       void setPitchDelta(int pitchDelta)              { m_pitchDelta = pitchDelta; }
       const std::vector<int>& Events() const          { return m_events; }
       void setEvents(const std::vector<int>& events)  { m_events = events; }
+      int bottomPitch() const                         { return m_bottomPitch; }
+      void setBottomPitch(int bottomPitch)            { m_bottomPitch = bottomPitch; }
 
    signals:
       void canvasChanged();
