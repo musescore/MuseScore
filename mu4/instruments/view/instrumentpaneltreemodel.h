@@ -45,33 +45,15 @@ class InstrumentPanelTreeModel : public QAbstractItemModel, public async::Asynca
     INJECT(instruments, framework::IInteractive, interactive)
 
     Q_PROPERTY(QItemSelectionModel * selectionModel READ selectionModel NOTIFY selectionChanged)
-    Q_PROPERTY(bool isMovingUpAvailable READ isMovingUpAvailable WRITE setIsMovingUpAvailable NOTIFY isMovingUpAvailableChanged)
-    Q_PROPERTY(bool isMovingDownAvailable READ isMovingDownAvailable WRITE setIsMovingDownAvailable NOTIFY isMovingDownAvailableChanged)
-    Q_PROPERTY(bool isRemovingAvailable READ isRemovingAvailable WRITE setIsRemovingAvailable NOTIFY isRemovingAvailableChanged)
+    Q_PROPERTY(bool isMovingUpAvailable READ isMovingUpAvailable NOTIFY isMovingUpAvailableChanged)
+    Q_PROPERTY(bool isMovingDownAvailable READ isMovingDownAvailable NOTIFY isMovingDownAvailableChanged)
+    Q_PROPERTY(bool isRemovingAvailable READ isRemovingAvailable NOTIFY isRemovingAvailableChanged)
+    Q_PROPERTY(bool isAddingAvailable READ isAddingAvailable NOTIFY isAddingAvailableChanged)
     Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY isEmptyChanged)
 
 public:
-    enum RoleNames {
-        ItemRole = Qt::UserRole + 1
-    };
-
     explicit InstrumentPanelTreeModel(QObject* parent = nullptr);
     ~InstrumentPanelTreeModel() override;
-
-    Q_INVOKABLE void load();
-    Q_INVOKABLE void selectRow(const QModelIndex& rowIndex, const bool isMultipleSelectionModeOn);
-    Q_INVOKABLE void addInstruments();
-    Q_INVOKABLE void moveSelectedRowsUp();
-    Q_INVOKABLE void moveSelectedRowsDown();
-    Q_INVOKABLE void removeSelectedRows();
-
-    bool isMovingUpAvailable() const;
-    bool isMovingDownAvailable() const;
-    bool isRemovingAvailable() const;
-    bool isEmpty() const;
-
-    Q_INVOKABLE bool moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent,
-                              int destinationChild) override;
 
     QModelIndex index(int row, int column, const QModelIndex& parent) const override;
     QModelIndex parent(const QModelIndex& child) const override;
@@ -81,16 +63,26 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     QItemSelectionModel* selectionModel() const;
+    bool isMovingUpAvailable() const;
+    bool isMovingDownAvailable() const;
+    bool isRemovingAvailable() const;
+    bool isAddingAvailable() const;
+    bool isEmpty() const;
 
-public slots:
-    void setIsMovingUpAvailable(bool isMovingUpAvailable);
-    void setIsMovingDownAvailable(bool isMovingDownAvailable);
-    void setIsRemovingAvailable(bool isRemovingAvailable);
+    Q_INVOKABLE void load();
+    Q_INVOKABLE void selectRow(const QModelIndex& rowIndex, const bool isMultipleSelectionModeOn);
+    Q_INVOKABLE void addInstruments();
+    Q_INVOKABLE void moveSelectedRowsUp();
+    Q_INVOKABLE void moveSelectedRowsDown();
+    Q_INVOKABLE void removeSelectedRows();
 
+    Q_INVOKABLE bool moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent,
+                              int destinationChild) override;
 signals:
     void selectionChanged();
     void isMovingUpAvailableChanged(bool isMovingUpAvailable);
     void isMovingDownAvailableChanged(bool isMovingDownAvailable);
+    void isAddingAvailableChanged(bool isAddingAvailable);
     void isRemovingAvailableChanged(bool isRemovingAvailable);
     void isEmptyChanged();
 
@@ -101,8 +93,16 @@ private slots:
     void updateRemovingAvailability();
 
 private:
+    enum RoleNames {
+        ItemRole = Qt::UserRole + 1
+    };
+
     void clear();
     void deleteItems();
+
+    void setIsMovingUpAvailable(bool isMovingUpAvailable);
+    void setIsMovingDownAvailable(bool isMovingDownAvailable);
+    void setIsRemovingAvailable(bool isRemovingAvailable);
 
     bool removeRows(int row, int count, const QModelIndex& parent) override;
 

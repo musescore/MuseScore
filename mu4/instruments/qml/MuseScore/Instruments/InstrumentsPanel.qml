@@ -28,9 +28,11 @@ Item {
 
         InstrumentsControlPanel {
             Layout.fillWidth: true
+            Layout.alignment: Qt.AlignTop
 
             isMovingUpAvailable: instrumentTreeModel.isMovingUpAvailable
             isMovingDownAvailable: instrumentTreeModel.isMovingDownAvailable
+            isAddingAvailable: instrumentTreeModel.isAddingAvailable
             isRemovingAvailable: instrumentTreeModel.isRemovingAvailable
 
             onAddRequested: {
@@ -51,14 +53,14 @@ Item {
         }
 
         StyledTextLabel {
-            Layout.topMargin: 12
             Layout.fillWidth: true
             Layout.fillHeight: true
+            Layout.topMargin: 12
             Layout.leftMargin: 20
             Layout.rightMargin: 20
 
             text: qsTrc("instruments", "There are no instruments in your score. To choose some, press <b>Add</b>, or use the shortcut <b>‘i’</b>")
-            visible: instrumentsTreeView.isEmpty
+            visible: instrumentTreeModel.isEmpty && instrumentTreeModel.isAddingAvailable
 
             verticalAlignment: Qt.AlignTop
             wrapMode: Text.WordWrap
@@ -70,8 +72,7 @@ Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            property alias isEmpty: instrumentTreeModel.isEmpty
-            visible: !isEmpty
+            visible: !instrumentTreeModel.isEmpty
 
             model: InstrumentPanelTreeModel {
                 id: instrumentTreeModel
