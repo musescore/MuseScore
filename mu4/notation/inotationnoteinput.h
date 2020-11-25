@@ -21,6 +21,7 @@
 
 #include "async/notification.h"
 #include "notationtypes.h"
+#include "retval.h"
 
 namespace mu::notation {
 class INotationNoteInput
@@ -42,6 +43,8 @@ public:
 
     virtual void addSlur(Ms::Slur* slur) = 0;
     virtual void resetSlur() = 0;
+
+    virtual void setCurrentVoiceIndex(int voiceIndex) = 0;
 
     virtual async::Notification noteAdded() const = 0;
     virtual async::Notification stateChanged() const = 0;

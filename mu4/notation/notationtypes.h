@@ -138,10 +138,11 @@ enum class NoteAddingMode
 
 struct NoteInputState
 {
-    NoteInputMethod method;
+    NoteInputMethod method = NoteInputMethod::UNKNOWN;
     Duration duration;
-    AccidentalType accidentalType;
+    AccidentalType accidentalType = AccidentalType::NONE;
     bool withSlur = false;
+    int currentVoiceIndex = 0;
 };
 
 enum class NoteFilter
