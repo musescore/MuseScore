@@ -562,12 +562,7 @@ void MasterNotation::initExcerpts()
         auto excerpts = Excerpt::createAllExcerpt(master);
 
         for (Excerpt* excerpt : excerpts) {
-            Score* score = new Score(excerpt->oscore());
-            excerpt->setPartScore(score);
-            score->style().set(Sid::createMultiMeasureRests, true);
-            auto excerptCmdFake = new AddExcerpt(excerpt);
-            excerptCmdFake->redo(nullptr);
-            Excerpt::createExcerpt(excerpt);
+            initExcerpt(excerpt);
         }
     }
 
@@ -615,20 +610,24 @@ void MasterNotation::removeMissingExcerpts(const ExcerptNotationList& allExcerpt
 
 void MasterNotation::createNewExcerpts(const ExcerptNotationList& allExcerpts)
 {
-    MasterScore* master = masterScore();
-    if (!master) {
-        return;
-    }
-
     for (IExcerptNotationPtr excerptNotation : allExcerpts) {
         bool isNewExcerpt = std::find(m_excerpts.val.begin(), m_excerpts.val.end(), excerptNotation) == m_excerpts.val.end();
         bool isEmpty = excerptNotation->parts()->partList().empty();
 
         if (isNewExcerpt && isEmpty) {
-            Excerpt* excerpt = new Excerpt(master);
-            excerpt->setPartScore(new Score(master));
+            Excerpt* excerpt = new Excerpt(masterScore());
+            initExcerpt(excerpt);
             static_cast<ExcerptNotation*>(excerptNotation.get())->setExcerpt(excerpt);
-            Excerpt::createExcerpt(excerpt);
         }
     }
+}
+
+void MasterNotation::initExcerpt(Excerpt* excerpt)
+{
+    Score* score = new Score(masterScore());
+    excerpt->setPartScore(score);
+    score->style().set(Sid::createMultiMeasureRests, true);
+    auto excerptCmdFake = new AddExcerpt(excerpt);
+    excerptCmdFake->redo(nullptr);
+    Excerpt::createExcerpt(excerpt);
 }
