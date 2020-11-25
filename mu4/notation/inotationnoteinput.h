@@ -34,7 +34,7 @@ public:
 
     virtual void startNoteInput() = 0;
     virtual void endNoteInput() = 0;
-    virtual void setNoteInputMethod(NoteInputMethod method) = 0;
+    virtual void toggleNoteInputMethod(NoteInputMethod method) = 0;
     virtual void addNote(NoteName noteName, NoteAddingMode addingMode) = 0;
     virtual void padNote(const Pad& pad)  = 0;
     virtual void putNote(const QPointF& pos, bool replace, bool insert) = 0;

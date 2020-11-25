@@ -53,6 +53,7 @@ bool NotationNoteInput::isNoteInputMode() const
 NoteInputState NotationNoteInput::state() const
 {
     NoteInputState noteInputState;
+    noteInputState.method = score()->inputState().noteEntryMethod();
     noteInputState.duration = score()->inputState().duration();
     noteInputState.accidentalType = score()->inputState().accidentalType();
 
@@ -149,7 +150,7 @@ void NotationNoteInput::endNoteInput()
     m_stateChanged.notify();
 }
 
-void NotationNoteInput::setNoteInputMethod(NoteInputMethod method)
+void NotationNoteInput::toggleNoteInputMethod(NoteInputMethod method)
 {
     Ms::InputState& inputState = score()->inputState();
     inputState.setNoteEntryMethod(method);
