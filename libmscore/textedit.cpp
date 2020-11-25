@@ -223,6 +223,7 @@ bool TextBase::edit(EditData& ed)
       QString s         = ed.s;
       bool ctrlPressed  = ed.modifiers & Qt::ControlModifier;
       bool shiftPressed = ed.modifiers & Qt::ShiftModifier;
+      bool altPressed   = ed.modifiers & Qt::AltModifier;
 
       QTextCursor::MoveMode mm = shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
 
@@ -425,7 +426,7 @@ bool TextBase::edit(EditData& ed)
                         case Qt::Key_H:
                               s = "\u266e"; // Unicode natural
                               break;
-                         case Qt::Key_Space:
+                        case Qt::Key_Space:
                               insertSym(ed, SymId::space);
                               return true;
                         case Qt::Key_F:
@@ -452,6 +453,12 @@ bool TextBase::edit(EditData& ed)
                               // so Shift+Ctrl+Z works
                               insertSym(ed, SymId::dynamicZ);
                               return true;
+                        }
+                  }
+            if (ctrlPressed && altPressed) {
+                  if (ed.key == Qt::Key_hyphen) {
+                        insertSym(ed, SymId::lyricsElision);
+                        return true;
                         }
                   }
             }
