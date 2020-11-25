@@ -56,6 +56,7 @@ public:
     };
 
     explicit InstrumentPanelTreeModel(QObject* parent = nullptr);
+    ~InstrumentPanelTreeModel() override;
 
     Q_INVOKABLE void load();
     Q_INVOKABLE void selectRow(const QModelIndex& rowIndex, const bool isMultipleSelectionModeOn);
@@ -101,6 +102,8 @@ private slots:
 
 private:
     void clear();
+    void deleteItems();
+
     bool removeRows(int row, int count, const QModelIndex& parent) override;
 
     notation::IDList currentNotationPartIdList() const;

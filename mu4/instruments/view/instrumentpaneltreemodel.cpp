@@ -62,20 +62,31 @@ InstrumentPanelTreeModel::InstrumentPanelTreeModel(QObject* parent)
     });
 }
 
+InstrumentPanelTreeModel::~InstrumentPanelTreeModel()
+{
+    deleteItems();
+}
+
 void InstrumentPanelTreeModel::clear()
 {
     beginResetModel();
-    m_rootItem->deleteLater();
+    deleteItems();
     endResetModel();
 
     emit isEmptyChanged();
+}
+
+void InstrumentPanelTreeModel::deleteItems()
+{
+    delete m_rootItem;
+    m_rootItem = nullptr;
 }
 
 void InstrumentPanelTreeModel::load()
 {
     beginResetModel();
 
-    m_rootItem = new RootTreeItem(m_masterNotationParts, this);
+    m_rootItem = new RootTreeItem(m_masterNotationParts);
 
     async::NotifyList<const Part*> allParts = m_masterNotationParts->partList();
     IDList notationPartIdList = currentNotationPartIdList();
@@ -392,7 +403,7 @@ bool InstrumentPanelTreeModel::isRemovingAvailable() const
 
 bool InstrumentPanelTreeModel::isEmpty() const
 {
-    return m_rootItem ? m_rootItem->isEmpty() : false;
+    return m_rootItem ? m_rootItem->isEmpty() : true;
 }
 
 void InstrumentPanelTreeModel::setIsRemovingAvailable(bool isRemovingAvailable)
@@ -421,11 +432,11 @@ void InstrumentPanelTreeModel::updateRearrangementAvailability()
 
     bool isRearrangementAvailable = true;
 
-    QMutableListIterator<QModelIndex> i(selectedIndexList);
+    QMutableListIterator<QModelIndex> it(selectedIndexList);
 
-    while (i.hasNext() && selectedIndexList.count() > 1) {
-        int nextRow = i.next().row();
-        int previousRow = i.peekPrevious().row();
+    while (it.hasNext() && selectedIndexList.count() > 1) {
+        int nextRow = it.next().row();
+        int previousRow = it.peekPrevious().row();
 
         isRearrangementAvailable = (nextRow - previousRow <= 1);
 
