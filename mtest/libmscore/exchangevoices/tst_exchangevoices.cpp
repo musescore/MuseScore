@@ -125,7 +125,7 @@ void TestExchangevoices::undoChangeVoice()
     }
     // change voice
     score->startCmd();
-    score->changeVoice(1);
+    score->changeSelectedNotesVoice(1);
     score->endCmd();
     QVERIFY(saveCompareScore(score, writeFile1, reference1));
 

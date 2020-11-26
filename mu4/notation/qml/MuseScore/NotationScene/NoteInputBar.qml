@@ -25,7 +25,7 @@ Rectangle {
         cellWidth: 36
         cellHeight: cellWidth
 
-        model: toolModel
+        model: noteInputModel
 
         sectionDelegate: Rectangle {
             color: ui.theme.strokeColor
@@ -39,7 +39,7 @@ Rectangle {
             icon: Boolean(item) ? item.iconRole : null
 
             onClicked: {
-                toolModel.click(item.nameRole)
+                noteInputModel.handleAction(item.nameRole)
             }
         }
     }
@@ -57,12 +57,12 @@ Rectangle {
         }
     }
 
-    NotationToolBarModel {
-        id: toolModel
+    NoteInputBarModel {
+        id: noteInputModel
     }
 
     Component.onCompleted: {
-        toolModel.load()
+        noteInputModel.load()
     }
 
     states: [

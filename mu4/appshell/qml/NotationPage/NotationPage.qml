@@ -14,20 +14,19 @@ DockPage {
     property var color: ui.theme.backgroundPrimaryColor
 
     toolbar: DockToolBar {
-        id: notationToolBar
-        objectName: "notationToolBar"
+        id: notationNoteInputBar
+        objectName: "notationNoteInputBar"
 
         minimumWidth: orientation == Qt.Horizontal ? 600 : 96
         minimumHeight: orientation == Qt.Horizontal ? 48 : 0
 
         color: notationPage.color
 
-        content: NotationToolBar {
-            id: _toolbar
+        content: NoteInputBar {
             anchors.fill: parent
-            color: notationToolBar.color
+            color: notationNoteInputBar.color
 
-            orientation: notationToolBar.orientation
+            orientation: notationNoteInputBar.orientation
         }
     }
 
