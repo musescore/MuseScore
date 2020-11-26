@@ -18,7 +18,7 @@
 //=============================================================================
 
 #include "easeinoutcanvas.h"
-#include "..\libmscore\easeInOut.h"
+#include "libmscore/easeInOut.h"
 #include "preferences.h"
 
 namespace Ms {
