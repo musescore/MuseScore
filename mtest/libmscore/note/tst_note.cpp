@@ -476,14 +476,18 @@ void TestNote::noteLimits()
     score->cmdAddPitch(42, false, false);
     for (int i = 0; i < 20; i++) {
         std::vector<Note*> nl = score->selection().noteList();
-        score->cmdAddInterval(-8, nl);
+        score->startCmd();
+        score->addInterval(-8, nl);
+        score->endCmd();
     }
 
     // interval above
     score->cmdAddPitch(42, false, false);
     for (int i = 0; i < 20; i++) {
         std::vector<Note*> nl = score->selection().noteList();
-        score->cmdAddInterval(8, nl);
+        score->startCmd();
+        score->addInterval(8, nl);
+        score->endCmd();
     }
     QVERIFY(saveCompareScore(score, "notelimits-test.mscx", DIR + "notelimits-ref.mscx"));
 }

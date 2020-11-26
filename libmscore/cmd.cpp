@@ -560,12 +560,11 @@ void Score::expandVoice()
 }
 
 //---------------------------------------------------------
-//   cmdAddInterval
+//   addInterval
 //---------------------------------------------------------
 
-void Score::cmdAddInterval(int val, const std::vector<Note*>& nl)
+void Score::addInterval(int val, const std::vector<Note*>& nl)
 {
-    startCmd();
     for (Note* on : nl) {
         Note* note = new Note(this);
         Chord* chord = on->chord();
@@ -643,7 +642,6 @@ void Score::cmdAddInterval(int val, const std::vector<Note*>& nl)
         _is.setAccidentalType(AccidentalType::NONE);
     }
     _is.moveToNextInputPos();
-    endCmd();
 }
 
 //---------------------------------------------------------
