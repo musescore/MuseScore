@@ -362,6 +362,20 @@ QString ScoreOrder::getFamilyName(const InstrumentTemplate* instrTemplate, bool 
       }
 
 //---------------------------------------------------------
+//   createUnsortedGroup
+//---------------------------------------------------------
+
+void ScoreOrder::createUnsortedGroup()
+      {
+      _unsorted  = new ScoreGroup(QString("<unsorted>"), "", "");
+      _unsorted->bracket            = false;
+      _unsorted->showSystemMarkings = false;
+      _unsorted->barLineSpan        = false;
+      _unsorted->thinBracket        = false;
+      groups.append(_unsorted);
+      }
+
+//---------------------------------------------------------
 //   getId
 //---------------------------------------------------------
 
@@ -477,14 +491,8 @@ void ScoreOrder::read(XmlReader& e)
             else
                   e.unknown();
             }
-      if (!_unsorted) {
-            _unsorted  = new ScoreGroup(QString("<unsorted>"), "", "");
-            _unsorted->bracket            = false;
-            _unsorted->showSystemMarkings = false;
-            _unsorted->barLineSpan        = false;
-            _unsorted->thinBracket        = false;
-            groups.append(_unsorted);
-            }
+      if (!_unsorted)
+            createUnsortedGroup();
       }
 
 //---------------------------------------------------------
@@ -717,7 +725,7 @@ ScoreOrderList::ScoreOrderList()
       {
       _orders.clear();
       ScoreOrder* custom = new ScoreOrder(QString("<custom>"), qApp->translate("OrderXML", "Custom"));
-      custom->groups.append(new ScoreGroup(QString("<unsorted>"), QString(""), QString("")));
+      custom->createUnsortedGroup();
       addScoreOrder(custom);
       }
 
