@@ -41,7 +41,7 @@ class Box : public MeasureBase {
       qreal _rightMargin            { 0.0   };       // inner margins in metric mm
       qreal _topMargin              { 0.0   };
       qreal _bottomMargin           { 0.0   };
-      bool _isAutoSizeEnabled       { false };
+      bool _isAutoSizeEnabled       { true  };
       bool editMode                 { false };
 
    public:

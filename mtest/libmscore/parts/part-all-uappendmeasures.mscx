@@ -103,7 +103,6 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <boxAutoSize>1</boxAutoSize>
         <linkedMain/>
         <Text>
           <linkedMain/>
@@ -1110,7 +1109,6 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <boxAutoSize>1</boxAutoSize>
           <linked>
             </linked>
           <Text>
@@ -1822,7 +1820,6 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <boxAutoSize>1</boxAutoSize>
           <linked>
             <location>
               <staves>-1</staves>

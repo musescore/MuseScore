@@ -284,6 +284,7 @@
     <Staff id="1">
       <VBox>
         <height>36.9323</height>
+        <boxAutoSize>0</boxAutoSize>
         <linkedMain/>
         <Text>
           <linkedMain/>
@@ -561,6 +562,7 @@
       <Staff id="1">
         <VBox>
           <height>36.9323</height>
+          <boxAutoSize>0</boxAutoSize>
           <linked>
             </linked>
           <Text>
@@ -799,6 +801,7 @@
       <Staff id="1">
         <VBox>
           <height>36.9323</height>
+          <boxAutoSize>0</boxAutoSize>
           <linked>
             <location>
               <staves>-1</staves>
@@ -1061,6 +1064,7 @@
       <Staff id="1">
         <VBox>
           <height>36.9323</height>
+          <boxAutoSize>0</boxAutoSize>
           <linked>
             <location>
               <staves>-2</staves>

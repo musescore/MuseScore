@@ -1672,6 +1672,7 @@
         <rightMargin>5</rightMargin>
         <topMargin>5</topMargin>
         <bottomMargin>5</bottomMargin>
+        <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>Title</style>
           <text><font size="28"/><font face="MuseJazz"/><b>Title</b></text>

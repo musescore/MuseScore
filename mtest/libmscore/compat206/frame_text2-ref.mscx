@@ -250,6 +250,7 @@
         <height>25.5926</height>
         <bottomGap>0</bottomGap>
         <topMargin>3</topMargin>
+        <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>Frame</style>
           <text>îèéààéà</text>
@@ -264,6 +265,7 @@
         <height>47.762</height>
         <topGap>10</topGap>
         <bottomGap>0</bottomGap>
+        <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>Frame</style>
           <text>êêàééééç*éô</text>

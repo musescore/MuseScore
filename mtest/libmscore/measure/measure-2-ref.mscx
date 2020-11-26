@@ -102,7 +102,6 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <boxAutoSize>1</boxAutoSize>
         <Text>
           <style>Title</style>
           <text>Test</text>
@@ -384,7 +383,6 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <boxAutoSize>1</boxAutoSize>
           <Text>
             <style>Title</style>
             <text>Test</text>
@@ -629,7 +627,6 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <boxAutoSize>1</boxAutoSize>
           <Text>
             <style>Title</style>
             <text>Test</text>

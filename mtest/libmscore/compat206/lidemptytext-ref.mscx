@@ -187,6 +187,7 @@
       <VBox>
         <height>8</height>
         <bottomGap>13</bottomGap>
+        <boxAutoSize>0</boxAutoSize>
         </VBox>
       <Measure>
         <stretch>0.9</stretch>
@@ -359,6 +360,7 @@
         <VBox>
           <height>8</height>
           <bottomGap>13</bottomGap>
+          <boxAutoSize>0</boxAutoSize>
           <Text>
             <style>Instrument Name (Part)</style>
             <text>Bass</text>

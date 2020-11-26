@@ -3467,6 +3467,7 @@ static void readBox(Box* b, XmlReader& e)
       b->setBottomMargin(0.0);
       b->setTopGap(0.0);
       b->setBottomGap(0.0);
+      b->setAutoSizeEnabled(false);
       b->setPropertyFlags(Pid::TOP_GAP, PropertyFlags::UNSTYLED);
       b->setPropertyFlags(Pid::BOTTOM_GAP, PropertyFlags::UNSTYLED);
 
