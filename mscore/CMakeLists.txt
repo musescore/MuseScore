@@ -163,7 +163,7 @@ add_library(mscoreapp STATIC
       analyse.h articulationprop.h
       bendcanvas.h breaksdialog.h
       chordview.h click.h clickableLabel.h continuouspanel.h downloadUtils.h
-      drumroll.h drumtools.h drumview.h editdrumset.h
+      drumroll.h drumtools.h drumview.h easeinoutcanvas.h editdrumset.h
       editinstrument.h editpitch.h editraster.h editstaff.h
       editstafftype.h editstringdata.h editstyle.h enableplayforwidget.h
       exampleview.h excerptsdialog.h exportdialog.h extension.h
@@ -193,7 +193,7 @@ add_library(mscoreapp STATIC
       recordbutton.h greendotbutton prefsdialog.h prefsdialog.cpp
       stringutils.h stringutils.cpp
       scoreview.cpp editharmony.cpp editfiguredbass.cpp events.cpp
-      editinstrument.cpp editstyle.cpp
+      editinstrument.cpp editstyle.cpp easeinoutcanvas.cpp
       clickableLabel.cpp
       icons.cpp
       instrdialog.cpp instrwidget.cpp
