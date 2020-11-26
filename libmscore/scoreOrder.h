@@ -91,6 +91,7 @@ class ScoreOrder {
       void readFamily(XmlReader& e, const QString section, bool br, bool ssm, bool bls, bool tbr);
       void readSection(XmlReader& e);
       QString getFamilyName(const InstrumentTemplate *instrTemplate, bool soloist) const;
+      void createUnsortedGroup();
 
 
    public:
@@ -124,6 +125,8 @@ class ScoreOrder {
       bool isScoreOrder(const Score* score) const;
 
       void dump() const;
+
+      friend class ScoreOrderList;
       };
 
 //---------------------------------------------------------
