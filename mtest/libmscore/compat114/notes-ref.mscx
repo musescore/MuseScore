@@ -88,6 +88,7 @@
         <rightMargin>5</rightMargin>
         <topMargin>5</topMargin>
         <bottomMargin>5</bottomMargin>
+        <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>Title</style>
           <text><font face="Times New Roman"/>notes</text>

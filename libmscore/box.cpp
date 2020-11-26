@@ -224,6 +224,8 @@ void Box::read(XmlReader& e)
       _boxHeight       = Spatium(0);     // override default set in constructor
       _boxWidth        = Spatium(0);
       MeasureBase::read(e);
+      if (score()->mscVersion() < 302)
+            _isAutoSizeEnabled = false; // disable auto-size for older scores by default.
       }
 
 //---------------------------------------------------------
@@ -357,7 +359,7 @@ QVariant Box::getProperty(Pid propertyId) const
             case Pid::BOTTOM_MARGIN:
                   return _bottomMargin;
             case Pid::BOX_AUTOSIZE:
-                  return _isAutoSizeEnabled;
+                  return (score()->mscVersion() >= 302) ? _isAutoSizeEnabled : false;
             default:
                   return MeasureBase::getProperty(propertyId);
             }
@@ -427,7 +429,7 @@ QVariant Box::propertyDefault(Pid id) const
             case Pid::BOTTOM_MARGIN:
                   return 0.0;
             case Pid::BOX_AUTOSIZE:
-                  return false;
+                  return true;
             default:
                   return MeasureBase::propertyDefault(id);
             }
@@ -741,7 +743,6 @@ VBox::VBox(Score* score)
       initElementStyle(&boxStyle);
       setBoxHeight(Spatium(10.0));
       setLineBreak(true);
-      setAutoSizeEnabled(score->mscVersion() >= 302); // enable auto-size feature only for newest scores by default
       }
 
 qreal VBox::minHeight() const

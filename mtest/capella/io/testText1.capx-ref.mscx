@@ -45,7 +45,6 @@
     <Staff id="1">
       <VBox>
         <height>14</height>
-        <boxAutoSize>1</boxAutoSize>
         </VBox>
       <Measure len="2/4">
         <voice>

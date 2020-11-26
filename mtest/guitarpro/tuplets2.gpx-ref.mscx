@@ -104,7 +104,6 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <boxAutoSize>1</boxAutoSize>
         <linkedMain/>
         <Text>
           <linkedMain/>
@@ -848,7 +847,6 @@ solo concert</text>
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <boxAutoSize>1</boxAutoSize>
           <linked>
             </linked>
           <Text>

@@ -64,7 +64,6 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <boxAutoSize>1</boxAutoSize>
         <Text>
           <style>Title</style>
           <text>Timesig change with tremolo</text>
