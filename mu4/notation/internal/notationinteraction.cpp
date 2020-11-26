@@ -2134,6 +2134,38 @@ void NotationInteraction::swapVoices(int voiceIndex1, int voiceIndex2)
     m_notation->notifyAboutNotationChanged();
 }
 
+void NotationInteraction::addIntervalToSelectedNotes(int interval)
+{
+    if (!isNotesIntervalValid(interval)) {
+        return;
+    }
+
+    std::vector<Note*> notes;
+
+    if (score()->selection().isRange()) {
+        for (const ChordRest* chordRest : score()->getSelectedChordRests()) {
+            if (chordRest->isChord()) {
+                const Chord* chord = toChord(chordRest);
+                Note* note = interval > 0 ? chord->upNote() : chord->downNote();
+                notes.push_back(note);
+            }
+        }
+    } else {
+        notes = score()->selection().noteList();
+    }
+
+    if (notes.empty()) {
+        return;
+    }
+
+    m_undoStack->prepareChanges();
+    score()->addInterval(interval, notes);
+    m_undoStack->commitChanges();
+
+    m_notation->notifyAboutNotationChanged();
+    m_selectionChanged.notify();
+}
+
 bool NotationInteraction::isVoiceIndexValid(int voiceIndex) const
 {
     return voiceIndex >= 0 && voiceIndex < VOICES;

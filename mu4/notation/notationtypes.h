@@ -264,6 +264,15 @@ inline QList<StaffType> allStaffTypes()
 
     return result;
 }
+
+static constexpr int MIN_NOTES_INTERVAL = -9;
+static constexpr int MAX_NOTES_INTERVAL = 9;
+
+inline bool isNotesIntervalValid(int interval)
+{
+    return interval >= MIN_NOTES_INTERVAL && interval <= MAX_NOTES_INTERVAL
+           && interval != 0 && interval != -1;
+}
 }
 }
 

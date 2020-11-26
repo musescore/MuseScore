@@ -270,6 +270,74 @@ const ActionList NotationActions::m_actions = {
     Action("append-textframe",
            QT_TRANSLATE_NOOP("action", "Append Text Frame"),
            ShortcutContext::NotationActive
+           ),
+    Action("interval1",
+           QT_TRANSLATE_NOOP("action", "Unison Above"),
+           ShortcutContext::NotationActive
+           ),
+    Action("interval2",
+           QT_TRANSLATE_NOOP("action", "Second Above"),
+           ShortcutContext::NotationActive
+           ),
+    Action("interval3",
+           QT_TRANSLATE_NOOP("action", "Third Above"),
+           ShortcutContext::NotationActive
+           ),
+    Action("interval4",
+           QT_TRANSLATE_NOOP("action", "Fourth Above"),
+           ShortcutContext::NotationActive
+           ),
+    Action("interval5",
+           QT_TRANSLATE_NOOP("action", "Fifth Above"),
+           ShortcutContext::NotationActive
+           ),
+    Action("interval6",
+           QT_TRANSLATE_NOOP("action", "Sixth Above"),
+           ShortcutContext::NotationActive
+           ),
+    Action("interval7",
+           QT_TRANSLATE_NOOP("action", "Seventh Above"),
+           ShortcutContext::NotationActive
+           ),
+    Action("interval8",
+           QT_TRANSLATE_NOOP("action", "Octave Above"),
+           ShortcutContext::NotationActive
+           ),
+    Action("interval9",
+           QT_TRANSLATE_NOOP("action", "Ninth Above"),
+           ShortcutContext::NotationActive
+           ),
+    Action("interval-2",
+           QT_TRANSLATE_NOOP("action", "Second Below"),
+           ShortcutContext::NotationActive
+           ),
+    Action("interval-3",
+           QT_TRANSLATE_NOOP("action", "Third Below"),
+           ShortcutContext::NotationActive
+           ),
+    Action("interval-4",
+           QT_TRANSLATE_NOOP("action", "Fourth Below"),
+           ShortcutContext::NotationActive
+           ),
+    Action("interval-5",
+           QT_TRANSLATE_NOOP("action", "Fifth Below"),
+           ShortcutContext::NotationActive
+           ),
+    Action("interval-6",
+           QT_TRANSLATE_NOOP("action", "Sixth Below"),
+           ShortcutContext::NotationActive
+           ),
+    Action("interval-7",
+           QT_TRANSLATE_NOOP("action", "Seventh Below"),
+           ShortcutContext::NotationActive
+           ),
+    Action("interval-8",
+           QT_TRANSLATE_NOOP("action", "Octave Below"),
+           ShortcutContext::NotationActive
+           ),
+    Action("interval-9",
+           QT_TRANSLATE_NOOP("action", "Ninth Below"),
+           ShortcutContext::NotationActive
            )
 };
 

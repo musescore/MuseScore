@@ -122,6 +122,7 @@ public:
     void setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval = 0) override;
     void transpose(const TransposeOptions& options) override;
     void swapVoices(int voiceIndex1, int voiceIndex2) override;
+    void addIntervalToSelectedNotes(int interval) override;
 
 private:
     Ms::Score* score() const;
