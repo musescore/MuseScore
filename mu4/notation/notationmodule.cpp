@@ -42,10 +42,10 @@
 #include "view/zoomcontrolmodel.h"
 #include "view/concertpitchcontrolmodel.h"
 #include "view/viewmodecontrolmodel.h"
-#include "view/notationtoolbarmodel.h"
 #include "view/notationswitchlistmodel.h"
 #include "view/partlistmodel.h"
 #include "view/searchpopupmodel.h"
+#include "view/noteinputbarmodel.h"
 #include "view/noteinputbarcustomisemodel.h"
 #include "view/internal/abstractnoteinputbaritem.h"
 
@@ -145,7 +145,6 @@ void NotationModule::registerResources()
 void NotationModule::registerUiTypes()
 {
     qmlRegisterType<NotationPaintView>("MuseScore.NotationScene", 1, 0, "NotationPaintView");
-    qmlRegisterType<NotationToolBarModel>("MuseScore.NotationScene", 1, 0, "NotationToolBarModel");
     qmlRegisterType<NotationAccessibilityModel>("MuseScore.NotationScene", 1, 0, "NotationAccessibilityModel");
     qmlRegisterType<ZoomControlModel>("MuseScore.NotationScene", 1, 0, "ZoomControlModel");
     qmlRegisterType<ConcertPitchControlModel>("MuseScore.NotationScene", 1, 0, "ConcertPitchControlModel");
@@ -153,6 +152,7 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<NotationSwitchListModel>("MuseScore.NotationScene", 1, 0, "NotationSwitchListModel");
     qmlRegisterType<PartListModel>("MuseScore.NotationScene", 1, 0, "PartListModel");
     qmlRegisterType<SearchPopupModel>("MuseScore.NotationScene", 1, 0, "SearchPopupModel");
+    qmlRegisterType<NoteInputBarModel>("MuseScore.NotationScene", 1, 0, "NoteInputBarModel");
     qmlRegisterType<NoteInputBarCustomiseModel>("MuseScore.NotationScene", 1, 0, "NoteInputBarCustomiseModel");
     qmlRegisterType<AbstractNoteInputBarItem>("MuseScore.NotationScene", 1, 0, "NoteInputBarItem");
 

@@ -1882,7 +1882,6 @@ void NotationInteraction::addSlurToSelection()
     doAddSlur();
     m_undoStack->commitChanges();
 
-
     m_selectionChanged.notify();
 }
 

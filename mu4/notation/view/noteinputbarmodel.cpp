@@ -16,7 +16,7 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "notationtoolbarmodel.h"
+#include "noteinputbarmodel.h"
 
 #include "log.h"
 #include "ui/view/iconcodes.h"
@@ -42,12 +42,12 @@ static QList<mu::actions::ActionName> noteInputModeActionNames = {
     { "note-input-timewise" },
 };
 
-NotationToolBarModel::NotationToolBarModel(QObject* parent)
+NoteInputBarModel::NoteInputBarModel(QObject* parent)
     : QAbstractListModel(parent)
 {
 }
 
-QVariant NotationToolBarModel::data(const QModelIndex& index, int role) const
+QVariant NoteInputBarModel::data(const QModelIndex& index, int role) const
 {
     const ActionItem& item = m_items.at(index.row());
     switch (role) {
@@ -59,12 +59,12 @@ QVariant NotationToolBarModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-int NotationToolBarModel::rowCount(const QModelIndex&) const
+int NoteInputBarModel::rowCount(const QModelIndex&) const
 {
     return m_items.count();
 }
 
-QHash<int,QByteArray> NotationToolBarModel::roleNames() const
+QHash<int,QByteArray> NoteInputBarModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles = {
         { IconRole, "iconRole" },
@@ -75,7 +75,7 @@ QHash<int,QByteArray> NotationToolBarModel::roleNames() const
     return roles;
 }
 
-void NotationToolBarModel::load()
+void NoteInputBarModel::load()
 {
     m_items.clear();
 
@@ -115,7 +115,7 @@ void NotationToolBarModel::load()
 
     onNotationChanged();
 
-    m_notationChanged = globalContext()->currentNotationChanged();
+    m_notationChanged = context()->currentNotationChanged();
     m_notationChanged.onNotify(this, [this]() {
         onNotationChanged();
     });
@@ -125,7 +125,7 @@ void NotationToolBarModel::load()
     });
 }
 
-NotationToolBarModel::ActionItem& NotationToolBarModel::item(const actions::ActionName& actionName)
+NoteInputBarModel::ActionItem& NoteInputBarModel::item(const actions::ActionName& actionName)
 {
     for (ActionItem& item : m_items) {
         if (item.action.name == actionName) {
@@ -138,7 +138,7 @@ NotationToolBarModel::ActionItem& NotationToolBarModel::item(const actions::Acti
     return null;
 }
 
-int NotationToolBarModel::findNoteInputModeItemIndex() const
+int NoteInputBarModel::findNoteInputModeItemIndex() const
 {
     for (int i = 0; i < m_items.size(); i++) {
         if (noteInputModeActionNames.contains(m_items[i].action.name)) {
@@ -149,9 +149,9 @@ int NotationToolBarModel::findNoteInputModeItemIndex() const
     return -1;
 }
 
-void NotationToolBarModel::onNotationChanged()
+void NoteInputBarModel::onNotationChanged()
 {
-    INotationPtr notation = globalContext()->currentNotation();
+    INotationPtr notation = context()->currentNotation();
 
     //! NOTE Unsubscribe from previous notation, if it was
     m_notationChanged.resetOnNotify(this);
@@ -171,7 +171,7 @@ void NotationToolBarModel::onNotationChanged()
     updateState();
 }
 
-void NotationToolBarModel::toggleNoteInput()
+void NoteInputBarModel::toggleNoteInput()
 {
     if (!noteInput()) {
         return;
@@ -184,7 +184,7 @@ void NotationToolBarModel::toggleNoteInput()
     }
 }
 
-void NotationToolBarModel::updateState()
+void NoteInputBarModel::updateState()
 {
     bool isPlaying = playbackController()->isPlaying();
     if (!notation() || isPlaying) {
@@ -204,7 +204,7 @@ void NotationToolBarModel::updateState()
     emit dataChanged(index(0), index(rowCount() - 1));
 }
 
-void NotationToolBarModel::updateNoteInputState()
+void NoteInputBarModel::updateNoteInputState()
 {
     updateNoteInputModeState();
 
@@ -216,7 +216,7 @@ void NotationToolBarModel::updateNoteInputState()
     updateVoicesState();
 }
 
-void NotationToolBarModel::updateNoteInputModeState()
+void NoteInputBarModel::updateNoteInputModeState()
 {
     int noteInputModeIndex = findNoteInputModeItemIndex();
     if (noteInputModeIndex == -1) {
@@ -229,7 +229,7 @@ void NotationToolBarModel::updateNoteInputModeState()
     emit dataChanged(index(noteInputModeIndex), index(noteInputModeIndex));
 }
 
-void NotationToolBarModel::updateNoteDotState()
+void NoteInputBarModel::updateNoteDotState()
 {
     static QMap<actions::ActionName, int> noteInputDots = {
         { "pad-dot", 1 },
@@ -245,7 +245,7 @@ void NotationToolBarModel::updateNoteDotState()
     }
 }
 
-void NotationToolBarModel::updateNoteDurationState()
+void NoteInputBarModel::updateNoteDurationState()
 {
     static QMap<actions::ActionName, DurationType> noteInputDurations = {
         { "note-longa", DurationType::V_LONG },
@@ -270,7 +270,7 @@ void NotationToolBarModel::updateNoteDurationState()
     }
 }
 
-void NotationToolBarModel::updateNoteAccidentalState()
+void NoteInputBarModel::updateNoteAccidentalState()
 {
     static QMap<actions::ActionName, AccidentalType> noteInputAccidentals = {
         { "flat2", AccidentalType::FLAT2 },
@@ -287,7 +287,7 @@ void NotationToolBarModel::updateNoteAccidentalState()
     }
 }
 
-void NotationToolBarModel::updateTieState()
+void NoteInputBarModel::updateTieState()
 {
     std::vector<Note*> tiedNotes = selection()->notes(NoteFilter::WithTie);
 
@@ -302,7 +302,7 @@ void NotationToolBarModel::updateTieState()
     item("tie").checked = checked;
 }
 
-void NotationToolBarModel::updateSlurState()
+void NoteInputBarModel::updateSlurState()
 {
     bool checked = false;
 
@@ -312,10 +312,10 @@ void NotationToolBarModel::updateSlurState()
         NOT_IMPLEMENTED;
     }
 
-    item("add-slur").checked = checked;
+    item("add-slur").checked = noteInputState().withSlur;
 }
 
-void NotationToolBarModel::updateVoicesState()
+void NoteInputBarModel::updateVoicesState()
 {
     QMap<actions::ActionName, int> voices {
         { "voice-1", 0 },
@@ -331,7 +331,7 @@ void NotationToolBarModel::updateVoicesState()
     }
 }
 
-int NotationToolBarModel::resolveCurrentVoiceIndex() const
+int NoteInputBarModel::resolveCurrentVoiceIndex() const
 {
     constexpr int INVALID_VOICE = -1;
 
@@ -356,12 +356,12 @@ int NotationToolBarModel::resolveCurrentVoiceIndex() const
     return INVALID_VOICE;
 }
 
-bool NotationToolBarModel::isNoteInputModeAction(const ActionName& actionName) const
+bool NoteInputBarModel::isNoteInputModeAction(const ActionName& actionName) const
 {
     return noteInputModeActionNames.contains(actionName);
 }
 
-Action NotationToolBarModel::currentNoteInputModeAction() const
+Action NoteInputBarModel::currentNoteInputModeAction() const
 {
     static QMap<NoteInputMethod, actions::ActionName> noteInputActionNames = {
         { NoteInputMethod::STEPTIME, "note-input" },
@@ -376,7 +376,7 @@ Action NotationToolBarModel::currentNoteInputModeAction() const
     return actionsRegister()->action(noteInputActionNames[method]);
 }
 
-NotationToolBarModel::ActionItem NotationToolBarModel::makeActionItem(const Action& action, const QString& section)
+NoteInputBarModel::ActionItem NoteInputBarModel::makeActionItem(const Action& action, const QString& section)
 {
     ActionItem item;
     item.action = action;
@@ -384,13 +384,13 @@ NotationToolBarModel::ActionItem NotationToolBarModel::makeActionItem(const Acti
     return item;
 }
 
-NotationToolBarModel::ActionItem NotationToolBarModel::makeAddItem(const QString& section)
+NoteInputBarModel::ActionItem NoteInputBarModel::makeAddItem(const QString& section)
 {
     Action addAction(ADD_ACTION_NAME, ADD_ACTION_TITLE, shortcuts::ShortcutContext::Undefined, ADD_ACTION_ICON_CODE);
     return makeActionItem(addAction, section);
 }
 
-std::vector<std::string> NotationToolBarModel::currentWorkspaceActions() const
+std::vector<std::string> NoteInputBarModel::currentWorkspaceActions() const
 {
     RetValCh<std::shared_ptr<IWorkspace> > workspace = workspaceManager()->currentWorkspace();
     if (!workspace.ret) {
@@ -408,7 +408,7 @@ std::vector<std::string> NotationToolBarModel::currentWorkspaceActions() const
     return toolbarData->actions;
 }
 
-void NotationToolBarModel::click(const QString& action)
+void NoteInputBarModel::handleAction(const QString& action)
 {
     if (isNoteInputModeAction(action.toStdString())) {
         toggleNoteInput();
@@ -418,7 +418,7 @@ void NotationToolBarModel::click(const QString& action)
     dispatcher()->dispatch(actions::namefromQString(action));
 }
 
-QVariantMap NotationToolBarModel::get(int index)
+QVariantMap NoteInputBarModel::get(int index)
 {
     QVariantMap result;
 
@@ -434,32 +434,32 @@ QVariantMap NotationToolBarModel::get(int index)
     return result;
 }
 
-INotationPtr NotationToolBarModel::notation() const
+INotationPtr NoteInputBarModel::notation() const
 {
-    return globalContext()->currentNotation();
+    return context()->currentNotation();
 }
 
-INotationInteractionPtr NotationToolBarModel::interaction() const
+INotationInteractionPtr NoteInputBarModel::interaction() const
 {
     return notation() ? notation()->interaction() : nullptr;
 }
 
-INotationSelectionPtr NotationToolBarModel::selection() const
+INotationSelectionPtr NoteInputBarModel::selection() const
 {
     return interaction() ? interaction()->selection() : nullptr;
 }
 
-INotationNoteInputPtr NotationToolBarModel::noteInput() const
+INotationNoteInputPtr NoteInputBarModel::noteInput() const
 {
     return interaction() ? interaction()->noteInput() : nullptr;
 }
 
-bool NotationToolBarModel::isNoteInputMode() const
+bool NoteInputBarModel::isNoteInputMode() const
 {
     return noteInput() ? noteInput()->isNoteInputMode() : false;
 }
 
-NoteInputState NotationToolBarModel::noteInputState() const
+NoteInputState NoteInputBarModel::noteInputState() const
 {
     return noteInput() ? noteInput()->state() : NoteInputState();
 }

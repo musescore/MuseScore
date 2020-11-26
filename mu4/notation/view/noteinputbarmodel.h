@@ -16,10 +16,9 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATION_NOTATIONTOOLBARMODEL_H
-#define MU_NOTATION_NOTATIONTOOLBARMODEL_H
+#ifndef MU_NOTATION_NOTEINPUTBARMODEL_H
+#define MU_NOTATION_NOTEINPUTBARMODEL_H
 
-#include <QObject>
 #include <QAbstractListModel>
 
 #include "modularity/ioc.h"
@@ -30,28 +29,28 @@
 #include "playback/iplaybackcontroller.h"
 #include "workspace/iworkspacemanager.h"
 
-namespace mu {
-namespace notation {
-class NotationToolBarModel : public QAbstractListModel, public async::Asyncable
+namespace mu::notation {
+class NoteInputBarModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
+
     INJECT(notation, actions::IActionsRegister, actionsRegister)
     INJECT(notation, actions::IActionsDispatcher, dispatcher)
-    INJECT(notation, context::IGlobalContext, globalContext)
+    INJECT(notation, context::IGlobalContext, context)
     INJECT(notation, playback::IPlaybackController, playbackController)
     INJECT(notation, workspace::IWorkspaceManager, workspaceManager)
 
     Q_PROPERTY(int count READ rowCount NOTIFY countChanged)
 
 public:
-    explicit NotationToolBarModel(QObject* parent = nullptr);
+    explicit NoteInputBarModel(QObject* parent = nullptr);
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QVariant data(const QModelIndex& index, int role) const override;
     QHash<int,QByteArray> roleNames() const override;
 
     Q_INVOKABLE void load();
-    Q_INVOKABLE void click(const QString& action);
+    Q_INVOKABLE void handleAction(const QString& action);
 
     Q_INVOKABLE QVariantMap get(int index);
 
@@ -113,6 +112,5 @@ private:
     async::Notification m_noteInputStateChanged;
 };
 }
-}
 
-#endif // MU_NOTATION_NOTATIONTOOLBARMODEL_H
+#endif // MU_NOTATION_NOTEINPUTBARMODEL_H

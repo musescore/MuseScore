@@ -126,8 +126,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/viewmodecontrolmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationaccessibilitymodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/notationaccessibilitymodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/notationtoolbarmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/notationtoolbarmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/playbackcursor.h
     ${CMAKE_CURRENT_LIST_DIR}/view/playbackcursor.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/notationswitchlistmodel.cpp
@@ -136,6 +134,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/partlistmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/searchpopupmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/searchpopupmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/noteinputbarmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/noteinputbarmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/noteinputbarcustomisemodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/noteinputbarcustomisemodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/abstractnoteinputbaritem.cpp
