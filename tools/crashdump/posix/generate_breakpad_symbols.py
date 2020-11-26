@@ -415,7 +415,7 @@ def main():
     return 1
 
   if not os.access(options.binary, os.X_OK):
-    print "Cannot find %s." % options.binary
+    print "Cannot find %s" % options.binary
     return 1
 
   if options.clear:

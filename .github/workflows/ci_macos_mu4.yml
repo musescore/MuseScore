@@ -114,6 +114,10 @@ jobs:
         bash ./build/ci/macos/build.sh -n ${{ github.run_id }} --telemetry $T_ID --build_mu4 ON
         echo "============== ccache ==============="
         ccache -s
+    - name: Generate dump symbols
+      if: env.DO_BUILD == 'true'
+      run: |
+        bash ./build/ci/macos/dumpsyms.sh  
     - name: Package 
       if: env.DO_BUILD == 'true'
       run: |
