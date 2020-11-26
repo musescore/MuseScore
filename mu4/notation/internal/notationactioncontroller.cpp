@@ -110,6 +110,12 @@ void NotationActionController::init()
     dispatcher()->reg(this, "voice-x23", [this]() { swapVoices(1, 2); });
     dispatcher()->reg(this, "voice-x24", [this]() { swapVoices(1, 3); });
     dispatcher()->reg(this, "voice-x34", [this]() { swapVoices(2, 3); });
+
+    for (int i = MIN_NOTES_INTERVAL; i <= MAX_NOTES_INTERVAL; ++i) {
+        if (isNotesIntervalValid(i)) {
+            dispatcher()->reg(this, "interval" + std::to_string(i), [this, i]() { addInterval(i); });
+        }
+    }
 }
 
 bool NotationActionController::canReceiveAction(const actions::ActionName&) const
@@ -346,6 +352,16 @@ void NotationActionController::swapSelection()
     }
 
     interaction->swapSelection();
+}
+
+void NotationActionController::addInterval(int interval)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->addIntervalToSelectedNotes(interval);
 }
 
 void NotationActionController::undo()

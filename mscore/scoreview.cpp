@@ -2569,7 +2569,9 @@ void ScoreView::cmd(const char* s)
                 if (!nl.empty()) {
                     //if (!noteEntryMode())
                     //      ;     // TODO: state    sm->postEvent(new CommandEvent("note-input"));
-                    cv->score()->cmdAddInterval(n, nl);
+                    cv->score()->startCmd();
+                    cv->score()->addInterval(n, nl);
+                    cv->score()->endCmd();
                 }
             } },
         { { "tie" }, [](ScoreView* cv, const QByteArray&) {

@@ -57,6 +57,7 @@ private:
     void copySelection();
     void deleteSelection();
     void swapSelection();
+    void addInterval(int interval);
 
     void undo();
     void redo();
