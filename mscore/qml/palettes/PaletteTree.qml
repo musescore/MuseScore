@@ -675,7 +675,6 @@ ListView {
                         paletteController: paletteTree.paletteController
                         selectionModel: paletteSelectionModel
 
-                        // TODO: don't show More button if there are no "more" items and there is nothing like a "Create Time Signature" button
                         showMoreButton: !filter.length
                         onMoreButtonClicked: control.togglePopup();
                         onVisibleChanged: {
