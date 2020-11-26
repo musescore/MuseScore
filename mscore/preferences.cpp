@@ -211,7 +211,7 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_UI_CANVAS_BG_USECOLOR,                           new BoolPreference(true, false)},
             {PREF_UI_CANVAS_FG_USECOLOR,                           new BoolPreference(true, false)},
             {PREF_UI_CANVAS_FG_USECOLOR_IN_PALETTES,               new BoolPreference(false, false)},
-            {PREF_UI_CANVAS_BG_COLOR,                              new ColorPreference(QColor(0x142433), false)},
+            {PREF_UI_CANVAS_BG_COLOR,                              new ColorPreference(QColor(0x385F94), false)},
             {PREF_UI_CANVAS_FG_COLOR,                              new ColorPreference(QColor(0xf9f9f9), false)},
             {PREF_UI_CANVAS_BG_WALLPAPER,                          new StringPreference(QFileInfo(QString("%1%2").arg(sharePath(), "wallpaper/background1.png")).absoluteFilePath(), false)},
             {PREF_UI_CANVAS_FG_WALLPAPER,                          new StringPreference(QFileInfo(QString("%1%2").arg(sharePath(), "wallpaper/paper5.png")).absoluteFilePath(), false)},
