@@ -63,7 +63,7 @@ void EaseInOutCanvas::paintEvent(QPaintEvent* ev)
 
       EaseInOut eio(static_cast<qreal>(m_easeIn) / 100.0, static_cast<qreal>(m_easeOut) / 100.0);
 
-      QString noteNames("C D EF G A B");
+      char noteNames[] = ("C D EF G A B");
 
       QPainter painter(this);
       painter.setRenderHint(QPainter::Antialiasing, preferences.getBool(PREF_UI_CANVAS_MISC_ANTIALIASEDDRAWING));
@@ -78,19 +78,21 @@ void EaseInOutCanvas::paintEvent(QPaintEvent* ev)
       pitchLinesColor.setAlphaF(0.25);
 
       // Color scheme based on the MuseScore blue.
-      QColor borderLinesColor, warpLineColor, pitchFillColor, pitchGraphColor;
+      QColor borderLinesColor, warpLineColor, pitchFillColor, pitchGraphColor, pitchNameColor;
       if (preferences.isThemeDark()) {
             pitchFillColor.setRgbF(0.078, 0.284, 0.463);
             pitchGraphColor.setRgbF(0.125, 0.455, 0.741);
-            warpLineColor.setRgbF(0.574, 0.368, 0.255);
+            warpLineColor.setRgbF(0.621, 0.315, 0.132);
             borderLinesColor.setRgbF(0.891, 0.932, 0.968);
+            pitchNameColor.setRgbF(0.935, 0.782, 0.691);
             }
       else {
             pitchFillColor.setRgbF(0.891, 0.932, 0.968);
             pitchGraphColor.setRgbF(0.125, 0.455, 0.741);
-            warpLineColor.setRgbF(0.938, 0.691, 0.556);
+            warpLineColor.setRgbF(0.914, 0.710, 0.588);
             borderLinesColor.setRgbF(0.016, 0.057, 0.093);
-            }
+            pitchNameColor.setRgbF(0.310, 0.157, 0.066);
+      }
 
       // this lambda takes as input a pitch value, and determines where what are its x and y coordinates
       auto getPosition = [this, graphWidth, graphHeight, leftPos, bottomPos](const QPointF& p) -> QPointF {
@@ -98,7 +100,7 @@ void EaseInOutCanvas::paintEvent(QPaintEvent* ev)
             };
 
       std::vector<QPointF> pitchPoints;
-      qreal offset = m_events[m_events.size() - 1] < 0 ? 1.0 : 0.0;
+      qreal offset = m_events.back() < 0 ? 1.0 : 0.0;
       QPointF prevPoint, currPoint;
       for (int i = 0; i < m_events.size(); i++) {
             currPoint = getPosition({ eio.XfromY(static_cast<qreal>(i) / nbEvents), offset + static_cast<qreal>(m_events[i]) / static_cast<qreal>(pitchDelta) });
@@ -134,16 +136,33 @@ void EaseInOutCanvas::paintEvent(QPaintEvent* ev)
             painter.drawLine(leftPos, yPos, rightPos, yPos);
             }
 
-      // Draw the Bezier transfer curve. This warps the event times
-      // so this curve always go from lower left corner to upper-right corner.
-      pen.setWidth(2);
-      pen.setColor(warpLineColor);
+      // draw note names
+      pen.setColor(pitchNameColor);
       painter.setPen(pen);
-      prevPoint = {leftPos, bottomPos};
-      for (int i = 1; i <= 33; i++) {
-            currPoint = getPosition(eio.Eval(static_cast<qreal>(i) / 33.0));
-            painter.drawLine(prevPoint, currPoint);
-            prevPoint = currPoint;
+      QFont font;
+      qreal fontHeight = std::min(12.0, (graphHeight * 0.875) / pitchDelta);
+      font.setPixelSize(fontHeight);
+      painter.setFont(font);
+      int curPitch = m_bottomPitch;
+      for (int i = 0; i <= m_pitchDelta; ++i) {
+            QString pitchName(noteNames[(curPitch - 60) % 12]);
+            QPointF pos = { 4, topPos + fontHeight * 0.3 + (1.0 - (static_cast<qreal>(i) / pitchDelta)) * graphHeight };
+            painter.drawText(pos, pitchName);
+            curPitch++;
+      }
+
+      // Draw the Bezier transfer curve only in ease-in or ease-out are not zero. This warps
+      // the event times so this curve always go from lower left corner to upper-right corner.
+      if (m_easeIn != 0 || m_easeOut != 0) {
+            pen.setWidth(2);
+            pen.setColor(warpLineColor);
+            painter.setPen(pen);
+            prevPoint = { leftPos, bottomPos };
+            for (int i = 1; i <= 33; i++) {
+                  currPoint = getPosition(eio.Eval(static_cast<qreal>(i) / 33.0));
+                  painter.drawLine(prevPoint, currPoint);
+                  prevPoint = currPoint;
+                  }
             }
 
       // Draw the pitches level lines next so they cover the Bezier transfer curve.

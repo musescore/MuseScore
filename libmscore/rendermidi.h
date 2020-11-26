@@ -137,7 +137,6 @@ class MidiRenderer {
 
 class Spanner;
 extern bool glissandoPitchOffsets(const Spanner* spanner, std::vector<int>& pitchOffsets);
-extern bool glissandoPitchOffsetsRef(const Spanner* spanner, std::vector<int>& pitchOffsets);
 
 } // namespace Ms
 

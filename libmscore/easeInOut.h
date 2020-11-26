@@ -34,7 +34,7 @@ public:
       EaseInOut(qreal easeIn, qreal easeOut) : _easeIn(easeIn), _easeOut(easeOut) {}
 
       void SetEases(qreal easeIn, qreal easeOut) { _easeIn = easeIn; _easeOut = easeOut; }
-      qreal EvalX(const qreal t) const;// { qreal tCompl = 1.0 - t;  return (3.0 * _easeIn * tCompl * tCompl + (3.0 - 3.0 * _easeOut * tCompl - 2.0 * t) * t) * t; }
+      qreal EvalX(const qreal t) const          { qreal tCompl = 1.0 - t;  return (3.0 * _easeIn * tCompl * tCompl + (3.0 - 3.0 * _easeOut * tCompl - 2.0 * t) * t) * t; }
       qreal EvalY(const qreal t) const          { return -(t * t) * (2.0 * t - 3.0); }
       QPointF Eval(const qreal t) const         { return {EvalX(t), EvalY(t)}; }
       qreal tFromX(const qreal x) const;
