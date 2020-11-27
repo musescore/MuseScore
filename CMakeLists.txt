@@ -203,7 +203,6 @@ option(BUILD_FOR_WINSTORE "Build for the Windows Store." OFF)
 option(COVERAGE "Build with instrumentation to record code coverage." OFF)
 option(BUILD_64 "Build 64 bit version of editor" ON)
 option(BUILD_AUTOUPDATE "Build with autoupdate support" OFF)
-option(BUILD_CRASH_REPORTER "Build with crash reporter" OFF)
 # default crash server url - Sentry MuseScore sandbox
 set(CRASH_REPORT_URL "https://sentry.musescore.org/api/3/minidump/?sentry_key=1260147a791c40349bbf717b94dc29c4" CACHE STRING "URL where to send crash reports")
 option(BUILD_TELEMETRY_MODULE "Build with telemetry module" ON)
@@ -238,12 +237,6 @@ if (MSCORE_UNSTABLE OR TELEMETRY_TRACK_ID STREQUAL "")
 
       add_definitions(-DTELEMETRY_DISABLED)
 endif(MSCORE_UNSTABLE OR TELEMETRY_TRACK_ID STREQUAL "")
-
-if (BUILD_CRASH_REPORTER)
-      message("Crash reporter enabled")
-else(BUILD_CRASH_REPORTER)
-      message("Crash reporter disabled")
-endif(BUILD_CRASH_REPORTER)
 
 if (APPLE)
       set (CMAKE_CXX_COMPILER   clang++)
@@ -873,13 +866,6 @@ endif(BUILD_MU3)
 
 add_subdirectory(main)
 
-if (BUILD_CRASH_REPORTER)
-      set (CRASHREPORTER_EXECUTABLE_NAME "${MSCORE_EXECUTABLE_NAME}-crash-reporter")
-      add_subdirectory(crashreporter)
-      add_dependencies(mscore mscore-crash-reporter)
-      set (CRASHREPORTER_EXECUTABLE "${CRASHREPORTER_EXECUTABLE_NAME}${CMAKE_EXECUTABLE_SUFFIX}")
-endif (BUILD_CRASH_REPORTER)
-
 ##
 ## produce config.h file
 ##
@@ -896,12 +882,6 @@ if (BUILD_MU3)
     add_subdirectory(bww2mxml)
     add_subdirectory(effects)
     add_subdirectory(audio)
-
-
-    if (BUILD_CRASH_REPORTER)
-          set(ENABLE_CRASH_REPORTER OFF CACHE BOOL "Disable libcrashreporter-qt GUI component")
-          add_subdirectory(thirdparty/libcrashreporter-qt)
-    endif (BUILD_CRASH_REPORTER)
 
     string(TOUPPER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
     if (APPLE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")

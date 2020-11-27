@@ -1,9 +1,0 @@
-Name: libdisasm
-URL: https://sourceforge.net/projects/bastard/files/libdisasm/0.23/libdisasm-0.23.tar.gz/download
-Version: 0.23
-License: Clarified-Artistic
-License File: LICENSE
-
-Description:
-This contains a copy of libdisasm.  It is no longer under development upstream,
-so we keep a copy here to maintain fixes ourselves.
