@@ -137,7 +137,7 @@ void NotationInteraction::startNoteEntry()
     }
     is.setAccidentalType(AccidentalType::NONE);
 
-    select(el, SelectType::SINGLE, 0);
+    select({ el }, SelectType::SINGLE, 0);
 
     is.setRest(false);
     is.setNoteEntryMode(true);
@@ -253,7 +253,7 @@ void NotationInteraction::selectFirstTopLeftOrLast()
         }
 
         if (topLeft) {
-            select(topLeft, SelectType::SINGLE);
+            select({ topLeft }, SelectType::SINGLE);
         }
     }
 }
@@ -551,19 +551,9 @@ bool NotationInteraction::elementIsLess(const Ms::Element* e1, const Ms::Element
     return e1->z() <= e2->z();
 }
 
-void NotationInteraction::select(Element* element, SelectType type, int staffIndex)
+void NotationInteraction::select(const std::vector<Element*>& elements, SelectType type, int staffIndex)
 {
-    if (isTextEditingStarted() && element != m_textEditData.element) {
-        endEditText();
-    }
-
-    score()->select(element, type, staffIndex);
-    m_selectionChanged.notify();
-}
-
-void NotationInteraction::select(std::vector<Element*> elements, SelectType type, int staffIndex)
-{
-    if (isTextEditingStarted()) {
+    if (needEndTextEditing(elements)) {
         endEditText();
     }
 
@@ -1373,7 +1363,7 @@ void NotationInteraction::applyDropPaletteElement(Ms::Score* score, Ms::Element*
         }
 
         if (el && !score->inputState().noteEntryMode()) {
-            select(el, SelectType::SINGLE, 0);
+            select({ el }, SelectType::SINGLE, 0);
         }
         dropData.dropElement = 0;
 
@@ -2009,7 +1999,7 @@ void NotationInteraction::insertMeasures(int afterMeasureIndex, int count)
 
     for (int i = afterMeasureIndex + 1; i <= afterMeasureIndex + count; i++) {
         Measure* measure = score()->crMeasure(i - 1);
-        select(measure, SelectType::RANGE);
+        select({ measure }, SelectType::RANGE);
     }
 }
 
@@ -2027,7 +2017,7 @@ void NotationInteraction::appendMeasures(int count)
 
     for (int i = measureCount; i < measureCount + count; i++) {
         Measure* measure = score()->crMeasure(i - 1);
-        select(measure, SelectType::RANGE);
+        select({ measure }, SelectType::RANGE);
     }
 }
 
@@ -2157,4 +2147,21 @@ void NotationInteraction::swapVoices(int voiceIndex1, int voiceIndex2)
 bool NotationInteraction::isVoiceIndexValid(int voiceIndex) const
 {
     return voiceIndex >= 0 && voiceIndex < VOICES;
+}
+
+bool NotationInteraction::needEndTextEditing(const std::vector<Element*>& newSelectedElements) const
+{
+    if (!isTextEditingStarted()) {
+        return false;
+    }
+
+    if (newSelectedElements.empty()) {
+        return false;
+    }
+
+    if (newSelectedElements.size() > 1) {
+        return true;
+    }
+
+    return newSelectedElements.front() != m_textEditData.element;
 }

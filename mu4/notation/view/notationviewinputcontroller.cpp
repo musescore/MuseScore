@@ -178,7 +178,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* ev)
                 st = SelectType::ADD;
             }
 
-            m_view->notationInteraction()->select(m_interactData.hitElement, st, m_interactData.hitStaffIndex);
+            m_view->notationInteraction()->select({ m_interactData.hitElement }, st, m_interactData.hitStaffIndex);
         }
     } else {
         m_view->notationInteraction()->clearSelection();

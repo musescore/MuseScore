@@ -90,8 +90,7 @@ private:
     void pasteSelection(PastingType type = PastingType::Default);
     Fraction resolvePastingScale(const INotationInteractionPtr& interaction, PastingType type) const;
 
-    ElementPattern* defaultElementPattern(const Element* element) const;
-    SearchElementOptions* elementSearchOptions(const Element* element) const;
+    FilterElementsOptions elementsFilterOptions(const Element* element) const;
 
     int lastSelectedMeasureIndex() const;
 };

@@ -63,7 +63,7 @@ private:
     INotationElementsPtr currentNotationElements() const;
 
     void apply() const;
-    SearchNoteOptions* noteOptions() const;
+    FilterNotesOptions noteOptions() const;
 
     const Ms::Note* m_note = nullptr;
 };
