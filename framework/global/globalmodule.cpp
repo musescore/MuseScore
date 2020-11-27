@@ -80,6 +80,26 @@ void GlobalModule::onInit()
 
     LOGI() << "=== Started MuseScore " << framework::Version::fullVersion() << " ===";
 
+    //! --- Setup profiler ---
+    using namespace haw::profiler;
+    struct MyPrinter : public Profiler::Printer
+    {
+        void printDebug(const std::string& str) override { LOG_STREAM(Logger::DEBUG, "Profiler") << str; }
+        void printInfo(const std::string& str) override { LOG_STREAM(Logger::INFO, "Profiler") << str; }
+    };
+
+    Profiler::Options profOpt;
+    profOpt.stepTimeEnabled = true;
+    profOpt.funcsTimeEnabled = true;
+    profOpt.funcsTraceEnabled = false;
+    profOpt.funcsMaxThreadCount = 100;
+    profOpt.dataTopCount = 150;
+
+    Profiler* profiler = Profiler::instance();
+    profiler->setup(profOpt, new MyPrinter());
+
+    //! --- Setup Invoker ---
+
     Invoker::setup();
 
     mu::async::onMainThreadInvoke([](const std::function<void()>& f) {

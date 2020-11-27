@@ -145,6 +145,8 @@ io::path FileScoreController::selectScoreSavingFile(const io::path& defaultFileP
 
 void FileScoreController::doOpenScore(const io::path& filePath)
 {
+    TRACEFUNC;
+
     auto notation = notationCreator()->newMasterNotation();
     IF_ASSERT_FAILED(notation) {
         return;

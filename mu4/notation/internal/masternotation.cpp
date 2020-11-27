@@ -59,6 +59,8 @@ Meta MasterNotation::metaInfo() const
 
 mu::Ret MasterNotation::load(const io::path& path)
 {
+    TRACEFUNC;
+
     std::string syffix = io::syffix(path);
 
     //! NOTE For "mscz", "mscx" see MsczNotationReader
@@ -79,6 +81,8 @@ MasterScore* MasterNotation::masterScore() const
 
 mu::Ret MasterNotation::load(const io::path& path, const INotationReaderPtr& reader)
 {
+    TRACEFUNC;
+
     ScoreLoad sl;
 
     MasterScore* score = new MasterScore(scoreGlobal()->baseStyle());

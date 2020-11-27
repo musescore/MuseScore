@@ -20,6 +20,8 @@
 #ifndef MU_FRAMEWORK_LOG_H
 #define MU_FRAMEWORK_LOG_H
 
+#include "thirdparty/haw_profiler/src/profiler.h"
+
 #ifndef HAW_LOGGER_QT_SUPPORT
 #define HAW_LOGGER_QT_SUPPORT
 #endif
