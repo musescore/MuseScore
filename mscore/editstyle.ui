@@ -10322,78 +10322,80 @@
                </widget>
               </item>
               <item row="3" column="0" colspan="5">
-               <layout class="QHBoxLayout" name="horizontalLayout_6">
-                <item>
-                 <widget class="QLabel" name="label_148">
-                  <property name="text">
-                   <string>Spelling:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QRadioButton" name="useStandardNoteNames">
-                  <property name="toolTip">
-                   <string notr="true">A, B♭, B, C, C♯, …</string>
-                  </property>
-                  <property name="text">
-                   <string>Standard</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QRadioButton" name="useGermanNoteNames">
-                  <property name="toolTip">
-                   <string notr="true">A, B♭, H, C, C♯, …</string>
-                  </property>
-                  <property name="text">
-                   <string>German</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QRadioButton" name="useFullGermanNoteNames">
-                  <property name="toolTip">
-                   <string notr="true">A, B, H, C, Cis, …</string>
-                  </property>
-                  <property name="text">
-                   <string>Full German</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QRadioButton" name="useSolfeggioNoteNames">
-                  <property name="toolTip">
-                   <string notr="true">Do, Do♯, Re♭, Re, …</string>
-                  </property>
-                  <property name="text">
-                   <string>Solfeggio</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QRadioButton" name="useFrenchNoteNames">
-                  <property name="toolTip">
-                   <string notr="true">Do, Do♯, Ré♭, Ré, …</string>
-                  </property>
-                  <property name="text">
-                   <string>French</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <spacer name="horizontalSpacer_12">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-               </layout>
+               <widget class="QGroupBox" name="spellingGroup">
+                <layout class="QHBoxLayout" name="horizontalLayout_6">
+                 <item>
+                  <widget class="QLabel" name="label_148">
+                   <property name="text">
+                    <string>Spelling:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="useStandardNoteNames">
+                   <property name="toolTip">
+                    <string notr="true">A, B♭, B, C, C♯, …</string>
+                   </property>
+                   <property name="text">
+                    <string>Standard</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="useGermanNoteNames">
+                   <property name="toolTip">
+                    <string notr="true">A, B♭, H, C, C♯, …</string>
+                   </property>
+                   <property name="text">
+                    <string>German</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="useFullGermanNoteNames">
+                   <property name="toolTip">
+                    <string notr="true">A, B, H, C, Cis, …</string>
+                   </property>
+                   <property name="text">
+                    <string>Full German</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="useSolfeggioNoteNames">
+                   <property name="toolTip">
+                    <string notr="true">Do, Do♯, Re♭, Re, …</string>
+                   </property>
+                   <property name="text">
+                    <string>Solfeggio</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="useFrenchNoteNames">
+                   <property name="toolTip">
+                    <string notr="true">Do, Do♯, Ré♭, Ré, …</string>
+                   </property>
+                   <property name="text">
+                    <string>French</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_12">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </widget>
               </item>
              </layout>
             </widget>
