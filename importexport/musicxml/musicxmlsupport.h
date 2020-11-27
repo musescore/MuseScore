@@ -150,7 +150,7 @@ struct MusicXMLInstrument {
             notehead(NoteHead::Group::HEAD_INVALID), line(0), stemDirection(Direction::AUTO) {}
       MusicXMLInstrument(QString s)
             : unpitched(-1), name(s), midiChannel(-1), midiPort(-1), midiProgram(-1), midiVolume(100), midiPan(63),
-            notehead(NoteHead::Group::HEAD_INVALID), line(0), stemDirection(Direction::AUTO) {}
+            notehead(NoteHead::Group::HEAD_NORMAL), line(0), stemDirection(Direction::AUTO) {}
       /*
       MusicXMLInstrument(int p, QString s, NoteHead::Group nh, int l, Direction d)
             : unpitched(p), name(s), midiChannel(-1), midiPort(-1), midiProgram(-1), midiVolume(100), midiPan(63),
