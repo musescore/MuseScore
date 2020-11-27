@@ -4,7 +4,7 @@ ECHO "MuseScore build"
 SET ARTIFACTS_DIR=build.artifacts
 SET BUILD_NUMBER=""
 SET TELEMETRY_TRACK_ID=""
-SET CRASH_LOG_SERVER_URL=""
+SET SENTRY_SERVER_KEY=""
 SET TARGET_PROCESSOR_BITS=64
 SET BUILD_WIN_PORTABLE=OFF
 SET BUILD_UI_MU4=OFF		# not used, only for easier synchronization and compatibility
@@ -13,7 +13,7 @@ SET BUILD_UI_MU4=OFF		# not used, only for easier synchronization and compatibil
 IF /I "%1" == "-n" SET BUILD_NUMBER=%2& SHIFT
 IF /I "%1" == "-b" SET TARGET_PROCESSOR_BITS=%2& SHIFT
 IF /I "%1" == "--telemetry" SET TELEMETRY_TRACK_ID=%2& SHIFT
-IF /I "%1" == "--crashurl" SET CRASH_LOG_SERVER_URL=%2& SHIFT
+IF /I "%1" == "--sentrykey" SET SENTRY_SERVER_KEY=%2& SHIFT
 IF /I "%1" == "--portable" SET BUILD_WIN_PORTABLE=%2& SHIFT
 IF /I "%1" == "--build_mu4" SET BUILD_UI_MU4=%2& SHIFT
 SHIFT
@@ -36,6 +36,16 @@ IF %BUILD_MODE% == stable_build  ( SET "MUSESCORE_BUILD_CONFIG=release" ) ELSE (
     ECHO "error: unknown BUILD_MODE: %BUILD_MODE%"
     EXIT /b 1
 ))))
+
+SET URL_IS_SET=1
+IF %SENTRY_SERVER_KEY% == "" ( SET URL_IS_SET=0)
+IF %SENTRY_SERVER_KEY% == "''" ( SET URL_IS_SET=0)
+
+IF %URL_IS_SET% EQU 1 (
+    SET "CRASH_LOG_SERVER_URL=https://sentry.musescore.org/api/2/minidump/?sentry_key=%SENTRY_SERVER_KEY%"
+) ELSE (
+    SET CRASH_LOG_SERVER_URL=
+)
 
 ECHO "MUSESCORE_BUILD_CONFIG: %MUSESCORE_BUILD_CONFIG%"
 ECHO "BUILD_NUMBER: %BUILD_NUMBER%"
@@ -60,10 +70,6 @@ IF %TARGET_PROCESSOR_BITS% == 32 (
 ) ELSE (
     SET "PATH=%QT_DIR%\msvc2017_64\bin;%JACK_DIR%;%PATH%"
 )
-
-:: Undefined CRASH_LOG_SERVER_URL if is it empty
-IF %CRASH_LOG_SERVER_URL% == "" ( SET CRASH_LOG_SERVER_URL=)
-IF %CRASH_LOG_SERVER_URL% == "''" ( SET CRASH_LOG_SERVER_URL=)
 
 bash ./build/ci/tools/make_revision_env.sh 
 SET /p MUSESCORE_REVISION=<%ARTIFACTS_DIR%\env\release_channel.env
