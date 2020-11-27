@@ -111,8 +111,8 @@ public:
     // Measure
     void splitSelectedMeasure() override;
     void joinSelectedMeasures() override;
-    void insertMeasures(int afterMeasureIndex, int count) override;
-    void appendMeasures(int count) override;
+
+    void addBoxes(BoxType boxType, int count, int beforeBoxIndex = -1) override;
 
     void copySelection() override;
     void pasteSelection(const Fraction& scale = Fraction(1, 1)) override;

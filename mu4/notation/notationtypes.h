@@ -106,6 +106,15 @@ enum class BreaksSpawnIntervalType
     MeasuresInterval
 };
 
+enum class BoxType
+{
+    Unknown,
+    Vertical,
+    Horizontal,
+    Measure,
+    Text
+};
+
 struct Meta
 {
     QString fileName;

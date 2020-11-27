@@ -3133,7 +3133,7 @@ void Score::nextInputPos(ChordRest* cr, bool doSelect)
 //    If measure is zero, append new MeasureBase.
 //---------------------------------------------------------
 
-void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmptyMeasures, bool moveSignaturesClef)
+void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmptyMeasures, bool moveSignaturesClef, bool needDeselectAll)
 {
     Fraction tick;
     if (measure) {
@@ -3332,7 +3332,10 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
             score->undoAddCR(rest, om, tick);
         }
     }
-    deselectAll();
+
+    if (needDeselectAll) {
+        deselectAll();
+    }
 }
 
 //---------------------------------------------------------
