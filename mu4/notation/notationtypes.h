@@ -169,7 +169,7 @@ struct SearchCommand
 };
 using SearchCommands = QList<SearchCommand>;
 
-struct SearchElementOptions
+struct FilterElementsOptions
 {
     ElementType elementType = ElementType::INVALID;
     int staffStart = -1;
@@ -181,10 +181,15 @@ struct SearchElementOptions
     bool bySubtype = false;
     int subtype = -1;
 
-    virtual ~SearchElementOptions() {}
+    bool isValid() const
+    {
+        return elementType != ElementType::INVALID;
+    }
+
+    virtual ~FilterElementsOptions() = default;
 };
 
-struct SearchNoteOptions : SearchElementOptions
+struct FilterNotesOptions : FilterElementsOptions
 {
     int pitch = -1;
     int string = Ms::STRING_NONE;

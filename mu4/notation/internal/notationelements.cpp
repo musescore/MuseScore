@@ -32,11 +32,11 @@ NotationElements::NotationElements(IGetScore* getScore)
 {
 }
 
-Ms::Element* NotationElements::search(const std::string& searchCommand) const
+Element* NotationElements::search(const std::string& searchText) const
 {
     SearchCommandsParser commandsParser;
 
-    SearchCommandsParser::SearchData searchData = commandsParser.parse(searchCommand);
+    SearchCommandsParser::SearchData searchData = commandsParser.parse(searchText);
     if (searchData.isValid()) {
         switch (searchData.elementType) {
         case ElementType::REHEARSAL_MARK: {
@@ -60,17 +60,23 @@ Ms::Element* NotationElements::search(const std::string& searchCommand) const
     return nullptr;
 }
 
-std::vector<Ms::Element*> NotationElements::searchSimilar(const SearchElementOptions* elementOptions) const
+std::vector<Element*> NotationElements::elements(const FilterElementsOptions& elementsOptions) const
 {
-    std::vector<Ms::Element*> result;
+    std::vector<Element*> result;
+
+    const FilterElementsOptions* elementsFilterOptions = dynamic_cast<const FilterElementsOptions*>(&elementsOptions);
+
+    if (!elementsFilterOptions || !elementsFilterOptions->isValid()) {
+        return allScoreElements();
+    }
 
     // todo: add check for range search
 
-    bool isNote = dynamic_cast<const SearchNoteOptions*>(elementOptions) != nullptr;
-    if (isNote) {
-        result = searchNotes(elementOptions);
+    const FilterNotesOptions* noteOptions = dynamic_cast<const FilterNotesOptions*>(elementsFilterOptions);
+    if (noteOptions) {
+        result = filterNotes(noteOptions);
     } else {
-        result = searchElements(elementOptions);
+        result = filterElements(elementsFilterOptions);
     }
 
     return result;
@@ -82,8 +88,8 @@ Ms::RehearsalMark* NotationElements::rehearsalMark(const std::string& name) cons
 
     for (Ms::Segment* segment = score()->firstSegment(Ms::SegmentType::ChordRest); segment;
          segment = segment->next1(Ms::SegmentType::ChordRest)) {
-        for (Ms::Element* element: segment->annotations()) {
-            if (element->type() != Ms::ElementType::REHEARSAL_MARK) {
+        for (Element* element: segment->annotations()) {
+            if (element->type() != ElementType::REHEARSAL_MARK) {
                 continue;
             }
 
@@ -112,9 +118,21 @@ Ms::Page* NotationElements::page(const int pageIndex) const
     return score()->pages().at(pageIndex);
 }
 
-std::vector<Ms::Element*> NotationElements::searchElements(const SearchElementOptions* elementOptions) const
+std::vector<Element*> NotationElements::allScoreElements() const
 {
-    Ms::ElementPattern* pattern = constructElementPattern(elementOptions);
+    std::vector<Element*> result;
+    for (Ms::Page* page : score()->pages()) {
+        for (Element* element: page->elements()) {
+            result.push_back(element);
+        }
+    }
+
+    return result;
+}
+
+std::vector<Element*> NotationElements::filterElements(const FilterElementsOptions* elementsOptions) const
+{
+    ElementPattern* pattern = constructElementPattern(elementsOptions);
 
     score()->scanElements(pattern, Ms::Score::collectMatch);
 
@@ -126,9 +144,9 @@ std::vector<Ms::Element*> NotationElements::searchElements(const SearchElementOp
     return result;
 }
 
-std::vector<Ms::Element*> NotationElements::searchNotes(const SearchElementOptions* elementOptions) const
+std::vector<Element*> NotationElements::filterNotes(const FilterNotesOptions* notesOptions) const
 {
-    Ms::NotePattern* pattern = constructNotePattern(elementOptions);
+    Ms::NotePattern* pattern = constructNotePattern(notesOptions);
 
     score()->scanElements(pattern, Ms::Score::collectNoteMatch);
 
@@ -149,7 +167,7 @@ Ms::Score* NotationElements::score() const
     return m_getScore->score();
 }
 
-ElementPattern* NotationElements::constructElementPattern(const SearchElementOptions* elementOptions) const
+ElementPattern* NotationElements::constructElementPattern(const FilterElementsOptions* elementOptions) const
 {
     ElementPattern* pattern = new ElementPattern;
     pattern->type = static_cast<int>(elementOptions->elementType);
@@ -164,22 +182,20 @@ ElementPattern* NotationElements::constructElementPattern(const SearchElementOpt
     return pattern;
 }
 
-Ms::NotePattern* NotationElements::constructNotePattern(const SearchElementOptions* elementOptions) const
+Ms::NotePattern* NotationElements::constructNotePattern(const FilterNotesOptions* notesOptions) const
 {
-    const SearchNoteOptions* noteOptions = dynamic_cast<const SearchNoteOptions*>(elementOptions);
-
     Ms::NotePattern* pattern = new Ms::NotePattern();
-    pattern->pitch = noteOptions->pitch;
-    pattern->string = noteOptions->string;
-    pattern->tpc = noteOptions->tpc;
-    pattern->notehead = noteOptions->notehead;
-    pattern->durationType = noteOptions->durationType;
-    pattern->durationTicks = noteOptions->durationTicks;
-    pattern->type = noteOptions->noteType;
-    pattern->staffStart = noteOptions->staffStart;
-    pattern->staffEnd = noteOptions->staffEnd;
-    pattern->voice = noteOptions->voice;
-    pattern->system = noteOptions->system;
+    pattern->pitch = notesOptions->pitch;
+    pattern->string = notesOptions->string;
+    pattern->tpc = notesOptions->tpc;
+    pattern->notehead = notesOptions->notehead;
+    pattern->durationType = notesOptions->durationType;
+    pattern->durationTicks = notesOptions->durationTicks;
+    pattern->type = notesOptions->noteType;
+    pattern->staffStart = notesOptions->staffStart;
+    pattern->staffEnd = notesOptions->staffEnd;
+    pattern->voice = notesOptions->voice;
+    pattern->system = notesOptions->system;
 
     return pattern;
 }

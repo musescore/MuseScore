@@ -72,8 +72,7 @@ public:
     // Select
     Element* hitElement(const QPointF& pos, float width) const override;
     int hitStaffIndex(const QPointF& pos) const override;
-    void select(Element* e, SelectType type, int staffIdx = 0) override;
-    void select(std::vector<Element*> elements, SelectType type, int staffIndex = 0) override;
+    void select(const std::vector<Element*>& elements, SelectType type, int staffIndex = 0) override;
     void selectAll() override;
     INotationSelectionPtr selection() const override;
     void clearSelection() override;
@@ -154,6 +153,8 @@ private:
     void addSlur(Ms::ChordRest* cr1, Ms::ChordRest* cr2, const Ms::Slur* slurTemplate);
 
     bool isVoiceIndexValid(int voiceIndex) const;
+
+    bool needEndTextEditing(const std::vector<Element*>& newSelectedElements) const;
 
     struct HitMeasureData
     {

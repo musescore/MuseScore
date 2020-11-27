@@ -145,7 +145,7 @@ void MeasurePropertiesDialog::setMeasure(Ms::Measure* measure)
 
     setWindowTitle(tr("Measure Properties for Measure %1").arg(m_measure->no() + 1));
     m_notation->interaction()->clearSelection();
-    m_notation->interaction()->select(m_measure, Ms::SelectType::ADD, 0);
+    m_notation->interaction()->select({ m_measure }, Ms::SelectType::ADD, 0);
 
     actualZ->setValue(m_measure->ticks().numerator());
     int index = actualN->findText(QString::number(m_measure->ticks().denominator()));
@@ -300,6 +300,6 @@ void MeasurePropertiesDialog::apply()
         m_measure->triggerLayout();
     }
 
-    m_notation->interaction()->select(m_measure, Ms::SelectType::SINGLE, 0);
+    m_notation->interaction()->select({ m_measure }, Ms::SelectType::SINGLE, 0);
     m_notation->notationChanged().notify();
 }
