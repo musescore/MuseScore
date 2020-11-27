@@ -11558,6 +11558,11 @@
   <tabstop>minEmptyMeasures</tabstop>
   <tabstop>minMeasureWidth</tabstop>
   <tabstop>resetMinMMRestWidth</tabstop>
+  <tabstop>mmRestNumberPos</tabstop>
+  <tabstop>resetMMRestNumberPos</tabstop>
+  <tabstop>enableIndentationOnFirstSystem</tabstop>
+  <tabstop>indentationValue</tabstop>
+  <tabstop>resetFirstSystemIndentation</tabstop>
   <tabstop>hideEmptyStaves</tabstop>
   <tabstop>dontHideStavesInFirstSystem</tabstop>
   <tabstop>alwaysShowBrackets</tabstop>
@@ -11571,14 +11576,43 @@
   <tabstop>resetAutoplaceVerticalAlignRange</tabstop>
   <tabstop>minVerticalDistance</tabstop>
   <tabstop>resetMinVerticalDistance</tabstop>
+  <tabstop>staffUpperBorder</tabstop>
+  <tabstop>resetStaffUpperBorder</tabstop>
+  <tabstop>staffLowerBorder</tabstop>
+  <tabstop>resetStaffLowerBorder</tabstop>
+  <tabstop>enableVerticalSpread</tabstop>
+  <tabstop>staffDistance</tabstop>
+  <tabstop>resetStaffDistance</tabstop>
+  <tabstop>akkoladeDistance</tabstop>
+  <tabstop>resetAkkoladeDistance</tabstop>
+  <tabstop>minSystemDistance</tabstop>
+  <tabstop>resetMinSystemDistance</tabstop>
+  <tabstop>maxSystemDistance</tabstop>
+  <tabstop>resetMaxSystemDistance</tabstop>
+  <tabstop>spreadSystem</tabstop>
+  <tabstop>resetSpreadSystem</tabstop>
+  <tabstop>maxSystemSpread</tabstop>
+  <tabstop>resetMaxSystemSpread</tabstop>
+  <tabstop>spreadSquareBracket</tabstop>
+  <tabstop>resetSpreadSquareBracket</tabstop>
+  <tabstop>minStaffSpread</tabstop>
+  <tabstop>resetMinStaffSpread</tabstop>
+  <tabstop>maxStaffSpread</tabstop>
+  <tabstop>resetMaxStaffSpread</tabstop>
+  <tabstop>spreadCurlyBracket</tabstop>
+  <tabstop>resetSpreadCurlyBracket</tabstop>
+  <tabstop>maxAkkoladeDistance</tabstop>
+  <tabstop>resetMaxAkkoladeDistance</tabstop>
+  <tabstop>systemFrameDistance</tabstop>
+  <tabstop>resetSystemFrameDistance</tabstop>
+  <tabstop>frameSystemDistance</tabstop>
+  <tabstop>resetFrameSystemDistance</tabstop>
+  <tabstop>lastSystemFillThreshold</tabstop>
+  <tabstop>resetLastSystemFillThreshold</tabstop>
   <tabstop>genClef</tabstop>
   <tabstop>genKeysig</tabstop>
   <tabstop>genCourtesyClef</tabstop>
   <tabstop>genCourtesyTimesig</tabstop>
-  <tabstop>genCourtesyKeysig</tabstop>
-  <tabstop>genClef</tabstop>
-  <tabstop>genKeysig</tabstop>
-  <tabstop>genCourtesyClef</tabstop>
   <tabstop>genCourtesyKeysig</tabstop>
   <tabstop>smallStaffSize</tabstop>
   <tabstop>resetSmallStaffSize</tabstop>
@@ -11608,15 +11642,15 @@
   <tabstop>evenFooterR</tabstop>
   <tabstop>showMeasureNumber</tabstop>
   <tabstop>showFirstMeasureNumber</tabstop>
-  <tabstop>showAllStavesMeasureNumber</tabstop>
-  <tabstop>showEverySystemMeasureNumber</tabstop>
-  <tabstop>showIntervalMeasureNumber</tabstop>
-  <tabstop>intervalMeasureNumber</tabstop>
   <tabstop>measureNumberVPlacement</tabstop>
   <tabstop>resetMeasureNumberVPlacement</tabstop>
+  <tabstop>showAllStavesMeasureNumber</tabstop>
   <tabstop>measureNumberHPlacement</tabstop>
   <tabstop>resetMeasureNumberHPlacement</tabstop>
+  <tabstop>showEverySystemMeasureNumber</tabstop>
   <tabstop>resetMeasureNumberPosAbove</tabstop>
+  <tabstop>showIntervalMeasureNumber</tabstop>
+  <tabstop>intervalMeasureNumber</tabstop>
   <tabstop>resetMeasureNumberPosBelow</tabstop>
   <tabstop>bracketWidth</tabstop>
   <tabstop>akkoladeWidth</tabstop>
@@ -11884,13 +11918,18 @@
   <tabstop>radioFBBottom</tabstop>
   <tabstop>radioFBModern</tabstop>
   <tabstop>radioFBHistoric</tabstop>
+  <tabstop>chordsStandard</tabstop>
+  <tabstop>chordsJazz</tabstop>
+  <tabstop>chordsCustom</tabstop>
+  <tabstop>chordDescriptionFile</tabstop>
   <tabstop>chordDescriptionFileButton</tabstop>
+  <tabstop>chordsXmlFile</tabstop>
   <tabstop>extensionMag</tabstop>
   <tabstop>resetExtensionMag</tabstop>
-  <tabstop>extensionAdjust</tabstop>
-  <tabstop>resetExtensionAdjust</tabstop>
   <tabstop>modifierMag</tabstop>
   <tabstop>resetModifierMag</tabstop>
+  <tabstop>extensionAdjust</tabstop>
+  <tabstop>resetExtensionAdjust</tabstop>
   <tabstop>modifierAdjust</tabstop>
   <tabstop>resetModifierAdjust</tabstop>
   <tabstop>useStandardNoteNames</tabstop>
@@ -11898,9 +11937,18 @@
   <tabstop>useFullGermanNoteNames</tabstop>
   <tabstop>useSolfeggioNoteNames</tabstop>
   <tabstop>useFrenchNoteNames</tabstop>
+  <tabstop>automaticCapitalization</tabstop>
   <tabstop>lowerCaseMinorChords</tabstop>
   <tabstop>lowerCaseBassNotes</tabstop>
   <tabstop>allCapsNoteNames</tabstop>
+  <tabstop>harmonyFretDist</tabstop>
+  <tabstop>minHarmonyDistance</tabstop>
+  <tabstop>maxHarmonyBarDistance</tabstop>
+  <tabstop>maxChordShiftAbove</tabstop>
+  <tabstop>resetMaxChordShiftAbove</tabstop>
+  <tabstop>resetMaxChordShiftBelow</tabstop>
+  <tabstop>harmonyPlay</tabstop>
+  <tabstop>capoPosition</tabstop>
   <tabstop>fretY</tabstop>
   <tabstop>fretMag</tabstop>
   <tabstop>fretNumMag</tabstop>
@@ -11910,6 +11958,10 @@
   <tabstop>fretDotSize</tabstop>
   <tabstop>fretStringSpacing</tabstop>
   <tabstop>fretFretSpacing</tabstop>
+  <tabstop>maxFretShiftAbove</tabstop>
+  <tabstop>resetMaxFretShiftAbove</tabstop>
+  <tabstop>maxFretShiftBelow</tabstop>
+  <tabstop>resetMaxFretShiftBelow</tabstop>
   <tabstop>textStyles</tabstop>
   <tabstop>styleName</tabstop>
   <tabstop>resetTextStyleName</tabstop>
@@ -11923,11 +11975,14 @@
   <tabstop>resetTextStyleSpatiumDependent</tabstop>
   <tabstop>resetTextStyleFontStyle</tabstop>
   <tabstop>resetTextStyleAlign</tabstop>
+  <tabstop>textStyleColor</tabstop>
   <tabstop>resetTextStyleColor</tabstop>
   <tabstop>resetTextStyleOffset</tabstop>
   <tabstop>textStyleFrameType</tabstop>
   <tabstop>resetTextStyleFrameType</tabstop>
+  <tabstop>textStyleFrameForeground</tabstop>
   <tabstop>resetTextStyleFrameForeground</tabstop>
+  <tabstop>textStyleFrameBackground</tabstop>
   <tabstop>resetTextStyleFrameBackground</tabstop>
   <tabstop>textStyleFrameBorder</tabstop>
   <tabstop>resetTextStyleFrameBorder</tabstop>
@@ -11935,10 +11990,8 @@
   <tabstop>resetTextStyleFramePadding</tabstop>
   <tabstop>textStyleFrameBorderRadius</tabstop>
   <tabstop>resetTextStyleFrameBorderRadius</tabstop>
+  <tabstop>maxChordShiftBelow</tabstop>
   <tabstop>buttonTogglePagelist</tabstop>
-  <tabstop>textStyleFrameForeground</tabstop>
-  <tabstop>textStyleFrameBackground</tabstop>
-  <tabstop>textStyleColor</tabstop>
  </tabstops>
  <resources>
   <include location="musescore.qrc"/>
