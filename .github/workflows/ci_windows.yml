@@ -72,8 +72,8 @@ jobs:
       shell: cmd
       run: |
         IF ${{ secrets.TELEMETRY_TRACK_ID != 0 }} == true ( SET T_ID=${{ secrets.TELEMETRY_TRACK_ID }} ) ELSE ( SET T_ID="''" )
-        IF ${{ secrets.CRASH_LOG_SERVER_URL != 0 }} == true ( SET C_URL=${{ secrets.CRASH_LOG_SERVER_URL }} ) ELSE ( SET C_URL="''" )
-        build\ci\windows\build.bat -n ${{ github.run_id }} --telemetry %T_ID% --crashurl %C_URL%
+        IF ${{ secrets.SENTRY_SERVER_MU3_KEY != 0 }} == true ( SET C_KEY=${{ secrets.SENTRY_SERVER_MU3_KEY }} ) ELSE ( SET C_KEY="''" )
+        build\ci\windows\build.bat -n ${{ github.run_id }} --telemetry %T_ID% --sentrykey %C_KEY%
     - name: Package 
       if: env.DO_BUILD == 'true'
       shell: cmd
@@ -151,8 +151,8 @@ jobs:
       shell: cmd
       run: |
         IF ${{ secrets.TELEMETRY_TRACK_ID != 0 }} == true ( SET T_ID=${{ secrets.TELEMETRY_TRACK_ID }} ) ELSE ( SET T_ID="''" )
-        IF ${{ secrets.CRASH_LOG_SERVER_URL != 0 }} == true ( SET C_URL=${{ secrets.CRASH_LOG_SERVER_URL }} ) ELSE ( SET C_URL="''" )
-        build\ci\windows\build.bat -b 32 -n ${{ github.run_id }} --telemetry %T_ID% --crashurl %C_URL%
+        IF ${{ secrets.SENTRY_SERVER_MU3_KEY != 0 }} == true ( SET C_KEY=${{ secrets.SENTRY_SERVER_MU3_KEY }} ) ELSE ( SET C_KEY="''" )
+        build\ci\windows\build.bat -b 32 -n ${{ github.run_id }} --telemetry %T_ID% --sentrykey %C_KEY%
     - name: Package 
       if: env.DO_BUILD == 'true'
       shell: cmd
@@ -230,8 +230,8 @@ jobs:
       shell: cmd
       run: |
         IF ${{ secrets.TELEMETRY_TRACK_ID != 0 }} == true ( SET T_ID=${{ secrets.TELEMETRY_TRACK_ID }} ) ELSE ( SET T_ID="''" )
-        IF ${{ secrets.CRASH_LOG_SERVER_URL != 0 }} == true ( SET C_URL=${{ secrets.CRASH_LOG_SERVER_URL }} ) ELSE ( SET C_URL="''" )
-        build\ci\windows\build.bat -b 32 --portable ON -n ${{ github.run_id }} --telemetry %T_ID% --crashurl %C_URL%
+        IF ${{ secrets.SENTRY_SERVER_MU3_KEY != 0 }} == true ( SET C_KEY=${{ secrets.SENTRY_SERVER_MU3_KEY }} ) ELSE ( SET C_KEY="''" )
+        build\ci\windows\build.bat -b 32 --portable ON -n ${{ github.run_id }} --telemetry %T_ID% --sentrykey %C_KEY%
     - name: Package 
       if: env.DO_BUILD == 'true'
       shell: cmd
