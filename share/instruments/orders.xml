@@ -5,6 +5,9 @@
         <instrument id="timpani">
             <family id="timpani">Timpani</family>
         </instrument>
+        <instrument id="harp">
+            <family id="harps">Harps</family>
+        </instrument>
         <section id="woodwind" showSystemMarkings="true">
             <family>flutes</family>
             <family>oboes</family>
@@ -31,6 +34,7 @@
             <family>other-percussion</family>
         </section>
         <family>keyboards</family>
+        <family>harps</family>
         <family>organs</family>
         <family>synths</family>
         <section id="plucked-strings">
