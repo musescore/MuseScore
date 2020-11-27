@@ -1,17 +1,19 @@
 #!/bin/bash
-
-cp ../../../build.debug/mtest/libmscore/spanners/glissando-cloning02.mscx    glissando-cloning02-ref.mscx
-cp ../../../build.debug/mtest/libmscore/spanners/glissando01.mscx            glissando01-ref.mscx
-cp ../../../build.debug/mtest/libmscore/spanners/glissando-cloning01.mscx    glissando-cloning01-ref.mscx
-cp ../../../build.debug/mtest/libmscore/spanners/glissando-cloning02.mscx    glissando-cloning02-ref.mscx
-cp ../../../build.debug/mtest/libmscore/spanners/glissando-cloning03.mscx    glissando-cloning03-ref.mscx
-cp ../../../build.debug/mtest/libmscore/spanners/glissando-cloning04.mscx    glissando-cloning04-ref.mscx
-cp ../../../build.debug/mtest/libmscore/spanners/glissando-cloning05.mscx    glissando-cloning05-ref.mscx
-cp ../../../build.debug/mtest/libmscore/spanners/glissando-crossstaff01.mscx glissando-crossstaff01-ref.mscx
-cp ../../../build.debug/mtest/libmscore/spanners/glissando-graces01.mscx     glissando-graces01-ref.mscx
-cp ../../../build.debug/mtest/libmscore/spanners/lyricsline02.mscx           lyricsline02-ref.mscx
-cp ../../../build.debug/mtest/libmscore/spanners/lyricsline03.mscx           lyricsline03-ref.mscx
-cp ../../../build.debug/mtest/libmscore/spanners/lyricsline04.mscx           lyricsline04-ref.mscx
-cp ../../../build.debug/mtest/libmscore/spanners/lyricsline05.mscx           lyricsline05-ref.mscx
-cp ../../../build.debug/mtest/libmscore/spanners/linecolor01.mscx            linecolor01-ref.mscx
-cp ../../../build.debug/mtest/libmscore/spanners/smallstaff01.mscx           smallstaff01-ref.mscx
+S=build.debug/mtest/libmscore/spanners
+cp $S/glissando-cloning02.mscx    glissando-cloning02-ref.mscx
+cp $S/glissando01.mscx            glissando01-ref.mscx
+cp $S/glissando-cloning01.mscx    glissando-cloning01-ref.mscx
+cp $S/glissando-cloning02.mscx    glissando-cloning02-ref.mscx
+cp $S/glissando-cloning03.mscx    glissando-cloning03-ref.mscx
+cp $S/glissando-cloning04.mscx    glissando-cloning04-ref.mscx
+cp $S/glissando-cloning05.mscx    glissando-cloning05-ref.mscx
+cp $S/glissando-crossstaff01.mscx glissando-crossstaff01-ref.mscx
+cp $S/glissando-graces01.mscx     glissando-graces01-ref.mscx
+cp $S/lyricsline02.mscx           lyricsline02-ref.mscx
+cp $S/lyricsline03.mscx           lyricsline03-ref.mscx
+cp $S/lyricsline04.mscx           lyricsline04-ref.mscx
+cp $S/lyricsline05.mscx           lyricsline05-ref.mscx
+cp $S/linecolor01.mscx            linecolor01-ref.mscx
+cp $S/smallstaff01.mscx           smallstaff01-ref.mscx
+cp $S/linecolor01.mscx            linecolor01-ref.mscx
+cp $S/lyricsline02.mscx           lyricsline02-ref.mscx

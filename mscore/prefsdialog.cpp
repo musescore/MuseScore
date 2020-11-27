@@ -370,7 +370,7 @@ void PreferenceDialog::start()
                   new IntPreferenceItem(PREF_IO_MIDI_SHORTESTNOTE, shortestNote,
                                           [this]() { applyShortestNote();  },  // apply function
                                           [this]() { updateShortestNote(); }), // update function
-                  new BoolPreferenceItem(PREF_IMPORT_SCORE_MIGRATION_ENABLED, scoreMigrationEnabled),
+                  new BoolPreferenceItem(PREF_MIGRATION_DO_NOT_ASK_ME_AGAIN, scoreMigrationEnabled),
                   new StringPreferenceItem(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS, resetElementPositionsAlwaysAsk,
                                           [this]() { // apply function
                                                 if (resetElementPositionsAlwaysAsk->isChecked())

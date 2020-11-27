@@ -281,6 +281,7 @@ void TestMxmlIO::mxmlIoTestRef(const char* file)
 
 void TestMxmlIO::mxmlIoTestRefBreaks(const char* file)
       {
+      QSKIP("Tests show different results every time");
       MScore::debugMode = true;
       preferences.setPreference(PREF_IMPORT_MUSICXML_IMPORTBREAKS, true);
       preferences.setPreference(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, false);

@@ -3,7 +3,7 @@
 if [ "`uname`" = 'Darwin' ]; then
    S=../../../build.xcode/mtest/libmscore/split/Debug
 else
-   S=../../../build.debug/mtest/libmscore/split
+   S=/home/presario/build-MuseScore-Desktop_Qt_5_9_9_GCC_64bit-Debug/mtest/libmscore/split
 fi
 
 cp $S/split08.mscx split08-ref.mscx

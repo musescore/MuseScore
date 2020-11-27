@@ -9,9 +9,28 @@
       <doubleBarDistance>0.46</doubleBarDistance>
       <endBarDistance>0.65</endBarDistance>
       <clefLeftMargin>0.64</clefLeftMargin>
+      <timesigLeftMargin>0.5</timesigLeftMargin>
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
+      <minNoteDistance>0.25</minNoteDistance>
       <barNoteDistance>1.2</barNoteDistance>
+      <barAccidentalDistance>0.3</barAccidentalDistance>
+      <noteBarDistance>1</noteBarDistance>
+      <accidentalNoteDistance>0.22</accidentalNoteDistance>
+      <beamDistance>0.5</beamDistance>
+      <beamMinLen>1.32</beamMinLen>
+      <dotNoteDistance>0.35</dotNoteDistance>
+      <dotDotDistance>0.5</dotDotDistance>
+      <hairpinPosBelow x="0" y="3.5"/>
+      <hairpinHeight>1.2</hairpinHeight>
+      <pedalPosBelow x="0" y="4"/>
+      <trillPosAbove x="0" y="-1"/>
       <harmonyFretDist>0.5</harmonyFretDist>
+      <slurEndWidth>0.07</slurEndWidth>
+      <voltaHook>1.9</voltaHook>
+      <ottavaPosAbove x="0" y="-3"/>
+      <tupletStemLeftDistance>0.5</tupletStemLeftDistance>
+      <tupletNoteLeftDistance>0</tupletNoteLeftDistance>
+      <barGraceDistance>0.6</barGraceDistance>
       <defaultFramePadding>0.5</defaultFramePadding>
       <defaultFrameWidth>0.2</defaultFrameWidth>
       <defaultFrameRound>25</defaultFrameRound>

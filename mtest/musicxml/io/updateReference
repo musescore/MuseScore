@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [ "`uname`" = 'Darwin' ]; then
+   S=../../../build.xcode/mtest/libmscore/split/Debug
+else
+   S=/home/presario/build-MuseScore-Desktop_Qt_5_9_9_GCC_64bit-Debug/mtest/musicxml/io
+fi
+
+cp $S/testBreaksManual.xml testBreaksManual_no_ref.xml
+cp $S/testBreaksManual.xml testBreaksManual_manual_ref.xml
+cp $S/testBreaksManual.xml testBreaksManual_all_ref.xml
+

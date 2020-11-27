@@ -311,6 +311,7 @@ class MScore {
       static void init();
 
       static const MStyle& baseStyle()             { return _baseStyle;            }
+      static void setBaseStyle(const MStyle& style) { _baseStyle = style;          }
       static MStyle& defaultStyle()                { return _defaultStyle;         }
       static const MStyle* defaultStyleForParts()  { return _defaultStyleForParts; }
 
