@@ -246,6 +246,30 @@ const ActionList NotationActions::m_actions = {
     Action("append-measures",
            QT_TRANSLATE_NOOP("action", "Append Measures"),
            ShortcutContext::NotationActive
+           ),
+    Action("insert-hbox",
+           QT_TRANSLATE_NOOP("action", "Insert Horizontal Frame"),
+           ShortcutContext::NotationActive
+           ),
+    Action("insert-vbox",
+           QT_TRANSLATE_NOOP("action", "Insert Vertical Frame"),
+           ShortcutContext::NotationActive
+           ),
+    Action("insert-textframe",
+           QT_TRANSLATE_NOOP("action", "Insert Text Frame"),
+           ShortcutContext::NotationActive
+           ),
+    Action("append-hbox",
+           QT_TRANSLATE_NOOP("action", "Append Horizontal Frame"),
+           ShortcutContext::NotationActive
+           ),
+    Action("append-vbox",
+           QT_TRANSLATE_NOOP("action", "Append Vertical Frame"),
+           ShortcutContext::NotationActive
+           ),
+    Action("append-textframe",
+           QT_TRANSLATE_NOOP("action", "Append Text Frame"),
+           ShortcutContext::NotationActive
            )
 };
 

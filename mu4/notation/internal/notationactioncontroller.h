@@ -42,6 +42,7 @@ private:
     INotationPtr currentNotation() const;
     INotationInteractionPtr currentNotationInteraction() const;
     INotationElementsPtr currentNotationElements() const;
+    INotationSelectionPtr currentNotationSelection() const;
 
     void toggleNoteInput();
     void padNote(const Pad& pad);
@@ -68,10 +69,14 @@ private:
 
     void splitMeasure();
     void joinSelectedMeasures();
-    void insertMeasure();
-    void insertMeasures();
-    void appendMeasure();
-    void appendMeasures();
+    void selectMeasuresCountAndInsert();
+    void selectMeasuresCountAndAppend();
+
+    void insertBox(BoxType boxType);
+    void appendBox(BoxType boxType);
+    void insertBoxes(BoxType boxType, int count);
+    void appendBoxes(BoxType boxType, int count);
+    int firstSelectedBoxIndex() const;
 
     void openPageStyle();
     void openStaffProperties();
@@ -91,8 +96,6 @@ private:
     Fraction resolvePastingScale(const INotationInteractionPtr& interaction, PastingType type) const;
 
     FilterElementsOptions elementsFilterOptions(const Element* element) const;
-
-    int lastSelectedMeasureIndex() const;
 };
 }
 
