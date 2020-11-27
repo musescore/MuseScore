@@ -20,17 +20,16 @@
 #include "inotationelements.h"
 #include "igetscore.h"
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class NotationElements : public INotationElements
 {
 public:
     NotationElements(IGetScore* getScore);
 
-    Ms::Element* search(const std::string& searchCommand) const override;
-    std::vector<Ms::Element*> searchSimilar(const SearchElementOptions* elementOptions) const override;
+    Element* search(const std::string& searchText) const override;
+    std::vector<Element*> elements(const FilterElementsOptions& elementsOptions) const override;
 
-    Ms::Measure* measure(const int measureIndex) const override;
+    Measure* measure(const int measureIndex) const override;
 
 private:
     Ms::Score* score() const;
@@ -38,15 +37,16 @@ private:
     Ms::RehearsalMark* rehearsalMark(const std::string& name) const;
     Ms::Page* page(const int pageIndex) const;
 
-    std::vector<Ms::Element*> searchElements(const SearchElementOptions* elementOptions) const;
-    std::vector<Ms::Element*> searchNotes(const SearchElementOptions* elementOptions) const;
+    std::vector<Element*> allScoreElements() const;
 
-    Ms::ElementPattern* constructElementPattern(const SearchElementOptions* elementOptions) const;
-    Ms::NotePattern* constructNotePattern(const SearchElementOptions* elementOptions) const;
+    std::vector<Element*> filterElements(const FilterElementsOptions* elementsOptions) const;
+    std::vector<Element*> filterNotes(const FilterNotesOptions* notesOptions) const;
+
+    ElementPattern* constructElementPattern(const FilterElementsOptions* elementsOptions) const;
+    Ms::NotePattern* constructNotePattern(const FilterNotesOptions* notesOptions) const;
 
     IGetScore* m_getScore = nullptr;
 };
-}
 }
 
 #endif // MU_NOTATION_NOTATIONELEMENTS_H

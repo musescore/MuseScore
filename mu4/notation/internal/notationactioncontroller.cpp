@@ -378,8 +378,8 @@ void NotationActionController::selectAllSimilarElements()
         return;
     }
 
-    SearchElementOptions* options = elementSearchOptions(selectedElement);
-    std::vector<Element*> elements = notationElements->searchSimilar(options);
+    FilterElementsOptions options = elementsFilterOptions(selectedElement);
+    std::vector<Element*> elements = notationElements->elements(options);
     if (elements.empty()) {
         return;
     }
@@ -402,11 +402,11 @@ void NotationActionController::selectAllSimilarElementsInStaff()
         return;
     }
 
-    SearchElementOptions* options = elementSearchOptions(selectedElement);
-    options->staffStart = selectedElement->staffIdx();
-    options->staffEnd = options->staffStart + 1;
+    FilterElementsOptions options = elementsFilterOptions(selectedElement);
+    options.staffStart = selectedElement->staffIdx();
+    options.staffEnd = options.staffStart + 1;
 
-    std::vector<Element*> elements = notationElements->searchSimilar(options);
+    std::vector<Element*> elements = notationElements->elements(options);
     if (elements.empty()) {
         return;
     }
@@ -428,9 +428,14 @@ void NotationActionController::openSelectionMoreOptions()
         return;
     }
 
-    bool isSelectionNote = interaction->selection()->element()->isNote();
+    auto selection = interaction->selection();
+    if (!selection) {
+        return;
+    }
 
-    if (isSelectionNote) {
+    bool noteSelected = selection->element() && selection->element()->isNote();
+
+    if (noteSelected) {
         interactive()->open("musescore://notation/selectnote");
     } else {
         interactive()->open("musescore://notation/selectelement");
@@ -565,17 +570,17 @@ void NotationActionController::openPartsDialog()
     interactive()->open("musescore://notation/parts");
 }
 
-SearchElementOptions* NotationActionController::elementSearchOptions(const Element* element) const
+FilterElementsOptions NotationActionController::elementsFilterOptions(const Element* element) const
 {
-    SearchElementOptions* options = new SearchElementOptions;
-    options->elementType = element->type();
+    FilterElementsOptions options;
+    options.elementType = element->type();
 
     if (element->type() == ElementType::NOTE) {
         const Ms::Note* note = dynamic_cast<const Ms::Note*>(element);
         if (note->chord()->isGrace()) {
-            options->subtype = -1;
+            options.subtype = -1;
         } else {
-            options->subtype = element->subtype();
+            options.subtype = element->subtype();
         }
     }
 

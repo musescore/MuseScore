@@ -61,7 +61,7 @@ private:
     INotationElementsPtr currentNotationElements() const;
 
     void apply() const;
-    SearchElementOptions* elementOptions() const;
+    FilterElementsOptions elementOptions() const;
 
     Ms::System* elementSystem(const Element* element) const;
 

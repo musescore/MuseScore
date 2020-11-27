@@ -90,39 +90,39 @@ int SelectDialog::metaTypeId()
 //   setPattern
 //---------------------------------------------------------
 
-SearchElementOptions* SelectDialog::elementOptions() const
+FilterElementsOptions SelectDialog::elementOptions() const
 {
-    SearchElementOptions* options = new SearchElementOptions();
-    options->elementType = m_element->type();
-    options->subtype = m_element->subtype();
+    FilterElementsOptions options;
+    options.elementType = m_element->type();
+    options.subtype = m_element->subtype();
     if (m_element->isSlurSegment()) {
         const SlurSegment* slurSegment = dynamic_cast<const SlurSegment*>(m_element);
-        options->subtype = static_cast<int>(slurSegment->spanner()->type());
+        options.subtype = static_cast<int>(slurSegment->spanner()->type());
     }
 
     if (sameStaff->isChecked()) {
-        options->staffStart = m_element->staffIdx();
-        options->staffEnd = m_element->staffIdx() + 1;
+        options.staffStart = m_element->staffIdx();
+        options.staffEnd = m_element->staffIdx() + 1;
     } else if (inSelection->isChecked()) {
-        options->staffStart = m_element->score()->selection().staffStart();
-        options->staffEnd = m_element->score()->selection().staffEnd();
+        options.staffStart = m_element->score()->selection().staffStart();
+        options.staffEnd = m_element->score()->selection().staffEnd();
     } else {
-        options->staffStart = -1;
-        options->staffEnd = -1;
+        options.staffStart = -1;
+        options.staffEnd = -1;
     }
 
     if (sameDuration->isChecked() && m_element->isRest()) {
         const Rest* rest = dynamic_cast<const Rest*>(m_element);
-        options->durationTicks = rest->actualTicks();
+        options.durationTicks = rest->actualTicks();
     } else {
-        options->durationTicks = Fraction(-1, 1);
+        options.durationTicks = Fraction(-1, 1);
     }
 
-    options->voice = sameVoice->isChecked() ? m_element->voice() : -1;
-    options->bySubtype = sameSubtype->isChecked();
+    options.voice = sameVoice->isChecked() ? m_element->voice() : -1;
+    options.bySubtype = sameSubtype->isChecked();
 
     if (sameSystem->isChecked()) {
-        options->system = elementSystem(m_element);
+        options.system = elementSystem(m_element);
     }
 
     return options;
@@ -229,9 +229,9 @@ void SelectDialog::apply() const
         return;
     }
 
-    SearchElementOptions* options = this->elementOptions();
+    FilterElementsOptions options = elementOptions();
 
-    std::vector<Element*> elements = notationElements->searchSimilar(options);
+    std::vector<Element*> elements = notationElements->elements(options);
     if (elements.empty()) {
         return;
     }

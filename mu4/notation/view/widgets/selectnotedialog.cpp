@@ -73,49 +73,50 @@ int SelectNoteDialog::metaTypeId()
     return QMetaType::type("SelectNoteDialog");
 }
 
-SearchNoteOptions* SelectNoteDialog::noteOptions() const
+FilterNotesOptions SelectNoteDialog::noteOptions() const
 {
-    SearchNoteOptions* options = new SearchNoteOptions();
+    FilterNotesOptions options;
+    options.elementType = ElementType::NOTE;
     if (sameNotehead->isChecked()) {
-        options->notehead = m_note->headGroup();
+        options.notehead = m_note->headGroup();
     }
     if (samePitch->isChecked()) {
-        options->pitch = m_note->pitch();
+        options.pitch = m_note->pitch();
     }
     if (sameString->isChecked()) {
-        options->string = m_note->string();
+        options.string = m_note->string();
     }
     if (sameName->isChecked()) {
-        options->tpc = m_note->tpc();
+        options.tpc = m_note->tpc();
     }
     if (sameType->isChecked()) {
-        options->noteType = m_note->noteType();
+        options.noteType = m_note->noteType();
     }
     if (sameDurationType->isChecked()) {
-        options->durationType = m_note->chord()->actualDurationType();
+        options.durationType = m_note->chord()->actualDurationType();
     }
 
     if (sameDurationTicks->isChecked()) {
-        options->durationTicks = m_note->chord()->actualTicks();
+        options.durationTicks = m_note->chord()->actualTicks();
     } else {
-        options->durationTicks = Ms::Fraction(-1, 1);
+        options.durationTicks = Ms::Fraction(-1, 1);
     }
 
     if (sameStaff->isChecked()) {
-        options->staffStart = m_note->staffIdx();
-        options->staffEnd = m_note->staffIdx() + 1;
+        options.staffStart = m_note->staffIdx();
+        options.staffEnd = m_note->staffIdx() + 1;
     } else if (inSelection->isChecked()) {
-        options->staffStart = m_note->score()->selection().staffStart();
-        options->staffEnd = m_note->score()->selection().staffEnd();
+        options.staffStart = m_note->score()->selection().staffStart();
+        options.staffEnd = m_note->score()->selection().staffEnd();
     } else {
-        options->staffStart = -1;
-        options->staffEnd = -1;
+        options.staffStart = -1;
+        options.staffEnd = -1;
     }
 
-    options->voice = sameVoice->isChecked() ? m_note->voice() : -1;
-    options->system = nullptr;
+    options.voice = sameVoice->isChecked() ? m_note->voice() : -1;
+    options.system = nullptr;
     if (sameSystem->isChecked()) {
-        options->system = m_note->chord()->segment()->system();
+        options.system = m_note->chord()->segment()->system();
     }
 
     return options;
@@ -215,9 +216,9 @@ void SelectNoteDialog::apply() const
         return;
     }
 
-    SearchElementOptions* options = noteOptions();
+    FilterElementsOptions options = noteOptions();
 
-    std::vector<Element*> elements = notationElements->searchSimilar(options);
+    std::vector<Element*> elements = notationElements->elements(options);
     if (elements.empty()) {
         return;
     }

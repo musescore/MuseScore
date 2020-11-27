@@ -33,7 +33,7 @@ void SearchPopupModel::search(const QString& text)
 {
     Ms::Element* element = notation()->elements()->search(text.toStdString());
     if (element) {
-        notation()->interaction()->select(element, SelectType::SINGLE);
+        notation()->interaction()->select({ element }, SelectType::SINGLE);
     } else {
         notation()->interaction()->clearSelection();
     }
