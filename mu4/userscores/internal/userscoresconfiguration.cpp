@@ -47,6 +47,7 @@ void UserScoresConfiguration::init()
 
 ValCh<QStringList> UserScoresConfiguration::recentScoreList() const
 {
+    TRACEFUNC;
     ValCh<QStringList> result;
     result.ch = m_recentListChanged;
     result.val = parseRecentList(settings()->value(RECENT_LIST).toString());
