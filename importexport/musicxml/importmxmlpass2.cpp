@@ -473,13 +473,17 @@ static Instrument createInstrument(const MusicXMLInstrument& mxmlInstr, const In
 //   updatePartWithInstrument
 //---------------------------------------------------------
 
-static void updatePartWithInstrument(Part* const part, const MusicXMLInstrument& mxmlInstr, const Interval interval)
+static void updatePartWithInstrument(Part* const part, const MusicXMLInstrument& mxmlInstr, const Interval interval, const bool hasDrumset = false)
       {
-      const Instrument instr = createInstrument(mxmlInstr, interval);
+      Instrument instr = createInstrument(mxmlInstr, interval);
+      if (hasDrumset)
+            instr.channel(0)->setBank(128);
       part->setInstrument(instr);
-      if (mxmlInstr.midiChannel >= 0) part->setMidiChannel(mxmlInstr.midiChannel, mxmlInstr.midiPort);
+      if (mxmlInstr.midiChannel >= 0)
+            part->setMidiChannel(mxmlInstr.midiChannel, mxmlInstr.midiPort);
       // note: setMidiProgram() does more than simply setting the MIDI program
-      if (mxmlInstr.midiProgram >= 0) part->setMidiProgram(mxmlInstr.midiProgram);
+      if (mxmlInstr.midiProgram >= 0)
+            part->setMidiProgram(mxmlInstr.midiProgram);
       }
 
 //---------------------------------------------------------
@@ -546,7 +550,7 @@ static void setPartInstruments(MxmlLogger* logger, const QXmlStreamReader* const
             // do not create multiple instruments for a drum part
             //qDebug("hasDrumset");
             MusicXMLInstrument mxmlInstr = instruments.first();
-            updatePartWithInstrument(part, mxmlInstr, {});
+            updatePartWithInstrument(part, mxmlInstr, {}, true);
             return;
             }
 
