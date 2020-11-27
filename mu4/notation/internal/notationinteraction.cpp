@@ -1958,9 +1958,9 @@ void NotationInteraction::splitSelectedMeasure()
 
     ChordRest* chordRest = dynamic_cast<ChordRest*>(selectedElement);
 
-    score()->startCmd();
+    m_undoStack->prepareChanges();
     score()->cmdSplitMeasure(chordRest);
-    score()->endCmd();
+    m_undoStack->commitChanges();
 
     m_selectionChanged.notify();
 }
@@ -1974,51 +1974,41 @@ void NotationInteraction::joinSelectedMeasures()
     Measure* measureStart = score()->crMeasure(m_selection->range()->startMeasureIndex() - 1);
     Measure* measureEnd = score()->crMeasure(m_selection->range()->endMeasureIndex() - 1);
 
-    score()->startCmd();
+    m_undoStack->prepareChanges();
     score()->cmdJoinMeasure(measureStart, measureEnd);
-    score()->endCmd();
+    m_undoStack->commitChanges();
 
     m_selectionChanged.notify();
 }
 
-void NotationInteraction::insertMeasures(int afterMeasureIndex, int count)
+void NotationInteraction::addBoxes(BoxType boxType, int count, int beforeBoxIndex)
 {
-    Measure* measure = score()->crMeasure(afterMeasureIndex);
+    auto boxTypeToElementType = [](BoxType boxType) {
+                                    switch (boxType) {
+                                    case BoxType::Horizontal: return ElementType::HBOX;
+                                    case BoxType::Vertical: return ElementType::VBOX;
+                                    case BoxType::Text: return ElementType::TBOX;
+                                    case BoxType::Measure: return ElementType::MEASURE;
+                                    case BoxType::Unknown: return ElementType::INVALID;
+                                    }
 
-    if (!measure) {
-        return;
+                                    return ElementType::INVALID;
+                                };
+
+    ElementType elementType = boxTypeToElementType(boxType);
+    MeasureBase* beforeBox = beforeBoxIndex >= 0 ? score()->measure(beforeBoxIndex) : nullptr;
+
+    m_undoStack->prepareChanges();
+    for (int i = 0; i < count; ++i) {
+        constexpr bool createEmptyMeasures = false;
+        constexpr bool moveSignaturesClef = true;
+        constexpr bool needDeselectAll = false;
+
+        score()->insertMeasure(elementType, beforeBox, createEmptyMeasures, moveSignaturesClef, needDeselectAll);
     }
+    m_undoStack->commitChanges();
 
-    score()->startCmd();
-    for (int i = 0; i < count; i++) {
-        score()->insertMeasure(ElementType::MEASURE, measure);
-    }
-    score()->endCmd();
-
-    clearSelection();
-
-    for (int i = afterMeasureIndex + 1; i <= afterMeasureIndex + count; i++) {
-        Measure* measure = score()->crMeasure(i - 1);
-        select({ measure }, SelectType::RANGE);
-    }
-}
-
-void NotationInteraction::appendMeasures(int count)
-{
-    int measureCount = score()->measures()->size();
-
-    score()->startCmd();
-    for (int i = 0; i < count; i++) {
-        score()->insertMeasure(ElementType::MEASURE, nullptr);
-    }
-    score()->endCmd();
-
-    clearSelection();
-
-    for (int i = measureCount; i < measureCount + count; i++) {
-        Measure* measure = score()->crMeasure(i - 1);
-        select({ measure }, SelectType::RANGE);
-    }
+    m_notation->notifyAboutNotationChanged();
 }
 
 void NotationInteraction::copySelection()

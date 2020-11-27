@@ -1171,7 +1171,10 @@ public:
     void cmdSelectSection();
     void respace(std::vector<ChordRest*>* elements);
     void transposeSemitone(int semitone);
-    void insertMeasure(ElementType type, MeasureBase*, bool createEmptyMeasures = false,bool moveSignaturesClef = true);
+
+    void insertMeasure(ElementType type, MeasureBase*, bool createEmptyMeasures = false, bool moveSignaturesClef = true,
+                       bool needDeselectAll = true);
+
     Audio* audio() const { return _audio; }
     void setAudio(Audio* a) { _audio = a; }
     PlayMode playMode() const { return _playMode; }

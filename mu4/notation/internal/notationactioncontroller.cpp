@@ -26,6 +26,8 @@
 using namespace mu::notation;
 using namespace mu::actions;
 
+static constexpr int INVALID_BOX_INDEX = -1;
+
 void NotationActionController::init()
 {
     dispatcher()->reg(this, "note-input", this, &NotationActionController::toggleNoteInput);
@@ -84,10 +86,16 @@ void NotationActionController::init()
 
     dispatcher()->reg(this, "split-measure", this, &NotationActionController::splitMeasure);
     dispatcher()->reg(this, "join-measures", this, &NotationActionController::joinSelectedMeasures);
-    dispatcher()->reg(this, "insert-measure", this, &NotationActionController::insertMeasure);
-    dispatcher()->reg(this, "insert-measures", this, &NotationActionController::insertMeasures);
-    dispatcher()->reg(this, "append-measure", this, &NotationActionController::appendMeasure);
-    dispatcher()->reg(this, "append-measures", this, &NotationActionController::appendMeasures);
+    dispatcher()->reg(this, "insert-measures", this, &NotationActionController::selectMeasuresCountAndInsert);
+    dispatcher()->reg(this, "append-measures", this, &NotationActionController::selectMeasuresCountAndAppend);
+    dispatcher()->reg(this, "insert-measure", [this]() { insertBox(BoxType::Measure); });
+    dispatcher()->reg(this, "append-measure", [this]() { appendBox(BoxType::Measure); });
+    dispatcher()->reg(this, "insert-hbox", [this]() { insertBox(BoxType::Horizontal); });
+    dispatcher()->reg(this, "insert-vbox", [this]() { insertBox(BoxType::Vertical); });
+    dispatcher()->reg(this, "insert-textframe", [this]() { insertBox(BoxType::Text); });
+    dispatcher()->reg(this, "append-hbox", [this]() { appendBox(BoxType::Horizontal); });
+    dispatcher()->reg(this, "append-vbox", [this]() { appendBox(BoxType::Vertical); });
+    dispatcher()->reg(this, "append-textframe", [this]() { appendBox(BoxType::Text); });
 
     dispatcher()->reg(this, "edit-style", this, &NotationActionController::openPageStyle);
     dispatcher()->reg(this, "staff-properties", this, &NotationActionController::openStaffProperties);
@@ -116,22 +124,17 @@ INotationPtr NotationActionController::currentNotation() const
 
 INotationInteractionPtr NotationActionController::currentNotationInteraction() const
 {
-    auto notation = currentNotation();
-    if (!notation) {
-        return nullptr;
-    }
+    return currentNotation() ? currentNotation()->interaction() : nullptr;
+}
 
-    return notation->interaction();
+INotationSelectionPtr NotationActionController::currentNotationSelection() const
+{
+    return currentNotationInteraction() ? currentNotationInteraction()->selection() : nullptr;
 }
 
 INotationElementsPtr NotationActionController::currentNotationElements() const
 {
-    auto notation = currentNotation();
-    if (!notation) {
-        return nullptr;
-    }
-
-    return notation->elements();
+    return currentNotation() ? currentNotation()->elements() : nullptr;
 }
 
 void NotationActionController::toggleNoteInput()
@@ -472,66 +475,77 @@ void NotationActionController::joinSelectedMeasures()
     interaction->joinSelectedMeasures();
 }
 
-void NotationActionController::insertMeasure()
+void NotationActionController::insertBoxes(BoxType boxType, int count)
 {
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
     }
 
-    int lastSelectedMeasureIndex = this->lastSelectedMeasureIndex();
+    int firstSelectedBoxIndex = this->firstSelectedBoxIndex();
 
-    if (lastSelectedMeasureIndex == -1) {
+    if (firstSelectedBoxIndex == INVALID_BOX_INDEX) {
         return;
     }
 
-    interaction->insertMeasures(lastSelectedMeasureIndex, 1);
+    interaction->addBoxes(boxType, count, firstSelectedBoxIndex);
 }
 
-void NotationActionController::insertMeasures()
+void NotationActionController::insertBox(BoxType boxType)
+{
+    insertBoxes(boxType, 1);
+}
+
+int NotationActionController::firstSelectedBoxIndex() const
+{
+    int result = INVALID_BOX_INDEX;
+
+    auto selection = currentNotationSelection();
+    if (!selection) {
+        return result;
+    }
+
+    if (selection->isRange()) {
+        result = selection->range()->startMeasureIndex();
+    } else if (selection->element()) {
+        Measure* measure = selection->element()->findMeasure();
+        result = measure ? measure->index() : INVALID_BOX_INDEX;
+    }
+
+    return result;
+}
+
+void NotationActionController::appendBoxes(BoxType boxType, int count)
 {
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
     }
 
-    int lastSelectedMeasureIndex = this->lastSelectedMeasureIndex();
+    interaction->addBoxes(boxType, count);
+}
 
-    if (lastSelectedMeasureIndex == -1) {
-        return;
-    }
+void NotationActionController::appendBox(BoxType boxType)
+{
+    appendBoxes(boxType, 1);
+}
 
+void NotationActionController::selectMeasuresCountAndInsert()
+{
     RetVal<Val> measureCount = interactive()->open("musescore://notation/selectmeasurescount?operation=insert");
-    if (!measureCount.ret) {
-        return;
-    }
 
-    interaction->insertMeasures(lastSelectedMeasureIndex, measureCount.val.toInt());
+    if (measureCount.ret) {
+        insertBoxes(BoxType::Measure, measureCount.val.toInt());
+    }
 }
 
-void NotationActionController::appendMeasure()
+void NotationActionController::selectMeasuresCountAndAppend()
 {
-    auto interaction = currentNotationInteraction();
-    if (!interaction) {
-        return;
+    RetVal<Val> measureCount = interactive()->open("musescore://notation/selectmeasurescount?operation=append");
+
+    if (measureCount.ret) {
+        appendBoxes(BoxType::Measure, measureCount.val.toInt());
     }
-
-    interaction->appendMeasures(1);
-}
-
-void NotationActionController::appendMeasures()
-{
-    auto interaction = currentNotationInteraction();
-    if (!interaction) {
-        return;
-    }
-
-    RetVal<Val> measureCount = interactive()->open("musescore://notation/selectcountmeasures?operation=append");
-    if (!measureCount.ret) {
-        return;
-    }
-
-    interaction->appendMeasures(measureCount.val.toInt());
 }
 
 void NotationActionController::openPageStyle()
@@ -585,22 +599,4 @@ FilterElementsOptions NotationActionController::elementsFilterOptions(const Elem
     }
 
     return options;
-}
-
-int NotationActionController::lastSelectedMeasureIndex() const
-{
-    int result = -1;
-
-    auto interaction = currentNotationInteraction();
-    if (!interaction) {
-        return result;
-    }
-
-    if (interaction->selection()->isRange()) {
-        result = interaction->selection()->range()->endMeasureIndex();
-    } else {
-        result = interaction->selection()->element()->findMeasure()->index();
-    }
-
-    return result;
 }

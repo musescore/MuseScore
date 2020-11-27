@@ -91,11 +91,10 @@ public:
     virtual void changeTextCursorPosition(const QPointF& newCursorPos) = 0;
     virtual async::Notification textEditingChanged() const = 0;
 
-    // Measure
     virtual void splitSelectedMeasure() = 0;
     virtual void joinSelectedMeasures() = 0;
-    virtual void insertMeasures(int afterMeasureIndex, int count) = 0;
-    virtual void appendMeasures(int count) = 0;
+
+    virtual void addBoxes(BoxType boxType, int count, int beforeBoxIndex = -1) = 0;
 
     virtual void copySelection() = 0;
     virtual void pasteSelection(const Fraction& scale = Fraction(1, 1)) = 0;
