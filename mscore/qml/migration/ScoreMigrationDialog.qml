@@ -57,14 +57,14 @@ FocusScope {
 
                 font.family: globalStyle.font.family
                 font.bold: true
-                font.pixelSize: 26
+                font.pixelSize: 24
                 color: globalStyle.buttonText
                 wrapMode: Text.WordWrap
                 horizontalAlignment: Qt.AlignHCenter
                 Accessible.role: Accessible.StaticText
                 Accessible.name: text
 
-                text: qsTr("Try our improved style settings")
+                text: qsTr("Would you like to try our improved score style?")
             }
 
             Image {
@@ -78,45 +78,39 @@ FocusScope {
 
             spacing: 8
 
-            Text {
-                Layout.fillWidth: true
-
-                font.family: globalStyle.font.family
-                font.bold: true
-                font.pixelSize: 14
-                color: globalStyle.buttonText
-                wrapMode: Text.WordWrap
-                horizontalAlignment: Qt.AlignLeft
-                Accessible.role: Accessible.StaticText
-                Accessible.name: text
-
-                text: qsTr("Here are some big improvements you can apply to your score:")
-            }
-
             CheckBoxControl {
-                checked: root.model ? root.model.areStylingImprovementsAllowed : false
-                text: qsTr("Our professional style, spacing and font")
+                checked: root.model ? root.model.isLelandAllowed : false
+                text: qsTr("Our new professional notation font")
 
                 onToggled: {
-                    root.model.areStylingImprovementsAllowed = checked
+                    root.model.isLelandAllowed = checked
                 }
             }
 
             CheckBoxControl {
-                checked: root.model ? root.model.areInstrumentsImprovementsAllowed : false
-                text: qsTr("Instrument ordering & bracketing (configurable in the \'instruments\' dialog)")
+                checked: root.model ? root.model.isEdwinAllowed : false
+                text: qsTr("Our improved text font")
 
                 onToggled: {
-                    root.model.areInstrumentsImprovementsAllowed = checked
+                    root.model.isEdwinAllowed = checked
+                }
+            }
+
+            CheckBoxControl {
+                visible: root.model ? root.model.isAutomaticPlacementAvailable : false
+                checked: root.model ? root.model.isAutomaticPlacementAllowed : false
+                text: qsTr("Automatic placement (spacing changes introduced in V3.0)")
+
+                onToggled: {
+                    root.model.isAutomaticPlacementAllowed = checked
                 }
             }
 
             Text {
-                Layout.fillWidth: true
                 Layout.topMargin: 12
+                Layout.fillWidth: true
 
                 font.family: globalStyle.font.family
-                font.bold: true
                 font.pixelSize: 14
                 color: globalStyle.buttonText
                 wrapMode: Text.WordWrap
@@ -124,15 +118,8 @@ FocusScope {
                 Accessible.role: Accessible.StaticText
                 Accessible.name: text
 
-                text: qsTr("<a href=\"https://musescore.com\">Learn more</a>") // TODO link to official announcement
-
-                onLinkActivated: {
-                    if (!root.model) {
-                        return
-                    }
-
-                    root.model.showMoreDetails()
-                }
+                text: root.model ? qsTr("Since this file was created in MuseScore %1, some layout changes may occur.").arg(root.model.creationAppVersion)
+                                 : ""
             }
         }
 
@@ -150,18 +137,6 @@ FocusScope {
 
             CheckBoxControl {
                 Layout.alignment: Qt.AlignLeft
-                Layout.fillWidth: true
-
-                checked: root.model ? root.model.shouldNeverAskForThisScoreAgain : false
-                text: qsTr("Don't ask again for this score")
-
-                onToggled: {
-                    root.model.shouldNeverAskForThisScoreAgain = checked
-                }
-            }
-
-            CheckBoxControl {
-                Layout.alignment: Qt.AlignHCenter
                 Layout.fillWidth: true
 
                 checked: root.model ? root.model.shouldNeverAskAgain : false
@@ -183,7 +158,8 @@ FocusScope {
             StyledButton {
                 id: ignoreButton
                 Layout.fillWidth: true
-                text: qsTr("Ignore")
+                Layout.preferredWidth: parent.width / 2
+                text: qsTr("Keep old style")
 
                 focus: true
 
@@ -198,7 +174,8 @@ FocusScope {
 
             StyledButton {
                 Layout.fillWidth: true
-                text: qsTr("Apply")
+                Layout.preferredWidth: parent.width / 2
+                text: qsTr("Apply new style")
 
                 enabled: root.model ? root.model.isApplyingAvailable : false
 

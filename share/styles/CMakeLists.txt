@@ -20,6 +20,7 @@
 install(FILES
       Leland.mss
       MuseJazz.mss
+      Pre-3.6-defaults.mss
       chords_std.xml
       chords_jazz.xml
       chords.xml

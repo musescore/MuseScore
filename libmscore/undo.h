@@ -677,10 +677,12 @@ class ChangePart : public UndoCommand {
 class ChangeStyle : public UndoCommand {
       Score* score;
       MStyle style;
+      bool overlap = false;
       void flip(EditData*) override;
+      void undo(EditData*) override;
 
    public:
-      ChangeStyle(Score*, const MStyle&);
+      ChangeStyle(Score*, const MStyle&, const bool overlapOnly = false);
       UNDO_NAME("ChangeStyle")
       };
 

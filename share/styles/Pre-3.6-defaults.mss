@@ -128,6 +128,5 @@
     <palmMuteFontFace>FreeSerif</palmMuteFontFace>
     <fermataPosAbove x="0" y="-1"/>
     <fermataPosBelow x="0" y="1"/>
-    <qualityUpgradeAllowed>0</qualityUpgradeAllowed>
     </Style>
   </museScore>

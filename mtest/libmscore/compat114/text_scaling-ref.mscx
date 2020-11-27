@@ -10,15 +10,22 @@
       <bracketWidth>0.35</bracketWidth>
       <bracketDistance>0.25</bracketDistance>
       <clefLeftMargin>0.5</clefLeftMargin>
+      <timesigLeftMargin>0.5</timesigLeftMargin>
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
       <clefBarlineDistance>0.18</clefBarlineDistance>
       <minNoteDistance>0.4</minNoteDistance>
       <barNoteDistance>1.2</barNoteDistance>
+      <noteBarDistance>1</noteBarDistance>
       <measureSpacing>1.14</measureSpacing>
       <ledgerLineWidth>0.12</ledgerLineWidth>
+      <accidentalNoteDistance>0.22</accidentalNoteDistance>
       <beamWidth>0.48</beamWidth>
+      <beamDistance>0.5</beamDistance>
       <beamMinLen>1.25</beamMinLen>
+      <dotNoteDistance>0.35</dotNoteDistance>
+      <dotDotDistance>0.5</dotDotDistance>
       <propertyDistanceStem>0.5</propertyDistanceStem>
+      <hairpinHeight>1.2</hairpinHeight>
       <chordStyle>custom</chordStyle>
       <chordsXmlFile>1</chordsXmlFile>
       <chordDescriptionFile>stdchords.xml</chordDescriptionFile>
@@ -26,6 +33,8 @@
       <voltaPosAbove x="0" y="-2"/>
       <keySigNaturals>1</keySigNaturals>
       <tupletOufOfStaff>0</tupletOufOfStaff>
+      <tupletStemLeftDistance>0.5</tupletStemLeftDistance>
+      <tupletNoteLeftDistance>0</tupletNoteLeftDistance>
       <Spatium>0.764</Spatium>
       </Style>
     <showInvisible>1</showInvisible>

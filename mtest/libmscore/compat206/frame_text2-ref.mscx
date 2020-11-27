@@ -30,18 +30,32 @@
       <doubleBarDistance>0.46</doubleBarDistance>
       <endBarDistance>0.65</endBarDistance>
       <clefLeftMargin>0.64</clefLeftMargin>
+      <timesigLeftMargin>0.5</timesigLeftMargin>
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
+      <minNoteDistance>0.25</minNoteDistance>
       <barNoteDistance>1.2</barNoteDistance>
+      <barAccidentalDistance>0.3</barAccidentalDistance>
+      <noteBarDistance>1</noteBarDistance>
+      <accidentalNoteDistance>0.22</accidentalNoteDistance>
+      <beamDistance>0.5</beamDistance>
+      <beamMinLen>1.32</beamMinLen>
+      <dotNoteDistance>0.35</dotNoteDistance>
+      <dotDotDistance>0.5</dotDotDistance>
+      <hairpinPosBelow x="0" y="3.5"/>
+      <hairpinHeight>1.2</hairpinHeight>
       <hairpinFontFace>FreeSerif</hairpinFontFace>
       <hairpinFramePadding>0</hairpinFramePadding>
       <hairpinFrameWidth>0</hairpinFrameWidth>
+      <pedalPosBelow x="0" y="4"/>
       <pedalFontFace>FreeSerif</pedalFontFace>
       <pedalFramePadding>0</pedalFramePadding>
       <pedalFrameWidth>0</pedalFrameWidth>
+      <trillPosAbove x="0" y="-1"/>
       <harmonyFretDist>0.5</harmonyFretDist>
       <chordSymbolAFontFace>FreeSerif</chordSymbolAFontFace>
       <chordSymbolAFramePadding>0</chordSymbolAFramePadding>
       <chordSymbolAFrameWidth>0</chordSymbolAFrameWidth>
+      <slurEndWidth>0.07</slurEndWidth>
       <showHeader>1</showHeader>
       <headerFirstPage>1</headerFirstPage>
       <evenHeaderL>$p</evenHeaderL>
@@ -51,10 +65,12 @@
       <evenFooterC>$C</evenFooterC>
       <oddFooterC>$C</oddFooterC>
       <oddFooterR></oddFooterR>
+      <voltaHook>1.9</voltaHook>
       <voltaFontFace>FreeSerif</voltaFontFace>
       <voltaFontSize>10</voltaFontSize>
       <voltaFramePadding>0</voltaFramePadding>
       <voltaFrameWidth>0</voltaFrameWidth>
+      <ottavaPosAbove x="0" y="-3"/>
       <ottavaHookAbove>0.5</ottavaHookAbove>
       <ottavaHookBelow>-0.5</ottavaHookBelow>
       <ottavaFontFace>FreeSerif</ottavaFontFace>
@@ -64,10 +80,13 @@
       <keySigNaturals>1</keySigNaturals>
       <tupletVHeadDistance>0</tupletVHeadDistance>
       <tupletVStemDistance>0</tupletVStemDistance>
+      <tupletStemLeftDistance>0.5</tupletStemLeftDistance>
+      <tupletNoteLeftDistance>0</tupletNoteLeftDistance>
       <tupletFontFace>FreeSerif</tupletFontFace>
-      <tupletFontSize>9</tupletFontSize>
+      <tupletFontStyle>2</tupletFontStyle>
       <tupletFramePadding>0</tupletFramePadding>
       <tupletFrameWidth>0</tupletFrameWidth>
+      <barGraceDistance>0.6</barGraceDistance>
       <textLineFramePadding>0</textLineFramePadding>
       <textLineFrameWidth>0</textLineFrameWidth>
       <defaultFontFace>FreeSerif</defaultFontFace>
@@ -141,6 +160,7 @@
       <metronomeFramePadding>0</metronomeFramePadding>
       <metronomeFrameWidth>0</metronomeFrameWidth>
       <measureNumberFontFace>FreeSerif</measureNumberFontFace>
+      <measureNumberFontStyle>0</measureNumberFontStyle>
       <measureNumberAlign>center,bottom</measureNumberAlign>
       <measureNumberFramePadding>0</measureNumberFramePadding>
       <measureNumberFrameWidth>0</measureNumberFrameWidth>
@@ -188,7 +208,7 @@
       <bendFramePadding>0</bendFramePadding>
       <bendFrameWidth>0</bendFrameWidth>
       <headerFontFace>FreeSerif</headerFontFace>
-      <headerFontSize>11</headerFontSize>
+      <headerFontStyle>0</headerFontStyle>
       <headerAlign>center,top</headerAlign>
       <headerFramePadding>0</headerFramePadding>
       <headerFrameWidth>0</headerFrameWidth>

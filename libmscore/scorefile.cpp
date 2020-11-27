@@ -703,13 +703,13 @@ bool Score::saveFile(QFileInfo& info)
 //   loadStyle
 //---------------------------------------------------------
 
-bool Score::loadStyle(const QString& fn, bool ign)
+bool Score::loadStyle(const QString& fn, bool ign, const bool overlap)
       {
       QFile f(fn);
       if (f.open(QIODevice::ReadOnly)) {
             MStyle st = style();
             if (st.load(&f, ign)) {
-                  undo(new ChangeStyle(this, st));
+                  undo(new ChangeStyle(this, st, overlap));
                   return true;
                   }
              else {

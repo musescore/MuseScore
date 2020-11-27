@@ -2601,7 +2601,8 @@ void MuseScore::reloadInstrumentTemplates()
 
 void MuseScore::askResetOldScorePositions(Score* score)
       {
-      if (preferences.getBool(PREF_IMPORT_SCORE_MIGRATION_ENABLED) && score->mscVersion() < MSCVERSION && score->styleB(Sid::qualityUpgradeAllowed)) {
+      if (!preferences.getBool(PREF_MIGRATION_DO_NOT_ASK_ME_AGAIN) && score->mscVersion() < MSCVERSION) {
+
             ScoreMigrationDialog* migrationDialog = new ScoreMigrationDialog(mscore->getQmlUiEngine(), score);
 
             migrationDialog->show();

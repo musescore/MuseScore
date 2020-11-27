@@ -3,8 +3,10 @@
 if [ "`uname`" = 'Darwin' ]; then
    S=../../../build.xcode/mtest/libmscore/tuplet/Debug
 else
-   S=../../../build.debug/mtest/libmscore/tuplet
+   S=/home/presario/build-MuseScore-Desktop_Qt_5_9_9_GCC_64bit-Debug/mtest/libmscore/tuplet
 fi
+
+cp $S/save-load.mscx save-load.mscx
 
 for a in 1; do
       cp $S/tuplet${a}.mscx tuplet${a}-ref.mscx

@@ -885,8 +885,8 @@ class Score : public QObject, public ScoreElement {
       virtual MStyle& style()              { return _style;                  }
       virtual const MStyle& style() const  { return _style;                  }
 
-      void setStyle(const MStyle& s);
-      bool loadStyle(const QString&, bool ign = false);
+      void setStyle(const MStyle& s, const bool overlap = false);
+      bool loadStyle(const QString&, bool ign = false, const bool overlap = false);
       bool saveStyle(const QString&);
 
       QVariant styleV(Sid idx) const  { return style().value(idx);   }

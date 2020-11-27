@@ -1403,7 +1403,7 @@ enum class Sid {
       tupletMinDistance,
 
       autoplaceEnabled,
-      qualityUpgradeAllowed,
+      usePre_3_6_defaults,
 
       STYLES
       ///\}
@@ -1442,6 +1442,7 @@ class MStyle {
 
       bool load(QFile* qf, bool ign = false);
       void load(XmlReader& e);
+      void applyNewDefaults(const MStyle& other);
       void save(XmlWriter& xml, bool optimize);
       bool readProperties(XmlReader&);
       bool readStyleValCompat(XmlReader&);

@@ -186,9 +186,10 @@ add_library(mscoreapp STATIC
       templateBrowser.h textcursor.h textpalette.h texttools.h timedialog.h timeline.h timesigproperties.h
       toolbarEditor.h toolbuttonmenu.h transposedialog.h tremolobarcanvas.h realizeharmonydialog.h
       tupletdialog.h updatechecker.h waveview.h webpage.h workspace.h migration/scoremigrationdialog.h
-      migration/scoremigrationdialogmodel.h migration/scoremigrator_3_6.h migration/handlers/instrumentorderinghandler.h
-      migration/handlers/staffverticaljustificationhandler.h migration/handlers/resetallelementspositionshandler.h
-      migration/handlers/firstsystemindentationhandler.h
+      migration/scoremigrationdialogmodel.h migration/scoremigrator_3_6.h
+      migration/handlers/resetallelementspositionshandler.h
+      migration/handlers/styledefaultshandler.h migration/handlers/lelandstylehandler.h
+      migration/handlers/edwinstylehandler.h
 
       recordbutton.h greendotbutton prefsdialog.h prefsdialog.cpp
       stringutils.h stringutils.cpp
@@ -261,9 +262,10 @@ add_library(mscoreapp STATIC
       script/script.cpp script/scriptentry.cpp script/testscript.cpp script/recorderwidget.cpp
       qml/msqmlengine.cpp qml/nativemenu.cpp qml/nativetooltip.cpp
       qmldockwidget.cpp migration/scoremigrationdialog.cpp migration/scoremigrationdialogmodel.cpp
-      migration/scoremigrator_3_6.cpp migration/handlers/instrumentorderinghandler.cpp
-      migration/handlers/staffverticaljustificationhandler.cpp migration/handlers/resetallelementspositionshandler.cpp
-      migration/handlers/firstsystemindentationhandler.cpp
+      migration/scoremigrator_3_6.cpp
+      migration/handlers/resetallelementspositionshandler.cpp
+      migration/handlers/styledefaultshandler.cpp migration/handlers/lelandstylehandler.cpp
+      migration/handlers/edwinstylehandler.cpp
 
       ${CLOUD_SRC}
       ${IMPORTMIDIUI_SRC}

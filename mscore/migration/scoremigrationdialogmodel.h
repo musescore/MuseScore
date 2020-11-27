@@ -9,12 +9,14 @@ class ScoreMigrationDialogModel : public QObject
       {
       Q_OBJECT
 
-      Q_PROPERTY(bool areStylingImprovementsAllowed READ areStylingImprovementsAllowed WRITE setAreStylingImprovementsAllowed NOTIFY areStylingImprovementsAllowedChanged)
-      Q_PROPERTY(bool areInstrumentsImprovementsAllowed READ areInstrumentsImprovementsAllowed WRITE setAreInstrumentsImprovementsAllowed NOTIFY areInstrumentsImprovementsAllowedChanged)
-      Q_PROPERTY(bool shouldNeverAskForThisScoreAgain READ shouldNeverAskForThisScoreAgain WRITE setShouldNeverAskForThisScoreAgain NOTIFY shouldNeverAskForThisScoreAgainChanged)
-      Q_PROPERTY(bool shouldNeverAskAgain READ shouldNeverAskAgain WRITE setShouldNeverAskAgain NOTIFY shouldNeverAskAgainChanged)
+      Q_PROPERTY(bool isLelandAllowed READ isLelandAllowed WRITE setIsLelandAllowed NOTIFY isLelandAllowedChanged)
+      Q_PROPERTY(bool isEdwinAllowed READ isEdwinAllowed WRITE setIsEdwinAllowed NOTIFY isEdwinAllowedChanged)
+      Q_PROPERTY(bool isAutomaticPlacementAllowed READ isAutomaticPlacementAllowed WRITE setIsAutomaticPlacementAllowed NOTIFY isAutomaticPlacementAllowedChanged)
+      Q_PROPERTY(bool isAutomaticPlacementAvailable READ isAutomaticPlacementAvailable WRITE setIsAutomaticPlacementAvailable NOTIFY isAutomaticPlacementAvailableChanged)
 
+      Q_PROPERTY(bool shouldNeverAskAgain READ shouldNeverAskAgain WRITE setShouldNeverAskAgain NOTIFY shouldNeverAskAgainChanged)
       Q_PROPERTY(bool isApplyingAvailable READ isApplyingAvailable NOTIFY isApplyingAvailableChanged)
+      Q_PROPERTY(QString creationAppVersion READ creationAppVersion NOTIFY creationAppVersionChanged)
 
    public:
       explicit ScoreMigrationDialogModel(Ms::Score* score, QObject* parent = nullptr);
@@ -25,45 +27,57 @@ class ScoreMigrationDialogModel : public QObject
 
       Q_INVOKABLE void showMoreDetails();
 
-      bool areStylingImprovementsAllowed() const;
-      bool areInstrumentsImprovementsAllowed() const;
+      bool isLelandAllowed() const;
+      bool isEdwinAllowed() const;
 
       bool isApplyingAvailable() const;
-
-      bool shouldNeverAskForThisScoreAgain() const;
       bool shouldNeverAskAgain() const;
 
-   public slots:
+      bool isAutomaticPlacementAllowed() const;
+      bool isAutomaticPlacementAvailable() const;
 
-      void setAreStylingImprovementsAllowed(bool areStylingImprovementsAllowed);
-      void setAreInstrumentsImprovementsAllowed(bool areInstrumentsImprovementsAllowed);
+      QString creationAppVersion() const;
 
-      void setShouldNeverAskForThisScoreAgain(bool shouldNeverAskForThisScoreAgain);
+public slots:
+
+      void setIsLelandAllowed(bool isLelandAllowed);
+      void setIsEdwinAllowed(bool isEdwinAllowed);
+
       void setShouldNeverAskAgain(bool shouldNeverAskAgain);
 
-   signals:
-      void areStylingImprovementsAllowedChanged(bool areStylingImprovementsAllowed);
-      void areInstrumentsImprovementsAllowedChanged(bool areInstrumentsImprovementsAllowed);
+      void setIsAutomaticPlacementAllowed(bool isAutomaticPlacementAllowed);
+      void setIsAutomaticPlacementAvailable(bool isAutomaticPlacementAvailable);
+
+      void setCreationAppVersion(QString creationAppVersion);
+
+signals:
+      void isLelandAllowedChanged(bool isLelandAllowed);
+      void isEdwinAllowedChanged(bool isEdwinAllowed);
 
       void isApplyingAvailableChanged(bool isApplyingAvailable);
-
-      void shouldNeverAskForThisScoreAgainChanged(bool shouldNeverAskForThisScoreAgain);
       void shouldNeverAskAgainChanged(bool shouldNeverAskAgain);
 
       void closeRequested();
 
-   private:
+      void isAutomaticPlacementAllowedChanged(bool isAutomaticPlacementAllowed);
+      void isAutomaticPlacementAvailableChanged(bool isAutomaticPlacementAvailable);
+
+      void creationAppVersionChanged(QString creationAppVersion);
+
+private:
 
       void setUpMigrationPolicy();
 
-      bool m_areStylingImprovementsAllowed = false;
-      bool m_areInstrumentsImprovementsAllowed = false;
+      bool m_isLelandAllowed = false;
+      bool m_isEdwinAllowed = false;
+      bool m_isAutomaticPlacementAllowed = false;
+      bool m_isAutomaticPlacementAvailable = false;
       bool m_isApplyingAvailable = false;
-      bool m_shouldNeverAskForThisScoreAgain = false;
       bool m_shouldNeverAskAgain = false;
 
       Ms::Score* m_score = nullptr;
       ScoreMigrator_3_6* m_migrator = nullptr;
-      };
+      QString m_creationAppVersion;
+};
 
 #endif // SCOREMIGRATIONDIALOGMODEL_H

@@ -2,6 +2,8 @@
     <qresource prefix="/">
         <file>data/icons/edit.svg</file>
         <file alias="styles/Leland.mss">../share/styles/Leland.mss</file>
+        <file alias="styles/Edwin.mss">../share/styles/Edwin.mss</file>
+        <file alias="styles/Pre-3.6-defaults.mss">../share/styles/Pre-3.6-defaults.mss</file>
         <file alias="fonts/mscore/metadata.json">../fonts/mscore/metadata.json</file>
         <file alias="fonts/gootville/metadata.json">../fonts/gootville/metadata.json</file>
         <file alias="fonts/leland/metadata.json">../fonts/leland/metadata.json</file>

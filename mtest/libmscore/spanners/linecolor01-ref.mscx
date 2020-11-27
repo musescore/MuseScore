@@ -101,7 +101,7 @@
               <color r="255" g="0" b="0" a="255"/>
               <Segment>
                 <subtype>0</subtype>
-                <offset x="0" y="4"/>
+                <offset x="0" y="2.5"/>
                 <off2 x="0" y="0"/>
                 <minDistance>0</minDistance>
                 <color r="255" g="0" b="0" a="255"/>

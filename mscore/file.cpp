@@ -93,6 +93,11 @@
 #include "libmscore/chordlist.h"
 #include "libmscore/mscore.h"
 #include "thirdparty/qzip/qzipreader_p.h"
+#include "migration/scoremigrator_3_6.h"
+#include "migration/handlers/styledefaultshandler.h"
+#include "migration/handlers/lelandstylehandler.h"
+#include "migration/handlers/edwinstylehandler.h"
+#include "migration/handlers/resetallelementspositionshandler.h"
 
 
 namespace Ms {
@@ -2273,6 +2278,24 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
                   score->setCreated(true); // force save as for imported files
             }
 
+      ScoreMigrator_3_6 migrator;
+
+      migrator.registerHandler(new StyleDefaultsHandler());
+
+      if (Ms::preferences.getBool(PREF_MIGRATION_DO_NOT_ASK_ME_AGAIN)) {
+
+            if (Ms::preferences.getBool(PREF_MIGRATION_APPLY_LELAND_STYLE))
+                  migrator.registerHandler(new LelandStyleHandler());
+
+            if (Ms::preferences.getBool(PREF_MIGRATION_APPLY_EDWIN_STYLE))
+                  migrator.registerHandler(new EdwinStyleHandler());
+
+            if (Ms::preferences.getString(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS).contains("Yes"))
+                  migrator.registerHandler(new ResetAllElementsPositionsHandler());
+            }
+
+      migrator.migrateScore(score);
+
       for (Part* p : score->parts()) {
             p->updateHarmonyChannels(false);
             }
@@ -2287,6 +2310,7 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
       score->updateExpressive(MuseScore::synthesizer("Fluid"));
       score->setSaved(false);
       score->update();
+      score->styleChanged();
 
       if (!ignoreVersionError && !MScore::noGui)
             if (!score->sanityCheck(QString()))
