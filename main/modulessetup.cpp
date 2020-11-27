@@ -20,6 +20,7 @@
 #include "modulessetup.h"
 #include "config.h"
 #include "runtime.h"
+#include "log.h"
 
 #include "framework/global/globalmodule.h"
 #include "framework/ui/uimodule.h"
@@ -60,19 +61,15 @@
 #include "avsomr/avsomrsetup.h"
 #endif
 
-//---------------------------------------------------------
-//   ModulesSetup
-//---------------------------------------------------------
+//! NOTE Separately to initialize logger and profiler as early as possible
+static mu::framework::GlobalModule globalModule;
 
 ModulesSetup::ModulesSetup()
 {
-    //! NOTE `global module` must be first, because all dependent on it
-    //! `telemetry` must be second, because it install crash handler.
+    //! NOTE `telemetry` must be first, because it install crash handler.
     //! others modules order not important (must be)
 
     m_modulesSetupList
-        << new mu::framework::GlobalModule()
-
 #ifdef BUILD_TELEMETRY_MODULE
         << new mu::telemetry::TelemetrySetup()
 #endif
@@ -122,6 +119,15 @@ void ModulesSetup::setup()
     mu::runtime::mainThreadId(); //! NOTE Needs only call
     mu::runtime::setThreadName("main");
 
+    globalModule.registerResources();
+    globalModule.registerExports();
+    globalModule.registerUiTypes();
+    globalModule.onInit();
+
+    //! NOTE Now we can use logger and profiler
+
+    TRACEFUNC;
+
     for (mu::framework::IModuleSetup* m : m_modulesSetupList) {
         m->registerResources();
     }
@@ -130,6 +136,7 @@ void ModulesSetup::setup()
         m->registerExports();
     }
 
+    globalModule.resolveImports();
     for (mu::framework::IModuleSetup* m : m_modulesSetupList) {
         m->registerUiTypes();
         m->resolveImports();
@@ -140,6 +147,7 @@ void ModulesSetup::setup()
     }
 
     //! NOTE Need to move to the place where the application finishes initializing
+    globalModule.onStartApp();
     for (mu::framework::IModuleSetup* m : m_modulesSetupList) {
         m->onStartApp();
     }
@@ -150,4 +158,8 @@ void ModulesSetup::deinit()
     for (mu::framework::IModuleSetup* m : m_modulesSetupList) {
         m->onDeinit();
     }
+
+    PROFILER_PRINT;
+
+    globalModule.onDeinit();
 }

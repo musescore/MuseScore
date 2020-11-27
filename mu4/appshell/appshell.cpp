@@ -37,7 +37,6 @@ AppShell::AppShell()
 
 int AppShell::run(int argc, char** argv, std::function<void()> moduleSetup)
 {
-    std::cout << "begin AppShell::run\n";
     qputenv("QT_STYLE_OVERRIDE", "Fusion");
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
