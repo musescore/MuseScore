@@ -31,7 +31,6 @@ EaseInOutCanvas::EaseInOutCanvas(QWidget* parent)
    : QFrame(parent),
      m_easeIn(0.0),
      m_easeOut(0.0),
-     m_nEvents(25),
      m_pitchDelta(0)
       {
       setFrameStyle(QFrame::NoFrame);
@@ -49,11 +48,12 @@ void EaseInOutCanvas::paintEvent(QPaintEvent* ev)
       const int w = width();
       const int h = height();
       const int border = 1;
+      const int nPitches = std::abs(m_pitchDelta) + 1;
 
       const qreal graphWidth = static_cast<qreal>(w - 2 * border);
       const qreal graphHeight = static_cast<qreal>(h - 2 * border);
-      const qreal nbEvents = static_cast<qreal>(m_nEvents);
-      const qreal pitchDelta = static_cast<qreal>(m_pitchDelta);
+      const qreal nbEvents = static_cast<qreal>(m_events.size());
+      const qreal pitchDelta = static_cast<qreal>(nPitches);
 
       // let half a column of margin around
       const qreal leftPos = static_cast<qreal>(border);           // also left margin
@@ -100,7 +100,7 @@ void EaseInOutCanvas::paintEvent(QPaintEvent* ev)
             };
 
       std::vector<QPointF> pitchPoints;
-      qreal offset = m_events.back() < 0 ? 1.0 : 0.0;
+      qreal offset = m_pitchDelta < 0 ? 1.0 : 0.0;
       QPointF prevPoint, currPoint;
       for (int i = 0; i < m_events.size(); i++) {
             currPoint = getPosition({ eio.XfromY(static_cast<qreal>(i) / nbEvents), offset + static_cast<qreal>(m_events[i]) / static_cast<qreal>(pitchDelta) });
@@ -116,22 +116,23 @@ void EaseInOutCanvas::paintEvent(QPaintEvent* ev)
                   prevPoint = currPoint;
                   }
             painter.fillRect(prevPoint.x(), bottomPos, (rightPos - prevPoint.x()) + 1, prevPoint.y() - bottomPos, pitchFillColor);
-            }
 
-      // draw time-warped vertical lines in lighter gray.
-      // These lines will move as ease-in and ease-out are adjusted.
-      pen.setWidth(0);
-      pen.setColor(eventLinesColor);
-      painter.setPen(pen);
-      for (int i = 1; i < pitchPoints.size(); ++i) {
-            qreal xPos = pitchPoints[i].x();
-            painter.drawLine(xPos, topPos, xPos, bottomPos);
+            // draw time-warped vertical lines in lighter gray.
+            // These lines will move as ease-in and ease-out are adjusted.
+            pen.setWidth(0);
+            pen.setColor(eventLinesColor);
+            painter.setPen(pen);
+            for (int i = 1; i < pitchPoints.size(); ++i) {
+                  qreal xPos = pitchPoints[i].x();
+                  painter.drawLine(xPos, topPos, xPos, bottomPos);
+                  }
             }
 
       // draw half step horigontal lines in even lighter gray
+      pen.setWidth(0);
       pen.setColor(pitchLinesColor);
       painter.setPen(pen);
-      for (int i = 1; i < m_pitchDelta; ++i) {
+      for (int i = 1; i < nPitches; ++i) {
             qreal yPos = topPos + (static_cast<qreal>(i) / pitchDelta) * graphHeight;
             painter.drawLine(leftPos, yPos, rightPos, yPos);
             }
@@ -144,26 +145,44 @@ void EaseInOutCanvas::paintEvent(QPaintEvent* ev)
       font.setPixelSize(fontHeight);
       painter.setFont(font);
       int curPitch = m_bottomPitch;
-      for (int i = 0; i <= m_pitchDelta; ++i) {
+      for (int i = 0; i <= nPitches; ++i) {
             QString pitchName(noteNames[(curPitch - 60) % 12]);
             QPointF pos = { 4, topPos + fontHeight * 0.3 + (1.0 - (static_cast<qreal>(i) / pitchDelta)) * graphHeight };
             painter.drawText(pos, pitchName);
             curPitch++;
       }
 
-      // Draw the Bezier transfer curve only in ease-in or ease-out are not zero. This warps
-      // the event times so this curve always go from lower left corner to upper-right corner.
-      if (m_easeIn != 0 || m_easeOut != 0) {
-            pen.setWidth(2);
-            pen.setColor(warpLineColor);
-            painter.setPen(pen);
-            prevPoint = { leftPos, bottomPos };
-            for (int i = 1; i <= 33; i++) {
-                  currPoint = getPosition(eio.Eval(static_cast<qreal>(i) / 33.0));
-                  painter.drawLine(prevPoint, currPoint);
-                  prevPoint = currPoint;
+      if (m_events.size()) {
+            // Not a portamento style glissando.
+            // Draw the Bezier transfer curve only in ease-in or ease-out are not zero. This warps
+            // the event times so this curve always go from lower left corner to upper-right corner.
+            if (m_easeIn != 0 || m_easeOut != 0) {
+                  pen.setWidth(2);
+                  pen.setColor(warpLineColor);
+                  painter.setPen(pen);
+                  prevPoint = { leftPos, bottomPos };
+                  for (int i = 1; i <= 33; i++) {
+                        currPoint = getPosition(eio.Eval(static_cast<qreal>(i) / 33.0));
+                        painter.drawLine(prevPoint, currPoint);
+                        prevPoint = currPoint;
+                        }
                   }
             }
+      else {
+            // Draw the portamento style glissando curve instead of the transfer curve
+            pen.setWidth(3);
+            pen.setColor(pitchGraphColor);
+            painter.setPen(pen);
+            prevPoint = { leftPos, m_pitchDelta > 0 ? bottomPos : topPos };
+            for (int i = 1; i <= 33; i++) {
+                  currPoint = eio.Eval(static_cast<qreal>(i) / 33.0);
+                  if (m_pitchDelta < 0)
+                        currPoint.setY(1.0 - currPoint.y());
+                  currPoint = getPosition(currPoint);
+                  painter.drawLine(prevPoint, currPoint);
+                  prevPoint = currPoint;
+            }
+      }
 
       // Draw the pitches level lines next so they cover the Bezier transfer curve.
       if (pitchPoints.size() > 1) {
