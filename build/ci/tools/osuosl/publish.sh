@@ -57,15 +57,51 @@ FTP_PATH=${OS}/${MAJOR_VERSION}x/${BUILD_DIR}
 echo "Copy ${ARTIFACTS_DIR}/${ARTIFACT_NAME} to $FTP_PATH"
 scp -oStrictHostKeyChecking=no -C -i $SSH_KEY $ARTIFACTS_DIR/$ARTIFACT_NAME musescore-nightlies@ftp-osl.osuosl.org:~/ftp/$FTP_PATH
 
+# For Linux, we also need to send a .zsync file, if exists
+ZSYNC_EXISTS=0
+if [ "$OS" == "linux" ]; then 
+    if [ -f "$ARTIFACTS_DIR/${ARTIFACT_NAME}.zsync" ]; then
+        echo "Copy ${ARTIFACTS_DIR}/${ARTIFACT_NAME}.zsync to $FTP_PATH"
+        scp -oStrictHostKeyChecking=no -C -i $SSH_KEY $ARTIFACTS_DIR/${ARTIFACT_NAME}.zsync musescore-nightlies@ftp-osl.osuosl.org:~/ftp/$FTP_PATH
+        ZSYNC_EXISTS=1
+    fi
+fi
+
 PUBLISH_URL=https://ftp.osuosl.org/pub/musescore-nightlies/$FTP_PATH
 echo $PUBLISH_URL > $ARTIFACTS_DIR/env/publish_url.env
 cat $ARTIFACTS_DIR/env/publish_url.env
 
+# Delete old files
 if [ "$BUILD_MODE" == "nightly_build" ]; then 
-    # Delete old files
     echo "Delete old MuseScoreNightly files"
-    ssh -i $SSH_KEY musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/$FTP_PATH; ls MuseScoreNightly* -t | tail -n +41 | xargs rm -f"
+
+    if [ "$OS" == "linux" ]; then 
+        ssh -i $SSH_KEY musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/$FTP_PATH; ls MuseScoreNightly*.AppImage       -t | tail -n +41 | xargs rm -f"
+        ssh -i $SSH_KEY musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/$FTP_PATH; ls MuseScoreNightly*.AppImage.zsync -t | tail -n +41 | xargs rm -f"
+    else 
+        ssh -i $SSH_KEY musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/$FTP_PATH; ls MuseScoreNightly* -t | tail -n +41 | xargs rm -f"
+    fi
 fi
+
+# Create link to latest
+if [ "$BUILD_MODE" == "nightly_build" ]; then 
+
+    echo "Create link to latest"
+
+    sleep 1m # For fine sort order on FTP
+
+    LATEST_NAME="MuseScoreNightly-latest-x86_64.AppImage"
+
+    ssh -i $SSH_KEY musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/$FTP_PATH; ln -sf $ARTIFACT_NAME $LATEST_NAME"
+
+    if [ "$OS" == "linux" ]; then 
+        if [ $ZSYNC_EXISTS -eq 1 ]; then
+            ssh -i $SSH_KEY musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/$FTP_PATH; ln -sf ${ARTIFACT_NAME}.zsync ${LATEST_NAME}.zsync"
+        fi
+    fi
+fi
+
+
 
 # Sending index.html
 # !! The page is automatically sending to the FTP only in the master
