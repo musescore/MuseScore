@@ -346,11 +346,10 @@ void Accidental::layout()
       {
       el.clear();
 
-      QRectF r;
       // TODO: remove Accidental in layout()
       // don't show accidentals for tab or slash notation
       if (onTabStaff() || (note() && note()->fixed())) {
-            setbbox(r);
+            setbbox(QRectF());
             return;
             }
 
@@ -359,9 +358,67 @@ void Accidental::layout()
             m *= score()->styleD(Sid::smallNoteMag);
       setMag(m);
 
-      m = magS();
+      // if the accidental is standard (doubleflat, flat, natural, sharp or double sharp)
+      // and it has either no bracket or parentheses, then we have glyphs straight from smufl.
+      if (_bracket == AccidentalBracket::NONE
+         || (_bracket == AccidentalBracket::PARENTHESIS
+          && (_accidentalType == AccidentalType::FLAT
+           || _accidentalType == AccidentalType::NATURAL
+           || _accidentalType == AccidentalType::SHARP
+           || _accidentalType == AccidentalType::SHARP2
+           || _accidentalType == AccidentalType::FLAT2))) {
+            layoutSingleGlyphAccidental();
+           }
+      else {
+            layoutMultiGlyphAccidental();
+            }
+      }
+
+void Accidental::layoutSingleGlyphAccidental()
+      {
+      QRectF r;
+
+      SymId s = symbol();
+      if (_bracket == AccidentalBracket::PARENTHESIS) {
+            switch (_accidentalType) {
+                  case AccidentalType::FLAT2:
+                        s = SymId::accidentalDoubleFlatParens;
+                        break;
+                  case AccidentalType::FLAT:
+                        s = SymId::accidentalFlatParens;
+                        break;
+                  case AccidentalType::NATURAL:
+                        s = SymId::accidentalNaturalParens;
+                        break;
+                  case AccidentalType::SHARP:
+                        s = SymId::accidentalSharpParens;
+                        break;
+                  case AccidentalType::SHARP2:
+                        s = SymId::accidentalDoubleSharpParens;
+                        break;
+                  default:
+                        break;
+                  }
+            if (!score()->scoreFont()->isValid(s)) {
+                  layoutMultiGlyphAccidental();
+                  return;
+                  }
+            }
+
+      SymElement e(s, 0.0, 0.0);
+      el.append(e);
+      r |= symBbox(s);
+      setbbox(r);
+      }
+
+
+void Accidental::layoutMultiGlyphAccidental()
+      {
+      qreal margin = score()->styleP(Sid::bracketedAccidentalPadding);
+      QRectF r;
       qreal x = 0.0;
 
+      // should always be true
       if (_bracket != AccidentalBracket::NONE) {
             SymId id = SymId::noSym;
             switch (_bracket) {
@@ -380,7 +437,7 @@ void Accidental::layout()
             SymElement se(id, 0.0, _bracket == AccidentalBracket::BRACE ? spatium() * 0.4 : 0.0);
             el.append(se);
             r |= symBbox(id);
-            x += symAdvance(id);
+            x += symAdvance(id) + margin;
             }
 
       SymId s = symbol();
@@ -388,8 +445,9 @@ void Accidental::layout()
       el.append(e);
       r |= symBbox(s).translated(x, 0.0);
 
+      // should always be true
       if (_bracket != AccidentalBracket::NONE) {
-            x += symAdvance(s);
+            x += symAdvance(s) + margin;
             SymId id = SymId::noSym;
             switch (_bracket) {
                   case AccidentalBracket::PARENTHESIS:
@@ -588,4 +646,3 @@ QString Accidental::accessibleInfo() const
       }
 
 }
-
