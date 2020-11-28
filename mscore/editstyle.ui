@@ -10057,7 +10057,7 @@
             </widget>
            </item>
            <item row="0" column="0" colspan="4">
-            <widget class="QGroupBox" name="groupBox_25">
+            <widget class="QGroupBox" name="harmonyAppearance">
              <property name="title">
               <string>Appearance</string>
              </property>
@@ -10116,83 +10116,6 @@
                  <cstring>extensionAdjust</cstring>
                 </property>
                </widget>
-              </item>
-              <item row="0" column="0" colspan="6">
-               <layout class="QHBoxLayout" name="horizontalLayout_7">
-                <item>
-                 <widget class="QLabel" name="label_147">
-                  <property name="text">
-                   <string>Style:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QRadioButton" name="chordsStandard">
-                  <property name="text">
-                   <string>Standard</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QRadioButton" name="chordsJazz">
-                  <property name="text">
-                   <string>Jazz</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QRadioButton" name="chordsCustom">
-                  <property name="text">
-                   <string>Custom</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="chordDescriptionFile"/>
-                </item>
-                <item>
-                 <widget class="QWidget" name="chordDescriptionGroup" native="true">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <layout class="QGridLayout" name="chordDescriptionLayout">
-                   <property name="leftMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="topMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="rightMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="bottomMargin">
-                    <number>0</number>
-                   </property>
-                   <item row="0" column="1">
-                    <widget class="QToolButton" name="chordDescriptionFileButton">
-                     <property name="text">
-                      <string notr="true"/>
-                     </property>
-                     <property name="icon">
-                      <iconset resource="musescore.qrc">
-                       <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="2">
-                    <widget class="QCheckBox" name="chordsXmlFile">
-                     <property name="text">
-                      <string>Load XML</string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-               </layout>
               </item>
               <item row="1" column="0">
                <widget class="QLabel" name="labelExtensionMag">
@@ -10321,79 +10244,158 @@
                 </layout>
                </widget>
               </item>
-              <item row="3" column="0" colspan="5">
-               <layout class="QHBoxLayout" name="horizontalLayout_6">
-                <item>
-                 <widget class="QLabel" name="label_148">
-                  <property name="text">
-                   <string>Spelling:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QRadioButton" name="useStandardNoteNames">
-                  <property name="toolTip">
-                   <string notr="true">A, B♭, B, C, C♯, …</string>
-                  </property>
-                  <property name="text">
-                   <string>Standard</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QRadioButton" name="useGermanNoteNames">
-                  <property name="toolTip">
-                   <string notr="true">A, B♭, H, C, C♯, …</string>
-                  </property>
-                  <property name="text">
-                   <string>German</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QRadioButton" name="useFullGermanNoteNames">
-                  <property name="toolTip">
-                   <string notr="true">A, B, H, C, Cis, …</string>
-                  </property>
-                  <property name="text">
-                   <string>Full German</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QRadioButton" name="useSolfeggioNoteNames">
-                  <property name="toolTip">
-                   <string notr="true">Do, Do♯, Re♭, Re, …</string>
-                  </property>
-                  <property name="text">
-                   <string>Solfeggio</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QRadioButton" name="useFrenchNoteNames">
-                  <property name="toolTip">
-                   <string notr="true">Do, Do♯, Ré♭, Ré, …</string>
-                  </property>
-                  <property name="text">
-                   <string>French</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <spacer name="horizontalSpacer_12">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-               </layout>
+              <item row="3" column="0" colspan="6">
+               <widget class="QGroupBox" name="harmonySpelling">
+                <property name="title">
+                 <string>Spelling</string>
+                </property>
+                <layout class="QHBoxLayout" name="horizontalLayout_6">
+                 <item>
+                  <widget class="QRadioButton" name="useStandardNoteNames">
+                   <property name="toolTip">
+                    <string notr="true">A, B♭, B, C, C♯, …</string>
+                   </property>
+                   <property name="text">
+                    <string>Standard</string>
+                   </property>
+                   <property name="checked">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="useGermanNoteNames">
+                   <property name="toolTip">
+                    <string notr="true">A, B♭, H, C, C♯, …</string>
+                   </property>
+                   <property name="text">
+                    <string>German</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="useFullGermanNoteNames">
+                   <property name="toolTip">
+                    <string notr="true">A, B, H, C, Cis, …</string>
+                   </property>
+                   <property name="text">
+                    <string>Full German</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="useSolfeggioNoteNames">
+                   <property name="toolTip">
+                    <string notr="true">Do, Do♯, Re♭, Re, …</string>
+                   </property>
+                   <property name="text">
+                    <string>Solfeggio</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="useFrenchNoteNames">
+                   <property name="toolTip">
+                    <string notr="true">Do, Do♯, Ré♭, Ré, …</string>
+                   </property>
+                   <property name="text">
+                    <string>French</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_12">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="0" column="0" colspan="6">
+               <widget class="QGroupBox" name="harmonyStyle">
+                <property name="title">
+                 <string>Style</string>
+                </property>
+                <layout class="QHBoxLayout" name="horizontalLayout_7">
+                 <item>
+                  <widget class="QRadioButton" name="chordsStandard">
+                   <property name="text">
+                    <string>Standard</string>
+                   </property>
+                   <property name="checked">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="chordsJazz">
+                   <property name="text">
+                    <string>Jazz</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="chordsCustom">
+                   <property name="text">
+                    <string>Custom</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="chordDescriptionFile"/>
+                 </item>
+                 <item>
+                  <widget class="QWidget" name="chordDescriptionGroup" native="true">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <layout class="QGridLayout" name="chordDescriptionLayout">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                    <item row="0" column="1">
+                     <widget class="QToolButton" name="chordDescriptionFileButton">
+                      <property name="text">
+                       <string notr="true"/>
+                      </property>
+                      <property name="icon">
+                       <iconset resource="musescore.qrc">
+                        <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="2">
+                     <widget class="QCheckBox" name="chordsXmlFile">
+                      <property name="text">
+                       <string>Load XML</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
               </item>
              </layout>
             </widget>
@@ -10419,7 +10421,7 @@
             </spacer>
            </item>
            <item row="1" column="0" rowspan="3" colspan="2">
-            <widget class="QGroupBox" name="groupBox_24">
+            <widget class="QGroupBox" name="harmonyPositioning">
              <property name="title">
               <string>Positioning</string>
              </property>
