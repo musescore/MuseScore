@@ -44,29 +44,31 @@ else
 fi
 
 if [ "$PACKTYPE" == "7z" ]; then
-mv $INSTALL_DIR $ARTIFACT_NAME
-7z a $ARTIFACTS_DIR/$ARTIFACT_NAME.7z $ARTIFACT_NAME
-bash ./build/ci/tools/make_artifact_name_env.sh $ARTIFACT_NAME.7z
-chmod a+rw $ARTIFACT_NAME.7z
+    mv $INSTALL_DIR $ARTIFACT_NAME
+    7z a $ARTIFACTS_DIR/$ARTIFACT_NAME.7z $ARTIFACT_NAME
+    bash ./build/ci/tools/make_artifact_name_env.sh $ARTIFACT_NAME.7z
+    chmod a+rw $ARTIFACT_NAME.7z
 fi
 
 if [ "$PACKTYPE" == "appimage" ]; then
-# To enable automatic updates for AppImages, set UPDATE_INFORMATION according to
-# https://github.com/AppImage/AppImageSpec/blob/master/draft.md#update-information
-case "${BUILD_MODE}" in
-  "stable_build")  export UPDATE_INFORMATION="gh-releases-zsync|musescore|MuseScore|latest|MuseScore-*x86_64.AppImage.zsync";;
-  "nightly_build") export UPDATE_INFORMATION="zsync|https://ftp.osuosl.org/pub/musescore-nightlies/linux/3x/nightly/MuseScoreNightly-latest-x86_64.AppImage.zsync";;
-  *) unset UPDATE_INFORMATION;; # disable updates for other build modes
-esac
-bash ./build/ci/linux/tools/make_appimage.sh $INSTALL_DIR
-APPIMAGE_FILE="$(ls $BUILD_DIR/*.AppImage)"
-if [ -v UPDATE_INFORMATION ]; then
-  ZSYNC_FILE="$(ls $BUILD_DIR/*.AppImage.zsync)" # data for delta updates
-  echo "ZSYNC_FILE: $ZSYNC_FILE" # TODO: Upload to server alongside AppImage
-fi
-mv $APPIMAGE_FILE $ARTIFACTS_DIR/$ARTIFACT_NAME.AppImage
-bash ./build/ci/tools/make_artifact_name_env.sh $ARTIFACT_NAME.AppImage
-fi
+    # To enable automatic updates for AppImages, set UPDATE_INFORMATION according to
+    # https://github.com/AppImage/AppImageSpec/blob/master/draft.md#update-information
+    case "${BUILD_MODE}" in
+    "stable_build")  export UPDATE_INFORMATION="gh-releases-zsync|musescore|MuseScore|latest|MuseScore-*x86_64.AppImage.zsync";;
+    "nightly_build") export UPDATE_INFORMATION="zsync|https://ftp.osuosl.org/pub/musescore-nightlies/linux/3x/nightly/MuseScoreNightly-latest-x86_64.AppImage.zsync";;
+    *) unset UPDATE_INFORMATION;; # disable updates for other build modes
+    esac
+
+    bash ./build/ci/linux/tools/make_appimage.sh $INSTALL_DIR
+    APPIMAGE_FILE="$(ls $BUILD_DIR/*.AppImage)"
+    mv $APPIMAGE_FILE $ARTIFACTS_DIR/$ARTIFACT_NAME.AppImage
+    bash ./build/ci/tools/make_artifact_name_env.sh $ARTIFACT_NAME.AppImage
+
+    if [ -v UPDATE_INFORMATION ]; then
+        ZSYNC_FILE="$(ls $BUILD_DIR/*.AppImage.zsync)" # data for delta updates
+        mv $ZSYNC_FILE $ARTIFACTS_DIR/$ARTIFACT_NAME.AppImage.zsync
+    fi
+fi 
 
 df -h .
 
