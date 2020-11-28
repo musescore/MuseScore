@@ -1411,6 +1411,7 @@ void InstrumentsWidget::setMakeSoloistButtonText()
 void InstrumentsWidget::setScoreOrder(ScoreOrder* order)
       {
       scoreOrderComboBox->setCurrentIndex(scoreOrders.getScoreOrderIndex(order));
+      sortInstruments();
       }
 
 //---------------------------------------------------------
