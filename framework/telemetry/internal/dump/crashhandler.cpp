@@ -24,6 +24,7 @@
 #include <thirdparty/google_crashpad_client/client/settings.h>
 
 #include "log.h"
+#include "global/version.h"
 
 using namespace mu::telemetry;
 using namespace crashpad;
@@ -55,7 +56,9 @@ bool CrashHandler::start(const io::path& handlerFilePath, const io::path& dumpsD
 #endif
 
     // Optional annotations passed via --annotations to the handler
-    std::map<std::string, std::string> annotations;
+    std::map<std::string, std::string> annotations = {
+        { "sentry[release]", framework::Version::fullVersion() }
+    };
     // Optional arguments to pass to the handler
     std::vector<std::string> arguments;
     arguments.push_back("--no-rate-limit");
