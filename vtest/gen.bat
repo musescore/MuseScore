@@ -31,7 +31,7 @@ set SRC=mmrest-1,bravura-mmrest,gonville-mmrest,mmrest-2,mmrest-4,mmrest-5,mmres
  tie-1,tie-2,tie-3,grace-1,grace-2,grace-3,grace-4, ^
  tuplets-1,tuplets-2,tuplets-3,tuplets-4,breath-1, ^
  harmony-1,harmony-2,harmony-3,harmony-4,harmony-5,harmony-6,harmony-7, ^
- harmony-8,harmony-9,harmony-10,harmony-11,harmony-12,harmony-13,harmony-14,harmony-15 ^
+ harmony-8,harmony-9,harmony-10,harmony-11,harmony-12,harmony-13,harmony-14,harmony-15, ^
  figured-bass-1, ^
  beams-1,beams-2,beams-3,beams-4,beams-5,beams-6,beams-7,beams-8,beams-9,beams-10, ^
  beams-11,beams-12,beams-13,beams-14,beams-15,beams-16,beams-17, ^
@@ -40,8 +40,8 @@ set SRC=mmrest-1,bravura-mmrest,gonville-mmrest,mmrest-2,mmrest-4,mmrest-5,mmres
  voice-1,voice-2,slash-1,slash-2, ^
  system-1,system-2,system-3,system-4,system-5,system-6,system-7,system-8,system-9,hide-1,small-1,tremolo-1, ^
  staff-1,staff-2,staff-3,staff-4,layout-1,layout-2,layout-3,layout-4,layout-5,layout-6,layout-7,layout-8,layout-9,layout-10, ^
- articulation-1, ^
- percussion-grace, ^
+ articulation-1, percussion-grace, ^
+ drumset-1, drumset-2, drumset-3, drumset-4, drumset-5, drumset-6, drumset-7, drumset-8, ^
  slashed_chord-layout-12, slashed_chord-layout-7, slashed_grace-3, slashed_noteheadposition-1, ^
  drumset-custom-1, read-206-custom-drumset-1, ^
  layout-sequence-1, layout-sequence-2, layout-sequence-3, layout-sequence-4, ^
