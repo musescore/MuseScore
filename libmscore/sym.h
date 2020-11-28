@@ -2871,6 +2871,12 @@ enum class SymId {
 
 //    additional symbols
 
+      accidentalDoubleFlatParens,
+      accidentalFlatParens,
+      accidentalNaturalParens,
+      accidentalSharpParens,
+      accidentalDoubleSharpParens,
+
       noteLongaUp,
       noteLongaDown,
       noteLongaSquareUp,

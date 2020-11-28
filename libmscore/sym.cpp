@@ -2877,6 +2877,11 @@ const std::array<const char*, int(SymId::lastSym)+1> Sym::symNames = { {
       "ornamentLinePrall",          // ornamentPRecompAppoggTrill ?
 
 //    additional symbols
+      "accidentalDoubleFlatParens",
+      "accidentalFlatParens",
+      "accidentalNaturalParens",
+      "accidentalSharpParens",
+      "accidentalDoubleSharpParens",
 
       "noteLongaUp",
       "noteLongaDown",
@@ -5714,6 +5719,12 @@ const std::array<const char*, int(SymId::lastSym)+1> Sym::symUserNames = { {
 
 //    additional symbols
 
+      "Parenthesised double flat accidental",
+      "Parenthesised flat accidental",
+      "Parenthesised natural accidental",
+      "Parenthesised sharp accidental",
+      "Parenthesised double sharp accidental",
+
       "noteLongaUp",
       "noteLongaDown",
       "noteLongaSquareUp",
@@ -6853,5 +6864,3 @@ ScoreFont::~ScoreFont()
       }
 
 }
-
-

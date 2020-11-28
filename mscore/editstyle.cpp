@@ -185,6 +185,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::hideInstrumentNameIfOneInstrument, false, hideInstrumentNameIfOneInstrument, 0 },
       { Sid::accidentalNoteDistance,  false, accidentalNoteDistance,  0 },
       { Sid::accidentalDistance,      false, accidentalDistance,      0 },
+      { Sid::bracketedAccidentalPadding, false, accidentalsBracketsBadding,     resetAccidentalsBracketPadding },
+      { Sid::alignAccidentalsLeft,    false, accidentalsOctaveColumnsAlignLeft, resetAccidentalsOctaveColumnsAlignLeft },
 
       { Sid::minNoteDistance,         false, minNoteDistance,         resetMinNoteDistance },
       { Sid::barNoteDistance,         false, barNoteDistance,         resetBarNoteDistance },
