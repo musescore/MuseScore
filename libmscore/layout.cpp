@@ -3697,6 +3697,7 @@ System* Score::collectSystem(LayoutContext& lc)
       Measure* measure  = _systems.empty() ? 0 : _systems.back()->lastMeasure();
       if (measure) {
             lc.firstSystem        = measure->sectionBreak() && _layoutMode != LayoutMode::FLOAT;
+            lc.firstSystemIndent  = lc.firstSystem && measure->sectionBreakElement()->firstSystemIdentation() && styleB(Sid::enableIndentationOnFirstSystem);
             lc.startWithLongNames = lc.firstSystem && measure->sectionBreakElement()->startWithLongNames();
             }
       System* system = getNextSystem(lc);
@@ -3898,7 +3899,7 @@ System* Score::collectSystem(LayoutContext& lc)
       // Relayout system decorations to reuse space properly for
       // hidden staves' instrument names or other hidden elements.
       minWidth -= system->leftMargin();
-      system->layoutSystem(layoutSystemMinWidth, lc.firstSystem);
+      system->layoutSystem(layoutSystemMinWidth, lc.firstSystem, lc.firstSystemIndent);
       minWidth += system->leftMargin();
 
       //-------------------------------------------------------
@@ -3996,6 +3997,7 @@ System* Score::collectSystem(LayoutContext& lc)
       lm  = system->lastMeasure();
       if (lm) {
             lc.firstSystem        = lm->sectionBreak() && _layoutMode != LayoutMode::FLOAT;
+            lc.firstSystemIndent  = lc.firstSystem && lm->sectionBreakElement()->firstSystemIdentation() && styleB(Sid::enableIndentationOnFirstSystem);
             lc.startWithLongNames = lc.firstSystem && lm->sectionBreakElement()->startWithLongNames();
             }
 
@@ -4982,6 +4984,16 @@ void LayoutContext::layout()
                   p->rebuildBspTree();
             }
       score->systems().append(systemList);     // TODO
+      }
+
+//---------------------------------------------------------
+//   LayoutContext::LayoutContext
+//---------------------------------------------------------
+
+LayoutContext::LayoutContext(Score* s)
+      : score(s)
+      {
+      firstSystemIndent = score && score->styleB(Sid::enableIndentationOnFirstSystem);
       }
 
 //---------------------------------------------------------

@@ -86,45 +86,6 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0" colspan="2">
-       <widget class="QCheckBox" name="startWithLongNames">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>Start new section with long instrument names</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="Ms::ResetButton" name="resetStartWithLongNames" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Start new section with long instrument names' value</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0" colspan="2">
-       <widget class="QCheckBox" name="startWithMeasureOne">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>Start new section with measure number one</string>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="2">
        <widget class="Ms::ResetButton" name="resetStartWithMeasureOne" native="true">
         <property name="sizePolicy">
@@ -167,6 +128,66 @@
         </property>
        </widget>
       </item>
+      <item row="2" column="0" colspan="2">
+       <widget class="QCheckBox" name="startWithMeasureOne">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Start new section with measure number one</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" colspan="2">
+       <widget class="QCheckBox" name="startWithLongNames">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Start new section with long instrument names</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="Ms::ResetButton" name="resetStartWithLongNames" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Start new section with long instrument names' value</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QCheckBox" name="firstSystemIndentation">
+        <property name="text">
+         <string>Start new section with first system indentation</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="Ms::ResetButton" name="resetFirstSystemIndentation" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Start new section with long instrument names' value</string>
+        </property>
+       </widget>
+      </item>
+      
      </layout>
     </widget>
    </item>

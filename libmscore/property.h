@@ -355,6 +355,7 @@ enum class Pid {
 
       START_WITH_LONG_NAMES,
       START_WITH_MEASURE_ONE,
+      FIRST_SYSTEM_INDENTATION,
 
       PATH, // for ChordLine to make its shape changes undoable
       
