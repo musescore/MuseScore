@@ -681,7 +681,7 @@ int commonTextSymbols[] = {
     0x00e9,      // &eacute;
     0x00ea,      // &ecirc;
     0x00eb,      // &euml;
-    0x00ec,      // igrave;
+    0x00ec,      // &igrave;
     0x00ed,      // &iacute;
     0x00ee,      // &icirc;
     0x00ef,      // &iuml;
@@ -729,9 +729,33 @@ int commonTextSymbols[] = {
     0x215D,      // &frac58; ?
     0x215E,      // &frac78; ?
 
-    // 0x203F,    // curved ligature to connect two syllables
-    0x035c,      // curved ligature to connect two syllables
-    0x0361       // curved ligature (top)
+    //0x203F,    // undertie
+    0x035c,    // curved ligature to connect two syllables
+    //0x2040,    // character tie
+    0x0361,    // curved ligature (top)
+
+    0x2013,    // &endash
+    0x2014,    // &emdash
+    0x2018,    // &rsquo;
+    0x2019,    // &lsquo;
+    0x201C,    // &ldquo;
+    0x201D,    // &rdquo;
+    0x2020,    // &dagger;
+    0x2021,    // &Dagger;
+    0x2022,    // &bull;
+    0x2026,    // &mldr;
+    0x00A7,    // &sect;
+    0x00B0,    // &deg;
+    0x00B1,    // &pm;
+    0x00B9,    // &sup1;
+    0x00B2,    // &sup2;
+    0x00B3,    // &sup3;
+
+    0x0024,    // &dollar;
+    0x20Ac,    // &euro;
+    0x00A2,    // &cent;
+    0x00A3,    // &pound;
+    0x00A5,    // &yen;
 };
 
 void TextPalette::populateCommon()
