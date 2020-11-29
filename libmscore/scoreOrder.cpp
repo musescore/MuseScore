@@ -626,8 +626,6 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
                               thnBracketSpan  = 0;
                               }
                         }
-                  if (sg->thinBracket && !blockThinBracket && !staffIdx)
-                        thnBracketSpan += part->nstaves();
 
                   if (ii.instrTemplate->nstaves() > 1)
                         {
@@ -641,6 +639,8 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
                         }
                   else
                         {
+                        if (sg->thinBracket && !staffIdx)
+                              thnBracketSpan += part->nstaves();
                         if (prvStaff)
                               prvStaff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, (sg->barLineSpan && (!prvScoreGroup || (sg->section() == prvScoreGroup->section()))));
                         prvStaff = staff;
