@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
-  <programVersion>3.0.0</programVersion>
-  <programRevision>3543170</programRevision>
+<museScore version="3.02">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
-    <Synthesizer>
-      </Synthesizer>
     <Division>480</Division>
     <Style>
+      <enableVerticalSpread>1</enableVerticalSpread>
+      <useStandardNoteNames>0</useStandardNoteNames>
       <concertPitch>1</concertPitch>
+      <enableIndentationOnFirstSystem>1</enableIndentationOnFirstSystem>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -27,16 +26,45 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
+    <Order id="woodwind-ensemble" customised="1">
+      <name>Woodwind Ensemble</name>
+      <instrument id="bassoon">
+        <family id="bassoons">Bassoons</family>
+        </instrument>
+      <instrument id="bb-clarinet">
+        <family id="clarinets">Clarinets</family>
+        </instrument>
+      <instrument id="flute">
+        <family id="flutes">Flutes</family>
+        </instrument>
+      <instrument id="horn">
+        <family id="horns">Horns</family>
+        </instrument>
+      <instrument id="oboe">
+        <family id="oboes">Oboes</family>
+        </instrument>
+      <soloists/>
+      <section id="woodwind" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="false">
+        <family>flutes</family>
+        <family>oboes</family>
+        <family>clarinets</family>
+        <family>horns</family>
+        <family>saxophones</family>
+        <family>bassoons</family>
+        </section>
+      <family>keyboards</family>
+      <unsorted/>
+      </Order>
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         <bracket type="0" span="5" col="0"/>
-        <barLineSpan>4</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Flute</trackName>
-      <Instrument>
+      <Instrument id="flute">
         <longName>Flute</longName>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
@@ -69,24 +97,24 @@
           <gateTime>67</gateTime>
           </Articulation>
         <Articulation name="sforzato">
-            <velocity>150</velocity>
-            <gateTime>100</gateTime>
-        </Articulation>
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
         <Articulation name="sforzatoStaccato">
-              <velocity>150</velocity>
-              <gateTime>50</gateTime>
-        </Articulation>
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
         <Articulation name="marcatoStaccato">
-              <velocity>120</velocity>
-              <gateTime>50</gateTime>
-        </Articulation>
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
         <Articulation name="marcatoTenuto">
-              <velocity>120</velocity>
-              <gateTime>100</gateTime>
-        </Articulation>
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
         <Channel>
+          <controller ctrl="32" value="17"/>
           <program value="73"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -95,10 +123,10 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <barLineSpan>3</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Oboe</trackName>
-      <Instrument>
+      <Instrument id="oboe">
         <longName>Oboe</longName>
         <trackName>Oboe</trackName>
         <minPitchP>58</minPitchP>
@@ -135,8 +163,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="32" value="17"/>
           <program value="68"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -145,10 +173,10 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <barLineSpan>2</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>B♭ Clarinet</trackName>
-      <Instrument>
+      <Instrument id="bb-clarinet">
         <longName>B♭ Clarinet</longName>
         <trackName>B♭ Clarinet</trackName>
         <minPitchP>50</minPitchP>
@@ -187,8 +215,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="32" value="17"/>
           <program value="71"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -200,7 +228,7 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Horn in F</trackName>
-      <Instrument>
+      <Instrument id="horn">
         <longName>Horn in F</longName>
         <trackName>Horn in F</trackName>
         <minPitchP>31</minPitchP>
@@ -239,8 +267,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="32" value="17"/>
           <program value="60"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -252,7 +280,7 @@
         <defaultClef>F</defaultClef>
         </Staff>
       <trackName>Bassoon</trackName>
-      <Instrument>
+      <Instrument id="bassoon">
         <longName>Bassoon</longName>
         <trackName>Bassoon</trackName>
         <minPitchP>34</minPitchP>
@@ -290,14 +318,15 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="32" value="17"/>
           <program value="70"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>Title</style>
           <text>Wind Quintet</text>
@@ -306,7 +335,6 @@
       <Measure>
         <voice>
           <BarLine>
-            <span>1</span>
             </BarLine>
           <TimeSig>
             <sigN>4</sigN>
@@ -409,7 +437,6 @@
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -418,7 +445,6 @@
       <Measure>
         <voice>
           <BarLine>
-            <span>1</span>
             </BarLine>
           <TimeSig>
             <sigN>4</sigN>
@@ -518,7 +544,6 @@
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -527,7 +552,6 @@
       <Measure>
         <voice>
           <BarLine>
-            <span>1</span>
             </BarLine>
           <TimeSig>
             <sigN>4</sigN>
@@ -627,7 +651,6 @@
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>

@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
-  <programVersion>3.0.0</programVersion>
-  <programRevision>3543170</programRevision>
+<museScore version="3.02">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
-    <Synthesizer>
-      </Synthesizer>
     <Division>480</Division>
     <Style>
+      <enableVerticalSpread>1</enableVerticalSpread>
+      <useStandardNoteNames>0</useStandardNoteNames>
+      <enableIndentationOnFirstSystem>1</enableIndentationOnFirstSystem>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -26,6 +25,31 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
+    <Order id="choir" customised="1">
+      <name>Choir</name>
+      <instrument id="alto">
+        <family id="voices">Voices</family>
+        </instrument>
+      <instrument id="bass">
+        <family id="voices">Voices</family>
+        </instrument>
+      <instrument id="piano">
+        <family id="keyboards">Keyboards</family>
+        </instrument>
+      <instrument id="soprano">
+        <family id="voices">Voices</family>
+        </instrument>
+      <instrument id="tenor">
+        <family id="voices">Voices</family>
+        </instrument>
+      <soloists/>
+      <section id="voices" brackets="true" showSystemMarkings="false" barLineSpan="false" thinBrackets="true">
+        <family>voices</family>
+        </section>
+      <family>keyboards</family>
+      <family>organs</family>
+      <unsorted/>
+      </Order>
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
@@ -34,7 +58,7 @@
         <bracket type="0" span="4" col="0"/>
         </Staff>
       <trackName>Soprano</trackName>
-      <Instrument>
+      <Instrument id="soprano">
         <longName>Soprano</longName>
         <shortName>S.</shortName>
         <trackName>Soprano</trackName>
@@ -68,24 +92,25 @@
           <gateTime>67</gateTime>
           </Articulation>
         <Articulation name="sforzato">
-            <velocity>150</velocity>
-            <gateTime>100</gateTime>
-        </Articulation>
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
         <Articulation name="sforzatoStaccato">
-              <velocity>150</velocity>
-              <gateTime>50</gateTime>
-        </Articulation>
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
         <Articulation name="marcatoStaccato">
-              <velocity>120</velocity>
-              <gateTime>50</gateTime>
-        </Articulation>
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
         <Articulation name="marcatoTenuto">
-              <velocity>120</velocity>
-              <gateTime>100</gateTime>
-        </Articulation>
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="52"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -96,7 +121,7 @@
           </StaffType>
         </Staff>
       <trackName>Alto</trackName>
-      <Instrument>
+      <Instrument id="alto">
         <longName>Alto</longName>
         <shortName>A.</shortName>
         <trackName>Alto</trackName>
@@ -134,8 +159,9 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="52"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -147,7 +173,7 @@
         <defaultClef>G8vb</defaultClef>
         </Staff>
       <trackName>Tenor</trackName>
-      <Instrument>
+      <Instrument id="tenor">
         <longName>Tenor</longName>
         <shortName>T.</shortName>
         <trackName>Tenor</trackName>
@@ -186,8 +212,9 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="52"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -199,7 +226,7 @@
         <defaultClef>F</defaultClef>
         </Staff>
       <trackName>Bass</trackName>
-      <Instrument>
+      <Instrument id="bass">
         <longName>Bass</longName>
         <shortName>B.</shortName>
         <trackName>Bass</trackName>
@@ -238,8 +265,9 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="52"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -248,7 +276,7 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="1" span="2" col="0"/>
+        <bracket type="1" span="2" col="2"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="6">
@@ -258,7 +286,7 @@
         <defaultClef>F</defaultClef>
         </Staff>
       <trackName>Piano</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Piano</longName>
         <shortName>Pno.</shortName>
         <trackName>Piano</trackName>
@@ -298,13 +326,13 @@
           </Articulation>
         <Channel>
           <program value="0"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>Title</style>
           <text>SATB + Piano</text>
@@ -312,9 +340,6 @@
         </VBox>
       <Measure>
         <voice>
-          <BarLine>
-            <span>1</span>
-            </BarLine>
           <TimeSig>
             <sigN>4</sigN>
             <sigD>4</sigD>
@@ -369,9 +394,6 @@
           </voice>
         </Measure>
       <Measure>
-        <MeasureNumber>
-          <text>7</text>
-          </MeasureNumber>
         <voice>
           <Rest>
             <durationType>measure</durationType>
@@ -417,18 +439,12 @@
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            </BarLine>
           </voice>
         </Measure>
       </Staff>
     <Staff id="2">
       <Measure>
         <voice>
-          <BarLine>
-            <span>1</span>
-            </BarLine>
           <TimeSig>
             <sigN>4</sigN>
             <sigD>4</sigD>
@@ -525,18 +541,12 @@
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            </BarLine>
           </voice>
         </Measure>
       </Staff>
     <Staff id="3">
       <Measure>
         <voice>
-          <BarLine>
-            <span>1</span>
-            </BarLine>
           <TimeSig>
             <sigN>4</sigN>
             <sigD>4</sigD>
@@ -633,18 +643,12 @@
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            </BarLine>
           </voice>
         </Measure>
       </Staff>
     <Staff id="4">
       <Measure>
         <voice>
-          <BarLine>
-            <span>1</span>
-            </BarLine>
           <TimeSig>
             <sigN>4</sigN>
             <sigD>4</sigD>
@@ -741,17 +745,12 @@
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            </BarLine>
           </voice>
         </Measure>
       </Staff>
     <Staff id="5">
       <Measure>
         <voice>
-          <BarLine>
-            </BarLine>
           <TimeSig>
             <sigN>4</sigN>
             <sigD>4</sigD>
@@ -848,18 +847,12 @@
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            </BarLine>
           </voice>
         </Measure>
       </Staff>
     <Staff id="6">
       <Measure>
         <voice>
-          <BarLine>
-            <span>1</span>
-            </BarLine>
           <TimeSig>
             <sigN>4</sigN>
             <sigD>4</sigD>
@@ -956,9 +949,6 @@
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            </BarLine>
           </voice>
         </Measure>
       </Staff>

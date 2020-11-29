@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
-  <programVersion>3.0.0</programVersion>
-  <programRevision>3543170</programRevision>
+<museScore version="3.02">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
-    <Synthesizer>
-      </Synthesizer>
     <Division>480</Division>
     <Style>
+      <enableVerticalSpread>1</enableVerticalSpread>
+      <useStandardNoteNames>0</useStandardNoteNames>
+      <enableIndentationOnFirstSystem>1</enableIndentationOnFirstSystem>
       <Spatium>1.564</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -35,7 +34,7 @@
         <barLineSpan>6</barLineSpan>
         </Staff>
       <trackName>Lead Vocals</trackName>
-      <Instrument>
+      <Instrument id="voice">
         <longName>Lead Vocals</longName>
         <shortName>L. Voc.</shortName>
         <trackName>Voice</trackName>
@@ -73,8 +72,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="32" value="17"/>
           <program value="52"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -86,7 +85,7 @@
         <barLineSpan>5</barLineSpan>
         </Staff>
       <trackName>Backing Vocals</trackName>
-      <Instrument>
+      <Instrument id="voice">
         <longName>Backing Vocals</longName>
         <shortName>Bk. Voc.</shortName>
         <trackName>Voice</trackName>
@@ -120,24 +119,24 @@
           <gateTime>67</gateTime>
           </Articulation>
         <Articulation name="sforzato">
-            <velocity>150</velocity>
-            <gateTime>100</gateTime>
-        </Articulation>
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
         <Articulation name="sforzatoStaccato">
-              <velocity>150</velocity>
-              <gateTime>50</gateTime>
-        </Articulation>
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
         <Articulation name="marcatoStaccato">
-              <velocity>120</velocity>
-              <gateTime>50</gateTime>
-        </Articulation>
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
         <Articulation name="marcatoTenuto">
-              <velocity>120</velocity>
-              <gateTime>100</gateTime>
-        </Articulation>
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
         <Channel>
+          <controller ctrl="32" value="17"/>
           <program value="52"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -149,7 +148,7 @@
         <barLineSpan>4</barLineSpan>
         </Staff>
       <trackName>Fiddle</trackName>
-      <Instrument>
+      <Instrument id="violin">
         <longName>Fiddle</longName>
         <shortName>Fiddle</shortName>
         <trackName>Violin</trackName>
@@ -187,16 +186,15 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="32" value="17"/>
           <program value="40"/>
-          <synti>Fluid</synti>
           </Channel>
         <Channel name="pizzicato">
           <program value="45"/>
-          <synti>Fluid</synti>
           </Channel>
         <Channel name="tremolo">
+          <controller ctrl="32" value="17"/>
           <program value="44"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -208,7 +206,7 @@
         <barLineSpan>3</barLineSpan>
         </Staff>
       <trackName>Mandolin</trackName>
-      <Instrument>
+      <Instrument id="mandolin">
         <longName>Mandolin</longName>
         <shortName>Mdn.</shortName>
         <trackName>Mandolin</trackName>
@@ -254,7 +252,6 @@
           </Articulation>
         <Channel>
           <program value="24"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -267,7 +264,7 @@
         <barLineSpan>2</barLineSpan>
         </Staff>
       <trackName>Banjo</trackName>
-      <Instrument>
+      <Instrument id="banjo">
         <longName>Banjo</longName>
         <shortName>Bj.</shortName>
         <trackName>Banjo</trackName>
@@ -315,7 +312,6 @@
           </Articulation>
         <Channel>
           <program value="105"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -328,7 +324,7 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Guitar</trackName>
-      <Instrument>
+      <Instrument id="guitar-steel">
         <longName>Guitar</longName>
         <shortName>Guit.</shortName>
         <trackName>Acoustic Guitar</trackName>
@@ -377,7 +373,6 @@
           </Articulation>
         <Channel>
           <program value="25"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -390,7 +385,7 @@
         <defaultTransposingClef>F</defaultTransposingClef>
         </Staff>
       <trackName>Acoustic Bass</trackName>
-      <Instrument>
+      <Instrument id="acoustic-bass">
         <longName>Bass</longName>
         <shortName>Bass</shortName>
         <trackName>Acoustic Bass</trackName>
@@ -440,29 +435,25 @@
           </Articulation>
         <Channel>
           <program value="32"/>
-          <synti>Fluid</synti>
           </Channel>
         <Channel name="arco">
           <program value="43"/>
-          <synti>Fluid</synti>
           </Channel>
         <Channel name="tremolo">
           <program value="44"/>
-          <synti>Fluid</synti>
           </Channel>
         <Channel name="slap">
           <program value="36"/>
-          <synti>Fluid</synti>
           </Channel>
         <Channel name="pop">
           <program value="37"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>Title</style>
           <text>Bluegrass Band

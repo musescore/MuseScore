@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
-  <programVersion>3.0.0</programVersion>
-  <programRevision>3543170</programRevision>
+<museScore version="3.02">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
-    <Synthesizer>
-      </Synthesizer>
     <Division>480</Division>
     <Style>
+      <enableVerticalSpread>1</enableVerticalSpread>
       <lyricsLineThickness>0.3</lyricsLineThickness>
       <lyricsOddFontFace>MuseJazz Text</lyricsOddFontFace>
       <lyricsEvenFontFace>MuseJazz Text</lyricsEvenFontFace>
@@ -31,18 +28,14 @@
       <pedalFontFace>MuseJazz Text</pedalFontFace>
       <maxChordShiftAbove>3</maxChordShiftAbove>
       <maxChordShiftBelow>3</maxChordShiftBelow>
-      <chordSymbolPosAbove x="0" y="-2.5"/>
       <chordSymbolBPosAbove x="0" y="-5.5"/>
       <chordSymbolAFontFace>MuseJazz Text</chordSymbolAFontFace>
       <chordSymbolAFontSize>15</chordSymbolAFontSize>
-      <chordSymbolAAlign>left,baseline</chordSymbolAAlign>
-      <chordSymbolBPosAbove x="0" y="-5.5"/>
       <chordSymbolBFontFace>MuseJazz Text</chordSymbolBFontFace>
       <maxFretShiftAbove>3</maxFretShiftAbove>
       <maxFretShiftBelow>3</maxFretShiftBelow>
-      <chordSymbolBFontSize>12</chordSymbolBFontSize>
-      <chordSymbolBAlign>left,baseline</chordSymbolBAlign>
       <showMeasureNumber>0</showMeasureNumber>
+      <useStandardNoteNames>0</useStandardNoteNames>
       <chordStyle>jazz</chordStyle>
       <chordDescriptionFile>chords_jazz.xml</chordDescriptionFile>
       <slurEndWidth>0.12</slurEndWidth>
@@ -121,7 +114,7 @@
           </StaffType>
         </Staff>
       <trackName>Piano</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Piano</longName>
         <shortName>Pno.</shortName>
         <trackName>Piano</trackName>
@@ -155,30 +148,30 @@
           <gateTime>67</gateTime>
           </Articulation>
         <Articulation name="sforzato">
-            <velocity>150</velocity>
-            <gateTime>100</gateTime>
-        </Articulation>
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
         <Articulation name="sforzatoStaccato">
-              <velocity>150</velocity>
-              <gateTime>50</gateTime>
-        </Articulation>
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
         <Articulation name="marcatoStaccato">
-              <velocity>120</velocity>
-              <gateTime>50</gateTime>
-        </Articulation>
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
         <Articulation name="marcatoTenuto">
-              <velocity>120</velocity>
-              <gateTime>100</gateTime>
-        </Articulation>
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
         <Channel>
           <program value="0"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>Title</style>
           <text>Jazz Lead Sheet</text>
