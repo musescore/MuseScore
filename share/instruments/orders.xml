@@ -49,6 +49,16 @@
         </section>
         <unsorted/>
     </Order>
+    <Order id="choir">
+        <name>Choir</name>
+        <soloists/>
+        <section id="voices" barLineSpan="false">
+            <family>voices</family>
+        </section>
+        <family>keyboards</family>
+        <family>organs</family>
+        <unsorted/>
+    </Order>
     <Order id="bigband">
         <name>Big Band</name>
         <!-- Define a local Guitar family -->
@@ -128,8 +138,84 @@
         </section>
         <unsorted/>
     </Order>
-    <Order id="concert-band-europe">
-        <name>Concert Band (Europe)</name>
+    <Order id="jazz-combo">
+        <name>Jazz Combo</name>
+        <!-- Define a local Guitar family -->
+        <instrument id="guitar-nylon-treble-clef">
+            <family id="guitars">Guitars</family>
+        </instrument>
+        <instrument id="7-string-guitar">
+            <family id="guitars">Guitars</family>
+        </instrument>
+        <instrument id="guitar-steel">
+            <family id="guitars">Guitars</family>
+        </instrument>
+        <instrument id="guitar-steel-tablature">
+            <family id="guitars">Guitars</family>
+        </instrument>
+        <instrument id="electric-guitar">
+            <family id="guitars">Guitars</family>
+        </instrument>
+        <instrument id="electric-guitar-treble-clef">
+            <family id="guitars">Guitars</family>
+        </instrument>
+        <!-- Define a local Basses family -->
+        <instrument id="bass-guitar">
+            <family id="basses">Basses</family>
+        </instrument>
+        <instrument id="acoustic-bass">
+            <family id="basses">Basses</family>
+        </instrument>
+        <instrument id="electric-bass">
+            <family id="basses">Basses</family>
+        </instrument>
+        <instrument id="5-string-electric-bass">
+            <family id="basses">Basses</family>
+        </instrument>
+        <instrument id="5-string-electric-bass-high-c">
+            <family id="basses">Basses</family>
+        </instrument>
+        <instrument id="6-string-electric-bass">
+            <family id="basses">Basses</family>
+        </instrument>
+        <instrument id="contrabass">
+            <family id="basses">Basses</family>
+        </instrument>
+        <instrument id="double-bass">
+            <family id="basses">Basses</family>
+        </instrument>
+        <instrument id="drumset">
+            <family id="drumset">Drumset</family>
+        </instrument>
+        <soloists/>
+        <family>voices</family>
+        <family>trumpets</family>
+        <family>saxophones</family>
+        <family>trombones</family>
+        <family>guitars</family>
+        <family>keyboards</family>
+        <family>basses</family>
+        <family>drumset</family>
+        <unsorted group="pitched-percussion"/>
+        <unsorted group="unpitched-percussion"/>
+        <unsorted/>
+    </Order>
+    <Order id="rock-band">
+        <name>Rock Band</name>
+        <instrument id="drumset">
+            <family id="drumset">Drumset</family>
+        </instrument>
+        <section id="vocals" barLineSpan="false" thinBrackets="false">
+            <family>voices</family>
+        </section>
+        <section id="guitars" thinBrackets="false">
+            <family>plucked-strings</family>
+        </section>
+        <family>drumset</family>
+        <unsorted/>
+    </Order>
+    <Order id="concert-band">
+        <name>Concert Band</name>
         <instrument id="flugelhorn">
             <family id="flugelhorn">Flugelhorn</family>
         </instrument>
@@ -142,7 +228,7 @@
         <instrument id="baritone-horn-treble">
             <family id="baritones">Baritones</family>
         </instrument>
-       <!-- Define a local Guitar family -->
+        <!-- Define a local Guitar family -->
         <instrument id="guitar-nylon-treble-clef">
             <family id="guitars">Guitars</family>
         </instrument>
@@ -202,17 +288,11 @@
             <family>saxophones</family>
         </section>
         <unsorted group="woodwinds"/>
-        <section id="trumpets">
+        <section id="brass">
             <family>cornets</family>
             <family>trumpets</family>
-        </section>
-        <section>
             <family>horns</family>
-        </section>
-        <section id="trombones">
             <family>trombones</family>
-        </section>
-        <section id="lowbrass">
             <family>baritones</family>
             <family>tubas</family>
         </section>
@@ -220,18 +300,58 @@
         <family>guitars</family>
         <family>bass-guitars</family>
         <family>string-basses</family>
-        <section id="timpani">
+        <section id="percussion" thinBrackets="false">
             <family>timpani</family>
             <family>keyboard-percussion</family>
-        </section>
-        <family>drumset</family>
-        <section id="percussion">
+            <family>drumset</family>
             <unsorted group="unpitched-percussion"/>
         </section>
         <unsorted/>
     </Order>
-    <Order id="concert-band-us">
-        <name>Concert Band (US)</name>
+    <Order id="brass-band">
+        <name>Brass Band</name>
+        <instrument id="flugelhorn">
+            <family id="flugelhorns">Flugelhorns</family>
+        </instrument>
+        <instrument id="euphonium">
+            <family id="euphoniums">Euphoniums</family>
+        </instrument>
+        <instrument id="euphonium-treble">
+            <family id="euphoniums">Euphoniums</family>
+        </instrument>
+        <instrument id="drumset">
+            <family id="drumset">Drumset</family>
+        </instrument>
+        <soloists/>
+        <section id="cornets" thinBrackets="false">
+            <family>cornets</family>
+        </section>
+        <section id="horns" thinBrackets="false">
+            <family>flugelhorns</family>
+            <family>horns</family>
+        </section>
+        <section id="baritones" thinBrackets="false">
+            <family>saxhorns</family>
+        </section>
+        <section id="trombones" thinBrackets="false">
+            <family>trombones</family>
+        </section>
+        <section id="euphoniums" thinBrackets="false">
+            <family>euphoniums</family>
+        </section>
+        <section id="tubas" thinBrackets="false">
+            <family>tubas</family>
+        </section>
+        <section id="percussion" thinBrackets="false">
+            <family>timpani</family>
+            <family>keyboard-percussion</family>
+            <family>drumset</family>
+            <unsorted group="unpitched-percussion"/>
+        </section>
+        <unsorted/>
+    </Order>
+    <Order id="small-concert-band">
+        <name>Small Concert Band</name>
         <instrument id="flugelhorn">
             <family id="flugelhorn">Flugelhorn</family>
         </instrument>
@@ -244,7 +364,7 @@
         <instrument id="baritone-horn-treble">
             <family id="baritones">Baritones</family>
         </instrument>
-       <!-- Define a local Guitar family -->
+        <!-- Define a local Guitar family -->
         <instrument id="guitar-nylon-treble-clef">
             <family id="guitars">Guitars</family>
         </instrument>
@@ -291,32 +411,22 @@
         <instrument id="drumset">
             <family id="drumset">Drumset</family>
         </instrument>
+        <soloists/>
         <section id="woodwind">
             <family>flutes</family>
             <family>oboes</family>
-        </section>
-        <section id="clarinets">
-            <family>clarinets</family>
-        </section>
-        <section>
             <family>bassoons</family>
+            <family>clarinets</family>
         </section>
         <section id="saxophones">
             <family>saxophones</family>
         </section>
         <unsorted group="woodwinds"/>
-        <soloists/>
-        <section id="trumpets">
+        <section id="brass">
+            <family>horns</family>
             <family>cornets</family>
             <family>trumpets</family>
-        </section>
-        <section>
-            <family>horns</family>
-        </section>
-        <section id="trombones">
             <family>trombones</family>
-        </section>
-        <section id="lowbrass">
             <family>baritones</family>
             <family>tubas</family>
         </section>
@@ -324,14 +434,140 @@
         <family>guitars</family>
         <family>bass-guitars</family>
         <family>string-basses</family>
-        <section id="timpani">
+        <section id="percussion" thinBrackets="false">
             <family>timpani</family>
             <family>keyboard-percussion</family>
-        </section>
-        <family>drumset</family>
-        <section id="percussion">
+            <family>drumset</family>
             <unsorted group="unpitched-percussion"/>
         </section>
+        <unsorted/>
+    </Order>
+    <Order id="marching-band">
+        <name>Marching Band</name>
+        <instrument id="mellophone">
+            <family id="horns">Horns</family>
+        </instrument>
+        <instrument id="baritone-horn">
+            <family id="baritones">Baritones</family>
+        </instrument>
+        <instrument id="baritone-horn">
+            <family id="baritones">Baritones</family>
+        </instrument>
+        <instrument id="baritone-horn-treble">
+            <family id="baritones">Baritones</family>
+        </instrument>
+        <instrument id="sousaphone">
+            <family id="tubas">Tubas</family>
+        </instrument>
+        <instrument id="glockenspiel">
+            <family id="glockenspiel">Glockenspiel</family>
+        </instrument>
+        <instrument id="xylophone">
+            <family id="xylophone">Xylophone</family>
+        </instrument>
+        <instrument id="vibraphone">
+            <family id="vibraphone">Vibraphone</family>
+        </instrument>
+        <instrument id="marimba">
+            <family id="marimba">Marimba</family>
+        </instrument>
+        <instrument id="marimba-single">
+            <family id="marimba">Marimba</family>
+        </instrument>
+        <instrument id="percussion">
+            <family id="percussion">Percussion</family>
+        </instrument>
+        <instrument id="marching-snare">
+            <family id="unpitched-percussion">Unpitched Percussion</family>
+        </instrument>
+        <instrument id="marching-tenor-drums">
+            <family id="unpitched-percussion">Unpitched Percussion</family>
+        </instrument>
+        <instrument id="marching-bass-drums">
+            <family id="unpitched-percussion">Unpitched Percussion</family>
+        </instrument>
+        <instrument id="marching-cymbals">
+            <family id="unpitched-percussion">Unpitched Percussion</family>
+        </instrument>
+        <instrument id="drumset">
+            <family id="drumset">Drumset</family>
+        </instrument>
+        <soloists/>
+        <section id="woodwind">
+            <family>flutes</family>
+            <family>oboes</family>
+            <family>bassoons</family>
+            <family>clarinets</family>
+        </section>
+        <section id="saxophones">
+            <family>saxophones</family>
+        </section>
+        <unsorted group="woodwinds"/>
+        <section id="brass">
+            <family>cornets</family>
+            <family>trumpets</family>
+            <family>horns</family>
+            <family>trombones</family>
+            <family>baritones</family>
+            <family>tubas</family>
+        </section>
+        <unsorted group="brass"/>
+        <section id="pitched-percussion">
+            <family>glockenspiel</family>
+            <family>xylophone</family>
+            <family>vibraphone</family>
+            <family>marimba</family>
+            <family>timpani</family>
+            <family>percussion</family>
+        </section>
+        <section id="unpitched-percussion">
+            <family>unpitched-percussion</family>
+        </section>
+        <unsorted/>
+    </Order>
+    <Order id="woodwind-ensemble">
+        <name>Woodwind Ensemble</name>
+        <soloists>
+            <section id="woodwind" showSystemMarkings="true">
+                <family>flutes</family>
+                <family>oboes</family>
+                <family>clarinets</family>
+                <family>saxophones</family>
+                <family>bassoons</family>
+                <unsorted group="woodwinds"/>
+            </section>
+        </soloists>
+        <section id="woodwind" thinBrackets="false">
+            <family>flutes</family>
+            <family>oboes</family>
+            <family>clarinets</family>
+            <family>horns</family>
+            <family>saxophones</family>
+            <family>bassoons</family>
+        </section>
+        <family>keyboards</family>
+        <unsorted/>
+    </Order>
+    <Order id="brass-ensemble">
+        <name>Brass Ensemble</name>
+        <soloists/>
+        <section id="brass" thinBrackets="false">
+            <family>trumpets</family>
+            <family>cornets</family>
+            <family>horns</family>
+            <family>trombones</family>
+            <family>tubas</family>
+        </section>
+        <family>keyboards</family>
+        <unsorted/>
+    </Order>
+    <Order id="string-ensemble">
+        <name>String Ensemble</name>
+        <soloists/>
+        <section id="strings" thinBrackets="false">
+            <family>orchestral-strings</family>
+        </section>
+        <family>keyboards</family>
         <unsorted/>
     </Order>
 </museScore>

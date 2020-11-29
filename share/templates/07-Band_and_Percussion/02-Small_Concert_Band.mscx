@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
-  <programVersion>3.0.0</programVersion>
-  <programRevision>3543170</programRevision>
+<museScore version="3.02">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
-    <Synthesizer>
-      </Synthesizer>
     <Division>480</Division>
     <Style>
+      <enableVerticalSpread>1</enableVerticalSpread>
+      <useStandardNoteNames>0</useStandardNoteNames>
+      <enableIndentationOnFirstSystem>1</enableIndentationOnFirstSystem>
       <Spatium>1.164</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -26,16 +25,148 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
+    <Order id="small-concert-band" customised="1">
+      <name>Small Concert Band</name>
+      <instrument id="5-string-electric-bass">
+        <family id="bass-guitars">Basses</family>
+        </instrument>
+      <instrument id="5-string-electric-bass-high-c">
+        <family id="bass-guitars">Basses</family>
+        </instrument>
+      <instrument id="6-string-electric-bass">
+        <family id="bass-guitars">Basses</family>
+        </instrument>
+      <instrument id="7-string-guitar">
+        <family id="guitars">Guitars</family>
+        </instrument>
+      <instrument id="acoustic-bass">
+        <family id="bass-guitars">Basses</family>
+        </instrument>
+      <instrument id="alto-saxophone">
+        <family id="saxophones">Saxophones</family>
+        </instrument>
+      <instrument id="baritone-horn">
+        <family id="baritones">Baritones</family>
+        </instrument>
+      <instrument id="baritone-horn-treble">
+        <family id="baritones">Baritones</family>
+        </instrument>
+      <instrument id="baritone-saxophone">
+        <family id="saxophones">Saxophones</family>
+        </instrument>
+      <instrument id="bass-clarinet">
+        <family id="clarinets">Clarinets</family>
+        </instrument>
+      <instrument id="bass-guitar">
+        <family id="bass-guitars">Basses</family>
+        </instrument>
+      <instrument id="bassoon">
+        <family id="bassoons">Bassoons</family>
+        </instrument>
+      <instrument id="bb-clarinet">
+        <family id="clarinets">Clarinets</family>
+        </instrument>
+      <instrument id="bb-trumpet">
+        <family id="trumpets">Trumpets</family>
+        </instrument>
+      <instrument id="contrabass">
+        <family id="string-basses">Basses</family>
+        </instrument>
+      <instrument id="double-bass">
+        <family id="string-basses">Basses</family>
+        </instrument>
+      <instrument id="drumset">
+        <family id="drums">Drums</family>
+        </instrument>
+      <instrument id="electric-bass">
+        <family id="bass-guitars">Basses</family>
+        </instrument>
+      <instrument id="electric-guitar">
+        <family id="guitars">Guitars</family>
+        </instrument>
+      <instrument id="electric-guitar-treble-clef">
+        <family id="guitars">Guitars</family>
+        </instrument>
+      <instrument id="euphonium">
+        <family id="tubas">Tubas</family>
+        </instrument>
+      <instrument id="flugelhorn">
+        <family id="flugelhorn">Flugelhorn</family>
+        </instrument>
+      <instrument id="flute">
+        <family id="flutes">Flutes</family>
+        </instrument>
+      <instrument id="glockenspiel">
+        <family id="keyboard-percussion">Keyboard Percussion</family>
+        </instrument>
+      <instrument id="guitar-nylon-treble-clef">
+        <family id="guitars">Guitars</family>
+        </instrument>
+      <instrument id="guitar-steel">
+        <family id="guitars">Guitars</family>
+        </instrument>
+      <instrument id="guitar-steel-tablature">
+        <family id="guitars">Guitars</family>
+        </instrument>
+      <instrument id="horn">
+        <family id="horns">Horns</family>
+        </instrument>
+      <instrument id="oboe">
+        <family id="oboes">Oboes</family>
+        </instrument>
+      <instrument id="tenor-saxophone">
+        <family id="saxophones">Saxophones</family>
+        </instrument>
+      <instrument id="timpani">
+        <family id="timpani">Timpani</family>
+        </instrument>
+      <instrument id="trombone">
+        <family id="trombones">Trombones</family>
+        </instrument>
+      <instrument id="tuba">
+        <family id="tubas">Tubas</family>
+        </instrument>
+      <soloists/>
+      <section id="woodwind" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
+        <family>flutes</family>
+        <family>oboes</family>
+        <family>bassoons</family>
+        <family>clarinets</family>
+        </section>
+      <section id="saxophones" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
+        <family>saxophones</family>
+        </section>
+      <unsorted group="woodwinds"/>
+      <section id="brass" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
+        <family>horns</family>
+        <family>cornets</family>
+        <family>trumpets</family>
+        <family>trombones</family>
+        <family>baritones</family>
+        <family>tubas</family>
+        </section>
+      <unsorted group="brass"/>
+      <family>guitars</family>
+      <family>bass-guitars</family>
+      <family>string-basses</family>
+      <section id="percussion" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="false">
+        <family>timpani</family>
+        <family>keyboard-percussion</family>
+        <family>drumset</family>
+        <unsorted group="unpitched-percussion"/>
+        </section>
+      <unsorted/>
+      </Order>
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="0" span="9" col="0"/>
-        <barLineSpan>8</barLineSpan>
+        <bracket type="0" span="6" col="0"/>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Flute</trackName>
-      <Instrument>
+      <Instrument id="flute">
         <longName>Flute</longName>
         <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
@@ -69,24 +200,24 @@
           <gateTime>67</gateTime>
           </Articulation>
         <Articulation name="sforzato">
-            <velocity>150</velocity>
-            <gateTime>100</gateTime>
-        </Articulation>
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
         <Articulation name="sforzatoStaccato">
-              <velocity>150</velocity>
-              <gateTime>50</gateTime>
-        </Articulation>
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
         <Articulation name="marcatoStaccato">
-              <velocity>120</velocity>
-              <gateTime>50</gateTime>
-        </Articulation>
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
         <Articulation name="marcatoTenuto">
-              <velocity>120</velocity>
-              <gateTime>100</gateTime>
-        </Articulation>
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
         <Channel>
+          <controller ctrl="32" value="17"/>
           <program value="73"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -95,10 +226,10 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <barLineSpan>7</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Oboe</trackName>
-      <Instrument>
+      <Instrument id="oboe">
         <longName>Oboe</longName>
         <shortName>Ob.</shortName>
         <trackName>Oboe</trackName>
@@ -136,8 +267,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="32" value="17"/>
           <program value="68"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -147,10 +278,10 @@
           <name>stdNormal</name>
           </StaffType>
         <defaultClef>F</defaultClef>
-        <barLineSpan>6</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Bassoon</trackName>
-      <Instrument>
+      <Instrument id="bassoon">
         <longName>Bassoon</longName>
         <shortName>Bsn.</shortName>
         <trackName>Bassoon</trackName>
@@ -189,8 +320,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="32" value="17"/>
           <program value="70"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -200,10 +331,10 @@
           <name>stdNormal</name>
           </StaffType>
         <bracket type="2" span="2" col="1"/>
-        <barLineSpan>5</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>B♭ Clarinet 1</trackName>
-      <Instrument>
+      <Instrument id="bb-clarinet">
         <longName>B♭ Clarinet 1</longName>
         <shortName>B♭ Cl. 1</shortName>
         <trackName>B♭ Clarinet</trackName>
@@ -243,8 +374,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="32" value="17"/>
           <program value="71"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -253,10 +384,10 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <barLineSpan>4</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>B♭ Clarinet 2</trackName>
-      <Instrument>
+      <Instrument id="bb-clarinet">
         <longName>B♭ Clarinet 2</longName>
         <shortName>B♭ Cl. 2</shortName>
         <trackName>B♭ Clarinet</trackName>
@@ -296,8 +427,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="32" value="17"/>
           <program value="71"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -308,10 +439,9 @@
           </StaffType>
         <defaultConcertClef>G8vb</defaultConcertClef>
         <defaultTransposingClef>G</defaultTransposingClef>
-        <barLineSpan>3</barLineSpan>
         </Staff>
       <trackName>Bass Clarinet</trackName>
-      <Instrument>
+      <Instrument id="bass-clarinet">
         <longName>Bass Clarinet</longName>
         <shortName>B. Cl.</shortName>
         <trackName>Bass Clarinet</trackName>
@@ -353,8 +483,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="32" value="17"/>
           <program value="71"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -363,11 +493,11 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="2" span="3" col="1"/>
-        <barLineSpan>2</barLineSpan>
+        <bracket type="0" span="3" col="0"/>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Alto Saxophone</trackName>
-      <Instrument>
+      <Instrument id="alto-saxophone">
         <longName>Alto Saxophone</longName>
         <shortName>A. Sax.</shortName>
         <trackName>Alto Saxophone</trackName>
@@ -407,8 +537,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="32" value="17"/>
           <program value="65"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -422,7 +552,7 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Tenor Saxophone</trackName>
-      <Instrument>
+      <Instrument id="tenor-saxophone">
         <longName>Tenor Saxophone</longName>
         <shortName>T. Sax.</shortName>
         <trackName>Tenor Saxophone</trackName>
@@ -464,8 +594,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="32" value="17"/>
           <program value="66"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -478,7 +608,7 @@
         <defaultTransposingClef>G</defaultTransposingClef>
         </Staff>
       <trackName>Baritone Saxophone</trackName>
-      <Instrument>
+      <Instrument id="baritone-saxophone">
         <longName>Baritone Saxophone</longName>
         <shortName>Bar. Sax.</shortName>
         <trackName>Baritone Saxophone</trackName>
@@ -520,8 +650,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="32" value="17"/>
           <program value="67"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -531,10 +661,10 @@
           <name>stdNormal</name>
           </StaffType>
         <bracket type="0" span="7" col="0"/>
-        <barLineSpan>6</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Horn in F</trackName>
-      <Instrument>
+      <Instrument id="horn">
         <longName>Horn in F</longName>
         <shortName>F Hn.</shortName>
         <trackName>Horn in F</trackName>
@@ -574,8 +704,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="32" value="17"/>
           <program value="60"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -585,10 +715,10 @@
           <name>stdNormal</name>
           </StaffType>
         <bracket type="2" span="2" col="1"/>
-        <barLineSpan>5</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>B♭ Trumpet 1</trackName>
-      <Instrument>
+      <Instrument id="bb-trumpet">
         <longName>B♭ Trumpet 1</longName>
         <shortName>B♭ Tpt. 1</shortName>
         <trackName>B♭ Trumpet</trackName>
@@ -628,12 +758,12 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel name="open">
+          <controller ctrl="32" value="17"/>
           <program value="56"/>
-          <synti>Fluid</synti>
           </Channel>
         <Channel name="mute">
+          <controller ctrl="32" value="17"/>
           <program value="59"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -642,10 +772,10 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <barLineSpan>4</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>B♭ Trumpet 2</trackName>
-      <Instrument>
+      <Instrument id="bb-trumpet">
         <longName>B♭ Trumpet 2</longName>
         <shortName>B♭ Tpt. 2</shortName>
         <trackName>B♭ Trumpet</trackName>
@@ -685,12 +815,12 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel name="open">
+          <controller ctrl="32" value="17"/>
           <program value="56"/>
-          <synti>Fluid</synti>
           </Channel>
         <Channel name="mute">
+          <controller ctrl="32" value="17"/>
           <program value="59"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -701,10 +831,10 @@
           </StaffType>
         <defaultClef>F</defaultClef>
         <bracket type="2" span="2" col="1"/>
-        <barLineSpan>3</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Trombone 1</trackName>
-      <Instrument>
+      <Instrument id="trombone">
         <longName>Trombone 1</longName>
         <shortName>Tbn. 1</shortName>
         <trackName>Trombone</trackName>
@@ -743,8 +873,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="32" value="17"/>
           <program value="57"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -754,10 +884,10 @@
           <name>stdNormal</name>
           </StaffType>
         <defaultClef>F</defaultClef>
-        <barLineSpan>2</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Trombone 2/Bass Trombone</trackName>
-      <Instrument>
+      <Instrument id="trombone">
         <longName>Trombone 2
 Bass Trombone</longName>
         <shortName>Tbn. 2
@@ -798,8 +928,8 @@ B. Tbn.</shortName>
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="32" value="17"/>
           <program value="57"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -812,7 +942,7 @@ B. Tbn.</shortName>
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Euphonium</trackName>
-      <Instrument>
+      <Instrument id="euphonium">
         <longName>Euphonium</longName>
         <shortName>Euph.</shortName>
         <trackName>Euphonium</trackName>
@@ -851,8 +981,8 @@ B. Tbn.</shortName>
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="32" value="17"/>
           <program value="58"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -864,7 +994,7 @@ B. Tbn.</shortName>
         <defaultClef>F</defaultClef>
         </Staff>
       <trackName>Tuba</trackName>
-      <Instrument>
+      <Instrument id="tuba">
         <longName>Tuba</longName>
         <shortName>Tba.</shortName>
         <trackName>Tuba</trackName>
@@ -903,8 +1033,8 @@ B. Tbn.</shortName>
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="32" value="17"/>
           <program value="58"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -915,10 +1045,10 @@ B. Tbn.</shortName>
           </StaffType>
         <defaultClef>F</defaultClef>
         <bracket type="0" span="4" col="0"/>
-        <barLineSpan>3</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Timpani</trackName>
-      <Instrument>
+      <Instrument id="timpani">
         <longName>Timpani</longName>
         <shortName>Timp.</shortName>
         <trackName>Timpani</trackName>
@@ -958,7 +1088,6 @@ B. Tbn.</shortName>
           </Articulation>
         <Channel>
           <program value="47"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -969,10 +1098,10 @@ B. Tbn.</shortName>
           </StaffType>
         <defaultConcertClef>G15ma</defaultConcertClef>
         <defaultTransposingClef>G</defaultTransposingClef>
-        <barLineSpan>2</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Glockenspiel</trackName>
-      <Instrument>
+      <Instrument id="glockenspiel">
         <longName>Glockenspiel</longName>
         <shortName>Glk.</shortName>
         <trackName>Glockenspiel</trackName>
@@ -1015,7 +1144,6 @@ B. Tbn.</shortName>
           </Articulation>
         <Channel>
           <program value="9"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -1029,7 +1157,7 @@ B. Tbn.</shortName>
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Percussion 1</trackName>
-      <Instrument>
+      <Instrument id="drumset">
         <longName>Percussion 1</longName>
         <shortName>Perc. 1</shortName>
         <trackName>Percussion</trackName>
@@ -1220,8 +1348,8 @@ B. Tbn.</shortName>
           </Articulation>
         <Channel>
           <controller ctrl="0" value="1"/>
+          <controller ctrl="32" value="0"/>
           <program value="48"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -1234,7 +1362,7 @@ B. Tbn.</shortName>
         <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Percussion 2</trackName>
-      <Instrument>
+      <Instrument id="drumset">
         <longName>Percussion 2</longName>
         <shortName>Perc. 2</shortName>
         <trackName>Percussion</trackName>
@@ -1425,14 +1553,15 @@ B. Tbn.</shortName>
           </Articulation>
         <Channel>
           <controller ctrl="0" value="1"/>
+          <controller ctrl="32" value="0"/>
           <program value="48"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>Title</style>
           <text>Small Concert Band</text>
@@ -1441,7 +1570,6 @@ B. Tbn.</shortName>
       <Measure>
         <voice>
           <BarLine>
-            <span>1</span>
             </BarLine>
           <TimeSig>
             <sigN>4</sigN>
@@ -1452,7 +1580,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1463,7 +1590,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1474,7 +1600,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1485,7 +1610,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1496,7 +1620,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1507,7 +1630,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1518,7 +1640,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1529,7 +1650,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1540,7 +1660,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1551,7 +1670,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1562,7 +1680,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1573,7 +1690,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1585,7 +1701,6 @@ B. Tbn.</shortName>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1594,7 +1709,6 @@ B. Tbn.</shortName>
       <Measure>
         <voice>
           <BarLine>
-            <span>1</span>
             </BarLine>
           <TimeSig>
             <sigN>4</sigN>
@@ -1605,7 +1719,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1616,7 +1729,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1627,7 +1739,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1638,7 +1749,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1649,7 +1759,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1660,7 +1769,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1671,7 +1779,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1682,7 +1789,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1693,7 +1799,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1704,7 +1809,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1715,7 +1819,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1726,7 +1829,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1738,7 +1840,6 @@ B. Tbn.</shortName>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1747,7 +1848,6 @@ B. Tbn.</shortName>
       <Measure>
         <voice>
           <BarLine>
-            <span>1</span>
             </BarLine>
           <TimeSig>
             <sigN>4</sigN>
@@ -1758,7 +1858,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1769,7 +1868,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1780,7 +1878,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1791,7 +1888,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1802,7 +1898,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1813,7 +1908,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1824,7 +1918,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1835,7 +1928,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1846,7 +1938,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1857,7 +1948,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1868,7 +1958,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1879,7 +1968,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1891,7 +1979,6 @@ B. Tbn.</shortName>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1900,7 +1987,6 @@ B. Tbn.</shortName>
       <Measure>
         <voice>
           <BarLine>
-            <span>1</span>
             </BarLine>
           <KeySig>
             <accidental>2</accidental>
@@ -1914,7 +2000,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1925,7 +2010,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1936,7 +2020,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1947,7 +2030,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1958,7 +2040,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1969,7 +2050,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1980,7 +2060,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1991,7 +2070,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2002,7 +2080,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2013,7 +2090,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2024,7 +2100,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2035,7 +2110,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2047,7 +2121,6 @@ B. Tbn.</shortName>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2056,7 +2129,6 @@ B. Tbn.</shortName>
       <Measure>
         <voice>
           <BarLine>
-            <span>1</span>
             </BarLine>
           <KeySig>
             <accidental>2</accidental>
@@ -2070,7 +2142,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2081,7 +2152,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2092,7 +2162,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2103,7 +2172,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2114,7 +2182,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2125,7 +2192,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2136,7 +2202,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2147,7 +2212,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2158,7 +2222,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2169,7 +2232,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2180,7 +2242,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2191,7 +2252,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2203,7 +2263,6 @@ B. Tbn.</shortName>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2226,7 +2285,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2237,7 +2295,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2248,7 +2305,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2259,7 +2315,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2270,7 +2325,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2281,7 +2335,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2292,7 +2345,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2303,7 +2355,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2314,7 +2365,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2325,7 +2375,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2336,7 +2385,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2347,7 +2395,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2359,7 +2406,6 @@ B. Tbn.</shortName>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2368,7 +2414,6 @@ B. Tbn.</shortName>
       <Measure>
         <voice>
           <BarLine>
-            <span>1</span>
             </BarLine>
           <KeySig>
             <accidental>3</accidental>
@@ -2382,7 +2427,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2393,7 +2437,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2404,7 +2447,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2415,7 +2457,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2426,7 +2467,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2437,7 +2477,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2448,7 +2487,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2459,7 +2497,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2470,7 +2507,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2481,7 +2517,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2492,7 +2527,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2503,7 +2537,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2515,7 +2548,6 @@ B. Tbn.</shortName>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2809,7 +2841,6 @@ B. Tbn.</shortName>
       <Measure>
         <voice>
           <BarLine>
-            <span>1</span>
             </BarLine>
           <KeySig>
             <accidental>1</accidental>
@@ -2823,7 +2854,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2834,7 +2864,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2845,7 +2874,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2856,7 +2884,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2867,7 +2894,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2878,7 +2904,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2889,7 +2914,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2900,7 +2924,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2911,7 +2934,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2922,7 +2944,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2933,7 +2954,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2944,7 +2964,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2956,7 +2975,6 @@ B. Tbn.</shortName>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2965,7 +2983,6 @@ B. Tbn.</shortName>
       <Measure>
         <voice>
           <BarLine>
-            <span>1</span>
             </BarLine>
           <KeySig>
             <accidental>2</accidental>
@@ -2979,7 +2996,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -2990,7 +3006,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3001,7 +3016,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3012,7 +3026,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3023,7 +3036,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3034,7 +3046,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3045,7 +3056,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3056,7 +3066,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3067,7 +3076,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3078,7 +3086,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3089,7 +3096,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3100,7 +3106,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3112,7 +3117,6 @@ B. Tbn.</shortName>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3121,7 +3125,6 @@ B. Tbn.</shortName>
       <Measure>
         <voice>
           <BarLine>
-            <span>1</span>
             </BarLine>
           <KeySig>
             <accidental>2</accidental>
@@ -3135,7 +3138,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3146,7 +3148,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3157,7 +3158,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3168,7 +3168,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3179,7 +3178,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3190,7 +3188,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3201,7 +3198,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3212,7 +3208,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3223,7 +3218,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3234,7 +3228,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3245,7 +3238,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3256,7 +3248,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3268,7 +3259,6 @@ B. Tbn.</shortName>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3277,7 +3267,6 @@ B. Tbn.</shortName>
       <Measure>
         <voice>
           <BarLine>
-            <span>1</span>
             </BarLine>
           <TimeSig>
             <sigN>4</sigN>
@@ -3288,7 +3277,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3299,7 +3287,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3310,7 +3297,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3321,7 +3307,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3332,7 +3317,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3343,7 +3327,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3354,7 +3337,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3365,7 +3347,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3376,7 +3357,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3387,7 +3367,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3398,7 +3377,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3409,7 +3387,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3421,7 +3398,6 @@ B. Tbn.</shortName>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3430,7 +3406,6 @@ B. Tbn.</shortName>
       <Measure>
         <voice>
           <BarLine>
-            <span>1</span>
             </BarLine>
           <TimeSig>
             <sigN>4</sigN>
@@ -3441,7 +3416,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3452,7 +3426,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3463,7 +3436,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3474,7 +3446,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3485,7 +3456,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3496,7 +3466,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3507,7 +3476,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3518,7 +3486,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3529,7 +3496,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3540,7 +3506,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3551,7 +3516,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3562,7 +3526,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3574,7 +3537,6 @@ B. Tbn.</shortName>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3862,7 +3824,6 @@ B. Tbn.</shortName>
       <Measure>
         <voice>
           <BarLine>
-            <span>1</span>
             </BarLine>
           <TimeSig>
             <sigN>4</sigN>
@@ -3873,7 +3834,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3884,7 +3844,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3895,7 +3854,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3906,7 +3864,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3917,7 +3874,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3928,7 +3884,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3939,7 +3894,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3950,7 +3904,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3961,7 +3914,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3972,7 +3924,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3983,7 +3934,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -3994,7 +3944,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -4006,7 +3955,6 @@ B. Tbn.</shortName>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -4015,7 +3963,6 @@ B. Tbn.</shortName>
       <Measure>
         <voice>
           <BarLine>
-            <span>1</span>
             </BarLine>
           <TimeSig>
             <sigN>4</sigN>
@@ -4026,7 +3973,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -4037,7 +3983,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -4048,7 +3993,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -4059,7 +4003,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -4070,7 +4013,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -4081,7 +4023,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -4092,7 +4033,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -4103,7 +4043,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -4114,7 +4053,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -4125,7 +4063,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -4136,7 +4073,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -4147,7 +4083,6 @@ B. Tbn.</shortName>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -4159,7 +4094,6 @@ B. Tbn.</shortName>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>

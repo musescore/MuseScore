@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
-  <programVersion>3.0.0</programVersion>
-  <programRevision>3543170</programRevision>
+<museScore version="3.02">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
-    <Synthesizer>
-      </Synthesizer>
     <Division>480</Division>
     <Style>
+      <enableVerticalSpread>1</enableVerticalSpread>
+      <useStandardNoteNames>0</useStandardNoteNames>
+      <enableIndentationOnFirstSystem>1</enableIndentationOnFirstSystem>
       <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>
       <Spatium>1.76389</Spatium>
       </Style>
@@ -27,6 +26,19 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
+    <Order id="choir" customised="1">
+      <name>Choir</name>
+      <instrument id="voice">
+        <family id="voices">Voices</family>
+        </instrument>
+      <soloists/>
+      <section id="voices" brackets="true" showSystemMarkings="false" barLineSpan="false" thinBrackets="true">
+        <family>voices</family>
+        </section>
+      <family>keyboards</family>
+      <family>organs</family>
+      <unsorted/>
+      </Order>
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
@@ -36,7 +48,7 @@
         <defaultClef>G8vbp</defaultClef>
         </Staff>
       <trackName>Voice</trackName>
-      <Instrument>
+      <Instrument id="voice">
         <longName>Voice</longName>
         <trackName>Voice</trackName>
         <minPitchP>38</minPitchP>
@@ -85,17 +97,19 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="52"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>Title</style>
-          <text>Lithurgical Unmetrical</text>
+          <text>Liturgical Unmetrical</text>
           </Text>
         </VBox>
       <Measure>

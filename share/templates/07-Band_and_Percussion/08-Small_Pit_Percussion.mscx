@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
-  <programVersion>3.0.0</programVersion>
-  <programRevision>3543170</programRevision>
+<museScore version="3.02">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
-    <Synthesizer>
-      </Synthesizer>
     <Division>480</Division>
     <Style>
+      <enableVerticalSpread>1</enableVerticalSpread>
+      <useStandardNoteNames>0</useStandardNoteNames>
+      <enableIndentationOnFirstSystem>1</enableIndentationOnFirstSystem>
       <Spatium>1.45</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -44,7 +43,7 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Electric Piano</trackName>
-      <Instrument>
+      <Instrument id="electric-piano">
         <longName>Electric Piano</longName>
         <shortName>El. Pno.</shortName>
         <trackName>Electric Piano</trackName>
@@ -79,24 +78,23 @@
           <gateTime>67</gateTime>
           </Articulation>
         <Articulation name="sforzato">
-            <velocity>150</velocity>
-            <gateTime>100</gateTime>
-        </Articulation>
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
         <Articulation name="sforzatoStaccato">
-              <velocity>150</velocity>
-              <gateTime>50</gateTime>
-        </Articulation>
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
         <Articulation name="marcatoStaccato">
-              <velocity>120</velocity>
-              <gateTime>50</gateTime>
-        </Articulation>
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
         <Articulation name="marcatoTenuto">
-              <velocity>120</velocity>
-              <gateTime>100</gateTime>
-        </Articulation>
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
         <Channel>
           <program value="4"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -108,7 +106,7 @@
         <defaultClef>F8vb</defaultClef>
         </Staff>
       <trackName>Electric Bass</trackName>
-      <Instrument>
+      <Instrument id="electric-bass">
         <longName>Electric Bass</longName>
         <shortName>El. B.</shortName>
         <trackName>Electric Bass</trackName>
@@ -155,7 +153,6 @@
           </Articulation>
         <Channel>
           <program value="33"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -169,7 +166,7 @@
         <barLineSpan>4</barLineSpan>
         </Staff>
       <trackName>Vibraphone 1</trackName>
-      <Instrument>
+      <Instrument id="vibraphone">
         <longName>Vibraphone 1</longName>
         <shortName>Vib. 1</shortName>
         <trackName>Vibraphone</trackName>
@@ -208,7 +205,6 @@
           </Articulation>
         <Channel>
           <program value="11"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -220,7 +216,7 @@
         <barLineSpan>3</barLineSpan>
         </Staff>
       <trackName>Vibraphone 2</trackName>
-      <Instrument>
+      <Instrument id="vibraphone">
         <longName>Vibraphone 2</longName>
         <shortName>Vib. 2</shortName>
         <trackName>Vibraphone</trackName>
@@ -259,7 +255,6 @@
           </Articulation>
         <Channel>
           <program value="11"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -272,7 +267,7 @@
         <barLineSpan>2</barLineSpan>
         </Staff>
       <trackName>Marimba 1</trackName>
-      <Instrument>
+      <Instrument id="marimba">
         <longName>Marimba 1</longName>
         <shortName>Mba. 1</shortName>
         <trackName>Marimba</trackName>
@@ -312,7 +307,6 @@
           </Articulation>
         <Channel>
           <program value="12"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -324,7 +318,7 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Marimba 2</trackName>
-      <Instrument>
+      <Instrument id="marimba">
         <longName>Marimba 2</longName>
         <shortName>Mba. 2</shortName>
         <trackName>Marimba</trackName>
@@ -364,7 +358,6 @@
           </Articulation>
         <Channel>
           <program value="12"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -376,7 +369,7 @@
         <defaultClef>F</defaultClef>
         </Staff>
       <trackName>Marimba 3</trackName>
-      <Instrument>
+      <Instrument id="marimba">
         <longName>Marimba 3</longName>
         <shortName>Mba. 3</shortName>
         <trackName>Marimba</trackName>
@@ -416,7 +409,6 @@
           </Articulation>
         <Channel>
           <program value="12"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -431,7 +423,7 @@
         <barLineSpan>3</barLineSpan>
         </Staff>
       <trackName>Glockenspiel</trackName>
-      <Instrument>
+      <Instrument id="glockenspiel">
         <longName>Glockenspiel</longName>
         <shortName>Glk.</shortName>
         <trackName>Glockenspiel</trackName>
@@ -474,7 +466,6 @@
           </Articulation>
         <Channel>
           <program value="9"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -488,7 +479,7 @@
         <barLineSpan>2</barLineSpan>
         </Staff>
       <trackName>Xylophone</trackName>
-      <Instrument>
+      <Instrument id="xylophone">
         <longName>Xylophone</longName>
         <shortName>Xyl.</shortName>
         <trackName>Xylophone</trackName>
@@ -531,7 +522,6 @@
           </Articulation>
         <Channel>
           <program value="13"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -545,7 +535,7 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Drumset</trackName>
-      <Instrument>
+      <Instrument id="drumset">
         <longName>Drumset</longName>
         <shortName>Drs.</shortName>
         <trackName>Drumset</trackName>
@@ -764,8 +754,8 @@
           </Articulation>
         <Channel>
           <controller ctrl="0" value="1"/>
+          <controller ctrl="32" value="0"/>
           <program value="0"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -778,7 +768,7 @@
         <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Auxiliary Percussion</trackName>
-      <Instrument>
+      <Instrument id="drumset">
         <longName>Aux. Perc.</longName>
         <shortName>Aux.</shortName>
         <trackName>Percussion</trackName>
@@ -969,8 +959,8 @@
           </Articulation>
         <Channel>
           <controller ctrl="0" value="1"/>
+          <controller ctrl="32" value="0"/>
           <program value="48"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -985,7 +975,7 @@
         <barLineSpan>3</barLineSpan>
         </Staff>
       <trackName>Snare Drum</trackName>
-      <Instrument>
+      <Instrument id="snare-drum">
         <longName>Snare Drum</longName>
         <shortName>S.D.</shortName>
         <trackName>Snare Drum</trackName>
@@ -1110,8 +1100,8 @@
           </Articulation>
         <Channel>
           <controller ctrl="0" value="1"/>
+          <controller ctrl="32" value="0"/>
           <program value="56"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -1125,7 +1115,7 @@
         <barLineSpan>2</barLineSpan>
         </Staff>
       <trackName>Quads</trackName>
-      <Instrument>
+      <Instrument id="marching-tenor-drums">
         <longName>Tenor Drums</longName>
         <shortName>T.D.</shortName>
         <trackName>Tenor Drums</trackName>
@@ -1327,8 +1317,8 @@
           </Articulation>
         <Channel>
           <controller ctrl="0" value="1"/>
+          <controller ctrl="32" value="0"/>
           <program value="95"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -1342,7 +1332,7 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Bass Drums</trackName>
-      <Instrument>
+      <Instrument id="bass-drum">
         <longName>Bass Drums</longName>
         <shortName>B.D.</shortName>
         <trackName>Bass Drums</trackName>
@@ -1460,8 +1450,8 @@
           </Articulation>
         <Channel>
           <controller ctrl="0" value="1"/>
+          <controller ctrl="32" value="0"/>
           <program value="57"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -1474,7 +1464,7 @@
         <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Cymbals</trackName>
-      <Instrument>
+      <Instrument id="cymbal">
         <longName>Cymbals</longName>
         <shortName>Cym.</shortName>
         <trackName>Cymbals</trackName>
@@ -1613,14 +1603,15 @@
           </Articulation>
         <Channel>
           <controller ctrl="0" value="1"/>
+          <controller ctrl="32" value="0"/>
           <program value="58"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
     <Staff id="1">
       <VBox>
         <height>7</height>
+        <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>Title</style>
           <text>Small Pit Percussion</text>

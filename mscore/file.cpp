@@ -603,6 +603,7 @@ MasterScore* MuseScore::getNewFile()
                         tscore->style().set(Sid::harmonyPlay, MScore::defaultStyle().value(Sid::harmonyPlay));
                   }
             score->setStyle(tscore->style());
+            score->setScoreOrder(tscore->scoreOrder());
 
             // create instruments from template
             for (Part* tpart : tscore->parts()) {

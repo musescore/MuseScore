@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
-  <programVersion>3.5.0</programVersion>
-  <programRevision>fb3c202</programRevision>
+<museScore version="3.02">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
-    <Synthesizer>
-      </Synthesizer>
     <Division>480</Division>
     <Style>
+      <enableVerticalSpread>1</enableVerticalSpread>
+      <useStandardNoteNames>0</useStandardNoteNames>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -34,7 +32,7 @@
         <defaultClef>G8vb</defaultClef>
         </Staff>
       <trackName>Classical Guitar</trackName>
-      <Instrument>
+      <Instrument id="guitar-nylon">
         <longName>Classical Guitar</longName>
         <shortName>Guit.</shortName>
         <trackName>Classical Guitar</trackName>
@@ -95,21 +93,19 @@
           </Articulation>
         <Channel>
           <program value="24"/>
-          <synti>Fluid</synti>
           </Channel>
         <Channel name="mute">
           <program value="28"/>
-          <synti>Fluid</synti>
           </Channel>
         <Channel name="harmony">
           <program value="24"/>
-          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>Title</style>
           <text>Guitar</text>
