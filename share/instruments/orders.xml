@@ -36,10 +36,10 @@
         <section id="plucked-strings">
             <family>plucked-strings</family>
         </section>
+        <soloists/>
         <section id="voices" barLineSpan="false">
             <family>voices</family>
         </section>
-        <soloists/>
         <section id="strings" showSystemMarkings="true">
             <family>orchestral-strings</family>
         </section>
