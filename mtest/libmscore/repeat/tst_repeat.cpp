@@ -117,6 +117,8 @@ class TestRepeat : public QObject, public MTest
       void repeat62() { repeat("repeat62.mscx", "1;5;6;7; 1;2;3;4;5;6;7; 1;5;6;7; 1;7"); } // overlapping voltas - same start
       void repeat63() { repeat("repeat63.mscx", "1;2;3;7; 1;2;3;4;5;6;7; 1;2;3;7; 1;7"); } // overlapping voltas - same end
       void repeat64() { repeat("repeat64.mscx", "1;2;3;7; 1;2;3;4;5;6;7; 1;2;3;7; 1;7"); } // overlapping voltas
+
+      void repeat65() { repeat("repeat65.mscx", "1;2;3;4; 2;3;4; 1;2; 5"); } // Jump at volta end with end repeat
       };
 
 //---------------------------------------------------------

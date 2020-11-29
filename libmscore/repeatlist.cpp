@@ -461,8 +461,13 @@ void RepeatList::collectRepeatListElements()
                         if (e->isJump()) {
                               sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::JUMP, e, toMeasure(mb)));
                               if (volta != nullptr) {
-                                    if (volta->endMeasure()->tick() <= mb->tick()) {
-                                          // The previous volta was supposed to end before us (open volta case) -> insert the end
+                                    if ((volta->endMeasure()->tick() < mb->tick())
+                                        || ((volta->endMeasure()->tick() == mb->tick())
+                                            && (volta->getProperty(Pid::END_HOOK_TYPE).value<HookType>() == HookType::NONE)
+                                            )
+                                        ) {
+                                          // The previous volta was supposed to end before us
+                                          // or open volta ends together with us -> insert the end
                                           sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::VOLTA_END, volta, toMeasure(mb)));
                                           volta = nullptr;
                                           }
