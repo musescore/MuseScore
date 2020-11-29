@@ -100,17 +100,17 @@ if test -f LOG; then
       rm LOG
       fi
 
-# make sure we don't put a  at the end of last line
+# make sure we don't put a , at the end of last line
 echo "Generate JSON job file"
 JSON_FILE=vtestjob.json
 rm -f $JSON_FILE
 echo "[" >> $JSON_FILE
 for src in $SRC ; do
 #    if test -f ../$src.mscz; then
-#          echo "{ \"in\" : \"../$src.mscz\"         \"out\" : \"$src.png\" }," >> $JSON_FILE;
+#          echo "{ \"in\" : \"../$src.mscz\",         \"out\" : \"$src.png\" }," >> $JSON_FILE;
 #    else
     if test -f ../$src.mscx; then
-          echo "{ \"in\" : \"../$src.mscx\"         \"out\" : \"$src.png\" }," >> $JSON_FILE;
+          echo "{ \"in\" : \"../$src.mscx\",         \"out\" : \"$src.png\" }," >> $JSON_FILE;
     fi
 done
 echo "{}]" >> $JSON_FILE
