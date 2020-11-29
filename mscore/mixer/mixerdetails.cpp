@@ -163,9 +163,11 @@ void MixerDetails::updateFromTrack()
       Channel* chan = _mti->focusedChan();
 
       //Check if drumkit
-      const bool drum = midiMap->part()->instrument()->useDrumset();
+      const bool isHarmonyChannel = chan->isHarmonyChannel();
+      const bool drum = midiMap->part()->instrument()->useDrumset() && !isHarmonyChannel;
       drumkitCheck->blockSignals(true);
       drumkitCheck->setChecked(drum);
+      drumkitCheck->setEnabled(!isHarmonyChannel);
       drumkitCheck->blockSignals(false);
 
       //Populate patch combo

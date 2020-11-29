@@ -189,6 +189,8 @@ public:
       bool userBankController() const           { return _userBankController; }
       void setUserBankController(bool val);
 
+      bool isHarmonyChannel() const { return _name == Channel::HARMONY_NAME; }
+
       QList<NamedEventList> midiActions;
       QList<MidiArticulation> articulation;
 
