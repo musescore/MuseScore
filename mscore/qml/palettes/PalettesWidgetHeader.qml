@@ -59,6 +59,8 @@ Item {
                 Accessible.name = qsTr("Palette Search")
             }
 
+            selectByMouse: true
+
             Timer {
                 id: resultsTimer
                 interval: 500
