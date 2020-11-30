@@ -34,6 +34,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/telemetrypermissiondialog.h
     ${CMAKE_CURRENT_LIST_DIR}/view/telemetrypermissionmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/telemetrypermissionmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/devtools/telemetrydevtools.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/devtools/telemetrydevtools.h
     )
 
 set(MODULE_QRC telemetry.qrc)

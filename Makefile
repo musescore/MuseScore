@@ -26,6 +26,7 @@ MUSESCORE_BUILD_CONFIG="dev"
 MUSESCORE_REVISION=""
 BUILD_NUMBER=""
 TELEMETRY_TRACK_ID=""
+CRASH_REPORT_URL=""
 
 # Override SUFFIX and LABEL when multiple versions are installed to avoid conflicts.
 SUFFIX=""# E.g.: SUFFIX="dev" --> "mscore" becomes "mscoredev"
@@ -70,6 +71,7 @@ release:
 	  -DMUSESCORE_REVISION="${MUSESCORE_REVISION}" \
   	  -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}"   \
   	  -DTELEMETRY_TRACK_ID="${TELEMETRY_TRACK_ID}" \
+  	  -DCRASH_REPORT_URL="${CRASH_REPORT_URL}" \
   	  -DBUILD_LAME="${BUILD_LAME}"             \
   	  -DBUILD_PULSEAUDIO="${BUILD_PULSEAUDIO}" \
   	  -DBUILD_PORTMIDI="${BUILD_PORTMIDI}"  \
