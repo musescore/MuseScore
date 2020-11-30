@@ -36,8 +36,7 @@ GridView {
 
             text: qsTrc("userscores", "New & recent")
 
-            font.pixelSize: 18
-            font.bold: true
+            font: ui.theme.tabBoldFont
         }
     }
 

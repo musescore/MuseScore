@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.12
 
 Text {
     id: root
@@ -11,7 +11,7 @@ Text {
     horizontalAlignment: Text.AlignHCenter
 
     font {
-        family: ui.theme.font.family
-        pixelSize: ui.theme.font.pixelSize
+        family: ui.theme.bodyFont.family
+        pixelSize: ui.theme.bodyFont.pixelSize
     }
 }

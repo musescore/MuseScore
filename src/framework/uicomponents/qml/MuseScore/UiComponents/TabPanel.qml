@@ -49,9 +49,7 @@ TabView {
                 width: parent.width
 
                 text: styleData.title
-                horizontalAlignment: Text.AlignHCenter
-                color: ui.theme.fontPrimaryColor
-                font.bold: true
+                font: ui.theme.bodyBoldFont
                 opacity: styleData.selected ? ui.theme.buttonOpacityHit : ui.theme.buttonOpacityNormal
             }
         }

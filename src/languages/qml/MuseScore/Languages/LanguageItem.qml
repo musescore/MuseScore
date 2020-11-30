@@ -35,9 +35,10 @@ Rectangle {
             StyledIconLabel {
                 iconCode: IconCode.NEW_FILE
             }
+
             StyledTextLabel {
                 text: title
-                font.pixelSize: 14
+                font: ui.theme.largeBodyFont
                 horizontalAlignment: Text.AlignLeft
             }
         }
@@ -46,7 +47,7 @@ Rectangle {
             width: headerWidth
 
             text: statusTitle
-            font.pixelSize: 14
+            font: ui.theme.largeBodyFont
             horizontalAlignment: Text.AlignLeft
         }
     }

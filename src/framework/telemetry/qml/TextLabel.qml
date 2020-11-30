@@ -19,6 +19,8 @@
 
 import QtQuick 2.5
 
+import MuseScore.UiComponents 1.0
+
 FocusableItem {
     id: root
 
@@ -38,14 +40,11 @@ FocusableItem {
     Accessible.role: Accessible.StaticText
     Accessible.name: textLabel.text
 
-    Text {
+    StyledTextLabel {
         id: textLabel
 
         height: implicitHeight
         width: parent.width
-
-        font.pixelSize: 12
-        horizontalAlignment: Text.AlignHCenter
 
         wrapMode: Text.WordWrap
 

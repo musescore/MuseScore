@@ -26,7 +26,7 @@ Item {
         anchors.top: parent.top
 
         text: qsTrc("userscores", "Preview")
-        font.bold: true
+        font: ui.theme.bodyBoldFont
     }
 
     Item {

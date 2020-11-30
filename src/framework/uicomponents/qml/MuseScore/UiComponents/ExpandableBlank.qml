@@ -8,9 +8,6 @@ FocusableItem {
     property alias contentItemComponent: contentLoader.sourceComponent
     property alias menuItemComponent: expandableSection.menuItemComponent
 
-    property alias icon: expandableSection.icon
-    property alias iconPixelSize: expandableSection.iconPixelSize
-
     property alias title: expandableSection.title
 
     property alias isExpanded: expandableSection.isExpanded

@@ -39,8 +39,7 @@ FocusScope {
             Layout.leftMargin: 133
             Layout.alignment: Qt.AlignLeft
 
-            font.pixelSize: 32
-            font.bold: true
+            font: ui.theme.titleBoldFont
 
             text: qsTrc("appshell", "Add-ons")
         }

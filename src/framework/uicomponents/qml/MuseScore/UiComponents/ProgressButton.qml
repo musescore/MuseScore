@@ -8,7 +8,6 @@ FocusableItem {
     property alias icon: buttonIcon.iconCode
     property string text: ""
     property string progressTitle: ""
-    property int iconPixelSize: buttonIcon.isEmpty ? 0 : 16
 
     property real from: 0.0
     property real to: 1.0

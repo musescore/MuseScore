@@ -19,7 +19,7 @@ Item {
 
         anchors.top: parent.top
 
-        font.bold: true
+        font: ui.theme.bodyBoldFont
     }
 
     SearchField {
@@ -47,7 +47,7 @@ Item {
         currentIndex: 0
 
         delegate: Item {
-            width: parent.width
+            width: ListView.view.width
             height: 30
 
             property bool isCurrent: view.currentIndex === model.index
@@ -66,7 +66,7 @@ Item {
 
                 horizontalAlignment: Text.AlignLeft
                 text: modelData
-                font.bold: root.boldFont
+                font: root.boldFont ? ui.theme.bodyBoldFont : ui.theme.bodyFont
             }
 
             MouseArea {

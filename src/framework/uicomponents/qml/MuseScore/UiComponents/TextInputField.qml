@@ -62,11 +62,7 @@ Rectangle {
             Layout.fillWidth: !measureUnitsLabel.visible
 
             color: ui.theme.fontPrimaryColor
-
-            font {
-                family: ui.theme.font.family
-                pixelSize: ui.theme.font.pixelSize
-            }
+            font: ui.theme.bodyFont
 
             background: Item {}
 

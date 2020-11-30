@@ -17,7 +17,7 @@ Item {
 
     signal copyPartRequested()
     signal removePartRequested()
-    signal voiceVisibilityChangeRequested(var voiceIndex, var voiceVisible)
+    signal voicesVisibilityChangeRequested()
     signal partClicked()
 
     height: 42
@@ -40,7 +40,7 @@ Item {
             text: root.title
 
             horizontalAlignment: Qt.AlignLeft
-            font.bold: true
+            font: ui.theme.bodyBoldFont
         }
     }
 
@@ -131,8 +131,8 @@ Item {
         x: showVoicesPopupButton.x + showVoicesPopupButton.width / 2 - width / 2
         y: showVoicesPopupButton.y + showVoicesPopupButton.height
 
-        onVoiceVisibilityChangeRequested: {
-            root.voiceVisibilityChangeRequested(voiceIndex, voiceVisible)
+        onVoicesVisibilityChangeRequested: {
+            root.voicesVisibilityChangeRequested()
         }
     }
 

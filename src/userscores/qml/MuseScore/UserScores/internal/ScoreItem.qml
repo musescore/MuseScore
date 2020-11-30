@@ -117,7 +117,7 @@ Item {
                 maximumLineCount: 1
                 width: parent.width
 
-                font.pixelSize: 14
+                font: ui.theme.largeBodyFont
             }
 
             StyledTextLabel {

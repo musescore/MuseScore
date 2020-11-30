@@ -36,7 +36,7 @@ Item {
         anchors.topMargin: 24
         anchors.horizontalCenter: parent.horizontalCenter
 
-        font.bold: true
+        font: ui.theme.bodyBoldFont
         text: qsTrc("userscores", "Additional Score Information")
     }
 

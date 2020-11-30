@@ -19,9 +19,9 @@
 
 #include "theme.h"
 
+#include <QApplication>
 #include <QPalette>
 #include <QVariant>
-#include <QApplication>
 
 using namespace mu::framework;
 
@@ -91,6 +91,14 @@ static const QHash<int, QVariant> LIGHT_THEME {
     { ITEM_OPACITY_DISABLED, 0.3 }
 };
 
+static QFont toSemibold(const QFont& font)
+{
+    QFont bold(font);
+    bold.setWeight(QFont::DemiBold);
+
+    return bold;
+}
+
 Theme::Theme(QObject* parent)
     : QObject(parent)
 {
@@ -102,7 +110,8 @@ void Theme::init()
         update();
     });
 
-    initFont();
+    initUiFonts();
+    initIconsFont();
     initMusicalFont();
 
     setupWidgetTheme();
@@ -160,9 +169,54 @@ QColor Theme::fontSecondaryColor() const
     return currentThemeProperites().value(FONT_SECONDARY_COLOR).toString();
 }
 
-QFont Theme::font() const
+QFont Theme::bodyFont() const
 {
-    return m_font;
+    return m_bodyFont;
+}
+
+QFont Theme::bodyBoldFont() const
+{
+    return toSemibold(bodyFont());
+}
+
+QFont Theme::largeBodyFont() const
+{
+    return m_largeBodyFont;
+}
+
+QFont Theme::largeBodyBoldFont() const
+{
+    return toSemibold(largeBodyFont());
+}
+
+QFont Theme::tabFont() const
+{
+    return m_tabFont;
+}
+
+QFont Theme::tabBoldFont() const
+{
+    return toSemibold(tabFont());
+}
+
+QFont Theme::headerFont() const
+{
+    return m_headerFont;
+}
+
+QFont Theme::headerBoldFont() const
+{
+    return toSemibold(headerFont());
+}
+
+QFont Theme::titleBoldFont() const
+{
+    return m_titleBoldFont;
+}
+
+QFont Theme::iconsFont() const
+{
+    return m_iconsFont;
 }
 
 QFont Theme::musicalFont() const
@@ -214,40 +268,69 @@ QHash<int, QVariant> Theme::currentThemeProperites() const
     return LIGHT_THEME;
 }
 
-void Theme::initFont()
+void Theme::initUiFonts()
 {
-    m_font.setFamily(configuration()->fontFamily());
-    m_font.setPixelSize(configuration()->fontSize());
+    setupUiFonts();
 
-    configuration()->fontFamilyChanged().onReceive(this, [this](const QString& fontFamily) {
-        m_font.setFamily(fontFamily);
-
+    configuration()->fontChanged().onNotify(this, [this]() {
+        setupUiFonts();
         update();
     });
+}
 
-    configuration()->fontSizeChanged().onReceive(this, [this](const int fontSize) {
-        m_font.setPixelSize(fontSize);
+void Theme::initIconsFont()
+{
+    setupIconsFont();
 
+    configuration()->iconsFontChanged().onNotify(this, [this]() {
+        setupIconsFont();
         update();
     });
 }
 
 void Theme::initMusicalFont()
 {
-    m_musicalFont.setFamily(configuration()->musicalFontFamily());
+    setupMusicFont();
+
+    configuration()->musicalFontChanged().onNotify(this, [this]() {
+        setupMusicFont();
+        update();
+    });
+}
+
+void Theme::setupUiFonts()
+{
+    using FontSizeType = IUiConfiguration::FontSizeType;
+
+    QMap<QFont*, FontSizeType> fonts {
+        { &m_bodyFont, FontSizeType::BODY },
+        { &m_largeBodyFont, FontSizeType::BODY_LARGE },
+        { &m_tabFont, FontSizeType::TABS },
+        { &m_headerFont, FontSizeType::HEADER },
+        { &m_titleBoldFont, FontSizeType::TITLE }
+    };
+
+    for (QFont* font : fonts.keys()) {
+        QString family = QString::fromStdString(configuration()->fontFamily());
+        int size = configuration()->fontSize(fonts[font]);
+
+        font->setFamily(family);
+        font->setPixelSize(size);
+    }
+
+    m_titleBoldFont = toSemibold(m_titleBoldFont);
+}
+
+void Theme::setupIconsFont()
+{
+    m_iconsFont.setFamily(QString::fromStdString(configuration()->iconsFontFamily()));
+    m_iconsFont.setPixelSize(configuration()->iconsFontSize());
+}
+
+void Theme::setupMusicFont()
+{
+    m_musicalFont.setFamily(QString::fromStdString(configuration()->musicalFontFamily()));
     m_musicalFont.setPixelSize(configuration()->musicalFontSize());
-
-    configuration()->musicalFontFamilyChanged().onReceive(this, [this](const QString& fontFamily) {
-        m_musicalFont.setFamily(fontFamily);
-
-        update();
-    });
-
-    configuration()->musicalFontSizeChanged().onReceive(this, [this](const int fontSize) {
-        m_musicalFont.setPixelSize(fontSize);
-
-        update();
-    });
 }
 
 void Theme::setupWidgetTheme()

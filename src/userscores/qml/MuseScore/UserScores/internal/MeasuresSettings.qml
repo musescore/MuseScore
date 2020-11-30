@@ -24,7 +24,7 @@ FlatButton {
         anchors.horizontalCenter: root.horizontalCenter
         anchors.verticalCenter: root.verticalCenter
 
-        font.pixelSize: 16
+        font: ui.theme.tabFont
         text: model.measureCount + qsTrc("userscores", " measures,\n Pickup: ") +
               model.pickupTimeSignature.numerator + "/" + model.pickupTimeSignature.denominator
     }

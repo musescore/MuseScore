@@ -5,7 +5,6 @@ Item {
     id: root
 
     property var icon
-    property int iconPixelSize: 16
 
     signal increaseButtonClicked
     signal decreaseButtonClicked
@@ -109,15 +108,14 @@ Item {
         Rectangle {
             id: backgroundRect
 
-            height: iconPixelSize
-            width: iconPixelSize
-
             color: "transparent"
+
+            width: buttonIcon.width
+            height: buttonIcon.height
 
             StyledIconLabel {
                 id: buttonIcon
 
-                anchors.fill: parent
                 iconCode: root.icon
             }
         }
