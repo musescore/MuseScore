@@ -203,8 +203,7 @@ option(BUILD_FOR_WINSTORE "Build for the Windows Store." OFF)
 option(COVERAGE "Build with instrumentation to record code coverage." OFF)
 option(BUILD_64 "Build 64 bit version of editor" ON)
 option(BUILD_AUTOUPDATE "Build with autoupdate support" OFF)
-# default crash server url - Sentry MuseScore sandbox
-set(CRASH_REPORT_URL "https://sentry.musescore.org/api/3/minidump/?sentry_key=1260147a791c40349bbf717b94dc29c4" CACHE STRING "URL where to send crash reports")
+set(CRASH_REPORT_URL "" CACHE STRING "URL where to send crash reports")
 option(BUILD_TELEMETRY_MODULE "Build with telemetry module" ON)
 set(TELEMETRY_TRACK_ID "" CACHE STRING "Telemetry track id")
 option(BUILD_PORTABLEAPPS "Windows build for PortableApps.com" OFF)
@@ -222,6 +221,7 @@ add_definitions(-DQT_QML_DEBUG)
 add_definitions(-D_USE_MATH_DEFINES)
 
 message("[cmake] BUILD_UI_MU4: ${BUILD_UI_MU4}")
+message("[cmake] CRASH_REPORT_URL: ${CRASH_REPORT_URL}")
 
 message(STATUS "CMAKE_CXX_COMPILER_ID: ${CMAKE_CXX_COMPILER_ID}")
 

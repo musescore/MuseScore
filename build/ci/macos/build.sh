@@ -7,12 +7,14 @@ SKIP_ERR=true
 
 ARTIFACTS_DIR=build.artifacts
 TELEMETRY_TRACK_ID=""
+CRASH_REPORT_URL=""
 BUILD_UI_MU4=OFF
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -n|--number) BUILD_NUMBER="$2"; shift ;;
         --telemetry) TELEMETRY_TRACK_ID="$2"; shift ;;
+        --crash_log_url) CRASH_REPORT_URL="$2"; shift ;;
         --build_mu4) BUILD_UI_MU4="$2"; shift;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
@@ -39,6 +41,7 @@ fi
 echo "MUSESCORE_BUILD_CONFIG: $MUSESCORE_BUILD_CONFIG"
 echo "BUILD_NUMBER: $BUILD_NUMBER"
 echo "TELEMETRY_TRACK_ID: $TELEMETRY_TRACK_ID"
+echo "CRASH_REPORT_URL: $CRASH_REPORT_URL"
 echo "BUILD_UI_MU4: $BUILD_UI_MU4"
 echo "VST3_SDK_PATH: $VST3_SDK_PATH"
 
@@ -49,6 +52,7 @@ make -f Makefile.osx \
     MUSESCORE_REVISION=$MUSESCORE_REVISION \
     BUILD_NUMBER=$BUILD_NUMBER \
     TELEMETRY_TRACK_ID=$TELEMETRY_TRACK_ID \
+    CRASH_REPORT_URL=$CRASH_REPORT_URL \
     BUILD_UI_MU4=$BUILD_UI_MU4 \
     BUILD_VST=$BUILD_VST \
     VST3_SDK_PATH=$VST3_SDK_PATH \

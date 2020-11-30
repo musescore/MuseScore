@@ -23,5 +23,6 @@
         <file>qml/DevTools/VST/VSTTests.qml</file>
         <file>qml/DevTools/Plugins/PluginsTests.qml</file>
         <file>qml/DevTools/Gallery/GeneralComponentsGallery.qml</file>
+        <file>qml/DevTools/Telemetry/TelemetryInfo.qml</file>
     </qresource>
 </RCC>

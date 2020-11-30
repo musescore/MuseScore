@@ -4,6 +4,7 @@ import MuseScore.Dock 1.0
 import MuseScore.UiComponents 1.0
 
 import "./Interactive"
+import "./Telemetry"
 import "./Audio"
 import "./Gallery"
 import "./NotationDialogs"
@@ -26,12 +27,13 @@ DockPage {
             DevToolsMenu {
 
                 model: [
+                    { "name": "gallery", "title": "UI Gallery" },
                     { "name": "interactive", "title": "Interactive" },
+                    { "name": "mu3dialogs", "title": "MU3Dialogs" },
+                    { "name": "telemetry", "title": "Telemetry" },
                     { "name": "audio", "title": "Audio" },
-                    { "name": "gallery", "title": "General Components Gallery" },
                     { "name": "synth", "title": "Synth" },
                     { "name": "midiports", "title": "Midi ports" },
-                    { "name": "mu3dialogs", "title": "MU3Dialogs" },
                     { "name": "vst", "title": "VST" },
                     { "name": "plugins", "title": "Plugins" }
                 ]
@@ -53,12 +55,13 @@ DockPage {
         function load(name) {
             console.info("loadCentral: " + name)
             switch (name) {
+            case "gallery": currentComp = galleryComp; break
             case "interactive": currentComp = interactiveComp; break
+            case "mu3dialogs": currentComp = notationDialogs; break
+            case "telemetry": currentComp = telemetryComp; break
             case "audio": currentComp = audioComp; break
             case "synth": currentComp = synthSettingsComp; break
-            case "gallery": currentComp = galleryComp; break
             case "midiports": currentComp = midiPortsComp; break
-            case "mu3dialogs": currentComp = notationDialogs; break
             case "vst": currentComp = vstComponent; break
             case "plugins": currentComp = pluginsComp; break
             }
@@ -77,6 +80,11 @@ DockPage {
     Component {
         id: interactiveComp
         InteractiveTests {}
+    }
+
+    Component {
+        id: telemetryComp
+        TelemetryInfo{}
     }
 
     Component{
