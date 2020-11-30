@@ -20,6 +20,7 @@
 
 #include "log.h"
 #include "ui/view/iconcodes.h"
+#include "internal/notationactions.h"
 
 using namespace mu::notation;
 using namespace mu::actions;
@@ -231,59 +232,59 @@ void NoteInputBarModel::updateNoteInputModeState()
 
 void NoteInputBarModel::updateNoteDotState()
 {
-    static QMap<actions::ActionName, int> noteInputDots = {
-        { "pad-dot", 1 },
-        { "pad-dotdot", 2 },
-        { "pad-dot3", 3 },
-        { "pad-dot4", 4 }
+    static std::vector<actions::ActionName> dotActions = {
+        "pad-dot",
+        "pad-dotdot",
+        "pad-dot3",
+        "pad-dot4"
     };
 
     int durationDots = noteInputState().duration.dots();
 
-    for (const actions::ActionName& actionName: noteInputDots.keys()) {
-        item(actionName).checked = durationDots == noteInputDots[actionName];
+    for (const actions::ActionName& actionName: dotActions) {
+        item(actionName).checked = durationDots == NotationActions::actionDotCount(actionName);
     }
 }
 
 void NoteInputBarModel::updateNoteDurationState()
 {
-    static QMap<actions::ActionName, DurationType> noteInputDurations = {
-        { "note-longa", DurationType::V_LONG },
-        { "note-breve", DurationType::V_BREVE },
-        { "pad-note-1", DurationType::V_WHOLE },
-        { "pad-note-2", DurationType::V_HALF },
-        { "pad-note-4", DurationType::V_QUARTER },
-        { "pad-note-8", DurationType::V_EIGHTH },
-        { "pad-note-16", DurationType::V_16TH },
-        { "pad-note-32", DurationType::V_32ND },
-        { "pad-note-64", DurationType::V_64TH },
-        { "pad-note-128", DurationType::V_128TH },
-        { "pad-note-256", DurationType::V_256TH },
-        { "pad-note-512", DurationType::V_512TH },
-        { "pad-note-1024", DurationType::V_1024TH }
+    static std::vector<actions::ActionName> noteActions = {
+        "note-longa",
+        "note-breve",
+        "pad-note-1",
+        "pad-note-2",
+        "pad-note-4",
+        "pad-note-8",
+        "pad-note-16",
+        "pad-note-32",
+        "pad-note-64",
+        "pad-note-128",
+        "pad-note-256",
+        "pad-note-512",
+        "pad-note-1024"
     };
 
     DurationType durationType = noteInputState().duration.type();
 
-    for (const actions::ActionName& actionName: noteInputDurations.keys()) {
-        item(actionName).checked = durationType == noteInputDurations[actionName];
+    for (const actions::ActionName& actionName: noteActions) {
+        item(actionName).checked = durationType == NotationActions::actionDurationType(actionName);
     }
 }
 
 void NoteInputBarModel::updateNoteAccidentalState()
 {
-    static QMap<actions::ActionName, AccidentalType> noteInputAccidentals = {
-        { "flat2", AccidentalType::FLAT2 },
-        { "flat", AccidentalType::FLAT },
-        { "nat", AccidentalType::NATURAL },
-        { "sharp", AccidentalType::SHARP },
-        { "sharp2", AccidentalType::SHARP2 }
+    static std::vector<actions::ActionName> accidentalActions = {
+        "flat2",
+        "flat",
+        "nat",
+        "sharp",
+        "sharp2"
     };
 
     AccidentalType accidentalType = noteInputState().accidentalType;
 
-    for (const actions::ActionName& actionName: noteInputAccidentals.keys()) {
-        item(actionName).checked = accidentalType == noteInputAccidentals[actionName];
+    for (const actions::ActionName& actionName: accidentalActions) {
+        item(actionName).checked = accidentalType == NotationActions::actionAccidentalType(actionName);
     }
 }
 
@@ -317,17 +318,17 @@ void NoteInputBarModel::updateSlurState()
 
 void NoteInputBarModel::updateVoicesState()
 {
-    QMap<actions::ActionName, int> voices {
-        { "voice-1", 0 },
-        { "voice-2", 1 },
-        { "voice-3", 2 },
-        { "voice-4", 3 }
+    static std::vector<actions::ActionName> voiceActions {
+        "voice-1",
+        "voice-2",
+        "voice-3",
+        "voice-4"
     };
 
     int currentVoice = resolveCurrentVoiceIndex();
 
-    for (const actions::ActionName& actionName: voices.keys()) {
-        item(actionName).checked = currentVoice == voices[actionName];
+    for (const actions::ActionName& actionName: voiceActions) {
+        item(actionName).checked = currentVoice == NotationActions::actionVoice(actionName);
     }
 }
 

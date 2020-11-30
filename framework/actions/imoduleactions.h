@@ -28,7 +28,7 @@ class IModuleActions
 public:
     virtual ~IModuleActions() = default;
 
-    virtual const Action& action(const ActionName& name) const = 0;
+    virtual const Action& action(const ActionName& actionName) const = 0;
 };
 }
 }

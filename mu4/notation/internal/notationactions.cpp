@@ -638,16 +638,16 @@ const ActionList NotationActions::m_noteInputActions = {
            )
 };
 
-const Action& NotationActions::action(const ActionName& name) const
+const Action& NotationActions::action(const ActionName& actionName) const
 {
     for (const Action& action : m_actions) {
-        if (action.name == name) {
+        if (action.name == actionName) {
             return action;
         }
     }
 
     for (const Action& action : m_noteInputActions) {
-        if (action.name == name) {
+        if (action.name == actionName) {
             return action;
         }
     }
@@ -659,4 +659,82 @@ const Action& NotationActions::action(const ActionName& name) const
 ActionList NotationActions::defaultNoteInputActions()
 {
     return m_noteInputActions;
+}
+
+DurationType NotationActions::actionDurationType(const ActionName& actionName)
+{
+    static QMap<actions::ActionName, DurationType> durations = {
+        { "note-longa", DurationType::V_LONG },
+        { "note-breve", DurationType::V_BREVE },
+        { "pad-note-1", DurationType::V_WHOLE },
+        { "pad-note-2", DurationType::V_HALF },
+        { "pad-note-4", DurationType::V_QUARTER },
+        { "pad-note-8", DurationType::V_EIGHTH },
+        { "pad-note-16", DurationType::V_16TH },
+        { "pad-note-32", DurationType::V_32ND },
+        { "pad-note-64", DurationType::V_64TH },
+        { "pad-note-128", DurationType::V_128TH },
+        { "pad-note-256", DurationType::V_256TH },
+        { "pad-note-512", DurationType::V_512TH },
+        { "pad-note-1024", DurationType::V_1024TH }
+    };
+
+    DurationType type = DurationType::V_INVALID;
+    if (durations.contains(actionName)) {
+        type = durations[actionName];
+    }
+
+    return type;
+}
+
+AccidentalType NotationActions::actionAccidentalType(const ActionName& actionName)
+{
+    static QMap<actions::ActionName, AccidentalType> accidentals = {
+        { "flat2", AccidentalType::FLAT2 },
+        { "flat", AccidentalType::FLAT },
+        { "nat", AccidentalType::NATURAL },
+        { "sharp", AccidentalType::SHARP },
+        { "sharp2", AccidentalType::SHARP2 }
+    };
+
+    AccidentalType type = AccidentalType::NONE;
+    if (accidentals.contains(actionName)) {
+        type = accidentals[actionName];
+    }
+
+    return type;
+}
+
+int NotationActions::actionDotCount(const ActionName& actionName)
+{
+    static QMap<actions::ActionName, int> dots = {
+        { "pad-dot", 1 },
+        { "pad-dotdot", 2 },
+        { "pad-dot3", 3 },
+        { "pad-dot4", 4 }
+    };
+
+    int dotCount = 0;
+    if (dots.contains(actionName)) {
+        dotCount = dots[actionName];
+    }
+
+    return dotCount;
+}
+
+int NotationActions::actionVoice(const ActionName& actionName)
+{
+    QMap<actions::ActionName, int> voices {
+        { "voice-1", 0 },
+        { "voice-2", 1 },
+        { "voice-3", 2 },
+        { "voice-4", 3 }
+    };
+
+    int voice = 0;
+    if (voices.contains(actionName)) {
+        voice = voices[actionName];
+    }
+
+    return voice;
 }

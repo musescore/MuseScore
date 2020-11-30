@@ -19,17 +19,22 @@
 #ifndef MU_NOTATION_NOTATIONACTIONS_H
 #define MU_NOTATION_NOTATIONACTIONS_H
 
-#include <vector>
 #include "actions/imoduleactions.h"
+#include "notationtypes.h"
 
 namespace mu::notation {
 class NotationActions : public actions::IModuleActions
 {
 public:
 
-    const actions::Action& action(const actions::ActionName& name) const override;
+    const actions::Action& action(const actions::ActionName& actionName) const override;
 
     static actions::ActionList defaultNoteInputActions();
+
+    static DurationType actionDurationType(const actions::ActionName& actionName);
+    static AccidentalType actionAccidentalType(const actions::ActionName& actionName);
+    static int actionDotCount(const actions::ActionName& actionName);
+    static int actionVoice(const actions::ActionName& actionName);
 
 private:
     static const actions::ActionList m_actions;
