@@ -156,6 +156,8 @@ void NotationActionController::init()
 
     dispatcher()->reg(this, "add-8va", [this]() { addOttava(OttavaType::OTTAVA_8VA); });
     dispatcher()->reg(this, "add-8vb", [this]() { addOttava(OttavaType::OTTAVA_8VB); });
+    dispatcher()->reg(this, "add-hairpin", [this]() { addHairpin(HairpinType::CRESC_HAIRPIN); });
+    dispatcher()->reg(this, "add-hairpin-reverse", [this]() { addHairpin(HairpinType::DECRESC_HAIRPIN); });
     dispatcher()->reg(this, "add-noteline", this, &NotationActionController::addNoteLine);
 
     for (int i = MIN_NOTES_INTERVAL; i <= MAX_NOTES_INTERVAL; ++i) {
@@ -680,6 +682,16 @@ void NotationActionController::addOttava(OttavaType type)
     }
 
     interaction->addOttava(type);
+}
+
+void NotationActionController::addHairpin(HairpinType type)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->addHairpin(type);
 }
 
 void NotationActionController::addNoteLine()

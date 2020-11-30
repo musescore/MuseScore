@@ -120,6 +120,7 @@ public:
 
     // Lines
     void addOttava(OttavaType type) override;
+    void addHairpin(HairpinType type) override;
     void addNoteLine() override;
 
 private:
