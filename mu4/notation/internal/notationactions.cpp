@@ -422,7 +422,15 @@ const ActionList NotationActions::m_actions = {
     Action("insert-b",
            QT_TRANSLATE_NOOP("action", "Insert B"),
            ShortcutContext::NotationActive
-           )
+           ),
+    Action("add-8va",
+           QT_TRANSLATE_NOOP("action", "Ottava 8va alta"),
+           ShortcutContext::NotationActive
+           ),
+    Action("add-8vb",
+           QT_TRANSLATE_NOOP("action", "Ottava 8va bassa"),
+           ShortcutContext::NotationActive
+           ),
 };
 
 const ActionList NotationActions::m_noteInputActions = {
