@@ -20,8 +20,6 @@
 #include "telemetryservice.h"
 
 #include "thirdparty/qt-google-analytics/ganalytics.h"
-#include "framework/preferencekeys.h"
-
 #include "config.h"
 
 using namespace mu::telemetry;
@@ -66,9 +64,5 @@ void TelemetryService::endSession()
 
 bool TelemetryService::isTelemetryAllowed() const
 {
-#ifndef TELEMETRY_DISABLED
-    return m_settings.value(PREF_APP_TELEMETRY_ALLOWED, false).toBool();
-#else
-    return false;
-#endif
+    return configuration()->isTelemetryAllowed();
 }
