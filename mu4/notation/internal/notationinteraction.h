@@ -126,6 +126,15 @@ public:
 private:
     Ms::Score* score() const;
 
+    void startEdit();
+    void apply();
+
+    void notifyAboutDragChanged();
+    void notifyAboutDropChanged();
+    void notifyAboutSelectionChanged();
+    void notifyAboutNotationChanged();
+    void notifyAboutTextEditingChanged();
+
     Ms::Page* point2page(const QPointF& p) const;
     QList<Element*> hitElements(const QPointF& p_in, float w) const;
     QList<Element*> elementsAt(const QPointF& p) const;
