@@ -131,6 +131,8 @@ void TextLineBaseSegment::draw(QPainter* painter) const
             case Qt::CustomDashLine:
                 pen.setDashPattern(customDashes);
                 break;
+            default:
+                  break;
             }
 
       //Draw lines      
