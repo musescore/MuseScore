@@ -22,7 +22,10 @@ set(MODULE telemetry)
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/telemetrysetup.cpp
     ${CMAKE_CURRENT_LIST_DIR}/telemetrysetup.h
+    ${CMAKE_CURRENT_LIST_DIR}/itelemetryconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/itelemetryservice.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/telemetryconfiguration.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/telemetryconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/actioneventobserver.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/actioneventobserver.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/telemetryservice.cpp
