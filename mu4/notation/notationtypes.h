@@ -38,6 +38,7 @@
 #include "libmscore/slur.h"
 #include "libmscore/rest.h"
 #include "libmscore/measure.h"
+#include "libmscore/ottava.h"
 
 #include "instruments/instrumentstypes.h"
 
@@ -72,6 +73,7 @@ using Rest = Ms::Rest;
 using Fraction = Ms::Fraction;
 using NoteInputMethod = Ms::NoteEntryMethod;
 using AccidentalType = Ms::AccidentalType;
+using OttavaType = Ms::OttavaType;
 
 using StaffList = QList<const Staff*>;
 using PartList = QList<const Part*>;

@@ -87,6 +87,8 @@ private:
     void appendBoxes(BoxType boxType, int count);
     int firstSelectedBoxIndex() const;
 
+    void addOttava(OttavaType type);
+
     void openPageStyle();
     void openStaffProperties();
     void openBreaksDialog();
