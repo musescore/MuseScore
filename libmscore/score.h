@@ -646,6 +646,7 @@ public:
     void cmdToggleTie();
     static std::vector<Note*> cmdTieNoteList(const Selection& selection, bool noteEntryMode);
     void cmdAddOttava(OttavaType);
+    void cmdAddNoteLine();
     void cmdAddStretch(qreal);
     void cmdResetNoteAndRestGroupings();
     void cmdResetAllPositions(bool undoable = true);

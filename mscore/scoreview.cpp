@@ -2191,7 +2191,7 @@ void ScoreView::cmd(const char* s)
                 cv->cmdAddHairpin(HairpinType::DECRESC_HAIRPIN);
             } },
         { { "add-noteline" }, [](ScoreView* cv, const QByteArray&) {
-                cv->cmdAddNoteLine();
+                cv->score()->cmdAddNoteLine();
             } },
         { { "chord-text" }, [](ScoreView* cv, const QByteArray&) {
                 cv->changeState(ViewState::NORMAL);
@@ -4157,57 +4157,6 @@ void ScoreView::cmdAddHairpin(HairpinType type)
         // or we will keep adding hairpins to the same chordrests
         return;
     }
-}
-
-//---------------------------------------------------------
-//   cmdAddNoteLine
-//---------------------------------------------------------
-
-void ScoreView::cmdAddNoteLine()
-{
-    Note* firstNote = 0;
-    Note* lastNote  = 0;
-    if (_score->selection().isRange()) {
-        int startTrack = _score->selection().staffStart() * VOICES;
-        int endTrack   = _score->selection().staffEnd() * VOICES;
-        for (int track = startTrack; track < endTrack; ++track) {
-            for (Note* n : _score->selection().noteList(track)) {
-                if (firstNote == 0 || firstNote->chord()->tick() > n->chord()->tick()) {
-                    firstNote = n;
-                }
-                if (lastNote == 0 || lastNote->chord()->tick() < n->chord()->tick()) {
-                    lastNote = n;
-                }
-            }
-        }
-    } else {
-        for (Note* n : _score->selection().noteList()) {
-            if (firstNote == 0 || firstNote->chord()->tick() > n->chord()->tick()) {
-                firstNote = n;
-            }
-            if (lastNote == 0 || lastNote->chord()->tick() < n->chord()->tick()) {
-                lastNote = n;
-            }
-        }
-    }
-    if (!firstNote || !lastNote) {
-        qDebug("addNoteLine: no note %p %p", firstNote, lastNote);
-        return;
-    }
-    if (firstNote == lastNote) {
-        qDebug("addNoteLine: no support for note to same note line %p", firstNote);
-        return;
-    }
-    TextLine* tl = new TextLine(_score);
-    tl->setParent(firstNote);
-    tl->setStartElement(firstNote);
-    tl->setEndElement(lastNote);
-    tl->setDiagonal(true);
-    tl->setAnchor(Spanner::Anchor::NOTE);
-    tl->setTick(firstNote->chord()->tick());
-    _score->startCmd();
-    _score->undoAddElement(tl);
-    _score->endCmd();
 }
 
 //---------------------------------------------------------

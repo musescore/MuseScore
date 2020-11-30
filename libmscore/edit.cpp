@@ -55,6 +55,7 @@
 #include "breath.h"
 #include "glissando.h"
 #include "fermata.h"
+#include "textline.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -1571,6 +1572,62 @@ void Score::cmdAddOttava(OttavaType type)
             select(ottava, SelectType::SINGLE, 0);
         }
     }
+}
+
+//---------------------------------------------------------
+//   cmdAddNoteLine
+//---------------------------------------------------------
+
+void Score::cmdAddNoteLine()
+{
+    std::vector<Note*> selectedNotes;
+
+    if (selection().isRange()) {
+        int startTrack = selection().staffStart() * VOICES;
+        int endTrack = selection().staffEnd() * VOICES;
+
+        for (int track = startTrack; track < endTrack; ++track) {
+            std::vector<Note*> notes = selection().noteList(track);
+            selectedNotes.insert(selectedNotes.end(), notes.begin(), notes.end());
+        }
+    } else {
+        std::vector<Note*> notes = selection().noteList();
+        selectedNotes.insert(selectedNotes.end(), notes.begin(), notes.end());
+    }
+
+    Note* firstNote = nullptr;
+    Note* lastNote  = nullptr;
+
+    for (Note* note : selectedNotes) {
+        if (firstNote == nullptr || firstNote->chord()->tick() > note->chord()->tick()) {
+            firstNote = note;
+        }
+        if (lastNote == nullptr || lastNote->chord()->tick() < note->chord()->tick()) {
+            lastNote = note;
+        }
+    }
+
+    if (!firstNote || !lastNote) {
+        qDebug("addNoteLine: no note %p %p", firstNote, lastNote);
+        return;
+    }
+
+    if (firstNote == lastNote) {
+        qDebug("addNoteLine: no support for note to same note line %p", firstNote);
+        return;
+    }
+
+    TextLine* line = new TextLine(this);
+    line->setParent(firstNote);
+    line->setStartElement(firstNote);
+    line->setEndElement(lastNote);
+    line->setDiagonal(true);
+    line->setAnchor(Spanner::Anchor::NOTE);
+    line->setTick(firstNote->chord()->tick());
+
+    startCmd();
+    undoAddElement(line);
+    endCmd();
 }
 
 //---------------------------------------------------------
