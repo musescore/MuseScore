@@ -111,17 +111,15 @@ public:
     void flipSelection() override;
     void addTieToSelection() override;
     void addSlurToSelection() override;
+    void addOttavaToSelection(OttavaType type) override;
+    void addHairpinToSelection(HairpinType type) override;
 
     void setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval = 0) override;
     void transpose(const TransposeOptions& options) override;
     void swapVoices(int voiceIndex1, int voiceIndex2) override;
     void addIntervalToSelectedNotes(int interval) override;
     void changeSelectedNotesVoice(int voiceIndex) override;
-
-    // Lines
-    void addOttava(OttavaType type) override;
-    void addHairpin(HairpinType type) override;
-    void addNoteLine() override;
+    void addAnchoredLineToSelectedNotes() override;
 
 private:
     Ms::Score* score() const;
