@@ -1235,9 +1235,7 @@ void PreferenceDialog::applyPageVertical()
                   ss->doLayout();
             }
       if (cv)
-            cv->setOffset(0.0, 0.0);
-      if (mscore->currentScoreView())
-            mscore->currentScoreView()->setOffset(0.0, 0.0);
+            cv->pageTop();
       mscore->scorePageLayoutChanged();
       mscore->update();
       }
