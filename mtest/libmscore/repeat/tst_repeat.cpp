@@ -124,6 +124,7 @@ private slots:
     void repeat64() { repeat("repeat64.mscx", "1;2;3;7; 1;2;3;4;5;6;7; 1;2;3;7; 1;7"); } // overlapping voltas
 
     void repeat65() { repeat("repeat65.mscx", "1;2;3;4; 2;3;4; 1;2; 5"); } // Jump at volta end with end repeat
+    void repeat66() { repeat("repeat66.mscx", "1;2;3;4; 2;3;4; 1;2; 5; 1;2;3;4; 2;3;4; 2; 5"); } // final repeat and new section
 };
 
 //---------------------------------------------------------

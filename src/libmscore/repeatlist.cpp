@@ -477,8 +477,8 @@ void RepeatList::collectRepeatListElements()
                         if ((volta->endMeasure()->tick() < mb->tick())
                             || ((volta->endMeasure()->tick() == mb->tick())
                                 && (volta->getProperty(Pid::END_HOOK_TYPE).value<HookType>() == HookType::NONE)
-                            )
-                        ) {
+                                )
+                            ) {
                             // The previous volta was supposed to end before us
                             // or open volta ends together with us -> insert the end
                             sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::VOLTA_END,
@@ -781,6 +781,7 @@ void RepeatList::unwind()
         activeVolta = nullptr;
         playUntil.first = _rlElements.cend();
         continueAt.first = _rlElements.cend();
+        forceFinalRepeat = false;
 
         rs = new RepeatSegment(playbackCount);
         rs->addMeasure((*repeatListElementIt)->measure);
