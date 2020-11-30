@@ -39,6 +39,7 @@
 #include "libmscore/rest.h"
 #include "libmscore/measure.h"
 #include "libmscore/ottava.h"
+#include "libmscore/hairpin.h"
 
 #include "instruments/instrumentstypes.h"
 
@@ -74,6 +75,7 @@ using Fraction = Ms::Fraction;
 using NoteInputMethod = Ms::NoteEntryMethod;
 using AccidentalType = Ms::AccidentalType;
 using OttavaType = Ms::OttavaType;
+using HairpinType = Ms::HairpinType;
 
 using StaffList = QList<const Staff*>;
 using PartList = QList<const Part*>;

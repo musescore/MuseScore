@@ -1575,6 +1575,45 @@ void Score::cmdAddOttava(OttavaType type)
 }
 
 //---------------------------------------------------------
+//   cmdAddHairpin
+//---------------------------------------------------------
+
+void Score::cmdAddHairpin(HairpinType type)
+{
+    // special case for two selected chordrests on same staff
+    bool twoNotesSameStaff = false;
+
+    if (selection().isList() && selection().elements().size() == 2) {
+        ChordRest* cr1 = selection().firstChordRest();
+        ChordRest* cr2 = selection().lastChordRest();
+        if (cr1 && cr2 && cr1 != cr2 && cr1->staffIdx() == cr2->staffIdx()) {
+            twoNotesSameStaff = true;
+        }
+    }
+
+    // add hairpin on each staff if possible
+    if (selection().isRange() && selection().staffStart() != selection().staffEnd() - 1) {
+        startCmd();
+        for (int staffIdx = selection().staffStart(); staffIdx < selection().staffEnd(); ++staffIdx) {
+            ChordRest* cr1 = selection().firstChordRest(staffIdx * VOICES);
+            ChordRest* cr2 = selection().lastChordRest(staffIdx * VOICES);
+            addHairpin(type, cr1, cr2, /* toCr2End */ true);
+        }
+        endCmd();
+    } else if (selection().isRange() || selection().isSingle() || twoNotesSameStaff) {
+        // for single staff range selection, or single selection,
+        // find start & end elements elements
+        ChordRest* cr1 = nullptr;
+        ChordRest* cr2 = nullptr;
+        getSelectedChordRest2(&cr1, &cr2);
+
+        startCmd();
+        addHairpin(type, cr1, cr2, /* toCr2End */ !twoNotesSameStaff);
+        endCmd();
+    }
+}
+
+//---------------------------------------------------------
 //   cmdAddNoteLine
 //---------------------------------------------------------
 

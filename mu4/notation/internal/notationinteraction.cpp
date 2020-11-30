@@ -1982,6 +1982,16 @@ void NotationInteraction::addOttava(OttavaType type)
     m_selectionChanged.notify();
 }
 
+void NotationInteraction::addHairpin(HairpinType type)
+{
+    m_undoStack->prepareChanges();
+    score()->cmdAddHairpin(type);
+    m_undoStack->commitChanges();
+
+    m_notation->notifyAboutNotationChanged();
+    m_selectionChanged.notify();
+}
+
 void NotationInteraction::addNoteLine()
 {
     m_undoStack->prepareChanges();
