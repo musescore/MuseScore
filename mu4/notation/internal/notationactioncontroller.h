@@ -89,7 +89,7 @@ private:
 
     void addOttava(OttavaType type);
     void addHairpin(HairpinType type);
-    void addNoteLine();
+    void addAnchoredNoteLine();
 
     void openPageStyle();
     void openStaffProperties();

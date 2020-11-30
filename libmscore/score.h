@@ -646,8 +646,8 @@ public:
     void cmdToggleTie();
     static std::vector<Note*> cmdTieNoteList(const Selection& selection, bool noteEntryMode);
     void cmdAddOttava(OttavaType);
-    void cmdAddHairpin(HairpinType);
-    void cmdAddNoteLine();
+    void addHairpin(HairpinType);
+    void addNoteLine();
     void cmdAddStretch(qreal);
     void cmdResetNoteAndRestGroupings();
     void cmdResetAllPositions(bool undoable = true);
