@@ -256,7 +256,7 @@ void StringData::fretChords(Chord* chord) const
 
     // check for any remaining fret conflict
     foreach (Note* note, sortedNotes) {
-        if (bUsed[note->string()] > 1) {
+        if (note->string() == -1 || bUsed[note->string()] > 1) {
             note->setFretConflict(true);
         }
     }
