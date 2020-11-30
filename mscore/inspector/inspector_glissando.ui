@@ -392,7 +392,7 @@
        </widget>
       </item>
       <item row="11" column="0" colspan="3">
-       <widget class="QWidget" name="textWidget" native="true">
+       <widget class="QWidget" name="textWidget1" native="true">
         <layout class="QGridLayout" name="gridLayout_4">
          <property name="leftMargin">
           <number>0</number>
