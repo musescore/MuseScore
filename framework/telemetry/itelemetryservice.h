@@ -26,10 +26,6 @@
 
 #include "modularity/imoduleexport.h"
 
-//---------------------------------------------------------
-//   ITelemetryService
-//---------------------------------------------------------
-
 class ITelemetryService : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(ITelemetryService)

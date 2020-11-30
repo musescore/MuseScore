@@ -24,6 +24,7 @@
 #include "modularity/ioc.h"
 
 #include "itelemetryservice.h"
+#include "internal/telemetryconfiguration.h"
 #include "internal/telemetryservice.h"
 #include "view/telemetrypermissionmodel.h"
 
@@ -34,6 +35,8 @@
 #include "config.h"
 
 using namespace mu::telemetry;
+
+static std::shared_ptr<TelemetryConfiguration> s_configuration = std::make_shared<TelemetryConfiguration>();
 
 static void telemetry_init_qrc()
 {
@@ -52,7 +55,8 @@ void TelemetrySetup::registerResources()
 
 void TelemetrySetup::registerExports()
 {
-    mu::framework::ioc()->registerExport<ITelemetryService>("telemetry", new TelemetryService());
+    mu::framework::ioc()->registerExport<ITelemetryConfiguration>(moduleName(), s_configuration);
+    mu::framework::ioc()->registerExport<ITelemetryService>(moduleName(), new TelemetryService());
 }
 
 void TelemetrySetup::registerUiTypes()
@@ -62,6 +66,8 @@ void TelemetrySetup::registerUiTypes()
 
 void TelemetrySetup::onInit()
 {
+    s_configuration->init();
+
     auto globalConf = framework::ioc()->resolve<framework::IGlobalConfiguration>(moduleName());
     IF_ASSERT_FAILED(globalConf) {
         return;
@@ -81,7 +87,12 @@ void TelemetrySetup::onInit()
     io::path dumpsDir = globalConf->logsPath() + "/dumps";
     std::string serverUrl(CRASH_REPORT_URL);
 
-    LOGD() << "crash server url: " << serverUrl;
+    if (!s_configuration->isDumpUploadAllowed()) {
+        serverUrl.clear();
+        LOGD() << "not allowed dump upload";
+    } else {
+        LOGD() << "crash server url: " << serverUrl;
+    }
 
     bool ok = s_crashHandler.start(handlerPath, dumpsDir, serverUrl);
     if (!ok) {
@@ -89,10 +100,6 @@ void TelemetrySetup::onInit()
     } else {
         LOGI() << "success start crash handler";
     }
-
-    //! NOTE For test creating a dump
-    // auto crash = []() { volatile int* a = (int*)(NULL); *a = 1; };
-    // crash();
 
 #else
     LOGW() << "crash handling disabled";
