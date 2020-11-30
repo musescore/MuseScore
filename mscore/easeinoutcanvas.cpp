@@ -102,7 +102,7 @@ void EaseInOutCanvas::paintEvent(QPaintEvent* ev)
       std::vector<QPointF> pitchPoints;
       qreal offset = m_pitchDelta < 0 ? 1.0 : 0.0;
       QPointF prevPoint, currPoint;
-      for (int i = 0; i < m_events.size(); i++) {
+      for (size_t i = 0; i < m_events.size(); i++) {
             currPoint = getPosition({ eio.XfromY(static_cast<qreal>(i) / nbEvents), offset + static_cast<qreal>(m_events[i]) / static_cast<qreal>(pitchDelta) });
             pitchPoints.push_back(currPoint);
             }
@@ -110,7 +110,7 @@ void EaseInOutCanvas::paintEvent(QPaintEvent* ev)
       // Draw the pitches barchart graph in the background first
       if (pitchPoints.size() > 1) {
             prevPoint = pitchPoints[0];
-            for (int i = 1; i < pitchPoints.size(); i++) {
+            for (size_t i = 1; i < pitchPoints.size(); i++) {
                   currPoint = pitchPoints[i];
                   painter.fillRect(prevPoint.x(), bottomPos, (currPoint.x() - prevPoint.x()) + 1, prevPoint.y() - bottomPos, pitchFillColor);
                   prevPoint = currPoint;
@@ -122,7 +122,7 @@ void EaseInOutCanvas::paintEvent(QPaintEvent* ev)
             pen.setWidth(0);
             pen.setColor(eventLinesColor);
             painter.setPen(pen);
-            for (int i = 1; i < pitchPoints.size(); ++i) {
+            for (size_t i = 1; i < pitchPoints.size(); ++i) {
                   qreal xPos = pitchPoints[i].x();
                   painter.drawLine(xPos, topPos, xPos, bottomPos);
                   }
@@ -191,7 +191,7 @@ void EaseInOutCanvas::paintEvent(QPaintEvent* ev)
             pen.setColor(pitchGraphColor);
             painter.setPen(pen);
             prevPoint = pitchPoints[0];
-            for (int i = 1; i < pitchPoints.size(); i++) {
+            for (size_t i = 1; i < pitchPoints.size(); i++) {
                   currPoint = pitchPoints[i];
                   painter.drawLine(prevPoint, { currPoint.x(), prevPoint.y() });
                   prevPoint = currPoint;
