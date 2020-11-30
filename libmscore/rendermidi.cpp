@@ -1865,7 +1865,6 @@ bool glissandoPitchOffsets(const Spanner* spanner, std::vector<int>& pitchOffset
       pitchOffsets.clear();
       if (glissandoStyle == GlissandoStyle::DIATONIC) {
             int lineStart = noteStart->line();
-            int lineEnd = noteEnd->line() - direction;
             // scale obeying accidentals
             for (int line = lineStart, pitch = pitchStart; (direction == 1) ? (pitch < pitchEnd) : (pitch > pitchEnd); line -= direction) {
                   int halfSteps = articulationExcursion(noteStart, noteEnd, lineStart - line);
