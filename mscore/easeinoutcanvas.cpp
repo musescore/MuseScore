@@ -92,7 +92,7 @@ void EaseInOutCanvas::paintEvent(QPaintEvent* ev)
             warpLineColor.setRgbF(0.914, 0.710, 0.588);
             borderLinesColor.setRgbF(0.016, 0.057, 0.093);
             pitchNameColor.setRgbF(0.310, 0.157, 0.066);
-      }
+            }
 
       // this lambda takes as input a pitch value, and determines where what are its x and y coordinates
       auto getPosition = [this, graphWidth, graphHeight, leftPos, bottomPos](const QPointF& p) -> QPointF {
@@ -150,7 +150,7 @@ void EaseInOutCanvas::paintEvent(QPaintEvent* ev)
             QPointF pos = { 4, topPos + fontHeight * 0.3 + (1.0 - (static_cast<qreal>(i) / pitchDelta)) * graphHeight };
             painter.drawText(pos, pitchName);
             curPitch++;
-      }
+            }
 
       if (m_events.size()) {
             // Not a portamento style glissando.
@@ -181,8 +181,8 @@ void EaseInOutCanvas::paintEvent(QPaintEvent* ev)
                   currPoint = getPosition(currPoint);
                   painter.drawLine(prevPoint, currPoint);
                   prevPoint = currPoint;
+                  }
             }
-      }
 
       // Draw the pitches level lines next so they cover the Bezier transfer curve.
       if (pitchPoints.size() > 1) {
