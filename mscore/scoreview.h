@@ -398,7 +398,6 @@ public:
     void cmdAddSlur(const Slur* slurTemplate = nullptr);
     void addSlur(ChordRest*, ChordRest*, const Slur*) override;
     virtual void cmdAddHairpin(HairpinType);
-    void cmdAddNoteLine();
 
     void setEditElement(Element*);
     void updateEditElement();

@@ -88,6 +88,7 @@ private:
     int firstSelectedBoxIndex() const;
 
     void addOttava(OttavaType type);
+    void addNoteLine();
 
     void openPageStyle();
     void openStaffProperties();

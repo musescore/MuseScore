@@ -156,6 +156,7 @@ void NotationActionController::init()
 
     dispatcher()->reg(this, "add-8va", [this]() { addOttava(OttavaType::OTTAVA_8VA); });
     dispatcher()->reg(this, "add-8vb", [this]() { addOttava(OttavaType::OTTAVA_8VB); });
+    dispatcher()->reg(this, "add-noteline", this, &NotationActionController::addNoteLine);
 
     for (int i = MIN_NOTES_INTERVAL; i <= MAX_NOTES_INTERVAL; ++i) {
         if (isNotesIntervalValid(i)) {
@@ -679,6 +680,16 @@ void NotationActionController::addOttava(OttavaType type)
     }
 
     interaction->addOttava(type);
+}
+
+void NotationActionController::addNoteLine()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->addNoteLine();
 }
 
 void NotationActionController::selectMeasuresCountAndInsert()
