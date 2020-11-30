@@ -438,6 +438,10 @@ const ActionList NotationActions::m_actions = {
     Action("add-hairpin-reverse",
            QT_TRANSLATE_NOOP("action", "Decrescendo"),
            ShortcutContext::NotationActive
+           ),
+    Action("add-noteline",
+           QT_TRANSLATE_NOOP("action", "Note Anchored Line"),
+           ShortcutContext::NotationActive
            )
 };
 

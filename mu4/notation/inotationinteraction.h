@@ -96,17 +96,15 @@ public:
     virtual void flipSelection() = 0;
     virtual void addTieToSelection() = 0;
     virtual void addSlurToSelection() = 0;
+    virtual void addOttavaToSelection(OttavaType type) = 0;
+    virtual void addHairpinToSelection(HairpinType type) = 0;
 
     virtual void setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval = 0) = 0;
     virtual void transpose(const TransposeOptions& options) = 0;
     virtual void swapVoices(int voiceIndex1, int voiceIndex2) = 0;
     virtual void addIntervalToSelectedNotes(int interval) = 0;
     virtual void changeSelectedNotesVoice(int voiceIndex) = 0;
-
-    // Lines
-    virtual void addOttava(OttavaType type) = 0;
-    virtual void addHairpin(HairpinType type) = 0;
-    virtual void addNoteLine() = 0;
+    virtual void addAnchoredLineToSelectedNotes() = 0;
 };
 
 using INotationInteractionPtr = std::shared_ptr<INotationInteraction>;

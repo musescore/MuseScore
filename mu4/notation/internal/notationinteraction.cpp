@@ -1920,6 +1920,24 @@ void NotationInteraction::addSlurToSelection()
     notifyAboutSelectionChanged();
 }
 
+void NotationInteraction::addOttavaToSelection(OttavaType type)
+{
+    startEdit();
+    score()->cmdAddOttava(type);
+    apply();
+
+    notifyAboutSelectionChanged();
+}
+
+void NotationInteraction::addHairpinToSelection(HairpinType type)
+{
+    startEdit();
+    score()->addHairpin(type);
+    apply();
+
+    notifyAboutSelectionChanged();
+}
+
 void NotationInteraction::setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval)
 {
     interval = intervalType == BreaksSpawnIntervalType::MeasuresInterval ? interval : 0;
@@ -1989,7 +2007,6 @@ void NotationInteraction::addIntervalToSelectedNotes(int interval)
     score()->addInterval(interval, notes);
     apply();
 
-    notifyAboutNotationChanged();
     notifyAboutSelectionChanged();
 }
 
@@ -2003,37 +2020,15 @@ void NotationInteraction::changeSelectedNotesVoice(int voiceIndex)
     score()->changeSelectedNotesVoice(voiceIndex);
     apply();
 
-    notifyAboutNotationChanged();
     notifyAboutSelectionChanged();
 }
 
-void NotationInteraction::addOttava(OttavaType type)
+void NotationInteraction::addAnchoredLineToSelectedNotes()
 {
     startEdit();
-    score()->cmdAddOttava(type);
+    score()->addNoteLine();
     apply();
 
-    notifyAboutNotationChanged();
-    notifyAboutSelectionChanged();
-}
-
-void NotationInteraction::addHairpin(HairpinType type)
-{
-    startEdit();
-    score()->cmdAddHairpin(type);
-    apply();
-
-    notifyAboutNotationChanged();
-    notifyAboutSelectionChanged();
-}
-
-void NotationInteraction::addNoteLine()
-{
-    startEdit();
-    score()->cmdAddNoteLine();
-    apply();
-
-    notifyAboutNotationChanged();
     notifyAboutSelectionChanged();
 }
 

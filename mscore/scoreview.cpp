@@ -2191,7 +2191,9 @@ void ScoreView::cmd(const char* s)
                 cv->cmdAddHairpin(HairpinType::DECRESC_HAIRPIN);
             } },
         { { "add-noteline" }, [](ScoreView* cv, const QByteArray&) {
-                cv->score()->cmdAddNoteLine();
+                cv->score()->startCmd();
+                cv->score()->addNoteLine();
+                cv->score()->endCmd();
             } },
         { { "chord-text" }, [](ScoreView* cv, const QByteArray&) {
                 cv->changeState(ViewState::NORMAL);

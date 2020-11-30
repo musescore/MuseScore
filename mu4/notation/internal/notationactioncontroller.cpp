@@ -149,21 +149,21 @@ void NotationActionController::init()
     dispatcher()->reg(this, "voice-x23", [this]() { swapVoices(1, 2); });
     dispatcher()->reg(this, "voice-x24", [this]() { swapVoices(1, 3); });
     dispatcher()->reg(this, "voice-x34", [this]() { swapVoices(2, 3); });
-    dispatcher()->reg(this, "voice-1", [this]() { changeVoice(0); });
-    dispatcher()->reg(this, "voice-2", [this]() { changeVoice(1); });
-    dispatcher()->reg(this, "voice-3", [this]() { changeVoice(2); });
-    dispatcher()->reg(this, "voice-4", [this]() { changeVoice(3); });
 
     dispatcher()->reg(this, "add-8va", [this]() { addOttava(OttavaType::OTTAVA_8VA); });
     dispatcher()->reg(this, "add-8vb", [this]() { addOttava(OttavaType::OTTAVA_8VB); });
     dispatcher()->reg(this, "add-hairpin", [this]() { addHairpin(HairpinType::CRESC_HAIRPIN); });
     dispatcher()->reg(this, "add-hairpin-reverse", [this]() { addHairpin(HairpinType::DECRESC_HAIRPIN); });
-    dispatcher()->reg(this, "add-noteline", this, &NotationActionController::addNoteLine);
+    dispatcher()->reg(this, "add-noteline", this, &NotationActionController::addAnchoredNoteLine);
 
     for (int i = MIN_NOTES_INTERVAL; i <= MAX_NOTES_INTERVAL; ++i) {
         if (isNotesIntervalValid(i)) {
             dispatcher()->reg(this, "interval" + std::to_string(i), [this, i]() { addInterval(i); });
         }
+    }
+
+    for (int i = 0; i < VOICES; ++i) {
+        dispatcher()->reg(this, "voice-" + std::to_string(i), [this, i]() { changeVoice(i); });
     }
 }
 
@@ -681,7 +681,7 @@ void NotationActionController::addOttava(OttavaType type)
         return;
     }
 
-    interaction->addOttava(type);
+    interaction->addOttavaToSelection(type);
 }
 
 void NotationActionController::addHairpin(HairpinType type)
@@ -691,17 +691,17 @@ void NotationActionController::addHairpin(HairpinType type)
         return;
     }
 
-    interaction->addHairpin(type);
+    interaction->addHairpinToSelection(type);
 }
 
-void NotationActionController::addNoteLine()
+void NotationActionController::addAnchoredNoteLine()
 {
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
     }
 
-    interaction->addNoteLine();
+    interaction->addAnchoredLineToSelectedNotes();
 }
 
 void NotationActionController::selectMeasuresCountAndInsert()

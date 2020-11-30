@@ -305,14 +305,6 @@ void NoteInputBarModel::updateTieState()
 
 void NoteInputBarModel::updateSlurState()
 {
-    bool checked = false;
-
-    if (isNoteInputMode()) {
-        checked = noteInputState().withSlur;
-    } else {
-        NOT_IMPLEMENTED;
-    }
-
     item("add-slur").checked = noteInputState().withSlur;
 }
 
