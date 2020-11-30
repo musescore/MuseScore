@@ -30,10 +30,10 @@ class InspectorGlissando : public InspectorElementBase {
 
       void updateEvents();
 
-private slots:
+   private slots:
       void valueChanged(int);
 
-public:
+   public:
       InspectorGlissando(QWidget* parent);
       virtual void setElement() override;
       };

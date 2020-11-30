@@ -42,7 +42,7 @@ InspectorGlissando::InspectorGlissando(QWidget* parent)
             { g.title, g.panel }
             };
       mapSignals(iiList, ppList);
-}
+      }
 
 //---------------------------------------------------------
 //   setElement
@@ -63,7 +63,7 @@ void InspectorGlissando::setElement()
       g.easeInOutCanvas->setEaseInOut(g.easeInSpin->value(), g.easeOutSpin->value());
 
       updateEvents();
-}
+      }
 
 //---------------------------------------------------------
 //   canvasChanged
@@ -77,7 +77,7 @@ void InspectorGlissando::valueChanged(int n)
       else if (iList[n].t == Pid::GLISS_STYLE)
             updateEvents();
       update();
-}
+      }
 
 //---------------------------------------------------------
 //   updateNbEvents computes the number of pitch events in the glissanso given the glissando style.
@@ -95,7 +95,7 @@ void InspectorGlissando::updateEvents() {
             g.easeInOutCanvas->setPitchDelta(pitchEnd - pitchStart);
             }
       g.easeInOutCanvas->setEvents(body);
-}
+      }
 
 }
 
