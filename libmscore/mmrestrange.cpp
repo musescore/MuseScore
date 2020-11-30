@@ -116,10 +116,7 @@ void MMRestRange::setXmlText(const QString& s)
                   TextBase::setXmlText("(" + s + ")");
                   break;
             case MMRestRangeBracketType::NONE:
-                  TextBase::setXmlText(s);
-                  break;
             default:
-                  Q_UNREACHABLE();
                   TextBase::setXmlText(s);
                   break;
             }
