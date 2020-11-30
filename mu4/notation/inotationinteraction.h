@@ -105,6 +105,7 @@ public:
 
     // Lines
     virtual void addOttava(OttavaType type) = 0;
+    virtual void addNoteLine() = 0;
 };
 
 using INotationInteractionPtr = std::shared_ptr<INotationInteraction>;
