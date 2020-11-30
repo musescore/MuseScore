@@ -77,8 +77,9 @@ Item {
             left: paletteExpandArrow.right; leftMargin: 4;
             right: deleteButton.visible ? deleteButton.left : (paletteHeaderMenuButton.visible ? paletteHeaderMenuButton.left : parent.right)
         }
+
         text: paletteHeader.text
-        font.bold: true
+        font: ui.theme.bodyBoldFont
     }
 
     FlatButton {

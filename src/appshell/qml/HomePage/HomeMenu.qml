@@ -34,7 +34,6 @@ RadioButtonGroup {
         checked: index === radioButtonList.currentIndex
 
         title: modelData["title"]
-        titlePixelSize: 16
 
         iconComponent: StyledIconLabel {
             Layout.fillWidth: true

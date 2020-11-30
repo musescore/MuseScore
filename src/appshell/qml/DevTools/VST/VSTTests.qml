@@ -74,7 +74,7 @@ Rectangle {
                         anchors.left: parent.left
                         anchors.right: parent.right
 
-                        Text {
+                        StyledTextLabel {
                             id: element
                             text: modelData.name;
                             width: parent.width - 240

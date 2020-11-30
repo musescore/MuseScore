@@ -35,7 +35,7 @@ QmlDialog {
 
             StyledTextLabel {
                 text: qsTrc("palette", "Name")
-                font.bold: true
+                font: ui.theme.bodyBoldFont
             }
 
             TextInputField {
@@ -50,7 +50,7 @@ QmlDialog {
 
             StyledTextLabel {
                 text: qsTrc("palette", "Content offset")
-                font.bold: true
+                font: ui.theme.bodyBoldFont
             }
 
             Grid {

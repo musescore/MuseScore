@@ -31,8 +31,7 @@ FocusScope {
 
         text: qsTrc("scores", "Account")
 
-        font.pixelSize: 32
-        font.bold: true
+        font: ui.theme.titleBoldFont
     }
 
     Image {

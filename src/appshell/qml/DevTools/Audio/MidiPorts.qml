@@ -40,8 +40,7 @@ Item {
                 anchors.right: parent.right
                 anchors.leftMargin: 8
                 height: 40
-                verticalAlignment: Text.AlignVCenter
-                font.bold: true
+                font: ui.theme.bodyBoldFont
                 text: "Midi output"
             }
 
@@ -51,7 +50,7 @@ Item {
                 anchors.leftMargin: 8
                 height: 40
                 horizontalAlignment: Text.AlignLeft
-                font.bold: true
+                font: ui.theme.bodyBoldFont
                 text: "Devices:"
             }
 
@@ -117,8 +116,7 @@ Item {
                 anchors.right: parent.right
                 anchors.leftMargin: 8
                 height: 40
-                verticalAlignment: Text.AlignVCenter
-                font.bold: true
+                font: ui.theme.bodyBoldFont
                 text: "Midi input"
             }
 
@@ -128,7 +126,7 @@ Item {
                 anchors.leftMargin: 8
                 height: 40
                 horizontalAlignment: Text.AlignLeft
-                font.bold: true
+                font: ui.theme.bodyBoldFont
                 text: "Devices:"
             }
 
@@ -196,13 +194,12 @@ Item {
             Repeater {
                 id: inputEventsRepeator
                 model: midiModel.inputEvents()
-                delegate: Text {
+                delegate: StyledTextLabel {
                     anchors.left: parent.left
                     anchors.right: parent.right
                     anchors.leftMargin: 8
                     anchors.rightMargin: 8
                     height: 20
-                    verticalAlignment: Text.AlignVCenter
                     text: modelData
                 }
             }

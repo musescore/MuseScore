@@ -83,13 +83,16 @@ Item {
             text: qsTrc("languages", "LANGUAGES")
             horizontalAlignment: Text.AlignLeft
             opacity: 0.5
+            font.capitalization: Font.AllUppercase
         }
+
         StyledTextLabel {
             width: header.itemWidth
 
             text: qsTrc("languages", "STATUS")
             horizontalAlignment: Text.AlignLeft
             opacity: 0.5
+            font.capitalization: Font.AllUppercase
         }
     }
 

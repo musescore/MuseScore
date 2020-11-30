@@ -54,8 +54,7 @@ QmlDialog {
                     anchors.leftMargin: privateProperties.sideMargin
 
                     text: qsTrc("notation", "Parts")
-
-                    font.pixelSize: 28
+                    font: ui.theme.headerBoldFont
                 }
 
                 FlatButton {

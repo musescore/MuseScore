@@ -50,7 +50,7 @@ Row {
             anchors.left: parent.left
             anchors.right: parent.right
 
-            font.bold: true
+            font: ui.theme.bodyBoldFont
             horizontalAlignment: Text.AlignLeft
             text: qsTrc("userscores", "Key Signature")
         }
@@ -79,7 +79,7 @@ Row {
             anchors.left: parent.left
             anchors.right: parent.right
 
-            font.bold: true
+            font: ui.theme.bodyBoldFont
             horizontalAlignment: Text.AlignLeft
             text: qsTrc("userscores", "Time Signature")
         }
@@ -108,7 +108,7 @@ Row {
             anchors.left: parent.left
             anchors.right: parent.right
 
-            font.bold: true
+            font: ui.theme.bodyBoldFont
             horizontalAlignment: Text.AlignLeft
             text: qsTrc("userscores", "Tempo")
         }
@@ -137,7 +137,7 @@ Row {
             anchors.left: parent.left
             anchors.right: parent.right
 
-            font.bold: true
+            font: ui.theme.bodyBoldFont
             horizontalAlignment: Text.AlignLeft
             text: qsTrc("userscores", "Measures")
         }

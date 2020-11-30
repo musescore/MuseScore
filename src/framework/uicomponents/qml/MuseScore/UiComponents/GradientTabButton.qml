@@ -11,7 +11,6 @@ RadioDelegate {
 
     property Component iconComponent: null
     property string title: ""
-    property int titlePixelSize: ui.theme.font.pixelSize
 
     property int orientation: Qt.Vertical
 
@@ -122,7 +121,7 @@ RadioDelegate {
             visible: Boolean(title)
 
             horizontalAlignment: Text.AlignLeft
-            font.pixelSize: titlePixelSize
+            font: ui.theme.tabFont
             text: title
         }
     }
@@ -168,7 +167,7 @@ RadioDelegate {
 
             PropertyChanges {
                 target: textLabel
-                font.bold: true
+                font: ui.theme.tabBoldFont
             }
         }
     ]

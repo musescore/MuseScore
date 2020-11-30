@@ -32,8 +32,7 @@ FocusScope {
         anchors.topMargin: 66
         anchors.leftMargin: privateProperties.sideMargin
 
-        font.pixelSize: 32
-        font.bold: true
+        font: ui.theme.titleBoldFont
     }
 
     Row {
@@ -57,14 +56,12 @@ FocusScope {
 
             StyledTextLabel {
                 text: qsTrc("cloud", "Your profile link:")
-                font.pixelSize: 18
+                font: ui.theme.largeBodyFont
             }
 
             StyledTextLabel {
                 text: "MuseScore.com/" + root.userName
-
-                font.pixelSize: 18
-                font.bold: true
+                font: ui.theme.largeBodyBoldFont
 
                 MouseArea {
                     anchors.fill: parent

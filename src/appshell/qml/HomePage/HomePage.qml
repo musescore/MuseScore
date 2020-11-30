@@ -150,10 +150,8 @@ DockPage {
         id: audioComp
 
         Rectangle {
-            Text {
+            StyledTextLabel {
                 anchors.fill: parent
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
                 text: "Audio & VST"
             }
         }
@@ -163,10 +161,8 @@ DockPage {
         id: feauturedComp
 
         Rectangle {
-            Text {
+            StyledTextLabel {
                 anchors.fill: parent
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
                 text: "Feautured"
             }
         }
@@ -176,10 +172,8 @@ DockPage {
         id: learnComp
 
         Rectangle {
-            Text {
+            StyledTextLabel {
                 anchors.fill: parent
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
                 text: "Learn"
             }
         }
@@ -189,10 +183,8 @@ DockPage {
         id: supportComp
 
         Rectangle {
-            Text {
+            StyledTextLabel {
                 anchors.fill: parent
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
                 text: "Support"
             }
         }

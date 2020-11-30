@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 
+import MuseScore.UiComponents 1.0
 
 Item {
 
@@ -28,14 +29,13 @@ Item {
         anchors.margins: 8
         width: (parent.width / 2) - 40
 
-        Text {
+        StyledTextLabel {
             id: headerAvalaible
             anchors.left: parent.left
             anchors.leftMargin: 8
             width: parent.width
             height: 40
-            verticalAlignment: Text.AlignVCenter
-            font.bold: true
+            font: ui.theme.bodyBoldFont
             text: "Avalaible"
         }
 
@@ -50,13 +50,12 @@ Item {
                 width: parent.width
                 height: 40
 
-                Text {
+                StyledTextLabel {
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
                     anchors.left: parent.left
                     anchors.right: addBtn.left
                     anchors.leftMargin: 8
-                    verticalAlignment: Text.AlignVCenter
 
                     text: modelData
                 }
@@ -90,14 +89,13 @@ Item {
         anchors.right: parent.right
         anchors.margins: 8
 
-        Text {
+        StyledTextLabel {
             id: headerSelecetd
             anchors.left: parent.left
             anchors.leftMargin: 8
             width: parent.width
             height: 40
-            verticalAlignment: Text.AlignVCenter
-            font.bold: true
+            font: ui.theme.bodyBoldFont
             text: "Selected"
         }
 
@@ -113,14 +111,12 @@ Item {
                 width: parent.width
                 height: 40
 
-                Text {
+                StyledTextLabel {
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
                     anchors.left: parent.left
                     anchors.right: btns.left
                     anchors.leftMargin: 8
-
-                    verticalAlignment: Text.AlignVCenter
 
                     text: modelData
                 }

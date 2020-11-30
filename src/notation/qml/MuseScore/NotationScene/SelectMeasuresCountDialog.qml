@@ -46,7 +46,7 @@ QmlDialog {
 
                 StyledTextLabel {
                     text: privateProperties.capitalizeFirstLetter(operation) + " " + qsTrc("notation", "empty measures")
-                    font.bold: true
+                    font: ui.theme.bodyBoldFont
                 }
 
                 RowLayout {

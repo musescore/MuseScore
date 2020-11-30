@@ -15,7 +15,6 @@ ComboBox {
     property var maxVisibleItemCount: 6
 
     opacity: root.enabled ? 1 : ui.theme.itemOpacityDisabled
-    font: ui.theme.font
 
     function valueFromModel(index, roleName) {
 
@@ -36,8 +35,9 @@ ComboBox {
         }
 
         for (var i = 0; i < count; ++i) {
-            if (valueFromModel(i, valueRoleName) === value)
+            if (valueFromModel(i, valueRoleName) === value) {
                 return i
+            }
         }
 
         return -1
@@ -56,16 +56,23 @@ ComboBox {
 
     padding: 0
 
+    QtObject {
+        id: privateProperties
+
+        readonly property int textPadding: 12
+    }
+
     delegate: ItemDelegate {
         height: root.implicitHeight
         width: root.width
 
-        contentItem: Text {
+        contentItem: StyledTextLabel {
+            leftPadding: privateProperties.textPadding
+            rightPadding: leftPadding
+
             text: valueFromModel(index, textRoleName)
-            color: ui.theme.fontPrimaryColor
-            font: root.font
             elide: Text.ElideRight
-            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Qt.AlignLeft
         }
 
         background: RoundedRectangle {
@@ -125,15 +132,14 @@ ComboBox {
         highlighted: root.highlightedIndex === index
     }
 
-    contentItem: Text {
-        leftPadding: 12
-        rightPadding: 12
+    contentItem: StyledTextLabel {
+        leftPadding: privateProperties.textPadding
+        rightPadding: leftPadding
 
         text: root.displayText
-        font: root.font
-        color: ui.theme.fontPrimaryColor
-        verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
+
+        horizontalAlignment: Qt.AlignLeft
     }
 
     background: RoundedRectangle {

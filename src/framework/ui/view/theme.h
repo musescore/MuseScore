@@ -54,7 +54,17 @@ class Theme : public QObject, public ITheme, public async::Asyncable
 
     Q_PROPERTY(qreal itemOpacityDisabled READ itemOpacityDisabled NOTIFY themeChanged)
 
-    Q_PROPERTY(QFont font READ font NOTIFY themeChanged)
+    Q_PROPERTY(QFont bodyFont READ bodyFont NOTIFY themeChanged)
+    Q_PROPERTY(QFont bodyBoldFont READ bodyBoldFont NOTIFY themeChanged)
+    Q_PROPERTY(QFont largeBodyFont READ largeBodyFont NOTIFY themeChanged)
+    Q_PROPERTY(QFont largeBodyBoldFont READ largeBodyBoldFont NOTIFY themeChanged)
+    Q_PROPERTY(QFont tabFont READ tabFont NOTIFY themeChanged)
+    Q_PROPERTY(QFont tabBoldFont READ tabBoldFont NOTIFY themeChanged)
+    Q_PROPERTY(QFont headerFont READ headerFont NOTIFY themeChanged)
+    Q_PROPERTY(QFont headerBoldFont READ headerBoldFont NOTIFY themeChanged)
+    Q_PROPERTY(QFont titleBoldFont READ titleBoldFont NOTIFY themeChanged)
+
+    Q_PROPERTY(QFont iconsFont READ iconsFont NOTIFY themeChanged)
     Q_PROPERTY(QFont musicalFont READ musicalFont NOTIFY themeChanged)
 
 public:
@@ -72,7 +82,18 @@ public:
     QColor buttonColor() const override;
     QColor fontPrimaryColor() const override;
     QColor fontSecondaryColor() const override;
-    QFont font() const override;
+
+    QFont bodyFont() const override;
+    QFont bodyBoldFont() const override;
+    QFont largeBodyFont() const override;
+    QFont largeBodyBoldFont() const override;
+    QFont tabFont() const override;
+    QFont tabBoldFont() const override;
+    QFont headerFont() const override;
+    QFont headerBoldFont() const override;
+    QFont titleBoldFont() const override;
+
+    QFont iconsFont() const override;
     QFont musicalFont() const override;
 
     qreal accentOpacityNormal() const override;
@@ -91,12 +112,22 @@ signals:
 private:
     QHash<int, QVariant> currentThemeProperites() const;
 
-    void initFont();
+    void initUiFonts();
+    void initIconsFont();
     void initMusicalFont();
+
+    void setupUiFonts();
+    void setupIconsFont();
+    void setupMusicFont();
 
     void setupWidgetTheme();
 
-    QFont m_font;
+    QFont m_bodyFont;
+    QFont m_largeBodyFont;
+    QFont m_tabFont;
+    QFont m_headerFont;
+    QFont m_titleBoldFont;
+    QFont m_iconsFont;
     QFont m_musicalFont;
 };
 }

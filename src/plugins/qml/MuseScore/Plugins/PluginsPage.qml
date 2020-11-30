@@ -126,7 +126,7 @@ Item {
                 id: notInstalledPluginsView
 
                 width: parent.width
-                title: qsTrc("plugins", "Not installed")
+                title: qsTrc("plugins", "Not Installed")
                 visible: count > 0
 
                 search: root.search

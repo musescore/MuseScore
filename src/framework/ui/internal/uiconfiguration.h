@@ -36,27 +36,27 @@ public:
     ThemeType themeType() const override;
     async::Channel<ThemeType> themeTypeChanged() const override;
 
-    QString fontFamily() const override;
-    async::Channel<QString> fontFamilyChanged() const override;
+    std::string fontFamily() const override;
+    int fontSize(FontSizeType type) const override;
+    async::Notification fontChanged() const override;
 
-    int fontSize() const override;
-    async::Channel<int> fontSizeChanged() const override;
+    std::string iconsFontFamily() const override;
+    int iconsFontSize() const override;
+    async::Notification iconsFontChanged() const override;
 
-    QString musicalFontFamily() const override;
-    async::Channel<QString> musicalFontFamilyChanged() const override;
-
+    std::string musicalFontFamily() const override;
     int musicalFontSize() const override;
-    async::Channel<int> musicalFontSizeChanged() const override;
+    async::Notification musicalFontChanged() const override;
 
     float guiScaling() const override;
     float physicalDotsPerInch() const override;
 
 private:
     async::Channel<ThemeType> m_currentThemeTypeChannel;
-    async::Channel<QString> m_currentFontFamilyChannel;
-    async::Channel<int> m_currentFontSizeChannel;
-    async::Channel<QString> m_currentMusicalFontFamilyChannel;
-    async::Channel<int> m_currentMusicalFontSizeChannel;
+
+    async::Notification m_fontChanged;
+    async::Notification m_musicalFontChanged;
+    async::Notification m_iconsFontChanged;
 };
 }
 

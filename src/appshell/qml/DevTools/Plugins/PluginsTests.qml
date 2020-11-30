@@ -23,8 +23,7 @@ Rectangle {
 
         text: "Installed plugins"
 
-        font.bold: true
-        font.pixelSize: 18
+        font: ui.theme.headerBoldFont
     }
 
     Grid {

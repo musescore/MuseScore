@@ -28,7 +28,7 @@ Item {
         }
 
         StyledTextLabel {
-            font.pixelSize: 20
+            font: ui.theme.headerFont
             text: " = " + root.tempo
         }
     }

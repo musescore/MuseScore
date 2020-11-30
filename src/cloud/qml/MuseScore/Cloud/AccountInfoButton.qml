@@ -13,7 +13,6 @@ GradientTabButton {
     orientation: Qt.Horizontal
 
     title: Boolean(userName) ? userName : qsTrc("cloud", "My Account")
-    titlePixelSize: 16
     iconComponent: Boolean(avatarUrl) ? avatarComp : stubAvatarComp
 
     Component {

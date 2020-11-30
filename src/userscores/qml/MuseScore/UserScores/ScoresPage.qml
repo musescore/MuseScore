@@ -49,9 +49,7 @@ FocusScope {
             id: pageTitle
 
             text: qsTrc("userscores", "Scores")
-
-            font.pixelSize: 32
-            font.bold: true
+            font: ui.theme.titleBoldFont
         }
 
         SearchField {

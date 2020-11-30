@@ -45,7 +45,7 @@ Rectangle {
         z: 1
     }
 
-    StyledIconLabel {
+    FlatButton {
         id: closeButton
 
         anchors.top: parent.top
@@ -56,16 +56,12 @@ Rectangle {
         width: 32
         height: width
 
-        font.pixelSize: 16
+        icon: IconCode.CLOSE_X_ROUNDED
 
-        iconCode: IconCode.CLOSE_X_ROUNDED
+        normalStateColor: "transparent"
 
-        MouseArea {
-            anchors.fill: parent
-
-            onClicked: {
-                close()
-            }
+        onClicked: {
+            close()
         }
     }
 

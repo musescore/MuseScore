@@ -13,8 +13,9 @@ TabButton {
     width: implicitWidth + sideMargin * 2 - 8
 
     contentItem: StyledTextLabel {
+        id: textLabel
         text: root.text
-        font.bold: true
+        font: ui.theme.largeBodyFont
         opacity: 0.75
     }
 
@@ -42,20 +43,22 @@ TabButton {
     states: [
         State {
             name: "HOVERED"
-            when: root.hovered
+            when: root.hovered && !isCurrent
 
             PropertyChanges {
                 target: contentItem
                 opacity: 1
             }
         },
+
         State {
             name: "SELECTED"
             when: isCurrent
 
             PropertyChanges {
-                target: contentItem
+                target: textLabel
                 opacity: 1
+                font: ui.theme.largeBodyBoldFont
             }
         }
     ]

@@ -19,6 +19,8 @@
 
 import QtQuick 2.0
 
+import MuseScore.UiComponents 1.0
+
 FocusableItem {
     id: root
 
@@ -64,14 +66,10 @@ FocusableItem {
         }
     }
 
-    Text {
+    StyledTextLabel {
         id: buttonLabel
 
         anchors.centerIn: root
-
-        font.pixelSize: 13
-
-        color: globalStyle.buttonText
     }
 
     MouseArea {

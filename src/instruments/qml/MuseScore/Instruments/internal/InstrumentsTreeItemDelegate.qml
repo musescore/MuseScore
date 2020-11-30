@@ -260,7 +260,13 @@ Item {
                 text: model ? model.itemRole.title : ""
                 opacity: model && model.itemRole.isVisible ? 1 : 0.75
 
-                font.bold: model ? delegateType === InstrumentTreeItemType.PART && model.itemRole.isVisible : false
+                font: {
+                    if (Boolean(model) && delegateType === InstrumentTreeItemType.PART && model.itemRole.isVisible) {
+                        return ui.theme.bodyBoldFont
+                    }
+
+                    return ui.theme.bodyFont
+                }
             }
         }
 

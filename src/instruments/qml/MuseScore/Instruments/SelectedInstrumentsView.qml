@@ -26,7 +26,7 @@ Item {
         anchors.top: parent.top
         anchors.left: parent.left
 
-        font.bold: true
+        font: ui.theme.bodyBoldFont
         text: qsTrc("instruments", "Your score")
     }
 
