@@ -145,8 +145,6 @@ private:
                                  QPointF pt = QPointF(), bool pasteMode = false);
     void doAddSlur(const Ms::Slur* slurTemplate = nullptr);
 
-    bool isVoiceIndexValid(int voiceIndex) const;
-
     bool needEndTextEditing(const std::vector<Element*>& newSelectedElements) const;
 
     struct HitMeasureData

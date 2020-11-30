@@ -49,7 +49,7 @@ public:
     void putNote(const QPointF& pos, bool replace, bool insert) override;
     void toogleAccidental(AccidentalType accidentalType) override;
 
-    void addSlur(Ms::Slur* slur) override;
+    void setSlur(Ms::Slur* slur) override;
     void resetSlur() override;
 
     void setCurrentVoiceIndex(int voiceIndex) override;

@@ -106,7 +106,7 @@ void NotationNoteInput::startNoteInput()
     }
     is.setAccidentalType(Ms::AccidentalType::NONE);
 
-    m_interaction->select(el, SelectType::SINGLE, 0);
+    m_interaction->select({ el }, SelectType::SINGLE, 0);
 
     is.setRest(false);
     is.setNoteEntryMode(true);
@@ -229,15 +229,19 @@ void NotationNoteInput::setCurrentVoiceIndex(int voiceIndex)
     notifyAboutStateChanged();
 }
 
-void NotationNoteInput::addSlur(Ms::Slur* slur)
+void NotationNoteInput::setSlur(Ms::Slur* slur)
 {
     Ms::InputState& inputState = score()->inputState();
     inputState.setSlur(slur);
 
-    std::vector<Ms::SpannerSegment*> slurSpannerSegments = slur->spannerSegments();
-    if (!slurSpannerSegments.empty()) {
-        slurSpannerSegments.back()->setSelected(true);
+    if (slur) {
+        std::vector<Ms::SpannerSegment*> slurSpannerSegments = slur->spannerSegments();
+        if (!slurSpannerSegments.empty()) {
+            slurSpannerSegments.back()->setSelected(true);
+        }
     }
+
+    notifyAboutStateChanged();
 }
 
 void NotationNoteInput::resetSlur()
@@ -252,7 +256,7 @@ void NotationNoteInput::resetSlur()
         el.front()->setSelected(false);
     }
 
-    inputState.setSlur(nullptr);
+    setSlur(nullptr);
 }
 
 Notification NotationNoteInput::noteAdded() const

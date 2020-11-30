@@ -1210,7 +1210,7 @@ void NotationInteraction::doAddSlur(const Ms::Slur* slurTemplate)
                 Slur* slur = score()->addSlur(cr1, cr2, slurTemplate);
 
                 if (m_noteInput->isNoteInputMode()) {
-                    m_noteInput->addSlur(slur);
+                    m_noteInput->setSlur(slur);
                 } else if (!cr2) {
                     NOT_IMPLEMENTED;
                     //startEditMode(ss);
@@ -1242,7 +1242,7 @@ void NotationInteraction::doAddSlur(const Ms::Slur* slurTemplate)
             Slur* slur = score()->addSlur(cr1, cr2, slurTemplate);
 
             if (m_noteInput->isNoteInputMode()) {
-                m_noteInput->addSlur(slur);
+                m_noteInput->setSlur(slur);
             } else if (!cr2) {
                 NOT_IMPLEMENTED;
                 //startEditMode(ss);
