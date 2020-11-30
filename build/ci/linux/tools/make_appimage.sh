@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
-INSTALL_DIR=$1
+INSTALL_DIR="$1" # MuseScore was installed here
+APPIMAGE_NAME="$2" # name for AppImage file (created outside $INSTALL_DIR)
+
 if [ -z "$INSTALL_DIR" ]; then echo "error: not set INSTALL_DIR"; exit 1; fi
+if [ -z "$APPIMAGE_NAME" ]; then echo "error: not set APPIMAGE_NAME"; exit 1; fi
 
 ##########################################################################
 # INSTALL APPIMAGETOOL AND LINUXDEPLOY
@@ -211,7 +214,7 @@ done
 # TURN APPDIR INTO AN APPIMAGE
 ##########################################################################
 
-appimage="${appdir%.AppDir}.AppImage" # name to use for AppImage file
+appimage="${APPIMAGE_NAME}" # name to use for AppImage file
 
 appimagetool_args=( # array
   # none
