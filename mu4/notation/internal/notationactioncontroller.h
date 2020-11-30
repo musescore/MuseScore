@@ -88,6 +88,7 @@ private:
     int firstSelectedBoxIndex() const;
 
     void addOttava(OttavaType type);
+    void addHairpin(HairpinType type);
     void addNoteLine();
 
     void openPageStyle();

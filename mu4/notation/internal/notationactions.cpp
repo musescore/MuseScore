@@ -431,8 +431,12 @@ const ActionList NotationActions::m_actions = {
            QT_TRANSLATE_NOOP("action", "Ottava 8va bassa"),
            ShortcutContext::NotationActive
            ),
-    Action("add-noteline",
-           QT_TRANSLATE_NOOP("action", "Note Anchored Line"),
+    Action("add-hairpin",
+           QT_TRANSLATE_NOOP("action", "Crescendo"),
+           ShortcutContext::NotationActive
+           ),
+    Action("add-hairpin-reverse",
+           QT_TRANSLATE_NOOP("action", "Decrescendo"),
            ShortcutContext::NotationActive
            )
 };
