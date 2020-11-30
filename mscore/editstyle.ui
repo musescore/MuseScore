@@ -5308,7 +5308,7 @@
           <property name="title">
            <string>Tuplets</string>
           </property>
-          <layout class="QGridLayout" name="gridLayout_48">
+          <layout class="QGridLayout" name="gridLayout_481">
            <item row="0" column="0">
             <widget class="QGroupBox" name="verticalDistance">
              <property name="title">
@@ -11751,9 +11751,9 @@
   <tabstop>mmRestRangeHPlacement</tabstop>
   <tabstop>resetMmRestRangeHPlacement</tabstop>
   <tabstop>mmRestRangePosAbove</tabstop>
-  <tabstop>resetMmRestRangePosAbove</tabstop>
+  <tabstop>resetMMRestRangePosAbove</tabstop>
   <tabstop>mmRestRangePosBelow</tabstop>
-  <tabstop>resetMmRestRangePosBelow</tabstop>
+  <tabstop>resetMMRestRangePosBelow</tabstop>
   <tabstop>bracketWidth</tabstop>
   <tabstop>akkoladeWidth</tabstop>
   <tabstop>bracketDistance</tabstop>
