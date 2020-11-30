@@ -740,7 +740,7 @@ void RepeatList::unwind()
       std::pair<QList<QList<RepeatListElement*>*>::const_iterator, QList<RepeatListElement*>::const_iterator> playUntil = std::make_pair(_rlElements.cend(), _rlElements[0]->cend());
       std::pair<QList<QList<RepeatListElement*>*>::const_iterator, QList<RepeatListElement*>::const_iterator> continueAt = std::make_pair(_rlElements.cend(), _rlElements[0]->cend());
       Jump const * activeJump = nullptr;
-      bool forceFinalRepeat = false; // Used during jump processing
+      bool forceFinalRepeat; // Used during jump processing
       QList<RepeatListElement*>::const_iterator repeatListElementIt;
 
       for (QList<QList<RepeatListElement*>*>::const_iterator sectionIt = _rlElements.cbegin(); sectionIt != _rlElements.cend(); ++sectionIt)
@@ -753,6 +753,7 @@ void RepeatList::unwind()
             activeVolta = nullptr;
             playUntil.first = _rlElements.cend();
             continueAt.first = _rlElements.cend();
+            forceFinalRepeat = false;
 
             rs = new RepeatSegment(playbackCount);
             rs->addMeasure((*repeatListElementIt)->measure);
