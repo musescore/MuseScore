@@ -21,6 +21,7 @@ VERSION := $(cmake -P config.cmake | sed -n -e "s/^.*VERSION  *//p")
 BUILD_NUMBER = ""
 PREFIX=../applebuild
 TELEMETRY_TRACK_ID=""
+CRASH_REPORT_URL=""
 MUSESCORE_BUILD_CONFIG="dev"
 MUSESCORE_REVISION=""
 BUILD_UI_MU4="OFF"
@@ -101,6 +102,7 @@ ci:
 	      -DMUSESCORE_BUILD_CONFIG="${MUSESCORE_BUILD_CONFIG}" \
 	      -DMUSESCORE_REVISION="${MUSESCORE_REVISION}" \
 	      -DTELEMETRY_TRACK_ID="${TELEMETRY_TRACK_ID}" \
+	      -DCRASH_REPORT_URL="${CRASH_REPORT_URL}" \
 	      .. -G Xcode; \
 	xcodebuild -project ${XCODEPROJ} -target lrelease; \
 	$(FORMATTER_START) xcodebuild -project ${XCODEPROJ} -configuration Release -target install $(FORMATTER_END);  

@@ -31,6 +31,8 @@
 #include "global/iglobalconfiguration.h"
 #include "internal/dump/crashhandler.h"
 
+#include "devtools/telemetrydevtools.h"
+
 #include "log.h"
 #include "config.h"
 
@@ -62,6 +64,8 @@ void TelemetrySetup::registerExports()
 void TelemetrySetup::registerUiTypes()
 {
     qmlRegisterType<TelemetryPermissionModel>("MuseScore.Telemetry", 3, 3, "TelemetryPermissionModel");
+
+    qmlRegisterType<TelemetryDevTools>("MuseScore.Telemetry", 1, 0, "TelemetryDevTools");
 }
 
 void TelemetrySetup::onInit()

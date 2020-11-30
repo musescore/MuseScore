@@ -15,7 +15,11 @@ on:
       publish:
         description: 'Publish to FTP: on - publish'
         required: false
-        default: 'off'  
+        default: 'off'
+      sentry_project:
+        description: 'Upload symbols and dumps to Sentry (choose a project): editor, sandbox'
+        required: false
+        default: ''  
 
 jobs:
   build_mu4:
@@ -67,8 +71,27 @@ jobs:
         if [ "$BUILD_MODE" == "nightly_build" ]; then 
           if [ "${{ github.repository }}" != "musescore/MuseScore" ]; then 
             DO_BUILD='false'
-            DO_PUBLISH='false'
           fi
+        fi
+
+        DO_UPLOAD_SYMBOLS='false'
+        SENTRY_PROJECT=""
+        SENTRY_URL=""
+        if [ "${{ github.event.inputs.sentry_project }}" == "editor" ] && [ ${{ secrets.SENTRY_SERVER_MU3_KEY }} != 0 ]; then 
+          DO_UPLOAD_SYMBOLS='true'
+          SENTRY_PROJECT="editor"
+          SENTRY_URL=https://sentry.musescore.org/api/2/minidump/?sentry_key=${{ secrets.SENTRY_SERVER_MU3_KEY }}
+        fi
+
+        if [ "${{ github.event.inputs.sentry_project }}" == "sandbox" ] && [ ${{ secrets.SENTRY_SERVER_SANDBOX_KEY }} != 0 ]; then 
+          DO_UPLOAD_SYMBOLS='true'
+          SENTRY_PROJECT="sandbox"
+          SENTRY_URL=https://sentry.musescore.org/api/3/minidump/?sentry_key=${{ secrets.SENTRY_SERVER_SANDBOX_KEY }}
+        fi
+
+        if [ $DO_BUILD == 'false' ]; then
+          DO_UPLOAD_SYMBOLS='false'
+          DO_PUBLISH='false'
         fi
 
         echo "github.repository: ${{ github.repository }}"
@@ -78,6 +101,12 @@ jobs:
         echo "DO_BUILD: $DO_BUILD"
         echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
         echo "DO_PUBLISH: $DO_PUBLISH"
+        echo "DO_UPLOAD_SYMBOLS=$DO_UPLOAD_SYMBOLS" >> $GITHUB_ENV
+        echo "DO_UPLOAD_SYMBOLS: $DO_UPLOAD_SYMBOLS"
+        echo "SENTRY_PROJECT=$SENTRY_PROJECT" >> $GITHUB_ENV
+        echo "SENTRY_PROJECT: $SENTRY_PROJECT"
+        echo "SENTRY_URL=$SENTRY_URL" >> $GITHUB_ENV
+        echo "SENTRY_URL: $SENTRY_URL"
 
     - name: Setup environment
       if: env.DO_BUILD == 'true'
@@ -87,7 +116,8 @@ jobs:
       if: env.DO_BUILD == 'true'
       run: |
         T_ID=${{ secrets.TELEMETRY_TRACK_ID }}; if [ -z "$T_ID" ]; then T_ID="''"; fi
-        sudo bash ./build/ci/linux/build.sh -n ${{ github.run_id }} --telemetry $T_ID --build_mu4 ON
+        C_URL=${SENTRY_URL}; if [ -z "$C_URL" ]; then C_URL="''"; fi
+        sudo bash ./build/ci/linux/build.sh -n ${{ github.run_id }} --telemetry $T_ID --crash_log_url $C_URL --build_mu4 ON
         echo "============== ccache ==============="
         ccache -s
     - name: "Run unit tests"
@@ -97,7 +127,7 @@ jobs:
     - name: Generate dump symbols
       if: env.DO_BUILD == 'true'
       run: |
-        sudo bash ./build/ci/linux/dumpsyms.sh  
+        sudo bash ./build/ci/linux/dumpsyms.sh
     - name: Package 
       if: env.DO_BUILD == 'true'
       run: |
@@ -106,6 +136,10 @@ jobs:
       if: env.DO_BUILD == 'true'
       run: |
         sudo bash ./build/ci/tools/checksum.sh 
+    - name: Upload dump symbols
+      if: env.DO_UPLOAD_SYMBOLS == 'true'
+      run: |
+        sudo bash ./build/ci/tools/sentry_syms_upload.sh -t ${{ secrets.SENTRY_AUTH_TOKEN }} -p ${SENTRY_PROJECT}
     - name: Publish package
       if: env.DO_PUBLISH == 'true'
       run: |
