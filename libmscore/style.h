@@ -73,10 +73,12 @@ enum class Sid {
       spreadSystem,
       spreadSquareBracket,
       spreadCurlyBracket,
+      minSystemSpread,
       maxSystemSpread,
       minStaffSpread,
       maxStaffSpread,
       maxAkkoladeDistance,
+      maxPageFillSpread,
 
       lyricsPlacement,
       lyricsPosAbove,
