@@ -37,7 +37,7 @@ Row {
 
     StyledTextLabel {
         anchors.verticalCenter: parent.verticalCenter
-        font.pixelSize: 15
+        font: ui.theme.tabFont
         text: "/"
     }
 

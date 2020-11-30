@@ -49,7 +49,7 @@ Item {
         anchors.top: parent.top
         anchors.left: parent.left
 
-        font.bold: true
+        font: ui.theme.bodyBoldFont
         text: qsTrc("instruments", "Family")
     }
 
@@ -110,7 +110,7 @@ Item {
                 anchors.fill: parent
                 anchors.leftMargin: 12
 
-                font.bold: true
+                font: ui.theme.bodyBoldFont
                 horizontalAlignment: Text.AlignLeft
                 text: modelData.name
             }

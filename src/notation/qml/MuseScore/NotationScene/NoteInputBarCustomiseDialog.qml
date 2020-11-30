@@ -44,8 +44,7 @@ QmlDialog {
 
                 text: qsTrc("notation", "Customise toolbar")
                 horizontalAlignment: Text.AlignLeft
-                font.pixelSize: 15
-                font.bold: true
+                font: ui.theme.largeBodyBoldFont
             }
 
             RowLayout {

@@ -1,7 +1,9 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.2
+
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
 import MuseScore.Dock 1.0
 import MuseScore.Settings 1.0
 
@@ -36,10 +38,10 @@ DockPage {
                     width: parent.width
                     height: 24
                     color: "#cccccc"
-                    Text {
+                    StyledTextLabel {
                         anchors.fill: parent
                         anchors.margins: 2
-                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Qt.AlignLeft
                         text: section
                     }
                 }
@@ -52,12 +54,13 @@ DockPage {
                     height: 32
                     color: content.color
 
-                    Text {
+                    StyledTextLabel {
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
                         anchors.left: parent.left
                         anchors.right: control.left
-                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Qt.AlignLeft
+
                         text: keyRole
                     }
 

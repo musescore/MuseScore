@@ -14,7 +14,7 @@ Column {
         anchors.left: parent.left
         anchors.right: parent.right
 
-        font.bold: true
+        font: ui.theme.bodyBoldFont
         horizontalAlignment: Text.AlignLeft
         text: title
     }

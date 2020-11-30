@@ -186,7 +186,7 @@ void NotationConfiguration::setCurrentZoom(int zoomPercentage)
 
 int NotationConfiguration::fontSize() const
 {
-    return uiConfiguration()->fontSize();
+    return uiConfiguration()->fontSize(IUiConfiguration::FontSizeType::BODY);
 }
 
 io::path NotationConfiguration::stylesDirPath() const

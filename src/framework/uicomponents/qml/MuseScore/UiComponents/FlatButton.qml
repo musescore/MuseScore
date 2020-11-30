@@ -6,7 +6,7 @@ FocusableItem {
 
     property alias icon: buttonIcon.iconCode
     property alias text: textLabel.text
-    property int iconPixelSize: buttonIcon.isEmpty ? 0 : 16
+    property int iconPixelSize: buttonIcon.isEmpty ? 0 : ui.theme.iconsFont.pixelSize
 
     property int orientation: Qt.Vertical
 

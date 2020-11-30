@@ -6,9 +6,6 @@ import MuseScore.Ui 1.0
 FocusableItem {
     id: root
 
-    property alias icon: expandButtonIcon.iconCode
-    property int iconPixelSize: 16
-
     property alias title: titleLabel.text
 
     property alias menuItemComponent: menuLoader.sourceComponent
@@ -16,7 +13,7 @@ FocusableItem {
     property bool isExpanded: true
 
     anchors.left: parent.left
-    anchors.leftMargin: -iconPixelSize/2
+    anchors.leftMargin: -expandButtonIcon.width / 2
     anchors.right: parent.right
 
     implicitHeight: expandSectionRow.height
@@ -29,15 +26,14 @@ FocusableItem {
         Rectangle {
             id: expandButton
 
-            height: iconPixelSize * 1.2
-            width: iconPixelSize * 1.2
+            height: expandButtonIcon.height * 1.2
+            width: expandButtonIcon.width * 1.2
 
             color: "transparent"
 
             StyledIconLabel {
                 id: expandButtonIcon
 
-                anchors.fill: parent
                 rotation: root.isExpanded ? 0 : -90
 
                 iconCode: IconCode.SMALL_ARROW_DOWN
@@ -56,7 +52,7 @@ FocusableItem {
 
             anchors.verticalCenter: expandButton.verticalCenter
 
-            font.bold: true
+            font: ui.theme.bodyBoldFont
         }
     }
 

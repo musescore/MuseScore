@@ -72,9 +72,7 @@ Item {
                 anchors.leftMargin: view.sideMargin
 
                 text: root.title
-
-                font.pixelSize: 18
-                font.bold: true
+                font: ui.theme.tabBoldFont
             }
         }
 

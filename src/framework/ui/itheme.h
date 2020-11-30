@@ -42,7 +42,18 @@ public:
     virtual QColor buttonColor() const = 0;
     virtual QColor fontPrimaryColor() const = 0;
     virtual QColor fontSecondaryColor() const = 0;
-    virtual QFont font() const = 0;
+
+    virtual QFont bodyFont() const = 0;
+    virtual QFont bodyBoldFont() const = 0;
+    virtual QFont largeBodyFont() const = 0;
+    virtual QFont largeBodyBoldFont() const = 0;
+    virtual QFont tabFont() const = 0;
+    virtual QFont tabBoldFont() const = 0;
+    virtual QFont headerFont() const = 0;
+    virtual QFont headerBoldFont() const = 0;
+    virtual QFont titleBoldFont() const = 0;
+
+    virtual QFont iconsFont() const = 0;
     virtual QFont musicalFont() const = 0;
 
     virtual qreal accentOpacityNormal() const = 0;

@@ -130,12 +130,11 @@ Rectangle {
             color: "#666666"
         }
 
-        Button {
+        FlatButton {
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
             anchors.rightMargin: 8
             height: 40
-            font.bold: true
             text: "Apply"
             onClicked: settingsModel.apply()
         }

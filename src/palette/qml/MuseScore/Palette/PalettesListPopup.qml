@@ -146,7 +146,7 @@ StyledPopup {
                         anchors.fill: parent
                         text: morePalettesDelegate.added ? qsTrc("palette", "%1 added").arg(model.display) : (morePalettesDelegate.removed ? qsTrc("palette", "%1 removed").arg(model.display) : "")
                         elide: Text.ElideMiddle
-                        font.bold: true
+                        font: ui.theme.bodyBoldFont
                     }
                 }
             }

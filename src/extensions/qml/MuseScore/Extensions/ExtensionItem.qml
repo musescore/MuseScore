@@ -39,7 +39,7 @@ Rectangle {
                     anchors.fill: parent
 
                     text: qsTrc("extensions", "Placeholder")
-                    font.pixelSize: 30
+                    font: ui.theme.titleBoldFont
                 }
             }
         }
@@ -59,8 +59,7 @@ Rectangle {
 
                     width: parent.width
 
-                    font.pixelSize: 22
-                    font.bold: true
+                    font: ui.theme.headerBoldFont
                     horizontalAlignment: Text.AlignLeft
                 }
 
@@ -92,8 +91,7 @@ Rectangle {
         anchors.bottomMargin: 20
 
         text: qsTrc("extensions", "FREE") // TODO: get from model
-        font.pixelSize: 16
-        font.bold: true
+        font: ui.theme.tabBoldFont
     }
 
     MouseArea {

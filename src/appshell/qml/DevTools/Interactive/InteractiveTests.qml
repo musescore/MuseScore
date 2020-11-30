@@ -10,11 +10,10 @@ Rectangle {
         id: testModel
     }
 
-    Text {
+    StyledTextLabel {
         id: header
         width: parent.width
         height: 40
-        verticalAlignment: Text.AlignVCenter
         text: testModel.currentUri
     }
 

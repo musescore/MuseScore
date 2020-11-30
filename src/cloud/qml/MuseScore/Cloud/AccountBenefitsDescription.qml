@@ -9,15 +9,12 @@ Column {
 
         StyledTextLabel {
             text: qsTrc("cloud", "What are the benefits of a MuseScore account?")
-
-            font.pixelSize: 32
-            font.bold: true
+            font: ui.theme.headerBoldFont
         }
 
         StyledTextLabel {
             text: qsTrc("cloud", "A MuseScore profile allows you to save & publish your scores on MuseScore.com. It's free.")
-
-            font.pixelSize: 18
+            font: ui.theme.largeBodyFont
         }
     }
 
@@ -47,8 +44,7 @@ Column {
 
             StyledTextLabel {
                 text: modelData
-
-                font.pixelSize: 18
+                font: ui.theme.largeBodyFont
             }
         }
     }

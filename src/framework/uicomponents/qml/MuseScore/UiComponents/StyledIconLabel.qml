@@ -1,7 +1,7 @@
-import QtQuick 2.9
+import QtQuick 2.12
 import MuseScore.Ui 1.0
 
-Text {
+StyledTextLabel {
     id: root
 
     property var iconCode
@@ -10,16 +10,10 @@ Text {
     height: isEmpty ? 0 : implicitHeight
     width: isEmpty ? 0 : implicitWidth
 
-    horizontalAlignment: Text.AlignHCenter
-    verticalAlignment: Text.AlignVCenter
-
     font {
-        family: "MusescoreIcon"
-        pixelSize: 16
+        family: ui.theme.iconsFont.family
+        pixelSize: ui.theme.iconsFont.pixelSize
     }
-
-    color: ui.theme.fontPrimaryColor
-    opacity: enabled ? 1 : ui.theme.itemOpacityDisabled
 
     text: iconCharCode(iconCode)
 

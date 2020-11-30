@@ -1,6 +1,8 @@
 import QtQuick 2.7
+
 import MuseScore.Ui 1.0
 import MuseScore.Dock 1.0
+import MuseScore.UiComponents 1.0
 
 DockPage {
     id: sequencerPage
@@ -21,9 +23,8 @@ DockPage {
         Rectangle {
             color: sequencerPage.color
 
-            Text {
+            StyledTextLabel {
                 anchors.fill: parent
-                verticalAlignment: Text.AlignVCenter
                 text: "Sequencer toolbar"
             }
         }
@@ -40,10 +41,8 @@ DockPage {
 
             Rectangle {
 
-                Text {
+                StyledTextLabel {
                     anchors.fill: parent
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignHCenter
                     text: "Mixer"
                 }
             }
@@ -56,11 +55,8 @@ DockPage {
         objectName: "seqCentral"
 
         Rectangle {
-
-            Text {
+            StyledTextLabel {
                 anchors.fill: parent
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
                 text: "Sequencer"
             }
         }
@@ -77,9 +73,8 @@ DockPage {
         Rectangle {
             color: notationStatusBar.color
 
-            Text {
+            StyledTextLabel {
                 anchors.fill: parent
-                verticalAlignment: Text.AlignVCenter
                 text: "Notation status bar"
             }
         }

@@ -65,8 +65,7 @@ PopupPanel {
             spacing: 8
 
             StyledTextLabel {
-                font.pixelSize: 22
-                font.bold: true
+                font: ui.theme.headerBoldFont
 
                 text: Boolean(root.title) ? root.title : ""
             }
@@ -93,13 +92,12 @@ PopupPanel {
                         }
 
                         StyledTextLabel {
-                            font.pixelSize: 14
+                            font: ui.theme.largeBodyFont
                             text: modelData.title
                         }
 
                         StyledTextLabel {
-                            font.pixelSize: 14
-                            font.bold: true
+                            font: ui.theme.largeBodyBoldFont
                             text: modelData.value
                         }
                     }
