@@ -1958,6 +1958,16 @@ void NotationInteraction::addIntervalToSelectedNotes(int interval)
     m_selectionChanged.notify();
 }
 
+void NotationInteraction::addOttava(OttavaType type)
+{
+    m_undoStack->prepareChanges();
+    score()->cmdAddOttava(type);
+    m_undoStack->commitChanges();
+
+    m_notation->notifyAboutNotationChanged();
+    m_selectionChanged.notify();
+}
+
 void NotationInteraction::changeSelectedNotesVoice(int voiceIndex)
 {
     if (!isVoiceIndexValid(voiceIndex)) {

@@ -102,6 +102,9 @@ public:
     virtual void swapVoices(int voiceIndex1, int voiceIndex2) = 0;
     virtual void addIntervalToSelectedNotes(int interval) = 0;
     virtual void changeSelectedNotesVoice(int voiceIndex) = 0;
+
+    // Lines
+    virtual void addOttava(OttavaType type) = 0;
 };
 
 using INotationInteractionPtr = std::shared_ptr<INotationInteraction>;

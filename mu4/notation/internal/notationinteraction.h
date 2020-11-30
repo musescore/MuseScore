@@ -116,8 +116,10 @@ public:
     void transpose(const TransposeOptions& options) override;
     void swapVoices(int voiceIndex1, int voiceIndex2) override;
     void addIntervalToSelectedNotes(int interval) override;
-
     void changeSelectedNotesVoice(int voiceIndex) override;
+
+    // Lines
+    void addOttava(OttavaType type) override;
 
 private:
     Ms::Score* score() const;

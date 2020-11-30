@@ -154,6 +154,9 @@ void NotationActionController::init()
     dispatcher()->reg(this, "voice-3", [this]() { changeVoice(2); });
     dispatcher()->reg(this, "voice-4", [this]() { changeVoice(3); });
 
+    dispatcher()->reg(this, "add-8va", [this]() { addOttava(OttavaType::OTTAVA_8VA); });
+    dispatcher()->reg(this, "add-8vb", [this]() { addOttava(OttavaType::OTTAVA_8VB); });
+
     for (int i = MIN_NOTES_INTERVAL; i <= MAX_NOTES_INTERVAL; ++i) {
         if (isNotesIntervalValid(i)) {
             dispatcher()->reg(this, "interval" + std::to_string(i), [this, i]() { addInterval(i); });
@@ -666,6 +669,16 @@ void NotationActionController::appendBoxes(BoxType boxType, int count)
 void NotationActionController::appendBox(BoxType boxType)
 {
     appendBoxes(boxType, 1);
+}
+
+void NotationActionController::addOttava(OttavaType type)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->addOttava(type);
 }
 
 void NotationActionController::selectMeasuresCountAndInsert()
