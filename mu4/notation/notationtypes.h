@@ -310,6 +310,11 @@ inline bool isNotesIntervalValid(int interval)
     return interval >= MIN_NOTES_INTERVAL && interval <= MAX_NOTES_INTERVAL
            && interval != 0 && interval != -1;
 }
+
+inline bool isVoiceIndexValid(int voiceIndex)
+{
+    return voiceIndex >= 0 && voiceIndex < VOICES;
+}
 }
 }
 
