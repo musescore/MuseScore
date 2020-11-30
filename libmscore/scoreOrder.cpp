@@ -353,8 +353,8 @@ QString ScoreOrder::getFamilyName(const InstrumentTemplate* instrTemplate, bool 
             return QString("<unsorted>");
       if (soloist)
            return QString("<soloists>");
-      else if (instrumentMap.contains(instrTemplate->trackName.toLower()))
-            return instrumentMap[instrTemplate->trackName.toLower()].id;
+      else if (instrumentMap.contains(instrTemplate->id))
+            return instrumentMap[instrTemplate->id].id;
       else if (instrTemplate->family)
             return instrTemplate->family->id;
       else
