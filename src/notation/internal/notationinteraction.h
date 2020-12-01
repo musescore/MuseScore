@@ -115,6 +115,7 @@ public:
     void addOttavaToSelection(OttavaType type) override;
     void addHairpinToSelection(HairpinType type) override;
     void changeSelectedNotesArticulation(SymbolId articulationSymbolId) override;
+    void addTupletToSelectedChords(const TupletOptions& options) override;
 
     void setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval = 0) override;
     void transpose(const TransposeOptions& options) override;

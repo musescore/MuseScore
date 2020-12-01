@@ -514,6 +514,42 @@ const ActionList NotationActions::m_actions = {
     Action("tempo",
            QT_TRANSLATE_NOOP("action", "Tempo Marking"),
            ShortcutContext::NotationActive
+           ),
+    Action("duplet",
+           QT_TRANSLATE_NOOP("action", "Duplet"),
+           ShortcutContext::NotationActive
+           ),
+    Action("triplet",
+           QT_TRANSLATE_NOOP("action", "Triplet"),
+           ShortcutContext::NotationActive
+           ),
+    Action("quadruplet",
+           QT_TRANSLATE_NOOP("action", "Quadruplet"),
+           ShortcutContext::NotationActive
+           ),
+    Action("quintuplet",
+           QT_TRANSLATE_NOOP("action", "Quintuplet"),
+           ShortcutContext::NotationActive
+           ),
+    Action("sextuplet",
+           QT_TRANSLATE_NOOP("action", "sextuplet"),
+           ShortcutContext::NotationActive
+           ),
+    Action("septuplet",
+           QT_TRANSLATE_NOOP("action", "Septuplet"),
+           ShortcutContext::NotationActive
+           ),
+    Action("octuplet",
+           QT_TRANSLATE_NOOP("action", "Octuplet"),
+           ShortcutContext::NotationActive
+           ),
+    Action("nonuplet",
+           QT_TRANSLATE_NOOP("action", "Nontuplet"),
+           ShortcutContext::NotationActive
+           ),
+    Action("tuplet-dialog",
+           QT_TRANSLATE_NOOP("action", "Other"),
+           ShortcutContext::NotationActive
            )
 };
 

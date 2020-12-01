@@ -91,6 +91,16 @@ void NotationActionController::init()
     dispatcher()->reg(this, "add-tenuto", [this]() { addArticulation(SymbolId::articTenutoAbove); });
     dispatcher()->reg(this, "add-staccato", [this]() { addArticulation(SymbolId::articStaccatoAbove); });
 
+    dispatcher()->reg(this, "duplet", [this]() { putTuplet(2); });
+    dispatcher()->reg(this, "triplet", [this]() { putTuplet(3); });
+    dispatcher()->reg(this, "quadruplet", [this]() { putTuplet(4); });
+    dispatcher()->reg(this, "quintuplet", [this]() { putTuplet(5); });
+    dispatcher()->reg(this, "sextuplet", [this]() { putTuplet(6); });
+    dispatcher()->reg(this, "septuplet", [this]() { putTuplet(7); });
+    dispatcher()->reg(this, "octuplet", [this]() { putTuplet(8); });
+    dispatcher()->reg(this, "nonuplet", [this]() { putTuplet(9); });
+    dispatcher()->reg(this, "tuplet-dialog", this, &NotationActionController::openTupletOtherDialog);
+
     dispatcher()->reg(this, "put-note", this, &NotationActionController::putNote);
 
     //! NOTE For historical reasons, the name of the action does not match what needs to be done.
@@ -314,6 +324,28 @@ void NotationActionController::addArticulation(SymbolId articulationSymbolId)
         noteInput->setArticulation(articulationSymbolId);
     } else {
         interaction->changeSelectedNotesArticulation(articulationSymbolId);
+    }
+}
+
+void NotationActionController::putTuplet(int tupletCount)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    auto noteInput = interaction->noteInput();
+    if (!noteInput) {
+        return;
+    }
+
+    TupletOptions options;
+    options.ratio.setNumerator(tupletCount);
+
+    if (noteInput->isNoteInputMode()) {
+        noteInput->putTuplet(options);
+    } else {
+        interaction->addTupletToSelectedChords(options);
     }
 }
 
@@ -836,4 +868,9 @@ bool NotationActionController::isTextEditting() const
     }
 
     return interaction->isTextEditingStarted();
+}
+
+void NotationActionController::openTupletOtherDialog()
+{
+    interactive()->open("musescore://notation/othertupletdialog");
 }

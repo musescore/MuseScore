@@ -83,6 +83,8 @@ private:
     void updateArticulationsState();
 
     bool isNoteInputModeAction(const actions::ActionName& actionName) const;
+    bool isTupletChooseAction(const actions::ActionName& actionName) const;
+
     actions::Action currentNoteInputModeAction() const;
 
     struct ActionItem {

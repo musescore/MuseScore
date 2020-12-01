@@ -195,6 +195,66 @@ MeasureRepeat* Score::addMeasureRepeat(const Fraction& tick, int track, int numM
     return mr;
 }
 
+Tuplet* Score::addTuplet(ChordRest* destinationChordRest, Fraction ratio, TupletNumberType numberType, TupletBracketType bracketType)
+{
+    if (destinationChordRest->durationType() < TDuration(TDuration::DurationType::V_512TH)
+        && destinationChordRest->durationType() != TDuration(TDuration::DurationType::V_MEASURE)) {
+        return nullptr;
+    }
+
+    Measure* measure = destinationChordRest->measure();
+    if (measure && measure->isMMRest()) {
+        return nullptr;
+    }
+
+    Fraction f(destinationChordRest->ticks());
+    Tuplet* ot  = destinationChordRest->tuplet();
+
+    f.reduce();         //measure duration might not be reduced
+
+    Fraction _ratio;
+    _ratio.setNumerator(ratio.numerator() != -1 ? ratio.numerator() : f.numerator());
+    _ratio.setDenominator(ratio.denominator() != -1 ? ratio.denominator() : f.numerator());
+
+    Fraction fr = f * Fraction(1, _ratio.denominator());
+    while (_ratio.numerator() >= _ratio.denominator() * 2) {
+        _ratio.setDenominator(_ratio.denominator() * 2);      // operator*= reduces, we don't want that here
+        fr    *= Fraction(1, 2);
+    }
+
+    Tuplet* tuplet = new Tuplet(this);
+    tuplet->setRatio(_ratio);
+
+    tuplet->setNumberType(numberType);
+    if (tuplet->numberType() == TupletNumberType(tuplet->score()->styleI(Sid::tupletNumberType))) {
+        tuplet->setPropertyFlags(Pid::NUMBER_TYPE, PropertyFlags::STYLED);
+    } else {
+        tuplet->setPropertyFlags(Pid::NUMBER_TYPE, PropertyFlags::UNSTYLED);
+    }
+
+    tuplet->setBracketType(bracketType);
+    if (tuplet->bracketType() == TupletBracketType(tuplet->score()->styleI(Sid::tupletBracketType))) {
+        tuplet->setPropertyFlags(Pid::BRACKET_TYPE, PropertyFlags::STYLED);
+    } else {
+        tuplet->setPropertyFlags(Pid::BRACKET_TYPE, PropertyFlags::UNSTYLED);
+    }
+
+    tuplet->setTicks(f);
+    tuplet->setBaseLen(fr);
+
+    tuplet->setTrack(destinationChordRest->track());
+    tuplet->setTick(destinationChordRest->tick());
+    tuplet->setParent(measure);
+
+    if (ot) {
+        tuplet->setTuplet(ot);
+    }
+
+    cmdCreateTuplet(destinationChordRest, tuplet);
+
+    return tuplet;
+}
+
 //---------------------------------------------------------
 //   addRest
 //    create one Rest at tick with duration d
