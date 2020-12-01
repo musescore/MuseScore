@@ -241,6 +241,22 @@ void NotationNoteInput::setCurrentVoiceIndex(int voiceIndex)
     notifyAboutStateChanged();
 }
 
+void NotationNoteInput::putTuplet(const TupletOptions& options)
+{
+    Ms::InputState& inputState = score()->inputState();
+
+    m_undoStack->prepareChanges();
+    score()->expandVoice();
+    Ms::ChordRest* chordRest = inputState.cr();
+    if (chordRest) {
+        score()->changeCRlen(chordRest, inputState.duration());
+        score()->addTuplet(chordRest, options.ratio, options.numberType, options.bracketType);
+    }
+    m_undoStack->commitChanges();
+
+    m_stateChanged.notify();
+}
+
 void NotationNoteInput::setSlur(Ms::Slur* slur)
 {
     Ms::InputState& inputState = score()->inputState();

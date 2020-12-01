@@ -41,6 +41,7 @@ public:
     virtual void putNote(const QPointF& pos, bool replace, bool insert) = 0;
     virtual void toogleAccidental(AccidentalType accidentalType) = 0;
     virtual void setArticulation(SymbolId articulationSymbolId) = 0;
+    virtual void putTuplet(const TupletOptions& options) = 0;
 
     virtual void setSlur(Ms::Slur* slur) = 0;
     virtual void resetSlur() = 0;

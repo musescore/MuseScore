@@ -14,6 +14,7 @@ set (WIDGETS_UI
     ${CMAKE_CURRENT_LIST_DIR}/transposedialog.ui
     ${CMAKE_CURRENT_LIST_DIR}/selectnotedialog.ui
     ${CMAKE_CURRENT_LIST_DIR}/selectdialog.ui
+    ${CMAKE_CURRENT_LIST_DIR}/tupletdialog.ui
     )
 
 set(WIDGETS_SRC
@@ -45,4 +46,6 @@ set(WIDGETS_SRC
     ${CMAKE_CURRENT_LIST_DIR}/selectnotedialog.h
     ${CMAKE_CURRENT_LIST_DIR}/selectdialog.cpp
     ${CMAKE_CURRENT_LIST_DIR}/selectdialog.h
+    ${CMAKE_CURRENT_LIST_DIR}/tupletdialog.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tupletdialog.h
     )

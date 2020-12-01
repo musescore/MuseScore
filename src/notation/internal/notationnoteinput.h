@@ -49,6 +49,7 @@ public:
     void putNote(const QPointF& pos, bool replace, bool insert) override;
     void toogleAccidental(AccidentalType accidentalType) override;
     void setArticulation(SymbolId articulationSymbolId) override;
+    void putTuplet(const TupletOptions& options) override;
 
     void setSlur(Ms::Slur* slur) override;
     void resetSlur() override;
