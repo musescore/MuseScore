@@ -2,14 +2,14 @@
     "engravingDefaults": {
         "arrowShaftThickness": 0.1,
         "barlineSeparation": 0.55,
-        "beamSpacing": 0.5,
+        "beamSpacing": 0.25,
         "beamThickness": 0.5,
         "bracketThickness": 0.44,
         "dashedBarlineDashLength": 0.6,
         "dashedBarlineGapLength": 0.4,
         "dashedBarlineThickness": 0.11,
         "hairpinThickness": 0.12,
-        "legerLineExtension": 0.55,
+        "legerLineExtension": 0.35,
         "legerLineThickness": 0.16,
         "lyricLineThickness": 0.1,
         "octaveLineThickness": 0.11,
@@ -273,21 +273,21 @@
         },
         "accidentalParensLeft": {
             "bBoxNE": [
-                0.316,
+                1.0728,
                 0.7783
             ],
             "bBoxSW": [
-                0.0,
+                0.7568,
                 -0.7856
             ]
         },
         "accidentalParensRight": {
             "bBoxNE": [
-                0.316,
+                0.0844,
                 0.7856
             ],
             "bBoxSW": [
-                -0.0,
+                -0.2316,
                 -0.7783
             ]
         },
@@ -494,21 +494,21 @@
         "articLaissezVibrerAbove": {
             "bBoxNE": [
                 2.356,
-                0.008
-            ],
-            "bBoxSW": [
-                0.0,
-                -0.5
-            ]
-        },
-        "articLaissezVibrerBelow": {
-            "bBoxNE": [
-                2.356,
                 0.508
             ],
             "bBoxSW": [
                 0.0,
                 0.0
+            ]
+        },
+        "articLaissezVibrerBelow": {
+            "bBoxNE": [
+                2.356,
+                0.008
+            ],
+            "bBoxSW": [
+                0.0,
+                -0.5
             ]
         },
         "articMarcatoAbove": {
@@ -859,6 +859,16 @@
             "bBoxSW": [
                 0.0,
                 -0.452
+            ]
+        },
+        "doubleLateralRollStevens": {
+            "bBoxNE": [
+                0.504,
+                1.5559
+            ],
+            "bBoxSW": [
+                -0.512,
+                0.0
             ]
         },
         "dynamicFF": {
@@ -2291,6 +2301,16 @@
                 -0.172
             ]
         },
+        "oneHandedRollStevens": {
+            "bBoxNE": [
+                1.092,
+                0.912
+            ],
+            "bBoxSW": [
+                -1.092,
+                0.0
+            ]
+        },
         "ornamentMordent": {
             "bBoxNE": [
                 1.892,
@@ -2614,11 +2634,11 @@
         "rest128th": {
             "bBoxNE": [
                 1.9016,
-                3.87
+                2.87
             ],
             "bBoxSW": [
                 -0.0016,
-                -2.0334
+                -3.0334
             ]
         },
         "rest16th": {
@@ -2664,11 +2684,11 @@
         "rest64th": {
             "bBoxNE": [
                 1.69,
-                2.8548
+                1.8548
             ],
             "bBoxSW": [
                 -0.0016,
-                -2.0334
+                -3.0334
             ]
         },
         "rest8th": {
@@ -3715,6 +3735,12 @@
         },
         "uniE231": {
             "codepoint": "0XE231"
+        },
+        "uniE233": {
+            "codepoint": "0XE233"
+        },
+        "uniE234": {
+            "codepoint": "0XE234"
         },
         "uniE240": {
             "codepoint": "0XE240"
@@ -5047,6 +5073,102 @@
             "opticalCenter": [
                 0.596,
                 0.0
+            ]
+        },
+        "flag1024thDown": {
+            "stemDownSW": [
+                0.0,
+                -4.308
+            ]
+        },
+        "flag1024thUp": {
+            "stemUpNW": [
+                0.0,
+                4.304
+            ]
+        },
+        "flag128thDown": {
+            "stemDownSW": [
+                0.0,
+                -2.016
+            ]
+        },
+        "flag128thUp": {
+            "stemUpNW": [
+                0.0,
+                2.008
+            ]
+        },
+        "flag16thDown": {
+            "stemDownSW": [
+                0.0,
+                0.004
+            ]
+        },
+        "flag16thUp": {
+            "stemUpNW": [
+                0.0,
+                0.0
+            ]
+        },
+        "flag256thDown": {
+            "stemDownSW": [
+                0.0,
+                -2.816
+            ]
+        },
+        "flag256thUp": {
+            "stemUpNW": [
+                0.0,
+                2.812
+            ]
+        },
+        "flag32ndDown": {
+            "stemDownSW": [
+                0.0,
+                -0.552
+            ]
+        },
+        "flag32ndUp": {
+            "stemUpNW": [
+                0.0,
+                0.548
+            ]
+        },
+        "flag512thDown": {
+            "stemDownSW": [
+                0.0,
+                -3.548
+            ]
+        },
+        "flag512thUp": {
+            "stemUpNW": [
+                0.0,
+                3.548
+            ]
+        },
+        "flag64thDown": {
+            "stemDownSW": [
+                0.0,
+                -1.272
+            ]
+        },
+        "flag64thUp": {
+            "stemUpNW": [
+                0.0,
+                1.268
+            ]
+        },
+        "flag8thDown": {
+            "stemDownSW": [
+                0.0,
+                0.004
+            ]
+        },
+        "flag8thUp": {
+            "stemUpNW": [
+                0.0,
+                -0.004
             ]
         },
         "noteheadBlack": {
