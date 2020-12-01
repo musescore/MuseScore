@@ -13,6 +13,8 @@
 #ifndef __ARTICULATION_H__
 #define __ARTICULATION_H__
 
+#include <set>
+
 #include "element.h"
 #include "mscore.h"
 
@@ -52,6 +54,11 @@ constexpr bool operator&(ArticulationShowIn a1, ArticulationShowIn a2)
 {
     return static_cast<unsigned char>(a1) & static_cast<unsigned char>(a2);
 }
+
+std::set<SymId> insertArticulation(const std::set<SymId>& articulationSymbolIds, SymId articulationSymbolId);
+std::set<SymId> splitArticulations(const std::set<SymId>& articulationSymbolIds);
+std::set<SymId> joinArticulations(const std::set<SymId>& articulationSymbolIds);
+std::set<SymId> flipArticulations(const std::set<SymId>& articulationSymbolIds, Placement placement);
 
 //---------------------------------------------------------
 //   @@ Articulation

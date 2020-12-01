@@ -758,3 +758,20 @@ int NotationActions::actionVoice(const ActionName& actionName)
 
     return voice;
 }
+
+SymbolId NotationActions::actionArticulationSymbolId(const ActionName& actionName)
+{
+    static QMap<actions::ActionName, SymbolId> articulations {
+        { "add-marcato", SymbolId::articMarcatoAbove },
+        { "add-sforzato", SymbolId::articAccentAbove },
+        { "add-tenuto", SymbolId::articTenutoAbove },
+        { "add-staccato", SymbolId::articStaccatoAbove }
+    };
+
+    SymbolId symbolId = SymbolId::noSym;
+    if (articulations.contains(actionName)) {
+        symbolId = articulations[actionName];
+    }
+
+    return symbolId;
+}

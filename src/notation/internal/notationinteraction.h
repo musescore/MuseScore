@@ -113,6 +113,7 @@ public:
     void addSlurToSelection() override;
     void addOttavaToSelection(OttavaType type) override;
     void addHairpinToSelection(HairpinType type) override;
+    void changeSelectedNotesArticulation(SymbolId articulationSymbolId) override;
 
     void setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval = 0) override;
     void transpose(const TransposeOptions& options) override;

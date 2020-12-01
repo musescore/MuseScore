@@ -51,6 +51,7 @@ private:
     void putNote(const actions::ActionData& data);
 
     void toggleAccidental(AccidentalType type);
+    void addArticulation(SymbolId articulationSymbolId);
 
     void moveAction(const actions::ActionName& action);
     void moveText(INotationInteractionPtr interaction, const actions::ActionName& action);

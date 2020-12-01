@@ -440,7 +440,7 @@ std::vector<std::string> NoteInputBarCustomiseModel::customizedActions() const
             continue;
         }
 
-        if (toolbarContainsAction(result, action.name)) {
+        if (!toolbarContainsAction(result, action.name)) {
             result.push_back(action.name);
         }
     }
