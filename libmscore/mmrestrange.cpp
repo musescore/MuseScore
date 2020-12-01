@@ -20,7 +20,6 @@
 #include "score.h"
 #include "mmrestrange.h"
 #include "measure.h"
-#include "staff.h"
 
 namespace Ms {
 
@@ -35,7 +34,7 @@ static const ElementStyle mmRestRangeStyle {
       };
 
 
-MMRestRange::MMRestRange(Score* s) : MeasureNumber(s, Tid::MMREST_RANGE)
+MMRestRange::MMRestRange(Score* s) : MeasureNumberBase(s, Tid::MMREST_RANGE)
       {
       initElementStyle(&mmRestRangeStyle);
       }
@@ -45,11 +44,9 @@ MMRestRange::MMRestRange(Score* s) : MeasureNumber(s, Tid::MMREST_RANGE)
 ///   Copy constructor
 //---------------------------------------------------------
 
-MMRestRange::MMRestRange(const MMRestRange& other) : MeasureNumber(other)
+MMRestRange::MMRestRange(const MMRestRange& other) : MeasureNumberBase(other)
       {
       initElementStyle(&mmRestRangeStyle);
-
-      setBracketType(other.bracketType());
       }
 
 
@@ -59,7 +56,7 @@ QVariant MMRestRange::getProperty(Pid id) const
             case Pid::MMREST_RANGE_BRACKET_TYPE:
                   return int(bracketType());
             default:
-                  return MeasureNumber::getProperty(id);
+                  return MeasureNumberBase::getProperty(id);
             }
       }
 
@@ -73,7 +70,7 @@ bool MMRestRange::setProperty(Pid id, const QVariant& val)
                   triggerLayout();
                   return true;
             default:
-                  return MeasureNumber::setProperty(id, val);
+                  return MeasureNumberBase::setProperty(id, val);
             }
       }
 
@@ -88,7 +85,7 @@ QVariant MMRestRange::propertyDefault(Pid id) const
             case Pid::HPLACEMENT:
                   return score()->styleV(Sid::mmRestRangeHPlacement);
             default:
-                  return MeasureNumber::propertyDefault(id);
+                  return MeasureNumberBase::propertyDefault(id);
             }
       }
 
@@ -98,7 +95,7 @@ bool MMRestRange::readProperties(XmlReader& xml)
       if (readProperty(xml.name(), xml, Pid::MMREST_RANGE_BRACKET_TYPE))
             return true;
       else
-            return MeasureNumber::readProperties(xml);
+            return MeasureNumberBase::readProperties(xml);
       }
 
 //---------------------------------------------------------

@@ -979,12 +979,10 @@ void Measure::remove(Element* e)
 
             case ElementType::MEASURE_NUMBER:
                   _mstaves[e->staffIdx()]->setNoText(nullptr);
-                  delete e;
                   break;
 
             case ElementType::MMREST_RANGE:
                   _mstaves[e->staffIdx()]->setMMRangeText(nullptr);
-                  delete e;
                   break;
 
             case ElementType::SPACER:

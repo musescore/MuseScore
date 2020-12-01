@@ -17,29 +17,26 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef __MMRESTRANGE_H__
-#define __MMRESTRANGE_H__
+#ifndef __MEASURENUMBERBASE_H__
+#define __MEASURENUMBERBASE_H__
 
-#include "measurenumberbase.h"
-#include "property.h"
+#include "textbase.h"
 
 namespace Ms {
 
 //---------------------------------------------------------
-//   MMRestRange
+//   MeasureNumberBase
+///   The basic element making measure numbers.
+///   Reimplemented by MMRestRange
 //---------------------------------------------------------
 
-class MMRestRange : public MeasureNumberBase {
+class MeasureNumberBase : public TextBase {
 
-      /// Bracketing: [18-24], (18-24) or 18-24
-      M_PROPERTY (MMRestRangeBracketType, bracketType, setBracketType)
+      M_PROPERTY (HPlacement, hPlacement, setHPlacement) // Horizontal Placement
 
    public:
-      MMRestRange(Score* s = nullptr);
-      MMRestRange(const MMRestRange& other);
-
-      virtual ElementType type()   const override   { return ElementType::MMREST_RANGE; }
-      virtual MMRestRange* clone() const override   { return new MMRestRange(*this); }
+      MeasureNumberBase(Score* = nullptr, Tid = Tid::DEFAULT);
+      MeasureNumberBase(const MeasureNumberBase& other);
 
       virtual QVariant getProperty(Pid id) const override;
       virtual bool setProperty(Pid id, const QVariant& val) override;
@@ -47,9 +44,12 @@ class MMRestRange : public MeasureNumberBase {
 
       virtual bool readProperties(XmlReader&) override;
 
-      virtual void setXmlText(const QString&) override;
+      virtual void layout() override;
+      Measure* measure() const { return toMeasure(parent()); }
+
+      virtual bool isEditable() const override { return false; } // The measure numbers' text should not be editable
       };
 
-} // namespace Ms
+}     // namespace Ms
 
 #endif

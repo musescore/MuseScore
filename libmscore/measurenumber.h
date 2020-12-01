@@ -2,48 +2,42 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2014 Werner Schweer
+//  Copyright (C) 2020 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2
-//  as published by the Free Software Foundation and appearing in
-//  the file LICENCE.GPL
+//  it under the terms of the GNU General Public License version 2.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program; if not, write to the Free Software
+//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
 #ifndef __MEASURENUMBER_H__
 #define __MEASURENUMBER_H__
 
-#include "textbase.h"
+#include "measurenumberbase.h"
 
 namespace Ms {
 
 //---------------------------------------------------------
 //   MeasureNumber
-///   The basic element making measure numbers.
-///   Reimplemented by MMRestRange
 //---------------------------------------------------------
 
-class MeasureNumber : public TextBase {
-
-      M_PROPERTY (HPlacement, hPlacement, setHPlacement) // Horizontal Placement
+class MeasureNumber : public MeasureNumberBase {
 
    public:
-      MeasureNumber(Score* = nullptr, Tid tid = Tid::MEASURE_NUMBER, ElementFlags flags = ElementFlag::NOTHING);
+      MeasureNumber(Score* = nullptr, Tid tid = Tid::MEASURE_NUMBER);
       MeasureNumber(const MeasureNumber& other);
 
       virtual ElementType type() const override       { return ElementType::MEASURE_NUMBER; }
       virtual MeasureNumber* clone() const override   { return new MeasureNumber(*this); }
 
-      virtual QVariant getProperty(Pid id) const override;
-      virtual bool setProperty(Pid id, const QVariant& val) override;
       virtual QVariant propertyDefault(Pid id) const override;
-
-      virtual bool readProperties(XmlReader&) override;
-
-      virtual void layout() override;
-      Measure* measure() const { return toMeasure(parent()); }
-
-      virtual bool isEditable() const override { return false; } // The measure numbers' text should not be editable
       };
 
 }     // namespace Ms
