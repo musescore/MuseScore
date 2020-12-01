@@ -86,6 +86,18 @@ void SelectNoteDialog::setPattern(NotePattern* p)
         p->durationTicks = Fraction(-1,1);
     }
 
+    if (sameBeat->isChecked()) {
+        p->beat = n->beat();
+    } else {
+        p->beat = Fraction(0,0);
+    }
+
+    if (sameMeasure->isChecked()) {
+        p->measure = n->findMeasure();
+    } else {
+        p->measure = nullptr;
+    }
+
     if (sameStaff->isChecked()) {
         p->staffStart = n->staffIdx();
         p->staffEnd = n->staffIdx() + 1;
