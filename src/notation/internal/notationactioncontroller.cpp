@@ -86,6 +86,11 @@ void NotationActionController::init()
     dispatcher()->reg(this, "sharp", [this]() { toggleAccidental(AccidentalType::SHARP); });
     dispatcher()->reg(this, "sharp2", [this]() { toggleAccidental(AccidentalType::SHARP2); });
 
+    dispatcher()->reg(this, "add-marcato", [this]() { addArticulation(SymbolId::articMarcatoAbove); });
+    dispatcher()->reg(this, "add-sforzato", [this]() { addArticulation(SymbolId::articAccentAbove); });
+    dispatcher()->reg(this, "add-tenuto", [this]() { addArticulation(SymbolId::articTenutoAbove); });
+    dispatcher()->reg(this, "add-staccato", [this]() { addArticulation(SymbolId::articStaccatoAbove); });
+
     dispatcher()->reg(this, "put-note", this, &NotationActionController::putNote);
 
     //! NOTE For historical reasons, the name of the action does not match what needs to be done.
@@ -262,6 +267,25 @@ void NotationActionController::toggleAccidental(AccidentalType type)
     }
 
     noteInput->toogleAccidental(type);
+}
+
+void NotationActionController::addArticulation(SymbolId articulationSymbolId)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    auto noteInput = interaction->noteInput();
+    if (!noteInput) {
+        return;
+    }
+
+    if (noteInput->isNoteInputMode()) {
+        noteInput->setArticulation(articulationSymbolId);
+    } else {
+        interaction->changeSelectedNotesArticulation(articulationSymbolId);
+    }
 }
 
 void NotationActionController::moveAction(const actions::ActionName& action)

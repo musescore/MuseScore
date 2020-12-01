@@ -2971,7 +2971,8 @@ void Score::padToggle(Pad p, const EditData& ed)
         } else {
             for (ChordRest* cr : getSelectedChordRests()) {
                 if (!cr->isRest()) {
-                    setNoteRest(cr->segment(), cr->track(), NoteVal(), cr->durationTypeTicks());
+                    setNoteRest(cr->segment(), cr->track(), NoteVal(), cr->durationTypeTicks(), Direction::AUTO, false,
+                                _is.articulationIds());
                 }
             }
         }
@@ -3078,7 +3079,7 @@ void Score::padToggle(Pad p, const EditData& ed)
                         }
                     }
                 }
-                setNoteRest(_is.segment(), _is.track(), nval, _is.duration().fraction(), stemDirection);
+                setNoteRest(_is.segment(), _is.track(), nval, _is.duration().fraction(), stemDirection, false, _is.articulationIds());
                 _is.moveToNextInputPos();
             } else {
                 _is.setRest(false);
@@ -3161,6 +3162,12 @@ void Score::padToggle(Pad p, const EditData& ed)
             undoChangeChordRestLen(cr, _is.duration());
         } else {
             changeCRlen(cr, _is.duration());
+
+            for (const SymId& articulation: _is.articulationIds()) {
+                Articulation* na = new Articulation(cr->score());
+                na->setSymId(articulation);
+                addArticulation(cr, na);
+            }
         }
     }
 }

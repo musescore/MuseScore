@@ -98,6 +98,7 @@ public:
     virtual void addSlurToSelection() = 0;
     virtual void addOttavaToSelection(OttavaType type) = 0;
     virtual void addHairpinToSelection(HairpinType type) = 0;
+    virtual void changeSelectedNotesArticulation(SymbolId articulationSymbolId) = 0;
 
     virtual void setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval = 0) = 0;
     virtual void transpose(const TransposeOptions& options) = 0;

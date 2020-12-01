@@ -35,6 +35,7 @@ public:
     static AccidentalType actionAccidentalType(const actions::ActionName& actionName);
     static int actionDotCount(const actions::ActionName& actionName);
     static int actionVoice(const actions::ActionName& actionName);
+    static SymbolId actionArticulationSymbolId(const actions::ActionName& actionName);
 
 private:
     static const actions::ActionList m_actions;

@@ -2986,6 +2986,32 @@ Articulation* Chord::hasArticulation(const Articulation* aa)
     return 0;
 }
 
+void Chord::updateArticulations(const std::set<SymId>& actualArticulations)
+{
+    std::set<SymId> currentArticulationIds;
+    for (Articulation* articulation: _articulations) {
+        currentArticulationIds.insert(articulation->symId());
+        score()->undoRemoveElement(articulation);
+    }
+
+    std::set<SymId> articulationIds = splitArticulations(currentArticulationIds);
+    articulationIds = flipArticulations(articulationIds, Placement::ABOVE);
+
+    std::set<SymId> actualArticulationIds = splitArticulations(actualArticulations);
+    actualArticulationIds = flipArticulations(actualArticulationIds, Placement::ABOVE);
+
+    for (const SymId& articulationId: actualArticulationIds) {
+        articulationIds = insertArticulation(articulationIds, articulationId);
+    }
+
+    std::set<SymId> result = joinArticulations(articulationIds);
+    for (const SymId& articulationSymbolId: result) {
+        Articulation* newArticulation = new Articulation(score());
+        newArticulation->setSymId(articulationSymbolId);
+        score()->addArticulation(this, newArticulation);
+    }
+}
+
 //---------------------------------------------------------
 //   reset
 //---------------------------------------------------------

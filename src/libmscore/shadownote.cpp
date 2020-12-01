@@ -11,12 +11,16 @@
 //=============================================================================
 
 #include "shadownote.h"
+
+#include <QPainter>
+
 #include "score.h"
 #include "drumset.h"
 #include "sym.h"
 #include "rest.h"
 #include "mscore.h"
 #include "accidental.h"
+#include "articulation.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -37,7 +41,7 @@ bool ShadowNote::isValid() const
     return _notehead != SymId::noSym;
 }
 
-void ShadowNote::setState(SymId noteSymbol, int voice, TDuration duration, bool rest)
+void ShadowNote::setState(SymId noteSymbol, int voice, TDuration duration, bool rest, qreal segmentSkylineTopY, qreal segmentSkylineBottomY)
 {
     // clear symbols
     _notehead = SymId::noSym;
@@ -46,6 +50,8 @@ void ShadowNote::setState(SymId noteSymbol, int voice, TDuration duration, bool 
     _duration = duration;
     _voice    = voice;
     _rest     = rest;
+    _segmentSkylineTopY = segmentSkylineTopY;
+    _segmentSkylineBottomY = segmentSkylineBottomY;
 }
 
 SymId ShadowNote::getNoteFlag() const
@@ -194,7 +200,73 @@ void ShadowNote::draw(QPainter* painter) const
             painter->drawLine(QLineF(x1, y, x2, y));
         }
     }
+
+    drawArticulations(painter);
+
     painter->translate(-ap);
+}
+
+void ShadowNote::drawArticulations(QPainter* painter) const
+{
+    qreal noteheadWidth = symWidth(_notehead);
+    qreal ms = spatium();
+    qreal x1 = noteheadWidth * .5 - (ms * mag());
+    qreal x2 = x1 + 2 * ms * mag();
+    ms *= .5;
+    qreal y1 = -ms * (_line) + _segmentSkylineTopY;
+    qreal y2 = -ms * (_line) + _segmentSkylineBottomY;
+
+    QRectF boundRect = QRectF(QPointF(x1, y1), QPointF(x2, y2));
+
+    for (const SymId& articulation: score()->inputState().articulationIds()) {
+        bool isMarcato = QString(Articulation::symId2ArticulationName(articulation)).contains("marcato");
+
+        if (isMarcato) {
+            drawMarcatto(painter, articulation, boundRect);
+        } else {
+            drawArticulation(painter, articulation, boundRect);
+        }
+    }
+}
+
+void ShadowNote::drawMarcatto(QPainter* painter, const SymId& articulation, QRectF& boundRect) const
+{
+    QPointF coord;
+    qreal spacing = spatium();
+
+    qreal topY = boundRect.y();
+    if (topY > 0) {
+        topY = 0;
+    }
+    coord.ry() = topY - symHeight(articulation);
+
+    boundRect.setY(boundRect.y() - symHeight(articulation) - spacing);
+    drawSymbol(articulation, painter, coord);
+}
+
+void ShadowNote::drawArticulation(QPainter* painter, const SymId& articulation, QRectF& boundRect) const
+{
+    QPointF coord;
+    qreal spacing = spatium();
+
+    bool up = !computeUp();
+    if (up) {
+        qreal topY = boundRect.y();
+        if (topY > 0) {
+            topY = 0;
+        }
+        coord.ry() = topY - symHeight(articulation);
+        boundRect.setY(topY - symHeight(articulation) - spacing);
+    } else {
+        qreal bottomY = boundRect.bottomLeft().y();
+        if (bottomY < 0) {
+            bottomY = symHeight(_notehead);
+        }
+        coord.ry() = bottomY + symHeight(articulation);
+        boundRect.setHeight(bottomY + symHeight(articulation) + spacing);
+    }
+
+    drawSymbol(articulation, painter, coord);
 }
 
 //---------------------------------------------------------

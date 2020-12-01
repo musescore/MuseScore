@@ -478,6 +478,10 @@ const char* Articulation::symId2ArticulationName(SymId symId)
     case SymId::articTenutoStaccatoBelow:
         return "portato";
 
+    case SymId::articTenutoAccentAbove:
+    case SymId::articTenutoAccentBelow:
+        return "sforzatoTenuto";
+
     case SymId::articMarcatoTenutoAbove:
     case SymId::articMarcatoTenutoBelow:
         return "marcatoTenuto";
@@ -721,5 +725,217 @@ void Articulation::doAutoplace()
         }
     }
     setOffsetChanged(false);
+}
+
+struct ArticulationGroup
+{
+    SymId first;
+    SymId second;
+
+    bool operator <(const ArticulationGroup& other) const
+    {
+        if ((first == other.first && second == other.second)
+            || (first == other.second && second == other.first)) {
+            return false;
+        }
+
+        if (first != other.first) {
+            return first < other.first;
+        }
+
+        return second < other.second;
+    }
+};
+
+static std::map<SymId, ArticulationGroup> articulationAboveSplitGroups = {
+    { SymId::articAccentStaccatoAbove, { SymId::articStaccatoAbove, SymId::articAccentAbove } },
+    { SymId::articTenutoAccentAbove, { SymId::articTenutoAbove, SymId::articAccentAbove } },
+    { SymId::articTenutoStaccatoAbove, { SymId::articTenutoAbove, SymId::articStaccatoAbove } },
+    { SymId::articMarcatoStaccatoAbove, { SymId::articStaccatoAbove, SymId::articMarcatoAbove } },
+    { SymId::articMarcatoTenutoAbove, { SymId::articTenutoAbove, SymId::articMarcatoAbove } },
+};
+
+static std::map<ArticulationGroup, SymId> articulationAboveJoinGroups = {
+    { { SymId::articStaccatoAbove, SymId::articAccentAbove }, SymId::articAccentStaccatoAbove },
+    { { SymId::articTenutoAbove, SymId::articAccentAbove }, SymId::articTenutoAccentAbove },
+    { { SymId::articTenutoAbove, SymId::articStaccatoAbove }, SymId::articTenutoStaccatoAbove },
+    { { SymId::articStaccatoAbove, SymId::articMarcatoAbove }, SymId::articMarcatoStaccatoAbove },
+    { { SymId::articTenutoAbove, SymId::articMarcatoAbove }, SymId::articMarcatoTenutoAbove },
+};
+
+static std::map<SymId, SymId> articulationPlacements = {
+    { SymId::articStaccatissimoAbove, SymId::articStaccatissimoBelow },
+    { SymId::articStaccatissimoStrokeAbove, SymId::articStaccatissimoStrokeBelow },
+    { SymId::articStaccatissimoWedgeAbove, SymId::articStaccatissimoWedgeBelow },
+    { SymId::articStaccatoAbove, SymId::articStaccatoBelow },
+    { SymId::articAccentStaccatoAbove, SymId::articAccentStaccatoBelow },
+    { SymId::articMarcatoStaccatoAbove, SymId::articMarcatoStaccatoBelow },
+    { SymId::articTenutoStaccatoAbove, SymId::articTenutoStaccatoBelow },
+    { SymId::articTenutoAccentAbove, SymId::articTenutoAccentBelow },
+    { SymId::articMarcatoTenutoAbove, SymId::articMarcatoTenutoBelow },
+    { SymId::articTenutoAbove, SymId::articTenutoBelow },
+    { SymId::articMarcatoAbove, SymId::articMarcatoBelow },
+    { SymId::articAccentAbove, SymId::articAccentBelow }
+};
+
+std::set<SymId> splitArticulations(const std::set<SymId>& articulationSymbolIds)
+{
+    std::set<SymId> result;
+    for (const SymId& articulationSymbolId: articulationSymbolIds) {
+        auto articulation = articulationAboveSplitGroups.find(articulationSymbolId);
+        if (articulation != articulationAboveSplitGroups.end()) {
+            ArticulationGroup group = articulationAboveSplitGroups[articulationSymbolId];
+            result.insert(group.first);
+            result.insert(group.second);
+        } else {
+            result.insert(articulationSymbolId);
+        }
+    }
+
+    return result;
+}
+
+std::set<SymId> joinArticulations(const std::set<SymId>& articulationSymbolIds)
+{
+    std::vector<SymId> result;
+
+    std::vector<SymId> vsymbolIds(articulationSymbolIds.begin(), articulationSymbolIds.end());
+
+    std::sort(vsymbolIds.begin(), vsymbolIds.end(), [](SymId l, SymId r) {
+            return l > r;
+        });
+
+    std::set<SymId> splittedSymbols;
+
+    auto symbolSelected = [&splittedSymbols](const SymId& symbolId) -> bool {
+                              return splittedSymbols.find(symbolId) != splittedSymbols.end();
+                          };
+
+    for (size_t i = 0; i < vsymbolIds.size(); i++) {
+        if (symbolSelected(vsymbolIds[i])) {
+            continue;
+        }
+
+        bool found = false;
+        for (size_t j = i + 1; j < vsymbolIds.size(); j++) {
+            if (symbolSelected(vsymbolIds[i]) || symbolSelected(vsymbolIds[j])) {
+                continue;
+            }
+
+            ArticulationGroup group = { vsymbolIds[i], vsymbolIds[j] };
+            auto joinArticulation = articulationAboveJoinGroups.find(group);
+            if (joinArticulation != articulationAboveJoinGroups.end()) {
+                result.push_back(articulationAboveJoinGroups.at(group));
+                splittedSymbols.insert(vsymbolIds[i]);
+                splittedSymbols.insert(vsymbolIds[j]);
+                found = true;
+            }
+        }
+
+        if (!found) {
+            result.push_back(vsymbolIds[i]);
+            splittedSymbols.insert(vsymbolIds[i]);
+        }
+    }
+
+    std::sort(result.begin(), result.end(), [](SymId l, SymId r) {
+            return l < r;
+        });
+
+    return std::set<SymId>(result.begin(), result.end());
+}
+
+std::set<SymId> insertArticulation(const std::set<SymId>& articulationSymbolIds, SymId articulationSymbolId)
+{
+    std::set<SymId> splittedArticulations = splitArticulations(articulationSymbolIds);
+
+    switch (articulationSymbolId) {
+    case SymId::articMarcatoAbove: {
+        if (splittedArticulations.find(SymId::articAccentAbove) != splittedArticulations.end()) {
+            splittedArticulations.erase(SymId::articAccentAbove);
+            splittedArticulations.insert(SymId::articMarcatoAbove);
+        } else if (splittedArticulations.find(SymId::articMarcatoAbove) != splittedArticulations.end()) {
+            splittedArticulations.erase(SymId::articMarcatoAbove);
+        } else {
+            splittedArticulations.insert(SymId::articMarcatoAbove);
+        }
+
+        return joinArticulations(splittedArticulations);
+    }
+    case SymId::articAccentAbove: {
+        if (splittedArticulations.find(SymId::articMarcatoAbove) != splittedArticulations.end()) {
+            splittedArticulations.erase(SymId::articMarcatoAbove);
+            splittedArticulations.insert(SymId::articAccentAbove);
+        } else if (splittedArticulations.find(SymId::articAccentAbove) != splittedArticulations.end()) {
+            splittedArticulations.erase(SymId::articAccentAbove);
+        } else {
+            splittedArticulations.insert(SymId::articAccentAbove);
+        }
+
+        return joinArticulations(splittedArticulations);
+    }
+    case SymId::articTenutoAbove: {
+        if (splittedArticulations.find(SymId::articTenutoAbove) != splittedArticulations.end()) {
+            splittedArticulations.erase(SymId::articTenutoAbove);
+        } else {
+            splittedArticulations.insert(SymId::articTenutoAbove);
+        }
+
+        return joinArticulations(splittedArticulations);
+    }
+    case SymId::articStaccatoAbove: {
+        if (splittedArticulations.find(SymId::articStaccatoAbove) != splittedArticulations.end()) {
+            splittedArticulations.erase(SymId::articStaccatoAbove);
+        } else {
+            splittedArticulations.insert(SymId::articStaccatoAbove);
+        }
+
+        return joinArticulations(splittedArticulations);
+    }
+    default:
+        break;
+    }
+
+    return articulationSymbolIds;
+}
+
+std::set<SymId> flipArticulations(const std::set<SymId>& articulationSymbolIds, Placement placement)
+{
+    std::set<SymId> result;
+    switch (placement) {
+    case Placement::ABOVE:
+        for (const SymId& articulationSymbolId: articulationSymbolIds) {
+            bool found = false;
+            for (auto it = articulationPlacements.begin(); it != articulationPlacements.end(); ++it) {
+                if (it->second == articulationSymbolId) {
+                    result.insert(it->first);
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                result.insert(articulationSymbolId);
+            }
+        }
+        break;
+    case Placement::BELOW:
+        for (const SymId& articulationSymbolId: articulationSymbolIds) {
+            bool found = false;
+            for (auto it = articulationPlacements.begin(); it != articulationPlacements.end(); ++it) {
+                if (it->first == articulationSymbolId) {
+                    result.insert(it->second);
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                result.insert(articulationSymbolId);
+            }
+        }
+    }
+
+    return result;
 }
 }

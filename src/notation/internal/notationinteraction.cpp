@@ -182,12 +182,20 @@ void NotationInteraction::showShadowNote(const QPointF& p)
     SymId symNotehead;
     TDuration d(is.duration());
 
+    qreal segmentSkylineTopY = 0;
+    qreal segmentSkylineBottomY = 0;
+    Segment* shadowNoteActualSegment = pos.segment->prev1enabled();
+    if (shadowNoteActualSegment) {
+        segmentSkylineTopY = shadowNoteActualSegment->elementsTopOffsetFromSkyline(pos.staffIdx);
+        segmentSkylineBottomY = shadowNoteActualSegment->elementsBottomOffsetFromSkyline(pos.staffIdx);
+    }
+
     if (is.rest()) {
         int yo;
         Rest rest(gscore, d.type());
         rest.setTicks(d.fraction());
         symNotehead = rest.getSymbol(is.duration().type(), 0, staff->lines(pos.segment->tick()), &yo);
-        m_shadowNote->setState(symNotehead, voice, d, true);
+        m_shadowNote->setState(symNotehead, voice, d, true, segmentSkylineTopY, segmentSkylineBottomY);
     } else {
         if (NoteHead::Group::HEAD_CUSTOM == noteheadGroup) {
             symNotehead = instr->drumset()->noteHeads(is.drumNote(), noteHead);
@@ -195,7 +203,7 @@ void NotationInteraction::showShadowNote(const QPointF& p)
             symNotehead = Note::noteHead(0, noteheadGroup, noteHead);
         }
 
-        m_shadowNote->setState(symNotehead, voice, d);
+        m_shadowNote->setState(symNotehead, voice, d, false, segmentSkylineTopY, segmentSkylineBottomY);
     }
 
     m_shadowNote->layout();
@@ -1933,6 +1941,20 @@ void NotationInteraction::addHairpinToSelection(HairpinType type)
 {
     startEdit();
     score()->addHairpin(type);
+    apply();
+
+    notifyAboutSelectionChanged();
+}
+
+void NotationInteraction::changeSelectedNotesArticulation(SymbolId articulationSymbolId)
+{
+    std::vector<Note*> notes = score()->selection().noteList();
+
+    startEdit();
+    for (Note* note: notes) {
+        Chord* chord = note->chord();
+        chord->updateArticulations({ articulationSymbolId });
+    }
     apply();
 
     notifyAboutSelectionChanged();
