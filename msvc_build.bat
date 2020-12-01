@@ -180,7 +180,7 @@ IF /I "%1"=="clean" (
    if not exist "%INSTALL_FOLDER%\" mkdir "%INSTALL_FOLDER%"
 
 IF NOT "%MSCORE_STABLE_BUILD%" == "" (
-    IF NOT "%CRASH_LOG_SERVER_URL%" == "" (
+    IF NOT %CRASH_LOG_SERVER_URL% == "" (
         IF "%BUILD_FOR_WINSTORE%" == "OFF" (
             SET CRASH_REPORT_URL_OPT=-DCRASH_REPORT_URL=%CRASH_LOG_SERVER_URL% -DBUILD_CRASH_REPORTER=ON
         )

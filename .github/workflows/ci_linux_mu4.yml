@@ -75,17 +75,15 @@ jobs:
         fi
 
         DO_UPLOAD_SYMBOLS='false'
-        SENTRY_PROJECT=""
+        SENTRY_PROJECT=${{ github.event.inputs.sentry_project }}
         SENTRY_URL=""
-        if [ "${{ github.event.inputs.sentry_project }}" == "editor" ] && [ ${{ secrets.SENTRY_SERVER_MU3_KEY }} != 0 ]; then 
+        if [ "$SENTRY_PROJECT" == "editor" ] && [ ${{ secrets.SENTRY_SERVER_MU3_KEY }} != 0 ]; then 
           DO_UPLOAD_SYMBOLS='true'
-          SENTRY_PROJECT="editor"
           SENTRY_URL=https://sentry.musescore.org/api/2/minidump/?sentry_key=${{ secrets.SENTRY_SERVER_MU3_KEY }}
         fi
 
-        if [ "${{ github.event.inputs.sentry_project }}" == "sandbox" ] && [ ${{ secrets.SENTRY_SERVER_SANDBOX_KEY }} != 0 ]; then 
+        if [ "$SENTRY_PROJECT" == "sandbox" ] && [ ${{ secrets.SENTRY_SERVER_SANDBOX_KEY }} != 0 ]; then 
           DO_UPLOAD_SYMBOLS='true'
-          SENTRY_PROJECT="sandbox"
           SENTRY_URL=https://sentry.musescore.org/api/3/minidump/?sentry_key=${{ secrets.SENTRY_SERVER_SANDBOX_KEY }}
         fi
 
