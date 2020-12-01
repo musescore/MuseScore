@@ -322,7 +322,7 @@ void NewWizardTemplatePage::buildTemplatesList()
       QDir dir(mscoreGlobalShare + "/templates");
       QFileInfoList fil = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Readable | QDir::Dirs | QDir::Files, QDir::Name);
       if(fil.isEmpty()){
-          fil.append(QFileInfo(QFile(":data/Empty_Score.mscz")));
+          fil.append(QFileInfo(QFile(":data/Empty_Score.mscx")));
           }
 
       QDir myTemplatesDir(preferences.getString(PREF_APP_PATHS_MYTEMPLATES));
