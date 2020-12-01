@@ -1983,6 +1983,19 @@ void NotationInteraction::changeSelectedNotesArticulation(SymbolId articulationS
     notifyAboutSelectionChanged();
 }
 
+void NotationInteraction::addTupletToSelectedChords(const TupletOptions& options)
+{
+    startEdit();
+    for (ChordRest* chordRest : score()->getSelectedChordRests()) {
+        if (!chordRest->isGrace()) {
+            score()->addTuplet(chordRest, options.ratio, options.numberType, options.bracketType);
+        }
+    }
+    apply();
+
+    notifyAboutSelectionChanged();
+}
+
 void NotationInteraction::setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval)
 {
     interval = intervalType == BreaksSpawnIntervalType::MeasuresInterval ? interval : 0;

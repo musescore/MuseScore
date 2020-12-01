@@ -54,6 +54,8 @@ private:
     void toggleAccidental(AccidentalType type);
     void addArticulation(SymbolId articulationSymbolId);
 
+    void putTuplet(int tupletCount);
+
     void moveAction(const actions::ActionName& action);
     void moveText(INotationInteractionPtr interaction, const actions::ActionName& action);
 
@@ -99,6 +101,7 @@ private:
     void openScoreProperties();
     void openTransposeDialog();
     void openPartsDialog();
+    void openTupletOtherDialog();
 
     bool isTextEditting() const;
 

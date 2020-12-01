@@ -59,6 +59,7 @@
 #include "view/widgets/transposedialog.h"
 #include "view/widgets/selectnotedialog.h"
 #include "view/widgets/selectdialog.h"
+#include "view/widgets/tupletdialog.h"
 
 using namespace mu::notation;
 using namespace mu::notation;
@@ -125,6 +126,9 @@ void NotationModule::resolveImports()
 
         ir->registerUri(Uri("musescore://notation/selectelement"),
                         ContainerMeta(ContainerType::QWidgetDialog, SelectDialog::metaTypeId()));
+
+        ir->registerUri(Uri("musescore://notation/othertupletdialog"),
+                        ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<TupletDialog>("TupletDialog")));
 
         ir->registerUri(Uri("musescore://notation/parts"),
                         ContainerMeta(ContainerType::QmlDialog, "MuseScore/NotationScene/PartsDialog.qml"));
