@@ -7,6 +7,9 @@ SENTRY_AUTH_TOKEN=""
 SENTRY_ORG=""
 SENTRY_PROJECT=""
 
+SENTRY_DOWNLOAD_SCRIPT=https://sentry.io/get-cli # Don't work on Windows
+SENTRY_DOWNLOAD_Windows_x86_64="https://downloads.sentry-cdn.com/sentry-cli/1.59.0/sentry-cli-Windows-x86_64.exe"  
+
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -s|--symbols) SYMBOLS_PATH="$2"; shift ;;
@@ -39,19 +42,34 @@ echo "SENTRY_ORG: $SENTRY_ORG"
 echo "SENTRY_PROJECT: $SENTRY_PROJECT"
 
 # Install Sentry CLI
-if ! command -v sentry-cli &> /dev/null
-then
-    curl -sL https://sentry.io/get-cli/ | bash
-    echo "sentry-cli now installed"
+PLATFORM=`uname -s`
+if [[ $PLATFORM == CYGWIN* ]] || [[ $PLATFORM == MINGW* ]] || [[ $PLATFORM == MSYS* ]]; then
+  PLATFORM="Windows"
+fi
+ 
+if [ $PLATFORM == "Windows" ]; then
+
+    INSTALL_PATH=/c/sentry
+    SENTRY_CLI=$INSTALL_PATH/sentry-cli
+    if ! command -v $SENTRY_CLI &> /dev/null; then
+        mkdir $INSTALL_PATH
+        curl -SL --progress-bar "$SENTRY_DOWNLOAD_Windows_x86_64" > "$SENTRY_CLI"
+        echo "sentry-cli now installed"
+    fi
+
 else
-    echo "sentry-cli already installed"
+    SENTRY_CLI=sentry-cli
+    if ! command -v $SENTRY_CLI &> /dev/null; then
+        curl -sL "$SENTRY_DOWNLOAD_SCRIPT" | bash
+        echo "sentry-cli now installed"
+    fi
 fi
 
 # Upload symbols
 export SENTRY_URL=$SENTRY_URL
 export SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN
 
-sentry-cli upload-dif -o $SENTRY_ORG -p $SENTRY_PROJECT $SYMBOLS_PATH
+$SENTRY_CLI upload-dif -o $SENTRY_ORG -p $SENTRY_PROJECT $SYMBOLS_PATH
 
 if [ $? -eq 0 ]; then
     echo "Success symbols uploaded"

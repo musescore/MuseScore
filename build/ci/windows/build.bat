@@ -1,4 +1,4 @@
-@echo off
+REM @echo off
 ECHO "MuseScore build"
 
 SET ARTIFACTS_DIR=build.artifacts
@@ -13,7 +13,7 @@ SET BUILD_UI_MU4=OFF
 IF /I "%1" == "-n" SET BUILD_NUMBER=%2& SHIFT
 IF /I "%1" == "-b" SET TARGET_PROCESSOR_BITS=%2& SHIFT
 IF /I "%1" == "--telemetry" SET TELEMETRY_TRACK_ID=%2& SHIFT
-IF /I "%1" == "--crash_log_url" SET CRASH_LOG_SERVER_URL=%2& SHIFT
+IF /I "%1" == "--crash_log_url" SET CRASH_LOG_SERVER_URL=%2& SHIFT & SHIFT
 IF /I "%1" == "--portable" SET BUILD_WIN_PORTABLE=%2& SHIFT
 IF /I "%1" == "--build_mu4" SET BUILD_UI_MU4=%2& SHIFT
 SHIFT
