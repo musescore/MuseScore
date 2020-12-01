@@ -43,6 +43,8 @@ public:
 
 private:
 
+    void removePendingLockFiles(const io::path& dumpsDir);
+
     crashpad::CrashpadClient* m_client = nullptr;
 };
 }

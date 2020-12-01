@@ -19,6 +19,8 @@
 
 #include "crashhandler.h"
 
+#include <QDir>
+
 #include <thirdparty/google_crashpad_client/client/crashpad_client.h>
 #include <thirdparty/google_crashpad_client/client/crash_report_database.h>
 #include <thirdparty/google_crashpad_client/client/settings.h>
@@ -69,6 +71,8 @@ bool CrashHandler::start(const io::path& handlerFilePath, const io::path& dumpsD
         db->GetSettings()->SetUploadsEnabled(true);
     }
 
+    removePendingLockFiles(dumpsDir);
+
     m_client = new CrashpadClient();
     bool success = m_client->StartHandler(
         handler,
@@ -82,4 +86,25 @@ bool CrashHandler::start(const io::path& handlerFilePath, const io::path& dumpsD
         );
 
     return success;
+}
+
+void CrashHandler::removePendingLockFiles(const io::path& dumpsDir)
+{
+#ifdef _MSC_VER
+    //! NOTE Different directory structure and no lock file on Windows
+    return;
+#endif
+
+    io::path pendingDir = dumpsDir + "/pending";
+    RetVal<io::paths> rv = fileSystem()->scanFiles(pendingDir, { "*.lock" }, framework::IFileSystem::ScanMode::OnlyCurrentDir);
+    if (!rv.ret) {
+        LOGE() << "failed get pending lock files, err: " << rv.ret.toString();
+        return;
+    }
+
+    for (const io::path& p : rv.val) {
+        if (!fileSystem()->remove(p)) {
+            LOGE() << "failed remove file: " << p;
+        }
+    }
 }

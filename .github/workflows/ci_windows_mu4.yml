@@ -59,17 +59,15 @@ jobs:
         fi
 
         DO_UPLOAD_SYMBOLS='false'
-        SENTRY_PROJECT=""
+        SENTRY_PROJECT=${{ github.event.inputs.sentry_project }}
         SENTRY_URL=""
-        if [ "${{ github.event.inputs.sentry_project }}" == "editor" ] && [ ${{ secrets.SENTRY_SERVER_MU3_KEY }} != 0 ]; then 
+        if [ "$SENTRY_PROJECT" == "editor" ] && [ ${{ secrets.SENTRY_SERVER_MU3_KEY }} != 0 ]; then 
           DO_UPLOAD_SYMBOLS='true'
-          SENTRY_PROJECT="editor"
           SENTRY_URL=https://sentry.musescore.org/api/2/minidump/?sentry_key=${{ secrets.SENTRY_SERVER_MU3_KEY }}
         fi
 
-        if [ "${{ github.event.inputs.sentry_project }}" == "sandbox" ] && [ ${{ secrets.SENTRY_SERVER_SANDBOX_KEY }} != 0 ]; then 
+        if [ "$SENTRY_PROJECT" == "sandbox" ] && [ ${{ secrets.SENTRY_SERVER_SANDBOX_KEY }} != 0 ]; then 
           DO_UPLOAD_SYMBOLS='true'
-          SENTRY_PROJECT="sandbox"
           SENTRY_URL=https://sentry.musescore.org/api/3/minidump/?sentry_key=${{ secrets.SENTRY_SERVER_SANDBOX_KEY }}
         fi
 
@@ -101,7 +99,7 @@ jobs:
       shell: cmd
       run: |
         IF ${{ secrets.TELEMETRY_TRACK_ID != 0 }} == true ( SET T_ID=${{ secrets.TELEMETRY_TRACK_ID }} ) ELSE ( SET T_ID="''" )
-        IF ${{ env.SENTRY_URL != 0 }} == true ( SET C_URL=${{ env.SENTRY_URL }} ) ELSE ( SET C_URL="''" )
+        IF ${{ env.SENTRY_URL != 0 }} == true ( SET C_URL="${{ env.SENTRY_URL }}" ) ELSE ( SET C_URL="" )
         build\ci\windows\build.bat -n ${{ github.run_id }} --telemetry %T_ID% --crash_log_url %C_URL% --build_mu4 ON
     - name: Generate dump symbols
       if: env.DO_BUILD == 'true'
@@ -124,7 +122,7 @@ jobs:
       if: env.DO_UPLOAD_SYMBOLS == 'true'
       shell: bash
       run: |
-        sudo bash ./build/ci/tools/sentry_syms_upload.sh -t ${{ secrets.SENTRY_AUTH_TOKEN }} -p ${SENTRY_PROJECT}    
+        bash ./build/ci/tools/sentry_syms_upload.sh -t ${{ secrets.SENTRY_AUTH_TOKEN }} -p ${SENTRY_PROJECT}    
     - name: Publish package
       if: env.DO_PUBLISH == 'true'
       shell: bash
