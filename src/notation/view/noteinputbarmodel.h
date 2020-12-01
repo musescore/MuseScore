@@ -80,6 +80,7 @@ private:
     void updateTieState();
     void updateSlurState();
     void updateVoicesState();
+    void updateArticulationsState();
 
     bool isNoteInputModeAction(const actions::ActionName& actionName) const;
     actions::Action currentNoteInputModeAction() const;
@@ -103,6 +104,7 @@ private:
     INotationInteractionPtr interaction() const;
     INotationSelectionPtr selection() const;
     int resolveCurrentVoiceIndex() const;
+    std::set<SymbolId> resolveCurrentArticulations() const;
     bool isNoteInputMode() const;
     NoteInputState noteInputState() const;
 

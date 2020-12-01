@@ -24,6 +24,7 @@
 #include "libmscore/note.h"
 #include "libmscore/chord.h"
 #include "libmscore/slur.h"
+#include "libmscore/articulation.h"
 
 #include "scorecallbacks.h"
 
@@ -56,6 +57,7 @@ NoteInputState NotationNoteInput::state() const
     noteInputState.method = score()->inputState().noteEntryMethod();
     noteInputState.duration = score()->inputState().duration();
     noteInputState.accidentalType = score()->inputState().accidentalType();
+    noteInputState.articulationIds = articulationIds();
     noteInputState.withSlur = score()->inputState().slur() != nullptr;
     noteInputState.currentVoiceIndex = score()->inputState().voice();
 
@@ -169,12 +171,12 @@ void NotationNoteInput::addNote(NoteName noteName, NoteAddingMode addingMode)
     Ms::EditData editData;
     editData.view = m_scoreCallbacks;
 
-    m_undoStack->prepareChanges();
+    startEdit();
     int inote = static_cast<int>(noteName);
     bool addToUpOnCurrentChord = addingMode == NoteAddingMode::CurrentChord;
     bool insertNewChord = addingMode == NoteAddingMode::InsertChord;
     score()->cmdAddPitch(editData, inote, addToUpOnCurrentChord, insertNewChord);
-    m_undoStack->commitChanges();
+    apply();
 
     notifyAboutStateChanged();
 }
@@ -184,20 +186,20 @@ void NotationNoteInput::padNote(const Pad& pad)
     Ms::EditData ed;
     ed.view = m_scoreCallbacks;
 
-    m_undoStack->prepareChanges();
+    startEdit();
     score()->padToggle(pad, ed);
-    m_undoStack->commitChanges();
+    apply();
 
     notifyAboutStateChanged();
 }
 
 void NotationNoteInput::putNote(const QPointF& pos, bool replace, bool insert)
 {
-    m_undoStack->prepareChanges();
+    startEdit();
     score()->putNote(pos, replace, insert);
-    m_undoStack->commitChanges();
+    apply();
 
-    m_noteAdded.notify();
+    notifyNoteAddedChanged();
 }
 
 void NotationNoteInput::toogleAccidental(AccidentalType accidentalType)
@@ -206,6 +208,16 @@ void NotationNoteInput::toogleAccidental(AccidentalType accidentalType)
     editData.view = m_scoreCallbacks;
 
     score()->toggleAccidental(accidentalType, editData);
+
+    notifyAboutStateChanged();
+}
+
+void NotationNoteInput::setArticulation(SymbolId articulationSymbolId)
+{
+    Ms::InputState& inputState = score()->inputState();
+
+    std::set<SymbolId> articulations = Ms::insertArticulation(inputState.articulationIds(), articulationSymbolId);
+    inputState.setArticulationIds(articulations);
 
     notifyAboutStateChanged();
 }
@@ -274,6 +286,16 @@ Ms::Score* NotationNoteInput::score() const
     return m_getScore->score();
 }
 
+void NotationNoteInput::startEdit()
+{
+    m_undoStack->prepareChanges();
+}
+
+void NotationNoteInput::apply()
+{
+    m_undoStack->commitChanges();
+}
+
 void NotationNoteInput::updateInputState()
 {
     score()->inputState().update(score()->selection());
@@ -284,4 +306,15 @@ void NotationNoteInput::updateInputState()
 void NotationNoteInput::notifyAboutStateChanged()
 {
     m_stateChanged.notify();
+}
+
+void NotationNoteInput::notifyNoteAddedChanged()
+{
+    m_noteAdded.notify();
+}
+
+std::set<SymbolId> NotationNoteInput::articulationIds() const
+{
+    Ms::InputState& inputState = score()->inputState();
+    return Ms::splitArticulations(inputState.articulationIds());
 }

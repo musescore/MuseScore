@@ -18,6 +18,8 @@
  Definition of classes Chord, HelpLine and NoteList.
 */
 
+#include <set>
+
 #include <functional>
 #include "chordrest.h"
 
@@ -214,6 +216,8 @@ public:
     const QVector<Articulation*>& articulations() const { return _articulations; }
     Articulation* hasArticulation(const Articulation*);
     bool hasSingleArticulation() const { return _articulations.size() == 1; }
+
+    void updateArticulations(const std::set<SymId>& actualArticulations);
 
     void crossMeasureSetup(bool on) override;
 

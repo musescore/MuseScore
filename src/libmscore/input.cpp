@@ -23,6 +23,7 @@
 #include "accidental.h"
 #include "durationtype.h"
 #include "select.h"
+#include "articulation.h"
 
 namespace Ms {
 class DrumSet;
@@ -129,6 +130,8 @@ void InputState::update(Selection& selection)
     bool differentAccidentals = false;
     bool differentDurations = false;
     bool chordsAndRests = false;
+
+    std::set<SymId> articulationSymbolIds;
     for (Element* e : selection.elements()) {
         if (Note* n = note(e)) {
             if (n1) {
@@ -136,8 +139,27 @@ void InputState::update(Selection& selection)
                     setAccidentalType(AccidentalType::NONE);
                     differentAccidentals = true;
                 }
+
+                std::set<SymId> articulationsIds;
+                for (Articulation* articulation: n->chord()->articulations()) {
+                    articulationsIds.insert(articulation->symId());
+                }
+                articulationsIds = Ms::flipArticulations(articulationsIds, Ms::Placement::ABOVE);
+                for (const SymId& articulationSymbolId: articulationsIds) {
+                    if (std::find(articulationSymbolIds.begin(), articulationSymbolIds.end(),
+                                  articulationSymbolId) == articulationSymbolIds.end()) {
+                        articulationSymbolIds.erase(articulationSymbolId);
+                    }
+                }
             } else {
                 setAccidentalType(n->accidentalType());
+
+                std::set<SymId> articulationsIds;
+                for (Articulation* articulation: n->chord()->articulations()) {
+                    articulationsIds.insert(articulation->symId());
+                }
+                articulationSymbolIds = Ms::flipArticulations(articulationsIds, Ms::Placement::ABOVE);
+
                 n1 = n;
             }
         }
@@ -163,6 +185,8 @@ void InputState::update(Selection& selection)
             break;
         }
     }
+
+    setArticulationIds(joinArticulations(articulationSymbolIds));
 
     Element* e = selection.element();
     if (e == 0) {

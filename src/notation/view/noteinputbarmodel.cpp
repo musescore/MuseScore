@@ -215,6 +215,7 @@ void NoteInputBarModel::updateNoteInputState()
     updateTieState();
     updateSlurState();
     updateVoicesState();
+    updateArticulationsState();
 }
 
 void NoteInputBarModel::updateNoteInputModeState()
@@ -324,6 +325,27 @@ void NoteInputBarModel::updateVoicesState()
     }
 }
 
+void NoteInputBarModel::updateArticulationsState()
+{
+    static std::vector<actions::ActionName> articulationActions {
+        "add-marcato",
+        "add-sforzato",
+        "add-tenuto",
+        "add-staccato"
+    };
+
+    std::set<SymbolId> currentArticulations = resolveCurrentArticulations();
+
+    auto isArticulationSelected = [&currentArticulations](SymbolId articulationSymbolId) {
+                                      return std::find(currentArticulations.begin(), currentArticulations.end(),
+                                                       articulationSymbolId) != currentArticulations.end();
+                                  };
+
+    for (const actions::ActionName& actionName: articulationActions) {
+        item(actionName).checked = isArticulationSelected(NotationActions::actionArticulationSymbolId(actionName));
+    }
+}
+
 int NoteInputBarModel::resolveCurrentVoiceIndex() const
 {
     constexpr int INVALID_VOICE = -1;
@@ -347,6 +369,54 @@ int NoteInputBarModel::resolveCurrentVoiceIndex() const
     }
 
     return INVALID_VOICE;
+}
+
+std::set<SymbolId> NoteInputBarModel::resolveCurrentArticulations() const
+{
+    if (!noteInput() || !selection()) {
+        return {};
+    }
+
+    if (isNoteInputMode()) {
+        return noteInputState().articulationIds;
+    }
+
+    if (selection()->isNone()) {
+        return {};
+    }
+
+    auto chordArticulations = [](const Chord* chord) {
+                                  std::set<SymbolId> result;
+                                  for (Articulation* articulation: chord->articulations()) {
+                                      result.insert(articulation->symId());
+                                  }
+
+                                  result = Ms::flipArticulations(result, Ms::Placement::ABOVE);
+                                  return Ms::splitArticulations(result);
+                              };
+
+    std::set<SymbolId> result;
+    bool isFirstNote = true;
+    for (const Element* element: selection()->elements()) {
+        if (!element->isNote()) {
+            continue;
+        }
+
+        const Note* note = dynamic_cast<const Note*>(element);
+        if (isFirstNote) {
+            result = chordArticulations(note->chord());
+            isFirstNote = false;
+        } else {
+            std::set<SymbolId> currentNoteArticulations = chordArticulations(note->chord());
+            for (const SymbolId& articulationSymbolId: currentNoteArticulations) {
+                if (std::find(result.begin(), result.end(), articulationSymbolId) == result.end()) {
+                    result.erase(articulationSymbolId);
+                }
+            }
+        }
+    }
+
+    return result;
 }
 
 bool NoteInputBarModel::isNoteInputModeAction(const ActionName& actionName) const

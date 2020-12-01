@@ -13,6 +13,8 @@
 #ifndef __INPUT_H__
 #define __INPUT_H__
 
+#include <set>
+
 #include "mscore.h"
 #include "durationtype.h"
 #include "beam.h"
@@ -55,6 +57,8 @@ class InputState
     AccidentalType _accidentalType { AccidentalType::NONE };
     Slur* _slur              { 0 };
     bool _insertMode         { false };
+
+    std::set<SymId> _articulationIds;
 
     Segment* nextInputPos() const;
 
@@ -107,6 +111,9 @@ public:
 
     AccidentalType accidentalType() const { return _accidentalType; }
     void setAccidentalType(AccidentalType val) { _accidentalType = val; }
+
+    std::set<SymId> articulationIds() const { return _articulationIds; }
+    void setArticulationIds(const std::set<SymId>& ids) { _articulationIds = ids; }
 
     Slur* slur() const { return _slur; }
     void setSlur(Slur* s) { _slur = s; }

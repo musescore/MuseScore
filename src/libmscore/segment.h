@@ -232,6 +232,9 @@ public:
     qreal minHorizontalDistance(Segment*, bool isSystemGap) const;
     qreal minHorizontalCollidingDistance(Segment* ns) const;
 
+    qreal elementsTopOffsetFromSkyline(int staffIndex) const;
+    qreal elementsBottomOffsetFromSkyline(int staffIndex) const;
+
     // some helper function
     ChordRest* cr(int track) const { return toChordRest(_elist[track]); }
     bool isType(const SegmentType t) const { return int(_segmentType) & int(t); }

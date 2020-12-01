@@ -744,7 +744,7 @@ void Score::createCRSequence(const Fraction& f, ChordRest* cr, const Fraction& t
 //---------------------------------------------------------
 
 Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction sd, Direction stemDirection,
-                            bool forceAccidental, bool rhythmic, InputState* externalInputState)
+                            bool forceAccidental, const std::set<SymId>& articulationIds, bool rhythmic, InputState* externalInputState)
 {
     Q_ASSERT(segment->segmentType() == SegmentType::ChordRest);
     InputState& is = externalInputState ? (*externalInputState) : _is;
@@ -812,6 +812,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                     a->setRole(AccidentalRole::USER);
                     note->add(a);
                 }
+
                 ncr = chord;
                 if (i + 1 < n) {
                     tie = new Tie(this);
@@ -828,6 +829,10 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
             setPlayNote(true);
             segment = ncr->segment();
             tick += ncr->actualTicks();
+
+            if (!articulationIds.empty()) {
+                toChord(ncr)->updateArticulations(articulationIds);
+            }
         }
 
         sd -= dd;
@@ -4261,7 +4266,7 @@ void Score::cmdAddPitch(int step, bool addFlag, bool insert)
                 NoteVal nval2 = noteValForPosition(pos, AccidentalType::NONE, error);
                 forceAccidental = (nval.pitch == nval2.pitch);
             }
-            addNote(chord, nval, forceAccidental);
+            addNote(chord, nval, forceAccidental, _is.articulationIds());
             _is.setAccidentalType(AccidentalType::NONE);
             return;
         }

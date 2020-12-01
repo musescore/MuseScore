@@ -2278,6 +2278,56 @@ qreal Segment::minHorizontalCollidingDistance(Segment* ns) const
     return w;
 }
 
+qreal Segment::elementsTopOffsetFromSkyline(int staffIndex) const
+{
+    System* segmentSystem = measure()->system();
+    SysStaff* staffSystem = segmentSystem->staff(staffIndex);
+
+    Ms::SkylineLine north = staffSystem->skyline().north();
+    int topOffset = INT_MAX;
+    for (Ms::SkylineSegment segment: north) {
+        bool ok = prev1enabled()->pagePos().x() <= segment.x && segment.x <= pagePos().x();
+        if (!ok) {
+            continue;
+        }
+
+        if (segment.y < topOffset) {
+            topOffset = segment.y;
+        }
+    }
+
+    if (topOffset == INT_MAX) {
+        topOffset = 0;
+    }
+
+    return topOffset;
+}
+
+qreal Segment::elementsBottomOffsetFromSkyline(int staffIndex) const
+{
+    System* segmentSystem = measure()->system();
+    SysStaff* staffSystem = segmentSystem->staff(staffIndex);
+
+    Ms::SkylineLine south = staffSystem->skyline().south();
+    int bottomOffset = INT_MIN;
+    for (Ms::SkylineSegment segment: south) {
+        bool ok = prev1enabled()->pagePos().x() <= segment.x && segment.x <= pagePos().x();
+        if (!ok) {
+            continue;
+        }
+
+        if (segment.y > bottomOffset) {
+            bottomOffset = segment.y;
+        }
+    }
+
+    if (bottomOffset == INT_MIN) {
+        bottomOffset = staffSystem->bbox().height();
+    }
+
+    return bottomOffset;
+}
+
 //---------------------------------------------------------
 //   minHorizontalDistance
 //    calculate the minimum layout distance to Segment ns
