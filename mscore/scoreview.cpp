@@ -26,6 +26,7 @@
 #include "navigator.h"
 #include "preferences.h"
 #include "scoreaccessibility.h"
+#include "scoreitemmodel.h"
 #include "scoretab.h"
 #include "seq.h"
 #include "splitstaff.h"
@@ -109,7 +110,7 @@ extern QErrorMessage* errorMessage;
 //---------------------------------------------------------
 
 ScoreView::ScoreView(QWidget* parent)
-    : QWidget(parent), editData(this)
+    : QAbstractItemView(parent), editData(this)
 {
     setObjectName("scoreview");
     setStatusTip("scoreview");
@@ -230,6 +231,13 @@ void ScoreView::setScore(Score* s)
 
     _score = s;
     if (_score) {
+        // create and set score item model, delete if we already have one
+        if (_model) {
+            delete _model;
+        }
+        _model = new ScoreItemModel(s, this);
+        setModel(_model);
+
         if (_score->isMaster()) {
             MasterScore* ms = static_cast<MasterScore*>(s);
             for (MasterScore* _ms : *ms->movements()) {
@@ -278,6 +286,101 @@ ScoreView::~ScoreView()
     delete _bgPixmap;
     delete _fgPixmap;
     delete shadowNote;
+}
+
+//---------------------------------------------------------
+//   visualRect
+//---------------------------------------------------------
+
+QRect ScoreView::visualRect(const QModelIndex& index) const
+{
+    ScoreElement* el = _model->scoreElementFromIndex(index);
+    if (el->isElement()) {
+        return toPhysical(toElement(el)->bbox());
+    }
+    return viewport()->geometry();
+}
+
+//---------------------------------------------------------
+//   scrollTo
+//---------------------------------------------------------
+
+void ScoreView::scrollTo(const QModelIndex& index, ScrollHint hint)
+{
+    // TODO
+    Q_UNUSED(index);
+    Q_UNUSED(hint);
+}
+
+//---------------------------------------------------------
+//   indexAt
+//---------------------------------------------------------
+
+QModelIndex ScoreView::indexAt(const QPoint& point) const
+{
+    Element* el = elementAt(toLogical(point));
+    return _model->scoreElementToIndex(el);
+}
+
+//---------------------------------------------------------
+//   moveCursor
+//---------------------------------------------------------
+
+QModelIndex ScoreView::moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers)
+{
+    // TODO
+    Q_UNUSED(cursorAction);
+    Q_UNUSED(modifiers);
+    return QModelIndex();
+}
+
+//---------------------------------------------------------
+//   horizontalOffset
+//---------------------------------------------------------
+
+int ScoreView::horizontalOffset() const
+{
+    return xoffset();
+}
+
+//---------------------------------------------------------
+//   verticalOffset
+//---------------------------------------------------------
+
+int ScoreView::verticalOffset() const
+{
+    return yoffset();
+}
+
+//---------------------------------------------------------
+//   isIndexHidden
+//---------------------------------------------------------
+
+bool ScoreView::isIndexHidden(const QModelIndex& /*index*/) const
+{
+    return false;
+}
+
+//---------------------------------------------------------
+//   setSelection
+//---------------------------------------------------------
+
+void ScoreView::setSelection(const QRect& rect, QItemSelectionModel::SelectionFlags command)
+{
+    // TODO
+    Q_UNUSED(rect);
+    Q_UNUSED(command);
+}
+
+//---------------------------------------------------------
+//   visualRegionForSelection
+//---------------------------------------------------------
+
+QRegion ScoreView::visualRegionForSelection(const QItemSelection& selection) const
+{
+    // TODO
+    Q_UNUSED(selection);
+    return QRegion();
 }
 
 //---------------------------------------------------------
@@ -1126,7 +1229,7 @@ void ScoreView::paintEvent(QPaintEvent* ev)
     if (!_score) {
         return;
     }
-    QPainter vp(this);
+    QPainter vp(viewport());
     vp.setRenderHint(QPainter::Antialiasing, preferences.getBool(PREF_UI_CANVAS_MISC_ANTIALIASEDDRAWING));
     vp.setRenderHint(QPainter::TextAntialiasing, true);
 
@@ -1152,6 +1255,7 @@ void ScoreView::paintEvent(QPaintEvent* ev)
     shadowNote->draw(&vp);
 
     drawAnchorLines(vp);
+    viewport()->update();
 }
 
 //---------------------------------------------------------

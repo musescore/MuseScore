@@ -42,8 +42,8 @@ public:
     // optional overrides
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
-private:
     ScoreElement* scoreElementFromIndex(const QModelIndex& index) const;
+    QModelIndex scoreElementToIndex(const ScoreElement* el) const;
 };
 }  // namespace Ms
 

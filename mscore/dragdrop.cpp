@@ -189,6 +189,7 @@ bool ScoreView::dragMeasureAnchorElement(const QPointF& pos)
 
 void ScoreView::dragEnterEvent(QDragEnterEvent* event)
 {
+    QAbstractItemView::dragEnterEvent(event);
     double _spatium = score()->spatium();
     editData.dropElement = 0;
 
@@ -322,6 +323,7 @@ Element* ScoreView::getDropTarget(EditData& ed)
 
 void ScoreView::dragMoveEvent(QDragMoveEvent* event)
 {
+    QAbstractItemView::dragMoveEvent(event);
     // we always accept the drop action
     // to get a "drop" Event:
 
@@ -427,6 +429,7 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
 
 void ScoreView::dropEvent(QDropEvent* event)
 {
+    QAbstractItemView::dropEvent(event);
     if (state == ViewState::PLAY) {
         event->ignore();
         return;
@@ -653,8 +656,9 @@ void ScoreView::dropEvent(QDropEvent* event)
 //   dragLeaveEvent
 //---------------------------------------------------------
 
-void ScoreView::dragLeaveEvent(QDragLeaveEvent*)
+void ScoreView::dragLeaveEvent(QDragLeaveEvent* event)
 {
+    QAbstractItemView::dragLeaveEvent(event);
     if (editData.dropElement) {
         _score->setUpdateAll();
         delete editData.dropElement;
