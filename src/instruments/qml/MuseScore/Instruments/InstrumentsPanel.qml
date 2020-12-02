@@ -22,13 +22,19 @@ Item {
     }
 
     ColumnLayout {
+        id: contentColumn
+
         anchors.fill: parent
 
-        spacing: 12
+        readonly property int sideMargin: 12
+        spacing: sideMargin
 
         InstrumentsControlPanel {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignTop
+
+            Layout.leftMargin: contentColumn.sideMargin
+            Layout.rightMargin: contentColumn.sideMargin
 
             isMovingUpAvailable: instrumentTreeModel.isMovingUpAvailable
             isMovingDownAvailable: instrumentTreeModel.isMovingDownAvailable
@@ -84,6 +90,11 @@ Item {
                 role: "itemRole"
             }
 
+            function isControl(itemType) {
+                return itemType === InstrumentTreeItemType.CONTROL_ADD_STAFF ||
+                       itemType === InstrumentTreeItemType.CONTROL_ADD_DOUBLE_INSTRUMENT
+            }
+
             style: TreeViewStyle {
                 indentation: 0
 
@@ -112,7 +123,7 @@ Item {
                 rowDelegate: Rectangle {
                     id: rowTreeDelegate
 
-                    height: 38
+                    height: Boolean(model) && instrumentsTreeView.isControl(model.itemRole.type) ? 64 : 38
                     width: parent.width
                     color: ui.theme.strokeColor
                 }
@@ -133,15 +144,13 @@ Item {
                     height: parent.height
                     width: parent.width
 
-                    sourceComponent: delegateType === InstrumentTreeItemType.CONTROL_ADD_STAFF
-                                     || delegateType === InstrumentTreeItemType.CONTROL_ADD_DOUBLE_INSTRUMENT ? controlItemDelegateComponent
-                                                                                                              : treeItemDelegateComponent
+                    sourceComponent: instrumentsTreeView.isControl(delegateType) ?
+                                     controlItemDelegateComponent : treeItemDelegateComponent
 
                     Component {
                         id: controlItemDelegateComponent
 
                         InstrumentsTreeItemControl {
-
                             onClicked: {
                                 styleData.value.appendNewItem()
                             }
@@ -156,6 +165,7 @@ Item {
                             isSelected: instrumentsTreeView.selection.selectedIndexes.indexOf(index) !== -1
                             isDragAvailable: dropArea.isSelectable
                             type: treeItemDelegateLoader.delegateType
+                            sideMargin: contentColumn.sideMargin
 
                             onClicked: {
                                 var isMultipleSelectionModeOn = mouse.modifiers & Qt.ShiftModifier || mouse.modifiers & Qt.ControlModifier;

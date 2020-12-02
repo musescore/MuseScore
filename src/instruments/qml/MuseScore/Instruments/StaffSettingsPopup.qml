@@ -21,9 +21,9 @@ StyledPopup {
     Column {
         id: contentColumn
 
-        anchors.fill: parent
+        width: parent.width
 
-        spacing: 8
+        spacing: 12
 
         StyledTextLabel {
             text: qsTrc("instruments", "Staff type")
@@ -51,14 +51,17 @@ StyledPopup {
             }
         }
 
-        SeparatorLine {}
+        SeparatorLine {
+            anchors.leftMargin: -root.leftPadding + root.borderWidth
+            anchors.rightMargin: -root.rightPadding + root.borderWidth
+        }
 
         StyledTextLabel {
             text: qsTrc("instruments", "Voices visible in the score")
         }
 
         ListView {
-            height: 30
+            height: 20
             width: parent.width
 
             spacing: 32
@@ -67,8 +70,6 @@ StyledPopup {
             model: settingsModel.voices
 
             delegate: CheckBox {
-                width: 30
-
                 text: modelData.title
                 checked: modelData.visible
 
@@ -78,7 +79,10 @@ StyledPopup {
             }
         }
 
-        SeparatorLine {}
+        SeparatorLine {
+            anchors.leftMargin: -root.leftPadding + root.borderWidth
+            anchors.rightMargin: -root.rightPadding + root.borderWidth
+        }
 
         CheckBox {
             text: qsTrc("instruments", "Small staff")
@@ -91,6 +95,8 @@ StyledPopup {
         }
 
         CheckBox {
+            width: parent.width
+
             text: qsTrc("instruments", "Hide all measures that do not contain notation (cutaway)")
             wrapMode: Text.WordWrap
 
@@ -101,38 +107,26 @@ StyledPopup {
             }
         }
 
-        SeparatorLine {}
+        SeparatorLine {
+            anchors.leftMargin: -root.leftPadding + root.borderWidth
+            anchors.rightMargin: -root.rightPadding + root.borderWidth
+        }
 
-        Item {
-            height: 110
+        FlatButton {
             width: parent.width
 
-            FlatButton {
-                anchors.top: parent.top
-                anchors.topMargin: 16
-                anchors.bottom: noteLabel.top
-                anchors.bottomMargin: 16
+            text: qsTrc("instruments", "Create a linked staff")
 
-                width: parent.width
-
-                text: qsTrc("instruments", "Create a linked staff")
-
-                onClicked: {
-                    settingsModel.createLinkedStaff()
-                }
+            onClicked: {
+                settingsModel.createLinkedStaff()
             }
+        }
 
-            StyledTextLabel {
-                id: noteLabel
+        StyledTextLabel {
+            width: parent.width
 
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 16
-
-                width: parent.width
-                wrapMode: Text.WordWrap
-
-                text: qsTrc("instruments", "Note: linked staves contain identical information.")
-            }
+            text: qsTrc("instruments", "Note: linked staves contain identical information.")
+            wrapMode: Text.WordWrap
         }
     }
 }

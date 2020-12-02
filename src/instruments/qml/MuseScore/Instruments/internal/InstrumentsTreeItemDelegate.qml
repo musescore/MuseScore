@@ -17,6 +17,8 @@ Item {
     property bool isDragAvailable: false
     property var type: InstrumentTreeItemType.UNDEFINED
 
+    property int sideMargin: 0
+
     signal clicked(var mouse)
 
     QtObject {
@@ -75,7 +77,7 @@ Item {
 
             State {
                 name: "SELECTED"
-                when: root.isSelected && !styleData.isExpanded
+                when: root.isSelected
 
                 PropertyChanges {
                     target: background
@@ -87,6 +89,19 @@ Item {
             State {
                 name: "PART_EXPANDED"
                 when: styleData.isExpanded && delegateType === InstrumentTreeItemType.PART
+
+                PropertyChanges {
+                    target: background
+                    color: ui.theme.textFieldColor
+                    opacity: 1
+                }
+            },
+
+            State {
+                name: "PARENT_EXPANDED"
+                when: root.visible && !root.isSelected &&
+                      (delegateType === InstrumentTreeItemType.INSTRUMENT ||
+                       delegateType === InstrumentTreeItemType.STAFF)
 
                 PropertyChanges {
                     target: background
@@ -116,7 +131,7 @@ Item {
         propagateComposedEvents: true
         preventStealing: true
 
-        hoverEnabled: true
+        hoverEnabled: root.visible
 
         drag.target: root
         drag.axis: Drag.YAxis
@@ -136,22 +151,21 @@ Item {
     InstrumentSettingsPopup {
         id: instrumentSettings
 
-        y: settingsButton.y + settingsButton.height + 4
-        arrowX: width - settingsButton.width / 2
+        y: settingsButton.y + settingsButton.height + 2
+        arrowX: width - settingsButton.width / 2 - root.sideMargin
     }
 
     StaffSettingsPopup {
         id: staffSettings
 
-        y: settingsButton.y + settingsButton.height + 4
-        arrowX: width - settingsButton.width / 2
+        y: settingsButton.y + settingsButton.height + 2
+        arrowX: width - settingsButton.width / 2 - root.sideMargin
     }
 
     RowLayout {
-        id: rowLayout
-
-        anchors.fill: root
-        anchors.margins: 4
+        anchors.fill: parent
+        anchors.leftMargin: root.sideMargin
+        anchors.rightMargin: root.sideMargin
 
         spacing: 2
 
@@ -176,7 +190,7 @@ Item {
 
         Item {
             Layout.fillWidth: true
-            Layout.leftMargin: 20 * styleData.depth
+            Layout.leftMargin: 10 * styleData.depth
             height: childrenRect.height
 
             FlatButton {
@@ -283,6 +297,7 @@ Item {
     states: [
         State {
             when: root.held
+
             ParentChange {
                 target: root
                 parent: attachedControl.contentItem
