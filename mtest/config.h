@@ -20,8 +20,6 @@
 #ifndef MUSESCORE_CONFIG_H
 #define MUSESCORE_CONFIG_H
 
-#define USE_JACK
-
 #define MSCORE_UNSTABLE
 
 #define HAS_MIDI
