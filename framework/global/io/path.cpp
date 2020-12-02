@@ -25,11 +25,6 @@
 
 using namespace mu::io;
 
-path::path(const path& p)
-    : m_path(p.m_path)
-{
-}
-
 path::path(const QString& s)
     : m_path(s.toUtf8())
 {
