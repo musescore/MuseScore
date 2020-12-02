@@ -23,8 +23,6 @@
 #include "translation.h"
 #include "roottreeitem.h"
 #include "parttreeitem.h"
-#include "instrumenttreeitem.h"
-#include "instrumentcontroltreeitem.h"
 #include "stafftreeitem.h"
 #include "staffcontroltreeitem.h"
 #include "log.h"
@@ -105,20 +103,12 @@ void InstrumentPanelTreeModel::load()
     });
 
     allParts.onItemChanged(this, [this](const Part* part) {
-        auto partItem = m_rootItem->childAtId(part->id());
+        auto partItem = dynamic_cast<PartTreeItem*>(m_rootItem->childAtId(part->id()));
         if (!partItem) {
             return;
         }
 
         updatePartItem(partItem, part);
-
-        for (auto item : partItem->childrenItems()) {
-            auto instrumentItem = dynamic_cast<InstrumentTreeItem*>(item);
-
-            if (instrumentItem) {
-                instrumentItem->setPartName(partItem->title());
-            }
-        }
     });
 
     endResetModel();
@@ -493,91 +483,24 @@ AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::loadPart(const Part* 
 {
     auto partItem = buildPartItem(part);
     QString partId = part->id();
-    QString partName = part->partName();
 
-    async::NotifyList<Instrument> instruments = m_masterNotationParts->instrumentList(partId);
-
-    for (const Instrument& instrument : instruments) {
-        auto instrumentItem = loadInstrument(instrument, partId, partName);
-        partItem->appendChild(instrumentItem);
-    }
-
-    auto addDoubleInstrumentControlItem = buildAddDoubleInstrumentControlItem(partId);
-    partItem->appendChild(addDoubleInstrumentControlItem);
-
-    instruments.onItemChanged(this, [this, partId](const Instrument& instrument) {
-        auto partItem = m_rootItem->childAtId(partId);
-        if (!partItem) {
-            return;
-        }
-
-        auto instrumentItem = dynamic_cast<InstrumentTreeItem*>(partItem->childAtId(instrument.id));
-        if (!instrumentItem) {
-            return;
-        }
-
-        updateInstrumentItem(instrumentItem, instrument, partItem->id(), partItem->title());
-    });
-
-    instruments.onItemReplaced(this, [this, partId](const Instrument& oldInstrument, const Instrument& newInstrument) {
-        auto partItem = m_rootItem->childAtId(partId);
-        if (!partItem) {
-            return;
-        }
-
-        auto instrumentItem = dynamic_cast<InstrumentTreeItem*>(partItem->childAtId(oldInstrument.id));
-        if (!instrumentItem) {
-            return;
-        }
-
-        updateInstrumentItem(instrumentItem, newInstrument, partItem->id(), partItem->title());
-    });
-
-    instruments.onItemAdded(this, [this, partId](const Instrument& instrument) {
-        auto partItem = m_rootItem->childAtId(partId);
-        if (!partItem) {
-            return;
-        }
-
-        auto instrumentItem = loadInstrument(instrument, partId, partItem->title());
-        QModelIndex partIndex = this->index(partItem->row(), 0, QModelIndex());
-
-        beginInsertRows(partIndex, partItem->childCount() - 1, partItem->childCount() - 1);
-        partItem->insertChild(instrumentItem, partItem->childCount() - 1);
-        endInsertRows();
-    });
-
-    return partItem;
-}
-
-AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::loadInstrument(const Instrument& instrument, const QString& partId,
-                                                                          const QString& partName)
-{
-    auto instrumentItem = buildInstrumentItem(partId, partName, instrument);
-    QString instrumentId = instrument.id;
-
-    async::NotifyList<const Staff*> staves = m_masterNotationParts->staffList(partId, instrumentId);
+    async::NotifyList<const Staff*> staves = m_masterNotationParts->staffList(partId, part->instrumentId());
 
     for (const Staff* staff : staves) {
         auto staffItem = buildStaffItem(staff);
-        instrumentItem->appendChild(staffItem);
+        partItem->appendChild(staffItem);
     }
 
     auto addStaffControlItem = buildAddStaffControlItem(partId);
-    instrumentItem->appendChild(addStaffControlItem);
+    partItem->appendChild(addStaffControlItem);
 
-    staves.onItemChanged(this, [this, partId, instrumentId](const Staff* staff) {
+    staves.onItemChanged(this, [this, partId](const Staff* staff) {
         auto partItem = m_rootItem->childAtId(partId);
         if (!partItem) {
             return;
         }
 
-        auto instrumentItem = partItem->childAtId(instrumentId);
-        if (!instrumentItem) {
-            return;
-        }
-
-        auto staffItem = dynamic_cast<StaffTreeItem*>(instrumentItem->childAtId(staff->id()));
+        auto staffItem = dynamic_cast<StaffTreeItem*>(partItem->childAtId(staff->id()));
         if (!staffItem) {
             return;
         }
@@ -585,40 +508,22 @@ AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::loadInstrument(const 
         updateStaffItem(staffItem, staff);
     });
 
-    staves.onItemAdded(this, [this, partId, instrumentId](const Staff* staff) {
+    staves.onItemAdded(this, [this, partId](const Staff* staff) {
         auto partItem = m_rootItem->childAtId(partId);
         if (!partItem) {
-            return;
-        }
-
-        auto instrumentItem = partItem->childAtId(instrumentId);
-        if (!instrumentItem) {
             return;
         }
 
         auto staffItem = buildStaffItem(staff);
 
         QModelIndex partIndex = index(partItem->row(), 0, QModelIndex());
-        QModelIndex instrumentIndex = index(instrumentItem->row(), 0, partIndex);
 
-        beginInsertRows(instrumentIndex, instrumentItem->childCount() - 1, instrumentItem->childCount() - 1);
-        instrumentItem->insertChild(staffItem, instrumentItem->childCount() - 1);
+        beginInsertRows(partIndex, partItem->childCount() - 1, partItem->childCount() - 1);
+        partItem->insertChild(staffItem, partItem->childCount() - 1);
         endInsertRows();
     });
 
-    return instrumentItem;
-}
-
-void InstrumentPanelTreeModel::updateInstrumentItem(InstrumentTreeItem* item, const Instrument& instrument, const QString& partId,
-                                                    const QString& partName)
-{
-    item->setId(instrument.id);
-    item->setTitle(instrument.name);
-    item->setAbbreviature(instrument.abbreviature());
-    item->setIsVisible(instrument.visible);
-    item->setPartId(partId);
-    item->setPartName(partName);
-    item->updateCanChangeVisibility();
+    return partItem;
 }
 
 void InstrumentPanelTreeModel::updateStaffItem(StaffTreeItem* item, const Staff* staff)
@@ -654,25 +559,14 @@ AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildPartItem(const P
     return result;
 }
 
-void InstrumentPanelTreeModel::updatePartItem(AbstractInstrumentPanelTreeItem* item, const Part* part)
+void InstrumentPanelTreeModel::updatePartItem(PartTreeItem* item, const Part* part)
 {
     item->setId(part->id());
     item->setTitle(part->partName());
     item->setIsVisible(part->show());
-}
-
-AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildInstrumentItem(const QString& partId, const QString& partName,
-                                                                               const Instrument& instrument)
-{
-    auto result = new InstrumentTreeItem(m_masterNotationParts, this);
-    updateInstrumentItem(result, instrument, partId, partName);
-
-    connect(result, &AbstractInstrumentPanelTreeItem::isVisibleChanged, this, [this, partId, instrument](const bool isVisible) {
-        //! NOTE: need to change a visibility only in a current notation
-        m_notationParts->setInstrumentVisible(instrument.id, partId, isVisible);
-    });
-
-    return result;
+    item->setInstrumentId(part->instrumentId());
+    item->setInstrumentName(part->instrument()->trackName());
+    item->setInstrumentAbbreviature(part->instrument()->abbreviature());
 }
 
 AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildStaffItem(const Staff* staff)
@@ -692,15 +586,6 @@ AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildAddStaffControlI
 {
     auto result = new StaffControlTreeItem(m_masterNotationParts, this);
     result->setTitle(qtrc("instruments", "Add staff"));
-    result->setPartId(partId);
-
-    return result;
-}
-
-AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildAddDoubleInstrumentControlItem(const QString& partId)
-{
-    auto result = new InstrumentControlTreeItem(m_masterNotationParts, this);
-    result->setTitle(qtrc("instruments", "Add doubling instrument"));
     result->setPartId(partId);
 
     return result;

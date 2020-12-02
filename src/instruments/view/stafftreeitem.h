@@ -23,8 +23,7 @@
 
 #include "notation/inotationparts.h"
 
-namespace mu {
-namespace instruments {
+namespace mu::instruments {
 class StaffTreeItem : public AbstractInstrumentPanelTreeItem
 {
     Q_OBJECT
@@ -48,7 +47,6 @@ private:
     int m_staffType = 0;
     QVariantList m_voicesVisibility;
 };
-}
 }
 
 #endif // MU_INSTRUMENTS_STAFFTREEITEM_H

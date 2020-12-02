@@ -1580,6 +1580,11 @@ void Instrument::setTrackName(const QString& s)
     _trackName = s;
 }
 
+QString Instrument::abbreviature() const
+{
+    return !_shortNames.isEmpty() ? _shortNames.first().name() : QString();
+}
+
 //---------------------------------------------------------
 //   fromTemplate
 //---------------------------------------------------------

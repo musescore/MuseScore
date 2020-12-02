@@ -362,6 +362,7 @@ public:
     QList<StaffName>& shortNames();
     QString trackName() const;
     void setTrackName(const QString& s);
+    QString abbreviature() const;
     static Instrument fromTemplate(const InstrumentTemplate* t);
 
     bool singleNoteDynamics() const { return _singleNoteDynamics; }

@@ -225,7 +225,7 @@ Item {
 
             pressedStateColor: ui.theme.accentColor
 
-            visible: model ? delegateType === InstrumentTreeItemType.INSTRUMENT ||
+            visible: model ? delegateType === InstrumentTreeItemType.PART ||
                              delegateType === InstrumentTreeItemType.STAFF : false
 
             icon: IconCode.SETTINGS_COG
@@ -239,14 +239,14 @@ Item {
 
                 var item = {}
 
-                if (root.type === InstrumentTreeItemType.INSTRUMENT) {
+                if (root.type === InstrumentTreeItemType.PART) {
                     privateProperties.currentSettingsPopup = instrumentSettings
 
-                    item["instrumentId"] = model.itemRole.id()
-                    item["instrumentName"] = model.itemRole.title
-                    item["partId"] = model.itemRole.partId()
-                    item["partName"] = model.itemRole.partName()
-                    item["abbreviature"] = model.itemRole.abbreviature()
+                    item["partId"] = model.itemRole.id()
+                    item["partName"] = model.itemRole.title
+                    item["instrumentId"] = model.itemRole.instrumentId()
+                    item["instrumentName"] = model.itemRole.instrumentName()
+                    item["abbreviature"] = model.itemRole.instrumentAbbreviature()
                 } else if (root.type === InstrumentTreeItemType.STAFF) {
                     privateProperties.currentSettingsPopup = staffSettings
 
