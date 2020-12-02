@@ -20,9 +20,10 @@ StyledPopup {
 
     Column {
         id: contentColumn
-        anchors.fill: parent
 
-        spacing: 8
+        width: parent.width
+
+        spacing: 12
 
         StyledTextLabel {
             text: qsTrc("instruments", "Name on main score")
@@ -60,7 +61,10 @@ StyledPopup {
             }
         }
 
-        SeparatorLine {}
+        SeparatorLine {
+            anchors.leftMargin: -root.leftPadding + root.borderWidth
+            anchors.rightMargin: -root.rightPadding + root.borderWidth
+        }
 
         FlatButton {
             width: parent.width

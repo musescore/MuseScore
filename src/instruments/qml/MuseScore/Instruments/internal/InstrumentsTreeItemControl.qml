@@ -7,27 +7,33 @@ import MuseScore.UiComponents 1.0
 Rectangle {
     id: root
 
-    color: ui.theme.backgroundPrimaryColor
+    color: ui.theme.textFieldColor
 
     signal clicked()
 
     RowLayout {
-        id: rowLayout
-
-        anchors.fill: root
-        anchors.margins: 4
+        anchors.top: parent.top
+        anchors.topMargin: 16
+        anchors.bottom: separator.top
+        anchors.bottomMargin: 16
+        anchors.left: parent.left
+        anchors.right: parent.right
 
         spacing: 2
 
         Item {
             Layout.fillWidth: true
-            Layout.leftMargin: 54 * styleData.depth
-            height: childrenRect.height
+            Layout.leftMargin: 90 * styleData.depth
+            Layout.preferredHeight: childrenRect.height
 
             FlatButton {
                 id: addButton
 
                 anchors.left: parent.left
+
+                width: 24
+                height: width
+
                 icon: IconCode.PLUS
             }
 
@@ -45,6 +51,8 @@ Rectangle {
             }
         }
     }
+
+    SeparatorLine { id: separator; anchors.bottom: parent.bottom; }
 
     MouseArea {
         anchors.fill: parent

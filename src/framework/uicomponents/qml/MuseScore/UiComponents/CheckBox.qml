@@ -49,7 +49,7 @@ FocusableItem {
         StyledTextLabel {
             id: label
 
-            Layout.preferredWidth: implicitWidth
+            Layout.preferredWidth: root.width > 0 ? Math.min(root.width, label.implicitWidth) : label.implicitWidth
             Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
 
             horizontalAlignment: Text.AlignLeft

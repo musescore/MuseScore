@@ -32,6 +32,8 @@ Popup {
     property var arrowX: width / 2
     property alias arrowHeight: arrow.height
 
+    readonly property int borderWidth: 1
+
     topPadding: bottomPadding + arrow.height
     bottomPadding: 12
     leftPadding: bottomPadding
@@ -83,7 +85,7 @@ Popup {
 
             Rectangle {
                 color: fillColor
-                border { width: 1; color: borderColor }
+                border { width: root.borderWidth; color: borderColor }
 
                 anchors {
                     top: arrow.bottom
