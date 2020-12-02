@@ -57,10 +57,6 @@
 #include "framework/telemetry/telemetrysetup.h"
 #endif
 
-#ifdef AVSOMR
-#include "avsomr/avsomrsetup.h"
-#endif
-
 //! NOTE Separately to initialize logger and profiler as early as possible
 static mu::framework::GlobalModule globalModule;
 
@@ -99,10 +95,6 @@ ModulesSetup::ModulesSetup()
 #ifdef BUILD_VST
         << new mu::vst::VSTModule()
 #endif
-#endif
-
-#ifdef AVSOMR
-        << new Ms::Avs::AvsOmrSetup()
 #endif
         << new mu::importexport::ImportExportModule()
         << new mu::inspector::InspectorModule()

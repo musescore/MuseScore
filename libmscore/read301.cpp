@@ -24,11 +24,6 @@
 #include "excerpt.h"
 #include "spanner.h"
 
-#ifdef OMR
-#include "omr/omr.h"
-#include "omr/omrpage.h"
-#endif
-
 namespace Ms {
 //---------------------------------------------------------
 //   read
@@ -43,12 +38,7 @@ bool Score::read(XmlReader& e)
         if (tag == "Staff") {
             readStaff(e);
         } else if (tag == "Omr") {
-#ifdef OMR
-            masterScore()->setOmr(new Omr(this));
-            masterScore()->omr()->read(e);
-#else
             e.skipCurrentElement();
-#endif
         } else if (tag == "Audio") {
             _audio = new Audio;
             _audio->read(e);

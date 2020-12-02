@@ -122,13 +122,7 @@ MasterScore* MTest::readCreatedScore(const QString& name)
         rv = score->loadMsc(name, false);
     } else if (csl == "mxl") {
         rv = importCompressedMusicXml(score, name);
-    }
-#ifdef OMR
-    else if (csl == "pdf") {
-        rv = importPdf(score, name);
-    }
-#endif
-    else if (csl == "xml" || csl == "musicxml") {
+    } else if (csl == "xml" || csl == "musicxml") {
         rv = importMusicXml(score, name);
     } else if (csl == "gp3" || csl == "gp4" || csl == "gp5" || csl == "gpx" || csl == "gp" || csl == "ptb") {
         rv = importGTP(score, name);

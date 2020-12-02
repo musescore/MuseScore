@@ -50,13 +50,6 @@ else (MSVC)
             )
 endif (MSVC)
 
-if (OMR)
-      target_link_libraries(${TARGET} omr poppler-qt5)
-      if (OCR)
-            target_link_libraries(${TARGET} tesseract_api)
-      endif (OCR)
-endif (OMR)
-
 if (MSVC)
       target_link_libraries(
             ${TARGET}

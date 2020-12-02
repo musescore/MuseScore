@@ -67,11 +67,6 @@
 #include "measurenumber.h"
 #include "marker.h"
 
-#ifdef OMR
-#include "omr/omr.h"
-#include "omr/omrpage.h"
-#endif
-
 namespace Ms {
 static void readText206(XmlReader& e, TextBase* t, Element* be);
 
@@ -3712,12 +3707,7 @@ static bool readScore(Score* score, XmlReader& e)
         } else if (tag == "siglist") {
             score->sigmap()->read(e, score->fileDivision());
         } else if (tag == "Omr") {
-#ifdef OMR
-            score->masterScore()->setOmr(new Omr(score));
-            score->masterScore()->omr()->read(e);
-#else
             e.skipCurrentElement();
-#endif
         } else if (tag == "Audio") {
             score->setAudio(new Audio);
             score->audio()->read(e);

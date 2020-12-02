@@ -34,10 +34,6 @@ else (USE_SYSTEM_FREETYPE)
       include_directories(${PROJECT_SOURCE_DIR}/thirdparty/freetype/include)
 endif (USE_SYSTEM_FREETYPE)
 
-if (OMR)
-      set(OMR_SRC ${PROJECT_SOURCE_DIR}/omr/importpdf.cpp)
-endif (OMR)
-
 if (MSVC)
       set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
 endif (MSVC)
@@ -95,7 +91,6 @@ set (SOURCE_LIB
       ${PROJECT_SOURCE_DIR}/thirdparty/beatroot/BeatTracker.cpp     # Required by importmidi.cpp
       ${PROJECT_SOURCE_DIR}/thirdparty/beatroot/Induction.cpp       # Required by importmidi.cpp
       ${PROJECT_SOURCE_DIR}/mscore/extension.cpp # required by zerberus tests
-      ${OMR_SRC}
       omr
       )
 
@@ -257,6 +252,3 @@ install(FILES
       )
 endif (NOT MSVC)
 
-if (OMR)
-      subdirs(omr)
-endif (OMR)

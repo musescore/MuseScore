@@ -62,9 +62,6 @@
 #include "layoutbreak.h"
 #include "harmony.h"
 #include "mscore.h"
-#ifdef OMR
-#include "omr/omr.h"
-#endif
 #include "bracket.h"
 #include "audio.h"
 #include "instrtemplate.h"
@@ -5038,9 +5035,6 @@ void MasterScore::setTempomap(TempoMap* tm)
 void MasterScore::removeOmr()
 {
     _showOmr = false;
-#ifdef OMR
-    delete _omr;
-#endif
     _omr = 0;
 }
 

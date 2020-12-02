@@ -105,9 +105,6 @@ add_library (
       )
 
 set (LINK_LIBS )
-if (AVSOMR)
-    set(LINK_LIBS ${LINK_LIBS} avsomr)
-endif (AVSOMR)
 
 set(FREETYPE_LIB )
 if (USE_SYSTEM_FREETYPE)
