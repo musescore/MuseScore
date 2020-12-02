@@ -779,7 +779,7 @@
       <Division>480</Division>
       <Style>
         <createMultiMeasureRests>1</createMultiMeasureRests>
-        <Spatium>1.76389</Spatium>
+        <Spatium>1.74978</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -874,7 +874,7 @@
                 <Fingering>
                   <linked>
                     </linked>
-                  <offset x="0.658089" y="-1.50001"/>
+                  <offset x="0.663397" y="-1.51211"/>
                   <text>3</text>
                   </Fingering>
                 <pitch>72</pitch>
@@ -1238,7 +1238,7 @@
       <Division>480</Division>
       <Style>
         <createMultiMeasureRests>1</createMultiMeasureRests>
-        <Spatium>1.76389</Spatium>
+        <Spatium>1.74978</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>

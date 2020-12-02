@@ -1,7 +1,13 @@
 #!/bin/bash
 
-cp ../../../build.debug/mtest/libmscore/clef_courtesy/clef_courtesy01.mscx clef_courtesy01-ref.mscx
-cp ../../../build.debug/mtest/libmscore/clef_courtesy/clef_courtesy02.mscx clef_courtesy02-ref.mscx
-cp ../../../build.debug/mtest/libmscore/clef_courtesy/clef_courtesy03.mscx clef_courtesy03-ref.mscx
+if [ "`uname`" = 'Darwin' ]; then
+   S=../../../build.xcode/mtest/libmscore/clef_courtesy/Debug
+else
+   S=../../../build.debug/mtest/libmscore/clef_courtesy
+fi
 
+cp $S/clef_courtesy01.mscx clef_courtesy01-ref.mscx
+cp $S/clef_courtesy02.mscx clef_courtesy02-ref.mscx
+cp $S/clef_courtesy03.mscx clef_courtesy03-ref.mscx
+cp $S/clef_courtesy04.mscx clef_courtesy04-ref.mscx
 

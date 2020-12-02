@@ -719,7 +719,7 @@ void Chord::addLedgerLines()
             return;
 
       // the extra length of a ledger line with respect to notehead (half of it on each side)
-      qreal extraLen = score()->styleP(Sid::ledgerLineLength) * mag * 0.5;
+      qreal extraLen = score()->styleP(Sid::ledgerLineLength) * mag;
       qreal hw;
       qreal minX, maxX;                         // note extrema in raster units
       int   minLine, maxLine;

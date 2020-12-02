@@ -1,21 +1,27 @@
 #!/bin/bash
 
-cp ../../../build.debug/mtest/libmscore/chordsymbol/add-part-test.mscx add-part-ref.mscx
-cp ../../../build.debug/mtest/libmscore/chordsymbol/add-link-test.mscx add-link-ref.mscx
-cp ../../../build.debug/mtest/libmscore/chordsymbol/clear-test.mscx    clear-ref.mscx
-cp ../../../build.debug/mtest/libmscore/chordsymbol/extend-test.mscx   extend-ref.mscx
-cp ../../../build.debug/mtest/libmscore/chordsymbol/no-system-test.mscx   no-system-ref.mscx
-cp ../../../build.debug/mtest/libmscore/chordsymbol/transpose-part-test.mscx   transpose-part-ref.mscx
-cp ../../../build.debug/mtest/libmscore/chordsymbol/transpose-test.mscx   transpose-ref.mscx
-cp ../../../build.debug/mtest/libmscore/chordsymbol/realize-override-test.mscx realize-override-ref.mscx
-cp ../../../build.debug/mtest/libmscore/chordsymbol/realize-concert-pitch-test.mscx realize-concert-pitch-ref.mscx
-cp ../../../build.debug/mtest/libmscore/chordsymbol/realize-transpose-test.mscx realize-transpose-ref.mscx
-cp ../../../build.debug/mtest/libmscore/chordsymbol/realize-triplet-test.mscx realize-triplet-ref.mscx
-cp ../../../build.debug/mtest/libmscore/chordsymbol/realize-jazz-test.mscx realize-jazz-ref.mscx
-cp ../../../build.debug/mtest/libmscore/chordsymbol/realize-duration-test.mscx realize-duration-ref.mscx
-cp ../../../build.debug/mtest/libmscore/chordsymbol/realize-close-test.mscx realize-close-ref.mscx
-cp ../../../build.debug/mtest/libmscore/chordsymbol/realize-drop2-test.mscx realize-drop2-ref.mscx
-cp ../../../build.debug/mtest/libmscore/chordsymbol/realize-6note-test.mscx realize-6note-ref.mscx
-cp ../../../build.debug/mtest/libmscore/chordsymbol/realize-4note-test.mscx realize-4note-ref.mscx
-cp ../../../build.debug/mtest/libmscore/chordsymbol/realize-3note-test.mscx realize-3note-ref.mscx
+if [ "`uname`" = 'Darwin' ]; then
+   S=../../../build.xcode/mtest/libmscore/chordsymbol/Debug
+else
+   S=../../../build.debug/mtest/libmscore/chordsymbol
+fi
+
+cp $S/add-part-test.mscx add-part-ref.mscx
+cp $S/add-link-test.mscx add-link-ref.mscx
+cp $S/clear-test.mscx    clear-ref.mscx
+cp $S/extend-test.mscx   extend-ref.mscx
+cp $S/no-system-test.mscx   no-system-ref.mscx
+cp $S/transpose-part-test.mscx   transpose-part-ref.mscx
+cp $S/transpose-test.mscx   transpose-ref.mscx
+cp $S/realize-override-test.mscx realize-override-ref.mscx
+cp $S/realize-concert-pitch-test.mscx realize-concert-pitch-ref.mscx
+cp $S/realize-transpose-test.mscx realize-transpose-ref.mscx
+cp $S/realize-triplet-test.mscx realize-triplet-ref.mscx
+cp $S/realize-jazz-test.mscx realize-jazz-ref.mscx
+cp $S/realize-duration-test.mscx realize-duration-ref.mscx
+cp $S/realize-close-test.mscx realize-close-ref.mscx
+cp $S/realize-drop2-test.mscx realize-drop2-ref.mscx
+cp $S/realize-6note-test.mscx realize-6note-ref.mscx
+cp $S/realize-4note-test.mscx realize-4note-ref.mscx
+cp $S/realize-3note-test.mscx realize-3note-ref.mscx
 

@@ -1,5 +1,9 @@
 #!/bin/bash
-S=build.debug/mtest/libmscore/spanners
+if [ "`uname`" = 'Darwin' ]; then
+   S=../../../build.xcode/mtest/libmscore/spanners/Debug
+else
+   S=../../../build.debug/mtest/libmscore/spanners
+fi
 cp $S/glissando-cloning02.mscx    glissando-cloning02-ref.mscx
 cp $S/glissando01.mscx            glissando01-ref.mscx
 cp $S/glissando-cloning01.mscx    glissando-cloning01-ref.mscx

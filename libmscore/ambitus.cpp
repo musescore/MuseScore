@@ -468,7 +468,7 @@ void Ambitus::draw(QPainter* p) const
             int numOfLines    = stf->lines(tick);
             qreal step        = lineDist * _spatium;
             qreal stepTolerance = step * 0.1;
-            qreal ledgerOffset = score()->styleS(Sid::ledgerLineLength).val() * 0.5 * _spatium;
+            qreal ledgerOffset = score()->styleS(Sid::ledgerLineLength).val() * _spatium;
             p->setPen(QPen(curColor(), score()->styleS(Sid::ledgerLineWidth).val() * _spatium,
                         Qt::SolidLine, Qt::RoundCap) );
             if (_topPos.y()-stepTolerance <= -step) {
