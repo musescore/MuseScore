@@ -100,6 +100,17 @@ if(PLATFORM_IS_WINDOWS)
 endif()
 
 if(PLATFORM_IS_LINUX)
+
+    ##
+    ## ALSA >= 1.0.0
+    ##
+    PKGCONFIG1 (alsa 1.0.0 ALSA_INCDIR ALSA_LIBDIR ALSA_LIB ALSA_CPP )
+    if (NOT ALSA_INCDIR)
+        message(SEND_ERROR "Error: ALSA support requested (BUILD_ALSA=${BUILD_ALSA}), but ALSA >= 1.0.0 was not found.")
+    else (NOT ALSA_INCDIR)
+        message("ALSA >= 1.0.0 found. ALSA support enabled. INCDIR ${ALSA_INCDIR}, LIBDIR ${ALSA_LIBDIR}, LIB ${ALSA_LIB}, CPP ${ALSA_CPP}")
+    endif (NOT ALSA_INCDIR)
+
     set(MODULE_LINK pthread ${ALSA_LIB} )
 endif()
 

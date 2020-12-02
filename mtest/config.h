@@ -20,9 +20,7 @@
 #ifndef MUSESCORE_CONFIG_H
 #define MUSESCORE_CONFIG_H
 
-#define USE_ALSA
 #define USE_JACK
-/* #undef USE_PORTAUDIO */
 
 #define MSCORE_UNSTABLE
 

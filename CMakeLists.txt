@@ -152,20 +152,6 @@ if (MSCORE_UNSTABLE)
   SET (MUSESCORE_NAME_VERSION "${MUSESCORE_NAME_VERSION} (${MUSESCORE_VERSION_FULL} unstable)")
 endif (MSCORE_UNSTABLE)
 
-# Disable components not supported on Windows
-if (MSVC OR MINGW)
-      set(WIN_NOT_AVAIL "Not available on Windows")
-      option(BUILD_PULSEAUDIO ${WIN_NOT_AVAIL} OFF)
-      option(BUILD_ALSA ${WIN_NOT_AVAIL} OFF)
-endif (MSVC OR MINGW)
-
-# Disable components not supported on Mac
-if (APPLE)
-      set(MAC_NOT_AVAIL "Not available on Mac")
-      option(BUILD_PULSEAUDIO ${MAC_NOT_AVAIL} OFF)
-      option(BUILD_ALSA ${MAC_NOT_AVAIL} OFF)
-endif (APPLE)
-
 # Disable components not supported on Linux/BSD
 if (NOT APPLE AND NOT MINGW AND NOT MSVC)
       set(NIX_NOT_AVAIL "Not available on Linux/BSD")
@@ -185,7 +171,6 @@ SET(JACK_LONGNAME "JACK (Jack Audio Connection Kit)")
 SET(JACK_MIN_VERSION "0.98.0")
 option(BUILD_JACK    "Build with support for ${JACK_LONGNAME} audio backend. JACK >= ${JACK_MIN_VERSION} will be needed." ON)
 option(BUILD_PULSEAUDIO "Build with support for PulseAudio audio backend." ON)
-option(BUILD_ALSA "Build with support for ALSA audio backend." ON)
 option(BUILD_PCH "Build using precompiled headers." ON)
 option(BUILD_FOR_WINSTORE "Build for the Windows Store." OFF)
 option(COVERAGE "Build with instrumentation to record code coverage." OFF)
@@ -441,34 +426,6 @@ if (USE_SYSTEM_FREETYPE)
             find_package(Freetype REQUIRED)
       endif (APPLE)
 endif (USE_SYSTEM_FREETYPE)
-
-##
-## ALSA >= 1.0.0
-##
-
-if (BUILD_ALSA)
-      PKGCONFIG1 (alsa 1.0.0 ALSA_INCDIR ALSA_LIBDIR ALSA_LIB ALSA_CPP )
-      if (NOT ALSA_INCDIR)
-            message(SEND_ERROR "Error: ALSA support requested (BUILD_ALSA=${BUILD_ALSA}), but ALSA >= 1.0.0 was not found.")
-      else (NOT ALSA_INCDIR)
-            message("ALSA >= 1.0.0 found. ALSA support enabled. INCDIR ${ALSA_INCDIR}, LIBDIR ${ALSA_LIBDIR}, LIB ${ALSA_LIB}, CPP ${ALSA_CPP}")
-            set (USE_ALSA 1)
-      endif (NOT ALSA_INCDIR)
-else (BUILD_ALSA)
-     message(STATUS "ALSA support disabled")
-endif (BUILD_ALSA)
-
-##
-## MIDI
-##
-
-if (APPLE OR MINGW OR MSVC)
-      set (HAS_MIDI 1)
-else (APPLE OR MINGW OR MSVC)
-      if (USE_ALSA)
-            set (HAS_MIDI 1)
-      endif (USE_ALSA)
-endif (APPLE OR MINGW OR MSVC)
 
 ##
 ## PulseAudio
