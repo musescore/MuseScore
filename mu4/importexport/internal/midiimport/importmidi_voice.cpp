@@ -7,7 +7,6 @@
 #include "importmidi_operations.h"
 #include "libmscore/sig.h"
 #include "libmscore/mscore.h"
-#include "mscore/preferences.h"
 #include "libmscore/durationtype.h"
 
 namespace Ms {

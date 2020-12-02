@@ -20,7 +20,6 @@
 #include "offsetSelect.h"
 
 #include "libmscore/types.h"
-#include "mscore/musescore.h"
 
 using namespace mu::notation;
 

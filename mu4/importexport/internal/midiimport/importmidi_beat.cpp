@@ -8,7 +8,6 @@
 #include "importmidi_tempo.h"
 #include "importmidi_operations.h"
 #include "thirdparty/beatroot/BeatTracker.h"
-#include "mscore/preferences.h"
 #include "libmscore/mscore.h"
 
 #include <functional>

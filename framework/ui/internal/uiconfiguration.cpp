@@ -1,7 +1,6 @@
 #include "uiconfiguration.h"
 
 #include "settings.h"
-#include "mscore/globals.h"
 
 #include <QMainWindow>
 #include <QScreen>

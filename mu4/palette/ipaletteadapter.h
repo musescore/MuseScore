@@ -27,8 +27,6 @@
 #include "retval.h"
 #include "async/notification.h"
 
-#include "mscore/globals.h"
-
 class QAction;
 
 namespace Ms {

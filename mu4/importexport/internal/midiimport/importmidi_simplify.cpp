@@ -6,7 +6,6 @@
 #include "importmidi_quant.h"
 #include "importmidi_voice.h"
 #include "importmidi_operations.h"
-#include "mscore/preferences.h"
 #include "libmscore/sig.h"
 #include "libmscore/durationtype.h"
 #include "importmidi_tuplet_voice.h"

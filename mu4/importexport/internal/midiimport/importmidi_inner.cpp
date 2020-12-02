@@ -1,7 +1,6 @@
 #include "importmidi_inner.h"
 #include "importmidi_operations.h"
 #include "importmidi_chord.h"
-#include "mscore/preferences.h"
 #include "libmscore/durationtype.h"
 #include "audio/midi/midifile.h"
 
