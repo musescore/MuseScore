@@ -24,8 +24,7 @@
 #include "notation/inotationparts.h"
 #include "async/asyncable.h"
 
-namespace mu {
-namespace instruments {
+namespace mu::instruments {
 class InstrumentTreeItem : public AbstractInstrumentPanelTreeItem, public async::Asyncable
 {
     Q_OBJECT
@@ -54,7 +53,6 @@ private:
     QString m_partName;
     QString m_abbreviature;
 };
-}
 }
 
 #endif // MU_INSTRUMENTS_INSTRUMENTTREEITEM_H

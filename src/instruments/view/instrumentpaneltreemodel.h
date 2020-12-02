@@ -32,10 +32,8 @@
 #include "instrumentstypes.h"
 #include "iinteractive.h"
 
-namespace mu {
-namespace instruments {
+namespace mu::instruments {
 class PartTreeItem;
-class InstrumentTreeItem;
 class StaffTreeItem;
 class InstrumentPanelTreeModel : public QAbstractItemModel, public async::Asyncable
 {
@@ -109,21 +107,15 @@ private:
     notation::IDList currentNotationPartIdList() const;
 
     AbstractInstrumentPanelTreeItem* loadPart(const notation::Part* part);
-    AbstractInstrumentPanelTreeItem* loadInstrument(const Instrument& instrument, const QString& partId,const QString& partName);
 
     AbstractInstrumentPanelTreeItem* modelIndexToItem(const QModelIndex& index) const;
 
-    void updatePartItem(AbstractInstrumentPanelTreeItem* item, const notation::Part* part);
-    void updateInstrumentItem(InstrumentTreeItem* item, const mu::instruments::Instrument& instrument, const QString& partId,
-                              const QString& partName);
+    void updatePartItem(PartTreeItem* item, const notation::Part* part);
     void updateStaffItem(StaffTreeItem* item, const mu::notation::Staff* staff);
 
     AbstractInstrumentPanelTreeItem* buildPartItem(const mu::notation::Part* part);
-    AbstractInstrumentPanelTreeItem* buildInstrumentItem(const QString& partId, const QString& partName,
-                                                         const mu::instruments::Instrument& instrument);
     AbstractInstrumentPanelTreeItem* buildStaffItem(const mu::notation::Staff* staff);
     AbstractInstrumentPanelTreeItem* buildAddStaffControlItem(const QString& partId);
-    AbstractInstrumentPanelTreeItem* buildAddDoubleInstrumentControlItem(const QString& partId);
 
     AbstractInstrumentPanelTreeItem* m_rootItem = nullptr;
     QItemSelectionModel* m_selectionModel = nullptr;
@@ -135,7 +127,6 @@ private:
     bool m_isMovingDownAvailable = false;
     bool m_isRemovingAvailable = false;
 };
-}
 }
 
 #endif // MU_INSTRUMENTS_INSTRUMENTPANELTREEMODEL_H
