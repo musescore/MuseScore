@@ -134,7 +134,6 @@ NoteInputBarModel::ActionItem& NoteInputBarModel::item(const actions::ActionName
         }
     }
 
-    LOGE() << "item not found with name: " << actionName;
     static ActionItem null;
     return null;
 }
@@ -216,6 +215,7 @@ void NoteInputBarModel::updateNoteInputState()
     updateSlurState();
     updateVoicesState();
     updateArticulationsState();
+    updateRestState();
 }
 
 void NoteInputBarModel::updateNoteInputModeState()
@@ -265,7 +265,7 @@ void NoteInputBarModel::updateNoteDurationState()
         "pad-note-1024"
     };
 
-    DurationType durationType = noteInputState().duration.type();
+    DurationType durationType = resolveCurrentDurationType();
 
     for (const actions::ActionName& actionName: noteActions) {
         item(actionName).checked = durationType == NotationActions::actionDurationType(actionName);
@@ -346,6 +346,11 @@ void NoteInputBarModel::updateArticulationsState()
     }
 }
 
+void NoteInputBarModel::updateRestState()
+{
+    item("pad-rest").checked = resolveCurrentRest();
+}
+
 int NoteInputBarModel::resolveCurrentVoiceIndex() const
 {
     constexpr int INVALID_VOICE = -1;
@@ -417,6 +422,43 @@ std::set<SymbolId> NoteInputBarModel::resolveCurrentArticulations() const
     }
 
     return result;
+}
+
+bool NoteInputBarModel::resolveCurrentRest() const
+{
+    if (!noteInput() || !selection()) {
+        return false;
+    }
+
+    if (isNoteInputMode()) {
+        return noteInputState().isRest;
+    }
+
+    if (selection()->isNone() || selection()->isRange()) {
+        return false;
+    }
+
+    return selection()->element()->isRest();
+}
+
+DurationType NoteInputBarModel::resolveCurrentDurationType() const
+{
+    constexpr DurationType INVALID_DURATION_TYPE = DurationType::V_INVALID;
+
+    if (!noteInput() || !selection()) {
+        return INVALID_DURATION_TYPE;
+    }
+
+    if (isNoteInputMode()) {
+        return noteInputState().duration.type();
+    }
+
+    if (selection()->isNone() || selection()->isRange()) {
+        return INVALID_DURATION_TYPE;
+    }
+
+    ChordRest* chordRest = elementToChordRest(selection()->element());
+    return chordRest ? chordRest->durationType().type() : INVALID_DURATION_TYPE;
 }
 
 bool NoteInputBarModel::isNoteInputModeAction(const ActionName& actionName) const
@@ -525,4 +567,24 @@ bool NoteInputBarModel::isNoteInputMode() const
 NoteInputState NoteInputBarModel::noteInputState() const
 {
     return noteInput() ? noteInput()->state() : NoteInputState();
+}
+
+ChordRest* NoteInputBarModel::elementToChordRest(Element* element) const
+{
+    if (!element) {
+        return nullptr;
+    }
+    if (element->isChordRest()) {
+        return toChordRest(element);
+    }
+    if (element->isNote()) {
+        return toNote(element)->chord();
+    }
+    if (element->isStem()) {
+        return toStem(element)->chord();
+    }
+    if (element->isHook()) {
+        return toHook(element)->chord();
+    }
+    return nullptr;
 }
