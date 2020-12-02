@@ -807,6 +807,20 @@ ScoreOrder* ScoreOrderList::findByName(const QString& name, bool customised)
       }
 
 //---------------------------------------------------------
+//   customScoreOrder
+//      return Custom ScoreOrder
+//---------------------------------------------------------
+
+ScoreOrder* ScoreOrderList::customScoreOrder() const
+      {
+      for (ScoreOrder* so : _orders) {
+            if (so->isCustom())
+                  return so;
+            }
+      return nullptr; // should never happen, there is always a custom score order.
+      }
+
+//---------------------------------------------------------
 //   searchScoreOrder
 //      return the index of the ScoreOrder or 0 (= Custom)
 //      if the order is not found.

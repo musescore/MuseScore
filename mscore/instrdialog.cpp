@@ -245,7 +245,8 @@ void MuseScore::editInstrList()
       instrList->init();
       MasterScore* masterScore = cs->masterScore();
       instrList->genPartList(masterScore);
-      instrList->setScoreOrder(masterScore->scoreOrder());
+      ScoreOrder* order = masterScore->scoreOrder();
+      instrList->setScoreOrder(order ? order : scoreOrders.customScoreOrder());
       masterScore->startCmd();
       masterScore->deselectAll();
       int rv = instrList->exec();
