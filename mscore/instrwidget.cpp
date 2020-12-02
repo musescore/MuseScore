@@ -629,29 +629,29 @@ void InstrumentsWidget::updatePartIdx()
 //   findPrvItem
 //---------------------------------------------------------
 
-int InstrumentsWidget::findPrvItem(PartListItem* pli, int number)
+int InstrumentsWidget::findPrvItem(PartListItem* pli, bool insert, int number)
       {
       ScoreOrder* order = getScoreOrder();
+      const int orderNumber = order->instrumentIndex(pli->id(), pli->isSoloist());
+      const int last = (number >= 0) ? number : partiturList->topLevelItemCount();
 
-      int orderNumber = order->instrumentIndex(pli->id(), pli->isSoloist());
-      bool unsorted = order->instrumentInUnsortedSection(pli->id(), pli->isSoloist());
-      int currow { 0 };
-      if (unsorted)
-            currow = partiturList->currentIndex().row();
-
-      const int last = number ? number - 1 : partiturList->topLevelItemCount();
       QTreeWidgetItem* item = nullptr;
-      for (int idx = 0; --number && (item = partiturList->topLevelItem(idx)); ++idx) {
-            PartListItem* p = (PartListItem*)item;
+      for (int idx = 0; number-- && (item = partiturList->topLevelItem(idx)); ++idx) {
+            PartListItem* p = static_cast<PartListItem*>(item);
             if (p->op == ListItemOp::I_DELETE)
                   continue;
+
             if (order->instrumentIndex(p->id(), p->isSoloist()) == orderNumber)
                   {
-                  if ((currow >= 0) && (idx > currow))
-                        return idx;
+                  if (insert) {
+                        const int selIdx = partiturList->currentIndex().row();
+                        if ((selIdx >= 0) && (idx > selIdx))
+                              return idx;
+                        }
                   }
-            if (order->instrumentIndex(p->id(), p->isSoloist()) > orderNumber)
+            else if (order->instrumentIndex(p->id(), p->isSoloist()) > orderNumber) {
                   return idx;
+                  }
             }
       return last;
       }
@@ -785,7 +785,7 @@ void InstrumentsWidget::on_addButton_clicked()
                   continue;
 
             PartListItem* pli = new PartListItem(it);
-            partiturList->insertTopLevelItem(findPrvItem(pli), pli);
+            partiturList->insertTopLevelItem(findPrvItem(pli, true), pli);
             pli->setFirstColumnSpanned(true);
             pli->op = ListItemOp::ADD;
 
@@ -1204,7 +1204,7 @@ void InstrumentsWidget::sortInstruments()
 
       PartListItem* pli = nullptr;
       for (int idx = 1; (pli = static_cast<PartListItem*>(partiturList->topLevelItem(idx))); ++idx)
-            movePartItem(idx, findPrvItem(pli, idx+1));
+            movePartItem(idx, findPrvItem(pli, false, idx));
       }
 
 //---------------------------------------------------------

@@ -160,7 +160,7 @@ class InstrumentsWidget : public QWidget, public Ui::InstrumentsWidget {
 
       ScoreOrderListModel* _model;
 
-      int findPrvItem(PartListItem* pli, int number=0);
+      int findPrvItem(PartListItem* pli, bool insert, int number=-1);
       QTreeWidgetItem* movePartItem(int oldPos, int newPos);
 
    private slots:
