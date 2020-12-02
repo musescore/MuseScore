@@ -1,4 +1,4 @@
-﻿//=============================================================================
+//=============================================================================
 //  MuseScore
 //  Music Composition & Notation
 //
@@ -73,6 +73,8 @@ void DockToolBar::onToolbarEvent(QEvent* e)
     if (QEvent::Resize == e->type()) {
         QResizeEvent* re = static_cast<QResizeEvent*>(e);
         view()->resize(re->size());
+    } else if (QEvent::ShowToParent == e->type()) {
+        view()->resize(m_tool.bar->size());
     }
 }
 
