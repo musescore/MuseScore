@@ -28,7 +28,7 @@ struct path;
 using paths = std::vector<path>;
 struct path {
     path() = default;
-    path(const path& p);
+    path(const path&) = default;
     path(const QString& s);
     path(const std::string& s);
     path(const char* s);

@@ -103,7 +103,7 @@ class KeySigEvent
 
 public:
     KeySigEvent() {}
-    KeySigEvent(const KeySigEvent&);
+    KeySigEvent(const KeySigEvent&) = default;
 
     bool operator==(const KeySigEvent& e) const;
     bool operator!=(const KeySigEvent& e) const { return !(*this == e); }
