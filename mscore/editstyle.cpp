@@ -557,16 +557,17 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       showFooter->setToolTip(toolTipHeaderFooter);
       showFooter->setToolTipDuration(5000);
 
-      connect(buttonBox,           SIGNAL(clicked(QAbstractButton*)), SLOT(buttonClicked(QAbstractButton*)));
-      connect(enableVerticalSpread,SIGNAL(toggled(bool)),             SLOT(toggleVerticalJustificationStaves(bool)));
-      connect(headerOddEven,       SIGNAL(toggled(bool)),             SLOT(toggleHeaderOddEven(bool)));
-      connect(footerOddEven,       SIGNAL(toggled(bool)),             SLOT(toggleFooterOddEven(bool)));
-      connect(chordDescriptionFileButton, SIGNAL(clicked()),          SLOT(selectChordDescriptionFile()));
-      connect(chordsStandard,      SIGNAL(toggled(bool)),             SLOT(setChordStyle(bool)));
-      connect(chordsJazz,          SIGNAL(toggled(bool)),             SLOT(setChordStyle(bool)));
-      connect(chordsCustom,        SIGNAL(toggled(bool)),             SLOT(setChordStyle(bool)));
-      connect(chordsXmlFile,       SIGNAL(toggled(bool)),             SLOT(setChordStyle(bool)));
-      connect(chordDescriptionFile,&QLineEdit::editingFinished,       [=]() { setChordStyle(true); });
+      connect(buttonBox,             SIGNAL(clicked(QAbstractButton*)), SLOT(buttonClicked(QAbstractButton*)));
+      connect(enableVerticalSpread,  SIGNAL(toggled(bool)),             SLOT(enableVerticalSpreadClicked(bool)));
+      connect(disableVerticalSpread, SIGNAL(toggled(bool)),             SLOT(disableVerticalSpreadClicked(bool)));
+      connect(headerOddEven,         SIGNAL(toggled(bool)),             SLOT(toggleHeaderOddEven(bool)));
+      connect(footerOddEven,         SIGNAL(toggled(bool)),             SLOT(toggleFooterOddEven(bool)));
+      connect(chordDescriptionFileButton, SIGNAL(clicked()),            SLOT(selectChordDescriptionFile()));
+      connect(chordsStandard,        SIGNAL(toggled(bool)),             SLOT(setChordStyle(bool)));
+      connect(chordsJazz,            SIGNAL(toggled(bool)),             SLOT(setChordStyle(bool)));
+      connect(chordsCustom,          SIGNAL(toggled(bool)),             SLOT(setChordStyle(bool)));
+      connect(chordsXmlFile,         SIGNAL(toggled(bool)),             SLOT(setChordStyle(bool)));
+      connect(chordDescriptionFile,  &QLineEdit::editingFinished,       [=]() { setChordStyle(true); });
       //chordDescriptionFile->setEnabled(false);
 
       chordDescriptionFileButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
@@ -1259,7 +1260,7 @@ void EditStyle::setValues()
 
       toggleHeaderOddEven(lstyle.value(Sid::headerOddEven).toBool());
       toggleFooterOddEven(lstyle.value(Sid::footerOddEven).toBool());
-      toggleVerticalJustificationStaves(lstyle.value(Sid::enableVerticalSpread).toBool());
+      disableVerticalSpread->setChecked(!lstyle.value(Sid::enableVerticalSpread).toBool());
       }
 
 //---------------------------------------------------------
@@ -1363,25 +1364,24 @@ void EditStyle::enableStyleWidget(const Sid idx, bool enable)
       }
 
 //---------------------------------------------------------
-//   toggleVerticalJustificationStaves
+//   enableVerticalSpreadClicked
 //---------------------------------------------------------
 
-void EditStyle::toggleVerticalJustificationStaves(bool checked)
+void EditStyle::enableVerticalSpreadClicked(bool checked)
       {
-      enableStyleWidget(Sid::staffDistance, !checked);
-      enableStyleWidget(Sid::akkoladeDistance, !checked);
-      enableStyleWidget(Sid::minSystemDistance, !checked);
-      enableStyleWidget(Sid::maxSystemDistance, !checked);
+      disableVerticalSpread->setChecked(!checked);
+      cs->setLayoutAll();
+      }
 
-      enableStyleWidget(Sid::spreadSystem, checked);
-      enableStyleWidget(Sid::spreadSquareBracket, checked);
-      enableStyleWidget(Sid::spreadCurlyBracket, checked);
-      enableStyleWidget(Sid::minSystemSpread, checked);
-      enableStyleWidget(Sid::maxSystemSpread, checked);
-      enableStyleWidget(Sid::minStaffSpread, checked);
-      enableStyleWidget(Sid::maxStaffSpread, checked);
-      enableStyleWidget(Sid::maxAkkoladeDistance, checked);
-      enableStyleWidget(Sid::maxPageFillSpread, checked);
+//---------------------------------------------------------
+//   disableVerticalSpreadClicked
+//---------------------------------------------------------
+
+void EditStyle::disableVerticalSpreadClicked(bool checked)
+      {
+      cs->style().set(Sid::enableVerticalSpread, !checked);
+      enableVerticalSpread->setChecked(!checked);
+      cs->setLayoutAll();
       }
 
 //---------------------------------------------------------
