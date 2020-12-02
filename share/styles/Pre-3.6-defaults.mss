@@ -31,7 +31,7 @@
     <noteBarDistance>1</noteBarDistance>
     <measureSpacing>1.2</measureSpacing>
     <staffLineWidth>0.08</staffLineWidth>
-    <ledgerLineLength>0.6</ledgerLineLength>
+    <ledgerLineLength>0.38</ledgerLineLength>
     <accidentalDistance>0.22</accidentalDistance>
     <accidentalNoteDistance>0.22</accidentalNoteDistance>
     <beamMinLen>1.32</beamMinLen>

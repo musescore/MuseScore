@@ -1,51 +1,58 @@
 #!/bin/bash
 
-cp ../../../build.debug/mtest/libmscore/parts/part-symbol-1.mscx   part-symbol.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-symbol-add.mscx   part-symbol-add.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-symbol-del.mscx   part-symbol-del.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-symbol-parts.mscx   part-symbol-parts.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-symbol-uadd.mscx   part-symbol-uadd.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-symbol-udel.mscx   part-symbol-udel.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-symbol-uradd.mscx   part-symbol-uradd.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-symbol-urdel.mscx   part-symbol-urdel.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-all-1.mscx   part-all.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-all-appendmeasures.mscx   part-all-appendmeasures.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-all-parts.mscx   part-all-parts.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-all-uappendmeasures.mscx   part-all-uappendmeasures.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-all-uinsertmeasures.mscx   part-all-uinsertmeasures.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-breath-1.mscx   part-breath.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-breath-add.mscx   part-breath-add.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-breath-del.mscx   part-breath-del.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-breath-parts.mscx   part-breath-parts.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-breath-uadd.mscx   part-breath-uadd.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-breath-udel.mscx   part-breath-udel.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-breath-uradd.mscx   part-breath-uradd.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-breath-urdel.mscx   part-breath-urdel.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-empty-1.mscx   part-empty.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-empty-parts.mscx   part-empty-parts.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-fingering-1.mscx   part-fingering.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-fingering-add.mscx   part-fingering-add.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-fingering-del.mscx   part-fingering-del.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-fingering-parts.mscx   part-fingering-parts.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-fingering-uadd.mscx   part-fingering-uadd.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-fingering-udel.mscx   part-fingering-udel.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-fingering-uradd.mscx   part-fingering-uradd.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-fingering-urdel.mscx   part-fingering-urdel.mscx
-cp ../../../build.debug/mtest/libmscore/parts/partStyle-score-reload-test.mscx   partStyle-score-reload-ref.mscx
-cp ../../../build.debug/mtest/libmscore/parts/partStyle-score-test.mscx   partStyle-score-ref.mscx
+if [ "`uname`" = 'Darwin' ]; then
+   S=../../../build.xcode/mtest/libmscore/parts/Debug
+else
+   S=../../../build.debug/mtest/libmscore/parts
+fi
 
-cp ../../../build.debug/mtest/libmscore/parts/part-chordline-1.mscx   	part-chordline.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-chordline-add.mscx   part-chordline-add.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-chordline-del.mscx   part-chordline-del.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-chordline-parts.mscx part-chordline-parts.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-chordline-uadd.mscx  part-chordline-uadd.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-chordline-udel.mscx  part-chordline-udel.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-chordline-uradd.mscx part-chordline-uradd.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-chordline-urdel.mscx part-chordline-urdel.mscx
+cp $S/part-symbol-1.mscx   part-symbol.mscx
+cp $S/part-symbol-add.mscx   part-symbol-add.mscx
+cp $S/part-symbol-del.mscx   part-symbol-del.mscx
+cp $S/part-symbol-parts.mscx   part-symbol-parts.mscx
+cp $S/part-symbol-uadd.mscx   part-symbol-uadd.mscx
+cp $S/part-symbol-udel.mscx   part-symbol-udel.mscx
+cp $S/part-symbol-uradd.mscx   part-symbol-uradd.mscx
+cp $S/part-symbol-urdel.mscx   part-symbol-urdel.mscx
+cp $S/part-all-1.mscx   part-all.mscx
+cp $S/part-all-appendmeasures.mscx   part-all-appendmeasures.mscx
+cp $S/part-all-parts.mscx   part-all-parts.mscx
+cp $S/part-all-uappendmeasures.mscx   part-all-uappendmeasures.mscx
+cp $S/part-all-uinsertmeasures.mscx   part-all-uinsertmeasures.mscx
+cp $S/part-breath-1.mscx   part-breath.mscx
+cp $S/part-breath-add.mscx   part-breath-add.mscx
+cp $S/part-breath-del.mscx   part-breath-del.mscx
+cp $S/part-breath-parts.mscx   part-breath-parts.mscx
+cp $S/part-breath-uadd.mscx   part-breath-uadd.mscx
+cp $S/part-breath-udel.mscx   part-breath-udel.mscx
+cp $S/part-breath-uradd.mscx   part-breath-uradd.mscx
+cp $S/part-breath-urdel.mscx   part-breath-urdel.mscx
+cp $S/part-empty-1.mscx   part-empty.mscx
+cp $S/part-empty-parts.mscx   part-empty-parts.mscx
+cp $S/part-fingering-1.mscx   part-fingering.mscx
+cp $S/part-fingering-add.mscx   part-fingering-add.mscx
+cp $S/part-fingering-del.mscx   part-fingering-del.mscx
+cp $S/part-fingering-parts.mscx   part-fingering-parts.mscx
+cp $S/part-fingering-uadd.mscx   part-fingering-uadd.mscx
+cp $S/part-fingering-udel.mscx   part-fingering-udel.mscx
+cp $S/part-fingering-uradd.mscx   part-fingering-uradd.mscx
+cp $S/part-fingering-urdel.mscx   part-fingering-urdel.mscx
+#cp $S/partStyle-score-reload-test.mscx   partStyle-score-reload-ref.mscx
+#cp $S/partStyle-score-test.mscx   partStyle-score-ref.mscx
 
-cp ../../../build.debug/mtest/libmscore/parts/part-54346-1.mscx   part-54346.mscx
-cp ../../../build.debug/mtest/libmscore/parts/part-54346-parts.mscx   part-54346-parts.mscx
-cp ../../../build.debug/mtest/libmscore/parts/voices.mscx   voices-ref.mscx
+cp $S/part-chordline-1.mscx   	part-chordline.mscx
+cp $S/part-chordline-add.mscx   part-chordline-add.mscx
+cp $S/part-chordline-del.mscx   part-chordline-del.mscx
+cp $S/part-chordline-parts.mscx part-chordline-parts.mscx
+cp $S/part-chordline-uadd.mscx  part-chordline-uadd.mscx
+cp $S/part-chordline-udel.mscx  part-chordline-udel.mscx
+cp $S/part-chordline-uradd.mscx part-chordline-uradd.mscx
+cp $S/part-chordline-urdel.mscx part-chordline-urdel.mscx
+
+cp $S/part-54346-1.mscx         part-54346.mscx
+cp $S/part-54346-parts.mscx     part-54346-parts.mscx
+cp $S/voices.mscx               voices-ref.mscx
+cp $S/part-stemless-parts.mscx  part-stemless-parts.mscx
 
 
 

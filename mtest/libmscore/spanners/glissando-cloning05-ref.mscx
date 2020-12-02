@@ -251,7 +251,7 @@
         <clefKeyRightMargin>1.75</clefKeyRightMargin>
         <createMultiMeasureRests>1</createMultiMeasureRests>
         <minMMRestWidth>0</minMMRestWidth>
-        <Spatium>1.76389</Spatium>
+        <Spatium>1.74978</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>

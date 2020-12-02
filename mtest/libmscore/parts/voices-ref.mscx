@@ -1065,7 +1065,7 @@
       <Style>
         <lastSystemFillLimit>0</lastSystemFillLimit>
         <createMultiMeasureRests>1</createMultiMeasureRests>
-        <Spatium>1.76389</Spatium>
+        <Spatium>1.74978</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -1372,7 +1372,7 @@
                       <voices>1</voices>
                       </location>
                     </linked>
-                  <offset x="1.05809" y="-4.67501"/>
+                  <offset x="1.06662" y="-4.71271"/>
                   <text>2</text>
                   </Fingering>
                 <pitch>63</pitch>
@@ -1922,7 +1922,7 @@
       <Style>
         <lastSystemFillLimit>0</lastSystemFillLimit>
         <createMultiMeasureRests>1</createMultiMeasureRests>
-        <Spatium>1.76389</Spatium>
+        <Spatium>1.74978</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -2129,7 +2129,7 @@
                       <voices>3</voices>
                       </location>
                     </linked>
-                  <offset x="1.05809" y="-4.67501"/>
+                  <offset x="1.06662" y="-4.71271"/>
                   <text>2</text>
                   </Fingering>
                 <pitch>43</pitch>
@@ -2463,7 +2463,7 @@
       <Style>
         <lastSystemFillLimit>0</lastSystemFillLimit>
         <createMultiMeasureRests>1</createMultiMeasureRests>
-        <Spatium>1.76389</Spatium>
+        <Spatium>1.74978</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>

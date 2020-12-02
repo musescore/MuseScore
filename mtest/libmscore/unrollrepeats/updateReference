@@ -1,0 +1,11 @@
+#!/bin/sh
+
+if [ "`uname`" = 'Darwin' ]; then
+   S=../../../build.xcode/mtest/libmscore/unrollrepeats/Debug
+else
+   S=../../../build.debug/mtest/libmscore/unrollrepeats
+fi
+
+cp $S/clef-key-ts-test.mscx              clef-key-ts-ref.mscx
+cp $S/pickup-measure-test.mscx           pickup-measure-ref.mscx
+

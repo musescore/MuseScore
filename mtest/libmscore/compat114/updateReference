@@ -3,7 +3,7 @@
 if [ "`uname`" = 'Darwin' ]; then
    S=../../../build.xcode/mtest/libmscore/compat114/Debug
 else
-   S=../../../build.debug/mtest/libmscore/compat114
+   S=/home/presario/build-MuseScore-Desktop_Qt_5_9_9_GCC_64bit-Debug/mtest/libmscore/compat114
 fi
 
 cp $S/accidentals-test.mscx              accidentals-ref.mscx

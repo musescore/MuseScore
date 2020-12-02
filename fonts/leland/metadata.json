@@ -91,6 +91,56 @@
                 0.02
             ]
         },
+        "U+F5DD": {
+            "bBoxNE": [
+                1.544,
+                1.812
+            ],
+            "bBoxSW": [
+                0.0,
+                -0.846
+            ]
+        },
+        "U+F5DE": {
+            "bBoxNE": [
+                1.544,
+                1.3
+            ],
+            "bBoxSW": [
+                0.0,
+                -1.292
+            ]
+        },
+        "U+F5DF": {
+            "bBoxNE": [
+                1.832,
+                1.34
+            ],
+            "bBoxSW": [
+                0.0,
+                -1.328
+            ]
+        },
+        "U+F5E0": {
+            "bBoxNE": [
+                1.828,
+                0.85
+            ],
+            "bBoxSW": [
+                0.0,
+                -0.846
+            ]
+        },
+        "U+F5E1": {
+            "bBoxNE": [
+                2.224,
+                1.81
+            ],
+            "bBoxSW": [
+                0.0,
+                -0.846
+            ]
+        },
         "accidentalArrowDown": {
             "bBoxNE": [
                 0.776,
@@ -123,22 +173,22 @@
         },
         "accidentalBracketLeft": {
             "bBoxNE": [
-                0.3,
-                0.772
+                0.292,
+                0.824
             ],
             "bBoxSW": [
                 0.0,
-                -0.772
+                -0.82
             ]
         },
         "accidentalBracketRight": {
             "bBoxNE": [
-                0.3,
-                0.772
+                0.292,
+                0.824
             ],
             "bBoxSW": [
                 0.0,
-                -0.772
+                -0.82
             ]
         },
         "accidentalBuyukMucennebFlat": {
@@ -273,22 +323,22 @@
         },
         "accidentalParensLeft": {
             "bBoxNE": [
-                1.0728,
-                0.7783
+                0.3,
+                0.8378
             ],
             "bBoxSW": [
-                0.7568,
-                -0.7856
+                0.0,
+                -0.846
             ]
         },
         "accidentalParensRight": {
             "bBoxNE": [
-                0.0844,
-                0.7856
+                0.3,
+                0.846
             ],
             "bBoxSW": [
-                -0.2316,
-                -0.7783
+                0.0,
+                -0.8378
             ]
         },
         "accidentalQuarterToneFlatArrowUp": {
@@ -1901,34 +1951,54 @@
                 0.0
             ]
         },
-        "metNote8thUp": {
+        "metAugmentationDot": {
             "bBoxNE": [
-                2.6658,
-                4.1732
+                0.44,
+                0.22
             ],
             "bBoxSW": [
-                -0.0016,
-                -0.6108
+                0.0,
+                -0.22
+            ]
+        },
+        "metNote16thUp": {
+            "bBoxNE": [
+                3.0143,
+                4.2956
+            ],
+            "bBoxSW": [
+                -0.0064,
+                -0.692
+            ]
+        },
+        "metNote8thUp": {
+            "bBoxNE": [
+                3.0123,
+                3.7552
+            ],
+            "bBoxSW": [
+                0.0004,
+                -0.6924
             ]
         },
         "metNoteHalfUp": {
             "bBoxNE": [
-                1.492,
-                4.044
+                1.7,
+                3.602
             ],
             "bBoxSW": [
-                -0.0016,
-                -0.604
+                -0.0,
+                -0.6856
             ]
         },
         "metNoteQuarterUp": {
             "bBoxNE": [
-                1.492,
-                4.044
+                1.7,
+                3.6008
             ],
             "bBoxSW": [
-                -0.0016,
-                -0.612
+                -0.0,
+                -0.6912
             ]
         },
         "note1024thDown": {
@@ -4381,6 +4451,12 @@
         "uniECA7": {
             "codepoint": "0XECA7"
         },
+        "uniECA9": {
+            "codepoint": "0XECA9"
+        },
+        "uniECB7": {
+            "codepoint": "0XECB7"
+        },
         "uniED10": {
             "codepoint": "0XED10"
         },
@@ -4452,6 +4528,21 @@
         },
         "uniF403": {
             "codepoint": "0XF403"
+        },
+        "uniF5DD": {
+            "codepoint": "0XF5DD"
+        },
+        "uniF5DE": {
+            "codepoint": "0XF5DE"
+        },
+        "uniF5DF": {
+            "codepoint": "0XF5DF"
+        },
+        "uniF5E0": {
+            "codepoint": "0XF5E0"
+        },
+        "uniF5E1": {
+            "codepoint": "0XF5E1"
         }
     },
     "glyphsWithAnchors": {

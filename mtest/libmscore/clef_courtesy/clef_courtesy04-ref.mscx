@@ -16,11 +16,8 @@
       <measureNumberSystem>0</measureNumberSystem>
       <genCourtesyTimesig>0</genCourtesyTimesig>
       <sectionPause>2</sectionPause>
-      <showHeader>1</showHeader>
-      <evenHeaderL>$p</evenHeaderL>
       <evenHeaderR>$:workTitle:</evenHeaderR>
       <oddHeaderL>$:workTitle:</oddHeaderL>
-      <oddHeaderR>$p</oddHeaderR>
       <footerOddEven>0</footerOddEven>
       <evenFooterL>$:copyright:</evenFooterL>
       <evenFooterC>$:plate:</evenFooterC>
