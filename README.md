@@ -1,4 +1,4 @@
-![MuseScore](mscore/data/musescore_logo_full.png)  
+![MuseScore](assets/musescore_logo_full.png)  
 Music notation and composition software
 
 [![Travis CI](https://secure.travis-ci.org/musescore/MuseScore.svg?branch=master)](https://travis-ci.org/musescore/MuseScore)
