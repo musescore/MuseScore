@@ -186,7 +186,6 @@ SET(JACK_MIN_VERSION "0.98.0")
 option(BUILD_JACK    "Build with support for ${JACK_LONGNAME} audio backend. JACK >= ${JACK_MIN_VERSION} will be needed." ON)
 option(BUILD_PULSEAUDIO "Build with support for PulseAudio audio backend." ON)
 option(BUILD_ALSA "Build with support for ALSA audio backend." ON)
-option(BUILD_PORTAUDIO "Build with support for PortAudio audio backend." ON)
 option(BUILD_PCH "Build using precompiled headers." ON)
 option(BUILD_FOR_WINSTORE "Build for the Windows Store." OFF)
 option(COVERAGE "Build with instrumentation to record code coverage." OFF)
@@ -556,30 +555,6 @@ IF(BUILD_JACK)
 ELSE(BUILD_JACK)
      MESSAGE(STATUS "${JACK_LONGNAME} support disabled")
 ENDIF(BUILD_JACK)
-
-
-##
-## PortAudio
-##
-
-if (BUILD_PORTAUDIO)
-    if (MINGW OR MSVC)
-        set ( USE_PORTAUDIO 1 )
-        include(FindPortAudio)
-        add_library(portaudiodll SHARED IMPORTED)
-        set_target_properties(portaudiodll PROPERTIES IMPORTED_IMPLIB ${PORTAUDIO_LIBRARY})
-    else (MINGW OR MSVC)
-        PKGCONFIG1 (portaudio-2.0 19 PORTAUDIO_INCDIR PORTAUDIO_LIBDIR PORTAUDIO_LIB PORTAUDIO_CPP)
-        if (PORTAUDIO_INCDIR)
-              message("PortAudio found. PortAudio support enabled. INCDIR ${PORTAUDIO_INCDIR}, LIBDIR ${PORTAUDIO_LIBDIR}, LIB ${PORTAUDIO_LIB}")
-              set ( USE_PORTAUDIO 1 )
-        else (PORTAUDIO_INCDIR)
-              message(SEND_ERROR "Error: PortAudio support requested (BUILD_PORTAUDIO=${BUILD_PORTAUDIO}), but portaudio-2.0 version 19 was not found (package portaudio19-dev)")
-        endif (PORTAUDIO_INCDIR)
-    endif (MINGW OR MSVC)
-else (BUILD_PORTAUDIO)
-     message(STATUS "PortAudio support disabled")
-endif (BUILD_PORTAUDIO)
 
 if (APPLE)
    if(SOUNDFONT3)
