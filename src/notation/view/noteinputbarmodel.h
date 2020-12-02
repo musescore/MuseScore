@@ -81,6 +81,7 @@ private:
     void updateSlurState();
     void updateVoicesState();
     void updateArticulationsState();
+    void updateRestState();
 
     bool isNoteInputModeAction(const actions::ActionName& actionName) const;
     bool isTupletChooseAction(const actions::ActionName& actionName) const;
@@ -107,8 +108,13 @@ private:
     INotationSelectionPtr selection() const;
     int resolveCurrentVoiceIndex() const;
     std::set<SymbolId> resolveCurrentArticulations() const;
+    bool resolveCurrentRest() const;
+    DurationType resolveCurrentDurationType() const;
+
     bool isNoteInputMode() const;
     NoteInputState noteInputState() const;
+
+    ChordRest* elementToChordRest(Element* element) const;
 
     QList<ActionItem> m_items;
 
