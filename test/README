@@ -18,8 +18,6 @@ I did some changes to the files to better fit for MuseScore:
 -------------------------------------------------
 accidentals3.mscz
       accidentals positioning in chords     
-aeolus.mscx
-      test aeolus synthesizer
 arpeggio.mscz
       arpeggio up down
 beam1.mscz

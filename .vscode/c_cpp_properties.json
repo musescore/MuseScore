@@ -18,7 +18,6 @@
                     "${workspaceFolder}/build.debug/",
                     "${workspaceFolder}/mscore/",
                     "${workspaceFolder}/libmscore/",
-                    "${workspaceFolder}/aeolus/",
                     "${workspaceFolder}/assets/",
                     "${workspaceFolder}/audiofile/",
                     "${workspaceFolder}/awl/",

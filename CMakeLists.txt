@@ -172,7 +172,6 @@ if (NOT APPLE AND NOT MINGW AND NOT MSVC)
       #option(BUILD_PORTMIDI "PortMidi disabled on Linux. (It uses ALSA but it's better to use ALSA directly)" OFF)
 endif (NOT APPLE AND NOT MINGW AND NOT MSVC)
 
-option(AEOLUS        "Enable pipe organ synthesizer"      OFF)
 option(ZERBERUS      "Enable experimental SFZ sampler"    ON)
 option(USE_ZITA_REVERB "Enable Zita Reverb audio effect"    ON)
 option(OSC           "Enable OSC remote control protocol" ON)
@@ -899,10 +898,6 @@ if (BUILD_MU3)
     if (USE_PORTMIDI AND (MINGW OR APPLE OR MSVC))
           add_subdirectory(thirdparty/portmidi)
     endif (USE_PORTMIDI AND (MINGW OR APPLE OR MSVC))
-
-    if (AEOLUS)
-          add_subdirectory(aeolus)
-    endif (AEOLUS)
 
     if (AVSOMR)
         add_subdirectory(avsomr)

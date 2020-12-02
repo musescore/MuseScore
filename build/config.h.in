@@ -51,7 +51,6 @@
 
 #cmakedefine WIN_SPARKLE_ENABLED
 #cmakedefine MAC_SPARKLE_ENABLED
-#cmakedefine AEOLUS
 #cmakedefine ZERBERUS
 #cmakedefine OMR
 #cmakedefine OCR

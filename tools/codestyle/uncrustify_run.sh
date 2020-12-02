@@ -7,7 +7,6 @@ HERE="tools/codestyle" # path to dir that contains this script
 
 SRC_DIRS=(
     # Alphabetical order please!
-    aeolus
     audio
     audiofile
     avsomr

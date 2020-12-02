@@ -29,8 +29,6 @@ MuseScore is an open source and free music notation software. For support, contr
 MuseScore is licensed under GPL version 2.0. See [LICENSE.GPL](https://github.com/musescore/MuseScore/blob/master/LICENSE.GPL) in the same directory.
 
 ## Packages
-- **aeolus:** Clone of [Aeolus](http://kokkinizita.linuxaudio.org/linuxaudio/aeolus/). Disabled by default in the stable releases. See http://dev-list.musescore.org/Aeolus-Organ-Synth-td7578364.html. Kept as an example of how to integrate with a complex synthesizer.
-
 - **assets:** Graphical assets, use them if you need a MuseScore icon. For logo, color, etc., see https://musescore.org/en/about/logos-and-graphics.
 
 - **awl:** Audio Widget Library, from the MusE project.
@@ -49,7 +47,7 @@ MuseScore is licensed under GPL version 2.0. See [LICENSE.GPL](https://github.co
 
 - **mscore:** Main code for the MuseScore UI.
 
-- **msynth:** Abstract interface to Fluid + Aeolus.
+- **msynth:** Abstract interface to Fluid.
 
 - **mtest:** Unit testing using QTest.
 
