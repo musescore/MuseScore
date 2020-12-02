@@ -167,9 +167,6 @@ option(USE_SYSTEM_FREETYPE "Use system FreeType"          OFF) # requires freety
 option(BUILD_LAME    "Enable MP3 export"                  ON)  # Requires libmp3lame, call CMake with -DBUILD_LAME="OFF" to disable
 option(DOWNLOAD_SOUNDFONT "Download the latest soundfont version as part of the build process" ON)
 
-SET(JACK_LONGNAME "JACK (Jack Audio Connection Kit)")
-SET(JACK_MIN_VERSION "0.98.0")
-option(BUILD_JACK    "Build with support for ${JACK_LONGNAME} audio backend. JACK >= ${JACK_MIN_VERSION} will be needed." ON)
 option(BUILD_PCH "Build using precompiled headers." ON)
 option(BUILD_FOR_WINSTORE "Build for the Windows Store." OFF)
 option(COVERAGE "Build with instrumentation to record code coverage." OFF)
@@ -454,48 +451,6 @@ else (APPLE OR MINGW)
             MESSAGE(STATUS "LAME MP3 support disabled")
       endif (BUILD_LAME)
 endif (APPLE OR MINGW)
-
-##
-## Find JACK >= JACK_MIN_VERSION
-##
-
-
-IF(BUILD_JACK)
-     IF(MINGW OR MSVC)
-           set (USE_JACK 1)
-           IF("$ENV{PROCESSOR_ARCHITEW6432}" STREQUAL "")
-              IF("$ENV{PROCESSOR_ARCHITECTURE}" STREQUAL "x86")
-                 # "pure" 32-bit environment
-                 set (progenv "PROGRAMFILES")
-              ELSE("$ENV{PROCESSOR_ARCHITECTURE}" STREQUAL "x86")
-                 # "pure" 64-bit environment
-                 set (progenv "PROGRAMFILES(x86)")
-              ENDIF("$ENV{PROCESSOR_ARCHITECTURE}" STREQUAL "x86")
-           ELSE("$ENV{PROCESSOR_ARCHITEW6432}" STREQUAL "")
-              IF("$ENV{PROCESSOR_ARCHITECTURE}" STREQUAL "x86")
-                 # 32-bit program running with an underlying 64-bit environment
-                 set (progenv "PROGRAMFILES(x86)")
-              ELSE("$ENV{PROCESSOR_ARCHITECTURE}" STREQUAL "x86")
-                 # Theoretically impossible case...
-                 MESSAGE(SEND_ERROR "Error: Impossible program/environment bitness combination deduced: 64-bit program running in 32-bit environment. This is a programming error. PROCESSOR_ARCHITEW6432=$ENV{PROCESSOR_ARCHITEW6432}. PROCESSOR_ARCHITECTURE=$ENV{PROCESSOR_ARCHITECTURE}")
-              ENDIF("$ENV{PROCESSOR_ARCHITECTURE}" STREQUAL "x86")
-           ENDIF("$ENV{PROCESSOR_ARCHITEW6432}" STREQUAL "")
-           set (JACK_INCDIR "$ENV{${progenv}}/Jack/includes")
-           set (JACK_LIB "$ENV{${progenv}}/Jack/lib/libjack.a")
-           MESSAGE("JACK support enabled.")
-     ELSE(MINGW OR MSVC)
-           PKGCONFIG1 (jack ${JACK_MIN_VERSION} JACK_INCDIR JACK_LIBDIR JACK_LIB JACK_CPP)
-           IF(JACK_INCDIR)
-                 MESSAGE(STATUS "${JACK_LONGNAME} >= ${JACK_MIN_VERSION} found. jack support enabled.")
-                 SET(USE_JACK 1)
-           ELSE(JACK_INCDIR)
-                 MESSAGE(STATUS "${JACK_LONGNAME} >= ${JACK_MIN_VERSION} not found")
-                 MESSAGE(SEND_ERROR "Error: JACK support requested (BUILD_JACK=${BUILD_JACK}), but JACK was not found")
-           ENDIF(JACK_INCDIR)
-     ENDIF(MINGW OR MSVC)
-ELSE(BUILD_JACK)
-     MESSAGE(STATUS "${JACK_LONGNAME} support disabled")
-ENDIF(BUILD_JACK)
 
 if (APPLE)
    if(SOUNDFONT3)
