@@ -21,8 +21,6 @@
 #define MUSESCORE_CONFIG_H
 
 #cmakedefine USE_JACK
-#cmakedefine USE_PORTAUDIO
-#cmakedefine USE_PULSEAUDIO
 #cmakedefine USE_LAME
 #cmakedefine USE_WEBENGINE
 
