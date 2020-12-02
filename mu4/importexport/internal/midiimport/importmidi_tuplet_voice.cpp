@@ -6,7 +6,6 @@
 #include "importmidi_voice.h"
 #include "importmidi_operations.h"
 #include "libmscore/mscore.h"
-#include "mscore/preferences.h"
 
 #include <set>
 

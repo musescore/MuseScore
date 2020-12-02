@@ -30,8 +30,6 @@
 #include "importmxmlpass1.h"
 #include "importmxmlpass2.h"
 
-#include "mscore/preferences.h"
-
 namespace Ms {
 Score::FileError importMusicXMLfromBuffer(Score* score, const QString& /*name*/, QIODevice* dev)
 {

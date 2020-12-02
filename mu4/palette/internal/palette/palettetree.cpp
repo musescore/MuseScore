@@ -36,6 +36,8 @@
 
 #include "translation.h"
 
+#include "../palette_config.h"
+
 using namespace mu::palette;
 using namespace mu::framework;
 

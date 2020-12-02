@@ -55,7 +55,6 @@
 #include "log.h"
 
 #include "audio/midi/event.h"
-#include "mscore/preferences.h"
 
 #include "log.h"
 

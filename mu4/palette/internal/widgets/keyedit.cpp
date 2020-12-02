@@ -33,6 +33,8 @@
 #include "commonscene/commonscenetypes.h"
 #include "translation.h"
 
+#include "../palette_config.h"
+
 namespace Ms {
 extern bool useFactorySettings;
 extern Palette* newAccidentalsPalette();
@@ -49,7 +51,7 @@ KeyCanvas::KeyCanvas(QWidget* parent)
 {
     setAcceptDrops(true);
     extraMag   = editScale * configuration()->paletteScaling();
-    qreal mag  = PALETTE_SPATIUM * extraMag / gscore->spatium();
+    qreal mag  = mu::palette::PALETTE_SPATIUM * extraMag / gscore->spatium();
     _matrix    = QTransform(mag, 0.0, 0.0, mag, 0.0, 0.0);
     imatrix    = _matrix.inverted();
     dragElement = 0;
@@ -101,9 +103,9 @@ void KeyCanvas::paintEvent(QPaintEvent*)
     painter.setRenderHint(QPainter::Antialiasing, true);
     qreal wh = double(height());
     qreal ww = double(width());
-    double y = wh * .5 - 2 * PALETTE_SPATIUM * extraMag;
+    double y = wh * .5 - 2 * mu::palette::PALETTE_SPATIUM * extraMag;
 
-    qreal mag  = PALETTE_SPATIUM * extraMag / gscore->spatium();
+    qreal mag  = mu::palette::PALETTE_SPATIUM * extraMag / gscore->spatium();
     _matrix    = QTransform(mag, 0.0, 0.0, mag, 0.0, y);
     imatrix    = _matrix.inverted();
 

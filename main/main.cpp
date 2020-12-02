@@ -18,7 +18,6 @@
 //=============================================================================
 
 #include "config.h"
-#include "mscore/musescore.h"
 #include "modulessetup.h"
 
 #ifdef BUILD_UI_MU4
@@ -40,15 +39,9 @@ int main(int argc, char** argv)
     // would otherwise default to the local ANSI code page and cause corruption of any non-ANSI Unicode characters in command-line arguments.
     QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
 
-#ifndef BUILD_UI_MU4
-    ModulesSetup::instance()->setup();
-#else
     //! HACK A temporary hack is required because some modules
     //! can only be initialized after the creation of the QApplication
-    auto moduleSetup = []() {
-                           ModulesSetup::instance()->setup();
-                       };
-#endif
+    auto moduleSetup = []() { ModulesSetup::instance()->setup(); };
 
 #if (defined (_MSCVER) || defined (_MSC_VER))
     // On MSVC under Windows, we need to manually retrieve the command-line arguments and convert them from UTF-16 to UTF-8.
@@ -84,12 +77,8 @@ int main(int argc, char** argv)
 
 #endif
 
-#ifdef BUILD_UI_MU4
     mu::appshell::AppShell app;
     int code = app.run(argcFinal, argvFinal, moduleSetup);
-#else
-    int code = Ms::runApplication(argcFinal, argvFinal);
-#endif
 
     ModulesSetup::instance()->deinit();
 

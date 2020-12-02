@@ -1,8 +1,8 @@
 //=============================================================================
 //  MuseScore
-//  Linux Music Score Editor
+//  Music Composition & Notation
 //
-//  Copyright (C) 2002-2009 Werner Schweer and others
+//  Copyright (C) 2020 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -16,31 +16,15 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#ifndef MU_PALETTE_PALETTE_CONFIG_H
+#define MU_PALETTE_PALETTE_CONFIG_H
 
-#ifndef __SPLITSTAFF_H__
-#define __SPLITSTAFF_H__
-
-#include "ui_splitstaff.h"
-
-class Staff;
-
-namespace Ms {
-//---------------------------------------------------------
-//   SplitStaff
-//    edit staff and part properties
-//---------------------------------------------------------
-
-class SplitStaff : public QDialog, private Ui::SplitStaff
-{
-    Q_OBJECT
-
-    virtual void hideEvent(QHideEvent*);
-private slots:
-
-public:
-    SplitStaff(QWidget* parent = 0);
-    int getSplitPoint() const { return splitPoint->value(); }
-};
+//! TODO Added to replace the old code.
+//! We should probably use configuration instead of these variables.
+namespace mu::palette {
+static constexpr double DPI_DISPLAY     = 96.0;  // 96 DPI nominal resolution
+static constexpr double DPMM_DISPLAY    = DPI_DISPLAY / 25.4;
+static constexpr double PALETTE_SPATIUM = 1.764 * DPMM_DISPLAY;
 }
 
-#endif
+#endif // MU_PALETTE_PALETTE_CONFIG_H
