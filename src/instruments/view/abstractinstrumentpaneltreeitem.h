@@ -26,8 +26,7 @@
 #include "instrumentstypes.h"
 #include "notation/inotationparts.h"
 
-namespace mu {
-namespace instruments {
+namespace mu::instruments {
 class AbstractInstrumentPanelTreeItem : public QObject
 {
     Q_OBJECT
@@ -104,7 +103,6 @@ private:
 
     notation::INotationPartsPtr m_notationParts = nullptr;
 };
-}
 }
 
 #endif // MU_INSTRUMENTS_ABSTRACTINSTRUMENTTREEITEM_H

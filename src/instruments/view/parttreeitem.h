@@ -23,19 +23,31 @@
 
 #include "notation/inotationparts.h"
 
-namespace mu {
-namespace instruments {
+namespace mu::instruments {
 class PartTreeItem : public AbstractInstrumentPanelTreeItem
 {
     Q_OBJECT
+
 public:
     explicit PartTreeItem(notation::INotationPartsPtr notationParts, QObject* parent = nullptr);
+
+    Q_INVOKABLE QString instrumentId() const;
+    Q_INVOKABLE QString instrumentName() const;
+    Q_INVOKABLE QString instrumentAbbreviature() const;
+
+    void setInstrumentId(const QString& instrumentId);
+    void setInstrumentName(const QString& name);
+    void setInstrumentAbbreviature(const QString& abbreviature);
 
     void moveChildren(const int sourceRow, const int count, AbstractInstrumentPanelTreeItem* destinationParent,
                       const int destinationRow) override;
     void removeChildren(const int row, const int count, const bool deleteChild) override;
+
+private:
+    QString m_instrumentId;
+    QString m_instrumentName;
+    QString m_instrumentAbbreviature;
 };
-}
 }
 
 #endif // MU_INSTRUMENTS_PARTTREEITEM_H

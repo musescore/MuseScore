@@ -27,13 +27,43 @@ PartTreeItem::PartTreeItem(INotationPartsPtr notationParts, QObject* parent)
 {
 }
 
+QString PartTreeItem::instrumentId() const
+{
+    return m_instrumentId;
+}
+
+QString PartTreeItem::instrumentName() const
+{
+    return m_instrumentName;
+}
+
+QString PartTreeItem::instrumentAbbreviature() const
+{
+    return m_instrumentAbbreviature;
+}
+
+void PartTreeItem::setInstrumentId(const QString& instrumentId)
+{
+    m_instrumentId = instrumentId;
+}
+
+void PartTreeItem::setInstrumentName(const QString& name)
+{
+    m_instrumentName = name;
+}
+
+void PartTreeItem::setInstrumentAbbreviature(const QString& abbreviature)
+{
+    m_instrumentAbbreviature = abbreviature;
+}
+
 void PartTreeItem::moveChildren(const int sourceRow, const int count, AbstractInstrumentPanelTreeItem* destinationParent,
                                 const int destinationRow)
 {
-    IDList instrumentIds;
+    IDList stavesIds;
 
     for (int i = sourceRow; i < sourceRow + count; ++i) {
-        instrumentIds << childAtRow(i)->id();
+        stavesIds << childAtRow(i)->id();
     }
 
     int destinationRowLast = destinationRow;
@@ -45,22 +75,22 @@ void PartTreeItem::moveChildren(const int sourceRow, const int count, AbstractIn
         moveMode = INotationParts::After;
     }
 
-    AbstractInstrumentPanelTreeItem* destinationInstrumentItem = destinationParent->childAtRow(destinationRowLast);
-    notationParts()->moveInstruments(instrumentIds, id(), destinationParent->id(), destinationInstrumentItem->id(), moveMode);
+    AbstractInstrumentPanelTreeItem* destinationStaffItem = destinationParent->childAtRow(destinationRowLast);
+    notationParts()->moveStaves(stavesIds, destinationStaffItem->id(), moveMode);
 
     AbstractInstrumentPanelTreeItem::moveChildren(sourceRow, count, destinationParent, destinationRow);
 }
 
 void PartTreeItem::removeChildren(const int row, const int count, const bool deleteChild)
 {
-    IDList instrumentIds;
+    IDList stavesIds;
 
     for (int i = row; i < row + count; ++i) {
-        instrumentIds << childAtRow(i)->id();
+        stavesIds << childAtRow(i)->id();
     }
 
     if (deleteChild) {
-        notationParts()->removeInstruments(instrumentIds, id());
+        notationParts()->removeStaves(stavesIds);
     }
 
     AbstractInstrumentPanelTreeItem::removeChildren(row, count, deleteChild);
