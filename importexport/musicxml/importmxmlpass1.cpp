@@ -1053,10 +1053,9 @@ void MusicXMLParserPass1::scorePartwise()
             // add bracket and set the span
             // TODO: use group-symbol default-x to determine horizontal order of brackets
             Staff* staff = il.at(pg->start)->staff(0);
-            if (pg->type == BracketType::NO_BRACKET)
-                  staff->setBracketType(0, BracketType::NO_BRACKET);
-            else {
-                  staff->addBracket(new BracketItem(staff->score(), pg->type, stavesSpan));
+            if (pg->type != BracketType::NO_BRACKET) {
+                  staff->setBracketType(pg->column, pg->type);
+                  staff->setBracketSpan(pg->column, stavesSpan);
                   }
             if (pg->barlineSpan)
                   staff->setBarLineSpan(pg->span);
@@ -1066,7 +1065,9 @@ void MusicXMLParserPass1::scorePartwise()
       // multi-staff parts w/o explicit brackets get a brace
       foreach(Part const* const p, il) {
             if (p->nstaves() > 1 && !partSet.contains(p)) {
-                  p->staff(0)->addBracket(new BracketItem(p->score(), BracketType::BRACE, p->nstaves()));
+                  const int column = p->staff(0)->bracketLevels() + 1;
+                  p->staff(0)->setBracketType(column, BracketType::BRACE);
+                  p->staff(0)->setBracketSpan(column, p->nstaves());
                   if (allStaffGroupsIdentical(p)) {
                         // span only if the same types
                         p->staff(0)->setBarLineSpan(p->nstaves());
@@ -1689,6 +1690,7 @@ static void partGroupStart(MusicXmlPartGroupMap& pgs, int n, int p, QString s, b
       pg->start = p;
       pg->barlineSpan = barlineSpan,
       pg->type = bracketType;
+      pg->column = n;
       pgs[n] = pg;
       }
 
