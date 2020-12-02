@@ -90,7 +90,7 @@ void ExportMidi::writeHeader()
             Staff* staff  = cs->staff(staffIdx);
 
             QByteArray partName = staff->partName().toUtf8();
-            int len = partName.length() + 1;
+            int len = partName.length();
             unsigned char* data = new unsigned char[len];
 
             memcpy(data, partName.data(), len);
