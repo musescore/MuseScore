@@ -368,9 +368,7 @@ int NoteInputBarModel::resolveCurrentVoiceIndex() const
     }
 
     for (const Element* element: selection()->elements()) {
-        if (element->isNote()) {
-            return element->voice();
-        }
+        return element->voice();
     }
 
     return INVALID_VOICE;
