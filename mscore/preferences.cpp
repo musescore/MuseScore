@@ -251,7 +251,7 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_UI_THEME_ICONWIDTH,                              new IntPreference(28, false)},
             {PREF_UI_THEME_ICONHEIGHT,                             new IntPreference(24, false)},
             {PREF_UI_THEME_FONTFAMILY,                             new StringPreference(QApplication::font().family(), false) },
-            {PREF_UI_THEME_FONTSIZE,                               new IntPreference(QApplication::font().pointSize(), false) },
+            {PREF_UI_THEME_FONTSIZE,                               new DoublePreference(QApplication::font().pointSizeF(), false) },
             {PREF_UI_PIANOROLL_DARK_SELECTION_BOX_COLOR,           new ColorPreference(QColor(0x0cebff))},
             {PREF_UI_PIANOROLL_DARK_NOTE_UNSEL_COLOR,              new ColorPreference(QColor(0x1dcca0))},
             {PREF_UI_PIANOROLL_DARK_NOTE_SEL_COLOR,                new ColorPreference(QColor(0xffff00))},

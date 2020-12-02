@@ -502,7 +502,7 @@ void PreferenceDialog::start()
                                                       fontFamily->addItem(currFontFamily);
                                                 fontFamily->setCurrentIndex(fontFamily->findText(currFontFamily));
                                                 }),
-                  new IntPreferenceItem(PREF_UI_THEME_FONTSIZE, fontSize),
+                  new DoublePreferenceItem(PREF_UI_THEME_FONTSIZE, fontSize),
                   new CustomPreferenceItem(PREF_UI_APP_GLOBALSTYLE, styleName,
                                           [&]() { // apply function
                                                 preferences.setCustomPreference<MuseScorePreferredStyleType>(PREF_UI_APP_GLOBALSTYLE, MuseScorePreferredStyleType(styleName->currentIndex()));
