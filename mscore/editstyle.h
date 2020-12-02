@@ -81,7 +81,8 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       void selectChordDescriptionFile();
       void setChordStyle(bool);
       void enableStyleWidget(const Sid idx, bool enable);
-      void toggleVerticalJustificationStaves(bool);
+      void enableVerticalSpreadClicked(bool);
+      void disableVerticalSpreadClicked(bool);
       void toggleHeaderOddEven(bool);
       void toggleFooterOddEven(bool);
       void buttonClicked(QAbstractButton*);
