@@ -204,10 +204,5 @@
 //#define PREF_PAN_WEIGHT_SMART                               "smoothPan/weight/smart"
 //#define PREF_PAN_WEIGHT_ADVANCED                            "smoothPan/weight/advanced"
 //#define PREF_PAN_SMART_TIMER_DURATION                       "smoothPan/smart/timer/duration"
-#ifdef AVSOMR
-#define PREF_IMPORT_AVSOMR_USELOCAL                         "import/avsomr/useLocalEngine"
-#define PREF_UI_AVSOMR_RECOGNITION_COLOR                    "ui/avsomr/recognition/valid/color"
-#define PREF_UI_AVSOMR_NOT_RECOGNITION_COLOR                "ui/avsomr/recognition/notValid/color"
-#endif
 
 #endif // PREFERENCEKEYS_H

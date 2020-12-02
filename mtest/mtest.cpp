@@ -78,9 +78,6 @@ const char* tests[] = {
     "testoves/bdat/tst_ove_bdat",
     "musicxml/io/tst_mxml_io",                        // FAIL
 #endif
-#ifdef OMR
-    "omr/notes/tst_notes",
-#endif
 };
 
 //---------------------------------------------------------

@@ -175,20 +175,12 @@ endif (NOT APPLE AND NOT MINGW AND NOT MSVC)
 option(ZERBERUS      "Enable experimental SFZ sampler"    ON)
 option(USE_ZITA_REVERB "Enable Zita Reverb audio effect"    ON)
 option(OSC           "Enable OSC remote control protocol" ON)
-option(AVSOMR        "Enable AVSOMR import"               OFF) # AVSOMR - optical music recognition by audirevis
-option(OMR           "Enable PDF import"                  OFF) # OMR - optical music recognition
-# For installation see: http://ubuntuforums.org/showthread.php?t=1647350
-option(OCR           "Enable OCR, requires OMR"           OFF) # Requires tesseract 3.0, needs work on mac/win
 option(SOUNDFONT3    "Ogg Vorbis compressed fonts"        ON)  # Enable Ogg Vorbis compressed fonts, requires Ogg & Vorbis
 option(HAS_AUDIOFILE "Enable audio export"                ON)  # Requires libsndfile
 option(USE_SYSTEM_QTSINGLEAPPLICATION "Use system QtSingleApplication" OFF)
 option(USE_SYSTEM_FREETYPE "Use system FreeType"          OFF) # requires freetype >= 2.5.2, does not work on win
-option(USE_SYSTEM_POPPLER  "Use system Poppler for OMR"   OFF)
 option(BUILD_LAME    "Enable MP3 export"                  ON)  # Requires libmp3lame, call CMake with -DBUILD_LAME="OFF" to disable
 option(DOWNLOAD_SOUNDFONT "Download the latest soundfont version as part of the build process" ON)
-
-# licence incompatibility, must never be distributed
-set(OCR OFF)
 
 SET(JACK_LONGNAME "JACK (Jack Audio Connection Kit)")
 SET(JACK_MIN_VERSION "0.98.0")
@@ -840,16 +832,6 @@ else (USE_SYSTEM_FREETYPE)
       include_directories(${PROJECT_SOURCE_DIR}/thirdparty/freetype/include)
 endif (USE_SYSTEM_FREETYPE)
 
-if (OMR)
- if (NOT USE_SYSTEM_POPPLER)
-   include_directories(${PROJECT_SOURCE_DIR}/thirdparty/poppler)
-   include_directories(${PROJECT_SOURCE_DIR}/thirdparty/poppler/poppler)
- else (NOT USE_SYSTEM_POPPLER)
-   include_directories(/usr/include/poppler)
-   include_directories(/usr/include/poppler/qt5)
- endif (NOT USE_SYSTEM_POPPLER)
-endif (OMR)
-
 set (BUILD_MU3 OFF)
 if (BUILD_UI_MU4)
     if (BUILD_UI_MU4_WITH_MU3)
@@ -898,17 +880,6 @@ if (BUILD_MU3)
     if (USE_PORTMIDI AND (MINGW OR APPLE OR MSVC))
           add_subdirectory(thirdparty/portmidi)
     endif (USE_PORTMIDI AND (MINGW OR APPLE OR MSVC))
-
-    if (AVSOMR)
-        add_subdirectory(avsomr)
-    endif (AVSOMR)
-
-    if (OMR)
-          add_subdirectory(omr)
-          if (NOT USE_SYSTEM_POPPLER)
-                add_subdirectory(thirdparty/poppler)
-          endif (NOT USE_SYSTEM_POPPLER)
-    endif (OMR)
 
     if (OSC)
           add_subdirectory(thirdparty/ofqf)

@@ -52,9 +52,6 @@
 #cmakedefine WIN_SPARKLE_ENABLED
 #cmakedefine MAC_SPARKLE_ENABLED
 #cmakedefine ZERBERUS
-#cmakedefine OMR
-#cmakedefine OCR
-#cmakedefine AVSOMR
 #cmakedefine OSC
 #cmakedefine OPENGL
 #cmakedefine SOUNDFONT3
