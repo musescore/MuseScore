@@ -8020,7 +8020,6 @@ void MuseScore::init(QStringList& argv)
                   QRectF psf = p.paperRect(QPrinter::Inch);
                   MScore::defaultStyle().set(Sid::pageWidth,  psf.width());
                   MScore::defaultStyle().set(Sid::pageHeight, psf.height());
-                  MScore::defaultStyle().set(Sid::pagePrintableWidth, psf.width()-20.0/INCH);
                   MScore::defaultStyle().set(Sid::enableVerticalSpread, true);
                   }
             }
