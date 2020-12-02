@@ -1015,7 +1015,6 @@ if (BUILD_UNIT_TESTS)
 endif(BUILD_UNIT_TESTS)
 
 add_subdirectory(framework)
-add_subdirectory(global) #todo remove
 
 if (BUILD_UI_MU4)
     add_subdirectory(mu4)

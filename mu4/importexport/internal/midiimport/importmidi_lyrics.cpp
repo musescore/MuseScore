@@ -10,7 +10,6 @@
 #include "libmscore/staff.h"
 #include "libmscore/text.h"
 #include "audio/midi/midifile.h"
-#include "mscore/preferences.h"
 
 #include <set>
 

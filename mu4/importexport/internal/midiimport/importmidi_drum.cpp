@@ -1,6 +1,5 @@
 #include "importmidi_drum.h"
 #include "importmidi_inner.h"
-#include "mscore/preferences.h"
 #include "libmscore/staff.h"
 #include "libmscore/drumset.h"
 #include "importmidi_chord.h"

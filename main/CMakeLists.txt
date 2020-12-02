@@ -100,7 +100,6 @@ set(LINK_LIB
     ${QT_LIBRARIES}
     awl
     global
-    global_old
     ui
     uicomponents
     fonts

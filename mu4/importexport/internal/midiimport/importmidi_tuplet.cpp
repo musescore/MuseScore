@@ -7,7 +7,6 @@
 #include "importmidi_inner.h"
 #include "importmidi_operations.h"
 #include "libmscore/sig.h"
-#include "mscore/preferences.h"
 
 #include <set>
 

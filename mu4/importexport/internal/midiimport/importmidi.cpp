@@ -11,7 +11,6 @@
 //=============================================================================
 
 #include "audio/midi/midifile.h"
-#include "mscore/preferences.h"
 #include "libmscore/score.h"
 #include "libmscore/key.h"
 #include "libmscore/clef.h"

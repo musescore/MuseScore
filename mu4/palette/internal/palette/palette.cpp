@@ -45,6 +45,8 @@
 #include "widgetstatestore.h"
 #include "mu4/commonscene/commonscenetypes.h"
 
+#include "../palette_config.h"
+
 using namespace mu::framework;
 
 namespace Ms {
@@ -833,7 +835,7 @@ void Palette::paintPaletteElement(void* data, Element* element)
 void Palette::paintEvent(QPaintEvent* /*event*/)
 {
     qreal _spatium = gscore->spatium();
-    qreal magS     = PALETTE_SPATIUM * extraMag * paletteScaling();
+    qreal magS     = mu::palette::PALETTE_SPATIUM * extraMag * paletteScaling();
     qreal mag      = magS / _spatium;
     gscore->setSpatium(SPATIUM20);
 
@@ -986,7 +988,7 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
 QPixmap Palette::pixmap(int paletteIdx) const
 {
     qreal _spatium = gscore->spatium();
-    qreal magS     = PALETTE_SPATIUM * extraMag * paletteScaling();
+    qreal magS     = mu::palette::PALETTE_SPATIUM * extraMag * paletteScaling();
     qreal mag      = magS / _spatium;
     PaletteCell* c = cellAt(paletteIdx);
     if (!c || !c->element) {
@@ -1436,7 +1438,7 @@ int Palette::heightForWidth(int w) const
     if (rows <= 0) {
         rows = 1;
     }
-    qreal magS = PALETTE_SPATIUM * extraMag * paletteScaling();
+    qreal magS = mu::palette::PALETTE_SPATIUM * extraMag * paletteScaling();
     int h = lrint(_yOffset * 2 * magS);
     return rows * vgridM + h;
 }

@@ -23,7 +23,6 @@
 #include <QShortcutEvent>
 #include <QMenu>
 #include <QToolButton>
-#include "mscore/shortcut.h"
 
 using namespace mu::telemetry;
 
@@ -73,23 +72,28 @@ QPair<QString, QString> ActionEventObserver::extractActionData(QObject* watched)
 
 bool ActionEventObserver::eventFilter(QObject* watched, QEvent* event)
 {
+    //! TODO Need porting for MU4
+
+    Q_UNUSED(watched);
+    Q_UNUSED(event);
+
     //if Shortcuts and Menus data IS the enabled telemetry data
-    if (Ms::enabledTelemetryDataTypes & Ms::TelemetryDataCollectionType::COLLECT_SHORTCUT_AND_MENU_DATA) {
-        if (event->type() == QEvent::MouseButtonRelease) {
-            QPair<QString, QString> actionData = extractActionData(watched);
-            telemetryService()->sendEvent(actionData.first, actionData.second);
-        } else if (event->type() == QEvent::Shortcut) {
-            //QShortcutEvent* shortCutEvent = static_cast<QShortcutEvent*>(event);
-            //! FIXME Need porting for MU4
-            Ms::Shortcut* shortcut = nullptr; //Ms::Shortcut::getShortcutByKeySequence(shortCutEvent->key(), m_scoreState);
+//    if (Ms::enabledTelemetryDataTypes & Ms::TelemetryDataCollectionType::COLLECT_SHORTCUT_AND_MENU_DATA) {
+//        if (event->type() == QEvent::MouseButtonRelease) {
+//            QPair<QString, QString> actionData = extractActionData(watched);
+//            telemetryService()->sendEvent(actionData.first, actionData.second);
+//        } else if (event->type() == QEvent::Shortcut) {
+//            QShortcutEvent* shortCutEvent = static_cast<QShortcutEvent*>(event);
 
-            if (!shortcut) {
-                return false;
-            }
+//            Ms::Shortcut* shortcut = Ms::Shortcut::getShortcutByKeySequence(shortCutEvent->key(), m_scoreState);
 
-            telemetryService()->sendEvent("shortcut", shortcut->key());
-        }
-    }
+//            if (!shortcut) {
+//                return false;
+//            }
+
+//            telemetryService()->sendEvent("shortcut", shortcut->key());
+//        }
+//    }
     return false;
 }
 
@@ -102,7 +106,7 @@ bool ActionEventObserver::eventFilter(QObject* watched, QEvent* event)
 /// @see ActionEventObserver::eventFilter
 ///---------------------------------------------------------
 
-void ActionEventObserver::setScoreState(const Ms::ScoreState state)
-{
-    m_scoreState = state;
-}
+//void ActionEventObserver::setScoreState(const Ms::ScoreState state)
+//{
+//    m_scoreState = state;
+//}

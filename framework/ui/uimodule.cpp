@@ -15,8 +15,6 @@
 #include "dev/interactivetestsmodel.h"
 #include "dev/testdialog.h"
 
-#include "mscore/globals.h"
-
 using namespace mu::framework;
 
 static std::shared_ptr<UiConfiguration> s_configuration = std::make_shared<UiConfiguration>();
