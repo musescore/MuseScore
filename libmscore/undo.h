@@ -41,7 +41,7 @@
 #include "rest.h"
 #include "fret.h"
 
-#include "audio/midi/midipatch.h"
+#include "framework/midi_old/midipatch.h"
 
 namespace Ms {
 class ElementList;

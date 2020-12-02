@@ -21,8 +21,8 @@
 #include "part.h"
 #include "score.h"
 
-#include "audio/midi/synthesizer.h"
-#include "audio/midi/midipatch.h"
+#include "framework/midi_old/midipatch.h"
+#include "log.h"
 
 namespace Ms {
 //: Channel name for otherwise unamed channels
@@ -835,65 +835,71 @@ void Channel::read(XmlReader& e, Part* part)
 
 void Channel::switchExpressive(Synthesizer* synth, bool expressive, bool force /* = false */)
 {
-    if ((_userBankController && !force) || !synth) {
-        return;
-    }
+    Q_UNUSED(synth);
+    Q_UNUSED(expressive);
+    Q_UNUSED(force);
+    //! TODO Needs poting to MU4
+    NOT_IMPLEMENTED;
 
-    // Don't try to switch if we already have done so
-    if (expressive == _switchedToExpressive) {
-        return;
-    }
+//    if ((_userBankController && !force) || !synth) {
+//        return;
+//    }
 
-    // Check that we're actually changing the MuseScore General soundfont
-    const auto fontsInfo = synth->soundFontsInfo();
-    if (fontsInfo.empty()) {
-        return;
-    }
-    const auto& info = fontsInfo.front();
-    if (!info.fontName.contains("MuseScore_General", Qt::CaseInsensitive)) {
-        qDebug().nospace() << "Soundfont '" << info.fontName << "' is not MuseScore General, cannot update expressive";
-        return;
-    }
+//    // Don't try to switch if we already have done so
+//    if (expressive == _switchedToExpressive) {
+//        return;
+//    }
 
-    // Work out where the new expressive patch will be
-    // All expressive instruments are +1 bank higher than the
-    // normal counterparts, except on bank 0, where they are placed on bank 17
-    // and on bank 8, which uses bank 18 instead.
-    int searchBankNum;
-    int newBankNum;
-    if (expressive) {
-        int relativeBank = bank() % 129;
-        if (relativeBank == 0) {
-            newBankNum = 17;
-        } else if (relativeBank == 8) {
-            newBankNum = 18;
-        } else {
-            newBankNum = relativeBank + 1;
-        }
-        _switchedToExpressive = true;
-    } else {
-        int relativeBank = bank() % 129;
-        if (relativeBank == 17) {
-            newBankNum = 0;
-        } else if (relativeBank == 18) {
-            newBankNum = 8;
-        } else {
-            newBankNum = relativeBank - 1;
-        }
-        _switchedToExpressive = false;
-    }
+//    // Check that we're actually changing the MuseScore General soundfont
+//    const auto fontsInfo = synth->soundFontsInfo();
+//    if (fontsInfo.empty()) {
+//        return;
+//    }
+//    const auto& info = fontsInfo.front();
+//    if (!info.fontName.contains("MuseScore_General", Qt::CaseInsensitive)) {
+//        qDebug().nospace() << "Soundfont '" << info.fontName << "' is not MuseScore General, cannot update expressive";
+//        return;
+//    }
 
-    // Floor bank num to multiple of 129 and add new num to get bank num of new patch
-    searchBankNum = (bank() / 129) * 129 + newBankNum;
-    const auto& pl = synth->getPatchInfo();
-    for (const MidiPatch* p : pl) {
-        if (p->synti == "Fluid") {
-            if (searchBankNum == p->bank && program() == p->prog) {
-                setBank(p->bank);
-                return;
-            }
-        }
-    }
+//    // Work out where the new expressive patch will be
+//    // All expressive instruments are +1 bank higher than the
+//    // normal counterparts, except on bank 0, where they are placed on bank 17
+//    // and on bank 8, which uses bank 18 instead.
+//    int searchBankNum;
+//    int newBankNum;
+//    if (expressive) {
+//        int relativeBank = bank() % 129;
+//        if (relativeBank == 0) {
+//            newBankNum = 17;
+//        } else if (relativeBank == 8) {
+//            newBankNum = 18;
+//        } else {
+//            newBankNum = relativeBank + 1;
+//        }
+//        _switchedToExpressive = true;
+//    } else {
+//        int relativeBank = bank() % 129;
+//        if (relativeBank == 17) {
+//            newBankNum = 0;
+//        } else if (relativeBank == 18) {
+//            newBankNum = 8;
+//        } else {
+//            newBankNum = relativeBank - 1;
+//        }
+//        _switchedToExpressive = false;
+//    }
+
+//    // Floor bank num to multiple of 129 and add new num to get bank num of new patch
+//    searchBankNum = (bank() / 129) * 129 + newBankNum;
+//    const auto& pl = synth->getPatchInfo();
+//    for (const MidiPatch* p : pl) {
+//        if (p->synti == "Fluid") {
+//            if (searchBankNum == p->bank && program() == p->prog) {
+//                setBank(p->bank);
+//                return;
+//            }
+//        }
+//    }
 }
 
 //---------------------------------------------------------

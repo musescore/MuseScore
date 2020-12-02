@@ -9,7 +9,8 @@
 #include "libmscore/sig.h"
 #include "libmscore/durationtype.h"
 #include "importmidi_tuplet_voice.h"
-#include "audio/midi/midifile.h"
+
+#include "framework/midi_old/midifile.h"
 
 namespace Ms {
 namespace Simplify {

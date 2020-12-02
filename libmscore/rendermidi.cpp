@@ -52,9 +52,8 @@
 #include "utils.h"
 #include "sym.h"
 #include "synthesizerstate.h"
-#include "log.h"
 
-#include "audio/midi/event.h"
+#include "framework/midi_old/event.h"
 
 #include "log.h"
 

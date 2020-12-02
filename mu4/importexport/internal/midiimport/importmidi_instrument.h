@@ -1,7 +1,7 @@
 #ifndef IMPORTMIDI_INSTRUMENT_H
 #define IMPORTMIDI_INSTRUMENT_H
 
-#include "audio/midi/midifile.h"
+#include "framework/midi_old/midifile.h"
 
 class QString;
 
