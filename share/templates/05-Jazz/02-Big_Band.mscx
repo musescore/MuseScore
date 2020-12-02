@@ -335,10 +335,10 @@
         <defaultTransposingClef>G</defaultTransposingClef>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Tenor Sax 2</trackName>
+      <trackName>Tenor Sax 1</trackName>
       <Instrument id="tenor-saxophone">
-        <longName>Tenor Sax 2</longName>
-        <shortName>Tenor 2</shortName>
+        <longName>Tenor Sax 1</longName>
+        <shortName>Tenor 1</shortName>
         <trackName>Tenor Saxophone</trackName>
         <minPitchP>44</minPitchP>
         <maxPitchP>82</maxPitchP>
@@ -395,10 +395,10 @@
         <defaultTransposingClef>G</defaultTransposingClef>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Tenor Sax 1</trackName>
+      <trackName>Tenor Sax 2</trackName>
       <Instrument id="tenor-saxophone">
-        <longName>Tenor Sax 1</longName>
-        <shortName>Tenor 1</shortName>
+        <longName>Tenor Sax 2</longName>
+        <shortName>Tenor 2</shortName>
         <trackName>Tenor Saxophone</trackName>
         <minPitchP>44</minPitchP>
         <maxPitchP>82</maxPitchP>
@@ -513,10 +513,10 @@
         <bracket type="0" span="4" col="0"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Trumpet 4</trackName>
+      <trackName>Trumpet 1</trackName>
       <Instrument id="bb-trumpet">
-        <longName>Trumpet 4</longName>
-        <shortName>Tpt. 4</shortName>
+        <longName>Trumpet 1</longName>
+        <shortName>Tpt. 1</shortName>
         <trackName>B♭ Trumpet</trackName>
         <minPitchP>52</minPitchP>
         <maxPitchP>85</maxPitchP>
@@ -576,10 +576,10 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Trumpet 3</trackName>
+      <trackName>Trumpet 2</trackName>
       <Instrument id="bb-trumpet">
-        <longName>Trumpet 3</longName>
-        <shortName>Tpt. 3</shortName>
+        <longName>Trumpet 2</longName>
+        <shortName>Tpt. 2</shortName>
         <trackName>B♭ Trumpet</trackName>
         <minPitchP>52</minPitchP>
         <maxPitchP>85</maxPitchP>
@@ -639,10 +639,10 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Trumpet 2</trackName>
+      <trackName>Trumpet 3</trackName>
       <Instrument id="bb-trumpet">
-        <longName>Trumpet 2</longName>
-        <shortName>Tpt. 2</shortName>
+        <longName>Trumpet 3</longName>
+        <shortName>Tpt. 3</shortName>
         <trackName>B♭ Trumpet</trackName>
         <minPitchP>52</minPitchP>
         <maxPitchP>85</maxPitchP>
@@ -701,10 +701,10 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Trumpet 1</trackName>
+      <trackName>Trumpet 4</trackName>
       <Instrument id="bb-trumpet">
-        <longName>Trumpet 1</longName>
-        <shortName>Tpt. 1</shortName>
+        <longName>Trumpet 4</longName>
+        <shortName>Tpt. 4</shortName>
         <trackName>B♭ Trumpet</trackName>
         <minPitchP>52</minPitchP>
         <maxPitchP>85</maxPitchP>
@@ -766,10 +766,10 @@
         <bracket type="0" span="4" col="0"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Trombone 4</trackName>
+      <trackName>Trombone 1</trackName>
       <Instrument id="trombone">
-        <longName>Trombone 4</longName>
-        <shortName>Tbn. 4</shortName>
+        <longName>Trombone 1</longName>
+        <shortName>Tbn. 1</shortName>
         <trackName>Trombone</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>74</maxPitchP>
@@ -822,10 +822,10 @@
         <defaultClef>F</defaultClef>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Trombone 3</trackName>
+      <trackName>Trombone 2</trackName>
       <Instrument id="trombone">
-        <longName>Trombone 3</longName>
-        <shortName>Tbn. 3</shortName>
+        <longName>Trombone 2</longName>
+        <shortName>Tbn. 2</shortName>
         <trackName>Trombone</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>74</maxPitchP>
@@ -878,10 +878,10 @@
         <defaultClef>F</defaultClef>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Trombone 2</trackName>
+      <trackName>Trombone 3</trackName>
       <Instrument id="trombone">
-        <longName>Trombone 2</longName>
-        <shortName>Tbn. 2</shortName>
+        <longName>Trombone 3</longName>
+        <shortName>Tbn. 3</shortName>
         <trackName>Trombone</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>74</maxPitchP>
@@ -933,10 +933,10 @@
           </StaffType>
         <defaultClef>F</defaultClef>
         </Staff>
-      <trackName>Trombone 1</trackName>
+      <trackName>Trombone 4</trackName>
       <Instrument id="trombone">
-        <longName>Trombone 1</longName>
-        <shortName>Tbn. 1</shortName>
+        <longName>Trombone 4</longName>
+        <shortName>Tbn. 4</shortName>
         <trackName>Trombone</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>74</maxPitchP>
