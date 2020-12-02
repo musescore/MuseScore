@@ -9,7 +9,8 @@
 #include "libmscore/score.h"
 #include "libmscore/staff.h"
 #include "libmscore/text.h"
-#include "audio/midi/midifile.h"
+
+#include "framework/midi_old/midifile.h"
 
 #include <set>
 

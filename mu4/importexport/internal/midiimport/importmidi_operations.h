@@ -3,7 +3,7 @@
 
 #include "importmidi_inner.h"
 #include "importmidi_operation.h"
-#include "audio/midi/midifile.h"
+#include "framework/midi_old/midifile.h"
 
 namespace Ms {
 class ReducedFraction;

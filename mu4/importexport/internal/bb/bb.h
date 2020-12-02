@@ -13,7 +13,7 @@
 #ifndef __BB_H__
 #define __BB_H__
 
-#include "audio/midi/midifile.h"
+#include "framework/midi_old/midifile.h"
 
 namespace Ms {
 const int MAX_BARS = 255;

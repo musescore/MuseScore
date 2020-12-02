@@ -6,7 +6,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/measure.h"
 #include "libmscore/harmony.h"
-#include "audio/midi/midifile.h"
+#include "framework/midi_old/midifile.h"
 #include "importmidi_operations.h"
 
 // From XF Format Specifications V 2.01 (January 13, 1999, YAMAHA CORPORATION)

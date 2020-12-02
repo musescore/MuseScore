@@ -2,7 +2,7 @@
 #include "importmidi_operations.h"
 #include "importmidi_chord.h"
 #include "libmscore/durationtype.h"
-#include "audio/midi/midifile.h"
+#include "framework/midi_old/midifile.h"
 
 namespace Ms {
 MTrack::MTrack()

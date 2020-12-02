@@ -19,15 +19,13 @@
 
 set(MODULE midi_old)
 
-set(MIDI_OLD_DIR ${PROJECT_SOURCE_DIR}/audio/midi)
-
 set(MODULE_SRC
-    ${MIDI_OLD_DIR}/event.cpp
-    ${MIDI_OLD_DIR}/event.h
-    ${MIDI_OLD_DIR}/midifile.cpp
-    ${MIDI_OLD_DIR}/midifile.h
-    ${MIDI_OLD_DIR}/midiinstrument.cpp
-    ${MIDI_OLD_DIR}/midiinstrument.h
+    ${CMAKE_CURRENT_LIST_DIR}/event.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/event.h
+    ${CMAKE_CURRENT_LIST_DIR}/midifile.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/midifile.h
+    ${CMAKE_CURRENT_LIST_DIR}/midiinstrument.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/midiinstrument.h
     )
 
 set (MODULE_INCLUDE

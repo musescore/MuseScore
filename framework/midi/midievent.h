@@ -18,10 +18,11 @@
 //=============================================================================
 #ifndef MU_MIDI_MIDIEVENT_H
 #define MU_MIDI_MIDIEVENT_H
+
 #include <cstdint>
 #include <array>
 #include <set>
-#include "audio/midi/event.h"
+#include "framework/midi_old/event.h"
 
 #ifndef UNUSED
 #define UNUSED(x) (void)x;
