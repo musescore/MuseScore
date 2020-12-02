@@ -22,7 +22,7 @@
 #include "interval.h"
 #include "clef.h"
 
-#include "audio/midi/event.h"
+#include "framework/midi_old/event.h"
 
 namespace Ms {
 class InstrumentTemplate;

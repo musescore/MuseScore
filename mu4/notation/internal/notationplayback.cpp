@@ -38,7 +38,7 @@
 #include "libmscore/chord.h"
 #include "libmscore/harmony.h"
 
-#include "audio/midi/event.h" //! TODO Remove me
+#include "framework/midi_old/event.h" //! TODO Remove me
 
 #include "notationerrors.h"
 
