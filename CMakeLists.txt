@@ -170,7 +170,6 @@ option(DOWNLOAD_SOUNDFONT "Download the latest soundfont version as part of the 
 SET(JACK_LONGNAME "JACK (Jack Audio Connection Kit)")
 SET(JACK_MIN_VERSION "0.98.0")
 option(BUILD_JACK    "Build with support for ${JACK_LONGNAME} audio backend. JACK >= ${JACK_MIN_VERSION} will be needed." ON)
-option(BUILD_PULSEAUDIO "Build with support for PulseAudio audio backend." ON)
 option(BUILD_PCH "Build using precompiled headers." ON)
 option(BUILD_FOR_WINSTORE "Build for the Windows Store." OFF)
 option(COVERAGE "Build with instrumentation to record code coverage." OFF)
@@ -426,21 +425,6 @@ if (USE_SYSTEM_FREETYPE)
             find_package(Freetype REQUIRED)
       endif (APPLE)
 endif (USE_SYSTEM_FREETYPE)
-
-##
-## PulseAudio
-##
-
-if (BUILD_PULSEAUDIO)
-      if (PULSEAUDIO_FOUND)
-            set(USE_PULSEAUDIO 1)
-            message("PulseAudio found. PulseAudio support enabled.")
-      else (PULSEAUDIO_FOUND)
-            message(SEND_ERROR "Error: PulseAudio support requested (BUILD_PULSEAUDIO=${BUILD_PULSEAUDIO}), but PulseAudio was not found.")
-      endif (PULSEAUDIO_FOUND)
-else (BUILD_PULSEAUDIO)
-      message(STATUS "PulseAudio support disabled")
-endif (BUILD_PULSEAUDIO)
 
 
 ##
