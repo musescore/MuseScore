@@ -146,6 +146,7 @@ class ScoreOrderList {
       ScoreOrder* findById(const QString& orderId) const;
       ScoreOrder* getById(const QString& orderId);
       ScoreOrder* findByName(const QString& orderName, bool customised=false);
+      ScoreOrder* customScoreOrder() const;
       int getScoreOrderIndex(const ScoreOrder* order) const;
       QList<ScoreOrder*> searchScoreOrders(const QList<int>& indices) const;
       QList<ScoreOrder*> searchScoreOrders(const Score* score) const;
