@@ -23,7 +23,6 @@
 #define USE_ALSA
 #define USE_JACK
 /* #undef USE_PORTAUDIO */
-/* #undef USE_PORTMIDI */
 
 #define MSCORE_UNSTABLE
 
