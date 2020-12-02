@@ -166,8 +166,8 @@ if (MINGW)
    add_custom_command(
       OUTPUT ${PROJECT_BINARY_DIR}/resfile.o
       COMMAND ${CMAKE_RC_COMPILER} -i mscore.rc -o ${PROJECT_BINARY_DIR}/resfile.o
-      DEPENDS ${PROJECT_SOURCE_DIR}/mscore/data/mscore.rc
-      WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/mscore/data
+      DEPENDS ${PROJECT_SOURCE_DIR}/main/res/mscore.rc
+      WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/main/res
       )
    set_source_files_properties(
       ${PROJECT_BINARY_DIR}/resfile.o
