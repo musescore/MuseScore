@@ -159,7 +159,7 @@ QmlStyle::QmlStyle(QPalette p, QObject* parent)
    : QObject(parent), _palette(p)
       {
       _font.setFamily(preferences.getString(PREF_UI_THEME_FONTFAMILY));
-      _font.setPointSize(preferences.getInt(PREF_UI_THEME_FONTSIZE));
+      _font.setPointSize(preferences.getDouble(PREF_UI_THEME_FONTSIZE));
       }
 
 //---------------------------------------------------------

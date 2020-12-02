@@ -635,7 +635,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             mapper2->setMapping(sw.widget, int(sw.idx));
             }
 
-      int topBottomMargin = automaticCapitalization->rect().height() - preferences.getInt(PREF_UI_THEME_FONTSIZE);
+      int topBottomMargin = automaticCapitalization->rect().height() - preferences.getDouble(PREF_UI_THEME_FONTSIZE);
       topBottomMargin /= 2;
       topBottomMargin = topBottomMargin > 4 ? topBottomMargin - 4 : 0;
       automaticCapitalization->layout()->setContentsMargins(9, topBottomMargin, 9, topBottomMargin);
