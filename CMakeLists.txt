@@ -169,7 +169,6 @@ endif (APPLE)
 # Disable components not supported on Linux/BSD
 if (NOT APPLE AND NOT MINGW AND NOT MSVC)
       set(NIX_NOT_AVAIL "Not available on Linux/BSD")
-      #option(BUILD_PORTMIDI "PortMidi disabled on Linux. (It uses ALSA but it's better to use ALSA directly)" OFF)
 endif (NOT APPLE AND NOT MINGW AND NOT MSVC)
 
 option(ZERBERUS      "Enable experimental SFZ sampler"    ON)
@@ -188,7 +187,6 @@ option(BUILD_JACK    "Build with support for ${JACK_LONGNAME} audio backend. JAC
 option(BUILD_PULSEAUDIO "Build with support for PulseAudio audio backend." ON)
 option(BUILD_ALSA "Build with support for ALSA audio backend." ON)
 option(BUILD_PORTAUDIO "Build with support for PortAudio audio backend." ON)
-option(BUILD_PORTMIDI "Build with support for PortAudio's MIDI features." ${BUILD_PORTAUDIO}) # PortAudio required
 option(BUILD_PCH "Build using precompiled headers." ON)
 option(BUILD_FOR_WINSTORE "Build for the Windows Store." OFF)
 option(COVERAGE "Build with instrumentation to record code coverage." OFF)
@@ -583,19 +581,6 @@ else (BUILD_PORTAUDIO)
      message(STATUS "PortAudio support disabled")
 endif (BUILD_PORTAUDIO)
 
-##
-## PortMidi
-##
-
-if (BUILD_PORTMIDI)
-    if (NOT BUILD_PORTAUDIO)
-        message(SEND_ERROR "Error: PortMidi support requested (BUILD_PORTMIDI=${BUILD_PORTMIDI}), but PortAudio support is disabled (BUILD_PORTAUDIO=${BUILD_PORTAUDIO}). PortMidi requires PortAudio.")
-    endif (NOT BUILD_PORTAUDIO)
-    set (USE_PORTMIDI 1)
-else (BUILD_PORTMIDI)
-    message(STATUS "PortMidi support disabled")
-endif (BUILD_PORTMIDI)
-
 if (APPLE)
    if(SOUNDFONT3)
       ##
@@ -876,10 +861,6 @@ if (BUILD_MU3)
     add_subdirectory(miditools EXCLUDE_FROM_ALL)
     add_subdirectory(fonttools EXCLUDE_FROM_ALL)
     add_subdirectory(demos)
-
-    if (USE_PORTMIDI AND (MINGW OR APPLE OR MSVC))
-          add_subdirectory(thirdparty/portmidi)
-    endif (USE_PORTMIDI AND (MINGW OR APPLE OR MSVC))
 
     if (OSC)
           add_subdirectory(thirdparty/ofqf)
