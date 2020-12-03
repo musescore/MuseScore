@@ -43,7 +43,7 @@ add_library (
 if (NOT MSVC)
    set_target_properties( rtf2html
       PROPERTIES
-         COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
+         COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch -Wno-deprecated-copy"
       )
 else (NOT MSVC)
    set_target_properties ( rtf2html
