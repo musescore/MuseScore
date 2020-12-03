@@ -104,3 +104,7 @@ set (FLUIDSYNTH_SRC
     ${FLUIDSYNTH_DIR}/src/drivers/fluid_mdriver.c
 
     )
+
+if (NOT MSVC)
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-copy")
+endif (NOT MSVC)
