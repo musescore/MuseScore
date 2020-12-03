@@ -54,6 +54,10 @@ set(MODULE_LINK
     qt-google-analytics
 )
 
+if (NOT MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-parameter")
+endif (NOT MSVC)
+
 # --- Crashpad ---
 # Not building with MinGW, so turned off for MinGW
 include(${PROJECT_SOURCE_DIR}/build/compiler.cmake)
