@@ -88,7 +88,6 @@ endif (USE_SYSTEM_FREETYPE)
 set(LINK_LIB
     ${FREETYPE_LIB}
     ${QT_LIBRARIES}
-    awl
     global
     ui
     uicomponents
