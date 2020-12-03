@@ -1092,7 +1092,7 @@ QStringList MuseScore::getOpenScoreNames(const QString& filter, const QString& t
 //   getSaveScoreName
 //---------------------------------------------------------
 
-QString MuseScore::getSaveScoreName(const QString& title, QString& name, const QString& filter, bool selectFolder)
+QString MuseScore::getSaveScoreName(const QString& title, QString& name, const QString& filter, bool selectFolder, bool askOverwrite)
       {
       QFileInfo myName(name);
       if (myName.isRelative())
@@ -1101,7 +1101,12 @@ QString MuseScore::getSaveScoreName(const QString& title, QString& name, const Q
 
       if (preferences.getBool(PREF_UI_APP_USENATIVEDIALOGS)) {
             QString s;
-            QFileDialog::Options options = selectFolder ? QFileDialog::ShowDirsOnly : QFileDialog::Options();
+            QFileDialog::Options options;
+            if (!askOverwrite) {
+                  options |= QFileDialog::DontConfirmOverwrite;
+            }
+            if (selectFolder)
+                  options |= QFileDialog::ShowDirsOnly;
             return QFileDialog::getSaveFileName(this, title, name, filter, &s, options);
             }
 
@@ -1111,7 +1116,6 @@ QString MuseScore::getSaveScoreName(const QString& title, QString& name, const Q
       if (saveScoreDialog == 0) {
             saveScoreDialog = new QFileDialog(this);
             saveScoreDialog->setFileMode(QFileDialog::AnyFile);
-            saveScoreDialog->setOption(QFileDialog::DontConfirmOverwrite, false);
             saveScoreDialog->setOption(QFileDialog::DontUseNativeDialog, true);
             saveScoreDialog->setAcceptMode(QFileDialog::AcceptSave);
             addScorePreview(saveScoreDialog);
@@ -1123,6 +1127,7 @@ QString MuseScore::getSaveScoreName(const QString& title, QString& name, const Q
 
       if (selectFolder)
             saveScoreDialog->setFileMode(QFileDialog::Directory);
+      saveScoreDialog->setOption(QFileDialog::DontConfirmOverwrite, !askOverwrite);
 
       saveScoreDialog->setWindowTitle(title);
       saveScoreDialog->setNameFilter(filter);
@@ -1825,7 +1830,7 @@ void MuseScore::printFile()
 //   saveAs
 //---------------------------------------------------------
 
-bool MuseScore::saveAs(Score* cs_, bool saveCopy, const QString& path, const QString& ext)
+bool MuseScore::saveAs(Score* cs_, bool saveCopy, const QString& path, const QString& ext, SaveReplacePolicy* replacePolicy)
       {
       bool rv = false;
       QString suffix = "." + ext;
@@ -1913,12 +1918,12 @@ bool MuseScore::saveAs(Score* cs_, bool saveCopy, const QString& path, const QSt
       else if (ext == "png") {
             // save as png file *.png
             cs_->switchToPageMode();
-            rv = savePng(cs_, fn);
+            rv = savePng(cs_, fn, replacePolicy);
             }
       else if (ext == "svg") {
             // save as svg file *.svg
             cs_->switchToPageMode();
-            rv = saveSvg(cs_, fn);
+            rv = saveSvg(cs_, fn, NotesColors(), replacePolicy);
             }
 #ifdef HAS_AUDIOFILE
       else if (ext == "wav" || ext == "flac" || ext == "ogg")
@@ -2080,7 +2085,6 @@ bool MuseScore::savePdf(QList<Score*> cs_, const QString& saveName)
       QString title = firstScore->metaTag("workTitle");
       if (title.isEmpty()) // workTitle unset?
             title = firstScore->title(); // fall back to (master)score's tab title
-      title += " - " + tr("Score and Parts");
       printer.setDocName(title); // set PDF's meta data for Title
 
       QPainter p;
@@ -2097,7 +2101,6 @@ bool MuseScore::savePdf(QList<Score*> cs_, const QString& saveName)
             LayoutMode layoutMode = s->layoutMode();
             if (layoutMode != LayoutMode::PAGE) {
                   s->setLayoutMode(LayoutMode::PAGE);
-            //      s->doLayout();
                   }
             s->doLayout();
 
@@ -2533,50 +2536,50 @@ static QRect trim(QImage source, int margin)
 //    return true on success.  Works with editor, shows additional windows.
 //---------------------------------------------------------
 
-bool MuseScore::savePng(Score* score, const QString& name)
+bool MuseScore::savePng(Score* score, const QString& name, SaveReplacePolicy* replacePolicy)
       {
-      const QList<Page*>& pl = score->pages();
-      int pages = pl.size();
-      int padding = QString("%1").arg(pages).size();
-      bool overwrite = false;
-      bool noToAll = false;
+      int pages    = score->pages().size();
+      int padding  = QString("%1").arg(pages).size();
+      bool success = true;
+      SaveReplacePolicy _replacePolicy = (replacePolicy != nullptr ? *replacePolicy : SaveReplacePolicy::NO_CHOICE);
+      
       for (int pageNumber = 0; pageNumber < pages; ++pageNumber) {
             QString fileName(name);
             if (fileName.endsWith(".png"))
                   fileName = fileName.left(fileName.size() - 4);
-            fileName += QString("-%1.png").arg(pageNumber+1, padding, 10, QLatin1Char('0'));
-            if (!converterMode) {
-                  QFileInfo fip(fileName);
-                  if(fip.exists() && !overwrite) {
-                        if(noToAll)
-                              continue;
-                        QMessageBox msgBox( QMessageBox::Question, tr("Confirm Replace"),
-                              tr("\"%1\" already exists.\nDo you want to replace it?\n").arg(QDir::toNativeSeparators(fileName)),
-                              QMessageBox::Yes |  QMessageBox::YesToAll | QMessageBox::No |  QMessageBox::NoToAll);
-                        msgBox.setButtonText(QMessageBox::Yes, tr("Replace"));
-                        msgBox.setButtonText(QMessageBox::No, tr("Skip"));
-                        msgBox.setButtonText(QMessageBox::YesToAll, tr("Replace All"));
-                        msgBox.setButtonText(QMessageBox::NoToAll, tr("Skip All"));
-                        int sb = msgBox.exec();
-                        if(sb == QMessageBox::YesToAll) {
-                              overwrite = true;
+            fileName += QString(" - %1.png").arg(pageNumber+1, padding, 10, QLatin1Char('0'));
+            if (!converterMode && QFileInfo(fileName).exists()) {
+                  switch (_replacePolicy) {
+                        case SaveReplacePolicy::NO_CHOICE:
+                              {
+                              int responseCode = mscore->askOverwriteAll(fileName);
+                              if (responseCode == QMessageBox::YesToAll) {
+                                    _replacePolicy = SaveReplacePolicy::REPLACE_ALL;
+                                    break; // Break out of the switch; go on and replace the existing file
+                                    }
+                              else if (responseCode == QMessageBox::NoToAll) {
+                                    _replacePolicy = SaveReplacePolicy::SKIP_ALL;
+                                    continue; // Continue in the `for` loop
+                                    }
+                              else if (responseCode == QMessageBox::No)
+                                    continue;
+                              break;
                               }
-                        else if (sb == QMessageBox::NoToAll) {
-                              noToAll = true;
+                        case SaveReplacePolicy::SKIP_ALL:
                               continue;
-                              }
-                        else if (sb == QMessageBox::No)
-                              continue;
+                        case SaveReplacePolicy::REPLACE_ALL:
+                              break;
                         }
                   }
             QFile f(fileName);
-            if (!f.open(QIODevice::WriteOnly))
-                  return false;
-            bool rv = savePng(score, &f, pageNumber);
-            if (!rv)
-                  return false;
+            if (!f.open(QIODevice::WriteOnly) || !savePng(score, &f, pageNumber)) {
+                  success = false;
+                  break;
+                  }
             }
-      return true;
+      if (replacePolicy != nullptr)
+            *replacePolicy = _replacePolicy;
+      return success;
       }
 
 //---------------------------------------------------------
@@ -2747,6 +2750,23 @@ QString MuseScore::getWallpaper(const QString& caption)
       }
 
 //---------------------------------------------------------
+//   askOverwriteAll
+//---------------------------------------------------------
+
+int MuseScore::askOverwriteAll(QString& filename)
+{
+      QMessageBox msgBox(QMessageBox::Question,
+                         tr("Confirm Replace"),
+                         tr("\"%1\" already exists.\nDo you want to replace it?\n").arg(QDir::toNativeSeparators(filename)),
+                         QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No | QMessageBox::NoToAll);
+      msgBox.setButtonText(QMessageBox::Yes, tr("Replace"));
+      msgBox.setButtonText(QMessageBox::No,  tr("Skip"));
+      msgBox.setButtonText(QMessageBox::YesToAll, tr("Replace All"));
+      msgBox.setButtonText(QMessageBox::NoToAll,  tr("Skip All"));
+      return msgBox.exec();
+}
+
+//---------------------------------------------------------
 //   MuseScore::saveSvg
 //---------------------------------------------------------
 // [TODO:
@@ -2760,51 +2780,50 @@ QString MuseScore::getWallpaper(const QString& caption)
 // [This file is currently undergoing a bunch of changes, and that's the kind
 // [of edit that must be coordinated with the MuseScore master code base.
 //
-bool MuseScore::saveSvg(Score* score, const QString& saveName, const NotesColors& notesColors)
+bool MuseScore::saveSvg(Score* score, const QString& name, const NotesColors& notesColors, SaveReplacePolicy* replacePolicy)
       {
-      const QList<Page*>& pl = score->pages();
-      int pages = pl.size();
-      int padding = QString("%1").arg(pages).size();
-      bool overwrite = false;
-      bool noToAll = false;
+      int pages    = score->pages().size();
+      int padding  = QString("%1").arg(pages).size();
+      bool success = true;
+      SaveReplacePolicy _replacePolicy = (replacePolicy != nullptr ? *replacePolicy : SaveReplacePolicy::NO_CHOICE);
+      
       for (int pageNumber = 0; pageNumber < pages; ++pageNumber) {
-            QString fileName(saveName);
+            QString fileName(name);
             if (fileName.endsWith(".svg"))
                   fileName = fileName.left(fileName.size() - 4);
-            fileName += QString("-%1.svg").arg(pageNumber+1, padding, 10, QLatin1Char('0'));
-            if (!converterMode) {
-                  QFileInfo fip(fileName);
-                  if(fip.exists() && !overwrite) {
-                        if(noToAll)
-                              continue;
-                        QMessageBox msgBox( QMessageBox::Question, tr("Confirm Replace"),
-                              tr("\"%1\" already exists.\nDo you want to replace it?\n").arg(QDir::toNativeSeparators(fileName)),
-                              QMessageBox::Yes |  QMessageBox::YesToAll | QMessageBox::No |  QMessageBox::NoToAll);
-                        msgBox.setButtonText(QMessageBox::Yes, tr("Replace"));
-                        msgBox.setButtonText(QMessageBox::No, tr("Skip"));
-                        msgBox.setButtonText(QMessageBox::YesToAll, tr("Replace All"));
-                        msgBox.setButtonText(QMessageBox::NoToAll, tr("Skip All"));
-                        int sb = msgBox.exec();
-                        if(sb == QMessageBox::YesToAll) {
-                              overwrite = true;
+            fileName += QString(" - %1.svg").arg(pageNumber+1, padding, 10, QLatin1Char('0'));
+            if (!converterMode && QFileInfo(fileName).exists()) {
+                  switch (_replacePolicy) {
+                        case SaveReplacePolicy::NO_CHOICE:
+                              {
+                              int responseCode = mscore->askOverwriteAll(fileName);
+                              if (responseCode == QMessageBox::YesToAll) {
+                                    _replacePolicy = SaveReplacePolicy::REPLACE_ALL;
+                                    break; // Break out of the switch; go on and replace the existing file
+                                    }
+                              else if (responseCode == QMessageBox::NoToAll) {
+                                    _replacePolicy = SaveReplacePolicy::SKIP_ALL;
+                                    continue; // Continue in the `for` loop
+                                    }
+                              else if (responseCode == QMessageBox::No)
+                                    continue;
+                              break;
                               }
-                        else if (sb == QMessageBox::NoToAll) {
-                              noToAll = true;
+                        case SaveReplacePolicy::SKIP_ALL:
                               continue;
-                              }
-                        else if (sb == QMessageBox::No)
-                              continue;
+                        case SaveReplacePolicy::REPLACE_ALL:
+                              break;
                         }
                   }
             QFile f(fileName);
-            if (!f.open(QIODevice::WriteOnly))
-                  return false;
-            bool rv = saveSvg(score, &f, pageNumber, /* drawPageBackground */ false, notesColors);
-
-            if (!rv)
-                  return false;
+            if (!f.open(QIODevice::WriteOnly) || !saveSvg(score, &f, pageNumber, /*drawPageBackground*/ false, notesColors)) {
+                  success = false;
+                  break;
+                  }
             }
-      return true;
+      if (replacePolicy != nullptr)
+            *replacePolicy = _replacePolicy;
+      return success;
       }
 
 //---------------------------------------------------------

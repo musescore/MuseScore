@@ -17,6 +17,7 @@ namespace Ms {
 
 class MasterScore;
 class Score;
+enum class SaveReplacePolicy;
 
 //---------------------------------------------------------
 //   class MuseScoreCore
@@ -34,7 +35,7 @@ class MuseScoreCore
       Score* currentScore() const        { return cs;     }
       void setCurrentScore(Score* score) { cs = score;    }
 
-      virtual bool saveAs(Score*, bool /*saveCopy*/, const QString& /*path*/, const QString& /*ext*/) { return false; }
+      virtual bool saveAs(Score*, bool /*saveCopy*/, const QString& /*path*/, const QString& /*ext*/, SaveReplacePolicy* /*replacePolicy*/ = nullptr) { return false; }
       virtual void closeScore(Score*) {}
       virtual void cmd(QAction* /*a*/) {}
       virtual void setCurrentView(int /*tabIdx*/, int /*idx*/) {}
@@ -46,7 +47,5 @@ class MuseScoreCore
       virtual void updateInspector() {}
       };
 
-
 } // namespace Ms
 #endif
-

@@ -157,6 +157,16 @@ struct LanguageItem {
       };
 
 //---------------------------------------------------------
+//   SaveReplacePolicy
+//---------------------------------------------------------
+
+enum class SaveReplacePolicy {
+      NO_CHOICE,
+      SKIP_ALL,
+      REPLACE_ALL
+      };
+
+//---------------------------------------------------------
 //   MuseScoreApplication (mac only)
 //---------------------------------------------------------
 
@@ -686,7 +696,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QList<LanguageItem>& languages() { return _languages; }
 
       QStringList getOpenScoreNames(const QString& filter, const QString& title, bool singleFile = false);
-      QString getSaveScoreName(const QString& title, QString& name, const QString& filter, bool folder = false);
+      QString getSaveScoreName(const QString& title, QString& name, const QString& filter, bool folder = false, bool askOverwrite = true);
       QString getStyleFilename(bool open, const QString& title = QString());
       QString getFotoFilename(QString& filter, QString *selectedFilter);
       QString getChordStyleFilename(bool open);
@@ -696,6 +706,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QString getPluginFilename(bool open);
       QString getPaletteFilename(bool open, const QString& name = "");
       QString getWallpaper(const QString& caption);
+      
+      int askOverwriteAll(QString&);
 
       bool hRaster() const { return hRasterAction->isChecked(); }
       bool vRaster() const { return vRasterAction->isChecked(); }
@@ -719,7 +731,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void endCmd(bool undoRedo);
       void endCmd() override { endCmd(false); };
       void printFile();
-      virtual bool saveAs(Score*, bool saveCopy, const QString& path, const QString& ext);
+      virtual bool saveAs(Score*, bool saveCopy, const QString& path, const QString& ext, SaveReplacePolicy* replacePolicy = nullptr);
       QString saveFilename(QString fn);
       bool savePdf(const QString& saveName);
       bool savePdf(Score* cs, const QString& saveName);
@@ -739,10 +751,10 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool canSaveMp3();
       bool saveMp3(Score*, const QString& name);
       bool saveMp3(Score*, QIODevice*, bool& wasCanceled);
-      bool saveSvg(Score*, const QString& name, const NotesColors& notesColors = NotesColors());
+      bool saveSvg(Score*, const QString& name, const NotesColors& notesColors = NotesColors(), SaveReplacePolicy* replacePolicy = nullptr);
       bool saveSvg(Score*, QIODevice*, int pageNum = 0, bool drawPageBackground = false, const NotesColors& notesColors = NotesColors());
+      bool savePng(Score*, const QString& name, SaveReplacePolicy* replacePolicy = nullptr);
       bool savePng(Score*, QIODevice*, int pageNum = 0, bool drawPageBackground = false);
-      bool savePng(Score*, const QString& name);
       bool saveMidi(Score*, const QString& name);
       bool saveMidi(Score*, QIODevice*);
       bool savePositions(Score*, const QString& name, bool segments);
