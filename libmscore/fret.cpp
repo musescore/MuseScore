@@ -897,23 +897,21 @@ void FretDiagram::setDot(int string, int fret, bool add /*= false*/, FretDotType
                   _dots[string].clear();
 
             _dots[string].push_back(FretItem::Dot(fret, dtype));
-            setMarker(string, FretMarkerType::NONE);
+            if (!add)
+                  setMarker(string, FretMarkerType::NONE);
             }
       }
 
 //---------------------------------------------------------
 //   setMarker
-//    Remove any dots and barres if the marker is being set to anything other than none.
+//    Removal of dots and barres if "Multiple dots" is inactive
+//    is handled in FretCanvas::mousePressEvent()
 //---------------------------------------------------------
 
 void FretDiagram::setMarker(int string, FretMarkerType mtype)
       {
       if (string >= 0 && string < _strings) {
             _markers[string] = FretItem::Marker(mtype);
-            if (mtype != FretMarkerType::NONE) {
-                  removeDot(string);
-                  removeBarres(string);
-                  }
             }
       }
 
