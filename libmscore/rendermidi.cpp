@@ -276,7 +276,7 @@ static void playNote(EventMap* events, const Note* note, int channel, int pitch,
                         easeInOut.timeList(static_cast<int>((timeDelta + timeStep * 0.5) / timeStep), int(timeDelta), &onTimes);
                         double nTimes = static_cast<double>(onTimes.size() - 1);
                         for (double time : onTimes) {
-                              int p = int(pitch + (t / nTimes) * pitchDelta);
+                              int p = int((t / nTimes) * pitchDelta);
                               int timeStamp = std::min(onTime + int(time), offTime - 1);
                               int midiPitch = (p * 16384) / 1200 + 8192;
                               NPlayEvent evb(ME_PITCHBEND, channel, midiPitch % 128, midiPitch / 128);
