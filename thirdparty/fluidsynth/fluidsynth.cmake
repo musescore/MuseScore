@@ -106,7 +106,9 @@ set (FLUIDSYNTH_SRC
     )
 
 if (NOT MSVC)
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-copy")
+   if (NOT MINGW)
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-copy")
+   endif (NOT MINGW)
 else (NOT MSVC)
    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4013 /wd4100 /wd4101 /wd4115 /wd4127 /wd4201 /wd4244 /wd4267 /wd4456 /wd4701 /wd4703 /wd4706")
 endif (NOT MSVC)
