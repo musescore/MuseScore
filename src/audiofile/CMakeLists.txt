@@ -10,55 +10,37 @@
 #  the file LICENSE.GPL
 #=============================================================================
 
-include (${PROJECT_SOURCE_DIR}/build/gch.cmake)
+set(MODULE audiofile)
 
-if (APPLE)
-        file(GLOB_RECURSE INCS "*.h")
-else (APPLE)
-        set(INCS "")
-endif (APPLE)
+set(MODULE_SRC
+    ${CMAKE_CURRENT_LIST_DIR}/audiofile.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/audiofile.h
+    )
 
-if (NOT MSVC)
-   set(_all_h_file "${PROJECT_BINARY_DIR}/all.h")
-else (NOT MSVC)
-   set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
-endif (NOT MSVC)
+include(${PROJECT_SOURCE_DIR}/build/platform.cmake)
 
-add_library (audiofile STATIC
-      ${_all_h_file}
-      ${PCH}
-      audiofile.cpp
-      )
+##
+## libsndfile
+##
 
-if (MSVC OR MINGW)
- target_link_libraries(audiofile sndfiledll)
-else (MSVC OR MINGW)
- target_link_libraries(audiofile ${SNDFILE_LIB})
-endif (MSVC OR MINGW)
+set(SNDFILE_LIB )
+if (PLATFORM_IS_WINDOWS)
 
-if (NOT MSVC)
-   set_target_properties (
-      audiofile
-      PROPERTIES
-         COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
-      )
-else (NOT MSVC)
-   set_target_properties (
-      audiofile
-      PROPERTIES
-         COMPILE_FLAGS "${PCH_INCLUDE}"
-      )
-endif (NOT MSVC)   
+    set(SNDFILE_LIB sndfiledll)
 
-xcode_pch(audiofile all)
+else(PLATFORM_IS_WINDOWS)
 
-# Use MSVC pre-compiled headers
-vstudio_pch( audiofile )
+    PKGCONFIG1 (sndfile 1.0.25 SNDFILE_INCDIR SNDFILE_LIBDIR SNDFILE_LIB SNDFILE_CPP)
+    if (SNDFILE_INCDIR)
+       message(STATUS "libsndfile detected ${SNDFILE_INCDIR} ${SNDFILE_LIBDIR} ${SNDFILE_LIB}")
+    else (SNDFILE_INCDIR)
+       message(FATAL_ERROR "libsndfile not found\n")
+    endif (SNDFILE_INCDIR)
 
-# MSVC does not depend on mops1 & mops2 for PCH
-if (NOT MSVC)
-   ADD_DEPENDENCIES(audiofile mops1)
-   ADD_DEPENDENCIES(audiofile mops2)
-endif (NOT MSVC)
+endif(PLATFORM_IS_WINDOWS)
 
+set(MODULE_LINK
+    ${SNDFILE_LIB}
+    )
 
+include(${PROJECT_SOURCE_DIR}/build/module.cmake)
