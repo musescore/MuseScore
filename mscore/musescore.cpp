@@ -4023,7 +4023,6 @@ bool MuseScoreApplication::event(QEvent* event)
 void MuseScore::focusScoreView()
       {
       if (currentScoreView()) {
-            currentScoreView()->activateWindow();
             currentScoreView()->setFocus();
             }
       else

@@ -22,6 +22,7 @@
 #include "musescore.h"
 #include "preferences.h"
 #include "qml/nativemenu.h"
+#include "scoreview.h"
 
 #include <QQmlContext>
 
@@ -146,6 +147,7 @@ void MsQuickView::keyPressEvent(QKeyEvent* evt)
             return;
 
       if (evt->key() == Qt::Key_Escape && evt->modifiers() == Qt::NoModifier) {
+            mscore->currentScoreView()->activateWindow();
             mscore->focusScoreView();
             evt->accept();
             }
