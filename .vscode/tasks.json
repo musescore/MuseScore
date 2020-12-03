@@ -1,0 +1,48 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build",
+            "type": "shell",
+            "command": "./msvc_build.bat",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "runOptions": {
+
+            },
+            "args": [
+                "debug"
+            ],
+            "detail": "Build using msvc_build.bat",
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Install",
+            "type": "shell",
+            "command": "./msvc_build.bat",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "args": [
+                "installdebug"
+            ],
+            "detail": "Build and install using msvc_build.bat"
+        },
+        {
+            "label": "build and install",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Build",
+                "Install"
+            ],
+            "problemMatcher": ["$msCompile"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+        }
+    ]
+}

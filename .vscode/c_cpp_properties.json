@@ -28,25 +28,38 @@
                     "${workspaceFolder}/demos/",
                     "${workspaceFolder}/doc/",
                     "${workspaceFolder}/effects/",
-                    "${workspaceFolder}/fluid/",
                     "${workspaceFolder}/fonts/",
                     "${workspaceFolder}/fonttools/",
-                    "${workspaceFolder}/manual/",
-                    "${workspaceFolder}/midi/",
                     "${workspaceFolder}/miditools/",
                     "${workspaceFolder}/mscore/",
                     "${workspaceFolder}/mtest/",
                     "${workspaceFolder}/rdoc/",
                     "${workspaceFolder}/share/",
-                    "${workspaceFolder}/synthesizer/",
                     "${workspaceFolder}/test/",
                     "${workspaceFolder}/telemetry/",
                     "${workspaceFolder}/thirdparty/",
                     "${workspaceFolder}/vtest/",
-                    "${workspaceFolder}/zerberus/",
                     "${workspaceFolder}/*"
                 ]
             }
+        },
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/**"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "windowsSdkVersion": "10.0.18362.0",
+            "compilerPath": "C:/Program Files (x86)/Microsoft Visual Studio/2019/BuildTools/VC/Tools/MSVC/14.24.28314/bin/Hostx64/x64/cl.exe",
+            "intelliSenseMode": "msvc-x64",
+            "cppStandard": "c++11",
+            "forcedInclude": [
+                "${workspaceFolder}/all.h"
+            ]
         }
     ],
     "version": 4
