@@ -76,7 +76,6 @@ ModulesSetup::ModulesSetup()
         << new mu::framework::NetworkModule()
         << new mu::plugins::PluginsModule()
 
-#ifdef BUILD_UI_MU4
         << new mu::actions::ActionsModule()
         << new mu::appshell::AppShellModule()
         << new mu::cloud::CloudModule()
@@ -95,16 +94,11 @@ ModulesSetup::ModulesSetup()
 #ifdef BUILD_VST
         << new mu::vst::VSTModule()
 #endif
-#endif
         << new mu::importexport::ImportExportModule()
         << new mu::inspector::InspectorModule()
         << new mu::palette::PaletteModule()
     ;
 }
-
-//---------------------------------------------------------
-//   setup
-//---------------------------------------------------------
 
 void ModulesSetup::setup()
 {

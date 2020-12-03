@@ -13,7 +13,6 @@ CRASH_REPORT_URL=""
 BUILD_MODE=""
 BUILDTYPE=portable # portable build is the default build
 OPTIONS=""
-BUILD_UI_MU4=ON
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
@@ -21,7 +20,6 @@ while [[ "$#" -gt 0 ]]; do
         --telemetry) TELEMETRY_TRACK_ID="$2"; shift ;;
         --crash_log_url) CRASH_REPORT_URL="$2"; shift ;;
         --build_mode) BUILD_MODE="$2"; shift ;;
-        --build_mu4) BUILD_UI_MU4="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -45,7 +43,6 @@ echo "CRASH_REPORT_URL: $CRASH_REPORT_URL"
 echo "BUILD_MODE: $BUILD_MODE"
 echo "BUILDTYPE: $BUILDTYPE"
 echo "OPTIONS: $OPTIONS"
-echo "BUILD_UI_MU4: $BUILD_UI_MU4"
 
 echo "=== ENVIRONMENT === "
 
@@ -76,7 +73,6 @@ make CPUS=2 $OPTIONS \
     BUILD_NUMBER=$BUILD_NUMBER \
     TELEMETRY_TRACK_ID=$TELEMETRY_TRACK_ID \
     CRASH_REPORT_URL=$CRASH_REPORT_URL \
-    BUILD_UI_MU4=$BUILD_UI_MU4 \
     BUILD_VST=$BUILD_VST \
     VST3_SDK_PATH=$VST3_SDK_PATH \
     BUILD_UNIT_TESTS=ON \

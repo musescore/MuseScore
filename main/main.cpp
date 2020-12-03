@@ -19,10 +19,7 @@
 
 #include "config.h"
 #include "modulessetup.h"
-
-#ifdef BUILD_UI_MU4
 #include "mu4/appshell/appshell.h"
-#endif
 
 #if (defined (_MSCVER) || defined (_MSC_VER))
 #include <vector>

@@ -65,10 +65,7 @@ std::string PaletteModule::moduleName() const
 
 void PaletteModule::registerExports()
 {
-#ifdef BUILD_UI_MU4
     framework::ioc()->registerExport<IPaletteAdapter>(moduleName(), s_adapter);
-#endif
-
     framework::ioc()->registerExport<IPaletteConfiguration>(moduleName(), std::make_shared<PaletteConfiguration>());
 
     // create a score for internal use
@@ -139,7 +136,5 @@ void PaletteModule::onInit()
     PaletteWorkspaceSetup w;
     w.setup();
 
-#ifdef BUILD_UI_MU4
     s_actionsController->init();
-#endif
 }
