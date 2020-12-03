@@ -471,19 +471,6 @@ if (APPLE)
           message("libogg not found\n")
       endif (OGG_INCDIR)
    endif(SOUNDFONT3)
-
-   if(HAS_AUDIOFILE)
-      ##
-      ## libsndfile
-      ##
-
-      PKGCONFIG1 (sndfile 1.0.25 SNDFILE_INCDIR SNDFILE_LIBDIR SNDFILE_LIB SNDFILE_CPP)
-      if (SNDFILE_INCDIR)
-          message("libsndfile detected ${SNDFILE_INCDIR} ${SNDFILE_LIBDIR} ${SNDFILE_LIB}")
-      else (SNDFILE_INCDIR)
-         message("libsndfile not found\n")
-      endif (SNDFILE_INCDIR)
-   endif(HAS_AUDIOFILE)
 else(APPLE)
    if (MINGW OR MSVC)
       set(SNDFILE_LIB sndfile-1)
