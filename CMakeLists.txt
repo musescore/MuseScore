@@ -682,8 +682,6 @@ else (USE_SYSTEM_FREETYPE)
       include_directories(${PROJECT_SOURCE_DIR}/thirdparty/freetype/include)
 endif (USE_SYSTEM_FREETYPE)
 
-add_subdirectory(main)
-
 ##
 ## produce config.h file
 ##
@@ -692,10 +690,7 @@ configure_file (
       ${PROJECT_BINARY_DIR}/config.h
       )
 
-add_subdirectory(awl)
-add_subdirectory(audiofile)
 add_subdirectory(share)
-add_subdirectory(libmscore)
 add_subdirectory(thirdparty/qzip)
 
 if (NOT USE_SYSTEM_FREETYPE)
@@ -747,34 +742,6 @@ add_custom_target(lrelease
    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
 )
 
-##
-## Miscellaneous Microsoft Visual Studio settings
-##
-if (MSVC)
-
-   # Force the "install" and "package" targets not to depend on the "all" target.
-   set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY true)
-   set(CMAKE_SKIP_PACKAGE_ALL_DEPENDENCY true)
-
-   # Set the startup project to "mscore".
-   if (NOT ${CMAKE_VERSION} VERSION_LESS "3.6.0")
-      set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT mscore)
-   endif ()
-
-   # Set the debugging properties for the "mscore" project.
-   file(TO_NATIVE_PATH "${CMAKE_INSTALL_PREFIX}/bin" VS_DEBUGGER_WORKING_DIRECTORY)
-   if (NOT ${CMAKE_VERSION} VERSION_LESS "3.12.0")
-      set_target_properties(mscore PROPERTIES VS_DEBUGGER_COMMAND "${VS_DEBUGGER_WORKING_DIRECTORY}\\${MSCORE_EXECUTABLE_NAME}${CMAKE_EXECUTABLE_SUFFIX}")
-   endif ()
-   if (NOT ${CMAKE_VERSION} VERSION_LESS "3.8.0")
-      set_target_properties(mscore PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${VS_DEBUGGER_WORKING_DIRECTORY}")
-   endif ()
-   if (NOT ${CMAKE_VERSION} VERSION_LESS "3.13.0")
-      set_target_properties(mscore PROPERTIES VS_DEBUGGER_COMMAND_ARGUMENTS "--debug")
-   endif ()
-
-endif (MSVC)
-
 define_property(TARGET PROPERTY OUTPUT_XML
     BRIEF_DOCS "List XML files outputed by google test."
     FULL_DOCS "List XML files outputed by google test."
@@ -785,8 +752,7 @@ if (BUILD_UNIT_TESTS)
     enable_testing()
 endif(BUILD_UNIT_TESTS)
 
-add_subdirectory(framework)
-add_subdirectory(mu4)
+add_subdirectory(src)
 
 ## TEMP: Display all variables!
 ### message(STATUS "===========================================================")
