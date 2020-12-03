@@ -17,13 +17,13 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-set(MODULE mu4_midi)
+set(MODULE midi)
 
 include(${PROJECT_SOURCE_DIR}/thirdparty/fluidsynth/fluidsynth.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/internal/zerberus/zerberus.cmake)
 
 
-include(${PROJECT_SOURCE_DIR}/build/platform.cmake)
+include(GetPlatformInfo)
 if (PLATFORM_IS_WINDOWS)
     set(DRIVER_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmidioutport.cpp

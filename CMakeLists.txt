@@ -17,155 +17,61 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-project(mscore)
+cmake_minimum_required(VERSION 3.16)
 
-# Minimum tested, report if it works with older
-CMAKE_MINIMUM_REQUIRED(VERSION 3.4.0)
+project(mscore LANGUAGES C CXX)
 
-find_program(CCACHE_PROGRAM ccache)
-if(CCACHE_PROGRAM)
-    message(STATUS "Using ccache")
-    # Set up wrapper scripts
-    set(C_LAUNCHER   "${CCACHE_PROGRAM}")
-    set(CXX_LAUNCHER "${CCACHE_PROGRAM}")
-    configure_file(build/launch-c.in   launch-c)
-    configure_file(build/launch-cxx.in launch-cxx)
-    execute_process(COMMAND chmod a+rx
-                     "${CMAKE_BINARY_DIR}/launch-c"
-                     "${CMAKE_BINARY_DIR}/launch-cxx"
+# Conflicted with PCH on Linux, will be resolve later
+#set(CMAKE_CXX_STANDARD 17)
+#set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+set(CMAKE_MODULE_PATH
+    ${CMAKE_CURRENT_LIST_DIR}/build
+    ${CMAKE_CURRENT_LIST_DIR}/build/cmake
+    ${CMAKE_MODULE_PATH}
     )
 
-    if(CMAKE_GENERATOR STREQUAL "Xcode")
-        # Set Xcode project attributes to route compilation and linking
-        # through our scripts
-        set(CMAKE_XCODE_ATTRIBUTE_CC         "${CMAKE_BINARY_DIR}/launch-c")
-        set(CMAKE_XCODE_ATTRIBUTE_CXX        "${CMAKE_BINARY_DIR}/launch-cxx")
-        set(CMAKE_XCODE_ATTRIBUTE_LD         "${CMAKE_BINARY_DIR}/launch-c")
-        set(CMAKE_XCODE_ATTRIBUTE_LDPLUSPLUS "${CMAKE_BINARY_DIR}/launch-cxx")
-    else()
-        # Support Unix Makefiles and Ninja
-        set(CMAKE_C_COMPILER_LAUNCHER   "${CMAKE_BINARY_DIR}/launch-c")
-        set(CMAKE_CXX_COMPILER_LAUNCHER "${CMAKE_BINARY_DIR}/launch-cxx")
-    endif()
- endif()
-
-include(build/functions.cmake) # library of CMake functions ("fn__" namespace)
-
-# Print Qt version or fail the build if Qt (qmake) is not in PATH.
-fn__require_program(QMAKE Qt --version "https://musescore.org/en/handbook/developers-handbook/compilation" qmake)
-
-# Libraries linked via full path no longer produce linker search paths.
-cmake_policy(SET CMP0003 NEW)
-
-# Apparently needed on Mac only (?)
-if (APPLE)
-    # Issue no warning non-existent target argument to get_target_property()
-    # and set the result variable to a -NOTFOUND value rather than issuing a FATAL_ERROR 40
-    if(POLICY CMP0045)
-        cmake_policy(SET CMP0045 OLD)
-    endif(POLICY CMP0045)
-
-    # Silently ignore non-existent dependencies (mops1, mops2)
-    if(POLICY CMP0046)
-        cmake_policy(SET CMP0046 OLD)
-    endif(POLICY CMP0046)
-endif (APPLE)
-
-# RPATH settings on macOS do not affect install_name
-if(POLICY CMP0068)
-      cmake_policy(SET CMP0068 NEW)
-endif(POLICY CMP0068)
-
-# Don't process generated source files with AUTOMOC
-if(POLICY CMP0071)
-      cmake_policy(SET CMP0071 OLD)
-endif(POLICY CMP0071)
-
-# Define MINGW for VS, as it appears not to be defined
-if (MSVC)
-   set (MINGW false)
-endif (MSVC)
+include(TryUseCcache)
+include(SetupCMakePolicy)
+include(GetCompilerInfo)
+include(GetUtilsFunctions) # library of CMake functions ("fn__" namespace)
 
 # We need this early, before FindQt5
 option(BUILD_WEBENGINE "Built in webengine support" ON)
-
-set(BUILD_WEBENGINE OFF)
-
 if (BUILD_WEBENGINE)
-   if (MINGW)
+   if (COMPILER_IS_MINGW)
       SET (USE_WEBENGINE 0)
-   else (MINGW)
+   else (COMPILER_IS_MINGW)
       SET (USE_WEBENGINE 1)
-   endif(MINGW)
+   endif(COMPILER_IS_MINGW)
 else (BUILD_WEBENGINE)
    SET (USE_WEBENGINE 0)
 endif (BUILD_WEBENGINE)
 
-set(SCRIPT_INTERFACE  TRUE)
-#  Look for Qt5
-SET(QT_MIN_VERSION    "5.15.0")
-# Include modules
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build" ${CMAKE_MODULE_PATH})
-include (FindQt5)
-include (UsePkgConfig1) # Defines MACRO(PKGCONFIG1 _package _minVersion _include_DIR _link_DIR _link_FLAGS _cflags)
-include (FindPulseAudio)
-include (GetCompilerVersion)
-include (CreatePrecompiledHeader)
-
-# For debugging the make system uncomment next line:
-# set(CMAKE_VERBOSE_MAKEFILE ON)
-
-set(CMAKE_AUTOMOC     TRUE)
-set(USE_SSE           TRUE)
-
-set(MUSESCORE_REVISION "" CACHE STRING "Build revision")
-
-# Set revision for local builds
-# Before need run 'make revision' or 'msvc_build.bat revision'
-if (MUSESCORE_REVISION STREQUAL "")
-    if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/local_build_revision.env")
-        file(READ "${CMAKE_CURRENT_LIST_DIR}/local_build_revision.env" MUSESCORE_REVISION)
-        STRING(REGEX REPLACE "\n" "" MUSESCORE_REVISION "${MUSESCORE_REVISION}")
-    endif()
-endif(MUSESCORE_REVISION STREQUAL "")
-message(STATUS "MUSESCORE_REVISION: ${MUSESCORE_REVISION}")
-
-add_definitions(-DMUSESCORE_REVISION="${MUSESCORE_REVISION}")
+set(QT_MIN_VERSION    "5.15.0")
+include(FindQt5)
+include(UsePkgConfig1) # Defines MACRO(PKGCONFIG1 _package _minVersion _include_DIR _link_DIR _link_FLAGS _cflags)
+include(CreatePrecompiledHeader)
 
 # Setup version number and general build settings
-SET(MUSESCORE_BUILD_CONFIG "dev" CACHE STRING "Build config")
+set(MUSESCORE_REVISION "" CACHE STRING "Build revision")
+set(MUSESCORE_BUILD_CONFIG "dev" CACHE STRING "Build config")
 # Possible MUSESCORE_BUILD_CONFIG values:
 # - dev     - for development/nightly builds
 # - testing - for testing versions (alpha, beta, RC)
 # - release - for stable release builds
-include("${CMAKE_CURRENT_LIST_DIR}/config.cmake")
+include(${CMAKE_CURRENT_LIST_DIR}/config.cmake)
 
-if (MUSESCORE_LABEL)
-  SET (MUSESCORE_NAME_VERSION "${MUSESCORE_NAME_VERSION} ${MUSESCORE_LABEL}")
-endif (MUSESCORE_LABEL)
 
-if (MSCORE_UNSTABLE)
-  SET (MUSESCORE_NAME_VERSION "${MUSESCORE_NAME_VERSION} (${MUSESCORE_VERSION_FULL} unstable)")
-endif (MSCORE_UNSTABLE)
-
-# Disable components not supported on Linux/BSD
-if (NOT APPLE AND NOT MINGW AND NOT MSVC)
-      set(NIX_NOT_AVAIL "Not available on Linux/BSD")
-endif (NOT APPLE AND NOT MINGW AND NOT MSVC)
-
+set(SCRIPT_INTERFACE  TRUE)
 option(ZERBERUS      "Enable experimental SFZ sampler"    ON)
-option(USE_ZITA_REVERB "Enable Zita Reverb audio effect"    ON)
 option(OSC           "Enable OSC remote control protocol" ON)
 option(SOUNDFONT3    "Ogg Vorbis compressed fonts"        ON)  # Enable Ogg Vorbis compressed fonts, requires Ogg & Vorbis
-option(HAS_AUDIOFILE "Enable audio export"                ON)  # Requires libsndfile
 option(USE_SYSTEM_QTSINGLEAPPLICATION "Use system QtSingleApplication" OFF)
 option(USE_SYSTEM_FREETYPE "Use system FreeType"          OFF) # requires freetype >= 2.5.2, does not work on win
 option(DOWNLOAD_SOUNDFONT "Download the latest soundfont version as part of the build process" ON)
-
-SET(JACK_LONGNAME "JACK (Jack Audio Connection Kit)")
-SET(JACK_MIN_VERSION "0.98.0")
-option(BUILD_JACK    "Build with support for ${JACK_LONGNAME} audio backend. JACK >= ${JACK_MIN_VERSION} will be needed." OFF)
-
 option(BUILD_PCH "Build using precompiled headers." ON)
 option(BUILD_FOR_WINSTORE "Build for the Windows Store." OFF)
 option(COVERAGE "Build with instrumentation to record code coverage." OFF)
@@ -180,9 +86,16 @@ option(MODULE_BUILD_PCH "Build using precompiled headers in MU4 modules" ON)
 option(QML_LOAD_FROM_SOURCE "Load qml files from source (not resource)" OFF)
 option(PACKAGE_FILE_ASSOCIATION "File types association" OFF)
 
-SET(VST3_SDK_VERSION "3.7")
+set(VST3_SDK_VERSION "3.7")
 option(BUILD_VST "Build VST MODULE" OFF)
 set(VST3_SDK_PATH "" CACHE PATH "Path to VST3_SDK. SDK version >= ${VST3_SDK_VERSION} required")
+
+set(JACK_LONGNAME "JACK (Jack Audio Connection Kit)")
+set(JACK_MIN_VERSION "0.98.0")
+option(BUILD_JACK    "Build with support for ${JACK_LONGNAME} audio backend. JACK >= ${JACK_MIN_VERSION} will be needed." OFF)
+if (BUILD_JACK)
+    include(FindJack)
+endif(BUILD_JACK)
 
 add_definitions(-DQT_QML_DEBUG)
 add_definitions(-D_USE_MATH_DEFINES)
@@ -193,8 +106,6 @@ message(STATUS "CMAKE_CXX_COMPILER_ID: ${CMAKE_CXX_COMPILER_ID}")
 
 if (MSCORE_UNSTABLE OR TELEMETRY_TRACK_ID STREQUAL "")
       message("Telemetry feature is disabled")
-      message("Build is unstable = ${MSCORE_UNSTABLE}")
-
       if (TELEMETRY_TRACK_ID STREQUAL "")
             message("Telemetry track id is empty")
       else(TELEMETRY_TRACK_ID STREQUAL "")
@@ -212,7 +123,6 @@ if (APPLE)
       set(MACOSX_DEPLOYMENT_TARGET 10.10)
       set(CMAKE_OSX_DEPLOYMENT_TARGET 10.10)
 
-      set(HAS_AUDIOFILE TRUE)            # Requires libsndfile
       set(MAC_APPCAST_URL "")
 
       find_library(AudioToolboxFW        NAMES AudioToolbox)
@@ -244,39 +154,9 @@ endif (BUILD_PORTABLEAPPS STREQUAL "ON")
 #
 #  Sparkle/WinSparkle routine
 #
-if (BUILD_AUTOUPDATE STREQUAL "ON")
-      if (APPLE)
-             find_package(Sparkle) #needed for SPARKLE_FOUND variable
-             if(SPARKLE_FOUND)
-                   set(MAC_SPARKLE_ENABLED 1)
-                   set(OsxFrameworks ${OsxFrameworks} ${SPARKLE_LIBRARY})
-                   message("Current OSX version is ${CURRENT_OSX_VERSION}")
-                   set(MAC_APPCAST_URL "https://sparkle.musescore.org/${MSCORE_RELEASE_CHANNEL}/3/macos/appcast.xml")
-             endif(SPARKLE_FOUND)
-      elseif (MSVC)
-             if ((NOT MSCORE_UNSTABLE) AND (NOT DEFINED WIN_PORTABLE)) # do not include WinSparkle in unstable and portable builds
-                   include(FindWinSparkle)
-                   add_library(winsparkledll SHARED IMPORTED)
-                   set_target_properties(winsparkledll PROPERTIES IMPORTED_IMPLIB ${WINSPARKLE_LIBRARY})
-                   set(WIN_SPARKLE_ENABLED 1)
-                   set(WIN_SPARKLE_APPCAST_URL "https://sparkle.musescore.org/${MSCORE_RELEASE_CHANNEL}/4/win/appcast${ARCH_TYPE}.xml")
-                   message("Win Sparkle Url: " ${WIN_SPARKLE_APPCAST_URL})
-             endif ((NOT MSCORE_UNSTABLE) AND (NOT DEFINED WIN_PORTABLE))
-      else (APPLE)
-             message("Sparkle is not supported on your system.")
-      endif (APPLE)
-endif(BUILD_AUTOUPDATE STREQUAL "ON")
-
-#
-#     Check for gcc compiler >= 4.8
-#
-if (${CMAKE_CXX_COMPILER_ID} MATCHES "GNU")
-      if (${CMAKE_CXX_COMPILER_MAJOR} LESS 4
-        OR ((${CMAKE_CXX_COMPILER_MAJOR} EQUAL 4) AND (${CMAKE_CXX_COMPILER_MINOR} LESS 8)))
-            message(FATAL_ERROR "bad gcc compiler version " ${CMAKE_CXX_COMPILER_VERSION}
-                  " >= 4.8 required")
-      endif()
-endif (${CMAKE_CXX_COMPILER_ID} MATCHES "GNU")
+if (BUILD_AUTOUPDATE)
+    include(SetupSparkle)
+endif(BUILD_AUTOUPDATE)
 
 if (NOT MSVC)
    set(CMAKE_CXX_FLAGS_DEBUG   "-g")
@@ -293,18 +173,10 @@ if (APPLE)
    SET(CMAKE_INSTALL_RPATH "${QT_INSTALL_LIBS}")
 else (APPLE)
    if (MSVC)
-      if (BUILD_64 STREQUAL "ON")
-         set(USE_SSE FALSE)
-      endif(BUILD_64 STREQUAL "ON")
    # Set compiler options for VS2017/19 toolchain.
    # Note: /D_CRT_SECURE_NO WARNINGS disables warnings when using "non-secure" library functions like sscanf...
       set(CMAKE_CXX_FLAGS                "/MP /DWIN32 /D_WINDOWS /GR /EHsc /D_UNICODE /DUNICODE /D_CRT_SECURE_NO_WARNINGS /execution-charset:utf-8 /source-charset:utf-8")
       set(CMAKE_C_FLAGS                  "/MP /DWIN32 /D_WINDOWS /D_CRT_SECURE_NO_WARNINGS")
-      if (USE_SSE)
-         # If USE_SSE is set, enable use of SSE instructions to compiler.
-         set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} /arch:SSE")
-         set(CMAKE_C_FLAGS    "${CMAKE_C_FLAGS} /arch:SSE")
-      endif (USE_SSE)
       set(CMAKE_CXX_FLAGS_DEBUG          "/MT /permissive- /std:c++17 /W4 /Zi /Ob0 /Od /RTC1")
       set(CMAKE_CXX_FLAGS_RELEASE        "/MT /permissive- /std:c++17 /W4 /O2 /Ob2 /DNDEBUG /DQT_NO_DEBUG /DQT_NO_DEBUG_OUTPUT")
       set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "/MT /permissive- /std:c++17 /W4 /Zi /O2 /Ob1 /DNDEBUG /DQT_NO_DEBUG /DQT_NO_DEBUG_OUTPUT")
@@ -328,7 +200,6 @@ else (APPLE)
    endif (MSVC)
 endif(APPLE)
 
-set(CMAKE_INCLUDE_CURRENT_DIR TRUE)
 set(CMAKE_BUILD_WITH_INSTALL_RPATH ON) # Call CMake with option -DCMAKE_SKIP_RPATH to not set RPATH (Debian packaging requirement)
 set(CMAKE_SKIP_RULE_DEPENDENCY TRUE)
 
@@ -349,47 +220,7 @@ endif (MINGW OR MSVC OR APPLE)
 
 # Download MuseScore SoundFont
 if (DOWNLOAD_SOUNDFONT)
-  set (SF_VERSION_REMOTE_FILE ${PROJECT_BINARY_DIR}/VERSION)
-  set (SF_VERSION_LOCAL_FILE ${PROJECT_SOURCE_DIR}/share/sound/VERSION)
-  set (DOWNLOAD_URL_ROOT "https://ftp.osuosl.org/pub/musescore/soundfont/MuseScore_General")
-  set (SOUND_DIRECTORY ${PROJECT_SOURCE_DIR}/share/sound)
-
-  file(DOWNLOAD ${DOWNLOAD_URL_ROOT}/VERSION ${SF_VERSION_REMOTE_FILE} STATUS SF_VERSION_DL_STATUS_LIST)
-  list(GET SF_VERSION_DL_STATUS_LIST 0 SF_VERSION_DL_STATUS)
-
-  if(EXISTS ${SF_VERSION_REMOTE_FILE} AND SF_VERSION_DL_STATUS EQUAL 0)
-    file (STRINGS ${SF_VERSION_REMOTE_FILE} SF_VERSION_REMOTE)
-
-    set(SF_VERSION_LOCAL "0.0")
-    if (EXISTS ${SF_VERSION_LOCAL_FILE})
-      file (STRINGS ${SF_VERSION_LOCAL_FILE} SF_VERSION_LOCAL)
-    endif ()
-
-    string(COMPARE LESS ${SF_VERSION_LOCAL} ${SF_VERSION_REMOTE} DO_DOWNLOAD)
-    if (DO_DOWNLOAD)
-      message("Version ${SF_VERSION_LOCAL} of the MuseScore SoundFont is outdated, downloading version ${SF_VERSION_REMOTE}.")
-      # delete soundfont and download new version
-      ## TODO check STATUS of downloads
-      file (REMOVE ${SOUND_DIRECTORY}/MuseScore_General.sf3
-                   ${SOUND_DIRECTORY}/MuseScore_General_License.md
-                   ${SOUND_DIRECTORY}/MuseScore_General_Changelog.md
-                   ${SOUND_DIRECTORY}/MuseScore_General_Readme.md)
-      file(DOWNLOAD ${DOWNLOAD_URL_ROOT}/MuseScore_General.sf3 ${SOUND_DIRECTORY}/MuseScore_General.sf3 SHOW_PROGRESS STATUS SF_DL_STATUS)
-      list(GET SF_DL_STATUS 0 HTTP_STATUS)
-      if (NOT HTTP_STATUS EQUAL 0)
-        list(GET SF_DL_STATUS 1 HTTP_STATUS_TEXT)
-        message(FATAL_ERROR "Cannot download new soundfont. Error: ${HTTP_STATUS_TEXT}")
-      endif()
-      file(DOWNLOAD ${DOWNLOAD_URL_ROOT}/MuseScore_General_License.md ${SOUND_DIRECTORY}/MuseScore_General_License.md)
-      file(DOWNLOAD ${DOWNLOAD_URL_ROOT}/MuseScore_General_Changelog.md ${SOUND_DIRECTORY}/MuseScore_General_Changelog.txt)
-      file(DOWNLOAD ${DOWNLOAD_URL_ROOT}/MuseScore_General_Readme.md ${SOUND_DIRECTORY}/MuseScore_General_Readme.md)
-      # replace VERSION file (in any case, delete VERSION file)
-      file (COPY ${SF_VERSION_REMOTE_FILE} DESTINATION ${SOUND_DIRECTORY})
-      file (REMOVE ${SF_VERSION_REMOTE_FILE})
-    else(DO_DOWNLOAD)
-      message("MuseScore SoundFont is up to date.")
-    endif(DO_DOWNLOAD)
-  endif()
+    include(DownloadSoundFont)
 endif(DOWNLOAD_SOUNDFONT)
 
 
@@ -397,9 +228,6 @@ if (BUILD_FOR_WINSTORE)
   set(FOR_WINSTORE 1)
 endif(BUILD_FOR_WINSTORE)
 
-if (USE_ZITA_REVERB)
-    add_definitions(-DZITA_REVERB)
-endif(USE_ZITA_REVERB)
 
 ##
 ## freetype2 >= 2.5.2
@@ -419,48 +247,6 @@ if (USE_SYSTEM_FREETYPE)
             find_package(Freetype REQUIRED)
       endif (APPLE)
 endif (USE_SYSTEM_FREETYPE)
-
-##
-## Find JACK >= JACK_MIN_VERSION
-##
-
-
-IF(BUILD_JACK)
-     IF(MINGW OR MSVC)
-           set (USE_JACK 1)
-           IF("$ENV{PROCESSOR_ARCHITEW6432}" STREQUAL "")
-              IF("$ENV{PROCESSOR_ARCHITECTURE}" STREQUAL "x86")
-                 # "pure" 32-bit environment
-                 set (progenv "PROGRAMFILES")
-              ELSE("$ENV{PROCESSOR_ARCHITECTURE}" STREQUAL "x86")
-                 # "pure" 64-bit environment
-                 set (progenv "PROGRAMFILES(x86)")
-              ENDIF("$ENV{PROCESSOR_ARCHITECTURE}" STREQUAL "x86")
-           ELSE("$ENV{PROCESSOR_ARCHITEW6432}" STREQUAL "")
-              IF("$ENV{PROCESSOR_ARCHITECTURE}" STREQUAL "x86")
-                 # 32-bit program running with an underlying 64-bit environment
-                 set (progenv "PROGRAMFILES(x86)")
-              ELSE("$ENV{PROCESSOR_ARCHITECTURE}" STREQUAL "x86")
-                 # Theoretically impossible case...
-                 MESSAGE(SEND_ERROR "Error: Impossible program/environment bitness combination deduced: 64-bit program running in 32-bit environment. This is a programming error. PROCESSOR_ARCHITEW6432=$ENV{PROCESSOR_ARCHITEW6432}. PROCESSOR_ARCHITECTURE=$ENV{PROCESSOR_ARCHITECTURE}")
-              ENDIF("$ENV{PROCESSOR_ARCHITECTURE}" STREQUAL "x86")
-           ENDIF("$ENV{PROCESSOR_ARCHITEW6432}" STREQUAL "")
-           set (JACK_INCDIR "$ENV{${progenv}}/Jack/includes")
-           set (JACK_LIB "$ENV{${progenv}}/Jack/lib/libjack.a")
-           MESSAGE("JACK support enabled.")
-     ELSE(MINGW OR MSVC)
-           PKGCONFIG1 (jack ${JACK_MIN_VERSION} JACK_INCDIR JACK_LIBDIR JACK_LIB JACK_CPP)
-           IF(JACK_INCDIR)
-                 MESSAGE(STATUS "${JACK_LONGNAME} >= ${JACK_MIN_VERSION} found. jack support enabled.")
-                 SET(USE_JACK 1)
-           ELSE(JACK_INCDIR)
-                 MESSAGE(STATUS "${JACK_LONGNAME} >= ${JACK_MIN_VERSION} not found")
-                 MESSAGE(SEND_ERROR "Error: JACK support requested (BUILD_JACK=${BUILD_JACK}), but JACK was not found")
-           ENDIF(JACK_INCDIR)
-     ENDIF(MINGW OR MSVC)
-ELSE(BUILD_JACK)
-     MESSAGE(STATUS "${JACK_LONGNAME} support disabled")
-ENDIF(BUILD_JACK)
 
 if (APPLE)
    if(SOUNDFONT3)

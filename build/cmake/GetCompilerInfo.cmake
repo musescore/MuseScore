@@ -2,7 +2,7 @@
 # Compiler definition
 # MuseScore-specific, defines typical configurations
 
-include(${CMAKE_CURRENT_LIST_DIR}/platform.cmake)
+include(GetPlatformInfo)
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 
@@ -25,3 +25,8 @@ elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
   set(COMPILER_IS_MSVC 1)
 
 endif()
+
+# Define MINGW for VS, as it appears not to be defined
+if (MSVC)
+   set (MINGW false)
+endif (MSVC)

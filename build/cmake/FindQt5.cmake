@@ -1,7 +1,14 @@
+
+# Print Qt version or fail the build if Qt (qmake) is not in PATH.
+fn__require_program(QMAKE Qt --version "https://musescore.org/en/handbook/developers-handbook/compilation" qmake)
+
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+
 set(_components
     Core
     Gui
-    #Designer
     Network
     Test
     Qml
