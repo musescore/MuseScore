@@ -42,7 +42,6 @@ USE_ZITA_REVERB="ON"
 UPDATE_CACHE="TRUE"# Override if building a DEB or RPM, or when installing to a non-standard location.
 NO_RPATH="FALSE"# Package maintainers may want to override this (e.g. Debian)
 
-BUILD_UI_MU4="OFF"
 BUILD_UNIT_TESTS="OFF"
 BUILD_VST="OFF"
 VST3_SDK_PATH=""
@@ -71,7 +70,6 @@ release:
    	  -DBUILD_WEBENGINE="${BUILD_WEBENGINE}"   \
    	  -DUSE_SYSTEM_FREETYPE="${USE_SYSTEM_FREETYPE}" \
    	  -DDOWNLOAD_SOUNDFONT="${DOWNLOAD_SOUNDFONT}"   \
-	  -DBUILD_UI_MU4="${BUILD_UI_MU4}"         \
 	  -DBUILD_VST="${BUILD_VST}"         		\
 	  -DVST3_SDK_PATH="${VST3_SDK_PATH}"         \
 	  -DMODULE_BUILD_PCH="${MODULE_BUILD_PCH}" \
@@ -103,7 +101,6 @@ debug:
    	  -DUSE_SYSTEM_FREETYPE="${USE_SYSTEM_FREETYPE}"      \
    	  -DCOVERAGE="${COVERAGE}"                          \
    	  -DDOWNLOAD_SOUNDFONT="${DOWNLOAD_SOUNDFONT}"      \
-	  -DBUILD_UI_MU4="${BUILD_UI_MU4}"         			\
 	  -DUSE_ZITA_REVERB="${USE_ZITA_REVERB}"   \
   	  -DCMAKE_SKIP_RPATH="${NO_RPATH}"     ..;            \
       make lrelease;                                        \

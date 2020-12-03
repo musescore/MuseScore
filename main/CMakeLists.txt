@@ -78,16 +78,6 @@ target_include_directories(mscore PRIVATE
       ${PROJECT_SOURCE_DIR}/thirdparty
       )
 
-# common
-set (BUILD_MU3 OFF)
-if (BUILD_UI_MU4)
-    if (BUILD_UI_MU4_WITH_MU3)
-        set (BUILD_MU3 ON)
-    endif(BUILD_UI_MU4_WITH_MU3)
-else (BUILD_UI_MU4)
-    set (BUILD_MU3 ON)
-endif(BUILD_UI_MU4)
-
 set(FREETYPE_LIB )
 if (USE_SYSTEM_FREETYPE)
      set(FREETYPE_LIB ${FREETYPE_LIBRARIES})
@@ -111,42 +101,34 @@ if (BUILD_TELEMETRY_MODULE)
     set(LINK_LIB ${LINK_LIB} telemetry)
 endif(BUILD_TELEMETRY_MODULE)
 
-if (BUILD_UI_MU4)
-    set(LINK_LIB ${LINK_LIB}
-        actions
-        appshell
-        cloud
-        context
-        shortcuts
-        workspace
-        mu4_audio
-        mu4_midi
-        midi_old
-        userscores
-        extensions
-        languages
-        importexport
-        notation
-        commonscene
-        palette
-        inspector
-        playback
-        instruments
-        plugins
-        )
-
-    if (BUILD_VST)
-        set(LINK_LIB ${LINK_LIB} vst)
-    endif(BUILD_VST)
-
-    add_dependencies(mscore workspaces)
-endif(BUILD_UI_MU4)
-
-if (BUILD_MU3)
-    set(LINK_LIB ${LINK_LIB}
-        mscoreapp
+set(LINK_LIB ${LINK_LIB}
+    actions
+    appshell
+    cloud
+    context
+    shortcuts
+    workspace
+    mu4_audio
+    mu4_midi
+    midi_old
+    userscores
+    extensions
+    languages
+    importexport
+    notation
+    commonscene
+    palette
+    inspector
+    playback
+    instruments
+    plugins
     )
-endif()
+
+if (BUILD_VST)
+    set(LINK_LIB ${LINK_LIB} vst)
+endif(BUILD_VST)
+
+add_dependencies(mscore workspaces)
 
 target_link_libraries(mscore ${LINK_LIB} )
 

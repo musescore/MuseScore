@@ -66,11 +66,6 @@ void ImportExportModule::onInit()
 {
     s_configuration->init();
 
-    //! NOTE The "importexport" module is linked when the BUILD_UI_MU4 is off
-    //! So that the import/export implementation is linked and used in the old code.
-    //! But of course there is no "INotationReadersRegister"
-
-#ifdef BUILD_UI_MU4
     auto readers = framework::ioc()->resolve<INotationReadersRegister>(moduleName());
     IF_ASSERT_FAILED(readers) {
         return;
@@ -100,6 +95,4 @@ void ImportExportModule::onInit()
     writers->reg({ "mp3" }, std::make_shared<Mp3Writer>());
     writers->reg({ "ogg" }, std::make_shared<OggWriter>());
     writers->reg({ "flac" }, std::make_shared<FlacWriter>());
-
-#endif
 }
