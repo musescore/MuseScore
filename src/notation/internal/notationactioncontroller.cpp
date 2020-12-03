@@ -257,6 +257,10 @@ void NotationActionController::addNote(NoteName note, NoteAddingMode addingMode)
         return;
     }
 
+    if (!noteInput->isNoteInputMode()) {
+        noteInput->startNoteInput();
+    }
+
     noteInput->addNote(note, addingMode);
 }
 
@@ -272,9 +276,18 @@ void NotationActionController::addText(TextType type)
 
 void NotationActionController::padNote(const Pad& pad)
 {
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
     auto noteInput = currentNotationNoteInput();
     if (!noteInput) {
         return;
+    }
+
+    if (interaction->selection()->isNone() && !noteInput->isNoteInputMode()) {
+        noteInput->startNoteInput();
     }
 
     noteInput->padNote(pad);
@@ -300,9 +313,18 @@ void NotationActionController::putNote(const actions::ActionData& data)
 
 void NotationActionController::toggleAccidental(AccidentalType type)
 {
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
     auto noteInput = currentNotationNoteInput();
     if (!noteInput) {
         return;
+    }
+
+    if (interaction->selection()->isNone() && !noteInput->isNoteInputMode()) {
+        noteInput->startNoteInput();
     }
 
     noteInput->toogleAccidental(type);
@@ -458,6 +480,10 @@ void NotationActionController::changeVoice(int voiceIndex)
     auto noteInput = interaction->noteInput();
     if (!noteInput) {
         return;
+    }
+
+    if (interaction->selection()->isNone() && !noteInput->isNoteInputMode()) {
+        noteInput->startNoteInput();
     }
 
     noteInput->setCurrentVoiceIndex(voiceIndex);
