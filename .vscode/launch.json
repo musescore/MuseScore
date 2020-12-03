@@ -5,6 +5,17 @@
       "version": "0.2.0",
       "configurations": [
             {
+                  "name": "(Windows) Launch",
+                  "type": "cppvsdbg",
+                  "request": "launch",
+                  "program": "${workspaceFolder}/msvc.install_x64/bin/MuseScore3.exe",
+                  "args": ["-d"],
+                  "stopAtEntry": false,
+                  "cwd": "${workspaceFolder}",
+                  "environment": [],
+                  "externalConsole": false,
+            },
+            {
                   "name": "gdb debug from debug build",
                   "type": "cppdbg",
                   "request": "launch",
