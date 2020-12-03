@@ -62,7 +62,7 @@ void AudioPlayer::setMidiStream(const std::shared_ptr<midi::MidiStream>& stream)
 
         m_tracks.clear();
         for (size_t num = 0; num < stream->initData.tracks.size(); ++num) {
-            m_tracks[num] = std::make_shared<Track>();
+            m_tracks[static_cast<int>(num)] = std::make_shared<Track>();
         }
 
         m_status.set(PlayStatus::STOPED);

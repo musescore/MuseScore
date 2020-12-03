@@ -117,7 +117,11 @@ if (LOCAL_MODULE_BUILD_PCH)
         ADD_DEPENDENCIES(${MODULE} mops2)
     endif (NOT MSVC)
 else (LOCAL_MODULE_BUILD_PCH)
-    set_target_properties(${MODULE} PROPERTIES COMPILE_FLAGS "-include ${PROJECT_SOURCE_DIR}/all.h")
+    if (NOT MSVC)
+        set_target_properties (${MODULE} PROPERTIES COMPILE_FLAGS "-include ${PROJECT_SOURCE_DIR}/all.h")
+    else (NOT MSVC)
+        set_target_properties (${MODULE} PROPERTIES COMPILE_FLAGS "/FI ${PROJECT_SOURCE_DIR}/all.h" )
+    endif (NOT MSVC)
 endif (LOCAL_MODULE_BUILD_PCH)
 
 

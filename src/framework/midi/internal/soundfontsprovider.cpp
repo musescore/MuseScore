@@ -107,8 +107,8 @@ std::vector<io::path> SoundFontsProvider::soundFontPaths(SoundFontFormats format
             continue;
         }
 
-        for (const io::path& path : files.val) {
-            soundFonts.push_back(path);
+        for (const io::path& filePath : files.val) {
+            soundFonts.push_back(filePath);
         }
     }
 

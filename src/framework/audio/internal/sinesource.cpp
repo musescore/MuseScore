@@ -44,14 +44,14 @@ struct SineSource::SLInstance : public SoLoud::AudioSourceInstance {
     unsigned int getAudio(float* aBuffer, unsigned int aSamplesToRead, unsigned int /*aBufferSize*/) override
     {
         size_t rest = samples->size() - position;
-        int readSamples = rest < aSamplesToRead ? rest : aSamplesToRead;
+        size_t readSamples = rest < aSamplesToRead ? rest : aSamplesToRead;
         size_t blockSizeInBytes = readSamples * sizeof(float);
         std::memcpy(aBuffer, &samples->operator [](position), blockSizeInBytes);
         std::memcpy(aBuffer + readSamples, &samples->operator [](position), blockSizeInBytes);
 
         position += readSamples;
 
-        return readSamples;
+        return static_cast<unsigned int>(readSamples);
     }
 
     bool hasEnded() override

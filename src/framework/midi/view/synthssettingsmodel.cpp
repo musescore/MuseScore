@@ -129,7 +129,7 @@ void SynthsSettingsModel::removeSoundFont(int selectedIndex_, const QString& syn
 
 void SynthsSettingsModel::addSoundFont(int avalableIndex_, const QString& synth)
 {
-    size_t avalableIndex = avalableIndex_;
+    int avalableIndex = avalableIndex_;
     const QStringList& avalaible = m_avalaibleSoundFonts[synth];
     std::string name = avalaible.at(avalableIndex).toStdString();
 

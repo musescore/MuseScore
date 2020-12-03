@@ -36,3 +36,7 @@ set(SOLOUD_SRC
     ${SOLOUD_DIR}/src/audiosource/wav/soloud_wavstream.cpp
     ${SOLOUD_DIR}/src/backend/muaudio/soloud_muaudio.cpp
 )
+
+if (MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4276 /wd4789")
+endif (MSVC)
