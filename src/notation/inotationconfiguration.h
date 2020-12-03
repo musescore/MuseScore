@@ -56,7 +56,7 @@ public:
     virtual ValCh<int> currentZoom() const = 0;
     virtual void setCurrentZoom(int zoomPercentage) = 0;
 
-    virtual int fontSize() const = 0;
+    virtual qreal fontSize() const = 0;
 
     virtual io::path stylesDirPath() const = 0;
 

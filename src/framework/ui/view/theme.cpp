@@ -215,7 +215,7 @@ QHash<int, QVariant> Theme::currentThemeProperites() const
 void Theme::initFont()
 {
     m_font.setFamily(configuration()->fontFamily());
-    m_font.setPixelSize(configuration()->fontSize());
+    m_font.setPointSizeF(configuration()->fontSize());
 
     configuration()->fontFamilyChanged().onReceive(this, [this](const QString& fontFamily) {
         m_font.setFamily(fontFamily);
@@ -223,8 +223,8 @@ void Theme::initFont()
         update();
     });
 
-    configuration()->fontSizeChanged().onReceive(this, [this](const int fontSize) {
-        m_font.setPixelSize(fontSize);
+    configuration()->fontSizeChanged().onReceive(this, [this](const float fontSize) {
+        m_font.setPointSizeF(fontSize);
 
         update();
     });
@@ -242,7 +242,7 @@ void Theme::initMusicalFont()
     });
 
     configuration()->musicalFontSizeChanged().onReceive(this, [this](const int fontSize) {
-        m_musicalFont.setPixelSize(fontSize);
+        m_musicalFont.setPointSizeF(fontSize);
 
         update();
     });

@@ -34,7 +34,7 @@ void UiConfiguration::init()
     });
 
     settings()->valueChanged(FONT_SIZE_KEY).onReceive(nullptr, [this](const Val& val) {
-        m_currentFontSizeChannel.send(val.toInt());
+        m_currentFontSizeChannel.send(val.toDouble());
     });
 
     settings()->valueChanged(MUSICAL_FONT_FAMILY_KEY).onReceive(nullptr, [this](const Val& val) {
@@ -66,9 +66,9 @@ Channel<QString> UiConfiguration::fontFamilyChanged() const
     return m_currentFontFamilyChannel;
 }
 
-int UiConfiguration::fontSize() const
+qreal UiConfiguration::fontSize() const
 {
-    return settings()->value(FONT_SIZE_KEY).toInt();
+    return settings()->value(FONT_SIZE_KEY).toDouble();
 }
 
 Channel<int> UiConfiguration::fontSizeChanged() const

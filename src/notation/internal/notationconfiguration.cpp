@@ -184,7 +184,7 @@ void NotationConfiguration::setCurrentZoom(int zoomPercentage)
     settings()->setValue(CURRENT_ZOOM, Val(zoomPercentage));
 }
 
-int NotationConfiguration::fontSize() const
+qreal NotationConfiguration::fontSize() const
 {
     return uiConfiguration()->fontSize();
 }

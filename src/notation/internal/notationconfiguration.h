@@ -57,7 +57,7 @@ public:
     ValCh<int> currentZoom() const override;
     void setCurrentZoom(int zoomPercentage) override;
 
-    int fontSize() const override;
+    qreal fontSize() const override;
 
     io::path stylesDirPath() const override;
 

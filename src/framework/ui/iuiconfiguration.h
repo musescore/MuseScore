@@ -44,7 +44,7 @@ public:
     virtual QString fontFamily() const = 0;
     virtual async::Channel<QString> fontFamilyChanged() const = 0;
 
-    virtual int fontSize() const = 0;
+    virtual qreal fontSize() const = 0;
     virtual async::Channel<int> fontSizeChanged() const = 0;
 
     virtual QString musicalFontFamily() const = 0;

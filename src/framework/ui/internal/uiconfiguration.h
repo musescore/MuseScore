@@ -39,7 +39,7 @@ public:
     QString fontFamily() const override;
     async::Channel<QString> fontFamilyChanged() const override;
 
-    int fontSize() const override;
+    qreal fontSize() const override;
     async::Channel<int> fontSizeChanged() const override;
 
     QString musicalFontFamily() const override;
