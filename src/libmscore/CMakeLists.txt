@@ -2,157 +2,361 @@
 #  MuseScore
 #  Music Composition & Notation
 #
-#  Copyright (C) 2016 Werner Schweer
+#  Copyright (C) 2020 MuseScore BVBA and others
 #
 #  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License version 2
-#  as published by the Free Software Foundation and appearing in
-#  the file LICENSE.GPL
+#  it under the terms of the GNU General Public License version 2.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-# MSVC does not depend on copying all.h to the binary directory
-if (NOT MSVC)
-   add_custom_command(
-      OUTPUT ${PROJECT_BINARY_DIR}/all.h
-      COMMAND ${CMAKE_COMMAND}
-      ARGS -E copy ${PROJECT_SOURCE_DIR}/all.h ${PROJECT_BINARY_DIR}/all.h
-      DEPENDS ${PROJECT_SOURCE_DIR}/all.h
-      WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
-      )
-endif (NOT MSVC)
+set(MODULE libmscore)
 
-if (APPLE)
-        file(GLOB_RECURSE INCS "*.h")
-else (APPLE)
-        set(INCS "")
-endif (APPLE)
+set(MODULE_SRC
+    accidental.cpp
+    accidental.h
+    ambitus.cpp
+    ambitus.h
+    arpeggio.cpp
+    arpeggio.h
+    articulation.cpp
+    articulation.h
+    audio.cpp
+    audio.h
+    bagpembell.cpp
+    bagpembell.h
+    barline.cpp
+    barline.h
+    beam.cpp
+    beam.h
+    bend.cpp
+    bend.h
+    box.cpp
+    box.h
+    bracket.cpp
+    bracket.h
+    bracketItem.cpp
+    bracketItem.h
+    breath.cpp
+    breath.h
+    bsp.cpp
+    bsp.h
+    bsymbol.cpp
+    bsymbol.h
+    changeMap.cpp
+    changeMap.h
+    check.cpp
+    chord.cpp
+    chord.h
+    chordline.cpp
+    chordline.h
+    chordlist.cpp
+    chordlist.h
+    chordrest.cpp
+    chordrest.h
+    clef.cpp
+    clef.h
+    cleflist.cpp
+    cleflist.h
+    cmd.cpp
+    connector.cpp
+    connector.h
+    drumset.cpp
+    drumset.h
+    duration.cpp
+    duration.h
+    durationtype.cpp
+    durationtype.h
+    dynamic.cpp
+    dynamic.h
+    dynamichairpingroup.cpp
+    dynamichairpingroup.h
+    edit.cpp
+    element.cpp
+    elementgroup.cpp
+    elementgroup.h
+    element.h
+    elementmap.cpp
+    elementmap.h
+    excerpt.cpp
+    excerpt.h
+    fermata.cpp
+    fermata.h
+    fifo.cpp
+    fifo.h
+    figuredbass.cpp
+    figuredbass.h
+    fingering.cpp
+    fingering.h
+    fraction.h
+    fret.cpp
+    fret.h
+    glissando.cpp
+    glissando.h
+    groups.cpp
+    groups.h
+    hairpin.cpp
+    hairpin.h
+    harmony.cpp
+    harmony.h
+    hook.cpp
+    hook.h
+    icon.cpp
+    icon.h
+    image.cpp
+    image.h
+    imageStore.cpp
+    imageStore.h
+    iname.cpp
+    iname.h
+    input.cpp
+    input.h
+    instrchange.cpp
+    instrchange.h
+    instrtemplate.cpp
+    instrtemplate.h
+    instrument.cpp
+    instrument.h
+    interval.cpp
+    interval.h
+    joinMeasure.cpp
+    jump.cpp
+    jump.h
+    key.cpp
+    key.h
+    keylist.cpp
+    keylist.h
+    keysig.cpp
+    keysig.h
+    lasso.cpp
+    lasso.h
+    layoutbreak.cpp
+    layoutbreak.h
+    layout.cpp
+    layout.h
+    layoutlinear.cpp
+    ledgerline.cpp
+    ledgerline.h
+    letring.cpp
+    letring.h
+    line.cpp
+    line.h
+    location.cpp
+    location.h
+    lyrics.cpp
+    lyrics.h
+    lyricsline.cpp
+    marker.cpp
+    marker.h
+    mcursor.cpp
+    mcursor.h
+    measurebase.cpp
+    measurebase.h
+    measure.cpp
+    measure.h
+    measurenumber.cpp
+    measurenumber.h
+    measurerepeat.cpp
+    measurerepeat.h
+    midimapping.cpp
+    mmrest.cpp
+    mmrest.h
+    mscore.cpp
+    mscore.h
+    mscoreview.cpp
+    mscoreview.h
+    musescoreCore.h
+    navigate.cpp
+    navigate.h
+    note.cpp
+    notedot.cpp
+    notedot.h
+    noteentry.cpp
+    noteevent.cpp
+    noteevent.h
+    note.h
+    noteline.cpp
+    noteline.h
+    notifier.hpp
+    ossia.cpp
+    ossia.h
+    ottava.cpp
+    ottava.h
+    page.cpp
+    page.h
+    palmmute.cpp
+    palmmute.h
+    part.cpp
+    part.h
+    paste.cpp
+    pedal.cpp
+    pedal.h
+    pitch.cpp
+    pitch.h
+    pitchspelling.cpp
+    pitchspelling.h
+    pitchvalue.h
+    pos.cpp
+    pos.h
+    preferences.cpp
+    preferences.h
+    property.cpp
+    property.h
+    range.cpp
+    range.h
+    read114.cpp
+    read206.cpp
+    read206.h
+    read301.cpp
+    realizedharmony.cpp
+    realizedharmony.h
+    rehearsalmark.cpp
+    rehearsalmark.h
+    rendermidi.cpp
+    rendermidi.h
+    repeatlist.cpp
+    repeatlist.h
+    rest.cpp
+    rest.h
+    revisions.cpp
+    revisions.h
+    score.cpp
+    scorediff.cpp
+    scorediff.h
+    scoreElement.cpp
+    scoreElement.h
+    scorefile.cpp
+    score.h
+    scoretree.cpp
+    segment.cpp
+    segment.h
+    segmentlist.cpp
+    segmentlist.h
+    select.cpp
+    select.h
+    sequencer.h
+    shadownote.cpp
+    shadownote.h
+    shape.cpp
+    shape.h
+    sig.cpp
+    sig.h
+    skyline.cpp
+    skyline.h
+    slur.cpp
+    slur.h
+    slurtie.cpp
+    slurtie.h
+    spacer.cpp
+    spacer.h
+    spanner.cpp
+    spanner.h
+    spannermap.cpp
+    spannermap.h
+    spatium.h
+    splitMeasure.cpp
+    staff.cpp
+    staff.h
+    stafflines.cpp
+    stafflines.h
+    staffstate.cpp
+    staffstate.h
+    stafftextbase.cpp
+    stafftextbase.h
+    stafftext.cpp
+    stafftext.h
+    stafftypechange.cpp
+    stafftypechange.h
+    stafftype.cpp
+    stafftype.h
+    stafftypelist.cpp
+    stafftypelist.h
+    stem.cpp
+    stem.h
+    stemslash.cpp
+    stemslash.h
+    sticking.cpp
+    sticking.h
+    stringdata.cpp
+    stringdata.h
+    style.cpp
+    style.h
+    symbol.cpp
+    symbol.h
+    sym.cpp
+    sym.h
+    synthesizerstate.cpp
+    synthesizerstate.h
+    system.cpp
+    systemdivider.cpp
+    systemdivider.h
+    system.h
+    systemtext.cpp
+    systemtext.h
+    tempo.cpp
+    tempo.h
+    tempotext.cpp
+    tempotext.h
+    textbase.cpp
+    textbase.h
+    text.cpp
+    textedit.cpp
+    textedit.h
+    textframe.cpp
+    textframe.h
+    text.h
+    textlinebase.cpp
+    textlinebase.h
+    textline.cpp
+    textline.h
+    tie.cpp
+    tie.h
+    tiemap.h
+    timesig.cpp
+    timesig.h
+    transpose.cpp
+    tremolobar.cpp
+    tremolobar.h
+    tremolo.cpp
+    tremolo.h
+    trill.cpp
+    trill.h
+    tuplet.cpp
+    tuplet.h
+    tupletmap.h
+    types.h
+    undo.cpp
+    undo.h
+    unrollrepeats.cpp
+    utils.cpp
+    utils.h
+    vibrato.cpp
+    vibrato.h
+    volta.cpp
+    volta.h
+    xml.h
+    xmlreader.cpp
+    xmlwriter.cpp
+    )
 
-if (NOT MSVC)
-   set(_all_h_file "${PROJECT_BINARY_DIR}/all.h")
-else (NOT MSVC)
-   set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
-endif (NOT MSVC)
-
-include_directories(
-      ${PROJECT_SOURCE_DIR}/thirdparty/dtl
-      ${PROJECT_SOURCE_DIR}/framework/global
-      )
-
-add_library (
-      libmscore STATIC
-      ${_all_h_file}
-      ${INCS}
-
-      types.h accidental.h ambitus.h arpeggio.h articulation.h audio.h bagpembell.h barline.h beam.h bend.h
-      box.h bracket.h bracketItem.h breath.h bsp.h bsymbol.h changeMap.h chord.h chordline.h chordlist.h chordrest.h clef.h
-      cleflist.h connector.h drumset.h dsp.h duration.h durationtype.h dynamic.h element.h
-      elementmap.h excerpt.h fermata.h fifo.h figuredbass.h fingering.h fraction.h fret.h glissando.h groups.h hairpin.h
-      harmony.h hook.h icon.h image.h imageStore.h iname.h input.h instrchange.h instrtemplate.h instrument.h interval.h
-      jump.h key.h keylist.h keysig.h lasso.h layout.h layoutbreak.h ledgerline.h letring.h line.h location.h
-      lyrics.h marker.h mcursor.h measure.h measurebase.h mmrest.h mscore.h mscoreview.h musescoreCore.h navigate.h note.h notedot.h
-      noteevent.h noteline.h ossia.h ottava.h page.h palmmute.h part.h pedal.h pitch.h pitchspelling.h pitchvalue.h
-      pos.h property.h range.h read206.h realizedharmony.h rehearsalmark.h measurerepeat.h repeatlist.h rest.h revisions.h score.h scoreElement.h segment.h
-      segmentlist.h select.h sequencer.h shadownote.h shape.h sig.h slur.h slurtie.h spacer.h spanner.h spannermap.h spatium.h
-      staff.h stafflines.h staffstate.h stafftext.h stafftextbase.h stafftype.h stafftypechange.h stafftypelist.h stem.h
-      stemslash.h stringdata.h style.h sym.h symbol.h synthesizerstate.h system.h systemdivider.h systemtext.h tempo.h
-      tempotext.h text.h measurenumber.h textbase.h textedit.h textframe.h textline.h textlinebase.h tie.h tiemap.h timesig.h
-      tremolo.h tremolobar.h trill.h tuplet.h tupletmap.h types.h undo.h utils.h vibrato.h volta.h xml.h
-
-      segmentlist.cpp fingering.cpp accidental.cpp arpeggio.cpp
-      fermata.cpp articulation.cpp barline.cpp beam.cpp bend.cpp box.cpp
-      bracket.cpp breath.cpp bsp.cpp changeMap.cpp chord.cpp chordline.cpp
-      chordlist.cpp chordrest.cpp clef.cpp cleflist.cpp
-      drumset.cpp durationtype.cpp dynamic.cpp dynamichairpingroup.cpp edit.cpp noteentry.cpp
-      element.cpp elementgroup.cpp excerpt.cpp
-      fifo.cpp fret.cpp glissando.cpp hairpin.cpp
-      harmony.cpp hook.cpp image.cpp iname.cpp instrchange.cpp
-      instrtemplate.cpp instrument.cpp interval.cpp
-      key.cpp keysig.cpp lasso.cpp
-      layoutbreak.cpp layout.cpp line.cpp lyrics.cpp measurebase.cpp
-      measure.cpp mmrest.cpp navigate.cpp note.cpp noteevent.cpp ottava.cpp
-      page.cpp part.cpp pedal.cpp letring.cpp vibrato.cpp palmmute.cpp pitch.cpp pitchspelling.cpp
-      rendermidi.cpp measurerepeat.cpp repeatlist.cpp rest.cpp
-      score.cpp scoretree.cpp segment.cpp select.cpp shadownote.cpp slur.cpp tie.cpp slurtie.cpp
-      spacer.cpp spanner.cpp staff.cpp staffstate.cpp
-      stafftextbase.cpp stafftext.cpp systemtext.cpp stafftype.cpp stem.cpp style.cpp symbol.cpp
-      sym.cpp system.cpp stringdata.cpp tempotext.cpp text.cpp measurenumber.cpp textbase.cpp textedit.cpp
-      textframe.cpp textline.cpp textlinebase.cpp timesig.cpp
-      tremolobar.cpp tremolo.cpp trill.cpp tuplet.cpp
-      utils.cpp volta.cpp xmlreader.cpp xmlwriter.cpp mscore.cpp
-      undo.cpp cmd.cpp scorefile.cpp revisions.cpp
-      check.cpp input.cpp icon.cpp ossia.cpp
-      tempo.cpp sig.cpp pos.cpp duration.cpp
-      figuredbass.cpp rehearsalmark.cpp transpose.cpp
-      property.cpp range.cpp elementmap.cpp notedot.cpp imageStore.cpp
-      audio.cpp splitMeasure.cpp joinMeasure.cpp
-      paste.cpp
-      bsymbol.cpp marker.cpp jump.cpp stemslash.cpp ledgerline.cpp
-      synthesizerstate.cpp mcursor.cpp groups.cpp mscoreview.cpp
-      noteline.cpp spannermap.cpp
-      bagpembell.cpp ambitus.cpp keylist.cpp scoreElement.cpp
-      shape.cpp systemdivider.cpp midimapping.cpp stafflines.cpp
-      sticking.cpp
-      read114.cpp
-      read206.cpp
-      read301.cpp realizedharmony.cpp stafftypelist.cpp stafftypechange.cpp
-      bracketItem.cpp
-      lyricsline.cpp
-      layoutlinear.cpp
-      connector.cpp location.cpp skyline.cpp
-      scorediff.cpp
-      unrollrepeats.cpp
-      preferences.cpp
-      )
-
-set (LINK_LIBS )
+set(MODULE_INCLUDE
+    ${PROJECT_SOURCE_DIR}/thirdparty/dtl
+    )
 
 set(FREETYPE_LIB )
 if (USE_SYSTEM_FREETYPE)
-     set(FREETYPE_LIB freetype)
+     set(MODULE_LINK freetype)
 else (USE_SYSTEM_FREETYPE)
-     set(FREETYPE_LIB mscore_freetype)
+     set(MODULE_LINK mscore_freetype)
 endif (USE_SYSTEM_FREETYPE)
 
-set(LINK_LIBS ${LINK_LIBS} ${FREETYPE_LIB} midi_old)
+set(MODULE_LINK ${MODULE_LINK} midi_old)
 
-target_link_libraries(libmscore ${LINK_LIBS})
-
-##
-## Code coverage. Only affects DEBUG builds.
-##
-
-set(COVERAGE_OPTIONS "")
-if (NOT APPLE AND NOT MINGW AND NOT MSVC AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
-   if (COVERAGE)
-      set(COVERAGE_OPTIONS "-O0 --coverage")
-      set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE 1)
-      target_link_libraries(libmscore gcov)
-   endif (COVERAGE)
-endif (NOT APPLE AND NOT MINGW AND NOT MSVC AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
-
-
-
-if (NOT MSVC)
-   set_target_properties (
-      libmscore
-      PROPERTIES
-         COMPILE_FLAGS "-g ${PCH_INCLUDE} -Wall -Wextra -Winvalid-pch -Woverloaded-virtual ${COVERAGE_OPTIONS}"
-      )
-else (NOT MSVC)
-   set_target_properties (
-      libmscore
-      PROPERTIES
-         COMPILE_FLAGS "${PCH_INCLUDE}"
-      )
-endif (NOT MSVC)
-
-xcode_pch(libmscore all)
-
-# Use MSVC pre-compiled headers
-vstudio_pch( libmscore )
-
-# MSVC does not depend on mops1 & mops2 for PCH
-if (NOT MSVC)
-   #ADD_DEPENDENCIES(libmscore mops1)
-   #ADD_DEPENDENCIES(libmscore mops2)
-endif (NOT MSVC)
+include(${PROJECT_SOURCE_DIR}/build/module.cmake)
