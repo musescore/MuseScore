@@ -54,7 +54,7 @@ constexpr double COMPARE_DOUBLE_EPSILON(1000000000.0);
 constexpr double COMPARE_DOUBLE_NULL(0.000000001);
 
 constexpr float COMPARE_FLOAT_EPSILON(1000000.0);
-constexpr float COMPARE_FLOAT_NULL(0.000001);
+constexpr float COMPARE_FLOAT_NULL(0.000001F);
 
 inline bool RealIsEqual(double p1, double p2)
 {

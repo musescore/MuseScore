@@ -178,3 +178,6 @@ endif (NOT MSVC)
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 
+if (MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4250")
+endif (MSVC)

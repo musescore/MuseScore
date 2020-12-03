@@ -116,7 +116,7 @@ void AudioEngineDevTools::makeArpeggio()
                          chunk.beginTick = tick;
                          chunk.endTick = chunk.beginTick + duration;
 
-                         uint32_t note_duration = duration / notes.size();
+                         uint32_t note_duration = static_cast<uint32_t>(duration / notes.size());
                          uint32_t note_time = tick + (tick > 0 ? note_duration : 0);
 
                          for (int n : notes) {

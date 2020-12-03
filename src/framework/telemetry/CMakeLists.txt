@@ -104,3 +104,6 @@ elseif(PLATFORM_IS_MACOS)
     install(PROGRAMS ${CPAD_ROOT_PATH}/macos/x86-64/crashpad_handler DESTINATION ${Mscore_SHARE_NAME}Contents/MacOS)
 endif()
 
+if (MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4100")
+endif (MSVC)
