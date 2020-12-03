@@ -199,7 +199,6 @@ bool InspectorListModel::isModelAlreadyExists(const AbstractInspectorModel::Insp
 
 void InspectorListModel::subscribeOnSelectionChanges()
 {
-#ifdef BUILD_UI_MU4
     if (!context() || !context()->currentNotation()) {
         setElementList(QList<Ms::Element*>());
     }
@@ -222,5 +221,4 @@ void InspectorListModel::subscribeOnSelectionChanges()
             setElementList(elements);
         });
     });
-#endif
 }

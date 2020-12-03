@@ -86,14 +86,10 @@ if (MSVC)
    set (MINGW false)
 endif (MSVC)
 
-option(BUILD_UI_MU4 "Build Modern UI MuseScore 4" ON)
-
 # We need this early, before FindQt5
 option(BUILD_WEBENGINE "Built in webengine support" ON)
 
-if (BUILD_UI_MU4)
-    set(BUILD_WEBENGINE OFF)
-endif(BUILD_UI_MU4)
+set(BUILD_WEBENGINE OFF)
 
 if (BUILD_WEBENGINE)
    if (MINGW)
@@ -176,7 +172,6 @@ set(CRASH_REPORT_URL "" CACHE STRING "URL where to send crash reports")
 option(BUILD_TELEMETRY_MODULE "Build with telemetry module" ON)
 set(TELEMETRY_TRACK_ID "" CACHE STRING "Telemetry track id")
 option(BUILD_PORTABLEAPPS "Windows build for PortableApps.com" OFF)
-option(BUILD_UI_MU4_WITH_MU3 "Build Modern UI MuseScore 4 and MU3 source code" OFF)
 option(BUILD_UNIT_TESTS "Build gtest unit test" OFF)
 option(MODULE_BUILD_PCH "Build using precompiled headers in MU4 modules" ON)
 option(QML_LOAD_FROM_SOURCE "Load qml files from source (not resource)" OFF)
@@ -189,7 +184,6 @@ set(VST3_SDK_PATH "" CACHE PATH "Path to VST3_SDK. SDK version >= ${VST3_SDK_VER
 add_definitions(-DQT_QML_DEBUG)
 add_definitions(-D_USE_MATH_DEFINES)
 
-message("[cmake] BUILD_UI_MU4: ${BUILD_UI_MU4}")
 message("[cmake] CRASH_REPORT_URL: ${CRASH_REPORT_URL}")
 
 message(STATUS "CMAKE_CXX_COMPILER_ID: ${CMAKE_CXX_COMPILER_ID}")
@@ -688,19 +682,6 @@ else (USE_SYSTEM_FREETYPE)
       include_directories(${PROJECT_SOURCE_DIR}/thirdparty/freetype/include)
 endif (USE_SYSTEM_FREETYPE)
 
-set (BUILD_MU3 OFF)
-if (BUILD_UI_MU4)
-    if (BUILD_UI_MU4_WITH_MU3)
-        set (BUILD_MU3 ON)
-    endif(BUILD_UI_MU4_WITH_MU3)
-else (BUILD_UI_MU4)
-    set (BUILD_MU3 ON)
-endif(BUILD_UI_MU4)
-
-if (BUILD_MU3)
-    add_subdirectory(mscore)
-endif(BUILD_MU3)
-
 add_subdirectory(main)
 
 ##
@@ -710,34 +691,6 @@ configure_file (
       ${PROJECT_SOURCE_DIR}/build/config.h.in
       ${PROJECT_BINARY_DIR}/config.h
       )
-
-##
-## Add subdirs
-##
-
-if (BUILD_MU3)
-    add_subdirectory(bww2mxml)
-    add_subdirectory(effects)
-    add_subdirectory(audio)
-
-    string(TOUPPER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
-    if (APPLE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
-    # With xcode, we need to have all the targets in the same project
-    add_subdirectory(mtest)
-    else(APPLE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
-    add_subdirectory(mtest EXCLUDE_FROM_ALL)
-    endif(APPLE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
-
-    add_subdirectory(rdoc EXCLUDE_FROM_ALL)
-    add_subdirectory(miditools EXCLUDE_FROM_ALL)
-    add_subdirectory(fonttools EXCLUDE_FROM_ALL)
-    add_subdirectory(demos)
-
-    if (OSC)
-          add_subdirectory(thirdparty/ofqf)
-    endif (OSC)
-
-endif(BUILD_MU3)
 
 add_subdirectory(awl)
 add_subdirectory(audiofile)
@@ -833,17 +786,7 @@ if (BUILD_UNIT_TESTS)
 endif(BUILD_UNIT_TESTS)
 
 add_subdirectory(framework)
-
-if (BUILD_UI_MU4)
-    add_subdirectory(mu4)
-else(BUILD_UI_MU4)
-    add_subdirectory(mu4/importexport)
-    add_subdirectory(mu4/commonscene)
-    add_subdirectory(mu4/inspector)
-    add_subdirectory(mu4/palette)
-    add_subdirectory(mu4/cloud)
-    add_subdirectory(mu4/plugins)
-endif(BUILD_UI_MU4)
+add_subdirectory(mu4)
 
 ## TEMP: Display all variables!
 ### message(STATUS "===========================================================")

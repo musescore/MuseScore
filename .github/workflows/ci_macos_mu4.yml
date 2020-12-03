@@ -139,7 +139,7 @@ jobs:
       run: |
         T_ID=${{ secrets.TELEMETRY_TRACK_ID }}; if [ -z "$T_ID" ]; then T_ID="''"; fi
         C_URL=${SENTRY_URL}; if [ -z "$C_URL" ]; then C_URL="''"; fi
-        bash ./build/ci/macos/build.sh -n ${{ github.run_id }} --telemetry $T_ID --crash_log_url $C_URL --build_mu4 ON
+        bash ./build/ci/macos/build.sh -n ${{ github.run_id }} --telemetry $T_ID --crash_log_url $C_URL
         echo "============== ccache ==============="
         ccache -s
     - name: Generate dump symbols

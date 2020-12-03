@@ -38,11 +38,9 @@ std::string InspectorModule::moduleName() const
 
 void InspectorModule::registerExports()
 {
-#ifdef BUILD_UI_MU4
     static std::shared_ptr<MU4InspectorAdapter> adapter = std::make_shared<MU4InspectorAdapter>();
 
     mu::framework::ioc()->registerExport<mu::inspector::IInspectorAdapter>(moduleName(), adapter);
-#endif
 }
 
 void InspectorModule::resolveImports()
