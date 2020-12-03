@@ -1682,6 +1682,9 @@ static void distributeStaves(Page* page)
                   vgd->sysStaff->bbox().translate(0.0, staffShift);
             prvSystem = vgd->system;
             }
+      if (prvSystem)
+            prvSystem->setHeight(prvSystem->height() + staffShift);
+
       for (System* system : systems) {
             system->setMeasureHeight(system->height());
             system->layoutBracketsVertical();
