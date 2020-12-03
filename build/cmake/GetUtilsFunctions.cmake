@@ -163,7 +163,7 @@ function(fn__build_container # create zip archive with META_INF/container.xml
   # ARGN remaining arguments are more files to go in the archive
   )
   configure_file(
-    "${_FUNCTIONS_DIR}/container.xml.in" # substitute @ROOTFILE@
+    "${_FUNCTIONS_DIR}/../container.xml.in" # substitute @ROOTFILE@
     "${DIR_IN}/META-INF/container.xml"
     )
   fn__build_zip(

@@ -60,7 +60,7 @@ endif (NOT MSVC)
 
 # --- Crashpad ---
 # Not building with MinGW, so turned off for MinGW
-include(${PROJECT_SOURCE_DIR}/build/compiler.cmake)
+include(GetCompilerInfo)
 set(BUILD_CRASHPAD_CLIENT ON)
 if (COMPILER_IS_MINGW)
     set(BUILD_CRASHPAD_CLIENT OFF)

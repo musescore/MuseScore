@@ -26,7 +26,6 @@
 #define STATIC_SCRIPT_BINDINGS
 #define BUILD_SCRIPTGEN
 #define HAS_AUDIOFILE
-/* #undef USE_SSE */
 
 #define INSTALL_NAME      "mscore-2.0/"
 #define INSTPREFIX        "/usr/local"
