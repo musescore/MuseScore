@@ -166,10 +166,6 @@ void NotationNoteInput::toggleNoteInputMethod(NoteInputMethod method)
 
 void NotationNoteInput::addNote(NoteName noteName, NoteAddingMode addingMode)
 {
-    if (!isNoteInputMode()) {
-        startNoteInput();
-    }
-
     Ms::EditData editData;
     editData.view = m_scoreCallbacks;
 
