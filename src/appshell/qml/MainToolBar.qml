@@ -3,8 +3,10 @@ import QtQuick.Controls 2.0
 import MuseScore.UiComponents 1.0
 
 Rectangle {
-
     id: root
+
+    width: radioButtonList.contentWidth
+    height: radioButtonList.contentHeight
 
     property var currentUri: "musescore://home"
     property var items: [
@@ -42,9 +44,6 @@ Rectangle {
 
     RadioButtonGroup {
         id: radioButtonList
-
-        height: parent.height
-        width: parent.width
 
         spacing: 0
 

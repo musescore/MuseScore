@@ -27,6 +27,8 @@ using namespace mu::dock;
 
 static const QString qss = QString("QToolBar { background: %1; border: 0; padding: 0; }");
 
+static const qreal MOVING_BUTTON_WIDTH(10);
+
 DockToolBar::DockToolBar(QQuickItem* parent)
     : DockView(parent)
 {
@@ -71,11 +73,22 @@ void DockToolBar::updateStyle()
 void DockToolBar::onToolbarEvent(QEvent* e)
 {
     if (QEvent::Resize == e->type()) {
-        QResizeEvent* re = static_cast<QResizeEvent*>(e);
-        view()->resize(re->size());
+        QResizeEvent* resizeEvent = static_cast<QResizeEvent*>(e);
+        resize(resizeEvent->size());
     } else if (QEvent::ShowToParent == e->type()) {
-        view()->resize(m_tool.bar->size());
+        resize(m_tool.bar->size());
     }
+}
+
+void DockToolBar::resize(const QSize& size)
+{
+    QSize newSize = size;
+    if (m_tool.bar->orientation() == Qt::Horizontal) {
+        newSize.setWidth(newSize.width() - MOVING_BUTTON_WIDTH);
+    } else {
+        newSize.setHeight(newSize.height() - MOVING_BUTTON_WIDTH);
+    }
+    view()->resize(newSize);
 }
 
 DockToolBar::Widget DockToolBar::widget() const
@@ -96,6 +109,11 @@ int DockToolBar::minimumHeight() const
 int DockToolBar::minimumWidth() const
 {
     return m_minimumWidth;
+}
+
+Qt::ToolBarAreas DockToolBar::allowedAreas() const
+{
+    return widget().bar->allowedAreas();
 }
 
 void DockToolBar::setMinimumHeight(int minimumHeight)
@@ -123,4 +141,10 @@ void DockToolBar::setMinimumWidth(int minimumWidth)
         view()->setMinimumWidth(minimumWidth);
     }
     emit minimumWidthChanged(m_minimumWidth);
+}
+
+void DockToolBar::setAllowedAreas(Qt::ToolBarAreas allowedAreas)
+{
+    widget().bar->setAllowedAreas(allowedAreas);
+    emit allowedAreasChanged(allowedAreas);
 }

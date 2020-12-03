@@ -17,15 +17,13 @@ DockPage {
         id: notationNoteInputBar
         objectName: "notationNoteInputBar"
 
-        minimumWidth: orientation == Qt.Horizontal ? 600 : 96
+        minimumWidth: orientation == Qt.Horizontal ? 900 : 96
         minimumHeight: orientation == Qt.Horizontal ? 48 : 0
 
         color: notationPage.color
 
         content: NoteInputBar {
-            anchors.fill: parent
             color: notationNoteInputBar.color
-
             orientation: notationNoteInputBar.orientation
         }
     }
