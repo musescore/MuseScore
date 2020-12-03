@@ -268,7 +268,7 @@ static void playNote(EventMap* events, const Note* note, int channel, int pitch,
                         Note* nextNote = toNote(spanner->endElement());
                         double pitchDelta = (static_cast<double>(nextNote->pitch()) - pitch) * 50.0;
                         double timeDelta = static_cast<double>(offTime - onTime);
-                        double timeStep = timeDelta / pitchDelta * 20.0;
+                        double timeStep = std::abs(timeDelta / pitchDelta * 20.0);
                         double t = 0.0;
                         QList<int> onTimes;
                         EaseInOut easeInOut(static_cast<qreal>(glissando->easeIn()) / 100.0,
