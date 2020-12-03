@@ -36,7 +36,7 @@ std::shared_ptr<IAudioSource> MidiStreamController::makeSource(const StreamID& i
 {
     UNUSED(id);
     std::shared_ptr<MidiSource> midi = std::make_shared<MidiSource>(name);
-    return std::move(midi);
+    return midi;
 }
 
 void MidiStreamController::fillAudioContext(const std::shared_ptr<Stream>& s, Context* ctx)
