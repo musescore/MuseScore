@@ -25,6 +25,8 @@
 
 #include <random>
 
+#include <QDate>
+
 namespace Ms {
 
 const QSize MsSplashScreen::designSize { 720, 405 };
@@ -50,16 +52,25 @@ MsSplashScreen::MsSplashScreen()
    : QSplashScreen(QPixmap(designSize))
    , _bgImage(createBackgroundImage(width(), height(), MuseScore::unstable() ? unstableBuildGradientColors : stableBuildGradientColors))
    , _devBuildIconRenderer(QString(":/data/maintenance.svg"), this)
-   , _logotypeRenderer(QString(":/data/musescore-logotype.svg"), this)
    , _miscText(QString(tr("Version %1")).arg(VERSION) + "\nwww.musescore.org")
 
    , _devBuildIconRect(scaleSvgRect(designDevBuildIconRect, _devBuildIconRenderer))
    , _devBuildTextRect(scaleRect(designDevBuildTextRect))
-   , _logotypeRect(scaleSvgRect(designLogotypeRect, _logotypeRenderer))
    , _messageTextRect(scaleRect(designMessageTextRect))
    , _miscTextRect(scaleRect(designMiscTextRect))
       {
       setWindowTitle("MuseScore Startup");
+
+      QDate d = QDate::currentDate();
+      if (d.day() >= 24 && d.day() <=27 && d.month() == 12) {
+            _logotypeRenderer.load(QString(":/data/musescore-logotype-c.svg"));
+      }
+      else {
+            _logotypeRenderer.load(QString(":/data/musescore-logotype.svg"));
+      }
+
+      _logotypeRect = scaleSvgRect(designLogotypeRect, _logotypeRenderer);
+
 
 #ifdef Q_OS_MAC
       // To have session dialog on top of splash screen on Mac.

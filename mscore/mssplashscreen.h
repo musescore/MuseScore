@@ -46,7 +46,7 @@ class MsSplashScreen : public QSplashScreen {
 
       const QRectF _devBuildIconRect;
       const QRectF _devBuildTextRect;
-      const QRectF _logotypeRect;
+      QRectF _logotypeRect;
       const QRectF _messageTextRect;
       const QRectF _miscTextRect;
 

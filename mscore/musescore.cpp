@@ -8055,7 +8055,7 @@ void MuseScore::init(QStringList& argv)
 
       MsSplashScreen* sc = nullptr;
       if (!MScore::noGui && preferences.getBool(PREF_UI_APP_STARTUP_SHOWSPLASHSCREEN)) {
-            sc = new MsSplashScreen;
+            sc = new MsSplashScreen();
             sc->show();
             qApp->processEvents();
             }
