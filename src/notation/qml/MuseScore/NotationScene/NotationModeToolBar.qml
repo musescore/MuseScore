@@ -10,6 +10,9 @@ import "internal"
 Rectangle {
     id: root
 
+    width: contentRow.width
+    height: contentRow.height
+
     property var items: [
         {
             title: qsTrc("notation", "Parts"),
@@ -24,6 +27,8 @@ Rectangle {
     ]
 
     Row {
+        id: contentRow
+
         anchors.verticalCenter: parent.verticalCenter
 
         spacing: 12

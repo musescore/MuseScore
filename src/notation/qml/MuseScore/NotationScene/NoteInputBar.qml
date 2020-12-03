@@ -27,8 +27,9 @@ Rectangle {
 
         model: noteInputModel
 
-        sectionDelegate: Rectangle {
-            color: ui.theme.strokeColor
+        sectionDelegate: SeparatorLine {
+            orientation: gridView.orientation === Qt.Vertical ? Qt.Horizontal : Qt.Vertical
+            visible: itemIndex !== 0
         }
 
         itemDelegate: FlatButton {
@@ -70,7 +71,7 @@ Rectangle {
             when: privatesProperties.isHorizontal
             PropertyChanges {
                 target: gridView
-                sectionWidth: 2
+                sectionWidth: 1
                 sectionHeight: root.height
                 rows: 1
                 columns: gridView.noLimit
@@ -87,7 +88,7 @@ Rectangle {
             PropertyChanges {
                 target: gridView
                 sectionWidth: root.width
-                sectionHeight: 2
+                sectionHeight: 1
                 rows: gridView.noLimit
                 columns: 2
             }

@@ -131,9 +131,17 @@ void NoteInputBarCustomiseModel::addSeparatorLine()
     }
 
     QModelIndex selectedItemIndex = m_selectionModel->selectedIndexes().first();
+    if (!selectedItemIndex.isValid()) {
+        return;
+    }
 
-    beginInsertRows(selectedItemIndex.parent(), selectedItemIndex.row() + 1, selectedItemIndex.row() + 1);
-    m_actions.insert(selectedItemIndex.row() + 1, makeSeparatorItem());
+    QModelIndex prevItemIndex = index(selectedItemIndex.row() - 1);
+    if (!prevItemIndex.isValid()) {
+        return;
+    }
+
+    beginInsertRows(prevItemIndex.parent(), prevItemIndex.row() + 1, prevItemIndex.row() + 1);
+    m_actions.insert(prevItemIndex.row() + 1, makeSeparatorItem());
     endInsertRows();
 
     updateOperationsAvailability();
@@ -383,18 +391,19 @@ void NoteInputBarCustomiseModel::updateAddSeparatorAvailability()
 
     QModelIndex selectedItemIndex = m_selectionModel->selectedIndexes().first();
 
-    AbstractNoteInputBarItem* lastSelectedItem = modelIndexToItem(selectedItemIndex);
-    addingAvailable = lastSelectedItem && lastSelectedItem->type() == AbstractNoteInputBarItem::ACTION;
+    AbstractNoteInputBarItem* selectedItem = modelIndexToItem(selectedItemIndex);
+    addingAvailable = selectedItem && selectedItem->type() == AbstractNoteInputBarItem::ACTION;
 
     if (!addingAvailable) {
         setIsAddSeparatorAvailable(addingAvailable);
         return;
     }
 
-    QModelIndex nextItemIndex = index(selectedItemIndex.row() + 1);
-    if (nextItemIndex.isValid()) {
-        AbstractNoteInputBarItem* nextItem = modelIndexToItem(nextItemIndex);
-        addingAvailable = !nextItem || nextItem->type() == AbstractNoteInputBarItem::ACTION;
+    QModelIndex prevItemIndex = index(selectedItemIndex.row() - 1);
+    addingAvailable = prevItemIndex.isValid();
+    if (addingAvailable) {
+        AbstractNoteInputBarItem* prevItem = modelIndexToItem(prevItemIndex);
+        addingAvailable = prevItem && prevItem->type() == AbstractNoteInputBarItem::ACTION;
     }
 
     setIsAddSeparatorAvailable(addingAvailable);
