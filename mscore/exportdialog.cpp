@@ -348,8 +348,21 @@ void MuseScore::showExportDialog(const QString& type)
 
 void ExportDialog::accept()
       {
-      QString saveDialogTitle = tr("Export");
-
+      // Collect which scores to export
+      QList<Score*> scores;
+      bool containsMasterScore = false;
+      for (int i = 0; i < listWidget->count(); i++) {
+            ExportScoreItem* item = static_cast<ExportScoreItem*>(listWidget->item(i));
+            if (item->isChecked()) {
+                  scores.append(item->score());
+                  if (item->score()->isMaster())
+                        containsMasterScore = true;
+                  }
+            }
+      if (scores.isEmpty())
+            return; // Should never happen
+      
+      // Ask for save name and location
       QString saveDirectory;
       if (cs->masterScore()->fileInfo()->exists())
             saveDirectory = cs->masterScore()->fileInfo()->dir().path();
@@ -416,24 +429,34 @@ void ExportDialog::accept()
       } else if (currentIndex == 9)
             saveFormat = "mscx";
 
+      // If only one file will be created during export, the filename will be exactly
+      // as the user types in the SaveDialog, so therefore, we can have the SaveDialog
+      // responsible for asking whether the user wants to replace any existing files.
+      // Otherwise, we will ask that per file, here below.
+      bool oneScore = scores.size() == 1;
+      bool singlePDF = saveFormat == "pdf" && pdfOneFileRadioButton->isChecked();
+      bool oneFile = (oneScore && saveFormat != "png" && saveFormat != "svg") || singlePDF;
+
       QString filter;
       if (saveFormat == "mid")
-            filter = "*.mid;*.midi;";
+            filter = "*.mid;*.midi";
       else
-            filter = "*." + saveFormat;
+            filter = QString("*.%1").arg(saveFormat);
 
-      QString name;
+      QString name = QString("%1/%2").arg(saveDirectory, cs->masterScore()->fileInfo()->completeBaseName());
+      if (oneScore) {
+            Score* score = scores.first();
+            name.append(QString(" - %1").arg(score->isMaster() ? tr("Full Score") : score->title()));
+            }
+      else if (singlePDF)
+            name.append(QString(" - %1").arg(containsMasterScore ? tr("Score and Parts") : tr("Parts")));
+
 #ifdef Q_OS_WIN
-      if (QOperatingSystemVersion::current() <= QOperatingSystemVersion(QOperatingSystemVersion::Windows, 5, 1))    // XP
-            name = QString("%1/%2").arg(saveDirectory)
-                         .arg(cs->masterScore()->fileInfo()->completeBaseName());
-      else
+      if (QOperatingSystemVersion::current() > QOperatingSystemVersion(QOperatingSystemVersion::Windows, 5, 1))    // XP
 #endif
-      name = QString("%1/%2.%3").arg(saveDirectory)
-                   .arg(cs->masterScore()->fileInfo()->completeBaseName())
-                   .arg(saveFormat);
+            name.append(QString(".%1").arg(saveFormat));
 
-      QString filename = mscore->getSaveScoreName(saveDialogTitle, name, filter);
+      QString filename = mscore->getSaveScoreName(tr("Export"), name, filter, /*selectFolder*/ false, /*askOverwrite*/ oneFile);
       if (filename.isEmpty())
             return; // User cancels; keep Export dialog open
 
@@ -450,73 +473,54 @@ void ExportDialog::accept()
       // At this moment, close the dialog
       QDialog::accept();
 
-      QList<Score*> scores;
-      for (int i = 0; i < listWidget->count(); i++) {
-            ExportScoreItem* item = static_cast<ExportScoreItem*>(listWidget->item(i));
-            if (item->isChecked()) {
-                  scores.append(item->score());
-                  }
-            }
-      if (scores.count() == 0)
-            return; // Should never happen
-      
-      if (saveFormat == "pdf" && pdfOneFileRadioButton->isChecked()) {
-            // Export all selected scores as one pdf file
-            if (!mscore->savePdf(scores, filename))
-                  return;
-            
-            QMessageBox::information(this, tr("Export"), tr("Export was successful."));
-      } else {
-            // Export all selected scores as separate files
-            bool overwriteAll = false;
-            bool noToAll = false;
-            QString confirmReplaceTitle = tr("Confirm Replace");
-            QString confirmReplaceMessage = tr("\"%1\" already exists.\nDo you want to replace it?\n");
-            QString replaceAllButtonText = tr("Replace All");
-            QString replaceButtonText = tr("Replace");
-            QString skipButtonText = tr("Skip");
-            QString skipAllButtonText = tr("Skip All");
-            
+      bool success = true;
+      if (singlePDF)
+            // Export the selected scores as one pdf file, directly with the filename the user typed
+            success = mscore->savePdf(scores, filename);
+      else if (oneScore)
+            // Export the selected score, directly with the filename the user typed
+            success = mscore->saveAs(scores.first(), true, filename, suffix);
+      else {
+            // Export the selected scores as separate files, appending the part names to the filename
+            SaveReplacePolicy replacePolicy = SaveReplacePolicy::NO_CHOICE;
+
             for (Score* score : scores) {
-                  QString definitiveFilename;
-                  if (score->isMaster())
-                        definitiveFilename = filename;
-                  else
-                        definitiveFilename = QString("%1/%2-%3.%4").arg(fileinfo.absolutePath(),
-                                                                        fileinfo.completeBaseName(),
-                                                                        score->title(),
-                                                                        suffix);
-                  QFileInfo definitiveFileInfo = QFileInfo(definitiveFilename);
-                  if (definitiveFileInfo.exists()) {
-                        if (noToAll)
-                              continue;
-                        if (!overwriteAll) {
-                              QMessageBox msgBox(QMessageBox::Question,
-                                                 confirmReplaceTitle,
-                                                 confirmReplaceMessage.arg(QDir::toNativeSeparators(definitiveFilename)),
-                                                 QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No | QMessageBox::NoToAll);
-                              msgBox.setButtonText(QMessageBox::Yes, replaceButtonText);
-                              msgBox.setButtonText(QMessageBox::No, skipButtonText);
-                              msgBox.setButtonText(QMessageBox::YesToAll, replaceAllButtonText);
-                              msgBox.setButtonText(QMessageBox::NoToAll, skipAllButtonText);
-                              int responseCode = msgBox.exec();
-                              if (responseCode == QMessageBox::YesToAll)
-                                    overwriteAll = true;
-                              else if (responseCode == QMessageBox::NoToAll) {
-                                    noToAll = true;
-                                    continue;
+                  QString definitiveFilename = QString("%1/%2 - %3.%4")
+                        .arg(fileinfo.absolutePath(),
+                             fileinfo.completeBaseName(),
+                             score->isMaster() ? tr("Full Score") : score->title(),
+                             suffix);
+                  if (saveFormat != "png" && saveFormat != "svg" && QFileInfo(definitiveFilename).exists()) {
+                        // Png and Svg export functions change the filename, so they
+                        // are responsible for asking the user about overwriting.
+                        switch (replacePolicy) {
+                              case SaveReplacePolicy::NO_CHOICE:
+                                    {
+                                    int responseCode = mscore->askOverwriteAll(definitiveFilename);
+                                    if (responseCode == QMessageBox::YesToAll) {
+                                          replacePolicy = SaveReplacePolicy::REPLACE_ALL;
+                                          break; // Break out of the switch; go on and replace the existing file
+                                          }
+                                    else if (responseCode == QMessageBox::NoToAll) {
+                                          replacePolicy = SaveReplacePolicy::SKIP_ALL;
+                                          continue; // Continue in the `for` loop
+                                          }
+                                    else if (responseCode == QMessageBox::No)
+                                          continue;
+                                    break;
                                     }
-                              else if (responseCode == QMessageBox::No)
+                              case SaveReplacePolicy::SKIP_ALL:
                                     continue;
+                              case SaveReplacePolicy::REPLACE_ALL:
+                                    break;
                               }
                         }
-                  if (!mscore->saveAs(score, true, definitiveFilename, suffix))
-                        return;
+                  if (!mscore->saveAs(score, true, definitiveFilename, suffix, &replacePolicy))
+                        success = false;
                   }
-            
-            if(!noToAll)
-                  QMessageBox::information(this, tr("Export"), tr("Export was successful."));
             }
+      if (success)
+            QMessageBox::information(this, tr("Export"), tr("Export was successful."));
       }
 
 //---------------------------------------------------------
