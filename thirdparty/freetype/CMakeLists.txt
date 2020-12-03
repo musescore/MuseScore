@@ -61,7 +61,7 @@ if (UNIX)
   check_include_file("fcntl.h" HAVE_FCNTL_H)
   check_include_file("stdint.h" HAVE_STDINT_H)
 
-  file(READ "${PROJECT_SOURCE_DIR}/thirdparty/freetype/builds/unix/ftconfig.in"
+  file(READ "${CMAKE_CURRENT_LIST_DIR}/builds/unix/ftconfig.in"
     FTCONFIG_H)
   if (HAVE_UNISTD_H)
     string(REGEX REPLACE
