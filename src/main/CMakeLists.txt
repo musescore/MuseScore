@@ -107,8 +107,8 @@ set(LINK_LIB ${LINK_LIB}
     context
     shortcuts
     workspace
-    mu4_audio
-    mu4_midi
+    audio
+    midi
     midi_old
     userscores
     extensions

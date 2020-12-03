@@ -29,10 +29,10 @@
 #cmakedefine HAS_MIDI
 #cmakedefine SCRIPT_INTERFACE
 #cmakedefine HAS_AUDIOFILE
-#cmakedefine USE_SSE
 
 #define CRASH_REPORT_URL        "${CRASH_REPORT_URL}"
 #define MUSESCORE_NAME_VERSION  "${MUSESCORE_NAME_VERSION}"
+#define MUSESCORE_REVISION      "${MUSESCORE_REVISION}"
 #define INSTALL_NAME            "${Mscore_INSTALL_NAME}"
 #define INSTPREFIX              "${CMAKE_INSTALL_PREFIX}"
 #define VERSION                 "${MUSESCORE_VERSION_FULL}"
