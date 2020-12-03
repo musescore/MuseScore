@@ -1,42 +1,33 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
+
 import MuseScore.Playback 1.0
+import MuseScore.UiComponents 1.0
 
 Rectangle {
-
     id: root
 
+    width: contentRow.width
+
     Row {
-        anchors.fill: parent
+        id: contentRow
+
+        anchors.verticalCenter: parent.verticalCenter
 
         Repeater {
-            anchors.fill: parent
             model: toolModel
-            Rectangle {
-                id: item
 
-                property bool enabled: enabledRole
+            FlatButton {
+                text: titleRole
 
-                height: parent.height
                 width: 60
-                color: checkedRole ? "#34C1FF" : root.color
-                opacity: item.enabled ? 1.0 : 0.5
 
-                Text {
-                    anchors.fill: parent
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignHCenter
-                    font.family: "Roboto"
-                    font.capitalization: Font.Capitalize
-                    text: titleRole
-                }
+                normalStateColor: checkedRole ? ui.theme.accentColor : "transparent"
+                enabled: enabledRole
 
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        if (item.enabled) {
-                            toolModel.click(nameRole)
-                        }
+                onClicked: {
+                    if (enabled) {
+                        toolModel.click(nameRole)
                     }
                 }
             }
@@ -50,5 +41,4 @@ Rectangle {
     Component.onCompleted: {
         toolModel.load()
     }
-
 }

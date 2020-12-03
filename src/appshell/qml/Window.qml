@@ -33,46 +33,49 @@ DockWindow {
             id: mainToolBar
             objectName: "mainToolBar"
 
-            minimumWidth: 600
+            minimumWidth: 900
             minimumHeight: 48
-            color: dockWindow.color
 
-            MainToolBar {
+            color: dockWindow.color
+            allowedAreas: Qt.TopToolBarArea
+
+            content: Rectangle {
                 color: dockWindow.color
-                currentUri: dockWindow.currentPageUri
-                onSelected: {
-                    api.launcher.open(uri)
+
+                Item {
+                    height: parent.height
+                    width: parent.width
+
+                    MainToolBar {
+                        anchors.left: parent.left
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+
+                        color: dockWindow.color
+                        currentUri: dockWindow.currentPageUri
+                        onSelected: {
+                            api.launcher.open(uri)
+                        }
+                    }
+
+                    NotationModeToolBar {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+
+                        color: dockWindow.color
+                        visible: dockWindow.currentPageUri !== home.uri
+                    }
+
+                    PlaybackToolBar {
+                        anchors.right: parent.right
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+
+                        visible: dockWindow.currentPageUri !== home.uri
+                        color: dockWindow.color
+                    }
                 }
-            }
-        },
-
-        DockToolBar {
-            id: notationToolBar
-            objectName: "notationModeToolBar"
-
-            minimumWidth: 200
-            minimumHeight: 48
-            color: dockWindow.color
-
-            visible: dockWindow.currentPageUri !== home.uri
-
-            NotationModeToolBar {
-                color: dockWindow.color
-            }
-        },
-
-        DockToolBar {
-            id: playToolBar
-            objectName: "playToolBar"
-
-            minimumWidth: 100
-            minimumHeight: 48
-            color: dockWindow.color
-
-            visible: dockWindow.currentPageUri !== home.uri
-
-            PlaybackToolBar {
-                color: dockWindow.color
             }
         }
     ]

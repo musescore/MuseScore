@@ -9,7 +9,7 @@ ListView {
     property alias radioButtonGroup: buttonGroup
 
     implicitHeight: contentHeight
-    implicitWidth: parent.width
+    implicitWidth: contentWidth
 
     spacing: 4
 
