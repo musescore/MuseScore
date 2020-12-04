@@ -49,16 +49,7 @@ static const std::vector<ParDescr> pd = {
 //---------------------------------------------------------
 
 Pareq::Pareq()
-   :
-    _touch0 (0),
-    _touch1 (0),
-    _state (BYPASS),
-    _g0 (1),
-    _g1 (1),
-    _f0 (1e3f),
-    _f1 (1e3f)
       {
-      setfsamp(0.0f);
       }
 
 //---------------------------------------------------------
@@ -89,7 +80,8 @@ void Pareq::prepare(int nsamp)
       {
       bool  upd = false;
 
-      if (_touch1 != _touch0) {
+      uint16_t touchValue = _touch0;
+      if (_touch1 != touchValue) {
             float g = _g0;
             float f = _f0;
             if (g != _g1) {
@@ -120,7 +112,7 @@ void Pareq::prepare(int nsamp)
                         }
                   }
             else {
-                  _touch1 = _touch0;
+                  _touch1 = touchValue;
                   if (fabs (_g1 - 1) < 0.001f) {
                         _state = BYPASS;
                         reset ();
@@ -498,11 +490,13 @@ void ZitaReverb::process (int nfram, float* inp, float* out)
 void ZitaReverb::setNValue(int idx, double value)
       {
       float fvalue = static_cast<float>(value);
-      if (!std::isnormal(fvalue)) {
+      if (!std::isfinite(fvalue)) {
             fvalue = pd[idx].init;
       }
-      fvalue = std::min(pd[idx].min, fvalue);
-      fvalue = std::max(pd[idx].max, fvalue);
+      float min = (pd[idx].log ? pow(M_E, pd[idx].min) : pd[idx].min);
+      float max = (pd[idx].log ? pow(M_E, pd[idx].max) : pd[idx].max);
+      fvalue = std::max(min, fvalue);
+      fvalue = std::min(max, fvalue);
       switch (idx) {
             case R_DELAY: set_delay(fvalue); break;
             case R_XOVER: set_xover(fvalue); break;
