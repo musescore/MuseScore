@@ -268,28 +268,30 @@ static void playNote(EventMap* events, const Note* note, int channel, int pitch,
                         Note* nextNote = toNote(spanner->endElement());
                         double pitchDelta = (static_cast<double>(nextNote->pitch()) - pitch) * 50.0;
                         double timeDelta = static_cast<double>(offTime - onTime);
-                        double timeStep = std::abs(timeDelta / pitchDelta * 20.0);
-                        double t = 0.0;
-                        QList<int> onTimes;
-                        EaseInOut easeInOut(static_cast<qreal>(glissando->easeIn()) / 100.0,
-                              static_cast<qreal>(glissando->easeOut()) / 100.0);
-                        easeInOut.timeList(static_cast<int>((timeDelta + timeStep * 0.5) / timeStep), int(timeDelta), &onTimes);
-                        double nTimes = static_cast<double>(onTimes.size() - 1);
-                        for (double time : onTimes) {
-                              int p = int((t / nTimes) * pitchDelta);
-                              int timeStamp = std::min(onTime + int(time), offTime - 1);
-                              int midiPitch = (p * 16384) / 1200 + 8192;
-                              NPlayEvent evb(ME_PITCHBEND, channel, midiPitch % 128, midiPitch / 128);
+                        if (pitchDelta != 0.0 && timeDelta != 0.0) {
+                              double timeStep = std::abs(timeDelta / pitchDelta * 20.0);
+                              double t = 0.0;
+                              QList<int> onTimes;
+                              EaseInOut easeInOut(static_cast<qreal>(glissando->easeIn()) / 100.0,
+                                    static_cast<qreal>(glissando->easeOut()) / 100.0);
+                              easeInOut.timeList(static_cast<int>((timeDelta + timeStep * 0.5) / timeStep), int(timeDelta), &onTimes);
+                              double nTimes = static_cast<double>(onTimes.size() - 1);
+                              for (double time : onTimes) {
+                                    int p = static_cast<int>((t / nTimes) * pitchDelta);
+                                    int timeStamp = std::min(onTime + int(time), offTime - 1);
+                                    int midiPitch = (p * 16384) / 1200 + 8192;
+                                    NPlayEvent evb(ME_PITCHBEND, channel, midiPitch % 128, midiPitch / 128);
+                                    evb.setOriginatingStaff(staffIdx);
+                                    events->insert(std::pair<int, NPlayEvent>(timeStamp, evb));
+                                    t += 1.0;
+                                    }
+                              ev.setVelo(0);
+                              events->insert(std::pair<int, NPlayEvent>(offTime, ev));
+                              NPlayEvent evb(ME_PITCHBEND, channel, 0, 64); // 0:64 is 8192 - no pitch bend
                               evb.setOriginatingStaff(staffIdx);
-                              events->insert(std::pair<int, NPlayEvent>(timeStamp, evb));
-                              t += 1.0;
+                              events->insert(std::pair<int, NPlayEvent>(offTime, evb));
+                              return;
                               }
-                        ev.setVelo(0);
-                        events->insert(std::pair<int, NPlayEvent>(offTime, ev));
-                        NPlayEvent evb(ME_PITCHBEND, channel, 0, 64); // 0:64 is 8192 - no pitch bend
-                        evb.setOriginatingStaff(staffIdx);
-                        events->insert(std::pair<int, NPlayEvent>(offTime, evb));
-                        return;
                         }
                   }
             }
