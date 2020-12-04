@@ -221,11 +221,6 @@ if (MINGW)
       ${QT_INSTALL_BINS}/Qt5QmlWorkerScript.dll
       DESTINATION bin)
 
-   install (FILES
-      ${DEPENDENCIES_DIR}/lame_enc.dll
-      DESTINATION bin
-      OPTIONAL)
-
     install(FILES
       ${QT_INSTALL_PLUGINS}/iconengines/qsvgicon.dll
       DESTINATION bin/iconengines)
@@ -398,7 +393,6 @@ else (MINGW)
             list(APPEND dlls_to_copy ${dll_winsparkle})
       endif (WIN_SPARKLE_ENABLED)
 
-      find_library( dll_lame        NAMES "lame_enc"       PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
       find_library( dll_ogg         NAMES "libogg"         PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
       find_library( dll_sndfile     NAMES "sndfile" "libsndfile-1"   PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
       find_library( dll_vorbis      NAMES "libvorbis"      PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
@@ -407,7 +401,7 @@ else (MINGW)
       find_library( dll_ssl1        NAMES "libcrypto-1_1-x64" "libcrypto-1_1"  PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
       find_library( dll_ssl2        NAMES "libssl-1_1-x64" "libssl-1_1"        PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
 
-      list(APPEND dlls_to_copy ${dll_lame} ${dll_ogg} ${dll_sndfile} ${dll_vorbis} ${dll_vorbisfile} ${dll_portaudio} ${dll_ssl1} ${dll_ssl2} "$<TARGET_FILE_DIR:mscore>/${MSCORE_OUTPUT_NAME}.exe")
+      list(APPEND dlls_to_copy ${dll_ogg} ${dll_sndfile} ${dll_vorbis} ${dll_vorbisfile} ${dll_portaudio} ${dll_ssl1} ${dll_ssl2} "$<TARGET_FILE_DIR:mscore>/${MSCORE_OUTPUT_NAME}.exe")
       set( output_dir_for_dlls "${CMAKE_INSTALL_PREFIX}/bin")
 
       COPY_FILES_INTO_DIRECTORY_IF_CHANGED( "${dlls_to_copy}" ${output_dir_for_dlls}  mscore)
@@ -433,7 +427,6 @@ else (MINGW)
 
       install( FILES
             ${dll_ogg}
-            ${dll_lame}
             ${dll_sndfile}
             ${dll_portaudio}
             ${dll_vorbis}

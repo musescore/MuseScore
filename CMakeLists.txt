@@ -160,7 +160,6 @@ option(SOUNDFONT3    "Ogg Vorbis compressed fonts"        ON)  # Enable Ogg Vorb
 option(HAS_AUDIOFILE "Enable audio export"                ON)  # Requires libsndfile
 option(USE_SYSTEM_QTSINGLEAPPLICATION "Use system QtSingleApplication" OFF)
 option(USE_SYSTEM_FREETYPE "Use system FreeType"          OFF) # requires freetype >= 2.5.2, does not work on win
-option(BUILD_LAME    "Enable MP3 export"                  ON)  # Requires libmp3lame, call CMake with -DBUILD_LAME="OFF" to disable
 option(DOWNLOAD_SOUNDFONT "Download the latest soundfont version as part of the build process" ON)
 
 option(BUILD_PCH "Build using precompiled headers." ON)
@@ -417,35 +416,6 @@ if (USE_SYSTEM_FREETYPE)
       endif (APPLE)
 endif (USE_SYSTEM_FREETYPE)
 
-
-##
-## LAME
-##
-
-if (APPLE OR MINGW)
-      if (BUILD_LAME)
-            include (FindLame)
-            set (USE_LAME 1)
-      endif (BUILD_LAME)
-else (APPLE OR MINGW)
-      if (BUILD_LAME)
-            if (MSVC)
-               include(FindLameMSVC)
-            else (MSVC)
-               include (FindLame)
-            endif (MSVC)
-            if (LAME_FOUND)
-                  set(USE_LAME 1)
-                  MESSAGE("LAME found.")
-            else (LAME_FOUND)
-                  set(USE_LAME 0)
-                  MESSAGE("LAME not found.")
-            endif (LAME_FOUND)
-      else (BUILD_LAME)
-            MESSAGE(STATUS "LAME MP3 support disabled")
-      endif (BUILD_LAME)
-endif (APPLE OR MINGW)
-
 if (APPLE)
    if(SOUNDFONT3)
       ##
@@ -650,7 +620,6 @@ include_directories(
    ${OGG_INCDIR}
    ${VORBIS_INCDIR}
    ${SNDFILE_INCDIR}
-   ${LAME_INCLUDE_DIR}
 )
 
 if (MSVC)
