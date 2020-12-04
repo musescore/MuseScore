@@ -123,9 +123,12 @@ public:
     void setInstrument(Instrument*, Fraction = { -1, 1 });         // transfer ownership
     void setInstrument(const Instrument&&, Fraction = { -1, 1 });
     void setInstrument(const Instrument&, Fraction = { -1, 1 });
+    void setInstruments(const InstrumentList& instruments);
     void removeInstrument(const Fraction&);
     void removeInstrument(const QString&);
     const InstrumentList* instruments() const;
+
+    bool isDoublingInstrument(const QString& instrumentId) const;
 
     void insertTime(const Fraction& tick, const Fraction& len);
 

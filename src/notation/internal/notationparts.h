@@ -22,13 +22,14 @@
 #include "inotationparts.h"
 #include "async/asyncable.h"
 #include "inotationundostack.h"
+#include "inotationinteraction.h"
 
 namespace mu::notation {
 class IGetScore;
 class NotationParts : public INotationParts, public async::Asyncable
 {
 public:
-    NotationParts(IGetScore* getScore, mu::async::Notification selectionChangedNotification, INotationUndoStackPtr undoStack);
+    NotationParts(IGetScore* getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack);
     ~NotationParts() override;
 
     async::NotifyList<const Part*> partList() const override;
@@ -114,6 +115,8 @@ private:
     bool needAssignInstrumentToChord(const ID& instrumentId, const ID& fromPartId) const;
     void assignIstrumentToSelectedChord(Ms::Instrument* instrument);
 
+    void updatePartTitles();
+
     void doMovePart(const ID& sourcePartId, const ID& destinationPartId, InsertMode mode = Before);
     void doSetStaffVisible(Staff* staff, bool visible);
     void doSetStaffVoiceVisible(Staff* staff, int voiceIndex, bool visible);
@@ -144,15 +147,7 @@ private:
 
     void removeEmptyExcerpts();
 
-    Ms::Instrument convertedInstrument(const instruments::Instrument& instrument) const;
-    instruments::Instrument convertedInstrument(const Ms::Instrument* museScoreInstrument, const Part* part) const;
-
-    bool isInstrumentVisible(const ID& instrumentId, const Part* fromPart) const;
-
     void initStaff(Staff* staff, const instruments::Instrument& instrument, const Ms::StaffType* staffType, int cleffIndex);
-
-    QList<Ms::NamedEventList> convertedMidiActions(const instruments::MidiActionList& midiActions) const;
-    instruments::MidiActionList convertedMidiActions(const QList<Ms::NamedEventList>& midiActions) const;
 
     void sortParts(const IDList& instrumentIds);
 

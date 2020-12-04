@@ -118,8 +118,6 @@ struct Instrument
     QString name;
     QString description;
 
-    bool isDoubling = false;
-
     bool extended = false;
     int staves = 1;
 
@@ -152,8 +150,6 @@ struct Instrument
     QList<MidiArticulation> midiArticulations;
 
     ChannelList channels;
-
-    bool visible = true;
 
     bool isValid() const { return !id.isEmpty(); }
     QString abbreviature() const { return !shortNames.isEmpty() ? shortNames.first().name() : QString(); }
