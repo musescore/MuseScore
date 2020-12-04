@@ -78,7 +78,7 @@ void InstrumentListModel::initSelectedInstruments()
         async::NotifyList<Instrument> selectedInstruments = notation->parts()->instrumentList(part->id());
 
         for (const Instrument& instrument: selectedInstruments) {
-            if (instrument.isDoubling) {
+            if (part->isDoublingInstrument(instrument.id)) {
                 continue;
             }
 

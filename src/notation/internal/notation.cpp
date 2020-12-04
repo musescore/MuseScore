@@ -86,7 +86,7 @@ Notation::Notation(Score* score)
     m_playback = std::make_shared<NotationPlayback>(this);
     m_midiInput = std::make_shared<NotationMidiInput>(this, m_undoStack);
     m_accessibility = std::make_shared<NotationAccessibility>(this, m_interaction->selectionChanged());
-    m_parts = std::make_shared<NotationParts>(this, m_interaction->selectionChanged(), m_undoStack);
+    m_parts = std::make_shared<NotationParts>(this, m_interaction, m_undoStack);
     m_style = std::make_shared<NotationStyle>(this);
     m_elements = std::make_shared<NotationElements>(this);
 

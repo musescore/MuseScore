@@ -31,12 +31,7 @@ InstrumentControlTreeItem::InstrumentControlTreeItem(INotationPartsPtr notationP
 
 void InstrumentControlTreeItem::appendNewItem()
 {
-    QStringList params {
-        QString("title='%1'").arg(qtrc("instruments", "Select instrument")),
-        "canSelectMultipleInstruments=false"
-    };
-
-    QString uri = QString("musescore://instruments/select?%1").arg(params.join('&'));
+    QString uri = QString("musescore://instruments/select?canSelectMultipleInstruments=false");
     RetVal<Val> result = interactive()->open(uri.toStdString());
 
     if (!result.ret) {
@@ -44,17 +39,10 @@ void InstrumentControlTreeItem::appendNewItem()
         return;
     }
 
-    QVariantList objList = result.val.toQVariant().toList();
-    if (objList.isEmpty()) {
-        return;
-    }
-
-    Instrument newInstrument = objList.first().value<Instrument>();
+    Instrument newInstrument = result.val.toQVariant().value<Instrument>();
     if (!newInstrument.isValid()) {
         return;
     }
-
-    newInstrument.visible = false;
 
     notationParts()->appendDoublingInstrument(newInstrument, m_partId);
 }

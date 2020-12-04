@@ -13,7 +13,8 @@ QmlDialog {
     height: 500
     width: root.canSelectMultipleInstruments ? 900 : 600
 
-    title: qsTrc("instruments", "Instruments")
+    title: canSelectMultipleInstruments ? qsTrc("instruments", "Instruments") :
+                                          qsTrc("instruments", "Select instrument")
 
     Rectangle {
         anchors.fill: parent
@@ -62,7 +63,14 @@ QmlDialog {
                 text: qsTrc("instruments", "Ok")
 
                 onClicked: {
-                    root.ret = {errcode: 0, value: instrumentsPage.selectedInstruments()}
+                    var selectedInstruments = instrumentsPage.selectedInstruments()
+
+                    if (root.canSelectMultipleInstruments) {
+                        root.ret = { errcode: 0, value: selectedInstruments }
+                    } else if (instrumentsPage.selectedInstruments().length > 0) {
+                        root.ret = { errcode: 0, value: selectedInstruments[0] }
+                    }
+
                     root.hide()
                 }
             }
