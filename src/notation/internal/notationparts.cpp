@@ -375,6 +375,7 @@ void NotationParts::doMovePart(const ID& sourcePartId, const ID& destinationPart
         Staff* movedStaff = staff->clone();
         score()->undoInsertStaff(movedStaff, newStaffIndex);
         Ms::Excerpt::cloneStaff(staff, movedStaff);
+        movedStaff->undoUnlink();
         newStaffIndex++;
     }
 
@@ -1023,6 +1024,7 @@ void NotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinat
         movedStaff->setPart(toPart);
         score()->undoInsertStaff(movedStaff, newStaffIndex);
         Ms::Excerpt::cloneStaff(staff, movedStaff);
+        movedStaff->undoUnlink();
         newStaffIndex++;
     }
 

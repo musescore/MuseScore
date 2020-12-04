@@ -117,9 +117,6 @@ private:
     ChordRest* elementToChordRest(Element* element) const;
 
     QList<ActionItem> m_items;
-
-    async::Notification m_notationChanged;
-    async::Notification m_noteInputStateChanged;
 };
 }
 
