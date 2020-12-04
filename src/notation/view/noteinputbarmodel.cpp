@@ -116,8 +116,7 @@ void NoteInputBarModel::load()
 
     onNotationChanged();
 
-    m_notationChanged = context()->currentNotationChanged();
-    m_notationChanged.onNotify(this, [this]() {
+    context()->currentNotationChanged().onNotify(this, [this]() {
         onNotationChanged();
     });
 
@@ -153,13 +152,8 @@ void NoteInputBarModel::onNotationChanged()
 {
     INotationPtr notation = context()->currentNotation();
 
-    //! NOTE Unsubscribe from previous notation, if it was
-    m_notationChanged.resetOnNotify(this);
-    m_noteInputStateChanged.resetOnNotify(this);
-
     if (notation) {
-        m_noteInputStateChanged = noteInput()->stateChanged();
-        m_noteInputStateChanged.onNotify(this, [this]() {
+        noteInput()->stateChanged().onNotify(this, [this]() {
             updateState();
         });
 
