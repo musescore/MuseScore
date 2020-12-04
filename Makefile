@@ -32,6 +32,7 @@ CRASH_REPORT_URL=""
 SUFFIX=""# E.g.: SUFFIX="dev" --> "mscore" becomes "mscoredev"
 LABEL=""# E.g.: LABEL="Development Build" --> "MuseScore 2" becomes "MuseScore 2 Development Build"
 
+BUILD_JACK="ON"       # Override with "OFF" to disable.
 BUILD_WEBENGINE="ON"  # Override with "OFF" to disable.
 USE_SYSTEM_FREETYPE="OFF" # Override with "ON" to enable. Requires freetype >= 2.5.2.
 COVERAGE="OFF"        # Override with "ON" to enable.
@@ -65,6 +66,7 @@ release:
   	  -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}"   \
   	  -DTELEMETRY_TRACK_ID="${TELEMETRY_TRACK_ID}" \
   	  -DCRASH_REPORT_URL="${CRASH_REPORT_URL}" \
+	  -DBUILD_JACK="${BUILD_JACK}"             \
    	  -DBUILD_WEBENGINE="${BUILD_WEBENGINE}"   \
    	  -DUSE_SYSTEM_FREETYPE="${USE_SYSTEM_FREETYPE}" \
    	  -DDOWNLOAD_SOUNDFONT="${DOWNLOAD_SOUNDFONT}"   \
@@ -94,6 +96,7 @@ debug:
   	  -DMSCORE_INSTALL_SUFFIX="${SUFFIX}"                 \
   	  -DMUSESCORE_LABEL="${LABEL}"                        \
   	  -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}"              \
+	  -DBUILD_JACK="${BUILD_JACK}"             	      \
    	  -DBUILD_WEBENGINE="${BUILD_WEBENGINE}"              \
    	  -DUSE_SYSTEM_FREETYPE="${USE_SYSTEM_FREETYPE}"      \
    	  -DCOVERAGE="${COVERAGE}"                          \

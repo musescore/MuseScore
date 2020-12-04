@@ -16,6 +16,9 @@ rm bottles/freetype* | $SKIP_ERR_FLAG
 
 brew update >/dev/null | $SKIP_ERR_FLAG
 
+# additional dependencies
+brew install jack
+
 BREW_CELLAR=$(brew --cellar)
 BREW_PREFIX=$(brew --prefix)
 
