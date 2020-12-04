@@ -322,6 +322,11 @@ void Part::setInstrument(const Instrument& i, Fraction tick)
     _instruments.setInstrument(new Instrument(i), tick.ticks());
 }
 
+void Part::setInstruments(const InstrumentList& instruments)
+{
+    _instruments = instruments;
+}
+
 //---------------------------------------------------------
 //   removeInstrument
 //---------------------------------------------------------
@@ -371,6 +376,11 @@ const Instrument* Part::instrument(Fraction tick) const
 const InstrumentList* Part::instruments() const
 {
     return &_instruments;
+}
+
+bool Part::isDoublingInstrument(const QString& instrumentId) const
+{
+    return instrument()->instrumentId() != instrumentId;
 }
 
 //---------------------------------------------------------

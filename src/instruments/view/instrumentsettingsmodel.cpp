@@ -49,7 +49,6 @@ void InstrumentSettingsModel::replaceInstrument()
     }
 
     QStringList params {
-        QString("title='%1'").arg(qtrc("instruments", "Select instrument")),
         "canSelectMultipleInstruments=false",
         "focusableInstrumentId=" + m_instrumentId
     };
@@ -62,12 +61,7 @@ void InstrumentSettingsModel::replaceInstrument()
         return;
     }
 
-    QVariantList objList = result.val.toQVariant().toList();
-    if (objList.isEmpty()) {
-        return;
-    }
-
-    Instrument newInstrument = objList.first().value<Instrument>();
+    Instrument newInstrument = result.val.toQVariant().value<Instrument>();
     if (!newInstrument.isValid()) {
         return;
     }

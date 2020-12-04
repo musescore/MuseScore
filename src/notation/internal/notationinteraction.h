@@ -30,6 +30,7 @@
 #include "inotationinteraction.h"
 #include "inotationconfiguration.h"
 #include "inotationundostack.h"
+#include "iinteractive.h"
 
 #include "libmscore/element.h"
 #include "libmscore/elementgroup.h"
@@ -43,6 +44,7 @@ class Notation;
 class NotationInteraction : public INotationInteraction, public async::Asyncable
 {
     INJECT(notation, INotationConfiguration, configuration)
+    INJECT(notation, framework::IInteractive, interactive)
 
 public:
     NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack);
@@ -158,6 +160,8 @@ private:
     bool dragTimeAnchorElement(const QPointF& pos);
     void setDropTarget(Element* el);
     bool dropCanvas(Element* e);
+
+    void selectInstrument(Ms::InstrumentChange* instrumentChange);
 
     void applyDropPaletteElement(Ms::Score* score, Ms::Element* target, Ms::Element* e, Qt::KeyboardModifiers modifiers,
                                  QPointF pt = QPointF(), bool pasteMode = false);

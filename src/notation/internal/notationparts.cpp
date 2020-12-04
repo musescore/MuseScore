@@ -24,6 +24,8 @@
 #include "libmscore/drumset.h"
 #include "libmscore/instrchange.h"
 
+#include "instrumentsconverter.h"
+
 #include "igetscore.h"
 
 #include "log.h"
@@ -34,11 +36,15 @@ using namespace mu::instruments;
 
 static const Ms::Fraction DEFAULT_TICK = Ms::Fraction(0, 1);
 
-NotationParts::NotationParts(IGetScore* getScore, Notification selectionChangedNotification, INotationUndoStackPtr undoStack)
+NotationParts::NotationParts(IGetScore* getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack)
     : m_getScore(getScore), m_undoStack(undoStack), m_partsNotifier(new ChangedNotifier<const Part*>())
 {
-    selectionChangedNotification.onNotify(this, [this]() {
+    interaction->selectionChanged().onNotify(this, [this]() {
         updateCanChangeInstrumentsVisibility();
+    });
+
+    interaction->dropChanged().onNotify(this, [this]() {
+        updatePartTitles();
     });
 }
 
@@ -97,7 +103,7 @@ NotifyList<Instrument> NotationParts::instrumentList(const ID& partId) const
     NotifyList<Instrument> result;
 
     for (const Ms::Instrument* instrument: instruments(part).values()) {
-        result.push_back(convertedInstrument(instrument, part));
+        result.push_back(InstrumentsConveter::convertInstrument(*instrument));
     }
 
     ChangedNotifier<Instrument>* notifier = partNotifier(partId);
@@ -144,7 +150,7 @@ void NotationParts::setInstruments(const InstrumentList& instruments)
         Part* part = new Part(score());
 
         part->setPartName(instrument.name);
-        part->setInstrument(convertedInstrument(instrument));
+        part->setInstrument(InstrumentsConveter::convertInstrument(instrument));
 
         score()->undo(new Ms::InsertPart(part, lastStaffIndex()));
         appendStaves(part, instrument);
@@ -197,7 +203,7 @@ void NotationParts::setPartVisible(const ID& partId, bool visible)
 void NotationParts::setPartName(const ID& partId, const QString& name)
 {
     Part* part = this->part(partId);
-    if (!part) {
+    if (!part || part->partName() == name) {
         return;
     }
 
@@ -271,7 +277,7 @@ void NotationParts::setInstrumentVisible(const ID& instrumentId, const ID& fromP
     apply();
 
     ChangedNotifier<Instrument>* notifier = partNotifier(fromPartId);
-    notifier->itemChanged(convertedInstrument(instrumentInfo.instrument, part));
+    notifier->itemChanged(InstrumentsConveter::convertInstrument(*instrumentInfo.instrument));
     m_partsChanged.notify();
 }
 
@@ -349,8 +355,15 @@ void NotationParts::assignIstrumentToSelectedChord(Ms::Instrument* instrument)
     apply();
 
     ChangedNotifier<Instrument>* notifier = partNotifier(part->id());
-    notifier->itemChanged(convertedInstrument(instrument, part));
+    notifier->itemChanged(InstrumentsConveter::convertInstrument(*instrument));
     m_partsChanged.notify();
+}
+
+void NotationParts::updatePartTitles()
+{
+    for (const Part* part: score()->parts()) {
+        setPartName(part->id(), formatPartName(part));
+    }
 }
 
 void NotationParts::doMovePart(const ID& sourcePartId, const ID& destinationPartId, INotationParts::InsertMode mode)
@@ -379,9 +392,13 @@ void NotationParts::doMovePart(const ID& sourcePartId, const ID& destinationPart
         newStaffIndex++;
     }
 
+    auto instruments = *part->instruments();
+
     for (Staff* staff: staves) {
         score()->undoRemoveStaff(staff);
     }
+
+    part->setInstruments(instruments);
 }
 
 void NotationParts::setInstrumentName(const ID& instrumentId, const ID& fromPartId, const QString& name)
@@ -402,7 +419,7 @@ void NotationParts::setInstrumentName(const ID& instrumentId, const ID& fromPart
 
     InstrumentInfo newInstrumentInfo = this->instrumentInfo(instrumentId, part);
     ChangedNotifier<Instrument>* notifier = partNotifier(part->id());
-    notifier->itemChanged(convertedInstrument(newInstrumentInfo.instrument, part));
+    notifier->itemChanged(InstrumentsConveter::convertInstrument(*newInstrumentInfo.instrument));
     m_partsChanged.notify();
 }
 
@@ -424,7 +441,7 @@ void NotationParts::setInstrumentAbbreviature(const ID& instrumentId, const ID& 
 
     InstrumentInfo newInstrumentInfo = this->instrumentInfo(instrumentId, part);
     ChangedNotifier<Instrument>* notifier = partNotifier(part->id());
-    notifier->itemChanged(convertedInstrument(newInstrumentInfo.instrument, part));
+    notifier->itemChanged(InstrumentsConveter::convertInstrument(*newInstrumentInfo.instrument));
     m_partsChanged.notify();
 }
 
@@ -630,7 +647,7 @@ void NotationParts::appendDoublingInstrument(const Instrument& instrument, const
     }
 
     startEdit();
-    part->setInstrument(convertedInstrument(instrument), Ms::Fraction::fromTicks(lastTick + 1));
+    part->setInstrument(InstrumentsConveter::convertInstrument(instrument), Ms::Fraction::fromTicks(lastTick + 1));
     doSetPartName(part, formatPartName(part));
     apply();
 
@@ -703,12 +720,12 @@ void NotationParts::replaceInstrument(const ID& instrumentId, const ID& fromPart
     }
 
     startEdit();
-    part->setInstrument(convertedInstrument(newInstrument), oldInstrumentInfo.fraction);
+    part->setInstrument(InstrumentsConveter::convertInstrument(newInstrument), oldInstrumentInfo.fraction);
     doSetPartName(part, formatPartName(part));
     apply();
 
     ChangedNotifier<Instrument>* notifier = partNotifier(part->id());
-    notifier->itemReplaced(convertedInstrument(oldInstrumentInfo.instrument, part), newInstrument);
+    notifier->itemReplaced(InstrumentsConveter::convertInstrument(*oldInstrumentInfo.instrument), newInstrument);
 
     m_partsNotifier->itemChanged(part);
     m_partsChanged.notify();
@@ -1315,78 +1332,6 @@ void NotationParts::removeEmptyExcerpts()
     }
 }
 
-Ms::Instrument NotationParts::convertedInstrument(const Instrument& instrument) const
-{
-    Ms::Instrument museScoreInstrument;
-    museScoreInstrument.setAmateurPitchRange(instrument.amateurPitchRange.min, instrument.amateurPitchRange.max);
-    museScoreInstrument.setProfessionalPitchRange(instrument.professionalPitchRange.min, instrument.professionalPitchRange.max);
-    for (Ms::StaffName sn: instrument.longNames) {
-        museScoreInstrument.addLongName(StaffName(sn.name(), sn.pos()));
-    }
-    for (Ms::StaffName sn: instrument.shortNames) {
-        museScoreInstrument.addShortName(StaffName(sn.name(), sn.pos()));
-    }
-    museScoreInstrument.setTrackName(instrument.name);
-    museScoreInstrument.setTranspose(instrument.transpose);
-    museScoreInstrument.setInstrumentId(instrument.id);
-    if (instrument.useDrumset) {
-        museScoreInstrument.setDrumset(instrument.drumset ? instrument.drumset : Ms::smDrumset);
-    }
-    for (int i = 0; i < instrument.staves; ++i) {
-        museScoreInstrument.setClefType(i, instrument.clefs[i]);
-    }
-    museScoreInstrument.setMidiActions(convertedMidiActions(instrument.midiActions));
-    museScoreInstrument.setArticulation(instrument.midiArticulations);
-    for (const instruments::Channel& c : instrument.channels) {
-        museScoreInstrument.appendChannel(new instruments::Channel(c));
-    }
-    museScoreInstrument.setStringData(instrument.stringData);
-    museScoreInstrument.setSingleNoteDynamics(instrument.singleNoteDynamics);
-    return museScoreInstrument;
-}
-
-Instrument NotationParts::convertedInstrument(const Ms::Instrument* museScoreInstrument, const Part* part) const
-{
-    Instrument instrument;
-    instrument.amateurPitchRange = PitchRange(museScoreInstrument->minPitchA(), museScoreInstrument->maxPitchA());
-    instrument.professionalPitchRange = PitchRange(museScoreInstrument->minPitchP(), museScoreInstrument->maxPitchP());
-    for (Ms::StaffName sn: museScoreInstrument->longNames()) {
-        instrument.longNames << StaffName(sn.name(), sn.pos());
-    }
-    for (Ms::StaffName sn: museScoreInstrument->shortNames()) {
-        instrument.shortNames << StaffName(sn.name(), sn.pos());
-    }
-    instrument.name = museScoreInstrument->trackName();
-    instrument.transpose = museScoreInstrument->transpose();
-    instrument.id = museScoreInstrument->instrumentId();
-    instrument.useDrumset = museScoreInstrument->useDrumset();
-    instrument.drumset = museScoreInstrument->drumset();
-    for (int i = 0; i < museScoreInstrument->cleffTypeCount(); ++i) {
-        instrument.clefs[i] = museScoreInstrument->clefType(i);
-    }
-    instrument.midiActions = convertedMidiActions(museScoreInstrument->midiActions());
-    instrument.midiArticulations = museScoreInstrument->articulation();
-    for (instruments::Channel* c : museScoreInstrument->channel()) {
-        instrument.channels.append(*c);
-    }
-    instrument.stringData = *museScoreInstrument->stringData();
-    instrument.singleNoteDynamics = museScoreInstrument->singleNoteDynamics();
-    instrument.visible = isInstrumentVisible(instrument.id, part);
-    instrument.isDoubling = part->instrument()->instrumentId() != instrument.id;
-    return instrument;
-}
-
-bool NotationParts::isInstrumentVisible(const ID& instrumentId, const Part* fromPart) const
-{
-    for (const Staff* staff: staves(fromPart, instrumentId)) {
-        if (!staff->invisible()) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 void NotationParts::initStaff(Staff* staff, const Instrument& instrument, const Ms::StaffType* staffType, int cleffIndex)
 {
     const Ms::StaffType* pst = staffType ? staffType : instrument.staffTypePreset;
@@ -1404,51 +1349,6 @@ void NotationParts::initStaff(Staff* staff, const Instrument& instrument, const 
         staff->setBarLineSpan(instrument.barlineSpan[cleffIndex]);
     }
     staff->setDefaultClefType(instrument.clefs[cleffIndex]);
-}
-
-QList<Ms::NamedEventList> NotationParts::convertedMidiActions(const MidiActionList& midiActions) const
-{
-    QList<Ms::NamedEventList> result;
-
-    for (const MidiAction& action: midiActions) {
-        Ms::NamedEventList event;
-        event.name = action.name;
-        event.descr = action.description;
-
-        for (const midi::Event& midiEvent: action.events) {
-            Ms::MidiCoreEvent midiCoreEvent;
-            midiCoreEvent.setType(static_cast<uchar>(midiEvent.type()));
-            midiCoreEvent.setChannel(midiCoreEvent.channel());
-            //!FIXME
-            //midiCoreEvent.setData(midiEvent.a, midiEvent.b);
-            event.events.push_back(midiCoreEvent);
-        }
-    }
-
-    return result;
-}
-
-MidiActionList NotationParts::convertedMidiActions(const QList<Ms::NamedEventList>& midiActions) const
-{
-    MidiActionList result;
-
-    for (const Ms::NamedEventList& coreAction: midiActions) {
-        MidiAction action;
-        action.name = coreAction.name;
-        action.description = coreAction.descr;
-
-        for (const Ms::MidiCoreEvent& midiCoreEvent: coreAction.events) {
-            midi::Event midiEvent(midiCoreEvent.channel(),
-                                  static_cast<midi::EventType>(midiCoreEvent.type()),
-                                  midiCoreEvent.dataA(),
-                                  midiCoreEvent.dataB()
-                                  );
-
-            action.events.push_back(midiEvent);
-        }
-    }
-
-    return result;
 }
 
 void NotationParts::sortParts(const IDList& instrumentIds)

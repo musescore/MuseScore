@@ -44,11 +44,14 @@
 #include "libmscore/undo.h"
 #include "libmscore/navigate.h"
 #include "libmscore/keysig.h"
+#include "libmscore/instrchange.h"
 
 #include "masternotation.h"
 #include "scorecallbacks.h"
 #include "notationnoteinput.h"
 #include "notationselection.h"
+
+#include "instrumentsconverter.h"
 
 using namespace mu::notation;
 using namespace Ms;
@@ -831,8 +834,7 @@ bool NotationInteraction::drop(const QPointF& pos, Qt::KeyboardModifiers modifie
 
         Element* dropElement = el->drop(m_dropData.ed);
         if (dropElement && dropElement->isInstrumentChange()) {
-            NOT_IMPLEMENTED;
-            // mscore->currentScoreView()->selectInstrument(toInstrumentChange(dropElement));
+            selectInstrument(toInstrumentChange(dropElement));
         }
         score()->addRefresh(el->canvasBoundingRect());
         if (dropElement) {
@@ -862,6 +864,28 @@ bool NotationInteraction::drop(const QPointF& pos, Qt::KeyboardModifiers modifie
         notifyAboutDropChanged();
     }
     return accepted;
+}
+
+void NotationInteraction::selectInstrument(InstrumentChange *instrumentChange)
+{
+    if (!instrumentChange) {
+        return;
+    }
+
+    RetVal<Val> retVal = interactive()->open("musescore://instruments/select?canSelectMultipleInstruments=false");
+    if (!retVal.ret) {
+        return;
+    }
+
+    instruments::Instrument selectedIstrument = retVal.val.toQVariant().value<instruments::Instrument>();
+    if (!selectedIstrument.isValid()) {
+        return;
+    }
+
+    Ms::Instrument instrument = InstrumentsConveter::convertInstrument(selectedIstrument);
+
+    instrumentChange->setInit(true);
+    instrumentChange->setupInstrument(&instrument);
 }
 
 //! NOTE Copied from Palette::applyPaletteElement
@@ -1200,8 +1224,7 @@ void NotationInteraction::applyDropPaletteElement(Ms::Score* score, Ms::Element*
 
         Element* el = target->drop(dropData);
         if (el && el->isInstrumentChange()) {
-            NOT_IMPLEMENTED;
-            //selectInstrument(toInstrumentChange(el));
+            selectInstrument(toInstrumentChange(el));
         }
 
         if (el && !score->inputState().noteEntryMode()) {
