@@ -48,7 +48,6 @@ apt_packages_standard=(
   libpulse-dev
   libsndfile1-dev
   make
-  portaudio19-dev
   wget
   )
 

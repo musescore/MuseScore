@@ -615,8 +615,6 @@ include_directories(
    ${PROJECT_SOURCE_DIR}
    ${PROJECT_BINARY_DIR}
    ${ALSA_INCDIR}
-   ${JACK_INCDIR}
-   ${PORTAUDIO_INCDIR}
    ${OGG_INCDIR}
    ${VORBIS_INCDIR}
    ${SNDFILE_INCDIR}
@@ -628,7 +626,6 @@ if (MSVC)
    include_directories(${PROJECT_SOURCE_DIR}/dependencies/include/vorbis)
    include_directories(${SNDFILE_INCLUDE_DIR})
    include_directories(${VORBIS_INCLUDE_DIR})
-   include_directories(${PORTAUDIO_INCLUDE_DIR})
    include_directories(${OGG_INCLUDE_DIR})
 endif (MSVC)
 
