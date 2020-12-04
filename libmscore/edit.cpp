@@ -1918,8 +1918,9 @@ void Score::deleteItem(Element* el)
                   {
                   undoRemoveElement(el);
                   LayoutBreak* lb = toLayoutBreak(el);
-                  Measure* m = lb->measure();
-                  if (m->isMMRest()) {
+                  MeasureBase* mb = lb->measure();
+                  Measure* m = mb && mb->isMeasure() ? toMeasure(mb) : nullptr;
+                  if (m && m->isMMRest()) {
                         // propagate to original measure
                         m = m->mmRestLast();
                         for (Element* e : m->el()) {
@@ -4534,7 +4535,7 @@ void Score::undoAddElement(Element* element)
       if (et == ElementType::LAYOUT_BREAK) {
             LayoutBreak* lb = toLayoutBreak(element);
             if (lb->layoutBreakType() == LayoutBreak::Type::SECTION) {
-                  Measure* m = lb->measure();
+                  MeasureBase* m = lb->measure();
                   for (Score* s : scoreList()) {
                         if (s == lb->score())
                               undo(new AddElement(lb));
