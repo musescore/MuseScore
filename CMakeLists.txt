@@ -675,6 +675,10 @@ if (MSVC)
    include_directories(${OGG_INCLUDE_DIR})
 endif (MSVC)
 
+if (MINGW)
+    include_directories(${SNDFILE_INCLUDE_DIR})
+endif(MINGW)
+
 if (USE_SYSTEM_FREETYPE)
       include_directories(${FREETYPE_INCLUDE_DIRS})
 else (USE_SYSTEM_FREETYPE)
