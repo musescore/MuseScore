@@ -259,6 +259,22 @@ Measure* MeasureBase::prevMeasureMM() const
       }
 
 //---------------------------------------------------------
+//   findPotentialSectionBreak
+//---------------------------------------------------------
+
+const MeasureBase *MeasureBase::findPotentialSectionBreak() const
+      {
+      // we're trying to find the MeasureBase that determines
+      // if the next one after this starts a new section
+      // if this is a measure, it's the one that determines this
+      // but if it is a frame, we may need to look backwards
+      const MeasureBase* mb = this;
+      while (mb && !mb->isMeasure() && !mb->sectionBreak())
+            mb = mb->prev();
+      return mb;
+      }
+
+//---------------------------------------------------------
 //   pause
 //---------------------------------------------------------
 

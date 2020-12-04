@@ -106,6 +106,7 @@ class MeasureBase : public Element {
       System* system() const                 { return (System*)parent(); }
       void setSystem(System* s)              { setParent((Element*)s);   }
 
+      const MeasureBase* findPotentialSectionBreak() const;
       LayoutBreak* sectionBreakElement() const;
 
       void undoSetBreak(bool v, LayoutBreak::Type type);

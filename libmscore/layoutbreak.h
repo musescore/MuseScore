@@ -63,7 +63,7 @@ class LayoutBreak final : public Element {
       void write(XmlWriter&) const override;
       void read(XmlReader&) override;
 
-      Measure* measure() const              { return (Measure*)parent();     }
+      MeasureBase* measure() const          { return (MeasureBase*)parent(); }
       qreal pause() const                   { return _pause;                 }
       void setPause(qreal v)                { _pause = v;                    }
       bool startWithLongNames() const       { return _startWithLongNames;    }

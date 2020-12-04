@@ -3751,7 +3751,9 @@ System* Score::collectSystem(LayoutContext& lc)
       {
       if (!lc.curMeasure)
             return 0;
-      Measure* measure  = _systems.empty() ? 0 : _systems.back()->lastMeasure();
+      const MeasureBase* measure  = _systems.empty() ? 0 : _systems.back()->measures().back();
+      if (measure)
+            measure = measure->findPotentialSectionBreak();
       if (measure) {
             lc.firstSystem        = measure->sectionBreak() && _layoutMode != LayoutMode::FLOAT;
             lc.firstSystemIndent  = lc.firstSystem && measure->sectionBreakElement()->firstSystemIdentation() && styleB(Sid::enableIndentationOnFirstSystem);
@@ -3850,6 +3852,10 @@ System* Score::collectSystem(LayoutContext& lc)
                   // measure in the system and we finally can create the end barline for it
 
                   Measure* m = toMeasure(lc.prevMeasure);
+                  // TODO: if lc.curMeasure is a frame, removing the trailer may be premature
+                  // but merely skipping this code isn't good enough,
+                  // we need to find the right time to re-enable the trailer,
+                  // since it seems to be disabled somewhere else
                   if (m->trailer()) {
                         qreal ow = m->width();
                         m->removeSystemTrailer();
@@ -3870,6 +3876,12 @@ System* Score::collectSystem(LayoutContext& lc)
                                     }
                               }
                         }
+                  // TODO: we actually still don't know for sure
+                  // if this will be the last true measure of the system or not
+                  // since the lc.curMeasure may be a frame
+                  // but at this point we have no choice but to assume it isn't
+                  // since we don't know yet if another true measure will fit
+                  // worst that happens is we don't get the automatic double bar before a courtesy key signature
                   minWidth += m->createEndBarLines(false);    // create final barLine
                   }
 
@@ -3925,6 +3937,7 @@ System* Score::collectSystem(LayoutContext& lc)
                               if (!s->enabled())
                                     s->setEnabled(true);
                               }
+                        // TODO: use findPotentialSectionBreak here to handle breaks on frames correctly?
                         bool firstSystem = lc.prevMeasure->sectionBreak() && _layoutMode != LayoutMode::FLOAT;
                         if (curHeader)
                               m->addSystemHeader(firstSystem);
@@ -4050,14 +4063,19 @@ System* Score::collectSystem(LayoutContext& lc)
 
       layoutSystemElements(system, lc);
       system->layout2();   // compute staff distances
-
-      lm  = system->lastMeasure();
-      if (lm) {
-            lc.firstSystem        = lm->sectionBreak() && _layoutMode != LayoutMode::FLOAT;
-            lc.firstSystemIndent  = lc.firstSystem && lm->sectionBreakElement()->firstSystemIdentation() && styleB(Sid::enableIndentationOnFirstSystem);
-            lc.startWithLongNames = lc.firstSystem && lm->sectionBreakElement()->startWithLongNames();
+      // TODO: now that the code at the top of this function does this same backwards search,
+      // we might be able to eliminate this block
+      // but, lc might be used elsewhere so we need to be careful
+#if 1
+      measure = system->measures().back();
+      if (measure)
+            measure = measure->findPotentialSectionBreak();
+      if (measure) {
+            lc.firstSystem        = measure->sectionBreak() && _layoutMode != LayoutMode::FLOAT;
+            lc.firstSystemIndent  = lc.firstSystem && measure->sectionBreakElement()->firstSystemIdentation() && styleB(Sid::enableIndentationOnFirstSystem);
+            lc.startWithLongNames = lc.firstSystem && measure->sectionBreakElement()->startWithLongNames();
             }
-
+#endif
       return system;
       }
 
@@ -4945,7 +4963,12 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
                   lc.tick      = Fraction(0,1);
                   }
             else {
-                  LayoutBreak* sectionBreak = lc.nextMeasure->prevMeasure()->sectionBreakElement();
+                  const MeasureBase* mb = lc.nextMeasure->prev();
+                  if (mb)
+                        mb->findPotentialSectionBreak();
+                  LayoutBreak* sectionBreak = mb->sectionBreakElement();
+                  // TODO: also use mb in else clause here?
+                  // probably not, only actual measures have meaningful numbers
                   if (sectionBreak && sectionBreak->startWithMeasureOne())
                         lc.measureNo = 0;
                   else
