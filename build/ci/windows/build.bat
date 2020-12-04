@@ -47,17 +47,14 @@ ECHO "Finished copy dependencies"
 
 SET GENERATOR_NAME=Visual Studio 16 2019
 SET MSCORE_STABLE_BUILD="TRUE"
-
-:: TODO We need define paths during image creation
-SET "JACK_DIR=C:\Program Files (x86)\Jack"
 SET "QT_DIR=C:\Qt\5.15.1"
 
 @REM IF %TARGET_PROCESSOR_BITS% == 32 ( 
-@REM     ::SET "PATH=%QT_DIR%\msvc2015\bin;%JACK_DIR%;%PATH%"
+@REM     ::SET "PATH=%QT_DIR%\msvc2015\bin;%PATH%"
 @REM     ECHO "error: Not installed Qt 32"
 @REM     EXIT /b 1
 @REM ) ELSE (
-SET "PATH=%QT_DIR%\msvc2019_64\bin;%JACK_DIR%;%PATH%"
+SET "PATH=%QT_DIR%\msvc2019_64\bin;%PATH%"
 @REM )
 
 :: At the moment not compiling yet.

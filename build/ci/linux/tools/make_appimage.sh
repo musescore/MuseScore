@@ -154,7 +154,7 @@ additional_libraries=(
 # the full functionality of the system version, but it does avoid the crash.
 # Report new additions at https://github.com/linuxdeploy/linuxdeploy/issues
 fallback_libraries=(
-  libjack.so.0 # https://github.com/LMMS/lmms/pull/3958
+
 )
 
 for file in "${unwanted_files[@]}"; do
