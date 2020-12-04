@@ -23,8 +23,6 @@ bool StyleDefaultsHandler::handle(Ms::Score* score)
             score->style().applyNewDefaults(baseStyle);
             }
 
-      QVariant lul = baseStyle.value(Ms::Sid::pageTwosided);
-
       Ms::MScore::setBaseStyle(baseStyle);
 
       return true;

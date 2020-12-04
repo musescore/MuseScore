@@ -367,7 +367,27 @@ Score* MuseScore::openScore(const QString& fn, bool switchTab)
 
       MasterScore* score = readScore(fn);
       if (score) {
+            ScoreMigrator_3_6 migrator;
+
+            migrator.registerHandler(new StyleDefaultsHandler());
+
+           if (Ms::preferences.getBool(PREF_MIGRATION_DO_NOT_ASK_ME_AGAIN)) {
+
+                  if (Ms::preferences.getBool(PREF_MIGRATION_APPLY_LELAND_STYLE))
+                        migrator.registerHandler(new LelandStyleHandler());
+
+                  if (Ms::preferences.getBool(PREF_MIGRATION_APPLY_EDWIN_STYLE))
+                        migrator.registerHandler(new EdwinStyleHandler());
+
+                  if (Ms::preferences.getString(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS).contains("Yes"))
+                        migrator.registerHandler(new ResetAllElementsPositionsHandler());
+                  }
+
+            migrator.migrateScore(score);
+
             score->updateCapo();
+            score->update();
+            score->styleChanged();
             const int tabIdx = appendScore(score);
             if (switchTab)
                   setCurrentScoreView(tabIdx);
@@ -2278,24 +2298,6 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
             if (!score->avsOmr()) //! NOTE For avsomr сreated is set upon import
                   score->setCreated(true); // force save as for imported files
             }
-
-      ScoreMigrator_3_6 migrator;
-
-      migrator.registerHandler(new StyleDefaultsHandler());
-
-      if (Ms::preferences.getBool(PREF_MIGRATION_DO_NOT_ASK_ME_AGAIN)) {
-
-            if (Ms::preferences.getBool(PREF_MIGRATION_APPLY_LELAND_STYLE))
-                  migrator.registerHandler(new LelandStyleHandler());
-
-            if (Ms::preferences.getBool(PREF_MIGRATION_APPLY_EDWIN_STYLE))
-                  migrator.registerHandler(new EdwinStyleHandler());
-
-            if (Ms::preferences.getString(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS).contains("Yes"))
-                  migrator.registerHandler(new ResetAllElementsPositionsHandler());
-            }
-
-      migrator.migrateScore(score);
 
       for (Part* p : score->parts()) {
             p->updateHarmonyChannels(false);
