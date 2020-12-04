@@ -30,6 +30,8 @@ static constexpr int INVALID_BOX_INDEX = -1;
 
 void NotationActionController::init()
 {
+    dispatcher()->reg(this, "escape", this, &NotationActionController::resetState);
+
     dispatcher()->reg(this, "note-input", [this]() { toggleNoteInputMethod(NoteInputMethod::STEPTIME); });
     dispatcher()->reg(this, "note-input-rhythm", [this]() { toggleNoteInputMethod(NoteInputMethod::RHYTHM); });
     dispatcher()->reg(this, "note-input-repitch", [this]() { toggleNoteInputMethod(NoteInputMethod::REPITCH); });
@@ -234,6 +236,47 @@ INotationNoteInputPtr NotationActionController::currentNotationNoteInput() const
     }
 
     return interaction->noteInput();
+}
+
+void NotationActionController::resetState()
+{
+    auto isAudioPlaying = [this]() {
+                              return audioPlayer()->status() == audio::PlayStatus::PLAYING;
+                          };
+
+    if (isAudioPlaying()) {
+        audioPlayer()->stop();
+        return;
+    }
+
+    auto noteInput = currentNotationNoteInput();
+    if (!noteInput) {
+        return;
+    }
+
+    if (noteInput->isNoteInputMode()) {
+        noteInput->endNoteInput();
+        return;
+    }
+
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    if (interaction->isDragStarted()) {
+        interaction->endDrag();
+        return;
+    }
+
+    if (interaction->isTextEditingStarted()) {
+        interaction->endEditText();
+        return;
+    }
+
+    if (!interaction->selection()->isNone()) {
+        interaction->clearSelection();
+    }
 }
 
 void NotationActionController::toggleNoteInputMethod(NoteInputMethod method)

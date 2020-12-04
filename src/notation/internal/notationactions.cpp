@@ -44,6 +44,10 @@ const ActionList NotationActions::m_actions = {
            QT_TRANSLATE_NOOP("action", "Save Score As"),
            ShortcutContext::Any
            ),
+    Action("escape",
+           QT_TRANSLATE_NOOP("action", "Esc"),
+           ShortcutContext::Any
+           ),
     Action("put-note", // args: QPoint pos, bool replace, bool insert
            QT_TRANSLATE_NOOP("action", "Put Note"),
            ShortcutContext::NotationActive
