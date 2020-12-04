@@ -1353,7 +1353,7 @@ class MasterScore : public Score
 
     Fraction _pos[3];                      ///< 0 - current, 1 - left loop, 2 - right loop
 
-    int _midiPortCount      { 0 };                    // A count of JACK/ALSA midi out ports
+    int _midiPortCount      { 0 };                    // A count of ALSA midi out ports
     QQueue<MidiInputEvent> _midiInputQueue;           // MIDI events that have yet to be processed
     std::list<MidiInputEvent> _activeMidiPitches;     // MIDI keys currently being held down
     std::vector<MidiMapping> _midiMapping;

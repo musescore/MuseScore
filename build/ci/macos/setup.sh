@@ -67,10 +67,9 @@ installBottleManually libogg
 installBottleManually libvorbis
 installBottleManually flac
 installBottleManually libsndfile
-installBottleManually portaudio
 
 
-export QT_SHORT_VERSION=5.9
+export QT_SHORT_VERSION=5.15.1
 export QT_PATH=$HOME/Qt
 export QT_MACOS=$QT_PATH/$QT_SHORT_VERSION/clang_64
 export PATH=$PATH:$QT_MACOS/bin
