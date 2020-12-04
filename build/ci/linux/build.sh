@@ -11,6 +11,7 @@ TELEMETRY_TRACK_ID=""
 ARTIFACTS_DIR=build.artifacts
 BUILD_MODE=""
 BUILDTYPE=portable # portable build is the default build
+SUFFIX="" # appended to `mscore` command name to avoid conflicts (e.g. `mscore-dev`)
 OPTIONS=""
 BUILD_UI_MU4=ON    # not used, only for easier synchronization and compatibility
 
@@ -30,11 +31,18 @@ if [ -z "$TELEMETRY_TRACK_ID" ]; then TELEMETRY_TRACK_ID=""; fi
 if [ -z "$BUILD_MODE" ]; then BUILD_MODE=$(cat $ARTIFACTS_DIR/env/build_mode.env); fi
 
 MUSESCORE_BUILD_CONFIG=dev
-if [ "$BUILD_MODE" == "devel_build" ]; then MUSESCORE_BUILD_CONFIG=dev; fi
-if [ "$BUILD_MODE" == "nightly_build" ]; then MUSESCORE_BUILD_CONFIG=dev; fi
-if [ "$BUILD_MODE" == "testing_build" ]; then MUSESCORE_BUILD_CONFIG=testing; fi
-if [ "$BUILD_MODE" == "stable_build" ]; then MUSESCORE_BUILD_CONFIG=release; fi
-if [ "$BUILD_MODE" == "mtests" ]; then MUSESCORE_BUILD_CONFIG=dev; BUILDTYPE=installdebug; OPTIONS="USE_SYSTEM_FREETYPE=ON UPDATE_CACHE=FALSE PREFIX=$ARTIFACTS_DIR/software"; fi
+
+case "${BUILD_MODE}" in
+"devel_build")   MUSESCORE_BUILD_CONFIG=dev; SUFFIX=-dev;;
+"nightly_build") MUSESCORE_BUILD_CONFIG=dev; SUFFIX=-nightly;;
+"testing_build") MUSESCORE_BUILD_CONFIG=testing; SUFFIX=-testing;;
+"stable_build")  MUSESCORE_BUILD_CONFIG=release; SUFFIX="";;
+"mtests")        MUSESCORE_BUILD_CONFIG=dev; BUILDTYPE=installdebug; OPTIONS="USE_SYSTEM_FREETYPE=ON UPDATE_CACHE=FALSE PREFIX=$ARTIFACTS_DIR/software";;
+esac
+
+if [ "${BUILDTYPE}" == "portable" ]; then
+  SUFFIX="-portable${SUFFIX}" # special value needed for CMakeLists.txt
+fi
 
 echo "MUSESCORE_BUILD_CONFIG: $MUSESCORE_BUILD_CONFIG"
 echo "BUILD_NUMBER: $BUILD_NUMBER"
@@ -50,7 +58,7 @@ cat ./../musescore_environment.sh
 source ./../musescore_environment.sh
 
 echo " "
-${CXX} --version 
+${CXX} --version
 ${CC} --version
 echo " "
 cmake --version
@@ -65,6 +73,7 @@ make CPUS=2 $OPTIONS \
      MUSESCORE_REVISION=$MUSESCORE_REVISION \
      BUILD_NUMBER=$BUILD_NUMBER \
      TELEMETRY_TRACK_ID=$TELEMETRY_TRACK_ID \
+     SUFFIX=$SUFFIX \
      $BUILDTYPE
 
 
