@@ -2653,6 +2653,8 @@ void Score::sortStaves(QList<int>& dst)
       _parts.clear();
       Part* curPart = 0;
       QList<Staff*> dl;
+      QMap<int, int> trackMap;
+      int track = 0;
       foreach (int idx, dst) {
             Staff* staff = _staves[idx];
             if (staff->part() != curPart) {
@@ -2662,8 +2664,16 @@ void Score::sortStaves(QList<int>& dst)
                   }
             curPart->staves()->push_back(staff);
             dl.push_back(staff);
+            for (int itrack = 0; itrack < VOICES; ++itrack)
+                  trackMap.insert(idx * VOICES + itrack, track++);
             }
       _staves = dl;
+      for (Excerpt* e : excerpts()) {
+            QMultiMap<int, int> oldTracks = e->tracks();
+            e->tracks().clear();
+            for (QMap<int, int>::iterator it = oldTracks.begin(); it != oldTracks.end(); ++it)
+                  e->tracks().insert(trackMap[it.key()], it.value());
+            }
 
       for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
             m->sortStaves(dst);
