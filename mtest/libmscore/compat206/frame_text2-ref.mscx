@@ -32,6 +32,7 @@
       <endBarWidth>0.5</endBarWidth>
       <doubleBarDistance>0.46</doubleBarDistance>
       <endBarDistance>0.65</endBarDistance>
+      <bracketWidth>0.45</bracketWidth>
       <clefLeftMargin>0.64</clefLeftMargin>
       <timesigLeftMargin>0.5</timesigLeftMargin>
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
@@ -50,6 +51,7 @@
       <hairpinHeight>1.2</hairpinHeight>
       <hairpinWidth>0.13</hairpinWidth>
       <hairpinFontFace>FreeSerif</hairpinFontFace>
+      <hairpinFontSize>12</hairpinFontSize>
       <hairpinFramePadding>0</hairpinFramePadding>
       <hairpinFrameWidth>0</hairpinFrameWidth>
       <pedalPosBelow x="0" y="4"/>
@@ -62,7 +64,6 @@
       <chordSymbolAFontFace>FreeSerif</chordSymbolAFontFace>
       <chordSymbolAFramePadding>0</chordSymbolAFramePadding>
       <chordSymbolAFrameWidth>0</chordSymbolAFrameWidth>
-      <slurEndWidth>0.07</slurEndWidth>
       <slurMidWidth>0.15</slurMidWidth>
       <musicalSymbolFont>Emmentaler</musicalSymbolFont>
       <musicalTextFont>MScore Text</musicalTextFont>

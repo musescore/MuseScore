@@ -9,4 +9,4 @@ fi
 cp $S/testBreaksManual.xml testBreaksManual_no_ref.xml
 cp $S/testBreaksManual.xml testBreaksManual_manual_ref.xml
 cp $S/testBreaksManual.xml testBreaksManual_all_ref.xml
-
+cp $S/testHairpinDynamics.xml testHairpinDynamics_ref.xml

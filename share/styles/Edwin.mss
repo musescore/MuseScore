@@ -27,6 +27,7 @@
     <lyricistFontSize>11</lyricistFontSize>
     <fingeringFontFace>Edwin</fingeringFontFace>
     <lhGuitarFingeringFontFace>Edwin</lhGuitarFingeringFontFace>
+    <rhGuitarFingeringFontFace>Edwin</rhGuitarFingeringFontFace>
     <stringNumberFontFace>Edwin</stringNumberFontFace>
     <longInstrumentFontFace>Edwin</longInstrumentFontFace>
     <longInstrumentFontSize>10</longInstrumentFontSize>
@@ -62,6 +63,7 @@
     <headerFontSize>9</headerFontSize>
     <footerFontFace>Edwin</footerFontFace>
     <footerFontSize>9</footerFontSize>
+    <instrumentChangeFontFace>Edwin</instrumentChangeFontFace>
     <stickingFontFace>Edwin</stickingFontFace>
     <stickingFontSize>10</stickingFontSize>
     <user1FontFace>Edwin</user1FontFace>

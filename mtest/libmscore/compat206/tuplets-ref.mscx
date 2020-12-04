@@ -11,6 +11,7 @@
       <endBarWidth>0.5</endBarWidth>
       <doubleBarDistance>0.46</doubleBarDistance>
       <endBarDistance>0.65</endBarDistance>
+      <bracketWidth>0.45</bracketWidth>
       <clefLeftMargin>0.64</clefLeftMargin>
       <timesigLeftMargin>0.5</timesigLeftMargin>
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
@@ -32,7 +33,6 @@
       <pedalLineWidth>0.15</pedalLineWidth>
       <trillPosAbove x="0" y="-1"/>
       <harmonyFretDist>0.5</harmonyFretDist>
-      <slurEndWidth>0.07</slurEndWidth>
       <slurMidWidth>0.15</slurMidWidth>
       <musicalSymbolFont>Emmentaler</musicalSymbolFont>
       <musicalTextFont>MScore Text</musicalTextFont>
