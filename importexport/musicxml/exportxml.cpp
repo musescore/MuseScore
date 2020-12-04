@@ -2404,6 +2404,13 @@ static Breath* hasBreathMark(Chord* ch)
       return s ? toBreath(s->element(ch->track())) : 0;
       }
 
+static Breath* hasBreathMark(Rest* rest)
+      {
+      Fraction tick = rest->tick() + rest->actualTicks();
+      Segment* s = rest->measure()->findSegment(SegmentType::Breath, tick);
+      return s ? toBreath(s->element(rest->track())) : 0;
+      }
+
 //---------------------------------------------------------
 //   tremoloSingleStartStop
 //---------------------------------------------------------
@@ -3550,6 +3557,14 @@ void ExportMusicXml::rest(Rest* rest, int staff)
                   fl.push_back(e);
             }
       fermatas(fl, _xml, notations);
+
+      Articulations articulations;
+      if (Breath* b = hasBreathMark(rest)) {
+            notations.tag(_xml);
+            articulations.tag(_xml);
+            _xml.tagE(b->isCaesura() ? "caesura" : "breath-mark");
+            }
+      articulations.etag(_xml);
 
       Ornaments ornaments;
       wavyLineStartStop(rest, notations, ornaments, _trillStart, _trillStop);
