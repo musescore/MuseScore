@@ -3,7 +3,7 @@
 .\"	mirabilos <m@mirbsd.org>
 .\" Published under the same terms as MuseScore itself.
 .\"-
-.Dd November 23, 2020
+.Dd December 4, 2020
 .Dt @MAN_MSCORE_UPPER@ 1
 .Os MuseScore
 .Sh NAME@Variables_substituted_by_CMAKE_on_installation@
@@ -115,6 +115,11 @@ GNU General Public Licence (GPLv2).
 @MAN_PORTABLE@.Ar prefix
 @MAN_PORTABLE@to install into a custom location.
 @MAN_PORTABLE@Installation is not required to run the program.
+@MAN_PORTABLE@.It Cm update , Cm upgrade Oo Fl i Oc Op Ar prefix
+@MAN_PORTABLE@Updates MuseScore to the latest version. This uses your internet
+@MAN_PORTABLE@connection to check for an update and download it if one is
+@MAN_PORTABLE@available. A delta update mechanism is used to minimise the
+@MAN_PORTABLE@amount of data that is downloaded.
 @MAN_PORTABLE@.It Cm remove , Cm uninstall Op Ar prefix
 @MAN_PORTABLE@Removes icons and resources, and asks whether you would
 @MAN_PORTABLE@like to remove the program as well.

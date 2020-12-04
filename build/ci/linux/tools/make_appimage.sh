@@ -46,6 +46,15 @@ fi
 export PATH="${PWD%/}/appimagetool:${PATH}"
 appimagetool --version
 
+if [[ ! -d "appimageupdatetool" ]]; then
+  mkdir appimageupdatetool
+  cd appimageupdatetool
+  download_appimage_release AppImage/AppImageUpdate appimageupdatetool continuous
+  cd ..
+fi
+export PATH="${PWD%/}/appimageupdatetool:${PATH}"
+appimageupdatetool --version
+
 function download_linuxdeploy_component()
 {
   download_appimage_release "linuxdeploy/$1" "$1" continuous
@@ -60,7 +69,6 @@ if [[ ! -d "linuxdeploy" ]]; then
 fi
 export PATH="${PWD%/}/linuxdeploy:${PATH}"
 linuxdeploy --list-plugins
-
 
 ##########################################################################
 # BUNDLE DEPENDENCIES INTO APPDIR
@@ -160,6 +168,13 @@ fallback_libraries=(
   libjack.so.0 # https://github.com/LMMS/lmms/pull/3958
 )
 
+# PREVIOUSLY EXTRACTED APPIMAGES
+# These include their own dependencies. We bundle them uncompressed to avoid
+# creating a double layer of compression (AppImage inside AppImage).
+extracted_appimages=(
+  appimageupdatetool
+)
+
 for file in "${unwanted_files[@]}"; do
   rm -rf "${appdir}/${file}"
 done
@@ -176,6 +191,15 @@ done
 
 for fb_lib in "${fallback_libraries[@]}"; do
   fallback_library "${fb_lib}"
+done
+
+for name in "${extracted_appimages[@]}"; do
+  symlink="$(which "${name}")"
+  apprun="$(dirname "${symlink}")/$(readlink "${symlink}")"
+  extracted_appdir_path="$(dirname "${apprun}")"
+  extracted_appdir_name="$(basename "${extracted_appdir_path}")"
+  cp -r "${extracted_appdir_path}" "${appdir}/"
+  ln -s "../${extracted_appdir_name}/AppRun" "${appdir}/bin/${name}"
 done
 
 # METHOD OF LAST RESORT
