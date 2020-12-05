@@ -13,6 +13,9 @@
 #ifndef __REPEATLIST_H__
 #define __REPEATLIST_H__
 
+#include <QList>
+#include <set>
+
 namespace Ms {
 class Score;
 class Measure;

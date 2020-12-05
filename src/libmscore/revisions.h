@@ -13,6 +13,9 @@
 #ifndef __REVISIONS_H__
 #define __REVISIONS_H__
 
+#include <QString>
+#include <QDateTime>
+
 namespace Ms {
 class XmlWriter;
 class XmlReader;

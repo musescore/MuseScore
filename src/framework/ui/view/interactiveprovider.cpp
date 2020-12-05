@@ -21,6 +21,7 @@
 
 #include <QMetaType>
 #include <QMetaProperty>
+#include <QMainWindow>
 
 using namespace mu::framework;
 using namespace mu;

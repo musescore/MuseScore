@@ -13,6 +13,8 @@
 #ifndef __TREMOLO_H__
 #define __TREMOLO_H__
 
+#include <QPainterPath>
+
 #include "durationtype.h"
 #include "symbol.h"
 

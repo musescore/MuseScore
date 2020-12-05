@@ -17,6 +17,9 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 #include "mu4paletteadapter.h"
+
+#include <QAction>
+
 #include "log.h"
 
 #include "palette/paletteworkspace.h"

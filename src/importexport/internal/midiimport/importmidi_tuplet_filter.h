@@ -1,6 +1,8 @@
 #ifndef IMPORTMIDI_TUPLET_FILTER_H
 #define IMPORTMIDI_TUPLET_FILTER_H
 
+#include <vector>
+
 namespace Ms {
 class ReducedFraction;
 

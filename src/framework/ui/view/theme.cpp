@@ -19,7 +19,9 @@
 
 #include "theme.h"
 
+#include <QPalette>
 #include <QVariant>
+#include <QApplication>
 
 using namespace mu::framework;
 

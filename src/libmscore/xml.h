@@ -14,6 +14,8 @@
 #define __XML_H__
 
 #include <QMultiMap>
+#include <QXmlStreamReader>
+#include <QTextStream>
 
 #include "connector.h"
 #include "stafftype.h"

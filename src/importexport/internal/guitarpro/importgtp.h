@@ -20,6 +20,8 @@
 #ifndef __IMPORTGTP_H__
 #define __IMPORTGTP_H__
 
+#include <QDomNode>
+
 #include <libmscore/score.h>
 #include <libmscore/mscore.h>
 #include <libmscore/fraction.h>

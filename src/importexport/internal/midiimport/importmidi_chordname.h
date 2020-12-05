@@ -1,6 +1,9 @@
 #ifndef IMPORTMIDI_CHORDNAME_H
 #define IMPORTMIDI_CHORDNAME_H
 
+#include <map>
+#include <QList>
+
 namespace Ms {
 class MTrack;
 

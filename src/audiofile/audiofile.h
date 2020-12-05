@@ -13,6 +13,8 @@
 #ifndef __AUDIOFILE_H__
 #define __AUDIOFILE_H__
 
+#include <QByteArray>
+
 #include <sndfile.h>
 
 //---------------------------------------------------------

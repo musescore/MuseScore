@@ -13,6 +13,9 @@
 #ifndef __KEY__H__
 #define __KEY__H__
 
+#include <QPointF>
+#include <QList>
+
 namespace Ms {
 class XmlWriter;
 class Score;

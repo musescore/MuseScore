@@ -1,6 +1,8 @@
 #ifndef IMPORTMIDI_TEMPO_H
 #define IMPORTMIDI_TEMPO_H
 
+#include <map>
+
 namespace Ms {
 class MTrack;
 class Score;

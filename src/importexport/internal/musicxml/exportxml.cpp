@@ -37,6 +37,9 @@
 #include "exportxml.h"
 
 #include <math.h>
+#include <QBuffer>
+#include <QDate>
+
 #include "config.h"
 
 #include "thirdparty/qzip/qzipwriter_p.h"

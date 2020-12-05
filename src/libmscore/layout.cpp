@@ -10,6 +10,8 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include <cmath>
+
 #include "accidental.h"
 #include "barline.h"
 #include "beam.h"

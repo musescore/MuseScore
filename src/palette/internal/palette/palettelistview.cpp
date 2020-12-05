@@ -11,6 +11,8 @@
 
 #include "palettelistview.h"
 
+#include <QKeyEvent>
+
 #include "palettemodel.h"
 
 namespace Ms {

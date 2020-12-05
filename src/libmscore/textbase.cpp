@@ -10,6 +10,16 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include <cmath>
+#include <QClipboard>
+#include <QRawFont>
+#include <QTextLayout>
+#include <QTextLine>
+#include <QGlyphRun>
+#include <QStack>
+#include <QTextFragment>
+#include <QTextDocument>
+
 #include "text.h"
 #include "textedit.h"
 #include "jump.h"

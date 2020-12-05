@@ -1,6 +1,8 @@
 #ifndef IMPORTMIDI_KEY_H
 #define IMPORTMIDI_KEY_H
 
+#include <QList>
+
 namespace Ms {
 class Staff;
 class MTrack;

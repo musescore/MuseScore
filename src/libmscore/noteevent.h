@@ -13,6 +13,8 @@
 #ifndef __NOTEEVENT_H__
 #define __NOTEEVENT_H__
 
+#include <QList>
+
 namespace Ms {
 class XmlWriter;
 class XmlReader;

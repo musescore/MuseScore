@@ -13,6 +13,10 @@
 #ifndef __PLUGIN_API_SCOREELEMENT_H__
 #define __PLUGIN_API_SCOREELEMENT_H__
 
+#include <QVariant>
+#include <QQmlListProperty>
+#include <QQmlEngine>
+
 #include "libmscore/property.h"
 
 namespace Ms {

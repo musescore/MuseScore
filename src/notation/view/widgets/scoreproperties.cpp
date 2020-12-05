@@ -19,6 +19,8 @@
 
 #include "scoreproperties.h"
 
+#include <QScrollBar>
+
 #include "framework/global/widgetstatestore.h"
 #include "ui/view/iconcodes.h"
 #include "translation.h"

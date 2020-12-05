@@ -13,6 +13,8 @@
 #ifndef __IMPORTMXMLNOTEPITCH_H__
 #define __IMPORTMXMLNOTEPITCH_H__
 
+#include <QXmlStreamReader>
+
 #include "libmscore/accidental.h"
 
 namespace Ms {

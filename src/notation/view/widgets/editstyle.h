@@ -19,6 +19,8 @@
 #ifndef MU_NOTATION_EDITSTYLE_H
 #define MU_NOTATION_EDITSTYLE_H
 
+#include <QScrollArea>
+
 #include "ui_editstyle.h"
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"

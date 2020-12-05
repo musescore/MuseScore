@@ -11,6 +11,10 @@
 //=============================================================================
 
 #include "exampleview.h"
+
+#include <cmath>
+#include <QMimeData>
+
 #include "libmscore/score.h"
 #include "libmscore/element.h"
 #include "libmscore/page.h"

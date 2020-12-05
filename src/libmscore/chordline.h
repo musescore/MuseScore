@@ -13,6 +13,8 @@
 #ifndef __CHORDLINE_H__
 #define __CHORDLINE_H__
 
+#include <QPainterPath>
+
 #include "element.h"
 
 namespace Ms {

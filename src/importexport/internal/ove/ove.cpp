@@ -19,6 +19,9 @@
 
 #include "ove.h"
 
+#include <QTextCodec>
+#include <QMap>
+
 namespace OVE {
 /*template <class T>
 inline void deleteVector(QList<T*>& vec) {

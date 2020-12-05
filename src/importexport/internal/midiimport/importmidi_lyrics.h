@@ -1,6 +1,9 @@
 #ifndef IMPORTMIDI_LYRICS_H
 #define IMPORTMIDI_LYRICS_H
 
+#include <string>
+#include <QList>
+
 namespace Ms {
 class MidiFile;
 class MTrack;

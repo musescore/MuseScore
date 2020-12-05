@@ -10,6 +10,9 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include <QClipboard>
+#include <QInputMethodEvent>
+
 #include "log.h"
 #include "textedit.h"
 #include "score.h"

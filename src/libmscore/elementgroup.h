@@ -13,6 +13,8 @@
 #ifndef __ELEMENTGROUP_H__
 #define __ELEMENTGROUP_H__
 
+#include <QRectF>
+
 namespace Ms {
 class Element;
 class EditData;

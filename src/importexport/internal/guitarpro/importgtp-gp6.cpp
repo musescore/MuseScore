@@ -13,6 +13,9 @@
 
 #include "importgtp.h"
 
+#include <QDebug>
+#include <cmath>
+
 #include <libmscore/score.h>
 #include <libmscore/measurebase.h>
 #include <libmscore/text.h>

@@ -15,6 +15,8 @@
  Implementation of most part of class Measure.
 */
 
+#include <cmath>
+
 #include "log.h"
 
 #include "measure.h"

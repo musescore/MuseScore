@@ -1,4 +1,7 @@
 #include "importmidi_tuplet_tonotes.h"
+
+#include <QDebug>
+
 #include "importmidi_tuplet.h"
 #include "importmidi_fraction.h"
 #include "importmidi_inner.h"

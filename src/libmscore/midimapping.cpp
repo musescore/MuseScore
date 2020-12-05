@@ -10,6 +10,8 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include <QDebug>
+
 #include "score.h"
 #include "excerpt.h"
 #include "instrument.h"

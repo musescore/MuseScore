@@ -13,6 +13,7 @@
 #ifndef __SPACER_H__
 #define __SPACER_H__
 
+#include <QPainterPath>
 #include "element.h"
 
 namespace Ms {

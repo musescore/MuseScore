@@ -13,6 +13,8 @@
 #ifndef __GLISSANDO_H__
 #define __GLISSANDO_H__
 
+#include <QApplication>
+
 #include "element.h"
 #include "line.h"
 #include "property.h"

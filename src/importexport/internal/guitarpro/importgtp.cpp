@@ -12,6 +12,10 @@
 
 #include "importgtp.h"
 
+#include <cmath>
+#include <QTextCodec>
+#include <QDebug>
+
 #include "importptb.h"
 
 #include <libmscore/measurebase.h>

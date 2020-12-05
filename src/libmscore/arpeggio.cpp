@@ -11,6 +11,9 @@
 //=============================================================================
 
 #include "arpeggio.h"
+
+#include <cmath>
+
 #include "sym.h"
 #include "chord.h"
 #include "note.h"

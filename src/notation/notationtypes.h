@@ -20,6 +20,7 @@
 #define MU_NOTATION_NOTATIONTYPES_H
 
 #include <QPixmap>
+#include <QDate>
 
 #include "io/path.h"
 

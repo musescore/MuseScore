@@ -19,6 +19,8 @@
 
 #include "alignSelect.h"
 
+#include <QButtonGroup>
+
 #include "ui/view/iconcodes.h"
 
 using namespace Ms;

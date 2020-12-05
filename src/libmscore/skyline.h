@@ -13,6 +13,10 @@
 #ifndef __SKYLINE_H__
 #define __SKYLINE_H__
 
+#include <vector>
+#include <QRectF>
+#include <QPainter>
+
 namespace Ms {
 #ifndef NDEBUG
 #define DEBUG_SKYLINE    // enable skyline debugging

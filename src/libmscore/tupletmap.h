@@ -13,6 +13,8 @@
 #ifndef __TUPLETMAP_H__
 #define __TUPLETMAP_H__
 
+#include <QList>
+
 namespace Ms {
 class Tuplet;
 

@@ -10,6 +10,8 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include <QDebug>
+
 #include "importgtp.h"
 #include "libmscore/bracketItem.h"
 #include <libmscore/instrtemplate.h>

@@ -19,6 +19,8 @@
 
 #include "pngwriter.h"
 
+#include <cmath>
+
 #include "log.h"
 
 #include "libmscore/score.h"

@@ -21,6 +21,8 @@
 
 #include "palettecreator.h"
 
+#include <QAction>
+
 #include "libmscore/score.h"
 #include "libmscore/note.h"
 #include "libmscore/chordrest.h"

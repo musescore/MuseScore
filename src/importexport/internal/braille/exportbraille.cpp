@@ -17,6 +17,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
+#include <QDebug>
+
 #include "libmscore/score.h"
 #include "libmscore/rest.h"
 #include "libmscore/chord.h"

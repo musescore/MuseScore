@@ -10,6 +10,10 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
+#include <cmath>
+#include <QDir>
+#include <QBuffer>
+
 #include "config.h"
 #include "score.h"
 #include "xml.h"

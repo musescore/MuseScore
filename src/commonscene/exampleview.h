@@ -13,6 +13,12 @@
 #ifndef __EXAMPLEVIEW_H__
 #define __EXAMPLEVIEW_H__
 
+#include <QTransform>
+#include <QStateMachine>
+#include <QPaintEvent>
+#include <QFrame>
+#include <QEventTransition>
+
 #include "libmscore/mscoreview.h"
 
 #include "modularity/ioc.h"

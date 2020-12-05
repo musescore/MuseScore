@@ -20,7 +20,18 @@
 #ifndef MU_CLOUD_CLOUDMANAGER_P_H
 #define MU_CLOUD_CLOUDMANAGER_P_H
 
+#include <QUrlQuery>
+#include <QHttpMultiPart>
+#include <QNetworkReply>
+#include <QEventLoop>
+
 #include "config.h"
+
+#ifdef USE_WEBENGINE
+#include <QWebEngineUrlRequestInterceptor>
+#include <QWebEngineUrlRequestInfo>
+#endif
+
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
 

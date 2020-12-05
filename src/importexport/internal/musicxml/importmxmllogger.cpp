@@ -12,6 +12,8 @@
 
 #include "importmxmllogger.h"
 
+#include <QXmlStreamReader>
+
 namespace Ms {
 //---------------------------------------------------------
 //   xmlLocation

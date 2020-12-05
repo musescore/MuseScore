@@ -11,6 +11,9 @@
 //=============================================================================
 
 #include "box.h"
+
+#include <cmath>
+
 #include "textframe.h"
 #include "text.h"
 #include "score.h"

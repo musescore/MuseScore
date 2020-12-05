@@ -13,6 +13,8 @@
 #ifndef __SLURTIE_H__
 #define __SLURTIE_H__
 
+#include <QPainterPath>
+
 #include "spanner.h"
 #include "mscore.h"
 

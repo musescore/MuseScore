@@ -10,6 +10,10 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include <QDir>
+#include <QSettings>
+#include <QFontDatabase>
+
 #include "config.h"
 #include "musescoreCore.h"
 #include "style.h"

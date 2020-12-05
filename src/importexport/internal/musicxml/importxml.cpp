@@ -21,6 +21,11 @@
  MusicXML import.
  */
 
+#include <QMessageBox>
+#include <QXmlSchema>
+#include <QXmlSchemaValidator>
+#include <QBuffer>
+
 #include "thirdparty/qzip/qzipreader_p.h"
 #include "importmxml.h"
 

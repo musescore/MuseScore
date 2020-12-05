@@ -10,6 +10,12 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include <QRandomGenerator>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QDir>
+#include <QMessageBox>
+
 #include "cloudmanager.h"
 #include "cloudmanager_p.h"
 #include "log.h"
@@ -18,6 +24,9 @@
 
 #ifdef USE_WEBENGINE
 #include <QWebEngineCookieStore>
+#include <QWebEnginePage>
+#include <QWebEngineProfile>
+#include <QWebEngineView>
 #endif
 
 #define qrand() QRandomGenerator::global()->generate()

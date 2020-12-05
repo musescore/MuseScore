@@ -1,6 +1,8 @@
 #include "importptb.h"
 #include "assert.h"
 
+#include <cmath>
+
 #include <libmscore/part.h>
 #include <libmscore/staff.h>
 #include <libmscore/measure.h>

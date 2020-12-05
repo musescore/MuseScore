@@ -13,6 +13,8 @@
 #ifndef __MIDIINSTRUMENT_H__
 #define __MIDIINSTRUMENT_H__
 
+#include <QString>
+
 //---------------------------------------------------------
 //   MidiInstrument
 //---------------------------------------------------------

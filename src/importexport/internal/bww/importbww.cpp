@@ -20,6 +20,8 @@
 // TODO LVI 2011-10-30: determine how to report import errors.
 // Currently all output (both debug and error reports) are done using qDebug.
 
+#include <QDebug>
+
 #include "lexer.h"
 #include "writer.h"
 #include "parser.h"

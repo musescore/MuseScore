@@ -13,6 +13,9 @@
 #ifndef __DYNAMICHAIRPINGROUP_H__
 #define __DYNAMICHAIRPINGROUP_H__
 
+#include <memory>
+#include <functional>
+
 #include "elementgroup.h"
 
 namespace Ms {

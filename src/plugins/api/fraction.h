@@ -13,6 +13,8 @@
 #ifndef __PLUGIN_API_FRACTION_H__
 #define __PLUGIN_API_FRACTION_H__
 
+#include <QQmlEngine>
+
 #include "libmscore/fraction.h"
 
 namespace Ms {

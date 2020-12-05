@@ -16,6 +16,10 @@
 */
 
 #include "element.h"
+
+#include <cmath>
+#include <QBuffer>
+
 #include "accidental.h"
 #include "ambitus.h"
 #include "arpeggio.h"

@@ -52,7 +52,6 @@ make -f Makefile.osx \
     CRASH_REPORT_URL=$CRASH_REPORT_URL \
     BUILD_VST=$BUILD_VST \
     VST3_SDK_PATH=$VST3_SDK_PATH \
-    MODULE_BUILD_PCH=OFF \
     ci
 
 

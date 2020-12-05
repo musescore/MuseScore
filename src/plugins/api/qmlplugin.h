@@ -13,6 +13,8 @@
 #ifndef __QMLPLUGIN_H__
 #define __QMLPLUGIN_H__
 
+#include <QQuickItem>
+
 #include "config.h"
 
 #include "libmscore/mscore.h"

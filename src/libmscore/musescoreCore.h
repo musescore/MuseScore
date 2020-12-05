@@ -13,6 +13,9 @@
 #ifndef __MUSESCORECORE_H__
 #define __MUSESCORECORE_H__
 
+#include <QAction>
+#include <QList>
+
 namespace Ms {
 class MasterScore;
 class Score;

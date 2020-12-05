@@ -22,6 +22,8 @@
 #include <QFileInfo>
 #include <QStorageInfo>
 #include <QVersionNumber>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 #include "thirdparty/qzip/qzipreader_p.h"
 #include "log.h"

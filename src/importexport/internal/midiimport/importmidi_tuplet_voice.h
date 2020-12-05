@@ -1,6 +1,10 @@
 #ifndef IMPORTMIDI_TUPLET_VOICE_H
 #define IMPORTMIDI_TUPLET_VOICE_H
 
+#include <vector>
+#include <map>
+#include <list>
+
 namespace Ms {
 class ReducedFraction;
 class MidiChord;
