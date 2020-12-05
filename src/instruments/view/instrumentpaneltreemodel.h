@@ -69,6 +69,7 @@ public:
 
     Q_INVOKABLE void load();
     Q_INVOKABLE void selectRow(const QModelIndex& rowIndex, const bool isMultipleSelectionModeOn);
+    Q_INVOKABLE bool isSelected(const QModelIndex& rowIndex) const;
     Q_INVOKABLE void addInstruments();
     Q_INVOKABLE void moveSelectedRowsUp();
     Q_INVOKABLE void moveSelectedRowsDown();
@@ -76,6 +77,7 @@ public:
 
     Q_INVOKABLE bool moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent,
                               int destinationChild) override;
+
 signals:
     void selectionChanged();
     void isMovingUpAvailableChanged(bool isMovingUpAvailable);
