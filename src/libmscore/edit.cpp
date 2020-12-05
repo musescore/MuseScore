@@ -10,6 +10,8 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include <QColorDialog>
+
 #include "note.h"
 #include "rest.h"
 #include "chord.h"

@@ -21,6 +21,10 @@
 //    Capella 2000 import filter
 //
 #include <assert.h>
+#include <cmath>
+#include <QMessageBox>
+#include <QtMath>
+
 #include "libmscore/mscore.h"
 #include "capella.h"
 #include "libmscore/score.h"

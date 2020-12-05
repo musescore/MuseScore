@@ -21,6 +21,8 @@
 #include <QDir>
 #include <QVariant>
 #include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonParseError>
 
 #include "log.h"
 #include "settings.h"

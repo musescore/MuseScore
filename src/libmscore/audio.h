@@ -13,6 +13,9 @@
 #ifndef __AUDIO_H__
 #define __AUDIO_H__
 
+#include <QString>
+#include <QByteArray>
+
 namespace Ms {
 class XmlWriter;
 class XmlReader;

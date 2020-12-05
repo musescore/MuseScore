@@ -13,6 +13,8 @@
 #ifndef __IMPORTMXMLLOGGER_H__
 #define __IMPORTMXMLLOGGER_H__
 
+#include <QString>
+
 class QXmlStreamReader;
 
 namespace Ms {

@@ -12,6 +12,8 @@
 
 #include "libmscore/fraction.h"
 
+#include <QXmlStreamReader>
+
 #include "importmxmllogger.h"
 #include "importmxmlnoteduration.h"
 

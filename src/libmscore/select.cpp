@@ -15,6 +15,8 @@
  Implementation of class Selection plus other selection related functions.
 */
 
+#include <QBuffer>
+
 #include "log.h"
 
 #include "mscore.h"

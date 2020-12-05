@@ -10,6 +10,8 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include <QDebug>
+
 #include "importmidi_clef.h"
 #include "libmscore/score.h"
 #include "libmscore/staff.h"

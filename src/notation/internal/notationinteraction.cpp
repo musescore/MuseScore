@@ -22,6 +22,7 @@
 #include <memory>
 #include <QRectF>
 #include <QPainter>
+#include <QClipboard>
 
 #include "ptrutils.h"
 

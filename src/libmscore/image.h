@@ -13,6 +13,8 @@
 #ifndef __IMAGE_H__
 #define __IMAGE_H__
 
+#include <QSvgRenderer>
+
 #include "bsymbol.h"
 
 namespace Ms {

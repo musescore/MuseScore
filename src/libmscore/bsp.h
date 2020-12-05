@@ -16,6 +16,10 @@
 #ifndef __BSP_H__
 #define __BSP_H__
 
+#include <QRectF>
+#include <QVector>
+#include <QList>
+
 namespace Ms {
 class BspTreeVisitor;
 class InsertItemBspTreeVisitor;

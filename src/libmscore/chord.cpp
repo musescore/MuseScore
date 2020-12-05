@@ -11,6 +11,9 @@
 //=============================================================================
 
 #include "chord.h"
+
+#include <cmath>
+
 #include "note.h"
 #include "xml.h"
 #include "style.h"

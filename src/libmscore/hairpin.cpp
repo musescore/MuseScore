@@ -11,6 +11,9 @@
 //=============================================================================
 
 #include "hairpin.h"
+
+#include <cmath>
+
 #include "dynamichairpingroup.h"
 #include "style.h"
 #include "xml.h"

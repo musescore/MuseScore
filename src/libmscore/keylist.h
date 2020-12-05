@@ -13,6 +13,8 @@
 #ifndef __KEYLIST_H__
 #define __KEYLIST_H__
 
+#include <map>
+
 #include "key.h"
 
 namespace Ms {

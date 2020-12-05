@@ -11,6 +11,9 @@
 //=============================================================================
 
 #include "instrument.h"
+
+#include <QTextDocumentFragment>
+
 #include "xml.h"
 #include "drumset.h"
 #include "articulation.h"

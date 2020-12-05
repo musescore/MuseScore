@@ -20,6 +20,8 @@
 #ifndef MU_NOTATION_SCOREPROPERTIES_H
 #define MU_NOTATION_SCOREPROPERTIES_H
 
+#include <QLineEdit>
+
 #include "ui_scoreproperties.h"
 
 #include "modularity/ioc.h"

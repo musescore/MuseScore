@@ -19,6 +19,8 @@
 #ifndef MU_FRAMEWORK_IINTERACTIVE_H
 #define MU_FRAMEWORK_IINTERACTIVE_H
 
+#include <QString>
+
 #include "modularity/imoduleexport.h"
 #include "io/path.h"
 #include "val.h"

@@ -19,6 +19,7 @@
 #include "interactive.h"
 
 #include <QFileDialog>
+#include <QMainWindow>
 
 #include <QMessageBox>
 #include <QPushButton>

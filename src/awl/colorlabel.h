@@ -20,6 +20,8 @@
 #ifndef __AWLCOLORLABEL_H__
 #define __AWLCOLORLABEL_H__
 
+#include <QPushButton>
+
 namespace Awl {
 //---------------------------------------------------------
 //   ColorLabel

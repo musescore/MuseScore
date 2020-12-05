@@ -20,6 +20,8 @@
 #ifndef __PALETTE_H__
 #define __PALETTE_H__
 
+#include <QScrollArea>
+
 #include "palettetree.h"
 #include "libmscore/sym.h"
 

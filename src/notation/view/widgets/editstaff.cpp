@@ -19,6 +19,9 @@
 
 #include "editstaff.h"
 
+#include <QMessageBox>
+
+
 #include "editpitch.h"
 #include "editstafftype.h"
 #include "editstringdata.h"

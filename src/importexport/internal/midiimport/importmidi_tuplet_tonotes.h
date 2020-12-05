@@ -1,6 +1,8 @@
 #ifndef IMPORTMIDI_TUPLET_TONOTES_H
 #define IMPORTMIDI_TUPLET_TONOTES_H
 
+#include <map>
+
 namespace Ms {
 class ReducedFraction;
 class DurationElement;

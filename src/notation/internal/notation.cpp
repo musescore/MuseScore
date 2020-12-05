@@ -20,6 +20,7 @@
 
 #include <QPainter>
 #include <QGuiApplication>
+#include <QScreen>
 
 #include "log.h"
 

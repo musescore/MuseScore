@@ -20,6 +20,7 @@
 
 #include <QVariant>
 #include <QJsonParseError>
+#include <QJsonArray>
 
 #include "log.h"
 #include "settings.h"

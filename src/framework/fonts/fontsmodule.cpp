@@ -18,6 +18,7 @@
 //=============================================================================
 #include "fontsmodule.h"
 
+#include <QtGlobal>
 #include "modularity/ioc.h"
 
 using namespace mu::fonts;

@@ -1,5 +1,8 @@
 #include "importmidi_beat.h"
 
+#include <functional>
+#include <cmath>
+
 #include "importmidi_chord.h"
 #include "importmidi_fraction.h"
 #include "importmidi_inner.h"
@@ -9,8 +12,6 @@
 #include "importmidi_operations.h"
 #include "thirdparty/beatroot/BeatTracker.h"
 #include "libmscore/mscore.h"
-
-#include <functional>
 
 namespace Ms {
 namespace MidiBeat {

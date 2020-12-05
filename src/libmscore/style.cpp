@@ -10,6 +10,8 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include <QDebug>
+
 #include "mscore.h"
 #include "style.h"
 #include "xml.h"

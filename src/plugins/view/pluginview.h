@@ -20,6 +20,8 @@
 #ifndef MU_PLUGINS_PLUGINVIEW_H
 #define MU_PLUGINS_PLUGINVIEW_H
 
+#include <QQuickView>
+
 #include "plugins/pluginstypes.h"
 
 #include "framework/ui/iuiengine.h"

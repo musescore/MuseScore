@@ -21,6 +21,7 @@
 #define __PLUGIN_API_ENUMS_H__
 
 #include <QQmlPropertyMap>
+#include <QMetaEnum>
 
 namespace Ms {
 namespace PluginAPI {

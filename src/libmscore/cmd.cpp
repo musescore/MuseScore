@@ -16,6 +16,7 @@
 */
 
 #include <assert.h>
+#include <QMessageBox>
 
 #include "types.h"
 #include "musescoreCore.h"

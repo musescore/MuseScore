@@ -14,6 +14,7 @@
 #define __SYNTHESIZERSTATE_H__
 
 #include <list>
+#include <QString>
 
 namespace Ms {
 class XmlWriter;

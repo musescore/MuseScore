@@ -1,5 +1,7 @@
 #include "importmidi_voice.h"
 
+#include <QSet>
+
 #include "importmidi_tuplet.h"
 #include "importmidi_inner.h"
 #include "importmidi_chord.h"

@@ -13,6 +13,8 @@
 #ifndef __INSTRCHANGE_H__
 #define __INSTRCHANGE_H__
 
+#include <QCoreApplication>
+
 #include "text.h"
 #include "instrument.h"
 #include "clef.h"

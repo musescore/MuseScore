@@ -17,6 +17,9 @@
 
 #include "changeMap.h"
 
+#include <cmath>
+#include <QDebug>
+
 namespace Ms {
 //---------------------------------------------------------
 //   interpolateVelocity

@@ -1,4 +1,7 @@
 #include "importmidi_meter.h"
+
+#include <QQueue>
+
 #include "importmidi_fraction.h"
 #include "libmscore/durationtype.h"
 #include "libmscore/mscore.h"

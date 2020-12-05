@@ -13,6 +13,8 @@
 #ifndef __BRACKET_H__
 #define __BRACKET_H__
 
+#include <QPainterPath>
+
 #include "element.h"
 #include "bracketItem.h"
 

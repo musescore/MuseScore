@@ -1,4 +1,7 @@
 #include "importmidi_model.h"
+
+#include <QCoreApplication>
+
 #include "importmidi_inner.h"
 #include "importmidi_clef.h"
 #include "libmscore/instrtemplate.h"

@@ -18,6 +18,11 @@
  Definition of Score class.
 */
 
+#include <set>
+#include <QFileInfo>
+#include <QQueue>
+#include <QSet>
+
 #include "config.h"
 #include "input.h"
 #include "instrument.h"

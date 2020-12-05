@@ -11,6 +11,9 @@
 //=============================================================================
 
 #include "rest.h"
+
+#include <cmath>
+
 #include "score.h"
 #include "xml.h"
 #include "style.h"

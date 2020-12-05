@@ -13,6 +13,8 @@
 #ifndef __MASTERPALETTE_H__
 #define __MASTERPALETTE_H__
 
+#include <QDialog>
+
 #include "ui_masterpalette.h"
 
 #include "modularity/ioc.h"

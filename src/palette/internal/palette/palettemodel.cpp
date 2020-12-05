@@ -19,6 +19,8 @@
 
 #include "palettemodel.h"
 
+#include <QMimeData>
+
 #include "libmscore/beam.h"
 #include "libmscore/chordrest.h"
 #include "libmscore/icon.h"

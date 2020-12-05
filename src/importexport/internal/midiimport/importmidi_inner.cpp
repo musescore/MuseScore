@@ -1,4 +1,7 @@
 #include "importmidi_inner.h"
+
+#include <QTextCodec>
+
 #include "importmidi_operations.h"
 #include "importmidi_chord.h"
 #include "libmscore/durationtype.h"

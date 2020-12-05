@@ -21,6 +21,8 @@
 #define __PALETTEMODEL_H__
 
 #include <QAbstractItemModel>
+#include <QSortFilterProxyModel>
+
 #include "palettetree.h"
 
 #include "modularity/ioc.h"

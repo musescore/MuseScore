@@ -20,6 +20,7 @@
 #define MU_CLOUD_ACCOUNTMODEL_H
 
 #include <QObject>
+#include <QVariant>
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"

@@ -12,6 +12,10 @@
 
 #include "audiofile.h"
 
+#include <vector>
+#include <math.h>
+#include <climits>
+
 static sf_count_t getFileLen(void* f)
 {
     return ((AudioFile*)f)->getFileLen();

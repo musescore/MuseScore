@@ -38,6 +38,9 @@
     Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
+#include <QString>
+#include <QDebug>
+
 #include "config.h"
 #include "rtf_table.h"
 #include "rtf_tools.h"

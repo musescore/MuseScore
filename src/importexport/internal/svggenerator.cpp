@@ -39,6 +39,13 @@
 **
 ****************************************************************************/
 
+#include <QTextStream>
+#include <QBuffer>
+#include <QTextCodec>
+#include <QPainterPath>
+#include <QMimeType>
+#include <QMimeDatabase>
+
 #include "svggenerator.h"
 #include "libmscore/element.h"
 #include "libmscore/image.h"

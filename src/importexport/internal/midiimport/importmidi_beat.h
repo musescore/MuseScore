@@ -2,6 +2,7 @@
 #define IMPORTMIDI_BEAT_H
 
 #include <set>
+#include <map>
 
 namespace Ms {
 class TimeSigMap;

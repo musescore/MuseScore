@@ -20,6 +20,10 @@
 #ifndef OVE_DATA_H
 #define OVE_DATA_H
 
+#include <QList>
+#include <QString>
+#include <cmath>
+
 #ifdef WIN32
 #define DLL_EXPORT extern "C" __declspec(dllexport)
 #else

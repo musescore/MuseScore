@@ -24,6 +24,7 @@
 #include <QJsonObject>
 #include <QObject>
 #include <QMetaObject>
+#include <QJsonArray>
 
 namespace mu {
 namespace languages {

@@ -10,6 +10,9 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include <cmath>
+#include <QtMath>
+
 #include "config.h"
 #include "score.h"
 #include "page.h"

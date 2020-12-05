@@ -12,6 +12,8 @@
 #ifndef __PALETTELISTVIEW_H__
 #define __PALETTELISTVIEW_H__
 
+#include <QListView>
+
 #include "modularity/ioc.h"
 #include "palette/ipaletteconfiguration.h"
 

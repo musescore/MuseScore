@@ -13,6 +13,8 @@
 #ifndef __TEXTBASE_H__
 #define __TEXTBASE_H__
 
+#include <QTextCursor>
+
 #include "element.h"
 #include "property.h"
 #include "style.h"

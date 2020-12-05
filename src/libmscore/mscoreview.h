@@ -13,6 +13,11 @@
 #ifndef __MSCOREVIEW_H__
 #define __MSCOREVIEW_H__
 
+#include <QPointF>
+#include <QList>
+#include <QCursor>
+#include <QRectF>
+
 namespace Ms {
 class Element;
 class Score;

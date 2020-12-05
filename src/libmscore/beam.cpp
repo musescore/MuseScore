@@ -11,6 +11,9 @@
 //=============================================================================
 
 #include "beam.h"
+
+#include <cmath>
+
 #include "segment.h"
 #include "score.h"
 #include "chord.h"

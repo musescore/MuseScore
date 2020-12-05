@@ -11,6 +11,9 @@
 //=============================================================================
 
 #include "importmidi_tie.h"
+
+#include <QDebug>
+
 #include "libmscore/element.h"
 #include "libmscore/segment.h"
 #include "libmscore/chordrest.h"

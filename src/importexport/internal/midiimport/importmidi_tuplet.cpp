@@ -1,4 +1,8 @@
 #include "importmidi_tuplet.h"
+
+#include <set>
+#include <QDebug>
+
 #include "importmidi_tuplet_detect.h"
 #include "importmidi_tuplet_filter.h"
 #include "importmidi_tuplet_voice.h"
@@ -7,8 +11,6 @@
 #include "importmidi_inner.h"
 #include "importmidi_operations.h"
 #include "libmscore/sig.h"
-
-#include <set>
 
 namespace Ms {
 namespace MidiTuplet {

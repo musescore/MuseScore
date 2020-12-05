@@ -2,6 +2,7 @@
 
 #include <set>
 #include <deque>
+#include <QDebug>
 
 #include "libmscore/sig.h"
 #include "importmidi_fraction.h"

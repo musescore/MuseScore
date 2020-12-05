@@ -17,6 +17,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
+#include <QDir>
+
 #include "timedialog.h"
 #include "libmscore/timesig.h"
 #include "palette/palette.h"

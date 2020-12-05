@@ -10,6 +10,8 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include <cmath>
+
 #include "vibrato.h"
 #include "style.h"
 #include "system.h"

@@ -22,6 +22,10 @@
 #include <QFileDialog>
 #include <QStandardItemModel>
 #include <QJsonDocument>
+#include <QQmlEngine>
+#include <QMimeData>
+#include <QStandardPaths>
+#include <QMainWindow>
 
 #include "libmscore/keysig.h"
 #include "libmscore/timesig.h"

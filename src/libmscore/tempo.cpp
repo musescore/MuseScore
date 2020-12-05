@@ -11,6 +11,9 @@
 //=============================================================================
 
 #include "tempo.h"
+
+#include <cmath>
+
 #include "xml.h"
 
 namespace Ms {
