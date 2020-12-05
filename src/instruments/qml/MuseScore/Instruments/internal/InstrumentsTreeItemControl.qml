@@ -4,10 +4,17 @@ import QtQuick.Layouts 1.3
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-Rectangle {
+Item {
     id: root
 
-    color: ui.theme.textFieldColor
+    property bool isHighlighted: false
+
+    Rectangle {
+        anchors.fill: parent
+
+        color: root.isHighlighted ? ui.theme.accentColor : ui.theme.textFieldColor
+        opacity: root.isHighlighted ? 0.5 : 1
+    }
 
     signal clicked()
 

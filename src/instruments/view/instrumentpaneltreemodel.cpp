@@ -271,6 +271,24 @@ bool InstrumentPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sou
     return true;
 }
 
+bool InstrumentPanelTreeModel::isSelected(const QModelIndex& rowIndex) const
+{
+    if (m_selectionModel->selectedIndexes().isEmpty()) {
+        return false;
+    }
+
+    if (m_selectionModel->isSelected(rowIndex)) {
+        return true;
+    }
+
+    QModelIndex parentIndex = parent(rowIndex);
+    if (m_selectionModel->isSelected(parentIndex)) {
+        return true;
+    }
+
+    return false;
+}
+
 QModelIndex InstrumentPanelTreeModel::index(int row, int column, const QModelIndex& parent) const
 {
     if (!hasIndex(row, column, parent)) {
