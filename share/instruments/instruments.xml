@@ -10624,15 +10624,15 @@ Aeolus organ synthesizer, currently disabled -->
                   <description>Standard Mountain Dulcimer</description>
                   <musicXMLid>pluck.dulcimer</musicXMLid>
                   <StringData>
-                        <frets>20</frets>
+                        <frets>28</frets>
                         <string>50</string>
                         <string>57</string>
                         <string>62</string>
                   </StringData>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>50-82</aPitchRange>
-                  <pPitchRange>50-82</pPitchRange>
+                  <aPitchRange>50-90</aPitchRange>
+                  <pPitchRange>50-90</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
@@ -10655,15 +10655,15 @@ Aeolus organ synthesizer, currently disabled -->
                   <description>Baritone Mountain Dulcimer</description>
                   <musicXMLid>pluck.dulcimer</musicXMLid>
                   <StringData>
-                        <frets>20</frets>
+                        <frets>23</frets>
                         <string>45</string>
                         <string>52</string>
                         <string>57</string>
                   </StringData>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>45-77</aPitchRange>
-                  <pPitchRange>45-77</pPitchRange>
+                  <aPitchRange>45-80</aPitchRange>
+                  <pPitchRange>45-80</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
@@ -10686,15 +10686,15 @@ Aeolus organ synthesizer, currently disabled -->
                   <description>Bass Mountain Dulcimer</description>
                   <musicXMLid>pluck.dulcimer</musicXMLid>
                   <StringData>
-                        <frets>20</frets>
+                        <frets>28</frets>
                         <string>38</string>
                         <string>45</string>
                         <string>50</string>
                   </StringData>
                   <clef>G8vb</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>38-70</aPitchRange>
-                  <pPitchRange>38-70</pPitchRange>
+                  <aPitchRange>38-78</aPitchRange>
+                  <pPitchRange>38-78</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
