@@ -21,6 +21,7 @@
 
 #include <QObject>
 #include <QMetaType>
+#include <QVariant>
 
 namespace mu {
 namespace framework {

@@ -12,6 +12,18 @@
 
 #include "palette.h"
 
+#include <cmath>
+#include <QMenu>
+#include <QResizeEvent>
+#include <QContextMenuEvent>
+#include <QAction>
+#include <QDrag>
+#include <QMimeData>
+#include <QAccessible>
+#include <QAccessibleEvent>
+#include <QToolTip>
+#include <QBuffer>
+
 #include "libmscore/element.h"
 #include "libmscore/style.h"
 #include "libmscore/sym.h"

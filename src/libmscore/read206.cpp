@@ -10,6 +10,8 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
+#include <cmath>
+
 #include "xml.h"
 #include "score.h"
 #include "staff.h"

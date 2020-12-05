@@ -1,6 +1,9 @@
 #ifndef IMPORTMIDI_METER_H
 #define IMPORTMIDI_METER_H
 
+#include <vector>
+#include <QList>
+
 namespace Ms {
 class ReducedFraction;
 class TDuration;

@@ -13,6 +13,8 @@
 #ifndef __ARPEGGIO_H__
 #define __ARPEGGIO_H__
 
+#include <QApplication>
+
 #include "element.h"
 
 namespace Ms {

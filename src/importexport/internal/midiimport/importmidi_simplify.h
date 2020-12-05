@@ -1,6 +1,8 @@
 #ifndef IMPORTMIDI_SIMPLIFY_H
 #define IMPORTMIDI_SIMPLIFY_H
 
+#include <map>
+
 namespace Ms {
 class MTrack;
 class TimeSigMap;

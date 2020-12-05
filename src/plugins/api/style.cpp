@@ -19,6 +19,9 @@
 
 #include "style.h"
 
+#include <QQmlEngine>
+#include <QMetaEnum>
+
 #include "libmscore/score.h"
 
 namespace Ms {

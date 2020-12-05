@@ -13,6 +13,8 @@
 #ifndef __LAYOUTBREAK_H__
 #define __LAYOUTBREAK_H__
 
+#include <QPainterPath>
+
 #include "element.h"
 
 namespace Ms {

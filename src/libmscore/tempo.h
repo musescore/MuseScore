@@ -13,6 +13,9 @@
 #ifndef __AL_TEMPO_H__
 #define __AL_TEMPO_H__
 
+#include <map>
+#include <QFlags>
+
 namespace Ms {
 class XmlWriter;
 

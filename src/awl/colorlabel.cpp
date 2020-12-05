@@ -19,6 +19,9 @@
 
 #include "colorlabel.h"
 
+#include <QColorDialog>
+#include <QPainter>
+
 namespace Awl {
 //---------------------------------------------------------
 //   ColorLabel

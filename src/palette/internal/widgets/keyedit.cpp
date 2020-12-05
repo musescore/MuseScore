@@ -18,6 +18,10 @@
 //=============================================================================
 
 #include <QDir>
+#include <QAction>
+#include <QMouseEvent>
+#include <QDragEnterEvent>
+#include <QMimeData>
 
 #include "palette/palette.h"
 #include "palette/palettecreator.h"

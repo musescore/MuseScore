@@ -19,6 +19,10 @@
 
 #include "gridcanvas.h"
 
+#include <QApplication>
+#include <QPalette>
+#include <cmath>
+
 using namespace Ms;
 
 using namespace mu::framework;

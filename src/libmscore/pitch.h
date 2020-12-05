@@ -13,6 +13,8 @@
 #ifndef __PITCH_H__
 #define __PITCH_H__
 
+#include <QMap>
+
 namespace Ms {
 //---------------------------------------------------------
 ///  PitchList

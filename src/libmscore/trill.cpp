@@ -11,6 +11,9 @@
 //=============================================================================
 
 #include "trill.h"
+
+#include <cmath>
+
 #include "style.h"
 #include "system.h"
 #include "measure.h"

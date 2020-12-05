@@ -13,6 +13,11 @@
 #ifndef MU_CLOUD_CLOUDMANAGER_H
 #define MU_CLOUD_CLOUDMANAGER_H
 
+#include <QAction>
+#include <QNetworkAccessManager>
+#include <QFile>
+#include <QProgressDialog>
+
 #include "config.h"
 
 #include "modularity/ioc.h"

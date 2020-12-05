@@ -13,6 +13,8 @@
 #ifndef __ELEMENTMAP_H__
 #define __ELEMENTMAP_H__
 
+#include <QHash>
+
 namespace Ms {
 class Element;
 

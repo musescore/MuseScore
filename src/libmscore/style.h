@@ -13,6 +13,8 @@
 #ifndef __STYLE_H__
 #define __STYLE_H__
 
+#include <QFile>
+
 #include "chordlist.h"
 #include "types.h"
 

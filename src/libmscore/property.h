@@ -13,6 +13,10 @@
 #ifndef __PROPERTY_H__
 #define __PROPERTY_H__
 
+#include <QVariant>
+#include <QString>
+#include <QPainterPath>
+
 namespace Ms {
 class XmlReader;
 

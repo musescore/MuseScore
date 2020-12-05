@@ -13,6 +13,8 @@
 #ifndef __BARLINE_H__
 #define __BARLINE_H__
 
+#include <QApplication>
+
 #include "element.h"
 #include "mscore.h"
 

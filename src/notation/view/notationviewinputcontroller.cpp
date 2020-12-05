@@ -19,6 +19,7 @@
 #include "notationviewinputcontroller.h"
 
 #include <QMimeData>
+#include <QtMath>
 
 #include "log.h"
 #include "notationpaintview.h"

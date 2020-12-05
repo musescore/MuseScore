@@ -12,6 +12,8 @@
 
 #include "lyrics.h"
 
+#include <QClipboard>
+
 #include "chord.h"
 #include "score.h"
 #include "sym.h"

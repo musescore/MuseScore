@@ -22,8 +22,8 @@ cmake_minimum_required(VERSION 3.16)
 project(mscore LANGUAGES C CXX)
 
 # Conflicted with PCH on Linux, will be resolve later
-#set(CMAKE_CXX_STANDARD 17)
-#set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -71,7 +71,7 @@ option(SOUNDFONT3    "Ogg Vorbis compressed fonts"        ON)  # Enable Ogg Vorb
 option(USE_SYSTEM_QTSINGLEAPPLICATION "Use system QtSingleApplication" OFF)
 option(USE_SYSTEM_FREETYPE "Use system FreeType"          OFF) # requires freetype >= 2.5.2, does not work on win
 option(DOWNLOAD_SOUNDFONT "Download the latest soundfont version as part of the build process" ON)
-option(BUILD_PCH "Build using precompiled headers." ON)
+option(BUILD_PCH "Build using precompiled headers." OFF)
 option(BUILD_FOR_WINSTORE "Build for the Windows Store." OFF)
 option(COVERAGE "Build with instrumentation to record code coverage." OFF)
 option(BUILD_64 "Build 64 bit version of editor" ON)
@@ -81,9 +81,11 @@ option(BUILD_TELEMETRY_MODULE "Build with telemetry module" ON)
 set(TELEMETRY_TRACK_ID "" CACHE STRING "Telemetry track id")
 option(BUILD_PORTABLEAPPS "Windows build for PortableApps.com" OFF)
 option(BUILD_UNIT_TESTS "Build gtest unit test" OFF)
-option(MODULE_BUILD_PCH "Build using precompiled headers in MU4 modules" ON)
 option(QML_LOAD_FROM_SOURCE "Load qml files from source (not resource)" OFF)
 option(PACKAGE_FILE_ASSOCIATION "File types association" OFF)
+
+# Temporary OFF
+set(BUILD_PCH OFF)
 
 set(VST3_SDK_VERSION "3.7")
 option(BUILD_VST "Build VST MODULE" OFF)

@@ -13,6 +13,11 @@
 #ifndef __PLUGIN_API_UTIL_H__
 #define __PLUGIN_API_UTIL_H__
 
+#include <QDir>
+#include <QProcess>
+#include <QQuickPaintedItem>
+#include <QNetworkAccessManager>
+
 #include "config.h"
 
 #include "libmscore/element.h"

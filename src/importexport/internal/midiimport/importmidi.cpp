@@ -10,6 +10,8 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include <QMessageBox>
+
 #include "framework/midi_old/midifile.h"
 #include "libmscore/score.h"
 #include "libmscore/key.h"

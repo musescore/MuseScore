@@ -1,6 +1,8 @@
 #ifndef IMPORTMIDI_LRHAND_H
 #define IMPORTMIDI_LRHAND_H
 
+#include <map>
+
 namespace Ms {
 class MTrack;
 class MidiChord;

@@ -21,6 +21,8 @@
  MusicXML support.
  */
 
+#include <QDebug>
+
 #include "libmscore/accidental.h"
 #include "libmscore/articulation.h"
 #include "libmscore/chord.h"

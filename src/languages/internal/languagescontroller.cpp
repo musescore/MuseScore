@@ -20,7 +20,7 @@
 
 #include <QDir>
 #include <QTranslator>
-#include <QCoreApplication>
+#include <QApplication>
 #include <QtConcurrent>
 #include <QCryptographicHash>
 

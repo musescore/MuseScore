@@ -44,7 +44,6 @@ NO_RPATH="FALSE"# Package maintainers may want to override this (e.g. Debian)
 BUILD_UNIT_TESTS="OFF"
 BUILD_VST="OFF"
 VST3_SDK_PATH=""
-MODULE_BUILD_PCH="ON"
 
 #
 # change path to include your Qt5 installation
@@ -71,7 +70,6 @@ release:
    	  -DDOWNLOAD_SOUNDFONT="${DOWNLOAD_SOUNDFONT}"   \
 	  -DBUILD_VST="${BUILD_VST}"         		\
 	  -DVST3_SDK_PATH="${VST3_SDK_PATH}"         \
-	  -DMODULE_BUILD_PCH="${MODULE_BUILD_PCH}" \
 	  -DBUILD_UNIT_TESTS="${BUILD_UNIT_TESTS}" \
   	  -DCMAKE_SKIP_RPATH="${NO_RPATH}"     ..; \
       make lrelease;                             \

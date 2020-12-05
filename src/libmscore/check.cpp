@@ -10,6 +10,10 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include <QDebug>
+#include <QJsonDocument>
+#include <QJsonObject>
+
 #include "score.h"
 #include "slur.h"
 #include "measure.h"

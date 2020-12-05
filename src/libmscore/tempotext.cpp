@@ -10,6 +10,8 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include <cmath>
+
 #include "score.h"
 #include "tempotext.h"
 #include "tempo.h"

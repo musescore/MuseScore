@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <utility>
+#include <cmath>
 
 #include "libmscore/arpeggio.h"
 #include "libmscore/accidental.h"

@@ -13,6 +13,8 @@
 #ifndef __SPANNER_H__
 #define __SPANNER_H__
 
+#include <deque>
+
 #include "element.h"
 
 namespace Ms {

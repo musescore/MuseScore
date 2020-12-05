@@ -19,6 +19,8 @@
 
 #include "ove.h"
 
+#include <QtMath>
+
 #include "libmscore/sig.h"
 #include "libmscore/tempo.h"
 #include "libmscore/arpeggio.h"

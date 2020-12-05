@@ -16,6 +16,9 @@
 */
 
 #include <assert.h>
+#include <cmath>
+#include <QBuffer>
+
 #include "score.h"
 #include "fermata.h"
 #include "imageStore.h"

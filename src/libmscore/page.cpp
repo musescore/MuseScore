@@ -11,6 +11,9 @@
 //=============================================================================
 
 #include "page.h"
+
+#include <QDateTime>
+
 #include "score.h"
 #include "text.h"
 #include "xml.h"

@@ -12,6 +12,8 @@
 
 #include "harmony.h"
 
+#include <QStack>
+
 #include "chordlist.h"
 #include "fret.h"
 #include "measure.h"

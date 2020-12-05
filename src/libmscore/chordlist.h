@@ -13,6 +13,8 @@
 #ifndef __CHORDLIST_H__
 #define __CHORDLIST_H__
 
+#include <QMap>
+
 namespace Ms {
 class XmlWriter;
 class XmlReader;

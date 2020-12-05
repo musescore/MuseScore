@@ -10,6 +10,8 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include <cmath>
+
 #include "measure.h"
 #include "score.h"
 #include "system.h"

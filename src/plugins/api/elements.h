@@ -14,6 +14,9 @@
 #define __PLUGIN_API_ELEMENTS_H__
 
 #include "scoreelement.h"
+
+#include <QQmlListProperty>
+
 #include "libmscore/element.h"
 #include "libmscore/chord.h"
 #include "libmscore/lyrics.h"

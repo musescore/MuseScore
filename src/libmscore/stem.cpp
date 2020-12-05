@@ -10,6 +10,8 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include <cmath>
+
 #include "stem.h"
 #include "staff.h"
 #include "chord.h"

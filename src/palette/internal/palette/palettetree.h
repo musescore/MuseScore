@@ -20,6 +20,8 @@
 #ifndef __PALETTETREE_H__
 #define __PALETTETREE_H__
 
+#include <QIconEngine>
+
 #include "libmscore/element.h"
 #include "libmscore/xml.h"
 

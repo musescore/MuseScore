@@ -13,6 +13,8 @@
 //    Copyright (C) 1992-2007 Trolltech ASA. All rights reserved.
 //=============================================================================
 
+#include <cmath>
+
 #include "bsp.h"
 #include "element.h"
 

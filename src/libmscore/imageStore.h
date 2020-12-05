@@ -13,6 +13,10 @@
 #ifndef __IMAGE_CACHE_H__
 #define __IMAGE_CACHE_H__
 
+#include <QList>
+#include <QString>
+#include <QByteArray>
+
 namespace Ms {
 class Image;
 class Score;

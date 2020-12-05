@@ -13,6 +13,8 @@
 #ifndef __STAFFSTATE_H__
 #define __STAFFSTATE_H__
 
+#include <QPainterPath>
+
 #include "element.h"
 #include "instrument.h"
 

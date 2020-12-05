@@ -11,6 +11,9 @@
 //=============================================================================
 
 #include "jump.h"
+
+#include <QApplication>
+
 #include "score.h"
 #include "xml.h"
 #include "measure.h"

@@ -11,6 +11,9 @@
 //=============================================================================
 
 #include "pos.h"
+
+#include <cmath>
+
 #include "xml.h"
 #include "sig.h"
 #include "tempo.h"

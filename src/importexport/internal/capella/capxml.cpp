@@ -24,6 +24,8 @@
 //    If statements in the parser match the element order in the schema definition
 
 #include <assert.h>
+#include <cmath>
+
 #include "libmscore/score.h"
 #include "thirdparty/qzip/qzipreader_p.h"
 #include "capella.h"

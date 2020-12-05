@@ -13,6 +13,8 @@
 #ifndef __SHAPE_H__
 #define __SHAPE_H__
 
+#include <QPainter>
+
 namespace Ms {
 #ifndef NDEBUG
 // #define DEBUG_SHAPES    // enable shape debugging

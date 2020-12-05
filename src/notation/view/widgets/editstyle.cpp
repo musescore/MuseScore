@@ -19,6 +19,10 @@
 
 #include "editstyle.h"
 
+#include <QButtonGroup>
+#include <QSignalMapper>
+#include <QScreen>
+
 #include "alignSelect.h"
 #include "offsetSelect.h"
 #include "fontStyleSelect.h"

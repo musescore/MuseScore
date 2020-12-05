@@ -16,6 +16,7 @@
 */
 
 #include <set>
+#include <cmath>
 
 #include "rendermidi.h"
 #include "score.h"

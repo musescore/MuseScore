@@ -1,5 +1,8 @@
 #include "importmidi_operations.h"
 
+#include <QXmlStreamReader>
+#include <QDebug>
+
 namespace Ms {
 MidiOperations::Data midiImportOperations;
 

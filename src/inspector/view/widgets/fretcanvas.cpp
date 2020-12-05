@@ -18,6 +18,9 @@
 //=============================================================================
 
 #include "fretcanvas.h"
+
+#include <cmath>
+
 #include "libmscore/fret.h"
 #include "libmscore/measure.h"
 #include "libmscore/system.h"

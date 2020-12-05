@@ -13,6 +13,8 @@
 #ifndef __SYM_H__
 #define __SYM_H__
 
+#include <QApplication>
+
 #include "config.h"
 #include "style.h"
 

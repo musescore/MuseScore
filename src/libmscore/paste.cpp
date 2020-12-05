@@ -10,6 +10,9 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include <QMimeData>
+#include <QBuffer>
+
 #include "score.h"
 
 #include "rest.h"

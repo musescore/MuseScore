@@ -11,6 +11,9 @@
 //=============================================================================
 
 #include "chordrest.h"
+
+#include <QDebug>
+
 #include "chord.h"
 #include "xml.h"
 #include "style.h"

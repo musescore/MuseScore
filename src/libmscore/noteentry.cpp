@@ -10,6 +10,8 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include <QMessageBox>
+
 #include "utils.h"
 #include "score.h"
 #include "chord.h"

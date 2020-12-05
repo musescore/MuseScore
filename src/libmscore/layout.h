@@ -13,6 +13,9 @@
 #ifndef __LAYOUT_H__
 #define __LAYOUT_H__
 
+#include <set>
+#include <QList>
+
 namespace Ms {
 class Segment;
 class Page;

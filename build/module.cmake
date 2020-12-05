@@ -26,7 +26,8 @@
 # set(MODULE_QRC somename.qrc)  - set resource (qrc) file
 # set(MODULE_UI ...)            - set ui headers
 # set(MODULE_QML_IMPORT ...)    - set Qml import for QtCreator (so that there is code highlighting, jump, etc.)
-# set(MODULE_HAS_C_CODE, 1)     - set if source contains C code
+# set(MODULE_HAS_C_CODE ON)     - set if source contains C code
+# set(MODULE_USE_ALL_H ON)      -
 
 # After all the settings you need to do:
 # include(${PROJECT_SOURCE_DIR}/build/module.cmake)
@@ -34,7 +35,6 @@
 message(STATUS "Configuring " ${MODULE})
 
 set(LIBRARY_TYPE STATIC)
-set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
 
 if (MODULE_QRC)
     qt5_add_resources(RCC_SOURCES ${MODULE_QRC})
@@ -50,7 +50,6 @@ if (NOT ${MODULE_QML_IMPORT} STREQUAL "")
 endif()
 
 add_library(${MODULE} ${LIBRARY_TYPE}
-    ${_all_h_file}
     ${ui_headers}
     ${RCC_SOURCES}
     ${MODULE_SRC}
@@ -117,11 +116,16 @@ if (LOCAL_MODULE_BUILD_PCH)
         ADD_DEPENDENCIES(${MODULE} mops2)
     endif (NOT MSVC)
 else (LOCAL_MODULE_BUILD_PCH)
-    if (NOT MSVC)
-        set_target_properties (${MODULE} PROPERTIES COMPILE_FLAGS "-include ${PROJECT_SOURCE_DIR}/all.h")
-    else (NOT MSVC)
-        set_target_properties (${MODULE} PROPERTIES COMPILE_FLAGS "/FI ${PROJECT_SOURCE_DIR}/all.h" )
-    endif (NOT MSVC)
+
+    if (MODULE_USE_ALL_H)
+        if (NOT MSVC)
+            set_target_properties (${MODULE} PROPERTIES COMPILE_FLAGS "-include ${PROJECT_SOURCE_DIR}/all.h")
+        else (NOT MSVC)
+            set_target_properties (${MODULE} PROPERTIES COMPILE_FLAGS "/FI ${PROJECT_SOURCE_DIR}/all.h" )
+        endif (NOT MSVC)
+        message(STATUS "  ${MODULE} include all.h")
+    endif(MODULE_USE_ALL_H)
+
 endif (LOCAL_MODULE_BUILD_PCH)
 
 
