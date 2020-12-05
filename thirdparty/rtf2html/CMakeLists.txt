@@ -17,56 +17,74 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-include (${PROJECT_SOURCE_DIR}/build/gch.cmake)
-if (APPLE)
-        file(GLOB_RECURSE INCS "*.h")
-else (APPLE)
-        set(INCS "")
-endif (APPLE)
+set(MODULE rtf2html)
 
-if (NOT MSVC)
-   set(_all_h_file "${PROJECT_BINARY_DIR}/all.h")
-else (NOT MSVC)
-   set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
-endif (NOT MSVC)
+set(MODULE_SRC
+    common.h
+    config.h
+    dbg_iter.h
+    fmt_opts.cpp
+    fmt_opts.h
+    rtf2html.cpp
+    rtf_keyword.cpp
+    rtf_keyword.h
+    rtf_table.cpp
+    rtf_table.h
+    rtf_tools.h
+    )
 
-add_library (
-  rtf2html STATIC
-  ${_all_h_file}
-  ${INCS}
-  fmt_opts.cpp
-  rtf2html.cpp
-  rtf_keyword.cpp
-  rtf_table.cpp
-  )
+include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 
-if (NOT MSVC)
-   if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 9.0)
-       set_target_properties( rtf2html
-          PROPERTIES
-             COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch -Wno-deprecated-copy"
-          )
-   else (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 9.0)
-       set_target_properties( rtf2html
-          PROPERTIES
-             COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
-          )
-   endif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 9.0)
-else (NOT MSVC)
-   set_target_properties ( rtf2html
-      PROPERTIES
-         COMPILE_FLAGS "${PCH_INCLUDE} /wd4267"
-      )
-endif (NOT MSVC)
+#include (${PROJECT_SOURCE_DIR}/build/gch.cmake)
+#if (APPLE)
+#        file(GLOB_RECURSE INCS "*.h")
+#else (APPLE)
+#        set(INCS "")
+#endif (APPLE)
 
-xcode_pch(rtf2html all)
+#if (NOT MSVC)
+#   set(_all_h_file "${PROJECT_BINARY_DIR}/all.h")
+#else (NOT MSVC)
+#   set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
+#endif (NOT MSVC)
 
-# Use MSVC pre-compiled headers
-vstudio_pch( rtf2html )
+#add_library (
+#  rtf2html STATIC
+#  ${_all_h_file}
+#  ${INCS}
+#  fmt_opts.cpp
+#  rtf2html.cpp
+#  rtf_keyword.cpp
+#  rtf_table.cpp
+#  )
 
-# MSVC does not depend on mops1 & mops2 for PCH
-if (NOT MSVC)
-   ADD_DEPENDENCIES(rtf2html mops1)
-   ADD_DEPENDENCIES(rtf2html mops2)
-endif (NOT MSVC)   
+#if (NOT MSVC)
+#   if (NOT MINGW)
+#      set_target_properties( rtf2html
+#         PROPERTIES
+#            COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch -Wno-deprecated-copy"
+#         )
+#   else (NOT MINGW)
+#       set_target_properties( rtf2html
+#          PROPERTIES
+#             COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
+#          )
+#   endif (NOT MINGW)
+#else (NOT MSVC)
+#   set_target_properties ( rtf2html
+#      PROPERTIES
+#         COMPILE_FLAGS "${PCH_INCLUDE} /wd4267"
+#      )
+#endif (NOT MSVC)
+
+#xcode_pch(rtf2html all)
+
+## Use MSVC pre-compiled headers
+#vstudio_pch( rtf2html )
+
+## MSVC does not depend on mops1 & mops2 for PCH
+#if (NOT MSVC)
+#   ADD_DEPENDENCIES(rtf2html mops1)
+#   ADD_DEPENDENCIES(rtf2html mops2)
+#endif (NOT MSVC)
 
