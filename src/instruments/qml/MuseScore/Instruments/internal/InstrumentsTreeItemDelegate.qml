@@ -14,6 +14,7 @@ Item {
     property var index: styleData.index
     property string filterKey
     property bool isSelected: false
+    property bool isParentSelected: false
     property bool isDragAvailable: false
     property var type: InstrumentTreeItemType.UNDEFINED
 
@@ -88,7 +89,8 @@ Item {
 
             State {
                 name: "PART_EXPANDED"
-                when: styleData.isExpanded && delegateType === InstrumentTreeItemType.PART
+                when: styleData.isExpanded && !root.isSelected &&
+                      delegateType === InstrumentTreeItemType.PART
 
                 PropertyChanges {
                     target: background
@@ -121,6 +123,12 @@ Item {
         verticalOffset: 4
         samples: 30
         visible: false
+    }
+
+    onHeldChanged: {
+        if (held && styleData.isExpanded) {
+            attachedControl.collapse(styleData.index)
+        }
     }
 
     MouseArea {

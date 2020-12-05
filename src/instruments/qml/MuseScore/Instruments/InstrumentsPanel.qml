@@ -147,13 +147,17 @@ Item {
                     sourceComponent: instrumentsTreeView.isControl(delegateType) ?
                                      controlItemDelegateComponent : treeItemDelegateComponent
 
-                    Component {
-                        id: controlItemDelegateComponent
+                    property bool isSelected: false
 
-                        InstrumentsTreeItemControl {
-                            onClicked: {
-                                styleData.value.appendNewItem()
-                            }
+                    function updateIsSelected() {
+                        treeItemDelegateLoader.isSelected = instrumentTreeModel.isSelected(styleData.index)
+                    }
+
+                    Connections {
+                        target: instrumentTreeModel
+
+                        function onSelectionChanged() {
+                            treeItemDelegateLoader.updateIsSelected()
                         }
                     }
 
@@ -162,15 +166,36 @@ Item {
 
                         InstrumentsTreeItemDelegate {
                             attachedControl: instrumentsTreeView
-                            isSelected: instrumentsTreeView.selection.selectedIndexes.indexOf(index) !== -1
+                            isSelected: treeItemDelegateLoader.isSelected
+
                             isDragAvailable: dropArea.isSelectable
                             type: treeItemDelegateLoader.delegateType
                             sideMargin: contentColumn.sideMargin
 
                             onClicked: {
-                                var isMultipleSelectionModeOn = mouse.modifiers & Qt.ShiftModifier || mouse.modifiers & Qt.ControlModifier;
+                                var isMultipleSelectionModeOn = mouse.modifiers & Qt.ShiftModifier || mouse.modifiers & Qt.ControlModifier
 
-                                instrumentTreeModel.selectRow(styleData.index, isMultipleSelectionModeOn);
+                                instrumentTreeModel.selectRow(styleData.index, isMultipleSelectionModeOn)
+                            }
+
+                            onVisibleChanged: {
+                                treeItemDelegateLoader.updateIsSelected()
+                            }
+                        }
+                    }
+
+                    Component {
+                        id: controlItemDelegateComponent
+
+                        InstrumentsTreeItemControl {
+                            isHighlighted: treeItemDelegateLoader.isSelected
+
+                            onClicked: {
+                                styleData.value.appendNewItem()
+                            }
+
+                            onVisibleChanged: {
+                                treeItemDelegateLoader.updateIsSelected()
                             }
                         }
                     }
