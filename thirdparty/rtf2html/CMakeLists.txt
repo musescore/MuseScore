@@ -41,23 +41,23 @@ add_library (
   )
 
 if (NOT MSVC)
-   if (NOT MINGW)
-      set_target_properties( rtf2html
-         PROPERTIES
-            COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch -Wno-deprecated-copy"
-         )
-   else (NOT MINGW)
+   if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 9.0)
+       set_target_properties( rtf2html
+          PROPERTIES
+             COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch -Wno-deprecated-copy"
+          )
+   else (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 9.0)
        set_target_properties( rtf2html
           PROPERTIES
              COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
           )
-   endif (NOT MINGW)
+   endif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 9.0)
 else (NOT MSVC)
    set_target_properties ( rtf2html
       PROPERTIES
          COMPILE_FLAGS "${PCH_INCLUDE} /wd4267"
       )
-endif (NOT MSVC)   
+endif (NOT MSVC)
 
 xcode_pch(rtf2html all)
 
