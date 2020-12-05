@@ -331,8 +331,9 @@ public:
 
     void drawPath(const QPainterPath& path);
     void drawPixmap(const QRectF& r, const QPixmap& pm, const QRectF& sr);
+    void drawPolygon(const QPoint* points, int pointCount, PolygonDrawMode mode) { QPaintEngine::drawPolygon(points,pointCount,mode); }
     void drawPolygon(const QPointF* points, int pointCount, PolygonDrawMode mode);
-    void drawImage(const QRectF& r, const QImage& pm, const QRectF& sr,Qt::ImageConversionFlag = Qt::AutoColor);
+    void drawImage(const QRectF& r, const QImage& pm, const QRectF& sr,Qt::ImageConversionFlags flags = Qt::AutoColor);
 
     QPaintEngine::Type type() const { return QPaintEngine::SVG; }
 
@@ -1106,7 +1107,7 @@ void SvgPaintEngine::drawPixmap(const QRectF& r, const QPixmap& pm,
 }
 
 void SvgPaintEngine::drawImage(const QRectF& r, const QImage& image,
-                               const QRectF& sr, Qt::ImageConversionFlag flags)
+                               const QRectF& sr, Qt::ImageConversionFlags flags)
 {
     Q_UNUSED(sr);
     Q_UNUSED(flags);
