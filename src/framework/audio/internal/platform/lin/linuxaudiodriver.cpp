@@ -91,7 +91,7 @@ std::string LinuxAudioDriver::name() const
 bool LinuxAudioDriver::open(const Spec& spec, Spec* activeSpec)
 {
     _alsaData = new ALSAData;
-    memset(_alsaData, 0, sizeof(ALSAData));
+    _alsaData->audioProcessingDone = 0;
     _alsaData->samples = spec.samples;
     _alsaData->channels = spec.channels;
     _alsaData->callback = spec.callback;
