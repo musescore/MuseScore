@@ -42,18 +42,17 @@ include(GetUtilsFunctions) # library of CMake functions ("fn__" namespace)
 option(BUILD_WEBENGINE "Built in webengine support" ON)
 if (BUILD_WEBENGINE)
    if (COMPILER_IS_MINGW)
-      SET (USE_WEBENGINE 0)
+      set(USE_WEBENGINE 0)
    else (COMPILER_IS_MINGW)
-      SET (USE_WEBENGINE 1)
+      set(USE_WEBENGINE 1)
    endif(COMPILER_IS_MINGW)
 else (BUILD_WEBENGINE)
-   SET (USE_WEBENGINE 0)
+   set(USE_WEBENGINE 0)
 endif (BUILD_WEBENGINE)
 
 set(QT_MIN_VERSION    "5.15.0")
 include(FindQt5)
 include(UsePkgConfig1) # Defines MACRO(PKGCONFIG1 _package _minVersion _include_DIR _link_DIR _link_FLAGS _cflags)
-include(CreatePrecompiledHeader)
 
 # Setup version number and general build settings
 set(MUSESCORE_REVISION "" CACHE STRING "Build revision")
@@ -203,21 +202,6 @@ endif(APPLE)
 set(CMAKE_BUILD_WITH_INSTALL_RPATH ON) # Call CMake with option -DCMAKE_SKIP_RPATH to not set RPATH (Debian packaging requirement)
 set(CMAKE_SKIP_RULE_DEPENDENCY TRUE)
 
-if (MINGW OR MSVC OR APPLE)
-  if(MINGW OR MSVC)
-      # Option for MINGW and MSVC
-      SET(Mscore_INSTALL_NAME  "")
-      SET(Mscore_SHARE_NAME    "./")
-  else(MINGW OR MSVC)
-       # Option for Apple
-       SET(Mscore_INSTALL_NAME  "Contents/Resources/")
-       SET(Mscore_SHARE_NAME    "mscore.app/")
-  endif(MINGW OR MSVC)
-else (MINGW OR MSVC OR APPLE)
-      SET(Mscore_INSTALL_NAME  "mscore${MSCORE_INSTALL_SUFFIX}-${MUSESCORE_VERSION}/")
-      SET(Mscore_SHARE_NAME    "share/")
-endif (MINGW OR MSVC OR APPLE)
-
 # Download MuseScore SoundFont
 if (DOWNLOAD_SOUNDFONT)
     include(DownloadSoundFont)
@@ -228,216 +212,45 @@ if (BUILD_FOR_WINSTORE)
   set(FOR_WINSTORE 1)
 endif(BUILD_FOR_WINSTORE)
 
+include(SetupFreetype)
+
+if(SOUNDFONT3)
+    include(SetupVorbisAndOgg)
+endif(SOUNDFONT3)
 
 ##
-## freetype2 >= 2.5.2
+##  Include packaging
 ##
+include(SetupAppImagePackaging)
+include(Packaging)
 
-if (USE_SYSTEM_FREETYPE)
-      if (APPLE)
-            PKGCONFIG1 (freetype2 2.5.2 FREETYPE_INCLUDE_DIRS FREETYPE_LIBDIR FREETYPE_LIBRARIES FREETYPE_CPP)
-            if (FREETYPE_INCLUDE_DIRS)
-                  STRING(REGEX REPLACE  "\"" "" FREETYPE_INCLUDE_DIRS ${FREETYPE_INCLUDE_DIRS})
-                  STRING(REGEX REPLACE  "\"" "" FREETYPE_LIBDIR ${FREETYPE_LIBDIR})
-                  message("freetype2 detected ${FREETYPE_INCLUDE_DIRS} ${FREETYPE_LIBDIR} ${FREETYPE_LIBRARIES}")
-            else (FREETYPE_INCLUDE_DIRS)
-                  message(FATAL_ERROR "freetype >= 2.5.2 is required\n")
-            endif (FREETYPE_INCLUDE_DIRS)
-      else (APPLE)
-            find_package(Freetype REQUIRED)
-      endif (APPLE)
-endif (USE_SYSTEM_FREETYPE)
-
-if (APPLE)
-   if(SOUNDFONT3)
-      ##
-      ## libvorbis
-      ##
-
-      PKGCONFIG1 (vorbis 1.3.3 VORBIS_INCDIR VORBIS_LIBDIR VORBIS_LIB VORBIS_CPP)
-      if (VORBIS_INCDIR)
-          message("libvorbis detected ${VORBIS_INCDIR} ${VORBIS_LIBDIR} ${VORBIS_LIB}")
-      else (VORBIS_INCDIR)
-          message("libvorbis not found\n")
-      endif (VORBIS_INCDIR)
-
-
-      ##
-      ## libogg
-      ##
-
-      PKGCONFIG1 (ogg 1.3.0 OGG_INCDIR OGG_LIBDIR OGG_LIB OGG_CPP)
-      if (OGG_INCDIR)
-          message("libogg detected ${OGG_INCDIR} ${OGG_LIBDIR} ${OGG_LIB}")
-      else (OGG_INCDIR)
-          message("libogg not found\n")
-      endif (OGG_INCDIR)
-   endif(SOUNDFONT3)
-else(APPLE)
-   if (MINGW OR MSVC)
-      set(SNDFILE_LIB sndfile-1)
-      include(FindVorbis)
-      add_library(vorbisdll SHARED IMPORTED)
-      set_target_properties(vorbisdll PROPERTIES IMPORTED_IMPLIB ${VORBIS_LIBRARY})
-
-      include(FindSndFile)
-      add_library(sndfiledll SHARED IMPORTED)
-      set_target_properties(sndfiledll PROPERTIES IMPORTED_IMPLIB ${SNDFILE_LIBRARY})
-
-      include(FindVorbisfile)
-      add_library(vorbisfiledll SHARED IMPORTED)
-      set_target_properties(vorbisfiledll PROPERTIES IMPORTED_IMPLIB ${VORBISFILE_LIBRARY})
-
-      include(FindOgg)
-      add_library(oggdll SHARED IMPORTED)
-      set_target_properties(oggdll PROPERTIES IMPORTED_IMPLIB ${OGG_LIBRARY})
-   else (MINGW OR MSVC)
-      set(SNDFILE_LIB sndfile)
-   endif (MINGW OR MSVC)
-   set(OGG_LIB ogg)
-
-   set(VORBIS_LIB vorbis)
-endif(APPLE)
-
-##
-## QtSingleApplication
-##
-
-if (USE_SYSTEM_QTSINGLEAPPLICATION)
-    if (USE_PATH_WITH_EXPLICIT_QT_VERSION)
-      find_path(QTSINGLEAPPLICATION_INCLUDE_DIRS qtsingleapplication.h PATH_SUFFIXES qt5/QtSolutions)
-      find_library(QTSINGLEAPPLICATION_LIBRARIES Qt5Solutions_SingleApplication-2.6)
-    else (USE_PATH_WITH_EXPLICIT_QT_VERSION)
-      find_path(QTSINGLEAPPLICATION_INCLUDE_DIRS qtsingleapplication.h PATH_SUFFIXES QtSolutions)
-      find_library(QTSINGLEAPPLICATION_LIBRARIES QtSolutions_SingleApplication-2.6)
-    endif (USE_PATH_WITH_EXPLICIT_QT_VERSION)
-else(USE_SYSTEM_QTSINGLEAPPLICATION)
-      subdirs (thirdparty/singleapp)
-      set(QTSINGLEAPPLICATION_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/singleapp/src)
-      set(QTSINGLEAPPLICATION_LIBRARIES qtsingleapp)
-endif(USE_SYSTEM_QTSINGLEAPPLICATION)
-
-if (NOT MINGW AND NOT MSVC AND NOT APPLE)
-    #### PACKAGING for Linux and BSD based systems (more in mscore/CMakeLists.txt) ####
-    #
-    #     set library search path for runtime linker to load the same
-    #     qt libraries as we used at compile time
-    #
-    SET(CMAKE_INSTALL_RPATH "${_qt5Core_install_prefix}/lib") # Ignored if CMAKE_SKIP_RPATH="TRUE"
-    string(TOUPPER "mscore${MSCORE_INSTALL_SUFFIX}" MAN_MSCORE_UPPER) # Command name shown in uppercase in man pages by convention
-    if (${MSCORE_INSTALL_SUFFIX} MATCHES "portable") # Note: "-portable-anything" would match
-      # Build portable AppImage as per https://github.com/probonopd/AppImageKit
-      add_subdirectory(build/Linux+BSD/portable)
-      if (NOT DEFINED ARCH)
-        execute_process(COMMAND arch OUTPUT_VARIABLE ARCH OUTPUT_STRIP_TRAILING_WHITESPACE)# Get architecture (strip trailing newline)
-      endif (NOT DEFINED ARCH)
-      get_filename_component(PORTABLE_INSTALL_PATH ${CMAKE_INSTALL_PREFIX} PATH)# Get path (dirname)
-      get_filename_component(PORTABLE_INSTALL_NAME ${CMAKE_INSTALL_PREFIX} NAME)# Strip path (basename)
-      if (NOT MSCORE_UNSTABLE)
-        set(PORTABLE_INSTALL_NAME "${PORTABLE_INSTALL_NAME}-${MUSESCORE_VERSION_FULL}") # Append version info.
-      endif (NOT MSCORE_UNSTABLE)
-      set(PORTABLE_INSTALL_NAME "${PORTABLE_INSTALL_NAME}-${ARCH}") # Append system architecture.
-      set(CMAKE_INSTALL_PREFIX ${PORTABLE_INSTALL_PATH}/${PORTABLE_INSTALL_NAME}.AppDir) # E.g. "MuseScore-X.Y.Z-x86_64.AppDir"
-      execute_process(COMMAND echo ${CMAKE_INSTALL_PREFIX} OUTPUT_FILE PREFIX.txt)
-      # Prepare portable scripts:
-      configure_file(build/Linux+BSD/portable/AppRun.in          AppRun         @ONLY)
-      configure_file(build/Linux+BSD/portable/portable-utils.in  portable-utils @ONLY)
-      install(PROGRAMS ${PROJECT_BINARY_DIR}/AppRun     DESTINATION .   COMPONENT portable)
-      install(PROGRAMS ${PROJECT_BINARY_DIR}/portable-utils
-                       build/Linux+BSD/portable/ldd-recursive
-                       build/rm-empty-dirs              DESTINATION bin COMPONENT portable)
-      install(FILES    build/Linux+BSD/portable/qt.conf DESTINATION bin COMPONENT portable)
-    else (${MSCORE_INSTALL_SUFFIX} MATCHES "portable")
-      set(MAN_PORTABLE .\\\") # comment out lines in man page that are only relevant to the portable version
-    endif (${MSCORE_INSTALL_SUFFIX} MATCHES "portable")
-    # Install desktop file (perform variable substitution first)
-    configure_file(build/Linux+BSD/mscore.desktop.in mscore${MSCORE_INSTALL_SUFFIX}.desktop)
-    install( FILES ${PROJECT_BINARY_DIR}/mscore${MSCORE_INSTALL_SUFFIX}.desktop DESTINATION share/applications)
-    # Install appdata file (perform variable substitution first)
-    configure_file(build/Linux+BSD/org.musescore.MuseScore.appdata.xml.in org.musescore.MuseScore${MSCORE_INSTALL_SUFFIX}.appdata.xml)
-    install( FILES ${PROJECT_BINARY_DIR}/org.musescore.MuseScore${MSCORE_INSTALL_SUFFIX}.appdata.xml DESTINATION share/metainfo)
-    # Substitute variables within man pages
-    set(MAN_NAME mscore)
-    set(MAN_ALIAS musescore)
-    set(MAN_EXTENSION .1)
-    set(MAN_FULL_NAME ${MAN_NAME}${MSCORE_INSTALL_SUFFIX}${MAN_EXTENSION})
-    set(MAN_FULL_ALIAS ${MAN_ALIAS}${MSCORE_INSTALL_SUFFIX}${MAN_EXTENSION})
-    set(MAN_TARGET ${PROJECT_SOURCE_DIR}/build/Linux+BSD/${MAN_NAME}${MAN_EXTENSION}.in)
-    set(MAN_BUILD ${PROJECT_BINARY_DIR}/${MAN_FULL_NAME})
-    configure_file(${MAN_TARGET} ${MAN_BUILD})
-    # Compress man pages if gzip is installed (don't on OpenBSD)
-    # Note: Compressing man pages is normal on Linux but not OpenBSD
-    find_program( GZIP_EXECUTABLE gzip DOC "A tool for compressing manpages (optional)." )
-    if (GZIP_EXECUTABLE AND NOT CMAKE_SYSTEM_NAME MATCHES "OpenBSD")
-        message(STATUS "Found 'gzip'. Man pages will be compressed.")
-        set(MAN_TARGET ${MAN_BUILD})
-        set(MAN_EXTENSION ${MAN_EXTENSION}.gz)
-        set(MAN_FULL_NAME ${MAN_NAME}${MSCORE_INSTALL_SUFFIX}${MAN_EXTENSION})
-        set(MAN_FULL_ALIAS ${MAN_ALIAS}${MSCORE_INSTALL_SUFFIX}${MAN_EXTENSION})
-        set(MAN_BUILD ${PROJECT_BINARY_DIR}/${MAN_FULL_NAME})
-        add_custom_command(
-            OUTPUT ${MAN_BUILD}
-            DEPENDS ${MAN_TARGET}
-            COMMAND ${GZIP_EXECUTABLE} -9 < ${MAN_TARGET} > ${MAN_BUILD}
-            )
-        add_custom_target(manpages ALL
-            DEPENDS ${MAN_BUILD}
-            COMMAND echo "Man pages have been compressed ready for installation."
-            VERBATIM
-            )
-    else (GZIP_EXECUTABLE AND NOT CMAKE_SYSTEM_NAME MATCHES "OpenBSD")
-        if (CMAKE_SYSTEM_NAME MATCHES "OpenBSD")
-            message(STATUS "System is OpenBSD: Man pages will not be compressed.")
-        else (CMAKE_SYSTEM_NAME MATCHES "OpenBSD")
-            message(STATUS "'gzip' not found (it is optional). Man pages will not be compressed.")
-        endif (CMAKE_SYSTEM_NAME MATCHES "OpenBSD")
-        add_custom_target(manpages ALL
-            COMMAND echo "Man pages will be installed uncompressed."
-            VERBATIM
-            )
-    endif (GZIP_EXECUTABLE AND NOT CMAKE_SYSTEM_NAME MATCHES "OpenBSD")
-    # Install man pages in either compressed or uncompressed form
-    install( FILES ${MAN_BUILD} DESTINATION share/man/man1 COMPONENT doc)
-    # Create symlink alias for man pages so `man musescore` = `man mscore`
-    find_program( LN_EXECUTABLE ln DOC "A tool for creating symbolic link aliases (optional)." )
-    if (LN_EXECUTABLE)
-        message(STATUS "Found 'ln'. Symlink aliases will be created for MuseScore executable and the man pages.")
-        add_custom_command(
-            TARGET manpages
-            COMMAND echo "Creating symlink alias for man pages."
-            COMMAND ${LN_EXECUTABLE} -sf "${MAN_FULL_NAME}" "${MAN_FULL_ALIAS}"
-            COMMAND echo 'Symlink alias: ${MAN_FULL_ALIAS} -> ${MAN_FULL_NAME}'
-            )
-        install( FILES ${PROJECT_BINARY_DIR}/${MAN_FULL_ALIAS} DESTINATION share/man/man1 COMPONENT doc)
-     else (LN_EXECUTABLE)
-         message(STATUS "'ln' not found (it is optional). No symlink aliases will be created.")
-     endif (LN_EXECUTABLE)
-    # Add .MSCZ and .MSCX to MIME database (informs system that filetypes .MSCZ & .MSCX are MuseScore files)
-    configure_file(build/Linux+BSD/musescore.xml.in musescore${MSCORE_INSTALL_SUFFIX}.xml)
-    install( FILES ${PROJECT_BINARY_DIR}/musescore${MSCORE_INSTALL_SUFFIX}.xml DESTINATION share/mime/packages COMPONENT doc)
-    # Note: Must now run "update-mime-database" to apply changes. This is done in the Makefile.
-endif (NOT MINGW AND NOT MSVC AND NOT APPLE)
 
 #
 #  Create precompiled header file
 #
 
-# all.h is expected in PROJECT_BINARY_DIR by subdirs, except for MSVC
-if (NOT MSVC)
-   execute_process(
-      COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/all.h ${PROJECT_BINARY_DIR}/all.h
-      WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
-      )
-endif (NOT MSVC)
+if (BUILD_PCH)
 
-precompiled_header(QT_INCLUDES all ${BUILD_PCH})
+    include(CreatePrecompiledHeader)
 
-# MSVC does not require these targets, as all.h is not copied and the
-#   PCH generation is done per-project
-if (NOT MSVC)
-   ADD_CUSTOM_TARGET(mops1 DEPENDS ${PROJECT_BINARY_DIR}/all.h)
-   ADD_CUSTOM_TARGET(mops2 DEPENDS ${PCH})
-endif (NOT MSVC)
+    # all.h is expected in PROJECT_BINARY_DIR by subdirs, except for MSVC
+    if (NOT MSVC)
+       execute_process(
+          COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/all.h ${PROJECT_BINARY_DIR}/all.h
+          WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+          )
+    endif (NOT MSVC)
+
+    precompiled_header(QT_INCLUDES all ${BUILD_PCH})
+
+    # MSVC does not require these targets, as all.h is not copied and the
+    #   PCH generation is done per-project
+    if (NOT MSVC)
+       ADD_CUSTOM_TARGET(mops1 DEPENDS ${PROJECT_BINARY_DIR}/all.h)
+       ADD_CUSTOM_TARGET(mops2 DEPENDS ${PCH})
+    endif (NOT MSVC)
+
+endif(BUILD_PCH)
 
 ##
 
@@ -465,11 +278,6 @@ if (MINGW)
     include_directories(${SNDFILE_INCLUDE_DIR})
 endif(MINGW)
 
-if (USE_SYSTEM_FREETYPE)
-      include_directories(${FREETYPE_INCLUDE_DIRS})
-else (USE_SYSTEM_FREETYPE)
-      include_directories(${PROJECT_SOURCE_DIR}/thirdparty/freetype/include)
-endif (USE_SYSTEM_FREETYPE)
 
 ##
 ## produce config.h file
@@ -482,15 +290,6 @@ configure_file (
 add_subdirectory(share)
 add_subdirectory(thirdparty/qzip)
 
-if (NOT USE_SYSTEM_FREETYPE)
-      add_subdirectory(thirdparty/freetype)
-endif (NOT USE_SYSTEM_FREETYPE)
-
-##
-##  Include packaging
-##
-
-include(Packaging)
 
 ##
 ##  Custom target for translation generation
@@ -540,6 +339,10 @@ if (BUILD_UNIT_TESTS)
     add_subdirectory(thirdparty/googletest)
     enable_testing()
 endif(BUILD_UNIT_TESTS)
+
+add_subdirectory(thirdparty/singleapp)
+set(QTSINGLEAPPLICATION_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/singleapp/src)
+set(QTSINGLEAPPLICATION_LIBRARIES qtsingleapp)
 
 add_subdirectory(src)
 
