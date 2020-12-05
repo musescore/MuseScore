@@ -17,5 +17,17 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-subdirs(src)
+set(MODULE qtsingleapp)
+
+set(MODULE_SRC
+    ${CMAKE_CURRENT_LIST_DIR}/src/qtlocalpeer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/qtlocalpeer.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/qtsingleapplication.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/qtsingleapplication.h
+    )
+
+include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+
+
+#subdirs(src)
 
