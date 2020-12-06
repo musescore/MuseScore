@@ -527,16 +527,7 @@
     </Order>
     <Order id="woodwind-ensemble">
         <name>Woodwind Ensemble</name>
-        <soloists>
-            <section id="woodwind" showSystemMarkings="true">
-                <family>flutes</family>
-                <family>oboes</family>
-                <family>clarinets</family>
-                <family>saxophones</family>
-                <family>bassoons</family>
-                <unsorted group="woodwinds"/>
-            </section>
-        </soloists>
+        <soloists/>
         <section id="woodwind" thinBrackets="false">
             <family>flutes</family>
             <family>oboes</family>
