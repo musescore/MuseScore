@@ -27,14 +27,25 @@
 # set(MODULE_UI ...)            - set ui headers
 # set(MODULE_QML_IMPORT ...)    - set Qml import for QtCreator (so that there is code highlighting, jump, etc.)
 # set(MODULE_HAS_C_CODE ON)     - set if source contains C code
-# set(MODULE_USE_ALL_H ON)      -
 
 # After all the settings you need to do:
 # include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 
 message(STATUS "Configuring " ${MODULE})
 
+set(IS_DEBUG_BUILD OFF)
+string(TOLOWER ${CMAKE_BUILD_TYPE} _build_type )
+if (_build_type STREQUAL "debug")
+   set(IS_DEBUG_BUILD ON)
+endif()
+
 set(LIBRARY_TYPE STATIC)
+if (IS_DEBUG_BUILD)
+    include(GetPlatformInfo)
+    if (PLATFORM_IS_LINUX)
+        set(LIBRARY_TYPE SHARED)
+    endif(PLATFORM_IS_LINUX)
+endif(IS_DEBUG_BUILD)
 
 if (MODULE_QRC)
     qt5_add_resources(RCC_SOURCES ${MODULE_QRC})
@@ -49,11 +60,17 @@ if (NOT ${MODULE_QML_IMPORT} STREQUAL "")
     set(QML_IMPORT_PATH "${QML_IMPORT_PATH};${MODULE_QML_IMPORT}" CACHE STRING "QtCreator extra import paths for QML modules" FORCE)
 endif()
 
-add_library(${MODULE} ${LIBRARY_TYPE}
+add_library(${MODULE} ${LIBRARY_TYPE})
+
+if (${LIBRARY_TYPE} STREQUAL "SHARED")
+    install(TARGETS ${MODULE} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+endif()
+
+target_sources(${MODULE} PRIVATE
     ${ui_headers}
     ${RCC_SOURCES}
     ${MODULE_SRC}
-)
+    )
 
 target_include_directories(${MODULE} PUBLIC
     ${PROJECT_BINARY_DIR}
@@ -83,7 +100,7 @@ endif()
 
 set(MODULE_LINK ${QT_LIBRARIES} ${MODULE_LINK})
 
-target_link_libraries(${MODULE} ${MODULE_LINK} )
+target_link_libraries(${MODULE} PRIVATE ${MODULE_LINK} )
 
 set(LOCAL_MODULE_BUILD_PCH ${BUILD_PCH})
 
@@ -116,6 +133,8 @@ if (LOCAL_MODULE_BUILD_PCH)
         ADD_DEPENDENCIES(${MODULE} mops2)
     endif (NOT MSVC)
 else (LOCAL_MODULE_BUILD_PCH)
+
+    set(MODULE_USE_ALL_H OFF)
 
     if (MODULE_USE_ALL_H)
         if (NOT MSVC)

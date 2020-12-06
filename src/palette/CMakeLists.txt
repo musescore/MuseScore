@@ -67,6 +67,7 @@ set(MODULE_INCLUDE
     )
 
 set(MODULE_LINK
+    qzip
     libmscore
     commonscene
     )

@@ -226,6 +226,8 @@ endif(SOUNDFONT3)
 include(SetupAppImagePackaging)
 include(Packaging)
 
+set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_RPATH};${CMAKE_INSTALL_PREFIX}/bin")
+#set(CMAKE_INSTALL_RPATH "$ORIGIN")
 
 #
 #  Create precompiled header file
