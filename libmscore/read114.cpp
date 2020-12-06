@@ -670,7 +670,7 @@ static void readFingering114(XmlReader& e, Fingering* fing)
                   auto subtype = e.readElementText();
                   if (subtype == "StringNumber") {
                         isStringNumber = true;
-                        fing->setProperty(Pid::SUB_STYLE, QVariant(10));
+                        fing->setProperty(Pid::SUB_STYLE, QVariant(int(Tid::STRING_NUMBER)));
                         fing->setPropertyFlags(Pid::SUB_STYLE, PropertyFlags::UNSTYLED);
                         }
                   }
