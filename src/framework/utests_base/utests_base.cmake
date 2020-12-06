@@ -29,8 +29,6 @@
 
 message(STATUS "Configuring " ${MODULE_TEST})
 
-set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
-
 # --- gtest ---
 #define_property(TARGET PROPERTY OUTPUT_XML
 #    BRIEF_DOCS "List XML files outputed by google test."
@@ -69,7 +67,6 @@ include_directories(
 )
 
 add_executable(${MODULE_TEST}
-    ${_all_h_file}
     ${TESTS_BASE_SRC}
     ${MODULE_TEST_SRC}
     )
@@ -84,20 +81,22 @@ target_link_libraries(${MODULE_TEST}
 
 add_test(NAME ${MODULE_TEST} COMMAND ${MODULE_TEST})
 
-if (NOT MSVC)
-    set_target_properties (${MODULE_TEST} PROPERTIES COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch")
-else (NOT MSVC)
-    set_target_properties (${MODULE_TEST} PROPERTIES COMPILE_FLAGS "${PCH_INCLUDE}" )
-endif (NOT MSVC)
+if (BUILD_PCH)
+    if (NOT MSVC)
+        set_target_properties (${MODULE_TEST} PROPERTIES COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch")
+    else (NOT MSVC)
+        set_target_properties (${MODULE_TEST} PROPERTIES COMPILE_FLAGS "${PCH_INCLUDE}" )
+    endif (NOT MSVC)
 
-xcode_pch(${MODULE_TEST} all)
+    xcode_pch(${MODULE_TEST} all)
 
-# Use MSVC pre-compiled headers
-vstudio_pch( ${MODULE_TEST} )
+    # Use MSVC pre-compiled headers
+    vstudio_pch( ${MODULE_TEST} )
 
-# MSVC does not depend on mops1 & mops2 for PCH
-if (NOT MSVC)
-    ADD_DEPENDENCIES(${MODULE_TEST} mops1)
-    ADD_DEPENDENCIES(${MODULE_TEST} mops2)
-endif (NOT MSVC)
+    # MSVC does not depend on mops1 & mops2 for PCH
+    if (NOT MSVC)
+        ADD_DEPENDENCIES(${MODULE_TEST} mops1)
+        ADD_DEPENDENCIES(${MODULE_TEST} mops2)
+    endif (NOT MSVC)
+endif(BUILD_PCH)
 

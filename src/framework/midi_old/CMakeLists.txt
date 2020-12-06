@@ -28,14 +28,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/midiinstrument.h
     )
 
-set (MODULE_INCLUDE
-
-    )
-
-set (MODULE_DEF
-
-    )
-
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 
 if (NOT MSVC AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 9.0)

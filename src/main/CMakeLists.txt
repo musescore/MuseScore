@@ -101,6 +101,7 @@ if (BUILD_TELEMETRY_MODULE)
 endif(BUILD_TELEMETRY_MODULE)
 
 set(LINK_LIB ${LINK_LIB}
+    libmscore
     actions
     appshell
     cloud
