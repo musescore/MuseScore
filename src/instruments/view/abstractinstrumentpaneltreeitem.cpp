@@ -145,7 +145,12 @@ void AbstractInstrumentPanelTreeItem::moveChildren(const int sourceRow, const in
         destinationRow_++;
     }
 
-    int childToRemoveIndex = sourceRow > destinationRow ? sourceRow + count : sourceRow;
+    int childToRemoveIndex = sourceRow;
+
+    if (sourceRow > destinationRow && destinationParent == this) {
+        childToRemoveIndex = sourceRow + count;
+    }
+
     AbstractInstrumentPanelTreeItem::removeChildren(childToRemoveIndex, count);
 }
 
