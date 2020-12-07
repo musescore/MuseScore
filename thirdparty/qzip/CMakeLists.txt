@@ -18,7 +18,13 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/qzipwriter_p.h
     )
 
-set(MODULE_LINK z)
+include(GetPlatformInfo)
+
+if (PLATFORM_IS_WINDOWS)
+    set(MODULE_INCLUDE ${PROJECT_SOURCE_DIR}/dependencies/include/zlib)
+else(PLATFORM_IS_WINDOWS)
+    set(MODULE_LINK z)
+endif(PLATFORM_IS_WINDOWS)
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 

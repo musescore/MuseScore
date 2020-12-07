@@ -101,7 +101,7 @@ set (MODULE_DEF
 
 
 if (MSVC OR MINGW)
-    set(MODULE_LINK audiofile sndfiledll)
+    set(MODULE_LINK audiofile libsndfile-1)
 else (MSVC OR MINGW)
     set(MODULE_LINK audiofile ${SNDFILE_LIB})
 endif (MSVC OR MINGW)

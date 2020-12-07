@@ -19,6 +19,7 @@
 #ifndef MU_IMPORTEXPORT_IIMPORTEXPORTCONFIGURATION_H
 #define MU_IMPORTEXPORT_IIMPORTEXPORTCONFIGURATION_H
 
+#include <string>
 #include "modularity/imoduleexport.h"
 
 namespace mu::importexport {
