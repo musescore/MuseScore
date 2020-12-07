@@ -302,13 +302,13 @@ std::vector<ChordSplitData> findSplits(std::multimap<ReducedFraction, MidiChord>
 
     for (auto it = chords.begin(); it != chords.end(); ++it) {
         const auto& notes = it->second.notes;
-
+#ifdef QT_DEBUG
         Q_ASSERT_X(!notes.isEmpty(),
                    "LRHand::findSplits", "Notes are empty");
         Q_ASSERT_X(areNotesSortedByPitchInAscOrder(notes),
                    "LRHand::findSplits",
                    "Notes are not sorted by pitch in ascending order");
-
+#endif
         const auto len = MChord::maxNoteOffTime(notes) - it->first;
         if (len > maxChordLen) {
             maxChordLen = len;

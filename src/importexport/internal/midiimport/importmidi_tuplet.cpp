@@ -1100,20 +1100,20 @@ void findTuplets(
     if (opers.simplifyDurations.value(currentTrack)) {
         cleanStaccatoOfNonTuplets(nonTuplets);
     }
-
+#ifdef QT_DEBUG
     Q_ASSERT_X(!doTupletsHaveCommonChords(tuplets),
                "MIDI tuplets: findTuplets", "Tuplets have common chords but they shouldn't");
-
+#endif
     const auto prevBarStart = findPrevBarStart(startBarTick, endBarTick - startBarTick);
     auto backTiedTuplets = findBackTiedTuplets(chords, tuplets, prevBarStart, startBarTick,
                                                basicQuant, startBarChordIt->second.barIndex);
     // backTiedTuplets can be changed here (incompatible are removed)
     assignVoices(tuplets, nonTuplets, backTiedTuplets, chords, basicQuant,
                  startBarTick, barIndex);
-
+#ifdef QT_DEBUG
     Q_ASSERT_X(areTupletNonTupletChordsDistinct(tuplets, nonTuplets),
                "MIDI tuplets: findTuplets", "Tuplets have common chords with non-tuplets");
-
+#endif
     addTupletEvents(tupletEvents, tuplets, backTiedTuplets);
     setBarIndexesOfNextBarChords(tuplets, nonTuplets, barIndex);
 }
@@ -1153,14 +1153,14 @@ void findAllTuplets(
     if (chords.empty()) {
         return;
     }
-
+#ifdef QT_DEBUG
     Q_ASSERT_X(MChord::areNotesLongEnough(chords),
                "MidiTuplet::findAllTuplets", "There are too short notes");
     Q_ASSERT_X(MChord::areBarIndexesSet(chords),
                "MidiTuplet::findAllTuplets", "Not all bar indexes were set");
     Q_ASSERT_X(MChord::areBarIndexesSuccessive(chords),
                "MidiTuplet::findAllTuplets", "Bar indexes are not successive");
-
+#endif
     {
         auto startBarIt = chords.begin();
         for (auto endBarIt = std::next(startBarIt); endBarIt != chords.end(); ++endBarIt) {
@@ -1187,8 +1187,10 @@ void findAllTuplets(
                         sigmap->bar2tick(currentBarIndex + 1, 0));
                     for (auto it = endBarIt; it != chords.end() && it->first < endBarTick; ++it) {
                         if (it->second.barIndex == currentBarIndex) {
+#ifdef QT_DEBUG
                             Q_ASSERT_X(!nextBarFound, "MidiTuplet::findAllTuplets",
                                        "Bar indexes become not successive");
+#endif
                             Q_ASSERT_X(endBarIt != chords.end(), "MidiTuplet::findAllTuplets",
                                        "End bar iterator cannot be incremented");
 
@@ -1214,13 +1216,14 @@ void findAllTuplets(
     }
     // check if there are not detected off times inside tuplets
     setAllTupletOffTimes(tuplets, chords, sigmap);
-
+#ifdef QT_DEBUG
     Q_ASSERT_X(areAllTupletsReferenced(chords, tuplets),
                "MidiTuplet::findAllTuplets",
                "Not all tuplets are referenced in chords or notes");
     Q_ASSERT_X(MChord::areNotesLongEnough(chords),
                "MidiTuplet::findAllTuplets", "There are too short notes");
     Q_ASSERT(areAllTupletsDifferent(tuplets));
+#endif
 }
 } // namespace MidiTuplet
 } // namespace Ms
