@@ -27,6 +27,8 @@
 #include <QWebEnginePage>
 #include <QWebEngineProfile>
 #include <QWebEngineView>
+#else
+#include <QDesktopServices>
 #endif
 
 #define qrand() QRandomGenerator::global()->generate()
