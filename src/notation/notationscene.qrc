@@ -6,7 +6,7 @@
         <file>qml/MuseScore/NotationScene/ViewModeControl.qml</file>
         <file>qml/MuseScore/NotationScene/NotationAccessibilityInfo.qml</file>
         <file>qml/MuseScore/NotationScene/PartsDialog.qml</file>
-        <file>qml/MuseScore/NotationScene/NotationModeToolBar.qml</file>
+        <file>qml/MuseScore/NotationScene/NotationToolBar.qml</file>
         <file>qml/MuseScore/NotationScene/ConcertPitchControl.qml</file>
         <file>qml/MuseScore/NotationScene/internal/SearchPopup.qml</file>
         <file>qml/MuseScore/NotationScene/internal/NotationSwitchButton.qml</file>
