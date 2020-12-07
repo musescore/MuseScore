@@ -1669,21 +1669,26 @@ static void distributeStaves(Page* page)
             if (vgd->sysStaff)
                   systems.insert(vgd->system);
             systemShift += vgd->actualAddedSpace();
-            if (prvSystem && (prvSystem != vgd->system)) {
+            if (prvSystem == vgd->system) {
+                  staffShift += vgd->actualAddedSpace();
+                  }
+            else {
                   vgd->system->rypos() += systemShift;
-                  prvSystem->setDistance(vgd->system->y() - prvSystem->y());
-                  prvSystem->setHeight(prvSystem->height() + staffShift);
+                  if (prvSystem) {
+                        prvSystem->setDistance(vgd->system->y() - prvSystem->y());
+                        prvSystem->setHeight(prvSystem->height() + staffShift);
+                        }
                   staffShift = 0.0;
                   }
-            else
-                  staffShift  += vgd->actualAddedSpace();
 
             if (vgd->sysStaff)
                   vgd->sysStaff->bbox().translate(0.0, staffShift);
+
             prvSystem = vgd->system;
             }
-      if (prvSystem)
+      if (prvSystem) {
             prvSystem->setHeight(prvSystem->height() + staffShift);
+            }
 
       for (System* system : systems) {
             system->setMeasureHeight(system->height());
