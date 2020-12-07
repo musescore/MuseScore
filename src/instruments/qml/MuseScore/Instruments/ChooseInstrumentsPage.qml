@@ -53,7 +53,7 @@ Rectangle {
         FamilyView {
             id: familyView
 
-            Layout.preferredWidth: root.canSelectMultipleInstruments ? root.width / 4 : undefined
+            Layout.preferredWidth: root.canSelectMultipleInstruments ? root.width / 4 : 0
             Layout.fillWidth: !root.canSelectMultipleInstruments
             Layout.fillHeight: true
 
@@ -83,7 +83,7 @@ Rectangle {
         InstrumentsView {
             id: instrumentsView
 
-            Layout.preferredWidth: root.canSelectMultipleInstruments ? root.width / 4 : undefined
+            Layout.preferredWidth: root.canSelectMultipleInstruments ? root.width / 4 : 0
             Layout.fillWidth: !root.canSelectMultipleInstruments
             Layout.fillHeight: true
 

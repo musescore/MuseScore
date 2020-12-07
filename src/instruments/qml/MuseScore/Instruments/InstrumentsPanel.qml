@@ -1,6 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 1.4
+import QtQuick.Controls 2.2
 import QtQuick.Controls.Styles 1.4
 import QtQml.Models 2.3
 
@@ -72,150 +73,175 @@ Item {
             wrapMode: Text.WordWrap
         }
 
-        TreeView {
-            id: instrumentsTreeView
+        Flickable {
+            id: flickable
 
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            visible: !instrumentTreeModel.isEmpty
+            contentWidth: width
+            contentHeight: instrumentsTreeView.height
 
-            model: InstrumentPanelTreeModel {
-                id: instrumentTreeModel
+            clip: true
+            boundsBehavior: Flickable.StopAtBounds
+            interactive: height < contentHeight
+
+            ScrollBar.vertical: StyledScrollBar {
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.right: parent.right
             }
 
-            selection: instrumentTreeModel ? instrumentTreeModel.selectionModel : null
+            TreeView {
+                id: instrumentsTreeView
 
-            TableViewColumn {
-                role: "itemRole"
-            }
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: flickableItem.contentHeight
 
-            function isControl(itemType) {
-                return itemType === InstrumentTreeItemType.CONTROL_ADD_STAFF ||
-                       itemType === InstrumentTreeItemType.CONTROL_ADD_DOUBLE_INSTRUMENT
-            }
+                visible: !instrumentTreeModel.isEmpty
 
-            style: TreeViewStyle {
-                indentation: 0
-
-                frame: Item {}
-                incrementControl: Item {}
-                decrementControl: Item {}
-
-                backgroundColor: background.color
-
-                readonly property int scrollBarWidth: 6
-
-                scrollBarBackground: Item {
-                    width: scrollBarWidth
+                model: InstrumentPanelTreeModel {
+                    id: instrumentTreeModel
                 }
 
-                handle: Rectangle {
-                    width: scrollBarWidth
-                    implicitWidth: scrollBarWidth
+                selection: instrumentTreeModel ? instrumentTreeModel.selectionModel : null
 
-                    radius: 8
+                alternatingRowColors: false
+                headerVisible: false
 
-                    color: ui.theme.fontPrimaryColor
-                    opacity: styleData.pressed ? 0.7 : 0.3
+                TableViewColumn {
+                    role: "itemRole"
                 }
 
-                rowDelegate: Rectangle {
-                    id: rowTreeDelegate
-
-                    height: Boolean(model) && instrumentsTreeView.isControl(model.itemRole.type) ? 64 : 38
-                    width: parent.width
-                    color: ui.theme.strokeColor
+                function isControl(itemType) {
+                    return itemType === InstrumentTreeItemType.CONTROL_ADD_STAFF ||
+                           itemType === InstrumentTreeItemType.CONTROL_ADD_DOUBLE_INSTRUMENT
                 }
 
-                branchDelegate: Item {}
-            }
+                style: TreeViewStyle {
+                    indentation: 0
 
-            itemDelegate: DropArea {
-                id: dropArea
+                    frame: Item {}
+                    incrementControl: Item {}
+                    decrementControl: Item {}
+                    handle: Item {}
+                    scrollBarBackground: Item {}
+                    branchDelegate: Item {}
 
-                property bool isSelectable: model ? model.itemRole.isSelectable : false
+                    backgroundColor: background.color
 
-                Loader {
-                    id: treeItemDelegateLoader
+                    rowDelegate: Rectangle {
+                        id: rowTreeDelegate
 
-                    property var delegateType: model ? model.itemRole.type : InstrumentTreeItemType.UNDEFINED
-
-                    height: parent.height
-                    width: parent.width
-
-                    sourceComponent: instrumentsTreeView.isControl(delegateType) ?
-                                     controlItemDelegateComponent : treeItemDelegateComponent
-
-                    property bool isSelected: false
-
-                    function updateIsSelected() {
-                        treeItemDelegateLoader.isSelected = instrumentTreeModel.isSelected(styleData.index)
+                        height: Boolean(model) && instrumentsTreeView.isControl(model.itemRole.type) ? 64 : 38
+                        width: parent.width
+                        color: ui.theme.strokeColor
                     }
+                }
 
-                    Connections {
-                        target: instrumentTreeModel
+                itemDelegate: DropArea {
+                    id: dropArea
 
-                        function onSelectionChanged() {
-                            treeItemDelegateLoader.updateIsSelected()
+                    property bool isSelectable: model ? model.itemRole.isSelectable : false
+
+                    Loader {
+                        id: treeItemDelegateLoader
+
+                        property var delegateType: model ? model.itemRole.type : InstrumentTreeItemType.UNDEFINED
+
+                        height: parent.height
+                        width: parent.width
+
+                        sourceComponent: instrumentsTreeView.isControl(delegateType) ?
+                                         controlItemDelegateComponent : treeItemDelegateComponent
+
+                        property bool isSelected: false
+
+                        function updateIsSelected() {
+                            treeItemDelegateLoader.isSelected = instrumentTreeModel.isSelected(styleData.index)
                         }
-                    }
 
-                    Component {
-                        id: treeItemDelegateComponent
+                        Connections {
+                            target: instrumentTreeModel
 
-                        InstrumentsTreeItemDelegate {
-                            attachedControl: instrumentsTreeView
-                            isSelected: treeItemDelegateLoader.isSelected
-
-                            isDragAvailable: dropArea.isSelectable
-                            type: treeItemDelegateLoader.delegateType
-                            sideMargin: contentColumn.sideMargin
-
-                            onClicked: {
-                                var isMultipleSelectionModeOn = mouse.modifiers & Qt.ShiftModifier || mouse.modifiers & Qt.ControlModifier
-
-                                instrumentTreeModel.selectRow(styleData.index, isMultipleSelectionModeOn)
-                            }
-
-                            onVisibleChanged: {
+                            function onSelectionChanged() {
                                 treeItemDelegateLoader.updateIsSelected()
                             }
                         }
-                    }
 
-                    Component {
-                        id: controlItemDelegateComponent
+                        Component {
+                            id: treeItemDelegateComponent
 
-                        InstrumentsTreeItemControl {
-                            isHighlighted: treeItemDelegateLoader.isSelected
+                            InstrumentsTreeItemDelegate {
+                                attachedControl: instrumentsTreeView
+                                isSelected: treeItemDelegateLoader.isSelected
 
-                            onClicked: {
-                                styleData.value.appendNewItem()
+                                isDragAvailable: dropArea.isSelectable
+                                type: treeItemDelegateLoader.delegateType
+                                sideMargin: contentColumn.sideMargin
+
+                                onClicked: {
+                                    var isMultipleSelectionModeOn = mouse.modifiers & Qt.ShiftModifier || mouse.modifiers & Qt.ControlModifier
+
+                                    instrumentTreeModel.selectRow(styleData.index, isMultipleSelectionModeOn)
+                                }
+
+                                onVisibleChanged: {
+                                    treeItemDelegateLoader.updateIsSelected()
+                                }
+
+                                property var contentYBackup: 0
+
+                                onPopupOpened: {
+                                    contentYBackup = flickable.contentY
+                                    var mappedPopupY = mapToItem(flickable, popupX, popupY).y
+
+                                    if (mappedPopupY + popupHeight < flickable.height - contentColumn.sideMargin) {
+                                        return
+                                    }
+
+                                    var hiddenPopupPartHeight = Math.abs(flickable.height - (mappedPopupY + popupHeight))
+                                    flickable.contentY += hiddenPopupPartHeight + contentColumn.sideMargin
+                                }
+
+                                onPopupClosed: {
+                                    flickable.contentY = contentYBackup
+                                }
                             }
+                        }
 
-                            onVisibleChanged: {
-                                treeItemDelegateLoader.updateIsSelected()
+                        Component {
+                            id: controlItemDelegateComponent
+
+                            InstrumentsTreeItemControl {
+                                isHighlighted: treeItemDelegateLoader.isSelected
+
+                                onClicked: {
+                                    styleData.value.appendNewItem()
+                                }
+
+                                onVisibleChanged: {
+                                    treeItemDelegateLoader.updateIsSelected()
+                                }
                             }
                         }
                     }
-                }
 
-                onEntered: {
-                    if (styleData.index === drag.source.index || !styleData.value.canAcceptDrop(drag.source.type)) {
-                        return
+                    onEntered: {
+                        if (styleData.index === drag.source.index || !styleData.value.canAcceptDrop(drag.source.type)) {
+                            return
+                        }
+
+                        instrumentTreeModel.moveRows(drag.source.index.parent,
+                                                     drag.source.index.row,
+                                                     1,
+                                                     styleData.index.parent,
+                                                     styleData.index.row)
                     }
-
-                    instrumentTreeModel.moveRows(drag.source.index.parent,
-                                                 drag.source.index.row,
-                                                 1,
-                                                 styleData.index.parent,
-                                                 styleData.index.row)
                 }
             }
-
-            alternatingRowColors: false
-            headerVisible: false
         }
     }
 }

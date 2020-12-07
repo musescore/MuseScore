@@ -22,10 +22,37 @@ Item {
 
     signal clicked(var mouse)
 
+    signal popupOpened(var popupX, var popupY, var popupHeight)
+    signal popupClosed()
+
     QtObject {
         id: privateProperties
 
-        property var currentSettingsPopup: null
+        property var openedPopup: null
+        property bool isPopupOpened: Boolean(openedPopup) && openedPopup.isOpened
+
+        function openPopup(popup, item) {
+            if (Boolean(popup)) {
+                openedPopup = popup
+
+                popup.open()
+                popup.load(item)
+
+                root.popupOpened(popup.x, popup.y, popup.height)
+            }
+        }
+
+        function closeOpenedPopup() {
+            if (isPopupOpened) {
+                openedPopup.close()
+                resetOpenedPopup()
+            }
+        }
+
+        function resetOpenedPopup() {
+            openedPopup = null
+            root.popupClosed()
+        }
     }
 
     anchors {
@@ -149,10 +176,7 @@ Item {
 
         onClicked: {
             root.clicked(mouse)
-
-            if (Boolean(privateProperties.currentSettingsPopup)) {
-                privateProperties.currentSettingsPopup.close()
-            }
+            privateProperties.closeOpenedPopup()
         }
     }
 
@@ -161,6 +185,8 @@ Item {
 
         y: settingsButton.y + settingsButton.height + 2
         arrowX: width - settingsButton.width / 2 - root.sideMargin
+
+        onClosed: privateProperties.resetOpenedPopup()
     }
 
     StaffSettingsPopup {
@@ -168,6 +194,8 @@ Item {
 
         y: settingsButton.y + settingsButton.height + 2
         arrowX: width - settingsButton.width / 2 - root.sideMargin
+
+        onClosed: privateProperties.resetOpenedPopup()
     }
 
     RowLayout {
@@ -253,16 +281,16 @@ Item {
             icon: IconCode.SETTINGS_COG
 
             onClicked: {
-                if (Boolean(privateProperties.currentSettingsPopup)) {
-                    privateProperties.currentSettingsPopup.close()
-                    privateProperties.currentSettingsPopup = null
+                if (privateProperties.isPopupOpened) {
+                    privateProperties.closeOpenedPopup()
                     return
                 }
 
+                var popup = null
                 var item = {}
 
                 if (root.type === InstrumentTreeItemType.PART) {
-                    privateProperties.currentSettingsPopup = instrumentSettings
+                    popup = instrumentSettings
 
                     item["partId"] = model.itemRole.id()
                     item["partName"] = model.itemRole.title
@@ -270,7 +298,7 @@ Item {
                     item["instrumentName"] = model.itemRole.instrumentName()
                     item["abbreviature"] = model.itemRole.instrumentAbbreviature()
                 } else if (root.type === InstrumentTreeItemType.STAFF) {
-                    privateProperties.currentSettingsPopup = staffSettings
+                    popup = staffSettings
 
                     item["staffId"] = model.itemRole.id()
                     item["isSmall"] = model.itemRole.isSmall()
@@ -279,8 +307,7 @@ Item {
                     item["voicesVisibility"] = model.itemRole.voicesVisibility()
                 }
 
-                privateProperties.currentSettingsPopup.open()
-                privateProperties.currentSettingsPopup.load(item)
+                privateProperties.openPopup(popup, item)
             }
 
             Behavior on opacity {
