@@ -1,6 +1,7 @@
 #include "styledefaultshandler.h"
 
 #include <QFile>
+#include "libmscore/excerpt.h"
 
 bool StyleDefaultsHandler::handle(Ms::Score* score)
       {
@@ -21,6 +22,11 @@ bool StyleDefaultsHandler::handle(Ms::Score* score)
             baseStyle.load(&oldDefaultsFile);
 
             score->style().applyNewDefaults(baseStyle);
+
+            for (Ms::Excerpt* excerpt : score->excerpts()) {
+                  excerpt->partScore()->style().applyNewDefaults(baseStyle);
+                  excerpt->partScore()->styleChanged();
+                  }
             }
 
       Ms::MScore::setBaseStyle(baseStyle);
