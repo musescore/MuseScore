@@ -288,7 +288,9 @@ else (MINGW)
            PROPERTIES
               LINK_FLAGS "-stdlib=libc++"
            )
-        xcode_pch(mscore all)
+        if (BUILD_PCH)
+            xcode_pch(mscore all)
+        endif(BUILD_PCH)
         install (TARGETS mscore BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX})
         install (FILES "${PROJECT_SOURCE_DIR}/src/main/res/mscore.icns" DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
         install (FILES "${PROJECT_SOURCE_DIR}/src/main/res/musescoreDocument.icns" DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
