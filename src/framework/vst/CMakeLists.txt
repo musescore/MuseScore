@@ -98,4 +98,9 @@ set(MODULE_INCLUDE
     ${VST3_SDK_PATH}
     )
 
+string(TOLOWER ${CMAKE_BUILD_TYPE} build_mode )
+if (build_mode STREQUAL "debug")
+    set(MODULE_DEF -D_DEBUG)
+endif()
+
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

@@ -17,6 +17,9 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 #include "vstmodule.h"
+
+#include <QQmlEngine>
+
 #include "settings.h"
 #include "internal/vstscanner.h"
 #include "devtools/vstdevtools.h"

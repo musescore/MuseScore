@@ -18,6 +18,8 @@
 //=============================================================================
 #include "attributevalue.h"
 
+#include <cstring>
+
 using namespace mu::vst;
 
 AttributeValue::AttributeValue()

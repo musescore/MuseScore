@@ -18,6 +18,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/qzipwriter_p.h
     )
 
+set(MODULE_LINK z)
+
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 
 

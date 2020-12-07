@@ -19,6 +19,8 @@
 #ifndef MU_VST_VSTSCANNER_H
 #define MU_VST_VSTSCANNER_H
 
+#include <vector>
+
 #include "plugin.h"
 #include "modularity/imoduleexport.h"
 

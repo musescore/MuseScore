@@ -20,6 +20,8 @@
 #define PLUGINEDITORVIEW_H
 
 #include <QObject>
+#include <QDialog>
+
 #include "internal/plugininstance.h"
 #include "pluginterfaces/gui/iplugview.h"
 #include "modularity/ioc.h"

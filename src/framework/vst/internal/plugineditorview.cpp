@@ -18,7 +18,14 @@
 //=============================================================================
 #include "plugineditorview.h"
 #include <QQmlContext>
+#include <QWindow>
+#include <QMainWindow>
+#include <QQuickWidget>
+#include <QLayout>
+#include <QHBoxLayout>
+
 #include "log.h"
+
 using namespace mu::vst;
 using namespace Steinberg;
 
