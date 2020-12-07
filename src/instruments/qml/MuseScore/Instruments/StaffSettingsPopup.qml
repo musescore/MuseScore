@@ -7,8 +7,10 @@ import MuseScore.Instruments 1.0
 StyledPopup {
     id: root
 
-    height: contentColumn.implicitHeight + topPadding + bottomPadding
+    height: Math.max(contentColumn.implicitHeight + topPadding + bottomPadding, implicitHeight)
     width: parent.width
+
+    implicitHeight: 340
 
     function load(staff) {
         settingsModel.load(staff)
