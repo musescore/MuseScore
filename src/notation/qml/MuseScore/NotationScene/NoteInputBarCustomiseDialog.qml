@@ -88,6 +88,7 @@ QmlDialog {
 
                     onClicked: {
                         customiseModel.moveSelectedRowsUp()
+                        Qt.callLater(view.positionViewAtSelectedItems)
                     }
                 }
 
@@ -100,6 +101,7 @@ QmlDialog {
 
                     onClicked: {
                         customiseModel.moveSelectedRowsDown()
+                        Qt.callLater(view.positionViewAtSelectedItems)
                     }
                 }
             }
@@ -117,6 +119,13 @@ QmlDialog {
 
                 boundsBehavior: Flickable.StopAtBounds
                 clip: true
+
+                function positionViewAtSelectedItems() {
+                    var selectedIndexes = customiseModel.selectionModel.selectedIndexes
+                    for (var _index in selectedIndexes) {
+                        positionViewAtIndex(selectedIndexes[_index].row, ListView.Contain)
+                    }
+                }
 
                 ScrollBar.vertical: StyledScrollBar {
 

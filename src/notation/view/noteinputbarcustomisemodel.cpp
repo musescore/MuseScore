@@ -219,6 +219,8 @@ void NoteInputBarCustomiseModel::moveSelectedRowsUp()
     QModelIndex sourceRowFirst = selectedIndexList.first();
 
     moveRows(sourceRowFirst.parent(), sourceRowFirst.row(), selectedIndexList.count(), sourceRowFirst.parent(), sourceRowFirst.row() - 1);
+
+    updateOperationsAvailability();
 }
 
 void NoteInputBarCustomiseModel::moveSelectedRowsDown()
@@ -237,6 +239,8 @@ void NoteInputBarCustomiseModel::moveSelectedRowsDown()
     QModelIndex sourceRowLast = selectedIndexList.last();
 
     moveRows(sourceRowFirst.parent(), sourceRowFirst.row(), selectedIndexList.count(), sourceRowFirst.parent(), sourceRowLast.row() + 1);
+
+    updateOperationsAvailability();
 }
 
 void NoteInputBarCustomiseModel::removeSelectedRows()
