@@ -33,7 +33,11 @@ set(CMAKE_MODULE_PATH
     ${CMAKE_MODULE_PATH}
     )
 
-#include(TryUseCcache)
+include(GetPlatformInfo)
+if (PLATFORM_IS_LINUX)
+    include(TryUseCcache)
+endif(PLATFORM_IS_LINUX)
+
 include(SetupCMakePolicy)
 include(GetCompilerInfo)
 include(GetUtilsFunctions) # library of CMake functions ("fn__" namespace)
