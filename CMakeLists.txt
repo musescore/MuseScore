@@ -287,14 +287,12 @@ include_directories(
    ${SNDFILE_INCDIR}
 )
 
-if (MSVC)
-   include_directories(${PROJECT_SOURCE_DIR}/dependencies)
-   include_directories(${PROJECT_SOURCE_DIR}/dependencies/include)
-   include_directories(${PROJECT_SOURCE_DIR}/dependencies/include/vorbis)
-   include_directories(${SNDFILE_INCLUDE_DIR})
-   include_directories(${VORBIS_INCLUDE_DIR})
-   include_directories(${OGG_INCLUDE_DIR})
-endif (MSVC)
+include_directories(${PROJECT_SOURCE_DIR}/dependencies)
+include_directories(${PROJECT_SOURCE_DIR}/dependencies/include)
+include_directories(${PROJECT_SOURCE_DIR}/dependencies/include/vorbis)
+include_directories(${SNDFILE_INCLUDE_DIR})
+include_directories(${VORBIS_INCLUDE_DIR})
+include_directories(${OGG_INCLUDE_DIR})
 
 if (MINGW)
     include_directories(${SNDFILE_INCLUDE_DIR})
