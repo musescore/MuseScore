@@ -45,8 +45,6 @@
 
 #cmakedefine WIN_SPARKLE_ENABLED
 #cmakedefine MAC_SPARKLE_ENABLED
-#cmakedefine ZERBERUS
-#cmakedefine OSC
 #cmakedefine OPENGL
 #cmakedefine SOUNDFONT3
 #cmakedefine WIN_PORTABLE

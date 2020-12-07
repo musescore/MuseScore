@@ -17,13 +17,8 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-if (MINGW)
-      set (resource_file ${PROJECT_BINARY_DIR}/resfile.o)
-endif (MINGW)
-if (MSVC)
-      # MSVC recognizes a *.rc file and will invoke the resource compiler to link it
-      set (resource_file ${CMAKE_CURRENT_LIST_DIR}/res/mscore.rc)
-endif ( MSVC )
+include(SetupIconResourceFile)
+
 
 if (APPLE)
       set (ExecutableName mscore MACOSX_BUNDLE)
@@ -42,14 +37,8 @@ else (APPLE)
       set (ExecutableName mscore)
 endif (APPLE)
 
-include_directories(
-      ${PROJECT_SOURCE_DIR}/src/framework/global
-      ${PROJECT_BINARY_DIR}
-      ${QTSINGLEAPPLICATION_INCLUDE_DIRS}
-      )
-
 add_executable(${ExecutableName}
-      ${resource_file}
+      ${ICON_RES_FILE}
       main.cpp
       modulessetup.cpp
       modulessetup.h
@@ -73,10 +62,7 @@ if (MSCORE_OUTPUT_NAME)
       )
 endif (MSCORE_OUTPUT_NAME)
 
-target_include_directories(mscore PRIVATE
-      ${PROJECT_SOURCE_DIR}
-      ${PROJECT_SOURCE_DIR}/thirdparty
-      )
+
 
 set(FREETYPE_LIB )
 if (USE_SYSTEM_FREETYPE)
@@ -133,16 +119,10 @@ add_dependencies(mscore workspaces)
 target_link_libraries(mscore ${LINK_LIB} )
 
 if (APPLE)
-      set_target_properties (mscore
-          PROPERTIES
-          MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/build/MacOSXBundleInfo.plist.in)
-      # Enable dSym generation
-      #set_target_properties (mscore
-      #    PROPERTIES
-      #       XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT "dwarf-with-dsym")
+    set_target_properties(mscore PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/build/MacOSXBundleInfo.plist.in)
 endif (APPLE)
 
-include (${PROJECT_SOURCE_DIR}/build/CopyFilesMacros.cmake)
+include(${PROJECT_SOURCE_DIR}/build/CopyFilesMacros.cmake)
 
 if (MINGW)
    add_custom_command(

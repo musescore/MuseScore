@@ -31,7 +31,6 @@
 #define INSTPREFIX        "/usr/local"
 #define VERSION           "2.0.0"
 
-#define OSC
 /* #undef OPENGL */
 #define SOUNDFONT3
 
