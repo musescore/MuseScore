@@ -141,11 +141,11 @@ void removeOverlappingNotes(std::multimap<int, MTrack>& tracks)
         if (chords.empty()) {
             continue;
         }
-
+#ifdef QT_DEBUG
         Q_ASSERT_X(MidiTuplet::areTupletRangesOk(chords, track.second.tuplets),
                    "MChord::removeOverlappingNotes", "Tuplet chord/note is outside tuplet "
                                                      "or non-tuplet chord/note is inside tuplet before overlaps remove");
-
+#endif
         for (auto i1 = chords.begin(); i1 != chords.end();) {
             const auto& onTime1 = i1->first;
             auto& chord1 = i1->second;
@@ -197,10 +197,11 @@ void removeOverlappingNotes(std::multimap<int, MTrack>& tracks)
         }
 
         MidiTuplet::removeEmptyTuplets(track.second);
-
+#ifdef QT_DEBUG
         Q_ASSERT_X(MidiTuplet::areTupletRangesOk(chords, track.second.tuplets),
                    "MChord::removeOverlappingNotes", "Tuplet chord/note is outside tuplet "
                                                      "or non-tuplet chord/note is inside tuplet after overlaps remove");
+#endif
     }
 }
 
@@ -345,9 +346,10 @@ void collectChords(
     if (chords.empty()) {
         return;
     }
-
+#ifdef QT_DEBUG
     Q_ASSERT_X(areNotesLongEnough(chords),
                "MChord::collectChords", "There are too short notes");
+#endif
 
     const auto& opers = midiImportOperations.data()->trackOpers;
     const auto minAllowedDur = minAllowedDuration();
@@ -411,10 +413,11 @@ void collectChords(
         curThreshTime = threshTime;
         ++it;
     }
-
+#ifdef QT_DEBUG
     Q_ASSERT_X(areOnTimeValuesDifferent(chords),
                "MChord: collectChords",
                "onTime values of chords are equal but should be different");
+#endif
 }
 
 void sortNotesByPitch(std::multimap<ReducedFraction, MidiChord>& chords)
@@ -644,11 +647,12 @@ void setBarIndexes(
             break;
         }
     }
-
+#ifdef QT_DEBUG
     Q_ASSERT_X(areBarIndexesSet(chords),
                "MChord::setBarIndexes", "Not all bar indexes were set");
     Q_ASSERT_X(areBarIndexesSuccessive(chords),
                "MChord::setBarIndexes", "Bar indexes are not successive");
+#endif
 }
 } // namespace MChord
 } // namespace Ms
