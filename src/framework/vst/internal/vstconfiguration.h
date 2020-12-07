@@ -19,6 +19,8 @@
 #ifndef MU_VST_VSTCONFIGURATION_H
 #define MU_VST_VSTCONFIGURATION_H
 
+#include <string>
+
 namespace mu {
 namespace vst {
 class VSTConfiguration
