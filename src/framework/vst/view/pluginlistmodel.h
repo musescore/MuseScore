@@ -19,6 +19,8 @@
 #ifndef MU_VST_PLUGINLISTMODEL_H
 #define MU_VST_PLUGINLISTMODEL_H
 
+#include <QAbstractListModel>
+
 #include "internal/vstscanner.h"
 
 namespace mu {
