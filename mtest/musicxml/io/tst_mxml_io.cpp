@@ -74,6 +74,7 @@ private slots:
       void chordDiagrams1() { mxmlIoTest("testChordDiagrams1"); }
       void chordNoVoice() { mxmlIoTestRef("testChordNoVoice"); }
       void clefs1() { mxmlIoTest("testClefs1"); }
+      void clefs2() { mxmlIoTest("testClefs2"); }
       void completeMeasureRests() { mxmlIoTest("testCompleteMeasureRests"); }
       void cueNotes() { mxmlIoTest("testCueNotes"); }
       void cueNotes2() { mxmlMscxExportTestRef("testCueNotes2"); }

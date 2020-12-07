@@ -3594,6 +3594,7 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const Fr
       // - single staff
       // - multi-staff with same clef
       QString strClefno = _e.attributes().value("number").toString();
+      const bool afterBarline = _e.attributes().value("after-barline") == "yes";
       int clefno = 1; // default
       if (strClefno != "")
             clefno = strClefno.toInt();
@@ -3692,7 +3693,12 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const Fr
       clefs->setClefType(clef);
       int track = _pass1.trackForPart(partId) + clefno * VOICES;
       clefs->setTrack(track);
-      Segment* s = measure->getSegment(tick.isNotZero() ? SegmentType::Clef : SegmentType::HeaderClef, tick);
+      Segment* s;
+      // check if the clef change needs to be in the previous measure
+      if (!afterBarline && (tick == measure->tick()) && measure->prevMeasure())
+            s = measure->prevMeasure()->getSegment(SegmentType::Clef, tick);
+      else
+            s = measure->getSegment(tick.isNotZero() ? SegmentType::Clef : SegmentType::HeaderClef, tick);
       s->add(clefs);
 
       // set the correct staff type
