@@ -5696,7 +5696,7 @@ void ExportMusicXml::findAndExportClef(const Measure* const m, const int staves,
                         clefDebug("exportxml: clef at start measure ti=%d ct=%d gen=%d", tick, int(cle->clefType()), cle->generated());
                         // output only clef changes, not generated clefs at line beginning
                         // exception: at tick=0, export clef anyway
-                        if (tick.isZero() || !cle->generated()) {
+                        if ((tick.isZero() || !cle->generated()) && ((seg->measure() != m) || (seg->segmentType() == SegmentType::HeaderClef) && !cle->otherClef())) {
                               clefDebug("exportxml: clef exported");
                               clef(sstaff, cle->clefType(), color2xml(cle));
                               }
@@ -5924,6 +5924,8 @@ void ExportMusicXml::writeElement(Element* el, const Measure* m, int sstaff, boo
                   }
             else if (!el->generated() && tickIsInMiddleOfMeasure(ti, m))
                   clef(sstaff, cle->clefType(), color2xml(cle));
+            else if (!el->generated() && (ti == m->tick()) && (cle->segment()->segmentType() != SegmentType::HeaderClef))
+                  clef(sstaff, cle->clefType(), color2xml(cle) + QString(" after-barline=\"yes\""));
             else
                   clefDebug("exportxml: clef not exported");
             }
