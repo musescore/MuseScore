@@ -1,4 +1,6 @@
 
+include(GetUtilsFunctions) # library of CMake functions ("fn__" namespace)
+
 # Print Qt version or fail the build if Qt (qmake) is not in PATH.
 fn__require_program(QMAKE Qt --version "https://musescore.org/en/handbook/developers-handbook/compilation" qmake)
 

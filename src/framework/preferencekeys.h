@@ -79,8 +79,6 @@
 #define PREF_IO_MIDI_SHORTESTNOTE                           "io/midi/shortestNote"
 #define PREF_IO_MIDI_SHOWCONTROLSINMIXER                    "io/midi/showControlsInMixer"
 #define PREF_IO_MIDI_USEREMOTECONTROL                       "io/midi/useRemoteControl"
-#define PREF_IO_OSC_PORTNUMBER                              "io/osc/portNumber"
-#define PREF_IO_OSC_USEREMOTECONTROL                        "io/osc/useRemoteControl"
 #define PREF_IO_PULSEAUDIO_USEPULSEAUDIO                    "io/pulseAudio/usePulseAudio"
 #define PREF_SCORE_CHORD_PLAYONADDNOTE                      "score/chord/playOnAddNote"
 #define PREF_SCORE_HARMONY_PLAY_ONEDIT                      "score/harmony/play/onedit"
