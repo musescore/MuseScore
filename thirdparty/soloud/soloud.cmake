@@ -32,7 +32,7 @@ set(SOLOUD_SRC
     ${SOLOUD_DIR}/src/core/soloud_queue.cpp
     ${SOLOUD_DIR}/src/core/soloud_thread.cpp
     ${SOLOUD_DIR}/src/audiosource/wav/dr_impl.cpp
-    #${SOLOUD_DIR}/src/audiosource/wav/stb_vorbis.c
+    ${SOLOUD_DIR}/src/audiosource/wav/stb_vorbis.c
     ${SOLOUD_DIR}/src/audiosource/wav/soloud_wavstream.cpp
     ${SOLOUD_DIR}/src/backend/muaudio/soloud_muaudio.cpp
 )
