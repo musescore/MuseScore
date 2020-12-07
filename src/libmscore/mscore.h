@@ -99,6 +99,7 @@ static const char mimeStaffListFormat[]   = "application/musescore/stafflist";
 
 static const int VISUAL_STRING_NONE      = -100;      // no ordinal for the visual repres. of string (topmost in TAB
                                                       // varies according to visual order and presence of bass strings)
+#undef STRING_NONE
 static const int STRING_NONE             = -1;        // no ordinal for a physical string (0 = topmost in instrument)
 static const int FRET_NONE               = -1;        // no ordinal for a fret
 
