@@ -948,7 +948,7 @@ void findChordRangeStarts(
             }
             break;
         }
-
+#ifdef QT_DEBUG
         Q_ASSERT_X(notLessThanPrev(it, data),
                    "Quantize::findChordRangeStarts",
                    "chordRangeStart is less than previous chordRangeStart");
@@ -959,6 +959,7 @@ void findChordRangeStarts(
         Q_ASSERT_X(((d.chordRangeStart - barStart) / d.quant).reduced().denominator() == 1,
                    "Quantize::findChordRangeStarts",
                    "chordRangeStart - barStart is not dividable by quant");
+#endif
     }
 }
 
@@ -1142,6 +1143,7 @@ void quantizeOnTimesInRange(
     const ReducedFraction& barStart,
     const ReducedFraction& barFraction)
 {
+#ifdef QT_DEBUG
     Q_ASSERT_X(!chords.empty(), "Quantize::quantizeOnTimesInRange", "Empty chords");
     Q_ASSERT_X(areAllVoicesSame(chords),
                "Quantize::quantizeOnTimesInRange", "Chord voices are not the same");
@@ -1161,7 +1163,7 @@ void quantizeOnTimesInRange(
     Q_ASSERT_X((chords.front()->second.isInTuplet) ? isTupletRangeCorrect(
                    chords.front()->second.tuplet->second, rangeStart, rangeEnd) : true,
                "Quantize::quantizeOnTimesInRange", "Tuplet range is incorrect");
-
+#endif
     std::vector<QuantData> quantData = findQuantData(chords, rangeStart, rangeEnd,
                                                      basicQuant, barStart, barFraction);
     applyDynamicProgramming(quantData);
@@ -1463,6 +1465,7 @@ void quantizeChords(
     const TimeSigMap* sigmap,
     const ReducedFraction& basicQuant)
 {
+#ifdef QT_DEBUG
     Q_ASSERT_X(MidiTuplet::areTupletReferencesValid(chords), "Quantize::quantizeChords",
                "Some tuplet references are invalid");
     Q_ASSERT_X(areOnTimeValuesDifferent(chords), "Quantize::quantizeChords",
@@ -1473,15 +1476,15 @@ void quantizeChords(
                "There are too short notes");
     Q_ASSERT_X(MChord::areBarIndexesSuccessive(chords), "Quantize::quantizeChords",
                "Bar indexes are not successive");
-
+#endif
     applyTupletStaccato(chords);       // apply staccato for tuplet off times
     std::map<const std::pair<const ReducedFraction, MidiChord>*, QuantInfo> foundOnTimes;
     quantizeOnTimes(chords, foundOnTimes, basicQuant, sigmap);
     auto quantizedChords = findQuantizedChords(foundOnTimes);
-
+#ifdef QT_DEBUG
     Q_ASSERT_X(MidiTuplet::areTupletReferencesValid(quantizedChords), "Quantize::quantizeChords",
                "Some tuplet references are invalid");
-
+#endif
     quantizeOffTimes(quantizedChords, basicQuant);
     std::swap(chords, quantizedChords);
 

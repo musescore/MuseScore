@@ -379,10 +379,10 @@ bool excludeExtraVoiceTuplets(
         }
         addedCount = newNonTuplets.size();
     }
-
+#ifdef QT_DEBUG
     Q_ASSERT_X(areAllElementsUnique(nonTuplets),
                "MidiTuplet::excludeExtraVoiceTuplets", "Non unique chords in non-tuplets");
-
+#endif
     bool excluded = (sz != tuplets.size());
     tuplets.resize(sz);
 
@@ -857,9 +857,10 @@ void assignVoices(
     const ReducedFraction& barStart,
     int barIndex)
 {
+#ifdef QT_DEBUG
     Q_ASSERT_X(!haveTupletsEmptyChords(tuplets),
                "MIDI tuplets: assignVoices", "Empty tuplet chords");
-
+#endif
     auto pendingTuplets = findPendingTuplets(tuplets);
     auto pendingNonTuplets = findPendingNonTuplets(nonTuplets);
 
@@ -886,7 +887,7 @@ void assignVoices(
 
     setNonTupletVoices(pendingNonTuplets, tupletIntervals, tuplets,
                        chords, basicQuant, barStart);
-
+#ifdef QT_DEBUG
     Q_ASSERT_X(pendingNonTuplets.empty(),
                "MIDI tuplets: assignVoices", "Unused non-tuplets");
     Q_ASSERT_X(!haveTupletsEmptyChords(tuplets),
@@ -898,6 +899,7 @@ void assignVoices(
                "MIDI tuplets: assignVoices", "Overlapping tuplets of the same voice");
     Q_ASSERT_X(!voiceDontExceedLimit(nonTuplets, tuplets),
                "MIDI tuplets: assignVoices", "Voice exceeds the limit");
+#endif
 }
 } // namespace MidiTuplet
 } // namespace Ms
