@@ -430,7 +430,13 @@ bool NoteInputBarModel::resolveRestSelected() const
         return false;
     }
 
-    return selection()->element()->isRest();
+    for (const Element* element: selection()->elements()) {
+        if (!element->isRest()) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 DurationType NoteInputBarModel::resolveCurrentDurationType() const
@@ -449,8 +455,27 @@ DurationType NoteInputBarModel::resolveCurrentDurationType() const
         return INVALID_DURATION_TYPE;
     }
 
-    const ChordRest* chordRest = elementToChordRest(selection()->element());
-    return chordRest ? chordRest->durationType().type() : INVALID_DURATION_TYPE;
+    if (selection()->elements().empty()) {
+        return INVALID_DURATION_TYPE;
+    }
+
+    DurationType result = INVALID_DURATION_TYPE;
+    bool isFirstElement = true;
+    for (const Element* element: selection()->elements()) {
+        const ChordRest* chordRest = elementToChordRest(element);
+        if (!chordRest) {
+            continue;
+        }
+
+        if (isFirstElement) {
+            result = chordRest->durationType().type();
+            isFirstElement = false;
+        } else if (result != chordRest->durationType().type()) {
+            return INVALID_DURATION_TYPE;
+        }
+    }
+
+    return result;
 }
 
 bool NoteInputBarModel::isNoteInputModeAction(const ActionName& actionName) const
