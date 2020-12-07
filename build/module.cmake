@@ -63,6 +63,7 @@ endif()
 add_library(${MODULE} ${LIBRARY_TYPE})
 
 if (${LIBRARY_TYPE} STREQUAL "SHARED")
+    message(STATUS "  ${MODULE} is SHARED, will be installed to /bin")
     install(TARGETS ${MODULE} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 endif()
 

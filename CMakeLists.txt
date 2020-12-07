@@ -33,7 +33,7 @@ set(CMAKE_MODULE_PATH
     ${CMAKE_MODULE_PATH}
     )
 
-include(TryUseCcache)
+#include(TryUseCcache)
 include(SetupCMakePolicy)
 include(GetCompilerInfo)
 include(GetUtilsFunctions) # library of CMake functions ("fn__" namespace)
@@ -50,8 +50,12 @@ else (BUILD_WEBENGINE)
    set(USE_WEBENGINE 0)
 endif (BUILD_WEBENGINE)
 
+include_directories(${CMAKE_CURRENT_LIST_DIR}/build/qtfix)
 set(QT_MIN_VERSION    "5.15.0")
 include(FindQt5)
+include_directories(${CMAKE_CURRENT_LIST_DIR}/build/qtfix)
+
+
 include(UsePkgConfig1) # Defines MACRO(PKGCONFIG1 _package _minVersion _include_DIR _link_DIR _link_FLAGS _cflags)
 
 # Setup version number and general build settings
@@ -100,6 +104,14 @@ endif(BUILD_JACK)
 
 add_definitions(-DQT_QML_DEBUG)
 add_definitions(-D_USE_MATH_DEFINES)
+add_definitions(-DNOMINMAX)
+
+
+#-DOS_WIN
+#-DNOMINMAX
+#-DUNICODE
+#-DWIN32_LEAN_AND_MEAN
+#-DWIN32
 
 message("[cmake] CRASH_REPORT_URL: ${CRASH_REPORT_URL}")
 
@@ -147,6 +159,8 @@ else (BUILD_64 STREQUAL "ON")
       SET (ARCH_TYPE "_x86")
       SET (DEPENDENCIES_DIR "${PROJECT_SOURCE_DIR}/dependencies/libx86")
 endif (BUILD_64 STREQUAL "ON")
+
+link_directories(${DEPENDENCIES_DIR})
 
 if (BUILD_PORTABLEAPPS STREQUAL "ON")
       SET (WIN_PORTABLE 1)

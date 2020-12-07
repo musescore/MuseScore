@@ -1,0 +1,2 @@
+#include <QVector>
+#include <QtQml/QQmlListProperty>

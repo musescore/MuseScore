@@ -18,6 +18,8 @@
  Definition of classes Note and NoteHead.
 */
 
+#include <QVector>
+
 #include "element.h"
 #include "symbol.h"
 #include "noteevent.h"

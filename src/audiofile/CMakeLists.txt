@@ -26,7 +26,7 @@ include(GetPlatformInfo)
 set(SNDFILE_LIB )
 if (PLATFORM_IS_WINDOWS)
 
-    set(SNDFILE_LIB sndfiledll)
+    set(SNDFILE_LIB libsndfile-1)
 
 else(PLATFORM_IS_WINDOWS)
 
