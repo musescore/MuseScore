@@ -37,11 +37,8 @@ void TelemetryConfiguration::init()
 
 bool TelemetryConfiguration::isTelemetryAllowed() const
 {
-#ifndef TELEMETRY_DISABLED
-    return settings()->value(IS_TELEMETRY_ALLOWED).toBool();
-#else
-    return false;
-#endif
+    static QString id(TELEMETRY_TRACK_ID);
+    return !id.isEmpty();
 }
 
 bool TelemetryConfiguration::isDumpUploadAllowed() const

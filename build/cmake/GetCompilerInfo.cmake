@@ -4,7 +4,7 @@
 
 include(GetPlatformInfo)
 
-if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
 
     set(COMPILER_IS_CLANG 1)
 

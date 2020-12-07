@@ -65,6 +65,10 @@ add_library(${MODULE} ${LIBRARY_TYPE})
 if (${LIBRARY_TYPE} STREQUAL "SHARED")
     message(STATUS "  ${MODULE} is SHARED, will be installed to /bin")
     install(TARGETS ${MODULE} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+
+    if (NOT MSVC)
+        set_target_properties(${MODULE} PROPERTIES COMPILE_FLAGS "-fPIC")
+    endif (NOT MSVC)
 endif()
 
 target_sources(${MODULE} PRIVATE
@@ -83,13 +87,6 @@ target_include_directories(${MODULE} PUBLIC
     ${MODULE_INCLUDE}
 )
 
-string(TOLOWER ${CMAKE_BUILD_TYPE} build_mode )
-if (build_mode STREQUAL "debug")
-    # set(MODULE_DEF ${MODULE_DEF} -D_DEBUG) # This caused debug build failure under Windows
-else()
-    set(MODULE_DEF ${MODULE_DEF} -DNDEBUG)
-endif()
-
 target_compile_definitions(${MODULE} PUBLIC
     ${MODULE_DEF}
     ${MODULE}_QML_IMPORT="${MODULE_QML_IMPORT}"
@@ -103,49 +100,49 @@ set(MODULE_LINK ${QT_LIBRARIES} ${MODULE_LINK})
 
 target_link_libraries(${MODULE} PRIVATE ${MODULE_LINK} )
 
-set(LOCAL_MODULE_BUILD_PCH ${BUILD_PCH})
+#set(LOCAL_MODULE_BUILD_PCH ${BUILD_PCH})
 
-if (MODULE_HAS_C_CODE)
+#if (MODULE_HAS_C_CODE)
 
-    set(LOCAL_MODULE_BUILD_PCH OFF)
+#    set(LOCAL_MODULE_BUILD_PCH OFF)
 
-    if (NOT MSVC)
-        set_target_properties( ${MODULE} PROPERTIES COMPILE_FLAGS "-fPIC")
-    endif (NOT MSVC)
+#    if (NOT MSVC)
+#        set_target_properties( ${MODULE} PROPERTIES COMPILE_FLAGS "-fPIC")
+#    endif (NOT MSVC)
 
-endif(MODULE_HAS_C_CODE)
+#endif(MODULE_HAS_C_CODE)
 
 
-if (LOCAL_MODULE_BUILD_PCH)
-    if (NOT MSVC)
-        set_target_properties (${MODULE} PROPERTIES COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch")
-    else (NOT MSVC)
-        set_target_properties (${MODULE} PROPERTIES COMPILE_FLAGS "${PCH_INCLUDE}" )
-    endif (NOT MSVC)
+#if (LOCAL_MODULE_BUILD_PCH)
+#    if (NOT MSVC)
+#        set_target_properties (${MODULE} PROPERTIES COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch")
+#    else (NOT MSVC)
+#        set_target_properties (${MODULE} PROPERTIES COMPILE_FLAGS "${PCH_INCLUDE}" )
+#    endif (NOT MSVC)
 
-    xcode_pch(${MODULE} all)
+#    xcode_pch(${MODULE} all)
 
-    # Use MSVC pre-compiled headers
-    vstudio_pch( ${MODULE} )
+#    # Use MSVC pre-compiled headers
+#    vstudio_pch( ${MODULE} )
 
-    # MSVC does not depend on mops1 & mops2 for PCH
-    if (NOT MSVC)
-        ADD_DEPENDENCIES(${MODULE} mops1)
-        ADD_DEPENDENCIES(${MODULE} mops2)
-    endif (NOT MSVC)
-else (LOCAL_MODULE_BUILD_PCH)
+#    # MSVC does not depend on mops1 & mops2 for PCH
+#    if (NOT MSVC)
+#        ADD_DEPENDENCIES(${MODULE} mops1)
+#        ADD_DEPENDENCIES(${MODULE} mops2)
+#    endif (NOT MSVC)
+#else (LOCAL_MODULE_BUILD_PCH)
 
-    set(MODULE_USE_ALL_H OFF)
+#    set(MODULE_USE_ALL_H OFF)
 
-    if (MODULE_USE_ALL_H)
-        if (NOT MSVC)
-            set_target_properties (${MODULE} PROPERTIES COMPILE_FLAGS "-include ${PROJECT_SOURCE_DIR}/all.h")
-        else (NOT MSVC)
-            set_target_properties (${MODULE} PROPERTIES COMPILE_FLAGS "/FI ${PROJECT_SOURCE_DIR}/all.h" )
-        endif (NOT MSVC)
-        message(STATUS "  ${MODULE} include all.h")
-    endif(MODULE_USE_ALL_H)
+#    if (MODULE_USE_ALL_H)
+#        if (NOT MSVC)
+#            set_target_properties (${MODULE} PROPERTIES COMPILE_FLAGS "-include ${PROJECT_SOURCE_DIR}/all.h")
+#        else (NOT MSVC)
+#            set_target_properties (${MODULE} PROPERTIES COMPILE_FLAGS "/FI ${PROJECT_SOURCE_DIR}/all.h" )
+#        endif (NOT MSVC)
+#        message(STATUS "  ${MODULE} include all.h")
+#    endif(MODULE_USE_ALL_H)
 
-endif (LOCAL_MODULE_BUILD_PCH)
+#endif (LOCAL_MODULE_BUILD_PCH)
 
 
