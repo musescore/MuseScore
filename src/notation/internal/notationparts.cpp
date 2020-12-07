@@ -375,8 +375,13 @@ void NotationParts::doMovePart(const ID& sourcePartId, const ID& destinationPart
     }
 
     bool partIsBefore = score()->staffIdx(part) < score()->staffIdx(toPart);
-    QList<Staff*> staves = *part->staves();
-    int newStaffIndex = partIsBefore ? staves.size() : 0;
+
+    std::vector<Staff*> staves;
+    for (Staff* staff: *part->staves()) {
+        staves.push_back(staff);
+    }
+
+    int destinationStaffIndex = partIsBefore ? staves.size() : 0;
 
     score()->undoRemovePart(part);
 
@@ -384,21 +389,36 @@ void NotationParts::doMovePart(const ID& sourcePartId, const ID& destinationPart
     int newPartIndex = mode == Before ? toPartIndex : toPartIndex + 1;
     score()->parts().insert(newPartIndex, part);
 
+    doMoveStaves(staves, destinationStaffIndex);
+}
+
+void NotationParts::doMoveStaves(const std::vector<Staff*>& staves, int destinationStaffIndex, Part* destinationPart)
+{
     for (Staff* staff: staves) {
         Staff* movedStaff = staff->clone();
-        score()->undoInsertStaff(movedStaff, newStaffIndex);
+
+        if (destinationPart) {
+            movedStaff->setPart(destinationPart);
+        }
+
+        score()->undoInsertStaff(movedStaff, destinationStaffIndex);
         Ms::Excerpt::cloneStaff(staff, movedStaff);
         movedStaff->undoUnlink();
-        newStaffIndex++;
+        ++destinationStaffIndex;
     }
 
-    auto instruments = *part->instruments();
+    Ms::InstrumentList instruments;
+    if (destinationPart) {
+        instruments = *destinationPart->instruments();
+    }
 
     for (Staff* staff: staves) {
         score()->undoRemoveStaff(staff);
     }
 
-    part->setInstruments(instruments);
+    if (destinationPart) {
+        destinationPart->setInstruments(instruments);
+    }
 }
 
 void NotationParts::setInstrumentName(const ID& instrumentId, const ID& fromPartId, const QString& name)
@@ -1032,22 +1052,11 @@ void NotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinat
 
     std::vector<Staff*> staves = this->staves(sourceStavesIds);
     Part* toPart = toStaff->part();
-    int newStaffIndex = (mode == Before ? toStaff->idx() : toStaff->idx() + 1);
-    newStaffIndex -= score()->staffIdx(toPart); // NOTE: convert to local part's staff index
+    int destinationStaffIndex = (mode == Before ? toStaff->idx() : toStaff->idx() + 1);
+    destinationStaffIndex -= score()->staffIdx(toPart); // NOTE: convert to local part's staff index
 
     startEdit();
-    for (Staff* staff: staves) {
-        Staff* movedStaff = staff->clone();
-        movedStaff->setPart(toPart);
-        score()->undoInsertStaff(movedStaff, newStaffIndex);
-        Ms::Excerpt::cloneStaff(staff, movedStaff);
-        movedStaff->undoUnlink();
-        newStaffIndex++;
-    }
-
-    for (Staff* staff: staves) {
-        score()->undoRemoveStaff(staff);
-    }
+    doMoveStaves(staves, destinationStaffIndex, toPart);
     apply();
 
     m_partsChanged.notify();
