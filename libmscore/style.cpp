@@ -761,7 +761,7 @@ static const StyleType styleTypes[] {
       { Sid::stringNumberOffset,            "stringNumberOffset",            QPointF(0.0, 0.0) },
 
       { Sid::longInstrumentFontFace,        "longInstrumentFontFace",       "Edwin" },
-      { Sid::longInstrumentFontSize,        "longInstrumentFontSize",       12.0 },
+      { Sid::longInstrumentFontSize,        "longInstrumentFontSize",       10.0 },
       { Sid::longInstrumentLineSpacing,     "longInstrumentLineSpacing",    1.0 },
       { Sid::longInstrumentFontSpatiumDependent, "longInstrumentFontSpatiumDependent", true },
       { Sid::longInstrumentFontStyle,       "longInstrumentFontStyle",      int(FontStyle::Normal) },
@@ -776,7 +776,7 @@ static const StyleType styleTypes[] {
       { Sid::longInstrumentFrameBgColor,    "longInstrumentFrameBgColor",   QColor(255, 255, 255, 0) },
 
       { Sid::shortInstrumentFontFace,       "shortInstrumentFontFace",      "Edwin" },
-      { Sid::shortInstrumentFontSize,       "shortInstrumentFontSize",      12.0 },
+      { Sid::shortInstrumentFontSize,       "shortInstrumentFontSize",      10.0 },
       { Sid::shortInstrumentLineSpacing,    "shortInstrumentLineSpacing",   1.0 },
       { Sid::shortInstrumentFontSpatiumDependent, "shortInstrumentFontSpatiumDependent", true },
       { Sid::shortInstrumentFontStyle,      "shortInstrumentFontStyle",     int(FontStyle::Normal) },
@@ -791,7 +791,7 @@ static const StyleType styleTypes[] {
       { Sid::shortInstrumentFrameBgColor,   "shortInstrumentFrameBgColor",  QColor(255, 255, 255, 0) },
 
       { Sid::partInstrumentFontFace,        "partInstrumentFontFace",       "Edwin" },
-      { Sid::partInstrumentFontSize,        "partInstrumentFontSize",       18.0 },
+      { Sid::partInstrumentFontSize,        "partInstrumentFontSize",       14.0 },
       { Sid::partInstrumentLineSpacing,     "partInstrumentLineSpacing",    1.0 },
       { Sid::partInstrumentFontSpatiumDependent, "partInstrumentFontSpatiumDependent", false },
       { Sid::partInstrumentFontStyle,       "partInstrumentFontStyle",      int(FontStyle::Normal) },
@@ -820,7 +820,7 @@ static const StyleType styleTypes[] {
       { Sid::dynamicsFrameBgColor,          "dynamicsFrameBgColor",         QColor(255, 255, 255, 0) },
 
       { Sid::expressionFontFace,            "expressionFontFace",           "Edwin" },
-      { Sid::expressionFontSize,            "expressionFontSize",           11.0 },
+      { Sid::expressionFontSize,            "expressionFontSize",           10.0 },
       { Sid::expressionLineSpacing,         "expressionLineSpacing",        1.0 },
       { Sid::expressionFontSpatiumDependent, "expressionFontSpatiumDependent", true },
       { Sid::expressionFontStyle,           "expressionFontStyle",          int(FontStyle::Italic) },

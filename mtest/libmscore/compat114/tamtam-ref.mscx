@@ -68,8 +68,8 @@
         </Staff>
       <trackName>Tam-tam</trackName>
       <Instrument>
-        <longName><font face="Times New Roman"/>Tam-tam</longName>
-        <shortName><font face="Times New Roman"/>Tam-tam</shortName>
+        <longName><font size="12"/><font face="Times New Roman"/>Tam-tam</longName>
+        <shortName><font size="12"/><font face="Times New Roman"/>Tam-tam</shortName>
         <trackName>Tam-tam</trackName>
         <useDrumset>1</useDrumset>
         <Drum pitch="52">

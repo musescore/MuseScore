@@ -65,8 +65,8 @@
         </Staff>
       <trackName>Drumset 5 lines</trackName>
       <Instrument>
-        <longName><font face="Times New Roman"/>Drumset</longName>
-        <shortName><font face="Times New Roman"/>Drs.</shortName>
+        <longName><font size="12"/><font face="Times New Roman"/>Drumset</longName>
+        <shortName><font size="12"/><font face="Times New Roman"/>Drs.</shortName>
         <trackName>Drumset 5 lines</trackName>
         <useDrumset>1</useDrumset>
         <Drum pitch="35">

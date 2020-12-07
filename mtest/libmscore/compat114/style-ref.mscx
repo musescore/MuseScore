@@ -110,8 +110,8 @@
         </Staff>
       <trackName>Flute</trackName>
       <Instrument>
-        <longName><font face="Times New Roman"/>Flute</longName>
-        <shortName><font face="Times New Roman"/>Fl.</shortName>
+        <longName><font size="12"/><font face="Times New Roman"/>Flute</longName>
+        <shortName><font size="12"/><font face="Times New Roman"/>Fl.</shortName>
         <trackName>Flute</trackName>
         <minPitchP>59</minPitchP>
         <maxPitchP>98</maxPitchP>

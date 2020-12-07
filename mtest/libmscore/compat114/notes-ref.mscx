@@ -63,8 +63,8 @@
         </Staff>
       <trackName>Voice</trackName>
       <Instrument>
-        <longName><font face="Times New Roman"/>Voice</longName>
-        <shortName><font face="Times New Roman"/>Vo.</shortName>
+        <longName><font size="12"/><font face="Times New Roman"/>Voice</longName>
+        <shortName><font size="12"/><font face="Times New Roman"/>Vo.</shortName>
         <trackName>Voice</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>94</maxPitchP>

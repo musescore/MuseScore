@@ -85,6 +85,7 @@
       <rhGuitarFingeringFrameWidth>0.2</rhGuitarFingeringFrameWidth>
       <rhGuitarFingeringFrameRound>25</rhGuitarFingeringFrameRound>
       <longInstrumentFontFace>FreeSerif</longInstrumentFontFace>
+      <longInstrumentFontSize>12</longInstrumentFontSize>
       <longInstrumentAlign>center,center</longInstrumentAlign>
       <longInstrumentFramePadding>0</longInstrumentFramePadding>
       <longInstrumentFrameWidth>0</longInstrumentFrameWidth>

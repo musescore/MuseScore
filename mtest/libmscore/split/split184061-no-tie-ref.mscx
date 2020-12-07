@@ -27,8 +27,6 @@
       <composerFontSize>10</composerFontSize>
       <composerFontSpatiumDependent>1</composerFontSpatiumDependent>
       <lyricistFontSize>10</lyricistFontSize>
-      <longInstrumentFontSize>10</longInstrumentFontSize>
-      <shortInstrumentFontSize>10</shortInstrumentFontSize>
       <partInstrumentFontSize>10</partInstrumentFontSize>
       <dynamicsFontStyle>0</dynamicsFontStyle>
       <tempoFontSize>10</tempoFontSize>
