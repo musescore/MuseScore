@@ -342,7 +342,7 @@ void NoteInputBarModel::updateArticulationsState()
 
 void NoteInputBarModel::updateRestState()
 {
-    item("pad-rest").checked = resolveCurrentRest();
+    item("pad-rest").checked = resolveRestSelected();
 }
 
 int NoteInputBarModel::resolveCurrentVoiceIndex() const
@@ -416,7 +416,7 @@ std::set<SymbolId> NoteInputBarModel::resolveCurrentArticulations() const
     return result;
 }
 
-bool NoteInputBarModel::resolveCurrentRest() const
+bool NoteInputBarModel::resolveRestSelected() const
 {
     if (!noteInput() || !selection()) {
         return false;
@@ -449,7 +449,7 @@ DurationType NoteInputBarModel::resolveCurrentDurationType() const
         return INVALID_DURATION_TYPE;
     }
 
-    ChordRest* chordRest = elementToChordRest(selection()->element());
+    const ChordRest* chordRest = elementToChordRest(selection()->element());
     return chordRest ? chordRest->durationType().type() : INVALID_DURATION_TYPE;
 }
 
@@ -561,7 +561,7 @@ NoteInputState NoteInputBarModel::noteInputState() const
     return noteInput() ? noteInput()->state() : NoteInputState();
 }
 
-ChordRest* NoteInputBarModel::elementToChordRest(Element* element) const
+const ChordRest* NoteInputBarModel::elementToChordRest(const Element* element) const
 {
     if (!element) {
         return nullptr;

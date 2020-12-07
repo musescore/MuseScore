@@ -319,19 +319,12 @@ void NotationActionController::addText(TextType type)
 
 void NotationActionController::padNote(const Pad& pad)
 {
-    auto interaction = currentNotationInteraction();
-    if (!interaction) {
-        return;
-    }
-
     auto noteInput = currentNotationNoteInput();
     if (!noteInput) {
         return;
     }
 
-    if (interaction->selection()->isNone() && !noteInput->isNoteInputMode()) {
-        noteInput->startNoteInput();
-    }
+    startNoteInputIfNeed();
 
     noteInput->padNote(pad);
 }
@@ -356,19 +349,12 @@ void NotationActionController::putNote(const actions::ActionData& data)
 
 void NotationActionController::toggleAccidental(AccidentalType type)
 {
-    auto interaction = currentNotationInteraction();
-    if (!interaction) {
-        return;
-    }
-
     auto noteInput = currentNotationNoteInput();
     if (!noteInput) {
         return;
     }
 
-    if (interaction->selection()->isNone() && !noteInput->isNoteInputMode()) {
-        noteInput->startNoteInput();
-    }
+    startNoteInputIfNeed();
 
     noteInput->toogleAccidental(type);
 }
@@ -525,9 +511,7 @@ void NotationActionController::changeVoice(int voiceIndex)
         return;
     }
 
-    if (interaction->selection()->isNone() && !noteInput->isNoteInputMode()) {
-        noteInput->startNoteInput();
-    }
+    startNoteInputIfNeed();
 
     noteInput->setCurrentVoiceIndex(voiceIndex);
 
@@ -942,4 +926,21 @@ bool NotationActionController::isTextEditting() const
 void NotationActionController::openTupletOtherDialog()
 {
     interactive()->open("musescore://notation/othertupletdialog");
+}
+
+void NotationActionController::startNoteInputIfNeed()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    auto noteInput = interaction->noteInput();
+    if (!noteInput) {
+        return;
+    }
+
+    if (interaction->selection()->isNone() && !noteInput->isNoteInputMode()) {
+        noteInput->startNoteInput();
+    }
 }
