@@ -84,7 +84,9 @@ DockPage {
 
     Component {
         id: telemetryComp
-        TelemetryInfo{}
+        Loader {
+            source: "qrc:/qml/DevTools/Telemetry/TelemetryInfo.qml"
+        }
     }
 
     Component{
