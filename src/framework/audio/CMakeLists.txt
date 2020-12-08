@@ -115,3 +115,5 @@ if(PLATFORM_IS_LINUX)
 endif()
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+
+target_no_warning(${MODULE} -Wno-unused-parameter)
