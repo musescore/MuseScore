@@ -122,6 +122,8 @@ public:
     void changeSelectedNotesVoice(int voiceIndex) override;
     void addAnchoredLineToSelectedNotes() override;
 
+    void addText(TextType type) override;
+
 private:
     Ms::Score* score() const;
 
@@ -157,6 +159,8 @@ private:
                                  QPointF pt = QPointF(), bool pasteMode = false);
 
     void doAddSlur(const Ms::Slur* slurTemplate = nullptr);
+
+    bool scoreHasMeasure() const;
 
     bool needEndTextEditing(const std::vector<Element*>& newSelectedElements) const;
 

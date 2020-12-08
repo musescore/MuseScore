@@ -78,6 +78,7 @@ using NoteInputMethod = Ms::NoteEntryMethod;
 using AccidentalType = Ms::AccidentalType;
 using OttavaType = Ms::OttavaType;
 using HairpinType = Ms::HairpinType;
+using TextType = Ms::Tid;
 
 using StaffList = QList<const Staff*>;
 using PartList = QList<const Part*>;
