@@ -13,6 +13,7 @@ using ThemeType = IUiConfiguration::ThemeType;
 static const std::string module_name("ui");
 static const Settings::Key THEME_TYPE_KEY(module_name, "ui/application/globalStyle");
 static const Settings::Key FONT_FAMILY_KEY(module_name, "ui/theme/fontFamily");
+static const Settings::Key SEMIBOLD_FONT_FAMILY_KEY(module_name, "ui/theme/semiBoldFontFamily");
 static const Settings::Key FONT_SIZE_KEY(module_name, "ui/theme/fontSize");
 static const Settings::Key ICONS_FONT_FAMILY_KEY(module_name, "ui/theme/iconsFontFamily");
 static const Settings::Key MUSICAL_FONT_FAMILY_KEY(module_name, "ui/theme/musicalFontFamily");
@@ -21,7 +22,8 @@ static const Settings::Key MUSICAL_FONT_SIZE_KEY(module_name, "ui/theme/musicalF
 void UiConfiguration::init()
 {
     settings()->setDefaultValue(THEME_TYPE_KEY, Val(static_cast<int>(ThemeType::LIGHT_THEME)));
-    settings()->setDefaultValue(FONT_FAMILY_KEY, Val("FreeSans"));
+    settings()->setDefaultValue(FONT_FAMILY_KEY, Val("Fira Sans"));
+    settings()->setDefaultValue(SEMIBOLD_FONT_FAMILY_KEY, Val("Fira Sans SemiBold"));
     settings()->setDefaultValue(FONT_SIZE_KEY, Val(12));
     settings()->setDefaultValue(ICONS_FONT_FAMILY_KEY, Val("MusescoreIcon"));
     settings()->setDefaultValue(MUSICAL_FONT_FAMILY_KEY, Val("Leland"));
@@ -68,6 +70,11 @@ std::string UiConfiguration::fontFamily() const
     return settings()->value(FONT_FAMILY_KEY).toString();
 }
 
+std::string UiConfiguration::semiBoldFontFamily() const
+{
+    return settings()->value(SEMIBOLD_FONT_FAMILY_KEY).toString();
+}
+
 int UiConfiguration::fontSize(FontSizeType type) const
 {
     int bodyFontSize = settings()->value(FONT_SIZE_KEY).toInt();
@@ -76,14 +83,14 @@ int UiConfiguration::fontSize(FontSizeType type) const
      * DEFAULT SIZE:
      * body: 12
      * body large: 14
-     * tabs: 16
+     * tab: 16
      * header: 22
      * title: 32
      */
     switch (type) {
     case FontSizeType::BODY: return bodyFontSize;
     case FontSizeType::BODY_LARGE: return bodyFontSize + bodyFontSize / 6;
-    case FontSizeType::TABS: return bodyFontSize + bodyFontSize / 3;
+    case FontSizeType::TAB: return bodyFontSize + bodyFontSize / 3;
     case FontSizeType::HEADER: return bodyFontSize + bodyFontSize / 1.2;
     case FontSizeType::TITLE: return bodyFontSize + bodyFontSize / 0.6;
     }
@@ -103,7 +110,7 @@ std::string UiConfiguration::iconsFontFamily() const
 
 int UiConfiguration::iconsFontSize() const
 {
-    return fontSize(FontSizeType::TABS);
+    return fontSize(FontSizeType::TAB);
 }
 
 Notification UiConfiguration::iconsFontChanged() const

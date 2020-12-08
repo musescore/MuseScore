@@ -384,6 +384,8 @@ void MScore::init()
         ":/fonts/musejazz/MuseJazzText.otf",
         ":/fonts/campania/Campania.otf",
         ":/fonts/FreeSans.ttf",
+        ":/fonts/firasans/FiraSansRegular.ttf",
+        ":/fonts/firasans/FiraSansSemiBold.ttf",
         ":/fonts/FreeSerif.ttf",
         ":/fonts/FreeSerifBold.ttf",
         ":/fonts/FreeSerifItalic.ttf",
