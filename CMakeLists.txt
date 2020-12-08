@@ -57,6 +57,7 @@ option(BUILD_UNIT_TESTS "Build gtest unit test" OFF)
 option(PACKAGE_FILE_ASSOCIATION "File types association" OFF)
 
 option(BUILD_PCH "Build using precompiled headers." OFF)
+option(BUILD_SHARED_LIB_IN_DEBUG "Build shared libs if possible in debug" ON)
 option(QML_LOAD_FROM_SOURCE "Load qml files from source (not resource)" OFF)
 
 option(USE_SYSTEM_FREETYPE "Use system FreeType"          OFF) # requires freetype >= 2.5.2, does not work on win
