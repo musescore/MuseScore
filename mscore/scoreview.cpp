@@ -2737,7 +2737,7 @@ void ScoreView::cmd(const char* s)
       #ifdef OMR
             {{"show-omr"}, [](ScoreView* cv, const QByteArray&) {
                   if (cv->score()->masterScore()->omr())
-                        showOmr(!_score->masterScore()->showOmr());
+                        cv->showOmr(!cv->score()->masterScore()->showOmr());
                   }},
       #endif
             {{"split-measure"}, [](ScoreView* cv, const QByteArray&) {
