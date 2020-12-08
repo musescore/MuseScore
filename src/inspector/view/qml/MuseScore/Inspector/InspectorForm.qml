@@ -168,7 +168,7 @@ FocusableItem {
             id: inspectorTitle
 
             text: qsTr("Inspector")
-            font: ui.theme.headerBoldFont
+            font: ui.theme.largeBodyBoldFont
         }
 
         Rectangle {
