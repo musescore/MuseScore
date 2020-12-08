@@ -81,6 +81,7 @@ private slots:
 
 signals:
     void openContextMenuRequested(const QVariantList& items, const QPoint& pos);
+    void textEdittingStarted();
 
 private:
     double guiScale() const;

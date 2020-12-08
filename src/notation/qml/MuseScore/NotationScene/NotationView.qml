@@ -8,6 +8,10 @@ import MuseScore.UiComponents 1.0
 import "internal"
 
 FocusScope {
+    id: root
+
+    signal textEdittingStarted()
+
     ColumnLayout {
         anchors.fill: parent
 
@@ -22,6 +26,10 @@ FocusScope {
 
             Layout.fillWidth: true
             Layout.fillHeight: true
+
+            onTextEdittingStarted: {
+                root.textEdittingStarted()
+            }
 
             Component {
                 id: menuAction

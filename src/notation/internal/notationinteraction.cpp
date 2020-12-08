@@ -110,6 +110,11 @@ void NotationInteraction::notifyAboutNotationChanged()
     m_notation->notifyAboutNotationChanged();
 }
 
+void NotationInteraction::notifyAboutTextEditingStarted()
+{
+    m_textEditingStarted.notify();
+}
+
 void NotationInteraction::notifyAboutTextEditingChanged()
 {
     m_textEditingChanged.notify();
@@ -1704,6 +1709,7 @@ void NotationInteraction::startEditText(Element* element, const QPointF& cursorP
         element->startEdit(m_textEditData);
     }
 
+    notifyAboutTextEditingStarted();
     notifyAboutTextEditingChanged();
 }
 
@@ -1750,6 +1756,11 @@ void NotationInteraction::changeTextCursorPosition(const QPointF& newCursorPos)
     m_textEditData.element->mousePress(m_textEditData);
 
     notifyAboutTextEditingChanged();
+}
+
+mu::async::Notification NotationInteraction::textEditingStarted() const
+{
+    return m_textEditingStarted;
 }
 
 mu::async::Notification NotationInteraction::textEditingChanged() const
