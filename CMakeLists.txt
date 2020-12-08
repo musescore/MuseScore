@@ -19,6 +19,7 @@
 
 cmake_minimum_required(VERSION 3.16)
 
+cmake_policy(SET CMP0091 OLD)
 project(mscore LANGUAGES C CXX)
 
 # Conflicted with PCH on Linux, will be resolve later
@@ -137,6 +138,10 @@ include(SetupFreetype)
 if(SOUNDFONT3)
     include(SetupVorbisAndOgg)
 endif(SOUNDFONT3)
+
+include(FindSndFile)
+#add_library(sndfiledll SHARED IMPORTED)
+#set_target_properties(sndfiledll PROPERTIES IMPORTED_IMPLIB ${SNDFILE_LIBRARY})
 
 ##
 ## produce config.h file

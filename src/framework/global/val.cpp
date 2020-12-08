@@ -137,5 +137,4 @@ Val Val::fromQVariant(const QVariant& var)
     case QVariant::String: return Val(var.toString().toStdString());
     default: return Val(var);
     }
-    return Val();
 }
