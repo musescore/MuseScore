@@ -121,7 +121,7 @@ static constexpr qreal DPMM_DISPLAY    = DPI_DISPLAY / 25.4;
 static constexpr qreal PALETTE_SPATIUM = 1.764 * DPMM_DISPLAY;
 
 static constexpr qreal ZOOM_LEVEL_MIN     = 1.0 / 16.0; // 6.25%
-static constexpr qreal ZOOM_LEVEL_MAX     = 16.0;
+static constexpr qreal ZOOM_LEVEL_MAX     = 400;
 static constexpr int   ZOOM_PRECISION_MIN = 1;
 static constexpr int   ZOOM_PRECISION_MAX = 16;
 
