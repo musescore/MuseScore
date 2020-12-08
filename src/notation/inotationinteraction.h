@@ -106,6 +106,8 @@ public:
     virtual void addIntervalToSelectedNotes(int interval) = 0;
     virtual void changeSelectedNotesVoice(int voiceIndex) = 0;
     virtual void addAnchoredLineToSelectedNotes() = 0;
+
+    virtual void addText(TextType type) = 0;
 };
 
 using INotationInteractionPtr = std::shared_ptr<INotationInteraction>;

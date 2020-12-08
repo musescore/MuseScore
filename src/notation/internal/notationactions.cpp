@@ -442,6 +442,78 @@ const ActionList NotationActions::m_actions = {
     Action("add-noteline",
            QT_TRANSLATE_NOOP("action", "Note Anchored Line"),
            ShortcutContext::NotationActive
+           ),
+    Action("title-text",
+           QT_TRANSLATE_NOOP("action", "Title"),
+           ShortcutContext::NotationActive
+           ),
+    Action("subtitle-text",
+           QT_TRANSLATE_NOOP("action", "Subtitle"),
+           ShortcutContext::NotationActive
+           ),
+    Action("composer-text",
+           QT_TRANSLATE_NOOP("action", "Composer"),
+           ShortcutContext::NotationActive
+           ),
+    Action("poet-text",
+           QT_TRANSLATE_NOOP("action", "Lirycist"),
+           ShortcutContext::NotationActive
+           ),
+    Action("part-text",
+           QT_TRANSLATE_NOOP("action", "Part Name"),
+           ShortcutContext::NotationActive
+           ),
+    Action("system-text",
+           QT_TRANSLATE_NOOP("action", "System Text"),
+           ShortcutContext::NotationActive
+           ),
+    Action("staff-text",
+           QT_TRANSLATE_NOOP("action", "Staff Text"),
+           ShortcutContext::NotationActive
+           ),
+    Action("expression-text",
+           QT_TRANSLATE_NOOP("action", "Expression Text"),
+           ShortcutContext::NotationActive
+           ),
+    Action("rehearsalmark-text",
+           QT_TRANSLATE_NOOP("action", "Rehearsal Mark"),
+           ShortcutContext::NotationActive
+           ),
+    Action("instrument-change-text",
+           QT_TRANSLATE_NOOP("action", "Instrument Change"),
+           ShortcutContext::NotationActive
+           ),
+    Action("fingering-text",
+           QT_TRANSLATE_NOOP("action", "Fingering"),
+           ShortcutContext::NotationActive
+           ),
+    Action("sticking-text",
+           QT_TRANSLATE_NOOP("action", "Sticking"),
+           ShortcutContext::NotationActive
+           ),
+    Action("chord-text",
+           QT_TRANSLATE_NOOP("action", "Chord Symbol"),
+           ShortcutContext::NotationActive
+           ),
+    Action("roman-numeral-text",
+           QT_TRANSLATE_NOOP("action", "Roman Numeral Analysis"),
+           ShortcutContext::NotationActive
+           ),
+    Action("nashville-number-text",
+           QT_TRANSLATE_NOOP("action", "Nashville Number"),
+           ShortcutContext::NotationActive
+           ),
+    Action("lyrics",
+           QT_TRANSLATE_NOOP("action", "Lyrics"),
+           ShortcutContext::NotationActive
+           ),
+    Action("figured-bass",
+           QT_TRANSLATE_NOOP("action", "Figured Bass"),
+           ShortcutContext::NotationActive
+           ),
+    Action("tempo",
+           QT_TRANSLATE_NOOP("action", "Tempo Marking"),
+           ShortcutContext::NotationActive
            )
 };
 
