@@ -1100,6 +1100,8 @@
     <figuredBassMinDistance>0.5</figuredBassMinDistance>
     <tupletMinDistance>0.5</tupletMinDistance>
     <autoplaceEnabled>1</autoplaceEnabled>
+    <bracketedAccidentalPadding>0</bracketedAccidentalPadding>
+    <alignAccidentalsLeft>true</alignAccidentalsLeft>
     <Spatium>1.76389</Spatium>
     </Style>
   </museScore>
