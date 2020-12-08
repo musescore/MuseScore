@@ -767,23 +767,42 @@ static QPair<qreal, qreal> layoutAccidental(AcEl* me, AcEl* above, AcEl* below, 
       pnd *= mag;
       pd *= mag;
 
+      Chord* chord = me->note->chord();
+      Staff* staff = chord->staff();
+      Fraction tick = chord->tick();
+
       // extra space for ledger lines
-      if (me->line <= -2 || me->line >= me->note->staff()->lines(me->note->chord()->tick()) * 2)
-            lx = qMin(lx, -acc->staff()->spatium(acc->tick()) * acc->score()->styleS(Sid::ledgerLineLength).val());
+      qreal ledgerAdjust = 0.0;
+      bool ledgerAbove = chord->upNote()->line() <= -2;
+      bool ledgerBelow = chord->downNote()->line() >= staff->lines(tick) * 2;
+      if (ledgerAbove || ledgerBelow) {
+            // ledger lines are present
+            // check for collision with lines above & below staff
+            // note that on 1-line staff, both collisions are possible at once
+            // TODO: account for cutouts in accidental
+            qreal lds = staff->lineDistance(tick) * sp;
+            if ((ledgerAbove && me->top + lds <= pnd) || (ledgerBelow && staff->lines(tick) * lds - me->bottom <= pnd)) {
+                  ledgerAdjust = -acc->score()->styleS(Sid::ledgerLineLength).val() * sp;
+                  lx = qMin(lx, ledgerAdjust);
+                  }
+            }
 
       // clear left notes
       int lns = leftNotes.size();
       for (int i = 0; i < lns; ++i) {
             Note* ln = leftNotes[i];
             int lnLine = ln->line();
+            qreal lnLedgerAdjust = 0.0;
+            if (lnLine <= -2 || lnLine >= staff->lines(tick) * 2)
+                  lnLedgerAdjust = ledgerAdjust;
             qreal lnTop = (lnLine - 1) * 0.5 * sp;
             qreal lnBottom = lnTop + sp;
             if (me->top - lnBottom <= pnd && lnTop - me->bottom <= pnd) {
                   // undercut note above if possible
                   if (lnBottom - me->top <= me->ascent - pnd)
-                        lx = qMin(lx, ln->x() + ln->chord()->x() + me->rightClear);
+                        lx = qMin(lx, ln->x() + ln->chord()->x() + lnLedgerAdjust + me->rightClear);
                   else
-                        lx = qMin(lx, ln->x() + ln->chord()->x());
+                        lx = qMin(lx, ln->x() + ln->chord()->x() + lnLedgerAdjust);
                   }
             else if (lnTop > me->bottom)
                   break;
