@@ -37,6 +37,11 @@ else()
     message(FATAL_ERROR "Unsupported Compiler CMAKE_CXX_COMPILER_ID: ${CMAKE_CXX_COMPILER_ID}")
 endif()
 
+##
+# Setup compile warnings
+##
+include(SetupCompileWarnings)
+
 # Common
 string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
 if(CMAKE_BUILD_TYPE MATCHES "DEBUG") #Debug

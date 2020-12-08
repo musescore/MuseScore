@@ -251,6 +251,8 @@ if (NOT MSVC)
     set_target_properties(gcrashpad PROPERTIES COMPILE_FLAGS "-fPIC")
 endif (NOT MSVC)
 
+target_no_warning(gcrashpad -Wno-multichar)
+
 #if (NOT MSVC)
 #    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 7.0)
 #        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unused-parameter -Wno-multichar -Wno-restrict -Wno-attributes")

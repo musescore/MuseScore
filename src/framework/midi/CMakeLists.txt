@@ -106,11 +106,15 @@ else (MSVC OR MINGW)
     set(MODULE_LINK audiofile ${SNDFILE_LIB})
 endif (MSVC OR MINGW)
 
-
 set (MODULE_HAS_C_CODE 1)
-
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 
-if (MSVC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4206")
-endif (MSVC)
+# for fluid
+target_no_warning(${MODULE} -Wunused-const-variable=0)
+target_no_warning(${MODULE} -Wno-unused-parameter)
+target_no_warning(${MODULE} -Wno-unused-variable)
+target_no_warning(${MODULE} -Wno-type-limits)
+target_no_warning(${MODULE} -Wno-unknown-pragmas)
+target_no_warning(${MODULE} -WMSVC-no-translation-unit-is-empty)
+
+

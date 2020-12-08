@@ -51,6 +51,8 @@ set(MODULE_DEF
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 
+target_no_warning(${MODULE} -Wimplicit-fallthrough=0)
+
 #include(CheckIncludeFile)
 
 #set(BUILD_SHARED_LIBS OFF)
