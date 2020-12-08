@@ -37,7 +37,6 @@ else()
     message(FATAL_ERROR "Unsupported Compiler CMAKE_CXX_COMPILER_ID: ${CMAKE_CXX_COMPILER_ID}")
 endif()
 
-
 # Common
 string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
 if(CMAKE_BUILD_TYPE MATCHES "DEBUG") #Debug
@@ -59,6 +58,23 @@ if (APPLE)
       set(MACOSX_DEPLOYMENT_TARGET 10.10)
       set(CMAKE_OSX_DEPLOYMENT_TARGET 10.10)
 endif(APPLE)
+
+
+#   string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
+#   # Windows: Add -mconsole to LINK_FLAGS to get a console window for debug output
+#   if(CMAKE_BUILD_TYPE MATCHES "DEBUG")
+#     set_target_properties( mscore
+#        PROPERTIES
+#           COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
+#           LINK_FLAGS "-mwindows -mconsole -L ${QT_INSTALL_LIBS}"
+#        )
+#   else(CMAKE_BUILD_TYPE MATCHES "DEBUG")
+#     set_target_properties( mscore
+#          PROPERTIES
+#             COMPILE_FLAGS "${PCH_INCLUDE} -Wall -Wextra -Winvalid-pch ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
+#             LINK_FLAGS "-Wl,-S -mwindows -L ${QT_INSTALL_LIBS}"
+#          )
+#   endif(CMAKE_BUILD_TYPE MATCHES "DEBUG")
 
 
 #if (APPLE)

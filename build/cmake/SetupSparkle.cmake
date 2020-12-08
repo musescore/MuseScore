@@ -1,5 +1,11 @@
 
 
+if (BUILD_64)
+    set(ARCH_TYPE "_x64")
+else (BUILD_64)
+    set(ARCH_TYPE "_x86")
+endif (BUILD_64)
+
 if (APPLE)
        find_package(Sparkle) #needed for SPARKLE_FOUND variable
        if(SPARKLE_FOUND)
