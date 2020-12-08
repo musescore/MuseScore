@@ -34,7 +34,9 @@
 #include "segment.h"
 
 namespace Ms {
-extern QString revision;
+//! FIXME
+//extern QString revision;
+QString revision;
 
 //---------------------------------------------------------
 //   Page

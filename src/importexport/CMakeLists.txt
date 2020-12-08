@@ -93,6 +93,9 @@ set(MODULE_LINK
     midi_old    # for midiimport
     beatroot    # for midiimport
     rtf2html    # for capella
+    libmscore
+    qzip
+    notation
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

@@ -192,7 +192,6 @@ public:
     void setData(int t, int a, int b) { _type = t; _a = a; _b = b; }
 
     bool isChannelEvent() const;
-    void write(XmlWriter&) const;
     bool operator==(const MidiCoreEvent& e) const
     {
         return e._type == _type && e._channel == _channel && e._a == _a && e._b == _b;
@@ -311,7 +310,6 @@ public:
     ~Event();
     bool operator==(const Event&) const;
 
-    void write(XmlWriter&) const;
     void dump() const;
 
     int noquantOntime() const { return _noquantOntime; }
