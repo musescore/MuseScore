@@ -2547,7 +2547,7 @@ bool MuseScore::savePng(Score* score, const QString& name, SaveReplacePolicy* re
             QString fileName(name);
             if (fileName.endsWith(".png"))
                   fileName = fileName.left(fileName.size() - 4);
-            fileName += QString(" - %1.png").arg(pageNumber+1, padding, 10, QLatin1Char('0'));
+            fileName += QString("-%1.png").arg(pageNumber+1, padding, 10, QLatin1Char('0'));
             if (!converterMode && QFileInfo(fileName).exists()) {
                   switch (_replacePolicy) {
                         case SaveReplacePolicy::NO_CHOICE:
