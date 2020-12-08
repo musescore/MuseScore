@@ -11,6 +11,8 @@ if (PLATFORM_IS_WINDOWS)
 
     link_directories(${DEPENDENCIES_DIR})
 
+    include_directories(${PROJECT_SOURCE_DIR}/dependencies/include)
+
 endif(PLATFORM_IS_WINDOWS)
 
 if (PLATFORM_IS_MACOS)

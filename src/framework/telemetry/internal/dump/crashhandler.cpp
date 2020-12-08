@@ -92,9 +92,9 @@ void CrashHandler::removePendingLockFiles(const io::path& dumpsDir)
 {
 #ifdef _MSC_VER
     //! NOTE Different directory structure and no lock file on Windows
+    (void)dumpsDir;
     return;
-#endif
-
+#else
     io::path pendingDir = dumpsDir + "/pending";
     RetVal<io::paths> rv = fileSystem()->scanFiles(pendingDir, { "*.lock" }, framework::IFileSystem::ScanMode::OnlyCurrentDir);
     if (!rv.ret) {
@@ -107,4 +107,5 @@ void CrashHandler::removePendingLockFiles(const io::path& dumpsDir)
             LOGE() << "failed remove file: " << p;
         }
     }
+#endif
 }
