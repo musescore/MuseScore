@@ -10,11 +10,11 @@ import MuseScore.Instruments 1.0
 Item {
     id: root
 
-    property bool isChosen: {
+    property bool hasSelection: {
         if (pagesStack.currentIndex === 0) {
-            return instrumentsPage.isInstrumentsChosen
+            return instrumentsPage.hasSelectedInstruments
         } else if (pagesStack.currentIndex === 1) {
-            return templatePage.isTemplateChosen
+            return templatePage.hasSelectedTemplate
         }
 
         return false

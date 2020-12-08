@@ -8,9 +8,9 @@ import MuseScore.Instruments 1.0
 Rectangle {
     id: root
 
-    property bool isInstrumentsChosen: instrumentsModel.selectedInstruments.length > 0
+    property bool hasSelectedInstruments: instrumentsModel.selectedInstruments.length > 0
     property bool canSelectMultipleInstruments: true
-    property string focusableInstrumentId: ""
+    property string currentInstrumentId: ""
 
     function selectedInstruments() {
         var instruments = instrumentsModel.selectedInstruments
@@ -30,18 +30,18 @@ Rectangle {
     }
 
     Component.onCompleted: {
-        instrumentsModel.load(canSelectMultipleInstruments, focusableInstrumentId)
+        instrumentsModel.load(canSelectMultipleInstruments, currentInstrumentId)
 
         var group = instrumentsModel.selectedGroup()
         familyView.focusGroup(group)
 
-        if (focusableInstrumentId !== "") {
-            focusOnInitedInstrument()
+        if (currentInstrumentId !== "") {
+            focusOnCurrentInstrument()
         }
     }
 
-    function focusOnInitedInstrument() {
-        var instrumentId = instrumentsModel.findInstrument(focusableInstrumentId)
+    function focusOnCurrentInstrument() {
+        var instrumentId = instrumentsModel.findInstrument(currentInstrumentId)
         Qt.callLater(instrumentsView.focusInstrument, instrumentId)
     }
 
