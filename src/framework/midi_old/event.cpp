@@ -21,46 +21,6 @@
 #include "libmscore/score.h"
 
 namespace Ms {
-//---------------------------------------------------------
-//   MidiCoreEvent::write
-//---------------------------------------------------------
-
-void MidiCoreEvent::write(XmlWriter& xml) const
-{
-    switch (_type) {
-    case ME_NOTEON:
-        xml.tagE(QString("note-on  channel=\"%1\" pitch=\"%2\" velo=\"%3\"")
-                 .arg(_channel).arg(_a).arg(_b));
-        break;
-
-    case ME_NOTEOFF:
-        xml.tagE(QString("note-off  channel=\"%1\" pitch=\"%2\" velo=\"%3\"")
-                 .arg(_channel).arg(_a).arg(_b));
-        break;
-
-    case ME_CONTROLLER:
-        if (_a == CTRL_PROGRAM) {
-            if (_channel == 0) {
-                xml.tagE(QString("program value=\"%1\"").arg(_b));
-            } else {
-                xml.tagE(QString("program channel=\"%1\" value=\"%2\"")
-                         .arg(channel()).arg(_b));
-            }
-        } else {
-            if (channel() == 0) {
-                xml.tagE(QString("controller ctrl=\"%1\" value=\"%2\"")
-                         .arg(_a).arg(_b));
-            } else {
-                xml.tagE(QString("controller channel=\"%1\" ctrl=\"%2\" value=\"%3\"")
-                         .arg(channel()).arg(_a).arg(_b));
-            }
-        }
-        break;
-    default:
-        qDebug("MidiCoreEvent::write: unknown type");
-        break;
-    }
-}
 
 //---------------------------------------------------------
 //   Event::Event
@@ -170,23 +130,25 @@ NPlayEvent::NPlayEvent(BeatType beatType)
 
 bool NPlayEvent::isMuted() const
 {
-    const Note* n = note();
-    if (n) {
-        MasterScore* cs = n->masterScore();
-        Staff* staff = n->staff();
-        Instrument* instr = staff->part()->instrument(n->tick());
-        const Channel* a = instr->playbackChannel(n->subchannel(), cs);
-        return a->mute() || a->soloMute() || !staff->playbackVoice(n->voice());
-    }
+    //! TODO
 
-    const Harmony* h = harmony();
-    if (h) {
-        const Channel* hCh = h->part()->harmonyChannel();
-        if (hCh) { //if there is a harmony channel
-            const Channel* pCh = h->masterScore()->playbackChannel(hCh);
-            return pCh->mute() || pCh->soloMute();
-        }
-    }
+//    const Note* n = note();
+//    if (n) {
+//        MasterScore* cs = n->masterScore();
+//        Staff* staff = n->staff();
+//        Instrument* instr = staff->part()->instrument(n->tick());
+//        const Channel* a = instr->playbackChannel(n->subchannel(), cs);
+//        return a->mute() || a->soloMute() || !staff->playbackVoice(n->voice());
+//    }
+
+//    const Harmony* h = harmony();
+//    if (h) {
+//        const Channel* hCh = h->part()->harmonyChannel();
+//        if (hCh) { //if there is a harmony channel
+//            const Channel* pCh = h->masterScore()->playbackChannel(hCh);
+//            return pCh->mute() || pCh->soloMute();
+//        }
+//    }
 
     return false;
 }
@@ -234,109 +196,6 @@ bool MidiCoreEvent::isChannelEvent() const
 
     // Prevent "unreachable code" warning.
     // return false;
-}
-
-//---------------------------------------------------------
-//   Event::write
-//---------------------------------------------------------
-
-void Event::write(XmlWriter& xml) const
-{
-    switch (_type) {
-    case ME_NOTE:
-        xml.tagE(QString("note  tick=\"%1\" channel=\"%2\" len=\"%3\" pitch=\"%4\" velo=\"%5\"")
-                 .arg(_ontime).arg(_channel).arg(_duration).arg(_a).arg(_b));
-        break;
-
-    case ME_NOTEON:
-        xml.tagE(QString("note-on  tick=\"%1\" channel=\"%2\" pitch=\"%3\" velo=\"%4\"")
-                 .arg(_ontime).arg(_channel).arg(_a).arg(_b));
-        break;
-
-    case ME_NOTEOFF:
-        xml.tagE(QString("note-off  tick=\"%1\" channel=\"%2\" pitch=\"%3\" velo=\"%4\"")
-                 .arg(_ontime).arg(_channel).arg(_a).arg(_b));
-        break;
-
-    case ME_CONTROLLER:
-        if (_a == CTRL_PROGRAM) {
-            if ((_ontime == -1) && (_channel == 0)) {
-                xml.tagE(QString("program value=\"%1\"").arg(_b));
-            } else {
-                xml.tagE(QString("program tick=\"%1\" channel=\"%2\" value=\"%3\"")
-                         .arg(ontime()).arg(channel()).arg(_b));
-            }
-        } else {
-            if ((ontime() == -1) && (channel() == 0)) {
-                xml.tagE(QString("controller ctrl=\"%1\" value=\"%2\"")
-                         .arg(_a).arg(_b));
-            } else {
-                xml.tagE(QString("controller tick=\"%1\" channel=\"%2\" ctrl=\"%3\" value=\"%4\"")
-                         .arg(ontime()).arg(channel()).arg(_a).arg(_b));
-            }
-        }
-        break;
-
-    case ME_SYSEX:
-        xml.stag(QString("sysex tick=\"%1\" len=\"%2\"").arg(ontime()).arg(_len));
-        xml.dump(_len, _edata);
-        xml.etag();
-        break;
-
-    case ME_META:
-        switch (metaType()) {
-        case META_TRACK_NAME:
-            xml.tag(QString("TrackName tick=\"%1\"").arg(ontime()), QString((char*)(edata())));
-            break;
-
-        case META_LYRIC:
-            xml.tag(QString("Lyric tick=\"%1\"").arg(ontime()), QString((char*)(edata())));
-            break;
-
-        case META_KEY_SIGNATURE:
-        {
-            const char* keyTable[] = {
-                "Ces", "Ges", "Des", "As", "Es", "Bes", "F",
-                "C",
-                "G", "D", "A", "E", "B", "Fis", "Cis"
-            };
-            int key = (char)(_edata[0]) + 7;
-            if (key < 0 || key > 14) {
-                qDebug("bad key signature %d", key);
-                key = 0;
-            }
-            QString sex(_edata[1] ? "Minor" : "Major");
-            QString keyName(keyTable[key]);
-            xml.tag(QString("Key tick=\"%1\" key=\"%2\" sex=\"%3\"").arg(ontime()).arg(_edata[0]).arg(_edata[1]),
-                    QString("%1 %2").arg(keyName).arg(sex));
-        }
-        break;
-
-        case META_TIME_SIGNATURE:
-            xml.tagE(QString("TimeSig tick=\"%1\" num=\"%2\" denom=\"%3\" metro=\"%4\" quarter=\"%5\"")
-                     .arg(ontime())
-                     .arg(int(_edata[0]))
-                     .arg(int(_edata[1]))
-                     .arg(int(_edata[2]))
-                     .arg(int(_edata[3])));
-            break;
-
-        case META_TEMPO:
-        {
-            unsigned tempo = _edata[2] + (_edata[1] << 8) + (_edata[0] << 16);
-            xml.tagE(QString("Tempo tick=\"%1\" value=\"%2\"").arg(ontime()).arg(tempo));
-        }
-        break;
-
-        default:
-            xml.stag(QString("Meta tick=\"%1\" type=\"%2\" len=\"%3\" name=\"%4\"")
-                     .arg(ontime()).arg(metaType()).arg(_len).arg(midiMetaName(metaType())));
-            xml.dump(_len, _edata);
-            xml.etag();
-            break;
-        }
-        break;
-    }
 }
 
 bool Event::operator==(const Event&) const

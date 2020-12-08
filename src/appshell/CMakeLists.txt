@@ -34,5 +34,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/appshell.h
     )
 
+set(MODULE_LINK
+    uicomponents
+    ui
+    )
+
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 
