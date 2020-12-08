@@ -24,6 +24,12 @@
 #include <set>
 #include "framework/midi_old/event.h"
 
+#ifdef SHOW_MIDI_EVENT_DEPRECATED_WARNING
+#define ME_DEPRECATED [[deprecated]]
+#else
+#define ME_DEPRECATED
+#endif
+
 #ifndef UNUSED
 #define UNUSED(x) (void)x;
 #endif
@@ -89,13 +95,13 @@ struct Event {
         setOpcode(opcode);
     }
 
-    [[deprecated]] Event(channel_t ch, EventType type)
+    ME_DEPRECATED Event(channel_t ch, EventType type)
     {
         setType(type);
         setChannel(ch);
     }
 
-    [[deprecated]] Event(channel_t ch, EventType type, uint8_t a = 0, uint8_t b = 0)
+    ME_DEPRECATED Event(channel_t ch, EventType type, uint8_t a = 0, uint8_t b = 0)
     {
         m_data[0] = (a << 8) | b;
         setType(type);
@@ -237,7 +243,7 @@ struct Event {
         return 0;
     }
 
-    [[deprecated]] EventType type() const
+    ME_DEPRECATED EventType type() const
     {
         if (isChannelVoice()) {
             return static_cast<EventType>(static_cast<uint32_t>(opcode()) << 4);
@@ -1032,4 +1038,7 @@ private:
 };
 }
 }
+
+#undef ME_DEPRECATED
+
 #endif // MU_MIDI_MIDIEVENT_H
