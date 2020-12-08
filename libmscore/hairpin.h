@@ -43,6 +43,7 @@ class HairpinSegment final : public TextLineBaseSegment {
       QPointF circledTip;
       qreal   circledTipRadius;
 
+      void startDrag(EditData&) override;
       void startEditDrag(EditData&) override;
       void editDrag(EditData&) override;
 

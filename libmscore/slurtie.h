@@ -94,6 +94,7 @@ class SlurTieSegment : public SpannerSegment {
       virtual void spatiumChanged(qreal, qreal) override;
       SlurTie* slurTie() const { return (SlurTie*)spanner(); }
 
+      virtual void startDrag(EditData& ed) override;
       virtual void startEditDrag(EditData& ed) override;
       virtual void endEditDrag(EditData& ed) override;
       virtual void editDrag(EditData&) override;

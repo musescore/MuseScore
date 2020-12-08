@@ -128,6 +128,16 @@ std::vector<QPointF> SlurTieSegment::gripsPositions(const EditData&) const
       }
 
 //---------------------------------------------------------
+//   startDrag
+//---------------------------------------------------------
+
+void SlurTieSegment::startDrag(EditData& ed)
+      {
+      SpannerSegment::startDrag(ed);
+      setAutoplace(false);
+      }
+
+//---------------------------------------------------------
 //   startEditDrag
 //---------------------------------------------------------
 

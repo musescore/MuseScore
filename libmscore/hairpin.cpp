@@ -413,6 +413,16 @@ std::unique_ptr<ElementGroup> HairpinSegment::getDragGroup(std::function<bool(co
       }
 
 //---------------------------------------------------------
+//   startDrag
+//---------------------------------------------------------
+
+void HairpinSegment::startDrag(EditData& ed)
+      {
+      TextLineBaseSegment::startDrag(ed);
+      setAutoplace(false);
+      }
+
+//---------------------------------------------------------
 //   startEditDrag
 //---------------------------------------------------------
 
