@@ -135,8 +135,14 @@ void MidiFile::writeEvent(const MidiEvent& event)
             case ME_META:
                   put(ME_META);
                   put(event.metaType());
-                  putvl(event.len());
-                  write(event.edata(), event.len());
+                  if (event.metaType() == META_TRACK_NAME) {
+                        putvl(event.len() - 1);
+                        write(event.edata(), event.len() - 1);
+                        }
+                  else {
+                        putvl(event.len());
+                        write(event.edata(), event.len());
+                        }
                   resetRunningStatus();     // really ?!
                   break;
 
