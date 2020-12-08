@@ -79,6 +79,10 @@ DockPage {
 
         NotationView {
             id: notationView
+
+            onTextEdittingStarted: {
+                notationCentral.forceActiveFocus()
+            }
         }
     }
 

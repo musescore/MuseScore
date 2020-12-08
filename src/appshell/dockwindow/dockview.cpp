@@ -42,6 +42,11 @@ DockView::~DockView()
 {
 }
 
+void DockView::forceActiveFocus()
+{
+    view()->setFocus();
+}
+
 void DockView::componentComplete()
 {
     QQuickItem::componentComplete();

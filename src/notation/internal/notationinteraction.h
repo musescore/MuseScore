@@ -96,6 +96,7 @@ public:
     void editText(QKeyEvent* event) override;
     void endEditText() override;
     void changeTextCursorPosition(const QPointF& newCursorPos) override;
+    async::Notification textEditingStarted() const override;
     async::Notification textEditingChanged() const override;
 
     // Measure
@@ -133,6 +134,7 @@ private:
     void notifyAboutDropChanged();
     void notifyAboutSelectionChanged();
     void notifyAboutNotationChanged();
+    void notifyAboutTextEditingStarted();
     void notifyAboutTextEditingChanged();
 
     Ms::Page* point2page(const QPointF& p) const;
@@ -201,6 +203,7 @@ private:
     std::vector<QLineF> m_anchorLines;
 
     Ms::EditData m_textEditData;
+    async::Notification m_textEditingStarted;
     async::Notification m_textEditingChanged;
 
     DropData m_dropData;

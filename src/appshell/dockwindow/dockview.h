@@ -40,6 +40,8 @@ public:
     explicit DockView(QQuickItem* parent = nullptr);
     ~DockView();
 
+    Q_INVOKABLE void forceActiveFocus();
+
     QQmlComponent* content() const;
     QColor color() const;
 
