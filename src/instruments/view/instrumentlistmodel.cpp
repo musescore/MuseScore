@@ -38,7 +38,7 @@ InstrumentListModel::InstrumentListModel(QObject* parent)
 {
 }
 
-void InstrumentListModel::load(bool canSelectMultipleInstruments, const QString& focusableInstrumentId)
+void InstrumentListModel::load(bool canSelectMultipleInstruments, const QString& currentInstrumentId)
 {
     RetValCh<InstrumentsMeta> instrumentsMeta = repository()->instrumentsMeta();
     if (!instrumentsMeta.ret) {
@@ -55,8 +55,8 @@ void InstrumentListModel::load(bool canSelectMultipleInstruments, const QString&
     setInstrumentsMeta(instrumentsMeta.val);
     initSelectedInstruments();
 
-    if (!focusableInstrumentId.isEmpty()) {
-        InstrumentTemplate instrumentTemplate = this->instrumentTemplate(focusableInstrumentId);
+    if (!currentInstrumentId.isEmpty()) {
+        InstrumentTemplate instrumentTemplate = this->instrumentTemplate(currentInstrumentId);
         selectGroup(instrumentTemplate.instrument.groupId);
     } else {
         QVariantList groups = this->groups();

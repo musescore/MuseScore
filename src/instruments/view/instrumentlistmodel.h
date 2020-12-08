@@ -43,7 +43,7 @@ class InstrumentListModel : public QObject, public async::Asyncable
 public:
     InstrumentListModel(QObject* parent = nullptr);
 
-    Q_INVOKABLE void load(bool canSelectMultipleInstruments, const QString& focusableInstrumentId);
+    Q_INVOKABLE void load(bool canSelectMultipleInstruments, const QString& currentInstrumentId);
 
     QVariantList families() const;
     QVariantList groups() const;

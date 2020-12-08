@@ -8,7 +8,7 @@ QmlDialog {
     id: root
 
     property bool canSelectMultipleInstruments: true
-    property string focusableInstrumentId: ""
+    property string currentInstrumentId: ""
 
     height: 500
     width: root.canSelectMultipleInstruments ? 900 : 600
@@ -31,7 +31,7 @@ QmlDialog {
             anchors.margins: 10
 
             canSelectMultipleInstruments: root.canSelectMultipleInstruments
-            focusableInstrumentId: root.focusableInstrumentId
+            currentInstrumentId: root.currentInstrumentId
         }
 
         Row {

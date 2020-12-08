@@ -369,12 +369,12 @@ void NotationParts::updatePartTitles()
 void NotationParts::doMovePart(const ID& sourcePartId, const ID& destinationPartId, INotationParts::InsertMode mode)
 {
     Part* part = this->part(sourcePartId);
-    Part* toPart = this->part(destinationPartId);
-    if (!part || !toPart) {
+    Part* destinationPart = this->part(destinationPartId);
+    if (!part || !destinationPart) {
         return;
     }
 
-    bool partIsBefore = score()->staffIdx(part) < score()->staffIdx(toPart);
+    bool partIsBefore = score()->staffIdx(part) < score()->staffIdx(destinationPart);
 
     std::vector<Staff*> staves;
     for (Staff* staff: *part->staves()) {
@@ -385,11 +385,13 @@ void NotationParts::doMovePart(const ID& sourcePartId, const ID& destinationPart
 
     score()->undoRemovePart(part);
 
-    int toPartIndex = score()->parts().indexOf(toPart);
+    int toPartIndex = score()->parts().indexOf(destinationPart);
     int newPartIndex = mode == Before ? toPartIndex : toPartIndex + 1;
     score()->parts().insert(newPartIndex, part);
 
+    auto instruments = *part->instruments();
     doMoveStaves(staves, destinationStaffIndex);
+    part->setInstruments(instruments);
 }
 
 void NotationParts::doMoveStaves(const std::vector<Staff*>& staves, int destinationStaffIndex, Part* destinationPart)
@@ -407,17 +409,8 @@ void NotationParts::doMoveStaves(const std::vector<Staff*>& staves, int destinat
         ++destinationStaffIndex;
     }
 
-    Ms::InstrumentList instruments;
-    if (destinationPart) {
-        instruments = *destinationPart->instruments();
-    }
-
     for (Staff* staff: staves) {
         score()->undoRemoveStaff(staff);
-    }
-
-    if (destinationPart) {
-        destinationPart->setInstruments(instruments);
     }
 }
 
@@ -1045,18 +1038,18 @@ void NotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinat
         return;
     }
 
-    Staff* toStaff = staff(destinationStaffId);
-    if (!toStaff) {
+    Staff* destinationStaff = staff(destinationStaffId);
+    if (!destinationStaff) {
         return;
     }
 
     std::vector<Staff*> staves = this->staves(sourceStavesIds);
-    Part* toPart = toStaff->part();
-    int destinationStaffIndex = (mode == Before ? toStaff->idx() : toStaff->idx() + 1);
-    destinationStaffIndex -= score()->staffIdx(toPart); // NOTE: convert to local part's staff index
+    Part* destinationPart = destinationStaff->part();
+    int destinationStaffIndex = (mode == Before ? destinationStaff->idx() : destinationStaff->idx() + 1);
+    destinationStaffIndex -= score()->staffIdx(destinationPart); // NOTE: convert to local part's staff index
 
     startEdit();
-    doMoveStaves(staves, destinationStaffIndex, toPart);
+    doMoveStaves(staves, destinationStaffIndex, destinationPart);
     apply();
 
     m_partsChanged.notify();
