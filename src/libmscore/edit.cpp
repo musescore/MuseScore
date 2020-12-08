@@ -58,6 +58,14 @@
 #include "glissando.h"
 #include "fermata.h"
 #include "textline.h"
+#include "rehearsalmark.h"
+#include "stafftext.h"
+#include "instrchange.h"
+#include "sticking.h"
+#include "fingering.h"
+#include "figuredbass.h"
+#include "lyrics.h"
+#include "tempotext.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -472,6 +480,266 @@ Slur* Score::addSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, cons
     slur->add(ss);
 
     return slur;
+}
+
+TextBase* Score::addText(Tid type)
+{
+    TextBase* textBox = nullptr;
+
+    switch (type) {
+    case Tid::TITLE:
+    case Tid::SUBTITLE:
+    case Tid::COMPOSER:
+    case Tid::POET:
+    case Tid::INSTRUMENT_EXCERPT: {
+        MeasureBase* measure = first();
+        if (!measure->isVBox()) {
+            insertMeasure(ElementType::VBOX, measure);
+            measure = measure->prev();
+        }
+        textBox = new Text(this, type);
+        textBox->setParent(measure);
+        undoAddElement(textBox);
+        break;
+    }
+    case Tid::REHEARSAL_MARK: {
+        ChordRest* chordRest = getSelectedChordRest();
+        if (!chordRest) {
+            break;
+        }
+        textBox = new RehearsalMark(this);
+        chordRest->undoAddAnnotation(textBox);
+        break;
+    }
+    case Tid::STAFF: {
+        ChordRest* chordRest = getSelectedChordRest();
+        if (!chordRest) {
+            break;
+        }
+        textBox = new StaffText(this, Tid::STAFF);
+        chordRest->undoAddAnnotation(textBox);
+        break;
+    }
+    case Tid::SYSTEM: {
+        ChordRest* chordRest = getSelectedChordRest();
+        if (!chordRest) {
+            break;
+        }
+        textBox = new SystemText(this, Tid::SYSTEM);
+        chordRest->undoAddAnnotation(textBox);
+        break;
+    }
+    case Tid::EXPRESSION: {
+        ChordRest* chordRest = getSelectedChordRest();
+        if (!chordRest) {
+            break;
+        }
+        textBox = new StaffText(this, Tid::EXPRESSION);
+        textBox->setPlacement(Placement::BELOW);
+        textBox->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+        chordRest->undoAddAnnotation(textBox);
+        break;
+    }
+    case Tid::INSTRUMENT_CHANGE: {
+        ChordRest* chordRest = getSelectedChordRest();
+        if (!chordRest) {
+            break;
+        }
+        textBox = new InstrumentChange(this);
+        chordRest->undoAddAnnotation(textBox);
+        break;
+    }
+    case Tid::STICKING: {
+        ChordRest* chordRest = getSelectedChordRest();
+        if (!chordRest) {
+            break;
+        }
+        textBox = new Sticking(this);
+        chordRest->undoAddAnnotation(textBox);
+        break;
+    }
+    case Tid::FINGERING:
+    case Tid::LH_GUITAR_FINGERING:
+    case Tid::RH_GUITAR_FINGERING:
+    case Tid::STRING_NUMBER: {
+        Element* element = getSelectedElement();
+        if (!element || !element->isNote()) {
+            break;
+        }
+        bool isTablature = element->staff()->isTabStaff(element->tick());
+        bool tabFingering = element->staff()->staffType(element->tick())->showTabFingering();
+        if (isTablature && !tabFingering) {
+            break;
+        }
+        textBox = new Fingering(this, type);
+        textBox->setTrack(element->track());
+        textBox->setParent(element);
+        undoAddElement(textBox);
+        break;
+    }
+    case Tid::HARMONY_A:
+    case Tid::HARMONY_ROMAN:
+    case Tid::HARMONY_NASHVILLE: {
+        int track = -1;
+        Element* newParent = nullptr;
+        Element* element = selection().element();
+        if (element && element->isFretDiagram()) {
+            FretDiagram* fretDiagram = toFretDiagram(element);
+            track = fretDiagram->track();
+            newParent = fretDiagram;
+        } else {
+            ChordRest* chordRest = getSelectedChordRest();
+            if (chordRest) {
+                track = chordRest->track();
+                newParent = toElement(chordRest->segment());
+            }
+        }
+
+        if (track == -1 || !newParent) {
+            break;
+        }
+
+        Harmony* harmony = new Harmony(this);
+        harmony->setTrack(track);
+        harmony->setParent(newParent);
+
+        static QMap<Tid, HarmonyType> harmonyTypes = {
+            { Tid::HARMONY_A, HarmonyType::STANDARD },
+            { Tid::HARMONY_ROMAN, HarmonyType::ROMAN },
+            { Tid::HARMONY_NASHVILLE, HarmonyType::NASHVILLE }
+        };
+        harmony->setHarmonyType(harmonyTypes[type]);
+
+        textBox = harmony;
+        undoAddElement(textBox);
+        break;
+    }
+    case Tid::LYRICS_ODD: {
+        Element* element = selection().element();
+        if (element == 0 || (!element->isNote() && !element->isLyrics() && !element->isRest())) {
+            break;
+        }
+        ChordRest* chordRest;
+        if (element->isNote()) {
+            chordRest = toNote(element)->chord();
+            if (chordRest->isGrace()) {
+                chordRest = toChordRest(chordRest->parent());
+            }
+        } else if (element->isLyrics()) {
+            chordRest = toLyrics(element)->chordRest();
+        } else if (element->isRest()) {
+            chordRest = toChordRest(element);
+        } else {
+            break;
+        }
+
+        int no = static_cast<int>(chordRest->lyrics().size());
+        Lyrics* lyrics = new Lyrics(this);
+        lyrics->setTrack(chordRest->track());
+        lyrics->setParent(chordRest);
+        lyrics->setNo(no);
+
+        textBox = lyrics;
+        undoAddElement(textBox);
+        break;
+    }
+    case Tid::FIGURED_BASS: {
+        Element* element = selection().element();
+        if (!element || (!(element->isNote()) && !(element->isRest()) && !(element->isFiguredBass()))) {
+            break;
+        }
+
+        FiguredBass* fb;
+        bool bNew = false;
+        if (element->isNote()) {
+            ChordRest* cr = toNote(element)->chord();
+            fb = FiguredBass::addFiguredBassToSegment(cr->segment(), cr->staffIdx() * VOICES, Fraction(0,1), &bNew);
+        } else if (element->isRest()) {
+            ChordRest* cr = toRest(element);
+            fb = FiguredBass::addFiguredBassToSegment(cr->segment(), cr->staffIdx() * VOICES, Fraction(0, 1), &bNew);
+        } else if (element->isFiguredBass()) {
+            fb = toFiguredBass(element);
+            bNew = false;
+        } else {
+            break;
+        }
+
+        if (fb == nullptr) {
+            break;
+        }
+
+        if (bNew) {
+            textBox = fb;
+            undoAddElement(textBox);
+        }
+        break;
+    }
+    case Tid::TEMPO: {
+        ChordRest* chordRest = getSelectedChordRest();
+        if (!chordRest) {
+            break;
+        }
+
+        SigEvent event = sigmap()->timesig(chordRest->tick());
+        Fraction f = event.nominal();
+        QString text("<sym>metNoteQuarterUp</sym> = 80");
+        switch (f.denominator()) {
+        case 1:
+            text = "<sym>metNoteWhole</sym> = 80";
+            break;
+        case 2:
+            text = "<sym>metNoteHalfUp</sym> = 80";
+            break;
+        case 4:
+            text = "<sym>metNoteQuarterUp</sym> = 80";
+            break;
+        case 8:
+            if (f.numerator() % 3 == 0) {
+                text = "<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80";
+            } else {
+                text = "<sym>metNote8thUp</sym> = 80";
+            }
+            break;
+        case 16:
+            if (f.numerator() % 3 == 0) {
+                text = "<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80";
+            } else {
+                text = "<sym>metNote16thUp</sym> = 80";
+            }
+            break;
+        case 32:
+            if (f.numerator() % 3 == 0) {
+                text = "<sym>metNote16thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80";
+            } else {
+                text = "<sym>metNote32ndUp</sym> = 80";
+            }
+            break;
+        case 64:
+            if (f.numerator() % 3 == 0) {
+                text = "<sym>metNote32ndUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80";
+            } else {
+                text = "<sym>metNote64thUp</sym> = 80";
+            }
+            break;
+        default:
+            break;
+        }
+
+        TempoText* tempoText = new TempoText(this);
+        tempoText->setParent(chordRest->segment());
+        tempoText->setTrack(0);
+        tempoText->setXmlText(text);
+        tempoText->setFollowText(true);
+
+        textBox = tempoText;
+        undoAddElement(textBox);
+        break;
+    }
+    default:
+        break;
+    }
+
+    return textBox;
 }
 
 //---------------------------------------------------------

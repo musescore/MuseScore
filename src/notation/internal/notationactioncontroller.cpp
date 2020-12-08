@@ -156,6 +156,25 @@ void NotationActionController::init()
     dispatcher()->reg(this, "add-hairpin-reverse", [this]() { addHairpin(HairpinType::DECRESC_HAIRPIN); });
     dispatcher()->reg(this, "add-noteline", this, &NotationActionController::addAnchoredNoteLine);
 
+    dispatcher()->reg(this, "title-text", [this]() { addText(TextType::TITLE); });
+    dispatcher()->reg(this, "subtitle-text", [this]() { addText(TextType::SUBTITLE); });
+    dispatcher()->reg(this, "composer-text", [this]() { addText(TextType::COMPOSER); });
+    dispatcher()->reg(this, "poet-text", [this]() { addText(TextType::POET); });
+    dispatcher()->reg(this, "part-text", [this]() { addText(TextType::INSTRUMENT_EXCERPT); });
+    dispatcher()->reg(this, "system-text", [this]() { addText(TextType::SYSTEM); });
+    dispatcher()->reg(this, "staff-text", [this]() { addText(TextType::STAFF); });
+    dispatcher()->reg(this, "expression-text", [this]() { addText(TextType::EXPRESSION); });
+    dispatcher()->reg(this, "rehearsalmark-text", [this]() { addText(TextType::REHEARSAL_MARK); });
+    dispatcher()->reg(this, "instrument-change-text", [this]() { addText(TextType::INSTRUMENT_CHANGE); });
+    dispatcher()->reg(this, "fingering-text", [this]() { addText(TextType::FINGERING); });
+    dispatcher()->reg(this, "sticking-text", [this]() { addText(TextType::STICKING); });
+    dispatcher()->reg(this, "chord-text", [this]() { addText(TextType::HARMONY_A); });
+    dispatcher()->reg(this, "roman-numeral-text", [this]() { addText(TextType::HARMONY_ROMAN); });
+    dispatcher()->reg(this, "nashville-number-text", [this]() { addText(TextType::HARMONY_NASHVILLE); });
+    dispatcher()->reg(this, "lyrics", [this]() { addText(TextType::LYRICS_ODD); });
+    dispatcher()->reg(this, "figured-bass", [this]() { addText(TextType::FIGURED_BASS); });
+    dispatcher()->reg(this, "tempo", [this]() { addText(TextType::TEMPO); });
+
     for (int i = MIN_NOTES_INTERVAL; i <= MAX_NOTES_INTERVAL; ++i) {
         if (isNotesIntervalValid(i)) {
             dispatcher()->reg(this, "interval" + std::to_string(i), [this, i]() { addInterval(i); });
@@ -169,7 +188,7 @@ void NotationActionController::init()
 
 bool NotationActionController::canReceiveAction(const actions::ActionName&) const
 {
-    return true;
+    return !isTextEditting();
 }
 
 INotationPtr NotationActionController::currentNotation() const
@@ -224,6 +243,16 @@ void NotationActionController::addNote(NoteName note, NoteAddingMode addingMode)
     }
 
     noteInput->addNote(note, addingMode);
+}
+
+void NotationActionController::addText(TextType type)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->addText(type);
 }
 
 void NotationActionController::padNote(const Pad& pad)
@@ -773,4 +802,14 @@ FilterElementsOptions NotationActionController::elementsFilterOptions(const Elem
     }
 
     return options;
+}
+
+bool NotationActionController::isTextEditting() const
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return false;
+    }
+
+    return interaction->isTextEditingStarted();
 }

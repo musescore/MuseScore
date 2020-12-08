@@ -120,6 +120,10 @@ void NotationPaintView::onCurrentNotationChanged()
         onSelectionChanged();
     });
 
+    interaction->textEditingStarted().onNotify(this, [this]() {
+        emit textEdittingStarted();
+    });
+
     update();
 }
 
