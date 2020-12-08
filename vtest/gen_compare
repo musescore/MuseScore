@@ -30,8 +30,8 @@ echo "   <link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">" >> $F
 echo "  </head>" >> $F
 echo "  <body>" >> $F
 echo "    <div id=\"topbar\">" >> $F
-echo "      <span>Current</span>" >> $F
-echo "      <span>Reference</span>" >> $F
+echo "      <span>After PR</span>" >> $F
+echo "      <span>Before PR</span>" >> $F
 echo "      <span>Comparison</span>" >> $F
 echo "    </div>" >> $F
 echo "    <div id=\"topmargin\"></div>" >> $F
