@@ -324,7 +324,11 @@ void Part::setInstrument(const Instrument& i, Fraction tick)
 
 void Part::setInstruments(const InstrumentList& instruments)
 {
-    _instruments = instruments;
+    _instruments.clear();
+
+    for (auto it = instruments.begin(); it != instruments.end(); ++it) {
+        _instruments.setInstrument(it->second, it->first);
+    }
 }
 
 //---------------------------------------------------------
