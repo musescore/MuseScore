@@ -85,7 +85,7 @@ Item {
                 root.model.setPartTitle(model.index, title)
             }
 
-            onVoiceVisibilityChangeRequested: {
+            onVoicesVisibilityChangeRequested: {
                 root.model.setVoiceVisible(model.index, voiceIndex, voiceVisible)
             }
 

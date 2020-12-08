@@ -131,7 +131,7 @@ Item {
         x: showVoicesPopupButton.x + showVoicesPopupButton.width / 2 - width / 2
         y: showVoicesPopupButton.y + showVoicesPopupButton.height
 
-        onVoicesVisibilityChangeRequested: {
+        onVoiceVisibilityChangeRequested: {
             root.voicesVisibilityChangeRequested()
         }
     }

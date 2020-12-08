@@ -123,9 +123,13 @@ private:
     void setupWidgetTheme();
 
     QFont m_bodyFont;
+    QFont m_bodyBoldFont;
     QFont m_largeBodyFont;
+    QFont m_largeBodyBoldFont;
     QFont m_tabFont;
+    QFont m_tabBoldFont;
     QFont m_headerFont;
+    QFont m_headerBoldFont;
     QFont m_titleBoldFont;
     QFont m_iconsFont;
     QFont m_musicalFont;

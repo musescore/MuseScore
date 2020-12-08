@@ -379,6 +379,8 @@ elseif(OS_IS_MAC)
             ${PROJECT_SOURCE_DIR}/fonts/leland/Leland.otf
             ${PROJECT_SOURCE_DIR}/fonts/petaluma/PetalumaText.otf
             ${PROJECT_SOURCE_DIR}/fonts/petaluma/PetalumaScript.otf
+            ${PROJECT_SOURCE_DIR}/fonts/firasans/FiraSans-Regular.ttf
+            ${PROJECT_SOURCE_DIR}/fonts/firasans/FiraSans-SemiBold.ttf
             DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}fonts
     )
 

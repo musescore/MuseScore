@@ -91,13 +91,13 @@ static const QHash<int, QVariant> LIGHT_THEME {
     { ITEM_OPACITY_DISABLED, 0.3 }
 };
 
-static QFont toSemibold(const QFont& font)
-{
-    QFont bold(font);
-    bold.setWeight(QFont::DemiBold);
+using FontSizeType = IUiConfiguration::FontSizeType;
 
-    return bold;
-}
+struct FontConfig
+{
+    QFont::Weight weight = QFont::Normal;
+    FontSizeType sizeType = FontSizeType::BODY;
+};
 
 Theme::Theme(QObject* parent)
     : QObject(parent)
@@ -176,7 +176,7 @@ QFont Theme::bodyFont() const
 
 QFont Theme::bodyBoldFont() const
 {
-    return toSemibold(bodyFont());
+    return m_bodyBoldFont;
 }
 
 QFont Theme::largeBodyFont() const
@@ -186,7 +186,7 @@ QFont Theme::largeBodyFont() const
 
 QFont Theme::largeBodyBoldFont() const
 {
-    return toSemibold(largeBodyFont());
+    return m_largeBodyBoldFont;
 }
 
 QFont Theme::tabFont() const
@@ -196,7 +196,7 @@ QFont Theme::tabFont() const
 
 QFont Theme::tabBoldFont() const
 {
-    return toSemibold(tabFont());
+    return m_tabBoldFont;
 }
 
 QFont Theme::headerFont() const
@@ -206,7 +206,7 @@ QFont Theme::headerFont() const
 
 QFont Theme::headerBoldFont() const
 {
-    return toSemibold(headerFont());
+    return m_headerBoldFont;
 }
 
 QFont Theme::titleBoldFont() const
@@ -300,25 +300,30 @@ void Theme::initMusicalFont()
 
 void Theme::setupUiFonts()
 {
-    using FontSizeType = IUiConfiguration::FontSizeType;
-
-    QMap<QFont*, FontSizeType> fonts {
-        { &m_bodyFont, FontSizeType::BODY },
-        { &m_largeBodyFont, FontSizeType::BODY_LARGE },
-        { &m_tabFont, FontSizeType::TABS },
-        { &m_headerFont, FontSizeType::HEADER },
-        { &m_titleBoldFont, FontSizeType::TITLE }
+    QMap<QFont*, FontConfig> fonts {
+        { &m_bodyFont, { QFont::Normal, FontSizeType::BODY }},
+        { &m_bodyBoldFont, { QFont::DemiBold, FontSizeType::BODY }},
+        { &m_largeBodyFont, { QFont::Normal, FontSizeType::BODY_LARGE }},
+        { &m_largeBodyBoldFont, { QFont::DemiBold, FontSizeType::BODY_LARGE }},
+        { &m_tabFont, { QFont::Normal, FontSizeType::TAB }},
+        { &m_tabBoldFont, { QFont::DemiBold, FontSizeType::TAB }},
+        { &m_headerFont, { QFont::Normal, FontSizeType::HEADER }},
+        { &m_headerBoldFont, { QFont::DemiBold, FontSizeType::HEADER }},
+        { &m_titleBoldFont, { QFont::DemiBold, FontSizeType::TITLE }},
     };
 
     for (QFont* font : fonts.keys()) {
-        QString family = QString::fromStdString(configuration()->fontFamily());
-        int size = configuration()->fontSize(fonts[font]);
+        QFont::Weight weight = fonts[font].weight;
 
-        font->setFamily(family);
+        std::string family = weight == QFont::Normal ? configuration()->fontFamily() :
+                                                       configuration()->semiBoldFontFamily();
+
+        int size = configuration()->fontSize(fonts[font].sizeType);
+
+        font->setFamily(QString::fromStdString(family));
         font->setPixelSize(size);
+        font->setWeight(weight);
     }
-
-    m_titleBoldFont = toSemibold(m_titleBoldFont);
 }
 
 void Theme::setupIconsFont()
