@@ -157,7 +157,7 @@ target_link_libraries(${EXECUTABLE_NAME} ${LINK_LIB} )
 if (APPLE)
   target_link_libraries(mscore ${OsxFrameworks})
 else (APPLE)
-    target_link_libraries(mscore rt) # TODO What is it?
+#    target_link_libraries(mscore rt) # TODO What is it?
 endif (APPLE)
 
 

@@ -67,7 +67,7 @@ std::string mu::strings::toLower(const std::string& source)
 {
     std::string str = source;
     std::for_each(str.begin(), str.end(), [](char& c) {
-        c = ::tolower(c);
+        c = static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
     });
     return str;
 }

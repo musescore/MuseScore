@@ -2,6 +2,7 @@
 # Common
 if (MSVC)
     add_compile_options(/W4)
+    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 else()
     add_compile_options(-Wall -Wextra)
 endif()
@@ -28,6 +29,8 @@ function(target_no_warning TARGET WNAME)
 
     elseif(WNAME STREQUAL "-Wno-unknown-pragmas")
 
+    elseif(WNAME STREQUAL "-Wfloat-conversion")
+        set(MSVC_Warning /wd4244)
     # Only MSVC warnings
     elseif(WNAME STREQUAL "-WMSVC-no-translation-unit-is-empty")
         unset(GCC_Warning)
