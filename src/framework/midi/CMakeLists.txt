@@ -101,9 +101,9 @@ set (MODULE_DEF
 
 
 if (MSVC OR MINGW)
-    set(MODULE_LINK audiofile libsndfile-1)
+    set(MODULE_LINK audiofile libsndfile-1 qzip winmm)
 else (MSVC OR MINGW)
-    set(MODULE_LINK audiofile ${SNDFILE_LIB})
+    set(MODULE_LINK audiofile ${SNDFILE_LIB} qzip)
 endif (MSVC OR MINGW)
 
 set (MODULE_HAS_C_CODE 1)

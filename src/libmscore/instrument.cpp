@@ -40,6 +40,43 @@ const std::initializer_list<Channel::Prop> PartChannelSettingsLink::excerptPrope
     Channel::Prop::MUTE,
 };
 
+static void midi_event_write(const MidiCoreEvent& e, XmlWriter& xml)
+{
+    switch (e.type()) {
+    case ME_NOTEON:
+        xml.tagE(QString("note-on  channel=\"%1\" pitch=\"%2\" velo=\"%3\"")
+                 .arg(e.channel()).arg(e.pitch()).arg(e.velo()));
+        break;
+
+    case ME_NOTEOFF:
+        xml.tagE(QString("note-off  channel=\"%1\" pitch=\"%2\" velo=\"%3\"")
+                 .arg(e.channel()).arg(e.pitch()).arg(e.velo()));
+        break;
+
+    case ME_CONTROLLER:
+        if (e.controller() == CTRL_PROGRAM) {
+            if (e.channel() == 0) {
+                xml.tagE(QString("program value=\"%1\"").arg(e.value()));
+            } else {
+                xml.tagE(QString("program channel=\"%1\" value=\"%2\"")
+                         .arg(e.channel()).arg(e.value()));
+            }
+        } else {
+            if (e.channel() == 0) {
+                xml.tagE(QString("controller ctrl=\"%1\" value=\"%2\"")
+                         .arg(e.controller()).arg(e.value()));
+            } else {
+                xml.tagE(QString("controller channel=\"%1\" ctrl=\"%2\" value=\"%3\"")
+                         .arg(e.channel()).arg(e.controller()).arg(e.value()));
+            }
+        }
+        break;
+    default:
+        qDebug("MidiCoreEvent::write: unknown type");
+        break;
+    }
+}
+
 //---------------------------------------------------------
 //   write
 //---------------------------------------------------------
@@ -51,7 +88,7 @@ void NamedEventList::write(XmlWriter& xml, const QString& n) const
         xml.tag("descr", descr);
     }
     for (const MidiCoreEvent& e : events) {
-        e.write(xml);
+        midi_event_write(e, xml);
     }
     xml.etag();
 }
@@ -707,7 +744,7 @@ void Channel::write(XmlWriter& xml, const Part* part) const
             }
         }
 
-        e.write(xml);
+        midi_event_write(e, xml);
     }
     if (!MScore::testMode) {
         // xml.tag("synti", ::synti->name(synti));

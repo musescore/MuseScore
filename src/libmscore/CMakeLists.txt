@@ -357,6 +357,6 @@ else (USE_SYSTEM_FREETYPE)
      set(MODULE_LINK mscore_freetype)
 endif (USE_SYSTEM_FREETYPE)
 
-set(MODULE_LINK ${MODULE_LINK} midi_old)
+set(MODULE_LINK ${MODULE_LINK} midi_old qzip)
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
