@@ -28,7 +28,6 @@ enum class MidiType : char {
 };
 
 class MidiFile;
-class Xml;
 
 //---------------------------------------------------------
 //   MidiTrack
@@ -40,9 +39,6 @@ class MidiTrack
     int _outChannel;
     int _outPort;
     bool _drumTrack;
-
-protected:
-    void readXml(XmlReader&);
 
 public:
     MidiTrack();
@@ -110,7 +106,6 @@ public:
     MidiFile();
     bool read(QIODevice*);
     bool write(QIODevice*);
-    void readXml(XmlReader&);
 
     QList<MidiTrack>& tracks() { return _tracks; }
     const QList<MidiTrack>& tracks() const { return _tracks; }
