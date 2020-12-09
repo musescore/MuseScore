@@ -95,10 +95,8 @@ else (BUILD_WEBENGINE)
    set(USE_WEBENGINE 0)
 endif (BUILD_WEBENGINE)
 
-include_directories(${CMAKE_CURRENT_LIST_DIR}/build/qtfix)
 set(QT_MIN_VERSION    "5.15.0")
 include(FindQt5)
-include_directories(${CMAKE_CURRENT_LIST_DIR}/build/qtfix)
 
 include(SetupDependencies)
 
