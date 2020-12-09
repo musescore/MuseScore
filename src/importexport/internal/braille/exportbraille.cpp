@@ -848,7 +848,6 @@ QString ExportBraille::brailleClef(Clef* clef)
     default:
         return QString();
     }
-    return QString();
 }
 
 QString ExportBraille::brailleTimeSig(TimeSig* timeSig)
