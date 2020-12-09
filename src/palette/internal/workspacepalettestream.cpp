@@ -17,17 +17,20 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 #include "workspacepalettestream.h"
-#include <memory>
 #include "ptrutils.h"
+
+#include "framework/global/xmlreader.h"
 
 using namespace mu::palette;
 using namespace mu::workspace;
+using namespace mu::framework;
 
-std::shared_ptr<AbstractData> WorkspacePaletteStream::read(Ms::XmlReader& xml) const
+std::shared_ptr<AbstractData> WorkspacePaletteStream::read(XmlReader& xml) const
 {
     std::shared_ptr<PaletteWorkspaceData> data = std::make_shared<PaletteWorkspaceData>();
     data->tree = std::unique_ptr<Ms::PaletteTree>(new Ms::PaletteTree);
-    data->tree->read(xml);
+    //FIXME
+    //data->tree->read(xml);
     return data;
 }
 

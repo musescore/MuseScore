@@ -18,24 +18,22 @@
 //=============================================================================
 #include "workspacesettingsstream.h"
 
-#include <QXmlStreamReader>
-
 #include "../workspacetypes.h"
 
-#include "libmscore/xml.h"
+#include "framework/global/xmlreader.h"
 
 using namespace mu::workspace;
+using namespace mu::framework;
 
-std::shared_ptr<AbstractData> WorkspaceSettingsStream::read(Ms::XmlReader& xml) const
+std::shared_ptr<AbstractData> WorkspaceSettingsStream::read(XmlReader& xml) const
 {
     std::shared_ptr<SettingsData> data = std::make_shared<SettingsData>();
     data->tag = "Preferences";
 
     while (xml.readNextStartElement()) {
-        QStringRef tag(xml.name());
-        if ("Preference" == tag) {
-            std::string key = xml.attributes().value("name").toString().toStdString();
-            Val val(xml.readElementText().toStdString());
+        if ("Preference" == xml.tagName()) {
+            std::string key = xml.attribute("name");
+            Val val(xml.readString());
             data->vals.insert({ key, val });
         } else {
             xml.skipCurrentElement();

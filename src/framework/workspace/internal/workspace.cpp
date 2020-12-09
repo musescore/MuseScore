@@ -18,16 +18,15 @@
 //=============================================================================
 #include "workspace.h"
 
-#include <QXmlStreamReader>
-
 #include "log.h"
 #include "translation.h"
 #include "workspacefile.h"
 
-#include "libmscore/xml.h"
+#include "framework/global/xmlreader.h"
 
 using namespace mu;
 using namespace mu::workspace;
+using namespace mu::framework;
 
 Workspace::Workspace(const io::path& file)
     : m_file(file)
@@ -127,26 +126,26 @@ Ret Workspace::read()
 
 Ret Workspace::readWorkspace(const QByteArray& xmlData)
 {
-    Ms::XmlReader xml(xmlData);
+    XmlReader xml(xmlData);
 
     while (xml.readNextStartElement()) {
-        if (xml.name() != "museScore") {
+        if (xml.tagName() != "museScore") {
             return make_ret(Ret::Code::UnknownError);
         }
 
         while (xml.readNextStartElement()) {
-            if (xml.name() != "Workspace") {
+            if (xml.tagName() != "Workspace") {
                 return make_ret(Ret::Code::UnknownError);
             }
 
             while (xml.readNextStartElement()) {
-                QString tag(xml.name().toString());
+                std::string tag = xml.tagName();
                 if ("name" == tag) {
-                    xml.readElementText();
+                    xml.readString();
                 } else if ("source" == tag) {
-                    m_source = xml.readElementText().toStdString();
+                    m_source = xml.readString();
                 } else {
-                    std::shared_ptr<IWorkspaceDataStream> reader = streamRegister()->stream(tag.toStdString());
+                    std::shared_ptr<IWorkspaceDataStream> reader = streamRegister()->stream(tag);
                     if (!reader) {
                         LOGW() << "not registred reader for: " << tag;
                         xml.skipCurrentElement();

@@ -27,7 +27,7 @@ class WorkspaceSettingsStream : public IWorkspaceDataStream
 {
 public:
 
-    std::shared_ptr<AbstractData> read(Ms::XmlReader& xml) const override;
+    std::shared_ptr<AbstractData> read(framework::XmlReader& xml) const override;
     void write(Ms::XmlWriter& xml, std::shared_ptr<AbstractData> data) const override;
 };
 }
