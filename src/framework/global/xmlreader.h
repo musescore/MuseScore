@@ -32,14 +32,30 @@ namespace mu::framework {
 class XmlReader
 {
 public:
+    enum TokenType {
+        Unknown,
+        StartDocument,
+        EndDocument,
+        StartElement,
+        EndElement,
+        Characters,
+        Comment
+    };
+
     XmlReader(const io::path& path);
     XmlReader(IODevice* device);
     XmlReader(const QByteArray& bytes);
     ~XmlReader();
 
     bool readNextStartElement();
+    TokenType readNext();
+    TokenType tokenType() const;
+    bool atEnd();
     void skipCurrentElement();
     std::string tagName() const;
+
+    bool hasError() const;
+    std::string error() const;
 
     int intAttribute(std::string_view name, int defaultValue = 0) const;
     double doubleAttribute(std::string_view name, double defaultValue = 0.) const;

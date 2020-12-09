@@ -5,6 +5,31 @@
 
 using namespace mu::framework;
 
+static XmlReader::TokenType convertTokenType(QXmlStreamReader::TokenType type) {
+    switch (type) {
+    case QXmlStreamReader::TokenType::NoToken:
+    case QXmlStreamReader::TokenType::Invalid:
+    case QXmlStreamReader::TokenType::DTD:
+    case QXmlStreamReader::TokenType::EntityReference:
+    case QXmlStreamReader::TokenType::ProcessingInstruction:
+        return XmlReader::TokenType::Unknown;
+    case QXmlStreamReader::TokenType::StartDocument:
+        return XmlReader::TokenType::StartDocument;
+    case QXmlStreamReader::TokenType::EndDocument:
+        return XmlReader::TokenType::EndDocument;
+    case QXmlStreamReader::TokenType::StartElement:
+        return XmlReader::TokenType::StartElement;
+    case QXmlStreamReader::TokenType::EndElement:
+        return XmlReader::TokenType::EndElement;
+    case QXmlStreamReader::TokenType::Comment:
+        return XmlReader::TokenType::Comment;
+    case QXmlStreamReader::TokenType::Characters:
+        return XmlReader::TokenType::Characters;
+    }
+
+    return XmlReader::TokenType::Unknown;
+}
+
 XmlReader::XmlReader(const io::path& path)
 {
     m_device = std::make_unique<QFile>(path.toQString());
@@ -33,6 +58,21 @@ bool XmlReader::readNextStartElement()
     return m_reader->readNextStartElement();
 }
 
+XmlReader::TokenType XmlReader::readNext()
+{
+    return convertTokenType(m_reader->readNext());
+}
+
+XmlReader::TokenType XmlReader::tokenType() const
+{
+    return convertTokenType(m_reader->tokenType());
+}
+
+bool XmlReader::atEnd()
+{
+    return m_reader->atEnd();
+}
+
 void XmlReader::skipCurrentElement()
 {
     m_reader->skipCurrentElement();
@@ -41,6 +81,16 @@ void XmlReader::skipCurrentElement()
 std::string XmlReader::tagName() const
 {
     return m_reader->name().toString().toStdString();
+}
+
+bool XmlReader::hasError() const
+{
+    return m_reader->hasError();
+}
+
+std::string XmlReader::error() const
+{
+    return m_reader->errorString().toStdString();
 }
 
 int XmlReader::intAttribute(std::string_view name, int defaultValue) const
