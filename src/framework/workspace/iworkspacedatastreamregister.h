@@ -19,22 +19,20 @@
 #ifndef MU_WORKSPACE_IWORKSPACEDATASTREAMREGISTER_H
 #define MU_WORKSPACE_IWORKSPACEDATASTREAMREGISTER_H
 
-#include <string>
 #include "modularity/imoduleexport.h"
 #include "iworkspacedatastream.h"
 
-namespace mu {
-namespace workspace {
+namespace mu::workspace {
 class IWorkspaceDataStreamRegister : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IWorkspaceDataStreamRegister)
+
 public:
     virtual ~IWorkspaceDataStreamRegister() = default;
 
-    virtual void regStream(const std::string& tag, std::shared_ptr<IWorkspaceDataStream> stream) = 0;
-    virtual std::shared_ptr<IWorkspaceDataStream> stream(const std::string& tag) const = 0;
+    virtual void addStream(IWorkspaceDataStreamPtr stream) = 0;
+    virtual IWorkspaceDataStreamPtrList streams() const = 0;
 };
-}
 }
 
 #endif // MU_WORKSPACE_IWORKSPACEDATASTREAMREGISTER_H

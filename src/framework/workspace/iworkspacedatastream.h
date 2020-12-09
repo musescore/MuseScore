@@ -20,27 +20,22 @@
 #define MU_WORKSPACE_IWORKSPACEDATASTREAM_H
 
 #include <memory>
+
 #include "workspacetypes.h"
+#include "framework/system/iodevice.h"
 
-namespace mu::framework {
-class XmlReader;
-}
-
-namespace Ms {
-class XmlWriter;
-}
-
-namespace mu {
-namespace workspace {
+namespace mu::workspace {
 class IWorkspaceDataStream
 {
 public:
     virtual ~IWorkspaceDataStream() = default;
 
-    virtual std::shared_ptr<AbstractData> read(framework::XmlReader& xml) const = 0;
-    virtual void write(Ms::XmlWriter& xml, std::shared_ptr<AbstractData> data) const = 0;
+    virtual AbstractDataPtrList read(framework::IODevice& sourceDevice) const = 0;
+    virtual void write(AbstractDataPtrList dataList, framework::IODevice& destinationDevice) const = 0;
 };
-}
+
+using IWorkspaceDataStreamPtr = std::shared_ptr<IWorkspaceDataStream>;
+using IWorkspaceDataStreamPtrList = std::vector<IWorkspaceDataStreamPtr>;
 }
 
 #endif // MU_WORKSPACE_IWORKSPACEDATASTREAM_H

@@ -25,26 +25,45 @@
 using namespace mu::workspace;
 using namespace mu::framework;
 
-std::shared_ptr<AbstractData> WorkspaceSettingsStream::read(XmlReader& xml) const
-{
-    std::shared_ptr<SettingsData> data = std::make_shared<SettingsData>();
-    data->tag = "Preferences";
+static constexpr std::string_view SETTINGS_TAG("Preferences");
+static constexpr std::string_view SETTING_TAG("Preference");
+static constexpr std::string_view SETTING_NAME_TAG("name");
 
-    while (xml.readNextStartElement()) {
-        if ("Preference" == xml.tagName()) {
-            std::string key = xml.attribute("name");
-            Val val(xml.readString());
-            data->vals.insert({ key, val });
-        } else {
-            xml.skipCurrentElement();
+AbstractDataPtrList WorkspaceSettingsStream::read(IODevice& sourceDevice) const
+{
+    XmlReader reader(&sourceDevice);
+
+    while (!reader.atEnd()) {
+        reader.readNextStartElement();
+
+        if (reader.tagName() == SETTINGS_TAG) {
+            return { readSettings(reader) };
         }
     }
 
-    return data;
+    return {};
 }
 
-void WorkspaceSettingsStream::write(Ms::XmlWriter& xml, std::shared_ptr<AbstractData> data) const
+SettingsDataPtr WorkspaceSettingsStream::readSettings(XmlReader& reader) const
 {
-    Q_UNUSED(xml);
-    Q_UNUSED(data);
+    SettingsDataPtr settings = std::make_shared<SettingsData>();
+    settings->tag = SETTINGS_TAG;
+
+    while (reader.readNextStartElement()) {
+        if (reader.tagName() != SETTING_TAG) {
+            std::string key = reader.attribute(SETTING_NAME_TAG);
+            Val val(reader.readString());
+            settings->vals.insert({ key, val });
+        } else {
+            reader.skipCurrentElement();
+        }
+    }
+
+    return settings;
+}
+
+void WorkspaceSettingsStream::write(AbstractDataPtrList dataList, IODevice& destinationDevice) const
+{
+    Q_UNUSED(destinationDevice);
+    Q_UNUSED(dataList);
 }
