@@ -57,6 +57,7 @@
     <repeatRightFontFace>Edwin</repeatRightFontFace>
     <frameFontFace>Edwin</frameFontFace>
     <textLineFontFace>Edwin</textLineFontFace>
+    <textLineFontSize>10</textLineFontSize>
     <glissandoFontFace>Edwin</glissandoFontFace>
     <bendFontFace>Edwin</bendFontFace>
     <headerFontFace>Edwin</headerFontFace>
