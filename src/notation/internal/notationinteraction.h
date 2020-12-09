@@ -114,6 +114,7 @@ public:
     void addSlurToSelection() override;
     void addOttavaToSelection(OttavaType type) override;
     void addHairpinToSelection(HairpinType type) override;
+    void addAccidentalToSelection(AccidentalType type) override;
     void changeSelectedNotesArticulation(SymbolId articulationSymbolId) override;
     void addTupletToSelectedChords(const TupletOptions& options) override;
 
