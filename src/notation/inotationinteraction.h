@@ -99,6 +99,7 @@ public:
     virtual void addSlurToSelection() = 0;
     virtual void addOttavaToSelection(OttavaType type) = 0;
     virtual void addHairpinToSelection(HairpinType type) = 0;
+    virtual void addAccidentalToSelection(AccidentalType type) = 0;
     virtual void changeSelectedNotesArticulation(SymbolId articulationSymbolId) = 0;
     virtual void addTupletToSelectedChords(const TupletOptions& options) = 0;
 
