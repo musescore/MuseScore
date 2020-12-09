@@ -52,6 +52,8 @@ set(MODULE_DEF
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 
 target_no_warning(${MODULE} -Wimplicit-fallthrough=0)
+target_no_warning(${MODULE} -Wno-conversion)
+target_no_warning(${MODULE} -Wno-cast-function-type)
 
 #include(CheckIncludeFile)
 

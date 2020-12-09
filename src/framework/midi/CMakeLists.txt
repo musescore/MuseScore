@@ -19,9 +19,9 @@
 
 set(MODULE midi)
 
-include(${PROJECT_SOURCE_DIR}/thirdparty/fluidsynth/fluidsynth.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/internal/zerberus/zerberus.cmake)
 
+add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/fluidsynth fluidsynth)
 
 include(GetPlatformInfo)
 if (PLATFORM_IS_WINDOWS)
@@ -49,7 +49,6 @@ endif()
 
 
 set(MODULE_SRC
-    ${FLUIDSYNTH_SRC}
     ${ZERBERUS_SRC}
     ${DRIVER_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/midimodule.cpp
@@ -92,20 +91,28 @@ set(MODULE_SRC
     )
 
 
-# for fluid
-include(FindSndFile)
+set(FLUIDSYNTH_DIR ${PROJECT_SOURCE_DIR}/thirdparty/fluidsynth/fluidsynth-2.1.4)
+set (FLUIDSYNTH_INC
+    ${FLUIDSYNTH_DIR}/include
+    ${FLUIDSYNTH_DIR}/src
+    ${FLUIDSYNTH_DIR}/src/external
+    ${FLUIDSYNTH_DIR}/src/utils
+    ${FLUIDSYNTH_DIR}/src/midi
+    ${FLUIDSYNTH_DIR}/src/rvoice
+    ${FLUIDSYNTH_DIR}/src/sfloader
+    ${FLUIDSYNTH_DIR}/src/bindings
+    ${FLUIDSYNTH_DIR}/src/synth
+    ${FLUIDSYNTH_DIR}/src/drivers
+    )
 
 set (MODULE_INCLUDE
     ${FLUIDSYNTH_INC}
     ${SNDFILE_INCDIR}
     )
 
-set (MODULE_DEF
-    ${FLUIDSYNTH_DEF}
-    )
-
 set(MODULE_LINK
     ${SNDFILE_LIB}
+    fluidsynth
     audiofile
     qzip
     )
@@ -117,13 +124,3 @@ endif(PLATFORM_IS_WINDOWS)
 
 set (MODULE_HAS_C_CODE 1)
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
-
-# for fluid
-target_no_warning(${MODULE} -Wunused-const-variable=0)
-target_no_warning(${MODULE} -Wno-unused-parameter)
-target_no_warning(${MODULE} -Wno-unused-variable)
-target_no_warning(${MODULE} -Wno-type-limits)
-target_no_warning(${MODULE} -Wno-unknown-pragmas)
-target_no_warning(${MODULE} -WMSVC-no-translation-unit-is-empty)
-
-

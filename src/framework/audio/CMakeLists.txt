@@ -116,4 +116,8 @@ endif()
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 
+# for soloud
 target_no_warning(${MODULE} -Wno-unused-parameter)
+target_no_warning(${MODULE} -Wno-conversion)
+target_no_warning(${MODULE} -Wno-uninitialized)
+target_no_warning(${MODULE} -WMSVC-no-hides-previous)
