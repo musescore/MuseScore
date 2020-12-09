@@ -116,11 +116,11 @@
           </Text>
         <Text>
           <style>Composer</style>
-          <text><font face="Times New Roman"/>Composer</text>
+          <text><font size="12"/><font face="Times New Roman"/>Composer</text>
           </Text>
         <Text>
           <style>Lyricist</style>
-          <text><font face="Times New Roman"/>Lyrics</text>
+          <text><font size="12"/><font face="Times New Roman"/>Lyrics</text>
           </Text>
         </VBox>
       <Measure>

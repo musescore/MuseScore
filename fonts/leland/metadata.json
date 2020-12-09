@@ -141,6 +141,16 @@
                 -0.846
             ]
         },
+        "U+F630": {
+            "bBoxNE": [
+                0.604,
+                1.012
+            ],
+            "bBoxSW": [
+                -0.596,
+                -1.012
+            ]
+        },
         "accidentalArrowDown": {
             "bBoxNE": [
                 0.776,
@@ -819,6 +829,16 @@
             "bBoxSW": [
                 0.0,
                 0.0
+            ]
+        },
+        "buzzRoll": {
+            "bBoxNE": [
+                0.6,
+                0.56
+            ],
+            "bBoxSW": [
+                -0.6,
+                -0.56
             ]
         },
         "cClef": {
@@ -1951,6 +1971,26 @@
                 0.0
             ]
         },
+        "mensuralNoteheadMinimaWhite": {
+            "bBoxNE": [
+                1.3001,
+                0.5657
+            ],
+            "bBoxSW": [
+                0.0,
+                -0.5623
+            ]
+        },
+        "mensuralNoteheadSemiminimaWhite": {
+            "bBoxNE": [
+                1.3,
+                0.5661
+            ],
+            "bBoxSW": [
+                -0.0,
+                -0.562
+            ]
+        },
         "metAugmentationDot": {
             "bBoxNE": [
                 0.44,
@@ -2221,16 +2261,6 @@
                 -0.564
             ]
         },
-        "noteShapeSquareWhite": {
-            "bBoxNE": [
-                0.0,
-                0.0
-            ],
-            "bBoxSW": [
-                0.0,
-                0.0
-            ]
-        },
         "noteWhole": {
             "bBoxNE": [
                 1.492,
@@ -2251,24 +2281,24 @@
                 -0.528
             ]
         },
-        "noteheadDiamondBlackWide": {
+        "noteheadDiamondBlack": {
             "bBoxNE": [
-                1.372,
-                0.6
+                1.3,
+                0.5661
             ],
             "bBoxSW": [
-                0.0,
-                -0.596
+                -0.0,
+                -0.562
             ]
         },
-        "noteheadDiamondHalfWide": {
+        "noteheadDiamondHalf": {
             "bBoxNE": [
-                1.372,
-                0.6
+                1.3001,
+                0.5657
             ],
             "bBoxSW": [
                 0.0,
-                -0.596
+                -0.5623
             ]
         },
         "noteheadDoubleWhole": {
@@ -2313,12 +2343,12 @@
         },
         "noteheadPlusBlack": {
             "bBoxNE": [
-                1.336,
-                0.54
+                1.3,
+                0.5267
             ],
             "bBoxSW": [
                 0.0,
-                -0.54
+                -0.5293
             ]
         },
         "noteheadWhole": {
@@ -2333,12 +2363,12 @@
         },
         "noteheadXBlack": {
             "bBoxNE": [
-                1.332,
-                0.56
+                1.3002,
+                0.5268
             ],
             "bBoxSW": [
                 0.0,
-                -0.56
+                -0.5292
             ]
         },
         "octaveBassa": {
@@ -3023,101 +3053,101 @@
         },
         "timeSig0": {
             "bBoxNE": [
-                1.496,
+                1.556,
                 1.02
             ],
             "bBoxSW": [
-                0.0,
+                0.06,
                 -1.016
             ]
         },
         "timeSig1": {
             "bBoxNE": [
-                1.284,
+                1.344,
                 0.98
             ],
             "bBoxSW": [
-                -0.0,
+                0.06,
                 -0.972
             ]
         },
         "timeSig2": {
             "bBoxNE": [
-                1.448,
+                1.508,
                 0.98
             ],
             "bBoxSW": [
-                0.0,
+                0.06,
                 -0.972
             ]
         },
         "timeSig3": {
             "bBoxNE": [
-                1.396,
+                1.4567,
                 0.976
             ],
             "bBoxSW": [
-                -0.0007,
+                0.06,
                 -0.976
             ]
         },
         "timeSig4": {
             "bBoxNE": [
-                1.68,
+                1.7398,
                 0.964
             ],
             "bBoxSW": [
-                0.0002,
+                0.06,
                 -0.984
             ]
         },
         "timeSig5": {
             "bBoxNE": [
-                1.388,
+                1.448,
                 0.984
             ],
             "bBoxSW": [
-                0.0,
+                0.06,
                 -0.976
             ]
         },
         "timeSig6": {
             "bBoxNE": [
-                1.488,
+                1.548,
                 0.98
             ],
             "bBoxSW": [
-                0.0,
+                0.06,
                 -0.976
             ]
         },
         "timeSig7": {
             "bBoxNE": [
-                1.364,
+                1.424,
                 0.96
             ],
             "bBoxSW": [
-                0.0,
+                0.06,
                 -0.988
             ]
         },
         "timeSig8": {
             "bBoxNE": [
-                1.512,
+                1.572,
                 0.984
             ],
             "bBoxSW": [
-                0.0,
+                0.06,
                 -0.992
             ]
         },
         "timeSig9": {
             "bBoxNE": [
-                1.488,
+                1.548,
                 0.98
             ],
             "bBoxSW": [
-                -0.0,
+                0.06,
                 -0.976
             ]
         },
@@ -3463,12 +3493,12 @@
         },
         "wiggleArpeggiatoDownArrow": {
             "bBoxNE": [
-                1.004,
-                1.048
+                1.036,
+                1.036
             ],
             "bBoxSW": [
-                -0.128,
-                -0.324
+                -0.096,
+                -0.336
             ]
         },
         "wiggleArpeggiatoUp": {
@@ -3483,12 +3513,12 @@
         },
         "wiggleArpeggiatoUpArrow": {
             "bBoxNE": [
-                1.004,
-                1.128
+                1.036,
+                1.04
             ],
             "bBoxSW": [
-                -0.128,
-                -0.244
+                -0.096,
+                -0.332
             ]
         },
         "wiggleTrill": {
@@ -3683,14 +3713,11 @@
         "uniE0AF": {
             "codepoint": "0XE0AF"
         },
-        "uniE0DA": {
-            "codepoint": "0XE0DA"
+        "uniE0D9": {
+            "codepoint": "0XE0D9"
         },
-        "uniE0DC": {
-            "codepoint": "0XE0DC"
-        },
-        "uniE1B2": {
-            "codepoint": "0XE1B2"
+        "uniE0DB": {
+            "codepoint": "0XE0DB"
         },
         "uniE1D0": {
             "codepoint": "0XE1D0"
@@ -3793,6 +3820,9 @@
         },
         "uniE229": {
             "codepoint": "0XE229"
+        },
+        "uniE22A": {
+            "codepoint": "0XE22A"
         },
         "uniE22E": {
             "codepoint": "0XE22E"
@@ -4427,6 +4457,12 @@
         "uniE88A": {
             "codepoint": "0XE88A"
         },
+        "uniE93C": {
+            "codepoint": "0XE93C"
+        },
+        "uniE93D": {
+            "codepoint": "0XE93D"
+        },
         "uniEAA4": {
             "codepoint": "0XEAA4"
         },
@@ -4543,6 +4579,31 @@
         },
         "uniF5E1": {
             "codepoint": "0XF5E1"
+        },
+        "uniF630": {
+            "codepoint": "0XF630"
+        }
+    },
+    "glyphsWithAlternates": {
+        "brace": {
+            "alternates": [
+                {
+                    "codepoint": "U+F400",
+                    "name": "braceSmall"
+                },
+                {
+                    "codepoint": "U+F401",
+                    "name": "braceLarge"
+                },
+                {
+                    "codepoint": "U+F402",
+                    "name": "braceLarger"
+                },
+                {
+                    "codepoint": "U+F403",
+                    "name": "braceFlat"
+                }
+            ]
         }
     },
     "glyphsWithAnchors": {
@@ -5022,6 +5083,12 @@
                 0.0
             ]
         },
+        "dynamicForte": {
+            "opticalCenter": [
+                0.668,
+                0.0
+            ]
+        },
         "dynamicFortePiano": {
             "opticalCenter": [
                 1.16,
@@ -5262,6 +5329,26 @@
                 -0.004
             ]
         },
+        "mensuralNoteheadMinimaWhite": {
+            "stemDownNW": [
+                0.0,
+                0.0
+            ],
+            "stemUpSE": [
+                1.372,
+                0.0
+            ]
+        },
+        "mensuralNoteheadSemiminimaWhite": {
+            "stemDownNW": [
+                0.0,
+                0.0
+            ],
+            "stemUpSE": [
+                1.372,
+                0.0
+            ]
+        },
         "noteheadBlack": {
             "cutOutNE": [
                 1.184,
@@ -5288,23 +5375,23 @@
                 0.168
             ]
         },
-        "noteheadDiamondBlackWide": {
+        "noteheadDiamondBlack": {
             "stemDownNW": [
                 0.0,
                 0.0
             ],
             "stemUpSE": [
-                1.372,
+                1.3,
                 0.0
             ]
         },
-        "noteheadDiamondHalfWide": {
+        "noteheadDiamondHalf": {
             "stemDownNW": [
                 0.0,
                 0.0
             ],
             "stemUpSE": [
-                1.372,
+                1.3,
                 0.0
             ]
         },
@@ -5340,7 +5427,7 @@
                 0.0
             ],
             "stemUpSE": [
-                1.336,
+                1.3,
                 0.0
             ]
         },
@@ -5365,11 +5452,11 @@
         "noteheadXBlack": {
             "stemDownNW": [
                 0.0,
-                -0.452
+                -0.424
             ],
             "stemUpSE": [
-                1.332,
-                0.452
+                1.3,
+                0.424
             ]
         },
         "wiggleArpeggiatoDown": {

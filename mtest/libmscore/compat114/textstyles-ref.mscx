@@ -1695,11 +1695,11 @@
           </Text>
         <Text>
           <style>Composer</style>
-          <text><font face="MuseJazz"/>Composer</text>
+          <text><font size="12"/><font face="MuseJazz"/>Composer</text>
           </Text>
         <Text>
           <style>Lyricist</style>
-          <text><font face="MuseJazz"/>Lyricist</text>
+          <text><font size="12"/><font face="MuseJazz"/>Lyricist</text>
           </Text>
         </VBox>
       <Measure>

@@ -681,7 +681,7 @@ static const StyleType styleTypes[] {
       { Sid::subTitleFrameBgColor,          "subTitleFrameBgColor",          QColor(255, 255, 255, 0) },
 
       { Sid::composerFontFace,              "composerFontFace",              "Edwin" },
-      { Sid::composerFontSize,              "composerFontSize",              12.0 },
+      { Sid::composerFontSize,              "composerFontSize",              11.0 },
       { Sid::composerLineSpacing,           "composerLineSpacing",           1.0 },
       { Sid::composerFontSpatiumDependent,  "composerFontSpatiumDependent",  false  },
       { Sid::composerFontStyle,             "composerFontStyle",             int(FontStyle::Normal) },
@@ -697,7 +697,7 @@ static const StyleType styleTypes[] {
       { Sid::composerFrameBgColor,          "composerFrameBgColor",          QColor(255, 255, 255, 0) },
 
       { Sid::lyricistFontFace,              "lyricistFontFace",              "Edwin" },
-      { Sid::lyricistFontSize,              "lyricistFontSize",              12.0 },
+      { Sid::lyricistFontSize,              "lyricistFontSize",              11.0 },
       { Sid::lyricistLineSpacing,           "lyricistLineSpacing",           1.0 },
       { Sid::lyricistFontSpatiumDependent,  "lyricistFontSpatiumDependent",  false  },
       { Sid::lyricistFontStyle,             "lyricistFontStyle",             int(FontStyle::Normal) },
@@ -1039,7 +1039,7 @@ static const StyleType styleTypes[] {
       { Sid::frameFrameBgColor,             "frameFrameBgColor",            QColor(255, 255, 255, 0) },
 
       { Sid::textLineFontFace,              "textLineFontFace",             "Edwin" },
-      { Sid::textLineFontSize,              "textLineFontSize",             12.0 },
+      { Sid::textLineFontSize,              "textLineFontSize",             10.0 },
       { Sid::textLineLineSpacing,           "textLineLineSpacing",          1.0 },
       { Sid::textLineFontSpatiumDependent,  "textLineFontSpatiumDependent", true },
       { Sid::textLineFontStyle,             "textLineFontStyle",            int(FontStyle::Normal) },
