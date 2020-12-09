@@ -21,13 +21,13 @@ set(MODULE_SRC
 include(GetPlatformInfo)
 include(GetCompilerInfo)
 
-if (PLATFORM_IS_WINDOWS)
+if (OS_IS_WIN)
     set(MODULE_INCLUDE ${PROJECT_SOURCE_DIR}/dependencies/include/zlib)
-endif(PLATFORM_IS_WINDOWS)
+endif(OS_IS_WIN)
 
-if (NOT COMPILER_IS_MSVC)
+if (NOT CC_IS_MSVC)
     set(MODULE_LINK z)
-endif(NOT COMPILER_IS_MSVC)
+endif(NOT CC_IS_MSVC)
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 

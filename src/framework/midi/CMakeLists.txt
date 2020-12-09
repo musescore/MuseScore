@@ -24,21 +24,21 @@ include(${CMAKE_CURRENT_LIST_DIR}/internal/zerberus/zerberus.cmake)
 add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/fluidsynth fluidsynth)
 
 include(GetPlatformInfo)
-if (PLATFORM_IS_WINDOWS)
+if (OS_IS_WIN)
     set(DRIVER_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmidioutport.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmidioutport.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmidiinport.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmidiinport.h
     )
-elseif(PLATFORM_IS_LINUX)
+elseif(OS_IS_LIN)
     set(DRIVER_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidioutport.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidioutport.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidiinport.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidiinport.h
     )
-elseif(PLATFORM_IS_MACOS)
+elseif(OS_IS_MAC)
     set(DRIVER_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/coremidioutport.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/coremidioutport.h
@@ -118,9 +118,9 @@ set(MODULE_LINK
     )
 
 include(GetPlatformInfo)
-if (PLATFORM_IS_WINDOWS)
+if (OS_IS_WIN)
     set(MODULE_LINK ${MODULE_LINK} winmm)
-endif(PLATFORM_IS_WINDOWS)
+endif(OS_IS_WIN)
 
 set (MODULE_HAS_C_CODE 1)
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

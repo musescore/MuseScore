@@ -2,7 +2,7 @@
 
 include(GetPlatformInfo)
 
-if (PLATFORM_IS_WINDOWS)
+if (OS_IS_WIN)
     find_path(SNDFILE_INCDIR sndfile.h PATHS ${PROJECT_SOURCE_DIR}/dependencies/include;)
     if (MINGW)
         set(CMAKE_FIND_LIBRARY_SUFFIXES ".dll")

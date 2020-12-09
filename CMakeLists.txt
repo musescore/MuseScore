@@ -78,19 +78,19 @@ include(UsePkgConfig1) # Defines MACRO(PKGCONFIG1 _package _minVersion _include_
 
 include(SetupBuildEnvironment)
 include(GetPlatformInfo)
-if (PLATFORM_IS_LINUX)
+if (OS_IS_LIN)
     include(TryUseCcache)
-endif(PLATFORM_IS_LINUX)
+endif(OS_IS_LIN)
 
 include(${CMAKE_CURRENT_LIST_DIR}/config.cmake)
 
 # We need this early, before FindQt5
 if (BUILD_WEBENGINE)
-   if (COMPILER_IS_MINGW)
+   if (CC_IS_MINGW)
       set(USE_WEBENGINE 0)
-   else (COMPILER_IS_MINGW)
+   else (CC_IS_MINGW)
       set(USE_WEBENGINE 1)
-   endif(COMPILER_IS_MINGW)
+   endif(CC_IS_MINGW)
 else (BUILD_WEBENGINE)
    set(USE_WEBENGINE 0)
 endif (BUILD_WEBENGINE)

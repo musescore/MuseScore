@@ -1,13 +1,13 @@
 
 include(GetCompilerInfo)
 
-if (COMPILER_IS_GCC)
+if (CC_IS_GCC)
     message(STATUS "Using Compiler GCC ${CMAKE_CXX_COMPILER_VERSION}")
 
     set(CMAKE_CXX_FLAGS_DEBUG   "-g")
     set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 
-elseif(COMPILER_IS_MSVC)
+elseif(CC_IS_MSVC)
     message(STATUS "Using Compiler MSVC ${CMAKE_CXX_COMPILER_VERSION}")
 
     set(CMAKE_CXX_FLAGS                 "/MP /EHsc /execution-charset:utf-8 /source-charset:utf-8")
@@ -29,7 +29,7 @@ elseif(COMPILER_IS_MSVC)
     add_definitions(-D_USE_MATH_DEFINES)
     add_definitions(-DNOMINMAX)
 
-elseif(COMPILER_IS_MINGW)
+elseif(CC_IS_MINGW)
     message(STATUS "Using Compiler MINGW ${CMAKE_CXX_COMPILER_VERSION}")
 
     set(CMAKE_CXX_FLAGS_DEBUG   "-g")
@@ -41,7 +41,7 @@ elseif(COMPILER_IS_MINGW)
         set(CMAKE_EXE_LINKER_FLAGS "-Wl,--large-address-aware")
     endif (NOT BUILD_64)
 
-elseif(COMPILER_IS_CLANG)
+elseif(CC_IS_CLANG)
     message(STATUS "Using Compiler CLANG ${CMAKE_CXX_COMPILER_VERSION}")
 
     set(CMAKE_CXX_FLAGS_DEBUG   "-g")
