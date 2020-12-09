@@ -139,10 +139,6 @@ if(SOUNDFONT3)
     include(SetupVorbisAndOgg)
 endif(SOUNDFONT3)
 
-include(FindSndFile)
-#add_library(sndfiledll SHARED IMPORTED)
-#set_target_properties(sndfiledll PROPERTIES IMPORTED_IMPLIB ${SNDFILE_LIBRARY})
-
 ##
 ## produce config.h file
 ##

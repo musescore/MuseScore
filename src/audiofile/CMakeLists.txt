@@ -17,27 +17,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/audiofile.h
     )
 
-include(GetPlatformInfo)
-
-##
-## libsndfile
-##
-
-set(SNDFILE_LIB )
-if (PLATFORM_IS_WINDOWS)
-
-    set(SNDFILE_LIB libsndfile-1)
-
-else(PLATFORM_IS_WINDOWS)
-
-    PKGCONFIG1 (sndfile 1.0.25 SNDFILE_INCDIR SNDFILE_LIBDIR SNDFILE_LIB SNDFILE_CPP)
-    if (SNDFILE_INCDIR)
-       message(STATUS "libsndfile detected ${SNDFILE_INCDIR} ${SNDFILE_LIBDIR} ${SNDFILE_LIB}")
-    else (SNDFILE_INCDIR)
-       message(FATAL_ERROR "libsndfile not found\n")
-    endif (SNDFILE_INCDIR)
-
-endif(PLATFORM_IS_WINDOWS)
+include(FindSndFile)
 
 set(MODULE_INCLUDE
     ${SNDFILE_INCDIR}
