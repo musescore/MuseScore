@@ -95,7 +95,7 @@ if (MSCORE_OUTPUT_NAME)
 endif (MSCORE_OUTPUT_NAME)
 
 if (PLATFORM_IS_MACOS)
-    set_target_properties(${EXECUTABLE_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/build/MacOSXBundleInfo.plist.in)
+    set_target_properties(mscore PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/build/MacOSXBundleInfo.plist.in)
 endif (PLATFORM_IS_MACOS)
 
 
@@ -150,9 +150,9 @@ if (BUILD_VST)
     set(LINK_LIB ${LINK_LIB} vst)
 endif(BUILD_VST)
 
-add_dependencies(${EXECUTABLE_NAME} workspaces)
+add_dependencies(mscore workspaces)
 
-target_link_libraries(${EXECUTABLE_NAME} ${LINK_LIB} )
+target_link_libraries(mscore ${LINK_LIB} )
 
 if (APPLE)
   target_link_libraries(mscore ${OsxFrameworks})
