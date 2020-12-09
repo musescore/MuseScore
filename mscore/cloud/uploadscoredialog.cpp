@@ -28,6 +28,10 @@ namespace Ms {
 
 void MuseScore::showUploadScoreDialog()
       {
+      if (MuseScore::unstable()) {
+            QMessageBox::warning(this, tr("Save online"), tr("Saving scores online is disabled in this unstable prerelease version of MuseScore."));
+            return;
+      }
       if (!currentScore())
             return;
       if (!currentScore()->sanityCheck(QString())) {

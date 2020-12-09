@@ -3345,6 +3345,10 @@ static void parseSourceUrl(const QString& sourceUrl, int& uid, int& nid)
 
 bool MuseScore::saveOnline(const QStringList& inFilePaths)
       {
+      if (MuseScore::unstable()) {
+            qCritical() << qUtf8Printable(tr("Error: Saving scores online is disabled in this unstable prerelease version of MuseScore."));
+            return false;
+      }
       if (!_loginManager->syncGetUser()) {
             return false;
             }
