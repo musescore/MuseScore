@@ -48,7 +48,7 @@ function(target_no_warning TARGET WNAME)
 endfunction()
 
 # Temporary solution
-# Pavel added the `deprecated` attribute to the old mid event, hoping that the use of deprecated methods will be quickly removed.
+# Pavel added the `deprecated` attribute to the old midi event, hoping that the use of deprecated methods will be quickly removed.
 # But! This is not yet true, the methods are used.
 # Displaying warnings is very annoying for all developers.
 # Pavel insists on keep these warnings.

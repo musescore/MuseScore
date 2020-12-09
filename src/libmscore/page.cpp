@@ -36,7 +36,7 @@
 namespace Ms {
 //! FIXME
 //extern QString revision;
-QString revision;
+static QString revision;
 
 //---------------------------------------------------------
 //   Page

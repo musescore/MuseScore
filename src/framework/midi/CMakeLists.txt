@@ -91,20 +91,29 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/devtools/midiportdevmodel.h
     )
 
+
+# for fluid
+include(FindSndFile)
+
 set (MODULE_INCLUDE
     ${FLUIDSYNTH_INC}
+    ${SNDFILE_INCDIR}
     )
 
 set (MODULE_DEF
     ${FLUIDSYNTH_DEF}
     )
 
+set(MODULE_LINK
+    ${SNDFILE_LIB}
+    audiofile
+    qzip
+    )
 
-if (MSVC OR MINGW)
-    set(MODULE_LINK audiofile qzip winmm)
-else (MSVC OR MINGW)
-    set(MODULE_LINK audiofile qzip)
-endif (MSVC OR MINGW)
+include(GetPlatformInfo)
+if (PLATFORM_IS_WINDOWS)
+    set(MODULE_LINK ${MODULE_LINK} winmm)
+endif(PLATFORM_IS_WINDOWS)
 
 set (MODULE_HAS_C_CODE 1)
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
