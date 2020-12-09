@@ -533,7 +533,7 @@
       <Division>480</Division>
       <Style>
         <createMultiMeasureRests>1</createMultiMeasureRests>
-        <Spatium>1.76389</Spatium>
+        <Spatium>1.74978</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -647,6 +647,7 @@
                 <beginText>Staff/1</beginText>
                 <linked>
                   </linked>
+                <lineWidth>0.15121</lineWidth>
                 </TextLine>
               <next>
                 <location>
@@ -734,6 +735,7 @@
                 <beginText>System</beginText>
                 <linked>
                   </linked>
+                <lineWidth>0.15121</lineWidth>
                 </TextLine>
               <next>
                 <location>
@@ -857,7 +859,7 @@
       <Division>480</Division>
       <Style>
         <createMultiMeasureRests>1</createMultiMeasureRests>
-        <Spatium>1.76389</Spatium>
+        <Spatium>1.74978</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -1016,6 +1018,7 @@
                 <beginText>Staff/2</beginText>
                 <linked>
                   </linked>
+                <lineWidth>0.15121</lineWidth>
                 </TextLine>
               <next>
                 <location>
@@ -1078,6 +1081,7 @@
                     <staves>-1</staves>
                     </location>
                   </linked>
+                <lineWidth>0.15121</lineWidth>
                 </TextLine>
               <next>
                 <location>
