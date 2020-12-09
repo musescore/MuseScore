@@ -1299,36 +1299,48 @@ void InstrumentsWidget::createInstruments(Score* cs)
 
 void InstrumentsWidget::numberInstrumentNames(Score* cs)
       {
-      std::vector<QString> names;
-      std::vector<QString> firsts;
+      class PartNamer {
+            Part* part;
+            bool  soloist;
+            int   number;
 
-      for (auto i = cs->parts().begin(); i != cs->parts().end(); ++i) {
-            auto p = *i;
-
-            QString name = p->partName();
-
-            names.push_back(name);
-            int n = 1;
-
-            for (auto j = i + 1; j != cs->parts().end(); ++j) {
-                  auto part = *j;
-                  // number 2nd and subsequent instances of instrument
-                  if (std::find(names.begin(), names.end(), part->partName()) != names.end())  {
-                        firsts.push_back(name);
-                        n++;
-                        part->setPartName((part->partName() + QStringLiteral(" %1").arg(n)));
-                        part->setLongName((part->longName() + QStringLiteral(" %1").arg(n)));
-                        part->setShortName((part->shortName() + QStringLiteral(" %1").arg(n)));
+            void setNamesN(Part *p) {
+                  ++number;
+                  QString tmpl = soloist ? QString(qApp->translate("InstrumentsDialog", "%1 solo %2")) : QString("%1 %2");
+                  p->setLongName(tmpl.arg(p->longName()).arg(number));
+                  p->setPartName(tmpl.arg(p->partName()).arg(number));
+                  p->setShortName(tmpl.arg(p->shortName()).arg(number));
+                  }
+         public:
+            PartNamer(Part* p=nullptr) : part(p), soloist(p && p->soloist()), number(0) {}
+            ~PartNamer() {
+                  if (part && !number) {
+                        QString tmpl = soloist ? QString(qApp->translate("InstrumentsDialog", "%1 solo")) : QString("%1");
+                        part->setLongName(tmpl.arg(part->longName()));
+                        part->setPartName(tmpl.arg(part->partName()));
+                        part->setShortName(tmpl.arg(part->shortName()));
                         }
                   }
 
-            // now finish by adding first instances
-            if (std::find(firsts.begin(), firsts.end(), p->partName()) != firsts.end()) {
-                  p->setPartName(p->partName() + " 1");
-                  p->setLongName(p->longName() + " 1");
-                  p->setShortName(p->shortName() + " 1");
+            void update(Part* p) {
+                  if (!number)
+                        setNamesN(part);
+                  setNamesN(p);
                   }
+
+      };
+
+      QMap<QString, PartNamer*> namers;
+      for (Part* p : cs->parts()) {
+            const QString key = QString("%1/%2").arg(p->partName()).arg(p->soloist());
+            if (namers.contains(key))
+                  namers[key]->update(p);
+            else
+                  namers.insert(key, new PartNamer(p));
             }
+
+      for (auto namer : namers.values())
+            delete namer;
       }
 
 //---------------------------------------------------------
