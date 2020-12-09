@@ -405,9 +405,12 @@ std::set<SymbolId> NoteInputBarModel::resolveCurrentArticulations() const
             isFirstNote = false;
         } else {
             std::set<SymbolId> currentNoteArticulations = chordArticulations(note->chord());
-            for (const SymbolId& articulationSymbolId: currentNoteArticulations) {
-                if (std::find(result.begin(), result.end(), articulationSymbolId) == result.end()) {
-                    result.erase(articulationSymbolId);
+            for (auto it = result.begin(); it != result.end();) {
+                if (std::find(currentNoteArticulations.begin(), currentNoteArticulations.end(),
+                              *it) == currentNoteArticulations.end()) {
+                    it = result.erase(it);
+                } else {
+                    ++it;
                 }
             }
         }

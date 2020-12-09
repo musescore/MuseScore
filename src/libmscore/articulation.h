@@ -55,7 +55,13 @@ constexpr bool operator&(ArticulationShowIn a1, ArticulationShowIn a2)
     return static_cast<unsigned char>(a1) & static_cast<unsigned char>(a2);
 }
 
-std::set<SymId> insertArticulation(const std::set<SymId>& articulationSymbolIds, SymId articulationSymbolId);
+enum class ArticulationsUpdateMode {
+    Insert,
+    Remove
+};
+
+std::set<SymId> updateArticulations(const std::set<SymId>& articulationSymbolIds, SymId articulationSymbolId,
+                                    ArticulationsUpdateMode updateMode = ArticulationsUpdateMode::Insert);
 std::set<SymId> splitArticulations(const std::set<SymId>& articulationSymbolIds);
 std::set<SymId> joinArticulations(const std::set<SymId>& articulationSymbolIds);
 std::set<SymId> flipArticulations(const std::set<SymId>& articulationSymbolIds, Placement placement);

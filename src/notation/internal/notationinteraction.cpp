@@ -1988,7 +1988,7 @@ void NotationInteraction::changeSelectedNotesArticulation(SymbolId articulationS
     startEdit();
     for (Note* note: notes) {
         Chord* chord = note->chord();
-        chord->updateArticulations({ articulationSymbolId });
+        chord->updateArticulations({ articulationSymbolId }, ArticulationsUpdateMode::Remove);
     }
     apply();
 
