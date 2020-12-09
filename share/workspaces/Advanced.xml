@@ -396,6 +396,7 @@
             </Bracket>
           </Cell>
         <Cell name="Brace">
+          <mag>1.1</mag>
           <Bracket type="Brace">
             </Bracket>
           </Cell>

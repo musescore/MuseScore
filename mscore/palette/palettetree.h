@@ -151,6 +151,7 @@ class PalettePanel {
       bool _expanded = false;
 
       Type guessType() const;
+      std::function<void(PaletteCell*)> cellHandlerByPaletteType(const Type& type) const;
 
    public:
       PalettePanel(Type t = Type::Custom) : _type(t) {}

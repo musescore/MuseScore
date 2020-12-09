@@ -61,6 +61,7 @@ class Bracket final : public Element {
       void setStaffSpan(int a, int b);
 
       SymId braceSymbol() const                 { return _braceSymbol; }
+      void setBraceSymbol(const SymId& sym)     { _braceSymbol = sym; }
       int column() const                        { return _bi->column();  }
       int span() const                          { return _bi->bracketSpan();    }
       qreal magx() const                        { return _magx;                 }
