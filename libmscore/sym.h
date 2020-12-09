@@ -2913,7 +2913,7 @@ class Sym {
    public:
       Sym() { }
 
-      bool isValid() const                       { return _code != -1; }
+      bool isValid() const                       { return _code != -1 && _bbox.isValid(); }
 
       void setSymList(const std::vector<SymId>& sl)    { _ids = sl;        }
       const std::vector<SymId>& symList() const        { return _ids;      }
