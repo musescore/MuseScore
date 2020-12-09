@@ -1,7 +1,7 @@
 
 include(${CMAKE_CURRENT_LIST_DIR}/GetPlatformInfo.cmake)
 
-if (PLATFORM_IS_WINDOWS)
+if (OS_IS_WIN)
 
     if (BUILD_64)
         set(DEPENDENCIES_DIR "${PROJECT_SOURCE_DIR}/dependencies/libx64")
@@ -13,9 +13,9 @@ if (PLATFORM_IS_WINDOWS)
 
     include_directories(${PROJECT_SOURCE_DIR}/dependencies/include)
 
-endif(PLATFORM_IS_WINDOWS)
+endif(OS_IS_WIN)
 
-if (PLATFORM_IS_MACOS)
+if (OS_IS_MAC)
 
     find_library(AudioToolboxFW        NAMES AudioToolbox)
     find_library(AudioUnitFW           NAMES AudioUnit)
@@ -35,4 +35,4 @@ if (PLATFORM_IS_MACOS)
         ${AppKit}
         )
 
-endif(PLATFORM_IS_MACOS)
+endif(OS_IS_MAC)

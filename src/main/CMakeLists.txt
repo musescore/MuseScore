@@ -24,18 +24,18 @@ include(GetPlatformInfo)
 set(EXECUTABLE_NAME mscore)
 
 # Platform specific
-if (PLATFORM_IS_WINDOWS)
+if (OS_IS_WIN)
 
     set(MSCORE_OUTPUT_NAME ${MUSESCORE_NAME}${MUSESCORE_VERSION_MAJOR})
 
     include(GetCompilerInfo)
-    if (COMPILER_IS_MSVC)
+    if (CC_IS_MSVC)
         # MSVC recognizes a *.rc file and will invoke the resource compiler to link it
         set (ICON_RES_FILE ${CMAKE_CURRENT_LIST_DIR}/res/mscore.rc)
 
-    endif(COMPILER_IS_MSVC)
+    endif(CC_IS_MSVC)
 
-    if (COMPILER_IS_MINGW)
+    if (CC_IS_MINGW)
         set(ICON_RES_FILE ${PROJECT_BINARY_DIR}/resfile.o)
         add_custom_command(
            OUTPUT ${PROJECT_BINARY_DIR}/resfile.o
@@ -45,15 +45,15 @@ if (PLATFORM_IS_WINDOWS)
            )
         set_source_files_properties(${PROJECT_BINARY_DIR}/resfile.o PROPERTIES generated true)
 
-    endif(COMPILER_IS_MINGW)
+    endif(CC_IS_MINGW)
 
-elseif(PLATFORM_IS_LINUX)
+elseif(OS_IS_LIN)
 
     if (MSCORE_INSTALL_SUFFIX)
         set(MSCORE_OUTPUT_NAME "${EXECUTABLE_NAME}${MSCORE_INSTALL_SUFFIX}")
     endif(MSCORE_INSTALL_SUFFIX)
 
-elseif(PLATFORM_IS_MACOS)
+elseif(OS_IS_MAC)
 
     set(EXECUTABLE_NAME mscore MACOSX_BUNDLE)
     set(MACOSX_BUNDLE_ICON_FILE mscore.icns)
@@ -94,9 +94,9 @@ if (MSCORE_OUTPUT_NAME)
   set_target_properties(${EXECUTABLE_NAME} PROPERTIES OUTPUT_NAME ${MSCORE_OUTPUT_NAME})
 endif (MSCORE_OUTPUT_NAME)
 
-if (PLATFORM_IS_MACOS)
+if (OS_IS_MAC)
     set_target_properties(mscore PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/build/MacOSXBundleInfo.plist.in)
-endif (PLATFORM_IS_MACOS)
+endif (OS_IS_MAC)
 
 
 
@@ -169,21 +169,127 @@ endif (MSCORE_OUTPUT_NAME)
 set(MSCORE_EXECUTABLE_NAME "${MSCORE_EXECUTABLE_NAME}" PARENT_SCOPE)
 
 
-# ========= install ==========
-if (PLATFORM_IS_WINDOWS)
+# === INSTALL ===
+
+# ===================
+# ===== Windows =====
+# ===================
+if (OS_IS_WIN)
 
     install(TARGETS ${EXECUTABLE_NAME} RUNTIME DESTINATION bin )
 
     include(GetCompilerInfo)
-    if (COMPILER_IS_MSVC)
+    if (CC_IS_MSVC)
 
-    endif(COMPILER_IS_MSVC)
 
-    if (COMPILER_IS_MINGW)
+    endif(CC_IS_MSVC)
 
-    endif(COMPILER_IS_MINGW)
+    if (CC_IS_MINGW)
+        get_filename_component(COMPILER_DIR ${CMAKE_CXX_COMPILER} DIRECTORY)
+        get_filename_component (MINGW_ROOT ${COMPILER_DIR} DIRECTORY)
 
-elseif(PLATFORM_IS_LINUX)
+        install( FILES
+               ${MINGW_ROOT}/bin/libgcc_s_seh-1.dll
+               ${MINGW_ROOT}/bin/libstdc++-6.dll
+               ${MINGW_ROOT}/bin/libwinpthread-1.dll
+               DESTINATION bin)
+
+    endif(CC_IS_MINGW)
+
+    # Install ssl
+    install( FILES
+            ${DEPENDENCIES_DIR}/libcrypto-1_1-x64.dll
+            ${DEPENDENCIES_DIR}/libssl-1_1-x64.dll
+            DESTINATION bin)
+
+    # Install Qt
+    foreach (QtLibrary ${QT_LIBRARIES})
+        #message(STATUS "Library ${QtLibrary}")
+        # always use release libs
+        set_target_properties(${QtLibrary} PROPERTIES MAP_IMPORTED_CONFIG_DEBUG "RELEASE")
+        get_target_property(QtSharedLibrary ${QtLibrary} LOCATION_RELEASE)
+        if (EXISTS ${QtSharedLibrary})
+            list (APPEND QtInstallLibraries ${QtSharedLibrary})
+        endif (EXISTS ${QtSharedLibrary})
+    endforeach (QtLibrary ${QT_LIBRARIES})
+    list(REMOVE_DUPLICATES QtInstallLibraries)
+
+    install(FILES
+            ${PROJECT_SOURCE_DIR}/build/qt.conf
+            ${QtInstallLibraries}
+            ${QT_INSTALL_BINS}/libEGL.dll
+            ${QT_INSTALL_BINS}/libGLESv2.dll
+            ${QT_INSTALL_BINS}/opengl32sw.dll
+            ${QT_INSTALL_BINS}/d3dcompiler_47.dll
+            ${QT_INSTALL_BINS}/Qt5QmlModels.dll
+            ${QT_INSTALL_BINS}/Qt5QmlWorkerScript.dll
+            DESTINATION bin)
+
+    install(FILES
+            ${QT_INSTALL_PLUGINS}/iconengines/qsvgicon.dll
+            DESTINATION bin/iconengines)
+
+    install(FILES
+            ${QT_INSTALL_PLUGINS}/imageformats/qjpeg.dll
+            ${QT_INSTALL_PLUGINS}/imageformats/qsvg.dll
+            ${QT_INSTALL_PLUGINS}/imageformats/qtiff.dll
+            DESTINATION bin/imageformats)
+
+
+    install(FILES
+            ${QT_INSTALL_PLUGINS}/platforms/qwindows.dll
+            DESTINATION bin/platforms)
+
+    install(FILES
+            ${QT_INSTALL_PLUGINS}/printsupport/windowsprintersupport.dll
+            DESTINATION bin/printsupport)
+
+    if (USE_WEBENGINE)
+        install(FILES
+                ${QT_INSTALL_BINS}/Qt5WebEngineWidgets.dll
+                ${QT_INSTALL_BINS}/Qt5WebEngineCore.dll
+                DESTINATION bin)
+
+        install(FILES
+               ${QT_INSTALL_LIBEXECS}/QtWebEngineProcess.exe
+               DESTINATION bin)
+
+        install(DIRECTORY
+               ${QT_INSTALL_DATA}/resources
+               DESTINATION bin/webengineresources)
+
+        install(DIRECTORY
+               ${QT_INSTALL_TRANSLATIONS}/qtwebengine_locales
+               DESTINATION bin/webengineresources/translations)
+
+    endif(USE_WEBENGINE)
+
+    if (WIN_PORTABLE)
+        # deploy the files and directory structure needed for the PortableApps.com format
+        install(DIRECTORY ${PROJECT_SOURCE_DIR}/build/PortableApps/App DESTINATION ${CMAKE_INSTALL_PREFIX}/../..)
+        install(DIRECTORY ${PROJECT_SOURCE_DIR}/build/PortableApps/Other DESTINATION ${CMAKE_INSTALL_PREFIX}/../..)
+        install(FILES ${PROJECT_SOURCE_DIR}/build/PortableApps/help.html DESTINATION ${CMAKE_INSTALL_PREFIX}/../..)
+        set(MSCORE_ICON_BASE ${PROJECT_SOURCE_DIR}/assets/musescore-icon-round)
+        configure_file(${PROJECT_SOURCE_DIR}/build/PortableApps/appinfo.ini.in     ${CMAKE_INSTALL_PREFIX}/../../App/AppInfo/appinfo.ini   @ONLY)
+        install(FILES ${PROJECT_SOURCE_DIR}/src/main/res/mscore.ico RENAME appicon.ico DESTINATION ${CMAKE_INSTALL_PREFIX}/../AppInfo)
+        install(FILES ${MSCORE_ICON_BASE}-16.png RENAME appicon_16.png DESTINATION ${CMAKE_INSTALL_PREFIX}/../AppInfo)
+        install(FILES ${MSCORE_ICON_BASE}-32.png RENAME appicon_32.png DESTINATION ${CMAKE_INSTALL_PREFIX}/../AppInfo)
+        install(FILES ${MSCORE_ICON_BASE}-128.png RENAME appicon_128.png DESTINATION ${CMAKE_INSTALL_PREFIX}/../AppInfo)
+        install( FILES   ${PROJECT_SOURCE_DIR}/assets/mscz-icon.ico RENAME mscz.ico DESTINATION ${CMAKE_INSTALL_PREFIX}/../AppInfo/FileTypeIcons) # icon for .MSCZ files
+        install( FILES   ${PROJECT_SOURCE_DIR}/assets/mscz-icon-48.png RENAME mscz_48.png DESTINATION ${CMAKE_INSTALL_PREFIX}/../AppInfo/FileTypeIcons) # PNG icon for .MSCZ files
+        install( FILES   ${PROJECT_SOURCE_DIR}/assets/mscx-icon.ico RENAME mscx.ico DESTINATION ${CMAKE_INSTALL_PREFIX}/../AppInfo/FileTypeIcons) # icon for .MSCX files
+        install( FILES   ${PROJECT_SOURCE_DIR}/assets/mscx-icon-48.png RENAME mscx_48.png DESTINATION  ${CMAKE_INSTALL_PREFIX}/../AppInfo/FileTypeIcons) # PNG icon for .MSCX files
+        # use a custom icon for MusicXML files (there isn't a standard icon for MusicXML files)
+        # install( FILES   ${PROJECT_SOURCE_DIR}/assets/mxl-icon.svg RENAME mxl.svg DESTINATION  ${CMAKE_INSTALL_PREFIX}/../AppInfo/FileTypeIcons) # SVG icon for .MXL (compressed MusicXML) files
+        # install( FILES   ${PROJECT_SOURCE_DIR}/assets/mxl-icon-48.png RENAME mxl_48.png DESTINATION  ${CMAKE_INSTALL_PREFIX}/../AppInfo/FileTypeIcons) # PNG icon for .MXL (compressed MusicXML) files
+        # install( FILES   ${PROJECT_SOURCE_DIR}/assets/xml-icon.svg RENAME xml.svg DESTINATION  ${CMAKE_INSTALL_PREFIX}/../AppInfo/FileTypeIcons) # SVG icon for .XML (MusicXML) files
+        # install( FILES   ${PROJECT_SOURCE_DIR}/assets/xml-icon-48.png RENAME xml_48.png DESTINATION  ${CMAKE_INSTALL_PREFIX}/../AppInfo/FileTypeIcons) # PNG icon for .XML (MusicXML) files
+    endif (WIN_PORTABLE)
+
+# =================
+# ===== Linux =====
+# =================
+elseif(OS_IS_LIN)
 
     install(TARGETS ${EXECUTABLE_NAME} RUNTIME DESTINATION bin )
     # Install mscore executable (package maintainers may add "MuseScore" and/or "musescore" aliases that symlink to mscore)
@@ -229,7 +335,10 @@ elseif(PLATFORM_IS_LINUX)
        DESTINATION share/icons/hicolor/48x48/mimetypes) # PNG icon for .XML (MusicXML) files
     # Note: Must now run "gtk-update-icon-cache" to set the new icons. This is done in the Makefile.
 
-elseif(PLATFORM_IS_MACOS)
+# =================
+# ===== MacOS =====
+# =================
+elseif(OS_IS_MAC)
 
     install(TARGETS mscore BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX})
     install(FILES "${PROJECT_SOURCE_DIR}/src/main/res/mscore.icns" DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
@@ -241,288 +350,125 @@ endif()
 
 
 
+#if (MINGW)
 
-include(${PROJECT_SOURCE_DIR}/build/CopyFilesMacros.cmake)
-
-if (MINGW)
-
-   # Keep dependencies in alphabetical order. Changes made to this list
-   # might need to be made in "build/Linux+BSD/portable/copy-libs" too.
-   get_filename_component(COMPILER_DIR ${CMAKE_CXX_COMPILER} DIRECTORY)
-   get_filename_component (MINGW_ROOT ${COMPILER_DIR} DIRECTORY)
-   foreach (QtLibrary ${QT_LIBRARIES})
-      message("Library ${QtLibrary}")
-      # always use release libs
-      set_target_properties(${QtLibrary} PROPERTIES MAP_IMPORTED_CONFIG_DEBUG "RELEASE")
-      get_target_property(QtSharedLibrary ${QtLibrary} LOCATION_RELEASE)
-      if (EXISTS ${QtSharedLibrary})
-          list (APPEND QtInstallLibraries ${QtSharedLibrary})
-      endif (EXISTS ${QtSharedLibrary})
-   endforeach (QtLibrary ${QT_LIBRARIES})
-   list(REMOVE_DUPLICATES QtInstallLibraries)
-
-   # target_link_libraries(mscore ${QT_LIBRARIES})
-
-  #-> install( TARGETS mscore RUNTIME DESTINATION bin )
-
-   if (BUILD_64)
-      install( FILES
-         ${MINGW_ROOT}/bin/libgcc_s_seh-1.dll
-         ${DEPENDENCIES_DIR}/libcrypto-1_1-x64.dll
-         ${DEPENDENCIES_DIR}/libssl-1_1-x64.dll
-         DESTINATION bin)
-   else (BUILD_64)
-      install( FILES
-         ${MINGW_ROOT}/bin/libgcc_s_dw2-1.dll
-         ${DEPENDENCIES_DIR}/libcrypto-1_1.dll
-         ${DEPENDENCIES_DIR}/libssl-1_1.dll
-         DESTINATION bin)
-   endif (BUILD_64)
-
-   install( FILES
-      ${MINGW_ROOT}/bin/libstdc++-6.dll
-      ${MINGW_ROOT}/bin/libwinpthread-1.dll
-      ${OGG_LIBRARY}
-      ${VORBIS_LIBRARY}
-      ${VORBISFILE_LIBRARY}
-      ${QT_INSTALL_BINS}/libEGL.dll
-      ${QT_INSTALL_BINS}/libGLESv2.dll
-      ${QT_INSTALL_BINS}/opengl32sw.dll
-      ${QT_INSTALL_BINS}/d3dcompiler_47.dll
-      ${QtInstallLibraries}
-      ${PROJECT_SOURCE_DIR}/build/qt.conf
-      ${QT_INSTALL_BINS}/Qt5QmlModels.dll
-      ${QT_INSTALL_BINS}/Qt5QmlWorkerScript.dll
-      DESTINATION bin)
-
-    install(FILES
-      ${QT_INSTALL_PLUGINS}/iconengines/qsvgicon.dll
-      DESTINATION bin/iconengines)
-
-    install(FILES
-      ${QT_INSTALL_PLUGINS}/imageformats/qjpeg.dll
-      ${QT_INSTALL_PLUGINS}/imageformats/qsvg.dll
-      ${QT_INSTALL_PLUGINS}/imageformats/qtiff.dll
-      DESTINATION bin/imageformats)
-
-    install(FILES
-      ${QT_INSTALL_PLUGINS}/platforms/qwindows.dll
-      DESTINATION bin/platforms)
-
-    install(FILES
-      ${QT_INSTALL_PLUGINS}/printsupport/windowsprintersupport.dll
-      DESTINATION bin/printsupport)
-
-    install(FILES
-      ${QT_INSTALL_PLUGINS}/sqldrivers/qsqlite.dll
-      DESTINATION bin/sqldrivers)
-
-    install(DIRECTORY
-      ${QT_INSTALL_QML}
-      DESTINATION .
-      REGEX ".*d\\.dll" EXCLUDE
-      REGEX ".*QtMultimedia.*" EXCLUDE
-      REGEX ".*QtSensors.*" EXCLUDE
-      REGEX ".*QtTest.*" EXCLUDE
-      REGEX ".*QtWebkit.*" EXCLUDE)
-
-else (MINGW)
-
-   if ( NOT MSVC )
-      ## install qwebengine core
-      if (NOT APPLE AND USE_WEBENGINE)
-         install(PROGRAMS
-            ${QT_INSTALL_LIBEXECS}/QtWebEngineProcess
-            DESTINATION bin
-            )
-         install(DIRECTORY
-            ${QT_INSTALL_DATA}/resources
-            DESTINATION lib/qt5
-            )
-         install(DIRECTORY
-            ${QT_INSTALL_TRANSLATIONS}/qtwebengine_locales
-            DESTINATION lib/qt5/translations
-            )
-      endif(NOT APPLE AND USE_WEBENGINE)
+#   # Keep dependencies in alphabetical order. Changes made to this list
+#   # might need to be made in "build/Linux+BSD/portable/copy-libs" too.
 
 
-   else ( NOT MSVC )
-      # Microsoft Visual Studio-specific starts here!
-      string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
+#else (MINGW)
 
-      # Create list of directories to search for libraries
-      foreach (item ${CMAKE_LIBRARY_PATH})
-         string( APPEND all_library_paths " /LIBPATH:${item}" )
-      endforeach()
+#   if ( NOT MSVC )
+#      ## install qwebengine core
+#      if (NOT APPLE AND USE_WEBENGINE)
+#         install(PROGRAMS
+#            ${QT_INSTALL_LIBEXECS}/QtWebEngineProcess
+#            DESTINATION bin
+#            )
+#         install(DIRECTORY
+#            ${QT_INSTALL_DATA}/resources
+#            DESTINATION lib/qt5
+#            )
+#         install(DIRECTORY
+#            ${QT_INSTALL_TRANSLATIONS}/qtwebengine_locales
+#            DESTINATION lib/qt5/translations
+#            )
+#      endif(NOT APPLE AND USE_WEBENGINE)
 
-      # Windows: Add /SUBSYSTEM:WINDOWS to LINK_FLAGS to avoid a console window in release
-#      if(CMAKE_BUILD_TYPE MATCHES "REL*")
-#        set_target_properties( mscore
-#           PROPERTIES
-#              COMPILE_FLAGS "${PCH_INCLUDE} ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
-#              LINK_FLAGS    "/LIBPATH:${QT_INSTALL_LIBS} ${all_library_paths}"
-#              LINK_FLAGS "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup"
-#           )
-#      else(CMAKE_BUILD_TYPE MATCHES "REL*")
-#        set_target_properties( mscore
-#           PROPERTIES
-#              COMPILE_FLAGS "${PCH_INCLUDE} ${QT_DEFINITIONS} /DQT_SVG_LIB /DQT_GUI_LIB /DQT_XML_LIB /DQT_CORE_LIB"
-#              LINK_FLAGS    "/LIBPATH:${QT_INSTALL_LIBS} ${all_library_paths}"
-#              LINK_FLAGS "/SUBSYSTEM:CONSOLE"
-#           )
-#      endif(CMAKE_BUILD_TYPE MATCHES "REL*")
 
-      # Copy DLL dependencies to .EXE DIRECTORY
-      list(APPEND dlls_to_copy
-                  "${QT_INSTALL_BINS}/Qt5Core.dll"  "${QT_INSTALL_BINS}/Qt5Gui.dll"  "${QT_INSTALL_BINS}/Qt5Help.dll"
-                  "${QT_INSTALL_BINS}/Qt5Network.dll"  "${QT_INSTALL_BINS}/Qt5PrintSupport.dll"
-                  "${QT_INSTALL_BINS}/Qt5Qml.dll"  "${QT_INSTALL_BINS}/Qt5Quick.dll"  "${QT_INSTALL_BINS}/Qt5Sql.dll"
-                  "${QT_INSTALL_BINS}/Qt5QuickControls2.dll" "${QT_INSTALL_BINS}/Qt5QuickTemplates2.dll"
-                  "${QT_INSTALL_BINS}/Qt5Svg.dll"  "${QT_INSTALL_BINS}/Qt5Widgets.dll"  "${QT_INSTALL_BINS}/Qt5Xml.dll"
-                  "${QT_INSTALL_BINS}/Qt5XmlPatterns.dll"
-                  "${QT_INSTALL_BINS}/Qt5WebChannel.dll"
-                  "${QT_INSTALL_BINS}/Qt5QuickWidgets.dll" "${QT_INSTALL_BINS}/Qt5Positioning.dll"
-                  "${QT_INSTALL_BINS}/libEGL.dll" "${QT_INSTALL_BINS}/libGLESv2.dll" "${QT_INSTALL_BINS}/opengl32sw.dll"
-                  "${QT_INSTALL_BINS}/d3dcompiler_47.dll"
-                  "${QT_INSTALL_BINS}/Qt5QmlModels.dll"
-                  "${QT_INSTALL_BINS}/Qt5QmlWorkerScript.dll"
-                  )
-      if (USE_WEBENGINE)
-         list(APPEND dlls_to_copy "${QT_INSTALL_BINS}/Qt5WebEngineWidgets.dll" "${QT_INSTALL_BINS}/Qt5WebEngineCore.dll")
-      endif(USE_WEBENGINE)
+#   else ( NOT MSVC )
+#      # Microsoft Visual Studio-specific starts here!
+#      string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
 
-      set(CMAKE_FIND_LIBRARY_PREFIX "")
-      set(CMAKE_FIND_LIBRARY_SUFFIXES ".dll")
+#      # Create list of directories to search for libraries
+#      foreach (item ${CMAKE_LIBRARY_PATH})
+#         string( APPEND all_library_paths " /LIBPATH:${item}" )
+#      endforeach()
 
-      if (WIN_SPARKLE_ENABLED)
-            find_library( dll_winsparkle  NAMES "WinSparkle" PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
-            list(APPEND dlls_to_copy ${dll_winsparkle})
-      endif (WIN_SPARKLE_ENABLED)
+#      # Windows: Add /SUBSYSTEM:WINDOWS to LINK_FLAGS to avoid a console window in release
+##      if(CMAKE_BUILD_TYPE MATCHES "REL*")
+##        set_target_properties( mscore
+##           PROPERTIES
+##              COMPILE_FLAGS "${PCH_INCLUDE} ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
+##              LINK_FLAGS    "/LIBPATH:${QT_INSTALL_LIBS} ${all_library_paths}"
+##              LINK_FLAGS "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup"
+##           )
+##      else(CMAKE_BUILD_TYPE MATCHES "REL*")
+##        set_target_properties( mscore
+##           PROPERTIES
+##              COMPILE_FLAGS "${PCH_INCLUDE} ${QT_DEFINITIONS} /DQT_SVG_LIB /DQT_GUI_LIB /DQT_XML_LIB /DQT_CORE_LIB"
+##              LINK_FLAGS    "/LIBPATH:${QT_INSTALL_LIBS} ${all_library_paths}"
+##              LINK_FLAGS "/SUBSYSTEM:CONSOLE"
+##           )
+##      endif(CMAKE_BUILD_TYPE MATCHES "REL*")
 
-      find_library( dll_ogg         NAMES "libogg"         PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
-      find_library( dll_vorbis      NAMES "libvorbis"      PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
-      find_library( dll_vorbisfile  NAMES "libvorbisfile"  PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
-      find_library( dll_ssl1        NAMES "libcrypto-1_1-x64" "libcrypto-1_1"  PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
-      find_library( dll_ssl2        NAMES "libssl-1_1-x64" "libssl-1_1"        PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
 
-      list(APPEND dlls_to_copy ${dll_ogg} ${dll_vorbis} ${dll_vorbisfile} ${dll_ssl1} ${dll_ssl2} "$<TARGET_FILE_DIR:mscore>/${MSCORE_OUTPUT_NAME}.exe")
-      set( output_dir_for_dlls "${CMAKE_INSTALL_PREFIX}/bin")
 
-      COPY_FILES_INTO_DIRECTORY_IF_CHANGED( "${dlls_to_copy}" ${output_dir_for_dlls}  mscore)
+#      set(CMAKE_FIND_LIBRARY_PREFIX "")
+#      set(CMAKE_FIND_LIBRARY_SUFFIXES ".dll")
 
-      # Keep dependencies in alphabetical order. Changes made to this list
-      # might need to be made in "build/Linux+BSD/portable/copy-libs" too.
-      get_filename_component(COMPILER_DIR ${CMAKE_CXX_COMPILER} DIRECTORY)
-      get_filename_component (MINGW_ROOT ${COMPILER_DIR} DIRECTORY)
+#      if (WIN_SPARKLE_ENABLED)
+#            find_library( dll_winsparkle  NAMES "WinSparkle" PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
+#            list(APPEND dlls_to_copy ${dll_winsparkle})
+#      endif (WIN_SPARKLE_ENABLED)
 
-      foreach (QtLibrary ${QT_LIBRARIES})
-         message("Library ${QtLibrary}")
-         # always use release libs
-         set_target_properties(${QtLibrary} PROPERTIES MAP_IMPORTED_CONFIG_DEBUG "RELEASE")
-         get_target_property(QtSharedLibrary ${QtLibrary} LOCATION_RELEASE)
-         if (EXISTS ${QtSharedLibrary})
-             list (APPEND QtInstallLibraries ${QtSharedLibrary})
-         endif (EXISTS ${QtSharedLibrary})
-      endforeach (QtLibrary ${QT_LIBRARIES})
-      list(REMOVE_DUPLICATES QtInstallLibraries)
+#      find_library( dll_ogg         NAMES "libogg"         PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
+#      find_library( dll_vorbis      NAMES "libvorbis"      PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
+#      find_library( dll_vorbisfile  NAMES "libvorbisfile"  PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
 
-      target_link_libraries(mscore ${QT_LIBRARIES})
-      add_dependencies(mscore lrelease)
+#      list(APPEND dlls_to_copy ${dll_ogg} ${dll_vorbis} ${dll_vorbisfile} ${dll_ssl1} ${dll_ssl2} "$<TARGET_FILE_DIR:mscore>/${MSCORE_OUTPUT_NAME}.exe")
+#      set( output_dir_for_dlls "${CMAKE_INSTALL_PREFIX}/bin")
 
-      install( FILES
-            ${dll_ogg}
-            ${dll_vorbis}
-            ${dll_vorbisfile}
-            ${dll_ssl1}
-            ${dll_ssl2}
-            ${dll_winsparkle}
-            ${QtInstallLibraries}
-            ${QT_INSTALL_BINS}/libEGL.dll
-            ${QT_INSTALL_BINS}/libGLESv2.dll
-            ${QT_INSTALL_BINS}/opengl32sw.dll
-            ${QT_INSTALL_BINS}/d3dcompiler_47.dll
-            ${QT_INSTALL_BINS}/Qt5Positioning.dll
-            ${QT_INSTALL_BINS}/Qt5WebChannel.dll
-            ${QT_INSTALL_BINS}/Qt5QuickTemplates2.dll
-            ${QT_INSTALL_BINS}/Qt5QmlModels.dll
-            ${QT_INSTALL_BINS}/Qt5QmlWorkerScript.dll
-            ${PROJECT_SOURCE_DIR}/build/qt.conf
-            DESTINATION bin)
+#      # Keep dependencies in alphabetical order. Changes made to this list
+#      # might need to be made in "build/Linux+BSD/portable/copy-libs" too.
 
-      install(FILES
-         ${QT_INSTALL_PLUGINS}/iconengines/qsvgicon.dll
-         DESTINATION bin/iconengines)
 
-      install(FILES
-         ${QT_INSTALL_PLUGINS}/imageformats/qjpeg.dll
-         ${QT_INSTALL_PLUGINS}/imageformats/qsvg.dll
-         ${QT_INSTALL_PLUGINS}/imageformats/qtiff.dll
-         DESTINATION bin/imageformats)
 
-      install(FILES
-         ${QT_INSTALL_PLUGINS}/platforms/qwindows.dll
-         DESTINATION bin/platforms)
 
-      install(FILES
-         ${QT_INSTALL_PLUGINS}/printsupport/windowsprintersupport.dll
-         DESTINATION bin/printsupport)
+#      add_dependencies(mscore lrelease)
 
-      install(FILES
-         ${QT_INSTALL_PLUGINS}/sqldrivers/qsqlite.dll
-         DESTINATION bin/sqldrivers)
+#      install( FILES
+#            ${dll_ogg}
+#            ${dll_vorbis}
+#            ${dll_vorbisfile}
+##            ${dll_ssl1}
+##            ${dll_ssl2}
+#            ${dll_winsparkle}
+#            DESTINATION bin)
 
-      install( TARGETS mscore RUNTIME DESTINATION bin ) # this duplicate due to the correctly package step
 
-      if (USE_WEBENGINE)
-         install(FILES
-            ${QT_INSTALL_LIBEXECS}/QtWebEngineProcess.exe
-            DESTINATION bin
-            )
-         install(DIRECTORY
-            ${QT_INSTALL_DATA}/resources
-            DESTINATION bin/webengineresources
-            )
-         install(DIRECTORY
-            ${QT_INSTALL_TRANSLATIONS}/qtwebengine_locales
-            DESTINATION bin/webengineresources/translations
-            )
-      endif (USE_WEBENGINE)
+##      install( TARGETS mscore RUNTIME DESTINATION bin ) # this duplicate due to the correctly package step
 
-      install(DIRECTORY
-         ${QT_INSTALL_QML}
-         DESTINATION .
-         REGEX ".*d\\.dll" EXCLUDE
-         REGEX ".pdb" EXCLUDE
-         REGEX ".*QtMultimedia.*" EXCLUDE
-         REGEX ".*QtSensors.*" EXCLUDE
-         REGEX ".*QtTest.*" EXCLUDE
-         REGEX ".*QtWebkit.*" EXCLUDE
-         )
+##      if (USE_WEBENGINE)
+##         install(FILES
+##            ${QT_INSTALL_LIBEXECS}/QtWebEngineProcess.exe
+##            DESTINATION bin
+##            )
+##         install(DIRECTORY
+##            ${QT_INSTALL_DATA}/resources
+##            DESTINATION bin/webengineresources
+##            )
+##         install(DIRECTORY
+##            ${QT_INSTALL_TRANSLATIONS}/qtwebengine_locales
+##            DESTINATION bin/webengineresources/translations
+##            )
+##      endif (USE_WEBENGINE)
 
-      if (WIN_PORTABLE)
-        # deploy the files and directory structure needed for the PortableApps.com format
-        install(DIRECTORY ${PROJECT_SOURCE_DIR}/build/PortableApps/App DESTINATION ${CMAKE_INSTALL_PREFIX}/../..)
-        install(DIRECTORY ${PROJECT_SOURCE_DIR}/build/PortableApps/Other DESTINATION ${CMAKE_INSTALL_PREFIX}/../..)
-        install(FILES ${PROJECT_SOURCE_DIR}/build/PortableApps/help.html DESTINATION ${CMAKE_INSTALL_PREFIX}/../..)
-        set(MSCORE_ICON_BASE ${PROJECT_SOURCE_DIR}/assets/musescore-icon-round)
-        configure_file(${PROJECT_SOURCE_DIR}/build/PortableApps/appinfo.ini.in     ${CMAKE_INSTALL_PREFIX}/../../App/AppInfo/appinfo.ini   @ONLY)
-        install(FILES ${PROJECT_SOURCE_DIR}/src/main/res/mscore.ico RENAME appicon.ico DESTINATION ${CMAKE_INSTALL_PREFIX}/../AppInfo)
-        install(FILES ${MSCORE_ICON_BASE}-16.png RENAME appicon_16.png DESTINATION ${CMAKE_INSTALL_PREFIX}/../AppInfo)
-        install(FILES ${MSCORE_ICON_BASE}-32.png RENAME appicon_32.png DESTINATION ${CMAKE_INSTALL_PREFIX}/../AppInfo)
-        install(FILES ${MSCORE_ICON_BASE}-128.png RENAME appicon_128.png DESTINATION ${CMAKE_INSTALL_PREFIX}/../AppInfo)
-        install( FILES   ${PROJECT_SOURCE_DIR}/assets/mscz-icon.ico RENAME mscz.ico DESTINATION ${CMAKE_INSTALL_PREFIX}/../AppInfo/FileTypeIcons) # icon for .MSCZ files
-        install( FILES   ${PROJECT_SOURCE_DIR}/assets/mscz-icon-48.png RENAME mscz_48.png DESTINATION ${CMAKE_INSTALL_PREFIX}/../AppInfo/FileTypeIcons) # PNG icon for .MSCZ files
-        install( FILES   ${PROJECT_SOURCE_DIR}/assets/mscx-icon.ico RENAME mscx.ico DESTINATION ${CMAKE_INSTALL_PREFIX}/../AppInfo/FileTypeIcons) # icon for .MSCX files
-        install( FILES   ${PROJECT_SOURCE_DIR}/assets/mscx-icon-48.png RENAME mscx_48.png DESTINATION  ${CMAKE_INSTALL_PREFIX}/../AppInfo/FileTypeIcons) # PNG icon for .MSCX files
-        # use a custom icon for MusicXML files (there isn't a standard icon for MusicXML files)
-        # install( FILES   ${PROJECT_SOURCE_DIR}/assets/mxl-icon.svg RENAME mxl.svg DESTINATION  ${CMAKE_INSTALL_PREFIX}/../AppInfo/FileTypeIcons) # SVG icon for .MXL (compressed MusicXML) files
-        # install( FILES   ${PROJECT_SOURCE_DIR}/assets/mxl-icon-48.png RENAME mxl_48.png DESTINATION  ${CMAKE_INSTALL_PREFIX}/../AppInfo/FileTypeIcons) # PNG icon for .MXL (compressed MusicXML) files
-        # install( FILES   ${PROJECT_SOURCE_DIR}/assets/xml-icon.svg RENAME xml.svg DESTINATION  ${CMAKE_INSTALL_PREFIX}/../AppInfo/FileTypeIcons) # SVG icon for .XML (MusicXML) files
-        # install( FILES   ${PROJECT_SOURCE_DIR}/assets/xml-icon-48.png RENAME xml_48.png DESTINATION  ${CMAKE_INSTALL_PREFIX}/../AppInfo/FileTypeIcons) # PNG icon for .XML (MusicXML) files
-      endif (WIN_PORTABLE)
+##      install(DIRECTORY
+##         ${QT_INSTALL_QML}
+##         DESTINATION .
+##         REGEX ".*d\\.dll" EXCLUDE
+##         REGEX ".pdb" EXCLUDE
+##         REGEX ".*QtMultimedia.*" EXCLUDE
+##         REGEX ".*QtSensors.*" EXCLUDE
+##         REGEX ".*QtTest.*" EXCLUDE
+##         REGEX ".*QtWebkit.*" EXCLUDE
+##         )
 
-   endif ( NOT MSVC )
-endif (MINGW)
+
+
+#   endif ( NOT MSVC )
+#endif (MINGW)
 
 if (APPLE)
      install (FILES
@@ -544,15 +490,15 @@ if (APPLE)
       ${PROJECT_SOURCE_DIR}/fonts/petaluma/PetalumaScript.otf
      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}fonts
      )
-     install(DIRECTORY
-      ${QT_INSTALL_QML}
-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}
-      REGEX ".*QtWebkit.*" EXCLUDE
-      REGEX ".*QtTest.*" EXCLUDE
-      REGEX ".*QtSensors.*" EXCLUDE
-      REGEX ".*QtMultimedia.*" EXCLUDE
-      REGEX ".*QtAudioEngine.*" EXCLUDE
-      REGEX ".*_debug\\.dylib" EXCLUDE)
+#     install(DIRECTORY
+#      ${QT_INSTALL_QML}
+#      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}
+#      REGEX ".*QtWebkit.*" EXCLUDE
+#      REGEX ".*QtTest.*" EXCLUDE
+#      REGEX ".*QtSensors.*" EXCLUDE
+#      REGEX ".*QtMultimedia.*" EXCLUDE
+#      REGEX ".*QtAudioEngine.*" EXCLUDE
+#      REGEX ".*_debug\\.dylib" EXCLUDE)
 endif (APPLE)
 
 

@@ -6,24 +6,26 @@ include(GetPlatformInfo)
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
 
-    set(COMPILER_IS_CLANG 1)
+    set(CC_IS_CLANG 1)
 
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 
-    if (PLATFORM_IS_WINDOWS)
+    if (OS_IS_WIN)
 
-        set(COMPILER_IS_MINGW 1)
+        set(CC_IS_MINGW 1)
 
-    else(PLATFORM_IS_WINDOWS)
+    else(OS_IS_WIN)
 
-        set(COMPILER_IS_GCC 1)
+        set(CC_IS_GCC 1)
 
-    endif(PLATFORM_IS_WINDOWS)
+    endif(OS_IS_WIN)
 
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 
-  set(COMPILER_IS_MSVC 1)
+  set(CC_IS_MSVC 1)
 
+else()
+    message(FATAL_ERROR "Unsupported compiller: ${CMAKE_CXX_COMPILER_ID}")
 endif()
 
 # Define MINGW for VS, as it appears not to be defined
