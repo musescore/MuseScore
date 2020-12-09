@@ -245,7 +245,7 @@ void Bracket::draw(QPainter* painter) const
                         qreal mag      = h / (100 * magS());
                         painter->setPen(curColor());
                         painter->save();
-                        painter->scale(_magx, mag);
+                        painter->scale(mag, mag);
                         drawSymbol(_braceSymbol, painter, QPointF(0, 100 * magS()));
                         painter->restore();
                         }
