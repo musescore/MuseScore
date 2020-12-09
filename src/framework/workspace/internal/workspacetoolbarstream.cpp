@@ -18,21 +18,21 @@
 //=============================================================================
 #include "workspacetoolbarstream.h"
 
-#include "libmscore/xml.h"
+#include "framework/global/xmlreader.h"
 
 using namespace mu::workspace;
+using namespace mu::framework;
 
-std::shared_ptr<AbstractData> WorkspaceToolbarStream::read(Ms::XmlReader& xml) const
+std::shared_ptr<AbstractData> WorkspaceToolbarStream::read(XmlReader& xml) const
 {
     std::shared_ptr<ToolbarData> data = std::make_shared<ToolbarData>();
 
     data->tag = "Toolbar";
-    data->name = xml.attributes().value("name").toString().toStdString();
+    data->name = xml.attribute("name");
 
     while (xml.readNextStartElement()) {
-        QStringRef tag(xml.name());
-        if ("action" == tag) {
-            data->actions.push_back(xml.readElementText().toStdString());
+        if ("action" == xml.tagName()) {
+            data->actions.push_back(xml.readString());
         } else {
             xml.skipCurrentElement();
         }

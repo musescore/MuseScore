@@ -22,7 +22,6 @@
 
 #include <QFile>
 #include <QBuffer>
-#include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 
 #include "log.h"
@@ -31,8 +30,11 @@
 #include "thirdparty/qzip/qzipreader_p.h"
 #include "thirdparty/qzip/qzipwriter_p.h"
 
+#include "framework/global/xmlreader.h"
+
 using namespace mu;
 using namespace mu::workspace;
+using namespace mu::framework;
 
 WorkspaceFile::WorkspaceFile(const io::path& filepath)
     : m_filepath(filepath)
@@ -143,27 +145,26 @@ bool WorkspaceFile::MetaInf::read(const MQZipReader& zip)
 
 void WorkspaceFile::MetaInf::readContainer(const QByteArray& data)
 {
-    QXmlStreamReader xml(data);
+    XmlReader xml(data);
     while (xml.readNextStartElement()) {
-        if ("container" != xml.name()) {
+        if ("container" != xml.tagName()) {
             xml.skipCurrentElement();
             continue;
         }
 
         while (xml.readNextStartElement()) {
-            if ("rootfiles" != xml.name()) {
+            if ("rootfiles" != xml.tagName()) {
                 xml.skipCurrentElement();
                 continue;
             }
 
             while (xml.readNextStartElement()) {
-                if ("rootfile" != xml.name()) {
+                if ("rootfile" != xml.tagName()) {
                     xml.skipCurrentElement();
                     continue;
                 }
 
-                QString path = xml.attributes().value("full-path").toString();
-                m_rootfile = path.toStdString();
+                m_rootfile = xml.attribute("full-path");
                 return;
             }
         }

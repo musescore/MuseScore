@@ -32,7 +32,7 @@ struct PaletteWorkspaceData : public workspace::AbstractData
 class WorkspacePaletteStream : public workspace::IWorkspaceDataStream
 {
 public:
-    std::shared_ptr<workspace::AbstractData> read(Ms::XmlReader& xml) const override;
+    std::shared_ptr<workspace::AbstractData> read(framework::XmlReader& xml) const override;
     void write(Ms::XmlWriter& xml, std::shared_ptr<workspace::AbstractData> data) const override;
 };
 }
