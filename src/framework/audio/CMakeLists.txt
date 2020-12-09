@@ -22,17 +22,17 @@ set(MODULE audio)
 include(${PROJECT_SOURCE_DIR}/thirdparty/soloud/soloud.cmake)
 
 include(GetPlatformInfo)
-if (PLATFORM_IS_WINDOWS)
+if (OS_IS_WIN)
     set(DRIVER_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmmdriver.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmmdriver.h
     )
-elseif(PLATFORM_IS_LINUX)
+elseif(OS_IS_LIN)
     set(DRIVER_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.h
     )
-elseif(PLATFORM_IS_MACOS)
+elseif(OS_IS_MAC)
     set(DRIVER_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/osxaudiodriver.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/osxaudiodriver.h
@@ -95,23 +95,14 @@ set(MODULE_INCLUDE
     ${SOLOUD_INC}
     )
 
-if(PLATFORM_IS_WINDOWS)
+if(OS_IS_WIN)
     set(MODULE_LINK winmm )
 endif()
 
-if(PLATFORM_IS_LINUX)
-
-    ##
-    ## ALSA >= 1.0.0
-    ##
-    PKGCONFIG1 (alsa 1.0.0 ALSA_INCDIR ALSA_LIBDIR ALSA_LIB ALSA_CPP )
-    if (NOT ALSA_INCDIR)
-        message(SEND_ERROR "Error: ALSA support requested (BUILD_ALSA=${BUILD_ALSA}), but ALSA >= 1.0.0 was not found.")
-    else (NOT ALSA_INCDIR)
-        message("ALSA >= 1.0.0 found. ALSA support enabled. INCDIR ${ALSA_INCDIR}, LIBDIR ${ALSA_LIBDIR}, LIB ${ALSA_LIB}, CPP ${ALSA_CPP}")
-    endif (NOT ALSA_INCDIR)
-
-    set(MODULE_LINK pthread ${ALSA_LIB} )
+if(OS_IS_LIN)
+    find_package(ALSA REQUIRED)
+    set(MODULE_LINK ${ALSA_LIBRARIES} pthread )
+    set(MODULE_INCLUDE ${MODULE_INCLUDE} ${ALSA_INCLUDE_DIRS} )
 endif()
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

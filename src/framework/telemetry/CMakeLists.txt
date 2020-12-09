@@ -62,9 +62,9 @@ endif (NOT MSVC)
 # Not building with MinGW, so turned off for MinGW
 include(GetCompilerInfo)
 set(BUILD_CRASHPAD_CLIENT ON)
-if (COMPILER_IS_MINGW)
+if (CC_IS_MINGW)
     set(BUILD_CRASHPAD_CLIENT OFF)
-endif(COMPILER_IS_MINGW)
+endif(CC_IS_MINGW)
 
 if (BUILD_CRASHPAD_CLIENT)
 
@@ -96,11 +96,11 @@ include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 
 # === Install crashpad handler ===
 set(CPAD_ROOT_PATH ${CMAKE_CURRENT_LIST_DIR}/crashpad_handler)
-if (PLATFORM_IS_LINUX)
+if (OS_IS_LIN)
     install(PROGRAMS ${CPAD_ROOT_PATH}/linux/x86-64/crashpad_handler DESTINATION bin)
-elseif(PLATFORM_IS_WINDOWS)
+elseif(OS_IS_WIN)
     install(PROGRAMS ${CPAD_ROOT_PATH}/windows/x86-64/crashpad_handler.exe DESTINATION bin)
-elseif(PLATFORM_IS_MACOS)
+elseif(OS_IS_MAC)
     install(PROGRAMS ${CPAD_ROOT_PATH}/macos/x86-64/crashpad_handler DESTINATION ${Mscore_SHARE_NAME}Contents/MacOS)
 endif()
 
