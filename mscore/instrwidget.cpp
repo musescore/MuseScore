@@ -1230,6 +1230,7 @@ void InstrumentsWidget::createInstruments(Score* cs)
             const InstrumentTemplate* t = ((PartListItem*)item)->it;
             part = new Part(cs);
             part->initFromInstrTemplate(t);
+            part->setSoloist(pli->isSoloist());
 
             pli->part = part;
             QTreeWidgetItem* ci = 0;
