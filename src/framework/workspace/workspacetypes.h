@@ -33,6 +33,7 @@ struct AbstractData
     std::string name;
 };
 using AbstractDataPtr = std::shared_ptr<AbstractData>;
+using AbstractDataPtrList = std::vector<AbstractDataPtr>;
 
 //! NOTE Only data associations with framework.
 //! Other data must be in the appropriate modules.

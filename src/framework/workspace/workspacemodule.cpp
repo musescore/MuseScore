@@ -47,8 +47,8 @@ void WorkspaceModule::registerExports()
 
 void WorkspaceModule::resolveImports()
 {
-    s_streamRegister->regStream("Preferences", std::make_shared<WorkspaceSettingsStream>());
-    s_streamRegister->regStream("Toolbar", std::make_shared<WorkspaceToolbarStream>());
+    s_streamRegister->addStream(std::make_shared<WorkspaceSettingsStream>());
+    s_streamRegister->addStream(std::make_shared<WorkspaceToolbarStream>());
 }
 
 void WorkspaceModule::onInit()

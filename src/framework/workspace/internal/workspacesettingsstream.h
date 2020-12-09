@@ -21,16 +21,20 @@
 
 #include "../iworkspacedatastream.h"
 
-namespace mu {
-namespace workspace {
+namespace mu::framework {
+class XmlReader;
+}
+
+namespace mu::workspace {
 class WorkspaceSettingsStream : public IWorkspaceDataStream
 {
 public:
+    AbstractDataPtrList read(framework::IODevice& sourceDevice) const override;
+    void write(AbstractDataPtrList dataList, framework::IODevice& destinationDevice) const override;
 
-    std::shared_ptr<AbstractData> read(framework::XmlReader& xml) const override;
-    void write(Ms::XmlWriter& xml, std::shared_ptr<AbstractData> data) const override;
+private:
+    SettingsDataPtr readSettings(framework::XmlReader& reader) const;
 };
-}
 }
 
 #endif // MU_WORKSPACE_WORKSPACESETTINGSSTREAM_H
