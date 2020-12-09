@@ -23,17 +23,26 @@
 
 #include "palette/palettetree.h"
 
+namespace Ms {
+class XmlReader;
+}
+
 namespace mu::palette {
 struct PaletteWorkspaceData : public workspace::AbstractData
 {
     std::unique_ptr<Ms::PaletteTree> tree;
 };
 
+using PaletteWorkspaceDataPtr = std::shared_ptr<PaletteWorkspaceData>;
+
 class WorkspacePaletteStream : public workspace::IWorkspaceDataStream
 {
 public:
-    std::shared_ptr<workspace::AbstractData> read(framework::XmlReader& xml) const override;
-    void write(Ms::XmlWriter& xml, std::shared_ptr<workspace::AbstractData> data) const override;
+    workspace::AbstractDataPtrList read(framework::IODevice& sourceDevice) const override;
+    void write(workspace::AbstractDataPtrList dataList, framework::IODevice& destinationDevice) const override;
+
+private:
+    PaletteWorkspaceDataPtr readPalettes(Ms::XmlReader& reader) const;
 };
 }
 

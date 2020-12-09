@@ -17,28 +17,50 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 #include "workspacepalettestream.h"
-#include "ptrutils.h"
 
-#include "framework/global/xmlreader.h"
+#include "log.h"
+
+#include "libmscore/xml.h"
 
 using namespace mu::palette;
 using namespace mu::workspace;
 using namespace mu::framework;
 
-std::shared_ptr<AbstractData> WorkspacePaletteStream::read(XmlReader& xml) const
+static const QString PALETTE_TAG("PaletteBox");
+
+AbstractDataPtrList WorkspacePaletteStream::read(IODevice& sourceDevice) const
 {
-    std::shared_ptr<PaletteWorkspaceData> data = std::make_shared<PaletteWorkspaceData>();
-    data->tree = std::unique_ptr<Ms::PaletteTree>(new Ms::PaletteTree);
-    //FIXME
-    //data->tree->read(xml);
-    return data;
+    Ms::XmlReader reader(&sourceDevice);
+
+    while (!reader.atEnd()) {
+        reader.readNextStartElement();
+
+        if (reader.name() == PALETTE_TAG) {
+            return { readPalettes(reader) };
+        }
+    }
+
+    return {};
 }
 
-void WorkspacePaletteStream::write(Ms::XmlWriter& xml, std::shared_ptr<AbstractData> data) const
+PaletteWorkspaceDataPtr WorkspacePaletteStream::readPalettes(Ms::XmlReader& reader) const
 {
-    PaletteWorkspaceData* pdata = ptr::checked_cast<PaletteWorkspaceData>(data.get());
-    IF_ASSERT_FAILED(pdata) {
-        return;
+    PaletteWorkspaceDataPtr palettes = std::make_shared<PaletteWorkspaceData>();
+    palettes->tree = std::unique_ptr<Ms::PaletteTree>(new Ms::PaletteTree);
+    palettes->tree->read(reader);
+
+    return palettes;
+}
+
+void WorkspacePaletteStream::write(AbstractDataPtrList dataList, IODevice& destinationDevice) const
+{
+    Ms::XmlWriter writer(nullptr, &destinationDevice);
+
+    for (AbstractDataPtr data : dataList) {
+        PaletteWorkspaceDataPtr palettes = std::dynamic_pointer_cast<PaletteWorkspaceData>(data);
+        IF_ASSERT_FAILED(palettes) {
+            return;
+        }
+        palettes->tree->write(writer);
     }
-    pdata->tree->write(xml);
 }

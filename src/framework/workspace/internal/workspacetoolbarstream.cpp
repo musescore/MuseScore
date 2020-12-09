@@ -23,26 +23,49 @@
 using namespace mu::workspace;
 using namespace mu::framework;
 
-std::shared_ptr<AbstractData> WorkspaceToolbarStream::read(XmlReader& xml) const
+static constexpr std::string_view TOOLBAR_TAG("Toolbar");
+static constexpr std::string_view ACTION_TAG("action");
+static constexpr std::string_view TOOLBAR_NAME_TAG("name");
+
+AbstractDataPtrList WorkspaceToolbarStream::read(IODevice& sourceDevice) const
 {
-    std::shared_ptr<ToolbarData> data = std::make_shared<ToolbarData>();
+    XmlReader reader(&sourceDevice);
+    AbstractDataPtrList toolbars;
 
-    data->tag = "Toolbar";
-    data->name = xml.attribute("name");
+    while (!reader.atEnd()) {
+        reader.readNextStartElement();
 
-    while (xml.readNextStartElement()) {
-        if ("action" == xml.tagName()) {
-            data->actions.push_back(xml.readString());
+        if (reader.tagName() != TOOLBAR_TAG) {
+            continue;
+        }
+
+        auto toolbar = readToolbar(reader);
+        toolbars.push_back(toolbar);
+    }
+
+    return toolbars;
+}
+
+AbstractDataPtr WorkspaceToolbarStream::readToolbar(XmlReader& reader) const
+{
+    ToolbarDataPtr toolbar = std::make_shared<ToolbarData>();
+
+    toolbar->tag = TOOLBAR_TAG;
+    toolbar->name = reader.attribute(TOOLBAR_NAME_TAG);
+
+    while (reader.readNextStartElement()) {
+        if (reader.tagName() == ACTION_TAG) {
+            toolbar->actions.push_back(reader.readString());
         } else {
-            xml.skipCurrentElement();
+            reader.skipCurrentElement();
         }
     }
 
-    return data;
+    return toolbar;
 }
 
-void WorkspaceToolbarStream::write(Ms::XmlWriter& xml, std::shared_ptr<AbstractData> data) const
+void WorkspaceToolbarStream::write(AbstractDataPtrList dataList, IODevice& destinationDevice) const
 {
-    Q_UNUSED(xml);
-    Q_UNUSED(data);
+    Q_UNUSED(destinationDevice);
+    Q_UNUSED(dataList);
 }

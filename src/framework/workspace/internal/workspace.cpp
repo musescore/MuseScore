@@ -24,6 +24,8 @@
 
 #include "framework/global/xmlreader.h"
 
+#include <QBuffer>
+
 using namespace mu;
 using namespace mu::workspace;
 using namespace mu::framework;
@@ -126,6 +128,22 @@ Ret Workspace::read()
 
 Ret Workspace::readWorkspace(const QByteArray& xmlData)
 {
+    QBuffer buffer;
+    buffer.setData(xmlData);
+    buffer.open(IODevice::ReadOnly);
+
+    for (IWorkspaceDataStreamPtr stream : streamRegister()->streams()) {
+        AbstractDataPtrList dataList = stream->read(buffer);
+
+        for (AbstractDataPtr data : dataList) {
+            DataKey key { data->tag, data->name };
+            m_data[key] = data;
+        }
+
+        buffer.seek(0);
+    }
+
+    /*
     XmlReader xml(xmlData);
 
     while (xml.readNextStartElement()) {
@@ -152,7 +170,7 @@ Ret Workspace::readWorkspace(const QByteArray& xmlData)
                         continue;
                     }
 
-                    std::shared_ptr<AbstractData> data = reader->read(xml);
+                    std::shared_ptr<AbstractData> data = reader->read(xml.device());
                     if (!data) {
                         LOGE() << "failed read: " << tag;
                     } else {
@@ -162,7 +180,7 @@ Ret Workspace::readWorkspace(const QByteArray& xmlData)
                 }
             }
         }
-    }
+    }*/
 
     return make_ret(Ret::Code::Ok);
 }
