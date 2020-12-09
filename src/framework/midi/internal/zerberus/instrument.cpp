@@ -16,7 +16,6 @@
 #include <QFileInfo>
 #include <QStringList>
 #include <QVector>
-#include <QXmlStreamReader>
 
 #include "audiofile/audiofile.h"
 #include "thirdparty/qzip/qzipreader_p.h"
@@ -25,7 +24,10 @@
 #include "zone.h"
 #include "sample.h"
 
+#include "framework/global/xmlreader.h"
+
 using namespace mu::zerberus;
+using namespace mu::framework;
 
 QByteArray ZInstrument::buf;
 int ZInstrument::idx;
@@ -188,11 +190,11 @@ bool ZInstrument::loadFromFile(const QString& path)
 
 bool ZInstrument::read(const QByteArray& buff, MQZipReader* /*uz*/, const QString& /*path*/)
 {
-    QXmlStreamReader e(buff);
+    XmlReader e(buff);
     while (e.readNextStartElement()) {
-        if (e.name() == "MuseSynth") {
+        if (e.tagName() == "MuseSynth") {
             while (e.readNextStartElement()) {
-                if (e.name() == "Instrument") {
+                if (e.tagName() == "Instrument") {
                     // if (!read(e, uz, path))
                     //      return false;
                 } else {

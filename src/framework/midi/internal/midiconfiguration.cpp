@@ -19,13 +19,14 @@
 #include "midiconfiguration.h"
 
 #include <list>
-#include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 #include <QFile>
 
 #include "log.h"
 #include "settings.h"
 #include "stringutils.h"
+
+#include "global/xmlreader.h"
 
 using namespace mu;
 using namespace mu::midi;
@@ -131,36 +132,30 @@ io::path MidiConfiguration::stateFilePath() const
 
 bool MidiConfiguration::readState(const io::path& path, SynthesizerState& state) const
 {
-    QFile file(path.toQString());
-    if (!file.open(QIODevice::ReadOnly)) {
-        LOGE() << "failed open " << path;
-        return false;
-    }
-
-    QXmlStreamReader xml(&file);
+    XmlReader xml(path);
 
     while (!xml.atEnd() && !xml.hasError()) {
-        QXmlStreamReader::TokenType token = xml.readNext();
-        if (token == QXmlStreamReader::StartDocument) {
+        XmlReader::TokenType token = xml.readNext();
+        if (token == XmlReader::StartDocument) {
             continue;
         }
 
-        if (token == QXmlStreamReader::StartElement) {
-            if (xml.name() == "Synthesizer") {
+        if (token == XmlReader::StartElement) {
+            if (xml.tagName() == "Synthesizer") {
                 continue;
             }
 
-            while (!(xml.tokenType() == QXmlStreamReader::EndElement)) {
-                SynthesizerState::Group g;
-                g.name = xml.name().toString().toStdString();
+            while (xml.tokenType() != XmlReader::EndElement) {
+                SynthesizerState::Group group;
+                group.name = xml.tagName();
 
                 xml.readNext();
 
-                while (!(xml.tokenType() == QXmlStreamReader::EndElement)) {
-                    if (xml.tokenType() == QXmlStreamReader::StartElement) {
-                        if (xml.name() == "val") {
-                            SynthesizerState::ValID id = static_cast<SynthesizerState::ValID>(xml.attributes().value("id").toInt());
-                            g.vals.push_back(SynthesizerState::Val(id, xml.readElementText().toStdString()));
+                while (xml.tokenType() != XmlReader::EndElement) {
+                    if (xml.tokenType() == XmlReader::StartElement) {
+                        if (xml.tagName() == "val") {
+                            SynthesizerState::ValID id = static_cast<SynthesizerState::ValID>(xml.intAttribute("id"));
+                            group.vals.push_back(SynthesizerState::Val(id, xml.readString()));
                         } else {
                             xml.skipCurrentElement();
                         }
@@ -168,13 +163,13 @@ bool MidiConfiguration::readState(const io::path& path, SynthesizerState& state)
                     xml.readNext();
                 }
 
-                state.groups.insert({ g.name, std::move(g) });
+                state.groups.insert({ group.name, std::move(group) });
             }
         }
     }
 
     if (xml.hasError()) {
-        LOGE() << "failed parse xml, error: " << xml.errorString() << ", path: " << path;
+        LOGE() << "failed parse xml, error: " << xml.error() << ", path: " << path;
         return false;
     }
 
