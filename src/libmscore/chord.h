@@ -22,6 +22,7 @@
 
 #include <functional>
 #include "chordrest.h"
+#include "articulation.h"
 
 namespace Ms {
 class Note;
@@ -217,7 +218,8 @@ public:
     Articulation* hasArticulation(const Articulation*);
     bool hasSingleArticulation() const { return _articulations.size() == 1; }
 
-    void updateArticulations(const std::set<SymId>& actualArticulations);
+    void updateArticulations(const std::set<SymId>& newArticulationIds,
+                             ArticulationsUpdateMode replaceMode = ArticulationsUpdateMode::Insert);
 
     void crossMeasureSetup(bool on) override;
 
