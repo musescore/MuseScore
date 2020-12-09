@@ -2989,7 +2989,7 @@ Articulation* Chord::hasArticulation(const Articulation* aa)
     return 0;
 }
 
-void Chord::updateArticulations(const std::set<SymId>& actualArticulations)
+void Chord::updateArticulations(const std::set<SymId>& newArticulationIds, ArticulationsUpdateMode updateMode)
 {
     std::set<SymId> currentArticulationIds;
     for (Articulation* articulation: _articulations) {
@@ -3000,11 +3000,11 @@ void Chord::updateArticulations(const std::set<SymId>& actualArticulations)
     std::set<SymId> articulationIds = splitArticulations(currentArticulationIds);
     articulationIds = flipArticulations(articulationIds, Placement::ABOVE);
 
-    std::set<SymId> actualArticulationIds = splitArticulations(actualArticulations);
-    actualArticulationIds = flipArticulations(actualArticulationIds, Placement::ABOVE);
+    std::set<SymId> _newArticulationIds = splitArticulations(newArticulationIds);
+    _newArticulationIds = flipArticulations(_newArticulationIds, Placement::ABOVE);
 
-    for (const SymId& articulationId: actualArticulationIds) {
-        articulationIds = insertArticulation(articulationIds, articulationId);
+    for (const SymId& articulationId: _newArticulationIds) {
+        articulationIds = Ms::updateArticulations(articulationIds, articulationId, updateMode);
     }
 
     std::set<SymId> result = joinArticulations(articulationIds);

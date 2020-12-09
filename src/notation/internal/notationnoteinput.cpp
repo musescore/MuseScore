@@ -214,7 +214,7 @@ void NotationNoteInput::setArticulation(SymbolId articulationSymbolId)
 {
     Ms::InputState& inputState = score()->inputState();
 
-    std::set<SymbolId> articulations = Ms::insertArticulation(inputState.articulationIds(), articulationSymbolId);
+    std::set<SymbolId> articulations = Ms::updateArticulations(inputState.articulationIds(), articulationSymbolId);
     inputState.setArticulationIds(articulations);
 
     notifyAboutStateChanged();
