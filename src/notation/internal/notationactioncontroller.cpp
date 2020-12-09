@@ -349,6 +349,11 @@ void NotationActionController::putNote(const actions::ActionData& data)
 
 void NotationActionController::toggleAccidental(AccidentalType type)
 {
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
     auto noteInput = currentNotationNoteInput();
     if (!noteInput) {
         return;
@@ -356,7 +361,11 @@ void NotationActionController::toggleAccidental(AccidentalType type)
 
     startNoteInputIfNeed();
 
-    noteInput->toogleAccidental(type);
+    if (noteInput->isNoteInputMode()) {
+        noteInput->toogleAccidental(type);
+    } else {
+        interaction->addAccidentalToSelection(type);
+    }
 }
 
 void NotationActionController::addArticulation(SymbolId articulationSymbolId)
@@ -370,6 +379,8 @@ void NotationActionController::addArticulation(SymbolId articulationSymbolId)
     if (!noteInput) {
         return;
     }
+
+    startNoteInputIfNeed();
 
     if (noteInput->isNoteInputMode()) {
         noteInput->setArticulation(articulationSymbolId);

@@ -1969,6 +1969,18 @@ void NotationInteraction::addHairpinToSelection(HairpinType type)
     notifyAboutSelectionChanged();
 }
 
+void NotationInteraction::addAccidentalToSelection(AccidentalType type)
+{
+    Ms::EditData editData;
+    editData.view = new ScoreCallbacks();
+
+    startEdit();
+    score()->toggleAccidental(type, editData);
+    apply();
+
+    notifyAboutSelectionChanged();
+}
+
 void NotationInteraction::changeSelectedNotesArticulation(SymbolId articulationSymbolId)
 {
     std::vector<Note*> notes = score()->selection().noteList();
