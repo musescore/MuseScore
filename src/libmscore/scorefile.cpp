@@ -733,7 +733,9 @@ bool Score::saveStyle(const QString& name)
 //    return true on success
 //---------------------------------------------------------
 
-extern QString revision;
+//! FIXME
+//extern QString revision;
+static QString revision;
 
 bool Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
 {
