@@ -173,12 +173,13 @@ void ShadowNote::draw(QPainter* painter) const
             }
 
       qreal ms = spatium();
-      qreal x1 = noteheadWidth * .5 - (ms * mag());
-      qreal x2 = x1 + 2 * ms * mag();
+      qreal extraLen = score()->styleP(Sid::ledgerLineLength) * mag();
+      qreal x1 = -extraLen;
+      qreal x2 = noteheadWidth + extraLen;
       ms *= .5;
 
       lw = score()->styleP(Sid::ledgerLineWidth);
-      QPen penL(MScore::selectColor[_voice].lighter(SHADOW_NOTE_LIGHT), lw);
+      QPen penL(MScore::selectColor[_voice].lighter(SHADOW_NOTE_LIGHT), lw, Qt::SolidLine, Qt::FlatCap);
       painter->setPen(penL);
 
       if (_line < 100 && _line > -100 && !_rest) {
