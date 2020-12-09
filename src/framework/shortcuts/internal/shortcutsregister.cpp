@@ -18,13 +18,14 @@
 //=============================================================================
 #include "shortcutsregister.h"
 
-#include <QFile>
-#include <QXmlStreamReader>
 #include <QKeySequence>
 
 #include "log.h"
 
+#include "global/xmlreader.h"
+
 using namespace mu::shortcuts;
+using namespace mu::framework;
 
 void ShortcutsRegister::load()
 {
@@ -92,32 +93,21 @@ void ShortcutsRegister::expandStandartKeys(std::list<Shortcut>& shortcuts) const
 
 bool ShortcutsRegister::loadFromFile(std::list<Shortcut>& shortcuts, const io::path& path) const
 {
-    QFile f(path.toQString());
-    if (!f.exists()) {
-        LOGE() << "Not exists shortcuts file: " << path;
-        return false;
-    }
-
-    if (!f.open(QIODevice::ReadOnly)) {
-        LOGE() << "Cannot open shortcuts file: " << path;
-        return false;
-    }
-
-    QXmlStreamReader xml(&f);
+    XmlReader xml(path);
 
     while (xml.readNextStartElement()) {
-        if (xml.name() == "Shortcuts") {
+        if (xml.tagName() == "Shortcuts") {
             while (xml.readNextStartElement()) {
-                if (xml.name() == "SC") {
+                if (xml.tagName() == "SC") {
                     Shortcut shortcut;
                     while (xml.readNextStartElement()) {
-                        const QStringRef& tag(xml.name());
+                        std::string tag(xml.tagName());
                         if (tag == "key") {
-                            shortcut.action = xml.readElementText().toStdString();
+                            shortcut.action = xml.readString();
                         } else if (tag == "std") {
-                            shortcut.standartKey = QKeySequence::StandardKey(xml.readElementText().toInt());
+                            shortcut.standartKey = QKeySequence::StandardKey(xml.readInt());
                         } else if (tag == "seq") {
-                            shortcut.sequence = xml.readElementText().toStdString();
+                            shortcut.sequence = xml.readString();
                         } else {
                             xml.skipCurrentElement();
                         }
