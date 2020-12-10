@@ -7282,7 +7282,7 @@ bool MuseScore::saveMp3(Score* score, QIODevice* device, bool& wasCanceled)
                               frames    -= n;
                               }
                         const NPlayEvent& e = playPos->second;
-                        if (!e.discard() && e.isChannelEvent()) {
+                        if (!(!e.velo() && e.discard()) && e.isChannelEvent()) {
                               int channelIdx = e.channel();
                               Channel* c = score->masterScore()->midiMapping(channelIdx)->articulation();
                               if (!c->mute()) {
