@@ -121,7 +121,7 @@ void ShadowNote::draw(QPainter* painter) const
       QPointF ap(pagePos());
       painter->translate(ap);
       qreal lw = score()->styleP(Sid::stemWidth);
-      QPen pen(MScore::selectColor[_voice].lighter(SHADOW_NOTE_LIGHT), lw, Qt::SolidLine, Qt::RoundCap);
+      QPen pen(MScore::selectColor[_voice].lighter(SHADOW_NOTE_LIGHT), lw, Qt::SolidLine, Qt::FlatCap);
       painter->setPen(pen);
 
       // draw the accidental
@@ -137,15 +137,18 @@ void ShadowNote::draw(QPainter* painter) const
 
       // draw the dots
       qreal noteheadWidth = symWidth(_notehead);
+      qreal spmag  = spatium() * mag();
+      qreal spmag5 = 0.5 * spmag;
+      qreal sp5    = 0.5 * spatium();
       QPointF posDot;
       if (_duration.dots() > 0) {
             qreal d  = score()->styleP(Sid::dotNoteDistance) * mag();
             qreal dd = score()->styleP(Sid::dotDotDistance) * mag();
             posDot.rx() += (noteheadWidth + d);
             if (!_rest)
-                  posDot.ry() -= (_line % 2 == 0 ? 0.5 * spatium() : 0);
+                  posDot.ry() -= (_line % 2 == 0 ? sp5 : 0);
             else
-                  posDot.ry() += Rest::getDotline(_duration.type()) * spatium() * mag() * .5;
+                  posDot.ry() += Rest::getDotline(_duration.type()) * spmag5;
             for (int i = 0; i < _duration.dots(); i++) {
                   posDot.rx() += dd * i;
                   drawSymbol(SymId::augmentationDot, painter, posDot, 1);
@@ -155,40 +158,38 @@ void ShadowNote::draw(QPainter* painter) const
 
       // stem and flag
       SymId flag = getNoteFlag();
-      int up = computeUp() ? 1 : -1;
       if (flag != SymId::noSym) {
-            QPointF pos;
-            pos.rx() = up == 1 ? (noteheadWidth - (lw / 2)) : lw / 2;
-            qreal yOffset = up == 1 ? symStemUpSE(_notehead).y() * magS() : symStemDownNW(_notehead).y() * magS();
-            if (flag != SymId::lastSym) {
-                  qreal flagHeight = (_duration.type() < TDuration::DurationType::V_256TH) ? symHeight(flag) : symHeight(flag) / 2;
-                  pos.ry() -= up * (flagHeight + (posDot.y() != 0 ? posDot.y() + spatium() : 0) + 0.5 * spatium());
-                  painter->drawLine(QLineF(pos.x(), yOffset, pos.x(), pos.y() - up * (yOffset + lw / 2)));
-                  pos.rx() -= (lw / 2); // flag offset?
-                  drawSymbol(flag, painter, pos, 1);
+            bool up  = computeUp();
+            qreal x  =  up ? (noteheadWidth - (lw / 2)) : lw / 2;
+            qreal y1 = (up ? symStemUpSE(_notehead) : symStemDownNW(_notehead)).y() * mag();
+            qreal y2 = (up ? -3.5 : 3.5) * spmag;
+            
+            if (flag != SymId::lastSym) { // If there is a flag
+                  if (up && _duration.dots() > 0 && !(_line & 1)) {
+                        y2 -= spmag5; // Lengthen stem to avoid collision of dots with hook
+                        }
+                  QPointF flagPoint(x - (lw / 2), y2);
+                  drawSymbol(flag, painter, flagPoint, 1);
+                  y2 += ( up ? symStemUpNW(flag) : symStemDownSW(flag) ).y();
                   }
-            else {
-                  painter->drawLine(QLineF(pos.x(), yOffset, pos.x(), -3 * up * spatium() * mag() + yOffset));
-                  }
+            painter->drawLine(QLineF(x, y1, x, y2));
             }
 
-      qreal ms = spatium();
+      // Ledger lines
       qreal extraLen = score()->styleP(Sid::ledgerLineLength) * mag();
       qreal x1 = -extraLen;
       qreal x2 = noteheadWidth + extraLen;
-      ms *= .5;
 
       lw = score()->styleP(Sid::ledgerLineWidth);
-      QPen penL(MScore::selectColor[_voice].lighter(SHADOW_NOTE_LIGHT), lw, Qt::SolidLine, Qt::FlatCap);
-      painter->setPen(penL);
+      painter->setPen(QPen(MScore::selectColor[_voice].lighter(SHADOW_NOTE_LIGHT), lw, Qt::SolidLine, Qt::FlatCap));
 
       if (_line < 100 && _line > -100 && !_rest) {
             for (int i = -2; i >= _line; i -= 2) {
-                  qreal y = ms * mag() * (i - _line);
+                  qreal y = spmag5 * (i - _line);
                   painter->drawLine(QLineF(x1, y, x2, y));
                   }
             for (int i = 10; i <= _line; i += 2) {
-                  qreal y = ms * mag() * (i - _line);
+                  qreal y = spmag5 * (i - _line);
                   painter->drawLine(QLineF(x1, y, x2, y));
                   }
             }

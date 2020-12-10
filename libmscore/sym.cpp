@@ -6419,6 +6419,16 @@ void ScoreFont::load()
                         qreal y = ooo.value(j).toArray().at(1).toDouble();
                         sym->setStemUpSE(QPointF(4.0 * DPI_F * x, 4.0 * DPI_F * -y));
                         }
+                  else if (j == "stemDownSW") {
+                        qreal x = ooo.value(j).toArray().at(0).toDouble();
+                        qreal y = ooo.value(j).toArray().at(1).toDouble();
+                        sym->setStemDownSW(QPointF(4.0 * DPI_F * x, 4.0 * DPI_F * -y));
+                        }
+                  else if (j == "stemUpNW") {
+                        qreal x = ooo.value(j).toArray().at(0).toDouble();
+                        qreal y = ooo.value(j).toArray().at(1).toDouble();
+                        sym->setStemUpNW(QPointF(4.0 * DPI_F * x, 4.0 * DPI_F * -y));
+                        }
                   else if (j == "cutOutNE") {
                         qreal x = ooo.value(j).toArray().at(0).toDouble() * scale;
                         qreal y = ooo.value(j).toArray().at(1).toDouble() * scale;
@@ -6811,6 +6821,20 @@ QPointF ScoreFont::stemUpSE(SymId id, qreal mag) const
       if (useFallbackFont(id))
             return fallbackFont()->stemUpSE(id, mag);
       return sym(id).stemUpSE() * mag;
+      }
+
+QPointF ScoreFont::stemDownSW(SymId id, qreal mag) const
+      {
+      if (useFallbackFont(id))
+            return fallbackFont()->stemDownSW(id, mag);
+      return sym(id).stemDownSW() * mag;
+      }
+
+QPointF ScoreFont::stemUpNW(SymId id, qreal mag) const
+      {
+      if (useFallbackFont(id))
+            return fallbackFont()->stemUpNW(id, mag);
+      return sym(id).stemUpNW() * mag;
       }
 
 QPointF ScoreFont::cutOutNE(SymId id, qreal mag) const
