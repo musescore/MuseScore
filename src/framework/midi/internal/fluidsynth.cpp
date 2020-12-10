@@ -185,7 +185,7 @@ Ret FluidSynth::removeSoundFonts()
 
 Ret FluidSynth::setupChannels(const std::vector<Event>& events)
 {
-    IF_ASSERT_FAILED(m_fluid->synth) {
+    if (!m_fluid->synth) {
         return make_ret(Err::SynthNotInited);
     }
 
@@ -271,7 +271,7 @@ void FluidSynth::allSoundsOff()
 
 void FluidSynth::flushSound()
 {
-    IF_ASSERT_FAILED(m_fluid->synth) {
+    if (!m_fluid->synth) {
         return;
     }
 

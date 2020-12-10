@@ -18,13 +18,14 @@
 //=============================================================================
 #include "notationconfiguration.h"
 
-#include "log.h"
-#include "settings.h"
-
-#include "io/path.h"
-
 #include "libmscore/preferences.h"
 #include "libmscore/mscore.h"
+
+#include "log.h"
+#include "settings.h"
+#include "io/path.h"
+
+#include "notationtypes.h"
 
 using namespace mu;
 using namespace mu::notation;
@@ -160,9 +161,13 @@ QColor NotationConfiguration::playbackCursorColor() const
     return c;
 }
 
-QColor NotationConfiguration::selectionColor() const
+QColor NotationConfiguration::selectionColor(int voice) const
 {
-    return Ms::MScore::selectColor[0];
+    if (!isVoiceIndexValid(voice)) {
+        return QColor();
+    }
+
+    return Ms::MScore::selectColor[voice];
 }
 
 int NotationConfiguration::selectionProximity() const

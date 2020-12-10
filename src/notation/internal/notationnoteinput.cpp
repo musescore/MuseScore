@@ -25,6 +25,9 @@
 #include "libmscore/chord.h"
 #include "libmscore/slur.h"
 #include "libmscore/articulation.h"
+#include "libmscore/system.h"
+#include "libmscore/page.h"
+#include "libmscore/stafftype.h"
 
 #include "scorecallbacks.h"
 
@@ -253,6 +256,63 @@ void NotationNoteInput::putTuplet(const TupletOptions& options)
     m_undoStack->commitChanges();
 
     m_stateChanged.notify();
+}
+
+QRectF NotationNoteInput::cursorRect() const
+{
+    if (!isNoteInputMode()) {
+        return QRectF();
+    }
+
+    Ms::InputState& inputState = score()->inputState();
+    Ms::Segment* segment = inputState.segment();
+    if (!segment) {
+        return QRectF();
+    }
+
+    Ms::System* system = segment->measure()->system();
+    if (!system) {
+        return QRectF();
+    }
+
+    int track = inputState.track() == -1 ? 0 : inputState.track();
+    int staffIdx = track / VOICES;
+
+    QRectF segmentContentRect = segment->contentRect();
+    double x = segmentContentRect.translated(segment->pagePos()).x() - 6;
+    double y = system->staffYpage(staffIdx) + system->page()->pos().y();
+    double w = segmentContentRect.width() + 12;
+
+    double h;
+
+    Staff* staff = score()->staff(staffIdx);
+    const Ms::StaffType* staffType = staff->staffType(inputState.tick());
+    double spatium = score()->spatium();
+    double lineDist = staffType->lineDistance().val() * spatium;
+    int lines = staffType->lines();
+    int strg = inputState.string();
+
+    int instrStrgs = staff->part()->instrument()->stringData()->strings();
+    if (staff->isTabStaff(inputState.tick()) && strg >= 0 && strg <= instrStrgs) {
+        h = lineDist;
+        y += staffType->physStringToYOffset(strg) * spatium;
+        y -= (staffType->onLines() ? lineDist * 0.5 : lineDist);
+    } else {
+        h = (lines - 1) * lineDist + 4 * spatium;
+        y -= 2.0 * spatium;
+    }
+
+    QRectF result = QRectF(x, y, w, h);
+    return result;
+}
+
+QColor NotationNoteInput::cursorColor() const
+{
+    Ms::InputState& inputState = score()->inputState();
+    int track = inputState.track() == -1 ? 0 : inputState.track();
+    int voice = track % VOICES;
+
+    return configuration()->selectionColor(voice);
 }
 
 void NotationNoteInput::setSlur(Ms::Slur* slur)
