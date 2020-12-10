@@ -121,6 +121,7 @@ StyledPopup {
 
             onClicked: {
                 settingsModel.createLinkedStaff()
+                root.close()
             }
         }
 

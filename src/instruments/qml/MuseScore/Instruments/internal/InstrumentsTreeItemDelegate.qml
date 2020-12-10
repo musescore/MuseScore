@@ -171,8 +171,26 @@ Item {
         drag.target: root
         drag.axis: Drag.YAxis
 
-        onPressAndHold: root.held = true
-        onReleased: root.held = false
+        Timer {
+            id: pressAndHoldTimer
+
+            interval: 300
+            running: false
+            repeat: false
+
+            onTriggered: {
+                root.held = true
+            }
+        }
+
+        onPressed: {
+            pressAndHoldTimer.start()
+        }
+
+        onReleased: {
+            pressAndHoldTimer.stop()
+            root.held = false
+        }
 
         onClicked: {
             root.clicked(mouse)
