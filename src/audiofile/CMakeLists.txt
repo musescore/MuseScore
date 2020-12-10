@@ -17,8 +17,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/audiofile.h
     )
 
-include(FindSndFile)
-
 set(MODULE_INCLUDE
     ${SNDFILE_INCDIR}
     )

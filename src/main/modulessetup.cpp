@@ -95,7 +95,7 @@ ModulesSetup::ModulesSetup()
 #ifdef BUILD_VST
         << new mu::vst::VSTModule()
 #endif
-        << new mu::importexport::ImportExportModule()
+        //<< new mu::importexport::ImportExportModule()
         << new mu::inspector::InspectorModule()
         << new mu::palette::PaletteModule()
     ;

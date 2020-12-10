@@ -107,11 +107,9 @@ set (FLUIDSYNTH_INC
 
 set (MODULE_INCLUDE
     ${FLUIDSYNTH_INC}
-    ${SNDFILE_INCDIR}
     )
 
 set(MODULE_LINK
-    ${SNDFILE_LIB}
     fluidsynth
     audiofile
     qzip
