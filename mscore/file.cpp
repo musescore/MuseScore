@@ -3191,8 +3191,6 @@ QJsonObject MuseScore::saveMetadataJSON(Score* score)
             QJsonObject jsonPart;
             jsonPart.insert("name", p->longName().replace("\n", ""));
             int midiProgram = p->midiProgram();
-            if (p->midiChannel() == 9)
-                midiProgram = 128;
             jsonPart.insert("program", midiProgram);
             jsonPart.insert("instrumentId", p->instrumentId());
             jsonPart.insert("lyricCount", p->lyricCount());
