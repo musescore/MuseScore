@@ -37,6 +37,7 @@
 #include "xml.h"
 #include "undo.h"
 #include "harmony.h"
+#include "hook.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -1215,6 +1216,35 @@ void Segment::scanElements(void* data, void (* func)(void*, Element*), bool all)
             e->scanElements(data, func, all);
         }
     }
+}
+
+QRectF Segment::contentRect() const
+{
+    QRectF result;
+    for (const Element* element: elist()) {
+        if (!element) {
+            continue;
+        }
+
+        if (element->isChord()) {
+            const Chord* chord = dynamic_cast<const Chord*>(element);
+            for (const Note* note: chord->notes()) {
+                result = result.united(note->bbox());
+            }
+
+            Hook* hook = chord->hook();
+            if (hook) {
+                QRectF rect = QRectF(hook->pos().x(), hook->pos().y(), hook->width(), hook->height());
+                result = result.united(rect);
+            }
+
+            continue;
+        }
+
+        result = result.united(element->bbox());
+    }
+
+    return result;
 }
 
 //---------------------------------------------------------
