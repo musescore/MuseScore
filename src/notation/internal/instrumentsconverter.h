@@ -28,7 +28,7 @@ class NamedEventList;
 }
 
 namespace mu::notation {
-class InstrumentsConveter
+class InstrumentsConverter
 {
 public:
     static Ms::Instrument convertInstrument(const instruments::Instrument& instrument);

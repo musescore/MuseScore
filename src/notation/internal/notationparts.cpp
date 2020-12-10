@@ -103,7 +103,7 @@ NotifyList<Instrument> NotationParts::instrumentList(const ID& partId) const
     NotifyList<Instrument> result;
 
     for (const Ms::Instrument* instrument: instruments(part).values()) {
-        result.push_back(InstrumentsConveter::convertInstrument(*instrument));
+        result.push_back(InstrumentsConverter::convertInstrument(*instrument));
     }
 
     ChangedNotifier<Instrument>* notifier = partNotifier(partId);
@@ -150,7 +150,7 @@ void NotationParts::setInstruments(const InstrumentList& instruments)
         Part* part = new Part(score());
 
         part->setPartName(instrument.name);
-        part->setInstrument(InstrumentsConveter::convertInstrument(instrument));
+        part->setInstrument(InstrumentsConverter::convertInstrument(instrument));
 
         score()->undo(new Ms::InsertPart(part, lastStaffIndex()));
         appendStaves(part, instrument);
@@ -277,7 +277,7 @@ void NotationParts::setInstrumentVisible(const ID& instrumentId, const ID& fromP
     apply();
 
     ChangedNotifier<Instrument>* notifier = partNotifier(fromPartId);
-    notifier->itemChanged(InstrumentsConveter::convertInstrument(*instrumentInfo.instrument));
+    notifier->itemChanged(InstrumentsConverter::convertInstrument(*instrumentInfo.instrument));
     m_partsChanged.notify();
 }
 
@@ -355,7 +355,7 @@ void NotationParts::assignIstrumentToSelectedChord(Ms::Instrument* instrument)
     apply();
 
     ChangedNotifier<Instrument>* notifier = partNotifier(part->id());
-    notifier->itemChanged(InstrumentsConveter::convertInstrument(*instrument));
+    notifier->itemChanged(InstrumentsConverter::convertInstrument(*instrument));
     m_partsChanged.notify();
 }
 
@@ -432,7 +432,7 @@ void NotationParts::setInstrumentName(const ID& instrumentId, const ID& fromPart
 
     InstrumentInfo newInstrumentInfo = this->instrumentInfo(instrumentId, part);
     ChangedNotifier<Instrument>* notifier = partNotifier(part->id());
-    notifier->itemChanged(InstrumentsConveter::convertInstrument(*newInstrumentInfo.instrument));
+    notifier->itemChanged(InstrumentsConverter::convertInstrument(*newInstrumentInfo.instrument));
     m_partsChanged.notify();
 }
 
@@ -454,7 +454,7 @@ void NotationParts::setInstrumentAbbreviature(const ID& instrumentId, const ID& 
 
     InstrumentInfo newInstrumentInfo = this->instrumentInfo(instrumentId, part);
     ChangedNotifier<Instrument>* notifier = partNotifier(part->id());
-    notifier->itemChanged(InstrumentsConveter::convertInstrument(*newInstrumentInfo.instrument));
+    notifier->itemChanged(InstrumentsConverter::convertInstrument(*newInstrumentInfo.instrument));
     m_partsChanged.notify();
 }
 
@@ -660,7 +660,7 @@ void NotationParts::appendDoublingInstrument(const Instrument& instrument, const
     }
 
     startEdit();
-    part->setInstrument(InstrumentsConveter::convertInstrument(instrument), Ms::Fraction::fromTicks(lastTick + 1));
+    part->setInstrument(InstrumentsConverter::convertInstrument(instrument), Ms::Fraction::fromTicks(lastTick + 1));
     doSetPartName(part, formatPartName(part));
     apply();
 
@@ -733,12 +733,12 @@ void NotationParts::replaceInstrument(const ID& instrumentId, const ID& fromPart
     }
 
     startEdit();
-    part->setInstrument(InstrumentsConveter::convertInstrument(newInstrument), oldInstrumentInfo.fraction);
+    part->setInstrument(InstrumentsConverter::convertInstrument(newInstrument), oldInstrumentInfo.fraction);
     doSetPartName(part, formatPartName(part));
     apply();
 
     ChangedNotifier<Instrument>* notifier = partNotifier(part->id());
-    notifier->itemReplaced(InstrumentsConveter::convertInstrument(*oldInstrumentInfo.instrument), newInstrument);
+    notifier->itemReplaced(InstrumentsConverter::convertInstrument(*oldInstrumentInfo.instrument), newInstrument);
 
     m_partsNotifier->itemChanged(part);
     m_partsChanged.notify();

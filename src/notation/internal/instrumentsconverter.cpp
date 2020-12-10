@@ -24,7 +24,7 @@
 using namespace mu::notation;
 using namespace mu::instruments;
 
-Ms::Instrument InstrumentsConveter::convertInstrument(const Instrument& instrument)
+Ms::Instrument InstrumentsConverter::convertInstrument(const Instrument& instrument)
 {
     Ms::Instrument result;
     result.setAmateurPitchRange(instrument.amateurPitchRange.min, instrument.amateurPitchRange.max);
@@ -63,7 +63,7 @@ Ms::Instrument InstrumentsConveter::convertInstrument(const Instrument& instrume
     return result;
 }
 
-Instrument InstrumentsConveter::convertInstrument(const Ms::Instrument& instrument)
+Instrument InstrumentsConverter::convertInstrument(const Ms::Instrument& instrument)
 {
     Instrument result;
     result.amateurPitchRange = PitchRange(instrument.minPitchA(), instrument.maxPitchA());
@@ -100,7 +100,7 @@ Instrument InstrumentsConveter::convertInstrument(const Ms::Instrument& instrume
     return result;
 }
 
-QList<Ms::NamedEventList> InstrumentsConveter::convertMidiActions(const MidiActionList& midiActions)
+QList<Ms::NamedEventList> InstrumentsConverter::convertMidiActions(const MidiActionList& midiActions)
 {
     QList<Ms::NamedEventList> result;
 
@@ -122,7 +122,7 @@ QList<Ms::NamedEventList> InstrumentsConveter::convertMidiActions(const MidiActi
     return result;
 }
 
-MidiActionList InstrumentsConveter::convertMidiActions(const QList<Ms::NamedEventList>& midiActions)
+MidiActionList InstrumentsConverter::convertMidiActions(const QList<Ms::NamedEventList>& midiActions)
 {
     MidiActionList result;
 

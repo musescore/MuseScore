@@ -882,7 +882,7 @@ void NotationInteraction::selectInstrument(InstrumentChange *instrumentChange)
         return;
     }
 
-    Ms::Instrument instrument = InstrumentsConveter::convertInstrument(selectedIstrument);
+    Ms::Instrument instrument = InstrumentsConverter::convertInstrument(selectedIstrument);
 
     instrumentChange->setInit(true);
     instrumentChange->setupInstrument(&instrument);
