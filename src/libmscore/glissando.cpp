@@ -377,6 +377,9 @@ void Glissando::write(XmlWriter& xml) const
     for (auto id : { Pid::GLISS_TYPE, Pid::PLAY, Pid::GLISSANDO_STYLE }) {
         writeProperty(xml, id);
     }
+    for (const StyledProperty& spp : *styledProperties()) {
+        writeProperty(xml, spp.pid);
+    }
 
     SLine::writeProperties(xml);
     xml.etag();
