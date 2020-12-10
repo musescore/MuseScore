@@ -33,7 +33,7 @@ AbstractDataPtrList WorkspaceSettingsStream::read(IODevice& sourceDevice) const
 {
     XmlReader reader(&sourceDevice);
 
-    while (!reader.atEnd()) {
+    while (reader.canRead()) {
         reader.readNextStartElement();
 
         if (reader.tagName() == SETTINGS_TAG) {

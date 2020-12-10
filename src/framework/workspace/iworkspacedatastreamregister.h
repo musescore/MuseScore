@@ -30,7 +30,7 @@ class IWorkspaceDataStreamRegister : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IWorkspaceDataStreamRegister() = default;
 
-    virtual void addStream(IWorkspaceDataStreamPtr stream) = 0;
+    virtual void regStream(IWorkspaceDataStreamPtr stream) = 0;
     virtual IWorkspaceDataStreamPtrList streams() const = 0;
 };
 }

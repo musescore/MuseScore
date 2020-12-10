@@ -38,7 +38,7 @@ public:
     ~XmlReader();
 
     bool readNextStartElement();
-    bool atEnd();
+    bool canRead() const;
     void skipCurrentElement();
     std::string tagName() const;
 
@@ -60,13 +60,13 @@ public:
     std::string attribute(std::string_view name) const;
     bool hasAttribute(std::string_view name) const;
 
-    enum ReadStringBehaviour {
+    enum ReadStringBehavior {
         ErrorOnUnexpectedElement,
         IncludeChildElements,
         SkipChildElements
     };
 
-    std::string readString(ReadStringBehaviour behaviour = ErrorOnUnexpectedElement);
+    std::string readString(ReadStringBehavior behavior = ErrorOnUnexpectedElement);
     int readInt();
     double readDouble();
 
@@ -74,7 +74,7 @@ public:
     std::string error() const;
 
 private:
-    QString readElementText(ReadStringBehaviour behaviour = ErrorOnUnexpectedElement);
+    QString readElementText(ReadStringBehavior behavior = ErrorOnUnexpectedElement);
     QStringRef attributeValue(std::string_view name) const;
 
     std::unique_ptr<IODevice> m_device;

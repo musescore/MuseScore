@@ -25,7 +25,7 @@ namespace mu::workspace {
 class WorkspaceDataStreamRegister : public IWorkspaceDataStreamRegister
 {
 public:
-    void addStream(IWorkspaceDataStreamPtr stream) override;
+    void regStream(IWorkspaceDataStreamPtr stream) override;
     IWorkspaceDataStreamPtrList streams() const override;
 
 private:

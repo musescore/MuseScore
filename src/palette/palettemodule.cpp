@@ -85,7 +85,7 @@ void PaletteModule::resolveImports()
 {
     auto workspaceStreams = ioc()->resolve<workspace::IWorkspaceDataStreamRegister>(moduleName());
     if (workspaceStreams) {
-        workspaceStreams->addStream(std::make_shared<WorkspacePaletteStream>());
+        workspaceStreams->regStream(std::make_shared<WorkspacePaletteStream>());
     }
 
     auto ar = framework::ioc()->resolve<actions::IActionsRegister>(moduleName());

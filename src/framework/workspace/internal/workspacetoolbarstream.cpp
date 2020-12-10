@@ -32,7 +32,7 @@ AbstractDataPtrList WorkspaceToolbarStream::read(IODevice& sourceDevice) const
     XmlReader reader(&sourceDevice);
     AbstractDataPtrList toolbars;
 
-    while (!reader.atEnd()) {
+    while (reader.canRead()) {
         reader.readNextStartElement();
 
         if (reader.tagName() != TOOLBAR_TAG) {
