@@ -10937,7 +10937,7 @@ By default, they will be placed such as that their right end are at the same lev
             </widget>
            </item>
            <item row="3" column="3">
-            <spacer name="verticalSpacer_34">
+            <spacer name="verticalSpacer_341">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
              </property>
@@ -11188,7 +11188,7 @@ By default, they will be placed such as that their right end are at the same lev
           <property name="title">
            <string>Fretboard Diagrams</string>
           </property>
-          <layout class="QGridLayout" name="gridLayout_47">
+          <layout class="QGridLayout" name="gridLayout_471">
            <item row="0" column="0">
             <widget class="QLabel" name="label_602">
              <property name="text">
