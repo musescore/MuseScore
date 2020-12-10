@@ -401,7 +401,7 @@ class CrashReportDatabase {
   //! \param[in] lockfile_ttl The number of seconds at which lockfiles or new
   //!     report files are considered expired.
   //! \return The number of reports cleaned.
-  virtual int CleanDatabase(time_t lockfile_ttl) { return 0; }
+  virtual int CleanDatabase(time_t lockfile_ttl) { (void)lockfile_ttl; return 0; }
 
  protected:
   CrashReportDatabase() {}

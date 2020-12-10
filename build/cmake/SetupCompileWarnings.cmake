@@ -40,6 +40,8 @@ function(target_no_warning TARGET WNAME)
         set(MSVC_Warning /wd4244 /wd4267 /wd4245)
     elseif(WNAME STREQUAL "-Wno-cast-function-type")
 
+    elseif(WNAME STREQUAL "-Wno-array-bounds")
+
     # Only MSVC warnings
     elseif(WNAME STREQUAL "-WMSVC-no-translation-unit-is-empty")
         unset(GCC_Warning)
