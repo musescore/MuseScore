@@ -18,15 +18,13 @@
 //=============================================================================
 #include "midiconfiguration.h"
 
-#include <list>
-#include <QXmlStreamWriter>
-#include <QFile>
-
 #include "log.h"
+
 #include "settings.h"
 #include "stringutils.h"
 
 #include "global/xmlreader.h"
+#include "global/xmlwriter.h"
 
 using namespace mu;
 using namespace mu::midi;
@@ -170,39 +168,33 @@ bool MidiConfiguration::readState(const io::path& path, SynthesizerState& state)
 
     if (xml.hasError()) {
         LOGE() << "failed parse xml, error: " << xml.error() << ", path: " << path;
-        return false;
     }
 
-    return true;
+    return xml.hasError();
 }
 
 bool MidiConfiguration::writeState(const io::path& path, const SynthesizerState& state)
 {
-    QFile file(path.toQString());
-    if (!file.open(QIODevice::WriteOnly)) {
-        LOGE() << "failed open " << path;
-        return false;
-    }
-
-    QXmlStreamWriter xml(&file);
-    xml.setAutoFormatting(true);
+    XmlWriter xml(path);
     xml.writeStartDocument();
 
     xml.writeStartElement("Synthesizer");
 
     for (auto it = state.groups.cbegin(); it != state.groups.cend(); ++it) {
-        const SynthesizerState::Group& g = it->second;
+        const SynthesizerState::Group& group = it->second;
 
-        if (!g.name.empty()) {
-            xml.writeStartElement(QString::fromStdString(g.name));
-            for (const SynthesizerState::Val& v : g.vals) {
-                xml.writeStartElement("val");
-                xml.writeAttribute("id", QString::number(static_cast<int>(v.id)));
-                xml.writeCharacters(QString::fromStdString(v.val));
-                xml.writeEndElement();
-            }
+        if (group.name.empty()) {
+            continue;
+        }
+
+        xml.writeStartElement(group.name);
+        for (const SynthesizerState::Val& value : group.vals) {
+            xml.writeStartElement("val");
+            xml.writeAttribute("id", std::to_string(static_cast<int>(value.id)));
+            xml.writeCharacters(value.val);
             xml.writeEndElement();
         }
+        xml.writeEndElement();
     }
 
     xml.writeEndElement();
@@ -210,13 +202,7 @@ bool MidiConfiguration::writeState(const io::path& path, const SynthesizerState&
 
     if (xml.hasError()) {
         LOGE() << "failed write xml";
-        return false;
     }
 
-    if (!file.flush()) {
-        LOGE() << "failed flush data, file: " << path;
-        return false;
-    }
-
-    return true;
+    return xml.hasError();
 }
