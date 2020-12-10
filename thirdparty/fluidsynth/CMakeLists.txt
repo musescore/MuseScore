@@ -7,8 +7,6 @@ set(MODULE_SRC
     ${FLUIDSYNTH_SRC}
     )
 
-include(FindSndFile)
-
 set (MODULE_INCLUDE
     ${FLUIDSYNTH_INC}
     ${SNDFILE_INCDIR}

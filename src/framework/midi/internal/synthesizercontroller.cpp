@@ -18,6 +18,8 @@
 //=============================================================================
 #include "synthesizercontroller.h"
 
+#include <thread>
+
 #include "log.h"
 
 using namespace mu::midi;
@@ -59,5 +61,10 @@ void SynthesizerController::reloadSoundFonts(std::shared_ptr<ISynthesizer> synth
     }
 
     std::vector<io::path> sfonts = sfprovider()->soundFontPathsForSynth(synth->name());
-    synth->addSoundFonts(sfonts);
+
+    //! NOTE Temporary fix
+    std::thread* th = new std::thread([synth, sfonts]() {
+        synth->addSoundFonts(sfonts);
+    });
+    th->detach();
 }

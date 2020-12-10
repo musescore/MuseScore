@@ -12,7 +12,6 @@ set(_components
     Core
     Gui
     Network
-    Test
     Qml
     Quick
     QuickControls2
@@ -21,13 +20,10 @@ set(_components
     Xml
     XmlPatterns
     Svg
-    Sql
     Widgets
     PrintSupport
     Concurrent
     OpenGL
-    LinguistTools
-    Help
   )
 if (USE_WEBENGINE)
   set(_components
