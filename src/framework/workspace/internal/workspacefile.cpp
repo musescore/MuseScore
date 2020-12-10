@@ -22,7 +22,6 @@
 
 #include <QFile>
 #include <QBuffer>
-#include <QXmlStreamWriter>
 
 #include "log.h"
 #include "stringutils.h"
@@ -30,7 +29,8 @@
 #include "thirdparty/qzip/qzipreader_p.h"
 #include "thirdparty/qzip/qzipwriter_p.h"
 
-#include "framework/global/xmlreader.h"
+#include "global/xmlreader.h"
+#include "global/xmlwriter.h"
 
 using namespace mu;
 using namespace mu::workspace;
@@ -177,17 +177,21 @@ void WorkspaceFile::MetaInf::writeContainer(QByteArray* data) const
         return;
     }
 
-    QXmlStreamWriter xml(data);
-    xml.setAutoFormatting(true);
+    QBuffer buffer(data);
+    buffer.open(QBuffer::WriteOnly);
+
+    XmlWriter xml(&buffer);
     xml.writeStartDocument();
     xml.writeStartElement("container");
     xml.writeStartElement("rootfiles");
 
     xml.writeStartElement("rootfile");
-    xml.writeAttribute("full-path", QString::fromStdString(m_rootfile));
+    xml.writeAttribute("full-path", m_rootfile);
     xml.writeEndElement();
 
     xml.writeEndElement();
     xml.writeEndElement();
     xml.writeEndDocument();
+
+    buffer.close();
 }

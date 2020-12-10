@@ -21,7 +21,6 @@
 
 #include <QXmlStreamReader>
 #include <QFile>
-#include <QBuffer>
 
 using namespace mu::framework;
 
@@ -105,16 +104,6 @@ std::string XmlReader::tagName() const
     return m_reader->name().toString().toStdString();
 }
 
-bool XmlReader::hasError() const
-{
-    return m_reader->hasError();
-}
-
-std::string XmlReader::error() const
-{
-    return m_reader->errorString().toStdString();
-}
-
 int XmlReader::intAttribute(std::string_view name, int defaultValue) const
 {
     if (hasAttribute(name)) {
@@ -180,4 +169,14 @@ QString XmlReader::readElementText(ReadStringBehaviour behaviour)
     }
 
     return m_reader->readElementText(behaviour_);
+}
+
+bool XmlReader::hasError() const
+{
+    return m_reader->hasError();
+}
+
+std::string XmlReader::error() const
+{
+    return m_reader->errorString().toStdString();
 }

@@ -55,9 +55,6 @@ public:
     TokenType readNext();
     TokenType tokenType() const;
 
-    bool hasError() const;
-    std::string error() const;
-
     int intAttribute(std::string_view name, int defaultValue = 0) const;
     double doubleAttribute(std::string_view name, double defaultValue = 0.) const;
     std::string attribute(std::string_view name) const;
@@ -72,6 +69,9 @@ public:
     std::string readString(ReadStringBehaviour behaviour = ErrorOnUnexpectedElement);
     int readInt();
     double readDouble();
+
+    bool hasError() const;
+    std::string error() const;
 
 private:
     QString readElementText(ReadStringBehaviour behaviour = ErrorOnUnexpectedElement);
