@@ -132,7 +132,7 @@ bool MidiConfiguration::readState(const io::path& path, SynthesizerState& state)
 {
     XmlReader xml(path);
 
-    while (!xml.atEnd() && !xml.hasError()) {
+    while (xml.canRead() && !xml.hasError()) {
         XmlReader::TokenType token = xml.readNext();
         if (token == XmlReader::StartDocument) {
             continue;

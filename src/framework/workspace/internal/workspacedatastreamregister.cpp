@@ -20,7 +20,7 @@
 
 using namespace mu::workspace;
 
-void WorkspaceDataStreamRegister::addStream(IWorkspaceDataStreamPtr stream)
+void WorkspaceDataStreamRegister::regStream(IWorkspaceDataStreamPtr stream)
 {
     m_streams.push_back(stream);
 }

@@ -22,13 +22,16 @@
 #include "translation.h"
 #include "workspacefile.h"
 
-#include "framework/global/xmlreader.h"
+#include "global/xmlreader.h"
+#include "global/xmlwriter.h"
 
 #include <QBuffer>
 
 using namespace mu;
 using namespace mu::workspace;
 using namespace mu::framework;
+
+static constexpr std::string_view SOURCE_TAG("source");
 
 Workspace::Workspace(const io::path& file)
     : m_file(file)
@@ -132,6 +135,16 @@ Ret Workspace::readWorkspace(const QByteArray& xmlData)
     buffer.setData(xmlData);
     buffer.open(IODevice::ReadOnly);
 
+    XmlReader reader(&buffer);
+    while (reader.canRead()) {
+        reader.readNextStartElement();
+
+        if (reader.tagName() == SOURCE_TAG) {
+            m_source = reader.readString();
+            break;
+        }
+    }
+
     for (IWorkspaceDataStreamPtr stream : streamRegister()->streams()) {
         AbstractDataPtrList dataList = stream->read(buffer);
 
@@ -142,45 +155,6 @@ Ret Workspace::readWorkspace(const QByteArray& xmlData)
 
         buffer.seek(0);
     }
-
-    /*
-    XmlReader xml(xmlData);
-
-    while (xml.readNextStartElement()) {
-        if (xml.tagName() != "museScore") {
-            return make_ret(Ret::Code::UnknownError);
-        }
-
-        while (xml.readNextStartElement()) {
-            if (xml.tagName() != "Workspace") {
-                return make_ret(Ret::Code::UnknownError);
-            }
-
-            while (xml.readNextStartElement()) {
-                std::string tag = xml.tagName();
-                if ("name" == tag) {
-                    xml.readString();
-                } else if ("source" == tag) {
-                    m_source = xml.readString();
-                } else {
-                    std::shared_ptr<IWorkspaceDataStream> reader = streamRegister()->stream(tag);
-                    if (!reader) {
-                        LOGW() << "not registred reader for: " << tag;
-                        xml.skipCurrentElement();
-                        continue;
-                    }
-
-                    std::shared_ptr<AbstractData> data = reader->read(xml.device());
-                    if (!data) {
-                        LOGE() << "failed read: " << tag;
-                    } else {
-                        DataKey key { data->tag, data->name };
-                        m_data[key] = data;
-                    }
-                }
-            }
-        }
-    }*/
 
     return make_ret(Ret::Code::Ok);
 }

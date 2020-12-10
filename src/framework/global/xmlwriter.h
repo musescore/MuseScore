@@ -24,7 +24,6 @@
 
 #include "io/path.h"
 #include "system/iodevice.h"
-#include "val.h"
 
 class QXmlStreamWriter;
 
@@ -43,8 +42,8 @@ public:
     void writeEndElement();
 
     void writeAttribute(std::string_view name, const std::string& value);
-    void writeCharacters(const std::string& value);
-    void writeTextElement(std::string_view name, const std::string& value);
+    void writeCharacters(const std::string& text);
+    void writeTextElement(std::string_view name, const std::string& text);
 
     bool hasError() const;
 
