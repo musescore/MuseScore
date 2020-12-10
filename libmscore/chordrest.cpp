@@ -938,6 +938,16 @@ bool ChordRest::isGraceAfter() const
       }
 
 //---------------------------------------------------------
+//   hasBreathMark - determine if chordrest has breath-mark
+//---------------------------------------------------------
+Breath* ChordRest::hasBreathMark() const
+      {
+      Fraction end = tick() + actualTicks();
+      Segment* s = measure()->findSegment(SegmentType::Breath, end);
+      return s ? toBreath(s->element(track())) : 0;
+      }
+
+//---------------------------------------------------------
 //   writeBeam
 //---------------------------------------------------------
 
