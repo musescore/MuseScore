@@ -1,11 +1,18 @@
 
 include(GetCompilerInfo)
+include(GetBuildType)
 
+set(BUILD_SHARED_LIBS OFF)
+set(SHARED_LIBS_INSTALL_DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 if (CC_IS_GCC)
     message(STATUS "Using Compiler GCC ${CMAKE_CXX_COMPILER_VERSION}")
 
     set(CMAKE_CXX_FLAGS_DEBUG   "-g")
     set(CMAKE_CXX_FLAGS_RELEASE "-O2")
+
+    if (BUILD_IS_DEBUG)
+        set(BUILD_SHARED_LIBS ON)
+    endif(BUILD_IS_DEBUG)
 
 elseif(CC_IS_MSVC)
     message(STATUS "Using Compiler MSVC ${CMAKE_CXX_COMPILER_VERSION}")
