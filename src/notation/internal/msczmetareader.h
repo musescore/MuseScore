@@ -21,11 +21,13 @@
 
 #include "imsczmetareader.h"
 
-class QXmlStreamReader;
+namespace mu::framework {
+class XmlReader;
+}
+
 class MQZipReader;
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class MsczMetaReader : public IMsczMetaReader
 {
 public:
@@ -58,20 +60,19 @@ private:
         size_t partsCount = 0;
     };
 
-    RetVal<Meta> doReadMeta(QXmlStreamReader& xmlReader) const;
-    RawMeta doReadBox(QXmlStreamReader& xmlReader) const;
-    RetVal<Meta> loadCompressedMsc(const mu::io::path& filePath) const;
-    QString readRootFile(MQZipReader* zipReader) const;
+    RetVal<Meta> doReadMeta(framework::XmlReader& xmlReader) const;
+    RawMeta doReadBox(framework::XmlReader& xmlReader) const;
+    RetVal<Meta> loadCompressedMsc(const io::path& filePath) const;
+    io::path readRootFile(MQZipReader* zipReader) const;
     QPixmap loadThumbnail(MQZipReader* zipReader) const;
-    RawMeta doReadRawMeta(QXmlStreamReader& xmlReader) const;
-    QString formatFromXml(const QString& xml) const;
+    RawMeta doReadRawMeta(framework::XmlReader& xmlReader) const;
+    QString formatFromXml(const std::string& xml) const;
 
-    QString format(const QString& str) const;
+    QString format(const std::string &str) const;
     QString simplified(const QString& str) const;
-    std::string simplified(const std::string& str) const;
+    QString simplified(const std::string& str) const;
     std::string cutXmlTags(const std::string& str) const;
 };
-}
 }
 
 #endif // MU_NOTATION_MSCZMETAREADER_H
