@@ -181,7 +181,7 @@ InstrumentTemplate InstrumentsReader::readInstrumentTemplate(Ms::XmlReader& read
         } else if (reader.name() == "staves") {
             instrument.staves = reader.readElementText().toInt();
             instrument.bracketSpan[0] = instrument.staves;
-        } else if (reader.name() == "clief") {
+        } else if (reader.name() == "clef") {
             int staffIndex = readStaffIndex(reader);
 
             QString clef = reader.readElementText();
