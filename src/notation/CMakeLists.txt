@@ -128,8 +128,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/viewmodecontrolmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationaccessibilitymodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/notationaccessibilitymodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/playbackcursor.h
     ${CMAKE_CURRENT_LIST_DIR}/view/playbackcursor.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/playbackcursor.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/noteinputcursor.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/noteinputcursor.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationswitchlistmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/notationswitchlistmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/partlistmodel.cpp

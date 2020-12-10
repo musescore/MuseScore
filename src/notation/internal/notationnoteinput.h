@@ -20,7 +20,9 @@
 #define MU_NOTATION_NOTATIONNOTEINPUT_H
 
 #include "../inotationnoteinput.h"
+#include "modularity/ioc.h"
 #include "async/asyncable.h"
+#include "inotationconfiguration.h"
 #include "igetscore.h"
 #include "inotationinteraction.h"
 #include "inotationundostack.h"
@@ -33,6 +35,8 @@ namespace mu::notation {
 class ScoreCallbacks;
 class NotationNoteInput : public INotationNoteInput, public async::Asyncable
 {
+    INJECT(notation, INotationConfiguration, configuration)
+
 public:
     NotationNoteInput(const IGetScore* getScore, INotationInteraction* interaction, INotationUndoStackPtr undoStack);
     ~NotationNoteInput() override;
@@ -55,6 +59,9 @@ public:
     void resetSlur() override;
 
     void setCurrentVoiceIndex(int voiceIndex) override;
+
+    QRectF cursorRect() const override;
+    QColor cursorColor() const override;
 
     async::Notification noteAdded() const override;
     async::Notification stateChanged() const override;

@@ -47,6 +47,8 @@ NotationPaintView::NotationPaintView(QQuickItem* parent)
     m_playbackCursor->setColor(configuration()->playbackCursorColor());
     m_playbackCursor->setVisible(false);
 
+    m_noteInputCursor = new NoteInputCursor();
+
     playbackController()->isPlayingChanged().onNotify(this, [this]() {
         onPlayingChanged();
     });
@@ -73,6 +75,7 @@ NotationPaintView::~NotationPaintView()
 {
     delete m_inputController;
     delete m_playbackCursor;
+    delete m_noteInputCursor;
 }
 
 void NotationPaintView::handleAction(const QString& actionName)
@@ -208,6 +211,7 @@ void NotationPaintView::paint(QPainter* painter)
         m_notation->paint(painter, toLogical(rect));
 
         m_playbackCursor->paint(painter);
+        m_noteInputCursor->paint(painter);
     } else {
         painter->drawText(10, 10, "no notation");
     }

@@ -36,6 +36,7 @@
 
 #include "notationviewinputcontroller.h"
 #include "playbackcursor.h"
+#include "noteinputcursor.h"
 
 namespace mu {
 namespace notation {
@@ -124,6 +125,7 @@ private:
     QTransform m_matrix;
     NotationViewInputController* m_inputController = nullptr;
     PlaybackCursor* m_playbackCursor = nullptr;
+    NoteInputCursor* m_noteInputCursor = nullptr;
 };
 }
 }
