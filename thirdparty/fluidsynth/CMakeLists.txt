@@ -25,7 +25,7 @@ set(MODULE_LINK
 set(MODULE_HAS_C_CODE 1)
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 
-target_no_warning(${MODULE} -Wunused-const-variable=0)
+#target_no_warning(${MODULE} -Wunused-const-variable=0)
 target_no_warning(${MODULE} -Wno-unused-parameter)
 target_no_warning(${MODULE} -Wno-unused-variable)
 target_no_warning(${MODULE} -Wno-type-limits)
