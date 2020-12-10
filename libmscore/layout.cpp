@@ -1562,24 +1562,25 @@ static void distributeStaves(Page* page)
       qreal prevYBottom { page->tm() };
       qreal yBottom     { 0.0        };
       bool  vbox        { false      };
+      bool transferNormalBracket { false };
+      bool transferCurlyBracket  { false };
       for (System* system : page->systems()) {
             if (system->vbox()) {
-                  VerticalGapData* vgd = new VerticalGapData(system, nullptr, nullptr, prevYBottom);
+                  VerticalGapData* vgd = new VerticalGapData(!ngaps++, system, nullptr, nullptr, prevYBottom);
                   vgd->addSpaceAroundVBox(true);
                   prevYBottom = system->y();
                   yBottom     = system->y() + system->height();
                   vbox        = true;
-                  if (ngaps++)
-                        vgdl.append(vgd);
-                  else
-                        delete vgd;
+                  vgdl.append(vgd);
+                  transferNormalBracket = false;
+                  transferCurlyBracket  = false;
                   }
             else {
-                  bool newSystem          { true };
+                  bool newSystem       { true };
                   bool addSpaceAroundNormalBracket { false };
                   bool addSpaceAroundCurlyBracket  { false };
-                  int endNormalBracket { - 1 };
-                  int endCurlyBracket  { - 1 };
+                  int endNormalBracket { -1   };
+                  int endCurlyBracket  { -1   };
                   int staffNr { -1 };
                   for (SysStaff* sysStaff : *system->staves()) {
                         sysStaff->restoreLayout();
@@ -1600,19 +1601,21 @@ static void distributeStaves(Page* page)
                         if (!sysStaff->show())
                               continue;
 
-                        VerticalGapData* vgd = new VerticalGapData(system, staff, sysStaff, prevYBottom);
+                        VerticalGapData* vgd = new VerticalGapData(!ngaps++, system, staff, sysStaff, prevYBottom);
 
                         if (newSystem) {
                               vgd->addSpaceBetweenSections();
                               newSystem = false;
                               }
-                        if (addSpaceAroundNormalBracket) {
+                        if (addSpaceAroundNormalBracket || transferNormalBracket) {
                               vgd->addSpaceAroundNormalBracket();
                               addSpaceAroundNormalBracket = false;
+                              transferNormalBracket = false;
                               }
-                        if (addSpaceAroundCurlyBracket) {
+                        if (addSpaceAroundCurlyBracket || transferCurlyBracket) {
                               vgd->addSpaceAroundCurlyBracket();
                               addSpaceAroundCurlyBracket = false;
+                              transferCurlyBracket = false;
                               }
                         else if (staffNr < endCurlyBracket) {
                               vgd->insideCurlyBracket();
@@ -1625,11 +1628,10 @@ static void distributeStaves(Page* page)
 
                         prevYBottom = system->y() + sysStaff->y() + sysStaff->bbox().height();
                         yBottom     = system->y() + sysStaff->y() + sysStaff->skyline().south().max();
-                        if (ngaps++)
-                              vgdl.append(vgd);
-                        else
-                              delete vgd;
+                        vgdl.append(vgd);
                         }
+                  transferNormalBracket = endNormalBracket >= 0;
+                  transferCurlyBracket  = endCurlyBracket >= 0;
                   }
             }
       --ngaps;
@@ -1639,7 +1641,7 @@ static void distributeStaves(Page* page)
             return;
 
       // Try to make the gaps equal, taking the spread factors and maximum spacing into account.
-      static const int maxPasses { 10 };   // Saveguard to prevent endless loops.
+      static const int maxPasses { 20 };   // Saveguard to prevent endless loops.
       int pass { 0 };
       while (!almostZero(spaceLeft) && (ngaps > 0) && (++pass < maxPasses)) {
             ngaps = 0;
@@ -1660,16 +1662,18 @@ static void distributeStaves(Page* page)
                         modified.append(vgd);
                         ++ngaps;
                         }
+                  if ((spaceLeft - addedSpace) <= 0.0)
+                        break;
                   }
             if ((spaceLeft - addedSpace) <= 0.0)
                   {
-                  qreal step = (spaceLeft - addedSpace) / modified.sumStretchFactor();
-                  for (VerticalGapData* vgd : modified) {
-                        vgd->addSpacing(step);
-                        addedSpace += step * vgd->factor();
-                        }
+                  for (VerticalGapData* vgd : modified)
+                        vgd->undoLastAddSpacing();
+                  ngaps = 0;
                   }
-            spaceLeft -= addedSpace;
+            else {
+                  spaceLeft -= addedSpace;
+                  }
             }
 
       // If there is still space left, distribute the space of the staves.
@@ -5044,11 +5048,17 @@ LayoutContext::~LayoutContext()
 //   VerticalStretchData
 //---------------------------------------------------------
 
-VerticalGapData::VerticalGapData(System *sys, Staff *st, SysStaff *sst, qreal y)
-      : system(sys), sysStaff(sst), staff(st)
+VerticalGapData::VerticalGapData(bool first, System *sys, Staff *st, SysStaff *sst, qreal y)
+      : _fixedHeight(first), system(sys), sysStaff(sst), staff(st)
       {
-      _spacing = system->y() + (sysStaff ? sysStaff->y() : 0.0) - y;
-      _maxActualSpacing = system->score()->styleP(Sid::maxStaffSpread);
+      if (_fixedHeight) {
+            _normalisedSpacing = system->score()->styleP(Sid::staffUpperBorder);
+            _maxActualSpacing = _normalisedSpacing;
+            }
+      else {
+            _normalisedSpacing = system->y() + (sysStaff ? sysStaff->y() : 0.0) - y;
+            _maxActualSpacing = system->score()->styleP(Sid::maxStaffSpread);
+            }
       }
 
 //---------------------------------------------------------
@@ -5057,8 +5067,10 @@ VerticalGapData::VerticalGapData(System *sys, Staff *st, SysStaff *sst, qreal y)
 
 void VerticalGapData::updateFactor(qreal factor)
       {
+      if (_fixedHeight)
+            return;
       qreal f = qMax(factor, _factor);
-      _spacing *= _factor / f;
+      _normalisedSpacing *= _factor / f;
       _factor = f;
       }
 
@@ -5069,7 +5081,8 @@ void VerticalGapData::updateFactor(qreal factor)
 void VerticalGapData::addSpaceBetweenSections()
       {
       updateFactor(system->score()->styleD(Sid::spreadSystem));
-      _maxActualSpacing = system->score()->styleP(Sid::maxSystemSpread);
+      if (!_fixedHeight)
+            _maxActualSpacing = qMax(_maxActualSpacing, system->score()->styleP(Sid::maxSystemSpread));
       }
 
 //---------------------------------------------------------
@@ -5079,9 +5092,10 @@ void VerticalGapData::addSpaceBetweenSections()
 void VerticalGapData::addSpaceAroundVBox(bool above)
       {
       _fixedHeight = true;
-      updateFactor(1.0);
+      _factor = 1.0;
       const Score* score { system->score() };
-      _spacing = above ? score->styleP(Sid::frameSystemDistance) : score->styleP(Sid::systemFrameDistance);
+      _normalisedSpacing = above ? score->styleP(Sid::frameSystemDistance) : score->styleP(Sid::systemFrameDistance);
+      _maxActualSpacing = _normalisedSpacing;
       }
 
 //---------------------------------------------------------
@@ -5127,7 +5141,7 @@ qreal VerticalGapData::factor() const
 
 qreal VerticalGapData::spacing() const
       {
-      return _spacing + _addedSpace;
+      return _normalisedSpacing + _addedNormalisedSpace;
       }
 
 //---------------------------------------------------------
@@ -5136,7 +5150,7 @@ qreal VerticalGapData::spacing() const
 
 qreal VerticalGapData::actualAddedSpace() const
       {
-      return _addedSpace * factor();
+      return _addedNormalisedSpace * factor();
       }
 
 //---------------------------------------------------------
@@ -5147,17 +5161,37 @@ qreal VerticalGapData::addSpacing(qreal step)
       {
       if (_fixedHeight)
             return 0.0;
-      if ((_spacing >= _maxActualSpacing)) {
-            _spacing = _maxActualSpacing;
+      if ((_normalisedSpacing >= _maxActualSpacing)) {
+            _normalisedSpacing = _maxActualSpacing;
             step = 0.0;
             }
       else {
-            qreal newSpacing { _spacing + _addedSpace + step };
+            qreal newSpacing { _normalisedSpacing + _addedNormalisedSpace + step };
             if ((newSpacing >= _maxActualSpacing))
-                  step = _maxActualSpacing - _spacing - _addedSpace;
+                  step = _maxActualSpacing - _normalisedSpacing - _addedNormalisedSpace;
             }
-      _addedSpace += step;
+      _addedNormalisedSpace += step;
+      _lastStep = step;
       return step;
+      }
+
+//---------------------------------------------------------
+//   isFixedHeight
+//---------------------------------------------------------
+
+bool VerticalGapData::isFixedHeight() const
+      {
+      return _fixedHeight;
+      }
+
+//---------------------------------------------------------
+//   undoLastAddSpacing
+//---------------------------------------------------------
+
+void VerticalGapData::undoLastAddSpacing()
+      {
+      _addedNormalisedSpace -= _lastStep;
+      _lastStep = 0.0;
       }
 
 //---------------------------------------------------------
@@ -5189,7 +5223,6 @@ qreal VerticalGapDataList::sumStretchFactor() const
       {
       qreal sum { 0.0 };
       for (VerticalGapData* vsd : *this)
-//            if (vsd->canAddSpace())
                   sum += vsd->factor();
       return sum;
       }
@@ -5202,12 +5235,14 @@ qreal VerticalGapDataList::smallest(qreal limit) const
       {
       VerticalGapData* vdp { nullptr };
       for (VerticalGapData* vgd : *this) {
-//            if ((limit >= 0.0) && (qCeil(limit) == qCeil(vgd->normalisedSpacing())))
+            if (vgd->isFixedHeight())
+                  continue;
             if ((qCeil(limit) == qCeil(vgd->spacing())))
                   continue;
-            if (!vdp ||  (vgd->spacing() <  vdp->spacing()))
+            if (!vdp || (vgd->spacing() <  vdp->spacing()))
                   vdp = vgd;
             }
       return vdp ? vdp->spacing() : 0.0;
       }
+
 }

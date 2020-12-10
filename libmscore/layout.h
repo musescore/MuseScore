@@ -27,20 +27,21 @@ class Page;
 
 class VerticalGapData {
    private:
-      bool      _fixedHeight      { false   };
-      qreal     _factor           { 1.0     };
-      qreal     _spacing          { 0.0     };
-      qreal     _maxActualSpacing { 0.0     };
-      qreal     _addedSpace       { 0.0     };
-      qreal     _fillSpacing      { 0.0     };
+      bool  _fixedHeight          { false };
+      qreal _factor               { 1.0   };
+      qreal _normalisedSpacing    { 0.0   };
+      qreal _maxActualSpacing     { 0.0   };
+      qreal _addedNormalisedSpace { 0.0   };
+      qreal _fillSpacing          { 0.0   };
+      qreal _lastStep             { 0.0   };
+      void  updateFactor(qreal factor);
 
-      void     updateFactor(qreal factor);
    public:
-      System*   system          { nullptr };
-      SysStaff* sysStaff        { nullptr };
-      Staff*    staff           { nullptr };
+      System*   system   { nullptr };
+      SysStaff* sysStaff { nullptr };
+      Staff*    staff    { nullptr };
 
-      VerticalGapData(System* sys, Staff* st, SysStaff* sst, qreal y);
+      VerticalGapData(bool first, System* sys, Staff* st, SysStaff* sst, qreal y);
 
       void addSpaceBetweenSections();
       void addSpaceAroundVBox(bool above);
@@ -53,6 +54,8 @@ class VerticalGapData {
       qreal actualAddedSpace() const;
 
       qreal addSpacing(qreal step);
+      bool isFixedHeight() const;
+      void undoLastAddSpacing();
       qreal addFillSpacing(qreal step, qreal maxFill);
       };
 
