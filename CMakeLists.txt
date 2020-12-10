@@ -232,31 +232,14 @@ endif(BUILD_UNIT_TESTS)
 
 # ====== Packaging ===============
 
-#set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-#set(CMAKE_BUILD_WITH_INSTALL_RPATH ON) # Call CMake with option -DCMAKE_SKIP_RPATH to not set RPATH (Debian packaging requirement)
-#set(CMAKE_SKIP_RULE_DEPENDENCY TRUE)
+if (OS_IS_LIN)
+    include(SetupAppImagePackaging)
+endif(OS_IS_LIN)
 
-##
-##  Include packaging
-##
-include(SetupAppImagePackaging)
-include(Packaging)
+if (OS_IS_WIN)
+    include(Packaging)
+endif(OS_IS_WIN)
 
-#set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_RPATH};${CMAKE_INSTALL_PREFIX}/bin")
-##set(CMAKE_INSTALL_RPATH "$ORIGIN")
-
-#message(STATUS "==========CMAKE_INSTALL_RPATH: ${CMAKE_INSTALL_RPATH}")
-
-if (APPLE)
-    set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-    set(CMAKE_INSTALL_RPATH "${QT_INSTALL_LIBS}")
-else(APPLE)
-    set(CMAKE_SKIP_BUILD_RPATH FALSE)
-    set(CMAKE_SKIP_RPATH TRUE)
-    set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
-    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/bin")
-    set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-endif(APPLE)
 ## TEMP: Display all variables!
 ### message(STATUS "===========================================================")
 ### message(STATUS "VARIABLES:")
