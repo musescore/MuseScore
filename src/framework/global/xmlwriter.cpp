@@ -75,14 +75,14 @@ void XmlWriter::writeAttribute(std::string_view name, const std::string& value)
     m_writer->writeAttribute(name.data(), QString::fromStdString(value));
 }
 
-void XmlWriter::writeCharacters(const std::string& value)
+void XmlWriter::writeCharacters(const std::string& text)
 {
-    m_writer->writeCharacters(QString::fromStdString(value));
+    m_writer->writeCharacters(QString::fromStdString(text));
 }
 
-void XmlWriter::writeTextElement(std::string_view name, const std::string& value)
+void XmlWriter::writeTextElement(std::string_view name, const std::string& text)
 {
-    m_writer->writeTextElement(name.data(), QString::fromStdString(value));
+    m_writer->writeTextElement(name.data(), QString::fromStdString(text));
 }
 
 bool XmlWriter::hasError() const

@@ -89,9 +89,9 @@ XmlReader::TokenType XmlReader::tokenType() const
     return convertTokenType(m_reader->tokenType());
 }
 
-bool XmlReader::atEnd()
+bool XmlReader::canRead() const
 {
-    return m_reader->atEnd();
+    return !m_reader->atEnd();
 }
 
 void XmlReader::skipCurrentElement()
@@ -147,28 +147,28 @@ double XmlReader::readDouble()
     return readElementText().toDouble();
 }
 
-std::string XmlReader::readString(ReadStringBehaviour behaviour)
+std::string XmlReader::readString(ReadStringBehavior behavior)
 {
-    return readElementText(behaviour).toStdString();
+    return readElementText(behavior).toStdString();
 }
 
-QString XmlReader::readElementText(ReadStringBehaviour behaviour)
+QString XmlReader::readElementText(ReadStringBehavior behavior)
 {
-    QXmlStreamReader::ReadElementTextBehaviour behaviour_;
+    QXmlStreamReader::ReadElementTextBehaviour behavior_;
 
-    switch (behaviour) {
+    switch (behavior) {
     case ErrorOnUnexpectedElement:
-        behaviour_ = QXmlStreamReader::ErrorOnUnexpectedElement;
+        behavior_ = QXmlStreamReader::ErrorOnUnexpectedElement;
         break;
     case IncludeChildElements:
-        behaviour_ = QXmlStreamReader::IncludeChildElements;
+        behavior_ = QXmlStreamReader::IncludeChildElements;
         break;
     case SkipChildElements:
-        behaviour_ = QXmlStreamReader::SkipChildElements;
+        behavior_ = QXmlStreamReader::SkipChildElements;
         break;
     }
 
-    return m_reader->readElementText(behaviour_);
+    return m_reader->readElementText(behavior_);
 }
 
 bool XmlReader::hasError() const
