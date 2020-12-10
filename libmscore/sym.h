@@ -2898,6 +2898,8 @@ class Sym {
 
       QPointF _stemDownNW;
       QPointF _stemUpSE;
+      QPointF _stemDownSW;
+      QPointF _stemUpNW;
       QPointF _cutOutNE;
       QPointF _cutOutNW;
       QPointF _cutOutSE;
@@ -2928,6 +2930,10 @@ class Sym {
       void setStemDownNW(const QPointF& r)       { _stemDownNW = r;      }
       QPointF stemUpSE() const                   { return _stemUpSE;   }
       void setStemUpSE(const QPointF& r)         { _stemUpSE = r;      }
+      QPointF stemDownSW() const                 { return _stemDownSW; }
+      void setStemDownSW(const QPointF& r)       { _stemDownSW = r;    }
+      QPointF stemUpNW() const                   { return _stemUpNW;   }
+      void setStemUpNW(const QPointF& r)         { _stemUpNW = r;      }
       QPointF cutOutNE() const                   { return _cutOutNE; }
       void setCutOutNE(const QPointF& r)         { _cutOutNE = r;    }
       QPointF cutOutNW() const                   { return _cutOutNW; }
@@ -3056,6 +3062,8 @@ class ScoreFont {
       const QRectF bbox(const std::vector<SymId>& s, qreal mag) const;
       QPointF stemDownNW(SymId id, qreal mag) const;
       QPointF stemUpSE(SymId id, qreal mag) const;
+      QPointF stemDownSW(SymId id, qreal mag) const;
+      QPointF stemUpNW(SymId id, qreal mag) const;
       QPointF cutOutNE(SymId id, qreal mag) const;
       QPointF cutOutNW(SymId id, qreal mag) const;
       QPointF cutOutSE(SymId id, qreal mag) const;

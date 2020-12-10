@@ -1608,6 +1608,24 @@ QPointF Element::symStemUpSE(SymId id) const
       }
 
 //---------------------------------------------------------
+//   symStemDownSW
+//---------------------------------------------------------
+
+QPointF Element::symStemDownSW(SymId id) const
+      {
+      return score()->scoreFont()->stemDownSW(id, magS());
+      }
+
+//---------------------------------------------------------
+//   symStemUpNW
+//---------------------------------------------------------
+
+QPointF Element::symStemUpNW(SymId id) const
+      {
+      return score()->scoreFont()->stemUpNW(id, magS());
+      }
+
+//---------------------------------------------------------
 //   symCutOutNE / symCutOutNW / symCutOutSE / symCutOutNW
 //---------------------------------------------------------
 

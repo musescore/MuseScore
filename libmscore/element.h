@@ -484,6 +484,8 @@ class Element : public ScoreElement {
       QRectF symBbox(const std::vector<SymId>&) const;
       QPointF symStemDownNW(SymId id) const;
       QPointF symStemUpSE(SymId id) const;
+      QPointF symStemDownSW(SymId id) const;
+      QPointF symStemUpNW(SymId id) const;
       QPointF symCutOutNE(SymId id) const;
       QPointF symCutOutNW(SymId id) const;
       QPointF symCutOutSE(SymId id) const;
