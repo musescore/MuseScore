@@ -27,8 +27,6 @@ elseif(CC_IS_MSVC)
     set(CMAKE_C_FLAGS_RELWITHDEBINFO    "/MT /Zi /O2 /Ob1")
     set(CMAKE_EXE_LINKER_FLAGS          "/DYNAMICBASE:NO")
 
-    message(STATUS "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}, CMAKE_CXX_FLAGS_DEBUG: ${CMAKE_CXX_FLAGS_DEBUG} ")
-
     add_definitions(-DWIN32)
     add_definitions(-D_WINDOWS)
     add_definitions(-D_UNICODE)
@@ -41,6 +39,10 @@ elseif(CC_IS_MINGW)
 
     set(CMAKE_CXX_FLAGS_DEBUG   "-g")
     set(CMAKE_CXX_FLAGS_RELEASE "-O2")
+
+    if (BUILD_IS_DEBUG)
+        #set(BUILD_SHARED_LIBS ON)
+    endif(BUILD_IS_DEBUG)
 
     # -mno-ms-bitfields see #22048
     set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} -mno-ms-bitfields")

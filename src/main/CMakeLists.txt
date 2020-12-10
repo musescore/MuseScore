@@ -106,6 +106,15 @@ if (OS_IS_MAC)
 endif (OS_IS_MAC)
 
 
+if (CC_IS_MINGW)
+    set_target_properties(mscore PROPERTIES LINK_FLAGS "-Wl,-S -mwindows" )
+endif(CC_IS_MINGW)
+
+if (CC_IS_MSVC)
+    target_link_options(mscore PRIVATE /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup)
+endif(CC_IS_MSVC)
+
+
 
 set(FREETYPE_LIB )
 if (USE_SYSTEM_FREETYPE)
@@ -186,10 +195,6 @@ if (OS_IS_WIN)
     install(TARGETS ${EXECUTABLE_NAME} RUNTIME DESTINATION bin )
 
     include(GetCompilerInfo)
-    if (CC_IS_MSVC)
-
-
-    endif(CC_IS_MSVC)
 
     if (CC_IS_MINGW)
         get_filename_component(COMPILER_DIR ${CMAKE_CXX_COMPILER} DIRECTORY)
@@ -202,12 +207,6 @@ if (OS_IS_WIN)
                DESTINATION bin)
 
     endif(CC_IS_MINGW)
-
-    # Install ssl
-    install( FILES
-            ${DEPENDENCIES_DIR}/libcrypto-1_1-x64.dll
-            ${DEPENDENCIES_DIR}/libssl-1_1-x64.dll
-            DESTINATION bin)
 
     # Install Qt
     foreach (QtLibrary ${QT_LIBRARIES})
@@ -251,6 +250,17 @@ if (OS_IS_WIN)
             ${QT_INSTALL_PLUGINS}/printsupport/windowsprintersupport.dll
             DESTINATION bin/printsupport)
 
+    install(DIRECTORY
+            ${QT_INSTALL_QML}
+            DESTINATION .
+            REGEX ".*d\\.dll" EXCLUDE
+            REGEX ".pdb" EXCLUDE
+            REGEX ".*QtMultimedia.*" EXCLUDE
+            REGEX ".*QtSensors.*" EXCLUDE
+            REGEX ".*QtTest.*" EXCLUDE
+            REGEX ".*QtWebkit.*" EXCLUDE
+            )
+
     if (USE_WEBENGINE)
         install(FILES
                 ${QT_INSTALL_BINS}/Qt5WebEngineWidgets.dll
@@ -270,6 +280,16 @@ if (OS_IS_WIN)
                DESTINATION bin/webengineresources/translations)
 
     endif(USE_WEBENGINE)
+
+    if (SNDFILE_LIB)
+        install(FILES ${DEPENDENCIES_DIR}/libsndfile-1.dll DESTINATION bin)
+    endif()
+
+    # Install ssl
+    install(FILES
+            ${DEPENDENCIES_DIR}/libcrypto-1_1-x64.dll
+            ${DEPENDENCIES_DIR}/libssl-1_1-x64.dll
+            DESTINATION bin)
 
     if (WIN_PORTABLE)
         # deploy the files and directory structure needed for the PortableApps.com format

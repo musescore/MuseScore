@@ -41,7 +41,7 @@ public:
     ~AudioFile();
 
     bool open(const QByteArray&);
-    const char* error() const { return sf_strerror(sf); }
+    const char* error() const;
     sf_count_t readData(short* data, sf_count_t frames);
 
     int channels() const { return info.channels; }
