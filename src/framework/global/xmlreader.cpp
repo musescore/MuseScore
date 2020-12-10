@@ -158,12 +158,26 @@ double XmlReader::readDouble()
     return readElementText().toDouble();
 }
 
-std::string XmlReader::readString()
+std::string XmlReader::readString(ReadStringBehaviour behaviour)
 {
-    return readElementText().toStdString();
+    return readElementText(behaviour).toStdString();
 }
 
-QString XmlReader::readElementText()
+QString XmlReader::readElementText(ReadStringBehaviour behaviour)
 {
-    return m_reader->readElementText();
+    QXmlStreamReader::ReadElementTextBehaviour behaviour_;
+
+    switch (behaviour) {
+    case ErrorOnUnexpectedElement:
+        behaviour_ = QXmlStreamReader::ErrorOnUnexpectedElement;
+        break;
+    case IncludeChildElements:
+        behaviour_ = QXmlStreamReader::IncludeChildElements;
+        break;
+    case SkipChildElements:
+        behaviour_ = QXmlStreamReader::SkipChildElements;
+        break;
+    }
+
+    return m_reader->readElementText(behaviour_);
 }

@@ -32,6 +32,16 @@ namespace mu::framework {
 class XmlReader
 {
 public:
+    XmlReader(const io::path& path);
+    XmlReader(IODevice* device);
+    XmlReader(const QByteArray& bytes);
+    ~XmlReader();
+
+    bool readNextStartElement();
+    bool atEnd();
+    void skipCurrentElement();
+    std::string tagName() const;
+
     enum TokenType {
         Unknown,
         StartDocument,
@@ -42,17 +52,8 @@ public:
         Comment
     };
 
-    XmlReader(const io::path& path);
-    XmlReader(IODevice* device);
-    XmlReader(const QByteArray& bytes);
-    ~XmlReader();
-
-    bool readNextStartElement();
     TokenType readNext();
     TokenType tokenType() const;
-    bool atEnd();
-    void skipCurrentElement();
-    std::string tagName() const;
 
     bool hasError() const;
     std::string error() const;
@@ -62,12 +63,18 @@ public:
     std::string attribute(std::string_view name) const;
     bool hasAttribute(std::string_view name) const;
 
+    enum ReadStringBehaviour {
+        ErrorOnUnexpectedElement,
+        IncludeChildElements,
+        SkipChildElements
+    };
+
+    std::string readString(ReadStringBehaviour behaviour = ErrorOnUnexpectedElement);
     int readInt();
     double readDouble();
-    std::string readString();
 
 private:
-    QString readElementText();
+    QString readElementText(ReadStringBehaviour behaviour = ErrorOnUnexpectedElement);
     QStringRef attributeValue(std::string_view name) const;
 
     std::unique_ptr<IODevice> m_device;

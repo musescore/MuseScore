@@ -2,7 +2,6 @@
 
 #include <sstream>
 
-#include <QXmlStreamReader>
 #include <QFileInfo>
 #include <QBuffer>
 
@@ -12,8 +11,11 @@
 
 #include "thirdparty/qzip/qzipreader_p.h"
 
+#include "framework/global/xmlreader.h"
+
 using namespace mu;
 using namespace mu::notation;
+using namespace mu::framework;
 
 RetVal<Meta> MsczMetaReader::readMeta(const io::path& filePath) const
 {
@@ -31,14 +33,7 @@ RetVal<Meta> MsczMetaReader::readMeta(const io::path& filePath) const
     if (compressed) {
         meta = loadCompressedMsc(filePath);
     } else {
-        QFile file(fileInfo.filePath());
-        if (!file.open(QFile::ReadOnly)) {
-            LOGE() << "Failed open file:" << filePath << file.errorString();
-            meta.ret = make_ret(Err::FileOpenError);
-            return meta;
-        }
-
-        QXmlStreamReader reader(file.readAll());
+        XmlReader reader(filePath);
         meta = doReadMeta(reader);
     }
 
@@ -68,13 +63,13 @@ RetVal<Meta> MsczMetaReader::loadCompressedMsc(const io::path& filePath) const
 
     MQZipReader zipReader(&buffer);
 
-    QString rootfile = readRootFile(&zipReader);
-    if (rootfile.isEmpty()) {
+    io::path rootFile = readRootFile(&zipReader);
+    if (rootFile.empty()) {
         meta.ret = make_ret(Err::FileNoRootFile);
         return meta;
     }
 
-    QByteArray rootBuffer = zipReader.fileData(rootfile);
+    QByteArray rootBuffer = zipReader.fileData(rootFile.toQString());
     if (rootBuffer.isEmpty()) {
         auto fil = zipReader.fileInfoList();
         for (const MQZipReader::FileInfo& fi : fil) {
@@ -85,7 +80,7 @@ RetVal<Meta> MsczMetaReader::loadCompressedMsc(const io::path& filePath) const
         }
     }
 
-    QXmlStreamReader xmlReader(rootBuffer);
+    XmlReader xmlReader(rootBuffer);
     meta = doReadMeta(xmlReader);
 
     meta.val.thumbnail = loadThumbnail(&zipReader);
@@ -93,21 +88,21 @@ RetVal<Meta> MsczMetaReader::loadCompressedMsc(const io::path& filePath) const
     return meta;
 }
 
-MsczMetaReader::RawMeta MsczMetaReader::doReadBox(QXmlStreamReader& xmlReader) const
+MsczMetaReader::RawMeta MsczMetaReader::doReadBox(XmlReader& xmlReader) const
 {
     RawMeta meta;
 
     while (xmlReader.readNextStartElement()) {
-        if (xmlReader.name() == "Text") {
+        if (xmlReader.tagName() == "Text") {
             bool isTitle = false;
             bool isSubtitle = false;
             bool isComposer = false;
             bool isLiricist = false;
             while (xmlReader.readNextStartElement()) {
-                const QStringRef& tag(xmlReader.name());
+                std::string tag(xmlReader.tagName());
 
                 if (tag == "style") {
-                    QString val(xmlReader.readElementText().toLower());
+                    std::string val = strings::toLower(xmlReader.readString());
 
                     if (val == "title" || val == "2") {
                         isTitle = true;
@@ -121,35 +116,32 @@ MsczMetaReader::RawMeta MsczMetaReader::doReadBox(QXmlStreamReader& xmlReader) c
                         xmlReader.skipCurrentElement();
                     }
                 } else if (tag == "text") {
+                    std::string str = xmlReader.readString(XmlReader::IncludeChildElements);
+                    QString formattedStr = formatFromXml(str);
+
                     if (isTitle) {
-                        meta.titleStyle = formatFromXml(xmlReader.readElementText(
-                                                            QXmlStreamReader::IncludeChildElements));
-                    }
-                    if (isSubtitle) {
-                        meta.subtitleStyle = formatFromXml(xmlReader.readElementText(
-                                                               QXmlStreamReader::IncludeChildElements));
+                        meta.titleStyle = formattedStr;
+                    } else if (isSubtitle) {
+                        meta.subtitleStyle = formattedStr;
                     } else if (isComposer) {
-                        meta.composerStyle
-                            = formatFromXml(xmlReader.readElementText(QXmlStreamReader::IncludeChildElements));
+                        meta.composerStyle = formattedStr;
                     } else if (isLiricist) {
-                        meta.lyricistStyle
-                            = formatFromXml(xmlReader.readElementText(QXmlStreamReader::IncludeChildElements));
+                        meta.lyricistStyle = formattedStr;
                     } else {
                         xmlReader.skipCurrentElement();
                     }
                 } else if (tag == "html-data") {
+                    std::string str = xmlReader.readString(XmlReader::IncludeChildElements);
+                    QString formattedStr = formatFromXml(str);
+
                     if (isTitle) {
-                        meta.titleStyleHtml
-                            = formatFromXml(xmlReader.readElementText(QXmlStreamReader::IncludeChildElements));
+                        meta.titleStyleHtml = formattedStr;
                     } else if (isSubtitle) {
-                        meta.subtitleStyleHtml
-                            = formatFromXml(xmlReader.readElementText(QXmlStreamReader::IncludeChildElements));
+                        meta.subtitleStyleHtml = formattedStr;
                     } else if (isComposer) {
-                        meta.composerStyleHtml
-                            = formatFromXml(xmlReader.readElementText(QXmlStreamReader::IncludeChildElements));
+                        meta.composerStyleHtml = formattedStr;
                     } else if (isLiricist) {
-                        meta.lyricistStyleHtml
-                            = formatFromXml(xmlReader.readElementText(QXmlStreamReader::IncludeChildElements));
+                        meta.lyricistStyleHtml = formattedStr;
                     } else {
                         xmlReader.skipCurrentElement();
                     }
@@ -165,41 +157,45 @@ MsczMetaReader::RawMeta MsczMetaReader::doReadBox(QXmlStreamReader& xmlReader) c
     return meta;
 }
 
-MsczMetaReader::RawMeta MsczMetaReader::doReadRawMeta(QXmlStreamReader& xmlReader) const
+MsczMetaReader::RawMeta MsczMetaReader::doReadRawMeta(XmlReader& xmlReader) const
 {
     RawMeta meta;
 
     while (xmlReader.readNextStartElement()) {
-        const QStringRef& tag(xmlReader.name());
+        std::string tag(xmlReader.tagName());
+
         if (tag == "work-title") {
-            meta.titleTag = xmlReader.readElementText();
+            meta.titleTag = QString::fromStdString(xmlReader.readString());
         } else if (tag == "metaTag") {
-            QString name = xmlReader.attributes().value("name").toString();
+            std::string name = xmlReader.attribute("name");
+            QString str = QString::fromStdString(xmlReader.readString());
+
             if (name == "workTitle") {
-                meta.titleAttribute = xmlReader.readElementText();
+                meta.titleAttribute = str;
             } else if (name == "composer") {
-                meta.composerAttribute = xmlReader.readElementText();
+                meta.composerAttribute = str;
             } else if (name == "arranger") {
-                meta.arranger = xmlReader.readElementText();
+                meta.arranger = str;
             } else if (name == "lyricist") {
-                meta.lyricistAttribute = xmlReader.readElementText();
+                meta.lyricistAttribute = str;
             } else if (name == "copyright") {
-                meta.copyright = xmlReader.readElementText();
+                meta.copyright = str;
             } else if (name == "translator") {
-                meta.translator = xmlReader.readElementText();
+                meta.translator = str;
             } else if (name == "creationDate") {
-                meta.creationDate = xmlReader.readElementText();
+                meta.creationDate = str;
             } else {
                 xmlReader.skipCurrentElement();
             }
         } else if (tag == "Staff") {
             if (meta.titleStyle.isEmpty()) {
                 while (xmlReader.readNextStartElement()) {
-                    const QStringRef& bTag(xmlReader.name());
-                    if (bTag == "HBox"
-                        || bTag == "VBox"
-                        || bTag == "TBox"
-                        || bTag == "FBox") {
+                    std::string tag(xmlReader.tagName());
+
+                    if (tag == "HBox"
+                        || tag == "VBox"
+                        || tag == "TBox"
+                        || tag == "FBox") {
                         RawMeta boxMeta = doReadBox(xmlReader);
 
                         meta.titleStyle = boxMeta.titleStyle;
@@ -228,19 +224,20 @@ MsczMetaReader::RawMeta MsczMetaReader::doReadRawMeta(QXmlStreamReader& xmlReade
     return meta;
 }
 
-RetVal<Meta> MsczMetaReader::doReadMeta(QXmlStreamReader& xmlReader) const
+RetVal<Meta> MsczMetaReader::doReadMeta(XmlReader& xmlReader) const
 {
     RawMeta rawMeta;
 
     while (xmlReader.readNextStartElement()) {
-        if (xmlReader.name() == "museScore") {
-            const QString& version = xmlReader.attributes().value("version").toString();
+        if (xmlReader.tagName() == "museScore") {
+            std::string version = xmlReader.attribute("version");
+            bool suitedVersion = version.rfind("1", 0) == 0;
 
-            if (version.startsWith("1")) {
+            if (suitedVersion) {
                 rawMeta = doReadRawMeta(xmlReader);
             } else {
                 while (xmlReader.readNextStartElement()) {
-                    if (xmlReader.name() == "Score") {
+                    if (xmlReader.tagName() == "Score") {
                         rawMeta = doReadRawMeta(xmlReader);
                     } else {
                         xmlReader.skipCurrentElement();
@@ -294,36 +291,34 @@ RetVal<Meta> MsczMetaReader::doReadMeta(QXmlStreamReader& xmlReader) const
     return meta;
 }
 
-QString MsczMetaReader::readRootFile(MQZipReader* zipReader) const
+io::path MsczMetaReader::readRootFile(MQZipReader* zipReader) const
 {
-    QString rootfile;
+    io::path rootFile;
 
     QByteArray containerBuffer = zipReader->fileData("META-INF/container.xml");
     if (containerBuffer.isEmpty()) {
         LOGD() << "Can't find container.xml";
-        return rootfile;
+        return rootFile;
     }
 
-    QXmlStreamReader reader(containerBuffer);
+    XmlReader reader(containerBuffer);
 
     while (reader.readNextStartElement()) {
-        if (reader.name() != "container") {
+        if (reader.tagName() != "container") {
             reader.skipCurrentElement();
             continue;
         }
 
         while (reader.readNextStartElement()) {
-            if (reader.name() != "rootfiles") {
+            if (reader.tagName() != "rootfiles") {
                 reader.skipCurrentElement();
                 continue;
             }
 
             while (reader.readNextStartElement()) {
-                const QStringRef& tag(reader.name());
-
-                if (tag == "rootfile") {
-                    if (rootfile.isEmpty()) {
-                        rootfile = reader.attributes().value("full-path").toString();
+                if (reader.tagName() == "rootfile") {
+                    if (rootFile.empty()) {
+                        rootFile = reader.attribute("full-path");
                         reader.skipCurrentElement();
                     }
                 } else {
@@ -333,7 +328,7 @@ QString MsczMetaReader::readRootFile(MQZipReader* zipReader) const
         }
     }
 
-    return rootfile;
+    return rootFile;
 }
 
 QPixmap MsczMetaReader::loadThumbnail(MQZipReader* zipReader) const
@@ -351,31 +346,30 @@ QPixmap MsczMetaReader::loadThumbnail(MQZipReader* zipReader) const
     return thumbnail;
 }
 
-QString MsczMetaReader::formatFromXml(const QString& xml) const
+QString MsczMetaReader::formatFromXml(const std::string& xml) const
 {
-    std::string c_xml = xml.toStdString();
-    size_t bbegin = c_xml.find("<body");
+    size_t bbegin = xml.find("<body");
 
     if (bbegin != std::string::npos) {
-        size_t bend = c_xml.find("</body>", bbegin);
-        std::string body = c_xml.substr(bbegin, (bend - bbegin));
+        size_t bend = xml.find("</body>", bbegin);
+        std::string body = xml.substr(bbegin, (bend - bbegin));
         return QString::fromStdString(MsczMetaReader::cutXmlTags(body));
     }
-    return QString::fromStdString(MsczMetaReader::cutXmlTags(c_xml));
+    return QString::fromStdString(MsczMetaReader::cutXmlTags(xml));
 }
 
-QString MsczMetaReader::format(const QString& str) const
+QString MsczMetaReader::format(const std::string& str) const
 {
-    std::string fin = MsczMetaReader::cutXmlTags(str.toStdString());
-    return QString::fromStdString(MsczMetaReader::simplified(fin));
+    std::string fin = MsczMetaReader::cutXmlTags(str);
+    return simplified(fin);
 }
 
 QString MsczMetaReader::simplified(const QString& str) const
 {
-    return QString::fromStdString(simplified(str.toStdString()));
+    return simplified(str.toStdString());
 }
 
-std::string MsczMetaReader::simplified(const std::string& str) const
+QString MsczMetaReader::simplified(const std::string& str) const
 {
     std::string fin;
     for (size_t index = 0; str[index]; ++index) {
@@ -385,7 +379,7 @@ std::string MsczMetaReader::simplified(const std::string& str) const
         fin += str[index];
     }
 
-    return fin;
+    return QString::fromStdString(fin);
 }
 
 std::string MsczMetaReader::cutXmlTags(const std::string& str) const
