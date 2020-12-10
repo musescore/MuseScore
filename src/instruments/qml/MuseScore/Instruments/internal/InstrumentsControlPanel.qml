@@ -19,6 +19,14 @@ RowLayout {
 
     spacing: 6
 
+    focus: true
+
+    Keys.onShortcutOverride: {
+        if (event.key === Qt.Key_Delete) {
+            root.removingRequested()
+        }
+    }
+
     FlatButton {
         Layout.fillWidth: true
 
