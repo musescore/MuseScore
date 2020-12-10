@@ -85,7 +85,7 @@ Popup {
 
             Rectangle {
                 color: fillColor
-                border { width: root.borderWidth; color: borderColor }
+                border { width: root.borderWidth; color: root.borderColor }
 
                 anchors {
                     top: arrow.bottom

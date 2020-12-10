@@ -128,15 +128,15 @@ struct Instrument
     PitchRange professionalPitchRange;
 
     ClefTypeList clefs[MAX_STAVES];
-    int staffLines[MAX_STAVES];
-    BracketType bracket[MAX_STAVES];
-    int bracketSpan[MAX_STAVES];
-    int barlineSpan[MAX_STAVES];
-    bool smallStaff[MAX_STAVES];
+    int staffLines[MAX_STAVES] = {0};
+    BracketType bracket[MAX_STAVES] = {BracketType::NO_BRACKET};
+    int bracketSpan[MAX_STAVES] = {0};
+    int barlineSpan[MAX_STAVES] = {0};
+    bool smallStaff[MAX_STAVES] = {false};
 
     Interval transpose;
 
-    StaffGroup staffGroup;
+    StaffGroup staffGroup = StaffGroup::STANDARD;
     const StaffType* staffTypePreset = nullptr;
 
     bool useDrumset = false;
