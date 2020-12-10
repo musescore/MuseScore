@@ -33,22 +33,6 @@
 
 message(STATUS "Configuring " ${MODULE})
 
-set(IS_DEBUG_BUILD OFF)
-string(TOLOWER ${CMAKE_BUILD_TYPE} _build_type )
-if (_build_type STREQUAL "debug")
-   set(IS_DEBUG_BUILD ON)
-endif()
-
-set(LIBRARY_TYPE STATIC)
-if (BUILD_SHARED_LIB_IN_DEBUG)
-    if (IS_DEBUG_BUILD)
-        include(GetCompilerInfo)
-        if (CC_IS_GCC)
-            set(LIBRARY_TYPE SHARED)
-        endif()
-    endif(IS_DEBUG_BUILD)
-endif(BUILD_SHARED_LIB_IN_DEBUG)
-
 if (MODULE_QRC)
     qt5_add_resources(RCC_SOURCES ${MODULE_QRC})
 endif()
@@ -62,11 +46,10 @@ if (NOT ${MODULE_QML_IMPORT} STREQUAL "")
     set(QML_IMPORT_PATH "${QML_IMPORT_PATH};${MODULE_QML_IMPORT}" CACHE STRING "QtCreator extra import paths for QML modules" FORCE)
 endif()
 
-add_library(${MODULE} ${LIBRARY_TYPE})
+add_library(${MODULE}) # STATIC/SHARED set global in the SetupBuildEnvironment.cmake
 
-if (${LIBRARY_TYPE} STREQUAL "SHARED")
-    message(STATUS "  ${MODULE} is SHARED, will be installed to /bin")
-    install(TARGETS ${MODULE} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+if (BUILD_SHARED_LIBS)
+    install(TARGETS ${MODULE} DESTINATION ${SHARED_LIBS_INSTALL_DESTINATION})
 
     if (NOT MSVC)
         set_target_properties(${MODULE} PROPERTIES COMPILE_FLAGS "-fPIC")
