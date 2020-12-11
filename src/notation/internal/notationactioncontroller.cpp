@@ -27,10 +27,11 @@ using namespace mu::notation;
 using namespace mu::actions;
 
 static constexpr int INVALID_BOX_INDEX = -1;
+static const ActionName ESCAPE_ACTION_NAME = "escape";
 
 void NotationActionController::init()
 {
-    dispatcher()->reg(this, "escape", this, &NotationActionController::resetState);
+    dispatcher()->reg(this, ESCAPE_ACTION_NAME, this, &NotationActionController::resetState);
 
     dispatcher()->reg(this, "note-input", [this]() { toggleNoteInputMethod(NoteInputMethod::STEPTIME); });
     dispatcher()->reg(this, "note-input-rhythm", [this]() { toggleNoteInputMethod(NoteInputMethod::RHYTHM); });
@@ -203,9 +204,13 @@ void NotationActionController::init()
     }
 }
 
-bool NotationActionController::canReceiveAction(const actions::ActionName&) const
+bool NotationActionController::canReceiveAction(const actions::ActionName& actionName) const
 {
-    return !isTextEditting();
+    if (isTextEditting()) {
+        return actionName == ESCAPE_ACTION_NAME;
+    }
+
+    return true;
 }
 
 INotationPtr NotationActionController::currentNotation() const
