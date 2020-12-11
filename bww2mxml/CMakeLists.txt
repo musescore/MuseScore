@@ -18,8 +18,6 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-include (${PROJECT_SOURCE_DIR}/build/gch.cmake)
-
 if (APPLE)
         file(GLOB_RECURSE INCS "*.h")
 else (APPLE)
@@ -47,13 +45,12 @@ if (NOT MINGW AND NOT APPLE AND NOT MSVC)
    set_target_properties (
          bww2mxml
          PROPERTIES
-            COMPILE_FLAGS "-x c++ -include ${PROJECT_BINARY_DIR}/all.h -g -Wall -Wextra -Winvalid-pch"
+            COMPILE_FLAGS "-x c++ -g -Wall -Wextra"
          )
 
    target_link_libraries(bww2mxml
       ${QT_LIBRARIES}
       )
-   ADD_DEPENDENCIES(bww2mxml mops1)
-   ADD_DEPENDENCIES(bww2mxml mops2)
+
 endif (NOT MINGW AND NOT APPLE AND NOT MSVC)
 

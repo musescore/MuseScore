@@ -26,7 +26,8 @@
 # set(MODULE_QRC somename.qrc)  - set resource (qrc) file
 # set(MODULE_UI ...)            - set ui headers
 # set(MODULE_QML_IMPORT ...)    - set Qml import for QtCreator (so that there is code highlighting, jump, etc.)
-# set(MODULE_HAS_C_CODE ON)     - set if source contains C code
+# set(MODULE_USE_PCH_NONE ON)   - set for disable PCH
+
 
 # After all the settings you need to do:
 # include(${PROJECT_SOURCE_DIR}/build/module.cmake)
@@ -54,6 +55,20 @@ if (BUILD_SHARED_LIBS)
     if (NOT MSVC)
         set_target_properties(${MODULE} PROPERTIES COMPILE_FLAGS "-fPIC")
     endif (NOT MSVC)
+endif()
+
+# Default use std pch
+if (MODULE_USE_PCH_NONE)
+    # note
+else()
+
+    if(NOT ${MODULE} MATCHES global)
+        target_precompile_headers(${MODULE} REUSE_FROM global)
+        target_compile_definitions(${MODULE} PRIVATE global_EXPORTS=1)
+    else()
+        target_precompile_headers(${MODULE} PRIVATE ${PROJECT_SOURCE_DIR}/build/pch/pch.h)
+    endif()
+
 endif()
 
 target_sources(${MODULE} PRIVATE
@@ -84,50 +99,3 @@ endif()
 set(MODULE_LINK ${QT_LIBRARIES} ${MODULE_LINK})
 
 target_link_libraries(${MODULE} PRIVATE ${MODULE_LINK} )
-
-#set(LOCAL_MODULE_BUILD_PCH ${BUILD_PCH})
-
-#if (MODULE_HAS_C_CODE)
-
-#    set(LOCAL_MODULE_BUILD_PCH OFF)
-
-#    if (NOT MSVC)
-#        set_target_properties( ${MODULE} PROPERTIES COMPILE_FLAGS "-fPIC")
-#    endif (NOT MSVC)
-
-#endif(MODULE_HAS_C_CODE)
-
-
-#if (LOCAL_MODULE_BUILD_PCH)
-#    if (NOT MSVC)
-#        set_target_properties (${MODULE} PROPERTIES COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch")
-#    else (NOT MSVC)
-#        set_target_properties (${MODULE} PROPERTIES COMPILE_FLAGS "${PCH_INCLUDE}" )
-#    endif (NOT MSVC)
-
-#    xcode_pch(${MODULE} all)
-
-#    # Use MSVC pre-compiled headers
-#    vstudio_pch( ${MODULE} )
-
-#    # MSVC does not depend on mops1 & mops2 for PCH
-#    if (NOT MSVC)
-#        ADD_DEPENDENCIES(${MODULE} mops1)
-#        ADD_DEPENDENCIES(${MODULE} mops2)
-#    endif (NOT MSVC)
-#else (LOCAL_MODULE_BUILD_PCH)
-
-#    set(MODULE_USE_ALL_H OFF)
-
-#    if (MODULE_USE_ALL_H)
-#        if (NOT MSVC)
-#            set_target_properties (${MODULE} PROPERTIES COMPILE_FLAGS "-include ${PROJECT_SOURCE_DIR}/all.h")
-#        else (NOT MSVC)
-#            set_target_properties (${MODULE} PROPERTIES COMPILE_FLAGS "/FI ${PROJECT_SOURCE_DIR}/all.h" )
-#        endif (NOT MSVC)
-#        message(STATUS "  ${MODULE} include all.h")
-#    endif(MODULE_USE_ALL_H)
-
-#endif (LOCAL_MODULE_BUILD_PCH)
-
-

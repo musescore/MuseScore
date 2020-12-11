@@ -120,5 +120,4 @@ if (OS_IS_WIN)
     set(MODULE_LINK ${MODULE_LINK} winmm)
 endif(OS_IS_WIN)
 
-set (MODULE_HAS_C_CODE 1)
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

@@ -49,6 +49,7 @@ set(MODULE_DEF
     -DFT2_BUILD_LIBRARY
     )
 
+set(MODULE_USE_PCH_NONE ON)
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 
 target_no_warning(${MODULE} -Wimplicit-fallthrough=0)
