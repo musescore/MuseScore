@@ -58,6 +58,26 @@ SysStaff::~SysStaff()
       }
 
 //---------------------------------------------------------
+//   saveLayout
+//---------------------------------------------------------
+
+void SysStaff::saveLayout()
+      {
+      _height =  bbox().height();
+      _yPos = bbox().y();
+      }
+
+//---------------------------------------------------------
+//   saveLayout
+//---------------------------------------------------------
+
+void SysStaff::restoreLayout()
+      {
+      bbox().setY(_yPos);
+      bbox().setHeight(_height);
+      }
+
+//---------------------------------------------------------
 //   System
 //---------------------------------------------------------
 
@@ -674,6 +694,7 @@ void System::layout2()
 //                  ss->setYOff(staff->lines(0) == 1 ? _spatium * staff->mag(0) : 0.0);
                   ss->setYOff(yOffset);
                   ss->bbox().setRect(_leftMargin, y - yOffset, width() - _leftMargin, h);
+                  ss->saveLayout();
                   break;
                   }
 
@@ -791,13 +812,14 @@ void System::layout2()
 //            ss->setYOff(staff->lines(0) == 1 ? _spatium * staff->mag(0) : 0.0);
             ss->setYOff(yOffset);
             ss->bbox().setRect(_leftMargin, y - yOffset, width() - _leftMargin, h);
+            ss->saveLayout();
             y += dist;
             }
 
-      qreal systemHeight = staff(visibleStaves.back().first)->bbox().bottom();
-      setHeight(systemHeight);
+      _systemHeight = staff(visibleStaves.back().first)->bbox().bottom();
+      setHeight(_systemHeight);
 
-      setMeasureHeight(systemHeight);
+      setMeasureHeight(_systemHeight);
 
       //---------------------------------------------------
       //  layout brackets vertical position
@@ -833,6 +855,19 @@ void System::layout2()
                   }
             }
 
+      }
+
+//---------------------------------------------------------
+//   restoreLayout2
+//---------------------------------------------------------
+
+void System::restoreLayout2()
+      {
+      for (SysStaff* s : _staves)
+            s->restoreLayout();
+
+      setHeight(_systemHeight);
+      setMeasureHeight(_systemHeight);
       }
 
 //---------------------------------------------------------

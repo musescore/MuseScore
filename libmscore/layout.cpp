@@ -1582,6 +1582,7 @@ static void distributeStaves(Page* page)
                   int endCurlyBracket  { - 1 };
                   int staffNr { -1 };
                   for (SysStaff* sysStaff : *system->staves()) {
+                        sysStaff->restoreLayout();
                         Staff* staff { score->staff(++staffNr)};
                         addSpaceAroundNormalBracket |= endNormalBracket == staffNr;
                         addSpaceAroundCurlyBracket  |= endCurlyBracket == staffNr;
@@ -4645,7 +4646,7 @@ void LayoutContext::collectPage()
             //  check for page break or if next system will fit on page
             //
             bool collected = false;
-            if (rangeDone && !score->enableVerticalSpread()) {
+            if (rangeDone) {
                   // take next system unchanged
                   if (systemIdx > 0) {
                         nextSystem = score->systems().value(systemIdx++);
@@ -4900,11 +4901,6 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
             }
       if (!layoutAll && m->system()) {
             System* system  = m->system();
-            if (enableVerticalSpread()) {
-                  system = system->page()->systems().first();
-                  lc.endTick = system->page()->systems().last()->endTick();
-                  }
-
             int systemIndex = _systems.indexOf(system);
             lc.page         = system->page();
             lc.curPage      = pageIdx(lc.page);
