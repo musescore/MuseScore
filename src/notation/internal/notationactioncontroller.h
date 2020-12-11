@@ -39,7 +39,7 @@ public:
     void init();
 
 private:
-    bool canReceiveAction(const actions::ActionName& action) const override;
+    bool canReceiveAction(const actions::ActionName& actionName) const override;
 
     INotationPtr currentNotation() const;
     INotationInteractionPtr currentNotationInteraction() const;
