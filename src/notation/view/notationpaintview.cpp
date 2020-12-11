@@ -121,7 +121,9 @@ void NotationPaintView::onCurrentNotationChanged()
     });
 
     interaction->textEditingStarted().onNotify(this, [this]() {
-        emit textEdittingStarted();
+        if (!hasActiveFocus()) {
+            emit textEdittingStarted();
+        }
     });
 
     update();
@@ -334,7 +336,7 @@ void NotationPaintView::keyReleaseEvent(QKeyEvent* event)
     if (!isInited()) {
         return;
     }
-    m_inputController->keyPressEvent(event);
+    m_inputController->keyReleaseEvent(event);
 }
 
 void NotationPaintView::dragEnterEvent(QDragEnterEvent* ev)

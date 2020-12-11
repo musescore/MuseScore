@@ -71,7 +71,7 @@ public:
     void mouseReleaseEvent(QMouseEvent*);
     void mouseDoubleClickEvent(QMouseEvent* ev);
     void hoverMoveEvent(QHoverEvent* ev);
-    void keyPressEvent(QKeyEvent* event);
+    void keyReleaseEvent(QKeyEvent* event);
 
     void dragEnterEvent(QDragEnterEvent* ev);
     void dragLeaveEvent(QDragLeaveEvent* ev);
