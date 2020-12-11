@@ -3166,9 +3166,9 @@ void Score::padToggle(Pad p, const EditData& ed)
         } else {
             changeCRlen(cr, _is.duration());
 
-            for (const SymId& articulation: _is.articulationIds()) {
+            for (const SymId& articulationId: _is.articulationIds()) {
                 Articulation* na = new Articulation(cr->score());
-                na->setSymId(articulation);
+                na->setSymId(articulationId);
                 addArticulation(cr, na);
             }
         }
