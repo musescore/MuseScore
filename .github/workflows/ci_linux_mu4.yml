@@ -50,6 +50,7 @@ jobs:
         echo "compression = true" >> ~/.ccache/ccache.conf
         echo "compression_level = 6" >> ~/.ccache/ccache.conf
         echo "max_size = 2G" >> ~/.ccache/ccache.conf
+        echo "sloppiness=pch_defines,time_macros" >> ~/.ccache/ccache.conf
         cat ~/.ccache/ccache.conf
         ccache -s
         ccache -z        

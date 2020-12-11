@@ -181,6 +181,7 @@ endif(DOWNLOAD_SOUNDFONT)
 ###########################################
 
 add_subdirectory(share)
+add_subdirectory(src/framework/global) # should be first to work pch
 add_subdirectory(thirdparty/qzip)
 add_subdirectory(src)
 

@@ -20,7 +20,7 @@ set(MODULE_LINK
     ${SNDFILE_LIB}
     )
 
-set(MODULE_HAS_C_CODE 1)
+set(MODULE_USE_PCH_NONE ON)
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 
 #target_no_warning(${MODULE} -Wunused-const-variable=0)

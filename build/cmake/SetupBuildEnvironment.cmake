@@ -14,6 +14,8 @@ if (CC_IS_GCC)
         set(BUILD_SHARED_LIBS ON)
     endif(BUILD_IS_DEBUG)
 
+    #add_compile_options(-H)
+
 elseif(CC_IS_MSVC)
     message(STATUS "Using Compiler MSVC ${CMAKE_CXX_COMPILER_VERSION}")
 
