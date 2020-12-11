@@ -196,6 +196,10 @@ done
 for name in "${extracted_appimages[@]}"; do
   symlink="$(which "${name}")"
   apprun="$(dirname "${symlink}")/$(readlink "${symlink}")"
+  if [[ ! -L "${symlink}" || ! -f "${apprun}" ]]; then
+    echo "$0: Warning: Unable to find AppImage for '${name}'. Will not bundle." >&2
+    continue
+  fi
   extracted_appdir_path="$(dirname "${apprun}")"
   extracted_appdir_name="$(basename "${extracted_appdir_path}")"
   cp -r "${extracted_appdir_path}" "${appdir}/"
