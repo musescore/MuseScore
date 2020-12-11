@@ -70,6 +70,12 @@ Item {
 
         sourceComponent: partTitle
 
+        function startEditTitle() {
+            if (sourceComponent !== editPartTitleField) {
+                sourceComponent = editPartTitleField
+            }
+        }
+
         Connections {
             target: root
 
@@ -159,7 +165,7 @@ Item {
             text: qsTrc("notation", "Rename")
 
             onTriggered: {
-                titleLoader.sourceComponent = editPartTitleField
+                titleLoader.startEditTitle()
             }
         }
     }
@@ -221,6 +227,10 @@ Item {
             onClicked: {
                 voicesPopup.close()
                 root.partClicked()
+            }
+
+            onDoubleClicked: {
+                titleLoader.startEditTitle()
             }
         }
     }
