@@ -22,7 +22,7 @@ Item {
             height: childrenRect.height
 
             StyledTextLabel {
-                width: parent.width / 2
+                width: parent.width * 2/3
 
                 text: qsTrc("notation", "NAME")
 
@@ -33,7 +33,7 @@ Item {
             StyledTextLabel {
                 id: voicesVisibilityHeader
 
-                width: parent.width / 2
+                width: parent.width * 1/3
 
                 text: qsTrc("notation", "VISIBLE VOICES")
 
