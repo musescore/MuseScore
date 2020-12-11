@@ -26,7 +26,7 @@ class SynthesizerState;
 //---------------------------------------------------------
 
 struct IdValue {
-    int id;
+    int id = 0;
     QString data;
 
     IdValue() {}

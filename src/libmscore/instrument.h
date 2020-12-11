@@ -41,7 +41,7 @@ class Synthesizer;
 class StaffName
 {
     QString _name;      // html string
-    int _pos;           // even number -> between staves
+    int _pos = 0;       // even number -> between staves
 
 public:
     StaffName() {}
@@ -85,8 +85,8 @@ struct NamedEventList {
 struct MidiArticulation {
     QString name;
     QString descr;
-    int velocity;             // velocity change: -100% - +100%
-    int gateTime;             // gate time change: -100% - +100%
+    int velocity = 0;         // velocity change: -100% - +100%
+    int gateTime = 0;         // gate time change: -100% - +100%
     void write(XmlWriter&) const;
     void read(XmlReader&);
 

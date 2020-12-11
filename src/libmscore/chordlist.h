@@ -100,8 +100,8 @@ struct RenderAction {
         NOTE, ACCIDENTAL
     };
 
-    RenderActionType type;
-    qreal movex, movey;            // MOVE
+    RenderActionType type = RenderActionType::SET;
+    qreal movex = 0.0, movey = 0.0; // MOVE
     QString text;                   // SET
 
     RenderAction() {}
@@ -186,7 +186,7 @@ private:
 //---------------------------------------------------------
 
 struct ChordDescription {
-    int id;                   // Chord id number (Band In A Box Chord Number)
+    int id = 0;               // Chord id number (Band In A Box Chord Number)
     QStringList names;        // list of alternative chord names
                               // that will by recognized from keyboard entry (without root/base)
     QList<ParsedChord> parsedChords;
@@ -198,9 +198,9 @@ struct ChordDescription {
     QStringList xmlDegrees;   // MusicXml: list of degrees (if any)
     HChord chord;             // C based chord
     QList<RenderAction> renderList;
-    bool generated;
-    bool renderListGenerated;
-    bool exportOk;
+    bool generated = false;
+    bool renderListGenerated = false;
+    bool exportOk = false;
     QString _quality;
 
 public:
