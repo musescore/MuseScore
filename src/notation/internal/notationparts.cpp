@@ -708,10 +708,10 @@ void NotationParts::appendLinkedStaff(const ID& originStaffId)
     Staff* linkedStaff = staff->clone();
     linkedStaff->setId(Staff::makeId());
     int linkedStaffIndex = staff->part()->nstaves();
-    staff->linkTo(linkedStaff);
 
     startEdit();
     score()->undoInsertStaff(linkedStaff, linkedStaffIndex);
+    Ms::Excerpt::cloneStaff(staff, linkedStaff);
     apply();
 
     InstrumentInfo instrumentInfo = this->instrumentInfo(linkedStaff);
