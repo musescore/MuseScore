@@ -15,16 +15,15 @@
         <file>qml/palettes/StyledToolButton.qml</file>
         <file>qml/palettes/TreePaletteHeader.qml</file>
         <file>qml/palettes/utils.js</file>
-        <file>qml/palettes/icons/arrow_down.svg</file>
-        <file>qml/palettes/icons/arrow_right.svg</file>
-        <file>qml/palettes/icons/clear.png</file>
-        <file>qml/palettes/icons/delete.png</file>
-        <file>qml/palettes/icons/menu_dots.svg</file>
-        <file>qml/palettes/icons/search.png</file>
+        <file>qml/palettes/icons/ArrowDown.svg</file>
+        <file>qml/palettes/icons/ArrowRight.svg</file>
         <file>qml/migration/ScoreMigrationDialog.qml</file>
         <file>qml/migration/CheckBoxControl.qml</file>
         <file>qml/migration/Tick_Icon.png</file>
         <file>qml/migration/placeholder.png</file>
-        <file>qml/palettes/icons/plus.png</file>
+        <file>qml/palettes/icons/CloseButton.svg</file>
+        <file>qml/palettes/icons/MagnifyingGlass.svg</file>
+        <file>qml/palettes/icons/ThreeDotMenu.svg</file>
+        <file>qml/palettes/icons/TrashCan.svg</file>
     </qresource>
 </RCC>

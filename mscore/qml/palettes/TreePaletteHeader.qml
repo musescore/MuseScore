@@ -64,7 +64,7 @@ Item {
         padding: 4
 
         contentItem: StyledIcon {
-            source: paletteHeader.expanded ? "icons/arrow_down.svg" : "icons/arrow_right.svg"
+            source: paletteHeader.expanded ? "icons/ArrowDown.svg" : "icons/ArrowRight.svg"
         }
 
         onClicked: paletteHeader.toggleExpandRequested()
@@ -116,7 +116,7 @@ Item {
         padding: 4
 
         contentItem: StyledIcon {
-            source: "icons/delete.png"
+            source: "icons/TrashCan.svg"
         }
 
         onClicked: hideSelectedElementsRequested()
@@ -135,7 +135,7 @@ Item {
         padding: 4
 
         contentItem: StyledIcon {
-            source: "icons/menu_dots.svg"
+            source: "icons/ThreeDotMenu.svg"
         }
 
         text: qsTr("Palette menu") // used by screen readers (they ignore Accessible.name for buttons)

@@ -228,7 +228,7 @@ StyledPopup {
                         padding: 4
 
                         contentItem: StyledIcon {
-                            source: "icons/delete.png"
+                            source: "icons/TrashCan.svg"
                             color: "black"
                             opacity: deleteButton.enabled ? 1.0 : 0.1
                         }

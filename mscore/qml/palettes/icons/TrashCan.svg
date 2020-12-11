@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>TrashCan</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="TrashCan" fill="#000000">
+            <path d="M12,14 L36,14 L36,38 C36,40.209139 34.209139,42 32,42 L16,42 C13.790861,42 12,40.209139 12,38 L12,14 L12,14 Z" id="Rectangle"></path>
+            <polygon id="Rectangle" points="10 8 17 8 19 6 29 6 31 8 38 8 38 12 10 12"></polygon>
+        </g>
+    </g>
+</svg>

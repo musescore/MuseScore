@@ -16,16 +16,16 @@ QGroupBox::title {
 
 QDockWidget {
  border: 1px solid lightgray;
- titlebar-close-icon: url(:/data/icons/png/window-close.png);
- titlebar-normal-icon: url(:/data/icons/png/window-float.png);
+ titlebar-close-icon: url(:/data/icons/png/dockwidget-close.png);
+ titlebar-normal-icon: url(:/data/icons/png/dockwidget-float.png);
 }
 
 QTabBar::close-button {
- image: url(:/data/icons/png/window-close.png);
+ image: url(:/data/icons/png/tabbar-close.png);
 }
 
 QTabBar::close-button:hover {
- image: url(:/data/icons/png/window-close-hover.png);
+ image: url(:/data/icons/png/tabbar-close-hover.png);
 }
 
 /* Inspector buttons */

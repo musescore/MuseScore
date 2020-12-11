@@ -31,18 +31,12 @@
         <file>data/style.qss</file>
         <file>data/mscore.png</file>
         <file>data/icons/window-close.svg</file>
-        <file>data/icons/png/window-close.png</file>
-        <file>data/icons/png/window-close@2x.png</file>
-        <file>data/icons/png/window-close-hover.png</file>
-        <file>data/icons/png/window-close-hover@2x.png</file>
-        <file>data/icons/png/window-float.png</file>
-        <file>data/icons/png/window-float@2x.png</file>
-        <file>data/icons/png/window-close-dark.png</file>
-        <file>data/icons/png/window-close-dark@2x.png</file>
-        <file>data/icons/png/window-close-hover-dark.png</file>
-        <file>data/icons/png/window-close-hover-dark@2x.png</file>
-        <file>data/icons/png/window-float-dark.png</file>
-        <file>data/icons/png/window-float-dark@2x.png</file>
+        <file>data/icons/png/dockwidget-close.png</file>
+        <file>data/icons/png/dockwidget-close@2x.png</file>
+        <file>data/icons/png/tabbar-close.png</file>
+        <file>data/icons/png/tabbar-close@2x.png</file>
+        <file>data/icons/png/tabbar-close-hover.png</file>
+        <file>data/icons/png/tabbar-close-hover@2x.png</file>
         <file>data/musescore-logo-transbg-m.png</file>
         <file>data/musescore_logo_full.png</file>
         <file>data/greendot.svg</file>
@@ -207,5 +201,15 @@
         <file>data/win_opengl_buglist.json</file>
         <file>data/icons/bin.svg</file>
         <file>data/icons/braces.svg</file>
+        <file>data/icons/png/tabbar-close-dark-hover.png</file>
+        <file>data/icons/png/tabbar-close-dark-hover@2x.png</file>
+        <file>data/icons/png/tabbar-close-dark.png</file>
+        <file>data/icons/png/tabbar-close-dark@2x.png</file>
+        <file>data/icons/png/dockwidget-close-dark.png</file>
+        <file>data/icons/png/dockwidget-close-dark@2x.png</file>
+        <file>data/icons/png/dockwidget-float-dark.png</file>
+        <file>data/icons/png/dockwidget-float-dark@2x.png</file>
+        <file>data/icons/png/dockwidget-float.png</file>
+        <file>data/icons/png/dockwidget-float@2x.png</file>
     </qresource>
 </RCC>
