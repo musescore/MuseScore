@@ -188,7 +188,7 @@ class TextBlock
 {
     QList<TextFragment> _fragments;
     qreal _y = 0;
-    qreal _lineSpacing;
+    qreal _lineSpacing = 0.0;
     QRectF _bbox;
     bool _eol = false;
 

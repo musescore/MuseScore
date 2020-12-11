@@ -254,7 +254,7 @@ enum class PlayMode : char {
 
 struct Layer {
     QString name;
-    uint tags;
+    uint tags = 0;
 };
 
 //---------------------------------------------------------
@@ -1367,10 +1367,10 @@ class MasterScore : public Score
     QQueue<MidiInputEvent> _midiInputQueue;           // MIDI events that have yet to be processed
     std::list<MidiInputEvent> _activeMidiPitches;     // MIDI keys currently being held down
     std::vector<MidiMapping> _midiMapping;
-    bool isSimpleMidiMaping;                          // midi mapping is simple if all ports and channels
+    bool isSimpleMidiMaping = false;                  // midi mapping is simple if all ports and channels
                                                       // don't decrease and don't have gaps
     QSet<int> occupiedMidiChannels;                   // each entry is port*16+channel, port range: 0-inf, channel: 0-15
-    unsigned int searchMidiMappingFrom;               // makes getting next free MIDI mapping faster
+    unsigned int searchMidiMappingFrom = 0;           // makes getting next free MIDI mapping faster
 
     void parseVersion(const QString&);
     void reorderMidiMapping();
