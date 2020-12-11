@@ -22,14 +22,15 @@
 #include "log.h"
 #include "translation.h"
 
-#include <QItemSelectionModel>
+#include "uicomponents/view/itemmultiselectionmodel.h"
 
 using namespace mu::notation;
+using namespace mu::framework;
 
 PartListModel::PartListModel(QObject* parent)
-    : QAbstractListModel(parent), m_selectionModel(new QItemSelectionModel(this))
+    : QAbstractListModel(parent), m_selectionModel(new ItemMultiSelectionModel(this))
 {
-    connect(m_selectionModel, &QItemSelectionModel::selectionChanged, this, &PartListModel::selectionChanged);
+    connect(m_selectionModel, &ItemMultiSelectionModel::selectionChanged, this, &PartListModel::selectionChanged);
 }
 
 void PartListModel::load()
@@ -148,10 +149,18 @@ void PartListModel::selectPart(int partIndex)
         return;
     }
 
-    QModelIndex modelIndex = this->index(partIndex);
-    m_selectionModel->select(modelIndex, QItemSelectionModel::SelectionFlag::Toggle);
+    QModelIndexList previousSelectedIndexes = m_selectionModel->selectedIndexes();
+    QModelIndex modelIndex = index(partIndex);
+    m_selectionModel->select(modelIndex);
+    QModelIndexList newSelectedIndexes = m_selectionModel->selectedIndexes();
 
-    emit dataChanged(modelIndex, modelIndex);
+    QSet<QModelIndex> indexesToUpdate(previousSelectedIndexes.begin(), previousSelectedIndexes.end());
+    indexesToUpdate = indexesToUpdate.unite(QSet<QModelIndex>(newSelectedIndexes.begin(), newSelectedIndexes.end()));
+    indexesToUpdate << modelIndex;
+
+    for (const QModelIndex& indexToUpdate : indexesToUpdate) {
+        emit dataChanged(indexToUpdate, indexToUpdate);
+    }
 }
 
 void PartListModel::removePart(int partIndex)

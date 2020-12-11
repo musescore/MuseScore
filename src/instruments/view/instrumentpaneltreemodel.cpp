@@ -27,8 +27,11 @@
 #include "staffcontroltreeitem.h"
 #include "log.h"
 
+#include "uicomponents/view/itemmultiselectionmodel.h"
+
 using namespace mu::instruments;
 using namespace mu::notation;
+using namespace mu::framework;
 using ItemType = InstrumentTreeItemType::ItemType;
 
 InstrumentPanelTreeModel::InstrumentPanelTreeModel(QObject* parent)
@@ -50,9 +53,9 @@ InstrumentPanelTreeModel::InstrumentPanelTreeModel(QObject* parent)
         }
     });
 
-    m_selectionModel = new QItemSelectionModel(this);
+    m_selectionModel = new ItemMultiSelectionModel(this);
 
-    connect(m_selectionModel, &QItemSelectionModel::selectionChanged, [this](const QItemSelection&, const QItemSelection&) {
+    connect(m_selectionModel, &ItemMultiSelectionModel::selectionChanged, [this](const QItemSelection&, const QItemSelection&) {
         updateRearrangementAvailability();
         updateRemovingAvailability();
 
@@ -128,25 +131,9 @@ IDList InstrumentPanelTreeModel::currentNotationPartIdList() const
     return result;
 }
 
-void InstrumentPanelTreeModel::selectRow(const QModelIndex& rowIndex, const bool isMultipleSelectionModeOn)
+void InstrumentPanelTreeModel::selectRow(const QModelIndex& rowIndex)
 {
-    for (const QModelIndex& selectedIndex : m_selectionModel->selectedIndexes()) {
-        if (rowIndex.parent() != selectedIndex.parent()) {
-            m_selectionModel->select(rowIndex, QItemSelectionModel::ClearAndSelect);
-            return;
-        }
-    }
-
-    if (m_selectionModel->isSelected(rowIndex)) {
-        m_selectionModel->select(rowIndex, QItemSelectionModel::Deselect);
-        return;
-    }
-
-    if (isMultipleSelectionModeOn) {
-        m_selectionModel->select(rowIndex, QItemSelectionModel::Select);
-    } else {
-        m_selectionModel->select(rowIndex, QItemSelectionModel::ClearAndSelect);
-    }
+    m_selectionModel->select(rowIndex);
 }
 
 void InstrumentPanelTreeModel::addInstruments()

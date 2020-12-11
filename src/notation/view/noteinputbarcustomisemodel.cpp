@@ -20,8 +20,6 @@
 
 #include <optional>
 
-#include <QItemSelectionModel>
-
 #include "log.h"
 #include "translation.h"
 
@@ -30,9 +28,12 @@
 #include "internal/notationactions.h"
 #include "workspace/workspacetypes.h"
 
+#include "uicomponents/view/itemmultiselectionmodel.h"
+
 using namespace mu::notation;
 using namespace mu::workspace;
 using namespace mu::actions;
+using namespace mu::framework;
 
 static const std::string NOTE_INPUT_TOOLBAR_NAME("noteInput");
 
@@ -45,9 +46,9 @@ static const ActionName SEPARATOR_LINE_ACTION_NAME("");
 NoteInputBarCustomiseModel::NoteInputBarCustomiseModel(QObject* parent)
     : QAbstractListModel(parent)
 {
-    m_selectionModel = new QItemSelectionModel(this);
+    m_selectionModel = new ItemMultiSelectionModel(this);
 
-    connect(m_selectionModel, &QItemSelectionModel::selectionChanged,
+    connect(m_selectionModel, &ItemMultiSelectionModel::selectionChanged,
             [this](const QItemSelection& selected, const QItemSelection& deselected) {
         updateOperationsAvailability();
 
@@ -194,27 +195,7 @@ QHash<int, QByteArray> NoteInputBarCustomiseModel::roleNames() const
 
 void NoteInputBarCustomiseModel::selectRow(int row)
 {
-    QModelIndex rowIndex = index(row);
-
-    AbstractNoteInputBarItem* currentItem = modelIndexToItem(rowIndex);
-    if (!currentItem) {
-        return;
-    }
-
-    for (const QModelIndex& selectedIndex : m_selectionModel->selectedIndexes()) {
-        AbstractNoteInputBarItem* selectedItem = modelIndexToItem(selectedIndex);
-        if (!selectedItem || selectedItem->type() != currentItem->type()) {
-            m_selectionModel->select(rowIndex, QItemSelectionModel::ClearAndSelect);
-            return;
-        }
-    }
-
-    if (m_selectionModel->isSelected(rowIndex)) {
-        m_selectionModel->select(rowIndex, QItemSelectionModel::Deselect);
-        return;
-    }
-
-    m_selectionModel->select(rowIndex, QItemSelectionModel::Select);
+    m_selectionModel->select(index(row));
 }
 
 void NoteInputBarCustomiseModel::moveSelectedRowsUp()
@@ -383,10 +364,22 @@ void NoteInputBarCustomiseModel::updateMovingDownAvailability(const QModelIndex&
 
 void NoteInputBarCustomiseModel::updateRemovingAvailability()
 {
-    bool removingAvailable = !m_selectionModel->selectedIndexes().empty();
+    auto hasActionInSelection = [this](const QModelIndexList& selectedIndexes) {
+        for (const QModelIndex& index : selectedIndexes) {
+            AbstractNoteInputBarItem* item = modelIndexToItem(index);
+            if (item && item->type() == AbstractNoteInputBarItem::ACTION) {
+                return true;
+            }
+        }
+
+        return false;
+    };
+
+    QModelIndexList selectedIndexes = m_selectionModel->selectedIndexes();
+    bool removingAvailable = !selectedIndexes.empty();
+
     if (removingAvailable) {
-        AbstractNoteInputBarItem* firstSelectedItem = modelIndexToItem(m_selectionModel->selectedIndexes().first());
-        removingAvailable = firstSelectedItem && firstSelectedItem->type() == AbstractNoteInputBarItem::SEPARATOR;
+        removingAvailable = !hasActionInSelection(selectedIndexes);
     }
 
     setIsRemovingAvailable(removingAvailable);

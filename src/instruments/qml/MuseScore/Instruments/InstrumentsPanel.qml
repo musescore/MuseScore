@@ -183,9 +183,7 @@ Item {
                                 sideMargin: contentColumn.sideMargin
 
                                 onClicked: {
-                                    var isMultipleSelectionModeOn = mouse.modifiers & Qt.ShiftModifier || mouse.modifiers & Qt.ControlModifier
-
-                                    instrumentTreeModel.selectRow(styleData.index, isMultipleSelectionModeOn)
+                                    instrumentTreeModel.selectRow(styleData.index)
                                 }
 
                                 onVisibleChanged: {
