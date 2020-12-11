@@ -24,6 +24,7 @@ set(_components
     PrintSupport
     Concurrent
     OpenGL
+    LinguistTools
   )
 if (USE_WEBENGINE)
   set(_components

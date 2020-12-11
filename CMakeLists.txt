@@ -244,3 +244,6 @@ add_custom_target(lrelease
    COMMAND Qt5::lrelease ${QT_TS_FILES}
    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
 )
+
+
+
