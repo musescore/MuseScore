@@ -105,6 +105,7 @@ if(OS_IS_LIN)
     set(MODULE_INCLUDE ${MODULE_INCLUDE} ${ALSA_INCLUDE_DIRS} )
 endif()
 
+set(MODULE_USE_PCH_NONE ON) # strange error
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 
 # for soloud
