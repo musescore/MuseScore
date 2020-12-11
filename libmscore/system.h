@@ -47,7 +47,9 @@ class BarLine;
 class SysStaff {
       QRectF _bbox;                 // Bbox of StaffLines.
       Skyline _skyline;
-      qreal _yOff { 0    };         // offset of top staff line within bbox
+      qreal _yOff   { 0.0 };        // offset of top staff line within bbox
+      qreal _yPos   { 0.0 };        // y position of bbox after System::layout2
+      qreal _height { 0.0 };        // height of bbox after System::layout2
       qreal _continuousDist { -1.0 }; // distance for continuous mode
       bool _show  { true };         // derived from Staff or false if empty
                                     // staff is hidden
@@ -61,6 +63,9 @@ class SysStaff {
       qreal y() const               { return _bbox.y() + _yOff; }
       void setYOff(qreal offset)    { _yOff = offset; }
       qreal yOffset() const         { return _yOff; }
+
+      void saveLayout();
+      void restoreLayout();
 
       qreal continuousDist() const      { return _continuousDist;  }
       void setContinuousDist(qreal val) { _continuousDist = val;   }
@@ -93,6 +98,7 @@ class System final : public Element {
       qreal _leftMargin              { 0.0   };     ///< left margin for instrument name, brackets etc.
       mutable bool fixedDownDistance { false };
       qreal _distance                { 0.0   };     // temp. variable used during layout
+      qreal _systemHeight            { 0.0   };
 
       int firstVisibleSysStaff() const;
       int lastVisibleSysStaff() const;
@@ -130,6 +136,7 @@ public:
       void addBrackets(Measure* measure);
 
       void layout2();                     ///< Called after Measure layout.
+      void restoreLayout2();
       void clear();                       ///< Clear measure list.
 
       QRectF bboxStaff(int staff) const      { return _staves[staff]->bbox(); }
