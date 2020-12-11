@@ -20,13 +20,13 @@
 #ifndef MU_NOTATION_PARTLISTMODEL_H
 #define MU_NOTATION_PARTLISTMODEL_H
 
-#include <QAbstractListModel>
-
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "inotationcreator.h"
 
-class QItemSelectionModel;
+namespace mu::framework {
+class ItemMultiSelectionModel;
+}
 
 namespace mu::notation {
 class PartListModel : public QAbstractListModel
@@ -84,7 +84,7 @@ private:
         RoleVoicesTitle
     };
 
-    QItemSelectionModel* m_selectionModel = nullptr;
+    framework::ItemMultiSelectionModel* m_selectionModel = nullptr;
     QList<INotationPtr> m_notations;
     INotationPtr m_currentNotation;
 };
