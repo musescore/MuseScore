@@ -2874,9 +2874,9 @@ class Sym
 {
 protected:
     int _code = -1;
-    FT_UInt _index;
+    FT_UInt _index = 0;
     QRectF _bbox;
-    qreal _advance;
+    qreal _advance = 0.0;
 
     QPointF _stemDownNW;
     QPointF _stemUpSE;

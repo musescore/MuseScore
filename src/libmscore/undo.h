@@ -1335,8 +1335,8 @@ class LinkUnlink : public UndoCommand
     bool mustDelete  { false };
 
 protected:
-    LinkedElements* le;
-    ScoreElement* e;
+    LinkedElements* le = nullptr;
+    ScoreElement* e = nullptr;
 
     void link();
     void unlink();

@@ -65,13 +65,13 @@ private:
 
     PitchMap _notes;
 
-    Voicing _voicing;
-    HDuration _duration;
+    Voicing _voicing = Voicing::AUTO;
+    HDuration _duration = HDuration::INVALID;
 
     //whether or not the current notes QMap is up to date
     bool _dirty;
 
-    bool _literal;   //use all notes when possible and do not add any notes
+    bool _literal = false;   //use all notes when possible and do not add any notes
 
 public:
     RealizedHarmony()

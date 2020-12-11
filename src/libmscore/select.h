@@ -34,13 +34,13 @@ class Chord;
 
 struct ElementPattern {
     QList<Element*> el;
-    int type;
-    int subtype;
-    int staffStart;
-    int staffEnd;   // exclusive
-    int voice;
-    const System* system;
-    bool subtypeValid;
+    int type = 0;
+    int subtype = 0;
+    int staffStart = 0;
+    int staffEnd = 0;   // exclusive
+    int voice = 0;
+    const System* system = nullptr;
+    bool subtypeValid = false;
     Fraction durationTicks;
 };
 
@@ -141,21 +141,21 @@ class Selection
     SelState _state;
     QList<Element*> _el;            // valid in mode SelState::LIST
 
-    int _staffStart;                // valid if selState is SelState::RANGE
-    int _staffEnd;
-    Segment* _startSegment;
-    Segment* _endSegment;           // next segment after selection
+    int _staffStart = 0;            // valid if selState is SelState::RANGE
+    int _staffEnd = 0;
+    Segment* _startSegment = nullptr;
+    Segment* _endSegment = nullptr; // next segment after selection
 
     Fraction _plannedTick1 { -1, 1 };   // Will be actually selected on updateSelectedElements() call.
     Fraction _plannedTick2 { -1, 1 };   // Used by setRangeTicks() to restore proper selection after
     // command end in case some changes are expected to segments'
     // structure (e.g. MMRests reconstruction).
 
-    Segment* _activeSegment;
-    int _activeTrack;
+    Segment* _activeSegment = nullptr;
+    int _activeTrack = 0;
 
     Fraction _currentTick;    // tracks the most recent selection
-    int _currentTrack;
+    int _currentTrack = 0;
 
     QString _lockReason;
 

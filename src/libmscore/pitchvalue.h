@@ -24,9 +24,9 @@ namespace Ms {
 //---------------------------------------------------------
 
 struct PitchValue {
-    int time;
-    int pitch;
-    bool vibrato;
+    int time = 0;
+    int pitch = 0;
+    bool vibrato = false;
     PitchValue() {}
     PitchValue(int a, int b, bool c = false)
         : time(a), pitch(b), vibrato(c) {}

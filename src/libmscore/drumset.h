@@ -41,14 +41,14 @@ struct DrumInstrument {
     QString name;
 
     // if notehead = HEAD_CUSTOM, custom, use noteheads
-    NoteHead::Group notehead;   ///< notehead symbol set
+    NoteHead::Group notehead = NoteHead::Group::HEAD_INVALID;   ///< notehead symbol set
     SymId noteheads[int(NoteHead::Type::HEAD_TYPES)]
         = { SymId::noteheadWhole, SymId::noteheadHalf, SymId::noteheadBlack, SymId::noteheadDoubleWhole };
 
-    int line;                   ///< place notehead onto this line
-    Direction stemDirection;
-    int voice;
-    char shortcut;              ///< accelerator key (CDEFGAB)
+    int line = 0;               ///< place notehead onto this line
+    Direction stemDirection = Direction::AUTO;
+    int voice = 0;
+    char shortcut = '\0';      ///< accelerator key (CDEFGAB)
     QList<DrumInstrumentVariant> variants;
 
     DrumInstrument() {}
