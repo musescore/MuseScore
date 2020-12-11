@@ -20,8 +20,6 @@
 #define MU_INSTRUMENTS_INSTRUMENTPANELTREEMODEL_H
 
 #include <QAbstractItemModel>
-#include <QItemSelectionModel>
-#include <QModelIndex>
 #include <QVariant>
 
 #include "abstractinstrumentpaneltreeitem.h"
@@ -31,6 +29,12 @@
 #include "async/asyncable.h"
 #include "instrumentstypes.h"
 #include "iselectinstrumentscenario.h"
+
+namespace mu::framework {
+class ItemMultiSelectionModel;
+}
+
+class QItemSelectionModel;
 
 namespace mu::instruments {
 class PartTreeItem;
@@ -68,7 +72,7 @@ public:
     bool isEmpty() const;
 
     Q_INVOKABLE void load();
-    Q_INVOKABLE void selectRow(const QModelIndex& rowIndex, const bool isMultipleSelectionModeOn);
+    Q_INVOKABLE void selectRow(const QModelIndex& rowIndex);
     Q_INVOKABLE bool isSelected(const QModelIndex& rowIndex) const;
     Q_INVOKABLE void addInstruments();
     Q_INVOKABLE void moveSelectedRowsUp();
@@ -120,7 +124,7 @@ private:
     AbstractInstrumentPanelTreeItem* buildAddStaffControlItem(const QString& partId);
 
     AbstractInstrumentPanelTreeItem* m_rootItem = nullptr;
-    QItemSelectionModel* m_selectionModel = nullptr;
+    framework::ItemMultiSelectionModel* m_selectionModel = nullptr;
 
     mu::notation::INotationPartsPtr m_masterNotationParts = nullptr;
     mu::notation::INotationPartsPtr m_notationParts = nullptr;

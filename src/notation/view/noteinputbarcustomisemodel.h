@@ -29,6 +29,10 @@
 
 class QItemSelectionModel;
 
+namespace mu::framework {
+class ItemMultiSelectionModel;
+}
+
 namespace mu::notation {
 class AbstractNoteInputBarItem;
 class ActionNoteInputBarItem;
@@ -112,7 +116,7 @@ private:
     void saveActions();
 
     QList<AbstractNoteInputBarItem*> m_actions;
-    QItemSelectionModel* m_selectionModel = nullptr;
+    framework::ItemMultiSelectionModel* m_selectionModel = nullptr;
 
     bool m_isMovingUpAvailable = false;
     bool m_isMovingDownAvailable = false;
