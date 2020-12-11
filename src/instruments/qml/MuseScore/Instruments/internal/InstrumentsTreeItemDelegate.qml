@@ -9,12 +9,10 @@ import MuseScore.Instruments 1.0
 Item {
     id: root
 
-    property bool held: false
     property var attachedControl: undefined
     property var index: styleData.index
     property string filterKey
     property bool isSelected: false
-    property bool isParentSelected: false
     property bool isDragAvailable: false
     property var type: InstrumentTreeItemType.UNDEFINED
 
@@ -27,6 +25,14 @@ Item {
 
     QtObject {
         id: privateProperties
+
+        property bool dragged: mouseArea.drag.active && mouseArea.pressed
+
+        onDraggedChanged: {
+            if (dragged && styleData.isExpanded) {
+                attachedControl.collapse(styleData.index)
+            }
+        }
 
         property var openedPopup: null
         property bool isPopupOpened: Boolean(openedPopup) && openedPopup.isOpened
@@ -67,7 +73,7 @@ Item {
     implicitWidth: 248
 
     Drag.keys: [ root.filterKey ]
-    Drag.active: held && isDragAvailable
+    Drag.active: privateProperties.dragged && isDragAvailable
     Drag.source: root
     Drag.hotSpot.x: width / 2
     Drag.hotSpot.y: height / 2
@@ -83,7 +89,7 @@ Item {
         states: [
             State {
                 name: "HOVERED"
-                when: mouseArea.containsMouse && !mouseArea.containsPress && !root.isSelected
+                when: mouseArea.containsMouse && !mouseArea.containsPress && !root.isSelected && !privateProperties.dragged
 
                 PropertyChanges {
                     target: background
@@ -94,7 +100,7 @@ Item {
 
             State {
                 name: "PRESSED"
-                when: mouseArea.containsPress && !root.isSelected
+                when: mouseArea.containsPress && !root.isSelected && !privateProperties.dragged
 
                 PropertyChanges {
                     target: background
@@ -152,12 +158,6 @@ Item {
         visible: false
     }
 
-    onHeldChanged: {
-        if (held && styleData.isExpanded) {
-            attachedControl.collapse(styleData.index)
-        }
-    }
-
     MouseArea {
         id: mouseArea
 
@@ -170,27 +170,6 @@ Item {
 
         drag.target: root
         drag.axis: Drag.YAxis
-
-        Timer {
-            id: pressAndHoldTimer
-
-            interval: 300
-            running: false
-            repeat: false
-
-            onTriggered: {
-                root.held = true
-            }
-        }
-
-        onPressed: {
-            pressAndHoldTimer.start()
-        }
-
-        onReleased: {
-            pressAndHoldTimer.stop()
-            root.held = false
-        }
 
         onClicked: {
             root.clicked(mouse)
@@ -349,7 +328,7 @@ Item {
 
     states: [
         State {
-            when: root.held
+            when: privateProperties.dragged
 
             ParentChange {
                 target: root
