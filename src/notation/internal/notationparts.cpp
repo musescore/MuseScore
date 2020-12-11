@@ -403,9 +403,15 @@ void NotationParts::doMoveStaves(const std::vector<Staff*>& staves, int destinat
             movedStaff->setPart(destinationPart);
         }
 
+        bool needUnlink = !staff->isLinked();
+
         score()->undoInsertStaff(movedStaff, destinationStaffIndex);
         Ms::Excerpt::cloneStaff(staff, movedStaff);
-        movedStaff->undoUnlink();
+
+        if (needUnlink) {
+            movedStaff->undoUnlink();
+        }
+
         ++destinationStaffIndex;
     }
 
