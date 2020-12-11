@@ -75,9 +75,9 @@ Item {
             Layout.preferredHeight: searchTextField.height
             Layout.preferredWidth: searchTextField.height
             text: qsTr("Search")
-            padding: 4
+            padding: 5
             contentItem: StyledIcon {
-                source: "icons/search.png"
+                source: "icons/MagnifyingGlass.svg"
             }
             onClicked: {
                 palettesListPopup.visible = false
@@ -93,7 +93,7 @@ Item {
             padding: 4
             text: qsTr("Options")
             contentItem: StyledIcon {
-                source: "icons/menu_dots.svg"
+                source: "icons/ThreeDotMenu.svg"
             }
             onClicked: {
                 palettesListPopup.visible = false
@@ -148,10 +148,10 @@ Item {
                 onClicked: {
                     searchTextField.clear()
                     searchTextFieldShown = false
-                    paletteTree.currentTreeItem
+                    paletteTree.currentTreeItem.forceActiveFocus()
                 }
 
-                padding: 4
+                padding: 5
 
                 text: qsTr("Stop search")
 
@@ -165,7 +165,7 @@ Item {
                 }
 
                 contentItem: StyledIcon {
-                    source: "icons/clear.png"
+                    source: "icons/CloseButton.svg"
                 }
             }
         }
