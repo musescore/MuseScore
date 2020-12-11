@@ -44,16 +44,33 @@ echo "VST3_SDK_PATH: $VST3_SDK_PATH"
 
 MUSESCORE_REVISION=$(git rev-parse --short=7 HEAD)
 
-make -f Makefile.osx \
-    MUSESCORE_BUILD_CONFIG=$MUSESCORE_BUILD_CONFIG \
-    MUSESCORE_REVISION=$MUSESCORE_REVISION \
-    BUILD_NUMBER=$BUILD_NUMBER \
-    TELEMETRY_TRACK_ID=$TELEMETRY_TRACK_ID \
-    CRASH_REPORT_URL=$CRASH_REPORT_URL \
-    BUILD_VST=$BUILD_VST \
-    VST3_SDK_PATH=$VST3_SDK_PATH \
-    ci
+# make -f Makefile.osx \
+#     MUSESCORE_BUILD_CONFIG=$MUSESCORE_BUILD_CONFIG \
+#     MUSESCORE_REVISION=$MUSESCORE_REVISION \
+#     BUILD_NUMBER=$BUILD_NUMBER \
+#     TELEMETRY_TRACK_ID=$TELEMETRY_TRACK_ID \
+#     CRASH_REPORT_URL=$CRASH_REPORT_URL \
+#     BUILD_VST=$BUILD_VST \
+#     VST3_SDK_PATH=$VST3_SDK_PATH \
+#     ci
 
+PREFIX=../applebuild
+
+mkdir build.release
+cd build.release
+cmake -GNinja \
+        -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
+        -DCMAKE_BUILD_TYPE=RELEASE \
+        -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}" \
+        -DMUSESCORE_BUILD_CONFIG="${MUSESCORE_BUILD_CONFIG}" \
+        -DMUSESCORE_REVISION="${MUSESCORE_REVISION}" \
+        -DTELEMETRY_TRACK_ID="${TELEMETRY_TRACK_ID}" \
+        -DCRASH_REPORT_URL="${CRASH_REPORT_URL}" \
+        ..\
+
+ninja -j 4 install  
+
+cd ..
 
 bash ./build/ci/tools/make_release_channel_env.sh -c $MUSESCORE_BUILD_CONFIG
 bash ./build/ci/tools/make_version_env.sh $BUILD_NUMBER

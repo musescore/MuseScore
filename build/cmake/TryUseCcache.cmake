@@ -13,34 +13,45 @@ if(CCACHE_PROGRAM)
 
     elseif(CC_IS_MSVC)
 
-        # not worked yet
+        # not worked
 
-    else() # posix
+    elseif(CC_IS_CLANG)
 
-        # Set up wrapper scripts
-        set(C_LAUNCHER   "${CCACHE_PROGRAM}")
-        set(CXX_LAUNCHER "${CCACHE_PROGRAM}")
-        configure_file(${PROJECT_SOURCE_DIR}/build/launch-c.in   launch-c)
-        configure_file(${PROJECT_SOURCE_DIR}/build/launch-cxx.in launch-cxx)
-        execute_process(COMMAND chmod a+rx
-                         "${CMAKE_BINARY_DIR}/launch-c"
-                         "${CMAKE_BINARY_DIR}/launch-cxx"
-        )
+       if (CMAKE_GENERATOR STREQUAL "Xcode")
 
-        if(CMAKE_GENERATOR STREQUAL "Xcode")
-            # Set Xcode project attributes to route compilation and linking
-            # through our scripts
-            set(CMAKE_XCODE_ATTRIBUTE_CC         "${CMAKE_BINARY_DIR}/launch-c")
-            set(CMAKE_XCODE_ATTRIBUTE_CXX        "${CMAKE_BINARY_DIR}/launch-cxx")
-            set(CMAKE_XCODE_ATTRIBUTE_LD         "${CMAKE_BINARY_DIR}/launch-c")
-            set(CMAKE_XCODE_ATTRIBUTE_LDPLUSPLUS "${CMAKE_BINARY_DIR}/launch-cxx")
-        else()
-            # Support Unix Makefiles and Ninja
-            set(CMAKE_C_COMPILER_LAUNCHER   "${CMAKE_BINARY_DIR}/launch-c")
-            set(CMAKE_CXX_COMPILER_LAUNCHER "${CMAKE_BINARY_DIR}/launch-cxx")
-        endif()
+           # not tested
 
+#           # Set up wrapper scripts
+#           set(C_LAUNCHER   "${CCACHE_PROGRAM}")
+#           set(CXX_LAUNCHER "${CCACHE_PROGRAM}")
+#           configure_file(${PROJECT_SOURCE_DIR}/build/launch-c.in   launch-c)
+#           configure_file(${PROJECT_SOURCE_DIR}/build/launch-cxx.in launch-cxx)
+#           execute_process(COMMAND chmod a+rx
+#                            "${CMAKE_BINARY_DIR}/launch-c"
+#                            "${CMAKE_BINARY_DIR}/launch-cxx"
+#           )
+
+#            # Set Xcode project attributes to route compilation and linking
+#            # through our scripts
+#            set(CMAKE_XCODE_ATTRIBUTE_CC         "${CMAKE_BINARY_DIR}/launch-c")
+#            set(CMAKE_XCODE_ATTRIBUTE_CXX        "${CMAKE_BINARY_DIR}/launch-cxx")
+#            set(CMAKE_XCODE_ATTRIBUTE_LD         "${CMAKE_BINARY_DIR}/launch-c")
+#            set(CMAKE_XCODE_ATTRIBUTE_LDPLUSPLUS "${CMAKE_BINARY_DIR}/launch-cxx")
+       else()
+           set(ENV{CCACHE_CPP2} true)
+           set(CMAKE_C_COMPILER_LAUNCHER   "${CCACHE_PROGRAM}")
+           set(CMAKE_CXX_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
+           message(STATUS "Using ccache")
+       endif()
+
+    elseif(CC_IS_GCC)
+
+        # Support Unix Makefiles and Ninja
+        set(ENV{CCACHE_CPP2} true)
+        set(CMAKE_C_COMPILER_LAUNCHER   "${CCACHE_PROGRAM}")
+        set(CMAKE_CXX_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
         message(STATUS "Using ccache")
 
     endif()
+
 endif(CCACHE_PROGRAM)
