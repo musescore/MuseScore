@@ -68,6 +68,8 @@ elseif(OS_IS_MAC)
     set(MACOSX_BUNDLE_SHORT_VERSION_STRING ${MUSESCORE_VERSION})
     set(MACOSX_BUNDLE_BUNDLE_VERSION ${MUSESCORE_VERSION_FULL})
     set(MACOSX_BUNDLE_COPYRIGHT musescore.org)
+    set(MACOSX_BUNDLE_SHORT_VERSION_STRING ${MUSESCORE_VERSION_FULL}.${CMAKE_BUILD_NUMBER})
+    set(MACOSX_BUNDLE_BUNDLE_VERSION ${MUSESCORE_VERSION_FULL}.${CMAKE_BUILD_NUMBER})
 
     set(CMAKE_INSTALL_RPATH ${QT_INSTALL_LIBS})
 
@@ -75,17 +77,6 @@ else()
     message(FATAL_ERROR "Unsopported Platform: ${CMAKE_HOST_SYSTEM_NAME}")
 endif()
 
-
-
-if (APPLE)
-
-
-#      if(CMAKE_BUILD_NUMBER)
-#            set (MACOSX_BUNDLE_SHORT_VERSION_STRING ${MUSESCORE_VERSION_FULL}.${CMAKE_BUILD_NUMBER})
-#            set (MACOSX_BUNDLE_BUNDLE_VERSION ${MUSESCORE_VERSION_FULL}.${CMAKE_BUILD_NUMBER})
-#      endif(CMAKE_BUILD_NUMBER)
-
-endif (APPLE)
 
 add_executable(${EXECUTABLE_NAME}
       ${ICON_RES_FILE}
@@ -371,162 +362,40 @@ elseif(OS_IS_MAC)
     install(FILES "${PROJECT_SOURCE_DIR}/src/main/res/mscore.icns" DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
     install(FILES "${PROJECT_SOURCE_DIR}/src/main/res/musescoreDocument.icns" DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
 
+    install(FILES
+            ${PROJECT_SOURCE_DIR}/fonts/gootville/GootvilleText.otf
+            ${PROJECT_SOURCE_DIR}/fonts/mscore/MScoreText.ttf
+            ${PROJECT_SOURCE_DIR}/fonts/mscore/MusescoreIcon.ttf
+            ${PROJECT_SOURCE_DIR}/fonts/musejazz/MuseJazzText.otf
+            ${PROJECT_SOURCE_DIR}/fonts/campania/Campania.otf
+            ${PROJECT_SOURCE_DIR}/fonts/FreeSerif.ttf
+            ${PROJECT_SOURCE_DIR}/fonts/FreeSerifBold.ttf
+            ${PROJECT_SOURCE_DIR}/fonts/FreeSerifItalic.ttf
+            ${PROJECT_SOURCE_DIR}/fonts/FreeSerifBoldItalic.ttf
+            ${PROJECT_SOURCE_DIR}/fonts/FreeSans.ttf
+            ${PROJECT_SOURCE_DIR}/fonts/mscoreTab.ttf
+            ${PROJECT_SOURCE_DIR}/fonts/mscore-BC.ttf
+            ${PROJECT_SOURCE_DIR}/fonts/bravura/BravuraText.otf
+            ${PROJECT_SOURCE_DIR}/fonts/leland/Leland.otf
+            ${PROJECT_SOURCE_DIR}/fonts/petaluma/PetalumaText.otf
+            ${PROJECT_SOURCE_DIR}/fonts/petaluma/PetalumaScript.otf
+            DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}fonts
+    )
+
+    install(DIRECTORY
+            ${QT_INSTALL_QML}
+            DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}
+            REGEX ".*QtWebkit.*" EXCLUDE
+            REGEX ".*QtTest.*" EXCLUDE
+            REGEX ".*QtSensors.*" EXCLUDE
+            REGEX ".*QtMultimedia.*" EXCLUDE
+            REGEX ".*QtAudioEngine.*" EXCLUDE
+            REGEX ".*_debug\\.dylib" EXCLUDE)
+
 else()
     message(FATAL_ERROR "Unsopported Platform: ${CMAKE_HOST_SYSTEM_NAME}")
 endif()
 
-
-
-#if (MINGW)
-
-#   # Keep dependencies in alphabetical order. Changes made to this list
-#   # might need to be made in "build/Linux+BSD/portable/copy-libs" too.
-
-
-#else (MINGW)
-
-#   if ( NOT MSVC )
-#      ## install qwebengine core
-#      if (NOT APPLE AND USE_WEBENGINE)
-#         install(PROGRAMS
-#            ${QT_INSTALL_LIBEXECS}/QtWebEngineProcess
-#            DESTINATION bin
-#            )
-#         install(DIRECTORY
-#            ${QT_INSTALL_DATA}/resources
-#            DESTINATION lib/qt5
-#            )
-#         install(DIRECTORY
-#            ${QT_INSTALL_TRANSLATIONS}/qtwebengine_locales
-#            DESTINATION lib/qt5/translations
-#            )
-#      endif(NOT APPLE AND USE_WEBENGINE)
-
-
-#   else ( NOT MSVC )
-#      # Microsoft Visual Studio-specific starts here!
-#      string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
-
-#      # Create list of directories to search for libraries
-#      foreach (item ${CMAKE_LIBRARY_PATH})
-#         string( APPEND all_library_paths " /LIBPATH:${item}" )
-#      endforeach()
-
-#      # Windows: Add /SUBSYSTEM:WINDOWS to LINK_FLAGS to avoid a console window in release
-##      if(CMAKE_BUILD_TYPE MATCHES "REL*")
-##        set_target_properties( mscore
-##           PROPERTIES
-##              COMPILE_FLAGS "${PCH_INCLUDE} ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
-##              LINK_FLAGS    "/LIBPATH:${QT_INSTALL_LIBS} ${all_library_paths}"
-##              LINK_FLAGS "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup"
-##           )
-##      else(CMAKE_BUILD_TYPE MATCHES "REL*")
-##        set_target_properties( mscore
-##           PROPERTIES
-##              COMPILE_FLAGS "${PCH_INCLUDE} ${QT_DEFINITIONS} /DQT_SVG_LIB /DQT_GUI_LIB /DQT_XML_LIB /DQT_CORE_LIB"
-##              LINK_FLAGS    "/LIBPATH:${QT_INSTALL_LIBS} ${all_library_paths}"
-##              LINK_FLAGS "/SUBSYSTEM:CONSOLE"
-##           )
-##      endif(CMAKE_BUILD_TYPE MATCHES "REL*")
-
-
-
-#      set(CMAKE_FIND_LIBRARY_PREFIX "")
-#      set(CMAKE_FIND_LIBRARY_SUFFIXES ".dll")
-
-#      if (WIN_SPARKLE_ENABLED)
-#            find_library( dll_winsparkle  NAMES "WinSparkle" PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
-#            list(APPEND dlls_to_copy ${dll_winsparkle})
-#      endif (WIN_SPARKLE_ENABLED)
-
-#      find_library( dll_ogg         NAMES "libogg"         PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
-#      find_library( dll_vorbis      NAMES "libvorbis"      PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
-#      find_library( dll_vorbisfile  NAMES "libvorbisfile"  PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
-
-#      list(APPEND dlls_to_copy ${dll_ogg} ${dll_vorbis} ${dll_vorbisfile} ${dll_ssl1} ${dll_ssl2} "$<TARGET_FILE_DIR:mscore>/${MSCORE_OUTPUT_NAME}.exe")
-#      set( output_dir_for_dlls "${CMAKE_INSTALL_PREFIX}/bin")
-
-#      # Keep dependencies in alphabetical order. Changes made to this list
-#      # might need to be made in "build/Linux+BSD/portable/copy-libs" too.
-
-
-
-
-#      add_dependencies(mscore lrelease)
-
-#      install( FILES
-#            ${dll_ogg}
-#            ${dll_vorbis}
-#            ${dll_vorbisfile}
-##            ${dll_ssl1}
-##            ${dll_ssl2}
-#            ${dll_winsparkle}
-#            DESTINATION bin)
-
-
-##      install( TARGETS mscore RUNTIME DESTINATION bin ) # this duplicate due to the correctly package step
-
-##      if (USE_WEBENGINE)
-##         install(FILES
-##            ${QT_INSTALL_LIBEXECS}/QtWebEngineProcess.exe
-##            DESTINATION bin
-##            )
-##         install(DIRECTORY
-##            ${QT_INSTALL_DATA}/resources
-##            DESTINATION bin/webengineresources
-##            )
-##         install(DIRECTORY
-##            ${QT_INSTALL_TRANSLATIONS}/qtwebengine_locales
-##            DESTINATION bin/webengineresources/translations
-##            )
-##      endif (USE_WEBENGINE)
-
-##      install(DIRECTORY
-##         ${QT_INSTALL_QML}
-##         DESTINATION .
-##         REGEX ".*d\\.dll" EXCLUDE
-##         REGEX ".pdb" EXCLUDE
-##         REGEX ".*QtMultimedia.*" EXCLUDE
-##         REGEX ".*QtSensors.*" EXCLUDE
-##         REGEX ".*QtTest.*" EXCLUDE
-##         REGEX ".*QtWebkit.*" EXCLUDE
-##         )
-
-
-
-#   endif ( NOT MSVC )
-#endif (MINGW)
-
-if (APPLE)
-     install (FILES
-      ${PROJECT_SOURCE_DIR}/fonts/gootville/GootvilleText.otf
-      ${PROJECT_SOURCE_DIR}/fonts/mscore/MScoreText.ttf
-      ${PROJECT_SOURCE_DIR}/fonts/mscore/MusescoreIcon.ttf
-      ${PROJECT_SOURCE_DIR}/fonts/musejazz/MuseJazzText.otf
-      ${PROJECT_SOURCE_DIR}/fonts/campania/Campania.otf
-      ${PROJECT_SOURCE_DIR}/fonts/FreeSerif.ttf
-      ${PROJECT_SOURCE_DIR}/fonts/FreeSerifBold.ttf
-      ${PROJECT_SOURCE_DIR}/fonts/FreeSerifItalic.ttf
-      ${PROJECT_SOURCE_DIR}/fonts/FreeSerifBoldItalic.ttf
-      ${PROJECT_SOURCE_DIR}/fonts/FreeSans.ttf
-      ${PROJECT_SOURCE_DIR}/fonts/mscoreTab.ttf
-      ${PROJECT_SOURCE_DIR}/fonts/mscore-BC.ttf
-      ${PROJECT_SOURCE_DIR}/fonts/bravura/BravuraText.otf
-      ${PROJECT_SOURCE_DIR}/fonts/leland/Leland.otf
-      ${PROJECT_SOURCE_DIR}/fonts/petaluma/PetalumaText.otf
-      ${PROJECT_SOURCE_DIR}/fonts/petaluma/PetalumaScript.otf
-     DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}fonts
-     )
-#     install(DIRECTORY
-#      ${QT_INSTALL_QML}
-#      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}
-#      REGEX ".*QtWebkit.*" EXCLUDE
-#      REGEX ".*QtTest.*" EXCLUDE
-#      REGEX ".*QtSensors.*" EXCLUDE
-#      REGEX ".*QtMultimedia.*" EXCLUDE
-#      REGEX ".*QtAudioEngine.*" EXCLUDE
-#      REGEX ".*_debug\\.dylib" EXCLUDE)
-endif (APPLE)
 
 
 ##
