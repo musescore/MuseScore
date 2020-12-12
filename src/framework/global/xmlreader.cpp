@@ -154,21 +154,21 @@ std::string XmlReader::readString(ReadStringBehavior behavior)
 
 QString XmlReader::readElementText(ReadStringBehavior behavior)
 {
-    QXmlStreamReader::ReadElementTextBehaviour behavior_;
+    auto _behavior = QXmlStreamReader::ReadElementTextBehaviour::ErrorOnUnexpectedElement;
 
     switch (behavior) {
     case ErrorOnUnexpectedElement:
-        behavior_ = QXmlStreamReader::ErrorOnUnexpectedElement;
+        _behavior = QXmlStreamReader::ErrorOnUnexpectedElement;
         break;
     case IncludeChildElements:
-        behavior_ = QXmlStreamReader::IncludeChildElements;
+        _behavior = QXmlStreamReader::IncludeChildElements;
         break;
     case SkipChildElements:
-        behavior_ = QXmlStreamReader::SkipChildElements;
+        _behavior = QXmlStreamReader::SkipChildElements;
         break;
     }
 
-    return m_reader->readElementText(behavior_);
+    return m_reader->readElementText(_behavior);
 }
 
 bool XmlReader::hasError() const

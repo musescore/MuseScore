@@ -381,7 +381,7 @@ void NotationParts::doMovePart(const ID& sourcePartId, const ID& destinationPart
         staves.push_back(staff);
     }
 
-    int destinationStaffIndex = partIsBefore ? staves.size() : 0;
+    int destinationStaffIndex = partIsBefore ? static_cast<int>(staves.size()) : 0;
 
     score()->undoRemovePart(part);
 
