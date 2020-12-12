@@ -1479,12 +1479,13 @@ void EditStyle::endEditUserStyleName()
     int row = textStyles->currentRow();
     Tid tid = Tid(textStyles->item(row)->data(Qt::UserRole).toInt());
     int idx = int(tid) - int(Tid::USER1);
-    if ((idx < 0) || (idx > 5)) {
-        qDebug("User style index %d outside of range [0,5].", idx);
+    if (int(tid) < int(Tid::USER1) || int(tid) > int(Tid::USER12)) {
+        qDebug("User style index %d outside of range.", idx);
         return;
     }
     StyleId sid[]
-        = { StyleId::user1Name, StyleId::user2Name, StyleId::user3Name, StyleId::user4Name, StyleId::user5Name, StyleId::user6Name };
+        = { StyleId::user1Name, StyleId::user2Name, StyleId::user3Name, StyleId::user4Name, StyleId::user5Name, StyleId::user6Name,
+            StyleId::user7Name, StyleId::user8Name, StyleId::user9Name, StyleId::user10Name, StyleId::user11Name, StyleId::user12Name };
     QString name = styleName->text();
     setStyleValue(sid[idx], name);
     if (name == "") {
