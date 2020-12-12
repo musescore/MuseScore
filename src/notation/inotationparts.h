@@ -63,15 +63,15 @@ public:
     virtual void removeInstruments(const IDList& instrumentsIds, const ID& fromPartId) = 0;
     virtual void removeStaves(const IDList& stavesIds) = 0;
 
-    enum InsertMode {
+    enum class InsertMode {
         Before,
         After
     };
 
-    virtual void moveParts(const IDList& sourcePartsIds, const ID& destinationPartId, InsertMode mode = Before) = 0;
+    virtual void moveParts(const IDList& sourcePartsIds, const ID& destinationPartId, InsertMode mode = InsertMode::Before) = 0;
     virtual void moveInstruments(const IDList& sourceInstrumentsIds, const ID& sourcePartId, const ID& destinationPartId,
-                                 const ID& destinationInstrumentId, InsertMode mode = Before) = 0;
-    virtual void moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode = Before) = 0;
+                                 const ID& destinationInstrumentId, InsertMode mode = InsertMode::Before) = 0;
+    virtual void moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode = InsertMode::Before) = 0;
 
     virtual void appendDoublingInstrument(const instruments::Instrument& instrument, const ID& destinationPartId) = 0;
     virtual void appendStaff(const ID& destinationPartId) = 0;

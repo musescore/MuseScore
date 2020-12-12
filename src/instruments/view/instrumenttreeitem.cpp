@@ -67,12 +67,12 @@ void InstrumentTreeItem::moveChildren(const int sourceRow, const int count, Abst
     }
 
     int destinationRowLast = destinationRow;
-    INotationParts::InsertMode moveMode = INotationParts::Before;
+    INotationParts::InsertMode moveMode = INotationParts::InsertMode::Before;
 
     // exclude the control item
     if (destinationRow == destinationParent->childCount() - 1) {
         destinationRowLast = destinationRow - 1;
-        moveMode = INotationParts::After;
+        moveMode = INotationParts::InsertMode::After;
     }
 
     auto staff = dynamic_cast<const StaffTreeItem*>(destinationParent->childAtRow(destinationRowLast));
