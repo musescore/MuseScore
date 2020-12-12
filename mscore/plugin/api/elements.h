@@ -258,12 +258,15 @@ class Element : public Ms::PluginAPI::ScoreElement {
       API_PROPERTY( arpUserLen1,             ARP_USER_LEN1             )
       API_PROPERTY( arpUserLen2,             ARP_USER_LEN2             )
       API_PROPERTY( measureNumberMode,       MEASURE_NUMBER_MODE       )
+      /** \since MuseScore 3.6 */
       API_PROPERTY( mmRestRangeBracketType,  MMREST_RANGE_BRACKET_TYPE )
       API_PROPERTY( glissType,               GLISS_TYPE                )
       API_PROPERTY( glissText,               GLISS_TEXT                )
       API_PROPERTY( glissShowText,           GLISS_SHOW_TEXT           )
       API_PROPERTY( glissandoStyle,          GLISS_STYLE               )
+      /** \since MuseScore 3.6 */
       API_PROPERTY( glissEaseIn,             GLISS_EASEIN              )
+      /** \since MuseScore 3.6 */
       API_PROPERTY( glissEaseOut,            GLISS_EASEOUT             )
       API_PROPERTY( diagonal,                DIAGONAL                  )
       API_PROPERTY( groups,                  GROUPS                    )
