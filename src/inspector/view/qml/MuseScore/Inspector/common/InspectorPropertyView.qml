@@ -46,63 +46,54 @@ Column {
                 normalStateColor: "transparent"
 
                 onClicked: {
-                    if (menu.opened) {
-                        menu.close()
-                        return
-                    }
-
                     menu.open()
                 }
             }
+        }
 
-            ContextMenu {
-                id: menu
+        ContextMenu {
+            id: menu
 
-                Layout.alignment: Qt.AlignRight
-                Layout.fillWidth: true
-                Layout.maximumWidth: 24
-                Layout.preferredHeight: 24
-                Layout.preferredWidth: 24
+            width: parent.width
 
-                y: menuButton.y + menuButton.height
+            y: menuButton.y + menuButton.height
 
-                StyledMenuItem {
-                    id: resetToDefaultItem
+            StyledMenuItem {
+                id: resetToDefaultItem
 
-                    text: root.isStyled ? qsTr("Reset to style default") : qsTr("Reset to default")
-                    checkable: false
-                    enabled: root.isModified
+                text: root.isStyled ? qsTr("Reset to style default") : qsTr("Reset to default")
+                checkable: false
+                enabled: root.isModified
 
-                    onTriggered: {
-                        if (propertyItem) {
-                            propertyItem.resetToDefault()
-                        }
+                onTriggered: {
+                    if (propertyItem) {
+                        propertyItem.resetToDefault()
                     }
                 }
+            }
 
-                StyledMenuItem {
-                    id: applyToStyleItem
+            StyledMenuItem {
+                id: applyToStyleItem
 
-                    text: qsTr("Set as style")
-                    checkable: true
-                    checked: !root.isModified
-                    enabled: root.isModified
+                text: qsTr("Set as style")
+                checkable: true
+                checked: !root.isModified
+                enabled: root.isModified
 
-                    onTriggered: {
-                        if (propertyItem) {
-                            propertyItem.applyToStyle()
-                        }
+                onTriggered: {
+                    if (propertyItem) {
+                        propertyItem.applyToStyle()
                     }
                 }
+            }
 
-                function updateMenuModel() {
-                    menu.clear()
+            function updateMenuModel() {
+                menu.clear()
 
-                    menu.addItem(resetToDefaultItem)
+                menu.addItem(resetToDefaultItem)
 
-                    if (root.isStyled) {
-                        menu.addItem(applyToStyleItem)
-                    }
+                if (root.isStyled) {
+                    menu.addItem(applyToStyleItem)
                 }
             }
         }
