@@ -1723,11 +1723,12 @@ void EditStyle::endEditUserStyleName()
       int row = textStyles->currentRow();
       Tid tid = Tid(textStyles->item(row)->data(Qt::UserRole).toInt());
       int idx = int(tid) - int(Tid::USER1);
-      if ((idx < 0) || (idx > 5)) {
-            qDebug("User style index %d outside of range [0,5].", idx);
+      if (int(tid) < int(Tid::USER1) || int(tid) > int(Tid::USER12)) {
+            qDebug("User style index %d outside of range.", idx);
             return;
             }
-      Sid sid[] = { Sid::user1Name, Sid::user2Name, Sid::user3Name, Sid::user4Name, Sid::user5Name, Sid::user6Name };
+      Sid sid[] = { Sid::user1Name, Sid::user2Name, Sid::user3Name, Sid::user4Name, Sid::user5Name, Sid::user6Name,
+                    Sid::user7Name, Sid::user8Name, Sid::user9Name, Sid::user10Name, Sid::user11Name, Sid::user12Name };
       QString name = styleName->text();
       cs->undoChangeStyleVal(sid[idx], name);
       if (name == "") {
