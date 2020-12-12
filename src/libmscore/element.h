@@ -31,6 +31,9 @@ namespace Ms {
 #define VOICES 4
 #endif
 
+// Defined in Windows headers, conflicts with member functions named small().
+#undef small
+
 class XmlReader;
 class XmlWriter;
 enum class Pid;
