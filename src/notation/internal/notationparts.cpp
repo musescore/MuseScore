@@ -386,7 +386,7 @@ void NotationParts::doMovePart(const ID& sourcePartId, const ID& destinationPart
     score()->undoRemovePart(part);
 
     int toPartIndex = score()->parts().indexOf(destinationPart);
-    int newPartIndex = mode == Before ? toPartIndex : toPartIndex + 1;
+    int newPartIndex = mode == InsertMode::Before ? toPartIndex : toPartIndex + 1;
     score()->parts().insert(newPartIndex, part);
 
     auto instruments = *part->instruments();
@@ -983,7 +983,7 @@ void NotationParts::doInsertInstruments(const QMap<Ms::Fraction, Ms::Instrument*
         }
     }
 
-    int newInstrumentIndex = (mode == Before ? destinationIndex : destinationIndex + 1);
+    int newInstrumentIndex = (mode == InsertMode::Before ? destinationIndex : destinationIndex + 1);
 
     for (Ms::Instrument* instrument: instruments.values()) {
         partInstruments.insert(newInstrumentIndex++, new Ms::Instrument(*instrument));
@@ -1051,7 +1051,7 @@ void NotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinat
 
     std::vector<Staff*> staves = this->staves(sourceStavesIds);
     Part* destinationPart = destinationStaff->part();
-    int destinationStaffIndex = (mode == Before ? destinationStaff->idx() : destinationStaff->idx() + 1);
+    int destinationStaffIndex = (mode == InsertMode::Before ? destinationStaff->idx() : destinationStaff->idx() + 1);
     destinationStaffIndex -= score()->staffIdx(destinationPart); // NOTE: convert to local part's staff index
 
     startEdit();

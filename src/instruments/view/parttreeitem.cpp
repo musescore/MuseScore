@@ -67,12 +67,12 @@ void PartTreeItem::moveChildren(const int sourceRow, const int count, AbstractIn
     }
 
     int destinationRowLast = destinationRow;
-    INotationParts::InsertMode moveMode = INotationParts::Before;
+    INotationParts::InsertMode moveMode = INotationParts::InsertMode::Before;
 
     // exclude the control item
     if (destinationRow == destinationParent->childCount() - 1) {
         destinationRowLast = destinationRow - 1;
-        moveMode = INotationParts::After;
+        moveMode = INotationParts::InsertMode::After;
     }
 
     AbstractInstrumentPanelTreeItem* destinationStaffItem = destinationParent->childAtRow(destinationRowLast);

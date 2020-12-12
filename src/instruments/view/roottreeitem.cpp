@@ -36,11 +36,11 @@ void RootTreeItem::moveChildren(const int sourceRow, const int count, AbstractIn
     }
 
     int destinationRow_ = destinationRow;
-    INotationParts::InsertMode moveMode = INotationParts::Before;
+    INotationParts::InsertMode moveMode = INotationParts::InsertMode::Before;
 
     if (destinationRow_ == destinationParent->childCount()) {
         destinationRow_--;
-        moveMode = INotationParts::After;
+        moveMode = INotationParts::InsertMode::After;
     }
 
     const AbstractInstrumentPanelTreeItem* destinationPartItem = destinationParent->childAtRow(destinationRow_);
