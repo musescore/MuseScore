@@ -60,10 +60,10 @@ public:
     void removeInstruments(const IDList& instrumentsIds, const ID& fromPartId) override;
     void removeStaves(const IDList& stavesIds) override;
 
-    void moveParts(const IDList& sourcePartsIds, const ID& destinationPartId, InsertMode mode = Before) override;
+    void moveParts(const IDList& sourcePartsIds, const ID& destinationPartId, InsertMode mode = InsertMode::Before) override;
     void moveInstruments(const IDList& sourceInstrumentIds, const ID& sourcePartId, const ID& destinationPartId,
-                         const ID& destinationInstrumentId, InsertMode mode = Before) override;
-    void moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode = Before) override;
+                         const ID& destinationInstrumentId, InsertMode mode = InsertMode::Before) override;
+    void moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode = InsertMode::Before) override;
 
     void appendDoublingInstrument(const instruments::Instrument& instrument, const ID& destinationPartId) override;
     void appendStaff(const ID& destinationPartId) override;
@@ -117,7 +117,7 @@ private:
 
     void updatePartTitles();
 
-    void doMovePart(const ID& sourcePartId, const ID& destinationPartId, InsertMode mode = Before);
+    void doMovePart(const ID& sourcePartId, const ID& destinationPartId, InsertMode mode = InsertMode::Before);
     void doMoveStaves(const std::vector<Staff*>& staves, int destinationStaffIndex, Part* destinationPart = nullptr);
     void doSetStaffVisible(Staff* staff, bool visible);
     void doSetStaffVoiceVisible(Staff* staff, int voiceIndex, bool visible);
@@ -164,7 +164,7 @@ private:
 
     QMap<Ms::Fraction, Ms::Instrument*> instruments(const Part* fromPart, const IDList& filterInstrumentsIds = IDList()) const;
     void doInsertInstruments(const QMap<Ms::Fraction, Ms::Instrument*>& instruments, const ID& destinationPartId,
-                             const ID& destinationInstrumentId, InsertMode mode = Before);
+                             const ID& destinationInstrumentId, InsertMode mode = InsertMode::Before);
 
     IGetScore* m_getScore = nullptr;
     INotationUndoStackPtr m_undoStack;
