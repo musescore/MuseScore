@@ -190,12 +190,12 @@ MsczMetaReader::RawMeta MsczMetaReader::doReadRawMeta(XmlReader& xmlReader) cons
         } else if (tag == "Staff") {
             if (meta.titleStyle.isEmpty()) {
                 while (xmlReader.readNextStartElement()) {
-                    std::string tag(xmlReader.tagName());
+                    std::string boxTag(xmlReader.tagName());
 
-                    if (tag == "HBox"
-                        || tag == "VBox"
-                        || tag == "TBox"
-                        || tag == "FBox") {
+                    if (boxTag == "HBox"
+                        || boxTag == "VBox"
+                        || boxTag == "TBox"
+                        || boxTag == "FBox") {
                         RawMeta boxMeta = doReadBox(xmlReader);
 
                         meta.titleStyle = boxMeta.titleStyle;

@@ -24,7 +24,7 @@
 
 namespace Ms {
 class Instrument;
-class NamedEventList;
+struct NamedEventList;
 }
 
 namespace mu::notation {
