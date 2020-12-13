@@ -39,8 +39,8 @@ struct LayoutContext {
     System* prevSystem       { 0 };       // used during page layout
     System* curSystem        { 0 };
 
-    MeasureBase* systemOldMeasure;
-    MeasureBase* pageOldMeasure;
+    MeasureBase* systemOldMeasure { 0 };
+    MeasureBase* pageOldMeasure   { 0 };
     bool rangeDone           { false };
 
     MeasureBase* prevMeasure { 0 };

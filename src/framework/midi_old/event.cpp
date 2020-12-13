@@ -57,7 +57,7 @@ Event::Event(int t)
     _duration        = 0;
     _tpc             = 0;
     _voice           = 0;
-    _edata            = 0;
+    _edata           = 0;
     _len             = 0;
     _metaType        = 0;
     _note            = 0;
