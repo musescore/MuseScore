@@ -41,17 +41,17 @@ void Score::cmdSplitMeasure(ChordRest* cr)
 void Score::splitMeasure(Segment* segment)
 {
     if (segment->rtick().isZero()) {
-        MScore::setError(CANNOT_SPLIT_MEASURE_FIRST_BEAT);
+        MScore::setError(MsError::CANNOT_SPLIT_MEASURE_FIRST_BEAT);
         return;
     }
     if (segment->splitsTuplet()) {
-        MScore::setError(CANNOT_SPLIT_MEASURE_TUPLET);
+        MScore::setError(MsError::CANNOT_SPLIT_MEASURE_TUPLET);
         return;
     }
     Measure* measure = segment->measure();
     for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
         if (measure->isMeasureRepeatGroup(staffIdx)) {
-            MScore::setError(CANNOT_SPLIT_MEASURE_REPEAT);
+            MScore::setError(MsError::CANNOT_SPLIT_MEASURE_REPEAT);
             return;
         }
     }

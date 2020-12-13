@@ -488,7 +488,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
             if (duration > remains && e->isTuplet()) {
                 // experimental: allow tuplet split in the middle
                 if (duration != remains * 2) {
-                    MScore::setError(CANNOT_SPLIT_TUPLET);
+                    MScore::setError(MsError::CANNOT_SPLIT_TUPLET);
                     return false;
                 }
             }

@@ -1625,7 +1625,7 @@ Element* Measure::drop(EditData& data)
             Measure* m2 = isMMRest() ? mmRestFirst() : this;
             for (int stIdx = 0; stIdx < score()->nstaves(); ++stIdx) {
                 if (m2->isMeasureRepeatGroupWithPrevM(stIdx)) {
-                    MScore::setError(CANNOT_SPLIT_MEASURE_REPEAT);
+                    MScore::setError(MsError::CANNOT_SPLIT_MEASURE_REPEAT);
                     return nullptr;
                 }
             }
@@ -1639,7 +1639,7 @@ Element* Measure::drop(EditData& data)
             Measure* m2 = isMMRest() ? mmRestLast() : this;
             for (int stIdx = 0; stIdx < score()->nstaves(); ++stIdx) {
                 if (m2->isMeasureRepeatGroupWithNextM(stIdx)) {
-                    MScore::setError(CANNOT_SPLIT_MEASURE_REPEAT);
+                    MScore::setError(MsError::CANNOT_SPLIT_MEASURE_REPEAT);
                     return nullptr;
                 }
             }
@@ -1653,7 +1653,7 @@ Element* Measure::drop(EditData& data)
             Measure* m2 = isMMRest() ? mmRestLast() : this;
             for (int stIdx = 0; stIdx < score()->nstaves(); ++stIdx) {
                 if (m2->isMeasureRepeatGroupWithNextM(stIdx)) {
-                    MScore::setError(CANNOT_SPLIT_MEASURE_REPEAT);
+                    MScore::setError(MsError::CANNOT_SPLIT_MEASURE_REPEAT);
                     return nullptr;
                 }
             }

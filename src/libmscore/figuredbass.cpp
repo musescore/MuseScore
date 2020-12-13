@@ -1878,7 +1878,7 @@ FiguredBass* Score::addFiguredBass()
 {
     Element* el = selection().element();
     if (!el || (!(el->isNote()) && !(el->isRest()) && !(el->isFiguredBass()))) {
-        MScore::setError(NO_NOTE_FIGUREDBASS_SELECTED);
+        MScore::setError(MsError::NO_NOTE_FIGUREDBASS_SELECTED);
         return 0;
     }
 
