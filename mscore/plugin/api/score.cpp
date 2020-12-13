@@ -216,5 +216,12 @@ void Score::startCmd()
             score()->startCmd();
             }
       }
+
+
+void Score::transpose(Ms::PluginAPI::TransposeMode mode, Ms::PluginAPI::TransposeDirection direction, Ms::PluginAPI::Key trKey,
+                      int transposeInterval, bool transposeKeySignatures, bool transposeChordNames, bool useDoubleSharpsFlats)
+      {
+      score()->transpose(mode, direction, trKey, transposeInterval, transposeKeySignatures, transposeChordNames, useDoubleSharpsFlats);
+      }
 }
 }

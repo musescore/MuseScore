@@ -53,6 +53,9 @@ Enum* PluginAPI::segmentTypeEnum = nullptr;
 Enum* PluginAPI::spannerAnchorEnum = nullptr;
 Enum* PluginAPI::symIdEnum = nullptr;
 Enum* PluginAPI::harmonyTypeEnum = nullptr;
+Enum* PluginAPI::transposeModeEnum = nullptr;
+Enum* PluginAPI::transposeDirectionEnum = nullptr;
+Enum* PluginAPI::keyEnum = nullptr;
 
 //---------------------------------------------------------
 //   PluginAPI

@@ -227,6 +227,19 @@ class Score : public Ms::PluginAPI::ScoreElement {
        */
       Q_INVOKABLE void createPlayEvents() { score()->createPlayEvents(); }
 
+      /**
+       * Transpose the score (or the selection).
+       * \since 3.6
+       */
+      Q_INVOKABLE void transpose(Ms::PluginAPI::TransposeMode mode,
+                                 Ms::PluginAPI::TransposeDirection direction,
+                                 Ms::PluginAPI::Key trKey,
+                                 int transposeInterval,
+                                 bool transposeKeySignatures,
+                                 bool transposeChordNames,
+                                 bool useDoubleSharpsFlats);
+
+
       /// \cond MS_INTERNAL
       QString mscoreVersion() { return score()->mscoreVersion(); }
       QString mscoreRevision() { return QString::number(score()->mscoreRevision(), /* base */ 16); }

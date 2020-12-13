@@ -639,7 +639,7 @@ class Score : public QObject, public ScoreElement {
       bool transpose(Note* n, Interval, bool useSharpsFlats);
       void transposeKeys(int staffStart, int staffEnd, const Fraction& tickStart, const Fraction& tickEnd, const Interval&, bool useInstrument = false, bool flip = false);
       bool transpose(TransposeMode mode, TransposeDirection, Key transposeKey, int transposeInterval,
-      bool trKeys, bool transposeChordNames, bool useDoubleSharpsFlats);
+                     bool trKeys, bool transposeChordNames, bool useDoubleSharpsFlats);
 
       bool appendMeasuresFromScore(Score* score, const Fraction& startTick, const Fraction& endTick);
       bool appendScore(Score*, bool addPageBreak = false, bool addSectionBreak = true);
@@ -1486,4 +1486,3 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(LayoutFlags);
 
 
 #endif
-

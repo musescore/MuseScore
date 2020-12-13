@@ -15,6 +15,7 @@
 
 #include "config.h"
 #include "style.h"
+#include "types.h"
 
 namespace Ms {
 
@@ -119,22 +120,6 @@ enum class BracketType : signed char {
 
 enum class PlaceText : char {
       AUTO, ABOVE, BELOW, LEFT
-      };
-
-//---------------------------------------------------------
-//   TransposeDirection
-//---------------------------------------------------------
-
-enum class TransposeDirection : char {
-      UP, DOWN, CLOSEST
-      };
-
-//---------------------------------------------------------
-//   TransposeMode
-//---------------------------------------------------------
-
-enum class TransposeMode : char {
-      TO_KEY, BY_INTERVAL, DIATONICALLY
       };
 
 //---------------------------------------------------------

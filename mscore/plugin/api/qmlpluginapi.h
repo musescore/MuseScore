@@ -167,6 +167,21 @@ class PluginAPI : public Ms::QmlPlugin {
       /// \since MuseScore 3.6
       DECLARE_API_ENUM( HarmonyType,      harmonyTypeEnum,        Ms::HarmonyType           )
 
+      /// Contains Ms::TransposeMode enumeration values.
+      /// Possible values: `TO_KEY`, `BY_INTERVAL`, `DIATONICALLY`
+      /// \since MuseScore 3.6
+      DECLARE_API_ENUM( TransposeMode,    transposeModeEnum,      Ms::TransposeMode         )
+      /// Contains Ms::TransposeDirection enumeration values.
+      /// Possible values: `UP`, `DOWN`, `CLOSEST`
+      /// \since MuseScore 3.6
+      DECLARE_API_ENUM( TransposeDirection, transposeDirectionEnum, Ms::TransposeDirection  )
+      /// Contains Ms::Key enumeration values.
+      ///  Possible values: `C_B`, `G_B`, `D_B`, `A_B`, `E_B`, `B_B`, `F`,
+      ///                   `C`, `G`, `D`, `A`, `E`, `B`, `F_S`, `C_S`,
+      /// \since MuseScore 3.6
+      DECLARE_API_ENUM( Key, keyEnum, Ms::Key  )
+
+
       QFile logFile;
 
    signals:

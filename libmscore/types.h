@@ -604,6 +604,18 @@ enum class PlayEventType : char {
       ///.\}
       };
 
+enum class TransposeDirection : char {
+      ///.\{
+      UP, DOWN, CLOSEST
+      ///.\}
+      };
+
+enum class TransposeMode : char {
+      ///.\{
+      TO_KEY, BY_INTERVAL, DIATONICALLY
+      ///.\}
+      };
+
 //---------------------------------------------------------
 //   Tuplets
 //---------------------------------------------------------
@@ -625,6 +637,8 @@ Q_ENUM_NS(NoteType);
 Q_ENUM_NS(PlayEventType);
 Q_ENUM_NS(AccidentalType);
 Q_ENUM_NS(HarmonyType);
+Q_ENUM_NS(TransposeDirection);
+Q_ENUM_NS(TransposeMode);
 #endif
 
 //hack: to force the build system to run moc on this file
