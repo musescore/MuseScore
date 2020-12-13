@@ -117,6 +117,14 @@ class Score : public Ms::PluginAPI::ScoreElement {
        */
       Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Staff> staves    READ staves)
 
+      /**
+       * Returns the path to the file from which the score was imported, or empty.
+       * \warning If the score hasn't been saved yet, this will return an empty string.
+       * \since MuseScore 3.6
+       */
+      Q_PROPERTY(QString path READ path)
+
+
    public:
       /// \cond MS_INTERNAL
       Score(Ms::Score* s = nullptr, Ownership o = Ownership::SCORE)
@@ -136,6 +144,7 @@ class Score : public Ms::PluginAPI::ScoreElement {
       QString title() { return score()->metaTag("workTitle"); }
       Ms::PluginAPI::Selection* selection() { return selectionWrap(&score()->selection()); }
       MStyle* style() { return wrap(&score()->style(), score()); }
+      QString path() { return score()->importedFilePath(); }
 
       int pageNumberOffset() const { return score()->pageNumberOffset(); }
       void setPageNumberOffset(int offset) { score()->undoChangePageNumberOffset(offset); }
