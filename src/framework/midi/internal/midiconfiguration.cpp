@@ -57,12 +57,12 @@ const SynthesizerState& MidiConfiguration::defaultSynthesizerState() const
     if (state.isNull()) {
         SynthesizerState::Group gf;
         gf.name = "Fluid";
-        gf.vals.push_back(SynthesizerState::Val(SynthesizerState::SoundFontID, DEFAULT_FLUID_SOUNDFONT));
+        gf.vals.push_back(SynthesizerState::Val(SynthesizerState::ValID::SoundFontID, DEFAULT_FLUID_SOUNDFONT));
         state.groups.insert({ gf.name, std::move(gf) });
 
         SynthesizerState::Group gz;
         gz.name = "Zerberus";
-        gz.vals.push_back(SynthesizerState::Val(SynthesizerState::SoundFontID, DEFAULT_ZERBERUS_SOUNDFONT));
+        gz.vals.push_back(SynthesizerState::Val(SynthesizerState::ValID::SoundFontID, DEFAULT_ZERBERUS_SOUNDFONT));
         state.groups.insert({ gz.name, std::move(gz) });
     }
 
