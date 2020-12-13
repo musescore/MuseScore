@@ -60,7 +60,7 @@ QStringList SynthsSettingsModel::selectedSoundFonts(const QString& synth) const
 
     QStringList list;
     for (const SynthesizerState::Val& val : g.vals) {
-        if (val.id == SynthesizerState::SoundFontID) {
+        if (val.id == SynthesizerState::ValID::SoundFontID) {
             list << QString::fromStdString(val.val);
         }
     }
@@ -148,7 +148,7 @@ void SynthsSettingsModel::addSoundFont(int avalableIndex_, const QString& synth)
         return;
     }
 
-    g.vals.push_back(SynthesizerState::Val(SynthesizerState::SoundFontID, name));
+    g.vals.push_back(SynthesizerState::Val(SynthesizerState::ValID::SoundFontID, name));
 
     emit selectedChanged(synth);
 }

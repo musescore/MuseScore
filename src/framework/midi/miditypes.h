@@ -55,13 +55,13 @@ enum class SoundFontFormat {
 using SoundFontFormats = std::set<SoundFontFormat>;
 
 struct SynthesizerState {
-    enum ValID {
+    enum class ValID {
         UndefinedID = -1,
         SoundFontID = 0,
     };
 
     struct Val {
-        ValID id = UndefinedID;
+        ValID id = ValID::UndefinedID;
         std::string val;
         Val() = default;
         Val(ValID id, const std::string& val)
