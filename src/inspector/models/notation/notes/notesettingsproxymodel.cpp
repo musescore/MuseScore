@@ -8,7 +8,7 @@
 NoteSettingsProxyModel::NoteSettingsProxyModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorProxyModel(parent)
 {
-    setSectionType(SECTION_NOTATION);
+    setSectionType(InspectorSectionType::SECTION_NOTATION);
     setModelType(TYPE_NOTE);
     setTitle(tr("Note"));
 

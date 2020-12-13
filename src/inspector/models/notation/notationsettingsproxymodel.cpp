@@ -38,7 +38,7 @@
 NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorProxyModel(parent)
 {
-    setSectionType(SECTION_NOTATION);
+    setSectionType(InspectorSectionType::SECTION_NOTATION);
     setTitle(QStringLiteral("Notation"));
 
     addModel(new NoteSettingsProxyModel(this, repository));
