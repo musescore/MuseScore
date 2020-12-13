@@ -102,25 +102,25 @@ void MeasureBase::add(Element* e)
     if (e->isLayoutBreak()) {
         LayoutBreak* b = toLayoutBreak(e);
         switch (b->layoutBreakType()) {
-        case LayoutBreak::PAGE:
+        case LayoutBreak::Type::PAGE:
             setPageBreak(true);
             setLineBreak(false);
             setNoBreak(false);
             break;
-        case LayoutBreak::LINE:
+        case LayoutBreak::Type::LINE:
             setPageBreak(false);
             setLineBreak(true);
             setSectionBreak(false);
             setNoBreak(false);
             break;
-        case LayoutBreak::SECTION:
+        case LayoutBreak::Type::SECTION:
             setLineBreak(false);
             setSectionBreak(true);
             setNoBreak(false);
             //does not work with repeats: score()->tempomap()->setPause(endTick(), b->pause());
             triggerLayoutAll();
             break;
-        case LayoutBreak::NOBREAK:
+        case LayoutBreak::Type:: NOBREAK:
             setPageBreak(false);
             setLineBreak(false);
             setSectionBreak(false);
@@ -146,18 +146,18 @@ void MeasureBase::remove(Element* el)
     if (el->isLayoutBreak()) {
         LayoutBreak* lb = toLayoutBreak(el);
         switch (lb->layoutBreakType()) {
-        case LayoutBreak::PAGE:
+        case LayoutBreak::Type::PAGE:
             setPageBreak(false);
             break;
-        case LayoutBreak::LINE:
+        case LayoutBreak::Type::LINE:
             setLineBreak(false);
             break;
-        case LayoutBreak::SECTION:
+        case LayoutBreak::Type::SECTION:
             setSectionBreak(false);
             score()->setPause(endTick(), 0);
             triggerLayoutAll();
             break;
-        case LayoutBreak::NOBREAK:
+        case LayoutBreak::Type::NOBREAK:
             setNoBreak(false);
             break;
         }
@@ -417,13 +417,13 @@ QVariant MeasureBase::propertyDefault(Pid propertyId) const
 void MeasureBase::undoSetBreak(bool v, LayoutBreak::Type type)
 {
     switch (type) {
-    case LayoutBreak::LINE:
+    case LayoutBreak::Type::LINE:
         if (lineBreak() == v) {
             return;
         }
         setLineBreak(v);
         break;
-    case LayoutBreak::PAGE:
+    case LayoutBreak::Type::PAGE:
         if (pageBreak() == v) {
             return;
         }
@@ -432,7 +432,7 @@ void MeasureBase::undoSetBreak(bool v, LayoutBreak::Type type)
         }
         setPageBreak(v);
         break;
-    case LayoutBreak::SECTION:
+    case LayoutBreak::Type::SECTION:
         if (sectionBreak() == v) {
             return;
         }
@@ -441,7 +441,7 @@ void MeasureBase::undoSetBreak(bool v, LayoutBreak::Type type)
         }
         setSectionBreak(v);
         break;
-    case LayoutBreak::NOBREAK:
+    case LayoutBreak::Type::NOBREAK:
         if (noBreak() == v) {
             return;
         }
@@ -476,22 +476,22 @@ void MeasureBase::cleanupLayoutBreaks(bool undo)
     for (Element* e : el()) {
         if (e->isLayoutBreak()) {
             switch (toLayoutBreak(e)->layoutBreakType()) {
-            case LayoutBreak::LINE:
+            case LayoutBreak::Type::LINE:
                 if (!lineBreak()) {
                     toDelete.push_back(e);
                 }
                 break;
-            case LayoutBreak::PAGE:
+            case LayoutBreak::Type::PAGE:
                 if (!pageBreak()) {
                     toDelete.push_back(e);
                 }
                 break;
-            case LayoutBreak::SECTION:
+            case LayoutBreak::Type::SECTION:
                 if (!sectionBreak()) {
                     toDelete.push_back(e);
                 }
                 break;
-            case LayoutBreak::NOBREAK:
+            case LayoutBreak::Type::NOBREAK:
                 if (!noBreak()) {
                     toDelete.push_back(e);
                 }
@@ -561,22 +561,22 @@ bool MeasureBase::readProperties(XmlReader& e)
         lb->read(e);
         bool doAdd = true;
         switch (lb->layoutBreakType()) {
-        case LayoutBreak::LINE:
+        case LayoutBreak::Type::LINE:
             if (lineBreak()) {
                 doAdd = false;
             }
             break;
-        case LayoutBreak::PAGE:
+        case LayoutBreak::Type::PAGE:
             if (pageBreak()) {
                 doAdd = false;
             }
             break;
-        case LayoutBreak::SECTION:
+        case LayoutBreak::Type::SECTION:
             if (sectionBreak()) {
                 doAdd = false;
             }
             break;
-        case LayoutBreak::NOBREAK:
+        case LayoutBreak::Type::NOBREAK:
             if (noBreak()) {
                 doAdd = false;
             }

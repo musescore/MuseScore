@@ -29,7 +29,7 @@ class LayoutBreak final : public Element
 {
     Q_GADGET
 public:
-    enum Type {
+    enum class Type {
         ///.\{
         PAGE, LINE, SECTION, NOBREAK
         ///\}
@@ -72,10 +72,10 @@ public:
     bool startWithMeasureOne() const { return _startWithMeasureOne; }
     void setStartWithMeasureOne(bool v) { _startWithMeasureOne = v; }
 
-    bool isPageBreak() const { return _layoutBreakType == PAGE; }
-    bool isLineBreak() const { return _layoutBreakType == LINE; }
-    bool isSectionBreak() const { return _layoutBreakType == SECTION; }
-    bool isNoBreak() const { return _layoutBreakType == NOBREAK; }
+    bool isPageBreak() const { return _layoutBreakType == Type::PAGE; }
+    bool isLineBreak() const { return _layoutBreakType == Type::LINE; }
+    bool isSectionBreak() const { return _layoutBreakType == Type::SECTION; }
+    bool isNoBreak() const { return _layoutBreakType == Type::NOBREAK; }
 
     QVariant getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const QVariant&) override;
