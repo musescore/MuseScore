@@ -48,7 +48,7 @@ void SystemDivider::layout()
     SymId sid;
     ScoreFont* sf = score()->scoreFont();
 
-    if (_dividerType == SystemDivider::LEFT) {
+    if (_dividerType == SystemDivider::Type::LEFT) {
         sid = Sym::name2id(score()->styleSt(Sid::dividerLeftSym));
     } else {
         sid = Sym::name2id(score()->styleSt(Sid::dividerRightSym));
@@ -64,7 +64,7 @@ void SystemDivider::layout()
 void SystemDivider::setDividerType(SystemDivider::Type v)
 {
     _dividerType = v;
-    if (v == SystemDivider::LEFT) {
+    if (v == SystemDivider::Type::LEFT) {
         setOffset(QPointF(score()->styleD(Sid::dividerLeftX), score()->styleD(Sid::dividerLeftY)));
     } else {
         setOffset(QPointF(score()->styleD(Sid::dividerRightX), score()->styleD(Sid::dividerRightY)));

@@ -24,7 +24,7 @@ namespace Ms {
 class SystemDivider final : public Symbol
 {
 public:
-    enum Type {
+    enum class Type {
         LEFT, RIGHT
     };
 
