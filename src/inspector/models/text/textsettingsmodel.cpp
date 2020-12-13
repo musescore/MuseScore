@@ -9,7 +9,7 @@
 TextSettingsModel::TextSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setSectionType(SECTION_TEXT);
+    setSectionType(InspectorSectionType::SECTION_TEXT);
     setTitle(tr("Text"));
     createProperties();
 

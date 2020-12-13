@@ -9,7 +9,7 @@
 ScoreAppearanceSettingsModel::ScoreAppearanceSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setSectionType(SECTION_SCORE_APPEARANCE);
+    setSectionType(InspectorSectionType::SECTION_SCORE_APPEARANCE);
     setTitle(tr("Score appearance"));
     createProperties();
 }

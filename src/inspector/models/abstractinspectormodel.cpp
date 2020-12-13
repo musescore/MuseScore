@@ -92,12 +92,12 @@ AbstractInspectorModel::InspectorSectionType AbstractInspectorModel::sectionType
     const Ms::ElementType elementType)
 {
     if (NOTATION_ELEMENT_TYPES.contains(elementType)) {
-        return SECTION_NOTATION;
+        return InspectorSectionType::SECTION_NOTATION;
     } else if (TEXT_ELEMENT_TYPES.contains(elementType)) {
-        return SECTION_TEXT;
+        return InspectorSectionType::SECTION_TEXT;
     }
 
-    return SECTION_UNDEFINED;
+    return InspectorSectionType::SECTION_UNDEFINED;
 }
 
 bool AbstractInspectorModel::isEmpty() const
@@ -109,12 +109,12 @@ QList<Ms::ElementType> AbstractInspectorModel::supportedElementTypesBySectionTyp
     const AbstractInspectorModel::InspectorSectionType sectionType)
 {
     switch (sectionType) {
-    case SECTION_GENERAL:
+    case InspectorSectionType::SECTION_GENERAL:
         return { Ms::ElementType::MAXTYPE };
-    case SECTION_NOTATION: {
+    case InspectorSectionType::SECTION_NOTATION: {
         return NOTATION_ELEMENT_TYPES;
     }
-    case SECTION_TEXT: {
+    case InspectorSectionType::SECTION_TEXT: {
         return TEXT_ELEMENT_TYPES;
     }
     default:
