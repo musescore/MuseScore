@@ -3,7 +3,7 @@
 JumpSettingsModel::JumpSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setModelType(TYPE_JUMP);
+    setModelType(InspectorModelType::TYPE_JUMP);
     setTitle(tr("Jump"));
     createProperties();
 }

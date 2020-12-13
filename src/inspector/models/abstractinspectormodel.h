@@ -38,7 +38,7 @@ public:
         SECTION_SCORE_APPEARANCE
     };
 
-    enum InspectorModelType {
+    enum class InspectorModelType {
         TYPE_UNDEFINED = -1,
         TYPE_NOTE,
         TYPE_BEAM,
@@ -141,7 +141,7 @@ private:
 
     QString m_title;
     InspectorSectionType m_sectionType = InspectorSectionType::SECTION_UNDEFINED;
-    InspectorModelType m_modelType = TYPE_UNDEFINED;
+    InspectorModelType m_modelType = InspectorModelType::TYPE_UNDEFINED;
     bool m_isEmpty = false;
 };
 

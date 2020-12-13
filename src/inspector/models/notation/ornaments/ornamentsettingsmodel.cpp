@@ -6,7 +6,7 @@
 OrnamentSettingsModel::OrnamentSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setModelType(TYPE_ORNAMENT);
+    setModelType(InspectorModelType::TYPE_ORNAMENT);
     setTitle(tr("Ornament"));
     createProperties();
 }

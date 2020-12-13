@@ -6,7 +6,7 @@
 BracketSettingsModel::BracketSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setModelType(TYPE_BRACKET);
+    setModelType(InspectorModelType::TYPE_BRACKET);
     setTitle(tr("Bracket"));
     createProperties();
 }

@@ -7,7 +7,7 @@
 ImageSettingsModel::ImageSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setModelType(TYPE_IMAGE);
+    setModelType(InspectorModelType::TYPE_IMAGE);
     setTitle(tr("Image"));
     createProperties();
 }

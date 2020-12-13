@@ -7,7 +7,7 @@
 TimeSignatureSettingsModel::TimeSignatureSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setModelType(TYPE_TIME_SIGNATURE);
+    setModelType(InspectorModelType::TYPE_TIME_SIGNATURE);
     setTitle(tr("Time signature"));
     createProperties();
 }

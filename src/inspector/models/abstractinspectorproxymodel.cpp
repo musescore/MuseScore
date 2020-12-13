@@ -7,7 +7,7 @@ AbstractInspectorProxyModel::AbstractInspectorProxyModel(QObject* parent)
 
 QObject* AbstractInspectorProxyModel::modelByType(const InspectorModelType type)
 {
-    return m_modelsHash.value(type);
+    return m_modelsHash.value(static_cast<int>(type));
 }
 
 void AbstractInspectorProxyModel::requestResetToDefaults()
@@ -38,5 +38,5 @@ void AbstractInspectorProxyModel::addModel(AbstractInspectorModel* model)
         setIsEmpty(!hasAcceptableElements());
     });
 
-    m_modelsHash.insert(model->modelType(), model);
+    m_modelsHash.insert(static_cast<int>(model->modelType()), model);
 }
