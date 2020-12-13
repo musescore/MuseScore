@@ -41,7 +41,7 @@ std::vector<io::path> SoundFontsProvider::soundFontPathsForSynth(const SynthName
 
     std::vector<std::string> fontNames;
     for (const SynthesizerState::Val& val : g.vals) {
-        if (val.id == SynthesizerState::SoundFontID) {
+        if (val.id == SynthesizerState::ValID::SoundFontID) {
             fontNames.push_back(val.val);
         }
     }
