@@ -56,9 +56,8 @@ PageSettings::PageSettings(QWidget* parent)
 
       connect(mmButton,             SIGNAL(clicked()),            SLOT(mmClicked()));
       connect(inchButton,           SIGNAL(clicked()),            SLOT(inchClicked()));
-      connect(buttonApply,          SIGNAL(clicked()),            SLOT(apply()));
+      connect(buttonBox,            SIGNAL(clicked(QAbstractButton*)), SLOT(buttonBoxClicked(QAbstractButton*)));
       connect(buttonApplyToAllParts,SIGNAL(clicked()),            SLOT(applyToAllParts()));
-      connect(buttonOk,             SIGNAL(clicked()),            SLOT(ok()));
       connect(portraitButton,       SIGNAL(clicked()),            SLOT(orientationClicked()));
       connect(landscapeButton,      SIGNAL(clicked()),            SLOT(orientationClicked()));
       connect(twosided,             SIGNAL(toggled(bool)),        SLOT(twosidedToggled(bool)));
@@ -278,6 +277,26 @@ void PageSettings::twosidedToggled(bool flag)
       }
 
 //---------------------------------------------------------
+//   buttonBoxClicked
+//---------------------------------------------------------
+
+void PageSettings::buttonBoxClicked(QAbstractButton* button)
+      {
+      switch (buttonBox->buttonRole(button)) {
+            case QDialogButtonBox::ApplyRole:
+                  PageSettings::apply();
+                  break;
+            case QDialogButtonBox::AcceptRole:
+                  PageSettings::apply();
+                  // fall through
+            case QDialogButtonBox::RejectRole:
+                  close();
+            default:
+                  break;
+            }
+      }
+
+//---------------------------------------------------------
 //   apply
 //---------------------------------------------------------
 
@@ -330,25 +349,6 @@ void PageSettings::applyToAllParts()
       _changeFlag = false;
       }
 
-//---------------------------------------------------------
-//   ok
-//---------------------------------------------------------
-
-void PageSettings::ok()
-      {
-      apply();
-      done(0);
-      }
-
-//---------------------------------------------------------
-//   done
-//---------------------------------------------------------
-
-void PageSettings::done(int val)
-      {
-      cs->setLayoutAll();     // HACK
-      QDialog::done(val);
-      }
 
 //---------------------------------------------------------
 //   pageFormatSelected

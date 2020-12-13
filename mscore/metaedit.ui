@@ -186,8 +186,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>660</width>
-        <height>295</height>
+        <width>662</width>
+        <height>299</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="scrollAreaLayout">
@@ -233,32 +233,9 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="okButton">
-       <property name="text">
-        <string>Ok</string>
-       </property>
-       <property name="default">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="cancelButton">
-       <property name="text">
-        <string>Cancel</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="saveButton">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="cursor">
-        <cursorShape>PointingHandCursor</cursorShape>
-       </property>
-       <property name="text">
-        <string>Save</string>
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok|QDialogButtonBox::Save</set>
        </property>
       </widget>
      </item>
@@ -268,43 +245,7 @@
  </widget>
  <tabstops>
   <tabstop>newButton</tabstop>
-  <tabstop>saveButton</tabstop>
-  <tabstop>okButton</tabstop>
-  <tabstop>cancelButton</tabstop>
  </tabstops>
  <resources/>
- <connections>
-  <connection>
-   <sender>okButton</sender>
-   <signal>clicked()</signal>
-   <receiver>MetaEditDialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>499</x>
-     <y>395</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>435</x>
-     <y>389</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cancelButton</sender>
-   <signal>clicked()</signal>
-   <receiver>MetaEditDialog</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>585</x>
-     <y>395</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>546</x>
-     <y>405</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

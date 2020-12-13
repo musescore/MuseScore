@@ -43,16 +43,15 @@ class PageSettings : public AbstractDialog, private Ui::PageSettingsBase {
       void blockSignals(bool);
       void applyToScore(Score*);
       void setMarginsMax(double);
+      void apply();
 
    private slots:
       void mmClicked();
       void inchClicked();
       void pageFormatSelected(int);
 
-      void apply();
       void applyToAllParts();
-      void ok();
-      void done(int val);
+      void buttonBoxClicked(QAbstractButton*);
 
       void twosidedToggled(bool);
       void otmChanged(double val);

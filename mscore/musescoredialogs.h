@@ -61,9 +61,10 @@ class InsertMeasuresDialog : public QDialog, public Ui::InsertMeasuresDialogBase
       Q_OBJECT
 
       void hideEvent(QHideEvent*) override;
+      void accept() override;
 
    private slots:
-      void accept() override;
+      void buttonBoxClicked(QAbstractButton*);
 
    public:
       InsertMeasuresDialog(QWidget* parent = 0);
@@ -76,8 +77,10 @@ class InsertMeasuresDialog : public QDialog, public Ui::InsertMeasuresDialogBase
 class MeasuresDialog : public QDialog, public Ui::MeasuresDialogBase {
       Q_OBJECT
 
-   private slots:
       void accept() override;
+
+   private slots:
+      void buttonBoxClicked(QAbstractButton*);
 
    public:
       MeasuresDialog(QWidget* parent = 0);
