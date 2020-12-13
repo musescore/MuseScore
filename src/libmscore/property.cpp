@@ -760,16 +760,16 @@ QVariant propertyFromString(Pid id, QString value)
     break;
     case P_TYPE::LAYOUT_BREAK: {
         if (value == "line") {
-            return QVariant(int(LayoutBreak::LINE));
+            return QVariant(int(LayoutBreak::Type::LINE));
         }
         if (value == "page") {
-            return QVariant(int(LayoutBreak::PAGE));
+            return QVariant(int(LayoutBreak::Type::PAGE));
         }
         if (value == "section") {
-            return QVariant(int(LayoutBreak::SECTION));
+            return QVariant(int(LayoutBreak::Type::SECTION));
         }
         if (value == "nobreak") {
-            return QVariant(int(LayoutBreak::NOBREAK));
+            return QVariant(int(LayoutBreak::Type::NOBREAK));
         }
         qDebug("getProperty: invalid P_TYPE::LAYOUT_BREAK: <%s>", qPrintable(value));
     }
@@ -1060,13 +1060,13 @@ QString propertyToString(Pid id, QVariant value, bool mscx)
         break;
     case P_TYPE::LAYOUT_BREAK:
         switch (LayoutBreak::Type(value.toInt())) {
-        case LayoutBreak::LINE:
+        case LayoutBreak::Type::LINE:
             return "line";
-        case LayoutBreak::PAGE:
+        case LayoutBreak::Type::PAGE:
             return "page";
-        case LayoutBreak::SECTION:
+        case LayoutBreak::Type::SECTION:
             return "section";
-        case LayoutBreak::NOBREAK:
+        case LayoutBreak::Type::NOBREAK:
             return "nobreak";
         }
         break;

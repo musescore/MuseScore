@@ -1527,7 +1527,7 @@ Element* Measure::drop(EditData& data)
         LayoutBreak* b = toLayoutBreak(e);
         Measure* measure = isMMRest() ? mmRestLast() : this;
         switch (b->layoutBreakType()) {
-        case  LayoutBreak::PAGE:
+        case  LayoutBreak::Type::PAGE:
             if (measure->pageBreak()) {
                 delete b;
                 b = 0;
@@ -1535,7 +1535,7 @@ Element* Measure::drop(EditData& data)
                 measure->setLineBreak(false);
             }
             break;
-        case  LayoutBreak::LINE:
+        case  LayoutBreak::Type::LINE:
             if (measure->lineBreak()) {
                 delete b;
                 b = 0;
@@ -1543,7 +1543,7 @@ Element* Measure::drop(EditData& data)
                 measure->setPageBreak(false);
             }
             break;
-        case  LayoutBreak::SECTION:
+        case  LayoutBreak::Type::SECTION:
             if (measure->sectionBreak()) {
                 delete b;
                 b = 0;
@@ -1551,7 +1551,7 @@ Element* Measure::drop(EditData& data)
                 measure->setLineBreak(false);
             }
             break;
-        case LayoutBreak::NOBREAK:
+        case LayoutBreak::Type::NOBREAK:
             if (measure->noBreak()) {
                 delete b;
                 b = 0;
