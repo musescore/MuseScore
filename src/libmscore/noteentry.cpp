@@ -618,7 +618,7 @@ void Score::insertChord(const Position& pos)
     }
     Segment* seg = pos.segment;
     if (seg->splitsTuplet()) {
-        MScore::setError(CANNOT_INSERT_TUPLET);
+        MScore::setError(MsError::CANNOT_INSERT_TUPLET);
         return;
     }
     if (_is.insertMode()) {

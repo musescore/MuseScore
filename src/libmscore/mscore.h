@@ -237,7 +237,7 @@ enum class IconType : signed char {
 //   MScoreError
 //---------------------------------------------------------
 
-enum MsError {
+enum class MsError {
     MS_NO_ERROR,
     NO_NOTE_SELECTED,
     NO_CHORD_REST_SELECTED,

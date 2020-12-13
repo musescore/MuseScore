@@ -268,7 +268,7 @@ void Score::endCmd(const bool isCmdFromInspector, bool rollback)
         update();
         return;
     }
-    if (readOnly() || MScore::_error != MS_NO_ERROR) {
+    if (readOnly() || MScore::_error != MsError::MS_NO_ERROR) {
         rollback = true;
     }
 
@@ -2900,7 +2900,7 @@ bool Score::makeMeasureRepeatGroup(Measure* firstMeasure, int numMeasures, int s
     Measure* measure = firstMeasure;
     for (int i = 1; i <= numMeasures; ++i) {
         if (!measure || measure->ticks() != firstMeasure->ticks()) {
-            MScore::setError(INSUFFICIENT_MEASURES);
+            MScore::setError(MsError::INSUFFICIENT_MEASURES);
             return false;
         }
         measures.push_back(measure);
