@@ -114,10 +114,10 @@ public:
     LayoutBreak* sectionBreakElement() const;
 
     void undoSetBreak(bool v, LayoutBreak::Type type);
-    void undoSetLineBreak(bool v) { undoSetBreak(v, LayoutBreak::LINE); }
-    void undoSetPageBreak(bool v) { undoSetBreak(v, LayoutBreak::PAGE); }
-    void undoSetSectionBreak(bool v) { undoSetBreak(v, LayoutBreak::SECTION); }
-    void undoSetNoBreak(bool v) { undoSetBreak(v, LayoutBreak::NOBREAK); }
+    void undoSetLineBreak(bool v) { undoSetBreak(v, LayoutBreak::Type::LINE); }
+    void undoSetPageBreak(bool v) { undoSetBreak(v, LayoutBreak::Type::PAGE); }
+    void undoSetSectionBreak(bool v) { undoSetBreak(v, LayoutBreak::Type::SECTION); }
+    void undoSetNoBreak(bool v) { undoSetBreak(v, LayoutBreak::Type::NOBREAK); }
 
     virtual void moveTicks(const Fraction& diff) { setTick(tick() + diff); }
 

@@ -260,7 +260,7 @@ QList<Ms::Element*> ElementRepositoryService::findSectionBreaks() const
     for (Ms::Element* element : m_elementList) {
         if (element && element->type() == Ms::ElementType::LAYOUT_BREAK) {
             const Ms::LayoutBreak* layoutBreak = Ms::toLayoutBreak(element);
-            if (layoutBreak->layoutBreakType() != Ms::LayoutBreak::SECTION) {
+            if (layoutBreak->layoutBreakType() != Ms::LayoutBreak::Type::SECTION) {
                 continue;
             }
 
