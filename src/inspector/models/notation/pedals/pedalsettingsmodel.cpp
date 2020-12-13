@@ -5,7 +5,7 @@
 PedalSettingsModel::PedalSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setModelType(TYPE_PEDAL);
+    setModelType(InspectorModelType::TYPE_PEDAL);
     setTitle(tr("Pedal"));
     createProperties();
 }

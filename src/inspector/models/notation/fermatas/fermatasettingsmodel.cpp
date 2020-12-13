@@ -3,7 +3,7 @@
 FermataSettingsModel::FermataSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setModelType(TYPE_FERMATA);
+    setModelType(InspectorModelType::TYPE_FERMATA);
     setTitle(tr("Fermata"));
     createProperties();
 }

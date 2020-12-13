@@ -5,7 +5,7 @@
 VerticalFrameSettingsModel::VerticalFrameSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setModelType(TYPE_VERTICAL_FRAME);
+    setModelType(InspectorModelType::TYPE_VERTICAL_FRAME);
     setTitle(tr("Vertical frame"));
     createProperties();
 }

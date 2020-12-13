@@ -6,7 +6,7 @@
 BendSettingsModel::BendSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setModelType(TYPE_BEND);
+    setModelType(InspectorModelType::TYPE_BEND);
     setTitle(tr("Bend"));
     createProperties();
 }

@@ -6,7 +6,7 @@
 ArticulationSettingsModel::ArticulationSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setModelType(TYPE_ARTICULATION);
+    setModelType(InspectorModelType::TYPE_ARTICULATION);
     setTitle(tr("Articulation"));
     createProperties();
 }
