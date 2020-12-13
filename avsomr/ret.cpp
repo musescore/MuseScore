@@ -108,7 +108,7 @@ QString Ret::text(Code c)
       {
       switch (c) {
             case Undefined:         return "Undefined error";
-            case Ok:                return QObject::tr("Ok");
+            case Ok:                return QObject::tr("OK");
                   // common
             case UnknownError:      return QObject::tr("Unknown error");
             case FailedReadFile:    return QObject::tr("Failed reading file");

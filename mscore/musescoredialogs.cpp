@@ -37,6 +37,24 @@ InsertMeasuresDialog::InsertMeasuresDialog(QWidget* parent)
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setModal(true);
       insmeasures->selectAll();
+      connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), SLOT(buttonBoxClicked(QAbstractButton*)));
+      }
+
+//---------------------------------------------------------
+//   buttonBoxClicked
+//---------------------------------------------------------
+
+void InsertMeasuresDialog::buttonBoxClicked(QAbstractButton* button)
+      {
+      switch (buttonBox->buttonRole(button)) {
+            case QDialogButtonBox::AcceptRole:
+                  accept();
+                  // fall through
+            case QDialogButtonBox::RejectRole:
+                  close();
+            default:
+                  break;
+            }
       }
 
 //---------------------------------------------------------
@@ -72,6 +90,24 @@ MeasuresDialog::MeasuresDialog(QWidget* parent)
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setModal(true);
       measures->selectAll();
+      connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), SLOT(buttonBoxClicked(QAbstractButton*)));
+      }
+
+//---------------------------------------------------------
+//   buttonBoxClicked
+//---------------------------------------------------------
+
+void MeasuresDialog::buttonBoxClicked(QAbstractButton* button)
+      {
+      switch (buttonBox->buttonRole(button)) {
+            case QDialogButtonBox::AcceptRole:
+                  accept();
+                  // fall through
+            case QDialogButtonBox::RejectRole:
+                  close();
+            default:
+                  break;
+            }
       }
 
 //---------------------------------------------------------

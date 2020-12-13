@@ -51,7 +51,7 @@ InstrumentsDialog::InstrumentsDialog(QWidget* parent)
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       QAction* a = getAction("instruments");
-      connect(a, SIGNAL(triggered()), SLOT(reject()));
+      connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), SLOT(buttonBoxClicked(QAbstractButton*)));
       addAction(a);
       saveButton->setVisible(false);
       loadButton->setVisible(false);
@@ -65,6 +65,23 @@ InstrumentsDialog::InstrumentsDialog(QWidget* parent)
 void InstrumentsDialog::init()
       {
       instrumentsWidget->init();
+      }
+
+//---------------------------------------------------------
+//   buttonBoxClicked
+//---------------------------------------------------------
+
+void InstrumentsDialog::buttonBoxClicked(QAbstractButton* button)
+      {
+      switch (buttonBox->buttonRole(button)) {
+            case QDialogButtonBox::AcceptRole:
+                  accept();
+                  // fall through
+            case QDialogButtonBox::RejectRole:
+                  close();
+            default:
+                  break;
+            }
       }
 
 //---------------------------------------------------------

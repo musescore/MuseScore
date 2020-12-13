@@ -27,9 +27,10 @@ class InstrumentsDialog : public QDialog, public Ui::InstrumentsDialog {
       Q_OBJECT
 
       void readSettings();
+      virtual void accept();
 
    private slots:
-      virtual void accept();
+      void buttonBoxClicked(QAbstractButton*);
       void on_saveButton_clicked();
       void on_loadButton_clicked();
 

@@ -71,7 +71,8 @@ MetaEditDialog::MetaEditDialog(Score* score, QWidget* parent)
       scrollAreaLayout->setColumnStretch(1, 1); // The 'value' column should be expanding
 
       connect(newButton,  &QPushButton::clicked, this, &MetaEditDialog::newClicked);
-      connect(saveButton, &QPushButton::clicked, this, &MetaEditDialog::save);
+      connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), SLOT(buttonBoxClicked(QAbstractButton*)));
+      buttonBox->button(QDialogButtonBox::Save)->setEnabled(m_dirty);
       if (!QFileInfo::exists(score->importedFilePath()))
             revealButton->setEnabled(false);
 
@@ -177,7 +178,7 @@ void MetaEditDialog::setDirty(const bool dirty)
       if (dirty == m_dirty)
             return;
 
-      saveButton->setEnabled(dirty);
+      buttonBox->button(QDialogButtonBox::Save)->setEnabled(dirty);
       setWindowTitle(tr("Score properties: %1%2").arg(m_score->title()).arg((dirty ? "*" : "")));
 
       m_dirty = dirty;
@@ -193,6 +194,26 @@ void MetaEditDialog::openFileLocation()
       if (!OpenFileLocation::openFileLocation(filePath->text()))
             QMessageBox::warning(this, tr("Open Containing Folder Error"),
                                        tr("Could not open containing folder"));
+      }
+
+//---------------------------------------------------------
+//   buttonBoxClicked
+//---------------------------------------------------------
+
+void MetaEditDialog::buttonBoxClicked(QAbstractButton* button)
+      {
+      switch (buttonBox->buttonRole(button)) {
+            case QDialogButtonBox::ApplyRole:
+                  save();
+                  break;
+            case QDialogButtonBox::AcceptRole:
+                  accept();
+                  // fall through
+            case QDialogButtonBox::RejectRole:
+                  close();
+            default:
+                  break;
+            }
       }
 
 //---------------------------------------------------------
