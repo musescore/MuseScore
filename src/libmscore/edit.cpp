@@ -78,7 +78,7 @@ Note* Score::getSelectedNote()
     if (el && el->isNote()) {
         return toNote(el);
     }
-    MScore::setError(NO_NOTE_SELECTED);
+    MScore::setError(MsError::NO_NOTE_SELECTED);
     return 0;
 }
 
@@ -98,7 +98,7 @@ ChordRest* Score::getSelectedChordRest() const
             return toChord(el);
         }
     }
-    MScore::setError(NO_NOTE_REST_SELECTED);
+    MScore::setError(MsError::NO_NOTE_REST_SELECTED);
     return 0;
 }
 
@@ -125,7 +125,7 @@ void Score::getSelectedChordRest2(ChordRest** cr1, ChordRest** cr2) const
         }
     }
     if (*cr1 == 0) {
-        MScore::setError(NO_NOTE_REST_SELECTED);
+        MScore::setError(MsError::NO_NOTE_REST_SELECTED);
     }
     if (*cr1 == *cr2) {
         *cr2 = 0;
@@ -1013,7 +1013,7 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
 
     // disable local time sig modifications in linked staves
     if (staffIdx != -1 && excerpts().size() > 0) {
-        MScore::setError(CANNOT_CHANGE_LOCAL_TIMESIG);
+        MScore::setError(MsError::CANNOT_CHANGE_LOCAL_TIMESIG);
         return false;
     }
 
@@ -1030,7 +1030,7 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
 
             if (!rewriteMeasures(fm1, lm, ns, staffIdx)) {
                 if (staffIdx >= 0) {
-                    MScore::setError(CANNOT_CHANGE_LOCAL_TIMESIG);
+                    MScore::setError(MsError::CANNOT_CHANGE_LOCAL_TIMESIG);
                     // restore measure rests that were prematurely modified
                     Fraction fr(staff(staffIdx)->timeSig(fm->tick())->sig());
                     for (Measure* m = fm1; m; m = m->nextMeasure()) {
@@ -1046,7 +1046,7 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
                     // (if we are rewriting all staves, but one has a local time signature)
                     // TODO: detect error conditions better, have clearer error messages
                     // and perform necessary fixups
-                    MScore::setError(TUPLET_CROSSES_BAR);
+                    MScore::setError(MsError::TUPLET_CROSSES_BAR);
                 }
                 for (Measure* m = fm1; m; m = m->nextMeasure()) {
                     if (m->first(SegmentType::TimeSig)) {
@@ -1339,7 +1339,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
 void Score::cmdRemoveTimeSig(TimeSig* ts)
 {
     if (ts->isLocal() && excerpts().size() > 0) {
-        MScore::setError(CANNOT_CHANGE_LOCAL_TIMESIG);
+        MScore::setError(MsError::CANNOT_CHANGE_LOCAL_TIMESIG);
         return;
     }
 
@@ -2020,7 +2020,7 @@ void Score::cmdFlip()
 {
     const QList<Element*>& el = selection().elements();
     if (el.empty()) {
-        MScore::setError(NO_FLIPPABLE_SELECTED);
+        MScore::setError(MsError::NO_FLIPPABLE_SELECTED);
         return;
     }
 
@@ -3283,7 +3283,7 @@ Lyrics* Score::addLyrics()
 {
     Element* el = selection().element();
     if (el == 0 || (!el->isNote() && !el->isLyrics() && !el->isRest())) {
-        MScore::setError(NO_LYRICS_SELECTED);
+        MScore::setError(MsError::NO_LYRICS_SELECTED);
         return 0;
     }
     ChordRest* cr;
@@ -3441,7 +3441,7 @@ void Score::colorItem(Element* element)
 void Score::cmdExchangeVoice(int s, int d)
 {
     if (!selection().isRange()) {
-        MScore::setError(NO_STAFF_SELECTED);
+        MScore::setError(MsError::NO_STAFF_SELECTED);
         return;
     }
     Fraction t1 = selection().tickStart();
@@ -3605,7 +3605,7 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
             }
             for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
                 if (toMeasure(measure)->isMeasureRepeatGroupWithPrevM(staffIdx)) {
-                    MScore::setError(CANNOT_SPLIT_MEASURE_REPEAT);
+                    MScore::setError(MsError::CANNOT_SPLIT_MEASURE_REPEAT);
                     return;
                 }
             }
@@ -3883,7 +3883,7 @@ bool Score::checkTimeDelete(Segment* startSegment, Segment* endSegment)
             || (endMeasure->isMeasureRepeatGroup(staffIdx) && !endsAtEndOfMeasure)
             || startMeasure->isMeasureRepeatGroupWithPrevM(staffIdx)
             || endMeasure->isMeasureRepeatGroupWithNextM(staffIdx)) {
-            MScore::setError(CANNOT_REMOVE_TIME_MEASURE_REPEAT);
+            MScore::setError(MsError::CANNOT_REMOVE_TIME_MEASURE_REPEAT);
             return false;
         }
     }
@@ -3922,7 +3922,7 @@ bool Score::checkTimeDelete(Segment* startSegment, Segment* endSegment)
         etick = endTick;
     }
     if (!canDeleteTime) {
-        MScore::setError(CANNOT_REMOVE_TIME_TUPLET);
+        MScore::setError(MsError::CANNOT_REMOVE_TIME_TUPLET);
         return false;
     }
     return true;

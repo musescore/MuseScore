@@ -158,7 +158,7 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
         Measure* m2 = m->isMMRest() ? m->mmRestFirst() : m;
         for (int staffIdx = 0; staffIdx < m2->score()->nstaves(); ++staffIdx) {
             if (m2->isMeasureRepeatGroupWithPrevM(staffIdx)) {
-                MScore::setError(CANNOT_SPLIT_MEASURE_REPEAT);
+                MScore::setError(MsError::CANNOT_SPLIT_MEASURE_REPEAT);
                 return;
             }
         }
@@ -174,7 +174,7 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
         Measure* m2 = m->isMMRest() ? m->mmRestLast() : m;
         for (int staffIdx = 0; staffIdx < m2->score()->nstaves(); ++staffIdx) {
             if (m2->isMeasureRepeatGroupWithNextM(staffIdx)) {
-                MScore::setError(CANNOT_SPLIT_MEASURE_REPEAT);
+                MScore::setError(MsError::CANNOT_SPLIT_MEASURE_REPEAT);
                 return;
             }
         }
@@ -190,7 +190,7 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
         Measure* m2 = m->isMMRest() ? m->mmRestLast() : m;
         for (int staffIdx = 0; staffIdx < m2->score()->nstaves(); ++staffIdx) {
             if (m2->isMeasureRepeatGroupWithNextM(staffIdx)) {
-                MScore::setError(CANNOT_SPLIT_MEASURE_REPEAT);
+                MScore::setError(MsError::CANNOT_SPLIT_MEASURE_REPEAT);
                 return;
             }
         }

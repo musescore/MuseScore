@@ -180,7 +180,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                     Fraction tick = doScale ? (e.tick() - dstTick) * scale + dstTick : e.tick();
                     // no paste into local time signature
                     if (staff(dstStaffIdx)->isLocalTimeSignature(tick)) {
-                        MScore::setError(DEST_LOCAL_TIME_SIGNATURE);
+                        MScore::setError(MsError::DEST_LOCAL_TIME_SIGNATURE);
                         if (oldTuplet && oldTuplet->elements().empty()) {
                             delete oldTuplet;
                         }
@@ -202,7 +202,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                         if (oldTuplet && oldTuplet->elements().empty()) {
                             delete oldTuplet;
                         }
-                        MScore::setError(TUPLET_CROSSES_BAR);
+                        MScore::setError(MsError::TUPLET_CROSSES_BAR);
                         return false;
                     }
                     if (oldTuplet) {
@@ -234,7 +234,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                     Fraction tick = doScale ? (e.tick() - dstTick) * scale + dstTick : e.tick();
                     // no paste into local time signature
                     if (staff(dstStaffIdx)->isLocalTimeSignature(tick)) {
-                        MScore::setError(DEST_LOCAL_TIME_SIGNATURE);
+                        MScore::setError(MsError::DEST_LOCAL_TIME_SIGNATURE);
                         return false;
                     }
                     if (tick2measure(tick)->isMeasureRepeatGroup(dstStaffIdx)) {
@@ -275,7 +275,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                                 Fraction ticks = cr->actualTicks();
                                 Fraction rticks = m->endTick() - tick;
                                 if (rticks < ticks || (rticks != ticks && rticks < ticks * 2)) {
-                                    MScore::setError(DEST_TREMOLO);
+                                    MScore::setError(MsError::DEST_TREMOLO);
                                     return false;
                                 }
                             }
@@ -1022,7 +1022,7 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
 {
     if (ms == 0) {
         qDebug("no application mime data");
-        MScore::setError(NO_MIME);
+        MScore::setError(MsError::NO_MIME);
         return;
     }
     if ((_selection.isSingle() || _selection.isList()) && ms->hasFormat(mimeSymbolFormat)) {
@@ -1093,7 +1093,7 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
             Element* e = _selection.element();
             if (!e->isNote() && !e->isChordRest()) {
                 qDebug("cannot paste to %s", e->name());
-                MScore::setError(DEST_NO_CR);
+                MScore::setError(MsError::DEST_NO_CR);
                 return;
             }
             if (e->isNote()) {
@@ -1102,10 +1102,10 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
             cr  = toChordRest(e);
         }
         if (cr == 0) {
-            MScore::setError(NO_DEST);
+            MScore::setError(MsError::NO_DEST);
             return;
         } else if (cr->tuplet() && cr->tick() != cr->topTuplet()->tick()) {
-            MScore::setError(DEST_TUPLET);
+            MScore::setError(MsError::DEST_TUPLET);
             return;
         } else {
             QByteArray data(ms->data(mimeStaffListFormat));
@@ -1126,7 +1126,7 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
             Element* e = _selection.element();
             if (!e->isNote() && !e->isRest() && !e->isChord()) {
                 qDebug("cannot paste to %s", e->name());
-                MScore::setError(DEST_NO_CR);
+                MScore::setError(MsError::DEST_NO_CR);
                 return;
             }
             if (e->isNote()) {
@@ -1135,7 +1135,7 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
             cr  = toChordRest(e);
         }
         if (cr == 0) {
-            MScore::setError(NO_DEST);
+            MScore::setError(MsError::NO_DEST);
             return;
         } else {
             QByteArray data(ms->data(mimeSymbolListFormat));
