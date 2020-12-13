@@ -1645,10 +1645,15 @@ static void distributeStaves(Page* page)
       int pass { 0 };
       while (!almostZero(spaceLeft) && (ngaps > 0) && (++pass < maxPasses)) {
             ngaps = 0;
-            const qreal smallest     { vgdl.smallest()         };
-            const qreal nextSmallest { vgdl.smallest(smallest) };
+            qreal smallest     { vgdl.smallest()         };
+            qreal nextSmallest { vgdl.smallest(smallest) };
             if (almostZero(smallest) || almostZero(nextSmallest))
                   break;
+
+            if ((nextSmallest - smallest) * vgdl.sumStretchFactor() > spaceLeft) {
+                  nextSmallest = smallest + spaceLeft/vgdl.sumStretchFactor();
+                  std::cout << "           nextSmallest = " << nextSmallest << std::endl;
+                  }
 
             qreal addedSpace { 0.0 };
             VerticalGapDataList modified;
@@ -1656,6 +1661,8 @@ static void distributeStaves(Page* page)
                   if (!almostZero(vgd->spacing() - smallest))
                         continue;
                   qreal step { nextSmallest - vgd->spacing() };
+                  if (step < 0.0)
+                        continue;
                   step = vgd->addSpacing(step);
                   if (!almostZero(step)) {
                         addedSpace += step * vgd->factor();
@@ -5223,7 +5230,7 @@ qreal VerticalGapDataList::sumStretchFactor() const
       {
       qreal sum { 0.0 };
       for (VerticalGapData* vsd : *this)
-                  sum += vsd->factor();
+            sum += vsd->factor();
       return sum;
       }
 
