@@ -29,7 +29,7 @@ class AbstractInspectorModel : public QObject
     Q_ENUMS(InspectorModelType)
 
 public:
-    enum InspectorSectionType {
+    enum class InspectorSectionType {
         SECTION_UNDEFINED = -1,
         SECTION_GENERAL,
         SECTION_TEXT,
@@ -140,7 +140,7 @@ private:
     Ms::Sid styleIdByPropertyId(const Ms::Pid pid) const;
 
     QString m_title;
-    InspectorSectionType m_sectionType = SECTION_UNDEFINED;
+    InspectorSectionType m_sectionType = InspectorSectionType::SECTION_UNDEFINED;
     InspectorModelType m_modelType = TYPE_UNDEFINED;
     bool m_isEmpty = false;
 };

@@ -21,7 +21,7 @@ InspectorListModel::InspectorListModel(QObject* parent)
 
 void InspectorListModel::buildModelsForSelectedElements(const QSet<Ms::ElementType>& selectedElementSet)
 {
-    static QList<AbstractInspectorModel::InspectorSectionType> persistentSectionList = { AbstractInspectorModel::SECTION_GENERAL };
+    static QList<AbstractInspectorModel::InspectorSectionType> persistentSectionList = { AbstractInspectorModel::InspectorSectionType::SECTION_GENERAL };
 
     removeUnusedModels(selectedElementSet, persistentSectionList);
 
@@ -38,8 +38,8 @@ void InspectorListModel::buildModelsForSelectedElements(const QSet<Ms::ElementTy
 
 void InspectorListModel::buildModelsForEmptySelection(const QSet<Ms::ElementType>& selectedElementSet)
 {
-    static QList<AbstractInspectorModel::InspectorSectionType> persistentSectionList = { AbstractInspectorModel::SECTION_SCORE_DISPLAY,
-                                                                                         AbstractInspectorModel::SECTION_SCORE_APPEARANCE
+    static QList<AbstractInspectorModel::InspectorSectionType> persistentSectionList = { AbstractInspectorModel::InspectorSectionType::SECTION_SCORE_DISPLAY,
+                                                                                         AbstractInspectorModel::InspectorSectionType::SECTION_SCORE_APPEARANCE
     };
 
     removeUnusedModels(selectedElementSet, persistentSectionList);
@@ -108,19 +108,19 @@ void InspectorListModel::createModelsBySectionType(const QList<AbstractInspector
         beginInsertRows(QModelIndex(), rowCount(), rowCount());
 
         switch (modelType) {
-        case SectionType::SECTION_GENERAL:
+        case AbstractInspectorModel::InspectorSectionType::SECTION_GENERAL:
             m_modelList << new GeneralSettingsModel(this, m_repository);
             break;
-        case SectionType::SECTION_TEXT:
+        case AbstractInspectorModel::InspectorSectionType::SECTION_TEXT:
             m_modelList << new TextSettingsModel(this, m_repository);
             break;
-        case SectionType::SECTION_NOTATION:
+        case AbstractInspectorModel::InspectorSectionType::SECTION_NOTATION:
             m_modelList << new NotationSettingsProxyModel(this, m_repository);
             break;
-        case AbstractInspectorModel::SECTION_SCORE_DISPLAY:
+        case AbstractInspectorModel::InspectorSectionType::SECTION_SCORE_DISPLAY:
             m_modelList << new ScoreSettingsModel(this, m_repository);
             break;
-        case AbstractInspectorModel::SECTION_SCORE_APPEARANCE:
+        case AbstractInspectorModel::InspectorSectionType::SECTION_SCORE_APPEARANCE:
             m_modelList << new ScoreAppearanceSettingsModel(this, m_repository);
             break;
         default:
