@@ -5,7 +5,7 @@
 AmbitusSettingsModel::AmbitusSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setModelType(TYPE_AMBITUS);
+    setModelType(InspectorModelType::TYPE_AMBITUS);
     setTitle(tr("Ambitus"));
     createProperties();
 

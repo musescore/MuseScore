@@ -3,7 +3,7 @@
 TextFrameSettingsModel::TextFrameSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setModelType(TYPE_TEXT_FRAME);
+    setModelType(InspectorModelType::TYPE_TEXT_FRAME);
     setTitle(tr("Text frame"));
     createProperties();
 }

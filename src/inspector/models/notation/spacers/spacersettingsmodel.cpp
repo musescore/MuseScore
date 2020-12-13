@@ -5,7 +5,7 @@
 SpacerSettingsModel::SpacerSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setModelType(TYPE_SPACER);
+    setModelType(InspectorModelType::TYPE_SPACER);
     setTitle(tr("Spacer"));
     createProperties();
 }

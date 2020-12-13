@@ -3,7 +3,7 @@
 AccidentalSettingsModel::AccidentalSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setModelType(TYPE_ACCIDENTAL);
+    setModelType(InspectorModelType::TYPE_ACCIDENTAL);
     setTitle(tr("Accidental"));
     createProperties();
 }

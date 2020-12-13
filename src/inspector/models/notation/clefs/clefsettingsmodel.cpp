@@ -3,7 +3,7 @@
 ClefSettingsModel::ClefSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setModelType(TYPE_CLEF);
+    setModelType(InspectorModelType::TYPE_CLEF);
     setTitle(tr("Clef"));
     createProperties();
 }

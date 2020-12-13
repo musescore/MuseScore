@@ -3,7 +3,7 @@
 MeasureRepeatSettingsModel::MeasureRepeatSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setModelType(TYPE_MEASURE_REPEAT);
+    setModelType(InspectorModelType::TYPE_MEASURE_REPEAT);
     setTitle(tr("Measure repeat"));
     createProperties();
 }

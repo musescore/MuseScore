@@ -5,7 +5,7 @@
 StaffTypeSettingsModel::StaffTypeSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setModelType(TYPE_STAFF_TYPE_CHANGES);
+    setModelType(InspectorModelType::TYPE_STAFF_TYPE_CHANGES);
     setTitle(tr("Staff type changes"));
     createProperties();
 }

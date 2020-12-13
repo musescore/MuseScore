@@ -6,7 +6,7 @@
 StemSettingsModel::StemSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setModelType(TYPE_STEM);
+    setModelType(InspectorModelType::TYPE_STEM);
     setTitle(tr("Stem"));
 
     createProperties();

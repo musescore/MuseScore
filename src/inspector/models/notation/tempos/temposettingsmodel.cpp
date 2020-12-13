@@ -5,7 +5,7 @@
 TempoSettingsModel::TempoSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setModelType(TYPE_TEMPO);
+    setModelType(InspectorModelType::TYPE_TEMPO);
     setTitle(tr("Tempo"));
     createProperties();
 }
