@@ -388,6 +388,7 @@ Score* MuseScore::openScore(const QString& fn, bool switchTab)
             score->updateCapo();
             score->update();
             score->styleChanged();
+            score->setLayoutAll();
             const int tabIdx = appendScore(score);
             if (switchTab)
                   setCurrentScoreView(tabIdx);
