@@ -13,8 +13,8 @@ class TimeSigMap;
 class MidiNote
 {
 public:
-    int pitch;
-    int velo;
+    int pitch = 0;
+    int velo = 0;
     ReducedFraction offTime;
     Tie* tie = nullptr;
     bool staccato = false;

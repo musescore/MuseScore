@@ -343,7 +343,7 @@ private:
                                 // 0 if this is the start of am mmrest (m_mmRest != 0)
                                 // < 0 if this measure is covered by an mmrest
 
-    int m_playbackCount;        // temp. value used in RepeatList
+    int m_playbackCount { 0 };  // temp. value used in RepeatList
                                 // counts how many times this measure was already played
 
     int m_repeatCount;          ///< end repeat marker and repeat count
