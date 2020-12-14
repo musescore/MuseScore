@@ -278,12 +278,14 @@ QRectF NotationNoteInput::cursorRect() const
     int track = inputState.track() == -1 ? 0 : inputState.track();
     int staffIdx = track / VOICES;
 
-    QRectF segmentContentRect = segment->contentRect();
-    double x = segmentContentRect.translated(segment->pagePos()).x() - 6;
-    double y = system->staffYpage(staffIdx) + system->page()->pos().y();
-    double w = segmentContentRect.width() + 12;
+    static constexpr int sideMargin = 4;
+    static constexpr int skylineMargin = 20;
 
-    double h;
+    QRectF segmentContentRect = segment->contentRect();
+    double x = segmentContentRect.translated(segment->pagePos()).x() - sideMargin;
+    double y = system->staffYpage(staffIdx) + system->page()->pos().y();
+    double w = segmentContentRect.width() + 2 * sideMargin;
+    double h = 0.0;
 
     Staff* staff = score()->staff(staffIdx);
     const Ms::StaffType* staffType = staff->staffType(inputState.tick());
@@ -298,11 +300,11 @@ QRectF NotationNoteInput::cursorRect() const
         y += staffType->physStringToYOffset(strg) * spatium;
         y -= (staffType->onLines() ? lineDist * 0.5 : lineDist);
     } else {
-        h = (lines - 1) * lineDist + 4 * spatium;
-        y -= 2.0 * spatium;
+        h = (lines - 1) * lineDist + 2 * skylineMargin;
+        y -= skylineMargin;
     }
 
-    QRectF result = QRectF(x, y, w, h);
+    QRectF result = QRectF(x, y, w, h).translated(system->page()->pos());
     return result;
 }
 

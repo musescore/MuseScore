@@ -155,8 +155,7 @@ io::path NotationConfiguration::foregroundWallpaper() const
 
 QColor NotationConfiguration::playbackCursorColor() const
 {
-    //! TODO Figure out what color to use
-    QColor c("#ff0000");
+    QColor c = selectionColor(0);
     c.setAlpha(50);
     return c;
 }

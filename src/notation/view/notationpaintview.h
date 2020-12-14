@@ -85,6 +85,11 @@ signals:
     void textEdittingStarted();
 
 private:
+    INotationPtr currentNotation() const;
+    INotationNoteInputPtr currentNotationNoteInput() const;
+    INotationElementsPtr currentNotationElements() const;
+    INotationStylePtr currentNotationStyle() const;
+
     double guiScale() const;
 
     bool canReceiveAction(const actions::ActionName& action) const override;
@@ -114,11 +119,14 @@ private:
     void adjustCanvasPosition(const QRectF& logicRect);
     void moveCanvasToPosition(const QPoint& logicPos);
 
-    void onNoteInputStateChanged();
+    void onNoteInputChanged();
     void onSelectionChanged();
 
     void onPlayingChanged();
     void movePlaybackCursor(uint32_t tick);
+
+    const Page* point2page(const QPointF& p) const;
+    QPointF alignToCurrentPageBorder(const QRectF& showRect, const QPointF& pos) const;
 
     QColor m_backgroundColor;
     notation::INotationPtr m_notation;

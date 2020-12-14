@@ -109,6 +109,16 @@ Ms::Measure* NotationElements::measure(const int measureIndex) const
     return score()->crMeasure(measureIndex);
 }
 
+std::vector<const Page*> NotationElements::pages() const
+{
+    std::vector<const Page*> result;
+    for (const Page* page: score()->pages()) {
+        result.push_back(page);
+    }
+
+    return result;
+}
+
 Ms::Page* NotationElements::page(const int pageIndex) const
 {
     if (pageIndex < 0 || pageIndex >= score()->pages().size()) {
