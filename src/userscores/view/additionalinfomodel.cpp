@@ -27,6 +27,8 @@ using namespace mu::ui;
 
 static const mu::notation::Fraction FOUR_FOUR_TIME_SIGNATURE(4, 4);
 static const mu::notation::Fraction ALLA_BREVE_TIME_SIGNATURE(2, 2);
+static const mu::notation::Fraction CUT_BACH_TIME_SIGNATURE(2, 2);
+static const mu::notation::Fraction CUT_TRIPLE_TIME_SIGNATURE(9, 8);
 static const mu::notation::Fraction DEFAULT_PICKUP_TIME_SIGNATURE(1, 4);
 
 static const QString VALUE_KEY("value");
@@ -175,6 +177,12 @@ QVariantMap AdditionalInfoModel::timeSignature() const
         return FOUR_FOUR_TIME_SIGNATURE.toMap();
     case TimeSigType::ALLA_BREVE:
         return ALLA_BREVE_TIME_SIGNATURE.toMap();
+    case TimeSigType::CUT_BACH:
+        return CUT_BACH_TIME_SIGNATURE.toMap();
+        break;
+    case TimeSigType::CUT_TRIPLE:
+        return CUT_TRIPLE_TIME_SIGNATURE.toMap();
+        break;
     case TimeSigType::NORMAL:
         break;
     }
