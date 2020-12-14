@@ -2,6 +2,12 @@
 
 using namespace deto::async;
 
+QueuedInvoker* QueuedInvoker::instance()
+{
+    static QueuedInvoker i;
+    return &i;
+}
+
 void QueuedInvoker::invoke(const std::thread::id& th, const Functor& f)
 {
     if (m_onMainThreadInvoke) {

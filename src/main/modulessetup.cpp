@@ -61,6 +61,12 @@
 //! NOTE Separately to initialize logger and profiler as early as possible
 static mu::framework::GlobalModule globalModule;
 
+ModulesSetup* ModulesSetup::instance()
+{
+    static ModulesSetup s;
+    return &s;
+}
+
 ModulesSetup::ModulesSetup()
 {
     //! NOTE `telemetry` must be first, because it install crash handler.

@@ -71,11 +71,7 @@ class Profiler
 {
 public:
 
-    static Profiler* instance()
-    {
-        static Profiler p;
-        return &p;
-    }
+    static Profiler* instance();
 
     struct Options {
         bool stepTimeEnabled{ true };

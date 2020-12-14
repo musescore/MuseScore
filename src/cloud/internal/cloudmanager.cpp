@@ -41,6 +41,14 @@ const QUrl ApiInfo::REGISTER_URL(ApiInfo::REGISTER_PAGE);
 const QUrl ApiInfo::LOGIN_URL(ApiInfo::LOGIN_PAGE);
 const QUrl ApiInfo::LOGIN_SUCCESS_URL(ApiInfo::LOGIN_SUCCESS_PAGE);
 
+const ApiInfo& ApiInfo::instance()
+{
+    if (!_instance) {
+        createInstance();
+    }
+    return *_instance;
+}
+
 //---------------------------------------------------------
 //   ApiInfo:apiInfoLocation
 //---------------------------------------------------------

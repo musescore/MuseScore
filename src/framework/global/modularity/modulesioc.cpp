@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2019 MuseScore BVBA and others
+//  Copyright (C) 2020 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -17,31 +17,12 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MODULESSETUP_H
-#define MODULESSETUP_H
+#include "modulesioc.h"
 
-#include <QList>
+using namespace mu::framework;
 
-#include "framework/global/modularity/imodulesetup.h"
-
-//---------------------------------------------------------
-//   ModulesSetup
-//---------------------------------------------------------
-
-class ModulesSetup
+ModulesIoC* ModulesIoC::instance()
 {
-public:
-    static ModulesSetup* instance();
-
-    void setup();
-    void deinit();
-
-private:
-    Q_DISABLE_COPY(ModulesSetup)
-
-    ModulesSetup();
-
-    QList<mu::framework::IModuleSetup*> m_modulesSetupList;
-};
-
-#endif // MODULESSETUP_H
+    static ModulesIoC p;
+    return &p;
+}

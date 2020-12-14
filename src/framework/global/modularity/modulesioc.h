@@ -33,11 +33,7 @@ class ModulesIoC
 {
 public:
 
-    static ModulesIoC* instance()
-    {
-        static ModulesIoC p;
-        return &p;
-    }
+    static ModulesIoC* instance();
 
     template<class I>
     void registerExportCreator(const std::string& module, IModuleExportCreator* c)

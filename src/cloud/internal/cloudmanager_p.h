@@ -60,13 +60,7 @@ class ApiInfo
     static constexpr const char* DEFAULT_UPDATE_SCORE_INFO_PATH = "/score/manage/upload/update";
 
 public:
-    static const ApiInfo& instance()
-    {
-        if (!_instance) {
-            createInstance();
-        }
-        return *_instance;
-    }
+    static const ApiInfo& instance();
 
     static constexpr const char* API_HOST = "https://api.musescore.com/";
     static constexpr const char* API_ROOT = "/v2";
