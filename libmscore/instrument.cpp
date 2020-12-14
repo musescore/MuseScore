@@ -30,6 +30,9 @@ namespace Ms {
 const char* Channel::DEFAULT_NAME = QT_TRANSLATE_NOOP("InstrumentsXML", "normal");
 //: Channel name for the chord symbols playback channel, best keep translation shorter than 11 letters
 const char* Channel::HARMONY_NAME = QT_TRANSLATE_NOOP("InstrumentsXML", "harmony");
+//: The values from default template
+const QString Instrument::DEFAULT_INSTRUMENT_ID = QString("keyboard.piano");
+const int Instrument::DEFAULT_MIDI_PROGRAM = 0;
 
 Instrument InstrumentList::defaultInstrument;
 const std::initializer_list<Channel::Prop> PartChannelSettingsLink::excerptProperties {
@@ -101,6 +104,7 @@ Instrument::Instrument(QString id)
       a->setName(Channel::DEFAULT_NAME);
       _channel.append(a);
 
+      _instrumentId = DEFAULT_INSTRUMENT_ID;
       _minPitchA   = 0;
       _maxPitchA   = 127;
       _minPitchP   = 0;
