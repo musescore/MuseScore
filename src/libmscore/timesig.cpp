@@ -309,6 +309,18 @@ void TimeSig::layout()
         ns.clear();
         ns.push_back(SymId::timeSigCutCommon);
         ds.clear();
+    } else if (sigType == TimeSigType::CUT_BACH) {
+        pz = QPointF(0.0, yoff);
+        setbbox(symBbox(SymId::timeSigCut2).translated(pz));
+        ns.clear();
+        ns.push_back(SymId::timeSigCut2);
+        ds.clear();
+    } else if (sigType == TimeSigType::CUT_TRIPLE) {
+        pz = QPointF(0.0, yoff);
+        setbbox(symBbox(SymId::timeSigCut3).translated(pz));
+        ns.clear();
+        ns.push_back(SymId::timeSigCut3);
+        ds.clear();
     } else {
         if (_numeratorString.isEmpty()) {
             ns = toTimeSigString(_numeratorString.isEmpty() ? QString::number(_sig.numerator()) : _numeratorString);
@@ -573,6 +585,12 @@ QString TimeSig::accessibleInfo() const
         break;
     case TimeSigType::ALLA_BREVE:
         timeSigString = qApp->translate("symUserNames", "Cut time");
+        break;
+    case TimeSigType::CUT_BACH:
+        timeSigString = qApp->translate("symUserNames", "Cut time (Bach)");
+        break;
+    case TimeSigType::CUT_TRIPLE:
+        timeSigString = qApp->translate("symUserNames", "Cut triple time (9/8)");
         break;
     default:
         timeSigString = QObject::tr("%1/%2 time").arg(QString::number(numerator()), QString::number(denominator()));
