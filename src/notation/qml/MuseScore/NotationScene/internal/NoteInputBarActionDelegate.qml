@@ -21,13 +21,16 @@ Item {
 
         spacing: 16
 
-        CheckBox {
+        FlatButton {
             Layout.alignment: Qt.AlignLeft
 
-            checked: Boolean(itemRole) ? itemRole.checked : false
+            normalStateColor: "transparent"
+            pressedStateColor: ui.theme.accentColor
+
+            icon: Boolean(itemRole) && itemRole.checked ? IconCode.VISIBILITY_ON : IconCode.VISIBILITY_OFF
 
             onClicked: {
-                itemRole.checked = !checked
+                itemRole.checked = !itemRole.checked
             }
         }
 
