@@ -132,11 +132,7 @@ class Logger
 {
 public:
 
-    static Logger* instance()
-    {
-        static Logger l;
-        return &l;
-    }
+    static Logger* instance();
 
     static const Type ERROR;
     static const Type WARN;

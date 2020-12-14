@@ -27,6 +27,12 @@ using namespace mu;
 using namespace mu::framework;
 using namespace mu::async;
 
+Settings* Settings::instance()
+{
+    static Settings s;
+    return &s;
+}
+
 Settings::Settings()
 {
 #if defined(WIN_PORTABLE)

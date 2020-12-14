@@ -13,11 +13,7 @@ class QueuedInvoker
 {
 public:
 
-    static QueuedInvoker* instance()
-    {
-        static QueuedInvoker i;
-        return &i;
-    }
+    static QueuedInvoker* instance();
 
     using Functor = std::function<void ()>;
 

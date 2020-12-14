@@ -271,6 +271,13 @@ LogLayout LogDest::layout() const
 }
 
 // Logger ---------------------------------
+
+Logger* Logger::instance()
+{
+    static Logger l;
+    return &l;
+}
+
 Logger::Logger()
 {
     setupDefault();

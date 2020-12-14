@@ -20,6 +20,12 @@
 
 using namespace Ms;
 
+ScorePreferences& ScorePreferences::instance()
+{
+    static ScorePreferences p;
+    return p;
+}
+
 QString ScorePreferences::backupDirPath() const
 {
     return m_backupDirPath;
