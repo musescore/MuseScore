@@ -144,6 +144,8 @@ void InputState::update(Selection& selection)
                 for (Articulation* articulation: n->chord()->articulations()) {
                     articulationsIds.insert(articulation->symId());
                 }
+
+                articulationsIds = Ms::splitArticulations(articulationsIds);
                 articulationsIds = Ms::flipArticulations(articulationsIds, Ms::Placement::ABOVE);
                 for (const SymId& articulationSymbolId: articulationsIds) {
                     if (std::find(articulationSymbolIds.begin(), articulationSymbolIds.end(),

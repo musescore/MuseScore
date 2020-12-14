@@ -215,6 +215,7 @@ public:
 
     QVector<Articulation*>& articulations() { return _articulations; }
     const QVector<Articulation*>& articulations() const { return _articulations; }
+    std::set<SymId> articulationSymbolIds() const;
     Articulation* hasArticulation(const Articulation*);
     bool hasSingleArticulation() const { return _articulations.size() == 1; }
 

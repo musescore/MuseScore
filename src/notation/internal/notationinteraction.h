@@ -169,6 +169,7 @@ private:
     void doAddSlur(const Ms::Slur* slurTemplate = nullptr);
 
     bool scoreHasMeasure() const;
+    bool notesHaveActiculation(const std::vector<Note*>& notes, SymbolId articulationSymbolId) const;
 
     bool needEndTextEditing(const std::vector<Element*>& newSelectedElements) const;
 
