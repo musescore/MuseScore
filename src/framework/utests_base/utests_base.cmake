@@ -80,23 +80,3 @@ target_link_libraries(${MODULE_TEST}
     )
 
 add_test(NAME ${MODULE_TEST} COMMAND ${MODULE_TEST})
-
-if (BUILD_PCH)
-    if (NOT MSVC)
-        set_target_properties (${MODULE_TEST} PROPERTIES COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch")
-    else (NOT MSVC)
-        set_target_properties (${MODULE_TEST} PROPERTIES COMPILE_FLAGS "${PCH_INCLUDE}" )
-    endif (NOT MSVC)
-
-    xcode_pch(${MODULE_TEST} all)
-
-    # Use MSVC pre-compiled headers
-    vstudio_pch( ${MODULE_TEST} )
-
-    # MSVC does not depend on mops1 & mops2 for PCH
-    if (NOT MSVC)
-        ADD_DEPENDENCIES(${MODULE_TEST} mops1)
-        ADD_DEPENDENCIES(${MODULE_TEST} mops2)
-    endif (NOT MSVC)
-endif(BUILD_PCH)
-

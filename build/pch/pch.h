@@ -20,72 +20,90 @@
 #ifndef MU_PCH_H
 #define MU_PCH_H
 
-// Std
-#include <string>
-#include <cstdint>
+/*
+This is not `all.h`, you don’t need to put all the includes that are used in the project here.
 
-#include <array>
-#include <vector>
-#include <list>
-#include <set>
-#include <map>
-#include <unordered_map>
+Here should be only the most frequently used includes.
+If you put a few includes here, the build will not speed up much.
+If you put a lot of includes here, then the build may also be slower than possible (due to the large .pch  file)
+So, here should be not few and not many includes :)
 
-#include <iostream>
-#include <sstream>
+It is best to use a tool to determine the most commonly used inclusions.
+See https://github.com/musescore/musescore_devtools/tree/main/include-what-you-use
+*/
 
-#include <thread>
-#include <mutex>
-#include <atomic>
 
-#include <memory>
-#include <chrono>
-#include <cassert>
-#include <functional>
+// Std includes
+#include <memory> //413
+#include <vector> //401
+#include <algorithm> //274
+#include <utility> //267
+#include <string> //236
+#include <stddef.h> //213
+#include <map> //161
+#include <stdint.h> //65
+#include <string.h> //65
+#include <set> //62
+#include <list> //61
+#include <ostream> //51
+#include <cmath> //51
+#include <stdio.h> //47
+#include <iterator> //40
+#include <functional> //38
+#include <type_traits> //30
+#include <math.h> //30
+#include <stdlib.h> //30
+#include <limits> //28
+#include <initializer_list> //28
+#include <array> //25
+#include <errno.h> //20
 
-#include <cmath>
-#include <algorithm>
-
-// Qt
-#include <QDebug>
-#include <QApplication>
-
-#include <QString>
-#include <QByteArray>
-#include <QVariant>
-
-#include <QList>
-#include <QVector>
-#include <QHash>
-#include <QMap>
-#include <QMultiMap>
-
-#include <QDateTime>
-
-#include <QFile>
-#include <QFileInfo>
-#include <QDir>
-#include <QBuffer>
-
-#include <QPoint>
-#include <QPointF>
-#include <QRect>
-#include <QRectF>
-#include <QPainter>
-#include <QPainterPath>
-
-#include <QQmlEngine>
-#include <QAbstractListModel>
-
-#include <QTextStream>
-
-#include <QJsonDocument>
-#include <QJsonArray>
-#include <QJsonObject>
-#include <QJsonParseError>
-
-#include <QXmlSimpleReader>
-#include <QXmlStreamWriter>
+// Qt includes
+#include <QString> //771
+#include <QList> //465
+#include <QVariant> //376
+#include <QByteArrayData> //266
+#include <QByteArray> //257
+#include <QPointF> //249
+#include <QStringRef> //218
+#include <QRectF> //191
+#include <QStringList> //164
+#include <QObject> //152
+#include <QVector> //143
+#include <QPainter> //139
+#include <QColor> //126
+#include <QFlags> //99
+#include <QIODevice> //92
+#include <QPen> //90
+#include <QMap> //88
+#include <QFile> //85
+#include <QLineF> //67
+#include <QChar> //66
+#include <QApplication> //61
+#include <QWidget> //52
+#include <QVariantMap> //51
+#include <QCharRef> //42
+#include <QModelIndex> //41
+#include <QFont> //40
+#include <QFileInfo> //40
+#include <QSizeF> //39
+#include <QSet> //39
+#include <QRegExp> //38
+#include <QRect> //38
+#include <QDebug> //35
+#include <QSize> //34
+#include <QUrl> //32
+#include <QTransform> //30
+#include <QDialog> //27
+#include <QXmlStreamReader> //26
+#include <QVariantList> //25
+#include <QMetaType> //25
+#include <QFontMetricsF> //24
+#include <QMultiMap> //22
+#include <QHashNode> //22
+#include <QPushButton> //22
+#include <QPixmap> //22
+#include <QXmlStreamAttributes> //22
 
 #endif //MU_PCH_H
 

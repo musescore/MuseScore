@@ -61,7 +61,7 @@ option(BUILD_UNIT_TESTS "Build gtest unit test" OFF)
 option(PACKAGE_FILE_ASSOCIATION "File types association" OFF)
 
 option(TRY_USE_CCACHE "Try use ccache" ON)
-option(BUILD_PCH "Build using precompiled headers." OFF)
+option(BUILD_PCH "Build using precompiled headers." ON)
 option(BUILD_SHARED_LIB_IN_DEBUG "Build shared libs if possible in debug" ON)
 option(QML_LOAD_FROM_SOURCE "Load qml files from source (not resource)" OFF)
 
