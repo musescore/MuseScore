@@ -1595,7 +1595,6 @@ static void distributeStaves(Page* page)
                   int endCurlyBracket  { -1   };
                   int staffNr { -1 };
                   for (SysStaff* sysStaff : *system->staves()) {
-                        sysStaff->restoreLayout();
                         Staff* staff { score->staff(++staffNr)};
                         addSpaceAroundNormalBracket |= endNormalBracket == staffNr;
                         addSpaceAroundCurlyBracket  |= endCurlyBracket == staffNr;
@@ -1662,10 +1661,8 @@ static void distributeStaves(Page* page)
             if (almostZero(smallest) || almostZero(nextSmallest))
                   break;
 
-            if ((nextSmallest - smallest) * vgdl.sumStretchFactor() > spaceLeft) {
+            if ((nextSmallest - smallest) * vgdl.sumStretchFactor() > spaceLeft)
                   nextSmallest = smallest + spaceLeft/vgdl.sumStretchFactor();
-                  std::cout << "           nextSmallest = " << nextSmallest << std::endl;
-                  }
 
             qreal addedSpace { 0.0 };
             VerticalGapDataList modified;
@@ -4680,6 +4677,7 @@ void LayoutContext::collectPage()
 
             y += distance;
             curSystem->setPos(page->lm(), y);
+            curSystem->restoreLayout2();
             page->appendSystem(curSystem);
             y += curSystem->height();
 
