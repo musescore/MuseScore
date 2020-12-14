@@ -1588,6 +1588,8 @@ static void distributeStaves(Page* page)
                   transferCurlyBracket  = false;
                   }
             else {
+                  // reset staff and system heights
+                  system->restoreLayout2();
                   bool newSystem       { true };
                   bool addSpaceAroundNormalBracket { false };
                   bool addSpaceAroundCurlyBracket  { false };
