@@ -17,6 +17,8 @@ public:
     virtual std::vector<Element*> elements(const FilterElementsOptions& elementOptions = FilterElementsOptions()) const = 0;
 
     virtual Measure* measure(const int measureIndex) const = 0;
+
+    virtual std::vector<const Page*> pages() const = 0;
 };
 
 using INotationElementsPtr = std::shared_ptr<INotationElements>;
