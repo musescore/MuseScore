@@ -100,7 +100,7 @@ private:
     bool isInstrumentChanged();
 
 private:
-    int m_staffIdx = 0;
+    int m_staffIdx = -1;
     Ms::Staff* m_staff = nullptr;
     Ms::Staff* m_orgStaff = nullptr;
     ID m_partId;

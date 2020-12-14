@@ -47,6 +47,7 @@
 #include "instruments/instrumentstypes.h"
 
 namespace mu::notation {
+using Page = Ms::Page;
 using Element = Ms::Element;
 using ElementType = Ms::ElementType;
 using Note = Ms::Note;
