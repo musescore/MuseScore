@@ -143,9 +143,7 @@ QVariant NewWorkspaceModel::createWorkspace()
     }
 
     for (WorkspaceTag tag : importedTags) {
-        AbstractDataPtr data = currentWorkspace->data(tag);
-
-        if (data) {
+        for (AbstractDataPtr data : currentWorkspace->dataList(tag)) {
             newWorkspace->addData(data);
         }
     }

@@ -48,14 +48,14 @@ AbstractDataPtrList WorkspacePaletteStream::read(IODevice& sourceDevice) const
 PaletteWorkspaceDataPtr WorkspacePaletteStream::readPalettes(Ms::XmlReader& reader) const
 {
     PaletteWorkspaceDataPtr palettes = std::make_shared<PaletteWorkspaceData>();
-    palettes->tag = WorkspaceTag::Palettes;
+    palettes->tag = tag();
     palettes->tree = std::make_shared<Ms::PaletteTree>();
     palettes->tree->read(reader);
 
     return palettes;
 }
 
-void WorkspacePaletteStream::write(AbstractDataPtrList dataList, IODevice& destinationDevice) const
+void WorkspacePaletteStream::write(const AbstractDataPtrList& dataList, IODevice& destinationDevice) const
 {
     Ms::XmlWriter writer(nullptr, &destinationDevice);
 
@@ -66,4 +66,9 @@ void WorkspacePaletteStream::write(AbstractDataPtrList dataList, IODevice& desti
         }
         palettes->tree->write(writer);
     }
+}
+
+WorkspaceTag WorkspacePaletteStream::tag() const
+{
+    return WorkspaceTag::Palettes;
 }

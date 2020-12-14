@@ -24,29 +24,40 @@
 #include "palette/palettecreator.h"
 
 using namespace mu::palette;
+using namespace Ms;
 
 void PaletteWorkspaceSetup::setup()
 {
-    using namespace Ms;
-
     if (!workspaceManager()) {
         return;
     }
 
-    Ms::PaletteWorkspace* paletteWorkspace = adapter()->paletteWorkspace();
-    auto applyWorkspaceData = [paletteWorkspace](workspace::IWorkspacePtr w) {
-                                  workspace::AbstractDataPtr data = w->data(workspace::WorkspaceTag::Palettes);
-                                  if (!data) {
-                                      LOGE() << "no palette data in workspace: " << w->name();
+    PaletteWorkspace* paletteWorkspace = adapter()->paletteWorkspace();
+    auto updateWorkspaceConnection = std::make_shared<QMetaObject::Connection>();
+
+    auto applyWorkspaceData = [paletteWorkspace, updateWorkspaceConnection](workspace::IWorkspacePtr workspace) {
+                                  workspace::AbstractDataPtr data = workspace->data(workspace::WorkspaceTag::Palettes);
+                                  PaletteWorkspaceDataPtr palette = std::dynamic_pointer_cast<PaletteWorkspaceData>(data);
+
+                                  if (!palette) {
+                                      LOGW() << "no palette data in workspace: " << workspace->name();
                                       return false;
                                   }
 
-                                  PaletteWorkspaceData* pdata = dynamic_cast<PaletteWorkspaceData*>(data.get());
-                                  IF_ASSERT_FAILED(pdata) {
-                                      return false;
+                                  paletteWorkspace->setDefaultPaletteTree(palette->tree);
+                                  paletteWorkspace->setUserPaletteTree(palette->tree);
+
+                                  if (updateWorkspaceConnection) {
+                                      QObject::disconnect(*updateWorkspaceConnection);
                                   }
 
-                                  paletteWorkspace->setDefaultPaletteTree(std::move(pdata->tree));
+                                  auto newConnection
+                                      = QObject::connect(paletteWorkspace, &PaletteWorkspace::userPaletteChanged, [workspace, palette]() {
+            workspace->addData(palette);
+        });
+
+                                  *updateWorkspaceConnection = newConnection;
+
                                   return true;
                               };
 
@@ -54,16 +65,16 @@ void PaletteWorkspaceSetup::setup()
     if (workspace.val) {
         bool ok = applyWorkspaceData(workspace.val);
         if (!ok) {
-            std::unique_ptr<PaletteTree> tree(PaletteCreator::newDefaultPaletteTree());
-            paletteWorkspace->setUserPaletteTree(std::move(tree));
+            PaletteTreePtr tree(PaletteCreator::newDefaultPaletteTree());
+            paletteWorkspace->setUserPaletteTree(tree);
         }
     }
 
     workspace.ch.onReceive(nullptr, [paletteWorkspace, applyWorkspaceData](workspace::IWorkspacePtr w) {
         bool ok = applyWorkspaceData(w);
         if (!ok) {
-            std::unique_ptr<PaletteTree> tree(PaletteCreator::newDefaultPaletteTree());
-            paletteWorkspace->setUserPaletteTree(std::move(tree));
+            PaletteTreePtr tree(PaletteCreator::newDefaultPaletteTree());
+            paletteWorkspace->setUserPaletteTree(tree);
         }
     });
 }

@@ -39,10 +39,10 @@ public:
     std::string title() const override;
 
     AbstractDataPtr data(WorkspaceTag tag, const std::string& name) const override;
+    AbstractDataPtrList dataList(WorkspaceTag tag) const override;
     void addData(AbstractDataPtr data) override;
     async::Channel<AbstractDataPtr> dataChanged() const override;
 
-    Val settingValue(const std::string& key) const override;
     std::vector<std::string> toolbarActions(const std::string& toolbarName) const override;
 
     bool isInited() const;
@@ -52,9 +52,11 @@ public:
 
 private:
     Ret readWorkspace(const QByteArray& data);
+    void clear();
 
     io::path m_filePath;
     bool m_isInited = false;
+    bool m_hasUnsavedChanges = false;
     std::string m_title;
     std::string m_source;
 
