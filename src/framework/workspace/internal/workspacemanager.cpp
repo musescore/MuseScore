@@ -133,11 +133,20 @@ Ret WorkspaceManager::createInexistentWorkspaces(const IWorkspacePtrList& newWor
     return make_ret(Ret::Code::Ok);
 }
 
-Ret WorkspaceManager::createWorkspace(const IWorkspacePtr& workspace)
+Ret WorkspaceManager::createWorkspace(IWorkspacePtr workspace)
 {
-    UNUSED(workspace)
-    NOT_IMPLEMENTED;
-    return Ret();
+    auto writable = std::dynamic_pointer_cast<Workspace>(workspace);
+    if (!writable) {
+        return make_ret(Ret::Code::Ok);
+    }
+
+    Ret ret = writable->write();
+
+    if (ret) {
+        m_workspaces.push_back(writable);
+    }
+
+    return ret;
 }
 
 void WorkspaceManager::init()

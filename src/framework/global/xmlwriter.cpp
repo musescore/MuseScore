@@ -52,6 +52,11 @@ XmlWriter::~XmlWriter()
 
 void XmlWriter::writeStartDocument(std::string_view version)
 {
+    if (version.empty()) {
+        m_writer->writeStartDocument();
+        return;
+    }
+
     m_writer->writeStartDocument(version.data());
 }
 

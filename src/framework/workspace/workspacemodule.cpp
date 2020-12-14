@@ -28,6 +28,7 @@
 #include "internal/workspaceconfiguration.h"
 #include "internal/workspacemanager.h"
 #include "internal/workspacedatastreamregister.h"
+#include "internal/workspacecreator.h"
 
 #include "internal/workspacesettingsstream.h"
 #include "internal/workspacetoolbarstream.h"
@@ -61,6 +62,7 @@ void WorkspaceModule::registerExports()
     ioc()->registerExport<IWorkspaceManager>(moduleName(), s_manager);
     ioc()->registerExport<WorkspaceDataStreamRegister>(moduleName(), s_streamRegister);
     ioc()->registerExport<ISettingsSource>(moduleName(), s_settingsSource);
+    ioc()->registerExport<IWorkspaceCreator>(moduleName(), std::make_shared<WorkspaceCreator>());
 }
 
 void WorkspaceModule::resolveImports()

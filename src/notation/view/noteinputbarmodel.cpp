@@ -100,10 +100,10 @@ void NoteInputBarModel::load()
 
     emit countChanged(rowCount());
 
-    RetValCh<std::shared_ptr<IWorkspace> > workspace = workspaceManager()->currentWorkspace();
+    RetValCh<IWorkspacePtr> workspace = workspaceManager()->currentWorkspace();
 
     if (workspace.ret) {
-        workspace.ch.onReceive(this, [this](std::shared_ptr<IWorkspace>) {
+        workspace.ch.onReceive(this, [this](IWorkspacePtr) {
             load();
         });
 

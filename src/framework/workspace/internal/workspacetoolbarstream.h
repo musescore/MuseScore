@@ -23,6 +23,7 @@
 
 namespace mu::framework {
 class XmlReader;
+class XmlWriter;
 }
 
 namespace mu::workspace {
@@ -30,10 +31,13 @@ class WorkspaceToolbarStream : public IWorkspaceDataStream
 {
 public:
     AbstractDataPtrList read(framework::IODevice& sourceDevice) const override;
-    void write(AbstractDataPtrList dataList, framework::IODevice& destinationDevice) const override;
+    void write(const AbstractDataPtrList& toolbars, framework::IODevice& destinationDevice) const override;
+
+    WorkspaceTag tag() const override;
 
 private:
     AbstractDataPtr readToolbar(framework::XmlReader& reader) const;
+    void writeToolbar(framework::XmlWriter& writer, const AbstractDataPtr& data) const;
 };
 }
 

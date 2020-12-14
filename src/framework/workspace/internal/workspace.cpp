@@ -26,11 +26,17 @@
 #include "global/xmlwriter.h"
 
 #include <QBuffer>
+#include <QDomDocument>
 
 using namespace mu;
 using namespace mu::workspace;
 using namespace mu::framework;
 
+#define MSC_VERSION "3.01" // FIXME
+
+static constexpr std::string_view MUSESCORE_TAG("museScore");
+static constexpr std::string_view VERSION_ATTRIBUTE("version");
+static constexpr std::string_view WORKSPACE_TAG("workspace");
 static constexpr std::string_view SOURCE_TAG("source");
 
 Workspace::Workspace(const io::path& filePath)
@@ -58,39 +64,24 @@ AbstractDataPtr Workspace::data(WorkspaceTag tag, const std::string& name) const
     return nullptr;
 }
 
-Val Workspace::settingValue(const std::string& key) const
+AbstractDataPtrList Workspace::dataList(WorkspaceTag tag) const
 {
-    std::shared_ptr<AbstractData> d = data(WorkspaceTag::Settings, "");
-    if (!d) {
-        return Val();
+    AbstractDataPtrList result;
+
+    for (auto it = m_data.cbegin(); it != m_data.cend(); ++it) {
+        if (it->first.tag == tag) {
+            result.push_back(it->second);
+        }
     }
 
-    SettingsData* sd = dynamic_cast<SettingsData*>(d.get());
-    IF_ASSERT_FAILED(sd) {
-        return Val();
-    }
-
-    auto it = sd->vals.find(key);
-    if (it == sd->vals.end()) {
-        return Val();
-    }
-
-    return it->second;
+    return result;
 }
 
 std::vector<std::string> Workspace::toolbarActions(const std::string& toolbarName) const
 {
-    AbstractDataPtr d = data(WorkspaceTag::Toolbar, toolbarName);
-    if (!d) {
-        return std::vector<std::string>();
-    }
-
-    ToolbarData* td = dynamic_cast<ToolbarData*>(d.get());
-    IF_ASSERT_FAILED(td) {
-        return std::vector<std::string>();
-    }
-
-    return td->actions;
+    AbstractDataPtr data = this->data(WorkspaceTag::Toolbar, toolbarName);
+    ToolbarDataPtr toolbar = std::dynamic_pointer_cast<ToolbarData>(data);
+    return toolbar ? toolbar->actions : std::vector<std::string>();
 }
 
 async::Channel<AbstractDataPtr> Workspace::dataChanged() const
@@ -104,6 +95,7 @@ void Workspace::addData(AbstractDataPtr data)
     m_data[key] = data;
 
     m_dataChanged.send(data);
+    m_hasUnsavedChanges = true;
 }
 
 bool Workspace::isInited() const
@@ -118,6 +110,8 @@ io::path Workspace::filePath() const
 
 Ret Workspace::read()
 {
+    clear();
+
     WorkspaceFile file(m_filePath);
     QByteArray data = file.readRootFile();
     if (data.isEmpty()) {
@@ -132,6 +126,13 @@ Ret Workspace::read()
     m_isInited = true;
 
     return make_ret(Ret::Code::Ok);
+}
+
+void Workspace::clear()
+{
+    m_data.clear();
+    m_hasUnsavedChanges = false;
+    m_isInited = false;
 }
 
 Ret Workspace::readWorkspace(const QByteArray& xmlData)
@@ -150,10 +151,8 @@ Ret Workspace::readWorkspace(const QByteArray& xmlData)
         }
     }
 
-    for (IWorkspaceDataStreamPtr stream : streamRegister()->streams()) {
-        AbstractDataPtrList dataList = stream->read(buffer);
-
-        for (AbstractDataPtr data : dataList) {
+    for (const IWorkspaceDataStreamPtr& stream : streamRegister()->streams()) {
+        for (AbstractDataPtr data : stream->read(buffer)) {
             DataKey key { data->tag, data->name };
             m_data[key] = data;
         }
@@ -166,5 +165,44 @@ Ret Workspace::readWorkspace(const QByteArray& xmlData)
 
 Ret Workspace::write()
 {
-    return Ret();
+    if (!m_hasUnsavedChanges) {
+        return make_ret(Ret::Code::Ok);
+    }
+
+    QBuffer buffer;
+    buffer.open(IODevice::WriteOnly);
+    XmlWriter writer(&buffer);
+
+    writer.writeStartDocument();
+    writer.writeStartElement(MUSESCORE_TAG);
+    writer.writeAttribute(VERSION_ATTRIBUTE, MSC_VERSION);
+    writer.writeStartElement(WORKSPACE_TAG);
+
+    //! NOTE: at least one element should be written
+    //! before any stream will start writing
+    //! otherwise tags in output file will be closed incorrectly
+    writer.writeTextElement(SOURCE_TAG, m_source);
+
+    for (const IWorkspaceDataStreamPtr& stream : streamRegister()->streams()) {
+        AbstractDataPtrList dataList = this->dataList(stream->tag());
+        stream->write(dataList, buffer);
+    }
+
+    writer.writeEndElement();
+    writer.writeEndElement();
+    writer.writeEndDocument();
+
+    //! NOTE: correct formatting
+    buffer.seek(0);
+    QDomDocument document;
+    document.setContent(buffer.data());
+    constexpr int FORMATTING_INDENT = 4;
+    QByteArray xmlData = document.toByteArray(FORMATTING_INDENT);
+
+    WorkspaceFile file(m_filePath);
+    Ret ret = file.writeRootFile(name() + ".xml", xmlData);
+    buffer.close();
+    m_hasUnsavedChanges = false;
+
+    return ret;
 }
