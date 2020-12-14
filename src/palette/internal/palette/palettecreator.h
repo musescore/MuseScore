@@ -22,6 +22,8 @@
 
 #include "libmscore/mscore.h"
 
+#include "palettetree.h"
+
 #include "modularity/ioc.h"
 #include "ipaletteadapter.h"
 #include "ipaletteconfiguration.h"
@@ -93,7 +95,7 @@ public:
     static PalettePanel* newBarLinePalettePanel();
     static PalettePanel* newLinesPalettePanel();
     static PalettePanel* newFretboardDiagramPalettePanel();
-    static PaletteTree* newMasterPaletteTree();
+    static Ms::PaletteTreePtr newMasterPaletteTree();
     static PaletteTree* newDefaultPaletteTree();
 };
 

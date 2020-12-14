@@ -265,8 +265,8 @@ public:
 
     bool paletteChanged() const { return userPalette->paletteTreeChanged(); }
 
-    void setUserPaletteTree(std::unique_ptr<PaletteTree> tree);
-    void setDefaultPaletteTree(std::unique_ptr<PaletteTree> tree);
+    void setUserPaletteTree(PaletteTreePtr tree);
+    void setDefaultPaletteTree(PaletteTreePtr tree);
     void write(XmlWriter&) const;
     bool read(XmlReader&);
 
