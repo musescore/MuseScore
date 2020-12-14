@@ -26,7 +26,7 @@
 # set(MODULE_QRC somename.qrc)  - set resource (qrc) file
 # set(MODULE_UI ...)            - set ui headers
 # set(MODULE_QML_IMPORT ...)    - set Qml import for QtCreator (so that there is code highlighting, jump, etc.)
-# set(MODULE_USE_PCH_NONE ON)   - set for disable PCH
+# set(MODULE_USE_PCH_NONE ON)   - set for disable PCH for module
 
 
 # After all the settings you need to do:
@@ -57,19 +57,18 @@ if (BUILD_SHARED_LIBS)
     endif (NOT MSVC)
 endif()
 
-# Default use std pch
-if (MODULE_USE_PCH_NONE)
-    # note
-else()
-
-    if(NOT ${MODULE} MATCHES global)
-        target_precompile_headers(${MODULE} REUSE_FROM global)
-        target_compile_definitions(${MODULE} PRIVATE global_EXPORTS=1)
+if (BUILD_PCH)
+    if (MODULE_USE_PCH_NONE)
+        # disables pch for current module
     else()
-        target_precompile_headers(${MODULE} PRIVATE ${PROJECT_SOURCE_DIR}/build/pch/pch.h)
+        if(NOT ${MODULE} MATCHES global)
+            target_precompile_headers(${MODULE} REUSE_FROM global)
+            target_compile_definitions(${MODULE} PRIVATE global_EXPORTS=1)
+        else()
+            target_precompile_headers(${MODULE} PRIVATE ${PROJECT_SOURCE_DIR}/build/pch/pch.h)
+        endif()
     endif()
-
-endif()
+endif(BUILD_PCH)
 
 target_sources(${MODULE} PRIVATE
     ${ui_headers}
