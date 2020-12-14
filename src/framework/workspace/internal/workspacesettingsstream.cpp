@@ -19,6 +19,8 @@
 #include "workspacesettingsstream.h"
 
 #include "global/xmlreader.h"
+#include "global/xmlwriter.h"
+
 #include "workspacetypes.h"
 
 #include "log.h"
@@ -27,8 +29,8 @@ using namespace mu::workspace;
 using namespace mu::framework;
 
 static constexpr std::string_view SETTINGS_TAG("Preferences");
-static constexpr std::string_view SETTING_TAG("Preference");
-static constexpr std::string_view SETTING_NAME_TAG("name");
+static constexpr std::string_view SETTING_ELEMENT_TAG("Preference");
+static constexpr std::string_view NAME_ATTRIBUTE("name");
 
 AbstractDataPtrList WorkspaceSettingsStream::read(IODevice& sourceDevice) const
 {
@@ -48,11 +50,11 @@ AbstractDataPtrList WorkspaceSettingsStream::read(IODevice& sourceDevice) const
 SettingsDataPtr WorkspaceSettingsStream::readSettings(XmlReader& reader) const
 {
     SettingsDataPtr settings = std::make_shared<SettingsData>();
-    settings->tag = WorkspaceTag::Settings;
+    settings->tag = tag();
 
     while (reader.readNextStartElement()) {
-        if (reader.tagName() != SETTING_TAG) {
-            std::string key = reader.attribute(SETTING_NAME_TAG);
+        if (reader.tagName() != SETTING_ELEMENT_TAG) {
+            std::string key = reader.attribute(NAME_ATTRIBUTE);
             Val val(reader.readString());
             settings->vals.insert({ key, val });
         } else {
@@ -63,8 +65,39 @@ SettingsDataPtr WorkspaceSettingsStream::readSettings(XmlReader& reader) const
     return settings;
 }
 
-void WorkspaceSettingsStream::write(AbstractDataPtrList dataList, IODevice& destinationDevice) const
+void WorkspaceSettingsStream::write(const AbstractDataPtrList& settingsList, IODevice& destinationDevice) const
 {
-    UNUSED(destinationDevice)
-    UNUSED(dataList)
+    XmlWriter writer(&destinationDevice);
+
+    for (const AbstractDataPtr& settings : settingsList) {
+        writeSettings(writer, settings);
+    }
+}
+
+void WorkspaceSettingsStream::writeSettings(XmlWriter& writer, const AbstractDataPtr& data) const
+{
+    SettingsDataPtr settings = std::dynamic_pointer_cast<SettingsData>(data);
+    IF_ASSERT_FAILED(settings) {
+        return;
+    }
+
+    writer.writeStartElement(SETTINGS_TAG);
+
+    for (auto it = settings->vals.begin(); it != settings->vals.end(); ++it) {
+        if (it->second.isNull()) {
+            continue;
+        }
+
+        writer.writeStartElement(SETTING_ELEMENT_TAG);
+        writer.writeAttribute(NAME_ATTRIBUTE, it->first);
+        writer.writeCharacters(it->second.toString());
+        writer.writeEndElement();
+    }
+
+    writer.writeEndElement();
+}
+
+WorkspaceTag WorkspaceSettingsStream::tag() const
+{
+    return WorkspaceTag::Settings;
 }

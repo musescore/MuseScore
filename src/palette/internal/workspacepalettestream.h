@@ -39,7 +39,9 @@ class WorkspacePaletteStream : public workspace::IWorkspaceDataStream
 {
 public:
     workspace::AbstractDataPtrList read(framework::IODevice& sourceDevice) const override;
-    void write(workspace::AbstractDataPtrList dataList, framework::IODevice& destinationDevice) const override;
+    void write(const workspace::AbstractDataPtrList& dataList, framework::IODevice& destinationDevice) const override;
+
+    workspace::WorkspaceTag tag() const override;
 
 private:
     PaletteWorkspaceDataPtr readPalettes(Ms::XmlReader& reader) const;

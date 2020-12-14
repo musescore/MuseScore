@@ -89,11 +89,6 @@ Ms::PaletteWorkspace* MU4PaletteAdapter::paletteWorkspace() const
         m_paletteWorkspace = new PaletteWorkspace(emptyModel, masterPaletteModel, /* parent */ nullptr);
         emptyModel->setParent(m_paletteWorkspace);
         masterPaletteModel->setParent(m_paletteWorkspace);
-
-//        if (WorkspacesManager::currentWorkspace()) {
-//            connect(paletteWorkspace, &PaletteWorkspace::userPaletteChanged,
-//                    WorkspacesManager::currentWorkspace(), QOverload<>::of(&Workspace::setDirty), Qt::UniqueConnection);
-//        }
     }
 
     return m_paletteWorkspace;

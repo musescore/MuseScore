@@ -19,6 +19,8 @@
 #include "workspacetoolbarstream.h"
 
 #include "global/xmlreader.h"
+#include "global/xmlwriter.h"
+
 #include "workspacetypes.h"
 
 #include "log.h"
@@ -53,7 +55,7 @@ AbstractDataPtr WorkspaceToolbarStream::readToolbar(XmlReader& reader) const
 {
     ToolbarDataPtr toolbar = std::make_shared<ToolbarData>();
 
-    toolbar->tag = WorkspaceTag::Toolbar;
+    toolbar->tag = tag();
     toolbar->name = reader.attribute(TOOLBAR_NAME_TAG);
 
     while (reader.readNextStartElement()) {
@@ -67,8 +69,33 @@ AbstractDataPtr WorkspaceToolbarStream::readToolbar(XmlReader& reader) const
     return toolbar;
 }
 
-void WorkspaceToolbarStream::write(AbstractDataPtrList dataList, IODevice& destinationDevice) const
+void WorkspaceToolbarStream::write(const AbstractDataPtrList& toolbars, IODevice& destinationDevice) const
 {
-    UNUSED(destinationDevice)
-    UNUSED(dataList)
+    XmlWriter writer(&destinationDevice);
+
+    for (const AbstractDataPtr& toolbar : toolbars) {
+        writeToolbar(writer, toolbar);
+    }
+}
+
+void WorkspaceToolbarStream::writeToolbar(XmlWriter& writer, const AbstractDataPtr& data) const
+{
+    ToolbarDataPtr toolbar = std::dynamic_pointer_cast<ToolbarData>(data);
+    IF_ASSERT_FAILED(toolbar) {
+        return;
+    }
+
+    writer.writeStartElement(TOOLBAR_TAG);
+    writer.writeAttribute(TOOLBAR_NAME_TAG, toolbar->name);
+
+    for (const std::string& actionName : toolbar->actions) {
+        writer.writeTextElement(ACTION_TAG, actionName);
+    }
+
+    writer.writeEndElement();
+}
+
+WorkspaceTag WorkspaceToolbarStream::tag() const
+{
+    return WorkspaceTag::Toolbar;
 }

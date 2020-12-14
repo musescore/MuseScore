@@ -19,8 +19,8 @@
 #ifndef MU_WORKSPACE_WORKSPACEFILE_H
 #define MU_WORKSPACE_WORKSPACEFILE_H
 
-#include "io/path.h"
-#include "ret.h"
+#include "system/ifilesystem.h"
+#include "modularity/ioc.h"
 
 class MQZipReader;
 class MQZipWriter;
@@ -29,26 +29,28 @@ class QByteArray;
 namespace mu::workspace {
 class WorkspaceFile
 {
+    INJECT(workspace, framework::IFileSystem, fileSystem)
+
 public:
     WorkspaceFile(const io::path& filePath);
 
     QByteArray readRootFile();
-    bool writeRootFile(const std::string& name, const QByteArray& file);
+    bool writeRootFile(const std::string& name, const QByteArray& data);
 
 private:
-    struct MetaInf
+    struct MetaInfo
     {
         void write(MQZipWriter& zip);
         bool read(const MQZipReader& zip);
 
-        void setRootfile(const std::string& name);
-        std::string rootfile() const;
+        void setRootFile(const std::string& name);
+        std::string rootFile() const;
 
     private:
         void readContainer(const QByteArray& data);
         void writeContainer(QByteArray* data) const;
 
-        std::string m_rootfile;
+        std::string m_rootFile;
     };
 
     io::path m_filePath;

@@ -47,7 +47,7 @@ mu::Val WorkspaceSettingsSource::value(const std::string& key) const
     return it->second;
 }
 
-void WorkspaceSettingsSource::setValue(const std::string &key, const Val& value)
+void WorkspaceSettingsSource::setValue(const std::string& key, const Val& value)
 {
     if (!m_currentWorkspace) {
         return;

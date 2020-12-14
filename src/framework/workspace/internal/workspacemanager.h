@@ -52,7 +52,7 @@ private:
     bool canRemoveWorkspace(const std::string& workspaceName) const;
 
     Ret createInexistentWorkspaces(const IWorkspacePtrList& newWorkspaceList);
-    Ret createWorkspace(const IWorkspacePtr& workspace);
+    Ret createWorkspace(IWorkspacePtr workspace);
 
     io::paths findWorkspaceFiles() const;
     void setupCurrentWorkspace();
