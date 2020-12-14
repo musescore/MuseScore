@@ -28,6 +28,7 @@
 #include "modularity/ioc.h"
 #include "ipaletteadapter.h"
 #include "ipaletteconfiguration.h"
+
 #include "iinteractive.h"
 
 namespace Ms {
@@ -128,7 +129,7 @@ signals:
 
 public:
     Palette(QWidget* parent = 0);
-    Palette(std::unique_ptr<PalettePanel>, QWidget* parent = nullptr);
+    Palette(PalettePanelPtr, QWidget* parent = nullptr);
     virtual ~Palette();
 
     void nextPaletteElement();

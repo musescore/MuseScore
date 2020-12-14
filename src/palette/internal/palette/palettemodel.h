@@ -112,15 +112,15 @@ public:
         PaletteContentTypeRole,
         CellActiveRole
     };
-    Q_ENUM(PaletteTreeModelRoles);
+    Q_ENUM(PaletteTreeModelRoles)
 
 private:
-    std::unique_ptr<PaletteTree> _paletteTree;
+    PaletteTreePtr _paletteTree;
     bool _treeChanged = false;
     bool _treeChangedSignalBlocked = false;
 
-    std::vector<std::unique_ptr<PalettePanel> >& palettes() { return _paletteTree->palettes; }
-    const std::vector<std::unique_ptr<PalettePanel> >& palettes() const { return _paletteTree->palettes; }
+    std::vector<PalettePanelPtr>& palettes() { return _paletteTree->palettes; }
+    const std::vector<PalettePanelPtr>& palettes() const { return _paletteTree->palettes; }
 
     PalettePanel* iptrToPalettePanel(void* iptr, int* idx = nullptr);
     const PalettePanel* iptrToPalettePanel(void* iptr, int* idx = nullptr) const
@@ -140,13 +140,11 @@ signals:
     void treeChanged();
 
 public:
-    explicit PaletteTreeModel(std::unique_ptr<PaletteTree> tree, QObject* parent = nullptr);
-    explicit PaletteTreeModel(PaletteTree* tree, QObject* parent = nullptr)
-        : PaletteTreeModel(std::unique_ptr<PaletteTree>(tree), parent) {}
+    explicit PaletteTreeModel(PaletteTreePtr tree, QObject* parent = nullptr);
 
     bool blockTreeChanged(bool block);
 
-    void setPaletteTree(std::unique_ptr<PaletteTree> tree);
+    void setPaletteTree(PaletteTreePtr tree);
     const PaletteTree* paletteTree() const { return _paletteTree.get(); }
 
     bool paletteTreeChanged() const { return _treeChanged; }
@@ -158,7 +156,6 @@ public:
     int columnCount(const QModelIndex& parent = QModelIndex()) const override;
     QVariant data(const QModelIndex& index, int role) const override;
     bool setData(const QModelIndex& index, const QVariant& value, int role) override;
-//       QVariant headerData(int section, Qt::Orientation orientation, int role) const override // TODO: headerData: palette name?
 
     QHash<int, QByteArray> roleNames() const override;
 
@@ -184,7 +181,7 @@ public:
     PalettePanel* findPalettePanel(const QModelIndex& index);
     PaletteCellConstPtr findCell(const QModelIndex&) const;
     PaletteCellPtr findCell(const QModelIndex& index);
-    bool insertPalettePanel(std::unique_ptr<PalettePanel> pp, int row, const QModelIndex& parent = QModelIndex());
+    bool insertPalettePanel(PalettePanelPtr pp, int row, const QModelIndex& parent = QModelIndex());
 
     void updateCellsState(const Selection&);
     void retranslate();

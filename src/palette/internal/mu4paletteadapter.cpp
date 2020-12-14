@@ -83,7 +83,7 @@ bool MU4PaletteAdapter::applyPaletteElement(Ms::Element* element, Qt::KeyboardMo
 Ms::PaletteWorkspace* MU4PaletteAdapter::paletteWorkspace() const
 {
     if (!m_paletteWorkspace) {
-        PaletteTreeModel* emptyModel = new PaletteTreeModel(new PaletteTree);
+        PaletteTreeModel* emptyModel = new PaletteTreeModel(std::make_shared<PaletteTree>());
         PaletteTreeModel* masterPaletteModel = new PaletteTreeModel(PaletteCreator::newMasterPaletteTree());
 
         m_paletteWorkspace = new PaletteWorkspace(emptyModel, masterPaletteModel, /* parent */ nullptr);

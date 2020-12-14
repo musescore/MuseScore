@@ -60,6 +60,7 @@
 #include "../palette_config.h"
 
 using namespace mu::framework;
+using namespace mu::palette;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -110,7 +111,7 @@ Palette::Palette(QWidget* parent)
     setObjectName("palette-cells");
 }
 
-Palette::Palette(std::unique_ptr<PalettePanel> pp, QWidget* parent)
+Palette::Palette(PalettePanelPtr pp, QWidget* parent)
     : Palette(parent)
 {
     setName(pp->name());
@@ -122,7 +123,7 @@ Palette::Palette(std::unique_ptr<PalettePanel> pp, QWidget* parent)
 
     const auto allCells = pp->takeCells(0, pp->ncells());
     for (const PaletteCellPtr& cell : allCells) {
-        Element* e = (cell.use_count() == 1) ? cell->element.release() : (cell->element ? cell->element->clone() : nullptr);
+        Element* e = (cell.use_count() == 1) ? cell->element.get() : (cell->element ? cell->element->clone() : nullptr);
         if (e) {
             PaletteCell* newCell = append(e, cell->name, cell->tag, cell->mag);
             newCell->drawStaff = cell->drawStaff;
@@ -847,7 +848,7 @@ void Palette::paintPaletteElement(void* data, Element* element)
 void Palette::paintEvent(QPaintEvent* /*event*/)
 {
     qreal _spatium = gscore->spatium();
-    qreal magS     = mu::palette::PALETTE_SPATIUM * extraMag * paletteScaling();
+    qreal magS     = PALETTE_SPATIUM * extraMag * paletteScaling();
     qreal mag      = magS / _spatium;
     gscore->setSpatium(SPATIUM20);
 
@@ -1000,7 +1001,7 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
 QPixmap Palette::pixmap(int paletteIdx) const
 {
     qreal _spatium = gscore->spatium();
-    qreal magS     = mu::palette::PALETTE_SPATIUM * extraMag * paletteScaling();
+    qreal magS     = PALETTE_SPATIUM * extraMag * paletteScaling();
     qreal mag      = magS / _spatium;
     PaletteCell* c = cellAt(paletteIdx);
     if (!c || !c->element) {
@@ -1281,7 +1282,7 @@ void Palette::write(const QString& p)
     }
     QBuffer cbuf;
     cbuf.open(QIODevice::ReadWrite);
-    XmlWriter xml(gscore, &cbuf);
+    XmlWriter xml(nullptr, &cbuf);
     xml.header();
     xml.stag("container");
     xml.stag("rootfiles");
@@ -1306,7 +1307,7 @@ void Palette::write(const QString& p)
     {
         QBuffer cbuf1;
         cbuf1.open(QIODevice::ReadWrite);
-        XmlWriter xml1(gscore, &cbuf1);
+        XmlWriter xml1(nullptr, &cbuf1);
         xml1.header();
         xml1.stag("museScore version=\"" MSC_VERSION "\"");
         write(xml1);
@@ -1450,7 +1451,7 @@ int Palette::heightForWidth(int w) const
     if (rows <= 0) {
         rows = 1;
     }
-    qreal magS = mu::palette::PALETTE_SPATIUM * extraMag * paletteScaling();
+    qreal magS = PALETTE_SPATIUM * extraMag * paletteScaling();
     int h = lrint(_yOffset * 2 * magS);
     return rows * vgridM + h;
 }
