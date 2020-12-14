@@ -279,9 +279,6 @@ class Instrument {
       void operator=(const Instrument&);
       ~Instrument();
 
-      static const QString DEFAULT_INSTRUMENT_ID;
-      static const int DEFAULT_MIDI_PROGRAM;
-
       void read(XmlReader&, Part *part);
       bool readProperties(XmlReader&, Part* , bool* customDrumset);
       void write(XmlWriter& xml, const Part* part) const;

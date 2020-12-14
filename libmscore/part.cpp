@@ -254,12 +254,7 @@ void Part::setMidiProgram(int program, int bank)
 
 int Part::midiProgram() const
       {
-      int result = instrument()->playbackChannel(0, masterScore())->program();
-
-      if (result < 0 || result > 128)
-            return Instrument::DEFAULT_MIDI_PROGRAM;
-
-      return result;
+      return instrument()->playbackChannel(0, masterScore())->program();
       }
 
 //---------------------------------------------------------
