@@ -2997,11 +2997,11 @@ void Chord::updateArticulations(const std::set<SymId>& newArticulationIds, Artic
         score()->undoRemoveElement(articulation);
     }
 
-    std::set<SymId> articulationIds = splitArticulations(currentArticulationIds);
-    articulationIds = flipArticulations(articulationIds, Placement::ABOVE);
+    std::set<SymId> articulationIds = flipArticulations(currentArticulationIds, Placement::ABOVE);
+    articulationIds = splitArticulations(articulationIds);
 
-    std::set<SymId> _newArticulationIds = splitArticulations(newArticulationIds);
-    _newArticulationIds = flipArticulations(_newArticulationIds, Placement::ABOVE);
+    std::set<SymId> _newArticulationIds = flipArticulations(newArticulationIds, Placement::ABOVE);
+    _newArticulationIds = splitArticulations(_newArticulationIds);
 
     for (const SymId& articulationId: _newArticulationIds) {
         articulationIds = Ms::updateArticulations(articulationIds, articulationId, updateMode);
@@ -3967,6 +3967,16 @@ void Chord::layoutArticulations3(Slur* slur)
             }
         }
     }
+}
+
+std::set<SymId> Chord::articulationSymbolIds() const
+{
+    std::set<SymId> result;
+    for (const Articulation* articulation: _articulations) {
+        result.insert(articulation->symId());
+    }
+
+    return result;
 }
 
 //---------------------------------------------------------

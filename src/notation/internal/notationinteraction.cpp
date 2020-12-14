@@ -1335,6 +1335,23 @@ bool NotationInteraction::scoreHasMeasure() const
     return true;
 }
 
+bool NotationInteraction::notesHaveActiculation(const std::vector<Note*>& notes, SymbolId articulationSymbolId) const
+{
+    for (Note* note: notes) {
+        Chord* chord = note->chord();
+
+        std::set<SymId> chordArticulations = chord->articulationSymbolIds();
+        chordArticulations = Ms::flipArticulations(chordArticulations, Ms::Placement::ABOVE);
+        chordArticulations = Ms::splitArticulations(chordArticulations);
+
+        if (chordArticulations.find(articulationSymbolId) == chordArticulations.end()) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 //! NOTE Copied from ScoreView::dragLeaveEvent
 void NotationInteraction::endDrop()
 {
@@ -2007,10 +2024,20 @@ void NotationInteraction::changeSelectedNotesArticulation(SymbolId articulationS
 {
     std::vector<Ms::Note*> notes = score()->selection().noteList();
 
+    auto updateMode = notesHaveActiculation(notes, articulationSymbolId)
+                      ? ArticulationsUpdateMode::Remove : ArticulationsUpdateMode::Insert;
+
     startEdit();
-    for (Ms::Note* note: notes) {
-        Ms::Chord* chord = note->chord();
-        chord->updateArticulations({ articulationSymbolId }, Ms::ArticulationsUpdateMode::Remove);
+    std::set<Chord*> chords;
+    for (Note* note: notes) {
+        Chord* chord = note->chord();
+        if (chords.find(chord) == chords.end()) {
+            chords.insert(chord);
+        }
+    }
+
+    for (Chord* chord: chords) {
+        chord->updateArticulations({ articulationSymbolId }, updateMode);
     }
     apply();
 

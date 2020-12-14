@@ -39,11 +39,9 @@ NotationNoteInput::NotationNoteInput(const IGetScore* getScore, INotationInterac
     m_scoreCallbacks = new ScoreCallbacks();
 
     m_interaction->selectionChanged().onNotify(this, [this]() {
-        updateInputState();
-    });
-
-    m_undoStack->stackChanged().onNotify(this, [this]() {
-        updateInputState();
+        if (!isNoteInputMode()) {
+            updateInputState();
+        }
     });
 }
 
@@ -220,7 +218,8 @@ void NotationNoteInput::setArticulation(SymbolId articulationSymbolId)
 {
     Ms::InputState& inputState = score()->inputState();
 
-    std::set<SymbolId> articulations = Ms::updateArticulations(inputState.articulationIds(), articulationSymbolId);
+    std::set<SymbolId> articulations = Ms::updateArticulations(
+        inputState.articulationIds(), articulationSymbolId, Ms::ArticulationsUpdateMode::Remove);
     inputState.setArticulationIds(articulations);
 
     notifyAboutStateChanged();

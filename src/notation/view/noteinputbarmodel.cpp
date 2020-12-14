@@ -160,6 +160,10 @@ void NoteInputBarModel::onNotationChanged()
         interaction()->selectionChanged().onNotify(this, [this]() {
             updateState();
         });
+
+        undoStack()->stackChanged().onNotify(this, [this]() {
+            updateState();
+        });
     }
 
     updateState();
@@ -572,6 +576,11 @@ INotationInteractionPtr NoteInputBarModel::interaction() const
 INotationSelectionPtr NoteInputBarModel::selection() const
 {
     return interaction() ? interaction()->selection() : nullptr;
+}
+
+INotationUndoStackPtr NoteInputBarModel::undoStack() const
+{
+    return notation() ? notation()->undoStack() : nullptr;
 }
 
 INotationNoteInputPtr NoteInputBarModel::noteInput() const

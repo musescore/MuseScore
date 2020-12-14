@@ -106,6 +106,8 @@ private:
     INotationNoteInputPtr noteInput() const;
     INotationInteractionPtr interaction() const;
     INotationSelectionPtr selection() const;
+    INotationUndoStackPtr undoStack() const;
+
     int resolveCurrentVoiceIndex() const;
     std::set<SymbolId> resolveCurrentArticulations() const;
     bool resolveRestSelected() const;
