@@ -35,11 +35,7 @@ class ActionEventObserver : public QObject
     INJECT(telemetry, ITelemetryService, telemetryService)
 
 public:
-    static ActionEventObserver* instance()
-    {
-        static ActionEventObserver s;
-        return &s;
-    }
+    static ActionEventObserver* instance();
 
     bool eventFilter(QObject* watched, QEvent* event) override;
 

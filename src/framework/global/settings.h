@@ -36,11 +36,7 @@ namespace mu::framework {
 class Settings
 {
 public:
-    static Settings* instance()
-    {
-        static Settings s;
-        return &s;
-    }
+    static Settings* instance();
 
     struct Key
     {

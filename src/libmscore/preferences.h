@@ -26,11 +26,7 @@ class ScorePreferences
 {
 public:
 
-    static ScorePreferences& instance()
-    {
-        static ScorePreferences p;
-        return p;
-    }
+    static ScorePreferences& instance();
 
     QString backupDirPath() const;
     void setBackupDirPath(const QString& path);

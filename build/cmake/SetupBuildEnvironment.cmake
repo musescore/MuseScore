@@ -43,7 +43,7 @@ elseif(CC_IS_MINGW)
     set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 
     if (BUILD_IS_DEBUG)
-        #set(BUILD_SHARED_LIBS ON)
+        set(BUILD_SHARED_LIBS ON)
     endif(BUILD_IS_DEBUG)
 
     # -mno-ms-bitfields see #22048

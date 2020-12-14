@@ -13,6 +13,12 @@ Profiler::Options Profiler::m_options;
 
 constexpr int MAIN_THREAD_INDEX(0);
 
+Profiler* Profiler::instance()
+{
+    static Profiler p;
+    return &p;
+}
+
 Profiler::Profiler()
 {
     setup(Options(), new Printer());

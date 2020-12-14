@@ -26,6 +26,12 @@
 
 using namespace mu::telemetry;
 
+ActionEventObserver* ActionEventObserver::instance()
+{
+    static ActionEventObserver s;
+    return &s;
+}
+
 ActionEventObserver::ActionEventObserver(QObject* parent)
     : QObject(parent)
 {
