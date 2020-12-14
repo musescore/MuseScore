@@ -36,6 +36,11 @@ QmlDialog::QmlDialog(QQuickItem* parent)
 
     m_dialog = new QDialog(QApplication::activeWindow());
 
+    QPixmap dummyIcon(32, 32);
+    dummyIcon.fill(Qt::transparent);
+    m_dialog->setWindowIcon(dummyIcon);
+    m_dialog->setWindowFlags(m_dialog->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
     connect(m_dialog, &QDialog::finished, [this](int code) {
         QDialog::DialogCode dialogCode = static_cast<QDialog::DialogCode>(code);
 

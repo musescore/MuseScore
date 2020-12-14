@@ -34,11 +34,11 @@ class NewWorkspaceModel : public QObject
     INJECT(workspace, IWorkspaceCreator, workspaceCreator)
     INJECT(workspace, IWorkspaceManager, workspaceManager)
 
-    Q_PROPERTY(QString workspaceName READ workspaceName WRITE setWorkspaceName NOTIFY workspaceNameChanged)
-    Q_PROPERTY(bool importUiPreferences READ importUiPreferences WRITE setImportUiPreferences NOTIFY importUiPreferencesChanged)
-    Q_PROPERTY(bool importUiArrangement READ importUiArrangement WRITE setImportUiArrangement NOTIFY importUiArrangementChanged)
-    Q_PROPERTY(bool importPalettes READ importPalettes WRITE setImportPalettes NOTIFY importPalettesChanged)
-    Q_PROPERTY(bool importToolbarCustomization READ importToolbarCustomization WRITE setImportToolbarCustomization NOTIFY importToolbarCustomizationChanged)
+    Q_PROPERTY(QString workspaceName READ workspaceName WRITE setWorkspaceName NOTIFY dataChanged)
+    Q_PROPERTY(bool importUiPreferences READ importUiPreferences WRITE setImportUiPreferences NOTIFY dataChanged)
+    Q_PROPERTY(bool importUiArrangement READ importUiArrangement WRITE setImportUiArrangement NOTIFY dataChanged)
+    Q_PROPERTY(bool importPalettes READ importPalettes WRITE setImportPalettes NOTIFY dataChanged)
+    Q_PROPERTY(bool importToolbarCustomization READ importToolbarCustomization WRITE setImportToolbarCustomization NOTIFY dataChanged)
     Q_PROPERTY(bool canCreateWorkspace READ canCreateWorkspace NOTIFY canCreateWorkspaceChanged)
 
 public:
@@ -62,11 +62,7 @@ public slots:
     void setImportToolbarCustomization(bool needImport);
 
 signals:
-    void workspaceNameChanged(QString name);
-    void importUiPreferencesChanged(bool needImport);
-    void importUiArrangementChanged(bool needImport);
-    void importPalettesChanged(bool needImport);
-    void importToolbarCustomizationChanged(bool needImport);
+    void dataChanged();
     void canCreateWorkspaceChanged();
 
 private:

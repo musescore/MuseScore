@@ -20,8 +20,8 @@
 #ifndef MU_WORKSPACE_IWORKSPACECREATOR_H
 #define MU_WORKSPACE_IWORKSPACECREATOR_H
 
-#include "framework/workspace/iworkspace.h"
-#include "framework/global/modularity/imoduleexport.h"
+#include "iworkspace.h"
+#include "modularity/imoduleexport.h"
 
 namespace mu::workspace {
 class IWorkspaceCreator : MODULE_EXPORT_INTERFACE

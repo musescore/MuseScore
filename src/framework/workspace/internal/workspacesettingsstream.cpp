@@ -56,7 +56,7 @@ SettingsDataPtr WorkspaceSettingsStream::readSettings(XmlReader& reader) const
         if (reader.tagName() != SETTING_ELEMENT_TAG) {
             std::string key = reader.attribute(NAME_ATTRIBUTE);
             Val val(reader.readString());
-            settings->vals.insert({ key, val });
+            settings->values.insert({ key, val });
         } else {
             reader.skipCurrentElement();
         }
@@ -83,7 +83,7 @@ void WorkspaceSettingsStream::writeSettings(XmlWriter& writer, const AbstractDat
 
     writer.writeStartElement(SETTINGS_TAG);
 
-    for (auto it = settings->vals.begin(); it != settings->vals.end(); ++it) {
+    for (auto it = settings->values.begin(); it != settings->values.end(); ++it) {
         if (it->second.isNull()) {
             continue;
         }

@@ -212,8 +212,9 @@ void WorkspaceManager::setupCurrentWorkspace()
 
     WorkspacePtr workspace = findAndInit(workspaceName);
     if (!workspace) {
-        LOGW() << "filed get workspace: " << workspaceName << ", will use Default";
-        workspace = findAndInit(std::string(DEFAULT_WORKSPACE_NAME));
+        std::string defaultWorkspaceName(DEFAULT_WORKSPACE_NAME);
+        LOGW() << "failed get workspace: " << workspaceName << ", will use " << defaultWorkspaceName;
+        workspace = findAndInit(defaultWorkspaceName);
     }
 
     m_currentWorkspace = workspace;

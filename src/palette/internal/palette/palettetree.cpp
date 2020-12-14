@@ -80,7 +80,7 @@ static QByteArray mimeData(T* t)
 {
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
-    XmlWriter xml(nullptr, &buffer);
+    XmlWriter xml(/* score */ nullptr, &buffer);
     xml.setClipboardmode(true);
     t->write(xml);
     buffer.close();
@@ -558,7 +558,7 @@ bool PalettePanel::writeToFile(const QString& p) const
     }
     QBuffer cbuf;
     cbuf.open(QIODevice::ReadWrite);
-    XmlWriter xml(nullptr, &cbuf);
+    XmlWriter xml(gscore, &cbuf);
     xml.header();
     xml.stag("container");
     xml.stag("rootfiles");
@@ -583,7 +583,7 @@ bool PalettePanel::writeToFile(const QString& p) const
     {
         QBuffer cbuf1;
         cbuf1.open(QIODevice::ReadWrite);
-        XmlWriter xml1(nullptr, &cbuf1);
+        XmlWriter xml1(gscore, &cbuf1);
         xml1.header();
         xml1.stag("museScore version=\"" MSC_VERSION "\"");
         write(xml1);

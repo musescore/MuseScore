@@ -1,4 +1,4 @@
-import QtQuick 2.9
+import QtQuick 2.12
 import QtQuick.Layouts 1.12
 
 import MuseScore.Ui 1.0
@@ -12,8 +12,6 @@ QmlDialog {
 
     width: 552
     height: 286
-
-    title: qsTrc("workspace", "Select workspace")
 
     Rectangle {
         id: content
@@ -31,14 +29,8 @@ QmlDialog {
         }
 
         ColumnLayout {
-            readonly property int leftMargin: 36
-            readonly property int rightMargin: 16
-
             anchors.fill: parent
-            anchors.topMargin: leftMargin
-            anchors.leftMargin: leftMargin
-            anchors.rightMargin: rightMargin
-            anchors.bottomMargin: rightMargin
+            anchors.margins: 24
 
             spacing: 0
 
@@ -50,9 +42,7 @@ QmlDialog {
                     anchors.left: parent.left
 
                     text: qsTrc("workspace", "Workspaces")
-
-                    font.pixelSize: 24
-                    font.bold: true
+                    font: ui.theme.headerBoldFont
                 }
 
                 FlatButton {
@@ -92,16 +82,16 @@ QmlDialog {
 
             SeparatorLine {
                 Layout.topMargin: 16
-                Layout.leftMargin: -parent.leftMargin
-                Layout.rightMargin: -parent.rightMargin
+                Layout.leftMargin: -parent.anchors.leftMargin
+                Layout.rightMargin: -parent.anchors.rightMargin
             }
 
             WorkspacesView {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                Layout.leftMargin: -parent.leftMargin
-                Layout.rightMargin: -parent.rightMargin
-                leftPadding: parent.leftMargin
+                Layout.leftMargin: -parent.anchors.leftMargin
+                Layout.rightMargin: -parent.anchors.rightMargin
+                leftPadding: parent.anchors.leftMargin
 
                 model: workspacesModel
             }
@@ -114,7 +104,7 @@ QmlDialog {
                 spacing: 12
 
                 FlatButton {
-                    text: qsTrc("workspace", "Cancel")
+                    text: qsTrc("global", "Cancel")
 
                     onClicked: {
                         root.reject()
@@ -122,7 +112,7 @@ QmlDialog {
                 }
 
                 FlatButton {
-                    text: qsTrc("workspace", "Select")
+                    text: qsTrc("global", "Select")
 
                     enabled: Boolean(workspacesModel.selectedWorkspace)
 

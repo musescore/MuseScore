@@ -75,7 +75,7 @@ void NewWorkspaceModel::setWorkspaceName(const QString& name)
     }
 
     m_workspaceName = name;
-    emit workspaceNameChanged(name);
+    emit dataChanged();
     emit canCreateWorkspaceChanged();
 }
 
@@ -86,7 +86,7 @@ void NewWorkspaceModel::setImportUiPreferences(bool needImport)
     }
 
     m_importUiPreferences = needImport;
-    emit importUiPreferencesChanged(needImport);
+    emit dataChanged();
 }
 
 void NewWorkspaceModel::setImportUiArrangement(bool needImport)
@@ -96,7 +96,7 @@ void NewWorkspaceModel::setImportUiArrangement(bool needImport)
     }
 
     m_importUiArrangement = needImport;
-    emit importUiArrangementChanged(needImport);
+    emit dataChanged();
 }
 
 void NewWorkspaceModel::setImportPalettes(bool needImport)
@@ -106,7 +106,7 @@ void NewWorkspaceModel::setImportPalettes(bool needImport)
     }
 
     m_importPalettes = needImport;
-    emit importPalettesChanged(needImport);
+    emit dataChanged();
 }
 
 void NewWorkspaceModel::setImportToolbarCustomization(bool needImport)
@@ -116,7 +116,7 @@ void NewWorkspaceModel::setImportToolbarCustomization(bool needImport)
     }
 
     m_importToolbarCustomization = needImport;
-    emit importToolbarCustomizationChanged(needImport);
+    emit dataChanged();
 }
 
 QVariant NewWorkspaceModel::createWorkspace()
