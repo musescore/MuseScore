@@ -41,6 +41,10 @@ NotationNoteInput::NotationNoteInput(const IGetScore* getScore, INotationInterac
     m_interaction->selectionChanged().onNotify(this, [this]() {
         updateInputState();
     });
+
+    m_undoStack->stackChanged().onNotify(this, [this]() {
+        updateInputState();
+    });
 }
 
 NotationNoteInput::~NotationNoteInput()
@@ -245,16 +249,16 @@ void NotationNoteInput::putTuplet(const TupletOptions& options)
 {
     Ms::InputState& inputState = score()->inputState();
 
-    m_undoStack->prepareChanges();
+    startEdit();
     score()->expandVoice();
     Ms::ChordRest* chordRest = inputState.cr();
     if (chordRest) {
         score()->changeCRlen(chordRest, inputState.duration());
         score()->addTuplet(chordRest, options.ratio, options.numberType, options.bracketType);
     }
-    m_undoStack->commitChanges();
+    apply();
 
-    m_stateChanged.notify();
+    notifyAboutStateChanged();
 }
 
 QRectF NotationNoteInput::cursorRect() const
