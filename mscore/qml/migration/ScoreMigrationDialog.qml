@@ -44,82 +44,91 @@ FocusScope {
         anchors.fill: parent
         anchors.margins: 20
 
-        spacing: 20
+        spacing: 8
 
         ColumnLayout {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignTop
+            spacing: 12
 
-            spacing: 20
+            ColumnLayout {
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignTop
 
-            Text {
+                spacing: 20
+
+                Text {
+                    Layout.fillWidth: true
+
+                    font.family: globalStyle.font.family
+                    font.bold: true
+                    font.pixelSize: 24
+                    color: globalStyle.buttonText
+                    wrapMode: Text.WordWrap
+                    horizontalAlignment: Qt.AlignHCenter
+                    Accessible.role: Accessible.StaticText
+                    Accessible.name: text
+
+                    text: qsTr("Would you like to try our improved score style?")
+                }
+
+                Image {
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.preferredHeight: 199
+                    Layout.preferredWidth: 548
+                    fillMode: Image.PreserveAspectFit
+                    source: "placeholder.png"
+                }
+            }
+
+            ColumnLayout {
                 Layout.fillWidth: true
 
-                font.family: globalStyle.font.family
-                font.bold: true
-                font.pixelSize: 24
-                color: globalStyle.buttonText
-                wrapMode: Text.WordWrap
-                horizontalAlignment: Qt.AlignHCenter
-                Accessible.role: Accessible.StaticText
-                Accessible.name: text
+                spacing: 8
 
-                text: qsTr("Would you like to try our improved score style?")
-            }
+                CheckBoxControl {
+                    checked: root.model ? root.model.isLelandAllowed : false
+                    text: qsTr("Our new professional notation font")
 
-            Image {
-                Layout.alignment: Qt.AlignHCenter
-                source: "placeholder.png"
-            }
-        }
-
-        ColumnLayout {
-            Layout.fillWidth: true
-
-            spacing: 8
-
-            CheckBoxControl {
-                checked: root.model ? root.model.isLelandAllowed : false
-                text: qsTr("Our new professional notation font")
-
-                onToggled: {
-                    root.model.isLelandAllowed = checked
+                    onToggled: {
+                        root.model.isLelandAllowed = checked
+                    }
                 }
-            }
 
-            CheckBoxControl {
-                checked: root.model ? root.model.isEdwinAllowed : false
-                text: qsTr("Our improved text font")
+                CheckBoxControl {
+                    checked: root.model ? root.model.isEdwinAllowed : false
+                    text: qsTr("Our improved text font")
 
-                onToggled: {
-                    root.model.isEdwinAllowed = checked
+                    onToggled: {
+                        root.model.isEdwinAllowed = checked
+                    }
                 }
-            }
 
-            CheckBoxControl {
-                visible: root.model ? root.model.isAutomaticPlacementAvailable : false
-                checked: root.model ? root.model.isAutomaticPlacementAllowed : false
-                text: qsTr("Automatic placement (spacing changes introduced in V3.0)")
+                CheckBoxControl {
+                    visible: root.model ? root.model.isAutomaticPlacementAvailable : false
+                    checked: root.model ? root.model.isAutomaticPlacementAllowed : false
+                    text: qsTr("Automatic placement (spacing changes introduced in V3.0)")
 
-                onToggled: {
-                    root.model.isAutomaticPlacementAllowed = checked
+                    onToggled: {
+                        root.model.isAutomaticPlacementAllowed = checked
+                    }
                 }
-            }
 
-            Text {
-                Layout.topMargin: 12
-                Layout.fillWidth: true
+                Text {
+                    Layout.topMargin: 12
+                    Layout.fillWidth: true
 
-                font.family: globalStyle.font.family
-                font.pixelSize: 14
-                color: globalStyle.buttonText
-                wrapMode: Text.WordWrap
-                horizontalAlignment: Qt.AlignLeft
-                Accessible.role: Accessible.StaticText
-                Accessible.name: text
+                    font.family: globalStyle.font.family
+                    font.pixelSize: 14
+                    color: globalStyle.buttonText
+                    wrapMode: Text.WordWrap
+                    horizontalAlignment: Qt.AlignLeft
+                    Accessible.role: Accessible.StaticText
+                    Accessible.name: text
 
-                text: root.model ? qsTr("Since this file was created in MuseScore %1, some layout changes may occur.").arg(root.model.creationAppVersion)
-                                 : ""
+                    text: root.model ? qsTr("Since this file was created in MuseScore %1, some layout changes may occur.").arg(root.model.creationAppVersion)
+                                     : ""
+                }
             }
         }
 

@@ -6,7 +6,7 @@ ScoreMigrationDialog::ScoreMigrationDialog(QQmlEngine* engine, Ms::Score* score)
       : QQuickView(engine, nullptr), m_dialogModel(new ScoreMigrationDialogModel(score, this))
       {
       setMinimumWidth(600);
-      setMinimumHeight(600);
+      setMinimumHeight(m_dialogModel->isAutomaticPlacementAvailable() ? 540 : 518);
 
       setFlags(Qt::Dialog);
 
