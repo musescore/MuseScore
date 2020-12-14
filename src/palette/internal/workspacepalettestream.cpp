@@ -49,7 +49,7 @@ PaletteWorkspaceDataPtr WorkspacePaletteStream::readPalettes(Ms::XmlReader& read
 {
     PaletteWorkspaceDataPtr palettes = std::make_shared<PaletteWorkspaceData>();
     palettes->tag = WorkspaceTag::Palettes;
-    palettes->tree = std::unique_ptr<Ms::PaletteTree>(new Ms::PaletteTree);
+    palettes->tree = std::make_shared<Ms::PaletteTree>();
     palettes->tree->read(reader);
 
     return palettes;

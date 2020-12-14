@@ -80,7 +80,7 @@ static QByteArray mimeData(T* t)
 {
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
-    XmlWriter xml(/* score */ nullptr, &buffer);
+    XmlWriter xml(nullptr, &buffer);
     xml.setClipboardmode(true);
     t->write(xml);
     buffer.close();
@@ -92,14 +92,14 @@ static QByteArray mimeData(T* t)
 //---------------------------------------------------------
 
 template<class T>
-static std::unique_ptr<T> readMimeData(const QByteArray& data, const QString& tagName)
+static std::shared_ptr<T> readMimeData(const QByteArray& data, const QString& tagName)
 {
     XmlReader e(data);
     e.setPasteMode(true);
     while (e.readNextStartElement()) {
         const QStringRef tag(e.name());
         if (tag == tagName) {
-            std::unique_ptr<T> t(new T);
+            std::shared_ptr<T> t(new T);
             if (!t->read(e)) {
                 return nullptr;
             }
@@ -114,8 +114,8 @@ static std::unique_ptr<T> readMimeData(const QByteArray& data, const QString& ta
 //---------------------------------------------------------
 //   PaletteCell::PaletteCell
 //---------------------------------------------------------
-PaletteCell::PaletteCell(std::unique_ptr<Element> e, const QString& _name, qreal _mag)
-    : element(std::move(e)), name(_name), mag(_mag)
+PaletteCell::PaletteCell(std::shared_ptr<Element> e, const QString& _name, qreal _mag)
+    : element(e), name(_name), mag(_mag)
 {
     id = makeId();
 
@@ -208,7 +208,7 @@ void PaletteCell::retranslate()
 void PaletteCell::setElementTranslated(bool translate)
 {
     if (translate && element) {
-        untranslatedElement = std::move(element);
+        untranslatedElement = element;
         element.reset(untranslatedElement->clone());
         retranslate();
     } else {
@@ -339,7 +339,7 @@ PaletteCellPtr PaletteCell::readElementMimeData(const QByteArray& data)
 {
     QPointF dragOffset;
     Fraction duration(1, 4);
-    std::unique_ptr<Element> e(Element::readMimeData(gscore, data, &dragOffset, &duration));
+    std::shared_ptr<Element> e(Element::readMimeData(gscore, data, &dragOffset, &duration));
 
     if (!e) {
         return nullptr;
@@ -363,7 +363,7 @@ PaletteCellPtr PaletteCell::readElementMimeData(const QByteArray& data)
 
     const QString name = (e->isFretDiagram()) ? toFretDiagram(e.get())->harmonyText() : e->userName();
 
-    return PaletteCellPtr(new PaletteCell(std::move(e), name));
+    return PaletteCellPtr(new PaletteCell(e, name));
 }
 
 //---------------------------------------------------------
@@ -379,7 +379,7 @@ QByteArray PaletteCell::mimeData() const
 //   PaletteCell::readMimeData
 //---------------------------------------------------------
 
-std::unique_ptr<PalettePanel> PalettePanel::readMimeData(const QByteArray& data)
+PalettePanelPtr PalettePanel::readMimeData(const QByteArray& data)
 {
     return Ms::readMimeData<PalettePanel>(data, "Palette");
 }
@@ -443,7 +443,7 @@ bool PalettePanel::read(XmlReader& e)
             if (!cell->read(e)) {
                 continue;
             }
-            cells.push_back(std::move(cell));
+            cells.push_back(cell);
         } else {
             e.unknown();
         }
@@ -558,7 +558,7 @@ bool PalettePanel::writeToFile(const QString& p) const
     }
     QBuffer cbuf;
     cbuf.open(QIODevice::ReadWrite);
-    XmlWriter xml(gscore, &cbuf);
+    XmlWriter xml(nullptr, &cbuf);
     xml.header();
     xml.stag("container");
     xml.stag("rootfiles");
@@ -583,7 +583,7 @@ bool PalettePanel::writeToFile(const QString& p) const
     {
         QBuffer cbuf1;
         cbuf1.open(QIODevice::ReadWrite);
-        XmlWriter xml1(gscore, &cbuf1);
+        XmlWriter xml1(nullptr, &cbuf1);
         xml1.header();
         xml1.stag("museScore version=\"" MSC_VERSION "\"");
         write(xml1);
@@ -694,7 +694,7 @@ PaletteCell* PalettePanel::insert(int idx, Element* e, const QString& name, qrea
     if (e) {
         e->layout();     // layout may be important for comparing cells, e.g. filtering "More" popup content
     }
-    PaletteCell* cell = new PaletteCell(std::unique_ptr<Element>(e), name, mag);
+    PaletteCell* cell = new PaletteCell(std::shared_ptr<Element>(e), name, mag);
     cells.emplace(cells.begin() + idx, cell);
     return cell;
 }
@@ -708,7 +708,7 @@ PaletteCell* PalettePanel::append(Element* e, const QString& name, qreal mag)
     if (e) {
         e->layout();     // layout may be important for comparing cells, e.g. filtering "More" popup content
     }
-    PaletteCell* cell = new PaletteCell(std::unique_ptr<Element>(e), name, mag);
+    PaletteCell* cell = new PaletteCell(std::shared_ptr<Element>(e), name, mag);
     cells.emplace_back(cell);
     return cell;
 }
@@ -761,7 +761,7 @@ bool PalettePanel::insertCell(int idx, PaletteCellPtr cell)
         return false;
     }
 
-    cells.insert(cells.begin() + idx, std::move(cell));
+    cells.insert(cells.begin() + idx, cell);
 
     return true;
 }
@@ -977,6 +977,7 @@ void PaletteTree::append(PalettePanel* palette)
 void PaletteTree::write(XmlWriter& xml) const
 {
     xml.stag("PaletteBox");   // for compatibility with old palettes file format
+
     for (const auto& p : palettes) {
         p->write(xml);
     }
@@ -992,9 +993,9 @@ bool PaletteTree::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const QStringRef tag(e.name());
         if (tag == "Palette") {
-            std::unique_ptr<PalettePanel> p(new PalettePanel);
+            PalettePanelPtr p = std::make_shared<PalettePanel>();
             p->read(e);
-            palettes.push_back(std::move(p));
+            palettes.push_back(p);
         } else {
             e.unknown();
         }

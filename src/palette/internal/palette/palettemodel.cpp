@@ -37,8 +37,8 @@ namespace Ms {
 //   PaletteTreeModel::PaletteTreeModel
 //---------------------------------------------------------
 
-PaletteTreeModel::PaletteTreeModel(std::unique_ptr<PaletteTree> tree, QObject* parent)
-    : QAbstractItemModel(parent), _paletteTree(std::move(tree))
+PaletteTreeModel::PaletteTreeModel(PaletteTreePtr tree, QObject* parent)
+    : QAbstractItemModel(parent), _paletteTree(tree)
 {
     connect(this, &QAbstractItemModel::dataChanged, this, &PaletteTreeModel::onDataChanged);
     connect(this, &QAbstractItemModel::layoutChanged, this, &PaletteTreeModel::setTreeChanged);
@@ -108,7 +108,7 @@ PalettePanel* PaletteTreeModel::iptrToPalettePanel(void* iptr, int* idx)
 {
     const auto palette = std::find_if(
         palettes().begin(), palettes().end(),
-        [iptr](const std::unique_ptr<PalettePanel>& p) {
+        [iptr](const PalettePanelPtr& p) {
             return iptr == p.get();
         });
 
@@ -179,10 +179,10 @@ PaletteCellPtr PaletteTreeModel::findCell(const QModelIndex& index)
 //   PaletteTreeModel::setPaletteTree
 //---------------------------------------------------------
 
-void PaletteTreeModel::setPaletteTree(std::unique_ptr<PaletteTree> newTree)
+void PaletteTreeModel::setPaletteTree(PaletteTreePtr newTree)
 {
     beginResetModel();
-    _paletteTree = std::move(newTree);
+    _paletteTree = newTree;
     endResetModel();
 
     _treeChanged = false;
@@ -450,7 +450,7 @@ bool PaletteTreeModel::setData(const QModelIndex& index, const QVariant& value, 
             if (!newCell) {
                 return false;
             }
-            *cell = std::move(*newCell);
+            *cell = *newCell;
             emit dataChanged(index, index);
             return true;
         };
@@ -483,10 +483,10 @@ bool PaletteTreeModel::setData(const QModelIndex& index, const QVariant& value, 
                 if (!newCell) {
                     return false;
                 }
-                *cell = std::move(*newCell);
+                *cell = *newCell;
             } else if (map.contains(mu::MIME_SYMBOL_FORMAT)) {
                 const QByteArray elementMimeData = map[mu::MIME_SYMBOL_FORMAT].toByteArray();
-                *cell = std::move(*PaletteCell::readElementMimeData(elementMimeData));
+                *cell = *PaletteCell::readElementMimeData(elementMimeData);
                 cell->custom = true;               // mark the updated cell custom
             } else {
                 return false;
@@ -622,7 +622,7 @@ bool PaletteTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action
         }
 
         beginInsertRows(parent, row, row);
-        palettes().insert(palettes().begin() + row, std::move(panel));
+        palettes().insert(palettes().begin() + row, panel);
         endInsertRows();
         return true;
     }
@@ -649,7 +649,7 @@ bool PaletteTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action
         }
 
         beginInsertRows(parent, row, row);
-        pp->insertCell(row, std::move(cell));
+        pp->insertCell(row, cell);
         endInsertRows();
         return true;
     }
@@ -686,7 +686,7 @@ bool PaletteTreeModel::moveRows(const QModelIndex& sourceParent, int sourceRow, 
             return false;
         }
 
-        std::vector<std::unique_ptr<PalettePanel> > movedPanels;
+        std::vector<PalettePanelPtr> movedPanels;
 
         auto srcBegin = palettes().begin() + sourceRow;
         auto srcEnd = srcBegin + count;
@@ -739,7 +739,7 @@ bool PaletteTreeModel::moveRows(const QModelIndex& sourceParent, int sourceRow, 
         const int destIdx = (sameParent && destinationRow >= sourceRow) ? (destinationRow - count) : destinationRow;
 
         beginInsertRows(destinationParent, destIdx, destIdx + count - 1);
-        destPanel->insertCells(destIdx, std::move(movedCells));
+        destPanel->insertCells(destIdx, movedCells);
         endInsertRows();
 
         return true;
@@ -797,11 +797,11 @@ bool PaletteTreeModel::insertRows(int row, int count, const QModelIndex& parent)
 
         beginInsertRows(parent, row, row + count - 1);
         for (int i = 0; i < count; ++i) {
-            std::unique_ptr<PalettePanel> p(new PalettePanel(PalettePanel::Type::Custom));
+            PalettePanelPtr p = std::make_shared<PalettePanel>(PalettePanel::Type::Custom);
             p->setName(QT_TRANSLATE_NOOP("palette", "Custom"));
             p->setGrid(QSize(48, 48));
             p->setExpanded(true);
-            palettes().insert(palettes().begin() + row, std::move(p));
+            palettes().insert(palettes().begin() + row, p);
         }
         endInsertRows();
         return true;
@@ -830,13 +830,13 @@ bool PaletteTreeModel::insertRows(int row, int count, const QModelIndex& parent)
 //   PaletteTreeModel::insertPalettePanel
 //---------------------------------------------------------
 
-bool PaletteTreeModel::insertPalettePanel(std::unique_ptr<PalettePanel> pp, int row, const QModelIndex& parent)
+bool PaletteTreeModel::insertPalettePanel(PalettePanelPtr pp, int row, const QModelIndex& parent)
 {
     if (row < 0 || row > int(palettes().size()) || parent != QModelIndex()) {
         return false;
     }
     beginInsertRows(parent, row, row);
-    palettes().insert(palettes().begin() + row, std::move(pp));
+    palettes().insert(palettes().begin() + row, pp);
     endInsertRows();
     return true;
 }
@@ -1023,7 +1023,7 @@ class ExcludePaletteCellFilter : public PaletteCellFilter
 
 public:
     ExcludePaletteCellFilter(const PalettePanel* p, QPersistentModelIndex index, QObject* parent = nullptr)
-        : PaletteCellFilter(parent), excludePanel(p), panelIndex(std::move(index)) {}
+        : PaletteCellFilter(parent), excludePanel(p), panelIndex(index) {}
 
     bool acceptCell(const PaletteCell& cell) const override
     {
