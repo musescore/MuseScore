@@ -34,5 +34,5 @@ https://musescore.com/contact
 Change log
 ----------
 
-01 November 2020 (Martin Keary & Simon Smith) Leland Version 0.5
-- Initial release to be packaged with MuseScore 3.6
+14 December 2020 (Martin Keary & Simon Smith) Leland Version 0.5
+- Initial release to be packaged with MuseScore 3.6 public beta
