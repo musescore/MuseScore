@@ -19,9 +19,9 @@
 #ifndef MU_WORKSPACE_WORKSPACETYPES_H
 #define MU_WORKSPACE_WORKSPACETYPES_H
 
-#include <string>
 #include <vector>
 #include <map>
+
 #include "val.h"
 
 namespace mu::workspace {
@@ -50,7 +50,7 @@ using AbstractDataPtrList = std::vector<AbstractDataPtr>;
 
 struct SettingsData : public AbstractData
 {
-    std::map<std::string /*key*/, Val> vals;
+    std::map<std::string /*key*/, Val> values;
 };
 
 using SettingsDataPtr = std::shared_ptr<SettingsData>;

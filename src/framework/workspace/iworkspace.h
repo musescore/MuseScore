@@ -40,6 +40,7 @@ public:
 
     //! NOTE Only methods associations with framework.
     //! Other methods (for other data) must be in the appropriate modules.
+    virtual Val settingValue(const std::string& key) const = 0;
     virtual std::vector<std::string> toolbarActions(const std::string& toolbarName) const = 0;
 };
 

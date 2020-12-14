@@ -1282,7 +1282,7 @@ void Palette::write(const QString& p)
     }
     QBuffer cbuf;
     cbuf.open(QIODevice::ReadWrite);
-    XmlWriter xml(nullptr, &cbuf);
+    XmlWriter xml(gscore, &cbuf);
     xml.header();
     xml.stag("container");
     xml.stag("rootfiles");
@@ -1307,7 +1307,7 @@ void Palette::write(const QString& p)
     {
         QBuffer cbuf1;
         cbuf1.open(QIODevice::ReadWrite);
-        XmlWriter xml1(nullptr, &cbuf1);
+        XmlWriter xml1(gscore, &cbuf1);
         xml1.header();
         xml1.stag("museScore version=\"" MSC_VERSION "\"");
         write(xml1);

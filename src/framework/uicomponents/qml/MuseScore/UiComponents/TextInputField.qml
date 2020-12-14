@@ -19,6 +19,11 @@ Rectangle {
     signal currentTextEdited(var newTextValue)
     signal textCleared()
 
+    function selectAll() {
+        valueInput.selectAll()
+        forceActiveFocus()
+    }
+
     function clear() {
         valueInput.text = ""
         textCleared()
