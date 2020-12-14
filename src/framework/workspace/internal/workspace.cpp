@@ -77,6 +77,13 @@ AbstractDataPtrList Workspace::dataList(WorkspaceTag tag) const
     return result;
 }
 
+mu::Val Workspace::settingValue(const std::string& key) const
+{
+    AbstractDataPtr data = this->data(WorkspaceTag::Settings);
+    SettingsDataPtr settings = std::dynamic_pointer_cast<SettingsData>(data);
+    return settings ? settings->values[key] : Val();
+}
+
 std::vector<std::string> Workspace::toolbarActions(const std::string& toolbarName) const
 {
     AbstractDataPtr data = this->data(WorkspaceTag::Toolbar, toolbarName);

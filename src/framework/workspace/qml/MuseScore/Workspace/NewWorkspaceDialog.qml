@@ -1,4 +1,4 @@
-import QtQuick 2.9
+import QtQuick 2.12
 import QtQuick.Layouts 1.12
 
 import MuseScore.Ui 1.0
@@ -10,8 +10,6 @@ QmlDialog {
 
     width: 552
     height: 360
-
-    title: qsTrc("workspace", "Create new workspace")
 
     Rectangle {
         anchors.fill: parent
@@ -28,18 +26,13 @@ QmlDialog {
 
         ColumnLayout {
             anchors.fill: parent
-            anchors.topMargin: 24
-            anchors.leftMargin: 36
-            anchors.rightMargin: 16
-            anchors.bottomMargin: 16
+            anchors.margins: 24
 
             spacing: 0
 
             StyledTextLabel {
                 text: qsTrc("workspace", "Create new workspace")
-
-                font.pixelSize: 24
-                font.bold: true
+                font: ui.theme.headerBoldFont
             }
 
             StyledTextLabel {
@@ -56,6 +49,10 @@ QmlDialog {
 
                 onCurrentTextEdited: {
                     workspaceModel.workspaceName = newTextValue
+                }
+
+                Component.onCompleted: {
+                    selectAll()
                 }
             }
 
@@ -74,11 +71,10 @@ QmlDialog {
                 Layout.fillWidth: true
 
                 columns: 2
-                spacing: 20
+                rowSpacing: 20
+                columnSpacing: rowSpacing * 4
 
                 CheckBox {
-                    width: parent.width / 2
-
                     checked: workspaceModel.importUiPreferences
 
                     text: qsTrc("workspace", "UI preferences (colours, canvas style, etc.)")
@@ -89,8 +85,6 @@ QmlDialog {
                 }
 
                 CheckBox {
-                    width: parent.width / 2
-
                     checked: workspaceModel.importUiArrangement
 
                     text: qsTrc("workspace", "UI arrangement")
@@ -101,8 +95,6 @@ QmlDialog {
                 }
 
                 CheckBox {
-                    width: parent.width / 2
-
                     checked: workspaceModel.importPalettes
 
                     text: qsTrc("workspace", "Palettes")
@@ -113,8 +105,6 @@ QmlDialog {
                 }
 
                 CheckBox {
-                    width: parent.width / 2
-
                     checked: workspaceModel.importToolbarCustomization
 
                     text: qsTrc("workspace", "Toolbar customisations")
