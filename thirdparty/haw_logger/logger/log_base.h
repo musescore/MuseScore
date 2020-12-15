@@ -27,10 +27,10 @@
 #define LOG_STREAM(type, tag) haw::logger::LogInput(type, tag).stream()
 #define LOG(type, tag)  LOG_STREAM(type, tag) << FUNCNAME(FUNC_INFO) << ": "
 
-#define LOGE()      IF_LOGLEVEL(haw::logger::Normal) LOG(haw::logger::Logger::ERROR, LOG_TAG)
+#define LOGE()      IF_LOGLEVEL(haw::logger::Normal) LOG(haw::logger::Logger::ERRR, LOG_TAG)
 #define LOGW()      IF_LOGLEVEL(haw::logger::Normal) LOG(haw::logger::Logger::WARN, LOG_TAG)
 #define LOGI()      IF_LOGLEVEL(haw::logger::Normal) LOG(haw::logger::Logger::INFO, LOG_TAG)
-#define LOGD()      IF_LOGLEVEL(haw::logger::Debug) LOG(haw::logger::Logger::DEBUG, LOG_TAG)
+#define LOGD()      IF_LOGLEVEL(haw::logger::Debug) LOG(haw::logger::Logger::DEBG, LOG_TAG)
 
 //! Helps
 #define DEPRECATED LOGD() << "This function deprecated!!"
