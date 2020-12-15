@@ -28,7 +28,7 @@ using namespace mu::workspace;
 using namespace mu::framework;
 
 static const std::string TOOLBAR_TAG("Toolbar");
-static const std::string NOTE_INPUT_TOOLBAR_NAME("noteInput");
+static const std::string TOOLBAR_NAME("noteInput");
 
 static const std::string ADD_ACTION_NAME("add");
 static const std::string ADD_ACTION_TITLE("Add");
@@ -108,7 +108,7 @@ void NoteInputBarModel::load()
         });
 
         workspace.val->dataChanged().onReceive(this, [this](const AbstractDataPtr data) {
-            if (data->name == NOTE_INPUT_TOOLBAR_NAME) {
+            if (data->name == TOOLBAR_NAME) {
                 load();
             }
         });
@@ -527,10 +527,10 @@ std::vector<std::string> NoteInputBarModel::currentWorkspaceActions() const
         return {};
     }
 
-    AbstractDataPtr abstractData = workspace.val->data(WorkspaceTag::Toolbar, NOTE_INPUT_TOOLBAR_NAME);
+    AbstractDataPtr abstractData = workspace.val->data(WorkspaceTag::Toolbar, TOOLBAR_NAME);
     ToolbarDataPtr toolbarData = std::dynamic_pointer_cast<ToolbarData>(abstractData);
     if (!toolbarData) {
-        LOGE() << "Failed to get data of actions for " << NOTE_INPUT_TOOLBAR_NAME;
+        LOGE() << "Failed to get data of actions for " << TOOLBAR_NAME;
         return {};
     }
 
