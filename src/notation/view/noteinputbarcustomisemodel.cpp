@@ -28,14 +28,17 @@
 #include "internal/notationactions.h"
 #include "workspace/workspacetypes.h"
 
-static const std::string CN_SEPARATOR_LINE_TITLE("-------  Separator line  -------");
-static const std::string CN_NOTE_INPUT_ACTION_NAME("note-input");
-static const std::string CN_NOTE_INPUT_MODE_NAME("mode-note-input");
-static const std::string CN_NOTE_INPUT_TOOLBAR_NAME("noteInput");
-
 using namespace mu::notation;
 using namespace mu::workspace;
 using namespace mu::actions;
+
+static const std::string NOTE_INPUT_TOOLBAR_NAME("noteInput");
+
+static const ActionName NOTE_INPUT_ACTION_NAME("note-input");
+static const ActionName NOTE_INPUT_MODE_ACTION_NAME("mode-note-input");
+
+static const std::string SEPARATOR_LINE_TITLE("-------  Separator line  -------");
+static const ActionName SEPARATOR_LINE_ACTION_NAME("");
 
 NoteInputBarCustomiseModel::NoteInputBarCustomiseModel(QObject* parent)
     : QAbstractListModel(parent)
@@ -95,9 +98,20 @@ bool NoteInputBarCustomiseModel::moveRows(const QModelIndex& sourceParent, int s
     return true;
 }
 
-static bool toolbarContainsAction(const std::vector<std::string>& toolbarActionNames, const mu::actions::ActionName& actionName)
+static bool containsAction(const ActionNameList& toolbarActionNames, const ActionName& actionName)
 {
     return std::find(toolbarActionNames.begin(), toolbarActionNames.end(), actionName) != toolbarActionNames.end();
+}
+
+static size_t indexOf(const ActionList& actions, const ActionName& actionName)
+{
+    for (size_t i = 0; i < actions.size(); ++i) {
+        if (actions[i].name == actionName) {
+            return i;
+        }
+    }
+
+    return -1;
 }
 
 void NoteInputBarCustomiseModel::load()
@@ -106,14 +120,14 @@ void NoteInputBarCustomiseModel::load()
 
     beginResetModel();
 
-    std::vector<std::string> actions = customizedActions();
+    ActionNameList actions = customizedActions();
     if (actions.empty()) {
         actions = defaultActions();
     }
 
-    for (const std::string& actionName: actions) {
+    for (const ActionName& actionName: actions) {
         Action action = actionsRegister()->action(actionName);
-        bool checked = toolbarContainsAction(currentWorkspaceActions(), actionName);
+        bool checked = containsAction(currentWorkspaceActions(), actionName);
 
         m_actions << makeItem(action, checked);
     }
@@ -432,58 +446,34 @@ AbstractNoteInputBarItem* NoteInputBarCustomiseModel::makeItem(const mu::actions
 AbstractNoteInputBarItem* NoteInputBarCustomiseModel::makeSeparatorItem() const
 {
     AbstractNoteInputBarItem* item = new AbstractNoteInputBarItem(AbstractNoteInputBarItem::ItemType::SEPARATOR);
-    item->setTitle(qtrc("notation", CN_SEPARATOR_LINE_TITLE.c_str()));
+    item->setTitle(qtrc("notation", SEPARATOR_LINE_TITLE.c_str()));
     return item;
 }
 
-std::vector<std::string> NoteInputBarCustomiseModel::customizedActions() const
+ActionNameList NoteInputBarCustomiseModel::customizedActions() const
 {
-    std::vector<std::string> result = configuration()->toolbarActions(CN_NOTE_INPUT_TOOLBAR_NAME);
+    ActionNameList actionsFromConfiguration = configuration()->toolbarActions(NOTE_INPUT_TOOLBAR_NAME);
 
-    if (result.empty()) {
+    if (actionsFromConfiguration.empty()) {
         return {};
     }
 
-    actions::ActionList allNoteInputActions = NotationActions::defaultNoteInputActions();
-    for (const Action& action: allNoteInputActions) {
-        if (actionFromNoteInputModes(action.name)) {
+    ActionNameList result;
+    for (const ActionName& actionName: actionsFromConfiguration) {
+        if (containsAction(result, actionName) && actionName != SEPARATOR_LINE_ACTION_NAME) {
             continue;
-        }
-
-        if (!toolbarContainsAction(result, action.name)) {
-            result.push_back(action.name);
-        }
-    }
-
-    return result;
-}
-
-std::vector<std::string> NoteInputBarCustomiseModel::defaultActions() const
-{
-    actions::ActionList allNoteInputActions = NotationActions::defaultNoteInputActions();
-    std::vector<std::string> currentWorkspaceNoteInputActions = currentWorkspaceActions();
-
-    bool noteInputModeActionExists = false;
-
-    std::vector<std::string> result;
-    for (const std::string& actionName: currentWorkspaceNoteInputActions) {
-        if (actionFromNoteInputModes(actionName)) {
-            noteInputModeActionExists = true;
         }
 
         result.push_back(actionName);
     }
 
-    if (!noteInputModeActionExists) {
-        result.insert(result.begin(), CN_NOTE_INPUT_ACTION_NAME);
-    }
-
+    actions::ActionList allNoteInputActions = NotationActions::defaultNoteInputActions();
     for (const Action& action: allNoteInputActions) {
-        if (toolbarContainsAction(currentWorkspaceNoteInputActions, action.name)) {
+        if (actionFromNoteInputModes(action.name)) {
             continue;
         }
 
-        if (actionFromNoteInputModes(action.name)) {
+        if (containsAction(result, action.name)) {
             continue;
         }
 
@@ -493,13 +483,77 @@ std::vector<std::string> NoteInputBarCustomiseModel::defaultActions() const
     return result;
 }
 
-std::vector<std::string> NoteInputBarCustomiseModel::currentActions() const
+ActionNameList NoteInputBarCustomiseModel::defaultActions() const
 {
-    std::vector<std::string> result;
+    ActionList allNoteInputActions = NotationActions::defaultNoteInputActions();
+    ActionNameList currentWorkspaceNoteInputActions = currentWorkspaceActions();
+
+    bool noteInputModeActionExists = false;
+
+    ActionNameList result;
+    auto canAppendAction = [&](const ActionName& actionName) {
+                               if (actionFromNoteInputModes(actionName)) {
+                                   if (noteInputModeActionExists) {
+                                       return false;
+                                   }
+
+                                   noteInputModeActionExists = true;
+                               }
+
+                               return true;
+                           };
+
+    auto appendRelatedActions = [&](size_t startActionIndex) {
+                                    ActionNameList actions;
+                                    for (size_t i = startActionIndex; i < allNoteInputActions.size(); ++i) {
+                                        ActionName actionName = allNoteInputActions[i].name;
+                                        if (containsAction(currentWorkspaceNoteInputActions, actionName)) {
+                                            break;
+                                        }
+
+                                        if (!canAppendAction(actionName)) {
+                                            continue;
+                                        }
+
+                                        actions.push_back(actionName);
+                                    }
+
+                                    if (!actions.empty()) {
+                                        result.insert(result.end(), actions.begin(), actions.end());
+                                    }
+                                };
+
+    //! NOTE: if there are actions at the beginning of the all note input actions,
+    //!       but not at the beginning of the current workspace
+    appendRelatedActions(0);
+
+    for (const ActionName& actionName: currentWorkspaceNoteInputActions) {
+        if (!canAppendAction(actionName)) {
+            continue;
+        }
+
+        result.push_back(actionName);
+
+        int indexInDefaultActions = indexOf(allNoteInputActions, actionName);
+        if (indexInDefaultActions != -1) {
+            appendRelatedActions(indexInDefaultActions + 1);
+        }
+    }
+
+    if (!noteInputModeActionExists) {
+        result.insert(result.begin(), NOTE_INPUT_ACTION_NAME);
+    }
+
+    return result;
+}
+
+ActionNameList NoteInputBarCustomiseModel::currentActions() const
+{
+    ActionNameList result;
 
     for (const AbstractNoteInputBarItem* item: m_actions) {
         if (item->type() == AbstractNoteInputBarItem::SEPARATOR) {
-            result.push_back("");
+            result.push_back(SEPARATOR_LINE_ACTION_NAME);
             continue;
         }
 
@@ -512,7 +566,7 @@ std::vector<std::string> NoteInputBarCustomiseModel::currentActions() const
     return result;
 }
 
-std::vector<std::string> NoteInputBarCustomiseModel::currentWorkspaceActions() const
+ActionNameList NoteInputBarCustomiseModel::currentWorkspaceActions() const
 {
     RetValCh<IWorkspacePtr> workspace = workspaceManager()->currentWorkspace();
     if (!workspace.ret) {
@@ -520,10 +574,10 @@ std::vector<std::string> NoteInputBarCustomiseModel::currentWorkspaceActions() c
         return {};
     }
 
-    AbstractDataPtr abstractData = workspace.val->data(WorkspaceTag::Toolbar, CN_NOTE_INPUT_TOOLBAR_NAME);
+    AbstractDataPtr abstractData = workspace.val->data(WorkspaceTag::Toolbar, NOTE_INPUT_TOOLBAR_NAME);
     ToolbarDataPtr toolbarData = std::dynamic_pointer_cast<ToolbarData>(abstractData);
     if (!toolbarData) {
-        LOGE() << "Failed to get data of actions for " << CN_NOTE_INPUT_TOOLBAR_NAME;
+        LOGE() << "Failed to get data of actions for " << NOTE_INPUT_TOOLBAR_NAME;
         return {};
     }
 
@@ -532,7 +586,7 @@ std::vector<std::string> NoteInputBarCustomiseModel::currentWorkspaceActions() c
 
 bool NoteInputBarCustomiseModel::actionFromNoteInputModes(const ActionName& actionName) const
 {
-    return QString::fromStdString(actionName).startsWith(QString::fromStdString(CN_NOTE_INPUT_ACTION_NAME));
+    return QString::fromStdString(actionName).startsWith(QString::fromStdString(NOTE_INPUT_ACTION_NAME));
 }
 
 void NoteInputBarCustomiseModel::saveActions()
@@ -543,18 +597,18 @@ void NoteInputBarCustomiseModel::saveActions()
         return;
     }
 
-    std::vector<std::string> currentActions = this->currentActions();
+    ActionNameList currentActions = this->currentActions();
 
     ToolbarDataPtr toolbarData = std::make_shared<ToolbarData>();
     toolbarData->tag = WorkspaceTag::Toolbar;
-    toolbarData->name = CN_NOTE_INPUT_TOOLBAR_NAME;
+    toolbarData->name = NOTE_INPUT_TOOLBAR_NAME;
     toolbarData->actions = currentActions;
     workspace.val->addData(toolbarData);
 
-    std::vector<std::string> items;
+    ActionNameList items;
     for (const AbstractNoteInputBarItem* actionItem: m_actions) {
         items.push_back(actionItem->id().toStdString());
     }
 
-    configuration()->setToolbarActions(CN_NOTE_INPUT_TOOLBAR_NAME, items);
+    configuration()->setToolbarActions(NOTE_INPUT_TOOLBAR_NAME, items);
 }

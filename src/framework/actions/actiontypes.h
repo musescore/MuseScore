@@ -31,6 +31,7 @@
 namespace mu {
 namespace actions {
 using ActionName = std::string;
+using ActionNameList = std::vector<ActionName>;
 
 inline static ActionName namefromQString(const QString& s)
 {

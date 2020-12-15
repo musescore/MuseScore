@@ -101,11 +101,11 @@ private:
     AbstractNoteInputBarItem* makeItem(const actions::Action& action, bool checked);
     AbstractNoteInputBarItem* makeSeparatorItem() const;
 
-    std::vector<std::string> customizedActions() const;
-    std::vector<std::string> defaultActions() const;
-    std::vector<std::string> currentActions() const;
+    actions::ActionNameList customizedActions() const;
+    actions::ActionNameList defaultActions() const;
+    actions::ActionNameList currentActions() const;
 
-    std::vector<std::string> currentWorkspaceActions() const;
+    actions::ActionNameList currentWorkspaceActions() const;
 
     bool actionFromNoteInputModes(const actions::ActionName& actionName) const;
 
