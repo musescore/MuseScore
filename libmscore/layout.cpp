@@ -1588,8 +1588,6 @@ static void distributeStaves(Page* page)
                   transferCurlyBracket  = false;
                   }
             else {
-                  // reset staff and system heights
-                  system->restoreLayout2();
                   bool newSystem       { true };
                   bool addSpaceAroundNormalBracket { false };
                   bool addSpaceAroundCurlyBracket  { false };
@@ -4629,20 +4627,28 @@ void LayoutContext::collectPage()
       System* nextSystem = 0;
       int systemIdx = -1;
 
-      qreal y = page->systems().isEmpty() ? page->tm() : page->system(0)->y() + page->system(0)->height();
       // re-calculate positions for systems before current
       // (they may have been filled on previous layout)
       int pSystems = page->systems().size();
+      if (pSystems > 0)
+            page->system(0)->restoreLayout2();
+      qreal y = page->systems().isEmpty() ? page->tm() : page->system(0)->y() + page->system(0)->height();
       for (int i = 1; i < pSystems; ++i) {
             System* cs = page->system(i);
             System* ps = page->system(i - 1);
             qreal distance = ps->minDistance(cs);
             y += distance;
             cs->setPos(page->lm(), y);
+            cs->restoreLayout2();
             y += cs->height();
             }
 
       for (int k = 0;;++k) {
+
+            // we know we want this system;
+            // but it may have staff spread leftover from a previous layout
+            curSystem->restoreLayout2();
+
             //
             // calculate distance to previous system
             //
