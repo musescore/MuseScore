@@ -76,7 +76,7 @@ QmlDialog {
 
                     icon: IconCode.DELETE_TANK
 
-                    enabled: partsModel.hasSelection
+                    enabled: partsModel.isRemovingAvailable
 
                     onClicked: {
                         partsModel.removeSelectedParts()

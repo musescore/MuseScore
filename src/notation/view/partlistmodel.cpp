@@ -59,7 +59,7 @@ QVariant PartListModel::data(const QModelIndex& index, int role) const
     case RoleIsSelected:
         return m_selectionModel->isSelected(index);
     case RoleIsMain:
-        return notation == masterNotation();
+        return isMainNotation(notation);
     case RoleVoicesVisibility:
         return voicesVisibility(notation);
     case RoleVoicesTitle:
@@ -67,6 +67,11 @@ QVariant PartListModel::data(const QModelIndex& index, int role) const
     }
 
     return QVariant();
+}
+
+bool PartListModel::isMainNotation(INotationPtr notation) const
+{
+    return notation == masterNotation();
 }
 
 QString PartListModel::formatVoicesTitle(INotationPtr notation) const
@@ -129,6 +134,21 @@ bool PartListModel::hasSelection() const
     return m_selectionModel->hasSelection();
 }
 
+bool PartListModel::isRemovingAvailable() const
+{
+    if (!m_selectionModel->hasSelection()) {
+        return false;
+    }
+
+    for (int index : selectedRows()) {
+        if (isMainNotation(m_notations[index])) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 void PartListModel::createNewPart()
 {
     Meta meta;
@@ -138,7 +158,10 @@ void PartListModel::createNewPart()
 
     notation->setMetaInfo(meta);
 
-    insertNotation(m_notations.size(), notation);
+    int index = m_notations.size();
+    insertNotation(index, notation);
+
+    selectPart(index);
 }
 
 void PartListModel::selectPart(int partIndex)
@@ -162,6 +185,19 @@ void PartListModel::selectPart(int partIndex)
 }
 
 void PartListModel::removePart(int partIndex)
+{
+    if (!isNotationIndexValid(partIndex)) {
+        return;
+    }
+
+    constexpr int partCount = 1;
+
+    if (userAgreesToRemoveParts(partCount)) {
+        doRemovePart(partIndex);
+    }
+}
+
+void PartListModel::doRemovePart(int partIndex)
 {
     if (!isNotationIndexValid(partIndex)) {
         return;
@@ -245,6 +281,10 @@ void PartListModel::removeSelectedParts()
         return;
     }
 
+    if (!userAgreesToRemoveParts(rows.count())) {
+        return;
+    }
+
     QList<INotationPtr> notationsToRemove;
 
     for (int row : rows) {
@@ -253,10 +293,22 @@ void PartListModel::removeSelectedParts()
 
     for (INotationPtr notation : notationsToRemove) {
         int row = m_notations.indexOf(notation);
-        removePart(row);
+        doRemovePart(row);
     }
 
     m_selectionModel->clear();
+}
+
+bool PartListModel::userAgreesToRemoveParts(int partCount) const
+{
+    QString question = mu::qtrc("notation", "Do you want to permanently delete %1?")
+            .arg(partCount > 1 ? "these parts" : "this part");
+
+    IInteractive::Button button = interactive()->question("", question.toStdString(), {
+        IInteractive::Button::Yes, IInteractive::Button::No
+    });
+
+    return button == IInteractive::Button::Yes;
 }
 
 void PartListModel::openSelectedParts()
