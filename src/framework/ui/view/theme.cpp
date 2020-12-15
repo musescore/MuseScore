@@ -25,6 +25,8 @@
 
 using namespace mu::framework;
 
+static const QString SEMIBOLD_STYLE_NAME("SemiBold");
+
 enum StyleKeys {
     BACKGROUND_PRIMARY_COLOR = 0,
     BACKGROUND_SECONDARY_COLOR,
@@ -313,16 +315,16 @@ void Theme::setupUiFonts()
     };
 
     for (QFont* font : fonts.keys()) {
+        std::string family = configuration()->fontFamily();
+        int size = configuration()->fontSize(fonts[font].sizeType);
         QFont::Weight weight = fonts[font].weight;
 
-        std::string family = weight == QFont::Normal ? configuration()->fontFamily() :
-                                                       configuration()->semiBoldFontFamily();
-
-        int size = configuration()->fontSize(fonts[font].sizeType);
-
-        font->setFamily(QString::fromStdString(family));
         font->setPixelSize(size);
-        font->setWeight(weight);
+        font->setFamily(QString::fromStdString(family));
+
+        if (weight == QFont::DemiBold) {
+            font->setStyleName(SEMIBOLD_STYLE_NAME);
+        }
     }
 }
 

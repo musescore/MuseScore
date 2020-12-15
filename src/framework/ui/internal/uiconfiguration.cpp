@@ -12,7 +12,6 @@ using ThemeType = IUiConfiguration::ThemeType;
 
 static const Settings::Key UI_THEME_TYPE_KEY("ui", "ui/application/globalStyle");
 static const Settings::Key UI_FONT_FAMILY_KEY("ui", "ui/theme/fontFamily");
-static const Settings::Key UI_SEMIBOLD_FONT_FAMILY_KEY("ui", "ui/theme/semiBoldFontFamily");
 static const Settings::Key UI_FONT_SIZE_KEY("ui", "ui/theme/fontSize");
 static const Settings::Key UI_ICONS_FONT_FAMILY_KEY("ui", "ui/theme/iconsFontFamily");
 static const Settings::Key UI_MUSICAL_FONT_FAMILY_KEY("ui", "ui/theme/musicalFontFamily");
@@ -22,7 +21,6 @@ void UiConfiguration::init()
 {
     settings()->setDefaultValue(UI_THEME_TYPE_KEY, Val(static_cast<int>(ThemeType::LIGHT_THEME)));
     settings()->setDefaultValue(UI_FONT_FAMILY_KEY, Val("Fira Sans"));
-    settings()->setDefaultValue(UI_SEMIBOLD_FONT_FAMILY_KEY, Val("Fira Sans SemiBold"));
     settings()->setDefaultValue(UI_FONT_SIZE_KEY, Val(12));
     settings()->setDefaultValue(UI_ICONS_FONT_FAMILY_KEY, Val("MusescoreIcon"));
     settings()->setDefaultValue(UI_MUSICAL_FONT_FAMILY_KEY, Val("Leland"));
@@ -67,11 +65,6 @@ Channel<ThemeType> UiConfiguration::themeTypeChanged() const
 std::string UiConfiguration::fontFamily() const
 {
     return settings()->value(UI_FONT_FAMILY_KEY).toString();
-}
-
-std::string UiConfiguration::semiBoldFontFamily() const
-{
-    return settings()->value(UI_SEMIBOLD_FONT_FAMILY_KEY).toString();
 }
 
 int UiConfiguration::fontSize(FontSizeType type) const
