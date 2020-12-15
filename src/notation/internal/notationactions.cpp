@@ -583,16 +583,11 @@ const ActionList NotationActions::m_noteInputActions = {
            ShortcutContext::NotationActive,
            IconCode::Code::FOOT_PEDAL
            ),
-//    Action("note-input-timewise", // TODO Insert (shifts notation to the right)
-//           QT_TRANSLATE_NOOP("action", "Re-pitch existing notes "),
-//           ShortcutContext::NotationActive,
-//           IconCode::Code::NOTE_TO_RIGHT
-//           ),
-//    Action("note-input-repitch", // TODO Insert (extends measure)
-//           QT_TRANSLATE_NOOP("action", "Re-pitch existing notes "),
-//           ShortcutContext::NotationActive,
-//           IconCode::Code::NOTE_PLUS
-//           ),
+    Action("note-input-timewise",
+           QT_TRANSLATE_NOOP("action", "Insert"),
+           ShortcutContext::NotationActive,
+           IconCode::Code::NOTE_PLUS
+           ),
     Action("note-longa",
            QT_TRANSLATE_NOOP("action", "Longo"),
            ShortcutContext::NotationActive,
@@ -683,15 +678,15 @@ const ActionList NotationActions::m_noteInputActions = {
            ShortcutContext::NotationActive,
            IconCode::Code::REST
            ),
-    Action("flat2",
-           QT_TRANSLATE_NOOP("action", "Double flat"),
-           ShortcutContext::NotationActive,
-           IconCode::Code::FLAT_DOUBLE
-           ),
     Action("flat",
            QT_TRANSLATE_NOOP("action", "Flat"),
            ShortcutContext::NotationActive,
            IconCode::Code::FLAT
+           ),
+    Action("flat2",
+           QT_TRANSLATE_NOOP("action", "Double flat"),
+           ShortcutContext::NotationActive,
+           IconCode::Code::FLAT_DOUBLE
            ),
     Action("nat",
            QT_TRANSLATE_NOOP("action", "Natural"),

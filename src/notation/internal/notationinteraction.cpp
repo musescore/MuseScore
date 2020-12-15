@@ -865,7 +865,7 @@ bool NotationInteraction::drop(const QPointF& pos, Qt::KeyboardModifiers modifie
     return accepted;
 }
 
-void NotationInteraction::selectInstrument(Ms::InstrumentChange *instrumentChange)
+void NotationInteraction::selectInstrument(Ms::InstrumentChange* instrumentChange)
 {
     if (!instrumentChange) {
         return;
@@ -1340,7 +1340,7 @@ bool NotationInteraction::notesHaveActiculation(const std::vector<Note*>& notes,
     for (Note* note: notes) {
         Chord* chord = note->chord();
 
-        std::set<SymId> chordArticulations = chord->articulationSymbolIds();
+        std::set<SymbolId> chordArticulations = chord->articulationSymbolIds();
         chordArticulations = Ms::flipArticulations(chordArticulations, Ms::Placement::ABOVE);
         chordArticulations = Ms::splitArticulations(chordArticulations);
 
@@ -2025,9 +2025,8 @@ void NotationInteraction::changeSelectedNotesArticulation(SymbolId articulationS
     std::vector<Ms::Note*> notes = score()->selection().noteList();
 
     auto updateMode = notesHaveActiculation(notes, articulationSymbolId)
-                      ? ArticulationsUpdateMode::Remove : ArticulationsUpdateMode::Insert;
+                      ? Ms::ArticulationsUpdateMode::Remove : Ms::ArticulationsUpdateMode::Insert;
 
-    startEdit();
     std::set<Chord*> chords;
     for (Note* note: notes) {
         Chord* chord = note->chord();
@@ -2036,6 +2035,7 @@ void NotationInteraction::changeSelectedNotesArticulation(SymbolId articulationS
         }
     }
 
+    startEdit();
     for (Chord* chord: chords) {
         chord->updateArticulations({ articulationSymbolId }, updateMode);
     }

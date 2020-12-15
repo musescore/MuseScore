@@ -12,7 +12,7 @@ QmlDialog {
     id: root
 
     width: 280
-    height: 825
+    height: 600
 
     modal: true
 
@@ -138,7 +138,7 @@ QmlDialog {
 
                 delegate: Item {
                     width: parent ? parent.width : 0
-                    height: 48
+                    height: 38
 
                     Loader {
                         property var delegateType: Boolean(itemRole) ? itemRole.type : NoteInputBarItem.UNDEFINED
