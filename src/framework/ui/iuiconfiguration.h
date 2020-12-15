@@ -51,7 +51,6 @@ public:
     };
 
     virtual std::string fontFamily() const = 0;
-    virtual std::string semiBoldFontFamily() const = 0;
     virtual int fontSize(FontSizeType type) const = 0;
     virtual async::Notification fontChanged() const = 0;
 
