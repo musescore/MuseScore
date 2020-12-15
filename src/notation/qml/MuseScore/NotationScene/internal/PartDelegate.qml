@@ -26,6 +26,12 @@ Item {
         }
     }
 
+    function endEditTitle() {
+        if (titleLoader.sourceComponent !== partTitle) {
+            titleLoader.sourceComponent = partTitle
+        }
+    }
+
     height: 42
 
     StyledIconLabel {
@@ -80,9 +86,9 @@ Item {
             target: root
 
             function onCurrentPartIndexChanged(currentPartIndex) {
-                titleLoader.sourceComponent = partTitle
+                root.endEditTitle()
             }
-        }
+        } 
     }
 
     FlatButton {
@@ -122,11 +128,6 @@ Item {
         icon: IconCode.MENU_THREE_DOTS
 
         onClicked: {
-            if (contextMenu.opened) {
-                contextMenu.close()
-                return
-            }
-
             contextMenu.popup()
         }
     }
@@ -146,6 +147,8 @@ Item {
         id: contextMenu
 
         StyledMenuItem {
+            id: duplicateItem
+
             text: qsTrc("notation", "Duplicate")
 
             onTriggered: {
@@ -154,6 +157,8 @@ Item {
         }
 
         StyledMenuItem {
+            id: deleteItem
+
             text: qsTrc("notation", "Delete score")
 
             onTriggered: {
@@ -162,10 +167,18 @@ Item {
         }
 
         StyledMenuItem {
+            id: renameItem
+
             text: qsTrc("notation", "Rename")
 
             onTriggered: {
-                titleLoader.startEditTitle()
+                root.startEditTitle()
+            }
+        }
+
+        Component.onCompleted: {
+            if (root.isMain) {
+                removeItem(deleteItem)
             }
         }
     }
@@ -230,7 +243,7 @@ Item {
             }
 
             onDoubleClicked: {
-                titleLoader.startEditTitle()
+                root.startEditTitle()
             }
         }
     }

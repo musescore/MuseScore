@@ -23,6 +23,7 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "inotationcreator.h"
+#include "iinteractive.h"
 
 namespace mu::framework {
 class ItemMultiSelectionModel;
@@ -35,8 +36,10 @@ class PartListModel : public QAbstractListModel
 
     INJECT(notation, context::IGlobalContext, context)
     INJECT(notation, INotationCreator, notationCreator)
+    INJECT(notation, framework::IInteractive, interactive)
 
     Q_PROPERTY(bool hasSelection READ hasSelection NOTIFY selectionChanged)
+    Q_PROPERTY(bool isRemovingAvailable READ isRemovingAvailable NOTIFY selectionChanged)
 
 public:
     explicit PartListModel(QObject* parent = nullptr);
@@ -46,6 +49,7 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     bool hasSelection() const;
+    bool isRemovingAvailable() const;
 
     Q_INVOKABLE void load();
     Q_INVOKABLE void createNewPart();
@@ -64,12 +68,17 @@ signals:
     void partAdded(int index);
 
 private:
+    bool isMainNotation(INotationPtr notation) const;
+
     QString formatVoicesTitle(INotationPtr notation) const;
     QVariantList voicesVisibility(INotationPtr notation) const;
 
     void setTitle(INotationPtr notation, const QString& title);
 
     bool isNotationIndexValid(int index) const;
+
+    bool userAgreesToRemoveParts(int partCount) const;
+    void doRemovePart(int partIndex);
 
     IMasterNotationPtr masterNotation() const;
     QList<int> selectedRows() const;
