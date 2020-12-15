@@ -70,14 +70,14 @@ void Score::addText(const QString& type, const QString& txt)
 //   defaultInstrTemplate
 //---------------------------------------------------------
 
-static const InstrumentTemplate* defaultInstrTemplate()
+static const Ms::InstrumentTemplate* defaultInstrTemplate()
 {
-    static InstrumentTemplate defaultInstrument;
+    static Ms::InstrumentTemplate defaultInstrument;
     if (defaultInstrument.channel.empty()) {
-        Channel a;
+        Ms::Channel a;
         a.setChorus(0);
         a.setReverb(0);
-        a.setName(Channel::DEFAULT_NAME);
+        a.setName(Ms::Channel::DEFAULT_NAME);
         a.setBank(0);
         a.setVolume(90);
         a.setPan(0);

@@ -4,6 +4,9 @@ include(GetBuildType)
 
 set(BUILD_SHARED_LIBS OFF)
 set(SHARED_LIBS_INSTALL_DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+
+set(CMAKE_UNITY_BUILD_BATCH_SIZE 12)
+
 if (CC_IS_GCC)
     message(STATUS "Using Compiler GCC ${CMAKE_CXX_COMPILER_VERSION}")
 
@@ -13,8 +16,6 @@ if (CC_IS_GCC)
     if (BUILD_IS_DEBUG)
         set(BUILD_SHARED_LIBS ON)
     endif(BUILD_IS_DEBUG)
-
-    #add_compile_options(-H)
 
 elseif(CC_IS_MSVC)
     message(STATUS "Using Compiler MSVC ${CMAKE_CXX_COMPILER_VERSION}")

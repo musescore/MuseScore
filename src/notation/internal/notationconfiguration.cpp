@@ -104,7 +104,7 @@ QColor NotationConfiguration::backgroundColor() const
     return settings()->value(BACKGROUND_COLOR).toQColor();
 }
 
-Channel<QColor> NotationConfiguration::backgroundColorChanged() const
+async::Channel<QColor> NotationConfiguration::backgroundColorChanged() const
 {
     return m_backgroundColorChanged;
 }
@@ -142,7 +142,7 @@ QColor NotationConfiguration::foregroundColor() const
     return defaultForegroundColor();
 }
 
-Channel<QColor> NotationConfiguration::foregroundColorChanged() const
+async::Channel<QColor> NotationConfiguration::foregroundColorChanged() const
 {
     return m_foregroundColorChanged;
 }

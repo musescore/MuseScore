@@ -47,6 +47,12 @@
 #include "libmscore/volta.h"
 #include "libmscore/segment.h"
 
+
+namespace Bww {
+/**
+ The writer that imports into MuseScore.
+ */
+
 //---------------------------------------------------------
 //   addText
 //   copied from importxml.cpp
@@ -120,11 +126,6 @@ static void setTempo(Ms::Score* score, int tempo)
     Ms::Segment* segment = measure->getSegment(Ms::SegmentType::ChordRest, Ms::Fraction(0,1));
     segment->add(tt);
 }
-
-namespace Bww {
-/**
- The writer that imports into MuseScore.
- */
 
 class MsScWriter : public Writer
 {
@@ -439,9 +440,9 @@ void MsScWriter::header(const QString title, const QString type,
 
     //  score->setWorkTitle(title);
     Ms::VBox* vbox  = 0;
-    addText(vbox, score, title, Ms::Tid::TITLE);
-    addText(vbox, score, type, Ms::Tid::SUBTITLE);
-    addText(vbox, score, composer, Ms::Tid::COMPOSER);
+    Bww::addText(vbox, score, title, Ms::Tid::TITLE);
+    Bww::addText(vbox, score, type, Ms::Tid::SUBTITLE);
+    Bww::addText(vbox, score, composer, Ms::Tid::COMPOSER);
     // addText(vbox, score, strPoet, Ms::Tid::POET);
     // addText(vbox, score, strTranslator, Ms::Tid::TRANSLATOR);
     if (vbox) {

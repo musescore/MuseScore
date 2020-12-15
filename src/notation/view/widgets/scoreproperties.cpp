@@ -25,10 +25,10 @@
 #include "ui/view/iconcodes.h"
 #include "translation.h"
 
-using namespace Ms;
 using namespace mu::notation;
 using namespace mu::framework;
 
+namespace spr_prv {
 static const QString WORK_TITLE_TAG("workTitle");
 static const QString WORK_NUMBER_TAG("workNumber");
 static const QString COMPOSER_TAG("composer");
@@ -39,6 +39,7 @@ static const QString COPYRIGHT_TAG("copyright");
 static const QString TRANSLATOR_TAG("translator");
 static const QString ARRANGER_TAG("arranger");
 static const QString CREATION_DATE_TAG("creationDate");
+}
 
 //---------------------------------------------------------
 //   MetaEditDialog
@@ -171,16 +172,16 @@ void ScorePropertiesDialog::newClicked()
 bool ScorePropertiesDialog::isStandardTag(const QString& tag) const
 {
     static const QSet<QString> standardTags {
-        WORK_TITLE_TAG,
-        WORK_NUMBER_TAG,
-        ARRANGER_TAG,
-        COMPOSER_TAG,
-        LYRICIST_TAG,
-        PLATFORM_TAG,
-        SOURCE_TAG,
-        TRANSLATOR_TAG,
-        COPYRIGHT_TAG,
-        CREATION_DATE_TAG
+        spr_prv::WORK_TITLE_TAG,
+        spr_prv::WORK_NUMBER_TAG,
+        spr_prv::ARRANGER_TAG,
+        spr_prv::COMPOSER_TAG,
+        spr_prv::LYRICIST_TAG,
+        spr_prv::PLATFORM_TAG,
+        spr_prv::SOURCE_TAG,
+        spr_prv::TRANSLATOR_TAG,
+        spr_prv::COPYRIGHT_TAG,
+        spr_prv::CREATION_DATE_TAG
     };
 
     return standardTags.contains(tag);
@@ -337,15 +338,15 @@ void ScorePropertiesDialog::initTags()
 
     Meta meta = notation()->metaInfo();
 
-    addTag(WORK_TITLE_TAG, meta.title);
-    addTag(ARRANGER_TAG, meta.arranger);
-    addTag(COMPOSER_TAG, meta.composer);
-    addTag(COPYRIGHT_TAG, meta.copyright);
-    addTag(CREATION_DATE_TAG, meta.creationDate.toString());
-    addTag(LYRICIST_TAG, meta.lyricist);
-    addTag(TRANSLATOR_TAG, meta.translator);
-    addTag(PLATFORM_TAG, meta.platform);
-    addTag(SOURCE_TAG, meta.source);
+    addTag(spr_prv::WORK_TITLE_TAG, meta.title);
+    addTag(spr_prv::ARRANGER_TAG, meta.arranger);
+    addTag(spr_prv::COMPOSER_TAG, meta.composer);
+    addTag(spr_prv::COPYRIGHT_TAG, meta.copyright);
+    addTag(spr_prv::CREATION_DATE_TAG, meta.creationDate.toString());
+    addTag(spr_prv::LYRICIST_TAG, meta.lyricist);
+    addTag(spr_prv::TRANSLATOR_TAG, meta.translator);
+    addTag(spr_prv::PLATFORM_TAG, meta.platform);
+    addTag(spr_prv::SOURCE_TAG, meta.source);
 
     for (const QString& key : meta.additionalTags.keys()) {
         addTag(key, meta.additionalTags[key].toString());
@@ -360,15 +361,15 @@ void ScorePropertiesDialog::saveMetaTags(const QVariantMap& tagsMap)
 
     Meta meta;
 
-    meta.title = tagsMap[WORK_TITLE_TAG].toString();
-    meta.arranger = tagsMap[ARRANGER_TAG].toString();
-    meta.composer = tagsMap[COMPOSER_TAG].toString();
-    meta.copyright = tagsMap[COPYRIGHT_TAG].toString();
-    meta.creationDate = QDate::fromString(tagsMap[CREATION_DATE_TAG].toString());
-    meta.lyricist = tagsMap[LYRICIST_TAG].toString();
-    meta.translator = tagsMap[TRANSLATOR_TAG].toString();
-    meta.source = tagsMap[SOURCE_TAG].toString();
-    meta.platform = tagsMap[PLATFORM_TAG].toString();
+    meta.title = tagsMap[spr_prv::WORK_TITLE_TAG].toString();
+    meta.arranger = tagsMap[spr_prv::ARRANGER_TAG].toString();
+    meta.composer = tagsMap[spr_prv::COMPOSER_TAG].toString();
+    meta.copyright = tagsMap[spr_prv::COPYRIGHT_TAG].toString();
+    meta.creationDate = QDate::fromString(tagsMap[spr_prv::CREATION_DATE_TAG].toString());
+    meta.lyricist = tagsMap[spr_prv::LYRICIST_TAG].toString();
+    meta.translator = tagsMap[spr_prv::TRANSLATOR_TAG].toString();
+    meta.source = tagsMap[spr_prv::SOURCE_TAG].toString();
+    meta.platform = tagsMap[spr_prv::PLATFORM_TAG].toString();
 
     for (const QString& key : tagsMap.keys()) {
         if (isStandardTag(key)) {

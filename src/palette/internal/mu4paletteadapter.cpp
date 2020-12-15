@@ -30,8 +30,6 @@
 using namespace mu;
 using namespace mu::palette;
 
-using namespace Ms;
-
 MU4PaletteAdapter::MU4PaletteAdapter()
 {
     m_paletteEnabled.val = true;
@@ -83,10 +81,10 @@ bool MU4PaletteAdapter::applyPaletteElement(Ms::Element* element, Qt::KeyboardMo
 Ms::PaletteWorkspace* MU4PaletteAdapter::paletteWorkspace() const
 {
     if (!m_paletteWorkspace) {
-        PaletteTreeModel* emptyModel = new PaletteTreeModel(std::make_shared<PaletteTree>());
-        PaletteTreeModel* masterPaletteModel = new PaletteTreeModel(PaletteCreator::newMasterPaletteTree());
+        Ms::PaletteTreeModel* emptyModel = new Ms::PaletteTreeModel(std::make_shared<Ms::PaletteTree>());
+        Ms::PaletteTreeModel* masterPaletteModel = new Ms::PaletteTreeModel(Ms::PaletteCreator::newMasterPaletteTree());
 
-        m_paletteWorkspace = new PaletteWorkspace(emptyModel, masterPaletteModel, /* parent */ nullptr);
+        m_paletteWorkspace = new Ms::PaletteWorkspace(emptyModel, masterPaletteModel, /* parent */ nullptr);
         emptyModel->setParent(m_paletteWorkspace);
         masterPaletteModel->setParent(m_paletteWorkspace);
     }

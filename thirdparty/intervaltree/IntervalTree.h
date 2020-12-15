@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <iostream>
 
+namespace interval_tree {
+
 template <class T, typename K = int>
 class Interval {
 public:
@@ -213,5 +215,7 @@ public:
     }
 
 };
+
+}
 
 #endif

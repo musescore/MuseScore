@@ -24,7 +24,7 @@
 using namespace mu::notation;
 using namespace mu::instruments;
 
-Ms::Instrument InstrumentsConverter::convertInstrument(const Instrument& instrument)
+Ms::Instrument InstrumentsConverter::convertInstrument(const mu::instruments::Instrument& instrument)
 {
     Ms::Instrument result;
     result.setAmateurPitchRange(instrument.amateurPitchRange.min, instrument.amateurPitchRange.max);
@@ -63,9 +63,9 @@ Ms::Instrument InstrumentsConverter::convertInstrument(const Instrument& instrum
     return result;
 }
 
-Instrument InstrumentsConverter::convertInstrument(const Ms::Instrument& instrument)
+mu::instruments::Instrument InstrumentsConverter::convertInstrument(const Ms::Instrument& instrument)
 {
-    Instrument result;
+    mu::instruments::Instrument result;
     result.amateurPitchRange = PitchRange(instrument.minPitchA(), instrument.maxPitchA());
     result.professionalPitchRange = PitchRange(instrument.minPitchP(), instrument.maxPitchP());
 
