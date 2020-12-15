@@ -20,6 +20,12 @@ Item {
     signal voicesVisibilityChangeRequested()
     signal partClicked()
 
+    function startEditTitle() {
+        if (titleLoader.sourceComponent !== editPartTitleField) {
+            titleLoader.sourceComponent = editPartTitleField
+        }
+    }
+
     height: 42
 
     StyledIconLabel {
@@ -69,12 +75,6 @@ Item {
         width: root.maxTitleWidth - partIcon.width
 
         sourceComponent: partTitle
-
-        function startEditTitle() {
-            if (sourceComponent !== editPartTitleField) {
-                sourceComponent = editPartTitleField
-            }
-        }
 
         Connections {
             target: root

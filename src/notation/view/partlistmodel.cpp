@@ -137,10 +137,8 @@ void PartListModel::createNewPart()
     INotationPtr notation = notationCreator()->newExcerptNotation();
 
     notation->setMetaInfo(meta);
-    notation->setOpened(true);
 
     insertNotation(m_notations.size(), notation);
-    m_currentNotation = notation;
 }
 
 void PartListModel::selectPart(int partIndex)
@@ -236,6 +234,8 @@ void PartListModel::insertNotation(int destinationIndex, INotationPtr notation)
     beginInsertRows(QModelIndex(), destinationIndex, destinationIndex);
     m_notations.insert(destinationIndex, notation);
     endInsertRows();
+
+    emit partAdded(destinationIndex);
 }
 
 void PartListModel::removeSelectedParts()
