@@ -27,10 +27,12 @@
 #include "internal/shortcutsregister.h"
 #include "internal/shortcutscontroller.h"
 #include "internal/midiremote.h"
+#include "internal/shortcutsconfiguration.h"
 
 #include "ui/iuiengine.h"
 
 using namespace mu::shortcuts;
+using namespace mu::framework;
 
 static ShortcutsRegister* m_shortcutsRegister = new ShortcutsRegister();
 
@@ -46,9 +48,10 @@ std::string ShortcutsModule::moduleName() const
 
 void ShortcutsModule::registerExports()
 {
-    framework::ioc()->registerExport<IShortcutsRegister>(moduleName(), m_shortcutsRegister);
-    framework::ioc()->registerExport<IShortcutsController>(moduleName(), new ShortcutsController());
-    framework::ioc()->registerExport<IMidiRemote>(moduleName(), new MidiRemote());
+    ioc()->registerExport<IShortcutsRegister>(moduleName(), m_shortcutsRegister);
+    ioc()->registerExport<IShortcutsController>(moduleName(), new ShortcutsController());
+    ioc()->registerExport<IMidiRemote>(moduleName(), new MidiRemote());
+    ioc()->registerExport<IShortcutsConfiguration>(moduleName(), new ShortcutsConfiguration());
 }
 
 void ShortcutsModule::registerResources()
