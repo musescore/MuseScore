@@ -61,6 +61,7 @@ public:
 
 signals:
     void selectionChanged();
+    void partAdded(int index);
 
 private:
     QString formatVoicesTitle(INotationPtr notation) const;

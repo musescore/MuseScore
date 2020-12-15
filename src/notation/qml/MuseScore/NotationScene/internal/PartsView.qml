@@ -60,6 +60,16 @@ Item {
         interactive: height < contentHeight
         clip: true
 
+        Connections {
+            target: root.model
+
+            function onPartAdded(index) {
+                view.positionViewAtIndex(index, ListView.Contain)
+                view.currentIndex = index
+                view.currentItem.startEditTitle()
+            }
+        }
+
         delegate: PartDelegate {
             readonly property int sideMargin: 24
 
