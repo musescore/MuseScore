@@ -134,22 +134,22 @@ void AdditionalInfoModel::setTimeSignatureDenominator(int denominator)
 
 QVariantList AdditionalInfoModel::musicSymbolCodes(int number) const
 {
-    static QMap<QString, MusicalSymbolCodes::Code> numeralsMusicSymbolCodes = {
-        { "0", MusicalSymbolCodes::Code::ZERO },
-        { "1", MusicalSymbolCodes::Code::ONE },
-        { "2", MusicalSymbolCodes::Code::TWO },
-        { "3", MusicalSymbolCodes::Code::THREE },
-        { "4", MusicalSymbolCodes::Code::FOUR },
-        { "5", MusicalSymbolCodes::Code::FIVE },
-        { "6", MusicalSymbolCodes::Code::SIX },
-        { "7", MusicalSymbolCodes::Code::SEVEN },
-        { "8", MusicalSymbolCodes::Code::EIGHT },
-        { "9", MusicalSymbolCodes::Code::NINE },
+    static QMap<QChar, MusicalSymbolCodes::Code> numeralsMusicSymbolCodes = {
+        { '0', MusicalSymbolCodes::Code::ZERO },
+        { '1', MusicalSymbolCodes::Code::ONE },
+        { '2', MusicalSymbolCodes::Code::TWO },
+        { '3', MusicalSymbolCodes::Code::THREE },
+        { '4', MusicalSymbolCodes::Code::FOUR },
+        { '5', MusicalSymbolCodes::Code::FIVE },
+        { '6', MusicalSymbolCodes::Code::SIX },
+        { '7', MusicalSymbolCodes::Code::SEVEN },
+        { '8', MusicalSymbolCodes::Code::EIGHT },
+        { '9', MusicalSymbolCodes::Code::NINE },
     };
 
     QVariantList result;
     QString numberStr = QString::number(number);
-    for (const QString& numeral: numberStr) {
+    for (const QChar& numeral: numberStr) {
         result << static_cast<int>(numeralsMusicSymbolCodes[numeral]);
     }
 

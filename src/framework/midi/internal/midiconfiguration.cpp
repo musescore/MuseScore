@@ -170,7 +170,7 @@ bool MidiConfiguration::readState(const io::path& path, SynthesizerState& state)
         LOGE() << "failed parse xml, error: " << xml.error() << ", path: " << path;
     }
 
-    return xml.hasError();
+    return !xml.hasError();
 }
 
 bool MidiConfiguration::writeState(const io::path& path, const SynthesizerState& state)
@@ -204,5 +204,5 @@ bool MidiConfiguration::writeState(const io::path& path, const SynthesizerState&
         LOGE() << "failed write xml";
     }
 
-    return xml.hasError();
+    return !xml.hasError();
 }
