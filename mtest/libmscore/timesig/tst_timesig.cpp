@@ -279,16 +279,10 @@ void TestTimesig::timesig10()
       ts2->setSig(Fraction(2, 2), TimeSigType::NORMAL);
       TimeSig* ts3 = new TimeSig(score);
       ts3->setSig(Fraction(4, 4), TimeSigType::FOUR_FOUR);
-      //TimeSig* ts4 = new TimeSig(score);
-      //ts4->setSig(Fraction(2, 2), TimeSigType::CUT_BACH);
 
       score->cmdAddTimeSig(m2, 0, ts2, false);
       m2 = score->firstMeasure()->nextMeasure();
       score->cmdAddTimeSig(m2, 0, ts3, false);
-      //m2 = score->firstMeasure()->nextMeasure();
-      //score->cmdAddTimeSig(m2, 0, ts4, false);
-      //m2 = score->firstMeasure()->nextMeasure();
-      //score->cmdAddTimeSig(m2, 0, ts5, false);
 
       score->doLayout();
       QVERIFY(saveCompareScore(score, "timesig-10.mscx", DIR + "timesig-10-ref.mscx"));
@@ -310,15 +304,11 @@ void TestTimesig::timesig_78216()
       Measure* m1 = score->firstMeasure();
       Measure* m2 = m1->nextMeasure();
       Measure* m3 = m2->nextMeasure();
-      //Measure* m4 = m3->nextMeasure();
-      //Measure* m5 = m4->nextMeasure();
 
       // verify no timesig exists in segment of final tick of m1, m2, m3
       QVERIFY2(!m1->findSegment(SegmentType::TimeSig, m1->endTick()), "Should be no timesig at the end of measure 1.");
       QVERIFY2(!m2->findSegment(SegmentType::TimeSig, m2->endTick()), "Should be no timesig at the end of measure 2.");
       QVERIFY2(!m3->findSegment(SegmentType::TimeSig, m3->endTick()), "Should be no timesig at the end of measure 3.");
-      //QVERIFY2(!m4->findSegment(SegmentType::TimeSig, m4->endTick()), "Should be no timesig at the end of measure 4.");
-      //QVERIFY2(!m5->findSegment(SegmentType::TimeSig, m5->endTick()), "Should be no timesig at the end of measure 5.");
       delete score;
       }
 
