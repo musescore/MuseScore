@@ -4618,22 +4618,29 @@ void LayoutContext::collectPage()
       {
       const qreal slb = score->styleP(Sid::staffLowerBorder);
       bool breakPages = score->layoutMode() != LayoutMode::SYSTEM;
-      //qreal y         = prevSystem ? prevSystem->y() + prevSystem->height() : page->tm();
       qreal ey        = page->height() - page->bm();
+      qreal y         = 0.0;
 
       System* nextSystem = 0;
       int systemIdx = -1;
 
-      qreal y = page->systems().isEmpty() ? page->tm() : page->system(0)->y() + page->system(0)->height();
       // re-calculate positions for systems before current
       // (they may have been filled on previous layout)
       int pSystems = page->systems().size();
+      if (pSystems > 0) {
+            page->system(0)->restoreLayout2();
+            y = page->system(0)->y() + page->system(0)->height();
+            }
+      else {
+             y = page->tm();
+            }
       for (int i = 1; i < pSystems; ++i) {
             System* cs = page->system(i);
             System* ps = page->system(i - 1);
             qreal distance = ps->minDistance(cs);
             y += distance;
             cs->setPos(page->lm(), y);
+            cs->restoreLayout2();
             y += cs->height();
             }
 
