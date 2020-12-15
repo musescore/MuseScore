@@ -20,6 +20,14 @@ Item {
         anchors.fill: parent
 
         color: ui.theme.backgroundPrimaryColor
+
+        MouseArea {
+            anchors.fill: parent
+
+            onClicked: {
+                instrumentTreeModel.selectionModel.clear()
+            }
+        }
     }
 
     ColumnLayout {
