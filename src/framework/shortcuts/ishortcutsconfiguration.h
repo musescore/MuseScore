@@ -16,37 +16,23 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_SHORTCUTS_SHORTCUTSREGISTER_H
-#define MU_SHORTCUTS_SHORTCUTSREGISTER_H
+#ifndef MU_SHORTCUTS_ISHORTCUTSCONFIGURATION_H
+#define MU_SHORTCUTS_ISHORTCUTSCONFIGURATION_H
 
-#include <QString>
-
-#include "../ishortcutsregister.h"
-#include "modularity/ioc.h"
-#include "ishortcutsconfiguration.h"
+#include "modularity/imoduleexport.h"
+#include "io/path.h"
 
 namespace mu::shortcuts {
-class ShortcutsRegister : public IShortcutsRegister
+class IShortcutsConfiguration : MODULE_EXPORT_INTERFACE
 {
-    INJECT(shortcuts, IShortcutsConfiguration, configuration)
+    INTERFACE_ID(IShortcutsConfiguration)
 
 public:
+    virtual ~IShortcutsConfiguration() = default;
 
-    ShortcutsRegister() = default;
-
-    void load();
-
-    const std::list<Shortcut>& shortcuts() const override;
-    Shortcut shortcut(const std::string& actionName) const override;
-    std::list<Shortcut> shortcutsForSequence(const std::string& sequence) const override;
-
-private:
-
-    bool loadFromFile(std::list<Shortcut>& shortcuts, const io::path& path) const;
-    void expandStandartKeys(std::list<Shortcut>& shortcuts) const;
-
-    std::list<Shortcut> m_shortcuts;
+    virtual io::path shortcutsUserPath() const = 0;
+    virtual io::path shortcutsDefaultPath() const = 0;
 };
 }
 
-#endif // MU_SHORTCUTS_SHORTCUTSREGISTER_H
+#endif // MU_SHORTCUTS_ISHORTCUTSCONFIGURATION_H

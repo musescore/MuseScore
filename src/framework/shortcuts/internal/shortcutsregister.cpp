@@ -31,18 +31,15 @@ void ShortcutsRegister::load()
 {
     m_shortcuts.clear();
 
-    io::path userPath = globalConfiguration()->dataPath() + "/shortcuts.xml";
-    bool ok = loadFromFile(m_shortcuts, userPath);
+    io::path shortcutsPath = configuration()->shortcutsUserPath();
+    bool ok = loadFromFile(m_shortcuts, shortcutsPath);
     if (!ok) {
-        ok = loadFromFile(m_shortcuts, ":/data/shortcuts.xml");
+        shortcutsPath = configuration()->shortcutsDefaultPath();
+        ok = loadFromFile(m_shortcuts, shortcutsPath);
     }
 
     if (ok) {
         expandStandartKeys(m_shortcuts);
-    }
-
-    if (!ok) {
-        LOGE() << "Failed load shortcuts.xml";
     }
 }
 
@@ -125,7 +122,11 @@ bool ShortcutsRegister::loadFromFile(std::list<Shortcut>& shortcuts, const io::p
         }
     }
 
-    return true;
+    if (xml.hasError()) {
+        LOGE() << "failed parse xml, error: " << xml.error() << ", path: " << path;
+    }
+
+    return !xml.hasError();
 }
 
 const std::list<Shortcut>& ShortcutsRegister::shortcuts() const
