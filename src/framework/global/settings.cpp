@@ -120,7 +120,7 @@ void Settings::setValue(const Key& key, const Val& value)
 
     auto it = m_channels.find(key);
     if (it != m_channels.end()) {
-        Channel<Val> channel = it->second;
+        async::Channel<Val> channel = it->second;
         channel.send(value);
     }
 }
@@ -154,7 +154,7 @@ Settings::Item& Settings::findItem(const Key& key) const
     return it->second;
 }
 
-Channel<Val> Settings::valueChanged(const Key& key) const
+async::Channel<Val> Settings::valueChanged(const Key& key) const
 {
     return m_channels[key];
 }

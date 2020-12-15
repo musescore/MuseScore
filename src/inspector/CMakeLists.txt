@@ -195,4 +195,5 @@ set(MODULE_LINK
     libmscore
     )
 
+set(MODULE_USE_UNITBUILD ON)
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

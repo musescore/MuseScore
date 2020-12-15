@@ -37,7 +37,6 @@
 #include "ui/view/iconcodes.h"
 #include "widgetstatestore.h"
 
-using namespace Ms;
 using namespace mu::notation;
 using namespace mu::framework;
 
@@ -113,8 +112,8 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
     Part* part        = m_orgStaff->part();
     m_instrument      = instrument();
     m_orgInstrument = m_instrument;
-    Score* score      = part->score();
-    m_staff             = new Staff(score);
+    Ms::Score* score      = part->score();
+    m_staff             = new Ms::Staff(score);
     Ms::StaffType* stt = m_staff->setStaffType(Fraction(0,1), *m_orgStaff->staffType(Fraction(0,1)));
     m_staff->setInvisible(m_orgStaff->invisible());
     m_staff->setUserDist(m_orgStaff->userDist());
@@ -187,11 +186,11 @@ void EditStaff::updateInstrument()
 {
     updateInterval(m_instrument.transpose);
 
-    QList<StaffName>& snl = m_instrument.shortNames;
+    QList<Ms::StaffName>& snl = m_instrument.shortNames;
     QString df = snl.isEmpty() ? "" : snl[0].name();
     shortName->setPlainText(df);
 
-    QList<StaffName>& lnl = m_instrument.longNames;
+    QList<Ms::StaffName>& lnl = m_instrument.longNames;
     df = lnl.isEmpty() ? "" : lnl[0].name();
 
     longName->setPlainText(df);
@@ -246,7 +245,7 @@ void EditStaff::updateInterval(const Ms::Interval& iv)
     chromatic %= 12;
     diatonic  %= 7;
 
-    int interval = searchInterval(diatonic, chromatic);
+    int interval = Ms::searchInterval(diatonic, chromatic);
     if (interval == -1) {
         qDebug("EditStaff: unknown interval %d %d", diatonic, chromatic);
         interval = 0;
@@ -385,7 +384,7 @@ void EditStaff::maxPitchPClicked()
 
 void EditStaff::lineDistanceChanged()
 {
-    m_staff->staffType(Fraction(0,1))->setLineDistance(Spatium(lineDistance->value()));
+    m_staff->staffType(Fraction(0,1))->setLineDistance(Ms::Spatium(lineDistance->value()));
 }
 
 void EditStaff::numOfLinesChanged()
@@ -532,7 +531,7 @@ void EditStaff::applyPartProperties()
 
     QString sn = shortName->toPlainText();
     QString ln = longName->toPlainText();
-    if (!Text::validateText(sn) || !Text::validateText(ln)) {
+    if (!Ms::Text::validateText(sn) || !Ms::Text::validateText(ln)) {
         QMessageBox msgBox;
         msgBox.setText(tr("The instrument name is invalid."));
         msgBox.exec();
@@ -544,7 +543,7 @@ void EditStaff::applyPartProperties()
     int intervalIdx = iList->currentIndex();
     bool upFlag     = up->isChecked();
 
-    Ms::Interval interval  = intervalList[intervalIdx];
+    Ms::Interval interval  = Ms::intervalList[intervalIdx];
     interval.diatonic  += octave->value() * 7;
     interval.chromatic += octave->value() * 12;
 
@@ -560,12 +559,12 @@ void EditStaff::applyPartProperties()
 
     m_instrument.shortNames.clear();
     if (sn.length() > 0) {
-        m_instrument.shortNames.append(StaffName(sn, 0));
+        m_instrument.shortNames.append(Ms::StaffName(sn, 0));
     }
 
     m_instrument.longNames.clear();
     if (ln.length() > 0) {
-        m_instrument.longNames.append(StaffName(ln, 0));
+        m_instrument.longNames.append(Ms::StaffName(ln, 0));
     }
 
     m_instrument.singleNoteDynamics = singleNoteDynamics->isChecked();
@@ -624,12 +623,12 @@ void EditStaff::showInstrumentDialog()
 void EditStaff::editStringDataClicked()
 {
     int frets = m_instrument.stringData.frets();
-    QList<instrString> stringList = m_instrument.stringData.stringList();
+    QList<Ms::instrString> stringList = m_instrument.stringData.stringList();
 
     EditStringData* esd = new EditStringData(this, &stringList, &frets);
     esd->setWindowModality(Qt::WindowModal);
     if (esd->exec()) {
-        StringData stringData(frets, stringList);
+        Ms::StringData stringData(frets, stringList);
 
         // update instrument pitch ranges as necessary
         if (stringList.size() > 0) {
@@ -638,7 +637,7 @@ void EditStaff::editStringDataClicked()
             int oldHighestStringPitch     = INT16_MIN;
             int highestStringPitch        = INT16_MIN;
             int lowestStringPitch         = INT16_MAX;
-            for (const instrString& str : stringList) {
+            for (const Ms::instrString& str : stringList) {
                 if (str.pitch > highestStringPitch) {
                     highestStringPitch = str.pitch;
                 }
@@ -647,7 +646,7 @@ void EditStaff::editStringDataClicked()
                 }
             }
             // get old string range bottom
-            for (const instrString& str : m_instrument.stringData.stringList()) {
+            for (const Ms::instrString& str : m_instrument.stringData.stringList()) {
                 if (str.pitch > oldHighestStringPitch) {
                     oldHighestStringPitch = str.pitch;
                 }

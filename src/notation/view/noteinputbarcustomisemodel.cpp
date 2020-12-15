@@ -28,12 +28,16 @@
 #include "internal/notationactions.h"
 #include "workspace/workspacetypes.h"
 
+namespace nibcm_prv {
+
 static const std::string SEPARATOR_LINE_TITLE("-------  Separator line  -------");
 
 static const std::string NOTE_INPUT_ACTION_NAME("note-input");
 static const std::string NOTE_INPUT_MODE_NAME("mode-note-input");
 
 static const std::string NOTE_INPUT_TOOLBAR_NAME("noteInput");
+
+}
 
 using namespace mu::notation;
 using namespace mu::workspace;
@@ -434,13 +438,13 @@ AbstractNoteInputBarItem* NoteInputBarCustomiseModel::makeItem(const mu::actions
 AbstractNoteInputBarItem* NoteInputBarCustomiseModel::makeSeparatorItem() const
 {
     AbstractNoteInputBarItem* item = new AbstractNoteInputBarItem(AbstractNoteInputBarItem::ItemType::SEPARATOR);
-    item->setTitle(qtrc("notation", SEPARATOR_LINE_TITLE.c_str()));
+    item->setTitle(qtrc("notation", nibcm_prv::SEPARATOR_LINE_TITLE.c_str()));
     return item;
 }
 
 std::vector<std::string> NoteInputBarCustomiseModel::customizedActions() const
 {
-    std::vector<std::string> result = configuration()->toolbarActions(NOTE_INPUT_TOOLBAR_NAME);
+    std::vector<std::string> result = configuration()->toolbarActions(nibcm_prv::NOTE_INPUT_TOOLBAR_NAME);
 
     if (result.empty()) {
         return {};
@@ -477,7 +481,7 @@ std::vector<std::string> NoteInputBarCustomiseModel::defaultActions() const
     }
 
     if (!noteInputModeActionExists) {
-        result.insert(result.begin(), NOTE_INPUT_ACTION_NAME);
+        result.insert(result.begin(), nibcm_prv::NOTE_INPUT_ACTION_NAME);
     }
 
     for (const Action& action: allNoteInputActions) {
@@ -522,10 +526,10 @@ std::vector<std::string> NoteInputBarCustomiseModel::currentWorkspaceActions() c
         return {};
     }
 
-    AbstractDataPtr abstractData = workspace.val->data(WorkspaceTag::Toolbar, NOTE_INPUT_TOOLBAR_NAME);
+    AbstractDataPtr abstractData = workspace.val->data(WorkspaceTag::Toolbar, nibcm_prv::NOTE_INPUT_TOOLBAR_NAME);
     ToolbarDataPtr toolbarData = std::dynamic_pointer_cast<ToolbarData>(abstractData);
     if (!toolbarData) {
-        LOGE() << "Failed to get data of actions for " << NOTE_INPUT_TOOLBAR_NAME;
+        LOGE() << "Failed to get data of actions for " << nibcm_prv::NOTE_INPUT_TOOLBAR_NAME;
         return {};
     }
 
@@ -534,7 +538,7 @@ std::vector<std::string> NoteInputBarCustomiseModel::currentWorkspaceActions() c
 
 bool NoteInputBarCustomiseModel::actionFromNoteInputModes(const ActionName& actionName) const
 {
-    return QString::fromStdString(actionName).startsWith(QString::fromStdString(NOTE_INPUT_ACTION_NAME));
+    return QString::fromStdString(actionName).startsWith(QString::fromStdString(nibcm_prv::NOTE_INPUT_ACTION_NAME));
 }
 
 void NoteInputBarCustomiseModel::saveActions()
@@ -549,7 +553,7 @@ void NoteInputBarCustomiseModel::saveActions()
 
     ToolbarDataPtr toolbarData = std::make_shared<ToolbarData>();
     toolbarData->tag = WorkspaceTag::Toolbar;
-    toolbarData->name = NOTE_INPUT_TOOLBAR_NAME;
+    toolbarData->name = nibcm_prv::NOTE_INPUT_TOOLBAR_NAME;
     toolbarData->actions = currentActions;
     workspace.val->addData(toolbarData);
 
@@ -558,5 +562,5 @@ void NoteInputBarCustomiseModel::saveActions()
         items.push_back(actionItem->id().toStdString());
     }
 
-    configuration()->setToolbarActions(NOTE_INPUT_TOOLBAR_NAME, items);
+    configuration()->setToolbarActions(nibcm_prv::NOTE_INPUT_TOOLBAR_NAME, items);
 }

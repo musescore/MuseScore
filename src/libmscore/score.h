@@ -1557,7 +1557,7 @@ inline const Movements* Score::movements() const { return _masterScore->movement
 inline Fraction Score::pos(POS pos) const { return _masterScore->pos(pos); }
 inline void Score::setPos(POS pos, Fraction tick) { _masterScore->setPos(pos, tick); }
 
-extern MasterScore* gscore;
+extern Ms::MasterScore* gscore;
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(LayoutFlags);
 }     // namespace Ms

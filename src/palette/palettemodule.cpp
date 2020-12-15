@@ -69,16 +69,15 @@ void PaletteModule::registerExports()
     framework::ioc()->registerExport<IPaletteConfiguration>(moduleName(), std::make_shared<PaletteConfiguration>());
 
     // create a score for internal use
-    using namespace Ms;
-    gscore = new MasterScore();
-    gscore->setPaletteMode(true);
-    gscore->setMovements(new Movements());
-    gscore->setStyle(MScore::baseStyle());
+    Ms::gscore = new Ms::MasterScore();
+    Ms::gscore->setPaletteMode(true);
+    Ms::gscore->setMovements(new Ms::Movements());
+    Ms::gscore->setStyle(Ms::MScore::baseStyle());
 
-    gscore->style().set(Sid::MusicalTextFont, QString("Bravura Text"));
-    ScoreFont* scoreFont = ScoreFont::fontFactory("Bravura");
-    gscore->setScoreFont(scoreFont);
-    gscore->setNoteHeadWidth(scoreFont->width(SymId::noteheadBlack, gscore->spatium()) / SPATIUM20);
+    Ms::gscore->style().set(Ms::Sid::MusicalTextFont, QString("Bravura Text"));
+    Ms::ScoreFont* scoreFont = Ms::ScoreFont::fontFactory("Bravura");
+    Ms::gscore->setScoreFont(scoreFont);
+    Ms::gscore->setNoteHeadWidth(scoreFont->width(Ms::SymId::noteheadBlack, Ms::gscore->spatium()) / Ms::SPATIUM20);
 }
 
 void PaletteModule::resolveImports()
@@ -130,8 +129,6 @@ void PaletteModule::registerUiTypes()
 
 void PaletteModule::onInit()
 {
-    using namespace Ms;
-
     // load workspace
     PaletteWorkspaceSetup w;
     w.setup();

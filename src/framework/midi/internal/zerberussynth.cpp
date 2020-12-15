@@ -28,10 +28,12 @@
 using namespace mu;
 using namespace mu::midi;
 
+namespace zerb_prv {
 template<class T>
 static const T& clamp(const T& v, const T& lo, const T& hi)
 {
     return (v < lo) ? lo : (hi < v) ? hi : v;
+}
 }
 
 ZerberusSynth::ZerberusSynth()
@@ -200,7 +202,7 @@ void ZerberusSynth::channelSoundsOff(channel_t chan)
 bool ZerberusSynth::channelVolume(channel_t chan, float volume)
 {
     int val = static_cast<int>(volume * 100.f);
-    val = clamp(val, 0, 127);
+    val = zerb_prv::clamp(val, 0, 127);
 
     m_zerb->controller(chan, zerberus::CTRL_VOLUME, val);
     return false;

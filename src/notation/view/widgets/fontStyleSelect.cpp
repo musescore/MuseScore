@@ -21,7 +21,6 @@
 
 #include "ui/view/iconcodes.h"
 
-using namespace Ms;
 using namespace mu::framework;
 using namespace mu::notation;
 
@@ -56,18 +55,18 @@ void FontStyleSelect::_fontStyleChanged()
 //   fontStyle
 //---------------------------------------------------------
 
-FontStyle FontStyleSelect::fontStyle() const
+Ms::FontStyle FontStyleSelect::fontStyle() const
 {
-    FontStyle fs = FontStyle::Normal;
+    Ms::FontStyle fs = Ms::FontStyle::Normal;
 
     if (bold->isChecked()) {
-        fs = fs + FontStyle::Bold;
+        fs = fs + Ms::FontStyle::Bold;
     }
     if (italic->isChecked()) {
-        fs = fs + FontStyle::Italic;
+        fs = fs + Ms::FontStyle::Italic;
     }
     if (underline->isChecked()) {
-        fs = fs + FontStyle::Underline;
+        fs = fs + Ms::FontStyle::Underline;
     }
 
     return fs;
@@ -77,9 +76,9 @@ FontStyle FontStyleSelect::fontStyle() const
 //   setFontStyle
 //---------------------------------------------------------
 
-void FontStyleSelect::setFontStyle(FontStyle fs)
+void FontStyleSelect::setFontStyle(Ms::FontStyle fs)
 {
-    bold->setChecked(fs & FontStyle::Bold);
-    italic->setChecked(fs & FontStyle::Italic);
-    underline->setChecked(fs & FontStyle::Underline);
+    bold->setChecked(fs & Ms::FontStyle::Bold);
+    italic->setChecked(fs & Ms::FontStyle::Italic);
+    underline->setChecked(fs & Ms::FontStyle::Underline);
 }

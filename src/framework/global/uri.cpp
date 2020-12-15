@@ -27,8 +27,10 @@ const Uri::Scheme Uri::MuseScore("musescore");
 const Uri::Scheme Uri::Http("http");
 const Uri::Scheme Uri::Https("https");
 
+namespace uri_prv {
 static const std::string VAL_TRUE("true");
 static const std::string VAL_FALSE("false");
+}
 
 // musescore://module/target/name
 
@@ -120,8 +122,8 @@ void UriQuery::parceParams(const std::string& uri, Params& out) const
         std::string val = param.at(1);
 
         //! NOTE Val is bool?
-        if (VAL_TRUE == val || VAL_FALSE == val) {
-            out[key] = Val(val == VAL_TRUE);
+        if (uri_prv::VAL_TRUE == val || uri_prv::VAL_FALSE == val) {
+            out[key] = Val(val == uri_prv::VAL_TRUE);
             continue;
         }
 

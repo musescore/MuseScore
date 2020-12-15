@@ -28,7 +28,9 @@
 
 #include "log.h"
 
+namespace nsr_prv {
 static const int SELECTION_SIDE_PADDING = 8;
+}
 
 using namespace mu::notation;
 
@@ -102,10 +104,10 @@ std::vector<QRectF> NotationSelectionRange::boundingArea() const
         int topY = sectionElementsMaxY(rangeSection);
         int bottomY = sectionElementsMinY(rangeSection);
 
-        double x1 = sectionStartSegment->pagePos().x() - SELECTION_SIDE_PADDING;
+        double x1 = sectionStartSegment->pagePos().x() - nsr_prv::SELECTION_SIDE_PADDING;
         double x2 = sectionEndSegment->pageBoundingRect().topRight().x();
-        double y1 = topY + segmentFirstStaff->y() + sectionStartSegment->pagePos().y() - SELECTION_SIDE_PADDING;
-        double y2 = bottomY + segmentLastStaff->y() + sectionStartSegment->pagePos().y() + SELECTION_SIDE_PADDING;
+        double y1 = topY + segmentFirstStaff->y() + sectionStartSegment->pagePos().y() - nsr_prv::SELECTION_SIDE_PADDING;
+        double y2 = bottomY + segmentLastStaff->y() + sectionStartSegment->pagePos().y() + nsr_prv::SELECTION_SIDE_PADDING;
 
         if (sectionStartSegment->measure()->first() == sectionStartSegment) {
             x1 = sectionStartSegment->measure()->pagePos().x();

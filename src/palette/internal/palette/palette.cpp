@@ -69,6 +69,8 @@ namespace Ms {
 //    a palette
 //---------------------------------------------------------
 
+namespace plt_prv {
+
 static bool needsStaff(Element* e)
 {
     if (e == 0) {
@@ -86,6 +88,7 @@ static bool needsStaff(Element* e)
     default:
         return false;
     }
+}
 }
 
 //---------------------------------------------------------
@@ -802,7 +805,7 @@ PaletteCell* Palette::add(int idx, Element* s, const QString& name, QString tag,
     cell->element.reset(s);
     cell->name      = name;
     cell->tag       = tag;
-    cell->drawStaff = needsStaff(s);
+    cell->drawStaff = plt_prv::needsStaff(s);
     cell->xoffset   = 0;
     cell->yoffset   = 0;
     cell->mag       = mag;

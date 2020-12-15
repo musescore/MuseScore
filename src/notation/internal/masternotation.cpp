@@ -39,7 +39,6 @@
 
 using namespace mu::notation;
 using namespace mu::async;
-using namespace Ms;
 
 MasterNotation::MasterNotation()
     : Notation()
@@ -74,18 +73,18 @@ mu::Ret MasterNotation::load(const io::path& path)
     return load(path, reader);
 }
 
-MasterScore* MasterNotation::masterScore() const
+Ms::MasterScore* MasterNotation::masterScore() const
 {
-    return dynamic_cast<MasterScore*>(score());
+    return dynamic_cast<Ms::MasterScore*>(score());
 }
 
 mu::Ret MasterNotation::load(const io::path& path, const INotationReaderPtr& reader)
 {
     TRACEFUNC;
 
-    ScoreLoad sl;
+    Ms::ScoreLoad sl;
 
-    MasterScore* score = new MasterScore(scoreGlobal()->baseStyle());
+    Ms::MasterScore* score = new Ms::MasterScore(scoreGlobal()->baseStyle());
     Ret ret = doLoadScore(score, path, reader);
 
     if (ret) {
@@ -112,14 +111,14 @@ mu::Ret MasterNotation::doLoadScore(Ms::MasterScore* score,
 
     score->connectTies();
 
-    for (Part* p : score->parts()) {
+    for (Ms::Part* p : score->parts()) {
         p->updateHarmonyChannels(false);
     }
     score->rebuildMidiMapping();
     score->setSoloMute();
-    for (Score* s : score->scoreList()) {
+    for (Ms::Score* s : score->scoreList()) {
         s->setPlaylistDirty();
-        s->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
+        s->addLayoutFlags(Ms::LayoutFlag::FIX_PITCH_VELO);
         s->setLayoutAll();
     }
     score->updateChannel();
@@ -137,7 +136,7 @@ mu::Ret MasterNotation::doLoadScore(Ms::MasterScore* score,
 
 mu::io::path MasterNotation::path() const
 {
-    const MasterScore* score = masterScore();
+    const Ms::MasterScore* score = masterScore();
 
     if (!score) {
         return mu::io::path();
@@ -156,18 +155,18 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
 
     int measures = scoreOptions.measures;
 
-    KeySigEvent ks;
+    Ms::KeySigEvent ks;
     ks.setKey(scoreOptions.key);
-    VBox* nvb = nullptr;
+    Ms::VBox* nvb = nullptr;
 
     bool pickupMeasure = scoreOptions.measureTimesigNumerator > 0 && scoreOptions.measureTimesigDenominator > 0;
     if (pickupMeasure) {
         measures += 1;
     }
 
-    MasterScore* score = new MasterScore(scoreGlobal()->baseStyle());
+    Ms::MasterScore* score = new Ms::MasterScore(scoreGlobal()->baseStyle());
 
-    QList<Excerpt*> excerpts;
+    QList<Ms::Excerpt*> excerpts;
     if (!templatePath.empty()) {
         std::string syffix = io::syffix(templatePath);
         auto reader = readers()->reader(syffix);
@@ -176,7 +175,7 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
             return make_ret(Ret::Code::InternalError);
         }
 
-        MasterScore* tscore = new MasterScore(scoreGlobal()->baseStyle());
+        Ms::MasterScore* tscore = new Ms::MasterScore(scoreGlobal()->baseStyle());
         Ret ret = doLoadScore(tscore, templatePath, reader);
         if (!ret) {
             delete tscore;
@@ -187,13 +186,13 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
         score->setStyle(tscore->style());
 
         // create instruments from template
-        for (Part* tpart : tscore->parts()) {
-            Part* part = new Part(score);
+        for (Ms::Part* tpart : tscore->parts()) {
+            Ms::Part* part = new Ms::Part(score);
             part->setInstrument(tpart->instrument());
             part->setPartName(tpart->partName());
 
-            for (Staff* tstaff : *tpart->staves()) {
-                Staff* staff = new Staff(score);
+            for (Ms::Staff* tstaff : *tpart->staves()) {
+                Ms::Staff* staff = new Ms::Staff(score);
                 staff->setPart(part);
                 staff->init(tstaff);
                 if (tstaff->links() && !part->staves()->isEmpty()) {
@@ -205,8 +204,8 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
             }
             score->appendPart(part);
         }
-        for (Excerpt* ex : tscore->excerpts()) {
-            Excerpt* x = new Excerpt(score);
+        for (Ms::Excerpt* ex : tscore->excerpts()) {
+            Ms::Excerpt* x = new Ms::Excerpt(score);
             x->setTitle(ex->title());
             for (Part* p : ex->parts()) {
                 int pidx = tscore->parts().indexOf(p);
@@ -218,10 +217,10 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
             }
             excerpts.append(x);
         }
-        MeasureBase* mb = tscore->first();
+        Ms::MeasureBase* mb = tscore->first();
         if (mb && mb->isVBox()) {
-            VBox* tvb = toVBox(mb);
-            nvb = new VBox(score);
+            Ms::VBox* tvb = toVBox(mb);
+            nvb = new Ms::VBox(score);
             nvb->setBoxHeight(tvb->boxHeight());
             nvb->setBoxWidth(tvb->boxWidth());
             nvb->setTopGap(tvb->topGap());
@@ -233,7 +232,7 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
         }
         delete tscore;
     } else {
-        score = new MasterScore(scoreGlobal()->baseStyle());
+        score = new Ms::MasterScore(scoreGlobal()->baseStyle());
     }
 
     score->setName(qtrc("notation", "Untitled"));
@@ -249,59 +248,59 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
         score->fileInfo()->setFile(scoreOptions.title);
     }
 
-    Fraction timesig(scoreOptions.timesigNumerator, scoreOptions.timesigDenominator);
+    Ms::Fraction timesig(scoreOptions.timesigNumerator, scoreOptions.timesigDenominator);
     score->sigmap()->add(0, timesig);
 
-    Fraction firstMeasureTicks = pickupMeasure ? Fraction(scoreOptions.measureTimesigNumerator,
+    Ms::Fraction firstMeasureTicks = pickupMeasure ? Ms::Fraction(scoreOptions.measureTimesigNumerator,
                                                           scoreOptions.measureTimesigDenominator) : timesig;
 
     for (int i = 0; i < measures; ++i) {
-        Fraction tick = firstMeasureTicks + timesig * (i - 1);
+        Ms::Fraction tick = firstMeasureTicks + timesig * (i - 1);
         if (i == 0) {
-            tick = Fraction(0,1);
+            tick = Ms::Fraction(0,1);
         }
-        QList<Rest*> puRests;
-        for (Score* _score : score->scoreList()) {
-            Rest* rest = 0;
-            Measure* measure = new Measure(_score);
+        QList<Ms::Rest*> puRests;
+        for (Ms::Score* _score : score->scoreList()) {
+            Ms::Rest* rest = 0;
+            Ms::Measure* measure = new Ms::Measure(_score);
             measure->setTimesig(timesig);
             measure->setTicks(timesig);
             measure->setTick(tick);
 
             if (pickupMeasure && tick.isZero()) {
                 measure->setIrregular(true);                // don’t count pickup measure
-                measure->setTicks(Fraction(scoreOptions.measureTimesigNumerator,
+                measure->setTicks(Ms::Fraction(scoreOptions.measureTimesigNumerator,
                                            scoreOptions.measureTimesigDenominator));
             }
             _score->measures()->add(measure);
 
-            for (Staff* staff : _score->staves()) {
+            for (Ms::Staff* staff : _score->staves()) {
                 int staffIdx = staff->idx();
                 if (tick.isZero()) {
-                    TimeSig* ts = new TimeSig(_score);
+                    Ms::TimeSig* ts = new Ms::TimeSig(_score);
                     ts->setTrack(staffIdx * VOICES);
                     ts->setSig(timesig, scoreOptions.timesigType);
-                    Measure* m = _score->firstMeasure();
-                    Segment* s = m->getSegment(SegmentType::TimeSig, Fraction(0,1));
+                    Ms::Measure* m = _score->firstMeasure();
+                    Ms::Segment* s = m->getSegment(Ms::SegmentType::TimeSig, Ms::Fraction(0,1));
                     s->add(ts);
                     Part* part = staff->part();
                     if (!part->instrument()->useDrumset()) {
                         //
                         // transpose key
                         //
-                        KeySigEvent nKey = ks;
+                        Ms::KeySigEvent nKey = ks;
                         if (!nKey.custom() && !nKey.isAtonal() && part->instrument()->transpose().chromatic
-                            && !score->styleB(Sid::concertPitch)) {
+                            && !score->styleB(Ms::Sid::concertPitch)) {
                             int diff = -part->instrument()->transpose().chromatic;
-                            nKey.setKey(transposeKey(nKey.key(), diff, part->preferSharpFlat()));
+                            nKey.setKey(Ms::transposeKey(nKey.key(), diff, part->preferSharpFlat()));
                         }
                         // do not create empty keysig unless custom or atonal
                         if (nKey.custom() || nKey.isAtonal() || nKey.key() != Key::C) {
-                            staff->setKey(Fraction(0,1), nKey);
-                            KeySig* keysig = new KeySig(score);
+                            staff->setKey(Ms::Fraction(0,1), nKey);
+                            Ms::KeySig* keysig = new Ms::KeySig(score);
                             keysig->setTrack(staffIdx * VOICES);
                             keysig->setKeySigEvent(nKey);
-                            Segment* ss = measure->getSegment(SegmentType::KeySig, Fraction(0,1));
+                            Ms::Segment* ss = measure->getSegment(Ms::SegmentType::KeySig, Ms::Fraction(0,1));
                             ss->add(keysig);
                         }
                     }
@@ -313,21 +312,21 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
                     if (!linkedToPrevious) {
                         puRests.clear();
                     }
-                    std::vector<TDuration> dList = toDurationList(measure->ticks(), false);
+                    std::vector<Ms::TDuration> dList = toDurationList(measure->ticks(), false);
                     if (!dList.empty()) {
-                        Fraction ltick = tick;
+                        Ms::Fraction ltick = tick;
                         int k = 0;
-                        foreach (TDuration d, dList) {
+                        foreach (Ms::TDuration d, dList) {
                             if (k < puRests.count()) {
-                                rest = static_cast<Rest*>(puRests[k]->linkedClone());
+                                rest = static_cast<Ms::Rest*>(puRests[k]->linkedClone());
                             } else {
-                                rest = new Rest(score, d);
+                                rest = new Ms::Rest(score, d);
                                 puRests.append(rest);
                             }
                             rest->setScore(_score);
                             rest->setTicks(d.fraction());
                             rest->setTrack(staffIdx * VOICES);
-                            Segment* seg = measure->getSegment(SegmentType::ChordRest, ltick);
+                            Ms::Segment* seg = measure->getSegment(Ms::SegmentType::ChordRest, ltick);
                             seg->add(rest);
                             ltick += rest->actualTicks();
                             k++;
@@ -335,14 +334,14 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
                     }
                 } else {
                     if (linkedToPrevious && rest) {
-                        rest = static_cast<Rest*>(rest->linkedClone());
+                        rest = static_cast<Ms::Rest*>(rest->linkedClone());
                     } else {
-                        rest = new Rest(score, TDuration(TDuration::DurationType::V_MEASURE));
+                        rest = new Ms::Rest(score, Ms::TDuration(Ms::TDuration::DurationType::V_MEASURE));
                     }
                     rest->setScore(_score);
                     rest->setTicks(measure->ticks());
                     rest->setTrack(staffIdx * VOICES);
-                    Segment* seg = measure->getSegment(SegmentType::ChordRest, tick);
+                    Ms::Segment* seg = measure->getSegment(Ms::SegmentType::ChordRest, tick);
                     seg->add(rest);
                 }
             }
@@ -353,8 +352,8 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
     // select first rest
     //
     Measure* m = score->firstMeasure();
-    for (Segment* s = m->first(); s; s = s->next()) {
-        if (s->segmentType() == SegmentType::ChordRest) {
+    for (Ms::Segment* s = m->first(); s; s = s->next()) {
+        if (s->segmentType() == Ms::SegmentType::ChordRest) {
             if (s->element(0)) {
                 score->select(s->element(0), SelectType::SINGLE, 0);
                 break;
@@ -364,10 +363,10 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
 
     if (!scoreOptions.title.isEmpty() || !scoreOptions.subtitle.isEmpty() || !scoreOptions.composer.isEmpty()
         || !scoreOptions.lyricist.isEmpty()) {
-        MeasureBase* measure = score->measures()->first();
+        Ms::MeasureBase* measure = score->measures()->first();
         if (measure->type() != ElementType::VBOX) {
-            MeasureBase* nm = nvb ? nvb : new VBox(score);
-            nm->setTick(Fraction(0,1));
+            Ms::MeasureBase* nm = nvb ? nvb : new Ms::VBox(score);
+            nm->setTick(Ms::Fraction(0,1));
             nm->setNext(measure);
             score->measures()->add(nm);
             measure = nm;
@@ -375,25 +374,25 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
             delete nvb;
         }
         if (!scoreOptions.title.isEmpty()) {
-            Text* s = new Text(score, Tid::TITLE);
+            Ms::Text* s = new Ms::Text(score, Ms::Tid::TITLE);
             s->setPlainText(scoreOptions.title);
             measure->add(s);
             score->setMetaTag("workTitle", scoreOptions.title);
         }
         if (!scoreOptions.subtitle.isEmpty()) {
-            Text* s = new Text(score, Tid::SUBTITLE);
+            Ms::Text* s = new Ms::Text(score, Ms::Tid::SUBTITLE);
             s->setPlainText(scoreOptions.subtitle);
             measure->add(s);
             score->setMetaTag("subtitle", scoreOptions.subtitle);
         }
         if (!scoreOptions.composer.isEmpty()) {
-            Text* s = new Text(score, Tid::COMPOSER);
+            Ms::Text* s = new Ms::Text(score, Ms::Tid::COMPOSER);
             s->setPlainText(scoreOptions.composer);
             measure->add(s);
             score->setMetaTag("composer", scoreOptions.composer);
         }
         if (!scoreOptions.lyricist.isEmpty()) {
-            Text* s = new Text(score, Tid::POET);
+            Ms::Text* s = new Ms::Text(score, Ms::Tid::POET);
             s->setPlainText(scoreOptions.lyricist);
             measure->add(s);
             score->setMetaTag("lyricist", scoreOptions.lyricist);
@@ -403,7 +402,7 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
     }
 
     if (scoreOptions.withTempo) {
-        Fraction ts = timesig;
+        Ms::Fraction ts = timesig;
 
         QString text("<sym>metNoteQuarterUp</sym> = %1");
         double bpm = scoreOptions.tempo;
@@ -459,14 +458,14 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
             break;
         }
 
-        TempoText* tt = new TempoText(score);
+        Ms::TempoText* tt = new Ms::TempoText(score);
         tt->setXmlText(text.arg(bpm));
         tempo /= 60;          // bpm -> bps
 
         tt->setTempo(tempo);
         tt->setFollowText(true);
         tt->setTrack(0);
-        Segment* seg = score->firstMeasure()->first(SegmentType::ChordRest);
+        Ms::Segment* seg = score->firstMeasure()->first(Ms::SegmentType::ChordRest);
         seg->add(tt);
         score->setTempo(seg, tempo);
     }
@@ -475,17 +474,17 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
     }
 
     {
-        ScoreLoad sl;
+        Ms::ScoreLoad sl;
         score->doLayout();
     }
 
-    for (Excerpt* x : excerpts) {
-        Score* xs = new Score(static_cast<MasterScore*>(score));
-        xs->style().set(Sid::createMultiMeasureRests, true);
+    for (Ms::Excerpt* x : excerpts) {
+        Ms::Score* xs = new Ms::Score(static_cast<Ms::MasterScore*>(score));
+        xs->style().set(Ms::Sid::createMultiMeasureRests, true);
         x->setPartScore(xs);
         xs->setExcerpt(x);
         score->excerpts().append(x);
-        Excerpt::createExcerpt(x);
+        Ms::Excerpt::createExcerpt(x);
     }
 
     score->setExcerptsChanged(true);
@@ -517,7 +516,7 @@ mu::Ret MasterNotation::save(const mu::io::path& path)
 
     bool ok = score()->masterScore()->saveFile(true);
     if (!ok) {
-        LOGE() << MScore::lastError;
+        LOGE() << Ms::MScore::lastError;
     } else {
         score()->setCreated(false);
         undoStack()->stackChanged().notify();
@@ -553,21 +552,21 @@ mu::ValNt<bool> MasterNotation::needSave() const
 
 void MasterNotation::initExcerpts()
 {
-    MasterScore* master = masterScore();
+    Ms::MasterScore* master = masterScore();
     if (!master) {
         return;
     }
 
     if (master->excerpts().isEmpty()) {
-        auto excerpts = Excerpt::createAllExcerpt(master);
+        auto excerpts = Ms::Excerpt::createAllExcerpt(master);
 
-        for (Excerpt* excerpt : excerpts) {
+        for (Ms::Excerpt* excerpt : excerpts) {
             initExcerpt(excerpt);
         }
     }
 
     ExcerptNotationList excerpts;
-    for (Excerpt* excerpt: master->excerpts()) {
+    for (Ms::Excerpt* excerpt: master->excerpts()) {
         excerpts.push_back(std::make_shared<ExcerptNotation>(excerpt));
     }
 
@@ -615,19 +614,19 @@ void MasterNotation::createNewExcerpts(const ExcerptNotationList& allExcerpts)
         bool isEmpty = excerptNotation->parts()->partList().empty();
 
         if (isNewExcerpt && isEmpty) {
-            Excerpt* excerpt = new Excerpt(masterScore());
+            Ms::Excerpt* excerpt = new Ms::Excerpt(masterScore());
             initExcerpt(excerpt);
             static_cast<ExcerptNotation*>(excerptNotation.get())->setExcerpt(excerpt);
         }
     }
 }
 
-void MasterNotation::initExcerpt(Excerpt* excerpt)
+void MasterNotation::initExcerpt(Ms::Excerpt* excerpt)
 {
-    Score* score = new Score(masterScore());
+    Ms::Score* score = new Ms::Score(masterScore());
     excerpt->setPartScore(score);
-    score->style().set(Sid::createMultiMeasureRests, true);
-    auto excerptCmdFake = new AddExcerpt(excerpt);
+    score->style().set(Ms::Sid::createMultiMeasureRests, true);
+    auto excerptCmdFake = new Ms::AddExcerpt(excerpt);
     excerptCmdFake->redo(nullptr);
-    Excerpt::createExcerpt(excerpt);
+    Ms::Excerpt::createExcerpt(excerpt);
 }
