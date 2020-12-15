@@ -93,20 +93,20 @@ NotifyList<const Part*> NotationParts::partList() const
     return result;
 }
 
-NotifyList<Instrument> NotationParts::instrumentList(const ID& partId) const
+NotifyList<mu::instruments::Instrument> NotationParts::instrumentList(const ID& partId) const
 {
     Part* part = this->part(partId);
     if (!part) {
-        return NotifyList<Instrument>();
+        return NotifyList<mu::instruments::Instrument>();
     }
 
-    NotifyList<Instrument> result;
+    NotifyList<mu::instruments::Instrument> result;
 
     for (const Ms::Instrument* instrument: instruments(part).values()) {
         result.push_back(InstrumentsConverter::convertInstrument(*instrument));
     }
 
-    ChangedNotifier<Instrument>* notifier = partNotifier(partId);
+    ChangedNotifier<mu::instruments::Instrument>* notifier = partNotifier(partId);
     result.setNotify(notifier->notify());
     return result;
 }
@@ -129,10 +129,10 @@ NotifyList<const Staff*> NotationParts::staffList(const ID& partId, const ID& in
     return result;
 }
 
-void NotationParts::setInstruments(const InstrumentList& instruments)
+void NotationParts::setInstruments(const mu::instruments::InstrumentList& instruments)
 {
     IDList instrumentIds;
-    for (const Instrument& instrument: instruments) {
+    for (const mu::instruments::Instrument& instrument : instruments) {
         instrumentIds << instrument.id;
     }
 
@@ -141,7 +141,7 @@ void NotationParts::setInstruments(const InstrumentList& instruments)
 
     IDList existedInstrumentIds = allInstrumentsIds();
 
-    for (const Instrument& instrument: instruments) {
+    for (const mu::instruments::Instrument& instrument: instruments) {
         bool isInstrumentExist = !existedInstrumentIds.isEmpty() && existedInstrumentIds.contains(instrument.id);
         if (isInstrumentExist) {
             continue;
@@ -276,7 +276,7 @@ void NotationParts::setInstrumentVisible(const ID& instrumentId, const ID& fromP
 
     apply();
 
-    ChangedNotifier<Instrument>* notifier = partNotifier(fromPartId);
+    ChangedNotifier<mu::instruments::Instrument>* notifier = partNotifier(fromPartId);
     notifier->itemChanged(InstrumentsConverter::convertInstrument(*instrumentInfo.instrument));
     m_partsChanged.notify();
 }
@@ -354,7 +354,7 @@ void NotationParts::assignIstrumentToSelectedChord(Ms::Instrument* instrument)
     score()->undoAddElement(instrumentChange);
     apply();
 
-    ChangedNotifier<Instrument>* notifier = partNotifier(part->id());
+    ChangedNotifier<mu::instruments::Instrument>* notifier = partNotifier(part->id());
     notifier->itemChanged(InstrumentsConverter::convertInstrument(*instrument));
     m_partsChanged.notify();
 }
@@ -437,7 +437,7 @@ void NotationParts::setInstrumentName(const ID& instrumentId, const ID& fromPart
     apply();
 
     InstrumentInfo newInstrumentInfo = this->instrumentInfo(instrumentId, part);
-    ChangedNotifier<Instrument>* notifier = partNotifier(part->id());
+    ChangedNotifier<mu::instruments::Instrument>* notifier = partNotifier(part->id());
     notifier->itemChanged(InstrumentsConverter::convertInstrument(*newInstrumentInfo.instrument));
     m_partsChanged.notify();
 }
@@ -459,7 +459,7 @@ void NotationParts::setInstrumentAbbreviature(const ID& instrumentId, const ID& 
     apply();
 
     InstrumentInfo newInstrumentInfo = this->instrumentInfo(instrumentId, part);
-    ChangedNotifier<Instrument>* notifier = partNotifier(part->id());
+    ChangedNotifier<mu::instruments::Instrument>* notifier = partNotifier(part->id());
     notifier->itemChanged(InstrumentsConverter::convertInstrument(*newInstrumentInfo.instrument));
     m_partsChanged.notify();
 }
@@ -653,7 +653,7 @@ void NotationParts::doSetStaffVoiceVisible(Staff* staff, int voiceIndex, bool vi
     staff->setVoiceVisible(voiceIndex, visible);
 }
 
-void NotationParts::appendDoublingInstrument(const Instrument& instrument, const ID& destinationPartId)
+void NotationParts::appendDoublingInstrument(const mu::instruments::Instrument& instrument, const ID& destinationPartId)
 {
     Part* part = this->part(destinationPartId);
     if (!part) {
@@ -670,7 +670,7 @@ void NotationParts::appendDoublingInstrument(const Instrument& instrument, const
     doSetPartName(part, formatPartName(part));
     apply();
 
-    ChangedNotifier<Instrument>* notifier = partNotifier(destinationPartId);
+    ChangedNotifier<mu::instruments::Instrument>* notifier = partNotifier(destinationPartId);
     notifier->itemAdded(instrument);
     m_partsNotifier->itemChanged(part);
     m_partsChanged.notify();
@@ -726,7 +726,7 @@ void NotationParts::appendLinkedStaff(const ID& originStaffId)
     m_partsChanged.notify();
 }
 
-void NotationParts::replaceInstrument(const ID& instrumentId, const ID& fromPartId, const Instrument& newInstrument)
+void NotationParts::replaceInstrument(const ID& instrumentId, const ID& fromPartId, const mu::instruments::Instrument& newInstrument)
 {
     Part* part = this->part(fromPartId);
     if (!part) {
@@ -743,7 +743,7 @@ void NotationParts::replaceInstrument(const ID& instrumentId, const ID& fromPart
     doSetPartName(part, formatPartName(part));
     apply();
 
-    ChangedNotifier<Instrument>* notifier = partNotifier(part->id());
+    ChangedNotifier<mu::instruments::Instrument>* notifier = partNotifier(part->id());
     notifier->itemReplaced(InstrumentsConverter::convertInstrument(*oldInstrumentInfo.instrument), newInstrument);
 
     m_partsNotifier->itemChanged(part);
@@ -1266,7 +1266,7 @@ int NotationParts::resolvePartIndex(Part* part) const
     return scoreParts.size();
 }
 
-void NotationParts::appendStaves(Part* part, const Instrument& instrument)
+void NotationParts::appendStaves(Part* part, const mu::instruments::Instrument& instrument)
 {
     for (int staffIndex = 0; staffIndex < instrument.staves; ++staffIndex) {
         int lastStaffIndex = this->lastStaffIndex();
@@ -1340,7 +1340,7 @@ void NotationParts::removeEmptyExcerpts()
     }
 }
 
-void NotationParts::initStaff(Staff* staff, const Instrument& instrument, const Ms::StaffType* staffType, int cleffIndex)
+void NotationParts::initStaff(Staff* staff, const mu::instruments::Instrument& instrument, const Ms::StaffType* staffType, int cleffIndex)
 {
     const Ms::StaffType* pst = staffType ? staffType : instrument.staffTypePreset;
     if (!pst) {
@@ -1348,7 +1348,7 @@ void NotationParts::initStaff(Staff* staff, const Instrument& instrument, const 
     }
 
     Ms::StaffType* stt = staff->setStaffType(DEFAULT_TICK, *pst);
-    if (cleffIndex >= MAX_STAVES) {
+    if (cleffIndex >= mu::instruments::MAX_STAVES) {
         stt->setSmall(false);
     } else {
         stt->setSmall(instrument.smallStaff[cleffIndex]);
@@ -1400,20 +1400,20 @@ void NotationParts::notifyAboutStaffChanged(const ID& staffId) const
 void NotationParts::notifyAboutInstrumentsChanged(const ID& partId) const
 {
     auto instruments = instrumentList(partId);
-    ChangedNotifier<Instrument>* notifier = partNotifier(partId);
-    for (const Instrument& instrument: instruments) {
+    ChangedNotifier<mu::instruments::Instrument>* notifier = partNotifier(partId);
+    for (const mu::instruments::Instrument& instrument: instruments) {
         notifier->itemChanged(instrument);
     }
 }
 
-ChangedNotifier<Instrument>* NotationParts::partNotifier(const ID& partId) const
+ChangedNotifier<mu::instruments::Instrument>* NotationParts::partNotifier(const ID& partId) const
 {
     if (m_partsNotifiersMap.find(partId) != m_partsNotifiersMap.end()) {
         return m_partsNotifiersMap[partId];
     }
 
-    ChangedNotifier<Instrument>* notifier = new ChangedNotifier<Instrument>();
-    auto value = std::pair<ID, ChangedNotifier<Instrument>*>(partId, notifier);
+    ChangedNotifier<mu::instruments::Instrument>* notifier = new ChangedNotifier<mu::instruments::Instrument>();
+    auto value = std::pair<ID, ChangedNotifier<mu::instruments::Instrument>*>(partId, notifier);
     m_partsNotifiersMap.insert(value);
     return notifier;
 }

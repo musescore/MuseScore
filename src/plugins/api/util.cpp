@@ -149,7 +149,7 @@ void ScoreView::setScore(Ms::Score* s)
     if (score) {
         score->doLayout();
 
-        Page* page = score->pages()[_currentPage];
+        Ms::Page* page = score->pages()[_currentPage];
         QRectF pr(page->abbox());
         qreal m1 = width() / pr.width();
         qreal m2 = height() / pr.height();
@@ -177,16 +177,16 @@ void ScoreView::paint(QPainter* p)
     }
     p->scale(mag, mag);
 
-    Page* page = score->pages()[_currentPage];
-    QList<const Element*> el;
+    Ms::Page* page = score->pages()[_currentPage];
+    QList<const Ms::Element*> el;
     for (System* s : page->systems()) {
         for (MeasureBase* m : s->measures()) {
-            m->scanElements(&el, collectElements, false);
+            m->scanElements(&el, Ms::collectElements, false);
         }
     }
-    page->scanElements(&el, collectElements, false);
+    page->scanElements(&el, Ms::collectElements, false);
 
-    foreach (const Element* e, el) {
+    foreach (const Ms::Element* e, el) {
         QPointF pos(e->pagePos());
         p->translate(pos);
         e->draw(p);

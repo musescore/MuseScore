@@ -33,7 +33,7 @@ RetVal<Meta> MsczMetaReader::readMeta(const io::path& filePath) const
     if (compressed) {
         meta = loadCompressedMsc(filePath);
     } else {
-        XmlReader reader(filePath);
+        framework::XmlReader reader(filePath);
         meta = doReadMeta(reader);
     }
 
@@ -80,7 +80,7 @@ RetVal<Meta> MsczMetaReader::loadCompressedMsc(const io::path& filePath) const
         }
     }
 
-    XmlReader xmlReader(rootBuffer);
+    framework::XmlReader xmlReader(rootBuffer);
     meta = doReadMeta(xmlReader);
 
     meta.val.thumbnail = loadThumbnail(&zipReader);
@@ -88,7 +88,7 @@ RetVal<Meta> MsczMetaReader::loadCompressedMsc(const io::path& filePath) const
     return meta;
 }
 
-MsczMetaReader::RawMeta MsczMetaReader::doReadBox(XmlReader& xmlReader) const
+MsczMetaReader::RawMeta MsczMetaReader::doReadBox(framework::XmlReader& xmlReader) const
 {
     RawMeta meta;
 
@@ -116,7 +116,7 @@ MsczMetaReader::RawMeta MsczMetaReader::doReadBox(XmlReader& xmlReader) const
                         xmlReader.skipCurrentElement();
                     }
                 } else if (tag == "text") {
-                    std::string str = xmlReader.readString(XmlReader::IncludeChildElements);
+                    std::string str = xmlReader.readString(framework::XmlReader::IncludeChildElements);
                     QString formattedStr = formatFromXml(str);
 
                     if (isTitle) {
@@ -131,7 +131,7 @@ MsczMetaReader::RawMeta MsczMetaReader::doReadBox(XmlReader& xmlReader) const
                         xmlReader.skipCurrentElement();
                     }
                 } else if (tag == "html-data") {
-                    std::string str = xmlReader.readString(XmlReader::IncludeChildElements);
+                    std::string str = xmlReader.readString(framework::XmlReader::IncludeChildElements);
                     QString formattedStr = formatFromXml(str);
 
                     if (isTitle) {
@@ -157,7 +157,7 @@ MsczMetaReader::RawMeta MsczMetaReader::doReadBox(XmlReader& xmlReader) const
     return meta;
 }
 
-MsczMetaReader::RawMeta MsczMetaReader::doReadRawMeta(XmlReader& xmlReader) const
+MsczMetaReader::RawMeta MsczMetaReader::doReadRawMeta(framework::XmlReader& xmlReader) const
 {
     RawMeta meta;
 
@@ -224,7 +224,7 @@ MsczMetaReader::RawMeta MsczMetaReader::doReadRawMeta(XmlReader& xmlReader) cons
     return meta;
 }
 
-RetVal<Meta> MsczMetaReader::doReadMeta(XmlReader& xmlReader) const
+RetVal<Meta> MsczMetaReader::doReadMeta(framework::XmlReader& xmlReader) const
 {
     RawMeta rawMeta;
 
@@ -301,7 +301,7 @@ io::path MsczMetaReader::readRootFile(MQZipReader* zipReader) const
         return rootFile;
     }
 
-    XmlReader reader(containerBuffer);
+    framework::XmlReader reader(containerBuffer);
 
     while (reader.readNextStartElement()) {
         if (reader.tagName() != "container") {

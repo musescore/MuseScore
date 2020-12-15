@@ -98,5 +98,6 @@ set(MODULE_LINK
     notation
     )
 
+set(MODULE_USE_UNITBUILD ON)
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 

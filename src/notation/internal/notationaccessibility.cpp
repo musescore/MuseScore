@@ -33,7 +33,6 @@
 
 using namespace mu::notation;
 using namespace mu::async;
-using namespace Ms;
 
 NotationAccessibility::NotationAccessibility(const IGetScore* getScore, Notification selectionChangedNotification)
     : m_getScore(getScore)
@@ -45,12 +44,12 @@ NotationAccessibility::NotationAccessibility(const IGetScore* getScore, Notifica
     });
 }
 
-const Score* NotationAccessibility::score() const
+const Ms::Score* NotationAccessibility::score() const
 {
     return m_getScore->score();
 }
 
-const Selection* NotationAccessibility::selection() const
+const Ms::Selection* NotationAccessibility::selection() const
 {
     return &score()->selection();
 }
@@ -88,7 +87,7 @@ void NotationAccessibility::setAccessibilityInfo(const QString& info)
 
 QString NotationAccessibility::rangeAccessibilityInfo() const
 {
-    const Segment* endSegment = selection()->endSegment();
+    const Ms::Segment* endSegment = selection()->endSegment();
 
     if (!endSegment) {
         endSegment = score()->lastSegment();
@@ -135,22 +134,22 @@ QString NotationAccessibility::singleElementAccessibilityInfo() const
 
 QString NotationAccessibility::formatSingleElementBarsAndBeats(const Element* element) const
 {
-    const Spanner* spanner = nullptr;
+    const Ms::Spanner* spanner = nullptr;
     if (element->isSpannerSegment()) {
-        spanner = static_cast<const SpannerSegment*>(element)->spanner();
+        spanner = static_cast<const Ms::SpannerSegment*>(element)->spanner();
     }
 
     if (spanner) {
-        const Segment* endSegment = spanner->endSegment();
+        const Ms::Segment* endSegment = spanner->endSegment();
 
         if (!endSegment) {
-            endSegment = score()->lastSegment()->prev1MM(SegmentType::ChordRest);
+            endSegment = score()->lastSegment()->prev1MM(Ms::SegmentType::ChordRest);
         }
 
-        if (endSegment->tick() != score()->lastSegment()->prev1MM(SegmentType::ChordRest)->tick()
+        if (endSegment->tick() != score()->lastSegment()->prev1MM(Ms::SegmentType::ChordRest)->tick()
             && spanner->type() != ElementType::SLUR
             && spanner->type() != ElementType::TIE) {
-            endSegment = endSegment->prev1MM(SegmentType::ChordRest);
+            endSegment = endSegment->prev1MM(Ms::SegmentType::ChordRest);
         }
 
         return formatStartBarsAndBeats(spanner->startSegment()) + " " + formatEndBarsAndBeats(endSegment);
@@ -207,11 +206,11 @@ std::pair<int, float> NotationAccessibility::barbeat(const Element* element) con
     int beat = 0;
     int ticks = 0;
 
-    const TimeSigMap* timeSigMap = element->score()->sigmap();
+    const Ms::TimeSigMap* timeSigMap = element->score()->sigmap();
     int ticksB = Ms::ticks_beat(timeSigMap->timesig(0).timesig().denominator());
 
     if (parent->type() == ElementType::SEGMENT) {
-        const Segment* segment = static_cast<const Segment*>(parent);
+        const Ms::Segment* segment = static_cast<const Ms::Segment*>(parent);
         timeSigMap->tickValues(segment->tick().ticks(), &bar, &beat, &ticks);
         ticksB = Ms::ticks_beat(timeSigMap->timesig(segment->tick().ticks()).timesig().denominator());
     } else if (parent->type() == ElementType::MEASURE) {

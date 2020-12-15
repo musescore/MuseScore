@@ -580,6 +580,7 @@ static void setPartInstruments(MxmlLogger* logger, const QXmlStreamReader* const
 /**
  Convert SMuFL code points to MuseScore <sym>...</sym>
  */
+namespace xmlpass2 {
 
 static QString text2syms(const QString& t)
 {
@@ -640,6 +641,7 @@ static QString text2syms(const QString& t)
     //qDebug("text2syms total time elapsed: %d ms, res '%s'", time.elapsed(), qPrintable(res));
     return res;
 }
+}
 
 //---------------------------------------------------------
 //   decodeEntities
@@ -648,6 +650,8 @@ static QString text2syms(const QString& t)
 /**
  Decode &#...; in string \a src into UNICODE (utf8) character.
  */
+
+namespace xmlpass2 {
 
 static QString decodeEntities(const QString& src)
 {
@@ -663,6 +667,8 @@ static QString decodeEntities(const QString& src)
     return ret;
 }
 
+}
+
 //---------------------------------------------------------
 //   nextPartOfFormattedString
 //---------------------------------------------------------
@@ -672,6 +678,8 @@ static QString decodeEntities(const QString& src)
 /**
  Read the next part of a MusicXML formatted string and convert to MuseScore internal encoding.
  */
+
+namespace xmlpass2 {
 
 static QString nextPartOfFormattedString(QXmlStreamReader& e)
 {
@@ -685,8 +693,8 @@ static QString nextPartOfFormattedString(QXmlStreamReader& e)
 
     QString txt        = e.readElementText();
     // replace HTML entities
-    txt = decodeEntities(txt);
-    QString syms       = text2syms(txt);
+    txt = xmlpass2::decodeEntities(txt);
+    QString syms       = xmlpass2::text2syms(txt);
 
     QString importedtext;
 
@@ -734,6 +742,8 @@ static QString nextPartOfFormattedString(QXmlStreamReader& e)
     }
     //qDebug("importedtext '%s'", qPrintable(importedtext));
     return importedtext;
+}
+
 }
 
 //---------------------------------------------------------
@@ -2647,13 +2657,13 @@ void MusicXMLParserDirection::directionType(QList<MusicXmlSpannerDesc>& starts,
             _metroText = metronome(_tpoMetro);
         } else if (_e.name() == "words") {
             _enclosure      = _e.attributes().value("enclosure").toString();
-            _wordsText += nextPartOfFormattedString(_e);
+            _wordsText += xmlpass2::nextPartOfFormattedString(_e);
         } else if (_e.name() == "rehearsal") {
             _enclosure      = _e.attributes().value("enclosure").toString();
             if (_enclosure == "") {
                 _enclosure = "square";          // note different default
             }
-            _rehearsalText += nextPartOfFormattedString(_e);
+            _rehearsalText += xmlpass2::nextPartOfFormattedString(_e);
         } else if (_e.name() == "pedal") {
             pedal(type, n, starts, stops);
         } else if (_e.name() == "octave-shift") {
@@ -5408,7 +5418,7 @@ void MusicXMLParserLyric::parse()
              formattedText += " ";
              else
              */
-            formattedText += nextPartOfFormattedString(_e);
+            formattedText += xmlpass2::nextPartOfFormattedString(_e);
         } else if (_e.name() == "extend") {
             hasExtend = true;
             extendType = _e.attributes().value("type").toString();
@@ -5427,7 +5437,7 @@ void MusicXMLParserLyric::parse()
                 qDebug("unknown syllabic %s", qPrintable(syll));                      // TODO
             }
         } else if (_e.name() == "text") {
-            formattedText += nextPartOfFormattedString(_e);
+            formattedText += xmlpass2::nextPartOfFormattedString(_e);
         } else {
             skipLogCurrElem();
         }

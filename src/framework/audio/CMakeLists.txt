@@ -106,6 +106,7 @@ if(OS_IS_LIN)
 endif()
 
 set(MODULE_USE_PCH_NONE ON) # strange error
+set(MODULE_USE_UNITY_NONE ON) # soloud not compile
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 
 # for soloud

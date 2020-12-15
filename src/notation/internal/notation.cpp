@@ -37,7 +37,6 @@
 #include "notationparts.h"
 
 using namespace mu::notation;
-using namespace Ms;
 
 static const QString WORK_TITLE_TAG("workTitle");
 static const QString WORK_NUMBER_TAG("workNumber");
@@ -76,9 +75,9 @@ static bool isStandardTag(const QString& tag)
     return standardTags.contains(tag);
 }
 
-Notation::Notation(Score* score)
+Notation::Notation(Ms::Score* score)
 {
-    m_scoreGlobal = new MScore(); //! TODO May be static?
+    m_scoreGlobal = new Ms::MScore(); //! TODO May be static?
     m_opened.val = false;
 
     m_undoStack = std::make_shared<NotationUndoStack>(this, m_notationChanged);
@@ -128,13 +127,13 @@ Notation::~Notation()
 
 void Notation::init()
 {
-    MScore::init(); // initialize libmscore
+    Ms::MScore::init(); // initialize libmscore
 
-    MScore::setNudgeStep(.1); // cursor key (default 0.1)
-    MScore::setNudgeStep10(1.0); // Ctrl + cursor key (default 1.0)
-    MScore::setNudgeStep50(0.01); // Alt  + cursor key (default 0.01)
+    Ms::MScore::setNudgeStep(.1); // cursor key (default 0.1)
+    Ms::MScore::setNudgeStep10(1.0); // Ctrl + cursor key (default 1.0)
+    Ms::MScore::setNudgeStep50(0.01); // Alt  + cursor key (default 0.01)
 
-    MScore::pixelRatio = DPI / QGuiApplication::primaryScreen()->logicalDotsPerInch();
+    Ms::MScore::pixelRatio = Ms::DPI / QGuiApplication::primaryScreen()->logicalDotsPerInch();
 }
 
 void Notation::setScore(Ms::Score* score)
@@ -147,7 +146,7 @@ void Notation::setScore(Ms::Score* score)
     }
 }
 
-MScore* Notation::scoreGlobal() const
+Ms::MScore* Notation::scoreGlobal() const
 {
     return m_scoreGlobal;
 }
@@ -252,14 +251,14 @@ void Notation::paint(QPainter* painter, const QRectF& frameRect)
     }
 
     switch (score()->layoutMode()) {
-    case LayoutMode::LINE:
-    case LayoutMode::SYSTEM: {
+    case Ms::LayoutMode::LINE:
+    case Ms::LayoutMode::SYSTEM: {
         bool paintBorders = false;
         paintPages(painter, frameRect, { pages.first() }, paintBorders);
         break;
     }
-    case LayoutMode::FLOAT:
-    case LayoutMode::PAGE: {
+    case Ms::LayoutMode::FLOAT:
+    case Ms::LayoutMode::PAGE: {
         bool paintBorders = !score()->printing();
         paintPages(painter, frameRect, pages, paintBorders);
     }
@@ -293,7 +292,7 @@ void Notation::paintPages(QPainter* painter, const QRectF& frameRect, const QLis
     }
 }
 
-void Notation::paintPageBorder(QPainter* painter, const Page* page) const
+void Notation::paintPageBorder(QPainter* painter, const Ms::Page* page) const
 {
     QRectF boundingRect(page->canvasBoundingRect());
 
@@ -306,7 +305,7 @@ void Notation::paintPageBorder(QPainter* painter, const Page* page) const
     }
 
     painter->setBrush(Qt::NoBrush);
-    painter->setPen(MScore::frameMarginColor);
+    painter->setPen(Ms::MScore::frameMarginColor);
     boundingRect.adjust(page->lm(), page->tm(), -page->rm(), -page->bm());
     painter->drawRect(boundingRect);
 

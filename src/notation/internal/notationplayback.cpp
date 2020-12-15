@@ -170,7 +170,7 @@ void NotationPlayback::makeTracks(std::vector<midi::Track>& tracks, const Ms::Sc
     }
 }
 
-void NotationPlayback::makeTempoMap(TempoMap& tempos, const Ms::Score* score) const
+void NotationPlayback::makeTempoMap(midi::TempoMap& tempos, const Ms::Score* score) const
 {
     Ms::TempoMap* tempomap = score->tempomap();
     qreal relTempo = tempomap->relTempo();
@@ -267,8 +267,6 @@ int NotationPlayback::secToTick(float sec) const
 //! NOTE Copied from ScoreView::moveCursor(const Fraction& tick)
 QRect NotationPlayback::playbackCursorRectByTick(int _tick) const
 {
-    using namespace Ms;
-
     Ms::Score* score = m_getScore->score();
     if (!score) {
         return QRect();
@@ -281,21 +279,21 @@ QRect NotationPlayback::playbackCursorRectByTick(int _tick) const
         return QRect();
     }
 
-    System* system = measure->system();
+    Ms::System* system = measure->system();
     if (!system) {
         return QRect();
     }
 
     qreal x = 0.0;
-    Segment* s = nullptr;
+    Ms::Segment* s = nullptr;
     for (s = measure->first(Ms::SegmentType::ChordRest); s;) {
         Fraction t1 = s->tick();
         int x1 = s->canvasPos().x();
         qreal x2;
         Fraction t2;
-        Segment* ns = s->next(SegmentType::ChordRest);
+        Ms::Segment* ns = s->next(Ms::SegmentType::ChordRest);
         while (ns && !ns->visible()) {
-            ns = ns->next(SegmentType::ChordRest);
+            ns = ns->next(Ms::SegmentType::ChordRest);
         }
         if (ns) {
             t2 = ns->tick();
@@ -303,7 +301,7 @@ QRect NotationPlayback::playbackCursorRectByTick(int _tick) const
         } else {
             t2 = measure->endTick();
             // measure->width is not good enough because of courtesy keysig, timesig
-            Segment* seg = measure->findSegment(SegmentType::EndBarLine, measure->tick() + measure->ticks());
+            Ms::Segment* seg = measure->findSegment(Ms::SegmentType::EndBarLine, measure->tick() + measure->ticks());
             if (seg) {
                 x2 = seg->canvasPos().x();
             } else {
@@ -326,8 +324,8 @@ QRect NotationPlayback::playbackCursorRectByTick(int _tick) const
     double y = system->staffYpage(0) + system->page()->pos().y();
     double _spatium = score->spatium();
 
-    qreal mag = _spatium / SPATIUM20;
-    double w  = _spatium * 2.0 + score->scoreFont()->width(SymId::noteheadBlack, mag);
+    qreal mag = _spatium / Ms::SPATIUM20;
+    double w  = _spatium * 2.0 + score->scoreFont()->width(Ms::SymId::noteheadBlack, mag);
     double h  = 6 * _spatium;
     //
     // set cursor height for whole system
@@ -335,7 +333,7 @@ QRect NotationPlayback::playbackCursorRectByTick(int _tick) const
     double y2 = 0.0;
 
     for (int i = 0; i < score->nstaves(); ++i) {
-        SysStaff* ss = system->staff(i);
+        Ms::SysStaff* ss = system->staff(i);
         if (!ss->show() || !score->staff(i)->show()) {
             continue;
         }
@@ -461,13 +459,13 @@ MidiData NotationPlayback::playNoteMidiData(const Ms::Note* note) const
     Chunk chunk;
     chunk.beginTick = 0;
     chunk.endTick = Ms::MScore::defaultPlayDuration * 2;
-    auto event = Event(Event::Opcode::NoteOn);
+    auto event = midi::Event(midi::Event::Opcode::NoteOn);
     event.setChannel(channel);
     event.setNote(pitch);
     event.setVelocityFraction(0.63f); //as 80 for 127 scale
     chunk.events.insert({ chunk.beginTick, event });
 
-    event.setOpcode(Event::Opcode::NoteOff);
+    event.setOpcode(midi::Event::Opcode::NoteOff);
     event.setVelocity(0);
     chunk.events.insert({ Ms::MScore::defaultPlayDuration, event });
 
@@ -497,16 +495,16 @@ MidiData NotationPlayback::playChordMidiData(const Ms::Chord* chord) const
         channel_t channel = msCh->channel();
         int pitch = n->ppitch();
 
-        auto event = Event(Event::Opcode::NoteOn);
+        auto event = midi::Event(midi::Event::Opcode::NoteOn);
         event.setChannel(channel);
         event.setNote(pitch);
         event.setVelocityFraction(0.63f); //as 80 for 127 scale
         chunk.events.insert({ chunk.beginTick, event });
 
-        event.setOpcode(Event::Opcode::NoteOff);
+        event.setOpcode(midi::Event::Opcode::NoteOff);
         event.setVelocity(0);
         chunk.events.insert({ Ms::MScore::defaultPlayDuration, event });
-        chunk.events.insert({ chunk.endTick, Event::NOOP() });
+        chunk.events.insert({ chunk.endTick, midi::Event::NOOP() });
     }
 
     midiData.chunks.insert({ chunk.beginTick, std::move(chunk) });
@@ -540,11 +538,11 @@ MidiData NotationPlayback::playHarmonyMidiData(const Ms::Harmony* harmony) const
     chunk.beginTick = 0;
     chunk.endTick = Ms::MScore::defaultPlayDuration * 2;
 
-    auto noteOn = Event(Event::Opcode::NoteOn);
+    auto noteOn = midi::Event(midi::Event::Opcode::NoteOn);
     noteOn.setChannel(channel);
     noteOn.setVelocityFraction(0.63f); //as 80 for 127 scale
 
-    auto noteOff = Event(Event::Opcode::NoteOff);
+    auto noteOff = midi::Event(midi::Event::Opcode::NoteOff);
     noteOff.setChannel(channel);
 
     for (int pitch : pitches) {

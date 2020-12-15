@@ -103,4 +103,5 @@ if (build_mode STREQUAL "debug")
     set(MODULE_DEF -D_DEBUG)
 endif()
 
+set(MODULE_USE_UNITY_NONE ON) # not linking
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

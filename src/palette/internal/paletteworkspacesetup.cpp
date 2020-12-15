@@ -65,7 +65,7 @@ void PaletteWorkspaceSetup::setup()
     if (workspace.val) {
         bool ok = applyWorkspaceData(workspace.val);
         if (!ok) {
-            PaletteTreePtr tree(PaletteCreator::newDefaultPaletteTree());
+            Ms::PaletteTreePtr tree(Ms::PaletteCreator::newDefaultPaletteTree());
             paletteWorkspace->setUserPaletteTree(tree);
         }
     }
@@ -73,7 +73,7 @@ void PaletteWorkspaceSetup::setup()
     workspace.ch.onReceive(nullptr, [paletteWorkspace, applyWorkspaceData](workspace::IWorkspacePtr w) {
         bool ok = applyWorkspaceData(w);
         if (!ok) {
-            PaletteTreePtr tree(PaletteCreator::newDefaultPaletteTree());
+            Ms::PaletteTreePtr tree(Ms::PaletteCreator::newDefaultPaletteTree());
             paletteWorkspace->setUserPaletteTree(tree);
         }
     });

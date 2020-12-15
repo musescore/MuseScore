@@ -23,10 +23,9 @@
 #include "log.h"
 #include "notationerrors.h"
 
-using namespace Ms;
 using namespace mu::notation;
 
-const char* g_groupNames[STAFF_GROUP_MAX] = {
+const char* g_groupNames[Ms::STAFF_GROUP_MAX] = {
     QT_TRANSLATE_NOOP("staff group header name", "STANDARD STAFF"),
     QT_TRANSLATE_NOOP("staff group header name", "PERCUSSION STAFF"),
     QT_TRANSLATE_NOOP("staff group header name", "TABLATURE STAFF")
@@ -60,23 +59,23 @@ EditStaffType::EditStaffType(QWidget* parent)
     setupUi(this);
 
     // tab page configuration
-    QList<QString> fontNames = StaffType::fontNames(false);
+    QList<QString> fontNames = Ms::StaffType::fontNames(false);
     foreach (const QString& fn, fontNames) {   // fill fret font name combo
         fretFontName->addItem(fn);
     }
     fretFontName->setCurrentIndex(0);
-    fontNames = StaffType::fontNames(true);
+    fontNames = Ms::StaffType::fontNames(true);
     foreach (const QString& fn, fontNames) {  // fill duration font name combo
         durFontName->addItem(fn);
     }
     durFontName->setCurrentIndex(0);
 
     for (auto i : noteHeadSchemes) {
-        noteHeadScheme->addItem(NoteHead::scheme2userName(i), NoteHead::scheme2name(i));
+        noteHeadScheme->addItem(Ms::NoteHead::scheme2userName(i), Ms::NoteHead::scheme2name(i));
     }
 
     // load a sample standard score in preview
-    MasterScore* sc = new MasterScore(MScore::defaultStyle());
+    Ms::MasterScore* sc = new Ms::MasterScore(Ms::MScore::defaultStyle());
     if (loadScore(sc, ":/view/resources/data/std_sample.mscx")) {
         standardPreview->setScore(sc);
     } else {
@@ -84,7 +83,7 @@ EditStaffType::EditStaffType(QWidget* parent)
     }
 
     // load a sample tabulature score in preview
-    sc = new MasterScore(MScore::defaultStyle());
+    sc = new Ms::MasterScore(Ms::MScore::defaultStyle());
     if (loadScore(sc, ":/view/resources/data/tab_sample.mscx")) {
         tabPreview->setScore(sc);
     } else {
@@ -142,7 +141,7 @@ EditStaffType::EditStaffType(QWidget* parent)
     WidgetStateStore::restoreGeometry(this);
 }
 
-void EditStaffType::setStaffType(const StaffType* stafftype)
+void EditStaffType::setStaffType(const Ms::StaffType* stafftype)
 {
     this->staffType = *stafftype;
 
@@ -159,10 +158,10 @@ void EditStaffType::setInstrument(const instruments::Instrument instrument)
     bool bPerc        = (instrument.drumset != nullptr);
     bool bTab = (instrument.stringData.frettedStrings() > 0);
     int idx           = 0;
-    for (const StaffType& t : StaffType::presets()) {
-        if ((t.group() == StaffGroup::STANDARD && bStandard)
-            || (t.group() == StaffGroup::PERCUSSION && bPerc)
-            || (t.group() == StaffGroup::TAB && bTab && t.lines() <= instrument.stringData.frettedStrings())) {
+    for (const Ms::StaffType& t : Ms::StaffType::presets()) {
+        if ((t.group() == Ms::StaffGroup::STANDARD && bStandard)
+            || (t.group() == Ms::StaffGroup::PERCUSSION && bPerc)
+            || (t.group() == Ms::StaffGroup::TAB && bTab && t.lines() <= instrument.stringData.frettedStrings())) {
             templateCombo->addItem(t.name(), idx);
         }
         idx++;
@@ -172,12 +171,12 @@ void EditStaffType::setInstrument(const instruments::Instrument instrument)
 
 mu::Ret EditStaffType::loadScore(Ms::MasterScore* score, const mu::io::path& path)
 {
-    ScoreLoad sl;
+    Ms::ScoreLoad sl;
 
     return doLoadScore(score, path);
 }
 
-mu::Ret EditStaffType::doLoadScore(MasterScore* score, const mu::io::path& path) const
+mu::Ret EditStaffType::doLoadScore(Ms::MasterScore* score, const mu::io::path& path) const
 {
     MsczNotationReader reader;
 
@@ -198,9 +197,9 @@ mu::Ret EditStaffType::doLoadScore(MasterScore* score, const mu::io::path& path)
     }
     score->rebuildMidiMapping();
     score->setSoloMute();
-    for (Score* s : score->scoreList()) {
+    for (Ms::Score* s : score->scoreList()) {
         s->setPlaylistDirty();
-        s->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
+        s->addLayoutFlags(Ms::LayoutFlag::FIX_PITCH_VELO);
         s->setLayoutAll();
     }
     score->updateChannel();
@@ -246,7 +245,7 @@ void EditStaffType::setValues()
 {
     blockSignals(true);
 
-    StaffGroup group = staffType.group();
+    Ms::StaffGroup group = staffType.group();
     int i = int(group);
     stack->setCurrentIndex(i);
     groupName->setText(qApp->translate("staff group header name", g_groupNames[i]));
@@ -260,14 +259,14 @@ void EditStaffType::setValues()
     genTimesig->setChecked(staffType.genTimesig());
 
     switch (group) {
-    case StaffGroup::STANDARD:
+    case Ms::StaffGroup::STANDARD:
         genKeysigPitched->setChecked(staffType.genKeysig());
         showLedgerLinesPitched->setChecked(staffType.showLedgerLines());
         stemlessPitched->setChecked(staffType.stemless());
         noteHeadScheme->setCurrentIndex(int(staffType.noteHeadScheme()));
         break;
 
-    case StaffGroup::TAB:
+    case Ms::StaffGroup::TAB:
     {
         upsideDown->setChecked(staffType.upsideDown());
         showTabFingering->setChecked(staffType.showTabFingering());
@@ -301,15 +300,15 @@ void EditStaffType::setValues()
         stemBelowRadio->setChecked(staffType.stemsDown());
         stemBesideRadio->setChecked(!staffType.stemThrough());
         stemThroughRadio->setChecked(staffType.stemThrough());
-        TablatureMinimStyle minimStyle = staffType.minimStyle();
-        minimNoneRadio->setChecked(minimStyle == TablatureMinimStyle::NONE);
-        minimShortRadio->setChecked(minimStyle == TablatureMinimStyle::SHORTER);
-        minimSlashedRadio->setChecked(minimStyle == TablatureMinimStyle::SLASHED);
-        TablatureSymbolRepeat symRepeat = staffType.symRepeat();
-        valuesRepeatNever->setChecked(symRepeat == TablatureSymbolRepeat::NEVER);
-        valuesRepeatSystem->setChecked(symRepeat == TablatureSymbolRepeat::SYSTEM);
-        valuesRepeatMeasure->setChecked(symRepeat == TablatureSymbolRepeat::MEASURE);
-        valuesRepeatAlways->setChecked(symRepeat == TablatureSymbolRepeat::ALWAYS);
+        Ms::TablatureMinimStyle minimStyle = staffType.minimStyle();
+        minimNoneRadio->setChecked(minimStyle == Ms::TablatureMinimStyle::NONE);
+        minimShortRadio->setChecked(minimStyle == Ms::TablatureMinimStyle::SHORTER);
+        minimSlashedRadio->setChecked(minimStyle == Ms::TablatureMinimStyle::SLASHED);
+        Ms::TablatureSymbolRepeat symRepeat = staffType.symRepeat();
+        valuesRepeatNever->setChecked(symRepeat == Ms::TablatureSymbolRepeat::NEVER);
+        valuesRepeatSystem->setChecked(symRepeat == Ms::TablatureSymbolRepeat::SYSTEM);
+        valuesRepeatMeasure->setChecked(symRepeat == Ms::TablatureSymbolRepeat::MEASURE);
+        valuesRepeatAlways->setChecked(symRepeat == Ms::TablatureSymbolRepeat::ALWAYS);
         if (staffType.genDurations()) {
             noteValuesNone->setChecked(false);
             noteValuesSymb->setChecked(true);
@@ -333,7 +332,7 @@ void EditStaffType::setValues()
     }
     break;
 
-    case StaffGroup::PERCUSSION:
+    case Ms::StaffGroup::PERCUSSION:
         genKeysigPercussion->setChecked(staffType.genKeysig());
         showLedgerLinesPercussion->setChecked(staffType.showLedgerLines());
         stemlessPercussion->setChecked(staffType.stemless());
@@ -369,7 +368,7 @@ void EditStaffType::nameEdited(const QString& /*s*/)
 void EditStaffType::durFontNameChanged(int idx)
 {
     qreal size, yOff;
-    if (StaffType::fontData(true, idx, 0, 0, &size, &yOff)) {
+    if (Ms::StaffType::fontData(true, idx, 0, 0, &size, &yOff)) {
         durFontSize->setValue(size);
         durY->setValue(yOff);
     }
@@ -379,7 +378,7 @@ void EditStaffType::durFontNameChanged(int idx)
 void EditStaffType::fretFontNameChanged(int idx)
 {
     qreal size, yOff;
-    if (StaffType::fontData(false, idx, 0, 0, &size, &yOff)) {
+    if (Ms::StaffType::fontData(false, idx, 0, 0, &size, &yOff)) {
         fretFontSize->setValue(size);
         fretY->setValue(yOff);
     }
@@ -430,17 +429,17 @@ void EditStaffType::setFromDlg()
 {
     staffType.setName(name->text());
     staffType.setLines(lines->value());
-    staffType.setLineDistance(Spatium(lineDistance->value()));
+    staffType.setLineDistance(Ms::Spatium(lineDistance->value()));
     staffType.setGenClef(genClef->isChecked());
     staffType.setShowBarlines(showBarlines->isChecked());
     staffType.setGenTimesig(genTimesig->isChecked());
-    if (staffType.group() == StaffGroup::STANDARD) {
+    if (staffType.group() == Ms::StaffGroup::STANDARD) {
         staffType.setGenKeysig(genKeysigPitched->isChecked());
         staffType.setShowLedgerLines(showLedgerLinesPitched->isChecked());
         staffType.setStemless(stemlessPitched->isChecked());
-        staffType.setNoteHeadScheme(NoteHead::name2scheme(noteHeadScheme->currentData().toString()));
+        staffType.setNoteHeadScheme(Ms::NoteHead::name2scheme(noteHeadScheme->currentData().toString()));
     }
-    if (staffType.group() == StaffGroup::PERCUSSION) {
+    if (staffType.group() == Ms::StaffGroup::PERCUSSION) {
         staffType.setGenKeysig(genKeysigPercussion->isChecked());
         staffType.setShowLedgerLines(showLedgerLinesPercussion->isChecked());
         staffType.setStemless(stemlessPercussion->isChecked());
@@ -453,13 +452,13 @@ void EditStaffType::setFromDlg()
     staffType.setFretFontUserY(fretY->value());
     staffType.setLinesThrough(linesThroughRadio->isChecked());
     staffType.setShowBackTied(showBackTied->isChecked());
-    staffType.setMinimStyle(minimNoneRadio->isChecked() ? TablatureMinimStyle::NONE
-                            : (minimShortRadio->isChecked() ? TablatureMinimStyle::SHORTER : TablatureMinimStyle::
+    staffType.setMinimStyle(minimNoneRadio->isChecked() ? Ms::TablatureMinimStyle::NONE
+                            : (minimShortRadio->isChecked() ? Ms::TablatureMinimStyle::SHORTER : Ms::TablatureMinimStyle::
                                SLASHED));
-    staffType.setSymbolRepeat(valuesRepeatNever->isChecked() ? TablatureSymbolRepeat::NEVER
-                              : (valuesRepeatSystem->isChecked() ? TablatureSymbolRepeat::SYSTEM
-                                 : valuesRepeatMeasure->isChecked() ? TablatureSymbolRepeat::MEASURE
-                                 : TablatureSymbolRepeat::ALWAYS));
+    staffType.setSymbolRepeat(valuesRepeatNever->isChecked() ? Ms::TablatureSymbolRepeat::NEVER
+                              : (valuesRepeatSystem->isChecked() ? Ms::TablatureSymbolRepeat::SYSTEM
+                                 : valuesRepeatMeasure->isChecked() ? Ms::TablatureSymbolRepeat::MEASURE
+                                 : Ms::TablatureSymbolRepeat::ALWAYS));
     staffType.setOnLines(onLinesRadio->isChecked());
     staffType.setShowRests(showRests->isChecked());
     staffType.setUpsideDown(upsideDown->isChecked());
@@ -468,7 +467,7 @@ void EditStaffType::setFromDlg()
     //note values
     staffType.setStemsDown(stemBelowRadio->isChecked());
     staffType.setStemsThrough(stemThroughRadio->isChecked());
-    if (staffType.group() == StaffGroup::TAB) {
+    if (staffType.group() == Ms::StaffGroup::TAB) {
         staffType.setGenKeysig(false);
         staffType.setStemless(true);                       // assume no note values
         staffType.setGenDurations(false);                  //    "     "
@@ -598,14 +597,14 @@ void EditStaffType::tabStemThroughCompatibility(bool checked)
 void EditStaffType::updatePreview()
 {
     setFromDlg();
-    ExampleView* preview = nullptr;
-    if (staffType.group() == StaffGroup::TAB) {
+    Ms::ExampleView* preview = nullptr;
+    if (staffType.group() == Ms::StaffGroup::TAB) {
         preview = tabPreview;
-    } else if (staffType.group() == StaffGroup::STANDARD) {
+    } else if (staffType.group() == Ms::StaffGroup::STANDARD) {
         preview = standardPreview;
     }
     if (preview) {
-        preview->score()->staff(0)->setStaffType(Fraction(0,1), staffType);
+        preview->score()->staff(0)->setStaffType(Ms::Fraction(0,1), staffType);
         preview->score()->doLayout();
         preview->updateAll();
         preview->update();
@@ -622,18 +621,18 @@ QString EditStaffType::createUniqueStaffTypeName(Ms::StaffGroup group)
     QString sn;
     for (int idx = 1;; ++idx) {
         switch (group) {
-        case StaffGroup::STANDARD:
+        case Ms::StaffGroup::STANDARD:
             sn = QString("Standard-%1 [*]").arg(idx);
             break;
-        case StaffGroup::PERCUSSION:
+        case Ms::StaffGroup::PERCUSSION:
             sn = QString("Perc-%1 [*]").arg(idx);
             break;
-        case StaffGroup::TAB:
+        case Ms::StaffGroup::TAB:
             sn = QString("Tab-%1 [*]").arg(idx);
             break;
         }
         bool found = false;
-        for (const StaffType& st : StaffType::presets()) {
+        for (const Ms::StaffType& st : Ms::StaffType::presets()) {
             if (st.name() == sn) {
                 found = true;
                 break;
@@ -668,7 +667,7 @@ void EditStaffType::resetToTemplateClicked()
 {
     int idx = templateCombo->itemData(templateCombo->currentIndex()).toInt();
     if (idx >= 0) {
-        staffType = *(StaffType::preset(StaffTypes(idx)));
+        staffType = *(Ms::StaffType::preset(Ms::StaffTypes(idx)));
         setValues();
     }
 }

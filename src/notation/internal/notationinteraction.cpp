@@ -54,7 +54,6 @@
 #include "instrumentsconverter.h"
 
 using namespace mu::notation;
-using namespace Ms;
 
 NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack)
     : m_notation(notation), m_undoStack(undoStack)
@@ -79,7 +78,7 @@ NotationInteraction::~NotationInteraction()
 
 void NotationInteraction::init()
 {
-    m_shadowNote = new ShadowNote(score());
+    m_shadowNote = new Ms::ShadowNote(score());
     m_shadowNote->setVisible(false);
 }
 
@@ -148,8 +147,8 @@ void NotationInteraction::showShadowNote(const QPointF& p)
 {
     //! NOTE This method coped from ScoreView::setShadowNote
 
-    const InputState& is = score()->inputState();
-    Position pos;
+    const Ms::InputState& is = score()->inputState();
+    Ms::Position pos;
     if (!score()->getPosition(&pos, p, is.voice())) {
         m_shadowNote->setVisible(false);
         return;
@@ -159,19 +158,19 @@ void NotationInteraction::showShadowNote(const QPointF& p)
     // so pad this by barNoteDistance
     qreal mag = score()->staff(pos.staffIdx)->staffMag(Fraction(0,1));
     qreal relX = pos.pos.x() - pos.segment->measure()->canvasPos().x();
-    pos.pos.rx() -= qMin(relX - score()->styleP(Sid::barNoteDistance) * mag, 0.0);
+    pos.pos.rx() -= qMin(relX - score()->styleP(Ms::Sid::barNoteDistance) * mag, 0.0);
 
     m_shadowNote->setVisible(true);
 
     Staff* staff = score()->staff(pos.staffIdx);
     m_shadowNote->setMag(staff->staffMag(Fraction(0,1)));
-    const Instrument* instr = staff->part()->instrument();
-    NoteHead::Group noteheadGroup = NoteHead::Group::HEAD_NORMAL;
+    const Ms::Instrument* instr = staff->part()->instrument();
+    Ms::NoteHead::Group noteheadGroup = Ms::NoteHead::Group::HEAD_NORMAL;
     int line = pos.line;
-    NoteHead::Type noteHead = is.duration().headType();
+    Ms::NoteHead::Type noteHead = is.duration().headType();
 
     if (instr->useDrumset()) {
-        const Drumset* ds  = instr->drumset();
+        const Ms::Drumset* ds  = instr->drumset();
         int pitch    = is.drumNote();
         if (pitch >= 0 && ds->isValid(pitch)) {
             line     = ds->line(pitch);
@@ -188,12 +187,12 @@ void NotationInteraction::showShadowNote(const QPointF& p)
         voice = is.voice();
     }
 
-    SymId symNotehead;
-    TDuration d(is.duration());
+    Ms::SymId symNotehead;
+    Ms::TDuration d(is.duration());
 
     qreal segmentSkylineTopY = 0;
     qreal segmentSkylineBottomY = 0;
-    Segment* shadowNoteActualSegment = pos.segment->prev1enabled();
+    Ms::Segment* shadowNoteActualSegment = pos.segment->prev1enabled();
     if (shadowNoteActualSegment) {
         segmentSkylineTopY = shadowNoteActualSegment->elementsTopOffsetFromSkyline(pos.staffIdx);
         segmentSkylineBottomY = shadowNoteActualSegment->elementsBottomOffsetFromSkyline(pos.staffIdx);
@@ -201,12 +200,12 @@ void NotationInteraction::showShadowNote(const QPointF& p)
 
     if (is.rest()) {
         int yo;
-        Rest rest(gscore, d.type());
+        Ms::Rest rest(Ms::gscore, d.type());
         rest.setTicks(d.fraction());
         symNotehead = rest.getSymbol(is.duration().type(), 0, staff->lines(pos.segment->tick()), &yo);
         m_shadowNote->setState(symNotehead, voice, d, true, segmentSkylineTopY, segmentSkylineBottomY);
     } else {
-        if (NoteHead::Group::HEAD_CUSTOM == noteheadGroup) {
+        if (Ms::NoteHead::Group::HEAD_CUSTOM == noteheadGroup) {
             symNotehead = instr->drumset()->noteHeads(is.drumNote(), noteHead);
         } else {
             symNotehead = Note::noteHead(0, noteheadGroup, noteHead);
@@ -259,7 +258,7 @@ Ms::Page* NotationInteraction::point2page(const QPointF& p) const
 QList<Element*> NotationInteraction::elementsAt(const QPointF& p) const
 {
     QList<Element*> el;
-    Page* page = point2page(p);
+    Ms::Page* page = point2page(p);
     if (page) {
         el = page->items(p - page->pos());
         std::sort(el.begin(), el.end(), NotationInteraction::elementIsLess);
@@ -340,7 +339,7 @@ QList<Ms::Element*> NotationInteraction::hitElements(const QPointF& p_in, float 
 NotationInteraction::HitMeasureData NotationInteraction::hitMeasure(const QPointF& pos) const
 {
     int staffIndex;
-    Segment* segment;
+    Ms::Segment* segment;
     QPointF offset;
     Measure* measure = score()->pos2measure(pos, &staffIndex, 0, &segment, &offset);
 
@@ -578,7 +577,7 @@ void NotationInteraction::startDrop(const QByteArray& edata)
         m_dropData.ed.dropElement = nullptr;
     }
 
-    XmlReader e(edata);
+    Ms::XmlReader e(edata);
     m_dropData.ed.dragOffset = QPointF();
     Fraction duration;      // dummy
     ElementType type = Element::readType(e, &m_dropData.ed.dragOffset, &duration);
@@ -716,7 +715,7 @@ bool NotationInteraction::drop(const QPointF& pos, Qt::KeyboardModifiers modifie
     case ElementType::HAIRPIN:
     case ElementType::TEXTLINE:
     {
-        Spanner* spanner = ptr::checked_cast<Spanner>(m_dropData.ed.dropElement);
+        Ms::Spanner* spanner = ptr::checked_cast<Ms::Spanner>(m_dropData.ed.dropElement);
         score()->cmdAddSpanner(spanner, pos, firstStaffOnly);
         score()->setUpdateAll();
         accepted = true;
@@ -734,7 +733,7 @@ bool NotationInteraction::drop(const QPointF& pos, Qt::KeyboardModifiers modifie
         Element* el = elementAt(pos);
         if (el == 0 || el->type() == ElementType::STAFF_LINES) {
             int staffIdx;
-            Segment* seg;
+            Ms::Segment* seg;
             QPointF offset;
             el = score()->pos2measure(pos, &staffIdx, 0, &seg, &offset);
             if (el && el->isMeasure()) {
@@ -866,7 +865,7 @@ bool NotationInteraction::drop(const QPointF& pos, Qt::KeyboardModifiers modifie
     return accepted;
 }
 
-void NotationInteraction::selectInstrument(InstrumentChange *instrumentChange)
+void NotationInteraction::selectInstrument(Ms::InstrumentChange *instrumentChange)
 {
     if (!instrumentChange) {
         return;
@@ -895,13 +894,13 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
         return false;
     }
 
-    Score* score = this->score();
+    Ms::Score* score = this->score();
 
     if (!score) {
         return false;
     }
 
-    const Selection sel = score->selection();   // make a copy of selection state before applying the operation.
+    const Ms::Selection sel = score->selection();   // make a copy of selection state before applying the operation.
     if (sel.isNone()) {
         return false;
     }
@@ -936,13 +935,13 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
         }
 
         auto isEntryDrumStaff = [score]() {
-                                    const InputState& is = score->inputState();
-                                    Staff* staff = score->staff(is.track() / VOICES);
-                                    return staff->staffType(is.tick())->group() == StaffGroup::PERCUSSION;
+                                    const Ms::InputState& is = score->inputState();
+                                    Ms::Staff* staff = score->staff(is.track() / VOICES);
+                                    return staff->staffType(is.tick())->group() == Ms::StaffGroup::PERCUSSION;
                                 };
 
         if (isEntryDrumStaff() && element->isChord()) {
-            InputState& is = score->inputState();
+            Ms::InputState& is = score->inputState();
             Element* e = nullptr;
             if (!(modifiers & Qt::ShiftModifier)) {
                 // shift+double-click: add note to "chord"
@@ -951,17 +950,17 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
                 // back up if necessary
                 // TODO: refactor this with similar code in putNote()
                 if (is.segment()) {
-                    Segment* seg = is.segment();
+                    Ms::Segment* seg = is.segment();
                     while (seg) {
                         if (seg->element(is.track())) {
                             break;
                         }
-                        seg = seg->prev(SegmentType::ChordRest);
+                        seg = seg->prev(Ms::SegmentType::ChordRest);
                     }
                     if (seg) {
                         is.setSegment(seg);
                     } else {
-                        is.setSegment(is.segment()->measure()->first(SegmentType::ChordRest));
+                        is.setSegment(is.segment()->measure()->first(Ms::SegmentType::ChordRest));
                     }
                 }
                 score->expandVoice();
@@ -986,14 +985,14 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
                 qDebug("nowhere to place drum note");
             }
         } else if (element->isLayoutBreak()) {
-            LayoutBreak* breakElement = toLayoutBreak(element);
+            Ms::LayoutBreak* breakElement = toLayoutBreak(element);
             score->cmdToggleLayoutBreak(breakElement->layoutBreakType());
         } else if (element->isSlur() && addSingle) {
             doAddSlur(toSlur(element));
         } else if (element->isSLine() && !element->isGlissando() && addSingle) {
-            Segment* startSegment = cr1->segment();
-            Segment* endSegment = cr2->segment();
-            if (element->type() == ElementType::PEDAL && cr2 != cr1) {
+            Ms::Segment* startSegment = cr1->segment();
+            Ms::Segment* endSegment = cr2->segment();
+            if (element->type() == Ms::ElementType::PEDAL && cr2 != cr1) {
                 endSegment = endSegment->nextCR(cr2->track());
             }
             // TODO - handle cross-voice selections
@@ -1001,11 +1000,11 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
 
             QByteArray a = element->mimeData(QPointF());
 //printf("<<%s>>\n", a.data());
-            XmlReader e(a);
-            Fraction duration;        // dummy
+            Ms::XmlReader e(a);
+            Ms::Fraction duration;        // dummy
             QPointF dragOffset;
-            ElementType type = Element::readType(e, &dragOffset, &duration);
-            Spanner* spanner = static_cast<Spanner*>(Element::create(type, score));
+            Ms::ElementType type = Ms::Element::readType(e, &dragOffset, &duration);
+            Ms::Spanner* spanner = static_cast<Ms::Spanner*>(Ms::Element::create(type, score));
             spanner->read(e);
             spanner->styleChanged();
             score->cmdAddSpanner(spanner, idx, startSegment, endSegment);
@@ -1026,11 +1025,11 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
             || element->type() == ElementType::BRACKET
             || element->type() == ElementType::STAFFTYPE_CHANGE
             || (element->type() == ElementType::ICON
-                && (toIcon(element)->iconType() == IconType::VFRAME
-                    || toIcon(element)->iconType() == IconType::HFRAME
-                    || toIcon(element)->iconType() == IconType::TFRAME
-                    || toIcon(element)->iconType() == IconType::MEASURE
-                    || toIcon(element)->iconType() == IconType::BRACKETS))) {
+                && (toIcon(element)->iconType() == Ms::IconType::VFRAME
+                    || toIcon(element)->iconType() == Ms::IconType::HFRAME
+                    || toIcon(element)->iconType() == Ms::IconType::TFRAME
+                    || toIcon(element)->iconType() == Ms::IconType::MEASURE
+                    || toIcon(element)->iconType() == Ms::IconType::BRACKETS))) {
             Measure* last = sel.endSegment() ? sel.endSegment()->measure() : nullptr;
             for (Measure* m = sel.startSegment()->measure(); m; m = m->nextMeasureMM()) {
                 QRectF r = m->staffabbox(sel.staffStart());
@@ -1042,7 +1041,7 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
                 }
             }
         } else if (element->type() == ElementType::LAYOUT_BREAK) {
-            LayoutBreak* breakElement = static_cast<LayoutBreak*>(element);
+            Ms::LayoutBreak* breakElement = static_cast<Ms::LayoutBreak*>(element);
             score->cmdToggleLayoutBreak(breakElement->layoutBreakType());
         } else if (element->isClef() || element->isKeySig() || element->isTimeSig()) {
             Measure* m1 = sel.startSegment()->measure();
@@ -1070,7 +1069,7 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
                             e1 = cr;
                         }
                     }
-                    if (sel.endSegment() && sel.endSegment()->segmentType() == SegmentType::ChordRest) {
+                    if (sel.endSegment() && sel.endSegment()->segmentType() == Ms::SegmentType::ChordRest) {
                         ChordRest* cr = static_cast<ChordRest*>(sel.endSegment()->nextChordRest(i * VOICES));
                         if (cr && cr->isChord()) {
                             e2 = static_cast<Ms::Chord*>(cr)->upNote();
@@ -1081,22 +1080,22 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
                 }
                 if (m2 || e2) {
                     // restore original clef/keysig/timesig
-                    Staff* staff = score->staff(i);
-                    Fraction tick1 = sel.startSegment()->tick();
-                    Element* oelement = nullptr;
+                    Ms::Staff* staff = score->staff(i);
+                    Ms::Fraction tick1 = sel.startSegment()->tick();
+                    Ms::Element* oelement = nullptr;
                     switch (element->type()) {
-                    case ElementType::CLEF:
+                    case Ms::ElementType::CLEF:
                     {
-                        Clef* oclef = new Clef(score);
+                        Ms::Clef* oclef = new Ms::Clef(score);
                         oclef->setClefType(staff->clef(tick1));
                         oelement = oclef;
                         break;
                     }
-                    case ElementType::KEYSIG:
+                    case Ms::ElementType::KEYSIG:
                     {
-                        KeySig* okeysig = new KeySig(score);
+                        Ms::KeySig* okeysig = new Ms::KeySig(score);
                         okeysig->setKeySigEvent(staff->keySigEvent(tick1));
-                        if (!score->styleB(Sid::concertPitch) && !okeysig->isCustom() && !okeysig->isAtonal()) {
+                        if (!score->styleB(Ms::Sid::concertPitch) && !okeysig->isCustom() && !okeysig->isAtonal()) {
                             Ms::Interval v = staff->part()->instrument(tick1)->transpose();
                             if (!v.isZero()) {
                                 Key k = okeysig->key();
@@ -1106,9 +1105,9 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
                         oelement = okeysig;
                         break;
                     }
-                    case ElementType::TIMESIG:
+                    case Ms::ElementType::TIMESIG:
                     {
-                        TimeSig* otimesig = new TimeSig(score);
+                        Ms::TimeSig* otimesig = new Ms::TimeSig(score);
                         otimesig->setFrom(staff->timeSig(tick1));
                         oelement = otimesig;
                         break;
@@ -1141,13 +1140,13 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
         } else if (element->isSlur()) {
             doAddSlur(toSlur(element));
         } else if (element->isSLine() && element->type() != ElementType::GLISSANDO) {
-            Segment* startSegment = sel.startSegment();
-            Segment* endSegment = sel.endSegment();
+            Ms::Segment* startSegment = sel.startSegment();
+            Ms::Segment* endSegment = sel.endSegment();
             bool firstStaffOnly = element->isVolta() && !(modifiers & Qt::ControlModifier);
             int startStaff = firstStaffOnly ? 0 : sel.staffStart();
             int endStaff   = firstStaffOnly ? 1 : sel.staffEnd();
             for (int i = startStaff; i < endStaff; ++i) {
-                Spanner* spanner = static_cast<Spanner*>(element->clone());
+                Ms::Spanner* spanner = static_cast<Ms::Spanner*>(element->clone());
                 spanner->setScore(score);
                 spanner->styleChanged();
                 score->cmdAddSpanner(spanner, i, startSegment, endSegment);
@@ -1155,19 +1154,19 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
         } else {
             int track1 = sel.staffStart() * VOICES;
             int track2 = sel.staffEnd() * VOICES;
-            Segment* startSegment = sel.startSegment();
-            Segment* endSegment = sel.endSegment();       //keep it, it could change during the loop
+            Ms::Segment* startSegment = sel.startSegment();
+            Ms::Segment* endSegment = sel.endSegment();       //keep it, it could change during the loop
 
-            for (Segment* s = startSegment; s && s != endSegment; s = s->next1()) {
+            for (Ms::Segment* s = startSegment; s && s != endSegment; s = s->next1()) {
                 for (int track = track1; track < track2; ++track) {
-                    Element* e = s->element(track);
+                    Ms::Element* e = s->element(track);
                     if (e == 0 || !score->selectionFilter().canSelect(e)
                         || !score->selectionFilter().canSelectVoice(track)) {
                         continue;
                     }
                     if (e->isChord()) {
                         Ms::Chord* chord = toChord(e);
-                        for (Note* n : chord->notes()) {
+                        for (Ms::Note* n : chord->notes()) {
                             applyDropPaletteElement(score, n, element, modifiers);
                             if (!(element->isAccidental() || element->isNoteHead())) {             // only these need to apply to every note
                                 break;
@@ -1201,7 +1200,7 @@ void NotationInteraction::applyDropPaletteElement(Ms::Score* score, Ms::Element*
                                                   Qt::KeyboardModifiers modifiers,
                                                   QPointF pt, bool pasteMode)
 {
-    EditData dropData;
+    Ms::EditData dropData;
     dropData.pos         = pt.isNull() ? target->pagePos() : pt;
     dropData.dragOffset  = QPointF();
     dropData.modifiers   = modifiers;
@@ -1212,7 +1211,7 @@ void NotationInteraction::applyDropPaletteElement(Ms::Score* score, Ms::Element*
 
         QByteArray a = e->mimeData(QPointF());
 
-        XmlReader n(a);
+        Ms::XmlReader n(a);
         n.setPasteMode(pasteMode);
         Fraction duration;      // dummy
         QPointF dragOffset;
@@ -1222,13 +1221,13 @@ void NotationInteraction::applyDropPaletteElement(Ms::Score* score, Ms::Element*
         dropData.dropElement->read(n);
         dropData.dropElement->styleChanged();       // update to local style
 
-        Element* el = target->drop(dropData);
+        Ms::Element* el = target->drop(dropData);
         if (el && el->isInstrumentChange()) {
             selectInstrument(toInstrumentChange(el));
         }
 
         if (el && !score->inputState().noteEntryMode()) {
-            select({ el }, SelectType::SINGLE, 0);
+            select({ el }, Ms::SelectType::SINGLE, 0);
         }
         dropData.dropElement = 0;
 
@@ -1248,8 +1247,8 @@ void NotationInteraction::doAddSlur(const Ms::Slur* slurTemplate)
 
     startEdit();
 
-    ChordRest* cr1;
-    ChordRest* cr2;
+    Ms::ChordRest* cr1;
+    Ms::ChordRest* cr2;
     const auto& sel = score()->selection();
     auto el         = sel.uniqueElements();
 
@@ -1259,7 +1258,7 @@ void NotationInteraction::doAddSlur(const Ms::Slur* slurTemplate)
         for (int track = startTrack; track < endTrack; ++track) {
             cr1 = 0;
             cr2 = 0;
-            for (Element* e : el) {
+            for (Ms::Element* e : el) {
                 if (e->track() != track) {
                     continue;
                 }
@@ -1269,7 +1268,7 @@ void NotationInteraction::doAddSlur(const Ms::Slur* slurTemplate)
                 if (!e->isChord()) {
                     continue;
                 }
-                ChordRest* cr = toChordRest(e);
+                Ms::ChordRest* cr = Ms::toChordRest(e);
                 if (!cr1 || cr1->tick() > cr->tick()) {
                     cr1 = cr;
                 }
@@ -1279,7 +1278,7 @@ void NotationInteraction::doAddSlur(const Ms::Slur* slurTemplate)
             }
 
             if (cr1 && (cr1 != cr2)) {
-                Slur* slur = score()->addSlur(cr1, cr2, slurTemplate);
+                Ms::Slur* slur = score()->addSlur(cr1, cr2, slurTemplate);
 
                 if (m_noteInput->isNoteInputMode()) {
                     m_noteInput->setSlur(slur);
@@ -1292,14 +1291,14 @@ void NotationInteraction::doAddSlur(const Ms::Slur* slurTemplate)
     } else {
         cr1 = 0;
         cr2 = 0;
-        for (Element* e : el) {
+        for (Ms::Element* e : el) {
             if (e->isNote()) {
-                e = toNote(e)->chord();
+                e = Ms::toNote(e)->chord();
             }
             if (!e->isChord()) {
                 continue;
             }
-            ChordRest* cr = toChordRest(e);
+            Ms::ChordRest* cr = Ms::toChordRest(e);
             if (!cr1 || cr->isBefore(cr1)) {
                 cr1 = cr;
             }
@@ -1311,7 +1310,7 @@ void NotationInteraction::doAddSlur(const Ms::Slur* slurTemplate)
             cr2 = 0;
         }
         if (cr1) {
-            Slur* slur = score()->addSlur(cr1, cr2, slurTemplate);
+            Ms::Slur* slur = score()->addSlur(cr1, cr2, slurTemplate);
 
             if (m_noteInput->isNoteInputMode()) {
                 m_noteInput->setSlur(slur);
@@ -1327,8 +1326,8 @@ void NotationInteraction::doAddSlur(const Ms::Slur* slurTemplate)
 
 bool NotationInteraction::scoreHasMeasure() const
 {
-    Page* page = score()->pages().isEmpty() ? nullptr : score()->pages().front();
-    const QList<System*>* systems = page ? &page->systems() : nullptr;
+    Ms::Page* page = score()->pages().isEmpty() ? nullptr : score()->pages().front();
+    const QList<Ms::System*>* systems = page ? &page->systems() : nullptr;
     if (systems == nullptr || systems->empty() || systems->front()->measures().empty()) {
         return false;
     }
@@ -1357,20 +1356,20 @@ mu::async::Notification NotationInteraction::dropChanged() const
 bool NotationInteraction::dropCanvas(Element* e)
 {
     if (e->isIcon()) {
-        switch (toIcon(e)->iconType()) {
-        case IconType::VFRAME:
+        switch (Ms::toIcon(e)->iconType()) {
+        case Ms::IconType::VFRAME:
             score()->insertMeasure(ElementType::VBOX, 0);
             break;
-        case IconType::HFRAME:
+        case Ms::IconType::HFRAME:
             score()->insertMeasure(ElementType::HBOX, 0);
             break;
-        case IconType::TFRAME:
+        case Ms::IconType::TFRAME:
             score()->insertMeasure(ElementType::TBOX, 0);
             break;
-        case IconType::FFRAME:
+        case Ms::IconType::FFRAME:
             score()->insertMeasure(ElementType::FBOX, 0);
             break;
-        case IconType::MEASURE:
+        case Ms::IconType::MEASURE:
             score()->insertMeasure(ElementType::MEASURE, 0);
             break;
         default:
@@ -1391,7 +1390,7 @@ Element* NotationInteraction::dropTarget(Ms::EditData& ed) const
             if (el.size() > 2) {          // is not first class drop target
                 continue;
             }
-            e = toStaffLines(e)->measure();
+            e = Ms::toStaffLines(e)->measure();
         }
         if (e->acceptDrop(ed)) {
             return e;
@@ -1404,16 +1403,16 @@ Element* NotationInteraction::dropTarget(Ms::EditData& ed) const
 bool NotationInteraction::dragMeasureAnchorElement(const QPointF& pos)
 {
     int staffIdx;
-    Segment* seg;
-    MeasureBase* mb = score()->pos2measure(pos, &staffIdx, 0, &seg, 0);
+    Ms::Segment* seg;
+    Ms::MeasureBase* mb = score()->pos2measure(pos, &staffIdx, 0, &seg, 0);
     if (!(m_dropData.ed.modifiers & Qt::ControlModifier)) {
         staffIdx = 0;
     }
     int track = staffIdx * VOICES;
 
     if (mb && mb->isMeasure()) {
-        Measure* m = toMeasure(mb);
-        System* s  = m->system();
+        Ms::Measure* m = Ms::toMeasure(mb);
+        Ms::System* s  = m->system();
         qreal y    = s->staff(staffIdx)->y() + s->pos().y() + s->page()->pos().y();
         QRectF b(m->canvasBoundingRect());
         if (pos.x() >= (b.x() + b.width() * .5) && m != score()->lastMeasureMM()
@@ -1437,13 +1436,13 @@ bool NotationInteraction::dragMeasureAnchorElement(const QPointF& pos)
 bool NotationInteraction::dragTimeAnchorElement(const QPointF& pos)
 {
     int staffIdx;
-    Segment* seg;
-    MeasureBase* mb = score()->pos2measure(pos, &staffIdx, 0, &seg, 0);
+    Ms::Segment* seg;
+    Ms::MeasureBase* mb = score()->pos2measure(pos, &staffIdx, 0, &seg, 0);
     int track  = staffIdx * VOICES;
 
     if (mb && mb->isMeasure() && seg->element(track)) {
-        Measure* m = toMeasure(mb);
-        System* s  = m->system();
+        Ms::Measure* m = Ms::toMeasure(mb);
+        Ms::System* s  = m->system();
         qreal y    = s->staff(staffIdx)->y() + s->pos().y() + s->page()->pos().y();
         QPointF anchor(seg->canvasBoundingRect().x(), y);
         setAnchorLines({ QLineF(pos, anchor) });
@@ -1672,7 +1671,7 @@ void NotationInteraction::moveText(MoveDirection d, bool quickly)
 
     startEdit();
 
-    qreal step = quickly ? MScore::nudgeStep10 : MScore::nudgeStep;
+    qreal step = quickly ? Ms::MScore::nudgeStep10 : Ms::MScore::nudgeStep;
     step = step * el->spatium();
 
     switch (d) {
@@ -1682,16 +1681,16 @@ void NotationInteraction::moveText(MoveDirection d, bool quickly)
         }
         break;
     case MoveDirection::Left:
-        el->undoChangeProperty(Pid::OFFSET, el->offset() - QPointF(step, 0.0), PropertyFlags::UNSTYLED);
+        el->undoChangeProperty(Ms::Pid::OFFSET, el->offset() - QPointF(step, 0.0), Ms::PropertyFlags::UNSTYLED);
         break;
     case MoveDirection::Right:
-        el->undoChangeProperty(Pid::OFFSET, el->offset() + QPointF(step, 0.0), PropertyFlags::UNSTYLED);
+        el->undoChangeProperty(Ms::Pid::OFFSET, el->offset() + QPointF(step, 0.0), Ms::PropertyFlags::UNSTYLED);
         break;
     case MoveDirection::Up:
-        el->undoChangeProperty(Pid::OFFSET, el->offset() - QPointF(0.0, step), PropertyFlags::UNSTYLED);
+        el->undoChangeProperty(Ms::Pid::OFFSET, el->offset() - QPointF(0.0, step), Ms::PropertyFlags::UNSTYLED);
         break;
     case MoveDirection::Down:
-        el->undoChangeProperty(Pid::OFFSET, el->offset() + QPointF(0.0, step), PropertyFlags::UNSTYLED);
+        el->undoChangeProperty(Ms::Pid::OFFSET, el->offset() + QPointF(0.0, step), Ms::PropertyFlags::UNSTYLED);
         break;
     }
 
@@ -1716,8 +1715,8 @@ void NotationInteraction::startEditText(Element* element, const QPointF& cursorP
 
     if (isTextEditingStarted()) {
         // double click on a textBase element that is being edited - select word
-        TextBase* textBase = toTextBase(m_textEditData.element);
-        textBase->multiClickSelect(m_textEditData, MultiClick::Double);
+        Ms::TextBase* textBase = Ms::toTextBase(m_textEditData.element);
+        textBase->multiClickSelect(m_textEditData, Ms::MultiClick::Double);
         textBase->endHexState(m_textEditData);
         textBase->setPrimed(false);
     } else {
@@ -1835,18 +1834,18 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, int beforeBoxInde
 {
     auto boxTypeToElementType = [](BoxType boxType) {
                                     switch (boxType) {
-                                    case BoxType::Horizontal: return ElementType::HBOX;
-                                    case BoxType::Vertical: return ElementType::VBOX;
-                                    case BoxType::Text: return ElementType::TBOX;
-                                    case BoxType::Measure: return ElementType::MEASURE;
-                                    case BoxType::Unknown: return ElementType::INVALID;
+                                    case BoxType::Horizontal: return Ms::ElementType::HBOX;
+                                    case BoxType::Vertical: return Ms::ElementType::VBOX;
+                                    case BoxType::Text: return Ms::ElementType::TBOX;
+                                    case BoxType::Measure: return Ms::ElementType::MEASURE;
+                                    case BoxType::Unknown: return Ms::ElementType::INVALID;
                                     }
 
                                     return ElementType::INVALID;
                                 };
 
-    ElementType elementType = boxTypeToElementType(boxType);
-    MeasureBase* beforeBox = beforeBoxIndex >= 0 ? score()->measure(beforeBoxIndex) : nullptr;
+    Ms::ElementType elementType = boxTypeToElementType(boxType);
+    Ms::MeasureBase* beforeBox = beforeBoxIndex >= 0 ? score()->measure(beforeBoxIndex) : nullptr;
 
     startEdit();
     for (int i = 0; i < count; ++i) {
@@ -1896,24 +1895,24 @@ void NotationInteraction::swapSelection()
     Ms::Selection& selection = score()->selection();
     QString mimeType = selection.mimeType();
 
-    if (mimeType == mimeStaffListFormat) { // determine size of clipboard selection
+    if (mimeType == Ms::mimeStaffListFormat) { // determine size of clipboard selection
         const QMimeData* mimeData = this->selection()->mimeData();
-        QByteArray data = mimeData ? mimeData->data(mimeStaffListFormat) : QByteArray();
-        XmlReader reader(data);
+        QByteArray data = mimeData ? mimeData->data(Ms::mimeStaffListFormat) : QByteArray();
+        Ms::XmlReader reader(data);
         reader.readNextStartElement();
 
         Fraction tickLen = Fraction(0, 1);
         int stavesCount = 0;
 
         if (reader.name() == "StaffList") {
-            tickLen = Fraction::fromTicks(reader.intAttribute("len", 0));
+            tickLen = Ms::Fraction::fromTicks(reader.intAttribute("len", 0));
             stavesCount = reader.intAttribute("staves", 0);
         }
 
-        if (tickLen > Fraction(0, 1)) { // attempt to extend selection to match clipboard size
-            Segment* segment = selection.startSegment();
-            Fraction startTick = selection.tickStart() + tickLen;
-            Segment* segmentAfter = score()->tick2leftSegment(startTick);
+        if (tickLen > Ms::Fraction(0, 1)) { // attempt to extend selection to match clipboard size
+            Ms::Segment* segment = selection.startSegment();
+            Ms::Fraction startTick = selection.tickStart() + tickLen;
+            Ms::Segment* segmentAfter = score()->tick2leftSegment(startTick);
 
             int staffIndex = selection.staffStart() + stavesCount - 1;
             if (staffIndex >= score()->nstaves()) {
@@ -1921,7 +1920,7 @@ void NotationInteraction::swapSelection()
             }
 
             startTick = selection.tickStart();
-            Fraction endTick = startTick + tickLen;
+            Ms::Fraction endTick = startTick + tickLen;
             selection.extendRangeSelection(segment, segmentAfter, staffIndex, startTick, endTick);
             selection.update();
         }
@@ -2006,12 +2005,12 @@ void NotationInteraction::addAccidentalToSelection(AccidentalType type)
 
 void NotationInteraction::changeSelectedNotesArticulation(SymbolId articulationSymbolId)
 {
-    std::vector<Note*> notes = score()->selection().noteList();
+    std::vector<Ms::Note*> notes = score()->selection().noteList();
 
     startEdit();
-    for (Note* note: notes) {
-        Chord* chord = note->chord();
-        chord->updateArticulations({ articulationSymbolId }, ArticulationsUpdateMode::Remove);
+    for (Ms::Note* note: notes) {
+        Ms::Chord* chord = note->chord();
+        chord->updateArticulations({ articulationSymbolId }, Ms::ArticulationsUpdateMode::Remove);
     }
     apply();
 
@@ -2137,7 +2136,7 @@ void NotationInteraction::addText(TextType type)
     }
 
     startEdit();
-    TextBase* textBox = score()->addText(type);
+    Ms::TextBase* textBox = score()->addText(type);
     apply();
 
     if (textBox) {

@@ -39,4 +39,5 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/fontsmodule.h
     )
 
+set(MODULE_USE_UNITY_NONE ON)
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

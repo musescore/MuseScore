@@ -32,7 +32,9 @@ static QString xmlLocation(const QXmlStreamReader* const xmlreader)
 //   logDebugTrace
 //---------------------------------------------------------
 
-static void log(MxmlLogger::Level level, const QString& text, const QXmlStreamReader* const xmlreader)
+namespace ixl_prv {
+
+static void to_log(MxmlLogger::Level level, const QString& text, const QXmlStreamReader* const xmlreader)
 {
     QString str;
     switch (level) {
@@ -52,6 +54,7 @@ static void log(MxmlLogger::Level level, const QString& text, const QXmlStreamRe
 
     qDebug("%s", qPrintable(str));
 }
+}
 
 //---------------------------------------------------------
 //   logDebugTrace
@@ -64,7 +67,7 @@ static void log(MxmlLogger::Level level, const QString& text, const QXmlStreamRe
 void MxmlLogger::logDebugTrace(const QString& trace, const QXmlStreamReader* const xmlreader)
 {
     if (_level <= Level::MXML_TRACE) {
-        log(Level::MXML_TRACE, trace, xmlreader);
+        ixl_prv::to_log(Level::MXML_TRACE, trace, xmlreader);
     }
 }
 
@@ -79,7 +82,7 @@ void MxmlLogger::logDebugTrace(const QString& trace, const QXmlStreamReader* con
 void MxmlLogger::logDebugInfo(const QString& info, const QXmlStreamReader* const xmlreader)
 {
     if (_level <= Level::MXML_INFO) {
-        log(Level::MXML_INFO, info, xmlreader);
+        ixl_prv::to_log(Level::MXML_INFO, info, xmlreader);
     }
 }
 
@@ -94,7 +97,7 @@ void MxmlLogger::logDebugInfo(const QString& info, const QXmlStreamReader* const
 void MxmlLogger::logError(const QString& error, const QXmlStreamReader* const xmlreader)
 {
     if (_level <= Level::MXML_ERROR) {
-        log(Level::MXML_ERROR, error, xmlreader);
+        ixl_prv::to_log(Level::MXML_ERROR, error, xmlreader);
     }
 }
 }

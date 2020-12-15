@@ -23,7 +23,6 @@
 
 #include "ui/view/iconcodes.h"
 
-using namespace Ms;
 using namespace mu::notation;
 using namespace mu::framework;
 
@@ -72,20 +71,20 @@ void AlignSelect::_alignChanged()
 //   align
 //---------------------------------------------------------
 
-Align AlignSelect::align() const
+Ms::Align AlignSelect::align() const
 {
-    Align a = Align::LEFT;
+    Ms::Align a = Ms::Align::LEFT;
     if (alignHCenter->isChecked()) {
-        a = a | Align::HCENTER;
+        a = a | Ms::Align::HCENTER;
     } else if (alignRight->isChecked()) {
-        a = a | Align::RIGHT;
+        a = a | Ms::Align::RIGHT;
     }
     if (alignVCenter->isChecked()) {
-        a = a | Align::VCENTER;
+        a = a | Ms::Align::VCENTER;
     } else if (alignBottom->isChecked()) {
-        a = a | Align::BOTTOM;
+        a = a | Ms::Align::BOTTOM;
     } else if (alignBaseline->isChecked()) {
-        a = a | Align::BASELINE;
+        a = a | Ms::Align::BASELINE;
     }
     return a;
 }
@@ -107,18 +106,18 @@ void AlignSelect::blockAlign(bool val)
 void AlignSelect::setAlign(Ms::Align a)
 {
     blockAlign(true);
-    if (a & Align::HCENTER) {
+    if (a & Ms::Align::HCENTER) {
         alignHCenter->setChecked(true);
-    } else if (a & Align::RIGHT) {
+    } else if (a & Ms::Align::RIGHT) {
         alignRight->setChecked(true);
     } else {
         alignLeft->setChecked(true);
     }
-    if (a & Align::VCENTER) {
+    if (a & Ms::Align::VCENTER) {
         alignVCenter->setChecked(true);
-    } else if (a & Align::BOTTOM) {
+    } else if (a & Ms::Align::BOTTOM) {
         alignBottom->setChecked(true);
-    } else if (a & Align::BASELINE) {
+    } else if (a & Ms::Align::BASELINE) {
         alignBaseline->setChecked(true);
     } else {
         alignTop->setChecked(true);

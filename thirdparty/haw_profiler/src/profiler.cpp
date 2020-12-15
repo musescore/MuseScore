@@ -472,7 +472,7 @@ void Profiler::Printer::printData(const Data& data, Data::Mode mode, int maxcoun
     printInfo(formatData(data, mode, maxcount));
 }
 
-namespace {
+namespace profiler_prv {
 struct IsLessBySum {
     bool operator()(const Profiler::Data::Func& f, const Profiler::Data::Func& s) const
     {
@@ -497,7 +497,7 @@ std::string Profiler::Printer::formatData(const Data& data, Data::Mode mode, int
             list.push_back(it->second);
         }
 
-        list.sort(IsLessBySum());
+        list.sort(profiler_prv::IsLessBySum());
 
         std::string info = "Main thread. Top "
                            + std::to_string(maxcount)
@@ -523,7 +523,7 @@ std::string Profiler::Printer::formatData(const Data& data, Data::Mode mode, int
             }
         }
 
-        list.sort(IsLessBySum());
+        list.sort(profiler_prv::IsLessBySum());
 
         std::string info = "Other threads. Top "
                            + std::to_string(maxcount)
@@ -537,7 +537,8 @@ std::string Profiler::Printer::formatData(const Data& data, Data::Mode mode, int
     return stream.str();
 }
 
-static std::string leftJustified(const std::string& val, size_t width)
+namespace profiler_prv {
+std::string leftJustified(const std::string& val, size_t width)
 {
     std::string str;
     str.resize(width, ' ');
@@ -547,8 +548,9 @@ static std::string leftJustified(const std::string& val, size_t width)
     }
     return str;
 }
+}
 
-#define FORMAT(str, width) leftJustified(str, width)
+#define FORMAT(str, width) profiler_prv::leftJustified(str, width)
 #define TITLE(str) FORMAT(std::string(str), 18)
 #define VALUE(val, unit) FORMAT(std::to_string(val) + unit, 18)
 #define VALUE_D(val, unit) FORMAT(formatDouble(val, 3) + unit, 18)
