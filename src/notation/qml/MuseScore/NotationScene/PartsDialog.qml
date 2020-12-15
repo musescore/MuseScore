@@ -65,8 +65,6 @@ QmlDialog {
 
                     onClicked: {
                         partsModel.createNewPart()
-                        partsModel.apply()
-                        root.hide()
                     }
                 }
 
@@ -104,10 +102,11 @@ QmlDialog {
                 spacing: 12
 
                 FlatButton {
-                    text: qsTrc("global", "Cancel")
+                    text: qsTrc("global", "Close")
 
                     onClicked: {
-                        root.reject()
+                        partsModel.apply()
+                        root.hide()
                     }
                 }
 
