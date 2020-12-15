@@ -10,10 +10,10 @@
 
 using namespace haw::logger;
 
-const Type Logger::ERROR("ERROR");
+const Type Logger::ERRR("ERROR");
 const Type Logger::WARN("WARN");
 const Type Logger::INFO("INFO");
-const Type Logger::DEBUG("DEBUG");
+const Type Logger::DEBG("DEBUG");
 
 // Layout ---------------------------------
 
@@ -299,10 +299,10 @@ void Logger::setupDefault()
     m_level = Normal;
 
     m_types.clear();
-    m_types.push_back(ERROR);
+    m_types.push_back(ERRR);
     m_types.push_back(WARN);
     m_types.push_back(INFO);
-    m_types.push_back(DEBUG);
+    m_types.push_back(DEBG);
 
 #ifdef HAW_LOGGER_QT_SUPPORT
     setIsCatchQtMsg(true);
@@ -407,10 +407,10 @@ void Logger::logMsgHandler(QtMsgType type, const QMessageLogContext& ctx, const 
 Type Logger::qtMsgTypeToString(enum QtMsgType defType)
 {
     switch (defType) {
-    case QtDebugMsg: return DEBUG;
+    case QtDebugMsg: return DEBG;
     case QtWarningMsg: return WARN;
-    case QtCriticalMsg: return ERROR;
-    case QtFatalMsg: return ERROR;
+    case QtCriticalMsg: return ERRR;
+    case QtFatalMsg: return ERRR;
     default: return INFO;
     }
 }

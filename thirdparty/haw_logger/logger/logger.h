@@ -134,10 +134,10 @@ public:
 
     static Logger* instance();
 
-    static const Type ERROR;
+    static const Type ERRR;
     static const Type WARN;
     static const Type INFO;
-    static const Type DEBUG;
+    static const Type DEBG;
 
     void setupDefault();
 

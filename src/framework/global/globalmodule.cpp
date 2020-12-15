@@ -84,7 +84,7 @@ void GlobalModule::onInit()
     using namespace haw::profiler;
     struct MyPrinter : public Profiler::Printer
     {
-        void printDebug(const std::string& str) override { LOG_STREAM(Logger::DEBUG, "Profiler") << str; }
+        void printDebug(const std::string& str) override { LOG_STREAM(Logger::DEBG, "Profiler") << str; }
         void printInfo(const std::string& str) override { LOG_STREAM(Logger::INFO, "Profiler") << str; }
     };
 
