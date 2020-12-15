@@ -22,6 +22,10 @@
 #include <windows.h>
 #include <mmsystem.h>
 
+#ifdef ERROR
+#undef ERROR
+#endif
+
 #include "log.h"
 #include "midierrors.h"
 
@@ -32,6 +36,7 @@ struct mu::midi::WinMidiInPort::Win {
 
 using namespace mu::midi;
 
+namespace wmidi_prv {
 static std::string errorString(MMRESULT ret)
 {
     switch (ret) {
@@ -44,6 +49,7 @@ static std::string errorString(MMRESULT ret)
     }
 
     return "UNKNOWN";
+}
 }
 
 WinMidiInPort::WinMidiInPort()
@@ -126,7 +132,7 @@ mu::Ret WinMidiInPort::connect(const MidiDeviceID& deviceID)
                               CALLBACK_FUNCTION | MIDI_IO_STATUS);
 
     if (ret != MMSYSERR_NOERROR) {
-        return make_ret(Err::MidiFailedConnect, "failed open port, error: " + errorString(ret));
+        return make_ret(Err::MidiFailedConnect, "failed open port, error: " + wmidi_prv::errorString(ret));
     }
 
     m_deviceID = deviceID;
