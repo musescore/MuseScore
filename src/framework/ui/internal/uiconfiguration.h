@@ -37,7 +37,6 @@ public:
     async::Channel<ThemeType> themeTypeChanged() const override;
 
     std::string fontFamily() const override;
-    std::string semiBoldFontFamily() const override;
     int fontSize(FontSizeType type) const override;
     async::Notification fontChanged() const override;
 
