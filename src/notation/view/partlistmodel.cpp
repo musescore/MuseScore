@@ -160,8 +160,6 @@ void PartListModel::createNewPart()
 
     int index = m_notations.size();
     insertNotation(index, notation);
-
-    selectPart(index);
 }
 
 void PartListModel::selectPart(int partIndex)
@@ -272,6 +270,7 @@ void PartListModel::insertNotation(int destinationIndex, INotationPtr notation)
     endInsertRows();
 
     emit partAdded(destinationIndex);
+    selectPart(destinationIndex);
 }
 
 void PartListModel::removeSelectedParts()
@@ -301,7 +300,7 @@ void PartListModel::removeSelectedParts()
 
 bool PartListModel::userAgreesToRemoveParts(int partCount) const
 {
-    QString question = mu::qtrc("notation", "Do you want to permanently delete %1?")
+    QString question = mu::qtrc("notation", "Are you sure you want to delete %1?")
             .arg(partCount > 1 ? "these parts" : "this part");
 
     IInteractive::Button button = interactive()->question("", question.toStdString(), {
