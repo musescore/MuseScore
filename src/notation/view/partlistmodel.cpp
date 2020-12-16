@@ -320,8 +320,6 @@ void PartListModel::openSelectedParts()
     for (int row : rows) {
         m_notations[row]->setOpened(true);
     }
-
-    m_currentNotation = m_notations[rows.last()];
 }
 
 QList<int> PartListModel::selectedRows() const
@@ -348,7 +346,13 @@ void PartListModel::apply()
     }
 
     masterNotation()->setExcerpts(newExcerpts);
-    context()->setCurrentNotation(m_currentNotation);
+
+    int lastSelectedNotationIndex = m_selectionModel->hasSelection() ?
+                m_selectionModel->selectedIndexes().last().row() : -1;
+
+    if (lastSelectedNotationIndex != -1) {
+        context()->setCurrentNotation(m_notations[lastSelectedNotationIndex]);
+    }
 }
 
 bool PartListModel::isNotationIndexValid(int index) const

@@ -149,8 +149,6 @@ private:
     IDList allInstrumentsIds() const;
     int lastStaffIndex() const;
 
-    void removeEmptyExcerpts();
-
     void initStaff(Staff* staff, const instruments::Instrument& instrument, const Ms::StaffType* staffType, int cleffIndex);
 
     void notifyAboutStaffChanged(const ID& staffId) const;

@@ -47,10 +47,12 @@ public:
 
     QList<Part*>& parts() { return _parts; }
     const QList<Part*>& parts() const { return _parts; }
+    bool containsPart(const Part* part) const;
 
     void setParts(const QList<Part*>& p) { _parts = p; }
 
     int nstaves() const;
+    bool isEmpty() const;
 
     QMultiMap<int, int>& tracks() { return _tracks; }
     void setTracks(const QMultiMap<int, int>& t) { _tracks = t; }
@@ -67,12 +69,16 @@ public:
     QString title() const { return _title; }
     void setTitle(const QString& s) { _title = s; }
 
-    static QList<Excerpt*> createAllExcerpt(MasterScore* score);
-    static QString createName(const QString& partName, QList<Excerpt*>&);
+    static QList<Excerpt*> createExcerptsFromParts(const QList<Part*>& parts);
+    static Excerpt* createExcerptFromPart(Part* part);
+
     static void createExcerpt(Excerpt*);
     static void cloneStaves(Score* oscore, Score* score, const QList<int>& sourceStavesIndexes, QMultiMap<int, int>& allTracks);
     static void cloneStaff(Staff* ostaff, Staff* nstaff);
     static void cloneStaff2(Staff* ostaff, Staff* nstaff, const Fraction& startTick, const Fraction& endTick);
+
+private:
+    static QString formatTitle(const QString& partName, const QList<Excerpt*>&);
     static void processLinkedClone(Element* ne, Score* score, int strack);
 };
 }     // namespace Ms
