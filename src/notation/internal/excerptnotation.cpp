@@ -45,6 +45,11 @@ ExcerptNotation::~ExcerptNotation()
     setScore(nullptr);
 }
 
+Ms::Excerpt* ExcerptNotation::excerpt() const
+{
+    return m_excerpt;
+}
+
 void ExcerptNotation::setExcerpt(Ms::Excerpt* excerpt)
 {
     m_excerpt = excerpt;

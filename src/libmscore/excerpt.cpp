@@ -67,6 +67,17 @@ Excerpt::~Excerpt()
     delete _partScore;
 }
 
+bool Excerpt::containsPart(const Part* part) const
+{
+    for (Part* _part : _parts) {
+        if (_part == part) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 //---------------------------------------------------------
 //   nstaves
 //---------------------------------------------------------
@@ -78,6 +89,11 @@ int Excerpt::nstaves() const
         n += p->nstaves();
     }
     return n;
+}
+
+bool Excerpt::isEmpty() const
+{
+    return partScore() ? partScore()->parts().empty() : true;
 }
 
 //---------------------------------------------------------
@@ -1284,33 +1300,36 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
     }
 }
 
-//---------------------------------------------------------
-//   createAllExcerpt
-//---------------------------------------------------------
-
-QList<Excerpt*> Excerpt::createAllExcerpt(MasterScore* score)
+QList<Excerpt*> Excerpt::createExcerptsFromParts(const QList<Part*>& parts)
 {
-    QList<Excerpt*> all;
-    for (Part* part : score->parts()) {
-        if (part->show()) {
-            Excerpt* e = new Excerpt(score);
-            e->parts().append(part);
-            for (int i = part->startTrack(), j = 0; i < part->endTrack(); i++, j++) {
-                e->tracks().insert(i, j);
-            }
-            QString name = createName(part->partName(), all);
-            e->setTitle(name);
-            all.append(e);
+    QList<Excerpt*> result;
+
+    for (Part* part : parts) {
+        Excerpt* excerpt = new Excerpt(part->masterScore());
+
+        excerpt->parts().append(part);
+
+        for (int i = part->startTrack(), j = 0; i < part->endTrack(); ++i, ++j) {
+            excerpt->tracks().insert(i, j);
         }
+
+        QString title = formatTitle(part->partName(), result);
+        excerpt->setTitle(title);
+        result.append(excerpt);
     }
-    return all;
+
+    return result;
 }
 
-//---------------------------------------------------------
-//   createName
-//---------------------------------------------------------
+Excerpt* Excerpt::createExcerptFromPart(Part* part)
+{
+    Excerpt* excerpt = createExcerptsFromParts({part}).first();
+    excerpt->setTitle(part->partName());
 
-QString Excerpt::createName(const QString& partName, QList<Excerpt*>& excerptList)
+    return excerpt;
+}
+
+QString Excerpt::formatTitle(const QString& partName, const QList<Excerpt*>& excerptList)
 {
     QString name = partName.simplified();
     int count = 0;      // no of occurrences of partName

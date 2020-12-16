@@ -72,6 +72,7 @@ protected:
     Ms::Score* score() const override;
     void setScore(Ms::Score* score);
     Ms::MScore* scoreGlobal() const;
+    async::Notification partsChanged() const;
 
 private:
     friend class NotationInteraction;
@@ -99,6 +100,7 @@ private:
     INotationPartsPtr m_parts;
 
     async::Notification m_notationChanged;
+    async::Notification m_partsChanged;
 };
 }
 

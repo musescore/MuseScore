@@ -146,8 +146,6 @@ void NotationParts::setInstruments(const mu::instruments::InstrumentList& instru
 
     sortParts(instruments);
 
-    removeEmptyExcerpts();
-
     apply();
 
     m_partsNotifier->changed();
@@ -1192,6 +1190,10 @@ void NotationParts::appendPart(Part* part)
     int partIndex = resolvePartIndex(part);
     score()->parts().insert(partIndex, partCopy);
 
+    if (score()->excerpt()) {
+        score()->excerpt()->parts().append(part);
+    }
+
     for (int staffIndex = 0; staffIndex < part->nstaves(); ++staffIndex) {
         Staff* staff = part->staff(staffIndex);
 
@@ -1370,18 +1372,6 @@ IDList NotationParts::allInstrumentsIds() const
 int NotationParts::lastStaffIndex() const
 {
     return !score()->staves().isEmpty() ? score()->staves().last()->idx() : 0;
-}
-
-void NotationParts::removeEmptyExcerpts()
-{
-    const QList<Ms::Excerpt*> excerpts(masterScore()->excerpts());
-    for (Ms::Excerpt* excerpt: excerpts) {
-        QList<Staff*> staves = excerpt->partScore()->staves();
-
-        if (staves.empty()) {
-            masterScore()->undo(new Ms::RemoveExcerpt(excerpt));
-        }
-    }
 }
 
 void NotationParts::initStaff(Staff* staff, const mu::instruments::Instrument& instrument, const Ms::StaffType* staffType, int cleffIndex)
