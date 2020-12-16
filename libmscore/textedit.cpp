@@ -458,7 +458,7 @@ bool TextBase::edit(EditData& ed)
                         }
                   }
             if (ctrlPressed && altPressed) {
-                  if (ed.key == Qt::Key_hyphen) {
+                  if (ed.key == Qt::Key_Minus) {
                         insertSym(ed, SymId::lyricsElision);
                         return true;
                         }
