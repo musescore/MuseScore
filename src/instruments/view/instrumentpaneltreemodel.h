@@ -27,6 +27,8 @@
 #include "notation/inotationparts.h"
 #include "context/iglobalcontext.h"
 #include "async/asyncable.h"
+#include "actions/iactionsdispatcher.h"
+#include "actions/actionable.h"
 #include "instrumentstypes.h"
 #include "iselectinstrumentscenario.h"
 
@@ -39,12 +41,13 @@ class QItemSelectionModel;
 namespace mu::instruments {
 class PartTreeItem;
 class StaffTreeItem;
-class InstrumentPanelTreeModel : public QAbstractItemModel, public async::Asyncable
+class InstrumentPanelTreeModel : public QAbstractItemModel, public async::Asyncable, public actions::Actionable
 {
     Q_OBJECT
 
     INJECT(instruments, context::IGlobalContext, context)
     INJECT(instruments, ISelectInstrumentsScenario, selectInstrumentsScenario)
+    INJECT(instruments, actions::IActionsDispatcher, dispatcher)
 
     Q_PROPERTY(QItemSelectionModel * selectionModel READ selectionModel NOTIFY selectionChanged)
     Q_PROPERTY(bool isMovingUpAvailable READ isMovingUpAvailable NOTIFY isMovingUpAvailableChanged)
@@ -97,6 +100,8 @@ private slots:
     void updateRemovingAvailability();
 
 private:
+    bool canReceiveAction(const actions::ActionName&) const override;
+
     enum RoleNames {
         ItemRole = Qt::UserRole + 1
     };
