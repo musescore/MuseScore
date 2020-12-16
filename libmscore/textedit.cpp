@@ -423,6 +423,8 @@ bool TextBase::edit(EditData& ed)
                         case Qt::Key_NumberSign: // e.g. QWERTY (US)
                         case Qt::Key_AsciiTilde: // e.g. QWERTY (GB)
                         case Qt::Key_Apostrophe: // e.g. QWERTZ (DE)
+                        case Qt::Key_periodcentered: // e.g. QWERTY (ES)
+                        case Qt::Key_3: // e.g. AZERTY (FR, BE)
                               s = "\u266f"; // Unicode sharp
                               break;
                         case Qt::Key_H:
