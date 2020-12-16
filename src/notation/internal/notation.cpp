@@ -115,6 +115,7 @@ Notation::Notation(Ms::Score* score)
 
     m_parts->partsChanged().onNotify(this, [this]() {
         notifyAboutNotationChanged();
+        m_partsChanged.notify();
     });
 
     setScore(score);
@@ -149,6 +150,11 @@ void Notation::setScore(Ms::Score* score)
 Ms::MScore* Notation::scoreGlobal() const
 {
     return m_scoreGlobal;
+}
+
+mu::async::Notification Notation::partsChanged() const
+{
+    return m_partsChanged;
 }
 
 Meta Notation::metaInfo() const

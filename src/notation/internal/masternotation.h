@@ -66,8 +66,11 @@ private:
     void initExcerpts();
     void initExcerpt(Ms::Excerpt* excerpt);
 
-    void removeMissingExcerpts(const ExcerptNotationList& allExcerpts);
-    void createNewExcerpts(const ExcerptNotationList& allExcerpts);
+    void removeMissingExcerpts(const ExcerptNotationList& newExcerpts);
+    void createNonexistentExcerpts(const ExcerptNotationList& newExcerpts);
+
+    void updateExcerpts();
+    IExcerptNotationPtr createExcerpt(Ms::Part* part);
 
     ValCh<ExcerptNotationList> m_excerpts;
 };

@@ -96,7 +96,6 @@ private:
 
     framework::ItemMultiSelectionModel* m_selectionModel = nullptr;
     QList<INotationPtr> m_notations;
-    INotationPtr m_currentNotation;
 };
 }
 
