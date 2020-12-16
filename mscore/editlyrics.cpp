@@ -66,6 +66,10 @@ bool ScoreView::editKeyLyrics()
 
             case Qt::Key_Minus:
                   if (editData.control(textEditing)) {
+                        if ((editData.modifiers & Qt::AltModifier) && editData.element->edit(editData)) {
+                              _score->update();
+                              break;
+                              }
                         // change into normal minus
                         editData.modifiers &= ~CONTROL_MODIFIER;
                         return false;
