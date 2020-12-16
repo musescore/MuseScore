@@ -27,6 +27,7 @@
 #include "internal/instrumentsrepository.h"
 #include "internal/instrumentsconfiguration.h"
 #include "internal/selectinstrumentscenario.h"
+#include "internal/instrumentsactions.h"
 
 #include "view/instrumentpaneltreemodel.h"
 #include "view/instrumentlistmodel.h"
@@ -34,6 +35,7 @@
 #include "view/staffsettingsmodel.h"
 #include "ui/iinteractiveuriregister.h"
 #include "instrumentstypes.h"
+#include "actions/iactionsregister.h"
 
 using namespace mu::instruments;
 using namespace mu::framework;
@@ -60,6 +62,11 @@ void InstrumentsModule::registerExports()
 
 void InstrumentsModule::resolveImports()
 {
+    auto ar = framework::ioc()->resolve<actions::IActionsRegister>(moduleName());
+    if (ar) {
+        ar->reg(std::make_shared<InstrumentsActions>());
+    }
+
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerUri(Uri("musescore://instruments/select"),

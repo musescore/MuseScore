@@ -61,11 +61,18 @@ InstrumentPanelTreeModel::InstrumentPanelTreeModel(QObject* parent)
 
         emit selectionChanged();
     });
+
+    dispatcher()->reg(this, "instruments", this, &InstrumentPanelTreeModel::addInstruments);
 }
 
 InstrumentPanelTreeModel::~InstrumentPanelTreeModel()
 {
     deleteItems();
+}
+
+bool InstrumentPanelTreeModel::canReceiveAction(const actions::ActionName&) const
+{
+    return true;
 }
 
 void InstrumentPanelTreeModel::clear()
