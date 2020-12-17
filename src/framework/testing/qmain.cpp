@@ -21,14 +21,19 @@
 #include <QDebug>
 
 #include "qtestsuite.h"
+#include "environment.h"
 #include "framework/global/runtime.h"
 
 int main(int argc, char** argv)
 {
     QGuiApplication app(argc, argv);
 
+    qputenv("QML_DISABLE_DISK_CACHE", "true");
+
     mu::runtime::mainThreadId(); //! NOTE Needs only call
     mu::runtime::setThreadName("main");
+
+    mu::testing::Environment::setup();
 
     return mu::testing::QTestSuite::run(argc, argv);
 }

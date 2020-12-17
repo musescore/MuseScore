@@ -33,6 +33,8 @@ message(STATUS "Configuring ${MODULE_TEST} (qtest)")
 add_executable(${MODULE_TEST}
     ${CMAKE_CURRENT_LIST_DIR}/qmain.cpp
     ${CMAKE_CURRENT_LIST_DIR}/qtestsuite.h
+    ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/environment.h
     ${MODULE_TEST_SRC}
     )
 
