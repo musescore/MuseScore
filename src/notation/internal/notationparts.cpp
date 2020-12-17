@@ -387,7 +387,7 @@ void NotationParts::doMoveStaves(const std::vector<Staff*>& staves, int destinat
 
         bool needUnlink = !staff->isLinked();
 
-        score()->undoInsertStaff(movedStaff, destinationStaffIndex);
+        insertStaff(movedStaff, destinationStaffIndex);
         Ms::Excerpt::cloneStaff(staff, movedStaff);
 
         if (needUnlink) {
@@ -661,52 +661,49 @@ void NotationParts::appendDoublingInstrument(const mu::instruments::Instrument& 
     m_partsChanged.notify();
 }
 
-void NotationParts::appendStaff(const ID& destinationPartId)
+void NotationParts::appendStaff(const Staff* staff, const ID& destinationPartId)
 {
-    Part* part = this->part(destinationPartId);
-    if (!part) {
+    Part* destinationPart = part(destinationPartId);
+    if (!destinationPart) {
         return;
     }
 
-    InstrumentInfo instrumentInfo = this->instrumentInfo(part->instrumentId(), part);
+    InstrumentInfo instrumentInfo = this->instrumentInfo(destinationPart->instrumentId(), destinationPart);
     if (!instrumentInfo.isValid()) {
         return;
     }
 
-    Ms::Instrument* instrument = instrumentInfo.instrument;
+    int staffIndex = destinationPart->nstaves();
+
+    Staff* copy = staff->clone();
+    copy->setPart(destinationPart);
+    copy->setScore(score());
 
     startEdit();
-    Staff* staff = part->staves()->front()->clone();
-    staff->setId(Staff::makeId());
-    int staffIndex = staff->part()->nstaves();
-    score()->undoInsertStaff(staff, staffIndex);
-    instrument->setClefType(staffIndex, staff->defaultClefType());
+    insertStaff(copy, staffIndex);
     apply();
+
+    Ms::Instrument* instrument = instrumentInfo.instrument;
+    instrument->setClefType(staffIndex, staff->defaultClefType());
 
     ChangedNotifier<const Staff*>* notifier = instrumentNotifier(instrument->instrumentId(), destinationPartId);
     notifier->itemAdded(staff);
     m_partsChanged.notify();
 }
 
-void NotationParts::appendLinkedStaff(const ID& originStaffId)
+void NotationParts::cloneStaff(const ID& sourceStaffId, const ID& destinationStaffId)
 {
-    Staff* staff = this->staff(originStaffId);
-    if (!staff || !staff->part()) {
+    Staff* sourceStaff = staff(sourceStaffId);
+    Staff* destinationStaff = staff(destinationStaffId);
+
+    if (!sourceStaff || !destinationStaff) {
         return;
     }
 
-    Staff* linkedStaff = staff->clone();
-    linkedStaff->setId(Staff::makeId());
-    int linkedStaffIndex = staff->part()->nstaves();
-
     startEdit();
-    score()->undoInsertStaff(linkedStaff, linkedStaffIndex);
-    Ms::Excerpt::cloneStaff(staff, linkedStaff);
+    Ms::Excerpt::cloneStaff(sourceStaff, destinationStaff);
     apply();
 
-    InstrumentInfo instrumentInfo = this->instrumentInfo(linkedStaff);
-    ChangedNotifier<const Staff*>* notifier = instrumentNotifier(instrumentInfo.instrument->instrumentId(), linkedStaff->part()->id());
-    notifier->itemAdded(linkedStaff);
     m_partsChanged.notify();
 }
 
@@ -814,6 +811,20 @@ void NotationParts::removeStaves(const IDList& stavesIds)
 void NotationParts::doSetPartName(Part* part, const QString& name)
 {
     score()->undo(new Ms::ChangePart(part, new Ms::Instrument(*part->instrument()), name));
+}
+
+void NotationParts::insertStaff(Staff *staff, int destinationStaffIndex)
+{
+    if (score()->excerpt()) {
+        int globalDestinationStaffIndex = score()->staffIdx(staff->part()) + destinationStaffIndex;
+
+        for (int voiceIndex = 0; voiceIndex < VOICES; ++voiceIndex) {
+            int track = globalDestinationStaffIndex * VOICES + voiceIndex % VOICES;
+            score()->excerpt()->tracks().insert(track, track);
+        }
+    }
+
+    score()->undoInsertStaff(staff, destinationStaffIndex);
 }
 
 void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinationPartId, InsertMode mode)
@@ -1192,7 +1203,7 @@ void NotationParts::appendPart(Part* part)
         staffCopy->setPart(partCopy);
         staffCopy->init(staff);
 
-        score()->undoInsertStaff(staffCopy, staffIndex);
+        insertStaff(staffCopy, staffIndex);
 
         Ms::Fraction startTick = score()->firstMeasure()->tick();
         Ms::Fraction endTick = score()->lastMeasure()->tick();
@@ -1257,7 +1268,7 @@ void NotationParts::appendStaves(Part* part, const mu::instruments::Instrument& 
             staff->setBarLineSpan(score()->staff(lastStaffIndex - 1)->barLineSpan());
         }
 
-        score()->undoInsertStaff(staff, staffIndex);
+        insertStaff(staff, staffIndex);
     }
 }
 

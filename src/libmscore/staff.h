@@ -117,6 +117,8 @@ public:
 
     ElementType type() const override { return ElementType::STAFF; }
 
+    void setScore(Score* score) override;
+
     bool isTop() const;
     QString partName() const;
     int rstaff() const;

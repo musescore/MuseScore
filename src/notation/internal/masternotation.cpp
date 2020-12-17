@@ -606,31 +606,9 @@ void MasterNotation::setExcerpts(const ExcerptNotationList& excerpts)
         return;
     }
 
-    removeMissingExcerpts(excerpts);
     createNonexistentExcerpts(excerpts);
 
     doSetExcerpts(excerpts);
-}
-
-void MasterNotation::removeMissingExcerpts(const ExcerptNotationList& newExcerpts)
-{
-    for (IExcerptNotationPtr excerpt : m_excerpts.val) {
-        bool missingExcerpt = std::find(newExcerpts.begin(), newExcerpts.end(), excerpt) == newExcerpts.end();
-
-        if (!missingExcerpt) {
-            continue;
-        }
-
-        excerpt->setOpened(false);
-
-        IDList partsToRemove;
-
-        for (const Part* part: excerpt->parts()->partList()) {
-            partsToRemove << part->id();
-        }
-
-        excerpt->parts()->removeParts(partsToRemove);
-    }
 }
 
 void MasterNotation::createNonexistentExcerpts(const ExcerptNotationList& newExcerpts)

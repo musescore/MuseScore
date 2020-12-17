@@ -66,8 +66,9 @@ public:
     void moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode = InsertMode::Before) override;
 
     void appendDoublingInstrument(const instruments::Instrument& instrument, const ID& destinationPartId) override;
-    void appendStaff(const ID& destinationPartId) override;
-    void appendLinkedStaff(const ID& originStaffId) override;
+    void appendStaff(const Staff* staff, const ID& destinationPartId) override;
+
+    void cloneStaff(const ID& sourceStaffId, const ID& destinationStaffId) override;
 
     void replaceInstrument(const ID& instrumentId, const ID& fromPartId, const instruments::Instrument& newInstrument) override;
 
@@ -124,6 +125,8 @@ private:
     void doRemoveParts(const IDList& partsIds);
     void doRemoveInstruments(const IDList& instrumentsIds, Part* fromPart);
     void doSetPartName(Part* part, const QString& name);
+
+    void insertStaff(Staff* staff, int destinationStaffIndex);
 
     Part* part(const ID& partId, const Ms::Score* score = nullptr) const;
     InstrumentInfo instrumentInfo(const ID& instrumentId, const Part* fromPart) const;
