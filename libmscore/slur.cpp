@@ -1089,14 +1089,14 @@ SpannerSegment* Slur::layoutSystem(System* system)
                   slurSegment->layoutSegment(sPos.p1, QPointF(system->bbox().width(), sPos.p1.y()));
                   break;
             case SpannerSegmentType::MIDDLE: {
-                  qreal x1 = firstNoteRestSegmentX(system);
+                  qreal x1 = system->firstNoteRestSegmentX(true);
                   qreal x2 = system->bbox().width();
                   qreal y  = staffIdx() > system->staves()->size() ? system->y() : system->staff(staffIdx())->y();
                   slurSegment->layoutSegment(QPointF(x1, y), QPointF(x2, y));
                   }
                   break;
             case SpannerSegmentType::END:
-                  slurSegment->layoutSegment(QPointF(firstNoteRestSegmentX(system), sPos.p2.y()), sPos.p2);
+                  slurSegment->layoutSegment(QPointF(system->firstNoteRestSegmentX(true), sPos.p2.y()), sPos.p2);
                   break;
             }
 
@@ -1246,7 +1246,7 @@ void Slur::layout()
             // case 3: middle segment
             else if (i != 0 && system != sPos.system2) {
                   segment->setSpannerSegmentType(SpannerSegmentType::MIDDLE);
-                  qreal x1 = firstNoteRestSegmentX(system);
+                  qreal x1 = system->firstNoteRestSegmentX(true);
                   qreal x2 = system->bbox().width();
                   qreal y  = staffIdx() > system->staves()->size() ? system->y() : system->staff(staffIdx())->y();
                   segment->layoutSegment(QPointF(x1, y), QPointF(x2, y));
@@ -1254,7 +1254,7 @@ void Slur::layout()
             // case 4: end segment
             else {
                   segment->setSpannerSegmentType(SpannerSegmentType::END);
-                  qreal x = firstNoteRestSegmentX(system);
+                  qreal x = system->firstNoteRestSegmentX(true);
                   segment->layoutSegment(QPointF(x, sPos.p2.y()), sPos.p2);
                   }
             if (system == sPos.system2)

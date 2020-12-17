@@ -223,10 +223,9 @@ SpannerSegment* LyricsLine::layoutSystem(System* system)
                   }
                   break;
             case SpannerSegmentType::MIDDLE: {
-                  Measure* firstMeasure = system->firstMeasure();
-                  Segment* firstCRSeg   = firstMeasure->first(SegmentType::ChordRest);
-                  qreal x1              = (firstCRSeg ? firstCRSeg->pos().x() : 0) + firstMeasure->pos().x();
-                  qreal x2              = system->bbox().right();
+                  bool leading = (anchor() == Anchor::SEGMENT || anchor() == Anchor::MEASURE);
+                  qreal x1 = system->firstNoteRestSegmentX(leading);
+                  qreal x2 = system->bbox().right();
                   System* s;
                   QPointF p1 = linePos(Grip::START, &s);
                   lineSegm->setPos(QPointF(x1, p1.y()));
@@ -236,17 +235,9 @@ SpannerSegment* LyricsLine::layoutSystem(System* system)
             case SpannerSegmentType::END: {
                   qreal offset = 0.0;
                   System* s;
-                  QPointF p2 = linePos(Grip::END,   &s);
-                  Measure* firstMeas  = system->firstMeasure();
-                  Segment* firstCRSeg = firstMeas->first(SegmentType::ChordRest);
-                  if (anchor() == Anchor::SEGMENT || anchor() == Anchor::MEASURE) {
-                        // start line just after previous element (eg, key signature)
-                        firstCRSeg = firstCRSeg->prev();
-                        Element* e = firstCRSeg ? firstCRSeg->element(staffIdx() * VOICES) : nullptr;
-                        if (e)
-                              offset = e->width();
-                        }
-                  qreal x1  = (firstCRSeg ? firstCRSeg->pos().x() : 0) + firstMeas->pos().x() + offset;
+                  QPointF p2 = linePos(Grip::END, &s);
+                  bool leading = (anchor() == Anchor::SEGMENT || anchor() == Anchor::MEASURE);
+                  qreal x1 = system->firstNoteRestSegmentX(leading);
                   qreal len = p2.x() - x1;
                   lineSegm->setPos(QPointF(p2.x() - len, p2.y()));
                   lineSegm->setPos2(QPointF(len, 0.0));

@@ -550,44 +550,6 @@ QVariant SlurTie::propertyDefault(Pid id) const
       }
 
 //---------------------------------------------------------
-//   firstNoteRestSegmentX
-//    in System() coordinates
-//    returns the position just after the last non-chordrest segment
-//---------------------------------------------------------
-
-qreal SlurTie::firstNoteRestSegmentX(System* system)
-      {
-      for (const MeasureBase* mb : system->measures()) {
-            if (mb->isMeasure()) {
-                  const Measure* measure = static_cast<const Measure*>(mb);
-                  for (const Segment* seg = measure->first(); seg; seg = seg->next()) {
-                        if (seg->isChordRestType()) {
-                              // first CR found; back up to previous segment
-                              seg = seg->prev();
-                              if (seg) {
-                                    // find maximum width
-                                    qreal width = 0.0;
-                                    int n = score()->nstaves();
-                                    for (int i = 0; i < n; ++i) {
-                                          if (!system->staff(i)->show())
-                                                continue;
-                                          Element* e = seg->element(i * VOICES);
-                                          if (e)
-                                                width = qMax(width, e->width());
-                                          }
-                                    return seg->measure()->pos().x() + seg->pos().x() + width;
-                                    }
-                              else
-                                    return 0.0;
-                              }
-                        }
-                  }
-            }
-      qDebug("firstNoteRestSegmentX: did not find segment");
-      return 0.0;
-      }
-
-//---------------------------------------------------------
 //   fixupSegments
 //---------------------------------------------------------
 

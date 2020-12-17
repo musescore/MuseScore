@@ -1556,6 +1556,52 @@ qreal System::spacerDistance(bool up) const
       }
 
 //---------------------------------------------------------
+//   firstNoteRestSegmentX
+//    in System() coordinates
+//    returns the position of the first note or rest,
+//    or the position just after the last non-chordrest segment
+//---------------------------------------------------------
+
+qreal System::firstNoteRestSegmentX(bool leading)
+      {
+      qreal margin = score()->spatium();
+      for (const MeasureBase* mb : measures()) {
+            if (mb->isMeasure()) {
+                  const Measure* measure = static_cast<const Measure*>(mb);
+                  for (const Segment* seg = measure->first(); seg; seg = seg->next()) {
+                        if (seg->isChordRestType()) {
+                              qreal noteRestPos = seg->measure()->pos().x() + seg->pos().x();
+                              if (!leading)
+                                    return noteRestPos;
+
+                              // first CR found; back up to previous segment
+                              seg = seg->prevActive();
+                              while (seg && seg->allElementsInvisible())
+                                    seg = seg->prevActive();
+                              if (seg) {
+                                    // find maximum width
+                                    qreal width = 0.0;
+                                    int n = score()->nstaves();
+                                    for (int i = 0; i < n; ++i) {
+                                          if (!staff(i)->show())
+                                                continue;
+                                          Element* e = seg->element(i * VOICES);
+                                          if (e && e->addToSkyline())
+                                                width = qMax(width, e->pos().x() + e->bbox().right());
+                                          }
+                                    return qMin(seg->measure()->pos().x() + seg->pos().x() + width + margin, noteRestPos);
+                                    }
+                              else
+                                    return margin;
+                              }
+                        }
+                  }
+            }
+      qDebug("firstNoteRestSegmentX: did not find segment");
+      return margin;
+      }
+
+//---------------------------------------------------------
 //   moveBracket
 //---------------------------------------------------------
 

@@ -3538,11 +3538,11 @@ void Measure::stretchMeasure(qreal targetWidth)
                         //    x2 - right measure position of free space
 
                         Segment* s1;
-                        for (s1 = s.prev(); s1 && !s1->enabled(); s1 = s1->prev())
+                        for (s1 = s.prevActive(); s1 && s1->allElementsInvisible(); s1 = s1->prevActive())
                               ;
                         Segment* s2;
-                        for (s2 = s.next(); s2; s2 = s2->next()) {
-                              if (s2->enabled() && !s2->isChordRestType() && s2->element(staffIdx * VOICES))
+                        for (s2 = s.nextActive(); s2; s2 = s2->nextActive()) {
+                              if (!s2->isChordRestType() && s2->element(staffIdx * VOICES))
                                     break;
                               }
                         qreal x1 = s1 ? s1->x() + s1->minRight() : 0;
