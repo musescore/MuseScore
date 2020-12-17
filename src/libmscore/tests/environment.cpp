@@ -17,23 +17,16 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include <QGuiApplication>
-#include <gmock/gmock.h>
+#include "testing/environment.h"
 
-#include "framework/global/runtime.h"
-#include "environment.h"
+#include "log.h"
+#include "framework/fonts/fontsmodule.h"
 
-GTEST_API_ int main(int argc, char** argv)
+static mu::testing::SuiteEnvironment libmscore_se(
 {
-    QGuiApplication app(argc, argv);
-
-    qputenv("QML_DISABLE_DISK_CACHE", "true");
-
-    mu::runtime::mainThreadId(); //! NOTE Needs only call
-    mu::runtime::setThreadName("main");
-
-    mu::testing::Environment::setup();
-
-    testing::InitGoogleMock(&argc, argv);
-    return RUN_ALL_TESTS();
-}
+    new mu::fonts::FontsModule()
+},
+    []() {
+    LOGI() << "libmscore tests suite post init";
+    }
+    );

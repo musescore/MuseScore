@@ -33,6 +33,8 @@ get_property(gmock_INCLUDE_DIRS GLOBAL PROPERTY gmock_INCLUDE_DIRS)
 
 add_executable(${MODULE_TEST}
     ${CMAKE_CURRENT_LIST_DIR}/gmain.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/environment.h
     ${MODULE_TEST_SRC}
     )
 
