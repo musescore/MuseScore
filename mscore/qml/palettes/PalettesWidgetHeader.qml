@@ -44,6 +44,15 @@ Item {
         searchTextField.selectAll()
     }
 
+    function stopPaletteSearch() {
+        searchTextField.clear()
+        searchTextFieldShown = false
+        if (paletteTree.currentTreeItem)
+            paletteTree.currentTreeItem.forceActiveFocus()
+        else
+            startSearchButton.forceActiveFocus()
+    }
+
     function showPaletteOptionsMenu() {
         paletteOptionsMenu.x = paletteOptionsButton.x + paletteOptionsButton.width - paletteOptionsMenu.width;
         paletteOptionsMenu.y = paletteOptionsButton.y;
@@ -105,6 +114,7 @@ Item {
             id: searchTextField
             visible: searchTextFieldShown
             Layout.fillWidth: true
+            rightPadding: stopSearchButton.width + 6
 
             placeholderText: qsTr("Search")
             font: globalStyle.font
@@ -134,6 +144,7 @@ Item {
 
             Keys.onDownPressed: paletteTree.focusFirstItem();
             Keys.onUpPressed: paletteTree.focusLastItem();
+            Keys.onEscapePressed: stopPaletteSearch();
 
             StyledToolButton {
                 id: stopSearchButton
@@ -145,11 +156,7 @@ Item {
                 }
                 width: height
                 flat: true
-                onClicked: {
-                    searchTextField.clear()
-                    searchTextFieldShown = false
-                    paletteTree.currentTreeItem.forceActiveFocus()
-                }
+                onClicked: stopPaletteSearch()
 
                 padding: 5
 
