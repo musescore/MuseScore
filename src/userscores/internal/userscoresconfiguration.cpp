@@ -32,9 +32,7 @@ static const Settings::Key RECENT_LIST(module_name, "userscores/recentList");
 static const Settings::Key USER_TEMPLATES_PATH(module_name, "application/paths/myTemplates");
 static const Settings::Key USER_SCORES_PATH(module_name, "application/paths/myScores");
 
-namespace usc_prv {
-static const QString DEFAULT_FILE_SUFFIX(".mscz");
-}
+const QString UserScoresConfiguration::DEFAULT_FILE_SUFFIX(".mscz");
 
 void UserScoresConfiguration::init()
 {
@@ -92,7 +90,7 @@ io::path UserScoresConfiguration::scoresPath() const
 
 io::path UserScoresConfiguration::defaultSavingFilePath(const std::string& fileName) const
 {
-    return scoresPath() + "/" + fileName + usc_prv::DEFAULT_FILE_SUFFIX;
+    return scoresPath() + "/" + fileName + DEFAULT_FILE_SUFFIX;
 }
 
 QColor UserScoresConfiguration::templatePreviewBackgroundColor() const

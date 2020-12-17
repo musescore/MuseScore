@@ -26,8 +26,6 @@
 
 #include "log.h"
 
-static const int SELECTION_SIDE_PADDING = 8;
-
 using namespace mu::notation;
 
 NotationSelection::NotationSelection(IGetScore* getScore)

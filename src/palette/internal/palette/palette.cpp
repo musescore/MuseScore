@@ -64,14 +64,12 @@ using namespace mu::palette;
 
 namespace Ms {
 //---------------------------------------------------------
-//   needsStaff
+//   paletteNeedsStaff
 //    should a staff been drawn if e is used as icon in
 //    a palette
 //---------------------------------------------------------
 
-namespace plt_prv {
-
-static bool needsStaff(Element* e)
+static bool paletteNeedsStaff(Element* e)
 {
     if (e == 0) {
         return false;
@@ -88,7 +86,6 @@ static bool needsStaff(Element* e)
     default:
         return false;
     }
-}
 }
 
 //---------------------------------------------------------
@@ -805,7 +802,7 @@ PaletteCell* Palette::add(int idx, Element* s, const QString& name, QString tag,
     cell->element.reset(s);
     cell->name      = name;
     cell->tag       = tag;
-    cell->drawStaff = plt_prv::needsStaff(s);
+    cell->drawStaff = paletteNeedsStaff(s);
     cell->xoffset   = 0;
     cell->yoffset   = 0;
     cell->mag       = mag;

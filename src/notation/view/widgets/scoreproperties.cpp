@@ -28,18 +28,16 @@
 using namespace mu::notation;
 using namespace mu::framework;
 
-namespace spr_prv {
-static const QString WORK_TITLE_TAG("workTitle");
-static const QString WORK_NUMBER_TAG("workNumber");
-static const QString COMPOSER_TAG("composer");
-static const QString LYRICIST_TAG("lyricist");
-static const QString PLATFORM_TAG("platform");
-static const QString SOURCE_TAG("source");
-static const QString COPYRIGHT_TAG("copyright");
-static const QString TRANSLATOR_TAG("translator");
-static const QString ARRANGER_TAG("arranger");
-static const QString CREATION_DATE_TAG("creationDate");
-}
+static const QString SP_WORK_TITLE_TAG("workTitle");
+static const QString SP_WORK_NUMBER_TAG("workNumber");
+static const QString SP_COMPOSER_TAG("composer");
+static const QString SP_LYRICIST_TAG("lyricist");
+static const QString SP_PLATFORM_TAG("platform");
+static const QString SP_SOURCE_TAG("source");
+static const QString SP_COPYRIGHT_TAG("copyright");
+static const QString SP_TRANSLATOR_TAG("translator");
+static const QString SP_ARRANGER_TAG("arranger");
+static const QString SP_CREATION_DATE_TAG("creationDate");
 
 //---------------------------------------------------------
 //   MetaEditDialog
@@ -172,16 +170,16 @@ void ScorePropertiesDialog::newClicked()
 bool ScorePropertiesDialog::isStandardTag(const QString& tag) const
 {
     static const QSet<QString> standardTags {
-        spr_prv::WORK_TITLE_TAG,
-        spr_prv::WORK_NUMBER_TAG,
-        spr_prv::ARRANGER_TAG,
-        spr_prv::COMPOSER_TAG,
-        spr_prv::LYRICIST_TAG,
-        spr_prv::PLATFORM_TAG,
-        spr_prv::SOURCE_TAG,
-        spr_prv::TRANSLATOR_TAG,
-        spr_prv::COPYRIGHT_TAG,
-        spr_prv::CREATION_DATE_TAG
+        SP_WORK_TITLE_TAG,
+        SP_WORK_NUMBER_TAG,
+        SP_ARRANGER_TAG,
+        SP_COMPOSER_TAG,
+        SP_LYRICIST_TAG,
+        SP_PLATFORM_TAG,
+        SP_SOURCE_TAG,
+        SP_TRANSLATOR_TAG,
+        SP_COPYRIGHT_TAG,
+        SP_CREATION_DATE_TAG
     };
 
     return standardTags.contains(tag);
@@ -338,15 +336,15 @@ void ScorePropertiesDialog::initTags()
 
     Meta meta = notation()->metaInfo();
 
-    addTag(spr_prv::WORK_TITLE_TAG, meta.title);
-    addTag(spr_prv::ARRANGER_TAG, meta.arranger);
-    addTag(spr_prv::COMPOSER_TAG, meta.composer);
-    addTag(spr_prv::COPYRIGHT_TAG, meta.copyright);
-    addTag(spr_prv::CREATION_DATE_TAG, meta.creationDate.toString());
-    addTag(spr_prv::LYRICIST_TAG, meta.lyricist);
-    addTag(spr_prv::TRANSLATOR_TAG, meta.translator);
-    addTag(spr_prv::PLATFORM_TAG, meta.platform);
-    addTag(spr_prv::SOURCE_TAG, meta.source);
+    addTag(SP_WORK_TITLE_TAG, meta.title);
+    addTag(SP_ARRANGER_TAG, meta.arranger);
+    addTag(SP_COMPOSER_TAG, meta.composer);
+    addTag(SP_COPYRIGHT_TAG, meta.copyright);
+    addTag(SP_CREATION_DATE_TAG, meta.creationDate.toString());
+    addTag(SP_LYRICIST_TAG, meta.lyricist);
+    addTag(SP_TRANSLATOR_TAG, meta.translator);
+    addTag(SP_PLATFORM_TAG, meta.platform);
+    addTag(SP_SOURCE_TAG, meta.source);
 
     for (const QString& key : meta.additionalTags.keys()) {
         addTag(key, meta.additionalTags[key].toString());
@@ -361,15 +359,15 @@ void ScorePropertiesDialog::saveMetaTags(const QVariantMap& tagsMap)
 
     Meta meta;
 
-    meta.title = tagsMap[spr_prv::WORK_TITLE_TAG].toString();
-    meta.arranger = tagsMap[spr_prv::ARRANGER_TAG].toString();
-    meta.composer = tagsMap[spr_prv::COMPOSER_TAG].toString();
-    meta.copyright = tagsMap[spr_prv::COPYRIGHT_TAG].toString();
-    meta.creationDate = QDate::fromString(tagsMap[spr_prv::CREATION_DATE_TAG].toString());
-    meta.lyricist = tagsMap[spr_prv::LYRICIST_TAG].toString();
-    meta.translator = tagsMap[spr_prv::TRANSLATOR_TAG].toString();
-    meta.source = tagsMap[spr_prv::SOURCE_TAG].toString();
-    meta.platform = tagsMap[spr_prv::PLATFORM_TAG].toString();
+    meta.title = tagsMap[SP_WORK_TITLE_TAG].toString();
+    meta.arranger = tagsMap[SP_ARRANGER_TAG].toString();
+    meta.composer = tagsMap[SP_COMPOSER_TAG].toString();
+    meta.copyright = tagsMap[SP_COPYRIGHT_TAG].toString();
+    meta.creationDate = QDate::fromString(tagsMap[SP_CREATION_DATE_TAG].toString());
+    meta.lyricist = tagsMap[SP_LYRICIST_TAG].toString();
+    meta.translator = tagsMap[SP_TRANSLATOR_TAG].toString();
+    meta.source = tagsMap[SP_SOURCE_TAG].toString();
+    meta.platform = tagsMap[SP_PLATFORM_TAG].toString();
 
     for (const QString& key : tagsMap.keys()) {
         if (isStandardTag(key)) {

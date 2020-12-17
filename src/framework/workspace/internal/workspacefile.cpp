@@ -32,12 +32,12 @@
 using namespace mu::workspace;
 using namespace mu::framework;
 
-static const QString CONTAINTER_XML_PATH("META-INF/container.xml");
+static const QString WS_CONTAINTER_XML_PATH("META-INF/container.xml");
 
-static constexpr std::string_view CONTAINER_TAG("container");
-static constexpr std::string_view ROOTFILES_TAG("rootfiles");
-static constexpr std::string_view ROOTFILE_TAG("rootfile");
-static constexpr std::string_view FULLPATH_ATTRIBUTE("full-path");
+static constexpr std::string_view WS_CONTAINER_TAG("container");
+static constexpr std::string_view WS_ROOTFILES_TAG("rootfiles");
+static constexpr std::string_view WS_ROOTFILE_TAG("rootfile");
+static constexpr std::string_view WS_FULLPATH_ATTRIBUTE("full-path");
 
 WorkspaceFile::WorkspaceFile(const io::path& filePath)
     : m_filePath(filePath)
@@ -112,14 +112,14 @@ void WorkspaceFile::MetaInfo::write(MQZipWriter& zip)
 {
     QByteArray data;
     writeContainer(&data);
-    zip.addFile(CONTAINTER_XML_PATH, data);
+    zip.addFile(WS_CONTAINTER_XML_PATH, data);
 }
 
 bool WorkspaceFile::MetaInfo::read(const MQZipReader& zip)
 {
-    QByteArray container = zip.fileData(CONTAINTER_XML_PATH);
+    QByteArray container = zip.fileData(WS_CONTAINTER_XML_PATH);
     if (container.isEmpty()) {
-        LOGE() << "not found" << CONTAINTER_XML_PATH;
+        LOGE() << "not found" << WS_CONTAINTER_XML_PATH;
         return false;
     }
 
@@ -136,24 +136,24 @@ void WorkspaceFile::MetaInfo::readContainer(const QByteArray& data)
     XmlReader reader(data);
 
     while (reader.readNextStartElement()) {
-        if (CONTAINER_TAG != reader.tagName()) {
+        if (WS_CONTAINER_TAG != reader.tagName()) {
             reader.skipCurrentElement();
             continue;
         }
 
         while (reader.readNextStartElement()) {
-            if (ROOTFILES_TAG != reader.tagName()) {
+            if (WS_ROOTFILES_TAG != reader.tagName()) {
                 reader.skipCurrentElement();
                 continue;
             }
 
             while (reader.readNextStartElement()) {
-                if (ROOTFILE_TAG != reader.tagName()) {
+                if (WS_ROOTFILE_TAG != reader.tagName()) {
                     reader.skipCurrentElement();
                     continue;
                 }
 
-                m_rootFile = reader.attribute(FULLPATH_ATTRIBUTE);
+                m_rootFile = reader.attribute(WS_FULLPATH_ATTRIBUTE);
                 return;
             }
         }
@@ -171,11 +171,11 @@ void WorkspaceFile::MetaInfo::writeContainer(QByteArray* data) const
 
     XmlWriter writer(&buffer);
     writer.writeStartDocument();
-    writer.writeStartElement(CONTAINER_TAG);
-    writer.writeStartElement(ROOTFILES_TAG);
+    writer.writeStartElement(WS_CONTAINER_TAG);
+    writer.writeStartElement(WS_ROOTFILES_TAG);
 
-    writer.writeStartElement(ROOTFILE_TAG);
-    writer.writeAttribute(FULLPATH_ATTRIBUTE, m_rootFile);
+    writer.writeStartElement(WS_ROOTFILE_TAG);
+    writer.writeAttribute(WS_FULLPATH_ATTRIBUTE, m_rootFile);
     writer.writeEndElement();
 
     writer.writeEndElement();

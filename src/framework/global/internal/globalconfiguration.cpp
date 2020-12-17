@@ -29,9 +29,7 @@
 using namespace mu;
 using namespace mu::framework;
 
-static const std::string module_name("global");
-
-static const Settings::Key BACKUP_PATH(module_name, "application/backup/subfolder");
+static const Settings::Key BACKUP_PATH("global", "application/backup/subfolder");
 
 io::path GlobalConfiguration::appDirPath() const
 {

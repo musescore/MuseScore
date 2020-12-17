@@ -212,8 +212,7 @@ void EditStringData::accept()
 //   midiCodeToStr
 //    Converts a MIDI numeric pitch code to human-readable note name
 //---------------------------------------------------------
-namespace esd_prv {
-static const char* g_cNoteName[] = {
+static const char* s_esd_noteNames[] = {
     QT_TRANSLATE_NOOP("editstringdata", "C"),
     QT_TRANSLATE_NOOP("editstringdata", "C♯"),
     QT_TRANSLATE_NOOP("editstringdata", "D"),
@@ -227,9 +226,8 @@ static const char* g_cNoteName[] = {
     QT_TRANSLATE_NOOP("editstringdata", "B♭"),
     QT_TRANSLATE_NOOP("editstringdata", "B")
 };
-}
 
 QString EditStringData::midiCodeToStr(int midiCode)
 {
-    return QString("%1 %2").arg(qApp->translate("editstringdata", esd_prv::g_cNoteName[midiCode % 12])).arg(midiCode / 12 - 1);
+    return QString("%1 %2").arg(qApp->translate("editstringdata", s_esd_noteNames[midiCode % 12])).arg(midiCode / 12 - 1);
 }
