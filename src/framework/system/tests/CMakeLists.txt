@@ -24,5 +24,5 @@ set(MODULE_TEST_SRC
 
 set(MODULE_TEST_LINK system)
 
-include(${PROJECT_SOURCE_DIR}/src/framework/utests_base/utests_base.cmake)
+include(${PROJECT_SOURCE_DIR}/src/framework/testing/gtest.cmake)
 
