@@ -21,13 +21,14 @@
 #include <QDebug>
 
 #include "qtestsuite.h"
+#include "framework/global/runtime.h"
 
 int main(int argc, char** argv)
 {
-    for (int i = 0; i < argc; ++i) {
-        qDebug() << i << " " << argv[i];
-    }
-
     QGuiApplication app(argc, argv);
+
+    mu::runtime::mainThreadId(); //! NOTE Needs only call
+    mu::runtime::setThreadName("main");
+
     return mu::testing::QTestSuite::run(argc, argv);
 }

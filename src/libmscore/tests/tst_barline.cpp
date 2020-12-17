@@ -21,7 +21,7 @@
 #include "libmscore/undo.h"
 #include "libmscore/bracket.h"
 
-#define DIR QString("libmscore/barline/")
+static const QString BARLINE_DATA_DIR("barline_data/");
 
 using namespace Ms;
 
@@ -84,7 +84,7 @@ static const qreal BARLINE_HEIGHT_MAX      = 15;
 void TestBarline::barline01()
 {
     char msg[256];
-    Score* score = readScore(DIR + "barline01.mscx");
+    Score* score = readScore(BARLINE_DATA_DIR + "barline01.mscx");
 
     qreal height, heightMin, heightMax;
     qreal spatium = score->spatium();
@@ -142,7 +142,7 @@ void TestBarline::barline01()
 void TestBarline::barline02()
 {
     char msg[256];
-    Score* score = readScore(DIR + "barline02.mscx");
+    Score* score = readScore(BARLINE_DATA_DIR + "barline02.mscx");
     QVERIFY(score);
     Measure* msr = score->firstMeasure()->nextMeasure();
     TimeSig* ts  = new TimeSig(score);
@@ -184,7 +184,7 @@ void TestBarline::barline02()
 
 void TestBarline::barline03()
 {
-    Score* score = readScore(DIR + "barline03.mscx");
+    Score* score = readScore(BARLINE_DATA_DIR + "barline03.mscx");
     QVERIFY(score);
     score->startCmd();
     score->undo(new ChangeProperty(score->staff(0), Pid::STAFF_BARLINE_SPAN, 1));
@@ -224,7 +224,7 @@ void TestBarline::barline03()
 
 void TestBarline::barline04()
 {
-    Score* score = readScore(DIR + "barline04.mscx");
+    Score* score = readScore(BARLINE_DATA_DIR + "barline04.mscx");
     QVERIFY(score);
     score->doLayout();
 
@@ -266,7 +266,7 @@ void TestBarline::barline04()
 
 void TestBarline::barline05()
 {
-    Score* score = readScore(DIR + "barline05.mscx");
+    Score* score = readScore(BARLINE_DATA_DIR + "barline05.mscx");
     QVERIFY(score);
     score->doLayout();
 
@@ -316,7 +316,7 @@ void TestBarline::barline05()
 void TestBarline::barline06()
 {
     char msg[256];
-    Score* score = readScore(DIR + "barline06.mscx");
+    Score* score = readScore(BARLINE_DATA_DIR + "barline06.mscx");
     QVERIFY(score);
     score->doLayout();
 
@@ -384,7 +384,7 @@ void dropNormalBarline(Element* e)
 
 void TestBarline::barline179726()
 {
-    Score* score = readScore(DIR + "barline179726.mscx");
+    Score* score = readScore(BARLINE_DATA_DIR + "barline179726.mscx");
     QVERIFY(score);
     score->doLayout();
 
@@ -455,7 +455,7 @@ void TestBarline::barline179726()
 
 void TestBarline::deleteSkipBarlines()
 {
-    MasterScore* score = readScore(DIR + "barlinedelete.mscx");
+    MasterScore* score = readScore(BARLINE_DATA_DIR + "barlinedelete.mscx");
 
     Measure* m1 = score->firstMeasure();
     QVERIFY(m1);
@@ -468,7 +468,7 @@ void TestBarline::deleteSkipBarlines()
     score->doLayout();
 
     QVERIFY(saveCompareScore(score, QString("barlinedelete.mscx"),
-                             DIR + QString("barlinedelete-ref.mscx")));
+                             BARLINE_DATA_DIR + QString("barlinedelete-ref.mscx")));
     delete score;
 }
 
