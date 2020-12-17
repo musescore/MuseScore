@@ -30,8 +30,7 @@ using namespace mu;
 using namespace mu::framework;
 using namespace mu::extensions;
 
-static const std::string module_name("extensions");
-static const Settings::Key EXTENSIONS_JSON(module_name, "extensions/extensionsJson");
+static const Settings::Key EXTENSIONS_JSON("extensions", "extensions/extensionsJson");
 
 static const io::path EXTENSIONS_DIR("/extensions");
 static const io::path WORKSPACES_DIR("/workspaces");

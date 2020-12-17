@@ -34,10 +34,10 @@ using namespace mu::framework;
 
 #define MSC_VERSION "3.01" // FIXME
 
-static constexpr std::string_view MUSESCORE_TAG("museScore");
-static constexpr std::string_view VERSION_ATTRIBUTE("version");
-static constexpr std::string_view WORKSPACE_TAG("workspace");
-static constexpr std::string_view SOURCE_TAG("source");
+static constexpr std::string_view WS_MUSESCORE_TAG("museScore");
+static constexpr std::string_view WS_VERSION_ATTRIBUTE("version");
+static constexpr std::string_view WS_WORKSPACE_TAG("workspace");
+static constexpr std::string_view WS_SOURCE_TAG("source");
 
 Workspace::Workspace(const io::path& filePath)
     : m_filePath(filePath)
@@ -152,7 +152,7 @@ Ret Workspace::readWorkspace(const QByteArray& xmlData)
     while (reader.canRead()) {
         reader.readNextStartElement();
 
-        if (reader.tagName() == SOURCE_TAG) {
+        if (reader.tagName() == WS_SOURCE_TAG) {
             m_source = reader.readString();
             break;
         }
@@ -181,14 +181,14 @@ Ret Workspace::write()
     XmlWriter writer(&buffer);
 
     writer.writeStartDocument();
-    writer.writeStartElement(MUSESCORE_TAG);
-    writer.writeAttribute(VERSION_ATTRIBUTE, MSC_VERSION);
-    writer.writeStartElement(WORKSPACE_TAG);
+    writer.writeStartElement(WS_MUSESCORE_TAG);
+    writer.writeAttribute(WS_VERSION_ATTRIBUTE, MSC_VERSION);
+    writer.writeStartElement(WS_WORKSPACE_TAG);
 
     //! NOTE: at least one element should be written
     //! before any stream will start writing
     //! otherwise tags in output file will be closed incorrectly
-    writer.writeTextElement(SOURCE_TAG, m_source);
+    writer.writeTextElement(WS_SOURCE_TAG, m_source);
 
     for (const IWorkspaceDataStreamPtr& stream : streamRegister()->streams()) {
         AbstractDataPtrList dataList = this->dataList(stream->tag());

@@ -69,7 +69,7 @@
 #include "modularity/ioc.h"
 #include "importexport/iimportexportconfiguration.h"
 
-namespace ove_prv {
+namespace ove {
 static std::shared_ptr<mu::importexport::IImportexportConfiguration> configuration()
 {
     return mu::framework::ioc()->resolve<mu::importexport::IImportexportConfiguration>("importexport");
@@ -350,7 +350,7 @@ OVE::Staff* getStaff(const OVE::OveSong* ove, int track)
     return 0;
 }
 
-namespace ove_prv {
+namespace ove {
 void addText(VBox*& vbox, Score* s, QString strTxt, Tid stl)
 {
     if (!strTxt.isEmpty()) {
@@ -371,7 +371,7 @@ void OveToMScore::convertHeader()
     if (!titles.empty() && !titles[0].isEmpty()) {
         QString title = titles[0];
         score_->setMetaTag("movementTitle", title);
-        ove_prv::addText(vbox, score_, title, Tid::TITLE);
+        ove::addText(vbox, score_, title, Tid::TITLE);
     }
 
     QList<QString> copyrights = ove_->getCopyrights();
@@ -383,19 +383,19 @@ void OveToMScore::convertHeader()
     QList<QString> annotates = ove_->getAnnotates();
     if (!annotates.empty() && !annotates[0].isEmpty()) {
         QString annotate = annotates[0];
-        ove_prv::addText(vbox, score_, annotate, Tid::POET);
+        ove::addText(vbox, score_, annotate, Tid::POET);
     }
 
     QList<QString> writers = ove_->getWriters();
     if (!writers.empty()) {
         QString composer = writers[0];
         score_->setMetaTag("composer", composer);
-        ove_prv::addText(vbox, score_, composer, Tid::COMPOSER);
+        ove::addText(vbox, score_, composer, Tid::COMPOSER);
     }
 
     if (writers.size() > 1) {
         QString lyricist = writers[1];
-        ove_prv::addText(vbox, score_, lyricist, Tid::POET);
+        ove::addText(vbox, score_, lyricist, Tid::POET);
     }
 
     if (vbox) {
@@ -2529,7 +2529,7 @@ Score::FileError importOve(MasterScore* score, const QString& name)
 
     oveFile.close();
 
-    oveSong.setTextCodecName(QString::fromStdString(ove_prv::configuration()->importOvertuneCharset()));
+    oveSong.setTextCodecName(QString::fromStdString(ove::configuration()->importOvertuneCharset()));
     oveLoader->setOve(&oveSong);
     oveLoader->setFileStream((unsigned char*)buffer.data(), buffer.size());
     bool result = oveLoader->load();

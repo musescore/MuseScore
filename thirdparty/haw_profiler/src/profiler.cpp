@@ -472,17 +472,15 @@ void Profiler::Printer::printData(const Data& data, Data::Mode mode, int maxcoun
     printInfo(formatData(data, mode, maxcount));
 }
 
-namespace profiler_prv {
-struct IsLessBySum {
-    bool operator()(const Profiler::Data::Func& f, const Profiler::Data::Func& s) const
-    {
-        return f.sumtimeMs > s.sumtimeMs;
-    }
-};
-}
-
 std::string Profiler::Printer::formatData(const Data& data, Data::Mode mode, int maxcount) const
 {
+    struct IsLessBySum {
+        bool operator()(const Profiler::Data::Func& f, const Profiler::Data::Func& s) const
+        {
+            return f.sumtimeMs > s.sumtimeMs;
+        }
+    };
+
     std::stringstream stream;
     stream << "\n\n";
 
@@ -497,7 +495,7 @@ std::string Profiler::Printer::formatData(const Data& data, Data::Mode mode, int
             list.push_back(it->second);
         }
 
-        list.sort(profiler_prv::IsLessBySum());
+        list.sort(IsLessBySum());
 
         std::string info = "Main thread. Top "
                            + std::to_string(maxcount)
@@ -523,7 +521,7 @@ std::string Profiler::Printer::formatData(const Data& data, Data::Mode mode, int
             }
         }
 
-        list.sort(profiler_prv::IsLessBySum());
+        list.sort(IsLessBySum());
 
         std::string info = "Other threads. Top "
                            + std::to_string(maxcount)
@@ -537,29 +535,27 @@ std::string Profiler::Printer::formatData(const Data& data, Data::Mode mode, int
     return stream.str();
 }
 
-namespace profiler_prv {
-std::string leftJustified(const std::string& val, size_t width)
-{
-    std::string str;
-    str.resize(width, ' ');
-    size_t lenght = width < val.size() ? width : val.size();
-    for (size_t i = 0; i < lenght; ++i) {
-        str[i] = val[i];
-    }
-    return str;
-}
-}
-
-#define FORMAT(str, width) profiler_prv::leftJustified(str, width)
-#define TITLE(str) FORMAT(std::string(str), 18)
-#define VALUE(val, unit) FORMAT(std::to_string(val) + unit, 18)
-#define VALUE_D(val, unit) FORMAT(formatDouble(val, 3) + unit, 18)
-
 void Profiler::Printer::funcsToStream(std::stringstream& stream,
                                       const std::string& title,
                                       const std::list<Data::Func>& funcs,
                                       int count) const
 {
+    auto leftJustified = [](const std::string& val, size_t width) -> std::string
+                         {
+                             std::string str;
+                             str.resize(width, ' ');
+                             size_t lenght = width < val.size() ? width : val.size();
+                             for (size_t i = 0; i < lenght; ++i) {
+                                 str[i] = val[i];
+                             }
+                             return str;
+                         };
+
+    #define FORMAT(str, width) leftJustified(str, width)
+    #define TITLE(str) FORMAT(std::string(str), 18)
+    #define VALUE(val, unit) FORMAT(std::to_string(val) + unit, 18)
+    #define VALUE_D(val, unit) FORMAT(formatDouble(val, 3) + unit, 18)
+
     stream << title << "\n";
     stream << FORMAT("Function", 60) << TITLE("Call time") << TITLE("Call count") << TITLE("Sum time") << "\n";
 
@@ -575,6 +571,11 @@ void Profiler::Printer::funcsToStream(std::stringstream& stream,
             break;
         }
     }
+
+    #undef FORMAT
+    #undef TITLE
+    #undef VALUE
+    #undef VALUE_D
 
     stream << "\n\n";
 }

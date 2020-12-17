@@ -24,10 +24,8 @@
 using namespace mu::telemetry;
 using namespace mu::framework;
 
-static const std::string module_name("telemetry");
-
-static const Settings::Key IS_TELEMETRY_ALLOWED(module_name, "telemetry/is_telemetry_allowed");
-static const Settings::Key IS_DUMP_UPLOAD_ALLOWED(module_name, "telemetry/is_dump_upload_allowed");
+static const Settings::Key IS_TELEMETRY_ALLOWED("telemetry", "telemetry/is_telemetry_allowed");
+static const Settings::Key IS_DUMP_UPLOAD_ALLOWED("telemetry", "telemetry/is_dump_upload_allowed");
 
 void TelemetryConfiguration::init()
 {

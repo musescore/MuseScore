@@ -21,7 +21,6 @@
 
 #include <QMessageBox>
 
-
 #include "editpitch.h"
 #include "editstafftype.h"
 #include "editstringdata.h"
@@ -681,7 +680,7 @@ void EditStaff::editStringDataClicked()
 //    Converts a MIDI numeric pitch code to human-readable note name
 //---------------------------------------------------------
 
-static const char* g_cNoteName[] = {
+static const char* s_es_noteNames[] = {
     QT_TRANSLATE_NOOP("editstaff", "C"),
     QT_TRANSLATE_NOOP("editstaff", "C♯"),
     QT_TRANSLATE_NOOP("editstaff", "D"),
@@ -698,7 +697,7 @@ static const char* g_cNoteName[] = {
 
 QString EditStaff::midiCodeToStr(int midiCode)
 {
-    return QString("%1 %2").arg(qApp->translate("editstaff", g_cNoteName[midiCode % 12])).arg(midiCode / 12 - 1);
+    return QString("%1 %2").arg(qApp->translate("editstaff", s_es_noteNames[midiCode % 12])).arg(midiCode / 12 - 1);
 }
 
 //---------------------------------------------------------

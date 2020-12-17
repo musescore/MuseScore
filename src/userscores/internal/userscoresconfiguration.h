@@ -34,6 +34,9 @@ class UserScoresConfiguration : public IUserScoresConfiguration
     INJECT(userscores, notation::INotationConfiguration, notationConfiguration)
 
 public:
+
+    static const QString DEFAULT_FILE_SUFFIX;
+
     void init();
 
     ValCh<QStringList> recentScoreList() const override;

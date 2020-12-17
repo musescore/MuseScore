@@ -29,15 +29,7 @@
 #include "log.h"
 #include "../midierrors.h"
 
-namespace  {
-static double GLOBAL_VOLUME_GAIN{ 1.8 };
-}
-
-template<class T>
-static const T& clamp(const T& v, const T& lo, const T& hi)
-{
-    return (v < lo) ? lo : (hi < v) ? hi : v;
-}
+static const double FLUID_GLOBAL_VOLUME_GAIN{ 1.8 };
 
 using namespace mu;
 using namespace mu::midi;
@@ -100,7 +92,7 @@ Ret FluidSynth::init(float samplerate)
     fluid_set_log_function(FLUID_DBG, fluid_log_out, nullptr);
 
     m_fluid->settings = new_fluid_settings();
-    fluid_settings_setnum(m_fluid->settings, "synth.gain", GLOBAL_VOLUME_GAIN);
+    fluid_settings_setnum(m_fluid->settings, "synth.gain", FLUID_GLOBAL_VOLUME_GAIN);
     fluid_settings_setint(m_fluid->settings, "synth.audio-channels", 1);
     fluid_settings_setint(m_fluid->settings, "synth.lock-memory", 0);
     fluid_settings_setint(m_fluid->settings, "synth.threadsafe-api", 0);
@@ -307,7 +299,7 @@ bool FluidSynth::channelVolume(channel_t chan, float volume)
     }
 
     int val = static_cast<int>(volume * 100.f);
-    val = clamp(val, 0, 127);
+    val = std::clamp(val, 0, 127);
 
     int ret = fluid_synth_cc(m_fluid->synth, chan, VOLUME_MSB, val);
     return ret == FLUID_OK;
@@ -319,10 +311,10 @@ bool FluidSynth::channelBalance(channel_t chan, float balance)
         return false;
     }
 
-    balance = clamp(balance, -1.f, 1.f);
+    balance = std::clamp(balance, -1.f, 1.f);
     float normalized = (balance < 0 ? 63 : 64) + 63 * balance;
     int val = static_cast<int>(std::lround(normalized));
-    val = clamp(val, 0, 127);
+    val = std::clamp(val, 0, 127);
 
     int ret = fluid_synth_cc(m_fluid->synth, chan, PAN_MSB, val);
     return ret == FLUID_OK;
@@ -336,11 +328,11 @@ bool FluidSynth::channelPitch(channel_t chan, int16_t pitch)
         return false;
     }
 
-    pitch = clamp(pitch, static_cast<int16_t>(-12), static_cast<int16_t>(12));
+    pitch = std::clamp(pitch, static_cast<int16_t>(-12), static_cast<int16_t>(12));
 
     int32_t val = (8192 * pitch) / 12;
     val = 8192 + val;
-    val = clamp(val, 0, 16383);
+    val = std::clamp(val, 0, 16383);
 
     int ret = fluid_synth_pitch_bend(m_fluid->synth, chan, val);
     return ret == FLUID_OK;

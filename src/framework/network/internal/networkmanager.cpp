@@ -30,7 +30,7 @@
 using namespace mu;
 using namespace mu::framework;
 
-static constexpr int TIMEOUT_MS = 60000;
+static constexpr int NET_TIMEOUT_MS = 60000;
 
 NetworkManager::NetworkManager(QObject* parent)
     : QObject(parent)
@@ -98,7 +98,7 @@ Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, IODevi
         prepareReplyReceive(reply, m_incommingData);
     }
 
-    Ret ret = waitForReplyFinished(reply, TIMEOUT_MS);
+    Ret ret = waitForReplyFinished(reply, NET_TIMEOUT_MS);
     if (!ret) {
         LOGE() << ret.toString();
     }
