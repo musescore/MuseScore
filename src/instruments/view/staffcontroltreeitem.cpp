@@ -28,7 +28,26 @@ StaffControlTreeItem::StaffControlTreeItem(INotationPartsPtr notationParts, QObj
 
 void StaffControlTreeItem::appendNewItem()
 {
-    notationParts()->appendStaff(m_partId);
+    Staff* lastStaff = this->lastStaff();
+    if (!lastStaff) {
+        return;
+    }
+
+    Staff* staff = lastStaff->clone();
+    staff->setId(Staff::makeId());
+
+    notationParts()->appendStaff(staff, m_partId);
+}
+
+Staff* StaffControlTreeItem::lastStaff() const
+{
+    for (const Part* part : notationParts()->partList()) {
+        if (part->id() == m_partId) {
+            return part->staves()->last();
+        }
+    }
+
+    return nullptr;
 }
 
 void StaffControlTreeItem::setPartId(const QString& id)

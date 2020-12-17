@@ -70,7 +70,6 @@ private:
     void initExcerpts();
     void initExcerpt(Ms::Excerpt* excerpt);
 
-    void removeMissingExcerpts(const ExcerptNotationList& newExcerpts);
     void createNonexistentExcerpts(const ExcerptNotationList& newExcerpts);
 
     void updateExcerpts();
