@@ -10,8 +10,10 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
-#include "mtest/testutils.h"
+#include "testing/qtestsuite.h"
+
+#include "testutils.h"
+
 #include "libmscore/score.h"
 #include "libmscore/undo.h"
 #include "libmscore/excerpt.h"
@@ -23,7 +25,7 @@
 #include "libmscore/duration.h"
 #include "libmscore/durationtype.h"
 
-#define DIR QString("libmscore/chordsymbol/")
+static const QString CHORDSYMBOL_DATA_DIR("chordsymbol_data/");
 
 using namespace Ms;
 
@@ -78,7 +80,7 @@ void TestChordSymbol::initTestCase()
 
 MasterScore* TestChordSymbol::test_pre(const char* p)
 {
-    QString p1 = DIR + p + ".mscx";
+    QString p1 = CHORDSYMBOL_DATA_DIR + p + ".mscx";
     MasterScore* score = readScore(p1);
     score->doLayout();
     return score;
@@ -88,7 +90,7 @@ void TestChordSymbol::test_post(MasterScore* score, const char* p)
 {
     QString p1 = p;
     p1 += "-test.mscx";
-    QString p2 = DIR + p + "-ref.mscx";
+    QString p2 = CHORDSYMBOL_DATA_DIR + p + "-ref.mscx";
     QVERIFY(saveCompareScore(score, p1, p2));
     delete score;
 }
