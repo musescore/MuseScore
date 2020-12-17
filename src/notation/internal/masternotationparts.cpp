@@ -176,21 +176,21 @@ void MasterNotationParts::appendDoublingInstrument(const instruments::Instrument
     }
 }
 
-void MasterNotationParts::appendStaff(const ID& destinationPartId)
+void MasterNotationParts::appendStaff(const Staff* staff, const ID& destinationPartId)
 {
-    NotationParts::appendStaff(destinationPartId);
+    NotationParts::appendStaff(staff, destinationPartId);
 
     for (INotationPartsPtr parts : excerptsParts()) {
-        parts->appendStaff(destinationPartId);
+        parts->appendStaff(staff, destinationPartId);
     }
 }
 
-void MasterNotationParts::appendLinkedStaff(const ID& originStaffId)
+void MasterNotationParts::cloneStaff(const ID& sourceStaffId, const ID& destinationStaffId)
 {
-    NotationParts::appendLinkedStaff(originStaffId);
+    NotationParts::cloneStaff(sourceStaffId, destinationStaffId);
 
     for (INotationPartsPtr parts : excerptsParts()) {
-        parts->appendLinkedStaff(originStaffId);
+        parts->cloneStaff(sourceStaffId, destinationStaffId);
     }
 }
 

@@ -142,9 +142,33 @@ void StaffSettingsModel::setCutawayEnabled(bool value)
 
 void StaffSettingsModel::createLinkedStaff()
 {
-    if (parts()) {
-        parts()->appendLinkedStaff(m_staffId);
+    if (!parts()) {
+        return;
     }
+
+    Staff* sourceStaff = staff();
+    if (!sourceStaff) {
+        return;
+    }
+
+    Staff* linkedStaff = sourceStaff->clone();
+    linkedStaff->setId(Staff::makeId());
+
+    parts()->appendStaff(linkedStaff, sourceStaff->part()->id());
+    parts()->cloneStaff(sourceStaff->id(), linkedStaff->id());
+}
+
+Staff* StaffSettingsModel::staff() const
+{
+    for (const Part* part : parts()->partList()) {
+        for (Staff* staff : *part->staves()) {
+            if (staff->id() == m_staffId) {
+                return staff;
+            }
+        }
+    }
+
+    return nullptr;
 }
 
 INotationPartsPtr StaffSettingsModel::parts() const

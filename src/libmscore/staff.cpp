@@ -1222,6 +1222,15 @@ void Staff::init(const Staff* s)
     _userDist          = s->_userDist;
 }
 
+void Staff::setScore(Score* score)
+{
+    Element::setScore(score);
+
+    for (BracketItem* bracket: _brackets) {
+        bracket->setScore(score);
+    }
+}
+
 //---------------------------------------------------------
 //   initFromStaffType
 //---------------------------------------------------------

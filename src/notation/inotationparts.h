@@ -74,8 +74,9 @@ public:
     virtual void moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode = InsertMode::Before) = 0;
 
     virtual void appendDoublingInstrument(const instruments::Instrument& instrument, const ID& destinationPartId) = 0;
-    virtual void appendStaff(const ID& destinationPartId) = 0;
-    virtual void appendLinkedStaff(const ID& originStaffId) = 0;
+    virtual void appendStaff(const Staff* staff, const ID& destinationPartId) = 0;
+
+    virtual void cloneStaff(const ID& sourceStaffId, const ID& destinationStaffId) = 0;
 
     virtual void replaceInstrument(const ID& instrumentId, const ID& fromPartId, const instruments::Instrument& newInstrument) = 0;
 

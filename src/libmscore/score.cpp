@@ -1053,73 +1053,44 @@ Measure* Score::searchMeasure(const QPointF& p, const System* preferredSystem, q
 
 //---------------------------------------------------------
 //    getNextValidInputSegment
-//    - s is of type SegmentType::ChordRest
+//    - segment is of type SegmentType::ChordRest
 //---------------------------------------------------------
 
-static Segment* getNextValidInputSegment(Segment* s, int track, int voice)
+static Segment* getNextValidInputSegment(Segment* segment, int track, int voice)
 {
-    if (s == 0) {
-        return 0;
+    if (segment == nullptr) {
+        return nullptr;
     }
-    Q_ASSERT(s->segmentType() == SegmentType::ChordRest);
-    // Segment* s1 = s;
-    ChordRest* cr1 = nullptr;
-    for (Segment* s1 = s; s1; s1 = s1->prev(SegmentType::ChordRest)) {
-        cr1 = toChordRest(s1->element(track + voice));
-        if (cr1) {
+
+    Q_ASSERT(segment->segmentType() == SegmentType::ChordRest);
+
+    ChordRest* chordRest = nullptr;
+    for (Segment* s1 = segment; s1; s1 = s1->prev(SegmentType::ChordRest)) {
+        Element* element = s1->element(track + voice);
+        chordRest = toChordRest(element);
+
+        if (chordRest) {
             break;
         }
     }
-    Fraction nextTick = (cr1 == nullptr) ? s->measure()->tick() : cr1->tick() + cr1->actualTicks();
+
+    Fraction nextTick = (chordRest == nullptr) ? segment->measure()->tick() :
+                                                 chordRest->tick() + chordRest->actualTicks();
 
     static const SegmentType st { SegmentType::ChordRest };
-    while (s) {
-        if (s->element(track + voice)) {
+    while (segment) {
+        if (segment->element(track + voice)) {
             break;
         }
-        if (voice && s->tick() == nextTick) {
-            return s;
+
+        if (voice && segment->tick() == nextTick) {
+            return segment;
         }
-#if 0
-        int v;
-        for (v = 0; v < VOICES; ++v) {
-            if (s->element(track + v)) {
-                break;
-            }
-        }
-        if ((v != VOICES) && voice) {
-            int ntick;
-            bool skipChord = false;
-            bool ns        = false;
-            for (Segment* s1 = s->measure()->first(st); s1; s1 = s1->next(st)) {
-                ChordRest* cr = toChordRest(s1->element(track + voice));
-                if (cr) {
-                    if (ns) {
-                        return s1;
-                    }
-                    ntick = s1->tick() + cr->actualTicks();
-                    skipChord = true;
-                }
-                if (s1 == s) {
-                    ns = true;
-                }
-                if (skipChord) {
-                    if (s->tick() >= ntick) {
-                        skipChord = false;
-                    }
-                }
-                if (!skipChord && ns) {
-                    return s1;
-                }
-            }
-            if (!skipChord) {
-                return s;
-            }
-        }
-#endif
-        s = s->next(st);
+
+        segment = segment->next(st);
     }
-    return s;
+
+    return segment;
 }
 
 //---------------------------------------------------------
