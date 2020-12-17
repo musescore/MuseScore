@@ -18,8 +18,6 @@
 //=============================================================================
 #include "staffsettingsmodel.h"
 
-#include "log.h"
-
 using namespace mu::instruments;
 using namespace mu::notation;
 
@@ -42,7 +40,7 @@ void StaffSettingsModel::load(const QVariant& staff)
         m_voicesVisibility << voice.toBool();
     }
 
-    emit voicesChanged();
+    emit dataChanged();
 }
 
 QVariantList StaffSettingsModel::allStaffTypes() const
@@ -77,7 +75,7 @@ void StaffSettingsModel::setStaffType(int type)
     m_type = type_;
     parts()->setStaffType(m_staffId, m_type);
 
-    emit staffTypeChanged();
+    emit dataChanged();
 }
 
 QVariantList StaffSettingsModel::voices() const
@@ -105,7 +103,7 @@ void StaffSettingsModel::setVoiceVisible(int voiceIndex, bool visible)
     m_voicesVisibility[voiceIndex] = visible;
     parts()->setVoiceVisible(m_staffId, voiceIndex, visible);
 
-    emit voicesChanged();
+    emit dataChanged();
 }
 
 bool StaffSettingsModel::isSmallStaff() const
@@ -122,7 +120,7 @@ void StaffSettingsModel::setIsSmallStaff(bool value)
     m_isSmallStaff = value;
     parts()->setSmallStaff(m_staffId, value);
 
-    emit isSmallStaffChanged();
+    emit dataChanged();
 }
 
 bool StaffSettingsModel::cutawayEnabled() const
@@ -139,7 +137,7 @@ void StaffSettingsModel::setCutawayEnabled(bool value)
     m_cutawayEnabled = value;
     parts()->setCutawayEnabled(m_staffId, value);
 
-    emit cutawayEnabledChanged();
+    emit dataChanged();
 }
 
 void StaffSettingsModel::createLinkedStaff()
@@ -151,8 +149,8 @@ void StaffSettingsModel::createLinkedStaff()
 
 INotationPartsPtr StaffSettingsModel::parts() const
 {
-    if (globalContext()->currentNotation()) {
-        return globalContext()->currentNotation()->parts();
+    if (context()->currentMasterNotation()) {
+        return context()->currentMasterNotation()->parts();
     }
 
     return nullptr;

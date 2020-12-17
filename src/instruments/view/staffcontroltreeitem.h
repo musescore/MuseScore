@@ -23,11 +23,11 @@
 
 #include "notation/inotationparts.h"
 
-namespace mu {
-namespace instruments {
+namespace mu::instruments {
 class StaffControlTreeItem : public AbstractInstrumentPanelTreeItem
 {
     Q_OBJECT
+
 public:
     explicit StaffControlTreeItem(notation::INotationPartsPtr notationParts, QObject* parent = nullptr);
 
@@ -38,7 +38,6 @@ public:
 private:
     QString m_partId;
 };
-}
 }
 
 #endif // MU_INSTRUMENTS_STAFFCONTROLTREEITEM_H

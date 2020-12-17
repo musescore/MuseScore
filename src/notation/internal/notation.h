@@ -72,7 +72,7 @@ protected:
     Ms::Score* score() const override;
     void setScore(Ms::Score* score);
     Ms::MScore* scoreGlobal() const;
-    async::Notification partsChanged() const;
+    void notifyAboutNotationChanged();
 
 private:
     friend class NotationInteraction;
@@ -82,8 +82,6 @@ private:
     void paintElements(QPainter* painter, const QList<Element*>& elements) const;
 
     QSizeF viewSize() const;
-
-    void notifyAboutNotationChanged();
 
     QSizeF m_viewSize;
     Ms::MScore* m_scoreGlobal = nullptr;
@@ -100,7 +98,6 @@ private:
     INotationPartsPtr m_parts;
 
     async::Notification m_notationChanged;
-    async::Notification m_partsChanged;
 };
 }
 

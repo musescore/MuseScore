@@ -570,7 +570,7 @@ void InstrumentPanelTreeModel::updatePartItem(PartTreeItem* item, const Part* pa
     item->setTitle(part->partName());
     item->setIsVisible(part->show());
     item->setInstrumentId(part->instrumentId());
-    item->setInstrumentName(part->instrument()->trackName());
+    item->setInstrumentName(part->instrument()->name());
     item->setInstrumentAbbreviature(part->instrument()->abbreviature());
 }
 

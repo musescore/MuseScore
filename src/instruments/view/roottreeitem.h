@@ -23,11 +23,11 @@
 
 #include "notation/inotationparts.h"
 
-namespace mu {
-namespace instruments {
+namespace mu::instruments {
 class RootTreeItem : public AbstractInstrumentPanelTreeItem
 {
     Q_OBJECT
+
 public:
     explicit RootTreeItem(notation::INotationPartsPtr notationParts, QObject* parent = nullptr);
 
@@ -37,6 +37,5 @@ public:
     void removeChildren(const int row, const int count, const bool deleteChild) override;
 };
 }
-}
 
-#endif // ROOTTREEITEM_H
+#endif // MU_INSTRUMENTS_ROOTTREEITEM_H

@@ -20,24 +20,22 @@
 #define MU_INSTRUMENTS_STAFFSETTINGSMODEL_H
 
 #include <QObject>
-#include <QQmlEngine>
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "notation/notationtypes.h"
 
-namespace mu {
-namespace instruments {
+namespace mu::instruments {
 class StaffSettingsModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(instruments, context::IGlobalContext, globalContext)
+    INJECT(instruments, context::IGlobalContext, context)
 
-    Q_PROPERTY(QString staffType READ staffType NOTIFY staffTypeChanged)
-    Q_PROPERTY(QVariantList voices READ voices NOTIFY voicesChanged)
-    Q_PROPERTY(bool isSmallStaff READ isSmallStaff NOTIFY isSmallStaffChanged)
-    Q_PROPERTY(bool cutawayEnabled READ cutawayEnabled NOTIFY cutawayEnabledChanged)
+    Q_PROPERTY(QString staffType READ staffType NOTIFY dataChanged)
+    Q_PROPERTY(QVariantList voices READ voices NOTIFY dataChanged)
+    Q_PROPERTY(bool isSmallStaff READ isSmallStaff NOTIFY dataChanged)
+    Q_PROPERTY(bool cutawayEnabled READ cutawayEnabled NOTIFY dataChanged)
 
 public:
     explicit StaffSettingsModel(QObject* parent = nullptr);
@@ -58,10 +56,7 @@ public:
     Q_INVOKABLE void setVoiceVisible(int voiceIndex, bool visible);
 
 signals:
-    void staffTypeChanged();
-    void voicesChanged();
-    void isSmallStaffChanged();
-    void cutawayEnabledChanged();
+    void dataChanged();
 
 private:
     notation::INotationPartsPtr parts() const;
@@ -72,7 +67,6 @@ private:
     QList<bool> m_voicesVisibility;
     notation::StaffType m_type = notation::StaffType::STANDARD;
 };
-}
 }
 
 #endif // MU_INSTRUMENTS_STAFFSETTINGSMODEL_H

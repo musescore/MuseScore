@@ -418,9 +418,7 @@ void NotationParts::setInstrumentName(const ID& instrumentId, const ID& fromPart
     score()->undo(new Ms::ChangeInstrumentLong(instrumentInfo.fraction, part, { StaffName(name, 0) }));
     apply();
 
-    InstrumentInfo newInstrumentInfo = this->instrumentInfo(instrumentId, part);
-    ChangedNotifier<mu::instruments::Instrument>* notifier = partNotifier(part->id());
-    notifier->itemChanged(InstrumentsConverter::convertInstrument(*newInstrumentInfo.instrument));
+    m_partsNotifier->itemChanged(part);
     m_partsChanged.notify();
 }
 
@@ -440,9 +438,7 @@ void NotationParts::setInstrumentAbbreviature(const ID& instrumentId, const ID& 
     score()->undo(new Ms::ChangeInstrumentShort(instrumentInfo.fraction, part, { StaffName(abbreviature, 0) }));
     apply();
 
-    InstrumentInfo newInstrumentInfo = this->instrumentInfo(instrumentId, part);
-    ChangedNotifier<mu::instruments::Instrument>* notifier = partNotifier(part->id());
-    notifier->itemChanged(InstrumentsConverter::convertInstrument(*newInstrumentInfo.instrument));
+    m_partsNotifier->itemChanged(part);
     m_partsChanged.notify();
 }
 
@@ -511,9 +507,12 @@ void NotationParts::setCutawayEnabled(const ID& staffId, bool enabled)
 void NotationParts::setSmallStaff(const ID& staffId, bool smallStaff)
 {
     Staff* staff = this->staff(staffId);
-    Ms::StaffType* staffType = staff->staffType(DEFAULT_TICK);
+    if (!staff) {
+        return;
+    }
 
-    if (!staff || !staffType) {
+    Ms::StaffType* staffType = staff->staffType(DEFAULT_TICK);
+    if (!staffType) {
         return;
     }
 
@@ -529,8 +528,12 @@ void NotationParts::setSmallStaff(const ID& staffId, bool smallStaff)
 void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config)
 {
     Staff* staff = this->staff(staffId);
-
     if (!staff) {
+        return;
+    }
+
+    Ms::StaffType* staffType = staff->staffType(DEFAULT_TICK);
+    if (!staffType) {
         return;
     }
 
@@ -542,15 +545,15 @@ void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config)
     staff->setUserDist(config.userDistance);
     staff->undoChangeProperty(Ms::Pid::MAG, config.scale);
     staff->setShowIfEmpty(config.showIfEmpty);
-    staff->staffType(DEFAULT_TICK)->setLines(config.linesCount);
-    staff->staffType(DEFAULT_TICK)->setLineDistance(Ms::Spatium(config.lineDistance));
-    staff->staffType(DEFAULT_TICK)->setGenClef(config.showClef);
-    staff->staffType(DEFAULT_TICK)->setGenTimesig(config.showTimeSignature);
-    staff->staffType(DEFAULT_TICK)->setGenKeysig(config.showKeySignature);
-    staff->staffType(DEFAULT_TICK)->setShowBarlines(config.showBarlines);
-    staff->staffType(DEFAULT_TICK)->setStemless(config.showStemless);
-    staff->staffType(DEFAULT_TICK)->setShowLedgerLines(config.showLedgerLinesPitched);
-    staff->staffType(DEFAULT_TICK)->setNoteHeadScheme(config.noteheadScheme);
+    staffType->setLines(config.linesCount);
+    staffType->setLineDistance(Ms::Spatium(config.lineDistance));
+    staffType->setGenClef(config.showClef);
+    staffType->setGenTimesig(config.showTimeSignature);
+    staffType->setGenKeysig(config.showKeySignature);
+    staffType->setShowBarlines(config.showBarlines);
+    staffType->setStemless(config.showStemless);
+    staffType->setShowLedgerLines(config.showLedgerLinesPitched);
+    staffType->setNoteHeadScheme(config.noteheadScheme);
     staff->setHideSystemBarLine(config.hideSystemBarline);
     staff->setMergeMatchingRests(config.mergeMatchingRests);
     staff->setHideWhenEmpty(config.hideMode);
@@ -671,10 +674,9 @@ void NotationParts::appendStaff(const ID& destinationPartId)
     }
 
     Ms::Instrument* instrument = instrumentInfo.instrument;
-    const QList<Staff*>* instrumentStaves = part->staves();
 
     startEdit();
-    Staff* staff = instrumentStaves->front()->clone();
+    Staff* staff = part->staves()->front()->clone();
     staff->setId(Staff::makeId());
     int staffIndex = staff->part()->nstaves();
     score()->undoInsertStaff(staff, staffIndex);
@@ -754,18 +756,6 @@ void NotationParts::doRemoveParts(const IDList& partsIds)
 {
     for (const ID& partId: partsIds) {
         score()->cmdRemovePart(part(partId));
-
-        if (!score()->isMaster()) {
-            continue;
-        }
-
-        for (Ms::Score* score : score()->scoreList()) {
-            if (score == this->score()) {
-                continue;
-            }
-
-            score->cmdRemovePart(part(partId, score));
-        }
     }
 }
 
@@ -1209,6 +1199,8 @@ void NotationParts::appendPart(Part* part)
         Ms::Excerpt::cloneStaff2(staff, staffCopy, startTick, endTick);
     }
 
+    partCopy->setScore(score());
+
     apply();
 
     m_partsNotifier->itemChanged(part);
@@ -1376,12 +1368,12 @@ int NotationParts::lastStaffIndex() const
 
 void NotationParts::initStaff(Staff* staff, const mu::instruments::Instrument& instrument, const Ms::StaffType* staffType, int cleffIndex)
 {
-    const Ms::StaffType* pst = staffType ? staffType : instrument.staffTypePreset;
-    if (!pst) {
-        pst = Ms::StaffType::getDefaultPreset(instrument.staffGroup);
+    const Ms::StaffType* staffTypePreset = staffType ? staffType : instrument.staffTypePreset;
+    if (!staffTypePreset) {
+        staffTypePreset = Ms::StaffType::getDefaultPreset(instrument.staffGroup);
     }
 
-    Ms::StaffType* stt = staff->setStaffType(DEFAULT_TICK, *pst);
+    Ms::StaffType* stt = staff->setStaffType(DEFAULT_TICK, *staffTypePreset);
     if (cleffIndex >= mu::instruments::MAX_STAVES) {
         stt->setSmall(false);
     } else {

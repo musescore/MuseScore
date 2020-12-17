@@ -362,6 +362,7 @@ public:
     QList<StaffName>& shortNames();
     QString trackName() const;
     void setTrackName(const QString& s);
+    QString name() const;
     QString abbreviature() const;
     static Instrument fromTemplate(const InstrumentTemplate* t);
 
