@@ -10,34 +10,28 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include "testutils.h"
+
 #include <QtTest/QtTest>
 #include <QTextStream>
+
 #include "config.h"
 #include "libmscore/score.h"
 #include "libmscore/note.h"
 #include "libmscore/chord.h"
 #include "libmscore/instrtemplate.h"
-#include "testutils.h"
 #include "libmscore/page.h"
 #include "libmscore/musescoreCore.h"
 #include "libmscore/xml.h"
 #include "libmscore/excerpt.h"
 #include "thirdparty/qzip/qzipreader_p.h"
 
+#include "framework/global/globalmodule.h"
+#include "framework/fonts/fontsmodule.h"
+
 static void initMyResources()
 {
 //    Q_INIT_RESOURCE(mtest);
-//    Q_INIT_RESOURCE(fonts_Leland);
-//    Q_INIT_RESOURCE(fonts_Bravura);
-//    Q_INIT_RESOURCE(fonts_Campania);
-//    Q_INIT_RESOURCE(fonts_Free);
-//    Q_INIT_RESOURCE(fonts_FreeSerif);
-//    Q_INIT_RESOURCE(fonts_Gootville);
-//    Q_INIT_RESOURCE(fonts_MScore);
-//    Q_INIT_RESOURCE(fonts_MuseJazz);
-//    Q_INIT_RESOURCE(fonts_Smufl);
-//    Q_INIT_RESOURCE(fonts_Tabulature);
-//    Q_INIT_RESOURCE(fonts_Petaluma);
 }
 
 namespace Ms {
@@ -101,8 +95,14 @@ MasterScore* MTest::readCreatedScore(const QString& name)
     score->setName(fi.completeBaseName());
     QString csl  = fi.suffix().toLower();
 
-//    ScoreLoad sl;
-//    Score::FileError rv;
+    ScoreLoad sl;
+    Score::FileError rv;
+    if (csl == "mscz" || csl == "mscx") {
+        rv = score->loadMsc(name, false);
+    } else {
+        rv = Score::FileError::FILE_UNKNOWN_TYPE;
+    }
+
 //    if (csl == "cap") {
 //        rv = importCapella(score, name);
 //        score->setMetaTag("originalFormat", csl);
@@ -125,15 +125,15 @@ MasterScore* MTest::readCreatedScore(const QString& name)
 //        rv = Score::FileError::FILE_UNKNOWN_TYPE;
 //    }
 
-//    if (rv != Score::FileError::FILE_NO_ERROR) {
-//        QWARN(qPrintable(QString("readScore: cannot load <%1> type <%2>\n").arg(name).arg(csl)));
-//        delete score;
-//        score = 0;
-//    } else {
-//        for (Score* s : score->scoreList()) {
-//            s->doLayout();
-//        }
-//    }
+    if (rv != Score::FileError::FILE_NO_ERROR) {
+        QWARN(qPrintable(QString("readScore: cannot load <%1> type <%2>\n").arg(name).arg(csl)));
+        delete score;
+        score = 0;
+    } else {
+        for (Score* s : score->scoreList()) {
+            s->doLayout();
+        }
+    }
     return score;
 }
 
@@ -221,6 +221,7 @@ bool MTest::saveCompareBrailleScore(MasterScore* score, const QString& saveName,
 
 bool MTest::savePdf(MasterScore* cs, const QString& saveName)
 {
+    Q_ASSERT(false);
     return false;
 //    QPrinter printerDev(QPrinter::HighResolution);
 //    double w = cs->styleD(Sid::pageWidth);
@@ -276,6 +277,7 @@ bool MTest::savePdf(MasterScore* cs, const QString& saveName)
 
 bool MTest::saveMusicXml(MasterScore* score, const QString& saveName)
 {
+    Q_ASSERT(false);
     return false;// saveXml(score, saveName);
 }
 
@@ -285,6 +287,7 @@ bool MTest::saveMusicXml(MasterScore* score, const QString& saveName)
 
 bool MTest::saveBraille(MasterScore* score, const QString& saveName)
 {
+    Q_ASSERT(false);
     return false;// Ms::saveBraille(score, saveName);
 }
 
@@ -342,7 +345,7 @@ void MTest::extractRootFile(const QString& zipFile, const QString& destination)
 
 QString MTest::rootPath()
 {
-    return QString();//TESTROOT "/mtest/";
+    return QString(libmscore_tests_DATA_ROOT);
 }
 
 //---------------------------------------------------------
@@ -352,7 +355,44 @@ QString MTest::rootPath()
 void MTest::initMTest()
 {
     qputenv("QML_DISABLE_DISK_CACHE", "true");
-    qSetMessagePattern("%{function}: %{message}");
+
+    static mu::framework::GlobalModule globalModule;
+    static QList<mu::framework::IModuleSetup*> modules;
+
+    modules
+        << new mu::fonts::FontsModule()
+    ;
+
+    globalModule.registerResources();
+    globalModule.registerExports();
+    globalModule.registerUiTypes();
+    globalModule.onInit();
+
+    //! NOTE Now we can use logger and profiler
+
+    for (mu::framework::IModuleSetup* m : modules) {
+        m->registerResources();
+    }
+
+    for (mu::framework::IModuleSetup* m : modules) {
+        m->registerExports();
+    }
+
+    globalModule.resolveImports();
+    for (mu::framework::IModuleSetup* m : modules) {
+        m->registerUiTypes();
+        m->resolveImports();
+    }
+
+    for (mu::framework::IModuleSetup* m : modules) {
+        m->onInit();
+    }
+
+    globalModule.onStartApp();
+    for (mu::framework::IModuleSetup* m : modules) {
+        m->onStartApp();
+    }
+
     initMyResources();
 //      DPI  = 120;
 //      PDPI = 120;
@@ -363,7 +403,7 @@ void MTest::initMTest()
     new MuseScoreCore;
     mscore->init();
 
-    //root = TESTROOT "/mtest";
+    root = rootPath();
     loadInstrumentTemplates(":/instruments.xml");
     score = readScore("test.mscx");
 }

@@ -20,9 +20,14 @@
 #include <QGuiApplication>
 #include <gmock/gmock.h>
 
+#include "framework/global/runtime.h"
+
 GTEST_API_ int main(int argc, char** argv)
 {
     QGuiApplication app(argc, argv);
+
+    mu::runtime::mainThreadId(); //! NOTE Needs only call
+    mu::runtime::setThreadName("main");
 
     testing::InitGoogleMock(&argc, argv);
     return RUN_ALL_TESTS();
