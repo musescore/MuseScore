@@ -16,24 +16,45 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#ifndef MU_TESTING_ENVIRONMENT_H
+#define MU_TESTING_ENVIRONMENT_H
 
-#include <QGuiApplication>
-#include <gmock/gmock.h>
+#include <functional>
+#include <vector>
 
-#include "framework/global/runtime.h"
-#include "environment.h"
+#include "framework/global/modularity/imodulesetup.h"
 
-GTEST_API_ int main(int argc, char** argv)
+namespace mu::testing {
+
+class Environment
 {
-    QGuiApplication app(argc, argv);
+public:
 
-    qputenv("QML_DISABLE_DISK_CACHE", "true");
+    using Modules = std::vector<framework::IModuleSetup*>;
+    using PostInit = std::function<void()>;
 
-    mu::runtime::mainThreadId(); //! NOTE Needs only call
-    mu::runtime::setThreadName("main");
+    Environment() = default;
 
-    mu::testing::Environment::setup();
+    static void setDependency(const Modules& modules);
+    static void setPostInit(const PostInit& postInit);
 
-    testing::InitGoogleMock(&argc, argv);
-    return RUN_ALL_TESTS();
+    static void setup();
+
+private:
+    static Modules m_dependencyModules;
+    static PostInit m_postInit;
+};
+
+class SuiteEnvironment
+{
+public:
+
+    SuiteEnvironment(const Environment::Modules& dependencyModules, const Environment::PostInit& postInit = nullptr) {
+        Environment::setDependency(dependencyModules);
+        Environment::setPostInit(postInit);
+    }
+};
+
 }
+
+#endif // MU_TESTING_ENVIRONMENT_H

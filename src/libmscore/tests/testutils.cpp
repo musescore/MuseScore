@@ -354,45 +354,6 @@ QString MTest::rootPath()
 
 void MTest::initMTest()
 {
-    qputenv("QML_DISABLE_DISK_CACHE", "true");
-
-    static mu::framework::GlobalModule globalModule;
-    static QList<mu::framework::IModuleSetup*> modules;
-
-    modules
-        << new mu::fonts::FontsModule()
-    ;
-
-    globalModule.registerResources();
-    globalModule.registerExports();
-    globalModule.registerUiTypes();
-    globalModule.onInit();
-
-    //! NOTE Now we can use logger and profiler
-
-    for (mu::framework::IModuleSetup* m : modules) {
-        m->registerResources();
-    }
-
-    for (mu::framework::IModuleSetup* m : modules) {
-        m->registerExports();
-    }
-
-    globalModule.resolveImports();
-    for (mu::framework::IModuleSetup* m : modules) {
-        m->registerUiTypes();
-        m->resolveImports();
-    }
-
-    for (mu::framework::IModuleSetup* m : modules) {
-        m->onInit();
-    }
-
-    globalModule.onStartApp();
-    for (mu::framework::IModuleSetup* m : modules) {
-        m->onStartApp();
-    }
-
     initMyResources();
 //      DPI  = 120;
 //      PDPI = 120;

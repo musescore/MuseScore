@@ -20,10 +20,12 @@
 set(MODULE_TEST libmscore_tests)
 
 set(MODULE_TEST_SRC
+    ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
     ${CMAKE_CURRENT_LIST_DIR}/testutils.cpp
     ${CMAKE_CURRENT_LIST_DIR}/testutils.h
     ${CMAKE_CURRENT_LIST_DIR}/tst_sample.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_barline.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tst_beam.cpp
 )
 
 set(MODULE_TEST_LINK
