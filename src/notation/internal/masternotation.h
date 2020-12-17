@@ -54,6 +54,8 @@ public:
     ValCh<ExcerptNotationList> excerpts() const override;
     void setExcerpts(const ExcerptNotationList& excerpts) override;
 
+    INotationPartsPtr parts() const override;
+
 private:
     Ret exportScore(const io::path& path, const std::string& suffix);
 
@@ -62,6 +64,8 @@ private:
     Ret load(const io::path& path, const INotationReaderPtr& reader);
     Ret doLoadScore(Ms::MasterScore* score, const io::path& path, const INotationReaderPtr& reader) const;
     mu::RetVal<Ms::MasterScore*> newScore(const ScoreCreateOptions& scoreInfo);
+
+    void doSetExcerpts(ExcerptNotationList excerpts);
 
     void initExcerpts();
     void initExcerpt(Ms::Excerpt* excerpt);
@@ -73,6 +77,7 @@ private:
     IExcerptNotationPtr createExcerpt(Ms::Part* part);
 
     ValCh<ExcerptNotationList> m_excerpts;
+    INotationPartsPtr m_parts;
 };
 }
 

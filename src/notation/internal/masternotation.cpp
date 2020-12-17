@@ -18,6 +18,7 @@
 //=============================================================================
 #include "masternotation.h"
 #include "excerptnotation.h"
+#include "masternotationparts.h"
 
 #include <QFileInfo>
 
@@ -48,7 +49,10 @@ static ExcerptNotation* get_impl(const IExcerptNotationPtr& excerpt)
 MasterNotation::MasterNotation()
     : Notation()
 {
-    partsChanged().onNotify(this, [this]() {
+    m_parts = std::make_shared<MasterNotationParts>(this, interaction(), undoStack());
+
+    m_parts->partsChanged().onNotify(this, [this]() {
+        notifyAboutNotationChanged();
         updateExcerpts();
     });
 }
@@ -567,7 +571,13 @@ void MasterNotation::initExcerpts()
         excerpts.push_back(std::make_shared<ExcerptNotation>(excerpt));
     }
 
+    doSetExcerpts(excerpts);
+}
+
+void MasterNotation::doSetExcerpts(ExcerptNotationList excerpts)
+{
     m_excerpts.set(excerpts);
+    static_cast<MasterNotationParts*>(m_parts.get())->setExcerpts(excerpts);
 }
 
 void MasterNotation::initExcerpt(Excerpt* excerpt)
@@ -585,6 +595,11 @@ mu::ValCh<ExcerptNotationList> MasterNotation::excerpts() const
     return m_excerpts;
 }
 
+INotationPartsPtr MasterNotation::parts() const
+{
+    return m_parts;
+}
+
 void MasterNotation::setExcerpts(const ExcerptNotationList& excerpts)
 {
     if (m_excerpts.val == excerpts) {
@@ -594,7 +609,7 @@ void MasterNotation::setExcerpts(const ExcerptNotationList& excerpts)
     removeMissingExcerpts(excerpts);
     createNonexistentExcerpts(excerpts);
 
-    m_excerpts.set(excerpts);
+    doSetExcerpts(excerpts);
 }
 
 void MasterNotation::removeMissingExcerpts(const ExcerptNotationList& newExcerpts)
@@ -657,7 +672,7 @@ void MasterNotation::updateExcerpts()
     }
 
     if (newExcerpts != m_excerpts.val) {
-        m_excerpts.set(newExcerpts);
+        doSetExcerpts(newExcerpts);
     }
 }
 

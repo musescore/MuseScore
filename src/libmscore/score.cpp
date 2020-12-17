@@ -2568,6 +2568,16 @@ void Score::insertPart(Part* part, int idx)
 void Score::removePart(Part* part)
 {
     _parts.removeAt(_parts.indexOf(part));
+    int index = _parts.indexOf(part);
+
+    if (index == -1) {
+        for (int i = 0; i < _parts.size(); ++i) {
+            if (_parts[i]->id() == part->id()) {
+                index = i;
+                break;
+            }
+        }
+    }
 
     if (_excerpt) {
         for (Part* excerptPart : _excerpt->parts()) {
