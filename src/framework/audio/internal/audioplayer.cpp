@@ -18,18 +18,12 @@
 //=============================================================================
 #include "audioplayer.h"
 
-#include "log.h"
+#include <algorithm>
 
-#include <QElapsedTimer>
+#include "log.h"
 
 using namespace mu;
 using namespace mu::audio;
-
-template<class T>
-static const T& clamp(const T& v, const T& lo, const T& hi)
-{
-    return (v < lo) ? lo : (hi < v) ? hi : v;
-}
 
 AudioPlayer::AudioPlayer()
 {
@@ -203,7 +197,7 @@ float AudioPlayer::generalVolume() const
 
 void AudioPlayer::setGeneralVolume(float v)
 {
-    m_generalVolume = clamp(v, 0.f, 1.27f); //! NOTE 127 - midi limitation
+    m_generalVolume = std::clamp(v, 0.f, 1.27f); //! NOTE 127 - midi limitation
 
     if (!isInited()) {
         return;
@@ -219,7 +213,7 @@ float AudioPlayer::generalBalance() const
 
 void AudioPlayer::setGeneralBalance(float b)
 {
-    m_generalBalance = clamp(b, -1.f, 1.f);
+    m_generalBalance = std::clamp(b, -1.f, 1.f);
 
     if (!isInited()) {
         return;
@@ -230,12 +224,12 @@ void AudioPlayer::setGeneralBalance(float b)
 
 float AudioPlayer::normalizedVolume(float volume) const
 {
-    return clamp(m_generalVolume * volume, 0.f, 1.27f); //! NOTE 127 - midi limitation
+    return std::clamp(m_generalVolume * volume, 0.f, 1.27f); //! NOTE 127 - midi limitation
 }
 
 float AudioPlayer::normalizedBalance(float balance) const
 {
-    return clamp(m_generalBalance + balance, -1.f, 1.f);
+    return std::clamp(m_generalBalance + balance, -1.f, 1.f);
 }
 
 void AudioPlayer::applyCurrentVolume()

@@ -25,7 +25,7 @@
 
 using namespace mu::dock;
 
-static const QString qtoolbarQss = QString("QToolBar { background: %1; border: 0; padding: 0; }");
+static const QString TOOLBAR_QSS = QString("QToolBar { background: %1; border: 0; padding: 0; }");
 
 static const qreal MOVING_BUTTON_WIDTH(10);
 
@@ -57,7 +57,7 @@ DockToolBar::~DockToolBar()
 void DockToolBar::onComponentCompleted()
 {
     m_tool.bar->setObjectName("w_" + objectName());
-    m_tool.bar->setStyleSheet(qtoolbarQss.arg(color().name()));
+    m_tool.bar->setStyleSheet(TOOLBAR_QSS.arg(color().name()));
 
     QWidget* w = view();
     w->setMinimumWidth(minimumWidth());
@@ -67,7 +67,7 @@ void DockToolBar::onComponentCompleted()
 
 void DockToolBar::updateStyle()
 {
-    m_tool.bar->setStyleSheet(qtoolbarQss.arg(color().name()));
+    m_tool.bar->setStyleSheet(TOOLBAR_QSS.arg(color().name()));
 }
 
 void DockToolBar::onToolbarEvent(QEvent* e)

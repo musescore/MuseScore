@@ -30,9 +30,7 @@ using namespace mu;
 using namespace mu::midi;
 using namespace mu::framework;
 
-static const std::string module_name("midi");
-
-static const Settings::Key MY_SOUNDFONTS(module_name, "application/paths/mySoundfonts");
+static const Settings::Key MY_SOUNDFONTS("midi", "application/paths/mySoundfonts");
 
 //! FIXME Temporary for tests
 static const std::string DEFAULT_FLUID_SOUNDFONT = "MuseScore_General.sf3"; // "GeneralUser GS v1.471.sf2"; // "MuseScore_General.sf3";

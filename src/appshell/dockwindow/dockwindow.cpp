@@ -35,12 +35,12 @@
 
 using namespace mu::dock;
 
-static const QString windowQss = QString("QMainWindow { background: %1; } "
-                                         "QMainWindow::separator { background: %1; width: 4px; } "
-                                         "QTabBar::tab { background: %1; border: 2px solid; padding: 2px; }"
-                                         "QTabBar::tab:selected { border-color: #9B9B9B; border-bottom-color: #C2C7CB; }");
+static const QString WINDOW_QSS = QString("QMainWindow { background: %1; } "
+                                          "QMainWindow::separator { background: %1; width: 4px; } "
+                                          "QTabBar::tab { background: %1; border: 2px solid; padding: 2px; }"
+                                          "QTabBar::tab:selected { border-color: #9B9B9B; border-bottom-color: #C2C7CB; }");
 
-static const QString statusQss = QString("QStatusBar { background: %1; } QStatusBar::item { border: 0 }");
+static const QString STATUS_QSS = QString("QStatusBar { background: %1; } QStatusBar::item { border: 0 }");
 
 DockWindow::DockWindow(QQuickItem* parent)
     : QQuickItem(parent), m_toolbars(this), m_pages(this)
@@ -259,8 +259,8 @@ void DockWindow::showPage(DockPage* page)
 
 void DockWindow::updateStyle()
 {
-    m_window->setStyleSheet(windowQss.arg(m_color.name()));
-    m_statusbar->setStyleSheet(statusQss.arg(m_color.name()));
+    m_window->setStyleSheet(WINDOW_QSS.arg(m_color.name()));
+    m_statusbar->setStyleSheet(STATUS_QSS.arg(m_color.name()));
 }
 
 DockPage* DockWindow::currentPage() const

@@ -23,7 +23,7 @@
 #include "log.h"
 #include "translation.h"
 
-static const QString DEFAULT_FILE_SUFFIX(".mscz");
+#include "userscoresconfiguration.h"
 
 using namespace mu;
 using namespace mu::userscores;
@@ -112,7 +112,7 @@ void FileScoreController::saveScore()
     }
 
     if (io::syffix(filePath).empty()) {
-        filePath = filePath + DEFAULT_FILE_SUFFIX;
+        filePath = filePath + UserScoresConfiguration::DEFAULT_FILE_SUFFIX;
     }
 
     doSaveScore(filePath);
