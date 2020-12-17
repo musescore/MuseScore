@@ -26,6 +26,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/tst_barline.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_beam.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_box.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tst_breath.cpp
 )
 
 set(MODULE_TEST_LINK
