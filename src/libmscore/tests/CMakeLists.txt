@@ -17,14 +17,18 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-set(MODULE_TEST userscores_test)
+set(MODULE_TEST libmscore_tests)
 
 set(MODULE_TEST_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/mocks/userscoresconfigurationmock.h
-    ${CMAKE_CURRENT_LIST_DIR}/templatesrepositorytest.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/testutils.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/testutils.h
+    ${CMAKE_CURRENT_LIST_DIR}/tst_sample.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tst_barline.cpp
 )
 
-set(MODULE_TEST_LINK userscores)
+set(MODULE_TEST_LINK
+    qzip
+    libmscore
+    )
 
-include(${PROJECT_SOURCE_DIR}/src/framework/testing/gtest.cmake)
-
+include(${PROJECT_SOURCE_DIR}/src/framework/testing/qtest.cmake)

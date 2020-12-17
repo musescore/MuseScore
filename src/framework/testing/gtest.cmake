@@ -24,58 +24,35 @@
 # set(MODULE_TEST_LINK ...)          - set libraries for link
 
 # After all the settings you need to do:
-# include(${PROJECT_SOURCE_DIR}/framework/utests_base/utests_base.cmake)
+# include(${PROJECT_SOURCE_DIR}/framework/testing/gtest.cmake)
 
+message(STATUS "Configuring ${MODULE_TEST} (gtest)")
 
-message(STATUS "Configuring " ${MODULE_TEST})
-
-# --- gtest ---
-#define_property(TARGET PROPERTY OUTPUT_XML
-#    BRIEF_DOCS "List XML files outputed by google test."
-#    FULL_DOCS "List XML files outputed by google test."
-#)
-
-#cmake_policy(SET CMP0079 NEW)
-#add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../../thirdparty/googletest googletest)
-#enable_testing()
 get_property(gmock_LIBS GLOBAL PROPERTY gmock_LIBS)
 get_property(gmock_INCLUDE_DIRS GLOBAL PROPERTY gmock_INCLUDE_DIRS)
-# -------------
-
-set(TESTS_BASE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/main.cpp
-)
-
-set(TESTS_BASE_INC
-    ${gmock_INCLUDE_DIRS}
-    ${CMAKE_CURRENT_LIST_DIR}
-)
-
-set(TESTS_BASE_LIBS
-   gmock
-   global
-)
-
-include_directories(
-    ${TESTS_BASE_INC}
-    ${PROJECT_BINARY_DIR}
-    ${PROJECT_SOURCE_DIR}
-    ${PROJECT_SOURCE_DIR}/framework
-    ${PROJECT_SOURCE_DIR}/framework/global
-    ${PROJECT_SOURCE_DIR}/mu4
-    ${MODULE_TEST_INCLUDE}
-)
 
 add_executable(${MODULE_TEST}
-    ${TESTS_BASE_SRC}
+    ${CMAKE_CURRENT_LIST_DIR}/gmain.cpp
     ${MODULE_TEST_SRC}
     )
+
+target_include_directories(${MODULE_TEST} PRIVATE
+    ${PROJECT_BINARY_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}
+    ${PROJECT_SOURCE_DIR}
+    ${PROJECT_SOURCE_DIR}/src/framework
+    ${PROJECT_SOURCE_DIR}/src/framework/global
+    ${PROJECT_SOURCE_DIR}/src
+    ${MODULE_TEST_INCLUDE}
+)
 
 find_package(Qt5 COMPONENTS Core Gui REQUIRED)
 
 target_link_libraries(${MODULE_TEST}
-    Qt5::Core Qt5::Gui
-    ${TESTS_BASE_LIBS}
+    Qt5::Core
+    Qt5::Gui
+    gmock
+    global
     ${MODULE_TEST_LINK}
     )
 
