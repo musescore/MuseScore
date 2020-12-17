@@ -111,8 +111,8 @@ void InstrumentSettingsModel::setAbbreviature(const QString& abbreviature)
 
 INotationPartsPtr InstrumentSettingsModel::parts() const
 {
-    if (globalContext()->currentNotation()) {
-        return globalContext()->currentNotation()->parts();
+    if (context()->currentMasterNotation()) {
+        return context()->currentMasterNotation()->parts();
     }
 
     return nullptr;

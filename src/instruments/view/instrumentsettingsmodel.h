@@ -20,13 +20,11 @@
 #define MU_INSTRUMENTS_INSTRUMENTSETTINGSMODEL_H
 
 #include <QObject>
-#include <QQmlEngine>
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "context/iglobalcontext.h"
 #include "notation/notationtypes.h"
-#include "instrumentstypes.h"
 #include "iselectinstrumentscenario.h"
 
 namespace mu::instruments {
@@ -34,8 +32,8 @@ class InstrumentSettingsModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(instruments, context::IGlobalContext, globalContext)
     INJECT(instruments, ISelectInstrumentsScenario, selectInstrumentsScenario)
+    INJECT(instruments, context::IGlobalContext, context)
 
     Q_PROPERTY(QString instrumentName READ instrumentName WRITE setInstrumentName NOTIFY dataChanged)
     Q_PROPERTY(QString partName READ partName WRITE setPartName NOTIFY dataChanged)
