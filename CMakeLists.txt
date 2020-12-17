@@ -181,21 +181,22 @@ endif(DOWNLOAD_SOUNDFONT)
 # Add source tree
 ###########################################
 
-add_subdirectory(share)
-add_subdirectory(src/framework/global) # should be first to work pch
-add_subdirectory(thirdparty/qzip)
-add_subdirectory(src)
-
 if (BUILD_UNIT_TESTS)
+    enable_testing()
+    message(STATUS "Enabled testing")
+
     define_property(TARGET PROPERTY OUTPUT_XML
         BRIEF_DOCS "List XML files outputed by google test."
         FULL_DOCS "List XML files outputed by google test."
     )
 
     add_subdirectory(thirdparty/googletest)
-    enable_testing()
 endif(BUILD_UNIT_TESTS)
 
+add_subdirectory(share)
+add_subdirectory(src/framework/global) # should be first to work pch
+add_subdirectory(thirdparty/qzip)
+add_subdirectory(src)
 
 ###########################################
 # Setup Packaging
