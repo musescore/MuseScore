@@ -10,15 +10,17 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
-#include "mtest/testutils.h"
+#include "testing/qtestsuite.h"
+
+#include "testutils.h"
+
 #include "libmscore/score.h"
 #include "libmscore/undo.h"
 #include "libmscore/measure.h"
 #include "libmscore/breath.h"
 #include "libmscore/sym.h"
 
-#define DIR QString("libmscore/breath/")
+static const QString BREATH_DATA_DIR("breath_data/");
 
 using namespace Ms;
 
@@ -50,11 +52,11 @@ void TestBreath::initTestCase()
 
 void TestBreath::breath()
 {
-    QString readFile(DIR + "breath.mscx");
+    QString readFile(BREATH_DATA_DIR + "breath.mscx");
     QString writeFile1("breath01-test.mscx");
-    QString reference1(DIR + "breath01-ref.mscx");
+    QString reference1(BREATH_DATA_DIR + "breath01-ref.mscx");
     QString writeFile2("breath02-test.mscx");
-    QString reference2(DIR + "breath02-ref.mscx");
+    QString reference2(BREATH_DATA_DIR + "breath02-ref.mscx");
 
     MasterScore* score = readScore(readFile);
     score->doLayout();
