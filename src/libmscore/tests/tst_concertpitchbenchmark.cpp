@@ -10,11 +10,11 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
-#include "mtest/testutils.h"
+#include "testing/qtestsuite.h"
+#include "testutils.h"
 #include "libmscore/score.h"
 
-#define DIR QString("libmscore/concertpitch/")
+static const QString CONCERTPITCH_DATA_DIR("concertpitch_data/");
 
 using namespace Ms;
 
@@ -46,7 +46,7 @@ void TestConcertPitchBenchmark::initTestCase()
 
 void TestConcertPitchBenchmark::benchmark()
 {
-    Score* score = readScore(DIR + "concertpitchbenchmark.mscx");
+    Score* score = readScore(CONCERTPITCH_DATA_DIR + "concertpitchbenchmark.mscx");
     QBENCHMARK {
         // switch to concert pitch
         score->cmdConcertPitchChanged(true);
