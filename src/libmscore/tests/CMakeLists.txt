@@ -30,7 +30,8 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/tst_chordsymbol.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_clef.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_clef_courtesy.cpp
-    # ${CMAKE_CURRENT_LIST_DIR}/tst_compat114.cpp #fail
+    # ${CMAKE_CURRENT_LIST_DIR}/tst_compat114.cpp fail
+    # ${CMAKE_CURRENT_LIST_DIR}/tst_compat206.cpp fail
 )
 
 set(MODULE_TEST_LINK
