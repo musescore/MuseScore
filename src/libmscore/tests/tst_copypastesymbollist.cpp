@@ -10,15 +10,18 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
-#include "mtest/testutils.h"
+#include "testing/qtestsuite.h"
+
+#include <QClipboard>
+
+#include "testutils.h"
 #include "libmscore/score.h"
 #include "libmscore/system.h"
 #include "libmscore/measure.h"
 #include "libmscore/chord.h"
 #include "libmscore/xml.h"
 
-#define DIR QString("libmscore/copypastesymbollist/")
+static const QString CPSYMBOLLIST_DATA_DIR("copypastesymbollist_data/");
 
 using namespace Ms;
 
@@ -94,7 +97,7 @@ void TestCopyPasteSymbolList::copypastecommon(MasterScore* score, const char* na
     score->doLayout();
 
     QVERIFY(saveCompareScore(score, QString("copypastesymbollist-%1.mscx").arg(name),
-                             DIR + QString("copypastesymbollist-%1-ref.mscx").arg(name)));
+                             CPSYMBOLLIST_DATA_DIR + QString("copypastesymbollist-%1-ref.mscx").arg(name)));
     delete score;
 }
 
@@ -105,7 +108,7 @@ void TestCopyPasteSymbolList::copypastecommon(MasterScore* score, const char* na
 
 void TestCopyPasteSymbolList::copypaste(const char* name, ElementType type)
 {
-    MasterScore* score = readScore(DIR + QString("copypastesymbollist-%1.mscx").arg(name));
+    MasterScore* score = readScore(CPSYMBOLLIST_DATA_DIR + QString("copypastesymbollist-%1.mscx").arg(name));
     // score->doLayout();
 
     Element* el = Element::create(type, score);
@@ -123,7 +126,7 @@ void TestCopyPasteSymbolList::copypaste(const char* name, ElementType type)
 
 void TestCopyPasteSymbolList::copypastepart(const char* name, ElementType type)
 {
-    MasterScore* score = readScore(DIR + QString("copypastesymbollist-%1.mscx").arg(name));
+    MasterScore* score = readScore(CPSYMBOLLIST_DATA_DIR + QString("copypastesymbollist-%1.mscx").arg(name));
     score->doLayout();
 
     //select all
@@ -145,7 +148,7 @@ void TestCopyPasteSymbolList::copypastepart(const char* name, ElementType type)
 
 void TestCopyPasteSymbolList::copypastedifferentvoice(const char* name, ElementType type)
 {
-    MasterScore* score = readScore(DIR + QString("copypastesymbollist-%1.mscx").arg(name));
+    MasterScore* score = readScore(CPSYMBOLLIST_DATA_DIR + QString("copypastesymbollist-%1.mscx").arg(name));
     score->doLayout();
 
     //select all
