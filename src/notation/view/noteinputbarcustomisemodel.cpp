@@ -61,22 +61,6 @@ NoteInputBarCustomiseModel::NoteInputBarCustomiseModel(QObject* parent)
     });
 }
 
-bool NoteInputBarCustomiseModel::removeRows(int row, int count, const QModelIndex& parent)
-{
-    beginRemoveRows(parent, row, row + count - 1);
-
-    for (int i = row + count - 1; i >= row; --i) {
-        m_actions.removeAt(i);
-    }
-
-    endRemoveRows();
-
-    updateOperationsAvailability();
-    saveActions();
-
-    return true;
-}
-
 bool NoteInputBarCustomiseModel::moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent,
                                           int destinationChild)
 {
@@ -239,17 +223,26 @@ void NoteInputBarCustomiseModel::moveSelectedRowsDown()
 
 void NoteInputBarCustomiseModel::removeSelectedRows()
 {
-    if (!m_selectionModel || !m_selectionModel->hasSelection()) {
+    if (!m_selectionModel->hasSelection()) {
         return;
     }
 
-    QModelIndexList selectedIndexList = m_selectionModel->selectedIndexes();
+    QList<AbstractNoteInputBarItem*> actionsToRemove;
 
-    QModelIndex parentIndex = selectedIndexList.first().parent();
-
-    for (const QModelIndex& selectedIndex : selectedIndexList) {
-        removeRows(selectedIndex.row(), 1, parentIndex);
+    for (const QModelIndex& selectedIndex : m_selectionModel->selectedIndexes()) {
+        actionsToRemove << m_actions[selectedIndex.row()];
     }
+
+    for (AbstractNoteInputBarItem* action : actionsToRemove) {
+        int index = m_actions.indexOf(action);
+
+        beginRemoveRows(QModelIndex(), index, index);
+        m_actions.removeAt(index);
+        endRemoveRows();
+    }
+
+    updateOperationsAvailability();
+    saveActions();
 }
 
 bool NoteInputBarCustomiseModel::isSelected(int row) const
