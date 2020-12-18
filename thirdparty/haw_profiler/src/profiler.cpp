@@ -260,22 +260,22 @@ bool Profiler::save_file(const std::string& path, const std::string& content)
 
 std::string FuncMarker::formatSig(const std::string& sig)
 {
-    static const std::string Colon("::");
-    static const std::string Space(" ");
-    static const std::string ArgBegin("(");
+    static const std::string Coln("::");
+    static const std::string Spc(" ");
+    static const std::string ArgBeg("(");
 
-    std::size_t endFunc = sig.find_first_of(ArgBegin);
+    std::size_t endFunc = sig.find_first_of(ArgBeg);
     if (endFunc == std::string::npos) {
         return sig;
     }
 
-    std::size_t beginFunc = sig.find_last_of(Colon, endFunc);
+    std::size_t beginFunc = sig.find_last_of(Coln, endFunc);
     if (beginFunc == std::string::npos) {
         return sig;
     }
 
-    std::size_t beginClassColon = sig.find_last_of(Colon, beginFunc - 2);
-    std::size_t beginClassSpace = sig.find_last_of(Space, beginFunc - 2);
+    std::size_t beginClassColon = sig.find_last_of(Coln, beginFunc - 2);
+    std::size_t beginClassSpace = sig.find_last_of(Spc, beginFunc - 2);
 
     std::size_t beginClass = std::string::npos;
     if (beginClassColon == std::string::npos) {
@@ -414,7 +414,7 @@ static std::string formatDouble(double val, size_t prec)
 
 void Profiler::Printer::printStep(const std::string& tag, double beginMs, double stepMs, const std::string& info)
 {
-    static const std::string COLON(" : ");
+    static const std::string COLN(" : ");
     static const std::string SEP("/");
     static const std::string MS(" ms: ");
 
@@ -423,7 +423,7 @@ void Profiler::Printer::printStep(const std::string& tag, double beginMs, double
 
     str
     .append(tag)
-    .append(COLON)
+    .append(COLN)
     .append(formatDouble(beginMs, 3))
     .append(SEP)
     .append(formatDouble(stepMs, 3))

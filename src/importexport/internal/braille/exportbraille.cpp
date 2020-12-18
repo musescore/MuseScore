@@ -1569,8 +1569,8 @@ QString ExportBraille::brailleChord(Chord* chord)
     }
 
     QString articulationsBraille = QString();
-    for (Articulation* articulation : chord->articulations()) {
-        articulationsBraille += brailleArticulation(articulation);
+    for (Articulation* artic : chord->articulations()) {
+        articulationsBraille += brailleArticulation(artic);
     }
 
     std::vector<Slur*> chordSlurs = slurs(chord);
@@ -1978,9 +1978,9 @@ QString ExportBraille::brailleTremolo(Chord* chord)
     return QString();
 }
 
-QString ExportBraille::brailleArticulation(Articulation* articulation)
+QString ExportBraille::brailleArticulation(Articulation* artic)
 {
-    switch (articulation->symId()) {
+    switch (artic->symId()) {
     case SymId::articAccentAbove:
     case SymId::articAccentBelow:
         return BRAILLE_ARTIC_ACCENT;
