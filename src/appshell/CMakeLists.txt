@@ -22,8 +22,8 @@ set(MODULE appshell)
 set(MODULE_QRC appshell.qrc)
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 
-include(${CMAKE_CURRENT_LIST_DIR}/dockwindow/dockwindow.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/settings/settings.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/view/dockwindow/dockwindow.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/view/settings/settings.cmake)
 
 set(MODULE_SRC
     ${DOCKWINDOW_SRC}
