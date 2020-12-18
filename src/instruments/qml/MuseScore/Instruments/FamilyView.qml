@@ -28,6 +28,7 @@ Item {
         }
 
         privateProperties.currentGroupIndex = 0
+        groupSelected(root.groups[0].id)
     }
 
     function setFamily(family) {
