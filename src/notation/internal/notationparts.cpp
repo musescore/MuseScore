@@ -137,30 +137,14 @@ void NotationParts::setInstruments(const mu::instruments::InstrumentList& instru
     }
 
     startEdit();
-    removeMissingInstruments(instrumentIds);
-
-    IDList existedInstrumentIds = allInstrumentsIds();
-
-    for (const mu::instruments::Instrument& instrument: instruments) {
-        bool isInstrumentExist = !existedInstrumentIds.isEmpty() && existedInstrumentIds.contains(instrument.id);
-        if (isInstrumentExist) {
-            continue;
-        }
-
-        Part* part = new Part(score());
-
-        part->setPartName(instrument.name);
-        part->setInstrument(InstrumentsConverter::convertInstrument(instrument));
-
-        score()->undo(new Ms::InsertPart(part, lastStaffIndex()));
-        appendStaves(part, instrument);
-    }
+    removeMissingInstruments(instruments);
+    appendNewInstruments(instruments);
 
     if (score()->measures()->empty()) {
         score()->insertMeasure(ElementType::MEASURE, 0, false);
     }
 
-    sortParts(instrumentIds);
+    sortParts(instruments);
 
     removeEmptyExcerpts();
 
@@ -1283,16 +1267,20 @@ void NotationParts::appendStaves(Part* part, const mu::instruments::Instrument& 
     }
 }
 
-void NotationParts::removeMissingInstruments(const IDList& newInstrumentIds)
+void NotationParts::removeMissingInstruments(const InstrumentList& instruments)
 {
     IDList partsToRemove;
+    IDList instrumentIds;
+    for (const mu::instruments::Instrument& instrument : instruments) {
+        instrumentIds << instrument.id;
+    }
 
     for (const Part* part: partList()) {
-        auto partInstruments = instruments(part);
+        auto partInstruments = this->instruments(part);
         IDList instrumentsToRemove;
 
         for (const Ms::Instrument* instrument: partInstruments.values()) {
-            if (!newInstrumentIds.contains(instrument->instrumentId())) {
+            if (!instrumentIds.contains(instrument->instrumentId())) {
                 instrumentsToRemove << instrument->instrumentId();
             }
         }
@@ -1306,6 +1294,62 @@ void NotationParts::removeMissingInstruments(const IDList& newInstrumentIds)
     }
 
     doRemoveParts(partsToRemove);
+}
+
+void NotationParts::appendNewInstruments(const InstrumentList& instruments)
+{
+    IDList instrumentIds;
+    for (const mu::instruments::Instrument& instrument : instruments) {
+        instrumentIds << instrument.id;
+    }
+
+    IDList existedInstrumentIds = allInstrumentsIds();
+    IDList newInstruentIds = instrumentIds;
+    for (const ID& instrumentId: existedInstrumentIds) {
+        newInstruentIds.removeOne(instrumentId);
+    }
+
+    for (const mu::instruments::Instrument& instrument: instruments) {
+        if (!newInstruentIds.contains(instrument.id)) {
+            continue;
+        }
+
+        newInstruentIds.removeOne(instrument.id);
+
+        Part* part = new Part(score());
+
+        part->setPartName(instrument.name);
+        part->setInstrument(InstrumentsConverter::convertInstrument(instrument));
+
+        score()->undo(new Ms::InsertPart(part, lastStaffIndex()));
+        appendStaves(part, instrument);
+    }
+}
+
+void NotationParts::sortParts(const InstrumentList& instruments)
+{
+    Q_ASSERT(score()->parts().size() == static_cast<int>(instruments.size()));
+
+    auto mainInstrumentId = [](const Part* part) {
+                                return part->instrument()->instrumentId();
+                            };
+
+    for (int i = 0; i < instruments.size(); ++i) {
+        const Part* currentPart = score()->parts().at(i);
+
+        if (mainInstrumentId(currentPart) == instruments.at(i).id) {
+            continue;
+        }
+
+        for (int j = i; j < score()->parts().size(); ++j) {
+            const Part* part = score()->parts().at(j);
+
+            if (mainInstrumentId(part) == instruments.at(i).id) {
+                doMovePart(part->id(), currentPart->id());
+                break;
+            }
+        }
+    }
 }
 
 IDList NotationParts::allInstrumentsIds() const
@@ -1357,32 +1401,6 @@ void NotationParts::initStaff(Staff* staff, const mu::instruments::Instrument& i
         staff->setBarLineSpan(instrument.barlineSpan[cleffIndex]);
     }
     staff->setDefaultClefType(instrument.clefs[cleffIndex]);
-}
-
-void NotationParts::sortParts(const IDList& instrumentIds)
-{
-    Q_ASSERT(score()->parts().size() == static_cast<int>(instrumentIds.size()));
-
-    auto mainInstrumentId = [](const Part* part) {
-                                return part->instrument()->instrumentId();
-                            };
-
-    for (int i = 0; i < instrumentIds.size(); ++i) {
-        const Part* currentPart = score()->parts().at(i);
-
-        if (mainInstrumentId(currentPart) == instrumentIds.at(i)) {
-            continue;
-        }
-
-        for (int j = i; j < score()->parts().size(); ++j) {
-            const Part* part = score()->parts().at(j);
-
-            if (mainInstrumentId(part) == instrumentIds.at(i)) {
-                doMovePart(part->id(), currentPart->id());
-                break;
-            }
-        }
-    }
 }
 
 void NotationParts::notifyAboutStaffChanged(const ID& staffId) const
