@@ -10,11 +10,10 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
-
+#include "testing/qtestsuite.h"
+#include "testutils.h"
 #include "libmscore/score.h"
 #include "libmscore/dynamic.h"
-#include "mtest/testutils.h"
 
 using namespace Ms;
 

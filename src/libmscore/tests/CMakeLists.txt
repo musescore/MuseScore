@@ -35,6 +35,8 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/tst_concertpitchbenchmark.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_copypaste.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_copypastesymbollist.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tst_durationtype.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tst_dynamic.cpp
 )
 
 set(MODULE_TEST_LINK
