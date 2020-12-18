@@ -1,5 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Layouts 1.3
+import QtQuick.Controls 2.12
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -34,7 +35,7 @@ Item {
         id: operationsRow
 
         anchors.top: instrumentsLabel.bottom
-        anchors.topMargin: 20
+        anchors.topMargin: 16
         anchors.left: parent.left
         anchors.right: parent.right
 
@@ -84,7 +85,7 @@ Item {
         id: instrumentsView
 
         anchors.top: operationsRow.bottom
-        anchors.topMargin: 20
+        anchors.topMargin: 8
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
@@ -93,6 +94,12 @@ Item {
 
         boundsBehavior: ListView.StopAtBounds
         clip: true
+
+        ScrollBar.vertical: StyledScrollBar {
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+        }
 
         delegate: Item {
             width: parent.width
