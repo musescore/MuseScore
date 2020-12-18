@@ -21,6 +21,9 @@
 
 #include <QQmlEngine>
 
+#include "view/dockwindow/docksetup.h"
+#include "view/settings/settingslistmodel.h"
+
 #include "modularity/ioc.h"
 
 #include "ui/iinteractiveuriregister.h"
