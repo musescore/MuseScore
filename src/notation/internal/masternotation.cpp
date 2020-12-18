@@ -566,7 +566,7 @@ void MasterNotation::initExcerpts()
 {
     ExcerptNotationList excerpts;
 
-    for (Ms::Excerpt* excerpt: Excerpt::createExcerptsFromParts(score()->parts())) {
+    for (Ms::Excerpt* excerpt: Ms::Excerpt::createExcerptsFromParts(score()->parts())) {
         initExcerpt(excerpt);
         excerpts.push_back(std::make_shared<ExcerptNotation>(excerpt));
     }
@@ -580,7 +580,7 @@ void MasterNotation::doSetExcerpts(ExcerptNotationList excerpts)
     static_cast<MasterNotationParts*>(m_parts.get())->setExcerpts(excerpts);
 }
 
-void MasterNotation::initExcerpt(Excerpt* excerpt)
+void MasterNotation::initExcerpt(Ms::Excerpt* excerpt)
 {
     Ms::Score* score = new Ms::Score(masterScore());
     excerpt->setPartScore(score);
@@ -656,7 +656,7 @@ void MasterNotation::updateExcerpts()
 
 IExcerptNotationPtr MasterNotation::createExcerpt(Part* part)
 {
-    Excerpt* excerpt = Excerpt::createExcerptFromPart(part);
+    Ms::Excerpt* excerpt = Ms::Excerpt::createExcerptFromPart(part);
     initExcerpt(excerpt);
 
     return std::make_shared<ExcerptNotation>(excerpt);
