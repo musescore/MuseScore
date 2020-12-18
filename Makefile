@@ -101,6 +101,24 @@ debug:
       make lrelease;                                        \
       make -j ${CPUS};                                      \
 
+
+utests:
+	if test ! -d build.debug; then mkdir build.debug; fi; \
+      cd build.debug;                                       \
+      export PATH=${BINPATH};                               \
+      cmake -DCMAKE_BUILD_TYPE=DEBUG	                    \
+  	  -DCMAKE_INSTALL_PREFIX="${PREFIX}"                  \
+  	  -DMSCORE_INSTALL_SUFFIX="${SUFFIX}"                 \
+  	  -DMUSESCORE_LABEL="${LABEL}"                        \
+  	  -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}"              \
+	  -DBUILD_JACK="${BUILD_JACK}"             	      \
+   	  -DBUILD_WEBENGINE="${BUILD_WEBENGINE}"              \
+   	  -DUSE_SYSTEM_FREETYPE="${USE_SYSTEM_FREETYPE}"      \
+   	  -DBUILD_UNIT_TESTS="${BUILD_UNIT_TESTS}" \
+   	  -DDOWNLOAD_SOUNDFONT=OFF \
+	  ..; \
+      make -j ${CPUS};                                      \
+
 #
 #  win32
 #     cross compile windows package
