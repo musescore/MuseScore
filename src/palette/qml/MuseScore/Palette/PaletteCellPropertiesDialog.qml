@@ -130,7 +130,7 @@ QmlDialog {
                 }
 
                 FlatButton {
-                    text: qsTrc("global", "Ok")
+                    text: qsTrc("global", "OK")
 
                     width: parent.width / 2
 
