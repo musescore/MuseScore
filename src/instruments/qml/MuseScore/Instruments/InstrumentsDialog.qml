@@ -9,6 +9,7 @@ QmlDialog {
 
     property bool canSelectMultipleInstruments: true
     property string currentInstrumentId: ""
+    property string initiallySelectedInstrumentIds: ""
 
     height: 500
     width: root.canSelectMultipleInstruments ? 900 : 600
@@ -30,6 +31,7 @@ QmlDialog {
             anchors.bottom: buttons.top
             anchors.margins: 10
 
+            initiallySelectedInstrumentIds: root.initiallySelectedInstrumentIds
             canSelectMultipleInstruments: root.canSelectMultipleInstruments
             currentInstrumentId: root.currentInstrumentId
         }
