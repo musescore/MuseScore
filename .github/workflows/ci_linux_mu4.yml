@@ -149,4 +149,28 @@ jobs:
       with:
         name: MuseScore_MU4_${{ github.run_id }}
         path: ./build.artifacts/         
-            
+
+  run_tests:
+    runs-on: ubuntu-18.04
+    env:
+        # Enable AddressSanitizer in the mtest build
+        CFLAGS: "-fsanitize=address -fno-omit-frame-pointer"
+        CXXFLAGS: "-fsanitize=address -fno-omit-frame-pointer"
+    steps:
+    - name: Clone repository
+      uses: actions/checkout@v2
+    - name: Setup environment
+      run: |
+        sudo bash ./build/ci/linux/setup.sh
+    - name: Build
+      run: |
+        mkdir -p build.artifacts/env
+        sudo bash ./build/ci/linux/build.sh -n ${{ github.run_id }} --build_mode utests_build
+    - name: Run tests 
+      run: |
+        # At moment build and run tests consume 13.4 Gb of the disk.
+        # After left too little free space.
+        # So, we remove unnecessary tools, for more free space
+        sudo docker system prune -a -f
+        sudo rm -rf /usr/local/lib/android
+        sudo bash ./build/ci/linux/runutests.sh          
