@@ -10,11 +10,13 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
-#include "mtest/testutils.h"
+#include "testing/qtestsuite.h"
+
+#include "testutils.h"
+
 #include "libmscore/score.h"
 
-#define DIR QString("libmscore/compat114/")
+static const QString COMPAT114_DATA_DIR("compat114_data/");
 
 using namespace Ms;
 
@@ -90,9 +92,9 @@ void TestCompat114::compat()
 {
     QFETCH(QString, file);
 
-    QString readFile(DIR + file + ".mscx");
+    QString readFile(COMPAT114_DATA_DIR + file + ".mscx");
     QString writeFile(file + "-test.mscx");
-    QString reference(DIR + file + "-ref.mscx");
+    QString reference(COMPAT114_DATA_DIR + file + "-ref.mscx");
 
     MasterScore* score = readScore(readFile);
     score->doLayout();
