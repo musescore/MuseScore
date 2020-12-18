@@ -10,7 +10,9 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
+#include "testing/qtestsuite.h"
+
+#include "testutils.h"
 
 #include "libmscore/mscore.h"
 #include "libmscore/score.h"
@@ -24,9 +26,8 @@
 #include "libmscore/sym.h"
 #include "libmscore/key.h"
 #include "libmscore/pitchspelling.h"
-#include "mtest/testutils.h"
 
-#define DIR QString("libmscore/durationtype/")
+static const QString DURATIONTYPE_DATA_DIR("durationtype_data/");
 
 using namespace Ms;
 
@@ -63,7 +64,7 @@ void TestDurationType::initTestCase()
 
 void TestDurationType::halfDuration()
 {
-    MasterScore* score = readScore(DIR + "empty.mscx");
+    MasterScore* score = readScore(DURATIONTYPE_DATA_DIR + "empty.mscx");
     score->inputState().setTrack(0);
     score->inputState().setSegment(score->tick2segment(Fraction(0,1), false, SegmentType::ChordRest));
     score->inputState().setDuration(TDuration::DurationType::V_WHOLE);
@@ -93,7 +94,7 @@ void TestDurationType::halfDuration()
 
 void TestDurationType::doubleDuration()
 {
-    MasterScore* score = readScore(DIR + "empty.mscx");
+    MasterScore* score = readScore(DURATIONTYPE_DATA_DIR + "empty.mscx");
     score->inputState().setTrack(0);
     score->inputState().setSegment(score->tick2segment(Fraction(0,1), false, SegmentType::ChordRest));
     score->inputState().setDuration(TDuration::DurationType::V_128TH);
@@ -120,7 +121,7 @@ void TestDurationType::doubleDuration()
 
 void TestDurationType::decDurationDotted()
 {
-    MasterScore* score = readScore(DIR + "empty.mscx");
+    MasterScore* score = readScore(DURATIONTYPE_DATA_DIR + "empty.mscx");
     score->inputState().setTrack(0);
     score->inputState().setSegment(score->tick2segment(Fraction(0,1), false, SegmentType::ChordRest));
     score->inputState().setDuration(TDuration::DurationType::V_WHOLE);
@@ -152,7 +153,7 @@ void TestDurationType::decDurationDotted()
 
 void TestDurationType::incDurationDotted()
 {
-    MasterScore* score = readScore(DIR + "empty.mscx");
+    MasterScore* score = readScore(DURATIONTYPE_DATA_DIR + "empty.mscx");
     score->inputState().setTrack(0);
     score->inputState().setSegment(score->tick2segment(Fraction(0,1), false, SegmentType::ChordRest));
     score->inputState().setDuration(TDuration::DurationType::V_128TH);
