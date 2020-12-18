@@ -10,14 +10,16 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
-#include "mtest/testutils.h"
+#include "testing/qtestsuite.h"
+
+#include "testutils.h"
+
 #include "libmscore/clef.h"
 #include "libmscore/measure.h"
 #include "libmscore/score.h"
 #include "libmscore/undo.h"
 
-#define DIR QString("libmscore/clef_courtesy/")
+static const QString CLEFCOURTESY_DATA_DIR("clef_courtesy_data/");
 
 using namespace Ms;
 
@@ -80,7 +82,7 @@ static void dropClef(Element* m, ClefType t)
 
 void TestClefCourtesy::clef_courtesy01()
 {
-    MasterScore* score = readScore(DIR + "clef_courtesy01.mscx");
+    MasterScore* score = readScore(CLEFCOURTESY_DATA_DIR + "clef_courtesy01.mscx");
 
     // drop G1 clef to 4th measure
     Measure* m1 = getMeasure(score, 4);
@@ -108,7 +110,7 @@ void TestClefCourtesy::clef_courtesy01()
     QVERIFY2(clefCourt, "No courtesy clef element in measure 6.");
     QVERIFY2(clefCourt->bbox().width() == 0, "Courtesy clef in measure 6 is NOT hidden.");
 
-    QVERIFY(saveCompareScore(score, "clef_courtesy01.mscx", DIR + "clef_courtesy01-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "clef_courtesy01.mscx", CLEFCOURTESY_DATA_DIR + "clef_courtesy01-ref.mscx"));
 
     Clef* clef = nullptr;
     seg = m1->findSegment(SegmentType::HeaderClef, m1->tick());
@@ -145,7 +147,7 @@ void TestClefCourtesy::clef_courtesy01()
 
 void TestClefCourtesy::clef_courtesy02()
 {
-    MasterScore* score = readScore(DIR + "clef_courtesy02.mscx");
+    MasterScore* score = readScore(CLEFCOURTESY_DATA_DIR + "clef_courtesy02.mscx");
 
     // 'go' to 4th measure
     Measure* m1 = score->firstMeasure();
@@ -190,7 +192,7 @@ void TestClefCourtesy::clef_courtesy02()
     QVERIFY2(clefCourt != nullptr, "No courtesy clef element in measure 6.");
     QVERIFY2(clefCourt->bbox().width() == 0, "Courtesy clef in measure 6 is NOT hidden.");
 
-    QVERIFY(saveCompareScore(score, "clef_courtesy02.mscx", DIR + "clef_courtesy02-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "clef_courtesy02.mscx", CLEFCOURTESY_DATA_DIR + "clef_courtesy02-ref.mscx"));
     delete score;
 }
 
@@ -203,7 +205,7 @@ void TestClefCourtesy::clef_courtesy02()
 
 void TestClefCourtesy::clef_courtesy03()
 {
-    MasterScore* score = readScore(DIR + "clef_courtesy03.mscx");
+    MasterScore* score = readScore(CLEFCOURTESY_DATA_DIR + "clef_courtesy03.mscx");
 
     Measure* m1 = score->firstMeasure();
     Measure* m2 = m1->nextMeasure();
@@ -225,7 +227,7 @@ void TestClefCourtesy::clef_courtesy03()
     QVERIFY2(clefCourt != nullptr, "No courtesy clef element in measure 1.");
     QVERIFY2(clefCourt->bbox().width() == 0, "Courtesy clef in measure 1 is NOT hidden.");
 
-    QVERIFY(saveCompareScore(score, "clef_courtesy03.mscx", DIR + "clef_courtesy03-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "clef_courtesy03.mscx", CLEFCOURTESY_DATA_DIR + "clef_courtesy03-ref.mscx"));
     delete score;
 }
 
@@ -237,7 +239,7 @@ void TestClefCourtesy::clef_courtesy03()
 
 void TestClefCourtesy::clef_courtesy_78196()
 {
-    MasterScore* score = readScore(DIR + "clef_courtesy_78196.mscx");
+    MasterScore* score = readScore(CLEFCOURTESY_DATA_DIR + "clef_courtesy_78196.mscx");
 
     Measure* m1 = score->firstMeasure();
     Measure* m2 = m1->nextMeasure();
@@ -282,7 +284,7 @@ void TestClefCourtesy::clef_courtesy_78196()
 
 void TestClefCourtesy::clef_courtesy04()
 {
-    MasterScore* score = readScore(DIR + "clef_courtesy04.mscx");
+    MasterScore* score = readScore(CLEFCOURTESY_DATA_DIR + "clef_courtesy04.mscx");
 
     Clef* clef = nullptr;
     Segment* seg = nullptr;
@@ -401,7 +403,7 @@ void TestClefCourtesy::clef_courtesy04()
     score->endCmd();
     QVERIFY2(clef->bbox().width() > 0, "Clef change in measure 8, track 0, is hidden when showCourtesy is true.");
 
-    QVERIFY(saveCompareScore(score, "clef_courtesy04.mscx", DIR + "clef_courtesy04-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "clef_courtesy04.mscx", CLEFCOURTESY_DATA_DIR + "clef_courtesy04-ref.mscx"));
 
     delete score;
 }
