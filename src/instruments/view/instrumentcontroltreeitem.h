@@ -42,6 +42,8 @@ public:
     void setPartId(const QString& id);
 
 private:
+    notation::IDList partsInstrumentIds() const;
+
     QString m_partId;
 };
 }

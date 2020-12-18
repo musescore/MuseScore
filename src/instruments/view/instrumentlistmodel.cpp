@@ -38,7 +38,8 @@ InstrumentListModel::InstrumentListModel(QObject* parent)
 {
 }
 
-void InstrumentListModel::load(bool canSelectMultipleInstruments, const QString& currentInstrumentId)
+void InstrumentListModel::load(bool canSelectMultipleInstruments, const QString& currentInstrumentId,
+                               const QString& selectedInstrumentIds)
 {
     RetValCh<InstrumentsMeta> instrumentsMeta = repository()->instrumentsMeta();
     if (!instrumentsMeta.ret) {
@@ -53,7 +54,8 @@ void InstrumentListModel::load(bool canSelectMultipleInstruments, const QString&
     m_selectedFamilyId = ALL_INSTRUMENTS_ID;
     m_canSelectMultipleInstruments = canSelectMultipleInstruments;
     setInstrumentsMeta(instrumentsMeta.val);
-    initSelectedInstruments();
+
+    initSelectedInstruments(selectedInstrumentIds.split(','));
 
     if (!currentInstrumentId.isEmpty()) {
         InstrumentTemplate instrumentTemplate = this->instrumentTemplate(currentInstrumentId);
@@ -65,28 +67,19 @@ void InstrumentListModel::load(bool canSelectMultipleInstruments, const QString&
     }
 }
 
-void InstrumentListModel::initSelectedInstruments()
+void InstrumentListModel::initSelectedInstruments(const IDList& selectedInstrumentIds)
 {
-    auto notation = context()->currentMasterNotation();
-    if (!notation || !m_canSelectMultipleInstruments) {
-        return;
-    }
-
-    async::NotifyList<const Part*> parts = notation->parts()->partList();
-
-    for (const Part* part: parts) {
-        async::NotifyList<Instrument> selectedInstruments = notation->parts()->instrumentList(part->id());
-
-        for (const Instrument& instrument: selectedInstruments) {
-            if (part->isDoublingInstrument(instrument.id)) {
-                continue;
-            }
-
-            SelectedInstrumentInfo info;
-            info.id = part->id() + instrument.id;
-            info.config = instrument;
-            m_selectedInstruments << info;
+    for (const ID& instrumentId: selectedInstrumentIds) {
+        if (instrumentId.isEmpty()) {
+            continue;
         }
+
+        InstrumentTemplate templ = instrumentTemplate(instrumentId);
+
+        SelectedInstrumentInfo info;
+        info.id = templ.id;
+        info.config = templ.instrument;
+        m_selectedInstruments << info;
     }
 
     emit selectedInstrumentsChanged();

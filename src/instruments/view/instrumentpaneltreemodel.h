@@ -119,6 +119,8 @@ private:
     AbstractInstrumentPanelTreeItem* buildStaffItem(const mu::notation::Staff* staff);
     AbstractInstrumentPanelTreeItem* buildAddStaffControlItem(const QString& partId);
 
+    notation::IDList partsInstrumentIds() const;
+
     AbstractInstrumentPanelTreeItem* m_rootItem = nullptr;
     QItemSelectionModel* m_selectionModel = nullptr;
 
