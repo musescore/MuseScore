@@ -50,7 +50,8 @@ void InstrumentSettingsModel::replaceInstrument()
 
     QStringList params {
         "canSelectMultipleInstruments=false",
-        "currentInstrumentId=" + m_instrumentId
+        "currentInstrumentId=" + m_instrumentId,
+        "selectedInstrumentIds=" + partsInstrumentIds().join(",")
     };
 
     QString uri = QString("musescore://instruments/select?%1").arg(params.join('&'));
@@ -127,4 +128,29 @@ INotationPartsPtr InstrumentSettingsModel::parts() const
     }
 
     return nullptr;
+}
+
+IDList InstrumentSettingsModel::partsInstrumentIds() const
+{
+    auto notationParts = parts();
+    if (!notationParts) {
+        return IDList();
+    }
+
+    async::NotifyList<const Part*> _parts = notationParts->partList();
+
+    IDList result;
+    for (const Part* part: _parts) {
+        async::NotifyList<Instrument> selectedInstruments = notationParts->instrumentList(part->id());
+
+        for (const Instrument& instrument: selectedInstruments) {
+            if (part->isDoublingInstrument(instrument.id)) {
+                continue;
+            }
+
+            result << instrument.id;
+        }
+    }
+
+    return result;
 }

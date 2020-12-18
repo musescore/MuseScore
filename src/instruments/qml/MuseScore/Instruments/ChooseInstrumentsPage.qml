@@ -8,6 +8,7 @@ import MuseScore.Instruments 1.0
 Rectangle {
     id: root
 
+    property string initiallySelectedInstrumentIds: ""
     property bool hasSelectedInstruments: instrumentsModel.selectedInstruments.length > 0
     property bool canSelectMultipleInstruments: true
     property string currentInstrumentId: ""
@@ -30,7 +31,7 @@ Rectangle {
     }
 
     Component.onCompleted: {
-        instrumentsModel.load(canSelectMultipleInstruments, currentInstrumentId)
+        instrumentsModel.load(canSelectMultipleInstruments, currentInstrumentId, initiallySelectedInstrumentIds)
 
         var group = instrumentsModel.selectedGroup()
         familyView.focusGroup(group)
