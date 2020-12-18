@@ -50,17 +50,17 @@ QmlDialog {
             spacing: 20
 
             FlatButton {
-                text: "Ok"
+                text: "Cancel"
                 onClicked: {
-                    root.ret = {errcode: 0, value: input.value }
-                    root.hide()
+                    root.reject()
                 }
             }
 
             FlatButton {
-                text: "Cancel"
+                text: "OK"
                 onClicked: {
-                    root.reject()
+                    root.ret = {errcode: 0, value: input.value }
+                    root.hide()
                 }
             }
         }
