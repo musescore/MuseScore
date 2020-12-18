@@ -37,6 +37,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/tst_copypastesymbollist.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_durationtype.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_dynamic.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tst_earlymusic.cpp
 )
 
 set(MODULE_TEST_LINK

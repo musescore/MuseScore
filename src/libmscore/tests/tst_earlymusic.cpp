@@ -10,15 +10,15 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
-#include "mtest/testutils.h"
+#include "testing/qtestsuite.h"
+#include "testutils.h"
 #include "libmscore/chord.h"
 #include "libmscore/measure.h"
 #include "libmscore/score.h"
 #include "libmscore/style.h"
 #include "libmscore/undo.h"
 
-#define DIR QString("libmscore/earlymusic/")
+static const QString EARLYMUSIC_DATA_DIR("earlymusic_data/");
 
 using namespace Ms;
 
@@ -51,7 +51,7 @@ void TestEarlymusic::initTestCase()
 
 void TestEarlymusic::earlymusic01()
 {
-    MasterScore* score = readScore(DIR + "mensurstrich01.mscx");
+    MasterScore* score = readScore(EARLYMUSIC_DATA_DIR + "mensurstrich01.mscx");
     QVERIFY(score);
     score->doLayout();
 
@@ -87,7 +87,7 @@ void TestEarlymusic::earlymusic01()
     dur   = chord->durationType();
     QVERIFY(dur.type() == TDuration::DurationType::V_LONG);
     // verify score file did not change
-    QVERIFY(saveCompareScore(score, "mensurstrich01.mscx", DIR + "mensurstrich01-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "mensurstrich01.mscx", EARLYMUSIC_DATA_DIR + "mensurstrich01-ref.mscx"));
 
     // UNDO AND VERIFY
     score->undoStack()->undo(&ed);
@@ -99,7 +99,7 @@ void TestEarlymusic::earlymusic01()
     QVERIFY(acDur.type() == TDuration::DurationType::V_BREVE);
     dur   = chord->durationType();
     QVERIFY(dur.type() == TDuration::DurationType::V_BREVE);
-    QVERIFY(saveCompareScore(score, "mensurstrich01.mscx", DIR + "mensurstrich01.mscx"));
+    QVERIFY(saveCompareScore(score, "mensurstrich01.mscx", EARLYMUSIC_DATA_DIR + "mensurstrich01.mscx"));
     delete score;
 }
 
