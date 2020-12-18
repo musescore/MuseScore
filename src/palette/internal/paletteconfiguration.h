@@ -42,6 +42,7 @@ public:
     QColor elementsColor() const override;
     QColor gridColor() const override;
     QColor accentColor() const override;
+    async::Notification colorsChanged() const override;
 
     io::path keySignaturesDirPath() const override;
     io::path timeSignaturesDirPath() const override;

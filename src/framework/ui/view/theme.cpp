@@ -123,7 +123,7 @@ void Theme::update()
 {
     setupWidgetTheme();
 
-    emit themeChanged();
+    notifyAboutThemeChanged();
 }
 
 QColor Theme::backgroundPrimaryColor() const
@@ -261,6 +261,11 @@ qreal Theme::itemOpacityDisabled() const
     return currentThemeProperites().value(ITEM_OPACITY_DISABLED).toReal();
 }
 
+mu::async::Notification Theme::themeChanged()
+{
+    return m_themeChanged;
+}
+
 QHash<int, QVariant> Theme::currentThemeProperites() const
 {
     if (configuration()->themeType() == IUiConfiguration::ThemeType::DARK_THEME) {
@@ -303,15 +308,15 @@ void Theme::initMusicalFont()
 void Theme::setupUiFonts()
 {
     QMap<QFont*, FontConfig> fonts {
-        { &m_bodyFont, { QFont::Normal, FontSizeType::BODY }},
-        { &m_bodyBoldFont, { QFont::DemiBold, FontSizeType::BODY }},
-        { &m_largeBodyFont, { QFont::Normal, FontSizeType::BODY_LARGE }},
-        { &m_largeBodyBoldFont, { QFont::DemiBold, FontSizeType::BODY_LARGE }},
-        { &m_tabFont, { QFont::Normal, FontSizeType::TAB }},
-        { &m_tabBoldFont, { QFont::DemiBold, FontSizeType::TAB }},
-        { &m_headerFont, { QFont::Normal, FontSizeType::HEADER }},
-        { &m_headerBoldFont, { QFont::DemiBold, FontSizeType::HEADER }},
-        { &m_titleBoldFont, { QFont::DemiBold, FontSizeType::TITLE }},
+        { &m_bodyFont, { QFont::Normal, FontSizeType::BODY } },
+        { &m_bodyBoldFont, { QFont::DemiBold, FontSizeType::BODY } },
+        { &m_largeBodyFont, { QFont::Normal, FontSizeType::BODY_LARGE } },
+        { &m_largeBodyBoldFont, { QFont::DemiBold, FontSizeType::BODY_LARGE } },
+        { &m_tabFont, { QFont::Normal, FontSizeType::TAB } },
+        { &m_tabBoldFont, { QFont::DemiBold, FontSizeType::TAB } },
+        { &m_headerFont, { QFont::Normal, FontSizeType::HEADER } },
+        { &m_headerBoldFont, { QFont::DemiBold, FontSizeType::HEADER } },
+        { &m_titleBoldFont, { QFont::DemiBold, FontSizeType::TITLE } },
     };
 
     for (QFont* font : fonts.keys()) {
@@ -357,4 +362,10 @@ void Theme::setupWidgetTheme()
     palette.setColor(QPalette::PlaceholderText, fontPrimaryColor());
 
     QApplication::setPalette(palette);
+}
+
+void Theme::notifyAboutThemeChanged()
+{
+    m_themeChanged.notify();
+    emit dataChanged();
 }

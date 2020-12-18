@@ -19,6 +19,7 @@ DockPage {
         Rectangle {
 
             id: content
+            color: ui.theme.backgroundPrimaryColor
 
             SettingListModel {
                 id: settingsModel
@@ -37,7 +38,7 @@ DockPage {
                 section.delegate: Rectangle {
                     width: parent.width
                     height: 24
-                    color: "#cccccc"
+                    color: ui.theme.backgroundSecondaryColor
                     StyledTextLabel {
                         anchors.fill: parent
                         anchors.margins: 2
@@ -117,7 +118,7 @@ DockPage {
                     signal changed(var newVal)
                     anchors.fill: parent
                     border.width: 1
-                    border.color: "#333333"
+                    border.color: ui.theme.strokeColor
                     TextEdit {
                         anchors.fill: parent
                         anchors.margins: 2

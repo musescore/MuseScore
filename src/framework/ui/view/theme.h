@@ -34,38 +34,38 @@ class Theme : public QObject, public ITheme, public async::Asyncable
 
     INJECT(ui, IUiConfiguration, configuration)
 
-    Q_PROPERTY(QColor backgroundPrimaryColor READ backgroundPrimaryColor NOTIFY themeChanged)
-    Q_PROPERTY(QColor backgroundSecondaryColor READ backgroundSecondaryColor NOTIFY themeChanged)
-    Q_PROPERTY(QColor popupBackgroundColor READ popupBackgroundColor NOTIFY themeChanged)
-    Q_PROPERTY(QColor textFieldColor READ textFieldColor NOTIFY themeChanged)
-    Q_PROPERTY(QColor strokeColor READ strokeColor NOTIFY themeChanged)
-    Q_PROPERTY(QColor accentColor READ accentColor NOTIFY themeChanged)
-    Q_PROPERTY(QColor buttonColor READ buttonColor NOTIFY themeChanged)
-    Q_PROPERTY(QColor fontPrimaryColor READ fontPrimaryColor NOTIFY themeChanged)
-    Q_PROPERTY(QColor fontSecondaryColor READ fontSecondaryColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor backgroundPrimaryColor READ backgroundPrimaryColor NOTIFY dataChanged)
+    Q_PROPERTY(QColor backgroundSecondaryColor READ backgroundSecondaryColor NOTIFY dataChanged)
+    Q_PROPERTY(QColor popupBackgroundColor READ popupBackgroundColor NOTIFY dataChanged)
+    Q_PROPERTY(QColor textFieldColor READ textFieldColor NOTIFY dataChanged)
+    Q_PROPERTY(QColor strokeColor READ strokeColor NOTIFY dataChanged)
+    Q_PROPERTY(QColor accentColor READ accentColor NOTIFY dataChanged)
+    Q_PROPERTY(QColor buttonColor READ buttonColor NOTIFY dataChanged)
+    Q_PROPERTY(QColor fontPrimaryColor READ fontPrimaryColor NOTIFY dataChanged)
+    Q_PROPERTY(QColor fontSecondaryColor READ fontSecondaryColor NOTIFY dataChanged)
 
-    Q_PROPERTY(qreal accentOpacityNormal READ accentOpacityNormal NOTIFY themeChanged)
-    Q_PROPERTY(qreal accentOpacityHit READ accentOpacityHit NOTIFY themeChanged)
-    Q_PROPERTY(qreal accentOpacityHover READ accentOpacityHover NOTIFY themeChanged)
+    Q_PROPERTY(qreal accentOpacityNormal READ accentOpacityNormal NOTIFY dataChanged)
+    Q_PROPERTY(qreal accentOpacityHit READ accentOpacityHit NOTIFY dataChanged)
+    Q_PROPERTY(qreal accentOpacityHover READ accentOpacityHover NOTIFY dataChanged)
 
-    Q_PROPERTY(qreal buttonOpacityNormal READ buttonOpacityNormal NOTIFY themeChanged)
-    Q_PROPERTY(qreal buttonOpacityHover READ buttonOpacityHover NOTIFY themeChanged)
-    Q_PROPERTY(qreal buttonOpacityHit READ buttonOpacityHit NOTIFY themeChanged)
+    Q_PROPERTY(qreal buttonOpacityNormal READ buttonOpacityNormal NOTIFY dataChanged)
+    Q_PROPERTY(qreal buttonOpacityHover READ buttonOpacityHover NOTIFY dataChanged)
+    Q_PROPERTY(qreal buttonOpacityHit READ buttonOpacityHit NOTIFY dataChanged)
 
-    Q_PROPERTY(qreal itemOpacityDisabled READ itemOpacityDisabled NOTIFY themeChanged)
+    Q_PROPERTY(qreal itemOpacityDisabled READ itemOpacityDisabled NOTIFY dataChanged)
 
-    Q_PROPERTY(QFont bodyFont READ bodyFont NOTIFY themeChanged)
-    Q_PROPERTY(QFont bodyBoldFont READ bodyBoldFont NOTIFY themeChanged)
-    Q_PROPERTY(QFont largeBodyFont READ largeBodyFont NOTIFY themeChanged)
-    Q_PROPERTY(QFont largeBodyBoldFont READ largeBodyBoldFont NOTIFY themeChanged)
-    Q_PROPERTY(QFont tabFont READ tabFont NOTIFY themeChanged)
-    Q_PROPERTY(QFont tabBoldFont READ tabBoldFont NOTIFY themeChanged)
-    Q_PROPERTY(QFont headerFont READ headerFont NOTIFY themeChanged)
-    Q_PROPERTY(QFont headerBoldFont READ headerBoldFont NOTIFY themeChanged)
-    Q_PROPERTY(QFont titleBoldFont READ titleBoldFont NOTIFY themeChanged)
+    Q_PROPERTY(QFont bodyFont READ bodyFont NOTIFY dataChanged)
+    Q_PROPERTY(QFont bodyBoldFont READ bodyBoldFont NOTIFY dataChanged)
+    Q_PROPERTY(QFont largeBodyFont READ largeBodyFont NOTIFY dataChanged)
+    Q_PROPERTY(QFont largeBodyBoldFont READ largeBodyBoldFont NOTIFY dataChanged)
+    Q_PROPERTY(QFont tabFont READ tabFont NOTIFY dataChanged)
+    Q_PROPERTY(QFont tabBoldFont READ tabBoldFont NOTIFY dataChanged)
+    Q_PROPERTY(QFont headerFont READ headerFont NOTIFY dataChanged)
+    Q_PROPERTY(QFont headerBoldFont READ headerBoldFont NOTIFY dataChanged)
+    Q_PROPERTY(QFont titleBoldFont READ titleBoldFont NOTIFY dataChanged)
 
-    Q_PROPERTY(QFont iconsFont READ iconsFont NOTIFY themeChanged)
-    Q_PROPERTY(QFont musicalFont READ musicalFont NOTIFY themeChanged)
+    Q_PROPERTY(QFont iconsFont READ iconsFont NOTIFY dataChanged)
+    Q_PROPERTY(QFont musicalFont READ musicalFont NOTIFY dataChanged)
 
 public:
     Theme(QObject* parent = nullptr);
@@ -106,8 +106,10 @@ public:
 
     qreal itemOpacityDisabled() const override;
 
+    async::Notification themeChanged() override;
+
 signals:
-    void themeChanged() override;
+    void dataChanged();
 
 private:
     QHash<int, QVariant> currentThemeProperites() const;
@@ -122,6 +124,8 @@ private:
 
     void setupWidgetTheme();
 
+    void notifyAboutThemeChanged();
+
     QFont m_bodyFont;
     QFont m_bodyBoldFont;
     QFont m_largeBodyFont;
@@ -133,6 +137,8 @@ private:
     QFont m_titleBoldFont;
     QFont m_iconsFont;
     QFont m_musicalFont;
+
+    async::Notification m_themeChanged;
 };
 }
 
