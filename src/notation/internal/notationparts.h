@@ -142,15 +142,16 @@ private:
 
     void appendStaves(Part* part, const instruments::Instrument& instrument);
 
-    void removeMissingInstruments(const IDList& selectedInstrumentIds);
+    void removeMissingInstruments(const instruments::InstrumentList& instruments);
+    void appendNewInstruments(const instruments::InstrumentList& instruments);
+    void sortParts(const instruments::InstrumentList& instruments);
+
     IDList allInstrumentsIds() const;
     int lastStaffIndex() const;
 
     void removeEmptyExcerpts();
 
     void initStaff(Staff* staff, const instruments::Instrument& instrument, const Ms::StaffType* staffType, int cleffIndex);
-
-    void sortParts(const IDList& instrumentIds);
 
     void notifyAboutStaffChanged(const ID& staffId) const;
     void notifyAboutInstrumentsChanged(const ID& partId) const;

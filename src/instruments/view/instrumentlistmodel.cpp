@@ -235,10 +235,6 @@ void InstrumentListModel::selectInstrument(const QString& instrumentId, const QS
     info.transposition = templ.transposition;
     info.config = templ.instrument;
 
-    if (m_selectedInstruments.contains(info)) {
-        return;
-    }
-
     if (!m_canSelectMultipleInstruments) {
         m_selectedInstruments.clear();
     }
