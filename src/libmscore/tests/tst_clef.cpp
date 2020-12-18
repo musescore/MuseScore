@@ -10,13 +10,15 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
-#include "mtest/testutils.h"
+#include "testing/qtestsuite.h"
+
+#include "testutils.h"
+
 #include "libmscore/score.h"
 #include "libmscore/measure.h"
 #include "libmscore/undo.h"
 
-#define DIR QString("libmscore/clef/")
+static const QString CLEF_DATA_DIR("clef_data/");
 
 using namespace Ms;
 
@@ -51,8 +53,8 @@ void TestClef::initTestCase()
 
 void TestClef::clef1()
 {
-    MasterScore* score = readScore(DIR + "clef-1.mscx");
-    QVERIFY(saveCompareScore(score, "clef-1.mscx", DIR + "clef-1-ref.mscx"));
+    MasterScore* score = readScore(CLEF_DATA_DIR + "clef-1.mscx");
+    QVERIFY(saveCompareScore(score, "clef-1.mscx", CLEF_DATA_DIR + "clef-1-ref.mscx"));
     delete score;
 }
 
@@ -63,7 +65,7 @@ void TestClef::clef1()
 
 void TestClef::clef2()
 {
-    MasterScore* score = readScore(DIR + "clef-2.mscx");
+    MasterScore* score = readScore(CLEF_DATA_DIR + "clef-2.mscx");
     Measure* m = score->firstMeasure();
     m = m->nextMeasure();
     m = m->nextMeasure();
@@ -72,7 +74,7 @@ void TestClef::clef2()
     score->cmdAddTimeSig(m, 0, ts, false);
 
     score->doLayout();
-    QVERIFY(saveCompareScore(score, "clef-2.mscx", DIR + "clef-2-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "clef-2.mscx", CLEF_DATA_DIR + "clef-2-ref.mscx"));
     delete score;
 }
 
@@ -83,12 +85,12 @@ void TestClef::clef2()
 
 void TestClef::clef3()
 {
-    MasterScore* score = readScore(DIR + "clef-3.mscx");
+    MasterScore* score = readScore(CLEF_DATA_DIR + "clef-3.mscx");
     Measure* m = score->firstMeasure();
     score->undoChangeClef(score->staff(0), m, ClefType::F);
 
     score->doLayout();
-    QVERIFY(saveCompareScore(score, "clef-3.mscx", DIR + "clef-3-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "clef-3.mscx", CLEF_DATA_DIR + "clef-3-ref.mscx"));
     delete score;
 }
 
