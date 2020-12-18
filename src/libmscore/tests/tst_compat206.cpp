@@ -10,11 +10,11 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
-#include "mtest/testutils.h"
+#include "testing/qtestsuite.h"
+#include "testutils.h"
 #include "libmscore/score.h"
 
-#define DIR QString("libmscore/compat206/")
+static const QString COMPAT206_DATA_DIR("compat206_data/");
 
 using namespace Ms;
 
@@ -63,9 +63,9 @@ void TestCompat206::initTestCase()
 
 void TestCompat206::compat(const QString& file)
 {
-    QString readFile(DIR + file + ".mscx");
+    QString readFile(COMPAT206_DATA_DIR + file + ".mscx");
     QString writeFile(file + "-test.mscx");
-    QString reference(DIR + file + "-ref.mscx");
+    QString reference(COMPAT206_DATA_DIR + file + "-ref.mscx");
 
     MasterScore* score = readScore(readFile);
     QVERIFY(score);
