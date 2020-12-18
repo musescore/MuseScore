@@ -34,6 +34,7 @@ set(MODULE_TEST_SRC
     # ${CMAKE_CURRENT_LIST_DIR}/tst_compat206.cpp fail
     ${CMAKE_CURRENT_LIST_DIR}/tst_concertpitchbenchmark.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_copypaste.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tst_copypastesymbollist.cpp
 )
 
 set(MODULE_TEST_LINK
