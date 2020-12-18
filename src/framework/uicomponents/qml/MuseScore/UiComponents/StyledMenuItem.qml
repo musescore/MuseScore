@@ -7,7 +7,7 @@ import MuseScore.Ui 1.0
 MenuItem {
     id: root
 
-    implicitHeight: 32
+    implicitHeight: 30
     implicitWidth: 220
 
     property var hintIcon: checkable && checked ? IconCode.TICK : undefined

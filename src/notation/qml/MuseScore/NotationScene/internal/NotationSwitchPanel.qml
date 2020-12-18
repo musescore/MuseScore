@@ -7,7 +7,7 @@ import MuseScore.UiComponents 1.0
 Rectangle {
     id: root
 
-    height: 32
+    height: 30
     visible: notationsView.count > 0
     color: ui.theme.backgroundSecondaryColor
 

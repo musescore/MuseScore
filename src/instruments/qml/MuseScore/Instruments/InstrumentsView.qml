@@ -130,7 +130,6 @@ Item {
                 anchors.rightMargin: 4
                 anchors.verticalCenter: parent.verticalCenter
 
-                height: 32
                 width: 72
 
                 textRoleName: "text"
