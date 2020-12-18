@@ -28,6 +28,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/tst_box.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_breath.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_chordsymbol.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tst_clef.cpp
 )
 
 set(MODULE_TEST_LINK
