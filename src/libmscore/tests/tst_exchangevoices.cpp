@@ -10,16 +10,14 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
-
-#include <QtTest/QtTest>
-#include "mtest/testutils.h"
+#include "testing/qtestsuite.h"
+#include "testutils.h"
 #include "libmscore/score.h"
 #include "libmscore/undo.h"
 #include "libmscore/chord.h"
 #include "libmscore/segment.h"
 
-#define DIR QString("libmscore/exchangevoices/")
+static const QString EXCHVOICES_DATA_DIR("exchangevoices_data/");
 
 using namespace Ms;
 
@@ -54,7 +52,7 @@ void TestExchangevoices::initTestCase()
 
 void TestExchangevoices::slurs()
 {
-    QString p1 = DIR + "exchangevoices-slurs.mscx";
+    QString p1 = EXCHVOICES_DATA_DIR + "exchangevoices-slurs.mscx";
     QVERIFY(score);
     Score* score = readScore(p1);
     score->doLayout();
@@ -70,7 +68,7 @@ void TestExchangevoices::slurs()
     score->endCmd();
 
     // compare
-    QVERIFY(saveCompareScore(score, "exchangevoices-slurs.mscx", DIR + "exchangevoices-slurs-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "exchangevoices-slurs.mscx", EXCHVOICES_DATA_DIR + "exchangevoices-slurs-ref.mscx"));
 }
 
 //---------------------------------------------------------
@@ -79,7 +77,7 @@ void TestExchangevoices::slurs()
 
 void TestExchangevoices::glissandi()
 {
-    QString p1 = DIR + "exchangevoices-gliss.mscx";
+    QString p1 = EXCHVOICES_DATA_DIR + "exchangevoices-gliss.mscx";
     QVERIFY(score);
     Score* score = readScore(p1);
     score->doLayout();
@@ -95,7 +93,7 @@ void TestExchangevoices::glissandi()
     score->endCmd();
 
     // compare
-    QVERIFY(saveCompareScore(score, "exchangevoices-gliss.mscx", DIR + "exchangevoices-gliss-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "exchangevoices-gliss.mscx", EXCHVOICES_DATA_DIR + "exchangevoices-gliss-ref.mscx"));
 }
 
 //---------------------------------------------------------
@@ -104,11 +102,11 @@ void TestExchangevoices::glissandi()
 
 void TestExchangevoices::undoChangeVoice()
 {
-    QString readFile(DIR + "undoChangeVoice.mscx");
+    QString readFile(EXCHVOICES_DATA_DIR + "undoChangeVoice.mscx");
     QString writeFile1("undoChangeVoice01-test.mscx");
-    QString reference1(DIR + "undoChangeVoice01-ref.mscx");
+    QString reference1(EXCHVOICES_DATA_DIR + "undoChangeVoice01-ref.mscx");
     QString writeFile2("undoChangeVoice02-test.mscx");
-    QString reference2(DIR + "undoChangeVoice02-ref.mscx");
+    QString reference2(EXCHVOICES_DATA_DIR + "undoChangeVoice02-ref.mscx");
 
     MasterScore* score = readScore(readFile);
     score->doLayout();
