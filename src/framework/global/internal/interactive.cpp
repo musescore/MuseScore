@@ -98,7 +98,7 @@ IInteractive::ButtonData Interactive::buttonData(Button b) const
 {
     switch (b) {
     case IInteractive::Button::NoButton:    return ButtonData(int(b), "");
-    case IInteractive::Button::Ok:          return ButtonData(int(b), trc("ui", "Ok"));
+    case IInteractive::Button::Ok:          return ButtonData(int(b), trc("ui", "OK"));
     case IInteractive::Button::Save:        return ButtonData(int(b), trc("ui", "Save"));
     case IInteractive::Button::SaveAll:     return ButtonData(int(b), trc("ui", "Save All"));
     case IInteractive::Button::Open:        return ButtonData(int(b), trc("ui", "Open"));

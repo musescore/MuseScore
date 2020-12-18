@@ -98,7 +98,7 @@ QmlDialog {
                 }
 
                 FlatButton {
-                    text: qsTrc("global", "Ok")
+                    text: qsTrc("global", "OK")
 
                     onClicked: {
                         root.ret = {errcode: 0, value: content.measuresCount}

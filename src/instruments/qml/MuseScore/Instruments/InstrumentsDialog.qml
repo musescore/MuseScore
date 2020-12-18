@@ -61,7 +61,7 @@ QmlDialog {
             FlatButton {
                 width: buttons.buttonWidth
 
-                text: qsTrc("global", "Ok")
+                text: qsTrc("global", "OK")
 
                 onClicked: {
                     var selectedInstruments = instrumentsPage.selectedInstruments()
