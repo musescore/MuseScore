@@ -169,10 +169,10 @@ void DockWindow::hidePage(DockPage* page)
         widgetsToHide << sw.widget;
     }
 
-    static QWidget* dummy = new QWidget();
+    static QWidget* sDummy = new QWidget();
     for (QWidget* w : widgetsToHide) {
         w->hide();
-        w->setParent(dummy);
+        w->setParent(sDummy);
     }
 
     m_window->update();
