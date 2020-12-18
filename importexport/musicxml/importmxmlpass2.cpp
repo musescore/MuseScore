@@ -423,7 +423,7 @@ static Instrument createInstrument(const MusicXMLDrumInstrument& mxmlInstr)
       }
 
       if (!it) {
-          it = Ms::searchTemplateForTrackName(mxmlInstr.name);
+          it = Ms::searchTemplateForInstrNameList({mxmlInstr.name});
       }
 
       if (!it) {

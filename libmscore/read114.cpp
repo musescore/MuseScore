@@ -2487,6 +2487,12 @@ static void readInstrument(Instrument *i, Part* p, XmlReader& e)
                  e.unknown();
             }
 
+      if (i->instrumentId().isEmpty())
+            i->setInstrumentId(i->recognizeInstrumentId());
+
+      if (program == -1)
+            program = i->recognizeMidiProgram();
+
       if (i->channel().empty()) {      // for backward compatibility
             Channel* a = new Channel;
             a->setName(Channel::DEFAULT_NAME);
@@ -2497,6 +2503,9 @@ static void readInstrument(Instrument *i, Part* p, XmlReader& e)
             a->setReverb(reverb);
             a->setChorus(chorus);
             i->appendChannel(a);
+            }
+      else if (i->channel(0)->program() < 0) {
+            i->channel(0)->setProgram(program);
             }
       if (i->useDrumset()) {
             if (i->channel()[0]->bank() == 0)

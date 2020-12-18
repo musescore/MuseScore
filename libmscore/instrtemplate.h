@@ -126,8 +126,9 @@ extern bool loadInstrumentTemplates(const QString& instrTemplates);
 extern bool saveInstrumentTemplates(const QString& instrTemplates);
 extern InstrumentTemplate* searchTemplate(const QString& name);
 extern InstrumentTemplate* searchTemplateForMusicXmlId(const QString& mxmlId);
-extern InstrumentTemplate* searchTemplateForTrackName(const QString& trackName);
-extern InstrumentTemplate* searchTemplateForMidiProgram(int midiProgram);
+extern InstrumentTemplate* searchTemplateForInstrNameList(const QList<QString>& nameList);
+extern InstrumentTemplate* searchTemplateForMidiProgram(int midiProgram, const bool useDrumKit = false);
+extern InstrumentTemplate* guessTemplateByNameData(const QList<QString>& nameDataList);
 extern ClefType defaultClef(int patch);
 
 }     // namespace Ms
