@@ -23,7 +23,7 @@ using namespace mu::notation;
 using namespace mu::shortcuts;
 using namespace mu::async;
 
-static const mu::Uri NOTAION_PAGE_URI("musescore://notation");
+static const mu::Uri NOTATION_PAGE_URI("musescore://notation");
 
 void GlobalContext::addMasterNotation(const IMasterNotationPtr& notation)
 {
@@ -101,7 +101,7 @@ ShortcutContext GlobalContext::currentShortcutContext() const
 {
     if (playbackController()->isPlaying()) {
         return ShortcutContext::Playing;
-    } else if (interactive()->currentUri().val == NOTAION_PAGE_URI) {
+    } else if (interactive()->currentUri().val == NOTATION_PAGE_URI) {
         return ShortcutContext::NotationActive;
     }
     return ShortcutContext::Undefined;
