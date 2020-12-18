@@ -27,7 +27,7 @@ FocusableItem {
 
     signal clicked
 
-    height: contentWrapper.height + 16
+    height: contentWrapper.height + 14
     width: (Boolean(text) ? Math.max(contentWrapper.width + 32, privateProperties.isVertical ? 132 : 0) : contentWrapper.width + 16)
 
     opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled

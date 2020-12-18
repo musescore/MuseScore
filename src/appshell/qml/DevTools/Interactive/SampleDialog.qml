@@ -30,7 +30,6 @@ QmlDialog {
 
                 property var value: ""
                 width: 150
-                height: 32
                 onCurrentTextEdited: input.value = newTextValue
             }
 

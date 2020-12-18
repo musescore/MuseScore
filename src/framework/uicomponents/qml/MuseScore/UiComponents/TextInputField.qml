@@ -33,7 +33,7 @@ Rectangle {
         valueInput.forceActiveFocus()
     }
 
-    implicitHeight: 32
+    implicitHeight: 30
     implicitWidth: parent.width
 
     color: ui.theme.textFieldColor

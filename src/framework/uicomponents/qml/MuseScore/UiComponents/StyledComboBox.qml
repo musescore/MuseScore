@@ -52,7 +52,7 @@ ComboBox {
 
     displayText: currentIndex === -1 ? "--" : currentText
 
-    implicitHeight: 32
+    implicitHeight: 30
 
     padding: 0
 
@@ -143,7 +143,7 @@ ComboBox {
     }
 
     background: RoundedRectangle {
-        height: parent.height
+        height: root.implicitHeight
         width: contentItem.width
 
         color: ui.theme.buttonColor
@@ -158,8 +158,8 @@ ComboBox {
     indicator: RoundedRectangle {
         id: indicatorCanvas
 
-        height: 32
-        width: 32
+        height: root.implicitHeight
+        width: height
 
         topLeftRadius: 0
         bottomLeftRadius: 0

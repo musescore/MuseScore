@@ -53,9 +53,6 @@ Rectangle {
         anchors.right: parent.right
         anchors.rightMargin: 20
 
-        width: 32
-        height: width
-
         icon: IconCode.CLOSE_X_ROUNDED
 
         normalStateColor: "transparent"

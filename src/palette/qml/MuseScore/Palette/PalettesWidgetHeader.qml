@@ -57,7 +57,6 @@ Item {
 
     FlatButton {
         id: morePalettesButton
-        height: searchTextInput.height
         anchors.left: parent.left
         anchors.right: searchTextButton.left
         anchors.rightMargin: 8
