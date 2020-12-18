@@ -46,6 +46,10 @@ PaletteTreeModel::PaletteTreeModel(PaletteTreePtr tree, QObject* parent)
     connect(this, &QAbstractItemModel::rowsInserted, this, &PaletteTreeModel::setTreeChanged);
     connect(this, &QAbstractItemModel::rowsMoved, this, &PaletteTreeModel::setTreeChanged);
     connect(this, &QAbstractItemModel::rowsRemoved, this, &PaletteTreeModel::setTreeChanged);
+
+    configuration()->colorsChanged().onNotify(this, [this]() {
+            notifyAboutCellsChanged(Qt::DecorationRole);
+        });
 }
 
 //---------------------------------------------------------
@@ -120,6 +124,19 @@ PalettePanel* PaletteTreeModel::iptrToPalettePanel(void* iptr, int* idx)
         return static_cast<PalettePanel*>(iptr);
     }
     return nullptr;
+}
+
+void PaletteTreeModel::notifyAboutCellsChanged(int changedRole)
+{
+    const size_t npalettes = palettes().size();
+    for (size_t row = 0; row < npalettes; ++row) {
+        PalettePanel* palette = palettes()[row].get();
+
+        const QModelIndex parent = index(int(row), 0, QModelIndex());
+        const QModelIndex first = index(0, 0, parent);
+        const QModelIndex last = index(palette->ncells() - 1, 0, parent);
+        emit dataChanged(first, last, { changedRole });
+    }
 }
 
 //---------------------------------------------------------
@@ -880,12 +897,9 @@ void PaletteTreeModel::updateCellsState(const Selection& sel)
                 cell->active = (icon->iconType() == beamIconType);
             }
         }
-
-        const QModelIndex parent = index(int(row), 0, QModelIndex());
-        const QModelIndex first = index(0, 0, parent);
-        const QModelIndex last = index(palette->ncells() - 1, 0, parent);
-        emit dataChanged(first, last, { CellActiveRole });
     }
+
+    notifyAboutCellsChanged(CellActiveRole);
 }
 
 //---------------------------------------------------------

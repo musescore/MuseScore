@@ -66,6 +66,11 @@ QColor PaletteConfiguration::accentColor() const
     return theme()->accentColor();
 }
 
+mu::async::Notification PaletteConfiguration::colorsChanged() const
+{
+    return theme()->themeChanged();
+}
+
 mu::io::path PaletteConfiguration::keySignaturesDirPath() const
 {
     return globalConfiguration()->dataPath() + "/keysigs";

@@ -24,6 +24,7 @@
 #include <QFont>
 
 #include "modularity/imoduleexport.h"
+#include "async/notification.h"
 
 namespace mu::framework {
 class ITheme : MODULE_EXPORT_INTERFACE
@@ -66,7 +67,7 @@ public:
 
     virtual qreal itemOpacityDisabled() const = 0;
 
-    virtual void themeChanged() = 0;
+    virtual async::Notification themeChanged() = 0;
 };
 }
 
