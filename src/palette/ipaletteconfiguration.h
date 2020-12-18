@@ -42,6 +42,7 @@ public:
     virtual QColor elementsColor() const = 0;
     virtual QColor gridColor() const = 0;
     virtual QColor accentColor() const = 0;
+    virtual async::Notification colorsChanged() const = 0;
 
     virtual io::path keySignaturesDirPath() const = 0;
     virtual io::path timeSignaturesDirPath() const = 0;

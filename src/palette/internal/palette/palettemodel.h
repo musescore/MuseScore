@@ -27,6 +27,7 @@
 
 #include "modularity/ioc.h"
 #include "ipaletteconfiguration.h"
+#include "async/asyncable.h"
 
 namespace Ms {
 class Selection;
@@ -92,7 +93,7 @@ public:
 //   PaletteTreeModel
 //---------------------------------------------------------
 
-class PaletteTreeModel : public QAbstractItemModel
+class PaletteTreeModel : public QAbstractItemModel, public mu::async::Asyncable
 {
     Q_OBJECT
 
@@ -127,6 +128,8 @@ private:
     {
         return const_cast<PaletteTreeModel*>(this)->iptrToPalettePanel(iptr, idx);
     }
+
+    void notifyAboutCellsChanged(int changedRole);
 
 private slots:
     void onDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int>& roles);
