@@ -6,9 +6,9 @@ RadioButton {
 
     default property Component contentComponent
 
-    implicitHeight: 32
+    implicitHeight: 30
     implicitWidth: ListView.view ? (ListView.view.width - (ListView.view.spacing * (ListView.view.count - 1))) / ListView.view.count
-                                 : 32
+                                 : 30
 
     spacing: 30
 
