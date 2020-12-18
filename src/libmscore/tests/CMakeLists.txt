@@ -38,6 +38,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/tst_durationtype.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_dynamic.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_earlymusic.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tst_element.cpp
 )
 
 set(MODULE_TEST_LINK
