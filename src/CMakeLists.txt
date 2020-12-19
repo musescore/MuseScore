@@ -24,7 +24,11 @@ add_subdirectory(cloud)
 add_subdirectory(extensions)
 add_subdirectory(languages)
 add_subdirectory(plugins)
+<<<<<<< HEAD
 endif()
+=======
+add_subdirectory(convertor)
+>>>>>>> added comandline module
 
 # Scenes common
 add_subdirectory(commonscene)

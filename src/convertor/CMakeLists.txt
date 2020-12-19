@@ -17,26 +17,15 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-set(MODULE appshell)
+# This is module for convert mscz files to various formats (image, pdf, audio and etc).
+# Main goal - determine what need to do and call necceasers functions.
+# Usually use from command line.
 
-set(MODULE_QRC appshell.qrc)
-set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
-
-include(${CMAKE_CURRENT_LIST_DIR}/view/dockwindow/dockwindow.cmake)
+set(MODULE convertor)
 
 set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/appshellmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/appshellmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/appshell.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/appshell.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/settings/settingslistmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/settings/settingslistmodel.h
-    ${DOCKWINDOW_SRC}
-    )
-
-set(MODULE_LINK
-    uicomponents
-    ui
+    ${CMAKE_CURRENT_LIST_DIR}/convertormodule.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/convertormodule.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
