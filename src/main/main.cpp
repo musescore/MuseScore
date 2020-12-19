@@ -30,6 +30,7 @@
 #include "framework/uicomponents/uicomponentsmodule.h"
 #include "framework/fonts/fontsmodule.h"
 #include "framework/actions/actionsmodule.h"
+#include "framework/commandline/commandlinemodule.h"
 #include "framework/shortcuts/shortcutsmodule.h"
 #include "framework/workspace/workspacemodule.h"
 #include "framework/system/systemmodule.h"
@@ -52,6 +53,8 @@
 #include "inspector/inspectormodule.h"
 #include "playback/playbackmodule.h"
 #include "instruments/instrumentsmodule.h"
+#include "convertor/convertormodule.h"
+
 #ifdef BUILD_VST
 #include "framework/vst/vstmodule.h"
 #endif
@@ -100,6 +103,7 @@ int main(int argc, char** argv)
 
 
     app.addModule(new mu::actions::ActionsModule());
+    app.addModule(new mu::commandline::CommandLineModule());
     app.addModule(new mu::appshell::AppShellModule());
 
     app.addModule(new mu::context::ContextModule());
@@ -120,6 +124,7 @@ int main(int argc, char** argv)
 
     app.addModule(new mu::inspector::InspectorModule());
     app.addModule(new mu::palette::PaletteModule());
+    app.addModule(new mu::convertor::ConvertorModule());
 
 #ifndef Q_OS_WASM
     app.addModule(new mu::importexport::ImportExportModule());
