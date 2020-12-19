@@ -17,13 +17,20 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
+###########################################
 # Setup main application
-include(GetPlatformInfo)
+###########################################
 
+###########################################
 # Common
+###########################################
+
 set(EXECUTABLE_NAME mscore)
 
+###########################################
 # Platform specific
+###########################################
+include(GetPlatformInfo)
 if (OS_IS_WIN)
 
     set(MSCORE_OUTPUT_NAME ${MUSESCORE_NAME}${MUSESCORE_VERSION_MAJOR})
@@ -108,6 +115,17 @@ else()
     message(FATAL_ERROR "Unsopported Platform: ${CMAKE_HOST_SYSTEM_NAME}")
 endif()
 
+###########################################
+# Dependency library declaration
+###########################################
+
+set(FREETYPE_LIB )
+if (USE_SYSTEM_FREETYPE)
+     set(FREETYPE_LIB ${FREETYPE_LIBRARIES})
+else (USE_SYSTEM_FREETYPE)
+     set(FREETYPE_LIB mscore_freetype)
+endif (USE_SYSTEM_FREETYPE)
+
 set(LINK_LIB
     ${FREETYPE_LIB}
     ${QT_LIBRARIES}
@@ -168,13 +186,20 @@ if (CC_IS_EMSCRIPTEN)
     list(APPEND MSCORE_APPEND_SRC $<TARGET_OBJECTS:fluidsynth>)
 endif()
 
+###########################################
+# Executable declaration
+###########################################
+
 add_executable(${EXECUTABLE_NAME}
       ${ICON_RES_FILE}
       main.cpp
-      modulessetup.cpp
-      modulessetup.h
       ${MSCORE_APPEND_SRC}
       )
+
+###########################################
+# Setting target properties
+###########################################
+
 
 # If MSCORE_OUTPUT_NAME is set (e.g, when cmake is called by the user), the output executable will be
 # called MSCORE_OUTPUT_NAME instead of 'mscore'. This can be used to have MuseScore stable and unstable
@@ -197,16 +222,20 @@ endif(CC_IS_MSVC)
 
 if (OS_IS_WASM)
     set_target_properties(mscore PROPERTIES LINK_FLAGS "${EMCC_LINKER_FLAGS}")
-endif()
+endif(OS_IS_WASM)
 
-set(FREETYPE_LIB )
-if (USE_SYSTEM_FREETYPE)
-     set(FREETYPE_LIB ${FREETYPE_LIBRARIES})
-else (USE_SYSTEM_FREETYPE)
-     set(FREETYPE_LIB mscore_freetype)
-endif (USE_SYSTEM_FREETYPE)
+if (MSCORE_OUTPUT_NAME)
+    set(MSCORE_EXECUTABLE_NAME ${MSCORE_OUTPUT_NAME})
+else (MSCORE_OUTPUT_NAME)
+    set(MSCORE_EXECUTABLE_NAME ${EXECUTABLE_NAME})
+endif (MSCORE_OUTPUT_NAME)
+set(MSCORE_EXECUTABLE_NAME "${MSCORE_EXECUTABLE_NAME}" PARENT_SCOPE)
 
 add_dependencies(mscore workspaces)
+
+###########################################
+# Link
+###########################################
 
 if (NOT CC_IS_EMSCRIPTEN)
     target_link_libraries(mscore ${LINK_LIB} )
@@ -224,19 +253,13 @@ else (OS_IS_MAC)
 endif (OS_IS_MAC)
 
 
-if (MSCORE_OUTPUT_NAME)
-    set(MSCORE_EXECUTABLE_NAME ${MSCORE_OUTPUT_NAME})
-else (MSCORE_OUTPUT_NAME)
-    set(MSCORE_EXECUTABLE_NAME ${EXECUTABLE_NAME})
-endif (MSCORE_OUTPUT_NAME)
-set(MSCORE_EXECUTABLE_NAME "${MSCORE_EXECUTABLE_NAME}" PARENT_SCOPE)
+###########################################
+# INSTALL
+###########################################
 
-
-# === INSTALL ===
-
-# ===================
-# ===== Windows =====
-# ===================
+###########################################
+# Windows
+###########################################
 if (OS_IS_WIN)
 
     install(TARGETS ${EXECUTABLE_NAME} RUNTIME DESTINATION bin )
@@ -360,9 +383,9 @@ if (OS_IS_WIN)
         # install( FILES   ${PROJECT_SOURCE_DIR}/assets/xml-icon-48.png RENAME xml_48.png DESTINATION  ${CMAKE_INSTALL_PREFIX}/../AppInfo/FileTypeIcons) # PNG icon for .XML (MusicXML) files
     endif (WIN_PORTABLE)
 
-# =================
-# ===== Linux =====
-# =================
+###########################################
+# Linux
+###########################################
 elseif(OS_IS_LIN)
 
     install(TARGETS ${EXECUTABLE_NAME} RUNTIME DESTINATION bin )
@@ -409,9 +432,9 @@ elseif(OS_IS_LIN)
        DESTINATION share/icons/hicolor/48x48/mimetypes) # PNG icon for .XML (MusicXML) files
     # Note: Must now run "gtk-update-icon-cache" to set the new icons. This is done in the Makefile.
 
-# =================
-# ===== MacOS =====
-# =================
+###########################################
+# MacOS
+###########################################
 elseif(OS_IS_MAC)
 
     install(TARGETS mscore BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX})
@@ -450,9 +473,9 @@ elseif(OS_IS_MAC)
             REGEX ".*QtAudioEngine.*" EXCLUDE
             REGEX ".*_debug\\.dylib" EXCLUDE)
 
-# ================
-# ===== WASM =====
-# ================
+###########################################
+# Wasm
+###########################################
 elseif(OS_IS_WASM)
 
     function(copy_html_js_launch_files target)
@@ -469,10 +492,9 @@ else()
 endif()
 
 
-
-##
-## Miscellaneous Microsoft Visual Studio settings
-##
+#################################################
+# Miscellaneous Microsoft Visual Studio settings
+#################################################
 if (MSVC)
 
    # Force the "install" and "package" targets not to depend on the "all" target.

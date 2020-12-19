@@ -15,7 +15,7 @@ if (CC_IS_GCC)
 
     if (TRY_BUILD_SHARED_LIBS_IN_DEBUG AND BUILD_IS_DEBUG)
         set(BUILD_SHARED_LIBS ON)
-    endif(BUILD_IS_DEBUG)
+    endif()
 
 elseif(CC_IS_MSVC)
     message(STATUS "Using Compiler MSVC ${CMAKE_CXX_COMPILER_VERSION}")
@@ -45,7 +45,7 @@ elseif(CC_IS_MINGW)
 
     if (TRY_BUILD_SHARED_LIBS_IN_DEBUG AND BUILD_IS_DEBUG)
         set(BUILD_SHARED_LIBS ON)
-    endif(BUILD_IS_DEBUG)
+    endif()
 
     # -mno-ms-bitfields see #22048
     set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS} -mno-ms-bitfields")
