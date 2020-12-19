@@ -10,8 +10,8 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
-#include "mtest/testutils.h"
+#include "testing/qtestsuite.h"
+#include "testutils.h"
 #include "libmscore/score.h"
 #include "libmscore/undo.h"
 #include "libmscore/mcursor.h"
@@ -19,8 +19,6 @@
 #include "libmscore/segment.h"
 #include "libmscore/excerpt.h"
 #include "libmscore/part.h"
-
-#define DIR QString("libmscore/links/")
 
 using namespace Ms;
 
