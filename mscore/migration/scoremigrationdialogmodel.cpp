@@ -38,7 +38,7 @@ void ScoreMigrationDialogModel::ignore()
       if (m_shouldNeverAskAgain) {
             Ms::preferences.setPreference(PREF_MIGRATION_APPLY_LELAND_STYLE, false);
             Ms::preferences.setPreference(PREF_MIGRATION_APPLY_EDWIN_STYLE, false);
-            Ms::preferences.setPreference(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS, false);
+            Ms::preferences.setPreference(PREF_MIGRATION_RESET_ELEMENT_POSITIONS, false);
             }
 
       emit closeRequested();
@@ -158,6 +158,6 @@ void ScoreMigrationDialogModel::setUpMigrationPolicy()
       if (m_shouldNeverAskAgain) {
             Ms::preferences.setPreference(PREF_MIGRATION_APPLY_LELAND_STYLE, m_isLelandAllowed);
             Ms::preferences.setPreference(PREF_MIGRATION_APPLY_EDWIN_STYLE, m_isEdwinAllowed);
-            Ms::preferences.setPreference(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS, m_isAutomaticPlacementAllowed);
+            Ms::preferences.setPreference(PREF_MIGRATION_RESET_ELEMENT_POSITIONS, m_isAutomaticPlacementAllowed);
             }
       }

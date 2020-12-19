@@ -370,34 +370,9 @@ void PreferenceDialog::start()
                   new IntPreferenceItem(PREF_IO_MIDI_SHORTESTNOTE, shortestNote,
                                           [this]() { applyShortestNote();  },  // apply function
                                           [this]() { updateShortestNote(); }), // update function
-                  new BoolPreferenceItem(PREF_MIGRATION_DO_NOT_ASK_ME_AGAIN, scoreMigrationEnabled),
-                  new StringPreferenceItem(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS, resetElementPositionsAlwaysAsk,
-                                          [this]() { // apply function
-                                                if (resetElementPositionsAlwaysAsk->isChecked())
-                                                      preferences.setPreference(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS, "Ask");
-                                                },
-                                          [this]() { // update function
-                                                QString resPref = preferences.getString(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS);
-                                                resetElementPositionsAlwaysAsk->setChecked(resPref != "Yes" && resPref != "No");
-                                                }),
-                  new StringPreferenceItem(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS, resetElementPositionsYes,
-                                          [this]() { // apply function
-                                                if (resetElementPositionsYes->isChecked())
-                                                      preferences.setPreference(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS, "Yes");
-                                                },
-                                          [this]() { // update function
-                                                QString resPref = preferences.getString(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS);
-                                                resetElementPositionsYes->setChecked(resPref == "Yes");
-                                                }),
-                  new StringPreferenceItem(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS, resetElementPositionsNo,
-                                          [this]() { // apply function
-                                                if (resetElementPositionsNo->isChecked())
-                                                      preferences.setPreference(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS, "No");
-                                                },
-                                          [this]() { // update function
-                                                QString resPref = preferences.getString(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS);
-                                                resetElementPositionsNo->setChecked(resPref == "No");
-                                                }),
+                  new BoolPreferenceItem(PREF_MIGRATION_DO_NOT_ASK_ME_AGAIN, scoreMigrationEnabled,
+                                          [this]() { preferences.setPreference(PREF_MIGRATION_DO_NOT_ASK_ME_AGAIN, !scoreMigrationEnabled->isChecked()); }, // apply function
+                                          [this]() { scoreMigrationEnabled->setChecked(!preferences.getBool(PREF_MIGRATION_DO_NOT_ASK_ME_AGAIN)); }), // update function
                   new StringPreferenceItem(PREF_UI_APP_LANGUAGE, language, [&](){ languageApply(); }, [&](){ languageUpdate(); }),
                   new CustomPreferenceItem(PREF_APP_STARTUP_SESSIONSTART, lastSession,
                                           [this]() { // apply function
