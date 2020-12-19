@@ -52,8 +52,11 @@
 #include "inspector/inspectormodule.h"
 #include "playback/playbackmodule.h"
 #include "instruments/instrumentsmodule.h"
+<<<<<<< HEAD
 #include "converter/convertermodule.h"
 
+=======
+>>>>>>> added parce and apply command line options
 #ifdef BUILD_VST
 #include "framework/vst/vstmodule.h"
 #endif
@@ -122,7 +125,10 @@ int main(int argc, char** argv)
 
     app.addModule(new mu::inspector::InspectorModule());
     app.addModule(new mu::palette::PaletteModule());
+<<<<<<< HEAD
     app.addModule(new mu::converter::ConverterModule());
+=======
+>>>>>>> added parce and apply command line options
 
 #ifndef Q_OS_WASM
     app.addModule(new mu::importexport::ImportExportModule());

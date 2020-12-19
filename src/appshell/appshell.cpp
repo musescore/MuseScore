@@ -29,11 +29,14 @@
 #include "version.h"
 #include "config.h"
 
+    << << << < HEAD
 #include "commandlinecontroller.h"
 
+==
+== ===>> >> >> > added parce and apply command line options
 #include "framework/global/globalmodule.h"
 
-using namespace mu::appshell;
+       using namespace mu::appshell;
 
 //! NOTE Separately to initialize logger and profiler as early as possible
 static mu::framework::GlobalModule globalModule;
@@ -199,4 +202,36 @@ int AppShell::processConverter(const CommandLineController::ConverterTask& task)
     }
 
     return ret.code();
+}
+
+void AppShell::parseCommandLineArguments(QCommandLineParser& parser) const
+{
+    parser.addHelpOption(); // -?, -h, --help
+    parser.addVersionOption(); // -v, --version
+
+    parser.addOption(QCommandLineOption({ "j", "job" }, "Process a conversion job", "file"));
+    //! NOTE Here will be added others options
+
+    parser.process(QCoreApplication::arguments());
+}
+
+void AppShell::applyCommandLineArguments(QCommandLineParser& parser)
+{
+    QStringList options = parser.optionNames();
+    qDebug() << "options: " << options;
+
+    for (const QString& opt : options) {
+        ICommandLineHandlerPtr h = clregister()->handler(opt.toStdString());
+        if (h) {
+            ICommandLineHandler::Values hvals;
+            QStringList values = parser.values(opt);
+            for (const QString& v : values) {
+                hvals.push_back(v.toStdString());
+            }
+
+            h->exec(hvals);
+        } else {
+            LOGW() << "Not found command line handler for option: " << opt;
+        }
+    }
 }
