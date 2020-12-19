@@ -20,42 +20,51 @@
 
 #include "log.h"
 
-using namespace mu::appshell;
+using namespace mu::commandline;
 
-CommandLineRegister::CommandLineRegister()
-{
-}
 
-bool CommandLineRegister::reg(const ICommandLineControllerPtr& h)
+mu::Ret CommandLineRegister::apply(const std::string& opt, const CommandLineValues& vals)
 {
-    IF_ASSERT_FAILED(h) {
-        return false;
+    auto found = m_handlers.find(opt);
+    if (found == m_handlers.end()) {
+        return make_ret(Ret::Code::UnknownError, "not found handler");
     }
 
-    IF_ASSERT_FAILED(handler(h->option()) == nullptr) {
-        return false;
-    }
-
-    m_handlers.push_back(h);
-    return true;
+    Handler& h = found->second;
+    h.callback(vals);
+    return make_ret(Ret::Code::Ok);
 }
 
-ICommandLineControllerPtr CommandLineRegister::handler(const ICommandLineController::Option& opt) const
+void CommandLineRegister::reg(ICommandLineHandler* handler, const CommandLineOption& opt, const CallBackWithVals& call)
 {
-    for (const ICommandLineControllerPtr& h : m_handlers) {
-        if (h->option() == opt) {
-            return h;
+    for (const std::string& op : opt) {
+        doReg(handler, op, call);
+    }
+}
+
+void CommandLineRegister::doReg(ICommandLineHandler* handler, const std::string& opt, const CallBackWithVals& call)
+{
+    auto found = m_handlers.find(opt);
+    IF_ASSERT_FAILED(found == m_handlers.end()) {
+        return;
+    }
+
+    Handler h;
+    h.h = handler;
+    h.callback = call;
+    m_handlers.insert({opt, h});
+}
+
+void CommandLineRegister::unReg(ICommandLineHandler* handler)
+{
+    std::list<std::string> opts;
+    for (auto const& it : m_handlers) {
+        if (it.second.h == handler) {
+            opts.push_back(it.first);
         }
     }
-    return nullptr;
-}
 
-ICommandLineControllerPtr CommandLineRegister::handler(const std::string& opt) const
-{
-    for (const ICommandLineControllerPtr& h : m_handlers) {
-        if (h->option() == opt) {
-            return h;
-        }
+    for (const std::string& opt : opts) {
+        m_handlers.erase(opt);
     }
-    return nullptr;
 }

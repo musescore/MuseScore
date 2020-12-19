@@ -20,8 +20,10 @@
 #define MU_COMMANDLINE_ICOMMANDLINEREGISTER_H
 
 #include <memory>
+#include <functional>
 #include "modularity/imoduleexport.h"
 #include "icommandlinehandler.h"
+#include "ret.h"
 
 namespace mu::commandline {
 class ICommandLineRegister : MODULE_EXPORT_INTERFACE
@@ -31,12 +33,24 @@ class ICommandLineRegister : MODULE_EXPORT_INTERFACE
 public:
     virtual ~ICommandLineRegister() = default;
 
-    virtual bool reg(const ICommandLineControllerPtr& h) = 0;
-    virtual bool reg(const ICommandLineController::Option& opt, const std::function<void()>& f) = 0;
-    virtual bool reg(const ICommandLineController::Option& opt, const std::function<void(const ICommandLineHandler::Values& vals)>& f) = 0;
+    using CallBack = std::function<void ()>;
+    using CallBackWithVal = std::function<void (const CommandLineValue&)>;
+    using CallBackWithVals = std::function<void (const CommandLineValues&)>;
 
-    virtual ICommandLineControllerPtr handler(const ICommandLineController::Option& opt) const = 0;
-    virtual ICommandLineControllerPtr handler(const std::string& opt) const = 0;
+    virtual Ret apply(const std::string& opt, const CommandLineValues& vals) = 0;
+
+    virtual void unReg(ICommandLineHandler* handler) = 0;
+    virtual void reg(ICommandLineHandler* handler, const CommandLineOption& opt, const CallBackWithVals& call) = 0;
+
+    void reg(ICommandLineHandler* handler, const CommandLineOption& opt, const CallBackWithVal& call)
+    {
+        reg(handler, opt, [call](const CommandLineValues& vals) { call(!vals.empty() ? vals.front() : CommandLineValue()); });
+    }
+
+    void reg(ICommandLineHandler* handler, const CommandLineOption& opt, const CallBack& call)
+    {
+        reg(handler, opt, [call](const CommandLineValues&) { call(); });
+    }
 };
 }
 
