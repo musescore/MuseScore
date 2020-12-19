@@ -10,15 +10,16 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
-#include "mtest/testutils.h"
+#include "testing/qtestsuite.h"
+
+#include "testutils.h"
 #include "libmscore/score.h"
 #include "libmscore/measure.h"
 #include "libmscore/segment.h"
 #include "libmscore/chordrest.h"
 #include "libmscore/chord.h"
 
-#define DIR QString("libmscore/join/")
+static const QString JOIN_DATA_DIR("join_data/");
 
 using namespace Ms;
 
@@ -61,7 +62,7 @@ void TestJoin::initTestCase()
 
 void TestJoin::join(const char* p1, const char* p2)
 {
-    MasterScore* score = readScore(DIR + p1);
+    MasterScore* score = readScore(JOIN_DATA_DIR + p1);
     Measure* m1 = score->firstMeasure();
     Measure* m2 = m1->nextMeasure();
 
@@ -71,13 +72,13 @@ void TestJoin::join(const char* p1, const char* p2)
 
     score->cmdJoinMeasure(m1, m2);
 
-    QVERIFY(saveCompareScore(score, p1, DIR + p2));
+    QVERIFY(saveCompareScore(score, p1, JOIN_DATA_DIR + p2));
     delete score;
 }
 
 void TestJoin::join(const char* p1, const char* p2, int index)
 {
-    MasterScore* score = readScore(DIR + p1);
+    MasterScore* score = readScore(JOIN_DATA_DIR + p1);
     Measure* m1 = score->firstMeasure();
     for (int i = 0; i < index; ++i) {
         m1 = m1->nextMeasure();
@@ -90,13 +91,13 @@ void TestJoin::join(const char* p1, const char* p2, int index)
 
     score->cmdJoinMeasure(m1, m2);
 
-    QVERIFY(saveCompareScore(score, p1, DIR + p2));
+    QVERIFY(saveCompareScore(score, p1, JOIN_DATA_DIR + p2));
     delete score;
 }
 
 void TestJoin::join1(const char* p1)
 {
-    MasterScore* score = readScore(DIR + p1);
+    MasterScore* score = readScore(JOIN_DATA_DIR + p1);
     Measure* m1 = score->firstMeasure();
     Measure* m2 = m1->nextMeasure();
 
