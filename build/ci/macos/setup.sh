@@ -16,6 +16,9 @@ rm bottles/freetype* | $SKIP_ERR_FLAG
 
 brew update >/dev/null | $SKIP_ERR_FLAG
 
+# fixing install python 3.9 error (it is a dependency for JACK)
+rm '/usr/local/bin/2to3'
+
 # additional dependencies
 brew install jack lame
 
