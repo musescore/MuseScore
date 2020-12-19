@@ -10,14 +10,14 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
-#include "mtest/testutils.h"
+#include "testing/qtestsuite.h"
+#include "testutils.h"
 #include "libmscore/score.h"
 #include "libmscore/measure.h"
 #include "libmscore/staff.h"
-#include "mscore/preferences.h"
 
-#define DIR QString("libmscore/midimapping/")
+static const QString MIDIMAPPING_DATA_DIR("midimapping_data/");
+
 namespace Ms {
 extern Score::FileError importMidi(MasterScore*, const QString&);
 }
@@ -83,11 +83,11 @@ void TestMidiMapping::initTestCase()
 
 void TestMidiMapping::testReadWrite(const char* f1)
 {
-    MasterScore* score = readScore(DIR + f1);
+    MasterScore* score = readScore(MIDIMAPPING_DATA_DIR + f1);
     score->doLayout();
     QVERIFY(score);
     score->rebuildMidiMapping();
-    QVERIFY(saveCompareScore(score, f1, DIR + QString(f1)));
+    QVERIFY(saveCompareScore(score, f1, MIDIMAPPING_DATA_DIR + QString(f1)));
     delete score;
 }
 
@@ -98,13 +98,13 @@ void TestMidiMapping::testReadWrite(const char* f1)
 
 void TestMidiMapping::testReadChangeWrite(const char* f1, const char* ref, int p)
 {
-    MasterScore* score = readScore(DIR + f1 + QString(".mscx"));
+    MasterScore* score = readScore(MIDIMAPPING_DATA_DIR + f1 + QString(".mscx"));
     score->doLayout();
     QVERIFY(score);
     score->rebuildMidiMapping();
     score->cmdRemovePart(score->parts()[p]);
     score->rebuildMidiMapping();
-    QVERIFY(saveCompareScore(score, f1 + QString("_changed.mscx"), DIR + ref));
+    QVERIFY(saveCompareScore(score, f1 + QString("_changed.mscx"), MIDIMAPPING_DATA_DIR + ref));
     delete score;
 }
 
@@ -115,7 +115,7 @@ void TestMidiMapping::testReadChangeWrite(const char* f1, const char* ref, int p
 
 void TestMidiMapping::testReadChangeWrite2(const char* f1, const char* ref)
 {
-    MasterScore* score = readScore(DIR + f1 + QString(".mscx"));
+    MasterScore* score = readScore(MIDIMAPPING_DATA_DIR + f1 + QString(".mscx"));
     score->doLayout();
     QVERIFY(score);
     score->rebuildMidiMapping();
@@ -125,7 +125,7 @@ void TestMidiMapping::testReadChangeWrite2(const char* f1, const char* ref)
     }
     score->deleteItem(static_cast<Measure*>(mb));
     score->rebuildMidiMapping();
-    QVERIFY(saveCompareScore(score, f1 + QString("_changed.mscx"), DIR + ref));
+    QVERIFY(saveCompareScore(score, f1 + QString("_changed.mscx"), MIDIMAPPING_DATA_DIR + ref));
     delete score;
 }
 
@@ -136,7 +136,7 @@ void TestMidiMapping::testReadChangeWrite2(const char* f1, const char* ref)
 
 void TestMidiMapping::testReadChangeOrderWrite(const char* f1, const char* ref, int p1, int p2)
 {
-    MasterScore* score = readScore(DIR + f1 + QString(".mscx"));
+    MasterScore* score = readScore(MIDIMAPPING_DATA_DIR + f1 + QString(".mscx"));
     score->doLayout();
     QVERIFY(score);
     score->rebuildMidiMapping();
@@ -157,7 +157,7 @@ void TestMidiMapping::testReadChangeOrderWrite(const char* f1, const char* ref, 
     dl.swap(p1, p2);
     score->sortStaves(dl);
     score->rebuildMidiMapping();
-    QVERIFY(saveCompareScore(score, f1 + QString("_changed3.mscx"), DIR + ref));
+    QVERIFY(saveCompareScore(score, f1 + QString("_changed3.mscx"), MIDIMAPPING_DATA_DIR + ref));
     delete score;
 }
 
@@ -173,12 +173,12 @@ void TestMidiMapping::testReadWriteMusicXML(const char* file, const char* ref)
                                                           MusicxmlExportBreaks::MANUAL);
     preferences.setPreference(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, false);
     preferences.setPreference(PREF_IMPORT_MUSICXML_IMPORTBREAKS, true);
-    MasterScore* score = readScore(DIR + file + ".xml");
+    MasterScore* score = readScore(MIDIMAPPING_DATA_DIR + file + ".xml");
     QVERIFY(score);
     score->rebuildMidiMapping();
     score->doLayout();
     QVERIFY(saveMusicXml(score, QString(file) + ".xml"));
-    QVERIFY(saveCompareMusicXmlScore(score, QString(file) + ".xml", DIR + ref + ".xml"));
+    QVERIFY(saveCompareMusicXmlScore(score, QString(file) + ".xml", MIDIMAPPING_DATA_DIR + ref + ".xml"));
     delete score;
 }
 
@@ -194,15 +194,15 @@ void TestMidiMapping::testReadWriteOther(const char* f1, const char* ref)
 
     if (qf.suffix() == "mid") {
         score = new MasterScore(mscore->baseStyle());
-        QString fullPath = QString(root + "/" + DIR + f1);
+        QString fullPath = QString(root + "/" + MIDIMAPPING_DATA_DIR + f1);
         QCOMPARE(importMidi(score,  fullPath), Score::FileError::FILE_NO_ERROR);
     } else {
-        score = readScore(DIR + f1);
+        score = readScore(MIDIMAPPING_DATA_DIR + f1);
     }
     score->doLayout();
     QVERIFY(score);
     score->rebuildMidiMapping();
-    QVERIFY(saveCompareScore(score, qf.completeBaseName() + QString(".mscx"), DIR + ref));
+    QVERIFY(saveCompareScore(score, qf.completeBaseName() + QString(".mscx"), MIDIMAPPING_DATA_DIR + ref));
     delete score;
 }
 
