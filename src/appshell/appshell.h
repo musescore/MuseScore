@@ -20,11 +20,12 @@
 #ifndef MU_APPSHELL_APPSHELL_H
 #define MU_APPSHELL_APPSHELL_H
 
-#include <vector>
+#include <QList>
+#include <QMap>
 
 #include "modularity/imodulesetup.h"
 #include "modularity/ioc.h"
-#include "icommandlineregister.h"
+#include "framework/commandline/icommandlineregister.h"
 
 class QCommandLineParser;
 
@@ -32,7 +33,7 @@ namespace mu {
 namespace appshell {
 class AppShell
 {
-    INJECT(appshell, ICommandLineRegister, clregister)
+    INJECT(appshell, commandline::ICommandLineRegister, commandlineRegister)
 public:
     AppShell();
 
@@ -41,10 +42,21 @@ public:
     int run(int argc, char** argv);
 
 private:
-    void parseCommandLineArguments(QCommandLineParser& parser) const;
+
+    enum class RunMode {
+        Gui,
+        Concole
+    };
+
+    void parseCommandLineArguments(QCommandLineParser& parser);
     void applyCommandLineArguments(QCommandLineParser& parser);
 
-    std::vector<mu::framework::IModuleSetup*> m_modules;
+    RunMode runMode(const QStringList &options) const;
+
+    QList<mu::framework::IModuleSetup*> m_modules;
+
+    QList<QString> m_consoleRunModeOptions;
+
 };
 }
 }

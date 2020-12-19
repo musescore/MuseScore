@@ -19,9 +19,13 @@
 #include "convertormodule.h"
 
 #include "modularity/ioc.h"
-#include "appshell/icommandlineregister.h"
+#include "commandline/icommandlineregister.h"
+
+#include "internal/convertorcommandlinecontroller.h"
 
 using namespace mu::convertor;
+
+static ConvertorCommandLineController s_clcontroller;
 
 std::string ConvertorModule::moduleName() const
 {
@@ -30,7 +34,5 @@ std::string ConvertorModule::moduleName() const
 
 void ConvertorModule::resolveImports()
 {
-    auto cr = framework::ioc()->resolve<appshell::ICommandLineRegister>(moduleName());
-    if (cr) {
-    }
+    s_clcontroller.setup();
 }

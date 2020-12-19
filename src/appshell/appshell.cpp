@@ -95,6 +95,10 @@ int AppShell::run(int argc, char** argv)
     // ====================================================
     QCommandLineParser parser;
     parseCommandLineArguments(parser);
+
+    int retCode = 0;
+    RunMode mode = runMode(parser.optionNames());
+
     applyCommandLineArguments(parser);
 
     // ====================================================
@@ -107,55 +111,61 @@ int AppShell::run(int argc, char** argv)
     // ====================================================
     // Setup Qml Engine
     // ====================================================
-    QQmlApplicationEngine* engine = new QQmlApplicationEngine();
-    //! NOTE Move ownership to UiEngine
-    framework::UiEngine::instance()->moveQQmlEngine(engine);
+    if (RunMode::Gui == mode) {
+        QQmlApplicationEngine* engine = new QQmlApplicationEngine();
+        //! NOTE Move ownership to UiEngine
+        framework::UiEngine::instance()->moveQQmlEngine(engine);
 
 #ifdef QML_LOAD_FROM_SOURCE
-    const QUrl url(QString(appshell_QML_IMPORT) + "/Main.qml");
+        const QUrl url(QString(appshell_QML_IMPORT) + "/Main.qml");
 #else
-    const QUrl url(QStringLiteral("qrc:/qml/Main.qml"));
+        const QUrl url(QStringLiteral("qrc:/qml/Main.qml"));
 #endif
 
-    QObject::connect(engine, &QQmlApplicationEngine::objectCreated,
-                     &app, [url](QObject* obj, const QUrl& objUrl) {
-        if (!obj && url == objUrl) {
-            LOGE() << "failed Qml load\n";
-            QCoreApplication::exit(-1);
-        }
-    }, Qt::QueuedConnection);
+        QObject::connect(engine, &QQmlApplicationEngine::objectCreated,
+                         &app, [url](QObject* obj, const QUrl& objUrl) {
+            if (!obj && url == objUrl) {
+                LOGE() << "failed Qml load\n";
+                QCoreApplication::exit(-1);
+            }
+        }, Qt::QueuedConnection);
 
-    QObject::connect(engine, &QQmlEngine::warnings, [](const QList<QQmlError>& warnings) {
-        for (const QQmlError& e : warnings) {
-            LOGE() << "error: " << e.toString().toStdString() << "\n";
-        }
-    });
+        QObject::connect(engine, &QQmlEngine::warnings, [](const QList<QQmlError>& warnings) {
+            for (const QQmlError& e : warnings) {
+                LOGE() << "error: " << e.toString().toStdString() << "\n";
+            }
+        });
+
+        // ====================================================
+        // Load Main qml
+        // ====================================================
+        engine->load(url);
+
+        // ====================================================
+        // Setup modules: onStartApp (on next event loop)
+        // ====================================================
+        QMetaObject::invokeMethod(qApp, [this]() {
+            globalModule.onStartApp();
+            for (mu::framework::IModuleSetup* m : m_modules) {
+                m->onStartApp();
+            }
+        }, Qt::QueuedConnection);
+
+        // ====================================================
+        // Run main loop
+        // ====================================================
+        retCode = app.exec();
+
+        // ====================================================
+        // Qml Engine quit
+        // ====================================================
+        framework::UiEngine::instance()->quit();
+
+    }
 
     // ====================================================
-    // Load Main qml
+    // Deinit
     // ====================================================
-    engine->load(url);
-
-    // ====================================================
-    // Setup modules: onStartApp (on next event loop)
-    // ====================================================
-    QMetaObject::invokeMethod(qApp, [this]() {
-        globalModule.onStartApp();
-        for (mu::framework::IModuleSetup* m : m_modules) {
-            m->onStartApp();
-        }
-    }, Qt::QueuedConnection);
-
-    // ====================================================
-    // Run main loop
-    // ====================================================
-    int code = app.exec();
-
-    // ====================================================
-    // Quit and deinit
-    // ====================================================
-    framework::UiEngine::instance()->quit();
-
     for (mu::framework::IModuleSetup* m : m_modules) {
         m->onDeinit();
     }
@@ -164,15 +174,36 @@ int AppShell::run(int argc, char** argv)
 
     globalModule.onDeinit();
 
-    return code;
+    return retCode;
 }
 
-void AppShell::parseCommandLineArguments(QCommandLineParser& parser) const
+AppShell::RunMode AppShell::runMode(const QStringList& options) const
+{
+    for (const QString& opt : options) {
+        if (m_consoleRunModeOptions.contains(opt)) {
+            return RunMode::Concole;
+        }
+    }
+    return RunMode::Gui;
+}
+
+void AppShell::parseCommandLineArguments(QCommandLineParser& parser)
 {
     parser.addHelpOption(); // -?, -h, --help
     parser.addVersionOption(); // -v, --version
 
-    parser.addOption(QCommandLineOption({ "j", "job" }, "Process a conversion job", "file"));
+    auto addGuiOption = [&parser, this](const QCommandLineOption& opt) {
+        parser.addOption(opt);
+    };
+
+    auto addConsoleOption = [&parser, this](const QCommandLineOption& opt) {
+        parser.addOption(opt);
+        for(const QString& name : opt.names()) {
+            m_consoleRunModeOptions << name;
+        }
+    };
+
+    addConsoleOption(QCommandLineOption({ "j", "job" }, "Process a conversion job", "file"));
     //! NOTE Here will be added others options
 
     parser.process(QCoreApplication::arguments());
@@ -180,21 +211,21 @@ void AppShell::parseCommandLineArguments(QCommandLineParser& parser) const
 
 void AppShell::applyCommandLineArguments(QCommandLineParser& parser)
 {
+    using namespace mu::commandline;
+
     QStringList options = parser.optionNames();
     qDebug() << "options: " << options;
 
     for (const QString& opt : options) {
-        ICommandLineControllerPtr h = clregister()->handler(opt.toStdString());
-        if (h) {
-            ICommandLineController::Values hvals;
-            QStringList values = parser.values(opt);
-            for (const QString& v : values) {
-                hvals.push_back(v.toStdString());
-            }
+        CommandLineValues values;
+        QStringList vals = parser.values(opt);
+        for (const QString& v : vals) {
+            values.push_back(v.toStdString());
+        }
 
-            h->exec(hvals);
-        } else {
-            LOGW() << "Not found command line handler for option: " << opt;
+        Ret ret = commandlineRegister()->apply(opt.toStdString(), values);
+        if (!ret) {
+            LOGE() << "failed apply option: opt, error: " << ret.toString();
         }
     }
 }
