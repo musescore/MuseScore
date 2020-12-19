@@ -10,8 +10,8 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
-#include "mtest/testutils.h"
+#include "testing/qtestsuite.h"
+#include "testutils.h"
 #include "libmscore/score.h"
 #include "libmscore/measure.h"
 #include "libmscore/segment.h"
@@ -21,9 +21,9 @@
 #include "libmscore/part.h"
 #include "libmscore/undo.h"
 
-#include "audio/midi/midipatch.h"
+#include "framework/midi_old/midipatch.h"
 
-#define DIR QString("libmscore/instrumentchange/")
+static const QString INSTRUMENTCHANGE_DATA_DIR("instrumentchange_data/");
 
 using namespace Ms;
 
@@ -62,7 +62,7 @@ void TestInstrumentChange::initTestCase()
 
 MasterScore* TestInstrumentChange::test_pre(const char* p)
 {
-    QString p1 = DIR + p + ".mscx";
+    QString p1 = INSTRUMENTCHANGE_DATA_DIR + p + ".mscx";
     MasterScore* score = readScore(p1);
     return score;
 }
@@ -71,7 +71,7 @@ void TestInstrumentChange::test_post(MasterScore* score, const char* p)
 {
     QString p1 = p;
     p1 += "-test.mscx";
-    QString p2 = DIR + p + "-ref.mscx";
+    QString p2 = INSTRUMENTCHANGE_DATA_DIR + p + "-ref.mscx";
     QVERIFY(saveCompareScore(score, p1, p2));
     delete score;
 }
