@@ -10,11 +10,11 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
-#include "mtest/testutils.h"
+#include "testing/qtestsuite.h"
+#include "testutils.h"
 #include "libmscore/score.h"
 
-#define DIR QString("libmscore/layout/")
+static const QString LAYOUT_DATA_DIR("layout_data/");
 
 using namespace Ms;
 
@@ -26,7 +26,7 @@ using namespace Ms;
 //   TestBechmark
 //---------------------------------------------------------
 
-class TestBenchmark : public QObject, public MTest
+class TestLayoutBenchmark : public QObject, public MTest
 {
     Q_OBJECT
 
@@ -45,7 +45,7 @@ private slots:
 //   initTestCase
 //---------------------------------------------------------
 
-void TestBenchmark::initTestCase()
+void TestLayoutBenchmark::initTestCase()
 {
     initMTest();
 }
@@ -54,9 +54,9 @@ void TestBenchmark::initTestCase()
 //   benchmark
 //---------------------------------------------------------
 
-void TestBenchmark::benchmark3()
+void TestLayoutBenchmark::benchmark3()
 {
-    QString path = root + "/" + DIR + "goldberg.mscx";
+    QString path = root + "/" + LAYOUT_DATA_DIR + "goldberg.mscx";
     score = new MasterScore(mscore->baseStyle());
     score->setName(path);
     MScore::testMode = true;
@@ -65,15 +65,15 @@ void TestBenchmark::benchmark3()
     }
 }
 
-void TestBenchmark::benchmark1()
+void TestLayoutBenchmark::benchmark1()
 {
-    // score = readScore(DIR + "goldberg.mscx");
+    // score = readScore(LAYOUT_DATA_DIR + "goldberg.mscx");
     QBENCHMARK {                          // cold run
         score->doLayout();
     }
 }
 
-void TestBenchmark::benchmark2()
+void TestLayoutBenchmark::benchmark2()
 {
     score->doLayout();
     QBENCHMARK {                          // warm run
@@ -81,7 +81,7 @@ void TestBenchmark::benchmark2()
     }
 }
 
-void TestBenchmark::benchmark4()
+void TestLayoutBenchmark::benchmark4()
 {
     QBENCHMARK {
         score->startCmd();
@@ -90,5 +90,5 @@ void TestBenchmark::benchmark4()
     }
 }
 
-QTEST_MAIN(TestBenchmark)
-#include "tst_benchmark.moc"
+QTEST_MAIN(TestLayoutBenchmark)
+#include "tst_layout_benchmark.moc"
