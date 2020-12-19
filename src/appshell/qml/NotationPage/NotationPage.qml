@@ -28,13 +28,19 @@ DockPage {
         }
     }
 
+    readonly property int defaultPanelWidth: 272
+    readonly property int minimumPanelWidth: 200
+
     panels: [
         DockPanel {
             id: palettePanel
             objectName: "palettePanel"
 
             title: qsTrc("appshell", "Palette")
-            width: 294
+
+            width: defaultPanelWidth
+            minimumWidth: minimumPanelWidth
+
             color: notationPage.color
 
             PalettesWidget {}
@@ -45,7 +51,10 @@ DockPage {
             objectName: "instrumentsPanel"
 
             title: qsTrc("appshell", "Instruments")
-            width: 294
+
+            width: defaultPanelWidth
+            minimumWidth: minimumPanelWidth
+
             color: notationPage.color
 
             tabifyObjectName: "palettePanel"
@@ -60,7 +69,10 @@ DockPage {
             objectName: "inspectorPanel"
 
             title: qsTrc("appshell", "Inspector")
-            width: 294
+
+            width: defaultPanelWidth
+            minimumWidth: minimumPanelWidth
+
             color: notationPage.color
 
             tabifyObjectName: "instrumentsPanel"
