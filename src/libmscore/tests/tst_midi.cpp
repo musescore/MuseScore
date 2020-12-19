@@ -10,10 +10,15 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
+#include "testing/qtestsuite.h"
+
 #include <QFile>
 #include <QCoreApplication>
 #include <QTextStream>
+#include <QIODevice>
+
+#include "testutils.h"
+
 #include "libmscore/mscore.h"
 #include "libmscore/score.h"
 #include "libmscore/durationtype.h"
@@ -23,12 +28,11 @@
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
 #include "libmscore/keysig.h"
-#include "audio/exports/exportmidi.h"
-#include <QIODevice>
-
 #include "libmscore/mcursor.h"
-#include "mtest/testutils.h"
-#define DIR QString("libmscore/midi/")
+
+//#include "audio/exports/exportmidi.h"
+
+static const QString MIDI_DATA_DIR("midi_data/");
 
 namespace Ms {
 extern Score::FileError importMidi(MasterScore*, const QString&);
@@ -156,8 +160,10 @@ void TestMidi::events_data()
 
 bool saveMidi(Score* score, const QString& name)
 {
-    ExportMidi em(score);
-    return em.write(name, true, true);
+    return false;
+    //! NOTE Not ported from 3.x
+//    ExportMidi em(score);
+//    return em.write(name, true, true);
 }
 
 //---------------------------------------------------------
@@ -388,7 +394,7 @@ void TestMidi::midi03()
 void TestMidi::testTimeStretchFermata(MasterScore* score, const QString& file, const QString& testName)
 {
     const QString writeFile = QString("%1-%2-test-%3.mid").arg(file).arg(testName);
-    const QString reference(DIR + file + "-ref.mid");
+    const QString reference(MIDI_DATA_DIR + file + "-ref.mid");
 
     testMidiExport(score, writeFile.arg(1), reference);
 
@@ -408,7 +414,7 @@ void TestMidi::testTimeStretchFermata(MasterScore* score, const QString& file, c
 void TestMidi::midiTimeStretchFermata()
 {
     const QString file("testTimeStretchFermata");
-    const QString readFile(DIR + file + ".mscx");
+    const QString readFile(MIDI_DATA_DIR + file + ".mscx");
 
     MasterScore* score = readScore(readFile);
 
@@ -425,7 +431,7 @@ void TestMidi::midiTimeStretchFermata()
 void TestMidi::midiTimeStretchFermataContinuousView()
 {
     const QString file("testTimeStretchFermata");
-    const QString readFile(DIR + file + ".mscx");
+    const QString readFile(MIDI_DATA_DIR + file + ".mscx");
 
     MasterScore* score = readScore(readFile);
     score->setLayoutMode(LayoutMode::LINE);
@@ -444,7 +450,7 @@ void TestMidi::midiTimeStretchFermataContinuousView()
 void TestMidi::testTimeStretchFermataTempoEdit(MasterScore* score, const QString& file, const QString& testName)
 {
     const QString writeFile = QString("%1-%2-test-%3.mid").arg(file).arg(testName);
-    const QString reference(DIR + file + "-%1-ref.mid");
+    const QString reference(MIDI_DATA_DIR + file + "-%1-ref.mid");
 
     Element* tempo = score->firstSegment(SegmentType::ChordRest)->findAnnotation(ElementType::TEMPO_TEXT, -1, 3);
     Q_ASSERT(tempo && tempo->isTempoText());
@@ -486,7 +492,7 @@ void TestMidi::testTimeStretchFermataTempoEdit(MasterScore* score, const QString
 void TestMidi::midiTimeStretchFermataTempoEdit()
 {
     const QString file("testTimeStretchFermataTempoEdit");
-    const QString readFile(DIR + file + ".mscx");
+    const QString readFile(MIDI_DATA_DIR + file + ".mscx");
 
     MasterScore* score = readScore(readFile);
 
@@ -502,7 +508,7 @@ void TestMidi::midiTimeStretchFermataTempoEdit()
 void TestMidi::midiTimeStretchFermataTempoEditContinuousView()
 {
     const QString file("testTimeStretchFermataTempoEdit");
-    const QString readFile(DIR + file + ".mscx");
+    const QString readFile(MIDI_DATA_DIR + file + ".mscx");
 
     MasterScore* score = readScore(readFile);
     score->setLayoutMode(LayoutMode::LINE);
@@ -520,9 +526,9 @@ void TestMidi::midiTimeStretchFermataTempoEditContinuousView()
 void TestMidi::midiSingleNoteDynamics()
 {
     const QString file("testSingleNoteDynamics");
-    QString readFile(DIR + file + ".mscx");
+    QString readFile(MIDI_DATA_DIR + file + ".mscx");
     QString writeFile(file + "-test.mid");
-    QString reference(DIR + file + "-ref.mid");
+    QString reference(MIDI_DATA_DIR + file + "-ref.mid");
 
     MasterScore* score = readScore(readFile);
     score->doLayout();
@@ -539,9 +545,9 @@ void TestMidi::events()
 {
     QFETCH(QString, file);
 
-    QString readFile(DIR + file + ".mscx");
+    QString readFile(MIDI_DATA_DIR + file + ".mscx");
     QString writeFile(file + "-test.txt");
-    QString reference(DIR + file + "-ref.txt");
+    QString reference(MIDI_DATA_DIR + file + "-ref.txt");
 
     MasterScore* score = readScore(readFile);
     EventMap events;
@@ -597,11 +603,11 @@ void TestMidi::testMidiExport(MasterScore* score, const QString& writeFile, cons
 void TestMidi::midiExportTestRef(const QString& file)
 {
     MScore::debugMode = true;
-    MasterScore* score = readScore(DIR + file + ".mscx");
+    MasterScore* score = readScore(MIDI_DATA_DIR + file + ".mscx");
     QVERIFY(score);
     score->doLayout();
     score->rebuildMidiMapping();
-    testMidiExport(score, QString(file) + ".mid", DIR + QString(file) + "-ref.mid");
+    testMidiExport(score, QString(file) + ".mid", MIDI_DATA_DIR + QString(file) + "-ref.mid");
     delete score;
 }
 
