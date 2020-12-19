@@ -1,13 +1,24 @@
 <RCC>
     <qresource prefix="/">
+        <file>qml/migration/CheckBoxControl.qml</file>
+        <file>qml/migration/placeholder.png</file>
+        <file>qml/migration/ScoreMigrationDialog.qml</file>
+        <file>qml/migration/StyledDialogButtonBox.qml</file>
+        <file>qml/migration/Tick_Icon.png</file>
         <file>qml/palettes/MoreElementsPopup.qml</file>
-        <file>qml/palettes/PaletteBackground.qml</file>
         <file>qml/palettes/Palette.qml</file>
+        <file>qml/palettes/PaletteBackground.qml</file>
         <file>qml/palettes/PalettesListPopup.qml</file>
-        <file>qml/palettes/PalettesWidgetHeader.qml</file>
         <file>qml/palettes/PalettesWidget.qml</file>
+        <file>qml/palettes/PalettesWidgetHeader.qml</file>
         <file>qml/palettes/PaletteTree.qml</file>
         <file>qml/palettes/PlaceholderManager.qml</file>
+        <file>qml/palettes/icons/ArrowDown.svg</file>
+        <file>qml/palettes/icons/ArrowRight.svg</file>
+        <file>qml/palettes/icons/CloseButton.svg</file>
+        <file>qml/palettes/icons/MagnifyingGlass.svg</file>
+        <file>qml/palettes/icons/ThreeDotMenu.svg</file>
+        <file>qml/palettes/icons/TrashCan.svg</file>
         <file>qml/palettes/StyledButton.qml</file>
         <file>qml/palettes/StyledCheckBox.qml</file>
         <file>qml/palettes/StyledIcon.qml</file>
@@ -15,15 +26,5 @@
         <file>qml/palettes/StyledToolButton.qml</file>
         <file>qml/palettes/TreePaletteHeader.qml</file>
         <file>qml/palettes/utils.js</file>
-        <file>qml/palettes/icons/ArrowDown.svg</file>
-        <file>qml/palettes/icons/ArrowRight.svg</file>
-        <file>qml/migration/ScoreMigrationDialog.qml</file>
-        <file>qml/migration/CheckBoxControl.qml</file>
-        <file>qml/migration/Tick_Icon.png</file>
-        <file>qml/migration/placeholder.png</file>
-        <file>qml/palettes/icons/CloseButton.svg</file>
-        <file>qml/palettes/icons/MagnifyingGlass.svg</file>
-        <file>qml/palettes/icons/ThreeDotMenu.svg</file>
-        <file>qml/palettes/icons/TrashCan.svg</file>
     </qresource>
 </RCC>

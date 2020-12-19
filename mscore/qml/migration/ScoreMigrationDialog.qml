@@ -157,44 +157,23 @@ FocusScope {
             }
         }
 
-        RowLayout {
-            Layout.maximumWidth: parent.width / 2
+        StyledDialogButtonBox {
+            Layout.preferredWidth: parent.width / 2
             Layout.alignment: Qt.AlignRight
-            Layout.leftMargin: 12
 
-            spacing: 4
+            onRejected: if (root.model) root.model.ignore()
+            onAccepted: if (root.model) root.model.apply()
 
             StyledButton {
-                id: ignoreButton
-                Layout.fillWidth: true
-                Layout.preferredWidth: parent.width / 2
                 text: qsTr("Keep old style")
-
+                DialogButtonBox.buttonRole: DialogButtonBox.RejectRole
                 focus: true
-
-                onClicked: {
-                    if (!root.model) {
-                        return
-                    }
-
-                    root.model.ignore()
-                }
             }
 
             StyledButton {
-                Layout.fillWidth: true
-                Layout.preferredWidth: parent.width / 2
                 text: qsTr("Apply new style")
-
+                DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
                 enabled: root.model ? root.model.isApplyingAvailable : false
-
-                onPressed: {
-                    if (!root.model) {
-                        return
-                    }
-
-                    root.model.apply()
-                }
             }
         }
     }
