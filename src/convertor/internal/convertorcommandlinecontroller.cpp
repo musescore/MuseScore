@@ -16,27 +16,16 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_COMMANDLINE_COMMANDLINETYPES_H
-#define MU_COMMANDLINE_COMMANDLINETYPES_H
+#include "convertorcommandlinecontroller.h"
 
-#include <string>
-#include <utility>
-#include <vector>
+#include "log.h"
 
-namespace mu::commandline {
-using CommandLineOption = std::list<std::string>;
-using CommandLineValue = std::string;
-using CommandLineValues = std::vector<CommandLineValue>;
+using namespace mu::convertor;
+using namespace mu::commandline;
 
-inline bool operator ==(const CommandLineOption& opt, const std::string& str)
+void ConvertorCommandLineController::setup()
 {
-    for (const std::string& o : opt) {
-        if (o == str) {
-            return true;
-        }
-    }
-    return false;
+    clinereg()->reg(this, {"j", "job"}, [this](const CommandLineValue& val) {
+        LOGI() << "do job " << val;
+    });
 }
-}
-
-#endif // MU_COMMANDLINE_COMMANDLINETYPES_H
