@@ -3560,15 +3560,11 @@ static void loadScores(const QStringList& argv)
             foreach(const QString& name, argv) {
                   if (name.isEmpty())
                         continue;
-                  MasterScore* score = mscore->readScore(name);
-                  if (score) {
-                        mscore->appendScore(score);
+
+                  Score* score = mscore->openScore(name);
+
+                  if (score)
                         scoresOnCommandline = true;
-                        if(!MScore::noGui) {
-                              mscore->addRecentScore(score);
-                              mscore->writeSessionFile(false);
-                              }
-                        }
                   }
             }
 
