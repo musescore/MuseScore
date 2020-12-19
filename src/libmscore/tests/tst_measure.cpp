@@ -10,7 +10,10 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
+#include "testing/qtestsuite.h"
+
+#include "testutils.h"
+
 #include "libmscore/score.h"
 #include "libmscore/excerpt.h"
 #include "libmscore/part.h"
@@ -26,9 +29,8 @@
 #include "libmscore/element.h"
 #include "libmscore/system.h"
 #include "libmscore/durationtype.h"
-#include "mtest/testutils.h"
 
-#define DIR QString("libmscore/measure/")
+static const QString MEASURE_DATA_DIR("measure_data/");
 
 using namespace Ms;
 
@@ -79,14 +81,14 @@ void TestMeasure::initTestCase()
 
 void TestMeasure::insertMeasureMiddle()
 {
-    MasterScore* score = readScore(DIR + "measure-1.mscx");
+    MasterScore* score = readScore(MEASURE_DATA_DIR + "measure-1.mscx");
 
     score->startCmd();
     Measure* m = score->firstMeasure()->nextMeasure();
     score->insertMeasure(ElementType::MEASURE, m);
     score->endCmd();
 
-    QVERIFY(saveCompareScore(score, "measure-1.mscx", DIR + "measure-1-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "measure-1.mscx", MEASURE_DATA_DIR + "measure-1-ref.mscx"));
     delete score;
 }
 
@@ -96,13 +98,13 @@ void TestMeasure::insertMeasureMiddle()
 
 void TestMeasure::insertMeasureBegin()
 {
-    MasterScore* score = readScore(DIR + "measure-1.mscx");
+    MasterScore* score = readScore(MEASURE_DATA_DIR + "measure-1.mscx");
 
     score->startCmd();
     Measure* m = score->firstMeasure();
     score->insertMeasure(ElementType::MEASURE, m);
     score->endCmd();
-    QVERIFY(saveCompareScore(score, "measure-2.mscx", DIR + "measure-2-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "measure-2.mscx", MEASURE_DATA_DIR + "measure-2-ref.mscx"));
 
     delete score;
 }
@@ -113,13 +115,13 @@ void TestMeasure::insertMeasureBegin()
 
 void TestMeasure::insertMeasureEnd()
 {
-    MasterScore* score = readScore(DIR + "measure-1.mscx");
+    MasterScore* score = readScore(MEASURE_DATA_DIR + "measure-1.mscx");
 
     score->startCmd();
     score->insertMeasure(ElementType::MEASURE, 0);
     score->endCmd();
 
-    QVERIFY(saveCompareScore(score, "measure-3.mscx", DIR + "measure-3-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "measure-3.mscx", MEASURE_DATA_DIR + "measure-3-ref.mscx"));
     delete score;
 }
 
@@ -129,7 +131,7 @@ void TestMeasure::insertMeasureEnd()
 
 void TestMeasure::insertBfClefChange()
 {
-    MasterScore* score = readScore(DIR + "measure-insert_bf_clef.mscx");
+    MasterScore* score = readScore(MEASURE_DATA_DIR + "measure-insert_bf_clef.mscx");
     // 4th measure
     Measure* m = score->firstMeasure()->nextMeasure();
     m = m->nextMeasure()->nextMeasure();
@@ -137,19 +139,19 @@ void TestMeasure::insertBfClefChange()
     score->insertMeasure(ElementType::MEASURE, m);
     score->endCmd();
     QVERIFY(score->checkClefs());
-    QVERIFY(saveCompareScore(score, "measure-insert_bf_clef.mscx", DIR + "measure-insert_bf_clef-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "measure-insert_bf_clef.mscx", MEASURE_DATA_DIR + "measure-insert_bf_clef-ref.mscx"));
     score->undoRedo(true, 0);
     QVERIFY(score->checkClefs());
-    QVERIFY(saveCompareScore(score, "measure-insert_bf_clef_undo.mscx", DIR + "measure-insert_bf_clef.mscx"));
+    QVERIFY(saveCompareScore(score, "measure-insert_bf_clef_undo.mscx", MEASURE_DATA_DIR + "measure-insert_bf_clef.mscx"));
     m = score->firstMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure();
     score->startCmd();
     score->insertMeasure(ElementType::MEASURE, m);
     score->endCmd();
     QVERIFY(score->checkClefs());
-    QVERIFY(saveCompareScore(score, "measure-insert_bf_clef-2.mscx", DIR + "measure-insert_bf_clef-2-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "measure-insert_bf_clef-2.mscx", MEASURE_DATA_DIR + "measure-insert_bf_clef-2-ref.mscx"));
     score->undoRedo(true, 0);
     QVERIFY(score->checkClefs());
-    QVERIFY(saveCompareScore(score, "measure-insert_bf_clef_undo.mscx", DIR + "measure-insert_bf_clef.mscx"));
+    QVERIFY(saveCompareScore(score, "measure-insert_bf_clef_undo.mscx", MEASURE_DATA_DIR + "measure-insert_bf_clef.mscx"));
     delete score;
 }
 
@@ -159,7 +161,7 @@ void TestMeasure::insertBfClefChange()
 
 void TestMeasure::insertBfKeyChange()
 {
-    MasterScore* score = readScore(DIR + "measure-insert_bf_key.mscx");
+    MasterScore* score = readScore(MEASURE_DATA_DIR + "measure-insert_bf_key.mscx");
     // 4th measure
     Measure* m = score->firstMeasure()->nextMeasure();
     m = m->nextMeasure()->nextMeasure();
@@ -167,19 +169,19 @@ void TestMeasure::insertBfKeyChange()
     score->insertMeasure(ElementType::MEASURE, m);
     score->endCmd();
     QVERIFY(score->checkKeys());
-    QVERIFY(saveCompareScore(score, "measure-insert_bf_key.mscx", DIR + "measure-insert_bf_key-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "measure-insert_bf_key.mscx", MEASURE_DATA_DIR + "measure-insert_bf_key-ref.mscx"));
     score->undoRedo(true, 0);
     QVERIFY(score->checkKeys());
-    QVERIFY(saveCompareScore(score, "measure-insert_bf_key_undo.mscx", DIR + "measure-insert_bf_key.mscx"));
+    QVERIFY(saveCompareScore(score, "measure-insert_bf_key_undo.mscx", MEASURE_DATA_DIR + "measure-insert_bf_key.mscx"));
     m = score->firstMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure();
     score->startCmd();
     score->insertMeasure(ElementType::MEASURE, m);
     score->endCmd();
     QVERIFY(score->checkKeys());
-    QVERIFY(saveCompareScore(score, "measure-insert_bf_key-2.mscx", DIR + "measure-insert_bf_key-2-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "measure-insert_bf_key-2.mscx", MEASURE_DATA_DIR + "measure-insert_bf_key-2-ref.mscx"));
     score->undoRedo(true, 0);
     QVERIFY(score->checkKeys());
-    QVERIFY(saveCompareScore(score, "measure-insert_bf_key_undo.mscx", DIR + "measure-insert_bf_key.mscx"));
+    QVERIFY(saveCompareScore(score, "measure-insert_bf_key_undo.mscx", MEASURE_DATA_DIR + "measure-insert_bf_key.mscx"));
     delete score;
 }
 
@@ -190,7 +192,7 @@ void TestMeasure::insertBfKeyChange()
 #if 0
 void TestMeasure::minWidth()
 {
-    MasterScore* score = readScore(DIR + "measure-2.mscx");
+    MasterScore* score = readScore(MEASURE_DATA_DIR + "measure-2.mscx");
 
     int n = score->systems().size();
     int measuresSystem[n];
@@ -228,13 +230,13 @@ void TestMeasure::minWidth()
 
 void TestMeasure::spanner_a()
 {
-    MasterScore* score = readScore(DIR + "measure-3.mscx");
+    MasterScore* score = readScore(MEASURE_DATA_DIR + "measure-3.mscx");
 
     Measure* m = score->firstMeasure()->nextMeasure();
     score->startCmd();
     score->insertMeasure(ElementType::MEASURE, m);
     score->endCmd();
-    QVERIFY(saveCompareScore(score, "measure-4.mscx", DIR + "measure-4-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "measure-4.mscx", MEASURE_DATA_DIR + "measure-4-ref.mscx"));
     delete score;
 }
 
@@ -248,13 +250,13 @@ void TestMeasure::spanner_a()
 
 void TestMeasure::spanner_b()
 {
-    MasterScore* score = readScore(DIR + "measure-4.mscx");
+    MasterScore* score = readScore(MEASURE_DATA_DIR + "measure-4.mscx");
 
     Measure* m = score->firstMeasure();
     score->startCmd();
     score->insertMeasure(ElementType::MEASURE, m);
     score->endCmd();
-    QVERIFY(saveCompareScore(score, "measure-5.mscx", DIR + "measure-5-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "measure-5.mscx", MEASURE_DATA_DIR + "measure-5-ref.mscx"));
     delete score;
 }
 
@@ -267,14 +269,14 @@ void TestMeasure::spanner_b()
 
 void TestMeasure::spanner_A()
 {
-    MasterScore* score = readScore(DIR + "measure-6.mscx");
+    MasterScore* score = readScore(MEASURE_DATA_DIR + "measure-6.mscx");
 
     score->select(score->firstMeasure());
     score->startCmd();
     score->localTimeDelete();
     score->endCmd();
     score->doLayout();
-    QVERIFY(saveCompareScore(score, "measure-6.mscx", DIR + "measure-6-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "measure-6.mscx", MEASURE_DATA_DIR + "measure-6-ref.mscx"));
     delete score;
 }
 
@@ -288,7 +290,7 @@ void TestMeasure::spanner_A()
 
 void TestMeasure::spanner_B()
 {
-    MasterScore* score = readScore(DIR + "measure-7.mscx");
+    MasterScore* score = readScore(MEASURE_DATA_DIR + "measure-7.mscx");
 
     Measure* m = score->firstMeasure()->nextMeasure();
     score->select(m);
@@ -296,7 +298,7 @@ void TestMeasure::spanner_B()
     score->localTimeDelete();
     score->endCmd();
 
-    QVERIFY(saveCompareScore(score, "measure-7.mscx", DIR + "measure-7-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "measure-7.mscx", MEASURE_DATA_DIR + "measure-7-ref.mscx"));
     delete score;
 }
 
@@ -310,7 +312,7 @@ void TestMeasure::spanner_B()
 
 void TestMeasure::spanner_C()
 {
-    MasterScore* score = readScore(DIR + "measure-8.mscx");
+    MasterScore* score = readScore(MEASURE_DATA_DIR + "measure-8.mscx");
 
     Measure* m = score->firstMeasure()->nextMeasure();
     score->select(m);
@@ -318,7 +320,7 @@ void TestMeasure::spanner_C()
     score->localTimeDelete();
     score->endCmd();
 
-    QVERIFY(saveCompareScore(score, "measure-8.mscx", DIR + "measure-8-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "measure-8.mscx", MEASURE_DATA_DIR + "measure-8-ref.mscx"));
     delete score;
 }
 
@@ -332,7 +334,7 @@ void TestMeasure::spanner_C()
 
 void TestMeasure::spanner_D()
 {
-    MasterScore* score = readScore(DIR + "measure-9.mscx");
+    MasterScore* score = readScore(MEASURE_DATA_DIR + "measure-9.mscx");
 
     Measure* m = score->firstMeasure()->nextMeasure();
     score->select(m);
@@ -341,7 +343,7 @@ void TestMeasure::spanner_D()
     score->localTimeDelete();
     score->endCmd();
 
-    QVERIFY(saveCompareScore(score, "measure-9.mscx", DIR + "measure-9-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "measure-9.mscx", MEASURE_DATA_DIR + "measure-9-ref.mscx"));
     delete score;
 }
 
@@ -351,7 +353,7 @@ void TestMeasure::spanner_D()
 
 void TestMeasure::deleteLast()
 {
-    MasterScore* score = readScore(DIR + "measure-10.mscx");
+    MasterScore* score = readScore(MEASURE_DATA_DIR + "measure-10.mscx");
 
     Measure* m = score->lastMeasure();
     score->select(m);
@@ -360,7 +362,7 @@ void TestMeasure::deleteLast()
     score->localTimeDelete();
     score->endCmd();
 
-    QVERIFY(saveCompareScore(score, "measure-10.mscx", DIR + "measure-10-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "measure-10.mscx", MEASURE_DATA_DIR + "measure-10-ref.mscx"));
     delete score;
 }
 
@@ -373,7 +375,7 @@ void TestMeasure::deleteLast()
 
 void TestMeasure::gap()
 {
-    MasterScore* score = readScore(DIR + "gaps.mscx");
+    MasterScore* score = readScore(MEASURE_DATA_DIR + "gaps.mscx");
     Element* tst       = 0;
 
     //Select and delete third quarter rest in first Measure (voice 2)
@@ -434,7 +436,7 @@ void TestMeasure::gap()
 
 void TestMeasure::checkMeasure()
 {
-    MasterScore* score = readScore(DIR + "checkMeasure.mscx");
+    MasterScore* score = readScore(MEASURE_DATA_DIR + "checkMeasure.mscx");
     Element* tst       = 0;
     Measure* m         = score->firstMeasure()->nextMeasure();
 
@@ -483,7 +485,7 @@ void TestMeasure::checkMeasure()
 
 void TestMeasure::undoDelInitialVBox_269919()
 {
-    MasterScore* score = readScore(DIR + "undoDelInitialVBox_269919.mscx");
+    MasterScore* score = readScore(MEASURE_DATA_DIR + "undoDelInitialVBox_269919.mscx");
 
     // 1. delete initial VBox
     score->startCmd();
@@ -506,7 +508,7 @@ void TestMeasure::undoDelInitialVBox_269919()
     // 4. Undo to restore initial VBox resulted in assert failure crash
     score->undoRedo(true, 0);
 
-    QVERIFY(saveCompareScore(score, "undoDelInitialVBox_269919.mscx", DIR + "undoDelInitialVBox_269919-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "undoDelInitialVBox_269919.mscx", MEASURE_DATA_DIR + "undoDelInitialVBox_269919-ref.mscx"));
     delete score;
 }
 
@@ -517,12 +519,12 @@ void TestMeasure::undoDelInitialVBox_269919()
 
 void TestMeasure::mmrest()
 {
-    MasterScore* score = readScore(DIR + "mmrest.mscx");
+    MasterScore* score = readScore(MEASURE_DATA_DIR + "mmrest.mscx");
     score->startCmd();
     score->undo(new ChangeStyleVal(score, Sid::createMultiMeasureRests, true));
     score->setLayoutAll();
     score->endCmd();
-    QVERIFY(saveCompareScore(score, "mmrest.mscx", DIR + "mmrest-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "mmrest.mscx", MEASURE_DATA_DIR + "mmrest-ref.mscx"));
     delete score;
 }
 
@@ -542,27 +544,27 @@ void TestMeasure::measureNumbers()
     QCOMPARE(mn->hPlacement(), HPlacement::CENTER);
     delete mn;
 
-    MasterScore* score = readScore(DIR + "measurenumber.mscx");
+    MasterScore* score = readScore(MEASURE_DATA_DIR + "measurenumber.mscx");
 
     // Place measure numbers below
     score->startCmd();
     score->undo(new ChangeStyleVal(score, Sid::measureNumberVPlacement, QVariant(int(Placement::BELOW))));
     score->setLayoutAll();
     score->endCmd();
-    QVERIFY(saveCompareScore(score, "measurenumber-1.mscx", DIR + "measurenumber-1-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "measurenumber-1.mscx", MEASURE_DATA_DIR + "measurenumber-1-ref.mscx"));
 
     // center measure numbers
     score->startCmd();
     score->undo(new ChangeStyleVal(score, Sid::measureNumberHPlacement, QVariant(int(HPlacement::CENTER))));
     score->setLayoutAll();
     score->endCmd();
-    QVERIFY(saveCompareScore(score, "measurenumber-2.mscx", DIR + "measurenumber-2-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "measurenumber-2.mscx", MEASURE_DATA_DIR + "measurenumber-2-ref.mscx"));
 
     // show on first system too
     score->undo(new ChangeStyleVal(score, Sid::showMeasureNumberOne, QVariant(true)));
     score->setLayoutAll();
     score->endCmd();
-    QVERIFY(saveCompareScore(score, "measurenumber-3.mscx", DIR + "measurenumber-3-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "measurenumber-3.mscx", MEASURE_DATA_DIR + "measurenumber-3-ref.mscx"));
 
     // every 5 measures (default interval)
     score->startCmd();
@@ -571,7 +573,7 @@ void TestMeasure::measureNumbers()
     score->undo(new ChangeStyleVal(score, Sid::measureNumberSystem, QVariant(false)));
     score->setLayoutAll();
     score->endCmd();
-    QVERIFY(saveCompareScore(score, "measurenumber-4.mscx", DIR + "measurenumber-4-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "measurenumber-4.mscx", MEASURE_DATA_DIR + "measurenumber-4-ref.mscx"));
 
     // do not show first measure number. This should shift all measure numbers,
     // because they are still placed at regular intervals.
@@ -580,14 +582,14 @@ void TestMeasure::measureNumbers()
     score->undo(new ChangeStyleVal(score, Sid::showMeasureNumberOne, QVariant(false)));
     score->setLayoutAll();
     score->endCmd();
-    QVERIFY(saveCompareScore(score, "measurenumber-5.mscx", DIR + "measurenumber-5-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "measurenumber-5.mscx", MEASURE_DATA_DIR + "measurenumber-5-ref.mscx"));
 
     // show at every measure (except fist)
     score->startCmd();
     score->undo(new ChangeStyleVal(score, Sid::measureNumberInterval, QVariant(1)));
     score->setLayoutAll();
     score->endCmd();
-    QVERIFY(saveCompareScore(score, "measurenumber-6.mscx", DIR + "measurenumber-6-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "measurenumber-6.mscx", MEASURE_DATA_DIR + "measurenumber-6-ref.mscx"));
 
     // Disable measure numbers
     score->startCmd();
@@ -596,7 +598,7 @@ void TestMeasure::measureNumbers()
     score->undo(new ChangeStyleVal(score, Sid::showMeasureNumber, QVariant(false)));
     score->setLayoutAll();
     score->endCmd();
-    QVERIFY(saveCompareScore(score, "measurenumber-7.mscx", DIR + "measurenumber-7-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "measurenumber-7.mscx", MEASURE_DATA_DIR + "measurenumber-7-ref.mscx"));
 
     delete score;
 }
