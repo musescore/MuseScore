@@ -16,28 +16,34 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#ifndef MU_APPSHELL_ICOMMANDLINEHANDLER_H
+#define MU_APPSHELL_ICOMMANDLINEHANDLER_H
 
-#ifndef MU_APPSHELL_APPSHELLMODULE_H
-#define MU_APPSHELL_APPSHELLMODULE_H
+#include <utility>
+#include <string>
+#include <vector>
+#include <memory>
 
-#include "modularity/imodulesetup.h"
-
-namespace mu {
-namespace appshell {
-class AppShellModule : public framework::IModuleSetup
+namespace mu::appshell {
+class ICommandLineHandler
 {
 public:
-    AppShellModule();
+    virtual ~ICommandLineHandler() = default;
 
-    std::string moduleName() const override;
+    using Option = std::pair<std::string /*short*/, std::string /*long*/>;
+    using Value = std::string;
+    using Values = std::vector<Value>;
 
-    void registerExports() override;
-    void resolveImports() override;
-
-    void registerResources() override;
-    void registerUiTypes() override;
+    virtual Option option() const = 0;
+    virtual bool exec(const Values& vals) = 0;
 };
+
+using ICommandLineHandlerPtr = std::shared_ptr<ICommandLineHandler>;
+
+inline bool operator ==(const ICommandLineHandler::Option& opt, const std::string& str)
+{
+    return opt.first == str || opt.second == str;
 }
 }
 
-#endif // MU_APPSHELL_APPSHELLMODULE_H
+#endif // MU_APPSHELL_ICOMMANDLINEHANDLER_H

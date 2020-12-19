@@ -54,6 +54,9 @@ void GlobalModule::registerExports()
 
 void GlobalModule::onInit()
 {
+    mu::runtime::mainThreadId(); //! NOTE Needs only call
+    mu::runtime::setThreadName("main");
+
     //! NOTE: settings must be inited before initialization of any module
     //! because modules can use settings at the moment of their initialization
     settings()->load();

@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2019 MuseScore BVBA and others
+//  Copyright (C) 2020 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -16,32 +16,25 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#ifndef MU_APPSHELL_ICOMMANDLINEREGISTER_H
+#define MU_APPSHELL_ICOMMANDLINEREGISTER_H
 
-#ifndef MODULESSETUP_H
-#define MODULESSETUP_H
+#include <memory>
+#include "modularity/imoduleexport.h"
+#include "icommandlinehandler.h"
 
-#include <QList>
-
-#include "framework/global/modularity/imodulesetup.h"
-
-//---------------------------------------------------------
-//   ModulesSetup
-//---------------------------------------------------------
-
-class ModulesSetup
+namespace mu::appshell {
+class ICommandLineRegister : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(ICommandLineRegister)
+
 public:
-    static ModulesSetup* instance();
+    virtual ~ICommandLineRegister() = default;
 
-    void setup();
-    void deinit();
-
-private:
-    Q_DISABLE_COPY(ModulesSetup)
-
-    ModulesSetup();
-
-    QList<mu::framework::IModuleSetup*> m_modulesSetupList;
+    virtual bool reg(const ICommandLineHandlerPtr& h) = 0;
+    virtual ICommandLineHandlerPtr handler(const ICommandLineHandler::Option& opt) const = 0;
+    virtual ICommandLineHandlerPtr handler(const std::string& opt) const = 0;
 };
+}
 
-#endif // MODULESSETUP_H
+#endif // MU_APPSHELL_ICOMMANDLINEREGISTER_H
