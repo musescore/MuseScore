@@ -16,27 +16,22 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#ifndef MU_COMMANDLINE_COMMANDLINETYPES_H
+#define MU_COMMANDLINE_COMMANDLINETYPES_H
 
-#ifndef MU_APPSHELL_APPSHELLMODULE_H
-#define MU_APPSHELL_APPSHELLMODULE_H
+#include <string>
+#include <utility>
+#include <vector>
 
-#include "modularity/imodulesetup.h"
+namespace mu::commandline {
+using CommandLineOption = std::pair<std::string /*short*/, std::string /*long*/>;
+using CommandLineValue = std::string;
+using CommandLineValues = std::vector<CommandLineValue>;
 
-namespace mu {
-namespace appshell {
-class AppShellModule : public framework::IModuleSetup
+inline bool operator ==(const CommandLineOption& opt, const std::string& str)
 {
-public:
-    AppShellModule();
-
-    std::string moduleName() const override;
-
-    void resolveImports() override;
-
-    void registerResources() override;
-    void registerUiTypes() override;
-};
+    return opt.first == str || opt.second == str;
 }
 }
 
-#endif // MU_APPSHELL_APPSHELLMODULE_H
+#endif // MU_COMMANDLINE_COMMANDLINETYPES_H

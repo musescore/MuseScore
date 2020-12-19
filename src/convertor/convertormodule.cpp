@@ -16,34 +16,21 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_APPSHELL_ICOMMANDLINEHANDLER_H
-#define MU_APPSHELL_ICOMMANDLINEHANDLER_H
+#include "convertormodule.h"
 
-#include <utility>
-#include <string>
-#include <vector>
-#include <memory>
+#include "modularity/ioc.h"
+#include "appshell/icommandlineregister.h"
 
-namespace mu::appshell {
-class ICommandLineHandler
+using namespace mu::convertor;
+
+std::string ConvertorModule::moduleName() const
 {
-public:
-    virtual ~ICommandLineHandler() = default;
-
-    using Option = std::pair<std::string /*short*/, std::string /*long*/>;
-    using Value = std::string;
-    using Values = std::vector<Value>;
-
-    virtual Option option() const = 0;
-    virtual bool exec(const Values& vals) = 0;
-};
-
-using ICommandLineHandlerPtr = std::shared_ptr<ICommandLineHandler>;
-
-inline bool operator ==(const ICommandLineHandler::Option& opt, const std::string& str)
-{
-    return opt.first == str || opt.second == str;
-}
+    return "convertor";
 }
 
-#endif // MU_APPSHELL_ICOMMANDLINEHANDLER_H
+void ConvertorModule::resolveImports()
+{
+    auto cr = framework::ioc()->resolve<appshell::ICommandLineRegister>(moduleName());
+    if (cr) {
+    }
+}

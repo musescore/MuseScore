@@ -17,27 +17,16 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-set(MODULE appshell)
-
-set(MODULE_QRC appshell.qrc)
-set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
-
-include(${CMAKE_CURRENT_LIST_DIR}/view/dockwindow/dockwindow.cmake)
+set(MODULE commandline)
 
 set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/appshellmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/appshellmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/appshell.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/appshell.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/settings/settingslistmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/settings/settingslistmodel.h
-    ${DOCKWINDOW_SRC}
-    )
-
-set(MODULE_LINK
-    uicomponents
-    ui
+    ${CMAKE_CURRENT_LIST_DIR}/commandlinemodule.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/commandlinemodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/commandlinetypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/icommandlineregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/icommandlinecontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/commandlineregister.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/commandlineregister.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
-

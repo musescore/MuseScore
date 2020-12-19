@@ -16,27 +16,19 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-
-#ifndef MU_APPSHELL_APPSHELLMODULE_H
-#define MU_APPSHELL_APPSHELLMODULE_H
+#ifndef MU_CONVERTOR_CONVERTORMODULE_H
+#define MU_CONVERTOR_CONVERTORMODULE_H
 
 #include "modularity/imodulesetup.h"
 
-namespace mu {
-namespace appshell {
-class AppShellModule : public framework::IModuleSetup
+namespace mu::convertor {
+class ConvertorModule : public framework::IModuleSetup
 {
 public:
-    AppShellModule();
 
     std::string moduleName() const override;
-
     void resolveImports() override;
-
-    void registerResources() override;
-    void registerUiTypes() override;
 };
 }
-}
 
-#endif // MU_APPSHELL_APPSHELLMODULE_H
+#endif // MU_CONVERTOR_CONVERTORMODULE_H
