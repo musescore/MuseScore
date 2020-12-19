@@ -43,6 +43,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/tst_hairpin.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_implodeExplode.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_instrumentchange.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tst_join.cpp
 )
 
 set(MODULE_TEST_LINK
