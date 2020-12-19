@@ -3557,7 +3557,7 @@ static void loadScores(const QStringList& argv)
                   }
             }
       else {
-            foreach(const QString& name, argv) {
+            for(const QString& name : argv) {
                   if (name.isEmpty())
                         continue;
 
