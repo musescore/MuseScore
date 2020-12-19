@@ -2657,6 +2657,10 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
                   }
             cs = cv->score();
             cv->setFocusRect();
+            if (!cv->wasShown) {
+                  cv->wasShown = true;
+                  cv->pageTop();
+                  }
             }
       else
             cs = 0;
@@ -2667,7 +2671,7 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       if (cs)
             cs->masterScore()->setPlaybackScore(_playPartOnly ? cs : cs->masterScore());
 
-                  // set midi import panel
+      // set midi import panel
       QString fileName = cs ? cs->importedFilePath() : "";
       midiPanelOnSwitchToFile(fileName);
 
