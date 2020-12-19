@@ -16,27 +16,36 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_APPSHELL_COMMANDLINEREGISTER_H
-#define MU_APPSHELL_COMMANDLINEREGISTER_H
+#ifndef MU_COMMANDLINE_COMMANDLINEREGISTER_H
+#define MU_COMMANDLINE_COMMANDLINEREGISTER_H
 
-#include <vector>
+#include <map>
 
 #include "../icommandlineregister.h"
 
-namespace mu::appshell {
+namespace mu::commandline {
 class CommandLineRegister : public ICommandLineRegister
 {
 public:
-    CommandLineRegister();
+    CommandLineRegister() = default;
 
-    bool reg(const ICommandLineControllerPtr& h) override;
-    ICommandLineControllerPtr handler(const ICommandLineController::Option& opt) const override;
-    ICommandLineControllerPtr handler(const std::string& opt) const override;
+     Ret apply(const std::string& opt, const CommandLineValues& vals) override;
+
+     void unReg(ICommandLineHandler* handler) override;
+     void reg(ICommandLineHandler* handler, const CommandLineOption& opt, const CallBackWithVals& call) override;
 
 private:
 
-    std::vector<ICommandLineControllerPtr> m_handlers;
+     void doReg(ICommandLineHandler* handler, const std::string& opt, const CallBackWithVals& call);
+
+     struct Handler
+     {
+         ICommandLineHandler* h = nullptr;
+         CallBackWithVals callback;
+     };
+
+     std::map<std::string/*option*/, Handler > m_handlers;
 };
 }
 
-#endif // MU_APPSHELL_COMMANDLINEREGISTER_H
+#endif // MU_COMMANDLINE_COMMANDLINEREGISTER_H

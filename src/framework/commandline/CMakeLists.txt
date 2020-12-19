@@ -24,7 +24,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/commandlinemodule.h
     ${CMAKE_CURRENT_LIST_DIR}/commandlinetypes.h
     ${CMAKE_CURRENT_LIST_DIR}/icommandlineregister.h
-    ${CMAKE_CURRENT_LIST_DIR}/icommandlinecontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/icommandlinehandler.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/commandlineregister.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/commandlineregister.h
     )

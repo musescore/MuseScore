@@ -16,23 +16,18 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_COMMANDLINE_ICOMMANDLINECONTROLLER_H
-#define MU_COMMANDLINE_ICOMMANDLINECONTROLLER_H
+#ifndef MU_COMMANDLINE_ICOMMANDLINEHANDLER_H
+#define MU_COMMANDLINE_ICOMMANDLINEHANDLER_H
 
 #include <memory>
 #include "commandlinetypes.h"
 
 namespace mu::commandline {
-class ICommandLineController
+class ICommandLineHandler
 {
 public:
-    virtual ~ICommandLineController() = default;
-
-    virtual bool canHandleOption(const CommandLineOption& opt) const = 0;
-    virtual bool apply(const CommandLineOption& opt, const CommandLineValues& vals) = 0;
+    virtual ~ICommandLineHandler() = default;
 };
-
-using ICommandLineControllerPtr = std::shared_ptr<ICommandLineController>;
 }
 
-#endif // MU_COMMANDLINE_ICOMMANDLINECONTROLLER_H
+#endif // MU_COMMANDLINE_ICOMMANDLINEHANDLER_H
