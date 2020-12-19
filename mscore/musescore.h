@@ -489,7 +489,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void createPlayPanel();
 
       ScoreTab* createScoreTab();
-      void askResetOldScorePositions(Score* score);
+      void askMigrateScore(Score* score);
 
       QString getUtmParameters(QString medium) const;
 
