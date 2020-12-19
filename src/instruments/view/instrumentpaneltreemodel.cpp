@@ -72,7 +72,7 @@ InstrumentPanelTreeModel::~InstrumentPanelTreeModel()
 
 bool InstrumentPanelTreeModel::canReceiveAction(const actions::ActionName&) const
 {
-    return true;
+    return m_masterNotationParts != nullptr;
 }
 
 void InstrumentPanelTreeModel::clear()
