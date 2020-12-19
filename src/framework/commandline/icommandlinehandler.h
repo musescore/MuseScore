@@ -16,25 +16,23 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_APPSHELL_ICOMMANDLINEREGISTER_H
-#define MU_APPSHELL_ICOMMANDLINEREGISTER_H
+#ifndef MU_COMMANDLINE_ICOMMANDLINECONTROLLER_H
+#define MU_COMMANDLINE_ICOMMANDLINECONTROLLER_H
 
 #include <memory>
-#include "modularity/imoduleexport.h"
-#include "icommandlinehandler.h"
+#include "commandlinetypes.h"
 
-namespace mu::appshell {
-class ICommandLineRegister : MODULE_EXPORT_INTERFACE
+namespace mu::commandline {
+class ICommandLineController
 {
-    INTERFACE_ID(ICommandLineRegister)
-
 public:
-    virtual ~ICommandLineRegister() = default;
+    virtual ~ICommandLineController() = default;
 
-    virtual bool reg(const ICommandLineHandlerPtr& h) = 0;
-    virtual ICommandLineHandlerPtr handler(const ICommandLineHandler::Option& opt) const = 0;
-    virtual ICommandLineHandlerPtr handler(const std::string& opt) const = 0;
+    virtual bool canHandleOption(const CommandLineOption& opt) const = 0;
+    virtual bool apply(const CommandLineOption& opt, const CommandLineValues& vals) = 0;
 };
+
+using ICommandLineControllerPtr = std::shared_ptr<ICommandLineController>;
 }
 
-#endif // MU_APPSHELL_ICOMMANDLINEREGISTER_H
+#endif // MU_COMMANDLINE_ICOMMANDLINECONTROLLER_H

@@ -184,9 +184,9 @@ void AppShell::applyCommandLineArguments(QCommandLineParser& parser)
     qDebug() << "options: " << options;
 
     for (const QString& opt : options) {
-        ICommandLineHandlerPtr h = clregister()->handler(opt.toStdString());
+        ICommandLineControllerPtr h = clregister()->handler(opt.toStdString());
         if (h) {
-            ICommandLineHandler::Values hvals;
+            ICommandLineController::Values hvals;
             QStringList values = parser.values(opt);
             for (const QString& v : values) {
                 hvals.push_back(v.toStdString());

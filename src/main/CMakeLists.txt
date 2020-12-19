@@ -130,6 +130,7 @@ endif(BUILD_TELEMETRY_MODULE)
 set(LINK_LIB ${LINK_LIB}
     libmscore
     actions
+    commandline
     appshell
     cloud
     context
@@ -149,6 +150,7 @@ set(LINK_LIB ${LINK_LIB}
     playback
     instruments
     plugins
+    convertor
     )
 
 if (BUILD_VST)
