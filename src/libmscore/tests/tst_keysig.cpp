@@ -10,8 +10,8 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
-#include "mtest/testutils.h"
+#include "testing/qtestsuite.h"
+#include "testutils.h"
 #include "libmscore/score.h"
 #include "libmscore/measure.h"
 #include "libmscore/keysig.h"
@@ -19,7 +19,7 @@
 #include "libmscore/fraction.h"
 #include "libmscore/part.h"
 
-#define DIR QString("libmscore/keysig/")
+static const QString KEYSIG_DATA_DIR("keysig_data/");
 
 using namespace Ms;
 
@@ -55,20 +55,20 @@ void TestKeySig::initTestCase()
 void TestKeySig::keysig()
 {
     QString writeFile1("keysig01-test.mscx");
-    QString reference1(DIR + "keysig01-ref.mscx");     // with D maj
+    QString reference1(KEYSIG_DATA_DIR + "keysig01-ref.mscx");     // with D maj
     QString writeFile2("keysig02-test.mscx");
-    QString reference2(DIR + "keysig02-ref.mscx");     // with Eb maj
+    QString reference2(KEYSIG_DATA_DIR + "keysig02-ref.mscx");     // with Eb maj
     QString writeFile3("keysig03-test.mscx");
-    QString reference3(DIR + "keysig.mscx");           // orig
+    QString reference3(KEYSIG_DATA_DIR + "keysig.mscx");           // orig
     QString writeFile4("keysig04-test.mscx");
-    QString reference4(DIR + "keysig02-ref.mscx");     // with Eb maj
+    QString reference4(KEYSIG_DATA_DIR + "keysig02-ref.mscx");     // with Eb maj
     QString writeFile5("keysig05-test.mscx");
-    QString reference5(DIR + "keysig01-ref.mscx");     // with D maj
+    QString reference5(KEYSIG_DATA_DIR + "keysig01-ref.mscx");     // with D maj
     QString writeFile6("keysig06-test.mscx");
-    QString reference6(DIR + "keysig.mscx");           // orig
+    QString reference6(KEYSIG_DATA_DIR + "keysig.mscx");           // orig
 
     // read file
-    MasterScore* score = readScore(DIR + "keysig.mscx");
+    MasterScore* score = readScore(KEYSIG_DATA_DIR + "keysig.mscx");
     Measure* m2 = score->firstMeasure()->nextMeasure();
 
     // add a key signature (D major) in measure 2
@@ -121,7 +121,7 @@ void TestKeySig::keysig()
 
 void TestKeySig::keysig_78216()
 {
-    MasterScore* score = readScore(DIR + "keysig_78216.mscx");
+    MasterScore* score = readScore(KEYSIG_DATA_DIR + "keysig_78216.mscx");
 
     Measure* m1 = score->firstMeasure();
     Measure* m2 = m1->nextMeasure();
@@ -144,11 +144,11 @@ void TestKeySig::keysig_78216()
 
 void TestKeySig::concertPitch()
 {
-    MasterScore* score = readScore(DIR + "concert-pitch.mscx");
+    MasterScore* score = readScore(KEYSIG_DATA_DIR + "concert-pitch.mscx");
     score->cmdConcertPitchChanged(true);
-    QVERIFY(saveCompareScore(score, "concert-pitch-01-test.mscx", DIR + "concert-pitch-01-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "concert-pitch-01-test.mscx", KEYSIG_DATA_DIR + "concert-pitch-01-ref.mscx"));
     score->cmdConcertPitchChanged(false);
-    QVERIFY(saveCompareScore(score, "concert-pitch-02-test.mscx", DIR + "concert-pitch-02-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "concert-pitch-02-test.mscx", KEYSIG_DATA_DIR + "concert-pitch-02-ref.mscx"));
 
     delete score;
 }
@@ -159,7 +159,7 @@ void TestKeySig::concertPitch()
 
 void TestKeySig::preferSharpFlat()
 {
-    MasterScore* score1 = readScore(DIR + "preferSharpFlat-1.mscx");
+    MasterScore* score1 = readScore(KEYSIG_DATA_DIR + "preferSharpFlat-1.mscx");
     auto parts = score1->parts();
     Part* part1 = parts[0];
     part1->setPreferSharpFlat(PreferSharpFlat::FLATS);
@@ -167,16 +167,16 @@ void TestKeySig::preferSharpFlat()
                                  Fraction(16, 4));
     score1->update();
     score1->doLayout();
-    QVERIFY(saveCompareScore(score1, "preferSharpFlat-1-test.mscx", DIR + "preferSharpFlat-1-ref.mscx"));
+    QVERIFY(saveCompareScore(score1, "preferSharpFlat-1-test.mscx", KEYSIG_DATA_DIR + "preferSharpFlat-1-ref.mscx"));
     delete score1;
 
-    MasterScore* score2 = readScore(DIR + "preferSharpFlat-2.mscx");
+    MasterScore* score2 = readScore(KEYSIG_DATA_DIR + "preferSharpFlat-2.mscx");
     score2->cmdSelectAll();
     score2->startCmd();
     // transpose augmented unison up
     score2->transpose(TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 1, true, true, true);
     score2->endCmd();
-    QVERIFY(saveCompareScore(score2, "preferSharpFlat-2-test.mscx", DIR + "preferSharpFlat-2-ref.mscx"));
+    QVERIFY(saveCompareScore(score2, "preferSharpFlat-2-test.mscx", KEYSIG_DATA_DIR + "preferSharpFlat-2-ref.mscx"));
     delete score2;
 }
 
