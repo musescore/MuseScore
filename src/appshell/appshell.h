@@ -20,16 +20,31 @@
 #ifndef MU_APPSHELL_APPSHELL_H
 #define MU_APPSHELL_APPSHELL_H
 
-#include <functional>
+#include <vector>
+
+#include "modularity/imodulesetup.h"
+#include "modularity/ioc.h"
+#include "icommandlineregister.h"
+
+class QCommandLineParser;
 
 namespace mu {
 namespace appshell {
 class AppShell
 {
+    INJECT(appshell, ICommandLineRegister, clregister)
 public:
     AppShell();
 
-    int run(int argc, char** argv, std::function<void()> moduleSetup);
+    void addModule(mu::framework::IModuleSetup* module);
+
+    int run(int argc, char** argv);
+
+private:
+    void parseCommandLineArguments(QCommandLineParser& parser) const;
+    void applyCommandLineArguments(QCommandLineParser& parser);
+
+    std::vector<mu::framework::IModuleSetup*> m_modules;
 };
 }
 }

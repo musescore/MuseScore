@@ -81,8 +81,6 @@ endif()
 add_executable(${EXECUTABLE_NAME}
       ${ICON_RES_FILE}
       main.cpp
-      modulessetup.cpp
-      modulessetup.h
       )
 
 # If MSCORE_OUTPUT_NAME is set (e.g, when cmake is called by the user), the output executable will be

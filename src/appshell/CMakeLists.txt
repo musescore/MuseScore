@@ -23,15 +23,19 @@ set(MODULE_QRC appshell.qrc)
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 
 include(${CMAKE_CURRENT_LIST_DIR}/view/dockwindow/dockwindow.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/view/settings/settings.cmake)
 
 set(MODULE_SRC
-    ${DOCKWINDOW_SRC}
-    ${SETTINGS_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/appshellmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/appshellmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/appshell.cpp
     ${CMAKE_CURRENT_LIST_DIR}/appshell.h
+    ${CMAKE_CURRENT_LIST_DIR}/icommandlineregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/icommandlinehandler.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/commandlineregister.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/commandlineregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/settings/settingslistmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/settings/settingslistmodel.h
+    ${DOCKWINDOW_SRC}
     )
 
 set(MODULE_LINK

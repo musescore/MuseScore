@@ -20,8 +20,46 @@
 #include <QTextCodec>
 
 #include "config.h"
-#include "modulessetup.h"
+#include "runtime.h"
+#include "log.h"
+
 #include "appshell/appshell.h"
+
+#include "framework/global/globalmodule.h"
+#include "framework/ui/uimodule.h"
+#include "framework/uicomponents/uicomponentsmodule.h"
+#include "framework/fonts/fontsmodule.h"
+#include "framework/actions/actionsmodule.h"
+#include "framework/shortcuts/shortcutsmodule.h"
+#include "framework/workspace/workspacemodule.h"
+#include "framework/system/systemmodule.h"
+#include "framework/network/networkmodule.h"
+#include "framework/audio/audiomodule.h"
+#include "framework/midi/midimodule.h"
+
+#include "appshell/appshellmodule.h"
+#include "cloud/cloudmodule.h"
+#include "context/contextmodule.h"
+#include "userscores/userscoresmodule.h"
+#include "extensions/extensionsmodule.h"
+#include "languages/languagesmodule.h"
+#include "plugins/pluginsmodule.h"
+#include "notation/notationmodule.h"
+#include "importexport/importexportmodule.h"
+#include "importexport/importexportmodule.h"
+#include "commonscene/commonscenemodule.h"
+#include "palette/palettemodule.h"
+#include "inspector/inspectormodule.h"
+#include "playback/playbackmodule.h"
+#include "instruments/instrumentsmodule.h"
+
+#ifdef BUILD_VST
+#include "framework/vst/vstmodule.h"
+#endif
+
+#ifdef BUILD_TELEMETRY_MODULE
+#include "framework/telemetry/telemetrysetup.h"
+#endif
 
 #if (defined (_MSCVER) || defined (_MSC_VER))
 #include <vector>
@@ -38,9 +76,41 @@ int main(int argc, char** argv)
     // would otherwise default to the local ANSI code page and cause corruption of any non-ANSI Unicode characters in command-line arguments.
     QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
 
-    //! HACK A temporary hack is required because some modules
-    //! can only be initialized after the creation of the QApplication
-    auto moduleSetup = []() { ModulesSetup::instance()->setup(); };
+    mu::appshell::AppShell app;
+
+    //! NOTE `telemetry` must be first, because it install crash handler.
+    //! others modules order not important (must be)
+#ifdef BUILD_TELEMETRY_MODULE
+    app.addModule(new mu::telemetry::TelemetrySetup());
+#endif
+    app.addModule(new mu::framework::UiModule());
+    app.addModule(new mu::framework::UiComponentsModule());
+    app.addModule(new mu::fonts::FontsModule());
+    app.addModule(new mu::framework::SystemModule());
+    app.addModule(new mu::framework::NetworkModule());
+    app.addModule(new mu::plugins::PluginsModule());
+
+    app.addModule(new mu::actions::ActionsModule());
+    app.addModule(new mu::appshell::AppShellModule());
+    app.addModule(new mu::cloud::CloudModule());
+    app.addModule(new mu::context::ContextModule());
+    app.addModule(new mu::shortcuts::ShortcutsModule());
+    app.addModule(new mu::workspace::WorkspaceModule());
+    app.addModule(new mu::audio::AudioModule());
+    app.addModule(new mu::midi::MidiModule());
+    app.addModule(new mu::userscores::UserScoresModule());
+    app.addModule(new mu::extensions::ExtensionsModule());
+    app.addModule(new mu::languages::LanguagesModule());
+    app.addModule(new mu::notation::NotationModule());
+    app.addModule(new mu::commonscene::CommonSceneModule());
+    app.addModule(new mu::playback::PlaybackModule());
+    app.addModule(new mu::instruments::InstrumentsModule());
+#ifdef BUILD_VST
+    app.addModule(new mu::vst::VSTModule());
+#endif
+    app.addModule(new mu::importexport::ImportExportModule());
+    app.addModule(new mu::inspector::InspectorModule());
+    app.addModule(new mu::palette::PaletteModule());
 
 #if (defined (_MSCVER) || defined (_MSC_VER))
     // On MSVC under Windows, we need to manually retrieve the command-line arguments and convert them from UTF-16 to UTF-8.
@@ -49,16 +119,13 @@ int main(int argc, char** argv)
     LPWSTR* argvUTF16 = CommandLineToArgvW(GetCommandLineW(), &argcUTF16);
 
     std::vector<QByteArray> argvUTF8Q;
-
     std::for_each(argvUTF16, argvUTF16 + argcUTF16, [&argvUTF8Q](const auto& arg) {
         argvUTF8Q.emplace_back(QString::fromUtf16(reinterpret_cast<const char16_t*>(arg), -1).toUtf8());
     });
 
     LocalFree(argvUTF16);
 
-    // Ms::runApplication() wants an argv-style array of raw pointers to the arguments, so let's create a vector of them.
     std::vector<char*> argvUTF8;
-
     for (auto& arg : argvUTF8Q) {
         argvUTF8.push_back(arg.data());
     }
@@ -76,10 +143,6 @@ int main(int argc, char** argv)
 
 #endif
 
-    mu::appshell::AppShell app;
-    int code = app.run(argcFinal, argvFinal, moduleSetup);
-
-    ModulesSetup::instance()->deinit();
-
+    int code = app.run(argcFinal, argvFinal);
     return code;
 }
