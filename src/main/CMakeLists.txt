@@ -144,6 +144,7 @@ endif(BUILD_TELEMETRY_MODULE)
 set(LINK_LIB ${LINK_LIB}
     libmscore
     actions
+    commandline
     appshell
     context
     shortcuts

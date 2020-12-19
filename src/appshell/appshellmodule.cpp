@@ -23,7 +23,6 @@
 
 #include "modularity/ioc.h"
 
-#include "internal/commandlineregister.h"
 #include "ui/iinteractiveuriregister.h"
 
 #include "view/dockwindow/docksetup.h"
@@ -44,11 +43,6 @@ AppShellModule::AppShellModule()
 std::string AppShellModule::moduleName() const
 {
     return "appshell";
-}
-
-void AppShellModule::registerExports()
-{
-    ioc()->registerExport<ICommandLineRegister>(moduleName(), new CommandLineRegister());
 }
 
 void AppShellModule::resolveImports()
