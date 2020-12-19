@@ -2001,7 +2001,8 @@ MuseScore::MuseScore()
             const bool loadSuccess = _loginManager->load();
 
             if (cliSaveOnline && !loadSuccess) {
-                  qFatal(qUtf8Printable(tr("No login credentials stored. Please sign in via the GUI.")));
+                  fprintf(stderr, "%s\n", qPrintable(tr("No login credentials stored. Please sign in via the GUI.")));
+                  ::exit(EXIT_FAILURE);
                   }
             }
 
@@ -7764,7 +7765,8 @@ MuseScoreApplication::CommandLineParseResult MuseScoreApplication::parseCommandL
             MScore::noGui = true;
 
             if (parser.positionalArguments().isEmpty()) {
-                  qFatal("Must specify at least one score to save online.");
+                  fprintf(stderr, "%s\n", qPrintable(tr("Must specify at least one score to save online.")));
+                  ::exit(EXIT_FAILURE);
             }
       }
 
@@ -7818,8 +7820,10 @@ MuseScoreApplication::CommandLineParseResult MuseScoreApplication::parseCommandL
             diffMode = true;
             }
       if (parser.isSet("run-test-script")) {
-            if (rawDiffMode || diffMode)
-                  qFatal("incompatible options");
+            if (rawDiffMode || diffMode) {
+                  fprintf(stderr, "%s\n", qPrintable(tr("--run-test-script is incompatible with --diff and --raw-diff")));
+                  ::exit(EXIT_FAILURE);
+                  }
             MScore::noGui = true;
             scriptTestMode = true;
             }
@@ -7849,11 +7853,15 @@ MuseScoreApplication::CommandLineParseResult MuseScoreApplication::parseCommandL
                         }
             }
       if (rawDiffMode || diffMode) {
-            if (argv.size() != 2)
-                  qFatal("Only two scores are needed for performing a comparison");
+            if (argv.size() != 2) {
+                  fprintf(stderr, "%s\n", qPrintable(tr("Only two scores are needed for performing a comparison")));
+                  ::exit(EXIT_FAILURE);
+                  }
             }
-      if (scriptTestMode && argv.empty())
-            qFatal("Please specify scripts to execute");
+      if (scriptTestMode && argv.empty()) {
+            fprintf(stderr, "%s\n", qPrintable(tr("Please specify scripts to execute")));
+            ::exit(EXIT_FAILURE);
+            }
 
       parseResult.argv = argv;
       return parseResult;
