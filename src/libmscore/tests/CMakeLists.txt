@@ -41,6 +41,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/tst_element.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_exchangevoices.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_hairpin.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tst_implodeExplode.cpp
 )
 
 set(MODULE_TEST_LINK

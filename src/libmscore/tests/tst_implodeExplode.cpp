@@ -10,15 +10,15 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
+#include "testing/qtestsuite.h"
 
-#include "mtest/testutils.h"
+#include "testutils.h"
 #include "libmscore/score.h"
 #include "libmscore/undo.h"
 #include "libmscore/measure.h"
 #include "libmscore/chord.h"
 
-#define DIR QString("libmscore/implode_explode/")
+static const QString IMPLODEEXP_DATA_DIR("implode_explode_data/");
 
 using namespace Ms;
 
@@ -55,11 +55,11 @@ void TestImplodeExplode::initTestCase()
 
 void TestImplodeExplode::undoExplode()
 {
-    QString readFile(DIR + "undoExplode.mscx");
+    QString readFile(IMPLODEEXP_DATA_DIR + "undoExplode.mscx");
     QString writeFile1("undoExplode01-test.mscx");
-    QString reference1(DIR + "undoExplode01-ref.mscx");
+    QString reference1(IMPLODEEXP_DATA_DIR + "undoExplode01-ref.mscx");
     QString writeFile2("undoExplode02-test.mscx");
-    QString reference2(DIR + "undoExplode02-ref.mscx");
+    QString reference2(IMPLODEEXP_DATA_DIR + "undoExplode02-ref.mscx");
 
     MasterScore* score = readScore(readFile);
     score->doLayout();
@@ -88,11 +88,11 @@ void TestImplodeExplode::undoExplode()
 
 void TestImplodeExplode::undoExplodeVoices()
 {
-    QString readFile(DIR + "undoExplode.mscx");
+    QString readFile(IMPLODEEXP_DATA_DIR + "undoExplode.mscx");
     QString writeFile1("undoExplode01-test.mscx");
-    QString reference1(DIR + "undoExplode01-ref.mscx");
+    QString reference1(IMPLODEEXP_DATA_DIR + "undoExplode01-ref.mscx");
     QString writeFile2("undoExplode02-test.mscx");
-    QString reference2(DIR + "undoExplode02-ref.mscx");
+    QString reference2(IMPLODEEXP_DATA_DIR + "undoExplode02-ref.mscx");
 }
 
 //---------------------------------------------------------
@@ -101,11 +101,11 @@ void TestImplodeExplode::undoExplodeVoices()
 
 void TestImplodeExplode::undoImplode()
 {
-    QString readFile(DIR + "undoImplode.mscx");
+    QString readFile(IMPLODEEXP_DATA_DIR + "undoImplode.mscx");
     QString writeFile1("undoImplode01-test.mscx");
-    QString reference1(DIR + "undoImplode01-ref.mscx");
+    QString reference1(IMPLODEEXP_DATA_DIR + "undoImplode01-ref.mscx");
     QString writeFile2("undoImplode02-test.mscx");
-    QString reference2(DIR + "undoImplode02-ref.mscx");
+    QString reference2(IMPLODEEXP_DATA_DIR + "undoImplode02-ref.mscx");
 
     MasterScore* score = readScore(readFile);
     score->doLayout();
@@ -134,11 +134,11 @@ void TestImplodeExplode::undoImplode()
 
 void TestImplodeExplode::undoExplode1()
 {
-    QString readFile(DIR + "explode1.mscx");
+    QString readFile(IMPLODEEXP_DATA_DIR + "explode1.mscx");
     QString writeFile1("explode1-test.mscx");
-    QString reference1(DIR + "explode1-ref.mscx");
+    QString reference1(IMPLODEEXP_DATA_DIR + "explode1-ref.mscx");
     QString writeFile2("explode1-test2.mscx");
-    QString reference2(DIR + "explode1-ref2.mscx");
+    QString reference2(IMPLODEEXP_DATA_DIR + "explode1-ref2.mscx");
 }
 
 //---------------------------------------------------------
@@ -147,11 +147,11 @@ void TestImplodeExplode::undoExplode1()
 
 void TestImplodeExplode::undoImplodeVoice()
 {
-    QString readFile(DIR + "undoImplodeVoice.mscx");
+    QString readFile(IMPLODEEXP_DATA_DIR + "undoImplodeVoice.mscx");
     QString writeFile1("undoImplodeVoice01-test.mscx");
-    QString reference1(DIR + "undoImplodeVoice01-ref.mscx");
+    QString reference1(IMPLODEEXP_DATA_DIR + "undoImplodeVoice01-ref.mscx");
     QString writeFile2("undoImplodeVoice02-test.mscx");
-    QString reference2(DIR + "undoImplodeVoice02-ref.mscx");
+    QString reference2(IMPLODEEXP_DATA_DIR + "undoImplodeVoice02-ref.mscx");
 
     MasterScore* score = readScore(readFile);
     score->doLayout();
@@ -180,10 +180,10 @@ void TestImplodeExplode::undoImplodeVoice()
 
 void TestImplodeExplode::implode1()
 {
-    QString readFile(DIR + "implode1.mscx");
+    QString readFile(IMPLODEEXP_DATA_DIR + "implode1.mscx");
     QString writeFile1("implode1-test1.mscx");
     QString writeFile2("implode1-test2.mscx");
-    QString reference(DIR + "implode1-ref.mscx");
+    QString reference(IMPLODEEXP_DATA_DIR + "implode1-ref.mscx");
 
     MasterScore* score = readScore(readFile);
     score->doLayout();
