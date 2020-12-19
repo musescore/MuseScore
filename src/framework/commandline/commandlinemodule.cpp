@@ -16,27 +16,20 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_APPSHELL_COMMANDLINEREGISTER_H
-#define MU_APPSHELL_COMMANDLINEREGISTER_H
+#include "commandlinemodule.h"
 
-#include <vector>
+#include "modularity/ioc.h"
 
-#include "../icommandlineregister.h"
+#include "internal/commandlineregister.h"
 
-namespace mu::appshell {
-class CommandLineRegister : public ICommandLineRegister
+using namespace mu::commandline;
+
+std::string CommandLineModule::moduleName() const
 {
-public:
-    CommandLineRegister();
-
-    bool reg(const ICommandLineHandlerPtr& h) override;
-    ICommandLineHandlerPtr handler(const ICommandLineHandler::Option& opt) const override;
-    ICommandLineHandlerPtr handler(const std::string& opt) const override;
-
-private:
-
-    std::vector<ICommandLineHandlerPtr> m_handlers;
-};
+    return "commandline";
 }
 
-#endif // MU_APPSHELL_COMMANDLINEREGISTER_H
+void CommandLineModule::registerExports()
+{
+    framework::ioc()->registerExport<ICommandLineRegister>(moduleName(), new CommandLineRegister());
+}

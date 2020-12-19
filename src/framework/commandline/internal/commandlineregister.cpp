@@ -26,7 +26,7 @@ CommandLineRegister::CommandLineRegister()
 {
 }
 
-bool CommandLineRegister::reg(const ICommandLineHandlerPtr& h)
+bool CommandLineRegister::reg(const ICommandLineControllerPtr& h)
 {
     IF_ASSERT_FAILED(h) {
         return false;
@@ -40,9 +40,9 @@ bool CommandLineRegister::reg(const ICommandLineHandlerPtr& h)
     return true;
 }
 
-ICommandLineHandlerPtr CommandLineRegister::handler(const ICommandLineHandler::Option& opt) const
+ICommandLineControllerPtr CommandLineRegister::handler(const ICommandLineController::Option& opt) const
 {
-    for (const ICommandLineHandlerPtr& h : m_handlers) {
+    for (const ICommandLineControllerPtr& h : m_handlers) {
         if (h->option() == opt) {
             return h;
         }
@@ -50,9 +50,9 @@ ICommandLineHandlerPtr CommandLineRegister::handler(const ICommandLineHandler::O
     return nullptr;
 }
 
-ICommandLineHandlerPtr CommandLineRegister::handler(const std::string& opt) const
+ICommandLineControllerPtr CommandLineRegister::handler(const std::string& opt) const
 {
-    for (const ICommandLineHandlerPtr& h : m_handlers) {
+    for (const ICommandLineControllerPtr& h : m_handlers) {
         if (h->option() == opt) {
             return h;
         }
