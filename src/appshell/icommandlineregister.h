@@ -16,28 +16,25 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#ifndef MU_APPSHELL_ICOMMANDLINEREGISTER_H
+#define MU_APPSHELL_ICOMMANDLINEREGISTER_H
 
-#ifndef MU_APPSHELL_APPSHELLMODULE_H
-#define MU_APPSHELL_APPSHELLMODULE_H
+#include <memory>
+#include "modularity/imoduleexport.h"
+#include "icommandlinehandler.h"
 
-#include "modularity/imodulesetup.h"
-
-namespace mu {
-namespace appshell {
-class AppShellModule : public framework::IModuleSetup
+namespace mu::appshell {
+class ICommandLineRegister : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(ICommandLineRegister)
+
 public:
-    AppShellModule();
+    virtual ~ICommandLineRegister() = default;
 
-    std::string moduleName() const override;
-
-    void registerExports() override;
-    void resolveImports() override;
-
-    void registerResources() override;
-    void registerUiTypes() override;
+    virtual bool reg(const ICommandLineHandlerPtr& h) = 0;
+    virtual ICommandLineHandlerPtr handler(const ICommandLineHandler::Option& opt) const = 0;
+    virtual ICommandLineHandlerPtr handler(const std::string& opt) const = 0;
 };
 }
-}
 
-#endif // MU_APPSHELL_APPSHELLMODULE_H
+#endif // MU_APPSHELL_ICOMMANDLINEREGISTER_H

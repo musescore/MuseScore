@@ -16,28 +16,46 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#include "commandlineregister.h"
 
-#ifndef MU_APPSHELL_APPSHELLMODULE_H
-#define MU_APPSHELL_APPSHELLMODULE_H
+#include "log.h"
 
-#include "modularity/imodulesetup.h"
+using namespace mu::appshell;
 
-namespace mu {
-namespace appshell {
-class AppShellModule : public framework::IModuleSetup
+CommandLineRegister::CommandLineRegister()
 {
-public:
-    AppShellModule();
-
-    std::string moduleName() const override;
-
-    void registerExports() override;
-    void resolveImports() override;
-
-    void registerResources() override;
-    void registerUiTypes() override;
-};
-}
 }
 
-#endif // MU_APPSHELL_APPSHELLMODULE_H
+bool CommandLineRegister::reg(const ICommandLineHandlerPtr& h)
+{
+    IF_ASSERT_FAILED(h) {
+        return false;
+    }
+
+    IF_ASSERT_FAILED(handler(h->option()) == nullptr) {
+        return false;
+    }
+
+    m_handlers.push_back(h);
+    return true;
+}
+
+ICommandLineHandlerPtr CommandLineRegister::handler(const ICommandLineHandler::Option& opt) const
+{
+    for (const ICommandLineHandlerPtr& h : m_handlers) {
+        if (h->option() == opt) {
+            return h;
+        }
+    }
+    return nullptr;
+}
+
+ICommandLineHandlerPtr CommandLineRegister::handler(const std::string& opt) const
+{
+    for (const ICommandLineHandlerPtr& h : m_handlers) {
+        if (h->option() == opt) {
+            return h;
+        }
+    }
+    return nullptr;
+}
