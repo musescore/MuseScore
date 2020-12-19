@@ -2597,15 +2597,13 @@ void MuseScore::reloadInstrumentTemplates()
       }
 
 //---------------------------------------------------------
-//   askResetOldScorePositions
+//   askMigrateScore
 //---------------------------------------------------------
 
-void MuseScore::askResetOldScorePositions(Score* score)
+void MuseScore::askMigrateScore(Score* score)
       {
       if (!preferences.getBool(PREF_MIGRATION_DO_NOT_ASK_ME_AGAIN) && score->mscVersion() < MSCVERSION) {
-
             ScoreMigrationDialog* migrationDialog = new ScoreMigrationDialog(mscore->getQmlUiEngine(), score);
-
             migrationDialog->show();
             }
       }
@@ -2767,7 +2765,7 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       MasterScore* master = cs->masterScore();
       if (!scoreWasShown[master]) {
             scoreWasShown[master] = true;
-            askResetOldScorePositions(master);
+            askMigrateScore(master);
             }
       }
 
