@@ -206,6 +206,10 @@ void NotationActionController::init()
 
 bool NotationActionController::canReceiveAction(const actions::ActionName& actionName) const
 {
+    if (!currentNotation()) {
+        return false;
+    }
+
     if (isTextEditting()) {
         return actionName == ESCAPE_ACTION_NAME;
     }
