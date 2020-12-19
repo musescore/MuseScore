@@ -78,6 +78,7 @@ endif(BUILD_PCH)
 if (BUILD_UNITY)
     if (MODULE_USE_UNITY_NONE)
         # disabled unity build for current module
+        set_target_properties(${MODULE} PROPERTIES UNITY_BUILD OFF)
     else()
         set_target_properties(${MODULE} PROPERTIES UNITY_BUILD ON)
     endif()

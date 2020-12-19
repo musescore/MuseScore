@@ -97,6 +97,11 @@ inline mu::Ret make_ret(Ret::Code e)
     return Ret(static_cast<int>(e));
 }
 
+inline mu::Ret make_ret(Ret::Code e, const std::string& text)
+{
+    return Ret(static_cast<int>(e), text);
+}
+
 inline bool check_ret(const Ret& r, Ret::Code c)
 {
     return r.code() == int(c);
