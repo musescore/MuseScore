@@ -371,15 +371,14 @@ Score* MuseScore::openScore(const QString& fn, bool switchTab)
 
             migrator.registerHandler(new StyleDefaultsHandler());
 
-           if (Ms::preferences.getBool(PREF_MIGRATION_DO_NOT_ASK_ME_AGAIN)) {
-
-                  if (Ms::preferences.getBool(PREF_MIGRATION_APPLY_LELAND_STYLE))
+            if (preferences.getBool(PREF_MIGRATION_DO_NOT_ASK_ME_AGAIN)) {
+                  if (preferences.getBool(PREF_MIGRATION_APPLY_LELAND_STYLE))
                         migrator.registerHandler(new LelandStyleHandler());
 
-                  if (Ms::preferences.getBool(PREF_MIGRATION_APPLY_EDWIN_STYLE))
+                  if (preferences.getBool(PREF_MIGRATION_APPLY_EDWIN_STYLE))
                         migrator.registerHandler(new EdwinStyleHandler());
 
-                  if (Ms::preferences.getString(PREF_IMPORT_COMPATIBILITY_RESET_ELEMENT_POSITIONS).contains("Yes"))
+                  if (preferences.getBool(PREF_MIGRATION_RESET_ELEMENT_POSITIONS))
                         migrator.registerHandler(new ResetAllElementsPositionsHandler());
                   }
 

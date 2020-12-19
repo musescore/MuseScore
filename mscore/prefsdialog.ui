@@ -101,7 +101,7 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="3" column="0" rowspan="3">
-        <widget class="QGroupBox" name="groupBox_6">
+        <widget class="QGroupBox" name="groupBox_folders">
          <property name="title">
           <string>Folders</string>
          </property>
@@ -135,7 +135,7 @@
            </widget>
           </item>
           <item row="5" column="0">
-           <widget class="QLabel" name="label_9">
+           <widget class="QLabel" name="label_imagesFolder">
             <property name="text">
              <string>Images:</string>
             </property>
@@ -145,7 +145,7 @@
            </widget>
           </item>
           <item row="6" column="0">
-           <widget class="QLabel" name="label_extensions">
+           <widget class="QLabel" name="label_extensionsFolder">
             <property name="text">
              <string>Extensions:</string>
             </property>
@@ -155,7 +155,7 @@
            </widget>
           </item>
           <item row="0" column="0">
-           <widget class="QLabel" name="label_86">
+           <widget class="QLabel" name="label_scoresFolder">
             <property name="text">
              <string>Scores:</string>
             </property>
@@ -165,7 +165,7 @@
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QLabel" name="label_88">
+           <widget class="QLabel" name="label_stylesFolder">
             <property name="text">
              <string>Styles:</string>
             </property>
@@ -185,7 +185,7 @@
            </widget>
           </item>
           <item row="2" column="0">
-           <widget class="QLabel" name="label_2">
+           <widget class="QLabel" name="label_templatesFolder">
             <property name="text">
              <string>Templates:</string>
             </property>
@@ -235,7 +235,7 @@
            </widget>
           </item>
           <item row="3" column="0">
-           <widget class="QLabel" name="label_89">
+           <widget class="QLabel" name="label_pluginsFolder">
             <property name="text">
              <string>Plugins:</string>
             </property>
@@ -295,7 +295,7 @@
            </widget>
           </item>
           <item row="4" column="0">
-           <widget class="QLabel" name="label_5">
+           <widget class="QLabel" name="label_soundFontsFolder">
             <property name="text">
              <string>SoundFonts:</string>
             </property>
@@ -408,11 +408,21 @@
         </widget>
        </item>
        <item row="2" column="1" rowspan="2">
-        <widget class="QGroupBox" name="groupBox_12">
+        <widget class="QGroupBox" name="groupBox_appearance">
          <property name="title">
-          <string>Theme</string>
+          <string>Appearance</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_9">
+          <item row="2" column="1">
+           <widget class="QFontComboBox" name="fontFamily"/>
+          </item>
+          <item row="2" column="2">
+           <widget class="QLabel" name="fontSizeLabel">
+            <property name="text">
+             <string>Font size:</string>
+            </property>
+           </widget>
+          </item>
           <item row="1" column="1">
            <widget class="QSpinBox" name="iconWidth">
             <property name="accessibleName">
@@ -429,10 +439,10 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="2">
-           <widget class="QLabel" name="iconHeightLabel">
+          <item row="2" column="0">
+           <widget class="QLabel" name="fontFamilyLabel">
             <property name="text">
-             <string>Icon height:</string>
+             <string>Font face:</string>
             </property>
            </widget>
           </item>
@@ -440,6 +450,13 @@
            <widget class="QLabel" name="iconWidthLabel">
             <property name="text">
              <string>Icon width:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="iconHeightLabel">
+            <property name="text">
+             <string>Icon height:</string>
             </property>
            </widget>
           </item>
@@ -459,7 +476,14 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="0" colspan="2">
+          <item row="2" column="3">
+           <widget class="QDoubleSpinBox" name="fontSize">
+            <property name="suffix">
+             <string>pt</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" colspan="3">
            <widget class="QComboBox" name="styleName">
             <property name="accessibleName">
              <string>Select style</string>
@@ -476,27 +500,10 @@
             </item>
            </widget>
           </item>
-          <item row="2" column="3">
-           <widget class="QDoubleSpinBox" name="fontSize">
-            <property name="suffix">
-             <string>pt</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QFontComboBox" name="fontFamily"/>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="fontFamilyLabel">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_theme">
             <property name="text">
-             <string>Font face:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="2">
-           <widget class="QLabel" name="fontSizeLabel">
-            <property name="text">
-             <string>Font size:</string>
+             <string>Theme:</string>
             </property>
            </widget>
           </item>
@@ -504,7 +511,7 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QGroupBox" name="groupBox_10">
+        <widget class="QGroupBox" name="groupBox_language">
          <property name="title">
           <string>Language</string>
          </property>
@@ -583,21 +590,8 @@
          </layout>
         </widget>
        </item>
-       <item row="6" column="0">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>0</width>
-           <height>0</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
        <item row="0" column="0" rowspan="3">
-        <widget class="QGroupBox" name="groupBox_5">
+        <widget class="QGroupBox" name="groupBox_programStart">
          <property name="title">
           <string>Program Start</string>
          </property>
@@ -736,7 +730,7 @@
            <number>9</number>
           </property>
           <item>
-           <widget class="QLabel" name="label_25">
+           <widget class="QLabel" name="label_autoSaveTime">
             <property name="text">
              <string>Save every:</string>
             </property>
@@ -775,7 +769,7 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QGroupBox" name="groupBox_15">
+        <widget class="QGroupBox" name="groupBox_telemetry">
          <property name="title">
           <string>Telemetry</string>
          </property>
@@ -789,6 +783,19 @@
           </item>
          </layout>
         </widget>
+       </item>
+       <item row="6" column="0" colspan="2">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -812,21 +819,8 @@
        <property name="bottomMargin">
         <number>9</number>
        </property>
-       <item row="3" column="0">
-        <spacer name="verticalSpacer_3">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>0</width>
-           <height>0</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
        <item row="0" column="0">
-        <widget class="QGroupBox" name="groupBox_2">
+        <widget class="QGroupBox" name="groupBox_background">
          <property name="accessibleName">
           <string>Background</string>
          </property>
@@ -849,86 +843,7 @@
           <property name="spacing">
            <number>6</number>
           </property>
-          <item row="0" column="0">
-           <widget class="QRadioButton" name="bgColorButton">
-            <property name="text">
-             <string>Color:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <layout class="QHBoxLayout">
-            <property name="spacing">
-             <number>6</number>
-            </property>
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <property name="topMargin">
-             <number>0</number>
-            </property>
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
-            <property name="bottomMargin">
-             <number>0</number>
-            </property>
-            <item>
-             <widget class="QRadioButton" name="bgWallpaperButton">
-              <property name="text">
-               <string>Wallpaper:</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="1" column="3">
-           <layout class="QHBoxLayout">
-            <property name="spacing">
-             <number>6</number>
-            </property>
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <property name="topMargin">
-             <number>0</number>
-            </property>
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
-            <property name="bottomMargin">
-             <number>0</number>
-            </property>
-            <item>
-             <widget class="QToolButton" name="bgWallpaperSelect">
-              <property name="accessibleName">
-               <string>Choose Background wallpaper file</string>
-              </property>
-              <property name="accessibleDescription">
-               <string>Opens a file dialog for selecting the wallpaper file</string>
-              </property>
-              <property name="text">
-               <string notr="true"/>
-              </property>
-              <property name="icon">
-               <iconset resource="musescore.qrc">
-                <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLineEdit" name="bgWallpaper">
-            <property name="accessibleName">
-             <string>Background wallpaper path</string>
-            </property>
-            <property name="accessibleDescription">
-             <string>Insert path to background wallpaper file</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
+          <item row="0" column="2">
            <widget class="Awl::ColorLabel" name="bgColorLabel">
             <property name="focusPolicy">
              <enum>Qt::StrongFocus</enum>
@@ -941,11 +856,52 @@
             </property>
            </widget>
           </item>
+          <item row="1" column="2">
+           <widget class="QLineEdit" name="bgWallpaper">
+            <property name="accessibleName">
+             <string>Background wallpaper path</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to background wallpaper file</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QRadioButton" name="bgWallpaperButton">
+            <property name="text">
+             <string>Wallpaper:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QRadioButton" name="bgColorButton">
+            <property name="text">
+             <string>Color:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="4">
+           <widget class="QToolButton" name="bgWallpaperSelect">
+            <property name="accessibleName">
+             <string>Choose Background wallpaper file</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Opens a file dialog for selecting the wallpaper file</string>
+            </property>
+            <property name="text">
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QGroupBox" name="groupBox_3">
+        <widget class="QGroupBox" name="groupBox_paper">
          <property name="accessibleName">
           <string>Paper</string>
          </property>
@@ -968,68 +924,6 @@
           <property name="spacing">
            <number>6</number>
           </property>
-          <item row="2" column="0">
-           <layout class="QHBoxLayout">
-            <property name="spacing">
-             <number>6</number>
-            </property>
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <property name="topMargin">
-             <number>0</number>
-            </property>
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
-            <property name="bottomMargin">
-             <number>0</number>
-            </property>
-            <item>
-             <widget class="QRadioButton" name="fgWallpaperButton">
-              <property name="text">
-               <string>Wallpaper:</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="2" column="2">
-           <layout class="QHBoxLayout">
-            <property name="spacing">
-             <number>6</number>
-            </property>
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <property name="topMargin">
-             <number>0</number>
-            </property>
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
-            <property name="bottomMargin">
-             <number>0</number>
-            </property>
-            <item>
-             <widget class="QToolButton" name="fgWallpaperSelect">
-              <property name="accessibleName">
-               <string>Choose paper wallpaper file</string>
-              </property>
-              <property name="accessibleDescription">
-               <string>Opens a file dialog for selecting the wallpaper file</string>
-              </property>
-              <property name="text">
-               <string notr="true"/>
-              </property>
-              <property name="icon">
-               <iconset resource="musescore.qrc">
-                <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
           <item row="0" column="0">
            <widget class="QRadioButton" name="fgColorButton">
             <property name="text">
@@ -1037,7 +931,17 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
+          <item row="2" column="2">
+           <widget class="QLineEdit" name="fgWallpaper">
+            <property name="accessibleName">
+             <string>Paper wallpaper path</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to paper wallpaper file</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
            <widget class="Awl::ColorLabel" name="fgColorLabel">
             <property name="focusPolicy">
              <enum>Qt::StrongFocus</enum>
@@ -1050,17 +954,31 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
-           <widget class="QLineEdit" name="fgWallpaper">
-            <property name="accessibleName">
-             <string>Paper wallpaper path</string>
-            </property>
-            <property name="accessibleDescription">
-             <string>Insert path to paper wallpaper file</string>
+          <item row="2" column="0">
+           <widget class="QRadioButton" name="fgWallpaperButton">
+            <property name="text">
+             <string>Wallpaper:</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="0" colspan="2">
+          <item row="2" column="3">
+           <widget class="QToolButton" name="fgWallpaperSelect">
+            <property name="accessibleName">
+             <string>Choose paper wallpaper file</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Opens a file dialog for selecting the wallpaper file</string>
+            </property>
+            <property name="text">
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
            <widget class="QCheckBox" name="fgUseColorInPalettes">
             <property name="text">
              <string>Use the same color in palettes</string>
@@ -1071,7 +989,7 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QGroupBox" name="groupBox_11">
+        <widget class="QGroupBox" name="groupBox_scrollPages">
          <property name="title">
           <string>Scroll Pages</string>
          </property>
@@ -1129,7 +1047,7 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QGroupBox" name="groupBox_7">
+        <widget class="QGroupBox" name="groupBox_zoom">
          <property name="title">
           <string>Zoom</string>
          </property>
@@ -1166,14 +1084,14 @@
            </widget>
           </item>
           <item row="0" column="0">
-           <widget class="QLabel" name="label_48">
+           <widget class="QLabel" name="label_defaultZoom">
             <property name="text">
              <string>Default zoom:</string>
             </property>
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QLabel" name="label_3">
+           <widget class="QLabel" name="label_keyboardZoomPrecision">
             <property name="text">
              <string>Keyboard zoom precision:</string>
             </property>
@@ -1202,7 +1120,7 @@
            </widget>
           </item>
           <item row="2" column="0">
-           <widget class="QLabel" name="label_7">
+           <widget class="QLabel" name="label_mouseZoomPrecision">
             <property name="text">
              <string>Mouse zoom precision:</string>
             </property>
@@ -1289,7 +1207,7 @@
         </widget>
        </item>
        <item row="2" column="0" colspan="2">
-        <widget class="QGroupBox" name="groupBox_4">
+        <widget class="QGroupBox" name="groupBox_miscellaneous">
          <property name="title">
           <string>Miscellaneous</string>
          </property>
@@ -1311,7 +1229,7 @@
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QLabel" name="label_24">
+           <widget class="QLabel" name="label_proximityForSelectingElements">
             <property name="text">
              <string>Proximity for selecting elements:</string>
             </property>
@@ -1349,6 +1267,19 @@
          </layout>
         </widget>
        </item>
+       <item row="3" column="0" colspan="2">
+        <spacer name="verticalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tabNoteEntry">
@@ -1360,7 +1291,7 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout5">
        <item row="0" column="0">
-        <widget class="QGroupBox" name="groupBox_13">
+        <widget class="QGroupBox" name="groupBox_noteInput">
          <property name="title">
           <string>Note Input</string>
          </property>
@@ -1380,7 +1311,7 @@
            </widget>
           </item>
           <item row="2" column="0">
-           <widget class="QLabel" name="label_56">
+           <widget class="QLabel" name="label_delayRealTimeMode">
             <property name="accessibleName">
              <string>Delay between notes in automatic real-time mode</string>
             </property>
@@ -1423,19 +1354,6 @@
           </item>
          </layout>
         </widget>
-       </item>
-       <item row="3" column="0">
-        <spacer>
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>0</width>
-           <height>0</height>
-          </size>
-         </property>
-        </spacer>
        </item>
        <item row="0" column="1">
         <widget class="QGroupBox" name="playNotes">
@@ -1505,7 +1423,7 @@
            </widget>
           </item>
           <item row="0" column="0">
-           <widget class="QLabel" name="label_37">
+           <widget class="QLabel" name="label_defaultDuration">
             <property name="text">
              <string>Default duration:</string>
             </property>
@@ -1542,7 +1460,7 @@
            <number>6</number>
           </property>
           <item row="0" column="0">
-           <widget class="QLabel" name="label_15">
+           <widget class="QLabel" name="label_rewind">
             <property name="text">
              <string>Rewind</string>
             </property>
@@ -1594,7 +1512,7 @@
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QLabel" name="label_20">
+           <widget class="QLabel" name="label_togglePlay">
             <property name="text">
              <string>Toggle play</string>
             </property>
@@ -1656,7 +1574,7 @@
            </spacer>
           </item>
           <item row="0" column="4">
-           <widget class="QLabel" name="label_14">
+           <widget class="QLabel" name="label_wholeNote">
             <property name="text">
              <string>Whole note</string>
             </property>
@@ -1666,7 +1584,7 @@
            </widget>
           </item>
           <item row="1" column="4">
-           <widget class="QLabel" name="label_16">
+           <widget class="QLabel" name="label_halfNote">
             <property name="text">
              <string>Half note</string>
             </property>
@@ -1760,7 +1678,7 @@
            </widget>
           </item>
           <item row="2" column="4">
-           <widget class="QLabel" name="label_39">
+           <widget class="QLabel" name="label_quarterNote">
             <property name="text">
              <string>Quarter note</string>
             </property>
@@ -1770,7 +1688,7 @@
            </widget>
           </item>
           <item row="3" column="4">
-           <widget class="QLabel" name="label_40">
+           <widget class="QLabel" name="label_eighthNote">
             <property name="text">
              <string>Eighth note</string>
             </property>
@@ -1780,7 +1698,7 @@
            </widget>
           </item>
           <item row="3" column="8">
-           <widget class="QLabel" name="label_44">
+           <widget class="QLabel" name="label_rest">
             <property name="text">
              <string>Rest</string>
             </property>
@@ -1895,7 +1813,7 @@
            </widget>
           </item>
           <item row="0" column="12">
-           <widget class="QLabel" name="label_45">
+           <widget class="QLabel" name="label_augmentationDot">
             <property name="text">
              <string>Augmentation dot</string>
             </property>
@@ -1905,7 +1823,7 @@
            </widget>
           </item>
           <item row="1" column="12">
-           <widget class="QLabel" name="label_46">
+           <widget class="QLabel" name="label_doubleAugmentationDot">
             <property name="text">
              <string>Double augmentation dot</string>
             </property>
@@ -1915,7 +1833,7 @@
            </widget>
           </item>
           <item row="4" column="8">
-           <widget class="QLabel" name="label_47">
+           <widget class="QLabel" name="label_tie">
             <property name="text">
              <string>Tie</string>
             </property>
@@ -1925,7 +1843,7 @@
            </widget>
           </item>
           <item row="2" column="12">
-           <widget class="QLabel" name="label_54">
+           <widget class="QLabel" name="label_realTimeAdvance">
             <property name="text">
              <string>Real-time advance</string>
             </property>
@@ -2163,7 +2081,7 @@
            </spacer>
           </item>
           <item row="2" column="0">
-           <widget class="QLabel" name="label_50">
+           <widget class="QLabel" name="label_play">
             <property name="text">
              <string>Play</string>
             </property>
@@ -2173,7 +2091,7 @@
            </widget>
           </item>
           <item row="3" column="0">
-           <widget class="QLabel" name="label_51">
+           <widget class="QLabel" name="label_stop">
             <property name="text">
              <string>Stop</string>
             </property>
@@ -2267,7 +2185,7 @@
            </widget>
           </item>
           <item row="4" column="0">
-           <widget class="QLabel" name="label_52">
+           <widget class="QLabel" name="label_noteInput">
             <property name="text">
              <string>Note input</string>
             </property>
@@ -2319,7 +2237,7 @@
            </widget>
           </item>
           <item row="4" column="4">
-           <widget class="QLabel" name="label_41">
+           <widget class="QLabel" name="label_16thNote">
             <property name="text">
              <string>16th note</string>
             </property>
@@ -2413,7 +2331,7 @@
            </widget>
           </item>
           <item row="0" column="8">
-           <widget class="QLabel" name="label_42">
+           <widget class="QLabel" name="label_32thNote">
             <property name="text">
              <string>32nd note</string>
             </property>
@@ -2423,7 +2341,7 @@
            </widget>
           </item>
           <item row="1" column="8">
-           <widget class="QLabel" name="label_43">
+           <widget class="QLabel" name="label_64thNote">
             <property name="text">
              <string>64th note</string>
             </property>
@@ -2517,7 +2435,7 @@
            </widget>
           </item>
           <item row="2" column="8">
-           <widget class="QLabel" name="label_53">
+           <widget class="QLabel" name="label_undo">
             <property name="text">
              <string>Undo</string>
             </property>
@@ -2527,7 +2445,7 @@
            </widget>
           </item>
           <item row="3" column="12">
-           <widget class="QLabel" name="label_55">
+           <widget class="QLabel" name="label_advanceOnRelease">
             <property name="text">
              <string>Advance on release?</string>
             </property>
@@ -2553,6 +2471,19 @@
          </layout>
         </widget>
        </item>
+       <item row="3" column="0" colspan="2">
+        <spacer>
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tabScore">
@@ -2564,7 +2495,7 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout61">
        <item row="1" column="0">
-        <widget class="QGroupBox" name="groupBox_19">
+        <widget class="QGroupBox" name="groupBox_view">
          <property name="title">
           <string>View</string>
          </property>
@@ -2580,7 +2511,7 @@
         </widget>
        </item>
        <item row="0" column="0">
-        <widget class="QGroupBox" name="groupBox_39">
+        <widget class="QGroupBox" name="groupBox_defaultFiles">
          <property name="title">
           <string>Default Files</string>
          </property>
@@ -2634,7 +2565,7 @@
            </widget>
           </item>
           <item row="5" column="0">
-           <widget class="QLabel" name="label_28">
+           <widget class="QLabel" name="label_styleForPart">
             <property name="text">
              <string>Style for part:</string>
             </property>
@@ -2694,7 +2625,7 @@
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QLabel" name="label_90">
+           <widget class="QLabel" name="label_instrumentList2">
             <property name="text">
              <string>Instrument list 2:</string>
             </property>
@@ -2724,7 +2655,7 @@
            </widget>
           </item>
           <item row="0" column="0">
-           <widget class="QLabel" name="label_85">
+           <widget class="QLabel" name="label_instrumentList1">
             <property name="accessibleDescription">
              <string>Insert path to an instrument list file</string>
             </property>
@@ -2737,7 +2668,7 @@
            </widget>
           </item>
           <item row="2" column="0">
-           <widget class="QLabel" name="label_10">
+           <widget class="QLabel" name="label_scoreOrderList1">
             <property name="text">
              <string>Score order list 1:</string>
             </property>
@@ -2747,7 +2678,7 @@
            </widget>
           </item>
           <item row="3" column="0">
-           <widget class="QLabel" name="label_11">
+           <widget class="QLabel" name="label_scoreOrderList2">
             <property name="text">
              <string>Score order list 2:</string>
             </property>
@@ -2757,7 +2688,7 @@
            </widget>
           </item>
           <item row="4" column="0">
-           <widget class="QLabel" name="label_87">
+           <widget class="QLabel" name="label_style">
             <property name="text">
              <string>Style:</string>
             </property>
@@ -3369,7 +3300,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox_14">
+        <widget class="QGroupBox" name="groupBox_audioEngine">
          <property name="toolTip">
           <string>Causes the audio engine to restart.  This can allow you to connect to MIDI devices that have been started since you started MuseScore.</string>
          </property>
@@ -3423,52 +3354,6 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
        <string>Import</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_16">
-       <item row="5" column="0">
-        <widget class="QGroupBox" name="resetElementPositions">
-         <property name="toolTip">
-          <string>Reset element positions when importing scores from older MuseScore versions.</string>
-         </property>
-         <property name="title">
-          <string>Reset Element Positions</string>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_7">
-          <item>
-           <widget class="QRadioButton" name="resetElementPositionsAlwaysAsk">
-            <property name="text">
-             <string>Always ask</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="resetElementPositionsYes">
-            <property name="text">
-             <string>Yes</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="resetElementPositionsNo">
-            <property name="text">
-             <string>No</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer_21">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>0</width>
-              <height>0</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
-        </widget>
-       </item>
        <item row="2" column="0">
         <widget class="QGroupBox" name="MusicXML">
          <property name="sizePolicy">
@@ -3506,51 +3391,47 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
          <property name="title">
           <string>Style Used for Import</string>
          </property>
-         <layout class="QVBoxLayout">
-          <item>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="1" column="2">
+           <widget class="QToolButton" name="styleFileButton">
+            <property name="accessibleName">
+             <string>Choose style</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Opens a file dialog for selecting a style file</string>
+            </property>
+            <property name="text">
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QRadioButton" name="useImportStyleFile">
+            <property name="text">
+             <string>Use style file:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="importStyleFile">
+            <property name="accessibleName">
+             <string>Use style file</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to style file</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" colspan="3">
            <widget class="QRadioButton" name="useImportBuiltinStyle">
             <property name="text">
              <string>Built-in style</string>
             </property>
            </widget>
-          </item>
-          <item>
-           <layout class="QHBoxLayout">
-            <item>
-             <widget class="QRadioButton" name="useImportStyleFile">
-              <property name="text">
-               <string>Use style file:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="importStyleFile">
-              <property name="accessibleName">
-               <string>Use style file</string>
-              </property>
-              <property name="accessibleDescription">
-               <string>Insert path to style file</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QToolButton" name="styleFileButton">
-              <property name="accessibleName">
-               <string>Choose style</string>
-              </property>
-              <property name="accessibleDescription">
-               <string>Opens a file dialog for selecting a style file</string>
-              </property>
-              <property name="text">
-               <string notr="true"/>
-              </property>
-              <property name="icon">
-               <iconset resource="musescore.qrc">
-                <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
-              </property>
-             </widget>
-            </item>
-           </layout>
           </item>
          </layout>
         </widget>
@@ -3565,7 +3446,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_10">
           <item>
-           <widget class="QLabel" name="label_17">
+           <widget class="QLabel" name="label_shortestNote">
             <property name="text">
              <string>Shortest note:</string>
             </property>
@@ -3645,76 +3526,43 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
          </layout>
         </widget>
        </item>
-       <item row="7" column="0">
-        <spacer>
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>0</width>
-           <height>0</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
        <item row="0" column="1">
         <widget class="QGroupBox" name="characterSetUsedWhenImportingBinaryFiles">
          <property name="title">
           <string>Character Set Used When Importing Binary Files</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_12">
-          <item>
-           <layout class="QFormLayout" name="formLayout">
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_49">
-              <property name="text">
-               <string>Overture import character set:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QComboBox" name="importCharsetListOve">
-              <property name="accessibleName">
-               <string>Overture import character set</string>
-              </property>
-              <property name="accessibleDescription">
-               <string>Choose Overture import character set</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QComboBox" name="importCharsetListGP">
-              <property name="accessibleName">
-               <string>Guitar Pro import character set</string>
-              </property>
-              <property name="accessibleDescription">
-               <string>Choose Guitar Pro import character set</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="label_23">
-              <property name="text">
-               <string>Guitar Pro import character set:</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="5" column="1">
-        <widget class="QGroupBox" name="groupBox_scoreMigration">
-         <property name="title">
-          <string>Score improvements</string>
-         </property>
-         <layout class="QGridLayout" name="gridScoreMigration">
+         <layout class="QFormLayout" name="formLayout_2">
           <item row="0" column="0">
-           <widget class="QCheckBox" name="scoreMigrationEnabled">
+           <widget class="QLabel" name="label_guitarProImportCharacterSet">
             <property name="text">
-             <string>Always suggest to apply improvements to the scores</string>
+             <string>Guitar Pro import character set:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="importCharsetListGP">
+            <property name="accessibleName">
+             <string>Guitar Pro import character set</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Choose Guitar Pro import character set</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_overtureImportCharacterSet">
+            <property name="text">
+             <string>Overture import character set:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QComboBox" name="importCharsetListOve">
+            <property name="accessibleName">
+             <string>Overture import character set</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Choose Overture import character set</string>
             </property>
            </widget>
           </item>
@@ -3737,17 +3585,23 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
          </layout>
         </widget>
        </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tabExport">
-      <property name="accessibleName">
-       <string>Export tab</string>
-      </property>
-      <attribute name="title">
-       <string>Export</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout_3">
-       <item row="4" column="0">
+       <item row="5" column="0" colspan="2">
+        <widget class="QGroupBox" name="groupBox_scoreMigration">
+         <property name="title">
+          <string>When opening scores from older MuseScore versions:</string>
+         </property>
+         <layout class="QGridLayout" name="gridScoreMigration">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="scoreMigrationEnabled">
+            <property name="text">
+             <string>Show option to apply improved engraving and style settings</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="7" column="0" colspan="2">
         <spacer>
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -3760,14 +3614,24 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
          </property>
         </spacer>
        </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabExport">
+      <property name="accessibleName">
+       <string>Export tab</string>
+      </property>
+      <attribute name="title">
+       <string>Export</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_3">
        <item row="0" column="0">
-        <widget class="QGroupBox" name="groupBox_9">
+        <widget class="QGroupBox" name="groupBox_png">
          <property name="title">
           <string notr="true">PNG</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_8">
           <item row="0" column="0">
-           <widget class="QLabel" name="label_4">
+           <widget class="QLabel" name="label_pngResolution">
             <property name="text">
              <string>Resolution:</string>
             </property>
@@ -3822,7 +3686,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QGroupBox" name="groupBox_8">
+        <widget class="QGroupBox" name="groupBox_midi">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -3835,7 +3699,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
          <property name="title">
           <string notr="true">MIDI</string>
          </property>
-         <layout class="QHBoxLayout" name="horizontalLayout">
+         <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
            <widget class="QCheckBox" name="expandRepeats">
             <property name="text">
@@ -3900,13 +3764,13 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QGroupBox" name="groupBox">
+        <widget class="QGroupBox" name="groupBox_pdf">
          <property name="title">
           <string notr="true">PDF</string>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_4">
           <item>
-           <widget class="QLabel" name="label_6">
+           <widget class="QLabel" name="label_pdfResolution">
             <property name="text">
              <string>Resolution:</string>
             </property>
@@ -3951,7 +3815,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QGroupBox" name="groupBox_16">
+        <widget class="QGroupBox" name="groupBox_audio">
          <property name="accessibleName">
           <string>Audio</string>
          </property>
@@ -4040,7 +3904,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QLabel" name="label_18">
+           <widget class="QLabel" name="label_sampleRate">
             <property name="text">
              <string>Sample rate:</string>
             </property>
@@ -4075,7 +3939,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
            </widget>
           </item>
           <item row="1" column="3">
-           <widget class="QLabel" name="label_8">
+           <widget class="QLabel" name="label_Hz">
             <property name="text">
              <string extracomment="Hertz">Hz</string>
             </property>
@@ -4117,6 +3981,19 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
           </item>
          </layout>
         </widget>
+       </item>
+       <item row="4" column="0" colspan="2">
+        <spacer>
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -4300,7 +4177,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_9">
        <item>
-        <widget class="QGroupBox" name="groupBox_17">
+        <widget class="QGroupBox" name="groupBox_update">
          <property name="accessibleName">
           <string>Automatic Update Check</string>
          </property>
@@ -4464,6 +4341,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
   <tabstop>fontFamily</tabstop>
   <tabstop>fontSize</tabstop>
   <tabstop>autoSave</tabstop>
+  <tabstop>autoSaveTime</tabstop>
   <tabstop>oscServer</tabstop>
   <tabstop>oscPort</tabstop>
   <tabstop>bgColorButton</tabstop>
@@ -4568,21 +4446,18 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
   <tabstop>useImportStyleFile</tabstop>
   <tabstop>importStyleFile</tabstop>
   <tabstop>styleFileButton</tabstop>
-  <tabstop>importCharsetListGP</tabstop>
-  <tabstop>importCharsetListOve</tabstop>
   <tabstop>importLayout</tabstop>
   <tabstop>importBreaks</tabstop>
+  <tabstop>importCharsetListGP</tabstop>
+  <tabstop>importCharsetListOve</tabstop>
   <tabstop>shortestNote</tabstop>
-  <tabstop>resetElementPositionsAlwaysAsk</tabstop>
-  <tabstop>resetElementPositionsYes</tabstop>
-  <tabstop>resetElementPositionsNo</tabstop>
   <tabstop>scoreMigrationEnabled</tabstop>
   <tabstop>useLocalAvsOmr</tabstop>
   <tabstop>pngResolution</tabstop>
   <tabstop>pngTransparent</tabstop>
-  <tabstop>exportPdfDpi</tabstop>
   <tabstop>expandRepeats</tabstop>
   <tabstop>exportRPNs</tabstop>
+  <tabstop>exportPdfDpi</tabstop>
   <tabstop>normalize</tabstop>
   <tabstop>exportAudioSampleRate</tabstop>
   <tabstop>exportMp3BitRate</tabstop>
@@ -4604,7 +4479,6 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
   <tabstop>advancedSearch</tabstop>
   <tabstop>resetToDefault</tabstop>
   <tabstop>buttonBox</tabstop>
-  <tabstop>autoSaveTime</tabstop>
  </tabstops>
  <resources>
   <include location="musescore.qrc"/>
