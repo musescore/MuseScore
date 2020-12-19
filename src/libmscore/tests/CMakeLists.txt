@@ -48,6 +48,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/tst_layout_benchmark.cpp
     # ${CMAKE_CURRENT_LIST_DIR}/tst_links.cpp fail
     ${CMAKE_CURRENT_LIST_DIR}/tst_measure.cpp
+    # ${CMAKE_CURRENT_LIST_DIR}/tst_midi.cpp not ported
 )
 
 set(MODULE_TEST_LINK
