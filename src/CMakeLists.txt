@@ -17,18 +17,15 @@ add_subdirectory(audiofile)
 add_subdirectory(context)
 add_subdirectory(notation)
 add_subdirectory(userscores)
+add_subdirectory(convertor)
 
 if (NOT OS_IS_WASM)
-add_subdirectory(importexport)
-add_subdirectory(cloud)
-add_subdirectory(extensions)
-add_subdirectory(languages)
-add_subdirectory(plugins)
-<<<<<<< HEAD
+    add_subdirectory(importexport)
+    add_subdirectory(cloud)
+    add_subdirectory(extensions)
+    add_subdirectory(languages)
+    add_subdirectory(plugins)
 endif()
-=======
-add_subdirectory(convertor)
->>>>>>> added comandline module
 
 # Scenes common
 add_subdirectory(commonscene)

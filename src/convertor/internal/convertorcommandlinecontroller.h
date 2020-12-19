@@ -16,27 +16,22 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_COMMANDLINE_COMMANDLINETYPES_H
-#define MU_COMMANDLINE_COMMANDLINETYPES_H
+#ifndef MU_CONVERTOR_CONVERTORCOMMANDLINECONTROLLER_H
+#define MU_CONVERTOR_CONVERTORCOMMANDLINECONTROLLER_H
 
-#include <string>
-#include <utility>
-#include <vector>
+#include "commandline/icommandlinehandler.h"
+#include "commandline/icommandlineregister.h"
+#include "modularity/ioc.h"
 
-namespace mu::commandline {
-using CommandLineOption = std::list<std::string>;
-using CommandLineValue = std::string;
-using CommandLineValues = std::vector<CommandLineValue>;
-
-inline bool operator ==(const CommandLineOption& opt, const std::string& str)
+namespace mu::convertor {
+class ConvertorCommandLineController : public commandline::ICommandLineHandler
 {
-    for (const std::string& o : opt) {
-        if (o == str) {
-            return true;
-        }
-    }
-    return false;
-}
+    INJECT(convertor, commandline::ICommandLineRegister, clinereg)
+public:
+    ConvertorCommandLineController() = default;
+
+    void setup();
+};
 }
 
-#endif // MU_COMMANDLINE_COMMANDLINETYPES_H
+#endif // MU_CONVERTOR_CONVERTORCOMMANDLINECONTROLLER_H
