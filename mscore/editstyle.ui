@@ -270,16 +270,25 @@
           <layout class="QVBoxLayout" name="verticalLayout_6">
            <item>
             <layout class="QGridLayout" name="gridLayout">
-             <item row="0" column="2">
-              <widget class="QCheckBox" name="optimizeStyleCheckbox">
-               <property name="toolTip">
-                <string>MuseScore will change the style to suit the font better</string>
-               </property>
-               <property name="text">
-                <string>Automatically load style settings based on font</string>
-               </property>
-               <property name="checked">
+             <item row="2" column="1">
+              <widget class="QFontComboBox" name="textFromComboBox">
+               <property name="enabled">
                 <bool>true</bool>
+               </property>
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="font">
+                <font>
+                 <family>FreeSerif</family>
+                 <pointsize>12</pointsize>
+                </font>
+               </property>
+               <property name="currentText">
+                <string>FreeSerif</string>
                </property>
               </widget>
              </item>
@@ -290,6 +299,19 @@
                </property>
                <property name="buddy">
                 <cstring>musicalSymbolFont</cstring>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="QCheckBox" name="optimizeStyleCheckbox">
+               <property name="toolTip">
+                <string>MuseScore will change the style to suit the font better</string>
+               </property>
+               <property name="text">
+                <string>Automatically load style settings based on font</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
@@ -389,6 +411,46 @@
                 </size>
                </property>
               </spacer>
+             </item>
+             <item row="0" column="1">
+              <widget class="QComboBox" name="musicalSymbolFont">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <item>
+                <property name="text">
+                 <string notr="true">Bravura</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string notr="true">Emmentaler</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string notr="true">Gonville</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string notr="true">MuseJazz</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <widget class="QFontComboBox" name="textToComboBox"/>
+             </item>
+             <item row="2" column="0">
+              <widget class="QPushButton" name="textFromToButton">
+               <property name="text">
+                <string>Text font (from-&gt;to):</string>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
@@ -11517,6 +11579,29 @@ By default, they will be placed such as that their right end are at the same lev
       </widget>
       <widget class="QWidget" name="PageTextStyles">
        <layout class="QGridLayout" name="gridLayout_41">
+        <item row="0" column="0" rowspan="2">
+         <widget class="QListWidget" name="textStyles">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <spacer name="verticalSpacer_32">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
         <item row="0" column="1">
          <widget class="QGroupBox" name="showMeasureNumber_8">
           <property name="sizePolicy">
@@ -11535,6 +11620,23 @@ By default, they will be placed such as that their right end are at the same lev
               <string/>
              </property>
              <layout class="QGridLayout" name="gridLayout_38">
+              <item row="0" column="2">
+               <widget class="QToolButton" name="resetTextStyleFrameType">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Frame' value</string>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
+              </item>
               <item row="0" column="0">
                <widget class="QLabel" name="label_202">
                 <property name="text">
@@ -11562,23 +11664,6 @@ By default, they will be placed such as that their right end are at the same lev
                   <string>Circle</string>
                  </property>
                 </item>
-               </widget>
-              </item>
-              <item row="0" column="2">
-               <widget class="QToolButton" name="resetTextStyleFrameType">
-                <property name="toolTip">
-                 <string>Reset to default</string>
-                </property>
-                <property name="accessibleName">
-                 <string>Reset 'Frame' value</string>
-                </property>
-                <property name="text">
-                 <string notr="true"/>
-                </property>
-                <property name="icon">
-                 <iconset resource="musescore.qrc">
-                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                </property>
                </widget>
               </item>
               <item row="1" column="0" colspan="3">
@@ -11997,7 +12082,7 @@ By default, they will be placed such as that their right end are at the same lev
            <item row="2" column="0">
             <widget class="QLabel" name="label_207">
              <property name="text">
-              <string>Size:</string>
+              <string>Color:</string>
              </property>
              <property name="buddy">
               <cstring>textStyleFontSize</cstring>
@@ -12045,29 +12130,6 @@ By default, they will be placed such as that their right end are at the same lev
             </widget>
            </item>
           </layout>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <spacer name="verticalSpacer_32">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="0" column="0" rowspan="2">
-         <widget class="QListWidget" name="textStyles">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
          </widget>
         </item>
        </layout>
