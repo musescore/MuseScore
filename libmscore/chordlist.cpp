@@ -487,7 +487,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
 #endif
       int lastLeadingToken;
       int len = s.size();
-      int i, j;
+      int i;
       int thirdKey = 0, seventhKey = 0;
       bool susChord = false;
       QList<HDegree> hdl;
@@ -509,12 +509,12 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
 #endif
       lastLeadingToken = _tokenList.size();
       // get quality
-      for (j = 0, tok1 = "", tok1L = "", initial = ""; i < len; ++i, ++j) {
+      for (tok1 = "", tok1L = "", initial = ""; i < len; ++i) {
             // up to first (non-zero) digit, paren, or comma
             if (extensionDigits.contains(s[i]) || special.contains(s[i]))
                   break;
-            tok1[j] = s[i];
-            tok1L[j] = s[i].toLower();
+            tok1.push_back(s[i]);
+            tok1L.push_back(s[i].toLower());
             if (tok1L == "m" || major.contains(tok1L) || minor.contains(tok1L) || diminished.contains(tok1L) || augmented.contains(tok1L))
                   initial = tok1;
             }
@@ -617,10 +617,10 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
 #endif
       lastLeadingToken = _tokenList.size();
       // get extension - up to first non-digit other than comma or slash
-      for (j = 0, tok1 = ""; i < len; ++i, ++j) {
+      for (tok1 = ""; i < len; ++i) {
             if (!s[i].isDigit() && s[i] != ',' && s[i] != '/')
                   break;
-            tok1[j] = s[i];
+            tok1.push_back(s[i]);
             }
       _extension = tok1;
       if (_quality == "") {
@@ -789,11 +789,11 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
                   _xmlParens = "yes";
                   }
             // get first token - up to first digit, paren, or comma
-            for (j = 0, tok1 = "", tok1L = "", initial = ""; i < len; ++i, ++j) {
+            for (tok1 = "", tok1L = "", initial = ""; i < len; ++i) {
                   if (s[i].isDigit() || special.contains(s[i]))
                         break;
-                  tok1[j] = s[i];
-                  tok1L[j] = s[i].toLower();
+                  tok1.push_back(s[i]);
+                  tok1L.push_back(s[i].toLower());
                   if (mod2.contains(tok1L))
                         initial = tok1;
                   }
@@ -820,12 +820,12 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
             while (i < len && s[i] == ' ')
                   ++i;
             // get second token - a number <= 13
-            for (j = 0, tok2 = ""; i < len; ++i) {
+            for (tok2 = ""; i < len; ++i) {
                   if (!s[i].isDigit())
                         break;
-                  if (j == 1 && (tok2[0] != '1' || s[i] > '3'))
+                  if (tok2.size() == 1 && (tok2[0] != '1' || s[i] > '3'))
                         break;
-                  tok2[j++] = s[i];
+                  tok2.push_back(s[i]);
                   }
             tok2L = tok2.toLower();
             // re-attach "add"
