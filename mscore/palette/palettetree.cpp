@@ -880,7 +880,7 @@ std::function<void (PaletteCell*)> PalettePanel::cellHandlerByPaletteType(const 
                   Bracket* bracket = toBracket(cellPtr->element.get());
 
                   if (bracket->bracketType() == BracketType::BRACE) {
-                        bracket->setBraceSymbol(SymId::braceSmall);
+                        bracket->setStaffSpan(0, 1);
                         cellPtr->mag = 1.2;
                         }
                   };
