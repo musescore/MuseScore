@@ -10,13 +10,13 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
-#include "mtest/testutils.h"
+#include "testing/qtestsuite.h"
+#include "testutils.h"
 #include "libmscore/score.h"
 #include "libmscore/measure.h"
 #include "libmscore/repeatlist.h"
 
-#define DIR QString("libmscore/repeat/")
+static const QString REPEAT_DATA_DIR("repeat_data/");
 
 using namespace Ms;
 
@@ -142,7 +142,7 @@ void TestRepeat::initTestCase()
 
 void TestRepeat::repeat(const char* f1, const QString& ref)
 {
-    MasterScore* score = readScore(DIR + f1);
+    MasterScore* score = readScore(REPEAT_DATA_DIR + f1);
     QVERIFY(score);
     score->setExpandRepeats(true);
     QStringList sl;
