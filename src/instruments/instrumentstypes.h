@@ -90,6 +90,7 @@ struct InstrumentGroup
     QString id;
     QString name;
     bool extended = false;
+    int sequenceOrder = 0;
 };
 
 using InstrumentGroupList = QList<InstrumentGroup>;
@@ -128,11 +129,11 @@ struct Instrument
     PitchRange professionalPitchRange;
 
     ClefTypeList clefs[MAX_STAVES];
-    int staffLines[MAX_STAVES] = {0};
-    BracketType bracket[MAX_STAVES] = {BracketType::NO_BRACKET};
-    int bracketSpan[MAX_STAVES] = {0};
-    int barlineSpan[MAX_STAVES] = {0};
-    bool smallStaff[MAX_STAVES] = {false};
+    int staffLines[MAX_STAVES] = { 0 };
+    BracketType bracket[MAX_STAVES] = { BracketType::NO_BRACKET };
+    int bracketSpan[MAX_STAVES] = { 0 };
+    int barlineSpan[MAX_STAVES] = { 0 };
+    bool smallStaff[MAX_STAVES] = { false };
 
     Interval transpose;
 

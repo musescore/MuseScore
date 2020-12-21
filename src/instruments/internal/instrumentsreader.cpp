@@ -42,6 +42,8 @@ RetVal<InstrumentsMeta> InstrumentsReader::readMeta(const io::path& path) const
     InstrumentsMeta meta;
     Ms::XmlReader reader(fileBytes.val);
 
+    int groupIndex = 0;
+
     while (reader.readNextStartElement()) {
         if (reader.name() != "museScore") {
             continue;
@@ -49,7 +51,7 @@ RetVal<InstrumentsMeta> InstrumentsReader::readMeta(const io::path& path) const
 
         while (reader.readNextStartElement()) {
             if (reader.name() == "instrument-group" || reader.name() == "InstrumentGroup") {
-                loadGroupMeta(reader, meta);
+                loadGroupMeta(reader, meta, groupIndex++);
             } else if (reader.name() == "Articulation") {
                 MidiArticulation articulation = readArticulation(reader);
                 meta.articulations.insert(articulation.name, articulation); // TODO: name?
@@ -68,12 +70,13 @@ RetVal<InstrumentsMeta> InstrumentsReader::readMeta(const io::path& path) const
     return result;
 }
 
-void InstrumentsReader::loadGroupMeta(Ms::XmlReader& reader, InstrumentsMeta& generalMeta) const
+void InstrumentsReader::loadGroupMeta(Ms::XmlReader& reader, InstrumentsMeta& generalMeta, int groupIndex) const
 {
     InstrumentGroup group;
     group.id = reader.attributes().value("id").toString();
     group.name = qApp->translate("InstrumentsXML", reader.attributes().value("name").toUtf8().data()); // TODO: translate
     group.extended = reader.attributes().value("extended").toInt();
+    group.sequenceOrder = groupIndex;
 
     while (reader.readNextStartElement()) {
         if (reader.name().toString().toLower() == "instrument") {
