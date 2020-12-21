@@ -27,11 +27,13 @@ class ItemMultiSelectionModel : public QItemSelectionModel
 public:
     explicit ItemMultiSelectionModel(QAbstractItemModel* parent = nullptr);
 
+    void setAllowedModifiers(Qt::KeyboardModifiers modifiers);
+
 public slots:
     void select(const QModelIndex& index);
 
 private:
-    bool needClearSelection(Qt::KeyboardModifiers modifiers) const;
+    Qt::KeyboardModifiers m_allowedModifiers;
 };
 }
 

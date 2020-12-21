@@ -54,6 +54,7 @@ InstrumentPanelTreeModel::InstrumentPanelTreeModel(QObject* parent)
     });
 
     m_selectionModel = new ItemMultiSelectionModel(this);
+    m_selectionModel->setAllowedModifiers(Qt::ShiftModifier);
 
     connect(m_selectionModel, &ItemMultiSelectionModel::selectionChanged, [this](const QItemSelection&, const QItemSelection&) {
         updateRearrangementAvailability();
