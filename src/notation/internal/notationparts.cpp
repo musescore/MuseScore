@@ -23,6 +23,7 @@
 #include "libmscore/excerpt.h"
 #include "libmscore/drumset.h"
 #include "libmscore/instrchange.h"
+#include "libmscore/page.h"
 
 #include "instrumentsconverter.h"
 
@@ -622,16 +623,29 @@ void NotationParts::doSetStaffVoiceVisible(Staff* staff, int voiceIndex, bool vi
         return;
     }
 
-    Ms::SegmentType segmentType = Ms::SegmentType::ChordRest;
-    for (const Ms::Segment* segment = score()->firstSegment(segmentType); segment; segment = segment->next1(segmentType)) {
-        for (Ms::Element* element: segment->elist()) {
+    static const QSet<Ms::ElementType> ignoredTypes {
+        Ms::ElementType::STAFF_LINES,
+        Ms::ElementType::BAR_LINE,
+        Ms::ElementType::BRACKET,
+        Ms::ElementType::TIMESIG,
+        Ms::ElementType::CLEF
+    };
+
+    for (Ms::Page* page : score()->pages()) {
+        for (Ms::Element* element : page->elements()) {
             if (!element) {
                 continue;
             }
 
-            if (element->staffIdx() == staff->idx() && element->voice() == voiceIndex) {
-                element->undoChangeProperty(Ms::Pid::VISIBLE, visible);
+            if (element->staffIdx() != staff->idx() || element->voice() != voiceIndex) {
+                continue;
             }
+
+            if (ignoredTypes.contains(element->type())) {
+                continue;
+            }
+
+            element->undoChangeProperty(Ms::Pid::VISIBLE, visible);
         }
     }
 
