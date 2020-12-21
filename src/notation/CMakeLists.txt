@@ -144,6 +144,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/noteinputbarmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/noteinputbarcustomisemodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/noteinputbarcustomisemodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationtoolbarmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationtoolbarmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/abstractnoteinputbaritem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/abstractnoteinputbaritem.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/actionnoteinputbaritem.cpp
