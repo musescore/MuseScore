@@ -232,17 +232,6 @@ ViewMode Notation::viewMode() const
     return score()->layoutMode();
 }
 
-QRectF Notation::previewRect() const
-{
-    const QList<Ms::Page*>& pages = m_score->pages();
-
-    if (pages.isEmpty()) {
-        return QRect();
-    }
-
-    return pages.first()->bbox();
-}
-
 void Notation::paint(QPainter* painter, const QRectF& frameRect)
 {
     const QList<Ms::Page*>& pages = score()->pages();

@@ -155,18 +155,21 @@ io::path NotationConfiguration::foregroundWallpaper() const
 
 QColor NotationConfiguration::playbackCursorColor() const
 {
-    QColor c = selectionColor(0);
-    c.setAlpha(50);
-    return c;
+    return selectionColor();
 }
 
-QColor NotationConfiguration::selectionColor(int voice) const
+int NotationConfiguration::cursorOpacity() const
 {
-    if (!isVoiceIndexValid(voice)) {
+    return 50;
+}
+
+QColor NotationConfiguration::selectionColor(int voiceIndex) const
+{
+    if (!isVoiceIndexValid(voiceIndex)) {
         return QColor();
     }
 
-    return Ms::MScore::selectColor[voice];
+    return Ms::MScore::selectColor[voiceIndex];
 }
 
 int NotationConfiguration::selectionProximity() const

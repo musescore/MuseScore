@@ -29,12 +29,12 @@ void NoteInputCursor::paint(QPainter* painter)
     }
 
     QRectF cursorRect = rect();
-    QColor fillColor = color();
-    fillColor.setAlpha(50);
-    painter->fillRect(cursorRect, fillColor);
+    QColor cursorRectColor = cursorColor();
+    painter->fillRect(cursorRect, cursorRectColor);
 
-    QRectF leftLine = QRectF(cursorRect.topLeft().x(), cursorRect.topLeft().y(), 3, cursorRect.height());
-    QColor lineColor = color();
+    constexpr int leftLineWidth = 3;
+    QRectF leftLine = QRectF(cursorRect.topLeft().x(), cursorRect.topLeft().y(), leftLineWidth, cursorRect.height());
+    QColor lineColor = fillColor();
     painter->fillRect(leftLine, lineColor);
 }
 
@@ -73,12 +73,20 @@ QRectF NoteInputCursor::rect() const
     return noteInput->cursorRect();
 }
 
-QColor NoteInputCursor::color() const
+QColor NoteInputCursor::cursorColor() const
+{
+    QColor color = fillColor();
+    color.setAlpha(configuration()->cursorOpacity());
+    return color;
+}
+
+QColor NoteInputCursor::fillColor() const
 {
     auto noteInput = currentNoteInput();
     if (!noteInput) {
         return QColor();
     }
 
-    return noteInput->cursorColor();
+    int voiceIndex = noteInput->state().currentVoiceIndex;
+    return configuration()->selectionColor(voiceIndex);
 }

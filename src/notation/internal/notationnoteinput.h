@@ -61,7 +61,6 @@ public:
     void setCurrentVoiceIndex(int voiceIndex) override;
 
     QRectF cursorRect() const override;
-    QColor cursorColor() const override;
 
     async::Notification noteAdded() const override;
     async::Notification stateChanged() const override;
