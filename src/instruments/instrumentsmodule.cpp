@@ -26,6 +26,7 @@
 #include "internal/instrumentsreader.h"
 #include "internal/instrumentsrepository.h"
 #include "internal/instrumentsconfiguration.h"
+#include "internal/selectinstrumentscenario.h"
 
 #include "view/instrumentpaneltreemodel.h"
 #include "view/instrumentlistmodel.h"
@@ -54,6 +55,7 @@ void InstrumentsModule::registerExports()
     ioc()->registerExport<IInstrumentsConfiguration>(moduleName(), new InstrumentsConfiguration());
     ioc()->registerExport<IInstrumentsRepository>(moduleName(), m_instrumentsRepository);
     ioc()->registerExport<IInstrumentsReader>(moduleName(), new InstrumentsReader());
+    ioc()->registerExport<ISelectInstrumentsScenario>(moduleName(), new SelectInstrumentsScenario());
 }
 
 void InstrumentsModule::resolveImports()

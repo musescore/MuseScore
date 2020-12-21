@@ -9,40 +9,36 @@
 //
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  MERCHANTABILITY or FIT-0NESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_INSTRUMENTS_INSTRUMENTCONTROLTREEITEM_H
-#define MU_INSTRUMENTS_INSTRUMENTCONTROLTREEITEM_H
+#ifndef MU_INSTRUMENTS_ISELECTINSTRUMENTSSCENARIO_H
+#define MU_INSTRUMENTS_ISELECTINSTRUMENTSSCENARIO_H
 
-#include "abstractinstrumentpaneltreeitem.h"
-
-#include "modularity/ioc.h"
-#include "notation/inotationparts.h"
-#include "iselectinstrumentscenario.h"
+#include "modularity/imoduleexport.h"
+#include "instrumentstypes.h"
+#include "retval.h"
 
 namespace mu::instruments {
-class InstrumentControlTreeItem : public AbstractInstrumentPanelTreeItem
+class ISelectInstrumentsScenario : MODULE_EXPORT_INTERFACE
 {
-    Q_OBJECT
-
-    INJECT(instruments, ISelectInstrumentsScenario, selectInstrumentsScenario)
+    INTERFACE_ID(ISelectInstrumentsScenario)
 
 public:
-    explicit InstrumentControlTreeItem(notation::INotationPartsPtr notationParts, QObject* parent = nullptr);
+    virtual ~ISelectInstrumentsScenario() = default;
 
-    Q_INVOKABLE void appendNewItem() override;
+    enum class SelectInstrumentsMode {
+        None,
+        ShowCurrentInstruments
+    };
 
-    QString partId() const;
-    void setPartId(const QString& id);
-
-private:
-    QString m_partId;
+    virtual RetVal<InstrumentList> selectInstruments(SelectInstrumentsMode mode = SelectInstrumentsMode::None) const = 0;
+    virtual RetVal<Instrument> selectInstrument(const std::string& currentInstrumentId = "") const = 0;
 };
 }
 
-#endif // MU_INSTRUMENTS_INSTRUMENTCONTROLTREEITEM_H
+#endif // MU_INSTRUMENTS_ISELECTINSTRUMENTSSCENARIO_H

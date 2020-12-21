@@ -106,7 +106,7 @@ public:
 
     qreal itemOpacityDisabled() const override;
 
-    async::Notification themeChanged() override;
+    async::Notification themeChanged() const override;
 
 signals:
     void dataChanged();
