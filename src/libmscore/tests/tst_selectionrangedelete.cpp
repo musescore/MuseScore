@@ -10,14 +10,14 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
+#include "testing/qtestsuite.h"
+#include "testutils.h"
 
 #include "libmscore/score.h"
 #include "libmscore/measure.h"
 #include "libmscore/undo.h"
-#include "mtest/testutils.h"
 
-#define DIR QString("libmscore/selectionrangedelete/")
+static const QString SELRANGEDELETE_DATA_DIR("selectionrangedelete_data/");
 
 using namespace Ms;
 
@@ -105,7 +105,7 @@ void TestSelectionRangeDelete::deleteSegmentWithSlur()
      *  ss es ss   es
      *  q  q  q  e e
      */
-    MasterScore* score = readScore(DIR + "selectionrangedelete01.mscx");
+    MasterScore* score = readScore(SELRANGEDELETE_DATA_DIR + "selectionrangedelete01.mscx");
 
     score->doLayout();
     QVERIFY(score);
@@ -147,7 +147,7 @@ void TestSelectionRangeDelete::deleteSegmentWithSpanner()
      *  ss    es
      *  q  q  q
      */
-    MasterScore* score = readScore(DIR + "selectionrangedelete02.mscx");
+    MasterScore* score = readScore(SELRANGEDELETE_DATA_DIR + "selectionrangedelete02.mscx");
 
     score->doLayout();
     QVERIFY(score);
@@ -180,7 +180,7 @@ void TestSelectionRangeDelete::deleteSegmentWithSpanner()
 
 void TestSelectionRangeDelete::deleteVoice(int voice, QString idx)
 {
-    MasterScore* score = readScore(DIR + QString("selectionrangedelete%1.mscx").arg(idx));
+    MasterScore* score = readScore(SELRANGEDELETE_DATA_DIR + QString("selectionrangedelete%1.mscx").arg(idx));
 
     Measure* m1 = score->firstMeasure();
     QVERIFY(m1);
@@ -196,7 +196,7 @@ void TestSelectionRangeDelete::deleteVoice(int voice, QString idx)
     score->doLayout();
 
     QVERIFY(saveCompareScore(score, QString("selectionrangedelete%1.mscx").arg(idx),
-                             DIR + QString("selectionrangedelete%1-ref.mscx").arg(idx)));
+                             SELRANGEDELETE_DATA_DIR + QString("selectionrangedelete%1-ref.mscx").arg(idx)));
     delete score;
 }
 
@@ -206,7 +206,7 @@ void TestSelectionRangeDelete::deleteVoice(int voice, QString idx)
 
 void TestSelectionRangeDelete::deleteSkipAnnotations()
 {
-    MasterScore* score = readScore(DIR + QString("selectionrangedelete05.mscx"));
+    MasterScore* score = readScore(SELRANGEDELETE_DATA_DIR + QString("selectionrangedelete05.mscx"));
 
     Measure* m1 = score->firstMeasure();
     QVERIFY(m1);
@@ -222,7 +222,7 @@ void TestSelectionRangeDelete::deleteSkipAnnotations()
     score->doLayout();
 
     QVERIFY(saveCompareScore(score, QString("selectionrangedelete05.mscx"),
-                             DIR + QString("selectionrangedelete05-ref.mscx")));
+                             SELRANGEDELETE_DATA_DIR + QString("selectionrangedelete05-ref.mscx")));
     delete score;
 }
 
