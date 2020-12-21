@@ -3391,7 +3391,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
          <property name="title">
           <string>Style Used for Import</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout">
+         <layout class="QGridLayout" name="gridLayout8">
           <item row="1" column="2">
            <widget class="QToolButton" name="styleFileButton">
             <property name="accessibleName">
