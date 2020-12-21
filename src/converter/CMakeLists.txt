@@ -21,13 +21,14 @@
 # Main goal - determine what need to do and call necceasers functions.
 # Usually use from command line.
 
-set(MODULE convertor)
+set(MODULE converter)
 
 set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/convertormodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/convertormodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/convertorcommandlinecontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/convertorcommandlinecontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/convertermodule.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/convertermodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/iconvertercontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/convertercontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/convertercontroller.cpp
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

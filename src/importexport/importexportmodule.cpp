@@ -62,7 +62,7 @@ void ImportExportModule::registerExports()
     framework::ioc()->registerExport<IImportexportConfiguration>(moduleName(), s_configuration);
 }
 
-void ImportExportModule::onInit()
+void ImportExportModule::onInit(const framework::IApplication::RunMode&)
 {
     s_configuration->init();
 

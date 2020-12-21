@@ -127,8 +127,12 @@ void PaletteModule::registerUiTypes()
     framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(palette_QML_IMPORT);
 }
 
-void PaletteModule::onInit()
+void PaletteModule::onInit(const IApplication::RunMode& mode)
 {
+    if (framework::IApplication::RunMode::Editor != mode) {
+        return;
+    }
+
     // load workspace
     PaletteWorkspaceSetup w;
     w.setup();

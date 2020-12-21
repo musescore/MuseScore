@@ -84,7 +84,7 @@ void InstrumentsModule::registerUiTypes()
     framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(instruments_QML_IMPORT);
 }
 
-void InstrumentsModule::onInit()
+void InstrumentsModule::onInit(const IApplication::RunMode&)
 {
     m_instrumentsRepository->init();
 }

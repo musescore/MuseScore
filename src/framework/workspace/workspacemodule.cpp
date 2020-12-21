@@ -91,8 +91,12 @@ void WorkspaceModule::registerUiTypes()
     ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(workspace_QML_IMPORT);
 }
 
-void WorkspaceModule::onInit()
+void WorkspaceModule::onInit(const IApplication::RunMode& mode)
 {
+    if (IApplication::RunMode::Converter == mode) {
+        return;
+    }
+
     s_configuration->init();
     s_manager->init();
 }

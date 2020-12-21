@@ -64,6 +64,9 @@ public:
 
     virtual float guiScaling() const = 0;
     virtual float physicalDotsPerInch() const = 0;
+
+    //! NOTE Maybe set from command line
+    virtual void setPhysicalDotsPerInch(float dpi) = 0;
 };
 }
 

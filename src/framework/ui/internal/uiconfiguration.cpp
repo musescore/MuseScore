@@ -134,8 +134,17 @@ float UiConfiguration::guiScaling() const
     return 1;
 }
 
+void UiConfiguration::setPhysicalDotsPerInch(float dpi)
+{
+    m_customDPI = dpi;
+}
+
 float UiConfiguration::physicalDotsPerInch() const
 {
+    if (m_customDPI > 0) {
+        return m_customDPI;
+    }
+
     if (mainWindow()) {
         return mainWindow()->qMainWindow()->screen()->physicalDotsPerInch();
     }

@@ -16,20 +16,19 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "commandlinemodule.h"
+#ifndef MU_CONVERTER_CONVERTERMODULE_H
+#define MU_CONVERTER_CONVERTERMODULE_H
 
-#include "modularity/ioc.h"
+#include "modularity/imodulesetup.h"
 
-#include "internal/commandlineregister.h"
-
-using namespace mu::commandline;
-
-std::string CommandLineModule::moduleName() const
+namespace mu::converter {
+class ConverterModule : public framework::IModuleSetup
 {
-    return "commandline";
+public:
+
+    std::string moduleName() const override;
+    void registerExports() override;
+};
 }
 
-void CommandLineModule::registerExports()
-{
-    framework::ioc()->registerExport<ICommandLineRegister>(moduleName(), new CommandLineRegister());
-}
+#endif // MU_CONVERTER_CONVERTERMODULE_H

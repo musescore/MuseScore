@@ -27,6 +27,7 @@
 #include "thirdparty/haw_logger/logger/logdefdest.h"
 #include "version.h"
 
+#include "internal/application.h"
 #include "internal/interactive.h"
 #include "invoker.h"
 
@@ -48,11 +49,12 @@ std::string GlobalModule::moduleName() const
 
 void GlobalModule::registerExports()
 {
+    ioc()->registerExport<IApplication>(moduleName(), new Application());
     ioc()->registerExport<IGlobalConfiguration>(moduleName(), s_globalConf);
     ioc()->registerExport<IInteractive>(moduleName(), new Interactive());
 }
 
-void GlobalModule::onInit()
+void GlobalModule::onInit(const IApplication::RunMode&)
 {
     mu::runtime::mainThreadId(); //! NOTE Needs only call
     mu::runtime::setThreadName("main");

@@ -16,19 +16,40 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_CONVERTOR_CONVERTORMODULE_H
-#define MU_CONVERTOR_CONVERTORMODULE_H
+#ifndef MU_APPSHELL_COMMANDLINECONTROLLER_H
+#define MU_APPSHELL_COMMANDLINECONTROLLER_H
 
-#include "modularity/imodulesetup.h"
+#include <QCommandLineParser>
+#include <QStringList>
 
-namespace mu::convertor {
-class ConvertorModule : public framework::IModuleSetup
+#include "modularity/ioc.h"
+#include "global/iapplication.h"
+#include "ui/iuiconfiguration.h"
+
+namespace mu::appshell {
+class CommandLineController
 {
+    INJECT(appshell, framework::IApplication, application)
+    INJECT(appshell, framework::IUiConfiguration, uiConfiguration)
 public:
+    CommandLineController() = default;
 
-    std::string moduleName() const override;
-    void resolveImports() override;
+    struct ConverterTask {
+        bool isBatchMode = false;
+        QString batchJobFile;
+        QString exportFile;
+    };
+
+    void parse(const QStringList& args);
+    void apply();
+
+    ConverterTask converterTask() const;
+
+private:
+
+    QCommandLineParser m_parser;
+    ConverterTask m_converterTask;
 };
 }
 
-#endif // MU_CONVERTOR_CONVERTORMODULE_H
+#endif // MU_APPSHELL_COMMANDLINECONTROLLER_H

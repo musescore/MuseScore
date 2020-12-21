@@ -68,7 +68,7 @@ void TelemetrySetup::registerUiTypes()
     qmlRegisterType<TelemetryDevTools>("MuseScore.Telemetry", 1, 0, "TelemetryDevTools");
 }
 
-void TelemetrySetup::onInit()
+void TelemetrySetup::onInit(const framework::IApplication::RunMode&)
 {
     s_configuration->init();
 

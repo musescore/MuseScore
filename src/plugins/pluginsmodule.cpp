@@ -68,7 +68,10 @@ void PluginsModule::registerUiTypes()
     ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(plugins_QML_IMPORT);
 }
 
-void PluginsModule::onInit()
+void PluginsModule::onInit(const IApplication::RunMode& mode)
 {
+    if (IApplication::RunMode::Converter == mode) {
+        return;
+    }
     s_configuration->init();
 }

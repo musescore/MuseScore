@@ -30,7 +30,7 @@ public:
     void resolveImports() override;
     void registerUiTypes() override;
     void registerResources() override;
-    void onInit() override;
+    void onInit(const framework::IApplication::RunMode& mode) override;
     void onDeinit() override;
 };
 }
