@@ -73,7 +73,8 @@ void UiModule::registerUiTypes()
     framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(ui_QML_IMPORT);
 }
 
-void UiModule::onInit()
+void UiModule::onInit(const IApplication::RunMode&)
 {
+    //! NOTE It is also needed in converter mode, because it defines the notation rendering settings
     s_configuration->init();
 }

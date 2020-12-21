@@ -29,6 +29,8 @@
 #include "version.h"
 #include "config.h"
 
+#include "commandlinecontroller.h"
+
 #include "framework/global/globalmodule.h"
 
 using namespace mu::appshell;
@@ -73,8 +75,6 @@ int AppShell::run(int argc, char** argv)
     globalModule.registerResources();
     globalModule.registerExports();
     globalModule.registerUiTypes();
-    globalModule.onInit();
-    //! NOTE Now we can use logger and profiler
 
     for (mu::framework::IModuleSetup* m : m_modules) {
         m->registerResources();
@@ -93,25 +93,31 @@ int AppShell::run(int argc, char** argv)
     // ====================================================
     // Parse and apply command line options
     // ====================================================
-    QCommandLineParser parser;
-    parseCommandLineArguments(parser);
-
-    int retCode = 0;
-    RunMode mode = runMode(parser.optionNames());
-
-    applyCommandLineArguments(parser);
+    CommandLineController commandLine;
+    commandLine.parse(QCoreApplication::arguments());
+    commandLine.apply();
+    framework::IApplication::RunMode runMode = muapplication()->runMode();
 
     // ====================================================
     // Setup modules: onInit
     // ====================================================
+    globalModule.onInit(runMode);
     for (mu::framework::IModuleSetup* m : m_modules) {
-        m->onInit();
+        m->onInit(runMode);
     }
 
-    // ====================================================
-    // Setup Qml Engine
-    // ====================================================
-    if (RunMode::Gui == mode) {
+    int retCode = 0;
+    switch (runMode) {
+    case framework::IApplication::RunMode::Converter: {
+        // ====================================================
+        // Process Converter
+        // ====================================================
+        retCode = processConverter(commandLine.converterTask());
+    } break;
+    case framework::IApplication::RunMode::Editor: {
+        // ====================================================
+        // Setup Qml Engine
+        // ====================================================
         QQmlApplicationEngine* engine = new QQmlApplicationEngine();
         //! NOTE Move ownership to UiEngine
         framework::UiEngine::instance()->moveQQmlEngine(engine);
@@ -129,17 +135,17 @@ int AppShell::run(int argc, char** argv)
 
         QObject::connect(engine, &QQmlApplicationEngine::objectCreated,
                          &app, [url](QObject* obj, const QUrl& objUrl) {
-            if (!obj && url == objUrl) {
-                LOGE() << "failed Qml load\n";
-                QCoreApplication::exit(-1);
-            }
-        }, Qt::QueuedConnection);
+                if (!obj && url == objUrl) {
+                    LOGE() << "failed Qml load\n";
+                    QCoreApplication::exit(-1);
+                }
+            }, Qt::QueuedConnection);
 
         QObject::connect(engine, &QQmlEngine::warnings, [](const QList<QQmlError>& warnings) {
-            for (const QQmlError& e : warnings) {
-                LOGE() << "error: " << e.toString().toStdString() << "\n";
-            }
-        });
+                for (const QQmlError& e : warnings) {
+                    LOGE() << "error: " << e.toString().toStdString() << "\n";
+                }
+            });
 
         // ====================================================
         // Load Main qml
@@ -150,11 +156,11 @@ int AppShell::run(int argc, char** argv)
         // Setup modules: onStartApp (on next event loop)
         // ====================================================
         QMetaObject::invokeMethod(qApp, [this]() {
-            globalModule.onStartApp();
-            for (mu::framework::IModuleSetup* m : m_modules) {
-                m->onStartApp();
-            }
-        }, Qt::QueuedConnection);
+                globalModule.onStartApp();
+                for (mu::framework::IModuleSetup* m : m_modules) {
+                    m->onStartApp();
+                }
+            }, Qt::QueuedConnection);
 
         // ====================================================
         // Run main loop
@@ -165,7 +171,7 @@ int AppShell::run(int argc, char** argv)
         // Qml Engine quit
         // ====================================================
         framework::UiEngine::instance()->quit();
-
+    }
     }
 
     // ====================================================
@@ -182,55 +188,15 @@ int AppShell::run(int argc, char** argv)
     return retCode;
 }
 
-AppShell::RunMode AppShell::runMode(const QStringList& options) const
+int AppShell::processConverter(const CommandLineController::ConverterTask& task)
 {
-    for (const QString& opt : options) {
-        if (m_consoleRunModeOptions.contains(opt)) {
-            return RunMode::Concole;
-        }
-    }
-    return RunMode::Gui;
-}
-
-void AppShell::parseCommandLineArguments(QCommandLineParser& parser)
-{
-    parser.addHelpOption(); // -?, -h, --help
-    parser.addVersionOption(); // -v, --version
-
-    auto addGuiOption = [&parser, this](const QCommandLineOption& opt) {
-        parser.addOption(opt);
-    };
-
-    auto addConsoleOption = [&parser, this](const QCommandLineOption& opt) {
-        parser.addOption(opt);
-        for(const QString& name : opt.names()) {
-            m_consoleRunModeOptions << name;
-        }
-    };
-
-    addConsoleOption(QCommandLineOption({ "j", "job" }, "Process a conversion job", "file"));
-    //! NOTE Here will be added others options
-
-    parser.process(QCoreApplication::arguments());
-}
-
-void AppShell::applyCommandLineArguments(QCommandLineParser& parser)
-{
-    using namespace mu::commandline;
-
-    QStringList options = parser.optionNames();
-    qDebug() << "options: " << options;
-
-    for (const QString& opt : options) {
-        CommandLineValues values;
-        QStringList vals = parser.values(opt);
-        for (const QString& v : vals) {
-            values.push_back(v.toStdString());
-        }
-
-        Ret ret = commandlineRegister()->apply(opt.toStdString(), values);
+    Ret ret;
+    if (task.isBatchMode) {
+        ret = converter()->batchConvert(task.batchJobFile);
         if (!ret) {
-            LOGE() << "failed apply option: opt, error: " << ret.toString();
+            LOGE() << "failed batch convert, error: " << ret.toString();
         }
     }
+
+    return ret.code();
 }

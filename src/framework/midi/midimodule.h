@@ -31,7 +31,7 @@ public:
 
     void registerExports() override;
     void registerUiTypes() override;
-    void onInit() override;
+    void onInit(const framework::IApplication::RunMode& mode) override;
 };
 }
 }

@@ -75,8 +75,12 @@ void VSTModule::registerUiTypes()
     qRegisterMetaType<PluginEditorView>("PluginEditorView");
 }
 
-void VSTModule::onInit()
+void VSTModule::onInit(const IApplication::RunMode& mode)
 {
+    if (framework::IApplication::RunMode::Editor != mode) {
+        return;
+    }
+
     m_configuration.init();
     s_vstScanner->setPaths(m_configuration.searchPaths());
 }

@@ -144,7 +144,6 @@ endif(BUILD_TELEMETRY_MODULE)
 set(LINK_LIB ${LINK_LIB}
     libmscore
     actions
-    commandline
     appshell
     context
     shortcuts
@@ -159,7 +158,7 @@ set(LINK_LIB ${LINK_LIB}
     inspector
     playback
     instruments
-    convertor
+    converter
     )
 
 if (NOT CC_IS_EMSCRIPTEN)

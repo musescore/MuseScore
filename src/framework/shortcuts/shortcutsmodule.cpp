@@ -66,7 +66,10 @@ void ShortcutsModule::registerUiTypes()
     framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(shortcuts_QML_IMPORT);
 }
 
-void ShortcutsModule::onInit()
+void ShortcutsModule::onInit(const IApplication::RunMode& mode)
 {
+    if (mode == IApplication::RunMode::Converter) {
+        return;
+    }
     m_shortcutsRegister->load();
 }

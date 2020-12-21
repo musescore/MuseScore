@@ -16,16 +16,21 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "convertorcommandlinecontroller.h"
+#ifndef MU_CONVERTER_CONVERTERCONTROLLER_H
+#define MU_CONVERTER_CONVERTERCONTROLLER_H
 
-#include "log.h"
+#include "../iconvertercontroller.h"
 
-using namespace mu::convertor;
-using namespace mu::commandline;
-
-void ConvertorCommandLineController::setup()
+namespace mu::converter {
+class ConverterController : public IConverterController
 {
-    clinereg()->reg(this, {"j", "job"}, [this](const CommandLineValue& val) {
-        LOGI() << "do job " << val;
-    });
+public:
+    ConverterController() = default;
+
+    Ret batchConvert(const io::path& batchJobFile) override;
+
+
+};
 }
+
+#endif // MU_CONVERTER_CONVERTERCONTROLLER_H

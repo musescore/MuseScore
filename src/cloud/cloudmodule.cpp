@@ -57,7 +57,10 @@ void CloudModule::registerUiTypes()
     framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(cloud_QML_IMPORT);
 }
 
-void CloudModule::onInit()
+void CloudModule::onInit(const framework::IApplication::RunMode& mode)
 {
+    if (framework::IApplication::RunMode::Editor != mode) {
+        return;
+    }
     m_accountController->init();
 }

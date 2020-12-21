@@ -63,9 +63,14 @@ void LanguagesModule::registerUiTypes()
     framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(languages_QML_IMPORT);
 }
 
-void LanguagesModule::onInit()
+void LanguagesModule::onInit(const framework::IApplication::RunMode& mode)
 {
     //! NOTE: configurator must be initialized before any service that uses it
     m_languagesConfiguration->init();
+
+    if (framework::IApplication::RunMode::Converter == mode) {
+        return;
+    }
+
     m_languagesController->init();
 }

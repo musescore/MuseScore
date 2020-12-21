@@ -17,7 +17,7 @@ add_subdirectory(audiofile)
 add_subdirectory(context)
 add_subdirectory(notation)
 add_subdirectory(userscores)
-add_subdirectory(convertor)
+add_subdirectory(converter)
 
 if (NOT OS_IS_WASM)
     add_subdirectory(importexport)

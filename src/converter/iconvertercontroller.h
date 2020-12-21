@@ -16,36 +16,22 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_COMMANDLINE_COMMANDLINEREGISTER_H
-#define MU_COMMANDLINE_COMMANDLINEREGISTER_H
+#ifndef MU_CONVERTER_ICONVERTERCONTROLLER_H
+#define MU_CONVERTER_ICONVERTERCONTROLLER_H
 
-#include <map>
+#include "modularity/imoduleexport.h"
+#include "ret.h"
+#include "io/path.h"
 
-#include "../icommandlineregister.h"
-
-namespace mu::commandline {
-class CommandLineRegister : public ICommandLineRegister
+namespace mu::converter {
+class IConverterController : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(IConverterController)
 public:
-    CommandLineRegister() = default;
+    virtual ~IConverterController() = default;
 
-     Ret apply(const std::string& opt, const CommandLineValues& vals) override;
-
-     void unReg(ICommandLineHandler* handler) override;
-     void reg(ICommandLineHandler* handler, const CommandLineOption& opt, const CallBackWithVals& call) override;
-
-private:
-
-     void doReg(ICommandLineHandler* handler, const std::string& opt, const CallBackWithVals& call);
-
-     struct Handler
-     {
-         ICommandLineHandler* h = nullptr;
-         CallBackWithVals callback;
-     };
-
-     std::map<std::string/*option*/, Handler > m_handlers;
+    virtual Ret batchConvert(const io::path& batchJobFile) = 0;
 };
 }
 
-#endif // MU_COMMANDLINE_COMMANDLINEREGISTER_H
+#endif // MU_CONVERTER_ICONVERTERCONTROLLER_H
