@@ -48,8 +48,8 @@ PaletteTreeModel::PaletteTreeModel(PaletteTreePtr tree, QObject* parent)
     connect(this, &QAbstractItemModel::rowsRemoved, this, &PaletteTreeModel::setTreeChanged);
 
     configuration()->colorsChanged().onNotify(this, [this]() {
-            notifyAboutCellsChanged(Qt::DecorationRole);
-        });
+        notifyAboutCellsChanged(Qt::DecorationRole);
+    });
 }
 
 //---------------------------------------------------------

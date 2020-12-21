@@ -27,16 +27,15 @@
 #include "context/iglobalcontext.h"
 #include "notation/notationtypes.h"
 #include "instrumentstypes.h"
-#include "iinteractive.h"
+#include "iselectinstrumentscenario.h"
 
-namespace mu {
-namespace instruments {
+namespace mu::instruments {
 class InstrumentSettingsModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
     INJECT(instruments, context::IGlobalContext, globalContext)
-    INJECT(instruments, framework::IInteractive, interactive)
+    INJECT(instruments, ISelectInstrumentsScenario, selectInstrumentsScenario)
 
     Q_PROPERTY(QString instrumentName READ instrumentName WRITE setInstrumentName NOTIFY dataChanged)
     Q_PROPERTY(QString partName READ partName WRITE setPartName NOTIFY dataChanged)
@@ -63,15 +62,12 @@ signals:
 private:
     notation::INotationPartsPtr parts() const;
 
-    notation::IDList partsInstrumentIds() const;
-
     QString m_partId;
     QString m_partName;
     QString m_instrumentId;
     QString m_instrumentName;
     QString m_instrumentAbbreviature;
 };
-}
 }
 
 #endif // MU_INSTRUMENTS_INSTRUMENTSETTINGSMODEL_H

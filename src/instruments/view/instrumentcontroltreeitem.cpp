@@ -31,25 +31,13 @@ InstrumentControlTreeItem::InstrumentControlTreeItem(INotationPartsPtr notationP
 
 void InstrumentControlTreeItem::appendNewItem()
 {
-    QStringList params {
-        "canSelectMultipleInstruments=false",
-        "initiallySelectedInstrumentIds=" + partsInstrumentIds().join(",")
-    };
-
-    QString uri = QString("musescore://instruments/select?%1").arg(params.join('&'));
-    RetVal<Val> result = interactive()->open(uri.toStdString());
-
-    if (!result.ret) {
-        LOGE() << result.ret.toString();
+    RetVal<Instrument> selectedInstrument = selectInstrumentsScenario()->selectInstrument();
+    if (!selectedInstrument.ret) {
+        LOGE() << selectedInstrument.ret.toString();
         return;
     }
 
-    Instrument newInstrument = result.val.toQVariant().value<Instrument>();
-    if (!newInstrument.isValid()) {
-        return;
-    }
-
-    notationParts()->appendDoublingInstrument(newInstrument, m_partId);
+    notationParts()->appendDoublingInstrument(selectedInstrument.val, m_partId);
 }
 
 QString InstrumentControlTreeItem::partId() const
@@ -60,29 +48,4 @@ QString InstrumentControlTreeItem::partId() const
 void InstrumentControlTreeItem::setPartId(const QString& id)
 {
     m_partId = id;
-}
-
-IDList InstrumentControlTreeItem::partsInstrumentIds() const
-{
-    auto _notationParts = notationParts();
-    if (!_notationParts) {
-        return IDList();
-    }
-
-    async::NotifyList<const Part*> parts = _notationParts->partList();
-
-    IDList result;
-    for (const Part* part: parts) {
-        async::NotifyList<Instrument> selectedInstruments = _notationParts->instrumentList(part->id());
-
-        for (const Instrument& instrument: selectedInstruments) {
-            if (part->isDoublingInstrument(instrument.id)) {
-                continue;
-            }
-
-            result << instrument.id;
-        }
-    }
-
-    return result;
 }
