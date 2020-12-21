@@ -210,10 +210,29 @@ void TemplatePaintView::scrollVertical(qreal position)
     update();
 }
 
+QRectF TemplatePaintView::previewRect() const
+{
+    if (!m_notation) {
+        return QRectF();
+    }
+
+    auto notationElements = m_notation->elements();
+    if (!notationElements) {
+        return QRectF();
+    }
+
+    PageList pages = notationElements->pages();
+    if (!pages.empty()) {
+        return pages.front()->bbox();
+    }
+
+    return QRectF();
+}
+
 qreal TemplatePaintView::canvasWidth() const
 {
     if (m_notation) {
-        return m_notation->previewRect().width() * m_currentScaleFactor;
+        return previewRect().width() * m_currentScaleFactor;
     }
 
     return 0;
@@ -222,7 +241,7 @@ qreal TemplatePaintView::canvasWidth() const
 qreal TemplatePaintView::canvasHeight() const
 {
     if (m_notation) {
-        return m_notation->previewRect().height() * m_currentScaleFactor;
+        return previewRect().height() * m_currentScaleFactor;
     }
 
     return 0;

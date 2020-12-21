@@ -67,6 +67,8 @@ private:
 
     void paint(QPainter* painter) override;
 
+    QRectF previewRect() const;
+
     qreal canvasWidth() const;
     qreal canvasHeight() const;
 

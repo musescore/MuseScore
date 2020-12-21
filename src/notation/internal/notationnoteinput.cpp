@@ -26,7 +26,6 @@
 #include "libmscore/slur.h"
 #include "libmscore/articulation.h"
 #include "libmscore/system.h"
-#include "libmscore/page.h"
 #include "libmscore/stafftype.h"
 
 #include "scorecallbacks.h"
@@ -278,8 +277,13 @@ QRectF NotationNoteInput::cursorRect() const
     int track = inputState.track() == -1 ? 0 : inputState.track();
     int staffIdx = track / VOICES;
 
-    static constexpr int sideMargin = 4;
-    static constexpr int skylineMargin = 20;
+    Staff* staff = score()->staff(staffIdx);
+    if (!staff) {
+        return QRectF();
+    }
+
+    constexpr int sideMargin = 4;
+    constexpr int skylineMargin = 20;
 
     QRectF segmentContentRect = segment->contentRect();
     double x = segmentContentRect.translated(segment->pagePos()).x() - sideMargin;
@@ -287,17 +291,16 @@ QRectF NotationNoteInput::cursorRect() const
     double w = segmentContentRect.width() + 2 * sideMargin;
     double h = 0.0;
 
-    Staff* staff = score()->staff(staffIdx);
     const Ms::StaffType* staffType = staff->staffType(inputState.tick());
     double spatium = score()->spatium();
     double lineDist = staffType->lineDistance().val() * spatium;
     int lines = staffType->lines();
-    int strg = inputState.string();
+    int inputStateStringsCount = inputState.string();
 
-    int instrStrgs = staff->part()->instrument()->stringData()->strings();
-    if (staff->isTabStaff(inputState.tick()) && strg >= 0 && strg <= instrStrgs) {
+    int instrumentStringsCount = staff->part()->instrument()->stringData()->strings();
+    if (staff->isTabStaff(inputState.tick()) && inputStateStringsCount >= 0 && inputStateStringsCount <= instrumentStringsCount) {
         h = lineDist;
-        y += staffType->physStringToYOffset(strg) * spatium;
+        y += staffType->physStringToYOffset(inputStateStringsCount) * spatium;
         y -= (staffType->onLines() ? lineDist * 0.5 : lineDist);
     } else {
         h = (lines - 1) * lineDist + 2 * skylineMargin;
@@ -306,15 +309,6 @@ QRectF NotationNoteInput::cursorRect() const
 
     QRectF result = QRectF(x, y, w, h).translated(system->page()->pos());
     return result;
-}
-
-QColor NotationNoteInput::cursorColor() const
-{
-    Ms::InputState& inputState = score()->inputState();
-    int track = inputState.track() == -1 ? 0 : inputState.track();
-    int voice = track % VOICES;
-
-    return configuration()->selectionColor(voice);
 }
 
 void NotationNoteInput::setSlur(Ms::Slur* slur)

@@ -25,6 +25,7 @@
 #include "io/path.h"
 
 #include "libmscore/element.h"
+#include "libmscore/page.h"
 #include "libmscore/durationtype.h"
 #include "libmscore/mscore.h"
 #include "libmscore/score.h"
@@ -88,6 +89,7 @@ using TextType = Ms::Tid;
 using TupletNumberType = Ms::TupletNumberType;
 using TupletBracketType = Ms::TupletBracketType;
 
+using PageList = std::vector<const Page*>;
 using StaffList = QList<const Staff*>;
 using PartList = QList<const Part*>;
 

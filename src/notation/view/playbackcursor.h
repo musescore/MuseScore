@@ -22,12 +22,16 @@
 #include <QRect>
 #include <QColor>
 
+#include "modularity/ioc.h"
+#include "inotationconfiguration.h"
+
 class QPainter;
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class PlaybackCursor
 {
+    INJECT(notation, INotationConfiguration, configuration)
+
 public:
 
     PlaybackCursor() = default;
@@ -37,15 +41,13 @@ public:
 
     const QRect& rect() const;
     void setVisible(bool arg);
-    void setColor(const QColor& c);
 
 private:
+    QColor color();
 
     bool m_visible = false;
     QRect m_rect;
-    QColor m_color;
 };
-}
 }
 
 #endif // MU_NOTATION_PLAYBACKCURSOR_H

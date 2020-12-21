@@ -20,8 +20,6 @@
 
 #include <QPainter>
 
-#include "libmscore/page.h"
-
 #include "log.h"
 #include "actions/actiontypes.h"
 
@@ -46,7 +44,6 @@ NotationPaintView::NotationPaintView(QQuickItem* parent)
 
     // playback
     m_playbackCursor = new PlaybackCursor();
-    m_playbackCursor->setColor(configuration()->playbackCursorColor());
     m_playbackCursor->setVisible(false);
 
     playbackController()->isPlayingChanged().onNotify(this, [this]() {
@@ -283,8 +280,10 @@ void NotationPaintView::adjustCanvasPosition(const QRectF& logicRect)
         return;
     }
 
-    double _spatium    = currentNotationStyle()->styleValue(StyleId::spatium).toDouble();
-    qreal border = _spatium * 3;
+    constexpr int borderSpacingRatio = 3;
+
+    double _spatium = currentNotationStyle()->styleValue(StyleId::spatium).toDouble();
+    qreal border = _spatium * borderSpacingRatio;
 
     QPointF pos = QPointF(viewRect.topLeft().x(), viewRect.topLeft().y());
     QPointF oldPos = pos;
@@ -552,12 +551,12 @@ const Page* NotationPaintView::point2page(const QPointF& p) const
         return nullptr;
     }
 
+    PageList pages = currentNotationElements()->pages();
     if (currentNotation()->viewMode() == Ms::LayoutMode::LINE) {
-        std::vector<const Page*> pages = currentNotationElements()->pages();
         return pages.empty() ? 0 : pages.front();
     }
 
-    for (const Page* page: currentNotationElements()->pages()) {
+    for (const Page* page: pages) {
         if (page->bbox().translated(page->pos()).contains(p)) {
             return page;
         }

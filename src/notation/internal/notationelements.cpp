@@ -109,9 +109,9 @@ Ms::Measure* NotationElements::measure(const int measureIndex) const
     return score()->crMeasure(measureIndex);
 }
 
-std::vector<const Page*> NotationElements::pages() const
+PageList NotationElements::pages() const
 {
-    std::vector<const Page*> result;
+    PageList result;
     for (const Page* page: score()->pages()) {
         result.push_back(page);
     }

@@ -6,8 +6,7 @@
 #include "modularity/imoduleexport.h"
 #include "notationtypes.h"
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class INotationElements
 {
 public:
@@ -18,11 +17,10 @@ public:
 
     virtual Measure* measure(const int measureIndex) const = 0;
 
-    virtual std::vector<const Page*> pages() const = 0;
+    virtual PageList pages() const = 0;
 };
 
 using INotationElementsPtr = std::shared_ptr<INotationElements>;
-}
 }
 
 #endif // INOTATIONELEMENTS_H

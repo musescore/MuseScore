@@ -49,7 +49,6 @@ public:
     virtual void setCurrentVoiceIndex(int voiceIndex) = 0;
 
     virtual QRectF cursorRect() const = 0;
-    virtual QColor cursorColor() const = 0;
 
     virtual async::Notification noteAdded() const = 0;
     virtual async::Notification stateChanged() const = 0;

@@ -30,7 +30,7 @@ public:
     std::vector<Element*> elements(const FilterElementsOptions& elementsOptions) const override;
 
     Measure* measure(const int measureIndex) const override;
-    std::vector<const Page*> pages() const override;
+    PageList pages() const override;
 
 private:
     Ms::Score* score() const;
