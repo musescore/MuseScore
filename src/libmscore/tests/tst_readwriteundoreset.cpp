@@ -10,12 +10,12 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
-#include "mtest/testutils.h"
+#include "testing/qtestsuite.h"
+#include "testutils.h"
 #include "libmscore/score.h"
 #include "libmscore/undo.h"
 
-#define DIR QString("libmscore/readwriteundoreset/")
+static const QString RWUNDORESET_DATA_DIR("readwriteundoreset_data/");
 
 using namespace Ms;
 
@@ -23,7 +23,7 @@ using namespace Ms;
 //   TestReadWrite
 //---------------------------------------------------------
 
-class TestReadWrite : public QObject, public MTest
+class TestReadWriteUndoReset : public QObject, public MTest
 {
     Q_OBJECT
 
@@ -40,7 +40,7 @@ private slots:
 //   initTestCase
 //---------------------------------------------------------
 
-void TestReadWrite::initTestCase()
+void TestReadWriteUndoReset::initTestCase()
 {
     initMTest();
 }
@@ -49,7 +49,7 @@ void TestReadWrite::initTestCase()
 //   testReadWriteResetPositions
 //---------------------------------------------------------
 
-void TestReadWrite::testReadWriteResetPositions_data()
+void TestReadWriteUndoReset::testReadWriteResetPositions_data()
 {
     QTest::addColumn<QString>("file");
 
@@ -58,11 +58,11 @@ void TestReadWrite::testReadWriteResetPositions_data()
     QTest::newRow("mmrestBarlineTextLinks") << "mmrestBarlineTextLinks";   // see issue #296426
 }
 
-void TestReadWrite::testReadWriteResetPositions()
+void TestReadWriteUndoReset::testReadWriteResetPositions()
 {
     QFETCH(QString, file);
 
-    QString readFile(DIR + file + ".mscx");
+    QString readFile(RWUNDORESET_DATA_DIR + file + ".mscx");
     QString writeFile(file + "-undoreset-test.mscx");
 
     MasterScore* score = readScore(readFile);
@@ -85,14 +85,14 @@ void TestReadWrite::testReadWriteResetPositions()
 ///   See issue #296426
 //---------------------------------------------------------
 
-void TestReadWrite::testMMRestLinksRecreateMMRest()
+void TestReadWriteUndoReset::testMMRestLinksRecreateMMRest()
 {
     const QString file("mmrestBarlineTextLinks");
 
-    QString readFile(DIR + file + ".mscx");
+    QString readFile(RWUNDORESET_DATA_DIR + file + ".mscx");
     QString writeFile(file + "-recreate-mmrest-test.mscx");
-    QString disableMMRestRefFile(DIR + file + "-disable-mmrest-ref.mscx");
-    QString recreateMMRestRefFile(DIR + file + "-recreate-mmrest-ref.mscx");
+    QString disableMMRestRefFile(RWUNDORESET_DATA_DIR + file + "-disable-mmrest-ref.mscx");
+    QString recreateMMRestRefFile(RWUNDORESET_DATA_DIR + file + "-recreate-mmrest-ref.mscx");
 
     MasterScore* score = readScore(readFile);
     QVERIFY(score);
@@ -118,5 +118,5 @@ void TestReadWrite::testMMRestLinksRecreateMMRest()
     delete score;
 }
 
-QTEST_MAIN(TestReadWrite)
+QTEST_MAIN(TestReadWriteUndoReset)
 #include "tst_readwriteundoreset.moc"
