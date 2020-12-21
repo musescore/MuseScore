@@ -26,6 +26,7 @@
 #include "async/asyncable.h"
 
 #include <QAbstractListModel>
+#include <QList>
 
 namespace mu {
 namespace plugins {

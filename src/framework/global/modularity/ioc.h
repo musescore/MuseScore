@@ -19,12 +19,12 @@
 
 #ifndef MU_FRAMEWORK_IOC_H
 #define MU_FRAMEWORK_IOC_H
-
+#include <memory>
 #include "modulesioc.h"
 
 #define INJECT(Module, Interface, getter) \
 private: \
-    mutable std::shared_ptr<Interface> _##getter; \
+    mutable std::shared_ptr<Interface> _##getter = nullptr; \
 public: \
     std::shared_ptr<Interface> getter() const {  \
         if (!_##getter) { \
@@ -37,7 +37,7 @@ public: \
 #define INJECT_STATIC(Module, Interface, getter) \
 public: \
     static std::shared_ptr<Interface> getter() {  \
-        static std::shared_ptr<Interface> _static##getter; \
+        static std::shared_ptr<Interface> _static##getter = nullptr; \
         if (!_static##getter) { \
             _static##getter = mu::framework::ioc()->resolve<Interface>(#Module); \
         } \

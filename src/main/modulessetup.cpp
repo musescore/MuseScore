@@ -28,22 +28,15 @@
 #include "framework/fonts/fontsmodule.h"
 #include "framework/actions/actionsmodule.h"
 #include "framework/shortcuts/shortcutsmodule.h"
-#include "framework/workspace/workspacemodule.h"
 #include "framework/system/systemmodule.h"
 #include "framework/network/networkmodule.h"
 #include "framework/audio/audiomodule.h"
 #include "framework/midi/midimodule.h"
 
 #include "appshell/appshellmodule.h"
-#include "cloud/cloudmodule.h"
 #include "context/contextmodule.h"
 #include "userscores/userscoresmodule.h"
-#include "extensions/extensionsmodule.h"
-#include "languages/languagesmodule.h"
-#include "plugins/pluginsmodule.h"
 #include "notation/notationmodule.h"
-#include "importexport/importexportmodule.h"
-#include "importexport/importexportmodule.h"
 #include "commonscene/commonscenemodule.h"
 #include "palette/palettemodule.h"
 #include "inspector/inspectormodule.h"
@@ -56,6 +49,17 @@
 
 #ifdef BUILD_TELEMETRY_MODULE
 #include "framework/telemetry/telemetrysetup.h"
+#endif
+
+#ifndef Q_OS_WASM
+#include "framework/workspace/workspacemodule.h"
+#include "plugins/pluginsmodule.h"
+#include "importexport/importexportmodule.h"
+#include "cloud/cloudmodule.h"
+#include "extensions/extensionsmodule.h"
+#include "languages/languagesmodule.h"
+#else
+#include "wasmtest/wasmtestmodule.h"
 #endif
 
 //! NOTE Separately to initialize logger and profiler as early as possible
@@ -81,19 +85,14 @@ ModulesSetup::ModulesSetup()
         << new mu::fonts::FontsModule()
         << new mu::framework::SystemModule()
         << new mu::framework::NetworkModule()
-        << new mu::plugins::PluginsModule()
 
         << new mu::actions::ActionsModule()
         << new mu::appshell::AppShellModule()
-        << new mu::cloud::CloudModule()
         << new mu::context::ContextModule()
         << new mu::shortcuts::ShortcutsModule()
-        << new mu::workspace::WorkspaceModule()
         << new mu::audio::AudioModule()
         << new mu::midi::MidiModule()
         << new mu::userscores::UserScoresModule()
-        << new mu::extensions::ExtensionsModule()
-        << new mu::languages::LanguagesModule()
         << new mu::notation::NotationModule()
         << new mu::commonscene::CommonSceneModule()
         << new mu::playback::PlaybackModule()
@@ -101,9 +100,19 @@ ModulesSetup::ModulesSetup()
 #ifdef BUILD_VST
         << new mu::vst::VSTModule()
 #endif
-        //<< new mu::importexport::ImportExportModule()
         << new mu::inspector::InspectorModule()
         << new mu::palette::PaletteModule()
+
+#ifndef Q_OS_WASM
+      //<< new mu::importexport::ImportExportModule()
+        << new mu::workspace::WorkspaceModule()
+        << new mu::plugins::PluginsModule()
+        << new mu::cloud::CloudModule()
+        << new mu::extensions::ExtensionsModule()
+        << new mu::languages::LanguagesModule()
+#else
+        << new mu::wasmtest::WasmTestModule()
+#endif
     ;
 }
 

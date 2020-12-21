@@ -19,8 +19,10 @@
 #include "extensionscontroller.h"
 
 #include <QBuffer>
+#include <QFile>
+#include <QJsonDocument>
+#include <QJsonParseError>
 #include <QtConcurrent>
-
 #include "log.h"
 #include "translation.h"
 #include "extensionserrors.h"
@@ -36,7 +38,6 @@ void ExtensionsController::init()
 {
     fileSystem()->makePath(configuration()->extensionsSharePath());
     fileSystem()->makePath(configuration()->extensionsDataPath());
-
     QtConcurrent::run(this, &ExtensionsController::th_refreshExtensions);
 }
 

@@ -37,6 +37,11 @@ elseif(OS_IS_MAC)
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/osxaudiodriver.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/osxaudiodriver.h
     )
+elseif(OS_IS_WASM)
+    set(DRIVER_SRC
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/web/webaudiodriver.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/web/webaudiodriver.h
+    )
 endif()
 
 set(MODULE_SRC

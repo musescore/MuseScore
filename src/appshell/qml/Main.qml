@@ -14,7 +14,7 @@ Rectangle {
         id: windowLoader
         anchors.fill: parent
         onStatusChanged: {
-            item.anchors.fill = item.parent
+            if (item && item.anchors) item.anchors.fill = item ? item.parent : null
             item.visible = true
         }
     }

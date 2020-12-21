@@ -21,9 +21,11 @@
 #include <QDir>
 #include <QTranslator>
 #include <QApplication>
-#include <QtConcurrent>
+#include <QJsonParseError>
+#include <QJsonDocument>
+#include <QBuffer>
 #include <QCryptographicHash>
-
+#include <QtConcurrent>
 #include "log.h"
 #include "languageserrors.h"
 
@@ -101,7 +103,6 @@ RetCh<LanguageProgress> LanguagesController::install(const QString& languageCode
         m_languageChanged.send(languageHash[languageCode]);
         closeOperation(languageCode, languageProgressStatus);
     }, Asyncable::AsyncMode::AsyncSetRepeat);
-
     QtConcurrent::run(this, &LanguagesController::th_install, languageCode, languageProgressStatus, languageFinishChannel);
 
     return result;

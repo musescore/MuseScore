@@ -133,7 +133,6 @@ void NetworkManager::abort()
     if (m_reply) {
         m_reply->abort();
     }
-
     m_isAborted = true;
     emit aborted();
 }

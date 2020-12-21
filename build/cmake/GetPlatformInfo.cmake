@@ -1,6 +1,7 @@
 
-
-if (${CMAKE_HOST_SYSTEM_NAME} MATCHES "Windows")
+if(${CMAKE_CXX_COMPILER} MATCHES "/em\\+\\+(-[a-zA-Z0-9.])?$")
+    set(OS_IS_WASM 1)
+elseif(${CMAKE_HOST_SYSTEM_NAME} MATCHES "Windows")
     set(OS_IS_WIN 1)
 elseif(${CMAKE_HOST_SYSTEM_NAME} MATCHES "Linux")
     set(OS_IS_LIN 1)
