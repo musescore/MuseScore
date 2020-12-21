@@ -59,6 +59,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/tst_selectionfilter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_selectionrangedelete.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_spanners.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tst_split.cpp
 )
 
 set(MODULE_TEST_LINK
