@@ -10,12 +10,12 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
-#include "mtest/testutils.h"
+#include "testing/qtestsuite.h"
+#include "testutils.h"
 #include "libmscore/score.h"
 #include "libmscore/measure.h"
 
-#define DIR QString("libmscore/selectionfilter/")
+static const QString SELECTIONFILTER_DATA_DIR("selectionfilter_data/");
 
 using namespace Ms;
 
@@ -71,7 +71,7 @@ void TestSelectionFilter::initTestCase()
 
 void TestSelectionFilter::testFilter(int idx, SelectionFilterType filter)
 {
-    Score* score = readScore(DIR + QString("selectionfilter%1.mscx").arg(idx));
+    Score* score = readScore(SELECTIONFILTER_DATA_DIR + QString("selectionfilter%1.mscx").arg(idx));
     score->doLayout();
 
     Measure* m1 = score->firstMeasure();
@@ -84,7 +84,7 @@ void TestSelectionFilter::testFilter(int idx, SelectionFilterType filter)
     QVERIFY(score->selection().mimeType() == mimeStaffListFormat);
 
     QVERIFY(saveCompareMimeData(score->selection().mimeData(),QString("selectionfilter%1-base.xml").arg(idx),
-                                DIR + QString("selectionfilter%1-base-ref.xml").arg(idx)));
+                                SELECTIONFILTER_DATA_DIR + QString("selectionfilter%1-base-ref.xml").arg(idx)));
 
     score->selectionFilter().setFiltered(filter,false);
 
@@ -92,7 +92,7 @@ void TestSelectionFilter::testFilter(int idx, SelectionFilterType filter)
     QVERIFY(score->selection().mimeType() == mimeStaffListFormat);
 
     QVERIFY(saveCompareMimeData(score->selection().mimeData(),QString("selectionfilter%1.xml").arg(idx),
-                                DIR + QString("selectionfilter%1-ref.xml").arg(idx)));
+                                SELECTIONFILTER_DATA_DIR + QString("selectionfilter%1-ref.xml").arg(idx)));
 
     delete score;
 }
@@ -103,7 +103,7 @@ void TestSelectionFilter::testFilter(int idx, SelectionFilterType filter)
 
 void TestSelectionFilter::testFilterSpanner(int idx, SelectionFilterType filter)
 {
-    Score* score = readScore(DIR + QString("selectionfilter%1.mscx").arg(idx));
+    Score* score = readScore(SELECTIONFILTER_DATA_DIR + QString("selectionfilter%1.mscx").arg(idx));
     score->doLayout();
 
     Measure* m1 = score->firstMeasure();
@@ -118,7 +118,7 @@ void TestSelectionFilter::testFilterSpanner(int idx, SelectionFilterType filter)
     QVERIFY(score->selection().mimeType() == mimeStaffListFormat);
 
     QVERIFY(saveCompareMimeData(score->selection().mimeData(),QString("selectionfilter%1-base.xml").arg(idx),
-                                DIR + QString("selectionfilter%1-base-ref.xml").arg(idx)));
+                                SELECTIONFILTER_DATA_DIR + QString("selectionfilter%1-base-ref.xml").arg(idx)));
 
     score->selectionFilter().setFiltered(filter,false);
 
@@ -126,7 +126,7 @@ void TestSelectionFilter::testFilterSpanner(int idx, SelectionFilterType filter)
     QVERIFY(score->selection().mimeType() == mimeStaffListFormat);
 
     QVERIFY(saveCompareMimeData(score->selection().mimeData(),QString("selectionfilter%1.xml").arg(idx),
-                                DIR + QString("selectionfilter%1-ref.xml").arg(idx)));
+                                SELECTIONFILTER_DATA_DIR + QString("selectionfilter%1-ref.xml").arg(idx)));
 
     delete score;
 }
