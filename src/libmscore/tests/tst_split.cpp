@@ -10,14 +10,15 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
-#include "mtest/testutils.h"
+#include "testing/qtestsuite.h"
+#include "testutils.h"
+
 #include "libmscore/score.h"
 #include "libmscore/measure.h"
 #include "libmscore/segment.h"
 #include "libmscore/chordrest.h"
 
-#define DIR QString("libmscore/split/")
+static const QString SPLIT_DATA_DIR("split_data/");
 
 using namespace Ms;
 
@@ -79,7 +80,7 @@ void TestSplit::initTestCase()
 
 void TestSplit::split(const char* f1, const char* ref)
 {
-    MasterScore* score = readScore(DIR + f1);
+    MasterScore* score = readScore(SPLIT_DATA_DIR + f1);
     QVERIFY(score);
     Measure* m = score->firstMeasure();
     Segment* s = m->first(SegmentType::ChordRest);
@@ -89,13 +90,13 @@ void TestSplit::split(const char* f1, const char* ref)
 
     score->cmdSplitMeasure(cr);
 
-    QVERIFY(saveCompareScore(score, f1, DIR + ref));
+    QVERIFY(saveCompareScore(score, f1, SPLIT_DATA_DIR + ref));
     delete score;
 }
 
 void TestSplit::split(const char* f1, const char* ref, int index)
 {
-    MasterScore* score = readScore(DIR + f1);
+    MasterScore* score = readScore(SPLIT_DATA_DIR + f1);
     QVERIFY(score);
     Measure* m = score->firstMeasure();
     Segment* s = m->first(SegmentType::ChordRest);
@@ -106,7 +107,7 @@ void TestSplit::split(const char* f1, const char* ref, int index)
 
     score->cmdSplitMeasure(cr);
 
-    QVERIFY(saveCompareScore(score, f1, DIR + ref));
+    QVERIFY(saveCompareScore(score, f1, SPLIT_DATA_DIR + ref));
     delete score;
 }
 
