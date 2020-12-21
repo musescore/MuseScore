@@ -10,12 +10,12 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
-#include "mtest/testutils.h"
+#include "testing/qtestsuite.h"
+#include "testutils.h"
 #include "libmscore/score.h"
 #include "libmscore/segment.h"
 
-#define DIR QString("libmscore/rhythmicGrouping/")
+static const QString RHYTHMICGRP_DATA_DIR("rhythmicGrouping_data/");
 
 using namespace Ms;
 
@@ -56,7 +56,7 @@ void TestRhythmicGrouping::initTestCase()
 
 void TestRhythmicGrouping::group(const char* p1, const char* p2, int staves)
 {
-    MasterScore* score = readScore(DIR + p1);
+    MasterScore* score = readScore(RHYTHMICGRP_DATA_DIR + p1);
 
     if (!staves) {
         score->cmdSelectAll();
@@ -72,7 +72,7 @@ void TestRhythmicGrouping::group(const char* p1, const char* p2, int staves)
     }
 
     score->doLayout();
-    QVERIFY(saveCompareScore(score, p1, DIR + p2));
+    QVERIFY(saveCompareScore(score, p1, RHYTHMICGRP_DATA_DIR + p2));
     delete score;
 }
 
