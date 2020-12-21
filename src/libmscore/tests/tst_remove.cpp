@@ -10,13 +10,13 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
-#include "mtest/testutils.h"
+#include "testing/qtestsuite.h"
+#include "testutils.h"
 #include "libmscore/excerpt.h"
 #include "libmscore/score.h"
 #include "libmscore/spanner.h"
 
-#define DIR QString("libmscore/remove/")
+static const QString REMOVE_DATA_DIR("remove_data/");
 
 using namespace Ms;
 
@@ -99,7 +99,7 @@ static bool staffHasElements(Score* score, int staffIdx)
 
 void TestRemove::removeStaff()
 {
-    MasterScore* score = readScore(DIR + "remove_staff.mscx");
+    MasterScore* score = readScore(REMOVE_DATA_DIR + "remove_staff.mscx");
 
     // Remove the second staff and see what happens
     score->startCmd();
