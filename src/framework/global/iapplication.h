@@ -16,27 +16,27 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_COMMANDLINE_COMMANDLINETYPES_H
-#define MU_COMMANDLINE_COMMANDLINETYPES_H
+#ifndef MU_FRAMEWORK_IAPPLICATION_H
+#define MU_FRAMEWORK_IAPPLICATION_H
 
-#include <string>
-#include <utility>
-#include <vector>
+#include "modularity/imoduleexport.h"
 
-namespace mu::commandline {
-using CommandLineOption = std::list<std::string>;
-using CommandLineValue = std::string;
-using CommandLineValues = std::vector<CommandLineValue>;
-
-inline bool operator ==(const CommandLineOption& opt, const std::string& str)
+namespace mu::framework {
+class IApplication : MODULE_EXPORT_INTERFACE
 {
-    for (const std::string& o : opt) {
-        if (o == str) {
-            return true;
-        }
-    }
-    return false;
-}
+    INTERFACE_ID(IApplication)
+public:
+    virtual ~IApplication() = default;
+
+    enum class RunMode {
+        Editor,
+        Converter
+    };
+
+    virtual void setRunMode(const RunMode& mode) = 0;
+    virtual RunMode runMode() const = 0;
+    virtual bool noGui() const = 0;
+};
 }
 
-#endif // MU_COMMANDLINE_COMMANDLINETYPES_H
+#endif // MU_FRAMEWORK_IAPPLICATION_H

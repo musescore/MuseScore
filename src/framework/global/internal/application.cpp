@@ -16,23 +16,25 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "convertormodule.h"
+#include "application.h"
 
-#include "modularity/ioc.h"
-#include "commandline/icommandlineregister.h"
+using namespace mu::framework;
 
-#include "internal/convertorcommandlinecontroller.h"
-
-using namespace mu::convertor;
-
-static ConvertorCommandLineController s_clcontroller;
-
-std::string ConvertorModule::moduleName() const
+void Application::setRunMode(const RunMode& mode)
 {
-    return "convertor";
+    m_runMode = mode;
 }
 
-void ConvertorModule::resolveImports()
+IApplication::RunMode Application::runMode() const
 {
-    s_clcontroller.setup();
+    return m_runMode;
+}
+
+bool Application::noGui() const
+{
+    switch (m_runMode) {
+    case RunMode::Editor: return false;
+    case RunMode::Converter: return true;
+    }
+    return false;
 }

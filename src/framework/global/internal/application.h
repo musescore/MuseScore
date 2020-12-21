@@ -16,19 +16,26 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_COMMANDLINE_COMMANDLINEMODULE_H
-#define MU_COMMANDLINE_COMMANDLINEMODULE_H
+#ifndef MU_FRAMEWORK_APPLICATION_H
+#define MU_FRAMEWORK_APPLICATION_H
 
-#include "modularity/imodulesetup.h"
+#include "../iapplication.h"
 
-namespace mu::commandline {
-class CommandLineModule : public framework::IModuleSetup
+namespace mu::framework {
+class Application : public IApplication
 {
 public:
 
-    std::string moduleName() const override;
-    void registerExports() override;
+    Application() = default;
+
+    void setRunMode(const RunMode& mode) override;
+    RunMode runMode() const override;
+    bool noGui() const override;
+
+private:
+
+    RunMode m_runMode = RunMode::Editor;
 };
 }
 
-#endif // MU_COMMANDLINE_COMMANDLINEMODULE_H
+#endif // MU_FRAMEWORK_APPLICATION_H

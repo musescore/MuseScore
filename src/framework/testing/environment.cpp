@@ -40,10 +40,12 @@ void Environment::setup()
 {
     static mu::framework::GlobalModule globalModule;
 
+    framework::IApplication::RunMode runMode = framework::IApplication::RunMode::Editor;
+
     globalModule.registerResources();
     globalModule.registerExports();
     globalModule.registerUiTypes();
-    globalModule.onInit();
+    globalModule.onInit(runMode);
 
     //! NOTE Now we can use logger and profiler
 
@@ -62,7 +64,7 @@ void Environment::setup()
     }
 
     for (mu::framework::IModuleSetup* m : m_dependencyModules) {
-        m->onInit();
+        m->onInit(runMode);
     }
 
     globalModule.onStartApp();

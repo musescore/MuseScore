@@ -52,6 +52,7 @@
 using namespace mu::audio;
 using namespace mu::audio::worker;
 
+static bool s_isAudioModuleInited = false;
 static std::shared_ptr<AudioEngine> s_audioEngine = std::make_shared<AudioEngine>();
 static std::shared_ptr<QueuedRpcStreamChannel> s_rpcChannel = std::make_shared<QueuedRpcStreamChannel>();
 static std::shared_ptr<AudioThreadStreamWorker> s_worker = std::make_shared<AudioThreadStreamWorker>(s_rpcChannel);
@@ -94,8 +95,12 @@ void AudioModule::registerUiTypes()
     //framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(mu4_audio_QML_IMPORT);
 }
 
-void AudioModule::onInit()
+void AudioModule::onInit(const framework::IApplication::RunMode& mode)
 {
+    if (framework::IApplication::RunMode::Editor != mode) {
+        return;
+    }
+
     s_audioEngine->init();
 
     s_rpcChannelInvoker = std::make_shared<mu::framework::Invoker>();
@@ -111,10 +116,16 @@ void AudioModule::onInit()
 #ifndef Q_OS_WASM
     s_worker->run();
 #endif
+
+    s_isAudioModuleInited = true;
 }
 
 void AudioModule::onDeinit()
 {
+    if (!s_isAudioModuleInited) {
+        return;
+    }
+
     s_worker->stop();
     s_audioEngine->deinit();
 }

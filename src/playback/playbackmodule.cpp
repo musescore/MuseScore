@@ -71,7 +71,10 @@ void PlaybackModule::registerUiTypes()
     framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(playback_QML_IMPORT);
 }
 
-void PlaybackModule::onInit()
+void PlaybackModule::onInit(const framework::IApplication::RunMode& mode)
 {
+    if (framework::IApplication::RunMode::Editor != mode) {
+        return;
+    }
     pcontroller->init();
 }

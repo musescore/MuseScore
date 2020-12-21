@@ -16,18 +16,19 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_COMMANDLINE_ICOMMANDLINEHANDLER_H
-#define MU_COMMANDLINE_ICOMMANDLINEHANDLER_H
+#include "convertermodule.h"
 
-#include <memory>
-#include "commandlinetypes.h"
+#include "modularity/ioc.h"
+#include "internal/convertercontroller.h"
 
-namespace mu::commandline {
-class ICommandLineHandler
+using namespace mu::converter;
+
+std::string ConverterModule::moduleName() const
 {
-public:
-    virtual ~ICommandLineHandler() = default;
-};
+    return "converter";
 }
 
-#endif // MU_COMMANDLINE_ICOMMANDLINEHANDLER_H
+void ConverterModule::registerExports()
+{
+    framework::ioc()->registerExport<IConverterController>(moduleName(), new ConverterController());
+}

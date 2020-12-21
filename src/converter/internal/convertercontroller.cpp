@@ -16,22 +16,11 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_CONVERTOR_CONVERTORCOMMANDLINECONTROLLER_H
-#define MU_CONVERTOR_CONVERTORCOMMANDLINECONTROLLER_H
+#include "convertercontroller.h"
 
-#include "commandline/icommandlinehandler.h"
-#include "commandline/icommandlineregister.h"
-#include "modularity/ioc.h"
+using namespace mu::converter;
 
-namespace mu::convertor {
-class ConvertorCommandLineController : public commandline::ICommandLineHandler
+mu::Ret ConverterController::batchConvert(const io::path& batchJobFile)
 {
-    INJECT(convertor, commandline::ICommandLineRegister, clinereg)
-public:
-    ConvertorCommandLineController() = default;
-
-    void setup();
-};
+    return make_ret(Ret::Code::UnknownError);
 }
-
-#endif // MU_CONVERTOR_CONVERTORCOMMANDLINECONTROLLER_H

@@ -21,9 +21,9 @@
 #define MU_FRAMEWORK_IMODULESETUP_H
 
 #include <string>
+#include "../iapplication.h"
 
-namespace mu {
-namespace framework {
+namespace mu::framework {
 class IModuleSetup
 {
 public:
@@ -38,12 +38,11 @@ public:
     virtual void registerResources() {}
     virtual void registerUiTypes() {}
 
-    virtual void onInit() {}
+    virtual void onInit(const framework::IApplication::RunMode& mode) { (void)mode; }
     virtual void onDeinit() {}
 
     virtual void onStartApp() {}
 };
-}
 }
 
 #endif // MU_FRAMEWORK_IMODULESETUP_H

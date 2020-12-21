@@ -168,7 +168,7 @@ void NotationModule::registerUiTypes()
     framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(notation_QML_IMPORT);
 }
 
-void NotationModule::onInit()
+void NotationModule::onInit(const IApplication::RunMode&)
 {
     s_configuration->init();
     s_actionController->init();

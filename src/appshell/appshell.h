@@ -21,19 +21,20 @@
 #define MU_APPSHELL_APPSHELL_H
 
 #include <QList>
-#include <QMap>
 
 #include "modularity/imodulesetup.h"
 #include "modularity/ioc.h"
-#include "framework/commandline/icommandlineregister.h"
+#include "global/iapplication.h"
+#include "converter/iconvertercontroller.h"
 
-class QCommandLineParser;
+#include "commandlinecontroller.h"
 
-namespace mu {
-namespace appshell {
+namespace mu::appshell {
 class AppShell
 {
-    INJECT(appshell, commandline::ICommandLineRegister, commandlineRegister)
+    INJECT(appshell, framework::IApplication, muapplication)
+    INJECT(appshell, converter::IConverterController, converter)
+
 public:
     AppShell();
 
@@ -43,22 +44,10 @@ public:
 
 private:
 
-    enum class RunMode {
-        Gui,
-        Concole
-    };
-
-    void parseCommandLineArguments(QCommandLineParser& parser);
-    void applyCommandLineArguments(QCommandLineParser& parser);
-
-    RunMode runMode(const QStringList &options) const;
+    int processConverter(const CommandLineController::ConverterTask& task);
 
     QList<mu::framework::IModuleSetup*> m_modules;
-
-    QList<QString> m_consoleRunModeOptions;
-
 };
-}
 }
 
 #endif // MU_APPSHELL_APPSHELL_H

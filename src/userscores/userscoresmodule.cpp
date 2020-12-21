@@ -84,8 +84,11 @@ void UserScoresModule::registerUiTypes()
     framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(userscores_QML_IMPORT);
 }
 
-void UserScoresModule::onInit()
+void UserScoresModule::onInit(const IApplication::RunMode& mode)
 {
+    if (IApplication::RunMode::Converter == mode) {
+        return;
+    }
     s_userScoresConfiguration->init();
     s_fileController->init();
 }
