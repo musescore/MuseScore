@@ -359,10 +359,7 @@ InstrumentGroupList InstrumentListModel::sortedGroupList() const
     InstrumentGroupList result = m_instrumentsMeta.groups.values();
 
     std::sort(result.begin(), result.end(), [](const InstrumentGroup& group1, const InstrumentGroup& group2) {
-        QString name1 = group1.name.toLower();
-        QString name2 = group2.name.toLower();
-
-        return name1 < name2;
+        return group1.sequenceOrder < group2.sequenceOrder;
     });
 
     return result;

@@ -73,6 +73,13 @@ void InstrumentsRepository::load()
         }
     }
 
+    int globalGroupsSequenceOrder = 0;
+    auto correctGroupSequenceOrder = [&globalGroupsSequenceOrder](const InstrumentGroup& group) {
+                                         InstrumentGroup correctedGroup = group;
+                                         correctedGroup.sequenceOrder += globalGroupsSequenceOrder;
+                                         return correctedGroup;
+                                     };
+
     for (const io::path& filePath: instrumentsFiles) {
         RetVal<InstrumentsMeta> metaInstrument = reader()->readMeta(filePath);
 
@@ -98,8 +105,10 @@ void InstrumentsRepository::load()
 
         const InstrumentGroupMap& groups = metaInstrument.val.groups;
         for (auto it = groups.cbegin(); it != groups.cend(); ++it) {
-            m_instrumentsMeta.groups.insert(it.key(), it.value());
+            InstrumentGroup group = correctGroupSequenceOrder(it.value());
+            m_instrumentsMeta.groups.insert(it.key(), group);
         }
+        globalGroupsSequenceOrder += groups.size();
 
         Ms::loadInstrumentTemplates(filePath.toQString());
     }
