@@ -9,155 +9,27 @@
     <Style>
       <pageWidth>8.27008</pageWidth>
       <pageHeight>11.6902</pageHeight>
-      <pagePrintableWidth>7.48268</pagePrintableWidth>
-      <pageEvenLeftMargin>0.590551</pageEvenLeftMargin>
-      <pageOddLeftMargin>0.590551</pageOddLeftMargin>
-      <pageEvenTopMargin>0.590551</pageEvenTopMargin>
-      <pageEvenBottomMargin>0.590551</pageEvenBottomMargin>
-      <pageOddTopMargin>0.590551</pageOddTopMargin>
-      <pageOddBottomMargin>0.590551</pageOddBottomMargin>
+      <pagePrintableWidth>7.08898</pagePrintableWidth>
       <enableVerticalSpread>1</enableVerticalSpread>
-      <lyricsOddFontFace>Edwin</lyricsOddFontFace>
+      <maxPageFillSpread>10</maxPageFillSpread>
       <lyricsOddFontSize>10</lyricsOddFontSize>
-      <lyricsEvenFontFace>Edwin</lyricsEvenFontFace>
       <lyricsEvenFontSize>10</lyricsEvenFontSize>
-      <barWidth>0.18</barWidth>
-      <doubleBarWidth>0.18</doubleBarWidth>
-      <endBarWidth>0.55</endBarWidth>
       <doubleBarDistance>0.73</doubleBarDistance>
       <endBarDistance>0.915</endBarDistance>
       <repeatBarlineDotSeparation>0.94</repeatBarlineDotSeparation>
-      <bracketWidth>0.44</bracketWidth>
-      <timesigLeftMargin>0.63</timesigLeftMargin>
-      <stemWidth>0.11</stemWidth>
-      <minNoteDistance>0.15</minNoteDistance>
-      <barNoteDistance>1.3</barNoteDistance>
-      <barAccidentalDistance>0.65</barAccidentalDistance>
-      <noteBarDistance>1.5</noteBarDistance>
-      <staffLineWidth>0.11</staffLineWidth>
-      <ledgerLineLength>0.35</ledgerLineLength>
-      <accidentalNoteDistance>0.25</accidentalNoteDistance>
-      <bracketedAccidentalPadding>0.175</bracketedAccidentalPadding>
-      <beamMinLen>1.3</beamMinLen>
-      <dotNoteDistance>0.5</dotNoteDistance>
-      <dotDotDistance>0.65</dotDotDistance>
-      <hairpinPosAbove x="0" y="-2"/>
-      <hairpinPosBelow x="0" y="2"/>
-      <hairpinHeight>1.15</hairpinHeight>
-      <hairpinWidth>0.12</hairpinWidth>
-      <hairpinFontFace>Edwin</hairpinFontFace>
-      <hairpinFontSize>10</hairpinFontSize>
-      <pedalPosAbove x="0" y="-1"/>
-      <pedalPosBelow x="0" y="2.5"/>
-      <pedalLineWidth>0.11</pedalLineWidth>
-      <pedalFontFace>Edwin</pedalFontFace>
-      <trillPosAbove x="0" y="-0.5"/>
-      <trillPosBelow x="0" y="2"/>
-      <chordSymbolAFontFace>Edwin</chordSymbolAFontFace>
       <chordSymbolAFontSize>11</chordSymbolAFontSize>
-      <chordSymbolBFontFace>Edwin</chordSymbolBFontFace>
       <chordSymbolBFontSize>11</chordSymbolBFontSize>
-      <nashvilleNumberFontFace>Edwin</nashvilleNumberFontFace>
       <useStandardNoteNames>0</useStandardNoteNames>
       <hideEmptyStaves>1</hideEmptyStaves>
-      <enableIndentationOnFirstSystem>1</enableIndentationOnFirstSystem>
       <alwaysShowBracketsWhenEmptyStavesAreHidden>1</alwaysShowBracketsWhenEmptyStavesAreHidden>
-      <slurMidWidth>0.21</slurMidWidth>
-      <musicalSymbolFont>Leland</musicalSymbolFont>
-      <musicalTextFont>Leland Text</musicalTextFont>
-      <showHeader>1</showHeader>
-      <evenHeaderL>$p</evenHeaderL>
-      <oddHeaderR>$p</oddHeaderR>
-      <evenFooterL></evenFooterL>
-      <oddFooterR></oddFooterR>
-      <voltaHook>2.2</voltaHook>
-      <voltaLineWidth>0.11</voltaLineWidth>
-      <voltaFontFace>Edwin</voltaFontFace>
-      <voltaOffset x="0.6" y="2.2"/>
-      <ottavaPosAbove x="0" y="-2"/>
-      <ottavaPosBelow x="0" y="2"/>
-      <ottavaHookAbove>1</ottavaHookAbove>
-      <ottavaHookBelow>-1</ottavaHookBelow>
-      <ottavaLineWidth>0.11</ottavaLineWidth>
-      <ottavaFontFace>Edwin</ottavaFontFace>
-      <tupletVStemDistance>0.5</tupletVStemDistance>
-      <tupletStemLeftDistance>0</tupletStemLeftDistance>
-      <tupletNoteLeftDistance>-0.5</tupletNoteLeftDistance>
-      <tupletFontFace>Edwin</tupletFontFace>
-      <tupletFontSize>9</tupletFontSize>
       <tupletFontStyle>3</tupletFontStyle>
-      <tupletBracketHookHeight>0.75</tupletBracketHookHeight>
-      <barGraceDistance>1</barGraceDistance>
-      <dynamicsPosAbove x="0" y="-1.5"/>
-      <dynamicsPosBelow x="0" y="2.5"/>
-      <defaultFontFace>Edwin</defaultFontFace>
-      <titleFontFace>Edwin</titleFontFace>
-      <subTitleFontFace>Edwin</subTitleFontFace>
       <subTitleFontSize>18</subTitleFontSize>
-      <composerFontFace>Edwin</composerFontFace>
-      <composerFontSize>11</composerFontSize>
-      <lyricistFontFace>Edwin</lyricistFontFace>
-      <lyricistFontSize>11</lyricistFontSize>
-      <fingeringFontFace>Edwin</fingeringFontFace>
-      <lhGuitarFingeringFontFace>Edwin</lhGuitarFingeringFontFace>
-      <rhGuitarFingeringFontFace>Edwin</rhGuitarFingeringFontFace>
-      <stringNumberFontFace>Edwin</stringNumberFontFace>
-      <longInstrumentFontFace>Edwin</longInstrumentFontFace>
-      <longInstrumentFontSize>10</longInstrumentFontSize>
-      <shortInstrumentFontFace>Edwin</shortInstrumentFontFace>
-      <shortInstrumentFontSize>10</shortInstrumentFontSize>
-      <partInstrumentFontFace>Edwin</partInstrumentFontFace>
-      <partInstrumentFontSize>14</partInstrumentFontSize>
-      <dynamicsFontFace>Edwin</dynamicsFontFace>
       <dynamicsFontSize>11</dynamicsFontSize>
-      <expressionFontFace>Edwin</expressionFontFace>
-      <expressionFontSize>10</expressionFontSize>
-      <expressionOffset x="0" y="2.5"/>
-      <tempoFontFace>Edwin</tempoFontFace>
-      <metronomeFontFace>Edwin</metronomeFontFace>
       <metronomeFontSize>10</metronomeFontSize>
-      <measureNumberFontFace>Edwin</measureNumberFontFace>
       <measureNumberFontSize>9</measureNumberFontSize>
-      <measureNumberFontStyle>2</measureNumberFontStyle>
-      <translatorFontFace>Edwin</translatorFontFace>
       <translatorFontSize>10</translatorFontSize>
-      <systemFontFace>Edwin</systemFontFace>
-      <staffFontFace>Edwin</staffFontFace>
-      <staffPosAbove x="0" y="-1"/>
-      <staffPosBelow x="0" y="2.5"/>
-      <rehearsalMarkFontFace>Edwin</rehearsalMarkFontFace>
-      <repeatLeftFontFace>Edwin</repeatLeftFontFace>
-      <repeatRightFontFace>Edwin</repeatRightFontFace>
-      <frameFontFace>Edwin</frameFontFace>
-      <textLineFontFace>Edwin</textLineFontFace>
-      <textLineFontSize>10</textLineFontSize>
-      <glissandoFontFace>Edwin</glissandoFontFace>
-      <bendFontFace>Edwin</bendFontFace>
-      <headerFontFace>Edwin</headerFontFace>
       <headerFontSize>9</headerFontSize>
-      <headerFontStyle>1</headerFontStyle>
-      <footerFontFace>Edwin</footerFontFace>
-      <footerFontSize>9</footerFontSize>
-      <instrumentChangeFontFace>Edwin</instrumentChangeFontFace>
-      <stickingFontFace>Edwin</stickingFontFace>
       <stickingFontSize>10</stickingFontSize>
-      <user1FontFace>Edwin</user1FontFace>
-      <user2FontFace>Edwin</user2FontFace>
-      <user3FontFace>Edwin</user3FontFace>
-      <user4FontFace>Edwin</user4FontFace>
-      <user5FontFace>Edwin</user5FontFace>
-      <user6FontFace>Edwin</user6FontFace>
-      <user7FontFace>Edwin</user7FontFace>
-      <user8FontFace>Edwin</user8FontFace>
-      <user9FontFace>Edwin</user9FontFace>
-      <user10FontFace>Edwin</user10FontFace>
-      <user11FontFace>Edwin</user11FontFace>
-      <user12FontFace>Edwin</user12FontFace>
-      <letRingFontFace>Edwin</letRingFontFace>
-      <palmMuteFontFace>Edwin</palmMuteFontFace>
-      <fermataPosAbove x="0" y="-0.5"/>
-      <fermataPosBelow x="0" y="0.5"/>
-      <trillMinDistance>0.5</trillMinDistance>
       <usePre_3_6_defaults>1</usePre_3_6_defaults>
       <Spatium>1.4</Spatium>
       </Style>
@@ -1547,6 +1419,7 @@
           </voice>
         </Measure>
       <Measure>
+        <stretch>0.9</stretch>
         <voice>
           <Dynamic>
             <subtype>f</subtype>
@@ -1711,6 +1584,7 @@
           </voice>
         </Measure>
       <Measure>
+        <stretch>0.9</stretch>
         <voice>
           <Dynamic>
             <subtype>p</subtype>
@@ -1799,9 +1673,7 @@
           </voice>
         </Measure>
       <Measure>
-        <LayoutBreak>
-          <subtype>line</subtype>
-          </LayoutBreak>
+        <stretch>0.9</stretch>
         <voice>
           <Chord>
             <dots>1</dots>
@@ -1918,6 +1790,10 @@
           </voice>
         </Measure>
       <Measure>
+        <stretch>0.9</stretch>
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
         <voice>
           <Spanner type="HairPin">
             <HairPin>
@@ -2049,9 +1925,6 @@
           </voice>
         </Measure>
       <Measure>
-        <LayoutBreak>
-          <subtype>line</subtype>
-          </LayoutBreak>
         <voice>
           <Dynamic>
             <subtype>pp</subtype>
@@ -2297,6 +2170,9 @@
           </voice>
         </Measure>
       <Measure>
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
         <voice>
           <Tempo>
             <tempo>0.666667</tempo>
@@ -5706,6 +5582,79 @@
             <subtype>p</subtype>
             <velocity>49</velocity>
             </Dynamic>
+          <InstrumentChange>
+            <Instrument id="horn">
+              <longName>Horns in F 1 &amp; 2</longName>
+              <shortName>F Hn. 1 2</shortName>
+              <trackName>Horn in F</trackName>
+              <minPitchP>31</minPitchP>
+              <maxPitchP>77</maxPitchP>
+              <minPitchA>41</minPitchA>
+              <maxPitchA>69</maxPitchA>
+              <transposeDiatonic>-4</transposeDiatonic>
+              <transposeChromatic>-7</transposeChromatic>
+              <instrumentId>brass.french-horn</instrumentId>
+              <Articulation>
+                <velocity>100</velocity>
+                <gateTime>100</gateTime>
+                </Articulation>
+              <Articulation name="staccatissimo">
+                <velocity>100</velocity>
+                <gateTime>33</gateTime>
+                </Articulation>
+              <Articulation name="staccato">
+                <velocity>100</velocity>
+                <gateTime>50</gateTime>
+                </Articulation>
+              <Articulation name="portato">
+                <velocity>100</velocity>
+                <gateTime>67</gateTime>
+                </Articulation>
+              <Articulation name="tenuto">
+                <velocity>100</velocity>
+                <gateTime>100</gateTime>
+                </Articulation>
+              <Articulation name="marcato">
+                <velocity>120</velocity>
+                <gateTime>67</gateTime>
+                </Articulation>
+              <Articulation name="sforzato">
+                <velocity>150</velocity>
+                <gateTime>100</gateTime>
+                </Articulation>
+              <Articulation name="sforzatoStaccato">
+                <velocity>150</velocity>
+                <gateTime>50</gateTime>
+                </Articulation>
+              <Articulation name="marcatoStaccato">
+                <velocity>120</velocity>
+                <gateTime>50</gateTime>
+                </Articulation>
+              <Articulation name="marcatoTenuto">
+                <velocity>120</velocity>
+                <gateTime>100</gateTime>
+                </Articulation>
+              <Channel name="open">
+                <controller ctrl="0" value="0"/>
+                <controller ctrl="32" value="17"/>
+                <program value="60"/>
+                <synti>Fluid</synti>
+                <midiPort>0</midiPort>
+                <midiChannel>8</midiChannel>
+                </Channel>
+              <Channel name="mute">
+                <controller ctrl="0" value="0"/>
+                <controller ctrl="32" value="17"/>
+                <program value="59"/>
+                <synti>Fluid</synti>
+                <midiPort>0</midiPort>
+                <midiChannel>10</midiChannel>
+                </Channel>
+              </Instrument>
+            <init>1</init>
+            <visible>0</visible>
+            <text>F Hn. 1 2</text>
+            </InstrumentChange>
           <Chord>
             <durationType>half</durationType>
             <Spanner type="Slur">
@@ -5869,79 +5818,6 @@
             <subtype>p</subtype>
             <velocity>49</velocity>
             </Dynamic>
-          <InstrumentChange>
-            <Instrument id="horn">
-              <longName>Horns in F 1 &amp; 2</longName>
-              <shortName>F Hn. 1 2</shortName>
-              <trackName>Horn in F</trackName>
-              <minPitchP>31</minPitchP>
-              <maxPitchP>77</maxPitchP>
-              <minPitchA>41</minPitchA>
-              <maxPitchA>69</maxPitchA>
-              <transposeDiatonic>-4</transposeDiatonic>
-              <transposeChromatic>-7</transposeChromatic>
-              <instrumentId>brass.french-horn</instrumentId>
-              <Articulation>
-                <velocity>100</velocity>
-                <gateTime>100</gateTime>
-                </Articulation>
-              <Articulation name="staccatissimo">
-                <velocity>100</velocity>
-                <gateTime>33</gateTime>
-                </Articulation>
-              <Articulation name="staccato">
-                <velocity>100</velocity>
-                <gateTime>50</gateTime>
-                </Articulation>
-              <Articulation name="portato">
-                <velocity>100</velocity>
-                <gateTime>67</gateTime>
-                </Articulation>
-              <Articulation name="tenuto">
-                <velocity>100</velocity>
-                <gateTime>100</gateTime>
-                </Articulation>
-              <Articulation name="marcato">
-                <velocity>120</velocity>
-                <gateTime>67</gateTime>
-                </Articulation>
-              <Articulation name="sforzato">
-                <velocity>150</velocity>
-                <gateTime>100</gateTime>
-                </Articulation>
-              <Articulation name="sforzatoStaccato">
-                <velocity>150</velocity>
-                <gateTime>50</gateTime>
-                </Articulation>
-              <Articulation name="marcatoStaccato">
-                <velocity>120</velocity>
-                <gateTime>50</gateTime>
-                </Articulation>
-              <Articulation name="marcatoTenuto">
-                <velocity>120</velocity>
-                <gateTime>100</gateTime>
-                </Articulation>
-              <Channel name="open">
-                <controller ctrl="0" value="0"/>
-                <controller ctrl="32" value="17"/>
-                <program value="60"/>
-                <synti>Fluid</synti>
-                <midiPort>0</midiPort>
-                <midiChannel>8</midiChannel>
-                </Channel>
-              <Channel name="mute">
-                <controller ctrl="0" value="0"/>
-                <controller ctrl="32" value="17"/>
-                <program value="59"/>
-                <synti>Fluid</synti>
-                <midiPort>0</midiPort>
-                <midiChannel>10</midiChannel>
-                </Channel>
-              </Instrument>
-            <init>1</init>
-            <visible>0</visible>
-            <text>F Hn. 1 2</text>
-            </InstrumentChange>
           <Spanner type="HairPin">
             <prev>
               <location>
@@ -6842,11 +6718,6 @@
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            <forInstrumentChange>1</forInstrumentChange>
-            </Clef>
           </voice>
         </Measure>
       <Measure>
