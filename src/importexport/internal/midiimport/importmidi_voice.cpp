@@ -60,7 +60,7 @@ bool areNotesSortedByOffTimeInAscOrder(
 bool areNotesSortedByOffTimeInAscOrder(const QList<MidiNote>& notes)
 {
     for (int i = 0; i != (int)notes.size() - 1; ++i) {
-        if (notes[i].offTime > notes[i].offTime) {
+        if (notes[i].offTime > notes[i + 1].offTime) {
             return false;
         }
     }
