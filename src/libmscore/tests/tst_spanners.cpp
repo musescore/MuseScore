@@ -10,8 +10,9 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
-#include "mtest/testutils.h"
+#include "testing/qtestsuite.h"
+#include "testutils.h"
+
 #include "libmscore/chord.h"
 #include "libmscore/excerpt.h"
 #include "libmscore/glissando.h"
@@ -25,7 +26,7 @@
 #include "libmscore/undo.h"
 #include "libmscore/line.h"
 
-#define DIR QString("libmscore/spanners/")
+static const QString SPANNERS_DATA_DIR("spanners_data/");
 
 using namespace Ms;
 
@@ -76,7 +77,7 @@ void TestSpanners::spanners01()
     EditData dropData(0);
     Glissando* gliss;
 
-    MasterScore* score = readScore(DIR + "glissando01.mscx");
+    MasterScore* score = readScore(SPANNERS_DATA_DIR + "glissando01.mscx");
     QVERIFY(score);
 
     // SIMPLE CASE: GLISSANDO FROM A NOTE TO THE FOLLOWING
@@ -159,7 +160,7 @@ void TestSpanners::spanners01()
     dropData.dropElement  = gliss;
     note->drop(dropData);
 
-    QVERIFY(saveCompareScore(score, "glissando01.mscx", DIR + "glissando01-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "glissando01.mscx", SPANNERS_DATA_DIR + "glissando01-ref.mscx"));
     delete score;
 }
 
@@ -174,10 +175,10 @@ void TestSpanners::spanners01()
 
 void TestSpanners::spanners02()
 {
-    MasterScore* score = readScore(DIR + "glissando-crossstaff01.mscx");
+    MasterScore* score = readScore(SPANNERS_DATA_DIR + "glissando-crossstaff01.mscx");
     QVERIFY(score);
 
-    QVERIFY(saveCompareScore(score, "glissando-crossstaff01.mscx", DIR + "glissando-crossstaff01-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "glissando-crossstaff01.mscx", SPANNERS_DATA_DIR + "glissando-crossstaff01-ref.mscx"));
     delete score;
 }
 
@@ -191,7 +192,7 @@ void TestSpanners::spanners03()
     EditData dropData(0);
     Glissando* gliss;
 
-    MasterScore* score = readScore(DIR + "glissando-graces01.mscx");
+    MasterScore* score = readScore(SPANNERS_DATA_DIR + "glissando-graces01.mscx");
     QVERIFY(score);
 
     // GLISSANDO FROM MAIN NOTE TO AFTER-GRACE
@@ -250,7 +251,7 @@ void TestSpanners::spanners03()
     dropData.dropElement  = gliss;
     note->drop(dropData);
 
-    QVERIFY(saveCompareScore(score, "glissando-graces01.mscx", DIR + "glissando-graces01-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "glissando-graces01.mscx", SPANNERS_DATA_DIR + "glissando-graces01-ref.mscx"));
     delete score;
 }
 
@@ -261,7 +262,7 @@ void TestSpanners::spanners03()
 
 void TestSpanners::spanners04()
 {
-    MasterScore* score = readScore(DIR + "glissando-cloning01.mscx");
+    MasterScore* score = readScore(SPANNERS_DATA_DIR + "glissando-cloning01.mscx");
     QVERIFY(score);
 
     // add a linked staff to the existing staff
@@ -279,7 +280,7 @@ void TestSpanners::spanners04()
     score->undoInsertStaff(newStaff, 1, false);
     Excerpt::cloneStaff(oldStaff, newStaff);
 
-    QVERIFY(saveCompareScore(score, "glissando-cloning01.mscx", DIR + "glissando-cloning01-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "glissando-cloning01.mscx", SPANNERS_DATA_DIR + "glissando-cloning01-ref.mscx"));
     delete score;
 }
 
@@ -290,7 +291,7 @@ void TestSpanners::spanners04()
 
 void TestSpanners::spanners05()
 {
-    MasterScore* score = readScore(DIR + "glissando-cloning02.mscx");
+    MasterScore* score = readScore(SPANNERS_DATA_DIR + "glissando-cloning02.mscx");
     QVERIFY(score);
 
     // create parts
@@ -311,7 +312,7 @@ void TestSpanners::spanners05()
 //      QMultiMap<int, int> tracks;
     score->Score::undo(new AddExcerpt(ex));
 
-    QVERIFY(saveCompareScore(score, "glissando-cloning02.mscx", DIR + "glissando-cloning02-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "glissando-cloning02.mscx", SPANNERS_DATA_DIR + "glissando-cloning02-ref.mscx"));
     delete score;
 }
 
@@ -325,7 +326,7 @@ void TestSpanners::spanners06()
     EditData dropData(0);
     Glissando* gliss;
 
-    MasterScore* score = readScore(DIR + "glissando-cloning03.mscx");
+    MasterScore* score = readScore(SPANNERS_DATA_DIR + "glissando-cloning03.mscx");
     QVERIFY(score);
 
     // DROP A GLISSANDO ON FIRST NOTE
@@ -343,7 +344,7 @@ void TestSpanners::spanners06()
     dropData.dropElement  = gliss;
     note->drop(dropData);
 
-    QVERIFY(saveCompareScore(score, "glissando-cloning03.mscx", DIR + "glissando-cloning03-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "glissando-cloning03.mscx", SPANNERS_DATA_DIR + "glissando-cloning03-ref.mscx"));
     delete score;
 }
 
@@ -357,7 +358,7 @@ void TestSpanners::spanners07()
     EditData dropData(0);
     Glissando* gliss;
 
-    MasterScore* score = readScore(DIR + "glissando-cloning04.mscx");
+    MasterScore* score = readScore(SPANNERS_DATA_DIR + "glissando-cloning04.mscx");
     QVERIFY(score);
 
     // DROP A GLISSANDO ON FIRST NOTE
@@ -375,7 +376,7 @@ void TestSpanners::spanners07()
     dropData.dropElement  = gliss;
     note->drop(dropData);
 
-    QVERIFY(saveCompareScore(score, "glissando-cloning04.mscx", DIR + "glissando-cloning04-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "glissando-cloning04.mscx", SPANNERS_DATA_DIR + "glissando-cloning04-ref.mscx"));
     delete score;
 }
 
@@ -387,7 +388,7 @@ void TestSpanners::spanners07()
 
 void TestSpanners::spanners08()
 {
-    MasterScore* score = readScore(DIR + "lyricsline01.mscx");
+    MasterScore* score = readScore(SPANNERS_DATA_DIR + "lyricsline01.mscx");
     QVERIFY(score);
 
     // verify initial LyricsLine setup
@@ -413,7 +414,7 @@ void TestSpanners::spanners08()
     QVERIFY(score->unmanagedSpanners().size() == 0);
 
     // save and verify score after deletion
-    QVERIFY(saveCompareScore(score, "lyricsline01.mscx", DIR + "lyricsline01-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "lyricsline01.mscx", SPANNERS_DATA_DIR + "lyricsline01-ref.mscx"));
 
     // UNDO
     score->undoStack()->undo();
@@ -424,7 +425,7 @@ void TestSpanners::spanners08()
     QVERIFY(score->unmanagedSpanners().size() == 1);
 
     // save and verify score after undo
-    QVERIFY(saveCompareScore(score, "lyricsline01.mscx", DIR + "lyricsline01.mscx"));
+    QVERIFY(saveCompareScore(score, "lyricsline01.mscx", SPANNERS_DATA_DIR + "lyricsline01.mscx"));
     delete score;
 }
 
@@ -440,7 +441,7 @@ void TestSpanners::spanners08()
 
 void TestSpanners::spanners09()
 {
-    MasterScore* score = readScore(DIR + "lyricsline02.mscx");
+    MasterScore* score = readScore(SPANNERS_DATA_DIR + "lyricsline02.mscx");
     QVERIFY(score);
 
     // DELETE SECOND MEASURE AND VERIFY
@@ -452,12 +453,12 @@ void TestSpanners::spanners09()
     score->select(msr);
     score->cmdTimeDelete();
     score->endCmd();
-    QVERIFY(saveCompareScore(score, "lyricsline02.mscx", DIR + "lyricsline02-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "lyricsline02.mscx", SPANNERS_DATA_DIR + "lyricsline02-ref.mscx"));
 
     // UNDO AND VERIFY
     score->undoStack()->undo(&ed);
     score->doLayout();   // measure needs to be renumbered
-    QVERIFY(saveCompareScore(score, "lyricsline02.mscx", DIR + "lyricsline02.mscx"));
+    QVERIFY(saveCompareScore(score, "lyricsline02.mscx", SPANNERS_DATA_DIR + "lyricsline02.mscx"));
     delete score;
 }
 
@@ -472,7 +473,7 @@ void TestSpanners::spanners09()
 
 void TestSpanners::spanners10()
 {
-    MasterScore* score = readScore(DIR + "lyricsline03.mscx");
+    MasterScore* score = readScore(SPANNERS_DATA_DIR + "lyricsline03.mscx");
     QVERIFY(score);
 
     // DELETE SECOND MEASURE AND VERIFY
@@ -484,12 +485,12 @@ void TestSpanners::spanners10()
     score->select(msr);
     score->cmdTimeDelete();
     score->endCmd();
-    QVERIFY(saveCompareScore(score, "lyricsline03.mscx", DIR + "lyricsline03-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "lyricsline03.mscx", SPANNERS_DATA_DIR + "lyricsline03-ref.mscx"));
 
     // UNDO AND VERIFY
     score->undoStack()->undo(&ed);
     score->doLayout();   // measure needs to be renumbered
-    QVERIFY(saveCompareScore(score, "lyricsline03.mscx", DIR + "lyricsline03.mscx"));
+    QVERIFY(saveCompareScore(score, "lyricsline03.mscx", SPANNERS_DATA_DIR + "lyricsline03.mscx"));
     delete score;
 }
 
@@ -504,7 +505,7 @@ void TestSpanners::spanners10()
 
 void TestSpanners::spanners11()
 {
-    MasterScore* score = readScore(DIR + "lyricsline04.mscx");
+    MasterScore* score = readScore(SPANNERS_DATA_DIR + "lyricsline04.mscx");
     QVERIFY(score);
 
     // DELETE SECOND MEASURE AND VERIFY
@@ -516,12 +517,12 @@ void TestSpanners::spanners11()
     score->select(msr);
     score->cmdTimeDelete();
     score->endCmd();
-    QVERIFY(saveCompareScore(score, "lyricsline04.mscx", DIR + "lyricsline04-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "lyricsline04.mscx", SPANNERS_DATA_DIR + "lyricsline04-ref.mscx"));
 
     // UNDO AND VERIFY
     score->undoStack()->undo(&ed);
     score->doLayout();   // measure needs to be renumbered
-    QVERIFY(saveCompareScore(score, "lyricsline04.mscx", DIR + "lyricsline04.mscx"));
+    QVERIFY(saveCompareScore(score, "lyricsline04.mscx", SPANNERS_DATA_DIR + "lyricsline04.mscx"));
     delete score;
 }
 
@@ -536,7 +537,7 @@ void TestSpanners::spanners11()
 
 void TestSpanners::spanners12()
 {
-    MasterScore* score = readScore(DIR + "lyricsline05.mscx");
+    MasterScore* score = readScore(SPANNERS_DATA_DIR + "lyricsline05.mscx");
     QVERIFY(score);
 
     // DELETE SECOND MEASURE AND VERIFY
@@ -548,12 +549,12 @@ void TestSpanners::spanners12()
     score->select(msr);
     score->cmdTimeDelete();
     score->endCmd();
-    QVERIFY(saveCompareScore(score, "lyricsline05.mscx", DIR + "lyricsline05-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "lyricsline05.mscx", SPANNERS_DATA_DIR + "lyricsline05-ref.mscx"));
 
     // UNDO AND VERIFY
     score->undoStack()->undo(&ed);
     score->doLayout();   // measure needs to be renumbered
-    QVERIFY(saveCompareScore(score, "lyricsline05.mscx", DIR + "lyricsline05.mscx"));
+    QVERIFY(saveCompareScore(score, "lyricsline05.mscx", SPANNERS_DATA_DIR + "lyricsline05.mscx"));
     delete score;
 }
 
@@ -569,7 +570,7 @@ void TestSpanners::spanners13()
     EditData dropData(0);
     LayoutBreak* brk;
 
-    MasterScore* score = readScore(DIR + "lyricsline06.mscx");
+    MasterScore* score = readScore(SPANNERS_DATA_DIR + "lyricsline06.mscx");
     QVERIFY(score);
 
     // DROP A BREAK AT FIRST MEASURE AND VERIFY
@@ -586,12 +587,12 @@ void TestSpanners::spanners13()
     for (System* sys : score->systems()) {
         QVERIFY(sys->spannerSegments().size() == 1);
     }
-    QVERIFY(saveCompareScore(score, "lyricsline06.mscx", DIR + "lyricsline06-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "lyricsline06.mscx", SPANNERS_DATA_DIR + "lyricsline06-ref.mscx"));
 
     // UNDO AND VERIFY
     score->undoStack()->undo();
     score->doLayout();        // systems need to be re-computed
-    QVERIFY(saveCompareScore(score, "lyricsline06.mscx", DIR + "lyricsline06.mscx"));
+    QVERIFY(saveCompareScore(score, "lyricsline06.mscx", SPANNERS_DATA_DIR + "lyricsline06.mscx"));
     delete score;
 }
 
@@ -604,7 +605,7 @@ void TestSpanners::spanners13()
 
 void TestSpanners::spanners14()
 {
-    MasterScore* score = readScore(DIR + "glissando-cloning05.mscx");
+    MasterScore* score = readScore(SPANNERS_DATA_DIR + "glissando-cloning05.mscx");
     QVERIFY(score);
 
     // create parts
@@ -625,7 +626,7 @@ void TestSpanners::spanners14()
 //      QMultiMap<int, int> tracks;
     score->Score::undo(new AddExcerpt(ex));
 
-    QVERIFY(saveCompareScore(score, "glissando-cloning05.mscx", DIR + "glissando-cloning05-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "glissando-cloning05.mscx", SPANNERS_DATA_DIR + "glissando-cloning05-ref.mscx"));
     delete score;
 }
 
@@ -636,7 +637,7 @@ void TestSpanners::spanners14()
 
 void TestSpanners::spanners15()
 {
-    MasterScore* score = readScore(DIR + "linecolor01.mscx");
+    MasterScore* score = readScore(SPANNERS_DATA_DIR + "linecolor01.mscx");
     QVERIFY(score);
 
     for (auto it = score->spanner().cbegin(); it != score->spanner().cend(); ++it) {
@@ -649,7 +650,7 @@ void TestSpanners::spanners15()
         }
     }
 
-    QVERIFY(saveCompareScore(score, "linecolor01.mscx", DIR + "linecolor01-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "linecolor01.mscx", SPANNERS_DATA_DIR + "linecolor01-ref.mscx"));
     delete score;
 }
 
@@ -660,10 +661,10 @@ void TestSpanners::spanners15()
 
 void TestSpanners::spanners16()
 {
-    MasterScore* score = readScore(DIR + "smallstaff01.mscx");
+    MasterScore* score = readScore(SPANNERS_DATA_DIR + "smallstaff01.mscx");
     QVERIFY(score);
 
-    QVERIFY(saveCompareScore(score, "smallstaff01.mscx", DIR + "smallstaff01-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "smallstaff01.mscx", SPANNERS_DATA_DIR + "smallstaff01-ref.mscx"));
     delete score;
 }
 
