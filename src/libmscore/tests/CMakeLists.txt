@@ -56,6 +56,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/tst_remove.cpp
     # ${CMAKE_CURRENT_LIST_DIR}/tst_repeat.cpp fail
     ${CMAKE_CURRENT_LIST_DIR}/tst_rhythmicGrouping.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tst_selectionfilter.cpp
 )
 
 set(MODULE_TEST_LINK
