@@ -63,10 +63,15 @@ int AppShell::run(int argc, char** argv, std::function<void()> moduleSetup)
     //! NOTE Move ownership to UiEngine
     framework::UiEngine::instance()->moveQQmlEngine(engine);
 
-#ifdef QML_LOAD_FROM_SOURCE
-    QUrl url(QString(appshell_QML_IMPORT) + "/Main.qml");
+#ifndef Q_OS_WASM
+    QString mainQmlFile = "/Main.qml";
 #else
-    const QUrl url(QStringLiteral("qrc:/qml/Main.qml"));
+    QString mainQmlFile = "/main.wasm.qml";
+#endif
+#ifdef QML_LOAD_FROM_SOURCE
+    QUrl url(QString(appshell_QML_IMPORT) + mainQmlFile);
+#else
+    const QUrl url(QStringLiteral("qrc:/qml") + mainQmlFile);
 #endif
 
     QObject::connect(engine, &QQmlApplicationEngine::objectCreated,

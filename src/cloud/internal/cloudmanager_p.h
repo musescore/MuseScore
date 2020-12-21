@@ -21,10 +21,9 @@
 #define MU_CLOUD_CLOUDMANAGER_P_H
 
 #include <QUrlQuery>
-#include <QHttpMultiPart>
 #include <QNetworkReply>
 #include <QEventLoop>
-
+#include <QHttpMultiPart>
 #include "config.h"
 
 #ifdef USE_WEBENGINE

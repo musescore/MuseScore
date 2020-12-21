@@ -4,7 +4,7 @@
 ##
 
 if (USE_SYSTEM_FREETYPE)
-      if (APPLE)
+      if (OS_IS_MAC)
             PKGCONFIG1 (freetype2 2.5.2 FREETYPE_INCLUDE_DIRS FREETYPE_LIBDIR FREETYPE_LIBRARIES FREETYPE_CPP)
             if (FREETYPE_INCLUDE_DIRS)
                   STRING(REGEX REPLACE  "\"" "" FREETYPE_INCLUDE_DIRS ${FREETYPE_INCLUDE_DIRS})
@@ -13,9 +13,9 @@ if (USE_SYSTEM_FREETYPE)
             else (FREETYPE_INCLUDE_DIRS)
                   message(FATAL_ERROR "freetype >= 2.5.2 is required\n")
             endif (FREETYPE_INCLUDE_DIRS)
-      else (APPLE)
+      else (OS_IS_MAC)
             find_package(Freetype REQUIRED)
-      endif (APPLE)
+      endif (OS_IS_MAC)
 endif (USE_SYSTEM_FREETYPE)
 
 

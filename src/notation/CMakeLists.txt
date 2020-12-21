@@ -163,9 +163,11 @@ set(Z_LIB )
 if (MSVC)
     include(FindStaticLibrary)
     set(Z_LIB zlibstat)
-else (MSVC)
+elseif (CC_IS_EMSCRIPTEN)
+    #zlib included in main linker
+else ()
     set(Z_LIB z)
-endif (MSVC)
+endif ()
 
 set(MODULE_LINK
     Qt5::Svg

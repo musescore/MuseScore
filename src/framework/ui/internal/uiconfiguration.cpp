@@ -1,7 +1,7 @@
 #include "uiconfiguration.h"
 
 #include "settings.h"
-
+#include "log.h"
 #include <QMainWindow>
 #include <QScreen>
 
@@ -127,10 +127,18 @@ Notification UiConfiguration::musicalFontChanged() const
 
 float UiConfiguration::guiScaling() const
 {
-    return mainWindow()->qMainWindow()->screen()->devicePixelRatio();
+    if (mainWindow()) {
+        return mainWindow()->qMainWindow()->screen()->devicePixelRatio();
+    }
+    LOGW() << "main window is null";
+    return 1;
 }
 
 float UiConfiguration::physicalDotsPerInch() const
 {
-    return mainWindow()->qMainWindow()->screen()->physicalDotsPerInch();
+    if (mainWindow()) {
+        return mainWindow()->qMainWindow()->screen()->physicalDotsPerInch();
+    }
+    LOGW() << "main window is null";
+    return 100;
 }

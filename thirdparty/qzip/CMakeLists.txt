@@ -25,9 +25,11 @@ if (OS_IS_WIN)
     set(MODULE_INCLUDE ${PROJECT_SOURCE_DIR}/dependencies/include/zlib)
 endif(OS_IS_WIN)
 
-if (NOT CC_IS_MSVC)
+if (CC_IS_EMSCRIPTEN)
+    #zlib included in main linker
+elseif (NOT CC_IS_MSVC)
     set(MODULE_LINK z)
-endif(NOT CC_IS_MSVC)
+endif()
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 

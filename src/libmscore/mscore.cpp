@@ -350,8 +350,16 @@ void MScore::init()
     //  initialize styles
     //
     _baseStyle.precomputeValues();
+
+//BUG: QSettings with emscripten has memory access error (read out of bounds)
+//if IndexedDB not inited construct of QSettings may cause runtime error.
+// also, @see https://wiki.qt.io/Qt_for_WebAssembly
+#ifndef Q_OS_WASM
     QSettings s;
     QString defStyle = s.value("score/style/defaultStyleFile").toString();
+#else
+    QString defStyle;
+#endif
     if (!(MScore::testMode || defStyle.isEmpty())) {
         QFile f(defStyle);
         if (f.open(QIODevice::ReadOnly)) {
@@ -361,7 +369,11 @@ void MScore::init()
         }
     }
     _defaultStyle.precomputeValues();
+#ifndef Q_OS_WASM
     QString partStyle = s.value("score/style/partStyleFile").toString();
+#else
+    QString partStyle;
+#endif
     if (!(MScore::testMode || partStyle.isEmpty())) {
         QFile f(partStyle);
         if (f.open(QIODevice::ReadOnly)) {

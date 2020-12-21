@@ -16,32 +16,27 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "instrumentsconfiguration.h"
+#ifndef MU_WASM_WASMMODULE_H
+#define MU_WASM_WASMMODULE_H
 
-#include "log.h"
-#include "settings.h"
+#include "modularity/imodulesetup.h"
+#include "modularity/ioc.h"
+#include "notation/inotationcreator.h"
+#include "actions/iactionsdispatcher.h"
+#include "context/iglobalcontext.h"
 
-using namespace mu::instruments;
-
-mu::io::paths InstrumentsConfiguration::instrumentPaths() const
+namespace mu::wasmtest {
+class WasmTestModule : public framework::IModuleSetup
 {
-    io::paths paths;
-    io::path sharePath = globalConfiguration()->sharePath() + "/instruments";
-    paths.push_back(sharePath);
+    INJECT(wasmtest, notation::INotationCreator, notationCreator)
+    INJECT(notation, actions::IActionsDispatcher, dispatcher)
+    INJECT(wasmtest, context::IGlobalContext, context)
 
-    io::path dataPath = globalConfiguration()->dataPath() + "/instruments";
-    paths.push_back(dataPath);
+public:
 
-    io::paths extensionsPath = this->extensionsPaths();
-    paths.insert(paths.end(), extensionsPath.begin(), extensionsPath.end());
-
-    return paths;
+    std::string moduleName() const override;
+    void onStartApp() override;
+};
 }
 
-mu::io::paths InstrumentsConfiguration::extensionsPaths() const
-{
-    if (extensionsConfigurator()) {
-        return extensionsConfigurator()->instrumentsPaths();
-    }
-    return {};
-}
+#endif // MU_WASM_WASMMODULE_H

@@ -861,7 +861,6 @@ void CloudManager::mediaUploadProgress(qint64 progress, qint64 total)
 void CloudManager::upload(const QString& path, int nid, const QString& title)
 {
     qDebug() << "file upload" << nid;
-
     ApiRequest* r = new ApiRequest(this);
     r->setPath("/score/upload-light")
     .setToken(m_accessToken);
