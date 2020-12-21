@@ -26,23 +26,31 @@ using namespace mu::framework;
 ItemMultiSelectionModel::ItemMultiSelectionModel(QAbstractItemModel* parent)
     : QItemSelectionModel(parent)
 {
+    m_allowedModifiers = (Qt::ShiftModifier | Qt::ControlModifier);
+}
+
+void ItemMultiSelectionModel::setAllowedModifiers(Qt::KeyboardModifiers modifiers)
+{
+    m_allowedModifiers = modifiers;
 }
 
 void ItemMultiSelectionModel::select(const QModelIndex& index)
 {
     Qt::KeyboardModifiers modifiers = QApplication::keyboardModifiers();
+    bool modifiersAllowed = m_allowedModifiers & modifiers;
 
     QModelIndex startIndex = index;
-    if (modifiers == Qt::ShiftModifier && hasSelection()) {
+    if (modifiers == Qt::ShiftModifier && hasSelection() && modifiersAllowed) {
         startIndex = selectedIndexes().last();
-    } else if (modifiers == Qt::ControlModifier && isSelected(index)) {
+    } else if (modifiers == Qt::ControlModifier && isSelected(index) && modifiersAllowed) {
         QItemSelectionModel::select(index, SelectionFlag::Deselect);
         return;
     }
 
     QSet<QModelIndex> uniqueIndexes;
+    bool needClearSelection = !modifiersAllowed;
 
-    if (needClearSelection(modifiers)) {
+    if (needClearSelection) {
         uniqueIndexes << index;
     } else {
         QItemSelection selection = this->selection();
@@ -57,22 +65,4 @@ void ItemMultiSelectionModel::select(const QModelIndex& index)
     }
 
     QItemSelectionModel::select(newSelection, SelectionFlag::ClearAndSelect);
-}
-
-bool ItemMultiSelectionModel::needClearSelection(Qt::KeyboardModifiers modifiers) const
-{
-    switch (modifiers) {
-    case Qt::ShiftModifier:
-    case Qt::ControlModifier:
-        return false;
-    case Qt::NoModifier:
-    case Qt::AltModifier:
-    case Qt::MetaModifier:
-    case Qt::KeypadModifier:
-    case Qt::GroupSwitchModifier:
-    case Qt::KeyboardModifierMask:
-        return true;
-    }
-
-    return true;
 }
