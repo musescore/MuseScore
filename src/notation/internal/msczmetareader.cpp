@@ -116,32 +116,26 @@ MsczMetaReader::RawMeta MsczMetaReader::doReadBox(framework::XmlReader& xmlReade
                         xmlReader.skipCurrentElement();
                     }
                 } else if (tag == "text") {
-                    std::string str = xmlReader.readString(framework::XmlReader::IncludeChildElements);
-                    QString formattedStr = formatFromXml(str);
-
                     if (isTitle) {
-                        meta.titleStyle = formattedStr;
+                        meta.titleStyle = readText(xmlReader);
                     } else if (isSubtitle) {
-                        meta.subtitleStyle = formattedStr;
+                        meta.subtitleStyle = readText(xmlReader);
                     } else if (isComposer) {
-                        meta.composerStyle = formattedStr;
+                        meta.composerStyle = readText(xmlReader);
                     } else if (isLiricist) {
-                        meta.lyricistStyle = formattedStr;
+                        meta.lyricistStyle = readText(xmlReader);
                     } else {
                         xmlReader.skipCurrentElement();
                     }
                 } else if (tag == "html-data") {
-                    std::string str = xmlReader.readString(framework::XmlReader::IncludeChildElements);
-                    QString formattedStr = formatFromXml(str);
-
                     if (isTitle) {
-                        meta.titleStyleHtml = formattedStr;
+                        meta.titleStyleHtml = readText(xmlReader);
                     } else if (isSubtitle) {
-                        meta.subtitleStyleHtml = formattedStr;
+                        meta.subtitleStyleHtml = readText(xmlReader);
                     } else if (isComposer) {
-                        meta.composerStyleHtml = formattedStr;
+                        meta.composerStyleHtml = readText(xmlReader);
                     } else if (isLiricist) {
-                        meta.lyricistStyleHtml = formattedStr;
+                        meta.lyricistStyleHtml = readText(xmlReader);
                     } else {
                         xmlReader.skipCurrentElement();
                     }
@@ -168,22 +162,21 @@ MsczMetaReader::RawMeta MsczMetaReader::doReadRawMeta(framework::XmlReader& xmlR
             meta.titleTag = QString::fromStdString(xmlReader.readString());
         } else if (tag == "metaTag") {
             std::string name = xmlReader.attribute("name");
-            QString str = QString::fromStdString(xmlReader.readString());
 
             if (name == "workTitle") {
-                meta.titleAttribute = str;
+                meta.titleAttribute = readMetaTagText(xmlReader);
             } else if (name == "composer") {
-                meta.composerAttribute = str;
+                meta.composerAttribute = readMetaTagText(xmlReader);
             } else if (name == "arranger") {
-                meta.arranger = str;
+                meta.arranger = readMetaTagText(xmlReader);
             } else if (name == "lyricist") {
-                meta.lyricistAttribute = str;
+                meta.lyricistAttribute = readMetaTagText(xmlReader);
             } else if (name == "copyright") {
-                meta.copyright = str;
+                meta.copyright = readMetaTagText(xmlReader);
             } else if (name == "translator") {
-                meta.translator = str;
+                meta.translator = readMetaTagText(xmlReader);
             } else if (name == "creationDate") {
-                meta.creationDate = str;
+                meta.creationDate = readMetaTagText(xmlReader);
             } else {
                 xmlReader.skipCurrentElement();
             }
@@ -396,4 +389,15 @@ std::string MsczMetaReader::cutXmlTags(const std::string& str) const
     }
 
     return fin;
+}
+
+QString MsczMetaReader::readText(XmlReader& xmlReader) const
+{
+    std::string str = xmlReader.readString(framework::XmlReader::IncludeChildElements);
+    return formatFromXml(str);
+}
+
+QString MsczMetaReader::readMetaTagText(XmlReader& xmlReader) const
+{
+    return QString::fromStdString(xmlReader.readString());
 }
