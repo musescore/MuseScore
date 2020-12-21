@@ -10,7 +10,9 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
+#include "testing/qtestsuite.h"
+#include "testutils.h"
+
 #include "libmscore/score.h"
 #include "libmscore/excerpt.h"
 #include "libmscore/part.h"
@@ -29,9 +31,8 @@
 #include "libmscore/sym.h"
 #include "libmscore/chordline.h"
 #include "libmscore/sym.h"
-#include "mtest/testutils.h"
 
-#define DIR QString("libmscore/parts/")
+static const QString PARTS_DATA_DIR("parts_data/");
 
 using namespace Ms;
 
@@ -193,7 +194,7 @@ void TestParts::createParts(MasterScore* score)
 
 void TestParts::voicesExcerpt()
 {
-    MasterScore* score = readScore(DIR + "voices.mscx");
+    MasterScore* score = readScore(PARTS_DATA_DIR + "voices.mscx");
 
     //
     // create first part
@@ -263,7 +264,7 @@ void TestParts::voicesExcerpt()
 
     score->setExcerptsChanged(true);
 
-    QVERIFY(saveCompareScore(score, "voices.mscx", DIR + "voices-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "voices.mscx", PARTS_DATA_DIR + "voices-ref.mscx"));
 
     delete score;
 }
@@ -274,11 +275,11 @@ void TestParts::voicesExcerpt()
 
 void TestParts::testPartCreation(const QString& test)
 {
-    MasterScore* score = readScore(DIR + test + ".mscx");
+    MasterScore* score = readScore(PARTS_DATA_DIR + test + ".mscx");
     QVERIFY(score);
-    QVERIFY(saveCompareScore(score, test + "-1.mscx", DIR + test + ".mscx"));
+    QVERIFY(saveCompareScore(score, test + "-1.mscx", PARTS_DATA_DIR + test + ".mscx"));
     createParts(score);
-    QVERIFY(saveCompareScore(score, test + "-parts.mscx", DIR + test + "-parts.mscx"));
+    QVERIFY(saveCompareScore(score, test + "-parts.mscx", PARTS_DATA_DIR + test + "-parts.mscx"));
     delete score;
 }
 
@@ -288,7 +289,7 @@ void TestParts::testPartCreation(const QString& test)
 
 void TestParts::appendMeasure()
 {
-    MasterScore* score = readScore(DIR + "part-all.mscx");
+    MasterScore* score = readScore(PARTS_DATA_DIR + "part-all.mscx");
 
     QVERIFY(score);
     createParts(score);
@@ -297,11 +298,11 @@ void TestParts::appendMeasure()
     score->insertMeasure(ElementType::MEASURE, 0);
     score->endCmd();
 
-    QVERIFY(saveCompareScore(score, "part-all-appendmeasures.mscx", DIR + "part-all-appendmeasures.mscx"));
+    QVERIFY(saveCompareScore(score, "part-all-appendmeasures.mscx", PARTS_DATA_DIR + "part-all-appendmeasures.mscx"));
 
     score->undoRedo(true, 0);
 
-    QVERIFY(saveCompareScore(score, "part-all-uappendmeasures.mscx", DIR + "part-all-uappendmeasures.mscx"));
+    QVERIFY(saveCompareScore(score, "part-all-uappendmeasures.mscx", PARTS_DATA_DIR + "part-all-uappendmeasures.mscx"));
     delete score;
 }
 
@@ -311,7 +312,7 @@ void TestParts::appendMeasure()
 
 void TestParts::insertMeasure()
 {
-    MasterScore* score = readScore(DIR + "part-all.mscx");
+    MasterScore* score = readScore(PARTS_DATA_DIR + "part-all.mscx");
     QVERIFY(score);
     createParts(score);
 
@@ -320,11 +321,11 @@ void TestParts::insertMeasure()
     score->insertMeasure(ElementType::MEASURE, m);
     score->endCmd();
 
-    // QVERIFY(saveCompareScore(score, "part-all-insertmeasures.mscx", DIR + "part-all-insertmeasures.mscx"));
+    // QVERIFY(saveCompareScore(score, "part-all-insertmeasures.mscx", PARTS_DATA_DIR + "part-all-insertmeasures.mscx"));
 
     score->undoRedo(true, 0);
 
-    QVERIFY(saveCompareScore(score, "part-all-uinsertmeasures.mscx", DIR + "part-all-uinsertmeasures.mscx"));
+    QVERIFY(saveCompareScore(score, "part-all-uinsertmeasures.mscx", PARTS_DATA_DIR + "part-all-uinsertmeasures.mscx"));
     delete score;
 }
 
@@ -335,11 +336,11 @@ void TestParts::insertMeasure()
 
 void TestParts::styleScore()
 {
-    MasterScore* score = readScore(DIR + "partStyle.mscx");
+    MasterScore* score = readScore(PARTS_DATA_DIR + "partStyle.mscx");
     QVERIFY(score);
     createParts(score);
     score->style().set(StyleIdx::clefLeftMargin, 4.0);
-    QVERIFY(saveCompareScore(score, "partStyle-score-test.mscx", DIR + "partStyle-score-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "partStyle-score-test.mscx", PARTS_DATA_DIR + "partStyle-score-ref.mscx"));
     delete score;
 }
 
@@ -349,8 +350,8 @@ void TestParts::styleScore()
 
 void TestParts::styleScoreReload()
 {
-    MasterScore* partScore = readScore(DIR + "partStyle-score-reload.mscx");
-    QVERIFY(saveCompareScore(partScore, "partStyle-score-reload-test.mscx", DIR + "partStyle-score-reload-ref.mscx"));
+    MasterScore* partScore = readScore(PARTS_DATA_DIR + "partStyle-score-reload.mscx");
+    QVERIFY(saveCompareScore(partScore, "partStyle-score-reload-test.mscx", PARTS_DATA_DIR + "partStyle-score-reload-ref.mscx"));
     delete partScore;
 }
 
@@ -363,17 +364,17 @@ void TestParts::styleScoreReload()
 #if 0
 void TestParts::stylePartDefault()
 {
-    MasterScore* score = readScore(DIR + "partStyle.mscx");
+    MasterScore* score = readScore(PARTS_DATA_DIR + "partStyle.mscx");
     QVERIFY(score);
     // TODO: set defaultStyleForParts
     MScore::_defaultStyleForParts = new MStyle();
-    QFile f(DIR + "style_test.mss");
+    QFile f(PARTS_DATA_DIR + "style_test.mss");
     QVERIFY(f.open(QIODevice::ReadOnly));
     MStyle* s = new MStyle(*defaultStyle());
     QVERIFY(s->load(&f));
     MScore::_defaultStyleForParts = s;
     createParts(score);
-    QVERIFY(saveCompareScore(score, "partStyle-part-default-test.mscx", DIR + "partStyle-part-default-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "partStyle-part-default-test.mscx", PARTS_DATA_DIR + "partStyle-part-default-ref.mscx"));
 }
 
 //---------------------------------------------------------
@@ -382,11 +383,11 @@ void TestParts::stylePartDefault()
 
 void TestParts::styleScoreDefault()
 {
-    MasterScore* score = readScore(DIR + "partStyle.mscx");
+    MasterScore* score = readScore(PARTS_DATA_DIR + "partStyle.mscx");
     QVERIFY(score);
     // TODO: set defaultStyle
     createParts(score);
-    QVERIFY(saveCompareScore(score, "partStyle-score-default-test.mscx", DIR + "partStyle-score-default-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "partStyle-score-default-test.mscx", PARTS_DATA_DIR + "partStyle-score-default-ref.mscx"));
 }
 
 #endif
@@ -448,7 +449,7 @@ void TestParts::createPartImage()
 
 MasterScore* TestParts::doAddBreath()
 {
-    MasterScore* score = readScore(DIR + "part-empty-parts.mscx");
+    MasterScore* score = readScore(PARTS_DATA_DIR + "part-empty-parts.mscx");
 
     Measure* m   = score->firstMeasure();
     Segment* s   = m->tick2segment(Fraction(1,4));
@@ -473,7 +474,7 @@ MasterScore* TestParts::doAddBreath()
 void TestParts::addBreath()
 {
     MasterScore* score = doAddBreath();
-    QVERIFY(saveCompareScore(score, "part-breath-add.mscx", DIR + "part-breath-add.mscx"));
+    QVERIFY(saveCompareScore(score, "part-breath-add.mscx", PARTS_DATA_DIR + "part-breath-add.mscx"));
     delete score;
 }
 
@@ -487,7 +488,7 @@ void TestParts::undoAddBreath()
 
     score->undoRedo(true, 0);
 
-    QVERIFY(saveCompareScore(score, "part-breath-uadd.mscx", DIR + "part-breath-uadd.mscx"));
+    QVERIFY(saveCompareScore(score, "part-breath-uadd.mscx", PARTS_DATA_DIR + "part-breath-uadd.mscx"));
     delete score;
 }
 
@@ -502,7 +503,7 @@ void TestParts::undoRedoAddBreath()
     score->undoRedo(true, 0);
     score->undoRedo(false, 0);
 
-    QVERIFY(saveCompareScore(score, "part-breath-uradd.mscx", DIR + "part-breath-uradd.mscx"));
+    QVERIFY(saveCompareScore(score, "part-breath-uradd.mscx", PARTS_DATA_DIR + "part-breath-uradd.mscx"));
     delete score;
 }
 
@@ -512,7 +513,7 @@ void TestParts::undoRedoAddBreath()
 
 MasterScore* TestParts::doRemoveBreath()
 {
-    MasterScore* score = readScore(DIR + "part-breath-add.mscx");
+    MasterScore* score = readScore(PARTS_DATA_DIR + "part-breath-add.mscx");
 
     Measure* m   = score->firstMeasure();
     Segment* s   = m->first()->next(SegmentType::Breath);
@@ -533,7 +534,7 @@ MasterScore* TestParts::doRemoveBreath()
 void TestParts::removeBreath()
 {
     MasterScore* score = doRemoveBreath();
-    QVERIFY(saveCompareScore(score, "part-breath-del.mscx", DIR + "part-breath-del.mscx"));
+    QVERIFY(saveCompareScore(score, "part-breath-del.mscx", PARTS_DATA_DIR + "part-breath-del.mscx"));
     delete score;
 }
 
@@ -545,7 +546,7 @@ void TestParts::undoRemoveBreath()
 {
     MasterScore* score = doRemoveBreath();
     score->undoRedo(true, 0);
-    QVERIFY(saveCompareScore(score, "part-breath-udel.mscx", DIR + "part-breath-udel.mscx"));
+    QVERIFY(saveCompareScore(score, "part-breath-udel.mscx", PARTS_DATA_DIR + "part-breath-udel.mscx"));
     delete score;
 }
 
@@ -559,7 +560,7 @@ void TestParts::undoRedoRemoveBreath()
     score->undoRedo(true, 0);
     score->undoRedo(false, 0);
 
-    QVERIFY(saveCompareScore(score, "part-breath-urdel.mscx", DIR + "part-breath-urdel.mscx"));
+    QVERIFY(saveCompareScore(score, "part-breath-urdel.mscx", PARTS_DATA_DIR + "part-breath-urdel.mscx"));
     delete score;
 }
 
@@ -569,7 +570,7 @@ void TestParts::undoRedoRemoveBreath()
 
 MasterScore* TestParts::doAddFingering()
 {
-    MasterScore* score = readScore(DIR + "part-empty-parts.mscx");
+    MasterScore* score = readScore(PARTS_DATA_DIR + "part-empty-parts.mscx");
 
     Measure* m   = score->firstMeasure();
     Segment* s   = m->tick2segment(Fraction(1,4));
@@ -593,7 +594,7 @@ MasterScore* TestParts::doAddFingering()
 void TestParts::addFingering()
 {
     MasterScore* score = doAddFingering();
-    QVERIFY(saveCompareScore(score, "part-fingering-add.mscx", DIR + "part-fingering-add.mscx"));
+    QVERIFY(saveCompareScore(score, "part-fingering-add.mscx", PARTS_DATA_DIR + "part-fingering-add.mscx"));
     delete score;
 }
 
@@ -605,7 +606,7 @@ void TestParts::undoAddFingering()
 {
     MasterScore* score = doAddFingering();
     score->undoRedo(true, 0);
-    QVERIFY(saveCompareScore(score, "part-fingering-uadd.mscx", DIR + "part-fingering-uadd.mscx"));
+    QVERIFY(saveCompareScore(score, "part-fingering-uadd.mscx", PARTS_DATA_DIR + "part-fingering-uadd.mscx"));
     delete score;
 }
 
@@ -618,7 +619,7 @@ void TestParts::undoRedoAddFingering()
     MasterScore* score = doAddFingering();
     score->undoRedo(true, 0);
     score->undoRedo(false, 0);
-    QVERIFY(saveCompareScore(score, "part-fingering-uradd.mscx", DIR + "part-fingering-uradd.mscx"));
+    QVERIFY(saveCompareScore(score, "part-fingering-uradd.mscx", PARTS_DATA_DIR + "part-fingering-uradd.mscx"));
     delete score;
 }
 
@@ -628,7 +629,7 @@ void TestParts::undoRedoAddFingering()
 
 MasterScore* TestParts::doRemoveFingering()
 {
-    MasterScore* score = readScore(DIR + "part-fingering-parts.mscx");
+    MasterScore* score = readScore(PARTS_DATA_DIR + "part-fingering-parts.mscx");
 
     Measure* m   = score->firstMeasure();
     Segment* s   = m->first()->next(SegmentType::ChordRest);
@@ -657,7 +658,7 @@ MasterScore* TestParts::doRemoveFingering()
 void TestParts::removeFingering()
 {
     MasterScore* score = doRemoveFingering();
-    QVERIFY(saveCompareScore(score, "part-fingering-del.mscx", DIR + "part-fingering-del.mscx"));
+    QVERIFY(saveCompareScore(score, "part-fingering-del.mscx", PARTS_DATA_DIR + "part-fingering-del.mscx"));
     delete score;
 }
 
@@ -669,7 +670,7 @@ void TestParts::undoRemoveFingering()
 {
     MasterScore* score = doRemoveFingering();
     score->undoRedo(true, 0);
-    QVERIFY(saveCompareScore(score, "part-fingering-udel.mscx", DIR + "part-fingering-udel.mscx"));
+    QVERIFY(saveCompareScore(score, "part-fingering-udel.mscx", PARTS_DATA_DIR + "part-fingering-udel.mscx"));
     delete score;
 }
 
@@ -682,7 +683,7 @@ void TestParts::undoRedoRemoveFingering()
     MasterScore* score = doRemoveFingering();
     score->undoRedo(true, 0);
     score->undoRedo(false, 0);
-    QVERIFY(saveCompareScore(score, "part-fingering-urdel.mscx", DIR + "part-fingering-urdel.mscx"));
+    QVERIFY(saveCompareScore(score, "part-fingering-urdel.mscx", PARTS_DATA_DIR + "part-fingering-urdel.mscx"));
     delete score;
 }
 
@@ -692,7 +693,7 @@ void TestParts::undoRedoRemoveFingering()
 
 MasterScore* TestParts::doAddSymbol()
 {
-    MasterScore* score = readScore(DIR + "part-empty-parts.mscx");
+    MasterScore* score = readScore(PARTS_DATA_DIR + "part-empty-parts.mscx");
 
     Measure* m   = score->firstMeasure();
     Segment* s   = m->tick2segment(Fraction(1,4));
@@ -716,7 +717,7 @@ MasterScore* TestParts::doAddSymbol()
 void TestParts::addSymbol()
 {
     MasterScore* score = doAddSymbol();
-    QVERIFY(saveCompareScore(score, "part-symbol-add.mscx", DIR + "part-symbol-add.mscx"));
+    QVERIFY(saveCompareScore(score, "part-symbol-add.mscx", PARTS_DATA_DIR + "part-symbol-add.mscx"));
     delete score;
 }
 
@@ -728,7 +729,7 @@ void TestParts::undoAddSymbol()
 {
     MasterScore* score = doAddSymbol();
     score->undoRedo(true, 0);
-    QVERIFY(saveCompareScore(score, "part-symbol-uadd.mscx", DIR + "part-symbol-uadd.mscx"));
+    QVERIFY(saveCompareScore(score, "part-symbol-uadd.mscx", PARTS_DATA_DIR + "part-symbol-uadd.mscx"));
     delete score;
 }
 
@@ -741,7 +742,7 @@ void TestParts::undoRedoAddSymbol()
     MasterScore* score = doAddSymbol();
     score->undoRedo(true, 0);
     score->undoRedo(false, 0);
-    QVERIFY(saveCompareScore(score, "part-symbol-uradd.mscx", DIR + "part-symbol-uradd.mscx"));
+    QVERIFY(saveCompareScore(score, "part-symbol-uradd.mscx", PARTS_DATA_DIR + "part-symbol-uradd.mscx"));
     delete score;
 }
 
@@ -751,7 +752,7 @@ void TestParts::undoRedoAddSymbol()
 
 MasterScore* TestParts::doRemoveSymbol()
 {
-    MasterScore* score = readScore(DIR + "part-symbol-parts.mscx");
+    MasterScore* score = readScore(PARTS_DATA_DIR + "part-symbol-parts.mscx");
 
     Measure* m   = score->firstMeasure();
     Segment* s   = m->first()->next(SegmentType::ChordRest);
@@ -780,7 +781,7 @@ MasterScore* TestParts::doRemoveSymbol()
 void TestParts::removeSymbol()
 {
     MasterScore* score = doRemoveSymbol();
-    QVERIFY(saveCompareScore(score, "part-symbol-del.mscx", DIR + "part-symbol-del.mscx"));
+    QVERIFY(saveCompareScore(score, "part-symbol-del.mscx", PARTS_DATA_DIR + "part-symbol-del.mscx"));
     delete score;
 }
 
@@ -792,7 +793,7 @@ void TestParts::undoRemoveSymbol()
 {
     MasterScore* score = doRemoveSymbol();
     score->undoRedo(true, 0);
-    QVERIFY(saveCompareScore(score, "part-symbol-udel.mscx", DIR + "part-symbol-udel.mscx"));
+    QVERIFY(saveCompareScore(score, "part-symbol-udel.mscx", PARTS_DATA_DIR + "part-symbol-udel.mscx"));
     delete score;
 }
 
@@ -805,7 +806,7 @@ void TestParts::undoRedoRemoveSymbol()
     MasterScore* score = doRemoveSymbol();
     score->undoRedo(true, 0);
     score->undoRedo(false, 0);
-    QVERIFY(saveCompareScore(score, "part-symbol-urdel.mscx", DIR + "part-symbol-urdel.mscx"));
+    QVERIFY(saveCompareScore(score, "part-symbol-urdel.mscx", PARTS_DATA_DIR + "part-symbol-urdel.mscx"));
     delete score;
 }
 
@@ -815,7 +816,7 @@ void TestParts::undoRedoRemoveSymbol()
 
 MasterScore* TestParts::doAddChordline()
 {
-    MasterScore* score = readScore(DIR + "part-empty-parts.mscx");
+    MasterScore* score = readScore(PARTS_DATA_DIR + "part-empty-parts.mscx");
 
     Measure* m   = score->firstMeasure();
     Segment* s   = m->tick2segment(Fraction(1,4));
@@ -839,7 +840,7 @@ MasterScore* TestParts::doAddChordline()
 void TestParts::addChordline()
 {
     MasterScore* score = doAddChordline();
-    QVERIFY(saveCompareScore(score, "part-chordline-add.mscx", DIR + "part-chordline-add.mscx"));
+    QVERIFY(saveCompareScore(score, "part-chordline-add.mscx", PARTS_DATA_DIR + "part-chordline-add.mscx"));
     delete score;
 }
 
@@ -851,7 +852,7 @@ void TestParts::undoAddChordline()
 {
     MasterScore* score = doAddChordline();
     score->undoRedo(true, 0);
-    QVERIFY(saveCompareScore(score, "part-chordline-uadd.mscx", DIR + "part-chordline-uadd.mscx"));
+    QVERIFY(saveCompareScore(score, "part-chordline-uadd.mscx", PARTS_DATA_DIR + "part-chordline-uadd.mscx"));
     delete score;
 }
 
@@ -864,7 +865,7 @@ void TestParts::undoRedoAddChordline()
     MasterScore* score = doAddChordline();
     score->undoRedo(true, 0);
     score->undoRedo(false, 0);
-    QVERIFY(saveCompareScore(score, "part-chordline-uradd.mscx", DIR + "part-chordline-uradd.mscx"));
+    QVERIFY(saveCompareScore(score, "part-chordline-uradd.mscx", PARTS_DATA_DIR + "part-chordline-uradd.mscx"));
     delete score;
 }
 
@@ -874,7 +875,7 @@ void TestParts::undoRedoAddChordline()
 
 MasterScore* TestParts::doRemoveChordline()
 {
-    MasterScore* score = readScore(DIR + "part-chordline-parts.mscx");
+    MasterScore* score = readScore(PARTS_DATA_DIR + "part-chordline-parts.mscx");
 
     Measure* m   = score->firstMeasure();
     Segment* s   = m->first()->next(SegmentType::ChordRest);
@@ -903,7 +904,7 @@ MasterScore* TestParts::doRemoveChordline()
 void TestParts::removeChordline()
 {
     MasterScore* score = doRemoveChordline();
-    QVERIFY(saveCompareScore(score, "part-chordline-del.mscx", DIR + "part-chordline-del.mscx"));
+    QVERIFY(saveCompareScore(score, "part-chordline-del.mscx", PARTS_DATA_DIR + "part-chordline-del.mscx"));
     delete score;
 }
 
@@ -915,7 +916,7 @@ void TestParts::undoRemoveChordline()
 {
     MasterScore* score = doRemoveChordline();
     score->undoRedo(true, 0);
-    QVERIFY(saveCompareScore(score, "part-chordline-udel.mscx", DIR + "part-chordline-udel.mscx"));
+    QVERIFY(saveCompareScore(score, "part-chordline-udel.mscx", PARTS_DATA_DIR + "part-chordline-udel.mscx"));
     delete score;
 }
 
@@ -928,7 +929,7 @@ void TestParts::undoRedoRemoveChordline()
     MasterScore* score = doRemoveChordline();
     score->undoRedo(true, 0);
     score->undoRedo(false, 0);
-    QVERIFY(saveCompareScore(score, "part-chordline-urdel.mscx", DIR + "part-chordline-urdel.mscx"));
+    QVERIFY(saveCompareScore(score, "part-chordline-urdel.mscx", PARTS_DATA_DIR + "part-chordline-urdel.mscx"));
     delete score;
 }
 
@@ -938,7 +939,7 @@ void TestParts::undoRedoRemoveChordline()
 
 MasterScore* TestParts::doAddMeasureRepeat()
 {
-    MasterScore* score = readScore(DIR + "part-empty-parts.mscx");
+    MasterScore* score = readScore(PARTS_DATA_DIR + "part-empty-parts.mscx");
     Measure* m = score->firstMeasure()->nextMeasure();
 
     score->startCmd();
@@ -956,7 +957,7 @@ MasterScore* TestParts::doAddMeasureRepeat()
 void TestParts::addMeasureRepeat()
 {
     MasterScore* score = doAddMeasureRepeat();
-    QVERIFY(saveCompareScore(score, "part-measure-repeat-add.mscx", DIR + "part-measure-repeat-add.mscx"));
+    QVERIFY(saveCompareScore(score, "part-measure-repeat-add.mscx", PARTS_DATA_DIR + "part-measure-repeat-add.mscx"));
     delete score;
 }
 
@@ -970,7 +971,7 @@ void TestParts::undoAddMeasureRepeat()
 
     score->undoRedo(true, 0);
 
-    QVERIFY(saveCompareScore(score, "part-measure-repeat-uadd.mscx", DIR + "part-measure-repeat-uadd.mscx"));
+    QVERIFY(saveCompareScore(score, "part-measure-repeat-uadd.mscx", PARTS_DATA_DIR + "part-measure-repeat-uadd.mscx"));
     delete score;
 }
 
@@ -985,7 +986,7 @@ void TestParts::undoRedoAddMeasureRepeat()
     score->undoRedo(true, 0);
     score->undoRedo(false, 0);
 
-    QVERIFY(saveCompareScore(score, "part-measure-repeat-uradd.mscx", DIR + "part-measure-repeat-uradd.mscx"));
+    QVERIFY(saveCompareScore(score, "part-measure-repeat-uradd.mscx", PARTS_DATA_DIR + "part-measure-repeat-uradd.mscx"));
     delete score;
 }
 
@@ -995,7 +996,7 @@ void TestParts::undoRedoAddMeasureRepeat()
 
 MasterScore* TestParts::doRemoveMeasureRepeat()
 {
-    MasterScore* score = readScore(DIR + "part-measure-repeat-parts.mscx");
+    MasterScore* score = readScore(PARTS_DATA_DIR + "part-measure-repeat-parts.mscx");
 
     Measure* m = score->firstMeasure()->nextMeasure()->nextMeasure();
     MeasureRepeat* mr = m->measureRepeatElement(0);
@@ -1015,7 +1016,7 @@ MasterScore* TestParts::doRemoveMeasureRepeat()
 void TestParts::removeMeasureRepeat()
 {
     MasterScore* score = doRemoveMeasureRepeat();
-    QVERIFY(saveCompareScore(score, "part-measure-repeat-del.mscx", DIR + "part-measure-repeat-del.mscx"));
+    QVERIFY(saveCompareScore(score, "part-measure-repeat-del.mscx", PARTS_DATA_DIR + "part-measure-repeat-del.mscx"));
     delete score;
 }
 
@@ -1027,7 +1028,7 @@ void TestParts::undoRemoveMeasureRepeat()
 {
     MasterScore* score = doRemoveMeasureRepeat();
     score->undoRedo(true, 0);
-    QVERIFY(saveCompareScore(score, "part-measure-repeat-udel.mscx", DIR + "part-measure-repeat-udel.mscx"));
+    QVERIFY(saveCompareScore(score, "part-measure-repeat-udel.mscx", PARTS_DATA_DIR + "part-measure-repeat-udel.mscx"));
     delete score;
 }
 
@@ -1041,7 +1042,7 @@ void TestParts::undoRedoRemoveMeasureRepeat()
     score->undoRedo(true, 0);
     score->undoRedo(false, 0);
 
-    QVERIFY(saveCompareScore(score, "part-measure-repeat-urdel.mscx", DIR + "part-measure-repeat-urdel.mscx"));
+    QVERIFY(saveCompareScore(score, "part-measure-repeat-urdel.mscx", PARTS_DATA_DIR + "part-measure-repeat-urdel.mscx"));
     delete score;
 }
 
@@ -1052,7 +1053,7 @@ void TestParts::undoRedoRemoveMeasureRepeat()
 
 MasterScore* TestParts::doAddImage()
 {
-    MasterScore* score = readScore(DIR + "part1-2o.mscx");
+    MasterScore* score = readScore(PARTS_DATA_DIR + "part1-2o.mscx");
 
     Measure* m   = score->firstMeasure();
     Segment* s   = m->tick2segment(MScore::division);
@@ -1060,7 +1061,7 @@ MasterScore* TestParts::doAddImage()
     Note* note   = chord->upNote();
     EditData dd(0);
     RasterImage* b = new RasterImage(score);
-    b->load(DIR + "schnee.png");
+    b->load(PARTS_DATA_DIR + "schnee.png");
     dd.dropElement = b;
 
     score->startCmd();
@@ -1076,7 +1077,7 @@ MasterScore* TestParts::doAddImage()
 void TestParts::addImage()
 {
     MasterScore* score = doAddImage();
-    QVERIFY(saveCompareScore(score, "part25.mscx", DIR + "part25o.mscx"));
+    QVERIFY(saveCompareScore(score, "part25.mscx", PARTS_DATA_DIR + "part25o.mscx"));
     delete score;
 }
 
@@ -1088,7 +1089,7 @@ void TestParts::undoAddImage()
 {
     MasterScore* score = doAddImage();
     score->undoRedo(true, 0);
-    QVERIFY(saveCompareScore(score, "part26.mscx", DIR + "part26o.mscx"));
+    QVERIFY(saveCompareScore(score, "part26.mscx", PARTS_DATA_DIR + "part26o.mscx"));
     delete score;
 }
 
@@ -1101,7 +1102,7 @@ void TestParts::undoRedoAddImage()
     MasterScore* score = doAddImage();
     score->undoRedo(true, 0);
     score->undoRedo(false, 0);
-    QVERIFY(saveCompareScore(score, "part27.mscx", DIR + "part27o.mscx"));
+    QVERIFY(saveCompareScore(score, "part27.mscx", PARTS_DATA_DIR + "part27o.mscx"));
     delete score;
 }
 
@@ -1111,7 +1112,7 @@ void TestParts::undoRedoAddImage()
 
 MasterScore* TestParts::doRemoveImage()
 {
-    MasterScore* score = readScore(DIR + "part12o.mscx");
+    MasterScore* score = readScore(PARTS_DATA_DIR + "part12o.mscx");
 
     Measure* m   = score->firstMeasure();
     Segment* s   = m->first()->next(SegChordRest);
@@ -1140,7 +1141,7 @@ MasterScore* TestParts::doRemoveImage()
 void TestParts::removeImage()
 {
     MasterScore* score = doRemoveImage();
-    QVERIFY(saveCompareScore(score, "part28.mscx", DIR + "part28o.mscx"));
+    QVERIFY(saveCompareScore(score, "part28.mscx", PARTS_DATA_DIR + "part28o.mscx"));
     delete score;
 }
 
@@ -1152,7 +1153,7 @@ void TestParts::undoRemoveImage()
 {
     MasterScore* score = doRemoveImage();
     score->undoRedo(true, 0);
-    QVERIFY(saveCompareScore(score, "part29.mscx", DIR + "part29o.mscx"));
+    QVERIFY(saveCompareScore(score, "part29.mscx", PARTS_DATA_DIR + "part29o.mscx"));
     delete score;
 }
 
@@ -1165,7 +1166,7 @@ void TestParts::undoRedoRemoveImage()
     MasterScore* score = doRemoveImage();
     score->undoRedo(true, 0);
     score->undoRedo(false, 0);
-    QVERIFY(saveCompareScore(score, "part30.mscx", DIR + "part30o.mscx"));
+    QVERIFY(saveCompareScore(score, "part30.mscx", PARTS_DATA_DIR + "part30o.mscx"));
     delete score;
 }
 
@@ -1178,7 +1179,7 @@ void TestParts::undoRedoRemoveImage()
 #if 0
 void TestParts::staffStyles()
 {
-    MasterScore* score = readScore(DIR + "part1.mscx");
+    MasterScore* score = readScore(PARTS_DATA_DIR + "part1.mscx");
     QVERIFY(score);
 //      int numOfStaffTypes = score->staffTypes().count();
     createParts(score);
