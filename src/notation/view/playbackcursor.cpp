@@ -28,7 +28,7 @@ void PlaybackCursor::paint(QPainter* painter)
         return;
     }
 
-    painter->fillRect(m_rect, m_color);
+    painter->fillRect(m_rect, color());
 }
 
 void PlaybackCursor::move(const QRect& rect)
@@ -46,7 +46,9 @@ void PlaybackCursor::setVisible(bool arg)
     m_visible = arg;
 }
 
-void PlaybackCursor::setColor(const QColor& c)
+QColor PlaybackCursor::color()
 {
-    m_color = c;
+    QColor color = configuration()->playbackCursorColor();
+    color.setAlpha(configuration()->cursorOpacity());
+    return color;
 }

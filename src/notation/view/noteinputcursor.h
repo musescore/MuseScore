@@ -24,13 +24,12 @@
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
-#include "async/asyncable.h"
 #include "inotationconfiguration.h"
 
 class QPainter;
 
 namespace mu::notation {
-class NoteInputCursor : public async::Asyncable
+class NoteInputCursor
 {
     INJECT(notation, context::IGlobalContext, globalContext)
     INJECT(notation, INotationConfiguration, configuration)
@@ -46,7 +45,8 @@ private:
 
     bool isNoteInputMode() const;
     QRectF rect() const;
-    QColor color() const;
+    QColor cursorColor() const;
+    QColor fillColor() const;
 };
 }
 

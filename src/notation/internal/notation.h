@@ -53,7 +53,6 @@ public:
     void setViewMode(const ViewMode& viewMode) override;
     ViewMode viewMode() const override;
     void paint(QPainter* painter, const QRectF& frameRect) override;
-    QRectF previewRect() const override;
 
     ValCh<bool> opened() const override;
     void setOpened(bool opened) override;

@@ -48,8 +48,11 @@ public:
     virtual io::path foregroundWallpaper() const = 0;
 
     virtual QColor anchorLineColor() const = 0;
+
     virtual QColor playbackCursorColor() const = 0;
-    virtual QColor selectionColor(int voice = 0) const = 0;
+    virtual int cursorOpacity() const = 0;
+
+    virtual QColor selectionColor(int voiceIndex = 0) const = 0;
 
     virtual int selectionProximity() const = 0;
 
