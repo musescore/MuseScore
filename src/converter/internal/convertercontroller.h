@@ -28,8 +28,6 @@ public:
     ConverterController() = default;
 
     Ret batchConvert(const io::path& batchJobFile) override;
-
-
 };
 }
 

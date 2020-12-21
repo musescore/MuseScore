@@ -30,7 +30,6 @@
 #include "framework/uicomponents/uicomponentsmodule.h"
 #include "framework/fonts/fontsmodule.h"
 #include "framework/actions/actionsmodule.h"
-#include "framework/commandline/commandlinemodule.h"
 #include "framework/shortcuts/shortcutsmodule.h"
 #include "framework/workspace/workspacemodule.h"
 #include "framework/system/systemmodule.h"
@@ -102,7 +101,6 @@ int main(int argc, char** argv)
     app.addModule(new mu::framework::NetworkModule());
 
     app.addModule(new mu::actions::ActionsModule());
-    app.addModule(new mu::commandline::CommandLineModule());
     app.addModule(new mu::appshell::AppShellModule());
 
     app.addModule(new mu::context::ContextModule());
