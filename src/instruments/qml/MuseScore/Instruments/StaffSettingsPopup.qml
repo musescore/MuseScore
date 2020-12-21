@@ -63,10 +63,10 @@ StyledPopup {
         }
 
         ListView {
-            height: 20
+            height: contentItem.childrenRect.height
             width: parent.width
 
-            spacing: 32
+            spacing: 26
             orientation: ListView.Horizontal
 
             model: settingsModel.voices
@@ -97,7 +97,9 @@ StyledPopup {
         }
 
         CheckBox {
-            width: parent.width
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.rightMargin: 20
 
             text: qsTrc("instruments", "Hide all measures that do not contain notation (cutaway)")
             wrapMode: Text.WordWrap
