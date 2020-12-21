@@ -35,16 +35,16 @@ const char* g_groupNames[Ms::STAFF_GROUP_MAX] = {
 //   noteHeadSchemes
 //---------------------------------------------------------
 
-NoteHead::Scheme noteHeadSchemes[] = {
-    NoteHead::Scheme::HEAD_NORMAL,
-    NoteHead::Scheme::HEAD_PITCHNAME,
-    NoteHead::Scheme::HEAD_PITCHNAME_GERMAN,
-    NoteHead::Scheme::HEAD_SOLFEGE,
-    NoteHead::Scheme::HEAD_SOLFEGE_FIXED,
-    NoteHead::Scheme::HEAD_SHAPE_NOTE_4,
-    NoteHead::Scheme::HEAD_SHAPE_NOTE_7_AIKIN,
-    NoteHead::Scheme::HEAD_SHAPE_NOTE_7_FUNK,
-    NoteHead::Scheme::HEAD_SHAPE_NOTE_7_WALKER
+Ms::NoteHead::Scheme noteHeadSchemes[] = {
+    Ms::NoteHead::Scheme::HEAD_NORMAL,
+    Ms::NoteHead::Scheme::HEAD_PITCHNAME,
+    Ms::NoteHead::Scheme::HEAD_PITCHNAME_GERMAN,
+    Ms::NoteHead::Scheme::HEAD_SOLFEGE,
+    Ms::NoteHead::Scheme::HEAD_SOLFEGE_FIXED,
+    Ms::NoteHead::Scheme::HEAD_SHAPE_NOTE_4,
+    Ms::NoteHead::Scheme::HEAD_SHAPE_NOTE_7_AIKIN,
+    Ms::NoteHead::Scheme::HEAD_SHAPE_NOTE_7_FUNK,
+    Ms::NoteHead::Scheme::HEAD_SHAPE_NOTE_7_WALKER
 };
 
 //---------------------------------------------------------
@@ -192,7 +192,7 @@ mu::Ret EditStaffType::doLoadScore(Ms::MasterScore* score, const mu::io::path& p
 
     score->connectTies();
 
-    for (Part* p : score->parts()) {
+    for (Ms::Part* p : score->parts()) {
         p->updateHarmonyChannels(false);
     }
     score->rebuildMidiMapping();
