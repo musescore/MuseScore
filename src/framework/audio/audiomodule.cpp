@@ -45,6 +45,10 @@
 #include "internal/platform/osx/osxaudiodriver.h"
 #endif
 
+#ifdef Q_OS_WASM
+#include "internal/platform/web/webaudiodriver.h"
+#endif
+
 using namespace mu::audio;
 using namespace mu::audio::worker;
 
@@ -76,6 +80,10 @@ void AudioModule::registerExports()
 #ifdef Q_OS_MACOS
     framework::ioc()->registerExport<IAudioDriver>(moduleName(), new OSXAudioDriver());
 #endif
+
+#ifdef Q_OS_WASM
+    framework::ioc()->registerExport<IAudioDriver>(moduleName(), new WebAudioDriver());
+#endif
 }
 
 void AudioModule::registerUiTypes()
@@ -100,7 +108,9 @@ void AudioModule::onInit()
         });
     });
 
+#ifndef Q_OS_WASM
     s_worker->run();
+#endif
 }
 
 void AudioModule::onDeinit()

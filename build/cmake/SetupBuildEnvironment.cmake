@@ -59,6 +59,26 @@ elseif(CC_IS_CLANG)
     set(CMAKE_CXX_FLAGS_DEBUG   "-g")
     set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 
+elseif(CC_IS_EMSCRIPTEN)
+    message(STATUS "Using Compiler Emscripten ${CMAKE_CXX_COMPILER_VERSION}")
+
+    set(EMCC_CMAKE_TOOLCHAIN "" CACHE FILEPATH "Path to EMCC CMake Emscripten.cmake")
+    set(EMCC_INCLUDE_PATH "." CACHE PATH "Path to EMCC include dir")
+    set(EMCC_COMPILE_FLAGS "--bind -o  .html")
+
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/public_html)
+    set(CMAKE_EXECUTABLE_SUFFIX ".html")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${EMCC_COMPILE_FLAGS}")
+    set(CMAKE_TOOLCHAIN_FILE ${EMCC_CMAKE_TOOLCHAIN})
+    set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
+    #for QtCreator
+    include_directories(
+        ${EMCC_INCLUDE_PATH}
+        ${EMCC_INCLUDE_PATH}/libcxx
+        ${EMCC_INCLUDE_PATH}/libc
+    )
+
 else()
     message(FATAL_ERROR "Unsupported Compiler CMAKE_CXX_COMPILER_ID: ${CMAKE_CXX_COMPILER_ID}")
 endif()
@@ -84,11 +104,11 @@ endif()
 
 
 # APPLE specific
-if (APPLE)
+if (OS_IS_MAC)
       set(CMAKE_OSX_ARCHITECTURES x86_64)
       set(MACOSX_DEPLOYMENT_TARGET 10.10)
       set(CMAKE_OSX_DEPLOYMENT_TARGET 10.10)
-endif(APPLE)
+endif(OS_IS_MAC)
 
 
 #   string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
@@ -108,9 +128,9 @@ endif(APPLE)
 #   endif(CMAKE_BUILD_TYPE MATCHES "DEBUG")
 
 
-#if (APPLE)
+#if (OS_IS_MAC)
 
-#else (APPLE)
+#else (OS_IS_MAC)
 #   if (MSVC)
 #   # Set compiler options for VS2017/19 toolchain.
 #   # Note: /D_CRT_SECURE_NO WARNINGS disables warnings when using "non-secure" library functions like sscanf...

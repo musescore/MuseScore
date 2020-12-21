@@ -22,7 +22,6 @@ set(_components
     Svg
     Widgets
     PrintSupport
-    Concurrent
     OpenGL
     LinguistTools
   )
@@ -34,6 +33,13 @@ if (USE_WEBENGINE)
     WebEngineWidgets
 	)
 endif(USE_WEBENGINE)
+
+if (NOT OS_IS_WASM)
+    set(_components
+      ${_components}
+      Concurrent
+    )
+endif()
 
 if (WIN32)
     set(_components

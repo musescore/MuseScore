@@ -16,32 +16,32 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "instrumentsconfiguration.h"
+#include "webaudiodriver.h"
 
-#include "log.h"
-#include "settings.h"
+using namespace mu::audio;
 
-using namespace mu::instruments;
-
-mu::io::paths InstrumentsConfiguration::instrumentPaths() const
+WebAudioDriver::WebAudioDriver()
 {
-    io::paths paths;
-    io::path sharePath = globalConfiguration()->sharePath() + "/instruments";
-    paths.push_back(sharePath);
-
-    io::path dataPath = globalConfiguration()->dataPath() + "/instruments";
-    paths.push_back(dataPath);
-
-    io::paths extensionsPath = this->extensionsPaths();
-    paths.insert(paths.end(), extensionsPath.begin(), extensionsPath.end());
-
-    return paths;
 }
 
-mu::io::paths InstrumentsConfiguration::extensionsPaths() const
+std::string WebAudioDriver::name() const
 {
-    if (extensionsConfigurator()) {
-        return extensionsConfigurator()->instrumentsPaths();
-    }
-    return {};
+    return "MUAUDIO(WEB)";
+}
+
+bool WebAudioDriver::open(const Spec& spec, Spec* activeSpec)
+{
+    //TODO:
+    m_opened = true;
+    return m_opened;
+}
+
+void WebAudioDriver::close()
+{
+    //TODO:
+}
+
+bool WebAudioDriver::isOpened() const
+{
+    return m_opened;
 }

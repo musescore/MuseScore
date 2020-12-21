@@ -207,10 +207,10 @@ struct ScoreCreateOptions {
     double tempo = 0.0;
 
     int timesigNumerator = 0;
-    int timesigDenominator = 0;
+    int timesigDenominator = 1;
     TimeSigType timesigType = TimeSigType::NORMAL;
 
-    Key key = Key::C_B;
+    Key key = Key::C;
     KeyMode keyMode = KeyMode::UNKNOWN;
 
     bool withPickupMeasure = false;

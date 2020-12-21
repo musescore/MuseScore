@@ -165,9 +165,9 @@ endif(BUILD_JACK)
 
 if (BUILD_AUTOUPDATE)
 
-    if (APPLE)
+    if (OS_IS_MAC)
         set(MAC_APPCAST_URL "")
-    endif (APPLE)
+    endif (OS_IS_MAC)
 
     include(SetupSparkle)
 endif(BUILD_AUTOUPDATE)

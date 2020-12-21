@@ -73,46 +73,40 @@ elseif(OS_IS_MAC)
 
     set(CMAKE_INSTALL_RPATH ${QT_INSTALL_LIBS})
 
+elseif(OS_IS_WASM)
+
+    include_directories(${MODULE} PUBLIC
+        ${PROJECT_BINARY_DIR}
+        ${CMAKE_CURRENT_BINARY_DIR}
+        ${PROJECT_SOURCE_DIR}
+        ${PROJECT_SOURCE_DIR}/src
+        ${PROJECT_SOURCE_DIR}/src/framework
+        ${PROJECT_SOURCE_DIR}/src/framework/global
+    )
+    set(EMCC_LINKER_FLAGS "\
+        -s WASM=1 \
+        -s FULL_ES2=1 \
+        -s FULL_ES3=1 \
+        -s USE_WEBGL2=1 \
+        -s USE_ZLIB=1 \
+        -s EXIT_RUNTIME=1 \
+        -s ERROR_ON_UNDEFINED_SYMBOLS=1 \
+        -s \"EXTRA_EXPORTED_RUNTIME_METHODS=['UTF16ToString', 'stringToUTF16']\" \
+        --bind \
+        -s FETCH=1 \
+        -s FORCE_FILESYSTEM=1 \
+        -g \
+        -s ASSERTIONS=2 \
+        -s DEMANGLE_SUPPORT=1 \
+        -s GL_DEBUG=1 \
+        -s ALLOW_MEMORY_GROWTH=1 \
+        -s EXIT_RUNTIME=1 \
+        -s TOTAL_MEMORY=33554432 \
+        -s ERROR_ON_UNDEFINED_SYMBOLS=0 \
+    ")
 else()
     message(FATAL_ERROR "Unsopported Platform: ${CMAKE_HOST_SYSTEM_NAME}")
 endif()
-
-
-add_executable(${EXECUTABLE_NAME}
-      ${ICON_RES_FILE}
-      main.cpp
-      modulessetup.cpp
-      modulessetup.h
-      )
-
-# If MSCORE_OUTPUT_NAME is set (e.g, when cmake is called by the user), the output executable will be
-# called MSCORE_OUTPUT_NAME instead of 'mscore'. This can be used to have MuseScore stable and unstable
-# both installed in the same prefix on a Linux system.
-if (MSCORE_OUTPUT_NAME)
-  set_target_properties(${EXECUTABLE_NAME} PROPERTIES OUTPUT_NAME ${MSCORE_OUTPUT_NAME})
-endif (MSCORE_OUTPUT_NAME)
-
-if (OS_IS_MAC)
-    set_target_properties(mscore PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/build/MacOSXBundleInfo.plist.in)
-endif (OS_IS_MAC)
-
-
-if (CC_IS_MINGW)
-    set_target_properties(mscore PROPERTIES LINK_FLAGS "-Wl,-S -mwindows" )
-endif(CC_IS_MINGW)
-
-if (CC_IS_MSVC)
-    target_link_options(mscore PRIVATE /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup)
-endif(CC_IS_MSVC)
-
-
-
-set(FREETYPE_LIB )
-if (USE_SYSTEM_FREETYPE)
-     set(FREETYPE_LIB ${FREETYPE_LIBRARIES})
-else (USE_SYSTEM_FREETYPE)
-     set(FREETYPE_LIB mscore_freetype)
-endif (USE_SYSTEM_FREETYPE)
 
 set(LINK_LIB
     ${FREETYPE_LIB}
@@ -133,7 +127,6 @@ set(LINK_LIB ${LINK_LIB}
     libmscore
     actions
     appshell
-    cloud
     context
     shortcuts
     workspace
@@ -141,31 +134,94 @@ set(LINK_LIB ${LINK_LIB}
     midi
     midi_old
     userscores
-    extensions
-    languages
-    importexport
     notation
     commonscene
     palette
     inspector
     playback
     instruments
-    plugins
     )
+
+if (NOT CC_IS_EMSCRIPTEN)
+    list(APPEND LINK_LIB cloud)
+    list(APPEND LINK_LIB extensions)
+    list(APPEND LINK_LIB languages)
+    list(APPEND LINK_LIB importexport)
+    list(APPEND LINK_LIB plugins)
+endif()
 
 if (BUILD_VST)
     set(LINK_LIB ${LINK_LIB} vst)
 endif(BUILD_VST)
 
+set (MSCORE_APPEND_SRC)
+if (CC_IS_EMSCRIPTEN)
+    list(APPEND LINK_LIB wasmtest)
+
+    foreach(link ${LINK_LIB} )
+        list(APPEND MSCORE_APPEND_SRC $<TARGET_OBJECTS:${link}>)
+    endforeach()
+
+    list(APPEND MSCORE_APPEND_SRC $<TARGET_OBJECTS:awl>)
+    list(APPEND MSCORE_APPEND_SRC $<TARGET_OBJECTS:qzip>)
+    list(APPEND MSCORE_APPEND_SRC $<TARGET_OBJECTS:audiofile>)
+    list(APPEND MSCORE_APPEND_SRC $<TARGET_OBJECTS:fluidsynth>)
+endif()
+
+add_executable(${EXECUTABLE_NAME}
+      ${ICON_RES_FILE}
+      main.cpp
+      modulessetup.cpp
+      modulessetup.h
+      ${MSCORE_APPEND_SRC}
+      )
+
+# If MSCORE_OUTPUT_NAME is set (e.g, when cmake is called by the user), the output executable will be
+# called MSCORE_OUTPUT_NAME instead of 'mscore'. This can be used to have MuseScore stable and unstable
+# both installed in the same prefix on a Linux system.
+if (MSCORE_OUTPUT_NAME)
+  set_target_properties(${EXECUTABLE_NAME} PROPERTIES OUTPUT_NAME ${MSCORE_OUTPUT_NAME})
+endif (MSCORE_OUTPUT_NAME)
+
+if (OS_IS_MAC)
+    set_target_properties(mscore PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/build/MacOSXBundleInfo.plist.in)
+endif (OS_IS_MAC)
+
+if (CC_IS_MINGW)
+    set_target_properties(mscore PROPERTIES LINK_FLAGS "-Wl,-S -mwindows" )
+endif(CC_IS_MINGW)
+
+if (CC_IS_MSVC)
+    target_link_options(mscore PRIVATE /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup)
+endif(CC_IS_MSVC)
+
+if (OS_IS_WASM)
+    set_target_properties(mscore PROPERTIES LINK_FLAGS "${EMCC_LINKER_FLAGS}")
+endif()
+
+set(FREETYPE_LIB )
+if (USE_SYSTEM_FREETYPE)
+     set(FREETYPE_LIB ${FREETYPE_LIBRARIES})
+else (USE_SYSTEM_FREETYPE)
+     set(FREETYPE_LIB mscore_freetype)
+endif (USE_SYSTEM_FREETYPE)
+
 add_dependencies(mscore workspaces)
 
-target_link_libraries(mscore ${LINK_LIB} )
+if (NOT CC_IS_EMSCRIPTEN)
+    target_link_libraries(mscore ${LINK_LIB} )
+else()
+    target_link_libraries(mscore PRIVATE ${QT_LIBRARIES})
 
-if (APPLE)
+    find_package(Qt5QmlImportScanner REQUIRED)
+    qt5_import_qml_plugins(mscore PATH_TO_SCAN ${CMAKE_SOURCE_DIR})
+endif()
+
+if (OS_IS_MAC)
   target_link_libraries(mscore ${OsxFrameworks})
-else (APPLE)
+else (OS_IS_MAC)
 #    target_link_libraries(mscore rt) # TODO What is it?
-endif (APPLE)
+endif (OS_IS_MAC)
 
 
 if (MSCORE_OUTPUT_NAME)
@@ -393,6 +449,20 @@ elseif(OS_IS_MAC)
             REGEX ".*QtMultimedia.*" EXCLUDE
             REGEX ".*QtAudioEngine.*" EXCLUDE
             REGEX ".*_debug\\.dylib" EXCLUDE)
+
+# ================
+# ===== WASM =====
+# ================
+elseif(OS_IS_WASM)
+
+    function(copy_html_js_launch_files target)
+        set(APPNAME ${target})
+        configure_file("${_qt5Core_install_prefix}/plugins/platforms/wasm_shell.html" "public_html/${target}.qt.html")
+        configure_file("${_qt5Core_install_prefix}/plugins/platforms/qtloader.js" public_html/qtloader.js COPYONLY)
+        configure_file("${_qt5Core_install_prefix}/plugins/platforms/qtlogo.svg" public_html/qtlogo.svg COPYONLY)
+    endfunction()
+
+    copy_html_js_launch_files(mscore)
 
 else()
     message(FATAL_ERROR "Unsopported Platform: ${CMAKE_HOST_SYSTEM_NAME}")

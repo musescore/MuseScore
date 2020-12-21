@@ -48,7 +48,11 @@ if (NOT ${MODULE_QML_IMPORT} STREQUAL "")
     set(QML_IMPORT_PATH "${QML_IMPORT_PATH};${MODULE_QML_IMPORT}" CACHE STRING "QtCreator extra import paths for QML modules" FORCE)
 endif()
 
-add_library(${MODULE}) # STATIC/SHARED set global in the SetupBuildEnvironment.cmake
+if (CC_IS_EMSCRIPTEN)
+    add_library(${MODULE} OBJECT)
+else()
+    add_library(${MODULE}) # STATIC/SHARED set global in the SetupBuildEnvironment.cmake
+endif()
 
 if (BUILD_SHARED_LIBS)
     install(TARGETS ${MODULE} DESTINATION ${SHARED_LIBS_INSTALL_DESTINATION})

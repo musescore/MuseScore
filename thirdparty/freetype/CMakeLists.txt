@@ -63,7 +63,7 @@ target_no_warning(${MODULE} -Wno-cast-function-type)
 
 ## CMAKE_TOOLCHAIN_FILE must be set before `project' is called, which
 ## configures the base build environment and references the toolchain file
-#if (APPLE)
+#if (OS_IS_MAC)
 #  if (DEFINED IOS_PLATFORM)
 #    if (NOT "${IOS_PLATFORM}" STREQUAL "OS"
 #        AND NOT "${IOS_PLATFORM}" STREQUAL "SIMULATOR")
