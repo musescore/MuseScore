@@ -50,6 +50,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/tst_measure.cpp
     # ${CMAKE_CURRENT_LIST_DIR}/tst_midi.cpp not ported
     # ${CMAKE_CURRENT_LIST_DIR}/tst_midimapping.cpp not ported
+    ${CMAKE_CURRENT_LIST_DIR}/tst_note.cpp
 
 )
 

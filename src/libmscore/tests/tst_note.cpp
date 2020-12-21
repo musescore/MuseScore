@@ -10,7 +10,8 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
+#include "testing/qtestsuite.h"
+#include "testutils.h"
 
 #include "libmscore/mscore.h"
 #include "libmscore/score.h"
@@ -25,9 +26,8 @@
 #include "libmscore/sym.h"
 #include "libmscore/key.h"
 #include "libmscore/pitchspelling.h"
-#include "mtest/testutils.h"
 
-#define DIR QString("libmscore/note/")
+static const QString NOTE_DATA_DIR("note_data/");
 
 using namespace Ms;
 
@@ -321,7 +321,7 @@ void TestNote::note()
 
 void TestNote::grace()
 {
-    MasterScore* score = readScore(DIR + "grace.mscx");
+    MasterScore* score = readScore(NOTE_DATA_DIR + "grace.mscx");
     score->doLayout();
     Ms::Chord* chord = score->firstMeasure()->findChord(Fraction(0,1), 0);
     Note* note = chord->upNote();
@@ -364,7 +364,7 @@ void TestNote::grace()
 //      QVERIFY(c->articulations().size() == 1);
 //      delete c;
 
-    QVERIFY(saveCompareScore(score, "grace-test.mscx", DIR + "grace-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "grace-test.mscx", NOTE_DATA_DIR + "grace-ref.mscx"));
 }
 
 //---------------------------------------------------------
@@ -374,7 +374,7 @@ void TestNote::grace()
 
 void TestNote::tpc()
 {
-    MasterScore* score = readScore(DIR + "tpc.mscx");
+    MasterScore* score = readScore(NOTE_DATA_DIR + "tpc.mscx");
 
     score->inputState().setTrack(0);
     score->inputState().setSegment(score->tick2segment(Fraction(0,1), false, SegmentType::ChordRest));
@@ -392,7 +392,7 @@ void TestNote::tpc()
 
     score->cmdConcertPitchChanged(true);
 
-    QVERIFY(saveCompareScore(score, "tpc-test.mscx", DIR + "tpc-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "tpc-test.mscx", NOTE_DATA_DIR + "tpc-ref.mscx"));
 }
 
 //---------------------------------------------------------
@@ -402,7 +402,7 @@ void TestNote::tpc()
 
 void TestNote::tpcTranspose()
 {
-    MasterScore* score = readScore(DIR + "tpc-transpose.mscx");
+    MasterScore* score = readScore(NOTE_DATA_DIR + "tpc-transpose.mscx");
 
     score->startCmd();
     Measure* m = score->firstMeasure();
@@ -420,7 +420,7 @@ void TestNote::tpcTranspose()
     score->cmdConcertPitchChanged(true);
     score->endCmd();
 
-    QVERIFY(saveCompareScore(score, "tpc-transpose-test.mscx", DIR + "tpc-transpose-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "tpc-transpose-test.mscx", NOTE_DATA_DIR + "tpc-transpose-ref.mscx"));
 }
 
 //---------------------------------------------------------
@@ -430,7 +430,7 @@ void TestNote::tpcTranspose()
 
 void TestNote::tpcTranspose2()
 {
-    MasterScore* score = readScore(DIR + "tpc-transpose2.mscx");
+    MasterScore* score = readScore(NOTE_DATA_DIR + "tpc-transpose2.mscx");
 
     score->inputState().setTrack(0);
     score->inputState().setSegment(score->tick2segment(Fraction(0,1), false, SegmentType::ChordRest));
@@ -445,7 +445,7 @@ void TestNote::tpcTranspose2()
 
     printf("================\n");
 
-    QVERIFY(saveCompareScore(score, "tpc-transpose2-test.mscx", DIR + "tpc-transpose2-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "tpc-transpose2-test.mscx", NOTE_DATA_DIR + "tpc-transpose2-ref.mscx"));
 }
 
 //---------------------------------------------------------
@@ -454,7 +454,7 @@ void TestNote::tpcTranspose2()
 
 void TestNote::noteLimits()
 {
-    MasterScore* score = readScore(DIR + "empty.mscx");
+    MasterScore* score = readScore(NOTE_DATA_DIR + "empty.mscx");
 
     score->inputState().setTrack(0);
     score->inputState().setSegment(score->tick2segment(Fraction(0,1), false, SegmentType::ChordRest));
@@ -489,7 +489,7 @@ void TestNote::noteLimits()
         score->addInterval(8, nl);
         score->endCmd();
     }
-    QVERIFY(saveCompareScore(score, "notelimits-test.mscx", DIR + "notelimits-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "notelimits-test.mscx", NOTE_DATA_DIR + "notelimits-ref.mscx"));
 }
 
 void TestNote::tpcDegrees()
@@ -514,7 +514,7 @@ void TestNote::tpcDegrees()
 
 void TestNote::LongNoteAfterShort_183746()
 {
-    Score* score = readScore(DIR + "empty.mscx");
+    Score* score = readScore(NOTE_DATA_DIR + "empty.mscx");
     score->doLayout();
 
     score->inputState().setTrack(0);
