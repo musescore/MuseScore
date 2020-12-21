@@ -68,10 +68,13 @@ private:
     RawMeta doReadRawMeta(framework::XmlReader& xmlReader) const;
     QString formatFromXml(const std::string& xml) const;
 
-    QString format(const std::string &str) const;
+    QString format(const std::string& str) const;
     QString simplified(const QString& str) const;
     QString simplified(const std::string& str) const;
     std::string cutXmlTags(const std::string& str) const;
+
+    QString readText(framework::XmlReader& xmlReader) const;
+    QString readMetaTagText(framework::XmlReader& xmlReader) const;
 };
 }
 
