@@ -67,7 +67,7 @@ public:
 
     virtual qreal itemOpacityDisabled() const = 0;
 
-    virtual async::Notification themeChanged() = 0;
+    virtual async::Notification themeChanged() const = 0;
 };
 }
 

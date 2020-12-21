@@ -63,7 +63,6 @@ Rectangle {
 
             onFamilySelected: {
                 instrumentsModel.selectFamily(familyId)
-                Qt.callLater(selectFirstGroup)
             }
 
             onGroupSelected: {

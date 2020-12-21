@@ -151,26 +151,14 @@ void InstrumentPanelTreeModel::selectRow(const QModelIndex& rowIndex, const bool
 
 void InstrumentPanelTreeModel::addInstruments()
 {
-    QStringList params {
-        "initiallySelectedInstrumentIds=" + partsInstrumentIds().join(",")
-    };
-
-    QString uri = QString("musescore://instruments/select?%1").arg(params.join('&'));
-    mu::RetVal<Val> result = interactive()->open(uri.toStdString());
-
-    if (!result.ret) {
-        LOGE() << result.ret.toString();
+    auto mode = ISelectInstrumentsScenario::SelectInstrumentsMode::ShowCurrentInstruments;
+    RetVal<InstrumentList> selectedInstruments = selectInstrumentsScenario()->selectInstruments(mode);
+    if (!selectedInstruments.ret) {
+        LOGE() << selectedInstruments.ret.toString();
         return;
     }
 
-    QVariantList objList = result.val.toQVariant().toList();
-    InstrumentList instruments;
-
-    for (const QVariant& obj: objList) {
-        instruments << obj.value<Instrument>();
-    }
-
-    m_masterNotationParts->setInstruments(instruments);
+    m_masterNotationParts->setInstruments(selectedInstruments.val);
 
     emit isEmptyChanged();
 }
@@ -610,30 +598,6 @@ AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildAddStaffControlI
     auto result = new StaffControlTreeItem(m_masterNotationParts, this);
     result->setTitle(qtrc("instruments", "Add staff"));
     result->setPartId(partId);
-
-    return result;
-}
-
-IDList InstrumentPanelTreeModel::partsInstrumentIds() const
-{
-    if (!m_notationParts) {
-        return IDList();
-    }
-
-    async::NotifyList<const Part*> parts = m_notationParts->partList();
-
-    IDList result;
-    for (const Part* part: parts) {
-        async::NotifyList<Instrument> selectedInstruments = m_notationParts->instrumentList(part->id());
-
-        for (const Instrument& instrument: selectedInstruments) {
-            if (part->isDoublingInstrument(instrument.id)) {
-                continue;
-            }
-
-            result << instrument.id;
-        }
-    }
 
     return result;
 }

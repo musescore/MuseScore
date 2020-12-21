@@ -30,7 +30,7 @@
 #include "context/iglobalcontext.h"
 #include "async/asyncable.h"
 #include "instrumentstypes.h"
-#include "iinteractive.h"
+#include "iselectinstrumentscenario.h"
 
 namespace mu::instruments {
 class PartTreeItem;
@@ -40,7 +40,7 @@ class InstrumentPanelTreeModel : public QAbstractItemModel, public async::Asynca
     Q_OBJECT
 
     INJECT(instruments, context::IGlobalContext, context)
-    INJECT(instruments, framework::IInteractive, interactive)
+    INJECT(instruments, ISelectInstrumentsScenario, selectInstrumentsScenario)
 
     Q_PROPERTY(QItemSelectionModel * selectionModel READ selectionModel NOTIFY selectionChanged)
     Q_PROPERTY(bool isMovingUpAvailable READ isMovingUpAvailable NOTIFY isMovingUpAvailableChanged)
@@ -118,8 +118,6 @@ private:
     AbstractInstrumentPanelTreeItem* buildPartItem(const mu::notation::Part* part);
     AbstractInstrumentPanelTreeItem* buildStaffItem(const mu::notation::Staff* staff);
     AbstractInstrumentPanelTreeItem* buildAddStaffControlItem(const QString& partId);
-
-    notation::IDList partsInstrumentIds() const;
 
     AbstractInstrumentPanelTreeItem* m_rootItem = nullptr;
     QItemSelectionModel* m_selectionModel = nullptr;

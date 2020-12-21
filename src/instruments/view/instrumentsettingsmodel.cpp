@@ -48,25 +48,13 @@ void InstrumentSettingsModel::replaceInstrument()
         return;
     }
 
-    QStringList params {
-        "canSelectMultipleInstruments=false",
-        "currentInstrumentId=" + m_instrumentId,
-        "selectedInstrumentIds=" + partsInstrumentIds().join(",")
-    };
-
-    QString uri = QString("musescore://instruments/select?%1").arg(params.join('&'));
-    RetVal<Val> result = interactive()->open(uri.toStdString());
-
-    if (!result.ret) {
-        LOGE() << result.ret.toString();
+    RetVal<Instrument> selectedInstrument = selectInstrumentsScenario()->selectInstrument(m_instrumentId.toStdString());
+    if (!selectedInstrument.ret) {
+        LOGE() << selectedInstrument.ret.toString();
         return;
     }
 
-    Instrument newInstrument = result.val.toQVariant().value<Instrument>();
-    if (!newInstrument.isValid()) {
-        return;
-    }
-
+    Instrument newInstrument = selectedInstrument.val;
     parts()->replaceInstrument(m_instrumentId, m_partId, newInstrument);
 
     m_instrumentId = newInstrument.id;
@@ -128,29 +116,4 @@ INotationPartsPtr InstrumentSettingsModel::parts() const
     }
 
     return nullptr;
-}
-
-IDList InstrumentSettingsModel::partsInstrumentIds() const
-{
-    auto notationParts = parts();
-    if (!notationParts) {
-        return IDList();
-    }
-
-    async::NotifyList<const Part*> _parts = notationParts->partList();
-
-    IDList result;
-    for (const Part* part: _parts) {
-        async::NotifyList<Instrument> selectedInstruments = notationParts->instrumentList(part->id());
-
-        for (const Instrument& instrument: selectedInstruments) {
-            if (part->isDoublingInstrument(instrument.id)) {
-                continue;
-            }
-
-            result << instrument.id;
-        }
-    }
-
-    return result;
 }

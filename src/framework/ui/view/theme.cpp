@@ -261,7 +261,7 @@ qreal Theme::itemOpacityDisabled() const
     return currentThemeProperites().value(ITEM_OPACITY_DISABLED).toReal();
 }
 
-mu::async::Notification Theme::themeChanged()
+mu::async::Notification Theme::themeChanged() const
 {
     return m_themeChanged;
 }

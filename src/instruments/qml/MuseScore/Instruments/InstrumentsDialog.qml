@@ -66,12 +66,7 @@ QmlDialog {
                 onClicked: {
                     var selectedInstruments = instrumentsPage.selectedInstruments()
 
-                    if (root.canSelectMultipleInstruments) {
-                        root.ret = { errcode: 0, value: selectedInstruments }
-                    } else if (instrumentsPage.selectedInstruments().length > 0) {
-                        root.ret = { errcode: 0, value: selectedInstruments[0] }
-                    }
-
+                    root.ret = { errcode: 0, value: selectedInstruments }
                     root.hide()
                 }
             }
