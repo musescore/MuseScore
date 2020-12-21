@@ -388,14 +388,23 @@ int nextVisibleSpannedStaff(const BarLine* bl)
       int nstaves = score->nstaves();
       int staffIdx = bl->staffIdx();
       Segment* segment = bl->segment();
-      Measure* nm = bl->measure()->nextMeasure();
       for (int i = staffIdx + 1; i < nstaves; ++i) {
             Staff* s = score->staff(i);
-            if (s->part()->show() && (bl->measure()->visible(i) ||        // span bar line if measure is visible
-                 (segment && segment->isEndBarLineType() &&               // or if this is a measure's End Bar Line and...
-                   ((nm ? nm->visible(i) : false) && (nm ? nm->system() == bl->measure()->system() : false)    // ...next measure is visible in system
-                   || bl->measure()->isCutawayClef(i)))))                                                     // ...or measure has Courtesy Clef
-                  return i;
+            if (s->part()->show()) {
+                  // span/show bar line if this measure is visible 
+                  if (bl->measure()->visible(i))
+                        return i;
+                  // or if this is an endBarLine and:
+                  if (segment && segment->isEndBarLineType()) {
+                        // ...this measure contains a (cutaway) courtesy clef only
+                        if (bl->measure()->isCutawayClef(i))
+                              return i;
+                        // ...or next measure is both visible and in the same system
+                        Measure* nm = bl->measure()->nextMeasure();
+                        if ((nm ? nm->visible(i) : false) && (nm ? nm->system() == bl->measure()->system() : false))
+                              return i;
+                        }
+                  }
             BarLine* nbl = toBarLine(segment->element(i * VOICES));
             if (!nbl || !nbl->spanStaff())
                   break;
