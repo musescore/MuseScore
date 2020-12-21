@@ -137,7 +137,7 @@ void OSXAudioDriver::logError(const std::string message, OSStatus error)
     errorString[2] = (errorBigEndian >> 16) & 0xFF;
     errorString[3] = (errorBigEndian >> 24) & 0xFF;
     errorString[4] = '\0';
-    if (isprint(errorString[0]) && isprint(errorString[0]) && isprint(errorString[0]) && isprint(errorString[0])) {
+    if (isprint(errorString[0]) && isprint(errorString[1]) && isprint(errorString[2]) && isprint(errorString[3])) {
         LOGE() << message << errorString << "(" << error << ")";
     } else {
         LOGE() << message << error;
