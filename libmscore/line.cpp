@@ -1072,10 +1072,8 @@ SpannerSegment* SLine::layoutSystem(System* system)
                   }
                   break;
             case SpannerSegmentType::MIDDLE: {
-                  Measure* firstMeasure = system->firstMeasure();
-                  Segment* firstCRSeg   = firstMeasure->first(SegmentType::ChordRest);
-                  qreal x1              = (firstCRSeg ? firstCRSeg->pos().x() : 0) + firstMeasure->pos().x();
-                  qreal x2              = system->bbox().right();
+                  qreal x1 = system->firstNoteRestSegmentX(true);
+                  qreal x2 = system->bbox().right();
                   System* s;
                   QPointF p1 = linePos(Grip::START, &s);
                   lineSegm->setPos(QPointF(x1, p1.y()));
@@ -1083,19 +1081,9 @@ SpannerSegment* SLine::layoutSystem(System* system)
                   }
                   break;
             case SpannerSegmentType::END: {
-                  qreal offset = 0.0;
                   System* s;
                   QPointF p2 = linePos(Grip::END,   &s);
-                  Measure* firstMeas  = system->firstMeasure();
-                  Segment* firstCRSeg = firstMeas->first(SegmentType::ChordRest);
-                  if (anchor() == Anchor::SEGMENT || anchor() == Anchor::MEASURE) {
-                        // start line just after previous element (eg, key signature)
-                        firstCRSeg = firstCRSeg->prev();
-                        Element* e = firstCRSeg ? firstCRSeg->element(staffIdx() * VOICES) : nullptr;
-                        if (e)
-                              offset = e->width();
-                        }
-                  qreal x1  = (firstCRSeg ? firstCRSeg->pos().x() : 0) + firstMeas->pos().x() + offset;
+                  qreal x1 = system->firstNoteRestSegmentX(true);
                   qreal len = p2.x() - x1;
                   lineSegm->setPos(QPointF(p2.x() - len, p2.y()));
                   lineSegm->setPos2(QPointF(len, 0.0));
@@ -1177,9 +1165,6 @@ void SLine::layout()
             lineSegm->setTrack(track());       // DEBUG
             lineSegm->setSystem(system);
 
-            Measure* firstMeas = system->firstMeasure();
-            Segment* firstCRSeg = firstMeas->first(SegmentType::ChordRest);
-
             if (sysIdx1 == sysIdx2) {
                   // single segment
                   lineSegm->setSpannerSegmentType(SpannerSegmentType::SINGLE);
@@ -1201,27 +1186,15 @@ void SLine::layout()
             else if (i > 0 && i != sysIdx2) {
                   // middle segment
                   lineSegm->setSpannerSegmentType(SpannerSegmentType::MIDDLE);
-                  qreal x1 = (firstCRSeg ? firstCRSeg->pos().x() : 0) + firstMeas->pos().x();
+                  qreal x1 = system->firstNoteRestSegmentX(true);
                   qreal x2 = system->bbox().right();
                   lineSegm->setPos(QPointF(x1, p1.y()));
                   lineSegm->setPos2(QPointF(x2 - x1, 0.0));
                   }
             else if (i == sysIdx2) {
                   // end segment
-                  qreal offset = 0.0;
                   qreal minLen = 0.0;
-                  if (anchor() == Anchor::SEGMENT || anchor() == Anchor::MEASURE) {
-                        // start line just after previous element (eg, key signature)
-                        firstCRSeg = firstCRSeg->prev();
-                        Element* e = firstCRSeg ? firstCRSeg->element(staffIdx() * VOICES) : nullptr;
-                        if (e)
-                              offset = e->width();
-                        // enforcing a minimum length would be possible but inadvisable
-                        // the line length calculations are tuned well enough that this should not be needed
-                        //if (type() != ElementType::PEDAL)
-                        //      minLen = 1.0 * spatium();
-                        }
-                  qreal x1 = (firstCRSeg ? firstCRSeg->pos().x() : 0) + firstMeas->pos().x() + offset;
+                  qreal x1 = system->firstNoteRestSegmentX(true);
                   qreal len = qMax(minLen, p2.x() - x1);
                   lineSegm->setSpannerSegmentType(SpannerSegmentType::END);
                   lineSegm->setPos(QPointF(p2.x() - len, p2.y()));
