@@ -172,9 +172,9 @@ QString XmlReader::readElementText(ReadStringBehavior behavior)
     return m_reader->readElementText(_behavior);
 }
 
-bool XmlReader::hasError() const
+bool XmlReader::success() const
 {
-    return m_reader->hasError();
+    return !m_reader->hasError();
 }
 
 std::string XmlReader::error() const

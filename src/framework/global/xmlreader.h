@@ -70,7 +70,7 @@ public:
     int readInt();
     double readDouble();
 
-    bool hasError() const;
+    bool success() const;
     std::string error() const;
 
 private:

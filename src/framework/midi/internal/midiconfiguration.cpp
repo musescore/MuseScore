@@ -134,7 +134,7 @@ bool MidiConfiguration::readState(const io::path& path, SynthesizerState& state)
 {
     XmlReader xml(path);
 
-    while (xml.canRead() && !xml.hasError()) {
+    while (xml.canRead() && xml.success()) {
         XmlReader::TokenType token = xml.readNext();
         if (token == XmlReader::StartDocument) {
             continue;
@@ -168,11 +168,11 @@ bool MidiConfiguration::readState(const io::path& path, SynthesizerState& state)
         }
     }
 
-    if (xml.hasError()) {
+    if (!xml.success()) {
         LOGE() << "failed parse xml, error: " << xml.error() << ", path: " << path;
     }
 
-    return !xml.hasError();
+    return xml.success();
 }
 
 bool MidiConfiguration::writeState(const io::path& path, const SynthesizerState& state)
@@ -202,9 +202,9 @@ bool MidiConfiguration::writeState(const io::path& path, const SynthesizerState&
     xml.writeEndElement();
     xml.writeEndDocument();
 
-    if (xml.hasError()) {
+    if (!xml.success()) {
         LOGE() << "failed write xml";
     }
 
-    return !xml.hasError();
+    return xml.success();
 }

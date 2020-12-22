@@ -33,43 +33,45 @@ void ShortcutsRegister::load()
 
     io::path shortcutsPath = configuration()->shortcutsUserPath();
     bool ok = loadFromFile(m_shortcuts, shortcutsPath);
+
     if (!ok) {
         shortcutsPath = configuration()->shortcutsDefaultPath();
         ok = loadFromFile(m_shortcuts, shortcutsPath);
     }
 
     if (ok) {
-        expandStandartKeys(m_shortcuts);
+        expandStandardKeys(m_shortcuts);
     }
 }
 
-void ShortcutsRegister::expandStandartKeys(std::list<Shortcut>& shortcuts) const
+void ShortcutsRegister::expandStandardKeys(ShortcutList& shortcuts) const
 {
-    std::list<Shortcut> expanded;
-    std::list<Shortcut> notbonded;
-    for (Shortcut& sc : shortcuts) {
-        if (!sc.sequence.empty()) {
+    ShortcutList expanded;
+    ShortcutList notbonded;
+
+    for (Shortcut& shortcut : shortcuts) {
+        if (!shortcut.sequence.empty()) {
             continue;
         }
 
-        QList<QKeySequence> kslist = QKeySequence::keyBindings(sc.standartKey);
+        QList<QKeySequence> kslist = QKeySequence::keyBindings(shortcut.standardKey);
         if (kslist.isEmpty()) {
-            LOGW() << "not bind key sequence for standart key: " << sc.standartKey;
-            notbonded.push_back(sc);
+            LOGW() << "not bind key sequence for standard key: " << shortcut.standardKey;
+            notbonded.push_back(shortcut);
             continue;
         }
 
         const QKeySequence& first = kslist.first();
-        sc.sequence = first.toString().toStdString();
-        //LOGD() << "for standart key: " << sc.standartKey << ", sequence: " << sc.sequence;
+        shortcut.sequence = first.toString().toStdString();
+        //LOGD() << "for standard key: " << sc.standardKey << ", sequence: " << sc.sequence;
 
         //! NOTE If the keyBindings contains more than one result,
         //! these can be considered alternative shortcuts on the same platform for the given key.
         for (int i = 1; i < kslist.count(); ++i) {
             const QKeySequence& seq = kslist.at(i);
-            Shortcut esc = sc;
+            Shortcut esc = shortcut;
             esc.sequence = seq.toString().toStdString();
-            //LOGD() << "for standart key: " << esc.standartKey << ", alternative sequence: " << esc.sequence;
+            //LOGD() << "for standard key: " << esc.standardKey << ", alternative sequence: " << esc.sequence;
             expanded.push_back(esc);
         }
     }
@@ -88,48 +90,56 @@ void ShortcutsRegister::expandStandartKeys(std::list<Shortcut>& shortcuts) const
     }
 }
 
-bool ShortcutsRegister::loadFromFile(std::list<Shortcut>& shortcuts, const io::path& path) const
+bool ShortcutsRegister::loadFromFile(ShortcutList& shortcuts, const io::path& path) const
 {
-    XmlReader xml(path);
+    XmlReader reader(path);
 
-    while (xml.readNextStartElement()) {
-        if (xml.tagName() == "Shortcuts") {
-            while (xml.readNextStartElement()) {
-                if (xml.tagName() == "SC") {
-                    Shortcut shortcut;
-                    while (xml.readNextStartElement()) {
-                        std::string tag(xml.tagName());
-                        if (tag == "key") {
-                            shortcut.action = xml.readString();
-                        } else if (tag == "std") {
-                            shortcut.standartKey = QKeySequence::StandardKey(xml.readInt());
-                        } else if (tag == "seq") {
-                            shortcut.sequence = xml.readString();
-                        } else {
-                            xml.skipCurrentElement();
-                        }
-                    }
+    reader.readNextStartElement();
+    if (reader.tagName() != "Shortcuts") {
+        return false;
+    }
 
-                    if (shortcut.isValid()) {
-                        shortcuts.push_back(shortcut);
-                    }
-                } else {
-                    xml.skipCurrentElement();
-                }
-            }
-        } else {
-            xml.skipCurrentElement();
+    while (reader.readNextStartElement()) {
+        if (reader.tagName() != "SC") {
+            reader.skipCurrentElement();
+            continue;
+        }
+
+        Shortcut shortcut = readShortcut(reader);
+        if (shortcut.isValid()) {
+            shortcuts.push_back(shortcut);
         }
     }
 
-    if (xml.hasError()) {
-        LOGE() << "failed parse xml, error: " << xml.error() << ", path: " << path;
+    if (!reader.success()) {
+        LOGE() << "failed parse xml, error: " << reader.error() << ", path: " << path;
     }
 
-    return !xml.hasError();
+    return reader.success();
 }
 
-const std::list<Shortcut>& ShortcutsRegister::shortcuts() const
+Shortcut ShortcutsRegister::readShortcut(framework::XmlReader& reader) const
+{
+    Shortcut shortcut;
+
+    while (reader.readNextStartElement()) {
+        std::string tag(reader.tagName());
+
+        if (tag == "key") {
+            shortcut.action = reader.readString();
+        } else if (tag == "std") {
+            shortcut.standardKey = QKeySequence::StandardKey(reader.readInt());
+        } else if (tag == "seq") {
+            shortcut.sequence = reader.readString();
+        } else {
+            reader.skipCurrentElement();
+        }
+    }
+
+    return shortcut;
+}
+
+const ShortcutList& ShortcutsRegister::shortcuts() const
 {
     return m_shortcuts;
 }
@@ -145,9 +155,9 @@ Shortcut ShortcutsRegister::shortcut(const std::string& actionName) const
     return Shortcut();
 }
 
-std::list<Shortcut> ShortcutsRegister::shortcutsForSequence(const std::string& sequence) const
+ShortcutList ShortcutsRegister::shortcutsForSequence(const std::string& sequence) const
 {
-    std::list<Shortcut> list;
+    ShortcutList list;
     for (const Shortcut& sh : m_shortcuts) {
         if (sh.sequence == sequence) {
             list.push_back(sh);

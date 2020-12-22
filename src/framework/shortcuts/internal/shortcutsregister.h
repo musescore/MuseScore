@@ -19,11 +19,13 @@
 #ifndef MU_SHORTCUTS_SHORTCUTSREGISTER_H
 #define MU_SHORTCUTS_SHORTCUTSREGISTER_H
 
-#include <QString>
-
 #include "../ishortcutsregister.h"
 #include "modularity/ioc.h"
 #include "ishortcutsconfiguration.h"
+
+namespace mu::framework {
+class XmlReader;
+}
 
 namespace mu::shortcuts {
 class ShortcutsRegister : public IShortcutsRegister
@@ -31,21 +33,21 @@ class ShortcutsRegister : public IShortcutsRegister
     INJECT(shortcuts, IShortcutsConfiguration, configuration)
 
 public:
-
     ShortcutsRegister() = default;
 
     void load();
 
-    const std::list<Shortcut>& shortcuts() const override;
+    const ShortcutList& shortcuts() const override;
     Shortcut shortcut(const std::string& actionName) const override;
-    std::list<Shortcut> shortcutsForSequence(const std::string& sequence) const override;
+    ShortcutList shortcutsForSequence(const std::string& sequence) const override;
 
 private:
+    bool loadFromFile(ShortcutList& shortcuts, const io::path& path) const;
+    Shortcut readShortcut(framework::XmlReader& reader) const;
 
-    bool loadFromFile(std::list<Shortcut>& shortcuts, const io::path& path) const;
-    void expandStandartKeys(std::list<Shortcut>& shortcuts) const;
+    void expandStandardKeys(ShortcutList& shortcuts) const;
 
-    std::list<Shortcut> m_shortcuts;
+    ShortcutList m_shortcuts;
 };
 }
 
