@@ -2538,7 +2538,6 @@ void Score::insertPart(Part* part, int idx)
 
 void Score::removePart(Part* part)
 {
-    _parts.removeAt(_parts.indexOf(part));
     int index = _parts.indexOf(part);
 
     if (index == -1) {
@@ -2549,6 +2548,8 @@ void Score::removePart(Part* part)
             }
         }
     }
+
+    _parts.removeAt(index);
 
     if (_excerpt) {
         for (Part* excerptPart : _excerpt->parts()) {
@@ -2771,10 +2772,6 @@ void Score::cmdRemoveStaff(int staffIdx)
             if (lscore != this) {
                 lscore->undoRemoveStaff(staff);
                 s->score()->undo(new Unlink(staff));
-                if (staff->part()->nstaves() == 0) {
-                    int pIndex    = lscore->staffIdx(staff->part());
-                    lscore->undoRemovePart(staff->part(), pIndex);
-                }
             } else {   // linked staff in the same score
                 sameScoreLinkedStaff = staff;
             }

@@ -66,7 +66,7 @@ public:
     void moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode = InsertMode::Before) override;
 
     void appendDoublingInstrument(const instruments::Instrument& instrument, const ID& destinationPartId) override;
-    void appendStaff(const Staff* staff, const ID& destinationPartId) override;
+    void appendStaff(Staff* staff, const ID& destinationPartId) override;
 
     void cloneStaff(const ID& sourceStaffId, const ID& destinationStaffId) override;
 
