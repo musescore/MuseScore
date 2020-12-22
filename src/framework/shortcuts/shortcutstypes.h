@@ -20,24 +20,24 @@
 #define MU_SHORTCUTS_SHORTCUTSTYPES_H
 
 #include <string>
+#include <list>
 #include <QKeySequence>
 
-namespace mu {
-namespace shortcuts {
+namespace mu::shortcuts {
 struct Shortcut
 {
     std::string action;
     std::string sequence;
-    QKeySequence::StandardKey standartKey = QKeySequence::UnknownKey;
+    QKeySequence::StandardKey standardKey = QKeySequence::UnknownKey;
 
-    inline bool isValid() const
+    bool isValid() const
     {
-        return !action.empty() && (!sequence.empty() || standartKey != QKeySequence::UnknownKey);
+        return !action.empty() && (!sequence.empty() || standardKey != QKeySequence::UnknownKey);
     }
 
-    inline bool operator ==(const Shortcut& sc) const
+    bool operator ==(const Shortcut& sc) const
     {
-        return action == sc.action && sequence == sc.sequence && standartKey == sc.standartKey;
+        return action == sc.action && sequence == sc.sequence && standardKey == sc.standardKey;
     }
 };
 
@@ -47,6 +47,8 @@ enum class ShortcutContext {
     NotationActive,
     Playing
 };
+
+using ShortcutList = std::list<Shortcut>;
 }
-}
+
 #endif // MU_SHORTCUTS_SHORTCUTSTYPES_H

@@ -45,7 +45,7 @@ public:
     void writeCharacters(const std::string& text);
     void writeTextElement(std::string_view name, const std::string& text);
 
-    bool hasError() const;
+    bool success() const;
 
 private:
     void initWriter(IODevice* device);

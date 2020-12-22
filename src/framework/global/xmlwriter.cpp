@@ -90,7 +90,7 @@ void XmlWriter::writeTextElement(std::string_view name, const std::string& text)
     m_writer->writeTextElement(name.data(), QString::fromStdString(text));
 }
 
-bool XmlWriter::hasError() const
+bool XmlWriter::success() const
 {
-    return m_writer->hasError();
+    return !m_writer->hasError();
 }
