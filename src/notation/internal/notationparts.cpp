@@ -675,7 +675,7 @@ void NotationParts::appendDoublingInstrument(const mu::instruments::Instrument& 
     m_partsChanged.notify();
 }
 
-void NotationParts::appendStaff(const Staff* staff, const ID& destinationPartId)
+void NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
 {
     Part* destinationPart = part(destinationPartId);
     if (!destinationPart) {
@@ -689,12 +689,11 @@ void NotationParts::appendStaff(const Staff* staff, const ID& destinationPartId)
 
     int staffIndex = destinationPart->nstaves();
 
-    Staff* copy = staff->clone();
-    copy->setPart(destinationPart);
-    copy->setScore(score());
+    staff->setScore(score());
+    staff->setPart(destinationPart);
 
     startEdit();
-    insertStaff(copy, staffIndex);
+    insertStaff(staff, staffIndex);
     apply();
 
     Ms::Instrument* instrument = instrumentInfo.instrument;

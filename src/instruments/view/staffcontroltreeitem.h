@@ -36,7 +36,7 @@ public:
     void setPartId(const QString& id);
 
 private:
-    notation::Staff* lastStaff() const;
+    const notation::Part* part() const;
 
     QString m_partId;
 };
