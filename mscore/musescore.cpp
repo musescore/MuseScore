@@ -2365,12 +2365,7 @@ void MuseScore::selectScore(QAction* action)
             case QVariant::Map: {
                   QVariantMap pathMap = actionData.toMap();
 
-                  MasterScore* score = readScore(pathMap.value("filePath").toString());
-                  if (score) {
-                        setCurrentScoreView(appendScore(score));
-                        addRecentScore(score);
-                        writeSessionFile(false);
-                        }
+                  openScore(pathMap.value("filePath").toString());
                   break;
                   }
             default:
