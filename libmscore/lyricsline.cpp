@@ -233,7 +233,6 @@ SpannerSegment* LyricsLine::layoutSystem(System* system)
                   }
                   break;
             case SpannerSegmentType::END: {
-                  qreal offset = 0.0;
                   System* s;
                   QPointF p2 = linePos(Grip::END, &s);
                   bool leading = (anchor() == Anchor::SEGMENT || anchor() == Anchor::MEASURE);
