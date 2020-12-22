@@ -1049,11 +1049,13 @@ SpannerSegment* Slur::layoutSystem(System* system)
                         _up = !(startCR()->up());
 
                         Measure* m1 = startCR()->measure();
+#if 0
+                        // the following code was in place until 3.6,
+                        // to force "long" slurs (duration > one measure) above
+                        // but it's much too aggressive - one measure isn't necessarily long
                         if ((endCR()->tick() - startCR()->tick()) > m1->ticks()) // long slurs are always above
                               _up = true;
-                        else
-                              _up = !startCR()->up();
-
+#endif
                         if (c1 && c2 && isDirectionMixture(c1, c2) && !c1->isGrace()) {
                               // slurs go above if start and end note have different stem directions,
                               // but grace notes are exceptions
