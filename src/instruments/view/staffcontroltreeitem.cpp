@@ -28,22 +28,24 @@ StaffControlTreeItem::StaffControlTreeItem(INotationPartsPtr notationParts, QObj
 
 void StaffControlTreeItem::appendNewItem()
 {
-    Staff* lastStaff = this->lastStaff();
-    if (!lastStaff) {
+    const Part* part = this->part();
+    if (!part) {
         return;
     }
 
-    Staff* staff = lastStaff->clone();
-    staff->setId(Staff::makeId());
+    int lastStaffIndex = part->nstaves();
+
+    Staff* staff = new Staff();
+    staff->setDefaultClefType(part->instrument()->clefType(lastStaffIndex));
 
     notationParts()->appendStaff(staff, m_partId);
 }
 
-Staff* StaffControlTreeItem::lastStaff() const
+const Part* StaffControlTreeItem::part() const
 {
     for (const Part* part : notationParts()->partList()) {
         if (part->id() == m_partId) {
-            return part->staves()->last();
+            return part;
         }
     }
 
