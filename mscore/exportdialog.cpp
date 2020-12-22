@@ -446,10 +446,10 @@ void ExportDialog::accept()
       QString name = QString("%1/%2").arg(saveDirectory, cs->masterScore()->fileInfo()->completeBaseName());
       if (oneScore) {
             Score* score = scores.first();
-            name.append(QString(" - %1").arg(score->isMaster() ? tr("Full Score") : score->title()));
+            name.append(QString("%1").arg(score->isMaster() ? "" : "-" + score->title()));
             }
       else if (singlePDF)
-            name.append(QString(" - %1").arg(containsMasterScore ? tr("Score and Parts") : tr("Parts")));
+            name.append(QString("-%1").arg(containsMasterScore ? tr("Score_and_Parts") : tr("Parts")));
 
 #ifdef Q_OS_WIN
       if (QOperatingSystemVersion::current() > QOperatingSystemVersion(QOperatingSystemVersion::Windows, 5, 1))    // XP
@@ -485,10 +485,10 @@ void ExportDialog::accept()
             SaveReplacePolicy replacePolicy = SaveReplacePolicy::NO_CHOICE;
 
             for (Score* score : scores) {
-                  QString definitiveFilename = QString("%1/%2 - %3.%4")
+                  QString definitiveFilename = QString("%1/%2%3.%4")
                         .arg(fileinfo.absolutePath(),
                              fileinfo.completeBaseName(),
-                             score->isMaster() ? tr("Full Score") : score->title(),
+                             score->isMaster() ? "" : "-" + score->title(),
                              suffix);
                   if (saveFormat != "png" && saveFormat != "svg" && QFileInfo(definitiveFilename).exists()) {
                         // Png and Svg export functions change the filename, so they
@@ -519,8 +519,8 @@ void ExportDialog::accept()
                         success = false;
                   }
             }
-      if (success)
-            QMessageBox::information(this, tr("Export"), tr("Export was successful."));
+      //if (success)
+      //      QMessageBox::information(this, tr("Export"), tr("Export was successful."));
       }
 
 //---------------------------------------------------------
