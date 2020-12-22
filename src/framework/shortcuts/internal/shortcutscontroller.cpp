@@ -27,7 +27,7 @@ void ShortcutsController::activate(const std::string& sequence)
 {
     LOGD() << "activate: " << sequence;
 
-    std::list<Shortcut> shortcuts = shortcutsRegister()->shortcutsForSequence(sequence);
+    ShortcutList shortcuts = shortcutsRegister()->shortcutsForSequence(sequence);
     IF_ASSERT_FAILED(!shortcuts.empty()) {
         return;
     }
