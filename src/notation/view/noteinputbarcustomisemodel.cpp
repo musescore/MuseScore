@@ -111,7 +111,7 @@ static size_t indexOf(const ActionList& actions, const ActionName& actionName)
         }
     }
 
-    return -1;
+    return static_cast<size_t>(-1);
 }
 
 void NoteInputBarCustomiseModel::load()
@@ -534,8 +534,8 @@ ActionNameList NoteInputBarCustomiseModel::defaultActions() const
 
         result.push_back(actionName);
 
-        int indexInDefaultActions = indexOf(allNoteInputActions, actionName);
-        if (indexInDefaultActions != -1) {
+        size_t indexInDefaultActions = indexOf(allNoteInputActions, actionName);
+        if (indexInDefaultActions != static_cast<size_t>(-1)) {
             appendRelatedActions(indexInDefaultActions + 1);
         }
     }
