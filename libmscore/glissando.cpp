@@ -296,8 +296,12 @@ void Glissando::layout()
             || cr2->noteType() == NoteType::GRACE16_AFTER || cr2->noteType() == NoteType::GRACE32_AFTER)
          // also ignore if cr1 is a child of cr2, which means cr1 is a grace-before of cr2
          && !(cr1->parent() == cr2)) {
-            segm2->rxpos() -= GLISS_STARTOFSYSTEM_WIDTH * _spatium;
-            segm2->rxpos2()+= GLISS_STARTOFSYSTEM_WIDTH * _spatium;
+            // in theory we should be reserving space for the gliss prior to the first note of a system
+            // but in practice we are not (and would be difficult to get right in current layout algorithms)
+            // so, a compromise is to at least use the available space to the left -
+            // the default layout for lines left a margin after the header
+            segm2->rxpos() -= _spatium;
+            segm2->rxpos2()+= _spatium;
             }
 
       // INTERPOLATION OF INTERMEDIATE POINTS
