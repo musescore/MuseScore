@@ -1479,6 +1479,8 @@ inline Fraction Score::pos(POS pos) const              { return _masterScore->po
 inline void Score::setPos(POS pos, Fraction tick)      { _masterScore->setPos(pos, tick);        }
 
 extern MasterScore* gscore;
+extern MStyle styleDefaults114();
+extern Ms::MStyle styleDefaults206();
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(LayoutFlags);
 
