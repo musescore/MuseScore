@@ -9425,12 +9425,10 @@ bool LyricChunkParse::parse()
 
         if (info.lyricSize_ > 0) {
             // lyric
-            if (info.lyricSize_ > 0) {
-                if (!readBuffer(placeHolder, info.lyricSize_)) {
-                    return false;
-                }
-                info.lyric_ = ove_->getCodecString(placeHolder.fixedSizeBufferToStrByteArray());
+            if (!readBuffer(placeHolder, info.lyricSize_)) {
+                return false;
             }
+            info.lyric_ = ove_->getCodecString(placeHolder.fixedSizeBufferToStrByteArray());
 
             if (!jump(4)) {
                 return false;
