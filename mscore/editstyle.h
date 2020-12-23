@@ -75,7 +75,7 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
 
       void adjustPagesStackSize(int currentPageIndex);
 
-      static const std::map<ElementType, EditStylePage> PAGES;
+      static EditStylePage pageForElement(Element*);
 
    private slots:
       void selectChordDescriptionFile();

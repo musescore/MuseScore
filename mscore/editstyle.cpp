@@ -780,120 +780,173 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       MuseScore::restoreGeometry(this);
       }
 
+//---------------------------------------------------------
+//   adjustPagesStackSize
+//---------------------------------------------------------
+
 void EditStyle::adjustPagesStackSize(int currentPageIndex)
-{
-    QSize preferredSize = pageStack->widget(currentPageIndex)->sizeHint();
-    pageStack->setMinimumSize(preferredSize);
+      {
+      QSize preferredSize = pageStack->widget(currentPageIndex)->sizeHint();
+      pageStack->setMinimumSize(preferredSize);
 
-    connect(pageStack, &QStackedWidget::currentChanged, [this](int currentIndex) {
-        QWidget* currentPage = pageStack->widget(currentIndex);
-        if (!currentPage) {
-            return;
-        }
+      connect(pageStack, &QStackedWidget::currentChanged, [this](int currentIndex) {
+            QWidget* currentPage = pageStack->widget(currentIndex);
+            if (!currentPage)
+                  return;
 
-        pageStack->setMinimumSize(currentPage->sizeHint());
+            pageStack->setMinimumSize(currentPage->sizeHint());
 
-        if (scrollArea) {
-            scrollArea->ensureVisible(0, 0);
-        }
-    });
-}
+            if (scrollArea)
+                  scrollArea->ensureVisible(0, 0);
+            });
+      }
 
 //---------------------------------------------------------
-//   PAGES
-///   This is a map of element type to pages, to allow the creation of a 'Style...'
+//   MuseScore::showStyleDialog
+///   Opens the Style Dialog, and if an element `e` is specified, switches to the
+///   page related to the element.
+//---------------------------------------------------------
+
+void MuseScore::showStyleDialog(Element* e)
+      {
+      if (!_styleDlg)
+            _styleDlg = new EditStyle { cs, this };
+      else
+            _styleDlg->setScore(cs);
+      
+      if (e)
+            _styleDlg->gotoElement(e);
+      
+      if (_styleDlg->isVisible()) {
+            _styleDlg->raise();
+            _styleDlg->activateWindow();
+            }
+      else
+            _styleDlg->show();
+      }
+
+//---------------------------------------------------------
+//   pageForElement
+///   Returns the page related to the element `e`, to allow the creation of a 'Style...'
 ///   menu for every possible element on the score.
 //---------------------------------------------------------
 
-const std::map<ElementType, EditStylePage> EditStyle::PAGES = {
-      { ElementType::SCORE,               &EditStyle::PageScore    },
-      { ElementType::PAGE,                &EditStyle::PagePage     },
-      { ElementType::MEASURE_NUMBER,      &EditStyle::PageMeasureNumbers },
-      { ElementType::MMREST_RANGE,        &EditStyle::PageMeasureNumbers },
-      { ElementType::BRACKET,             &EditStyle::PageSystem   },
-      { ElementType::BRACKET_ITEM,        &EditStyle::PageSystem   },
-      { ElementType::CLEF,                &EditStyle::PageClefs    },
-      { ElementType::KEYSIG,              &EditStyle::PageAccidentals },
-      { ElementType::MEASURE,             &EditStyle::PageMeasure  },
-      { ElementType::REST,                &EditStyle::PageMeasure  },
-      { ElementType::BAR_LINE,            &EditStyle::PageBarlines },
-      { ElementType::NOTE,                &EditStyle::PageNotes    },
-      { ElementType::CHORD,               &EditStyle::PageNotes    },
-      { ElementType::ACCIDENTAL,          &EditStyle::PageNotes    },
-      { ElementType::STEM,                &EditStyle::PageNotes    },
-      { ElementType::STEM_SLASH,          &EditStyle::PageNotes    },
-      { ElementType::LEDGER_LINE,         &EditStyle::PageNotes    },
-      { ElementType::BEAM,                &EditStyle::PageBeams    },
-      { ElementType::TUPLET,              &EditStyle::PageTuplets  },
-      { ElementType::ARPEGGIO,            &EditStyle::PageArpeggios },
-      { ElementType::SLUR,                &EditStyle::PageSlursTies },
-      { ElementType::SLUR_SEGMENT,        &EditStyle::PageSlursTies },
-      { ElementType::TIE,                 &EditStyle::PageSlursTies },
-      { ElementType::TIE_SEGMENT,         &EditStyle::PageSlursTies },
-      { ElementType::HAIRPIN,             &EditStyle::PageHairpins },
-      { ElementType::HAIRPIN_SEGMENT,     &EditStyle::PageHairpins },
-      { ElementType::VOLTA,               &EditStyle::PageVolta    },
-      { ElementType::VOLTA_SEGMENT,       &EditStyle::PageVolta    },
-      { ElementType::OTTAVA,              &EditStyle::PageOttava   },
-      { ElementType::OTTAVA_SEGMENT,      &EditStyle::PageOttava   },
-      { ElementType::PEDAL,               &EditStyle::PagePedal    },
-      { ElementType::PEDAL_SEGMENT,       &EditStyle::PagePedal    },
-      { ElementType::TRILL,               &EditStyle::PageTrill    },
-      { ElementType::TRILL_SEGMENT,       &EditStyle::PageTrill    },
-      { ElementType::VIBRATO,             &EditStyle::PageVibrato  },
-      { ElementType::VIBRATO_SEGMENT,     &EditStyle::PageVibrato  },
-      { ElementType::BEND,                &EditStyle::PageBend     },
-      { ElementType::TEXTLINE,            &EditStyle::PageTextLine },
-      { ElementType::TEXTLINE_SEGMENT,    &EditStyle::PageTextLine },
-      { ElementType::ARTICULATION,        &EditStyle::PageArticulationsOrnaments },
-      { ElementType::FERMATA,             &EditStyle::PageFermatas },
-      { ElementType::STAFF_TEXT,          &EditStyle::PageStaffText },
-      { ElementType::TEMPO_TEXT,          &EditStyle::PageTempoText },
-      { ElementType::LYRICS,              &EditStyle::PageLyrics   },
-      { ElementType::LYRICSLINE,          &EditStyle::PageLyrics   },
-      { ElementType::LYRICSLINE_SEGMENT,  &EditStyle::PageLyrics   },
-      { ElementType::DYNAMIC,             &EditStyle::PageDynamics },
-      { ElementType::REHEARSAL_MARK,      &EditStyle::PageRehearsalMarks },
-      { ElementType::FIGURED_BASS,        &EditStyle::PageFiguredBass },
-      { ElementType::HARMONY,             &EditStyle::PageChordSymbols },
-      { ElementType::FRET_DIAGRAM,        &EditStyle::PageFretboardDiagrams },
-      };
-
-//---------------------------------------------------------
-//   gotoElement
-///   switch the page to the one related to the element `e`
-//---------------------------------------------------------
-
-void EditStyle::gotoElement(Element* e)
+EditStylePage EditStyle::pageForElement(Element* e)
       {
-      const ElementType& t = e->type();
-      const auto i = PAGES.find(t);
-      if (i != PAGES.cend()) {
-            QWidget* page = this->*(i->second);
-            setPage(pageStack->indexOf(page));
+      switch (e->type()) {
+            case ElementType::SCORE:
+                  return &EditStyle::PageScore;
+            case ElementType::PAGE:
+                  return &EditStyle::PagePage;
+            case ElementType::TEXT:
+                  if (toText(e)->tid() == Tid::FOOTER || toText(e)->tid() == Tid::HEADER)
+                        return &EditStyle::PageHeaderFooter;
+                  return nullptr;
+            case ElementType::MEASURE_NUMBER:
+            case ElementType::MMREST_RANGE:
+                  return &EditStyle::PageMeasureNumbers;
+            case ElementType::BRACKET:
+            case ElementType::BRACKET_ITEM:
+            case ElementType::SYSTEM_DIVIDER:
+                  return &EditStyle::PageSystem;
+            case ElementType::CLEF:
+                  return &EditStyle::PageClefs;
+            case ElementType::KEYSIG:
+                  return &EditStyle::PageAccidentals;
+            case ElementType::MEASURE:
+            case ElementType::REST:
+                  return &EditStyle::PageMeasure;
+            case ElementType::BAR_LINE:
+                  return &EditStyle::PageBarlines;
+            case ElementType::NOTE:
+            case ElementType::CHORD:
+            case ElementType::ACCIDENTAL:
+            case ElementType::STEM:
+            case ElementType::STEM_SLASH:
+            case ElementType::LEDGER_LINE:
+                  return &EditStyle::PageNotes;
+            case ElementType::BEAM:
+                  return &EditStyle::PageBeams;
+            case ElementType::TUPLET:
+                  return &EditStyle::PageTuplets;
+            case ElementType::ARPEGGIO:
+                  return &EditStyle::PageArpeggios;
+            case ElementType::SLUR:
+            case ElementType::SLUR_SEGMENT:
+            case ElementType::TIE:
+            case ElementType::TIE_SEGMENT:
+                  return &EditStyle::PageSlursTies;
+            case ElementType::HAIRPIN:
+            case ElementType::HAIRPIN_SEGMENT:
+                  return &EditStyle::PageHairpins;
+            case ElementType::VOLTA:
+            case ElementType::VOLTA_SEGMENT:
+                  return &EditStyle::PageVolta;
+            case ElementType::OTTAVA:
+            case ElementType::OTTAVA_SEGMENT:
+                  return &EditStyle::PageOttava;
+            case ElementType::PEDAL:
+            case ElementType::PEDAL_SEGMENT:
+                  return &EditStyle::PagePedal;
+            case ElementType::TRILL:
+            case ElementType::TRILL_SEGMENT:
+                  return &EditStyle::PageTrill;
+            case ElementType::VIBRATO:
+            case ElementType::VIBRATO_SEGMENT:
+                  return &EditStyle::PageVibrato;
+            case ElementType::BEND:
+                  return &EditStyle::PageBend;
+            case ElementType::TEXTLINE:
+            case ElementType::TEXTLINE_SEGMENT:
+                  return &EditStyle::PageTextLine;
+            case ElementType::ARTICULATION:
+                  return &EditStyle::PageArticulationsOrnaments;
+            case ElementType::FERMATA:
+                  return &EditStyle::PageFermatas;
+            case ElementType::STAFF_TEXT:
+                  return &EditStyle::PageStaffText;
+            case ElementType::TEMPO_TEXT:
+                  return &EditStyle::PageTempoText;
+            case ElementType::LYRICS:
+            case ElementType::LYRICSLINE:
+            case ElementType::LYRICSLINE_SEGMENT:
+                  return &EditStyle::PageLyrics;
+            case ElementType::DYNAMIC:
+                  return &EditStyle::PageDynamics;
+            case ElementType::REHEARSAL_MARK:
+                  return &EditStyle::PageRehearsalMarks;
+            case ElementType::FIGURED_BASS:
+                  return &EditStyle::PageFiguredBass;
+            case ElementType::HARMONY:
+                  return &EditStyle::PageChordSymbols;
+            case ElementType::FRET_DIAGRAM:
+                  return &EditStyle::PageFretboardDiagrams;
+            default:
+                  return nullptr;
             }
       }
 
 //---------------------------------------------------------
-//   gotoElement
-///   used to go to the correct page when double-clicking on a header/footer
-//---------------------------------------------------------
-
-void EditStyle::gotoHeaderFooterPage()
-      {
-      setPage(pageStack->indexOf(PageHeaderFooter));
-      }
-
-//---------------------------------------------------------
 //   elementHasPage
-///   check if an element has a style page related to it
+///   check if the element `e` has a style page related to it
 //---------------------------------------------------------
 
 bool EditStyle::elementHasPage(Element* e)
       {
-      const ElementType& t = e->type();
-      const auto i = PAGES.find(t);
-      return i != PAGES.cend();
+      return (pageForElement(e) != nullptr);
+      }
+
+//---------------------------------------------------------
+//   gotoElement
+///   switch to the page related to the element `e`
+//---------------------------------------------------------
+
+void EditStyle::gotoElement(Element* e)
+      {
+      if (auto pagePointer = pageForElement(e)) {
+            if (QWidget* page = this->*pagePointer)
+                  pageStack->setCurrentWidget(page);
+            }
       }
 
 //---------------------------------------------------------
