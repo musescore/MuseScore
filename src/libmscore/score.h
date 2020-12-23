@@ -577,8 +577,6 @@ private:
     void deleteAnnotationsFromRange(Segment* segStart, Segment* segEnd, int trackStart, int trackEnd,const SelectionFilter& filter);
     ChordRest* deleteRange(Segment* segStart, Segment* segEnd, int trackStart, int trackEnd,const SelectionFilter& filter);
 
-    void update(bool resetCmdState);
-
 protected:
     int _fileDivision;   ///< division of current loading *.msc file
     LayoutMode _layoutMode { LayoutMode::PAGE };
@@ -795,7 +793,7 @@ public:
 
     void startCmd();                            // start undoable command
     void endCmd(const bool isCmdFromInspector = false, bool rollback = false);       // end undoable command
-    void update() { update(true); }
+    void update(bool resetCmdState = true);
     void undoRedo(bool undo, EditData*);
 
     void cmdRemoveTimeSig(TimeSig*);

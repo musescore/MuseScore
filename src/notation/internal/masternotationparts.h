@@ -59,6 +59,9 @@ public:
     void replaceInstrument(const ID& instrumentId, const ID& fromPartId, const instruments::Instrument& newInstrument) override;
 
 private:
+    void startEdit();
+    void apply();
+
     std::vector<INotationPartsPtr> excerptsParts() const;
 
     ExcerptNotationList m_excerpts;
