@@ -1952,6 +1952,10 @@ void NotationInteraction::swapSelection()
 
 void NotationInteraction::deleteSelection()
 {
+    if (selection()->isNone()) {
+        return;
+    }
+
     startEdit();
     score()->cmdDeleteSelection();
     apply();
@@ -1961,6 +1965,10 @@ void NotationInteraction::deleteSelection()
 
 void NotationInteraction::flipSelection()
 {
+    if (selection()->isNone()) {
+        return;
+    }
+
     startEdit();
     score()->cmdFlip();
     apply();
@@ -1983,6 +1991,10 @@ void NotationInteraction::addTieToSelection()
 
 void NotationInteraction::addSlurToSelection()
 {
+    if (selection()->isNone()) {
+        return;
+    }
+
     startEdit();
     doAddSlur();
     apply();
@@ -1992,6 +2004,10 @@ void NotationInteraction::addSlurToSelection()
 
 void NotationInteraction::addOttavaToSelection(OttavaType type)
 {
+    if (selection()->isNone()) {
+        return;
+    }
+
     startEdit();
     score()->cmdAddOttava(type);
     apply();
@@ -2001,6 +2017,10 @@ void NotationInteraction::addOttavaToSelection(OttavaType type)
 
 void NotationInteraction::addHairpinToSelection(HairpinType type)
 {
+    if (selection()->isNone()) {
+        return;
+    }
+
     startEdit();
     score()->addHairpin(type);
     apply();
@@ -2010,6 +2030,10 @@ void NotationInteraction::addHairpinToSelection(HairpinType type)
 
 void NotationInteraction::addAccidentalToSelection(AccidentalType type)
 {
+    if (selection()->isNone()) {
+        return;
+    }
+
     Ms::EditData editData;
     editData.view = new ScoreCallbacks();
 
@@ -2022,6 +2046,10 @@ void NotationInteraction::addAccidentalToSelection(AccidentalType type)
 
 void NotationInteraction::changeSelectedNotesArticulation(SymbolId articulationSymbolId)
 {
+    if (selection()->isNone()) {
+        return;
+    }
+
     std::vector<Ms::Note*> notes = score()->selection().noteList();
 
     auto updateMode = notesHaveActiculation(notes, articulationSymbolId)
@@ -2046,6 +2074,10 @@ void NotationInteraction::changeSelectedNotesArticulation(SymbolId articulationS
 
 void NotationInteraction::addTupletToSelectedChords(const TupletOptions& options)
 {
+    if (selection()->isNone()) {
+        return;
+    }
+
     startEdit();
     for (ChordRest* chordRest : score()->getSelectedChordRests()) {
         if (!chordRest->isGrace()) {
@@ -2083,6 +2115,10 @@ void NotationInteraction::transpose(const TransposeOptions& options)
 
 void NotationInteraction::swapVoices(int voiceIndex1, int voiceIndex2)
 {
+    if (selection()->isNone()) {
+        return;
+    }
+
     if (voiceIndex1 == voiceIndex2) {
         return;
     }
@@ -2131,6 +2167,10 @@ void NotationInteraction::addIntervalToSelectedNotes(int interval)
 
 void NotationInteraction::changeSelectedNotesVoice(int voiceIndex)
 {
+    if (selection()->isNone()) {
+        return;
+    }
+
     if (!isVoiceIndexValid(voiceIndex)) {
         return;
     }
@@ -2144,6 +2184,10 @@ void NotationInteraction::changeSelectedNotesVoice(int voiceIndex)
 
 void NotationInteraction::addAnchoredLineToSelectedNotes()
 {
+    if (selection()->isNone()) {
+        return;
+    }
+
     startEdit();
     score()->addNoteLine();
     apply();
