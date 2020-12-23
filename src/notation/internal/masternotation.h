@@ -67,7 +67,7 @@ private:
 
     void doSetExcerpts(ExcerptNotationList excerpts);
 
-    void initExcerpts();
+    void initExcerpts(const QList<Ms::Excerpt*>& scoreExcerpts = QList<Ms::Excerpt*>());
     void initExcerpt(Ms::Excerpt* excerpt);
 
     void createNonexistentExcerpts(const ExcerptNotationList& newExcerpts);
