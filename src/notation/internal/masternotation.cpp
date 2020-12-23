@@ -50,11 +50,6 @@ MasterNotation::MasterNotation()
     : Notation()
 {
     m_parts = std::make_shared<MasterNotationParts>(this, interaction(), undoStack());
-
-    m_parts->partsChanged().onNotify(this, [this]() {
-        notifyAboutNotationChanged();
-        updateExcerpts();
-    });
 }
 
 Meta MasterNotation::metaInfo() const
@@ -572,6 +567,11 @@ void MasterNotation::initExcerpts()
     }
 
     doSetExcerpts(excerpts);
+
+    m_parts->partsChanged().onNotify(this, [this]() {
+        notifyAboutNotationChanged();
+        updateExcerpts();
+    });
 }
 
 void MasterNotation::doSetExcerpts(ExcerptNotationList excerpts)

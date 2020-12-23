@@ -39,6 +39,19 @@ void MasterNotationParts::startEdit()
 void MasterNotationParts::apply()
 {
     undoStack()->commitChanges();
+    partsChanged().notify();
+}
+
+void MasterNotationParts::updateScore()
+{
+    score()->update(false);
+}
+
+void MasterNotationParts::setInstruments(const instruments::InstrumentList& instruments)
+{
+    startEdit();
+    NotationParts::setInstruments(instruments);
+    apply();
 }
 
 void MasterNotationParts::setInstrumentName(const ID& instrumentId, const ID& fromPartId, const QString& name)

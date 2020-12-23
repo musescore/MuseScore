@@ -75,11 +75,12 @@ public:
     async::Notification partsChanged() const override;
 
 protected:
+    Ms::Score* score() const;
     INotationUndoStackPtr undoStack() const;
 
-private:
-    void updateScore();
+    virtual void updateScore();
 
+private:
     struct InstrumentInfo
     {
         Ms::Fraction fraction = { -1, -1 };
@@ -109,7 +110,6 @@ private:
         }
     };
 
-    Ms::Score* score() const;
     Ms::MasterScore* masterScore() const;
 
     Ms::ChordRest* selectedChord() const;
