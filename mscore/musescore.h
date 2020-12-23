@@ -635,8 +635,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void addRecentScore(Score*);
       QFileDialog* saveAsDialog();
       QFileDialog* saveCopyDialog();
-      EditStyle* styleDlg() { return _styleDlg; }
-      void setStyleDlg(EditStyle* es) { _styleDlg = es; }
+      void showStyleDialog(Element* e = nullptr);
 
       QString lastSaveCopyDirectory;
       QString lastSaveCopyFormat;
