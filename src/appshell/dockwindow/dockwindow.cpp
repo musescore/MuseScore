@@ -215,13 +215,13 @@ void DockWindow::showPage(DockPage* page)
     }
 
     auto panelByName = [](const QList<DockPanel*> panels, const QString& objectName) -> DockPanel* {
-                           for (DockPanel* panel : panels) {
-                               if (panel->objectName() == objectName) {
-                                   return panel;
-                               }
-                           }
-                           return nullptr;
-                       };
+        for (DockPanel* panel : panels) {
+            if (panel->objectName() == objectName) {
+                return panel;
+            }
+        }
+        return nullptr;
+    };
 
     for (DockPanel* panel : panels) {
         DockPanel::Widget dw = panel->widget();

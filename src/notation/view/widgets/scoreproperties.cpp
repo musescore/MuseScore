@@ -296,9 +296,9 @@ void ScorePropertiesDialog::accept()
 void ScorePropertiesDialog::closeEvent(QCloseEvent* event)
 {
     auto apply = [this, event]() {
-                     WidgetStateStore::saveGeometry(this);
-                     event->accept();
-                 };
+        WidgetStateStore::saveGeometry(this);
+        event->accept();
+    };
 
     if (!m_dirty) {
         apply();

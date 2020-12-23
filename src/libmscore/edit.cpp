@@ -1194,23 +1194,23 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
 
     auto getStaffIdxRange
         = [this, local, staffIdx](const Score* score) -> std::pair<int /*start*/, int /*end*/> {
-              int startStaffIdx, endStaffIdx;
-              if (local) {
-                  if (score == this) {
-                      startStaffIdx = staffIdx;
-                      endStaffIdx = startStaffIdx + 1;
-                  } else {
-                      // TODO: get index for this score
-                      qDebug("cmdAddTimeSig: unable to write local time signature change to linked score");
-                      startStaffIdx = 0;
-                      endStaffIdx = 0;
-                  }
-              } else {
-                  startStaffIdx = 0;
-                  endStaffIdx = score->nstaves();
-              }
-              return std::make_pair(startStaffIdx, endStaffIdx);
-          };
+        int startStaffIdx, endStaffIdx;
+        if (local) {
+            if (score == this) {
+                startStaffIdx = staffIdx;
+                endStaffIdx = startStaffIdx + 1;
+            } else {
+                // TODO: get index for this score
+                qDebug("cmdAddTimeSig: unable to write local time signature change to linked score");
+                startStaffIdx = 0;
+                endStaffIdx = 0;
+            }
+        } else {
+            startStaffIdx = 0;
+            endStaffIdx = score->nstaves();
+        }
+        return std::make_pair(startStaffIdx, endStaffIdx);
+    };
 
     if (ots && ots->sig() == ns && ots->stretch() == ts->stretch()) {
         //
@@ -2026,11 +2026,11 @@ void Score::cmdFlip()
 
     std::set<const Element*> alreadyFlippedElements;
     auto flipOnce = [&alreadyFlippedElements](const Element* element, std::function<void()> flipFunction) -> void {
-                        if (alreadyFlippedElements.count(element) == 0) {
-                            alreadyFlippedElements.insert(element);
-                            flipFunction();
-                        }
-                    };
+        if (alreadyFlippedElements.count(element) == 0) {
+            alreadyFlippedElements.insert(element);
+            flipFunction();
+        }
+    };
     for (Element* e : el) {
         if (e->isNote() || e->isStem() || e->isHook()) {
             Chord* chord = nullptr;
@@ -2051,59 +2051,59 @@ void Score::cmdFlip()
                 }
             } else {
                 flipOnce(chord, [this, chord]() {
-                        Direction dir = chord->up() ? Direction::DOWN : Direction::UP;
-                        chord->undoChangeProperty(Pid::STEM_DIRECTION, QVariant::fromValue<Direction>(dir),
-                                                  propertyFlags(Pid::STEM_DIRECTION));
-                    });
+                    Direction dir = chord->up() ? Direction::DOWN : Direction::UP;
+                    chord->undoChangeProperty(Pid::STEM_DIRECTION, QVariant::fromValue<Direction>(dir),
+                                              propertyFlags(Pid::STEM_DIRECTION));
+                });
             }
         }
 
         if (e->isBeam()) {
             auto beam = toBeam(e);
             flipOnce(beam, [beam]() {
-                    Direction dir = beam->up() ? Direction::DOWN : Direction::UP;
-                    beam->undoChangeProperty(Pid::STEM_DIRECTION, QVariant::fromValue<Direction>(dir));
-                });
+                Direction dir = beam->up() ? Direction::DOWN : Direction::UP;
+                beam->undoChangeProperty(Pid::STEM_DIRECTION, QVariant::fromValue<Direction>(dir));
+            });
         } else if (e->isSlurTieSegment()) {
             auto slurTieSegment = toSlurTieSegment(e)->slurTie();
             flipOnce(slurTieSegment, [slurTieSegment]() {
-                    Direction dir = slurTieSegment->up() ? Direction::DOWN : Direction::UP;
-                    slurTieSegment->undoChangeProperty(Pid::SLUR_DIRECTION, QVariant::fromValue<Direction>(dir));
-                });
+                Direction dir = slurTieSegment->up() ? Direction::DOWN : Direction::UP;
+                slurTieSegment->undoChangeProperty(Pid::SLUR_DIRECTION, QVariant::fromValue<Direction>(dir));
+            });
         } else if (e->isArticulation()) {
             auto articulation = toArticulation(e);
             flipOnce(articulation, [articulation]() {
-                    ArticulationAnchor articAnchor = articulation->anchor();
-                    switch (articAnchor) {
-                    case ArticulationAnchor::TOP_CHORD:
-                        articAnchor = ArticulationAnchor::BOTTOM_CHORD;
-                        break;
-                    case ArticulationAnchor::BOTTOM_CHORD:
-                        articAnchor = ArticulationAnchor::TOP_CHORD;
-                        break;
-                    case ArticulationAnchor::CHORD:
-                        articAnchor = articulation->up() ? ArticulationAnchor::BOTTOM_CHORD : ArticulationAnchor::TOP_CHORD;
-                        break;
-                    case ArticulationAnchor::TOP_STAFF:
-                        articAnchor = ArticulationAnchor::BOTTOM_STAFF;
-                        break;
-                    case ArticulationAnchor::BOTTOM_STAFF:
-                        articAnchor = ArticulationAnchor::TOP_STAFF;
-                        break;
-                    }
-                    PropertyFlags pf = articulation->propertyFlags(Pid::ARTICULATION_ANCHOR);
-                    if (pf == PropertyFlags::STYLED) {
-                        pf = PropertyFlags::UNSTYLED;
-                    }
-                    articulation->undoChangeProperty(Pid::ARTICULATION_ANCHOR, int(articAnchor), pf);
-                });
+                ArticulationAnchor articAnchor = articulation->anchor();
+                switch (articAnchor) {
+                case ArticulationAnchor::TOP_CHORD:
+                    articAnchor = ArticulationAnchor::BOTTOM_CHORD;
+                    break;
+                case ArticulationAnchor::BOTTOM_CHORD:
+                    articAnchor = ArticulationAnchor::TOP_CHORD;
+                    break;
+                case ArticulationAnchor::CHORD:
+                    articAnchor = articulation->up() ? ArticulationAnchor::BOTTOM_CHORD : ArticulationAnchor::TOP_CHORD;
+                    break;
+                case ArticulationAnchor::TOP_STAFF:
+                    articAnchor = ArticulationAnchor::BOTTOM_STAFF;
+                    break;
+                case ArticulationAnchor::BOTTOM_STAFF:
+                    articAnchor = ArticulationAnchor::TOP_STAFF;
+                    break;
+                }
+                PropertyFlags pf = articulation->propertyFlags(Pid::ARTICULATION_ANCHOR);
+                if (pf == PropertyFlags::STYLED) {
+                    pf = PropertyFlags::UNSTYLED;
+                }
+                articulation->undoChangeProperty(Pid::ARTICULATION_ANCHOR, int(articAnchor), pf);
+            });
         } else if (e->isTuplet()) {
             auto tuplet = toTuplet(e);
             flipOnce(tuplet, [tuplet]() {
-                    Direction dir = tuplet->isUp() ? Direction::DOWN : Direction::UP;
-                    tuplet->undoChangeProperty(Pid::DIRECTION, QVariant::fromValue<Direction>(dir),
-                                               PropertyFlags::UNSTYLED);
-                });
+                Direction dir = tuplet->isUp() ? Direction::DOWN : Direction::UP;
+                tuplet->undoChangeProperty(Pid::DIRECTION, QVariant::fromValue<Direction>(dir),
+                                           PropertyFlags::UNSTYLED);
+            });
         } else if (e->isNoteDot() && e->parent()->isNote()) {
             Note* note = toNote(e->parent());
             Direction d = note->dotIsUp() ? Direction::DOWN : Direction::UP;

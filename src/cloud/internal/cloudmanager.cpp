@@ -309,17 +309,17 @@ void CloudManager::onReplyFinished(ApiRequest* request, RequestType requestType)
             refreshRequest->setParent(this);
             connect(refreshRequest, &ApiRequest::replyFinished, this,
                     [this, request, requestType](ApiRequest* refreshRequest) {
-                    m_accessToken.clear();
-                    onReplyFinished(refreshRequest, RequestType::LOGIN_REFRESH);
-                    if (!m_accessToken.isEmpty()) {
-                        // try to execute the request once more with the new token
-                        request->setToken(m_accessToken);
-                        request->executeRequest(m_networkManager);
-                    } else {
-                        handleReply(request->reply(), requestType);
-                        request->deleteLater();
-                    }
-                });
+                m_accessToken.clear();
+                onReplyFinished(refreshRequest, RequestType::LOGIN_REFRESH);
+                if (!m_accessToken.isEmpty()) {
+                    // try to execute the request once more with the new token
+                    request->setToken(m_accessToken);
+                    request->executeRequest(m_networkManager);
+                } else {
+                    handleReply(request->reply(), requestType);
+                    request->deleteLater();
+                }
+            });
             refreshRequest->executeRequest(m_networkManager);
             return;
         }
@@ -444,11 +444,11 @@ static void clearHttpCacheOnRenderFinish(QWebEngineView* webView)
     // workaround for the crashes sometimes happening in Chromium on macOS with Qt 5.12
     QObject::connect(webView, &QWebEngineView::renderProcessTerminated, webView,
                      [profile, webView](QWebEnginePage::RenderProcessTerminationStatus terminationStatus, int exitCode)
-        {
-            qDebug() << "Login page loading terminated" << terminationStatus << " " << exitCode;
-            profile->clearHttpCache();
-            webView->show();
-        });
+    {
+        qDebug() << "Login page loading terminated" << terminationStatus << " " << exitCode;
+        profile->clearHttpCache();
+        webView->show();
+    });
 }
 
 #endif
@@ -485,22 +485,22 @@ void CloudManager::showWebViewDialog(const QUrl& url)
 
     connect(page, &QWebEnginePage::loadFinished, this, [this, page, webView](
                 bool ok) {
-            if (!ok) {
-                return;
-            }
-            constexpr QUrl::FormattingOptions cmpOpt = QUrl::RemoveQuery | QUrl::RemoveFragment | QUrl::StripTrailingSlash;
-            if (!page->url().matches(ApiInfo::LOGIN_SUCCESS_URL, cmpOpt)) {
-                return;
-            }
+        if (!ok) {
+            return;
+        }
+        constexpr QUrl::FormattingOptions cmpOpt = QUrl::RemoveQuery | QUrl::RemoveFragment | QUrl::StripTrailingSlash;
+        if (!page->url().matches(ApiInfo::LOGIN_SUCCESS_URL, cmpOpt)) {
+            return;
+        }
 
-            page->runJavaScript("JSON.stringify(muGetAuthInfo())", [this, page, webView](const QVariant& v) {
-                onLoginReply(nullptr, HTTP_OK, QJsonDocument::fromJson(v.toString().toUtf8()).object());
-                // We have retrieved an access token, do not remain logged
-                // in with web view profile.
-                page->profile()->cookieStore()->deleteAllCookies();
-                webView->close();
-            });
+        page->runJavaScript("JSON.stringify(muGetAuthInfo())", [this, page, webView](const QVariant& v) {
+            onLoginReply(nullptr, HTTP_OK, QJsonDocument::fromJson(v.toString().toUtf8()).object());
+            // We have retrieved an access token, do not remain logged
+            // in with web view profile.
+            page->profile()->cookieStore()->deleteAllCookies();
+            webView->close();
         });
+    });
 
     webView->load(url);
     webView->show();
@@ -525,8 +525,8 @@ void CloudManager::login(QString login, QString password)
     .addPostParameter("password", password);
 
     connect(r, &ApiRequest::replyFinished, this, [this](ApiRequest* r) {
-            onReplyFinished(r, RequestType::LOGIN);
-        });
+        onReplyFinished(r, RequestType::LOGIN);
+    });
 
     r->executeRequest(m_networkManager);
 }
@@ -602,8 +602,8 @@ void CloudManager::getUser()
     .setToken(m_accessToken);
 
     connect(r, &ApiRequest::replyFinished, this, [this](ApiRequest* r) {
-            onReplyFinished(r, RequestType::GET_USER_INFO);
-        });
+        onReplyFinished(r, RequestType::GET_USER_INFO);
+    });
 
     r->executeRequest(m_networkManager);
 }
@@ -670,8 +670,8 @@ void CloudManager::getScoreInfo(int nid)
     .addGetParameter("score_id", QString::number(nid));
 
     connect(r, &ApiRequest::replyFinished, this, [this](ApiRequest* r) {
-            onReplyFinished(r, RequestType::GET_SCORE_INFO);
-        });
+        onReplyFinished(r, RequestType::GET_SCORE_INFO);
+    });
 
     r->executeRequest(m_networkManager);
 }
@@ -751,8 +751,8 @@ void CloudManager::getMediaUrl(const QString& nid, const QString& vid, const QSt
     .addGetParameter("revision_id", vid);
 
     connect(r, &ApiRequest::replyFinished, this, [this](ApiRequest* r) {
-            onReplyFinished(r, RequestType::GET_MEDIA_URL);
-        });
+        onReplyFinished(r, RequestType::GET_MEDIA_URL);
+    });
 
     r->executeRequest(m_networkManager);
 }
@@ -899,8 +899,8 @@ void CloudManager::upload(const QString& path, int nid, const QString& title)
     }
 
     connect(r, &ApiRequest::replyFinished, this, [this](ApiRequest* r) {
-            onReplyFinished(r, RequestType::UPLOAD_SCORE);
-        });
+        onReplyFinished(r, RequestType::UPLOAD_SCORE);
+    });
 
     r->executeRequest(m_networkManager);
 }

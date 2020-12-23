@@ -59,10 +59,10 @@ QHash<int,QByteArray> PlaybackToolBarModel::roleNames() const
 void PlaybackToolBarModel::load()
 {
     auto makeItem = [](const Action& action) {
-                        ActionItem item;
-                        item.action = action;
-                        return item;
-                    };
+        ActionItem item;
+        item.action = action;
+        return item;
+    };
 
     beginResetModel();
 

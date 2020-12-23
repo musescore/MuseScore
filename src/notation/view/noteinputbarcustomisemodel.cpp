@@ -492,36 +492,36 @@ ActionNameList NoteInputBarCustomiseModel::defaultActions() const
 
     ActionNameList result;
     auto canAppendAction = [&](const ActionName& actionName) {
-                               if (actionFromNoteInputModes(actionName)) {
-                                   if (noteInputModeActionExists) {
-                                       return false;
-                                   }
+        if (actionFromNoteInputModes(actionName)) {
+            if (noteInputModeActionExists) {
+                return false;
+            }
 
-                                   noteInputModeActionExists = true;
-                               }
+            noteInputModeActionExists = true;
+        }
 
-                               return true;
-                           };
+        return true;
+    };
 
     auto appendRelatedActions = [&](size_t startActionIndex) {
-                                    ActionNameList actions;
-                                    for (size_t i = startActionIndex; i < allNoteInputActions.size(); ++i) {
-                                        ActionName actionName = allNoteInputActions[i].name;
-                                        if (containsAction(currentWorkspaceNoteInputActions, actionName)) {
-                                            break;
-                                        }
+        ActionNameList actions;
+        for (size_t i = startActionIndex; i < allNoteInputActions.size(); ++i) {
+            ActionName actionName = allNoteInputActions[i].name;
+            if (containsAction(currentWorkspaceNoteInputActions, actionName)) {
+                break;
+            }
 
-                                        if (!canAppendAction(actionName)) {
-                                            continue;
-                                        }
+            if (!canAppendAction(actionName)) {
+                continue;
+            }
 
-                                        actions.push_back(actionName);
-                                    }
+            actions.push_back(actionName);
+        }
 
-                                    if (!actions.empty()) {
-                                        result.insert(result.end(), actions.begin(), actions.end());
-                                    }
-                                };
+        if (!actions.empty()) {
+            result.insert(result.end(), actions.begin(), actions.end());
+        }
+    };
 
     //! NOTE: if there are actions at the beginning of the all note input actions,
     //!       but not at the beginning of the current workspace

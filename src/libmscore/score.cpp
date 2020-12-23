@@ -3145,11 +3145,11 @@ void Score::padToggle(Pad p, const EditData& ed)
         if (canAdjustLength) {
             // Change length from last to first chord/rest
             std::sort(crs.begin(), crs.end(), [](const ChordRest* cr1, const ChordRest* cr2) {
-                    if (cr2->track() == cr1->track()) {
-                        return cr2->isBefore(cr1);
-                    }
-                    return cr2->track() < cr1->track();
-                });
+                if (cr2->track() == cr1->track()) {
+                    return cr2->isBefore(cr1);
+                }
+                return cr2->track() < cr1->track();
+            });
             // Remove duplicates from the list
             crs.erase(std::unique(crs.begin(), crs.end()), crs.end());
         } else {

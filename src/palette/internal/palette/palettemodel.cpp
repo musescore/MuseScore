@@ -113,8 +113,8 @@ PalettePanel* PaletteTreeModel::iptrToPalettePanel(void* iptr, int* idx)
     const auto palette = std::find_if(
         palettes().begin(), palettes().end(),
         [iptr](const PalettePanelPtr& p) {
-            return iptr == p.get();
-        });
+        return iptr == p.get();
+    });
 
     if (idx) {
         (*idx) = palette - palettes().begin();

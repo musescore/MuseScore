@@ -330,32 +330,32 @@ void sortInstrumentTemplates(
 {
     std::stable_sort(templates.begin(), templates.end(),
                      [minMaxPitch](const InstrumentTemplate* templ1, const InstrumentTemplate* templ2) {
-                const int diff1 = findMaxPitchDiff(minMaxPitch, templ1);
-                const int diff2 = findMaxPitchDiff(minMaxPitch, templ2);
+        const int diff1 = findMaxPitchDiff(minMaxPitch, templ1);
+        const int diff2 = findMaxPitchDiff(minMaxPitch, templ2);
 
-                if (diff1 != diff2) {
-                    return diff1 < diff2;
-                }
-                // if drumset is not null - it's a particular drum instrument
-                // if drum set is null - it's a common drumset
-                // so prefer particular drum instruments
-                if (templ1->drumset && !templ2->drumset) {
-                    return true;
-                }
-                if (!templ1->drumset && templ2->drumset) {
-                    return false;
-                }
-                // prefer instruments with the "common" genre
-                const bool hasCommon1 = hasCommonGenre(templ1->genres);
-                const bool hasCommon2 = hasCommonGenre(templ2->genres);
-                if (hasCommon1 && !hasCommon2) {
-                    return true;
-                }
-                if (!hasCommon1 && hasCommon2) {
-                    return false;
-                }
-                return templ1->genres.size() > templ2->genres.size();
-            });
+        if (diff1 != diff2) {
+            return diff1 < diff2;
+        }
+        // if drumset is not null - it's a particular drum instrument
+        // if drum set is null - it's a common drumset
+        // so prefer particular drum instruments
+        if (templ1->drumset && !templ2->drumset) {
+            return true;
+        }
+        if (!templ1->drumset && templ2->drumset) {
+            return false;
+        }
+        // prefer instruments with the "common" genre
+        const bool hasCommon1 = hasCommonGenre(templ1->genres);
+        const bool hasCommon2 = hasCommonGenre(templ2->genres);
+        if (hasCommon1 && !hasCommon2) {
+            return true;
+        }
+        if (!hasCommon1 && hasCommon2) {
+            return false;
+        }
+        return templ1->genres.size() > templ2->genres.size();
+    });
 }
 
 std::vector<const InstrumentTemplate*> findSuitableInstruments(const MTrack& track)

@@ -74,4 +74,3 @@ private:
 }
 
 #endif // MU_WORKSPACE_WORKSPACELISTMODEL_H
-

@@ -24,7 +24,8 @@
 
 using namespace mu::framework;
 
-static XmlReader::TokenType convertTokenType(QXmlStreamReader::TokenType type) {
+static XmlReader::TokenType convertTokenType(QXmlStreamReader::TokenType type)
+{
     switch (type) {
     case QXmlStreamReader::TokenType::NoToken:
     case QXmlStreamReader::TokenType::Invalid:

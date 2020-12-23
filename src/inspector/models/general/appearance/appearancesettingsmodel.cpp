@@ -37,8 +37,8 @@ void AppearanceSettingsModel::requestElements()
 void AppearanceSettingsModel::loadProperties()
 {
     auto formatDoubleFunc = [](const QVariant& elementPropertyValue) -> QVariant {
-                                return DataFormatter::formatDouble(elementPropertyValue.toDouble());
-                            };
+        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+    };
 
     loadPropertyItem(m_leadingSpace, formatDoubleFunc);
     loadPropertyItem(m_minimumDistance, formatDoubleFunc);

@@ -30,7 +30,8 @@ public:
 
     Ret makePath(const io::path& path) const override;
 
-    RetVal<io::paths> scanFiles(const io::path& rootDir, const QStringList& filters, ScanMode mode = ScanMode::IncludeSubdirs) const override;
+    RetVal<io::paths> scanFiles(const io::path& rootDir, const QStringList& filters,
+                                ScanMode mode = ScanMode::IncludeSubdirs) const override;
 
     RetVal<QByteArray> readFile(const io::path& filePath) const override;
 

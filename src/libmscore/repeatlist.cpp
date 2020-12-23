@@ -254,9 +254,9 @@ int RepeatList::utime2utick(qreal t) const
 QList<RepeatSegment*>::const_iterator RepeatList::findRepeatSegmentFromUTick(int utick) const
 {
     return std::lower_bound(this->cbegin(), this->cend(), utick, [](RepeatSegment const* rs, int utick) {
-            // Skip RS where endtick is less than us
-            return utick > (rs->utick + rs->len());
-        });
+        // Skip RS where endtick is less than us
+        return utick > (rs->utick + rs->len());
+    });
 }
 
 //---------------------------------------------------------
@@ -403,8 +403,8 @@ void RepeatList::collectRepeatListElements()
                     // Cross-section of the repeatList
                     std::list<int> endings(remainder->endings().begin(), remainder->endings().end());
                     endings.remove_if([&volta](const int& ending) {
-                            return !(volta->hasEnding(ending));
-                        });
+                        return !(volta->hasEnding(ending));
+                    });
                     remainder->setEndings(QList<int>(endings.begin(), endings.end()));
                     // Split and merge done
                     preProcessedVoltas.push_back(remainder);

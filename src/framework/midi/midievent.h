@@ -859,12 +859,12 @@ struct Event {
     {
         std::string str;
         auto dataToStr = [&str, this]() {
-                             str += " {";
-                             for (auto& d : m_data) {
-                                 str += " " + std::to_string(d);
-                             }
-                             str += "}";
-                         };
+            str += " {";
+            for (auto& d : m_data) {
+                str += " " + std::to_string(d);
+            }
+            str += "}";
+        };
 
         switch (messageType()) {
         case MessageType::ChannelVoice10: {

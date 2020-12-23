@@ -74,8 +74,8 @@ void CrescendoSettingsModel::loadProperties()
     loadPropertyItem(m_endHookType);
 
     auto formatDoubleFunc = [](const QVariant& elementPropertyValue) -> QVariant {
-                                return DataFormatter::formatDouble(elementPropertyValue.toDouble());
-                            };
+        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+    };
 
     loadPropertyItem(m_thickness, formatDoubleFunc);
     loadPropertyItem(m_hookHeight, formatDoubleFunc);

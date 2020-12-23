@@ -131,36 +131,36 @@ std::vector<MScoreError> MScore::errorList {
     { MsError::MS_NO_ERROR,                     0,    0 },
 
     { MsError::NO_NOTE_SELECTED,                "s1", QT_TRANSLATE_NOOP("error",
-                                                               "No note selected:\nPlease select a note and retry") },
+                                                                        "No note selected:\nPlease select a note and retry") },
     { MsError::NO_CHORD_REST_SELECTED,          "s2", QT_TRANSLATE_NOOP("error",
-                                                               "No chord/rest selected:\nPlease select a chord or rest and retry") },
+                                                                        "No chord/rest selected:\nPlease select a chord or rest and retry") },
     { MsError::NO_LYRICS_SELECTED,              "s3", QT_TRANSLATE_NOOP("error",
-                                                               "No note or lyrics selected:\nPlease select a note or lyrics and retry") },
+                                                                        "No note or lyrics selected:\nPlease select a note or lyrics and retry") },
     { MsError::NO_NOTE_REST_SELECTED,           "s4", QT_TRANSLATE_NOOP("error",
-                                                               "No note or rest selected:\nPlease select a note or rest and retry") },
+                                                                        "No note or rest selected:\nPlease select a note or rest and retry") },
     { MsError::NO_FLIPPABLE_SELECTED,           "s5", QT_TRANSLATE_NOOP("error",
-                                                               "No flippable element selected:\nPlease select an element that can be flipped and retry") },
+                                                                        "No flippable element selected:\nPlease select an element that can be flipped and retry") },
     { MsError::NO_STAFF_SELECTED,               "s6", QT_TRANSLATE_NOOP("error",
-                                                               "No staff selected:\nPlease select one or more staves and retry") },
+                                                                        "No staff selected:\nPlease select one or more staves and retry") },
     { MsError::NO_NOTE_FIGUREDBASS_SELECTED,    "s7", QT_TRANSLATE_NOOP("error",
-                                                               "No note or figured bass selected:\nPlease select a note or figured bass and retry") },
+                                                                        "No note or figured bass selected:\nPlease select a note or figured bass and retry") },
 
     { MsError::CANNOT_INSERT_TUPLET,            "t1", QT_TRANSLATE_NOOP("error", "Cannot insert chord/rest in tuplet") },
     { MsError::CANNOT_SPLIT_TUPLET,             "t2", QT_TRANSLATE_NOOP("error", "Cannot split tuplet") },
 
     { MsError::CANNOT_SPLIT_MEASURE_FIRST_BEAT, "m1", QT_TRANSLATE_NOOP("error",
-                                                               "Cannot split measure here:\n"
-                                                               "First beat of measure") },
+                                                                        "Cannot split measure here:\n"
+                                                                        "First beat of measure") },
     { MsError::CANNOT_SPLIT_MEASURE_TUPLET,     "m2", QT_TRANSLATE_NOOP("error",
-                                                               "Cannot split measure here:\n" "Cannot split tuplet") },
+                                                                        "Cannot split measure here:\n" "Cannot split tuplet") },
     { MsError::INSUFFICIENT_MEASURES,           "m3", QT_TRANSLATE_NOOP("error",
-                                                               "Measure repeat cannot be added here:\nInsufficient or unequal measures") },
+                                                                        "Measure repeat cannot be added here:\nInsufficient or unequal measures") },
     { MsError::CANNOT_SPLIT_MEASURE_REPEAT,     "m4", QT_TRANSLATE_NOOP("error", "Cannot split measure repeat") },
 
     { MsError::CANNOT_REMOVE_TIME_TUPLET,       "d1", QT_TRANSLATE_NOOP("error",
-                                                               "Cannot remove time from tuplet:\nPlease select the complete tuplet and retry") },
+                                                                        "Cannot remove time from tuplet:\nPlease select the complete tuplet and retry") },
     { MsError::CANNOT_REMOVE_TIME_MEASURE_REPEAT, "d2", QT_TRANSLATE_NOOP("error",
-                                                                 "Cannot remove time from measure repeat:\nPlease select the complete measure repeat and retry") },
+                                                                          "Cannot remove time from measure repeat:\nPlease select the complete measure repeat and retry") },
 
     { MsError::NO_DEST,                         "p1", QT_TRANSLATE_NOOP("error", "No destination to paste") },
     { MsError::DEST_TUPLET,                     "p2", QT_TRANSLATE_NOOP("error", "Cannot paste into tuplet") },
@@ -170,7 +170,7 @@ std::vector<MScoreError> MScore::errorList {
     { MsError::NO_MIME,                         "p6", QT_TRANSLATE_NOOP("error", "Nothing to paste") },
     { MsError::DEST_NO_CR,                      "p7", QT_TRANSLATE_NOOP("error", "Destination is not a chord or rest") },
     { MsError::CANNOT_CHANGE_LOCAL_TIMESIG,     "l1", QT_TRANSLATE_NOOP("error",
-                                                               "Cannot change local time signature:\nMeasure is not empty") },
+                                                                        "Cannot change local time signature:\nMeasure is not empty") },
 };
 
 MsError MScore::_error { MsError::MS_NO_ERROR };

@@ -108,28 +108,28 @@ void AudioEngineDevTools::makeArpeggio()
     m_midiStream->initData.initEvents.push_back(e);
 
     auto makeChunk = [](Chunk& chunk, uint32_t tick, int pitch) {
-                         UNUSED(pitch);
-                         /* notes of the arpeggio */
-                         static std::vector<int> notes = { 60, 64, 67, 72, 76, 79, 84, 79, 76, 72, 67, 64 };
-                         static uint32_t duration = 4440;
+        UNUSED(pitch);
+        /* notes of the arpeggio */
+        static std::vector<int> notes = { 60, 64, 67, 72, 76, 79, 84, 79, 76, 72, 67, 64 };
+        static uint32_t duration = 4440;
 
-                         chunk.beginTick = tick;
-                         chunk.endTick = chunk.beginTick + duration;
+        chunk.beginTick = tick;
+        chunk.endTick = chunk.beginTick + duration;
 
-                         uint32_t note_duration = static_cast<uint32_t>(duration / notes.size());
-                         uint32_t note_time = tick + (tick > 0 ? note_duration : 0);
+        uint32_t note_duration = static_cast<uint32_t>(duration / notes.size());
+        uint32_t note_time = tick + (tick > 0 ? note_duration : 0);
 
-                         for (int n : notes) {
-                             auto noteOn = Event(Event::Opcode::NoteOn);
-                             noteOn.setNote(n);
-                             noteOn.setVelocityFraction(0.8f);
-                             chunk.events.insert({ note_time, noteOn });
-                             note_time += note_duration;
-                             auto noteOff = noteOn;
-                             noteOff.setOpcode(Event::Opcode::NoteOff);
-                             chunk.events.insert({ note_time, noteOff });
-                         }
-                     };
+        for (int n : notes) {
+            auto noteOn = Event(Event::Opcode::NoteOn);
+            noteOn.setNote(n);
+            noteOn.setVelocityFraction(0.8f);
+            chunk.events.insert({ note_time, noteOn });
+            note_time += note_duration;
+            auto noteOff = noteOn;
+            noteOff.setOpcode(Event::Opcode::NoteOff);
+            chunk.events.insert({ note_time, noteOff });
+        }
+    };
 
     Chunk chunk;
     makeChunk(chunk, 0, 0);

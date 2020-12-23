@@ -41,7 +41,8 @@ public:
         IncludeSubdirs
     };
 
-    virtual RetVal<io::paths> scanFiles(const io::path& rootDir, const QStringList& filters, ScanMode mode = ScanMode::IncludeSubdirs) const = 0;
+    virtual RetVal<io::paths> scanFiles(const io::path& rootDir, const QStringList& filters,
+                                        ScanMode mode = ScanMode::IncludeSubdirs) const = 0;
 
     virtual RetVal<QByteArray> readFile(const io::path& filePath) const = 0;
 };

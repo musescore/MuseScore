@@ -203,10 +203,10 @@ Ret NetworkManager::waitForReplyFinished(QNetworkReply* reply, int timeoutMs)
     });
 
     auto restartTimeoutTimer = [&timeoutTimer, &isTimeout](qint64, qint64) {
-                                   if (!isTimeout) {
-                                       timeoutTimer.start();
-                                   }
-                               };
+        if (!isTimeout) {
+            timeoutTimer.start();
+        }
+    };
 
     connect(reply, &QNetworkReply::downloadProgress, this, restartTimeoutTimer);
     connect(reply, &QNetworkReply::uploadProgress, this, restartTimeoutTimer);

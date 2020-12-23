@@ -31,16 +31,16 @@ void SynthesizerController::init()
     }
 
     auto init = [this](float sampleRate) {
-                    std::vector<std::shared_ptr<ISynthesizer> > synthesizers = synthRegister()->synthesizers();
+        std::vector<std::shared_ptr<ISynthesizer> > synthesizers = synthRegister()->synthesizers();
 
-                    for (std::shared_ptr<ISynthesizer> synth : synthesizers) {
-                        synth->init(sampleRate);
+        for (std::shared_ptr<ISynthesizer> synth : synthesizers) {
+            synth->init(sampleRate);
 
-                        reloadSoundFonts(synth);
-                        auto notification = sfprovider()->soundFontPathsForSynthChanged(synth->name());
-                        notification.onNotify(this, [this, synth]() { reloadSoundFonts(synth); });
-                    }
-                };
+            reloadSoundFonts(synth);
+            auto notification = sfprovider()->soundFontPathsForSynthChanged(synth->name());
+            notification.onNotify(this, [this, synth]() { reloadSoundFonts(synth); });
+        }
+    };
 
     if (audioEngine()->isInited()) {
         init(audioEngine()->sampleRate());
