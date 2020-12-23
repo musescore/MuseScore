@@ -74,7 +74,12 @@ public:
 
     async::Notification partsChanged() const override;
 
+protected:
+    INotationUndoStackPtr undoStack() const;
+
 private:
+    void updateScore();
+
     struct InstrumentInfo
     {
         Ms::Fraction fraction = { -1, -1 };
@@ -106,9 +111,6 @@ private:
 
     Ms::Score* score() const;
     Ms::MasterScore* masterScore() const;
-
-    void startEdit();
-    void apply();
 
     Ms::ChordRest* selectedChord() const;
     void updateCanChangeInstrumentsVisibility();
