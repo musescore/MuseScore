@@ -352,8 +352,8 @@ PropertyItem* AbstractInspectorModel::buildPropertyItem(const Ms::Pid& propertyI
 
     if (!callback) {
         callback = [this](const int propertyId, const QVariant& newValue) {
-                       onPropertyValueChanged(static_cast<Ms::Pid>(propertyId), newValue);
-                   };
+            onPropertyValueChanged(static_cast<Ms::Pid>(propertyId), newValue);
+        };
     }
 
     connect(newPropertyItem, &PropertyItem::propertyModified, this, callback);

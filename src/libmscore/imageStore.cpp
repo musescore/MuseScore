@@ -215,12 +215,12 @@ void ImageStore::clearUnused()
 {
     _items.erase(
         std::remove_if(_items.begin(), _items.end(), [](ImageStoreItem* i) {
-            const bool remove = !i->isUsed();
-            if (remove) {
-                delete i;
-            }
-            return remove;
-        }),
+        const bool remove = !i->isUsed();
+        if (remove) {
+            delete i;
+        }
+        return remove;
+    }),
         _items.end()
         );
 }

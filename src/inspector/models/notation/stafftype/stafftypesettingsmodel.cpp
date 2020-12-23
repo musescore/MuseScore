@@ -39,8 +39,8 @@ void StaffTypeSettingsModel::requestElements()
 void StaffTypeSettingsModel::loadProperties()
 {
     auto formatDoubleFunc = [](const QVariant& elementPropertyValue) -> QVariant {
-                                return DataFormatter::formatDouble(elementPropertyValue.toDouble());
-                            };
+        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+    };
 
     loadPropertyItem(m_isSmall);
     loadPropertyItem(m_verticalOffset, formatDoubleFunc);

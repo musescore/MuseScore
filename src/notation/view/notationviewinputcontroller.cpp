@@ -270,8 +270,8 @@ void NotationViewInputController::startDragElements(ElementType etype, const QPo
 
     const bool isFilterType = m_view->notationInteraction()->selection()->isRange();
     const auto isDraggable = [isFilterType, etype](const Element* e) {
-                                 return e && e->selected() && (!isFilterType || etype == e->type());
-                             };
+        return e && e->selected() && (!isFilterType || etype == e->type());
+    };
 
     m_view->notationInteraction()->startDrag(els, eoffset, isDraggable);
 }

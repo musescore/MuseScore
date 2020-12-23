@@ -335,9 +335,9 @@ void NoteInputBarModel::updateArticulationsState()
     std::set<SymbolId> currentArticulations = resolveCurrentArticulations();
 
     auto isArticulationSelected = [&currentArticulations](SymbolId articulationSymbolId) {
-                                      return std::find(currentArticulations.begin(), currentArticulations.end(),
-                                                       articulationSymbolId) != currentArticulations.end();
-                                  };
+        return std::find(currentArticulations.begin(), currentArticulations.end(),
+                         articulationSymbolId) != currentArticulations.end();
+    };
 
     for (const actions::ActionName& actionName: articulationActions) {
         item(actionName).checked = isArticulationSelected(NotationActions::actionArticulationSymbolId(actionName));
@@ -387,14 +387,14 @@ std::set<SymbolId> NoteInputBarModel::resolveCurrentArticulations() const
     }
 
     auto chordArticulations = [](const Chord* chord) {
-                                  std::set<SymbolId> result;
-                                  for (Articulation* articulation: chord->articulations()) {
-                                      result.insert(articulation->symId());
-                                  }
+        std::set<SymbolId> result;
+        for (Articulation* articulation: chord->articulations()) {
+            result.insert(articulation->symId());
+        }
 
-                                  result = Ms::flipArticulations(result, Ms::Placement::ABOVE);
-                                  return Ms::splitArticulations(result);
-                              };
+        result = Ms::flipArticulations(result, Ms::Placement::ABOVE);
+        return Ms::splitArticulations(result);
+    };
 
     std::set<SymbolId> result;
     bool isFirstNote = true;

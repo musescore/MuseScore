@@ -1344,8 +1344,8 @@ Element* Segment::nextAnnotation(Element* e)
     }
     // TODO: firstVisibleStaff() for system elements? see Spanner::nextSpanner()
     auto resIt = std::find_if(ei + 1, _annotations.end(), [e](Element* nextElem) {
-            return nextElem && nextElem->staffIdx() == e->staffIdx();
-        });
+        return nextElem && nextElem->staffIdx() == e->staffIdx();
+    });
 
     return _annotations.end() == resIt ? nullptr : *resIt;
 }
@@ -1366,8 +1366,8 @@ Element* Segment::prevAnnotation(Element* e)
     }
     // TODO: firstVisibleStaff() for system elements? see Spanner::nextSpanner()
     auto resIt = std::find_if(reverseIt + 1, _annotations.rend(), [e](Element* prevElem) {
-            return prevElem && prevElem->staffIdx() == e->staffIdx();
-        });
+        return prevElem && prevElem->staffIdx() == e->staffIdx();
+    });
 
     return _annotations.rend() == resIt ? nullptr : *resIt;
 }

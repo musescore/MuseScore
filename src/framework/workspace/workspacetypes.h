@@ -25,7 +25,6 @@
 #include "val.h"
 
 namespace mu::workspace {
-
 enum class WorkspaceTag
 {
     UiArrangement,

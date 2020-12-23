@@ -135,8 +135,8 @@ Palette::Palette(PalettePanelPtr pp, QWidget* parent)
 
     if (moreElements()) {
         connect(this, &Palette::displayMore, [](const QString& arg) {
-                adapter()->showMasterPalette(arg);
-            });
+            adapter()->showMasterPalette(arg);
+        });
     }
 }
 

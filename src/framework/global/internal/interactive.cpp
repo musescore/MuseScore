@@ -53,20 +53,20 @@ int Interactive::question(const std::string& title, const Text& text, const Butt
     //! NOTE Temporarily, need to replace the qml dialog
 
     auto format = [](IInteractive::TextFormat f) {
-                      switch (f) {
-                      case IInteractive::TextFormat::PlainText: return Qt::PlainText;
-                      case IInteractive::TextFormat::RichText:  return Qt::RichText;
-                      }
-                      return Qt::PlainText;
-                  };
+        switch (f) {
+        case IInteractive::TextFormat::PlainText: return Qt::PlainText;
+        case IInteractive::TextFormat::RichText:  return Qt::RichText;
+        }
+        return Qt::PlainText;
+    };
 
     QMap<QAbstractButton*, int> btnsMap;
     auto makeButton = [&btnsMap](const ButtonData& b, QWidget* parent) {
-                          QPushButton* btn = new QPushButton(parent);
-                          btn->setText(QString::fromStdString(b.text));
-                          btnsMap[btn] = b.btn;
-                          return btn;
-                      };
+        QPushButton* btn = new QPushButton(parent);
+        btn->setText(QString::fromStdString(b.text));
+        btnsMap[btn] = b.btn;
+        return btn;
+    };
 
     QMessageBox msgBox;
     msgBox.setWindowTitle(QString::fromStdString(title));
@@ -127,13 +127,13 @@ void Interactive::message(Type type, const std::string& title, const std::string
     //! NOTE Temporarily, need to replace the qml dialog
 
     auto icon = [](Type type) {
-                    switch (type) {
-                    case Type::Info:        return QMessageBox::Information;
-                    case Type::Warning:     return QMessageBox::Warning;
-                    case Type::Critical:    return QMessageBox::Critical;
-                    }
-                    return QMessageBox::NoIcon;
-                };
+        switch (type) {
+        case Type::Info:        return QMessageBox::Information;
+        case Type::Warning:     return QMessageBox::Warning;
+        case Type::Critical:    return QMessageBox::Critical;
+        }
+        return QMessageBox::NoIcon;
+    };
 
     QMessageBox msgBox;
     msgBox.setWindowTitle(QString::fromStdString(title));

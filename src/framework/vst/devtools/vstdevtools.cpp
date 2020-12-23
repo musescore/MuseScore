@@ -88,34 +88,34 @@ void VSTDevTools::makeArpeggio()
     m_midiStream->initData.initEvents.push_back(e);
 
     auto makeChunk = [](Chunk& chunk, uint32_t tick, bool pitch) {
-                         /* notes of the arpeggio */
-                         static std::vector<int> notes = { 60, 64, 67, 72, 76, 79, 84, 79, 76, 72, 67, 64 };
-                         static uint32_t duration = 4440;
-                         uint16_t velocity = 65535;
-                         chunk.beginTick = tick;
+        /* notes of the arpeggio */
+        static std::vector<int> notes = { 60, 64, 67, 72, 76, 79, 84, 79, 76, 72, 67, 64 };
+        static uint32_t duration = 4440;
+        uint16_t velocity = 65535;
+        chunk.beginTick = tick;
 
-                         uint32_t note_duration = duration / notes.size();
-                         uint32_t note_time = tick + (tick > 0 ? note_duration : 0);
+        uint32_t note_duration = duration / notes.size();
+        uint32_t note_time = tick + (tick > 0 ? note_duration : 0);
 
-                         for (int n : notes) {
-                             auto noteOn = Event(Event::Opcode::NoteOn);
+        for (int n : notes) {
+            auto noteOn = Event(Event::Opcode::NoteOn);
 
-                             noteOn.setNote(n);
-                             noteOn.setVelocity(velocity);
-                             if (pitch) {
-                                 noteOn.setPitchNote(n + 12, 1.f);//1 octave + 1 semitone
-                             }
-                             velocity -= 5461;
-                             chunk.events.insert({ note_time, noteOn });
-                             note_time += note_duration;
+            noteOn.setNote(n);
+            noteOn.setVelocity(velocity);
+            if (pitch) {
+                noteOn.setPitchNote(n + 12, 1.f);                 //1 octave + 1 semitone
+            }
+            velocity -= 5461;
+            chunk.events.insert({ note_time, noteOn });
+            note_time += note_duration;
 
-                             //NoteOff should copy noteId and pitch from NoteOn
-                             auto noteOff = noteOn;
-                             noteOff.setOpcode(Event::Opcode::NoteOff);
-                             chunk.events.insert({ note_time, noteOff });
-                         }
-                         chunk.endTick = note_time + note_duration;
-                     };
+            //NoteOff should copy noteId and pitch from NoteOn
+            auto noteOff = noteOn;
+            noteOff.setOpcode(Event::Opcode::NoteOff);
+            chunk.events.insert({ note_time, noteOff });
+        }
+        chunk.endTick = note_time + note_duration;
+    };
 
     Chunk chunk;
     makeChunk(chunk, 0, false);

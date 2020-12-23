@@ -47,69 +47,69 @@ int ChangeMap::interpolate(Fraction& eventTick, ChangeEvent& event, Fraction& ti
         // so treat it as a piecewise function.
         if (exprDiff > 0) {
             valueFunction = [&](int ct) {
-                                return int(
-                                    pow(
-                                        pow((exprDiff + 1), 1.0 / double(exprTicks)), // the exprTicks root of d+1
-                                        double(ct)    // to the power of the current tick (exponential)
-                                        ) - 1
-                                    );
-                            };
+                return int(
+                    pow(
+                        pow((exprDiff + 1), 1.0 / double(exprTicks)),                 // the exprTicks root of d+1
+                        double(ct)                    // to the power of the current tick (exponential)
+                        ) - 1
+                    );
+            };
         } else {
             valueFunction = [&](int ct) {
-                                return -int(
-                                    pow(
-                                        pow((-exprDiff + 1), 1.0 / double(exprTicks)), // the exprTicks root of 1-d
-                                        double(ct)    // again to the power of ct
-                                        ) + 1
-                                    );
-                            };
+                return -int(
+                    pow(
+                        pow((-exprDiff + 1), 1.0 / double(exprTicks)),                 // the exprTicks root of 1-d
+                        double(ct)                    // again to the power of ct
+                        ) + 1
+                    );
+            };
         }
         break;
     // Uses sin x transformed, which _does_ flip with negative numbers
     case ChangeMethod::EASE_IN_OUT:
         valueFunction = [&](int ct) {
-                            return int(
-                                (double(exprDiff) / 2.0) * (
-                                    sin(
-                                        double(ct) * (
-                                            double(M_PI / double(exprTicks))
-                                            ) - double(M_PI / 2.0)
-                                        ) + 1
-                                    )
-                                );
-                        };
+            return int(
+                (double(exprDiff) / 2.0) * (
+                    sin(
+                        double(ct) * (
+                            double(M_PI / double(exprTicks))
+                            ) - double(M_PI / 2.0)
+                        ) + 1
+                    )
+                );
+        };
         break;
     case ChangeMethod::EASE_IN:
         valueFunction = [&](int ct) {
-                            return int(
-                                double(exprDiff) * (
-                                    sin(
-                                        double(ct - double(exprTicks)) * (
-                                            double(M_PI / double(2 * exprTicks))
-                                            )
-                                        ) + 1
-                                    )
-                                );
-                        };
+            return int(
+                double(exprDiff) * (
+                    sin(
+                        double(ct - double(exprTicks)) * (
+                            double(M_PI / double(2 * exprTicks))
+                            )
+                        ) + 1
+                    )
+                );
+        };
         break;
     case ChangeMethod::EASE_OUT:
         valueFunction = [&](int ct) {
-                            return int(
-                                double(exprDiff) * sin(
-                                    double(ct) * (
-                                        double(M_PI / double(2 * exprTicks))
-                                        )
-                                    )
-                                );
-                        };
+            return int(
+                double(exprDiff) * sin(
+                    double(ct) * (
+                        double(M_PI / double(2 * exprTicks))
+                        )
+                    )
+                );
+        };
         break;
     case ChangeMethod::NORMAL:
     default:
         valueFunction = [&](int ct) {
-                            return int(
-                                double(exprDiff) * (double(ct) / double(exprTicks))
-                                );
-                        };
+            return int(
+                double(exprDiff) * (double(ct) / double(exprTicks))
+                );
+        };
         break;
     }
 

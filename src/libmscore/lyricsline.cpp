@@ -182,8 +182,8 @@ SpannerSegment* LyricsLine::layoutSystem(System* system)
     Fraction etick = system->lastMeasure()->endTick();
 
     LyricsLineSegment* lineSegm = toLyricsLineSegment(getNextLayoutSystemSegment(system, [this]() {
-            return createLineSegment();
-        }));
+        return createLineSegment();
+    }));
 
     SpannerSegmentType sst;
     if (tick() >= stick) {

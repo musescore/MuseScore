@@ -3670,8 +3670,8 @@ void Chord::undoChangeProperty(Pid id, const QVariant& newValue, PropertyFlags p
 {
     if (id == Pid::VISIBLE) {
         processSiblings([=](Element* element) {
-                element->undoChangeProperty(id, newValue, ps);
-            });
+            element->undoChangeProperty(id, newValue, ps);
+        });
     }
 
     Element::undoChangeProperty(id, newValue, ps);

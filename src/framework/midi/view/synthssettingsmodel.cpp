@@ -32,14 +32,14 @@ void SynthsSettingsModel::load()
     m_state = configuration()->synthesizerState();
 
     auto doLoad = [this](const QString& name) {
-                      auto synth = synthRegister()->synthesizer(name.toStdString());
-                      std::vector<io::path> avalaibleSFPaths = sfprovider()->soundFontPaths(synth->soundFontFormats());
-                      for (const io::path& path : avalaibleSFPaths) {
-                          m_avalaibleSoundFonts[name] << io::filename(path).toQString();
-                      }
-                      emit avalaibleChanged(name);
-                      emit selectedChanged(name);
-                  };
+        auto synth = synthRegister()->synthesizer(name.toStdString());
+        std::vector<io::path> avalaibleSFPaths = sfprovider()->soundFontPaths(synth->soundFontFormats());
+        for (const io::path& path : avalaibleSFPaths) {
+            m_avalaibleSoundFonts[name] << io::filename(path).toQString();
+        }
+        emit avalaibleChanged(name);
+        emit selectedChanged(name);
+    };
 
     doLoad("Fluid");
     doLoad("Zerberus");

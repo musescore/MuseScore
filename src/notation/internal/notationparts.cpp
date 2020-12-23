@@ -1216,16 +1216,16 @@ void NotationParts::appendPart(Part* part)
 int NotationParts::resolvePartIndex(Part* part) const
 {
     auto findMasterPartIndex = [this](const ID& partId) -> int {
-                                   QList<Part*> masterParts = masterScore()->parts();
+        QList<Part*> masterParts = masterScore()->parts();
 
-                                   for (int masterPartIndex = 0; masterPartIndex < masterParts.size(); ++masterPartIndex) {
-                                       if (masterParts[masterPartIndex]->id() == partId) {
-                                           return masterPartIndex;
-                                       }
-                                   }
+        for (int masterPartIndex = 0; masterPartIndex < masterParts.size(); ++masterPartIndex) {
+            if (masterParts[masterPartIndex]->id() == partId) {
+                return masterPartIndex;
+            }
+        }
 
-                                   return -1;
-                               };
+        return -1;
+    };
 
     const QList<Part*>& scoreParts = score()->parts();
 
@@ -1331,8 +1331,8 @@ void NotationParts::sortParts(const InstrumentList& instruments)
     Q_ASSERT(score()->parts().size() == static_cast<int>(instruments.size()));
 
     auto mainInstrumentId = [](const Part* part) {
-                                return part->instrument()->instrumentId();
-                            };
+        return part->instrument()->instrumentId();
+    };
 
     for (int i = 0; i < instruments.size(); ++i) {
         const Part* currentPart = score()->parts().at(i);

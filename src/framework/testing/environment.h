@@ -25,13 +25,12 @@
 #include "framework/global/modularity/imodulesetup.h"
 
 namespace mu::testing {
-
 class Environment
 {
 public:
 
     using Modules = std::vector<framework::IModuleSetup*>;
-    using PostInit = std::function<void()>;
+    using PostInit = std::function<void ()>;
 
     Environment() = default;
 
@@ -49,12 +48,12 @@ class SuiteEnvironment
 {
 public:
 
-    SuiteEnvironment(const Environment::Modules& dependencyModules, const Environment::PostInit& postInit = nullptr) {
+    SuiteEnvironment(const Environment::Modules& dependencyModules, const Environment::PostInit& postInit = nullptr)
+    {
         Environment::setDependency(dependencyModules);
         Environment::setPostInit(postInit);
     }
 };
-
 }
 
 #endif // MU_TESTING_ENVIRONMENT_H

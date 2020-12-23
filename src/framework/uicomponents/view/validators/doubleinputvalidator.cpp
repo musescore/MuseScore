@@ -8,12 +8,12 @@ DoubleInputValidator::DoubleInputValidator(QObject* parent)
 void DoubleInputValidator::fixup(QString& string) const
 {
     auto zeros = [](int num)->QString {
-                     QString s = QString();
-                     for (int i = 0; i < num; i++) {
-                         s.append("0");
-                     }
-                     return s;
-                 };
+        QString s = QString();
+        for (int i = 0; i < num; i++) {
+            s.append("0");
+        }
+        return s;
+    };
 
     if (!string.contains(".")) {
         string.append("." + zeros(m_decimal));

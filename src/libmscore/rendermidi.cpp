@@ -1717,25 +1717,25 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
     // of a different pitch.
     // The total duration of the tied note is returned, and the index is modified.
     auto tieForward = [millespernote](int& j, const std::vector<int>& vec) {
-                          int size = int(vec.size());
-                          int duration = millespernote;
-                          while (j < size - 1 && vec[j] == vec[j + 1]) {
-                              duration += millespernote;
-                              j++;
-                          }
-                          return duration;
-                      };
+        int size = int(vec.size());
+        int duration = millespernote;
+        while (j < size - 1 && vec[j] == vec[j + 1]) {
+            duration += millespernote;
+            j++;
+        }
+        return duration;
+    };
 
     // local function:
     //   append a NoteEvent either by calculating an articulationExcursion or by
     //   the given chromatic relative pitch.
     //   RETURNS the new ontime value.  The caller is expected to assign this value.
     auto makeEvent = [note,chord,chromatic,events](int pitch, int ontime, int duration) {
-                         events->append(NoteEvent(chromatic ? pitch : articulationExcursion(note,note,pitch),
-                                                  ontime / chord->actualTicks().ticks(),
-                                                  duration / chord->actualTicks().ticks()));
-                         return ontime + duration;
-                     };
+        events->append(NoteEvent(chromatic ? pitch : articulationExcursion(note,note,pitch),
+                                 ontime / chord->actualTicks().ticks(),
+                                 duration / chord->actualTicks().ticks()));
+        return ontime + duration;
+    };
 
     // local function:
     //    Given a chord from a grace note, (normally the chord contains a single note) and create
@@ -1746,20 +1746,20 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
     //    but still updates ontime +=millespernote.
     //    RETURNS the new value of ontime, so caller must make an assignment to the return value.
     auto graceExtend = [millespernote,chord,events](int notePitch, QVector<Chord*> graceNotes, int ontime) {
-                           for (Chord* c : graceNotes) {
-                               for (Note* n : c->notes()) {
-                                   // NoteEvent takes relative pitch as first argument.
-                                   // The pitch is relative to the pitch of the note, the event is rendering
-                                   if (n->play()) {
-                                       events->append(NoteEvent(n->pitch() - notePitch,
-                                                                ontime / chord->actualTicks().ticks(),
-                                                                millespernote / chord->actualTicks().ticks()));
-                                   }
-                               }
-                               ontime += millespernote;
-                           }
-                           return ontime;
-                       };
+        for (Chord* c : graceNotes) {
+            for (Note* n : c->notes()) {
+                // NoteEvent takes relative pitch as first argument.
+                // The pitch is relative to the pitch of the note, the event is rendering
+                if (n->play()) {
+                    events->append(NoteEvent(n->pitch() - notePitch,
+                                             ontime / chord->actualTicks().ticks(),
+                                             millespernote / chord->actualTicks().ticks()));
+                }
+            }
+            ontime += millespernote;
+        }
+        return ontime;
+    };
 
     // calculate the number of times to repeat the body, and sustain the last note of the body
     // 1000 = P + numrepeat*B+sustain + S
@@ -2644,8 +2644,8 @@ MidiRenderer::Chunk MidiRenderer::getChunkAt(int utick)
     updateState();
 
     auto it = std::upper_bound(chunks.begin(), chunks.end(), utick, [](int utick, const Chunk& ch) {
-            return utick < ch.utick1();
-        });
+        return utick < ch.utick1();
+    });
     if (it == chunks.begin()) {
         return Chunk();
     }
@@ -2661,8 +2661,8 @@ MidiRenderer::Chunk MidiRenderer::chunkAt(int utick)
 {
     updateState();
     auto it = std::upper_bound(chunks.begin(), chunks.end(), utick, [](int utick, const Chunk& ch) {
-            return utick <= ch.utick1();
-        });
+        return utick <= ch.utick1();
+    });
 
     if (it == chunks.end()) {
         return Chunk();
