@@ -1,4 +1,5 @@
-import QtQuick 2.9
+import QtQuick 2.12
+import QtQuick.Controls 2.12
 
 import MuseScore.UiComponents 1.0
 
@@ -59,6 +60,13 @@ Item {
         boundsBehavior: Flickable.StopAtBounds
         interactive: height < contentHeight
         clip: true
+
+        ScrollBar.vertical: StyledScrollBar {
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            anchors.rightMargin: 8
+        }
 
         Connections {
             target: root.model
