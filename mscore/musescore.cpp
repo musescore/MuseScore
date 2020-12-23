@@ -5338,7 +5338,7 @@ bool MuseScore::restoreSession(bool always)
                                     else if (t == "dirty")
                                           /*int dirty =*/ e.readInt();
                                     else if (t == "path") {
-                                          MasterScore* score = readScore(e.readElementText());
+                                          Score* score = openScore(e.readElementText());
                                           if (score) {
                                                 if (!name.isEmpty()) {
                                                       QFileInfo* fi = score->masterScore()->fileInfo();
@@ -5349,7 +5349,6 @@ bool MuseScore::restoreSession(bool always)
                                                       // override if last session did a clean exit
                                                       created = false;
                                                       }
-                                                appendScore(score);
                                                 score->setCreated(created);
                                                 }
                                           else {

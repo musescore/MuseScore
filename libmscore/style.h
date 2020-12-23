@@ -1426,6 +1426,7 @@ enum class Sid {
 
       autoplaceEnabled,
       usePre_3_6_defaults,
+      defaultsVersion,
 
       STYLES
       ///\}
@@ -1445,6 +1446,7 @@ class MStyle {
 
       ChordList _chordList;
       bool _customChordList;        // if true, chordlist will be saved as part of score
+      int _defaultStyleVersion = -1;
 
    public:
       MStyle();
@@ -1455,6 +1457,7 @@ class MStyle {
       void set(Sid idx, const QVariant& v);
 
       bool isDefault(Sid idx) const;
+      void setDefaultStyleVersion(const int defaultsVersion);
 
       const ChordDescription* chordDescription(int id) const;
       ChordList* chordList()  { return &_chordList; }
@@ -1464,7 +1467,7 @@ class MStyle {
 
       bool load(QFile* qf, bool ign = false);
       void load(XmlReader& e);
-      void applyNewDefaults(const MStyle& other);
+      void applyNewDefaults(const MStyle& other, const int defaultsVersion);
       void save(XmlWriter& xml, bool optimize);
       bool readProperties(XmlReader&);
       bool readStyleValCompat(XmlReader&);
@@ -1475,6 +1478,7 @@ class MStyle {
       static const char* valueType(const Sid);
       static const char* valueName(const Sid);
       static Sid styleIdx(const QString& name);
+      static MStyle* resolveStyleDefaults(const int defaultsVersion);
       };
 
 //---------------------------------------------------------

@@ -4810,11 +4810,9 @@ void Score::setStyle(const MStyle& s, const bool overlap)
       for (int i = static_cast<int>(Sid::NOSTYLE) + 1; i < static_cast<int>(Sid::STYLES); i++) {
           Sid sid = static_cast<Sid>(i);
 
-          if (!style().isDefault(sid))
-                styleCopy.set(sid, style().value(sid));
+          if (style().isDefault(sid))
+                style().set(sid, styleCopy.value(sid));
           }
-
-      style() = styleCopy;
       }
 
 //---------------------------------------------------------

@@ -411,5 +411,23 @@ Score::FileError MasterScore::read302(XmlReader& e)
       return FileError::FILE_NO_ERROR;
       }
 
+MStyle* styleDefaults301()
+      {
+      static MStyle* result = nullptr;
+
+      if (result)
+            return result;
+
+      result = new MStyle();
+
+      QFile baseDefaults(":/styles/legacy-style-defaults-v3.mss");
+
+      if (!baseDefaults.open(QIODevice::ReadOnly))
+            return result;
+
+      result->load(&baseDefaults);
+
+      return result;
+      }
 }
 

@@ -2571,15 +2571,20 @@ static void readPageFormat(PageFormat* pf, XmlReader& e)
       pf->setPrintableWidth(qMin(w1, w2));     // silently adjust right margins
       }
 
-MStyle styleDefaults114()
+MStyle* styleDefaults114()
       {
-      MStyle result;
+      static MStyle* result = nullptr;
+
+      if (result)
+            return result;
+
+      result = new MStyle();
       QFile baseDefaults(":/styles/legacy-style-defaults-v1.mss");
 
       if (!baseDefaults.open(QIODevice::ReadOnly))
             return result;
 
-      result.load(&baseDefaults);
+      result->load(&baseDefaults);
 
       return result;
       }
@@ -2735,20 +2740,6 @@ static void readStyle(MStyle* style, XmlReader& e)
 
 Score::FileError MasterScore::read114(XmlReader& e)
       {
-      setStyle(styleDefaults114());
-#if 0
-      // old text style defaults
-      TextStyle ts = style().textStyle("Chord Symbol");
-      ts.setYoff(-4.0);
-      style().setTextStyle(ts);
-      ts = style().textStyle("Rehearsal Mark");
-      ts.setSquare(false);
-      ts.setFrameRound(20);
-      style().setTextStyle(ts);
-      ts = style().textStyle("Dynamics");
-      ts.setItalic(false);
-      style().setTextStyle(ts);
-#endif
       TempoMap tm;
       while (e.readNextStartElement()) {
             e.setTrack(-1);

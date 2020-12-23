@@ -1368,7 +1368,7 @@ class MasterScore : public Score {
       void setTempomap(TempoMap* tm);
 
       bool saveFile(bool generateBackup = true);
-      FileError read1(XmlReader&, bool ignoreVersionError);
+      FileError read1(XmlReader&, bool ignoreVersionError, const int styleDefaultsVersion = MSCVERSION);
       FileError loadCompressedMsc(QIODevice*, bool ignoreVersionError);
       FileError loadMsc(QString name, bool ignoreVersionError);
       FileError loadMsc(QString name, QIODevice*, bool ignoreVersionError);
@@ -1377,6 +1377,7 @@ class MasterScore : public Score {
       FileError read302(XmlReader&);
       QByteArray readToBuffer();
       QByteArray readCompressedToBuffer();
+      int readStyleDefaultsVersion(const QByteArray& data) const;
 
       Omr* omr() const                         { return _omr;     }
       void setOmr(Omr* o)                      { _omr = o;        }
@@ -1479,8 +1480,10 @@ inline Fraction Score::pos(POS pos) const              { return _masterScore->po
 inline void Score::setPos(POS pos, Fraction tick)      { _masterScore->setPos(pos, tick);        }
 
 extern MasterScore* gscore;
-extern MStyle styleDefaults114();
-extern Ms::MStyle styleDefaults206();
+
+extern MStyle* styleDefaults114();
+extern MStyle* styleDefaults206();
+extern MStyle* styleDefaults301();
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(LayoutFlags);
 

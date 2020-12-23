@@ -6,40 +6,11 @@
     <Division>480</Division>
     <Style>
       <minSystemDistance>9.2</minSystemDistance>
-      <lyricsDashForce>0</lyricsDashForce>
-      <minMeasureWidth>4</minMeasureWidth>
-      <bracketWidth>0.35</bracketWidth>
+      <frameSystemDistance>13</frameSystemDistance>
       <bracketDistance>0.2</bracketDistance>
-      <clefLeftMargin>0.5</clefLeftMargin>
-      <timesigLeftMargin>0.5</timesigLeftMargin>
-      <clefKeyRightMargin>1.75</clefKeyRightMargin>
-      <clefBarlineDistance>0.18</clefBarlineDistance>
-      <stemWidth>0.13</stemWidth>
-      <minNoteDistance>0.4</minNoteDistance>
-      <barNoteDistance>1.2</barNoteDistance>
-      <noteBarDistance>1</noteBarDistance>
       <measureSpacing>1.14</measureSpacing>
-      <staffLineWidth>0.08</staffLineWidth>
-      <ledgerLineWidth>0.12</ledgerLineWidth>
-      <accidentalNoteDistance>0.22</accidentalNoteDistance>
-      <beamWidth>0.48</beamWidth>
-      <beamMinLen>1.25</beamMinLen>
-      <dotNoteDistance>0.35</dotNoteDistance>
-      <dotDotDistance>0.5</dotDotDistance>
-      <propertyDistanceStem>0.5</propertyDistanceStem>
-      <hairpinHeight>1.2</hairpinHeight>
-      <hairpinWidth>0.13</hairpinWidth>
-      <chordStyle>custom</chordStyle>
-      <chordsXmlFile>1</chordsXmlFile>
-      <chordDescriptionFile>stdchords.xml</chordDescriptionFile>
       <createMultiMeasureRests>1</createMultiMeasureRests>
-      <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>
       <voltaPosAbove x="0" y="-2"/>
-      <keySigNaturals>1</keySigNaturals>
-      <tupletOufOfStaff>0</tupletOufOfStaff>
-      <tupletVStemDistance>0.25</tupletVStemDistance>
-      <tupletStemLeftDistance>0.5</tupletStemLeftDistance>
-      <tupletNoteLeftDistance>0</tupletNoteLeftDistance>
       <Spatium>1.764</Spatium>
       </Style>
     <showInvisible>1</showInvisible>

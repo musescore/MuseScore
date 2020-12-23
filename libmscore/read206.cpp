@@ -3781,8 +3781,6 @@ void PageFormat::read(XmlReader& e)
 
 Score::FileError MasterScore::read206(XmlReader& e)
       {
-      setStyle(styleDefaults206());
-
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "programVersion") {
@@ -3861,15 +3859,20 @@ Score::FileError MasterScore::read206(XmlReader& e)
       return FileError::FILE_NO_ERROR;
       }
 
-MStyle styleDefaults206()
+MStyle* styleDefaults206()
       {
-      MStyle result;
+      static MStyle* result = nullptr;
+
+      if (result)
+            return result;
+
+      result = new MStyle();
       QFile baseDefaults(":/styles/legacy-style-defaults-v2.mss");
 
       if (!baseDefaults.open(QIODevice::ReadOnly))
             return result;
 
-      result.load(&baseDefaults);
+      result->load(&baseDefaults);
 
       return result;
       }
