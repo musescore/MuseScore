@@ -34,6 +34,10 @@ namespace Ms {
 // 120 dpi           screen resolution
 //  spatium = 20/4 points
 
+static const int LEGACY_MSC_VERSION_V3 = 301;
+static const int LEGACY_MSC_VERSION_V2 = 206;
+static const int LEGACY_MSC_VERSION_V1 = 114;
+
 //---------------------------------------------------------
 //   StyleType
 //---------------------------------------------------------
@@ -1437,7 +1441,8 @@ static const StyleType styleTypes[] {
       { Sid::tupletMinDistance,             "tupletMinDistance",             Spatium(0.5)  },
 
       { Sid::autoplaceEnabled,              "autoplaceEnabled",              true },
-      { Sid::usePre_3_6_defaults,           "usePre_3_6_defaults",           false}
+      { Sid::usePre_3_6_defaults,           "usePre_3_6_defaults",           false},
+      { Sid::defaultsVersion,               "defaultsVersion",               Ms::MSCVERSION}
       };
 
 MStyle  MScore::_baseStyle;
@@ -2671,16 +2676,31 @@ Sid MStyle::styleIdx(const QString &name)
       return Sid::NOSTYLE;
       }
 
+MStyle* MStyle::resolveStyleDefaults(const int defaultsVersion)
+      {
+      switch (defaultsVersion) {
+            case LEGACY_MSC_VERSION_V3:
+                 return styleDefaults301();
+            case LEGACY_MSC_VERSION_V2:
+                 return styleDefaults206();
+            case LEGACY_MSC_VERSION_V1:
+                 return styleDefaults114();
+            default:
+                 return &MScore::baseStyle();
+          }
+      }
+
 //---------------------------------------------------------
 //   Style
 //---------------------------------------------------------
 
 MStyle::MStyle()
       {
+      _defaultStyleVersion = MSCVERSION;
       _customChordList = false;
       for (const StyleType& t : styleTypes)
             _values[t.idx()] = t.defaultValue();
-      };
+      }
 
 //---------------------------------------------------------
 //   precomputeValues
@@ -2703,7 +2723,12 @@ void MStyle::precomputeValues()
 
 bool MStyle::isDefault(Sid idx) const
       {
-      return value(idx) == MScore::baseStyle().value(idx);
+      return value(idx) == resolveStyleDefaults(_defaultStyleVersion)->value(idx);
+      }
+
+void MStyle::setDefaultStyleVersion(const int defaultsVersion)
+      {
+      _defaultStyleVersion = defaultsVersion;
       }
 
 //---------------------------------------------------------
@@ -3006,13 +3031,15 @@ void MStyle::load(XmlReader& e)
             checkChordList();
       }
 
-void MStyle::applyNewDefaults(const MStyle& other)
+void MStyle::applyNewDefaults(const MStyle& other, const int defaultsVersion)
       {
       for (auto st : qAsConst(styleTypes))
             if (isDefault(st.styleIdx())) {
                   st._defaultValue = other.value(st.styleIdx());
                   _values.at(st.idx()) = other.value(st.styleIdx());
             }
+
+      _defaultStyleVersion = defaultsVersion;
       }
 
 //---------------------------------------------------------

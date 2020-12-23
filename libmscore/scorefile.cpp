@@ -864,7 +864,9 @@ Score::FileError MasterScore::loadCompressedMsc(QIODevice* io, bool ignoreVersio
       XmlReader e(dbuf);
       e.setDocName(masterScore()->fileInfo()->completeBaseName());
 
-      FileError retval = read1(e, ignoreVersionError);
+      int defaultsVersion = readStyleDefaultsVersion(QByteArray(dbuf));
+
+      FileError retval = read1(e, ignoreVersionError, defaultsVersion);
 
 #ifdef OMR
       //
@@ -893,6 +895,20 @@ Score::FileError MasterScore::loadCompressedMsc(QIODevice* io, bool ignoreVersio
             audio()->setData(dbuf1);
             }
       return retval;
+      }
+
+int MasterScore::readStyleDefaultsVersion(const QByteArray& data) const
+      {
+      XmlReader e(data);
+      e.setDocName(masterScore()->fileInfo()->completeBaseName());
+
+      while (!e.atEnd()) {
+            e.readNext();
+            if (e.name() == "defaultsVersion")
+                  return e.readInt();
+            }
+
+      return MSCVERSION;
       }
 
 //---------------------------------------------------------
@@ -980,7 +996,7 @@ void MasterScore::parseVersion(const QString& val)
 //    return true on success
 //---------------------------------------------------------
 
-Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError)
+Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError, const int styleDefaultsVersion)
       {
       while (e.readNextStartElement()) {
             if (e.name() == "museScore") {
@@ -996,6 +1012,10 @@ Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError)
                         if (mscVersion() == 300)
                               return FileError::FILE_OLD_300_FORMAT;
                         }
+
+                  setStyle(*MStyle::resolveStyleDefaults(styleDefaultsVersion));
+                  style().setDefaultStyleVersion(styleDefaultsVersion);
+
                   Score::FileError error;
                   if (mscVersion() <= 114)
                         error = read114(e);

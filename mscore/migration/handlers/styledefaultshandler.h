@@ -9,6 +9,9 @@ class StyleDefaultsHandler : public IScoreMigrationHandler
       StyleDefaultsHandler() = default;
 
       bool handle(Ms::Score* score) override;
+    private:
+      int resolveDefaultsVersion(const int mscVersion) const;
+      void applyStyleDefaults(Ms::Score* score) const;
       };
 
 #endif // OLDSCOREHANDLER_H

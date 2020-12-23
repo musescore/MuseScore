@@ -10,21 +10,17 @@
       <staffDistance>6</staffDistance>
       <akkoladeDistance>6.4</akkoladeDistance>
       <minSystemDistance>8.2</minSystemDistance>
-      <lyricsDashForce>0</lyricsDashForce>
       <systemFrameDistance>6</systemFrameDistance>
       <frameSystemDistance>6</frameSystemDistance>
-      <minMeasureWidth>4</minMeasureWidth>
       <repeatBarTips>1</repeatBarTips>
       <startBarlineSingle>1</startBarlineSingle>
       <startBarlineMultiple>0</startBarlineMultiple>
-      <bracketWidth>0.35</bracketWidth>
       <bracketDistance>0.3</bracketDistance>
       <clefLeftMargin>0.6</clefLeftMargin>
       <keysigLeftMargin>0.6</keysigLeftMargin>
       <timesigLeftMargin>0.6</timesigLeftMargin>
       <clefKeyRightMargin>1.8</clefKeyRightMargin>
       <clefBarlineDistance>0.19</clefBarlineDistance>
-      <stemWidth>0.13</stemWidth>
       <shortenStem>0</shortenStem>
       <shortStemProgression>0.3</shortStemProgression>
       <shortestStem>2.5</shortestStem>
@@ -32,7 +28,6 @@
       <minNoteDistance>0.5</minNoteDistance>
       <noteBarDistance>1.1</noteBarDistance>
       <measureSpacing>1.235</measureSpacing>
-      <staffLineWidth>0.08</staffLineWidth>
       <ledgerLineWidth>0.13</ledgerLineWidth>
       <accidentalDistance>0.23</accidentalDistance>
       <accidentalNoteDistance>0.23</accidentalNoteDistance>
@@ -64,27 +59,18 @@
       <genCourtesyKeysig>0</genCourtesyKeysig>
       <useStandardNoteNames>0</useStandardNoteNames>
       <useGermanNoteNames>1</useGermanNoteNames>
-      <chordStyle>custom</chordStyle>
-      <chordsXmlFile>1</chordsXmlFile>
-      <chordDescriptionFile>stdchords.xml</chordDescriptionFile>
       <concertPitch>1</concertPitch>
       <createMultiMeasureRests>1</createMultiMeasureRests>
       <minEmptyMeasures>3</minEmptyMeasures>
       <minMMRestWidth>3</minMMRestWidth>
       <hideEmptyStaves>1</hideEmptyStaves>
       <dontHidStavesInFirstSystm>0</dontHidStavesInFirstSystm>
-      <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>
       <ArpeggioNoteDistance>0.7</ArpeggioNoteDistance>
       <ArpeggioLineWidth>0.19</ArpeggioLineWidth>
       <ArpeggioHookLen>0.9</ArpeggioHookLen>
       <evenFooterL>$P</evenFooterL>
       <oddFooterR>$P</oddFooterR>
       <voltaPosAbove x="0" y="-2"/>
-      <keySigNaturals>1</keySigNaturals>
-      <tupletOufOfStaff>0</tupletOufOfStaff>
-      <tupletVStemDistance>0.25</tupletVStemDistance>
-      <tupletStemLeftDistance>0.5</tupletStemLeftDistance>
-      <tupletNoteLeftDistance>0</tupletNoteLeftDistance>
       <Spatium>1.764</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
