@@ -77,288 +77,6 @@ namespace Ms {
 static void readText206(XmlReader& e, TextBase* t, Element* be);
 
 //---------------------------------------------------------
-//   StyleVal206
-//    this is a list of default style values which are
-//    different in 3.x
-//
-// TODO: remove style values which are equal
-//---------------------------------------------------------
-
-struct StyleVal2 {
-            Sid idx;
-            QVariant val;
-            };
-      static const StyleVal2 style206[] = {
-      { Sid::staffUpperBorder,            Spatium(7.0)  },
-      { Sid::staffLowerBorder,            Spatium(7.0)  },
-      { Sid::staffDistance,               Spatium(6.5)  },
-      { Sid::akkoladeDistance,            Spatium(6.5)  },
-      { Sid::minSystemDistance,           Spatium(8.5)  },
-      { Sid::maxSystemDistance,           Spatium(15.0) },
-
-//      { Sid::lyricsMinBottomDistance,     Spatium(4.0)  },      // no longer makes sense
-      { Sid::lyricsLineHeight,            QVariant(1.0) },
-      { Sid::lyricsDashForce,             QVariant(false) },
-      { Sid::figuredBassFontFamily,       QVariant(QString("MScoreBC")) },
-      { Sid::figuredBassFontSize,         QVariant(8.0) },
-      { Sid::figuredBassYOffset,          QVariant(6.0) },
-      { Sid::figuredBassLineHeight,       QVariant(1.0) },
-      { Sid::figuredBassAlignment,        QVariant(0) },
-      { Sid::figuredBassStyle,            QVariant(0) },
-      { Sid::systemFrameDistance,         Spatium(7.0) },
-      { Sid::frameSystemDistance,         Spatium(7.0) },
-      { Sid::minMeasureWidth,             Spatium(5.0) },
-      { Sid::barWidth,                    Spatium(0.16) },      // 0.1875
-      { Sid::doubleBarWidth,              Spatium(0.16) },
-      { Sid::endBarWidth,                 Spatium(0.5) },       // 0.5
-      { Sid::doubleBarDistance,           Spatium(0.46) },     // 0.3 + doubleBarWidth
-      { Sid::endBarDistance,              Spatium(0.65) },     // 0.3
-      { Sid::repeatBarTips,               QVariant(false) },
-      { Sid::startBarlineSingle,          QVariant(false) },
-      { Sid::startBarlineMultiple,        QVariant(true) },
-      { Sid::bracketWidth,                Spatium(0.45) },
-      { Sid::bracketDistance,             Spatium(0.1) },
-      { Sid::akkoladeWidth,               Spatium(1.6) },
-      { Sid::akkoladeBarDistance,         Spatium(.4) },
-      { Sid::clefLeftMargin,              Spatium(0.64) },
-      { Sid::keysigLeftMargin,            Spatium(0.5) },
-      { Sid::timesigLeftMargin,           Spatium(0.5) },
-      { Sid::clefKeyRightMargin,          Spatium(1.75) },
-      { Sid::clefBarlineDistance,         Spatium(0.5) },
-      { Sid::stemWidth,                   Spatium(0.13) },      // 0.09375
-      { Sid::shortenStem,                 QVariant(true) },
-      { Sid::shortStemProgression,        Spatium(0.25) },
-      { Sid::shortestStem,                Spatium(2.25) },
-      { Sid::beginRepeatLeftMargin,       Spatium(1.0) },
-      { Sid::minNoteDistance,             Spatium(0.25) },      // 0.4
-      { Sid::barNoteDistance,             Spatium(1.2) },
-      { Sid::barAccidentalDistance,       Spatium(.3) },
-      { Sid::multiMeasureRestMargin,      Spatium(1.2) },
-      { Sid::noteBarDistance,             Spatium(1.0) },
-      { Sid::measureSpacing,              QVariant(1.2) },
-      { Sid::staffLineWidth,              Spatium(0.08) },      // 0.09375
-      { Sid::ledgerLineWidth,             Spatium(0.16) },     // 0.1875
-      { Sid::ledgerLineLength,            Spatium(0.76) },     // notehead width + this value
-      { Sid::accidentalDistance,          Spatium(0.22) },
-      { Sid::accidentalNoteDistance,      Spatium(0.22) },
-      { Sid::beamWidth,                   Spatium(0.5) },           // was 0.48
-      { Sid::beamDistance,                QVariant(0.5) },          // 0.25sp
-      { Sid::beamMinLen,                  QVariant(1.32) },      // 1.316178 exactly notehead width
-      { Sid::beamNoSlope,                 QVariant(false) },
-      { Sid::dotMag,                      QVariant(1.0) },
-      { Sid::dotNoteDistance,             QVariant(0.35) },
-      { Sid::dotRestDistance,             QVariant(0.25) },
-      { Sid::dotDotDistance,              QVariant(0.5) },
-      { Sid::propertyDistanceHead,        QVariant(1.0) },
-      { Sid::propertyDistanceStem,        QVariant(1.8) },
-      { Sid::propertyDistance,            QVariant(1.0) },
-      { Sid::articulationMag,             QVariant(1.0) },
-      { Sid::lastSystemFillLimit,         QVariant(0.3) },
-      { Sid::hairpinPosBelow,             QPointF(0.0, 3.5) },
-      { Sid::hairpinHeight,               QVariant(1.2) },
-      { Sid::hairpinContHeight,           QVariant(0.5) },
-      { Sid::hairpinLineWidth,            QVariant(0.13) },
-      { Sid::pedalPosBelow,               QPointF(0.0, 4) },
-      { Sid::pedalLineWidth,              QVariant(.15) },
-      { Sid::pedalLineStyle,              QVariant(int(Qt::SolidLine)) },
-      { Sid::trillPosAbove,               QPointF(0.0, -1) },
-      { Sid::harmonyFretDist,             QVariant(0.5) },
-      { Sid::minHarmonyDistance,          QVariant(0.5) },
-      { Sid::maxHarmonyBarDistance,       QVariant(3.0) },
-      { Sid::capoPosition,                QVariant(0) },
-      { Sid::fretNumMag,                  QVariant(2.0) },
-      { Sid::fretNumPos,                  QVariant(0) },
-      { Sid::fretY,                       QVariant(1.0) },
-      { Sid::showPageNumber,              QVariant(true) },
-      { Sid::showPageNumberOne,           QVariant(false) },
-      { Sid::pageNumberOddEven,           QVariant(true) },
-      { Sid::showMeasureNumber,           QVariant(true) },
-      { Sid::showMeasureNumberOne,        QVariant(false) },
-      { Sid::measureNumberInterval,       QVariant(5) },
-      { Sid::measureNumberSystem,         QVariant(true) },
-      { Sid::measureNumberAllStaves,      QVariant(false) },
-      { Sid::smallNoteMag,                QVariant(.7) },
-      { Sid::graceNoteMag,                QVariant(0.7) },
-      { Sid::smallStaffMag,               QVariant(0.7) },
-      { Sid::smallClefMag,                QVariant(0.8) },
-      { Sid::genClef,                     QVariant(true) },
-      { Sid::genKeysig,                   QVariant(true) },
-      { Sid::genCourtesyTimesig,          QVariant(true) },
-      { Sid::genCourtesyKeysig,           QVariant(true) },
-      { Sid::genCourtesyClef,             QVariant(true) },
-      { Sid::swingRatio,                  QVariant(60)   },
-      { Sid::swingUnit,                   QVariant(QString("")) },
-      { Sid::useStandardNoteNames,        QVariant(true) },
-      { Sid::useGermanNoteNames,          QVariant(false) },
-      { Sid::useFullGermanNoteNames,      QVariant(false) },
-      { Sid::useSolfeggioNoteNames,       QVariant(false) },
-      { Sid::useFrenchNoteNames,          QVariant(false) },
-      { Sid::automaticCapitalization,     QVariant(true) },
-      { Sid::lowerCaseMinorChords,        QVariant(false) },
-      { Sid::lowerCaseBassNotes,          QVariant(false) },
-      { Sid::allCapsNoteNames,            QVariant(false) },
-      { Sid::chordStyle,                  QVariant(QString("std")) },
-      { Sid::chordsXmlFile,               QVariant(false) },
-      { Sid::chordDescriptionFile,        QVariant(QString("chords_std.xml")) },
-//      { Sid::harmonyPlay,                 QVariant(false) },
-      { Sid::concertPitch,                QVariant(false) },
-      { Sid::createMultiMeasureRests,     QVariant(false) },
-      { Sid::minEmptyMeasures,            QVariant(2) },
-      { Sid::minMMRestWidth,              Spatium(4) },
-      { Sid::hideEmptyStaves,             QVariant(false) },
-      { Sid::dontHideStavesInFirstSystem, QVariant(true) },
-      { Sid::hideInstrumentNameIfOneInstrument, QVariant(true) },
-      { Sid::gateTime,                    QVariant(100) },
-      { Sid::tenutoGateTime,              QVariant(100) },
-      { Sid::staccatoGateTime,            QVariant(50) },
-      { Sid::slurGateTime,                QVariant(100) },
-      { Sid::ArpeggioNoteDistance,        QVariant(.5) },
-      { Sid::ArpeggioLineWidth,           QVariant(.18) },
-      { Sid::ArpeggioHookLen,             QVariant(.8) },
-      { Sid::SlurEndWidth,                QVariant(.07) },
-      { Sid::SlurMidWidth,                QVariant(.15) },
-      { Sid::SlurDottedWidth,             QVariant(.1) },
-      { Sid::MinTieLength,                QVariant(1.0) },
-      { Sid::SectionPause,                QVariant(qreal(3.0)) },
-      { Sid::MusicalSymbolFont,           QVariant(QString("Emmentaler")) },
-      { Sid::MusicalTextFont,             QVariant(QString("MScore Text")) },
-      { Sid::showHeader,                  QVariant(false) },
-      { Sid::headerFirstPage,             QVariant(false) },
-      { Sid::headerOddEven,               QVariant(true) },
-      { Sid::evenHeaderL,                 QVariant(QString()) },
-      { Sid::evenHeaderC,                 QVariant(QString()) },
-      { Sid::evenHeaderR,                 QVariant(QString()) },
-      { Sid::oddHeaderL,                  QVariant(QString()) },
-      { Sid::oddHeaderC,                  QVariant(QString()) },
-      { Sid::oddHeaderR,                  QVariant(QString()) },
-      { Sid::showFooter,                  QVariant(true) },
-      { Sid::footerFirstPage,             QVariant(true) },
-      { Sid::footerOddEven,               QVariant(true) },
-      { Sid::evenFooterL,                 QVariant(QString("$p")) },
-      { Sid::evenFooterC,                 QVariant(QString("$:copyright:")) },
-      { Sid::evenFooterR,                 QVariant(QString()) },
-      { Sid::oddFooterL,                  QVariant(QString()) },
-      { Sid::oddFooterC,                  QVariant(QString("$:copyright:")) },
-      { Sid::oddFooterR,                  QVariant(QString("$p")) },
-      { Sid::voltaPosAbove,               QPointF(0.0, -3.0) },
-      { Sid::voltaHook,                   QVariant(1.9) },
-      { Sid::voltaLineWidth,              QVariant(.1) },
-      { Sid::voltaLineStyle,              QVariant(int(Qt::SolidLine)) },
-      { Sid::ottavaPosAbove,              QPointF(0.0, -3.0) },
-      { Sid::ottavaHookAbove,             QVariant(1.9) },
-      { Sid::ottavaHookBelow,             QVariant(-1.9) },
-      { Sid::ottavaLineWidth,             QVariant(.1) },
-      { Sid::ottavaLineStyle,             QVariant(int(Qt::DashLine)) },
-      { Sid::ottavaNumbersOnly,           true },
-      { Sid::tabClef,                     QVariant(int(ClefType::TAB)) },
-      { Sid::tremoloWidth,                QVariant(1.2) },  // tremolo stroke width: notehead width
-      { Sid::tremoloBoxHeight,            QVariant(0.65) },
-      { Sid::tremoloStrokeWidth,          QVariant(0.5) },  // was 0.35
-      { Sid::tremoloDistance,             QVariant(0.8) },
-      // TODO { Sid::tremoloBeamLengthMultiplier, QVariant(0.62) },
-      // TODO { Sid::tremoloMaxBeamLength,        QVariant(12.0) },
-      { Sid::linearStretch,               QVariant(qreal(1.5)) },
-      { Sid::crossMeasureValues,          QVariant(false) },
-      { Sid::keySigNaturals,              QVariant(int(KeySigNatural::NONE)) },
-
-      { Sid::tupletMaxSlope,              QVariant(qreal(0.5)) },
-      { Sid::tupletOufOfStaff,            QVariant(true) },
-      { Sid::tupletVHeadDistance,         QVariant(.5) },
-      { Sid::tupletVStemDistance,         QVariant(.25) },
-      { Sid::tupletStemLeftDistance,      QVariant(.5) },
-      { Sid::tupletStemRightDistance,     QVariant(.5) },
-      { Sid::tupletNoteLeftDistance,      QVariant(0.0) },
-      { Sid::tupletNoteRightDistance,     QVariant(0.0) },
-
-      { Sid::barreLineWidth,              QVariant(1.0) },
-      { Sid::fretMag,                     QVariant(1.0) },
-      { Sid::scaleBarlines,               QVariant(true) },
-      { Sid::barGraceDistance,            QVariant(.6) },
-      { Sid::rehearsalMarkFrameRound,     QVariant(20)    },
-      { Sid::dynamicsFontStyle,           int(FontStyle::Italic) },
-
-//      { Sid::staffTextFontFace,           "Edwin" },
-//      { Sid::staffTextFontSize,           10.0 },
-//      { Sid::staffTextFontBold,           false },
-//      { Sid::staffTextFontItalic,         false },
-//      { Sid::staffTextFontUnderline,      false },
-      { Sid::staffTextAlign,              QVariant::fromValue(Align::LEFT | Align::TOP) },      // different from 3.x
-//      { Sid::staffTextOffsetType,         int(OffsetType::SPATIUM)   },
-//      { Sid::staffTextPlacement,          int(Placement::ABOVE) },
-      { Sid::staffTextPosAbove,           QPointF(.0, -4.0) },
-//      { Sid::staffTextMinDistance,        Spatium(0.5)  },
-//      { Sid::staffTextFrameType,          int(FrameType::NO_FRAME) },
-//      { Sid::staffTextFramePadding,       0.2 },
-//      { Sid::staffTextFrameWidth,         0.1 },
-//      { Sid::staffTextFrameRound,         0  },
-//      { Sid::staffTextFrameFgColor,       QColor(0, 0, 0, 255) },
-//      { Sid::staffTextFrameBgColor,       QColor(255, 255, 255, 0) },
-      { Sid::defaultFrameRound,           QVariant(25) },
-      { Sid::defaultFrameWidth,           Spatium(0.2) },
-      { Sid::defaultFramePadding,         Spatium(0.5) },
-
-      { Sid::titleFrameRound,             QVariant(25) },
-      { Sid::titleFrameWidth,             Spatium(0.2) },
-      { Sid::titleFramePadding,           Spatium(0.5) },
-
-      { Sid::subTitleFrameRound,          QVariant(25) },
-      { Sid::subTitleFrameWidth,          Spatium(0.2) },
-      { Sid::subTitleFramePadding,        Spatium(0.5) },
-
-      { Sid::composerFrameRound,          QVariant(25) },
-      { Sid::composerFrameWidth,          Spatium(0.2) },
-      { Sid::composerFramePadding,        Spatium(0.5) },
-
-      { Sid::lyricistFrameRound,          QVariant(25) },
-      { Sid::lyricistFrameWidth,          Spatium(0.2) },
-      { Sid::lyricistFramePadding,        Spatium(0.5) },
-
-      { Sid::fingeringFrameRound,          QVariant(25) },
-      { Sid::fingeringFrameWidth,          Spatium(0.2) },
-      { Sid::fingeringFramePadding,        Spatium(0.5) },
-
-      { Sid::lhGuitarFingeringFrameRound,       QVariant(25) },
-      { Sid::lhGuitarFingeringFrameWidth,       Spatium(0.2) },
-      { Sid::lhGuitarFingeringFramePadding,     Spatium(0.5) },
-
-      { Sid::rhGuitarFingeringFrameRound,       QVariant(25) },
-      { Sid::rhGuitarFingeringFrameWidth,       Spatium(0.2) },
-      { Sid::rhGuitarFingeringFramePadding,     Spatium(0.5) },
-
-      { Sid::partInstrumentFrameRound,    QVariant(25) },
-      { Sid::partInstrumentFrameWidth,    Spatium(0.2) },
-      { Sid::partInstrumentFramePadding,  Spatium(0.5) },
-
-      { Sid::tempoFrameRound,             QVariant(0)  },
-      { Sid::tempoFrameWidth,             Spatium(0.2) },
-      { Sid::tempoFramePadding,           Spatium(0.5) },
-
-      { Sid::tempoFrameRound,             QVariant(25) },
-      { Sid::tempoFrameWidth,             Spatium(0.2) },
-      { Sid::tempoFramePadding,           Spatium(0.5) },
-
-      { Sid::systemTextFrameRound,        QVariant(25) },
-      { Sid::systemTextFrameWidth,        Spatium(0.2) },
-      { Sid::systemTextFramePadding,      Spatium(0.5) },
-
-      { Sid::staffTextFrameRound,         QVariant(25) },
-      { Sid::staffTextFrameWidth,         Spatium(0.2) },
-      { Sid::staffTextFramePadding,       Spatium(0.5) },
-
-      { Sid::rehearsalMarkFrameRound,     QVariant(20) },
-      { Sid::rehearsalMarkFrameWidth,     Spatium(0.2) },
-      { Sid::rehearsalMarkFramePadding,   Spatium(0.5) },
-
-      { Sid::repeatLeftFrameRound,        QVariant(25) },
-      { Sid::repeatLeftFrameWidth,        Spatium(0.2) },
-      { Sid::repeatLeftFramePadding,      Spatium(0.5) },
-
-      { Sid::repeatRightFrameRound,       QVariant(25) },
-      { Sid::repeatRightFrameWidth,       Spatium(0.2) },
-      { Sid::repeatRightFramePadding,     Spatium(0.5) },
-      };
-
-//---------------------------------------------------------
 //   excessTextStyles206
 //    The first map has the name of the style as the string
 //    The second map has the mapping of each Sid that the style identifies
@@ -4063,8 +3781,7 @@ void PageFormat::read(XmlReader& e)
 
 Score::FileError MasterScore::read206(XmlReader& e)
       {
-      for (unsigned int i = 0; i < sizeof(style206)/sizeof(*style206); ++i)
-            style().set(style206[i].idx, style206[i].val);
+      setStyle(styleDefaults206());
 
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
@@ -4142,6 +3859,19 @@ Score::FileError MasterScore::read206(XmlReader& e)
       setAutosaveDirty(false);
 
       return FileError::FILE_NO_ERROR;
+      }
+
+MStyle styleDefaults206()
+      {
+      MStyle result;
+      QFile baseDefaults(":/styles/legacy-style-defaults-v2.mss");
+
+      if (!baseDefaults.open(QIODevice::ReadOnly))
+            return result;
+
+      result.load(&baseDefaults);
+
+      return result;
       }
 
 }

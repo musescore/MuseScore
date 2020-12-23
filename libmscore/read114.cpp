@@ -67,110 +67,6 @@ static int g_violinStrings[] = {55,62,69,76};
 static int g_violaStrings[]  = {48,55,62,69};
 static int g_celloStrings[]  = {36,43,50,57};
 
-//---------------------------------------------------------
-//   StyleVal114
-//---------------------------------------------------------
-
-struct StyleVal2 {
-      Sid sid;
-      QVariant val;
-      };
-
-static const StyleVal2 style114[] = {
-//      { Sid::lyricsMinBottomDistance,      Spatium(2) },
-      { Sid::lyricsDashForce,              QVariant(false) },
-      { Sid::frameSystemDistance,          Spatium(1.0) },
-      { Sid::minMeasureWidth,              Spatium(4.0) },
-//      { Sid::endBarDistance,               Spatium(0.30) },
-
-      { Sid::repeatBarTips,                QVariant(false) },
-      { Sid::startBarlineSingle,           QVariant(false) },
-      { Sid::startBarlineMultiple,         QVariant(true) },
-      { Sid::bracketWidth,                 QVariant(0.35) },
-      { Sid::bracketDistance,              QVariant(0.25) },
-      { Sid::clefLeftMargin,               QVariant(0.5) },
-      { Sid::keysigLeftMargin,             QVariant(0.5) },
-      { Sid::timesigLeftMargin,            QVariant(0.5) },
-      { Sid::clefKeyRightMargin,           QVariant(1.75) },
-      { Sid::clefBarlineDistance,          QVariant(0.18) },
-      { Sid::stemWidth,                    QVariant(0.13) },
-      { Sid::shortenStem,                  QVariant(true) },
-      { Sid::shortStemProgression,         QVariant(0.25) },
-      { Sid::shortestStem,                 QVariant(2.25) },
-      { Sid::beginRepeatLeftMargin,        QVariant(1.0) },
-      { Sid::minNoteDistance,              QVariant(0.4) },
-      { Sid::barNoteDistance,              QVariant(1.2) },
-      { Sid::noteBarDistance,              QVariant(1.0) },
-      { Sid::measureSpacing,               QVariant(1.2) },
-      { Sid::staffLineWidth,               QVariant(0.08) },
-      { Sid::ledgerLineWidth,              QVariant(0.12) },
-      { Sid::akkoladeWidth,                QVariant(1.6) },
-      { Sid::accidentalDistance,           QVariant(0.22) },
-      { Sid::accidentalNoteDistance,       QVariant(0.22) },
-      { Sid::beamWidth,                    QVariant(0.48) },
-      { Sid::beamDistance,                 QVariant(0.5) },
-      { Sid::beamMinLen,                   QVariant(1.25) },
-      { Sid::dotNoteDistance,              QVariant(0.35) },
-      { Sid::dotRestDistance,              QVariant(0.25) },
-      { Sid::dotDotDistance,               QVariant(0.5) },
-      { Sid::propertyDistanceHead,         QVariant(1.0) },
-      { Sid::propertyDistanceStem,         QVariant(0.5) },
-      { Sid::propertyDistance,             QVariant(1.0) },
-      { Sid::articulationMag,              QVariant(qreal(1.0)) },
-      { Sid::lastSystemFillLimit,          QVariant(0.3) },
-      { Sid::hairpinHeight,                QVariant(1.2) },
-      { Sid::hairpinContHeight,            QVariant(0.5) },
-      { Sid::hairpinLineWidth,             QVariant(0.13) },
-      { Sid::showPageNumber,               QVariant(true) },
-      { Sid::showPageNumberOne,            QVariant(false) },
-      { Sid::pageNumberOddEven,            QVariant(true) },
-      { Sid::showMeasureNumber,            QVariant(true) },
-      { Sid::showMeasureNumberOne,         QVariant(false) },
-      { Sid::measureNumberInterval,        QVariant(5) },
-      { Sid::measureNumberSystem,          QVariant(true) },
-      { Sid::measureNumberAllStaves,       QVariant(false) },
-      { Sid::smallNoteMag,                 QVariant(qreal(0.7)) },
-      { Sid::graceNoteMag,                 QVariant(qreal(0.7)) },
-      { Sid::smallStaffMag,                QVariant(qreal(0.7)) },
-      { Sid::smallClefMag,                 QVariant(qreal(0.8)) },
-      { Sid::genClef,                      QVariant(true) },
-      { Sid::genKeysig,                    QVariant(true) },
-      { Sid::genCourtesyTimesig,           QVariant(true) },
-      { Sid::genCourtesyKeysig,            QVariant(true) },
-      { Sid::useStandardNoteNames,         QVariant(true) },
-      { Sid::useGermanNoteNames,           QVariant(false) },
-      { Sid::useFullGermanNoteNames,       QVariant(false) },
-      { Sid::useSolfeggioNoteNames,        QVariant(false) },
-      { Sid::useFrenchNoteNames,           QVariant(false) },
-      { Sid::chordDescriptionFile,         QVariant(QString("stdchords.xml")) },
-      { Sid::chordStyle,                   QVariant(QString("custom")) },
-      { Sid::chordsXmlFile,                QVariant(true) },
-//      { Sid::harmonyY,                     QVariant(0.0) },
-//      { Sid::harmonyPlay,                  QVariant(false) },
-      { Sid::concertPitch,                 QVariant(false) },
-      { Sid::createMultiMeasureRests,      QVariant(false) },
-      { Sid::minEmptyMeasures,             QVariant(2) },
-      { Sid::minMMRestWidth,               QVariant(4.0) },
-      { Sid::hideEmptyStaves,              QVariant(false) },
-      { Sid::gateTime,                     QVariant(100) },
-      { Sid::tenutoGateTime,               QVariant(100) },
-      { Sid::staccatoGateTime,             QVariant(50) },
-      { Sid::slurGateTime,                 QVariant(100) },
-      { Sid::ArpeggioNoteDistance,         QVariant(.5) },
-      { Sid::ArpeggioLineWidth,            QVariant(.18) },
-      { Sid::ArpeggioHookLen,              QVariant(.8) },
-      { Sid::keySigNaturals,               QVariant(int(KeySigNatural::BEFORE)) },
-      { Sid::tupletMaxSlope,               QVariant(qreal(0.5)) },
-      { Sid::tupletOufOfStaff,             QVariant(false) },
-      { Sid::tupletVHeadDistance,          QVariant(.5) },
-      { Sid::tupletVStemDistance,          QVariant(.25) },
-      { Sid::tupletStemLeftDistance,       QVariant(.5) },
-      { Sid::tupletStemRightDistance,      QVariant(.5) },
-      { Sid::tupletNoteLeftDistance,       QVariant(0.0) },
-      { Sid::tupletNoteRightDistance,      QVariant(0.0) },
-      { Sid::hideInstrumentNameIfOneInstrument, QVariant(false) },
-      };
-
 #define MM(x) ((x)/INCH)
 
 //---------------------------------------------------------
@@ -2675,6 +2571,19 @@ static void readPageFormat(PageFormat* pf, XmlReader& e)
       pf->setPrintableWidth(qMin(w1, w2));     // silently adjust right margins
       }
 
+MStyle styleDefaults114()
+      {
+      MStyle result;
+      QFile baseDefaults(":/styles/legacy-style-defaults-v1.mss");
+
+      if (!baseDefaults.open(QIODevice::ReadOnly))
+            return result;
+
+      result.load(&baseDefaults);
+
+      return result;
+      }
+
 //---------------------------------------------------------
 //   readStyle
 //---------------------------------------------------------
@@ -2826,8 +2735,7 @@ static void readStyle(MStyle* style, XmlReader& e)
 
 Score::FileError MasterScore::read114(XmlReader& e)
       {
-      for (unsigned int i = 0; i < sizeof(style114)/sizeof(*style114); ++i)
-            style().set(style114[i].sid, style114[i].val);
+      setStyle(styleDefaults114());
 #if 0
       // old text style defaults
       TextStyle ts = style().textStyle("Chord Symbol");
