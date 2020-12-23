@@ -485,14 +485,7 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
         score->doLayout();
     }
 
-    for (Ms::Excerpt* x : excerpts) {
-        Ms::Score* xs = new Ms::Score(static_cast<Ms::MasterScore*>(score));
-        xs->style().set(Ms::Sid::createMultiMeasureRests, true);
-        x->setPartScore(xs);
-        xs->setExcerpt(x);
-        score->excerpts().append(x);
-        Ms::Excerpt::createExcerpt(x);
-    }
+    initExcerpts(excerpts);
 
     score->setExcerptsChanged(true);
 
@@ -554,19 +547,26 @@ mu::ValNt<bool> MasterNotation::needSave() const
     ValNt<bool> needSave;
     needSave.val = !masterScore()->saved();
     needSave.notification = undoStack()->stackChanged();
+
     return needSave;
 }
 
-void MasterNotation::initExcerpts()
+void MasterNotation::initExcerpts(const QList<Ms::Excerpt*>& scoreExcerpts)
 {
-    ExcerptNotationList excerpts;
+    QList<Ms::Excerpt*> excerpts = scoreExcerpts;
 
-    for (Ms::Excerpt* excerpt: Ms::Excerpt::createExcerptsFromParts(score()->parts())) {
-        initExcerpt(excerpt);
-        excerpts.push_back(std::make_shared<ExcerptNotation>(excerpt));
+    if (scoreExcerpts.empty()) {
+        excerpts = Ms::Excerpt::createExcerptsFromParts(score()->parts());
     }
 
-    doSetExcerpts(excerpts);
+    ExcerptNotationList notationExcerpts;
+
+    for (Ms::Excerpt* excerpt : excerpts) {
+        initExcerpt(excerpt);
+        notationExcerpts.push_back(std::make_shared<ExcerptNotation>(excerpt));
+    }
+
+    doSetExcerpts(notationExcerpts);
 
     m_parts->partsChanged().onNotify(this, [this]() {
         notifyAboutNotationChanged();
