@@ -31,7 +31,7 @@ void CurrentWorkspaceModel::load()
     emit currentWorkspaceNameChanged();
 
     configuration()->currentWorkspaceName().ch.onReceive(this, [this](const std::string&) {
-         emit currentWorkspaceNameChanged();
+        emit currentWorkspaceNameChanged();
     });
 }
 

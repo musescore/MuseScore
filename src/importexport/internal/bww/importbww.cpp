@@ -47,7 +47,6 @@
 #include "libmscore/volta.h"
 #include "libmscore/segment.h"
 
-
 namespace Bww {
 /**
  The writer that imports into MuseScore.

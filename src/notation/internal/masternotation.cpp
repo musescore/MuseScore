@@ -252,7 +252,7 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
     score->sigmap()->add(0, timesig);
 
     Ms::Fraction firstMeasureTicks = pickupMeasure ? Ms::Fraction(scoreOptions.measureTimesigNumerator,
-                                                          scoreOptions.measureTimesigDenominator) : timesig;
+                                                                  scoreOptions.measureTimesigDenominator) : timesig;
 
     for (int i = 0; i < measures; ++i) {
         Ms::Fraction tick = firstMeasureTicks + timesig * (i - 1);
@@ -270,7 +270,7 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
             if (pickupMeasure && tick.isZero()) {
                 measure->setIrregular(true);                // don’t count pickup measure
                 measure->setTicks(Ms::Fraction(scoreOptions.measureTimesigNumerator,
-                                           scoreOptions.measureTimesigDenominator));
+                                               scoreOptions.measureTimesigDenominator));
             }
             _score->measures()->add(measure);
 

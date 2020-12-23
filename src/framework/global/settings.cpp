@@ -107,7 +107,7 @@ void Settings::setValue(const Key& key, const Val& value)
     Item& item = findItem(key);
 
     if (!item.isNull() && item.value == value) {
-       return;
+        return;
     }
 
     writeValue(key, value);

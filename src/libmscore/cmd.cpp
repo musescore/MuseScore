@@ -4498,20 +4498,20 @@ void Score::cmd(const QAction* a, EditData& ed)
         { "beam64",                     [](Score* cs, EditData&) { cs->cmdSetBeamMode(Beam::Mode::BEGIN64); } },
         { "auto-beam",                  [](Score* cs, EditData&) { cs->cmdSetBeamMode(Beam::Mode::AUTO); } },
         { "sharp2",                     [](Score* cs, EditData& ed) {
-              cs->toggleAccidental(AccidentalType::SHARP2, ed);
-          } },
+                cs->toggleAccidental(AccidentalType::SHARP2, ed);
+            } },
         { "sharp",                      [](Score* cs, EditData& ed) {
-              cs->toggleAccidental(AccidentalType::SHARP, ed);
-          } },
+                cs->toggleAccidental(AccidentalType::SHARP, ed);
+            } },
         { "nat",                        [](Score* cs, EditData& ed) {
-              cs->toggleAccidental(AccidentalType::NATURAL, ed);
-          } },
+                cs->toggleAccidental(AccidentalType::NATURAL, ed);
+            } },
         { "flat",                       [](Score* cs, EditData& ed) {
-              cs->toggleAccidental(AccidentalType::FLAT, ed);
-          } },
+                cs->toggleAccidental(AccidentalType::FLAT, ed);
+            } },
         { "flat2",                      [](Score* cs, EditData& ed) {
-              cs->toggleAccidental(AccidentalType::FLAT2, ed);
-          } },
+                cs->toggleAccidental(AccidentalType::FLAT2, ed);
+            } },
         { "flip",                       [](Score* cs, EditData&) { cs->cmdFlip(); } },
         { "stretch+",                   [](Score* cs, EditData&) { cs->cmdAddStretch(0.1); } },
         { "stretch-",                   [](Score* cs, EditData&) { cs->cmdAddStretch(-0.1); } },
@@ -4522,29 +4522,29 @@ void Score::cmd(const QAction* a, EditData& ed)
         { "add-parentheses",            [](Score* cs, EditData&) { cs->cmdAddParentheses(); } },
         { "add-braces",                 [](Score* cs, EditData&) { cs->cmdAddBraces(); } },
         { "acciaccatura",               [](Score* cs, EditData&) {
-              cs->cmdAddGrace(NoteType::ACCIACCATURA, MScore::division / 2);
-          } },
+                cs->cmdAddGrace(NoteType::ACCIACCATURA, MScore::division / 2);
+            } },
         { "appoggiatura",               [](Score* cs, EditData&) {
-              cs->cmdAddGrace(NoteType::APPOGGIATURA, MScore::division / 2);
-          } },
+                cs->cmdAddGrace(NoteType::APPOGGIATURA, MScore::division / 2);
+            } },
         { "grace4",                     [](Score* cs, EditData&) {
-              cs->cmdAddGrace(NoteType::GRACE4, MScore::division);
-          } },
+                cs->cmdAddGrace(NoteType::GRACE4, MScore::division);
+            } },
         { "grace16",                    [](Score* cs, EditData&) {
-              cs->cmdAddGrace(NoteType::GRACE16, MScore::division / 4);
-          } },
+                cs->cmdAddGrace(NoteType::GRACE16, MScore::division / 4);
+            } },
         { "grace32",                    [](Score* cs, EditData&) {
-              cs->cmdAddGrace(NoteType::GRACE32, MScore::division / 8);
-          } },
+                cs->cmdAddGrace(NoteType::GRACE32, MScore::division / 8);
+            } },
         { "grace8after",                [](Score* cs, EditData&) {
-              cs->cmdAddGrace(NoteType::GRACE8_AFTER, MScore::division / 2);
-          } },
+                cs->cmdAddGrace(NoteType::GRACE8_AFTER, MScore::division / 2);
+            } },
         { "grace16after",               [](Score* cs, EditData&) {
-              cs->cmdAddGrace(NoteType::GRACE16_AFTER, MScore::division / 4);
-          } },
+                cs->cmdAddGrace(NoteType::GRACE16_AFTER, MScore::division / 4);
+            } },
         { "grace32after",               [](Score* cs, EditData&) {
-              cs->cmdAddGrace(NoteType::GRACE32_AFTER, MScore::division / 8);
-          } },
+                cs->cmdAddGrace(NoteType::GRACE32_AFTER, MScore::division / 8);
+            } },
         { "explode",                    [](Score* cs, EditData&) { cs->cmdExplode(); } },
         { "implode",                    [](Score* cs, EditData&) { cs->cmdImplode(); } },
         { "realize-chord-symbols",      [](Score* cs, EditData&) { cs->cmdRealizeChordSymbols(); } },
@@ -4572,14 +4572,14 @@ void Score::cmd(const QAction* a, EditData& ed)
         { "set-visible",                [](Score* cs, EditData&) { cs->cmdSetVisible(); } },
         { "unset-visible",              [](Score* cs, EditData&) { cs->cmdUnsetVisible(); } },
         { "system-break",               [](Score* cs, EditData&) {
-              cs->cmdToggleLayoutBreak(LayoutBreak::Type::LINE);
-          } },
+                cs->cmdToggleLayoutBreak(LayoutBreak::Type::LINE);
+            } },
         { "page-break",                 [](Score* cs, EditData&) {
-              cs->cmdToggleLayoutBreak(LayoutBreak::Type::PAGE);
-          } },
+                cs->cmdToggleLayoutBreak(LayoutBreak::Type::PAGE);
+            } },
         { "section-break",              [](Score* cs, EditData&) {
-              cs->cmdToggleLayoutBreak(LayoutBreak::Type::SECTION);
-          } },
+                cs->cmdToggleLayoutBreak(LayoutBreak::Type::SECTION);
+            } },
         { "relayout",                   [](Score* cs, EditData&) { cs->cmdRelayout(); } },
         { "toggle-autoplace",           [](Score* cs, EditData&) { cs->cmdToggleAutoplace(false); } },
         { "autoplace-enabled",          [](Score* cs, EditData&) { cs->cmdToggleAutoplace(true); } },

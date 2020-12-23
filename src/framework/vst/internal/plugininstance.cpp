@@ -113,19 +113,19 @@ void PluginInstance::process(float* input, float* output, unsigned int samples)
     }
     AudioBusBuffers out[m_busInfo.audioOutput.size()], in[m_busInfo.audioInput.size()];
     auto initBuffers = [&samples](AudioBusBuffers* buffers, std::vector<unsigned int>& busInfo, float* stream) {
-                           for (unsigned int i = 0; i < busInfo.size(); ++i) {
-                               auto channels = busInfo[i];
-                               buffers[i].numChannels = channels;
-                               buffers[i].silenceFlags = 0;
-                               buffers[i].channelBuffers32 = new Sample32*[channels];
-                               for (unsigned int j = 0; j < channels; ++j) {
-                                   buffers[i].channelBuffers32[j] = new Sample32[samples];
-                                   if (stream) {
-                                       //TODO: fill buffer from stream if given (for audio plugins)
-                                   }
-                               }
-                           }
-                       };
+        for (unsigned int i = 0; i < busInfo.size(); ++i) {
+            auto channels = busInfo[i];
+            buffers[i].numChannels = channels;
+            buffers[i].silenceFlags = 0;
+            buffers[i].channelBuffers32 = new Sample32*[channels];
+            for (unsigned int j = 0; j < channels; ++j) {
+                buffers[i].channelBuffers32[j] = new Sample32[samples];
+                if (stream) {
+                    //TODO: fill buffer from stream if given (for audio plugins)
+                }
+            }
+        }
+    };
     initBuffers(in, m_busInfo.audioInput, input);
     initBuffers(out, m_busInfo.audioOutput, nullptr);
 

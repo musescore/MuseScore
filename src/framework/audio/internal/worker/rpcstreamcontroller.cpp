@@ -58,8 +58,8 @@ void RpcStreamController::callRpc(const StreamID& id, CallID method, const Args&
 #define CHECK_ARGS(args, n) IF_ASSERT_FAILED(args.count() >= n) { return; }
 
     auto bindMethod = [this](CallID method, const Call& call) {
-                          m_calls.insert({ method, call });
-                      };
+        m_calls.insert({ method, call });
+    };
 
     if (m_calls.empty()) {
         bindMethod(callID(CallType::Midi, CallMethod::Create), [this](const StreamID& id, const Args& args) {

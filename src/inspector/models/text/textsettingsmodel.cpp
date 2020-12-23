@@ -58,17 +58,17 @@ void TextSettingsModel::loadProperties()
 {
     loadPropertyItem(m_fontFamily, [](const QVariant& elementPropertyValue) -> QVariant {
         return elementPropertyValue.toString() == Ms::TextBase::UNDEFINED_FONT_FAMILY ? QVariant()
-        : elementPropertyValue.toString();
+               : elementPropertyValue.toString();
     });
 
     loadPropertyItem(m_fontStyle, [](const QVariant& elementPropertyValue) -> QVariant {
         return elementPropertyValue.toInt() == static_cast<int>(Ms::FontStyle::Undefined) ? QVariant()
-        : elementPropertyValue.toInt();
+               : elementPropertyValue.toInt();
     });
 
     loadPropertyItem(m_fontSize, [](const QVariant& elementPropertyValue) -> QVariant {
         return elementPropertyValue.toInt() == Ms::TextBase::UNDEFINED_FONT_SIZE ? QVariant()
-        : elementPropertyValue.toInt();
+               : elementPropertyValue.toInt();
     });
 
     loadPropertyItem(m_horizontalAlignment, [](const QVariant& elementPropertyValue) -> QVariant {
@@ -104,8 +104,8 @@ void TextSettingsModel::loadProperties()
     loadPropertyItem(m_frameHighlightColor);
 
     auto formatDoubleFunc = [](const QVariant& elementPropertyValue) -> QVariant {
-                                return DataFormatter::formatDouble(elementPropertyValue.toDouble());
-                            };
+        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+    };
 
     loadPropertyItem(m_frameThickness, formatDoubleFunc);
     loadPropertyItem(m_frameMargin, formatDoubleFunc);
@@ -115,7 +115,7 @@ void TextSettingsModel::loadProperties()
     loadPropertyItem(m_textPlacement);
     loadPropertyItem(m_textScriptAlignment, [](const QVariant& elementPropertyValue) -> QVariant {
         return elementPropertyValue.toInt() == static_cast<int>(Ms::VerticalAlignment::AlignUndefined) ? QVariant()
-        : elementPropertyValue.toInt();
+               : elementPropertyValue.toInt();
     });
 
     updateFramePropertiesAvailability();

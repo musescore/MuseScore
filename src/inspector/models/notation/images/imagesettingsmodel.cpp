@@ -55,8 +55,8 @@ void ImageSettingsModel::requestElements()
 void ImageSettingsModel::loadProperties()
 {
     auto formatDoubleFunc = [](const QVariant& elementPropertyValue) -> QVariant {
-                                return DataFormatter::formatDouble(elementPropertyValue.toDouble());
-                            };
+        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+    };
 
     loadPropertyItem(m_shouldScaleToFrameSize);
     loadPropertyItem(m_height, formatDoubleFunc);

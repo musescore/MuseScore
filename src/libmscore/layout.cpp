@@ -1663,8 +1663,8 @@ static void layoutPage(Page* page, qreal restHeight)
 
     // allocate space as needed to normalize system distance (bottom of one system to top of next)
     std::sort(sList.begin(), sList.end(), [](System* a, System* b) {
-            return a->distance() - a->height() < b->distance() - b->height();
-        });
+        return a->distance() - a->height() < b->distance() - b->height();
+    });
     System* s0 = sList[0];
     qreal dist = s0->distance() - s0->height();             // distance for shortest system
     for (int i = 1; i < sList.size(); ++i) {

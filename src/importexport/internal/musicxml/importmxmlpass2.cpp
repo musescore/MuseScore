@@ -581,7 +581,6 @@ static void setPartInstruments(MxmlLogger* logger, const QXmlStreamReader* const
  Convert SMuFL code points to MuseScore <sym>...</sym>
  */
 namespace xmlpass2 {
-
 static QString text2syms(const QString& t)
 {
     //QTime time;
@@ -652,7 +651,6 @@ static QString text2syms(const QString& t)
  */
 
 namespace xmlpass2 {
-
 static QString decodeEntities(const QString& src)
 {
     QString ret(src);
@@ -666,7 +664,6 @@ static QString decodeEntities(const QString& src)
     }
     return ret;
 }
-
 }
 
 //---------------------------------------------------------
@@ -680,7 +677,6 @@ static QString decodeEntities(const QString& src)
  */
 
 namespace xmlpass2 {
-
 static QString nextPartOfFormattedString(QXmlStreamReader& e)
 {
     //QString lang       = e.attribute(QString("xml:lang"), "it");
@@ -743,7 +739,6 @@ static QString nextPartOfFormattedString(QXmlStreamReader& e)
     //qDebug("importedtext '%s'", qPrintable(importedtext));
     return importedtext;
 }
-
 }
 
 //---------------------------------------------------------

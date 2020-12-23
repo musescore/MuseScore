@@ -184,18 +184,18 @@ void GridCanvas::paint(QPainter* painter)
 
     // this lambda takes as input a pitch value, and determines where what are its x and y coordinates
     auto getPosition = [this, columnWidth, rowHeight, leftPos, topPos, bottomPos](const PitchValue& v) -> QPointF {
-                           const qreal x = round((qreal(v.time) / 60) * (m_columns - 1)) * columnWidth + leftPos;
-                           qreal y = 0;
-                           if (m_showNegativeRows) { // get the middle pos and add the top margin and half of the rows
-                               y = topPos + rowHeight * (m_rows - 1) * .5;
-                           } else { // from the bottom
-                               y = bottomPos;
-                           }
-                           // add the offset
-                           y -=  round((qreal(v.pitch) / (100 * (m_rows / m_primaryRowsInterval))) * (m_rows - 1))
-                                * rowHeight;
-                           return QPointF(x, y);
-                       };
+        const qreal x = round((qreal(v.time) / 60) * (m_columns - 1)) * columnWidth + leftPos;
+        qreal y = 0;
+        if (m_showNegativeRows) {                    // get the middle pos and add the top margin and half of the rows
+            y = topPos + rowHeight * (m_rows - 1) * .5;
+        } else {                    // from the bottom
+            y = bottomPos;
+        }
+        // add the offset
+        y -=  round((qreal(v.pitch) / (100 * (m_rows / m_primaryRowsInterval))) * (m_rows - 1))
+             * rowHeight;
+        return QPointF(x, y);
+    };
 
     static constexpr int GRIP_HALF_RADIUS = 5;
     QPointF lastPoint(0, 0);

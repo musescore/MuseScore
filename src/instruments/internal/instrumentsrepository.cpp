@@ -77,10 +77,10 @@ void InstrumentsRepository::load()
 
     int globalGroupsSequenceOrder = 0;
     auto correctGroupSequenceOrder = [&globalGroupsSequenceOrder](const InstrumentGroup& group) {
-                                         InstrumentGroup correctedGroup = group;
-                                         correctedGroup.sequenceOrder += globalGroupsSequenceOrder;
-                                         return correctedGroup;
-                                     };
+        InstrumentGroup correctedGroup = group;
+        correctedGroup.sequenceOrder += globalGroupsSequenceOrder;
+        return correctedGroup;
+    };
 
     for (const io::path& filePath: instrumentsFiles) {
         RetVal<InstrumentsMeta> metaInstrument = reader()->readMeta(filePath);

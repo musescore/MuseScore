@@ -62,8 +62,8 @@ public:
     int offtime()
     {
         return empty() ? 0 : std::max_element(cbegin(), cend(), [](const NoteEvent& n1, const NoteEvent& n2) {
-                return n1.offtime() < n2.offtime();
-            })->offtime();
+            return n1.offtime() < n2.offtime();
+        })->offtime();
     }
 };
 }     // namespace Ms

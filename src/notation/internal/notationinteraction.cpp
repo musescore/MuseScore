@@ -935,10 +935,10 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
         }
 
         auto isEntryDrumStaff = [score]() {
-                                    const Ms::InputState& is = score->inputState();
-                                    Ms::Staff* staff = score->staff(is.track() / VOICES);
-                                    return staff->staffType(is.tick())->group() == Ms::StaffGroup::PERCUSSION;
-                                };
+            const Ms::InputState& is = score->inputState();
+            Ms::Staff* staff = score->staff(is.track() / VOICES);
+            return staff->staffType(is.tick())->group() == Ms::StaffGroup::PERCUSSION;
+        };
 
         if (isEntryDrumStaff() && element->isChord()) {
             Ms::InputState& is = score->inputState();
@@ -1593,15 +1593,15 @@ void NotationInteraction::moveSelection(MoveDirection d, MoveSelectionType type)
     //! and interpretation of actions is the responsibility of `NotationActionController`
 
     auto typeToString = [](MoveSelectionType type) {
-                            switch (type) {
-                            case MoveSelectionType::Undefined: return QString();
-                            case MoveSelectionType::Element:   return QString();
-                            case MoveSelectionType::Chord:     return QString("chord");
-                            case MoveSelectionType::Measure:   return QString("measure");
-                            case MoveSelectionType::Track:     return QString("track");
-                            }
-                            return QString();
-                        };
+        switch (type) {
+        case MoveSelectionType::Undefined: return QString();
+        case MoveSelectionType::Element:   return QString();
+        case MoveSelectionType::Chord:     return QString("chord");
+        case MoveSelectionType::Measure:   return QString("measure");
+        case MoveSelectionType::Track:     return QString("track");
+        }
+        return QString();
+    };
 
     QString cmd;
     if (MoveDirection::Left == d) {
@@ -1850,16 +1850,16 @@ void NotationInteraction::joinSelectedMeasures()
 void NotationInteraction::addBoxes(BoxType boxType, int count, int beforeBoxIndex)
 {
     auto boxTypeToElementType = [](BoxType boxType) {
-                                    switch (boxType) {
-                                    case BoxType::Horizontal: return Ms::ElementType::HBOX;
-                                    case BoxType::Vertical: return Ms::ElementType::VBOX;
-                                    case BoxType::Text: return Ms::ElementType::TBOX;
-                                    case BoxType::Measure: return Ms::ElementType::MEASURE;
-                                    case BoxType::Unknown: return Ms::ElementType::INVALID;
-                                    }
+        switch (boxType) {
+        case BoxType::Horizontal: return Ms::ElementType::HBOX;
+        case BoxType::Vertical: return Ms::ElementType::VBOX;
+        case BoxType::Text: return Ms::ElementType::TBOX;
+        case BoxType::Measure: return Ms::ElementType::MEASURE;
+        case BoxType::Unknown: return Ms::ElementType::INVALID;
+        }
 
-                                    return ElementType::INVALID;
-                                };
+        return ElementType::INVALID;
+    };
 
     Ms::ElementType elementType = boxTypeToElementType(boxType);
     Ms::MeasureBase* beforeBox = beforeBoxIndex >= 0 ? score()->measure(beforeBoxIndex) : nullptr;

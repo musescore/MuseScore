@@ -613,11 +613,11 @@ int Part::harmonyCount() const
 void Part::updateHarmonyChannels(bool isDoOnInstrumentChanged, bool checkRemoval)
 {
     auto onInstrumentChanged = [this]() {
-                                   masterScore()->rebuildMidiMapping();
-                                   masterScore()->updateChannel();
-                                   score()->setInstrumentsChanged(true);
-                                   score()->setLayoutAll(); //do we need this?
-                               };
+        masterScore()->rebuildMidiMapping();
+        masterScore()->updateChannel();
+        score()->setInstrumentsChanged(true);
+        score()->setLayoutAll();                            //do we need this?
+    };
 
     // usage of harmony count is okay even if expensive since checking harmony channel will shortcircuit if existent
     // harmonyCount will only be called on loading of a score (where it will need to be scanned for harmony anyway)

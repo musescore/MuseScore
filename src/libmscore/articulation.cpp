@@ -802,14 +802,14 @@ std::set<SymId> joinArticulations(const std::set<SymId>& articulationSymbolIds)
     std::vector<SymId> vsymbolIds(articulationSymbolIds.begin(), articulationSymbolIds.end());
 
     std::sort(vsymbolIds.begin(), vsymbolIds.end(), [](SymId l, SymId r) {
-            return l > r;
-        });
+        return l > r;
+    });
 
     std::set<SymId> splittedSymbols;
 
     auto symbolSelected = [&splittedSymbols](const SymId& symbolId) -> bool {
-                              return splittedSymbols.find(symbolId) != splittedSymbols.end();
-                          };
+        return splittedSymbols.find(symbolId) != splittedSymbols.end();
+    };
 
     for (size_t i = 0; i < vsymbolIds.size(); i++) {
         if (symbolSelected(vsymbolIds[i])) {
@@ -839,8 +839,8 @@ std::set<SymId> joinArticulations(const std::set<SymId>& articulationSymbolIds)
     }
 
     std::sort(result.begin(), result.end(), [](SymId l, SymId r) {
-            return l < r;
-        });
+        return l < r;
+    });
 
     return std::set<SymId>(result.begin(), result.end());
 }

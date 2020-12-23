@@ -36,30 +36,30 @@ void PaletteWorkspaceSetup::setup()
     auto updateWorkspaceConnection = std::make_shared<QMetaObject::Connection>();
 
     auto applyWorkspaceData = [paletteWorkspace, updateWorkspaceConnection](workspace::IWorkspacePtr workspace) {
-                                  workspace::AbstractDataPtr data = workspace->data(workspace::WorkspaceTag::Palettes);
-                                  PaletteWorkspaceDataPtr palette = std::dynamic_pointer_cast<PaletteWorkspaceData>(data);
+        workspace::AbstractDataPtr data = workspace->data(workspace::WorkspaceTag::Palettes);
+        PaletteWorkspaceDataPtr palette = std::dynamic_pointer_cast<PaletteWorkspaceData>(data);
 
-                                  if (!palette) {
-                                      LOGW() << "no palette data in workspace: " << workspace->name();
-                                      return false;
-                                  }
+        if (!palette) {
+            LOGW() << "no palette data in workspace: " << workspace->name();
+            return false;
+        }
 
-                                  paletteWorkspace->setDefaultPaletteTree(palette->tree);
-                                  paletteWorkspace->setUserPaletteTree(palette->tree);
+        paletteWorkspace->setDefaultPaletteTree(palette->tree);
+        paletteWorkspace->setUserPaletteTree(palette->tree);
 
-                                  if (updateWorkspaceConnection) {
-                                      QObject::disconnect(*updateWorkspaceConnection);
-                                  }
+        if (updateWorkspaceConnection) {
+            QObject::disconnect(*updateWorkspaceConnection);
+        }
 
-                                  auto newConnection
-                                      = QObject::connect(paletteWorkspace, &PaletteWorkspace::userPaletteChanged, [workspace, palette]() {
+        auto newConnection
+            = QObject::connect(paletteWorkspace, &PaletteWorkspace::userPaletteChanged, [workspace, palette]() {
             workspace->addData(palette);
         });
 
-                                  *updateWorkspaceConnection = newConnection;
+        *updateWorkspaceConnection = newConnection;
 
-                                  return true;
-                              };
+        return true;
+    };
 
     RetValCh<workspace::IWorkspacePtr> workspace = workspaceManager()->currentWorkspace();
     if (workspace.val) {

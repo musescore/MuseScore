@@ -63,27 +63,27 @@ SoundFontFormats FluidSynth::soundFontFormats() const
 Ret FluidSynth::init(float samplerate)
 {
     auto fluid_log_out = [](int level, const char* message, void*) {
-                             switch (level) {
-                             case FLUID_PANIC:
-                             case FLUID_ERR:  {
-                                 LOGE() << message;
-                             } break;
-                             case FLUID_WARN: {
-                                 LOGW() << message;
-                             } break;
-                             case FLUID_INFO: {
-                                 LOGI() << message;
-                             } break;
-                             case FLUID_DBG:  {
-                                 LOGD() << message;
-                             } break;
-                             }
+        switch (level) {
+        case FLUID_PANIC:
+        case FLUID_ERR:  {
+            LOGE() << message;
+        } break;
+        case FLUID_WARN: {
+            LOGW() << message;
+        } break;
+        case FLUID_INFO: {
+            LOGI() << message;
+        } break;
+        case FLUID_DBG:  {
+            LOGD() << message;
+        } break;
+        }
 
-                             if (level < FLUID_DBG) {
-                                 bool debugme = true;
-                                 (void)debugme;
-                             }
-                         };
+        if (level < FLUID_DBG) {
+            bool debugme = true;
+            (void)debugme;
+        }
+    };
 
     fluid_set_log_function(FLUID_PANIC, fluid_log_out, nullptr);
     fluid_set_log_function(FLUID_ERR, fluid_log_out, nullptr);

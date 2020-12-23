@@ -28,5 +28,5 @@ static mu::testing::SuiteEnvironment libmscore_se(
 },
     []() {
     LOGI() << "libmscore tests suite post init";
-    }
+}
     );

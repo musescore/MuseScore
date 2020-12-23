@@ -443,8 +443,8 @@ void UserPaletteController::remove(const QModelIndexList& unsortedRemoveIndices,
 
     QModelIndexList removeIndices = unsortedRemoveIndices;
     std::sort(removeIndices.begin(), removeIndices.end(), [](const QModelIndex& a, const QModelIndex& b) {
-            return a.row() < b.row();
-        });
+        return a.row() < b.row();
+    });
 
     // remove in reversed order to leave the previous model indices in the list valid
     for (auto i = removeIndices.rbegin(); i != removeIndices.rend(); ++i) {
@@ -535,13 +535,13 @@ void UserPaletteController::editPaletteProperties(const QModelIndex& index)
 
     configuration()->paletteConfig(panel->id()).ch.onReceive(this,
                                                              [this, srcIndex, panel](const IPaletteConfiguration::PaletteConfig& config) {
-            panel->setName(config.name);
-            panel->setGrid(config.size);
-            panel->setMag(config.scale);
-            panel->setYOffset(config.elementOffset);
-            panel->setDrawGrid(config.showGrid);
-            _userPalette->itemDataChanged(srcIndex);
-        });
+        panel->setName(config.name);
+        panel->setGrid(config.size);
+        panel->setMag(config.scale);
+        panel->setYOffset(config.elementOffset);
+        panel->setDrawGrid(config.showGrid);
+        _userPalette->itemDataChanged(srcIndex);
+    });
 
     QVariantMap properties;
     properties["paletteId"] = panel->id();
@@ -578,13 +578,13 @@ void UserPaletteController::editCellProperties(const QModelIndex& index)
     configuration()->paletteCellConfig(cell->id).ch.onReceive(this,
                                                               [this, srcIndex, cell](
                                                                   const IPaletteConfiguration::PaletteCellConfig& config) {
-            cell->name = config.name;
-            cell->mag = config.scale;
-            cell->drawStaff = config.drawStaff;
-            cell->xoffset = config.xOffset;
-            cell->yoffset = config.yOffset;
-            _userPalette->itemDataChanged(srcIndex);
-        });
+        cell->name = config.name;
+        cell->mag = config.scale;
+        cell->drawStaff = config.drawStaff;
+        cell->xoffset = config.xOffset;
+        cell->yoffset = config.yOffset;
+        _userPalette->itemDataChanged(srcIndex);
+    });
 
     QVariantMap properties;
     properties["cellId"] = cell->id;

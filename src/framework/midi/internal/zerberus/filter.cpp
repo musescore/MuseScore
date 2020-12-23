@@ -202,35 +202,35 @@ float ZFilter::apply(float inputValue, bool leftChannel)
 {
     float value = 0.f;
     const auto applyBqEquation = [this, &inputValue](float& histX1, float& histX2, float& histY1, float& histY2) {
-                                     //apply filter
-                                     /*
-                                           float y = d.b0 * x + d.b1 * d.x1 + d.b2 * d.x2 +
-                                                     d.a1 * d.y1 + d.a2 * d.y2;
-                                           d.x2 = d.x1;
-                                           d.x1 = x;
-                                           d.y2 = d.y1;
-                                           d.y1 = y;
-                                           return y;
-                                      */
-                                     float value = b0 * inputValue + b1 * histX1 + b2 * histX2 + a1 * histY1 + a2
-                                                   * histY2;
-                                     histX2 = histX1;
-                                     histX1 = inputValue;
-                                     histY2 = histY1;
-                                     histY1 = value;
-                                     return value;
-                                 };
+        //apply filter
+        /*
+                                   float y = d.b0 * x + d.b1 * d.x1 + d.b2 * d.x2 +
+                                             d.a1 * d.y1 + d.a2 * d.y2;
+                                   d.x2 = d.x1;
+                                   d.x1 = x;
+                                   d.y2 = d.y1;
+                                   d.y1 = y;
+                                   return y;
+                              */
+        float value = b0 * inputValue + b1 * histX1 + b2 * histX2 + a1 * histY1 + a2
+                      * histY2;
+        histX2 = histX1;
+        histX1 = inputValue;
+        histY2 = histY1;
+        histY1 = value;
+        return value;
+    };
     const auto applyHPF1PEquation = [this, &inputValue](float& histX1, float& histY1) {
-                                        float value = b0 * inputValue + b1 * histX1 - a1 * histY1;
-                                        histX1 = inputValue;
-                                        histY1 = value;
-                                        return value;
-                                    };
+        float value = b0 * inputValue + b1 * histX1 - a1 * histY1;
+        histX1 = inputValue;
+        histY1 = value;
+        return value;
+    };
     const auto applyLPF1PEquation = [this, &inputValue](float& histY1) {
-                                        float value = b0 * inputValue - a1 * histY1;
-                                        histY1 = value;
-                                        return value;
-                                    };
+        float value = b0 * inputValue - a1 * histY1;
+        histY1 = value;
+        return value;
+    };
     if (leftChannel) {
         switch (sampleZone->fil_type) {
         case FilterType::hpf_2p:

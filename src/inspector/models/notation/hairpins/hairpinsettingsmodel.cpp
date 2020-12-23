@@ -69,8 +69,8 @@ void HairpinSettingsModel::requestElements()
 void HairpinSettingsModel::loadProperties()
 {
     auto formatDoubleFunc = [](const QVariant& elementPropertyValue) -> QVariant {
-                                return DataFormatter::formatDouble(elementPropertyValue.toDouble());
-                            };
+        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+    };
 
     loadPropertyItem(m_lineStyle);
     loadPropertyItem(m_placement);

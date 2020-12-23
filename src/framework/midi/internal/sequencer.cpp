@@ -471,10 +471,10 @@ void Sequencer::setIsTrackMuted(track_t trackIndex, bool mute)
     }
 
     auto setMuted = [this, mute](channel_t ch) {
-                        ChanState& state = m_chanStates[ch];
-                        state.muted = mute;
-                        synth(ch)->channelSoundsOff(ch);
-                    };
+        ChanState& state = m_chanStates[ch];
+        state.muted = mute;
+        synth(ch)->channelSoundsOff(ch);
+    };
 
     const Track& track = m_midiData.tracks[trackIndex];
     for (channel_t ch : track.channels) {
