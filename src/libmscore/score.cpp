@@ -392,25 +392,21 @@ Score::~Score()
 
 Score* Score::clone()
 {
-    Excerpt excerpt(masterScore());
-    excerpt.setParts(_parts);
-    excerpt.setTitle(title());
+    Excerpt* excerpt = new Excerpt(masterScore());
+    excerpt->setTitle(title());
 
     for (Part* part : _parts) {
-        for (int i = part->startTrack(), j = 0; i < part->endTrack(); i++, j++) {
-            excerpt.tracks().insert(i, j);
+        excerpt->parts().append(part);
+
+        for (int track = part->startTrack(); track < part->endTrack(); ++track) {
+            excerpt->tracks().insert(track, track);
         }
     }
 
-    Score* copy = new Score(masterScore());
-    excerpt.setPartScore(copy);
-    copy->_style = _style;
-    masterScore()->addExcerpt(&excerpt);
-    Excerpt::createExcerpt(&excerpt);
-    masterScore()->removeExcerpt(&excerpt);
-    excerpt.setPartScore(nullptr);
+    masterScore()->initExcerpt(excerpt);
+    masterScore()->removeExcerpt(excerpt);
 
-    return copy;
+    return excerpt->partScore();
 }
 
 //---------------------------------------------------------
