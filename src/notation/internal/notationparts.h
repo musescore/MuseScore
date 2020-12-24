@@ -75,10 +75,7 @@ public:
     async::Notification partsChanged() const override;
 
 protected:
-    Ms::Score* score() const;
     INotationUndoStackPtr undoStack() const;
-
-    virtual void updateScore();
 
 private:
     struct InstrumentInfo
@@ -110,7 +107,9 @@ private:
         }
     };
 
+    Ms::Score* score() const;
     Ms::MasterScore* masterScore() const;
+    void updateScore();
 
     Ms::ChordRest* selectedChord() const;
     void updateCanChangeInstrumentsVisibility();
