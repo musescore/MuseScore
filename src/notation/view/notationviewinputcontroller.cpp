@@ -138,9 +138,9 @@ void NotationViewInputController::wheelEvent(QWheelEvent* ev)
         int zoom = configuration()->currentZoom().val * qPow(1.1, steps);
         setZoom(zoom, ev->position().toPoint());
     } else if (keyState & Qt::ShiftModifier) {
-        m_view->scrollHorizontal(dy);
+        m_view->moveCanvasHorizontal(dy);
     } else {
-        m_view->scrollVertical(dy);
+        m_view->moveCanvasVertical(dy);
     }
 }
 

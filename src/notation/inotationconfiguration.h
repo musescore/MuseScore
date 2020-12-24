@@ -42,7 +42,6 @@ public:
     virtual int borderWidth() const = 0;
 
     virtual bool foregroundUseColor() const = 0;
-    virtual QColor defaultForegroundColor() const = 0;
     virtual QColor foregroundColor() const = 0;
     virtual async::Channel<QColor> foregroundColorChanged() const = 0;
     virtual io::path foregroundWallpaper() const = 0;

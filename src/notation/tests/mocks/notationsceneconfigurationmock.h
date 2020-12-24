@@ -30,7 +30,6 @@ public:
     MOCK_METHOD(QColor, backgroundColor, (), (const, override));
     MOCK_METHOD(async::Channel<QColor>, backgroundColorChanged, (), (const, override));
 
-    MOCK_METHOD(QColor, defaultForegroundColor, (), (const, override));
     MOCK_METHOD(QColor, foregroundColor, (), (const, override));
     MOCK_METHOD(async::Channel<QColor>, foregroundColorChanged, (), (const, override));
 
