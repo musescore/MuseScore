@@ -1336,7 +1336,16 @@ bool readNoteProperties206(Note* note, XmlReader& e)
     const QStringRef& tag(e.name());
 
     if (tag == "pitch") {
-        note->setPitch(e.readInt());
+        int pitch = e.readInt();
+        Tie* tie = note->tieBack();
+        if (tie) {
+            int startPitch = tie->startNote()->pitch();
+            if (pitch != startPitch) {
+                qDebug("Changing pitch from %d to %d to match pitch of note at start of tie.", pitch, startPitch);
+                pitch = startPitch;
+            }
+        }
+        note->setPitch(pitch);
     } else if (tag == "tpc") {
         const int tpc = e.readInt();
         note->setTpc1(tpc);
