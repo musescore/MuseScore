@@ -301,7 +301,7 @@ void PartListModel::removeSelectedParts()
 bool PartListModel::userAgreesToRemoveParts(int partCount) const
 {
     QString question = mu::qtrc("notation", "Are you sure you want to delete %1?")
-            .arg(partCount > 1 ? "these parts" : "this part");
+                       .arg(partCount > 1 ? "these parts" : "this part");
 
     IInteractive::Button button = interactive()->question("", question.toStdString(), {
         IInteractive::Button::Yes, IInteractive::Button::No

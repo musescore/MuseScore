@@ -774,7 +774,7 @@ void NotationParts::doSetPartName(Part* part, const QString& name)
     score()->undo(new Ms::ChangePart(part, new Ms::Instrument(*part->instrument()), name));
 }
 
-void NotationParts::insertStaff(Staff *staff, int destinationStaffIndex)
+void NotationParts::insertStaff(Staff* staff, int destinationStaffIndex)
 {
     if (score()->excerpt()) {
         int globalDestinationStaffIndex = score()->staffIdx(staff->part()) + destinationStaffIndex;

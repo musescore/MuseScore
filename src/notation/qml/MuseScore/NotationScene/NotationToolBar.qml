@@ -1,4 +1,4 @@
-import QtQuick 2.12
+import QtQuick 2.15
 
 import MuseScore.NotationScene 1.0
 import MuseScore.UiComponents 1.0

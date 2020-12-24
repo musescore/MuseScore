@@ -1070,8 +1070,8 @@ static Segment* getNextValidInputSegment(Segment* segment, int track, int voice)
         }
     }
 
-    Fraction nextTick = (chordRest == nullptr) ? segment->measure()->tick() :
-                                                 chordRest->tick() + chordRest->actualTicks();
+    Fraction nextTick = (chordRest == nullptr) ? segment->measure()->tick()
+                        : chordRest->tick() + chordRest->actualTicks();
 
     static const SegmentType st { SegmentType::ChordRest };
     while (segment) {

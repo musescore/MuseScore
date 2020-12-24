@@ -1333,7 +1333,7 @@ QList<Excerpt*> Excerpt::createExcerptsFromParts(const QList<Part*>& parts)
 
 Excerpt* Excerpt::createExcerptFromPart(Part* part)
 {
-    Excerpt* excerpt = createExcerptsFromParts({part}).first();
+    Excerpt* excerpt = createExcerptsFromParts({ part }).first();
     excerpt->setTitle(part->partName());
 
     return excerpt;

@@ -21,7 +21,7 @@
 
 using namespace mu::notation;
 
-MasterNotationParts::MasterNotationParts(IGetScore *getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack)
+MasterNotationParts::MasterNotationParts(IGetScore* getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack)
     : NotationParts(getScore, interaction, undoStack)
 {
 }
@@ -40,11 +40,6 @@ void MasterNotationParts::apply()
 {
     undoStack()->commitChanges();
     partsChanged().notify();
-}
-
-void MasterNotationParts::updateScore()
-{
-    score()->doLayout();
 }
 
 void MasterNotationParts::setInstruments(const instruments::InstrumentList& instruments)
@@ -86,7 +81,7 @@ void MasterNotationParts::setPartSharpFlat(const ID& partId, const SharpFlat& sh
 
     NotationParts::setPartSharpFlat(partId, sharpFlat);
 
-    for (INotationPartsPtr parts : excerptsParts())  {
+    for (INotationPartsPtr parts : excerptsParts()) {
         parts->setPartSharpFlat(partId, sharpFlat);
     }
 
@@ -99,7 +94,7 @@ void MasterNotationParts::setPartTransposition(const ID& partId, const instrumen
 
     NotationParts::setPartTransposition(partId, transpose);
 
-    for (INotationPartsPtr parts : excerptsParts())  {
+    for (INotationPartsPtr parts : excerptsParts()) {
         parts->setPartTransposition(partId, transpose);
     }
 
@@ -112,7 +107,7 @@ void MasterNotationParts::setInstrumentAbbreviature(const ID& instrumentId, cons
 
     NotationParts::setInstrumentAbbreviature(instrumentId, fromPartId, abbreviature);
 
-    for (INotationPartsPtr parts : excerptsParts())  {
+    for (INotationPartsPtr parts : excerptsParts()) {
         parts->setInstrumentAbbreviature(instrumentId, fromPartId, abbreviature);
     }
 
@@ -125,7 +120,7 @@ void MasterNotationParts::setStaffType(const ID& staffId, StaffType type)
 
     NotationParts::setStaffType(staffId, type);
 
-    for (INotationPartsPtr parts : excerptsParts())  {
+    for (INotationPartsPtr parts : excerptsParts()) {
         parts->setStaffType(staffId, type);
     }
 
@@ -138,7 +133,7 @@ void MasterNotationParts::setCutawayEnabled(const ID& staffId, bool enabled)
 
     NotationParts::setCutawayEnabled(staffId, enabled);
 
-    for (INotationPartsPtr parts : excerptsParts())  {
+    for (INotationPartsPtr parts : excerptsParts()) {
         parts->setCutawayEnabled(staffId, enabled);
     }
 
@@ -151,7 +146,7 @@ void MasterNotationParts::setSmallStaff(const ID& staffId, bool smallStaff)
 
     NotationParts::setSmallStaff(staffId, smallStaff);
 
-    for (INotationPartsPtr parts : excerptsParts())  {
+    for (INotationPartsPtr parts : excerptsParts()) {
         parts->setSmallStaff(staffId, smallStaff);
     }
 
@@ -164,7 +159,7 @@ void MasterNotationParts::setStaffConfig(const ID& staffId, const StaffConfig& c
 
     NotationParts::setStaffConfig(staffId, config);
 
-    for (INotationPartsPtr parts : excerptsParts())  {
+    for (INotationPartsPtr parts : excerptsParts()) {
         parts->setStaffConfig(staffId, config);
     }
 
