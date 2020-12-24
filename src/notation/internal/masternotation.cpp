@@ -562,7 +562,7 @@ void MasterNotation::initExcerpts(const QList<Ms::Excerpt*>& scoreExcerpts)
     ExcerptNotationList notationExcerpts;
 
     for (Ms::Excerpt* excerpt : excerpts) {
-        initExcerpt(excerpt);
+        masterScore()->initExcerpt(excerpt);
         notationExcerpts.push_back(std::make_shared<ExcerptNotation>(excerpt));
     }
 
@@ -580,16 +580,6 @@ void MasterNotation::doSetExcerpts(ExcerptNotationList excerpts)
     static_cast<MasterNotationParts*>(m_parts.get())->setExcerpts(excerpts);
 }
 
-void MasterNotation::initExcerpt(Ms::Excerpt* excerpt)
-{
-    Ms::Score* score = new Ms::Score(masterScore());
-    excerpt->setPartScore(score);
-    score->style().set(Ms::Sid::createMultiMeasureRests, true);
-    auto excerptCmdFake = new Ms::AddExcerpt(excerpt);
-    excerptCmdFake->redo(nullptr);
-    Ms::Excerpt::createExcerpt(excerpt);
-}
-
 mu::ValCh<ExcerptNotationList> MasterNotation::excerpts() const
 {
     return m_excerpts;
@@ -598,6 +588,11 @@ mu::ValCh<ExcerptNotationList> MasterNotation::excerpts() const
 INotationPartsPtr MasterNotation::parts() const
 {
     return m_parts;
+}
+
+INotationPtr MasterNotation::clone() const
+{
+    return std::make_shared<ExcerptNotation>(score()->clone()->excerpt());
 }
 
 void MasterNotation::setExcerpts(const ExcerptNotationList& excerpts)
@@ -619,7 +614,7 @@ void MasterNotation::createNonexistentExcerpts(const ExcerptNotationList& newExc
 
         if (isNewExcerpt && isEmpty) {
             Ms::Excerpt* excerpt = new Ms::Excerpt(masterScore());
-            initExcerpt(excerpt);
+            masterScore()->initExcerpt(excerpt);
             get_impl(excerptNotation)->setExcerpt(excerpt);
         }
     }
@@ -657,7 +652,7 @@ void MasterNotation::updateExcerpts()
 IExcerptNotationPtr MasterNotation::createExcerpt(Part* part)
 {
     Ms::Excerpt* excerpt = Ms::Excerpt::createExcerptFromPart(part);
-    initExcerpt(excerpt);
+    masterScore()->initExcerpt(excerpt);
 
     return std::make_shared<ExcerptNotation>(excerpt);
 }

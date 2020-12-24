@@ -1482,6 +1482,7 @@ public:
     void addExcerpt(Excerpt*);
     void removeExcerpt(Excerpt*);
     void deleteExcerpt(Excerpt*);
+    void initExcerpt(Excerpt*);
 
     void setPlaybackScore(Score*);
     Score* playbackScore() { return _playbackScore; }
