@@ -62,7 +62,6 @@ public:
 private:
     void startEdit();
     void apply();
-    void updateScore() override;
 
     std::vector<INotationPartsPtr> excerptsParts() const;
 

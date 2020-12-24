@@ -40,7 +40,7 @@ void StaffSettingsModel::load(const QVariant& staff)
         m_voicesVisibility << voice.toBool();
     }
 
-    emit dataChanged();
+    emit voicesChanged();
 }
 
 QVariantList StaffSettingsModel::allStaffTypes() const
@@ -75,7 +75,7 @@ void StaffSettingsModel::setStaffType(int type)
     m_type = type_;
     parts()->setStaffType(m_staffId, m_type);
 
-    emit dataChanged();
+    emit staffTypeChanged();
 }
 
 QVariantList StaffSettingsModel::voices() const
@@ -103,7 +103,7 @@ void StaffSettingsModel::setVoiceVisible(int voiceIndex, bool visible)
     m_voicesVisibility[voiceIndex] = visible;
     parts()->setVoiceVisible(m_staffId, voiceIndex, visible);
 
-    emit dataChanged();
+    emit voicesChanged();
 }
 
 bool StaffSettingsModel::isSmallStaff() const
@@ -120,7 +120,7 @@ void StaffSettingsModel::setIsSmallStaff(bool value)
     m_isSmallStaff = value;
     parts()->setSmallStaff(m_staffId, value);
 
-    emit dataChanged();
+    emit isSmallStaffChanged();
 }
 
 bool StaffSettingsModel::cutawayEnabled() const
@@ -137,7 +137,7 @@ void StaffSettingsModel::setCutawayEnabled(bool value)
     m_cutawayEnabled = value;
     parts()->setCutawayEnabled(m_staffId, value);
 
-    emit dataChanged();
+    emit cutawayEnabledChanged();
 }
 
 void StaffSettingsModel::createLinkedStaff()

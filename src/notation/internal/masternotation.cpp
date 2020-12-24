@@ -630,12 +630,12 @@ void MasterNotation::updateExcerpts()
         }
     }
 
-    QList<Ms::Excerpt*> exceprts = score()->excerpts();
+    QList<Ms::Excerpt*> excerpts = score()->excerpts();
 
     for (Part* part: score()->parts()) {
         bool isNewPart = true;
 
-        for (Ms::Excerpt* exceprt: exceprts) {
+        for (Ms::Excerpt* exceprt: excerpts) {
             isNewPart &= !exceprt->containsPart(part);
         }
 
