@@ -44,7 +44,7 @@ void MasterNotationParts::apply()
 
 void MasterNotationParts::updateScore()
 {
-    score()->update(false);
+    score()->doLayout();
 }
 
 void MasterNotationParts::setInstruments(const instruments::InstrumentList& instruments)
