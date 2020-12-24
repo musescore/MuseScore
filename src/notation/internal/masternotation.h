@@ -55,6 +55,7 @@ public:
     void setExcerpts(const ExcerptNotationList& excerpts) override;
 
     INotationPartsPtr parts() const override;
+    INotationPtr clone() const override;
 
 private:
     Ret exportScore(const io::path& path, const std::string& suffix);
@@ -68,7 +69,6 @@ private:
     void doSetExcerpts(ExcerptNotationList excerpts);
 
     void initExcerpts(const QList<Ms::Excerpt*>& scoreExcerpts = QList<Ms::Excerpt*>());
-    void initExcerpt(Ms::Excerpt* excerpt);
 
     void createNonexistentExcerpts(const ExcerptNotationList& newExcerpts);
 

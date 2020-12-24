@@ -399,6 +399,16 @@ void MasterScore::deleteExcerpt(Excerpt* excerpt)
     undo(new RemoveExcerpt(excerpt));
 }
 
+void MasterScore::initExcerpt(Excerpt* excerpt)
+{
+    Score* score = new Score(masterScore());
+    excerpt->setPartScore(score);
+    score->style().set(Sid::createMultiMeasureRests, true);
+    auto excerptCmdFake = new AddExcerpt(excerpt);
+    excerptCmdFake->redo(nullptr);
+    Excerpt::createExcerpt(excerpt);
+}
+
 //---------------------------------------------------------
 //   cloneSpanner
 //---------------------------------------------------------
