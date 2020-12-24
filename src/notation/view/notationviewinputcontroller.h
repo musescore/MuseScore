@@ -42,8 +42,8 @@ public:
     virtual QPoint toLogical(const QPoint& p) const = 0;
 
     virtual void moveCanvas(int dx, int dy) = 0;
-    virtual void scrollVertical(int dy) = 0;
-    virtual void scrollHorizontal(int dx) = 0;
+    virtual void moveCanvasVertical(int dy) = 0;
+    virtual void moveCanvasHorizontal(int dx) = 0;
     virtual void setZoom(int zoomPercentage, const QPoint& pos) = 0;
 
     virtual bool isNoteEnterMode() const = 0;

@@ -1,5 +1,5 @@
-import QtQuick 2.7
-import QtQuick.Layouts 1.3
+import QtQuick 2.15
+import QtQuick.Layouts 1.15
 import QtQuick.Controls 2.15
 
 import MuseScore.NotationScene 1.0
@@ -12,6 +12,12 @@ FocusScope {
 
     signal textEdittingStarted()
 
+    QtObject {
+        id: privateProperties
+
+        property int scrollbarMargin: 4
+    }
+
     ColumnLayout {
         anchors.fill: parent
 
@@ -21,51 +27,113 @@ FocusScope {
             Layout.fillWidth: true
         }
 
-        NotationPaintView {
-            id: notationView
-
+        Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            onTextEdittingStarted: {
-                root.textEdittingStarted()
-            }
+            NotationPaintView {
+                id: notationView
 
-            Component {
-                id: menuAction
+                anchors.fill: parent
 
-                Action {
-                    property string name: ""
-                    property string hintIcon: ""
+                onTextEdittingStarted: {
+                    root.textEdittingStarted()
+                }
 
-                    icon.name: hintIcon
+                Component {
+                    id: menuAction
 
-                    onTriggered: {
-                        Qt.callLater(notationView.handleAction, name)
+                    Action {
+                        property string name: ""
+                        property string hintIcon: ""
+
+                        icon.name: hintIcon
+
+                        onTriggered: {
+                            Qt.callLater(notationView.handleAction, name)
+                        }
+                    }
+                }
+
+                onOpenContextMenuRequested: {
+                    contextMenu.clear()
+
+                    for (var i in items) {
+                        var item = items[i]
+
+                        var action = menuAction.createObject(notationView, {
+                                                             name: item.name,
+                                                             text: item.title,
+                                                             hintIcon: item.icon,
+                                                             shortcut: item.shortcut
+                                                             })
+                        contextMenu.addMenuItem(action)
+                    }
+
+                    contextMenu.popup()
+                }
+
+                ContextMenu {
+                    id: contextMenu
+                }
+
+                onHorizontalScrollChanged: {
+                    if (!horizontalScrollBar.pressed) {
+                        horizontalScrollBar.setPosition(notationView.startHorizontalScrollPosition)
+                    }
+                }
+
+                onVerticalScrollChanged: {
+                    if (!verticalScrollBar.pressed) {
+                        verticalScrollBar.setPosition(notationView.startVerticalScrollPosition)
                     }
                 }
             }
 
-            onOpenContextMenuRequested: {
-                contextMenu.clear()
+            StyledScrollBar {
+                id: verticalScrollBar
 
-                for (var i in items) {
-                    var item = items[i]
+                anchors.top: parent.top
+                anchors.bottomMargin: privateProperties.scrollbarMargin
+                anchors.bottom: parent.bottom
+                anchors.right: parent.right
 
-                    var action = menuAction.createObject(notationView, {
-                                                         name: item.name,
-                                                         text: item.title,
-                                                         hintIcon: item.icon,
-                                                         shortcut: item.shortcut
-                                                         })
-                    contextMenu.addMenuItem(action)
+                orientation: Qt.Vertical
+
+                color: "black"
+                withBorder: true
+                borderColor: "white"
+
+                size: notationView.verticalScrollSize
+
+                onPositionChanged: {
+                    if (pressed) {
+                        notationView.scrollVertical(position)
+                    }
                 }
-
-                contextMenu.popup()
             }
 
-            ContextMenu {
-                id: contextMenu
+            StyledScrollBar {
+                id: horizontalScrollBar
+
+                anchors.bottom: parent.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.rightMargin: privateProperties.scrollbarMargin
+
+                orientation: Qt.Horizontal
+
+                color: "black"
+                withBorder: true
+                borderColor: "white"
+
+                size: notationView.horizontalScrollSize
+
+                onPositionChanged: {
+                    if (pressed) {
+                        notationView.scrollHorizontal(position)
+                    }
+                }
             }
         }
 

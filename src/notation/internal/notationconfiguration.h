@@ -21,15 +21,18 @@
 
 #include "../inotationconfiguration.h"
 #include "modularity/ioc.h"
+#include "async/asyncable.h"
 #include "ui/iuiconfiguration.h"
 #include "iglobalconfiguration.h"
 #include "settings.h"
+#include "ui/itheme.h"
 
 namespace mu::notation {
-class NotationConfiguration : public INotationConfiguration
+class NotationConfiguration : public INotationConfiguration, public async::Asyncable
 {
     INJECT(notation, framework::IUiConfiguration, uiConfiguration)
     INJECT(notation, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(notation, framework::ITheme, theme)
 
 public:
     void init();
@@ -45,7 +48,6 @@ public:
 
     bool foregroundUseColor() const override;
     QColor foregroundColor() const override;
-    QColor defaultForegroundColor() const override;
     async::Channel<QColor> foregroundColorChanged() const override;
     io::path foregroundWallpaper() const override;
 
@@ -75,6 +77,8 @@ private:
     std::vector<std::string> parseToolbarActions(const std::string& actions) const;
 
     framework::Settings::Key toolbarSettingsKey(const std::string& toolbarName) const;
+
+    QColor resolveColor(const framework::Settings::Key& key) const;
 
     async::Channel<QColor> m_backgroundColorChanged;
     async::Channel<QColor> m_foregroundColorChanged;
