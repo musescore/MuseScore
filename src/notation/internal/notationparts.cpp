@@ -66,7 +66,7 @@ Ms::MasterScore* NotationParts::masterScore() const
 
 void NotationParts::updateScore()
 {
-    score()->update(false);
+    score()->doLayout();
     m_partsChanged.notify();
 }
 
