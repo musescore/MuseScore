@@ -52,9 +52,17 @@ class NotationPaintView : public QQuickPaintedItem, public IControlledView, publ
     INJECT(notation, INotationActionsRepositoryFactory, actionsFactory)
     INJECT(notation, shortcuts::IShortcutsRegister, shortcutsRegister)
 
+    Q_PROPERTY(qreal startHorizontalScrollPosition READ startHorizontalScrollPosition NOTIFY horizontalScrollChanged)
+    Q_PROPERTY(qreal horizontalScrollSize READ horizontalScrollSize NOTIFY horizontalScrollChanged)
+    Q_PROPERTY(qreal startVerticalScrollPosition READ startVerticalScrollPosition NOTIFY verticalScrollChanged)
+    Q_PROPERTY(qreal verticalScrollSize READ verticalScrollSize NOTIFY verticalScrollChanged)
+
 public:
     explicit NotationPaintView(QQuickItem* parent = nullptr);
     ~NotationPaintView() override;
+
+    Q_INVOKABLE void scrollHorizontal(qreal position);
+    Q_INVOKABLE void scrollVertical(qreal position);
 
     Q_INVOKABLE void handleAction(const QString& actionName);
 
@@ -65,8 +73,8 @@ public:
     QPoint toLogical(const QPoint& point) const override;
 
     void moveCanvas(int dx, int dy) override;
-    void scrollVertical(int dy) override;
-    void scrollHorizontal(int dx) override;
+    void moveCanvasVertical(int dy) override;
+    void moveCanvasHorizontal(int dx) override;
     void setZoom(int zoomPercentage, const QPoint& pos) override;
 
     bool isNoteEnterMode() const override;
@@ -77,12 +85,20 @@ public:
     INotationInteractionPtr notationInteraction() const override;
     INotationPlaybackPtr notationPlayback() const override;
 
+    qreal startHorizontalScrollPosition() const;
+    qreal horizontalScrollSize() const;
+    qreal startVerticalScrollPosition() const;
+    qreal verticalScrollSize() const;
+
 private slots:
     void onViewSizeChanged();
 
 signals:
     void openContextMenuRequested(const QVariantList& items, const QPoint& pos);
     void textEdittingStarted();
+
+    void horizontalScrollChanged();
+    void verticalScrollChanged();
 
 private:
     INotationPtr currentNotation() const;
@@ -116,6 +132,14 @@ private:
     QRect toLogical(const QRect& rect) const;
     QRect viewport() const;
 
+    QRectF notationContentRect() const;
+    QRectF canvasRect() const;
+
+    qreal horizontalScrollableAreaSize() const;
+    qreal horizontalScrollableSize() const;
+    qreal verticalScrollableAreaSize() const;
+    qreal verticalScrollableSize() const;
+
     void adjustCanvasPosition(const QRectF& logicRect);
     void moveCanvasToPosition(const QPoint& logicPos);
 
@@ -134,6 +158,9 @@ private:
     NotationViewInputController* m_inputController = nullptr;
     PlaybackCursor* m_playbackCursor = nullptr;
     NoteInputCursor* m_noteInputCursor = nullptr;
+
+    qreal m_previousVerticalScrollPosition = 0;
+    qreal m_previousHorizontalScrollPosition = 0;
 };
 }
 }

@@ -15,6 +15,10 @@ Canvas {
         property color color: "#00000000"
     }
 
+    onColorChanged: {
+        requestPaint()
+    }
+
     onTopLeftRadiusChanged: {
         requestPaint()
     }
