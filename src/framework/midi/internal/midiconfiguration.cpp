@@ -34,9 +34,9 @@ static const Settings::Key MY_SOUNDFONTS("midi", "application/paths/mySoundfonts
 
 //! FIXME Temporary for tests
 #ifndef Q_OS_WASM
-    static const std::string DEFAULT_FLUID_SOUNDFONT = "MuseScore_General.sf3"; // "GeneralUser GS v1.471.sf2"; // "MuseScore_General.sf3";
+static const std::string DEFAULT_FLUID_SOUNDFONT = "MuseScore_General.sf3";     // "GeneralUser GS v1.471.sf2"; // "MuseScore_General.sf3";
 #else
-    static const std::string DEFAULT_FLUID_SOUNDFONT = "GeneralUser GS v1.471.sf2";
+static const std::string DEFAULT_FLUID_SOUNDFONT = "GeneralUser GS v1.471.sf2";
 #endif
 static const std::string DEFAULT_ZERBERUS_SOUNDFONT = "FM-Piano1-20190916.sfz"; // "";
 

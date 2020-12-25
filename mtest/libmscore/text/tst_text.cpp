@@ -410,18 +410,18 @@ void TestText::testCompatibility()
 void TestText::testReadWrite()
 {
     auto testrw = [](Score* score, Text* t) {
-                      QBuffer buffer;
-                      buffer.open(QIODevice::WriteOnly);
-                      XmlWriter xml(score, &buffer);
-                      t->write(xml);
-                      buffer.close();
+        QBuffer buffer;
+        buffer.open(QIODevice::WriteOnly);
+        XmlWriter xml(score, &buffer);
+        t->write(xml);
+        buffer.close();
 
-                      XmlReader e(score, buffer.buffer());
-                      Text* text2 = new Text(score);
-                      e.readNextStartElement();
-                      text2->read(e);
-                      QCOMPARE(t->xmlText(), text2->xmlText());
-                  };
+        XmlReader e(score, buffer.buffer());
+        Text* text2 = new Text(score);
+        e.readNextStartElement();
+        text2->read(e);
+        QCOMPARE(t->xmlText(), text2->xmlText());
+    };
     Text* text = new Text(score);
     text->setXmlText("test");
     testrw(score, text);
