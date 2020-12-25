@@ -10,8 +10,8 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
-#include "mtest/testutils.h"
+#include "testing/qtestsuite.h"
+#include "testutils.h"
 #include "libmscore/staff.h"
 #include "libmscore/score.h"
 #include "libmscore/tuplet.h"
@@ -19,7 +19,7 @@
 #include "libmscore/measure.h"
 #include "libmscore/timesig.h"
 
-#define DIR QString("libmscore/tuplet/")
+static const QString TUPLET_DATA_DIR("tuplet_data/");
 
 using namespace Ms;
 
@@ -113,7 +113,7 @@ bool TestTuplet::createTuplet(int n, ChordRest* cr)
 
 void TestTuplet::tuplet(const char* p1, const char* p2)
 {
-    MasterScore* score = readScore(DIR + p1);
+    MasterScore* score = readScore(TUPLET_DATA_DIR + p1);
     Measure* m1 = score->firstMeasure();
     Measure* m2 = m1->nextMeasure();
 
@@ -128,7 +128,7 @@ void TestTuplet::tuplet(const char* p1, const char* p2)
 
     QVERIFY(createTuplet(3, c));
 
-    QVERIFY(saveCompareScore(score, p1, DIR + p2));
+    QVERIFY(saveCompareScore(score, p1, TUPLET_DATA_DIR + p2));
     delete score;
 }
 
@@ -138,7 +138,7 @@ void TestTuplet::tuplet(const char* p1, const char* p2)
 
 void TestTuplet::split(const char* p1, const char* p2)
 {
-    MasterScore* score = readScore(DIR + p1);
+    MasterScore* score = readScore(TUPLET_DATA_DIR + p1);
     Measure* m         = score->firstMeasure();
     TimeSig* ts        = new TimeSig(score);
     ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
@@ -152,7 +152,7 @@ void TestTuplet::split(const char* p1, const char* p2)
     m->drop(dd);
     score->endCmd();
 
-    QVERIFY(saveCompareScore(score, p1, DIR + p2));
+    QVERIFY(saveCompareScore(score, p1, TUPLET_DATA_DIR + p2));
     delete score;
 }
 
@@ -164,7 +164,7 @@ void TestTuplet::split(const char* p1, const char* p2)
 
 void TestTuplet::addStaff()
 {
-    MasterScore* score = readScore(DIR + "nestedTuplets_addStaff.mscx");
+    MasterScore* score = readScore(TUPLET_DATA_DIR + "nestedTuplets_addStaff.mscx");
     QVERIFY(score);
 
     // add a staff to the existing staff
@@ -178,7 +178,7 @@ void TestTuplet::addStaff()
     newStaff->setKey(Fraction(0,1), ke);
     score->undoInsertStaff(newStaff, 0, true);
 
-    QVERIFY(saveCompareScore(score, "nestedTuplets_addStaff.mscx", DIR + "nestedTuplets_addStaff-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "nestedTuplets_addStaff.mscx", TUPLET_DATA_DIR + "nestedTuplets_addStaff-ref.mscx"));
     delete score;
 }
 
@@ -188,10 +188,10 @@ void TestTuplet::addStaff()
 //-----------------------------------------
 void TestTuplet::saveLoad()
 {
-    MasterScore* score = readScore(DIR + "save-load.mscx");
+    MasterScore* score = readScore(TUPLET_DATA_DIR + "save-load.mscx");
     QVERIFY(score);
     //simply load and save
-    QVERIFY(saveCompareScore(score, "save-load.mscx", DIR + "save-load.mscx"));
+    QVERIFY(saveCompareScore(score, "save-load.mscx", TUPLET_DATA_DIR + "save-load.mscx"));
     delete score;
 }
 
