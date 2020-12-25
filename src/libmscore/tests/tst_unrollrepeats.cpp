@@ -10,11 +10,11 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
+#include "testing/qtestsuite.h"
+#include "testutils.h"
 #include "libmscore/score.h"
-#include "mtest/testutils.h"
 
-#define DIR QString("libmscore/unrollrepeats/")
+static const QString UNROLLREPEATS_DATA_DIR("unrollrepeats_data/");
 
 using namespace Ms;
 
@@ -52,11 +52,11 @@ void TestUnrollRepeats::initTestCase()
 
 void TestUnrollRepeats::clefKeyTs()
 {
-    MasterScore* score = readScore(DIR + "clef-key-ts-test.mscx");
+    MasterScore* score = readScore(UNROLLREPEATS_DATA_DIR + "clef-key-ts-test.mscx");
 
     MasterScore* unrolled = score->unrollRepeats();
 
-    QVERIFY(saveCompareScore(unrolled, "clef-key-ts-test.mscx", DIR + "clef-key-ts-ref.mscx"));
+    QVERIFY(saveCompareScore(unrolled, "clef-key-ts-test.mscx", UNROLLREPEATS_DATA_DIR + "clef-key-ts-ref.mscx"));
 }
 
 //---------------------------------------------------------
@@ -67,9 +67,9 @@ void TestUnrollRepeats::clefKeyTs()
 
 void TestUnrollRepeats::pickupMeasure()
 {
-    MasterScore* score = readScore(DIR + "pickup-measure-test.mscx");
+    MasterScore* score = readScore(UNROLLREPEATS_DATA_DIR + "pickup-measure-test.mscx");
 
     MasterScore* unrolled = score->unrollRepeats();
 
-    QVERIFY(saveCompareScore(unrolled, "pickup-measure-test.mscx", DIR + "pickup-measure-ref.mscx"));
+    QVERIFY(saveCompareScore(unrolled, "pickup-measure-test.mscx", UNROLLREPEATS_DATA_DIR + "pickup-measure-ref.mscx"));
 }
