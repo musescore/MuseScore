@@ -23,6 +23,8 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
     ${CMAKE_CURRENT_LIST_DIR}/testutils.cpp
     ${CMAKE_CURRENT_LIST_DIR}/testutils.h
+    ${CMAKE_CURRENT_LIST_DIR}/tst_all_elements_layout_elements.cpp
+    # ${CMAKE_CURRENT_LIST_DIR}/tst_all_elements_tree_model.cpp fail
     ${CMAKE_CURRENT_LIST_DIR}/tst_barline.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_beam.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_box.cpp

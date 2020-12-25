@@ -10,11 +10,11 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
-#include "mtest/testutils.h"
+#include "testing/qtestsuite.h"
+#include "testutils.h"
 #include "libmscore/score.h"
 
-#define DIR QString("libmscore/all_elements/")
+static const QString ALL_ELEMENTS_DATA_DIR("all_elements_data/");
 
 using namespace Ms;
 
@@ -58,7 +58,7 @@ void TestTreeModel::initTestCase()
 
 void TestTreeModel::tstTree(QString file)
 {
-    MasterScore* score = readScore(DIR + file);
+    MasterScore* score = readScore(ALL_ELEMENTS_DATA_DIR + file);
     traverseTree(score);
 }
 
@@ -113,4 +113,4 @@ QString elementToText(ScoreElement* element)
 }
 
 QTEST_MAIN(TestTreeModel)
-#include "tst_tree_model.moc"
+#include "tst_all_elements_tree_model.moc"

@@ -10,8 +10,8 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
-#include "mtest/testutils.h"
+#include "testing/qtestsuite.h"
+#include "testutils.h"
 #include "libmscore/measure.h"
 #include "libmscore/page.h"
 #include "libmscore/rest.h"
@@ -20,7 +20,7 @@
 #include "libmscore/system.h"
 #include "libmscore/tuplet.h"
 
-#define DIR QString("libmscore/all_elements/")
+static const QString ALL_ELEMENTS_DATA_DIR("all_elements_data/");
 
 using namespace Ms;
 
@@ -107,7 +107,7 @@ static void isLayoutDone(void* data, Element* e)
 
 void TestLayoutElements::tstLayoutAll(QString file)
 {
-    MasterScore* score = readScore(DIR + file);
+    MasterScore* score = readScore(ALL_ELEMENTS_DATA_DIR + file);
     // readScore should also do layout of the score
 
     for (LayoutMode mode : { LayoutMode::PAGE }) {
@@ -121,4 +121,4 @@ void TestLayoutElements::tstLayoutAll(QString file)
 }
 
 QTEST_MAIN(TestLayoutElements)
-#include "tst_layout_elements.moc"
+#include "tst_all_elements_layout_elements.moc"
