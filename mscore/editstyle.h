@@ -64,12 +64,14 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       QScrollArea* scrollArea = nullptr;
       bool isTooBig = false;
       bool hasShown = false;
+      bool needResetStyle = false;
 
       virtual void showEvent(QShowEvent*);
       virtual void hideEvent(QHideEvent*);
       QVariant getValue(Sid idx);
-      void setValues();
+      void loadValuesFromStyle(const MStyle& sourceStyle);
 
+      void resetStyle(Score* score);
       void applyToAllParts();
       const StyleWidget& styleWidget(Sid) const;
 
@@ -99,6 +101,7 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       void textStyleValueChanged(Pid, QVariant);
       void on_comboFBFont_currentIndexChanged(int index);
       void on_buttonTogglePagelist_clicked();
+      void on_resetStylesButton_clicked();
       void editUserStyleName();
       void endEditUserStyleName();
       void resetUserStyleName();

@@ -2628,6 +2628,25 @@ const std::vector<Tid>& primaryTextStyles()
       return _primaryTextStyles;
       }
 
+QSet<Sid> pageStyles()
+{
+    static const QSet<Sid> styles {
+        Sid::pageWidth,
+        Sid::pageHeight,
+        Sid::pagePrintableWidth,
+        Sid::pageEvenTopMargin,
+        Sid::pageEvenBottomMargin,
+        Sid::pageEvenLeftMargin,
+        Sid::pageOddTopMargin,
+        Sid::pageOddBottomMargin,
+        Sid::pageOddLeftMargin,
+        Sid::pageTwosided,
+        Sid::spatium
+    };
+
+    return styles;
+}
+
 //---------------------------------------------------------
 //   valueType
 //---------------------------------------------------------
@@ -3098,10 +3117,22 @@ void MStyle::save(XmlWriter& xml, bool optimize)
 //   reset
 //---------------------------------------------------------
 
-void MStyle::reset(Score* score)
+void MStyle::resetAllStyles(Score* score, const QSet<Sid>& ignoredStyles)
       {
-      for (const StyleType& st : styleTypes)
-            score->undo(new ChangeStyleVal(score, st.styleIdx(), MScore::defaultStyle().value(st.styleIdx())));
+      for (const StyleType& st : styleTypes) {
+           if (ignoredStyles.isEmpty() || !ignoredStyles.contains(st.styleIdx())) {
+                score->undo(new ChangeStyleVal(score, st.styleIdx(), MScore::defaultStyle().value(st.styleIdx())));
+           }
+      }
+      }
+
+void MStyle::resetStyles(Score* score, const QSet<Sid>& stylesToReset)
+      {
+      for (const StyleType& st : styleTypes) {
+           if (stylesToReset.contains(st.styleIdx())) {
+                score->undo(new ChangeStyleVal(score, st.styleIdx(), MScore::defaultStyle().value(st.styleIdx())));
+           }
+      }
       }
 
 #ifndef NDEBUG

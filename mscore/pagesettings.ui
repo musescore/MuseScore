@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>489</width>
+    <width>531</width>
     <height>520</height>
    </rect>
   </property>
@@ -247,6 +247,13 @@
      <property name="bottomMargin">
       <number>0</number>
      </property>
+     <item>
+      <widget class="QPushButton" name="resetPageStyleButton">
+       <property name="text">
+        <string>Reset All Page Sizes to Default</string>
+       </property>
+      </widget>
+     </item>
      <item>
       <spacer>
        <property name="orientation">
