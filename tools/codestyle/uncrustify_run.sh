@@ -7,25 +7,11 @@ HERE="tools/codestyle" # path to dir that contains this script
 
 SRC_DIRS=(
     # Alphabetical order please!
-    audio
-    audiofile
-    avsomr
-    awl
     bww2mxml
-    crashreporter
-    effects
     fonttools
-    global
-    importexport
-    libmscore
-    main
     miditools
-    mscore
     mtest
-    omr
-    telemetry
-    framework
-    mu4
+    src
 )
 
 START_TIME=$(date +%s)
