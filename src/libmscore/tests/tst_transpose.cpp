@@ -10,12 +10,12 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
-#include "mtest/testutils.h"
+#include "testing/qtestsuite.h"
+#include "testutils.h"
 #include "libmscore/score.h"
 #include "libmscore/undo.h"
 
-#define DIR QString("libmscore/transpose/")
+static const QString TRANSPOSE_DATA_DIR("transpose_data/");
 
 using namespace Ms;
 
@@ -48,11 +48,11 @@ void TestTranspose::initTestCase()
 
 void TestTranspose::undoTranspose()
 {
-    QString readFile(DIR + "undoTranspose.mscx");
+    QString readFile(TRANSPOSE_DATA_DIR + "undoTranspose.mscx");
     QString writeFile1("undoTranspose01-test.mscx");
-    QString reference1(DIR + "undoTranspose01-ref.mscx");
+    QString reference1(TRANSPOSE_DATA_DIR + "undoTranspose01-ref.mscx");
     QString writeFile2("undoTranspose02-test.mscx");
-    QString reference2(DIR + "undoTranspose02-ref.mscx");
+    QString reference2(TRANSPOSE_DATA_DIR + "undoTranspose02-ref.mscx");
 
     MasterScore* score = readScore(readFile);
 
@@ -79,11 +79,11 @@ void TestTranspose::undoTranspose()
 
 void TestTranspose::undoDiatonicTranspose()
 {
-    QString readFile(DIR + "undoDiatonicTranspose.mscx");
+    QString readFile(TRANSPOSE_DATA_DIR + "undoDiatonicTranspose.mscx");
     QString writeFile1("undoDiatonicTranspose01-test.mscx");
-    QString reference1(DIR + "undoDiatonicTranspose01-ref.mscx");
+    QString reference1(TRANSPOSE_DATA_DIR + "undoDiatonicTranspose01-ref.mscx");
     QString writeFile2("undoDiatonicTranspose02-test.mscx");
-    QString reference2(DIR + "undoDiatonicTranspose02-ref.mscx");
+    QString reference2(TRANSPOSE_DATA_DIR + "undoDiatonicTranspose02-ref.mscx");
 
     MasterScore* score = readScore(readFile);
     score->doLayout();
