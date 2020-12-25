@@ -13,5 +13,9 @@ echo "s3cmd: $(s3cmd --version)"
 
 echo "Updating translation on s3..."
 SCRIPT_PATH=$(dirname $0)
+
+# remove old ts files 
+rm -rf share/locale/
+
 python3 $SCRIPT_PATH/tx2s3.py
 echo "Translation updated"
