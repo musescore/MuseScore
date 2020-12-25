@@ -64,6 +64,7 @@ set(MODULE_TEST_SRC
     # ${CMAKE_CURRENT_LIST_DIR}/tst_text.cpp not actual, not compile
     ${CMAKE_CURRENT_LIST_DIR}/tst_timesig.cpp
     # ${CMAKE_CURRENT_LIST_DIR}/tst_tools.cpp fail
+    # ${CMAKE_CURRENT_LIST_DIR}/tst_transpose.cpp fail
 )
 
 set(MODULE_TEST_LINK
