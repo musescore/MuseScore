@@ -10,14 +10,14 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
-#include "mtest/testutils.h"
+#include "testing/qtestsuite.h"
+#include "testutils.h"
 #include "libmscore/score.h"
 #include "libmscore/measure.h"
 #include "libmscore/segment.h"
 #include "libmscore/chordrest.h"
 
-#define DIR QString("libmscore/splitstaff/")
+static const QString SPLITSTAFF_DATA_DIR("splitstaff_data/");
 
 using namespace Ms;
 
@@ -56,13 +56,13 @@ void TestSplitStaff::initTestCase()
 
 void TestSplitStaff::splitstaff(int idx, int staffIdx)
 {
-    MasterScore* score = readScore(DIR + QString("splitstaff0%1.mscx").arg(idx));
+    MasterScore* score = readScore(SPLITSTAFF_DATA_DIR + QString("splitstaff0%1.mscx").arg(idx));
     score->startCmd();
     score->splitStaff(staffIdx, 60);
     score->endCmd();
 
     QVERIFY(saveCompareScore(score, QString("splitstaff0%1.mscx").arg(idx),
-                             DIR + QString("splitstaff0%1-ref.mscx").arg(idx)));
+                             SPLITSTAFF_DATA_DIR + QString("splitstaff0%1-ref.mscx").arg(idx)));
     delete score;
 }
 
