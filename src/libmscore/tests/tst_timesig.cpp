@@ -10,14 +10,14 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
-#include "mtest/testutils.h"
+#include "testing/qtestsuite.h"
+#include "testutils.h"
 #include "libmscore/score.h"
 #include "libmscore/measure.h"
 #include "libmscore/timesig.h"
 #include "libmscore/undo.h"
 
-#define DIR QString("libmscore/timesig/")
+static const QString TIMESIG_DATA_DIR("timesig_data/");
 
 using namespace Ms;
 
@@ -51,7 +51,7 @@ private slots:
 
 void TestTimesig::timesig01()
 {
-    MasterScore* score = readScore(DIR + "timesig01.mscx");
+    MasterScore* score = readScore(TIMESIG_DATA_DIR + "timesig01.mscx");
     QVERIFY(score);
     Measure* m  = score->firstMeasure()->nextMeasure();
     TimeSig* ts = new TimeSig(score);
@@ -63,7 +63,7 @@ void TestTimesig::timesig01()
     score->cmdAddTimeSig(m, staffIdx, ts, local);
     score->endCmd();
 
-    QVERIFY(saveCompareScore(score, "timesig01.mscx", DIR + "timesig01-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "timesig01.mscx", TIMESIG_DATA_DIR + "timesig01-ref.mscx"));
     delete score;
 }
 
@@ -75,7 +75,7 @@ void TestTimesig::timesig01()
 
 void TestTimesig::timesig02()
 {
-    MasterScore* score = readScore(DIR + "timesig-02.mscx");
+    MasterScore* score = readScore(TIMESIG_DATA_DIR + "timesig-02.mscx");
     QVERIFY(score);
     Measure* m = score->firstMeasure();
     TimeSig* ts = new TimeSig(score);
@@ -86,7 +86,7 @@ void TestTimesig::timesig02()
     score->doLayout();
     score->endCmd();
 
-    QVERIFY(saveCompareScore(score, "timesig-02.mscx", DIR + "timesig-02-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "timesig-02.mscx", TIMESIG_DATA_DIR + "timesig-02-ref.mscx"));
     delete score;
 }
 
@@ -101,7 +101,7 @@ void TestTimesig::timesig02()
 
 void TestTimesig::timesig03()
 {
-    MasterScore* score = readScore(DIR + "timesig-03.mscx");
+    MasterScore* score = readScore(TIMESIG_DATA_DIR + "timesig-03.mscx");
     QVERIFY(score);
     Measure* m = score->firstMeasure()->nextMeasure();
     TimeSig* ts = new TimeSig(score);
@@ -110,7 +110,7 @@ void TestTimesig::timesig03()
     score->cmdAddTimeSig(m, 0, ts, false);
     score->doLayout();
 
-    QVERIFY(saveCompareScore(score, "timesig-03.mscx", DIR + "timesig-03-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "timesig-03.mscx", TIMESIG_DATA_DIR + "timesig-03-ref.mscx"));
     delete score;
 }
 
@@ -122,7 +122,7 @@ void TestTimesig::timesig03()
 
 void TestTimesig::timesig04()
 {
-    MasterScore* score = readScore(DIR + "timesig-04.mscx");
+    MasterScore* score = readScore(TIMESIG_DATA_DIR + "timesig-04.mscx");
     QVERIFY(score);
     Measure* m = score->firstMeasure()->nextMeasure();
     TimeSig* ts = new TimeSig(score);
@@ -131,7 +131,7 @@ void TestTimesig::timesig04()
     score->cmdAddTimeSig(m, 0, ts, false);
     score->doLayout();
 
-    QVERIFY(saveCompareScore(score, "timesig-04.mscx", DIR + "timesig-04-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "timesig-04.mscx", TIMESIG_DATA_DIR + "timesig-04-ref.mscx"));
     delete score;
 }
 
@@ -146,7 +146,7 @@ void TestTimesig::timesig04()
 
 void TestTimesig::timesig05()
 {
-    MasterScore* score = readScore(DIR + "timesig-05.mscx");
+    MasterScore* score = readScore(TIMESIG_DATA_DIR + "timesig-05.mscx");
     QVERIFY(score);
     Measure* m = score->firstMeasure();
     TimeSig* ts = new TimeSig(score);
@@ -155,7 +155,7 @@ void TestTimesig::timesig05()
     score->cmdAddTimeSig(m, 0, ts, false);
     score->doLayout();
 
-    QVERIFY(saveCompareScore(score, "timesig-05.mscx", DIR + "timesig-05-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "timesig-05.mscx", TIMESIG_DATA_DIR + "timesig-05-ref.mscx"));
     delete score;
 }
 
@@ -166,7 +166,7 @@ void TestTimesig::timesig05()
 
 void TestTimesig::timesig06()
 {
-    MasterScore* score = readScore(DIR + "timesig-06.mscx");
+    MasterScore* score = readScore(TIMESIG_DATA_DIR + "timesig-06.mscx");
     QVERIFY(score);
     Measure* m = score->firstMeasure();
     TimeSig* ts = new TimeSig(score);
@@ -175,7 +175,7 @@ void TestTimesig::timesig06()
     score->startCmd();
     score->cmdAddTimeSig(m, 0, ts, false);
     score->doLayout();
-    QVERIFY(saveCompareScore(score, "timesig-06.mscx", DIR + "timesig-06-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "timesig-06.mscx", TIMESIG_DATA_DIR + "timesig-06-ref.mscx"));
     score->endCmd();
 
     // Now undo the change, if it crashes, it will fail
@@ -192,7 +192,7 @@ void TestTimesig::timesig06()
 
 void TestTimesig::timesig07()
 {
-    MasterScore* score = readScore(DIR + "timesig-07.mscx");
+    MasterScore* score = readScore(TIMESIG_DATA_DIR + "timesig-07.mscx");
     QVERIFY(score);
     Measure* m = score->firstMeasure();
     TimeSig* ts = new TimeSig(score);
@@ -201,7 +201,7 @@ void TestTimesig::timesig07()
     score->startCmd();
     score->cmdAddTimeSig(m, 0, ts, false);
     score->doLayout();
-    QVERIFY(saveCompareScore(score, "timesig-07.mscx", DIR + "timesig-07-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "timesig-07.mscx", TIMESIG_DATA_DIR + "timesig-07-ref.mscx"));
     score->endCmd();
 
     // Now undo the change, if there is a crash the test will fail
@@ -219,7 +219,7 @@ void TestTimesig::timesig07()
 
 void TestTimesig::timesig08()
 {
-    MasterScore* score = readScore(DIR + "timesig-08.mscx");
+    MasterScore* score = readScore(TIMESIG_DATA_DIR + "timesig-08.mscx");
     score->doLayout();
 
     Measure* m1 = score->firstMeasure();
@@ -237,7 +237,7 @@ void TestTimesig::timesig08()
 
 void TestTimesig::timesig09()
 {
-    MasterScore* score = readScore(DIR + "timesig-09.mscx");
+    MasterScore* score = readScore(TIMESIG_DATA_DIR + "timesig-09.mscx");
     QVERIFY(score);
     Measure* m = score->firstMeasure();
     TimeSig* ts = new TimeSig(score);
@@ -246,13 +246,13 @@ void TestTimesig::timesig09()
     score->startCmd();
     score->cmdAddTimeSig(m, 0, ts, false);
     score->doLayout();
-    QVERIFY(saveCompareScore(score, "timesig-09-1.mscx", DIR + "timesig-09-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "timesig-09-1.mscx", TIMESIG_DATA_DIR + "timesig-09-ref.mscx"));
     score->endCmd();
 
     // Now undo the change
     score->undoStack()->undo(0);
     score->doLayout();
-    QVERIFY(saveCompareScore(score, "timesig-09-2.mscx", DIR + "timesig-09.mscx"));
+    QVERIFY(saveCompareScore(score, "timesig-09-2.mscx", TIMESIG_DATA_DIR + "timesig-09.mscx"));
     delete score;
 }
 
@@ -264,7 +264,7 @@ void TestTimesig::timesig09()
 
 void TestTimesig::timesig10()
 {
-    MasterScore* score = readScore(DIR + "timesig-10.mscx");
+    MasterScore* score = readScore(TIMESIG_DATA_DIR + "timesig-10.mscx");
 
     Measure* m1 = score->firstMeasure();
     TimeSig* ts1 = new TimeSig(score);
@@ -284,7 +284,7 @@ void TestTimesig::timesig10()
     score->cmdAddTimeSig(m2, 0, ts3, false);
 
     score->doLayout();
-    QVERIFY(saveCompareScore(score, "timesig-10.mscx", DIR + "timesig-10-ref.mscx"));
+    QVERIFY(saveCompareScore(score, "timesig-10.mscx", TIMESIG_DATA_DIR + "timesig-10-ref.mscx"));
     score->endCmd();
     delete score;
 }
@@ -297,7 +297,7 @@ void TestTimesig::timesig10()
 
 void TestTimesig::timesig_78216()
 {
-    MasterScore* score = readScore(DIR + "timesig_78216.mscx");
+    MasterScore* score = readScore(TIMESIG_DATA_DIR + "timesig_78216.mscx");
     score->doLayout();
 
     Measure* m1 = score->firstMeasure();
