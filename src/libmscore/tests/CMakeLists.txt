@@ -65,6 +65,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/tst_timesig.cpp
     # ${CMAKE_CURRENT_LIST_DIR}/tst_tools.cpp fail
     # ${CMAKE_CURRENT_LIST_DIR}/tst_transpose.cpp fail
+    # ${CMAKE_CURRENT_LIST_DIR}/tst_tuplet.cpp fail
 )
 
 set(MODULE_TEST_LINK
