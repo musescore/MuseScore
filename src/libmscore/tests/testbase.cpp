@@ -10,7 +10,7 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "testutils.h"
+#include "testbase.h"
 
 #include <QtTest/QtTest>
 #include <QTextStream>
@@ -58,7 +58,6 @@ Element* MTest::writeReadElement(Element* element)
 
     XmlReader e(buffer.buffer());
     e.readNextStartElement();
-    QString tag(e.name().toString());
     element = Element::name2Element(e.name(), score);
     element->read(e);
     return element;
@@ -102,28 +101,6 @@ MasterScore* MTest::readCreatedScore(const QString& name)
     } else {
         rv = Score::FileError::FILE_UNKNOWN_TYPE;
     }
-
-//    if (csl == "cap") {
-//        rv = importCapella(score, name);
-//        score->setMetaTag("originalFormat", csl);
-//    } else if (csl == "capx") {
-//        rv = importCapXml(score, name);
-//        score->setMetaTag("originalFormat", csl);
-//    } else if (csl == "ove") {
-//        rv = importOve(score, name);
-//    } else if (csl == "sgu") {
-//        rv = importBB(score, name);
-//    } else if (csl == "mscz" || csl == "mscx") {
-//        rv = score->loadMsc(name, false);
-//    } else if (csl == "mxl") {
-//        rv = importCompressedMusicXml(score, name);
-//    } else if (csl == "xml" || csl == "musicxml") {
-//        rv = importMusicXml(score, name);
-//    } else if (csl == "gp3" || csl == "gp4" || csl == "gp5" || csl == "gpx" || csl == "gp" || csl == "ptb") {
-//        rv = importGTP(score, name);
-//    } else {
-//        rv = Score::FileError::FILE_UNKNOWN_TYPE;
-//    }
 
     if (rv != Score::FileError::FILE_NO_ERROR) {
         QWARN(qPrintable(QString("readScore: cannot load <%1> type <%2>\n").arg(name).arg(csl)));
@@ -196,102 +173,6 @@ bool MTest::saveCompareScore(Score* score, const QString& saveName, const QStrin
 }
 
 //---------------------------------------------------------
-//   saveCompareMusicXMLScore
-//---------------------------------------------------------
-
-bool MTest::saveCompareMusicXmlScore(MasterScore* score, const QString& saveName, const QString& compareWith)
-{
-    saveMusicXml(score, saveName);
-    return compareFiles(saveName, compareWith);
-}
-
-//---------------------------------------------------------
-//   saveCompareBrailleScore
-//---------------------------------------------------------
-
-bool MTest::saveCompareBrailleScore(MasterScore* score, const QString& saveName, const QString& compareWith)
-{
-    saveBraille(score, saveName);
-    return compareFiles(saveName, compareWith);
-}
-
-//---------------------------------------------------------
-//   savePdf
-//---------------------------------------------------------
-
-bool MTest::savePdf(MasterScore* cs, const QString& saveName)
-{
-    Q_ASSERT(false);
-    return false;
-//    QPrinter printerDev(QPrinter::HighResolution);
-//    double w = cs->styleD(Sid::pageWidth);
-//    double h = cs->styleD(Sid::pageHeight);
-//    printerDev.setPaperSize(QSizeF(w,h), QPrinter::Inch);
-
-//    printerDev.setCreator("MuseScore Version: " VERSION);
-//    printerDev.setFullPage(true);
-//    printerDev.setColorMode(QPrinter::Color);
-////      printerDev.setDocName(cs->name());
-//    printerDev.setOutputFormat(QPrinter::PdfFormat);
-
-//    printerDev.setOutputFileName(saveName);
-//    QPainter p(&printerDev);
-//    p.setRenderHint(QPainter::Antialiasing, true);
-//    p.setRenderHint(QPainter::TextAntialiasing, true);
-//    double mag = printerDev.logicalDpiX() / DPI;
-//    p.scale(mag, mag);
-
-//    const QList<Page*> pl = cs->pages();
-//    int pages    = pl.size();
-//    int offset   = cs->pageNumberOffset();
-//    int fromPage = printerDev.fromPage() - 1 - offset;
-//    int toPage   = printerDev.toPage() - 1 - offset;
-//    if (fromPage < 0) {
-//        fromPage = 0;
-//    }
-//    if ((toPage < 0) || (toPage >= pages)) {
-//        toPage = pages - 1;
-//    }
-
-//    for (int copy = 0; copy < printerDev.numCopies(); ++copy) {
-//        bool firstPage = true;
-//        for (int n = fromPage; n <= toPage; ++n) {
-//            if (!firstPage) {
-//                printerDev.newPage();
-//            }
-//            firstPage = false;
-
-//            cs->print(&p, n);
-//            if ((copy + 1) < printerDev.numCopies()) {
-//                printerDev.newPage();
-//            }
-//        }
-//    }
-//    p.end();
-//    return true;
-}
-
-//---------------------------------------------------------
-//   saveMusicXml
-//---------------------------------------------------------
-
-bool MTest::saveMusicXml(MasterScore* score, const QString& saveName)
-{
-    Q_ASSERT(false);
-    return false;// saveXml(score, saveName);
-}
-
-//---------------------------------------------------------
-//   saveBraille
-//---------------------------------------------------------
-
-bool MTest::saveBraille(MasterScore* score, const QString& saveName)
-{
-    Q_ASSERT(false);
-    return false;// Ms::saveBraille(score, saveName);
-}
-
-//---------------------------------------------------------
 //   saveMimeData
 //---------------------------------------------------------
 
@@ -314,33 +195,6 @@ bool MTest::saveCompareMimeData(QByteArray mimeData, const QString& saveName, co
 {
     saveMimeData(mimeData, saveName);
     return compareFiles(saveName, compareWith);
-}
-
-//---------------------------------------------------------
-//   extractRootFile
-//---------------------------------------------------------
-
-extern QString readRootFile(MQZipReader*, QList<QString>&);
-
-void MTest::extractRootFile(const QString& zipFile, const QString& destination)
-{
-    MQZipReader f(zipFile);
-    QList<QString> images;
-    const QString rootfile = readRootFile(&f, images);
-
-    if (rootfile.isEmpty()) {
-        qDebug("can't find rootfile in: %s", qPrintable(zipFile));
-        return;
-    }
-
-    const QByteArray ba = f.fileData(rootfile);
-
-    QFile out(destination);
-    if (!out.open(QIODevice::WriteOnly)) {
-        return;
-    }
-    out.write(ba);
-    out.close();
 }
 
 QString MTest::rootPath()

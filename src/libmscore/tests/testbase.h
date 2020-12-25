@@ -36,21 +36,16 @@ protected:
     Ms::MasterScore* readScore(const QString& name);
     Ms::MasterScore* readCreatedScore(const QString& name);
     bool saveScore(Ms::Score*, const QString& name) const;
-    bool savePdf(Ms::MasterScore*, const QString& name);
-    bool saveMusicXml(Ms::MasterScore*, const QString& name);
-    bool saveBraille(Ms::MasterScore*, const QString& name);
     bool saveMimeData(QByteArray mimeData, const QString& saveName);
     bool compareFiles(const QString& saveName, const QString& compareWith) const;
     bool saveCompareScore(Ms::Score*, const QString& saveName, const QString& compareWith) const;
-    bool saveCompareMusicXmlScore(Ms::MasterScore*, const QString& saveName, const QString& compareWith);
-    bool saveCompareBrailleScore(MasterScore* score, const QString& saveName, const QString& compareWith);
+
     bool saveCompareMimeData(QByteArray, const QString& saveName, const QString& compareWith);
     Ms::Element* writeReadElement(Ms::Element* element);
     void initMTest();
 
 public:
     static bool compareFilesFromPaths(const QString& f1, const QString& f2);
-    static void extractRootFile(const QString& zipFile, const QString& destination);
 
     static QString rootPath();
 };
