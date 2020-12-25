@@ -11,7 +11,7 @@
 //=============================================================================
 
 #include "testing/qtestsuite.h"
-#include "testutils.h"
+#include "testbase.h"
 #include "libmscore/chord.h"
 #include "libmscore/measure.h"
 #include "libmscore/score.h"

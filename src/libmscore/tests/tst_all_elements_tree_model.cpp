@@ -11,7 +11,7 @@
 //=============================================================================
 
 #include "testing/qtestsuite.h"
-#include "testutils.h"
+#include "testbase.h"
 #include "libmscore/score.h"
 
 static const QString ALL_ELEMENTS_DATA_DIR("all_elements_data/");

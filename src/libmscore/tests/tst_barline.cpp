@@ -12,7 +12,7 @@
 
 #include "testing/qtestsuite.h"
 
-#include "testutils.h"
+#include "testbase.h"
 
 #include "libmscore/barline.h"
 #include "libmscore/measure.h"

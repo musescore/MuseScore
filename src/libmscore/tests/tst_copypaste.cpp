@@ -14,7 +14,7 @@
 
 #include <QClipboard>
 
-#include "testutils.h"
+#include "testbase.h"
 #include "libmscore/score.h"
 #include "libmscore/measure.h"
 #include "libmscore/segment.h"
