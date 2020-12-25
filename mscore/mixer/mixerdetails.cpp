@@ -278,7 +278,7 @@ void MixerDetails::updateFromTrack()
                   tb->setText(QString("%1").arg(voice + 1));
                   tb->setCheckable(true);
                   tb->setChecked(!staff->playbackVoice(voice));
-                  tb->setToolTip(QString(tr("Staff %1")).arg(staffIdx + 1));
+                  tb->setToolTip(QString(tr("Staff %1:")).arg(staffIdx + 1));
 
                   mutePerVoiceGrid->addWidget(tb, staffIdx, voice);
                   MixerDetailsVoiceButtonHandler* handler =

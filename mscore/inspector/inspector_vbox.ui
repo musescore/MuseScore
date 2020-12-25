@@ -434,7 +434,7 @@
          </sizepolicy>
         </property>
         <property name="accessibleName">
-         <string>Reset 'AutoSize&quot; value</string>
+         <string>Reset 'Auto-Size' value</string>
         </property>
        </widget>
       </item>

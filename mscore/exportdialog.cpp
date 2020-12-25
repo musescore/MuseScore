@@ -141,7 +141,7 @@ void ExportDialog::retranslate()
       
       musicxmlFileTypeComboBox->setItemText(0, tr("Compressed") + " (*.mxl)");
       musicxmlFileTypeComboBox->setItemText(1, tr("Uncompressed") + " (*.musicxml)");
-      musicxmlFileTypeComboBox->setItemText(2, tr("Uncompressed (deprecated)") + " (*.xml)");
+      musicxmlFileTypeComboBox->setItemText(2, tr("Uncompressed (outdated)") + " (*.xml)");
 
       buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Export…"));
       }

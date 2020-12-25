@@ -403,7 +403,7 @@ QString ScoreOrder::getName() const
 QString ScoreOrder::getFullName() const
       {
       if (_customised)
-            return QString(QT_TRANSLATE_NOOP("OrderXML", "%1 (Customised)")).arg(_name);
+            return QString(QT_TRANSLATE_NOOP("OrderXML", "%1 (Customized)")).arg(_name);
       else
             return getName();
       }
@@ -724,7 +724,7 @@ void ScoreOrder::dump() const
 ScoreOrderList::ScoreOrderList()
       {
       _orders.clear();
-      ScoreOrder* custom = new ScoreOrder(QString("<custom>"), qApp->translate("OrderXML", "Custom"));
+      ScoreOrder* custom = new ScoreOrder(QString("<custom>"), QString(QT_TRANSLATE_NOOP("OrderXML", "Custom")));
       custom->createUnsortedGroup();
       addScoreOrder(custom);
       }

@@ -487,7 +487,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       voicingSelectWidget->voicingBox->addItem(tr("Automatic"), int(Voicing::AUTO));
       voicingSelectWidget->voicingBox->addItem(tr("Root Only"), int(Voicing::ROOT_ONLY));
       voicingSelectWidget->voicingBox->addItem(tr("Close"), int(Voicing::CLOSE));
-      voicingSelectWidget->voicingBox->addItem(tr("Drop 2"), int(Voicing::DROP_2));
+      voicingSelectWidget->voicingBox->addItem(tr("Drop Two"), int(Voicing::DROP_2));
       voicingSelectWidget->voicingBox->addItem(tr("Six Note"), int(Voicing::SIX_NOTE));
       voicingSelectWidget->voicingBox->addItem(tr("Four Note"), int(Voicing::FOUR_NOTE));
       voicingSelectWidget->voicingBox->addItem(tr("Three Note"), int(Voicing::THREE_NOTE));
