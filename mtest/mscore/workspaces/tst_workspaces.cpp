@@ -367,19 +367,19 @@ void TestWorkspaces::testCreateNewWorkspace()
     bool sourceTagUnique = true;
 
     WorkspacesManager::readWorkspaceFile(workspacePath, [&](XmlReader& e) {
-            while (e.readNextStartElement()) {
-                if (e.name() == "source") {
-                    const QString val = e.readElementText();
-                    if (sourceTagValue.isEmpty()) {
-                        sourceTagValue = val;
-                    } else {
-                        sourceTagUnique = false;
-                    }
+        while (e.readNextStartElement()) {
+            if (e.name() == "source") {
+                const QString val = e.readElementText();
+                if (sourceTagValue.isEmpty()) {
+                    sourceTagValue = val;
                 } else {
-                    e.skipCurrentElement();
+                    sourceTagUnique = false;
                 }
+            } else {
+                e.skipCurrentElement();
             }
-        });
+        }
+    });
 
     QVERIFY(sourceTagUnique);
     QCOMPARE(sourceTagValue, baseWorkspace);
