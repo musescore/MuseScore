@@ -9,14 +9,14 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
-#include "mtest/testutils.h"
+#include "testing/qtestsuite.h"
+#include "testutils.h"
 #include "libmscore/score.h"
 #include "libmscore/undo.h"
 #include "libmscore/measure.h"
 #include "libmscore/chord.h"
 
-#define DIR QString("libmscore/tools/")
+static const QString TOOLS_DATA_DIR("tools_data/");
 
 using namespace Ms;
 
@@ -58,11 +58,11 @@ void TestTools::initTestCase()
 
 void TestTools::undoAddLineBreaks()
 {
-    QString readFile(DIR + "undoAddLineBreaks.mscx");
+    QString readFile(TOOLS_DATA_DIR + "undoAddLineBreaks.mscx");
     QString writeFile1("undoAddLineBreaks01-test.mscx");
-    QString reference1(DIR + "undoAddLineBreaks01-ref.mscx");
+    QString reference1(TOOLS_DATA_DIR + "undoAddLineBreaks01-ref.mscx");
     QString writeFile2("undoAddLineBreaks02-test.mscx");
-    QString reference2(DIR + "undoAddLineBreaks02-ref.mscx");
+    QString reference2(TOOLS_DATA_DIR + "undoAddLineBreaks02-ref.mscx");
 
     MasterScore* score = readScore(readFile);
     score->doLayout();
@@ -92,11 +92,11 @@ void TestTools::undoAddLineBreaks()
 #if 0
 void TestTools::undoLockLineBreaks()
 {
-    QString readFile(DIR + "undoLockLineBreaks.mscx");
+    QString readFile(TOOLS_DATA_DIR + "undoLockLineBreaks.mscx");
     QString writeFile1("undoLockLineBreaks01-test.mscx");
-    QString reference1(DIR + "undoLockLineBreaks01-ref.mscx");
+    QString reference1(TOOLS_DATA_DIR + "undoLockLineBreaks01-ref.mscx");
     QString writeFile2("undoLockLineBreaks02-test.mscx");
-    QString reference2(DIR + "undoLockLineBreaks02-ref.mscx");
+    QString reference2(TOOLS_DATA_DIR + "undoLockLineBreaks02-ref.mscx");
 
     MasterScore* score = readScore(readFile);
     score->doLayout();
@@ -125,11 +125,11 @@ void TestTools::undoLockLineBreaks()
 
 void TestTools::undoRemoveLineBreaks()
 {
-    QString readFile(DIR + "undoRemoveLineBreaks.mscx");
+    QString readFile(TOOLS_DATA_DIR + "undoRemoveLineBreaks.mscx");
     QString writeFile1("undoRemoveLineBreaks01-test.mscx");
-    QString reference1(DIR + "undoRemoveLineBreaks01-ref.mscx");
+    QString reference1(TOOLS_DATA_DIR + "undoRemoveLineBreaks01-ref.mscx");
     QString writeFile2("undoRemoveLineBreaks02-test.mscx");
-    QString reference2(DIR + "undoRemoveLineBreaks02-ref.mscx");
+    QString reference2(TOOLS_DATA_DIR + "undoRemoveLineBreaks02-ref.mscx");
 
     MasterScore* score = readScore(readFile);
     score->doLayout();
@@ -156,11 +156,11 @@ void TestTools::undoRemoveLineBreaks()
 
 void TestTools::undoSlashFill()
 {
-    QString readFile(DIR + "undoSlashFill.mscx");
+    QString readFile(TOOLS_DATA_DIR + "undoSlashFill.mscx");
     QString writeFile1("undoSlashFill01-test.mscx");
-    QString reference1(DIR + "undoSlashFill01-ref.mscx");
+    QString reference1(TOOLS_DATA_DIR + "undoSlashFill01-ref.mscx");
     QString writeFile2("undoSlashFill02-test.mscx");
-    QString reference2(DIR + "undoSlashFill02-ref.mscx");
+    QString reference2(TOOLS_DATA_DIR + "undoSlashFill02-ref.mscx");
 
     MasterScore* score = readScore(readFile);
 
@@ -183,11 +183,11 @@ void TestTools::undoSlashFill()
 
 void TestTools::undoSlashRhythm()
 {
-    QString readFile(DIR + "undoSlashRhythm.mscx");
+    QString readFile(TOOLS_DATA_DIR + "undoSlashRhythm.mscx");
     QString writeFile1("undoSlashRhythm01-test.mscx");
-    QString reference1(DIR + "undoSlashRhythm01-ref.mscx");
+    QString reference1(TOOLS_DATA_DIR + "undoSlashRhythm01-ref.mscx");
     QString writeFile2("undoSlashRhythm02-test.mscx");
-    QString reference2(DIR + "undoSlashRhythm02-ref.mscx");
+    QString reference2(TOOLS_DATA_DIR + "undoSlashRhythm02-ref.mscx");
 
     MasterScore* score = readScore(readFile);
     score->doLayout();
@@ -212,11 +212,11 @@ void TestTools::undoSlashRhythm()
 
 void TestTools::undoResequenceAlpha()
 {
-    QString readFile(DIR + "undoResequenceAlpha.mscx");
+    QString readFile(TOOLS_DATA_DIR + "undoResequenceAlpha.mscx");
     QString writeFile1("undoResequenceAlpha01-test.mscx");
-    QString reference1(DIR + "undoResequenceAlpha01-ref.mscx");
+    QString reference1(TOOLS_DATA_DIR + "undoResequenceAlpha01-ref.mscx");
     QString writeFile2("undoResequenceAlpha02-test.mscx");
-    QString reference2(DIR + "undoResequenceAlpha02-ref.mscx");
+    QString reference2(TOOLS_DATA_DIR + "undoResequenceAlpha02-ref.mscx");
 
     MasterScore* score = readScore(readFile);
     score->doLayout();
@@ -236,11 +236,11 @@ void TestTools::undoResequenceAlpha()
 
 void TestTools::undoResequenceNumeric()
 {
-    QString readFile(DIR + "undoResequenceNumeric.mscx");
+    QString readFile(TOOLS_DATA_DIR + "undoResequenceNumeric.mscx");
     QString writeFile1("undoResequenceNumeric01-test.mscx");
-    QString reference1(DIR + "undoResequenceNumeric01-ref.mscx");
+    QString reference1(TOOLS_DATA_DIR + "undoResequenceNumeric01-ref.mscx");
     QString writeFile2("undoResequenceNumeric02-test.mscx");
-    QString reference2(DIR + "undoResequenceNumeric02-ref.mscx");
+    QString reference2(TOOLS_DATA_DIR + "undoResequenceNumeric02-ref.mscx");
 
     MasterScore* score = readScore(readFile);
     score->doLayout();
@@ -260,11 +260,11 @@ void TestTools::undoResequenceNumeric()
 
 void TestTools::undoResequenceMeasure()
 {
-    QString readFile(DIR + "undoResequenceMeasure.mscx");
+    QString readFile(TOOLS_DATA_DIR + "undoResequenceMeasure.mscx");
     QString writeFile1("undoResequenceMeasure01-test.mscx");
-    QString reference1(DIR + "undoResequenceMeasure01-ref.mscx");
+    QString reference1(TOOLS_DATA_DIR + "undoResequenceMeasure01-ref.mscx");
     QString writeFile2("undoResequenceMeasure02-test.mscx");
-    QString reference2(DIR + "undoResequenceMeasure02-ref.mscx");
+    QString reference2(TOOLS_DATA_DIR + "undoResequenceMeasure02-ref.mscx");
 
     MasterScore* score = readScore(readFile);
     score->doLayout();
@@ -284,11 +284,11 @@ void TestTools::undoResequenceMeasure()
 
 void TestTools::undoResequencePart()
 {
-    QString readFile(DIR + "undoResequencePart.mscx");
+    QString readFile(TOOLS_DATA_DIR + "undoResequencePart.mscx");
     QString writeFile1("undoResequencePart01-test.mscx");
-    QString reference1(DIR + "undoResequencePart01-ref.mscx");
+    QString reference1(TOOLS_DATA_DIR + "undoResequencePart01-ref.mscx");
     QString writeFile2("undoResequencePart02-test.mscx");
-    QString reference2(DIR + "undoResequencePart02-ref.mscx");
+    QString reference2(TOOLS_DATA_DIR + "undoResequencePart02-ref.mscx");
 
     MasterScore* score = readScore(readFile);
     score->doLayout();
