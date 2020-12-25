@@ -382,7 +382,7 @@
          </sizepolicy>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Invisible' value</string>
+         <string>Reset 'Invisible staff lines' value</string>
         </property>
        </widget>
       </item>

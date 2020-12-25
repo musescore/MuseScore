@@ -2731,7 +2731,8 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "find",
-         QT_TRANSLATE_NOOP("action","Find")
+         QT_TRANSLATE_NOOP("action","Find / Go To")
+         QT_TRANSLATE_NOOP("action","Find / Go to")
          },
       {
          MsWidget::MAIN_WINDOW,
@@ -3979,7 +3980,7 @@ Shortcut Shortcut::_sc[] = {
          STATE_ALL,
          "zoom-in-horiz-pre",
          QT_TRANSLATE_NOOP("action", "Zoom In Horizontally"),
-         QT_TRANSLATE_NOOP("action", "Zoom in horizontal - piano roll editor"),
+         QT_TRANSLATE_NOOP("action", "Zoom in horizontally - piano roll editor"),
          0,
          Icons::Invalid_ICON
          },
@@ -3988,7 +3989,7 @@ Shortcut Shortcut::_sc[] = {
          STATE_ALL,
          "zoom-out-horiz-pre",
          QT_TRANSLATE_NOOP("action", "Zoom Out Horizontally"),
-         QT_TRANSLATE_NOOP("action", "Zoom out horizontal - piano roll editor"),
+         QT_TRANSLATE_NOOP("action", "Zoom out horizontally - piano roll editor"),
          0,
          Icons::Invalid_ICON
          },
@@ -3997,7 +3998,7 @@ Shortcut Shortcut::_sc[] = {
          STATE_ALL,
          "zoom-in-vert-pre",
          QT_TRANSLATE_NOOP("action", "Zoom In Vertically"),
-         QT_TRANSLATE_NOOP("action", "Zoom in vertical - piano roll editor"),
+         QT_TRANSLATE_NOOP("action", "Zoom in vertically - piano roll editor"),
          0,
          Icons::Invalid_ICON
          },
@@ -4006,7 +4007,7 @@ Shortcut Shortcut::_sc[] = {
          STATE_ALL,
          "zoom-out-vert-pre",
          QT_TRANSLATE_NOOP("action", "Zoom Out Vertically"),
-         QT_TRANSLATE_NOOP("action", "Zoom out vertical - piano roll editor"),
+         QT_TRANSLATE_NOOP("action", "Zoom out vertically - piano roll editor"),
          0,
          Icons::Invalid_ICON
          },

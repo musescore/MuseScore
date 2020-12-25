@@ -539,7 +539,7 @@
                      </sizepolicy>
                     </property>
                     <property name="text">
-                     <string>First system indentation value:</string>
+                     <string>First system indentation:</string>
                     </property>
                     <property name="buddy">
                      <cstring>indentationValue</cstring>
@@ -568,7 +568,7 @@
                      <string>Reset to default</string>
                     </property>
                     <property name="accessibleName">
-                     <string>Reset 'First system indentation value'</string>
+                     <string>Reset 'First system indentation' value</string>
                     </property>
                     <property name="text">
                      <string notr="true"/>
@@ -1345,7 +1345,7 @@
                      <string>Reset 'Min. system distance' value</string>
                     </property>
                     <property name="text">
-                     <string>...</string>
+                     <string notr="true"/>
                     </property>
                     <property name="icon">
                      <iconset resource="musescore.qrc">
@@ -1491,7 +1491,7 @@
                      <string>Reset 'Max. grand staff distance' value</string>
                     </property>
                     <property name="text">
-                     <string notr="true">...</string>
+                     <string notr="true"/>
                     </property>
                     <property name="icon">
                      <iconset resource="musescore.qrc">
@@ -1572,7 +1572,7 @@
                   <item row="0" column="4">
                    <widget class="QLabel" name="label_162">
                     <property name="text">
-                     <string>Min. system distance</string>
+                     <string>Min. system distance:</string>
                     </property>
                     <property name="buddy">
                      <cstring>minSystemSpread</cstring>
@@ -1656,7 +1656,7 @@
                      <string>Reset 'Max. system distance' value</string>
                     </property>
                     <property name="text">
-                     <string notr="true">...</string>
+                     <string notr="true"/>
                     </property>
                     <property name="icon">
                      <iconset resource="musescore.qrc">
@@ -1667,10 +1667,10 @@
                   <item row="5" column="6">
                    <widget class="QToolButton" name="resetMaxPageFillSpread">
                     <property name="accessibleName">
-                     <string>Reset &quot;Max. page fill distance&quot; value</string>
+                     <string>Reset 'Max. page fill distance' value</string>
                     </property>
                     <property name="text">
-                     <string>...</string>
+                     <string notr="true"/>
                     </property>
                     <property name="icon">
                      <iconset resource="musescore.qrc">
@@ -3163,7 +3163,7 @@
         <item>
          <widget class="QGroupBox" name="mmRestShowMeasureNumberRange">
           <property name="title">
-           <string>Show measure number range at multi-measure-rests</string>
+           <string>Show measure number range at multimeasure rests</string>
           </property>
           <property name="checkable">
            <bool>true</bool>
@@ -3203,7 +3203,7 @@
            <item row="1" column="0">
             <widget class="QLabel" name="label_165">
              <property name="text">
-              <string>Vertical placement</string>
+              <string>Vertical placement:</string>
              </property>
              <property name="buddy">
               <cstring>mmRestRangeVPlacement</cstring>
@@ -3238,7 +3238,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_164">
              <property name="text">
-              <string>Bracket type</string>
+              <string>Bracket type:</string>
              </property>
              <property name="buddy">
               <cstring>mmRestRangeBracketType</cstring>
@@ -3256,7 +3256,7 @@
            <item row="2" column="0">
             <widget class="QLabel" name="label_166">
              <property name="text">
-              <string>Horizontal placement</string>
+              <string>Horizontal placement:</string>
              </property>
              <property name="buddy">
               <cstring>mmRestRangeHPlacement</cstring>
@@ -3796,10 +3796,10 @@
            <item row="0" column="3">
             <widget class="QToolButton" name="resetAccidentalsOctaveColumnsAlignLeft">
              <property name="toolTip">
-              <string>Reset to padding inside parentheses to default</string>
+              <string>Reset padding inside parentheses to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'align accidentals left in columns' value</string>
+              <string>Reset 'Padding inside parentheses' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -3865,10 +3865,10 @@ By default, they will be placed such as that their right end are at the same lev
            <item row="1" column="3" rowspan="2">
             <widget class="QToolButton" name="resetAccidentalsBracketPadding">
              <property name="toolTip">
-              <string>Reset to padding inside parentheses to default</string>
+              <string>Reset to align accidentals within octaves to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'padding inside parentheses for bracketed accidentals' value</string>
+              <string>Reset 'Align octaves left' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -3891,7 +3891,7 @@ By default, they will be placed such as that their right end are at the same lev
               <string>Bracketed accidentals have a margin between the accidental and the brackets.</string>
              </property>
              <property name="text">
-              <string>Padding inside parentheses</string>
+              <string>Padding inside parentheses:</string>
              </property>
              <property name="buddy">
               <cstring>accidentalsBracketsBadding</cstring>

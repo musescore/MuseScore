@@ -170,7 +170,7 @@ void ResourceManager::displayExtensions()
                         buttonInstall->setText(tr("Update"));
                         }
                   else {
-                        buttonInstall->setText(tr("Updated"));
+                        buttonInstall->setText(tr("Up to date"));
                         buttonInstall->setDisabled(true);
                         }
                   }
@@ -348,7 +348,7 @@ void ResourceManager::downloadLanguage()
             zipFile.close();
             if (result) {
                   QFile::remove(localPath);
-                  button->setText(tr("Updated"));
+                  button->setText(tr("Up to date"));
                   //  retranslate the UI if current language is updated
                   if (dta == languageButtonMap.first())
                         setMscoreLocale(localeName);
@@ -399,7 +399,7 @@ void ResourceManager::downloadExtension()
             bool result = mscore->importExtension(localPath);
             if (result) {
                   QFile::remove(localPath);
-                  button->setText(tr("Updated"));
+                  button->setText(tr("Up to date"));
                   // find uninstall button and make it visible
                   int rowId = button->property("rowId").toInt();
                   QPushButton* uninstallButton = static_cast<QPushButton*>(extensionsTable->indexWidget(extensionsTable->model()->index(rowId, 4)));

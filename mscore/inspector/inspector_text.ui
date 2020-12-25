@@ -546,7 +546,7 @@
            <string>Line spacing</string>
           </property>
           <property name="suffix">
-           <string> li</string>
+           <string>li</string>
           </property>
           <property name="singleStep">
            <double>0.100000000000000</double>

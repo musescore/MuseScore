@@ -356,7 +356,7 @@
              <string>Opens a dialog for selecting the image folder</string>
             </property>
             <property name="text">
-             <string/>
+             <string notr="true"/>
             </property>
             <property name="icon">
              <iconset resource="musescore.qrc">
@@ -2610,7 +2610,7 @@
              <string>Instrument list 2</string>
             </property>
             <property name="accessibleDescription">
-             <string>Insert path to a instrument list file</string>
+             <string>Insert path to an instrument list file</string>
             </property>
            </widget>
           </item>
@@ -2646,7 +2646,7 @@
              <string>Opens a file dialog for selecting an instrument list file</string>
             </property>
             <property name="text">
-             <string/>
+             <string notr="true"/>
             </property>
             <property name="icon">
              <iconset resource="musescore.qrc">
@@ -2734,7 +2734,7 @@
           <item row="2" column="2">
            <widget class="QToolButton" name="scoreOrderList1Button">
             <property name="text">
-             <string>...</string>
+             <string notr="true"/>
             </property>
             <property name="icon">
              <iconset resource="musescore.qrc">
@@ -2745,7 +2745,7 @@
           <item row="3" column="2">
            <widget class="QToolButton" name="scoreOrderList2Button">
             <property name="text">
-             <string>...</string>
+             <string notr="true"/>
             </property>
             <property name="icon">
              <iconset resource="musescore.qrc">
@@ -3588,7 +3588,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
        <item row="5" column="0" colspan="2">
         <widget class="QGroupBox" name="groupBox_scoreMigration">
          <property name="title">
-          <string>When opening scores from older MuseScore versions:</string>
+          <string>When opening scores from older MuseScore versions</string>
          </property>
          <layout class="QGridLayout" name="gridScoreMigration">
           <item row="0" column="0">
