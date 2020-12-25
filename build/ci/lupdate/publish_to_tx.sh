@@ -27,4 +27,4 @@ username = $TRANSIFEX_USER
 EOL
 
 echo "tx version: $(tx --version)"
-#tx push -s
+tx push -s
