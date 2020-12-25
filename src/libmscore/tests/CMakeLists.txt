@@ -67,6 +67,7 @@ set(MODULE_TEST_SRC
     # ${CMAKE_CURRENT_LIST_DIR}/tst_transpose.cpp fail
     # ${CMAKE_CURRENT_LIST_DIR}/tst_tuplet.cpp fail
     # ${CMAKE_CURRENT_LIST_DIR}/tst_unrollrepeats.cpp fail
+    ${CMAKE_CURRENT_LIST_DIR}/tst_utils.cpp
 )
 
 set(MODULE_TEST_LINK
