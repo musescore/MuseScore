@@ -12373,6 +12373,13 @@ By default, they will be placed such as that their right end are at the same lev
       <number>0</number>
      </property>
      <item>
+      <widget class="QPushButton" name="resetStylesButton">
+       <property name="text">
+        <string>Reset All Styles to Default</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="buttonTogglePagelist">
        <property name="maximumSize">
         <size>

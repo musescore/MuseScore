@@ -1433,6 +1433,11 @@ enum class Sid {
       };
 END_QT_REGISTERED_ENUM(Sid)
 
+inline uint qHash(Sid id)
+{
+    return static_cast<uint>(id);
+}
+
 //---------------------------------------------------------
 //   MStyle
 ///   \cond PLUGIN_API \private \endcond
@@ -1473,7 +1478,8 @@ class MStyle {
       bool readStyleValCompat(XmlReader&);
       bool readTextStyleValCompat(XmlReader&);
 
-      void reset(Score*);
+      void resetAllStyles(Score* score, const QSet<Sid>& ignoredStyles = QSet<Sid>());
+      void resetStyles(Score* score, const QSet<Sid>& stylesToReset);
 
       static const char* valueType(const Sid);
       static const char* valueName(const Sid);
@@ -1507,6 +1513,8 @@ Tid textStyleFromName(const QString&);
 
 const std::vector<Tid>& allTextStyles();
 const std::vector<Tid>& primaryTextStyles();
+
+QSet<Sid> pageStyles();
 
 #ifndef NDEBUG
 extern void checkStyles();
