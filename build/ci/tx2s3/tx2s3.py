@@ -83,7 +83,6 @@ else:
     data["type"] = "Languages"
     data["version"] = "2.0"
 
-
 translationChanged = newDetailsFile
 for lang_code, languageName in langCodeNameDict.items():
     updateMscore = processTsFile("mscore", lang_code, data)
