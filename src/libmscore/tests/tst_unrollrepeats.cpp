@@ -11,7 +11,7 @@
 //=============================================================================
 
 #include "testing/qtestsuite.h"
-#include "testutils.h"
+#include "testbase.h"
 #include "libmscore/score.h"
 
 static const QString UNROLLREPEATS_DATA_DIR("unrollrepeats_data/");
