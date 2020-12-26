@@ -193,6 +193,8 @@ void NotationActionController::init()
     dispatcher()->reg(this, "figured-bass", [this]() { addText(TextType::FIGURED_BASS); });
     dispatcher()->reg(this, "tempo", [this]() { addText(TextType::TEMPO); });
 
+    dispatcher()->reg(this, "toggle-navigator", this, &NotationActionController::toogleNavigator);
+
     for (int i = MIN_NOTES_INTERVAL; i <= MAX_NOTES_INTERVAL; ++i) {
         if (isNotesIntervalValid(i)) {
             dispatcher()->reg(this, "interval" + std::to_string(i), [this, i]() { addInterval(i); });
@@ -964,6 +966,16 @@ bool NotationActionController::isTextEditting() const
 void NotationActionController::openTupletOtherDialog()
 {
     interactive()->open("musescore://notation/othertupletdialog");
+}
+
+void NotationActionController::toogleNavigator()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->toogleNavigator();
 }
 
 void NotationActionController::startNoteInputIfNeed()

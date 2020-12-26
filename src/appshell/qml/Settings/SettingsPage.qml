@@ -199,7 +199,7 @@ DockPage {
                     signal changed(var newVal)
                     anchors.fill: parent
                     checked: val ? true : false
-                    onClicked: checkbox.changed(checkbox.checked ? true : false)
+                    onClicked: checkbox.changed(!checkbox.checked)
                 }
             }
         }
