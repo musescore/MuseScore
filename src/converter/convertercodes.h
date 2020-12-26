@@ -16,39 +16,32 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_CONVERTER_CONVERTERCONTROLLER_H
-#define MU_CONVERTER_CONVERTERCONTROLLER_H
+#ifndef MU_CONVERTER_CONVERTERCODES_H
+#define MU_CONVERTER_CONVERTERCODES_H
 
-#include <list>
-
-#include "../iconvertercontroller.h"
-
-#include "retval.h"
-#include "convertertypes.h"
+#include "ret.h"
 
 namespace mu::converter {
-class ConverterController : public IConverterController
-{
-public:
-    ConverterController() = default;
+enum class Err {
+    Undefined       = int(Ret::Code::Undefined),
+    NoError         = int(Ret::Code::Ok),
+    UnknownError    = int(Ret::Code::ConverterFirst), // 1300
 
-    Ret batchConvert(const io::path& batchJobFile) override;
+    BatchJobFileFailedOpen = 1301,
+    BatchJobFileFailedParse = 1302,
 
-private:
-
-    struct Job {
-        io::path in;
-        io::path out;
-    };
-
-    using BatchJob = std::list<Job>;
-
-    RetVal<BatchJob> parseBatchJob(const io::path& batchJobFile) const;
-
-    ConvertType typeFromExt(const io::path& path) const;
-    Ret convert(const io::path& in, const io::path& out);
-    Ret convertToPng(const io::path& in, const io::path& out);
+    ConvertTypeUnknown = 1310,
 };
+
+inline Ret make_ret(Err e)
+{
+    return Ret(static_cast<int>(e));
 }
 
-#endif // MU_CONVERTER_CONVERTERCONTROLLER_H
+inline Ret make_ret(Err e, const std::string& text)
+{
+    return Ret(static_cast<int>(e), text);
+}
+}
+
+#endif // MU_CONVERTER_CONVERTERCODES_H
