@@ -63,7 +63,10 @@ public:
         LanguagesLast  = 799,
 
         NotationFirst   = 1000,
-        NotationLast    = 1299
+        NotationLast    = 1299,
+
+        ConverterFirst  = 1300,
+        ConverterLast   = 1399
     };
 
     Ret() = default;
