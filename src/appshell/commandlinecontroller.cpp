@@ -32,6 +32,7 @@ void CommandLineController::parse(const QStringList& args)
     m_parser.addOption(QCommandLineOption({ "D", "monitor-resolution" }, "Specify monitor resolution", "DPI"));
 
     // Converter mode
+    m_parser.addOption(QCommandLineOption({ "r", "image-resolution" }, "Set output resolution for image export",  "DPI"));
     m_parser.addOption(QCommandLineOption({ "j", "job" }, "Process a conversion job", "file"));
     m_parser.addOption(QCommandLineOption({ "o", "export-to" }, "Export to 'file'. Format depends on file's extension", "file"));
 
@@ -40,18 +41,35 @@ void CommandLineController::parse(const QStringList& args)
 
 void CommandLineController::apply()
 {
+    auto floatValue = [this](const QString& name) -> std::optional<float> {
+        bool ok;
+        float val = m_parser.value(name).toFloat(&ok);
+        if (ok) {
+            return val;
+        } else {
+            return std::nullopt;
+        }
+    };
+
     // Common
     if (m_parser.isSet("D")) {
-        bool ok;
-        float val = m_parser.value("D").toFloat(&ok);
-        if (ok) {
+        std::optional<float> val = floatValue("D");
+        if (val) {
             uiConfiguration()->setPhysicalDotsPerInch(val);
         } else {
-            LOGE() << "Not recognized DPI value: " << m_parser.value("D");
+            LOGE() << "Option -D not recognized DPI value: " << m_parser.value("D");
         }
     }
 
     // Converter mode
+    if (m_parser.isSet("r")) {
+        std::optional<float> val = floatValue("r");
+        if (val) {
+            importexportConfiguration()->setExportPngDpiResolution(val);
+            LOGE() << "Option: -r not recognized DPI value: " << m_parser.value("r");
+        }
+    }
+
     if (m_parser.isSet("o")) {
         application()->setRunMode(IApplication::RunMode::Converter);
         m_converterTask.exportFile = m_parser.value("o");

@@ -25,12 +25,14 @@
 #include "modularity/ioc.h"
 #include "global/iapplication.h"
 #include "ui/iuiconfiguration.h"
+#include "importexport/iimportexportconfiguration.h"
 
 namespace mu::appshell {
 class CommandLineController
 {
     INJECT(appshell, framework::IApplication, application)
     INJECT(appshell, framework::IUiConfiguration, uiConfiguration)
+    INJECT(appshell, importexport::IImportexportConfiguration, importexportConfiguration)
 public:
     CommandLineController() = default;
 

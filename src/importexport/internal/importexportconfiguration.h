@@ -40,9 +40,15 @@ public:
     MusicxmlExportBreaksType musicxmlExportBreaksType() const override;
 
     int exportPdfDpiResolution() const override;
-    double exportPngDpiResolution() const override;
+
+    void setExportPngDpiResolution(std::optional<float> dpi) override;
+    float exportPngDpiResolution() const override;
 
     bool exportPngWithTransparentBackground() const override;
+
+private:
+
+    std::optional<float> m_customExportPngDpi;
 };
 }
 
