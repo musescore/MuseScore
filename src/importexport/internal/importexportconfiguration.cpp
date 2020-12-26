@@ -95,9 +95,18 @@ int ImportexportConfiguration::exportPdfDpiResolution() const
     return settings()->value(EXPORT_PDF_DPI_RESOLUTION_KEY).toInt();
 }
 
-double ImportexportConfiguration::exportPngDpiResolution() const
+void ImportexportConfiguration::setExportPngDpiResolution(std::optional<float> dpi)
 {
-    return settings()->value(EXPORT_PNG_DPI_RESOLUTION_KEY).toDouble();
+    m_customExportPngDpi = dpi;
+}
+
+float ImportexportConfiguration::exportPngDpiResolution() const
+{
+    if (m_customExportPngDpi) {
+        return m_customExportPngDpi.value();
+    }
+
+    return settings()->value(EXPORT_PNG_DPI_RESOLUTION_KEY).toFloat();
 }
 
 bool ImportexportConfiguration::exportPngWithTransparentBackground() const
