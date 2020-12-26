@@ -21,7 +21,7 @@
 
 #include <QApplication>
 #include <QQmlApplicationEngine>
-#include <QCommandLineParser>
+#include <QThreadPool>
 
 #include "log.h"
 #include "modularity/ioc.h"
@@ -106,13 +106,30 @@ int AppShell::run(int argc, char** argv)
         m->onInit(runMode);
     }
 
-    int retCode = 0;
+    // ====================================================
+    // Setup modules: onStartApp (on next event loop)
+    // ====================================================
+    QMetaObject::invokeMethod(qApp, [this]() {
+        globalModule.onStartApp();
+        for (mu::framework::IModuleSetup* m : m_modules) {
+            m->onStartApp();
+        }
+    }, Qt::QueuedConnection);
+
+    // ====================================================
+    // Run
+    // ====================================================
+
     switch (runMode) {
     case framework::IApplication::RunMode::Converter: {
         // ====================================================
         // Process Converter
         // ====================================================
-        retCode = processConverter(commandLine.converterTask());
+        auto task = commandLine.converterTask();
+        QMetaObject::invokeMethod(qApp, [this, task]() {
+                int code = processConverter(task);
+                qApp->exit(code);
+            }, Qt::QueuedConnection);
     } break;
     case framework::IApplication::RunMode::Editor: {
         // ====================================================
@@ -151,32 +168,29 @@ int AppShell::run(int argc, char** argv)
         // Load Main qml
         // ====================================================
         engine->load(url);
-
-        // ====================================================
-        // Setup modules: onStartApp (on next event loop)
-        // ====================================================
-        QMetaObject::invokeMethod(qApp, [this]() {
-                globalModule.onStartApp();
-                for (mu::framework::IModuleSetup* m : m_modules) {
-                    m->onStartApp();
-                }
-            }, Qt::QueuedConnection);
-
-        // ====================================================
-        // Run main loop
-        // ====================================================
-        retCode = app.exec();
-
-        // ====================================================
-        // Qml Engine quit
-        // ====================================================
-        framework::UiEngine::instance()->quit();
     }
     }
 
     // ====================================================
+    // Run main loop
+    // ====================================================
+    int retCode = app.exec();
+
+    // ====================================================
+    // Quit
+    // ====================================================
+
+    // Wait Thread Poll
+    QThreadPool* globalThreadPool = QThreadPool::globalInstance();
+    if (globalThreadPool) {
+        LOGI() << "activeThreadCount: " << globalThreadPool->activeThreadCount();
+        globalThreadPool->waitForDone();
+    }
+
+    // Engine quit
+    framework::UiEngine::instance()->quit();
+
     // Deinit
-    // ====================================================
     for (mu::framework::IModuleSetup* m : m_modules) {
         m->onDeinit();
     }

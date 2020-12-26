@@ -57,6 +57,10 @@ UiEngine::~UiEngine()
 
 void UiEngine::quit()
 {
+    if (!m_engine) {
+        return;
+    }
+
     m_engine->quit();
     delete m_engine;
     m_engine = nullptr;

@@ -63,8 +63,12 @@ void ExtensionsModule::registerUiTypes()
     framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(extensions_QML_IMPORT);
 }
 
-void ExtensionsModule::onInit(const framework::IApplication::RunMode&)
+void ExtensionsModule::onInit(const framework::IApplication::RunMode& runMode)
 {
+    if (framework::IApplication::RunMode::Editor != runMode) {
+        return;
+    }
+
     m_extensionsController->init();
     m_extensionsConfiguration->init();
 }
