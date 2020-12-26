@@ -129,6 +129,7 @@ const char* PaletteCell::translationContext() const
             case ElementType::BREATH:
             case ElementType::FERMATA:
             case ElementType::SYMBOL:
+            case ElementType::TIMESIG:
                   return "symUserNames"; // libmscore/sym.cpp, Sym::symUserNames
             case ElementType::CLEF:
                   return "clefTable"; // libmscore/clef.cpp, ClefInfo::clefTable[]
