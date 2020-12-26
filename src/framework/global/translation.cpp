@@ -21,12 +21,12 @@
 
 using namespace mu;
 
-std::string mu::trc(const char* context, const char* key, const char* disambiguation)
+std::string mu::trc(const char* context, const char* key, const char* disambiguation, int n)
 {
-    return QCoreApplication::translate(context, key, disambiguation).toStdString();
+    return QCoreApplication::translate(context, key, disambiguation, n).toStdString();
 }
 
-QString mu::qtrc(const char* context, const char* key, const char* disambiguation)
+QString mu::qtrc(const char* context, const char* key, const char* disambiguation, int n)
 {
-    return QCoreApplication::translate(context, key, disambiguation);
+    return QCoreApplication::translate(context, key, disambiguation, n);
 }

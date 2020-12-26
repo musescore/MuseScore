@@ -87,7 +87,7 @@ Rectangle {
 
         text: qsTrc("palette", "Start typing to search all palettes")
 
-        visible: palettesWidgetHeader.searchOpenned && !Boolean(palettesWidgetHeader.searchText)
+        visible: palettesWidgetHeader.searchOpened && !Boolean(palettesWidgetHeader.searchText)
     }
 
     PaletteTree {
@@ -97,7 +97,7 @@ Rectangle {
 
         filter: palettesWidgetHeader.searchText
         enableAnimations: !palettesWidgetHeader.searching
-        searchOpenned: palettesWidgetHeader.searchOpenned
+        searchOpened: palettesWidgetHeader.searchOpened
 
         anchors {
             top: palettesWidgetHeader.bottom

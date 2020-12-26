@@ -27,10 +27,10 @@ QmlTranslation::QmlTranslation(QObject* parent)
 {
 }
 
-QString QmlTranslation::translate(const QString& context, const QString& text, const QString& disambiguation) const
+QString QmlTranslation::translate(const QString& context, const QString& text, const QString& disambiguation, int n) const
 {
     return qtrc(context.toUtf8().constData(),
                 text.toUtf8().constData(),
-                disambiguation.isEmpty() ? nullptr : disambiguation.toUtf8().constData()
-                );
+                disambiguation.isEmpty() ? nullptr : disambiguation.toUtf8().constData(),
+                n);
 }
