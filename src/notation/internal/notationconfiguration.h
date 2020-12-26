@@ -56,11 +56,14 @@ public:
 
     QColor selectionColor(int voiceIndex = 0) const override;
 
+    QColor layoutBreakColor() const override;
+
     int selectionProximity() const override;
 
     ValCh<int> currentZoom() const override;
     void setCurrentZoom(int zoomPercentage) override;
 
+    std::string fontFamily() const override;
     int fontSize() const override;
 
     io::path stylesDirPath() const override;
@@ -73,6 +76,10 @@ public:
     std::vector<std::string> toolbarActions(const std::string& toolbarName) const override;
     void setToolbarActions(const std::string& toolbarName, const std::vector<std::string>& actions) override;
 
+    NavigatorOrientation navigatorOrientation() const;
+    void setNavigatorOrientation(NavigatorOrientation orientation) override;
+    async::Channel<NavigatorOrientation> navigatorOrientationChanged() const;
+
 private:
     std::vector<std::string> parseToolbarActions(const std::string& actions) const;
 
@@ -83,6 +90,7 @@ private:
     async::Channel<QColor> m_backgroundColorChanged;
     async::Channel<QColor> m_foregroundColorChanged;
     async::Channel<int> m_currentZoomChanged;
+    async::Channel<NavigatorOrientation> m_navigatorOrientationChanged;
 };
 }
 

@@ -36,7 +36,7 @@ class NotationInteraction;
 class NotationPlayback;
 class Notation : virtual public INotation, public IGetScore, public async::Asyncable
 {
-    INJECT(notation, INotationConfiguration, configuration)
+    INJECT_STATIC(notation, INotationConfiguration, configuration)
 
 public:
     explicit Notation(Ms::Score* score = nullptr);

@@ -61,6 +61,9 @@ static const Settings::Key IS_MIDI_INPUT_ENABLED(module_name, "io/midi/enableInp
 
 static const Settings::Key TOOLBAR_KEY(module_name, "ui/toolbar/");
 
+static const Settings::Key NAVIGATOR_ORIENTATION(module_name, "ui/canvas/scroll/verticalOrientation");
+static const bool NAVIGATOR_ORIENTATION_VERTICAL(true);
+
 void NotationConfiguration::init()
 {
     settings()->setDefaultValue(ANCHORLINE_COLOR, Val(QColor("#C31989")));
@@ -95,6 +98,11 @@ void NotationConfiguration::init()
 
     settings()->setDefaultValue(SELECTION_PROXIMITY, Val(6));
     settings()->setDefaultValue(IS_MIDI_INPUT_ENABLED, Val(false));
+
+    settings()->setDefaultValue(NAVIGATOR_ORIENTATION, Val(NAVIGATOR_ORIENTATION_VERTICAL));
+    settings()->valueChanged(NAVIGATOR_ORIENTATION).onReceive(nullptr, [this](const Val&) {
+        m_navigatorOrientationChanged.send(navigatorOrientation());
+    });
 
     // libmscore
     preferences().setBackupDirPath(globalConfiguration()->backupPath().toQString());
@@ -174,6 +182,11 @@ int NotationConfiguration::cursorOpacity() const
     return 50;
 }
 
+QColor NotationConfiguration::layoutBreakColor() const
+{
+    return QColor("0xA0A0A4");
+}
+
 QColor NotationConfiguration::selectionColor(int voiceIndex) const
 {
     if (!isVoiceIndexValid(voiceIndex)) {
@@ -200,6 +213,11 @@ mu::ValCh<int> NotationConfiguration::currentZoom() const
 void NotationConfiguration::setCurrentZoom(int zoomPercentage)
 {
     settings()->setValue(CURRENT_ZOOM, Val(zoomPercentage));
+}
+
+std::string NotationConfiguration::fontFamily() const
+{
+    return uiConfiguration()->fontFamily();
 }
 
 int NotationConfiguration::fontSize() const
@@ -241,6 +259,23 @@ void NotationConfiguration::setToolbarActions(const std::string& toolbarName, co
 
     Val value(qactions.join(",").toStdString());
     settings()->setValue(toolbarSettingsKey(toolbarName), value);
+}
+
+NavigatorOrientation NotationConfiguration::navigatorOrientation() const
+{
+    bool isVertical = settings()->value(NAVIGATOR_ORIENTATION).toBool() == NAVIGATOR_ORIENTATION_VERTICAL;
+    return isVertical ? NavigatorOrientation::Vertical : NavigatorOrientation::Horizontal;
+}
+
+void NotationConfiguration::setNavigatorOrientation(NavigatorOrientation orientation)
+{
+    bool isVertical = orientation == NavigatorOrientation::Vertical;
+    settings()->setValue(NAVIGATOR_ORIENTATION, Val(isVertical));
+}
+
+async::Channel<NavigatorOrientation> NotationConfiguration::navigatorOrientationChanged() const
+{
+    return m_navigatorOrientationChanged;
 }
 
 std::vector<std::string> NotationConfiguration::parseToolbarActions(const std::string& actions) const

@@ -48,6 +48,7 @@
 #include "view/noteinputbarcustomisemodel.h"
 #include "view/internal/abstractnoteinputbaritem.h"
 #include "view/notationtoolbarmodel.h"
+#include "view/notationnavigator.h"
 
 #include "ui/iinteractiveuriregister.h"
 #include "ui/uitypes.h"
@@ -159,6 +160,7 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<NoteInputBarCustomiseModel>("MuseScore.NotationScene", 1, 0, "NoteInputBarCustomiseModel");
     qmlRegisterType<AbstractNoteInputBarItem>("MuseScore.NotationScene", 1, 0, "NoteInputBarItem");
     qmlRegisterType<NotationToolBarModel>("MuseScore.NotationScene", 1, 0, "NotationToolBarModel");
+    qmlRegisterType<NotationNavigator>("MuseScore.NotationScene", 1, 0, "NotationNavigator");
 
     qRegisterMetaType<EditStyle>("EditStyle");
     qRegisterMetaType<EditStaff>("EditStaff");
@@ -172,6 +174,8 @@ void NotationModule::registerUiTypes()
 
 void NotationModule::onInit(const IApplication::RunMode&)
 {
+    Notation::init();
+
     s_configuration->init();
     s_actionController->init();
     s_midiInputController->init();

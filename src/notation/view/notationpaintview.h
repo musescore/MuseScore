@@ -53,6 +53,7 @@ class NotationPaintView : public QQuickPaintedItem, public IControlledView, publ
     Q_PROPERTY(qreal horizontalScrollSize READ horizontalScrollSize NOTIFY horizontalScrollChanged)
     Q_PROPERTY(qreal startVerticalScrollPosition READ startVerticalScrollPosition NOTIFY verticalScrollChanged)
     Q_PROPERTY(qreal verticalScrollSize READ verticalScrollSize NOTIFY verticalScrollChanged)
+    Q_PROPERTY(QRect viewport READ viewport NOTIFY viewportChanged)
 
 public:
     explicit NotationPaintView(QQuickItem* parent = nullptr);
@@ -69,7 +70,7 @@ public:
 
     QPoint toLogical(const QPoint& point) const override;
 
-    void moveCanvas(int dx, int dy) override;
+    Q_INVOKABLE void moveCanvas(int dx, int dy) override;
     void moveCanvasVertical(int dy) override;
     void moveCanvasHorizontal(int dx) override;
 
@@ -88,6 +89,8 @@ public:
     qreal horizontalScrollSize() const;
     qreal startVerticalScrollPosition() const;
     qreal verticalScrollSize() const;
+    
+    QRect viewport() const;
 
 signals:
     void openContextMenuRequested(const QVariantList& items, const QPoint& pos);
@@ -95,6 +98,8 @@ signals:
 
     void horizontalScrollChanged();
     void verticalScrollChanged();
+
+    void viewportChanged(QRect viewport);
 
 protected:
     void setNotation(INotationPtr notation);
@@ -139,7 +144,6 @@ private:
     void dropEvent(QDropEvent* event) override;
 
     QRect toLogical(const QRect& rect) const;
-    QRect viewport() const;
 
     QRectF canvasRect() const;
 
