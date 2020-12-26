@@ -107,6 +107,8 @@ private:
     void openPartsDialog();
     void openTupletOtherDialog();
 
+    void toogleNavigator();
+
     bool isTextEditting() const;
 
     enum class PastingType {

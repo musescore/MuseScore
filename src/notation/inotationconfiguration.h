@@ -25,6 +25,7 @@
 #include "async/channel.h"
 #include "retval.h"
 #include "io/path.h"
+#include "notationtypes.h"
 
 namespace mu::notation {
 class INotationConfiguration : MODULE_EXPORT_INTERFACE
@@ -53,11 +54,14 @@ public:
 
     virtual QColor selectionColor(int voiceIndex = 0) const = 0;
 
+    virtual QColor layoutBreakColor() const = 0;
+
     virtual int selectionProximity() const = 0;
 
     virtual ValCh<int> currentZoom() const = 0;
     virtual void setCurrentZoom(int zoomPercentage) = 0;
 
+    virtual std::string fontFamily() const = 0;
     virtual int fontSize() const = 0;
 
     virtual io::path stylesDirPath() const = 0;
@@ -69,6 +73,10 @@ public:
 
     virtual std::vector<std::string> toolbarActions(const std::string& toolbarName) const = 0;
     virtual void setToolbarActions(const std::string& toolbarName, const std::vector<std::string>& actions) = 0;
+
+    virtual NavigatorOrientation navigatorOrientation() const = 0;
+    virtual void setNavigatorOrientation(NavigatorOrientation orientation) = 0;
+    virtual async::Channel<NavigatorOrientation> navigatorOrientationChanged() const = 0;
 };
 }
 

@@ -73,6 +73,7 @@ void NotationPaintView::load()
     });
 
     initBackground();
+    initNavigatorOrientation();
 }
 
 void NotationPaintView::initBackground()
@@ -82,6 +83,13 @@ void NotationPaintView::initBackground()
     configuration()->backgroundColorChanged().onReceive(this, [this](const QColor& color) {
         m_backgroundColor = color;
         update();
+    });
+}
+
+void NotationPaintView::initNavigatorOrientation()
+{
+    configuration()->navigatorOrientationChanged().onReceive(this, [this](NavigatorOrientation) {
+        moveCanvasToPosition(QPoint(0, 0));
     });
 }
 
@@ -193,8 +201,9 @@ void NotationPaintView::onViewSizeChanged()
 
     QPoint topLeft = toLogical(QPoint(0, 0));
     QPoint bottomRight = toLogical(QPoint(width(), height()));
-
     notation()->setViewSize(QSizeF(bottomRight.x() - topLeft.x(), bottomRight.y() - topLeft.y()));
+
+    emit viewportChanged(viewport());
 }
 
 INotationPtr NotationPaintView::notation() const
@@ -442,6 +451,7 @@ void NotationPaintView::moveCanvas(int dx, int dy)
 
     emit horizontalScrollChanged();
     emit verticalScrollChanged();
+    emit viewportChanged(viewport());
 }
 
 void NotationPaintView::moveCanvasVertical(int dy)

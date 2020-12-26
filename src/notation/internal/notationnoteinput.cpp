@@ -311,7 +311,12 @@ QRectF NotationNoteInput::cursorRect() const
         y -= skylineMargin;
     }
 
-    QRectF result = QRectF(x, y, w, h).translated(system->page()->pos());
+    QRectF result = QRectF(x, y, w, h);
+
+    if (configuration()->navigatorOrientation() == NavigatorOrientation::Horizontal) {
+        result.translate(system->page()->pos());
+    }
+
     return result;
 }
 

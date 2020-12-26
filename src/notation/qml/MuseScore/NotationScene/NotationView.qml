@@ -12,12 +12,6 @@ FocusScope {
 
     signal textEdittingStarted()
 
-    QtObject {
-        id: privateProperties
-
-        property int scrollbarMargin: 4
-    }
-
     ColumnLayout {
         anchors.fill: parent
 
@@ -27,54 +21,30 @@ FocusScope {
             Layout.fillWidth: true
         }
 
-        Item {
+        SplitView {
+            id: splitView
+
             Layout.fillWidth: true
             Layout.fillHeight: true
+
+            orientation: notationNavigator.orientation
 
             NotationPaintView {
                 id: notationView
 
-                anchors.fill: parent
+                SplitView.fillWidth: true
+                SplitView.fillHeight: true
 
                 onTextEdittingStarted: {
                     root.textEdittingStarted()
                 }
 
-                Component {
-                    id: menuAction
-
-                    Action {
-                        property string code: ""
-                        property string hintIcon: ""
-
-                        icon.name: hintIcon
-
-                        onTriggered: {
-                            Qt.callLater(notationView.handleAction, code)
-                        }
-                    }
-                }
-
                 onOpenContextMenuRequested: {
-                    contextMenu.clear()
-
-                    for (var i in items) {
-                        var item = items[i]
-
-                        var action = menuAction.createObject(notationView, {
-                                                             code: item.code,
-                                                             text: item.title,
-                                                             hintIcon: item.icon,
-                                                             shortcut: item.shortcut
-                                                             })
-                        contextMenu.addMenuItem(action)
-                    }
-
-                    contextMenu.popup()
+                    privateProperties.showNotationMenu(items)
                 }
 
-                ContextMenu {
-                    id: contextMenu
+                onViewportChanged: {
+                    notationNavigator.setViewRect(viewport)
                 }
 
                 onHorizontalScrollChanged: {
@@ -87,6 +57,10 @@ FocusScope {
                     if (!verticalScrollBar.pressed) {
                         verticalScrollBar.setPosition(notationView.startVerticalScrollPosition)
                     }
+                }
+
+                ContextMenu {
+                    id: contextMenu
                 }
             }
 
@@ -135,6 +109,47 @@ FocusScope {
                     }
                 }
             }
+
+            NotationNavigator {
+                id: notationNavigator
+
+                property bool isVertical: orientation === Qt.Vertical
+
+                SplitView.preferredHeight: 200
+                SplitView.preferredWidth: 200
+
+                onMoveNotationRequested: {
+                    notationView.moveCanvas(dx, dy)
+                }
+            }
+
+            handle: Rectangle {
+                id: background
+
+                implicitWidth: 4
+                implicitHeight: 4
+
+                color: ui.theme.strokeColor
+
+                states: [
+                    State {
+                        name: "PRESSED"
+                        when: background.SplitHandle.pressed
+                        PropertyChanges {
+                            target: background
+                            opacity: ui.theme.accentOpacityHit
+                        }
+                    },
+                    State {
+                        name: "HOVERED"
+                        when: background.SplitHandle.hovered
+                        PropertyChanges {
+                            target: background
+                            opacity: ui.theme.accentOpacityHover
+                        }
+                    }
+                ]
+            }
         }
 
         SearchPopup {
@@ -146,5 +161,44 @@ FocusScope {
 
     Component.onCompleted: {
         notationView.load()
+    }
+
+    QtObject {
+        id: privateProperties
+
+        property int scrollbarMargin: 4
+
+        function showNotationMenu(items) {
+            contextMenu.clear()
+
+            for (var i in items) {
+                var item = items[i]
+
+                var action = notationMenuAction.createObject(notationView, {
+                                                                 code: item.code,
+                                                                 text: item.title,
+                                                                 hintIcon: item.icon,
+                                                                 shortcut: item.shortcut
+                                                             })
+                contextMenu.addMenuItem(action)
+            }
+
+            contextMenu.popup()
+        }
+    }
+
+    Component {
+        id: notationMenuAction
+
+        Action {
+            property string code: ""
+            property string hintIcon: ""
+
+            icon.name: hintIcon
+
+            onTriggered: {
+                Qt.callLater(notationView.handleAction, code)
+            }
+        }
     }
 }
