@@ -23,12 +23,16 @@
 
 #include "../iconvertercontroller.h"
 
+#include "modularity/ioc.h"
+#include "notation/inotationcreator.h"
+
 #include "retval.h"
 #include "convertertypes.h"
 
 namespace mu::converter {
 class ConverterController : public IConverterController
 {
+    INJECT(converter, notation::INotationCreator, notationCreator)
 public:
     ConverterController() = default;
 
@@ -45,9 +49,7 @@ private:
 
     RetVal<BatchJob> parseBatchJob(const io::path& batchJobFile) const;
 
-    ConvertType typeFromExt(const io::path& path) const;
     Ret convert(const io::path& in, const io::path& out);
-    Ret convertToPng(const io::path& in, const io::path& out);
 };
 }
 
