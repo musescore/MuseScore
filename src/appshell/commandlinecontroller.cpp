@@ -57,7 +57,7 @@ void CommandLineController::apply()
         if (val) {
             uiConfiguration()->setPhysicalDotsPerInch(val);
         } else {
-            LOGE() << "Option -D not recognized DPI value: " << m_parser.value("D");
+            LOGE() << "Option: -D not recognized DPI value: " << m_parser.value("D");
         }
     }
 

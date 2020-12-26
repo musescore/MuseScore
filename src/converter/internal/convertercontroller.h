@@ -25,14 +25,16 @@
 
 #include "modularity/ioc.h"
 #include "notation/inotationcreator.h"
+#include "notation/inotationwritersregister.h"
 
 #include "retval.h"
-#include "convertertypes.h"
 
 namespace mu::converter {
 class ConverterController : public IConverterController
 {
     INJECT(converter, notation::INotationCreator, notationCreator)
+    INJECT(converter, notation::INotationWritersRegister, writers)
+
 public:
     ConverterController() = default;
 
