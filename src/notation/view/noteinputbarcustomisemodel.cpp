@@ -18,6 +18,8 @@
 //=============================================================================
 #include "noteinputbarcustomisemodel.h"
 
+#include <optional>
+
 #include <QItemSelectionModel>
 
 #include "log.h"
@@ -103,7 +105,7 @@ static bool containsAction(const ActionNameList& toolbarActionNames, const Actio
     return std::find(toolbarActionNames.begin(), toolbarActionNames.end(), actionName) != toolbarActionNames.end();
 }
 
-static size_t indexOf(const ActionList& actions, const ActionName& actionName)
+static std::optional<size_t> indexOf(const ActionList& actions, const ActionName& actionName)
 {
     for (size_t i = 0; i < actions.size(); ++i) {
         if (actions[i].name == actionName) {
@@ -111,7 +113,7 @@ static size_t indexOf(const ActionList& actions, const ActionName& actionName)
         }
     }
 
-    return -1;
+    return std::nullopt;
 }
 
 void NoteInputBarCustomiseModel::load()
@@ -534,9 +536,9 @@ ActionNameList NoteInputBarCustomiseModel::defaultActions() const
 
         result.push_back(actionName);
 
-        int indexInDefaultActions = indexOf(allNoteInputActions, actionName);
-        if (indexInDefaultActions != -1) {
-            appendRelatedActions(indexInDefaultActions + 1);
+        std::optional<size_t> indexInDefaultActions = indexOf(allNoteInputActions, actionName);
+        if (indexInDefaultActions) {
+            appendRelatedActions(indexInDefaultActions.value() + 1);
         }
     }
 
