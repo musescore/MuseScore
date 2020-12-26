@@ -27,10 +27,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/convertermodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/convertermodule.h
     ${CMAKE_CURRENT_LIST_DIR}/convertercodes.h
-    ${CMAKE_CURRENT_LIST_DIR}/convertertypes.h
     ${CMAKE_CURRENT_LIST_DIR}/iconvertercontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/convertercontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/convertercontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/convertercontroller.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
