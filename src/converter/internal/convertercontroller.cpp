@@ -57,17 +57,30 @@ mu::Ret ConverterController::convert(const io::path& in, const io::path& out)
         return make_ret(Err::UnknownError);
     }
 
-    Ret ret = notation->load(in);
-    if (!ret) {
-        LOGE() << "failed load: " << in << ", ret: " << ret.toString();
-        return ret;
+    std::string suffix = io::syffix(out);
+    auto writer = writers()->writer(suffix);
+    if (!writer) {
+        return make_ret(Err::ConvertTypeUnknown);
     }
 
-    ret = notation->save(out);
+    Ret ret = notation->load(in);
     if (!ret) {
-        LOGE() << "failed save: " << out << ", ret: " << ret.toString();
-        return ret;
+        LOGE() << "failed load notation, err: " << ret.toString() << ", path: " << in;
+        return make_ret(Err::InFileFailedLoad);
     }
+
+    QFile file(out.toQString());
+    if (!file.open(QFile::WriteOnly)) {
+        return make_ret(Err::OutFileFailedOpen);
+    }
+
+    ret = writer->write(notation.get(), file);
+    if (!ret) {
+        LOGE() << "failed write, err: " << ret.toString() << ", path: " << out;
+        return make_ret(Err::OutFileFailedWrite);
+    }
+
+    file.close();
 
     return make_ret(Ret::Code::Ok);
 }

@@ -31,6 +31,11 @@ enum class Err {
     BatchJobFileFailedParse = 1302,
 
     ConvertTypeUnknown = 1310,
+
+    InFileFailedLoad = 1320,
+
+    OutFileFailedOpen = 1330,
+    OutFileFailedWrite = 1331,
 };
 
 inline Ret make_ret(Err e)
