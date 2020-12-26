@@ -26,10 +26,7 @@
 #include "async/channel.h"
 #include "global/progress.h"
 #include "system/iodevice.h"
-
-namespace Ms {
-class Score;
-}
+#include "inotation.h"
 
 namespace mu::notation {
 class INotationWriter
@@ -46,7 +43,7 @@ public:
 
     virtual ~INotationWriter() = default;
 
-    virtual Ret write(const Ms::Score& score, framework::IODevice& destinationDevice, const Options& options = Options()) = 0;
+    virtual Ret write(const INotation* notation, framework::IODevice& destinationDevice, const Options& options = Options()) = 0;
     virtual void abort() = 0;
     virtual framework::ProgressChannel progress() const = 0;
 };

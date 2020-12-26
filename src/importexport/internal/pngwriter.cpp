@@ -31,21 +31,29 @@
 
 using namespace mu::importexport;
 using namespace mu::framework;
-using namespace Ms;
 
-mu::Ret PngWriter::write(const Score& score, IODevice& destinationDevice, const Options& options)
+mu::Ret PngWriter::write(const notation::INotation* notation, IODevice& destinationDevice, const Options& options)
 {
-    const_cast<Score&>(score).setPrinting(true); // don’t print page break symbols etc.
-    double pixelRatioBackup = MScore::pixelRatio;
+    IF_ASSERT_FAILED(notation) {
+        return make_ret(Ret::Code::UnknownError);
+    }
+    Ms::Score* score = notation->elements()->msScore();
+    IF_ASSERT_FAILED(score) {
+        return make_ret(Ret::Code::UnknownError);
+    }
+
+    score->setPrinting(true); // don’t print page break symbols etc.
+
+    double pixelRatioBackup = Ms::MScore::pixelRatio;
 
     const int PAGE_NUMBER = options.value(OptionKey::PAGE_NUMBER, Val(0)).toInt();
-    const QList<Page*>& pages = score.pages();
+    const QList<Ms::Page*>& pages = score->pages();
 
     if (PAGE_NUMBER < 0 || PAGE_NUMBER >= pages.size()) {
         return false;
     }
 
-    Page* page = pages[PAGE_NUMBER];
+    Ms::Page* page = pages[PAGE_NUMBER];
 
     const int TRIM_MARGIN_SIZE = options.value(OptionKey::TRIM_MARGINS_SIZE, Val(0)).toInt();
     QRectF pageRect = page->abbox();
@@ -67,7 +75,7 @@ mu::Ret PngWriter::write(const Score& score, IODevice& destinationDevice, const 
     image.fill(TRANSPARENT_BACKGROUND ? 0 : Qt::white);
 
     double scaling = CANVAS_DPI / DPI;
-    MScore::pixelRatio = 1.0 / scaling;
+    Ms::MScore::pixelRatio = 1.0 / scaling;
 
     QPainter painter(&image);
     painter.setRenderHint(QPainter::Antialiasing, true);
@@ -77,14 +85,14 @@ mu::Ret PngWriter::write(const Score& score, IODevice& destinationDevice, const 
         painter.translate(-pageRect.topLeft());
     }
 
-    QList<Element*> elements = page->elements();
+    QList<Ms::Element*> elements = page->elements();
     std::stable_sort(elements.begin(), elements.end(), elementLessThan);
 
-    paintElements(painter, elements);
+    Ms::paintElements(painter, elements);
     image.save(&destinationDevice, "png");
 
-    const_cast<Score&>(score).setPrinting(false);
-    MScore::pixelRatio = pixelRatioBackup;
+    score->setPrinting(false);
+    Ms::MScore::pixelRatio = pixelRatioBackup;
 
     return true;
 }

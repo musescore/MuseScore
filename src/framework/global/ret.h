@@ -31,10 +31,12 @@ public:
         Undefined       = -1,
         Ok              = 0,
         UnknownError    = 1,
-        NotSupported    = 2,
 
         // not error, just codes
         Cancel          = 3,  // abort by user
+
+        NotSupported    = 4,
+        NotImplemented  = 5,
 
         // Global errors
         GlobalFirst     = 20,

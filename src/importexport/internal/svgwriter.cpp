@@ -36,13 +36,22 @@ using namespace mu::importexport;
 using namespace mu::framework;
 using namespace Ms;
 
-mu::Ret SvgWriter::write(const Score& score, IODevice& destinationDevice, const Options& options)
+mu::Ret SvgWriter::write(const notation::INotation* notation, IODevice& destinationDevice, const Options& options)
 {
-    const_cast<Score&>(score).setPrinting(true);
+    IF_ASSERT_FAILED(notation) {
+        return make_ret(Ret::Code::UnknownError);
+    }
+    Ms::Score* score = notation->elements()->msScore();
+    IF_ASSERT_FAILED(score) {
+        return make_ret(Ret::Code::UnknownError);
+    }
+
+    score->setPrinting(true); // don’t print page break symbols etc.
+
     MScore::pdfPrinting = true;
     MScore::svgPrinting = true;
 
-    const QList<Page*>& pages = score.pages();
+    const QList<Page*>& pages = score->pages();
     double pixelRationBackup = MScore::pixelRatio;
 
     const int PAGE_NUMBER = options.value(OptionKey::PAGE_NUMBER, Val(0)).toInt();
@@ -53,7 +62,7 @@ mu::Ret SvgWriter::write(const Score& score, IODevice& destinationDevice, const 
     Page* page = pages.at(PAGE_NUMBER);
 
     SvgGenerator printer;
-    QString title(score.title());
+    QString title(score->title());
     printer.setTitle(pages.size() > 1 ? QString("%1 (%2)").arg(title).arg(PAGE_NUMBER + 1) : title);
     printer.setOutputDevice(&destinationDevice);
 
@@ -88,7 +97,7 @@ mu::Ret SvgWriter::write(const Score& score, IODevice& destinationDevice, const 
         int stavesCount = system->staves()->size();
 
         for (int staffIndex = 0; staffIndex < stavesCount; ++staffIndex) {
-            if (score.staff(staffIndex)->invisible() || !score.staff(staffIndex)->show()) {
+            if (score->staff(staffIndex)->invisible() || !score->staff(staffIndex)->show()) {
                 continue; // ignore invisible staves
             }
 
@@ -202,7 +211,7 @@ mu::Ret SvgWriter::write(const Score& score, IODevice& destinationDevice, const 
 
     // Clean up and return
     MScore::pixelRatio = pixelRationBackup;
-    const_cast<Score&>(score).setPrinting(false);
+    score->setPrinting(false);
     MScore::pdfPrinting = false;
     MScore::svgPrinting = false;
 
