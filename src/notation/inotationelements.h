@@ -12,6 +12,8 @@ class INotationElements
 public:
     virtual ~INotationElements() = default;
 
+    virtual Ms::Score* msScore() const = 0;
+
     virtual Element* search(const std::string& searchText) const = 0;
     virtual std::vector<Element*> elements(const FilterElementsOptions& elementOptions = FilterElementsOptions()) const = 0;
 

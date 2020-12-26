@@ -32,6 +32,14 @@ NotationElements::NotationElements(IGetScore* getScore)
 {
 }
 
+Ms::Score* NotationElements::msScore() const
+{
+    IF_ASSERT_FAILED(m_getScore) {
+        return nullptr;
+    }
+    return m_getScore->score();
+}
+
 Element* NotationElements::search(const std::string& searchText) const
 {
     SearchCommandsParser commandsParser;

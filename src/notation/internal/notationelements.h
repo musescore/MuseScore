@@ -26,6 +26,8 @@ class NotationElements : public INotationElements
 public:
     NotationElements(IGetScore* getScore);
 
+    Ms::Score* msScore() const override;
+
     Element* search(const std::string& searchText) const override;
     std::vector<Element*> elements(const FilterElementsOptions& elementsOptions) const override;
 

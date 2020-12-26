@@ -31,7 +31,7 @@ class PdfWriter : public notation::AbstractNotationWriter
     INJECT(importexport, IImportexportConfiguration, configuration)
 
 public:
-    Ret write(const Ms::Score& score, framework::IODevice& destinationDevice, const Options& options = Options()) override;
+    Ret write(const notation::INotation* notation, framework::IODevice& destinationDevice, const Options& options = Options()) override;
 
 private:
     QString documentTitle(const Ms::Score& score) const;
