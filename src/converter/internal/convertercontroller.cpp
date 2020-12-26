@@ -52,37 +52,24 @@ mu::Ret ConverterController::batchConvert(const io::path& batchJobFile)
 
 mu::Ret ConverterController::convert(const io::path& in, const io::path& out)
 {
-    ConvertType type = typeFromExt(out);
-    if (type == ConvertType::Undefined) {
-        return make_ret(Err::ConvertTypeUnknown);
+    auto notation = notationCreator()->newMasterNotation();
+    IF_ASSERT_FAILED(notation) {
+        return make_ret(Err::UnknownError);
     }
 
-    Ret ret = make_ret(Ret::Code::Ok);
-    switch (type) {
-    case ConvertType::Png:
-        ret = convertToPng(in, out);
-        break;
-    case ConvertType::Undefined:
-        ret = make_ret(Err::ConvertTypeUnknown);
+    Ret ret = notation->load(in);
+    if (!ret) {
+        LOGE() << "failed load: " << in << ", ret: " << ret.toString();
+        return ret;
     }
 
-    return ret;
-}
-
-mu::Ret ConverterController::convertToPng(const io::path& in, const io::path& out)
-{
-}
-
-ConvertType ConverterController::typeFromExt(const io::path& file) const
-{
-    std::string ext = io::syffix(file);
-    ext = strings::toLower(ext);
-
-    if ("png" == ext) {
-        return ConvertType::Png;
+    ret = notation->save(out);
+    if (!ret) {
+        LOGE() << "failed save: " << out << ", ret: " << ret.toString();
+        return ret;
     }
 
-    return ConvertType::Undefined;
+    return make_ret(Ret::Code::Ok);
 }
 
 mu::RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(const io::path& batchJobFile) const
