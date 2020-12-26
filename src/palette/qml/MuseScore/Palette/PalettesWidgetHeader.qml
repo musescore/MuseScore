@@ -32,7 +32,7 @@ Item {
     property PaletteWorkspace paletteWorkspace: null
     property string searchText: searchTextInput.searchText
     readonly property bool searching: searchTextInput.activeFocus
-    property bool searchOpenned: searchTextInput.visible
+    property bool searchOpened: searchTextInput.visible
 
     property alias popupMaxHeight: palettePopup.maxHeight
 

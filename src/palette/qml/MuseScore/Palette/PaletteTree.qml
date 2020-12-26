@@ -29,7 +29,7 @@ import "utils.js" as Utils
 
 ListView {
     id: paletteTree
-    Accessible.name: qsTrc("palette", "Palettes Tree, contains %n palette(s)").arg(count)
+    Accessible.name: qsTrc("palette", "Palettes Tree, contains %n palette(s)", "", count)
 
     activeFocusOnTab: true // allow focus even when empty
 
@@ -46,11 +46,11 @@ ListView {
     property Item currentTreeItem: currentItem // most recently focused item at any level of the tree
 
     property string filter: ""
-    property bool searchOpenned: false
+    property bool searchOpened: false
 
-    onSearchOpennedChanged: {
+    onSearchOpenedChanged: {
         if (paletteWorkspace) {
-            paletteWorkspace.setSearching(searchOpenned)
+            paletteWorkspace.setSearching(searchOpened)
         }
     }
 

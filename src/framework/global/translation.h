@@ -22,8 +22,8 @@
 #include <QString>
 
 namespace mu {
-std::string trc(const char* context, const char* key, const char* disambiguation = nullptr);
-QString qtrc(const char* context, const char* key, const char* disambiguation = nullptr);
+std::string trc(const char* context, const char* key, const char* disambiguation = nullptr, int n = -1);
+QString qtrc(const char* context, const char* key, const char* disambiguation = nullptr, int n = -1);
 }
 
 #endif // MU_FRAMEWORK_TRANSLATION_H
