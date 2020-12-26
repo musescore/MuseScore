@@ -20,6 +20,7 @@
 #ifndef IUICONFIGURATION_H
 #define IUICONFIGURATION_H
 
+#include <optional>
 #include <QString>
 
 #include "modularity/imoduleexport.h"
