@@ -25,9 +25,16 @@
 
 using namespace mu::importexport;
 using namespace mu::framework;
-using namespace Ms;
 
-mu::Ret MxlWriter::write(const Score& score, IODevice& destinationDevice, const Options&)
+mu::Ret MxlWriter::write(const notation::INotation* notation, IODevice& destinationDevice, const Options&)
 {
-    return saveMxl(const_cast<Score*>(&score), &destinationDevice);
+    IF_ASSERT_FAILED(notation) {
+        return make_ret(Ret::Code::UnknownError);
+    }
+    Ms::Score* score = notation->elements()->msScore();
+    IF_ASSERT_FAILED(score) {
+        return make_ret(Ret::Code::UnknownError);
+    }
+
+    return Ms::saveMxl(score, &destinationDevice);
 }

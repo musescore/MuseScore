@@ -23,15 +23,14 @@
 
 using namespace mu::importexport;
 using namespace mu::framework;
-using namespace Ms;
 
-mu::Ret WaveWriter::write(const Score& score, IODevice& destinationDevice, const Options& options)
+mu::Ret WaveWriter::write(const notation::INotation* notation, IODevice& destinationDevice, const Options& options)
 {
-    UNUSED(score)
+    UNUSED(notation)
     UNUSED(destinationDevice)
     UNUSED(options)
 
     NOT_IMPLEMENTED;
 
-    return Ret();
+    return make_ret(Ret::Code::NotImplemented);
 }

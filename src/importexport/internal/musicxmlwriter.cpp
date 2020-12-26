@@ -26,9 +26,15 @@
 
 using namespace mu::importexport;
 using namespace mu::framework;
-using namespace Ms;
 
-mu::Ret MusicXmlWriter::write(const Score& score, IODevice& destinationDevice, const Options&)
+mu::Ret MusicXmlWriter::write(const notation::INotation* notation, IODevice& destinationDevice, const Options&)
 {
-    return saveXml(const_cast<Score*>(&score), &destinationDevice);
+    IF_ASSERT_FAILED(notation) {
+        return make_ret(Ret::Code::UnknownError);
+    }
+    Ms::Score* score = notation->elements()->msScore();
+    IF_ASSERT_FAILED(score) {
+        return make_ret(Ret::Code::UnknownError);
+    }
+    return Ms::saveXml(score, &destinationDevice);
 }
