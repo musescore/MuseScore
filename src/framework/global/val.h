@@ -55,6 +55,7 @@ public:
     bool isNull() const;
     std::string toString() const;
     double toDouble() const;
+    float toFloat() const;
     bool toBool() const;
     int toInt() const;
 

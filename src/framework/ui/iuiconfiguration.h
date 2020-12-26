@@ -66,7 +66,7 @@ public:
     virtual float physicalDotsPerInch() const = 0;
 
     //! NOTE Maybe set from command line
-    virtual void setPhysicalDotsPerInch(float dpi) = 0;
+    virtual void setPhysicalDotsPerInch(std::optional<float> dpi) = 0;
 };
 }
 

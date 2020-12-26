@@ -20,6 +20,7 @@
 #define MU_IMPORTEXPORT_IIMPORTEXPORTCONFIGURATION_H
 
 #include <string>
+#include <optional>
 #include "modularity/imoduleexport.h"
 
 namespace mu::importexport {
@@ -54,8 +55,11 @@ public:
     virtual int exportPdfDpiResolution() const = 0;
 
     // Png
-    virtual double exportPngDpiResolution() const = 0;
+    virtual float exportPngDpiResolution() const = 0;
     virtual bool exportPngWithTransparentBackground() const = 0;
+
+    //! NOTE Maybe set from command line
+    virtual void setExportPngDpiResolution(std::optional<float> dpi) = 0;
 };
 }
 

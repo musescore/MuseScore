@@ -51,7 +51,7 @@ public:
     float guiScaling() const override;
     float physicalDotsPerInch() const override;
 
-    void setPhysicalDotsPerInch(float dpi) override;
+    void setPhysicalDotsPerInch(std::optional<float> dpi) override;
 
 private:
     async::Channel<ThemeType> m_currentThemeTypeChannel;
@@ -60,7 +60,7 @@ private:
     async::Notification m_musicalFontChanged;
     async::Notification m_iconsFontChanged;
 
-    float m_customDPI = -1.f;
+    std::optional<float> m_customDPI;
 };
 }
 

@@ -76,6 +76,11 @@ double Val::toDouble() const
     return m_val.toDouble();
 }
 
+float Val::toFloat() const
+{
+    return m_val.toFloat();
+}
+
 bool Val::toBool() const
 {
     if (m_val.isNull()) {
