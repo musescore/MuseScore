@@ -760,7 +760,7 @@
       </measure>
     <measure number="4">
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
         <staff>1</staff>
@@ -769,7 +769,7 @@
         <duration>4</duration>
         </backup>
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>5</voice>
         <staff>2</staff>
