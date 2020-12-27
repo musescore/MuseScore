@@ -52,6 +52,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/stafftext.h"
 #include "libmscore/sym.h"
+#include "libmscore/tempo.h"
 #include "libmscore/tempotext.h"
 #include "libmscore/tie.h"
 #include "libmscore/timesig.h"
@@ -1930,6 +1931,15 @@ static void addGraceChordsBefore(Chord* c, GraceChordList& gcl)
       }
 
 //---------------------------------------------------------
+//   hasTempoTextAtTick
+//---------------------------------------------------------
+
+static bool hasTempoTextAtTick(const TempoMap* const tempoMap, const int tick)
+      {
+      return tempoMap->count(tick) > 0;
+      }
+
+//---------------------------------------------------------
 //   measure
 //---------------------------------------------------------
 
@@ -2038,17 +2048,25 @@ void MusicXMLParserPass2::measure(const QString& partId,
                   QString tempo = _e.attributes().value("tempo").toString();
 
                   if (!tempo.isEmpty()) {
-                        double tpo = tempo.toDouble() / 60;
+                        // sound tempo="..."
+                        // create an invisible default TempoText
+                        // to prevent duplicates, only if none is present yet
                         Fraction tick = time + mTime;
+                        if (hasTempoTextAtTick(_score->tempomap(), tick.ticks())) {
+                              _logger->logError(QString("duplicate tempo at tick %1").arg(tick.ticks()), &_e);
+                              }
+                        else {
+                              double tpo = tempo.toDouble() / 60;
+                              TempoText* t = new TempoText(_score);
+                              t->setXmlText(QString("%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(TDuration::DurationType::V_QUARTER)), tempo));
+                              t->setVisible(false);
+                              t->setTempo(tpo);
+                              t->setFollowText(true);
 
-                        TempoText* t = new TempoText(_score);
-                        t->setXmlText(QString("%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(TDuration::DurationType::V_QUARTER)), tempo));
-                        t->setTempo(tpo);
-                        t->setFollowText(true);
+                              _score->setTempo(tick, tpo);
 
-                        _score->setTempo(tick, tpo);
-
-                        addElemOffset(t, _pass1.trackForPart(partId), "above", measure, tick);
+                              addElemOffset(t, _pass1.trackForPart(partId), "above", measure, tick);
+                              }
                         }
                   _e.skipCurrentElement();
                   }
@@ -2402,12 +2420,18 @@ void MusicXMLParserDirection::direction(const QString& partId,
       if (_wordsText != "" || _rehearsalText != "" || _metroText != "") {
             TextBase* t = 0;
             if (_tpoSound > 0.1) {
-                  _tpoSound /= 60;
-                  t = new TempoText(_score);
-                  t->setXmlText(_wordsText + _metroText);
-                  ((TempoText*) t)->setTempo(_tpoSound);
-                  ((TempoText*) t)->setFollowText(true);
-                  _score->setTempo(tick, _tpoSound);
+                  // to prevent duplicates, only create a TempoText if none is present yet
+                  if (hasTempoTextAtTick(_score->tempomap(), tick.ticks())) {
+                        _logger->logError(QString("duplicate tempo at tick %1").arg(tick.ticks()), &_e);
+                        }
+                  else {
+                        _tpoSound /= 60;
+                        t = new TempoText(_score);
+                        t->setXmlText(_wordsText + _metroText);
+                        ((TempoText*) t)->setTempo(_tpoSound);
+                        ((TempoText*) t)->setFollowText(true);
+                        _score->setTempo(tick, _tpoSound);
+                        }
                   }
             else {
                   if (_wordsText != "" || _metroText != "") {
@@ -2426,31 +2450,41 @@ void MusicXMLParserDirection::direction(const QString& partId,
                         }
                   }
 
-            if (_enclosure == "circle") {
-                  t->setFrameType(FrameType::CIRCLE);
-                  }
-            else if (_enclosure == "none") {
-                  t->setFrameType(FrameType::NO_FRAME);
-                  }
-            else if (_enclosure == "rectangle") {
-                  t->setFrameType(FrameType::SQUARE);
-                  t->setFrameRound(0);
-                  }
+            if (t) {
+                  if (_enclosure == "circle") {
+                        t->setFrameType(FrameType::CIRCLE);
+                        }
+                  else if (_enclosure == "none") {
+                        t->setFrameType(FrameType::NO_FRAME);
+                        }
+                  else if (_enclosure == "rectangle") {
+                        t->setFrameType(FrameType::SQUARE);
+                        t->setFrameRound(0);
+                        }
 
 //TODO:ws            if (_hasDefaultY) t->textStyle().setYoff(_defaultY);
-            addElemOffset(t, track, placement, measure, tick + _offset);
+                  addElemOffset(t, track, placement, measure, tick + _offset);
+                  }
             }
       else if (_tpoSound > 0) {
-            double tpo = _tpoSound / 60;
-            TempoText* t = new TempoText(_score);
-            t->setXmlText(QString("%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(TDuration::DurationType::V_QUARTER))).arg(_tpoSound));
-            t->setTempo(tpo);
-            t->setFollowText(true);
+            // direction without text but with sound tempo="..."
+            // create an invisible default TempoText
+            if (hasTempoTextAtTick(_score->tempomap(), tick.ticks())) {
+                  _logger->logError(QString("duplicate tempo at tick %1").arg(tick.ticks()), &_e);
+                  }
+            else {
+                  double tpo = _tpoSound / 60;
+                  TempoText* t = new TempoText(_score);
+                  t->setXmlText(QString("%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(TDuration::DurationType::V_QUARTER))).arg(_tpoSound));
+                  t->setVisible(false);
+                  t->setTempo(tpo);
+                  t->setFollowText(true);
 
-            // TBD may want ro use tick + _offset if sound is affected
-            _score->setTempo(tick, tpo);
+                  // TBD may want ro use tick + _offset if sound is affected
+                  _score->setTempo(tick, tpo);
 
-            addElemOffset(t, track, placement, measure, tick + _offset);
+                  addElemOffset(t, track, placement, measure, tick + _offset);
+                  }
             }
 
       // do dynamics
