@@ -111,6 +111,7 @@ private slots:
       void harmony4() { mxmlIoTest("testHarmony4"); }
       void harmony5() { mxmlIoTest("testHarmony5"); } // chordnames without chordrest
       void harmony6() { mxmlMscxExportTestRef("testHarmony6"); }
+      void harmony7() { mxmlMscxExportTestRef("testHarmony7"); }
       void hello() { mxmlIoTest("testHello"); }
       void helloReadCompr() { mxmlReadTestCompr("testHello"); }
       void helloReadWriteCompr() { mxmlReadWriteTestCompr("testHello"); }
