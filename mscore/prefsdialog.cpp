@@ -75,10 +75,12 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       setModal(true);
       shortcutsChanged = false;
 
-#ifdef Q_OS_MAC // On Mac, we have an extra theme option,
-      // namely to follow the system's Dark Mode
+      styleName->clear();
+      styleName->addItem(tr("Light"));
+      styleName->addItem(tr("Dark"));
+#ifdef Q_OS_MAC // On Mac, we have a theme option to follow the system's Dark Mode
       if (CocoaBridge::isSystemDarkModeSupported())
-            styleName->addItem(QCoreApplication::translate("PrefsDialogBase", "System"));
+            styleName->addItem(tr("System"));
 #endif
 
 #ifndef USE_JACK
@@ -558,12 +560,6 @@ PreferenceDialog::~PreferenceDialog()
 void PreferenceDialog::retranslate()
       {
       retranslateUi(this);
-#ifdef Q_OS_MAC // On Mac, we have an extra theme option,
-      // namely, to follow the system's Dark Mode.
-      // Of course, we need to translate that too :)
-      if (CocoaBridge::isSystemDarkModeSupported())
-            styleName->setItemText(2, QCoreApplication::translate("PrefsDialogBase", "System"));
-#endif
       updateValues();
       }
 
@@ -643,6 +639,14 @@ void PreferenceDialog::updateValues(bool useDefaultValues, bool setup)
       {
       if (useDefaultValues)
             preferences.setReturnDefaultValuesMode(true);
+
+      styleName->clear();
+      styleName->addItem(tr("Light"));
+      styleName->addItem(tr("Dark"));
+#ifdef Q_OS_MAC // On Mac, we have a theme option to follow the system's Dark Mode
+      if (CocoaBridge::isSystemDarkModeSupported())
+            styleName->addItem(tr("System"));
+#endif
 
       advancedWidget->updatePreferences();
 

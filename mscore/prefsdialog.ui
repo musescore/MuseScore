@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>706</width>
-    <height>486</height>
+    <width>904</width>
+    <height>579</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -490,12 +490,12 @@
             </property>
             <item>
              <property name="text">
-              <string>Light</string>
+              <string notr="true">Light</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Dark</string>
+              <string notr="true">Dark</string>
              </property>
             </item>
            </widget>
