@@ -16,15 +16,16 @@
     <ottavaFontFace>Edwin</ottavaFontFace>
     <tupletFontFace>Edwin</tupletFontFace>
     <tupletFontSize>9</tupletFontSize>
-    <tupletFontStyle>3</tupletFontStyle>
+    <tupletFontStyle>2</tupletFontStyle>
     <defaultFontFace>Edwin</defaultFontFace>
     <titleFontFace>Edwin</titleFontFace>
+    <titleFontSize>22</titleFontSize>
     <subTitleFontFace>Edwin</subTitleFontFace>
-    <subTitleFontSize>18</subTitleFontSize>
+    <subTitleFontSize>16</subTitleFontSize>
     <composerFontFace>Edwin</composerFontFace>
-    <composerFontSize>11</composerFontSize>
+    <composerFontSize>10</composerFontSize>
     <lyricistFontFace>Edwin</lyricistFontFace>
-    <lyricistFontSize>11</lyricistFontSize>
+    <lyricistFontSize>10</lyricistFontSize>
     <fingeringFontFace>Edwin</fingeringFontFace>
     <lhGuitarFingeringFontFace>Edwin</lhGuitarFingeringFontFace>
     <rhGuitarFingeringFontFace>Edwin</rhGuitarFingeringFontFace>
@@ -43,10 +44,15 @@
     <tempoFontSize>12</tempoFontSize>
     <metronomeFontFace>Edwin</metronomeFontFace>
     <metronomeFontSize>10</metronomeFontSize>
+    <metronomeFontStyle>0</metronomeFontStyle>
     <measureNumberFontFace>Edwin</measureNumberFontFace>
-    <measureNumberFontSize>9</measureNumberFontSize>
+    <measureNumberFontSize>8</measureNumberFontSize>
     <measureNumberFontStyle>2</measureNumberFontStyle>
+    <measureNumberFontSpatiumDependent>0</measureNumberFontSpatiumDependent>
     <measureNumberAlign>left,baseline</measureNumberAlign>
+    <mmRestRangeFontSize>8</mmRestRangeFontSize>
+    <mmRestRangeFontStyle>2</mmRestRangeFontStyle>
+    <mmRestRangeFontSpatiumDependent>0</mmRestRangeFontSpatiumDependent>
     <translatorFontFace>Edwin</translatorFontFace>
     <translatorFontSize>10</translatorFontSize>
     <systemFontFace>Edwin</systemFontFace>
@@ -54,8 +60,11 @@
     <rehearsalMarkFontFace>Edwin</rehearsalMarkFontFace>
     <rehearsalMarkFontSize>14</rehearsalMarkFontSize>
     <repeatLeftFontFace>Edwin</repeatLeftFontFace>
+    <repeatLeftFontSize>18</repeatLeftFontSize>
     <repeatRightFontFace>Edwin</repeatRightFontFace>
+    <repeatRightFontSize>11</repeatRightFontSize>
     <frameFontFace>Edwin</frameFontFace>
+    <frameFontSize>10</FrameFontSize>
     <textLineFontFace>Edwin</textLineFontFace>
     <textLineFontSize>10</textLineFontSize>
     <glissandoFontFace>Edwin</glissandoFontFace>
@@ -65,6 +74,7 @@
     <footerFontFace>Edwin</footerFontFace>
     <footerFontSize>9</footerFontSize>
     <instrumentChangeFontFace>Edwin</instrumentChangeFontFace>
+    <instrumentChangeFontSize>10</instrumentChangeFontSize>
     <stickingFontFace>Edwin</stickingFontFace>
     <stickingFontSize>10</stickingFontSize>
     <user1FontFace>Edwin</user1FontFace>
