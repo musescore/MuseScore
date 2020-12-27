@@ -11281,9 +11281,8 @@ By default, they will be placed such as that their right end are at the same lev
                      <string notr="true">…</string>
                     </property>
                     <property name="icon">
-                     <iconset>
-                      <normalon>data/icons/edit-reset.svg</normalon>
-                     </iconset>
+                     <iconset resource="musescore.qrc">
+                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                     </property>
                    </widget>
                   </item>
@@ -11352,9 +11351,8 @@ By default, they will be placed such as that their right end are at the same lev
                      <string notr="true">…</string>
                     </property>
                     <property name="icon">
-                     <iconset>
-                      <normalon>data/icons/edit-reset.svg</normalon>
-                     </iconset>
+                     <iconset resource="musescore.qrc">
+                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                     </property>
                    </widget>
                   </item>
@@ -11500,8 +11498,8 @@ By default, they will be placed such as that their right end are at the same lev
               <string notr="true">…</string>
              </property>
              <property name="icon">
-              <iconset>
-               <normaloff>data/icons/edit-reset.svg</normaloff>data/icons/edit-reset.svg</iconset>
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -11682,8 +11680,8 @@ By default, they will be placed such as that their right end are at the same lev
               <string notr="true">…</string>
              </property>
              <property name="icon">
-              <iconset>
-               <normaloff>data/icons/edit-reset.svg</normaloff>data/icons/edit-reset.svg</iconset>
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
