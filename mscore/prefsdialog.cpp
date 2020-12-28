@@ -311,6 +311,7 @@ void PreferenceDialog::start()
                   new BoolPreferenceItem(PREF_EXPORT_PNG_USETRANSPARENCY, pngTransparent),
                   new BoolPreferenceItem(PREF_IMPORT_MUSICXML_IMPORTBREAKS, importBreaks),
                   new BoolPreferenceItem(PREF_IMPORT_MUSICXML_IMPORTLAYOUT, importLayout),
+                  new BoolPreferenceItem(PREF_MIGRATION_APPLY_EDWIN_FOR_XML_FILES, applyDefaultTypeFaceToImportedScores),
             #ifdef AVSOMR
                   new BoolPreferenceItem(PREF_IMPORT_AVSOMR_USELOCAL, useLocalAvsOmr, [&](){ updateUseLocalAvsOmr(); }),
             #endif

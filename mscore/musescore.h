@@ -497,6 +497,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       void doLoadFiles(const QStringList& filter, bool switchTab, bool singleFile);
 
+      void askAboutApplyingEdwinIfNeed(const QString& fileSuffix);
+
    signals:
       void windowSplit(bool);
       void musescoreWindowWasShown();
