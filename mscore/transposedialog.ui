@@ -18,7 +18,7 @@
     <widget class="QWidget" name="widget" native="true">
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <widget class="QGroupBox" name="chromaticBox">
+       <widget class="Ms::RadioButtonGroupBox" name="chromaticBox">
         <property name="title">
          <string>Transpose Chromatically</string>
         </property>
@@ -27,7 +27,7 @@
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
-          <widget class="QGroupBox" name="transposeByKey">
+          <widget class="Ms::RadioButtonGroupBox" name="transposeByKey">
            <property name="toolTip">
             <string>Transpose to key (specified at concert pitch)</string>
            </property>
@@ -157,7 +157,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QGroupBox" name="transposeByInterval">
+          <widget class="Ms::RadioButtonGroupBox" name="transposeByInterval">
            <property name="title">
             <string>By Interval</string>
            </property>
@@ -345,7 +345,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QGroupBox" name="diatonicBox">
+       <widget class="Ms::RadioButtonGroupBox" name="diatonicBox">
         <property name="title">
          <string>Transpose Diatonically</string>
         </property>
@@ -486,6 +486,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Ms::RadioButtonGroupBox</class>
+   <extends>QGroupBox</extends>
+   <header>radiobuttongroupbox.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>chromaticBox</tabstop>
   <tabstop>transposeByKey</tabstop>

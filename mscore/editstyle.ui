@@ -1273,7 +1273,7 @@
                 </widget>
                </item>
                <item row="2" column="0" colspan="9">
-                <widget class="QGroupBox" name="enableVerticalSpread">
+                <widget class="Ms::RadioButtonGroupBox" name="enableVerticalSpread">
                  <property name="title">
                   <string>Enable vertical justification of staves</string>
                  </property>
@@ -1750,7 +1750,7 @@
                 </widget>
                </item>
                <item row="3" column="0" colspan="9">
-                <widget class="QGroupBox" name="disableVerticalSpread">
+                <widget class="Ms::RadioButtonGroupBox" name="disableVerticalSpread">
                  <property name="title">
                   <string>Disable vertical justification of staves</string>
                  </property>
@@ -12436,6 +12436,11 @@ By default, they will be placed such as that their right end are at the same lev
    <extends>QWidget</extends>
    <header>inspector/voicingSelect.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Ms::RadioButtonGroupBox</class>
+   <extends>QGroupBox</extends>
+   <header>radiobuttongroupbox.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
