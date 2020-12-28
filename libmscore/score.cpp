@@ -612,7 +612,7 @@ void Score::dragPosition(const QPointF& p, int* rst, Segment** seg, qreal spacin
       {
       const System* preferredSystem = (*seg) ? (*seg)->system() : nullptr;
       Measure* m = searchMeasure(p, preferredSystem, spacingFactor);
-      if (m == 0)
+      if (m == 0 || m->isMMRest())
             return;
 
       System* s = m->system();
