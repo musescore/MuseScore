@@ -3723,6 +3723,8 @@ static void processLines(System* system, std::vector<Spanner*> lines, bool align
                         }
                   }
             for (SpannerSegment* ss : segments) {
+                  if (!ss->isStyled(Pid::OFFSET))
+                        continue;
                   const qreal staffY = y[ss->staffIdx()];
                   if (staffY > minY)
                         ss->rypos() = staffY;
@@ -4555,7 +4557,8 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
 
                   for (int i = 0; i < idx; ++i) {
                         SpannerSegment* ss = voltaSegments[i];
-                        ss->rypos() = y;
+                        if (ss->autoplace() && ss->isStyled(Pid::OFFSET))
+                              ss->rypos() = y;
                         if (ss->addToSkyline())
                               system->staff(staffIdx)->skyline().add(ss->shape().translated(ss->pos()));
                         }
