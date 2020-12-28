@@ -473,13 +473,12 @@ void ExportDialog::accept()
       // At this moment, close the dialog
       QDialog::accept();
 
-      bool success = true;
       if (singlePDF)
             // Export the selected scores as one pdf file, directly with the filename the user typed
-            success = mscore->savePdf(scores, filename);
+            mscore->savePdf(scores, filename);
       else if (oneScore)
             // Export the selected score, directly with the filename the user typed
-            success = mscore->saveAs(scores.first(), true, filename, suffix);
+            mscore->saveAs(scores.first(), true, filename, suffix);
       else {
             // Export the selected scores as separate files, appending the part names to the filename
             SaveReplacePolicy replacePolicy = SaveReplacePolicy::NO_CHOICE;
@@ -515,12 +514,9 @@ void ExportDialog::accept()
                                     break;
                               }
                         }
-                  if (!mscore->saveAs(score, true, definitiveFilename, suffix, &replacePolicy))
-                        success = false;
+                  mscore->saveAs(score, true, definitiveFilename, suffix, &replacePolicy);
                   }
             }
-      //if (success)
-      //      QMessageBox::information(this, tr("Export"), tr("Export was successful."));
       }
 
 //---------------------------------------------------------
