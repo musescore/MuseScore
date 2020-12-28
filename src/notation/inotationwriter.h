@@ -43,7 +43,7 @@ public:
 
     virtual ~INotationWriter() = default;
 
-    virtual Ret write(const INotation* notation, framework::IODevice& destinationDevice, const Options& options = Options()) = 0;
+    virtual Ret write(const INotationPtr notation, framework::IODevice& destinationDevice, const Options& options = Options()) = 0;
     virtual void abort() = 0;
     virtual framework::ProgressChannel progress() const = 0;
 };

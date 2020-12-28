@@ -30,7 +30,7 @@ using namespace mu::importexport;
 using namespace mu::framework;
 using namespace Ms;
 
-mu::Ret PdfWriter::write(const notation::INotation* notation, IODevice& destinationDevice, const Options&)
+mu::Ret PdfWriter::write(const notation::INotationPtr notation, IODevice& destinationDevice, const Options&)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);

@@ -34,9 +34,8 @@
 
 using namespace mu::importexport;
 using namespace mu::framework;
-using namespace Ms;
 
-mu::Ret SvgWriter::write(const notation::INotation* notation, IODevice& destinationDevice, const Options& options)
+mu::Ret SvgWriter::write(const notation::INotationPtr notation, IODevice& destinationDevice, const Options& options)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
@@ -48,18 +47,18 @@ mu::Ret SvgWriter::write(const notation::INotation* notation, IODevice& destinat
 
     score->setPrinting(true); // don’t print page break symbols etc.
 
-    MScore::pdfPrinting = true;
-    MScore::svgPrinting = true;
+    Ms::MScore::pdfPrinting = true;
+    Ms::MScore::svgPrinting = true;
 
-    const QList<Page*>& pages = score->pages();
-    double pixelRationBackup = MScore::pixelRatio;
+    const QList<Ms::Page*>& pages = score->pages();
+    double pixelRationBackup = Ms::MScore::pixelRatio;
 
     const int PAGE_NUMBER = options.value(OptionKey::PAGE_NUMBER, Val(0)).toInt();
     if (PAGE_NUMBER < 0 || PAGE_NUMBER >= pages.size()) {
         return false;
     }
 
-    Page* page = pages.at(PAGE_NUMBER);
+    Ms::Page* page = pages.at(PAGE_NUMBER);
 
     SvgGenerator printer;
     QString title(score->title());
@@ -86,14 +85,14 @@ mu::Ret SvgWriter::write(const notation::INotation* notation, IODevice& destinat
         painter.translate(-pageRect.topLeft());
     }
 
-    MScore::pixelRatio = DPI / printer.logicalDpiX();
+    Ms::MScore::pixelRatio = Ms::DPI / printer.logicalDpiX();
 
     if (!options[OptionKey::TRANSPARENT_BACKGROUND].toBool()) {
         painter.fillRect(pageRect, Qt::white);
     }
 
     // 1st pass: StaffLines
-    for (const System* system : page->systems()) {
+    for (const Ms::System* system : page->systems()) {
         int stavesCount = system->staves()->size();
 
         for (int staffIndex = 0; staffIndex < stavesCount; ++staffIndex) {
@@ -105,7 +104,7 @@ mu::Ret SvgWriter::write(const notation::INotation* notation, IODevice& destinat
                 continue;
             }
 
-            Measure* firstMeasure = system->firstMeasure();
+            Ms::Measure* firstMeasure = system->firstMeasure();
             if (!firstMeasure) { // only boxes, hence no staff lines
                 continue;
             }
@@ -123,24 +122,24 @@ mu::Ret SvgWriter::write(const notation::INotation* notation, IODevice& destinat
             // are drawn by measure.
             //
             bool byMeasure = false;
-            for (MeasureBase* measure = firstMeasure; measure; measure = system->nextMeasure(measure)) {
-                if (!measure->isMeasure() || !toMeasure(measure)->visible(staffIndex)) {
+            for (Ms::MeasureBase* measure = firstMeasure; measure; measure = system->nextMeasure(measure)) {
+                if (!measure->isMeasure() || !Ms::toMeasure(measure)->visible(staffIndex)) {
                     byMeasure = true;
                     break;
                 }
             }
 
             if (byMeasure) {     // Draw visible staff lines by measure
-                for (MeasureBase* measure = firstMeasure; measure; measure = system->nextMeasure(measure)) {
-                    if (measure->isMeasure() && toMeasure(measure)->visible(staffIndex)) {
-                        StaffLines* sl = toMeasure(measure)->staffLines(staffIndex);
+                for (Ms::MeasureBase* measure = firstMeasure; measure; measure = system->nextMeasure(measure)) {
+                    if (measure->isMeasure() && Ms::toMeasure(measure)->visible(staffIndex)) {
+                        Ms::StaffLines* sl = Ms::toMeasure(measure)->staffLines(staffIndex);
                         printer.setElement(sl);
-                        paintElement(painter, sl);
+                        Ms::paintElement(painter, sl);
                     }
                 }
             } else {   // Draw staff lines once per system
-                StaffLines* firstSL = system->firstMeasure()->staffLines(staffIndex)->clone();
-                StaffLines* lastSL =  system->lastMeasure()->staffLines(staffIndex);
+                Ms::StaffLines* firstSL = system->firstMeasure()->staffLines(staffIndex)->clone();
+                Ms::StaffLines* lastSL =  system->lastMeasure()->staffLines(staffIndex);
 
                 qreal lastX =  lastSL->bbox().right()
                               + lastSL->pagePos().x()
@@ -151,19 +150,19 @@ mu::Ret SvgWriter::write(const notation::INotation* notation, IODevice& destinat
                 }
 
                 printer.setElement(firstSL);
-                paintElement(painter, firstSL);
+                Ms::paintElement(painter, firstSL);
             }
         }
     }
 
     // 2nd pass: the rest of the elements
-    QList<Element*> elements = page->elements();
-    std::stable_sort(elements.begin(), elements.end(), elementLessThan);
+    QList<Ms::Element*> elements = page->elements();
+    std::stable_sort(elements.begin(), elements.end(), Ms::elementLessThan);
 
     int lastNoteIndex = -1;
     for (int i = 0; i < PAGE_NUMBER; ++i) {
-        for (const Element* element: pages[i]->elements()) {
-            if (element->type() == ElementType::NOTE) {
+        for (const Ms::Element* element: pages[i]->elements()) {
+            if (element->type() == Ms::ElementType::NOTE) {
                 lastNoteIndex++;
             }
         }
@@ -171,15 +170,15 @@ mu::Ret SvgWriter::write(const notation::INotation* notation, IODevice& destinat
 
     NotesColors notesColors = parseNotesColors(options.value(OptionKey::NOTES_COLORS, Val()).toQVariant());
 
-    for (const Element* element : elements) {
+    for (const Ms::Element* element : elements) {
         // Always exclude invisible elements
         if (!element->visible()) {
             continue;
         }
 
-        ElementType type = element->type();
+        Ms::ElementType type = element->type();
         switch (type) { // In future sub-type code, this switch() grows, and eType gets used
-        case ElementType::STAFF_LINES: // Handled in the 1st pass above
+        case Ms::ElementType::STAFF_LINES: // Handled in the 1st pass above
             continue; // Exclude from 2nd pass
             break;
         default:
@@ -190,7 +189,7 @@ mu::Ret SvgWriter::write(const notation::INotation* notation, IODevice& destinat
         printer.setElement(element);
 
         // Paint it
-        if (element->type() == ElementType::NOTE && !notesColors.isEmpty()) {
+        if (element->type() == Ms::ElementType::NOTE && !notesColors.isEmpty()) {
             QColor color = element->color();
             int currentNoteIndex = (++lastNoteIndex);
 
@@ -198,22 +197,22 @@ mu::Ret SvgWriter::write(const notation::INotation* notation, IODevice& destinat
                 color = notesColors[currentNoteIndex];
             }
 
-            Element* note = dynamic_cast<const Note*>(element)->clone();
+            Ms::Element* note = dynamic_cast<const Ms::Note*>(element)->clone();
             note->setColor(color);
-            paintElement(painter, note);
+            Ms::paintElement(painter, note);
             delete note;
         } else {
-            paintElement(painter, element);
+            Ms::paintElement(painter, element);
         }
     }
 
     painter.end(); // Writes MuseScore SVG file to disk, finally
 
     // Clean up and return
-    MScore::pixelRatio = pixelRationBackup;
+    Ms::MScore::pixelRatio = pixelRationBackup;
     score->setPrinting(false);
-    MScore::pdfPrinting = false;
-    MScore::svgPrinting = false;
+    Ms::MScore::pdfPrinting = false;
+    Ms::MScore::svgPrinting = false;
 
     return true;
 }

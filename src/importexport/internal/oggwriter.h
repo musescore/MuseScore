@@ -26,7 +26,7 @@ namespace mu::importexport {
 class OggWriter : public notation::AbstractNotationWriter
 {
 public:
-    Ret write(const notation::INotation* notation, framework::IODevice& destinationDevice, const Options& options = Options()) override;
+    Ret write(const notation::INotationPtr notation, framework::IODevice& destinationDevice, const Options& options = Options()) override;
 };
 }
 
