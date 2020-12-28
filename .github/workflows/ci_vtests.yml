@@ -2,9 +2,9 @@ name: CI_vtests
 
 on:
   # Temporary off
-  # pull_request:
-  #   branches:
-  #   - master
+  pull_request:
+    branches:
+    - master
 
 jobs:
   run_vtests:
