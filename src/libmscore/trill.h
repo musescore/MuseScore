@@ -78,6 +78,7 @@ private:
 
 public:
     Trill(Score* s);
+    Trill(const Trill& t);
     ~Trill();
 
     // Score Tree functions

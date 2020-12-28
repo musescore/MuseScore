@@ -3341,7 +3341,7 @@ MeasureRepeat* Measure::measureRepeatElement(int staffIdx) const
     if (!m) {
         return nullptr;
     }
-    while (m->isMeasureRepeatGroup(staffIdx)) {
+    while (m && m->isMeasureRepeatGroup(staffIdx)) {
         int strack = staff2track(staffIdx);
         int etrack = staff2track(staffIdx + 1);
         for (int track = strack; track < etrack; ++track) {
