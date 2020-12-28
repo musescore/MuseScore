@@ -32,7 +32,7 @@
 using namespace mu::importexport;
 using namespace mu::framework;
 
-mu::Ret PngWriter::write(const notation::INotation* notation, IODevice& destinationDevice, const Options& options)
+mu::Ret PngWriter::write(const notation::INotationPtr notation, IODevice& destinationDevice, const Options& options)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
@@ -64,17 +64,17 @@ mu::Ret PngWriter::write(const notation::INotation* notation, IODevice& destinat
     }
 
     const float CANVAS_DPI = configuration()->exportPngDpiResolution();
-    int width = std::lrint(pageRect.width() * CANVAS_DPI / DPI);
-    int height = std::lrint(pageRect.height() * CANVAS_DPI / DPI);
+    int width = std::lrint(pageRect.width() * CANVAS_DPI / Ms::DPI);
+    int height = std::lrint(pageRect.height() * CANVAS_DPI / Ms::DPI);
 
     QImage image(width, height, QImage::Format_ARGB32_Premultiplied);
-    image.setDotsPerMeterX(std::lrint((CANVAS_DPI * 1000) / INCH));
-    image.setDotsPerMeterY(std::lrint((CANVAS_DPI * 1000) / INCH));
+    image.setDotsPerMeterX(std::lrint((CANVAS_DPI * 1000) / Ms::INCH));
+    image.setDotsPerMeterY(std::lrint((CANVAS_DPI * 1000) / Ms::INCH));
 
     const bool TRANSPARENT_BACKGROUND = options.value(OptionKey::TRANSPARENT_BACKGROUND, Val(false)).toBool();
     image.fill(TRANSPARENT_BACKGROUND ? 0 : Qt::white);
 
-    double scaling = CANVAS_DPI / DPI;
+    double scaling = CANVAS_DPI / Ms::DPI;
     Ms::MScore::pixelRatio = 1.0 / scaling;
 
     QPainter painter(&image);
@@ -86,7 +86,7 @@ mu::Ret PngWriter::write(const notation::INotation* notation, IODevice& destinat
     }
 
     QList<Ms::Element*> elements = page->elements();
-    std::stable_sort(elements.begin(), elements.end(), elementLessThan);
+    std::stable_sort(elements.begin(), elements.end(), Ms::elementLessThan);
 
     Ms::paintElements(painter, elements);
     image.save(&destinationDevice, "png");

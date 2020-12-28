@@ -536,7 +536,7 @@ mu::Ret MasterNotation::exportScore(const io::path& path, const std::string& suf
         return false;
     }
 
-    Ret ret = writer->write(this, file);
+    Ret ret = writer->write(shared_from_this(), file);
     file.close();
 
     return ret;

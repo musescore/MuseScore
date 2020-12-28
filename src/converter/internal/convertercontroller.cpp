@@ -74,7 +74,7 @@ mu::Ret ConverterController::convert(const io::path& in, const io::path& out)
         return make_ret(Err::OutFileFailedOpen);
     }
 
-    ret = writer->write(notation.get(), file);
+    ret = writer->write(notation, file);
     if (!ret) {
         LOGE() << "failed write, err: " << ret.toString() << ", path: " << out;
         return make_ret(Err::OutFileFailedWrite);

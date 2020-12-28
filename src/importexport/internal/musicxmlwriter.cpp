@@ -27,7 +27,7 @@
 using namespace mu::importexport;
 using namespace mu::framework;
 
-mu::Ret MusicXmlWriter::write(const notation::INotation* notation, IODevice& destinationDevice, const Options&)
+mu::Ret MusicXmlWriter::write(const notation::INotationPtr notation, IODevice& destinationDevice, const Options&)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
