@@ -52,6 +52,7 @@ mu::Ret ConverterController::batchConvert(const io::path& batchJobFile)
 
 mu::Ret ConverterController::convert(const io::path& in, const io::path& out)
 {
+    LOGI() << "in: " << in;
     auto notation = notationCreator()->newMasterNotation();
     IF_ASSERT_FAILED(notation) {
         return make_ret(Err::UnknownError);
@@ -110,7 +111,10 @@ mu::RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(con
         Job job;
         job.in = obj["in"].toString();
         job.out = obj["out"].toString();
-        rv.val.push_back(std::move(job));
+
+        if (!job.in.empty() && !job.out.empty()) {
+            rv.val.push_back(std::move(job));
+        }
     }
 
     rv.ret = make_ret(Ret::Code::Ok);
