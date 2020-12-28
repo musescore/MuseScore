@@ -75,6 +75,8 @@
 #define PREF_MIGRATION_APPLY_LELAND_STYLE                   "import/compatibility/apply_leland_style"
 #define PREF_MIGRATION_APPLY_EDWIN_STYLE                    "import/compatibility/apply_edwin_style"
 #define PREF_MIGRATION_RESET_ELEMENT_POSITIONS              "import/compatibility/reset_element_positions"
+#define PREF_MIGRATION_APPLY_EDWIN_FOR_XML_FILES            "import/compatibility/apply_edwin_for_xml"
+#define PREF_MIGRATION_DO_NOT_ASK_ME_AGAIN_XML              "import/compatibility/do_not_ask_me_again_xml"
 #define PREF_APP_PALETTESCALE                               "application/paletteScale"
 #define PREF_IO_ALSA_DEVICE                                 "io/alsa/device"
 #define PREF_IO_ALSA_FRAGMENTS                              "io/alsa/fragments"

@@ -15,6 +15,7 @@
  */
 
 #include <QFileInfo>
+#include <QMessageBox>
 
 #include "cloud/loginmanager.h"
 
@@ -346,6 +347,48 @@ void MuseScore::doLoadFiles(const QStringList& filter, bool switchTab, bool sing
       mscore->tourHandler()->showDelayedWelcomeTour();
       }
 
+void MuseScore::askAboutApplyingEdwinIfNeed(const QString& fileSuffix)
+{
+    if (MScore::noGui) {
+        return;
+    }
+
+    static const QSet<QString> suitedSuffixes {
+        "xml",
+        "musicxml",
+        "mxl"
+    };
+
+    if (!suitedSuffixes.contains(fileSuffix)) {
+        return;
+    }
+
+    if (preferences.getBool(PREF_MIGRATION_DO_NOT_ASK_ME_AGAIN_XML)) {
+        return;
+    }
+
+    QMessageBox dialog;
+    dialog.setWindowTitle(QObject::tr("MuseScore"));
+    dialog.setText(QObject::tr("Would you like to apply our default typeface (Edwin) to this score?"));
+    QPushButton* noButton = dialog.addButton(QObject::tr("Do not apply Edwin"), QMessageBox::NoRole);
+    QPushButton* yesButton = dialog.addButton(QObject::tr("Apply Edwin"), QMessageBox::YesRole);
+    dialog.setDefaultButton(noButton);
+
+    QCheckBox askAgainCheckbox(QObject::tr("Remember my choise and don't ask again"));
+    dialog.setCheckBox(&askAgainCheckbox);
+
+    QObject::connect(&askAgainCheckbox, &QCheckBox::stateChanged, [this](int state) {
+        if (static_cast<Qt::CheckState>(state) == Qt::CheckState::Checked) {
+            preferences.setPreference(PREF_MIGRATION_DO_NOT_ASK_ME_AGAIN_XML, true);
+        }
+    });
+
+    dialog.exec();
+
+    bool needApplyEdwin = dialog.clickedButton() == yesButton;
+    preferences.setPreference(PREF_MIGRATION_APPLY_EDWIN_FOR_XML_FILES, needApplyEdwin);
+}
+
 //---------------------------------------------------------
 //   openScore
 //---------------------------------------------------------
@@ -364,6 +407,8 @@ Score* MuseScore::openScore(const QString& fn, bool switchTab)
                   return 0;
                   }
             }
+
+      askAboutApplyingEdwinIfNeed(fi.suffix().toLower());
 
       MasterScore* score = readScore(fn);
       if (score) {

@@ -732,7 +732,10 @@ static QString nextPartOfFormattedString(QXmlStreamReader& e)
             if (ok)
                   importedtext += QString("<font size=\"%1\"/>").arg(size);
             }
-      if (!fontFamily.isEmpty() && txt == syms) {
+
+      bool needUseDefaultFont = preferences.getBool(PREF_MIGRATION_APPLY_EDWIN_FOR_XML_FILES);
+
+      if (!fontFamily.isEmpty() && txt == syms && !needUseDefaultFont) {
             // add font family only if no <sym> replacement made
             importedtext += QString("<font face=\"%1\"/>").arg(fontFamily);
             }
@@ -1166,7 +1169,10 @@ static void addTextToNote(int l, int c, QString txt, QString placement, QString 
             if (!txt.isEmpty()) {
                   TextBase* t = new Fingering(score, subType);
                   t->setPlainText(txt);
-                  if (!fontFamily.isEmpty()) {
+
+                  bool needUseDefaultFont = preferences.getBool(PREF_MIGRATION_APPLY_EDWIN_FOR_XML_FILES);
+
+                  if (!fontFamily.isEmpty() && !needUseDefaultFont) {
                         t->setFamily(fontFamily);
                         t->setPropertyFlags(Pid::FONT_FACE, PropertyFlags::UNSTYLED);
                         }

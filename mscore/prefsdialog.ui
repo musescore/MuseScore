@@ -3383,6 +3383,13 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QCheckBox" name="applyDefaultTypeFaceToImportedScores">
+            <property name="text">
+             <string>Apply default typeface to imported scores</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>

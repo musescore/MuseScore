@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>531</width>
+    <width>489</width>
     <height>520</height>
    </rect>
   </property>
@@ -250,7 +250,7 @@
      <item>
       <widget class="QPushButton" name="resetPageStyleButton">
        <property name="text">
-        <string>Reset All Page Sizes to Default</string>
+        <string>Reset All Page Settings to Default</string>
        </property>
       </widget>
      </item>
