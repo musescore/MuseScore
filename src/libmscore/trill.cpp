@@ -269,6 +269,16 @@ Trill::Trill(Score* s)
     initElementStyle(&trillStyle);
 }
 
+Trill::Trill(const Trill& t)
+    : SLine(t.score())
+{
+    _trillType = t._trillType;
+    _accidental = t._accidental ? t._accidental->clone() : nullptr;
+    _ornamentStyle = t._ornamentStyle;
+    _playArticulation = t._playArticulation;
+    initElementStyle(&trillStyle);
+}
+
 Trill::~Trill()
 {
     delete _accidental;
