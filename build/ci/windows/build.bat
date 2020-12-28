@@ -72,7 +72,8 @@ IF %TARGET_PROCESSOR_BITS% == 32 (
 )
 
 bash ./build/ci/tools/make_revision_env.sh 
-SET /p MUSESCORE_REVISION=<%ARTIFACTS_DIR%\env\release_channel.env
+SET /p MUSESCORE_REVISION=<%ARTIFACTS_DIR%\env\build_revision.env
+ECHO "MUSESCORE_REVISION: %MUSESCORE_REVISION%"
 
 CALL msvc_build.bat relwithdebinfo %TARGET_PROCESSOR_BITS% %BUILD_NUMBER% || exit \b 1
 CALL msvc_build.bat installrelwithdebinfo %TARGET_PROCESSOR_BITS% %BUILD_NUMBER% || exit \b 1
