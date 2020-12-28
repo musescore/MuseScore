@@ -63,7 +63,7 @@ option(PACKAGE_FILE_ASSOCIATION "File types association" OFF)
 option(TRY_USE_CCACHE "Try use ccache" ON)
 option(BUILD_PCH "Build using precompiled headers." ON)
 option(BUILD_UNITY "Build using unity build." ON)
-option(TRY_BUILD_SHARED_LIBS_IN_DEBUG "Build shared libs if possible in debug" ON)
+option(TRY_BUILD_SHARED_LIBS_IN_DEBUG "Build shared libs if possible in debug" OFF)
 option(QML_LOAD_FROM_SOURCE "Load qml files from source (not resource)" OFF)
 
 option(USE_SYSTEM_FREETYPE "Use system FreeType" OFF) # requires freetype >= 2.5.2, does not work on win
