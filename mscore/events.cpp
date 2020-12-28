@@ -493,6 +493,7 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
       editData.pos       = editData.startMove;
       editData.buttons   = ev->buttons();
       editData.modifiers = qApp->keyboardModifiers();
+      editData.key       = 0;
 
       bool gripFound = false;
       if (hasEditGrips() && ev->button() == Qt::LeftButton) {

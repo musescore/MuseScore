@@ -534,6 +534,10 @@ void LineSegment::rebaseAnchors(EditData& ed, Grip grip)
       {
       if (line()->anchor() != Spanner::Anchor::SEGMENT)
             return;
+      // don't change anchors on keyboard adjustment or if Ctrl is pressed
+      // (Ctrl+Left/Right is handled elsewhere!)
+      if (ed.key == Qt::Key_Left || ed.key == Qt::Key_Right || ed.modifiers & Qt::ControlModifier)
+            return;
 
       switch (grip) {
             case Grip::START:
