@@ -2099,9 +2099,9 @@ QVector<QLineF> Element::genericDragAnchorLines() const
       if (parent()->isSegment()) {
             System* system = toSegment(parent())->measure()->system();
             const int stIdx = staffIdx();
-            yp = system->staffCanvasYpage(stIdx);
+            yp = system ? system->staffCanvasYpage(stIdx) : 0.0;
             if (placement() == Placement::BELOW)
-                  yp += system->staff(stIdx)->bbox().height();
+                  yp += system ? system->staff(stIdx)->bbox().height() : 0.0;
             //adjust anchor Y positions to staffType offset
             if (staff())
                 yp += staff()->staffTypeForElement(this)->yoffset().val()* spatium();
@@ -2191,7 +2191,10 @@ void Element::endEditDrag(EditData& ed)
       if (eed) {
             for (const PropertyData &pd : qAsConst(eed->propertyData)) {
                   setPropertyFlags(pd.id, pd.f); // reset initial property flags state
-                  if (score()->undoPropertyChanged(this, pd.id, pd.data))
+                  PropertyFlags f = pd.f;
+                  if (f == PropertyFlags::STYLED)
+                        f = PropertyFlags::UNSTYLED;
+                  if (score()->undoPropertyChanged(this, pd.id, pd.data, f))
                         changed = true;
                   }
             eed->propertyData.clear();
