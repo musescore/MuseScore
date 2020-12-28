@@ -19,6 +19,8 @@
 #ifndef MU_NOTATION_MASTERNOTATION_H
 #define MU_NOTATION_MASTERNOTATION_H
 
+#include <memory>
+
 #include "../imasternotation.h"
 #include "../inotationreadersregister.h"
 #include "../inotationwritersregister.h"
@@ -32,7 +34,7 @@ class MasterScore;
 }
 
 namespace mu::notation {
-class MasterNotation : public IMasterNotation, public Notation
+class MasterNotation : public IMasterNotation, public Notation, public std::enable_shared_from_this<MasterNotation>
 {
     INJECT(notation, INotationReadersRegister, readers)
     INJECT(notation, INotationWritersRegister, writers)

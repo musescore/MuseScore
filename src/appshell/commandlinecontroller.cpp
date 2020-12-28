@@ -46,9 +46,8 @@ void CommandLineController::apply()
         float val = m_parser.value(name).toFloat(&ok);
         if (ok) {
             return val;
-        } else {
-            return std::nullopt;
         }
+        return std::nullopt;
     };
 
     // Common
@@ -66,6 +65,7 @@ void CommandLineController::apply()
         std::optional<float> val = floatValue("r");
         if (val) {
             importexportConfiguration()->setExportPngDpiResolution(val);
+        } else {
             LOGE() << "Option: -r not recognized DPI value: " << m_parser.value("r");
         }
     }

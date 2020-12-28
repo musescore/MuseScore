@@ -24,7 +24,7 @@
 using namespace mu::importexport;
 using namespace mu::framework;
 
-mu::Ret Mp3Writer::write(const notation::INotation* notation, IODevice& destinationDevice, const Options& options)
+mu::Ret Mp3Writer::write(const notation::INotationPtr notation, IODevice& destinationDevice, const Options& options)
 {
     UNUSED(notation)
     UNUSED(destinationDevice)
