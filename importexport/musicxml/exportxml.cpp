@@ -4977,8 +4977,9 @@ static void annotations(ExportMusicXml* exp, int strack, int etrack, int track, 
                   wtrack = findTrackForAnnotations(e->track(), seg);
 
             if (track == wtrack) {
-                  if (commonAnnotations(exp, e, sstaff))
+                  if (commonAnnotations(exp, e, sstaff)) {
                         ;  // already handled
+                        }
                   }
             }
       }
