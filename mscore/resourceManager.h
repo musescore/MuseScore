@@ -29,6 +29,8 @@ class ResourceManager : public QDialog, public Ui::Resource
       bool verifyFile(QString path, QString hash);
       bool verifyLanguageFile(QString filename, QString hash);
       
+      QPushButton* currentLanguageButton = nullptr;
+      
    public:
       explicit ResourceManager(QWidget *parent = 0);
       void selectLanguagesTab();

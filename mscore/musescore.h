@@ -125,6 +125,8 @@ static const int PROJECT_LIST_LEN = 6;
 extern const char* voiceActions[];
 extern bool mscoreFirstStart;
 
+QString localeName();
+
 using NotesColors = QHash<int /* noteIndex */, QColor>;
 
 //---------------------------------------------------------

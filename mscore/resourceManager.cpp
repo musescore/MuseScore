@@ -15,14 +15,12 @@
 #include "extension.h"
 #include "libmscore/utils.h"
 #include "stringutils.h"
-#include "ui_resourceManager.h"
 #include "thirdparty/qzip/qzipreader_p.h"
 
 namespace Ms {
 
 extern QString dataPath;
 extern QString mscoreGlobalShare;
-extern QString localeName;
 
 ResourceManager::ResourceManager(QWidget *parent) :
       QDialog(parent)
@@ -221,30 +219,31 @@ void ResourceManager::displayLanguages()
 
       // move current language to first row
       QStringList langs = result.object().keys();
-      QString lang = mscore->getLocaleISOCode();
-      int index = langs.indexOf(lang);
-      if (index < 0 && lang.size() > 2) {
-            lang = lang.left(2);
-            index = langs.indexOf(lang);
+      QString currentLocaleISOCode = mscore->getLocaleISOCode();
+      int index = langs.indexOf(currentLocaleISOCode);
+      if (index < 0 && currentLocaleISOCode.size() > 2) {
+            currentLocaleISOCode = currentLocaleISOCode.left(2);
+            index = langs.indexOf(currentLocaleISOCode);
             }
+      QString currentLanguageKey = "";
       if (index >= 0) {
-            QString l = langs.takeAt(index);
-            langs.prepend(l);
+            currentLanguageKey = langs.takeAt(index);
+            langs.prepend(currentLanguageKey);
             }
 
       for (QString key : langs) {
             if (!result.object().value(key).isObject())
                   continue;
-            QJsonObject value = result.object().value(key).toObject();
+            QJsonObject object = result.object().value(key).toObject();
             col = 0;
-            QString test = value.value("file_name").toString();
+            QString test = object.value("file_name").toString();
             if (test.length() == 0)
                   continue;
 
-            QString filename = value.value("file_name").toString();
-            QString name = value.value("name").toString();
-            double fileSize = value.value("file_size").toString().toDouble();
-            QString hashValue = value.value("hash").toString();
+            QString filename = object.value("file_name").toString();
+            QString name = object.value("name").toString();
+            double fileSize = object.value("file_size").toString().toDouble();
+            QString hashValue = object.value("hash").toString();
 
             languagesTable->setItem(row, col++, new QTableWidgetItem(name));
             languagesTable->setItem(row, col++, new QTableWidgetItem(filename));
@@ -257,26 +256,29 @@ void ResourceManager::displayLanguages()
 
             languagesTable->setIndexWidget(languagesTable->model()->index(row, col++), temp);
 
+            if (key == currentLanguageKey)
+                  currentLanguageButton = temp;
+
             // get hash mscore and instruments
-            QJsonObject mscoreObject = value.value("mscore").toObject();
+            QJsonObject mscoreObject = object.value("mscore").toObject();
             QString hashMscore = mscoreObject.value("hash").toString();
             QString filenameMscore = mscoreObject.value("file_name").toString();
 
-            bool verifyMScore = verifyLanguageFile(filenameMscore, hashMscore);
+            bool mscoreUpToDate = verifyLanguageFile(filenameMscore, hashMscore);
 
-            QJsonObject instrumentsObject = value.value("instruments").toObject();
+            QJsonObject instrumentsObject = object.value("instruments").toObject();
             QString hashInstruments = instrumentsObject.value("hash").toString();
             QString filenameInstruments = instrumentsObject.value("file_name").toString();
 
-            bool verifyInstruments = verifyLanguageFile(filenameInstruments, hashInstruments);
+            bool instrumentsUpToDate = verifyLanguageFile(filenameInstruments, hashInstruments);
 
-            QJsonObject toursObject = value.value("tours").toObject();
+            QJsonObject toursObject = object.value("tours").toObject();
             QString hashTours = toursObject.value("hash").toString();
             QString filenameTours = toursObject.value("file_name").toString();
 
-            bool verifyTours = verifyLanguageFile(filenameTours, hashTours);
+            bool toursUpToDate = verifyLanguageFile(filenameTours, hashTours);
 
-            if (verifyMScore && verifyInstruments && verifyTours) { // compare local file with distant hash
+            if (mscoreUpToDate && instrumentsUpToDate && toursUpToDate) { // compare local file with distant hash
                   temp->setText(tr("Up to date"));
                   temp->setDisabled(1);
                   }
@@ -303,7 +305,6 @@ bool ResourceManager::verifyLanguageFile(QString filename, QString hash)
       return verifyFile(local, hash);
       }
 
-
 //---------------------------------------------------------
 //   downloadLanguage
 //---------------------------------------------------------
@@ -311,14 +312,15 @@ bool ResourceManager::verifyLanguageFile(QString filename, QString hash)
 void ResourceManager::downloadLanguage()
       {
       QPushButton *button = static_cast<QPushButton*>( sender() );
-      QString dta  = languageButtonMap[button];
+      QString languageFileName = languageButtonMap[button];
       QString hash = languageButtonHashMap[button];
       button->setText(tr("Updating"));
       button->setDisabled(true);
-      QString baseAddress = baseAddr() + dta;
+
+      QString baseAddress = baseAddr() + languageFileName;
       DownloadUtils dl(this);
       dl.setTarget(baseAddress);
-      QString localPath = dataPath + "/locale/" + dta.split('/')[1];
+      QString localPath = dataPath + "/locale/" + languageFileName.split('/')[1];
       dl.setLocalFile(localPath);
       dl.download();
       if (!dl.saveFile() || !verifyFile(localPath, hash)) {
@@ -331,13 +333,13 @@ void ResourceManager::downloadLanguage()
             QFileInfo zfi(localPath);
             QString destinationDir(zfi.absolutePath());
             QVector<MQZipReader::FileInfo> allFiles = zipFile.fileInfoList();
-            bool result = true;
+            bool success = true;
             foreach (MQZipReader::FileInfo fi, allFiles) {
                   const QString absPath = destinationDir + "/" + fi.filePath;
                   if (fi.isFile) {
                         QFile f(absPath);
                         if (!f.open(QIODevice::WriteOnly)) {
-                              result = false;
+                              success = false;
                               break;
                               }
                         f.write(zipFile.fileData(fi.filePath));
@@ -346,12 +348,12 @@ void ResourceManager::downloadLanguage()
                         }
                   }
             zipFile.close();
-            if (result) {
+            if (success) {
                   QFile::remove(localPath);
                   button->setText(tr("Up to date"));
                   //  retranslate the UI if current language is updated
-                  if (dta == languageButtonMap.first())
-                        setMscoreLocale(localeName);
+                  if (button == currentLanguageButton)
+                        setMscoreLocale(localeName());
                   }
             else {
                   button->setText(tr("Failed, try again"));

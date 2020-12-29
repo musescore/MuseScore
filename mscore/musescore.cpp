@@ -224,7 +224,6 @@ static bool scoresOnCommandline { false };
 
 static QList<QTranslator*> translatorList;
 
-QString localeName;
 bool useFactorySettings = false;
 bool deletePreferences = false;
 QString styleName;
@@ -343,6 +342,17 @@ QString getSharePath()
       return QString( INSTPREFIX "/share/" INSTALL_NAME);
 #endif
 #endif
+      }
+
+//---------------------------------------------------------
+//   localeName
+//---------------------------------------------------------
+
+QString localeName()
+      {
+      if (useFactorySettings)
+            return "system";
+      return preferences.getString(PREF_UI_APP_LANGUAGE);
       }
 
 //---------------------------------------------------------
@@ -2249,12 +2259,10 @@ void MuseScore::startAutoSave()
 
 QString MuseScore::getLocaleISOCode() const
       {
-      QString lang;
-      if (localeName.toLower() == "system")
-            lang = QLocale::system().name();
-      else
-            lang = localeName;
-      return lang;
+      QString l = localeName();
+      if (l.toLower() == "system")
+            return QLocale::system().name();
+      return l;
       }
 
 //---------------------------------------------------------
@@ -7987,8 +7995,10 @@ void MuseScore::init(QStringList& argv)
       if (MScore::debugMode)
             qDebug("global share: <%s>", qPrintable(mscoreGlobalShare));
 
-      // set translator before Shortcut are initialized to get translations for all shortcuts
-      // can not use preferences to retrieve these values as it needs to be initialized after translator is set
+      // Set translator before Shortcuts are initialized to get translations for all shortcuts.
+      // Cannot use `preferences` or `localeName()` (which uses `preferences`) to retrieve
+      // these values, as `preferences` needs to be initialized after translator is set.
+      QString localeName;
       if (useFactorySettings)
             localeName = "system";
       else {
