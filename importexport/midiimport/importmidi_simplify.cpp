@@ -43,7 +43,7 @@ bool areDurationsEqual(
       for (const auto &d: durations)
             sum += ReducedFraction(d.second.fraction()) / d.first;
 
-      return desiredLen == desiredLen;
+      return sum == desiredLen;
       }
 
 #endif
