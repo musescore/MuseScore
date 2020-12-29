@@ -32,23 +32,6 @@ bool hasComplexBeamedDurations(const QList<std::pair<ReducedFraction, TDuration>
       return false;
       }
 
-
-#ifdef QT_DEBUG
-
-bool areDurationsEqual(
-            const QList<std::pair<ReducedFraction, TDuration> > &durations,
-            const ReducedFraction &desiredLen)
-      {
-      ReducedFraction sum(0, 1);
-      for (const auto &d: durations)
-            sum += ReducedFraction(d.second.fraction()) / d.first;
-
-      return desiredLen == desiredLen;
-      }
-
-#endif
-
-
 void lengthenNote(
             MidiNote &note,
             int voice,
@@ -81,11 +64,6 @@ void lengthenNote(
                               note.offTime - barStart, endTime - barStart, barFraction,
                               tupletsForDuration, Meter::DurationType::REST, useDots, false);
 
-      Q_ASSERT_X(areDurationsEqual(origNoteDurations, note.offTime - durationStart),
-                 "Simplify::lengthenNote", "Too short note durations remaining");
-      Q_ASSERT_X(areDurationsEqual(origRestDurations, endTime - note.offTime),
-                 "Simplify::lengthenNote", "Too short rest durations remaining");
-
                   // double - because can be + 0.5 for dots
       double minNoteDurationCount = MidiDuration::durationCount(origNoteDurations);
       double minRestDurationCount = MidiDuration::durationCount(origRestDurations);
@@ -101,18 +79,12 @@ void lengthenNote(
                               durationStart - barStart, offTime - barStart, barFraction,
                               tupletsForDuration, Meter::DurationType::NOTE, useDots, false);
 
-            Q_ASSERT_X(areDurationsEqual(noteDurations, offTime - durationStart),
-                       "Simplify::lengthenNote", "Too short note durations remaining");
-
             noteDurationCount += MidiDuration::durationCount(noteDurations);
 
             if (offTime < endTime) {
                   const auto restDurations = Meter::toDurationList(
                               offTime - barStart, endTime - barStart, barFraction,
                               tupletsForDuration, Meter::DurationType::REST, useDots, false);
-
-                  Q_ASSERT_X(areDurationsEqual(restDurations, endTime - offTime),
-                             "Simplify::lengthenNote", "Too short rest durations remaining");
 
                   restDurationCount += MidiDuration::durationCount(restDurations);
                   }
