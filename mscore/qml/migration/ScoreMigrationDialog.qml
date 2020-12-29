@@ -62,7 +62,7 @@ FocusScope {
 
                     font.family: globalStyle.font.family
                     font.bold: true
-                    font.pixelSize: 24
+                    font.pixelSize: 20
                     color: globalStyle.buttonText
                     wrapMode: Text.WordWrap
                     horizontalAlignment: Qt.AlignHCenter
