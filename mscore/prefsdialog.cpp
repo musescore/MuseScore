@@ -311,7 +311,12 @@ void PreferenceDialog::start()
                   new BoolPreferenceItem(PREF_EXPORT_PNG_USETRANSPARENCY, pngTransparent),
                   new BoolPreferenceItem(PREF_IMPORT_MUSICXML_IMPORTBREAKS, importBreaks),
                   new BoolPreferenceItem(PREF_IMPORT_MUSICXML_IMPORTLAYOUT, importLayout),
-                  new BoolPreferenceItem(PREF_MIGRATION_APPLY_EDWIN_FOR_XML_FILES, applyDefaultTypeFaceToImportedScores),
+                  new BoolPreferenceItem(PREF_MIGRATION_APPLY_EDWIN_FOR_XML_FILES, applyDefaultTypeFaceToImportedScores,
+                                      [this]() { preferences.setPreference(PREF_MIGRATION_APPLY_EDWIN_FOR_XML_FILES, applyDefaultTypeFaceToImportedScores->isChecked()); }, // apply function
+                                      [this]() {
+                                            bool value = preferences.getBool(PREF_MIGRATION_DO_NOT_ASK_ME_AGAIN_XML) && preferences.getBool(PREF_MIGRATION_APPLY_EDWIN_FOR_XML_FILES);
+                                            applyDefaultTypeFaceToImportedScores->setChecked(value);
+                                            }), // update function
             #ifdef AVSOMR
                   new BoolPreferenceItem(PREF_IMPORT_AVSOMR_USELOCAL, useLocalAvsOmr, [&](){ updateUseLocalAvsOmr(); }),
             #endif
@@ -376,6 +381,7 @@ void PreferenceDialog::start()
                   new BoolPreferenceItem(PREF_MIGRATION_DO_NOT_ASK_ME_AGAIN, scoreMigrationEnabled,
                                           [this]() { preferences.setPreference(PREF_MIGRATION_DO_NOT_ASK_ME_AGAIN, !scoreMigrationEnabled->isChecked()); }, // apply function
                                           [this]() { scoreMigrationEnabled->setChecked(!preferences.getBool(PREF_MIGRATION_DO_NOT_ASK_ME_AGAIN)); }), // update function
+                  new BoolPreferenceItem(PREF_MIGRATION_DO_NOT_ASK_ME_AGAIN_XML),
                   new StringPreferenceItem(PREF_UI_APP_LANGUAGE, language, [&](){ languageApply(); }, [&](){ languageUpdate(); }),
                   new CustomPreferenceItem(PREF_APP_STARTUP_SESSIONSTART, lastSession,
                                           [this]() { // apply function

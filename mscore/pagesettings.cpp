@@ -112,7 +112,6 @@ void PageSettings::setScore(Score* s)
       updateValues();
       updatePreview();
       _changeFlag = false;
-      _needResetStyle = false;
       }
 
 //---------------------------------------------------------
@@ -268,8 +267,8 @@ void PageSettings::orientationClicked()
 
 void PageSettings::on_resetPageStyleButton_clicked()
 {
-    _needResetStyle = true;
-    _changeFlag = true;
+    preview->score()->style().resetStyles(preview->score(), pageStyles());
+    updatePreview();
 }
 
 //---------------------------------------------------------
@@ -324,12 +323,6 @@ void PageSettings::apply()
 
 void PageSettings::applyToScore(Score* s)
       {
-
-      if (_needResetStyle) {
-          s->style().resetStyles(s, pageStyles());
-          return;
-      }
-
       double f  = mmUnit ? 1.0/INCH : 1.0;
       double f1 = mmUnit ? DPMM : DPI;
 

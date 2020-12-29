@@ -34,9 +34,6 @@ class PageSettings : public AbstractDialog, private Ui::PageSettingsBase {
       bool _changeFlag = false;
       Score* cs = nullptr;
       Score* clonedScore = nullptr;
-      bool _needResetStyle = false;
-
-//      std::unique_ptr<Score> clonedScoreForNavigator;
 
       virtual void hideEvent(QHideEvent*);
       void updateValues();
