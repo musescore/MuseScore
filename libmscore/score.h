@@ -496,6 +496,7 @@ class Score : public QObject, public ScoreElement {
       ChordRest* prevMeasure(ChordRest* element, bool mmRest = false);
       void cmdSetBeamMode(Beam::Mode);
       void cmdResetAllStyle();
+      void cmdResetTextStyleOverrides();
       void cmdFlip();
       Note* getSelectedNote();
       ChordRest* upStaff(ChordRest* cr);

@@ -1703,6 +1703,7 @@ MuseScore::MuseScore()
       menuFormat->addMenu(menuStretch);
       menuFormat->addSeparator();
 
+      menuFormat->addAction(getAction("reset-text-style-overrides"));
       menuFormat->addAction(getAction("reset-beammode"));
       menuFormat->addAction(getAction("reset"));
       menuFormat->addSeparator();
