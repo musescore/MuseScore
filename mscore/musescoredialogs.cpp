@@ -154,7 +154,7 @@ AboutBoxDialog::AboutBoxDialog()
                                      .arg("</a>");
       visitAndDonateString += "\n\n";
 #endif
-      QString finalString = visitAndDonateString + tr("Copyright &copy; 1999-2020 MuseScore BVBA and others.\nPublished under the GNU General Public License.");
+      QString finalString = visitAndDonateString + tr("Copyright &copy; 1999-2021 MuseScore BVBA and others.\nPublished under the GNU General Public License.");
       finalString.replace("\n", "<br/>");
       copyrightLabel->setText(QString("<span style=\"font-size:10pt;\">%1</span>").arg(finalString));
       connect(copyRevisionButton, SIGNAL(clicked()), this, SLOT(copyRevisionToClipboard()));
