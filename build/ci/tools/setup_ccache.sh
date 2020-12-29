@@ -4,7 +4,7 @@ BASE_DIR=$1
 
 echo "Install ccache"
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    apt install ccache
+    sudo apt install ccache
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     brew install ccache
 else
