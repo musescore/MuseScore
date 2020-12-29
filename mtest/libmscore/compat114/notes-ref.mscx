@@ -73,7 +73,7 @@
         <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>Title</style>
-          <text><font face="Times New Roman"/>notes</text>
+          <text><font size="24"/><font face="Times New Roman"/>notes</text>
           </Text>
         </VBox>
       <Measure>

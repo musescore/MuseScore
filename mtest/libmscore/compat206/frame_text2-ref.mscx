@@ -20,9 +20,11 @@
       <minSystemDistance>9</minSystemDistance>
       <maxSystemDistance>9</maxSystemDistance>
       <lyricsOddFontFace>FreeSerif</lyricsOddFontFace>
+      <lyricsOddFontSize>11</lyricsOddFontSize>
       <lyricsOddFramePadding>0</lyricsOddFramePadding>
       <lyricsOddFrameWidth>0</lyricsOddFrameWidth>
       <lyricsEvenFontFace>FreeSerif</lyricsEvenFontFace>
+      <lyricsEvenFontSize>11</lyricsEvenFontSize>
       <lyricsEvenFramePadding>0</lyricsEvenFramePadding>
       <lyricsEvenFrameWidth>0</lyricsEvenFrameWidth>
       <frameSystemDistance>3</frameSystemDistance>
@@ -64,6 +66,7 @@
       <defaultFramePadding>0</defaultFramePadding>
       <defaultFrameWidth>0</defaultFrameWidth>
       <titleFontFace>FreeSerif</titleFontFace>
+      <titleFontSize>24</titleFontSize>
       <titleFontStyle>1</titleFontStyle>
       <titleFramePadding>0</titleFramePadding>
       <titleFrameWidth>0</titleFrameWidth>
@@ -117,14 +120,17 @@
       <tempoFramePadding>0</tempoFramePadding>
       <tempoFrameWidth>0</tempoFrameWidth>
       <metronomeFontFace>FreeSerif</metronomeFontFace>
+      <metronomeFontStyle>1</metronomeFontStyle>
       <metronomeFramePadding>0</metronomeFramePadding>
       <metronomeFrameWidth>0</metronomeFrameWidth>
       <measureNumberFontFace>FreeSerif</measureNumberFontFace>
+      <measureNumberFontSpatiumDependent>1</measureNumberFontSpatiumDependent>
       <measureNumberFontStyle>0</measureNumberFontStyle>
       <measureNumberAlign>center,bottom</measureNumberAlign>
       <measureNumberFramePadding>0</measureNumberFramePadding>
       <measureNumberFrameWidth>0</measureNumberFrameWidth>
       <translatorFontFace>FreeSerif</translatorFontFace>
+      <translatorFontSize>11</translatorFontSize>
       <translatorAlign>center,top</translatorAlign>
       <translatorFramePadding>0</translatorFramePadding>
       <translatorFrameWidth>0</translatorFrameWidth>
@@ -140,6 +146,7 @@
       <rehearsalMarkFontSize>10</rehearsalMarkFontSize>
       <rehearsalMarkFramePadding>0.1</rehearsalMarkFramePadding>
       <repeatLeftFontFace>FreeSerif</repeatLeftFontFace>
+      <repeatLeftFontSize>20</repeatLeftFontSize>
       <repeatLeftFramePadding>0</repeatLeftFramePadding>
       <repeatLeftFrameWidth>0</repeatLeftFrameWidth>
       <repeatRightFontFace>FreeSerif</repeatRightFontFace>
@@ -173,6 +180,7 @@
       <footerFramePadding>0</footerFramePadding>
       <footerFrameWidth>0</footerFrameWidth>
       <instrumentChangeFontFace>FreeSerif</instrumentChangeFontFace>
+      <instrumentChangeFontSize>12</instrumentChangeFontSize>
       <instrumentChangeAlign>left,bottom</instrumentChangeAlign>
       <instrumentChangeFramePadding>0</instrumentChangeFramePadding>
       <instrumentChangeFrameWidth>0</instrumentChangeFrameWidth>

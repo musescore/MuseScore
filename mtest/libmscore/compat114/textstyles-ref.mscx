@@ -1665,7 +1665,7 @@
           </Text>
         <Text>
           <style>Subtitle</style>
-          <text><font face="MuseJazz"/>Subtitle</text>
+          <text><font size="14"/><font face="MuseJazz"/>Subtitle</text>
           </Text>
         <Text>
           <style>Composer</style>

@@ -78,7 +78,7 @@
         <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>Title</style>
-          <text><font face="Times New Roman"/>Title</text>
+          <text><font size="24"/><font face="Times New Roman"/>Title</text>
           </Text>
         </VBox>
       <Measure>
@@ -98,7 +98,7 @@
             <durationType>quarter</durationType>
             <Lyrics>
               <syllabic>begin</syllabic>
-              <text><font face="Times New Roman"/>ly</text>
+              <text><font size="11"/><font face="Times New Roman"/>ly</text>
               </Lyrics>
             <Note>
               <pitch>72</pitch>
@@ -109,7 +109,7 @@
             <durationType>quarter</durationType>
             <Lyrics>
               <syllabic>end</syllabic>
-              <text><font face="Times New Roman"/>rics</text>
+              <text><font size="11"/><font face="Times New Roman"/>rics</text>
               </Lyrics>
             <Note>
               <pitch>72</pitch>

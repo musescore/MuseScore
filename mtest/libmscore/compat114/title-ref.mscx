@@ -78,11 +78,11 @@
         <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>Title</style>
-          <text><font face="Times New Roman"/>title</text>
+          <text><font size="24"/><font face="Times New Roman"/>title</text>
           </Text>
         <Text>
           <style>Subtitle</style>
-          <text><font face="Times New Roman"/>subtitle</text>
+          <text><font size="14"/><font face="Times New Roman"/>subtitle</text>
           </Text>
         <Text>
           <style>Composer</style>

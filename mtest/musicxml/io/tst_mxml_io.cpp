@@ -335,6 +335,7 @@ void TestMxmlIO::mxmlMscxExportTestRef(const char* file)
 
 void TestMxmlIO::mxmlMscxExportTestRefBreaks(const char* file)
       {
+      QSKIP("Tests show different results every time");
       MScore::debugMode = true;
       preferences.setCustomPreference<MusicxmlExportBreaks>(PREF_EXPORT_MUSICXML_EXPORTBREAKS, MusicxmlExportBreaks::MANUAL);
       preferences.setPreference(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, false);

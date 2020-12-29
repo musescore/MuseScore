@@ -71,7 +71,7 @@
         <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>Title</style>
-          <text><font face="Times New Roman"/>Tuplet 1.3 file</text>
+          <text><font size="24"/><font face="Times New Roman"/>Tuplet 1.3 file</text>
           </Text>
         </VBox>
       <Measure>

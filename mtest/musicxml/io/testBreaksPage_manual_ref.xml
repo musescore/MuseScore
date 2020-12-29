@@ -72,7 +72,7 @@
       <print new-page="yes"/>
       <direction placement="below">
         <direction-type>
-          <words valign="top" font-size="12">Tframe</words>
+          <words valign="top">Tframe</words>
           </direction-type>
         </direction>
       <direction>

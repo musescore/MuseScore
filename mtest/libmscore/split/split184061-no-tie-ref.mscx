@@ -24,18 +24,14 @@
       <titleFontSpatiumDependent>1</titleFontSpatiumDependent>
       <subTitleFontSize>10</subTitleFontSize>
       <subTitleFontSpatiumDependent>1</subTitleFontSpatiumDependent>
-      <composerFontSize>10</composerFontSize>
       <composerFontSpatiumDependent>1</composerFontSpatiumDependent>
-      <lyricistFontSize>10</lyricistFontSize>
       <partInstrumentFontSize>10</partInstrumentFontSize>
       <dynamicsFontStyle>0</dynamicsFontStyle>
       <tempoFontSize>10</tempoFontSize>
       <metronomeFontSize>10</metronomeFontSize>
-      <translatorFontSize>10</translatorFontSize>
       <repeatLeftFontSize>10</repeatLeftFontSize>
       <repeatRightFontSize>10</repeatRightFontSize>
       <glissandoFontSize>10</glissandoFontSize>
-      <instrumentChangeFontSize>10</instrumentChangeFontSize>
       <figuredBassFontFace>FreeSerif</figuredBassFontFace>
       <Spatium>1.76389</Spatium>
       </Style>

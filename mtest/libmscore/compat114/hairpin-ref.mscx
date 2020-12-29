@@ -78,7 +78,7 @@
         <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>Title</style>
-          <text><font face="Times New Roman"/>Hairpin</text>
+          <text><font size="24"/><font face="Times New Roman"/>Hairpin</text>
           </Text>
         </VBox>
       <Measure>

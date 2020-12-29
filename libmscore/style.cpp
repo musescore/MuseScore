@@ -90,7 +90,7 @@ static const StyleType styleTypes[] {
       { Sid::minStaffSpread,          "minSpreadSpread",         Spatium(3.5)  },
       { Sid::maxStaffSpread,          "maxSpreadSpread",         Spatium(20.0) },
       { Sid::maxAkkoladeDistance,     "maxAkkoladeDistance",     Spatium(6.5)  },
-      { Sid::maxPageFillSpread,       "maxPageFillSpread",       Spatium(4.0)  },
+      { Sid::maxPageFillSpread,       "maxPageFillSpread",       Spatium(6.0)  },
 
       { Sid::lyricsPlacement,         "lyricsPlacement",         int(Placement::BELOW)  },
       { Sid::lyricsPosAbove,          "lyricsPosAbove",          QPointF(0.0, -2.0) },
@@ -113,7 +113,7 @@ static const StyleType styleTypes[] {
       { Sid::lyricsDashYposRatio,     "lyricsDashYposRatio",     0.67          }, // the fraction of lyrics font x-height to raise the dashes above text base line
 
       { Sid::lyricsOddFontFace,       "lyricsOddFontFace",       "Edwin" },
-      { Sid::lyricsOddFontSize,       "lyricsOddFontSize",       11.0 },
+      { Sid::lyricsOddFontSize,       "lyricsOddFontSize",       10.0 },
       { Sid::lyricsOddLineSpacing,    "lyricsOddLineSpacing",    1.0 },
       { Sid::lyricsOddFontSpatiumDependent, "lyricsOddFontSpatiumDependent", true },
       { Sid::lyricsOddFontStyle,      "lyricsOddFontStyle",      int(FontStyle::Normal) },
@@ -127,7 +127,7 @@ static const StyleType styleTypes[] {
       { Sid::lyricsOddFrameBgColor,   "lyricsOddFrameBgColor",   QColor(255, 255, 255, 0) },
 
       { Sid::lyricsEvenFontFace,      "lyricsEvenFontFace",      "Edwin" },
-      { Sid::lyricsEvenFontSize,      "lyricsEvenFontSize",      11.0 },
+      { Sid::lyricsEvenFontSize,      "lyricsEvenFontSize",      10.0 },
       { Sid::lyricsEvenLineSpacing,   "lyricsEvenLineSpacing",   1.0 },
       { Sid::lyricsEvenFontSpatiumDependent, "lyricsEvenFontSpatiumDependent", true },
       { Sid::lyricsEvenFontStyle,     "lyricsEvenFontStyle",     int(FontStyle::Normal) },
@@ -653,7 +653,7 @@ static const StyleType styleTypes[] {
       { Sid::defaultText,                   "defaultText",                   QString("")    },
 
       { Sid::titleFontFace,                 "titleFontFace",                 "Edwin" },
-      { Sid::titleFontSize,                 "titleFontSize",                 24.0 },
+      { Sid::titleFontSize,                 "titleFontSize",                 22.0 },
       { Sid::titleLineSpacing,              "titleLineSpacing",              1.0 },
       { Sid::titleFontSpatiumDependent,     "titleFontSpatiumDependent",     false  },
       { Sid::titleFontStyle,                "titleFontStyle",                int(FontStyle::Normal) },
@@ -669,7 +669,7 @@ static const StyleType styleTypes[] {
       { Sid::titleFrameBgColor,             "titleFrameBgColor",             QColor(255, 255, 255, 0) },
 
       { Sid::subTitleFontFace,              "subTitleFontFace",              "Edwin" },
-      { Sid::subTitleFontSize,              "subTitleFontSize",              14.0 },
+      { Sid::subTitleFontSize,              "subTitleFontSize",              16.0 },
       { Sid::subTitleLineSpacing,           "subTitleLineSpacing",           1.0 },
       { Sid::subTitleFontSpatiumDependent,  "subTitleFontSpatiumDependent",  false  },
       { Sid::subTitleFontStyle,             "subTitleFontStyle",             int(FontStyle::Normal) },
@@ -685,7 +685,7 @@ static const StyleType styleTypes[] {
       { Sid::subTitleFrameBgColor,          "subTitleFrameBgColor",          QColor(255, 255, 255, 0) },
 
       { Sid::composerFontFace,              "composerFontFace",              "Edwin" },
-      { Sid::composerFontSize,              "composerFontSize",              11.0 },
+      { Sid::composerFontSize,              "composerFontSize",              10.0 },
       { Sid::composerLineSpacing,           "composerLineSpacing",           1.0 },
       { Sid::composerFontSpatiumDependent,  "composerFontSpatiumDependent",  false  },
       { Sid::composerFontStyle,             "composerFontStyle",             int(FontStyle::Normal) },
@@ -701,7 +701,7 @@ static const StyleType styleTypes[] {
       { Sid::composerFrameBgColor,          "composerFrameBgColor",          QColor(255, 255, 255, 0) },
 
       { Sid::lyricistFontFace,              "lyricistFontFace",              "Edwin" },
-      { Sid::lyricistFontSize,              "lyricistFontSize",              11.0 },
+      { Sid::lyricistFontSize,              "lyricistFontSize",              10.0 },
       { Sid::lyricistLineSpacing,           "lyricistLineSpacing",           1.0 },
       { Sid::lyricistFontSpatiumDependent,  "lyricistFontSpatiumDependent",  false  },
       { Sid::lyricistFontStyle,             "lyricistFontStyle",             int(FontStyle::Normal) },
@@ -874,7 +874,7 @@ static const StyleType styleTypes[] {
       { Sid::metronomeFontSize,             "metronomeFontSize",            12.0 },
       { Sid::metronomeLineSpacing,          "metronomeLineSpacing",         1.0 },
       { Sid::metronomeFontSpatiumDependent, "metronomeFontSpatiumDependent", false },
-      { Sid::metronomeFontStyle,            "metronomeFontStyle",           int(FontStyle::Bold) },
+      { Sid::metronomeFontStyle,            "metronomeFontStyle",           int(FontStyle::Normal) },
       { Sid::metronomeColor,                "metronomeColor",               QColor(0, 0, 0, 255) },
       { Sid::metronomePlacement,            "metronomePlacement",           int(Placement::ABOVE) },
       { Sid::metronomeAlign,                "metronomeAlign",               QVariant::fromValue(Align::LEFT) },
@@ -889,7 +889,7 @@ static const StyleType styleTypes[] {
       { Sid::measureNumberFontFace,         "measureNumberFontFace",        "Edwin" },
       { Sid::measureNumberFontSize,         "measureNumberFontSize",        8.0 },
       { Sid::measureNumberLineSpacing,      "measureNumberLineSpacing",     1.0 },
-      { Sid::measureNumberFontSpatiumDependent, "measureNumberFontSpatiumDependent", true },
+      { Sid::measureNumberFontSpatiumDependent, "measureNumberFontSpatiumDependent", false },
       { Sid::measureNumberFontStyle,        "measureNumberFontStyle",       2 },
       { Sid::measureNumberColor,            "measureNumberColor",           QColor(0, 0, 0, 255) },
       { Sid::measureNumberPosAbove,         "measureNumberOffset",          QPointF(0.0, -2.0) }, // This measureNumberOffset cannot be renamed to measureNumberPosAbove for backward compatibility
@@ -910,8 +910,8 @@ static const StyleType styleTypes[] {
 
       { Sid::mmRestRangeFontFace,           "mmRestRangeFontFace",          "Edwin" },
       { Sid::mmRestRangeFontSize,           "mmRestRangeFontSize",          8.0 },
-      { Sid::mmRestRangeFontSpatiumDependent, "mmRestRangeFontSpatiumDependent", true },
-      { Sid::mmRestRangeFontStyle,          "mmRestRangeFontStyle",         int(FontStyle::Normal)          },
+      { Sid::mmRestRangeFontSpatiumDependent, "mmRestRangeFontSpatiumDependent", false },
+      { Sid::mmRestRangeFontStyle,          "mmRestRangeFontStyle",         int(FontStyle::Italic)          },
       { Sid::mmRestRangeColor,              "mmRestRangeColor",             QColor(0, 0, 0, 255)            },
       { Sid::mmRestRangePosAbove,           "measureNumberPosAbove",        QPointF(0.0, -3.0)              },
       { Sid::mmRestRangePosBelow,           "measureNumberPosBelow",        QPointF(0.0, 1.0)               },
@@ -927,7 +927,7 @@ static const StyleType styleTypes[] {
       { Sid::mmRestRangeFrameBgColor,       "mmRestRangeFrameBgColor",      QColor(255, 255, 255, 0)        },
 
       { Sid::translatorFontFace,            "translatorFontFace",           "Edwin" },
-      { Sid::translatorFontSize,            "translatorFontSize",           11.0 },
+      { Sid::translatorFontSize,            "translatorFontSize",           10.0 },
       { Sid::translatorLineSpacing,         "translatorLineSpacing",        1.0 },
       { Sid::translatorFontSpatiumDependent, "translatorFontSpatiumDependent", false },
       { Sid::translatorFontStyle,           "translatorFontStyle",          int(FontStyle::Normal) },
@@ -998,7 +998,7 @@ static const StyleType styleTypes[] {
       { Sid::rehearsalMarkMinDistance,      "rehearsalMarkMinDistance",     Spatium(0.5) },
 
       { Sid::repeatLeftFontFace,            "repeatLeftFontFace",           "Edwin" },
-      { Sid::repeatLeftFontSize,            "repeatLeftFontSize",           20.0 },
+      { Sid::repeatLeftFontSize,            "repeatLeftFontSize",           18.0 },
       { Sid::repeatLeftLineSpacing,         "repeatLeftLineSpacing",        1.0 },
       { Sid::repeatLeftFontSpatiumDependent, "repeatLeftFontSpatiumDependent", true },
       { Sid::repeatLeftFontStyle,           "repeatLeftFontStyle",          int(FontStyle::Normal) },
@@ -1013,7 +1013,7 @@ static const StyleType styleTypes[] {
       { Sid::repeatLeftFrameBgColor,        "repeatLeftFrameBgColor",       QColor(255, 255, 255, 0) },
 
       { Sid::repeatRightFontFace,           "repeatRightFontFace",          "Edwin" },
-      { Sid::repeatRightFontSize,           "repeatRightFontSize",          12.0 },
+      { Sid::repeatRightFontSize,           "repeatRightFontSize",          11.0 },
       { Sid::repeatRightLineSpacing,        "repeatRightLineSpacing",       1.0 },
       { Sid::repeatRightFontSpatiumDependent, "repeatRightFontSpatiumDependent", true },
       { Sid::repeatRightFontStyle,          "repeatRightFontStyle",         int(FontStyle::Normal) },
@@ -1028,7 +1028,7 @@ static const StyleType styleTypes[] {
       { Sid::repeatRightFrameBgColor,       "repeatRightFrameBgColor",      QColor(255, 255, 255, 0) },
 
       { Sid::frameFontFace,                 "frameFontFace",                "Edwin" },
-      { Sid::frameFontSize,                 "frameFontSize",                12.0 },
+      { Sid::frameFontSize,                 "frameFontSize",                10.0 },
       { Sid::frameLineSpacing,              "frameLineSpacing",             1.0 },
       { Sid::frameFontSpatiumDependent,     "frameFontSpatiumDependent",    false },
       { Sid::frameFontStyle,                "frameFontStyle",               int(FontStyle::Normal) },
@@ -1124,7 +1124,7 @@ static const StyleType styleTypes[] {
       { Sid::footerFrameBgColor,            "footerFrameBgColor",           QColor(255, 255, 255, 0) },
 
       { Sid::instrumentChangeFontFace,      "instrumentChangeFontFace",     "Edwin" },
-      { Sid::instrumentChangeFontSize,      "instrumentChangeFontSize",     12.0 },
+      { Sid::instrumentChangeFontSize,      "instrumentChangeFontSize",     10.0 },
       { Sid::instrumentChangeLineSpacing,   "instrumentChangeLineSpacing",  1.0 },
       { Sid::instrumentChangeFontSpatiumDependent, "instrumentChangeFontSpatiumDependent", true },
       { Sid::instrumentChangeFontStyle,     "instrumentChangeFontStyle",    int(FontStyle::Bold) },
@@ -1143,7 +1143,7 @@ static const StyleType styleTypes[] {
       { Sid::instrumentChangeFrameBgColor,  "instrumentChangeFrameBgColor", QColor(255, 255, 255, 0) },
 
       { Sid::stickingFontFace,              "stickingFontFace",     "Edwin" },
-      { Sid::stickingFontSize,              "stickingFontSize",     12.0 },
+      { Sid::stickingFontSize,              "stickingFontSize",     10.0 },
       { Sid::stickingLineSpacing,           "stickingLineSpacing",  1.0 },
       { Sid::stickingFontSpatiumDependent,  "stickingFontSpatiumDependent", true },
       { Sid::stickingFontStyle,             "stickingFontStyle",    int(FontStyle::Normal) },

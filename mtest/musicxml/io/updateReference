@@ -6,6 +6,17 @@ else
    S=/home/presario/build-MuseScore-Desktop_Qt_5_9_9_GCC_64bit-Debug/mtest/musicxml/io
 fi
 
+cp $S/testBreaksPage.xml testBreaksPage_no_ref.xml
+cp $S/testBreaksPage.xml testBreaksPage_all_ref.xml
+cp $S/testBreaksPage.xml testBreaksPage_manual_ref.xml
+cp $S/testInstrumentChangeMIDIportExport.xml testInstrumentChangeMIDIportExport_ref.xml
+cp $S/testMeasureStyleSlash.mscx testMeasureStyleSlash_ref.mscx
+cp $S/testTboxAboveBelow1.xml testTboxAboveBelow1_ref.xml
+cp $S/testTboxAboveBelow2.xml testTboxAboveBelow2_ref.xml
+cp $S/testTboxAboveBelow3.xml testTboxAboveBelow3_ref.xml
+cp $S/testTboxMultiPage1.xml testTboxMultiPage1_ref.xml
+cp $S/testTboxVbox1.xml testTboxVbox1_ref.xml
+cp $S/testTboxWords1.xml testTboxWords1_ref.xml
 cp $S/testBreaksManual.xml testBreaksManual_no_ref.xml
 cp $S/testBreaksManual.xml testBreaksManual_manual_ref.xml
 cp $S/testBreaksManual.xml testBreaksManual_all_ref.xml
