@@ -16,6 +16,7 @@ build.xcode
 applebuild
 build.artifacts
 build.symbols
+vtest.artifacts
 MuseScorePortable
 /*.config
 /*.creator

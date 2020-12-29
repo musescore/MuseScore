@@ -52,7 +52,8 @@ mu::Ret ConverterController::batchConvert(const io::path& batchJobFile)
 
 mu::Ret ConverterController::convert(const io::path& in, const io::path& out)
 {
-    LOGI() << "in: " << in;
+    TRACEFUNC;
+    LOGI() << "in: " << in << ", out: " << out;
     auto notation = notationCreator()->newMasterNotation();
     IF_ASSERT_FAILED(notation) {
         return make_ret(Err::UnknownError);
