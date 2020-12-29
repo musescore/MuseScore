@@ -1703,7 +1703,7 @@ void PreferenceDialog::selectExtensionsDirectory()
 
 void PreferenceDialog::updateTranslationClicked()
       {
-      ResourceManager r(0);
+      ResourceManager r(this);
       r.selectLanguagesTab();
       r.exec();
       }
