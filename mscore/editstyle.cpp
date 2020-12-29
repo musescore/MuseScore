@@ -1458,7 +1458,7 @@ void EditStyle::enableVerticalSpreadClicked(bool checked)
 
 void EditStyle::disableVerticalSpreadClicked(bool checked)
       {
-      cs->style().set(Sid::enableVerticalSpread, !checked);
+      cs->undo(new ChangeStyleVal(cs, Sid::enableVerticalSpread, !checked));
       enableVerticalSpread->setChecked(!checked);
       cs->setLayoutAll();
       }
