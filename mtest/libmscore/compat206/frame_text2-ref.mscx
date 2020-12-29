@@ -36,6 +36,7 @@
       <pedalFramePadding>0</pedalFramePadding>
       <pedalFrameWidth>0</pedalFrameWidth>
       <chordSymbolAFontFace>FreeSerif</chordSymbolAFontFace>
+      <chordSymbolAFontSize>12</chordSymbolAFontSize>
       <chordSymbolAFramePadding>0</chordSymbolAFramePadding>
       <chordSymbolAFrameWidth>0</chordSymbolAFrameWidth>
       <headerFirstPage>1</headerFirstPage>
@@ -107,6 +108,7 @@
       <partInstrumentFramePadding>0</partInstrumentFramePadding>
       <partInstrumentFrameWidth>0</partInstrumentFrameWidth>
       <dynamicsFontFace>FreeSerif</dynamicsFontFace>
+      <dynamicsFontSize>12</dynamicsFontSize>
       <dynamicsFontStyle>0</dynamicsFontStyle>
       <dynamicsFramePadding>0</dynamicsFramePadding>
       <dynamicsFrameWidth>0</dynamicsFrameWidth>

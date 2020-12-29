@@ -29,6 +29,7 @@
     <fingeringFontFace>Edwin</fingeringFontFace>
     <lhGuitarFingeringFontFace>Edwin</lhGuitarFingeringFontFace>
     <rhGuitarFingeringFontFace>Edwin</rhGuitarFingeringFontFace>
+    <rhGuitarFingeringFontStyle>2</rhGuitarFingeringFontStyle>
     <stringNumberFontFace>Edwin</stringNumberFontFace>
     <longInstrumentFontFace>Edwin</longInstrumentFontFace>
     <longInstrumentFontSize>10</longInstrumentFontSize>
@@ -43,7 +44,7 @@
     <tempoFontFace>Edwin</tempoFontFace>
     <tempoFontSize>12</tempoFontSize>
     <metronomeFontFace>Edwin</metronomeFontFace>
-    <metronomeFontSize>10</metronomeFontSize>
+    <metronomeFontSize>12</metronomeFontSize>
     <metronomeFontStyle>0</metronomeFontStyle>
     <measureNumberFontFace>Edwin</measureNumberFontFace>
     <measureNumberFontSize>8</measureNumberFontSize>
@@ -70,7 +71,7 @@
     <glissandoFontFace>Edwin</glissandoFontFace>
     <bendFontFace>Edwin</bendFontFace>
     <headerFontFace>Edwin</headerFontFace>
-    <headerFontSize>9</headerFontSize>
+    <headerFontSize>11</headerFontSize>
     <footerFontFace>Edwin</footerFontFace>
     <footerFontSize>9</footerFontSize>
     <instrumentChangeFontFace>Edwin</instrumentChangeFontFace>

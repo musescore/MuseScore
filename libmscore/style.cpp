@@ -317,7 +317,7 @@ static const StyleType styleTypes[] {
       { Sid::nashvilleNumberPosBelow,   "nashvilleNumberPosBelow",   QPointF(.0, 3.5) },
 
       { Sid::chordSymbolAFontFace,      "chordSymbolAFontFace",      "Edwin" },
-      { Sid::chordSymbolAFontSize,      "chordSymbolAFontSize",      12.0 },
+      { Sid::chordSymbolAFontSize,      "chordSymbolAFontSize",      11.0 },
       { Sid::chordSymbolALineSpacing,   "chordSymbolALineSpacing",   1.0 },
       { Sid::chordSymbolAFontSpatiumDependent, "chordSymbolAFontSpatiumDependent", true },
       { Sid::chordSymbolAFontStyle,     "chordSymbolAFontStyle",     int(FontStyle::Normal) },
@@ -331,7 +331,7 @@ static const StyleType styleTypes[] {
       { Sid::chordSymbolAFrameBgColor,  "chordSymbolAFrameBgColor",  QColor(255, 255, 255, 0) },
 
       { Sid::chordSymbolBFontFace,      "chordSymbolBFontFace",      "Edwin" },
-      { Sid::chordSymbolBFontSize,      "chordSymbolBFontSize",      12.0 },
+      { Sid::chordSymbolBFontSize,      "chordSymbolBFontSize",      11.0 },
       { Sid::chordSymbolBLineSpacing,   "chordSymbolBLineSpacing",   1.0 },
       { Sid::chordSymbolBFontSpatiumDependent, "chordSymbolBFontSpatiumDependent", true },
       { Sid::chordSymbolBFontStyle,     "chordSymbolBFontStyle",     int(FontStyle::Italic) },
@@ -750,7 +750,7 @@ static const StyleType styleTypes[] {
       { Sid::rhGuitarFingeringFontSize,     "rhGuitarFingeringFontSize",     8.0 },
       { Sid::rhGuitarFingeringLineSpacing,  "rhGuitarFingeringLineSpacing",  1.0 },
       { Sid::rhGuitarFingeringFontSpatiumDependent, "rhGuitarFingeringFontSpatiumDependent", true },
-      { Sid::rhGuitarFingeringFontStyle,    "rhGuitarFingeringFontStyle",    int(FontStyle::Normal) },
+      { Sid::rhGuitarFingeringFontStyle,    "rhGuitarFingeringFontStyle",    int(FontStyle::Italic) },
       { Sid::rhGuitarFingeringColor,        "rhGuitarFingeringColor",        QColor(0, 0, 0, 255) },
       { Sid::rhGuitarFingeringAlign,        "rhGuitarFingeringAlign",        QVariant::fromValue(Align::CENTER) },
       { Sid::rhGuitarFingeringFrameType,    "rhGuitarFingeringFrameType",    int(FrameType::NO_FRAME) },
@@ -822,7 +822,7 @@ static const StyleType styleTypes[] {
       { Sid::partInstrumentFrameBgColor,    "partInstrumentFrameBgColor",   QColor(255, 255, 255, 0) },
 
       { Sid::dynamicsFontFace,              "dynamicsFontFace",             "Edwin" },
-      { Sid::dynamicsFontSize,              "dynamicsFontSize",             12.0 },
+      { Sid::dynamicsFontSize,              "dynamicsFontSize",             11.0 },
       { Sid::dynamicsLineSpacing,           "dynamicsLineSpacing",          1.0 },
       { Sid::dynamicsFontSpatiumDependent,  "dynamicsFontSpatiumDependent", true },
       { Sid::dynamicsFontStyle,             "dynamicsFontStyle",            int(FontStyle::Italic) },
