@@ -35,7 +35,7 @@ void ScoreMigrator_3_6::migrateScore(Ms::Score* score)
                   break;
             }
 
-      if (successfulMigration)
+      if (successfulMigration && score->mscVersion() != Ms::MSCVERSION)
             score->undo(new Ms::ChangeMetaText(score, "mscVersion", MSC_VERSION));
 
       score->endCmd();
