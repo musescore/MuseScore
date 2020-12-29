@@ -69,7 +69,7 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       virtual void showEvent(QShowEvent*);
       virtual void hideEvent(QHideEvent*);
       QVariant getValue(Sid idx);
-      void loadValuesFromStyle(const MStyle& sourceStyle);
+      void setValues();
 
       void resetStyle(Score* score);
       void applyToAllParts();

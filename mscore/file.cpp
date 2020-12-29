@@ -374,7 +374,7 @@ void MuseScore::askAboutApplyingEdwinIfNeed(const QString& fileSuffix)
     QPushButton* yesButton = dialog.addButton(QObject::tr("Apply Edwin"), QMessageBox::YesRole);
     dialog.setDefaultButton(noButton);
 
-    QCheckBox askAgainCheckbox(QObject::tr("Remember my choise and don't ask again"));
+    QCheckBox askAgainCheckbox(QObject::tr("Remember my choice and don't ask again"));
     dialog.setCheckBox(&askAgainCheckbox);
 
     QObject::connect(&askAgainCheckbox, &QCheckBox::stateChanged, [this](int state) {

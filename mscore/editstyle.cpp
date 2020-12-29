@@ -963,7 +963,7 @@ void EditStyle::showEvent(QShowEvent* ev)
             scrollArea->setWidgetResizable(true);
             hasShown = true; // so that it only happens once
             }
-      loadValuesFromStyle(cs->style());
+      setValues();
       pageList->setFocus();
       cs->startCmd();
       buttonApplyToAllParts->setEnabled(!cs->isMaster());
@@ -990,11 +990,6 @@ void EditStyle::buttonClicked(QAbstractButton* b)
       switch (buttonBox->standardButton(b)) {
             case QDialogButtonBox::Ok:
                   done(1);
-
-                  if (needResetStyle) {
-                      resetStyle(cs);
-                  }
-
                   cs->endCmd();
                   break;
             case QDialogButtonBox::Cancel:
@@ -1039,7 +1034,9 @@ void EditStyle::on_buttonTogglePagelist_clicked()
 void EditStyle::on_resetStylesButton_clicked()
 {
     needResetStyle = true;
-    loadValuesFromStyle(MScore::defaultStyle());
+    resetStyle(cs);
+    cs->update();
+    setValues();
 }
 
 //---------------------------------------------------------
@@ -1169,15 +1166,16 @@ QVariant EditStyle::getValue(Sid idx)
 //   setValues
 //---------------------------------------------------------
 
-void EditStyle::loadValuesFromStyle(const MStyle& sourceStyle)
+void EditStyle::setValues()
       {
+      const MStyle& lstyle = cs->style();
       for (const StyleWidget& sw : styleWidgets) {
             if (sw.widget)
                   sw.widget->blockSignals(true);
-            QVariant val = sourceStyle.value(sw.idx);
+            QVariant val = lstyle.value(sw.idx);
             const char* type = MStyle::valueType(sw.idx);
             if (sw.reset)
-                  sw.reset->setEnabled(!sourceStyle.isDefault(sw.idx));
+                  sw.reset->setEnabled(!lstyle.isDefault(sw.idx));
 
             if (!strcmp("Ms::Spatium", type)) {
                   if (sw.showPercent)
@@ -1274,7 +1272,7 @@ void EditStyle::loadValuesFromStyle(const MStyle& sourceStyle)
 
       //TODO: convert the rest:
 
-      QString unit(sourceStyle.value(Sid::swingUnit).toString());
+      QString unit(lstyle.value(Sid::swingUnit).toString());
 
       if (unit == TDuration(TDuration::DurationType::V_EIGHTH).name()) {
             swingEighth->setChecked(true);
@@ -1288,9 +1286,9 @@ void EditStyle::loadValuesFromStyle(const MStyle& sourceStyle)
             swingOff->setChecked(true);
             swingBox->setEnabled(false);
             }
-      QString s(sourceStyle.value(Sid::chordDescriptionFile).toString());
+      QString s(lstyle.value(Sid::chordDescriptionFile).toString());
       chordDescriptionFile->setText(s);
-      QString cstyle(sourceStyle.value(Sid::chordStyle).toString());
+      QString cstyle(lstyle.value(Sid::chordStyle).toString());
       if (cstyle == "std") {
             chordsStandard->setChecked(true);
             chordDescriptionGroup->setEnabled(false);
@@ -1307,15 +1305,15 @@ void EditStyle::loadValuesFromStyle(const MStyle& sourceStyle)
 
       // figured bass
       for (int i = 0; i < comboFBFont->count(); i++)
-            if (comboFBFont->itemText(i) == sourceStyle.value(Sid::figuredBassFontFamily).toString()) {
+            if (comboFBFont->itemText(i) == lstyle.value(Sid::figuredBassFontFamily).toString()) {
                   comboFBFont->setCurrentIndex(i);
                   break;
             }
-      doubleSpinFBSize->setValue(sourceStyle.value(Sid::figuredBassFontSize).toDouble());
-      doubleSpinFBVertPos->setValue(sourceStyle.value(Sid::figuredBassYOffset).toDouble());
-      spinFBLineHeight->setValue(sourceStyle.value(Sid::figuredBassLineHeight).toDouble() * 100.0);
+      doubleSpinFBSize->setValue(lstyle.value(Sid::figuredBassFontSize).toDouble());
+      doubleSpinFBVertPos->setValue(lstyle.value(Sid::figuredBassYOffset).toDouble());
+      spinFBLineHeight->setValue(lstyle.value(Sid::figuredBassLineHeight).toDouble() * 100.0);
 
-      QString mfont(sourceStyle.value(Sid::MusicalSymbolFont).toString());
+      QString mfont(lstyle.value(Sid::MusicalSymbolFont).toString());
       int idx = 0;
       for (const auto& i : ScoreFont::scoreFonts()) {
             if (i.name().toLower() == mfont.toLower()) {
@@ -1334,14 +1332,14 @@ void EditStyle::loadValuesFromStyle(const MStyle& sourceStyle)
       musicalTextFont->addItem("Gonville Text", "Gootville Text");
       musicalTextFont->addItem("MuseJazz Text", "MuseJazz Text");
       musicalTextFont->addItem("Petaluma Text", "Petaluma Text");
-      QString tfont(sourceStyle.value(Sid::MusicalTextFont).toString());
+      QString tfont(lstyle.value(Sid::MusicalTextFont).toString());
       idx = musicalTextFont->findData(tfont);
       musicalTextFont->setCurrentIndex(idx);
       musicalTextFont->blockSignals(false);
 
-      toggleHeaderOddEven(sourceStyle.value(Sid::headerOddEven).toBool());
-      toggleFooterOddEven(sourceStyle.value(Sid::footerOddEven).toBool());
-      disableVerticalSpread->setChecked(!sourceStyle.value(Sid::enableVerticalSpread).toBool());
+      toggleHeaderOddEven(lstyle.value(Sid::headerOddEven).toBool());
+      toggleFooterOddEven(lstyle.value(Sid::footerOddEven).toBool());
+      disableVerticalSpread->setChecked(!lstyle.value(Sid::enableVerticalSpread).toBool());
       }
 
 //---------------------------------------------------------
@@ -1625,7 +1623,7 @@ void EditStyle::valueChanged(int i)
       cs->undo(new ChangeStyleVal(cs, idx, val));
       cs->update();
       if (setValue)
-            loadValuesFromStyle(cs->style());
+            setValues();
       const StyleWidget& sw = styleWidget(idx);
       if (sw.reset)
             sw.reset->setEnabled(!cs->style().isDefault(idx));
@@ -1639,7 +1637,7 @@ void EditStyle::resetStyleValue(int i)
       {
       Sid idx = (Sid)i;
       cs->undo(new ChangeStyleVal(cs, idx, MScore::defaultStyle().value(idx)));
-      loadValuesFromStyle(cs->style());
+      setValues();
       cs->update();
       }
 
