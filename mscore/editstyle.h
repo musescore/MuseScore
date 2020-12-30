@@ -21,7 +21,6 @@
 #define __EDITSTYLE_H__
 
 #include "ui_editstyle.h"
-#include "abstractdialog.h"
 #include "globals.h"
 #include "libmscore/mscore.h"
 #include "libmscore/style.h"
@@ -56,7 +55,7 @@ typedef QWidget* EditStyle::* EditStylePage;
 //   EditStyle
 //---------------------------------------------------------
 
-class EditStyle : public AbstractDialog, private Ui::EditStyleBase {
+class EditStyle : public QDialog, private Ui::EditStyleBase {
       Q_OBJECT
 
       Score* cs = nullptr;
@@ -67,7 +66,6 @@ class EditStyle : public AbstractDialog, private Ui::EditStyleBase {
       bool hasShown = false;
       bool needResetStyle = false;
 
-      void setTranslatedTexts();
       virtual void showEvent(QShowEvent*);
       virtual void hideEvent(QHideEvent*);
       QVariant getValue(Sid idx);
@@ -107,9 +105,6 @@ class EditStyle : public AbstractDialog, private Ui::EditStyleBase {
       void editUserStyleName();
       void endEditUserStyleName();
       void resetUserStyleName();
-
-   protected:
-      virtual void retranslate();
 
    public:
       EditStyle(Score*, QWidget*);

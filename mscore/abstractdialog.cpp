@@ -26,6 +26,11 @@ AbstractDialog::AbstractDialog(QWidget * parent, Qt::WindowFlags f)
       {
       }
 
+AbstractDialog::~AbstractDialog()
+      {
+
+      }
+
 void AbstractDialog::changeEvent(QEvent *event)
       {
       QDialog::changeEvent(event);

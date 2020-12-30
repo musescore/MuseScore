@@ -39,7 +39,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 EditStyle::EditStyle(Score* s, QWidget* parent)
-   : AbstractDialog(parent), cs(s)
+   : QDialog(parent), cs(s)
       {
       setObjectName("EditStyle");
       setupUi(this);
@@ -71,6 +71,26 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       QButtonGroup* fbStyle = new QButtonGroup(this);
       fbStyle->addButton(radioFBModern, 0);
       fbStyle->addButton(radioFBHistoric, 1);
+
+
+      const char* styles[] = {
+            QT_TRANSLATE_NOOP("EditStyleBase", "Continuous"),
+            QT_TRANSLATE_NOOP("EditStyleBase", "Dashed"),
+            QT_TRANSLATE_NOOP("EditStyleBase", "Dotted"),
+            QT_TRANSLATE_NOOP("EditStyleBase", "Dash-dotted"),
+            QT_TRANSLATE_NOOP("EditStyleBase", "Dash-dot-dotted")
+            };
+      int dta = 1;
+      voltaLineStyle->clear();
+      ottavaLineStyle->clear();
+      pedalLineStyle->clear();
+      for (const char* p : styles) {
+            QString trs = qApp->translate("EditStyleBase", p);
+            voltaLineStyle->addItem(trs, dta);
+            ottavaLineStyle->addItem(trs, dta);
+            pedalLineStyle->addItem(trs, dta);
+            ++dta;
+            }
 
       styleWidgets = {
       //   idx                --- showPercent      --- widget          --- resetButton
@@ -386,6 +406,46 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::bendArrowWidth,    false, bendArrowWidth,    resetBendArrowWidth    },
       };
 
+      for (QComboBox* cb : std::vector<QComboBox*> {
+            lyricsPlacement, textLinePlacement, systemTextLinePlacement, hairpinPlacement, pedalLinePlacement,
+            trillLinePlacement, vibratoLinePlacement, dynamicsPlacement,
+            tempoTextPlacement, staffTextPlacement, rehearsalMarkPlacement,
+            measureNumberVPlacement, mmRestRangeVPlacement
+            }) {
+            cb->clear();
+            cb->addItem(tr("Above"), int(Placement::ABOVE));
+            cb->addItem(tr("Below"), int(Placement::BELOW));
+            }
+      for (QComboBox* cb : std::vector<QComboBox*> {
+           measureNumberHPlacement, mmRestRangeHPlacement
+           }) {
+            cb->clear();
+            cb->addItem(tr("Left"),   int(HPlacement::LEFT));
+            cb->addItem(tr("Center"), int(HPlacement::CENTER));
+            cb->addItem(tr("Right"),  int(HPlacement::RIGHT));
+            }
+
+      mmRestRangeBracketType->clear();
+      mmRestRangeBracketType->addItem(tr("None"),        int(MMRestRangeBracketType::NONE));
+      mmRestRangeBracketType->addItem(tr("Brackets"),    int(MMRestRangeBracketType::BRACKETS));
+      mmRestRangeBracketType->addItem(tr("Parentheses"), int(MMRestRangeBracketType::PARENTHESES));
+
+
+      autoplaceVerticalAlignRange->clear();
+      autoplaceVerticalAlignRange->addItem(tr("Segment"), int(VerticalAlignRange::SEGMENT));
+      autoplaceVerticalAlignRange->addItem(tr("Measure"), int(VerticalAlignRange::MEASURE));
+      autoplaceVerticalAlignRange->addItem(tr("System"),  int(VerticalAlignRange::SYSTEM));
+
+      tupletNumberType->clear();
+      tupletNumberType->addItem(tr("Number"), int(TupletNumberType::SHOW_NUMBER));
+      tupletNumberType->addItem(tr("Ratio"), int(TupletNumberType::SHOW_RELATION));
+      tupletNumberType->addItem(tr("None", "no tuplet number type"), int(TupletNumberType::NO_TEXT));
+
+      tupletBracketType->clear();
+      tupletBracketType->addItem(tr("Automatic"), int(TupletBracketType::AUTO_BRACKET));
+      tupletBracketType->addItem(tr("Bracket"), int(TupletBracketType::SHOW_BRACKET));
+      tupletBracketType->addItem(tr("None", "no tuplet bracket type"), int(TupletBracketType::SHOW_NO_BRACKET));
+
       pageList->setCurrentRow(0);
       accidentalsGroup->setVisible(false); // disable, not yet implemented
 
@@ -394,6 +454,16 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       for (auto i : ScoreFont::scoreFonts()) {
             musicalSymbolFont->addItem(i.name(), i.name());
             ++idx;
+            }
+
+      static const SymId ids[] = {
+            SymId::systemDivider, SymId::systemDividerLong, SymId::systemDividerExtraLong
+            };
+      for (SymId id : ids) {
+            const QString& un = Sym::id2userName(id);
+            const char* n  = Sym::id2name(id);
+            dividerLeftSym->addItem(un,  QVariant(QString(n)));
+            dividerRightSym->addItem(un, QVariant(QString(n)));
             }
 
       // figured bass init
@@ -405,6 +475,90 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
 
       // chord symbol init
       harmonyPlay->setChecked(true);
+
+      voicingSelectWidget->interpretBox->clear();
+      voicingSelectWidget->interpretBox->addItem(tr("Jazz"), int(0)); // two-item combobox for boolean style variant
+      voicingSelectWidget->interpretBox->addItem(tr("Literal"), int(1)); // true = literal
+
+      voicingSelectWidget->voicingBox->clear();
+      voicingSelectWidget->voicingBox->addItem(tr("Automatic"), int(Voicing::AUTO));
+      voicingSelectWidget->voicingBox->addItem(tr("Root Only"), int(Voicing::ROOT_ONLY));
+      voicingSelectWidget->voicingBox->addItem(tr("Close"), int(Voicing::CLOSE));
+      voicingSelectWidget->voicingBox->addItem(tr("Drop Two"), int(Voicing::DROP_2));
+      voicingSelectWidget->voicingBox->addItem(tr("Six Note"), int(Voicing::SIX_NOTE));
+      voicingSelectWidget->voicingBox->addItem(tr("Four Note"), int(Voicing::FOUR_NOTE));
+      voicingSelectWidget->voicingBox->addItem(tr("Three Note"), int(Voicing::THREE_NOTE));
+
+      voicingSelectWidget->durationBox->clear();
+      voicingSelectWidget->durationBox->addItem(tr("Until Next Chord Symbol"), int(HDuration::UNTIL_NEXT_CHORD_SYMBOL));
+      voicingSelectWidget->durationBox->addItem(tr("Until End of Measure"), int(HDuration::STOP_AT_MEASURE_END));
+      voicingSelectWidget->durationBox->addItem(tr("Chord/Rest Duration"), int(HDuration::SEGMENT_DURATION));
+
+      // keep in sync with implementation in Page::replaceTextMacros (page.cpp)
+      // jumping thru hoops here to make the job of translators easier, yet have a nice display
+      QString toolTipHeaderFooter
+            = QString("<html><head></head><body><p><b>")
+            + tr("Special symbols in header/footer")
+            + QString("</b></p>")
+            + QString("<table><tr><td>$p</td><td>-</td><td><i>")
+            + tr("Page number, except on first page")
+            + QString("</i></td></tr><tr><td>$N</td><td>-</td><td><i>")
+            + tr("Page number, if there is more than one page")
+            + QString("</i></td></tr><tr><td>$P</td><td>-</td><td><i>")
+            + tr("Page number, on all pages")
+            + QString("</i></td></tr><tr><td>$n</td><td>-</td><td><i>")
+            + tr("Number of pages")
+            + QString("</i></td></tr><tr><td>$f</td><td>-</td><td><i>")
+            + tr("File name")
+            + QString("</i></td></tr><tr><td>$F</td><td>-</td><td><i>")
+            + tr("File path+name")
+            + QString("</i></td></tr><tr><td>$i</td><td>-</td><td><i>")
+            + tr("Part name, except on first page")
+            + QString("</i></td></tr><tr><td>$I</td><td>-</td><td><i>")
+            + tr("Part name, on all pages")
+            + QString("</i></td></tr><tr><td>$d</td><td>-</td><td><i>")
+            + tr("Current date")
+            + QString("</i></td></tr><tr><td>$D</td><td>-</td><td><i>")
+            + tr("Creation date")
+            + QString("</i></td></tr><tr><td>$m</td><td>-</td><td><i>")
+            + tr("Last modification time")
+            + QString("</i></td></tr><tr><td>$M</td><td>-</td><td><i>")
+            + tr("Last modification date")
+            + QString("</i></td></tr><tr><td>$C</td><td>-</td><td><i>")
+            + tr("Copyright, on first page only")
+            + QString("</i></td></tr><tr><td>$c</td><td>-</td><td><i>")
+            + tr("Copyright, on all pages")
+            + QString("</i></td></tr><tr><td>$v</td><td>-</td><td><i>")
+            + tr("MuseScore version this score was last saved with")
+            + QString("</i></td></tr><tr><td>$r</td><td>-</td><td><i>")
+            + tr("MuseScore revision this score was last saved with")
+            + QString("</i></td></tr><tr><td>$$</td><td>-</td><td><i>")
+            + tr("The $ sign itself")
+            + QString("</i></td></tr><tr><td>$:tag:</td><td>-</td><td><i>")
+            + tr("Metadata tag, see below")
+            + QString("</i></td></tr></table><p>")
+            + tr("Available metadata tags and their current values")
+            + QString("<br />")
+            + tr("(in File > Score Properties…):")
+            + QString("</p><table>");
+      // show all tags for current score/part, see also Score::init()
+      if (!cs->isMaster()) {
+            QMapIterator<QString, QString> j(cs->masterScore()->metaTags());
+            while (j.hasNext()) {
+                  j.next();
+                  toolTipHeaderFooter += QString("<tr><td>%1</td><td>-</td><td>%2</td></tr>").arg(j.key()).arg(j.value());
+                  }
+            }
+      QMapIterator<QString, QString> i(cs->metaTags());
+      while (i.hasNext()) {
+            i.next();
+            toolTipHeaderFooter += QString("<tr><td>%1</td><td>-</td><td>%2</td></tr>").arg(i.key()).arg(i.value());
+            }
+      toolTipHeaderFooter += QString("</table></body></html>");
+      showHeader->setToolTip(toolTipHeaderFooter);
+      showHeader->setToolTipDuration(5000); // leaving the default value of -1 calculates the duration automatically and it takes too long
+      showFooter->setToolTip(toolTipHeaderFooter);
+      showFooter->setToolTipDuration(5000);
 
       connect(buttonBox,             SIGNAL(clicked(QAbstractButton*)), SLOT(buttonClicked(QAbstractButton*)));
       connect(enableVerticalSpread,  SIGNAL(toggled(bool)),             SLOT(enableVerticalSpreadClicked(bool)));
@@ -497,6 +651,11 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             item->setData(Qt::UserRole, int(ss));
             textStyles->addItem(item);
             }
+
+      textStyleFrameType->clear();
+      textStyleFrameType->addItem(tr("None", "no frame for text"), int(FrameType::NO_FRAME));
+      textStyleFrameType->addItem(tr("Rectangle"), int(FrameType::SQUARE));
+      textStyleFrameType->addItem(tr("Circle"), int(FrameType::CIRCLE));
 
       resetTextStyleName->setIcon(*icons[int(Icons::reset_ICON)]);
       connect(resetTextStyleName, &QToolButton::clicked, [=](){ resetUserStyleName(); });
@@ -604,8 +763,6 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
 
       connect(textStyles, SIGNAL(currentRowChanged(int)), SLOT(textStyleChanged(int)));
       textStyles->setCurrentRow(0);
-
-      setTranslatedTexts();
 
       QRect scr = QGuiApplication::primaryScreen()->availableGeometry();
       QRect dlg = this->frameGeometry();
@@ -792,182 +949,6 @@ void EditStyle::gotoElement(Element* e)
                   setPage(pageStack->indexOf(page));
       }
 
-//---------------------------------------------------------
-//   retranslate
-//---------------------------------------------------------
-
-void EditStyle::retranslate()
-      {
-      retranslateUi(this);
-      setTranslatedTexts();
-      setValues();
-      }
-
-//---------------------------------------------------------
-//   setTranslatedTexts
-//---------------------------------------------------------
-
-void EditStyle::setTranslatedTexts()
-      {
-      const char* styles[] = {
-            QT_TRANSLATE_NOOP("EditStyleBase", "Continuous"),
-            QT_TRANSLATE_NOOP("EditStyleBase", "Dashed"),
-            QT_TRANSLATE_NOOP("EditStyleBase", "Dotted"),
-            QT_TRANSLATE_NOOP("EditStyleBase", "Dash-dotted"),
-            QT_TRANSLATE_NOOP("EditStyleBase", "Dash-dot-dotted")
-      };
-      int dta = 1;
-      voltaLineStyle->clear();
-      ottavaLineStyle->clear();
-      pedalLineStyle->clear();
-      for (const char* p : styles) {
-            QString trs = qApp->translate("EditStyleBase", p);
-            voltaLineStyle->addItem(trs, dta);
-            ottavaLineStyle->addItem(trs, dta);
-            pedalLineStyle->addItem(trs, dta);
-            ++dta;
-            }
-
-      for (QComboBox* cb : std::vector<QComboBox*> {
-            lyricsPlacement, textLinePlacement, systemTextLinePlacement, hairpinPlacement, pedalLinePlacement,
-            trillLinePlacement, vibratoLinePlacement, dynamicsPlacement,
-            tempoTextPlacement, staffTextPlacement, rehearsalMarkPlacement,
-            measureNumberVPlacement, mmRestRangeVPlacement
-            }) {
-            cb->clear();
-            cb->addItem(tr("Above"), int(Placement::ABOVE));
-            cb->addItem(tr("Below"), int(Placement::BELOW));
-            }
-      for (QComboBox* cb : std::vector<QComboBox*> {
-           measureNumberHPlacement, mmRestRangeHPlacement
-           }) {
-            cb->clear();
-            cb->addItem(tr("Left"),   int(HPlacement::LEFT));
-            cb->addItem(tr("Center"), int(HPlacement::CENTER));
-            cb->addItem(tr("Right"),  int(HPlacement::RIGHT));
-            }
-
-      mmRestRangeBracketType->clear();
-      mmRestRangeBracketType->addItem(tr("None"),        int(MMRestRangeBracketType::NONE));
-      mmRestRangeBracketType->addItem(tr("Brackets"),    int(MMRestRangeBracketType::BRACKETS));
-      mmRestRangeBracketType->addItem(tr("Parentheses"), int(MMRestRangeBracketType::PARENTHESES));
-
-      autoplaceVerticalAlignRange->clear();
-      autoplaceVerticalAlignRange->addItem(tr("Segment"), int(VerticalAlignRange::SEGMENT));
-      autoplaceVerticalAlignRange->addItem(tr("Measure"), int(VerticalAlignRange::MEASURE));
-      autoplaceVerticalAlignRange->addItem(tr("System"),  int(VerticalAlignRange::SYSTEM));
-
-      tupletNumberType->clear();
-      tupletNumberType->addItem(tr("Number"), int(TupletNumberType::SHOW_NUMBER));
-      tupletNumberType->addItem(tr("Ratio"),  int(TupletNumberType::SHOW_RELATION));
-      tupletNumberType->addItem(tr("None", "no tuplet number type"), int(TupletNumberType::NO_TEXT));
-
-      tupletBracketType->clear();
-      tupletBracketType->addItem(tr("Automatic"), int(TupletBracketType::AUTO_BRACKET));
-      tupletBracketType->addItem(tr("Bracket"),   int(TupletBracketType::SHOW_BRACKET));
-      tupletBracketType->addItem(tr("None", "no tuplet bracket type"), int(TupletBracketType::SHOW_NO_BRACKET));
-
-      static const SymId ids[] = {
-            SymId::systemDivider, SymId::systemDividerLong, SymId::systemDividerExtraLong
-            };
-      for (SymId id : ids) {
-            const QString& un = Sym::id2userName(id);
-            const char* n  = Sym::id2name(id);
-            dividerLeftSym->addItem(un,  QVariant(QString(n)));
-            dividerRightSym->addItem(un, QVariant(QString(n)));
-            }
-
-      voicingSelectWidget->interpretBox->clear();
-      voicingSelectWidget->interpretBox->addItem(tr("Jazz"), int(0)); // two-item combobox for boolean style variant
-      voicingSelectWidget->interpretBox->addItem(tr("Literal"), int(1)); // true = literal
-
-      voicingSelectWidget->voicingBox->clear();
-      voicingSelectWidget->voicingBox->addItem(tr("Automatic"), int(Voicing::AUTO));
-      voicingSelectWidget->voicingBox->addItem(tr("Root Only"), int(Voicing::ROOT_ONLY));
-      voicingSelectWidget->voicingBox->addItem(tr("Close"), int(Voicing::CLOSE));
-      voicingSelectWidget->voicingBox->addItem(tr("Drop Two"), int(Voicing::DROP_2));
-      voicingSelectWidget->voicingBox->addItem(tr("Six Note"), int(Voicing::SIX_NOTE));
-      voicingSelectWidget->voicingBox->addItem(tr("Four Note"), int(Voicing::FOUR_NOTE));
-      voicingSelectWidget->voicingBox->addItem(tr("Three Note"), int(Voicing::THREE_NOTE));
-
-      voicingSelectWidget->durationBox->clear();
-      voicingSelectWidget->durationBox->addItem(tr("Until Next Chord Symbol"), int(HDuration::UNTIL_NEXT_CHORD_SYMBOL));
-      voicingSelectWidget->durationBox->addItem(tr("Until End of Measure"), int(HDuration::STOP_AT_MEASURE_END));
-      voicingSelectWidget->durationBox->addItem(tr("Chord/Rest Duration"), int(HDuration::SEGMENT_DURATION));
-
-      // keep in sync with implementation in Page::replaceTextMacros (page.cpp)
-      // jumping thru hoops here to make the job of translators easier, yet have a nice display
-      QString toolTipHeaderFooter
-            = QString("<html><head></head><body><p><b>")
-            + tr("Special symbols in header/footer")
-            + QString("</b></p>")
-            + QString("<table><tr><td>$p</td><td>-</td><td><i>")
-            + tr("Page number, except on first page")
-            + QString("</i></td></tr><tr><td>$N</td><td>-</td><td><i>")
-            + tr("Page number, if there is more than one page")
-            + QString("</i></td></tr><tr><td>$P</td><td>-</td><td><i>")
-            + tr("Page number, on all pages")
-            + QString("</i></td></tr><tr><td>$n</td><td>-</td><td><i>")
-            + tr("Number of pages")
-            + QString("</i></td></tr><tr><td>$f</td><td>-</td><td><i>")
-            + tr("File name")
-            + QString("</i></td></tr><tr><td>$F</td><td>-</td><td><i>")
-            + tr("File path+name")
-            + QString("</i></td></tr><tr><td>$i</td><td>-</td><td><i>")
-            + tr("Part name, except on first page")
-            + QString("</i></td></tr><tr><td>$I</td><td>-</td><td><i>")
-            + tr("Part name, on all pages")
-            + QString("</i></td></tr><tr><td>$d</td><td>-</td><td><i>")
-            + tr("Current date")
-            + QString("</i></td></tr><tr><td>$D</td><td>-</td><td><i>")
-            + tr("Creation date")
-            + QString("</i></td></tr><tr><td>$m</td><td>-</td><td><i>")
-            + tr("Last modification time")
-            + QString("</i></td></tr><tr><td>$M</td><td>-</td><td><i>")
-            + tr("Last modification date")
-            + QString("</i></td></tr><tr><td>$C</td><td>-</td><td><i>")
-            + tr("Copyright, on first page only")
-            + QString("</i></td></tr><tr><td>$c</td><td>-</td><td><i>")
-            + tr("Copyright, on all pages")
-            + QString("</i></td></tr><tr><td>$v</td><td>-</td><td><i>")
-            + tr("MuseScore version this score was last saved with")
-            + QString("</i></td></tr><tr><td>$r</td><td>-</td><td><i>")
-            + tr("MuseScore revision this score was last saved with")
-            + QString("</i></td></tr><tr><td>$$</td><td>-</td><td><i>")
-            + tr("The $ sign itself")
-            + QString("</i></td></tr><tr><td>$:tag:</td><td>-</td><td><i>")
-            + tr("Metadata tag, see below")
-            + QString("</i></td></tr></table><p>")
-            + tr("Available metadata tags and their current values")
-            + QString("<br />")
-            + tr("(in File > Score Properties…):")
-            + QString("</p><table>");
-      // show all tags for current score/part, see also Score::init()
-      if (!cs->isMaster()) {
-            QMapIterator<QString, QString> j(cs->masterScore()->metaTags());
-            while (j.hasNext()) {
-                  j.next();
-                  toolTipHeaderFooter += QString("<tr><td>%1</td><td>-</td><td>%2</td></tr>").arg(j.key()).arg(j.value());
-                  }
-            }
-      QMapIterator<QString, QString> i(cs->metaTags());
-      while (i.hasNext()) {
-            i.next();
-            toolTipHeaderFooter += QString("<tr><td>%1</td><td>-</td><td>%2</td></tr>").arg(i.key()).arg(i.value());
-            }
-      toolTipHeaderFooter += QString("</table></body></html>");
-      showHeader->setToolTip(toolTipHeaderFooter);
-      showHeader->setToolTipDuration(5000); // leaving the default value of -1 calculates the duration automatically and it takes too long
-      showFooter->setToolTip(toolTipHeaderFooter);
-      showFooter->setToolTipDuration(5000);
-
-      textStyleFrameType->clear();
-      textStyleFrameType->addItem(tr("None", "no frame for text"), int(FrameType::NO_FRAME));
-      textStyleFrameType->addItem(tr("Rectangle"), int(FrameType::SQUARE));
-      textStyleFrameType->addItem(tr("Circle"), int(FrameType::CIRCLE));
-
-      buttonApplyToAllParts->setText(tr("Apply to all Parts"));
-      }
 //---------------------------------------------------------
 //   showEvent
 //---------------------------------------------------------
