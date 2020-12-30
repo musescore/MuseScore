@@ -6,6 +6,7 @@
 .directory
 build.release
 build.debug
+build.install
 build.qtc
 build-*
 win32build
