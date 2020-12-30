@@ -110,7 +110,7 @@ namespace Ms {
 
 void Element::spatiumChanged(qreal oldValue, qreal newValue)
       {
-      if (sizeIsSpatiumDependent())
+      if (offsetIsSpatiumDependent())
             _offset *= (newValue / oldValue);
       }
 
@@ -121,7 +121,7 @@ void Element::spatiumChanged(qreal oldValue, qreal newValue)
 
 void Element::localSpatiumChanged(qreal oldValue, qreal newValue)
       {
-      if (sizeIsSpatiumDependent())
+      if (offsetIsSpatiumDependent())
             _offset *= (newValue / oldValue);
       }
 
@@ -138,6 +138,15 @@ qreal Element::spatium() const
             Staff* s = staff();
             return s ? s->spatium(this) : score()->spatium();
             }
+      }
+
+//---------------------------------------------------------
+//   offsetIsSpatiumDependent
+//---------------------------------------------------------
+
+bool Element::offsetIsSpatiumDependent() const
+      {
+      return sizeIsSpatiumDependent() || (parent() && !parent()->isBox());
       }
 
 //---------------------------------------------------------

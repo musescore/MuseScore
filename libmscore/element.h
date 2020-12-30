@@ -223,6 +223,7 @@ class Element : public ScoreElement {
 
       virtual bool sizeIsSpatiumDependent() const override { return !flag(ElementFlag::SIZE_SPATIUM_DEPENDENT); }
       void setSizeIsSpatiumDependent(bool v)  { setFlag(ElementFlag::SIZE_SPATIUM_DEPENDENT, !v); }
+      virtual bool offsetIsSpatiumDependent() const override;
 
       Placement placement() const             { return Placement(!flag(ElementFlag::PLACE_ABOVE));  }
       void setPlacement(Placement val)        { setFlag(ElementFlag::PLACE_ABOVE, !bool(val)); }

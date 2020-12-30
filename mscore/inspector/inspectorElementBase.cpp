@@ -45,7 +45,7 @@ InspectorElementBase::InspectorElementBase(QWidget* parent)
 void InspectorElementBase::setElement()
       {
       InspectorBase::setElement();
-      if (inspector->element()->sizeIsSpatiumDependent())
+      if (inspector->element()->offsetIsSpatiumDependent())
             e.offset->setSuffix("sp");
       else
             e.offset->setSuffix("mm");

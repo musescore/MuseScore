@@ -370,7 +370,7 @@ void ScoreElement::readProperty(XmlReader& e, Pid id)
                   v = v.toPointF() * score()->spatium();
                   break;
             case P_TYPE::POINT_SP_MM:
-                  if (sizeIsSpatiumDependent())
+                  if (offsetIsSpatiumDependent())
                         v = v.toPointF() * score()->spatium();
                   else
                         v = v.toPointF() * DPMM;
@@ -448,7 +448,7 @@ void ScoreElement::writeProperty(XmlWriter& xml, Pid pid) const
                   if ((qAbs(p1.x() - p2.x()) < 0.0001) && (qAbs(p1.y() - p2.y()) < 0.0001))
                         return;
                   }
-            qreal q = sizeIsSpatiumDependent() ? score()->spatium() : DPMM;
+            qreal q = offsetIsSpatiumDependent() ? score()->spatium() : DPMM;
             p = QVariant(p1/q);
             d = QVariant();
             }
@@ -883,7 +883,7 @@ QVariant ScoreElement::styleValue(Pid pid, Sid sid) const
                   }
             case P_TYPE::POINT_SP_MM: {
                   QPointF val = score()->styleV(sid).toPointF();
-                  if (sizeIsSpatiumDependent()) {
+                  if (offsetIsSpatiumDependent()) {
                         val *= score()->spatium();
                         if (isElement()) {
                               const Element* e = toElement(this);
