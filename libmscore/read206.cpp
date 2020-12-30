@@ -2068,6 +2068,25 @@ static void convertDoubleArticulations(Chord* chord, XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   fixTies
+//---------------------------------------------------------
+
+static void fixTies(Chord* chord)
+      {
+      std::vector<Note*> notes;
+      for (Note* note : chord->notes()) {
+            Tie* tie = note->tieBack();
+            if (tie && tie->startNote()->pitch() != note->pitch()) {
+                  notes.push_back(tie->startNote());
+                  }
+            }
+      for (Note* note : notes) {
+            Note* endNote = chord->findNote(note->pitch());
+            note->tieFor()->setEndNote(endNote);
+            }
+      }
+
+//---------------------------------------------------------
 //   readChord
 //---------------------------------------------------------
 
@@ -2106,6 +2125,7 @@ static void readChord(Chord* chord, XmlReader& e)
                   e.unknown();
             }
       convertDoubleArticulations(chord, e);
+      fixTies(chord);
       }
 
 //---------------------------------------------------------
