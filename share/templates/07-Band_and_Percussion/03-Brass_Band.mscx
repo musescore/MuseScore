@@ -7,8 +7,7 @@
     <Style>
       <enableVerticalSpread>1</enableVerticalSpread>
       <useStandardNoteNames>0</useStandardNoteNames>
-      <enableIndentationOnFirstSystem>1</enableIndentationOnFirstSystem>
-      <Spatium>1.214</Spatium>
+      <Spatium>1.2</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -25,10 +24,10 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Order id="brass-band" customised="1">
+    <Order id="brass-band" customized="1">
       <name>Brass Band</name>
       <instrument id="baritone-horn">
-        <family id="saxhorns">Saxhorns</family>
+        <family id="baritone-horns">Baritone Horns</family>
         </instrument>
       <instrument id="bass-trombone">
         <family id="trombones">Trombones</family>
@@ -46,13 +45,10 @@
         <family id="cornets">Cornets</family>
         </instrument>
       <instrument id="euphonium">
-        <family id="tubas">Tubas</family>
-        </instrument>
-      <instrument id="euphonium-treble">
         <family id="euphoniums">Euphoniums</family>
         </instrument>
       <instrument id="flugelhorn">
-        <family id="saxhorns">Saxhorns</family>
+        <family id="flugelhorns">Flugelhorns</family>
         </instrument>
       <instrument id="timpani">
         <family id="timpani">Timpani</family>
@@ -72,7 +68,7 @@
         <family>horns</family>
         </section>
       <section id="baritones" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="false">
-        <family>saxhorns</family>
+        <family>baritone-horns</family>
         </section>
       <section id="trombones" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="false">
         <family>trombones</family>
@@ -86,7 +82,7 @@
       <section id="percussion" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="false">
         <family>timpani</family>
         <family>keyboard-percussion</family>
-        <family>drumset</family>
+        <family>drums</family>
         <unsorted group="unpitched-percussion"/>
         </section>
       <unsorted/>
@@ -152,12 +148,16 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel name="open">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="56"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="mute">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="59"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -209,12 +209,16 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel name="open">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="56"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="mute">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="59"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -266,12 +270,16 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel name="open">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="56"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="mute">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="59"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -323,12 +331,16 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel name="open">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="56"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="mute">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="59"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -379,12 +391,16 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel name="open">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="56"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="mute">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="59"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -437,8 +453,10 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="56"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -490,8 +508,10 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="60"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -543,8 +563,10 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="60"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -595,8 +617,10 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="60"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -653,8 +677,10 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="60"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -709,8 +735,10 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="60"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -767,8 +795,10 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="57"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -824,8 +854,10 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="57"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -876,8 +908,10 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="57"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -888,6 +922,7 @@
           </StaffType>
         <defaultConcertClef>F</defaultConcertClef>
         <defaultTransposingClef>G</defaultTransposingClef>
+        <bracket type="0" span="1" col="0"/>
         </Staff>
       <trackName>Euphonium (Treble Clef)</trackName>
       <Instrument id="euphonium">
@@ -932,8 +967,10 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="58"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -990,8 +1027,10 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="58"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -1046,8 +1085,10 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="58"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -1101,6 +1142,7 @@
           </Articulation>
         <Channel>
           <program value="47"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -1306,6 +1348,7 @@
           <controller ctrl="0" value="1"/>
           <controller ctrl="32" value="0"/>
           <program value="48"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>

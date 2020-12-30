@@ -27,17 +27,20 @@
       <pedalFontFace>MuseJazz Text</pedalFontFace>
       <maxChordShiftAbove>3</maxChordShiftAbove>
       <maxChordShiftBelow>3</maxChordShiftBelow>
+      <chordSymbolPosAbove x="0" y="-2.5"/>
       <chordSymbolBPosAbove x="0" y="-5.5"/>
       <chordSymbolAFontFace>MuseJazz Text</chordSymbolAFontFace>
       <chordSymbolAFontSize>15</chordSymbolAFontSize>
+      <chordSymbolAAlign>left,baseline</chordSymbolAAlign>
       <chordSymbolBFontFace>MuseJazz Text</chordSymbolBFontFace>
       <maxFretShiftAbove>3</maxFretShiftAbove>
       <maxFretShiftBelow>3</maxFretShiftBelow>
+      <chordSymbolBFontSize>12</chordSymbolBFontSize>
+      <chordSymbolBAlign>left,baseline</chordSymbolBAlign>
       <showMeasureNumber>0</showMeasureNumber>
       <useStandardNoteNames>0</useStandardNoteNames>
       <chordStyle>jazz</chordStyle>
       <chordDescriptionFile>chords_jazz.xml</chordDescriptionFile>
-      <enableIndentationOnFirstSystem>1</enableIndentationOnFirstSystem>
       <slurEndWidth>0.12</slurEndWidth>
       <slurMidWidth>0.25</slurMidWidth>
       <musicalSymbolFont>MuseJazz</musicalSymbolFont>
@@ -107,57 +110,27 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Jazz Combo</metaTag>
-    <Order id="jazz-combo" customised="1">
+    <Order id="jazz-combo" customized="1">
       <name>Jazz Combo</name>
-      <instrument id="5-string-electric-bass">
-        <family id="basses">Basses</family>
-        </instrument>
-      <instrument id="5-string-electric-bass-high-c">
-        <family id="basses">Basses</family>
-        </instrument>
-      <instrument id="6-string-electric-bass">
-        <family id="basses">Basses</family>
-        </instrument>
-      <instrument id="7-string-guitar">
-        <family id="guitars">Guitars</family>
-        </instrument>
       <instrument id="acoustic-bass">
-        <family id="plucked-strings">Plucked Strings</family>
+        <family id="bass-guitars">Bass Guitars</family>
         </instrument>
       <instrument id="alto-saxophone">
         <family id="saxophones">Saxophones</family>
-        </instrument>
-      <instrument id="bass-guitar">
-        <family id="basses">Basses</family>
         </instrument>
       <instrument id="bb-trumpet">
         <family id="trumpets">Trumpets</family>
         </instrument>
       <instrument id="contrabass">
-        <family id="basses">Basses</family>
+        <family id="contrabasses">Basses</family>
         </instrument>
       <instrument id="double-bass">
-        <family id="basses">Basses</family>
+        <family id="contrabasses">Basses</family>
         </instrument>
       <instrument id="drumset">
         <family id="drums">Drums</family>
         </instrument>
-      <instrument id="electric-bass">
-        <family id="basses">Basses</family>
-        </instrument>
       <instrument id="electric-guitar">
-        <family id="plucked-strings">Plucked Strings</family>
-        </instrument>
-      <instrument id="electric-guitar-treble-clef">
-        <family id="guitars">Guitars</family>
-        </instrument>
-      <instrument id="guitar-nylon-treble-clef">
-        <family id="guitars">Guitars</family>
-        </instrument>
-      <instrument id="guitar-steel">
-        <family id="guitars">Guitars</family>
-        </instrument>
-      <instrument id="guitar-steel-tablature">
         <family id="guitars">Guitars</family>
         </instrument>
       <instrument id="piano">
@@ -171,16 +144,19 @@
         </instrument>
       <soloists/>
       <family>voices</family>
+      <family>flutes</family>
+      <family>clarinets</family>
       <family>trumpets</family>
       <family>saxophones</family>
       <family>trombones</family>
+      <unsorted/>
       <family>guitars</family>
       <family>keyboards</family>
-      <family>basses</family>
-      <family>drumset</family>
+      <family>bass-guitars</family>
+      <family>contrabasses</family>
+      <family>drums</family>
       <unsorted group="pitched-percussion"/>
       <unsorted group="unpitched-percussion"/>
-      <unsorted/>
       </Order>
     <Part>
       <Staff id="1">
@@ -241,12 +217,16 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel name="open">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="56"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="mute">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="59"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -297,8 +277,10 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="65"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -353,8 +335,10 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="66"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -405,8 +389,10 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="57"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -479,21 +465,27 @@
           </Articulation>
         <Channel>
           <program value="27"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="harmonics">
           <program value="31"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="distortion">
           <program value="30"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="overdriven">
           <program value="29"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="mute">
           <program value="28"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="jazz">
           <program value="26"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -552,6 +544,7 @@
           </Articulation>
         <Channel>
           <program value="0"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -614,18 +607,23 @@
           </Articulation>
         <Channel name="pizzicato">
           <program value="32"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="arco">
           <program value="43"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="tremolo">
           <program value="44"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="slap">
           <program value="36"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="pop">
           <program value="37"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -859,6 +857,7 @@
           <controller ctrl="0" value="1"/>
           <controller ctrl="32" value="0"/>
           <program value="0"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>

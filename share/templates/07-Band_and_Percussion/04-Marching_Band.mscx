@@ -7,7 +7,6 @@
     <Style>
       <enableVerticalSpread>1</enableVerticalSpread>
       <useStandardNoteNames>0</useStandardNoteNames>
-      <enableIndentationOnFirstSystem>1</enableIndentationOnFirstSystem>
       <Spatium>0.85</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -25,16 +24,13 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Order id="marching-band" customised="1">
+    <Order id="marching-band" customized="1">
       <name>Marching Band</name>
       <instrument id="alto-saxophone">
         <family id="saxophones">Saxophones</family>
         </instrument>
       <instrument id="baritone-horn">
-        <family id="saxhorns">Saxhorns</family>
-        </instrument>
-      <instrument id="baritone-horn-treble">
-        <family id="baritones">Baritones</family>
+        <family id="baritone-horns">Baritone Horns</family>
         </instrument>
       <instrument id="baritone-saxophone">
         <family id="saxophones">Saxophones</family>
@@ -48,12 +44,6 @@
       <instrument id="bb-trumpet">
         <family id="trumpets">Trumpets</family>
         </instrument>
-      <instrument id="drumset">
-        <family id="drumset">Drumset</family>
-        </instrument>
-      <instrument id="flugelhorn">
-        <family id="flugelhorn">Flugelhorn</family>
-        </instrument>
       <instrument id="flute">
         <family id="flutes">Flutes</family>
         </instrument>
@@ -64,19 +54,19 @@
         <family id="horns">Horns</family>
         </instrument>
       <instrument id="marching-bass-drums">
-        <family id="unpitched-percussion">Unpitched Percussion</family>
+        <family id="batterie">Batterie</family>
         </instrument>
       <instrument id="marching-cymbals">
-        <family id="unpitched-percussion">Unpitched Percussion</family>
+        <family id="batterie">Batterie</family>
         </instrument>
       <instrument id="marching-snare">
-        <family id="unpitched-percussion">Unpitched Percussion</family>
+        <family id="batterie">Batterie</family>
         </instrument>
       <instrument id="marching-tenor-drums">
-        <family id="unpitched-percussion">Unpitched Percussion</family>
+        <family id="batterie">Batterie</family>
         </instrument>
       <instrument id="marimba">
-        <family id="marimba">Marimba</family>
+        <family id="marimbas">Marimbas</family>
         </instrument>
       <instrument id="marimba-single">
         <family id="keyboard-percussion">Keyboard Percussion</family>
@@ -85,7 +75,7 @@
         <family id="horns">Horns</family>
         </instrument>
       <instrument id="percussion">
-        <family id="percussion">Percussion</family>
+        <family id="other-percussion">Other Percussion</family>
         </instrument>
       <instrument id="piccolo">
         <family id="flutes">Flutes</family>
@@ -124,15 +114,15 @@
         <family>trumpets</family>
         <family>horns</family>
         <family>trombones</family>
-        <family>baritones</family>
+        <family>baritone-horns</family>
         <family>tubas</family>
         </section>
       <unsorted group="brass"/>
       <section id="pitched-percussion" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
         <family>glockenspiel</family>
-        <family>xylophone</family>
-        <family>vibraphone</family>
-        <family>marimba</family>
+        <family>xylophones</family>
+        <family>vibraphones</family>
+        <family>marimbas</family>
         <family>timpani</family>
         <family>percussion</family>
         </section>
@@ -197,6 +187,7 @@
           <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="72"/>
+          <synti>Fluid</synti>
           <midiPort>0</midiPort>
           <midiChannel>0</midiChannel>
           </Channel>
@@ -263,6 +254,7 @@
           <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="73"/>
+          <synti>Fluid</synti>
           <midiPort>0</midiPort>
           <midiChannel>1</midiChannel>
           </Channel>
@@ -320,6 +312,7 @@
           <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="71"/>
+          <synti>Fluid</synti>
           <midiPort>0</midiPort>
           <midiChannel>2</midiChannel>
           </Channel>
@@ -376,6 +369,7 @@
           <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="71"/>
+          <synti>Fluid</synti>
           <midiPort>0</midiPort>
           <midiChannel>3</midiChannel>
           </Channel>
@@ -435,6 +429,7 @@
           <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="71"/>
+          <synti>Fluid</synti>
           <midiPort>0</midiPort>
           <midiChannel>4</midiChannel>
           </Channel>
@@ -493,6 +488,7 @@
           <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="65"/>
+          <synti>Fluid</synti>
           <midiPort>0</midiPort>
           <midiChannel>5</midiChannel>
           </Channel>
@@ -549,6 +545,7 @@
           <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="65"/>
+          <synti>Fluid</synti>
           <midiPort>0</midiPort>
           <midiChannel>6</midiChannel>
           </Channel>
@@ -609,6 +606,7 @@
           <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="66"/>
+          <synti>Fluid</synti>
           <midiPort>0</midiPort>
           <midiChannel>7</midiChannel>
           </Channel>
@@ -668,6 +666,7 @@
           <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="67"/>
+          <synti>Fluid</synti>
           <midiPort>0</midiPort>
           <midiChannel>8</midiChannel>
           </Channel>
@@ -726,6 +725,7 @@
           <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="56"/>
+          <synti>Fluid</synti>
           <midiPort>0</midiPort>
           <midiChannel>10</midiChannel>
           </Channel>
@@ -733,6 +733,7 @@
           <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="59"/>
+          <synti>Fluid</synti>
           <midiPort>0</midiPort>
           <midiChannel>11</midiChannel>
           </Channel>
@@ -789,6 +790,7 @@
           <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="56"/>
+          <synti>Fluid</synti>
           <midiPort>0</midiPort>
           <midiChannel>12</midiChannel>
           </Channel>
@@ -796,6 +798,7 @@
           <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="59"/>
+          <synti>Fluid</synti>
           <midiPort>0</midiPort>
           <midiChannel>13</midiChannel>
           </Channel>
@@ -852,6 +855,7 @@
           <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="60"/>
+          <synti>Fluid</synti>
           <midiPort>0</midiPort>
           <midiChannel>14</midiChannel>
           </Channel>
@@ -908,6 +912,7 @@
           <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="57"/>
+          <synti>Fluid</synti>
           <midiPort>0</midiPort>
           <midiChannel>15</midiChannel>
           </Channel>
@@ -964,6 +969,7 @@
           <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="60"/>
+          <synti>Fluid</synti>
           <midiPort>1</midiPort>
           <midiChannel>0</midiChannel>
           </Channel>
@@ -1028,8 +1034,10 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="58"/>
+          <synti>Fluid</synti>
           <midiPort>1</midiPort>
           <midiChannel>8</midiChannel>
           </Channel>
@@ -1089,6 +1097,7 @@
           </Articulation>
         <Channel>
           <program value="9"/>
+          <synti>Fluid</synti>
           <midiPort>1</midiPort>
           <midiChannel>2</midiChannel>
           </Channel>
@@ -1147,6 +1156,7 @@
           </Articulation>
         <Channel>
           <program value="13"/>
+          <synti>Fluid</synti>
           <midiPort>1</midiPort>
           <midiChannel>3</midiChannel>
           </Channel>
@@ -1199,6 +1209,7 @@
           </Articulation>
         <Channel>
           <program value="11"/>
+          <synti>Fluid</synti>
           <midiPort>1</midiPort>
           <midiChannel>4</midiChannel>
           </Channel>
@@ -1265,6 +1276,7 @@
           </Articulation>
         <Channel>
           <program value="12"/>
+          <synti>Fluid</synti>
           <midiPort>1</midiPort>
           <midiChannel>5</midiChannel>
           </Channel>
@@ -1330,6 +1342,7 @@
           </Articulation>
         <Channel>
           <program value="12"/>
+          <synti>Fluid</synti>
           <midiPort>1</midiPort>
           <midiChannel>6</midiChannel>
           </Channel>
@@ -1384,6 +1397,7 @@
           </Articulation>
         <Channel>
           <program value="47"/>
+          <synti>Fluid</synti>
           <midiPort>1</midiPort>
           <midiChannel>7</midiChannel>
           </Channel>
@@ -1603,6 +1617,7 @@
           <controller ctrl="0" value="1"/>
           <controller ctrl="32" value="0"/>
           <program value="48"/>
+          <synti>Fluid</synti>
           <midiPort>0</midiPort>
           <midiChannel>9</midiChannel>
           </Channel>
@@ -1754,6 +1769,7 @@
           <controller ctrl="0" value="1"/>
           <controller ctrl="32" value="0"/>
           <program value="56"/>
+          <synti>Fluid</synti>
           <midiPort>1</midiPort>
           <midiChannel>9</midiChannel>
           </Channel>
@@ -2003,6 +2019,7 @@
           <controller ctrl="0" value="1"/>
           <controller ctrl="32" value="0"/>
           <program value="96"/>
+          <synti>Fluid</synti>
           <midiPort>2</midiPort>
           <midiChannel>9</midiChannel>
           </Channel>
@@ -2154,6 +2171,7 @@
           <controller ctrl="0" value="1"/>
           <controller ctrl="32" value="0"/>
           <program value="59"/>
+          <synti>Fluid</synti>
           <midiPort>3</midiPort>
           <midiChannel>9</midiChannel>
           </Channel>
@@ -2318,6 +2336,7 @@
           <controller ctrl="0" value="1"/>
           <controller ctrl="32" value="0"/>
           <program value="58"/>
+          <synti>Fluid</synti>
           <midiPort>4</midiPort>
           <midiChannel>9</midiChannel>
           </Channel>
@@ -5292,9 +5311,6 @@
     <Staff id="15">
       <Measure>
         <voice>
-          <KeySig>
-            <accidental>0</accidental>
-            </KeySig>
           <TimeSig>
             <sigN>4</sigN>
             <sigD>4</sigD>

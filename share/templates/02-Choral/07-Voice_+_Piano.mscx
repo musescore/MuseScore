@@ -7,7 +7,7 @@
     <Style>
       <enableVerticalSpread>1</enableVerticalSpread>
       <useStandardNoteNames>0</useStandardNoteNames>
-      <Spatium>1.76389</Spatium>
+      <Spatium>1.75</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -24,7 +24,7 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Order id="choir" customised="1">
+    <Order id="choir" customized="1">
       <name>Choir</name>
       <instrument id="piano">
         <family id="keyboards">Keyboards</family>

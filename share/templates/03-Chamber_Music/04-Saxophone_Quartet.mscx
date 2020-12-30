@@ -8,8 +8,7 @@
       <enableVerticalSpread>1</enableVerticalSpread>
       <useStandardNoteNames>0</useStandardNoteNames>
       <concertPitch>1</concertPitch>
-      <enableIndentationOnFirstSystem>1</enableIndentationOnFirstSystem>
-      <Spatium>1.76389</Spatium>
+      <Spatium>1.75</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -26,7 +25,7 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Order id="woodwind-ensemble" customised="1">
+    <Order id="woodwind-ensemble" customized="1">
       <name>Woodwind Ensemble</name>
       <instrument id="alto-saxophone">
         <family id="saxophones">Saxophones</family>
@@ -112,8 +111,10 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="64"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -164,8 +165,10 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="65"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -220,8 +223,10 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="66"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -275,8 +280,10 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="67"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>

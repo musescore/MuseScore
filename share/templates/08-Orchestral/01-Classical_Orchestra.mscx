@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="3.02">
+  <programVersion>3.6.0</programVersion>
+  <programRevision></programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -8,8 +10,7 @@
       <staffUpperBorder>10</staffUpperBorder>
       <enableVerticalSpread>1</enableVerticalSpread>
       <useStandardNoteNames>0</useStandardNoteNames>
-      <enableIndentationOnFirstSystem>1</enableIndentationOnFirstSystem>
-      <Spatium>1.764</Spatium>
+      <Spatium>1.75</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -26,8 +27,8 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Order id="orchestra" customised="1">
-      <name>Orchestra</name>
+    <Order id="orchestral" customized="1">
+      <name>Orchestral</name>
       <instrument id="bassoon">
         <family id="bassoons">Bassoons</family>
         </instrument>
@@ -39,9 +40,6 @@
         </instrument>
       <instrument id="flute">
         <family id="flutes">Flutes</family>
-        </instrument>
-      <instrument id="harp">
-        <family id="harps">Harps</family>
         </instrument>
       <instrument id="horn">
         <family id="horns">Horns</family>
@@ -155,8 +153,10 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="73"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -206,8 +206,10 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="68"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -259,8 +261,10 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="71"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -311,8 +315,10 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="70"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -372,8 +378,10 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="60"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -424,12 +432,16 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel name="open">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="56"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="mute">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="59"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -481,6 +493,7 @@
           </Articulation>
         <Channel>
           <program value="47"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -530,15 +543,20 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel name="arco">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="48"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="pizzicato">
           <program value="45"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="tremolo">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="44"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -587,15 +605,20 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel name="arco">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="48"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="pizzicato">
           <program value="45"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="tremolo">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="44"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -646,15 +669,20 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel name="arco">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="48"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="pizzicato">
           <program value="45"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="tremolo">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="44"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -705,15 +733,20 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel name="arco">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="48"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="pizzicato">
           <program value="45"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="tremolo">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="44"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -768,15 +801,20 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel name="arco">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="48"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="pizzicato">
           <program value="45"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="tremolo">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="44"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>

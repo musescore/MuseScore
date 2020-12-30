@@ -7,7 +7,6 @@
     <Style>
       <enableVerticalSpread>1</enableVerticalSpread>
       <useStandardNoteNames>0</useStandardNoteNames>
-      <enableIndentationOnFirstSystem>1</enableIndentationOnFirstSystem>
       <Spatium>1.45</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -95,6 +94,7 @@
           </Articulation>
         <Channel>
           <program value="4"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -153,6 +153,7 @@
           </Articulation>
         <Channel>
           <program value="33"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -205,6 +206,7 @@
           </Articulation>
         <Channel>
           <program value="11"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -255,6 +257,7 @@
           </Articulation>
         <Channel>
           <program value="11"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -307,6 +310,7 @@
           </Articulation>
         <Channel>
           <program value="12"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -358,6 +362,7 @@
           </Articulation>
         <Channel>
           <program value="12"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -409,6 +414,7 @@
           </Articulation>
         <Channel>
           <program value="12"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -466,6 +472,7 @@
           </Articulation>
         <Channel>
           <program value="9"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -522,6 +529,7 @@
           </Articulation>
         <Channel>
           <program value="13"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -756,6 +764,7 @@
           <controller ctrl="0" value="1"/>
           <controller ctrl="32" value="0"/>
           <program value="0"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -961,6 +970,7 @@
           <controller ctrl="0" value="1"/>
           <controller ctrl="32" value="0"/>
           <program value="48"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -1102,6 +1112,7 @@
           <controller ctrl="0" value="1"/>
           <controller ctrl="32" value="0"/>
           <program value="56"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -1319,6 +1330,7 @@
           <controller ctrl="0" value="1"/>
           <controller ctrl="32" value="0"/>
           <program value="95"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -1452,6 +1464,7 @@
           <controller ctrl="0" value="1"/>
           <controller ctrl="32" value="0"/>
           <program value="57"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -1605,6 +1618,7 @@
           <controller ctrl="0" value="1"/>
           <controller ctrl="32" value="0"/>
           <program value="58"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>

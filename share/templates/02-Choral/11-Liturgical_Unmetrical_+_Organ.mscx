@@ -8,8 +8,7 @@
       <enableVerticalSpread>1</enableVerticalSpread>
       <barNoteDistance>1.2</barNoteDistance>
       <useStandardNoteNames>0</useStandardNoteNames>
-      <enableIndentationOnFirstSystem>1</enableIndentationOnFirstSystem>
-      <Spatium>1.76389</Spatium>
+      <Spatium>1.75</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -26,7 +25,7 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Order id="choir" customised="1">
+    <Order id="choir" customized="1">
       <name>Choir</name>
       <instrument id="pipe-organ">
         <family id="organs">Organs</family>

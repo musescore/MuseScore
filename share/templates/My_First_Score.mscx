@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="3.02">
+  <programVersion>3.6.0</programVersion>
+  <programRevision></programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -8,7 +10,7 @@
       <enableVerticalSpread>1</enableVerticalSpread>
       <lastSystemFillLimit>0</lastSystemFillLimit>
       <useStandardNoteNames>0</useStandardNoteNames>
-      <Spatium>1.76389</Spatium>
+      <Spatium>1.75</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -25,14 +27,8 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Title</metaTag>
-    <Order id="orchestra" customised="1">
-      <name>Orchestra</name>
-      <instrument id="harp">
-        <family id="harps">Harps</family>
-        </instrument>
-      <instrument id="timpani">
-        <family id="timpani">Timpani</family>
-        </instrument>
+    <Order id="orchestral" customized="1">
+      <name>Orchestral</name>
       <section id="woodwind" brackets="true" showSystemMarkings="true" barLineSpan="true" thinBrackets="true">
         <family>flutes</family>
         <family>oboes</family>
@@ -132,6 +128,7 @@
           </Articulation>
         <Channel>
           <program value="0"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>

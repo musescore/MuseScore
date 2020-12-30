@@ -7,8 +7,7 @@
     <Style>
       <enableVerticalSpread>1</enableVerticalSpread>
       <useStandardNoteNames>0</useStandardNoteNames>
-      <enableIndentationOnFirstSystem>1</enableIndentationOnFirstSystem>
-      <Spatium>1.76389</Spatium>
+      <Spatium>1.75</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -175,303 +174,12 @@
           <controller ctrl="0" value="1"/>
           <controller ctrl="32" value="0"/>
           <program value="56"/>
-          <midiPort>0</midiPort>
-          <midiChannel>9</midiChannel>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
     <Part>
       <Staff id="2">
-        <StaffType group="percussion">
-          <name>perc5Line</name>
-          <keysig>0</keysig>
-          </StaffType>
-        <defaultClef>PERC</defaultClef>
-        <barLineSpan>1</barLineSpan>
-        </Staff>
-      <trackName>Bass Drums</trackName>
-      <Instrument id="bass-drum">
-        <longName>Bass Drums</longName>
-        <shortName>B.D.</shortName>
-        <trackName>Bass Drums</trackName>
-        <instrumentId>drum.bass-drum</instrumentId>
-        <useDrumset>1</useDrumset>
-        <Drum pitch="1">
-          <head>normal</head>
-          <line>7</line>
-          <voice>0</voice>
-          <name>Bass Drum 1</name>
-          <stem>1</stem>
-          <shortcut>A</shortcut>
-          </Drum>
-        <Drum pitch="2">
-          <head>cross</head>
-          <line>7</line>
-          <voice>0</voice>
-          <name>Bass Drum 1 Rim Knock</name>
-          <stem>1</stem>
-          <shortcut>B</shortcut>
-          </Drum>
-        <Drum pitch="24">
-          <head>normal</head>
-          <line>5</line>
-          <voice>0</voice>
-          <name>Bass Drum 2</name>
-          <stem>1</stem>
-          <shortcut>C</shortcut>
-          </Drum>
-        <Drum pitch="26">
-          <head>cross</head>
-          <line>5</line>
-          <voice>0</voice>
-          <name>Bass Drum 2 Rim Knock</name>
-          <stem>1</stem>
-          <shortcut>D</shortcut>
-          </Drum>
-        <Drum pitch="48">
-          <head>normal</head>
-          <line>3</line>
-          <voice>0</voice>
-          <name>Bass Drum 3</name>
-          <stem>1</stem>
-          <shortcut>E</shortcut>
-          </Drum>
-        <Drum pitch="50">
-          <head>cross</head>
-          <line>3</line>
-          <voice>0</voice>
-          <name>Bass Drum 3 Rim Knock</name>
-          <stem>1</stem>
-          <shortcut>F</shortcut>
-          </Drum>
-        <Drum pitch="69">
-          <head>normal</head>
-          <line>1</line>
-          <voice>0</voice>
-          <name>Bass Drum 4</name>
-          <stem>1</stem>
-          <shortcut>G</shortcut>
-          </Drum>
-        <Drum pitch="71">
-          <head>cross</head>
-          <line>1</line>
-          <voice>0</voice>
-          <name>Bass Drum 4 Rim Knock</name>
-          <stem>1</stem>
-          </Drum>
-        <Drum pitch="96">
-          <head>normal</head>
-          <line>-1</line>
-          <voice>0</voice>
-          <name>Bass Drum 5</name>
-          <stem>1</stem>
-          </Drum>
-        <Drum pitch="98">
-          <head>cross</head>
-          <line>-1</line>
-          <voice>0</voice>
-          <name>Bass Drum 5 Rim Knock</name>
-          <stem>1</stem>
-          </Drum>
-        <clef>PERC</clef>
-        <Articulation>
-          <velocity>100</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
-        <Articulation name="staccatissimo">
-          <velocity>100</velocity>
-          <gateTime>33</gateTime>
-          </Articulation>
-        <Articulation name="staccato">
-          <velocity>100</velocity>
-          <gateTime>50</gateTime>
-          </Articulation>
-        <Articulation name="portato">
-          <velocity>100</velocity>
-          <gateTime>67</gateTime>
-          </Articulation>
-        <Articulation name="tenuto">
-          <velocity>100</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
-        <Articulation name="marcato">
-          <velocity>120</velocity>
-          <gateTime>67</gateTime>
-          </Articulation>
-        <Articulation name="sforzato">
-          <velocity>130</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
-        <Articulation name="umarcato">
-          <velocity>500</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
-        <Channel>
-          <controller ctrl="0" value="1"/>
-          <controller ctrl="32" value="0"/>
-          <program value="57"/>
-          <midiPort>2</midiPort>
-          <midiChannel>9</midiChannel>
-          </Channel>
-        </Instrument>
-      </Part>
-    <Part>
-      <Staff id="3">
-        <StaffType group="percussion">
-          <name>perc5Line</name>
-          <keysig>0</keysig>
-          </StaffType>
-        <defaultClef>PERC</defaultClef>
-        </Staff>
-      <trackName>Cymbals</trackName>
-      <Instrument id="cymbal">
-        <longName>Cymbals</longName>
-        <shortName>Cym.</shortName>
-        <trackName>Cymbals</trackName>
-        <instrumentId>metal.cymbal.crash</instrumentId>
-        <useDrumset>1</useDrumset>
-        <Drum pitch="72">
-          <head>normal</head>
-          <line>4</line>
-          <voice>0</voice>
-          <name>Full Crash</name>
-          <stem>1</stem>
-          <shortcut>A</shortcut>
-          </Drum>
-        <Drum pitch="74">
-          <head>normal</head>
-          <line>4</line>
-          <voice>0</voice>
-          <name>Half Crash</name>
-          <stem>1</stem>
-          <shortcut>B</shortcut>
-          </Drum>
-        <Drum pitch="76">
-          <head>cross</head>
-          <line>4</line>
-          <voice>0</voice>
-          <name>High Hat</name>
-          <stem>1</stem>
-          <shortcut>C</shortcut>
-          </Drum>
-        <Drum pitch="77">
-          <head>diamond</head>
-          <line>4</line>
-          <voice>0</voice>
-          <name>Sizzle</name>
-          <stem>1</stem>
-          <shortcut>D</shortcut>
-          </Drum>
-        <Drum pitch="79">
-          <head>normal</head>
-          <line>4</line>
-          <voice>0</voice>
-          <name>Crash-Choke</name>
-          <stem>1</stem>
-          <shortcut>E</shortcut>
-          </Drum>
-        <Drum pitch="81">
-          <head>do</head>
-          <line>4</line>
-          <voice>0</voice>
-          <name>Normal Tap</name>
-          <stem>1</stem>
-          <shortcut>F</shortcut>
-          </Drum>
-        <Drum pitch="83">
-          <head>do</head>
-          <line>4</line>
-          <voice>0</voice>
-          <name>Normal Tap-Choke</name>
-          <stem>1</stem>
-          <shortcut>G</shortcut>
-          </Drum>
-        <Drum pitch="84">
-          <head>do</head>
-          <line>4</line>
-          <voice>0</voice>
-          <name>Bell Tap</name>
-          <stem>1</stem>
-          </Drum>
-        <Drum pitch="86">
-          <head>do</head>
-          <line>4</line>
-          <voice>0</voice>
-          <name>Bell Tap-Choke</name>
-          <stem>1</stem>
-          </Drum>
-        <Drum pitch="88">
-          <head>do</head>
-          <line>4</line>
-          <voice>0</voice>
-          <name>Muted Tap</name>
-          <stem>1</stem>
-          </Drum>
-        <Drum pitch="89">
-          <head>diamond</head>
-          <line>4</line>
-          <voice>0</voice>
-          <name>Smash</name>
-          <stem>1</stem>
-          </Drum>
-        <Drum pitch="91">
-          <head>diamond</head>
-          <line>4</line>
-          <voice>0</voice>
-          <name>Zing</name>
-          <stem>1</stem>
-          </Drum>
-        <Drum pitch="93">
-          <head>diamond</head>
-          <line>4</line>
-          <voice>0</voice>
-          <name>Roll</name>
-          <stem>1</stem>
-          </Drum>
-        <clef>PERC</clef>
-        <Articulation>
-          <velocity>100</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
-        <Articulation name="staccatissimo">
-          <velocity>100</velocity>
-          <gateTime>33</gateTime>
-          </Articulation>
-        <Articulation name="staccato">
-          <velocity>100</velocity>
-          <gateTime>50</gateTime>
-          </Articulation>
-        <Articulation name="portato">
-          <velocity>100</velocity>
-          <gateTime>67</gateTime>
-          </Articulation>
-        <Articulation name="tenuto">
-          <velocity>100</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
-        <Articulation name="marcato">
-          <velocity>120</velocity>
-          <gateTime>67</gateTime>
-          </Articulation>
-        <Articulation name="sforzato">
-          <velocity>130</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
-        <Articulation name="umarcato">
-          <velocity>500</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
-        <Channel>
-          <controller ctrl="0" value="1"/>
-          <controller ctrl="32" value="0"/>
-          <program value="58"/>
-          <midiPort>3</midiPort>
-          <midiChannel>9</midiChannel>
-          </Channel>
-        </Instrument>
-      </Part>
-    <Part>
-      <Staff id="4">
         <StaffType group="percussion">
           <name>perc5Line</name>
           <keysig>0</keysig>
@@ -684,8 +392,295 @@
           <controller ctrl="0" value="1"/>
           <controller ctrl="32" value="0"/>
           <program value="95"/>
-          <midiPort>1</midiPort>
-          <midiChannel>9</midiChannel>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="3">
+        <StaffType group="percussion">
+          <name>perc5Line</name>
+          <keysig>0</keysig>
+          </StaffType>
+        <defaultClef>PERC</defaultClef>
+        <barLineSpan>1</barLineSpan>
+        </Staff>
+      <trackName>Bass Drums</trackName>
+      <Instrument id="bass-drum">
+        <longName>Bass Drums</longName>
+        <shortName>B.D.</shortName>
+        <trackName>Bass Drums</trackName>
+        <instrumentId>drum.bass-drum</instrumentId>
+        <useDrumset>1</useDrumset>
+        <Drum pitch="1">
+          <head>normal</head>
+          <line>7</line>
+          <voice>0</voice>
+          <name>Bass Drum 1</name>
+          <stem>1</stem>
+          <shortcut>A</shortcut>
+          </Drum>
+        <Drum pitch="2">
+          <head>cross</head>
+          <line>7</line>
+          <voice>0</voice>
+          <name>Bass Drum 1 Rim Knock</name>
+          <stem>1</stem>
+          <shortcut>B</shortcut>
+          </Drum>
+        <Drum pitch="24">
+          <head>normal</head>
+          <line>5</line>
+          <voice>0</voice>
+          <name>Bass Drum 2</name>
+          <stem>1</stem>
+          <shortcut>C</shortcut>
+          </Drum>
+        <Drum pitch="26">
+          <head>cross</head>
+          <line>5</line>
+          <voice>0</voice>
+          <name>Bass Drum 2 Rim Knock</name>
+          <stem>1</stem>
+          <shortcut>D</shortcut>
+          </Drum>
+        <Drum pitch="48">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Bass Drum 3</name>
+          <stem>1</stem>
+          <shortcut>E</shortcut>
+          </Drum>
+        <Drum pitch="50">
+          <head>cross</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Bass Drum 3 Rim Knock</name>
+          <stem>1</stem>
+          <shortcut>F</shortcut>
+          </Drum>
+        <Drum pitch="69">
+          <head>normal</head>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Bass Drum 4</name>
+          <stem>1</stem>
+          <shortcut>G</shortcut>
+          </Drum>
+        <Drum pitch="71">
+          <head>cross</head>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Bass Drum 4 Rim Knock</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="96">
+          <head>normal</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Bass Drum 5</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="98">
+          <head>cross</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Bass Drum 5 Rim Knock</name>
+          <stem>1</stem>
+          </Drum>
+        <clef>PERC</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>130</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="umarcato">
+          <velocity>500</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <controller ctrl="0" value="1"/>
+          <controller ctrl="32" value="0"/>
+          <program value="57"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="4">
+        <StaffType group="percussion">
+          <name>perc5Line</name>
+          <keysig>0</keysig>
+          </StaffType>
+        <defaultClef>PERC</defaultClef>
+        </Staff>
+      <trackName>Cymbals</trackName>
+      <Instrument id="cymbal">
+        <longName>Cymbals</longName>
+        <shortName>Cym.</shortName>
+        <trackName>Cymbals</trackName>
+        <instrumentId>metal.cymbal.crash</instrumentId>
+        <useDrumset>1</useDrumset>
+        <Drum pitch="72">
+          <head>normal</head>
+          <line>4</line>
+          <voice>0</voice>
+          <name>Full Crash</name>
+          <stem>1</stem>
+          <shortcut>A</shortcut>
+          </Drum>
+        <Drum pitch="74">
+          <head>normal</head>
+          <line>4</line>
+          <voice>0</voice>
+          <name>Half Crash</name>
+          <stem>1</stem>
+          <shortcut>B</shortcut>
+          </Drum>
+        <Drum pitch="76">
+          <head>cross</head>
+          <line>4</line>
+          <voice>0</voice>
+          <name>High Hat</name>
+          <stem>1</stem>
+          <shortcut>C</shortcut>
+          </Drum>
+        <Drum pitch="77">
+          <head>diamond</head>
+          <line>4</line>
+          <voice>0</voice>
+          <name>Sizzle</name>
+          <stem>1</stem>
+          <shortcut>D</shortcut>
+          </Drum>
+        <Drum pitch="79">
+          <head>normal</head>
+          <line>4</line>
+          <voice>0</voice>
+          <name>Crash-Choke</name>
+          <stem>1</stem>
+          <shortcut>E</shortcut>
+          </Drum>
+        <Drum pitch="81">
+          <head>do</head>
+          <line>4</line>
+          <voice>0</voice>
+          <name>Normal Tap</name>
+          <stem>1</stem>
+          <shortcut>F</shortcut>
+          </Drum>
+        <Drum pitch="83">
+          <head>do</head>
+          <line>4</line>
+          <voice>0</voice>
+          <name>Normal Tap-Choke</name>
+          <stem>1</stem>
+          <shortcut>G</shortcut>
+          </Drum>
+        <Drum pitch="84">
+          <head>do</head>
+          <line>4</line>
+          <voice>0</voice>
+          <name>Bell Tap</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="86">
+          <head>do</head>
+          <line>4</line>
+          <voice>0</voice>
+          <name>Bell Tap-Choke</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="88">
+          <head>do</head>
+          <line>4</line>
+          <voice>0</voice>
+          <name>Muted Tap</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="89">
+          <head>diamond</head>
+          <line>4</line>
+          <voice>0</voice>
+          <name>Smash</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="91">
+          <head>diamond</head>
+          <line>4</line>
+          <voice>0</voice>
+          <name>Zing</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="93">
+          <head>diamond</head>
+          <line>4</line>
+          <voice>0</voice>
+          <name>Roll</name>
+          <stem>1</stem>
+          </Drum>
+        <clef>PERC</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>130</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="umarcato">
+          <velocity>500</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <controller ctrl="0" value="1"/>
+          <controller ctrl="32" value="0"/>
+          <program value="58"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -704,7 +699,6 @@
             <span>1</span>
             </BarLine>
           <TimeSig>
-            <linkedMain/>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
@@ -713,6 +707,7 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -723,6 +718,7 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -733,6 +729,7 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -743,6 +740,7 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -753,69 +751,7 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
-            </BarLine>
-          </voice>
-        </Measure>
-      <Measure>
-        <LayoutBreak>
-          <subtype>line</subtype>
-          </LayoutBreak>
-        <voice>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          <BarLine>
-            </BarLine>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          <BarLine>
-            </BarLine>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          <BarLine>
-            </BarLine>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          <BarLine>
-            </BarLine>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          <BarLine>
-            </BarLine>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          <BarLine>
+            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -829,6 +765,7 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -839,6 +776,7 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -849,6 +787,7 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -859,6 +798,7 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -869,6 +809,7 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -879,6 +820,76 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -890,7 +901,7 @@
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <linkedMain/>
+            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -899,9 +910,9 @@
       <Measure>
         <voice>
           <BarLine>
+            <span>1</span>
             </BarLine>
           <TimeSig>
-            <linkedMain/>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
@@ -910,6 +921,7 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -920,6 +932,7 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -930,6 +943,7 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -940,6 +954,7 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -950,6 +965,7 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -960,6 +976,7 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -970,6 +987,7 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -980,6 +998,7 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -990,6 +1009,7 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1000,6 +1020,7 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1010,6 +1031,7 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1020,6 +1042,7 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1030,6 +1053,7 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1040,6 +1064,7 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1050,6 +1075,7 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1060,6 +1086,7 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1070,6 +1097,7 @@
             <duration>4/4</duration>
             </Rest>
           <BarLine>
+            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1081,7 +1109,7 @@
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <linkedMain/>
+            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1090,10 +1118,8 @@
       <Measure>
         <voice>
           <BarLine>
-            <span>1</span>
             </BarLine>
           <TimeSig>
-            <linkedMain/>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
@@ -1273,7 +1299,6 @@
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <linkedMain/>
             </BarLine>
           </voice>
         </Measure>
@@ -1285,7 +1310,6 @@
             <span>1</span>
             </BarLine>
           <TimeSig>
-            <linkedMain/>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
@@ -1465,7 +1489,6 @@
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <linkedMain/>
             </BarLine>
           </voice>
         </Measure>

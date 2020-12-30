@@ -7,7 +7,7 @@
     <Style>
       <enableVerticalSpread>1</enableVerticalSpread>
       <useStandardNoteNames>0</useStandardNoteNames>
-      <Spatium>1.76389</Spatium>
+      <Spatium>1.75</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -111,12 +111,15 @@
           </Articulation>
         <Channel>
           <program value="24"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="mute">
           <program value="28"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="harmony">
           <program value="24"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
