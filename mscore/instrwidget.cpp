@@ -543,6 +543,26 @@ InstrumentsWidget::InstrumentsWidget(QWidget* parent)
       }
 
 //---------------------------------------------------------
+//   changeEvent
+//---------------------------------------------------------
+
+void InstrumentsWidget::changeEvent(QEvent* event)
+      {
+      QWidget::changeEvent(event);
+      if (event->type() == QEvent::LanguageChange)
+            retranslate();
+      }
+
+//---------------------------------------------------------
+//   retranslate
+//---------------------------------------------------------
+
+void InstrumentsWidget::retranslate()
+      {
+      retranslateUi(this);
+      }
+
+//---------------------------------------------------------
 //   populateGenreCombo
 //---------------------------------------------------------
 

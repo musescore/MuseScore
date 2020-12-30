@@ -45,7 +45,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 InstrumentsDialog::InstrumentsDialog(QWidget* parent)
-   : QDialog(parent)
+   : AbstractDialog(parent)
       {
       setObjectName("Instruments");
       setupUi(this);
@@ -65,6 +65,15 @@ InstrumentsDialog::InstrumentsDialog(QWidget* parent)
 void InstrumentsDialog::init()
       {
       instrumentsWidget->init();
+      }
+
+//---------------------------------------------------------
+//   retranslate
+//---------------------------------------------------------
+
+void InstrumentsDialog::retranslate()
+      {
+      retranslateUi(this);
       }
 
 //---------------------------------------------------------

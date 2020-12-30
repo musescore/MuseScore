@@ -14,6 +14,7 @@
 #define __INSTRDIALOG_H__
 
 #include "ui_instrdialog.h"
+#include "abstractdialog.h"
 
 namespace Ms {
 
@@ -23,7 +24,7 @@ class Score;
 //   InstrumentsDialog
 //---------------------------------------------------------
 
-class InstrumentsDialog : public QDialog, public Ui::InstrumentsDialog {
+class InstrumentsDialog : public AbstractDialog, public Ui::InstrumentsDialog {
       Q_OBJECT
 
       void readSettings();
@@ -33,6 +34,9 @@ class InstrumentsDialog : public QDialog, public Ui::InstrumentsDialog {
       void buttonBoxClicked(QAbstractButton*);
       void on_saveButton_clicked();
       void on_loadButton_clicked();
+      
+   protected:
+      virtual void retranslate();
 
    public:
       InstrumentsDialog(QWidget* parent = 0);

@@ -197,6 +197,10 @@ class InstrumentsWidget : public QWidget, public Ui::InstrumentsWidget {
       void filterInstrumentsByGenre(QTreeWidget *, QString);
       void sortInstruments();
       void updateScoreOrder();
+      
+   protected:
+      virtual void changeEvent(QEvent*);
+      void retranslate();
 
    public slots:
       void buildTemplateList();
