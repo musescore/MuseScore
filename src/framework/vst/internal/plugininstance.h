@@ -41,19 +41,20 @@ class Plugin;
 class PluginInstance
 {
     INJECT_STATIC(vst, IVSTInstanceRegister, vstInstanceRegister)
+    const static Steinberg::int32 MAX_SAMPLES_PERBLOCK = 8192;
 
 public:
     PluginInstance(const Plugin* plugin);
     ~PluginInstance();
     static std::shared_ptr<PluginInstance> create(const Plugin* plugin);
 
-    const Plugin& plugin() const { return m_plugin; }
+    const Plugin& plugin() const;
 
     //! registered id
-    instanceId id() const { return m_id; }
+    instanceId id() const;
 
     //! return true if plugin was instantiated successfully
-    bool isValid() const { return m_valid; }
+    bool isValid() const;
 
     //! create view of plugin's editor
     Steinberg::IPlugView* createView();
@@ -74,7 +75,7 @@ public:
     void flush();
 
     //! returns all parameters of the plugin
-    std::vector<PluginParameter> getParameters() const { return m_parameters; }
+    std::vector<PluginParameter> getParameters() const;
 
     //! return ediable parameters of the plugin. Use this for saving and loading parameters from a project
     std::vector<PluginParameter> getEditableParameters() const;
@@ -114,19 +115,19 @@ private:
     void initBuses(std::vector<unsigned int>& target, Steinberg::Vst::MediaType type, Steinberg::Vst::BusDirection direction);
 
     //! registered instance id
-    instanceId m_id;
+    instanceId m_id = IVSTInstanceRegister::ID_NOT_SETTED;
 
     //! basic plugin's info
     const Plugin m_plugin;
 
     //! the flag that initialization and connection was made successfully
-    bool m_valid;
+    bool m_valid = false;
 
     //! current plugin state
-    bool m_active;
+    bool m_active = false;
 
     //! plugins parameters
-    std::vector<PluginParameter> m_parameters;
+    std::vector<PluginParameter> m_parameters = {};
 
     //! interface for midi events
     EventList m_events;
@@ -149,18 +150,19 @@ private:
     Steinberg::IPluginFactory3* m_factory;
 
     //! interface for processing
-    Steinberg::IPtr<Steinberg::Vst::IComponent> m_component;
+    Steinberg::IPtr<Steinberg::Vst::IComponent> m_component = nullptr;
 
     //! interface for controller and plugin's UI
-    Steinberg::IPtr<Steinberg::Vst::IEditController> m_controller;
+    Steinberg::IPtr<Steinberg::Vst::IEditController> m_controller = nullptr;
 
-    Steinberg::IPtr<Steinberg::Vst::INoteExpressionController> m_noteexpression;
+    Steinberg::IPtr<Steinberg::Vst::INoteExpressionController> m_noteexpression = nullptr;
 
     //! connection proxies between component and controller
-    std::unique_ptr<ConnectionProxy> m_componentCP, m_controllerCP;
+    std::unique_ptr<ConnectionProxy> m_componentCP = nullptr,
+                                     m_controllerCP = nullptr;
 
     //! Processing interface
-    Steinberg::IPtr<Steinberg::Vst::IAudioProcessor> m_audioProcessor;
+    Steinberg::IPtr<Steinberg::Vst::IAudioProcessor> m_audioProcessor = nullptr;
 };
 }
 }

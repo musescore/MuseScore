@@ -82,10 +82,8 @@ set(MODULE_SRC
     ${VST3_SDK_PATH}/base/source/fstring.cpp
     ${VST3_SDK_PATH}/base/source/timer.cpp
     ${VST3_SDK_PATH}/base/source/updatehandler.cpp
-    #${VST3_SDK_PATH}/base/thread/source/fcondition.cpp
     ${VST3_SDK_PATH}/base/thread/source/flock.cpp
     ${VST3_SDK_PATH}/pluginterfaces/base/funknown.cpp
-    ${VST3_SDK_PATH}/pluginterfaces/base/conststringtable.cpp
     ${VST3_SDK_PATH}/pluginterfaces/base/coreiids.cpp
     ${VST3_SDK_PATH}/pluginterfaces/base/funknown.cpp
     ${VST3_SDK_PATH}/pluginterfaces/base/ustring.cpp

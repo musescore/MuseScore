@@ -22,7 +22,7 @@
 using namespace mu::vst;
 using namespace mu::framework;
 
-static const Settings::Key SEARCH_PATHS("vst", "search_path");
+const Settings::Key VSTConfiguration::SEARCH_PATHS = Settings::Key("vst", "search_path");
 
 #ifdef Q_OS_MAC
 const std::string VSTConfiguration::DEFAULT_PATHS = "/Library/Audio/Plug-Ins/VST3";

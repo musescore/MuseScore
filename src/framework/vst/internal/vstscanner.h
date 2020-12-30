@@ -43,14 +43,14 @@ public:
     void scan();
 
     //! return all available plugins as a map: [std::string UID] : Plugin
-    const std::map<std::string, Plugin>& getPlugins() const { return m_plugins; }
+    const std::map<std::string, Plugin>& getPlugins() const;
 
 private:
     //! paths to search installed plugins
-    std::vector<std::string> m_paths;
+    std::vector<std::string> m_paths = {};
 
     //! all loaded plugins m_plugins[UID] = Plugin
-    std::map<std::string, Plugin> m_plugins;
+    std::map<std::string, Plugin> m_plugins = {};
 };
 }
 }

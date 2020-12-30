@@ -26,7 +26,6 @@ DEF_CLASS_IID(IEventList)
 IMPLEMENT_FUNKNOWN_METHODS(EventList, IEventList, IEventList::iid)
 
 EventList::EventList()
-    : m_events()
 {
 }
 
@@ -80,8 +79,10 @@ tresult EventList::getEvent(int32 index, Event& e)
         break;
 
     case midi::Event::Opcode::PerNotePitchBend:
-
         break;
+
+    default:
+        return kResultFalse;
     }
 
     return kResultOk;

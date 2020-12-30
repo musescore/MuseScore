@@ -65,7 +65,7 @@ private:
     Steinberg::PClassInfo2 m_effectClass;
 
     //! pointer to the factory function of plugin
-    Steinberg::IPluginFactory3* m_factory;
+    Steinberg::IPluginFactory3* m_factory = nullptr;
 };
 }
 }

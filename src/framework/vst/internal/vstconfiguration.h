@@ -20,6 +20,7 @@
 #define MU_VST_VSTCONFIGURATION_H
 
 #include <string>
+#include "settings.h"
 
 namespace mu {
 namespace vst {
@@ -32,6 +33,7 @@ public:
 
     //! default paths in system for plugin scanning
     static const std::string DEFAULT_PATHS;
+    static const mu::framework::Settings::Key SEARCH_PATHS;
 };
 } // namespace vst
 } // namespace mu

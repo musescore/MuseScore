@@ -26,28 +26,26 @@
 using namespace mu::vst;
 
 VSTScanner::VSTScanner(std::string paths)
-    : m_paths(), m_plugins()
 {
     setPaths(paths);
 }
 
 VSTScanner::VSTScanner()
-    : m_paths(), m_plugins()
 {
 }
 
 //TODO: rewrite with FsOperations when it will have needed functionality
 void VSTScanner::scan()
 {
-    for (auto dirPath : m_paths) {
+    for (auto&& dirPath : m_paths) {
         QDir directory(QString::fromStdString(dirPath));
         if (directory.exists()) {
-            for (auto pluginName : directory.entryList(QStringList({ "*.vst3" }))) {
+            for (auto&& pluginName : directory.entryList(QStringList({ "*.vst3" }))) {
                 PluginLoader loader(dirPath, pluginName.toStdString());
                 loader.load();
                 auto plugins = loader.getPlugins();
 
-                for (auto p : plugins) {
+                for (auto&& p : plugins) {
                     if (p.getType() == Plugin::Instrument) {
                         m_plugins[p.getId()] = p;
                     }
@@ -57,10 +55,15 @@ void VSTScanner::scan()
     }
 }
 
+const std::map<std::string, Plugin>& VSTScanner::getPlugins() const
+{
+    return m_plugins;
+}
+
 std::string VSTScanner::paths() const
 {
     std::string paths;
-    for (auto path : m_paths) {
+    for (auto&& path : m_paths) {
         paths += (paths.length() ? ";" : "") + path;
     }
     return paths;
