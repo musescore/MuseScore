@@ -95,6 +95,8 @@ void NotationNavigator::rescale()
         scale = height() / scoreHeight;
     }
 
+    scale *= guiScaling();
+
     m_matrix = QTransform(scale, 0, 0, scale, m_matrix.dx(), m_matrix.dy());
 }
 
@@ -105,11 +107,19 @@ QRect NotationNavigator::viewport() const
 
 QPoint NotationNavigator::toLogical(const QPoint& point) const
 {
-    return m_matrix.inverted().map(point);
+    double scale = guiScaling();
+    QPoint scaledPoint(point.x() * scale, point.y() * scale);
+
+    return m_matrix.inverted().map(scaledPoint);
 }
 
 QRect NotationNavigator::toLogical(const QRect& rect) const
 {
+    double scale = guiScaling();
+
+    QRect scaledRect = rect;
+    scaledRect.setBottomRight(rect.bottomRight() * scale);
+
     return m_matrix.inverted().mapRect(rect);
 }
 
@@ -155,8 +165,8 @@ void NotationNavigator::moveCanvasToRect(const QRect& viewRect)
     if (isVerticalOrientation()) {
         newViewRect.setHeight(std::min(viewport().height(), newViewRect.toRect().height()));
 
-        QPoint top = toLogical(newViewRect.topLeft().toPoint()) * scale();
-        QPoint bottom = toLogical(newViewRect.bottomRight().toPoint()) * scale();
+        QPoint top = newViewRect.topLeft().toPoint();
+        QPoint bottom = newViewRect.bottomRight().toPoint();
 
         if (!notationContentRect().contains(top) && !notationContentRect().contains(bottom)) {
             return;
@@ -170,8 +180,8 @@ void NotationNavigator::moveCanvasToRect(const QRect& viewRect)
     } else {
         newViewRect.setWidth(std::min(viewport().width(), newViewRect.toRect().width()));
 
-        QPoint left = toLogical(newViewRect.topLeft().toPoint()) * scale();
-        QPoint right = toLogical(newViewRect.bottomRight().toPoint()) * scale();
+        QPoint left = newViewRect.topLeft().toPoint();
+        QPoint right = newViewRect.bottomRight().toPoint();
 
         if (!notationContentRect().contains(left) && !notationContentRect().contains(right)) {
             return;
@@ -226,6 +236,11 @@ void NotationNavigator::onCurrentNotationChanged()
     });
 }
 
+double NotationNavigator::guiScaling() const
+{
+    return configuration()->guiScaling();
+}
+
 INotationPtr NotationNavigator::currentNotation() const
 {
     return globalContext()->currentNotation();
@@ -262,7 +277,7 @@ void NotationNavigator::paintPages(QPainter* painter)
     QFont font(QString::fromStdString(configuration()->fontFamily()), PAGE_NUMBER_FONT_SIZE);
 
     painter->setTransform(m_matrix);
-    QRectF viewportRect = toLogical(viewport());
+    QRectF viewportRect = viewport();
 
     for (const Page* page : pages) {
         QPointF pos(page->pos());
