@@ -52,6 +52,8 @@ jobs:
         mkdir -p "$HOME/musescore_current"
         make clean
         make installdebug CPUS=2 PREFIX="$HOME/musescore_current" COVERAGE=ON    
+        # bash ninja_build.sh -t clean
+        # MUSESCORE_INSTALL_DIR="$HOME/musescore_current" bash ninja_build.sh -t installdebug
     - name: Checkout on ref branch
       if: env.DO_RUN == 'true'
       uses: actions/checkout@v2    
@@ -64,6 +66,8 @@ jobs:
         mkdir -p "$HOME/musescore_ref"
         make clean
         make installdebug CPUS=2 PREFIX="$HOME/musescore_ref" COVERAGE=ON
+        # bash ninja_build.sh -t clean
+        # MUSESCORE_INSTALL_DIR="$HOME/musescore_ref" bash ninja_build.sh -t installdebug
     - name: Checkout on current branch
       if: env.DO_RUN == 'true'
       uses: actions/checkout@v2    

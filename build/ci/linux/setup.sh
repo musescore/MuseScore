@@ -134,6 +134,15 @@ echo export PATH="${PWD%/}/${cmake_dir}/bin:\${PATH}" >> ${ENV_FILE}
 export PATH="${PWD%/}/${cmake_dir}/bin:${PATH}"
 cmake --version
 
+# Ninja
+echo "Get Ninja"
+mkdir -p $HOME/build_tools/Ninja
+wget -q --show-progress -O $HOME/build_tools/Ninja/ninja "https://s3.amazonaws.com/utils.musescore.org/build_tools/linux/Ninja/ninja"
+chmod +x $HOME/build_tools/Ninja/ninja
+echo export PATH="$HOME/build_tools/Ninja:\${PATH}" >> ${ENV_FILE}
+echo "ninja version"
+$HOME/build_tools/Ninja/ninja --version
+
 # Dump syms
 wget -q --show-progress -O dump_syms.7z "https://s3.amazonaws.com/utils.musescore.org/breakpad/linux/x86-64/dump_syms.7z"
 7z x -y dump_syms.7z -o"$HOME/breakpad"
