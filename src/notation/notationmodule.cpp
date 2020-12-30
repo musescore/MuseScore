@@ -92,6 +92,9 @@ void NotationModule::registerExports()
     readers->reg({ "mscz", "mscx" }, std::make_shared<MsczNotationReader>());
     framework::ioc()->registerExport<INotationReadersRegister>(moduleName(), readers);
     framework::ioc()->registerExport<INotationWritersRegister>(moduleName(), std::make_shared<NotationWritersRegister>());
+
+    //! FIXME: init of notation should be in NotationModule::onInit
+    Notation::init();
 }
 
 void NotationModule::resolveImports()
@@ -174,8 +177,6 @@ void NotationModule::registerUiTypes()
 
 void NotationModule::onInit(const IApplication::RunMode&)
 {
-    Notation::init();
-
     s_configuration->init();
     s_actionController->init();
     s_midiInputController->init();
