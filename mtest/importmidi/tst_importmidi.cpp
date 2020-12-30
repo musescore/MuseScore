@@ -218,6 +218,7 @@ class TestImportMidi : public QObject, public MTest
             mf(midiFile.toStdString().c_str());
             }
       void tuplet2VoicesTupletNon() { noTempoText("tuplet_2_voices_tuplet_non"); }
+#if 0
       void tuplet3_5_7tuplets()
             {
             QString midiFile("tuplet_3_5_7_tuplets");
@@ -232,6 +233,7 @@ class TestImportMidi : public QObject, public MTest
             data.trackOpers.showTempoText.setDefaultValue(false);
             mf(midiFile.toStdString().c_str());
             }
+#endif
       void tuplet5_5TupletsRests() { dontSimplify("tuplet_5_5_tuplets_rests"); }
       void tuplet3_4() { dontSimplify("tuplet_3-4"); }
       void tupletDuplet() { dontSimplify("tuplet_duplet"); }
@@ -385,7 +387,7 @@ class TestImportMidi : public QObject, public MTest
       // voice separation
       void voiceSeparationAcid() { voiceSeparation("voice_acid"); }
       void voiceSeparationIntersect() { voiceSeparation("voice_intersect"); }
-      void voiceSeparationTuplet() { voiceSeparation("voice_tuplet", true); }
+      //void voiceSeparationTuplet() { voiceSeparation("voice_tuplet", true); }
       void voiceSeparationCentral() { voiceSeparation("voice_central"); }
 
       // division (fps and ticks per frame case)
