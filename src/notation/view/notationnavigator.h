@@ -54,6 +54,8 @@ signals:
     void orientationChanged();
 
 private:
+    double guiScaling() const;
+
     INotationPtr currentNotation() const;
 
     ViewMode notationViewMode() const;
