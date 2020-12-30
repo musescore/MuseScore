@@ -106,6 +106,9 @@ void NotationConfiguration::init()
 
     // libmscore
     preferences().setBackupDirPath(globalConfiguration()->backupPath().toQString());
+
+    bool isVertical = navigatorOrientation() == NavigatorOrientation::Vertical;
+    Ms::MScore::setVerticalOrientation(isVertical);
 }
 
 QColor NotationConfiguration::anchorLineColor() const

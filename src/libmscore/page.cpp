@@ -569,10 +569,10 @@ void Page::read(XmlReader& e)
 //   elements
 //---------------------------------------------------------
 
-QList<Element*> Page::elements()
+QList<Element*> Page::elements() const
 {
     QList<Element*> el;
-    scanElements(&el, collectElements, false);
+    const_cast<Page*>(this)->scanElements(&el, collectElements, false);
     return el;
 }
 
