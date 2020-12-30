@@ -98,7 +98,7 @@ QVariant InspectorBase::getValue(const InspectorItem& ii) const
                   break;
             case P_TYPE::POINT_SP_MM: {
                   Element* e = inspector->element();
-                  if (e->sizeIsSpatiumDependent())
+                  if (e->offsetIsSpatiumDependent())
                         v = v.toPointF() * e->score()->spatium();
                   else
                         v = v.toPointF() * DPMM;
@@ -158,7 +158,7 @@ void InspectorBase::setValue(const InspectorItem& ii, QVariant val)
                   break;
             case P_TYPE::POINT_SP_MM: {
                   Element* e = inspector->element();
-                  if (e->sizeIsSpatiumDependent())
+                  if (e->offsetIsSpatiumDependent())
                         val = val.toPointF() / e->score()->spatium();
                   else
                         val = val.toPointF() / DPMM;
@@ -494,7 +494,7 @@ void InspectorBase::setStyleClicked(int i)
       else if (t == P_TYPE::POINT_SP)
             val = val.toPointF() / score->spatium();
       else if (t == P_TYPE::POINT_SP_MM) {
-            if (e->sizeIsSpatiumDependent())
+            if (e->offsetIsSpatiumDependent())
                   val = val.toPointF() / score->spatium();
             else
                   val = val.toPointF() / DPMM;
