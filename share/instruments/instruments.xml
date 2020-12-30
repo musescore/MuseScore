@@ -57,8 +57,17 @@
       <Family id="cornets">
             <name>Cornets</name>
       </Family>
-      <Family id="saxhorns">
-            <name>Saxhorns</name>
+      <Family id="flugelhorns">
+            <name>Flugelhorns</name>
+      </Family>
+      <Family id="alto-horns">
+            <name>Alto Horns</name>
+      </Family>
+      <Family id="baritone-horns">
+            <name>Baritone Horns</name>
+      </Family>
+      <Family id="euphoniums">
+            <name>Euphoniums</name>
       </Family>
       <Family id="trumpets">
             <name>Trumpets</name>
@@ -75,6 +84,9 @@
       <Family id="keyboard-percussion">
             <name>Keyboard Percussion</name>
       </Family>
+      <Family id="harps">
+            <name>Harps</name>
+      </Family>
       <Family id="orff-percussion">
             <name>Orff Percussion</name>
       </Family>
@@ -89,6 +101,9 @@
       </Family>
       <Family id="drums">
             <name>Drums</name>
+      </Family>
+      <Family id="batterie">
+            <name>Batterie</name>
       </Family>
       <Family id="other-percussion">
             <name>Other Percussion</name>
@@ -107,6 +122,12 @@
       </Family>
       <Family id="plucked-strings">
             <name>Plucked Strings</name>
+      </Family>
+      <Family id="guitars">
+            <name>Guitars</name>
+      </Family>
+      <Family id="bass-guitars">
+            <name>Bass Guitars</name>
       </Family>
       <Family id="orchestral-strings">
             <name>Orchestral Strings</name>
@@ -3440,7 +3461,6 @@
                   </Channel>
             </Instrument>
             <Instrument id="saxhorn">
-                  <family>saxhorns</family>
                   <longName>Saxhorn</longName>
                   <shortName>Saxhorn</shortName>
                   <description>Saxhorn</description>
@@ -3459,7 +3479,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="f-alto-horn">
-                  <family>saxhorns</family>
+                  <family>alto-horns</family>
                   <longName>F Alto Horn</longName>
                   <shortName>F A. Hn.</shortName>
                   <description>F Alto Horn</description>
@@ -3478,7 +3498,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="eb-alto-horn">
-                  <family>saxhorns</family>
+                  <family>alto-horns</family>
                   <longName>E♭ Alto Horn</longName>
                   <shortName>E♭ A. Hn.</shortName>
                   <description>E♭ Alto Horn</description>
@@ -3497,7 +3517,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="baritone-horn">
-                  <family>saxhorns</family>
+                  <family>baritone-horns</family>
                   <trackName>Baritone Horn</trackName>
                   <longName>Baritone Horn</longName>
                   <shortName>Bar. Hn.</shortName>
@@ -3517,7 +3537,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="baritone-horn-treble">
-                  <family>saxhorns</family>
+                  <family>baritone-horns</family>
                   <trackName>Baritone Horn (Treble Clef)</trackName>
                   <longName>Baritone Horn</longName>
                   <shortName>Bar. Hn.</shortName>
@@ -3539,7 +3559,7 @@
                   <genre>concertband</genre>
             </Instrument>
             <Instrument id="baritone-horn-central-europe">
-                  <family>saxhorns</family>
+                  <family>baritone-horns</family>
                   <trackName>Baritone Horn (Central Europe)</trackName>
                   <longName>Baritone Horn</longName>
                   <shortName>Bar. Hn.</shortName>
@@ -3559,7 +3579,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="baritone-horn-central-europe-treble">
-                  <family>saxhorns</family>
+                  <family>baritone-horns</family>
                   <trackName>Baritone Horn (Central Europe, Treble Clef)</trackName>
                   <longName>Baritone Horn</longName>
                   <shortName>Bar. Hn.</shortName>
@@ -4155,7 +4175,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="flugelhorn">
-                  <family>saxhorns</family>
+                  <family>flugelhorns</family>
                   <longName>Flugelhorn</longName>
                   <shortName>Flghn.</shortName>
                   <description>Flugelhorn</description>
@@ -4629,7 +4649,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="euphonium">
-                  <family>tubas</family>
+                  <family>euphoniums</family>
                   <longName>Euphonium</longName>
                   <shortName>Euph.</shortName>
                   <description>Euphonium</description>
@@ -4645,7 +4665,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="euphonium-treble">
-                  <family>tubas</family>
+                  <family>euphoniums</family>
                   <trackName>Euphonium (Treble Clef)</trackName>
                   <longName>Euphonium</longName>
                   <shortName>Euph.</shortName>
@@ -7279,6 +7299,7 @@
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="percussion">
+                  <family>other-percussion</family>
                   <longName>Percussion</longName>
                   <shortName>Perc.</shortName>
                   <description>Orchestral Percussion</description>
@@ -7456,6 +7477,7 @@
       <InstrumentGroup id="marching-percussion">
             <name>Percussion - Marching</name>
             <Instrument id="marching-snare">
+                  <family>batterie</family>
                   <longName>Snare Drum</longName>
                   <shortName>S.D.</shortName>
                   <description>Marching Snare Drum</description>
@@ -7554,6 +7576,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="marching-tenor-drums">
+                  <family>batterie</family>
                   <longName>Tenor Drums</longName>
                   <shortName>T.D.</shortName>
                   <description>Marching Tenor Drums</description>
@@ -7761,6 +7784,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="marching-bass-drums">
+                  <family>batterie</family>
                   <longName>Bass Drums</longName>
                   <shortName>B.D.</shortName>
                   <description>Marching Bass Drums</description>
@@ -7870,6 +7894,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="marching-cymbals">
+                  <family>batterie</family>
                   <longName>Cymbals</longName>
                   <shortName>Cym.</shortName>
                   <description>Marching Cymbals</description>
@@ -10081,7 +10106,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>world</genre>
             </Instrument>
             <Instrument id="soprano-guitar">
-                  <family>plucked-strings</family>
+                  <family>guitars</family>
                   <longName>Soprano Guitar</longName>
                   <shortName>S. Guit.</shortName>
                   <description>Soprano Guitar</description>
@@ -10108,7 +10133,7 @@ Aeolus organ synthesizer, currently disabled -->
                   </Channel>
             </Instrument>
             <Instrument id="alto-guitar">
-                  <family>plucked-strings</family>
+                  <family>guitars</family>
                   <longName>Alto Guitar</longName>
                   <shortName>A. Guit.</shortName>
                   <description>Alto Guitar</description>
@@ -10135,7 +10160,7 @@ Aeolus organ synthesizer, currently disabled -->
                   </Channel>
             </Instrument>
             <Instrument id="guitar-nylon">
-                  <family>plucked-strings</family>
+                  <family>guitars</family>
                   <longName>Classical Guitar</longName>
                   <shortName>Guit.</shortName>
                   <description>Acoustic Nylon-strung Guitar</description>
@@ -10164,7 +10189,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>popular</genre>
             </Instrument>
             <Instrument id="guitar-nylon-treble-clef">
-                  <family>plucked-strings</family>
+                  <family>guitars</family>
                   <trackName>Guitar (Treble Clef)</trackName>
                   <longName>Guitar</longName>
                   <shortName>Guit.</shortName>
@@ -10195,7 +10220,7 @@ Aeolus organ synthesizer, currently disabled -->
                   </Channel>
             </Instrument>
             <Instrument id="guitar-nylon-tablature">
-                  <family>plucked-strings</family>
+                  <family>guitars</family>
                   <trackName>Classical Guitar (Tablature)</trackName>
                   <init>guitar-nylon</init>
                   <description>Acoustic Nylon Strung Guitar (Tablature)</description>
@@ -10205,6 +10230,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>common</genre>
             </Instrument>
             <Instrument id="7-string-guitar">
+                  <family>guitars</family>
                   <longName>7-string Guitar</longName>
                   <shortName>Guit.</shortName>
                   <description>7-string Guitar</description>
@@ -10230,7 +10256,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>world</genre>
             </Instrument>
             <Instrument id="7-string-guitar-tablature">
-                  <family>plucked-strings</family>
+                  <family>guitars</family>
                   <trackName>7-string Guitar (Tablature)</trackName>
                   <init>7-string-guitar</init>
                   <description>7-string Guitar (Tablature)</description>
@@ -10240,6 +10266,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>world</genre>
             </Instrument>
             <Instrument id="cavaquinho">
+                  <family>plucked-strings</family>
                   <longName>Cavaquinho</longName>
                   <shortName>Cava.</shortName>
                   <description>Cavaquinho (4-string Guitar)</description>
@@ -10272,7 +10299,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>world</genre>
             </Instrument>
             <Instrument id="baritone-guitar">
-                  <family>plucked-strings</family>
+                  <family>guitars</family>
                   <longName>Baritone Guitar</longName>
                   <shortName>Bar. Guit.</shortName>
                   <description>Baritone Guitar</description>
@@ -10296,7 +10323,7 @@ Aeolus organ synthesizer, currently disabled -->
                   </Channel>
             </Instrument>
             <Instrument id="contra-guitar">
-                  <family>plucked-strings</family>
+                  <family>guitars</family>
                   <longName>Contra Guitar</longName>
                   <shortName>C. Guit.</shortName>
                   <description>Acoustic Contra Guitar</description>
@@ -10333,7 +10360,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>world</genre>
             </Instrument>
             <Instrument id="guitar-steel">
-                  <family>plucked-strings</family>
+                  <family>guitars</family>
                   <longName>Acoustic Guitar</longName>
                   <shortName>Guit.</shortName>
                   <description>Acoustic Steel-strung Guitar</description>
@@ -10367,7 +10394,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="guitar-steel-treble-clef">
-                  <family>plucked-strings</family>
+                  <family>guitar</family>
                   <trackName>Acoustic Guitar (Treble Clef)</trackName>
                   <longName>Guitar</longName>
                   <shortName>Guit.</shortName>
@@ -10395,7 +10422,7 @@ Aeolus organ synthesizer, currently disabled -->
                   </Channel>
             </Instrument>
             <Instrument id="guitar-steel-tablature">
-                  <family>plucked-strings</family>
+                  <family>guitars</family>
                   <trackName>Acoustic Guitar (Tablature)</trackName>
                   <init>guitar-steel</init>
                   <description>Acoustic Steel Strung Guitar (Tablature)</description>
@@ -10406,7 +10433,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="11-string-alto-guitar">
-                  <family>plucked-strings</family>
+                  <family>guitars</family>
                   <longName>11-string Alto Guitar</longName>
                   <shortName>11-str. A. Guit.</shortName>
                   <description>11-string Alto Guitar</description>
@@ -10442,7 +10469,7 @@ Aeolus organ synthesizer, currently disabled -->
                   </Channel>
             </Instrument>
             <Instrument id="12-string-guitar">
-                  <family>plucked-strings</family>
+                  <family>guitars</family>
                   <longName>12-string Guitar</longName>
                   <shortName>12-str. Guit.</shortName>
                   <description>12-string Guitar</description>
@@ -10473,7 +10500,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>popular</genre>
             </Instrument>
             <Instrument id="pedal-steel-guitar">
-                  <family>plucked-strings</family>
+                  <family>guitars</family>
                   <longName>Pedal Steel Guitar</longName>
                   <shortName>Ped. St. Guit.</shortName>
                   <description>Pedal Steel Guitar</description>
@@ -10497,7 +10524,7 @@ Aeolus organ synthesizer, currently disabled -->
             <Instrument id="electric-guitar">
                   <!-- don't remove this instrument, it is used in ...mtest/libmscore/links/tst_links.cpp
                  and ...mtest/libmscore/midi/tst_midi.cpp for testing purposes -->
-                  <family>plucked-strings</family>
+                  <family>guitars</family>
                   <longName>Electric Guitar</longName>
                   <shortName>El. Guit.</shortName>
                   <description>Electric Guitar</description>
@@ -10540,7 +10567,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="electric-guitar-treble-clef">
-                  <family>plucked-strings</family>
+                  <family>guitars</family>
                   <trackName>Electric Guitar (Treble Clef)</trackName>
                   <longName>Electric Guitar</longName>
                   <shortName>El. Guit.</shortName>
@@ -10577,7 +10604,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>popular</genre>
             </Instrument>
             <Instrument id="harp">
-                  <family>plucked-strings</family>
+                  <family>harps</family>
                   <longName>Harp</longName>
                   <shortName>Hrp.</shortName>
                   <description>Harp</description>
@@ -11320,7 +11347,7 @@ Aeolus organ synthesizer, currently disabled -->
                   </Channel>
             </Instrument>
             <Instrument id="bass-guitar">
-                  <family>plucked-strings</family>
+                  <family>bass-guitars</family>
                   <longName>Bass Guitar</longName>
                   <shortName>B. Guit.</shortName>
                   <description>Bass Guitar</description>
@@ -11355,7 +11382,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="bass-guitar-tablature">
-                  <family>plucked-strings</family>
+                  <family>bass-guitars</family>
                   <trackName>Bass Guitar (Tablature)</trackName>
                   <init>bass-guitar</init>
                   <description>Bass Guitar (Tablature)</description>
@@ -11368,7 +11395,7 @@ Aeolus organ synthesizer, currently disabled -->
             <Instrument id="acoustic-bass">
                   <!-- Same instrument as the orchestral contrabass, but used by default plucked, rather than bowed
                   can't init from it, as it has not been read yet. -->
-                  <family>plucked-strings</family>
+                  <family>bass-guitars</family>
                   <longName>Acoustic Bass</longName>
                   <shortName>Bass</shortName>
                   <description>Acoustic Bass</description>
@@ -11407,7 +11434,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>jazz</genre>
             </Instrument>
             <Instrument id="electric-bass">
-                  <family>plucked-strings</family>
+                  <family>bass-guitars</family>
                   <longName>Electric Bass</longName>
                   <shortName>El. B.</shortName>
                   <description>Electric Bass</description>
@@ -11441,7 +11468,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>popular</genre>
             </Instrument>
             <Instrument id="electric-bass-4-str-tab">
-                  <family>plucked-strings</family>
+                  <family>bass-guitars</family>
                   <trackName>Electric Bass (Tablature)</trackName>
                   <init>electric-bass</init>
                   <description>Electric Bass (Tablature)</description>
@@ -11452,7 +11479,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>popular</genre>
             </Instrument>
             <Instrument id="fretless-electric-bass">
-                  <family>plucked-strings</family>
+                  <family>bass-guitars</family>
                   <longName>Fretless Electric Bass</longName>
                   <shortName>Frtl. El. B.</shortName>
                   <description>Fretless Electric Bass</description>
@@ -11485,7 +11512,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>jazz</genre>
             </Instrument>
             <Instrument id="5-string-electric-bass">
-                  <family>plucked-strings</family>
+                  <family>bass-guitars</family>
                   <longName>5-str. Electric Bass</longName>
                   <shortName>El. B.</shortName>
                   <description>5-string Electric Bass</description>
@@ -11520,7 +11547,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>popular</genre>
             </Instrument>
             <Instrument id="5-string-electric-bass-tab">
-                  <family>plucked-strings</family>
+                  <family>bass-guitars</family>
                   <trackName>5-str. Electric Bass (Tablature)</trackName>
                   <init>5-string-electric-bass</init>
                   <description>5-string Electric Bass (Tablature)</description>
@@ -11530,7 +11557,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>popular</genre>
             </Instrument>
             <Instrument id="5-string-electric-bass-high-c">
-                  <family>plucked-strings</family>
+                  <family>bass-guitars</family>
                   <longName>5-str. Electric Bass</longName>
                   <shortName>El. B.</shortName>
                   <trackName>5-str. Electric Bass (High C/Tenor)</trackName>
@@ -11564,7 +11591,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>jazz</genre>
             </Instrument>
             <Instrument id="5-string-electric-bass-tab-high-c">
-                  <family>plucked-strings</family>
+                  <family>bass-guitars</family>
                   <trackName>5-str. Electric Bass (High C/Tenor) (Tablature)</trackName>
                   <init>5-string-electric-bass-high-c</init>
                   <description>5-string Electric Bass (High C/Tenor) (Tablature)</description>
@@ -11573,7 +11600,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>jazz</genre>
             </Instrument>
             <Instrument id="6-string-electric-bass">
-                  <family>plucked-strings</family>
+                  <family>bass-guitars</family>
                   <longName>6-str. Electric Bass</longName>
                   <shortName>El. B.</shortName>
                   <description>6-string Electric Bass</description>
@@ -11607,7 +11634,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>jazz</genre>
             </Instrument>
             <Instrument id="6-string-electric-bass-tab">
-                  <family>plucked-strings</family>
+                  <family>guitars</family>
                   <trackName>6-str. Electric Bass (Tablature)</trackName>
                   <init>6-string-electric-bass</init>
                   <description>6-string Electric Bass (Tablature)</description>

@@ -28,16 +28,22 @@
       <pedalFontFace>MuseJazz Text</pedalFontFace>
       <maxChordShiftAbove>3</maxChordShiftAbove>
       <maxChordShiftBelow>3</maxChordShiftBelow>
+      <chordSymbolPosAbove x="0" y="-2.5"/>
       <chordSymbolBPosAbove x="0" y="-5.5"/>
       <chordSymbolAFontFace>MuseJazz Text</chordSymbolAFontFace>
       <chordSymbolAFontSize>15</chordSymbolAFontSize>
+      <chordSymbolAAlign>left,baseline</chordSymbolAAlign>
+      <chordSymbolBPosAbove x="0" y="-5.5"/>
       <chordSymbolBFontFace>MuseJazz Text</chordSymbolBFontFace>
       <maxFretShiftAbove>3</maxFretShiftAbove>
       <maxFretShiftBelow>3</maxFretShiftBelow>
+      <chordSymbolBFontSize>12</chordSymbolBFontSize>
+      <chordSymbolBAlign>left,baseline</chordSymbolBAlign>
       <showMeasureNumber>0</showMeasureNumber>
       <useStandardNoteNames>0</useStandardNoteNames>
       <chordStyle>jazz</chordStyle>
       <chordDescriptionFile>chords_jazz.xml</chordDescriptionFile>
+      <enableIndentationOnFirstSystem>0</enableIndentationOnFirstSystem>
       <slurEndWidth>0.12</slurEndWidth>
       <slurMidWidth>0.25</slurMidWidth>
       <musicalSymbolFont>MuseJazz</musicalSymbolFont>
@@ -165,6 +171,7 @@
           </Articulation>
         <Channel>
           <program value="0"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="3.02">
+  <programVersion>3.6.0</programVersion>
+  <programRevision></programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -7,8 +9,7 @@
     <Style>
       <enableVerticalSpread>1</enableVerticalSpread>
       <useStandardNoteNames>0</useStandardNoteNames>
-      <enableIndentationOnFirstSystem>1</enableIndentationOnFirstSystem>
-      <Spatium>1.76389</Spatium>
+      <Spatium>1.75</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -25,7 +26,7 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Order id="choir" customised="1">
+    <Order id="choir" customized="1">
       <name>Choir</name>
       <instrument id="alto">
         <family id="voices">Voices</family>
@@ -111,6 +112,7 @@
           <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="52"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -162,6 +164,7 @@
           <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="52"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -215,6 +218,7 @@
           <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="52"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -268,6 +272,7 @@
           <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="52"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -326,6 +331,7 @@
           </Articulation>
         <Channel>
           <program value="0"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>

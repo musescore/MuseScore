@@ -3,11 +3,13 @@
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
+    <Synthesizer>
+      </Synthesizer>
     <Division>480</Division>
     <Style>
       <enableVerticalSpread>1</enableVerticalSpread>
       <useStandardNoteNames>0</useStandardNoteNames>
-      <Spatium>1.76389</Spatium>
+      <Spatium>1.75</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -24,16 +26,10 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Order id="orchestra" customised="1">
-      <name>Orchestra</name>
-      <instrument id="harp">
-        <family id="harps">Harps</family>
-        </instrument>
+    <Order id="orchestral" customized="1">
+      <name>Orchestral</name>
       <instrument id="piano">
         <family id="keyboards">Keyboards</family>
-        </instrument>
-      <instrument id="timpani">
-        <family id="timpani">Timpani</family>
         </instrument>
       <section id="woodwind" brackets="true" showSystemMarkings="true" barLineSpan="true" thinBrackets="true">
         <family>flutes</family>
@@ -136,6 +132,7 @@
           </Articulation>
         <Channel>
           <program value="0"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>

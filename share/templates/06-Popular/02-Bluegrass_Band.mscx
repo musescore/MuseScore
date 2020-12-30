@@ -7,8 +7,7 @@
     <Style>
       <enableVerticalSpread>1</enableVerticalSpread>
       <useStandardNoteNames>0</useStandardNoteNames>
-      <enableIndentationOnFirstSystem>1</enableIndentationOnFirstSystem>
-      <Spatium>1.564</Spatium>
+      <Spatium>1.55</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -72,8 +71,10 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="52"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -135,8 +136,10 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="52"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -186,15 +189,20 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="40"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="pizzicato">
           <program value="45"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="tremolo">
+          <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
           <program value="44"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -252,6 +260,7 @@
           </Articulation>
         <Channel>
           <program value="24"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -312,6 +321,7 @@
           </Articulation>
         <Channel>
           <program value="105"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -373,6 +383,7 @@
           </Articulation>
         <Channel>
           <program value="25"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -435,18 +446,23 @@
           </Articulation>
         <Channel>
           <program value="32"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="arco">
           <program value="43"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="tremolo">
           <program value="44"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="slap">
           <program value="36"/>
+          <synti>Fluid</synti>
           </Channel>
         <Channel name="pop">
           <program value="37"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
