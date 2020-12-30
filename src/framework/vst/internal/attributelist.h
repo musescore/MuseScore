@@ -46,7 +46,7 @@ public:
 
 protected:
     void removeAttrID(AttrID aid);
-    std::map<AttrID, std::unique_ptr<AttributeValue> > m_list;
+    std::map<AttrID, std::unique_ptr<AttributeValue> > m_list = {};
 };
 }
 }

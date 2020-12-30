@@ -22,12 +22,12 @@
 using namespace mu::vst;
 
 PluginListModel::PluginListModel(QObject* parent)
-    : QAbstractListModel(parent), m_scanner(), m_plugins()
+    : QAbstractListModel(parent)
 {
 }
 
 PluginListModel::PluginListModel(std::shared_ptr<VSTScanner> scaner, QObject* parent)
-    : QAbstractListModel(parent), m_scanner(scaner), m_plugins()
+    : QAbstractListModel(parent), m_scanner(scaner)
 {
     update();
 }
@@ -87,12 +87,12 @@ void PluginListModel::update()
 {
     m_plugins.clear();
     m_scanner->scan();
-    for (auto p : m_scanner->getPlugins()) {
+    for (auto&& p : m_scanner->getPlugins()) {
         m_plugins.push_back(p.second);
     }
 }
 
-static const Plugin nullPlugin;
+const Plugin PluginListModel::nullPlugin = Plugin();
 const Plugin& PluginListModel::item(unsigned int index)
 {
     auto size = static_cast<unsigned int>(m_plugins.size());

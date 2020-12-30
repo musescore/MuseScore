@@ -47,8 +47,9 @@ public:
     const Plugin& item(unsigned int index);
 
 private:
-    std::shared_ptr<VSTScanner> m_scanner;
-    QList<Plugin> m_plugins;
+    std::shared_ptr<VSTScanner> m_scanner = nullptr;
+    QList<Plugin> m_plugins = {};
+    static const Plugin nullPlugin;
 };
 } // namespace vst
 } // namespace mu

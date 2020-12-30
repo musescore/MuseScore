@@ -28,27 +28,27 @@ namespace vst {
 class PluginParameter
 {
 public:
-    PluginParameter() = default;
+    PluginParameter();
     PluginParameter(Steinberg::Vst::ParameterInfo info);
     PluginParameter(Steinberg::Vst::ParameterInfo&& info);
 
     //! unique id of the parameter in the plugin
-    uint id() const { return m_info.id; }
+    unsigned int id() const;
 
     //! return title of the parameter, ex: Volume
-    std::u16string title() const { return m_info.title; }
+    std::u16string title() const;
 
     //! return short title, ex: Vol
-    std::u16string shortTitle() const { return m_info.shortTitle; }
+    std::u16string shortTitle() const;
 
     //! parameter units, ex: dB
-    std::u16string unit() const { return m_info.units; }
+    std::u16string unit() const;
 
     //! how many steps the parameter has
-    uint stepCount() const { return m_info.stepCount; }
+    unsigned int stepCount() const;
 
     //! parameter's default value
-    double defaultValue() const { return m_info.defaultNormalizedValue; }
+    double defaultValue() const;
 
     //! return true if visible and not readonly
     bool isEditable() const;

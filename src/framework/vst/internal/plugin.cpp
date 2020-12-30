@@ -25,7 +25,7 @@ using namespace Steinberg;
 using namespace Steinberg::Vst;
 
 Plugin::Plugin()
-    : m_effectClass(), m_factory(nullptr)
+    : m_effectClass()
 {
 }
 

@@ -23,6 +23,8 @@ using namespace mu::vst;
 using namespace Steinberg;
 using namespace Steinberg::Vst;
 
+PluginParameter::PluginParameter()  = default;
+
 PluginParameter::PluginParameter(ParameterInfo info)
     : m_info(info)
 {
@@ -31,6 +33,36 @@ PluginParameter::PluginParameter(ParameterInfo info)
 PluginParameter::PluginParameter(ParameterInfo&& info)
     : m_info(std::move(info))
 {
+}
+
+unsigned int PluginParameter::id() const
+{
+    return m_info.id;
+}
+
+std::u16string PluginParameter::title() const
+{
+    return m_info.title;
+}
+
+std::u16string PluginParameter::shortTitle() const
+{
+    return m_info.shortTitle;
+}
+
+std::u16string PluginParameter::unit() const
+{
+    return m_info.units;
+}
+
+unsigned int PluginParameter::stepCount() const
+{
+    return m_info.stepCount;
+}
+
+double PluginParameter::defaultValue() const
+{
+    return m_info.defaultNormalizedValue;
 }
 
 bool PluginParameter::isEditable() const

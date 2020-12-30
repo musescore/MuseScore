@@ -47,19 +47,19 @@ public:
     const Steinberg::Vst::TChar* stringValue(Steinberg::uint32& stringSize);
     const void* binaryValue(Steinberg::uint32& binarySize);
 
-    Type getType() const { return m_type; }
+    Type getType() const;
 
 protected:
     union
     {
-        Steinberg::int64 intValue;
+        Steinberg::int64 intValue = 0;
         double floatValue;
         Steinberg::Vst::TChar* stringValue;
         char* binaryValue;
     } m_value;
 
-    Steinberg::uint32 m_size;
-    Type m_type;
+    Steinberg::uint32 m_size = 0;
+    Type m_type = Integer;
 };
 }
 }

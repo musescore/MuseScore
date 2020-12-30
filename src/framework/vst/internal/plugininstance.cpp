@@ -28,13 +28,10 @@ using namespace Steinberg;
 using namespace Steinberg::Vst;
 
 PluginInstance::PluginInstance(const Plugin* plugin)
-    : m_id(IVSTInstanceRegister::ID_NOT_SETTED), m_plugin(*plugin), m_valid(false), m_active(false),
+    : m_plugin(*plugin),
     m_parameters(), m_events(), m_host(),
     m_effectClass(plugin->m_effectClass),
-    m_factory(plugin->m_factory),
-    m_controller(nullptr),
-    m_componentCP(nullptr), m_controllerCP(nullptr),
-    m_audioProcessor(nullptr)
+    m_factory(plugin->m_factory)
 {
     init();
     connect();
@@ -48,6 +45,21 @@ std::shared_ptr<PluginInstance> PluginInstance::create(const Plugin* plugin)
     auto instance = std::make_shared<PluginInstance>(plugin);
     instance->m_id = vstInstanceRegister()->addInstance(instance);
     return instance;
+}
+
+const Plugin& PluginInstance::plugin() const
+{
+    return m_plugin;
+}
+
+instanceId PluginInstance::id() const
+{
+    return m_id;
+}
+
+bool PluginInstance::isValid() const
+{
+    return m_valid;
 }
 
 PluginInstance::~PluginInstance()
@@ -99,6 +111,9 @@ void PluginInstance::addMidiEvent(const mu::midi::Event& e)
 Ret PluginInstance::setSampleRate(int sampleRate)
 {
     ProcessSetup setup;
+    setup.processMode = kRealtime;
+    setup.symbolicSampleSize = kSample32;
+    setup.maxSamplesPerBlock = MAX_SAMPLES_PERBLOCK;
     setup.sampleRate = sampleRate;
     if (m_audioProcessor->setupProcessing(setup) != kResultOk) {
         return Ret(Ret::Code::Ok);
@@ -175,6 +190,11 @@ void PluginInstance::flush()
     }
 }
 
+std::vector<PluginParameter> PluginInstance::getParameters() const
+{
+    return m_parameters;
+}
+
 void PluginInstance::init()
 {
     tresult resultCode;
@@ -216,7 +236,7 @@ void PluginInstance::init()
             = m_factory->createInstance(classID /*uid.data()*/, INLINE_UID_OF(IEditController), reinterpret_cast<void**>(&controller));
         m_controller = Steinberg::owned(controller);
 
-        if (resultCode != Steinberg::kResultTrue | !m_controller) {
+        if ((resultCode != Steinberg::kResultTrue) | !m_controller) {
             return;
         }
 

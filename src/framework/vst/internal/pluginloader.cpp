@@ -37,10 +37,7 @@ using namespace Steinberg::Vst;
 
 PluginLoader::PluginLoader(std::string folder, std::string filename)
     : m_folder(folder),
-    m_filename(filename),
-    m_library(),
-    m_factory(nullptr),
-    m_plugins()
+    m_filename(filename)
 {
 }
 
@@ -80,6 +77,11 @@ void PluginLoader::unload()
     //library will unload automatically with app exits
     //don't call unload, it will destroy all pointers to plugin's functions (factory, audioEffectClass etc)
     //m_library.unload();
+}
+
+const std::vector<Plugin>& PluginLoader::getPlugins() const
+{
+    return m_plugins;
 }
 
 void PluginLoader::initPlugins()

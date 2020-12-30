@@ -82,3 +82,8 @@ const void* AttributeValue::binaryValue(Steinberg::uint32& binarySize)
     binarySize = m_size;
     return m_value.binaryValue;
 }
+
+AttributeValue::Type AttributeValue::getType() const
+{
+    return m_type;
+}

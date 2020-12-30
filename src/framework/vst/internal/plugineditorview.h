@@ -46,14 +46,13 @@ public:
 
     static int metaTypeId();
 
-    instanceId id() const { return m_instanceId; }
+    instanceId id() const;
     void setId(instanceId id);
     virtual Steinberg::tresult resizeView(Steinberg::IPlugView* view, Steinberg::ViewRect* newSize) override;
 
 private:
-    instanceId m_instanceId;
-
-    Steinberg::IPlugView* m_view;
+    instanceId m_instanceId = IVSTInstanceRegister::ID_NOT_SETTED;
+    Steinberg::IPlugView* m_view = nullptr;
 
     void initInstance();
 

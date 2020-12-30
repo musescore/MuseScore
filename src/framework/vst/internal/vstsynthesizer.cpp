@@ -119,23 +119,30 @@ void VSTSynthesizer::flushSound()
 
 void VSTSynthesizer::channelSoundsOff(midi::channel_t chan)
 {
+    UNUSED(chan);
     LOGI() << "TODO";
 }
 
 bool VSTSynthesizer::channelVolume(midi::channel_t chan, float val)
 {
+    UNUSED(chan);
+    UNUSED(val);
     LOGI() << "TODO";
     return true;
 }
 
 bool VSTSynthesizer::channelBalance(midi::channel_t chan, float val)
 {
+    UNUSED(chan);
+    UNUSED(val);
     LOGI() << "TODO";
     return true;
 }
 
 bool VSTSynthesizer::channelPitch(midi::channel_t chan, int16_t val)
 {
+    UNUSED(chan);
+    UNUSED(val);
     LOGI() << "TODO";
     return true;
 }

@@ -42,7 +42,7 @@ public:
     Steinberg::tresult addEvent(Steinberg::Vst::Event& e) override;
 
 private:
-    std::vector<midi::Event> m_events;
+    std::vector<midi::Event> m_events = {};
 };
 } // namespace vst
 } // namespace mu
