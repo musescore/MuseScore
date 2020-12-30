@@ -105,10 +105,6 @@ jobs:
         sudo bash ./build/ci/linux/build.sh -n ${{ github.run_id }} --telemetry $T_ID --crash_log_url $C_URL
         echo "============== ccache ==============="
         ccache -s
-    - name: "Run unit tests"
-      if: env.DO_BUILD == 'true'
-      run: |
-        sudo bash ./build/ci/linux/runutests.sh
     - name: Generate dump symbols
       if: env.DO_BUILD == 'true'
       run: |
