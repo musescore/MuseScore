@@ -11,8 +11,6 @@ ARTIFACTS_DIR=build.artifacts
 TELEMETRY_TRACK_ID=""
 CRASH_REPORT_URL=""
 BUILD_MODE=""
-BUILDTYPE=portable # portable build is the default build
-OPTIONS=""
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
@@ -35,15 +33,12 @@ if [ "$BUILD_MODE" == "devel_build" ]; then MUSESCORE_BUILD_CONFIG=dev; fi
 if [ "$BUILD_MODE" == "nightly_build" ]; then MUSESCORE_BUILD_CONFIG=dev; fi
 if [ "$BUILD_MODE" == "testing_build" ]; then MUSESCORE_BUILD_CONFIG=testing; fi
 if [ "$BUILD_MODE" == "stable_build" ]; then MUSESCORE_BUILD_CONFIG=release; fi
-if [ "$BUILD_MODE" == "utests_build" ]; then MUSESCORE_BUILD_CONFIG=dev; BUILDTYPE=utests; BUILD_UNIT_TESTS=ON; OPTIONS="USE_SYSTEM_FREETYPE=ON"; fi
 
 echo "MUSESCORE_BUILD_CONFIG: $MUSESCORE_BUILD_CONFIG"
 echo "BUILD_NUMBER: $BUILD_NUMBER"
 echo "TELEMETRY_TRACK_ID: $TELEMETRY_TRACK_ID"
 echo "CRASH_REPORT_URL: $CRASH_REPORT_URL"
 echo "BUILD_MODE: $BUILD_MODE"
-echo "BUILDTYPE: $BUILDTYPE"
-echo "OPTIONS: $OPTIONS"
 
 echo "=== ENVIRONMENT === "
 
@@ -58,17 +53,17 @@ cmake --version
 echo " "
 echo "VST3_SDK_PATH: $VST3_SDK_PATH"
 if [ -z "$VST3_SDK_PATH" ]; then 
-echo "warning: not set VST3_SDK_PATH, build VST module disabled"
-BUILD_VST=OFF
+    echo "warning: not set VST3_SDK_PATH, build VST module disabled"
+    BUILD_VST=OFF
 else
-BUILD_VST=ON
+    BUILD_VST=ON
 fi
 
 echo "=== BUILD ==="
 
 MUSESCORE_REVISION=$(git rev-parse --short=7 HEAD)
 
-make CPUS=2 $OPTIONS \
+make CPUS=2 \
     MUSESCORE_BUILD_CONFIG=$MUSESCORE_BUILD_CONFIG \
     MUSESCORE_REVISION=$MUSESCORE_REVISION \
     BUILD_NUMBER=$BUILD_NUMBER \
@@ -76,8 +71,8 @@ make CPUS=2 $OPTIONS \
     CRASH_REPORT_URL=$CRASH_REPORT_URL \
     BUILD_VST=$BUILD_VST \
     VST3_SDK_PATH=$VST3_SDK_PATH \
-    BUILD_UNIT_TESTS=$BUILD_UNIT_TESTS \
-    $BUILDTYPE
+    BUILD_UNIT_TESTS=OFF \
+    portable
 
 
 bash ./build/ci/tools/make_release_channel_env.sh -c $MUSESCORE_BUILD_CONFIG
