@@ -1205,17 +1205,26 @@
             <length>200</length>
             </Trill>
           </Cell>
-        <Cell name="Text line">
+        <Cell name="Staff Text line">
           <TextLine id="28">
             <endHookType>1</endHookType>
-            <beginText>VII</beginText>
+            <beginText>Staff</beginText>
             <ticks>0</ticks>
             <track>0</track>
             <length>200</length>
             </TextLine>
           </Cell>
+          <Cell name="System Text line" trElement="1">
+            <TextLine system="1" id="29">
+              <endHookType>1</endHookType>
+              <beginText>System</beginText>
+              <ticks>0</ticks>
+              <track>0</track>
+              <length>200</length>
+              </TextLine>
+            </Cell>
         <Cell name="Line">
-          <TextLine id="29">
+          <TextLine id="30">
             <ticks>0</ticks>
             <track>0</track>
             <diagonal>1</diagonal>
@@ -1223,20 +1232,20 @@
             </TextLine>
           </Cell>
         <Cell name="Ambitus">
-          <Ambitus>
+          <Ambitus id="31">
             <topPitch>-1</topPitch>
-            <topTpc>-2</topTpc>
+            <topTpc>-9</topTpc>
             <bottomPitch>-1</bottomPitch>
-            <bottomTpc>-2</bottomTpc>
+            <bottomTpc>-9</bottomTpc>
             </Ambitus>
           </Cell>
         <Cell name="Let Ring">
-          <LetRing id="30">
+          <LetRing id="32">
             <track>0</track>
             </LetRing>
           </Cell>
         <Cell name="Guitar vibrato">
-          <Vibrato id="31">
+          <Vibrato id="33">
             <subtype>guitarVibrato</subtype>
             <ticks>0</ticks>
             <track>0</track>
@@ -1244,7 +1253,7 @@
             </Vibrato>
           </Cell>
         <Cell name="Guitar vibrato wide">
-          <Vibrato id="32">
+          <Vibrato id="34">
             <subtype>guitarVibratoWide</subtype>
             <ticks>0</ticks>
             <track>0</track>
@@ -1252,7 +1261,7 @@
             </Vibrato>
           </Cell>
         <Cell name="Vibrato sawtooth">
-          <Vibrato id="33">
+          <Vibrato id="35">
             <subtype>vibratoSawtooth</subtype>
             <ticks>0</ticks>
             <track>0</track>
@@ -1260,7 +1269,7 @@
             </Vibrato>
           </Cell>
         <Cell name="Tremolo sawtooth wide">
-          <Vibrato id="34">
+          <Vibrato id="36">
             <subtype>vibratoSawtoothWide</subtype>
             <ticks>0</ticks>
             <track>0</track>
@@ -1268,7 +1277,7 @@
             </Vibrato>
           </Cell>
         <Cell name="Palm Mute">
-          <PalmMute id="35">
+          <PalmMute id="37">
             <track>0</track>
             </PalmMute>
           </Cell>
