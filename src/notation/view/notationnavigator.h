@@ -67,7 +67,6 @@ private:
 
     void paint(QPainter* painter) override;
     void paintPages(QPainter* painter);
-    void paintElements(QPainter* painter, const QList<Element*>& elements);
     void paintViewRect(QPainter* painter);
 
     void mousePressEvent(QMouseEvent* event) override;
