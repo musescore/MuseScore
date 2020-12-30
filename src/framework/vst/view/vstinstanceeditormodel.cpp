@@ -22,8 +22,13 @@
 using namespace mu::vst;
 
 VSTInstanceEditorModel::VSTInstanceEditorModel(QObject* parent)
-    : QObject(parent), m_id(IVSTInstanceRegister::ID_NOT_SETTED)
+    : QObject(parent)
 {
+}
+
+instanceId VSTInstanceEditorModel::id() const
+{
+    return m_id;
 }
 
 void VSTInstanceEditorModel::setId(instanceId id)

@@ -40,16 +40,16 @@ public:
     void unload();
 
     //! return vector of loaded plugins from file
-    const std::vector<Plugin>& getPlugins() const { return m_plugins; }
+    const std::vector<Plugin>& getPlugins() const;
 
 private:
-    std::string m_folder;
-    std::string m_filename;
+    std::string m_folder = "";
+    std::string m_filename = "";
 
     QLibrary m_library;
-    Steinberg::IPluginFactory3* m_factory;
+    Steinberg::IPluginFactory3* m_factory = nullptr;
 
-    std::vector<Plugin> m_plugins;
+    std::vector<Plugin> m_plugins = {};
 
     void initPlugins();
 };

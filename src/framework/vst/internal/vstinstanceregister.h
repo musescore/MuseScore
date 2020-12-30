@@ -34,7 +34,7 @@ public:
     instancePtr instance(instanceId id) override;
 
 private:
-    std::vector<instancePtr> m_instances;
+    std::vector<instancePtr> m_instances = {};
 };
 } // namespace vst
 } // namespace mu

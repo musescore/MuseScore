@@ -21,7 +21,6 @@
 using namespace mu::vst;
 
 VSTInstanceRegister::VSTInstanceRegister()
-    : m_instances()
 {
 }
 

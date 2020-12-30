@@ -27,7 +27,6 @@ IMPLEMENT_FUNKNOWN_METHODS(AttributeList, IAttributeList, IAttributeList::iid)
 DEF_CLASS_IID(IAttributeList)
 
 AttributeList::AttributeList()
-    : m_list()
 {
 }
 

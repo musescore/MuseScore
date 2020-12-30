@@ -56,8 +56,8 @@ public:
     virtual bool channelPitch(mu::midi::channel_t chan, int16_t val); // -12 - 12
 
 private:
-    std::string m_name;
-    std::shared_ptr<PluginInstance> m_instance;
+    std::string m_name = "";
+    std::shared_ptr<PluginInstance> m_instance = nullptr;
 };
 }
 }

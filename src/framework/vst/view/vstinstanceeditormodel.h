@@ -35,17 +35,17 @@ class VSTInstanceEditorModel : public QObject
 public:
     VSTInstanceEditorModel(QObject* parent = nullptr);
 
-    instanceId id() const { return m_id; }
+    instanceId id() const;
     void setId(instanceId id);
 
     QString name() const;
 
 signals:
-    void idChanged(instanceId);
+    void idChanged(mu::vst::instanceId);
 
 private:
     instancePtr instance() const;
-    instanceId m_id;
+    instanceId m_id = IVSTInstanceRegister::ID_NOT_SETTED;
 };
 } // namespace vst
 } // namespace mu

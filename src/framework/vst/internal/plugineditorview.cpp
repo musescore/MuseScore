@@ -35,7 +35,7 @@ IMPLEMENT_FUNKNOWN_METHODS(PluginEditorView, IPlugFrame, IPlugFrame::iid)
 std::map<instanceId, QWidget*> PluginEditorView::m_activeViews = {};
 
 PluginEditorView::PluginEditorView(QWidget* parent)
-    : QDialog(parent), m_instanceId(IVSTInstanceRegister::ID_NOT_SETTED), m_view(nullptr)
+    : QDialog(parent)
 {
     setAttribute(Qt::WA_NativeWindow, true);
 }
@@ -59,6 +59,11 @@ PluginEditorView::~PluginEditorView()
 int PluginEditorView::metaTypeId()
 {
     return QMetaType::type("PluginEditorView");
+}
+
+instanceId PluginEditorView::id() const
+{
+    return m_instanceId;
 }
 
 void PluginEditorView::setId(instanceId id)

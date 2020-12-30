@@ -41,7 +41,7 @@ public:
     Steinberg::Vst::IAttributeList* getAttributes() override;
 
 protected:
-    std::string m_messageId;
+    std::string m_messageId = "";
     AttributeList m_attributeList;
 };
 }
