@@ -2741,7 +2741,7 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "find",
-         QT_TRANSLATE_NOOP("action","Find / Go To")
+         QT_TRANSLATE_NOOP("action","Find / Go To"),
          QT_TRANSLATE_NOOP("action","Find / Go to")
          },
       {

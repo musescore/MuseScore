@@ -6906,7 +6906,7 @@ void MuseScore::showSearchDialog()
             searchDialogLayout->addWidget(searchExit);
             searchDialogLayout->addSpacing(10);
 
-            searchDialogLayout->addWidget(new QLabel(tr("Find / Go To: ")));
+            searchDialogLayout->addWidget(new QLabel(tr("Find / Go to:")));
 
             searchCombo = new SearchComboBox;
             searchDialogLayout->addWidget(searchCombo);
