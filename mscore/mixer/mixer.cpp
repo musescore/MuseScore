@@ -228,6 +228,8 @@ void Mixer::retranslate(bool firstTime)
       {
       setWindowTitle(qApp->translate("Mixer", "Mixer"));
       if (!firstTime) {
+            retranslateUi(this);
+            mixerDetails->retranslateUi(mixerDetails);
             for (int i = 0; i < trackAreaLayout->count(); i++) {
                   PartEdit* p = getPartAtIndex(i);
                   if (p) p->retranslateUi(p);
