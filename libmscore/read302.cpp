@@ -291,10 +291,28 @@ bool Score::read(XmlReader& e)
             if (defined)
                   {
                   if (defined->isScoreOrder(this)) {
+                        // The order in the score file matches a score order
+                        // which is already defined so use that order.
                         setScoreOrder(defined);
                         delete order;
                         }
                   else {
+                        // The order in the score file is already defined in the score order
+                        // but the order is of the instruments is not the same so use the
+                        // order as a customized version of the already defined order.
+                        scoreOrders.addScoreOrder(order);
+                        setScoreOrder(order);
+                        }
+                  }
+            else {
+                  defined = scoreOrders.findById(order->getId());
+                  if (defined) {
+                        // The order in the score file is already available, resuse it.
+                        setScoreOrder(defined);
+                        delete order;
+                        }
+                  else {
+                        // The order in the score file is new, add it to the score orders.
                         scoreOrders.addScoreOrder(order);
                         setScoreOrder(order);
                         }
