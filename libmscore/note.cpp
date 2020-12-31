@@ -2102,8 +2102,8 @@ void Note::layout2()
       for (Element* e : _el) {
             if (!score()->tagIsValid(e->tag()))
                   continue;
-            e->setMag(mag());
             if (e->isSymbol()) {
+                  e->setMag(mag());
                   qreal w = headWidth();
                   Symbol* sym = toSymbol(e);
                   e->layout();
@@ -2120,6 +2120,7 @@ void Note::layout2()
                         }
                   }
             else if (e->isFingering()) {
+                  // don't set mag; fingerings should not scale with note
                   Fingering* f = toFingering(e);
                   if (f->propertyFlags(Pid::PLACEMENT) == PropertyFlags::STYLED)
                         f->setPlacement(f->calculatePlacement());
@@ -2129,6 +2130,7 @@ void Note::layout2()
                         f->layout();
                   }
             else {
+                  e->setMag(mag());
                   e->layout();
                   }
             }
