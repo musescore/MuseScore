@@ -3419,7 +3419,7 @@ bool MuseScore::saveOnline(const QStringList& inFilePaths)
             parseSourceUrl(score->metaTag("source"), uid, nid);
 
             if (nid <= 0) {
-                  qCritical() << qUtf8Printable(tr("Error: '%1' tag missing or badly formed in %2").arg("source").arg(path));
+                  qCritical() << qUtf8Printable(tr("Error: '%1' tag missing or malformed in %2").arg("source").arg(path));
                   all_successful = false;
                   continue;
                   }
