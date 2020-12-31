@@ -43,6 +43,7 @@ class TDockWidget : public QDockWidget {
       QSplitter* _grid;
 
       virtual void closeEvent(QCloseEvent* event);
+      virtual void changeEvent(QEvent*);
 
    signals:
       void closed(bool);
@@ -198,6 +199,7 @@ class Timeline : public QGraphicsView {
       virtual void wheelEvent(QWheelEvent *event);
       virtual void leaveEvent(QEvent*);
       void showEvent(QShowEvent*) override;
+      virtual void changeEvent(QEvent*);
 
       unsigned correctMetaRow(unsigned row);
       int correctStave(int stave);

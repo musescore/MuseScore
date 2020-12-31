@@ -93,6 +93,17 @@ void TDockWidget::closeEvent(QCloseEvent* event)
       }
 
 //---------------------------------------------------------
+//   changeEvent
+//---------------------------------------------------------
+
+void TDockWidget::changeEvent(QEvent* event)
+      {
+      QDockWidget::changeEvent(event);
+      if (event->type() == QEvent::LanguageChange)
+            setWindowTitle(tr("Timeline"));
+      }
+
+//---------------------------------------------------------
 //   TRowLabels
 //---------------------------------------------------------
 
@@ -2425,6 +2436,34 @@ void Timeline::showEvent(QShowEvent* evt)
       QGraphicsView::showEvent(evt);
       if (!evt->spontaneous())
             setScore(_score);
+      }
+
+//---------------------------------------------------------
+//   changeEvent
+//---------------------------------------------------------
+
+void Timeline::changeEvent(QEvent* event)
+      {
+      QGraphicsView::changeEvent(event);
+      if (event->type() == QEvent::LanguageChange) {
+            _metas.clear();
+            std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t1(tr("Tempo"), &Ms::Timeline::tempoMeta, true);
+            std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t2(tr("Time Signature"), &Ms::Timeline::timeMeta, true);
+            std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t3(tr("Rehearsal Mark"), &Ms::Timeline::rehearsalMeta, true);
+            std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t4(tr("Key Signature"), &Ms::Timeline::keyMeta, true);
+            std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t5(tr("Barlines"), &Ms::Timeline::barlineMeta, true);
+            std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t6(tr("Jumps and Markers"), &Ms::Timeline::jumpMarkerMeta, true);
+            std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t7(tr("Measures"), &Ms::Timeline::measureMeta, true);
+            _metas.push_back(t1);
+            _metas.push_back(t2);
+            _metas.push_back(t3);
+            _metas.push_back(t4);
+            _metas.push_back(t5);
+            _metas.push_back(t6);
+            _metas.push_back(t7);
+
+            updateGridFull();
+            }
       }
 
 //---------------------------------------------------------
