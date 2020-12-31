@@ -42,7 +42,7 @@ enum { PART_LIST_ITEM = QTreeWidgetItem::UserType, STAFF_LIST_ITEM };
 class ScoreOrderListModel : public QAbstractListModel {
    private:
       ScoreOrderList* _scoreOrders;
-      ScoreOrder* customisedOrder { nullptr };
+      ScoreOrder* _customizedOrder { nullptr };
 
    public:
       ScoreOrderListModel(ScoreOrderList* data, QObject* parent=nullptr);
@@ -51,7 +51,24 @@ class ScoreOrderListModel : public QAbstractListModel {
       QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
       void rebuildData();
 
-      void setCustomisedOrder(ScoreOrder* order);
+      void setCustomizedOrder(ScoreOrder* order);
+      };
+
+//---------------------------------------------------------
+//   ScoreOrderFilterProxyModel
+//---------------------------------------------------------
+
+class ScoreOrderFilterProxyModel : public QSortFilterProxyModel {
+   private:
+      ScoreOrderList* _scoreOrders;
+      ScoreOrder* _customizedOrder { nullptr };
+
+   public:
+      ScoreOrderFilterProxyModel(ScoreOrderList* data, QObject* parent=nullptr);
+      void setCustomizedOrder(ScoreOrder* order);
+
+   protected:
+      virtual bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
       };
 
 //---------------------------------------------------------
@@ -159,7 +176,7 @@ class InstrumentsWidget : public QWidget, public Ui::InstrumentsWidget {
       Q_OBJECT
 
       ScoreOrderListModel* _model;
-
+      ScoreOrderFilterProxyModel* _filter;
       int findPrvItem(PartListItem* pli, bool insert, int number=-1);
       QTreeWidgetItem* movePartItem(int oldPos, int newPos);
 

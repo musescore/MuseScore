@@ -193,7 +193,7 @@ ScoreOrder* ScoreOrder::clone()
             }
       order->instrumentMap = instrumentMap;
       order->_groupMultiplier = _groupMultiplier;
-      order->_customised = true;
+      order->_customized = true;
       return order;
       }
 
@@ -207,7 +207,7 @@ void ScoreOrder::init()
       _soloists = nullptr;
       _unsorted = nullptr;
       _groupMultiplier = 1;
-      _customised = false;
+      _customized = false;
       if (!isCustom()) {
             for (auto ig : instrumentGroups)
                   _groupMultiplier += ig->instrumentTemplates.size();
@@ -381,7 +381,7 @@ void ScoreOrder::createUnsortedGroup()
 
 QString ScoreOrder::getId() const
       {
-      if (_customised)
+      if (_customized)
             return QString("%1-%2").arg(_id).arg(reinterpret_cast<quintptr>(this), 0, 16);
       else
             return _id;
@@ -402,7 +402,7 @@ QString ScoreOrder::getName() const
 
 QString ScoreOrder::getFullName() const
       {
-      if (_customised)
+      if (_customized)
             return QObject::tr("%1 (Customized)").arg(_name);
       else
             return getName();
@@ -418,22 +418,22 @@ bool ScoreOrder::isCustom() const
       }
 
 //---------------------------------------------------------
-//   isCustomised
+//   isCustomized
 //---------------------------------------------------------
 
-bool ScoreOrder::isCustomised() const
+bool ScoreOrder::isCustomized() const
       {
-      return _customised;
+      return _customized;
       }
 
 //---------------------------------------------------------
-//   setCustomised
+//   setCustomized
 //---------------------------------------------------------
 
-void ScoreOrder::setCustomised()
+void ScoreOrder::setCustomized()
       {
       if (!isCustom())
-            _customised = true;
+            _customized = true;
       }
 
 //---------------------------------------------------------
@@ -473,7 +473,7 @@ void ScoreOrder::read(XmlReader& e)
       {
       init();
       const QString id { "" };
-      _customised = e.intAttribute("customised");
+      _customized = e.intAttribute("customised");
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "name")
@@ -504,7 +504,7 @@ void ScoreOrder::write(XmlWriter& xml) const
       if (isCustom())
             return;
 
-      xml.stag(QString("Order id=\"%1\" customised=\"%2\"").arg(_id).arg(_customised));
+      xml.stag(QString("Order id=\"%1\" customised=\"%2\"").arg(_id).arg(_customized));
       xml.tag("name", _name);
 
       QMapIterator<QString, InstrumentOverwrite> i(instrumentMap);
@@ -784,26 +784,26 @@ ScoreOrder* ScoreOrderList::getById(const QString& id)
 //      return nullptr if no matching ScoreOrder is found
 //---------------------------------------------------------
 
-ScoreOrder* ScoreOrderList::findByName(const QString& name, bool customised)
+ScoreOrder* ScoreOrderList::findByName(const QString& name, bool customized)
       {
-      ScoreOrder* customisedOrder { nullptr };
+      ScoreOrder* customizedOrder { nullptr };
       for (ScoreOrder* order : _orders) {
             if (order->getName() == name) {
-                  if (customised)
+                  if (customized)
                         {
-                        if (order->isCustomised())
+                        if (order->isCustomized())
                               return order;
                         }
                   else
                         {
-                        if (order->isCustomised())
-                              customisedOrder = order;
+                        if (order->isCustomized())
+                              customizedOrder = order;
                         else
                               return order;
                         }
                   }
             }
-      return customisedOrder;
+      return customizedOrder;
       }
 
 //---------------------------------------------------------
@@ -880,12 +880,12 @@ void ScoreOrderList::addScoreOrder(ScoreOrder* order)
       if (!order || _orders.contains(order))
             return;
 
-      if (!order->isCustomised()) {
+      if (!order->isCustomized()) {
             append(order);
             return;
             }
 
-      if (order->isCustomised()) {
+      if (order->isCustomized()) {
             for (int index { 0 }; index < _orders.size(); ++index) {
                   if (_orders[index]->getName() == order->getName()) {
                         _orders.insert(index+1, order);
