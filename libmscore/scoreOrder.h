@@ -77,7 +77,7 @@ class ScoreOrder {
       ScoreGroup* _soloists;
       ScoreGroup* _unsorted;
       int _groupMultiplier;
-      bool _customised { false };
+      bool _customized { false };
 
    protected:
       QMap<QString, InstrumentOverwrite> instrumentMap;
@@ -107,8 +107,8 @@ class ScoreOrder {
       bool isCustom() const;
       void setOwner(Score *score);
       Score* getOwner() const;
-      bool isCustomised() const;
-      void setCustomised();
+      bool isCustomized() const;
+      void setCustomized();
 
       ScoreGroup* getGroup(const QString family, const QString instrumentGroup) const;
       ScoreGroup* getGroup(const QString instrumentId, bool soloist) const;
@@ -145,7 +145,7 @@ class ScoreOrderList {
 
       ScoreOrder* findById(const QString& orderId) const;
       ScoreOrder* getById(const QString& orderId);
-      ScoreOrder* findByName(const QString& orderName, bool customised=false);
+      ScoreOrder* findByName(const QString& orderName, bool customized=false);
       ScoreOrder* customScoreOrder() const;
       int getScoreOrderIndex(const ScoreOrder* order) const;
       QList<ScoreOrder*> searchScoreOrders(const QList<int>& indices) const;
