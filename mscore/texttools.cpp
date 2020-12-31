@@ -55,54 +55,49 @@ TextTools::TextTools(QWidget* parent)
    : QDockWidget(parent)
       {
       setObjectName("text-tools");
-      setWindowTitle(tr("Text Tools"));
       setAllowedAreas(Qt::DockWidgetAreas(Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea));
       setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
 
       text = nullptr;
       cursor = nullptr;
 
-      QToolBar* tb = new QToolBar(tr("Text Edit"));
-      tb->setIconSize(QSize(preferences.getInt(PREF_UI_THEME_ICONWIDTH) * guiScaling, preferences.getInt(PREF_UI_THEME_ICONHEIGHT) * guiScaling));
+      toolbar = new QToolBar(tr("Text Edit"));
+      toolbar->setIconSize(QSize(preferences.getInt(PREF_UI_THEME_ICONWIDTH) * guiScaling,
+                                 preferences.getInt(PREF_UI_THEME_ICONHEIGHT) * guiScaling));
 
       showKeyboard = getAction("show-keys");
       showKeyboard->setCheckable(true);
-      tb->addAction(showKeyboard);
+      toolbar->addAction(showKeyboard);
 
-      typefaceBold = tb->addAction(*icons[int(Icons::textBold_ICON)], "");
-      typefaceBold->setToolTip(tr("Bold"));
+      typefaceBold = toolbar->addAction(*icons[int(Icons::textBold_ICON)], "");
       typefaceBold->setCheckable(true);
 
-      typefaceItalic = tb->addAction(*icons[int(Icons::textItalic_ICON)], "");
-      typefaceItalic->setToolTip(tr("Italic"));
+      typefaceItalic = toolbar->addAction(*icons[int(Icons::textItalic_ICON)], "");
       typefaceItalic->setCheckable(true);
 
-      typefaceUnderline = tb->addAction(*icons[int(Icons::textUnderline_ICON)], "");
-      typefaceUnderline->setToolTip(tr("Underline"));
+      typefaceUnderline = toolbar->addAction(*icons[int(Icons::textUnderline_ICON)], "");
       typefaceUnderline->setCheckable(true);
 
-      tb->addSeparator();
+      toolbar->addSeparator();
 
-      typefaceSubscript   = tb->addAction(*icons[int(Icons::textSub_ICON)], "");
-      typefaceSubscript->setToolTip(tr("Subscript"));
+      typefaceSubscript = toolbar->addAction(*icons[int(Icons::textSub_ICON)], "");
       typefaceSubscript->setCheckable(true);
 
-      typefaceSuperscript = tb->addAction(*icons[int(Icons::textSuper_ICON)], "");
-      typefaceSuperscript->setToolTip(tr("Superscript"));
+      typefaceSuperscript = toolbar->addAction(*icons[int(Icons::textSuper_ICON)], "");
       typefaceSuperscript->setCheckable(true);
 
-      tb->addSeparator();
+      toolbar->addSeparator();
 
       typefaceFamily = new QFontComboBox(this);
       typefaceFamily->setEditable(false);
-      tb->addWidget(typefaceFamily);
+      toolbar->addWidget(typefaceFamily);
 
       typefaceSize = new QDoubleSpinBox(this);
       typefaceSize->setFocusPolicy(Qt::ClickFocus);
       typefaceSize->setMinimum(1);
-      tb->addWidget(typefaceSize);
+      toolbar->addWidget(typefaceSize);
 
-      setWidget(tb);
+      setWidget(toolbar);
       QWidget* w = new QWidget(this);
       setTitleBarWidget(w);
       titleBarWidget()->hide();
@@ -115,6 +110,33 @@ TextTools::TextTools(QWidget* parent)
       connect(typefaceSubscript,   SIGNAL(triggered(bool)), SLOT(subscriptClicked(bool)));
       connect(typefaceSuperscript, SIGNAL(triggered(bool)), SLOT(superscriptClicked(bool)));
       connect(showKeyboard,        SIGNAL(toggled(bool)),   SLOT(showKeyboardClicked(bool)));
+      
+      retranslate();
+      }
+
+//---------------------------------------------------------
+//   retranslate
+//---------------------------------------------------------
+
+void TextTools::retranslate()
+      {
+      setWindowTitle(tr("Text Tools"));
+      toolbar->setWindowTitle(tr("Text Edit"));
+      typefaceBold->setToolTip(tr("Bold"));
+      typefaceItalic->setToolTip(tr("Italic"));
+      typefaceSubscript->setToolTip(tr("Subscript"));
+      typefaceSuperscript->setToolTip(tr("Superscript"));
+      }
+
+//---------------------------------------------------------
+//   changeEvent
+//---------------------------------------------------------
+
+void TextTools::changeEvent(QEvent* event)
+      {
+      QDockWidget::changeEvent(event);
+      if (event->type() == QEvent::LanguageChange)
+            retranslate();
       }
 
 //---------------------------------------------------------
@@ -341,4 +363,3 @@ void TextTools::showKeyboardClicked(bool val)
             }
       }
 }
-
