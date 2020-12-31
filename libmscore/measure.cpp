@@ -2879,7 +2879,7 @@ bool Measure::isEmpty(int staffIdx) const
 //---------------------------------------------------------
 //   isCutawayClef
 ///    Check for empty measure with only
-///    a Courtesy Clef before the End Bar Line
+///    a Courtesy Clef before End Bar Line
 //---------------------------------------------------------
 
 bool Measure::isCutawayClef(int staffIdx) const
@@ -2896,7 +2896,14 @@ bool Measure::isCutawayClef(int staffIdx) const
             strack = staffIdx * VOICES;
             etrack = strack + VOICES;
             }
-      Segment* s = last()->prev();
+      // find segment before EndBarLine
+      Segment* s;
+      for (Segment* ls = last(); ls; ls = ls->prev()) {
+            if (ls->segmentType() ==  SegmentType::EndBarLine) {
+                  s = ls->prev();
+                  break;
+                  }
+            }
       if (!s)
             return false;
       for (int track = strack; track < etrack; ++track) {
