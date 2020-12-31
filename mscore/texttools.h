@@ -30,6 +30,7 @@ class TextTools : public QDockWidget {
       TextBase* text;
       TextCursor* cursor;
 
+      QToolBar* toolbar;
       QDoubleSpinBox* typefaceSize;
       QFontComboBox* typefaceFamily;
       QAction* typefaceBold;
@@ -52,6 +53,10 @@ class TextTools : public QDockWidget {
       void subscriptClicked(bool);
       void superscriptClicked(bool);
       void showKeyboardClicked(bool);
+      
+   protected:
+      void changeEvent(QEvent*);
+      void retranslate();
 
    public:
       TextTools(QWidget* parent = 0);
