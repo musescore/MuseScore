@@ -14,6 +14,7 @@
 #define __TOOLBAREDITOR_H__
 
 #include "ui_toolbarEditor.h"
+#include "abstractdialog.h"
 
 namespace Ms {
 
@@ -21,16 +22,17 @@ namespace Ms {
 //   ToolbarEditor
 //---------------------------------------------------------
 
-class ToolbarEditor : public QDialog, public Ui::ToolbarEditor {
+class ToolbarEditor : public AbstractDialog, public Ui::ToolbarEditor {
       Q_OBJECT
 
       std::vector<std::list<const char*>*> *new_toolbars;
       void updateNewToolbar(int toolbar_to_update);
 
       void populateLists(const std::list<const char*>&, std::list<const char*>*);
-      bool isSpacer(QListWidgetItem*) const;
+      bool isSeparator(QListWidgetItem*) const;
 
       virtual void hideEvent(QHideEvent*);
+      
    private slots:
       void toolbarChanged(int);
       void addAction();
@@ -38,6 +40,9 @@ class ToolbarEditor : public QDialog, public Ui::ToolbarEditor {
       void upAction();
       void downAction();
       void accepted();
+      
+   protected:
+      virtual void retranslate();
 
    public:
       ToolbarEditor(QWidget* parent = 0);

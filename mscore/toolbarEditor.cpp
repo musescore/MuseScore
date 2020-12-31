@@ -41,7 +41,7 @@ void MuseScore::showToolbarEditor()
 //---------------------------------------------------------
 
 ToolbarEditor::ToolbarEditor(QWidget* parent)
-   : QDialog(parent)
+   : AbstractDialog(parent)
       {
       setObjectName("ToolbarEditor");
       setupUi(this);
@@ -76,6 +76,9 @@ ToolbarEditor::ToolbarEditor(QWidget* parent)
 
 void ToolbarEditor::init()
       {
+      for (int i = 0; i < toolbarList->count(); i++)
+            toolbarList->item(i)->setText(qApp->translate("toolbar", toolbars[i]));
+
       QString name = WorkspacesManager::currentWorkspace()->name();
       bool writable = !WorkspacesManager::currentWorkspace()->readOnly();
       if (!writable) {
@@ -92,6 +95,16 @@ void ToolbarEditor::init()
       new_toolbars->at(1) = mscore->fileOperationEntries();
       new_toolbars->at(2) = mscore->playbackControlEntries();
       toolbarChanged(toolbarList->currentRow());  // populate lists
+      }
+
+//---------------------------------------------------------
+//   retranslate
+//---------------------------------------------------------
+
+void ToolbarEditor::retranslate()
+      {
+      retranslateUi(this);
+      init();
       }
 
 //---------------------------------------------------------
@@ -122,14 +135,16 @@ void ToolbarEditor::populateLists(const std::list<const char*>& all, std::list<c
       availableList->clear();
       for (auto i : *current) {
             QAction* a = getAction(i);
-            QListWidgetItem* item;
-            QString actionName = QString(i);
+            QListWidgetItem* item = nullptr;
+            QString id = QString(i);
             if (a)
-                  item = new QListWidgetItem(a->icon(), actionName);
-            else if (actionName.isEmpty())
+                  // Remove '&', because text contains '&' signs for mnemonics,
+                  // but in a QListWidgetItem, you get the '&' instead of the mnemonic.
+                  item = new QListWidgetItem(a->icon(), a->text().remove('&'));
+            else if (id.isEmpty())
                   item = new QListWidgetItem(tr("Separator"));
             else
-                  item = new QListWidgetItem(actionName);
+                  item = new QListWidgetItem(id);
             item->setData(Qt::UserRole, QVariant::fromValue((void*)i));
             actionList->addItem(item);
             }
@@ -143,13 +158,13 @@ void ToolbarEditor::populateLists(const std::list<const char*>& all, std::list<c
                   }
             if (!found) {
                   QAction* a = getAction(i);
-                  QListWidgetItem* item = 0;
-                  QString actionName = QString(i);
+                  QListWidgetItem* item = nullptr;
+                  QString id = QString(i);
                   if (a)
-                        item = new QListWidgetItem(a->icon(), actionName);
-                  else if (!actionName.isEmpty())
-                        item = new QListWidgetItem(QString(i));
-				  if (item) {
+                        item = new QListWidgetItem(a->icon(), a->text().remove('&'));
+                  else if (!id.isEmpty())
+                        item = new QListWidgetItem(id);
+                  if (item) {
                         item->setData(Qt::UserRole, QVariant::fromValue((void*)i));
                         availableList->addItem(item);
                         }
@@ -161,10 +176,10 @@ void ToolbarEditor::populateLists(const std::list<const char*>& all, std::list<c
       }
 
 //---------------------------------------------------------
-//   isSpacer
+//   isSeparator
 //---------------------------------------------------------
 
-bool ToolbarEditor::isSpacer(QListWidgetItem* item) const
+bool ToolbarEditor::isSeparator(QListWidgetItem* item) const
       {
       return !*(const char*)(item->data(Qt::UserRole).value<void*>());
       }
@@ -180,7 +195,7 @@ void ToolbarEditor::addAction()
             return;
       QListWidgetItem* item = availableList->item(cr);
 
-      if (isSpacer(item)) {
+      if (isSeparator(item)) {
             QListWidgetItem* nitem = new QListWidgetItem(item->text());
             nitem->setData(Qt::UserRole, QVariant::fromValue((void*)""));
             item = nitem;
@@ -205,7 +220,7 @@ void ToolbarEditor::removeAction()
       if (cr == -1)
             return;
       QListWidgetItem* item = actionList->takeItem(cr);
-      if (!isSpacer(item))
+      if (!isSeparator(item))
             availableList->addItem(item);
       updateNewToolbar(toolbarList->currentRow());
       }
