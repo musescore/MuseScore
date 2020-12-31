@@ -473,7 +473,7 @@ void ScoreOrder::read(XmlReader& e)
       {
       init();
       const QString id { "" };
-      _customized = e.intAttribute("customised");
+      _customized = e.intAttribute("customized");
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "name")
@@ -504,7 +504,7 @@ void ScoreOrder::write(XmlWriter& xml) const
       if (isCustom())
             return;
 
-      xml.stag(QString("Order id=\"%1\" customised=\"%2\"").arg(_id).arg(_customized));
+      xml.stag(QString("Order id=\"%1\" customized=\"%2\"").arg(_id).arg(_customized));
       xml.tag("name", _name);
 
       QMapIterator<QString, InstrumentOverwrite> i(instrumentMap);
@@ -885,15 +885,14 @@ void ScoreOrderList::addScoreOrder(ScoreOrder* order)
             return;
             }
 
-      if (order->isCustomized()) {
-            for (int index { 0 }; index < _orders.size(); ++index) {
-                  if (_orders[index]->getName() == order->getName()) {
-                        _orders.insert(index+1, order);
-                        return;
-                        }
+      for (int index { 0 }; index < _orders.size(); ++index) {
+            if (_orders[index]->getName() == order->getName()) {
+                  _orders.insert(index+1, order);
+                  return;
                   }
             }
       append(order);
+      order->_customized = false;
       }
 
 //---------------------------------------------------------
