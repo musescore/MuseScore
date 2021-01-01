@@ -2749,7 +2749,7 @@ void Chord::setIsChordPlayable(const bool isPlayable)
     }
 
     if (_tremolo) {
-        _arpeggio->undoChangeProperty(Pid::PLAY, isPlayable);
+        _tremolo->undoChangeProperty(Pid::PLAY, isPlayable);
     }
 
     triggerLayout();

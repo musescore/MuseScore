@@ -194,7 +194,7 @@ public:
     Fraction& operator*=(const Fraction& val)
     {
         _numerator *= val._numerator;
-        _denominator  *= val._denominator;
+        _denominator *= val._denominator;
         if (val._denominator != 1) {
             reduce();                            // We should be free to fully reduce here
         }

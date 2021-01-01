@@ -84,10 +84,10 @@ void SegmentList::check()
     if (l != _last) {
         qFatal("SegmentList::check: bad last");
     }
-    if (f->prev()) {
+    if (f && f->prev()) {
         qFatal("SegmentList::check: first has prev");
     }
-    if (l->next()) {
+    if (l && l->next()) {
         qFatal("SegmentList::check: last has next");
     }
     if (n != _size) {
