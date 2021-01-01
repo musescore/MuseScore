@@ -1477,7 +1477,7 @@ qreal Chord::minAbsStemLength() const
 
       // two-note tremolo
       else {
-            if (_tremolo->chord1()->up() == _tremolo->chord2()->up()) {
+            if (_tremolo->chord2() && _tremolo->chord1()->up() == _tremolo->chord2()->up()) {
                   const qreal tremoloMinHeight = _tremolo->minHeight() * spatium();
                   return tremoloMinHeight + beamLvl * beamDist + 2 * td * spatium();
                   }
