@@ -254,8 +254,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>635</width>
-                <height>696</height>
+                <width>597</width>
+                <height>552</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -932,8 +932,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>635</width>
-                <height>674</height>
+                <width>503</width>
+                <height>534</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_4">
@@ -2334,8 +2334,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>738</width>
-             <height>659</height>
+             <width>703</width>
+             <height>320</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -3796,10 +3796,10 @@
            <item row="0" column="3">
             <widget class="QToolButton" name="resetAccidentalsOctaveColumnsAlignLeft">
              <property name="toolTip">
-              <string>Reset padding inside parentheses to default</string>
+              <string>Reset to align accidentals within octaves to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Padding inside parentheses' value</string>
+              <string>Reset 'Align octaves left' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -3865,10 +3865,10 @@ By default, they will be placed such as that their right end are at the same lev
            <item row="1" column="3" rowspan="2">
             <widget class="QToolButton" name="resetAccidentalsBracketPadding">
              <property name="toolTip">
-              <string>Reset to align accidentals within octaves to default</string>
+              <string>Reset padding inside parentheses to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Align octaves left' value</string>
+              <string>Reset 'Padding inside parentheses' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -4022,8 +4022,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>635</width>
-                <height>900</height>
+                <width>332</width>
+                <height>678</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_56">
@@ -5726,8 +5726,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>650</width>
-                <height>638</height>
+                <width>434</width>
+                <height>420</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_54">
@@ -9484,8 +9484,8 @@ By default, they will be placed such as that their right end are at the same lev
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>680</width>
-             <height>674</height>
+             <width>458</width>
+             <height>364</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_57">
@@ -10884,8 +10884,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>650</width>
-                <height>638</height>
+                <width>467</width>
+                <height>443</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_55">
@@ -12441,6 +12441,7 @@ By default, they will be placed such as that their right end are at the same lev
    <class>Ms::RadioButtonGroupBox</class>
    <extends>QGroupBox</extends>
    <header>radiobuttongroupbox.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>
