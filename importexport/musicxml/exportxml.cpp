@@ -1530,9 +1530,12 @@ static void unpitch2xml(const Note* note, QString& s, int& octave)
 
 static QString tick2xml(const Fraction& ticks, int* dots)
       {
-      TDuration t;
-      t.setVal(ticks.ticks());
+      TDuration t(ticks);
       *dots = t.dots();
+      if (ticks == Fraction(0,1)) {
+            t.setType("measure");
+            *dots = 0;
+            }
       return t.name();
       }
 
@@ -3069,15 +3072,15 @@ static void writeFingering(XmlWriter& xml, Notations& notations, Technical& tech
       }
 
 //---------------------------------------------------------
-//   stretchCorrActTicks
+//   stretchCorrActFraction
 //---------------------------------------------------------
 
-static int stretchCorrActTicks(const Note* const note)
+static Fraction stretchCorrActFraction(const Note* const note)
       {
       // time signature stretch factor
       const Fraction str = note->chord()->staff()->timeStretch(note->chord()->tick());
       // chord's actual ticks corrected for stretch
-      return (note->chord()->actualTicks() * str).ticks();
+      return note->chord()->actualTicks() * str;
       }
 
 //---------------------------------------------------------
@@ -3140,14 +3143,12 @@ static void writeTypeAndDots(XmlWriter& xml, const Note* const note)
       // type
       int dots { 0 };
       const auto ratio = timeModification(note->chord()->tuplet());
-      const auto actNotes = ratio.numerator();
-      const auto nrmNotes = ratio.denominator();
 
-      const auto strActTicks = stretchCorrActTicks(note);
-      const Fraction tt { Fraction::fromTicks(strActTicks * actNotes * tremoloCorrection(note) / nrmNotes) };
+      const auto strActFraction = stretchCorrActFraction(note);
+      const Fraction tt  = strActFraction * ratio * tremoloCorrection(note);
       const QString s { tick2xml(tt, &dots) };
       if (s.isEmpty())
-            qDebug("no note type found for ticks %d", strActTicks);
+            qDebug("no note type found for fraction %d / %d", strActFraction.numerator(), strActFraction.denominator());
 
       // small notes are indicated by size=cue, but for grace and cue notes this is implicit
       if (isSmallNote(note) && !isCueNote(note) && !note->chord()->isGrace())
@@ -3322,7 +3323,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* 
 
             // duration
             if (!grace)
-                  _xml.tag("duration", stretchCorrActTicks(note) / div);
+                  _xml.tag("duration", stretchCorrActFraction(note).ticks() / div);
 
             if (note->tieBack())
                   _xml.tagE("tie type=\"stop\"");
