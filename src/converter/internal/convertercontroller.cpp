@@ -106,7 +106,7 @@ mu::RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(con
 
     QJsonArray arr = doc.array();
 
-    for (const QJsonValue& v : arr) {
+    for (const QJsonValue v : arr) {
         QJsonObject obj = v.toObject();
 
         Job job;

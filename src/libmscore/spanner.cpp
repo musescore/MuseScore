@@ -917,7 +917,7 @@ Chord* Spanner::findEndChord() const
     Q_ASSERT(_anchor == Anchor::CHORD);
     Segment* s = score()->tick2segmentMM(tick2(), false, SegmentType::ChordRest);
     ChordRest* endCR = s ? toChordRest(s->element(track2())) : nullptr;
-    if (!endCR->isChord()) {
+    if (endCR && !endCR->isChord()) {
         endCR = nullptr;
     }
     return toChord(endCR);

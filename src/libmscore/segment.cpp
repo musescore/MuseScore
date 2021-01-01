@@ -1715,6 +1715,9 @@ Element* Segment::nextElement(int activeStaff)
     if (!e && !score()->selection().elements().isEmpty()) {
         e = score()->selection().elements().first();
     }
+    if (!e) {
+        return nullptr;
+    }
     switch (e->type()) {
     case ElementType::DYNAMIC:
     case ElementType::HARMONY:
@@ -1852,6 +1855,9 @@ Element* Segment::prevElement(int activeStaff)
     Element* e = score()->selection().element();
     if (!e && !score()->selection().elements().isEmpty()) {
         e = score()->selection().elements().last();
+    }
+    if (!e) {
+        return nullptr;
     }
     switch (e->type()) {
     case ElementType::DYNAMIC:

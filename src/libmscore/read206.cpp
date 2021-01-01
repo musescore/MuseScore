@@ -1501,8 +1501,8 @@ bool readNoteProperties206(Note* note, XmlReader& e)
             sp->setTick(e.tick());
             note->addSpannerFor(sp);
             sp->setParent(note);
+            adjustPlacement(sp);
         }
-        adjustPlacement(sp);
     } else if (tag == "offset") {
         note->Element::readProperties(e);
     } else if (note->Element::readProperties(e)) {

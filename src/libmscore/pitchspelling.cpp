@@ -680,9 +680,12 @@ int computeWindow(const std::vector<Note*>& notes, int start, int end)
 
 void changeAllTpcs(Note* n, int tpc1)
 {
+    if (!n) {
+        return;
+    }
     Interval v;
-    Fraction tick = n && n->chord() ? n->chord()->tick() : Fraction(-1,1);
-    if (n && n->part() && n->part()->instrument()) {
+    Fraction tick = n->chord() ? n->chord()->tick() : Fraction(-1,1);
+    if (n->part() && n->part()->instrument()) {
         v = n->part()->instrument(tick)->transpose();
         v.flip();
     }
