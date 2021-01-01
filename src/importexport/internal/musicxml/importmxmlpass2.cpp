@@ -6159,7 +6159,7 @@ Notation Notation::notationWithAttributes(const QString& name, const QXmlStreamA
                                           const QString& parent, const SymId& symId)
 {
     Notation notation { name, parent, symId };
-    for (const auto attr : attributes) {
+    for (const auto& attr : attributes) {
         notation.addAttribute(attr.name(), attr.value());
     }
     return notation;

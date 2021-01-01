@@ -1024,7 +1024,7 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
         if (!measure || !measure->isMeasure() || lm->sectionBreak()
             || (toMeasure(measure)->first(SegmentType::TimeSig) && measure != fm)) {
             // save section break to reinstate after rewrite
-            if (lm->sectionBreak()) {
+            if (lm && lm->sectionBreak()) {
                 sectionBreak = new LayoutBreak(*lm->sectionBreakElement());
             }
 
@@ -2713,7 +2713,7 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
     if (mbEnd->isMeasure()) {
         Measure* mbEndMeasure = toMeasure(mbEnd);
         if (mbEndMeasure->isMMRest()) {
-            mbEnd = mbEndMeasure = mbEndMeasure->mmRestLast();
+            mbEnd = mbEndMeasure->mmRestLast();
         }
 //TODO            createEndBar = (iem == lastMeasureMM()) && (iem->endBarLineType() == BarLineType::END);
         createEndBar = false;
@@ -5128,7 +5128,7 @@ void Score::undoAddElement(Element* element)
             int ntrack    = staffIdx * VOICES;
             Element* ne;
 
-            if (staff->score() == ostaff->score()) {
+            if (ostaff && staff->score() == ostaff->score()) {
                 ne = element;
             } else {
                 // only create linked volta for first staff

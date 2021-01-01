@@ -1292,7 +1292,7 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
             }
             if (needMove) {
                 voiceTagWritten |= writeVoiceMove(xml, segment, startTick, track, &lastTrackWritten);
-                needMove = false;
+                // needMove = false; //! NOTE Not necessary, because needMove is currently never read again.
             }
             if (e->isChordRest()) {
                 ChordRest* cr = toChordRest(e);

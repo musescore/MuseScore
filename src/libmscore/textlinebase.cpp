@@ -214,7 +214,7 @@ bool TextLineBaseSegment::setProperty(Pid id, const QVariant& v)
         }
 
         if (_endText) {
-            _text->setColor(color);
+            _endText->setColor(color);
         }
     }
 

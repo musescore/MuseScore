@@ -363,7 +363,6 @@ void Accidental::layout()
     }
     setMag(m);
 
-    m = magS();
     qreal x = 0.0;
 
     if (_bracket != AccidentalBracket::NONE) {

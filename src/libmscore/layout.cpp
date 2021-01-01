@@ -3746,13 +3746,13 @@ System* Score::collectSystem(LayoutContext& lc)
     if (!lc.curMeasure) {
         return 0;
     }
-    Measure* measure  = _systems.empty() ? 0 : _systems.back()->lastMeasure();
+    Measure* measure = _systems.empty() ? 0 : _systems.back()->lastMeasure();
     if (measure) {
         lc.firstSystem        = measure->sectionBreak() && _layoutMode != LayoutMode::FLOAT;
         lc.startWithLongNames = lc.firstSystem && measure->sectionBreakElement()->startWithLongNames();
     }
     System* system = getNextSystem(lc);
-    Fraction lcmTick = lc.curMeasure ? lc.curMeasure->tick() : Fraction(0,1);
+    Fraction lcmTick = lc.curMeasure->tick();
     system->setInstrumentNames(lc.startWithLongNames, lcmTick);
 
     qreal minWidth    = 0;

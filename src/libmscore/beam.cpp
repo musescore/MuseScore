@@ -2285,6 +2285,9 @@ std::vector<QPointF> Beam::gripsPositions(const EditData& ed) const
             break;
         }
     }
+    if (!c2) { // no chord/rest found, no need to check again below
+        return {}; // just ignore the requested operation
+    }
 
     int y = pagePos().y();
 
