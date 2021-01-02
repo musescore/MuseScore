@@ -210,7 +210,8 @@ if (MSCORE_OUTPUT_NAME)
 endif (MSCORE_OUTPUT_NAME)
 
 if (OS_IS_MAC)
-    set_target_properties(mscore PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/build/MacOSXBundleInfo.plist.in)
+    set_target_properties(mscore PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/build/MacOSXBundleInfo.plist.in
+                                            XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER ${MACOSX_BUNDLE_GUI_IDENTIFIER})
 endif (OS_IS_MAC)
 
 if (CC_IS_MINGW)
