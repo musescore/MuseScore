@@ -3843,7 +3843,7 @@ By default, they will be placed such as that their right end are at the same lev
               </sizepolicy>
              </property>
              <property name="accessibleName">
-              <string>Double spin box for padding inside parentheses around accidentals</string>
+              <string>Set value for padding inside parentheses around accidentals</string>
              </property>
              <property name="suffix">
               <string>sp</string>
@@ -12294,7 +12294,7 @@ By default, they will be placed such as that their right end are at the same lev
            <item row="3" column="1">
             <widget class="QDoubleSpinBox" name="textStyleLineSpacing">
              <property name="suffix">
-              <string> lines</string>
+              <string>li</string>
              </property>
              <property name="singleStep">
               <double>0.100000000000000</double>
