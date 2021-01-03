@@ -1,27 +1,33 @@
-import QtQuick 2.7
-import QtQuick.Controls 2.2
+import QtQuick 2.15
+import QtQuick.Controls 2.15
 
-Rectangle {
+import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
 
-    id: root
+RadioButtonGroup {
+    id: radioButtonList
 
-    property var model: null
+    orientation: ListView.Vertical
+    spacing: 0
 
     signal selected(string name)
 
-    Column {
-        anchors.fill: parent
+    currentIndex: 0
 
-        Repeater {
-            model: root.model
-            delegate: ItemDelegate {
-                height: 56
-                anchors.left: parent.left
-                anchors.right: parent.right
+    delegate: GradientTabButton {
+        id: radioButtonDelegate
 
-                text: modelData.title
-                onClicked: root.selected(modelData.name)
-            }
+        width: parent.width
+
+        ButtonGroup.group: radioButtonList.radioButtonGroup
+        orientation: Qt.Horizontal
+        checked: index === radioButtonList.currentIndex
+
+        title: modelData["title"]
+
+        onToggled: {
+            radioButtonList.currentIndex = index
+            radioButtonList.selected(modelData["name"])
         }
     }
 }
