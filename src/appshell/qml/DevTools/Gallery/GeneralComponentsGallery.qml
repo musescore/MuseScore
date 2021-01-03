@@ -106,32 +106,61 @@ Rectangle {
     Component {
         id: popupSample
 
-        Item {
-            width: root.width
-            height: 40
+        Column {
+            spacing: 12
 
             FlatButton {
-                id: popupButton
+                id: popupDownButton
 
-                text: "Click to show popup"
+                text: "Click to show popup downward"
 
                 onClicked: {
-                    if (popup.opened) {
-                        popup.close()
-                        return
+                    if (popupDown.opened) {
+                        popupDown.close()
+                    } else {
+                        popupDown.open()
                     }
-
-                    popup.open()
                 }
             }
 
             StyledPopup {
-                id: popup
+                id: popupDown
 
                 width: 200
                 height: 200
 
-                y: popupButton.y + popupButton.height
+                anchorItem: popupDownButton
+
+                StyledTextLabel {
+                    text: "Hello, World!"
+
+                    anchors.centerIn: parent
+                }
+            }
+
+            FlatButton {
+                id: popupUpButton
+
+                text: "Click to show popup upward"
+
+                onClicked: {
+                    if (popupUp.opened) {
+                        popupUp.close()
+                    } else {
+                        popupUp.open()
+                    }
+                }
+            }
+
+            StyledPopup {
+                id: popupUp
+
+                width: 200
+                height: 200
+
+                anchorItem: popupUpButton
+
+                opensUpward: true
 
                 StyledTextLabel {
                     text: "Hello, World!"

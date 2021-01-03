@@ -28,16 +28,22 @@ Popup {
     property color borderColor: ui.theme.strokeColor
     property color fillColor: ui.theme.backgroundPrimaryColor
     property bool isOpened: false
+    property bool opensUpward: false
 
     property var arrowX: width / 2
     property alias arrowHeight: arrow.height
 
     readonly property int borderWidth: 1
 
-    topPadding: bottomPadding + arrow.height
-    bottomPadding: 12
-    leftPadding: bottomPadding
-    rightPadding: bottomPadding
+    property Item anchorItem: null
+
+    y: opensUpward ? anchorItem.y - height : anchorItem.y + anchorItem.height
+
+    property var popupPadding: 12
+    topPadding: opensUpward ? popupPadding : popupPadding + arrowHeight
+    bottomPadding: opensUpward ? popupPadding + arrowHeight : popupPadding
+    leftPadding: popupPadding
+    rightPadding: popupPadding
 
     onOpened: { isOpened = true }
     onClosed: { isOpened = false }
@@ -63,6 +69,8 @@ Popup {
 
             Canvas {
                 id: arrow
+                anchors.top: opensUpward ? undefined : parent.top
+                anchors.bottom: opensUpward ? parent.bottom : undefined
                 z: 1
                 height: 12
                 width: 22
@@ -73,11 +81,18 @@ Popup {
                     ctx.lineWidth = 2;
                     ctx.fillStyle = fillColor;
                     ctx.strokeStyle = borderColor;
-
                     ctx.beginPath();
-                    ctx.moveTo(0, height);
-                    ctx.lineTo(width / 2, 1);
-                    ctx.lineTo(width, height);
+
+                    if (opensUpward) {
+                        ctx.moveTo(0, 0);
+                        ctx.lineTo(width / 2, height - 1);
+                        ctx.lineTo(width, 0);
+                    } else {
+                        ctx.moveTo(0, height);
+                        ctx.lineTo(width / 2, 1);
+                        ctx.lineTo(width, height);
+                    }
+
                     ctx.stroke();
                     ctx.fill();
                 }
@@ -88,9 +103,10 @@ Popup {
                 border { width: root.borderWidth; color: root.borderColor }
 
                 anchors {
-                    top: arrow.bottom
-                    topMargin: -1
-                    bottom: parent.bottom
+                    top: opensUpward ? parent.top : arrow.bottom
+                    topMargin: opensUpward ? 0 : -1
+                    bottom: opensUpward ? arrow.top : parent.bottom
+                    bottomMargin: opensUpward ? -1 : 0
                     left: parent.left
                     right: parent.right
                 }
