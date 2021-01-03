@@ -244,8 +244,7 @@ double PlayPanel::speed() const
 
 void PlayPanel::setTempo(double val)
       {
-      int tempo = lrint(val * 60.0);
-      tempoLabel->setText(tr("Tempo\n%1 BPM").arg(tempo, 3, 10, QLatin1Char(' ')));
+      tempoLabel->setText(tr("Tempo\n%1 BPM").arg(val * 60, 6, 'f', 2, QLatin1Char(' ')));
       }
 
 //---------------------------------------------------------
