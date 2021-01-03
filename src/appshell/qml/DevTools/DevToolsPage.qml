@@ -1,13 +1,14 @@
-import QtQuick 2.7
-import MuseScore.Ui 1.0
+import QtQuick 2.15
+
 import MuseScore.Dock 1.0
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
+import "./Gallery"
 import "./Interactive"
+import "./NotationDialogs"
 import "./Telemetry"
 import "./Audio"
-import "./Gallery"
-import "./NotationDialogs"
 import "./VST"
 import "./Plugins"
 
@@ -21,27 +22,36 @@ DockPage {
             id: resourcesPanel
             objectName: "devtoolsPanel"
 
-            width: 200
+            width: 292
+            minimumWidth: 76
+
             color: ui.theme.backgroundPrimaryColor
 
-            DevToolsMenu {
+            Rectangle {
+                anchors.fill: parent
+                color: ui.theme.backgroundPrimaryColor
 
-                model: [
-                    { "name": "gallery", "title": "UI Gallery" },
-                    { "name": "interactive", "title": "Interactive" },
-                    { "name": "mu3dialogs", "title": "MU3Dialogs" },
-                    { "name": "telemetry", "title": "Telemetry" },
-                    { "name": "audio", "title": "Audio" },
-                    { "name": "synth", "title": "Synth" },
-                    { "name": "midiports", "title": "Midi ports" },
-                    { "name": "vst", "title": "VST" },
-                    { "name": "plugins", "title": "Plugins" }
-                ]
+                DevToolsMenu {
+                    anchors.top: parent.top
+                    anchors.left: parent.left
+                    anchors.right: parent.right
 
-                onSelected: {
-                    devtoolsCentral.load(name)
+                    model: [
+                        { "name": "gallery", "title": "UI Gallery" },
+                        { "name": "interactive", "title": "Interactive" },
+                        { "name": "mu3dialogs", "title": "MU3Dialogs" },
+                        { "name": "telemetry", "title": "Telemetry" },
+                        { "name": "audio", "title": "Audio" },
+                        { "name": "synth", "title": "Synth" },
+                        { "name": "midiports", "title": "Midi ports" },
+                        { "name": "vst", "title": "VST" },
+                        { "name": "plugins", "title": "Plugins" }
+                    ]
+
+                    onSelected: {
+                        devtoolsCentral.load(name)
+                    }
                 }
-
             }
         }
     ]
@@ -50,7 +60,7 @@ DockPage {
         id: devtoolsCentral
         objectName: "devtoolsCentral"
 
-        property var currentComp: interactiveComp
+        property var currentComp: galleryComp
 
         function load(name) {
             console.info("loadCentral: " + name)
@@ -68,7 +78,6 @@ DockPage {
         }
 
         Rectangle {
-
             Loader {
                 id: centralLoader
                 anchors.fill: parent
@@ -78,8 +87,18 @@ DockPage {
     }
 
     Component {
+        id: galleryComp
+        GeneralComponentsGallery {}
+    }
+
+    Component {
         id: interactiveComp
         InteractiveTests {}
+    }
+
+    Component {
+        id: notationDialogs
+        MU3Dialogs {}
     }
 
     Component {
@@ -89,7 +108,7 @@ DockPage {
         }
     }
 
-    Component{
+    Component {
         id: audioComp
         AudioEngineTests {}
     }
@@ -105,22 +124,11 @@ DockPage {
     }
 
     Component {
-        id: notationDialogs
-        MU3Dialogs {}
-    }
-
-    Component {
         id: vstComponent
         //safe if VST is not available
         Loader {
             source: "qrc:/qml/DevTools/VST/VSTTests.qml"
         }
-    }
-
-    Component {
-        id: galleryComp
-
-        GeneralComponentsGallery {}
     }
 
     Component {
