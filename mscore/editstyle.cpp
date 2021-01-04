@@ -1007,12 +1007,10 @@ void EditStyle::buttonClicked(QAbstractButton* b)
       {
       switch (buttonBox->standardButton(b)) {
             case QDialogButtonBox::Ok:
-                  done(1);
-                  cs->endCmd();
+                  accept();
                   break;
             case QDialogButtonBox::Cancel:
-                  done(0);
-                  cs->endCmd(true);
+                  reject();
                   break;
             case QDialogButtonBox::NoButton:
             default:
@@ -1020,6 +1018,26 @@ void EditStyle::buttonClicked(QAbstractButton* b)
                         applyToAllParts();
                   break;
             }
+      }
+
+//---------------------------------------------------------
+//   accept
+//---------------------------------------------------------
+
+void EditStyle::accept()
+      {
+      cs->endCmd();
+      QDialog::accept();
+      }
+
+//---------------------------------------------------------
+//   reject
+//---------------------------------------------------------
+
+void EditStyle::reject()
+      {
+      cs->endCmd(true);
+      QDialog::reject();
       }
 
 //---------------------------------------------------------
