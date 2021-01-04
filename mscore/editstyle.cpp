@@ -45,10 +45,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       buttonApplyToAllParts = buttonBox->addButton(tr("Apply to all Parts"), QDialogButtonBox::ApplyRole);
-      //buttonApplyToAllParts->setEnabled(!cs->isMaster()); // set in showEvent() now
       buttonTogglePagelist->setIcon(QIcon(*icons[int(Icons::goNext_ICON)]));
-      // Allow user to scroll/zoom score while selecting style options:
-      setModal(false);
 
       // create button groups for every set of radio button widgets
       // use this group widgets in list styleWidgets
@@ -665,7 +662,11 @@ void MuseScore::showStyleDialog(Element* e)
             _styleDlg->activateWindow();
             }
       else
-            _styleDlg->show();
+            // use `_styleDlg->show();` to show non-modally to allow
+            // user to scroll/zoom score while selecting style options;
+            // however, that must be properly implemented, otherwise it
+            // will cause problems.
+            _styleDlg->exec();
       }
 
 //---------------------------------------------------------
