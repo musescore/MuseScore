@@ -786,10 +786,9 @@ bool EditStyle::elementHasPage(Element* e)
 
 void EditStyle::gotoElement(Element* e)
       {
-      if (auto pagePointer = pageForElement(e)) {
+      if (auto pagePointer = pageForElement(e))
             if (QWidget* page = this->*pagePointer)
-                  pageStack->setCurrentWidget(page);
-            }
+                  setPage(pageStack->indexOf(page));
       }
 
 //---------------------------------------------------------
@@ -1570,7 +1569,8 @@ void EditStyle::systemMinDistanceValueChanged(double val)
 
 void EditStyle::setPage(int row)
       {
-      pageList->setCurrentRow(row);
+      if (row >= 0)
+            pageList->setCurrentRow(row);
       }
 
 //---------------------------------------------------------
