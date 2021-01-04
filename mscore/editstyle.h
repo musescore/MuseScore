@@ -119,6 +119,10 @@ class EditStyle : public AbstractDialog, private Ui::EditStyleBase {
       void gotoElement(Element* e);
       void gotoHeaderFooterPage();
       static bool elementHasPage(Element* e);
+      
+   public slots:
+      void accept();
+      void reject();
       };
 
 
