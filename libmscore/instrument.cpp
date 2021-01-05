@@ -1542,7 +1542,7 @@ void Instrument::updateInstrumentId()
                                     // if no "strings.group" instrument with requested bank
                                     // is found, assume "Strings".
                                     fallback = it->id;
-                              for (const Channel chan : it->channel) {
+                              for (const Channel& chan : it->channel) {
                                     if ((chan.name() == arco) && (chan.bank() == val32ref)) {
                                           _id = it->id;
                                           return;

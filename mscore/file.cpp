@@ -377,7 +377,7 @@ void MuseScore::askAboutApplyingEdwinIfNeed(const QString& fileSuffix)
     QCheckBox askAgainCheckbox(QObject::tr("Remember my choice and don't ask again"));
     dialog.setCheckBox(&askAgainCheckbox);
 
-    QObject::connect(&askAgainCheckbox, &QCheckBox::stateChanged, [this](int state) {
+    QObject::connect(&askAgainCheckbox, &QCheckBox::stateChanged, [](int state) {
         if (static_cast<Qt::CheckState>(state) == Qt::CheckState::Checked) {
             preferences.setPreference(PREF_MIGRATION_DO_NOT_ASK_ME_AGAIN_XML, true);
         }
@@ -2894,12 +2894,12 @@ NotesColors MuseScore::readNotesColors(const QString& filePath) const
 
     NotesColors result;
 
-    for (const QJsonValue& colorObj: colors) {
+    for (const QJsonValue colorObj: colors) {
         QJsonObject cobj = colorObj.toObject();
         QJsonArray notesIndexes = cobj.value("notes").toArray();
         QColor notesColor = QColor(cobj.value("color").toString());
 
-        for (const QJsonValue& index: notesIndexes) {
+        for (const QJsonValue index: notesIndexes) {
             result.insert(index.toInt(), notesColor);
         }
     }

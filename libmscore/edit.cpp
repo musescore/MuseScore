@@ -2148,7 +2148,7 @@ void Score::deleteMeasures(MeasureBase* is, MeasureBase* ie, bool preserveTies)
       if (ie->isMeasure()) {
             Measure* iem = toMeasure(ie);
             if (iem->isMMRest())
-                  ie = iem = iem->mmRestLast();
+                  ie = /*iem = */iem->mmRestLast();
 //TODO            createEndBar = (iem == lastMeasureMM()) && (iem->endBarLineType() == BarLineType::END);
             createEndBar = false;
             }
@@ -4435,7 +4435,7 @@ void Score::undoAddElement(Element* element)
                   int ntrack    = staffIdx * VOICES;
                   Element* ne;
 
-                  if (staff->score() == ostaff->score())
+                  if (ostaff && staff->score() == ostaff->score())
                         ne = element;
                   else {
                         // only create linked volta for first staff
