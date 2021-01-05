@@ -1425,9 +1425,8 @@ void Score::addElement(Element* element)
             case ElementType::ARTICULATION:
             case ElementType::ARPEGGIO:
                   {
-                  Element* cr = parent;
-                  if (cr->isChord())
-                        createPlayEvents(toChord(cr));
+                  if (parent && parent->isChord())
+                        createPlayEvents(toChord(parent));
                   }
                   break;
             case ElementType::HARMONY:
@@ -3950,7 +3949,7 @@ ChordRest* Score::findCR(Fraction tick, int track) const
             tick = m->tick();
       Segment* s = m->first(SegmentType::ChordRest);
       for (Segment* ns = s; ; ns = ns->next(SegmentType::ChordRest)) {
-            if (ns == 0 || ns->tick() > tick)
+            if (!ns || ns->tick() > tick)
                   break;
             Element* el = ns->element(track);
             if (el && el->isRest() && toRest(el)->isGap())

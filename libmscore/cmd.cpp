@@ -1355,15 +1355,12 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
 
                   if (((tick - etick).ticks() % dList[0].ticks().ticks()) == 0) {
                         for (TDuration du : dList) {
-                              bool genTie;
                               Chord* cc;
                               if (oc) {
-                                    genTie = true;
                                     cc = oc;
-                                    oc = addChord(tick, du, cc, genTie, tuplet);
+                                    oc = addChord(tick, du, cc, true, tuplet);
                                     }
                               else {
-                                    genTie = false;
                                     cc = toChord(cr);
                                     undoChangeChordRestLen(cr, du);
                                     oc = cc;
@@ -1381,15 +1378,12 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
                         }
                   else {
                         for (size_t i = dList.size(); i > 0; --i) { // loop probably needs to be in this reverse order
-                              bool genTie;
                               Chord* cc;
                               if (oc) {
-                                    genTie = true;
                                     cc = oc;
-                                    oc = addChord(tick, dList[i-1], cc, genTie, tuplet);
+                                    oc = addChord(tick, dList[i-1], cc, true, tuplet);
                                     }
                               else {
-                                    genTie = false;
                                     cc = toChord(cr);
                                     undoChangeChordRestLen(cr, dList[i-1]);
                                     oc = cc;

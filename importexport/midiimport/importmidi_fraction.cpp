@@ -28,30 +28,28 @@ bool isSubtractionOverflow(int a, int b)        // a - b
 
 bool isMultiplicationOverflow(int a, int b)     // a * b
       {
-      bool flag = false;
-
       if (a > 0) {
             if (b > 0) {
                   if (a > std::numeric_limits<int>::max() / b)
-                        flag = true;
+                        return true;
                   }
             else {
                   if (b < std::numeric_limits<int>::min() / a)
-                        flag = true;
+                        return true;
                   }
             }
       else {
             if (b > 0) {
                   if (a < std::numeric_limits<int>::min() / b)
-                        flag = true;
+                        return true;
                   }
             else {
                   if (a != 0 && b < std::numeric_limits<int>::max() / a)
-                        flag = true;
+                        return true;
                   }
             }
 
-      return flag;
+      return false;
       }
 
 bool isDivisionOverflow(int a, int b)           // a / b
@@ -259,7 +257,7 @@ ReducedFraction& ReducedFraction::operator/=(const ReducedFraction& val)
                  "ReducedFraction::operator/=", "Multiplication overflow");
 
       numerator_ *= val.denominator_;
-      denominator_  *= val.numerator_;
+      denominator_ *= val.numerator_;
       return *this;
       }
 

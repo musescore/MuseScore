@@ -257,13 +257,15 @@ ChordRest* Selection::lastChordRest(int track) const
       {
       if (_el.size() == 1) {
             Element* el = _el[0];
-            if (el && el->isNote())
-                  return toChordRest(el->parent());
-            else if (el->isChord() || el->isRest() || el->isRepeatMeasure())
-                  return toChordRest(el);
-            return 0;
+            if (el) {
+                  if (el->isNote())
+                        return toChordRest(el->parent());
+                  else if (el->isChord() || el->isRest() || el->isRepeatMeasure())
+                        return toChordRest(el);
+                  }
+            return nullptr;
             }
-      ChordRest* cr = 0;
+      ChordRest* cr = nullptr;
       for (auto el : _el) {
             if (el->isNote())
                   el = toNote(el)->chord();

@@ -707,7 +707,7 @@ void SlurHandler::doSlurs(const ChordRest* chordRest, Notations& notations, XmlW
       // loop over all slurs twice, first to handle the stops, then the starts
       for (int i = 0; i < 2; ++i) {
             // search for slur(s) starting or stopping at this chord
-            for (const auto it : chordRest->score()->spanner()) {
+            for (const auto& it : chordRest->score()->spanner()) {
                   auto sp = it.second;
                   if (sp->generated() || sp->type() != ElementType::SLUR)
                         continue;
@@ -4499,7 +4499,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
             // or other characters and write the runs.
             QString text;
             bool inDynamicsSym = false;
-            for (const auto ch : qAsConst(dynText)) {
+            for (const auto& ch : qAsConst(dynText)) {
                   const auto it = map.find(ch.unicode());
                   if (it != map.end()) {
                         // found a SMUFL single letter dynamics glyph

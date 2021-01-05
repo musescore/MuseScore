@@ -95,7 +95,7 @@ void EaseInOutCanvas::paintEvent(QPaintEvent* ev)
             }
 
       // this lambda takes as input a pitch value, and determines where what are its x and y coordinates
-      auto getPosition = [this, graphWidth, graphHeight, leftPos, bottomPos](const QPointF& p) -> QPointF {
+      auto getPosition = [graphWidth, graphHeight, leftPos, bottomPos](const QPointF& p) -> QPointF {
             return { leftPos + p.x() * graphWidth, bottomPos - p.y() * graphHeight };
             };
 

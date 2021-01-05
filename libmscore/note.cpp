@@ -3197,6 +3197,8 @@ Element* Note::nextElement()
       Element* e = score()->selection().element();
       if (!e && !score()->selection().elements().isEmpty() )
             e = score()->selection().elements().first();
+      if (!e)
+            return nullptr;
       switch (e->type()) {
             case ElementType::SYMBOL:
             case ElementType::IMAGE:
@@ -3214,7 +3216,7 @@ Element* Note::nextElement()
                                     return i->spannerSegments().front();
                               }
                         }
-                  return 0;
+                  return nullptr;
                   }
 
             case ElementType::TIE_SEGMENT:
@@ -3240,7 +3242,7 @@ Element* Note::nextElement()
                                     return i->spannerSegments().front();
                               }
                         }
-                  return 0;
+                  return nullptr;
 
             case ElementType::NOTE:
                   if (!_el.empty())
@@ -3253,10 +3255,10 @@ Element* Note::nextElement()
                                     return i->spannerSegments().front();
                               }
                         }
-                  return 0;
+                  return nullptr;
 
             default:
-                  return 0;
+                  return nullptr;
             }
       }
 
@@ -3269,6 +3271,8 @@ Element* Note::prevElement()
       Element* e = score()->selection().element();
       if (!e && !score()->selection().elements().isEmpty() )
             e = score()->selection().elements().last();
+      if (!e)
+            return nullptr;
       switch (e->type()) {
             case ElementType::SYMBOL:
             case ElementType::IMAGE:
@@ -3293,7 +3297,7 @@ Element* Note::prevElement()
             case ElementType::ACCIDENTAL:
                   return this;
             default:
-                  return 0;
+                  return nullptr;
             }
       }
 

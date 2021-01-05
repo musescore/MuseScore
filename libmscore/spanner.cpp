@@ -790,7 +790,7 @@ Chord* Spanner::endChord()
       if (!_endElement && type() == ElementType::SLUR) {
             Segment* s = score()->tick2segmentMM(tick2(), false, SegmentType::ChordRest);
             _endElement = s ? toChordRest(s->element(track2())) : nullptr;
-            if (!_endElement->isChord())
+            if (_endElement && !_endElement->isChord())
                   _endElement = nullptr;
             }
       return toChord(_endElement);
