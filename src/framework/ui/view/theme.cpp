@@ -108,7 +108,7 @@ Theme::Theme(QObject* parent)
 
 void Theme::init()
 {
-    configuration()->themeTypeChanged().onReceive(this, [this](const IUiConfiguration::ThemeType) {
+    configuration()->actualThemeTypeChanged().onReceive(this, [this](const IUiConfiguration::ThemeType) {
         update();
     });
 
@@ -128,47 +128,47 @@ void Theme::update()
 
 QColor Theme::backgroundPrimaryColor() const
 {
-    return currentThemeProperites().value(BACKGROUND_PRIMARY_COLOR).toString();
+    return currentThemeProperties().value(BACKGROUND_PRIMARY_COLOR).toString();
 }
 
 QColor Theme::backgroundSecondaryColor() const
 {
-    return currentThemeProperites().value(BACKGROUND_SECONDARY_COLOR).toString();
+    return currentThemeProperties().value(BACKGROUND_SECONDARY_COLOR).toString();
 }
 
 QColor Theme::popupBackgroundColor() const
 {
-    return currentThemeProperites().value(POPUP_BACKGROUND_COLOR).toString();
+    return currentThemeProperties().value(POPUP_BACKGROUND_COLOR).toString();
 }
 
 QColor Theme::textFieldColor() const
 {
-    return currentThemeProperites().value(TEXT_FIELD_COLOR).toString();
+    return currentThemeProperties().value(TEXT_FIELD_COLOR).toString();
 }
 
 QColor Theme::accentColor() const
 {
-    return currentThemeProperites().value(ACCENT_COLOR).toString();
+    return currentThemeProperties().value(ACCENT_COLOR).toString();
 }
 
 QColor Theme::strokeColor() const
 {
-    return currentThemeProperites().value(STROKE_COLOR).toString();
+    return currentThemeProperties().value(STROKE_COLOR).toString();
 }
 
 QColor Theme::buttonColor() const
 {
-    return currentThemeProperites().value(BUTTON_COLOR).toString();
+    return currentThemeProperties().value(BUTTON_COLOR).toString();
 }
 
 QColor Theme::fontPrimaryColor() const
 {
-    return currentThemeProperites().value(FONT_PRIMARY_COLOR).toString();
+    return currentThemeProperties().value(FONT_PRIMARY_COLOR).toString();
 }
 
 QColor Theme::fontSecondaryColor() const
 {
-    return currentThemeProperites().value(FONT_SECONDARY_COLOR).toString();
+    return currentThemeProperties().value(FONT_SECONDARY_COLOR).toString();
 }
 
 QFont Theme::bodyFont() const
@@ -228,37 +228,37 @@ QFont Theme::musicalFont() const
 
 qreal Theme::accentOpacityNormal() const
 {
-    return currentThemeProperites().value(ACCENT_OPACITY_NORMAL).toReal();
+    return currentThemeProperties().value(ACCENT_OPACITY_NORMAL).toReal();
 }
 
 qreal Theme::accentOpacityHover() const
 {
-    return currentThemeProperites().value(ACCENT_OPACITY_HOVER).toReal();
+    return currentThemeProperties().value(ACCENT_OPACITY_HOVER).toReal();
 }
 
 qreal Theme::accentOpacityHit() const
 {
-    return currentThemeProperites().value(ACCENT_OPACITY_HIT).toReal();
+    return currentThemeProperties().value(ACCENT_OPACITY_HIT).toReal();
 }
 
 qreal Theme::buttonOpacityNormal() const
 {
-    return currentThemeProperites().value(BUTTON_OPACITY_NORMAL).toReal();
+    return currentThemeProperties().value(BUTTON_OPACITY_NORMAL).toReal();
 }
 
 qreal Theme::buttonOpacityHover() const
 {
-    return currentThemeProperites().value(BUTTON_OPACITY_HOVER).toReal();
+    return currentThemeProperties().value(BUTTON_OPACITY_HOVER).toReal();
 }
 
 qreal Theme::buttonOpacityHit() const
 {
-    return currentThemeProperites().value(BUTTON_OPACITY_HIT).toReal();
+    return currentThemeProperties().value(BUTTON_OPACITY_HIT).toReal();
 }
 
 qreal Theme::itemOpacityDisabled() const
 {
-    return currentThemeProperites().value(ITEM_OPACITY_DISABLED).toReal();
+    return currentThemeProperties().value(ITEM_OPACITY_DISABLED).toReal();
 }
 
 mu::async::Notification Theme::themeChanged() const
@@ -266,9 +266,9 @@ mu::async::Notification Theme::themeChanged() const
     return m_themeChanged;
 }
 
-QHash<int, QVariant> Theme::currentThemeProperites() const
+QHash<int, QVariant> Theme::currentThemeProperties() const
 {
-    if (configuration()->themeType() == IUiConfiguration::ThemeType::DARK_THEME) {
+    if (configuration()->actualThemeType() == IUiConfiguration::ThemeType::DARK_THEME) {
         return DARK_THEME;
     }
 
@@ -362,6 +362,10 @@ void Theme::setupWidgetTheme()
     palette.setColor(QPalette::PlaceholderText, fontPrimaryColor());
 
     QApplication::setPalette(palette);
+
+#ifdef Q_OS_MAC
+    macos()->setAppAppearanceDark(configuration()->actualThemeType() == IUiConfiguration::ThemeType::DARK_THEME);
+#endif
 }
 
 void Theme::notifyAboutThemeChanged()

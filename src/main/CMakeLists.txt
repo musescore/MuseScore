@@ -169,6 +169,10 @@ if (NOT CC_IS_EMSCRIPTEN)
     list(APPEND LINK_LIB plugins)
 endif()
 
+if (OS_IS_MAC)
+    list(APPEND LINK_LIB macos)
+endif()
+
 if (BUILD_VST)
     set(LINK_LIB ${LINK_LIB} vst)
 endif(BUILD_VST)

@@ -42,6 +42,10 @@ if (BUILD_UNIT_TESTS)
     add_subdirectory(libmscore/tests)
 endif(BUILD_UNIT_TESTS)
 
+if (OS_IS_MAC)
+    add_subdirectory(macos)
+endif()
+
 if (OS_IS_WASM)
     add_subdirectory(wasmtest)
 endif()

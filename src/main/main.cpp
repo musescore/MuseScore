@@ -72,6 +72,10 @@
 #include "wasmtest/wasmtestmodule.h"
 #endif
 
+#ifdef Q_OS_MAC
+#include "macos/macosmodule.h"
+#endif
+
 #if (defined (_MSCVER) || defined (_MSC_VER))
 #include <vector>
 #include <algorithm>
@@ -131,6 +135,10 @@ int main(int argc, char** argv)
     app.addModule(new mu::languages::LanguagesModule());
 #else
     app.addModule(new mu::wasmtest::WasmTestModule());
+#endif
+
+#ifdef Q_OS_MAC
+    app.addModule(new mu::macos::MacosModule());
 #endif
 
 #if (defined (_MSCVER) || defined (_MSC_VER))
