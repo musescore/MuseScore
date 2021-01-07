@@ -116,6 +116,7 @@ private slots:
       void helloReadCompr() { mxmlReadTestCompr("testHello"); }
       void helloReadWriteCompr() { mxmlReadWriteTestCompr("testHello"); }
       void implicitMeasure1() { mxmlIoTest("testImplicitMeasure1"); }
+      void incompleteTuplet() { mxmlIoTestRef("testIncompleteTuplet"); }
       void incorrectStaffNumber1() { mxmlIoTestRef("testIncorrectStaffNumber1"); }
       void incorrectStaffNumber2() { mxmlIoTestRef("testIncorrectStaffNumber2"); }
       void instrumentChangeMIDIportExport() { mxmlMscxExportTestRef("testInstrumentChangeMIDIportExport"); }
