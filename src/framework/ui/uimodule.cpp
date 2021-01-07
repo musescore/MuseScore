@@ -7,6 +7,13 @@
 #include "internal/uiengine.h"
 #include "internal/uiconfiguration.h"
 #include "internal/interactiveuriregister.h"
+
+#ifdef Q_OS_MAC
+#include "internal/platform/macos/macosplatformtheme.h"
+#else
+#include "internal/platform/stub/stubplatformtheme.h"
+#endif
+
 #include "view/qmltooltip.h"
 #include "view/iconcodes.h"
 #include "view/musicalsymbolcodes.h"
@@ -36,6 +43,12 @@ void UiModule::registerExports()
     ioc()->registerExportNoDelete<ITheme>(moduleName(), UiEngine::instance()->theme());
     ioc()->registerExport<IInteractiveProvider>(moduleName(), UiEngine::instance()->interactiveProvider());
     ioc()->registerExport<IInteractiveUriRegister>(moduleName(), new InteractiveUriRegister());
+
+#ifdef Q_OS_MAC
+    ioc()->registerExport<IPlatformTheme>(moduleName(), new MacOSPlatformTheme());
+#else
+    ioc()->registerExport<IPlatformTheme>(moduleName(), new StubPlatformTheme());
+#endif
 }
 
 void UiModule::resolveImports()

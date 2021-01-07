@@ -25,6 +25,7 @@
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
 #include "ui/itheme.h"
+#include "ui/iplatformtheme.h"
 #include "async/asyncable.h"
 
 namespace mu::framework {
@@ -33,6 +34,7 @@ class Theme : public QObject, public ITheme, public async::Asyncable
     Q_OBJECT
 
     INJECT(ui, IUiConfiguration, configuration)
+    INJECT(ui, IPlatformTheme, platformTheme)
 
     Q_PROPERTY(QColor backgroundPrimaryColor READ backgroundPrimaryColor NOTIFY dataChanged)
     Q_PROPERTY(QColor backgroundSecondaryColor READ backgroundSecondaryColor NOTIFY dataChanged)
@@ -112,7 +114,7 @@ signals:
     void dataChanged();
 
 private:
-    QHash<int, QVariant> currentThemeProperites() const;
+    QHash<int, QVariant> currentThemeProperties() const;
 
     void initUiFonts();
     void initIconsFont();
