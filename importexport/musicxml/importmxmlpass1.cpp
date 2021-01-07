@@ -2248,12 +2248,30 @@ void MusicXMLParserPass1::measure(const QString& partId,
 
       // if necessary, round up to an integral number of 1/64s,
       // to comply with MuseScores actual measure length constraints
-      // TODO: calculate in fraction
-      int length = mDura.ticks();
-      int correctedLength = length;
-      if ((length % (MScore::division/16)) != 0) {
-            correctedLength = ((length / (MScore::division/16)) + 1) * (MScore::division/16);
-            mDura = Fraction::fromTicks(correctedLength);
+      Fraction length = mDura * Fraction(64,1);
+      Fraction correctedLength = mDura;
+      length.reduce();
+      if (length.denominator() != 1) {
+            Fraction roundDown = Fraction(length.numerator() / length.denominator(), 64);
+            Fraction roundUp = Fraction(length.numerator() / length.denominator() + 1, 64);
+            // mDura is not an integer multiple of 1/64;
+            // first check if the duration is larger than an integer multiple of 1/64
+            // by an amount smaller than the minimum division resolution
+            // in that case, round down (rounding errors have possibly occurred),
+            // otherwise, round up
+            if ((_divs > 0) && ((mDura - roundDown) < Fraction(1, 4*_divs))) {
+                  _logger->logError(QString("rounding down measure duration %1 to %2")
+                                    .arg(qPrintable(mDura.print())).arg(qPrintable(roundDown.print())),
+                                    &_e);
+                  correctedLength = roundDown;
+                  }
+            else {
+                  _logger->logError(QString("rounding up measure duration %1 to %2")
+                                    .arg(qPrintable(mDura.print())).arg(qPrintable(roundUp.print())),
+                                    &_e);
+                  correctedLength = roundUp;
+                  }
+            mDura = correctedLength;
             }
 
       // set measure duration to a suitable value given the time signature
