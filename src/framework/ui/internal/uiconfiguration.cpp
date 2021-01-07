@@ -27,7 +27,12 @@ void UiConfiguration::init()
     settings()->setDefaultValue(UI_MUSICAL_FONT_SIZE_KEY, Val(12));
 
     settings()->valueChanged(UI_THEME_TYPE_KEY).onReceive(nullptr, [this](const Val& val) {
-        m_currentThemeTypeChannel.send(static_cast<ThemeType>(val.toInt()));
+        m_currentPreferredThemeTypeChannel.send(static_cast<ThemeType>(val.toInt()));
+        m_currentActualThemeTypeChannel.send(actualThemeType());
+    });
+
+    platformTheme()->darkModeSwitched().onReceive(nullptr, [this](const bool) {
+        m_currentActualThemeTypeChannel.send(actualThemeType());
     });
 
     settings()->valueChanged(UI_FONT_FAMILY_KEY).onReceive(nullptr, [this](const Val&) {
@@ -52,14 +57,30 @@ void UiConfiguration::init()
     });
 }
 
-ThemeType UiConfiguration::themeType() const
+ThemeType UiConfiguration::preferredThemeType() const
 {
     return static_cast<ThemeType>(settings()->value(UI_THEME_TYPE_KEY).toInt());
 }
 
-Channel<ThemeType> UiConfiguration::themeTypeChanged() const
+Channel<ThemeType> UiConfiguration::preferredThemeTypeChanged() const
 {
-    return m_currentThemeTypeChannel;
+    return m_currentPreferredThemeTypeChannel;
+}
+
+ThemeType UiConfiguration::actualThemeType() const
+{
+    switch (preferredThemeType()) {
+    case IUiConfiguration::ThemeType::LIGHT_THEME:
+    case IUiConfiguration::ThemeType::DARK_THEME:
+        return preferredThemeType();
+    case IUiConfiguration::ThemeType::FOLLOW_SYSTEM_THEME:
+        return platformTheme()->isDarkMode() ? IUiConfiguration::ThemeType::DARK_THEME : IUiConfiguration::ThemeType::LIGHT_THEME;
+    }
+}
+
+Channel<ThemeType> UiConfiguration::actualThemeTypeChanged() const
+{
+    return m_currentActualThemeTypeChannel;
 }
 
 std::string UiConfiguration::fontFamily() const

@@ -22,6 +22,7 @@
 
 #include "iuiconfiguration.h"
 #include "imainwindow.h"
+#include "iplatformtheme.h"
 
 #include "modularity/ioc.h"
 
@@ -29,12 +30,15 @@ namespace mu::framework {
 class UiConfiguration : public IUiConfiguration
 {
     INJECT(framework, IMainWindow, mainWindow)
+    INJECT(framework, IPlatformTheme, platformTheme)
 
 public:
     void init();
 
-    ThemeType themeType() const override;
-    async::Channel<ThemeType> themeTypeChanged() const override;
+    ThemeType preferredThemeType() const override;
+    async::Channel<ThemeType> preferredThemeTypeChanged() const override;
+    ThemeType actualThemeType() const override;
+    async::Channel<ThemeType> actualThemeTypeChanged() const override;
 
     std::string fontFamily() const override;
     int fontSize(FontSizeType type) const override;
@@ -54,7 +58,8 @@ public:
     void setPhysicalDotsPerInch(std::optional<float> dpi) override;
 
 private:
-    async::Channel<ThemeType> m_currentThemeTypeChannel;
+    async::Channel<ThemeType> m_currentPreferredThemeTypeChannel;
+    async::Channel<ThemeType> m_currentActualThemeTypeChannel;
 
     async::Notification m_fontChanged;
     async::Notification m_musicalFontChanged;

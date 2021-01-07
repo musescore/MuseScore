@@ -22,6 +22,27 @@ set(MODULE ui)
 set(MODULE_QRC ui.qrc)
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 
+include(GetPlatformInfo)
+if (OS_IS_MAC)
+    set(PLATFORM_THEME_SRC
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosplatformtheme.mm
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosplatformtheme.h
+    )
+    # Don't mix C++ and Objective-C++ in Unity Build
+    set_source_files_properties(${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosplatformtheme.mm
+                                PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON)
+
+    if (NOT (CC_IS_CLANG AND CMAKE_GENERATOR STREQUAL "Xcode"))
+        set_source_files_properties(${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosplatformtheme.mm
+                                    PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
+    endif()
+else()
+    set(PLATFORM_THEME_SRC
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/stub/stubplatformtheme.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/stub/stubplatformtheme.h
+    )
+endif()
+
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/uimodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/uimodule.h
@@ -33,6 +54,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/uitypes.h
     ${CMAKE_CURRENT_LIST_DIR}/imainwindow.h
     ${CMAKE_CURRENT_LIST_DIR}/itheme.h
+    ${CMAKE_CURRENT_LIST_DIR}/iplatformtheme.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/interactiveuriregister.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/interactiveuriregister.h
@@ -40,6 +62,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiengine.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiconfiguration.h
+    ${PLATFORM_THEME_SRC}
 
     ${CMAKE_CURRENT_LIST_DIR}/view/interactiveprovider.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/interactiveprovider.h

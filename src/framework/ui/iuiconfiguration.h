@@ -37,11 +37,14 @@ public:
 
     enum class ThemeType {
         DARK_THEME = 0,
-        LIGHT_THEME
+        LIGHT_THEME,
+        FOLLOW_SYSTEM_THEME
     };
 
-    virtual ThemeType themeType() const = 0;
-    virtual async::Channel<ThemeType> themeTypeChanged() const = 0;
+    virtual ThemeType preferredThemeType() const = 0;
+    virtual async::Channel<ThemeType> preferredThemeTypeChanged() const = 0;
+    virtual ThemeType actualThemeType() const = 0;
+    virtual async::Channel<ThemeType> actualThemeTypeChanged() const = 0;
 
     enum class FontSizeType {
         BODY,
