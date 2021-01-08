@@ -791,6 +791,7 @@ class Score : public QObject, public ScoreElement {
       void appendPart(const InstrumentTemplate*);
       void updateStaffIndex();
       void sortStaves(QList<int>& dst);
+      void mapExcerptTracks(QList<int>& l);
 
       bool showInvisible() const       { return _showInvisible; }
       bool showUnprintable() const     { return _showUnprintable; }
