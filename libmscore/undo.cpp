@@ -1092,6 +1092,37 @@ void SortStaves::undo(EditData*)
       }
 
 //---------------------------------------------------------
+//   MapExcerptTracks
+//---------------------------------------------------------
+
+MapExcerptTracks::MapExcerptTracks(Score* s, QList<int> l)
+      {
+      score = s;
+
+      /*
+       *    In list l [x] represents the previous index of the staffIdx x.
+       *    If the a staff x is a newly added staff, l[x] = -1.
+       *    For the "undo" all staves which value -1 are *not* remapped since
+       *    it is assumed this staves are removed later.
+       */
+      for (int i = 0; i < l.size(); ++i) {
+            if (l[i] >= 0)
+                  rlist.insert(l[i], i);
+            }
+      list = l;
+      }
+
+void MapExcerptTracks::redo(EditData*)
+      {
+      score->mapExcerptTracks(list);
+      }
+
+void MapExcerptTracks::undo(EditData*)
+      {
+      score->mapExcerptTracks(rlist);
+      }
+
+//---------------------------------------------------------
 //   ChangePitch
 //---------------------------------------------------------
 

@@ -261,6 +261,7 @@ void MuseScore::editInstrList()
             }
       instrList->init();
       MasterScore* masterScore = cs->masterScore();
+      QList<Staff*> originalStaves = masterScore->staves();
       instrList->genPartList(masterScore);
       ScoreOrder* order = masterScore->scoreOrder();
       instrList->setScoreOrder(order ? order : scoreOrders.customScoreOrder());
@@ -467,9 +468,11 @@ void MuseScore::editInstrList()
             }
 
       QList<int> dl;
+      QList<int> trackMap;
       int idx2 = 0;
       bool sort = false;
       for (Staff* staff : dst) {
+            trackMap.append(originalStaves.indexOf(staff));
             int idx = masterScore->staves().indexOf(staff);
             if (idx == -1)
                   qDebug("staff in dialog(%p) not found in score", staff);
@@ -482,6 +485,7 @@ void MuseScore::editInstrList()
 
       if (sort)
             masterScore->undo(new SortStaves(masterScore, dl));
+      masterScore->undo(new MapExcerptTracks(masterScore, trackMap));
 
       //
       // check for valid barLineSpan and bracketSpan
@@ -561,28 +565,8 @@ void MuseScore::editInstrList()
       const QList<Excerpt*> excerpts(masterScore->excerpts()); // excerpts list may change in the loop below
       for (Excerpt* excerpt : excerpts) {
             QList<Staff*> sl       = excerpt->partScore()->staves();
-            QMultiMap<int, int> tr = excerpt->tracks();
             if (sl.size() == 0)
                   masterScore->undo(new RemoveExcerpt(excerpt));
-            else {
-                  for (Staff* s : sl) {
-                        const LinkedElements* sll = s->links();
-                        if (!sll)
-                              continue;
-                        for (auto le : *sll) {
-                              Staff* ss = toStaff(le);
-                              if (ss->primaryStaff()) {
-                                    for (int j = s->idx() * VOICES; j < (s->idx() + 1) * VOICES; j++) {
-                                          int strack = tr.key(j, -1);
-                                          if (strack != -1 && ((strack & ~3) == ss->idx()))
-                                                break;
-                                          else if (strack != -1)
-                                                tr.insert(ss->idx() + strack % VOICES, tr.value(strack, -1));
-                                          }
-                                    }
-                              }
-                        }
-                  }
             }
 
       // Recreate brackets and barlines.
