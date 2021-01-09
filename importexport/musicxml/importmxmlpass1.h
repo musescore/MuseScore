@@ -165,6 +165,7 @@ public:
       Fraction getMeasureStart(const int i) const;
       int octaveShift(const QString& id, const int staff, const Fraction f) const;
       const CreditWordsList& credits() const { return _credits; }
+      bool hasBeamingInfo() const { return _hasBeamingInfo; }
 
 private:
       // functions
@@ -183,6 +184,7 @@ private:
       QMap<QString, MusicXMLInstruments> _instruments; ///< instruments for each part, mapped on part id
       Score* _score;                            ///< MuseScore score
       MxmlLogger* _logger;                      ///< Error logger
+      bool _hasBeamingInfo;                     ///< Whether the score supports or contains beaming info
 
       // part specific data (TODO: move to part-specific class)
       Fraction _timeSigDura;                    ///< Measure duration according to last timesig read

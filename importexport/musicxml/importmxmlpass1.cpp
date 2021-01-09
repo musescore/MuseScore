@@ -183,7 +183,7 @@ static void copyOverlapData(VoiceOverlapDetector& vod, VoiceList& vcLst)
 //---------------------------------------------------------
 
 MusicXMLParserPass1::MusicXMLParserPass1(Score* score, MxmlLogger* logger)
-      : _divs(0), _score(score), _logger(logger)
+      : _divs(0), _score(score), _logger(logger), _hasBeamingInfo(false)
       {
       // nothing
       }
@@ -1100,7 +1100,11 @@ void MusicXMLParserPass1::identification()
                   _score->setMetaTag("copyright", _e.readElementText());
             else if (_e.name() == "encoding") {
                   // TODO
-                  _e.skipCurrentElement(); // skip but don't log
+                  while (_e.readNextStartElement()) {
+                        if (_e.name() == "supports" && _e.attributes().value("element") == "beam" && _e.attributes().value("type") == "yes")
+                              _hasBeamingInfo = true;
+                        _e.skipCurrentElement();
+                        }
                   // _score->setMetaTag("encoding", _e.readElementText()); works with DOM but not with pull parser
                   // temporarily fake the encoding tag (compliant with DOM parser) to help the autotester
                   if (MScore::debugMode)
@@ -3152,8 +3156,10 @@ void MusicXMLParserPass1::note(const QString& partId,
                   }
             else if (_e.name() == "accidental")
                   _e.skipCurrentElement();  // skip but don't log
-            else if (_e.name() == "beam")
+            else if (_e.name() == "beam") {
+                  _hasBeamingInfo = true;
                   _e.skipCurrentElement();  // skip but don't log
+                  }
             else if (_e.name() == "chord") {
                   chord = true;
                   _e.readNext();

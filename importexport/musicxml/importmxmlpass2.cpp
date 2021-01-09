@@ -1771,7 +1771,7 @@ static void removeBeam(Beam*& beam)
 //   handleBeamAndStemDir
 //---------------------------------------------------------
 
-static void handleBeamAndStemDir(ChordRest* cr, const Beam::Mode bm, const Direction sd, Beam*& beam)
+static void handleBeamAndStemDir(ChordRest* cr, const Beam::Mode bm, const Direction sd, Beam*& beam, bool hasBeamingInfo)
       {
       if (!cr) return;
       // create a new beam
@@ -1812,10 +1812,17 @@ static void handleBeamAndStemDir(ChordRest* cr, const Beam::Mode bm, const Direc
                   beam->add(cr);
                   }
             }
-      // if no beam, set stem direction on chord itself and set beam to auto
+      // if no beam, set stem direction on chord itself
       if (!beam) {
             static_cast<Chord*>(cr)->setStemDirection(sd);
-            cr->setBeamMode(Beam::Mode::AUTO);
+            // set beam to none if score has beaming information and note can get beam, otherwise
+            // set to auto
+            bool canGetBeam = (cr->durationType().type() >= TDuration::DurationType::V_EIGHTH &&
+                               cr->durationType().type() <= TDuration::DurationType::V_1024TH);
+            if (hasBeamingInfo && canGetBeam)
+                  cr->setBeamMode(Beam::Mode::NONE);
+            else
+                  cr->setBeamMode(Beam::Mode::AUTO);
             }
       // terminate the current beam and add to the score
       if (beam && bm == Beam::Mode::END)
@@ -4546,7 +4553,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   // regular note
                   // handle beam
                   if (!chord)
-                        handleBeamAndStemDir(c, bm, stemDir, currBeam);
+                        handleBeamAndStemDir(c, bm, stemDir, currBeam, _pass1.hasBeamingInfo());
 
                   // append any grace chord after chord to the previous chord
                   const auto prevChord = measure->findChord(prevSTime, msTrack + msVoice);
