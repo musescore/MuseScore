@@ -454,7 +454,7 @@ void Ambitus::draw(QPainter* p) const
       {
       qreal _spatium = spatium();
       qreal lw = lineWidth().val() * _spatium;
-      p->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::RoundCap));
+      p->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::FlatCap));
       drawSymbol(noteHead(), p, _topPos);
       drawSymbol(noteHead(), p, _bottomPos);
       if (_hasLine)
@@ -470,7 +470,7 @@ void Ambitus::draw(QPainter* p) const
             qreal stepTolerance = step * 0.1;
             qreal ledgerOffset = score()->styleS(Sid::ledgerLineLength).val() * _spatium;
             p->setPen(QPen(curColor(), score()->styleS(Sid::ledgerLineWidth).val() * _spatium,
-                        Qt::SolidLine, Qt::RoundCap) );
+                        Qt::SolidLine, Qt::FlatCap) );
             if (_topPos.y()-stepTolerance <= -step) {
                   qreal xMin = _topPos.x() - ledgerOffset;
                   qreal xMax = _topPos.x() + headWidth() + ledgerOffset;
