@@ -66,6 +66,9 @@ private slots:
       void barStyles2() { mxmlIoTest("testBarStyles2"); }
       void barStyles3() { mxmlIoTest("testBarStyles3"); }
       void beamEnd() { mxmlIoTest("testBeamEnd"); }
+      void beams1() { mxmlIoTest("testBeams1"); }
+      void beams2() { mxmlIoTest("testBeams2"); }
+      void beams3() { mxmlIoTestRef("testBeams3"); }
       void breaksImplExpl() { mxmlMscxExportTestRefBreaks("testBreaksImplExpl"); }
       void breaksMMRest() { mxmlMscxExportTestRefBreaks("testBreaksMMRest"); }
       void breaksManual() { mxmlIoTestRefBreaks("testBreaksManual"); }
@@ -274,6 +277,7 @@ void TestMxmlIO::mxmlIoTestRef(const char* file)
       MScore::debugMode = true;
       preferences.setCustomPreference<MusicxmlExportBreaks>(PREF_EXPORT_MUSICXML_EXPORTBREAKS, MusicxmlExportBreaks::MANUAL);
       preferences.setPreference(PREF_IMPORT_MUSICXML_IMPORTBREAKS, true);
+      preferences.setPreference(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, false);
       MasterScore* score = readScore(DIR + file + ".xml");
       QVERIFY(score);
       fixupScore(score);

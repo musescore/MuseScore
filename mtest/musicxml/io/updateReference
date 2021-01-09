@@ -1,9 +1,9 @@
 #!/bin/bash
 
 if [ "`uname`" = 'Darwin' ]; then
-   S=../../../build.xcode/mtest/libmscore/split/Debug
+   S=../../../build.xcode/mtest/musicxml/io/Debug
 else
-   S=/home/presario/build-MuseScore-Desktop_Qt_5_9_9_GCC_64bit-Debug/mtest/musicxml/io
+   S=../../../build.debug/mtest/musicxml/io
 fi
 
 cp $S/testBreaksPage.xml testBreaksPage_no_ref.xml
@@ -28,3 +28,4 @@ cp $S/testTablature2.xml testTablature2.xml
 cp $S/testTablature3.xml testTablature3.xml
 cp $S/testTablature4.xml testTablature4.xml
 cp $S/testTablature5.xml testTablature5_ref.xml
+cp $S/testBeams3.xml testBeams3_ref.xml
