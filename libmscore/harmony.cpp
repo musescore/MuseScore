@@ -1501,8 +1501,12 @@ void Harmony::draw(QPainter* painter) const
       for (const TextSegment* ts : textList) {
             QFont f(ts->font);
             f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+#ifndef Q_OS_MACOS
+            TextBase::drawTextWorkaround(painter, f, ts->pos(), ts->text);
+#else
             painter->setFont(f);
             painter->drawText(ts->pos(), ts->text);
+#endif
             }
       }
 
