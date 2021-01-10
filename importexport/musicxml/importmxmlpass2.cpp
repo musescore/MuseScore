@@ -3996,9 +3996,10 @@ static Chord* findOrCreateChord(Score* score, Measure* m,
       Chord* c = m->findChord(tick, track);
       if (c == 0) {
             c = new Chord(score);
-            // better not to force beam end, as the beam palette does not support it
             if (bm == Beam::Mode::END)
-                  c->setBeamMode(Beam::Mode::AUTO);
+                  // The beam palette does not support beam END, use MID instead which means "beam
+                  // current note together with previous note".
+                  c->setBeamMode(Beam::Mode::MID);
             else
                   c->setBeamMode(bm);
             c->setTrack(track);
