@@ -48,6 +48,7 @@ class StaffName {
       StaffName(const QString& s, int p=0);
 
       bool operator==(const StaffName&) const;
+      QString toString() const;
       void read(XmlReader&);
       void write(XmlWriter& xml, const char* name) const;
       int pos() const { return _pos; }
@@ -62,6 +63,7 @@ class StaffNameList : public QList<StaffName> {
 
    public:
       void write(XmlWriter& xml, const char* name) const;
+      QStringList toStringList() const;
       };
 
 //---------------------------------------------------------
@@ -287,6 +289,9 @@ class Instrument {
       void updateVelocity(int* velocity, int channel, const QString& name);
       qreal getVelocityMultiplier(const QString& name);
       void updateGateTime(int* gateTime, int channelIdx, const QString& name);
+
+      QString recognizeInstrumentId() const;
+      int recognizeMidiProgram() const;
 
       bool operator==(const Instrument&) const;
       bool isDifferentInstrument(const Instrument& i) const;

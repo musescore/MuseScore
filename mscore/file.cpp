@@ -84,6 +84,8 @@
 #include "scorecmp/scorecmp.h"
 #include "extension.h"
 #include "tourhandler.h"
+#include "preferences.h"
+#include "libmscore/instrtemplate.h"
 
 #ifdef OMR
 #include "omr/omr.h"
@@ -452,6 +454,15 @@ MasterScore* MuseScore::readScore(const QString& name)
       {
       if (name.isEmpty())
             return 0;
+
+      if (instrumentGroups.isEmpty()) {
+            QString tmplPath = preferences.getString(PREF_APP_PATHS_INSTRUMENTLIST1);
+
+            if (tmplPath.isEmpty())
+                  tmplPath = preferences.getString(PREF_APP_PATHS_INSTRUMENTLIST2);
+
+            loadInstrumentTemplates(tmplPath);
+            }
 
       MasterScore* score = new MasterScore(MScore::baseStyle());
       setMidiReopenInProgress(name);
