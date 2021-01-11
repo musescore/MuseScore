@@ -46,7 +46,7 @@ void ScoreMigrationDialogModel::ignore()
 
 void ScoreMigrationDialogModel::showMoreDetails()
       {
-      QDesktopServices::openUrl(QUrl("https://musescore.com")); // Here will be the link for announcement
+      QDesktopServices::openUrl(QUrl("https://youtu.be/qLR40BGNy68"));
       }
 
 bool ScoreMigrationDialogModel::isLelandAllowed() const

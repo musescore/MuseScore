@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2020 MuseScore BVBA and others
+//  Copyright (C) 2021 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -30,13 +30,12 @@ FocusableItem {
     property alias verticalAlignment: textLabel.verticalAlignment
     property alias font: textLabel.font
 
-    signal linkActivated(var link)
+    signal linkActivated()
 
     height: textLabel.height
     width: parent.width
 
     Accessible.role: Accessible.StaticText
-    Accessible.description: textLabel.text
     Accessible.name: textLabel.text
 
     Text {
@@ -50,7 +49,7 @@ FocusableItem {
 
         wrapMode: Text.WordWrap
 
-        color: "#373737"
+        color: globalStyle.buttonText
 
         onLinkActivated: {
             root.linkActivated()
