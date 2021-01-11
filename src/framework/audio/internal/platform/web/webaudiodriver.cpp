@@ -17,7 +17,7 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 #include "webaudiodriver.h"
-
+#include "log.h"
 using namespace mu::audio;
 
 WebAudioDriver::WebAudioDriver()
@@ -44,4 +44,28 @@ void WebAudioDriver::close()
 bool WebAudioDriver::isOpened() const
 {
     return m_opened;
+}
+
+std::string WebAudioDriver::device() const
+{
+    NOT_IMPLEMENTED;
+    return "default";
+}
+
+bool WebAudioDriver::selectDevice(std::string name)
+{
+    NOT_IMPLEMENTED;
+    return false;
+}
+
+std::vector<std::string> WebAudioDriver::availableDevices() const
+{
+    NOT_IMPLEMENTED;
+    return { "default" };
+}
+
+mu::async::Notification WebAudioDriver::deviceListChanged() const
+{
+    NOT_IMPLEMENTED;
+    return mu::async::Notification();
 }

@@ -159,3 +159,27 @@ bool LinuxAudioDriver::isOpened() const
 {
     return _alsaData != nullptr;
 }
+
+std::string LinuxAudioDriver::device() const
+{
+    NOT_IMPLEMENTED;
+    return "default";
+}
+
+bool LinuxAudioDriver::selectDevice(std::string name)
+{
+    NOT_IMPLEMENTED;
+    return false;
+}
+
+std::vector<std::string> LinuxAudioDriver::availableDevices() const
+{
+    NOT_IMPLEMENTED;
+    return { "default" };
+}
+
+mu::async::Notification LinuxAudioDriver::deviceListChanged() const
+{
+    NOT_IMPLEMENTED;
+    return mu::async::Notification();
+}

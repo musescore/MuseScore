@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import MuseScore.UiComponents 1.0
 import MuseScore.Audio 1.0
+import QtQuick.Controls 2.2
 
 Rectangle {
 
@@ -12,6 +13,20 @@ Rectangle {
 
     Column {
         anchors.fill: parent
+
+        Row {
+            anchors.left:  parent.left
+            anchors.right: parent.right
+            height: 40
+
+            ComboBox {
+                id: pluginSelector
+                model: devtools.devices
+                width: parent.width / 2
+                currentIndex: devtools.devices.indexOf(devtools.device())
+                onCurrentValueChanged: devtools.selectDevice(currentValue)
+            }
+        }
 
         Row {
             anchors.left:  parent.left

@@ -20,6 +20,7 @@
 #define MU_AUDIO_OSXAUDIODRIVER_H
 
 #include <memory>
+#include <map>
 #include <MacTypes.h>
 #include "../../iaudiodriver.h"
 
@@ -34,18 +35,32 @@ class OSXAudioDriver : public IAudioDriver
 public:
     OSXAudioDriver();
     ~OSXAudioDriver();
+    const static std::string DEFAULT_DEVICE_NAME;
 
     std::string name() const override;
     bool open(const Spec& spec, Spec* activeSpec) override;
     void close() override;
     bool isOpened() const override;
 
+    std::string device() const override;
+    bool selectDevice(std::string name) override;
+    std::vector<std::string> availableDevices() const override;
+    async::Notification deviceListChanged() const override;
+    void updateDeviceMap();
+
 private:
     static void OnFillBuffer(void* context, OpaqueAudioQueue* queue, AudioQueueBuffer* buffer);
     static void logError(const std::string message, OSStatus error);
+
+    void initDeviceMapListener();
+    bool audioQueueSetDeviceName(std::string deviceName);
+
     struct Data;
 
-    std::shared_ptr<Data> m_data;
+    std::shared_ptr<Data> m_data = nullptr;
+    std::map<unsigned int, std::string> m_devices = {};
+    async::Notification m_deviceListChanged;
+    std::string m_deviceName = DEFAULT_DEVICE_NAME;
 };
 }
 }
