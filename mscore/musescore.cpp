@@ -3750,14 +3750,10 @@ static bool convert(const QString& inFile, const QJsonArray& outFiles, const QSt
             return false;
             }
       fprintf(stderr, "convert <%s>...\n", qPrintable(inFile));
-      MasterScore* score = mscore->readScore(inFile);
+      Score* score = mscore->openScore(inFile);
       if (!score)
             return false;
       mscore->setCurrentScore(score);
-      if (!plugin.isEmpty()) {
-            int index = mscore->appendScore(score);
-            mscore->setCurrentView(index, 0);
-            }
       bool success = doConvert(score, outFiles, plugin);
       fprintf(stderr, success ? "... success!\n" : "... failed!\n");
       if (plugin.isEmpty())
@@ -5076,12 +5072,7 @@ void MuseScore::handleMessage(const QString& message)
       if (startcenter)
             showStartcenter(false);
       ((QtSingleApplication*)(qApp))->activateWindow();
-      MasterScore* score = readScore(message);
-      if (score) {
-            setCurrentScoreView(appendScore(score));
-            addRecentScore(score);
-            writeSessionFile(false);
-            }
+      openScore(message);
       }
 
 //---------------------------------------------------------
@@ -5693,7 +5684,7 @@ void MuseScore::networkFinished()
 
       reply->deleteLater();
 
-      MasterScore* score = readScore(tmpName);
+      Score* score = openScore(tmpName);
       // delete the temp file created above
       QFile::remove(tmpName);
       if (!score) {
@@ -5701,7 +5692,6 @@ void MuseScore::networkFinished()
             return;
             }
       score->setCreated(true);
-      setCurrentScoreView(appendScore(score));
       }
 
 //---------------------------------------------------------
@@ -8409,7 +8399,7 @@ QByteArray MuseScore::exportMsczAsJSON(Score* score)
 
 bool MuseScore::exportPartsPdfsToJSON(const QString& inFilePath, const QString& outFilePath)
 {
-      MasterScore* score = mscore->readScore(inFilePath);
+      Score* score = mscore->openScore(inFilePath);
       if (!score)
             return false;
 
@@ -8432,7 +8422,7 @@ bool MuseScore::exportPartsPdfsToJSON(const QString& inFilePath, const QString& 
       //save extended score+parts and separate parts pdfs
       //if no parts, generate parts from existing instruments
       if (score->excerpts().size() == 0) {
-            auto excerpts = Excerpt::createAllExcerpt(score);
+            auto excerpts = Excerpt::createAllExcerpt(score->masterScore());
             for (Excerpt* e : excerpts) {
                   Score* nscore = new Score(e->oscore());
                   e->setPartScore(nscore);
