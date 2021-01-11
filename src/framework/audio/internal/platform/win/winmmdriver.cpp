@@ -213,3 +213,27 @@ bool WinmmDriver::isOpened() const
 {
     return s_winMMData != nullptr;
 }
+
+std::string WinmmDriver::device() const
+{
+    NOT_IMPLEMENTED;
+    return "default";
+}
+
+bool WinmmDriver::selectDevice(std::string name)
+{
+    NOT_IMPLEMENTED;
+    return false;
+}
+
+std::vector<std::string> WinmmDriver::availableDevices() const
+{
+    NOT_IMPLEMENTED;
+    return { "default" };
+}
+
+mu::async::Notification WinmmDriver::deviceListChanged() const
+{
+    NOT_IMPLEMENTED;
+    return mu::async::Notification();
+}

@@ -21,12 +21,12 @@
 
 #include <mutex>
 #include <AudioToolbox/AudioToolbox.h>
-
 #include "log.h"
 
 using namespace mu::audio;
 
 struct OSXAudioDriver::Data {
+    Spec format;
     AudioQueueRef audioQueue;
     Callback callback;
     void* mUserData;
@@ -37,12 +37,17 @@ OSXAudioDriver::OSXAudioDriver()
 {
     m_data = std::make_shared<Data>();
     m_data->audioQueue = nullptr;
+
+    initDeviceMapListener();
+    updateDeviceMap();
 }
 
 OSXAudioDriver::~OSXAudioDriver()
 {
     close();
 }
+
+const std::string OSXAudioDriver::DEFAULT_DEVICE_NAME = "Systems default";
 
 std::string OSXAudioDriver::name() const
 {
@@ -62,6 +67,7 @@ bool OSXAudioDriver::open(const Spec& spec, Spec* activeSpec)
     *activeSpec = spec;
 
     activeSpec->format = Format::AudioS16;
+    m_data->format = *activeSpec;
 
     AudioStreamBasicDescription audioFormat;
     audioFormat.mSampleRate = spec.freq;
@@ -82,6 +88,8 @@ bool OSXAudioDriver::open(const Spec& spec, Spec* activeSpec)
         logError("Failed to create Audio Queue Output, err: ", result);
         return false;
     }
+
+    audioQueueSetDeviceName(m_deviceName);
 
     // Allocate 3 audio buffers. At the same time one used for writing, one for reading and one for reserve
     for (unsigned int i = 0; i < 3; ++i) {
@@ -123,6 +131,120 @@ bool OSXAudioDriver::isOpened() const
     return m_data->audioQueue != nullptr;
 }
 
+std::vector<std::string> OSXAudioDriver::availableDevices() const
+{
+    std::vector<std::string> deviceList = { DEFAULT_DEVICE_NAME };
+    for (auto& device : m_devices) {
+        deviceList.push_back(device.second);
+    }
+    return deviceList;
+}
+
+mu::async::Notification OSXAudioDriver::deviceListChanged() const
+{
+    return m_deviceListChanged;
+}
+
+std::string OSXAudioDriver::device() const
+{
+    return m_deviceName;
+}
+
+void OSXAudioDriver::updateDeviceMap()
+{
+    AudioObjectPropertyAddress propertyAddress;
+    UInt32 propertySize;
+    OSStatus result;
+    std::vector<AudioObjectID> audioObjects = {};
+    m_devices.clear();
+
+    propertyAddress.mSelector = kAudioHardwarePropertyDevices;
+    propertyAddress.mScope = kAudioObjectPropertyScopeOutput;
+    propertyAddress.mElement = kAudioObjectPropertyElementMaster;
+
+    result = AudioObjectGetPropertyDataSize(kAudioObjectSystemObject, &propertyAddress, 0, NULL, &propertySize);
+    if (result != noErr) {
+        logError("Failed to get devices count, err: ", result);
+        return;
+    }
+
+    audioObjects.resize(propertySize / sizeof(AudioDeviceID));
+    result = AudioObjectGetPropertyData(kAudioObjectSystemObject, &propertyAddress, 0, NULL, &propertySize, audioObjects.data());
+    if (result != noErr) {
+        logError("Failed to get devices list, err: ", result);
+        return;
+    }
+
+    propertyAddress.mSelector = kAudioDevicePropertyDeviceNameCFString;
+    propertyAddress.mScope = kAudioObjectPropertyScopeOutput;
+    propertyAddress.mElement = kAudioObjectPropertyElementMaster;
+
+    for (auto&& d : audioObjects) {
+        std::string deviceName;
+        CFStringRef nameRef;
+
+        result = AudioObjectGetPropertyData(d, &propertyAddress, 0, NULL, &propertySize, &nameRef);
+        if (result != noErr) {
+            logError("Failed to get device's name, err: ", result);
+            continue;
+        }
+        propertySize = CFStringGetLength(nameRef);
+        deviceName.resize(propertySize);
+        CFStringGetCString(nameRef, deviceName.data(), sizeof(deviceName), kCFStringEncodingUTF8);
+        m_devices[d] = deviceName;
+        CFRelease(nameRef);
+    }
+    m_deviceListChanged.notify();
+}
+
+bool OSXAudioDriver::audioQueueSetDeviceName(std::string deviceName)
+{
+    if (deviceName.empty() || deviceName == DEFAULT_DEVICE_NAME) {
+        return true; //default device used
+    }
+
+    auto index = std::find_if(m_devices.begin(), m_devices.end(), [&deviceName](auto& d) { return d.second == deviceName; });
+    if (index == m_devices.end()) {
+        LOGW() << "device " << deviceName << " not found";
+        return false;
+    }
+    AudioDeviceID deviceId = index->first;
+
+    CFStringRef deviceUID;
+    UInt32 deviceUIDSize = sizeof(deviceUID);
+    AudioObjectPropertyAddress propertyAddress;
+    propertyAddress.mSelector = kAudioDevicePropertyDeviceUID;
+    propertyAddress.mScope = kAudioDevicePropertyScopeOutput;
+    propertyAddress.mElement = kAudioObjectPropertyElementMaster;
+
+    auto result = AudioObjectGetPropertyData(deviceId, &propertyAddress, 0, NULL, &deviceUIDSize, &deviceUID);
+    if (result != noErr) {
+        logError("Failed to get device UID, err: ", result);
+        return false;
+    }
+    result = AudioQueueSetProperty(m_data->audioQueue, kAudioQueueProperty_CurrentDevice, &deviceUID, deviceUIDSize);
+    if (result != noErr) {
+        logError("Failed to set device by UID, err: ", result);
+        return false;
+    }
+    return true;
+}
+
+bool OSXAudioDriver::selectDevice(std::string name)
+{
+    if (m_deviceName == name) {
+        return true;
+    }
+
+    bool reopen = isOpened();
+    close();
+    m_deviceName = name;
+    if (reopen) {
+        return open(m_data->format, &m_data->format);
+    }
+    return true;
+}
+
 void OSXAudioDriver::logError(const std::string message, OSStatus error)
 {
     if (error == noErr) {
@@ -141,6 +263,31 @@ void OSXAudioDriver::logError(const std::string message, OSStatus error)
         LOGE() << message << errorString << "(" << error << ")";
     } else {
         LOGE() << message << error;
+    }
+}
+
+static OSStatus onDeviceListChanged(AudioObjectID inObjectID, UInt32 inNumberAddresses, const AudioObjectPropertyAddress* inAddresses,
+                                    void* inClientData)
+{
+    UNUSED(inObjectID);
+    UNUSED(inNumberAddresses);
+    UNUSED(inAddresses);
+    auto driver = reinterpret_cast<OSXAudioDriver*>(inClientData);
+    driver->updateDeviceMap();
+
+    return noErr;
+}
+
+void OSXAudioDriver::initDeviceMapListener()
+{
+    AudioObjectPropertyAddress propertyAddress;
+    propertyAddress.mSelector = kAudioHardwarePropertyDevices;
+    propertyAddress.mScope = kAudioObjectPropertyScopeGlobal;
+    propertyAddress.mElement = kAudioObjectPropertyElementMaster;
+
+    auto result = AudioObjectAddPropertyListener(kAudioObjectSystemObject, &propertyAddress, &onDeviceListChanged, this);
+    if (result != noErr) {
+        logError("Failed to add devices list listener, err: ", result);
     }
 }
 

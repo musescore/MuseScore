@@ -33,6 +33,11 @@ public:
     bool open(const Spec& spec, Spec* activeSpec) override;
     void close() override;
     bool isOpened() const override;
+
+    std::string device() const override;
+    bool selectDevice(std::string name) override;
+    std::vector<std::string> availableDevices() const override;
+    async::Notification deviceListChanged() const override;
 };
 }
 }
