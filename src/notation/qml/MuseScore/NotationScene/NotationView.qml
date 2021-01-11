@@ -143,4 +143,8 @@ FocusScope {
             Layout.fillWidth: true
         }
     }
+
+    Component.onCompleted: {
+        notationView.load()
+    }
 }

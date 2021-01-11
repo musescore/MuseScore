@@ -19,18 +19,20 @@
 #ifndef MU_NOTATION_NOTATIONVIEWINPUTCONTROLLER_H
 #define MU_NOTATION_NOTATIONVIEWINPUTCONTROLLER_H
 
-#include <QWheelEvent>
 #include "modularity/ioc.h"
-#include "../inotationconfiguration.h"
+
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
+
 #include "context/iglobalcontext.h"
+
 #include "notation/inotationinteraction.h"
 #include "notation/inotationplayback.h"
+#include "notation/inotationconfiguration.h"
+
 #include "playback/iplaybackcontroller.h"
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class IControlledView
 {
 public:
@@ -38,13 +40,15 @@ public:
 
     virtual qreal width() const = 0;
     virtual qreal height() const = 0;
-    virtual qreal scale() const = 0;
-    virtual QPoint toLogical(const QPoint& p) const = 0;
 
     virtual void moveCanvas(int dx, int dy) = 0;
-    virtual void moveCanvasVertical(int dy) = 0;
     virtual void moveCanvasHorizontal(int dx) = 0;
-    virtual void setZoom(int zoomPercentage, const QPoint& pos) = 0;
+    virtual void moveCanvasVertical(int dy) = 0;
+
+    virtual qreal currentScaling() const = 0;
+    virtual void scale(qreal scaling, const QPoint& pos) = 0;
+
+    virtual QPoint toLogical(const QPoint& p) const = 0;
 
     virtual bool isNoteEnterMode() const = 0;
     virtual void showShadowNote(const QPointF& pos) = 0;
@@ -65,26 +69,31 @@ class NotationViewInputController : public actions::Actionable
 public:
     NotationViewInputController(IControlledView* view);
 
-    void wheelEvent(QWheelEvent* ev);
-    void mousePressEvent(QMouseEvent* ev);
-    void mouseMoveEvent(QMouseEvent* ev);
-    void mouseReleaseEvent(QMouseEvent*);
-    void mouseDoubleClickEvent(QMouseEvent* ev);
-    void hoverMoveEvent(QHoverEvent* ev);
+    void setReadonly(bool readonly);
+
+    void wheelEvent(QWheelEvent* event);
+    void mousePressEvent(QMouseEvent* event);
+    void mouseMoveEvent(QMouseEvent* event);
+    void mouseReleaseEvent(QMouseEvent* event);
+    void mouseDoubleClickEvent(QMouseEvent* event);
+    void hoverMoveEvent(QHoverEvent* event);
     void keyReleaseEvent(QKeyEvent* event);
 
-    void dragEnterEvent(QDragEnterEvent* ev);
-    void dragLeaveEvent(QDragLeaveEvent* ev);
-    void dragMoveEvent(QDragMoveEvent* ev);
-    void dropEvent(QDropEvent* ev);
+    void dragEnterEvent(QDragEnterEvent* event);
+    void dragLeaveEvent(QDragLeaveEvent* event);
+    void dragMoveEvent(QDragMoveEvent* event);
+    void dropEvent(QDropEvent* event);
 
 private:
-    std::shared_ptr<INotation> currentNotation() const;
+    INotationPtr currentNotation() const;
 
     void zoomIn();
     void zoomOut();
+    void zoomToPageWidth();
 
     int currentZoomIndex() const;
+    int currentZoomPercentage() const;
+    qreal notationScaling() const;
     void setZoom(int zoomPercentage, const QPoint& pos = QPoint());
 
     void setViewMode(const ViewMode& viewMode);
@@ -96,7 +105,7 @@ private:
     };
 
     bool isDragAllowed() const;
-    void startDragElements(ElementType etype, const QPointF& eoffset);
+    void startDragElements(ElementType elemetsType, const QPointF& elementsOffset);
 
     float hitWidth() const;
 
@@ -106,7 +115,10 @@ private:
     InteractData m_interactData;
 
     QList<int> m_possibleZoomsPercentage;
+
+    bool m_readonly = false;
+    int m_currentZoomPercentage = 0;
 };
 }
-}
+
 #endif // MU_NOTATION_NOTATIONVIEWINPUTCONTROLLER_H

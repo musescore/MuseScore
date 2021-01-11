@@ -20,94 +20,16 @@
 #include "templatepaintview.h"
 
 #include "log.h"
-#include "io/path.h"
+
+#include "notation/imasternotation.h"
 
 using namespace mu::userscores;
 using namespace mu::notation;
 
-//! NOTE: experimental values
-static constexpr qreal INITIAL_SCALE_FACTOR = 0.08;
-static constexpr qreal SCALE_FACTOR_STEP = 0.01;
-
-static constexpr qreal MIN_SCROLL_SIZE = 0.1;
-static constexpr qreal MAX_SCROLL_SIZE = 1.0;
-static constexpr qreal MID_SCROLL_POSITION = (MAX_SCROLL_SIZE - MIN_SCROLL_SIZE) / 2.0;
-
 TemplatePaintView::TemplatePaintView(QQuickItem* parent)
-    : QQuickPaintedItem(parent), m_currentScaleFactor(INITIAL_SCALE_FACTOR)
+    : NotationPaintView(parent)
 {
-    setAntialiasing(true);
-
-    m_backgroundColor = configuration()->templatePreviewBackgroundColor();
-    configuration()->templatePreviewBackgroundColorChanged().onReceive(this, [this](const QColor& color) {
-        m_backgroundColor = color;
-        update();
-    });
-
-    connect(this, &QQuickPaintedItem::widthChanged, this, &TemplatePaintView::onViewSizeChanged);
-    connect(this, &QQuickPaintedItem::heightChanged, this, &TemplatePaintView::onViewSizeChanged);
-}
-
-qreal TemplatePaintView::startHorizontalScrollPosition() const
-{
-    if (horizontalScrollSize() == MIN_SCROLL_SIZE) {
-        return MID_SCROLL_POSITION;
-    }
-
-    return MAX_SCROLL_SIZE - horizontalScrollableAreaSize();
-}
-
-qreal TemplatePaintView::horizontalScrollSize() const
-{
-    qreal area = horizontalScrollableAreaSize();
-    if (qFuzzyIsNull(area)) {
-        return 0;
-    }
-
-    qreal size = area - (MAX_SCROLL_SIZE - area);
-    size = std::max(size, MIN_SCROLL_SIZE);
-
-    return size;
-}
-
-qreal TemplatePaintView::horizontalScrollableAreaSize() const
-{
-    if (canvasWidth() <= width() || !canvasScaled()) {
-        return 0;
-    }
-
-    return width() / canvasWidth();
-}
-
-qreal TemplatePaintView::startVerticalScrollPosition() const
-{
-    if (verticalScrollSize() == MIN_SCROLL_SIZE) {
-        return MID_SCROLL_POSITION;
-    }
-
-    return MAX_SCROLL_SIZE - verticalScrollableAreaSize();
-}
-
-qreal TemplatePaintView::verticalScrollSize() const
-{
-    qreal area = verticalScrollableAreaSize();
-    if (qFuzzyIsNull(area)) {
-        return 0;
-    }
-
-    qreal size = area - (MAX_SCROLL_SIZE - area);
-    size = std::max(size, MIN_SCROLL_SIZE);
-
-    return size;
-}
-
-qreal TemplatePaintView::verticalScrollableAreaSize() const
-{
-    if (canvasHeight() <= height() || !canvasScaled()) {
-        return 0;
-    }
-
-    return height() / canvasHeight();
+    setReadonly(true);
 }
 
 void TemplatePaintView::load(const QString& templatePath)
@@ -117,145 +39,62 @@ void TemplatePaintView::load(const QString& templatePath)
     }
 
     m_templatePath = templatePath;
-    m_notation = notationCreator()->newMasterNotation();
+    load();
+}
 
-    Ret ret = m_notation->load(m_templatePath);
+void TemplatePaintView::load()
+{
+    IMasterNotationPtr notation = notationCreator()->newMasterNotation();
+    Ret ret = notation->load(m_templatePath);
+
     if (!ret) {
         LOGE() << ret.toString();
-        m_notation = nullptr;
-        update();
+        notation = nullptr;
+    }
+
+    setNotation(notation);
+
+    if (notation) {
+        adjustCanvas();
+    }
+}
+
+void TemplatePaintView::adjustCanvas()
+{
+    qreal scaling = resolveDefaultScaling();
+
+    if (qFuzzyIsNull(scaling) || scaling < 0) {
         return;
     }
 
-    scaleCanvas(INITIAL_SCALE_FACTOR);
+    scale(scaling, QPoint());
+    moveCanvasToCenter();
 }
 
-void TemplatePaintView::moveCanvasToCenter()
+qreal TemplatePaintView::resolveDefaultScaling() const
 {
-    m_dx = (width() - canvasWidth()) / 2.;
-    m_dy = (height() - canvasHeight()) / 2.;
+    //! NOTE: this value was found experimentally
+    constexpr qreal PROPORTION_FACTOR = 1.2;
 
-    m_previousHorizontalScrollPosition = 0;
-    m_previousVerticalScrollPosition = 0;
+    QRectF notationRect = notationContentRect();
 
-    update();
+    qreal widthScaling = width() * guiScaling() / notationRect.width() / PROPORTION_FACTOR;
+    qreal heightScaling = height() * guiScaling() / notationRect.height() / PROPORTION_FACTOR;
+
+    return std::min(widthScaling, heightScaling);
 }
 
 void TemplatePaintView::onViewSizeChanged()
 {
-    moveCanvasToCenter();
+    adjustCanvas();
 }
 
 void TemplatePaintView::zoomIn()
 {
-    scaleCanvas(m_currentScaleFactor + SCALE_FACTOR_STEP);
+    handleAction("zoomin");
 }
 
 void TemplatePaintView::zoomOut()
 {
-    scaleCanvas(m_currentScaleFactor - SCALE_FACTOR_STEP);
-}
-
-void TemplatePaintView::scaleCanvas(qreal scaleFactor)
-{
-    if (scaleFactor < INITIAL_SCALE_FACTOR) {
-        scaleFactor = INITIAL_SCALE_FACTOR;
-    }
-
-    m_currentScaleFactor = scaleFactor;
-    moveCanvasToCenter();
-
-    emit horizontalScrollChanged();
-    emit verticalScrollChanged();
-}
-
-bool TemplatePaintView::canvasScaled() const
-{
-    return !qFuzzyCompare(m_currentScaleFactor, INITIAL_SCALE_FACTOR);
-}
-
-void TemplatePaintView::scrollHorizontal(qreal position)
-{
-    if (position == m_previousHorizontalScrollPosition) {
-        return;
-    }
-
-    if (qFuzzyIsNull(m_previousHorizontalScrollPosition)) {
-        m_previousHorizontalScrollPosition = position;
-        return;
-    }
-
-    qreal scrollStep = position - m_previousHorizontalScrollPosition;
-    m_dx -= canvasWidth() * scrollStep;
-
-    m_previousHorizontalScrollPosition = position;
-    update();
-}
-
-void TemplatePaintView::scrollVertical(qreal position)
-{
-    if (position == m_previousVerticalScrollPosition) {
-        return;
-    }
-
-    if (qFuzzyIsNull(m_previousVerticalScrollPosition)) {
-        m_previousVerticalScrollPosition = position;
-        return;
-    }
-
-    qreal scrollStep = position - m_previousVerticalScrollPosition;
-    m_dy -= canvasHeight() * scrollStep;
-
-    m_previousVerticalScrollPosition = position;
-    update();
-}
-
-QRectF TemplatePaintView::previewRect() const
-{
-    if (!m_notation) {
-        return QRectF();
-    }
-
-    auto notationElements = m_notation->elements();
-    if (!notationElements) {
-        return QRectF();
-    }
-
-    PageList pages = notationElements->pages();
-    if (!pages.empty()) {
-        return pages.front()->bbox();
-    }
-
-    return QRectF();
-}
-
-qreal TemplatePaintView::canvasWidth() const
-{
-    if (m_notation) {
-        return previewRect().width() * m_currentScaleFactor;
-    }
-
-    return 0;
-}
-
-qreal TemplatePaintView::canvasHeight() const
-{
-    if (m_notation) {
-        return previewRect().height() * m_currentScaleFactor;
-    }
-
-    return 0;
-}
-
-void TemplatePaintView::paint(QPainter* painter)
-{
-    QRect rect(0, 0, width(), height());
-
-    painter->fillRect(rect, m_backgroundColor);
-    painter->translate(m_dx, m_dy);
-    painter->scale(m_currentScaleFactor, m_currentScaleFactor);
-
-    if (m_notation) {
-        m_notation->paint(painter, rect);
-    }
+    handleAction("zoomout");
 }

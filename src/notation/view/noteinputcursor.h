@@ -24,7 +24,7 @@
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
-#include "inotationconfiguration.h"
+#include "notation/inotationconfiguration.h"
 
 class QPainter;
 
