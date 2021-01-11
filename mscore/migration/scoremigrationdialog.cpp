@@ -10,6 +10,7 @@ ScoreMigrationDialog::ScoreMigrationDialog(QQmlEngine* engine, Ms::Score* score)
 
       setFlags(Qt::Dialog);
 
+      setTitle(score->title());
       setSource(QUrl(QStringLiteral("qrc:/qml/migration/ScoreMigrationDialog.qml")));
 
       setModality(Qt::ApplicationModal);
