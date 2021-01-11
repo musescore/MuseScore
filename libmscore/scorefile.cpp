@@ -864,9 +864,7 @@ Score::FileError MasterScore::loadCompressedMsc(QIODevice* io, bool ignoreVersio
       XmlReader e(dbuf);
       e.setDocName(masterScore()->fileInfo()->completeBaseName());
 
-      int defaultsVersion = readStyleDefaultsVersion(QByteArray(dbuf));
-
-      FileError retval = read1(e, ignoreVersionError, defaultsVersion);
+      FileError retval = read1(e, ignoreVersionError);
 
 #ifdef OMR
       //
@@ -897,9 +895,27 @@ Score::FileError MasterScore::loadCompressedMsc(QIODevice* io, bool ignoreVersio
       return retval;
       }
 
-int MasterScore::readStyleDefaultsVersion(const QByteArray& data) const
+int MasterScore::styleDefaultByMscVersion(const int mscVer) const
       {
-      XmlReader e(data);
+      constexpr int LEGACY_MSC_VERSION_V3 = 301;
+      constexpr int LEGACY_MSC_VERSION_V2 = 206;
+      constexpr int LEGACY_MSC_VERSION_V1 = 114;
+
+      if (mscVer > LEGACY_MSC_VERSION_V2 && mscVer < MSCVERSION)
+            return LEGACY_MSC_VERSION_V3;
+
+      if (mscVer > LEGACY_MSC_VERSION_V1 && mscVer <= LEGACY_MSC_VERSION_V2)
+            return LEGACY_MSC_VERSION_V2;
+
+      if (mscVer <= LEGACY_MSC_VERSION_V1)
+            return LEGACY_MSC_VERSION_V1;
+
+      return MSCVERSION;
+      }
+
+int MasterScore::readStyleDefaultsVersion()
+      {
+      XmlReader e(readToBuffer());
       e.setDocName(masterScore()->fileInfo()->completeBaseName());
 
       while (!e.atEnd()) {
@@ -908,7 +924,7 @@ int MasterScore::readStyleDefaultsVersion(const QByteArray& data) const
                   return e.readInt();
             }
 
-      return MSCVERSION;
+      return styleDefaultByMscVersion(mscVersion());
       }
 
 //---------------------------------------------------------
@@ -996,7 +1012,7 @@ void MasterScore::parseVersion(const QString& val)
 //    return true on success
 //---------------------------------------------------------
 
-Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError, const int styleDefaultsVersion)
+Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError)
       {
       while (e.readNextStartElement()) {
             if (e.name() == "museScore") {
@@ -1013,8 +1029,10 @@ Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError, const
                               return FileError::FILE_OLD_300_FORMAT;
                         }
 
-                  setStyle(*MStyle::resolveStyleDefaults(styleDefaultsVersion));
-                  style().setDefaultStyleVersion(styleDefaultsVersion);
+                  int defaultsVersion = readStyleDefaultsVersion();
+
+                  setStyle(*MStyle::resolveStyleDefaults(defaultsVersion));
+                  style().setDefaultStyleVersion(defaultsVersion);
 
                   Score::FileError error;
                   if (mscVersion() <= 114)

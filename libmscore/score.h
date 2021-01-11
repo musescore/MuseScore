@@ -1370,7 +1370,7 @@ class MasterScore : public Score {
       void setTempomap(TempoMap* tm);
 
       bool saveFile(bool generateBackup = true);
-      FileError read1(XmlReader&, bool ignoreVersionError, const int styleDefaultsVersion = MSCVERSION);
+      FileError read1(XmlReader&, bool ignoreVersionError);
       FileError loadCompressedMsc(QIODevice*, bool ignoreVersionError);
       FileError loadMsc(QString name, bool ignoreVersionError);
       FileError loadMsc(QString name, QIODevice*, bool ignoreVersionError);
@@ -1379,7 +1379,8 @@ class MasterScore : public Score {
       FileError read302(XmlReader&);
       QByteArray readToBuffer();
       QByteArray readCompressedToBuffer();
-      int readStyleDefaultsVersion(const QByteArray& data) const;
+      int readStyleDefaultsVersion();
+      int styleDefaultByMscVersion(const int mscVer) const;
 
       Omr* omr() const                         { return _omr;     }
       void setOmr(Omr* o)                      { _omr = o;        }
