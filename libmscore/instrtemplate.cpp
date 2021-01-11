@@ -751,6 +751,35 @@ InstrumentTemplate* searchTemplateForMusicXmlId(const QString& mxmlId)
       return 0;
       }
 
+InstrumentTemplate* searchTemplateForTrackName(const QString& trackName)
+{
+    QString trackNameLower = trackName.toLower();
+
+    for (InstrumentGroup* g : qAsConst(instrumentGroups)) {
+        for (InstrumentTemplate* it : qAsConst(g->instrumentTemplates)) {
+            if (it->trackName.toLower().contains(trackNameLower)) {
+                return it;
+            }
+        }
+    }
+    return 0;
+}
+
+InstrumentTemplate* searchTemplateForMidiProgram(int midiProgram)
+{
+    for (InstrumentGroup* g : qAsConst(instrumentGroups)) {
+          for (InstrumentTemplate* it : qAsConst(g->instrumentTemplates)) {
+                if (it->channel.empty()) {
+                    continue;
+                }
+
+                if (it->channel[0].program() == midiProgram)
+                      return it;
+                }
+          }
+    return 0;
+}
+
 //---------------------------------------------------------
 //   searchTemplateIndexForTrackName
 //---------------------------------------------------------
