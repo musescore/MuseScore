@@ -21,7 +21,7 @@
 
 #include "modularity/imoduleexport.h"
 #include "uicomponents/uicomponentstypes.h"
-#include "notationtypes.h"
+#include "notation/notationtypes.h"
 
 namespace mu::notation {
 class INotationContextMenu : MODULE_EXPORT_INTERFACE

@@ -23,7 +23,7 @@
 #include <QColor>
 
 #include "modularity/ioc.h"
-#include "inotationconfiguration.h"
+#include "notation/inotationconfiguration.h"
 
 class QPainter;
 

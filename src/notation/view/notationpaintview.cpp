@@ -39,24 +39,30 @@ NotationPaintView::NotationPaintView(QQuickItem* parent)
     setAcceptedMouseButtons(Qt::AllButtons);
     setAntialiasing(true);
 
-    setZoom(configuration()->currentZoom().val, QPoint());
-
     connect(this, &QQuickPaintedItem::widthChanged, this, &NotationPaintView::onViewSizeChanged);
     connect(this, &QQuickPaintedItem::heightChanged, this, &NotationPaintView::onViewSizeChanged);
 
     connect(this, &NotationPaintView::horizontalScrollChanged, [this]() {
         m_previousHorizontalScrollPosition = startHorizontalScrollPosition();
     });
+
     connect(this, &NotationPaintView::verticalScrollChanged, [this]() {
         m_previousVerticalScrollPosition = startVerticalScrollPosition();
     });
 
-    // input
-    m_inputController = new NotationViewInputController(this);
-
-    // playback
-    m_playbackCursor = new PlaybackCursor();
+    m_inputController = std::make_unique<NotationViewInputController>(this);
+    m_playbackCursor = std::make_unique<PlaybackCursor>();
     m_playbackCursor->setVisible(false);
+    m_noteInputCursor = std::make_unique<NoteInputCursor>();
+}
+
+void NotationPaintView::load()
+{
+    m_notation = globalContext()->currentNotation();
+
+    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+        onCurrentNotationChanged();
+    });
 
     playbackController()->isPlayingChanged().onNotify(this, [this]() {
         onPlayingChanged();
@@ -66,28 +72,36 @@ NotationPaintView::NotationPaintView(QQuickItem* parent)
         movePlaybackCursor(tick);
     });
 
-    // note input
-    m_noteInputCursor = new NoteInputCursor();
+    initBackground();
+}
 
-    // configuration
+void NotationPaintView::initBackground()
+{
     m_backgroundColor = configuration()->backgroundColor();
+
     configuration()->backgroundColorChanged().onReceive(this, [this](const QColor& color) {
         m_backgroundColor = color;
         update();
     });
-
-    // notation
-    m_notation = globalContext()->currentNotation();
-    globalContext()->currentNotationChanged().onNotify(this, [this]() {
-        onCurrentNotationChanged();
-    });
 }
 
-NotationPaintView::~NotationPaintView()
+void NotationPaintView::moveCanvasToCenter()
 {
-    delete m_inputController;
-    delete m_playbackCursor;
-    delete m_noteInputCursor;
+    if (!isInited()) {
+        return;
+    }
+
+    QRectF canvasRect = m_matrix.mapRect(notationContentRect());
+
+    int canvasWidth = canvasRect.width() / guiScaling();
+    int canvasHeight = canvasRect.height() / guiScaling();
+
+    int dx = (width() - canvasWidth) / 2;
+    int dy = (height() - canvasHeight) / 2;
+
+    QPoint newTopLeft = toLogical(QPoint(dx, dy));
+
+    moveCanvas(newTopLeft.x(), newTopLeft.y());
 }
 
 void NotationPaintView::scrollHorizontal(qreal position)
@@ -173,60 +187,51 @@ void NotationPaintView::onCurrentNotationChanged()
 
 void NotationPaintView::onViewSizeChanged()
 {
-    if (!currentNotation()) {
+    if (!notation()) {
         return;
     }
 
-    QPoint p1 = toLogical(QPoint(0, 0));
-    QPoint p2 = toLogical(QPoint(width(), height()));
-    currentNotation()->setViewSize(QSizeF(p2.x() - p1.x(), p2.y() - p1.y()));
+    QPoint topLeft = toLogical(QPoint(0, 0));
+    QPoint bottomRight = toLogical(QPoint(width(), height()));
+
+    notation()->setViewSize(QSizeF(bottomRight.x() - topLeft.x(), bottomRight.y() - topLeft.y()));
 }
 
-INotationPtr NotationPaintView::currentNotation() const
+INotationPtr NotationPaintView::notation() const
 {
     return m_notation;
 }
 
-INotationNoteInputPtr NotationPaintView::currentNotationNoteInput() const
+INotationInteractionPtr NotationPaintView::notationInteraction() const
 {
-    auto notation = currentNotation();
-    if (!notation) {
-        return nullptr;
-    }
-
-    auto interaction = notation->interaction();
-    if (!interaction) {
-        return nullptr;
-    }
-
-    return interaction->noteInput();
+    return notation() ? notation()->interaction() : nullptr;
 }
 
-INotationElementsPtr NotationPaintView::currentNotationElements() const
+INotationPlaybackPtr NotationPaintView::notationPlayback() const
 {
-    auto notation = currentNotation();
-    if (!notation) {
-        return nullptr;
-    }
-
-    return notation->elements();
+    return notation() ? notation()->playback() : nullptr;
 }
 
-INotationStylePtr NotationPaintView::currentNotationStyle() const
+INotationNoteInputPtr NotationPaintView::notationNoteInput() const
 {
-    auto notation = currentNotation();
-    if (!notation) {
-        return nullptr;
-    }
+    return notationInteraction() ? notationInteraction()->noteInput() : nullptr;
+}
 
-    return notation->style();
+INotationElementsPtr NotationPaintView::notationElements() const
+{
+    return notation() ? notation()->elements() : nullptr;
+}
+
+INotationStylePtr NotationPaintView::notationStyle() const
+{
+    return notation() ? notation()->style() : nullptr;
 }
 
 void NotationPaintView::onNoteInputChanged()
 {
-    if (currentNotationNoteInput()->isNoteInputMode()) {
+    if (isNoteEnterMode()) {
         setAcceptHoverEvents(true);
-        QRectF cursorRect = currentNotationNoteInput()->cursorRect();
+        QRectF cursorRect = notationNoteInput()->cursorRect();
         adjustCanvasPosition(cursorRect);
     } else {
         setAcceptHoverEvents(false);
@@ -249,11 +254,7 @@ void NotationPaintView::onSelectionChanged()
 
 bool NotationPaintView::isNoteEnterMode() const
 {
-    if (!currentNotation()) {
-        return false;
-    }
-
-    return notationInteraction()->noteInput()->isNoteInputMode();
+    return notationNoteInput() ? notationNoteInput()->isNoteInputMode() : false;
 }
 
 void NotationPaintView::showShadowNote(const QPointF& pos)
@@ -275,19 +276,19 @@ void NotationPaintView::showContextMenu(const ElementType& elementType, const QP
 
 void NotationPaintView::paint(QPainter* painter)
 {
+    if (!notation()) {
+        return;
+    }
+
     QRect rect(0, 0, width(), height());
     painter->fillRect(rect, m_backgroundColor);
 
     painter->setTransform(m_matrix);
 
-    if (currentNotation()) {
-        currentNotation()->paint(painter, toLogical(rect));
+    notation()->paint(painter, toLogical(rect));
 
-        m_playbackCursor->paint(painter);
-        m_noteInputCursor->paint(painter);
-    } else {
-        painter->drawText(10, 10, "no notation");
-    }
+    m_playbackCursor->paint(painter);
+    m_noteInputCursor->paint(painter);
 }
 
 QRect NotationPaintView::viewport() const
@@ -297,17 +298,12 @@ QRect NotationPaintView::viewport() const
 
 QRectF NotationPaintView::notationContentRect() const
 {
-    if (!m_notation) {
-        return QRectF();
-    }
-
-    auto notationElements = m_notation->elements();
-    if (!notationElements) {
+    if (!notationElements()) {
         return QRectF();
     }
 
     QRectF result;
-    for (const Page* page: notationElements->pages()) {
+    for (const Page* page: notationElements()->pages()) {
         result = result.united(page->bbox().translated(page->pos()));
     }
 
@@ -394,11 +390,11 @@ void NotationPaintView::adjustCanvasPosition(const QRectF& logicRect)
         return;
     }
 
-    constexpr int borderSpacingRatio = 3;
+    constexpr int BORDER_SPACING_RATIO = 3;
 
-    double _spatium = currentNotationStyle()->styleValue(StyleId::spatium).toDouble();
-    qreal border = _spatium * borderSpacingRatio;
-    qreal _scale = scale();
+    double _spatium = notationStyle()->styleValue(StyleId::spatium).toDouble();
+    qreal border = _spatium * BORDER_SPACING_RATIO;
+    qreal _scale = currentScaling();
     if (qFuzzyIsNull(_scale)) {
         _scale = 1;
     }
@@ -409,7 +405,7 @@ void NotationPaintView::adjustCanvasPosition(const QRectF& logicRect)
     if (showRect.left() < viewRect.left()) {
         pos.setX(showRect.left() - border);
     } else if (showRect.left() > viewRect.right()) {
-        pos.setX(showRect.right() - width() / scale() + border);
+        pos.setX(showRect.right() - width() / _scale + border);
     } else if (viewRect.width() >= showRect.width() && showRect.right() > viewRect.right()) {
         pos.setX(showRect.left() - border);
     }
@@ -417,7 +413,7 @@ void NotationPaintView::adjustCanvasPosition(const QRectF& logicRect)
     if (showRect.top() < viewRect.top() && showRect.bottom() < viewRect.bottom()) {
         pos.setY(showRect.top() - border);
     } else if (showRect.top() > viewRect.bottom()) {
-        pos.setY(showRect.bottom() - height() / scale() + border);
+        pos.setY(showRect.bottom() - height() / _scale + border);
     } else if (viewRect.height() >= showRect.height() && showRect.bottom() > viewRect.bottom()) {
         pos.setY(showRect.top() - border);
     }
@@ -435,8 +431,8 @@ void NotationPaintView::adjustCanvasPosition(const QRectF& logicRect)
 
 void NotationPaintView::moveCanvasToPosition(const QPoint& logicPos)
 {
-    QPoint viewTL = toLogical(QPoint(0, 0));
-    moveCanvas(viewTL.x() - logicPos.x(), viewTL.y() - logicPos.y());
+    QPoint viewTopLeft = toLogical(QPoint(0, 0));
+    moveCanvas(viewTopLeft.x() - logicPos.x(), viewTopLeft.y() - logicPos.y());
 }
 
 void NotationPaintView::moveCanvas(int dx, int dy)
@@ -458,23 +454,27 @@ void NotationPaintView::moveCanvasHorizontal(int dx)
     moveCanvas(dx, 0);
 }
 
-void NotationPaintView::setZoom(int zoomPercentage, const QPoint& pos)
+qreal NotationPaintView::currentScaling() const
 {
-    qreal newScale = static_cast<qreal>(zoomPercentage) / 100.0 * configuration()->notationScaling();
-    qreal currentScale = scale();
+    return m_matrix.m11();
+}
 
-    if (qFuzzyCompare(newScale, currentScale)) {
+void NotationPaintView::scale(qreal scaling, const QPoint& pos)
+{
+    qreal currentScaling = this->currentScaling();
+
+    if (qFuzzyCompare(currentScaling, scaling)) {
         return;
     }
 
-    if (qFuzzyIsNull(currentScale)) {
-        currentScale = 1;
+    if (qFuzzyIsNull(currentScaling)) {
+        currentScaling = 1;
     }
 
     QPoint pointBeforeScaling = toLogical(pos);
 
-    qreal deltaScale = newScale / currentScale;
-    m_matrix.scale(deltaScale, deltaScale);
+    qreal deltaScaling = scaling / currentScaling;
+    m_matrix.scale(deltaScaling, deltaScaling);
 
     QPoint pointAfterScaling = toLogical(pos);
 
@@ -484,113 +484,134 @@ void NotationPaintView::setZoom(int zoomPercentage, const QPoint& pos)
     moveCanvas(dx, dy);
 }
 
-void NotationPaintView::wheelEvent(QWheelEvent* ev)
+void NotationPaintView::wheelEvent(QWheelEvent* event)
 {
-    if (!isInited()) {
-        return;
+    if (isInited()) {
+        m_inputController->wheelEvent(event);
     }
-    m_inputController->wheelEvent(ev);
 }
 
-void NotationPaintView::mousePressEvent(QMouseEvent* ev)
+void NotationPaintView::mousePressEvent(QMouseEvent* event)
 {
     setFocus(true);
 
-    if (!isInited()) {
-        return;
+    if (isInited()) {
+        m_inputController->mousePressEvent(event);
     }
-    m_inputController->mousePressEvent(ev);
 }
 
-void NotationPaintView::mouseMoveEvent(QMouseEvent* ev)
+void NotationPaintView::mouseMoveEvent(QMouseEvent* event)
 {
-    if (!isInited()) {
-        return;
+    if (isInited()) {
+        m_inputController->mouseMoveEvent(event);
     }
-    m_inputController->mouseMoveEvent(ev);
 }
 
 void NotationPaintView::mouseDoubleClickEvent(QMouseEvent* event)
 {
     forceActiveFocus();
-    if (!isInited()) {
-        return;
+
+    if (isInited()) {
+        m_inputController->mouseDoubleClickEvent(event);
     }
-    m_inputController->mouseDoubleClickEvent(event);
 }
 
-void NotationPaintView::mouseReleaseEvent(QMouseEvent* ev)
+void NotationPaintView::mouseReleaseEvent(QMouseEvent* event)
 {
-    if (!isInited()) {
-        return;
+    if (isInited()) {
+        m_inputController->mouseReleaseEvent(event);
     }
-    m_inputController->mouseReleaseEvent(ev);
 }
 
-void NotationPaintView::hoverMoveEvent(QHoverEvent* ev)
+void NotationPaintView::hoverMoveEvent(QHoverEvent* event)
 {
-    if (!isInited()) {
-        return;
+    if (isInited()) {
+        m_inputController->hoverMoveEvent(event);
     }
-    m_inputController->hoverMoveEvent(ev);
 }
 
 void NotationPaintView::keyReleaseEvent(QKeyEvent* event)
 {
-    if (!isInited()) {
-        return;
+    if (isInited()) {
+        m_inputController->keyReleaseEvent(event);
     }
-    m_inputController->keyReleaseEvent(event);
 }
 
-void NotationPaintView::dragEnterEvent(QDragEnterEvent* ev)
+void NotationPaintView::dragEnterEvent(QDragEnterEvent* event)
 {
-    if (!isInited()) {
-        return;
+    if (isInited()) {
+        m_inputController->dragEnterEvent(event);
     }
-    m_inputController->dragEnterEvent(ev);
 }
 
-void NotationPaintView::dragLeaveEvent(QDragLeaveEvent* ev)
+void NotationPaintView::dragLeaveEvent(QDragLeaveEvent* event)
 {
-    if (!isInited()) {
-        return;
+    if (isInited()) {
+        m_inputController->dragLeaveEvent(event);
     }
-    m_inputController->dragLeaveEvent(ev);
 }
 
-void NotationPaintView::dragMoveEvent(QDragMoveEvent* ev)
+void NotationPaintView::dragMoveEvent(QDragMoveEvent* event)
 {
-    if (!isInited()) {
-        return;
+    if (isInited()) {
+        m_inputController->dragMoveEvent(event);
     }
-    m_inputController->dragMoveEvent(ev);
 }
 
-void NotationPaintView::dropEvent(QDropEvent* ev)
+void NotationPaintView::dropEvent(QDropEvent* event)
 {
-    if (!isInited()) {
-        return;
+    if (isInited()) {
+        m_inputController->dropEvent(event);
     }
-    m_inputController->dropEvent(ev);
+}
+
+void NotationPaintView::setNotation(INotationPtr notation)
+{
+    clear();
+    initBackground();
+    m_notation = notation;
+    update();
+}
+
+void NotationPaintView::setReadonly(bool readonly)
+{
+    m_inputController->setReadonly(readonly);
+}
+
+void NotationPaintView::clear()
+{
+    m_matrix = QTransform();
+
+    m_previousHorizontalScrollPosition = 0;
+    m_previousVerticalScrollPosition = 0;
+}
+
+qreal NotationPaintView::width() const
+{
+    return QQuickPaintedItem::width();
+}
+
+qreal NotationPaintView::height() const
+{
+    return QQuickPaintedItem::height();
 }
 
 QPoint NotationPaintView::toLogical(const QPoint& point) const
 {
-    double scale = guiScale();
+    double scale = guiScaling();
     QPoint scaledPoint(point.x() * scale, point.y() * scale);
 
     return m_matrix.inverted().map(scaledPoint);
 }
 
-double NotationPaintView::guiScale() const
+double NotationPaintView::guiScaling() const
 {
     return configuration()->guiScaling();
 }
 
 QRect NotationPaintView::toLogical(const QRect& rect) const
 {
-    double scale = guiScale();
+    double scale = guiScaling();
 
     QRect scaledRect = rect;
     scaledRect.setBottomRight(rect.bottomRight() * scale);
@@ -600,27 +621,11 @@ QRect NotationPaintView::toLogical(const QRect& rect) const
 
 bool NotationPaintView::isInited() const
 {
-    return currentNotation() != nullptr;
-}
-
-INotationInteractionPtr NotationPaintView::notationInteraction() const
-{
-    auto notation = currentNotation();
-    if (!notation) {
-        return nullptr;
+    if (qFuzzyIsNull(width()) || qFuzzyIsNull(height())) {
+        return false;
     }
 
-    return notation->interaction();
-}
-
-INotationPlaybackPtr NotationPaintView::notationPlayback() const
-{
-    auto notation = currentNotation();
-    if (!notation) {
-        return nullptr;
-    }
-
-    return notation->playback();
+    return notation() != nullptr;
 }
 
 qreal NotationPaintView::startHorizontalScrollPosition() const
@@ -683,21 +688,6 @@ qreal NotationPaintView::verticalScrollSize() const
     return size;
 }
 
-qreal NotationPaintView::width() const
-{
-    return QQuickPaintedItem::width();
-}
-
-qreal NotationPaintView::height() const
-{
-    return QQuickPaintedItem::height();
-}
-
-qreal NotationPaintView::scale() const
-{
-    return m_matrix.m11();
-}
-
 void NotationPaintView::onPlayingChanged()
 {
     if (!notationPlayback()) {
@@ -730,19 +720,19 @@ void NotationPaintView::movePlaybackCursor(uint32_t tick)
     update(); //! TODO set rect to optimization
 }
 
-const Page* NotationPaintView::point2page(const QPointF& p) const
+const Page* NotationPaintView::pointToPage(const QPointF& point) const
 {
-    if (!currentNotation() || !currentNotationElements()) {
+    if (!notationElements()) {
         return nullptr;
     }
 
-    PageList pages = currentNotationElements()->pages();
-    if (currentNotation()->viewMode() == Ms::LayoutMode::LINE) {
+    PageList pages = notationElements()->pages();
+    if (notation()->viewMode() == Ms::LayoutMode::LINE) {
         return pages.empty() ? 0 : pages.front();
     }
 
     for (const Page* page: pages) {
-        if (page->bbox().translated(page->pos()).contains(p)) {
+        if (page->bbox().translated(page->pos()).contains(point)) {
             return page;
         }
     }
@@ -753,7 +743,7 @@ const Page* NotationPaintView::point2page(const QPointF& p) const
 QPointF NotationPaintView::alignToCurrentPageBorder(const QRectF& showRect, const QPointF& pos) const
 {
     QPointF result = pos;
-    const Page* page = point2page(showRect.topLeft().toPoint());
+    const Page* page = pointToPage(showRect.topLeft().toPoint());
     if (!page) {
         return result;
     }

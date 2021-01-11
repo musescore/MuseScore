@@ -9,15 +9,15 @@ Item {
     id: root
 
     function load(templatePath) {
-        paintView.load(templatePath)
+        templateView.load(templatePath)
     }
 
     function zoomIn() {
-        paintView.zoomIn()
+        templateView.zoomIn()
     }
 
     function zoomOut() {
-        paintView.zoomOut()
+        templateView.zoomOut()
     }
 
     StyledTextLabel {
@@ -29,51 +29,59 @@ Item {
         font: ui.theme.bodyBoldFont
     }
 
-    Item {
+    TemplatePaintView {
+        id: templateView
+
         anchors.top: title.bottom
         anchors.topMargin: 16
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
 
-        TemplatePaintView {
-            id: paintView
-
-            anchors.fill: parent
+        onHorizontalScrollChanged: {
+            if (!horizontalScrollBar.pressed) {
+                horizontalScrollBar.setPosition(templateView.startHorizontalScrollPosition)
+            }
         }
 
-        ScrollBar {
+        onVerticalScrollChanged: {
+            if (!verticalScrollBar.pressed) {
+                verticalScrollBar.setPosition(templateView.startVerticalScrollPosition)
+            }
+        }
+
+        StyledScrollBar {
+            id: verticalScrollBar
+
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             anchors.right: parent.right
-            z: 1
             orientation: Qt.Vertical
-            policy: ScrollBar.AlwaysOn
 
-            position: paintView.startVerticalScrollPosition
-            size: paintView.verticalScrollSize
+            position: templateView.startVerticalScrollPosition
+            size: templateView.verticalScrollSize
 
             onPositionChanged: {
                 if (pressed) {
-                    paintView.scrollVertical(position)
+                    templateView.scrollVertical(position)
                 }
             }
         }
 
-        ScrollBar {
+        StyledScrollBar {
+            id: horizontalScrollBar
+
             anchors.bottom: parent.bottom
             anchors.left: parent.left
             anchors.right: parent.right
-            z: 1
             orientation: Qt.Horizontal
-            policy: ScrollBar.AlwaysOn
 
-            position: paintView.startHorizontalScrollPosition
-            size: paintView.horizontalScrollSize
+            position: templateView.startHorizontalScrollPosition
+            size: templateView.horizontalScrollSize
 
             onPositionChanged: {
                 if (pressed) {
-                    paintView.scrollHorizontal(position)
+                    templateView.scrollHorizontal(position)
                 }
             }
         }
