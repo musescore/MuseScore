@@ -282,6 +282,63 @@ void Instrument::write(XmlWriter& xml, const Part* part) const
       xml.etag();
       }
 
+QString Instrument::recognizeInstrumentId() const
+      {
+      static QString defaultInstrumentId("keyboard.piano");
+
+      QList<QString> nameList;
+
+      nameList << _trackName;
+      nameList << _longNames.toStringList();
+      nameList << _shortNames.toStringList();
+
+      InstrumentTemplate* tmplByName = Ms::searchTemplateForInstrNameList(nameList);
+
+      if (tmplByName && !tmplByName->musicXMLid.isEmpty())
+            return tmplByName->musicXMLid;
+
+      if (!channel(0))
+            return defaultInstrumentId;
+
+      InstrumentTemplate* tmplMidiProgram = Ms::searchTemplateForMidiProgram(channel(0)->program(), useDrumset());
+
+      if (tmplMidiProgram && !tmplMidiProgram->musicXMLid.isEmpty())
+            return tmplMidiProgram->musicXMLid;
+
+      InstrumentTemplate* guessedTmpl = Ms::guessTemplateByNameData(nameList);
+
+      if (guessedTmpl && !guessedTmpl->musicXMLid.isEmpty())
+            return guessedTmpl->musicXMLid;
+
+      return defaultInstrumentId;
+      }
+
+int Instrument::recognizeMidiProgram() const
+      {
+      InstrumentTemplate* tmplInstrumentId = Ms::searchTemplateForMusicXmlId(_instrumentId);
+
+      if (tmplInstrumentId && !tmplInstrumentId->channel.isEmpty() && tmplInstrumentId->channel[0].program() >= 0)
+            return tmplInstrumentId->channel[0].program();
+
+      QList<QString> nameList;
+
+      nameList << _trackName;
+      nameList << _longNames.toStringList();
+      nameList << _shortNames.toStringList();
+
+      InstrumentTemplate* tmplByName = Ms::searchTemplateForInstrNameList(nameList);
+
+      if (tmplByName && !tmplByName->channel.isEmpty() && tmplByName->channel[0].program() >= 0)
+            return tmplByName->channel[0].program();
+
+      InstrumentTemplate* guessedTmpl = Ms::guessTemplateByNameData(nameList);
+
+      if (guessedTmpl && !guessedTmpl->channel.isEmpty() && guessedTmpl->channel[0].program() >= 0)
+            return guessedTmpl->channel[0].program();
+
+      return 0;
+      }
+
 //---------------------------------------------------------
 //   Instrument::read
 //---------------------------------------------------------
@@ -302,6 +359,13 @@ void Instrument::read(XmlReader& e, Part* part)
             else if (!readProperties(e, part, &customDrumset))
                   e.unknown();
             }
+
+      if (_instrumentId.isEmpty())
+            _instrumentId = recognizeInstrumentId();
+
+      if (channel(0) && channel(0)->program() == -1) {
+          channel(0)->setProgram(recognizeMidiProgram());
+      }
 
       if (!readSingleNoteDynamics)
             setSingleNoteDynamicsFromTemplate();
@@ -1251,6 +1315,11 @@ bool StaffName::operator==(const StaffName& i) const
       return (i._pos == _pos) && (i._name == _name);
       }
 
+QString StaffName::toString() const
+      {
+      return _name;
+      }
+
 //---------------------------------------------------------
 //   setUseDrumset
 //---------------------------------------------------------
@@ -1609,6 +1678,16 @@ void StaffNameList::write(XmlWriter& xml, const char* name) const
       {
       for (const StaffName& sn : *this)
             sn.write(xml, name);
+      }
+
+QStringList StaffNameList::toStringList() const
+      {
+      QStringList result;
+
+      for (const StaffName& name : *this)
+            result << name.toString();
+
+      return result;
       }
 }
 
