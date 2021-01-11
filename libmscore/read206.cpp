@@ -722,7 +722,6 @@ static void readDrumset(Drumset* ds, XmlReader& e)
 
 static void readInstrument(Instrument *i, Part* p, XmlReader& e)
       {
-      int program = -1;
       int bank    = 0;
       int volume  = 100;
       int pan     = 60;
@@ -750,19 +749,25 @@ static void readInstrument(Instrument *i, Part* p, XmlReader& e)
                  e.unknown();
             }
 
+      if (i->instrumentId().isEmpty())
+            i->setInstrumentId(i->recognizeInstrumentId());
+
       // Read single-note dynamics from template
       i->setSingleNoteDynamicsFromTemplate();
 
       if (i->channel().empty()) {      // for backward compatibility
             Channel* a = new Channel;
             a->setName(Channel::DEFAULT_NAME);
-            a->setProgram(program);
+            a->setProgram(i->recognizeMidiProgram());
             a->setBank(bank);
             a->setVolume(volume);
             a->setPan(pan);
             a->setReverb(reverb);
             a->setChorus(chorus);
             i->appendChannel(a);
+            }
+      else if (i->channel(0)->program() < 0){
+            i->channel(0)->setProgram(i->recognizeMidiProgram());
             }
       if (i->useDrumset()) {
             if (i->channel()[0]->bank() == 0)

@@ -751,34 +751,59 @@ InstrumentTemplate* searchTemplateForMusicXmlId(const QString& mxmlId)
       return 0;
       }
 
-InstrumentTemplate* searchTemplateForTrackName(const QString& trackName)
-{
-    QString trackNameLower = trackName.toLower();
-
-    for (InstrumentGroup* g : qAsConst(instrumentGroups)) {
-        for (InstrumentTemplate* it : qAsConst(g->instrumentTemplates)) {
-            if (it->trackName.toLower().contains(trackNameLower)) {
-                return it;
+InstrumentTemplate* searchTemplateForInstrNameList(const QList<QString>& nameList)
+      {
+      for (InstrumentGroup* g : qAsConst(instrumentGroups)) {
+            for (InstrumentTemplate* it : qAsConst(g->instrumentTemplates)) {
+                  for (const QString& name : nameList) {
+                        if (it->trackName == name ||
+                            it->longNames.contains(StaffName(name)) ||
+                            it->shortNames.contains(StaffName(name)))
+                              return it;
+                        }
+                  }
             }
-        }
-    }
-    return 0;
-}
+      return nullptr;
+      }
 
-InstrumentTemplate* searchTemplateForMidiProgram(int midiProgram)
-{
-    for (InstrumentGroup* g : qAsConst(instrumentGroups)) {
-          for (InstrumentTemplate* it : qAsConst(g->instrumentTemplates)) {
-                if (it->channel.empty()) {
-                    continue;
-                }
+InstrumentTemplate* searchTemplateForMidiProgram(int midiProgram, const bool useDrumSet)
+      {
+      for (InstrumentGroup* g : qAsConst(instrumentGroups)) {
+            for (InstrumentTemplate* it : qAsConst(g->instrumentTemplates)) {
+                  if (it->channel.empty() || it->useDrumset != useDrumSet)
+                        continue;
 
-                if (it->channel[0].program() == midiProgram)
-                      return it;
-                }
-          }
-    return 0;
-}
+                  if (it->channel[0].program() == midiProgram)
+                        return it;
+                  }
+            }
+      return 0;
+      }
+
+InstrumentTemplate* guessTemplateByNameData(const QList<QString>& nameDataList)
+      {
+      for (InstrumentGroup* g : qAsConst(instrumentGroups)) {
+            for (InstrumentTemplate* it : qAsConst(g->instrumentTemplates)) {
+                  for (const QString& name : nameDataList) {
+                        if (name.contains(it->trackName, Qt::CaseInsensitive) ||
+                            name.contains(it->longNames.value(0).name(), Qt::CaseInsensitive) ||
+                            name.contains(it->shortNames.value(0).name(), Qt::CaseInsensitive)) {
+                              return it;
+                              }
+                        }
+                  }
+            }
+
+      for (const QString& name : nameDataList) {
+            if (name.contains("drum", Qt::CaseInsensitive))
+                  return searchTemplate("drumset");
+
+            if (name.contains("piano", Qt::CaseInsensitive))
+                  return searchTemplate("piano");
+            }
+
+      return nullptr;
+      }
 
 //---------------------------------------------------------
 //   searchTemplateIndexForTrackName
