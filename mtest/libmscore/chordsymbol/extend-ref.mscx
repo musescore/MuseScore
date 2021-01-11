@@ -29,12 +29,13 @@
           </StaffType>
         </Staff>
       <trackName>Electric Guitar</trackName>
-      <Instrument>
+      <Instrument id="electric-guitar">
         <trackName>Electric Guitar</trackName>
         <minPitchP>40</minPitchP>
         <maxPitchP>86</maxPitchP>
         <minPitchA>40</minPitchA>
         <maxPitchA>86</maxPitchA>
+        <instrumentId>pluck.guitar.electric</instrumentId>
         <StringData>
           <frets>24</frets>
           <string>40</string>

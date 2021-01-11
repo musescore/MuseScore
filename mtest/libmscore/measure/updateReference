@@ -27,3 +27,4 @@ cp $P/mtest/libmscore/measure/measurenumber-4-ref.mscx measurenumber-4-ref.mscx
 cp $P/mtest/libmscore/measure/measurenumber-5-ref.mscx measurenumber-5-ref.mscx
 cp $P/mtest/libmscore/measure/measurenumber-6-ref.mscx measurenumber-6-ref.mscx
 cp $P/mtest/libmscore/measure/measurenumber-7-ref.mscx measurenumber-7-ref.mscx
+cp $P/mtest/libmscore/measure/undoDelInitialVBox_269919-ref.mscx undoDelInitialVBox_269919.mscx

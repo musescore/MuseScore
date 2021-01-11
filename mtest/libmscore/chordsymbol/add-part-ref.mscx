@@ -29,12 +29,13 @@
           </StaffType>
         </Staff>
       <trackName>Classical Guitar</trackName>
-      <Instrument>
+      <Instrument id="guitar-nylon">
         <trackName>Classical Guitar</trackName>
         <minPitchP>40</minPitchP>
         <maxPitchP>83</maxPitchP>
         <minPitchA>40</minPitchA>
         <maxPitchA>83</maxPitchA>
+        <instrumentId>pluck.guitar.nylon-string</instrumentId>
         <StringData>
           <frets>19</frets>
           <string>40</string>
@@ -127,12 +128,13 @@
             </StaffType>
           </Staff>
         <trackName>Classical Guitar</trackName>
-        <Instrument>
+        <Instrument id="guitar-nylon">
           <trackName>Classical Guitar</trackName>
           <minPitchP>40</minPitchP>
           <maxPitchP>83</maxPitchP>
           <minPitchA>40</minPitchA>
           <maxPitchA>83</maxPitchA>
+          <instrumentId>pluck.guitar.nylon-string</instrumentId>
           <StringData>
             <frets>19</frets>
             <string>40</string>

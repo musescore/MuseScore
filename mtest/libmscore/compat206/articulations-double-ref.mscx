@@ -47,6 +47,7 @@
         <maxPitchP>108</maxPitchP>
         <minPitchA>21</minPitchA>
         <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
         <clef staff="2">F</clef>
         <Channel>
           <program value="0"/>
@@ -1786,6 +1787,7 @@
           <maxPitchP>108</maxPitchP>
           <minPitchA>21</minPitchA>
           <maxPitchA>108</maxPitchA>
+          <instrumentId>keyboard.piano</instrumentId>
           <clef staff="2">F</clef>
           <Channel>
             <program value="0"/>

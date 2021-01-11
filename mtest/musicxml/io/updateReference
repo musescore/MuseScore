@@ -21,3 +21,10 @@ cp $S/testBreaksManual.xml testBreaksManual_no_ref.xml
 cp $S/testBreaksManual.xml testBreaksManual_manual_ref.xml
 cp $S/testBreaksManual.xml testBreaksManual_all_ref.xml
 cp $S/testHairpinDynamics.xml testHairpinDynamics_ref.xml
+cp $S/testBarStyles2.xml testBarStyles2.xml
+cp $S/testSystemBrackets3.xml testSystemBrackets3_ref.xml
+cp $S/testTablature1.xml testTablature1.xml
+cp $S/testTablature2.xml testTablature2.xml
+cp $S/testTablature3.xml testTablature3.xml
+cp $S/testTablature4.xml testTablature4.xml
+cp $S/testTablature5.xml testTablature5_ref.xml

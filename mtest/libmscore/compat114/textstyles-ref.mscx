@@ -1628,6 +1628,7 @@
       <trackName>Piano</trackName>
       <Instrument>
         <trackName>Piano</trackName>
+        <instrumentId>keyboard.piano</instrumentId>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>

@@ -40,6 +40,7 @@
         <maxPitchP>83</maxPitchP>
         <minPitchA>40</minPitchA>
         <maxPitchA>83</maxPitchA>
+        <instrumentId>pluck.guitar.nylon-string</instrumentId>
         <StringData>
           <frets>19</frets>
           <string>40</string>

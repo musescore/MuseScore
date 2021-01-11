@@ -29,7 +29,7 @@
           </StaffType>
         </Staff>
       <trackName>Alto</trackName>
-      <Instrument>
+      <Instrument id="alto">
         <longName>Alto</longName>
         <shortName>A.</shortName>
         <trackName>Alto</trackName>
@@ -37,6 +37,7 @@
         <maxPitchP>77</maxPitchP>
         <minPitchA>55</minPitchA>
         <maxPitchA>74</maxPitchA>
+        <instrumentId>voice.alto</instrumentId>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -54,6 +55,7 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <program value="52"/>
           <midiPort>0</midiPort>
           <midiChannel>0</midiChannel>
           </Channel>
@@ -70,7 +72,7 @@
           </StaffType>
         </Staff>
       <trackName>Tenor</trackName>
-      <Instrument>
+      <Instrument id="tenor">
         <longName>Tenor</longName>
         <shortName>T.</shortName>
         <trackName>Tenor</trackName>
@@ -78,6 +80,7 @@
         <maxPitchP>72</maxPitchP>
         <minPitchA>48</minPitchA>
         <maxPitchA>69</maxPitchA>
+        <instrumentId>voice.tenor</instrumentId>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -95,6 +98,7 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <program value="52"/>
           <midiPort>0</midiPort>
           <midiChannel>1</midiChannel>
           </Channel>
