@@ -1,15 +1,15 @@
 #!/bin/bash
 
-cp ../../../build.debug/mtest/libmscore/copypastesymbollist/copypastesymbollist-articulation.mscx copypastesymbollist-articulation-ref.mscx
-cp ../../../build.debug/mtest/libmscore/copypastesymbollist/copypastesymbollist-chordnames-01.mscx copypastesymbollist-chordnames-01-ref.mscx
-cp ../../../build.debug/mtest/libmscore/copypastesymbollist/copypastesymbollist-chordnames.mscx copypastesymbollist-chordnames-ref.mscx
-cp ../../../build.debug/mtest/libmscore/copypastesymbollist/copypastesymbollist-figuredbass.mscx copypastesymbollist-figuredbass-ref.mscx
-cp ../../../build.debug/mtest/libmscore/copypastesymbollist/copypastesymbollist-lyrics.mscx copypastesymbollist-lyrics-ref.mscx
-cp ../../../build.debug/mtest/libmscore/copypastesymbollist/copypastesymbollist-stafftext.mscx copypastesymbollist-stafftext-ref.mscx
-cp ../../../build.debug/mtest/libmscore/copypastesymbollist/copypastesymbollist-sticking.mscx copypastesymbollist-sticking-ref.mscx
+cp /home/presario/build-MuseScore-Desktop_Qt_5_9_9_GCC_64bit-Debug/mtest/libmscore/copypastesymbollist/copypastesymbollist-articulation.mscx copypastesymbollist-articulation-ref.mscx
+cp /home/presario/build-MuseScore-Desktop_Qt_5_9_9_GCC_64bit-Debug/mtest/libmscore/copypastesymbollist/copypastesymbollist-chordnames-01.mscx copypastesymbollist-chordnames-01-ref.mscx
+cp /home/presario/build-MuseScore-Desktop_Qt_5_9_9_GCC_64bit-Debug/mtest/libmscore/copypastesymbollist/copypastesymbollist-chordnames.mscx copypastesymbollist-chordnames-ref.mscx
+cp /home/presario/build-MuseScore-Desktop_Qt_5_9_9_GCC_64bit-Debug/mtest/libmscore/copypastesymbollist/copypastesymbollist-figuredbass.mscx copypastesymbollist-figuredbass-ref.mscx
+cp /home/presario/build-MuseScore-Desktop_Qt_5_9_9_GCC_64bit-Debug/mtest/libmscore/copypastesymbollist/copypastesymbollist-lyrics.mscx copypastesymbollist-lyrics-ref.mscx
+cp /home/presario/build-MuseScore-Desktop_Qt_5_9_9_GCC_64bit-Debug/mtest/libmscore/copypastesymbollist/copypastesymbollist-stafftext.mscx copypastesymbollist-stafftext-ref.mscx
+cp /home/presario/build-MuseScore-Desktop_Qt_5_9_9_GCC_64bit-Debug/mtest/libmscore/copypastesymbollist/copypastesymbollist-sticking.mscx copypastesymbollist-sticking-ref.mscx
 # cp ../../../build.debug/mtest/libmscore/copypastesymbollist/copypastesymbollist-fermata-rest.mscx copypastesymbollist-fermata-rest-ref.mscx
-cp ../../../build.debug/mtest/libmscore/copypastesymbollist/copypastesymbollist-articulation-rest.mscx copypastesymbollist-articulation-rest-ref.mscx
-cp ../../../build.debug/mtest/libmscore/copypastesymbollist/copypastesymbollist-range.mscx copypastesymbollist-range-ref.mscx
-cp ../../../build.debug/mtest/libmscore/copypastesymbollist/copypastesymbollist-range-01.mscx copypastesymbollist-range-01-ref.mscx
+cp /home/presario/build-MuseScore-Desktop_Qt_5_9_9_GCC_64bit-Debug/mtest/libmscore/copypastesymbollist/copypastesymbollist-articulation-rest.mscx copypastesymbollist-articulation-rest-ref.mscx
+cp /home/presario/build-MuseScore-Desktop_Qt_5_9_9_GCC_64bit-Debug/mtest/libmscore/copypastesymbollist/copypastesymbollist-range.mscx copypastesymbollist-range-ref.mscx
+cp /home/presario/build-MuseScore-Desktop_Qt_5_9_9_GCC_64bit-Debug/mtest/libmscore/copypastesymbollist/copypastesymbollist-range-01.mscx copypastesymbollist-range-01-ref.mscx
 
 
