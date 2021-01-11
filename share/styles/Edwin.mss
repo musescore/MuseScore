@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="3.02">
   <Style>
+    <lyricsMinDistance>0.25</lyricsMinDistance>
+    <lyricsDashYposRatio>0.6</lyricsDashYposRatio>
     <lyricsOddFontFace>Edwin</lyricsOddFontFace>
     <lyricsOddFontSize>10</lyricsOddFontSize>
     <lyricsEvenFontFace>Edwin</lyricsEvenFontFace>

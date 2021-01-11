@@ -97,7 +97,7 @@ static const StyleType styleTypes[] {
       { Sid::lyricsPosBelow,          "lyricsPosBelow",          QPointF(.0, 3.0) },
       { Sid::lyricsMinTopDistance,    "lyricsMinTopDistance",    Spatium(1.0)  },
       { Sid::lyricsMinBottomDistance, "lyricsMinBottomDistance", Spatium(2.0)  },
-      { Sid::lyricsMinDistance,       "lyricsMinDistance",       Spatium(0.0)  },
+      { Sid::lyricsMinDistance,       "lyricsMinDistance",       Spatium(0.25)  },
       { Sid::lyricsLineHeight,        "lyricsLineHeight",        1.0 },
       { Sid::lyricsDashMinLength,     "lyricsDashMinLength",     Spatium(0.4) },
       { Sid::lyricsDashMaxLength,     "lyricsDashMaxLength",     Spatium(0.8) },
@@ -110,7 +110,7 @@ static const StyleType styleTypes[] {
       { Sid::lyricsMelismaPad,        "lyricsMelismaPad",        Spatium(0.10) }, // the empty space before a melisma line
       { Sid::lyricsDashPad,           "lyricsDashPad",           Spatium(0.05) }, // the min. empty space before and after a dash
       { Sid::lyricsDashLineThickness, "lyricsDashLineThickness", Spatium(0.15) }, // in sp. units
-      { Sid::lyricsDashYposRatio,     "lyricsDashYposRatio",     0.67          }, // the fraction of lyrics font x-height to raise the dashes above text base line
+      { Sid::lyricsDashYposRatio,     "lyricsDashYposRatio",     0.60          }, // the fraction of lyrics font x-height to raise the dashes above text base line
 
       { Sid::lyricsOddFontFace,       "lyricsOddFontFace",       "Edwin" },
       { Sid::lyricsOddFontSize,       "lyricsOddFontSize",       10.0 },
@@ -197,7 +197,7 @@ static const StyleType styleTypes[] {
       { Sid::shortStemProgression,    "shortStemProgression",    Spatium(0.25) },
       { Sid::shortestStem,            "shortestStem",            Spatium(2.25) },
       { Sid::beginRepeatLeftMargin,   "beginRepeatLeftMargin",   Spatium(1.0) },
-      { Sid::minNoteDistance,         "minNoteDistance",         Spatium(0.15) },      // 0.4
+      { Sid::minNoteDistance,         "minNoteDistance",         Spatium(0.2) },
       { Sid::barNoteDistance,         "barNoteDistance",         Spatium(1.3) },     // was 1.2
 
       { Sid::barAccidentalDistance,   "barAccidentalDistance",   Spatium(0.65)   },
