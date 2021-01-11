@@ -49,8 +49,6 @@ FocusableItem {
 
         wrapMode: Text.WordWrap
 
-        color: globalStyle.buttonText
-
         onLinkActivated: {
             root.linkActivated()
         }
