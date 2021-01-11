@@ -773,6 +773,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool saveScoreParts(const QString& inFilePath, const QString& outFilePath = "/dev/stdout");
       bool exportPartsPdfsToJSON(const QString& inFilePath, const QString& outFilePath = "/dev/stdout");
       bool exportTransposedScoreToJSON(const QString& inFilePath, const QString& transposeOptions, const QString& outFilePath = "/dev/stdout");
+      bool updateSource(const QString& scorePath, const QString& newSource);
       /////////////////////////////////////////////////
 
       void scoreUnrolled(MasterScore* original);

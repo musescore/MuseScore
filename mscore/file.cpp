@@ -3701,5 +3701,15 @@ bool MuseScore::exportTransposedScoreToJSON(const QString& inFilePath, const QSt
       return res;
       }
 
-}
+bool MuseScore::updateSource(const QString& scorePath, const QString& newSource)
+{
+    MasterScore* score = mscore->readScore(scorePath);
+    if (!score) {
+        return false;
+    }
 
+    score->setMetaTag("source", newSource);
+
+    return score->saveFile(false);
+}
+}
