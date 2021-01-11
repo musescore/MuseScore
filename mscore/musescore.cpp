@@ -208,6 +208,7 @@ bool exportScoreMedia = false;
 bool exportScoreMeta = false;
 bool exportScoreMp3 = false;
 bool exportScorePartsPdf = false;
+bool needUpdateSource = false;
 static bool exportTransposedScore = false;
 static QString transposeExportOptions;
 static QString highlightConfigPath;
@@ -3846,6 +3847,8 @@ static bool processNonGui(const QStringList& argv)
             return mscore->exportPartsPdfsToJSON(argv[0]);
       else if (exportTransposedScore)
             return mscore->exportTransposedScoreToJSON(argv[0], transposeExportOptions);
+      else if (needUpdateSource)
+            return mscore->updateSource(argv[0] /* scorePath */, argv[1] /* newSource */);
 
       if (pluginMode && !converterMode) {
             loadScores(argv);
@@ -7614,6 +7617,7 @@ MuseScoreApplication::CommandLineParseResult MuseScoreApplication::parseCommandL
       parser.addOption(QCommandLineOption(      "score-parts", "Generate parts data for the given score and save them to separate mscz files"));
       parser.addOption(QCommandLineOption(      "score-parts-pdf", "Generate parts data for the given score and export the data to a single JSON file, print it to stdout"));
       parser.addOption(QCommandLineOption(      "score-transpose", "Transpose the given score and export the data to a single JSON file, print it to stdout", "options"));
+      parser.addOption(QCommandLineOption(      "source-update", "Update the source in the given score"));
       parser.addOption(QCommandLineOption(      "raw-diff", "Print a raw diff for the given scores"));
       parser.addOption(QCommandLineOption(      "diff", "Print a diff for the given scores"));
 
@@ -7799,6 +7803,11 @@ MuseScoreApplication::CommandLineParseResult MuseScoreApplication::parseCommandL
             transposeExportOptions = parser.value("score-transpose");
             MScore::noGui = true;
             converterMode = true;
+            }
+
+      if (parser.isSet("source-update")) {
+            MScore::noGui = true;
+            needUpdateSource = true;
             }
 
       if (parser.isSet("raw-diff")) {
