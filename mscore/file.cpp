@@ -3203,6 +3203,7 @@ QJsonObject MuseScore::saveMetadataJSON(Score* score)
       json.insert("hasLyrics", boolToString(score->hasLyrics()));
       json.insert("hasHarmonies", boolToString(score->hasHarmonies()));
       json.insert("keysig", score->keysig());
+      json.insert("previousSource", score->metaTag("source"));
 
       // timeSig
       QString timeSig;

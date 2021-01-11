@@ -61,14 +61,19 @@
           </StaffType>
         </Staff>
       <trackName>Piano</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Piano</longName>
         <shortName>Pno.</shortName>
         <trackName>Piano</trackName>
-        <singleNoteDynamics>1</singleNoteDynamics>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
+        <clef staff="2">F</clef>
         <Articulation>
           <velocity>100</velocity>
-          <gateTime>100</gateTime>
+          <gateTime>95</gateTime>
           </Articulation>
         <Articulation name="staccatissimo">
           <velocity>100</velocity>

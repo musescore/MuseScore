@@ -41,6 +41,7 @@
         <maxPitchP>98</maxPitchP>
         <minPitchA>60</minPitchA>
         <maxPitchA>93</maxPitchA>
+        <instrumentId>wind.flutes.flute</instrumentId>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>

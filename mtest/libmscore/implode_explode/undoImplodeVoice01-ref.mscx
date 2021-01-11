@@ -29,7 +29,7 @@
           </StaffType>
         </Staff>
       <trackName>Flute</trackName>
-      <Instrument>
+      <Instrument id="flute">
         <longName>Flute</longName>
         <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
@@ -37,6 +37,7 @@
         <maxPitchP>98</maxPitchP>
         <minPitchA>60</minPitchA>
         <maxPitchA>93</maxPitchA>
+        <instrumentId>wind.flutes.flute</instrumentId>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>95</gateTime>

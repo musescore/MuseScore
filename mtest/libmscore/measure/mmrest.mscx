@@ -15,6 +15,7 @@
       <pageOddTopMargin>0.393701</pageOddTopMargin>
       <pageOddBottomMargin>0.787403</pageOddBottomMargin>
       <lastSystemFillLimit>0</lastSystemFillLimit>
+      <createMultiMeasureRests>1</createMultiMeasureRests>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -39,7 +40,7 @@
           </StaffType>
         </Staff>
       <trackName>Piano</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Piano</longName>
         <shortName>Pno.</shortName>
         <trackName>Piano</trackName>
@@ -47,6 +48,7 @@
         <maxPitchP>108</maxPitchP>
         <minPitchA>21</minPitchA>
         <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
         <clef staff="2">F</clef>
         <Articulation>
           <velocity>100</velocity>
@@ -129,6 +131,18 @@
             </Rest>
           </voice>
         </Measure>
+      <Measure len="12/4">
+        <multiMeasureRest>3</multiMeasureRest>
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>12/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
       <Measure>
         <voice>
           <Rest>
@@ -160,6 +174,18 @@
           <Rest>
             <durationType>measure</durationType>
             <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure len="16/4">
+        <multiMeasureRest>4</multiMeasureRest>
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>16/4</duration>
             </Rest>
           </voice>
         </Measure>
@@ -210,6 +236,18 @@
             </Rest>
           </voice>
         </Measure>
+      <Measure len="16/4">
+        <multiMeasureRest>4</multiMeasureRest>
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>16/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
       <Measure>
         <voice>
           <Rest>
@@ -249,6 +287,18 @@
           <Rest>
             <durationType>measure</durationType>
             <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure len="16/4">
+        <multiMeasureRest>4</multiMeasureRest>
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>16/4</duration>
             </Rest>
           </voice>
         </Measure>

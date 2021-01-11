@@ -79,6 +79,7 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <program value="0"/>
           </Channel>
         <Channel name="harmony">
           <program value="0"/>

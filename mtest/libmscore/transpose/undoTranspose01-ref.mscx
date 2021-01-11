@@ -45,7 +45,7 @@
           </StaffType>
         </Staff>
       <trackName>Piano</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Piano</longName>
         <shortName>Pno.</shortName>
         <trackName>Piano</trackName>
@@ -53,6 +53,7 @@
         <maxPitchP>108</maxPitchP>
         <minPitchA>21</minPitchA>
         <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
         <Channel>
           <program value="0"/>
           <controller ctrl="7" value="127"/>

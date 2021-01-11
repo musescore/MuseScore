@@ -29,7 +29,7 @@
           </StaffType>
         </Staff>
       <trackName>Flute</trackName>
-      <Instrument>
+      <Instrument id="flute">
         <longName>Flute</longName>
         <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
@@ -37,6 +37,7 @@
         <maxPitchP>98</maxPitchP>
         <minPitchA>60</minPitchA>
         <maxPitchA>93</maxPitchA>
+        <instrumentId>wind.flutes.flute</instrumentId>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>95</gateTime>
@@ -65,7 +66,7 @@
           </StaffType>
         </Staff>
       <trackName>Alto Saxophone</trackName>
-      <Instrument>
+      <Instrument id="alto-saxophone">
         <longName>Alto Saxophone</longName>
         <shortName>A. Sax.</shortName>
         <trackName>Alto Saxophone</trackName>
@@ -75,6 +76,7 @@
         <maxPitchA>82</maxPitchA>
         <transposeDiatonic>-5</transposeDiatonic>
         <transposeChromatic>-9</transposeChromatic>
+        <instrumentId>wind.reed.saxophone.alto</instrumentId>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -218,7 +220,7 @@
             </StaffType>
           </Staff>
         <trackName>Flute</trackName>
-        <Instrument>
+        <Instrument id="flute">
           <longName>Flute</longName>
           <shortName>Fl.</shortName>
           <trackName>Flute</trackName>
@@ -226,6 +228,7 @@
           <maxPitchP>98</maxPitchP>
           <minPitchA>60</minPitchA>
           <maxPitchA>93</maxPitchA>
+          <instrumentId>wind.flutes.flute</instrumentId>
           <Articulation>
             <velocity>100</velocity>
             <gateTime>95</gateTime>
@@ -328,7 +331,7 @@
             </StaffType>
           </Staff>
         <trackName>Alto Saxophone</trackName>
-        <Instrument>
+        <Instrument id="alto-saxophone">
           <longName>Alto Saxophone</longName>
           <shortName>A. Sax.</shortName>
           <trackName>Alto Saxophone</trackName>
@@ -338,6 +341,7 @@
           <maxPitchA>82</maxPitchA>
           <transposeDiatonic>-5</transposeDiatonic>
           <transposeChromatic>-9</transposeChromatic>
+          <instrumentId>wind.reed.saxophone.alto</instrumentId>
           <Articulation>
             <velocity>100</velocity>
             <gateTime>100</gateTime>

@@ -223,6 +223,7 @@
       <Instrument>
         <longName>Tenor</longName>
         <trackName>Choir Aahs</trackName>
+        <instrumentId>voice.tenor</instrumentId>
         <Channel>
           <program value="0"/>
           <controller ctrl="7" value="101"/>
