@@ -25,6 +25,5 @@ ScoreMigrationDialog::ScoreMigrationDialog(QQmlEngine* engine, Ms::Score* score)
 void ScoreMigrationDialog::focusInEvent(QFocusEvent* event)
       {
       QQuickView::focusInEvent(event);
-      if (rootObject())
-            rootObject()->forceActiveFocus();
+      rootObject()->forceActiveFocus();
       }

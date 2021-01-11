@@ -26,5 +26,7 @@
         <file>qml/palettes/StyledToolButton.qml</file>
         <file>qml/palettes/TreePaletteHeader.qml</file>
         <file>qml/palettes/utils.js</file>
+        <file>qml/migration/FocusableItem.qml</file>
+        <file>qml/migration/TextLabel.qml</file>
     </qresource>
 </RCC>

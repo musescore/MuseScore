@@ -29,7 +29,7 @@ FocusScope {
     property var model
 
     Keys.onEscapePressed: {
-        root.closeRequested()
+        root.model.ignore()
     }
 
     Rectangle {
@@ -57,17 +57,14 @@ FocusScope {
 
                 spacing: 20
 
-                Text {
+                TextLabel {
                     Layout.fillWidth: true
 
                     font.family: globalStyle.font.family
                     font.bold: true
                     font.pixelSize: 20
                     color: globalStyle.buttonText
-                    wrapMode: Text.WordWrap
                     horizontalAlignment: Qt.AlignHCenter
-                    Accessible.role: Accessible.StaticText
-                    Accessible.name: text
 
                     text: qsTr("Would you like to try our improved score style?")
                 }
@@ -114,20 +111,35 @@ FocusScope {
                     }
                 }
 
-                Text {
+                TextLabel {
                     Layout.topMargin: 12
                     Layout.fillWidth: true
 
                     font.family: globalStyle.font.family
                     font.pixelSize: 14
                     color: globalStyle.buttonText
-                    wrapMode: Text.WordWrap
                     horizontalAlignment: Qt.AlignLeft
-                    Accessible.role: Accessible.StaticText
-                    Accessible.name: text
 
                     text: root.model ? qsTr("Since this file was created in MuseScore %1, some layout changes may occur.").arg(root.model.creationAppVersion)
                                      : ""
+                }
+
+                TextLabel {
+                    Layout.topMargin: 12
+                    Layout.fillWidth: true
+
+                    font.family: globalStyle.font.family
+                    font.pixelSize: 14
+                    color: globalStyle.buttonText
+                    horizontalAlignment: Qt.AlignLeft
+
+                    text: qsTr("<a href=\"https://youtu.be/qLR40BGNy68\">Watch our release video to learn more</a>")
+
+                    onLinkActivated: {
+                        if (root.model) {
+                            root.model.showMoreDetails()
+                        }
+                    }
                 }
             }
         }
