@@ -84,7 +84,7 @@ void VSTDevTools::makeArpeggio()
     t.channels.push_back(0);
     m_midiStream->initData.tracks.push_back(t);
 
-    Event e(Event::Opcode::ProgramChange);
+    midi::Event e(midi::Event::Opcode::ProgramChange);
     m_midiStream->initData.initEvents.push_back(e);
 
     auto makeChunk = [](Chunk& chunk, uint32_t tick, bool pitch) {
@@ -98,7 +98,7 @@ void VSTDevTools::makeArpeggio()
         uint32_t note_time = tick + (tick > 0 ? note_duration : 0);
 
         for (int n : notes) {
-            auto noteOn = Event(Event::Opcode::NoteOn);
+            auto noteOn = midi::Event(midi::Event::Opcode::NoteOn);
 
             noteOn.setNote(n);
             noteOn.setVelocity(velocity);
@@ -111,7 +111,7 @@ void VSTDevTools::makeArpeggio()
 
             //NoteOff should copy noteId and pitch from NoteOn
             auto noteOff = noteOn;
-            noteOff.setOpcode(Event::Opcode::NoteOff);
+            noteOff.setOpcode(midi::Event::Opcode::NoteOff);
             chunk.events.insert({ note_time, noteOff });
         }
         chunk.endTick = note_time + note_duration;

@@ -19,6 +19,8 @@
 
 set(MODULE vst)
 
+add_subdirectory("sdk")
+
 set(MODULE_QRC vst.qrc)
 
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml )
@@ -70,25 +72,6 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/devtools/vstdevtools.h
     ${CMAKE_CURRENT_LIST_DIR}/devtools/vstdevtools.cpp
-
-    #VST SDK
-    ${VST3_SDK_PATH}/base/source/fobject.cpp
-    ${VST3_SDK_PATH}/base/source/baseiids.cpp
-    ${VST3_SDK_PATH}/base/source/fbuffer.cpp
-    ${VST3_SDK_PATH}/base/source/fdebug.cpp
-    ${VST3_SDK_PATH}/base/source/fdynlib.cpp
-    ${VST3_SDK_PATH}/base/source/fobject.cpp
-    ${VST3_SDK_PATH}/base/source/fstreamer.cpp
-    ${VST3_SDK_PATH}/base/source/fstring.cpp
-    ${VST3_SDK_PATH}/base/source/timer.cpp
-    ${VST3_SDK_PATH}/base/source/updatehandler.cpp
-    ${VST3_SDK_PATH}/base/thread/source/flock.cpp
-    ${VST3_SDK_PATH}/pluginterfaces/base/funknown.cpp
-    ${VST3_SDK_PATH}/pluginterfaces/base/coreiids.cpp
-    ${VST3_SDK_PATH}/pluginterfaces/base/funknown.cpp
-    ${VST3_SDK_PATH}/pluginterfaces/base/ustring.cpp
-    ${VST3_SDK_PATH}/pluginterfaces/base/ipluginbase.h
-    ${VST3_SDK_PATH}/pluginterfaces/vst/ivstcomponent.h
     )
 
 set(MODULE_INCLUDE
@@ -96,10 +79,13 @@ set(MODULE_INCLUDE
     ${VST3_SDK_PATH}
     )
 
+set(MODULE_LINK
+    vst3_sdk
+    )
+
 string(TOLOWER ${CMAKE_BUILD_TYPE} build_mode )
 if (build_mode STREQUAL "debug")
     set(MODULE_DEF -D_DEBUG)
 endif()
 
-set(MODULE_USE_UNITY_NONE ON) # not linking
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
