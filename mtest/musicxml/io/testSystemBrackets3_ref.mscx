@@ -32,11 +32,16 @@
         </Staff>
       <trackName>Backing
 Vocals</trackName>
-      <Instrument>
+      <Instrument id="voice">
         <longName>Backing
 Vocals</longName>
         <shortName>B. Vx.</shortName>
         <trackName>Voice</trackName>
+        <minPitchP>38</minPitchP>
+        <maxPitchP>84</maxPitchP>
+        <minPitchA>41</minPitchA>
+        <maxPitchA>79</maxPitchA>
+        <instrumentId>voice.vocals</instrumentId>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -119,15 +124,20 @@ Vocals</longName>
         </Staff>
       <trackName>Electric
 Guitar 1</trackName>
-      <Instrument>
+      <Instrument id="electric-guitar">
         <longName>Electric
 Guitar 1</longName>
         <shortName>Elec.
 Gtr. 1</shortName>
         <trackName>Electric Guitar</trackName>
-        <singleNoteDynamics>1</singleNoteDynamics>
+        <minPitchP>40</minPitchP>
+        <maxPitchP>88</maxPitchP>
+        <minPitchA>40</minPitchA>
+        <maxPitchA>86</maxPitchA>
+        <instrumentId>pluck.guitar.electric</instrumentId>
+        <clef>G8vb</clef>
         <StringData>
-          <frets>25</frets>
+          <frets>24</frets>
           <string>40</string>
           <string>45</string>
           <string>50</string>
@@ -175,11 +185,36 @@ Gtr. 1</shortName>
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
+        <Channel name="open">
           <program value="30"/>
           <controller ctrl="10" value="63"/>
           <midiPort>0</midiPort>
           <midiChannel>2</midiChannel>
+          </Channel>
+        <Channel name="harmonics">
+          <program value="31"/>
+          <midiPort>0</midiPort>
+          <midiChannel>1</midiChannel>
+          </Channel>
+        <Channel name="distortion">
+          <program value="30"/>
+          <midiPort>0</midiPort>
+          <midiChannel>3</midiChannel>
+          </Channel>
+        <Channel name="overdriven">
+          <program value="29"/>
+          <midiPort>0</midiPort>
+          <midiChannel>4</midiChannel>
+          </Channel>
+        <Channel name="mute">
+          <program value="28"/>
+          <midiPort>0</midiPort>
+          <midiChannel>5</midiChannel>
+          </Channel>
+        <Channel name="jazz">
+          <program value="26"/>
+          <midiPort>0</midiPort>
+          <midiChannel>6</midiChannel>
           </Channel>
         </Instrument>
       </Part>
@@ -216,15 +251,20 @@ Gtr. 1</shortName>
         </Staff>
       <trackName>Electric
 Guitar 2</trackName>
-      <Instrument>
+      <Instrument id="electric-guitar">
         <longName>Electric
 Guitar 2</longName>
         <shortName>Elec.
 Gtr. 2</shortName>
         <trackName>Electric Guitar</trackName>
-        <singleNoteDynamics>1</singleNoteDynamics>
+        <minPitchP>40</minPitchP>
+        <maxPitchP>88</maxPitchP>
+        <minPitchA>40</minPitchA>
+        <maxPitchA>86</maxPitchA>
+        <instrumentId>pluck.guitar.electric</instrumentId>
+        <clef>G8vb</clef>
         <StringData>
-          <frets>25</frets>
+          <frets>24</frets>
           <string>40</string>
           <string>45</string>
           <string>50</string>
@@ -272,11 +312,36 @@ Gtr. 2</shortName>
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
+        <Channel name="open">
           <program value="28"/>
           <controller ctrl="10" value="63"/>
           <midiPort>0</midiPort>
           <midiChannel>8</midiChannel>
+          </Channel>
+        <Channel name="harmonics">
+          <program value="31"/>
+          <midiPort>0</midiPort>
+          <midiChannel>7</midiChannel>
+          </Channel>
+        <Channel name="distortion">
+          <program value="30"/>
+          <midiPort>0</midiPort>
+          <midiChannel>10</midiChannel>
+          </Channel>
+        <Channel name="overdriven">
+          <program value="29"/>
+          <midiPort>0</midiPort>
+          <midiChannel>11</midiChannel>
+          </Channel>
+        <Channel name="mute">
+          <program value="28"/>
+          <midiPort>0</midiPort>
+          <midiChannel>12</midiChannel>
+          </Channel>
+        <Channel name="jazz">
+          <program value="26"/>
+          <midiPort>0</midiPort>
+          <midiChannel>13</midiChannel>
           </Channel>
         </Instrument>
       </Part>
@@ -312,14 +377,21 @@ Gtr. 2</shortName>
         </Staff>
       <trackName>Acoustic
 Guitar</trackName>
-      <Instrument>
+      <Instrument id="guitar-steel">
         <longName>Acoustic
 Guitar</longName>
         <shortName>Ac.
 Gtr.</shortName>
         <trackName>Acoustic Guitar</trackName>
+        <minPitchP>40</minPitchP>
+        <maxPitchP>84</maxPitchP>
+        <minPitchA>40</minPitchA>
+        <maxPitchA>83</maxPitchA>
+        <instrumentId>pluck.guitar.acoustic</instrumentId>
+        <clef>G8vb</clef>
+        <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
-          <frets>25</frets>
+          <frets>20</frets>
           <string>40</string>
           <string>45</string>
           <string>50</string>
@@ -367,11 +439,21 @@ Gtr.</shortName>
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
+        <Channel name="open">
           <program value="24"/>
           <controller ctrl="10" value="63"/>
           <midiPort>0</midiPort>
           <midiChannel>15</midiChannel>
+          </Channel>
+        <Channel name="mute">
+          <program value="28"/>
+          <midiPort>0</midiPort>
+          <midiChannel>14</midiChannel>
+          </Channel>
+        <Channel name="jazz">
+          <program value="26"/>
+          <midiPort>1</midiPort>
+          <midiChannel>0</midiChannel>
           </Channel>
         </Instrument>
       </Part>
@@ -389,15 +471,20 @@ Gtr.</shortName>
           </StaffType>
         </Staff>
       <trackName>Piano 2</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Piano 2</longName>
         <shortName>Pno.
 2</shortName>
         <trackName>Piano</trackName>
-        <singleNoteDynamics>1</singleNoteDynamics>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
+        <clef staff="2">F</clef>
         <Articulation>
           <velocity>100</velocity>
-          <gateTime>100</gateTime>
+          <gateTime>95</gateTime>
           </Articulation>
         <Articulation name="staccatissimo">
           <velocity>100</velocity>

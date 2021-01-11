@@ -29,12 +29,13 @@
           </StaffType>
         </Staff>
       <trackName>C Trumpet</trackName>
-      <Instrument>
+      <Instrument id="c-trumpet">
         <trackName>C Trumpet</trackName>
         <minPitchP>54</minPitchP>
         <maxPitchP>85</maxPitchP>
         <minPitchA>54</minPitchA>
         <maxPitchA>82</maxPitchA>
+        <instrumentId>brass.trumpet.c</instrumentId>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>

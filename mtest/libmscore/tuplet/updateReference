@@ -7,6 +7,7 @@ else
 fi
 
 cp $S/save-load.mscx save-load.mscx
+cp $S/nestedTuplets_addStaff.mscx nestedTuplets_addStaff-ref.mscx
 
 for a in 1; do
       cp $S/tuplet${a}.mscx tuplet${a}-ref.mscx

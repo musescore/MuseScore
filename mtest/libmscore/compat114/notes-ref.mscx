@@ -40,6 +40,7 @@
         <maxPitchP>94</maxPitchP>
         <minPitchA>40</minPitchA>
         <maxPitchA>79</maxPitchA>
+        <instrumentId>voice.vocals</instrumentId>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>

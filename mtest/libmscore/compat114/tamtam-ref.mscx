@@ -41,6 +41,7 @@
         <longName><font size="12"/><font face="Times New Roman"/>Tam-tam</longName>
         <shortName><font size="12"/><font face="Times New Roman"/>Tam-tam</shortName>
         <trackName>Tam-tam</trackName>
+        <instrumentId>drum.group.set</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="52">
           <head>cross</head>

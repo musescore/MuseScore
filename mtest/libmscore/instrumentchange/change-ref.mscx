@@ -29,7 +29,7 @@
           </StaffType>
         </Staff>
       <trackName>Flute</trackName>
-      <Instrument>
+      <Instrument id="flute">
         <longName>Flute</longName>
         <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
@@ -37,6 +37,7 @@
         <maxPitchP>98</maxPitchP>
         <minPitchA>60</minPitchA>
         <maxPitchA>93</maxPitchA>
+        <instrumentId>wind.flutes.flute</instrumentId>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -65,7 +66,7 @@
           </StaffType>
         </Staff>
       <trackName>Oboe</trackName>
-      <Instrument>
+      <Instrument id="oboe">
         <longName>Oboe</longName>
         <shortName>Ob.</shortName>
         <trackName>Oboe</trackName>
@@ -73,6 +74,7 @@
         <maxPitchP>93</maxPitchP>
         <minPitchA>58</minPitchA>
         <maxPitchA>87</maxPitchA>
+        <instrumentId>wind.reed.oboe</instrumentId>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -131,7 +133,7 @@
       <Measure>
         <voice>
           <InstrumentChange>
-            <Instrument>
+            <Instrument id="oboe">
               <longName>Oboe</longName>
               <shortName>Ob.</shortName>
               <trackName>Oboe</trackName>
@@ -139,6 +141,7 @@
               <maxPitchP>93</maxPitchP>
               <minPitchA>58</minPitchA>
               <maxPitchA>87</maxPitchA>
+              <instrumentId>wind.reed.oboe</instrumentId>
               <Articulation>
                 <velocity>100</velocity>
                 <gateTime>100</gateTime>

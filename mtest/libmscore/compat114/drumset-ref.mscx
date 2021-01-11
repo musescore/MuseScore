@@ -38,6 +38,7 @@
         <longName><font size="12"/><font face="Times New Roman"/>Drumset</longName>
         <shortName><font size="12"/><font face="Times New Roman"/>Drs.</shortName>
         <trackName>Drumset 5 lines</trackName>
+        <instrumentId>drum.group.set</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="35">
           <head>normal</head>

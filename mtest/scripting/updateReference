@@ -8,5 +8,6 @@ fi
 
 cp $MSCORE/p1.log  p1.log.ref
 cp $MSCORE/p2.log  p2.log.ref
-
+cp $MSCORE/testTextStyle-test.mscx  testTextStyle-ref.mscx
+cp $MSCORE/testTextStyle-test2.mscx  testTextStyle.mscx
 

@@ -26,5 +26,6 @@ cp $S/split184061-keep-tie-before-break-voice-4.mscx split184061-keep-tie-before
 cp $S/split184061-keep-tie.mscx split184061-keep-tie-ref.mscx
 cp $S/split184061-no-tie.mscx split184061-no-tie-ref.mscx
 cp $S/split184061-other-inst-only-one-tie.mscx split184061-other-inst-only-one-tie-ref.mscx
+cp $S/split295207.mscx split295207-ref.mscx
 
 

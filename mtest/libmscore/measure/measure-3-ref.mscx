@@ -36,7 +36,7 @@
           </StaffType>
         </Staff>
       <trackName>Piano</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Piano</longName>
         <shortName>Pno.</shortName>
         <trackName>Piano</trackName>
@@ -44,6 +44,7 @@
         <maxPitchP>108</maxPitchP>
         <minPitchA>21</minPitchA>
         <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>70</gateTime>
@@ -61,6 +62,7 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <program value="0"/>
           </Channel>
         </Instrument>
       </Part>
@@ -71,7 +73,7 @@
           </StaffType>
         </Staff>
       <trackName>Flute</trackName>
-      <Instrument>
+      <Instrument id="flute">
         <longName>Flute</longName>
         <shortName>Fl.</shortName>
         <trackName>Flute</trackName>
@@ -79,6 +81,7 @@
         <maxPitchP>98</maxPitchP>
         <minPitchA>60</minPitchA>
         <maxPitchA>93</maxPitchA>
+        <instrumentId>wind.flutes.flute</instrumentId>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -96,6 +99,7 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <program value="73"/>
           </Channel>
         </Instrument>
       </Part>
@@ -355,7 +359,7 @@
             </StaffType>
           </Staff>
         <trackName>Piano</trackName>
-        <Instrument>
+        <Instrument id="piano">
           <longName>Piano</longName>
           <shortName>Pno.</shortName>
           <trackName>Piano</trackName>
@@ -363,6 +367,7 @@
           <maxPitchP>108</maxPitchP>
           <minPitchA>21</minPitchA>
           <maxPitchA>108</maxPitchA>
+          <instrumentId>keyboard.piano</instrumentId>
           <Articulation>
             <velocity>100</velocity>
             <gateTime>70</gateTime>
@@ -380,6 +385,7 @@
             <gateTime>100</gateTime>
             </Articulation>
           <Channel>
+            <program value="0"/>
             </Channel>
           </Instrument>
         </Part>
@@ -603,7 +609,7 @@
             </StaffType>
           </Staff>
         <trackName>Flute</trackName>
-        <Instrument>
+        <Instrument id="flute">
           <longName>Flute</longName>
           <shortName>Fl.</shortName>
           <trackName>Flute</trackName>
@@ -611,6 +617,7 @@
           <maxPitchP>98</maxPitchP>
           <minPitchA>60</minPitchA>
           <maxPitchA>93</maxPitchA>
+          <instrumentId>wind.flutes.flute</instrumentId>
           <Articulation>
             <velocity>100</velocity>
             <gateTime>100</gateTime>
@@ -628,6 +635,7 @@
             <gateTime>100</gateTime>
             </Articulation>
           <Channel>
+            <program value="73"/>
             </Channel>
           </Instrument>
         </Part>

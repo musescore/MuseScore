@@ -52,27 +52,27 @@
           <staff-lines>6</staff-lines>
           <staff-tuning line="1">
             <tuning-step>E</tuning-step>
-            <tuning-octave>2</tuning-octave>
+            <tuning-octave>3</tuning-octave>
             </staff-tuning>
           <staff-tuning line="2">
             <tuning-step>A</tuning-step>
-            <tuning-octave>2</tuning-octave>
+            <tuning-octave>3</tuning-octave>
             </staff-tuning>
           <staff-tuning line="3">
             <tuning-step>D</tuning-step>
-            <tuning-octave>3</tuning-octave>
+            <tuning-octave>4</tuning-octave>
             </staff-tuning>
           <staff-tuning line="4">
             <tuning-step>G</tuning-step>
-            <tuning-octave>3</tuning-octave>
+            <tuning-octave>4</tuning-octave>
             </staff-tuning>
           <staff-tuning line="5">
             <tuning-step>B</tuning-step>
-            <tuning-octave>3</tuning-octave>
+            <tuning-octave>4</tuning-octave>
             </staff-tuning>
           <staff-tuning line="6">
             <tuning-step>E</tuning-step>
-            <tuning-octave>4</tuning-octave>
+            <tuning-octave>5</tuning-octave>
             </staff-tuning>
           </staff-details>
         </attributes>
@@ -86,8 +86,8 @@
         <type>whole</type>
         <notations>
           <technical>
-            <string>2</string>
-            <fret>0</fret>
+            <string>5</string>
+            <fret>2</fret>
             </technical>
           </notations>
         </note>
@@ -104,8 +104,8 @@
         <type>whole</type>
         <notations>
           <technical>
-            <string>2</string>
-            <fret>1</fret>
+            <string>5</string>
+            <fret>3</fret>
             </technical>
           </notations>
         </note>
@@ -122,8 +122,8 @@
         <type>whole</type>
         <notations>
           <technical>
-            <string>2</string>
-            <fret>2</fret>
+            <string>5</string>
+            <fret>4</fret>
             </technical>
           </notations>
         </note>
@@ -139,8 +139,8 @@
         <type>whole</type>
         <notations>
           <technical>
-            <string>2</string>
-            <fret>1</fret>
+            <string>5</string>
+            <fret>3</fret>
             </technical>
           </notations>
         </note>
@@ -157,8 +157,8 @@
         <type>whole</type>
         <notations>
           <technical>
-            <string>2</string>
-            <fret>0</fret>
+            <string>5</string>
+            <fret>2</fret>
             </technical>
           </notations>
         </note>
@@ -175,8 +175,8 @@
         <type>whole</type>
         <notations>
           <technical>
-            <string>3</string>
-            <fret>3</fret>
+            <string>5</string>
+            <fret>1</fret>
             </technical>
           </notations>
         </note>

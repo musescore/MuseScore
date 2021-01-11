@@ -30,7 +30,7 @@
           </StaffType>
         </Staff>
       <trackName>B♭ Trumpet</trackName>
-      <Instrument>
+      <Instrument id="bb-trumpet">
         <longName>B♭ Trumpet</longName>
         <shortName>B♭ Tpt.</shortName>
         <trackName>B♭ Trumpet</trackName>
@@ -40,6 +40,7 @@
         <maxPitchA>80</maxPitchA>
         <transposeDiatonic>-1</transposeDiatonic>
         <transposeChromatic>-2</transposeChromatic>
+        <instrumentId>brass.trumpet.bflat</instrumentId>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -83,7 +84,7 @@
           </StaffType>
         </Staff>
       <trackName>B♭ Trumpet</trackName>
-      <Instrument>
+      <Instrument id="bb-trumpet">
         <longName>B♭ Trumpet</longName>
         <shortName>B♭ Tpt.</shortName>
         <trackName>B♭ Trumpet</trackName>
@@ -93,6 +94,7 @@
         <maxPitchA>80</maxPitchA>
         <transposeDiatonic>-1</transposeDiatonic>
         <transposeChromatic>-2</transposeChromatic>
+        <instrumentId>brass.trumpet.bflat</instrumentId>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -136,7 +138,7 @@
           </StaffType>
         </Staff>
       <trackName>B♭ Trumpet</trackName>
-      <Instrument>
+      <Instrument id="bb-trumpet">
         <longName>B♭ Trumpet</longName>
         <shortName>B♭ Tpt.</shortName>
         <trackName>B♭ Trumpet</trackName>
@@ -146,6 +148,7 @@
         <maxPitchA>80</maxPitchA>
         <transposeDiatonic>-1</transposeDiatonic>
         <transposeChromatic>-2</transposeChromatic>
+        <instrumentId>brass.trumpet.bflat</instrumentId>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -189,7 +192,7 @@
           </StaffType>
         </Staff>
       <trackName>B♭ Trumpet</trackName>
-      <Instrument>
+      <Instrument id="bb-trumpet">
         <longName>B♭ Trumpet</longName>
         <shortName>B♭ Tpt.</shortName>
         <trackName>B♭ Trumpet</trackName>
@@ -199,6 +202,7 @@
         <maxPitchA>80</maxPitchA>
         <transposeDiatonic>-1</transposeDiatonic>
         <transposeChromatic>-2</transposeChromatic>
+        <instrumentId>brass.trumpet.bflat</instrumentId>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
