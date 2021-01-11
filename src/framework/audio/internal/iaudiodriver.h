@@ -21,9 +21,11 @@
 
 #include <cstdint>
 #include <string>
+#include <vector>
 #include <functional>
 
 #include "modularity/imoduleexport.h"
+#include "async/notification.h"
 
 namespace mu {
 namespace audio {
@@ -55,6 +57,11 @@ public:
     virtual bool open(const Spec& spec, Spec* activeSpec) = 0;
     virtual void close() = 0;
     virtual bool isOpened() const = 0;
+
+    virtual std::string device() const = 0;
+    virtual bool selectDevice(std::string name) = 0;
+    virtual std::vector<std::string> availableDevices() const = 0;
+    virtual async::Notification deviceListChanged() const = 0;
 };
 }
 }

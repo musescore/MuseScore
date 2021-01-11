@@ -26,6 +26,9 @@ using namespace mu::midi;
 AudioEngineDevTools::AudioEngineDevTools(QObject* parent)
     : QObject(parent)
 {
+    audioDriver()->deviceListChanged().onNotify(this, [this]() {
+        emit devicesChanged();
+    });
 }
 
 void AudioEngineDevTools::playSine()
@@ -89,6 +92,26 @@ void AudioEngineDevTools::playNotation()
 void AudioEngineDevTools::stopNotation()
 {
     player()->stop();
+}
+
+QVariantList AudioEngineDevTools::devices() const
+{
+    auto devices = audioDriver()->availableDevices();
+    QVariantList list;
+    for (auto&& device : devices) {
+        list.push_back(QString::fromStdString(device));
+    }
+    return list;
+}
+
+QString AudioEngineDevTools::device() const
+{
+    return QString::fromStdString(audioDriver()->device());
+}
+
+void AudioEngineDevTools::selectDevice(QString name)
+{
+    audioDriver()->selectDevice(name.toStdString());
 }
 
 void AudioEngineDevTools::makeArpeggio()

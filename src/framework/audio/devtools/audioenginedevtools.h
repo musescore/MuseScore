@@ -21,10 +21,12 @@
 
 #include <QObject>
 #include <QTimer>
+#include <QVariantList>
 
 #include "modularity/ioc.h"
 #include "iaudioengine.h"
 #include "iaudioplayer.h"
+#include "internal/iaudiodriver.h"
 #include "context/iglobalcontext.h"
 #include "internal/sinesource.h"
 #include "internal/midisource.h"
@@ -36,8 +38,10 @@ class AudioEngineDevTools : public QObject, public async::Asyncable
 {
     Q_OBJECT
     INJECT(audio, IAudioEngine, audioEngine)
+    INJECT(audio, IAudioDriver, audioDriver)
     INJECT(audio, IAudioPlayer, player)
     INJECT(audio, context::IGlobalContext, globalContext)
+    Q_PROPERTY(QVariantList devices READ devices NOTIFY devicesChanged)
 
 public:
     explicit AudioEngineDevTools(QObject* parent = nullptr);
@@ -54,6 +58,10 @@ public:
     Q_INVOKABLE void playNotation();
     Q_INVOKABLE void stopNotation();
 
+    QVariantList devices() const;
+    Q_INVOKABLE QString device() const;
+    Q_INVOKABLE void selectDevice(QString name);
+
 private:
 
     void makeArpeggio();
@@ -65,6 +73,9 @@ private:
 
     std::shared_ptr<MidiSource> m_midiSource;
     IAudioEngine::handle m_midiHandel = 0;
+
+signals:
+    void devicesChanged();
 };
 }
 }
