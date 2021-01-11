@@ -42,6 +42,9 @@ function(target_no_warning TARGET WNAME)
 
     elseif(WNAME STREQUAL "-Wno-array-bounds")
 
+    elseif(WNAME STREQUAL "-w")
+        set(MSVC_Warning /w)
+
     # Only MSVC warnings
     elseif(WNAME STREQUAL "-WMSVC-no-translation-unit-is-empty")
         unset(GCC_Warning)
