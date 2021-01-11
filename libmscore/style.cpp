@@ -3052,13 +3052,13 @@ void MStyle::load(XmlReader& e)
 
 void MStyle::applyNewDefaults(const MStyle& other, const int defaultsVersion)
       {
+      _defaultStyleVersion = defaultsVersion;
+
       for (auto st : qAsConst(styleTypes))
             if (isDefault(st.styleIdx())) {
                   st._defaultValue = other.value(st.styleIdx());
                   _values.at(st.idx()) = other.value(st.styleIdx());
             }
-
-      _defaultStyleVersion = defaultsVersion;
       }
 
 //---------------------------------------------------------
