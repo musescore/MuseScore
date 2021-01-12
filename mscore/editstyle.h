@@ -21,6 +21,7 @@
 #define __EDITSTYLE_H__
 
 #include "ui_editstyle.h"
+#include "abstractdialog.h"
 #include "globals.h"
 #include "libmscore/mscore.h"
 #include "libmscore/style.h"
@@ -55,7 +56,7 @@ typedef QWidget* EditStyle::* EditStylePage;
 //   EditStyle
 //---------------------------------------------------------
 
-class EditStyle : public QDialog, private Ui::EditStyleBase {
+class EditStyle : public AbstractDialog, private Ui::EditStyleBase {
       Q_OBJECT
 
       Score* cs = nullptr;
@@ -76,6 +77,7 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       const StyleWidget& styleWidget(Sid) const;
 
       void adjustPagesStackSize(int currentPageIndex);
+      void setHeaderFooterToolTip();
 
       static EditStylePage pageForElement(Element*);
 
@@ -106,6 +108,9 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       void endEditUserStyleName();
       void resetUserStyleName();
 
+   protected:
+      void retranslate();
+
    public:
       EditStyle(Score*, QWidget*);
       void setPage(int no);
@@ -119,7 +124,6 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       void accept();
       void reject();
       };
-
 
 } // namespace Ms
 #endif

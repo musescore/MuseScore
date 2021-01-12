@@ -34,12 +34,20 @@
 
 namespace Ms {
 
+const char* lineStyles[] = {
+      QT_TRANSLATE_NOOP("EditStyleBase", "Continuous"),
+      QT_TRANSLATE_NOOP("EditStyleBase", "Dashed"),
+      QT_TRANSLATE_NOOP("EditStyleBase", "Dotted"),
+      QT_TRANSLATE_NOOP("EditStyleBase", "Dash-dotted"),
+      QT_TRANSLATE_NOOP("EditStyleBase", "Dash-dot-dotted")
+};
+
 //---------------------------------------------------------
 //   EditStyle
 //---------------------------------------------------------
 
 EditStyle::EditStyle(Score* s, QWidget* parent)
-   : QDialog(parent), cs(s)
+   : AbstractDialog(parent), cs(s)
       {
       setObjectName("EditStyle");
       setupUi(this);
@@ -72,19 +80,11 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       fbStyle->addButton(radioFBModern, 0);
       fbStyle->addButton(radioFBHistoric, 1);
 
-
-      const char* styles[] = {
-            QT_TRANSLATE_NOOP("EditStyleBase", "Continuous"),
-            QT_TRANSLATE_NOOP("EditStyleBase", "Dashed"),
-            QT_TRANSLATE_NOOP("EditStyleBase", "Dotted"),
-            QT_TRANSLATE_NOOP("EditStyleBase", "Dash-dotted"),
-            QT_TRANSLATE_NOOP("EditStyleBase", "Dash-dot-dotted")
-            };
       int dta = 1;
       voltaLineStyle->clear();
       ottavaLineStyle->clear();
       pedalLineStyle->clear();
-      for (const char* p : styles) {
+      for (const char* p : lineStyles) {
             QString trs = qApp->translate("EditStyleBase", p);
             voltaLineStyle->addItem(trs, dta);
             ottavaLineStyle->addItem(trs, dta);
@@ -430,7 +430,6 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       mmRestRangeBracketType->addItem(tr("Brackets"),    int(MMRestRangeBracketType::BRACKETS));
       mmRestRangeBracketType->addItem(tr("Parentheses"), int(MMRestRangeBracketType::PARENTHESES));
 
-
       autoplaceVerticalAlignRange->clear();
       autoplaceVerticalAlignRange->addItem(tr("Segment"), int(VerticalAlignRange::SEGMENT));
       autoplaceVerticalAlignRange->addItem(tr("Measure"), int(VerticalAlignRange::MEASURE));
@@ -494,71 +493,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       voicingSelectWidget->durationBox->addItem(tr("Until End of Measure"), int(HDuration::STOP_AT_MEASURE_END));
       voicingSelectWidget->durationBox->addItem(tr("Chord/Rest Duration"), int(HDuration::SEGMENT_DURATION));
 
-      // keep in sync with implementation in Page::replaceTextMacros (page.cpp)
-      // jumping thru hoops here to make the job of translators easier, yet have a nice display
-      QString toolTipHeaderFooter
-            = QString("<html><head></head><body><p><b>")
-            + tr("Special symbols in header/footer")
-            + QString("</b></p>")
-            + QString("<table><tr><td>$p</td><td>-</td><td><i>")
-            + tr("Page number, except on first page")
-            + QString("</i></td></tr><tr><td>$N</td><td>-</td><td><i>")
-            + tr("Page number, if there is more than one page")
-            + QString("</i></td></tr><tr><td>$P</td><td>-</td><td><i>")
-            + tr("Page number, on all pages")
-            + QString("</i></td></tr><tr><td>$n</td><td>-</td><td><i>")
-            + tr("Number of pages")
-            + QString("</i></td></tr><tr><td>$f</td><td>-</td><td><i>")
-            + tr("File name")
-            + QString("</i></td></tr><tr><td>$F</td><td>-</td><td><i>")
-            + tr("File path+name")
-            + QString("</i></td></tr><tr><td>$i</td><td>-</td><td><i>")
-            + tr("Part name, except on first page")
-            + QString("</i></td></tr><tr><td>$I</td><td>-</td><td><i>")
-            + tr("Part name, on all pages")
-            + QString("</i></td></tr><tr><td>$d</td><td>-</td><td><i>")
-            + tr("Current date")
-            + QString("</i></td></tr><tr><td>$D</td><td>-</td><td><i>")
-            + tr("Creation date")
-            + QString("</i></td></tr><tr><td>$m</td><td>-</td><td><i>")
-            + tr("Last modification time")
-            + QString("</i></td></tr><tr><td>$M</td><td>-</td><td><i>")
-            + tr("Last modification date")
-            + QString("</i></td></tr><tr><td>$C</td><td>-</td><td><i>")
-            + tr("Copyright, on first page only")
-            + QString("</i></td></tr><tr><td>$c</td><td>-</td><td><i>")
-            + tr("Copyright, on all pages")
-            + QString("</i></td></tr><tr><td>$v</td><td>-</td><td><i>")
-            + tr("MuseScore version this score was last saved with")
-            + QString("</i></td></tr><tr><td>$r</td><td>-</td><td><i>")
-            + tr("MuseScore revision this score was last saved with")
-            + QString("</i></td></tr><tr><td>$$</td><td>-</td><td><i>")
-            + tr("The $ sign itself")
-            + QString("</i></td></tr><tr><td>$:tag:</td><td>-</td><td><i>")
-            + tr("Metadata tag, see below")
-            + QString("</i></td></tr></table><p>")
-            + tr("Available metadata tags and their current values")
-            + QString("<br />")
-            + tr("(in File > Score Properties…):")
-            + QString("</p><table>");
-      // show all tags for current score/part, see also Score::init()
-      if (!cs->isMaster()) {
-            QMapIterator<QString, QString> j(cs->masterScore()->metaTags());
-            while (j.hasNext()) {
-                  j.next();
-                  toolTipHeaderFooter += QString("<tr><td>%1</td><td>-</td><td>%2</td></tr>").arg(j.key()).arg(j.value());
-                  }
-            }
-      QMapIterator<QString, QString> i(cs->metaTags());
-      while (i.hasNext()) {
-            i.next();
-            toolTipHeaderFooter += QString("<tr><td>%1</td><td>-</td><td>%2</td></tr>").arg(i.key()).arg(i.value());
-            }
-      toolTipHeaderFooter += QString("</table></body></html>");
-      showHeader->setToolTip(toolTipHeaderFooter);
-      showHeader->setToolTipDuration(5000); // leaving the default value of -1 calculates the duration automatically and it takes too long
-      showFooter->setToolTip(toolTipHeaderFooter);
-      showFooter->setToolTipDuration(5000);
+      setHeaderFooterToolTip();
 
       connect(buttonBox,             SIGNAL(clicked(QAbstractButton*)), SLOT(buttonClicked(QAbstractButton*)));
       connect(enableVerticalSpread,  SIGNAL(toggled(bool)),             SLOT(enableVerticalSpreadClicked(bool)));
@@ -810,10 +745,10 @@ void MuseScore::showStyleDialog(Element* e)
             _styleDlg = new EditStyle { cs, this };
       else
             _styleDlg->setScore(cs);
-      
+
       if (e)
             _styleDlg->gotoElement(e);
-      
+
       if (_styleDlg->isVisible()) {
             _styleDlg->raise();
             _styleDlg->activateWindow();
@@ -824,6 +759,160 @@ void MuseScore::showStyleDialog(Element* e)
             // however, that must be properly implemented, otherwise it
             // will cause problems.
             _styleDlg->exec();
+      }
+
+//---------------------------------------------------------
+//   retranslate
+//    NOTE: keep in sync with constructor.
+//---------------------------------------------------------
+
+void EditStyle::retranslate()
+      {
+      retranslateUi(this);
+
+      int index = 0;
+      for (const char* p : lineStyles) {
+            QString trs = qApp->translate("EditStyleBase", p);
+            voltaLineStyle->setItemText(index, trs);
+            voltaLineStyle->setItemText(index, trs);
+            ottavaLineStyle->setItemText(index, trs);
+            pedalLineStyle->setItemText(index, trs);
+            ++index;
+            }
+
+      for (QComboBox* cb : std::vector<QComboBox*> {
+            lyricsPlacement, textLinePlacement, systemTextLinePlacement, hairpinPlacement, pedalLinePlacement,
+            trillLinePlacement, vibratoLinePlacement, dynamicsPlacement,
+            tempoTextPlacement, staffTextPlacement, rehearsalMarkPlacement,
+            measureNumberVPlacement, mmRestRangeVPlacement
+            }) {
+            cb->setItemText(0, tr("Above"));
+            cb->setItemText(1, tr("Below"));
+            }
+
+      for (QComboBox* cb : std::vector<QComboBox*> {
+            measureNumberHPlacement, mmRestRangeHPlacement
+            }) {
+            cb->setItemText(0, tr("Left"));
+            cb->setItemText(1, tr("Center"));
+            cb->setItemText(2, tr("Right"));
+            }
+
+      mmRestRangeBracketType->setItemText(0, tr("None"));
+      mmRestRangeBracketType->setItemText(1, tr("Brackets"));
+      mmRestRangeBracketType->setItemText(2, tr("Parentheses"));
+
+      autoplaceVerticalAlignRange->setItemText(0, tr("Segment"));
+      autoplaceVerticalAlignRange->setItemText(1, tr("Measure"));
+      autoplaceVerticalAlignRange->setItemText(2, tr("System"));
+
+      tupletNumberType->setItemText(0, tr("Number"));
+      tupletNumberType->setItemText(1, tr("Ratio"));
+      tupletNumberType->setItemText(2, tr("None", "no tuplet number type"));
+
+      tupletBracketType->setItemText(0, tr("Automatic"));
+      tupletBracketType->setItemText(1, tr("Bracket"));
+      tupletBracketType->setItemText(2, tr("None", "no tuplet bracket type"));
+
+      voicingSelectWidget->interpretBox->setItemText(0, tr("Jazz")); // two-item combobox for boolean style variant
+      voicingSelectWidget->interpretBox->setItemText(1, tr("Literal")); // true = literal
+
+      voicingSelectWidget->voicingBox->setItemText(0, tr("Automatic"));
+      voicingSelectWidget->voicingBox->setItemText(1, tr("Root Only"));
+      voicingSelectWidget->voicingBox->setItemText(2, tr("Close"));
+      voicingSelectWidget->voicingBox->setItemText(3, tr("Drop Two"));
+      voicingSelectWidget->voicingBox->setItemText(4, tr("Six Note"));
+      voicingSelectWidget->voicingBox->setItemText(5, tr("Four Note"));
+      voicingSelectWidget->voicingBox->setItemText(6, tr("Three Note"));
+
+      voicingSelectWidget->durationBox->setItemText(0, tr("Until Next Chord Symbol"));
+      voicingSelectWidget->durationBox->setItemText(1, tr("Until End of Measure"));
+      voicingSelectWidget->durationBox->setItemText(2, tr("Chord/Rest Duration"));
+
+      setHeaderFooterToolTip();
+
+      index = 0;
+      for (auto ss : allTextStyles()) {
+            QString name = cs->getTextStyleUserName(ss);
+            textStyles->item(index)->setText(name);
+            ++index;
+            }
+
+      textStyleFrameType->setItemText(0, tr("None", "no frame for text"));
+      textStyleFrameType->setItemText(1, tr("Rectangle"));
+      textStyleFrameType->setItemText(2, tr("Circle"));
+      }
+
+//---------------------------------------------------------
+//   setHeaderFooterToolTip
+//---------------------------------------------------------
+
+void EditStyle::setHeaderFooterToolTip() {
+      // keep in sync with implementation in Page::replaceTextMacros (page.cpp)
+      // jumping thru hoops here to make the job of translators easier, yet have a nice display
+      QString toolTipHeaderFooter
+            = QString("<html><head></head><body><p><b>")
+            + tr("Special symbols in header/footer")
+            + QString("</b></p>")
+            + QString("<table><tr><td>$p</td><td>-</td><td><i>")
+            + tr("Page number, except on first page")
+            + QString("</i></td></tr><tr><td>$N</td><td>-</td><td><i>")
+            + tr("Page number, if there is more than one page")
+            + QString("</i></td></tr><tr><td>$P</td><td>-</td><td><i>")
+            + tr("Page number, on all pages")
+            + QString("</i></td></tr><tr><td>$n</td><td>-</td><td><i>")
+            + tr("Number of pages")
+            + QString("</i></td></tr><tr><td>$f</td><td>-</td><td><i>")
+            + tr("File name")
+            + QString("</i></td></tr><tr><td>$F</td><td>-</td><td><i>")
+            + tr("File path+name")
+            + QString("</i></td></tr><tr><td>$i</td><td>-</td><td><i>")
+            + tr("Part name, except on first page")
+            + QString("</i></td></tr><tr><td>$I</td><td>-</td><td><i>")
+            + tr("Part name, on all pages")
+            + QString("</i></td></tr><tr><td>$d</td><td>-</td><td><i>")
+            + tr("Current date")
+            + QString("</i></td></tr><tr><td>$D</td><td>-</td><td><i>")
+            + tr("Creation date")
+            + QString("</i></td></tr><tr><td>$m</td><td>-</td><td><i>")
+            + tr("Last modification time")
+            + QString("</i></td></tr><tr><td>$M</td><td>-</td><td><i>")
+            + tr("Last modification date")
+            + QString("</i></td></tr><tr><td>$C</td><td>-</td><td><i>")
+            + tr("Copyright, on first page only")
+            + QString("</i></td></tr><tr><td>$c</td><td>-</td><td><i>")
+            + tr("Copyright, on all pages")
+            + QString("</i></td></tr><tr><td>$v</td><td>-</td><td><i>")
+            + tr("MuseScore version this score was last saved with")
+            + QString("</i></td></tr><tr><td>$r</td><td>-</td><td><i>")
+            + tr("MuseScore revision this score was last saved with")
+            + QString("</i></td></tr><tr><td>$$</td><td>-</td><td><i>")
+            + tr("The $ sign itself")
+            + QString("</i></td></tr><tr><td>$:tag:</td><td>-</td><td><i>")
+            + tr("Metadata tag, see below")
+            + QString("</i></td></tr></table><p>")
+            + tr("Available metadata tags and their current values")
+            + QString("<br />")
+            + tr("(in File > Score Properties…):")
+            + QString("</p><table>");
+      // show all tags for current score/part, see also Score::init()
+      if (!cs->isMaster()) {
+            QMapIterator<QString, QString> j(cs->masterScore()->metaTags());
+            while (j.hasNext()) {
+                  j.next();
+                  toolTipHeaderFooter += QString("<tr><td>%1</td><td>-</td><td>%2</td></tr>").arg(j.key()).arg(j.value());
+                  }
+            }
+      QMapIterator<QString, QString> i(cs->metaTags());
+      while (i.hasNext()) {
+            i.next();
+            toolTipHeaderFooter += QString("<tr><td>%1</td><td>-</td><td>%2</td></tr>").arg(i.key()).arg(i.value());
+            }
+      toolTipHeaderFooter += QString("</table></body></html>");
+      showHeader->setToolTip(toolTipHeaderFooter);
+      showHeader->setToolTipDuration(5000); // leaving the default value of -1 calculates the duration automatically and it takes too long
+      showFooter->setToolTip(toolTipHeaderFooter);
+      showFooter->setToolTipDuration(5000);
       }
 
 //---------------------------------------------------------

@@ -28,12 +28,10 @@ namespace Ms {
 
 class AbstractDialog : public QDialog
       {
-
-   Q_OBJECT
+      Q_OBJECT
 
    public:
       AbstractDialog(QWidget * parent = 0, Qt::WindowFlags f = {});
-      virtual ~AbstractDialog();
 
    protected:
       // change language event
@@ -45,4 +43,3 @@ class AbstractDialog : public QDialog
 
 }
 #endif
-
