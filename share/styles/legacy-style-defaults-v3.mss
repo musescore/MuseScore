@@ -668,6 +668,7 @@
     <metronomeFrameRound>0</metronomeFrameRound>
     <metronomeFrameFgColor r="0" g="0" b="0" a="255"/>
     <metronomeFrameBgColor r="255" g="255" b="255" a="0"/>
+    <measureNumberAlign>center,baseline</measureNumberAlign>
     <measureNumberFontFace>FreeSerif</measureNumberFontFace>
     <measureNumberFontSize>8</measureNumberFontSize>
     <measureNumberFontSpatiumDependent>1</measureNumberFontSpatiumDependent>

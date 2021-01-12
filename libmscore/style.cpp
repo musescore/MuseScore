@@ -3083,7 +3083,7 @@ void MStyle::save(XmlWriter& xml, bool optimize)
             else if (!strcmp("Ms::Align", type)) {
                   Align a = Align(value(idx).toInt());
                   // Don't write if it's the default value
-                  if (a == Align(st.defaultValue().toInt()))
+                  if (optimize && a == Align(st.defaultValue().toInt()))
                         continue;
                   QString horizontal = "left";
                   QString vertical = "top";
