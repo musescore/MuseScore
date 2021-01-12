@@ -1,9 +1,9 @@
 .\" New manual page for MuseScore 3
-.\" Copyright (c) 2018, 2019, 2020
+.\" Copyright (c) 2018, 2019, 2020, 2021
 .\"	mirabilos <m@mirbsd.org>
 .\" Published under the same terms as MuseScore itself.
 .\"-
-.Dd December 4, 2020
+.Dd Janurary 12, 2021
 .Dt @MAN_MSCORE_UPPER@ 1
 .Os MuseScore
 .Sh NAME@Variables_substituted_by_CMAKE_on_installation@
@@ -53,6 +53,7 @@
 .Op Fl \-score\-parts
 .Op Fl \-score\-parts\-pdf
 .Op Fl \-score\-transpose
+.Op Fl \-source\-update
 .Op Fl \-template\-mode
 .Op Fl \-test\-mode
 .Op Fl \-version
@@ -275,6 +276,8 @@ as a single JSON document to stdout
 .It Fl \-score\-transpose
 Transpose the given score and export the data to
 a single JSON file, print it to stdout
+.It Fl \-source\-update
+Update the source in the given score
 .It Fl \-template\-mode
 Save files in template mode (e.g. without page sizes)
 .El
