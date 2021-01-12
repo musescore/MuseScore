@@ -46,25 +46,25 @@ bool WebAudioDriver::isOpened() const
     return m_opened;
 }
 
-std::string WebAudioDriver::device() const
+std::string WebAudioDriver::outputDevice() const
 {
     NOT_IMPLEMENTED;
     return "default";
 }
 
-bool WebAudioDriver::selectDevice(std::string name)
+bool WebAudioDriver::selectOutputDevice(const std::string& name)
 {
     NOT_IMPLEMENTED;
     return false;
 }
 
-std::vector<std::string> WebAudioDriver::availableDevices() const
+std::vector<std::string> WebAudioDriver::availableOutputDevices() const
 {
     NOT_IMPLEMENTED;
     return { "default" };
 }
 
-mu::async::Notification WebAudioDriver::deviceListChanged() const
+mu::async::Notification WebAudioDriver::availableOutputDevicesChanged() const
 {
     NOT_IMPLEMENTED;
     return mu::async::Notification();

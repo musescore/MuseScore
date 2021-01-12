@@ -131,59 +131,88 @@ bool OSXAudioDriver::isOpened() const
     return m_data->audioQueue != nullptr;
 }
 
-std::vector<std::string> OSXAudioDriver::availableDevices() const
+std::vector<std::string> OSXAudioDriver::availableOutputDevices() const
 {
     std::vector<std::string> deviceList = { DEFAULT_DEVICE_NAME };
-    for (auto& device : m_devices) {
+    for (auto& device : m_outputDevices) {
         deviceList.push_back(device.second);
     }
     return deviceList;
 }
 
-mu::async::Notification OSXAudioDriver::deviceListChanged() const
+mu::async::Notification OSXAudioDriver::availableOutputDevicesChanged() const
 {
-    return m_deviceListChanged;
+    return m_availableOutputDevicesChanged;
 }
 
-std::string OSXAudioDriver::device() const
+std::string OSXAudioDriver::outputDevice() const
 {
     return m_deviceName;
 }
 
 void OSXAudioDriver::updateDeviceMap()
 {
-    AudioObjectPropertyAddress propertyAddress;
     UInt32 propertySize;
     OSStatus result;
     std::vector<AudioObjectID> audioObjects = {};
-    m_devices.clear();
+    m_outputDevices.clear();
 
-    propertyAddress.mSelector = kAudioHardwarePropertyDevices;
-    propertyAddress.mScope = kAudioObjectPropertyScopeOutput;
-    propertyAddress.mElement = kAudioObjectPropertyElementMaster;
+    AudioObjectPropertyAddress devicesPropertyAddress = {
+        .mSelector = kAudioHardwarePropertyDevices,
+        .mScope = kAudioObjectPropertyScopeGlobal,
+        .mElement = kAudioObjectPropertyElementMaster,
+    };
 
-    result = AudioObjectGetPropertyDataSize(kAudioObjectSystemObject, &propertyAddress, 0, NULL, &propertySize);
+    AudioObjectPropertyAddress namePropertyAddress = {
+        .mSelector = kAudioDevicePropertyDeviceNameCFString,
+        .mScope = kAudioObjectPropertyScopeGlobal,
+        .mElement = kAudioObjectPropertyElementMaster,
+    };
+
+    auto getStreamsCount
+        = [](const AudioObjectID& id, const AudioObjectPropertyScope& scope, const std::string& deviceName) -> unsigned int {
+        AudioObjectPropertyAddress propertyAddress = {
+            .mSelector  = kAudioDevicePropertyStreamConfiguration,
+            .mScope     = scope,
+            .mElement   = kAudioObjectPropertyElementWildcard
+        };
+        UInt32 propertySize = 0;
+        AudioBufferList* bufferList = nullptr;
+        auto result = AudioObjectGetPropertyDataSize(id, &propertyAddress, 0, NULL, &propertySize);
+        if (result != noErr) {
+            logError("Failed to get device's (" + deviceName + ") streams size, err: ", result);
+        } else {
+            bufferList = reinterpret_cast<AudioBufferList*>(malloc(propertySize));
+            result = AudioObjectGetPropertyData(id, &propertyAddress, 0, NULL, &propertySize, bufferList);
+            if (result != noErr) {
+                logError("Failed to get device's (" + deviceName + ") streams, err: ", result);
+            } else {
+                return bufferList->mNumberBuffers;
+            }
+        }
+
+        delete bufferList;
+        return 0;
+    };
+
+    result = AudioObjectGetPropertyDataSize(kAudioObjectSystemObject, &devicesPropertyAddress, 0, NULL, &propertySize);
     if (result != noErr) {
         logError("Failed to get devices count, err: ", result);
         return;
     }
 
     audioObjects.resize(propertySize / sizeof(AudioDeviceID));
-    result = AudioObjectGetPropertyData(kAudioObjectSystemObject, &propertyAddress, 0, NULL, &propertySize, audioObjects.data());
+    result = AudioObjectGetPropertyData(kAudioObjectSystemObject, &devicesPropertyAddress, 0, NULL, &propertySize, audioObjects.data());
     if (result != noErr) {
         logError("Failed to get devices list, err: ", result);
         return;
     }
 
-    propertyAddress.mSelector = kAudioDevicePropertyDeviceNameCFString;
-    propertyAddress.mScope = kAudioObjectPropertyScopeOutput;
-    propertyAddress.mElement = kAudioObjectPropertyElementMaster;
-
-    for (auto&& d : audioObjects) {
+    for (auto&& deviceId : audioObjects) {
         std::string deviceName;
         CFStringRef nameRef;
 
-        result = AudioObjectGetPropertyData(d, &propertyAddress, 0, NULL, &propertySize, &nameRef);
+        result = AudioObjectGetPropertyData(deviceId, &namePropertyAddress, 0, NULL, &propertySize, &nameRef);
         if (result != noErr) {
             logError("Failed to get device's name, err: ", result);
             continue;
@@ -191,20 +220,28 @@ void OSXAudioDriver::updateDeviceMap()
         propertySize = CFStringGetLength(nameRef);
         deviceName.resize(propertySize);
         CFStringGetCString(nameRef, deviceName.data(), sizeof(deviceName), kCFStringEncodingUTF8);
-        m_devices[d] = deviceName;
+
+        if (getStreamsCount(deviceId, kAudioObjectPropertyScopeOutput, deviceName) > 0) {
+            m_outputDevices[deviceId] = deviceName;
+        }
+
+        if (getStreamsCount(deviceId, kAudioObjectPropertyScopeInput, deviceName) > 0) {
+            m_inputDevices[deviceId] = deviceName;
+        }
+
         CFRelease(nameRef);
     }
-    m_deviceListChanged.notify();
+    m_availableOutputDevicesChanged.notify();
 }
 
-bool OSXAudioDriver::audioQueueSetDeviceName(std::string deviceName)
+bool OSXAudioDriver::audioQueueSetDeviceName(const std::string& deviceName)
 {
     if (deviceName.empty() || deviceName == DEFAULT_DEVICE_NAME) {
         return true; //default device used
     }
 
-    auto index = std::find_if(m_devices.begin(), m_devices.end(), [&deviceName](auto& d) { return d.second == deviceName; });
-    if (index == m_devices.end()) {
+    auto index = std::find_if(m_outputDevices.begin(), m_outputDevices.end(), [&deviceName](auto& d) { return d.second == deviceName; });
+    if (index == m_outputDevices.end()) {
         LOGW() << "device " << deviceName << " not found";
         return false;
     }
@@ -230,7 +267,7 @@ bool OSXAudioDriver::audioQueueSetDeviceName(std::string deviceName)
     return true;
 }
 
-bool OSXAudioDriver::selectDevice(std::string name)
+bool OSXAudioDriver::selectOutputDevice(const std::string& name)
 {
     if (m_deviceName == name) {
         return true;

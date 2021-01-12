@@ -214,25 +214,25 @@ bool WinmmDriver::isOpened() const
     return s_winMMData != nullptr;
 }
 
-std::string WinmmDriver::device() const
+std::string WinmmDriver::outputDevice() const
 {
     NOT_IMPLEMENTED;
     return "default";
 }
 
-bool WinmmDriver::selectDevice(std::string name)
+bool WinmmDriver::selectOutputDevice(const std::string& name)
 {
     NOT_IMPLEMENTED;
     return false;
 }
 
-std::vector<std::string> WinmmDriver::availableDevices() const
+std::vector<std::string> WinmmDriver::availableOutputDevices() const
 {
     NOT_IMPLEMENTED;
     return { "default" };
 }
 
-mu::async::Notification WinmmDriver::deviceListChanged() const
+mu::async::Notification WinmmDriver::availableOutputDevicesChanged() const
 {
     NOT_IMPLEMENTED;
     return mu::async::Notification();
