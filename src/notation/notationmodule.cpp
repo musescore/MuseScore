@@ -91,8 +91,6 @@ void NotationModule::registerExports()
     readers->reg({ "mscz", "mscx" }, std::make_shared<MsczNotationReader>());
     framework::ioc()->registerExport<INotationReadersRegister>(moduleName(), readers);
     framework::ioc()->registerExport<INotationWritersRegister>(moduleName(), std::make_shared<NotationWritersRegister>());
-
-    Notation::init();
 }
 
 void NotationModule::resolveImports()
@@ -168,6 +166,8 @@ void NotationModule::registerUiTypes()
     qRegisterMetaType<SelectDialog>("SelectDialog");
 
     framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(notation_QML_IMPORT);
+
+    Ms::MScore::registerUiTypes();
 }
 
 void NotationModule::onInit(const IApplication::RunMode&)
@@ -175,4 +175,6 @@ void NotationModule::onInit(const IApplication::RunMode&)
     s_configuration->init();
     s_actionController->init();
     s_midiInputController->init();
+
+    Notation::init();
 }
