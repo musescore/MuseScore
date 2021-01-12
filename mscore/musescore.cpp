@@ -3751,7 +3751,7 @@ static bool convert(const QString& inFile, const QJsonArray& outFiles, const QSt
             return false;
             }
       fprintf(stderr, "convert <%s>...\n", qPrintable(inFile));
-      Score* score = mscore->openScore(inFile);
+      Score* score = mscore->openScore(inFile, false, false);
       if (!score)
             return false;
       mscore->setCurrentScore(score);
