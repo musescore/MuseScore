@@ -45,20 +45,9 @@ ECHO "BUILD_WIN_PORTABLE: %BUILD_WIN_PORTABLE%"
 XCOPY "C:\musescore_dependencies" %CD% /E /I /Y
 ECHO "Finished copy dependencies"
 
-SET GENERATOR_NAME=Visual Studio 16 2019
-SET MSCORE_STABLE_BUILD="TRUE"
-
-:: TODO We need define paths during image creation
 SET "JACK_DIR=C:\Program Files (x86)\Jack"
 SET "QT_DIR=C:\Qt\5.15.1"
-
-@REM IF %TARGET_PROCESSOR_BITS% == 32 ( 
-@REM     ::SET "PATH=%QT_DIR%\msvc2015\bin;%JACK_DIR%;%PATH%"
-@REM     ECHO "error: Not installed Qt 32"
-@REM     EXIT /b 1
-@REM ) ELSE (
 SET "PATH=%QT_DIR%\msvc2019_64\bin;%JACK_DIR%;%PATH%"
-@REM )
 
 :: At the moment not compiling yet.
 SET BUILD_VST=OFF 
@@ -67,9 +56,15 @@ SET VST3_SDK_PATH="C:\vst\VST3_SDK"
 bash ./build/ci/tools/make_revision_env.sh 
 SET /p MUSESCORE_REVISION=<%ARTIFACTS_DIR%\env\release_channel.env
 
-CALL msvc_build.bat relwithdebinfo %TARGET_PROCESSOR_BITS% %BUILD_NUMBER% || exit \b 1
-CALL msvc_build.bat installrelwithdebinfo %TARGET_PROCESSOR_BITS% %BUILD_NUMBER% || exit \b 1
+SET MUSESCORE_BUILD_CONFIG=%MUSESCORE_BUILD_CONFIG%
+SET MUSESCORE_BUILD_NUMBER=%BUILD_NUMBER%
+SET MUSESCORE_REVISION=%MUSESCORE_REVISION%
+SET MUSESCORE_TELEMETRY_ID="%TELEMETRY_TRACK_ID%"
+SET MUSESCORE_CRASHREPORT_URL="%CRASH_LOG_SERVER_URL%"
+SET MUSESCORE_BUILD_VST=%BUILD_VST%
+SET MUSESCORE_VST3_SDK_PATH=%VST3_SDK_PATH%
 
+CALL ninja_build.bat -t relwithdebinfo || exit \b 1
 
 bash ./build/ci/tools/make_release_channel_env.sh -c %MUSESCORE_BUILD_CONFIG%
 bash ./build/ci/tools/make_version_env.sh %BUILD_NUMBER%

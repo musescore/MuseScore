@@ -35,6 +35,9 @@ if [ $SHOW_HELP -eq 1 ]; then
 	exit 0
 fi
 
+cmake --version
+echo "ninja version $(ninja --version)"
+
 function do_build() {
 
     BUILD_TYPE=$1
@@ -66,26 +69,39 @@ case $TARGET in
     release)
         mkdir -p build.release
         cd build.release
-        do_build RELEASE
-        ;;
+        do_build Release
+        ;; 
 
     debug)
         mkdir -p build.release
         cd build.release
-        do_build DEBUG
+        do_build Debug
         ;;
+
+    relwithdebinfo)
+        mkdir -p build.release
+        cd build.release
+        do_build RelWithDebInfo
+        ;;     
 
     install)
         mkdir -p build.release
         cd build.release
-        do_build RELEASE
+        do_build Release
         ninja install
         ;;
+
+    installrelwithdebinfo)
+        mkdir -p build.release
+        cd build.release
+        do_build RelWithDebInfo
+        ninja install
+        ;;    
 
     installdebug)
         mkdir -p build.debug
         cd build.debug
-        do_build DEBUG
+        do_build Debug
         ninja install
         ;; 
 
