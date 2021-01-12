@@ -21,7 +21,11 @@
 #include <QtGlobal>
 #include "modularity/ioc.h"
 
+#include "internal/fontscontroller.h"
+
 using namespace mu::fonts;
+
+static FontsController* m_fontsController = nullptr;
 
 static void init_fonts_qrc()
 {
@@ -51,4 +55,10 @@ void FontsModule::registerResources()
 
 void FontsModule::registerExports()
 {
+    m_fontsController = new FontsController();
+}
+
+void FontsModule::onInit(const mu::framework::IApplication::RunMode&)
+{
+    m_fontsController->init();
 }
