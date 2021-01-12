@@ -39,12 +39,14 @@ public:
     virtual void addNote(NoteName noteName, NoteAddingMode addingMode) = 0;
     virtual void padNote(const Pad& pad)  = 0;
     virtual void putNote(const QPointF& pos, bool replace, bool insert) = 0;
-    virtual void toogleAccidental(AccidentalType accidentalType) = 0;
+    virtual void setAccidental(AccidentalType accidentalType) = 0;
     virtual void setArticulation(SymbolId articulationSymbolId) = 0;
-    virtual void putTuplet(const TupletOptions& options) = 0;
+    virtual void addTuplet(const TupletOptions& options) = 0;
 
-    virtual void setSlur(Ms::Slur* slur) = 0;
+    virtual void addSlur(Ms::Slur* slur) = 0;
     virtual void resetSlur() = 0;
+
+    virtual void addTie() = 0;
 
     virtual void setCurrentVoiceIndex(int voiceIndex) = 0;
 

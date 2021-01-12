@@ -51,12 +51,14 @@ public:
     void addNote(NoteName noteName, NoteAddingMode addingMode) override;
     void padNote(const Pad& pad) override;
     void putNote(const QPointF& pos, bool replace, bool insert) override;
-    void toogleAccidental(AccidentalType accidentalType) override;
+    void setAccidental(AccidentalType accidentalType) override;
     void setArticulation(SymbolId articulationSymbolId) override;
-    void putTuplet(const TupletOptions& options) override;
+    void addTuplet(const TupletOptions& options) override;
 
-    void setSlur(Ms::Slur* slur) override;
+    void addSlur(Ms::Slur* slur) override;
     void resetSlur() override;
+
+    void addTie() override;
 
     void setCurrentVoiceIndex(int voiceIndex) override;
 

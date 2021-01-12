@@ -1238,26 +1238,19 @@ void NotationInteraction::applyDropPaletteElement(Ms::Score* score, Ms::Element*
 //! NOTE Copied from ScoreView::cmdAddSlur
 void NotationInteraction::doAddSlur(const Ms::Slur* slurTemplate)
 {
-    if (m_noteInput->isNoteInputMode()) {
-        if (m_noteInput->state().withSlur) {
-            m_noteInput->resetSlur();
-            return;
-        }
-    }
-
     startEdit();
 
-    Ms::ChordRest* cr1;
-    Ms::ChordRest* cr2;
+    Ms::ChordRest* firstChordRest = nullptr;
+    Ms::ChordRest* secondChordRest = nullptr;
     const auto& sel = score()->selection();
-    auto el         = sel.uniqueElements();
+    auto el = sel.uniqueElements();
 
     if (sel.isRange()) {
         int startTrack = sel.staffStart() * VOICES;
-        int endTrack   = sel.staffEnd() * VOICES;
+        int endTrack = sel.staffEnd() * VOICES;
         for (int track = startTrack; track < endTrack; ++track) {
-            cr1 = 0;
-            cr2 = 0;
+            firstChordRest = nullptr;
+            secondChordRest = nullptr;
             for (Ms::Element* e : el) {
                 if (e->track() != track) {
                     continue;
@@ -1269,28 +1262,19 @@ void NotationInteraction::doAddSlur(const Ms::Slur* slurTemplate)
                     continue;
                 }
                 Ms::ChordRest* cr = Ms::toChordRest(e);
-                if (!cr1 || cr1->tick() > cr->tick()) {
-                    cr1 = cr;
+                if (!firstChordRest || firstChordRest->tick() > cr->tick()) {
+                    firstChordRest = cr;
                 }
-                if (!cr2 || cr2->tick() < cr->tick()) {
-                    cr2 = cr;
+                if (!secondChordRest || secondChordRest->tick() < cr->tick()) {
+                    secondChordRest = cr;
                 }
             }
 
-            if (cr1 && (cr1 != cr2)) {
-                Ms::Slur* slur = score()->addSlur(cr1, cr2, slurTemplate);
-
-                if (m_noteInput->isNoteInputMode()) {
-                    m_noteInput->setSlur(slur);
-                } else if (!cr2) {
-                    NOT_IMPLEMENTED;
-                    //startEditMode(ss);
-                }
+            if (firstChordRest && (firstChordRest != secondChordRest)) {
+                doAddSlur(firstChordRest, secondChordRest, slurTemplate);
             }
         }
     } else {
-        cr1 = 0;
-        cr2 = 0;
         for (Ms::Element* e : el) {
             if (e->isNote()) {
                 e = Ms::toNote(e)->chord();
@@ -1299,29 +1283,42 @@ void NotationInteraction::doAddSlur(const Ms::Slur* slurTemplate)
                 continue;
             }
             Ms::ChordRest* cr = Ms::toChordRest(e);
-            if (!cr1 || cr->isBefore(cr1)) {
-                cr1 = cr;
+            if (!firstChordRest || cr->isBefore(firstChordRest)) {
+                firstChordRest = cr;
             }
-            if (!cr2 || cr2->isBefore(cr)) {
-                cr2 = cr;
+            if (!secondChordRest || secondChordRest->isBefore(cr)) {
+                secondChordRest = cr;
             }
         }
-        if (cr1 == cr2) {
-            cr2 = 0;
-        }
-        if (cr1) {
-            Ms::Slur* slur = score()->addSlur(cr1, cr2, slurTemplate);
 
-            if (m_noteInput->isNoteInputMode()) {
-                m_noteInput->setSlur(slur);
-            } else if (!cr2) {
-                NOT_IMPLEMENTED;
-                //startEditMode(ss);
-            }
+        if (firstChordRest == secondChordRest) {
+            secondChordRest = Ms::nextChordRest(firstChordRest);
+        }
+
+        if (firstChordRest) {
+            doAddSlur(firstChordRest, secondChordRest, slurTemplate);
         }
     }
 
     apply();
+}
+
+void NotationInteraction::doAddSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, const Ms::Slur* slurTemplate)
+{
+    Ms::Slur* slur = firstChordRest->slur(secondChordRest);
+    if (slur) {
+        score()->removeElement(slur);
+        return;
+    }
+
+    slur = score()->addSlur(firstChordRest, secondChordRest, slurTemplate);
+
+    if (m_noteInput->isNoteInputMode()) {
+        m_noteInput->addSlur(slur);
+    } else if (!secondChordRest) {
+        NOT_IMPLEMENTED;
+        //startEditMode(ss);
+    }
 }
 
 bool NotationInteraction::scoreHasMeasure() const
@@ -1979,11 +1976,7 @@ void NotationInteraction::flipSelection()
 void NotationInteraction::addTieToSelection()
 {
     startEdit();
-    if (noteInput()->isNoteInputMode()) {
-        score()->cmdAddTie();
-    } else {
-        score()->cmdToggleTie();
-    }
+    score()->cmdToggleTie();
     apply();
 
     notifyAboutSelectionChanged();

@@ -129,8 +129,8 @@ void NotationActionController::init()
     dispatcher()->reg(this, "swap", this, &NotationActionController::swapSelection);
     dispatcher()->reg(this, "delete", this, &NotationActionController::deleteSelection);
     dispatcher()->reg(this, "flip", this, &NotationActionController::flipSelection);
-    dispatcher()->reg(this, "tie", this, &NotationActionController::addTieToSelection);
-    dispatcher()->reg(this, "add-slur", this, &NotationActionController::addSlurToSelection);
+    dispatcher()->reg(this, "tie", this, &NotationActionController::addTie);
+    dispatcher()->reg(this, "add-slur", this, &NotationActionController::addSlur);
 
     dispatcher()->reg(this, "undo", this, &NotationActionController::undo);
     dispatcher()->reg(this, "redo", this, &NotationActionController::redo);
@@ -371,7 +371,7 @@ void NotationActionController::toggleAccidental(AccidentalType type)
     startNoteInputIfNeed();
 
     if (noteInput->isNoteInputMode()) {
-        noteInput->toogleAccidental(type);
+        noteInput->setAccidental(type);
     } else {
         interaction->addAccidentalToSelection(type);
     }
@@ -414,7 +414,7 @@ void NotationActionController::putTuplet(int tupletCount)
     options.ratio.setNumerator(tupletCount);
 
     if (noteInput->isNoteInputMode()) {
-        noteInput->putTuplet(options);
+        noteInput->addTuplet(options);
     } else {
         interaction->addTupletToSelectedChords(options);
     }
@@ -620,24 +620,42 @@ void NotationActionController::flipSelection()
     interaction->flipSelection();
 }
 
-void NotationActionController::addTieToSelection()
+void NotationActionController::addTie()
 {
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
     }
 
-    interaction->addTieToSelection();
+    auto noteInput = interaction->noteInput();
+    if (!noteInput) {
+        return;
+    }
+
+    if (noteInput->isNoteInputMode()) {
+        noteInput->addTie();
+    } else {
+        interaction->addTieToSelection();
+    }
 }
 
-void NotationActionController::addSlurToSelection()
+void NotationActionController::addSlur()
 {
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
     }
 
-    interaction->addSlurToSelection();
+    auto noteInput = interaction->noteInput();
+    if (!noteInput) {
+        return;
+    }
+
+    if (noteInput->isNoteInputMode() && noteInput->state().withSlur) {
+        noteInput->resetSlur();
+    } else {
+        interaction->addSlurToSelection();
+    }
 }
 
 void NotationActionController::addInterval(int interval)
