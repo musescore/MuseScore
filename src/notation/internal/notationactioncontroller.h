@@ -71,8 +71,8 @@ private:
     void deleteSelection();
     void swapSelection();
     void flipSelection();
-    void addTieToSelection();
-    void addSlurToSelection();
+    void addTie();
+    void addSlur();
     void addInterval(int interval);
 
     void undo();

@@ -167,6 +167,7 @@ private:
                                  QPointF pt = QPointF(), bool pasteMode = false);
 
     void doAddSlur(const Ms::Slur* slurTemplate = nullptr);
+    void doAddSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, const Ms::Slur* slurTemplate);
 
     bool scoreHasMeasure() const;
     bool notesHaveActiculation(const std::vector<Note*>& notes, SymbolId articulationSymbolId) const;

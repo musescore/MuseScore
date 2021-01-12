@@ -112,6 +112,7 @@ private:
     std::set<SymbolId> resolveCurrentArticulations() const;
     bool resolveRestSelected() const;
     DurationType resolveCurrentDurationType() const;
+    bool resolveSlurSelected() const;
 
     bool isNoteInputMode() const;
     NoteInputState noteInputState() const;

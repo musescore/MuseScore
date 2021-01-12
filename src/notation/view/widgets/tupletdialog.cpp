@@ -127,7 +127,7 @@ void TupletDialog::apply()
     options.bracketType = bracketType();
 
     if (noteInput->isNoteInputMode()) {
-        noteInput->putTuplet(options);
+        noteInput->addTuplet(options);
     } else {
         interaction->addTupletToSelectedChords(options);
     }

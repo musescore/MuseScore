@@ -204,7 +204,7 @@ void NotationNoteInput::putNote(const QPointF& pos, bool replace, bool insert)
     notifyNoteAddedChanged();
 }
 
-void NotationNoteInput::toogleAccidental(AccidentalType accidentalType)
+void NotationNoteInput::setAccidental(AccidentalType accidentalType)
 {
     Ms::EditData editData;
     editData.view = m_scoreCallbacks;
@@ -244,7 +244,7 @@ void NotationNoteInput::setCurrentVoiceIndex(int voiceIndex)
     notifyAboutStateChanged();
 }
 
-void NotationNoteInput::putTuplet(const TupletOptions& options)
+void NotationNoteInput::addTuplet(const TupletOptions& options)
 {
     Ms::InputState& inputState = score()->inputState();
 
@@ -314,7 +314,7 @@ QRectF NotationNoteInput::cursorRect() const
     return result;
 }
 
-void NotationNoteInput::setSlur(Ms::Slur* slur)
+void NotationNoteInput::addSlur(Ms::Slur* slur)
 {
     Ms::InputState& inputState = score()->inputState();
     inputState.setSlur(slur);
@@ -322,7 +322,7 @@ void NotationNoteInput::setSlur(Ms::Slur* slur)
     if (slur) {
         std::vector<Ms::SpannerSegment*> slurSpannerSegments = slur->spannerSegments();
         if (!slurSpannerSegments.empty()) {
-            slurSpannerSegments.back()->setSelected(true);
+            slurSpannerSegments.front()->setSelected(true);
         }
     }
 
@@ -332,16 +332,25 @@ void NotationNoteInput::setSlur(Ms::Slur* slur)
 void NotationNoteInput::resetSlur()
 {
     Ms::InputState& inputState = score()->inputState();
-    if (!inputState.slur()) {
+    Ms::Slur* slur = inputState.slur();
+    if (!slur) {
         return;
     }
 
-    const std::vector<Ms::SpannerSegment*>& el = inputState.slur()->spannerSegments();
-    if (!el.empty()) {
-        el.front()->setSelected(false);
-    }
+    startEdit();
+    score()->removeElement(slur);
+    apply();
 
-    setSlur(nullptr);
+    addSlur(nullptr);
+}
+
+void NotationNoteInput::addTie()
+{
+    startEdit();
+    score()->cmdAddTie();
+    apply();
+
+    notifyAboutStateChanged();
 }
 
 Notification NotationNoteInput::noteAdded() const
