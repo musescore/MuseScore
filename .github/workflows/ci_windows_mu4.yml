@@ -98,7 +98,7 @@ jobs:
       if: env.DO_BUILD == 'true'
       shell: cmd
       run: |
-        IF ${{ secrets.TELEMETRY_TRACK_ID != 0 }} == true ( SET T_ID=${{ secrets.TELEMETRY_TRACK_ID }} ) ELSE ( SET T_ID="''" )
+        IF ${{ secrets.TELEMETRY_TRACK_ID != 0 }} == true ( SET T_ID=${{ secrets.TELEMETRY_TRACK_ID }} ) ELSE ( SET T_ID="" )
         IF ${{ env.SENTRY_URL != 0 }} == true ( SET C_URL="${{ env.SENTRY_URL }}" ) ELSE ( SET C_URL="" )
         build\ci\windows\build.bat -n ${{ github.run_id }} --telemetry %T_ID% --crash_log_url %C_URL%
     - name: Generate dump symbols
