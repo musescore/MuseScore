@@ -4425,6 +4425,7 @@ void Score::undoAddElement(Element* element)
          || (et == ElementType::MARKER)
          || (et == ElementType::TEMPO_TEXT)
          || (et == ElementType::VOLTA)
+         || ((et == ElementType::TEXTLINE) && element->systemFlag())
          ) {
             for (Score* s : scoreList())
                   staffList.append(s->staff(0));
@@ -4438,8 +4439,8 @@ void Score::undoAddElement(Element* element)
                   if (ostaff && staff->score() == ostaff->score())
                         ne = element;
                   else {
-                        // only create linked volta for first staff
-                        if (et == ElementType::VOLTA && element->track() != 0)
+                        // only create linked volta/systemTextLine for first staff
+                        if (((et == ElementType::VOLTA) || (et == ElementType::TEXTLINE)) && element->track() != 0)
                               continue;
                         ne = element->linkedClone();
                         ne->setScore(score);
@@ -4447,7 +4448,7 @@ void Score::undoAddElement(Element* element)
                         ne->setTrack(staffIdx * VOICES + element->voice());
                         }
 
-                  if (et == ElementType::VOLTA) {
+                  if (et == ElementType::VOLTA || (et == ElementType::TEXTLINE)) {
                         Spanner* nsp = toSpanner(ne);
                         Spanner* sp = toSpanner(element);
                         int staffIdx1 = sp->track() / VOICES;
