@@ -826,6 +826,32 @@ void ChordRest::replaceBeam(Beam* newBeam)
     newBeam->add(this);
 }
 
+Slur* ChordRest::slur(const ChordRest* secondChordRest) const
+{
+    int currentTick = tick().ticks();
+    for (auto it : score()->spannerMap().findOverlapping(currentTick, currentTick + 1)) {
+        Ms::Spanner* spanner = it.value;
+        if (!spanner->isSlur()) {
+            continue;
+        }
+
+        Ms::Slur* slur = Ms::toSlur(spanner);
+        if (!secondChordRest) {
+            if (slur->endElement()->tick() > tick()) {
+                return slur;
+            }
+
+            continue;
+        }
+
+        if (slur->endElement() == secondChordRest) {
+            return slur;
+        }
+    }
+
+    return nullptr;
+}
+
 //---------------------------------------------------------
 //   undoSetBeamMode
 //---------------------------------------------------------

@@ -160,6 +160,8 @@ public:
     ElementList& el() { return _el; }
     const ElementList& el() const { return _el; }
 
+    Slur* slur(const ChordRest* secondChordRest = nullptr) const;
+
     CrossMeasure crossMeasure() const { return _crossMeasure; }
     void setCrossMeasure(CrossMeasure val) { _crossMeasure = val; }
     virtual void crossMeasureSetup(bool /*on*/) { }
