@@ -42,7 +42,7 @@ class MuseScoreCore
 
       virtual int appendScore(MasterScore* s)               { scoreList.append(s); return 0;  }
       virtual void endCmd() {}
-      virtual Score* openScore(const QString& /*fn*/, bool /*switchTab*/) { return 0;}
+      virtual Score* openScore(const QString& /*fn*/, bool /*switchTab*/, bool considerInCurrentSession = true) { Q_UNUSED(considerInCurrentSession); return 0;}
       QList<MasterScore*>& scores()                         { return scoreList; }
       virtual void updateInspector() {}
       };

@@ -393,7 +393,7 @@ void MuseScore::askAboutApplyingEdwinIfNeed(const QString& fileSuffix)
 //   openScore
 //---------------------------------------------------------
 
-Score* MuseScore::openScore(const QString& fn, bool switchTab)
+Score* MuseScore::openScore(const QString& fn, bool switchTab, const bool considerInCurrentSession)
       {
       //
       // make sure we load a file only once
@@ -401,7 +401,7 @@ Score* MuseScore::openScore(const QString& fn, bool switchTab)
       QFileInfo fi(fn);
       QString path = fi.canonicalFilePath();
       for (Score* s : scoreList) {
-            if (s->masterScore()->fileInfo()->canonicalFilePath() == path) {
+            if (s->masterScore() && s->masterScore()->fileInfo()->canonicalFilePath() == path) {
                   if (switchTab)
                         setCurrentScoreView(scoreList.indexOf(s->masterScore()));
                   return 0;
@@ -433,10 +433,13 @@ Score* MuseScore::openScore(const QString& fn, bool switchTab)
             score->update();
             score->styleChanged();
             score->doLayout();
-            const int tabIdx = appendScore(score);
-            if (switchTab)
-                  setCurrentScoreView(tabIdx);
-            writeSessionFile(false);
+
+            if (considerInCurrentSession) {
+                  const int tabIdx = appendScore(score);
+                  if (switchTab)
+                        setCurrentScoreView(tabIdx);
+                  writeSessionFile(false);
+                  }
             }
       return score;
       }
