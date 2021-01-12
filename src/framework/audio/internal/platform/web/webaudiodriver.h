@@ -32,10 +32,10 @@ public:
     void close() override;
     bool isOpened() const override;
 
-    std::string device() const override;
-    bool selectDevice(std::string name) override;
-    std::vector<std::string> availableDevices() const override;
-    async::Notification deviceListChanged() const override;
+    std::string outputDevice() const override;
+    bool selectOutputDevice(const std::string& name) override;
+    std::vector<std::string> availableOutputDevices() const override;
+    async::Notification availableOutputDevicesChanged() const override;
 
 private:
     bool m_opened = false;

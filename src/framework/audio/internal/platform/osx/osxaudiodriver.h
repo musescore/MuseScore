@@ -42,10 +42,10 @@ public:
     void close() override;
     bool isOpened() const override;
 
-    std::string device() const override;
-    bool selectDevice(std::string name) override;
-    std::vector<std::string> availableDevices() const override;
-    async::Notification deviceListChanged() const override;
+    std::string outputDevice() const override;
+    bool selectOutputDevice(const std::string& name) override;
+    std::vector<std::string> availableOutputDevices() const override;
+    async::Notification availableOutputDevicesChanged() const override;
     void updateDeviceMap();
 
 private:
@@ -53,13 +53,13 @@ private:
     static void logError(const std::string message, OSStatus error);
 
     void initDeviceMapListener();
-    bool audioQueueSetDeviceName(std::string deviceName);
+    bool audioQueueSetDeviceName(const std::string& deviceName);
 
     struct Data;
 
     std::shared_ptr<Data> m_data = nullptr;
-    std::map<unsigned int, std::string> m_devices = {};
-    async::Notification m_deviceListChanged;
+    std::map<unsigned int, std::string> m_outputDevices = {}, m_inputDevices = {};
+    async::Notification m_availableOutputDevicesChanged;
     std::string m_deviceName = DEFAULT_DEVICE_NAME;
 };
 }

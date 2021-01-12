@@ -58,10 +58,10 @@ public:
     virtual void close() = 0;
     virtual bool isOpened() const = 0;
 
-    virtual std::string device() const = 0;
-    virtual bool selectDevice(std::string name) = 0;
-    virtual std::vector<std::string> availableDevices() const = 0;
-    virtual async::Notification deviceListChanged() const = 0;
+    virtual std::string outputDevice() const = 0;
+    virtual bool selectOutputDevice(const std::string& name) = 0;
+    virtual std::vector<std::string> availableOutputDevices() const = 0;
+    virtual async::Notification availableOutputDevicesChanged() const = 0;
 };
 }
 }
