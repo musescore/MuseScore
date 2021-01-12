@@ -384,48 +384,6 @@ void MScore::init()
         }
     }
 
-    //
-    //  load internal fonts
-    //
-    //
-    // do not load application specific fonts
-    // for MAC, they are in Resources/fonts
-    //
-#if !defined(Q_OS_MAC) && !defined(Q_OS_IOS)
-    static const char* fonts[] = {
-        ":/fonts/musejazz/MuseJazzText.otf",
-        ":/fonts/campania/Campania.otf",
-        ":/fonts/FreeSans.ttf",
-        ":/fonts/firasans/FiraSansRegular.ttf",
-        ":/fonts/firasans/FiraSansSemiBold.ttf",
-        ":/fonts/FreeSerif.ttf",
-        ":/fonts/FreeSerifBold.ttf",
-        ":/fonts/FreeSerifItalic.ttf",
-        ":/fonts/FreeSerifBoldItalic.ttf",
-        ":/fonts/mscoreTab.ttf",
-        ":/fonts/mscore-BC.ttf",
-        ":/fonts/bravura/BravuraText.otf",
-        ":/fonts/gootville/GootvilleText.otf",
-        ":/fonts/mscore/MScoreText.ttf",
-        ":/fonts/mscore/MusescoreIcon.ttf",
-        ":/fonts/leland/Leland.otf",
-        ":/fonts/petaluma/PetalumaText.otf",
-        ":/fonts/petaluma/PetalumaScript.otf",
-    };
-
-    for (unsigned i = 0; i < sizeof(fonts) / sizeof(*fonts); ++i) {
-        QString str(fonts[i]);
-        if (-1 == QFontDatabase::addApplicationFont(str)) {
-            if (!MScore::testMode) {
-                qDebug("Mscore: fatal error: cannot load internal font <%s>", qPrintable(str));
-            }
-            if (!MScore::debugMode && !MScore::testMode) {
-                exit(-1);
-            }
-        }
-    }
-
-#endif
     initScoreFonts();
     StaffType::initStaffTypes();
     initDrumset();
