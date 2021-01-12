@@ -16,23 +16,20 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FONTS_FONTSMODULE_H
-#define MU_FONTS_FONTSMODULE_H
+#ifndef MU_FONTS_FONTSCONTROLLER_H
+#define MU_FONTS_FONTSCONTROLLER_H
 
-#include "modularity/imodulesetup.h"
+#include "modularity/imoduleexport.h"
 
 namespace mu::fonts {
-class FontsModule : public framework::IModuleSetup
+class FontsController
 {
 public:
+    void init();
 
-    std::string moduleName() const override;
-
-    void registerResources() override;
-    void registerExports() override;
-
-    void onInit(const framework::IApplication::RunMode&) override;
+private:
+    void loadInternalFonts();
 };
 }
 
-#endif // MU_FONTS_FONTSMODULE_H
+#endif // MU_FONTS_FONTSCONTROLLER_H
