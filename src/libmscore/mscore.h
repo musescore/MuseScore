@@ -320,6 +320,7 @@ public:
     static std::vector<MScoreError> errorList;
 
     static void init();
+    static void registerUiTypes();
 
     static const MStyle& baseStyle() { return _baseStyle; }
     static MStyle& defaultStyle() { return _defaultStyle; }

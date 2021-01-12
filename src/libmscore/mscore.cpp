@@ -264,47 +264,6 @@ void MScore::init()
         return;
     }
 
-    if (!QMetaType::registerConverter<Spatium, double>(&Spatium::toDouble)) {
-        qFatal("registerConverter Spatium::toDouble failed");
-    }
-    if (!QMetaType::registerConverter<double, Spatium>(&doubleToSpatium)) {
-        qFatal("registerConverter doubleToSpatium failed");
-    }
-//      if (!QMetaType::registerComparators<Spatium>())
-//            qFatal("registerComparators for Spatium failed");
-
-#ifdef SCRIPT_INTERFACE
-    qRegisterMetaType<Note::ValueType>("ValueType");
-
-    qRegisterMetaType<MScore::DirectionH>("DirectionH");
-    qRegisterMetaType<Spanner::Anchor>("Anchor");
-    qRegisterMetaType<NoteHead::Group>("NoteHeadGroup");
-    qRegisterMetaType<NoteHead::Type>("NoteHeadType");
-    qRegisterMetaType<SegmentType>("SegmentType");
-    qRegisterMetaType<FiguredBassItem::Modifier>("Modifier");
-    qRegisterMetaType<FiguredBassItem::Parenthesis>("Parenthesis");
-    qRegisterMetaType<FiguredBassItem::ContLine>("ContLine");
-    qRegisterMetaType<Volta::Type>("VoltaType");
-    qRegisterMetaType<OttavaType>("OttavaType");
-    qRegisterMetaType<Trill::Type>("TrillType");
-    qRegisterMetaType<Dynamic::Range>("DynamicRange");
-    qRegisterMetaType<Jump::Type>("JumpType");
-    qRegisterMetaType<Marker::Type>("MarkerType");
-    qRegisterMetaType<Beam::Mode>("BeamMode");
-    qRegisterMetaType<HairpinType>("HairpinType");
-    qRegisterMetaType<Lyrics::Syllabic>("Syllabic");
-    qRegisterMetaType<LayoutBreak::Type>("LayoutBreakType");
-
-    //classed enumerations
-//      qRegisterMetaType<MSQE_StyledPropertyListIdx::E>("StyledPropertyListIdx");
-//      qRegisterMetaType<MSQE_BarLineType::E>("BarLineType");
-#endif
-    qRegisterMetaType<Fraction>("Fraction");
-
-    if (!QMetaType::registerConverter<Fraction, QString>(&Fraction::toString)) {
-        qFatal("registerConverter Fraction::toString failed");
-    }
-
 #ifdef Q_OS_WIN
     QDir dir(QCoreApplication::applicationDirPath() + QString("/../" INSTALL_NAME));
     _globalShare = dir.absolutePath() + "/";
@@ -394,6 +353,50 @@ void MScore::init()
 #endif
 
     initDone = true;
+}
+
+void MScore::registerUiTypes()
+{
+    if (!QMetaType::registerConverter<Spatium, double>(&Spatium::toDouble)) {
+        qFatal("registerConverter Spatium::toDouble failed");
+    }
+    if (!QMetaType::registerConverter<double, Spatium>(&doubleToSpatium)) {
+        qFatal("registerConverter doubleToSpatium failed");
+    }
+//      if (!QMetaType::registerComparators<Spatium>())
+//            qFatal("registerComparators for Spatium failed");
+
+#ifdef SCRIPT_INTERFACE
+    qRegisterMetaType<Note::ValueType>("ValueType");
+
+    qRegisterMetaType<MScore::DirectionH>("DirectionH");
+    qRegisterMetaType<Spanner::Anchor>("Anchor");
+    qRegisterMetaType<NoteHead::Group>("NoteHeadGroup");
+    qRegisterMetaType<NoteHead::Type>("NoteHeadType");
+    qRegisterMetaType<SegmentType>("SegmentType");
+    qRegisterMetaType<FiguredBassItem::Modifier>("Modifier");
+    qRegisterMetaType<FiguredBassItem::Parenthesis>("Parenthesis");
+    qRegisterMetaType<FiguredBassItem::ContLine>("ContLine");
+    qRegisterMetaType<Volta::Type>("VoltaType");
+    qRegisterMetaType<OttavaType>("OttavaType");
+    qRegisterMetaType<Trill::Type>("TrillType");
+    qRegisterMetaType<Dynamic::Range>("DynamicRange");
+    qRegisterMetaType<Jump::Type>("JumpType");
+    qRegisterMetaType<Marker::Type>("MarkerType");
+    qRegisterMetaType<Beam::Mode>("BeamMode");
+    qRegisterMetaType<HairpinType>("HairpinType");
+    qRegisterMetaType<Lyrics::Syllabic>("Syllabic");
+    qRegisterMetaType<LayoutBreak::Type>("LayoutBreakType");
+
+    //classed enumerations
+//      qRegisterMetaType<MSQE_StyledPropertyListIdx::E>("StyledPropertyListIdx");
+//      qRegisterMetaType<MSQE_BarLineType::E>("BarLineType");
+#endif
+    qRegisterMetaType<Fraction>("Fraction");
+
+    if (!QMetaType::registerConverter<Fraction, QString>(&Fraction::toString)) {
+        qFatal("registerConverter Fraction::toString failed");
+    }
 }
 
 //---------------------------------------------------------
