@@ -4,16 +4,17 @@ import QtQuick.Controls 2.12
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-Item {
+ListItemBlank {
     id: root
 
     property string title: ""
     property int maxTitleWidth: 0
-    property bool isSelected: false
     property bool isMain: false
     property int currentPartIndex: -1
     property alias voicesVisibility: voicesPopup.voicesVisibility
     property alias voicesTitle: voicesLabel.text
+
+    property int sidePadding: 0
 
     signal copyPartRequested()
     signal removePartRequested()
@@ -34,10 +35,20 @@ Item {
 
     height: 42
 
+    onClicked: {
+        voicesPopup.close()
+        root.partClicked()
+    }
+
+    onDoubleClicked: {
+        root.startEditTitle()
+    }
+
     StyledIconLabel {
         id: partIcon
 
         anchors.left: parent.left
+        anchors.leftMargin: root.sidePadding
 
         height: parent.height
         width: height
@@ -122,6 +133,7 @@ Item {
 
     FlatButton {
         anchors.right: parent.right
+        anchors.rightMargin: root.sidePadding
         anchors.verticalCenter: parent.verticalCenter
 
         normalStateColor: "transparent"
@@ -179,71 +191,6 @@ Item {
         Component.onCompleted: {
             if (root.isMain) {
                 removeItem(deleteItem)
-            }
-        }
-    }
-
-    Rectangle {
-        id: background
-
-        anchors.fill: parent
-        anchors.leftMargin: -root.anchors.leftMargin
-        anchors.rightMargin: -root.anchors.rightMargin
-
-        z: -1
-
-        color: "transparent"
-        opacity: 1
-
-        states: [
-            State {
-                name: "HOVERED"
-                when: mouseArea.containsMouse && !mouseArea.pressed && !root.isSelected
-
-                PropertyChanges {
-                    target: background
-                    opacity: ui.theme.buttonOpacityHover
-                    color: ui.theme.buttonColor
-                }
-            },
-
-            State {
-                name: "PRESSED"
-                when: mouseArea.pressed && !root.isSelected
-
-                PropertyChanges {
-                    target: background
-                    opacity: ui.theme.buttonOpacityHit
-                    color: ui.theme.buttonColor
-                }
-            },
-
-            State {
-                name: "SELECTED"
-                when: root.isSelected
-
-                PropertyChanges {
-                    target: background
-                    opacity: ui.theme.accentOpacityHit
-                    color: ui.theme.accentColor
-                }
-            }
-        ]
-
-        MouseArea {
-            id: mouseArea
-
-            anchors.fill: parent
-
-            hoverEnabled: true
-
-            onClicked: {
-                voicesPopup.close()
-                root.partClicked()
-            }
-
-            onDoubleClicked: {
-                root.startEditTitle()
             }
         }
     }

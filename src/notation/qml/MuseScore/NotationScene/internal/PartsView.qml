@@ -81,11 +81,6 @@ Item {
         delegate: PartDelegate {
             readonly property int sideMargin: 24
 
-            anchors.left: parent.left
-            anchors.leftMargin: sideMargin
-            anchors.right: parent.right
-            anchors.rightMargin: sideMargin
-
             title: model.title
             maxTitleWidth: voicesVisibilityHeader.x
             currentPartIndex: view.currentIndex
@@ -93,6 +88,7 @@ Item {
             isMain: model.isMain
             voicesVisibility: model.voicesVisibility
             voicesTitle: model.voicesTitle
+            sidePadding: 24
 
             onPartClicked: {
                 root.model.selectPart(model.index)
