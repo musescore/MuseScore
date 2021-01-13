@@ -1463,6 +1463,7 @@ class MStyle {
 
       bool isDefault(Sid idx) const;
       void setDefaultStyleVersion(const int defaultsVersion);
+      int defaultStyleVersion() const { return _defaultStyleVersion; }
 
       const ChordDescription* chordDescription(int id) const;
       ChordList* chordList()  { return &_chordList; }
