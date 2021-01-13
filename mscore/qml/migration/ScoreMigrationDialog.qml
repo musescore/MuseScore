@@ -85,7 +85,7 @@ FocusScope {
 
                 CheckBoxControl {
                     checked: root.model ? root.model.isLelandAllowed : false
-                    text: qsTr("Our new professional notation font, Leland")
+                    text: qsTr("Our new professional notation font, %1").arg("Leland")
 
                     onToggled: {
                         root.model.isLelandAllowed = checked
@@ -94,7 +94,7 @@ FocusScope {
 
                 CheckBoxControl {
                     checked: root.model ? root.model.isEdwinAllowed : false
-                    text: qsTr("Our improved text font, Edwin")
+                    text: qsTr("Our improved text font, %1").arg("Edwin")
 
                     onToggled: {
                         root.model.isEdwinAllowed = checked

@@ -372,9 +372,9 @@ void MuseScore::askAboutApplyingEdwinIfNeed(const QString& fileSuffix)
 
     QMessageBox dialog;
     dialog.setWindowTitle(QObject::tr("MuseScore"));
-    dialog.setText(QObject::tr("Would you like to apply our default typeface (Edwin) to this score?"));
-    QPushButton* noButton = dialog.addButton(QObject::tr("Do not apply Edwin"), QMessageBox::NoRole);
-    QPushButton* yesButton = dialog.addButton(QObject::tr("Apply Edwin"), QMessageBox::YesRole);
+    dialog.setText(QObject::tr("Would you like to apply our default typeface (%1) to this score?").arg("Edwin"));
+    QPushButton* noButton = dialog.addButton(QObject::tr("No"), QMessageBox::NoRole); // No
+    QPushButton* yesButton = dialog.addButton(QObject::tr("Yes"), QMessageBox::YesRole);
     dialog.setDefaultButton(noButton);
 
     QCheckBox askAgainCheckbox(QObject::tr("Remember my choice and don't ask again"));
