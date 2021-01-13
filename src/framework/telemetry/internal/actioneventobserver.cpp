@@ -42,7 +42,7 @@ QPair<QString, QString> ActionEventObserver::extractActionData(QObject* watched)
     QPair<QString, QString> result;
 
     QString actionCategory;
-    QString actionName;
+    QString actionCode;
 
     if (qobject_cast<QMenu*>(watched)) {
         QMenu* watchedMenu = qobject_cast<QMenu*>(watched);
@@ -51,10 +51,10 @@ QPair<QString, QString> ActionEventObserver::extractActionData(QObject* watched)
 
         if (activeAction) {
             if (activeAction->data().type() == QVariant::String) {
-                actionName = activeAction->data().toString();
+                actionCode = activeAction->data().toString();
             } else if (activeAction->data().type() == QVariant::Map) {
                 QVariantMap actionDataMap = activeAction->data().toMap();
-                actionName = actionDataMap.value("actionName").toString();
+                actionCode = actionDataMap.value("actionCode").toString();
             }
 
             actionCategory = QStringLiteral("menu item click");
@@ -65,13 +65,13 @@ QPair<QString, QString> ActionEventObserver::extractActionData(QObject* watched)
         QAction* activeAction = watchedButton->defaultAction();
 
         if (activeAction) {
-            actionName = activeAction->data().toString();
+            actionCode = activeAction->data().toString();
             actionCategory = QStringLiteral("button clicked");
         }
     }
 
     result.first = actionCategory;
-    result.second = actionName;
+    result.second = actionCode;
 
     return result;
 }

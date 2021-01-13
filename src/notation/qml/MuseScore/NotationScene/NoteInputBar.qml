@@ -40,7 +40,7 @@ Rectangle {
             icon: Boolean(item) ? item.iconRole : null
 
             onClicked: {
-                noteInputModel.handleAction(item.nameRole)
+                noteInputModel.handleAction(item.codeRole)
             }
         }
     }

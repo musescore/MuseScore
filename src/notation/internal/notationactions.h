@@ -27,15 +27,15 @@ class NotationActions : public actions::IModuleActions
 {
 public:
 
-    const actions::Action& action(const actions::ActionName& actionName) const override;
+    const actions::ActionItem& action(const actions::ActionCode& actionCode) const override;
 
     static actions::ActionList defaultNoteInputActions();
 
-    static DurationType actionDurationType(const actions::ActionName& actionName);
-    static AccidentalType actionAccidentalType(const actions::ActionName& actionName);
-    static int actionDotCount(const actions::ActionName& actionName);
-    static int actionVoice(const actions::ActionName& actionName);
-    static SymbolId actionArticulationSymbolId(const actions::ActionName& actionName);
+    static DurationType actionDurationType(const actions::ActionCode& actionCode);
+    static AccidentalType actionAccidentalType(const actions::ActionCode& actionCode);
+    static int actionDotCount(const actions::ActionCode& actionCode);
+    static int actionVoice(const actions::ActionCode& actionCode);
+    static SymbolId actionArticulationSymbolId(const actions::ActionCode& actionCode);
 
 private:
     static const actions::ActionList m_actions;

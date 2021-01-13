@@ -4,8 +4,8 @@ import MuseScore.Ui 1.0
 StyledTextLabel {
     id: root
 
-    property var iconCode
-    property bool isEmpty: iconCode === undefined
+    property int iconCode: IconCode.NONE
+    property bool isEmpty: iconCode === IconCode.NONE
 
     height: isEmpty ? 0 : implicitHeight
     width: isEmpty ? 0 : implicitWidth
@@ -22,7 +22,7 @@ StyledTextLabel {
 
         switch (code) {
         case IconCode.AUTO: result = "AUTO"; break
-        case IconCode.NONE: result = "NONE"; break
+        case IconCode.NONE: result = ""; break
         case IconCode.CUSTOM: result = "Custom"; break
         default: result = String.fromCharCode(code); break
         }

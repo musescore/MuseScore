@@ -90,7 +90,7 @@ void PaletteElementEditor::onElementAdded(const Element* el)
         return;
     }
     QVariantMap mimeData;
-    mimeData[mu::MIME_SYMBOL_FORMAT] = el->mimeData(QPointF());
+    mimeData[mu::commonscene::MIME_SYMBOL_FORMAT] = el->mimeData(QPointF());
     _controller->insert(_paletteIndex, -1, mimeData, Qt::CopyAction);
 }
 
@@ -228,7 +228,7 @@ Qt::DropAction UserPaletteController::dropAction(const QVariantMap& mimeData, Qt
         }
         return Qt::MoveAction;
     }
-    if (mimeData.contains(mu::MIME_SYMBOL_FORMAT) && proposedAction == Qt::CopyAction) {
+    if (mimeData.contains(mu::commonscene::MIME_SYMBOL_FORMAT) && proposedAction == Qt::CopyAction) {
         if (_filterCustom && !_custom) {
             return Qt::IgnoreAction;
         }
@@ -273,8 +273,8 @@ bool UserPaletteController::insert(const QModelIndex& parent, int row, const QVa
                 return false;
             }
         }
-    } else if (mimeData.contains(mu::MIME_SYMBOL_FORMAT) && (action == Qt::CopyAction)) {
-        cell = PaletteCell::readElementMimeData(mimeData[mu::MIME_SYMBOL_FORMAT].toByteArray());
+    } else if (mimeData.contains(mu::commonscene::MIME_SYMBOL_FORMAT) && (action == Qt::CopyAction)) {
+        cell = PaletteCell::readElementMimeData(mimeData[mu::commonscene::MIME_SYMBOL_FORMAT].toByteArray());
     }
 
     if (!cell) {

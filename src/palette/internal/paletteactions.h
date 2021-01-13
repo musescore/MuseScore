@@ -25,10 +25,10 @@ namespace mu::palette {
 class PaletteActions : public actions::IModuleActions
 {
 public:
-    const actions::Action& action(const actions::ActionName& name) const override;
+    const actions::ActionItem& action(const actions::ActionCode& actionCode) const override;
 
 private:
-    static const std::vector<actions::Action> m_actions;
+    static const std::vector<actions::ActionItem> m_actions;
 };
 }
 

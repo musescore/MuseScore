@@ -19,9 +19,11 @@
 #include "playbacktoolbarmodel.h"
 
 #include "log.h"
+#include "translation.h"
 
 using namespace mu::playback;
 using namespace mu::actions;
+using namespace mu::framework;
 
 PlaybackToolBarModel::PlaybackToolBarModel(QObject* parent)
     : QAbstractListModel(parent)
@@ -30,10 +32,10 @@ PlaybackToolBarModel::PlaybackToolBarModel(QObject* parent)
 
 QVariant PlaybackToolBarModel::data(const QModelIndex& index, int role) const
 {
-    const ActionItem& item = m_items.at(index.row());
+    const MenuItem& item = m_items.at(index.row());
     switch (role) {
-    case TitleRole: return QString::fromStdString(item.action.title);
-    case NameRole: return QString::fromStdString(item.action.name);
+    case TitleRole: return QString::fromStdString(item.title);
+    case CodeRole: return QString::fromStdString(item.code);
     case EnabledRole: return item.enabled;
     case CheckedRole: return item.checked;
     }
@@ -48,7 +50,7 @@ int PlaybackToolBarModel::rowCount(const QModelIndex&) const
 QHash<int,QByteArray> PlaybackToolBarModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles = {
-        { NameRole, "nameRole" },
+        { CodeRole, "codeRole" },
         { TitleRole, "titleRole" },
         { EnabledRole, "enabledRole" },
         { CheckedRole, "checkedRole" }
@@ -58,15 +60,9 @@ QHash<int,QByteArray> PlaybackToolBarModel::roleNames() const
 
 void PlaybackToolBarModel::load()
 {
-    auto makeItem = [](const Action& action) {
-        ActionItem item;
-        item.action = action;
-        return item;
-    };
-
     beginResetModel();
 
-    m_items << makeItem(Action("play", "Play", shortcuts::ShortcutContext::Any));
+    m_items << ActionItem("play", shortcuts::ShortcutContext::Any, trc("playback", "Play"));
 
     endResetModel();
 
@@ -85,7 +81,7 @@ void PlaybackToolBarModel::click(const QString& action)
 {
     LOGI() << action;
 
-    dispatcher()->dispatch(actions::namefromQString(action));
+    dispatcher()->dispatch(actions::codeFromQString(action));
 }
 
 void PlaybackToolBarModel::updateState()
@@ -93,12 +89,12 @@ void PlaybackToolBarModel::updateState()
     bool isPlayAllowed = playbackController()->isPlayAllowed();
 
     if (!isPlayAllowed) {
-        for (ActionItem& item : m_items) {
+        for (MenuItem& item : m_items) {
             item.enabled = false;
             item.checked = false;
         }
     } else {
-        for (ActionItem& item : m_items) {
+        for (MenuItem& item : m_items) {
             item.enabled = true;
             item.checked = false;
         }
@@ -109,15 +105,15 @@ void PlaybackToolBarModel::updateState()
     emit dataChanged(index(0), index(rowCount() - 1));
 }
 
-PlaybackToolBarModel::ActionItem& PlaybackToolBarModel::item(const actions::ActionName& name)
+MenuItem& PlaybackToolBarModel::item(const actions::ActionCode& actionCode)
 {
-    for (ActionItem& item : m_items) {
-        if (item.action.name == name) {
+    for (MenuItem& item : m_items) {
+        if (item.code == actionCode) {
             return item;
         }
     }
 
-    LOGE() << "item not found with name: " << name;
-    static ActionItem null;
+    LOGE() << "item not found with name: " << actionCode;
+    static MenuItem null;
     return null;
 }

@@ -27,11 +27,11 @@ using namespace mu::notation;
 using namespace mu::actions;
 
 static constexpr int INVALID_BOX_INDEX = -1;
-static const ActionName ESCAPE_ACTION_NAME = "escape";
+static const ActionCode ESCAPE_ACTION_CODE = "escape";
 
 void NotationActionController::init()
 {
-    dispatcher()->reg(this, ESCAPE_ACTION_NAME, this, &NotationActionController::resetState);
+    dispatcher()->reg(this, ESCAPE_ACTION_CODE, this, &NotationActionController::resetState);
 
     dispatcher()->reg(this, "note-input", [this]() { toggleNoteInputMethod(NoteInputMethod::STEPTIME); });
     dispatcher()->reg(this, "note-input-rhythm", [this]() { toggleNoteInputMethod(NoteInputMethod::RHYTHM); });
@@ -107,18 +107,18 @@ void NotationActionController::init()
     dispatcher()->reg(this, "put-note", this, &NotationActionController::putNote);
 
     //! NOTE For historical reasons, the name of the action does not match what needs to be done.
-    dispatcher()->reg(this, "next-element", [this](const ActionName& action) { moveAction(action); });
-    dispatcher()->reg(this, "prev-element", [this](const ActionName& action) { moveAction(action); });
-    dispatcher()->reg(this, "next-chord", [this](const ActionName& action) { moveAction(action); });
-    dispatcher()->reg(this, "prev-chord", [this](const ActionName& action) { moveAction(action); });
-    dispatcher()->reg(this, "next-measure", [this](const ActionName& action) { moveAction(action); });
-    dispatcher()->reg(this, "prev-measure", [this](const ActionName& action) { moveAction(action); });
-    dispatcher()->reg(this, "next-track", [this](const ActionName& action) { moveAction(action); });
-    dispatcher()->reg(this, "prev-track", [this](const ActionName& action) { moveAction(action); });
-    dispatcher()->reg(this, "pitch-up", [this](const ActionName& action) { moveAction(action); });
-    dispatcher()->reg(this, "pitch-down", [this](const ActionName& action) { moveAction(action); });
-    dispatcher()->reg(this, "pitch-up-octave", [this](const ActionName& action) { moveAction(action); });
-    dispatcher()->reg(this, "pitch-down-octave", [this](const ActionName& action) { moveAction(action); });
+    dispatcher()->reg(this, "next-element", [this](const ActionCode& actionCode) { moveAction(actionCode); });
+    dispatcher()->reg(this, "prev-element", [this](const ActionCode& actionCode) { moveAction(actionCode); });
+    dispatcher()->reg(this, "next-chord", [this](const ActionCode& actionCode) { moveAction(actionCode); });
+    dispatcher()->reg(this, "prev-chord", [this](const ActionCode& actionCode) { moveAction(actionCode); });
+    dispatcher()->reg(this, "next-measure", [this](const ActionCode& actionCode) { moveAction(actionCode); });
+    dispatcher()->reg(this, "prev-measure", [this](const ActionCode& actionCode) { moveAction(actionCode); });
+    dispatcher()->reg(this, "next-track", [this](const ActionCode& actionCode) { moveAction(actionCode); });
+    dispatcher()->reg(this, "prev-track", [this](const ActionCode& actionCode) { moveAction(actionCode); });
+    dispatcher()->reg(this, "pitch-up", [this](const ActionCode& actionCode) { moveAction(actionCode); });
+    dispatcher()->reg(this, "pitch-down", [this](const ActionCode& actionCode) { moveAction(actionCode); });
+    dispatcher()->reg(this, "pitch-up-octave", [this](const ActionCode& actionCode) { moveAction(actionCode); });
+    dispatcher()->reg(this, "pitch-down-octave", [this](const ActionCode& actionCode) { moveAction(actionCode); });
 
     dispatcher()->reg(this, "cut", this, &NotationActionController::cutSelection);
     dispatcher()->reg(this, "copy", this, &NotationActionController::copySelection);
@@ -204,14 +204,14 @@ void NotationActionController::init()
     }
 }
 
-bool NotationActionController::canReceiveAction(const actions::ActionName& actionName) const
+bool NotationActionController::canReceiveAction(const actions::ActionCode& actionCode) const
 {
     if (!currentNotation()) {
         return false;
     }
 
     if (isTextEditting()) {
-        return actionName == ESCAPE_ACTION_NAME;
+        return actionCode == ESCAPE_ACTION_CODE;
     }
 
     return true;
@@ -420,7 +420,7 @@ void NotationActionController::putTuplet(int tupletCount)
     }
 }
 
-void NotationActionController::moveAction(const actions::ActionName& action)
+void NotationActionController::moveAction(const actions::ActionCode& actionCode)
 {
     auto interaction = currentNotationInteraction();
     if (!interaction) {
@@ -436,73 +436,73 @@ void NotationActionController::moveAction(const actions::ActionName& action)
     if (el->isLyrics()) {
         NOT_IMPLEMENTED;
     } else if (el->isTextBase()) {
-        moveText(interaction, action);
+        moveText(interaction, actionCode);
     } else {
-        if ("pitch-up" == action) {
+        if ("pitch-up" == actionCode) {
             if (el->isRest()) {
-                NOT_IMPLEMENTED << action << ", el->isRest";
+                NOT_IMPLEMENTED << actionCode << ", el->isRest";
             } else {
                 interaction->movePitch(MoveDirection::Up, PitchMode::CHROMATIC);
             }
-        } else if ("pitch-down" == action) {
+        } else if ("pitch-down" == actionCode) {
             if (el->isRest()) {
-                NOT_IMPLEMENTED << action << ", el->isRest";
+                NOT_IMPLEMENTED << actionCode << ", el->isRest";
             } else {
                 interaction->movePitch(MoveDirection::Down, PitchMode::CHROMATIC);
             }
-        } else if ("pitch-up-octave" == action) {
+        } else if ("pitch-up-octave" == actionCode) {
             interaction->movePitch(MoveDirection::Up, PitchMode::OCTAVE);
-        } else if ("pitch-down-octave" == action) {
+        } else if ("pitch-down-octave" == actionCode) {
             interaction->movePitch(MoveDirection::Down, PitchMode::OCTAVE);
-        } else if ("next-element" == action) {
+        } else if ("next-element" == actionCode) {
             interaction->moveSelection(MoveDirection::Right, MoveSelectionType::Element);
-        } else if ("prev-element" == action) {
+        } else if ("prev-element" == actionCode) {
             interaction->moveSelection(MoveDirection::Left, MoveSelectionType::Element);
-        } else if ("next-chord" == action) {
+        } else if ("next-chord" == actionCode) {
             interaction->moveSelection(MoveDirection::Right, MoveSelectionType::Chord);
-        } else if ("prev-chord" == action) {
+        } else if ("prev-chord" == actionCode) {
             interaction->moveSelection(MoveDirection::Left, MoveSelectionType::Chord);
-        } else if ("next-measure" == action) {
+        } else if ("next-measure" == actionCode) {
             interaction->moveSelection(MoveDirection::Right, MoveSelectionType::Measure);
-        } else if ("prev-measure" == action) {
+        } else if ("prev-measure" == actionCode) {
             interaction->moveSelection(MoveDirection::Left, MoveSelectionType::Measure);
-        } else if ("next-track" == action) {
+        } else if ("next-track" == actionCode) {
             interaction->moveSelection(MoveDirection::Right, MoveSelectionType::Track);
-        } else if ("prev-track" == action) {
+        } else if ("prev-track" == actionCode) {
             interaction->moveSelection(MoveDirection::Left, MoveSelectionType::Track);
         } else {
-            NOT_SUPPORTED << action;
+            NOT_SUPPORTED << actionCode;
         }
     }
 }
 
-void NotationActionController::moveText(INotationInteractionPtr interaction, const actions::ActionName& action)
+void NotationActionController::moveText(INotationInteractionPtr interaction, const actions::ActionCode& actionCode)
 {
     MoveDirection direction = MoveDirection::Undefined;
     bool quickly = false;
 
-    if ("next-chord" == action) {
+    if ("next-chord" == actionCode) {
         direction = MoveDirection::Right;
-    } else if ("next-measure" == action) {
+    } else if ("next-measure" == actionCode) {
         direction = MoveDirection::Right;
         quickly = true;
-    } else if ("prev-chord" == action) {
+    } else if ("prev-chord" == actionCode) {
         direction = MoveDirection::Left;
-    } else if ("prev-measure" == action) {
+    } else if ("prev-measure" == actionCode) {
         direction = MoveDirection::Left;
         quickly = true;
-    } else if ("pitch-up" == action) {
+    } else if ("pitch-up" == actionCode) {
         direction = MoveDirection::Up;
-    } else if ("pitch-down" == action) {
+    } else if ("pitch-down" == actionCode) {
         direction = MoveDirection::Down;
-    } else if ("pitch-up-octave" == action) {
+    } else if ("pitch-up-octave" == actionCode) {
         direction = MoveDirection::Up;
         quickly = true;
-    } else if ("pitch-down-octave" == action) {
+    } else if ("pitch-down-octave" == actionCode) {
         direction = MoveDirection::Down;
         quickly = true;
     } else {
-        NOT_SUPPORTED << action;
+        NOT_SUPPORTED << actionCode;
         return;
     }
 

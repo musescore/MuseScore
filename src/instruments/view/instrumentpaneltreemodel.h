@@ -100,7 +100,7 @@ private slots:
     void updateRemovingAvailability();
 
 private:
-    bool canReceiveAction(const actions::ActionName&) const override;
+    bool canReceiveAction(const actions::ActionCode&) const override;
 
     enum RoleNames {
         ItemRole = Qt::UserRole + 1

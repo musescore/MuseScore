@@ -71,7 +71,7 @@ InstrumentPanelTreeModel::~InstrumentPanelTreeModel()
     deleteItems();
 }
 
-bool InstrumentPanelTreeModel::canReceiveAction(const actions::ActionName&) const
+bool InstrumentPanelTreeModel::canReceiveAction(const actions::ActionCode&) const
 {
     return m_masterNotationParts != nullptr;
 }

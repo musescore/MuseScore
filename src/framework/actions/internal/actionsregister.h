@@ -30,7 +30,7 @@ public:
     ActionsRegister() = default;
 
     void reg(const std::shared_ptr<IModuleActions>& actions) override;
-    const Action& action(const ActionName& name) const override;
+    const ActionItem& action(const ActionCode& name) const override;
 
 private:
 

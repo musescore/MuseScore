@@ -144,10 +144,10 @@ const ShortcutList& ShortcutsRegister::shortcuts() const
     return m_shortcuts;
 }
 
-Shortcut ShortcutsRegister::shortcut(const std::string& actionName) const
+Shortcut ShortcutsRegister::shortcut(const std::string& actionCode) const
 {
     for (const Shortcut& shortcut: m_shortcuts) {
-        if (shortcut.action == actionName) {
+        if (shortcut.action == actionCode) {
             return shortcut;
         }
     }
