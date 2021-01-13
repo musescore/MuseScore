@@ -110,12 +110,11 @@ QList<Ms::NamedEventList> InstrumentsConverter::convertMidiActions(const MidiAct
         event.descr = action.description;
 
         for (const midi::Event& midiEvent: action.events) {
-            Ms::MidiCoreEvent midiCoreEvent;
-            midiCoreEvent.setType(static_cast<uchar>(midiEvent.type()));
-            midiCoreEvent.setChannel(midiCoreEvent.channel());
-            //!FIXME
-            //midiCoreEvent.setData(midiEvent.a, midiEvent.b);
-            event.events.push_back(midiCoreEvent);
+            auto midi10Events = midiEvent.toMIDI10();
+            for (const auto& midi10Event : midi10Events) {
+                Ms::MidiCoreEvent midiCoreEvent = midi10Event.toMSEvent();
+                event.events.push_back(midiCoreEvent);
+            }
         }
     }
 
@@ -132,12 +131,7 @@ MidiActionList InstrumentsConverter::convertMidiActions(const QList<Ms::NamedEve
         action.description = coreAction.descr;
 
         for (const Ms::MidiCoreEvent& midiCoreEvent: coreAction.events) {
-            midi::Event midiEvent(midiCoreEvent.channel(),
-                                  static_cast<midi::EventType>(midiCoreEvent.type()),
-                                  midiCoreEvent.dataA(),
-                                  midiCoreEvent.dataB()
-                                  );
-
+            midi::Event midiEvent(midiCoreEvent);
             action.events.push_back(midiEvent);
         }
     }

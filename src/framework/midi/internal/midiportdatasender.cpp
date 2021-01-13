@@ -40,8 +40,6 @@ void MidiPortDataSender::onChunkReceived(const Chunk& chunk)
 
 bool MidiPortDataSender::sendEvents(tick_t fromTick, tick_t toTick)
 {
-    static const std::set<EventType> SKIP_EVENTS = { EventType::ME_EOT, EventType::ME_TICK1, EventType::ME_TICK2 };
-
     //! NOTE Here we need to set up a callback to receive data in the same thread as reading,
     //! and accordingly, then the mutex is not needed
     if (m_stream->isStreamingAllowed && !m_isStreamConnected) {
@@ -82,7 +80,7 @@ bool MidiPortDataSender::sendEvents(tick_t fromTick, tick_t toTick)
 
         const Event& event = pos->second;
 
-        if (SKIP_EVENTS.find(event.type()) == SKIP_EVENTS.end()) {
+        if (event) {
             midiOutPort()->sendEvent(event);
         }
 

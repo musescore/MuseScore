@@ -195,8 +195,6 @@ std::shared_ptr<ISynthesizer> Sequencer::synth(channel_t ch) const
 
 bool Sequencer::sendEvents(tick_t fromTick, tick_t toTick)
 {
-    static const std::set<EventType> SKIP_EVENTS = { EventType::ME_TICK1, EventType::ME_TICK2, EventType::ME_EOT };
-
     std::lock_guard<std::mutex> lock(m_dataMutex);
 
     m_isPlayTickSet = false;
@@ -239,7 +237,7 @@ bool Sequencer::sendEvents(tick_t fromTick, tick_t toTick)
         }
 
         ChanState& chState = m_chanStates[event.channel()];
-        if (chState.muted || SKIP_EVENTS.find(event.type()) != SKIP_EVENTS.end()) {
+        if (chState.muted || !event) {
             // noop
         } else {
             auto s = synth(event.channel());

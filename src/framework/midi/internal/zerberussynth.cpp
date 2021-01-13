@@ -134,27 +134,31 @@ bool ZerberusSynth::handleEvent(const Event& e)
         return false;
     }
 
-    int ret = true;
-    switch (e.type()) {
-    case EventType::ME_NOTEON: {
-        ret = m_zerb->noteOn(e.channel(), e.note(), e.velocity());
+    bool ret = true;
+    int channel = 0;
+    if (e.isChannelVoice()) {
+        channel = e.channel() + e.group() * 16;
+    }
+    switch (e.opcode()) {
+    case Event::Opcode::NoteOn: {
+        ret = m_zerb->noteOn(channel, e.note(), e.velocity());
     } break;
-    case EventType::ME_NOTEOFF: {
-        ret = m_zerb->noteOff(e.channel(), e.note());
+    case Event::Opcode::NoteOff: {
+        ret = m_zerb->noteOff(channel, e.note());
     } break;
-    case EventType::ME_CONTROLLER: {
-        ret = m_zerb->controller(e.channel(), e.index(), e.data());
+    case Event::Opcode::ControlChange: {
+        ret = m_zerb->controller(channel, e.index(), e.data());
     } break;
-    case EventType::ME_PROGRAM: {
+    case Event::Opcode::ProgramChange: {
         ret = false;
         NOT_IMPLEMENTED;
     } break;
-    case EventType::ME_PITCHBEND: {
+    case Event::Opcode::PitchBend: {
         ret = false;
         NOT_IMPLEMENTED;
     } break;
     default: {
-        NOT_SUPPORTED << " event type: " << static_cast<int>(e.type());
+        NOT_SUPPORTED << "not supported event opcode: " << e.opcodeString();
         ret = false;
     }
     }

@@ -230,28 +230,32 @@ bool FluidSynth::handleEvent(const Event& e)
     }
 
     int ret = FLUID_OK;
-    switch (e.type()) {
-    case EventType::ME_NOTEON: {
-        ret = fluid_synth_noteon(m_fluid->synth, e.channel(), e.note(), e.velocity());
+    int channel = 0;
+    if (e.isChannelVoice()) {
+        channel = e.channel() + e.group() * 16;
+    }
+    switch (e.opcode()) {
+    case Event::Opcode::NoteOn: {
+        ret = fluid_synth_noteon(m_fluid->synth, channel, e.note(), e.velocity());
     } break;
-    case EventType::ME_NOTEOFF: {
-        ret = fluid_synth_noteoff(m_fluid->synth, e.channel(), e.note());
+    case Event::Opcode::NoteOff: {
+        ret = fluid_synth_noteoff(m_fluid->synth, channel, e.note());
     } break;
-    case EventType::ME_CONTROLLER: {
+    case Event::Opcode::ControlChange: {
         if (e.index() == CntrType::CTRL_PROGRAM) {
-            ret = fluid_synth_program_change(m_fluid->synth, e.channel(), e.data());
+            ret = fluid_synth_program_change(m_fluid->synth, channel, e.data());
         } else {
-            ret = fluid_synth_cc(m_fluid->synth, e.channel(), e.index(), e.data());
+            ret = fluid_synth_cc(m_fluid->synth, channel, e.index(), e.data());
         }
     } break;
-    case EventType::ME_PROGRAM: {
-        fluid_synth_program_change(m_fluid->synth, e.channel(), e.program());
+    case Event::Opcode::ProgramChange: {
+        fluid_synth_program_change(m_fluid->synth, channel, e.program());
     } break;
-    case EventType::ME_PITCHBEND: {
-        ret = fluid_synth_pitch_bend(m_fluid->synth, e.channel(), e.data());
+    case Event::Opcode::PitchBend: {
+        ret = fluid_synth_pitch_bend(m_fluid->synth, channel, e.data());
     } break;
     default: {
-        LOGW() << "not supported event type: " << static_cast<int>(e.type());
+        LOGW() << "not supported event opcode: " << e.opcodeString();
         ret = FLUID_FAILED;
     }
     }

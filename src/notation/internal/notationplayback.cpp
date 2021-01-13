@@ -127,12 +127,12 @@ void NotationPlayback::makeInitEvents(std::vector<midi::Event>& events, const Ms
     Ms::MasterScore* masterScore = score->masterScore();
     for (const Ms::MidiMapping& mm : masterScore->midiMapping()) {
         const Ms::Channel* channel = mm.articulation();
-        for (const Ms::MidiCoreEvent& mse : channel->initList()) {
+        for (Ms::MidiCoreEvent mse : channel->initList()) {
             if (mse.type() == Ms::ME_INVALID) {
                 continue;
             }
-
-            midi::Event e(channel->channel(), static_cast<midi::EventType>(mse.type()), mse.dataA(), mse.dataB());
+            mse.setChannel(channel->channel());
+            midi::Event e(mse);
             events.push_back(std::move(e));
         }
     }
@@ -233,13 +233,7 @@ void NotationPlayback::makeChunk(midi::Chunk& chunk, tick_t fromTick) const
         if (SKIP_EVENTS.find(etype) != SKIP_EVENTS.end()) {
             continue;
         }
-        midi::Event e
-        {
-            static_cast<channel_t>(ev.channel()),
-            etype,
-            static_cast<uint8_t>(ev.dataA()),
-            static_cast<uint8_t>(ev.dataB())
-        };
+        midi::Event e(ev);
         chunk.events.insert({ tick, std::move(e) });
     }
 }

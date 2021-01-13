@@ -342,13 +342,16 @@ MidiAction InstrumentsReader::readMidiAction(Ms::XmlReader& reader) const
 
     while (reader.readNextStartElement()) {
         if (reader.name() == "program") {
-            Event event(0 /*TODO*/, EventType::ME_CONTROLLER, CntrType::CTRL_PROGRAM,
-                        reader.attributes().value("value").toInt());
+            Event event(Event::Opcode::ProgramChange, Event::MessageType::ChannelVoice10);
+            event.setChannel(0);//TODO
+            event.setProgram(reader.attributes().value("value").toInt());
             action.events.push_back(event);
             reader.skipCurrentElement();
         } else if (reader.name() == "controller") {
-            Event event(0 /*TODO*/, EventType::ME_CONTROLLER, reader.attributes().value("ctrl").toInt(),
-                        reader.attributes().value("value").toInt());
+            Event event(Event::Opcode::ControlChange, Event::MessageType::ChannelVoice10);
+            event.setChannel(0);//TODO
+            event.setIndex(reader.attributes().value("ctrl").toInt());
+            event.setData(reader.attributes().value("value").toInt());
             action.events.push_back(event);
             reader.skipCurrentElement();
         } else if (reader.name() == "descr") {
