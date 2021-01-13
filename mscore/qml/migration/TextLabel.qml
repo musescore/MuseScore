@@ -44,6 +44,7 @@ FocusableItem {
         height: implicitHeight
         width: parent.width
 
+        linkColor: globalStyle.link
         font.pixelSize: 12
         horizontalAlignment: Text.AlignHCenter
 
