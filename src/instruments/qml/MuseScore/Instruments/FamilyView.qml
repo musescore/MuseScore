@@ -103,16 +103,8 @@ Item {
             anchors.right: parent.right
         }
 
-        delegate: Item {
-            width: parent.width
-            height: 40
-
-            Rectangle {
-                anchors.fill: parent
-
-                color: privateProperties.currentGroupIndex === index ? ui.theme.accentColor : ui.theme.backgroundPrimaryColor
-                opacity: privateProperties.currentGroupIndex === index ? 0.3 : 1
-            }
+        delegate: ListItemBlank {
+            isSelected: privateProperties.currentGroupIndex === index
 
             StyledTextLabel {
                 anchors.fill: parent
@@ -123,13 +115,9 @@ Item {
                 text: modelData.name
             }
 
-            MouseArea {
-                anchors.fill: parent
-
-                onClicked: {
-                    privateProperties.currentGroupIndex = index
-                    groupSelected(modelData.id)
-                }
+            onClicked: {
+                privateProperties.currentGroupIndex = index
+                groupSelected(modelData.id)
             }
         }
     }

@@ -85,18 +85,10 @@ Item {
             anchors.right: parent.right
         }
 
-        delegate: Item {
+        delegate: ListItemBlank {
             id: item
 
-            width: ListView.view.width
-            height: 40
-
-            Rectangle {
-                anchors.fill: parent
-
-                color: privateProperties.currentInstrumentIndex === index ? ui.theme.accentColor : ui.theme.backgroundPrimaryColor
-                opacity: privateProperties.currentInstrumentIndex === index ? 0.3 : 1
-            }
+            isSelected: privateProperties.currentInstrumentIndex === index
 
             StyledTextLabel {
                 anchors.left: parent.left
@@ -109,18 +101,14 @@ Item {
                 text: modelData.name
             }
 
-            MouseArea {
-                anchors.fill: parent
+            onClicked: {
+                privateProperties.currentInstrumentIndex = index
+                root.instrumentClicked()
+            }
 
-                onClicked: {
-                    privateProperties.currentInstrumentIndex = index
-                    root.instrumentClicked()
-                }
-
-                onDoubleClicked: {
-                    var currentSelection = root.currentInstrument()
-                    root.selectInstrumentRequested(currentSelection.instrument.id, currentSelection.transposition)
-                }
+            onDoubleClicked: {
+                var currentSelection = root.currentInstrument()
+                root.selectInstrumentRequested(currentSelection.instrument.id, currentSelection.transposition)
             }
 
             StyledComboBox {

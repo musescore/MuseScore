@@ -101,16 +101,8 @@ Item {
             anchors.right: parent.right
         }
 
-        delegate: Item {
-            width: parent.width
-            height: 40
-
-            Rectangle {
-                anchors.fill: parent
-
-                color: root.currentInstrumentIndex === index ? ui.theme.accentColor : ui.theme.backgroundPrimaryColor
-                opacity: root.currentInstrumentIndex === index ? 0.3 : 1
-            }
+        delegate: ListItemBlank {
+            isSelected: root.currentInstrumentIndex === index
 
             StyledTextLabel {
                 anchors.left: parent.left
@@ -123,16 +115,12 @@ Item {
                 text: modelData.name
             }
 
-            MouseArea {
-                anchors.fill: parent
+            onClicked: {
+                root.currentInstrumentIndex = index
+            }
 
-                onClicked: {
-                    root.currentInstrumentIndex = index
-                }
-
-                onDoubleClicked: {
-                    root.unselectInstrumentRequested(modelData.id)
-                }
+            onDoubleClicked: {
+                root.unselectInstrumentRequested(modelData.id)
             }
         }
     }
