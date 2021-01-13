@@ -19,6 +19,7 @@
 
 import QtQuick 2.8
 import QtQuick.Controls 2.1
+import QtQuick.Layouts 1.12
 
 import MuseScore.Palette 1.0
 import MuseScore.UiComponents 1.0
@@ -26,6 +27,7 @@ import MuseScore.Ui 1.0
 
 StyledPopup {
     id: palettesListPopup
+
     property PaletteWorkspace paletteWorkspace: null
     property int maxHeight: 400
 
@@ -87,67 +89,69 @@ StyledPopup {
                 }
             }
 
-            delegate: ItemDelegate { // TODO: use ItemDelegate or just Item?
+            delegate: Item {
                 id: morePalettesDelegate
+
                 width: parent.width
                 height: addButton.height
-                topPadding: 0
-                bottomPadding: 0
-                leftPadding: 0
-                rightPadding: 0
 
-                background: Item {}
-
-                property bool added: false // TODO: store in some model
+                property bool added: false
                 property bool removed: false
 
-                text: model.display
+                Accessible.name: model.display
 
-                contentItem: Item {
-                    height: parent.availableHeight
-                    width: parent.availableWidth
-                    Item {
-                        visible: !(morePalettesDelegate.added || morePalettesDelegate.removed)
-                        anchors.fill: parent
+                RowLayout {
+                    visible: !(morePalettesDelegate.added || morePalettesDelegate.removed)
+                    anchors.fill: parent
 
-                        StyledTextLabel {
-                            height: parent.height
-                            anchors.left: parent.left
-                            anchors.right: addButton.left
-                            text: morePalettesDelegate.text
-                            horizontalAlignment: Text.AlignHLeft
-                        }
-
-                        FlatButton {
-                            id: addButton
-                            anchors.right: parent.right
-                            icon: IconCode.PLUS
-
-                            ToolTip.text: qsTrc("palette", "Add %1 palette").arg(model.display)
-                            Accessible.description: ToolTip.text
-
-                            onHoveredChanged: {
-                                if (hovered) {
-                                    ui.tooltip.show(addButton, addButton.ToolTip.text)
-                                } else {
-                                    ui.tooltip.hide(addButton)
-                                }
-                            }
-
-                            onClicked: {
-                                if (paletteWorkspace.addPalette(model.paletteIndex))
-                                    morePalettesDelegate.added = true; // TODO: store in some model
-                            }
-                        }
-                    }
+                    spacing: 8
 
                     StyledTextLabel {
-                        visible: morePalettesDelegate.added || morePalettesDelegate.removed
-                        anchors.fill: parent
-                        text: morePalettesDelegate.added ? qsTrc("palette", "%1 added").arg(model.display) : (morePalettesDelegate.removed ? qsTrc("palette", "%1 removed").arg(model.display) : "")
-                        elide: Text.ElideMiddle
-                        font: ui.theme.bodyBoldFont
+                        Layout.alignment: Qt.AlignLeft
+                        Layout.fillWidth: true
+
+                        height: parent.height
+                        text: model.display
+                        horizontalAlignment: Text.AlignHLeft
+
+                        wrapMode: Text.WordWrap
+                        maximumLineCount: 1
                     }
+
+                    FlatButton {
+                        id: addButton
+
+                        Layout.alignment: Qt.AlignRight
+                        Layout.preferredWidth: width
+
+                        icon: IconCode.PLUS
+
+                        ToolTip.text: qsTrc("palette", "Add %1 palette").arg(model.display)
+                        Accessible.description: ToolTip.text
+
+                        onHoveredChanged: {
+                            if (hovered) {
+                                ui.tooltip.show(addButton, addButton.ToolTip.text)
+                            } else {
+                                ui.tooltip.hide(addButton)
+                            }
+                        }
+
+                        onClicked: {
+                            if (paletteWorkspace.addPalette(model.paletteIndex)) {
+                                morePalettesDelegate.added = true
+                            }
+                        }
+                    }
+                }
+
+                StyledTextLabel {
+                    anchors.fill: parent
+
+                    visible: morePalettesDelegate.added || morePalettesDelegate.removed
+                    text: morePalettesDelegate.added ? qsTrc("palette", "%1 added").arg(model.display) : (morePalettesDelegate.removed ? qsTrc("palette", "%1 removed").arg(model.display) : "")
+                    elide: Text.ElideMiddle
+                    font: ui.theme.bodyBoldFont
                 }
             }
         }

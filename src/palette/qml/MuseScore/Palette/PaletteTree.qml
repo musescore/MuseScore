@@ -97,7 +97,7 @@ ListView {
             // in search and no cell selected: apply the first found element
             const parentIndex = paletteTreeDelegateModel.modelIndex(0);
             index = paletteModel.index(0, 0, parentIndex);
-            }
+        }
 
         paletteController.applyPaletteElement(index, Qt.NoModifier);
     }
@@ -111,18 +111,21 @@ ListView {
     }
 
     onCurrentIndexChanged: {
-        if (paletteSelectionModel.hasSelection && paletteSelectionModel.currentIndex.row !== currentIndex)
+        if (paletteSelectionModel.hasSelection && paletteSelectionModel.currentIndex.row !== currentIndex) {
             paletteSelectionModel.clearSelection();
+        }
     }
 
     function ensureYVisible(y) {
-        if (y > footerItem.y)
+        if (y > footerItem.y) {
             footerItem.height = y - footerItem.y
+        }
 
-        if (y > contentY + height)
+        if (y > contentY + height) {
             contentY = y - height;
-        else if (y < contentY)
+        } else if (y < contentY) {
             contentY = y;
+        }
     }
 
     function removeSelectedItems(parentIndex) {
@@ -198,16 +201,18 @@ ListView {
     }
 
     function focusNextItem(includeChildren) {
-        if (includeChildren === undefined) // https://stackoverflow.com/a/44128406
+        if (includeChildren === undefined) { // https://stackoverflow.com/a/44128406
             includeChildren = true;
+        }
 
         if (includeChildren && currentItem.expanded) {
             currentItem.focusFirstItem();
             return;
         }
 
-        if (currentIndex == count - 1)
+        if (currentIndex == count - 1) {
             return; // no next item
+        }
 
         incrementCurrentIndex();
         currentItem.forceActiveFocus();
@@ -215,18 +220,21 @@ ListView {
     }
 
     function focusPreviousItem(includeChildren) {
-        if (includeChildren === undefined) // https://stackoverflow.com/a/44128406
+        if (includeChildren === undefined) { // https://stackoverflow.com/a/44128406
             includeChildren = true;
+        }
 
-        if (currentIndex == 0)
+        if (currentIndex == 0) {
             return; // no previous item
+        }
 
         decrementCurrentIndex();
 
-        if (includeChildren && currentItem.expanded)
+        if (includeChildren && currentItem.expanded) {
             currentItem.focusLastItem();
-        else
+        } else {
             currentItem.forceActiveFocus();
+        }
 
         positionViewAtIndex(currentIndex, ListView.Contain);
     }
@@ -236,6 +244,7 @@ ListView {
             currentIndex++; // move by at least one item
             // try to keep going, but new item must stay entirely in view
             var distance = currentItem.height;
+
             while (currentIndex < count - 1) {
                 currentIndex++; // try another
                 distance += currentItem.height;
@@ -245,6 +254,7 @@ ListView {
                 }
             }
         }
+
         currentItem.forceActiveFocus();
         positionViewAtIndex(currentIndex, ListView.Contain);
     }
@@ -254,6 +264,7 @@ ListView {
             currentIndex--; // move by at least one item
             // try to keep going, but new item must stay entirely in view
             var distance = currentItem.height;
+
             while (currentIndex > 0) {
                 currentIndex--; // try another
                 distance += currentItem.height;
@@ -263,6 +274,7 @@ ListView {
                 }
             }
         }
+
         currentItem.forceActiveFocus();
         positionViewAtIndex(currentIndex, ListView.Contain);
     }
@@ -275,22 +287,27 @@ ListView {
 
     function focusLastItem() {
         currentIndex = count - 1;
-        if (currentItem.expanded)
+
+        if (currentItem.expanded) {
             currentItem.focusLastItem();
-        else
+        } else {
             currentItem.forceActiveFocus();
+        }
+
         positionViewAtIndex(currentIndex, ListView.Contain);
     }
 
     function focusNextMatchingItem(str, startIndex) {
         const modelIndex = paletteModel.index(startIndex, 0);
         const matchedIndexList = paletteModel.match(modelIndex, Qt.ToolTipRole, str);
+
         if (matchedIndexList.length) {
             currentIndex = matchedIndexList[0].row;
             currentItem.forceActiveFocus();
             positionViewAtIndex(currentIndex, ListView.Contain);
             return true;
         }
+
         return false;
     }
 
@@ -300,9 +317,12 @@ ListView {
             const sameChr = chr === typeAheadStr;
             typeAheadStr += chr;
             const found = focusNextMatchingItem(typeAheadStr, currentIndex);
-            if (found || !sameChr)
+
+            if (found || !sameChr) {
                 return;
+            }
         }
+
         // start new search on next item
         typeAheadStr = chr;
         const nextIndex = (currentIndex === count - 1) ? 0 : currentIndex + 1;
@@ -310,14 +330,17 @@ ListView {
     }
 
     property string typeAheadStr: ''
+
     Timer {
         id: typeAheadTimer
         interval: 1000
         onTriggered: typeAheadStr = ''
-        }
+    }
+
     onTypeAheadStrChanged: {
-        if (typeAheadStr.length)
+        if (typeAheadStr.length) {
             typeAheadTimer.restart();
+        }
     }
 
     function expandCollapseAll(expand) {
@@ -331,10 +354,12 @@ ListView {
             const collapsedIndexList = paletteModel.match(startIndex, PaletteTreeModel.PaletteExpandedRole, false);
             expand = !!collapsedIndexList.length;
         }
+
         for (var idx = 0; idx < count; idx++) {
             const paletteIndex = paletteModel.index(idx, 0);
             paletteModel.setData(paletteIndex, expand, PaletteTreeModel.PaletteExpandedRole);
         }
+
         currentItem.bringIntoViewAfterExpanding();
         return expand; // bool, did we expand?
     }
@@ -351,8 +376,9 @@ ListView {
             property var modelIndex: paletteTree.model.modelIndex(index, 0)
 
             onActiveFocusChanged: {
-                if (activeFocus)
+                if (activeFocus) {
                     paletteTree.currentTreeItem = this;
+                }
             }
 
             Component.onCompleted: {
@@ -369,71 +395,52 @@ ListView {
             }
 
             property bool expanded: filter.length || model.expanded
+
             function toggleExpand() {
                 model.expanded = !expanded
             }
+
             function bringIntoViewAfterExpanding() {
                 expandTimer.restart();
             }
+
             Timer {
                 id: expandTimer
                 interval: expandDuration + 50 // allow extra grace period
                 onTriggered: paletteTree.positionViewAtIndex(index, ListView.Contain)
-                }
+            }
+
             onExpandedChanged: {
-                if (ListView.isCurrentItem && !filter.length)
+                if (ListView.isCurrentItem && !filter.length) {
                     bringIntoViewAfterExpanding();
+                }
             }
 
             property bool selected: paletteSelectionModel.hasSelection ? paletteSelectionModel.isSelected(modelIndex) : false
+
             onClicked: {
                 forceActiveFocus();
                 const cmd = selected ? ItemSelectionModel.Toggle : ItemSelectionModel.ClearAndSelect;
                 paletteSelectionModel.setCurrentIndex(modelIndex, cmd);
                 paletteTree.currentIndex = index;
             }
+
             onDoubleClicked: {
                 forceActiveFocus();
                 paletteSelectionModel.setCurrentIndex(modelIndex, ItemSelectionModel.Deselect);
                 toggleExpand();
             }
 
-            background: Rectangle {
-                id: background
-
+            background: ListItemBlank {
                 visible: !control.Drag.active
-                z: -1
-                color: ui.theme.backgroundPrimaryColor
-                opacity: 1
 
-                states: [
-                    State {
-                        name: "HOVERED"
-                        when: control.hovered && !control.selected
-
-                        PropertyChanges {
-                            target: background
-                            color: ui.theme.buttonColor
-                            opacity: 0.5
-                        }
-                    },
-
-                    State {
-                        name: "SELECTED"
-                        when: control.selected
-
-                        PropertyChanges {
-                            target: background
-                            color: ui.theme.accentColor
-                            opacity: 0.5
-                        }
-                    }
-                ]
+                isSelected: control.selected
             }
 
             highlighted: (activeFocus && !selected) || DelegateModel.isUnresolved
 
             property bool popupExpanded: paletteTree.expandedPopupIndex === modelIndex
+
             function togglePopup() {
                 const expand = !popupExpanded;
                 paletteTree.expandedPopupIndex = expand ? modelIndex : null;
@@ -465,10 +472,15 @@ ListView {
                     case Qt.Key_Asterisk:
                         return;
                 }
-                if (event.key === Qt.Key_F10 && event.modifiers & Qt.ShiftModifier)
+
+                if (event.key === Qt.Key_F10 && event.modifiers & Qt.ShiftModifier) {
                     return;
-                if (event.text.match(/[^\x00-\x20\x7F]+$/) !== null)
+                }
+
+                if (event.text.match(/[^\x00-\x20\x7F]+$/) !== null) {
                     return;
+                }
+
                 event.accepted = false; // allow key to function as shortcut (don't intercept)
             }
 
@@ -477,10 +489,11 @@ ListView {
                 switch (event.key) {
                     case Qt.Key_Right:
                     case Qt.Key_Plus:
-                        if (!expanded)
+                        if (!expanded) {
                             toggleExpand();
-                        else if (event.key === Qt.Key_Right)
+                        } else if (event.key === Qt.Key_Right) {
                             focusFirstItem();
+                        }
                         break;
                     case Qt.Key_Left:
                     case Qt.Key_Minus:
@@ -498,25 +511,26 @@ ListView {
                         toggleExpand();
                         break;
                     case Qt.Key_F10:
-                        if (!(event.modifiers & Qt.ShiftModifier))
+                        if (!(event.modifiers & Qt.ShiftModifier)) {
                             return;
+                        }
                         // fallthrough
                     case Qt.Key_Menu:
                         paletteHeader.showPaletteMenu();
                         break;
                     case Qt.Key_Asterisk:
-                        if (paletteTree.typeAheadStr.length)
+                        if (paletteTree.typeAheadStr.length) {
                             paletteTree.typeAheadFind('*');
-                        else
+                        } else {
                             paletteTree.expandCollapseAll(null);
+                        }
                         break;
                     default:
                         if (event.text.match(/[^\x00-\x20\x7F]+$/) !== null) {
                             // Pressed non-control character(s) (e.g. "L")
                             // so go to matching palette (e.g. "Lines")
                             paletteTree.typeAheadFind(event.text);
-                        }
-                        else {
+                        } else {
                             return; // don't accept event
                         }
                 }
@@ -537,8 +551,10 @@ ListView {
             Drag.mimeData: { "application/musescore/palettetree": "" } // for keys filtering. TODO: make more reasonable MIME data?
 
             Drag.onDragStarted: {
-                if (popupExpanded)
+                if (popupExpanded) {
                     togglePopup();
+                }
+
                 paletteTree.itemDragged = true;
                 DelegateModel.inPersistedItems = true;
                 DelegateModel.inItems = false;
@@ -547,8 +563,11 @@ ListView {
 
             Drag.onDragFinished: {
                 paletteTree.itemDragged = false;
-                if (dropAction != Qt.IgnoreAction)
+
+                if (dropAction != Qt.IgnoreAction) {
                     paletteTree.currentIndex = -1;
+                }
+
                 const destIndex = placeholder.active ? placeholder.index : control.rowIndex;
                 placeholder.removePlaceholder();
                 const controller = paletteTree.paletteController;
@@ -566,13 +585,16 @@ ListView {
             DropArea {
                 anchors.fill: parent
                 keys: [ "application/musescore/palettetree" ]
+
                 onEntered: {
                     const idx = control.DelegateModel.itemsIndex;
+
                     if (!control.DelegateModel.isUnresolved) {
                         placeholder.makePlaceholder(idx, paletteTree.placeholderData());
                         paletteTree.currentIndex = idx;
-                        }
+                    }
                 }
+
                 onDropped: {
                     if (drop.proposedAction == Qt.MoveAction)
                         drop.acceptProposedAction();
@@ -624,11 +646,13 @@ ListView {
                     expanded: control.expanded
                     hovered: control.hovered
                     text: model.display
+
                     hidePaletteElementVisible: {
                         return !control.selected && control.expanded
                             && paletteSelectionModel.hasSelection && paletteSelectionModel.columnIntersectsSelection(0, control.modelIndex)
                             && paletteTree.paletteModel.parent(paletteSelectionModel.currentIndex) === control.modelIndex; // HACK to work around a (possible?) bug in columnIntersectsSelection
                     }
+
                     custom: model.custom
 
                     unresolved: control.DelegateModel.isUnresolved
@@ -692,9 +716,11 @@ ListView {
 
                         showMoreButton: !filter.length
                         onMoreButtonClicked: control.togglePopup();
+
                         onVisibleChanged: {
-                            if (!visible && control.popupExpanded)
+                            if (!visible && control.popupExpanded) {
                                 control.togglePopup();
+                            }
                         }
 
                         enableAnimations: paletteTree.enableAnimations
@@ -742,14 +768,18 @@ ListView {
 
                     onAboutToShow: {
                         needScrollToBottom = true;
-                        if (implicitHeight)
+
+                        if (implicitHeight) {
                             scrollToPopupBottom();
+                        }
                     }
+
                     onOpened: {
                         scrollToPopupBottom();
                         needScrollToBottom = false;
                         enablePaletteAnimations = true;
                     }
+
                     onClosed: enablePaletteAnimations = false
 
                     function scrollToPopupBottom() {
@@ -765,10 +795,13 @@ ListView {
                     onAddElementsRequested: {
                         const parentIndex = control.modelIndex;
                         var idx = paletteTree.paletteModel.rowCount(parentIndex);
+
                         for (var i = 0; i < mimeDataList.length; i++) {
                             const mimeData = mimeDataList[i];
-                            if (paletteTree.paletteController.insert(parentIndex, idx, mimeData, Qt.MoveAction))
+
+                            if (paletteTree.paletteController.insert(parentIndex, idx, mimeData, Qt.MoveAction)) {
                                 idx++;
+                            }
                         }
                     }
                 }

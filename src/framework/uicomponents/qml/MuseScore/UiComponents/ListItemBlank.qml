@@ -9,9 +9,13 @@ Item {
 
     signal clicked()
     signal doubleClicked()
+    signal hovered()
 
     implicitHeight: 30
-    implicitWidth: ListView.view.width
+    implicitWidth: Boolean(ListView.view) ? ListView.view.width : 30
+
+    Accessible.selectable: true
+    Accessible.selected: isSelected
 
     Rectangle {
         id: background
@@ -19,7 +23,7 @@ Item {
         anchors.fill: parent
 
         color: "transparent"
-        opacity: 1
+        opacity: root.enabled ? 1 : ui.theme.itemOpacityDisabled
     }
 
     states: [
@@ -62,7 +66,7 @@ Item {
 
         anchors.fill: parent
 
-        hoverEnabled: true
+        hoverEnabled: root.visible
 
         onClicked: {
             root.clicked()
@@ -70,6 +74,10 @@ Item {
 
         onDoubleClicked: {
             root.doubleClicked()
+        }
+
+        onHoveredChanged: {
+            root.hovered()
         }
     }
 }
