@@ -25,20 +25,20 @@ using namespace mu::shortcuts;
 //! NOTE Only actions processed by notation
 
 const mu::actions::ActionList PlaybackActions::m_actions = {
-    Action("play",
-           QT_TRANSLATE_NOOP("action", "Play"),
-           ShortcutContext::Any
-           ),
+    ActionItem("play",
+               ShortcutContext::Any,
+               QT_TRANSLATE_NOOP("action", "Play")
+               ),
 };
 
-const Action& PlaybackActions::action(const ActionName& name) const
+const ActionItem& PlaybackActions::action(const ActionCode& actionCode) const
 {
-    for (const Action& a : m_actions) {
-        if (a.name == name) {
+    for (const ActionItem& a : m_actions) {
+        if (a.code == actionCode) {
             return a;
         }
     }
 
-    static Action null;
+    static ActionItem null;
     return null;
 }

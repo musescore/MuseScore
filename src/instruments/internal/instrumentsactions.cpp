@@ -24,20 +24,20 @@ using namespace mu::actions;
 using namespace mu::shortcuts;
 
 const ActionList InstrumentsActions::m_actions = {
-    Action("instruments",
-           QT_TRANSLATE_NOOP("action", "Instruments..."),
-           ShortcutContext::Any
-           )
+    ActionItem("instruments",
+               ShortcutContext::Any,
+               QT_TRANSLATE_NOOP("action", "Instruments...")
+               )
 };
 
-const Action& InstrumentsActions::action(const ActionName& actionName) const
+const ActionItem& InstrumentsActions::action(const ActionCode& actionCode) const
 {
-    for (const Action& action : m_actions) {
-        if (action.name == actionName) {
+    for (const ActionItem& action : m_actions) {
+        if (action.code == actionCode) {
             return action;
         }
     }
 
-    static Action null;
+    static ActionItem null;
     return null;
 }

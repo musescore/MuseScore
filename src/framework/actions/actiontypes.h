@@ -30,27 +30,35 @@
 
 namespace mu {
 namespace actions {
-using ActionName = std::string;
-using ActionNameList = std::vector<ActionName>;
+using ActionCode = std::string;
+using ActionCodeList = std::vector<ActionCode>;
 
-inline static ActionName namefromQString(const QString& s)
+inline static ActionCode codeFromQString(const QString& s)
 {
     return s.toStdString();
 }
 
-struct Action {
-    ActionName name;
+struct ActionItem {
+    ActionCode code;
+    shortcuts::ShortcutContext shortcutContext = shortcuts::ShortcutContext::Undefined;
+
     std::string title;
-    shortcuts::ShortcutContext scContext = shortcuts::ShortcutContext::Undefined;
+    std::string description;
     framework::IconCode::Code iconCode = framework::IconCode::Code::NONE;
 
-    Action() = default;
-    Action(const ActionName& name, const std::string& title, shortcuts::ShortcutContext shortcutContext,
-           framework::IconCode::Code iconCode = framework::IconCode::Code::NONE)
-        : name(name), title(title), scContext(shortcutContext), iconCode(iconCode) {}
-    bool isValid() const { return !name.empty(); }
+    ActionItem() = default;
+    ActionItem(const ActionCode& code, shortcuts::ShortcutContext shortcutContext,
+               const std::string& title, const std::string& description,
+               framework::IconCode::Code iconCode = framework::IconCode::Code::NONE)
+        : code(code), shortcutContext(shortcutContext), title(title), description(description), iconCode(iconCode) {}
+
+    ActionItem(const ActionCode& code, shortcuts::ShortcutContext shortcutContext,
+               const std::string& title, framework::IconCode::Code iconCode = framework::IconCode::Code::NONE)
+        : code(code), shortcutContext(shortcutContext), title(title), iconCode(iconCode) {}
+
+    bool isValid() const { return !code.empty(); }
 };
-using ActionList = std::vector<Action>;
+using ActionList = std::vector<ActionItem>;
 
 class ActionData
 {

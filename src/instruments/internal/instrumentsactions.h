@@ -25,7 +25,7 @@ namespace mu::instruments {
 class InstrumentsActions : public actions::IModuleActions
 {
 public:
-    const actions::Action& action(const actions::ActionName& actionName) const override;
+    const actions::ActionItem& action(const actions::ActionCode& actionCode) const override;
 
 private:
     const static actions::ActionList m_actions;

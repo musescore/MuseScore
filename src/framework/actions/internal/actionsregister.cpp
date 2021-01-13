@@ -25,15 +25,15 @@ void ActionsRegister::reg(const std::shared_ptr<IModuleActions>& actions)
     m_modules.push_back(actions);
 }
 
-const Action& ActionsRegister::action(const ActionName& name) const
+const ActionItem& ActionsRegister::action(const ActionCode& name) const
 {
     for (const std::shared_ptr<IModuleActions>& m : m_modules) {
-        const Action& a = m->action(name);
+        const ActionItem& a = m->action(name);
         if (a.isValid()) {
             return a;
         }
     }
 
-    static Action null;
+    static ActionItem null;
     return null;
 }

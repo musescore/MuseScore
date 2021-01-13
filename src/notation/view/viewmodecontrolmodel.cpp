@@ -90,7 +90,7 @@ int ViewModeControlModel::currentViewModeId() const
 void ViewModeControlModel::setCurrentViewModeId(int newViewModeId)
 {
     if (m_currentViewModeId != newViewModeId) {
-        dispatcher()->dispatch(actions::namefromQString(m_viewModeOptions.at(newViewModeId).actionString));
+        dispatcher()->dispatch(actions::codeFromQString(m_viewModeOptions.at(newViewModeId).actionString));
         m_currentViewModeId = newViewModeId; // can remove once notify works
     }
 }

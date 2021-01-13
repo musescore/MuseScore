@@ -46,7 +46,7 @@ FocusableItem {
     Item {
         id: contentWrapper
 
-        property int spacing: Boolean(root.icon) && Boolean(root.text) ? 4 : 0
+        property int spacing: Boolean(!buttonIcon.isEmpty) && Boolean(textLabel.text) ? 4 : 0
 
         anchors.verticalCenter: parent ? parent.verticalCenter : undefined
         anchors.horizontalCenter: parent ? parent.horizontalCenter : undefined

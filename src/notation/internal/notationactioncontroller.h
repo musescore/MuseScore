@@ -39,7 +39,7 @@ public:
     void init();
 
 private:
-    bool canReceiveAction(const actions::ActionName& actionName) const override;
+    bool canReceiveAction(const actions::ActionCode& actionCode) const override;
 
     INotationPtr currentNotation() const;
     INotationInteractionPtr currentNotationInteraction() const;
@@ -60,8 +60,8 @@ private:
 
     void putTuplet(int tupletCount);
 
-    void moveAction(const actions::ActionName& action);
-    void moveText(INotationInteractionPtr interaction, const actions::ActionName& action);
+    void moveAction(const actions::ActionCode& actionCode);
+    void moveText(INotationInteractionPtr interaction, const actions::ActionCode& actionCode);
 
     void swapVoices(int voiceIndex1, int voiceIndex2);
     void changeVoice(int voiceIndex);

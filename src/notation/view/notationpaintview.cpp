@@ -114,14 +114,14 @@ void NotationPaintView::scrollVertical(qreal position)
     moveCanvasVertical(-dy);
 }
 
-void NotationPaintView::handleAction(const QString& actionName)
+void NotationPaintView::handleAction(const QString& actionCode)
 {
-    dispatcher()->dispatch(actionName.toStdString());
+    dispatcher()->dispatch(actionCode.toStdString());
 }
 
-bool NotationPaintView::canReceiveAction(const actions::ActionName& action) const
+bool NotationPaintView::canReceiveAction(const actions::ActionCode& actionCode) const
 {
-    if (action == "file-open") {
+    if (actionCode == "file-open") {
         return true;
     }
 
@@ -264,22 +264,10 @@ void NotationPaintView::showShadowNote(const QPointF& pos)
 
 void NotationPaintView::showContextMenu(const ElementType& elementType, const QPoint& pos)
 {
-    INotationActionsRepositoryPtr actionsRepository = actionsFactory()->actionsRepository(elementType);
-
     QVariantList menuItems;
 
-    for (const actions::Action& action: actionsRepository->actions()) {
-        QVariantMap actionObj;
-        actionObj["name"] = QString::fromStdString(action.name);
-        actionObj["title"] = QString::fromStdString(action.title);
-        actionObj["icon"] = action.iconCode != IconCode::Code::NONE ? static_cast<int>(action.iconCode) : 0;
-
-        shortcuts::Shortcut shortcut = shortcutsRegister()->shortcut(action.name);
-        if (shortcut.isValid()) {
-            actionObj["shortcut"] = QString::fromStdString(shortcut.sequence);
-        }
-
-        menuItems << actionObj;
+    for (const MenuItem& menuItem: notationContextMenu()->items(elementType)) {
+        menuItems << menuItem.toVariantMap();
     }
 
     emit openContextMenuRequested(menuItems, pos);

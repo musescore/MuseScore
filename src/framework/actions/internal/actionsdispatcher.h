@@ -31,18 +31,18 @@ public:
     ActionsDispatcher() = default;
     ~ActionsDispatcher() override;
 
-    void dispatch(const ActionName& a) override;
-    void dispatch(const ActionName& action, const ActionData& data) override;
+    void dispatch(const ActionCode& actionCode) override;
+    void dispatch(const ActionCode& actionCode, const ActionData& data) override;
 
     void unReg(Actionable* client) override;
-    void reg(Actionable* client, const ActionName& action, const ActionCallBackWithNameAndData& call) override;
+    void reg(Actionable* client, const ActionCode& actionCode, const ActionCallBackWithNameAndData& call) override;
 
 private:
 
-    using CallBacks = std::map<ActionName, ActionCallBackWithNameAndData>;
+    using CallBacks = std::map<ActionCode, ActionCallBackWithNameAndData>;
     using Clients = std::map<Actionable*, CallBacks>;
 
-    std::map<ActionName, Clients > m_clients;
+    std::map<ActionCode, Clients > m_clients;
 };
 }
 }

@@ -110,11 +110,6 @@ void NotationViewInputController::setViewMode(const ViewMode& viewMode)
     notation->setViewMode(viewMode);
 }
 
-bool NotationViewInputController::canReceiveAction(const ActionName&) const
-{
-    return true;
-}
-
 void NotationViewInputController::wheelEvent(QWheelEvent* ev)
 {
     QPoint pixelsScrolled = ev->pixelDelta();
@@ -321,7 +316,7 @@ void NotationViewInputController::dragEnterEvent(QDragEnterEvent* ev)
         return;
     }
 
-    if (dta->hasFormat(MIME_SYMBOL_FORMAT)) {
+    if (dta->hasFormat(mu::commonscene::MIME_SYMBOL_FORMAT)) {
         if (ev->possibleActions() & Qt::CopyAction) {
             ev->setDropAction(Qt::CopyAction);
         }
@@ -330,7 +325,7 @@ void NotationViewInputController::dragEnterEvent(QDragEnterEvent* ev)
             ev->accept();
         }
 
-        QByteArray edata = dta->data(MIME_SYMBOL_FORMAT);
+        QByteArray edata = dta->data(mu::commonscene::MIME_SYMBOL_FORMAT);
         m_view->notationInteraction()->startDrop(edata);
 
         return;
@@ -348,9 +343,9 @@ void NotationViewInputController::dragMoveEvent(QDragMoveEvent* ev)
         return;
     }
 
-    if (dta->hasFormat(MIME_SYMBOL_FORMAT)
-        || dta->hasFormat(MIME_SYMBOLLIST_FORMAT)
-        || dta->hasFormat(MIME_STAFFLLIST_FORMAT)) {
+    if (dta->hasFormat(mu::commonscene::MIME_SYMBOL_FORMAT)
+        || dta->hasFormat(mu::commonscene::MIME_SYMBOLLIST_FORMAT)
+        || dta->hasFormat(mu::commonscene::MIME_STAFFLLIST_FORMAT)) {
         if (ev->possibleActions() & Qt::CopyAction) {
             ev->setDropAction(Qt::CopyAction);
         }

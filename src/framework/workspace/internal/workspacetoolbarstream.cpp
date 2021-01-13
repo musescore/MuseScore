@@ -88,8 +88,8 @@ void WorkspaceToolbarStream::writeToolbar(XmlWriter& writer, const AbstractDataP
     writer.writeStartElement(TOOLBAR_TAG);
     writer.writeAttribute(TOOLBAR_NAME_TAG, toolbar->name);
 
-    for (const std::string& actionName : toolbar->actions) {
-        writer.writeTextElement(ACTION_TAG, actionName);
+    for (const std::string& actionCode : toolbar->actions) {
+        writer.writeTextElement(ACTION_TAG, actionCode);
     }
 
     writer.writeEndElement();

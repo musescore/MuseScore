@@ -16,21 +16,23 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATION_INOTATIONACTIONSREPOSITORY_H
-#define MU_NOTATION_INOTATIONACTIONSREPOSITORY_H
+#ifndef MU_NOTATION_INOTATIONCONTEXTMENU_H
+#define MU_NOTATION_INOTATIONCONTEXTMENU_H
 
 #include "modularity/imoduleexport.h"
-#include "actions/actiontypes.h"
+#include "uicomponents/uicomponentstypes.h"
+#include "notationtypes.h"
 
 namespace mu::notation {
-class INotationActionsRepository
+class INotationContextMenu : MODULE_EXPORT_INTERFACE
 {
-public:
-    virtual ~INotationActionsRepository() = default;
+    INTERFACE_ID(INotationContextMenu)
 
-    virtual actions::ActionList actions() const = 0;
+public:
+    virtual ~INotationContextMenu() = default;
+
+    virtual framework::MenuItemList items(const ElementType& elementType) const = 0;
 };
-using INotationActionsRepositoryPtr = std::shared_ptr<INotationActionsRepository>;
 }
 
-#endif // MU_NOTATION_INOTATIONACTIONSREPOSITORY_H
+#endif // MU_NOTATION_INOTATIONCONTEXTMENU_H

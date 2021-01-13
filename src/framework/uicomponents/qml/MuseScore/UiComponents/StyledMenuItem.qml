@@ -10,7 +10,7 @@ MenuItem {
     implicitHeight: 30
     implicitWidth: 220
 
-    property var hintIcon: checkable && checked ? IconCode.TICK : undefined
+    property var hintIcon: checkable && checked ? IconCode.TICK : IconCode.NONE
     property string shortcut: ""
 
     background: Rectangle {

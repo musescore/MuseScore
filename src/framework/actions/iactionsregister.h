@@ -34,7 +34,7 @@ public:
 
     virtual void reg(const std::shared_ptr<IModuleActions>& actions) = 0;
 
-    virtual const Action& action(const ActionName& name) const = 0;
+    virtual const ActionItem& action(const ActionCode& actionCode) const = 0;
 };
 }
 }

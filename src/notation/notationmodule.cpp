@@ -35,7 +35,6 @@
 #include "internal/notationwritersregister.h"
 #include "internal/mscznotationreader.h"
 #include "internal/msczmetareader.h"
-#include "internal/notationactionsrepositoryfactory.h"
 
 #include "view/notationpaintview.h"
 #include "view/notationaccessibilitymodel.h"
@@ -61,6 +60,7 @@
 #include "view/widgets/selectnotedialog.h"
 #include "view/widgets/selectdialog.h"
 #include "view/widgets/tupletdialog.h"
+#include "view/notationcontextmenu.h"
 
 using namespace mu::notation;
 using namespace mu::notation;
@@ -85,7 +85,7 @@ void NotationModule::registerExports()
     framework::ioc()->registerExport<INotationCreator>(moduleName(), new NotationCreator());
     framework::ioc()->registerExport<INotationConfiguration>(moduleName(), s_configuration);
     framework::ioc()->registerExport<IMsczMetaReader>(moduleName(), new MsczMetaReader());
-    framework::ioc()->registerExport<INotationActionsRepositoryFactory>(moduleName(), new NotationActionsRepositoryFactory());
+    framework::ioc()->registerExport<INotationContextMenu>(moduleName(), new NotationContextMenu());
 
     std::shared_ptr<INotationReadersRegister> readers = std::make_shared<NotationReadersRegister>();
     readers->reg({ "mscz", "mscx" }, std::make_shared<MsczNotationReader>());
