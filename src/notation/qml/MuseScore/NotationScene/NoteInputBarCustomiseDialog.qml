@@ -136,9 +136,14 @@ QmlDialog {
                     z: 1
                 }
 
-                delegate: Item {
-                    width: parent ? parent.width : 0
+                delegate: ListItemBlank {
                     height: 38
+
+                    isSelected: selectedRole
+
+                    onClicked: {
+                        customiseModel.selectRow(index)
+                    }
 
                     Loader {
                         property var delegateType: Boolean(itemRole) ? itemRole.type : NoteInputBarItem.UNDEFINED
@@ -151,22 +156,15 @@ QmlDialog {
                         Component {
                             id: actionComponent
 
-                            NoteInputBarActionDelegate {
-
-                                onClicked: {
-                                    customiseModel.selectRow(index)
-                                }
-                            }
+                            NoteInputBarActionDelegate {}
                         }
 
                         Component {
                             id: separatorLineComponent
 
-                            NoteInputBarSeparatorDelegate {
-
-                                onClicked: {
-                                    customiseModel.selectRow(index)
-                                }
+                            StyledTextLabel {
+                                anchors.centerIn: parent
+                                text: Boolean(itemRole) ? itemRole.title : ""
                             }
                         }
                     }
