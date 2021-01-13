@@ -393,6 +393,8 @@ QString ScoreOrder::getId() const
 
 QString ScoreOrder::getName() const
       {
+      if (isCustom())
+            return QObject::tr("Custom");
       return _name;
       }
 
@@ -724,7 +726,7 @@ void ScoreOrder::dump() const
 ScoreOrderList::ScoreOrderList()
       {
       _orders.clear();
-      ScoreOrder* custom = new ScoreOrder(QString("<custom>"), QObject::tr("Custom"));
+      ScoreOrder* custom = new ScoreOrder(QString("<custom>"), "Custom"); // gets translated later, in `SortOrder::getName()`
       custom->createUnsortedGroup();
       addScoreOrder(custom);
       }
