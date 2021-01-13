@@ -35,7 +35,6 @@ Item {
             listTitle: qsTrc("userscores", "Category")
             model: model.categoriesTitles
             searchEnabled: false
-            boldFont: true
 
             onTitleClicked: {
                 model.setCurrentCategory(index)
