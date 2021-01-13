@@ -85,7 +85,7 @@ FocusScope {
 
                 CheckBoxControl {
                     checked: root.model ? root.model.isLelandAllowed : false
-                    text: qsTr("Our new professional notation font")
+                    text: qsTr("Our new professional notation font, Leland")
 
                     onToggled: {
                         root.model.isLelandAllowed = checked
@@ -94,7 +94,7 @@ FocusScope {
 
                 CheckBoxControl {
                     checked: root.model ? root.model.isEdwinAllowed : false
-                    text: qsTr("Our improved text font")
+                    text: qsTr("Our improved text font, Edwin")
 
                     onToggled: {
                         root.model.isEdwinAllowed = checked
@@ -121,7 +121,7 @@ FocusScope {
                     horizontalAlignment: Qt.AlignLeft
 
                     text: root.model ? qsTr("Since this file was created in MuseScore %1, some layout changes may occur.").arg(root.model.creationAppVersion)
-                                     : ""
+                                     : qsTr("(unknown)")
                 }
 
                 TextLabel {
@@ -133,7 +133,7 @@ FocusScope {
                     color: globalStyle.buttonText
                     horizontalAlignment: Qt.AlignLeft
 
-                    text: qsTr("<a href=\"https://youtu.be/qLR40BGNy68\">Watch our release video to learn more</a>")
+                    text: "<a href=\"https://youtu.be/qLR40BGNy68\">%1</a>".arg(qsTr("Watch our release video to learn more"))
 
                     onLinkActivated: {
                         if (root.model) {
