@@ -10,8 +10,6 @@ Item {
     property alias searchEnabled: searchField.visible
     property alias searchText: searchField.searchText
 
-    property bool boldFont: false
-
     signal titleClicked(var index)
 
     StyledTextLabel {
@@ -39,24 +37,15 @@ Item {
         anchors.bottom: parent.bottom
 
         width: parent.width
-        spacing: 8
+        spacing: 0
 
         boundsBehavior: ListView.StopAtBounds
         clip: true
 
         currentIndex: 0
 
-        delegate: Item {
-            width: ListView.view.width
-            height: 30
-
-            property bool isCurrent: view.currentIndex === model.index
-
-            Rectangle {
-                anchors.fill: parent
-                color: isCurrent ? ui.theme.accentColor : ui.theme.backgroundPrimaryColor
-                opacity: isCurrent ? 0.3 : 1
-            }
+        delegate: ListItemBlank {
+            isSelected: view.currentIndex === model.index
 
             StyledTextLabel {
                 id: titleLabel
@@ -66,16 +55,12 @@ Item {
 
                 horizontalAlignment: Text.AlignLeft
                 text: modelData
-                font: root.boldFont ? ui.theme.bodyBoldFont : ui.theme.bodyFont
+                font: ui.theme.bodyBoldFont
             }
 
-            MouseArea {
-                anchors.fill: parent
-
-                onClicked: {
-                    view.currentIndex = model.index
-                    root.titleClicked(model.index)
-                }
+            onClicked: {
+                view.currentIndex = model.index
+                root.titleClicked(model.index)
             }
         }
     }
