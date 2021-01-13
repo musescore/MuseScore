@@ -26,9 +26,9 @@
 #include "actions/iactionsdispatcher.h"
 #include "async/asyncable.h"
 #include "actions/actiontypes.h"
+#include "uicomponents/uicomponentstypes.h"
 
-namespace mu {
-namespace playback {
+namespace mu::playback {
 class PlaybackToolBarModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
@@ -48,24 +48,17 @@ public:
 private:
 
     enum Roles {
-        NameRole = Qt::UserRole + 1,
+        CodeRole = Qt::UserRole + 1,
         TitleRole,
         EnabledRole,
         CheckedRole
     };
 
-    struct ActionItem {
-        actions::Action action;
-        bool enabled = false;
-        bool checked = false;
-    };
-
     void updateState();
 
-    ActionItem& item(const actions::ActionName& name);
-    QList<ActionItem> m_items;
+    framework::MenuItem& item(const actions::ActionCode& actionCode);
+    QList<framework::MenuItem> m_items;
 };
-}
 }
 
 #endif // MU_PLAYBACK_PLAYBACKTOOLBARMODEL_H

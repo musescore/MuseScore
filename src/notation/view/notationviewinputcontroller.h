@@ -89,8 +89,6 @@ private:
 
     void setViewMode(const ViewMode& viewMode);
 
-    bool canReceiveAction(const actions::ActionName& actionName) const override;
-
     struct InteractData {
         QPoint beginPoint;
         Element* hitElement = nullptr;

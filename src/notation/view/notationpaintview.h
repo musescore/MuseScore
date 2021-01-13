@@ -25,7 +25,7 @@
 
 #include "modularity/ioc.h"
 #include "inotationconfiguration.h"
-#include "internal/inotationactionsrepositoryfactory.h"
+#include "inotationcontextmenu.h"
 #include "iinteractive.h"
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
@@ -49,7 +49,7 @@ class NotationPaintView : public QQuickPaintedItem, public IControlledView, publ
     INJECT(notation, actions::IActionsDispatcher, dispatcher)
     INJECT(notation, context::IGlobalContext, globalContext)
     INJECT(notation, playback::IPlaybackController, playbackController)
-    INJECT(notation, INotationActionsRepositoryFactory, actionsFactory)
+    INJECT(notation, INotationContextMenu, notationContextMenu)
     INJECT(notation, shortcuts::IShortcutsRegister, shortcutsRegister)
 
     Q_PROPERTY(qreal startHorizontalScrollPosition READ startHorizontalScrollPosition NOTIFY horizontalScrollChanged)
@@ -64,7 +64,7 @@ public:
     Q_INVOKABLE void scrollHorizontal(qreal position);
     Q_INVOKABLE void scrollVertical(qreal position);
 
-    Q_INVOKABLE void handleAction(const QString& actionName);
+    Q_INVOKABLE void handleAction(const QString& actionCode);
 
     qreal width() const override;
     qreal height() const override;
@@ -108,7 +108,7 @@ private:
 
     double guiScale() const;
 
-    bool canReceiveAction(const actions::ActionName& action) const override;
+    bool canReceiveAction(const actions::ActionCode& actionCode) const override;
     void onCurrentNotationChanged();
     bool isInited() const;
 

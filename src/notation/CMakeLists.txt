@@ -103,21 +103,12 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationparts.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/masternotationparts.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/masternotationparts.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationactionsrepositoryfactory.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationactionsrepositoryfactory.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/elementactionsrepository.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/elementactionsrepository.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/measureactionsrepository.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/measureactionsrepository.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/pageactionsrepository.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/pageactionsrepository.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/inotationactionsrepositoryfactory.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/inotationactionsrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/searchcommandsparser.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/searchcommandsparser.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/inotationselectionrange.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsconverter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsconverter.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/inotationcontextmenu.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationpaintview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/notationpaintview.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationviewinputcontroller.cpp
@@ -146,6 +137,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/noteinputbarcustomisemodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationtoolbarmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/notationtoolbarmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationcontextmenu.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationcontextmenu.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/abstractnoteinputbaritem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/abstractnoteinputbaritem.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/actionnoteinputbaritem.cpp

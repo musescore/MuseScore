@@ -19,10 +19,10 @@
 #ifndef MU_SCENECOMMON_COMMONSCENETYPES_H
 #define MU_SCENECOMMON_COMMONSCENETYPES_H
 
-namespace mu {
-static const char MIME_SYMBOL_FORMAT[]      = "application/musescore/symbol";
-static const char MIME_SYMBOLLIST_FORMAT[]  = "application/musescore/symbollist";
-static const char MIME_STAFFLLIST_FORMAT[]  = "application/musescore/stafflist";
+namespace mu::commonscene {
+static const char MIME_SYMBOL_FORMAT[] = "application/musescore/symbol";
+static const char MIME_SYMBOLLIST_FORMAT[] = "application/musescore/symbollist";
+static const char MIME_STAFFLLIST_FORMAT[] = "application/musescore/stafflist";
 }
 
 #endif // MU_SCENECOMMON_COMMONSCENETYPES_H

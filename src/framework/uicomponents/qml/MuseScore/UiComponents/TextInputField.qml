@@ -57,7 +57,7 @@ Rectangle {
             Layout.fillHeight: true
             Layout.preferredWidth: 30
 
-            visible: Boolean(hintIcon.iconCode)
+            visible: Boolean(!hintIcon.isEmpty)
         }
 
         TextField {

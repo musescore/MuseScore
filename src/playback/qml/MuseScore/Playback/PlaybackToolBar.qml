@@ -27,7 +27,7 @@ Rectangle {
 
                 onClicked: {
                     if (enabled) {
-                        toolModel.click(nameRole)
+                        toolModel.click(codeRole)
                     }
                 }
             }

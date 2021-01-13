@@ -66,6 +66,7 @@ NoteInputState NotationNoteInput::state() const
     noteInputState.articulationIds = articulationIds();
     noteInputState.withSlur = inputState.slur() != nullptr;
     noteInputState.currentVoiceIndex = inputState.voice();
+    noteInputState.isRest = inputState.rest();
 
     return noteInputState;
 }

@@ -101,16 +101,16 @@ private:
     void updateRemovingAvailability();
     void updateAddSeparatorAvailability();
 
-    AbstractNoteInputBarItem* makeItem(const actions::Action& action, bool checked);
+    AbstractNoteInputBarItem* makeItem(const actions::ActionItem& action, bool checked);
     AbstractNoteInputBarItem* makeSeparatorItem() const;
 
-    actions::ActionNameList customizedActions() const;
-    actions::ActionNameList defaultActions() const;
-    actions::ActionNameList currentActions() const;
+    actions::ActionCodeList customizedActions() const;
+    actions::ActionCodeList defaultActions() const;
+    actions::ActionCodeList currentActions() const;
 
-    actions::ActionNameList currentWorkspaceActions() const;
+    actions::ActionCodeList currentWorkspaceActions() const;
 
-    bool actionFromNoteInputModes(const actions::ActionName& actionName) const;
+    bool actionFromNoteInputModes(const actions::ActionCode& actionCode) const;
 
     void saveActions();
 

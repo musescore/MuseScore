@@ -44,13 +44,13 @@ FocusScope {
                     id: menuAction
 
                     Action {
-                        property string name: ""
+                        property string code: ""
                         property string hintIcon: ""
 
                         icon.name: hintIcon
 
                         onTriggered: {
-                            Qt.callLater(notationView.handleAction, name)
+                            Qt.callLater(notationView.handleAction, code)
                         }
                     }
                 }
@@ -62,7 +62,7 @@ FocusScope {
                         var item = items[i]
 
                         var action = menuAction.createObject(notationView, {
-                                                             name: item.name,
+                                                             code: item.code,
                                                              text: item.title,
                                                              hintIcon: item.icon,
                                                              shortcut: item.shortcut

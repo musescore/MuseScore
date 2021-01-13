@@ -30,8 +30,8 @@ ConcertPitchControlModel::ConcertPitchControlModel(QObject* parent)
 
 void ConcertPitchControlModel::load()
 {
-    dispatcher()->reg(this, "concert-pitch", [this](const ActionName& name, const ActionData& args) {
-        Q_UNUSED(name)
+    dispatcher()->reg(this, "concert-pitch", [this](const ActionCode& actionCode, const ActionData& args) {
+        Q_UNUSED(actionCode)
         bool enabled = args.count() > 0 ? args.arg<bool>(0) : false;
         setConcertPitchEnabled(enabled);
     });

@@ -34,13 +34,13 @@ void ShortcutsController::activate(const std::string& sequence)
 
     ShortcutContext activeCtx = contextResolver()->currentShortcutContext();
     for (const Shortcut& sc: shortcuts) {
-        const Action& a = aregister()->action(sc.action);
+        const ActionItem& a = aregister()->action(sc.action);
         if (!a.isValid()) {
             LOGE() << "not found action: " << sc.action;
             continue;
         }
 
-        if (a.scContext == ShortcutContext::Any || a.scContext == activeCtx) {
+        if (a.shortcutContext == ShortcutContext::Any || a.shortcutContext == activeCtx) {
             dispatcher()->dispatch(sc.action);
         } else {
             LOGD() << "context is not active for action: " << sc.action;

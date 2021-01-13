@@ -28,6 +28,9 @@
 #include "actions/iactionsdispatcher.h"
 #include "playback/iplaybackcontroller.h"
 #include "workspace/iworkspacemanager.h"
+#include "shortcuts/ishortcutsregister.h"
+
+#include "uicomponents/uicomponentstypes.h"
 
 namespace mu::notation {
 class NoteInputBarModel : public QAbstractListModel, public async::Asyncable
@@ -39,6 +42,7 @@ class NoteInputBarModel : public QAbstractListModel, public async::Asyncable
     INJECT(notation, context::IGlobalContext, context)
     INJECT(notation, playback::IPlaybackController, playbackController)
     INJECT(notation, workspace::IWorkspaceManager, workspaceManager)
+    INJECT(notation, shortcuts::IShortcutsRegister, shortcutsRegister)
 
     Q_PROPERTY(int count READ rowCount NOTIFY countChanged)
 
@@ -59,7 +63,7 @@ signals:
 
 private:
     enum Roles {
-        NameRole = Qt::UserRole + 1,
+        CodeRole = Qt::UserRole + 1,
         IconRole,
         SectionRole,
         CheckedRole
@@ -83,24 +87,17 @@ private:
     void updateArticulationsState();
     void updateRestState();
 
-    bool isNoteInputModeAction(const actions::ActionName& actionName) const;
-    bool isTupletChooseAction(const actions::ActionName& actionName) const;
+    bool isNoteInputModeAction(const actions::ActionCode& actionCode) const;
+    bool isTupletChooseAction(const actions::ActionCode& actionCode) const;
 
-    actions::Action currentNoteInputModeAction() const;
+    actions::ActionItem currentNoteInputModeAction() const;
 
-    struct ActionItem {
-        actions::Action action;
-        QString section;
-        bool enabled = false;
-        bool checked = false;
-    };
-
-    ActionItem makeActionItem(const actions::Action& action, const QString& section);
-    ActionItem makeAddItem(const QString& section);
+    framework::MenuItem makeActionItem(const actions::ActionItem& action, const std::string& section);
+    framework::MenuItem makeAddItem(const std::string& section);
 
     std::vector<std::string> currentWorkspaceActions() const;
 
-    ActionItem& item(const actions::ActionName& actionName);
+    framework::MenuItem& item(const actions::ActionCode& actionCode);
     int findNoteInputModeItemIndex() const;
 
     INotationNoteInputPtr noteInput() const;
@@ -119,7 +116,7 @@ private:
 
     const ChordRest* elementToChordRest(const Element* element) const;
 
-    QList<ActionItem> m_items;
+    QList<framework::MenuItem> m_items;
 };
 }
 

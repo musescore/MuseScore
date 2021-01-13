@@ -26,20 +26,20 @@ using namespace mu::actions;
 using namespace mu::shortcuts;
 
 const mu::actions::ActionList PaletteActions::m_actions = {
-    Action("masterpalette",
-           QT_TRANSLATE_NOOP("action", "Master Palette"),
-           ShortcutContext::Any
-           ),
+    ActionItem("masterpalette",
+               ShortcutContext::Any,
+               QT_TRANSLATE_NOOP("action", "Master Palette")
+               ),
 };
 
-const Action& PaletteActions::action(const ActionName& name) const
+const ActionItem& PaletteActions::action(const ActionCode& actionCode) const
 {
-    for (const Action& action : m_actions) {
-        if (action.name == name) {
+    for (const ActionItem& action : m_actions) {
+        if (action.code == actionCode) {
             return action;
         }
     }
 
-    static Action null;
+    static ActionItem null;
     return null;
 }
