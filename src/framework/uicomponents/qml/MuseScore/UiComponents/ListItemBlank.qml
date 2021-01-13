@@ -8,6 +8,7 @@ Item {
     property bool isSelected: false
 
     signal clicked()
+    signal doubleClicked()
 
     implicitHeight: 30
     implicitWidth: ListView.view.width
@@ -65,6 +66,10 @@ Item {
 
         onClicked: {
             root.clicked()
+        }
+
+        onDoubleClicked: {
+            root.doubleClicked()
         }
     }
 }
