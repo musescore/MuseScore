@@ -915,6 +915,9 @@ int MasterScore::styleDefaultByMscVersion(const int mscVer) const
 
 int MasterScore::readStyleDefaultsVersion()
       {
+      if (styleB(Sid::usePre_3_6_defaults))
+            return style().defaultStyleVersion();
+
       XmlReader e(readToBuffer());
       e.setDocName(masterScore()->fileInfo()->completeBaseName());
 
