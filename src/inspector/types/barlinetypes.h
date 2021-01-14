@@ -1,5 +1,5 @@
-#ifndef BARLINETYPES_H
-#define BARLINETYPES_H
+#ifndef MU_INSPECTOR_BARLINETYPES_H
+#define MU_INSPECTOR_BARLINETYPES_H
 
 #include "qobjectdefs.h"
 
@@ -43,4 +43,4 @@ public:
 };
 }
 
-#endif // BARLINETYPES_H
+#endif // MU_INSPECTOR_BARLINETYPES_H

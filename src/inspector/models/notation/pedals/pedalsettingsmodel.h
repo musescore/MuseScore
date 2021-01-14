@@ -1,5 +1,5 @@
-#ifndef PEDALSSETTINGSMODEL_H
-#define PEDALSSETTINGSMODEL_H
+#ifndef MU_INSPECTOR_PEDALSSETTINGSMODEL_H
+#define MU_INSPECTOR_PEDALSSETTINGSMODEL_H
 
 #include "models/abstractinspectormodel.h"
 
@@ -54,4 +54,4 @@ private:
 };
 }
 
-#endif // PEDALSSETTINGSMODEL_H
+#endif // MU_INSPECTOR_PEDALSSETTINGSMODEL_H

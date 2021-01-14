@@ -1,5 +1,5 @@
-#ifndef STEMTYPES_H
-#define STEMTYPES_H
+#ifndef MU_INSPECTOR_STEMTYPES_H
+#define MU_INSPECTOR_STEMTYPES_H
 
 #include "qobjectdefs.h"
 
@@ -26,4 +26,4 @@ public:
 };
 }
 
-#endif // STEMTYPES_H
+#endif // MU_INSPECTOR_STEMTYPES_H

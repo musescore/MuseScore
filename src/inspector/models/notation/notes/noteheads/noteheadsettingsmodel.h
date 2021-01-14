@@ -1,5 +1,5 @@
-#ifndef NOTEHEADSETTINGSMODEL_H
-#define NOTEHEADSETTINGSMODEL_H
+#ifndef MU_INSPECTOR_NOTEHEADSETTINGSMODEL_H
+#define MU_INSPECTOR_NOTEHEADSETTINGSMODEL_H
 
 #include "models/abstractinspectormodel.h"
 #include "noteheadtypesmodel.h"
@@ -58,4 +58,4 @@ private:
 };
 }
 
-#endif // NOTEHEADSETTINGSMODEL_H
+#endif // MU_INSPECTOR_NOTEHEADSETTINGSMODEL_H

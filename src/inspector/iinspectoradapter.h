@@ -17,8 +17,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef IINSPECTORADAPTER_H
-#define IINSPECTORADAPTER_H
+#ifndef MU_INSPECTOR_IINSPECTORADAPTER_H
+#define MU_INSPECTOR_IINSPECTORADAPTER_H
 
 #include <QVariant>
 
@@ -27,14 +27,11 @@
 #include "libmscore/style.h"
 #include "async/notification.h"
 
-namespace Ms {
-class Score;
-}
-
 namespace mu::inspector {
 class IInspectorAdapter : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IInspectorAdapter)
+
 public:
     virtual ~IInspectorAdapter() = default;
 
@@ -72,4 +69,4 @@ public:
 };
 }
 
-#endif // IINSPECTORADAPTER_H
+#endif // MU_INSPECTOR_IINSPECTORADAPTER_H

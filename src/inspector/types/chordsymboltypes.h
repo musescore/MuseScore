@@ -1,5 +1,5 @@
-#ifndef CHORDSYMBOLTYPES_H
-#define CHORDSYMBOLTYPES_H
+#ifndef MU_INSPECTOR_CHORDSYMBOLTYPES_H
+#define MU_INSPECTOR_CHORDSYMBOLTYPES_H
 
 #include "qobjectdefs.h"
 
@@ -32,4 +32,4 @@ public:
 };
 }
 
-#endif // CHORDSYMBOLTYPES_H
+#endif // MU_INSPECTOR_CHORDSYMBOLTYPES_H

@@ -1,5 +1,5 @@
-#ifndef FERMATATYPES_H
-#define FERMATATYPES_H
+#ifndef MU_INSPECTOR_FERMATATYPES_H
+#define MU_INSPECTOR_FERMATATYPES_H
 
 #include "qobjectdefs.h"
 
@@ -16,4 +16,4 @@ public:
     Q_ENUM(Placement)
 };
 
-#endif // FERMATATYPES_H
+#endif // MU_INSPECTOR_FERMATATYPES_H

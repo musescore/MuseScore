@@ -1,5 +1,5 @@
-#ifndef TREMOLOTYPES_H
-#define TREMOLOTYPES_H
+#ifndef MU_INSPECTOR_TREMOLOTYPES_H
+#define MU_INSPECTOR_TREMOLOTYPES_H
 
 #include "qobjectdefs.h"
 
@@ -17,4 +17,4 @@ public:
     Q_ENUM(TremoloStyle)
 };
 
-#endif // TREMOLOTYPES_H
+#endif // MU_INSPECTOR_TREMOLOTYPES_H

@@ -1,5 +1,5 @@
-#ifndef NOTEHEADTYPES_H
-#define NOTEHEADTYPES_H
+#ifndef MU_INSPECTOR_NOTEHEADTYPES_H
+#define MU_INSPECTOR_NOTEHEADTYPES_H
 
 #include "qobjectdefs.h"
 
@@ -78,4 +78,4 @@ public:
 };
 }
 
-#endif // NOTEHEADTYPES_H
+#endif // MU_INSPECTOR_NOTEHEADTYPES_H

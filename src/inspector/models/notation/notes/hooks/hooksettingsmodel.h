@@ -1,5 +1,5 @@
-#ifndef HOOKSETTINGSMODEL_H
-#define HOOKSETTINGSMODEL_H
+#ifndef MU_INSPECTOR_HOOKSETTINGSMODEL_H
+#define MU_INSPECTOR_HOOKSETTINGSMODEL_H
 
 #include "models/abstractinspectormodel.h"
 
@@ -30,4 +30,4 @@ private:
 };
 }
 
-#endif // HOOKSETTINGSMODEL_H
+#endif // MU_INSPECTOR_HOOKSETTINGSMODEL_H

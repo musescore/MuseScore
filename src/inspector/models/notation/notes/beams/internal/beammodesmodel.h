@@ -1,5 +1,5 @@
-#ifndef BEAMMODESMODEL_H
-#define BEAMMODESMODEL_H
+#ifndef MU_INSPECTOR_BEAMMODESMODEL_H
+#define MU_INSPECTOR_BEAMMODESMODEL_H
 
 #include "beammodelistmodel.h"
 #include "models/abstractinspectormodel.h"
@@ -38,4 +38,4 @@ private:
 };
 }
 
-#endif // BEAMMODESMODEL_H
+#endif // MU_INSPECTOR_BEAMMODESMODEL_H

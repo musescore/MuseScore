@@ -1,5 +1,5 @@
-#ifndef CRESCENDOTYPES_H
-#define CRESCENDOTYPES_H
+#ifndef MU_INSPECTOR_CRESCENDOTYPES_H
+#define MU_INSPECTOR_CRESCENDOTYPES_H
 
 #include "qobjectdefs.h"
 
@@ -37,4 +37,4 @@ public:
 };
 }
 
-#endif // CRESCENDOTYPES_H
+#endif // MU_INSPECTOR_CRESCENDOTYPES_H

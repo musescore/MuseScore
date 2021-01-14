@@ -1,5 +1,5 @@
-#ifndef IMAGESETTINGSMODEL_H
-#define IMAGESETTINGSMODEL_H
+#ifndef MU_INSPECTOR_IMAGESETTINGSMODEL_H
+#define MU_INSPECTOR_IMAGESETTINGSMODEL_H
 
 #include "models/abstractinspectormodel.h"
 
@@ -42,4 +42,4 @@ private:
 };
 }
 
-#endif // IMAGESETTINGSMODEL_H
+#endif // MU_INSPECTOR_IMAGESETTINGSMODEL_H

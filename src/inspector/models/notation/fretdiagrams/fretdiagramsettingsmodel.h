@@ -1,5 +1,5 @@
-#ifndef FRETDIAGRAMSETTINGSMODEL_H
-#define FRETDIAGRAMSETTINGSMODEL_H
+#ifndef MU_INSPECTOR_FRETDIAGRAMSETTINGSMODEL_H
+#define MU_INSPECTOR_FRETDIAGRAMSETTINGSMODEL_H
 
 #include "models/abstractinspectormodel.h"
 #include "types/fretdiagramtypes.h"
@@ -79,4 +79,4 @@ private:
 };
 }
 
-#endif // FRETDIAGRAMSETTINGSMODEL_H
+#endif // MU_INSPECTOR_FRETDIAGRAMSETTINGSMODEL_H

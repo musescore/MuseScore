@@ -1,5 +1,5 @@
-#ifndef DYNAMICTYPES_H
-#define DYNAMICTYPES_H
+#ifndef MU_INSPECTOR_DYNAMICTYPES_H
+#define MU_INSPECTOR_DYNAMICTYPES_H
 
 #include "qobjectdefs.h"
 
@@ -24,4 +24,4 @@ public:
     Q_ENUM(VelocityChangeSpeed)
 };
 
-#endif // DYNAMICTYPES_H
+#endif // MU_INSPECTOR_DYNAMICTYPES_H
