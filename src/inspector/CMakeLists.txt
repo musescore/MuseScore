@@ -39,7 +39,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/types/fretdiagramtypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/glissandotypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/hairpintypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/types/iconnames.h
     ${CMAKE_CURRENT_LIST_DIR}/types/keysignaturetypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/markertypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/noteheadtypes.h
