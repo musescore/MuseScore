@@ -19,6 +19,7 @@
 #include "fontscontroller.h"
 
 #include <QFontDatabase>
+#include <QCoreApplication>
 
 #include "log.h"
 
