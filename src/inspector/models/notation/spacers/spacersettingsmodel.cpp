@@ -2,6 +2,8 @@
 
 #include "dataformatter.h"
 
+using namespace mu::inspector;
+
 SpacerSettingsModel::SpacerSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {

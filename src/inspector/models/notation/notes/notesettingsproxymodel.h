@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectorproxymodel.h"
 
+namespace mu::inspector {
 class NoteSettingsProxyModel : public AbstractInspectorProxyModel
 {
     Q_OBJECT
@@ -10,5 +11,6 @@ class NoteSettingsProxyModel : public AbstractInspectorProxyModel
 public:
     explicit NoteSettingsProxyModel(QObject* parent, IElementRepositoryService* repository);
 };
+}
 
 #endif // NOTATIONINSPECTORPROXYMODEL_H

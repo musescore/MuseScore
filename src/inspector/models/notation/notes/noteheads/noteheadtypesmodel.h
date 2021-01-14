@@ -6,6 +6,7 @@
 #include "note.h"
 #include "types/noteheadtypes.h"
 
+namespace mu::inspector {
 class NoteheadTypesModel : public QAbstractListModel
 {
     Q_OBJECT
@@ -50,5 +51,6 @@ private:
     Ms::Score* m_score = nullptr;
     int m_selectedHeadTypeIndex = 0;
 };
+}
 
 #endif // NOTEHEADTYPESMODEL_H

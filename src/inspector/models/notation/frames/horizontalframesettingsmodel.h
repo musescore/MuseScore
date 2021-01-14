@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class HorizontalFrameSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -31,5 +32,6 @@ private:
     PropertyItem* m_rightGap = nullptr;
     PropertyItem* m_shouldDisplayKeysAndBrackets = nullptr;
 };
+}
 
 #endif // HORIZONTALFRAMESETTINGSMODEL_H

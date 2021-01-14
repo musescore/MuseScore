@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class ImageSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -39,5 +40,6 @@ private:
     PropertyItem* m_isSizeInSpatiums = nullptr;
     PropertyItem* m_isImageFramed = nullptr;
 };
+}
 
 #endif // IMAGESETTINGSMODEL_H

@@ -27,6 +27,7 @@
 #include "ui/iuiconfiguration.h"
 #include "libmscore/pitchvalue.h"
 
+namespace mu::inspector {
 class GridCanvas : public QQuickPaintedItem
 {
     Q_OBJECT
@@ -94,5 +95,6 @@ private:
     /// Show negative pitch values. Happens in tremoloBarCanvas.
     bool m_showNegativeRows = false;
 };
+}
 
 #endif

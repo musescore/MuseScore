@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class TextFrameSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -37,5 +38,6 @@ private:
     PropertyItem* m_frameTopMargin = nullptr;
     PropertyItem* m_frameBottomMargin = nullptr;
 };
+}
 
 #endif // TEXTFRAMESETTINGSMODEL_H

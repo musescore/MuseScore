@@ -3,6 +3,8 @@
 #include "libmscore/musescoreCore.h"
 #include "log.h"
 
+using namespace mu::inspector;
+
 static const QList<Ms::ElementType> NOTATION_ELEMENT_TYPES = {
     Ms::ElementType::NOTE,
     Ms::ElementType::STEM,

@@ -3,6 +3,7 @@
 
 #include "qobjectdefs.h"
 
+namespace mu::inspector {
 class KeySignatureTypes
 {
     Q_GADGET
@@ -23,5 +24,6 @@ public:
 
     Q_ENUM(Mode)
 };
+}
 
 #endif // KEYSIGNATURETYPES_H

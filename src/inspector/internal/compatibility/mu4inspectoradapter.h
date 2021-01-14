@@ -8,8 +8,7 @@
 #include "notation/inotation.h"
 #include "iinteractive.h"
 
-namespace mu {
-namespace inspector {
+namespace mu::inspector {
 class MU4InspectorAdapter : public IInspectorAdapter
 {
     INJECT(inspector, mu::context::IGlobalContext, context)
@@ -54,7 +53,6 @@ private:
     mu::notation::INotationUndoStackPtr undoStack() const;
     mu::notation::INotationStylePtr style() const;
 };
-}
 }
 
 #endif // MU4INSPECTORADAPTER_H

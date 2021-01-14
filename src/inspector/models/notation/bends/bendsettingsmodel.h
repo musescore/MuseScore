@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class BendSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -35,5 +36,6 @@ private:
     PropertyItem* m_bendCurve = nullptr;
     PropertyItem* m_lineThickness = nullptr;
 };
+}
 
 #endif // BENDSETTINGSMODEL_H

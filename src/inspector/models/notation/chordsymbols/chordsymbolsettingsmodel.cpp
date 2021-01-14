@@ -1,5 +1,7 @@
 #include "chordsymbolsettingsmodel.h"
 
+using namespace mu::inspector;
+
 ChordSymbolSettingsModel::ChordSymbolSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {

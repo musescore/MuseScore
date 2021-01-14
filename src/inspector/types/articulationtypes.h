@@ -3,6 +3,7 @@
 
 #include "qobjectdefs.h"
 
+namespace mu::inspector {
 class ArticulationTypes
 {
     Q_GADGET
@@ -31,5 +32,6 @@ public:
     Q_ENUM(Direction)
     Q_ENUM(Style)
 };
+}
 
 #endif // ARTICULATIONTYPES_H

@@ -3,6 +3,7 @@
 
 #include "qobjectdefs.h"
 
+namespace mu::inspector {
 class TextTypes
 {
     Q_GADGET
@@ -102,5 +103,6 @@ public:
 
     Q_ENUM(FontVerticalAlignment)
 };
+}
 
 #endif // TEXTTYPES_H

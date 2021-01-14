@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class ClefSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -22,5 +23,6 @@ public:
 private:
     PropertyItem* m_shouldShowCourtesy = nullptr;
 };
+}
 
 #endif // CLEFSETTINGSMODEL_H

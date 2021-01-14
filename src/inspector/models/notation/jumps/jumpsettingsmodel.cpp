@@ -1,5 +1,7 @@
 #include "jumpsettingsmodel.h"
 
+using namespace mu::inspector;
+
 JumpSettingsModel::JumpSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {

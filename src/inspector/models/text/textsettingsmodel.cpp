@@ -6,6 +6,8 @@
 #include "libmscore/textbase.h"
 #include "dataformatter.h"
 
+using namespace mu::inspector;
+
 TextSettingsModel::TextSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {

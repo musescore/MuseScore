@@ -1,5 +1,7 @@
 #include "accidentalsettingsmodel.h"
 
+using namespace mu::inspector;
+
 AccidentalSettingsModel::AccidentalSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {

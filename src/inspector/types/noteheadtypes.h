@@ -3,6 +3,7 @@
 
 #include "qobjectdefs.h"
 
+namespace mu::inspector {
 class NoteHeadTypes
 {
     Q_GADGET
@@ -75,5 +76,6 @@ public:
     Q_ENUM(NoteDotPosition)
     Q_ENUM(SchemeType)
 };
+}
 
 #endif // NOTEHEADTYPES_H

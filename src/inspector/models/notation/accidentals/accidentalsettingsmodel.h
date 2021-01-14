@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class AccidentalSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -21,5 +22,6 @@ public:
 private:
     PropertyItem* m_bracketType = nullptr;
 };
+}
 
 #endif // ACCIDENTALSETTINGSMODEL_H

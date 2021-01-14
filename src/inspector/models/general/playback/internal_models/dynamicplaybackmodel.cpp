@@ -2,6 +2,8 @@
 
 #include "dynamic.h"
 
+using namespace mu::inspector;
+
 DynamicPlaybackModel::DynamicPlaybackModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {

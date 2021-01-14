@@ -3,6 +3,7 @@
 
 #include "qobjectdefs.h"
 
+namespace mu::inspector {
 class MarkerTypes
 {
     Q_GADGET
@@ -21,5 +22,6 @@ public:
 
     Q_ENUM(Type)
 };
+}
 
 #endif // MARKERTYPES_H

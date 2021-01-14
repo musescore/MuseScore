@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class BracketSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -26,5 +27,6 @@ private:
     PropertyItem* m_bracketColumnPosition = nullptr;
     PropertyItem* m_bracketSpanStaves = nullptr;
 };
+}
 
 #endif // BRACKETSETTINGSMODEL_H

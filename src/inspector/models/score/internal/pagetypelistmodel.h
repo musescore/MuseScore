@@ -7,6 +7,7 @@
 #include <QSizeF>
 #include <QAbstractListModel>
 
+namespace mu::inspector {
 class PageTypeListModel : public QAbstractListModel
 {
     Q_OBJECT
@@ -39,5 +40,6 @@ private:
     QList<int> m_pageSizeIdList;
     QHash<int, QByteArray> m_roleNames;
 };
+}
 
 #endif // PAGETYPELISTMODEL_H

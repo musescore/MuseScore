@@ -7,6 +7,7 @@
 #include "score/scoreappearancesettingsmodel.h"
 #include "notation/inotationinteraction.h"
 
+using namespace mu::inspector;
 using namespace mu::notation;
 
 InspectorListModel::InspectorListModel(QObject* parent)

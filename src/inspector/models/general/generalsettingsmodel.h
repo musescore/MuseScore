@@ -5,6 +5,7 @@
 #include "playback/playbackproxymodel.h"
 #include "appearance/appearancesettingsmodel.h"
 
+namespace mu::inspector {
 class GeneralSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -51,5 +52,6 @@ private:
     PlaybackProxyModel* m_playbackProxyModel = nullptr;
     AppearanceSettingsModel* m_appearanceSettingsModel = nullptr;
 };
+}
 
 #endif // GENERALSETTINGSMODEL_H

@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class DynamicPlaybackModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -32,5 +33,6 @@ private:
     PropertyItem* m_velocityChangeSpeed = nullptr;
     PropertyItem* m_scopeType = nullptr;
 };
+}
 
 #endif // DYNAMICPLAYBACKMODEL_H

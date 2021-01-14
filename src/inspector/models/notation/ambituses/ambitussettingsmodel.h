@@ -4,6 +4,7 @@
 #include "models/abstractinspectormodel.h"
 #include "models/notation/notes/noteheads/noteheadtypesmodel.h"
 
+namespace mu::inspector {
 class AmbitusSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -67,5 +68,6 @@ private:
     PropertyItem* m_direction = nullptr;
     PropertyItem* m_lineThickness = nullptr;
 };
+}
 
 #endif // AMBITUSSETTINGSMODEL_H

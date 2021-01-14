@@ -22,8 +22,7 @@
 
 #include "modularity/imodulesetup.h"
 
-namespace mu {
-namespace inspector {
+namespace mu::inspector {
 class InspectorModule : public mu::framework::IModuleSetup
 {
 public:
@@ -31,11 +30,9 @@ public:
 
     std::string moduleName() const override;
     void registerExports() override;
-    void resolveImports() override;
     void registerResources() override;
     void registerUiTypes() override;
 };
-}
 }
 
 #endif // INSPECTORSETUP_H

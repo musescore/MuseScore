@@ -3,6 +3,8 @@
 #include "types/stemtypes.h"
 #include "dataformatter.h"
 
+using namespace mu::inspector;
+
 StemSettingsModel::StemSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {

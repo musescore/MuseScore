@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class CrescendoSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -69,5 +70,6 @@ private:
     PropertyItem* m_continiousTextHorizontalOffset = nullptr;
     PropertyItem* m_continiousTextVerticalOffset = nullptr;
 };
+}
 
 #endif // CRESCENDOSETTINGSMODEL_H

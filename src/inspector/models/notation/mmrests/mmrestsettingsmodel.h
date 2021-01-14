@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class MMRestSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -25,5 +26,6 @@ private:
     PropertyItem* m_isNumberVisible = nullptr;
     PropertyItem* m_numberPosition = nullptr;
 };
+}
 
 #endif // MMRESTSETTINGSMODEL_H

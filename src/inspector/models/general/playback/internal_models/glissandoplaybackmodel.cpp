@@ -1,5 +1,7 @@
 #include "glissandoplaybackmodel.h"
 
+using namespace mu::inspector;
+
 GlissandoPlaybackModel::GlissandoPlaybackModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {

@@ -3,6 +3,7 @@
 
 #include "qobjectdefs.h"
 
+namespace mu::inspector {
 class HairpinTypes
 {
     Q_GADGET
@@ -35,5 +36,6 @@ public:
     Q_ENUM(LineStyle)
     Q_ENUM(PlacementType)
 };
+}
 
 #endif // HAIRPINTYPES_H

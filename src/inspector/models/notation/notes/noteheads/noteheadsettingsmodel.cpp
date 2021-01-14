@@ -3,6 +3,8 @@
 #include "note.h"
 #include "dataformatter.h"
 
+using namespace mu::inspector;
+
 NoteheadSettingsModel::NoteheadSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {

@@ -1,5 +1,7 @@
 #include "fermatasettingsmodel.h"
 
+using namespace mu::inspector;
+
 FermataSettingsModel::FermataSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {

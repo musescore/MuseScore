@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class MarkerSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -24,5 +25,6 @@ private:
     PropertyItem* m_type = nullptr;
     PropertyItem* m_label = nullptr;
 };
+}
 
 #endif // MARKERSETTINGSMODEL_H

@@ -3,6 +3,8 @@
 #include "log.h"
 #include "libmscore/bracket.h"
 
+using namespace mu::inspector;
+
 BraceSettingsModel::BraceSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {

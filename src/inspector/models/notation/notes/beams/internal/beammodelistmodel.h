@@ -4,6 +4,7 @@
 #include <QAbstractListModel>
 #include "types/beamtypes.h"
 
+namespace mu::inspector {
 class BeamModeListModel : public QAbstractListModel
 {
     Q_OBJECT
@@ -46,5 +47,6 @@ private:
     QVector<BeamTypesData> m_beamTypesDataList;
     int m_selectedTypeIndex = -1;
 };
+}
 
 #endif // BEAMTYPESMODEL_H

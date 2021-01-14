@@ -1,5 +1,7 @@
 #include "abstractinspectorproxymodel.h"
 
+using namespace mu::inspector;
+
 AbstractInspectorProxyModel::AbstractInspectorProxyModel(QObject* parent)
     : AbstractInspectorModel(parent)
 {

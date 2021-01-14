@@ -14,6 +14,7 @@
 #include "modularity/ioc.h"
 #include "models/propertyitem.h"
 
+namespace mu::inspector {
 class AbstractInspectorModel : public QObject
 {
     Q_OBJECT
@@ -144,5 +145,6 @@ private:
     InspectorModelType m_modelType = InspectorModelType::TYPE_UNDEFINED;
     bool m_isEmpty = false;
 };
+}
 
 #endif // ABSTRACTINSPECTORMODEL_H

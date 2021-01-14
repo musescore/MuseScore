@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class HookSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -27,5 +28,6 @@ private:
     PropertyItem* m_horizontalOffset = nullptr;
     PropertyItem* m_verticalOffset = nullptr;
 };
+}
 
 #endif // HOOKSETTINGSMODEL_H

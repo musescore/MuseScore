@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class HairpinSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -78,5 +79,6 @@ private:
     PropertyItem* m_continiousTextHorizontalOffset = nullptr;
     PropertyItem* m_continiousTextVerticalOffset = nullptr;
 };
+}
 
 #endif // HAIRPINSETTINGSMODEL_H

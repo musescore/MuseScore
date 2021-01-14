@@ -1,5 +1,7 @@
 #include "clefsettingsmodel.h"
 
+using namespace mu::inspector;
+
 ClefSettingsModel::ClefSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {

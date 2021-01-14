@@ -5,6 +5,7 @@
 
 #include "internal/pagetypelistmodel.h"
 
+namespace mu::inspector {
 class ScoreAppearanceSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -53,5 +54,6 @@ private:
 
     PageTypeListModel* m_pageTypeListModel = nullptr;
 };
+}
 
 #endif // SCOREAPPEARANCESETTINGSMODEL_H
