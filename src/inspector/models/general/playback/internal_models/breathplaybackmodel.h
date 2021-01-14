@@ -1,5 +1,5 @@
-#ifndef BREATHPLAYBACKMODEL_H
-#define BREATHPLAYBACKMODEL_H
+#ifndef MU_INSPECTOR_BREATHPLAYBACKMODEL_H
+#define MU_INSPECTOR_BREATHPLAYBACKMODEL_H
 
 #include "models/abstractinspectormodel.h"
 

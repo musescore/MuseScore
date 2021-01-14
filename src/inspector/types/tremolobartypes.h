@@ -1,5 +1,5 @@
-#ifndef TREMOLOBARTYPES_H
-#define TREMOLOBARTYPES_H
+#ifndef MU_INSPECTOR_TREMOLOBARTYPES_H
+#define MU_INSPECTOR_TREMOLOBARTYPES_H
 
 #include "qobjectdefs.h"
 
@@ -23,4 +23,4 @@ public:
 };
 }
 
-#endif // TREMOLOBARTYPES_H
+#endif // MU_INSPECTOR_TREMOLOBARTYPES_H

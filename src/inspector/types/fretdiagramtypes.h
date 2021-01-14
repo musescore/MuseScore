@@ -1,5 +1,5 @@
-#ifndef FRETDIAGRAMTYPES_H
-#define FRETDIAGRAMTYPES_H
+#ifndef MU_INSPECTOR_FRETDIAGRAMTYPES_H
+#define MU_INSPECTOR_FRETDIAGRAMTYPES_H
 
 #include "qobjectdefs.h"
 
@@ -29,4 +29,4 @@ public:
     Q_ENUM(FretMarker)
 };
 
-#endif // FRETDIAGRAMTYPES_H
+#endif // MU_INSPECTOR_FRETDIAGRAMTYPES_H

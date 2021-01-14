@@ -1,5 +1,5 @@
-#ifndef MMRESTSETTINGSMODEL_H
-#define MMRESTSETTINGSMODEL_H
+#ifndef MU_INSPECTOR_MMRESTSETTINGSMODEL_H
+#define MU_INSPECTOR_MMRESTSETTINGSMODEL_H
 
 #include "models/abstractinspectormodel.h"
 
@@ -28,4 +28,4 @@ private:
 };
 }
 
-#endif // MMRESTSETTINGSMODEL_H
+#endif // MU_INSPECTOR_MMRESTSETTINGSMODEL_H

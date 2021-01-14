@@ -1,5 +1,5 @@
-#ifndef TEXTTYPES_H
-#define TEXTTYPES_H
+#ifndef MU_INSPECTOR_TEXTTYPES_H
+#define MU_INSPECTOR_TEXTTYPES_H
 
 #include "qobjectdefs.h"
 
@@ -105,4 +105,4 @@ public:
 };
 }
 
-#endif // TEXTTYPES_H
+#endif // MU_INSPECTOR_TEXTTYPES_H

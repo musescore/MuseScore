@@ -1,5 +1,5 @@
-#ifndef ACCIDENTALTYPES_H
-#define ACCIDENTALTYPES_H
+#ifndef MU_INSPECTOR_ACCIDENTALTYPES_H
+#define MU_INSPECTOR_ACCIDENTALTYPES_H
 
 #include "qobjectdefs.h"
 
@@ -20,4 +20,4 @@ public:
 };
 }
 
-#endif // ACCIDENTALTYPES_H
+#endif // MU_INSPECTOR_ACCIDENTALTYPES_H

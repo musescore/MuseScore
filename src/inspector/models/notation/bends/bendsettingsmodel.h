@@ -1,5 +1,5 @@
-#ifndef BENDSETTINGSMODEL_H
-#define BENDSETTINGSMODEL_H
+#ifndef MU_INSPECTOR_BENDSETTINGSMODEL_H
+#define MU_INSPECTOR_BENDSETTINGSMODEL_H
 
 #include "models/abstractinspectormodel.h"
 
@@ -38,4 +38,4 @@ private:
 };
 }
 
-#endif // BENDSETTINGSMODEL_H
+#endif // MU_INSPECTOR_BENDSETTINGSMODEL_H

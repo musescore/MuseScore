@@ -1,5 +1,5 @@
-#ifndef PEDALTYPES_H
-#define PEDALTYPES_H
+#ifndef MU_INSPECTOR_PEDALTYPES_H
+#define MU_INSPECTOR_PEDALTYPES_H
 
 #include "qobjectdefs.h"
 
@@ -37,4 +37,4 @@ public:
 };
 }
 
-#endif // PEDALTYPES_H
+#endif // MU_INSPECTOR_PEDALTYPES_H

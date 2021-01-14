@@ -1,5 +1,5 @@
-#ifndef BRACESETTINGSMODEL_H
-#define BRACESETTINGSMODEL_H
+#ifndef MU_INSPECTOR_BRACESETTINGSMODEL_H
+#define MU_INSPECTOR_BRACESETTINGSMODEL_H
 
 #include "models/abstractinspectormodel.h"
 
@@ -29,4 +29,4 @@ private:
 };
 }
 
-#endif // BRACESETTINGSMODEL_H
+#endif // MU_INSPECTOR_BRACESETTINGSMODEL_H

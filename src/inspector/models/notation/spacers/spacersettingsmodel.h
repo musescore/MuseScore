@@ -1,5 +1,5 @@
-#ifndef SPACERSETTINGSMODEL_H
-#define SPACERSETTINGSMODEL_H
+#ifndef MU_INSPECTOR_SPACERSETTINGSMODEL_H
+#define MU_INSPECTOR_SPACERSETTINGSMODEL_H
 
 #include "models/abstractinspectormodel.h"
 
@@ -25,4 +25,4 @@ private:
 };
 }
 
-#endif // SPACERSETTINGSMODEL_H
+#endif // MU_INSPECTOR_SPACERSETTINGSMODEL_H

@@ -1,5 +1,5 @@
-#ifndef INSPECTORPROPERTY_H
-#define INSPECTORPROPERTY_H
+#ifndef MU_INSPECTOR_INSPECTORPROPERTY_H
+#define MU_INSPECTOR_INSPECTORPROPERTY_H
 
 #include <QObject>
 #include <QVariant>
@@ -63,4 +63,4 @@ private:
 };
 }
 
-#endif // INSPECTORPROPERTY_H
+#endif // MU_INSPECTOR_INSPECTORPROPERTY_H

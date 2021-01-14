@@ -17,8 +17,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef __GRIDCANVAS_H__
-#define __GRIDCANVAS_H__
+#ifndef MU_INSPECTOR_GRIDCANVAS_H
+#define MU_INSPECTOR_GRIDCANVAS_H
 
 #include <QQuickPaintedItem>
 #include <QPainter>
@@ -97,4 +97,4 @@ private:
 };
 }
 
-#endif
+#endif // MU_INSPECTOR_GRIDCANVAS_H

@@ -1,5 +1,5 @@
-#ifndef BEAMTYPESMODEL_H
-#define BEAMTYPESMODEL_H
+#ifndef MU_INSPECTOR_BEAMTYPESMODEL_H
+#define MU_INSPECTOR_BEAMTYPESMODEL_H
 
 #include <QAbstractListModel>
 #include "types/beamtypes.h"
@@ -49,4 +49,4 @@ private:
 };
 }
 
-#endif // BEAMTYPESMODEL_H
+#endif // MU_INSPECTOR_BEAMTYPESMODEL_H

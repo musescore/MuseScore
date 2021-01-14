@@ -1,5 +1,5 @@
-#ifndef NOTEPLAYBACKMODEL_H
-#define NOTEPLAYBACKMODEL_H
+#ifndef MU_INSPECTOR_NOTEPLAYBACKMODEL_H
+#define MU_INSPECTOR_NOTEPLAYBACKMODEL_H
 
 #include "models/abstractinspectormodel.h"
 
@@ -32,4 +32,4 @@ private:
 };
 }
 
-#endif // NOTEPLAYBACKMODEL_H
+#endif // MU_INSPECTOR_NOTEPLAYBACKMODEL_H
