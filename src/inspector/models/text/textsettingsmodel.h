@@ -1,5 +1,5 @@
-#ifndef TEXTSETTINGSMODEL_H
-#define TEXTSETTINGSMODEL_H
+#ifndef MU_INSPECTOR_TEXTSETTINGSMODEL_H
+#define MU_INSPECTOR_TEXTSETTINGSMODEL_H
 
 #include "async/asyncable.h"
 #include "models/abstractinspectormodel.h"
@@ -99,4 +99,4 @@ private:
 };
 }
 
-#endif // TEXTSETTINGSMODEL_H
+#endif // MU_INSPECTOR_TEXTSETTINGSMODEL_H

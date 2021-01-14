@@ -1,5 +1,5 @@
-#ifndef TEMPOSETTINGSMODEL_H
-#define TEMPOSETTINGSMODEL_H
+#ifndef MU_INSPECTOR_TEMPOSETTINGSMODEL_H
+#define MU_INSPECTOR_TEMPOSETTINGSMODEL_H
 
 #include "models/abstractinspectormodel.h"
 
@@ -28,4 +28,4 @@ private:
 };
 }
 
-#endif // TEMPOSETTINGSMODEL_H
+#endif // MU_INSPECTOR_TEMPOSETTINGSMODEL_H

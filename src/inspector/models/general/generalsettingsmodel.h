@@ -1,5 +1,5 @@
-#ifndef GENERALSETTINGSMODEL_H
-#define GENERALSETTINGSMODEL_H
+#ifndef MU_INSPECTOR_GENERALSETTINGSMODEL_H
+#define MU_INSPECTOR_GENERALSETTINGSMODEL_H
 
 #include "models/abstractinspectormodel.h"
 #include "playback/playbackproxymodel.h"
@@ -54,4 +54,4 @@ private:
 };
 }
 
-#endif // GENERALSETTINGSMODEL_H
+#endif // MU_INSPECTOR_GENERALSETTINGSMODEL_H

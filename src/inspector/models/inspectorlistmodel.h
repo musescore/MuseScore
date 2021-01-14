@@ -1,5 +1,5 @@
-#ifndef INSPECTORLISTMODEL_H
-#define INSPECTORLISTMODEL_H
+#ifndef MU_INSPECTOR_INSPECTORLISTMODEL_H
+#define MU_INSPECTOR_INSPECTORLISTMODEL_H
 
 #include <QAbstractListModel>
 #include "libmscore/element.h"
@@ -55,4 +55,4 @@ private:
 };
 }
 
-#endif // INSPECTORLISTMODEL_H
+#endif // MU_INSPECTOR_INSPECTORLISTMODEL_H

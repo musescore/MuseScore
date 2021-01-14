@@ -17,8 +17,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef INSPECTORSETUP_H
-#define INSPECTORSETUP_H
+#ifndef MU_INSPECTOR_INSPECTORSETUP_H
+#define MU_INSPECTOR_INSPECTORSETUP_H
 
 #include "modularity/imodulesetup.h"
 
@@ -35,4 +35,4 @@ public:
 };
 }
 
-#endif // INSPECTORSETUP_H
+#endif // MU_INSPECTOR_INSPECTORSETUP_H

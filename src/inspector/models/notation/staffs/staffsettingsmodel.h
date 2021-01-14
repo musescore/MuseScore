@@ -1,5 +1,5 @@
-#ifndef STAFFSETTINGSMODEL_H
-#define STAFFSETTINGSMODEL_H
+#ifndef MU_INSPECTOR_STAFFSETTINGSMODEL_H
+#define MU_INSPECTOR_STAFFSETTINGSMODEL_H
 
 #include "models/abstractinspectormodel.h"
 
@@ -27,4 +27,4 @@ private:
 };
 }
 
-#endif // STAFFSETTINGSMODEL_H
+#endif // MU_INSPECTOR_STAFFSETTINGSMODEL_H

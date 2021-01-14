@@ -1,5 +1,5 @@
-#ifndef CLEFSETTINGSMODEL_H
-#define CLEFSETTINGSMODEL_H
+#ifndef MU_INSPECTOR_CLEFSETTINGSMODEL_H
+#define MU_INSPECTOR_CLEFSETTINGSMODEL_H
 
 #include "models/abstractinspectormodel.h"
 
@@ -25,4 +25,4 @@ private:
 };
 }
 
-#endif // CLEFSETTINGSMODEL_H
+#endif // MU_INSPECTOR_CLEFSETTINGSMODEL_H

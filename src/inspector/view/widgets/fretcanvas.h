@@ -17,18 +17,14 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef __FRETCANVAS_H__
-#define __FRETCANVAS_H__
+#ifndef MU_INSPECTOR_FRETCANVAS_H
+#define MU_INSPECTOR_FRETCANVAS_H
 
 #include <QQuickPaintedItem>
 #include <QPainter>
 #include <QVariant>
 
 #include "fret.h"
-
-//---------------------------------------------------------
-//   FretCanvas
-//---------------------------------------------------------
 
 namespace mu::inspector {
 class FretCanvas : public QQuickPaintedItem
@@ -87,4 +83,4 @@ private:
 };
 }
 
-#endif
+#endif // MU_INSPECTOR_FRETCANVAS_H

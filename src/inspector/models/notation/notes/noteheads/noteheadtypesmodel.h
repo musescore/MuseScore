@@ -1,5 +1,5 @@
-#ifndef NOTEHEADTYPESMODEL_H
-#define NOTEHEADTYPESMODEL_H
+#ifndef MU_INSPECTOR_NOTEHEADTYPESMODEL_H
+#define MU_INSPECTOR_NOTEHEADTYPESMODEL_H
 
 #include <QObject>
 #include <QAbstractListModel>
@@ -53,4 +53,4 @@ private:
 };
 }
 
-#endif // NOTEHEADTYPESMODEL_H
+#endif // MU_INSPECTOR_NOTEHEADTYPESMODEL_H

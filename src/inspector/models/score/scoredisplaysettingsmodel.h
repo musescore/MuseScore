@@ -1,5 +1,5 @@
-#ifndef scoreSETTINGSMODEL_H
-#define scoreSETTINGSMODEL_H
+#ifndef MU_INSPECTOR_SCORESETTINGSMODEL_H
+#define MU_INSPECTOR_SCORESETTINGSMODEL_H
 
 #include "models/abstractinspectormodel.h"
 
@@ -47,4 +47,4 @@ private:
 };
 }
 
-#endif // scoreSETTINGSMODEL_H
+#endif // MU_INSPECTOR_SCORESETTINGSMODEL_H

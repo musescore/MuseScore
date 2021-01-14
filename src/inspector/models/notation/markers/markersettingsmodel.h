@@ -1,5 +1,5 @@
-#ifndef MARKERSETTINGSMODEL_H
-#define MARKERSETTINGSMODEL_H
+#ifndef MU_INSPECTOR_MARKERSETTINGSMODEL_H
+#define MU_INSPECTOR_MARKERSETTINGSMODEL_H
 
 #include "models/abstractinspectormodel.h"
 
@@ -27,4 +27,4 @@ private:
 };
 }
 
-#endif // MARKERSETTINGSMODEL_H
+#endif // MU_INSPECTOR_MARKERSETTINGSMODEL_H

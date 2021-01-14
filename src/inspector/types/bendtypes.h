@@ -1,5 +1,5 @@
-#ifndef BENDTYPES_H
-#define BENDTYPES_H
+#ifndef MU_INSPECTOR_BENDTYPES_H
+#define MU_INSPECTOR_BENDTYPES_H
 
 #include "qobjectdefs.h"
 
@@ -22,4 +22,4 @@ public:
 };
 }
 
-#endif // BENDTYPES_H
+#endif // MU_INSPECTOR_BENDTYPES_H

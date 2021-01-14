@@ -1,5 +1,5 @@
-#ifndef PLAYBACKPROXYMODEL_H
-#define PLAYBACKPROXYMODEL_H
+#ifndef MU_INSPECTOR_PLAYBACKPROXYMODEL_H
+#define MU_INSPECTOR_PLAYBACKPROXYMODEL_H
 
 #include <QObject>
 #include "models/abstractinspectormodel.h"
@@ -73,4 +73,4 @@ private:
 };
 }
 
-#endif // PLAYBACKPROXYMODEL_H
+#endif // MU_INSPECTOR_PLAYBACKPROXYMODEL_H

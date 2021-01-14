@@ -1,5 +1,5 @@
-#ifndef AMBITUSSETTINGSMODEL_H
-#define AMBITUSSETTINGSMODEL_H
+#ifndef MU_INSPECTOR_AMBITUSSETTINGSMODEL_H
+#define MU_INSPECTOR_AMBITUSSETTINGSMODEL_H
 
 #include "models/abstractinspectormodel.h"
 #include "models/notation/notes/noteheads/noteheadtypesmodel.h"
@@ -70,4 +70,4 @@ private:
 };
 }
 
-#endif // AMBITUSSETTINGSMODEL_H
+#endif // MU_INSPECTOR_AMBITUSSETTINGSMODEL_H

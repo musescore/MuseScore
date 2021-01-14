@@ -1,5 +1,5 @@
-#ifndef AMBITUSTYPES_H
-#define AMBITUSTYPES_H
+#ifndef MU_INSPECTOR_AMBITUSTYPES_H
+#define MU_INSPECTOR_AMBITUSTYPES_H
 
 #include "qobjectdefs.h"
 
@@ -52,4 +52,4 @@ public:
 };
 }
 
-#endif // AMBITUSTYPES_H
+#endif // MU_INSPECTOR_AMBITUSTYPES_H

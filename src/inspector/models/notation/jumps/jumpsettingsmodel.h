@@ -1,5 +1,5 @@
-#ifndef JUMPSETTINGSMODEL_H
-#define JUMPSETTINGSMODEL_H
+#ifndef MU_INSPECTOR_JUMPSETTINGSMODEL_H
+#define MU_INSPECTOR_JUMPSETTINGSMODEL_H
 
 #include "models/abstractinspectormodel.h"
 
@@ -33,4 +33,4 @@ private:
 };
 }
 
-#endif // JUMPSETTINGSMODEL_H
+#endif // MU_INSPECTOR_JUMPSETTINGSMODEL_H

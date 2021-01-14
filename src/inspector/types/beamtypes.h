@@ -1,5 +1,5 @@
-#ifndef BEAMTYPES_H
-#define BEAMTYPES_H
+#ifndef MU_INSPECTOR_BEAMTYPES_H
+#define MU_INSPECTOR_BEAMTYPES_H
 
 #include "qobjectdefs.h"
 
@@ -31,4 +31,4 @@ public:
 };
 }
 
-#endif // BEAMTYPES_H
+#endif // MU_INSPECTOR_BEAMTYPES_H
