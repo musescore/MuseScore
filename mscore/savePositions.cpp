@@ -59,7 +59,8 @@ bool MuseScore::savePositions(Score* score, QIODevice* device, bool segments)
 
       qreal ndpi = ((qreal) preferences.getDouble(PREF_EXPORT_PNG_RESOLUTION) / DPI) * 12.0;
       if (segments) {
-            for (Segment* s = score->firstMeasureMM()->first(SegmentType::ChordRest);
+            Measure* m = score->firstMeasureMM();
+            for (Segment* s = (m ? m->first(SegmentType::ChordRest) : nullptr);
                s; s = s->next1MM(SegmentType::ChordRest)) {
                   qreal sx   = 0;
                   int tracks = score->nstaves() * VOICES;
