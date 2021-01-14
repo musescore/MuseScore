@@ -6,6 +6,8 @@
 #include "hairpin.h"
 #include "dataformatter.h"
 
+using namespace mu::inspector;
+
 HairpinSettingsModel::HairpinSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {

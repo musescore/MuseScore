@@ -12,6 +12,7 @@
 #include "internal_models/dynamicplaybackmodel.h"
 #include "internal_models/hairpinplaybackmodel.h"
 
+namespace mu::inspector {
 class PlaybackProxyModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -70,5 +71,6 @@ private:
     DynamicPlaybackModel* m_dynamicPlaybackModel = nullptr;
     HairpinPlaybackModel* m_hairpinPlaybackModel = nullptr;
 };
+}
 
 #endif // PLAYBACKPROXYMODEL_H

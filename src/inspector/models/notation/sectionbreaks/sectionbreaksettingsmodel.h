@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class SectionBreakSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -28,5 +29,6 @@ private:
     PropertyItem* m_shouldResetBarNums = nullptr;
     PropertyItem* m_pauseDuration = nullptr;
 };
+}
 
 #endif // SECTIONBREAKSETTINGSMODEL_H

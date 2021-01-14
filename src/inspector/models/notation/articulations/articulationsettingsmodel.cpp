@@ -3,6 +3,8 @@
 #include "log.h"
 #include "articulation.h"
 
+using namespace mu::inspector;
+
 ArticulationSettingsModel::ArticulationSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {

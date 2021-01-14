@@ -1,5 +1,7 @@
 #include "keysignaturesettingsmodel.h"
 
+using namespace mu::inspector;
+
 KeySignatureSettingsModel::KeySignatureSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {

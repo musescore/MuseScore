@@ -1,5 +1,7 @@
 #include "glissandosettingsmodel.h"
 
+using namespace mu::inspector;
+
 GlissandoSettingsModel::GlissandoSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {

@@ -4,6 +4,8 @@
 
 #include "dataformatter.h"
 
+using namespace mu::inspector;
+
 TimeSignatureSettingsModel::TimeSignatureSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {

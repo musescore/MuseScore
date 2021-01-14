@@ -3,6 +3,7 @@
 
 #include "qobjectdefs.h"
 
+namespace mu::inspector {
 class OrnamentTypes
 {
     Q_GADGET
@@ -15,5 +16,6 @@ public:
 
     Q_ENUM(Style)
 };
+}
 
 #endif // ORNAMENTTYPES_H

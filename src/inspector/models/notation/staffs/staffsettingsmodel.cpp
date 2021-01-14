@@ -1,5 +1,7 @@
 #include "staffsettingsmodel.h"
 
+using namespace mu::inspector;
+
 StaffSettingsModel::StaffSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {

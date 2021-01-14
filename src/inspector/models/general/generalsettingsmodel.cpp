@@ -1,5 +1,7 @@
 #include "generalsettingsmodel.h"
 
+using namespace mu::inspector;
+
 GeneralSettingsModel::GeneralSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {

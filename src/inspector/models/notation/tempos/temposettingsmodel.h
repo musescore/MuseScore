@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class TempoSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -25,5 +26,6 @@ private:
     PropertyItem* m_isDefaultTempoForced = nullptr;
     PropertyItem* m_tempo = nullptr;
 };
+}
 
 #endif // TEMPOSETTINGSMODEL_H

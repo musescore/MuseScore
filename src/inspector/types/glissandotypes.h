@@ -3,6 +3,7 @@
 
 #include "qobjectdefs.h"
 
+namespace mu::inspector {
 class GlissandoTypes
 {
     Q_GADGET
@@ -23,5 +24,6 @@ public:
     Q_ENUM(Style)
     Q_ENUM(LineType)
 };
+}
 
 #endif // GLISSANDOTYPES_H

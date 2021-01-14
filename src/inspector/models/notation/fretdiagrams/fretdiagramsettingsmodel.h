@@ -5,6 +5,7 @@
 #include "types/fretdiagramtypes.h"
 #include "fret.h"
 
+namespace mu::inspector {
 class FretDiagramSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -76,5 +77,6 @@ private:
     bool m_isMultipleDotsModeOn = false;
     FretDiagramTypes::FretDot m_currentFretDotType = FretDiagramTypes::FretDot::DOT_NORMAL;
 };
+}
 
 #endif // FRETDIAGRAMSETTINGSMODEL_H

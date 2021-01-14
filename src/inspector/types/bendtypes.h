@@ -3,6 +3,7 @@
 
 #include "qobjectdefs.h"
 
+namespace mu::inspector {
 class BendTypes
 {
     Q_GADGET
@@ -19,5 +20,6 @@ public:
 
     Q_ENUM(BendType)
 };
+}
 
 #endif // BENDTYPES_H

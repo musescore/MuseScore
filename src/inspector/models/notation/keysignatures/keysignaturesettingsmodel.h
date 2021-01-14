@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class KeySignatureSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -24,5 +25,6 @@ private:
     PropertyItem* m_hasToShowCourtesy = nullptr;
     PropertyItem* m_mode = nullptr;
 };
+}
 
 #endif // KEYSIGNATURESETTINGSMODEL_H

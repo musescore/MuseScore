@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class VerticalFrameSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -40,5 +41,6 @@ private:
     PropertyItem* m_frameTopMargin = nullptr;
     PropertyItem* m_frameBottomMargin = nullptr;
 };
+}
 
 #endif // VERTICALFRAMESETTINGSMODEL_H

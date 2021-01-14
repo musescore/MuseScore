@@ -6,6 +6,7 @@
 #include <QObject>
 #include <functional>
 
+namespace mu::inspector {
 class IElementRepositoryService
 {
 public:
@@ -22,5 +23,6 @@ public:
 signals:
     virtual void elementsUpdated() = 0;
 };
+}
 
 #endif // IELEMENTREPOSITORYSERVICE_H

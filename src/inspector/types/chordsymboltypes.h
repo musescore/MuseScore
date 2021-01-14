@@ -3,6 +3,7 @@
 
 #include "qobjectdefs.h"
 
+namespace mu::inspector {
 class ChordSymbolTypes
 {
     Q_GADGET
@@ -29,5 +30,6 @@ public:
     Q_ENUM(VoicingType)
     Q_ENUM(DurationType)
 };
+}
 
 #endif // CHORDSYMBOLTYPES_H

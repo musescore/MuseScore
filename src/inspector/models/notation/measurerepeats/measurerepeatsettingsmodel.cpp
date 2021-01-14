@@ -1,5 +1,7 @@
 #include "measurerepeatsettingsmodel.h"
 
+using namespace mu::inspector;
+
 MeasureRepeatSettingsModel::MeasureRepeatSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {

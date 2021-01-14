@@ -30,6 +30,7 @@
 //   FretCanvas
 //---------------------------------------------------------
 
+namespace mu::inspector {
 class FretCanvas : public QQuickPaintedItem
 {
     Q_OBJECT
@@ -84,5 +85,6 @@ private:
     bool m_barreMode = false;
     bool m_multidotMode = false;
 };
+}
 
 #endif

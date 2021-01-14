@@ -17,6 +17,8 @@
 
 #include "log.h"
 
+using namespace mu::inspector;
+
 ElementRepositoryService::ElementRepositoryService(QObject* parent)
     : QObject(parent)
 {

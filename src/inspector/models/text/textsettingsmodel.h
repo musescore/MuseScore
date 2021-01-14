@@ -4,6 +4,7 @@
 #include "async/asyncable.h"
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class TextSettingsModel : public AbstractInspectorModel, public mu::async::Asyncable
 {
     Q_OBJECT
@@ -96,5 +97,6 @@ private:
     bool m_areStaffTextPropertiesAvailable = false;
     bool m_isSpecialCharactersInsertionAvailable = false;
 };
+}
 
 #endif // TEXTSETTINGSMODEL_H

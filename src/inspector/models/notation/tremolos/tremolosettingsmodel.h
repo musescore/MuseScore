@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class TremoloSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -22,5 +23,6 @@ public:
 private:
     PropertyItem* m_style = nullptr;
 };
+}
 
 #endif // TREMOLOSETTINGSMODEL_H

@@ -3,6 +3,8 @@
 #include "types/bendtypes.h"
 #include "dataformatter.h"
 
+using namespace mu::inspector;
+
 BendSettingsModel::BendSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {

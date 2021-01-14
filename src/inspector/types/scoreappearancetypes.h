@@ -3,6 +3,7 @@
 
 #include "qobjectdefs.h"
 
+namespace mu::inspector {
 class ScoreAppearanceTypes
 {
     Q_GADGET
@@ -16,5 +17,6 @@ public:
 
     Q_ENUM(OrientationType)
 };
+}
 
 #endif // SCOREAPPEARANCETYPES_H

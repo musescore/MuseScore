@@ -2,6 +2,8 @@
 
 #include <QList>
 
+using namespace mu::inspector;
+
 TremoloSettingsModel::TremoloSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {

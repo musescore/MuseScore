@@ -6,6 +6,8 @@
 #include "types/scoreappearancetypes.h"
 #include "dataformatter.h"
 
+using namespace mu::inspector;
+
 ScoreAppearanceSettingsModel::ScoreAppearanceSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {

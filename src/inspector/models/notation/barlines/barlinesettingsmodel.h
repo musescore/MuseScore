@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class BarlineSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -37,5 +38,6 @@ private:
     PropertyItem* m_spanTo = nullptr;
     PropertyItem* m_hasToShowTips = nullptr;
 };
+}
 
 #endif // BARLINESETTINGSMODEL_H

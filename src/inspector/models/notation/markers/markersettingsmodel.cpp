@@ -1,5 +1,7 @@
 #include "markersettingsmodel.h"
 
+using namespace mu::inspector;
+
 MarkerSettingsModel::MarkerSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {

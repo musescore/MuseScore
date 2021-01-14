@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class GlissandoPlaybackModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -23,5 +24,6 @@ protected:
 private:
     PropertyItem* m_styleType = nullptr;
 };
+}
 
 #endif // GLISSANDOPLAYBACKMODEL_H

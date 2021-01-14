@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class BreathPlaybackModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -24,5 +25,6 @@ protected:
 private:
     PropertyItem* m_pauseTime = nullptr;
 };
+}
 
 #endif // BREATHPLAYBACKMODEL_H

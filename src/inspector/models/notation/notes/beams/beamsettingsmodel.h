@@ -5,6 +5,7 @@
 #include "internal/beammodesmodel.h"
 #include "types/beamtypes.h"
 
+namespace mu::inspector {
 class BeamSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -72,5 +73,6 @@ private:
 
     PropertyItem* m_isBeamHidden = nullptr;
 };
+}
 
 #endif // BEAMSETTINGSMODEL_H

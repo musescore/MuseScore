@@ -1,5 +1,7 @@
 #include "playbackproxymodel.h"
 
+using namespace mu::inspector;
+
 PlaybackProxyModel::PlaybackProxyModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent)
 {

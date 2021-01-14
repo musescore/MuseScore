@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class StaffSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -24,5 +25,6 @@ private:
     PropertyItem* m_barlinesSpanFrom = nullptr;
     PropertyItem* m_barlinesSpanTo = nullptr;
 };
+}
 
 #endif // STAFFSETTINGSMODEL_H

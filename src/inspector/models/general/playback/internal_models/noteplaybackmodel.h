@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class NotePlaybackModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -29,5 +30,6 @@ private:
     PropertyItem* m_velocity = nullptr;
     PropertyItem* m_overrideDynamics = nullptr;
 };
+}
 
 #endif // NOTEPLAYBACKMODEL_H

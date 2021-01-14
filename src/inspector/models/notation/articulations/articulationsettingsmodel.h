@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class ArticulationSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -27,5 +28,6 @@ private:
     PropertyItem* m_direction = nullptr;
     PropertyItem* m_placement = nullptr;
 };
+}
 
 #endif // ARTICULATIONSETTINGSMODEL_H

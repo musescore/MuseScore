@@ -1,5 +1,7 @@
 #include "beammodesmodel.h"
 
+using namespace mu::inspector;
+
 BeamModesModel::BeamModesModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {

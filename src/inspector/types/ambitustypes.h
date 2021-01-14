@@ -3,6 +3,7 @@
 
 #include "qobjectdefs.h"
 
+namespace mu::inspector {
 class AmbitusTypes
 {
     Q_GADGET
@@ -49,5 +50,6 @@ public:
 
     Q_ENUM(TpcType)
 };
+}
 
 #endif // AMBITUSTYPES_H

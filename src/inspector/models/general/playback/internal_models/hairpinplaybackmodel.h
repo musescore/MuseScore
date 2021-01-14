@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class HairpinPlaybackModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -26,5 +27,6 @@ private:
     PropertyItem* m_velocityChange = nullptr;
     PropertyItem* m_velocityChangeType = nullptr;
 };
+}
 
 #endif // HAIRPINPLAYBACKMODEL_H

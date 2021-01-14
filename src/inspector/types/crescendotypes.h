@@ -3,6 +3,7 @@
 
 #include "qobjectdefs.h"
 
+namespace mu::inspector {
 class CrescendoTypes
 {
     Q_GADGET
@@ -34,5 +35,6 @@ public:
     Q_ENUM(LineStyle)
     Q_ENUM(PlacementType)
 };
+}
 
 #endif // CRESCENDOTYPES_H

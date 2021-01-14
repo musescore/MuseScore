@@ -1,5 +1,7 @@
 #include "beammodelistmodel.h"
 
+using namespace mu::inspector;
+
 BeamModeListModel::BeamModeListModel(QObject* parent)
     : QAbstractListModel(parent)
 {

@@ -1,5 +1,7 @@
 #include "textframesettingsmodel.h"
 
+using namespace mu::inspector;
+
 TextFrameSettingsModel::TextFrameSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {

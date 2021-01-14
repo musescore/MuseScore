@@ -5,6 +5,7 @@
 
 #include <QObject>
 
+namespace mu::inspector {
 class ElementRepositoryService : public QObject, public IElementRepositoryService
 {
     Q_OBJECT
@@ -41,5 +42,6 @@ private:
     QList<Ms::Element*> findTexts() const;
     QList<Ms::Element*> findTremolos() const;
 };
+}
 
 #endif // ELEMENTREPOSITORYSERVICE_H

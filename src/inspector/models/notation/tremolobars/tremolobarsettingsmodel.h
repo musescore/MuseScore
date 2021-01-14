@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class TremoloBarSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -38,5 +39,6 @@ private:
     PropertyItem* m_lineThickness = nullptr;
     PropertyItem* m_scale = nullptr;
 };
+}
 
 #endif // TREMOLOBARSETTINGSMODEL_H

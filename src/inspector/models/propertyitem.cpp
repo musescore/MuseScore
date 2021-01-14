@@ -1,5 +1,7 @@
 #include "propertyitem.h"
 
+using namespace mu::inspector;
+
 PropertyItem::PropertyItem(const int propertyId, QObject* parent)
     : QObject(parent)
 {

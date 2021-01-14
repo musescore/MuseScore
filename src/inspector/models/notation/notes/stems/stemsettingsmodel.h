@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class StemSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -38,5 +39,6 @@ private:
     PropertyItem* m_verticalOffset = nullptr;
     PropertyItem* m_stemDirection = nullptr;
 };
+}
 
 #endif // NOTATIONINSPECTORMODEL_H
