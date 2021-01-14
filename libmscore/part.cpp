@@ -526,6 +526,10 @@ int Part::lyricCount() const
       {
       if (!score())
             return 0;
+
+      if (!score()->firstMeasure())
+            return 0;
+
       size_t count = 0;
       SegmentType st = SegmentType::ChordRest;
       for (Segment* seg = score()->firstMeasure()->first(st); seg; seg = seg->next1(st)) {
