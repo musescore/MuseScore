@@ -2897,7 +2897,7 @@ bool Measure::isCutawayClef(int staffIdx) const
             etrack = strack + VOICES;
             }
       // find segment before EndBarLine
-      Segment* s;
+      Segment* s = nullptr;
       for (Segment* ls = last(); ls; ls = ls->prev()) {
             if (ls->segmentType() ==  SegmentType::EndBarLine) {
                   s = ls->prev();
