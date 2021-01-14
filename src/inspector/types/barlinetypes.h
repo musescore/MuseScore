@@ -3,6 +3,7 @@
 
 #include "qobjectdefs.h"
 
+namespace mu::inspector {
 class BarlineTypes
 {
     Q_GADGET
@@ -40,5 +41,6 @@ public:
     Q_ENUM(LineType)
     Q_ENUM(SpanPreset)
 };
+}
 
 #endif // BARLINETYPES_H

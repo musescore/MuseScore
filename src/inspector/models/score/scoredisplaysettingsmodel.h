@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class ScoreSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -44,5 +45,6 @@ private:
     bool m_shouldShowFrames = true;
     bool m_shouldShowPageMargins = false;
 };
+}
 
 #endif // scoreSETTINGSMODEL_H

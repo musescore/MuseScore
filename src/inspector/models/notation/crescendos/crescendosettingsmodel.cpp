@@ -4,6 +4,8 @@
 #include "types/crescendotypes.h"
 #include "dataformatter.h"
 
+using namespace mu::inspector;
+
 CrescendoSettingsModel::CrescendoSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {

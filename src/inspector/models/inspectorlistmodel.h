@@ -9,8 +9,7 @@
 #include "context/iglobalcontext.h"
 #include "async/asyncable.h"
 
-using namespace mu::notation;
-
+namespace mu::inspector {
 class InspectorListModel : public QAbstractListModel, public mu::async::Asyncable
 {
     Q_OBJECT
@@ -52,7 +51,8 @@ private:
     QList<AbstractInspectorModel*> m_modelList;
 
     IElementRepositoryService* m_repository = nullptr;
-    INotationPtr m_notation;
+    notation::INotationPtr m_notation;
 };
+}
 
 #endif // INSPECTORLISTMODEL_H

@@ -4,6 +4,8 @@
 
 #include "dataformatter.h"
 
+using namespace mu::inspector;
+
 ImageSettingsModel::ImageSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {

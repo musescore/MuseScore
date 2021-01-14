@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class JumpSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -30,5 +31,6 @@ private:
     PropertyItem* m_continueAt = nullptr;
     PropertyItem* m_hasToPlayRepeats = nullptr;
 };
+}
 
 #endif // JUMPSETTINGSMODEL_H

@@ -4,6 +4,7 @@
 #include "beammodelistmodel.h"
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class BeamModesModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -35,5 +36,6 @@ private:
     PropertyItem* m_mode = nullptr;
     PropertyItem* m_isFeatheringAvailable = nullptr;
 };
+}
 
 #endif // BEAMMODESMODEL_H

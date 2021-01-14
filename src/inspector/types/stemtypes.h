@@ -3,6 +3,7 @@
 
 #include "qobjectdefs.h"
 
+namespace mu::inspector {
 class DirectionTypes
 {
     Q_GADGET
@@ -23,5 +24,6 @@ public:
     Q_ENUM(VerticalDirection)
     Q_ENUM(HorizontalDirection)
 };
+}
 
 #endif // STEMTYPES_H

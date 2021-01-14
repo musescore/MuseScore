@@ -31,8 +31,7 @@ namespace Ms {
 class Score;
 }
 
-namespace mu {
-namespace inspector {
+namespace mu::inspector {
 class IInspectorAdapter : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IInspectorAdapter)
@@ -71,7 +70,6 @@ public:
     // notation layout
     virtual void updateNotation() = 0;
 };
-}
 }
 
 #endif // IINSPECTORADAPTER_H

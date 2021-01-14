@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QVariant>
 
+namespace mu::inspector {
 class PropertyItem : public QObject
 {
     Q_OBJECT
@@ -60,5 +61,6 @@ private:
     bool m_isEnabled = false;
     bool m_isStyled = false;
 };
+}
 
 #endif // INSPECTORPROPERTY_H

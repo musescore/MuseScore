@@ -3,6 +3,7 @@
 
 #include "qobjectdefs.h"
 
+namespace mu::inspector {
 class TremoloBarTypes
 {
     Q_GADGET
@@ -20,5 +21,6 @@ public:
 
     Q_ENUM(TremoloBarType)
 };
+}
 
 #endif // TREMOLOBARTYPES_H

@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class PedalSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -51,5 +52,6 @@ private:
 
     bool m_hasToShowBothHooks = false;
 };
+}
 
 #endif // PEDALSSETTINGSMODEL_H

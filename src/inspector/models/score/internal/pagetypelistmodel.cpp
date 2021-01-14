@@ -1,5 +1,7 @@
 #include "pagetypelistmodel.h"
 
+using namespace mu::inspector;
+
 PageTypeListModel::PageTypeListModel(QObject* parent)
     : QAbstractListModel(parent)
 {

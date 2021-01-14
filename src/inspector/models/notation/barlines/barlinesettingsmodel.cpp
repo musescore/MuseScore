@@ -2,6 +2,8 @@
 #include "types/barlinetypes.h"
 #include "barline.h"
 
+using namespace mu::inspector;
+
 BarlineSettingsModel::BarlineSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {

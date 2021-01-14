@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class MeasureRepeatSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -22,5 +23,6 @@ public:
 private:
     PropertyItem* m_numberPosition = nullptr;
 };
+}
 
 #endif // MEASUREREPEATSETTINGSMODEL_H

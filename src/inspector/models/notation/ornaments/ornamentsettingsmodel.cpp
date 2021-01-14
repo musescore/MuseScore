@@ -3,6 +3,8 @@
 #include "log.h"
 #include "articulation.h"
 
+using namespace mu::inspector;
+
 OrnamentSettingsModel::OrnamentSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {

@@ -3,6 +3,7 @@
 
 #include "qobjectdefs.h"
 
+namespace mu::inspector {
 class AccidentalTypes
 {
     Q_GADGET
@@ -17,5 +18,6 @@ public:
 
     Q_ENUM(BracketType)
 };
+}
 
 #endif // ACCIDENTALTYPES_H

@@ -3,6 +3,8 @@
 #include "types/tremolobartypes.h"
 #include "dataformatter.h"
 
+using namespace mu::inspector;
+
 TremoloBarSettingsModel::TremoloBarSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {

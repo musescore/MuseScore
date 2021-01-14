@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class StaffTypeSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -63,5 +64,6 @@ private:
     PropertyItem* m_shouldGenerateTimeSignatures = nullptr;
     PropertyItem* m_shouldGenerateKeySignatures = nullptr;
 };
+}
 
 #endif // STAFFTYPESETTINGSMODEL_H

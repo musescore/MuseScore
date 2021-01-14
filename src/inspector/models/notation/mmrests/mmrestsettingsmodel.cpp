@@ -1,5 +1,7 @@
 #include "mmrestsettingsmodel.h"
 
+using namespace mu::inspector;
+
 MMRestSettingsModel::MMRestSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {

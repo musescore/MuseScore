@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class AppearanceSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -57,5 +58,6 @@ private:
     bool m_verticallySnapToGrid = false;
     bool m_horizontallySnapToGrid = false;
 };
+}
 
 #endif // APPEARANCESETTINGSMODEL_H

@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class ChordSymbolSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -28,5 +29,6 @@ private:
     PropertyItem* m_voicingType = nullptr;
     PropertyItem* m_durationType = nullptr;
 };
+}
 
 #endif // CHORDSYMBOLSETTINGSMODEL_H

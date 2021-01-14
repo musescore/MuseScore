@@ -2,6 +2,8 @@
 
 #include "dataformatter.h"
 
+using namespace mu::inspector;
+
 PedalSettingsModel::PedalSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {

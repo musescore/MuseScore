@@ -1,5 +1,7 @@
 #include "scoredisplaysettingsmodel.h"
 
+using namespace mu::inspector;
+
 ScoreSettingsModel::ScoreSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {

@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class TimeSignatureSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -31,5 +32,6 @@ private:
     PropertyItem* m_verticalScale = nullptr;
     PropertyItem* m_shouldShowCourtesy = nullptr;
 };
+}
 
 #endif // TIMESIGNATURESETTINGSMODEL_H

@@ -21,37 +21,6 @@
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
 
-using namespace mu::inspector;
-
-static void inspector_init_qrc()
-{
-    Q_INIT_RESOURCE(inspector_resources);
-}
-
-std::string InspectorModule::moduleName() const
-{
-    return "inspector";
-}
-
-#include "iinspectoradapter.h"
-#include "internal/compatibility/mu4inspectoradapter.h"
-
-void InspectorModule::registerExports()
-{
-    static std::shared_ptr<MU4InspectorAdapter> adapter = std::make_shared<MU4InspectorAdapter>();
-
-    mu::framework::ioc()->registerExport<mu::inspector::IInspectorAdapter>(moduleName(), adapter);
-}
-
-void InspectorModule::resolveImports()
-{
-}
-
-void InspectorModule::registerResources()
-{
-    inspector_init_qrc();
-}
-
 #include "models/abstractinspectormodel.h"
 #include "models/inspectorlistmodel.h"
 
@@ -81,6 +50,33 @@ void InspectorModule::registerResources()
 #include "types/bendtypes.h"
 #include "types/tremolobartypes.h"
 #include "types/tremolotypes.h"
+
+#include "iinspectoradapter.h"
+#include "internal/compatibility/mu4inspectoradapter.h"
+
+using namespace mu::inspector;
+
+static void inspector_init_qrc()
+{
+    Q_INIT_RESOURCE(inspector_resources);
+}
+
+std::string InspectorModule::moduleName() const
+{
+    return "inspector";
+}
+
+void InspectorModule::registerExports()
+{
+    static std::shared_ptr<MU4InspectorAdapter> adapter = std::make_shared<MU4InspectorAdapter>();
+
+    mu::framework::ioc()->registerExport<mu::inspector::IInspectorAdapter>(moduleName(), adapter);
+}
+
+void InspectorModule::registerResources()
+{
+    inspector_init_qrc();
+}
 
 void InspectorModule::registerUiTypes()
 {

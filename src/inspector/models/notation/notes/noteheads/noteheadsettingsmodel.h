@@ -4,6 +4,7 @@
 #include "models/abstractinspectormodel.h"
 #include "noteheadtypesmodel.h"
 
+namespace mu::inspector {
 class NoteheadSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -55,5 +56,6 @@ private:
     PropertyItem* m_horizontalOffset = nullptr;
     PropertyItem* m_verticalOffset = nullptr;
 };
+}
 
 #endif // NOTEHEADSETTINGSMODEL_H

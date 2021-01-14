@@ -5,6 +5,8 @@
 #include "beams/beamsettingsmodel.h"
 #include "hooks/hooksettingsmodel.h"
 
+using namespace mu::inspector;
+
 NoteSettingsProxyModel::NoteSettingsProxyModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorProxyModel(parent)
 {

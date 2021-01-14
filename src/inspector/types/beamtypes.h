@@ -3,6 +3,7 @@
 
 #include "qobjectdefs.h"
 
+namespace mu::inspector {
 class BeamTypes
 {
     Q_GADGET
@@ -28,5 +29,6 @@ public:
     Q_ENUM(Mode)
     Q_ENUM(FeatheringMode)
 };
+}
 
 #endif // BEAMTYPES_H

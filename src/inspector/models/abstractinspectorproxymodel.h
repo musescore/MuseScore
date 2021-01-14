@@ -5,6 +5,7 @@
 
 #include <QHash>
 
+namespace mu::inspector {
 class AbstractInspectorProxyModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -28,5 +29,6 @@ protected:
 private:
     QHash<int, AbstractInspectorModel*> m_modelsHash;
 };
+}
 
 #endif // ABSTRACTINSPECTORPROXYMODEL_H

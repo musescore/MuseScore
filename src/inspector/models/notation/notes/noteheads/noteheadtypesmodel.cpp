@@ -1,5 +1,7 @@
 #include "noteheadtypesmodel.h"
 
+using namespace mu::inspector;
+
 NoteheadTypesModel::NoteheadTypesModel(QObject* parent)
     : QAbstractListModel(parent)
 {

@@ -30,7 +30,8 @@
 #include "libmscore/segment.h"
 #include "libmscore/undo.h"
 
-using namespace Ms;
+using namespace mu::inspector;
+
 //---------------------------------------------------------
 //   FretCanvas
 //---------------------------------------------------------
@@ -113,14 +114,14 @@ void FretCanvas::draw(QPainter* painter)
         }
         painter->setPen(pen);
 
-        FretItem::Marker mark = m_diagram->marker(i);
+        Ms::FretItem::Marker mark = m_diagram->marker(i);
         if (mark.exists()) {
             painter->setFont(font);
             double x = stringDist * i;
             double y = -fretDist * .1;
             painter->drawText(QRectF(x, y, 0.0, 0.0),
                               Qt::AlignHCenter | Qt::AlignBottom | Qt::TextDontClip,
-                              FretItem::markerToChar(mark.mtype));
+                              Ms::FretItem::markerToChar(mark.mtype));
         }
     }
 
@@ -135,7 +136,7 @@ void FretCanvas::draw(QPainter* painter)
         qreal newX2 = endString == -1 ? x2 : stringDist * endString;
 
         qreal y    = fretDist * (fret - 1) + fretDist * .5;
-        pen.setWidthF(dotd * m_diagram->score()->styleD(Sid::barreLineWidth));          // don't use style barreLineWidth - why not?
+        pen.setWidthF(dotd * m_diagram->score()->styleD(Ms::Sid::barreLineWidth));          // don't use style barreLineWidth - why not?
         pen.setCapStyle(Qt::RoundCap);
         painter->setPen(pen);
         painter->drawLine(QLineF(x1, y, newX2, y));
@@ -143,16 +144,16 @@ void FretCanvas::draw(QPainter* painter)
 
     // Draw 'hover' dot
     if ((m_cfret > 0) && (m_cfret <= _frets) && (m_cstring >= 0) && (m_cstring < _strings)) {
-        FretItem::Dot cd = m_diagram->dot(m_cstring, m_cfret)[0];
-        std::vector<FretItem::Dot> otherDots = m_diagram->dot(m_cstring);
-        FretDotType dtype;
+        Ms::FretItem::Dot cd = m_diagram->dot(m_cstring, m_cfret)[0];
+        std::vector<Ms::FretItem::Dot> otherDots = m_diagram->dot(m_cstring);
+        Ms::FretDotType dtype;
         symPen.setColor(Qt::lightGray);
 
         if (cd.exists()) {
             dtype = cd.dtype;
             symPen.setColor(Qt::red);
         } else {
-            dtype = m_automaticDotType ? FretDotType::NORMAL : m_currentDtype;
+            dtype = m_automaticDotType ? Ms::FretDotType::NORMAL : m_currentDtype;
         }
         painter->setPen(symPen);
 
@@ -180,23 +181,23 @@ void FretCanvas::draw(QPainter* painter)
 //   paintDotSymbol
 //---------------------------------------------------------
 
-void FretCanvas::paintDotSymbol(QPainter* p, QPen& pen, qreal x, qreal y, qreal dotd, FretDotType dtype)
+void FretCanvas::paintDotSymbol(QPainter* p, QPen& pen, qreal x, qreal y, qreal dotd, Ms::FretDotType dtype)
 {
     switch (dtype) {
-    case FretDotType::CROSS:
+    case Ms::FretDotType::CROSS:
         p->drawLine(QLineF(x, y, x + dotd, y + dotd));
         p->drawLine(QLineF(x + dotd, y, x, y + dotd));
         break;
-    case FretDotType::SQUARE:
+    case Ms::FretDotType::SQUARE:
         p->setBrush(Qt::NoBrush);
         p->drawRect(QRectF(x, y, dotd, dotd));
         break;
-    case FretDotType::TRIANGLE:
+    case Ms::FretDotType::TRIANGLE:
         p->drawLine(QLineF(x, y + dotd, x + .5 * dotd, y));
         p->drawLine(QLineF(x + .5 * dotd, y, x + dotd, y + dotd));
         p->drawLine(QLineF(x + dotd, y + dotd, x, y + dotd));
         break;
-    case FretDotType::NORMAL:
+    case Ms::FretDotType::NORMAL:
     default:
         p->setBrush(pen.color());
         p->setPen(Qt::NoPen);
@@ -247,22 +248,22 @@ void FretCanvas::mousePressEvent(QMouseEvent* ev)
     // Click above the fret diagram, so change the open/closed string marker
     if (fret == 0) {
         switch (m_diagram->marker(string).mtype) {
-        case FretMarkerType::CIRCLE:
-            m_diagram->undoSetFretMarker(string, FretMarkerType::CROSS);
+        case Ms::FretMarkerType::CIRCLE:
+            m_diagram->undoSetFretMarker(string, Ms::FretMarkerType::CROSS);
             break;
-        case FretMarkerType::CROSS:
-            m_diagram->undoSetFretMarker(string, FretMarkerType::NONE);
+        case Ms::FretMarkerType::CROSS:
+            m_diagram->undoSetFretMarker(string, Ms::FretMarkerType::NONE);
             break;
-        case FretMarkerType::NONE:
+        case Ms::FretMarkerType::NONE:
         default:
             m_diagram->undoSetFretDot(string, 0);
-            m_diagram->undoSetFretMarker(string, FretMarkerType::CIRCLE);
+            m_diagram->undoSetFretMarker(string, Ms::FretMarkerType::CIRCLE);
             break;
         }
     }
     // Otherwise, the click is on the fretboard itself
     else {
-        FretItem::Dot thisDot = m_diagram->dot(string, fret)[0];
+        Ms::FretItem::Dot thisDot = m_diagram->dot(string, fret)[0];
         bool haveShift = (ev->modifiers() & Qt::ShiftModifier) || m_barreMode;
         bool haveCtrl  = (ev->modifiers() & Qt::ControlModifier) || m_multidotMode;
 
@@ -274,24 +275,24 @@ void FretCanvas::mousePressEvent(QMouseEvent* ev)
             if (haveShift) {
                 m_diagram->undoSetFretBarre(string, fret, haveCtrl);
             } else {
-                FretDotType dtype = FretDotType::NORMAL;
+                Ms::FretDotType dtype = Ms::FretDotType::NORMAL;
                 if (m_automaticDotType && haveCtrl && m_diagram->dot(string)[0].exists()) {
-                    dtype = FretDotType::TRIANGLE;
+                    dtype = Ms::FretDotType::TRIANGLE;
 
-                    std::vector<FretDotType> dtypes {
-                        FretDotType::NORMAL,
-                        FretDotType::CROSS,
-                        FretDotType::SQUARE,
-                        FretDotType::TRIANGLE
+                    std::vector<Ms::FretDotType> dtypes {
+                        Ms::FretDotType::NORMAL,
+                        Ms::FretDotType::CROSS,
+                        Ms::FretDotType::SQUARE,
+                        Ms::FretDotType::TRIANGLE
                     };
 
                     // Find the lowest dot type that doesn't already exist on the string
                     for (int i = 0; i < int(dtypes.size()); i++) {
-                        FretDotType t = dtypes[i];
+                        Ms::FretDotType type = dtypes[i];
 
                         bool hasThisType = false;
                         for (auto const& dot : m_diagram->dot(string)) {
-                            if (dot.dtype == t) {
+                            if (dot.dtype == type) {
                                 hasThisType = true;
                                 break;
                             }
@@ -301,7 +302,7 @@ void FretCanvas::mousePressEvent(QMouseEvent* ev)
                             continue;
                         }
 
-                        dtype = t;
+                        dtype = type;
                         break;
                     }
                 } else if (!m_automaticDotType) {
@@ -340,7 +341,7 @@ void FretCanvas::mouseMoveEvent(QMouseEvent* ev)
 
 void FretCanvas::setFretDiagram(QVariant fd)
 {
-    m_diagram = fd.value<FretDiagram*>();
+    m_diagram = fd.value<Ms::FretDiagram*>();
 
     emit diagramChanged(fd);
 
@@ -393,7 +394,7 @@ bool FretCanvas::isMultipleDotsModeOn() const
 
 void FretCanvas::setCurrentFretDotType(int currentFretDotType)
 {
-    FretDotType newDotType = static_cast<FretDotType>(currentFretDotType);
+    Ms::FretDotType newDotType = static_cast<Ms::FretDotType>(currentFretDotType);
 
     if (m_currentDtype == newDotType) {
         return;

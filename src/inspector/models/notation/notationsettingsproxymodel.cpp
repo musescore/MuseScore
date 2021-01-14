@@ -35,6 +35,8 @@
 #include "tremolos/tremolosettingsmodel.h"
 #include "measurerepeats/measurerepeatsettingsmodel.h"
 
+using namespace mu::inspector;
+
 NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorProxyModel(parent)
 {

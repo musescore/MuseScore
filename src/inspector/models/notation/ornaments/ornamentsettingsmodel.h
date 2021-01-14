@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class OrnamentSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -27,5 +28,6 @@ private:
     PropertyItem* m_performanceType = nullptr;
     PropertyItem* m_placement = nullptr;
 };
+}
 
 #endif // ORNAMENTSETTINGSMODEL_H

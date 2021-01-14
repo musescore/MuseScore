@@ -3,6 +3,7 @@
 
 #include "models/abstractinspectormodel.h"
 
+namespace mu::inspector {
 class ArpeggioPlaybackModel : public AbstractInspectorModel
 {
     Q_OBJECT
@@ -22,5 +23,6 @@ protected:
 private:
     PropertyItem* m_stretch = nullptr;
 };
+}
 
 #endif // ARPEGGIOPLAYBACKMODEL_H
