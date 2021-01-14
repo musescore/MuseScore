@@ -64,7 +64,7 @@ SET MUSESCORE_CRASHREPORT_URL="%CRASH_LOG_SERVER_URL%"
 SET MUSESCORE_BUILD_VST=%BUILD_VST%
 SET MUSESCORE_VST3_SDK_PATH=%VST3_SDK_PATH%
 
-CALL ninja_build.bat -t relwithdebinfo || exit \b 1
+CALL ninja_build.bat -t installrelwithdebinfo || exit \b 1
 
 bash ./build/ci/tools/make_release_channel_env.sh -c %MUSESCORE_BUILD_CONFIG%
 bash ./build/ci/tools/make_version_env.sh %BUILD_NUMBER%
