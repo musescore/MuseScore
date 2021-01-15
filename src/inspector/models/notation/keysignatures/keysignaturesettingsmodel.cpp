@@ -6,7 +6,7 @@ KeySignatureSettingsModel::KeySignatureSettingsModel(QObject* parent, IElementRe
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_KEYSIGNATURE);
-    setTitle(tr("Key signature"));
+    setTitle(qtrc("inspector", "Key signature"));
     createProperties();
 }
 

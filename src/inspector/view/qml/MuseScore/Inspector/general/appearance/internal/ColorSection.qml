@@ -11,7 +11,7 @@ InspectorPropertyView {
     height: implicitHeight
     width: parent.width
 
-    titleText: qsTr("Colour")
+    titleText: qsTrc("inspector", "Colour")
     propertyItem: root.color
 
     ColorPicker {

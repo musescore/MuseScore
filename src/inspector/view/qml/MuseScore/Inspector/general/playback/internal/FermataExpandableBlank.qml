@@ -19,7 +19,7 @@ ExpandableBlank {
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 2
 
-        titleText: qsTr("Time stretch")
+        titleText: qsTrc("inspector", "Time stretch")
         propertyItem: model ? model.timeStretch : null
 
         IncrementalPropertyControl {

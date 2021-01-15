@@ -8,7 +8,7 @@ BarlineSettingsModel::BarlineSettingsModel(QObject* parent, IElementRepositorySe
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_BARLINE);
-    setTitle(tr("Barline"));
+    setTitle(qtrc("inspector", "Barline"));
     createProperties();
 }
 

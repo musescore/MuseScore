@@ -29,7 +29,7 @@ InspectorSectionView {
             CheckBox {
                 anchors.left: parent.left
 
-                text: qsTr("Visible")
+                text: qsTrc("inspector", "Visible")
 
                 isIndeterminate: model ? model.isVisible.isUndefined : false
                 checked: model && !model.isVisible.isUndefined ? model.isVisible.value : false
@@ -41,7 +41,7 @@ InspectorSectionView {
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 6
 
-                text: qsTr("Cue size")
+                text: qsTrc("inspector", "Cue size")
 
                 enabled: model ? model.isSmall.isEnabled : false
                 isIndeterminate: model && enabled ? model.isSmall.isUndefined : false
@@ -59,7 +59,7 @@ InspectorSectionView {
             CheckBox {
                 anchors.left: parent.left
 
-                text: qsTr("Auto-place")
+                text: qsTrc("inspector", "Auto-place")
 
                 isIndeterminate: model ? model.isAutoPlaceAllowed.isUndefined : false
                 checked: model && !model.isAutoPlaceAllowed.isUndefined ? model.isAutoPlaceAllowed.value : false
@@ -71,7 +71,7 @@ InspectorSectionView {
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 6
 
-                text: qsTr("Play")
+                text: qsTrc("inspector", "Play")
 
                 enabled: model ? model.isPlayable.isEnabled : false
                 isIndeterminate: model && enabled ? model.isPlayable.isUndefined : false
@@ -94,7 +94,7 @@ InspectorSectionView {
                 width: (parent.width - popupButtonsRow.spacing)/ 2
 
                 icon: IconCode.AUDIO
-                text: qsTr("Playback")
+                text: qsTrc("inspector", "Playback")
 
                 onClicked: {
                     if (playbackPopup.isOpened) {
@@ -123,7 +123,7 @@ InspectorSectionView {
                 width: (parent.width - popupButtonsRow.spacing)/ 2
 
                 icon: IconCode.POSITION_ARROWS
-                text: qsTr("Appearance")
+                text: qsTrc("inspector", "Appearance")
 
                 onClicked: {
                     if (appearancePopup.isOpened) {

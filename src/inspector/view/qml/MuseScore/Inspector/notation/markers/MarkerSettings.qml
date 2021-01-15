@@ -11,7 +11,7 @@ PopupViewButton {
     property alias model: markerPopup.model
 
     icon: IconCode.MARKER
-    text: qsTr("Markers")
+    text: qsTrc("inspector", "Markers")
 
     visible: root.model ? !root.model.isEmpty : false
 

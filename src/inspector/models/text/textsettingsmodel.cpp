@@ -12,7 +12,7 @@ TextSettingsModel::TextSettingsModel(QObject* parent, IElementRepositoryService*
     : AbstractInspectorModel(parent, repository)
 {
     setSectionType(InspectorSectionType::SECTION_TEXT);
-    setTitle(tr("Text"));
+    setTitle(qtrc("inspector", "Text"));
     createProperties();
 
     adapter()->isTextEditingChanged().onNotify(this, [this]() {

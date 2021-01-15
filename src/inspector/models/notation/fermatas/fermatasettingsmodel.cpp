@@ -1,12 +1,14 @@
 #include "fermatasettingsmodel.h"
 
+#include "translation.h"
+
 using namespace mu::inspector;
 
 FermataSettingsModel::FermataSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_FERMATA);
-    setTitle(tr("Fermata"));
+    setTitle(qtrc("inspector", "Fermata"));
     createProperties();
 }
 

@@ -12,7 +12,7 @@ PopupViewButton {
     property alias staffSettingsModel: barlinePopup.staffSettingsModel
 
     icon: IconCode.SECTION_BREAK
-    text: qsTr("Barlines")
+    text: qsTrc("inspector", "Barlines")
 
     visible: root.barlineSettingsModel ? !root.barlineSettingsModel.isEmpty : false
 

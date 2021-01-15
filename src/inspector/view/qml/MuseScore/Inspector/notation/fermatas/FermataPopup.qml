@@ -15,7 +15,7 @@ StyledPopup {
     InspectorPropertyView {
         id: contentColumn
 
-        titleText: qsTr("Placement on staff")
+        titleText: qsTrc("inspector", "Placement on staff")
         propertyItem: root.model ? root.model.placementType : null
 
         RadioButtonGroup {

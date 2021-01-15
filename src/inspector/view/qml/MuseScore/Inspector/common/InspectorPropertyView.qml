@@ -61,7 +61,7 @@ Column {
             StyledMenuItem {
                 id: resetToDefaultItem
 
-                text: root.isStyled ? qsTr("Reset to style default") : qsTr("Reset to default")
+                text: root.isStyled ? qsTrc("inspector", "Reset to style default") : qsTrc("inspector", "Reset to default")
                 checkable: false
                 enabled: root.isModified
 
@@ -75,7 +75,7 @@ Column {
             StyledMenuItem {
                 id: applyToStyleItem
 
-                text: qsTr("Set as style")
+                text: qsTrc("inspector", "Set as style")
                 checkable: true
                 checked: !root.isModified
                 enabled: root.isModified

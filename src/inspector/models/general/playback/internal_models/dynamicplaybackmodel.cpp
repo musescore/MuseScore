@@ -2,12 +2,14 @@
 
 #include "dynamic.h"
 
+#include "translation.h"
+
 using namespace mu::inspector;
 
 DynamicPlaybackModel::DynamicPlaybackModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setTitle(tr("Dynamics"));
+    setTitle(qtrc("inspector", "Dynamics"));
 
     createProperties();
 }

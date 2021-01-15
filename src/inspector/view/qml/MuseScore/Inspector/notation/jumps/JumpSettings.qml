@@ -11,7 +11,7 @@ PopupViewButton {
     property alias model: jumpPopup.model
 
     icon: IconCode.JUMP
-    text: qsTr("Jumps")
+    text: qsTrc("inspector", "Jumps")
 
     visible: root.model ? !root.model.isEmpty : false
 

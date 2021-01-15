@@ -11,7 +11,7 @@ PopupViewButton {
     property alias model: ornamentPopup.model
 
     icon: IconCode.ORNAMENT
-    text: qsTr("Ornaments")
+    text: qsTrc("inspector", "Ornaments")
 
     visible: root.model ? !root.model.isEmpty : false
 

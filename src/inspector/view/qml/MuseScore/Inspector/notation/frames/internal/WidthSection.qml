@@ -12,7 +12,7 @@ InspectorPropertyView {
     anchors.right: parent.horizontalCenter
     anchors.rightMargin: 2
 
-    titleText: qsTr("Width")
+    titleText: qsTrc("inspector", "Width")
     propertyItem: widthProperty
 
     IncrementalPropertyControl {

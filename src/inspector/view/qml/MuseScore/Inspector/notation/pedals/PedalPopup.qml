@@ -22,7 +22,7 @@ StyledPopup {
 
         InspectorPropertyView {
 
-            titleText: qsTr("Line type")
+            titleText: qsTrc("inspector", "Line type")
             propertyItem: root.model ? root.model.hookType : null
 
             RadioButtonGroup {
@@ -65,7 +65,7 @@ StyledPopup {
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
-                titleText: qsTr("Thickness")
+                titleText: qsTrc("inspector", "Thickness")
                 propertyItem: root.model ? root.model.thickness : null
 
                 IncrementalPropertyControl {
@@ -84,7 +84,7 @@ StyledPopup {
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
-                titleText: qsTr("Hook height")
+                titleText: qsTrc("inspector", "Hook height")
                 propertyItem: root.model ? root.model.hookHeight : null
 
                 IncrementalPropertyControl {
@@ -106,7 +106,7 @@ StyledPopup {
 
             /*isIndeterminate: model ? model.isDefaultTempoForced.isUndefined : false
             checked: model && !isIndeterminate ? model.isDefaultTempoForced.value : false*/
-            text: qsTr("Show hook on both ends")
+            text: qsTrc("inspector", "Show hook on both ends")
 
             //onClicked: { model.isDefaultTempoForced.value = !checked }
         }
@@ -152,7 +152,7 @@ StyledPopup {
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
-                titleText: qsTr("Dash")
+                titleText: qsTrc("inspector", "Dash")
                 propertyItem: root.model ? root.model.dashLineLength : null
 
                 IncrementalPropertyControl {
@@ -171,7 +171,7 @@ StyledPopup {
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
-                titleText: qsTr("Gap")
+                titleText: qsTrc("inspector", "Gap")
                 propertyItem: root.model ? root.model.dashGapLength : null
 
                 IncrementalPropertyControl {
@@ -195,8 +195,8 @@ StyledPopup {
             width: parent.width
 
             model: [
-                { textRole: qsTr("Above"), valueRole: PedalTypes.PLACEMENT_TYPE_ABOVE },
-                { textRole: qsTr("Below"), valueRole: PedalTypes.PLACEMENT_TYPE_BELOW }
+                { textRole: qsTrc("inspector", "Above"), valueRole: PedalTypes.PLACEMENT_TYPE_ABOVE },
+                { textRole: qsTrc("inspector", "Below"), valueRole: PedalTypes.PLACEMENT_TYPE_BELOW }
             ]
 
             delegate: FlatRadioButton {

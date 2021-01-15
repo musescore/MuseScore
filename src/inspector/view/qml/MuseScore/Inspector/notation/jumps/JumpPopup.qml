@@ -20,7 +20,7 @@ StyledPopup {
         spacing: 12
 
         InspectorPropertyView {
-            titleText: qsTr("Jump to")
+            titleText: qsTrc("inspector", "Jump to")
             propertyItem: model ? model.jumpTo : null
 
             TextInputField {
@@ -40,7 +40,7 @@ StyledPopup {
 
         InspectorPropertyView {
 
-            titleText: qsTr("Play until")
+            titleText: qsTrc("inspector", "Play until")
             propertyItem: model ? model.playUntil : null
 
             TextInputField {
@@ -59,7 +59,7 @@ StyledPopup {
         }
 
         InspectorPropertyView {
-            titleText: qsTr("Continue at")
+            titleText: qsTrc("inspector", "Continue at")
             propertyItem: model ? model.continueAt : null
 
             TextInputField {
@@ -72,7 +72,7 @@ StyledPopup {
         CheckBox {
             isIndeterminate: model ? model.hasToPlayRepeats.isUndefined : false
             checked: model && !isIndeterminate ? model.hasToPlayRepeats.value : false
-            text: qsTr("Play repeats")
+            text: qsTrc("inspector", "Play repeats")
 
             onClicked: { model.hasToPlayRepeats.value = !checked }
         }

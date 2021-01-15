@@ -20,7 +20,7 @@ StyledPopup {
         spacing: 12
 
         InspectorPropertyView {
-            titleText: qsTr("Pause before new section starts")
+            titleText: qsTrc("inspector", "Pause before new section starts")
             propertyItem: model ? model.pauseDuration : null
 
             IncrementalPropertyControl {
@@ -30,7 +30,7 @@ StyledPopup {
                 maxValue: 999
                 minValue: 0
                 step: 0.5
-                measureUnitsSymbol: qsTr("s")
+                measureUnitsSymbol: qsTrc("inspector", "s")
 
                 onValueEdited: { model.pauseDuration.value = newValue }
             }
@@ -39,7 +39,7 @@ StyledPopup {
         CheckBox {
             isIndeterminate: model ? model.shouldStartWithLongInstrNames.isUndefined : false
             checked: model && !isIndeterminate ? model.shouldStartWithLongInstrNames.value : false
-            text: qsTr("Start new section with long instrument names")
+            text: qsTrc("inspector", "Start new section with long instrument names")
 
             onClicked: { model.shouldStartWithLongInstrNames.value = !checked }
         }
@@ -47,7 +47,7 @@ StyledPopup {
         CheckBox {
             isIndeterminate: model ? model.shouldResetBarNums.isUndefined : false
             checked: model && !isIndeterminate ? model.shouldResetBarNums.value : false
-            text: qsTr("Reset bar numbers for new section")
+            text: qsTrc("inspector", "Reset bar numbers for new section")
 
             onClicked: { model.shouldResetBarNums.value = !checked }
         }

@@ -4,13 +4,15 @@
 
 #include "dataformatter.h"
 
+#include "translation.h"
+
 using namespace mu::inspector;
 
 TimeSignatureSettingsModel::TimeSignatureSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_TIME_SIGNATURE);
-    setTitle(tr("Time signature"));
+    setTitle(qtrc("inspector", "Time signature"));
     createProperties();
 }
 

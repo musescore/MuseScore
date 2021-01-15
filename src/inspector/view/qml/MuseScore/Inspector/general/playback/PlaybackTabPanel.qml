@@ -19,7 +19,7 @@ TabPanel {
         height: implicitHeight
         width: root.width
 
-        title: qsTr("General")
+        title: qsTrc("inspector", "General")
 
         GeneralSettingsTab {
             id: generalSettings
@@ -39,7 +39,7 @@ TabPanel {
         height: implicitHeight
         width: root.width
 
-        title: qsTr("Dynamics")
+        title: qsTrc("inspector", "Dynamics")
 
         DynamicsSettingsTab {
             id: dynamicsSettings

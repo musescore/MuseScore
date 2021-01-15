@@ -10,7 +10,7 @@ PopupViewButton {
     property alias model: tremoloBarPopup.model
 
     icon: IconCode.GUITAR_TREMOLO_BAR
-    text: qsTr("Guitar tremolo bars")
+    text: qsTrc("inspector", "Guitar tremolo bars")
 
     visible: root.model ? !root.model.isEmpty : false
 

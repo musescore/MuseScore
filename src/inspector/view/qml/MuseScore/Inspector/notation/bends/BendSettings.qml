@@ -11,7 +11,7 @@ PopupViewButton {
     property alias model: bendPopup.model
 
     icon: IconCode.GUITAR_BEND
-    text: qsTr("Guitar bends")
+    text: qsTrc("inspector", "Guitar bends")
 
     visible: root.model ? !root.model.isEmpty : false
 

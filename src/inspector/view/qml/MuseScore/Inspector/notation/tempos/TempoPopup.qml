@@ -24,13 +24,13 @@ StyledPopup {
 
             isIndeterminate: model ? model.isDefaultTempoForced.isUndefined : false
             checked: model && !isIndeterminate ? model.isDefaultTempoForced.value : false
-            text: qsTr("Follow written tempo")
+            text: qsTrc("inspector", "Follow written tempo")
 
             onClicked: { model.isDefaultTempoForced.value = !checked }
         }
 
         InspectorPropertyView {
-            titleText: qsTr("Override written tempo")
+            titleText: qsTrc("inspector", "Override written tempo")
             propertyItem: model ? model.tempo : null
 
             IncrementalPropertyControl {
@@ -38,7 +38,7 @@ StyledPopup {
                 isIndeterminate: model ? model.tempo.isUndefined : false
                 currentValue: model ? model.tempo.value : 0
                 iconMode: iconModeEnum.hidden
-                measureUnitsSymbol: qsTr("BPM")
+                measureUnitsSymbol: qsTrc("inspector", "BPM")
 
                 onValueEdited: { model.tempo.value = newValue }
             }

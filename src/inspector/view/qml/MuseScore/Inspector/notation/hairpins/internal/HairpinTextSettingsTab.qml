@@ -21,7 +21,7 @@ FocusableItem {
         spacing: 12
 
         InspectorPropertyView {
-            titleText: qsTr("Beginning text")
+            titleText: qsTrc("inspector", "Beginning text")
             propertyItem: root.model ? root.model.beginingText : null
 
             TextInputField {
@@ -40,7 +40,7 @@ FocusableItem {
         }
 
         InspectorPropertyView {
-            titleText: qsTr("Offset")
+            titleText: qsTrc("inspector", "Offset")
             propertyItem: root.model ? root.model.beginingTextHorizontalOffset : null
 
             Item {
@@ -76,7 +76,7 @@ FocusableItem {
         SeparatorLine { anchors.margins: -10 }
 
         InspectorPropertyView {
-            titleText:  qsTr("Text when continuing to a new system")
+            titleText:  qsTrc("inspector", "Text when continuing to a new system")
             propertyItem: root.model ? root.model.continiousText : null
 
             TextInputField {
@@ -95,7 +95,7 @@ FocusableItem {
         }
 
         InspectorPropertyView {
-            titleText: qsTr("Offset")
+            titleText: qsTrc("inspector", "Offset")
             propertyItem: root.model ? root.model.continiousTextHorizontalOffset : null
 
             Item {

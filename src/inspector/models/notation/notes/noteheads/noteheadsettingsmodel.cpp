@@ -3,12 +3,14 @@
 #include "note.h"
 #include "dataformatter.h"
 
+#include "translation.h"
+
 using namespace mu::inspector;
 
 NoteheadSettingsModel::NoteheadSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setTitle(tr("Head"));
+    setTitle(qtrc("inspector", "Head"));
     setModelType(InspectorModelType::TYPE_NOTEHEAD);
 
     createProperties();

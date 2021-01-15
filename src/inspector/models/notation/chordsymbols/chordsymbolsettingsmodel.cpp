@@ -6,7 +6,7 @@ ChordSymbolSettingsModel::ChordSymbolSettingsModel(QObject* parent, IElementRepo
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_CHORD_SYMBOL);
-    setTitle(tr("Chord symbol"));
+    setTitle(qtrc("inspector", "Chord symbol"));
     createProperties();
 }
 

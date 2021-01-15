@@ -2,16 +2,18 @@
 
 #include "dataformatter.h"
 
+#include "translation.h"
+
 using namespace mu::inspector;
 
-static const int REARRANGE_ORDER_STEP = 100;
+static constexpr int REARRANGE_ORDER_STEP = 100;
 
 AppearanceSettingsModel::AppearanceSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
     createProperties();
 
-    setTitle(tr("Appearance"));
+    setTitle(qtrc("inspector", "Appearance"));
 }
 
 void AppearanceSettingsModel::createProperties()

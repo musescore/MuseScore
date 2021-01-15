@@ -8,7 +8,7 @@ FretDiagramSettingsModel::FretDiagramSettingsModel(QObject* parent, IElementRepo
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_FRET_DIAGRAM);
-    setTitle(tr("Fretboard Diagram"));
+    setTitle(qtrc("inspector", "Fretboard Diagram"));
     createProperties();
 }
 

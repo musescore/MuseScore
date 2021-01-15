@@ -24,7 +24,7 @@ ExpandableBlank {
         spacing: 16
 
         InspectorPropertyView {
-            titleText: qsTr("Applies to")
+            titleText: qsTrc("inspector", "Applies to")
             propertyItem: root.model ? root.model.scopeType : null
 
             StyledComboBox {
@@ -34,9 +34,9 @@ ExpandableBlank {
                 valueRoleName: "value"
 
                 model: [
-                    { text: qsTr("Staff"), value: Dynamic.SCOPE_STAFF },
-                    { text: qsTr("Single instrument"), value: Dynamic.SCOPE_SINGLE_INSTRUMENT },
-                    { text: qsTr("All instruments"), value: Dynamic.SCOPE_ALL_INSTRUMENTS }
+                    { text: qsTrc("inspector", "Staff"), value: Dynamic.SCOPE_STAFF },
+                    { text: qsTrc("inspector", "Single instrument"), value: Dynamic.SCOPE_SINGLE_INSTRUMENT },
+                    { text: qsTrc("inspector", "All instruments"), value: Dynamic.SCOPE_ALL_INSTRUMENTS }
                 ]
 
                 currentIndex: root.model && !root.model.scopeType.isUndefined ? indexOfValue(root.model.scopeType.value) : -1
@@ -56,7 +56,7 @@ ExpandableBlank {
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
-                titleText: qsTr("Velocity")
+                titleText: qsTrc("inspector", "Velocity")
                 propertyItem: model ? model.velocity : null
 
                 IncrementalPropertyControl {
@@ -84,7 +84,7 @@ ExpandableBlank {
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
-                titleText: qsTr("Velocity change")
+                titleText: qsTrc("inspector", "Velocity change")
                 propertyItem: model ? model.velocityChange : null
 
                 IncrementalPropertyControl {
@@ -111,7 +111,7 @@ ExpandableBlank {
         }
 
         InspectorPropertyView {
-            titleText: qsTr("Change speed")
+            titleText: qsTrc("inspector", "Change speed")
             propertyItem: root.model ? root.model.velocityChangeSpeed : null
 
             RadioButtonGroup {

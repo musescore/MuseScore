@@ -11,7 +11,7 @@ PopupViewButton {
     property alias model: pedalPopup.model
 
     icon: IconCode.PEDAL_MARKING
-    text: qsTr("Pedals")
+    text: qsTrc("inspector", "Pedals")
 
     visible: root.model ? !root.model.isEmpty : false
 

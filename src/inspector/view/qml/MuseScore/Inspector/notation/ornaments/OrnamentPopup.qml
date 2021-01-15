@@ -21,7 +21,7 @@ StyledPopup {
 
         InspectorPropertyView {
 
-            titleText: qsTr("Performance")
+            titleText: qsTrc("inspector", "Performance")
             propertyItem: root.model ? root.model.performanceType : null
 
             RadioButtonGroup {
@@ -31,8 +31,8 @@ StyledPopup {
                 width: parent.width
 
                 model: [
-                    { textRole: qsTr("Standard"), valueRole: OrnamentTypes.STYLE_STANDARD },
-                    { textRole: qsTr("Baroque"), valueRole: OrnamentTypes.STYLE_BAROQUE }
+                    { textRole: qsTrc("inspector", "Standard"), valueRole: OrnamentTypes.STYLE_STANDARD },
+                    { textRole: qsTrc("inspector", "Baroque"), valueRole: OrnamentTypes.STYLE_BAROQUE }
                 ]
 
                 delegate: FlatRadioButton {
@@ -58,7 +58,7 @@ StyledPopup {
         }
 
         InspectorPropertyView {
-            titleText: qsTr("Placement")
+            titleText: qsTrc("inspector", "Placement")
             propertyItem: root.model ? root.model.placement : null
 
             StyledComboBox {
@@ -68,11 +68,11 @@ StyledPopup {
                 valueRoleName: "value"
 
                 model: [
-                    { text: qsTr("Above staff"), value: ArticulationTypes.TYPE_ABOVE_STAFF },
-                    { text: qsTr("Below staff"), value: ArticulationTypes.TYPE_BELOW_STAFF },
-                    { text: qsTr("Chord automatic"), value: ArticulationTypes.TYPE_CHORD_AUTO },
-                    { text: qsTr("Above chord"), value: ArticulationTypes.TYPE_ABOVE_CHORD },
-                    { text: qsTr("Below chord"), value: ArticulationTypes.TYPE_BELOW_CHORD }
+                    { text: qsTrc("inspector", "Above staff"), value: ArticulationTypes.TYPE_ABOVE_STAFF },
+                    { text: qsTrc("inspector", "Below staff"), value: ArticulationTypes.TYPE_BELOW_STAFF },
+                    { text: qsTrc("inspector", "Chord automatic"), value: ArticulationTypes.TYPE_CHORD_AUTO },
+                    { text: qsTrc("inspector", "Above chord"), value: ArticulationTypes.TYPE_ABOVE_CHORD },
+                    { text: qsTrc("inspector", "Below chord"), value: ArticulationTypes.TYPE_BELOW_CHORD }
                 ]
 
                 currentIndex: root.model && !root.model.placement.isUndefined ? indexOfValue(root.model.placement.value) : -1
@@ -86,7 +86,7 @@ StyledPopup {
         FlatButton {
             width: parent.width
 
-            text: qsTr("Channel & Midi properties")
+            text: qsTrc("inspector", "Channel & Midi properties")
 
             onClicked: {
                 if (root.model) {

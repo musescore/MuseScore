@@ -12,7 +12,7 @@ HairpinSettingsModel::HairpinSettingsModel(QObject* parent, IElementRepositorySe
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_HAIRPIN);
-    setTitle(tr("Hairpin"));
+    setTitle(qtrc("inspector", "Hairpin"));
     createProperties();
 }
 

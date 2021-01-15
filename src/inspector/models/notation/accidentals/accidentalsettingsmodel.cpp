@@ -1,12 +1,14 @@
 #include "accidentalsettingsmodel.h"
 
+#include "translation.h"
+
 using namespace mu::inspector;
 
 AccidentalSettingsModel::AccidentalSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_ACCIDENTAL);
-    setTitle(tr("Accidental"));
+    setTitle(qtrc("inspector", "Accidental"));
     createProperties();
 }
 

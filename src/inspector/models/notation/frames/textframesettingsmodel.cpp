@@ -1,12 +1,14 @@
 #include "textframesettingsmodel.h"
 
+#include "translation.h"
+
 using namespace mu::inspector;
 
 TextFrameSettingsModel::TextFrameSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_TEXT_FRAME);
-    setTitle(tr("Text frame"));
+    setTitle(qtrc("inspector", "Text frame"));
     createProperties();
 }
 

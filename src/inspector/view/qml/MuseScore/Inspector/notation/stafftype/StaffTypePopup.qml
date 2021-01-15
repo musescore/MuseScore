@@ -23,7 +23,7 @@ StyledPopup {
         CheckBox {
             isIndeterminate: root.model ? root.model.isSmall.isUndefined : false
             checked: root.model && !isIndeterminate ? root.model.isSmall.value : false
-            text: qsTr("Cue size")
+            text: qsTrc("inspector", "Cue size")
 
             onClicked: { root.model.isSmall.value = !checked }
         }
@@ -37,7 +37,7 @@ StyledPopup {
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
-                titleText: qsTr("Offset")
+                titleText: qsTrc("inspector", "Offset")
                 propertyItem: root.model ? root.model.verticalOffset : null
 
                 IncrementalPropertyControl {
@@ -59,7 +59,7 @@ StyledPopup {
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
-                titleText: qsTr("Scale")
+                titleText: qsTrc("inspector", "Scale")
                 propertyItem: root.model ? root.model.scale : null
 
                 IncrementalPropertyControl {
@@ -91,7 +91,7 @@ StyledPopup {
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
-                titleText: qsTr("Number of lines")
+                titleText: qsTrc("inspector", "Number of lines")
                 propertyItem: root.model ? root.model.lineCount : null
 
                 IncrementalPropertyControl {
@@ -119,7 +119,7 @@ StyledPopup {
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
-                titleText: qsTr("Line distance")
+                titleText: qsTrc("inspector", "Line distance")
                 propertyItem: root.model ? root.model.lineDistance : null
 
                 IncrementalPropertyControl {
@@ -143,7 +143,7 @@ StyledPopup {
             anchors.right: parent.horizontalCenter
             anchors.rightMargin: 2
 
-            titleText: qsTr("Step offset")
+            titleText: qsTrc("inspector", "Step offset")
             propertyItem: root.model ? root.model.stepOffset : null
 
             IncrementalPropertyControl {
@@ -169,7 +169,7 @@ StyledPopup {
         SeparatorLine { anchors.margins: -10 }
 
         InspectorPropertyView {
-            titleText: qsTr("Notehead scheme")
+            titleText: qsTrc("inspector", "Notehead scheme")
             propertyItem: root.model ? root.model.noteheadSchemeType : null
 
             StyledComboBox {
@@ -179,16 +179,16 @@ StyledPopup {
                 valueRoleName: "value"
 
                 model: [
-                    { text: qsTr("Auto"), value: NoteHead.SCHEME_AUTO },
-                    { text: qsTr("Normal"), value: NoteHead.SCHEME_NORMAL },
-                    { text: qsTr("Pitch names"), value: NoteHead.SCHEME_PITCHNAME },
-                    { text: qsTr("German pitch names"), value: NoteHead.SCHEME_PITCHNAME_GERMAN },
-                    { text: qsTr("Solfege movable Do"), value: NoteHead.SCHEME_SOLFEGE },
-                    { text: qsTr("Solfege fixed Do"), value: NoteHead.SCHEME_SOLFEGE_FIXED },
-                    { text: qsTr("4-shape (Walker)"), value: NoteHead.SCHEME_SHAPE_NOTE_4 },
-                    { text: qsTr("7-shape (Aikin)"), value: NoteHead.SCHEME_SHAPE_NOTE_7_AIKIN },
-                    { text: qsTr("7-shape (Funk)"), value: NoteHead.SCHEME_SHAPE_NOTE_7_FUNK },
-                    { text: qsTr("7-shape (Walker)"), value: NoteHead.SCHEME_SHAPE_NOTE_7_WALKER }
+                    { text: qsTrc("inspector", "Auto"), value: NoteHead.SCHEME_AUTO },
+                    { text: qsTrc("inspector", "Normal"), value: NoteHead.SCHEME_NORMAL },
+                    { text: qsTrc("inspector", "Pitch names"), value: NoteHead.SCHEME_PITCHNAME },
+                    { text: qsTrc("inspector", "German pitch names"), value: NoteHead.SCHEME_PITCHNAME_GERMAN },
+                    { text: qsTrc("inspector", "Solfege movable Do"), value: NoteHead.SCHEME_SOLFEGE },
+                    { text: qsTrc("inspector", "Solfege fixed Do"), value: NoteHead.SCHEME_SOLFEGE_FIXED },
+                    { text: qsTrc("inspector", "4-shape (Walker)"), value: NoteHead.SCHEME_SHAPE_NOTE_4 },
+                    { text: qsTrc("inspector", "7-shape (Aikin)"), value: NoteHead.SCHEME_SHAPE_NOTE_7_AIKIN },
+                    { text: qsTrc("inspector", "7-shape (Funk)"), value: NoteHead.SCHEME_SHAPE_NOTE_7_FUNK },
+                    { text: qsTrc("inspector", "7-shape (Walker)"), value: NoteHead.SCHEME_SHAPE_NOTE_7_WALKER }
                 ]
 
                 currentIndex: root.model && !root.model.noteheadSchemeType.isUndefined ? indexOfValue(root.model.noteheadSchemeType.value) : -1
@@ -207,7 +207,7 @@ StyledPopup {
             CheckBox {
                 isIndeterminate: root.model ? root.model.isStemless.isUndefined : false
                 checked: root.model && !isIndeterminate ? root.model.isStemless.value : false
-                text: qsTr("Stemless")
+                text: qsTrc("inspector", "Stemless")
 
                 onClicked: { root.model.isStemless.value = !checked }
             }
@@ -215,7 +215,7 @@ StyledPopup {
             CheckBox {
                 isIndeterminate: root.model ? root.model.shouldShowBarlines.isUndefined : false
                 checked: root.model && !isIndeterminate ? root.model.shouldShowBarlines.value : false
-                text: qsTr("Show barlines")
+                text: qsTrc("inspector", "Show barlines")
 
                 onClicked: { root.model.shouldShowBarlines.value = !checked }
             }
@@ -223,7 +223,7 @@ StyledPopup {
             CheckBox {
                 isIndeterminate: root.model ? root.model.shouldShowLedgerLines.isUndefined : false
                 checked: root.model && !isIndeterminate ? root.model.shouldShowLedgerLines.value : false
-                text: qsTr("Show ledger lines")
+                text: qsTrc("inspector", "Show ledger lines")
 
                 onClicked: { root.model.shouldShowLedgerLines.value = !checked }
             }
@@ -231,7 +231,7 @@ StyledPopup {
             CheckBox {
                 isIndeterminate: root.model ? root.model.shouldGenerateClefs.isUndefined : false
                 checked: root.model && !isIndeterminate ? root.model.shouldGenerateClefs.value : false
-                text: qsTr("Generate clefs")
+                text: qsTrc("inspector", "Generate clefs")
 
                 onClicked: { root.model.shouldGenerateClefs.value = !checked }
             }
@@ -239,7 +239,7 @@ StyledPopup {
             CheckBox {
                 isIndeterminate: root.model ? root.model.shouldGenerateTimeSignatures.isUndefined : false
                 checked: root.model && !isIndeterminate ? root.model.shouldGenerateTimeSignatures.value : false
-                text: qsTr("Generate time signatures")
+                text: qsTrc("inspector", "Generate time signatures")
 
                 onClicked: { root.model.shouldGenerateTimeSignatures.value = !checked }
             }
@@ -247,7 +247,7 @@ StyledPopup {
             CheckBox {
                 isIndeterminate: root.model ? root.model.shouldGenerateKeySignatures.isUndefined : false
                 checked: root.model && !isIndeterminate ? root.model.shouldGenerateKeySignatures.value : false
-                text: qsTr("Generate key signatures")
+                text: qsTrc("inspector", "Generate key signatures")
 
                 onClicked: { root.model.shouldGenerateKeySignatures.value = !checked }
             }

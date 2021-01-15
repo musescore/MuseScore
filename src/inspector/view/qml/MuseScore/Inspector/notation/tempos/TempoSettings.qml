@@ -11,7 +11,7 @@ PopupViewButton {
     property alias model: tempoPopup.model
 
     icon: IconCode.METRONOME
-    text: qsTr("Tempos")
+    text: qsTrc("inspector", "Tempos")
 
     visible: root.model ? !root.model.isEmpty : false
 

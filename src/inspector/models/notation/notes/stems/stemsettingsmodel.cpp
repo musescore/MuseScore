@@ -3,13 +3,15 @@
 #include "types/stemtypes.h"
 #include "dataformatter.h"
 
+#include "translation.h"
+
 using namespace mu::inspector;
 
 StemSettingsModel::StemSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_STEM);
-    setTitle(tr("Stem"));
+    setTitle(qtrc("inspector", "Stem"));
 
     createProperties();
 }

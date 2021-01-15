@@ -2,12 +2,14 @@
 
 #include "dataformatter.h"
 
+#include "translation.h"
+
 using namespace mu::inspector;
 
 FermataPlaybackModel::FermataPlaybackModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setTitle(tr("Fermatas"));
+    setTitle(qtrc("inspector", "Fermatas"));
 
     createProperties();
 }

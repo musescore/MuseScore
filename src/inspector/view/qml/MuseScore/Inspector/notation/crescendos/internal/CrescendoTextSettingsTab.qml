@@ -21,7 +21,7 @@ FocusableItem {
         spacing: 12
 
         InspectorPropertyView {
-            titleText: qsTr("Beginning text")
+            titleText: qsTrc("inspector", "Beginning text")
             propertyItem: root.model ? root.model.beginningText : null
 
             TextInputField {
@@ -48,7 +48,7 @@ FocusableItem {
             StyledTextLabel {
                 anchors.left: parent.left
 
-                text: qsTr("Offset")
+                text: qsTrc("inspector", "Offset")
             }
 
             Item {
@@ -88,7 +88,7 @@ FocusableItem {
             spacing: 8
 
             StyledTextLabel {
-                text: qsTr("Text when continuing to a new system")
+                text: qsTrc("inspector", "Text when continuing to a new system")
             }
 
             TextInputField {
@@ -115,7 +115,7 @@ FocusableItem {
             StyledTextLabel {
                 anchors.left: parent.left
 
-                text: qsTr("Offset")
+                text: qsTrc("inspector", "Offset")
             }
 
             Item {

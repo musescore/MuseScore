@@ -11,7 +11,7 @@ PopupViewButton {
     property alias model: spacerPopup.model
 
     icon: IconCode.SPACER
-    text: qsTr("Spacers")
+    text: qsTrc("inspector", "Spacers")
 
     visible: root.model ? !root.model.isEmpty : false
 

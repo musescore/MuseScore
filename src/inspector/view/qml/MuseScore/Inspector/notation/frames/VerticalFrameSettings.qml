@@ -10,7 +10,7 @@ PopupViewButton {
     property alias model: verticalFramePopup.model
 
     icon: IconCode.VERTICAL_FRAME
-    text: qsTr("Vertical frames")
+    text: qsTrc("inspector", "Vertical frames")
 
     visible: root.model ? !root.model.isEmpty : false
 

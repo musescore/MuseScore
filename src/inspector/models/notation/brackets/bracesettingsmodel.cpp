@@ -9,7 +9,7 @@ BraceSettingsModel::BraceSettingsModel(QObject* parent, IElementRepositoryServic
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_BRACE);
-    setTitle(tr("Brace"));
+    setTitle(qtrc("inspector", "Brace"));
     createProperties();
 }
 
