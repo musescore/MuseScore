@@ -76,6 +76,8 @@ ThemeType UiConfiguration::actualThemeType() const
     case IUiConfiguration::ThemeType::FOLLOW_SYSTEM_THEME:
         return platformTheme()->isDarkMode() ? IUiConfiguration::ThemeType::DARK_THEME : IUiConfiguration::ThemeType::LIGHT_THEME;
     }
+
+    return IUiConfiguration::ThemeType::LIGHT_THEME;
 }
 
 Channel<ThemeType> UiConfiguration::actualThemeTypeChanged() const

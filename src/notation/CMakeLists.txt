@@ -172,7 +172,6 @@ set(MODULE_LINK
     qzip
     ${Z_LIB}
     libmscore
-    awl
     commonscene
     )
 

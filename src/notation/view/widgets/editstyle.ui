@@ -10912,7 +10912,7 @@
   <customwidget>
    <class>Awl::ColorLabel</class>
    <extends>QPushButton</extends>
-   <header>awl/colorlabel.h</header>
+   <header>notation/view/widgets/colorlabel.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

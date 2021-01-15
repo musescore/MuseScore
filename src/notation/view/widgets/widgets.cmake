@@ -24,6 +24,8 @@ set(WIDGETS_SRC
     ${CMAKE_CURRENT_LIST_DIR}/editstyle.h
     ${CMAKE_CURRENT_LIST_DIR}/alignSelect.cpp
     ${CMAKE_CURRENT_LIST_DIR}/alignSelect.h
+    ${CMAKE_CURRENT_LIST_DIR}/colorlabel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/colorlabel.h
     ${CMAKE_CURRENT_LIST_DIR}/fontStyleSelect.cpp
     ${CMAKE_CURRENT_LIST_DIR}/fontStyleSelect.h
     ${CMAKE_CURRENT_LIST_DIR}/offsetSelect.cpp
