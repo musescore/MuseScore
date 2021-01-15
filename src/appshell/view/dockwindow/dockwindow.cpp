@@ -71,7 +71,7 @@ DockWindow::DockWindow(QQuickItem* parent)
 
     WidgetStateStore::restoreGeometry(m_window);
 
-    connect(m_pages.notifier(), &framework::QmlListPropertyNotifier::appended, this, &DockWindow::onPageAppended);
+    connect(m_pages.notifier(), &uicomponents::QmlListPropertyNotifier::appended, this, &DockWindow::onPageAppended);
     connect(this, &DockWindow::colorChanged, this, &DockWindow::updateStyle);
 }
 

@@ -56,8 +56,8 @@ private:
 
     void updateState();
 
-    framework::MenuItem& item(const actions::ActionCode& actionCode);
-    QList<framework::MenuItem> m_items;
+    uicomponents::MenuItem& item(const actions::ActionCode& actionCode);
+    QList<uicomponents::MenuItem> m_items;
 };
 }
 

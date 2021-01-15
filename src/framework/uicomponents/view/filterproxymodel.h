@@ -16,21 +16,20 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_FILTERPROXYMODEL_H
-#define MU_FRAMEWORK_FILTERPROXYMODEL_H
+#ifndef MU_UICOMPONENTS_FILTERPROXYMODEL_H
+#define MU_UICOMPONENTS_FILTERPROXYMODEL_H
 
 #include <QSortFilterProxyModel>
 
 #include "filtervalue.h"
 #include "qmllistproperty.h"
 
-namespace mu {
-namespace framework {
+namespace mu::uicomponents {
 class FilterProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(QQmlListProperty<mu::framework::FilterValue> filters READ filters)
+    Q_PROPERTY(QQmlListProperty<mu::uicomponents::FilterValue> filters READ filters)
 
 public:
     explicit FilterProxyModel(QObject* parent = nullptr);
@@ -53,6 +52,5 @@ private:
     QHash<int, FilterValue*> m_roleIdToValueHash;
 };
 }
-}
 
-#endif // MU_FRAMEWORK_FILTERPROXYMODEL_H
+#endif // MU_UICOMPONENTS_FILTERPROXYMODEL_H

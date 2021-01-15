@@ -31,7 +31,7 @@ class INotationContextMenu : MODULE_EXPORT_INTERFACE
 public:
     virtual ~INotationContextMenu() = default;
 
-    virtual framework::MenuItemList items(const ElementType& elementType) const = 0;
+    virtual uicomponents::MenuItemList items(const ElementType& elementType) const = 0;
 };
 }
 

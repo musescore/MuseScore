@@ -72,7 +72,7 @@ private:
     QString m_uri;
     DockCentral* _central = nullptr;
     DockToolBar* _toolbar = nullptr;
-    framework::QmlListProperty<DockPanel> _panels;
+    uicomponents::QmlListProperty<DockPanel> _panels;
     DockStatusBar* _statusbar = nullptr;
 
     QByteArray _state;

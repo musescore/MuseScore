@@ -32,7 +32,7 @@
 #include "instrumentstypes.h"
 #include "iselectinstrumentscenario.h"
 
-namespace mu::framework {
+namespace mu::uicomponents {
 class ItemMultiSelectionModel;
 }
 
@@ -129,7 +129,7 @@ private:
     AbstractInstrumentPanelTreeItem* buildAddStaffControlItem(const QString& partId);
 
     AbstractInstrumentPanelTreeItem* m_rootItem = nullptr;
-    framework::ItemMultiSelectionModel* m_selectionModel = nullptr;
+    uicomponents::ItemMultiSelectionModel* m_selectionModel = nullptr;
 
     mu::notation::INotationPartsPtr m_masterNotationParts = nullptr;
     mu::notation::INotationPartsPtr m_notationParts = nullptr;

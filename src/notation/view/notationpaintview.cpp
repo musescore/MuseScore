@@ -24,7 +24,7 @@
 #include "actions/actiontypes.h"
 
 using namespace mu::notation;
-using namespace mu::framework;
+using namespace mu::uicomponents;
 
 static constexpr qreal MIN_SCROLL_SIZE = 0.2;
 static constexpr qreal MAX_SCROLL_SIZE = 1.0;

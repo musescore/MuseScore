@@ -92,12 +92,12 @@ private:
 
     actions::ActionItem currentNoteInputModeAction() const;
 
-    framework::MenuItem makeActionItem(const actions::ActionItem& action, const std::string& section);
-    framework::MenuItem makeAddItem(const std::string& section);
+    uicomponents::MenuItem makeActionItem(const actions::ActionItem& action, const std::string& section);
+    uicomponents::MenuItem makeAddItem(const std::string& section);
 
     std::vector<std::string> currentWorkspaceActions() const;
 
-    framework::MenuItem& item(const actions::ActionCode& actionCode);
+    uicomponents::MenuItem& item(const actions::ActionCode& actionCode);
     int findNoteInputModeItemIndex() const;
 
     INotationNoteInputPtr noteInput() const;
@@ -116,7 +116,7 @@ private:
 
     const ChordRest* elementToChordRest(const Element* element) const;
 
-    QList<framework::MenuItem> m_items;
+    QList<uicomponents::MenuItem> m_items;
 };
 }
 

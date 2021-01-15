@@ -4,6 +4,7 @@
 #include <QString>
 #include <QValidator>
 
+namespace mu::uicomponents {
 class DoubleInputValidator : public QValidator
 {
     Q_OBJECT
@@ -31,5 +32,6 @@ private:
     qreal m_bottom = -999.0;
     int m_decimal = 2;
 };
+}
 
 #endif // DOUBLEINPUTVALIDATOR_H

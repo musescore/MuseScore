@@ -21,7 +21,7 @@
 
 #include <QApplication>
 
-using namespace mu::framework;
+using namespace mu::uicomponents;
 
 ItemMultiSelectionModel::ItemMultiSelectionModel(QAbstractItemModel* parent)
     : QItemSelectionModel(parent)

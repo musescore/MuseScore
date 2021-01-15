@@ -23,7 +23,7 @@
 
 using namespace mu::playback;
 using namespace mu::actions;
-using namespace mu::framework;
+using namespace mu::uicomponents;
 
 PlaybackToolBarModel::PlaybackToolBarModel(QObject* parent)
     : QAbstractListModel(parent)
