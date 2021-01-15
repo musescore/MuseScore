@@ -36,14 +36,6 @@ if (WIN32)
       )
 endif(WIN32)
 
-# For Windows, because of these lines, for some unknown reason, the build of the .msi package fails.
-if(NOT ${CMAKE_HOST_SYSTEM_NAME} MATCHES "Windows")
-    find_package(Qt5Core 5.15.0 QUIET)
-    if (Qt5Core_FOUND)
-        message(FATAL_ERROR "MuseScore 3 does not support Qt 5.15: 5.15.0 shows empty palettes panel, 5.15.1 and later crash when opening pre-3.6 scores due to QTBUG-77337")
-    endif()
-endif()
-
 find_package(Qt5Core ${QT_MIN_VERSION} REQUIRED)
 
 foreach(_component ${_components})
