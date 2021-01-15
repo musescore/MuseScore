@@ -15,7 +15,7 @@ StyledPopup {
     InspectorPropertyView {
         id: contentColumn
 
-        titleText: qsTr("Bracket type")
+        titleText: qsTrc("inspector", "Bracket type")
         propertyItem: root.model ? root.model.bracketType : null
 
         RadioButtonGroup {
@@ -25,10 +25,10 @@ StyledPopup {
             width: parent.width
 
             model: [
-                { textRole: qsTr("None"), valueRole: AccidentalTypes.BRACKET_TYPE_NONE },
-                { textRole: qsTr("Parenthesis"), valueRole: AccidentalTypes.BRACKET_TYPE_PARENTHESIS },
-                { textRole: qsTr("Bracket"), valueRole: AccidentalTypes.BRACKET_TYPE_SQUARE },
-                { textRole: qsTr("Brace"), valueRole: AccidentalTypes.BRACKET_TYPE_ROUND },
+                { textRole: qsTrc("inspector", "None"), valueRole: AccidentalTypes.BRACKET_TYPE_NONE },
+                { textRole: qsTrc("inspector", "Parenthesis"), valueRole: AccidentalTypes.BRACKET_TYPE_PARENTHESIS },
+                { textRole: qsTrc("inspector", "Bracket"), valueRole: AccidentalTypes.BRACKET_TYPE_SQUARE },
+                { textRole: qsTrc("inspector", "Brace"), valueRole: AccidentalTypes.BRACKET_TYPE_ROUND },
             ]
 
             delegate: FlatRadioButton {

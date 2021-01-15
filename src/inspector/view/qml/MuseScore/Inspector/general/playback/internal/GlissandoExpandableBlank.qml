@@ -17,7 +17,7 @@ ExpandableBlank {
     contentItemComponent: InspectorPropertyView {
         width: root.width
 
-        titleText: qsTr("Style")
+        titleText: qsTrc("inspector", "Style")
         propertyItem: root.model ? root.model.styleType : null
 
         StyledComboBox {

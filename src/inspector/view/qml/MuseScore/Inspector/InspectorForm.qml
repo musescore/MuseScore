@@ -167,7 +167,7 @@ FocusableItem {
         StyledTextLabel {
             id: inspectorTitle
 
-            text: qsTr("Inspector")
+            text: qsTrc("inspector", "Inspector")
             font: ui.theme.largeBodyBoldFont
         }
 

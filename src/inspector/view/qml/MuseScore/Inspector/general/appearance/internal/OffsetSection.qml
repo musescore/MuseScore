@@ -20,7 +20,7 @@ Column {
     spacing: 16
 
     InspectorPropertyView {
-        titleText: qsTr("Offset")
+        titleText: qsTrc("inspector", "Offset")
         propertyItem: horizontalOffset
 
         Item {
@@ -60,7 +60,7 @@ Column {
     CheckBox {
         id: snapToGridCheckbox
 
-        text: qsTr("Snap to grid")
+        text: qsTrc("inspector", "Snap to grid")
 
         checked: isSnappedToGrid
 
@@ -70,7 +70,7 @@ Column {
     FlatButton {
         width: parent.width
 
-        text: qsTr("Configure grid")
+        text: qsTrc("inspector", "Configure grid")
 
         visible: snapToGridCheckbox.checked
 

@@ -32,7 +32,7 @@ StyledPopup {
 
 
                 InspectorPropertyView {
-                    titleText: qsTr("Number visible")
+                    titleText: qsTrc("inspector", "Number visible")
                     propertyItem: root.model ? root.model.isNumberVisible : null
 
                     anchors.left: parent.left
@@ -51,7 +51,7 @@ StyledPopup {
                 }
 
                 InspectorPropertyView {
-                    titleText: qsTr("Number position")
+                    titleText: qsTrc("inspector", "Number position")
                     propertyItem: root.model ? root.model.numberPosition : null
 
                     anchors.left: parent.horizontalCenter

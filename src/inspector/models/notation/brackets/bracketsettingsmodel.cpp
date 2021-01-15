@@ -3,13 +3,15 @@
 #include "log.h"
 #include "libmscore/bracket.h"
 
+#include "translation.h"
+
 using namespace mu::inspector;
 
 BracketSettingsModel::BracketSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_BRACKET);
-    setTitle(tr("Bracket"));
+    setTitle(qtrc("inspector", "Bracket"));
     createProperties();
 }
 

@@ -31,13 +31,13 @@ StyledPopup {
                 anchors.right: lockButton.left
                 anchors.rightMargin: 6
 
-                titleText: qsTr("Image height")
+                titleText: qsTrc("inspector", "Image height")
                 propertyItem: model ? model.height : null
 
                 IncrementalPropertyControl {
 
                     icon: IconCode.VERTICAL
-                    measureUnitsSymbol: staffSpaceUnitsCheckbox.checked ? qsTr("sp") : qsTr("mm")
+                    measureUnitsSymbol: staffSpaceUnitsCheckbox.checked ? qsTrc("inspector", "sp") : qsTrc("inspector", "mm")
                     isIndeterminate: model ? model.height.isUndefined : false
                     currentValue: model ? model.height.value : 0
 
@@ -68,13 +68,13 @@ StyledPopup {
                 anchors.leftMargin: 6
                 anchors.right: parent.right
 
-                titleText: qsTr("Image width")
+                titleText: qsTrc("inspector", "Image width")
                 propertyItem: model ? model.width : null
 
                 IncrementalPropertyControl {
                     icon: IconCode.HORIZONTAL
                     iconMode: iconModeEnum.right
-                    measureUnitsSymbol: staffSpaceUnitsCheckbox.checked ? qsTr("sp") : qsTr("mm")
+                    measureUnitsSymbol: staffSpaceUnitsCheckbox.checked ? qsTrc("inspector", "sp") : qsTrc("inspector", "mm")
                     isIndeterminate: model ? model.width.isUndefined : false
                     currentValue: model ? model.width.value : 0
 
@@ -89,7 +89,7 @@ StyledPopup {
             enabled: model ? model.shouldScaleToFrameSize.isEnabled : false
             isIndeterminate: model ? model.shouldScaleToFrameSize.isUndefined : false
             checked: model && !isIndeterminate ? model.shouldScaleToFrameSize.value : false
-            text: qsTr("Scale to frame size")
+            text: qsTrc("inspector", "Scale to frame size")
 
             onClicked: { model.shouldScaleToFrameSize.value = !checked }
         }
@@ -99,7 +99,7 @@ StyledPopup {
 
             isIndeterminate: model ? model.isSizeInSpatiums.isUndefined : false
             checked: model && !isIndeterminate ? model.isSizeInSpatiums.value : false
-            text: qsTr("Use staff space units")
+            text: qsTrc("inspector", "Use staff space units")
 
             onClicked: { model.isSizeInSpatiums.value = !checked }
         }

@@ -16,7 +16,7 @@ StyledPopup {
     InspectorPropertyView {
         id: contentColumn
 
-        titleText: qsTr("Style (between notes)")
+        titleText: qsTrc("inspector", "Style (between notes)")
         propertyItem: root.model ? root.model.style : null
 
         RadioButtonGroup {

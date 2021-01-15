@@ -11,7 +11,7 @@ PopupViewButton {
     property alias model: glissandoPopup.model
 
     icon: IconCode.GLISSANDO
-    text: qsTr("Glissandos")
+    text: qsTrc("inspector", "Glissandos")
 
     visible: root.model ? !root.model.isEmpty : false
 

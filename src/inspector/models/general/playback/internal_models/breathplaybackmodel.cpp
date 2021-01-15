@@ -2,12 +2,14 @@
 
 #include "dataformatter.h"
 
+#include "translation.h"
+
 using namespace mu::inspector;
 
 BreathPlaybackModel::BreathPlaybackModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setTitle(tr("Breaths & pauses"));
+    setTitle(qtrc("inspector", "Breaths & pauses"));
 
     createProperties();
 }

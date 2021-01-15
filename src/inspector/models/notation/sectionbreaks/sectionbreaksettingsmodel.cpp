@@ -8,7 +8,7 @@ SectionBreakSettingsModel::SectionBreakSettingsModel(QObject* parent, IElementRe
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_SECTIONBREAK);
-    setTitle(tr("Section Break"));
+    setTitle(qtrc("inspector", "Section Break"));
     createProperties();
 }
 

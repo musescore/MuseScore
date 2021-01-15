@@ -13,7 +13,7 @@ PopupViewButton {
     popupAvailableWidth: parent ? parent.width : 0
 
     icon: IconCode.MUSIC_NOTES
-    text: qsTr("Note settings")
+    text: qsTrc("inspector", "Note settings")
 
     visible: root.model ? !root.model.isEmpty : false
 

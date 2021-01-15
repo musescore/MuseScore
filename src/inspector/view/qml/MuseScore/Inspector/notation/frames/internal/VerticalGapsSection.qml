@@ -17,7 +17,7 @@ Item {
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 4
 
-        titleText: qsTr("Gap above")
+        titleText: qsTrc("inspector", "Gap above")
         propertyItem: gapAbove
 
         IncrementalPropertyControl {
@@ -36,7 +36,7 @@ Item {
         anchors.leftMargin: 4
         anchors.right: parent.right
 
-        titleText: qsTr("Gap below")
+        titleText: qsTrc("inspector", "Gap below")
         propertyItem: gapBelow
 
         IncrementalPropertyControl {

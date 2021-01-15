@@ -2,13 +2,15 @@
 
 #include "dataformatter.h"
 
+#include "translation.h"
+
 using namespace mu::inspector;
 
 StaffTypeSettingsModel::StaffTypeSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_STAFF_TYPE_CHANGES);
-    setTitle(tr("Staff type changes"));
+    setTitle(qtrc("inspector", "Staff type changes"));
     createProperties();
 }
 

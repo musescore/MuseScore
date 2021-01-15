@@ -3,13 +3,15 @@
 #include "types/tremolobartypes.h"
 #include "dataformatter.h"
 
+#include "translation.h"
+
 using namespace mu::inspector;
 
 TremoloBarSettingsModel::TremoloBarSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_TREMOLOBAR);
-    setTitle(tr("Tremolo bar"));
+    setTitle(qtrc("inspector", "Tremolo bar"));
     createProperties();
 }
 

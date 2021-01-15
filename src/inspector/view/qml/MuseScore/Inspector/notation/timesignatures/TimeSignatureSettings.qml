@@ -11,7 +11,7 @@ PopupViewButton {
     property alias model: timeSignaturePopup.model
 
     icon: IconCode.TIME_SIGNATURE
-    text: qsTr("Time signatures")
+    text: qsTrc("inspector", "Time signatures")
 
     visible: root.model ? !root.model.isEmpty : false
 

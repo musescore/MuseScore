@@ -11,7 +11,7 @@ PopupViewButton {
     property alias model: hairpinPopup.model
 
     icon: IconCode.HAIRPIN
-    text: qsTr("Hairpins")
+    text: qsTrc("inspector", "Hairpins")
 
     visible: root.model ? !root.model.isEmpty : false
 

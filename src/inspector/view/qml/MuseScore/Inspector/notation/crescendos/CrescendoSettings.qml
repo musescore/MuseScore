@@ -11,7 +11,7 @@ PopupViewButton {
     property alias model: crescendoPopup.model
 
     icon: IconCode.CRESCENDO_LINE
-    text: qsTr("Crescendos & Diminuendos")
+    text: qsTrc("inspector", "Crescendos & Diminuendos")
 
     visible: root.model ? !root.model.isEmpty : false
 

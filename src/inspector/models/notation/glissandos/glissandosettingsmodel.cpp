@@ -6,7 +6,7 @@ GlissandoSettingsModel::GlissandoSettingsModel(QObject* parent, IElementReposito
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_GLISSANDO);
-    setTitle(tr("Glissando"));
+    setTitle(qtrc("inspector", "Glissando"));
     createProperties();
 }
 

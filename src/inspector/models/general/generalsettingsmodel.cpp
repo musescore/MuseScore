@@ -1,5 +1,7 @@
 #include "generalsettingsmodel.h"
 
+#include "translation.h"
+
 using namespace mu::inspector;
 
 GeneralSettingsModel::GeneralSettingsModel(QObject* parent, IElementRepositoryService* repository)
@@ -7,7 +9,7 @@ GeneralSettingsModel::GeneralSettingsModel(QObject* parent, IElementRepositorySe
 {
     createProperties();
 
-    setTitle(tr("General"));
+    setTitle(qtrc("inspector", "General"));
     setSectionType(InspectorSectionType::SECTION_GENERAL);
     setPlaybackProxyModel(new PlaybackProxyModel(this, repository));
     setAppearanceSettingsModel(new AppearanceSettingsModel(this, repository));

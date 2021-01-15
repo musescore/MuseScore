@@ -20,14 +20,14 @@ StyledPopup {
             return "--"
 
         switch (type.value) {
-        case MarkerTypes.TYPE_SEGNO: return qsTr("Segno");
-        case MarkerTypes.TYPE_VARSEGNO: return qsTr("Segno variation")
-        case MarkerTypes.TYPE_CODA: return qsTr("Coda")
-        case MarkerTypes.TYPE_VARCODA: return qsTr("Varied coda")
-        case MarkerTypes.TYPE_CODETTA: return qsTr("Codetta")
-        case MarkerTypes.TYPE_FINE: return qsTr("Fine")
-        case MarkerTypes.TYPE_TOCODA: return qsTr("To Coda")
-        case MarkerTypes.TYPE_USER: return qsTr("Custom")
+        case MarkerTypes.TYPE_SEGNO: return qsTrc("inspector", "Segno");
+        case MarkerTypes.TYPE_VARSEGNO: return qsTrc("inspector", "Segno variation")
+        case MarkerTypes.TYPE_CODA: return qsTrc("inspector", "Coda")
+        case MarkerTypes.TYPE_VARCODA: return qsTrc("inspector", "Varied coda")
+        case MarkerTypes.TYPE_CODETTA: return qsTrc("inspector", "Codetta")
+        case MarkerTypes.TYPE_FINE: return qsTrc("inspector", "Fine")
+        case MarkerTypes.TYPE_TOCODA: return qsTrc("inspector", "To Coda")
+        case MarkerTypes.TYPE_USER: return qsTrc("inspector", "Custom")
         }
     }
 
@@ -39,11 +39,11 @@ StyledPopup {
         spacing: 12
 
         StyledTextLabel {
-            text: qsTr("Marker type: ") + markerTypeToString(model ? model.type : null)
+            text: qsTrc("inspector", "Marker type: ") + markerTypeToString(model ? model.type : null)
         }
 
         InspectorPropertyView {
-            titleText: qsTr("Label")
+            titleText: qsTrc("inspector", "Label")
             propertyItem: model ? model.label : null
 
             TextInputField {

@@ -2,13 +2,15 @@
 
 #include "dataformatter.h"
 
+#include "translation.h"
+
 using namespace mu::inspector;
 
 TempoSettingsModel::TempoSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_TEMPO);
-    setTitle(tr("Tempo"));
+    setTitle(qtrc("inspector", "Tempo"));
     createProperties();
 }
 

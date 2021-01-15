@@ -10,7 +10,7 @@ CrescendoSettingsModel::CrescendoSettingsModel(QObject* parent, IElementReposito
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_CRESCENDO);
-    setTitle(tr("Crescendo"));
+    setTitle(qtrc("inspector", "Crescendo"));
     createProperties();
 }
 

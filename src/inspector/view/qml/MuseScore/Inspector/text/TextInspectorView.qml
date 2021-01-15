@@ -21,7 +21,7 @@ InspectorSectionView {
         spacing: 16
 
         InspectorPropertyView {
-            titleText: qsTr("Font")
+            titleText: qsTrc("inspector", "Font")
 
             propertyItem: root.model ? root.model.fontFamily : null
 
@@ -62,7 +62,7 @@ InspectorSectionView {
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
-                titleText: qsTr("Style")
+                titleText: qsTrc("inspector", "Style")
                 propertyItem: root.model ? root.model.fontStyle : null
 
                 RadioButtonGroup {
@@ -97,7 +97,7 @@ InspectorSectionView {
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
-                titleText: qsTr("Size")
+                titleText: qsTrc("inspector", "Size")
                 propertyItem: root.model ? root.model.fontSize : null
 
                 StyledComboBox {
@@ -131,7 +131,7 @@ InspectorSectionView {
         }
 
         InspectorPropertyView {
-            titleText: qsTr("Alignment")
+            titleText: qsTrc("inspector", "Alignment")
             propertyItem: root.model ? root.model.horizontalAlignment : null
 
             Item {
@@ -216,7 +216,7 @@ InspectorSectionView {
         FlatButton {
             width: parent.width
 
-            text: qsTr("Insert special charachters")
+            text: qsTrc("inspector", "Insert special charachters")
 
             visible: root.model ? root.model.isSpecialCharactersInsertionAvailable : false
 

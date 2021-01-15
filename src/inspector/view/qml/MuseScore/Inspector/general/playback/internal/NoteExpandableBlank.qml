@@ -29,7 +29,7 @@ ExpandableBlank {
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
-                titleText: qsTr("Velocity")
+                titleText: qsTrc("inspector", "Velocity")
                 propertyItem: model ? model.velocity : null
 
                 IncrementalPropertyControl {
@@ -57,7 +57,7 @@ ExpandableBlank {
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
-                titleText: qsTr("Tunings (cents)")
+                titleText: qsTrc("inspector", "Tunings (cents)")
                 propertyItem: model ? model.tuning : null
 
                 IncrementalPropertyControl {
@@ -72,7 +72,7 @@ ExpandableBlank {
         }
 
         CheckBox {
-            text: qsTr("Override dynamics")
+            text: qsTrc("inspector", "Override dynamics")
 
             isIndeterminate: model ? model.overrideDynamics.isUndefined : false
             checked: model && !isIndeterminate ? model.overrideDynamics.value : false

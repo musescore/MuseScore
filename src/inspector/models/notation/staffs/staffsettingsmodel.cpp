@@ -1,12 +1,14 @@
 #include "staffsettingsmodel.h"
 
+#include "translation.h"
+
 using namespace mu::inspector;
 
 StaffSettingsModel::StaffSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_STAFF);
-    setTitle(tr("Staff"));
+    setTitle(qtrc("inspector", "Staff"));
     createProperties();
 }
 

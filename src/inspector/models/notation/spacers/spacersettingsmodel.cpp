@@ -2,13 +2,15 @@
 
 #include "dataformatter.h"
 
+#include "translation.h"
+
 using namespace mu::inspector;
 
 SpacerSettingsModel::SpacerSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_SPACER);
-    setTitle(tr("Spacer"));
+    setTitle(qtrc("inspector", "Spacer"));
     createProperties();
 }
 

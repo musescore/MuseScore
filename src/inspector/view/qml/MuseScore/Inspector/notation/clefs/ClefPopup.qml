@@ -22,7 +22,7 @@ StyledPopup {
         CheckBox {
             isIndeterminate: model ? model.shouldShowCourtesy.isUndefined : false
             checked: model && !isIndeterminate ? model.shouldShowCourtesy.value : false
-            text: qsTr("Show courtesy clef on previous measure")
+            text: qsTrc("inspector", "Show courtesy clef on previous measure")
 
             onClicked: { model.shouldShowCourtesy.value = !checked }
         }

@@ -11,7 +11,7 @@ PopupViewButton {
     property alias model: fermataPopup.model
 
     icon: IconCode.FERMATA
-    text: qsTr("Fermatas")
+    text: qsTrc("inspector", "Fermatas")
 
     visible: root.model ? !root.model.isEmpty : false
 

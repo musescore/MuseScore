@@ -36,7 +36,7 @@ InspectorSectionView {
                 Layout.maximumWidth: parent.width/2
 
                 StyledTextLabel {
-                    text: qsTr("Page size")
+                    text: qsTrc("inspector", "Page size")
                 }
 
                 StyledComboBox {
@@ -62,7 +62,7 @@ InspectorSectionView {
                 Layout.maximumWidth: parent.width/2
 
                 StyledTextLabel {
-                    text: qsTr("Orientation")
+                    text: qsTrc("inspector", "Orientation")
                 }
 
                 RadioButtonGroup {
@@ -101,14 +101,14 @@ InspectorSectionView {
                 Layout.maximumWidth: parent.width/2
 
                 StyledTextLabel {
-                    text: qsTr("Staff spacing")
+                    text: qsTrc("inspector", "Staff spacing")
                 }
 
                 IncrementalPropertyControl {
                     iconMode: iconModeEnum.hidden
 
                     currentValue: root.model ? root.model.staffSpacing : 0
-                    measureUnitsSymbol: qsTr("mm")
+                    measureUnitsSymbol: qsTrc("inspector", "mm")
 
                     step: 0.1
                     decimals: 3
@@ -126,7 +126,7 @@ InspectorSectionView {
                 spacing: 8
 
                 StyledTextLabel {
-                    text: qsTr("Staff distance")
+                    text: qsTrc("inspector", "Staff distance")
                 }
 
                 IncrementalPropertyControl {
@@ -151,7 +151,7 @@ InspectorSectionView {
             FlatButton {
                 width: parent.width
 
-                text: qsTr("More page settings")
+                text: qsTrc("inspector", "More page settings")
 
                 onClicked: {
                     if (root.model) {
@@ -163,7 +163,7 @@ InspectorSectionView {
             FlatButton {
                 width: parent.width
 
-                text: qsTr("Style settings")
+                text: qsTrc("inspector", "Style settings")
 
                 onClicked: {
                     if (root.model) {

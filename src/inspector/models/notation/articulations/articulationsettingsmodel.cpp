@@ -9,7 +9,7 @@ ArticulationSettingsModel::ArticulationSettingsModel(QObject* parent, IElementRe
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_ARTICULATION);
-    setTitle(tr("Articulation"));
+    setTitle(qtrc("inspector", "Articulation"));
     createProperties();
 }
 

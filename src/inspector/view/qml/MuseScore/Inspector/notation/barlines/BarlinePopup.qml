@@ -23,7 +23,7 @@ StyledPopup {
         spacing: 16
 
         InspectorPropertyView {
-            titleText: qsTr("Style")
+            titleText: qsTrc("inspector", "Style")
             propertyItem: root.barlineSettingsModel ? root.barlineSettingsModel.type : null
 
             StyledComboBox {
@@ -55,7 +55,7 @@ StyledPopup {
         }
 
         InspectorPropertyView {
-            titleText: qsTr("Repeat style")
+            titleText: qsTrc("inspector", "Repeat style")
             propertyItem: barlineSettingsModel ? barlineSettingsModel.hasToShowTips : null
 
             RadioButtonGroup {
@@ -92,7 +92,7 @@ StyledPopup {
 
             isIndeterminate: barlineSettingsModel ? barlineSettingsModel.isSpanToNextStaff.isUndefined : false
             checked: barlineSettingsModel && !isIndeterminate ? barlineSettingsModel.isSpanToNextStaff.value : false
-            text: qsTr("Span to next staff")
+            text: qsTrc("inspector", "Span to next staff")
 
             onClicked: { barlineSettingsModel.isSpanToNextStaff.value = !checked }
         }
@@ -110,7 +110,7 @@ StyledPopup {
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
-                titleText: qsTr("Span from")
+                titleText: qsTrc("inspector", "Span from")
                 propertyItem: barlineSettingsModel ? barlineSettingsModel.spanFrom : null
 
                 IncrementalPropertyControl {
@@ -129,7 +129,7 @@ StyledPopup {
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
-                titleText: qsTr("Span to")
+                titleText: qsTrc("inspector", "Span to")
                 propertyItem: barlineSettingsModel ? barlineSettingsModel.spanTo : null
 
                 IncrementalPropertyControl {
@@ -150,7 +150,7 @@ StyledPopup {
         FlatButton {
             width: parent.width
 
-            text: qsTr("Apply to all staffs")
+            text: qsTrc("inspector", "Apply to all staffs")
 
             enabled: !spanFromControl.isIndeterminate && !spanToControl.isIndeterminate
 
@@ -171,27 +171,27 @@ StyledPopup {
             width: parent.width
 
             StyledTextLabel {
-                text: qsTr("Span presets")
+                text: qsTrc("inspector", "Span presets")
             }
 
             RowLayout {
                 width: parent.width
 
                 FlatButton {
-                    text: qsTr("Default")
+                    text: qsTrc("inspector", "Default")
                     Layout.fillWidth: true
                     onClicked: { barlineSettingsModel.applySpanPreset(BarlineTypes.PRESET_DEFAULT) }
                 }
 
                 FlatButton {
-                    text: qsTr("Tick 1")
+                    text: qsTrc("inspector", "Tick 1")
                     Layout.fillWidth: true
                     onClicked: { barlineSettingsModel.applySpanPreset(BarlineTypes.PRESET_TICK_1) }
                 }
 
 
                 FlatButton {
-                    text: qsTr("Tick 2")
+                    text: qsTrc("inspector", "Tick 2")
                     Layout.fillWidth: true
                     onClicked: { barlineSettingsModel.applySpanPreset(BarlineTypes.PRESET_TICK_2) }
                 }
@@ -201,13 +201,13 @@ StyledPopup {
                 width: parent.width
 
                 FlatButton {
-                    text: qsTr("Short 1")
+                    text: qsTrc("inspector", "Short 1")
                     Layout.fillWidth: true
                     onClicked: { barlineSettingsModel.applySpanPreset(BarlineTypes.PRESET_SHORT_1) }
                 }
 
                 FlatButton {
-                    text: qsTr("Short 2")
+                    text: qsTrc("inspector", "Short 2")
                     Layout.fillWidth: true
                     onClicked: { barlineSettingsModel.applySpanPreset(BarlineTypes.PRESET_SHORT_2) }
                 }

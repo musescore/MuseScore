@@ -8,7 +8,7 @@ BeamSettingsModel::BeamSettingsModel(QObject* parent, IElementRepositoryService*
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_BEAM);
-    setTitle(tr("Beam"));
+    setTitle(qtrc("inspector", "Beam"));
     setBeamModesModel(new BeamModesModel(this, repository));
 
     createProperties();

@@ -1,12 +1,14 @@
 #include "mmrestsettingsmodel.h"
 
+#include "translation.h"
+
 using namespace mu::inspector;
 
 MMRestSettingsModel::MMRestSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_MMREST);
-    setTitle(tr("Multimeasure rest"));
+    setTitle(qtrc("inspector", "Multimeasure rest"));
     createProperties();
 }
 

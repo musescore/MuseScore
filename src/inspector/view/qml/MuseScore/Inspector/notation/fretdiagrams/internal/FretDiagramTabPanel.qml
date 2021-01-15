@@ -16,7 +16,7 @@ TabPanel {
     Tab {
         id: generalTab
 
-        title: qsTr("General")
+        title: qsTrc("inspector", "General")
 
         FretGeneralSettingsTab {
             anchors.top: parent.top
@@ -31,7 +31,7 @@ TabPanel {
     Tab {
         id: advancedTab
 
-        title: qsTr("Settings")
+        title: qsTrc("inspector", "Settings")
 
         enabled: root.model ? root.model.areSettingsAvailable : false
 

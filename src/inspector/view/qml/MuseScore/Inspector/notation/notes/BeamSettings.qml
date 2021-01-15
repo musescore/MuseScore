@@ -24,7 +24,7 @@ FocusableItem {
 
         InspectorPropertyView {
 
-            titleText: qsTr("Beam types")
+            titleText: qsTrc("inspector", "Beam types")
             propertyItem: beamModesModel ? beamModesModel.mode : null
 
             BeamTypesGrid {
@@ -60,7 +60,7 @@ FocusableItem {
                                              : false
 
                 StyledTextLabel {
-                    text: qsTr("Feathered beams")
+                    text: qsTrc("inspector", "Feathered beams")
                 }
 
                 RadioButtonGroup {
@@ -103,7 +103,7 @@ FocusableItem {
                         anchors.right: parent.horizontalCenter
                         anchors.rightMargin: 4
 
-                        titleText: qsTr("Feathering left")
+                        titleText: qsTrc("inspector", "Feathering left")
                         propertyItem: model ? model.featheringHeightLeft : null
 
                         IncrementalPropertyControl {
@@ -124,7 +124,7 @@ FocusableItem {
                         anchors.leftMargin: 4
                         anchors.right: parent.right
 
-                        titleText: qsTr("Feathering right")
+                        titleText: qsTrc("inspector", "Feathering right")
                         propertyItem: model ? model.featheringHeightRight : null
 
                         IncrementalPropertyControl {
@@ -151,7 +151,7 @@ FocusableItem {
             FlatButton {
                 width: parent.width
 
-                text: qsTr("Force horizontal")
+                text: qsTrc("inspector", "Force horizontal")
 
                 onClicked: {
                     if (!model)
@@ -164,7 +164,7 @@ FocusableItem {
             ExpandableBlank {
                 isExpanded: false
 
-                title: isExpanded ? qsTr("Show less") : qsTr("Show more")
+                title: isExpanded ? qsTrc("inspector", "Show less") : qsTrc("inspector", "Show more")
 
                 width: parent.width
 
@@ -176,7 +176,7 @@ FocusableItem {
 
                     InspectorPropertyView {
 
-                        titleText: qsTr("Beam height")
+                        titleText: qsTrc("inspector", "Beam height")
                         propertyItem: model ? model.beamVectorX : null
 
                         Item {

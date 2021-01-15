@@ -11,7 +11,7 @@ PopupViewButton {
     property alias model: chordSymbolPopup.model
 
     icon: IconCode.CHORD_SYMBOL
-    text: qsTr("Chord symbols")
+    text: qsTrc("inspector", "Chord symbols")
 
     visible: root.model ? !root.model.isEmpty : false
 
