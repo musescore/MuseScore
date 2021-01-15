@@ -26,11 +26,11 @@
 #include "alignSelect.h"
 #include "offsetSelect.h"
 #include "fontStyleSelect.h"
+#include "colorlabel.h"
 
 #include "libmscore/figuredbass.h"
 #include "libmscore/layout.h"
 #include "libmscore/sym.h"
-#include "awl/colorlabel.h"
 #include "ui/view/iconcodes.h"
 
 #include "framework/global/widgetstatestore.h"
