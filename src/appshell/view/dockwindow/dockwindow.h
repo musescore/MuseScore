@@ -91,10 +91,10 @@ private:
     QMainWindow* m_window = nullptr;
     EventsWatcher* m_eventsWatcher = nullptr;
     QString m_title;
-    framework::QmlListProperty<DockToolBar> m_toolbars;
+    uicomponents::QmlListProperty<DockToolBar> m_toolbars;
     QStackedWidget* m_central = nullptr;
     QStatusBar* m_statusbar = nullptr;
-    framework::QmlListProperty<DockPage> m_pages;
+    uicomponents::QmlListProperty<DockPage> m_pages;
     QString m_currentPageUri;
     bool m_isComponentComplete = false;
     QColor m_color;

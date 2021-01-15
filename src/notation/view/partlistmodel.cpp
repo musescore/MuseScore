@@ -25,7 +25,7 @@
 #include "uicomponents/view/itemmultiselectionmodel.h"
 
 using namespace mu::notation;
-using namespace mu::framework;
+using namespace mu::uicomponents;
 
 PartListModel::PartListModel(QObject* parent)
     : QAbstractListModel(parent), m_selectionModel(new ItemMultiSelectionModel(this))

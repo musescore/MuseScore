@@ -31,7 +31,7 @@
 
 using namespace mu::instruments;
 using namespace mu::notation;
-using namespace mu::framework;
+using namespace mu::uicomponents;
 using ItemType = InstrumentTreeItemType::ItemType;
 
 InstrumentPanelTreeModel::InstrumentPanelTreeModel(QObject* parent)

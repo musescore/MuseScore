@@ -16,12 +16,12 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_ITEMMULTISELECTIONMODEL_H
-#define MU_FRAMEWORK_ITEMMULTISELECTIONMODEL_H
+#ifndef MU_UICOMPONENTS_ITEMMULTISELECTIONMODEL_H
+#define MU_UICOMPONENTS_ITEMMULTISELECTIONMODEL_H
 
 #include <QItemSelectionModel>
 
-namespace mu::framework {
+namespace mu::uicomponents {
 class ItemMultiSelectionModel : public QItemSelectionModel
 {
 public:
@@ -37,4 +37,4 @@ private:
 };
 }
 
-#endif // MU_FRAMEWORK_ITEMMULTISELECTIONMODEL_H
+#endif // MU_UICOMPONENTS_ITEMMULTISELECTIONMODEL_H

@@ -16,15 +16,14 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_FILTERVALUE_H
-#define MU_FRAMEWORK_FILTERVALUE_H
+#ifndef MU_UICOMPONENTS_FILTERVALUE_H
+#define MU_UICOMPONENTS_FILTERVALUE_H
 
 #include <QObject>
 #include <QMetaType>
 #include <QVariant>
 
-namespace mu {
-namespace framework {
+namespace mu::uicomponents {
 class CompareType
 {
     Q_GADGET
@@ -66,6 +65,5 @@ private:
     QVariant m_compareType;
 };
 }
-}
 
-#endif // MU_FRAMEWORK_FILTERVALUE_H
+#endif // MU_UICOMPONENTS_FILTERVALUE_H

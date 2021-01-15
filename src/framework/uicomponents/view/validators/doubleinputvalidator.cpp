@@ -1,5 +1,7 @@
 #include "doubleinputvalidator.h"
 
+using namespace mu::uicomponents;
+
 DoubleInputValidator::DoubleInputValidator(QObject* parent)
     : QValidator(parent)
 {

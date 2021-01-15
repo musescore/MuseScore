@@ -18,7 +18,7 @@
 //=============================================================================
 #include "filtervalue.h"
 
-using namespace mu::framework;
+using namespace mu::uicomponents;
 
 FilterValue::FilterValue(QObject* parent)
     : QObject(parent)

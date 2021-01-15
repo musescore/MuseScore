@@ -17,15 +17,14 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_FRAMEWORK_ICONVIEW_H
-#define MU_FRAMEWORK_ICONVIEW_H
+#ifndef MU_UICOMPONENTS_ICONVIEW_H
+#define MU_UICOMPONENTS_ICONVIEW_H
 
 #include <QQuickPaintedItem>
 #include <QIcon>
 #include <QColor>
 
-namespace mu {
-namespace framework {
+namespace mu::uicomponents {
 class IconView : public QQuickPaintedItem
 {
     Q_OBJECT
@@ -56,5 +55,5 @@ private:
     bool m_active   { false };
 };
 }
-}
-#endif // MU_FRAMEWORK_ICONVIEW_H
+
+#endif // MU_UICOMPONENTS_ICONVIEW_H

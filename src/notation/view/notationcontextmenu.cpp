@@ -22,7 +22,7 @@
 
 using namespace mu::notation;
 using namespace mu::actions;
-using namespace mu::framework;
+using namespace mu::uicomponents;
 
 MenuItemList NotationContextMenu::items(const ElementType& elementType) const
 {

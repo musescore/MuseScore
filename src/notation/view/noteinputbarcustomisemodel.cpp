@@ -33,7 +33,7 @@
 using namespace mu::notation;
 using namespace mu::workspace;
 using namespace mu::actions;
-using namespace mu::framework;
+using namespace mu::uicomponents;
 
 static const std::string NOTE_INPUT_TOOLBAR_NAME("noteInput");
 

@@ -4,6 +4,7 @@
 #include <QString>
 #include <QValidator>
 
+namespace mu::uicomponents {
 class IntInputValidator : public QValidator
 {
     Q_OBJECT
@@ -27,5 +28,6 @@ private:
     int m_top = 999;
     int m_bottom = -999;
 };
+}
 
 #endif // INTINPUTVALIDATOR_H

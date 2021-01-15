@@ -97,7 +97,7 @@ int main(int argc, char** argv)
 #endif
     app.addModule(new mu::fonts::FontsModule());
     app.addModule(new mu::ui::UiModule());
-    app.addModule(new mu::framework::UiComponentsModule());
+    app.addModule(new mu::uicomponents::UiComponentsModule());
     app.addModule(new mu::system::SystemModule());
     app.addModule(new mu::network::NetworkModule());
 

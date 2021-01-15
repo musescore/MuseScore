@@ -1,6 +1,6 @@
 #include "sampleobject.h"
 
-using namespace mu::framework;
+using namespace mu::uicomponents;
 
 SampleObject::SampleObject(QObject* parent)
     : QObject(parent)
@@ -9,15 +9,15 @@ SampleObject::SampleObject(QObject* parent)
 
 SampleObject::State SampleObject::state() const
 {
-    return _state;
+    return m_state;
 }
 
 void SampleObject::next()
 {
-    if (_state == Third) {
-        _state = First;
+    if (m_state == Third) {
+        m_state = First;
     } else {
-        _state = static_cast<State>(static_cast<int>(_state) + 1);
+        m_state = static_cast<State>(static_cast<int>(m_state) + 1);
     }
-    emit stateChanged(_state);
+    emit stateChanged(m_state);
 }
