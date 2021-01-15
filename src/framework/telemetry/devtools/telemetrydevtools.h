@@ -22,6 +22,7 @@
 
 #include <QObject>
 
+namespace mu::telemetry {
 class TelemetryDevTools : public QObject
 {
     Q_OBJECT
@@ -30,5 +31,6 @@ public:
 
     Q_INVOKABLE void doCrash();
 };
+}
 
 #endif // MU_TELEMETRY_TELEMETRYDEVTOOLS_H

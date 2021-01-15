@@ -21,23 +21,22 @@
 #define MU_TELEMETRY_TELEMETRYPERMISSIONMODEL_H
 
 #include <QObject>
-#include <QSettings>
-#include <QString>
+
+#include "modularity/ioc.h"
+#include "itelemetryconfiguration.h"
 
 namespace mu::telemetry {
 class TelemetryPermissionModel : public QObject
 {
     Q_OBJECT
 
+    INJECT(telemetry, ITelemetryConfiguration, configuration)
+
 public:
     explicit TelemetryPermissionModel(QObject* parent = nullptr);
 
-    Q_INVOKABLE void accept();
-    Q_INVOKABLE void reject();
-    Q_INVOKABLE void openLink(const QString& link);
-
-private:
-    QSettings m_settings;
+    Q_INVOKABLE void allowUseTelemetry();
+    Q_INVOKABLE void forbidUseTelemetry();
 };
 }
 

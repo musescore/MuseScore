@@ -19,6 +19,8 @@
 
 #include "telemetrydevtools.h"
 
+using namespace mu::telemetry;
+
 TelemetryDevTools::TelemetryDevTools(QObject* parent)
     : QObject(parent)
 {

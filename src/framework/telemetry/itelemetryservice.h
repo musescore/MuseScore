@@ -26,22 +26,23 @@
 
 #include "modularity/imoduleexport.h"
 
+namespace mu::telemetry {
 class ITelemetryService : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(ITelemetryService)
 
 public:
-
     virtual ~ITelemetryService() = default;
 
-    virtual void sendEvent(const QString& category,const QString& action,const QString& label = QString(),
-                           const QVariant& value = QVariant(),const QVariantMap& customValues = QVariantMap()) = 0;
+    virtual void sendEvent(const QString& category, const QString& action, const QString& label = QString(),
+                           const QVariant& value = QVariant(), const QVariantMap& customValues = QVariantMap()) = 0;
 
-    virtual void sendException(const QString& exceptionDescription,bool exceptionFatal = true,
+    virtual void sendException(const QString& exceptionDescription, bool exceptionFatal = true,
                                const QVariantMap& customValues = QVariantMap()) = 0;
 
     virtual void startSession() = 0;
     virtual void endSession() = 0;
 };
+}
 
 #endif // MU_TELEMETRY_ITELEMETRYSERVICE_H

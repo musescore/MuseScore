@@ -17,13 +17,12 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "telemetrysetup.h"
+#include "telemetrymodule.h"
 
 #include <QQmlEngine>
 
 #include "modularity/ioc.h"
 
-#include "itelemetryservice.h"
 #include "internal/telemetryconfiguration.h"
 #include "internal/telemetryservice.h"
 #include "view/telemetrypermissionmodel.h"
@@ -33,10 +32,13 @@
 
 #include "devtools/telemetrydevtools.h"
 
+#include "ui/iinteractiveuriregister.h"
+
 #include "log.h"
 #include "config.h"
 
 using namespace mu::telemetry;
+using namespace mu::framework;
 
 static std::shared_ptr<TelemetryConfiguration> s_configuration = std::make_shared<TelemetryConfiguration>();
 
@@ -45,30 +47,38 @@ static void telemetry_init_qrc()
     Q_INIT_RESOURCE(telemetry);
 }
 
-std::string TelemetrySetup::moduleName() const
+std::string TelemetryModule::moduleName() const
 {
     return "telemetry";
 }
 
-void TelemetrySetup::registerResources()
+void TelemetryModule::registerResources()
 {
     telemetry_init_qrc();
 }
 
-void TelemetrySetup::registerExports()
+void TelemetryModule::registerExports()
 {
-    mu::framework::ioc()->registerExport<ITelemetryConfiguration>(moduleName(), s_configuration);
-    mu::framework::ioc()->registerExport<ITelemetryService>(moduleName(), new TelemetryService());
+    ioc()->registerExport<ITelemetryConfiguration>(moduleName(), s_configuration);
+    ioc()->registerExport<ITelemetryService>(moduleName(), new TelemetryService());
 }
 
-void TelemetrySetup::registerUiTypes()
+void TelemetryModule::resolveImports()
 {
-    qmlRegisterType<TelemetryPermissionModel>("MuseScore.Telemetry", 3, 3, "TelemetryPermissionModel");
+    auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
+    if (ir) {
+        ir->registerUri(Uri("musescore://telemetry/permission"),
+                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/Telemetry/TelemetryPermissionDialog.qml"));
+    }
+}
 
+void TelemetryModule::registerUiTypes()
+{
+    qmlRegisterType<TelemetryPermissionModel>("MuseScore.Telemetry", 1, 0, "TelemetryPermissionModel");
     qmlRegisterType<TelemetryDevTools>("MuseScore.Telemetry", 1, 0, "TelemetryDevTools");
 }
 
-void TelemetrySetup::onInit(const framework::IApplication::RunMode&)
+void TelemetryModule::onInit(const framework::IApplication::RunMode&)
 {
     s_configuration->init();
 
