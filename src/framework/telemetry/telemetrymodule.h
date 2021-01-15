@@ -17,26 +17,23 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_TELEMETRY_TELEMETRYPERMISSIONDIALOG_H
-#define MU_TELEMETRY_TELEMETRYPERMISSIONDIALOG_H
+#ifndef MU_TELEMETRY_TELEMETRYMODULE_H
+#define MU_TELEMETRY_TELEMETRYMODULE_H
 
-#include <QQuickView>
-#include <QQmlEngine>
-#include <QWidget>
+#include "framework/global/modularity/imodulesetup.h"
 
 namespace mu::telemetry {
-class TelemetryPermissionDialog : public QQuickView
+class TelemetryModule : public mu::framework::IModuleSetup
 {
-    Q_OBJECT
-
-    void focusInEvent(QFocusEvent*) override;
-
 public:
-    explicit TelemetryPermissionDialog(QQmlEngine* engine);
+    std::string moduleName() const override;
 
-signals:
-    void closeRequested();
+    void registerExports() override;
+    void resolveImports() override;
+    void registerResources() override;
+    void registerUiTypes() override;
+    void onInit(const framework::IApplication::RunMode& mode) override;
 };
 }
 
-#endif // MU_TELEMETRY_TELEMETRYPERMISSIONDIALOG_H
+#endif // MU_TELEMETRY_TELEMETRYMODULE_H

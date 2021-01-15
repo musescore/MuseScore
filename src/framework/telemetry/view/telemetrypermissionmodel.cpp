@@ -19,30 +19,19 @@
 
 #include "telemetrypermissionmodel.h"
 
-#include <QDesktopServices>
-#include <QUrl>
-
-#include "framework/preferencekeys.h"
-
 using namespace mu::telemetry;
 
 TelemetryPermissionModel::TelemetryPermissionModel(QObject* parent)
     : QObject(parent)
 {
-    m_settings.setValue(PREF_APP_STARTUP_TELEMETRY_ACCESS_REQUESTED, true);
 }
 
-void TelemetryPermissionModel::accept()
+void TelemetryPermissionModel::allowUseTelemetry()
 {
-    m_settings.setValue(PREF_APP_TELEMETRY_ALLOWED, true);
+    configuration()->setIsTelemetryAllowed(true);
 }
 
-void TelemetryPermissionModel::reject()
+void TelemetryPermissionModel::forbidUseTelemetry()
 {
-    m_settings.setValue(PREF_APP_TELEMETRY_ALLOWED, false);
-}
-
-void TelemetryPermissionModel::openLink(const QString& link)
-{
-    QDesktopServices::openUrl(QUrl(link));
+    configuration()->setIsTelemetryAllowed(false);
 }

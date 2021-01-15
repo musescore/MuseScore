@@ -1,8 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>qml/TelemetryPermissionDialog.qml</file>
-        <file>qml/DialogButton.qml</file>
-        <file>qml/TextLabel.qml</file>
-        <file>qml/FocusableItem.qml</file>
+        <file>qml/MuseScore/Telemetry/TelemetryPermissionDialog.qml</file>
     </qresource>
 </RCC>

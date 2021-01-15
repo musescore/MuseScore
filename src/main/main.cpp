@@ -59,7 +59,7 @@
 #include "framework/vst/vstmodule.h"
 #endif
 #ifdef BUILD_TELEMETRY_MODULE
-#include "framework/telemetry/telemetrysetup.h"
+#include "framework/telemetry/telemetrymodule.h"
 #endif
 
 #ifndef Q_OS_WASM
@@ -93,7 +93,7 @@ int main(int argc, char** argv)
     //! NOTE `telemetry` must be first, because it install crash handler.
     //! others modules order not important (must be)
 #ifdef BUILD_TELEMETRY_MODULE
-    app.addModule(new mu::telemetry::TelemetrySetup());
+    app.addModule(new mu::telemetry::TelemetryModule());
 #endif
     app.addModule(new mu::fonts::FontsModule());
     app.addModule(new mu::framework::UiModule());
