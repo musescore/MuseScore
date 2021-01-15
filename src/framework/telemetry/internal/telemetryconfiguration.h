@@ -29,7 +29,10 @@ public:
 
     void init();
 
+    bool needRequestTelemetryPermission() const override;
+
     bool isTelemetryAllowed() const override;
+    void setIsTelemetryAllowed(bool val) override;
 
     bool isDumpUploadAllowed() const override;
     void setIsDumpUploadAllowed(bool val) override;

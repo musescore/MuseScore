@@ -20,8 +20,8 @@
 set(MODULE telemetry)
 
 set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/telemetrysetup.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/telemetrysetup.h
+    ${CMAKE_CURRENT_LIST_DIR}/telemetrymodule.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/telemetrymodule.h
     ${CMAKE_CURRENT_LIST_DIR}/itelemetryconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/itelemetryservice.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/telemetryconfiguration.cpp
@@ -30,8 +30,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/actioneventobserver.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/telemetryservice.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/telemetryservice.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/telemetrypermissiondialog.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/telemetrypermissiondialog.h
     ${CMAKE_CURRENT_LIST_DIR}/view/telemetrypermissionmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/telemetrypermissionmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/devtools/telemetrydevtools.cpp
