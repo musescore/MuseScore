@@ -133,12 +133,12 @@ ECHO "Start msi packing..."
 :: sign dlls and exe files
 IF %DO_SIGN% == ON (
     where /q secure-file
-    IF ERRORLEVEL 1 ( choco install -y choco install -y --ignore-checksums secure-file )
+    IF ERRORLEVEL 1 ( choco install -y --ignore-checksums secure-file )
     secure-file -decrypt build\ci\windows\resources\musescore.p12.enc -secret %SIGN_CERTIFICATE_ENCRYPT_SECRET%
 
     for /f "delims=" %%f in ('dir /a-d /b /s "%INSTALL_DIR%\*.dll" "%INSTALL_DIR%\*.exe"') do (
         ECHO "Signing %%f"
-        %SIGNTOOL% sign /f "build\ci\windows\resources\musescore.p12" /t http://timestamp.verisign.com/scripts/timstamp.dll /p %SIGN_CERTIFICATE_PASSWORD% "%%f"
+        %SIGNTOOL% sign /f "build\ci\windows\resources\musescore.p12" /t http://timestamp.globalsign.com/scripts/timstamp.dll /p %SIGN_CERTIFICATE_PASSWORD% "%%f"
     )
 
 ) ELSE (
