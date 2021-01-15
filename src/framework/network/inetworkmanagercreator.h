@@ -16,14 +16,13 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_INETWORKMANAGERCREATOR_H
-#define MU_FRAMEWORK_INETWORKMANAGERCREATOR_H
+#ifndef MU_NETWORK_INETWORKMANAGERCREATOR_H
+#define MU_NETWORK_INETWORKMANAGERCREATOR_H
 
 #include "modularity/imoduleexport.h"
 #include "inetworkmanager.h"
 
-namespace mu {
-namespace framework {
+namespace mu::network {
 class INetworkManagerCreator : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(INetworkManagerCreator)
@@ -34,6 +33,5 @@ public:
     virtual INetworkManagerPtr makeNetworkManager() const = 0;
 };
 }
-}
 
-#endif // MU_FRAMEWORK_INETWORKMANAGERCREATOR_H
+#endif // MU_NETWORK_INETWORKMANAGERCREATOR_H

@@ -16,19 +16,17 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_NETWORKMANAGERCREATOR_H
-#define MU_FRAMEWORK_NETWORKMANAGERCREATOR_H
+#ifndef MU_NETWORK_NETWORKMANAGERCREATOR_H
+#define MU_NETWORK_NETWORKMANAGERCREATOR_H
 
 #include "inetworkmanagercreator.h"
 
-namespace mu {
-namespace framework {
+namespace mu::network {
 class NetworkManagerCreator : public INetworkManagerCreator
 {
 public:
     INetworkManagerPtr makeNetworkManager() const override;
 };
 }
-}
 
-#endif // MU_FRAMEWORK_NETWORKMANAGERCREATOR_H
+#endif // MU_NETWORK_NETWORKMANAGERCREATOR_H

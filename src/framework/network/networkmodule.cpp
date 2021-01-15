@@ -21,7 +21,7 @@
 #include "modularity/ioc.h"
 #include "internal/networkmanagercreator.h"
 
-using namespace mu::framework;
+using namespace mu::network;
 
 std::string NetworkModule::moduleName() const
 {

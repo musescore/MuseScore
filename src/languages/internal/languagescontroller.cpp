@@ -32,6 +32,7 @@
 using namespace mu;
 using namespace mu::languages;
 using namespace mu::framework;
+using namespace mu::network;
 
 static const QString DEFAULT_LANGUAGE("system");
 static const QString ANALYSING_STATUS = qtrc("languages", "Analysing...");
