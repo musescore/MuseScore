@@ -1339,11 +1339,13 @@
           <name>stdNormal</name>
           </StaffType>
         <bracket type="0" span="5" col="0"/>
+        <bracket type="2" span="2" col="1"/>
+        <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Violins 2</trackName>
+      <trackName>Violins 1</trackName>
       <Instrument id="strings">
-        <longName>Violins 2</longName>
-        <shortName>Vlns. 2</shortName>
+        <longName>Violins 1</longName>
+        <shortName>Vlns. 1</shortName>
         <trackName>Violins</trackName>
         <minPitchP>55</minPitchP>
         <maxPitchP>103</maxPitchP>
@@ -1411,10 +1413,10 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Violins 1</trackName>
+      <trackName>Violins 2</trackName>
       <Instrument id="violins">
-        <longName>Violins 1</longName>
-        <shortName>Vlns. 1</shortName>
+        <longName>Violins 2</longName>
+        <shortName>Vlns. 2</shortName>
         <trackName>Violins</trackName>
         <minPitchP>55</minPitchP>
         <maxPitchP>103</maxPitchP>
