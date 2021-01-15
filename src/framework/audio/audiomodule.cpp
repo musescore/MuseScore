@@ -25,10 +25,17 @@
 #include "ui/iuiengine.h"
 #include "devtools/audioenginedevtools.h"
 
+#include "internal/rpc/queuedrpcchannel.h"
+#include "internal/rpc/rpcsequencer.h"
+
+using namespace mu::framework;
 using namespace mu::audio;
 
 static std::shared_ptr<AudioConfiguration> s_audioConfiguration = std::make_shared<AudioConfiguration>();
 static std::shared_ptr<AudioEngine> s_audioEngine = std::make_shared<AudioEngine>();
+static std::shared_ptr<AudioThread> s_audioWorker = std::make_shared<AudioThread>();
+static std::shared_ptr<rpc::RpcSequencer> s_rpcSequencer = std::make_shared<rpc::RpcSequencer>();
+
 #ifdef Q_OS_LINUX
 #include "internal/platform/lin/linuxaudiodriver.h"
 static std::shared_ptr<IAudioDriver> s_audioDriver = std::shared_ptr<IAudioDriver>(new LinuxAudioDriver());
@@ -56,8 +63,10 @@ std::string AudioModule::moduleName() const
 
 void AudioModule::registerExports()
 {
-    framework::ioc()->registerExport<IAudioEngine>(moduleName(), s_audioEngine);
-    framework::ioc()->registerExport<ISequencer>(moduleName(), s_audioEngine->sequencer());
+    ioc()->registerExport<IAudioEngine>(moduleName(), s_audioEngine);
+    ioc()->registerExport<rpc::IRpcChannel>(moduleName(), s_audioWorker->channel());
+
+    ioc()->registerExport<ISequencer>(moduleName(), s_rpcSequencer);
 }
 
 void AudioModule::registerUiTypes()
@@ -68,13 +77,20 @@ void AudioModule::registerUiTypes()
     //framework::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(mu4_audio_QML_IMPORT);
 }
 
-void AudioModule::onInit(const framework::IApplication::RunMode& mode)
+void AudioModule::onInit(const framework::IApplication::RunMode&)
 {
     s_audioConfiguration->init();
     s_audioEngine->init(s_audioDriver, s_audioConfiguration->driverBufferSize());
+
+    s_rpcSequencer->setup();
+
+    s_audioWorker->channel()->setupMainThread();
+    s_audioWorker->setAudioBuffer(s_audioEngine->buffer());
+    s_audioWorker->run();
 }
 
 void AudioModule::onDeinit()
 {
+    s_audioWorker->stop();
     s_audioEngine->deinit();
 }

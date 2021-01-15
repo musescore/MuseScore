@@ -23,7 +23,6 @@ using namespace mu::audio;
 
 Mixer::Mixer()
 {
-    buildRpcReflection();
 }
 
 Mixer::~Mixer()
@@ -165,40 +164,6 @@ void Mixer::forward(unsigned int sampleCount)
     }
     std::transform(m_buffer.begin(), m_buffer.end(), m_buffer.begin(),
                    [this](float sample) -> float { return sample * m_masterLevel; });
-}
-
-void Mixer::buildRpcReflection()
-{
-    using namespace rpc;
-    m_rpcReflection = {
-        {
-            "setActive",  [this](ArgumentList args) -> Variable {
-                IF_ASSERT_FAILED(args.size() == 2) {
-                    return {};
-                }
-                setActive(args[0].toUInt(), args[1].toBool());
-                return {};
-            }
-        },
-        {
-            "setLevel",   [this](ArgumentList args) -> Variable {
-                IF_ASSERT_FAILED(args.size() == 3) {
-                    return {};
-                }
-                setLevel(args[0].toUInt(), args[1].toUInt(), args[2].toFloat());
-                return {};
-            }
-        },
-        {
-            "setBalance", [this](ArgumentList args) -> Variable {
-                IF_ASSERT_FAILED(args.size() == 3) {
-                    return {};
-                }
-                setBalance(args[0].toUInt(), args[1].toUInt(), args[2].toFloat());
-                return {};
-            }
-        }
-    };
 }
 
 void Mixer::mixinChannel(std::shared_ptr<MixerChannel> channel, unsigned int samplesCount)

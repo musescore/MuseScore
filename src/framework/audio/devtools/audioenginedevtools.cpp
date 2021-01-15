@@ -199,33 +199,6 @@ void AudioEngineDevTools::unsetLoop()
     sequencer()->unsetLoop();
 }
 
-void AudioEngineDevTools::rpcPlay()
-{
-    auto notation = globalContext()->currentNotation();
-    if (notation) {
-        auto stream = notation->playback()->midiStream();
-        sequencer()->setMIDITrack(0, stream);
-    }
-
-    m_rpcSequencer.rewind();
-    m_rpcSequencer.play();
-}
-
-void AudioEngineDevTools::rpcStop()
-{
-    m_rpcSequencer.stop();
-}
-
-void AudioEngineDevTools::rpcSetLoop(unsigned int from, unsigned int to)
-{
-    m_rpcSequencer.setLoop(from, to);
-}
-
-void AudioEngineDevTools::rpcUnsetLoop()
-{
-    m_rpcSequencer.unsetLoop();
-}
-
 void AudioEngineDevTools::openAudio()
 {
     auto path = interactive()->selectOpeningFile("audio file", "", "Audio files (*.wav *mp3 *ogg)");

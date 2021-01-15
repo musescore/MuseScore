@@ -31,7 +31,6 @@
 #include "async/asyncable.h"
 #include "global/iinteractive.h"
 #include "iaudiostream.h"
-#include "rpc/sequencer.h"
 
 namespace mu::audio {
 class AudioEngineDevTools : public QObject, public async::Asyncable
@@ -77,11 +76,6 @@ public:
     Q_INVOKABLE void setLoop(unsigned int from, unsigned int to);
     Q_INVOKABLE void unsetLoop();
 
-    Q_INVOKABLE void rpcPlay();
-    Q_INVOKABLE void rpcStop();
-    Q_INVOKABLE void rpcSetLoop(unsigned int from, unsigned int to);
-    Q_INVOKABLE void rpcUnsetLoop();
-
     QVariantList devices() const;
     Q_INVOKABLE QString device() const;
     Q_INVOKABLE void selectDevice(QString name);
@@ -102,7 +96,6 @@ private:
     std::shared_ptr<midi::MidiStream> m_midiStream = nullptr;
     std::shared_ptr<IAudioStream> m_audioStream = nullptr;
     std::weak_ptr<IMIDIPlayer> m_threadMIDIPlayer;
-    RPCSequencer m_rpcSequencer;
 };
 }
 

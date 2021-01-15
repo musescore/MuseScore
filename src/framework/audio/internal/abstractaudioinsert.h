@@ -19,7 +19,7 @@
 #ifndef MU_AUDIO_ABSTRACTAUDIOINSERT_H
 #define MU_AUDIO_ABSTRACTAUDIOINSERT_H
 
-#include <iaudioinsert.h>
+#include "iaudioinsert.h"
 
 namespace mu::audio {
 class AbstractAudioInsert : public IAudioInsert

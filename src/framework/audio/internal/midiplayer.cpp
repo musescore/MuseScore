@@ -142,9 +142,18 @@ void MIDIPlayer::forwardTime(unsigned long miliseconds)
         toTick = maxValidTick;
     }
 
-    while (m_streamState.requested) {
-        //wait NotationPlayback send data
+    //! TODO Research in more detail whether we can simply ignore, or we  need to wait,
+    //! but we cannot block the message queue, otherwise the data will not recieved
+    //! and this flag will never change its value and a deadlock will occur.
+    //! Perhaps we need to make a decision like Qt processEvents (although I would like to avoid)
+    //while (m_streamState.requested) {
+    //wait NotationPlayback send data
+    //}
+
+    if (m_streamState.requested) {
+        return;
     }
+    //! -----
 
     m_curMSec = curMSec;
 

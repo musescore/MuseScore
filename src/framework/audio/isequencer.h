@@ -26,7 +26,6 @@
 #include "iaudioplayer.h"
 #include "imidiplayer.h"
 #include "iaudiostream.h"
-
 namespace mu::audio {
 class ISequencer : MODULE_EXPORT_INTERFACE
 {
@@ -47,22 +46,21 @@ public:
 
     virtual Status status() const = 0;
     virtual async::Channel<Status> statusChanged() const = 0;
-    virtual async::Channel<audio_track_t> audioTrackAdded() const = 0;
 
     virtual void initMIDITrack(track_id id) = 0;
     virtual void initAudioTrack(track_id id) = 0;
     virtual void setMIDITrack(track_id id, const std::shared_ptr<midi::MidiStream>& stream) = 0;
     virtual void setAudioTrack(track_id id, const std::shared_ptr<audio::IAudioStream>& stream) = 0;
 
-    virtual bool play() = 0;
+    virtual void play() = 0;
     virtual void pause() = 0;
     virtual void stop() = 0;
-    virtual void seek(unsigned long sec) = 0;
+    virtual void seek(uint64_t sec) = 0;
     virtual void rewind() = 0;
-    virtual void setLoop(unsigned int from, unsigned int to) = 0;
+    virtual void setLoop(uint64_t fromMiliSeconds, uint64_t toMiliSeconds) = 0;
     virtual void unsetLoop() = 0;
 
-    virtual async::Channel<mu::midi::tick_t> midiTickPlayed(track_id id) const = 0;
+    virtual async::Channel<midi::tick_t> midiTickPlayed(track_id id) const = 0;
     virtual async::Notification positionChanged() const = 0;
 
     //!return position in seconds

@@ -25,10 +25,9 @@
 #include "abstractaudiosource.h"
 #include "internal/mixerchannel.h"
 #include "internal/clock.h"
-#include "rpc/irpctarget.h"
 
 namespace mu::audio {
-class Mixer : public AbstractAudioSource, public IMixer, public rpc::IRPCTarget
+class Mixer : public AbstractAudioSource, public IMixer
 {
 public:
     Mixer();
@@ -57,9 +56,6 @@ public:
 
     void setBufferSize(unsigned int samples) override;
     void forward(unsigned int sampleCount) override;
-
-protected:
-    void buildRpcReflection() override;
 
 private:
     //! mix the channel in to the buffer

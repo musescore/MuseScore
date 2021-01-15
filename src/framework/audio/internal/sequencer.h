@@ -26,10 +26,9 @@
 #include "clock.h"
 #include "isequencer.h"
 #include "imidiplayer.h"
-#include "rpc/irpctarget.h"
 
 namespace mu::audio {
-class Sequencer : public ISequencer, public async::Asyncable, public rpc::IRPCTarget
+class Sequencer : public ISequencer, public async::Asyncable
 {
 public:
     Sequencer();
@@ -37,12 +36,12 @@ public:
     Status status() const override;
     async::Channel<Status> statusChanged() const override;
 
-    bool play() override;
+    void play() override;
     void pause() override;
     void stop() override;
-    void seek(unsigned long miliseconds) override;
+    void seek(uint64_t miliseconds) override;
     void rewind() override;
-    void setLoop(unsigned int from, unsigned int to) override;
+    void setLoop(uint64_t fromMiliSeconds, uint64_t toMiliSeconds) override;
     void unsetLoop() override;
 
     std::shared_ptr<Clock> clock() const;
@@ -51,7 +50,7 @@ public:
     void setMIDITrack(track_id id, const std::shared_ptr<midi::MidiStream>& stream) override;
     void setAudioTrack(track_id id, const std::shared_ptr<IAudioStream>& stream) override;
 
-    async::Channel<audio_track_t> audioTrackAdded() const override;
+    async::Channel<audio_track_t> audioTrackAdded() const;
     void initAudioTrack(track_id id) override;
 
     async::Channel<mu::midi::tick_t> midiTickPlayed(track_id id) const override;
@@ -59,9 +58,6 @@ public:
     float playbackPosition() const override;
 
     std::shared_ptr<IMIDIPlayer> instantlyPlayMidi(const midi::MidiData& data) override;
-
-protected:
-    void buildRpcReflection() override;
 
 private:
     void setStatus(Status status);
@@ -85,9 +81,8 @@ private:
     async::Channel<audio_track_t> m_audioTrackAdded;
     async::Notification m_positionChanged;
 
-    std::mutex m_syncMutex;
     std::optional<Clock::time_t> m_loopStart, m_loopEnd;
-    std::optional<unsigned long> m_nextSeek;
+    std::optional<uint64_t> m_nextSeek;
 };
 }
 

@@ -19,7 +19,7 @@
 #ifndef MU_AUDIO_ABSTRACTAUDIOSOURCE_H
 #define MU_AUDIO_ABSTRACTAUDIOSOURCE_H
 
-#include <iaudiosource.h>
+#include "iaudiosource.h"
 
 namespace mu::audio {
 class AbstractAudioSource : public virtual IAudioSource

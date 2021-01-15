@@ -94,8 +94,15 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiothread.h
     ${CMAKE_CURRENT_LIST_DIR}/devtools/audioenginedevtools.cpp
     ${CMAKE_CURRENT_LIST_DIR}/devtools/audioenginedevtools.h
-    ${CMAKE_CURRENT_LIST_DIR}/rpc/sequencer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rpc/sequencer.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpctypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/irpcchannel.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/queuedrpcchannel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/queuedrpcchannel.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpccontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpccontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpcsequencer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpcsequencer.h
     )
 
 set(MODULE_INCLUDE
@@ -112,13 +119,4 @@ if(OS_IS_LIN)
     set(MODULE_INCLUDE ${MODULE_INCLUDE} ${ALSA_INCLUDE_DIRS} )
 endif()
 
-set(MODULE_USE_PCH_NONE ON) # strange error
-set(MODULE_USE_UNITY_NONE ON) # soloud not compile
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
-
-# for soloud
-target_no_warning(${MODULE} -Wno-unused-parameter)
-target_no_warning(${MODULE} -Wno-conversion)
-target_no_warning(${MODULE} -Wno-uninitialized)
-target_no_warning(${MODULE} -Wno-array-bounds)
-target_no_warning(${MODULE} -WMSVC-no-hides-previous)
