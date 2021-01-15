@@ -38,9 +38,6 @@ AudioEngine::AudioEngine()
     m_sequencer->audioTrackAdded().onReceive(this, [this](ISequencer::audio_track_t player) {
         m_mixer->addChannel(player);
     });
-
-    m_worker = std::make_shared<AudioThread>();
-    m_worker->setAudioBuffer(m_buffer);
 }
 
 AudioEngine::~AudioEngine()
@@ -85,12 +82,6 @@ mu::Ret AudioEngine::init(IAudioDriverPtr driver, uint16_t bufferSize)
     m_inited = true;
     m_initChanged.send(m_inited);
 
-    if (rpcServer()) {
-        rpcServer()->registerTarget({ "sequencer", 0 }, m_sequencer);
-        rpcServer()->registerTarget({ "mixer", 0 }, m_mixer);
-    }
-
-    m_worker->run();
     return make_ret(Ret::Code::Ok);
 }
 
@@ -99,7 +90,6 @@ void AudioEngine::deinit()
     if (isInited()) {
         m_inited = false;
         m_initChanged.send(m_inited);
-        m_worker->stop();
         if (m_driver) {
             m_driver->close();
         }
@@ -114,11 +104,6 @@ mu::async::Channel<bool> AudioEngine::initChanged() const
 unsigned int AudioEngine::sampleRate() const
 {
     return m_format.sampleRate;
-}
-
-std::shared_ptr<AudioThread> AudioEngine::worker() const
-{
-    return m_worker;
 }
 
 std::shared_ptr<IAudioBuffer> AudioEngine::buffer() const
@@ -151,7 +136,10 @@ void AudioEngine::setBuffer(IAudioBufferPtr buffer)
 {
     m_buffer = buffer;
     m_buffer->setSource(m_mixer);
-    m_worker->setAudioBuffer(m_buffer);
+
+    //! TODO It doesn't look obvious.
+    //! Requires detailed research
+    //m_worker->setAudioBuffer(m_buffer);
 }
 
 void AudioEngine::resumeDriver()

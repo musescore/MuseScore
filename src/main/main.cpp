@@ -35,7 +35,6 @@
 #include "framework/system/systemmodule.h"
 #include "framework/network/networkmodule.h"
 #include "framework/audio/audiomodule.h"
-#include "framework/rpc/rpcmodule.h"
 #include "framework/midi/midimodule.h"
 
 #include "appshell/appshellmodule.h"
@@ -108,7 +107,6 @@ int main(int argc, char** argv)
     app.addModule(new mu::shortcuts::ShortcutsModule());
 
     app.addModule(new mu::audio::AudioModule());
-    app.addModule(new mu::rpc::RpcModule());
     app.addModule(new mu::midi::MidiModule());
     app.addModule(new mu::userscores::UserScoresModule());
 

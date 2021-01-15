@@ -168,6 +168,7 @@ std::string LinuxAudioDriver::outputDevice() const
 
 bool LinuxAudioDriver::selectOutputDevice(const std::string& name)
 {
+    UNUSED(name);
     NOT_IMPLEMENTED;
     return false;
 }

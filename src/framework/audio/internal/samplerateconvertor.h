@@ -21,7 +21,6 @@
 
 #include <vector>
 #include <deque>
-
 namespace mu::audio {
 class SampleRateConvertor
 {

@@ -26,13 +26,12 @@
 
 #include "iaudiobuffer.h"
 #include "modularity/ioc.h"
-#include "rpc/irpcserver.h"
+#include "rpc/queuedrpcchannel.h"
+#include "rpc/rpccontroller.h"
 
 namespace mu::audio {
 class AudioThread
 {
-    INJECT(audio, rpc::IRPCServer, rpcServer)
-
 public:
     AudioThread();
     ~AudioThread();
@@ -45,9 +44,13 @@ public:
     //! use if you don't want to use internal thread
     void loopBody();
 
+    rpc::QueuedRpcChannelPtr channel() const;
+
 private:
     void main();
 
+    rpc::QueuedRpcChannelPtr m_channel;
+    std::shared_ptr<rpc::RpcController> m_controller;
     std::shared_ptr<IAudioBuffer> m_buffer = nullptr;
     std::shared_ptr<std::thread> m_thread = nullptr;
     std::atomic<bool> m_running = false;

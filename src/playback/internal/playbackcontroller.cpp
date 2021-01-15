@@ -170,7 +170,7 @@ void PlaybackController::seek(int tick)
         return;
     }
 
-    unsigned long miliseconds = m_notation->playback()->tickToSec(tick) * 1000;
+    uint64_t miliseconds = m_notation->playback()->tickToSec(tick) * 1000;
     sequencer()->seek(miliseconds);
 }
 
