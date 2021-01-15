@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2020 MuseScore BVBA and others
+//  Copyright (C) 2021 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -16,23 +16,33 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "rpcmodule.h"
-#include "internal/server.h"
-#include "internal/client.h"
+#ifndef MU_AUDIO_RPCCONTROLLER_H
+#define MU_AUDIO_RPCCONTROLLER_H
+
+#include <functional>
+
 #include "modularity/ioc.h"
+#include "irpcchannel.h"
+#include "iaudioengine.h"
 
-using namespace mu::rpc;
-
-static std::shared_ptr<Server> s_server = std::make_shared<Server>();
-static std::shared_ptr<Client> s_client = std::make_shared<Client>();
-
-std::string RpcModule::moduleName() const
+namespace mu::audio::rpc {
+class RpcController : public async::Asyncable
 {
-    return "rpc_module";
+    INJECT(audio, IRpcChannel, rpcChannel)
+    INJECT(audio, IAudioEngine, audioEngine)
+
+public:
+    RpcController() = default;
+
+    void init();
+
+private:
+
+    using Call = std::function<void (const Args& args)>;
+
+    ISequencerPtr sequencer() const;
+    void sequencerHandle(const Msg& msg);
+};
 }
 
-void RpcModule::registerExports()
-{
-    framework::ioc()->registerExport<IRPCServer>(moduleName(), s_server);
-    framework::ioc()->registerExport<IRPCClient>(moduleName(), s_client);
-}
+#endif // MU_AUDIO_RPCCONTROLLER_H

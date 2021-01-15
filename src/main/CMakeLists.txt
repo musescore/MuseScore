@@ -157,7 +157,6 @@ set(LINK_LIB ${LINK_LIB}
     playback
     instruments
     converter
-    rpc
     )
 
 if (NOT CC_IS_EMSCRIPTEN)

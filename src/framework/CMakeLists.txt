@@ -11,7 +11,6 @@ add_subdirectory(system)
 add_subdirectory(audio)
 add_subdirectory(midi)
 add_subdirectory(midi_old)
-add_subdirectory(rpc)
 
 if (BUILD_TELEMETRY_MODULE)
       add_subdirectory(telemetry)

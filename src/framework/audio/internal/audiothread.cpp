@@ -30,6 +30,8 @@ using namespace mu::audio;
 
 AudioThread::AudioThread()
 {
+    m_channel = std::make_shared<rpc::QueuedRpcChannel>();
+    m_controller = std::make_shared<rpc::RpcController>();
 }
 
 AudioThread::~AudioThread()
@@ -69,19 +71,27 @@ void AudioThread::setAudioBuffer(std::shared_ptr<IAudioBuffer> buffer)
 
 void AudioThread::loopBody()
 {
+    mu::async::processEvents();
+    m_channel->process();
     if (m_buffer) {
         m_buffer->forward();
     }
-    rpcServer()->invoke();
 }
 
 void AudioThread::main()
 {
     mu::runtime::setThreadName("audio_worker");
 
+    m_channel->setupWorkerThread();
+    m_controller->init();
+
     while (m_running) {
-        mu::async::processEvents();
         loopBody();
         std::this_thread::sleep_for(std::chrono::milliseconds(2));
     }
+}
+
+rpc::QueuedRpcChannelPtr AudioThread::channel() const
+{
+    return m_channel;
 }

@@ -17,6 +17,9 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 #include "sequencer.h"
+
+#include "log.h"
+
 #include "internal/midiplayer.h"
 #include "internal/audioplayer.h"
 
@@ -31,7 +34,6 @@ Sequencer::Sequencer()
     m_clock->addBeforeCallback([this](Clock::time_t miliseconds) {
         beforeTimeUpdate(miliseconds);
     });
-    buildRpcReflection();
 }
 
 ISequencer::Status Sequencer::status() const
@@ -44,10 +46,9 @@ mu::async::Channel<ISequencer::Status> Sequencer::statusChanged() const
     return m_statusChanged;
 }
 
-bool Sequencer::play()
+void Sequencer::play()
 {
     m_nextStatus = PLAYING;
-    return true;
 }
 
 void Sequencer::pause()
@@ -61,9 +62,8 @@ void Sequencer::stop()
     rewind();
 }
 
-void Sequencer::seek(unsigned long miliseconds)
+void Sequencer::seek(uint64_t miliseconds)
 {
-    std::lock_guard guard(m_syncMutex);
     m_nextSeek = miliseconds;
 }
 
@@ -79,7 +79,6 @@ void Sequencer::initMIDITrack(ISequencer::track_id id)
 
 void Sequencer::setMIDITrack(ISequencer::track_id id, const std::shared_ptr<mu::midi::MidiStream>& stream)
 {
-    std::lock_guard guard(m_syncMutex);
     midi_track_t track = midiTrack(id);
     if (!track) {
         track = createMIDITrack(id);
@@ -89,7 +88,6 @@ void Sequencer::setMIDITrack(ISequencer::track_id id, const std::shared_ptr<mu::
 
 void Sequencer::setAudioTrack(ISequencer::track_id id, const std::shared_ptr<audio::IAudioStream>& stream)
 {
-    std::lock_guard guard(m_syncMutex);
     audio_track_t track = audioTrack(id);
     if (!track) {
         track = createAudioTrack(id);
@@ -125,16 +123,14 @@ float Sequencer::playbackPosition() const
     return clock()->timeInSeconds();
 }
 
-void Sequencer::setLoop(unsigned int from, unsigned int to)
+void Sequencer::setLoop(uint64_t fromMiliSeconds, uint64_t toMiliSeconds)
 {
-    std::lock_guard guard(m_syncMutex);
-    m_loopStart = from;
-    m_loopEnd = to;
+    m_loopStart = fromMiliSeconds;
+    m_loopEnd = toMiliSeconds;
 }
 
 void Sequencer::unsetLoop()
 {
-    std::lock_guard guard(m_syncMutex);
     m_loopStart.reset();
     m_loopEnd.reset();
 }
@@ -146,7 +142,6 @@ std::shared_ptr<Clock> Sequencer::clock() const
 
 void Sequencer::timeUpdate()
 {
-    std::lock_guard guard(m_syncMutex);
     if (m_loopStart.has_value() && m_loopEnd.has_value()) {
         if (m_clock->timeInMiliSeconds() >= m_loopEnd) {
             seek(m_loopStart.value_or(0));
@@ -166,7 +161,6 @@ void Sequencer::timeUpdate()
 
 void Sequencer::beforeTimeUpdate(Clock::time_t miliseconds)
 {
-    std::lock_guard guard(m_syncMutex);
     if (m_nextStatus != m_status) {
         setStatus(m_nextStatus);
     }
@@ -264,7 +258,6 @@ std::shared_ptr<IMIDIPlayer> Sequencer::instantlyPlayMidi(const midi::MidiData& 
     }
     auto player = std::make_shared<MIDIPlayer>();
     auto midiStream = std::make_shared<midi::MidiStream>();
-    std::lock_guard guard(m_syncMutex);
 
     midiStream->initData = data;
     midiStream->isStreamingAllowed = false;
@@ -274,18 +267,4 @@ std::shared_ptr<IMIDIPlayer> Sequencer::instantlyPlayMidi(const midi::MidiData& 
 
     m_backgroudPlayers.push_back({ 0 /*ms*/, player });
     return player;
-}
-
-void Sequencer::buildRpcReflection()
-{
-    using namespace rpc;
-    m_rpcReflection = {
-        { "play",    [this](ArgumentList) -> Variable { return play(); } },
-        { "pause",   [this](ArgumentList) -> Variable { pause(); return {}; } },
-        { "stop",    [this](ArgumentList) -> Variable { stop(); return {}; } },
-        { "seek",    [this](ArgumentList args) -> Variable { seek(args[0].toUInt()); return {}; } },
-        { "rewind",  [this](ArgumentList)      -> Variable { rewind(); return {}; } },
-        { "setLoop", [this](ArgumentList args) -> Variable { setLoop(args[0].toUInt(), args[1].toUInt()); return {}; } },
-        { "unsetLoop",  [this](ArgumentList)   -> Variable { unsetLoop(); return {}; } }
-    };
 }

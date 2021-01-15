@@ -35,14 +35,11 @@
 #include "audiobuffer.h"
 #include "internal/sequencer.h"
 #include "async/asyncable.h"
-#include "rpc/irpcserver.h"
 #include "internal/audiothread.h"
 
 namespace mu::audio {
 class AudioEngine : public IAudioEngine, public async::Asyncable
 {
-    INJECT(audio, rpc::IRPCServer, rpcServer)
-
 public:
     AudioEngine();
     ~AudioEngine();
@@ -52,7 +49,6 @@ public:
     bool isInited() const override;
     async::Channel<bool> initChanged() const override;
     unsigned int sampleRate() const override;
-    std::shared_ptr<AudioThread> worker() const;
     unsigned int startSynthesizer(std::shared_ptr<midi::ISynthesizer> synthesizer) override;
     std::shared_ptr<IMixer> mixer() const override;
     std::shared_ptr<ISequencer> sequencer() const override;
@@ -70,7 +66,6 @@ private:
     std::shared_ptr<IAudioDriver> m_driver = nullptr;
     std::shared_ptr<Mixer> m_mixer = nullptr;
     std::shared_ptr<IAudioBuffer> m_buffer = nullptr;
-    std::shared_ptr<AudioThread> m_worker = nullptr;
 };
 }
 
