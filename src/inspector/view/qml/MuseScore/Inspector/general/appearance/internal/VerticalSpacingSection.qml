@@ -13,7 +13,7 @@ InspectorPropertyView {
     anchors.right: parent.horizontalCenter
     anchors.rightMargin: 2
 
-    titleText: qsTr("Minimum distance")
+    titleText: qsTrc("inspector", "Minimum distance")
     propertyItem: minimumDistance
 
     IncrementalPropertyControl {

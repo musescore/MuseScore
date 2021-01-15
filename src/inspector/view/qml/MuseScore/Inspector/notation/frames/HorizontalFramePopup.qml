@@ -37,7 +37,7 @@ StyledPopup {
         CheckBox {
             isIndeterminate: model ? model.shouldDisplayKeysAndBrackets.isUndefined : false
             checked: model && !isIndeterminate ? model.shouldDisplayKeysAndBrackets.value : false
-            text: qsTr("Display key, brackets and braces")
+            text: qsTrc("inspector", "Display key, brackets and braces")
 
             onClicked: { model.shouldDisplayKeysAndBrackets.value = !checked }
         }

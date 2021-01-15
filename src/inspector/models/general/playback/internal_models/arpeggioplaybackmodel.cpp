@@ -2,12 +2,14 @@
 
 #include "dataformatter.h"
 
+#include "translation.h"
+
 using namespace mu::inspector;
 
 ArpeggioPlaybackModel::ArpeggioPlaybackModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setTitle(tr("Arpeggio"));
+    setTitle(qtrc("inspector", "Arpeggio"));
 
     createProperties();
 }

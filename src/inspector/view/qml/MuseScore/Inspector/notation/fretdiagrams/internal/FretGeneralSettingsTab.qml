@@ -36,7 +36,7 @@ FocusableItem {
 
                 enabled: root.model ? !root.model.isMultipleDotsModeOn : false
                 checked: root.model && enabled ? root.model.isBarreModeOn : false
-                text: qsTr("Barre")
+                text: qsTrc("inspector", "Barre")
 
                 onClicked: { root.model.isBarreModeOn = !checked }
             }
@@ -50,7 +50,7 @@ FocusableItem {
 
                 enabled: root.model ? !root.model.isBarreModeOn : false
                 checked: root.model && enabled ? root.model.isMultipleDotsModeOn : false
-                text: qsTr("Multiple dots")
+                text: qsTrc("inspector", "Multiple dots")
 
                 onClicked: { root.model.isMultipleDotsModeOn = !checked }
             }
@@ -62,7 +62,7 @@ FocusableItem {
             spacing: 8
 
             StyledTextLabel {
-                text: qsTr("Marker type")
+                text: qsTrc("inspector", "Marker type")
             }
 
             RadioButtonGroup {

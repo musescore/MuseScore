@@ -20,7 +20,7 @@ StyledPopup {
         spacing: 12
 
         InspectorPropertyView {
-            titleText: qsTr("Bend type")
+            titleText: qsTrc("inspector", "Bend type")
             propertyItem: root.model ? root.model.bendType : null
 
             StyledComboBox {
@@ -30,12 +30,12 @@ StyledPopup {
                 valueRoleName: "value"
 
                 model: [
-                    { text: qsTr("Bend"), value: BendTypes.TYPE_BEND },
-                    { text: qsTr("Bend/Release"), value: BendTypes.TYPE_BEND_RELEASE },
-                    { text: qsTr("Bend/Release/Bend"), value: BendTypes.TYPE_BEND_RELEASE_BEND },
-                    { text: qsTr("Prebend"), value: BendTypes.TYPE_PREBEND },
-                    { text: qsTr("Prebend/Release"), value: BendTypes.TYPE_PREBEND_RELEASE },
-                    { text: qsTr("Custom"), value: BendTypes.TYPE_CUSTOM }
+                    { text: qsTrc("inspector", "Bend"), value: BendTypes.TYPE_BEND },
+                    { text: qsTrc("inspector", "Bend/Release"), value: BendTypes.TYPE_BEND_RELEASE },
+                    { text: qsTrc("inspector", "Bend/Release/Bend"), value: BendTypes.TYPE_BEND_RELEASE_BEND },
+                    { text: qsTrc("inspector", "Prebend"), value: BendTypes.TYPE_PREBEND },
+                    { text: qsTrc("inspector", "Prebend/Release"), value: BendTypes.TYPE_PREBEND_RELEASE },
+                    { text: qsTrc("inspector", "Custom"), value: BendTypes.TYPE_CUSTOM }
                 ]
 
                 currentIndex: root.model && !root.model.bendType.isUndefined ? indexOfValue(root.model.bendType.value) : -1
@@ -47,7 +47,7 @@ StyledPopup {
         }
 
         InspectorPropertyView {
-            titleText: qsTr("Click to add or remove points")
+            titleText: qsTrc("inspector", "Click to add or remove points")
             propertyItem: root.model ? root.model.bendCurve : null
 
             GridCanvas {
@@ -70,7 +70,7 @@ StyledPopup {
         }
 
         InspectorPropertyView {
-            titleText: qsTr("Line thickness")
+            titleText: qsTrc("inspector", "Line thickness")
             propertyItem: model ? model.lineThickness : null
 
             IncrementalPropertyControl {

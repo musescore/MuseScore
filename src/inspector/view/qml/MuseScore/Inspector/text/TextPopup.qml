@@ -32,7 +32,7 @@ StyledPopup {
 
                 isIndeterminate: model ? model.isSizeSpatiumDependent.isUndefined : false
                 checked: model && !isIndeterminate ? model.isSizeSpatiumDependent.value : false
-                text: qsTr("Match staff size")
+                text: qsTrc("inspector", "Match staff size")
 
                 onClicked: { model.isSizeSpatiumDependent.value = !checked }
             }
@@ -80,7 +80,7 @@ StyledPopup {
         }
 
         InspectorPropertyView {
-            titleText: qsTr("Frame")
+            titleText: qsTrc("inspector", "Frame")
             propertyItem: root.model ? root.model.frameType : null
 
             RadioButtonGroup {
@@ -127,7 +127,7 @@ StyledPopup {
                 visible: root.model ? root.model.frameBorderColor.isEnabled : false
                 height: visible ? implicitHeight : 0
 
-                titleText: qsTr("Border")
+                titleText: qsTrc("inspector", "Border")
                 propertyItem: root.model ? root.model.frameBorderColor : null
 
                 ColorPicker {
@@ -152,7 +152,7 @@ StyledPopup {
                 visible: root.model ? root.model.frameHighlightColor.isEnabled : false
                 height: visible ? implicitHeight : 0
 
-                titleText: qsTr("Highlight")
+                titleText: qsTrc("inspector", "Highlight")
                 propertyItem: root.model ? root.model.frameHighlightColor : null
 
                 ColorPicker {
@@ -182,7 +182,7 @@ StyledPopup {
                 visible: root.model ? root.model.frameThickness.isEnabled : false
                 height: visible ? implicitHeight : 0
 
-                titleText: qsTr("Thickness")
+                titleText: qsTrc("inspector", "Thickness")
                 propertyItem: root.model ? root.model.frameThickness : null
 
                 IncrementalPropertyControl {
@@ -209,7 +209,7 @@ StyledPopup {
                 visible: root.model ? root.model.frameMargin.isEnabled : false
                 height: visible ? implicitHeight : 0
 
-                titleText: qsTr("Margin")
+                titleText: qsTrc("inspector", "Margin")
                 propertyItem: root.model ? root.model.frameMargin : null
 
                 IncrementalPropertyControl {
@@ -235,7 +235,7 @@ StyledPopup {
             visible: root.model ? root.model.frameCornerRadius.isEnabled : false
             height: visible ? implicitHeight : 0
 
-            titleText: qsTr("Corner radius")
+            titleText: qsTrc("inspector", "Corner radius")
             propertyItem: root.model ? root.model.frameCornerRadius : null
 
             IncrementalPropertyControl {
@@ -255,7 +255,7 @@ StyledPopup {
         SeparatorLine { anchors.margins: -10 }
 
         InspectorPropertyView {
-            titleText: qsTr("Text style")
+            titleText: qsTrc("inspector", "Text style")
             propertyItem: root.model ? root.model.textType : null
 
             StyledComboBox {
@@ -265,33 +265,33 @@ StyledPopup {
                 valueRoleName: "value"
 
                 model: [
-                    { text: qsTr("Title"), value: TextTypes.TEXT_TYPE_TITLE },
-                    { text: qsTr("Subtitle"), value: TextTypes.TEXT_TYPE_SUBTITLE},
-                    { text: qsTr("Composer"), value: TextTypes.TEXT_TYPE_COMPOSER },
-                    { text: qsTr("Lyricist"), value: TextTypes.TEXT_TYPE_LYRICS_ODD },
-                    { text: qsTr("Translator"), value: TextTypes.TEXT_TYPE_TRANSLATOR },
-                    { text: qsTr("Frame"), value: TextTypes.TEXT_TYPE_FRAME },
-                    { text: qsTr("Header"), value: TextTypes.TEXT_TYPE_HEADER },
-                    { text: qsTr("Footer"), value: TextTypes.TEXT_TYPE_FOOTER },
-                    { text: qsTr("Measure number"), value: TextTypes.TEXT_TYPE_MEASURE_NUMBER },
-                    { text: qsTr("Instrument name (Part)"), value: TextTypes.TEXT_TYPE_INSTRUMENT_EXCERPT },
-                    { text: qsTr("Instrument change"), value: TextTypes.TEXT_TYPE_INSTRUMENT_CHANGE },
-                    { text: qsTr("Staff"), value: TextTypes.TEXT_TYPE_STAFF },
-                    { text: qsTr("System"), value: TextTypes.TEXT_TYPE_SYSTEM },
-                    { text: qsTr("Expression"), value: TextTypes.TEXT_TYPE_EXPRESSION },
-                    { text: qsTr("Dynamics"), value: TextTypes.TEXT_TYPE_DYNAMICS },
-                    { text: qsTr("Hairpin"), value: TextTypes.TEXT_TYPE_HAIRPIN },
-                    { text: qsTr("Tempo"), value: TextTypes.TEXT_TYPE_TEMPO },
-                    { text: qsTr("Rehearshal mark"), value: TextTypes.TEXT_TYPE_REHEARSAL_MARK },
-                    { text: qsTr("Repeat text left"), value: TextTypes.TEXT_TYPE_REPEAT_LEFT },
-                    { text: qsTr("Repeat text right"), value: TextTypes.TEXT_TYPE_REPEAT_RIGHT },
-                    { text: qsTr("Lyrics odd lines"), value: TextTypes.TEXT_TYPE_LYRICS_ODD },
-                    { text: qsTr("Lyrics even lines"), value: TextTypes.TEXT_TYPE_LYRICS_EVEN },
-                    { text: qsTr("Chord symbol"), value: TextTypes.TEXT_TYPE_HARMONY_A },
-                    { text: qsTr("Chord symbol (Alternate)"), value: TextTypes.TEXT_TYPE_HARMONY_B },
-                    { text: qsTr("Roman numeral analysis"), value: TextTypes.TEXT_TYPE_HARMONY_ROMAN },
-                    { text: qsTr("Nashville number"), value: TextTypes.TEXT_TYPE_HARMONY_NASHVILLE },
-                    { text: qsTr("Sticking"), value: TextTypes.TEXT_TYPE_STICKING }
+                    { text: qsTrc("inspector", "Title"), value: TextTypes.TEXT_TYPE_TITLE },
+                    { text: qsTrc("inspector", "Subtitle"), value: TextTypes.TEXT_TYPE_SUBTITLE},
+                    { text: qsTrc("inspector", "Composer"), value: TextTypes.TEXT_TYPE_COMPOSER },
+                    { text: qsTrc("inspector", "Lyricist"), value: TextTypes.TEXT_TYPE_LYRICS_ODD },
+                    { text: qsTrc("inspector", "Translator"), value: TextTypes.TEXT_TYPE_TRANSLATOR },
+                    { text: qsTrc("inspector", "Frame"), value: TextTypes.TEXT_TYPE_FRAME },
+                    { text: qsTrc("inspector", "Header"), value: TextTypes.TEXT_TYPE_HEADER },
+                    { text: qsTrc("inspector", "Footer"), value: TextTypes.TEXT_TYPE_FOOTER },
+                    { text: qsTrc("inspector", "Measure number"), value: TextTypes.TEXT_TYPE_MEASURE_NUMBER },
+                    { text: qsTrc("inspector", "Instrument name (Part)"), value: TextTypes.TEXT_TYPE_INSTRUMENT_EXCERPT },
+                    { text: qsTrc("inspector", "Instrument change"), value: TextTypes.TEXT_TYPE_INSTRUMENT_CHANGE },
+                    { text: qsTrc("inspector", "Staff"), value: TextTypes.TEXT_TYPE_STAFF },
+                    { text: qsTrc("inspector", "System"), value: TextTypes.TEXT_TYPE_SYSTEM },
+                    { text: qsTrc("inspector", "Expression"), value: TextTypes.TEXT_TYPE_EXPRESSION },
+                    { text: qsTrc("inspector", "Dynamics"), value: TextTypes.TEXT_TYPE_DYNAMICS },
+                    { text: qsTrc("inspector", "Hairpin"), value: TextTypes.TEXT_TYPE_HAIRPIN },
+                    { text: qsTrc("inspector", "Tempo"), value: TextTypes.TEXT_TYPE_TEMPO },
+                    { text: qsTrc("inspector", "Rehearshal mark"), value: TextTypes.TEXT_TYPE_REHEARSAL_MARK },
+                    { text: qsTrc("inspector", "Repeat text left"), value: TextTypes.TEXT_TYPE_REPEAT_LEFT },
+                    { text: qsTrc("inspector", "Repeat text right"), value: TextTypes.TEXT_TYPE_REPEAT_RIGHT },
+                    { text: qsTrc("inspector", "Lyrics odd lines"), value: TextTypes.TEXT_TYPE_LYRICS_ODD },
+                    { text: qsTrc("inspector", "Lyrics even lines"), value: TextTypes.TEXT_TYPE_LYRICS_EVEN },
+                    { text: qsTrc("inspector", "Chord symbol"), value: TextTypes.TEXT_TYPE_HARMONY_A },
+                    { text: qsTrc("inspector", "Chord symbol (Alternate)"), value: TextTypes.TEXT_TYPE_HARMONY_B },
+                    { text: qsTrc("inspector", "Roman numeral analysis"), value: TextTypes.TEXT_TYPE_HARMONY_ROMAN },
+                    { text: qsTrc("inspector", "Nashville number"), value: TextTypes.TEXT_TYPE_HARMONY_NASHVILLE },
+                    { text: qsTrc("inspector", "Sticking"), value: TextTypes.TEXT_TYPE_STICKING }
                 ]
 
                 currentIndex: root.model && !root.model.textType.isUndefined ? indexOfValue(root.model.textType.value) : -1
@@ -309,8 +309,8 @@ StyledPopup {
             width: parent.width
 
             model: [
-                { textRole: qsTr("Above"), valueRole: TextTypes.TEXT_PLACEMENT_ABOVE },
-                { textRole: qsTr("Below"), valueRole: TextTypes.TEXT_PLACEMENT_BELOW }
+                { textRole: qsTrc("inspector", "Above"), valueRole: TextTypes.TEXT_PLACEMENT_ABOVE },
+                { textRole: qsTrc("inspector", "Below"), valueRole: TextTypes.TEXT_PLACEMENT_BELOW }
             ]
 
             delegate: FlatRadioButton {
@@ -336,7 +336,7 @@ StyledPopup {
         FlatButton {
             width: parent.width
 
-            text: qsTr("Staff text properties")
+            text: qsTrc("inspector", "Staff text properties")
 
             visible: root.model ? root.model.areStaffTextPropertiesAvailable : false
 

@@ -11,7 +11,7 @@ PopupViewButton {
     property alias model: staffTypePopup.model
 
     icon: IconCode.STAFF_TYPE_CHANGE
-    text: qsTr("Staff type changes")
+    text: qsTrc("inspector", "Staff type changes")
 
     visible: root.model ? !root.model.isEmpty : false
 

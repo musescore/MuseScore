@@ -11,7 +11,7 @@ PopupViewButton {
     property alias model: sectionBreakPopup.model
 
     icon: IconCode.SECTION_BREAK
-    text: qsTr("Section breaks")
+    text: qsTrc("inspector", "Section breaks")
 
     visible: root.model ? !root.model.isEmpty : false
 

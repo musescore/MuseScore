@@ -6,7 +6,7 @@ ScoreSettingsModel::ScoreSettingsModel(QObject* parent, IElementRepositoryServic
     : AbstractInspectorModel(parent, repository)
 {
     setSectionType(InspectorSectionType::SECTION_SCORE_DISPLAY);
-    setTitle(tr("Show"));
+    setTitle(qtrc("inspector", "Show"));
     createProperties();
 }
 

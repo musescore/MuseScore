@@ -12,7 +12,7 @@ NoteSettingsProxyModel::NoteSettingsProxyModel(QObject* parent, IElementReposito
 {
     setSectionType(InspectorSectionType::SECTION_NOTATION);
     setModelType(InspectorModelType::TYPE_NOTE);
-    setTitle(tr("Note"));
+    setTitle(qtrc("inspector", "Note"));
 
     addModel(new StemSettingsModel(this, repository));
     addModel(new NoteheadSettingsModel(this, repository));

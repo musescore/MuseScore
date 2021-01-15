@@ -23,7 +23,7 @@ StyledPopup {
         InspectorPropertyView {
             height: childrenRect.height
 
-            titleText: qsTr("Scale")
+            titleText: qsTrc("inspector", "Scale")
             propertyItem: root.model ? root.model.horizontalScale : null
 
             Item {
@@ -83,7 +83,7 @@ StyledPopup {
         CheckBox {
             isIndeterminate: model ? model.shouldShowCourtesy.isUndefined : false
             checked: model && !isIndeterminate ? model.shouldShowCourtesy.value : false
-            text: qsTr("Show courtesy time signature on previous system")
+            text: qsTrc("inspector", "Show courtesy time signature on previous system")
 
             onClicked: { model.shouldShowCourtesy.value = !checked }
         }
@@ -91,7 +91,7 @@ StyledPopup {
         FlatButton {
             width: parent.width
 
-            text: qsTr("Change time signature")
+            text: qsTrc("inspector", "Change time signature")
 
             onClicked: {
                 if (root.model) {

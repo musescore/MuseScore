@@ -5,7 +5,7 @@ using namespace mu::inspector;
 GlissandoPlaybackModel::GlissandoPlaybackModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setTitle(tr("Glissando"));
+    setTitle(qtrc("inspector", "Glissando"));
 
     createProperties();
 }

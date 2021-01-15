@@ -11,7 +11,7 @@ PopupViewButton {
     property alias model: accidentalPopup.model
 
     icon: IconCode.ACCIDENTAL_SHARP
-    text: qsTr("Accidentals")
+    text: qsTrc("inspector", "Accidentals")
 
     visible: root.model ? !root.model.isEmpty : false
 

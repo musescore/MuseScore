@@ -15,7 +15,7 @@ StyledPopup {
     InspectorPropertyView {
         id: contentColumn
 
-        titleText: qsTr("Glissando line")
+        titleText: qsTrc("inspector", "Glissando line")
         propertyItem: root.model ? root.model.lineType : null
 
         RadioButtonGroup {
@@ -25,8 +25,8 @@ StyledPopup {
             width: parent.width
 
             model: [
-                { textRole: qsTr("Straight"), valueRole: Glissando.LINE_TYPE_STRAIGHT },
-                { textRole: qsTr("Wavy"), valueRole: Glissando.LINE_TYPE_WAVY }
+                { textRole: qsTrc("inspector", "Straight"), valueRole: Glissando.LINE_TYPE_STRAIGHT },
+                { textRole: qsTrc("inspector", "Wavy"), valueRole: Glissando.LINE_TYPE_WAVY }
             ]
 
             delegate: FlatRadioButton {

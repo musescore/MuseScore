@@ -2,13 +2,15 @@
 
 #include "dataformatter.h"
 
+#include "translation.h"
+
 using namespace mu::inspector;
 
 AmbitusSettingsModel::AmbitusSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_AMBITUS);
-    setTitle(tr("Ambitus"));
+    setTitle(qtrc("inspector", "Ambitus"));
     createProperties();
 
     setNoteheadGroupsModel(new NoteheadTypesModel(this));

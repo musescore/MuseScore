@@ -11,7 +11,7 @@ PopupViewButton {
     property alias model: imagePopup.model
 
     icon: IconCode.IMAGE_MOUNTAINS
-    text: qsTr("Images")
+    text: qsTrc("inspector", "Images")
 
     visible: root.model ? !root.model.isEmpty : false
 

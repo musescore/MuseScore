@@ -11,7 +11,7 @@ PopupViewButton {
     property alias model: tremoloPopup.model
 
     icon: IconCode.TREMOLO_TWO_NOTES
-    text: qsTr("Tremolos")
+    text: qsTrc("inspector", "Tremolos")
 
     visible: root.model ? !root.model.isEmpty : false
 

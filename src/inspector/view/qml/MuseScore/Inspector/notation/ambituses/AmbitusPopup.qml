@@ -64,7 +64,7 @@ StyledPopup {
         FlatButton {
             width: parent.width
 
-            text: qsTr("Update to match the notes on the staff")
+            text: qsTrc("inspector", "Update to match the notes on the staff")
 
             onClicked: {
                 if (root.model) {
@@ -90,7 +90,7 @@ StyledPopup {
                 width: parent.width
 
                 InspectorPropertyView {
-                    titleText: qsTr("Top TPC")
+                    titleText: qsTrc("inspector", "Top TPC")
                     propertyItem: root.model ? root.model.topTpc : null
 
                     StyledComboBox {
@@ -113,7 +113,7 @@ StyledPopup {
                 }
 
                 InspectorPropertyView {
-                    titleText: qsTr("Top octave")
+                    titleText: qsTrc("inspector", "Top octave")
                     propertyItem: root.model ? root.model.topOctave : null
 
                     IncrementalPropertyControl {
@@ -190,7 +190,7 @@ StyledPopup {
             ExpandableBlank {
                 isExpanded: false
 
-                title: isExpanded ? qsTr("Show less") : qsTr("Show more")
+                title: isExpanded ? qsTrc("inspector", "Show less") : qsTrc("inspector", "Show more")
 
                 width: parent.width
 
@@ -201,7 +201,7 @@ StyledPopup {
                     spacing: 16
 
                     InspectorPropertyView {
-                        titleText: qsTr("Direction")
+                        titleText: qsTrc("inspector", "Direction")
                         propertyItem: root.model ? root.model.direction : null
 
                         RadioButtonGroup {
@@ -235,7 +235,7 @@ StyledPopup {
                     }
 
                     InspectorPropertyView {
-                        titleText: qsTr("Head type (visual only)")
+                        titleText: qsTrc("inspector", "Head type (visual only)")
                         propertyItem: root.model ? root.model.noteheadType : null
 
                         RadioButtonGroup {
@@ -277,7 +277,7 @@ StyledPopup {
                         anchors.right: parent.horizontalCenter
                         anchors.rightMargin: 2
 
-                        titleText: qsTr("Line thickness")
+                        titleText: qsTrc("inspector", "Line thickness")
                         propertyItem: root.model ? root.model.lineThickness : null
 
                         IncrementalPropertyControl {

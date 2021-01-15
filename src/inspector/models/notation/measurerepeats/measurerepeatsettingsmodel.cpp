@@ -1,12 +1,14 @@
 #include "measurerepeatsettingsmodel.h"
 
+#include "translation.h"
+
 using namespace mu::inspector;
 
 MeasureRepeatSettingsModel::MeasureRepeatSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_MEASURE_REPEAT);
-    setTitle(tr("Measure repeat"));
+    setTitle(qtrc("inspector", "Measure repeat"));
     createProperties();
 }
 

@@ -7,7 +7,7 @@ using namespace mu::inspector;
 NotePlaybackModel::NotePlaybackModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setTitle(tr("Notes"));
+    setTitle(qtrc("inspector", "Notes"));
 
     createProperties();
 }

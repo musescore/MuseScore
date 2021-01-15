@@ -24,13 +24,13 @@ FocusableItem {
         CheckBox {
             isIndeterminate: model ? model.isHeadHidden.isUndefined : false
             checked: model && !isIndeterminate ? model.isHeadHidden.value : false
-            text: qsTr("Hide notehead")
+            text: qsTrc("inspector", "Hide notehead")
 
             onClicked: { model.isHeadHidden.value = !checked }
         }
 
         InspectorPropertyView {
-            titleText: qsTr("Noteheads")
+            titleText: qsTrc("inspector", "Noteheads")
             propertyItem: root.model ? root.model.headGroup : null
 
             NoteheadsGrid {
@@ -42,7 +42,7 @@ FocusableItem {
 
         InspectorPropertyView {
 
-            titleText: qsTr("Dotted note position")
+            titleText: qsTrc("inspector", "Dotted note position")
             propertyItem: root.model ? root.model.dotPosition : null
 
             RadioButtonGroup {
@@ -78,7 +78,7 @@ FocusableItem {
         ExpandableBlank {
             isExpanded: false
 
-            title: isExpanded ? qsTr("Show less") : qsTr("Show more")
+            title: isExpanded ? qsTrc("inspector", "Show less") : qsTrc("inspector", "Show more")
 
             width: parent.width
 
@@ -92,7 +92,7 @@ FocusableItem {
                     width: root.width
                     height: implicitHeight
 
-                    titleText: qsTr("Head type (visual only)")
+                    titleText: qsTrc("inspector", "Head type (visual only)")
                     propertyItem: root.model ? root.model.headType : null
 
                     RadioButtonGroup {
@@ -133,7 +133,7 @@ FocusableItem {
                     width: root.width
                     height: implicitHeight
 
-                    titleText: qsTr("Note direction")
+                    titleText: qsTrc("inspector", "Note direction")
                     propertyItem: root.model ? root.model.headDirection : null
 
                     RadioButtonGroup {
@@ -170,7 +170,7 @@ FocusableItem {
                     height: childrenRect.height
                     width: parent.width
 
-                    titleText: qsTr("Notehead offset")
+                    titleText: qsTrc("inspector", "Notehead offset")
                     propertyItem: model ? model.horizontalOffset : null
 
                     Item {

@@ -23,14 +23,14 @@ StyledPopup {
         CheckBox {
             isIndeterminate: model ? model.hasToShowCourtesy.isUndefined : false
             checked: model && !isIndeterminate ? model.hasToShowCourtesy.value : false
-            text: qsTr("Show courtesy key signature on previous system")
+            text: qsTrc("inspector", "Show courtesy key signature on previous system")
 
             onClicked: { model.hasToShowCourtesy.value = !checked }
         }
 
         InspectorPropertyView {
 
-            titleText: qsTr("Mode")
+            titleText: qsTrc("inspector", "Mode")
             propertyItem: root.model ? root.model.mode : null
 
             StyledComboBox {
@@ -40,16 +40,16 @@ StyledPopup {
                 valueRoleName: "value"
 
                 model: [
-                    { text: qsTr("Unknown"), value: KeySignatureTypes.MODE_UNKNOWN },
-                    { text: qsTr("None"), value: KeySignatureTypes.MODE_NONE },
-                    { text: qsTr("Major"), value: KeySignatureTypes.MODE_MAJOR },
-                    { text: qsTr("Minor"), value: KeySignatureTypes.MODE_MINOR },
-                    { text: qsTr("Dorian"), value: KeySignatureTypes.MODE_DORIAN },
-                    { text: qsTr("Phrygian"), value: KeySignatureTypes.MODE_PHRYGIAN },
-                    { text: qsTr("Lydian"), value: KeySignatureTypes.MODE_LYDIAN },
-                    { text: qsTr("Mixolydian"), value: KeySignatureTypes.MODE_MIXOLYDIAN },
-                    { text: qsTr("Ionian"), value: KeySignatureTypes.MODE_IONIAN },
-                    { text: qsTr("Locrian"), value: KeySignatureTypes.MODE_LOCRIAN }
+                    { text: qsTrc("inspector", "Unknown"), value: KeySignatureTypes.MODE_UNKNOWN },
+                    { text: qsTrc("inspector", "None"), value: KeySignatureTypes.MODE_NONE },
+                    { text: qsTrc("inspector", "Major"), value: KeySignatureTypes.MODE_MAJOR },
+                    { text: qsTrc("inspector", "Minor"), value: KeySignatureTypes.MODE_MINOR },
+                    { text: qsTrc("inspector", "Dorian"), value: KeySignatureTypes.MODE_DORIAN },
+                    { text: qsTrc("inspector", "Phrygian"), value: KeySignatureTypes.MODE_PHRYGIAN },
+                    { text: qsTrc("inspector", "Lydian"), value: KeySignatureTypes.MODE_LYDIAN },
+                    { text: qsTrc("inspector", "Mixolydian"), value: KeySignatureTypes.MODE_MIXOLYDIAN },
+                    { text: qsTrc("inspector", "Ionian"), value: KeySignatureTypes.MODE_IONIAN },
+                    { text: qsTrc("inspector", "Locrian"), value: KeySignatureTypes.MODE_LOCRIAN }
                 ]
 
                 currentIndex: root.model && !root.model.mode.isUndefined ? indexOfValue(root.model.mode.value) : -1

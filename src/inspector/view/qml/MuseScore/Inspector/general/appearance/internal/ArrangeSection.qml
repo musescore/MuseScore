@@ -20,7 +20,7 @@ Column {
         spacing: 8
 
         StyledTextLabel {
-            text: qsTr("Arrange")
+            text: qsTrc("inspector", "Arrange")
         }
 
         Item {
@@ -32,7 +32,7 @@ Column {
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 4
 
-                text: qsTr("Backwards")
+                text: qsTrc("inspector", "Backwards")
 
                 onClicked: {
                     root.pushBackRequested()
@@ -44,7 +44,7 @@ Column {
                 anchors.leftMargin: 4
                 anchors.right: parent.right
 
-                text: qsTr("Forwards")
+                text: qsTrc("inspector", "Forwards")
 
                 onClicked: {
                     root.pushFrontRequested()

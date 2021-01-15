@@ -17,13 +17,13 @@ Item {
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 4
 
-        titleText: qsTr("Left margin")
+        titleText: qsTrc("inspector", "Left margin")
         propertyItem: frameLeftMargin
 
         IncrementalPropertyControl {
             icon: IconCode.LEFT_MARGIN
 
-            measureUnitsSymbol: qsTr("mm")
+            measureUnitsSymbol: qsTrc("inspector", "mm")
 
             enabled: frameLeftMargin ? frameLeftMargin.isEnabled : false
             isIndeterminate: frameLeftMargin && enabled ? frameLeftMargin.isUndefined : false
@@ -38,13 +38,13 @@ Item {
         anchors.leftMargin: 4
         anchors.right: parent.right
 
-        titleText: qsTr("Right margin")
+        titleText: qsTrc("inspector", "Right margin")
         propertyItem: frameRightMargin
 
         IncrementalPropertyControl {
             icon: IconCode.RIGHT_MARGIN
 
-            measureUnitsSymbol: qsTr("mm")
+            measureUnitsSymbol: qsTrc("inspector", "mm")
 
             enabled: frameRightMargin ? frameRightMargin.isEnabled : false
             isIndeterminate: frameRightMargin && enabled ? frameRightMargin.isUndefined : false

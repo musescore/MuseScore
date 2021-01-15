@@ -21,7 +21,7 @@ StyledPopup {
         spacing: 12
 
         InspectorPropertyView {
-            titleText: qsTr("Number position")
+            titleText: qsTrc("inspector", "Number position")
             propertyItem: model ? model.numberPosition : null
 
             IncrementalPropertyControl {

@@ -11,7 +11,7 @@ PopupViewButton {
     property alias model: fretDiagramPopup.model
 
     icon: IconCode.FRETBOARD_DIAGRAM
-    text: qsTr("Fretboard diagrams")
+    text: qsTrc("inspector", "Fretboard diagrams")
 
     visible: root.model ? !root.model.isEmpty : false
 

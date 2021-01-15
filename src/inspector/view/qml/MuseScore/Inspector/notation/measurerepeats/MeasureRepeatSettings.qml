@@ -11,7 +11,7 @@ PopupViewButton {
     property alias model: measureRepeatPopup.model
 
     icon: IconCode.QUESTION_MARK /*TODO*/
-    text: qsTr("Measure repeats")
+    text: qsTrc("inspector", "Measure repeats")
 
     visible: root.model ? !root.model.isEmpty : false
 

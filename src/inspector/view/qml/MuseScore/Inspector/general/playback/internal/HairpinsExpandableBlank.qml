@@ -25,7 +25,7 @@ ExpandableBlank {
             anchors.right: parent.horizontalCenter
             anchors.rightMargin: 2
 
-            titleText: qsTr("Velocity change")
+            titleText: qsTrc("inspector", "Velocity change")
             propertyItem: model ? model.velocityChange : null
 
             IncrementalPropertyControl {
@@ -49,7 +49,7 @@ ExpandableBlank {
         }
 
         InspectorPropertyView {
-            titleText: qsTr("Changes in dynamics range")
+            titleText: qsTrc("inspector", "Changes in dynamics range")
             propertyItem: root.model ? root.model.velocityChangeType : null
 
             StyledComboBox {
@@ -59,11 +59,11 @@ ExpandableBlank {
                 valueRoleName: "value"
 
                 model: [
-                    { text: qsTr("Linear (default)"), value: Hairpin.VELOCITY_EASING_LINEAR },
-                    { text: qsTr("Exponential"), value: Hairpin.VELOCITY_EASING_EXPONENTIAL },
-                    { text: qsTr("Ease-in"), value: Hairpin.VELOCITY_EASING_IN },
-                    { text: qsTr("Ease-out"), value: Hairpin.VELOCITY_EASING_OUT },
-                    { text: qsTr("Ease-in and out"), value: Hairpin.VELOCITY_EASING_IN_OUT }
+                    { text: qsTrc("inspector", "Linear (default)"), value: Hairpin.VELOCITY_EASING_LINEAR },
+                    { text: qsTrc("inspector", "Exponential"), value: Hairpin.VELOCITY_EASING_EXPONENTIAL },
+                    { text: qsTrc("inspector", "Ease-in"), value: Hairpin.VELOCITY_EASING_IN },
+                    { text: qsTrc("inspector", "Ease-out"), value: Hairpin.VELOCITY_EASING_OUT },
+                    { text: qsTrc("inspector", "Ease-in and out"), value: Hairpin.VELOCITY_EASING_IN_OUT }
                 ]
 
                 currentIndex: root.model && !root.model.velocityChangeType.isUndefined ? indexOfValue(root.model.velocityChangeType.value) : -1

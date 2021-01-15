@@ -2,13 +2,15 @@
 
 #include "dataformatter.h"
 
+#include "translation.h"
+
 using namespace mu::inspector;
 
 HookSettingsModel::HookSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_HOOK);
-    setTitle(tr("Flag")); // internally called "Hook", but "Flag" in SMuFL, so here externally too
+    setTitle(qtrc("inspector", "Flag")); // internally called "Hook", but "Flag" in SMuFL, so here externally too
 
     createProperties();
 }

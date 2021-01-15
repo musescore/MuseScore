@@ -23,7 +23,7 @@ InspectorSectionView {
         CheckBox {
             Layout.fillWidth: true
             Layout.maximumWidth: parent.width/2
-            text: qsTr("Invisible")
+            text: qsTrc("inspector", "Invisible")
             checked: model ? model.shouldShowInvisible : false
             onClicked: { model.shouldShowInvisible = !model.shouldShowInvisible }
         }
@@ -31,7 +31,7 @@ InspectorSectionView {
         CheckBox {
             Layout.fillWidth: true
             Layout.maximumWidth: parent.width/2
-            text: qsTr("Unprintable")
+            text: qsTrc("inspector", "Unprintable")
             checked: model ? model.shouldShowUnprintable : false
             onClicked: { model.shouldShowUnprintable = !model.shouldShowUnprintable }
         }
@@ -39,7 +39,7 @@ InspectorSectionView {
         CheckBox {
             Layout.fillWidth: true
             Layout.maximumWidth: parent.width/2
-            text: qsTr("Frames")
+            text: qsTrc("inspector", "Frames")
             checked: model ? model.shouldShowFrames : false
             onClicked: { model.shouldShowFrames = !model.shouldShowFrames }
         }
@@ -47,7 +47,7 @@ InspectorSectionView {
         CheckBox {
             Layout.fillWidth: true
             Layout.maximumWidth: parent.width/2
-            text: qsTr("Page margins")
+            text: qsTrc("inspector", "Page margins")
             checked: model ? model.shouldShowPageMargins : false
             onClicked: { model.shouldShowPageMargins = !model.shouldShowPageMargins }
         }

@@ -8,7 +8,7 @@ TremoloSettingsModel::TremoloSettingsModel(QObject* parent, IElementRepositorySe
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_TREMOLO);
-    setTitle(tr("Tremolos"));
+    setTitle(qtrc("inspector", "Tremolos"));
     createProperties();
 }
 

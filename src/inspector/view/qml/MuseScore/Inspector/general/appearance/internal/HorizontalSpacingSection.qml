@@ -18,7 +18,7 @@ Item {
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 4
 
-        titleText: qsTr("Leading")
+        titleText: qsTrc("inspector", "Leading")
         propertyItem: leadingSpace
 
         IncrementalPropertyControl {
@@ -37,7 +37,7 @@ Item {
         anchors.leftMargin: 4
         anchors.right: parent.right
 
-        titleText: qsTr("Bar width")
+        titleText: qsTrc("inspector", "Bar width")
         propertyItem: barWidth
 
         IncrementalPropertyControl {

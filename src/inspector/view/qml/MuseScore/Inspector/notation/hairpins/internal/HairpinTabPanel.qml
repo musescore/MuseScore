@@ -16,7 +16,7 @@ TabPanel {
     Tab {
         id: styleTab
 
-        title: qsTr("Style")
+        title: qsTrc("inspector", "Style")
 
         HairpinStyleSettingsTab {
             anchors.top: parent.top
@@ -31,7 +31,7 @@ TabPanel {
     Tab {
         id: textTab
 
-        title: qsTr("Text")
+        title: qsTrc("inspector", "Text")
 
         HairpinTextSettingsTab {
             anchors.top: parent.top

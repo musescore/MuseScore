@@ -20,7 +20,7 @@ StyledPopup {
         spacing: 16
 
         InspectorPropertyView {
-            titleText: qsTr("Interpretation")
+            titleText: qsTrc("inspector", "Interpretation")
             propertyItem: root.model ? root.model.isLiteral : null
 
             RadioButtonGroup {
@@ -30,8 +30,8 @@ StyledPopup {
                 width: parent.width
 
                 model: [
-                    { textRole: qsTr("Literal"), valueRole: true },
-                    { textRole: qsTr("Jazz"), valueRole: false }
+                    { textRole: qsTrc("inspector", "Literal"), valueRole: true },
+                    { textRole: qsTrc("inspector", "Jazz"), valueRole: false }
                 ]
 
                 delegate: FlatRadioButton {
@@ -53,7 +53,7 @@ StyledPopup {
         }
 
         InspectorPropertyView {
-            titleText: qsTr("Voicing")
+            titleText: qsTrc("inspector", "Voicing")
             propertyItem: root.model ? root.model.voicingType : null
 
             StyledComboBox {
@@ -63,13 +63,13 @@ StyledPopup {
                 valueRoleName: "value"
 
                 model: [
-                    { text: qsTr("Auto"), value: ChordSymbolTypes.VOICING_AUTO },
-                    { text: qsTr("Root only"), value: ChordSymbolTypes.VOICING_ROOT_ONLY },
-                    { text: qsTr("Close"), value: ChordSymbolTypes.VOICING_CLOSE },
-                    { text: qsTr("Drop two"), value: ChordSymbolTypes.VOICING_DROP_TWO },
-                    { text: qsTr("Six note"), value: ChordSymbolTypes.VOICING_SIX_NOTE },
-                    { text: qsTr("Four note"), value: ChordSymbolTypes.VOICING_FOUR_NOTE },
-                    { text: qsTr("Three note"), value: ChordSymbolTypes.VOICING_THREE_NOTE }
+                    { text: qsTrc("inspector", "Auto"), value: ChordSymbolTypes.VOICING_AUTO },
+                    { text: qsTrc("inspector", "Root only"), value: ChordSymbolTypes.VOICING_ROOT_ONLY },
+                    { text: qsTrc("inspector", "Close"), value: ChordSymbolTypes.VOICING_CLOSE },
+                    { text: qsTrc("inspector", "Drop two"), value: ChordSymbolTypes.VOICING_DROP_TWO },
+                    { text: qsTrc("inspector", "Six note"), value: ChordSymbolTypes.VOICING_SIX_NOTE },
+                    { text: qsTrc("inspector", "Four note"), value: ChordSymbolTypes.VOICING_FOUR_NOTE },
+                    { text: qsTrc("inspector", "Three note"), value: ChordSymbolTypes.VOICING_THREE_NOTE }
                 ]
 
                 currentIndex: root.model && !root.model.voicingType.isUndefined ? indexOfValue(root.model.voicingType.value) : -1
@@ -81,7 +81,7 @@ StyledPopup {
         }
 
         InspectorPropertyView {
-            titleText: qsTr("Duration")
+            titleText: qsTrc("inspector", "Duration")
             propertyItem: root.model ? root.model.durationType : null
 
             StyledComboBox {
@@ -91,9 +91,9 @@ StyledPopup {
                 valueRoleName: "value"
 
                 model: [
-                    { text: qsTr("Until the next chord symbol"), value: ChordSymbolTypes.DURATION_UNTIL_NEXT_CHORD_SYMBOL },
-                    { text: qsTr("Until the end of the bar"), value: ChordSymbolTypes.DURATION_STOP_AT_MEASURE_END },
-                    { text: qsTr("Until the end of the attached duration"), value: ChordSymbolTypes.DURATION_SEGMENT_DURATION }
+                    { text: qsTrc("inspector", "Until the next chord symbol"), value: ChordSymbolTypes.DURATION_UNTIL_NEXT_CHORD_SYMBOL },
+                    { text: qsTrc("inspector", "Until the end of the bar"), value: ChordSymbolTypes.DURATION_STOP_AT_MEASURE_END },
+                    { text: qsTrc("inspector", "Until the end of the attached duration"), value: ChordSymbolTypes.DURATION_SEGMENT_DURATION }
                 ]
 
                 currentIndex: root.model && !root.model.durationType.isUndefined ? indexOfValue(root.model.durationType.value) : -1

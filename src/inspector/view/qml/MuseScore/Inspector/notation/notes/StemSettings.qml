@@ -29,7 +29,7 @@ FocusableItem {
         CheckBox {
             isIndeterminate: stemModel && beamModel ? stemModel.isStemHidden.isUndefined || beamModel.isBeamHidden.isUndefined : false
             checked: stemModel && !isIndeterminate && beamModel ? stemModel.isStemHidden.value && beamModel.isBeamHidden.value : false
-            text: qsTr("Hide stem (also hides beam)")
+            text: qsTrc("inspector", "Hide stem (also hides beam)")
 
             onClicked: {
                 var isHidden = !checked
@@ -40,7 +40,7 @@ FocusableItem {
 
         InspectorPropertyView {
 
-            titleText: qsTr("Stem direction")
+            titleText: qsTrc("inspector", "Stem direction")
             propertyItem: root.stemModel ? root.stemModel.stemDirection : null
 
             RadioButtonGroup {
@@ -76,7 +76,7 @@ FocusableItem {
         ExpandableBlank {
             isExpanded: false
 
-            title: isExpanded ? qsTr("Show less") : qsTr("Show more")
+            title: isExpanded ? qsTrc("inspector", "Show less") : qsTrc("inspector", "Show more")
 
             width: parent.width
 
@@ -95,7 +95,7 @@ FocusableItem {
                         anchors.right: parent.horizontalCenter
                         anchors.rightMargin: 2
 
-                        titleText: qsTr("Thickness")
+                        titleText: qsTrc("inspector", "Thickness")
                         propertyItem: stemModel ? stemModel.thickness : null
 
                         IncrementalPropertyControl {
@@ -117,7 +117,7 @@ FocusableItem {
                         anchors.leftMargin: 2
                         anchors.right: parent.right
 
-                        titleText: qsTr("Length")
+                        titleText: qsTrc("inspector", "Length")
                         propertyItem: stemModel ? stemModel.length : null
 
                         IncrementalPropertyControl {
@@ -137,7 +137,7 @@ FocusableItem {
                 InspectorPropertyView {
                     height: implicitHeight
 
-                    titleText: qsTr("Stem offset")
+                    titleText: qsTrc("inspector", "Stem offset")
                     propertyItem: stemModel ? stemModel.horizontalOffset : null
 
                     Item {
@@ -175,7 +175,7 @@ FocusableItem {
                 InspectorPropertyView {
                     height: childrenRect.height
 
-                    titleText: qsTr("Flag offset")
+                    titleText: qsTrc("inspector", "Flag offset")
                     propertyItem: hookModel ? hookModel.horizontalOffset : null
 
                     Item {
