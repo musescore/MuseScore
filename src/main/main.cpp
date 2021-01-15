@@ -99,7 +99,7 @@ int main(int argc, char** argv)
     app.addModule(new mu::framework::UiModule());
     app.addModule(new mu::framework::UiComponentsModule());
     app.addModule(new mu::framework::SystemModule());
-    app.addModule(new mu::framework::NetworkModule());
+    app.addModule(new mu::network::NetworkModule());
 
     app.addModule(new mu::actions::ActionsModule());
     app.addModule(new mu::appshell::AppShellModule());

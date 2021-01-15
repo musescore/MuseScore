@@ -16,20 +16,18 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_NETWORKMODULE_H
-#define MU_FRAMEWORK_NETWORKMODULE_H
+#ifndef MU_NETWORK_NETWORKMODULE_H
+#define MU_NETWORK_NETWORKMODULE_H
 
 #include "modularity/imodulesetup.h"
 
-namespace mu {
-namespace framework {
-class NetworkModule : public IModuleSetup
+namespace mu::network {
+class NetworkModule : public framework::IModuleSetup
 {
 public:
     std::string moduleName() const override;
     void registerExports() override;
 };
 }
-}
 
-#endif // MU_FRAMEWORK_NETWORKMODULE_H
+#endif // MU_NETWORK_NETWORKMODULE_H

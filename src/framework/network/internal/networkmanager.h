@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_NETWORKMANAGER_H
-#define MU_FRAMEWORK_NETWORKMANAGER_H
+#ifndef MU_NETWORK_NETWORKMANAGER_H
+#define MU_NETWORK_NETWORKMANAGER_H
 
 #include "inetworkmanager.h"
 
@@ -25,7 +25,7 @@ class QNetworkAccessManager;
 class QNetworkRequest;
 class QNetworkReply;
 
-namespace mu::framework {
+namespace mu::network {
 class NetworkManager : public QObject, public INetworkManager
 {
     Q_OBJECT
@@ -34,13 +34,13 @@ public:
     explicit NetworkManager(QObject* parent = nullptr);
     ~NetworkManager() override;
 
-    Ret get(const QUrl& url, IODevice* incommingData) override;
+    Ret get(const QUrl& url, framework::IODevice* incommingData) override;
     Ret head(const QUrl& url) override;
-    Ret post(const QUrl& url, IODevice* outgoingData, IODevice* incommingData) override;
-    Ret put(const QUrl& url, IODevice* outgoingData, IODevice* incommingData) override;
-    Ret del(const QUrl& url, IODevice* incommingData) override;
+    Ret post(const QUrl& url, framework::IODevice* outgoingData, framework::IODevice* incommingData) override;
+    Ret put(const QUrl& url, framework::IODevice* outgoingData, framework::IODevice* incommingData) override;
+    Ret del(const QUrl& url, framework::IODevice* incommingData) override;
 
-    ProgressChannel progressChannel() const override;
+    framework::ProgressChannel progressChannel() const override;
 
     void abort() override;
 
@@ -56,15 +56,16 @@ private:
         DELETE_REQUEST
     };
 
-    Ret execRequest(RequestType requestType, const QUrl& url, IODevice* incommingData = nullptr, IODevice* outgoingData = nullptr);
-    QNetworkReply* receiveReply(RequestType requestType, const QNetworkRequest& request, IODevice* outgoingData = nullptr);
+    Ret execRequest(RequestType requestType, const QUrl& url, framework::IODevice* incommingData = nullptr,
+                    framework::IODevice* outgoingData = nullptr);
+    QNetworkReply* receiveReply(RequestType requestType, const QNetworkRequest& request, framework::IODevice* outgoingData = nullptr);
 
-    bool openIoDevice(IODevice* device, QIODevice::OpenModeFlag flags);
-    void closeIoDevice(IODevice* device);
+    bool openIoDevice(framework::IODevice* device, QIODevice::OpenModeFlag flags);
+    void closeIoDevice(framework::IODevice* device);
 
     bool isAborted() const;
 
-    void prepareReplyReceive(QNetworkReply* reply, IODevice* incommingData);
+    void prepareReplyReceive(QNetworkReply* reply, framework::IODevice* incommingData);
     void prepareReplyTransmit(QNetworkReply* reply);
 
     Ret waitForReplyFinished(QNetworkReply* reply, int timeoutMs);
@@ -72,12 +73,12 @@ private:
 
 private:
     QNetworkAccessManager* m_manager = nullptr;
-    IODevice* m_incommingData = nullptr;
+    framework::IODevice* m_incommingData = nullptr;
     QNetworkReply* m_reply = nullptr;
-    ProgressChannel m_progressCh;
+    framework::ProgressChannel m_progressCh;
 
     bool m_isAborted = false;
 };
 }
 
-#endif // MU_FRAMEWORK_NETWORKMANAGER_H
+#endif // MU_NETWORK_NETWORKMANAGER_H

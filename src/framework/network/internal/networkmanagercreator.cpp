@@ -20,7 +20,7 @@
 
 #include "networkmanager.h"
 
-using namespace mu::framework;
+using namespace mu::network;
 
 INetworkManagerPtr NetworkManagerCreator::makeNetworkManager() const
 {

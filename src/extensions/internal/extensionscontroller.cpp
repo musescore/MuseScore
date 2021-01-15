@@ -30,6 +30,7 @@
 using namespace mu;
 using namespace mu::extensions;
 using namespace mu::framework;
+using namespace mu::network;
 
 static const QString ANALYSING_STATUS = qtrc("extensions", "Analysing...");
 static const QString DOWNLOADING_STATUS = qtrc("extensions", "Downloading...");
