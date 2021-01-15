@@ -158,6 +158,8 @@ Ret Workspace::readWorkspace(const QByteArray& xmlData)
         }
     }
 
+    buffer.seek(0);
+
     for (const IWorkspaceDataStreamPtr& stream : streamRegister()->streams()) {
         for (AbstractDataPtr data : stream->read(buffer)) {
             DataKey key { data->tag, data->name };
