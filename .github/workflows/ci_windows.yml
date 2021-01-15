@@ -236,7 +236,9 @@ jobs:
       if: env.DO_BUILD == 'true'
       shell: cmd
       run: |      
-        build\ci\windows\package.bat -b 32 --portable ON 
+        IF ${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET }} ) ELSE ( SET S_S="''" )
+        IF ${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD != 0 }} == true ( SET S_P=${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD }} ) ELSE ( SET S_P="''" )
+        build\ci\windows\package.bat -b 32 --portable ON --signsecret %S_S% --signpass %S_P%
     - name: Checksum 
       shell: bash
       if: env.DO_BUILD == 'true'
