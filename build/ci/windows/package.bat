@@ -55,8 +55,12 @@ IF %BUILD_MODE% == stable_build  ( SET PACKAGE_TYPE="msi") ELSE (
     GOTO END_ERROR
 )))))
 
+SET NEED_SIGN=OFF 
+IF %PACKAGE_TYPE% == "msi"      ( SET NEED_SIGN=ON) 
+IF %PACKAGE_TYPE% == "portable" ( SET NEED_SIGN=ON) 
+
 SET DO_SIGN=OFF
-IF %PACKAGE_TYPE% == "msi" ( 
+IF %NEED_SIGN% == ON ( 
     SET DO_SIGN=ON
     IF %SIGN_CERTIFICATE_ENCRYPT_SECRET% == "" ( 
         SET DO_SIGN=OFF
@@ -84,8 +88,10 @@ ECHO "BUILD_DIR: %BUILD_DIR%"
 ECHO "INSTALL_DIR: %INSTALL_DIR%"
 ECHO "PACKAGE_TYPE: %PACKAGE_TYPE%"
 
-:: For MSI
+:: Tools
 SET SIGNTOOL="C:\Program Files (x86)\Windows Kits\10\bin\x64\signtool.exe"
+SET SIGNCERT="build\ci\windows\resources\musescore.p12"
+SET SIGNTIMESERVER="http://timestamp.globalsign.com/scripts/timstamp.dll"
 SET UUIDGEN="C:\Program Files (x86)\Windows Kits\10\bin\x64\uuidgen.exe"
 SET WIX_DIR=%WIX%
 
@@ -138,7 +144,7 @@ IF %DO_SIGN% == ON (
 
     for /f "delims=" %%f in ('dir /a-d /b /s "%INSTALL_DIR%\*.dll" "%INSTALL_DIR%\*.exe"') do (
         ECHO "Signing %%f"
-        %SIGNTOOL% sign /f "build\ci\windows\resources\musescore.p12" /t http://timestamp.globalsign.com/scripts/timstamp.dll /p %SIGN_CERTIFICATE_PASSWORD% "%%f"
+        %SIGNTOOL% sign /f %SIGNCERT% /t %SIGNTIMESERVER% /p %SIGN_CERTIFICATE_PASSWORD% "%%f"
     )
 
 ) ELSE (
@@ -190,12 +196,11 @@ IF %BUILD_MODE% == nightly_build (
 )
 
 ECHO "Copy from %FILEPATH% to %ARTIFACT_NAME%"
-
 COPY %FILEPATH% %ARTIFACTS_DIR%\%ARTIFACT_NAME% /Y 
 SET ARTIFACT_PATH=%ARTIFACTS_DIR%\%ARTIFACT_NAME%
 
 IF %DO_SIGN% == ON (
-    %SIGNTOOL% sign /debug /f "build\ci\windows\resources\musescore.p12" /t http://timestamp.verisign.com/scripts/timstamp.dll /p %SIGN_CERTIFICATE_PASSWORD% /d %ARTIFACT_NAME% %ARTIFACT_PATH%
+    %SIGNTOOL% sign /debug /f %SIGNCERT% /t %SIGNTIMESERVER% /p %SIGN_CERTIFICATE_PASSWORD% /d %ARTIFACT_NAME% %ARTIFACT_PATH%
     :: verify signature
     %SIGNTOOL% verify /pa %ARTIFACT_PATH%
 )
@@ -217,6 +222,21 @@ GOTO END_SUCCESS
 :PACK_PORTABLE
 ECHO "Start portable packing..."
 
+:: sign dlls and exe files
+IF %DO_SIGN% == ON (
+    where /q secure-file
+    IF ERRORLEVEL 1 ( choco install -y --ignore-checksums secure-file )
+    secure-file -decrypt build\ci\windows\resources\musescore.p12.enc -secret %SIGN_CERTIFICATE_ENCRYPT_SECRET%
+
+    for /f "delims=" %%f in ('dir /a-d /b /s "%INSTALL_DIR%\*.dll" "%INSTALL_DIR%\*.exe"') do (
+        ECHO "Signing %%f"
+        %SIGNTOOL% sign /f %SIGNCERT% /t %SIGNTIMESERVER% /p %SIGN_CERTIFICATE_PASSWORD% "%%f"
+    )
+
+) ELSE (
+    ECHO "Sign disabled"
+)
+
 :: Create launcher
 CALL C:\portableappslauncher\Launcher\PortableApps.comLauncherGenerator.exe %CD%\%INSTALL_DIR%
 ECHO "Finished comLauncherGenerator"
@@ -234,6 +254,13 @@ SET ARTIFACT_NAME=MuseScore-%BUILD_VERSION%-%TARGET_PROCESSOR_ARCH%.paf.exe
 
 ECHO "Copy from %FILEPATH% to %ARTIFACT_NAME%"
 COPY %FILEPATH% %ARTIFACTS_DIR%\%ARTIFACT_NAME% /Y 
+SET ARTIFACT_PATH=%ARTIFACTS_DIR%\%ARTIFACT_NAME%
+
+IF %DO_SIGN% == ON (
+    %SIGNTOOL% sign /debug /f %SIGNCERT% /t %SIGNTIMESERVER% /p %SIGN_CERTIFICATE_PASSWORD% /d %ARTIFACT_NAME% %ARTIFACT_PATH%
+    :: verify signature
+    %SIGNTOOL% verify /pa %ARTIFACT_PATH%
+)
 
 bash ./build/ci/tools/make_artifact_name_env.sh %ARTIFACT_NAME%
 
