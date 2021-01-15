@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="3.02">
   <programVersion>3.6.0</programVersion>
-  <programRevision></programRevision>
+  <programRevision>269baf7</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -12,24 +12,17 @@
       <pagePrintableWidth>7.08898</pagePrintableWidth>
       <enableVerticalSpread>1</enableVerticalSpread>
       <maxPageFillSpread>10</maxPageFillSpread>
-      <lyricsOddFontSize>10</lyricsOddFontSize>
-      <lyricsEvenFontSize>10</lyricsEvenFontSize>
       <doubleBarDistance>0.73</doubleBarDistance>
       <endBarDistance>0.915</endBarDistance>
       <repeatBarlineDotSeparation>0.94</repeatBarlineDotSeparation>
-      <chordSymbolAFontSize>11</chordSymbolAFontSize>
-      <chordSymbolBFontSize>11</chordSymbolBFontSize>
       <useStandardNoteNames>0</useStandardNoteNames>
       <hideEmptyStaves>1</hideEmptyStaves>
       <alwaysShowBracketsWhenEmptyStavesAreHidden>1</alwaysShowBracketsWhenEmptyStavesAreHidden>
       <tupletFontStyle>3</tupletFontStyle>
       <subTitleFontSize>18</subTitleFontSize>
-      <dynamicsFontSize>11</dynamicsFontSize>
       <metronomeFontSize>10</metronomeFontSize>
       <measureNumberFontSize>9</measureNumberFontSize>
-      <translatorFontSize>10</translatorFontSize>
       <headerFontSize>9</headerFontSize>
-      <stickingFontSize>10</stickingFontSize>
       <usePre_3_6_defaults>1</usePre_3_6_defaults>
       <Spatium>1.4</Spatium>
       </Style>
@@ -1419,7 +1412,7 @@
           </voice>
         </Measure>
       <Measure>
-        <stretch>0.9</stretch>
+        <stretch>0.8</stretch>
         <voice>
           <Dynamic>
             <subtype>f</subtype>
@@ -1584,7 +1577,7 @@
           </voice>
         </Measure>
       <Measure>
-        <stretch>0.9</stretch>
+        <stretch>0.8</stretch>
         <voice>
           <Dynamic>
             <subtype>p</subtype>
@@ -1673,7 +1666,7 @@
           </voice>
         </Measure>
       <Measure>
-        <stretch>0.9</stretch>
+        <stretch>0.8</stretch>
         <voice>
           <Chord>
             <dots>1</dots>
@@ -1790,7 +1783,7 @@
           </voice>
         </Measure>
       <Measure>
-        <stretch>0.9</stretch>
+        <stretch>0.8</stretch>
         <LayoutBreak>
           <subtype>line</subtype>
           </LayoutBreak>
