@@ -25,7 +25,7 @@
 #include "inotationcreator.h"
 #include "iinteractive.h"
 
-namespace mu::framework {
+namespace mu::uicomponents {
 class ItemMultiSelectionModel;
 }
 
@@ -94,7 +94,7 @@ private:
         RoleVoicesTitle
     };
 
-    framework::ItemMultiSelectionModel* m_selectionModel = nullptr;
+    uicomponents::ItemMultiSelectionModel* m_selectionModel = nullptr;
     QList<INotationPtr> m_notations;
     INotationPtr m_currentNotation;
 };

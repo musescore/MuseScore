@@ -10,6 +10,7 @@
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
 
+using namespace mu::uicomponents;
 using namespace mu::framework;
 
 static void uicomponents_init_qrc()

@@ -1,5 +1,7 @@
 #include "intinputvalidator.h"
 
+using namespace mu::uicomponents;
+
 IntInputValidator::IntInputValidator(QObject* parent)
     : QValidator(parent)
 {

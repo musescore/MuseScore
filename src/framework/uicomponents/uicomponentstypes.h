@@ -16,15 +16,15 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_UICOMPONENTSTYPES_H
-#define MU_FRAMEWORK_UICOMPONENTSTYPES_H
+#ifndef MU_UICOMPONENTS_UICOMPONENTSTYPES_H
+#define MU_UICOMPONENTS_UICOMPONENTSTYPES_H
 
 #include <QString>
 #include <QVariantMap>
 
 #include "actions/actiontypes.h"
 
-namespace mu::framework {
+namespace mu::uicomponents {
 struct MenuItem : public actions::ActionItem
 {
     std::string shortcut;
@@ -54,4 +54,4 @@ struct MenuItem : public actions::ActionItem
 using MenuItemList = QList<MenuItem>;
 }
 
-#endif // MU_FRAMEWORK_UICOMPONENTSTYPES_H
+#endif // MU_UICOMPONENTS_UICOMPONENTSTYPES_H

@@ -17,14 +17,13 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_FRAMEWORK_QMLLISTPROPERTY_H
-#define MU_FRAMEWORK_QMLLISTPROPERTY_H
+#ifndef MU_UICOMPONENTS_QMLLISTPROPERTY_H
+#define MU_UICOMPONENTS_QMLLISTPROPERTY_H
 
 #include <QObject>
 #include <QQmlListProperty>
 
-namespace mu {
-namespace framework {
+namespace mu::uicomponents {
 class QmlListPropertyNotifier : public QObject
 {
     Q_OBJECT
@@ -124,6 +123,5 @@ private:
     QmlListPropertyNotifier* _notifier = nullptr;
 };
 }
-}
 
-#endif // MU_FRAMEWORK_QMLLISTPROPERTY_H
+#endif // MU_UICOMPONENTS_QMLLISTPROPERTY_H

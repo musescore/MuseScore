@@ -33,17 +33,17 @@ class NotationContextMenu : public INotationContextMenu
     INJECT(notation, actions::IActionsRegister, actionsRegister)
 
 public:
-    framework::MenuItemList items(const ElementType& elementType) const override;
+    uicomponents::MenuItemList items(const ElementType& elementType) const override;
 
 private:
-    framework::MenuItem makeItem(const actions::ActionItem& action, const std::string& section = "", bool enabled = true,
-                                 bool checked = false) const;
+    uicomponents::MenuItem makeItem(const actions::ActionItem& action, const std::string& section = "", bool enabled = true,
+                                    bool checked = false) const;
 
-    framework::MenuItemList measureItems() const;
-    framework::MenuItemList pageItems() const;
-    framework::MenuItemList elementItems() const;
+    uicomponents::MenuItemList measureItems() const;
+    uicomponents::MenuItemList pageItems() const;
+    uicomponents::MenuItemList elementItems() const;
 
-    framework::MenuItemList defaultCopyPasteItems() const;
+    uicomponents::MenuItemList defaultCopyPasteItems() const;
 };
 }
 

@@ -29,7 +29,7 @@
 
 class QItemSelectionModel;
 
-namespace mu::framework {
+namespace mu::uicomponents {
 class ItemMultiSelectionModel;
 }
 
@@ -115,7 +115,7 @@ private:
     void saveActions();
 
     QList<AbstractNoteInputBarItem*> m_actions;
-    framework::ItemMultiSelectionModel* m_selectionModel = nullptr;
+    uicomponents::ItemMultiSelectionModel* m_selectionModel = nullptr;
 
     bool m_isMovingUpAvailable = false;
     bool m_isMovingDownAvailable = false;

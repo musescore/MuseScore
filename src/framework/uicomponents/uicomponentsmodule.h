@@ -17,14 +17,13 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_FRAMEWORK_UICOMPONENTSMODULE_H
-#define MU_FRAMEWORK_UICOMPONENTSMODULE_H
+#ifndef MU_UICOMPONENTS_UICOMPONENTSMODULE_H
+#define MU_UICOMPONENTS_UICOMPONENTSMODULE_H
 
 #include "framework/global/modularity/imodulesetup.h"
 
-namespace mu {
-namespace framework {
-class UiComponentsModule : public IModuleSetup
+namespace mu::uicomponents {
+class UiComponentsModule : public framework::IModuleSetup
 {
 public:
 
@@ -34,6 +33,5 @@ public:
     void registerUiTypes() override;
 };
 }
-}
 
-#endif // MU_FRAMEWORK_UICOMPONENTSMODULE_H
+#endif // MU_UICOMPONENTS_UICOMPONENTSMODULE_H

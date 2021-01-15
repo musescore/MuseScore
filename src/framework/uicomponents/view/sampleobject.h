@@ -1,10 +1,9 @@
-#ifndef MU_FRAMEWORK_SAMPLEOBJECT_H
-#define MU_FRAMEWORK_SAMPLEOBJECT_H
+#ifndef MU_UICOMPONENTS_SAMPLEOBJECT_H
+#define MU_UICOMPONENTS_SAMPLEOBJECT_H
 
 #include <QObject>
 
-namespace mu {
-namespace framework {
+namespace mu::uicomponents {
 class SampleObject : public QObject
 {
     Q_OBJECT
@@ -30,9 +29,8 @@ signals:
 
 private:
 
-    State _state = First;
+    State m_state = First;
 };
 }
-}
 
-#endif // MU_FRAMEWORK_SAMPLEOBJECT_H
+#endif // MU_UICOMPONENTS_SAMPLEOBJECT_H
