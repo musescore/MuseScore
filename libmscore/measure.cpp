@@ -2908,8 +2908,10 @@ bool Measure::isCutawayClef(int staffIdx) const
             return false;
       for (int track = strack; track < etrack; ++track) {
             Element* e = s->element(track);
-            if (e && e->isClef() && (nextMeasure()->system() == system() || toClef(e)->showCourtesy()))
-                return true;
+            if (!e || !e->isClef())
+                  continue;
+            if ((nextMeasure() && (nextMeasure()->system() == system())) || toClef(e)->showCourtesy())
+                  return true;
             }            
       return false;
       }
