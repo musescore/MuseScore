@@ -3954,17 +3954,22 @@ void ExportMusicXml::tempoText(TempoText const* const text, int staff)
              qPrintable(text->xmlText()));
       */
       _attr.doAttr(_xml, false);
-      _xml.stag(QString("direction placement=\"%1\"").arg((text->placement() ==Placement::BELOW ) ? "below" : "above"));
-      wordsMetrome(_xml, _score, text, offset);
+      if (text->visible()) {
+            _xml.stag(QString("direction placement=\"%1\"").arg((text->placement() ==Placement::BELOW ) ? "below" : "above"));
+            wordsMetrome(_xml, _score, text, offset);
 
-      if (staff)
-            _xml.tag("staff", staff);
+            if (staff)
+                  _xml.tag("staff", staff);
+            }
+
       // Format tempo with maximum 2 decimal places, because in some MuseScore files tempo is stored
       // imprecisely and this could cause rounding errors (e.g. 92 BPM would be saved as 91.9998).
       qreal bpm = text->tempo() * 60.0;
       qreal bpmRounded = round(bpm * 100) / 100;
       _xml.tagE(QString("sound tempo=\"%1\"").arg(QString::number(bpmRounded)));
-      _xml.etag();
+
+      if (text->visible())
+            _xml.etag();
       }
 
 //---------------------------------------------------------
