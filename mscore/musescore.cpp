@@ -2669,6 +2669,9 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       else
             cs = 0;
 
+      updateWindowTitle(cs);
+      setWindowModified(cs ? cs->dirty() : false);
+
       if (ScriptRecorder* rec = getScriptRecorder())
             rec->recordCurrentScoreChange();
 
@@ -2703,7 +2706,6 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
             }
 #endif
       if (!cs) {
-            setWindowTitle(MUSESCORE_NAME_VERSION);
             if (_navigator && _navigator->widget()) {
                   navigator()->setScoreView(cv);
                   }
@@ -2749,16 +2751,10 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       getAction("fotomode")->setChecked(cv->fotoMode());
       getAction("join-measures")->setEnabled(cs->masterScore()->excerpts().size() == 0);
       getAction("split-measure")->setEnabled(cs->masterScore()->excerpts().size() == 0);
+      getAction("concert-pitch")->setChecked(cs->styleB(Sid::concertPitch));
       updateUndoRedo();
 
       setZoom(cv->zoomIndex(), cv->logicalZoomLevel());
-
-      updateWindowTitle(cs);
-      setWindowModified(cs->dirty());
-
-      QAction* a = getAction("concert-pitch");
-      a->setChecked(cs->styleB(Sid::concertPitch));
-
       setPos(cs->inputPos());
       //showMessage(cs->filePath(), 2000);
       if (_navigator && _navigator->widget()) {
@@ -6952,20 +6948,24 @@ void MuseScore::restoreGeometry(QWidget *const qw)
 
 void MuseScore::updateWindowTitle(Score* score)
       {
-#ifdef Q_OS_MAC
-      if (!cs->isMaster())
-            setWindowTitle(cs->masterScore()->title() + "-" + cs->title());
+      if (!score) {
+            setWindowTitle(MUSESCORE_NAME_VERSION);
+            setWindowFilePath(QString());
+            return;
+            }
+      QString scoreTitle;
+      if (score->isMaster())
+            scoreTitle = score->title();
       else
-            setWindowTitle(cs->title());
+            scoreTitle = score->masterScore()->title() + "-" + score->title();
+#ifdef Q_OS_MAC
+      setWindowTitle(scoreTitle);
       if (score->masterScore()->created())
             setWindowFilePath(QString());
       else
             setWindowFilePath(score->masterScore()->fileInfo()->absoluteFilePath());
 #else
-      if (!cs->isMaster())
-            setWindowTitle(MUSESCORE_NAME_VERSION ": " + cs->masterScore()->title() + "-" + cs->title() + "[*]");
-      else
-            setWindowTitle(MUSESCORE_NAME_VERSION ": " + score->title() + "[*]");
+      setWindowTitle(MUSESCORE_NAME_VERSION ": " + scoreTitle + "[*]");
 #endif
       }
 
