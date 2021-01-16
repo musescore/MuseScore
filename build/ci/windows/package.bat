@@ -47,7 +47,7 @@ IF %BUILD_WIN_PORTABLE% == ON (
 
 :: Setup package type
 IF %BUILD_WIN_PORTABLE% == ON    ( SET PACKAGE_TYPE="portable") ELSE (
-IF %BUILD_MODE% == devel_build   ( SET PACKAGE_TYPE="7z") ELSE (
+IF %BUILD_MODE% == devel_build   ( SET PACKAGE_TYPE="msi") ELSE (
 IF %BUILD_MODE% == nightly_build ( SET PACKAGE_TYPE="7z") ELSE (
 IF %BUILD_MODE% == testing_build ( SET PACKAGE_TYPE="msi") ELSE (    
 IF %BUILD_MODE% == stable_build  ( SET PACKAGE_TYPE="msi") ELSE ( 
