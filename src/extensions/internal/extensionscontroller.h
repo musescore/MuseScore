@@ -33,7 +33,7 @@ class ExtensionsController : public IExtensionsController, public async::Asyncab
 {
     INJECT(extensions, IExtensionsConfiguration, configuration)
     INJECT(extensions, IExtensionUnpacker, extensionUnpacker)
-    INJECT(extensions, framework::IFileSystem, fileSystem)
+    INJECT(extensions, system::IFileSystem, fileSystem)
     INJECT(extensions, network::INetworkManagerCreator, networkManagerCreator)
 
 public:

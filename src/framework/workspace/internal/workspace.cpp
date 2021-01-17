@@ -30,7 +30,7 @@
 
 using namespace mu;
 using namespace mu::workspace;
-using namespace mu::framework;
+using namespace mu::system;
 
 #define MSC_VERSION "3.01" // FIXME
 

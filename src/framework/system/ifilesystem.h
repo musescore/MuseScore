@@ -16,14 +16,14 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_IFILESYSTEM_H
-#define MU_FRAMEWORK_IFILESYSTEM_H
+#ifndef MU_SYSTEM_IFILESYSTEM_H
+#define MU_SYSTEM_IFILESYSTEM_H
 
 #include "modularity/imoduleexport.h"
 #include "retval.h"
 #include "io/path.h"
 
-namespace mu::framework {
+namespace mu::system {
 class IFileSystem : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IFileSystem)
@@ -48,4 +48,4 @@ public:
 };
 }
 
-#endif // MU_FRAMEWORK_IFILESYSTEM_H
+#endif // MU_SYSTEM_IFILESYSTEM_H

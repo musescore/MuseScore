@@ -38,7 +38,7 @@ class LanguagesController : public ILanguagesController, public async::Asyncable
     INJECT(languages, ILanguageUnpacker, languageUnpacker)
     INJECT(languages, framework::IGlobalConfiguration, globalConfiguration)
     INJECT(languages, network::INetworkManagerCreator, networkManagerCreator)
-    INJECT(languages, framework::IFileSystem, fileSystem)
+    INJECT(languages, system::IFileSystem, fileSystem)
 
 public:
     void init();

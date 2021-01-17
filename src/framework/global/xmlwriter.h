@@ -32,7 +32,7 @@ class XmlWriter
 {
 public:
     XmlWriter(const io::path& path);
-    XmlWriter(IODevice* device);
+    XmlWriter(system::IODevice* device);
     ~XmlWriter();
 
     void writeStartDocument(std::string_view version = std::string_view());
@@ -48,9 +48,9 @@ public:
     bool success() const;
 
 private:
-    void initWriter(IODevice* device);
+    void initWriter(system::IODevice* device);
 
-    std::unique_ptr<IODevice> m_device;
+    std::unique_ptr<system::IODevice> m_device;
     std::unique_ptr<QXmlStreamWriter> m_writer;
 };
 }

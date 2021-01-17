@@ -25,7 +25,7 @@
 #include "systemerrors.h"
 
 using namespace mu;
-using namespace mu::framework;
+using namespace mu::system;
 
 Ret FileSystem::exists(const io::path& path) const
 {

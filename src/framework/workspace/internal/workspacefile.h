@@ -29,7 +29,7 @@ class QByteArray;
 namespace mu::workspace {
 class WorkspaceFile
 {
-    INJECT(workspace, framework::IFileSystem, fileSystem)
+    INJECT(workspace, system::IFileSystem, fileSystem)
 
 public:
     WorkspaceFile(const io::path& filePath);

@@ -27,7 +27,7 @@
 #include <QPainter>
 
 using namespace mu::importexport;
-using namespace mu::framework;
+using namespace mu::system;
 using namespace Ms;
 
 mu::Ret PdfWriter::write(const notation::INotationPtr notation, IODevice& destinationDevice, const Options&)

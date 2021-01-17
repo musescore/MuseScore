@@ -16,13 +16,13 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_IODEVICE_H
-#define MU_FRAMEWORK_IODEVICE_H
+#ifndef MU_SYSTEM_IODEVICE_H
+#define MU_SYSTEM_IODEVICE_H
 
 #include <QIODevice>
 
-namespace mu::framework {
+namespace mu::system {
 using IODevice = QIODevice;
 }
 
-#endif // MU_FRAMEWORK_IODEVICE_H
+#endif // MU_SYSTEM_IODEVICE_H

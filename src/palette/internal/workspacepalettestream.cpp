@@ -26,7 +26,7 @@
 
 using namespace mu::palette;
 using namespace mu::workspace;
-using namespace mu::framework;
+using namespace mu::system;
 
 static const QString PALETTE_TAG("PaletteBox");
 
