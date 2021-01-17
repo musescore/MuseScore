@@ -33,7 +33,7 @@ namespace plugins {
 class PluginsService : public IPluginsService, public async::Asyncable
 {
     INJECT(plugins, IPluginsConfiguration, configuration)
-    INJECT(plugins, framework::IFileSystem, fileSystem)
+    INJECT(plugins, system::IFileSystem, fileSystem)
 
 public:
     mu::RetVal<PluginInfoList> plugins(PluginsStatus status = PluginsStatus::All) const override;

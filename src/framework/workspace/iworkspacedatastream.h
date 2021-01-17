@@ -30,8 +30,8 @@ class IWorkspaceDataStream
 public:
     virtual ~IWorkspaceDataStream() = default;
 
-    virtual AbstractDataPtrList read(framework::IODevice& sourceDevice) const = 0;
-    virtual void write(const AbstractDataPtrList& dataList, framework::IODevice& destinationDevice) const = 0;
+    virtual AbstractDataPtrList read(system::IODevice& sourceDevice) const = 0;
+    virtual void write(const AbstractDataPtrList& dataList, system::IODevice& destinationDevice) const = 0;
 
     virtual WorkspaceTag tag() const = 0;
 };

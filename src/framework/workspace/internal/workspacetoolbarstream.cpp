@@ -27,6 +27,7 @@
 
 using namespace mu::workspace;
 using namespace mu::framework;
+using namespace mu::system;
 
 static constexpr std::string_view TOOLBAR_TAG("Toolbar");
 static constexpr std::string_view ACTION_TAG("action");

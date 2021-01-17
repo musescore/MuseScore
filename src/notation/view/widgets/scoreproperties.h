@@ -47,7 +47,7 @@ class ScorePropertiesDialog : public QDialog, public Ui::ScorePropertiesDialog
 
     INJECT(notation, framework::IInteractive, interactive)
     INJECT(notation, context::IGlobalContext, context)
-    INJECT(notation, framework::IFileSystem, fileSystem)
+    INJECT(notation, system::IFileSystem, fileSystem)
 
     bool m_dirty = false;     /// whether the editor has unsaved changes or not
 

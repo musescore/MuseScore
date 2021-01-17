@@ -34,7 +34,7 @@ namespace mu {
 namespace instruments {
 class InstrumentsReader : public IInstrumentsReader
 {
-    INJECT(instruments, framework::IFileSystem, fileSystem)
+    INJECT(instruments, system::IFileSystem, fileSystem)
 
 public:
     RetVal<InstrumentsMeta> readMeta(const io::path& path) const override;

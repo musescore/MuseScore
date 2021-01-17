@@ -32,7 +32,7 @@ class WorkspaceManager : public IWorkspaceManager, async::Asyncable
 {
     INJECT(workspace, IWorkspaceConfiguration, configuration)
     INJECT(workspace, extensions::IExtensionsController, extensionsController)
-    INJECT(workspaces, framework::IFileSystem, fileSystem)
+    INJECT(workspace, system::IFileSystem, fileSystem)
 
 public:
     void init();

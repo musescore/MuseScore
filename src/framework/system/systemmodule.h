@@ -16,20 +16,18 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_SYSTEMMODULE_H
-#define MU_FRAMEWORK_SYSTEMMODULE_H
+#ifndef MU_SYSTEM_SYSTEMMODULE_H
+#define MU_SYSTEM_SYSTEMMODULE_H
 
 #include "modularity/imodulesetup.h"
 
-namespace mu {
-namespace framework {
-class SystemModule : public IModuleSetup
+namespace mu::system {
+class SystemModule : public framework::IModuleSetup
 {
 public:
     std::string moduleName() const override;
     void registerExports() override;
 };
 }
-}
 
-#endif // MU_FRAMEWORK_SYSTEMMODULE_H
+#endif // MU_SYSTEM_SYSTEMMODULE_H

@@ -33,7 +33,7 @@ class TemplatesRepository : public ITemplatesRepository
 {
     INJECT(userscores, IUserScoresConfiguration, configuration)
     INJECT(userscores, notation::IMsczMetaReader, msczReader)
-    INJECT(userscores, framework::IFileSystem, fileSystem)
+    INJECT(userscores, system::IFileSystem, fileSystem)
 
 public:
     RetVal<Templates> templates() const override;

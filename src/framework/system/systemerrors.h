@@ -16,14 +16,13 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_SYSTEMERRORS_H
-#define MU_FRAMEWORK_SYSTEMERRORS_H
+#ifndef MU_SYSTEM_SYSTEMERRORS_H
+#define MU_SYSTEM_SYSTEMERRORS_H
 
 #include "ret.h"
 #include "translation.h"
 
-namespace mu {
-namespace framework {
+namespace mu::system {
 enum class Err {
     Undefined       = int(Ret::Code::Undefined),
     NoError         = int(Ret::Code::Ok),
@@ -52,6 +51,5 @@ inline Ret make_ret(Err e)
     return Ret(static_cast<int>(e));
 }
 }
-}
 
-#endif // MU_FRAMEWORK_SYSTEMERRORS_H
+#endif // MU_SYSTEM_SYSTEMERRORS_H

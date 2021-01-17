@@ -16,15 +16,14 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_FILESYSTEMMOCK_H
-#define MU_FRAMEWORK_FILESYSTEMMOCK_H
+#ifndef MU_SYSTEM_FILESYSTEMMOCK_H
+#define MU_SYSTEM_FILESYSTEMMOCK_H
 
 #include <gmock/gmock.h>
 
 #include "framework/system/ifilesystem.h"
 
-namespace mu {
-namespace framework {
+namespace mu::system {
 class FileSystemMock : public IFileSystem
 {
 public:
@@ -38,6 +37,5 @@ public:
     MOCK_METHOD(RetVal<io::paths>, scanFiles, (const io::path&, const QStringList&, ScanMode), (const, override));
 };
 }
-}
 
-#endif // MU_FRAMEWORK_FILESYSTEMMOCK_H
+#endif // MU_SYSTEM_FILESYSTEMMOCK_H

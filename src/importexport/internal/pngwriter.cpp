@@ -30,7 +30,7 @@
 #include <QPainter>
 
 using namespace mu::importexport;
-using namespace mu::framework;
+using namespace mu::system;
 
 mu::Ret PngWriter::write(const notation::INotationPtr notation, IODevice& destinationDevice, const Options& options)
 {

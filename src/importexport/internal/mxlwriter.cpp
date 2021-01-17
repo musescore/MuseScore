@@ -24,7 +24,7 @@
 #include "musicxml/exportxml.h"
 
 using namespace mu::importexport;
-using namespace mu::framework;
+using namespace mu::system;
 
 mu::Ret MxlWriter::write(const notation::INotationPtr notation, IODevice& destinationDevice, const Options&)
 {

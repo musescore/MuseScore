@@ -33,7 +33,7 @@ class XmlReader
 {
 public:
     XmlReader(const io::path& path);
-    XmlReader(IODevice* device);
+    XmlReader(system::IODevice* device);
     XmlReader(const QByteArray& bytes);
     ~XmlReader();
 
@@ -77,7 +77,7 @@ private:
     QString readElementText(ReadStringBehavior behavior = ErrorOnUnexpectedElement);
     QStringRef attributeValue(std::string_view name) const;
 
-    std::unique_ptr<IODevice> m_device;
+    std::unique_ptr<system::IODevice> m_device;
     std::unique_ptr<QXmlStreamReader> m_reader;
 };
 }
