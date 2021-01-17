@@ -23,8 +23,6 @@ using namespace mu::vst;
 using namespace Steinberg;
 using namespace Steinberg::Vst;
 
-PluginParameter::PluginParameter()  = default;
-
 PluginParameter::PluginParameter(ParameterInfo info)
     : m_info(info)
 {

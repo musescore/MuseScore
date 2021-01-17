@@ -71,7 +71,8 @@ private:
     unsigned int m_sampleRate = 1;
 
     async::Channel<time_t> m_timeChanged;
-    std::list<syncCallback> m_beforeCallbacks = {}, m_afterCallbacks = {};
+    std::list<syncCallback> m_beforeCallbacks = {};
+    std::list<syncCallback> m_afterCallbacks = {};
 };
 }
 

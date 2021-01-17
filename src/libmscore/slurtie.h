@@ -110,8 +110,8 @@ public:
     virtual bool isEditable() const override { return true; }
 
     void setSlurOffset(Grip i, const QPointF& val) { _ups[int(i)].off = val; }
-    const struct UP& ups(Grip i) const { return _ups[int(i)]; }
-    struct UP& ups(Grip i) { return _ups[int(i)]; }
+    const UP& ups(Grip i) const { return _ups[int(i)]; }
+    UP& ups(Grip i) { return _ups[int(i)]; }
     virtual Shape shape() const override { return _shape; }
 
     Element::EditBehavior normalModeEditBehavior() const override { return Element::EditBehavior::Edit; }

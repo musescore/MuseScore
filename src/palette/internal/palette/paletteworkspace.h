@@ -224,7 +224,7 @@ class PaletteWorkspace : public QObject
     Q_PROPERTY(
         Ms::AbstractPaletteController* customElementsPaletteController READ getCustomElementsPaletteController CONSTANT)
 
-    QAbstractItemModel * mainPaletteModel();
+    QAbstractItemModel* mainPaletteModel();
     AbstractPaletteController* getMainPaletteController();
 
     FilterPaletteTreeModel* customElementsPaletteModel();

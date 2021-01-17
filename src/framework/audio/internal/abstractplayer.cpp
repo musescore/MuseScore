@@ -20,8 +20,6 @@
 
 using namespace mu::audio;
 
-AbstractPlayer::~AbstractPlayer() = default;
-
 IPlayer::Status AbstractPlayer::status() const
 {
     return m_status;
