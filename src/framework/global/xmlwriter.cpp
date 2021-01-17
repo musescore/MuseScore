@@ -23,6 +23,7 @@
 #include <QFile>
 
 using namespace mu::framework;
+using namespace mu::system;
 
 XmlWriter::XmlWriter(const io::path& path)
 {

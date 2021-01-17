@@ -25,8 +25,7 @@
 #include "../imidioutport.h"
 #include "async/asyncable.h"
 
-namespace mu {
-namespace midi {
+namespace mu::midi {
 class MidiPortDataSender : public IMidiPortDataSender, public async::Asyncable
 {
     INJECT(midi, IMidiOutPort, midiOutPort)
@@ -46,7 +45,6 @@ private:
     bool m_isStreamConnected = false;
     MidiData m_midiData;
 };
-}
 }
 
 #endif // MU_MIDI_MIDIPORTDATASENDER_H

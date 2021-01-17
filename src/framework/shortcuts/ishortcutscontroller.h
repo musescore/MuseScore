@@ -24,8 +24,7 @@
 #include "modularity/imoduleexport.h"
 #include "shortcutstypes.h"
 
-namespace mu {
-namespace shortcuts {
+namespace mu::shortcuts {
 class IShortcutsController : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IShortcutsController)
@@ -35,7 +34,6 @@ public:
 
     virtual void activate(const std::string& sequence) = 0;
 };
-}
 }
 
 #endif // MU_SHORTCUTS_ISHORTCUTSCONTROLLER_H

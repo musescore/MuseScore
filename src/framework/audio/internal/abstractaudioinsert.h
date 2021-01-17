@@ -21,8 +21,7 @@
 
 #include <iaudioinsert.h>
 
-namespace mu {
-namespace audio {
+namespace mu::audio {
 class AbstractAudioInsert : public IAudioInsert
 {
 public:
@@ -36,7 +35,6 @@ protected:
     unsigned int m_sampleRate = 1;
     bool m_active = false;
 };
-}
 }
 
 #endif // MU_AUDIO_ABSTRACTAUDIOINSERT_H

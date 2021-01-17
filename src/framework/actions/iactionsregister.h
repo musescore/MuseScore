@@ -23,8 +23,7 @@
 #include "modularity/imoduleexport.h"
 #include "imoduleactions.h"
 
-namespace mu {
-namespace actions {
+namespace mu::actions {
 class IActionsRegister : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IActionsRegister)
@@ -36,7 +35,6 @@ public:
 
     virtual const ActionItem& action(const ActionCode& actionCode) const = 0;
 };
-}
 }
 
 #endif // MU_ACTIONS_IACTIONSREGISTER_H

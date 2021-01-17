@@ -25,6 +25,7 @@
 
 using namespace mu::inspector;
 using namespace mu::framework;
+using namespace mu::ui;
 
 GridCanvas::GridCanvas(QQuickItem* parent)
     : QQuickPaintedItem(parent)

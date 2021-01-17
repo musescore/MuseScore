@@ -30,8 +30,7 @@
 #include "system/ifilesystem.h"
 #include "async/asyncable.h"
 
-namespace mu {
-namespace midi {
+namespace mu::midi {
 class SoundFontsProvider : public ISoundFontsProvider, public async::Asyncable
 {
     INJECT(midi, IMidiConfiguration, configuration)
@@ -49,7 +48,6 @@ private:
 
     mutable std::map<SynthName, async::Notification > m_soundFontPathsForSynthChangedMap;
 };
-}
 }
 
 #endif // MU_MIDI_SOUNDFONTSPROVIDER_H

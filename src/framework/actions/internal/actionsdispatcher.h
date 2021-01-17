@@ -23,8 +23,7 @@
 
 #include "../iactionsdispatcher.h"
 
-namespace mu {
-namespace actions {
+namespace mu::actions {
 class ActionsDispatcher : public IActionsDispatcher
 {
 public:
@@ -44,7 +43,6 @@ private:
 
     std::map<ActionCode, Clients > m_clients;
 };
-}
 }
 
 #endif // MU_ACTIONS_ACTIONSDISPATCHER_H

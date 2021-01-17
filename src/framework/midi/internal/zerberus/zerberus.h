@@ -22,8 +22,7 @@
 
 #include "voice.h"
 
-namespace mu {
-namespace zerberus {
+namespace mu::zerberus {
 class Channel;
 class ZInstrument;
 enum class Trigger : char;
@@ -132,7 +131,6 @@ public:
     void allSoundsOff(int channel);
     void allNotesOff(int channel);
 };
-}
 }
 
 #endif //MU_ZERBERUS_ZERBERUS_H

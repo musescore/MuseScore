@@ -26,8 +26,7 @@
 #include "miditypes.h"
 #include "async/notification.h"
 
-namespace mu {
-namespace midi {
+namespace mu::midi {
 class IMidiConfiguration : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IMidiConfiguration)
@@ -41,7 +40,6 @@ public:
     virtual async::Notification synthesizerStateChanged() const = 0;
     virtual async::Notification synthesizerStateGroupChanged(const std::string& gname) const = 0;
 };
-}
 }
 
 #endif // MU_MIDI_IMIDICONFIGURATION_H

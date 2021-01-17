@@ -13,8 +13,7 @@
 #ifndef MU_ZERBERUS_MFILTER_H
 #define MU_ZERBERUS_MFILTER_H
 
-namespace mu {
-namespace zerberus {
+namespace mu::zerberus {
 struct Zone;
 class Zerberus;
 
@@ -74,7 +73,6 @@ private:
     float a2_incr = 0.f;
     int filter_coeff_incr_count = 0;
 };
-}
 }
 
 #endif //MU_ZERBERUS_MFILTER_H

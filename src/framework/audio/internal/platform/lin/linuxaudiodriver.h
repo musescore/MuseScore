@@ -22,8 +22,7 @@
 
 #include "iaudiodriver.h"
 
-namespace mu {
-namespace audio {
+namespace mu::audio {
 class LinuxAudioDriver : public IAudioDriver
 {
 public:
@@ -41,7 +40,6 @@ public:
     void resume() override;
     void suspend() override;
 };
-}
 }
 
 #endif // MU_AUDIO_LINUXAUDIODRIVER_H

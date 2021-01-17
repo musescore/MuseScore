@@ -26,8 +26,7 @@
 #include "miditypes.h"
 #include "ret.h"
 
-namespace mu {
-namespace midi {
+namespace mu::midi {
 class IMidiOutPort : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IMidiPort)
@@ -44,7 +43,6 @@ public:
 
     virtual Ret sendEvent(const Event& e) = 0;
 };
-}
 }
 
 #endif // MU_MIDI_IMIDIPORT_H

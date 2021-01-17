@@ -22,8 +22,7 @@
 #include "modularity/imoduleexport.h"
 #include "rpctypes.h"
 
-namespace mu {
-namespace rpc {
+namespace mu::rpc {
 class IRPCClient : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IRPCClient)
@@ -32,7 +31,6 @@ public:
     virtual ~IRPCClient() = default;
     virtual void send(const Message& message) = 0;
 };
-}
 }
 
 #endif // MU_RPC_IRPCCLIENT_H

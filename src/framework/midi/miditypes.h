@@ -31,8 +31,7 @@
 #include "async/channel.h"
 #include "midievent.h"
 
-namespace mu {
-namespace midi {
+namespace mu::midi {
 static const unsigned int AUDIO_CHANNELS = 2;
 
 using track_t = unsigned int;
@@ -184,7 +183,6 @@ struct MidiDevice {
     MidiDeviceID id;
     std::string name;
 };
-}
 }
 
 #endif // MU_MIDI_MIDITYPES_H
