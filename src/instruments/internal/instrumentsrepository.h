@@ -39,7 +39,7 @@ namespace instruments {
 class InstrumentsRepository : public IInstrumentsRepository, public async::Asyncable
 {
     INJECT(instruments, IInstrumentsConfiguration, configuration)
-    INJECT(instruments, framework::IFileSystem, fileSystem)
+    INJECT(instruments, system::IFileSystem, fileSystem)
     INJECT(instruments, IInstrumentsReader, reader)
     INJECT(instruments, extensions::IExtensionsController, extensionsController)
 

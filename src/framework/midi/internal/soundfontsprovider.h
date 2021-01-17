@@ -36,7 +36,7 @@ class SoundFontsProvider : public ISoundFontsProvider, public async::Asyncable
 {
     INJECT(midi, IMidiConfiguration, configuration)
     INJECT(midi, ISynthesizersRegister, synthRegister)
-    INJECT(midi, framework::IFileSystem, fileSystem)
+    INJECT(midi, system::IFileSystem, fileSystem)
 
 public:
 

@@ -23,6 +23,7 @@
 #include <QFile>
 
 using namespace mu::framework;
+using namespace mu::system;
 
 static XmlReader::TokenType convertTokenType(QXmlStreamReader::TokenType type)
 {

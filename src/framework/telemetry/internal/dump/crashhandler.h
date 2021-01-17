@@ -33,7 +33,7 @@ class CrashpadClient;
 namespace mu::telemetry {
 class CrashHandler
 {
-    INJECT(telemetry, framework::IFileSystem, fileSystem)
+    INJECT(telemetry, system::IFileSystem, fileSystem)
 
 public:
     CrashHandler() = default;

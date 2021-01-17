@@ -32,11 +32,11 @@ class INetworkManager
 public:
     virtual ~INetworkManager() = default;
 
-    virtual Ret get(const QUrl& url, framework::IODevice* incommingData) = 0;
+    virtual Ret get(const QUrl& url, system::IODevice* incommingData) = 0;
     virtual Ret head(const QUrl& url) = 0;
-    virtual Ret post(const QUrl& url, framework::IODevice* outgoingData, framework::IODevice* incommingData) = 0;
-    virtual Ret put(const QUrl& url, framework::IODevice* outgoingData, framework::IODevice* incommingData) = 0;
-    virtual Ret del(const QUrl& url, framework::IODevice* incommingData) = 0;
+    virtual Ret post(const QUrl& url, system::IODevice* outgoingData, system::IODevice* incommingData) = 0;
+    virtual Ret put(const QUrl& url, system::IODevice* outgoingData, system::IODevice* incommingData) = 0;
+    virtual Ret del(const QUrl& url, system::IODevice* incommingData) = 0;
 
     virtual framework::ProgressChannel progressChannel() const = 0;
 

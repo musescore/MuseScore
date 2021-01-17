@@ -29,7 +29,7 @@ namespace languages {
 class LanguagesConfiguration : public ILanguagesConfiguration
 {
     INJECT(languages, framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(languages, framework::IFileSystem, fileSystem)
+    INJECT(languages, system::IFileSystem, fileSystem)
 
 public:
     void init();

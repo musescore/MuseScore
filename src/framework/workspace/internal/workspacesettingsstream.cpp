@@ -27,6 +27,7 @@
 
 using namespace mu::workspace;
 using namespace mu::framework;
+using namespace mu::system;
 
 static constexpr std::string_view SETTINGS_TAG("Preferences");
 static constexpr std::string_view SETTING_ELEMENT_TAG("Preference");

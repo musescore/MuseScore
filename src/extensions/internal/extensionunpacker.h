@@ -32,7 +32,7 @@ namespace mu {
 namespace extensions {
 class ExtensionUnpacker : public IExtensionUnpacker
 {
-    INJECT(extensions, framework::IFileSystem, fileSystem)
+    INJECT(extensions, system::IFileSystem, fileSystem)
 
 public:
 

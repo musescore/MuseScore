@@ -30,7 +30,7 @@
 #include "global/xmlwriter.h"
 
 using namespace mu::workspace;
-using namespace mu::framework;
+using namespace mu::system;
 
 static const QString WS_CONTAINTER_XML_PATH("META-INF/container.xml");
 

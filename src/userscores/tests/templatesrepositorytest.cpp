@@ -31,7 +31,7 @@ using ::testing::Return;
 using namespace mu;
 using namespace mu::notation;
 using namespace mu::userscores;
-using namespace mu::framework;
+using namespace mu::system;
 
 class TemplatesRepositoryTest : public ::testing::Test
 {

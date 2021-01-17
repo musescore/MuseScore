@@ -16,12 +16,12 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_FILESYSTEM_H
-#define MU_FRAMEWORK_FILESYSTEM_H
+#ifndef MU_SYSTEM_FILESYSTEM_H
+#define MU_SYSTEM_FILESYSTEM_H
 
 #include "../ifilesystem.h"
 
-namespace mu::framework {
+namespace mu::system {
 class FileSystem : public IFileSystem
 {
 public:
@@ -41,4 +41,4 @@ private:
 };
 }
 
-#endif // MU_FRAMEWORK_FILESYSTEM_H
+#endif // MU_SYSTEM_FILESYSTEM_H

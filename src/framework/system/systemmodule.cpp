@@ -21,7 +21,7 @@
 #include "modularity/ioc.h"
 #include "internal/filesystem.h"
 
-using namespace mu::framework;
+using namespace mu::system;
 
 std::string SystemModule::moduleName() const
 {

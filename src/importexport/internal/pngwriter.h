@@ -31,7 +31,7 @@ class PngWriter : public notation::AbstractNotationWriter
     INJECT(importexport, IImportexportConfiguration, configuration)
 
 public:
-    Ret write(const notation::INotationPtr notation, framework::IODevice& destinationDevice, const Options& options = Options()) override;
+    Ret write(const notation::INotationPtr notation, system::IODevice& destinationDevice, const Options& options = Options()) override;
 };
 }
 

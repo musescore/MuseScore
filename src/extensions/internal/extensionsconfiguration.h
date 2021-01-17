@@ -29,7 +29,7 @@ namespace extensions {
 class ExtensionsConfiguration : public IExtensionsConfiguration
 {
     INJECT(extensions, framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(extensions, framework::IFileSystem, fileSystem)
+    INJECT(extensions, system::IFileSystem, fileSystem)
 
 public:
     void init();
