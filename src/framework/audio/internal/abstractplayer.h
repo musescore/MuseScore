@@ -25,7 +25,7 @@ namespace mu::audio {
 class AbstractPlayer : public virtual IPlayer
 {
 public:
-    virtual ~AbstractPlayer();
+    virtual ~AbstractPlayer() = default;
 
     Status status() const override;
     async::Channel<Status> statusChanged() const override;

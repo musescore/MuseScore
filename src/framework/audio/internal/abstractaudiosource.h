@@ -25,7 +25,7 @@ namespace mu::audio {
 class AbstractAudioSource : public virtual IAudioSource
 {
 public:
-    virtual ~AbstractAudioSource();
+    virtual ~AbstractAudioSource() = default;
 
     virtual void setSampleRate(unsigned int sampleRate) override;
 

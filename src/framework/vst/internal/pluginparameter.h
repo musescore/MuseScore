@@ -23,12 +23,11 @@
 #include <string>
 #include "pluginterfaces/vst/ivsteditcontroller.h"
 
-namespace mu {
-namespace vst {
+namespace mu::vst {
 class PluginParameter
 {
 public:
-    PluginParameter();
+    PluginParameter() = default;
     PluginParameter(Steinberg::Vst::ParameterInfo info);
     PluginParameter(Steinberg::Vst::ParameterInfo&& info);
 
@@ -61,5 +60,5 @@ private:
     Steinberg::Vst::ParameterInfo m_info;
 };
 }
-}
+
 #endif // MU_VST_PLUGINPARAMETER_H
