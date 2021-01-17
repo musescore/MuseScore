@@ -28,15 +28,13 @@ using namespace mu::audio;
 //TODO: add other setting: audio device etc
 static const Settings::Key AUDIO_BUFFER_SIZE("audio", "driver_buffer");
 
-AudioConfiguration::AudioConfiguration() = default;
-
 void AudioConfiguration::init()
 {
-    int defaultBufferSize =
+    int defaultBufferSize = 0;
 #ifdef Q_OS_WASM
-        8192;
+    defaultBufferSize = 8192;
 #else
-        1024;
+    defaultBufferSize = 1024;
 #endif
     settings()->setDefaultValue(AUDIO_BUFFER_SIZE, Val(defaultBufferSize));
 }

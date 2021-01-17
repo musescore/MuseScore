@@ -25,7 +25,7 @@ namespace mu::audio {
 class AbstractAudioInsert : public IAudioInsert
 {
 public:
-    virtual ~AbstractAudioInsert();
+    virtual ~AbstractAudioInsert() = default;
 
     virtual void setSampleRate(unsigned int sampleRate) override;
     virtual bool active() const override;

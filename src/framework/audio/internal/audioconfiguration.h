@@ -23,7 +23,8 @@ namespace mu::audio {
 class AudioConfiguration
 {
 public:
-    AudioConfiguration();
+    AudioConfiguration() = default;
+
     void init();
     unsigned int driverBufferSize() const;
 };

@@ -20,8 +20,6 @@
 
 using namespace mu::audio;
 
-AbstractAudioInsert::~AbstractAudioInsert() = default;
-
 void AbstractAudioInsert::setSampleRate(unsigned int sampleRate)
 {
     m_sampleRate = sampleRate;
