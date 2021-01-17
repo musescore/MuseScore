@@ -23,8 +23,7 @@
 #include "midi/miditypes.h"
 #include "ret.h"
 
-namespace mu {
-namespace shortcuts {
+namespace mu::shortcuts {
 class IMidiRemote : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IMidiRemote)
@@ -62,7 +61,6 @@ public:
     // Process
     virtual Ret process(const midi::Event& ev) = 0;
 };
-}
 }
 
 #endif // MU_SHORTCUTS_IMIDIREMOTE_H

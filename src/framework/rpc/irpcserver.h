@@ -23,8 +23,7 @@
 #include "irpctarget.h"
 #include "rpctypes.h"
 
-namespace mu {
-namespace rpc {
+namespace mu::rpc {
 class IRPCServer : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IServer)
@@ -36,7 +35,6 @@ public:
     virtual void addCall(Message message) = 0;
     virtual void invoke() = 0;
 };
-} // namespace rpc
-} // namespace mu
+}
 
 #endif // MU_RPC_IRPCSERVER_H

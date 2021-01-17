@@ -24,8 +24,7 @@
 
 #include "imidiinport.h"
 
-namespace mu {
-namespace midi {
+namespace mu::midi {
 class AlsaMidiInPort : public IMidiInPort
 {
 public:
@@ -56,7 +55,6 @@ private:
     std::atomic<bool> m_running{ false };
     async::Channel<std::pair<tick_t, Event> > m_eventReceived;
 };
-}
 }
 
 #endif // MU_MIDI_ALSAMIDIINPORT_H

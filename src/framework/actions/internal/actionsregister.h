@@ -22,8 +22,7 @@
 #include <vector>
 #include "../iactionsregister.h"
 
-namespace mu {
-namespace actions {
+namespace mu::actions {
 class ActionsRegister : public IActionsRegister
 {
 public:
@@ -36,7 +35,6 @@ private:
 
     std::vector<std::shared_ptr<IModuleActions> > m_modules;
 };
-}
 }
 
 #endif // MU_ACTIONS_ACTIONSREGISTER_H

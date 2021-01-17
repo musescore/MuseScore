@@ -23,8 +23,7 @@
 #include "irpcserver.h"
 #include "modularity/ioc.h"
 
-namespace mu {
-namespace rpc {
+namespace mu::rpc {
 class Client : public IRPCClient
 {
     INJECT(rpc, rpc::IRPCServer, rpcServer)
@@ -33,7 +32,6 @@ public:
     Client();
     void send(const Message& message) override;
 };
-} // namespace rpc
-} // namespace mu
+}
 
 #endif // MU_RPC_RPCCLIENT_H

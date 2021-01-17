@@ -25,8 +25,7 @@
 #include "modularity/imoduleexport.h"
 #include "isynthesizer.h"
 
-namespace mu {
-namespace midi {
+namespace mu::midi {
 class ISynthesizersRegister : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(ISynthesizersRegister)
@@ -40,7 +39,6 @@ public:
     virtual void setDefaultSynthesizer(const SynthName& name) = 0;
     virtual std::shared_ptr<ISynthesizer> defaultSynthesizer() const = 0;
 };
-}
 }
 
 #endif // MU_MIDI_ISYNTHESIZERSREGISTER_H

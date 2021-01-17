@@ -26,8 +26,7 @@
 #include "actions/iactionsdispatcher.h"
 #include "actions/iactionsregister.h"
 
-namespace mu {
-namespace shortcuts {
+namespace mu::shortcuts {
 class ShortcutsController : public IShortcutsController
 {
     INJECT(shortcuts, IShortcutsRegister, shortcutsRegister)
@@ -40,7 +39,6 @@ public:
 
     void activate(const std::string& sequence) override;
 };
-}
 }
 
 #endif // MU_SHORTCUTS_SHORTCUTSCONTROLLER_H

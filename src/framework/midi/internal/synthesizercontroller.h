@@ -18,6 +18,7 @@
 //=============================================================================
 #ifndef MU_MIDI_SYNTHESIZERCONTROLLER_H
 #define MU_MIDI_SYNTHESIZERCONTROLLER_H
+
 #include <future>
 #include <memory>
 #include "modularity/ioc.h"
@@ -27,8 +28,7 @@
 #include "../isynthesizersregister.h"
 #include "../isoundfontsprovider.h"
 
-namespace mu {
-namespace midi {
+namespace mu::midi {
 class SynthesizerController : public async::Asyncable
 {
     INJECT(midi, audio::IAudioEngine, audioEngine)
@@ -46,7 +46,6 @@ private:
 
     std::future<void> m_initilizer;
 };
-}
 }
 
 #endif // MU_MIDI_SYNTHESIZERCONTROLLER_H

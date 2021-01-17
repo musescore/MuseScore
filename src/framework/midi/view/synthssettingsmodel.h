@@ -29,8 +29,7 @@
 #include "midi/imidiconfiguration.h"
 #include "iinteractive.h"
 
-namespace mu {
-namespace midi {
+namespace mu::midi {
 class SynthsSettingsModel : public QObject
 {
     Q_OBJECT
@@ -63,7 +62,6 @@ private:
     SynthesizerState m_state;
     QMap<QString, QStringList> m_avalaibleSoundFonts;
 };
-}
 }
 
 #endif // MU_MIDI_SYNTHSSETTINGSMODEL_H

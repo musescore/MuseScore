@@ -21,8 +21,7 @@
 
 #include "modularity/imodulesetup.h"
 
-namespace mu {
-namespace midi {
+namespace mu::midi {
 class MidiModule : public framework::IModuleSetup
 {
 public:
@@ -33,7 +32,6 @@ public:
     void registerUiTypes() override;
     void onInit(const framework::IApplication::RunMode& mode) override;
 };
-}
 }
 
 #endif // MU_MIDI_MIDIMODULE_H

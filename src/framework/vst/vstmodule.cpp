@@ -32,6 +32,7 @@
 
 using namespace mu::vst;
 using namespace mu::framework;
+using namespace mu::ui;
 
 VSTConfiguration VSTModule::m_configuration = VSTConfiguration();
 static std::shared_ptr<VSTScanner> s_vstScanner = std::make_shared<VSTScanner>();

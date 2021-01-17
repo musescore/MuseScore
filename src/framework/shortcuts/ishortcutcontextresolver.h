@@ -26,8 +26,7 @@
 //! who can determine the current context for shortcuts
 //! Most likely it implements `GlobalContext`
 
-namespace mu {
-namespace shortcuts {
+namespace mu::shortcuts {
 class IShortcutContextResolver : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IShortcutContextResolver)
@@ -37,7 +36,6 @@ public:
 
     virtual ShortcutContext currentShortcutContext() const = 0;
 };
-}
 }
 
 #endif // MU_SHORTCUTS_ISHORTCUTCONTEXTRESOLVER_H

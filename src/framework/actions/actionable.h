@@ -21,8 +21,7 @@
 
 #include "iactionsdispatcher.h"
 
-namespace mu {
-namespace actions {
+namespace mu::actions {
 class Actionable
 {
 public:
@@ -44,7 +43,6 @@ private:
 
     IActionsDispatcher* m_dispatcher = nullptr;
 };
-}
 }
 
 #endif // MU_ACTIONS_ACTIONABLE_H

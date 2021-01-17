@@ -27,8 +27,7 @@
 #include "ishortcutsregister.h"
 #include "ishortcutscontroller.h"
 
-namespace mu {
-namespace shortcuts {
+namespace mu::shortcuts {
 class ShortcutsInstanceModel : public QObject
 {
     Q_OBJECT
@@ -52,7 +51,6 @@ signals:
 private:
     QStringList m_shortcuts;
 };
-}
 }
 
 #endif // MU_SHORTCUTS_SHORTCUTSINSTANCEMODEL_H

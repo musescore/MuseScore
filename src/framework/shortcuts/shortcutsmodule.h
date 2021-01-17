@@ -21,8 +21,7 @@
 
 #include "modularity/imodulesetup.h"
 
-namespace mu {
-namespace shortcuts {
+namespace mu::shortcuts {
 class ShortcutsModule : public framework::IModuleSetup
 {
 public:
@@ -33,7 +32,6 @@ public:
     void registerUiTypes() override;
     void onInit(const framework::IApplication::RunMode& mode) override;
 };
-}
 }
 
 #endif // MU_SHORTCUTS_SHORTCUTSMODULE_H

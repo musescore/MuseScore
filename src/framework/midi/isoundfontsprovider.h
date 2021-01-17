@@ -26,8 +26,7 @@
 #include "io/path.h"
 #include "async/notification.h"
 
-namespace mu {
-namespace midi {
+namespace mu::midi {
 class ISoundFontsProvider : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(ISoundFontsProvider)
@@ -39,7 +38,6 @@ public:
 
     virtual std::vector<io::path> soundFontPaths(SoundFontFormats formats) const = 0;
 };
-}
 }
 
 #endif // MU_MIDI_ISOUNDFONTSPROVIDER_H

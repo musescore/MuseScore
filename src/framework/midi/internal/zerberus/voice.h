@@ -22,8 +22,7 @@
       #pragma warning ( disable: 4201)
 #endif
 
-namespace mu {
-namespace zerberus {
+namespace mu::zerberus {
 class Channel;
 struct Zone;
 class Sample;
@@ -195,7 +194,6 @@ public:
     int offBy() const { return _offBy; }
     static void init();
 };
-}
 }
 
 #endif //MU_ZERBERUS_MVOICE_H

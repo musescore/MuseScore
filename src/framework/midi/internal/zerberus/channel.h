@@ -13,8 +13,7 @@
 #ifndef MU_ZERBERUS_MCHANNEL_H
 #define MU_ZERBERUS_MCHANNEL_H
 
-namespace mu {
-namespace zerberus {
+namespace mu::zerberus {
 class Zerberus;
 class ZInstrument;
 
@@ -53,7 +52,6 @@ public:
     int getCtrl(int CTRL) const;
     void resetCC();
 };
-}
 }
 
 #endif //MU_ZERBERUS_MCHANNEL_H

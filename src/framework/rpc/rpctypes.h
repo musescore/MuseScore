@@ -22,8 +22,7 @@
 #include <vector>
 #include <string>
 
-namespace mu {
-namespace rpc {
+namespace mu::rpc {
 struct Variable
 {
     Variable()
@@ -99,6 +98,5 @@ struct Message
     std::string method;
     ArgumentList args;
 };
-}
 }
 #endif // MU_RPC_RPCTYPES_H

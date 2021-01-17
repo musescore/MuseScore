@@ -72,6 +72,8 @@ float SampleRateConvertor::y(unsigned int sample, unsigned int channel) const
     case FIR:
         return yFIR(sample, channel);
     }
+
+    return 0;
 }
 
 void SampleRateConvertor::setChannelCount(unsigned int count)

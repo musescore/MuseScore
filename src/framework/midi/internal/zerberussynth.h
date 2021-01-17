@@ -21,12 +21,11 @@
 
 #include "../isynthesizer.h"
 
-namespace mu {
-namespace zerberus {
+namespace mu::zerberus {
 class Zerberus;
 }
 
-namespace midi {
+namespace mu::midi {
 class ZerberusSynth : public ISynthesizer
 {
 public:
@@ -76,7 +75,6 @@ private:
     std::vector<float> m_buffer = {};
     async::Channel<unsigned int> m_streamsCountChanged;
 };
-}
 }
 
 #endif // MU_MIDI_ZERBERUSSYNTH_H

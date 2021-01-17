@@ -26,6 +26,7 @@
 #include "iaudioplayer.h"
 #include "imidiplayer.h"
 #include "iaudiostream.h"
+
 namespace mu::audio {
 class ISequencer : MODULE_EXPORT_INTERFACE
 {

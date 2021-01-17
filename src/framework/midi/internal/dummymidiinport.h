@@ -21,8 +21,7 @@
 
 #include "imidiinport.h"
 
-namespace mu {
-namespace midi {
+namespace mu::midi {
 class DummyMidiInPort : public IMidiInPort
 {
 public:
@@ -45,5 +44,5 @@ private:
     async::Channel<std::pair<tick_t, Event> > m_eventReceived;
 };
 }
-}
+
 #endif // MU_MIDI_DUMMYMIDIINPORT_H

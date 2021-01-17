@@ -32,8 +32,7 @@
 
 //! NOTE Used for the test, the main synthesizer will not be this one.
 
-namespace mu {
-namespace midi {
+namespace mu::midi {
 struct Fluid;
 class FluidSynth : public ISynthesizer
 {
@@ -98,7 +97,6 @@ private:
     std::vector<float> m_buffer = {};
     async::Channel<unsigned int> m_streamsCountChanged;
 };
-}
 }
 
 #endif //MU_MIDI_FLUIDSYNTH_H

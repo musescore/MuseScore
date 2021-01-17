@@ -22,8 +22,7 @@
 #include "modularity/imoduleexport.h"
 #include "miditypes.h"
 
-namespace mu {
-namespace midi {
+namespace mu::midi {
 class IMidiPortDataSender : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IMidiPortDataSender)
@@ -36,7 +35,6 @@ public:
     virtual bool sendEvents(tick_t from, tick_t toTick) = 0;
     virtual bool sendSingleEvent(const midi::Event& event) = 0;
 };
-}
 }
 
 #endif // MU_MIDI_IMIDIPORTDATASENDER_H

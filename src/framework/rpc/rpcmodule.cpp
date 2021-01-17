@@ -36,15 +36,3 @@ void RpcModule::registerExports()
     framework::ioc()->registerExport<IRPCServer>(moduleName(), s_server);
     framework::ioc()->registerExport<IRPCClient>(moduleName(), s_client);
 }
-
-void RpcModule::registerUiTypes()
-{
-}
-
-void RpcModule::onInit(const framework::IApplication::RunMode& mode)
-{
-}
-
-void RpcModule::onDeinit()
-{
-}
