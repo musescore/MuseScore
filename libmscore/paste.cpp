@@ -534,6 +534,9 @@ void Score::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
             case ElementType::TRILL:
             case ElementType::TEXTLINE:
             case ElementType::VOLTA:
+            case ElementType::PALM_MUTE:
+            case ElementType::LET_RING:
+            case ElementType::VIBRATO:
                   {
                   Spanner* sp = toSpanner(info->connector());
                   const Location& l = info->location();
