@@ -24,8 +24,7 @@
 #include "modularity/imoduleexport.h"
 #include "shortcutstypes.h"
 
-namespace mu {
-namespace shortcuts {
+namespace mu::shortcuts {
 class IShortcutsRegister : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IShortcutsRegister)
@@ -36,7 +35,6 @@ public:
     virtual Shortcut shortcut(const std::string& actionCode) const = 0;
     virtual ShortcutList shortcutsForSequence(const std::string& sequence) const = 0;
 };
-}
 }
 
 #endif // MU_SHORTCUTS_ISHORTCUTSREGISTER_H

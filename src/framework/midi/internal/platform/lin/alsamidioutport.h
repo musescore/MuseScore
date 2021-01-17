@@ -22,8 +22,7 @@
 #include <memory>
 #include "midi/imidioutport.h"
 
-namespace mu {
-namespace midi {
+namespace mu::midi {
 class AlsaMidiOutPort : public IMidiOutPort
 {
 public:
@@ -46,7 +45,6 @@ private:
     std::unique_ptr<Alsa> m_alsa;
     MidiDeviceID m_deviceID;
 };
-}
 }
 
 #endif // MU_MIDI_ALSAMIDIOUTPORT_H

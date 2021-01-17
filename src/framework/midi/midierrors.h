@@ -21,8 +21,7 @@
 
 #include "ret.h"
 
-namespace mu {
-namespace midi {
+namespace mu::midi {
 enum class Err {
     Undefined       = int(Ret::Code::Undefined),
     NoError         = int(Ret::Code::Ok),
@@ -50,7 +49,6 @@ inline Ret make_ret(Err e)
 inline Ret make_ret(Err e, const std::string& text)
 {
     return Ret(static_cast<int>(e), text);
-}
 }
 }
 

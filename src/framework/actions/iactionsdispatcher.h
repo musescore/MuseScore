@@ -23,8 +23,7 @@
 #include "modularity/imoduleexport.h"
 #include "actiontypes.h"
 
-namespace mu {
-namespace actions {
+namespace mu::actions {
 class Actionable;
 class IActionsDispatcher : MODULE_EXPORT_INTERFACE
 {
@@ -77,7 +76,6 @@ public:
         reg(client, action, [caller, func](const ActionCode&, const ActionData& data) { (caller->*func)(data); });
     }
 };
-}
 }
 
 #endif // MU_ACTIONS_IACTIONSDISPATCHER_H

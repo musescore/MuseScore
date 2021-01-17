@@ -27,8 +27,7 @@
 #include "ret.h"
 #include "async/channel.h"
 
-namespace mu {
-namespace midi {
+namespace mu::midi {
 class IMidiInPort : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IMidiInPort)
@@ -47,7 +46,6 @@ public:
     virtual bool isRunning() const = 0;
     virtual async::Channel<std::pair<tick_t, Event> > eventReceived() const = 0;
 };
-}
 }
 
 #endif // MU_MIDI_IMIDIINPORT_H

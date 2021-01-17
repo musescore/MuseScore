@@ -21,8 +21,7 @@
 
 #include "../imidiremote.h"
 
-namespace mu {
-namespace shortcuts {
+namespace mu::shortcuts {
 class MidiRemote : public IMidiRemote
 {
 public:
@@ -42,7 +41,6 @@ private:
 
     bool m_isSettingMode = false;
 };
-}
 }
 
 #endif // MU_SHORTCUTS_MIDIREMOTE_H

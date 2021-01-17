@@ -18,8 +18,7 @@
 
 class MQZipReader;
 
-namespace mu {
-namespace zerberus {
+namespace mu::zerberus {
 class Zerberus;
 struct Zone;
 struct SfzRegion;
@@ -64,7 +63,6 @@ public:
     static QByteArray buf;    // used during read of Sample
     static int idx;
 };
-}
 }
 
 #endif //MU_ZERBERUS_MINSTRUMENT_H

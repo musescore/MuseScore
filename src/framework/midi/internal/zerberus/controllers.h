@@ -19,8 +19,7 @@
 #ifndef MU_ZERBERUS_CONTROLLERS_H
 #define MU_ZERBERUS_CONTROLLERS_H
 
-namespace mu {
-namespace zerberus {
+namespace mu::zerberus {
 enum {
     CTRL_VOLUME             = 0x07,
     CTRL_PANPOT             = 0x0a,
@@ -34,7 +33,6 @@ enum {
     //
     CTRL_PROGRAM   = 0x81,
 };
-}
 }
 
 #endif // MU_ZERBERUS_CONTROLLERS_H

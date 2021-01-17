@@ -39,6 +39,7 @@
 
 using namespace mu::telemetry;
 using namespace mu::framework;
+using namespace mu::ui;
 
 static std::shared_ptr<TelemetryConfiguration> s_configuration = std::make_shared<TelemetryConfiguration>();
 

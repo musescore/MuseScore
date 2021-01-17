@@ -34,8 +34,7 @@
 #define UNUSED(x) (void)x;
 #endif
 
-namespace mu {
-namespace midi {
+namespace mu::midi {
 using channel_t = uint8_t;
 using EventType = Ms::EventType;
 
@@ -1036,7 +1035,6 @@ private:
 
     std::array<uint32_t, 4> m_data = { { 0, 0, 0, 0 } };
 };
-}
 }
 
 #undef ME_DEPRECATED

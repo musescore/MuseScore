@@ -27,8 +27,7 @@
 #include "midi/imidiinport.h"
 #include "async/asyncable.h"
 
-namespace mu {
-namespace midi {
+namespace mu::midi {
 class MidiPortDevModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
@@ -65,7 +64,6 @@ private:
     QMap<QString, QString> m_connectionErrors;
     QVariantList m_inputEvents;
 };
-}
 }
 
 #endif // MU_MIDI_MIDIPORTDEVMODEL_H

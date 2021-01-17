@@ -15,8 +15,7 @@
 
 #include <map>
 
-namespace mu {
-namespace zerberus {
+namespace mu::zerberus {
 class Sample;
 class Channel;
 
@@ -125,7 +124,6 @@ struct Zone {
     bool match(Channel*, int key, int velo, Trigger, double rand, int cc, int ccVal);
     void updateCCGain(Channel* c);
 };
-}
 }
 
 #endif //MU_ZERBERUS_ZONE_H

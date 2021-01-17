@@ -28,8 +28,7 @@
 #include "shortcuts/shortcutstypes.h"
 #include "ui/view/iconcodes.h"
 
-namespace mu {
-namespace actions {
+namespace mu::actions {
 using ActionCode = std::string;
 using ActionCodeList = std::vector<ActionCode>;
 
@@ -128,7 +127,6 @@ public:
 private:
     std::vector<std::shared_ptr<IArg> > m_args;
 };
-}
 }
 
 #endif // MU_ACTIONS_ACTIONTYPES_H

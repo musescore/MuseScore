@@ -21,8 +21,7 @@
 
 #include "../imidioutport.h"
 
-namespace mu {
-namespace midi {
+namespace mu::midi {
 class DummyMidiOutPort : public IMidiOutPort
 {
 public:
@@ -40,7 +39,6 @@ private:
 
     std::string m_connectedDeviceID;
 };
-}
 }
 
 #endif // MU_MIDI_DUMMYMIDIPORT_H

@@ -21,19 +21,14 @@
 
 #include "modularity/imodulesetup.h"
 
-namespace mu {
-namespace rpc {
+namespace mu::rpc {
 class RpcModule : public framework::IModuleSetup
 {
 public:
     std::string moduleName() const override;
 
     void registerExports() override;
-    void registerUiTypes() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
-    void onDeinit() override;
 };
-}
 }
 
 #endif // MU_RPC_RPCMODULE_H

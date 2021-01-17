@@ -21,8 +21,7 @@
 
 #include "actiontypes.h"
 
-namespace mu {
-namespace actions {
+namespace mu::actions {
 class IModuleActions
 {
 public:
@@ -30,7 +29,6 @@ public:
 
     virtual const ActionItem& action(const ActionCode& actionCode) const = 0;
 };
-}
 }
 
 #endif // MU_ACTIONS_IMODULEACTIONS_H

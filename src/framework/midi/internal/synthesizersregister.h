@@ -24,8 +24,7 @@
 #include "modularity/ioc.h"
 #include "audio/iaudioengine.h"
 
-namespace mu {
-namespace midi {
+namespace mu::midi {
 class SynthesizersRegister : public ISynthesizersRegister
 {
     INJECT(audio, mu::audio::IAudioEngine, audioEngine)
@@ -43,7 +42,6 @@ private:
     std::map<std::string, std::shared_ptr<ISynthesizer> > m_synths;
     SynthName m_defaultName;
 };
-}
 }
 
 #endif // MU_MIDI_SYNTHESIZERSREGISTER_H

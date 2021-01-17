@@ -25,8 +25,7 @@
 #include "ret.h"
 #include "audio/iaudiosource.h"
 
-namespace mu {
-namespace midi {
+namespace mu::midi {
 class ISynthesizer : public audio::IAudioSource
 {
 public:
@@ -65,7 +64,6 @@ public:
 //        writeBuf(m_buffer.data(), sampleCount);
 //    }
 };
-}
 }
 
 #endif // MU_MIDI_ISYNTHESIZER_H

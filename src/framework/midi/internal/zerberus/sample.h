@@ -15,8 +15,7 @@
 
 #include <QString>
 
-namespace mu {
-namespace zerberus {
+namespace mu::zerberus {
 //---------------------------------------------------------
 //   Sample
 //---------------------------------------------------------
@@ -49,5 +48,5 @@ public:
     int loopMode() { return _loopMode; }
 };
 }
-}
+
 #endif //MU_ZERBERUS_SAMPLE_H

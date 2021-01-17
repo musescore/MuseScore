@@ -25,8 +25,7 @@
 #include "irpcserver.h"
 #include "irpctarget.h"
 
-namespace mu {
-namespace rpc {
+namespace mu::rpc {
 class Server : public IRPCServer
 {
 public:
@@ -57,7 +56,6 @@ private:
         TargetEqual
         > m_targets;
 };
-} // namespace rpc
-} // namespace mu
+}
 
 #endif // MU_RPC_SERVER_H

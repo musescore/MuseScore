@@ -26,8 +26,7 @@
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
 
-namespace mu {
-namespace midi {
+namespace mu::midi {
 class MidiConfiguration : public IMidiConfiguration
 {
     INJECT(midi, framework::IGlobalConfiguration, globalConfiguration)
@@ -52,7 +51,6 @@ private:
     async::Notification m_synthesizerStateChanged;
     mutable std::map<std::string, async::Notification> m_synthesizerStateGroupChanged;
 };
-}
 }
 
 #endif // MU_MIDI_MIDICONFIGURATION_H
