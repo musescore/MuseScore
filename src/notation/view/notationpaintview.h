@@ -124,6 +124,7 @@ private:
     INotationNoteInputPtr notationNoteInput() const;
     INotationElementsPtr notationElements() const;
     INotationStylePtr notationStyle() const;
+    INotationSelectionPtr notationSelection() const;
 
     void clear();
     void initBackground();

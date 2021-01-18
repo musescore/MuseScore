@@ -40,11 +40,10 @@ void InspectorListModel::buildModelsForSelectedElements(const QSet<Ms::ElementTy
 
 void InspectorListModel::buildModelsForEmptySelection(const QSet<Ms::ElementType>& selectedElementSet)
 {
-    static QList<AbstractInspectorModel::InspectorSectionType> persistentSectionList
-        = { AbstractInspectorModel::InspectorSectionType::SECTION_SCORE_DISPLAY,
-            AbstractInspectorModel::InspectorSectionType::
-            SECTION_SCORE_APPEARANCE
-        };
+    static QList<AbstractInspectorModel::InspectorSectionType> persistentSectionList {
+        AbstractInspectorModel::InspectorSectionType::SECTION_SCORE_DISPLAY,
+        AbstractInspectorModel::InspectorSectionType::SECTION_SCORE_APPEARANCE
+    };
 
     removeUnusedModels(selectedElementSet, persistentSectionList);
 
