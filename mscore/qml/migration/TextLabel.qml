@@ -53,5 +53,11 @@ FocusableItem {
         onLinkActivated: {
             root.linkActivated()
         }
+
+        MouseArea {
+            anchors.fill: parent
+            cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : undefined
+            acceptedButtons: Qt.NoButton // Not actually accepting clicks, just changing the cursor
+        }
     }
 }
