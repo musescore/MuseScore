@@ -1235,15 +1235,37 @@ void collectElements(void* data, Element* e)
 
 void paintElement(QPainter& painter, const Element* element)
 {
-    QPointF pos(element->pagePos());
-    painter.translate(pos);
+    element->itemDiscovered = false;
+    QPointF elementPosition(element->pagePos());
+
+    painter.translate(elementPosition);
     element->draw(&painter);
-    painter.translate(-pos);
+    painter.translate(-elementPosition);
 }
 
 void paintElements(QPainter& painter, const QList<Element*>& elements)
 {
-    for (Element* element : elements) {
+    QList<Ms::Element*> sortedElements = elements;
+
+    std::sort(sortedElements.begin(), sortedElements.end(), [](Ms::Element* e1, Ms::Element* e2) {
+        if (e1->z() == e2->z()) {
+            if (e1->selected()) {
+                return false;
+            } else if (e2->selected()) {
+                return true;
+            } else if (!e1->visible()) {
+                return true;
+            } else if (!e2->visible()) {
+                return false;
+            }
+
+            return e1->track() > e2->track();
+        }
+
+        return e1->z() <= e2->z();
+    });
+
+    for (const Element* element : sortedElements) {
         if (!element->visible()) {
             continue;
         }
