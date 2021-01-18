@@ -1740,7 +1740,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                   for (; i < n; ++i) {
                         ChordRest* c = crl[i];
                         ChordRest* p = i ? crl[i - 1] : 0;
-                        int l = c->durationType().hooks() - 1;
+                        int l = c->isChord() ? c->durationType().hooks() - 1 : beamLevel;
 
                         Mode bm = Groups::endBeam(c, p);
                         b32 = (beamLevel >= 1) && (bm == Mode::BEGIN32);
