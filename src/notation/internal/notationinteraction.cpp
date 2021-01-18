@@ -127,15 +127,15 @@ void NotationInteraction::notifyAboutSelectionChanged()
     m_selectionChanged.notify();
 }
 
-void NotationInteraction::paint(QPainter* p)
+void NotationInteraction::paint(QPainter* painter)
 {
-    m_shadowNote->draw(p);
+    m_shadowNote->draw(painter);
 
-    drawAnchorLines(p);
+    drawAnchorLines(painter);
 
-    drawTextEditMode(p);
+    drawTextEditMode(painter);
 
-    drawSelectionRange(p);
+    drawSelectionRange(painter);
 }
 
 INotationNoteInputPtr NotationInteraction::noteInput() const
@@ -143,30 +143,29 @@ INotationNoteInputPtr NotationInteraction::noteInput() const
     return m_noteInput;
 }
 
-void NotationInteraction::showShadowNote(const QPointF& p)
+//! NOTE This method copied from ScoreView::setShadowNote
+void NotationInteraction::showShadowNote(const QPointF& pos)
 {
-    //! NOTE This method coped from ScoreView::setShadowNote
-
     const Ms::InputState& is = score()->inputState();
-    Ms::Position pos;
-    if (!score()->getPosition(&pos, p, is.voice())) {
+    Ms::Position position;
+    if (!score()->getPosition(&position, pos, is.voice())) {
         m_shadowNote->setVisible(false);
         return;
     }
 
     // in any empty measure, pos will be right next to barline
     // so pad this by barNoteDistance
-    qreal mag = score()->staff(pos.staffIdx)->staffMag(Fraction(0,1));
-    qreal relX = pos.pos.x() - pos.segment->measure()->canvasPos().x();
-    pos.pos.rx() -= qMin(relX - score()->styleP(Ms::Sid::barNoteDistance) * mag, 0.0);
+    qreal mag = score()->staff(position.staffIdx)->staffMag(Fraction(0,1));
+    qreal relX = position.pos.x() - position.segment->measure()->canvasPos().x();
+    position.pos.rx() -= qMin(relX - score()->styleP(Ms::Sid::barNoteDistance) * mag, 0.0);
 
     m_shadowNote->setVisible(true);
 
-    Staff* staff = score()->staff(pos.staffIdx);
+    Staff* staff = score()->staff(position.staffIdx);
     m_shadowNote->setMag(staff->staffMag(Fraction(0,1)));
     const Ms::Instrument* instr = staff->part()->instrument();
     Ms::NoteHead::Group noteheadGroup = Ms::NoteHead::Group::HEAD_NORMAL;
-    int line = pos.line;
+    int line = position.line;
     Ms::NoteHead::Type noteHead = is.duration().headType();
 
     if (instr->useDrumset()) {
@@ -180,7 +179,7 @@ void NotationInteraction::showShadowNote(const QPointF& p)
 
     m_shadowNote->setLine(line);
 
-    int voice;
+    int voice = 0;
     if (is.drumNote() != -1 && is.drumset() && is.drumset()->isValid(is.drumNote())) {
         voice = is.drumset()->voice(is.drumNote());
     } else {
@@ -192,17 +191,17 @@ void NotationInteraction::showShadowNote(const QPointF& p)
 
     qreal segmentSkylineTopY = 0;
     qreal segmentSkylineBottomY = 0;
-    Ms::Segment* shadowNoteActualSegment = pos.segment->prev1enabled();
+    Ms::Segment* shadowNoteActualSegment = position.segment->prev1enabled();
     if (shadowNoteActualSegment) {
-        segmentSkylineTopY = shadowNoteActualSegment->elementsTopOffsetFromSkyline(pos.staffIdx);
-        segmentSkylineBottomY = shadowNoteActualSegment->elementsBottomOffsetFromSkyline(pos.staffIdx);
+        segmentSkylineTopY = shadowNoteActualSegment->elementsTopOffsetFromSkyline(position.staffIdx);
+        segmentSkylineBottomY = shadowNoteActualSegment->elementsBottomOffsetFromSkyline(position.staffIdx);
     }
 
     if (is.rest()) {
-        int yo;
+        int yo = 0;
         Ms::Rest rest(Ms::gscore, d.type());
         rest.setTicks(d.fraction());
-        symNotehead = rest.getSymbol(is.duration().type(), 0, staff->lines(pos.segment->tick()), &yo);
+        symNotehead = rest.getSymbol(is.duration().type(), 0, staff->lines(position.segment->tick()), &yo);
         m_shadowNote->setState(symNotehead, voice, d, true, segmentSkylineTopY, segmentSkylineBottomY);
     } else {
         if (Ms::NoteHead::Group::HEAD_CUSTOM == noteheadGroup) {
@@ -215,7 +214,7 @@ void NotationInteraction::showShadowNote(const QPointF& p)
     }
 
     m_shadowNote->layout();
-    m_shadowNote->setPos(pos.pos);
+    m_shadowNote->setPos(position.pos);
 }
 
 void NotationInteraction::hideShadowNote()
@@ -223,18 +222,14 @@ void NotationInteraction::hideShadowNote()
     m_shadowNote->setVisible(false);
 }
 
-void NotationInteraction::paintShadowNote(QPainter* p)
-{
-    m_shadowNote->draw(p);
-}
-
 Element* NotationInteraction::hitElement(const QPointF& pos, float width) const
 {
-    QList<Ms::Element*> ll = hitElements(pos, width);
-    if (ll.isEmpty()) {
+    QList<Ms::Element*> elements = hitElements(pos, width);
+    if (elements.isEmpty()) {
         return nullptr;
     }
-    return ll.first();
+
+    return elements.first();
 }
 
 int NotationInteraction::hitStaffIndex(const QPointF& pos) const
@@ -422,6 +417,10 @@ INotationSelectionPtr NotationInteraction::selection() const
 
 void NotationInteraction::clearSelection()
 {
+    if (selection()->isNone()) {
+        return;
+    }
+
     score()->deselectAll();
 
     notifyAboutSelectionChanged();

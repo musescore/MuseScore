@@ -197,19 +197,17 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
 
     if (m_interactData.hitElement) {
         if (!m_interactData.hitElement->selected()) {
-            SelectType st = SelectType::SINGLE;
+            SelectType selectType = SelectType::SINGLE;
             if (keyState == Qt::NoModifier) {
-                st = SelectType::SINGLE;
+                selectType = SelectType::SINGLE;
             } else if (keyState & Qt::ShiftModifier) {
-                st = SelectType::RANGE;
+                selectType = SelectType::RANGE;
             } else if (keyState & Qt::ControlModifier) {
-                st = SelectType::ADD;
+                selectType = SelectType::ADD;
             }
 
-            m_view->notationInteraction()->select({ m_interactData.hitElement }, st, m_interactData.hitStaffIndex);
+            m_view->notationInteraction()->select({ m_interactData.hitElement }, selectType, m_interactData.hitStaffIndex);
         }
-    } else {
-        m_view->notationInteraction()->clearSelection();
     }
 
     if (event->button() == Qt::MouseButton::RightButton) {
@@ -276,7 +274,6 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
     }
 
     // move canvas
-
     QPoint d = logicPos - m_interactData.beginPoint;
     int dx = d.x();
     int dy = d.y();
@@ -286,18 +283,19 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
     }
 
     m_view->moveCanvas(dx, dy);
+    m_isCanvasDragged = true;
 }
 
-void NotationViewInputController::startDragElements(ElementType elemetsType, const QPointF& elementsOffset)
+void NotationViewInputController::startDragElements(ElementType elementsType, const QPointF& elementsOffset)
 {
     std::vector<Element*> elements = m_view->notationInteraction()->selection()->elements();
-    IF_ASSERT_FAILED(elements.size() > 0) {
+    IF_ASSERT_FAILED(!elements.empty()) {
         return;
     }
 
-    const bool isFilterType = m_view->notationInteraction()->selection()->isRange();
-    const auto isDraggable = [isFilterType, elemetsType](const Element* element) {
-        return element && element->selected() && (!isFilterType || elemetsType == element->type());
+    bool isFilterType = m_view->notationInteraction()->selection()->isRange();
+    auto isDraggable = [isFilterType, elementsType](const Element* element) {
+        return element && element->selected() && (!isFilterType || elementsType == element->type());
     };
 
     m_view->notationInteraction()->startDrag(elements, elementsOffset, isDraggable);
@@ -305,6 +303,12 @@ void NotationViewInputController::startDragElements(ElementType elemetsType, con
 
 void NotationViewInputController::mouseReleaseEvent(QMouseEvent*)
 {
+    if (!m_interactData.hitElement && !m_isCanvasDragged) {
+        m_view->notationInteraction()->clearSelection();
+    }
+
+    m_isCanvasDragged = false;
+
     if (m_view->notationInteraction()->isDragStarted()) {
         m_view->notationInteraction()->endDrag();
     }

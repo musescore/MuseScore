@@ -17,14 +17,7 @@ class InspectorListModel : public QAbstractListModel, public mu::async::Asyncabl
     INJECT(inspector, mu::context::IGlobalContext, context)
 
 public:
-    enum RoleNames {
-        InspectorDataRole = Qt::UserRole + 1,
-        InspectorTitleRole
-    };
-
     explicit InspectorListModel(QObject* parent = nullptr);
-
-    void setElementList(const QList<Ms::Element*>& selectedElementList);
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QVariant data(const QModelIndex& index, int role) const override;
@@ -35,6 +28,13 @@ signals:
     void elementsModified();
 
 private:
+    enum RoleNames {
+        InspectorDataRole = Qt::UserRole + 1,
+        InspectorTitleRole
+    };
+
+    void setElementList(const QList<Ms::Element*>& selectedElementList);
+
     void buildModelsForEmptySelection(const QSet<Ms::ElementType>& selectedElementSet);
     void buildModelsForSelectedElements(const QSet<Ms::ElementType>& selectedElementSet);
 
