@@ -17,8 +17,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_FRAMEWORK_UIENGINE_H
-#define MU_FRAMEWORK_UIENGINE_H
+#ifndef MU_UI_UIENGINE_H
+#define MU_UI_UIENGINE_H
 
 #include <QObject>
 #include <memory>
@@ -32,7 +32,7 @@
 
 class QQmlEngine;
 
-namespace mu::framework {
+namespace mu::ui {
 class UiEngine : public QObject, public IUiEngine
 {
     Q_OBJECT
@@ -85,4 +85,4 @@ private:
 };
 }
 
-#endif // MU_FRAMEWORK_UIENGINE_H
+#endif // MU_UI_UIENGINE_H

@@ -16,16 +16,15 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_UITYPES_H
-#define MU_FRAMEWORK_UITYPES_H
+#ifndef MU_UI_UITYPES_H
+#define MU_UI_UITYPES_H
 
 #include <QString>
 #include <QMetaType>
 
 #include "ret.h"
 
-namespace mu {
-namespace framework {
+namespace mu::ui {
 class ContainerType
 {
     Q_GADGET
@@ -56,6 +55,5 @@ struct ContainerMeta
         : type(type), widgetMetaTypeId(widgetMetaTypeId) {}
 };
 }
-}
 
-#endif // MU_FRAMEWORK_UIERRORS_H
+#endif // MU_UI_UIERRORS_H

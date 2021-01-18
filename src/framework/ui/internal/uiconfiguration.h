@@ -26,11 +26,11 @@
 
 #include "modularity/ioc.h"
 
-namespace mu::framework {
+namespace mu::ui {
 class UiConfiguration : public IUiConfiguration
 {
-    INJECT(framework, IMainWindow, mainWindow)
-    INJECT(framework, IPlatformTheme, platformTheme)
+    INJECT(ui, IMainWindow, mainWindow)
+    INJECT(ui, IPlatformTheme, platformTheme)
 
 public:
     void init();

@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_IINTERACTIVEURIREGISTER_H
-#define MU_FRAMEWORK_IINTERACTIVEURIREGISTER_H
+#ifndef MU_UI_IINTERACTIVEURIREGISTER_H
+#define MU_UI_IINTERACTIVEURIREGISTER_H
 
 #include <QVariantMap>
 #include <QDialog>
@@ -26,8 +26,7 @@
 #include "global/uri.h"
 #include "uitypes.h"
 
-namespace mu {
-namespace framework {
+namespace mu::ui {
 class IInteractiveUriRegister : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IInteractiveUriRegister)
@@ -39,6 +38,5 @@ public:
     virtual ContainerMeta meta(const Uri& uri) const = 0;
 };
 }
-}
 
-#endif // MU_FRAMEWORK_IINTERACTIVEURIREGISTER_H
+#endif // MU_UI_IINTERACTIVEURIREGISTER_H

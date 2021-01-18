@@ -19,7 +19,7 @@
 #include "actionnoteinputbaritem.h"
 
 using namespace mu::notation;
-using namespace mu::framework;
+using namespace mu::ui;
 
 ActionNoteInputBarItem::ActionNoteInputBarItem(const ItemType& type, QObject* parent)
     : AbstractNoteInputBarItem(type, parent)

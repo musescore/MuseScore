@@ -18,7 +18,7 @@
 //=============================================================================
 #include "qmlapi.h"
 
-using namespace mu::framework;
+using namespace mu::ui;
 
 QmlApi::QmlApi(QObject* parent)
     : QObject(parent)

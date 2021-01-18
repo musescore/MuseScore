@@ -16,15 +16,14 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_IINTERACTIVEPROVIDER_H
-#define MU_FRAMEWORK_IINTERACTIVEPROVIDER_H
+#ifndef MU_UI_IINTERACTIVEPROVIDER_H
+#define MU_UI_IINTERACTIVEPROVIDER_H
 
 #include "modularity/imoduleexport.h"
 #include "uri.h"
 #include "retval.h"
 
-namespace mu {
-namespace framework {
+namespace mu::ui {
 class IInteractiveProvider : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(ILaunchProvider)
@@ -36,6 +35,5 @@ public:
     virtual ValCh<Uri> currentUri() const = 0;
 };
 }
-}
 
-#endif // MU_FRAMEWORK_IINTERACTIVEPROVIDER_H
+#endif // MU_UI_IINTERACTIVEPROVIDER_H

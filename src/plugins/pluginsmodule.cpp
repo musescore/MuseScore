@@ -34,6 +34,7 @@
 
 using namespace mu::plugins;
 using namespace mu::framework;
+using namespace mu::ui;
 
 static std::shared_ptr<PluginsConfiguration> s_configuration = std::make_shared<PluginsConfiguration>();
 

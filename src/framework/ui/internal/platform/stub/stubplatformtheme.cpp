@@ -19,7 +19,7 @@
 
 #include "stubplatformtheme.h"
 
-using namespace mu::framework;
+using namespace mu::ui;
 using namespace mu::async;
 
 bool StubPlatformTheme::isFollowSystemThemeAvailable() const

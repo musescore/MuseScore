@@ -30,9 +30,9 @@
 namespace mu::notation {
 class NotationConfiguration : public INotationConfiguration, public async::Asyncable
 {
-    INJECT(notation, framework::IUiConfiguration, uiConfiguration)
+    INJECT(notation, ui::IUiConfiguration, uiConfiguration)
     INJECT(notation, framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(notation, framework::ITheme, theme)
+    INJECT(notation, ui::ITheme, theme)
 
 public:
     void init();

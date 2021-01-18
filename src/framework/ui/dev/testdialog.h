@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_TESTDIALOG_H
-#define MU_FRAMEWORK_TESTDIALOG_H
+#ifndef MU_UI_TESTDIALOG_H
+#define MU_UI_TESTDIALOG_H
 
 #include <QDialog>
 
@@ -25,8 +25,7 @@ namespace Ui {
 class TestDialog;
 }
 
-namespace mu {
-namespace framework {
+namespace mu::ui {
 class TestDialog : public QDialog
 {
     Q_OBJECT
@@ -53,8 +52,7 @@ private:
     QString m_title;
 };
 }
-}
 
-Q_DECLARE_METATYPE(mu::framework::TestDialog)
+Q_DECLARE_METATYPE(mu::ui::TestDialog)
 
-#endif // MU_FRAMEWORK_TESTDIALOG_H
+#endif // MU_UI_TESTDIALOG_H

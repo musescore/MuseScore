@@ -17,19 +17,18 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_FRAMEWORK_IUIENGINE_H
-#define MU_FRAMEWORK_IUIENGINE_H
+#ifndef MU_UI_IUIENGINE_H
+#define MU_UI_IUIENGINE_H
 
 #include <QString>
 #include "framework/global/modularity/imoduleexport.h"
 
 class QQmlEngine;
 
-namespace mu {
-namespace framework {
+namespace mu::ui {
 class IUiEngine : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(mu::framework::IUiEngine)
+    INTERFACE_ID(IUiEngine)
 
 public:
     virtual ~IUiEngine() {}
@@ -41,6 +40,5 @@ public:
     virtual void addSourceImportPath(const QString& path) = 0;
 };
 }
-}
 
-#endif // MU_FRAMEWORK_UIENGINEMODULE_H
+#endif // MU_UI_UIENGINEMODULE_H

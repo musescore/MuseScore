@@ -20,7 +20,7 @@
 
 #include "translation.h"
 
-using namespace mu::framework;
+using namespace mu::ui;
 
 QmlTranslation::QmlTranslation(QObject* parent)
     : QObject(parent)

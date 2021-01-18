@@ -33,7 +33,7 @@ class MasterPalette : public QDialog, Ui::MasterPalette
 {
     Q_OBJECT
 
-    INJECT(palette, mu::framework::IMainWindow, mainWindow)
+    INJECT(palette, mu::ui::IMainWindow, mainWindow)
 
     TimeDialog* timeDialog;
     KeyEditor* keyEditor;

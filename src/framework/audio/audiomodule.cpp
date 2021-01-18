@@ -65,7 +65,7 @@ void AudioModule::registerUiTypes()
     qmlRegisterType<AudioEngineDevTools>("MuseScore.Audio", 1, 0, "AudioEngineDevTools");
 
     //! NOTE No Qml, as it will be, need to uncomment
-    //framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(mu4_audio_QML_IMPORT);
+    //framework::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(mu4_audio_QML_IMPORT);
 }
 
 void AudioModule::onInit(const framework::IApplication::RunMode& mode)

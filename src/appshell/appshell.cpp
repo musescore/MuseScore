@@ -138,7 +138,7 @@ int AppShell::run(int argc, char** argv)
         // ====================================================
         QQmlApplicationEngine* engine = new QQmlApplicationEngine();
         //! NOTE Move ownership to UiEngine
-        framework::UiEngine::instance()->moveQQmlEngine(engine);
+        ui::UiEngine::instance()->moveQQmlEngine(engine);
 
 #ifndef Q_OS_WASM
         const QString mainQmlFile = "/Main.qml";
@@ -190,7 +190,7 @@ int AppShell::run(int argc, char** argv)
     }
 #endif
     // Engine quit
-    framework::UiEngine::instance()->quit();
+    ui::UiEngine::instance()->quit();
 
     // Deinit
     for (mu::framework::IModuleSetup* m : m_modules) {

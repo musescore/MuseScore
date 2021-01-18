@@ -54,7 +54,7 @@ void CloudModule::registerUiTypes()
 {
     qmlRegisterType<AccountModel>("MuseScore.Cloud", 1, 0, "AccountModel");
 
-    framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(cloud_QML_IMPORT);
+    framework::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(cloud_QML_IMPORT);
 }
 
 void CloudModule::onInit(const framework::IApplication::RunMode& mode)

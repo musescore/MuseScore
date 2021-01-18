@@ -31,7 +31,7 @@ namespace mu::appshell {
 class CommandLineController
 {
     INJECT(appshell, framework::IApplication, application)
-    INJECT(appshell, framework::IUiConfiguration, uiConfiguration)
+    INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
     INJECT(appshell, importexport::IImportexportConfiguration, importexportConfiguration)
 public:
     CommandLineController() = default;

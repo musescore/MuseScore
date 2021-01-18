@@ -27,7 +27,7 @@
 #include "async/channel.h"
 #include "async/notification.h"
 
-namespace mu::framework {
+namespace mu::ui {
 class IUiConfiguration : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IUiConfiguration)

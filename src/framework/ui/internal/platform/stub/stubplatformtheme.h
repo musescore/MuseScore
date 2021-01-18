@@ -17,12 +17,12 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_FRAMEWORK_STUBPLATFORMTHEME_H
-#define MU_FRAMEWORK_STUBPLATFORMTHEME_H
+#ifndef MU_UI_STUBPLATFORMTHEME_H
+#define MU_UI_STUBPLATFORMTHEME_H
 
 #include "ui/iplatformtheme.h"
 
-namespace mu::framework {
+namespace mu::ui {
 class StubPlatformTheme : public IPlatformTheme
 {
 public:
@@ -40,4 +40,4 @@ private:
 };
 }
 
-#endif // MU_FRAMEWORK_STUBPLATFORMTHEME_H
+#endif // MU_UI_STUBPLATFORMTHEME_H

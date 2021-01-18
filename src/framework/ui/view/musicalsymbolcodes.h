@@ -17,13 +17,12 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_FRAMEWORK_MUSICALSYMBOLCODE_H
-#define MU_FRAMEWORK_MUSICALSYMBOLCODE_H
+#ifndef MU_UI_MUSICALSYMBOLCODE_H
+#define MU_UI_MUSICALSYMBOLCODE_H
 
 #include <QObject>
 
-namespace mu {
-namespace framework {
+namespace mu::ui {
 /**
  * @brief The MusicalSymbolCodes class simplifies access to the icons from the musical font
  *
@@ -63,6 +62,5 @@ public:
     Q_ENUM(Code)
 };
 }
-}
 
-#endif // MU_FRAMEWORK_MUSICALSYMBOLCODE_H
+#endif // MU_UI_MUSICALSYMBOLCODE_H

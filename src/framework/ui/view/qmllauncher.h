@@ -16,21 +16,20 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_QMLLAUNCHER_H
-#define MU_FRAMEWORK_QMLLAUNCHER_H
+#ifndef MU_UI_QMLLAUNCHER_H
+#define MU_UI_QMLLAUNCHER_H
 
 #include <QObject>
 
 #include "modularity/ioc.h"
 #include "iinteractive.h"
 
-namespace mu {
-namespace framework {
+namespace mu::ui {
 class QmlLauncher : public QObject
 {
     Q_OBJECT
 
-    INJECT(framework, IInteractive, interactive)
+    INJECT(ui, framework::IInteractive, interactive)
 
 public:
     QmlLauncher(QObject* parent);
@@ -39,6 +38,5 @@ public:
     Q_INVOKABLE bool openUrl(const QString& url);
 };
 }
-}
 
-#endif // MU_FRAMEWORK_QMLLAUNCHER_H
+#endif // MU_UI_QMLLAUNCHER_H

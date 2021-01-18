@@ -22,6 +22,7 @@
 #include "dev/interactivetestsmodel.h"
 #include "dev/testdialog.h"
 
+using namespace mu::ui;
 using namespace mu::framework;
 
 static std::shared_ptr<UiConfiguration> s_configuration = std::make_shared<UiConfiguration>();
@@ -53,7 +54,7 @@ void UiModule::registerExports()
 
 void UiModule::resolveImports()
 {
-    auto ir = framework::ioc()->resolve<framework::IInteractiveUriRegister>(moduleName());
+    auto ir = framework::ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerUri(Uri("musescore://devtools/interactive/testdialog"),
                         ContainerMeta(ContainerType::QWidgetDialog, TestDialog::metaTypeId()));
@@ -83,7 +84,7 @@ void UiModule::registerUiTypes()
 
     qRegisterMetaType<TestDialog>("TestDialog");
 
-    framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(ui_QML_IMPORT);
+    framework::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(ui_QML_IMPORT);
 }
 
 void UiModule::onInit(const IApplication::RunMode&)

@@ -109,7 +109,7 @@ signals:
 private:
     struct KeySignature {
         QString title;
-        framework::IconCode::Code icon = framework::IconCode::Code::NONE;
+        ui::IconCode::Code icon = ui::IconCode::Code::NONE;
         notation::Key key = notation::Key::C;
         notation::KeyMode mode = notation::KeyMode::UNKNOWN;
 
@@ -125,14 +125,14 @@ private:
 
         KeySignature() = default;
 
-        KeySignature(const QString& title, const framework::IconCode::Code& icon, const notation::Key& key,
+        KeySignature(const QString& title, const ui::IconCode::Code& icon, const notation::Key& key,
                      const notation::KeyMode& mode)
             : title(title), icon(icon), key(key), mode(mode) {}
 
         KeySignature(const QVariantMap& map)
         {
             title = map["title"].toString();
-            icon = static_cast<framework::IconCode::Code>(map["icon"].toInt());
+            icon = static_cast<ui::IconCode::Code>(map["icon"].toInt());
             key = static_cast<Ms::Key>(map["key"].toInt());
             mode = static_cast<Ms::KeyMode>(map["mode"].toInt());
         }

@@ -16,16 +16,15 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_IMAINWINDOW_H
-#define MU_FRAMEWORK_IMAINWINDOW_H
+#ifndef MU_UI_IMAINWINDOW_H
+#define MU_UI_IMAINWINDOW_H
 
 #include "modularity/imoduleexport.h"
 
 class QMainWindow;
 class QWidget;
 
-namespace mu {
-namespace framework {
+namespace mu::ui {
 class IMainWindow : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IMainWindow)
@@ -36,6 +35,5 @@ public:
     virtual void stackUnder(QWidget*) = 0;
 };
 }
-}
 
-#endif // MU_FRAMEWORK_IMAINWINDOW_H
+#endif // MU_UI_IMAINWINDOW_H

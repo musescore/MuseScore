@@ -16,13 +16,12 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_INTERACTIVEURIREGISTER_H
-#define MU_FRAMEWORK_INTERACTIVEURIREGISTER_H
+#ifndef MU_UI_INTERACTIVEURIREGISTER_H
+#define MU_UI_INTERACTIVEURIREGISTER_H
 
 #include "iinteractiveuriregister.h"
 
-namespace mu {
-namespace framework {
+namespace mu::ui {
 class InteractiveUriRegister : public IInteractiveUriRegister
 {
 public:
@@ -34,10 +33,11 @@ private:
 };
 }
 
+namespace mu {
 inline uint qHash(const Uri& uri)
 {
     return qHash(QString::fromStdString(uri.toString()));
 }
 }
 
-#endif // MU_FRAMEWORK_INTERACTIVEURIREGISTER_H
+#endif // MU_UI_INTERACTIVEURIREGISTER_H

@@ -17,13 +17,13 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_FRAMEWORK_MACOSPLATFORMTHEME_H
-#define MU_FRAMEWORK_MACOSPLATFORMTHEME_H
+#ifndef MU_UI_MACOSPLATFORMTHEME_H
+#define MU_UI_MACOSPLATFORMTHEME_H
 
 #include "ui/iplatformtheme.h"
 
 namespace mu::framework {
-class MacOSPlatformTheme : public IPlatformTheme
+class MacOSPlatformTheme : public ui::IPlatformTheme
 {
 public:
     MacOSPlatformTheme();
@@ -41,4 +41,4 @@ private:
 };
 }
 
-#endif // MU_FRAMEWORK_MACOSPLATFORMTHEME_H
+#endif // MU_UI_MACOSPLATFORMTHEME_H
