@@ -26,7 +26,12 @@ def get_node_url(node):
 def get_node_info(node):
     node_url = get_node_url(node)
 
-    response = urllib.request.urlopen(node_url)
+    try:
+    	response = urllib.request.urlopen(node_url)
+    except urllib.error.HTTPError as e:
+        print('Issue not found! HTTP response code: ' + str(e.code))
+        return {"node": node, "url": node_url, "title": "!!!!! HTTP " + str(e.code)}
+
     html = str(response.read())
 
     # We may need some more complex HTML parsing to get
