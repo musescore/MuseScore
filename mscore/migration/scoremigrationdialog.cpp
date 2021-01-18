@@ -1,22 +1,20 @@
 #include "scoremigrationdialog.h"
 
-#include <QQuickItem>
-
 ScoreMigrationDialog::ScoreMigrationDialog(QQmlEngine* engine, Ms::Score* score)
-      : QQuickView(engine, nullptr), m_dialogModel(new ScoreMigrationDialogModel(score, this))
+      : QQuickWidget(engine, nullptr), m_dialogModel(new ScoreMigrationDialogModel(score, this))
       {
       setMinimumWidth(600);
       setMinimumHeight(m_dialogModel->isAutomaticPlacementAvailable() ? 570 : 548);
 
-      setFlags(Qt::Dialog);
+      setWindowFlags(Qt::Dialog);
+      setWindowModality(Qt::ApplicationModal);
 
-      setTitle(score->title());
+      setWindowTitle(score->title());
       setSource(QUrl(QStringLiteral("qrc:/qml/migration/ScoreMigrationDialog.qml")));
 
-      setModality(Qt::ApplicationModal);
-      setResizeMode(QQuickView::SizeRootObjectToView);
+      setResizeMode(SizeRootObjectToView);
 
-      connect(m_dialogModel, &ScoreMigrationDialogModel::closeRequested, this, &QQuickView::close);
+      connect(m_dialogModel, &ScoreMigrationDialogModel::closeRequested, this, &QQuickWidget::close);
 
       if (rootObject())
             rootObject()->setProperty("model", QVariant::fromValue(m_dialogModel));
@@ -24,6 +22,13 @@ ScoreMigrationDialog::ScoreMigrationDialog(QQmlEngine* engine, Ms::Score* score)
 
 void ScoreMigrationDialog::focusInEvent(QFocusEvent* event)
       {
-      QQuickView::focusInEvent(event);
+      QQuickWidget::focusInEvent(event);
+      rootObject()->forceActiveFocus();
+      }
+
+void ScoreMigrationDialog::showEvent(QShowEvent* event)
+      {
+      QQuickWidget::showEvent(event);
+      setFocus();
       rootObject()->forceActiveFocus();
       }
