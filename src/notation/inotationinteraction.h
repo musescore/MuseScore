@@ -39,9 +39,8 @@ public:
     virtual INotationNoteInputPtr noteInput() const = 0;
 
     // Shadow note
-    virtual void showShadowNote(const QPointF& p) = 0;
+    virtual void showShadowNote(const QPointF& pos) = 0;
     virtual void hideShadowNote() = 0;
-    virtual void paintShadowNote(QPainter* p) = 0;
 
     // Select
     virtual Element* hitElement(const QPointF& pos, float width) const = 0;

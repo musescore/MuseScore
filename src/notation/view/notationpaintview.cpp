@@ -236,6 +236,11 @@ INotationStylePtr NotationPaintView::notationStyle() const
     return notation() ? notation()->style() : nullptr;
 }
 
+INotationSelectionPtr NotationPaintView::notationSelection() const
+{
+    return notationInteraction() ? notationInteraction()->selection() : nullptr;
+}
+
 void NotationPaintView::onNoteInputChanged()
 {
     if (isNoteEnterMode()) {
@@ -251,13 +256,13 @@ void NotationPaintView::onNoteInputChanged()
 
 void NotationPaintView::onSelectionChanged()
 {
-    if (notationInteraction()->selection()->isNone()) {
+    if (notationSelection()->isNone()) {
         return;
     }
 
-    QRectF selRect = notationInteraction()->selection()->canvasBoundingRect();
+    QRectF selectionRect = notationSelection()->canvasBoundingRect();
 
-    adjustCanvasPosition(selRect);
+    adjustCanvasPosition(selectionRect);
     update();
 }
 
@@ -595,7 +600,6 @@ void NotationPaintView::setReadonly(bool readonly)
 void NotationPaintView::clear()
 {
     m_matrix = QTransform();
-
     m_previousHorizontalScrollPosition = 0;
     m_previousVerticalScrollPosition = 0;
 }
@@ -726,11 +730,10 @@ void NotationPaintView::movePlaybackCursor(uint32_t tick)
         return;
     }
 
-    //LOGI() << "tick: " << tick;
-    QRect rec = notationPlayback()->playbackCursorRectByTick(tick);
-    m_playbackCursor->move(rec);
+    QRect cursorRect = notationPlayback()->playbackCursorRectByTick(tick);
+    m_playbackCursor->move(cursorRect);
 
-    adjustCanvasPosition(rec);
+    adjustCanvasPosition(cursorRect);
     update(); //! TODO set rect to optimization
 }
 
@@ -742,7 +745,7 @@ const Page* NotationPaintView::pointToPage(const QPointF& point) const
 
     PageList pages = notationElements()->pages();
     if (notation()->viewMode() == Ms::LayoutMode::LINE) {
-        return pages.empty() ? 0 : pages.front();
+        return pages.empty() ? nullptr : pages.front();
     }
 
     for (const Page* page: pages) {

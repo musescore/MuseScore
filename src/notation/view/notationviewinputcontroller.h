@@ -105,7 +105,7 @@ private:
     };
 
     bool isDragAllowed() const;
-    void startDragElements(ElementType elemetsType, const QPointF& elementsOffset);
+    void startDragElements(ElementType elementsType, const QPointF& elementsOffset);
 
     float hitWidth() const;
 
@@ -118,6 +118,7 @@ private:
 
     bool m_readonly = false;
     int m_currentZoomPercentage = 0;
+    bool m_isCanvasDragged = false;
 };
 }
 

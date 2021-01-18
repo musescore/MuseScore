@@ -51,15 +51,14 @@ public:
     ~NotationInteraction() override;
 
     void init();
-    void paint(QPainter* p);
+    void paint(QPainter* painter);
 
     // Put notes
     INotationNoteInputPtr noteInput() const override;
 
     // Shadow note
-    void showShadowNote(const QPointF& p) override;
+    void showShadowNote(const QPointF& pos) override;
     void hideShadowNote() override;
-    void paintShadowNote(QPainter* p) override;
 
     // Select
     Element* hitElement(const QPointF& pos, float width) const override;
