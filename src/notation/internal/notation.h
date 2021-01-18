@@ -79,7 +79,6 @@ private:
 
     void paintPages(QPainter* painter, const QRectF& frameRect, const QList<Ms::Page*>& pages, bool paintBorders) const;
     void paintPageBorder(QPainter* painter, const Ms::Page* page) const;
-    void paintElements(QPainter* painter, const QList<Element*>& elements) const;
 
     QSizeF viewSize() const;
 

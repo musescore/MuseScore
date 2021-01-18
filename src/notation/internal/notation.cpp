@@ -279,7 +279,10 @@ void Notation::paintPages(QPainter* painter, const QRectF& frameRect, const QLis
         QPointF pagePosition(page->pos());
         painter->translate(pagePosition);
         painter->fillRect(page->bbox(), configuration()->pageColor());
-        paintElements(painter, page->elements());
+
+        QList<Element*> elements = page->items(frameRect.translated(-page->pos()));
+        Ms::paintElements(*painter, elements);
+
         painter->translate(-pagePosition);
     }
 }
@@ -303,40 +306,6 @@ void Notation::paintPageBorder(QPainter* painter, const Ms::Page* page) const
 
     if (!page->isOdd()) {
         painter->drawLine(boundingRect.right(), 0.0, boundingRect.right(), boundingRect.bottom());
-    }
-}
-
-void Notation::paintElements(QPainter* painter, const QList<Element*>& elements) const
-{
-    QList<Ms::Element*> sortedElements = elements;
-    std::sort(sortedElements.begin(), sortedElements.end(), [](Ms::Element* e1, Ms::Element* e2) {
-        if (e1->z() == e2->z()) {
-            if (e1->selected()) {
-                return false;
-            } else if (e2->selected()) {
-                return true;
-            } else if (!e1->visible()) {
-                return true;
-            } else if (!e2->visible()) {
-                return false;
-            } else {
-                return e1->track() > e2->track();
-            }
-        }
-        return e1->z() <= e2->z();
-    });
-
-    for (const Ms::Element* element : sortedElements) {
-        if (!element->visible()) {
-            continue;
-        }
-
-        element->itemDiscovered = false;
-        QPointF elementPosition(element->pagePos());
-
-        painter->translate(elementPosition);
-        element->draw(painter);
-        painter->translate(-elementPosition);
     }
 }
 
