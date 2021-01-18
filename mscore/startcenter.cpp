@@ -124,8 +124,8 @@ void Startcenter::loadScore(QString s)
             newScore();
             }
       else {
-            mscore->openScore(s);
             close();
+            mscore->openScore(s);
             }
       }
 
