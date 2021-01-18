@@ -43,5 +43,5 @@ void UiComponentsModule::registerUiTypes()
     qmlRegisterType<FilterValue>("MuseScore.UiComponents", 1, 0, "FilterValue");
     qmlRegisterUncreatableType<CompareType>("MuseScore.UiComponents", 1, 0, "CompareType", "Cannot create a CompareType");
 
-    framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(uicomponents_QML_IMPORT);
+    framework::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(uicomponents_QML_IMPORT);
 }

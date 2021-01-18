@@ -17,8 +17,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_FRAMEWORK_ICONCODE_H
-#define MU_FRAMEWORK_ICONCODE_H
+#ifndef MU_UI_ICONCODE_H
+#define MU_UI_ICONCODE_H
 
 #include <QObject>
 
@@ -26,7 +26,7 @@
 #undef FILE_OPEN
 #endif
 
-namespace mu::framework {
+namespace mu::ui {
 /**
  * @brief The IconCode class simplifies access to the icons from the icon font
  *
@@ -273,4 +273,4 @@ static inline QChar iconCodeToChar(IconCode::Code code)
 }
 }
 
-#endif // MU_FRAMEWORK_ICONCODE_H
+#endif // MU_UI_ICONCODE_H

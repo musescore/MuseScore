@@ -63,8 +63,8 @@
 #include "view/notationcontextmenu.h"
 
 using namespace mu::notation;
-using namespace mu::notation;
 using namespace mu::framework;
+using namespace mu::ui;
 
 static std::shared_ptr<NotationConfiguration> s_configuration = std::make_shared<NotationConfiguration>();
 static std::shared_ptr<NotationActionController> s_actionController = std::make_shared<NotationActionController>();
@@ -100,7 +100,7 @@ void NotationModule::resolveImports()
         ar->reg(std::make_shared<NotationActions>());
     }
 
-    auto ir = framework::ioc()->resolve<framework::IInteractiveUriRegister>(moduleName());
+    auto ir = framework::ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerUri(Uri("musescore://notation/style"),
                         ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<EditStyle>("EditStyle")));
@@ -165,7 +165,7 @@ void NotationModule::registerUiTypes()
     qRegisterMetaType<SelectNoteDialog>("SelectNoteDialog");
     qRegisterMetaType<SelectDialog>("SelectDialog");
 
-    framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(notation_QML_IMPORT);
+    framework::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(notation_QML_IMPORT);
 
     Ms::MScore::registerUiTypes();
 }

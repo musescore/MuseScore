@@ -16,15 +16,14 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_QMLAPI_H
-#define MU_FRAMEWORK_QMLAPI_H
+#ifndef MU_UI_QMLAPI_H
+#define MU_UI_QMLAPI_H
 
 #include <QObject>
 
 #include "qmllauncher.h"
 
-namespace mu {
-namespace framework {
+namespace mu::ui {
 class QmlApi : public QObject
 {
     Q_OBJECT
@@ -41,6 +40,5 @@ private:
     QmlLauncher* m_launcher = nullptr;
 };
 }
-}
 
-#endif // MU_FRAMEWORK_QMLAPI_H
+#endif // MU_UI_QMLAPI_H

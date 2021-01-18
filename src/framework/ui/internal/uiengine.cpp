@@ -32,7 +32,7 @@ namespace Ms {
 extern QString mscoreGlobalShare; //! FIXME Need to remove global variable
 }
 
-using namespace mu::framework;
+using namespace mu::ui;
 
 UiEngine* UiEngine::instance()
 {

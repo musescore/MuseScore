@@ -59,7 +59,7 @@ void DockView::componentComplete()
     if (_content) {
         QQmlEngine* engine = nullptr;
 #if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
-        engine = framework::ioc()->resolve<framework::IUiEngine>("appshell")->qmlEngine();
+        engine = framework::ioc()->resolve<ui::IUiEngine>("appshell")->qmlEngine();
 #else
         engine = _content->engine();
 #endif

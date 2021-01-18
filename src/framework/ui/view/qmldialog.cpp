@@ -26,7 +26,7 @@
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
 
-using namespace mu::framework;
+using namespace mu::ui;
 
 QmlDialog::QmlDialog(QQuickItem* parent)
     : QQuickItem(parent)

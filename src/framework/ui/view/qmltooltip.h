@@ -16,15 +16,14 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_QMLTOOLTIP_H
-#define MU_FRAMEWORK_QMLTOOLTIP_H
+#ifndef MU_UI_QMLTOOLTIP_H
+#define MU_UI_QMLTOOLTIP_H
 
 #include <QObject>
 #include <QQuickItem>
 #include <QTimer>
 
-namespace mu {
-namespace framework {
+namespace mu::ui {
 class QmlToolTip : public QObject
 {
     Q_OBJECT
@@ -45,6 +44,5 @@ private:
     QTimer m_timer;
 };
 }
-}
 
-#endif // MU_FRAMEWORK_QMLTOOLTIP_H
+#endif // MU_UI_QMLTOOLTIP_H

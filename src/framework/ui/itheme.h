@@ -17,8 +17,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_FRAMEWORK_ITHEME_H
-#define MU_FRAMEWORK_ITHEME_H
+#ifndef MU_UI_ITHEME_H
+#define MU_UI_ITHEME_H
 
 #include <QColor>
 #include <QFont>
@@ -26,7 +26,7 @@
 #include "modularity/imoduleexport.h"
 #include "async/notification.h"
 
-namespace mu::framework {
+namespace mu::ui {
 class ITheme : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(ITheme)
@@ -71,4 +71,4 @@ public:
 };
 }
 
-#endif // MU_FRAMEWORK_ITHEME_H
+#endif // MU_UI_ITHEME_H

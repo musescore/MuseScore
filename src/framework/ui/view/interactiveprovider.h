@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_INTERACTIVEPROVIDER_H
-#define MU_FRAMEWORK_INTERACTIVEPROVIDER_H
+#ifndef MU_UI_INTERACTIVEPROVIDER_H
+#define MU_UI_INTERACTIVEPROVIDER_H
 
 #include <QObject>
 #include <QVariant>
@@ -30,8 +30,7 @@
 #include "../imainwindow.h"
 #include "retval.h"
 
-namespace mu {
-namespace framework {
+namespace mu::ui {
 class QmlLaunchData : public QObject
 {
     Q_OBJECT
@@ -88,6 +87,5 @@ private:
     QMap<QString, RetVal<Val> > m_retvals;
 };
 }
-}
 
-#endif // MU_FRAMEWORK_INTERACTIVEPROVIDER_H
+#endif // MU_UI_INTERACTIVEPROVIDER_H

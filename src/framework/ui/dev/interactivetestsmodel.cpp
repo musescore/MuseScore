@@ -19,6 +19,7 @@
 #include "interactivetestsmodel.h"
 #include "log.h"
 
+using namespace mu::ui;
 using namespace mu::framework;
 
 InteractiveTestsModel::InteractiveTestsModel(QObject* parent)

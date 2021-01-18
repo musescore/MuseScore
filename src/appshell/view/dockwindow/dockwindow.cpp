@@ -45,7 +45,7 @@ static const QString STATUS_QSS = QString("QStatusBar { background: %1; } QStatu
 DockWindow::DockWindow(QQuickItem* parent)
     : QQuickItem(parent), m_toolbars(this), m_pages(this)
 {
-    framework::ioc()->registerExportNoDelete<framework::IMainWindow>("dock", this);
+    framework::ioc()->registerExportNoDelete<ui::IMainWindow>("dock", this);
 
     setFlag(QQuickItem::ItemHasContents, true);
     m_window = new QMainWindow();

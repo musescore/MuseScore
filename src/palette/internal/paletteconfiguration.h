@@ -30,7 +30,7 @@
 namespace mu::palette {
 class PaletteConfiguration : public IPaletteConfiguration
 {
-    INJECT(palette, framework::ITheme, theme)
+    INJECT(palette, ui::ITheme, theme)
     INJECT(palette, framework::IGlobalConfiguration, globalConfiguration)
     INJECT(palette, notation::INotationConfiguration, notationConfiguration)
 

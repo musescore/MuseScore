@@ -34,7 +34,7 @@ class QStatusBar;
 namespace mu {
 namespace dock {
 class EventsWatcher;
-class DockWindow : public QQuickItem, public framework::IMainWindow
+class DockWindow : public QQuickItem, public ui::IMainWindow
 {
     Q_OBJECT
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)

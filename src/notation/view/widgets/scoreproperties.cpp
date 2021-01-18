@@ -27,6 +27,7 @@
 
 using namespace mu::notation;
 using namespace mu::framework;
+using namespace mu::ui;
 
 static const QString SP_WORK_TITLE_TAG("workTitle");
 static const QString SP_WORK_NUMBER_TAG("workNumber");

@@ -68,7 +68,7 @@ void PlaybackModule::registerUiTypes()
 {
     qmlRegisterType<PlaybackToolBarModel>("MuseScore.Playback", 1, 0, "PlaybackToolBarModel");
 
-    framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(playback_QML_IMPORT);
+    framework::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(playback_QML_IMPORT);
 }
 
 void PlaybackModule::onInit(const framework::IApplication::RunMode& mode)

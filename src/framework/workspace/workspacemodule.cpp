@@ -39,6 +39,7 @@
 
 using namespace mu::workspace;
 using namespace mu::framework;
+using namespace mu::ui;
 
 static std::shared_ptr<WorkspaceManager> s_manager = std::make_shared<WorkspaceManager>();
 static std::shared_ptr<WorkspaceDataStreamRegister> s_streamRegister = std::make_shared<WorkspaceDataStreamRegister>();

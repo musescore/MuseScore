@@ -37,7 +37,7 @@ public:
     bool checked() const;
 
 public slots:
-    void setIcon(framework::IconCode::Code icon);
+    void setIcon(ui::IconCode::Code icon);
     void setChecked(bool checked);
 
 signals:
@@ -45,7 +45,7 @@ signals:
     void checkedChanged(bool checked);
 
 private:
-    framework::IconCode::Code m_icon = framework::IconCode::Code::NONE;
+    ui::IconCode::Code m_icon = ui::IconCode::Code::NONE;
     bool m_checked = false;
 };
 }

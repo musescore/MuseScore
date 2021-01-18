@@ -49,6 +49,7 @@
 
 using namespace mu::palette;
 using namespace mu::framework;
+using namespace mu::ui;
 
 static std::shared_ptr<MU4PaletteAdapter> s_adapter = std::make_shared<MU4PaletteAdapter>();
 static std::shared_ptr<PaletteActionsController> s_actionsController = std::make_shared<PaletteActionsController>();
@@ -65,8 +66,8 @@ std::string PaletteModule::moduleName() const
 
 void PaletteModule::registerExports()
 {
-    framework::ioc()->registerExport<IPaletteAdapter>(moduleName(), s_adapter);
-    framework::ioc()->registerExport<IPaletteConfiguration>(moduleName(), std::make_shared<PaletteConfiguration>());
+    ioc()->registerExport<IPaletteAdapter>(moduleName(), s_adapter);
+    ioc()->registerExport<IPaletteConfiguration>(moduleName(), std::make_shared<PaletteConfiguration>());
 
     // create a score for internal use
     Ms::gscore = new Ms::MasterScore();
@@ -87,7 +88,7 @@ void PaletteModule::resolveImports()
         workspaceStreams->regStream(std::make_shared<WorkspacePaletteStream>());
     }
 
-    auto ar = framework::ioc()->resolve<actions::IActionsRegister>(moduleName());
+    auto ar = ioc()->resolve<actions::IActionsRegister>(moduleName());
     if (ar) {
         ar->reg(std::make_shared<PaletteActions>());
     }
@@ -124,7 +125,7 @@ void PaletteModule::registerUiTypes()
     qmlRegisterType<PalettePropertiesModel>("MuseScore.Palette", 1, 0, "PalettePropertiesModel");
     qmlRegisterType<PaletteCellPropertiesModel>("MuseScore.Palette", 1, 0, "PaletteCellPropertiesModel");
 
-    framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(palette_QML_IMPORT);
+    ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(palette_QML_IMPORT);
 }
 
 void PaletteModule::onInit(const IApplication::RunMode& mode)

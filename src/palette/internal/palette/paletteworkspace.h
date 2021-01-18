@@ -40,7 +40,7 @@ class PaletteElementEditor : public QObject
 {
     Q_OBJECT
 
-    INJECT(palette, mu::framework::IMainWindow, mainWindow)
+    INJECT(palette, mu::ui::IMainWindow, mainWindow)
     INJECT(palette, mu::framework::IInteractive, interactive)
 
     AbstractPaletteController* _controller = nullptr;
@@ -130,7 +130,7 @@ class UserPaletteController : public AbstractPaletteController, public mu::async
 {
     Q_OBJECT
 
-    INJECT(palette, mu::framework::IMainWindow, mainWindow)
+    INJECT(palette, mu::ui::IMainWindow, mainWindow)
     INJECT(palette, mu::framework::IInteractive, interactive)
     INJECT(palette, mu::palette::IPaletteConfiguration, configuration)
 
@@ -197,7 +197,7 @@ class PaletteWorkspace : public QObject
 {
     Q_OBJECT
 
-    INJECT(palette, mu::framework::IMainWindow, mainWindow)
+    INJECT(palette, mu::ui::IMainWindow, mainWindow)
     INJECT(palette, mu::framework::IInteractive, interactive)
 
     PaletteTreeModel* userPalette;
@@ -224,7 +224,7 @@ class PaletteWorkspace : public QObject
     Q_PROPERTY(
         Ms::AbstractPaletteController* customElementsPaletteController READ getCustomElementsPaletteController CONSTANT)
 
-    QAbstractItemModel* mainPaletteModel();
+    QAbstractItemModel * mainPaletteModel();
     AbstractPaletteController* getMainPaletteController();
 
     FilterPaletteTreeModel* customElementsPaletteModel();

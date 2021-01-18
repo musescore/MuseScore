@@ -19,7 +19,7 @@
 #include "testdialog.h"
 #include "ui_testdialog.h"
 
-using namespace mu::framework;
+using namespace mu::ui;
 
 TestDialog::TestDialog(const TestDialog& dialog)
     : QDialog(dialog.parentWidget()),

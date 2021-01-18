@@ -36,6 +36,7 @@
 
 using namespace mu::userscores;
 using namespace mu::framework;
+using namespace mu::ui;
 
 static FileScoreController* s_fileController = new FileScoreController();
 static UserScoresConfiguration* s_userScoresConfiguration = new UserScoresConfiguration();
@@ -81,7 +82,7 @@ void UserScoresModule::registerUiTypes()
     qmlRegisterType<TemplatesModel>("MuseScore.UserScores", 1, 0, "TemplatesModel");
     qmlRegisterType<TemplatePaintView>("MuseScore.UserScores", 1, 0, "TemplatePaintView");
 
-    framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(userscores_QML_IMPORT);
+    framework::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(userscores_QML_IMPORT);
 }
 
 void UserScoresModule::onInit(const IApplication::RunMode& mode)

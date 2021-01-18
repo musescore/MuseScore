@@ -5,6 +5,7 @@
 #include <QMainWindow>
 #include <QScreen>
 
+using namespace mu::ui;
 using namespace mu::framework;
 using namespace mu::async;
 

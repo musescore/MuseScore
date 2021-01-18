@@ -63,7 +63,7 @@ private:
         std::string uri;
     };
 
-    ToolbarItem makeItem(std::string_view title, framework::IconCode::Code, std::string uri, bool enabled = true) const;
+    ToolbarItem makeItem(std::string_view title, ui::IconCode::Code, std::string uri, bool enabled = true) const;
 
     QList<ToolbarItem> m_items;
 };

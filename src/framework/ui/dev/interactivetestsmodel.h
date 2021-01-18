@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_INTERACTIVETESTSMODEL_H
-#define MU_FRAMEWORK_INTERACTIVETESTSMODEL_H
+#ifndef MU_UI_INTERACTIVETESTSMODEL_H
+#define MU_UI_INTERACTIVETESTSMODEL_H
 
 #include <QObject>
 
@@ -25,13 +25,12 @@
 #include "iinteractive.h"
 #include "async/asyncable.h"
 
-namespace mu {
-namespace framework {
+namespace mu::ui {
 class InteractiveTestsModel : public QObject, async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(ui, IInteractive, interactive)
+    INJECT(ui, framework::IInteractive, interactive)
 
     Q_PROPERTY(QString currentUri READ currentUri NOTIFY currentUriChanged)
 
@@ -64,6 +63,5 @@ private:
     QString m_currentUri;
 };
 }
-}
 
-#endif // MU_FRAMEWORK_INTERACTIVETESTSMODEL_H
+#endif // MU_UI_INTERACTIVETESTSMODEL_H

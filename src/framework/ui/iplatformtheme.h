@@ -17,13 +17,13 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_FRAMEWORK_IPLATFORMTHEME_H
-#define MU_FRAMEWORK_IPLATFORMTHEME_H
+#ifndef MU_UI_IPLATFORMTHEME_H
+#define MU_UI_IPLATFORMTHEME_H
 
 #include "modularity/imoduleexport.h"
 #include "async/channel.h"
 
-namespace mu::framework {
+namespace mu::ui {
 class IPlatformTheme : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IPlatformTheme)
@@ -40,4 +40,4 @@ public:
 };
 }
 
-#endif // MU_FRAMEWORK_IPLATFORMTHEME_H
+#endif // MU_UI_IPLATFORMTHEME_H

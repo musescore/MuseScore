@@ -16,13 +16,12 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_QMLTRANSLATION_H
-#define MU_FRAMEWORK_QMLTRANSLATION_H
+#ifndef MU_UI_QMLTRANSLATION_H
+#define MU_UI_QMLTRANSLATION_H
 
 #include <QObject>
 
-namespace mu {
-namespace framework {
+namespace mu::ui {
 class QmlTranslation : public QObject
 {
     Q_OBJECT
@@ -32,6 +31,5 @@ public:
     Q_INVOKABLE QString translate(const QString& context, const QString& text, const QString& disambiguation = QString(), int n = -1) const;
 };
 }
-}
 
-#endif // MU_FRAMEWORK_QMLTRANSLATION_H
+#endif // MU_UI_QMLTRANSLATION_H
