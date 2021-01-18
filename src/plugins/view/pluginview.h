@@ -41,7 +41,7 @@ class PluginView : public QObject
 {
     Q_OBJECT
 
-    INJECT(plugins, framework::IUiEngine, uiEngine)
+    INJECT(plugins, ui::IUiEngine, uiEngine)
 
 public:
     PluginView(const QUrl& url, QObject* parent = nullptr);

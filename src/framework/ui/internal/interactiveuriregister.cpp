@@ -20,8 +20,7 @@
 
 #include "log.h"
 
-using namespace mu;
-using namespace mu::framework;
+using namespace mu::ui;
 
 void InteractiveUriRegister::registerUri(const Uri& uri, const ContainerMeta& meta)
 {

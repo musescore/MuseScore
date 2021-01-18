@@ -32,7 +32,7 @@ class GridCanvas : public QQuickPaintedItem
 {
     Q_OBJECT
 
-    INJECT(inspector, mu::framework::IUiConfiguration, uiConfig)
+    INJECT(inspector, mu::ui::IUiConfiguration, uiConfig)
 
     Q_PROPERTY(QVariant pointList READ pointList WRITE setPointList NOTIFY pointListChanged)
 

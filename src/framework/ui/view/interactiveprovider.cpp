@@ -23,8 +23,8 @@
 #include <QMetaProperty>
 #include <QMainWindow>
 
-using namespace mu::framework;
 using namespace mu;
+using namespace mu::ui;
 
 static const QString PAGE_TYPE_DOCK("dock");
 static const QString PAGE_TYPE_POPUP("popup");

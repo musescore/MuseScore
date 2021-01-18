@@ -30,6 +30,7 @@
 
 using namespace mu::appshell;
 using namespace mu::framework;
+using namespace mu::ui;
 
 static void appshell_init_qrc()
 {

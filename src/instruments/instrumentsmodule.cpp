@@ -39,6 +39,7 @@
 
 using namespace mu::instruments;
 using namespace mu::framework;
+using namespace mu::ui;
 
 static InstrumentsRepository* m_instrumentsRepository = new InstrumentsRepository();
 
@@ -88,7 +89,7 @@ void InstrumentsModule::registerUiTypes()
     qmlRegisterUncreatableType<InstrumentTreeItemType>("MuseScore.Instruments", 1, 0, "InstrumentTreeItemType",
                                                        "Cannot create a ContainerType");
 
-    framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(instruments_QML_IMPORT);
+    framework::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(instruments_QML_IMPORT);
 }
 
 void InstrumentsModule::onInit(const IApplication::RunMode&)

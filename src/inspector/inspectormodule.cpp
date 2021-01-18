@@ -108,5 +108,5 @@ void InspectorModule::registerUiTypes()
     qmlRegisterUncreatableType<TremoloBarTypes>("MuseScore.Inspector", 1, 0, "TremoloBarTypes", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<TremoloTypes>("MuseScore.Inspector", 1, 0, "TremoloTypes", "Not creatable as it is an enum type");
 
-    framework::ioc()->resolve<framework::IUiEngine>(moduleName())->addSourceImportPath(inspector_QML_IMPORT);
+    framework::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(inspector_QML_IMPORT);
 }

@@ -24,7 +24,7 @@
 #include "translation.h"
 
 using namespace mu::notation;
-using namespace mu::framework;
+using namespace mu::ui;
 
 NotationToolBarModel::NotationToolBarModel(QObject* parent)
     : QAbstractListModel(parent)

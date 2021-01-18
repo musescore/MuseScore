@@ -23,7 +23,7 @@
 #include <QPalette>
 #include <QVariant>
 
-using namespace mu::framework;
+using namespace mu::ui;
 
 static const QString SEMIBOLD_STYLE_NAME("SemiBold");
 

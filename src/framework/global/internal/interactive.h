@@ -28,8 +28,8 @@ namespace mu {
 namespace framework {
 class Interactive : public IInteractive
 {
-    INJECT(global, IInteractiveProvider, provider)
-    INJECT(palette, mu::framework::IMainWindow, mainWindow)
+    INJECT(global, ui::IInteractiveProvider, provider)
+    INJECT(global, ui::IMainWindow, mainWindow)
 
 public:
     // question

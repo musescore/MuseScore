@@ -41,7 +41,7 @@ class ExampleView : public QFrame, public MuseScoreView
 {
     Q_OBJECT
 
-    INJECT(commonscene, mu::framework::IUiConfiguration, uiConfiguration)
+    INJECT(commonscene, mu::ui::IUiConfiguration, uiConfiguration)
     INJECT(commonscene, mu::notation::INotationConfiguration, notationConfiguration)
 
     QTransform _matrix, imatrix;

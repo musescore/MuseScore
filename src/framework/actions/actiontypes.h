@@ -44,16 +44,16 @@ struct ActionItem {
 
     std::string title;
     std::string description;
-    framework::IconCode::Code iconCode = framework::IconCode::Code::NONE;
+    ui::IconCode::Code iconCode = ui::IconCode::Code::NONE;
 
     ActionItem() = default;
     ActionItem(const ActionCode& code, shortcuts::ShortcutContext shortcutContext,
                const std::string& title, const std::string& description,
-               framework::IconCode::Code iconCode = framework::IconCode::Code::NONE)
+               ui::IconCode::Code iconCode = ui::IconCode::Code::NONE)
         : code(code), shortcutContext(shortcutContext), title(title), description(description), iconCode(iconCode) {}
 
     ActionItem(const ActionCode& code, shortcuts::ShortcutContext shortcutContext,
-               const std::string& title, framework::IconCode::Code iconCode = framework::IconCode::Code::NONE)
+               const std::string& title, ui::IconCode::Code iconCode = ui::IconCode::Code::NONE)
         : code(code), shortcutContext(shortcutContext), title(title), iconCode(iconCode) {}
 
     bool isValid() const { return !code.empty(); }

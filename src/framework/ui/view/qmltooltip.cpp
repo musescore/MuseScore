@@ -27,7 +27,7 @@
 
 #include "log.h"
 
-using namespace mu::framework;
+using namespace mu::ui;
 
 QmlToolTip::QmlToolTip(QObject* parent)
     : QObject(parent)

@@ -17,8 +17,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_FRAMEWORK_THEME_H
-#define MU_FRAMEWORK_THEME_H
+#ifndef MU_UI_THEME_H
+#define MU_UI_THEME_H
 
 #include <QObject>
 
@@ -28,7 +28,7 @@
 #include "ui/iplatformtheme.h"
 #include "async/asyncable.h"
 
-namespace mu::framework {
+namespace mu::ui {
 class Theme : public QObject, public ITheme, public async::Asyncable
 {
     Q_OBJECT
@@ -144,4 +144,4 @@ private:
 };
 }
 
-#endif // MU_FRAMEWORK_THEME_H
+#endif // MU_UI_THEME_H

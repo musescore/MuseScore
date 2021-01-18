@@ -23,7 +23,7 @@
 using namespace mu::notation;
 using namespace mu::actions;
 using namespace mu::shortcuts;
-using namespace mu::framework;
+using namespace mu::ui;
 
 //! NOTE Only actions processed by notation
 

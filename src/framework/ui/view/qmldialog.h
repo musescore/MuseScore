@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_QMLDIALOG_H
-#define MU_FRAMEWORK_QMLDIALOG_H
+#ifndef MU_UI_QMLDIALOG_H
+#define MU_UI_QMLDIALOG_H
 
 #include <QQuickItem>
 #include <QQmlComponent>
@@ -28,8 +28,7 @@
 
 class QDialog;
 
-namespace mu {
-namespace framework {
+namespace mu::ui {
 class QmlDialog : public QQuickItem
 {
     Q_OBJECT
@@ -85,6 +84,5 @@ private:
     QVariantMap m_ret;
 };
 }
-}
 
-#endif // MU_FRAMEWORK_QMLDIALOG_H
+#endif // MU_UI_QMLDIALOG_H

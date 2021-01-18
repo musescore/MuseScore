@@ -17,14 +17,13 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_FRAMEWORK_UIMODULE_H
-#define MU_FRAMEWORK_UIMODULE_H
+#ifndef MU_UI_UIMODULE_H
+#define MU_UI_UIMODULE_H
 
 #include "framework/global/modularity/imodulesetup.h"
 
-namespace mu {
-namespace framework {
-class UiModule : public IModuleSetup
+namespace mu::ui {
+class UiModule : public framework::IModuleSetup
 {
 public:
     std::string moduleName() const override;
@@ -36,6 +35,5 @@ public:
     void onInit(const framework::IApplication::RunMode& mode) override;
 };
 }
-}
 
-#endif // MU_FRAMEWORK_UIMODULE_H
+#endif // MU_UI_UIMODULE_H

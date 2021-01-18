@@ -34,9 +34,9 @@ class PluginEditorView : public QDialog, public Steinberg::IPlugFrame
 {
     Q_OBJECT
     Q_PROPERTY(int instanceId READ id WRITE setId NOTIFY idChanged)
-    INJECT(ui, mu::framework::IMainWindow, mainWindow)
+    INJECT(ui, mu::ui::IMainWindow, mainWindow)
     INJECT(vst, IVSTInstanceRegister, vstInstanceRegister)
-    INJECT(ui, mu::framework::IUiEngine, uiEngine)
+    INJECT(ui, mu::ui::IUiEngine, uiEngine)
 public:
     PluginEditorView(QWidget* parent = nullptr);
     PluginEditorView(const PluginEditorView& other);
