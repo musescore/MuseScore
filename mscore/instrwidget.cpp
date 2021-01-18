@@ -94,15 +94,6 @@ void ScoreOrderListModel::rebuildData()
       }
 
 //---------------------------------------------------------
-//   setCustomizedOrder
-//---------------------------------------------------------
-
-void ScoreOrderListModel::setCustomizedOrder(ScoreOrder* order)
-      {
-      _customizedOrder = (order && order->isCustomized()) ? order : nullptr;
-      }
-
-//---------------------------------------------------------
 //   ScoreOrderFilterProxyModel
 //---------------------------------------------------------
 ScoreOrderFilterProxyModel::ScoreOrderFilterProxyModel(ScoreOrderList* data, QObject* parent)
@@ -118,6 +109,7 @@ ScoreOrderFilterProxyModel::ScoreOrderFilterProxyModel(ScoreOrderList* data, QOb
 void ScoreOrderFilterProxyModel::setCustomizedOrder(ScoreOrder* order)
       {
       _customizedOrder = (order && order->isCustomized()) ? order : nullptr;
+      invalidateFilter();
       }
 
 //---------------------------------------------------------
@@ -1239,8 +1231,8 @@ void InstrumentsWidget::updateScoreOrder()
                   if (!custom) {
                         custom = order->clone();
                         scoreOrders.addScoreOrder(custom);
-                        _filter->setCustomizedOrder(custom);
                         }
+                  _filter->setCustomizedOrder(custom);
                   setScoreOrder(custom);
                   }
             }

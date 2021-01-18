@@ -42,7 +42,6 @@ enum { PART_LIST_ITEM = QTreeWidgetItem::UserType, STAFF_LIST_ITEM };
 class ScoreOrderListModel : public QAbstractListModel {
    private:
       ScoreOrderList* _scoreOrders;
-      ScoreOrder* _customizedOrder { nullptr };
 
    public:
       ScoreOrderListModel(ScoreOrderList* data, QObject* parent=nullptr);
@@ -50,8 +49,6 @@ class ScoreOrderListModel : public QAbstractListModel {
       int rowCount(const QModelIndex& parent = QModelIndex()) const;
       QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
       void rebuildData();
-
-      void setCustomizedOrder(ScoreOrder* order);
       };
 
 //---------------------------------------------------------
