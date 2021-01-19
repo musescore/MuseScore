@@ -133,7 +133,7 @@ FocusScope {
                     color: globalStyle.buttonText
                     horizontalAlignment: Qt.AlignLeft
 
-                    text: "<a href=\"https://youtu.be/qLR40BGNy68\">%1</a>".arg(qsTr("Watch our release video to learn more"))
+                    text: "<a href=\"%1\">%2</a>".arg(Qt.locale().name === "zh_CN" ? "https://www.bilibili.com/video/BV1FT4y1K7UM" : "https://youtu.be/qLR40BGNy68").arg(qsTr("Watch our release video to learn more"))
 
                     onLinkActivated: {
                         if (root.model) {

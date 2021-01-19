@@ -1,6 +1,7 @@
 #include "scoremigrationdialogmodel.h"
 
 #include <QDesktopServices>
+#include <QLocale>
 
 #include "handlers/resetallelementspositionshandler.h"
 #include "handlers/lelandstylehandler.h"
@@ -46,7 +47,8 @@ void ScoreMigrationDialogModel::ignore()
 
 void ScoreMigrationDialogModel::showMoreDetails()
       {
-      QDesktopServices::openUrl(QUrl("https://youtu.be/qLR40BGNy68"));
+      QLocale locale;
+      QDesktopServices::openUrl((locale.language() == QLocale::Chinese) ? QUrl("https://www.bilibili.com/video/BV1FT4y1K7UM") : QUrl("https://youtu.be/qLR40BGNy68"));
       }
 
 bool ScoreMigrationDialogModel::isLelandAllowed() const
