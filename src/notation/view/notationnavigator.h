@@ -43,12 +43,9 @@ class NotationNavigator : public NotationPaintView
 public:
     NotationNavigator(QQuickItem* parent = nullptr);
 
-    Q_INVOKABLE void setViewRect(const QRect& rect);
+    Q_INVOKABLE void setCursorRect(const QRect& rect);
 
     int orientation() const;
-
-public slots:
-    void onCurrentNotationChanged();
 
 signals:
     void moveNotationRequested(int dx, int dy);
@@ -56,6 +53,9 @@ signals:
 
 private:
     INotationPtr currentNotation() const;
+
+    void initOrientation();
+    void initVisible();
 
     ViewMode notationViewMode() const;
 
@@ -67,7 +67,7 @@ private:
     void mousePressEvent(QMouseEvent* event) override;
     void mouseMoveEvent(QMouseEvent* event) override;
 
-    void paintViewRect(QPainter* painter);
+    void paintCursor(QPainter* painter);
     void paintPageNumbers(QPainter* painter);
 
     void moveCanvasToRect(const QRect& viewRect);
@@ -77,7 +77,7 @@ private:
     QRectF notationContentRect() const;
     PageList pages() const;
 
-    QRect m_viewRect;
+    QRect m_cursorRect;
     QPoint m_startMove;
 };
 }

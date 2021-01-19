@@ -74,9 +74,11 @@ public:
     virtual std::vector<std::string> toolbarActions(const std::string& toolbarName) const = 0;
     virtual void setToolbarActions(const std::string& toolbarName, const std::vector<std::string>& actions) = 0;
 
-    virtual NavigatorOrientation navigatorOrientation() const = 0;
+    virtual ValCh<bool> isNavigatorVisible() const = 0;
+    virtual void setNavigatorVisible(bool visible) = 0;
+
+    virtual ValCh<NavigatorOrientation> navigatorOrientation() const = 0;
     virtual void setNavigatorOrientation(NavigatorOrientation orientation) = 0;
-    virtual async::Channel<NavigatorOrientation> navigatorOrientationChanged() const = 0;
 };
 }
 

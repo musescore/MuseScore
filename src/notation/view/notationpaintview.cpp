@@ -88,7 +88,7 @@ void NotationPaintView::initBackground()
 
 void NotationPaintView::initNavigatorOrientation()
 {
-    configuration()->navigatorOrientationChanged().onReceive(this, [this](NavigatorOrientation) {
+    configuration()->navigatorOrientation().ch.onReceive(this, [this](NavigatorOrientation) {
         moveCanvasToPosition(QPoint(0, 0));
     });
 }
