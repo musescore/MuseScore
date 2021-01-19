@@ -23,17 +23,14 @@
 using namespace mu::notation;
 
 NotationNavigator::NotationNavigator(QQuickItem* parent)
-    : QQuickPaintedItem(parent)
+    : NotationPaintView(parent)
 {
     setAcceptedMouseButtons(Qt::AllButtons);
+    setReadonly(true);
 
     configuration()->navigatorOrientationChanged().onReceive(this, [this](NavigatorOrientation) {
         moveCanvasToPosition(QPoint(0, 0));
         emit orientationChanged();
-    });
-
-    globalContext()->currentNotationChanged().onNotify(this, [this]() {
-        onCurrentNotationChanged();
     });
 
     theme()->themeChanged().onNotify(this, [this]() {
@@ -71,11 +68,6 @@ PageList NotationNavigator::pages() const
     return elements->pages();
 }
 
-qreal NotationNavigator::scale() const
-{
-    return m_matrix.m11();
-}
-
 void NotationNavigator::rescale()
 {
     PageList pages = this->pages();
@@ -85,42 +77,21 @@ void NotationNavigator::rescale()
 
     const Page* lastPage = pages.back();
 
-    qreal scale = 0;
+    qreal _scale = 0;
 
     if (isVerticalOrientation()) {
         qreal scoreWidth = lastPage->width();
-        scale = width() / scoreWidth;
+        _scale = width() * guiScaling() / scoreWidth;
     } else {
         qreal scoreHeight = lastPage->height();
-        scale = height() / scoreHeight;
+        _scale = height() * guiScaling() / scoreHeight;
     }
 
-    scale *= guiScaling();
-
-    m_matrix = QTransform(scale, 0, 0, scale, m_matrix.dx(), m_matrix.dy());
+    scale(_scale, QPoint());
 }
 
-QRect NotationNavigator::viewport() const
+void NotationNavigator::wheelEvent(QWheelEvent*)
 {
-    return toLogical(QRect(0, 0, width(), height()));
-}
-
-QPoint NotationNavigator::toLogical(const QPoint& point) const
-{
-    double scale = guiScaling();
-    QPoint scaledPoint(point.x() * scale, point.y() * scale);
-
-    return m_matrix.inverted().map(scaledPoint);
-}
-
-QRect NotationNavigator::toLogical(const QRect& rect) const
-{
-    double scale = guiScaling();
-
-    QRect scaledRect = rect;
-    scaledRect.setBottomRight(rect.bottomRight() * scale);
-
-    return m_matrix.inverted().mapRect(rect);
 }
 
 void NotationNavigator::mousePressEvent(QMouseEvent* event)
@@ -149,69 +120,62 @@ void NotationNavigator::mouseMoveEvent(QMouseEvent* event)
     m_startMove = logicPos;
 }
 
-void NotationNavigator::moveCanvas(int dx, int dy)
-{
-    m_matrix.translate(dx, dy);
-    update();
-}
-
 void NotationNavigator::moveCanvasToRect(const QRect& viewRect)
 {
-    QRectF newViewRect = notationContentRect().intersected(viewRect);
+    QRectF newViewRect = viewRect;
+    QRect viewport = this->viewport();
+    QRectF notationContentRect = this->notationContentRect();
 
     int dx = 0;
     int dy = 0;
 
     if (isVerticalOrientation()) {
-        newViewRect.setHeight(std::min(viewport().height(), newViewRect.toRect().height()));
+        newViewRect.setHeight(std::min(viewport.height(), newViewRect.toRect().height()));
 
         QPoint top = newViewRect.topLeft().toPoint();
         QPoint bottom = newViewRect.bottomRight().toPoint();
 
-        if (!notationContentRect().contains(top) && !notationContentRect().contains(bottom)) {
+        if (!notationContentRect.contains(top) && !notationContentRect.contains(bottom)) {
             return;
         }
 
-        if (viewport().top() > top.y()) {
-            dy = newViewRect.top() - viewport().top();
-        } else if (viewport().bottom() < bottom.y()) {
-            dy = newViewRect.bottom() - viewport().bottom();
+        if (viewport.top() > top.y()) {
+            dy = top.y() - viewport.top();
+        } else if (viewport.bottom() < bottom.y()) {
+            dy = bottom.y() - viewport.bottom();
         }
     } else {
-        newViewRect.setWidth(std::min(viewport().width(), newViewRect.toRect().width()));
+        newViewRect.setWidth(std::min(viewport.width(), newViewRect.toRect().width()));
 
         QPoint left = newViewRect.topLeft().toPoint();
         QPoint right = newViewRect.bottomRight().toPoint();
 
-        if (!notationContentRect().contains(left) && !notationContentRect().contains(right)) {
+        if (!notationContentRect.contains(left) && !notationContentRect.contains(right)) {
             return;
         }
 
-        if (viewport().left() > left.x()) {
-            dx = newViewRect.left() - viewport().left();
-        } else if (viewport().right() < right.x()) {
-            dx = newViewRect.right() - viewport().right();
+        if (viewport.left() > left.x()) {
+            dx = left.x() - viewport.left();
+        } else if (viewport.right() < right.x()) {
+            dx = right.x() - viewport.right();
         }
     }
 
     moveCanvas(-dx, -dy);
 }
 
-void NotationNavigator::moveCanvasToPosition(const QPoint& position)
-{
-    QPoint viewTopLeft = toLogical(QPoint(0, 0));
-    moveCanvas(viewTopLeft.x() - position.x(), viewTopLeft.y() - position.y());
-}
-
 void NotationNavigator::setViewRect(const QRect& rect)
 {
-    if (!rect.isValid()) {
+    QRect newViewRect = rect;
+    if (!newViewRect.isValid()) {
         return;
     }
 
-    moveCanvasToRect(rect);
+    newViewRect = notationContentRect().intersected(QRectF(newViewRect)).toRect();
 
-    m_viewRect = rect;
+    moveCanvasToRect(newViewRect);
+
+    m_viewRect = newViewRect;
     rescale();
     update();
 }
@@ -236,11 +200,6 @@ void NotationNavigator::onCurrentNotationChanged()
     });
 }
 
-double NotationNavigator::guiScaling() const
-{
-    return configuration()->guiScaling();
-}
-
 INotationPtr NotationNavigator::currentNotation() const
 {
     return globalContext()->currentNotation();
@@ -260,48 +219,10 @@ void NotationNavigator::paint(QPainter* painter)
 {
     painter->fillRect(viewport(), configuration()->backgroundColor());
 
-    paintPages(painter);
+    NotationPaintView::paint(painter);
     paintViewRect(painter);
-}
 
-void NotationNavigator::paintPages(QPainter* painter)
-{
-    PageList pages = this->pages();
-    if (pages.empty()) {
-        return;
-    }
-
-    ViewMode viewMode = notationViewMode();
-
-    constexpr int PAGE_NUMBER_FONT_SIZE = 2000;
-    QFont font(QString::fromStdString(configuration()->fontFamily()), PAGE_NUMBER_FONT_SIZE);
-
-    painter->setTransform(m_matrix);
-    QRectF viewportRect = viewport();
-
-    for (const Page* page : pages) {
-        QPointF pos(page->pos());
-        QRectF pageRect(page->abbox().translated(pos));
-        if (pageRect.right() < viewportRect.left()) {
-            continue;
-        }
-        if (pageRect.left() > viewportRect.right()) {
-            break;
-        }
-
-        painter->translate(pos);
-
-        painter->fillRect(page->bbox(), configuration()->pageColor());
-
-        Ms::paintElements(*painter, page->elements());
-
-        if (viewMode == ViewMode::PAGE) {
-            painter->setFont(font);
-            painter->setPen(configuration()->layoutBreakColor());
-            painter->drawText(page->bbox(), Qt::AlignCenter, QString("%1").arg(page->no() + 1));
-        }
-        painter->translate(-pos);
-    }
+    paintPageNumbers(painter);
 }
 
 void NotationNavigator::paintViewRect(QPainter* painter)
@@ -311,6 +232,25 @@ void NotationNavigator::paintViewRect(QPainter* painter)
     painter->setPen(pen);
     painter->setBrush(QColor(color.red(), color.green(), color.blue(), configuration()->cursorOpacity()));
 
-    QRectF viewRect = notationContentRect().intersected(m_viewRect);
-    painter->drawRect(viewRect);
+    painter->drawRect(m_viewRect);
+}
+
+void NotationNavigator::paintPageNumbers(QPainter* painter)
+{
+    if (notationViewMode() != ViewMode::PAGE) {
+        return;
+    }
+
+    constexpr int PAGE_NUMBER_FONT_SIZE = 2000;
+    QFont font(QString::fromStdString(configuration()->fontFamily()), PAGE_NUMBER_FONT_SIZE);
+
+    for (const Page* page : pages()) {
+        painter->translate(page->pos());
+
+        painter->setFont(font);
+        painter->setPen(configuration()->layoutBreakColor());
+        painter->drawText(page->bbox(), Qt::AlignCenter, QString("%1").arg(page->no() + 1));
+
+        painter->translate(-page->pos());
+    }
 }

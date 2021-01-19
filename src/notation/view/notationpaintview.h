@@ -89,7 +89,7 @@ public:
     qreal horizontalScrollSize() const;
     qreal startVerticalScrollPosition() const;
     qreal verticalScrollSize() const;
-    
+
     QRect viewport() const;
 
 signals:
@@ -106,9 +106,15 @@ protected:
     void setReadonly(bool readonly);
 
     void moveCanvasToCenter();
+    void moveCanvasToPosition(const QPoint& logicPos);
     double guiScaling() const;
 
     QRectF notationContentRect() const;
+
+    QRect toLogical(const QRect& rect) const;
+
+    // Draw
+    void paint(QPainter* painter) override;
 
 protected slots:
     virtual void onViewSizeChanged();
@@ -121,13 +127,11 @@ private:
 
     void clear();
     void initBackground();
+    void initNavigatorOrientation();
 
     bool canReceiveAction(const actions::ActionCode& actionCode) const override;
     void onCurrentNotationChanged();
     bool isInited() const;
-
-    // Draw
-    void paint(QPainter* painter) override;
 
     // Input
     void wheelEvent(QWheelEvent* event) override;
@@ -143,8 +147,6 @@ private:
     void dragMoveEvent(QDragMoveEvent* event) override;
     void dropEvent(QDropEvent* event) override;
 
-    QRect toLogical(const QRect& rect) const;
-
     QRectF canvasRect() const;
 
     qreal horizontalScrollableAreaSize() const;
@@ -153,7 +155,6 @@ private:
     qreal verticalScrollableSize() const;
 
     void adjustCanvasPosition(const QRectF& logicRect);
-    void moveCanvasToPosition(const QPoint& logicPos);
 
     void onNoteInputChanged();
     void onSelectionChanged();

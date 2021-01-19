@@ -2211,7 +2211,7 @@ void NotationInteraction::addText(TextType type)
     notifyAboutSelectionChanged();
 }
 
-void NotationInteraction::toggleNavigator()
+void NotationInteraction::toggleNavigatorOrientation()
 {
     NavigatorOrientation orientation = configuration()->navigatorOrientation();
 

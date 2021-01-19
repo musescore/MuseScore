@@ -62,50 +62,50 @@ FocusScope {
                 ContextMenu {
                     id: contextMenu
                 }
-            }
 
-            StyledScrollBar {
-                id: verticalScrollBar
+                StyledScrollBar {
+                    id: verticalScrollBar
 
-                anchors.top: parent.top
-                anchors.bottomMargin: privateProperties.scrollbarMargin
-                anchors.bottom: parent.bottom
-                anchors.right: parent.right
+                    anchors.top: parent.top
+                    anchors.bottomMargin: privateProperties.scrollbarMargin
+                    anchors.bottom: parent.bottom
+                    anchors.right: parent.right
 
-                orientation: Qt.Vertical
+                    orientation: Qt.Vertical
 
-                color: "black"
-                withBorder: true
-                borderColor: "white"
+                    color: "black"
+                    withBorder: true
+                    borderColor: "white"
 
-                size: notationView.verticalScrollSize
+                    size: notationView.verticalScrollSize
 
-                onPositionChanged: {
-                    if (pressed) {
-                        notationView.scrollVertical(position)
+                    onPositionChanged: {
+                        if (pressed) {
+                            notationView.scrollVertical(position)
+                        }
                     }
                 }
-            }
 
-            StyledScrollBar {
-                id: horizontalScrollBar
+                StyledScrollBar {
+                    id: horizontalScrollBar
 
-                anchors.bottom: parent.bottom
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.rightMargin: privateProperties.scrollbarMargin
+                    anchors.bottom: parent.bottom
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.rightMargin: privateProperties.scrollbarMargin
 
-                orientation: Qt.Horizontal
+                    orientation: Qt.Horizontal
 
-                color: "black"
-                withBorder: true
-                borderColor: "white"
+                    color: "black"
+                    withBorder: true
+                    borderColor: "white"
 
-                size: notationView.horizontalScrollSize
+                    size: notationView.horizontalScrollSize
 
-                onPositionChanged: {
-                    if (pressed) {
-                        notationView.scrollHorizontal(position)
+                    onPositionChanged: {
+                        if (pressed) {
+                            notationView.scrollHorizontal(position)
+                        }
                     }
                 }
             }
@@ -115,8 +115,8 @@ FocusScope {
 
                 property bool isVertical: orientation === Qt.Vertical
 
-                SplitView.preferredHeight: 200
-                SplitView.preferredWidth: 200
+                SplitView.preferredHeight: 100
+                SplitView.preferredWidth: 100
 
                 onMoveNotationRequested: {
                     notationView.moveCanvas(dx, dy)
@@ -161,6 +161,7 @@ FocusScope {
 
     Component.onCompleted: {
         notationView.load()
+        notationNavigator.load()
     }
 
     QtObject {

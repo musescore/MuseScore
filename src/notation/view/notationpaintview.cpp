@@ -446,6 +446,10 @@ void NotationPaintView::moveCanvasToPosition(const QPoint& logicPos)
 
 void NotationPaintView::moveCanvas(int dx, int dy)
 {
+    if (dx == 0 && dy == 0) {
+        return;
+    }
+
     m_matrix.translate(dx, dy);
     update();
 
