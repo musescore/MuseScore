@@ -58,6 +58,8 @@ NotationPaintView::NotationPaintView(QQuickItem* parent)
 
 void NotationPaintView::load()
 {
+    TRACEFUNC;
+
     m_notation = globalContext()->currentNotation();
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
@@ -152,6 +154,8 @@ bool NotationPaintView::canReceiveAction(const actions::ActionCode& actionCode) 
 
 void NotationPaintView::onCurrentNotationChanged()
 {
+    TRACEFUNC;
+
     if (m_notation) {
         m_notation->notationChanged().resetOnNotify(this);
         INotationInteractionPtr interaction = m_notation->interaction();
@@ -243,6 +247,8 @@ INotationSelectionPtr NotationPaintView::notationSelection() const
 
 void NotationPaintView::onNoteInputChanged()
 {
+    TRACEFUNC;
+
     if (isNoteEnterMode()) {
         setAcceptHoverEvents(true);
         QRectF cursorRect = notationNoteInput()->cursorRect();
@@ -259,6 +265,8 @@ void NotationPaintView::onSelectionChanged()
     if (notationSelection()->isNone()) {
         return;
     }
+
+    TRACEFUNC;
 
     QRectF selectionRect = notationSelection()->canvasBoundingRect();
 
@@ -712,6 +720,8 @@ void NotationPaintView::onPlayingChanged()
         return;
     }
 
+    TRACEFUNC;
+
     bool isPlaying = playbackController()->isPlaying();
     m_playbackCursor->setVisible(isPlaying);
 
@@ -729,6 +739,8 @@ void NotationPaintView::movePlaybackCursor(uint32_t tick)
     if (!notationPlayback()) {
         return;
     }
+
+    TRACEFUNC;
 
     QRect cursorRect = notationPlayback()->playbackCursorRectByTick(tick);
     m_playbackCursor->move(cursorRect);
