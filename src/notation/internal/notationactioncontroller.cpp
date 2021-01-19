@@ -975,7 +975,7 @@ void NotationActionController::toggleNavigatorOrientation()
         return;
     }
 
-    interaction->toggleNavigatorOrientation();
+    interaction->toggleNavigator();
 }
 
 void NotationActionController::startNoteInputIfNeed()

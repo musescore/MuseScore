@@ -2211,23 +2211,10 @@ void NotationInteraction::addText(TextType type)
     notifyAboutSelectionChanged();
 }
 
-void NotationInteraction::toggleNavigatorOrientation()
+void NotationInteraction::toggleNavigator()
 {
-    NavigatorOrientation orientation = configuration()->navigatorOrientation();
-
-    if (orientation == NavigatorOrientation::Vertical) {
-        orientation = NavigatorOrientation::Horizontal;
-    } else {
-        orientation = NavigatorOrientation::Vertical;
-    }
-
-    bool isVertical = orientation == NavigatorOrientation::Vertical;
-    Ms::MScore::setVerticalOrientation(isVertical);
-    score()->doLayout();
-
-    configuration()->setNavigatorOrientation(orientation);
-
-    notifyAboutNotationChanged();
+    bool visible = configuration()->isNavigatorVisible().val;
+    configuration()->setNavigatorVisible(!visible);
 }
 
 bool NotationInteraction::needEndTextEditing(const std::vector<Element*>& newSelectedElements) const

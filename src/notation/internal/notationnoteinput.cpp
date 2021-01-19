@@ -313,7 +313,7 @@ QRectF NotationNoteInput::cursorRect() const
 
     QRectF result = QRectF(x, y, w, h);
 
-    if (configuration()->navigatorOrientation() == NavigatorOrientation::Horizontal) {
+    if (configuration()->navigatorOrientation().val == NavigatorOrientation::Horizontal) {
         result.translate(system->page()->pos());
     }
 

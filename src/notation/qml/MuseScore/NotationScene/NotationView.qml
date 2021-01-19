@@ -44,7 +44,7 @@ FocusScope {
                 }
 
                 onViewportChanged: {
-                    notationNavigator.setViewRect(viewport)
+                    notationNavigator.setCursorRect(viewport)
                 }
 
                 onHorizontalScrollChanged: {

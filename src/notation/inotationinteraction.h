@@ -112,7 +112,7 @@ public:
 
     virtual void addText(TextType type) = 0;
 
-    virtual void toggleNavigatorOrientation() = 0;
+    virtual void toggleNavigator() = 0;
 };
 
 using INotationInteractionPtr = std::shared_ptr<INotationInteraction>;

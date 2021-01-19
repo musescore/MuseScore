@@ -92,9 +92,6 @@ void NotationModule::registerExports()
     readers->reg({ "mscz", "mscx" }, std::make_shared<MsczNotationReader>());
     framework::ioc()->registerExport<INotationReadersRegister>(moduleName(), readers);
     framework::ioc()->registerExport<INotationWritersRegister>(moduleName(), std::make_shared<NotationWritersRegister>());
-
-    //! FIXME: init of notation should be in NotationModule::onInit
-    Notation::init();
 }
 
 void NotationModule::resolveImports()

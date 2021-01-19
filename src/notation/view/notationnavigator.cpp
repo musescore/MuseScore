@@ -28,10 +28,8 @@ NotationNavigator::NotationNavigator(QQuickItem* parent)
     setAcceptedMouseButtons(Qt::AllButtons);
     setReadonly(true);
 
-    configuration()->navigatorOrientationChanged().onReceive(this, [this](NavigatorOrientation) {
-        moveCanvasToPosition(QPoint(0, 0));
-        emit orientationChanged();
-    });
+    initOrientation();
+    initVisible();
 
     theme()->themeChanged().onNotify(this, [this]() {
         update();
@@ -40,7 +38,7 @@ NotationNavigator::NotationNavigator(QQuickItem* parent)
 
 bool NotationNavigator::isVerticalOrientation() const
 {
-    return configuration()->navigatorOrientation() == NavigatorOrientation::Vertical;
+    return configuration()->navigatorOrientation().val == NavigatorOrientation::Vertical;
 }
 
 QRectF NotationNavigator::notationContentRect() const
@@ -98,11 +96,11 @@ void NotationNavigator::mousePressEvent(QMouseEvent* event)
 {
     QPoint logicPos = toLogical(event->pos());
     m_startMove = logicPos;
-    if (m_viewRect.contains(logicPos)) {
+    if (m_cursorRect.contains(logicPos)) {
         return;
     }
 
-    QRectF viewRect = m_viewRect;
+    QRectF viewRect = m_cursorRect;
     double dx = logicPos.x() - (viewRect.x() + (viewRect.width() / 2));
     double dy = logicPos.y() - (viewRect.y() + (viewRect.height() / 2));
 
@@ -164,45 +162,52 @@ void NotationNavigator::moveCanvasToRect(const QRect& viewRect)
     moveCanvas(-dx, -dy);
 }
 
-void NotationNavigator::setViewRect(const QRect& rect)
+void NotationNavigator::setCursorRect(const QRect& rect)
 {
-    QRect newViewRect = rect;
-    if (!newViewRect.isValid()) {
+    QRect newCursorRect = rect;
+    if (!newCursorRect.isValid()) {
         return;
     }
 
-    newViewRect = notationContentRect().intersected(QRectF(newViewRect)).toRect();
+    newCursorRect = notationContentRect().intersected(QRectF(newCursorRect)).toRect();
 
-    moveCanvasToRect(newViewRect);
+    moveCanvasToRect(newCursorRect);
 
-    m_viewRect = newViewRect;
+    m_cursorRect = newCursorRect;
     rescale();
     update();
 }
 
 int NotationNavigator::orientation() const
 {
-    return static_cast<int>(configuration()->navigatorOrientation());
-}
-
-void NotationNavigator::onCurrentNotationChanged()
-{
-    auto notation = currentNotation();
-    setVisible(notation != nullptr);
-
-    if (!notation) {
-        return;
-    }
-
-    notation->notationChanged().onNotify(this, [this]() {
-        rescale();
-        update();
-    });
+    return static_cast<int>(configuration()->navigatorOrientation().val);
 }
 
 INotationPtr NotationNavigator::currentNotation() const
 {
     return globalContext()->currentNotation();
+}
+
+void NotationNavigator::initOrientation()
+{
+    ValCh<NavigatorOrientation> orientation = configuration()->navigatorOrientation();
+    orientation.ch.onReceive(this, [this](NavigatorOrientation) {
+        moveCanvasToPosition(QPoint(0, 0));
+        emit orientationChanged();
+    });
+
+    emit orientationChanged();
+}
+
+void NotationNavigator::initVisible()
+{
+    ValCh<bool> visible = configuration()->isNavigatorVisible();
+    visible.ch.onReceive(this, [this](bool visible) {
+        setVisible(visible);
+        update();
+    });
+
+    setVisible(visible.val);
 }
 
 ViewMode NotationNavigator::notationViewMode() const
@@ -217,22 +222,24 @@ ViewMode NotationNavigator::notationViewMode() const
 
 void NotationNavigator::paint(QPainter* painter)
 {
-    painter->fillRect(viewport(), configuration()->backgroundColor());
+    if (!isVisible()) {
+        return;
+    }
 
     NotationPaintView::paint(painter);
-    paintViewRect(painter);
+    paintCursor(painter);
 
     paintPageNumbers(painter);
 }
 
-void NotationNavigator::paintViewRect(QPainter* painter)
+void NotationNavigator::paintCursor(QPainter* painter)
 {
     QColor color(configuration()->selectionColor());
     QPen pen(color, configuration()->borderWidth());
     painter->setPen(pen);
     painter->setBrush(QColor(color.red(), color.green(), color.blue(), configuration()->cursorOpacity()));
 
-    painter->drawRect(m_viewRect);
+    painter->drawRect(m_cursorRect);
 }
 
 void NotationNavigator::paintPageNumbers(QPainter* painter)
