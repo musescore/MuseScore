@@ -76,9 +76,11 @@ public:
     std::vector<std::string> toolbarActions(const std::string& toolbarName) const override;
     void setToolbarActions(const std::string& toolbarName, const std::vector<std::string>& actions) override;
 
-    NavigatorOrientation navigatorOrientation() const;
+    ValCh<bool> isNavigatorVisible() const override;
+    void setNavigatorVisible(bool visible) override;
+
+    ValCh<NavigatorOrientation> navigatorOrientation() const override;
     void setNavigatorOrientation(NavigatorOrientation orientation) override;
-    async::Channel<NavigatorOrientation> navigatorOrientationChanged() const;
 
 private:
     std::vector<std::string> parseToolbarActions(const std::string& actions) const;
@@ -90,6 +92,7 @@ private:
     async::Channel<QColor> m_backgroundColorChanged;
     async::Channel<QColor> m_foregroundColorChanged;
     async::Channel<int> m_currentZoomChanged;
+    async::Channel<bool> m_navigatorVisibleChanged;
     async::Channel<NavigatorOrientation> m_navigatorOrientationChanged;
 };
 }

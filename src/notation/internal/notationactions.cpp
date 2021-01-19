@@ -584,6 +584,10 @@ const ActionList NotationActions::m_actions = {
     ActionItem("tuplet-dialog",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Other")
+               ),
+    ActionItem("toggle-navigator",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Toggle Navigator")
                )
 };
 
