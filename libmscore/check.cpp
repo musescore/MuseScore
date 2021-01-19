@@ -214,7 +214,7 @@ bool Score::sanityCheck(const QString& name)
                         }
                   for (int v = 1; v < VOICES; ++v) {
                         if (voices[v] > mLen) {
-                              QString msg = QObject::tr("Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5").arg(mNumber).arg(staffIdx + 1, v + 1).arg(mLen.print(), voices[v].print());
+                              QString msg = QObject::tr("Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5").arg(mNumber).arg(staffIdx + 1).arg(v + 1).arg(mLen.print(), voices[v].print());
                               qDebug() << msg;
                               error += QString("%1\n").arg(msg);
 #ifndef NDEBUG
