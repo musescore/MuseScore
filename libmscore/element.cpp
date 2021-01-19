@@ -146,7 +146,7 @@ qreal Element::spatium() const
 
 bool Element::offsetIsSpatiumDependent() const
       {
-      return sizeIsSpatiumDependent() || (parent() && !parent()->isBox());
+      return sizeIsSpatiumDependent() || (_flags & ElementFlag::ON_STAFF);
       }
 
 //---------------------------------------------------------
