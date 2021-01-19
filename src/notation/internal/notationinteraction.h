@@ -129,7 +129,7 @@ public:
 
     void addText(TextType type) override;
 
-    void toggleNavigator() override;
+    void toggleNavigatorOrientation() override;
 
 private:
     Ms::Score* score() const;

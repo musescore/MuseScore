@@ -27,15 +27,16 @@
 #include "inotationconfiguration.h"
 #include "context/iglobalcontext.h"
 #include "ui/itheme.h"
+#include "notationpaintview.h"
 
 namespace mu::notation {
-class NotationNavigator : public QQuickPaintedItem, public async::Asyncable
+class NotationNavigator : public NotationPaintView
 {
     Q_OBJECT
 
     INJECT(notation, context::IGlobalContext, globalContext)
     INJECT(notation, INotationConfiguration, configuration)
-    INJECT(notation, framework::ITheme, theme)
+    INJECT(notation, ui::ITheme, theme)
 
     Q_PROPERTY(int orientation READ orientation NOTIFY orientationChanged)
 
@@ -54,29 +55,22 @@ signals:
     void orientationChanged();
 
 private:
-    double guiScaling() const;
-
     INotationPtr currentNotation() const;
 
     ViewMode notationViewMode() const;
 
-    qreal scale() const;
     void rescale();
 
-    QRect viewport() const;
-    QPoint toLogical(const QPoint& point) const;
-    QRect toLogical(const QRect& rect) const;
-
     void paint(QPainter* painter) override;
-    void paintPages(QPainter* painter);
-    void paintViewRect(QPainter* painter);
 
+    void wheelEvent(QWheelEvent* event) override;
     void mousePressEvent(QMouseEvent* event) override;
     void mouseMoveEvent(QMouseEvent* event) override;
 
-    void moveCanvas(int dx, int dy);
+    void paintViewRect(QPainter* painter);
+    void paintPageNumbers(QPainter* painter);
+
     void moveCanvasToRect(const QRect& viewRect);
-    void moveCanvasToPosition(const QPoint& position);
 
     bool isVerticalOrientation() const;
 
@@ -85,7 +79,6 @@ private:
 
     QRect m_viewRect;
     QPoint m_startMove;
-    QTransform m_matrix;
 };
 }
 
