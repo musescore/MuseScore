@@ -107,7 +107,7 @@ private:
     void openPartsDialog();
     void openTupletOtherDialog();
 
-    void toggleNavigator();
+    void toggleNavigatorOrientation();
 
     bool isTextEditting() const;
 
