@@ -31,7 +31,7 @@
 #include "iplayer.h"
 
 namespace mu::audio {
-class IMIDIPlayer : public virtual IPlayer
+class IMIDIPlayer : public IPlayer
 {
 public:
     virtual ~IMIDIPlayer() = default;

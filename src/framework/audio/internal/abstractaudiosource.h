@@ -22,7 +22,7 @@
 #include "iaudiosource.h"
 
 namespace mu::audio {
-class AbstractAudioSource : public virtual IAudioSource
+class AbstractAudioSource : public IAudioSource
 {
 public:
     virtual ~AbstractAudioSource() = default;

@@ -27,35 +27,44 @@
 #include "internal/clock.h"
 
 namespace mu::audio {
-class Mixer : public AbstractAudioSource, public IMixer
+class Mixer : public IMixer, public AbstractAudioSource, public std::enable_shared_from_this<Mixer>
 {
 public:
     Mixer();
     ~Mixer();
 
+    // IMixer
     Mode mode() const override;
     void setMode(const Mode& mode) override;
 
-    void setClock(std::shared_ptr<Clock> clock);
-
-    virtual void setSampleRate(unsigned int sampleRate) override;
-
-    unsigned int streamCount() const override;
-
     void setLevel(float level) override;
+
     std::shared_ptr<IAudioInsert> insert(unsigned int number) const override;
     void setInsert(unsigned int number, std::shared_ptr<IAudioInsert> insert) override;
 
-    std::shared_ptr<IMixerChannel> channel(unsigned int number) const override;
     unsigned int addChannel(std::shared_ptr<IAudioSource> source) override;
     void removeChannel(unsigned int channelId) override;
+
+    IAudioSourcePtr mixedSource() override;
 
     void setActive(unsigned int channelId, bool active) override;
     void setLevel(unsigned int channelId, unsigned int streamId, float level) override;
     void setBalance(unsigned int channelId, unsigned int streamId, std::complex<float> balance) override;
 
-    void setBufferSize(unsigned int samples) override;
+    std::shared_ptr<IMixerChannel> channel(unsigned int number) const override;
+
+    // IAudioSource (AbstractAudioSource)
+    void setSampleRate(unsigned int sampleRate) override;
+
+    unsigned int streamCount() const override;
+
     void forward(unsigned int sampleCount) override;
+
+    void setBufferSize(unsigned int samples) override;
+
+    // Self
+
+    void setClock(std::shared_ptr<Clock> clock);
 
 private:
     //! mix the channel in to the buffer
