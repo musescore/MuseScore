@@ -2211,12 +2211,6 @@ void NotationInteraction::addText(TextType type)
     notifyAboutSelectionChanged();
 }
 
-void NotationInteraction::toggleNavigator()
-{
-    bool visible = configuration()->isNavigatorVisible().val;
-    configuration()->setNavigatorVisible(!visible);
-}
-
 bool NotationInteraction::needEndTextEditing(const std::vector<Element*>& newSelectedElements) const
 {
     if (!isTextEditingStarted()) {

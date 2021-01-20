@@ -129,8 +129,6 @@ public:
 
     void addText(TextType type) override;
 
-    void toggleNavigator() override;
-
 private:
     Ms::Score* score() const;
 
