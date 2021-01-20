@@ -36,7 +36,7 @@ public:
         Running
     };
 
-    using syncCallback = std::function<void (time_t)>;
+    using SyncCallback = std::function<void (time_t)>;
 
     using time_t = unsigned long;
 
@@ -60,19 +60,19 @@ public:
     void seekSeconds(float seconds);
 
     async::Channel<time_t> timeChanged() const;
-    void addBeforeCallback(syncCallback callback);
-    void addAfterCallback(syncCallback callback);
+    void addBeforeCallback(SyncCallback callback);
+    void addAfterCallback(SyncCallback callback);
 
 private:
-    void runCallbacks(const std::list<syncCallback>& list, time_t miliseconds);
+    void runCallbacks(const std::list<SyncCallback>& list, time_t miliseconds);
 
     std::atomic<Status> m_status = Stoped;
     time_t m_time = 0;
     unsigned int m_sampleRate = 1;
 
     async::Channel<time_t> m_timeChanged;
-    std::list<syncCallback> m_beforeCallbacks = {};
-    std::list<syncCallback> m_afterCallbacks = {};
+    std::list<SyncCallback> m_beforeCallbacks = {};
+    std::list<SyncCallback> m_afterCallbacks = {};
 };
 }
 

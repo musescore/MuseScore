@@ -94,17 +94,17 @@ mu::async::Channel<Clock::time_t> Clock::timeChanged() const
     return m_timeChanged;
 }
 
-void Clock::addBeforeCallback(Clock::syncCallback callback)
+void Clock::addBeforeCallback(Clock::SyncCallback callback)
 {
     m_beforeCallbacks.push_back(callback);
 }
 
-void Clock::addAfterCallback(Clock::syncCallback callback)
+void Clock::addAfterCallback(Clock::SyncCallback callback)
 {
     m_afterCallbacks.push_back(callback);
 }
 
-void Clock::runCallbacks(const std::list<Clock::syncCallback>& list, time_t miliseconds)
+void Clock::runCallbacks(const std::list<Clock::SyncCallback>& list, time_t miliseconds)
 {
     for (auto& callback : list) {
         callback(miliseconds);
