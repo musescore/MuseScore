@@ -26,6 +26,30 @@ AudioPlayer::AudioPlayer()
 {
 }
 
+IPlayer::Status AudioPlayer::status() const
+{
+    return m_status;
+}
+
+void AudioPlayer::setStatus(const Status& status)
+{
+    if (m_status == status) {
+        return;
+    }
+    m_status = status;
+    m_statusChanged.send(m_status);
+}
+
+mu::async::Channel<IPlayer::Status> AudioPlayer::statusChanged() const
+{
+    return m_statusChanged;
+}
+
+bool AudioPlayer::isRunning() const
+{
+    return m_status == Status::Running;
+}
+
 void AudioPlayer::unload()
 {
     load(nullptr);
@@ -39,6 +63,11 @@ mu::Ret AudioPlayer::load(const std::shared_ptr<IAudioStream>& stream)
     m_streamsCountChanged.send(streamCount());
 
     return Ret(Ret::Code::Ok);
+}
+
+std::shared_ptr<IAudioSource> AudioPlayer::audioSource()
+{
+    return shared_from_this();
 }
 
 void AudioPlayer::play()
