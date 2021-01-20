@@ -22,6 +22,8 @@
 #include <QObject>
 
 #include "ui/view/iconcodes.h"
+#include "ui/view/musicalsymbolcodes.h"
+
 #include "notation/notationtypes.h"
 
 namespace mu::userscores {
@@ -34,7 +36,7 @@ class AdditionalInfoModel : public QObject
     Q_PROPERTY(QVariantMap timeSignature READ timeSignature WRITE setTimeSignature NOTIFY timeSignatureChanged)
     Q_PROPERTY(int timeSignatureType READ timeSignatureType WRITE setTimeSignatureType NOTIFY timeSignatureTypeChanged)
 
-    Q_PROPERTY(int tempo READ tempo WRITE setTempo NOTIFY tempoChanged)
+    Q_PROPERTY(QVariantMap tempo READ tempo WRITE setTempo NOTIFY tempoChanged)
     Q_PROPERTY(bool withTempo READ withTempo WRITE setWithTempo NOTIFY withTempoChanged)
 
     Q_PROPERTY(QVariantMap pickupTimeSignature READ pickupTimeSignature WRITE setPickupTimeSignature NOTIFY pickupTimeSignatureChanged)
@@ -62,7 +64,7 @@ public:
 
     Q_INVOKABLE QVariantList timeSignatureDenominators();
 
-    int tempo() const;
+    QVariantMap tempo() const;
     bool withTempo() const;
     Q_INVOKABLE QVariantMap tempoRange();
     Q_INVOKABLE QVariantList tempoMarks();
@@ -87,7 +89,7 @@ public slots:
     void setTimeSignature(QVariantMap timeSignature);
     void setTimeSignatureType(int timeSignatureType);
 
-    void setTempo(int tempo);
+    void setTempo(QVariantMap tempo);
     void setWithTempo(bool withTempo);
 
     void setPickupTimeSignature(QVariantMap pickupTimeSignature);
@@ -100,7 +102,7 @@ signals:
     void timeSignatureChanged(QVariantMap timeSignature);
     void timeSignatureTypeChanged(int timeSignatureType);
 
-    void tempoChanged(int tempo);
+    void tempoChanged(QVariantMap tempo);
     void withTempoChanged(bool withTempo);
 
     void pickupTimeSignatureChanged(QVariantMap pickupTimeSignature);
@@ -163,6 +165,30 @@ private:
         }
     };
 
+    struct Tempo {
+        int value = 0;
+        ui::MusicalSymbolCodes::Code noteIcon;
+        bool withDot = false;
+
+        Tempo() = default;
+
+        Tempo(const QVariantMap& map)
+        {
+            value = map["value"].toInt();
+            noteIcon = static_cast<ui::MusicalSymbolCodes::Code>(map["noteIcon"].toInt());
+            withDot = map["withDot"].toBool();
+        }
+
+        QVariantMap toMap() const
+        {
+            return {
+                { "value", value },
+                { "noteIcon", static_cast<int>(noteIcon) },
+                { "withDot", withDot }
+            };
+        }
+    };
+
     static const TimeSignature FOUR_FOUR_TIME_SIGNATURE;
     static const TimeSignature ALLA_BREVE_TIME_SIGNATURE;
 
@@ -175,7 +201,7 @@ private:
     bool m_timeCut = false;
     bool m_timeFraction = false;
 
-    int m_tempo = 0;
+    Tempo m_tempo;
     bool m_withTempo = false;
 
     TimeSignature m_pickupTimeSignature;
