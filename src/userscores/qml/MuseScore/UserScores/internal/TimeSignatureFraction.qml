@@ -9,9 +9,6 @@ Row {
     property var denominator: 0
     property var availableDenominators: null
 
-    signal numeratorSelected(var value)
-    signal denominatorSelected(var value)
-
     spacing: 14
 
     IncrementalPropertyControl {
@@ -31,7 +28,7 @@ Row {
         }
 
         onValueEdited: {
-            numeratorSelected(newValue)
+            numerator = newValue
         }
     }
 
@@ -63,7 +60,7 @@ Row {
         }
 
         onValueChanged: {
-            denominatorSelected(value)
+            denominator = value
         }
     }
 }
