@@ -29,10 +29,12 @@ void CommandLineController::parse(const QStringList& args)
     m_parser.addHelpOption(); // -?, -h, --help
     m_parser.addVersionOption(); // -v, --version
 
+    m_parser.addPositionalArgument("scorefiles", "The files to open", "[scorefile...]");
+
     m_parser.addOption(QCommandLineOption({ "D", "monitor-resolution" }, "Specify monitor resolution", "DPI"));
 
     // Converter mode
-    m_parser.addOption(QCommandLineOption({ "r", "image-resolution" }, "Set output resolution for image export",  "DPI"));
+    m_parser.addOption(QCommandLineOption({ "r", "image-resolution" }, "Set output resolution for image export", "DPI"));
     m_parser.addOption(QCommandLineOption({ "j", "job" }, "Process a conversion job", "file"));
     m_parser.addOption(QCommandLineOption({ "o", "export-to" }, "Export to 'file'. Format depends on file's extension", "file"));
 
@@ -51,6 +53,9 @@ void CommandLineController::apply()
     };
 
     // Common
+    // TODO: Open these files at launch if RunMode is Editor
+    QStringList scorefiles = m_parser.positionalArguments();
+
     if (m_parser.isSet("D")) {
         std::optional<float> val = floatValue("D");
         if (val) {
@@ -72,13 +77,21 @@ void CommandLineController::apply()
 
     if (m_parser.isSet("o")) {
         application()->setRunMode(IApplication::RunMode::Converter);
-        m_converterTask.exportFile = m_parser.value("o");
+        if (scorefiles.size() < 1) {
+            LOGE() << "Option: -o no input file specified";
+        } else {
+            if (scorefiles.size() > 1) {
+                LOGW() << "Option: -o multiple input files specified; processing only the first one";
+            }
+            m_converterTask.inputFile = scorefiles[0];
+            m_converterTask.outputFile = m_parser.value("o");
+        }
     }
 
     if (m_parser.isSet("j")) {
         application()->setRunMode(IApplication::RunMode::Converter);
         m_converterTask.isBatchMode = true;
-        m_converterTask.batchJobFile = m_parser.value("j");
+        m_converterTask.inputFile = m_parser.value("j");
     }
 }
 

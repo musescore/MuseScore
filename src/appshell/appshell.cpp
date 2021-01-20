@@ -208,9 +208,14 @@ int AppShell::processConverter(const CommandLineController::ConverterTask& task)
 {
     Ret ret;
     if (task.isBatchMode) {
-        ret = converter()->batchConvert(task.batchJobFile);
+        ret = converter()->batchConvert(task.inputFile);
         if (!ret) {
             LOGE() << "failed batch convert, error: " << ret.toString();
+        }
+    } else {
+        ret = converter()->fileConvert(task.inputFile, task.outputFile);
+        if (!ret) {
+            LOGE() << "failed file convert, error: " << ret.toString();
         }
     }
 
