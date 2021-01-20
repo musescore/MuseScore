@@ -54,6 +54,8 @@ option(BUILD_TELEMETRY_MODULE "Build with telemetry module" ON)
 set(TELEMETRY_TRACK_ID "" CACHE STRING "Telemetry track id")
 set(CRASH_REPORT_URL "" CACHE STRING "URL where to send crash reports")
 
+option(BUILD_NETWORK_MODULE "Build network module" ON)
+
 option(SOUNDFONT3    "Ogg Vorbis compressed fonts"        ON)  # Enable Ogg Vorbis compressed fonts, requires Ogg & Vorbis
 option(DOWNLOAD_SOUNDFONT "Download the latest soundfont version as part of the build process" ON)
 

@@ -32,7 +32,13 @@
 #include "framework/actions/actionsmodule.h"
 #include "framework/shortcuts/shortcutsmodule.h"
 #include "framework/system/systemmodule.h"
+
+#ifdef BUILD_NETWORK_MODULE
 #include "framework/network/networkmodule.h"
+#else
+#include "stubs/framework/network/networkstubmodule.h"
+#endif
+
 #include "framework/audio/audiomodule.h"
 #include "framework/midi/midimodule.h"
 
@@ -98,7 +104,12 @@ int main(int argc, char** argv)
     app.addModule(new mu::ui::UiModule());
     app.addModule(new mu::uicomponents::UiComponentsModule());
     app.addModule(new mu::system::SystemModule());
+
+#ifdef BUILD_NETWORK_MODULE
     app.addModule(new mu::network::NetworkModule());
+#else
+    app.addModule(new mu::network::NetworkStubModule());
+#endif
 
     app.addModule(new mu::actions::ActionsModule());
     app.addModule(new mu::appshell::AppShellModule());
