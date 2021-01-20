@@ -95,7 +95,7 @@ void Mixer::setInsert(unsigned int number, std::shared_ptr<IAudioInsert> insert)
 
 IMixer::ChannelID Mixer::addChannel(std::shared_ptr<IAudioSource> source)
 {
-    auto guard = std::lock_guard(m_process);
+    auto guard = std::lock_guard(m_mutex);
     auto lastId = (m_inputList.size() > 0 ? m_inputList.rbegin()->first : -1);
     auto newId = lastId + 1;
 
@@ -110,25 +110,25 @@ IMixer::ChannelID Mixer::addChannel(std::shared_ptr<IAudioSource> source)
 
 void Mixer::removeChannel(ChannelID channelId)
 {
-    auto guard = std::lock_guard(m_process);
+    auto guard = std::lock_guard(m_mutex);
     m_inputList.erase(channelId);
 }
 
 void Mixer::setActive(ChannelID channelId, bool active)
 {
-    auto guard = std::lock_guard(m_process);
+    auto guard = std::lock_guard(m_mutex);
     m_inputList[channelId]->setActive(active);
 }
 
 void Mixer::setLevel(ChannelID channelId, unsigned int streamId, float level)
 {
-    auto guard = std::lock_guard(m_process);
+    auto guard = std::lock_guard(m_mutex);
     m_inputList[channelId]->setLevel(streamId, level);
 }
 
 void Mixer::setBalance(ChannelID channelId, unsigned int streamId, std::complex<float> balance)
 {
-    auto guard = std::lock_guard(m_process);
+    auto guard = std::lock_guard(m_mutex);
     m_inputList[channelId]->setBalance(streamId, balance);
 }
 
@@ -150,7 +150,7 @@ void Mixer::setBufferSize(unsigned int samples)
 
 void Mixer::forward(unsigned int sampleCount)
 {
-    auto guard = std::lock_guard(m_process);
+    auto guard = std::lock_guard(m_mutex);
     std::fill(m_buffer.begin(), m_buffer.end(), 0.f);
 
     if (m_clock) {
