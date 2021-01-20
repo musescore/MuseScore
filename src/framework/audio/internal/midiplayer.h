@@ -35,7 +35,7 @@
 #include "midi/imidiportdatasender.h"
 
 namespace mu::audio {
-class MIDIPlayer : public AbstractPlayer, public IMIDIPlayer, public async::Asyncable
+class MIDIPlayer : public IMIDIPlayer, public async::Asyncable
 {
     INJECT(midi, midi::ISynthesizersRegister, synthesizersRegister)
     INJECT(midi, midi::IMidiPortDataSender, midiPortDataSender)
@@ -44,13 +44,21 @@ public:
     MIDIPlayer();
     ~MIDIPlayer() override;
 
-    void loadMIDI(const std::shared_ptr<midi::MidiStream>& stream) override;
-    void forwardTime(unsigned long miliseconds) override;
+    // IPlayer
+    Status status() const override;
+    async::Channel<Status> statusChanged() const override;
+
+    bool isRunning() const override;
 
     void play() override;
     void seek(unsigned long miliseconds) override;
     void stop() override;
+
     unsigned long miliseconds() const override;
+    void forwardTime(unsigned long miliseconds) override;
+
+    // IMIDIPlayer
+    void loadMIDI(const std::shared_ptr<midi::MidiStream>& stream) override;
     async::Channel<midi::tick_t> tickPlayed() const override;
 
     float playbackSpeed() const override;
@@ -61,6 +69,9 @@ public:
     void setTrackBalance(midi::track_t trackIndex, float balance) override;
 
 private:
+
+    void setStatus(const Status& status);
+
     void checkPosition();
 
     midi::tick_t validChunkTick(midi::tick_t fromTick, const midi::Chunks& chunks, midi::tick_t maxDistanceTick) const;
@@ -81,6 +92,9 @@ private:
 
     void requestData(midi::tick_t tick);
     void onChunkReceived(const midi::Chunk& chunk);
+
+    Status m_status = Status::Stoped;
+    async::Channel<Status> m_statusChanged;
 
     std::mutex m_dataMutex;
     midi::MidiData m_midiData;
