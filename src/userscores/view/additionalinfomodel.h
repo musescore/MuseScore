@@ -53,6 +53,8 @@ public:
 
     QVariantMap timeSignature() const;
     int timeSignatureType() const;
+
+    Q_INVOKABLE QVariantMap defaultTimeSignature() const;
     Q_INVOKABLE void setTimeSignatureNumerator(int numerator);
     Q_INVOKABLE void setTimeSignatureDenominator(int denominator);
 
@@ -161,6 +163,9 @@ private:
         }
     };
 
+    static const TimeSignature FOUR_FOUR_TIME_SIGNATURE;
+    static const TimeSignature ALLA_BREVE_TIME_SIGNATURE;
+
     void updateTimeSignature();
 
     KeySignature m_keySignature;
@@ -176,7 +181,7 @@ private:
     TimeSignature m_pickupTimeSignature;
     bool m_withPickupMeasure = false;
     int m_measureCount = 0;
-    notation::TimeSigType m_timeSignatureType;
+    notation::TimeSigType m_timeSignatureType = notation::TimeSigType::NORMAL;
 };
 }
 

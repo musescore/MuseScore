@@ -18,16 +18,17 @@
 //=============================================================================
 #include "additionalinfomodel.h"
 
-#include "libmscore/sym.h"
-
 #include "log.h"
 #include "translation.h"
+
 #include "ui/view/iconcodes.h"
 #include "ui/view/musicalsymbolcodes.h"
 
 using namespace mu::userscores;
-using namespace mu::framework;
 using namespace mu::notation;
+
+const AdditionalInfoModel::TimeSignature AdditionalInfoModel::FOUR_FOUR_TIME_SIGNATURE(4, 4);
+const AdditionalInfoModel::TimeSignature AdditionalInfoModel::ALLA_BREVE_TIME_SIGNATURE(2, 2);
 
 AdditionalInfoModel::AdditionalInfoModel(QObject* parent)
     : QObject(parent)
@@ -38,15 +39,15 @@ void AdditionalInfoModel::init()
 {
     setKeySignature(KeySignature(qtrc("userscore", "None"), IconCode::Code::KEY_SIGNATURE_NONE, Key::C, KeyMode::MAJOR).toMap());
 
-    setTimeSignatureType(static_cast<int>(TimeSignatureType::Common));
-    setTimeSignature(TimeSignature(4, 4).toMap());
+    setTimeSignatureType(static_cast<int>(TimeSignatureType::Fraction));
+    setTimeSignature(FOUR_FOUR_TIME_SIGNATURE.toMap());
 
     setWithTempo(false);
     setTempo(120);
 
     setWithPickupMeasure(false);
     setMeasureCount(32);
-    setPickupTimeSignature(TimeSignature(4, 4).toMap());
+    setPickupTimeSignature(TimeSignature(1, 4).toMap());
 }
 
 QVariantList AdditionalInfoModel::keySignatureMajorList()
@@ -60,7 +61,6 @@ QVariantList AdditionalInfoModel::keySignatureMajorList()
               << KeySignature(qtrc("userscore", "Db major"), IconCode::Code::KEY_SIGNATURE_5_FLAT, Key::D_B, KeyMode::MAJOR).toMap()
               << KeySignature(qtrc("userscore", "Gb major"), IconCode::Code::KEY_SIGNATURE_6_FLAT, Key::G_B, KeyMode::MAJOR).toMap()
               << KeySignature(qtrc("userscore", "Cb major"), IconCode::Code::KEY_SIGNATURE_7_FLAT, Key::C_B, KeyMode::MAJOR).toMap()
-
               << KeySignature(qtrc("userscore", "None"), IconCode::Code::KEY_SIGNATURE_NONE, Key::C, KeyMode::MAJOR).toMap()
               << KeySignature(qtrc("userscore", "G major"), IconCode::Code::KEY_SIGNATURE_1_SHARP, Key::G, KeyMode::MAJOR).toMap()
               << KeySignature(qtrc("userscore", "D major"), IconCode::Code::KEY_SIGNATURE_2_SHARPS, Key::D, KeyMode::MAJOR).toMap()
@@ -84,7 +84,6 @@ QVariantList AdditionalInfoModel::keySignatureMinorList()
               << KeySignature(qtrc("userscore", "Bb minor"), IconCode::Code::KEY_SIGNATURE_5_FLAT, Key::D_B, KeyMode::MINOR).toMap()
               << KeySignature(qtrc("userscore", "Eb minor"), IconCode::Code::KEY_SIGNATURE_6_FLAT, Key::G_B, KeyMode::MINOR).toMap()
               << KeySignature(qtrc("userscore", "Ab minor"), IconCode::Code::KEY_SIGNATURE_7_FLAT, Key::C_B, KeyMode::MINOR).toMap()
-
               << KeySignature(qtrc("userscore", "None"), IconCode::Code::KEY_SIGNATURE_NONE, Key::C, KeyMode::MINOR).toMap()
               << KeySignature(qtrc("userscore", "E minor"), IconCode::Code::KEY_SIGNATURE_1_SHARP, Key::G, KeyMode::MINOR).toMap()
               << KeySignature(qtrc("userscore", "B minor"), IconCode::Code::KEY_SIGNATURE_2_SHARPS, Key::D, KeyMode::MINOR).toMap()
@@ -110,6 +109,11 @@ QVariantMap AdditionalInfoModel::timeSignature() const
 int AdditionalInfoModel::timeSignatureType() const
 {
     return static_cast<int>(m_timeSignatureType);
+}
+
+QVariantMap AdditionalInfoModel::defaultTimeSignature() const
+{
+    return FOUR_FOUR_TIME_SIGNATURE.toMap();
 }
 
 void AdditionalInfoModel::setTimeSignatureNumerator(int numerator)
@@ -307,10 +311,10 @@ void AdditionalInfoModel::updateTimeSignature()
 {
     switch (m_timeSignatureType) {
     case TimeSigType::FOUR_FOUR:
-        setTimeSignature(TimeSignature(4, 4).toMap());
+        setTimeSignature(FOUR_FOUR_TIME_SIGNATURE.toMap());
         break;
     case TimeSigType::ALLA_BREVE:
-        setTimeSignature(TimeSignature(2, 2).toMap());
+        setTimeSignature(ALLA_BREVE_TIME_SIGNATURE.toMap());
         break;
     case TimeSigType::NORMAL:
         break;
