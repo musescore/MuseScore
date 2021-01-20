@@ -42,16 +42,15 @@ public:
     std::shared_ptr<IAudioInsert> insert(unsigned int number) const override;
     void setInsert(unsigned int number, std::shared_ptr<IAudioInsert> insert) override;
 
-    unsigned int addChannel(std::shared_ptr<IAudioSource> source) override;
-    void removeChannel(unsigned int channelId) override;
-
     IAudioSourcePtr mixedSource() override;
 
-    void setActive(unsigned int channelId, bool active) override;
-    void setLevel(unsigned int channelId, unsigned int streamId, float level) override;
-    void setBalance(unsigned int channelId, unsigned int streamId, std::complex<float> balance) override;
-
+    ChannelID addChannel(std::shared_ptr<IAudioSource> source) override;
+    void removeChannel(ChannelID channelId) override;
     std::shared_ptr<IMixerChannel> channel(unsigned int number) const override;
+
+    void setActive(ChannelID channelId, bool active) override;
+    void setLevel(ChannelID channelId, unsigned int streamId, float level) override;
+    void setBalance(ChannelID channelId, unsigned int streamId, std::complex<float> balance) override;
 
     // IAudioSource (AbstractAudioSource)
     void setSampleRate(unsigned int sampleRate) override;
@@ -73,7 +72,7 @@ private:
 
     Mode m_mode = STEREO;
     float m_masterLevel = 1.f;
-    std::map<unsigned int, std::shared_ptr<MixerChannel> > m_inputList = {};
+    std::map<ChannelID, std::shared_ptr<MixerChannel> > m_inputList = {};
     std::map<unsigned int, std::shared_ptr<IAudioInsert> > m_insertList = {};
     std::mutex m_process;
     std::shared_ptr<Clock> m_clock;
