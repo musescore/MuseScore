@@ -194,7 +194,7 @@ void Sequencer::setStatus(Status status)
     std::function<void(const track_t&)> applyStaus = [](const track_t&) {};
     switch (m_status) {
     case PLAYING:
-        applyStaus = [](const track_t& track) { track->play(); };
+        applyStaus = [](const track_t& track) { track->run(); };
         m_clock->start();
         break;
     case STOPED:
@@ -263,7 +263,7 @@ std::shared_ptr<IMIDIPlayer> Sequencer::instantlyPlayMidi(const midi::MidiData& 
     midiStream->isStreamingAllowed = false;
     midiStream->lastTick = data.lastChunksTick();
     player->loadMIDI(midiStream);
-    player->play();
+    player->run();
 
     m_backgroudPlayers.push_back({ 0 /*ms*/, player });
     return player;

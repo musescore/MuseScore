@@ -70,7 +70,7 @@ IAudioSourcePtr AudioPlayer::audioSource()
     return shared_from_this();
 }
 
-void AudioPlayer::play()
+void AudioPlayer::run()
 {
     if (m_stream && status() != Status::Error) {
         setStatus(Status::Running);
