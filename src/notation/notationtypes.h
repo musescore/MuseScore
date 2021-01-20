@@ -152,12 +152,6 @@ enum class NoteAddingMode
     InsertChord
 };
 
-enum class NavigatorOrientation
-{
-    Horizontal,
-    Vertical
-};
-
 struct NoteInputState
 {
     NoteInputMethod method = NoteInputMethod::UNKNOWN;
