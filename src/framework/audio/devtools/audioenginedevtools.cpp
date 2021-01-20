@@ -163,14 +163,12 @@ void AudioEngineDevTools::stopSequencerMidi()
 void AudioEngineDevTools::playPlayerMidi()
 {
     makeArpeggio();
-    m_threadMIDIPlayer = sequencer()->instantlyPlayMidi(m_midiStream->initData);
+    sequencer()->instantlyPlayMidi(m_midiStream->initData);
 }
 
 void AudioEngineDevTools::stopPlayerMidi()
 {
-    if (auto player = m_threadMIDIPlayer.lock()) {
-        player->stop();
-    }
+    NOT_IMPLEMENTED;
 }
 
 void AudioEngineDevTools::play()

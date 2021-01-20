@@ -251,10 +251,10 @@ Sequencer::AudioTrack Sequencer::audioTrack(TrackID id) const
     return nullptr;
 }
 
-std::shared_ptr<IMIDIPlayer> Sequencer::instantlyPlayMidi(const midi::MidiData& data)
+void Sequencer::instantlyPlayMidi(const midi::MidiData& data)
 {
     if (!data.isValid()) {
-        return nullptr;
+        return;
     }
     auto player = std::make_shared<MIDIPlayer>();
     auto midiStream = std::make_shared<midi::MidiStream>();
@@ -266,5 +266,4 @@ std::shared_ptr<IMIDIPlayer> Sequencer::instantlyPlayMidi(const midi::MidiData& 
     player->run();
 
     m_backgroudPlayers.push_back({ 0 /*ms*/, player });
-    return player;
 }

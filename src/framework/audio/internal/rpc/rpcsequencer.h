@@ -55,7 +55,7 @@ public:
     async::Notification positionChanged() const override;
     async::Channel<mu::midi::tick_t> midiTickPlayed(TrackID id) const override;
 
-    MidiTrack instantlyPlayMidi(const midi::MidiData& data) override;
+    void instantlyPlayMidi(const midi::MidiData& data) override;
 
 private:
     Target m_target;

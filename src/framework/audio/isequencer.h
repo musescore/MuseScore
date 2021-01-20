@@ -65,7 +65,8 @@ public:
 
     //!return position in seconds
     virtual float playbackPosition() const = 0;
-    virtual MidiTrack instantlyPlayMidi(const midi::MidiData& data) = 0;
+
+    virtual void instantlyPlayMidi(const midi::MidiData& data) = 0;
 };
 
 using ISequencerPtr = std::shared_ptr<ISequencer>;
