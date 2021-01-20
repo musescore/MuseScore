@@ -93,7 +93,7 @@ void Mixer::setInsert(unsigned int number, std::shared_ptr<IAudioInsert> insert)
     m_insertList[number] = insert;
 }
 
-unsigned int Mixer::addChannel(std::shared_ptr<IAudioSource> source)
+IMixer::ChannelID Mixer::addChannel(std::shared_ptr<IAudioSource> source)
 {
     auto guard = std::lock_guard(m_process);
     auto lastId = (m_inputList.size() > 0 ? m_inputList.rbegin()->first : -1);
@@ -108,25 +108,25 @@ unsigned int Mixer::addChannel(std::shared_ptr<IAudioSource> source)
     return newId;
 }
 
-void Mixer::removeChannel(unsigned int channelId)
+void Mixer::removeChannel(ChannelID channelId)
 {
     auto guard = std::lock_guard(m_process);
     m_inputList.erase(channelId);
 }
 
-void Mixer::setActive(unsigned int channelId, bool active)
+void Mixer::setActive(ChannelID channelId, bool active)
 {
     auto guard = std::lock_guard(m_process);
     m_inputList[channelId]->setActive(active);
 }
 
-void Mixer::setLevel(unsigned int channelId, unsigned int streamId, float level)
+void Mixer::setLevel(ChannelID channelId, unsigned int streamId, float level)
 {
     auto guard = std::lock_guard(m_process);
     m_inputList[channelId]->setLevel(streamId, level);
 }
 
-void Mixer::setBalance(unsigned int channelId, unsigned int streamId, std::complex<float> balance)
+void Mixer::setBalance(ChannelID channelId, unsigned int streamId, std::complex<float> balance)
 {
     auto guard = std::lock_guard(m_process);
     m_inputList[channelId]->setBalance(streamId, balance);

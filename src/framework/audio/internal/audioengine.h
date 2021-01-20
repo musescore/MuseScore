@@ -49,7 +49,7 @@ public:
     bool isInited() const override;
     async::Channel<bool> initChanged() const override;
     unsigned int sampleRate() const override;
-    unsigned int startSynthesizer(std::shared_ptr<midi::ISynthesizer> synthesizer) override;
+    IMixer::ChannelID startSynthesizer(std::shared_ptr<midi::ISynthesizer> synthesizer) override;
     std::shared_ptr<IMixer> mixer() const override;
     std::shared_ptr<ISequencer> sequencer() const override;
     IAudioBufferPtr buffer() const override;

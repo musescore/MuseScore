@@ -116,7 +116,7 @@ IAudioDriverPtr AudioEngine::driver() const
     return m_driver;
 }
 
-unsigned int AudioEngine::startSynthesizer(std::shared_ptr<midi::ISynthesizer> synthesizer)
+IMixer::ChannelID AudioEngine::startSynthesizer(std::shared_ptr<midi::ISynthesizer> synthesizer)
 {
     synthesizer->setSampleRate(sampleRate());
     return m_mixer->addChannel(synthesizer);
