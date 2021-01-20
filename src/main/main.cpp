@@ -31,7 +31,6 @@
 #include "framework/fonts/fontsmodule.h"
 #include "framework/actions/actionsmodule.h"
 #include "framework/shortcuts/shortcutsmodule.h"
-#include "framework/workspace/workspacemodule.h"
 #include "framework/system/systemmodule.h"
 #include "framework/network/networkmodule.h"
 #include "framework/audio/audiomodule.h"
@@ -53,6 +52,7 @@
 #include "playback/playbackmodule.h"
 #include "instruments/instrumentsmodule.h"
 #include "converter/convertermodule.h"
+#include "workspace/workspacemodule.h"
 
 #ifdef BUILD_VST
 #include "framework/vst/vstmodule.h"
@@ -62,7 +62,7 @@
 #endif
 
 #ifndef Q_OS_WASM
-#include "framework/workspace/workspacemodule.h"
+#include "workspace/workspacemodule.h"
 #include "plugins/pluginsmodule.h"
 #include "importexport/importexportmodule.h"
 #include "cloud/cloudmodule.h"

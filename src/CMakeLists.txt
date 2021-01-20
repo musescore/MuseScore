@@ -17,6 +17,7 @@ add_subdirectory(context)
 add_subdirectory(notation)
 add_subdirectory(userscores)
 add_subdirectory(converter)
+add_subdirectory(workspace)
 
 if (NOT OS_IS_WASM)
     add_subdirectory(importexport)
