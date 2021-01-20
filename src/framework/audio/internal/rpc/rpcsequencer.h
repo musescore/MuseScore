@@ -37,10 +37,10 @@ public:
     Status status() const override;
     async::Channel<Status> statusChanged() const override;
 
-    void initMIDITrack(track_id id) override;
-    void initAudioTrack(track_id id) override;
-    void setMIDITrack(track_id id, const std::shared_ptr<midi::MidiStream>& stream) override;
-    void setAudioTrack(track_id id, const std::shared_ptr<audio::IAudioStream>& stream) override;
+    void initMIDITrack(TrackID id) override;
+    void initAudioTrack(TrackID id) override;
+    void setMIDITrack(TrackID id, const std::shared_ptr<midi::MidiStream>& stream) override;
+    void setAudioTrack(TrackID id, const std::shared_ptr<audio::IAudioStream>& stream) override;
 
     void play() override;
     void pause() override;
@@ -53,9 +53,9 @@ public:
     //!return position in seconds
     float playbackPosition() const override;
     async::Notification positionChanged() const override;
-    async::Channel<mu::midi::tick_t> midiTickPlayed(track_id id) const override;
+    async::Channel<mu::midi::tick_t> midiTickPlayed(TrackID id) const override;
 
-    midi_track_t instantlyPlayMidi(const midi::MidiData& data) override;
+    MidiTrack instantlyPlayMidi(const midi::MidiData& data) override;
 
 private:
     Target m_target;
@@ -65,7 +65,7 @@ private:
     async::Notification m_positionChanged;
     float m_playbackPosition = 0.f;
 
-    mutable std::map<track_id, async::Channel<midi::tick_t> > m_midiTickPlayed;
+    mutable std::map<TrackID, async::Channel<midi::tick_t> > m_midiTickPlayed;
 };
 }
 

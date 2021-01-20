@@ -68,7 +68,7 @@ unsigned int AudioStream::sampleRate() const
     return m_sampleRate;
 }
 
-unsigned int AudioStream::copySamples(float* buffer, unsigned int fromSample, unsigned int sampleCount, unsigned int sampleRate)
+unsigned int AudioStream::copySamplesToBuffer(float* buffer, unsigned int fromSample, unsigned int sampleCount, unsigned int sampleRate)
 {
     if (m_sampleRate != sampleRate) {
         m_src.setSampleRateOut(sampleRate);

@@ -47,7 +47,8 @@ private:
 
     unsigned int m_streamsPerSample = 0;
     unsigned int m_minSampleLag = FILL_SAMPLES;
-    std::atomic<unsigned int> m_writeIndex = 0, m_readIndex = 0;
+    std::atomic<unsigned int> m_writeIndex = 0;
+    std::atomic<unsigned int> m_readIndex = 0;
     std::mutex m_dataMutex;
     std::vector<float> m_data = {};
     std::shared_ptr<IAudioSource> m_source = nullptr;
