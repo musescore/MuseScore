@@ -27,13 +27,15 @@
 #include "ret.h"
 
 namespace mu::audio {
-class IAudioPlayer : public virtual IPlayer, public virtual IAudioSource
+class IAudioPlayer : public IPlayer
 {
 public:
     ~IAudioPlayer() = default;
 
     virtual void unload() = 0;
     virtual Ret load(const std::shared_ptr<audio::IAudioStream>& stream) = 0;
+
+    virtual std::shared_ptr<IAudioSource> audioSource() = 0;
 };
 }
 #endif // MU_AUDIO_IAUDIOPLAYER_H
