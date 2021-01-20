@@ -66,18 +66,18 @@ void RpcController::sequencerHandle(const Msg& msg)
         // Bind to sequencer
 
         bindMethod(calls, "initMIDITrack", [this](const Args& args) {
-            sequencer()->initMIDITrack(args.arg<ISequencer::track_id>(0));
+            sequencer()->initMIDITrack(args.arg<ISequencer::TrackID>(0));
         });
 
         bindMethod(calls, "initAudioTrack", [this](const Args& args) {
-            sequencer()->initAudioTrack(args.arg<ISequencer::track_id>(0));
+            sequencer()->initAudioTrack(args.arg<ISequencer::TrackID>(0));
         });
 
         bindMethod(calls, "setMIDITrack", [this](const Args& args) {
             if (rpcChannel()->isSerialized()) {
                 NOT_IMPLEMENTED;
             } else {
-                sequencer()->setMIDITrack(args.arg<ISequencer::track_id>(0), args.arg<std::shared_ptr<midi::MidiStream> >(1));
+                sequencer()->setMIDITrack(args.arg<ISequencer::TrackID>(0), args.arg<std::shared_ptr<midi::MidiStream> >(1));
             }
         });
 
@@ -85,7 +85,7 @@ void RpcController::sequencerHandle(const Msg& msg)
             if (rpcChannel()->isSerialized()) {
                 NOT_IMPLEMENTED;
             } else {
-                sequencer()->setAudioTrack(args.arg<ISequencer::track_id>(0), args.arg<std::shared_ptr<audio::IAudioStream> >(1));
+                sequencer()->setAudioTrack(args.arg<ISequencer::TrackID>(0), args.arg<std::shared_ptr<audio::IAudioStream> >(1));
             }
         });
 
@@ -137,10 +137,10 @@ void RpcController::sequencerHandle(const Msg& msg)
         //! to the audio driver and from there already taken, then they will always be synchronized with the sound that is currently being played.
 
         bindMethod(calls, "bindMidiTickPlayed", [this](const Args& args) {
-            ISequencer::track_id trackID = args.arg<ISequencer::track_id>(0);
+            ISequencer::TrackID trackID = args.arg<ISequencer::TrackID>(0);
             async::Channel<midi::tick_t> ch = sequencer()->midiTickPlayed(trackID);
             ch.onReceive(this, [this, trackID](midi::tick_t tick) {
-                rpcChannel()->send(Msg(rpcSeqTarget, "midiTickPlayed", Args::make_arg2<ISequencer::track_id, midi::tick_t>(trackID, tick)));
+                rpcChannel()->send(Msg(rpcSeqTarget, "midiTickPlayed", Args::make_arg2<ISequencer::TrackID, midi::tick_t>(trackID, tick)));
             });
         });
 

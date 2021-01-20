@@ -49,7 +49,7 @@ public:
 
     bool isRunning() const override;
 
-    void play() override;
+    void run() override;
     void seek(unsigned long miliseconds) override;
     void stop() override;
 

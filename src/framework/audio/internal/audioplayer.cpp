@@ -128,7 +128,7 @@ void AudioPlayer::forward(unsigned int sampleCount)
         return;
     }
 
-    auto displacement = stream->copySamples(m_buffer.data(), m_position, sampleCount, m_sampleRate);
+    auto displacement = stream->copySamplesToBuffer(m_buffer.data(), m_position, sampleCount, m_sampleRate);
     m_position += displacement;
 
     if (!displacement) {

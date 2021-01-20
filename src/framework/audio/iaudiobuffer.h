@@ -22,8 +22,7 @@
 #include <memory>
 #include "iaudiosource.h"
 
-namespace mu {
-namespace audio {
+namespace mu::audio {
 class IAudioBuffer
 {
 public:
@@ -36,7 +35,7 @@ public:
     virtual void pop(float* dest, unsigned int sampleCount) = 0;
     virtual void setMinSampleLag(unsigned int lag) = 0;
 };
+
 using IAudioBufferPtr = std::shared_ptr<IAudioBuffer>;
-} // namespace audio
-} // namespace mu
+}
 #endif // MU_AUDIO_IAUDIOBUFFER_H

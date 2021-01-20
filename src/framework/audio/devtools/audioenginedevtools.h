@@ -73,7 +73,7 @@ public:
 
     Q_INVOKABLE void play();
     Q_INVOKABLE void stop();
-    Q_INVOKABLE void setLoop(unsigned int from, unsigned int to);
+    Q_INVOKABLE void setLoop(uint64_t from, uint64_t to);
     Q_INVOKABLE void unsetLoop();
 
     QVariantList devices() const;

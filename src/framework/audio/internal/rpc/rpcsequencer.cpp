@@ -66,7 +66,7 @@ void RpcSequencer::setup()
             });
 
             bindMethod(calls, "midiTickPlayed", [this](const Args& args) {
-                track_id trackID = args.arg<track_id>(0);
+                TrackID trackID = args.arg<TrackID>(0);
                 midi::tick_t tick = args.arg<midi::tick_t>(1);
                 m_midiTickPlayed[trackID].send(tick);
             });
@@ -92,31 +92,31 @@ Channel<ISequencer::Status> RpcSequencer::statusChanged() const
     return m_statusChanged;
 }
 
-void RpcSequencer::initMIDITrack(track_id id)
+void RpcSequencer::initMIDITrack(TrackID id)
 {
-    rpcChannel()->send(Msg(m_target, "initMIDITrack", Args::make_arg1<track_id>(id)));
+    rpcChannel()->send(Msg(m_target, "initMIDITrack", Args::make_arg1<TrackID>(id)));
 }
 
-void RpcSequencer::initAudioTrack(track_id id)
+void RpcSequencer::initAudioTrack(TrackID id)
 {
-    rpcChannel()->send(Msg(m_target, "initAudioTrack", Args::make_arg1<track_id>(id)));
+    rpcChannel()->send(Msg(m_target, "initAudioTrack", Args::make_arg1<TrackID>(id)));
 }
 
-void RpcSequencer::setMIDITrack(track_id id, const std::shared_ptr<midi::MidiStream>& stream)
+void RpcSequencer::setMIDITrack(TrackID id, const std::shared_ptr<midi::MidiStream>& stream)
 {
     if (rpcChannel()->isSerialized()) {
         NOT_IMPLEMENTED;
     } else {
-        rpcChannel()->send(Msg(m_target, "setMIDITrack", Args::make_arg2<track_id, std::shared_ptr<midi::MidiStream> >(id, stream)));
+        rpcChannel()->send(Msg(m_target, "setMIDITrack", Args::make_arg2<TrackID, std::shared_ptr<midi::MidiStream> >(id, stream)));
     }
 }
 
-void RpcSequencer::setAudioTrack(track_id id, const std::shared_ptr<audio::IAudioStream>& stream)
+void RpcSequencer::setAudioTrack(TrackID id, const std::shared_ptr<audio::IAudioStream>& stream)
 {
     if (rpcChannel()->isSerialized()) {
         NOT_IMPLEMENTED;
     } else {
-        rpcChannel()->send(Msg(m_target, "setAudioTrack", Args::make_arg2<track_id, std::shared_ptr<audio::IAudioStream> >(id, stream)));
+        rpcChannel()->send(Msg(m_target, "setAudioTrack", Args::make_arg2<TrackID, std::shared_ptr<audio::IAudioStream> >(id, stream)));
     }
 }
 
@@ -155,11 +155,11 @@ void RpcSequencer::unsetLoop()
     rpcChannel()->send(Msg(m_target, "unsetLoop"));
 }
 
-Channel<mu::midi::tick_t> RpcSequencer::midiTickPlayed(track_id id) const
+Channel<mu::midi::tick_t> RpcSequencer::midiTickPlayed(TrackID id) const
 {
     auto found = m_midiTickPlayed.find(id);
     if (found == m_midiTickPlayed.end()) {
-        rpcChannel()->send(Msg(m_target, "bindMidiTickPlayed", Args::make_arg1<track_id>(id)));
+        rpcChannel()->send(Msg(m_target, "bindMidiTickPlayed", Args::make_arg1<TrackID>(id)));
 
         //! TODO Figure out if and when to remove not up to date channels
         m_midiTickPlayed.insert({ id, async::Channel<mu::midi::tick_t>() });
@@ -177,7 +177,7 @@ float RpcSequencer::playbackPosition() const
     return m_playbackPosition;
 }
 
-ISequencer::midi_track_t RpcSequencer::instantlyPlayMidi(const midi::MidiData& data)
+ISequencer::MidiTrack RpcSequencer::instantlyPlayMidi(const midi::MidiData& data)
 {
     if (rpcChannel()->isSerialized()) {
         NOT_IMPLEMENTED;

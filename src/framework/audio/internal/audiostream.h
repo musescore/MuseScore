@@ -43,7 +43,7 @@ public:
     unsigned int sampleRate() const override;
 
     //! copy samples with real time sample rate convertion if needed
-    unsigned int copySamples(float* buffer, unsigned int fromSample, unsigned int sampleCount, unsigned int sampleRate) override;
+    unsigned int copySamplesToBuffer(float* buffer, unsigned int fromSample, unsigned int sampleCount, unsigned int sampleRate) override;
 
 private:
     bool loadWAV(mu::io::path path);

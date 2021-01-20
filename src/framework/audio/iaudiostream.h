@@ -40,7 +40,7 @@ public:
     virtual void convertSampleRate(unsigned int sampleRate) = 0;
 
     //! fill samples buffer in needed sampleRate
-    virtual unsigned int copySamples(float* buffer, unsigned int from, unsigned int sampleCount, unsigned int sampleRate) = 0;
+    virtual unsigned int copySamplesToBuffer(float* buffer, unsigned int from, unsigned int sampleCount, unsigned int sampleRate) = 0;
 };
 }
 #endif // MU_AUDIO_IAUDIOSTREAM_H
