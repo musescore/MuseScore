@@ -301,13 +301,13 @@ void MScore::init()
             _globalShare = QString( INSTPREFIX "/share/" INSTALL_NAME);
 #endif
 
-      selectColor[0].setNamedColor("0065BF");   //blue
-      selectColor[1].setNamedColor("007F00");   //green
-      selectColor[2].setNamedColor("C53F00");   //orange
-      selectColor[3].setNamedColor("C31989");   //purple
+      selectColor[0].setNamedColor("#0065BF");   //blue
+      selectColor[1].setNamedColor("#007F00");   //green
+      selectColor[2].setNamedColor("#C53F00");   //orange
+      selectColor[3].setNamedColor("#C31989");   //purple
 
       defaultColor           = Qt::black;
-      dropColor              = QColor(0x1778db);
+      dropColor              = QColor("#1778db");
       defaultPlayDuration    = 300;      // ms
       warnPitchRange         = true;
       pedalEventsMinTicks    = 1;
@@ -317,9 +317,9 @@ void MScore::init()
 
       lastError           = "";
 
-      layoutBreakColor    = QColor(0xA0A0A4);
-      frameMarginColor    = QColor(0xA0A0A4);
-      bgColor.setNamedColor("dddddd");
+      layoutBreakColor    = QColor("#A0A0A4");
+      frameMarginColor    = QColor("#A0A0A4");
+      bgColor.setNamedColor("#dddddd");
 
       //
       //  initialize styles
