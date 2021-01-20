@@ -24,13 +24,16 @@
 #include "abstractaudiosource.h"
 
 namespace mu::audio {
-class AudioPlayer : public AbstractPlayer, public AbstractAudioSource, public IAudioPlayer
+class AudioPlayer : public IAudioPlayer, public AbstractAudioSource, private std::enable_shared_from_this<IAudioSource>
 {
 public:
     AudioPlayer();
 
-    void unload() override;
-    Ret load(const std::shared_ptr<audio::IAudioStream>& stream) override;
+    // IPlayer
+    Status status() const override;
+    async::Channel<Status> statusChanged() const override;
+
+    bool isRunning() const override;
 
     void play() override;
     void seek(unsigned long miliseconds) override;
@@ -39,11 +42,20 @@ public:
     unsigned long miliseconds() const override;
     void forwardTime(unsigned long) override;
 
-    unsigned int streamCount() const override;
+    // IAudioPlayer
+    void unload() override;
+    Ret load(const std::shared_ptr<audio::IAudioStream>& stream) override;
+    std::shared_ptr<IAudioSource> audioSource() override;
 
+    // IAudioSource (AbstractAudioSource)
+    unsigned int streamCount() const override;
     void forward(unsigned int sampleCount) override;
 
 private:
+    void setStatus(const Status& status);
+
+    Status m_status = Status::Stoped;
+    async::Channel<Status> m_statusChanged;
     std::shared_ptr<audio::IAudioStream> m_stream = nullptr;
     unsigned long m_position = 0;
 };
