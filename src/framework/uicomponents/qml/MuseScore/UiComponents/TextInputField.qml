@@ -155,7 +155,7 @@ Rectangle {
     states: [
         State {
             name: "HOVERED"
-            when: clickableArea.containsMouse && !valueInput.focus
+            when: clickableArea.containsMouse && !valueInput.activeFocus
 
             PropertyChanges {
                 target: root
@@ -167,7 +167,7 @@ Rectangle {
 
         State {
             name: "FOCUSED"
-            when: valueInput.focus
+            when: valueInput.activeFocus
 
             PropertyChanges {
                 target: root

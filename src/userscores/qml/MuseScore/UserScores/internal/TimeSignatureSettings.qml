@@ -94,23 +94,40 @@ FlatButton {
         TimeSignatureFraction {
             anchors.fill: parent
 
-            numerator: root.model.timeSignature.numerator
-            denominator: root.model.timeSignature.denominator
-            availableDenominators: root.model.timeSignatureDenominators()
             enabled: (root.model.timeSignatureType === AdditionalInfoModel.Fraction)
+            availableDenominators: root.model.timeSignatureDenominators()
 
-            onNumeratorSelected: {
-                root.model.setTimeSignatureNumerator(value)
+            onNumeratorChanged: {
+                updateTimeSignature()
             }
 
-            onDenominatorSelected: {
-                root.model.setTimeSignatureDenominator(value)
+            onDenominatorChanged: {
+                updateTimeSignature()
+            }
+
+            onEnabledChanged: {
+                if (enabled) {
+                    updateTimeSignature()
+                }
+            }
+
+            Component.onCompleted: {
+                var defaultTimeSignature = root.model.defaultTimeSignature()
+
+                numerator = defaultTimeSignature.numerator
+                denominator = defaultTimeSignature.denominator
+            }
+
+            function updateTimeSignature() {
+                root.model.setTimeSignatureNumerator(numerator)
+                root.model.setTimeSignatureDenominator(denominator)
             }
         }
     }
 
     Component {
         id: commonComp
+
         StyledIconLabel {
             horizontalAlignment: Text.AlignLeft
             font.family: ui.theme.musicalFont.family
@@ -121,6 +138,7 @@ FlatButton {
 
     Component {
         id: cutComp
+
         StyledIconLabel {
             horizontalAlignment: Text.AlignLeft
             font.family: ui.theme.musicalFont.family
