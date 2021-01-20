@@ -29,6 +29,11 @@ Mixer::~Mixer()
 {
 }
 
+IAudioSourcePtr Mixer::mixedSource()
+{
+    return shared_from_this();
+}
+
 Mixer::Mode Mixer::mode() const
 {
     return m_mode;

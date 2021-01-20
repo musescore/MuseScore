@@ -20,11 +20,10 @@
 #define MU_AUDIO_AUDIOPLAYER_H
 
 #include "iaudioplayer.h"
-#include "abstractplayer.h"
 #include "abstractaudiosource.h"
 
 namespace mu::audio {
-class AudioPlayer : public IAudioPlayer, public AbstractAudioSource, private std::enable_shared_from_this<IAudioSource>
+class AudioPlayer : public IAudioPlayer, public AbstractAudioSource, public std::enable_shared_from_this<AudioPlayer>
 {
 public:
     AudioPlayer();
@@ -45,7 +44,7 @@ public:
     // IAudioPlayer
     void unload() override;
     Ret load(const std::shared_ptr<audio::IAudioStream>& stream) override;
-    std::shared_ptr<IAudioSource> audioSource() override;
+    IAudioSourcePtr audioSource() override;
 
     // IAudioSource (AbstractAudioSource)
     unsigned int streamCount() const override;

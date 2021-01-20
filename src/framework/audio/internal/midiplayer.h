@@ -30,7 +30,6 @@
 #include "imidiplayer.h"
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "abstractplayer.h"
 #include "midi/isynthesizersregister.h"
 #include "midi/imidiportdatasender.h"
 
