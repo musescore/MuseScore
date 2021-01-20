@@ -65,7 +65,7 @@ mu::Ret AudioPlayer::load(const std::shared_ptr<IAudioStream>& stream)
     return Ret(Ret::Code::Ok);
 }
 
-std::shared_ptr<IAudioSource> AudioPlayer::audioSource()
+IAudioSourcePtr AudioPlayer::audioSource()
 {
     return shared_from_this();
 }

@@ -33,7 +33,7 @@ AudioEngine::AudioEngine()
     m_mixer->setClock(m_sequencer->clock());
 
     m_buffer = std::make_shared<AudioBuffer>();
-    m_buffer->setSource(m_mixer);
+    m_buffer->setSource(m_mixer->mixedSource());
 
     m_sequencer->audioTrackAdded().onReceive(this, [this](ISequencer::audio_track_t player) {
         m_mixer->addChannel(player->audioSource());

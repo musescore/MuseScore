@@ -56,10 +56,11 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iaudioplayer.h
     ${CMAKE_CURRENT_LIST_DIR}/imidiplayer.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiodriver.h
+    ${CMAKE_CURRENT_LIST_DIR}/imixer.h
+    ${CMAKE_CURRENT_LIST_DIR}/imixerchannel.h
+    ${CMAKE_CURRENT_LIST_DIR}/iaudiobuffer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/abstractplayer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/abstractplayer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/abstractaudiosource.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/abstractaudiosource.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/abstractaudioinsert.cpp

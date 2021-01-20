@@ -25,9 +25,8 @@
 #include "iaudiosource.h"
 #include "iaudioinsert.h"
 
-namespace mu {
-namespace audio {
-class IMixerChannel : virtual public IAudioSource
+namespace mu::audio {
+class IMixerChannel
 {
 public:
     virtual ~IMixerChannel() = default;
@@ -48,7 +47,6 @@ public:
     virtual std::shared_ptr<IAudioInsert> insert(unsigned int number) const = 0;
     virtual void setInsert(unsigned int number, std::shared_ptr<IAudioInsert> insert) = 0;
 };
-} // namespace audio
-} // namespace mu
+}
 
 #endif // MU_AUDIO_IMIXERCHANNEL_H

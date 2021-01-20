@@ -46,6 +46,8 @@ public:
     //! set the mix step in samples
     virtual void setBufferSize(unsigned int samples) = 0;
 };
+
+using IAudioSourcePtr = std::shared_ptr<IAudioSource>;
 }
 
 #endif // MU_AUDIO_ISOURCE_H
