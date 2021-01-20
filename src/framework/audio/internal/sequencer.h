@@ -57,7 +57,7 @@ public:
     async::Notification positionChanged() const override;
     float playbackPosition() const override;
 
-    std::shared_ptr<IMIDIPlayer> instantlyPlayMidi(const midi::MidiData& data) override;
+    void instantlyPlayMidi(const midi::MidiData& data) override;
 
 private:
     void setStatus(Status status);
