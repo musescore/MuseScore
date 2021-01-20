@@ -41,6 +41,30 @@ MIDIPlayer::~MIDIPlayer()
     }
 }
 
+IPlayer::Status MIDIPlayer::status() const
+{
+    return m_status;
+}
+
+void MIDIPlayer::setStatus(const Status& status)
+{
+    if (m_status == status) {
+        return;
+    }
+    m_status = status;
+    m_statusChanged.send(m_status);
+}
+
+mu::async::Channel<IPlayer::Status> MIDIPlayer::statusChanged() const
+{
+    return m_statusChanged;
+}
+
+bool MIDIPlayer::isRunning() const
+{
+    return m_status == Status::Running;
+}
+
 void MIDIPlayer::loadMIDI(const std::shared_ptr<MidiStream>& stream)
 {
     m_midiStream = stream;
