@@ -98,6 +98,7 @@ class Chord final : public ChordRest {
 
       void setScore(Score* s) override;
       ElementType type() const override   { return ElementType::CHORD; }
+      qreal chordMag() const;
       qreal mag() const override;
 
       void write(XmlWriter& xml) const override;
