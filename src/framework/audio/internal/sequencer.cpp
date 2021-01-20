@@ -72,42 +72,42 @@ void Sequencer::rewind()
     seek(0);
 }
 
-void Sequencer::initMIDITrack(ISequencer::track_id id)
+void Sequencer::initMIDITrack(ISequencer::TrackID id)
 {
     createMIDITrack(id);
 }
 
-void Sequencer::setMIDITrack(ISequencer::track_id id, const std::shared_ptr<mu::midi::MidiStream>& stream)
+void Sequencer::setMIDITrack(ISequencer::TrackID id, const std::shared_ptr<mu::midi::MidiStream>& stream)
 {
-    midi_track_t track = midiTrack(id);
+    MidiTrack track = midiTrack(id);
     if (!track) {
         track = createMIDITrack(id);
     }
     track->loadMIDI(stream);
 }
 
-void Sequencer::setAudioTrack(ISequencer::track_id id, const std::shared_ptr<audio::IAudioStream>& stream)
+void Sequencer::setAudioTrack(ISequencer::TrackID id, const std::shared_ptr<audio::IAudioStream>& stream)
 {
-    audio_track_t track = audioTrack(id);
+    AudioTrack track = audioTrack(id);
     if (!track) {
         track = createAudioTrack(id);
     }
     track->load(stream);
 }
 
-mu::async::Channel<ISequencer::audio_track_t> Sequencer::audioTrackAdded() const
+mu::async::Channel<ISequencer::AudioTrack> Sequencer::audioTrackAdded() const
 {
     return m_audioTrackAdded;
 }
 
-void Sequencer::initAudioTrack(ISequencer::track_id id)
+void Sequencer::initAudioTrack(ISequencer::TrackID id)
 {
     createAudioTrack(id);
 }
 
-mu::async::Channel<mu::midi::tick_t> Sequencer::midiTickPlayed(ISequencer::track_id id) const
+mu::async::Channel<mu::midi::tick_t> Sequencer::midiTickPlayed(ISequencer::TrackID id) const
 {
-    if (midi_track_t track = midiTrack(id)) {
+    if (MidiTrack track = midiTrack(id)) {
         return track->tickPlayed();
     }
     return {};
@@ -191,14 +191,14 @@ void Sequencer::setStatus(Status status)
     m_status = status;
     m_statusChanged.send(m_status);
 
-    std::function<void(const track_t&)> applyStaus = [](const track_t&) {};
+    std::function<void(const Track&)> applyStaus = [](const Track&) {};
     switch (m_status) {
     case PLAYING:
-        applyStaus = [](const track_t& track) { track->run(); };
+        applyStaus = [](const Track& track) { track->run(); };
         m_clock->start();
         break;
     case STOPED:
-        applyStaus = [](const track_t& track) { track->stop(); };
+        applyStaus = [](const Track& track) { track->stop(); };
         m_clock->stop();
         break;
     }
@@ -208,7 +208,7 @@ void Sequencer::setStatus(Status status)
     }
 }
 
-std::optional<Sequencer::track_t> Sequencer::track(Sequencer::track_id id) const
+std::optional<Sequencer::Track> Sequencer::track(Sequencer::TrackID id) const
 {
     if (m_tracks.find(id) != m_tracks.end()) {
         return m_tracks.at(id);
@@ -216,7 +216,7 @@ std::optional<Sequencer::track_t> Sequencer::track(Sequencer::track_id id) const
     return std::nullopt;
 }
 
-Sequencer::midi_track_t Sequencer::midiTrack(Sequencer::track_id id) const
+Sequencer::MidiTrack Sequencer::midiTrack(TrackID id) const
 {
     if (auto track_var = track(id)) {
         if (auto track_value = track_var.value_or(nullptr)) {
@@ -226,14 +226,14 @@ Sequencer::midi_track_t Sequencer::midiTrack(Sequencer::track_id id) const
     return nullptr;
 }
 
-Sequencer::midi_track_t Sequencer::createMIDITrack(ISequencer::track_id id)
+Sequencer::MidiTrack Sequencer::createMIDITrack(TrackID id)
 {
     auto player = std::make_shared<MIDIPlayer>();
     m_tracks[id] = player;
     return player;
 }
 
-Sequencer::audio_track_t Sequencer::createAudioTrack(Sequencer::track_id id)
+Sequencer::AudioTrack Sequencer::createAudioTrack(TrackID id)
 {
     auto player = std::make_shared<AudioPlayer>();
     m_tracks[id] = player;
@@ -241,7 +241,7 @@ Sequencer::audio_track_t Sequencer::createAudioTrack(Sequencer::track_id id)
     return player;
 }
 
-Sequencer::audio_track_t Sequencer::audioTrack(Sequencer::track_id id) const
+Sequencer::AudioTrack Sequencer::audioTrack(TrackID id) const
 {
     if (auto track_var = track(id)) {
         if (auto track_value = track_var.value_or(nullptr)) {

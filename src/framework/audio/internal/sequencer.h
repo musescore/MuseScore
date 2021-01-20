@@ -46,14 +46,14 @@ public:
 
     std::shared_ptr<Clock> clock() const;
 
-    void initMIDITrack(track_id id) override;
-    void setMIDITrack(track_id id, const std::shared_ptr<midi::MidiStream>& stream) override;
-    void setAudioTrack(track_id id, const std::shared_ptr<IAudioStream>& stream) override;
+    void initMIDITrack(TrackID id) override;
+    void setMIDITrack(TrackID id, const std::shared_ptr<midi::MidiStream>& stream) override;
+    void setAudioTrack(TrackID id, const std::shared_ptr<IAudioStream>& stream) override;
 
-    async::Channel<audio_track_t> audioTrackAdded() const;
-    void initAudioTrack(track_id id) override;
+    async::Channel<AudioTrack> audioTrackAdded() const;
+    void initAudioTrack(TrackID id) override;
 
-    async::Channel<mu::midi::tick_t> midiTickPlayed(track_id id) const override;
+    async::Channel<mu::midi::tick_t> midiTickPlayed(TrackID id) const override;
     async::Notification positionChanged() const override;
     float playbackPosition() const override;
 
@@ -64,21 +64,21 @@ private:
     void timeUpdate();
     void beforeTimeUpdate(Clock::time_t time);
 
-    std::optional<track_t> track(track_id id) const;
-    midi_track_t midiTrack(track_id id) const;
-    midi_track_t createMIDITrack(track_id id);
+    std::optional<Track> track(TrackID id) const;
+    MidiTrack midiTrack(TrackID id) const;
+    MidiTrack createMIDITrack(TrackID id);
 
-    audio_track_t audioTrack(track_id id) const;
-    audio_track_t createAudioTrack(track_id id);
+    AudioTrack audioTrack(TrackID id) const;
+    AudioTrack createAudioTrack(TrackID id);
 
     Status m_status = STOPED;
     std::atomic<Status> m_nextStatus = STOPED;
     std::shared_ptr<Clock> m_clock = nullptr;
-    std::map<track_id, track_t> m_tracks = {};
-    std::list<std::pair<Clock::time_t, track_t> > m_backgroudPlayers = {};
+    std::map<TrackID, Track> m_tracks = {};
+    std::list<std::pair<Clock::time_t, Track> > m_backgroudPlayers = {};
 
     async::Channel<Status> m_statusChanged;
-    async::Channel<audio_track_t> m_audioTrackAdded;
+    async::Channel<AudioTrack> m_audioTrackAdded;
     async::Notification m_positionChanged;
 
     std::optional<Clock::time_t> m_loopStart, m_loopEnd;

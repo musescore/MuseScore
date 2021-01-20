@@ -34,10 +34,10 @@ class ISequencer : MODULE_EXPORT_INTERFACE
 public:
     virtual ~ISequencer() = default;
 
-    using midi_track_t = std::shared_ptr<IMIDIPlayer>;
-    using audio_track_t = std::shared_ptr<IAudioPlayer>;
-    using track_t = std::shared_ptr<IPlayer>;
-    using track_id = unsigned int;
+    using MidiTrack = std::shared_ptr<IMIDIPlayer>;
+    using AudioTrack = std::shared_ptr<IAudioPlayer>;
+    using Track = std::shared_ptr<IPlayer>;
+    using TrackID = unsigned int;
 
     enum Status {
         STOPED,
@@ -47,10 +47,10 @@ public:
     virtual Status status() const = 0;
     virtual async::Channel<Status> statusChanged() const = 0;
 
-    virtual void initMIDITrack(track_id id) = 0;
-    virtual void initAudioTrack(track_id id) = 0;
-    virtual void setMIDITrack(track_id id, const std::shared_ptr<midi::MidiStream>& stream) = 0;
-    virtual void setAudioTrack(track_id id, const std::shared_ptr<audio::IAudioStream>& stream) = 0;
+    virtual void initMIDITrack(TrackID id) = 0;
+    virtual void initAudioTrack(TrackID id) = 0;
+    virtual void setMIDITrack(TrackID id, const std::shared_ptr<midi::MidiStream>& stream) = 0;
+    virtual void setAudioTrack(TrackID id, const std::shared_ptr<audio::IAudioStream>& stream) = 0;
 
     virtual void play() = 0;
     virtual void pause() = 0;
@@ -60,12 +60,12 @@ public:
     virtual void setLoop(uint64_t fromMiliSeconds, uint64_t toMiliSeconds) = 0;
     virtual void unsetLoop() = 0;
 
-    virtual async::Channel<midi::tick_t> midiTickPlayed(track_id id) const = 0;
+    virtual async::Channel<midi::tick_t> midiTickPlayed(TrackID id) const = 0;
     virtual async::Notification positionChanged() const = 0;
 
     //!return position in seconds
     virtual float playbackPosition() const = 0;
-    virtual midi_track_t instantlyPlayMidi(const midi::MidiData& data) = 0;
+    virtual MidiTrack instantlyPlayMidi(const midi::MidiData& data) = 0;
 };
 
 using ISequencerPtr = std::shared_ptr<ISequencer>;
