@@ -322,7 +322,7 @@ void MIDIPlayer::sendClear()
     m_noteCache.clear();
 }
 
-void MIDIPlayer::play()
+void MIDIPlayer::run()
 {
     if (m_midiStream && status() != Status::Error) {
         setStatus(Status::Running);

@@ -38,7 +38,7 @@ public:
 
     virtual bool isRunning() const = 0;
 
-    virtual void play() = 0;
+    virtual void run() = 0;
     virtual void seek(unsigned long miliseconds) = 0;
     virtual void stop() = 0;
 
