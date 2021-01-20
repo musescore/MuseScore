@@ -40,7 +40,7 @@ mu::Ret ConverterController::batchConvert(const io::path& batchJobFile)
 
     Ret ret = make_ret(Ret::Code::Ok);
     for (const Job& job : batchJob.val) {
-        ret = convert(job.in, job.out);
+        ret = fileConvert(job.in, job.out);
         if (!ret) {
             LOGE() << "failed convert, err: " << ret.toString() << ", in: " << job.in << ", out: " << job.out;
             break;
@@ -50,7 +50,7 @@ mu::Ret ConverterController::batchConvert(const io::path& batchJobFile)
     return ret;
 }
 
-mu::Ret ConverterController::convert(const io::path& in, const io::path& out)
+mu::Ret ConverterController::fileConvert(const io::path& in, const io::path& out)
 {
     TRACEFUNC;
     LOGI() << "in: " << in << ", out: " << out;

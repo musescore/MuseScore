@@ -38,8 +38,8 @@ public:
 
     struct ConverterTask {
         bool isBatchMode = false;
-        QString batchJobFile;
-        QString exportFile;
+        QString inputFile;
+        QString outputFile;
     };
 
     void parse(const QStringList& args);

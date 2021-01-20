@@ -30,6 +30,7 @@ class IConverterController : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IConverterController() = default;
 
+    virtual Ret fileConvert(const io::path& in, const io::path& out) = 0;
     virtual Ret batchConvert(const io::path& batchJobFile) = 0;
 };
 }
