@@ -5278,8 +5278,15 @@ void ScoreView::cmdMoveCR(bool left)
                               break;
                         }
                   ChordRest* cr2 = left ? prevChordRest(cr1) : nextChordRest(cr1);
-                  if (cr2 && cr1->measure() == cr2->measure() && !cr1->tuplet() && !cr2->tuplet()
-                      && cr1->durationType() == cr2->durationType() && cr1->ticks() == cr2->ticks()) {
+                  // ensures cr1 is the left chord, useful in SwapCR::flip()
+                  if (left)
+                        std::swap(cr1, cr2);
+                  if (cr1 && cr2 && cr1->measure() == cr2->measure() && !cr1->tuplet() && !cr2->tuplet()
+                     && cr1->durationType() == cr2->durationType() && cr1->ticks() == cr2->ticks()
+                     // if two chords belong to different two-note tremolos, abort
+                     && !(cr1->isChord() && toChord(cr1)->tremolo() && toChord(cr1)->tremolo()->twoNotes()
+                        && cr2->isChord() && toChord(cr2)->tremolo() && toChord(cr2)->tremolo()->twoNotes()
+                        && toChord(cr1)->tremolo() != toChord(cr2)->tremolo())) {
                         if (!cmdActive) {
                               _score->startCmd();
                               cmdActive = true;
