@@ -35,6 +35,7 @@ set(MODULE_SRC
     ${HAW_PROFILER_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/globalmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/globalmodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/globaltypes.h
     ${CMAKE_CURRENT_LIST_DIR}/iapplication.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/application.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/application.h

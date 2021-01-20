@@ -26,6 +26,7 @@
 #include "inotation.h"
 #include "iinteractive.h"
 #include "audio/isequencer.h"
+#include "inotationconfiguration.h"
 
 namespace mu::notation {
 class NotationActionController : public actions::Actionable
@@ -34,6 +35,7 @@ class NotationActionController : public actions::Actionable
     INJECT(notation, context::IGlobalContext, globalContext)
     INJECT(notation, framework::IInteractive, interactive)
     INJECT(notation, audio::ISequencer, sequencer)
+    INJECT(notation, INotationConfiguration, configuration)
 
 public:
     void init();
@@ -107,7 +109,7 @@ private:
     void openPartsDialog();
     void openTupletOtherDialog();
 
-    void toggleNavigatorOrientation();
+    void toggleNavigator();
 
     bool isTextEditting() const;
 

@@ -281,19 +281,19 @@ void NotationConfiguration::setNavigatorVisible(bool visible)
     settings()->setValue(NAVIGATOR_VISIBLE_KEY, Val(visible));
 }
 
-ValCh<NavigatorOrientation> NotationConfiguration::navigatorOrientation() const
+ValCh<Orientation> NotationConfiguration::navigatorOrientation() const
 {
-    ValCh<NavigatorOrientation> orientation;
+    ValCh<Orientation> orientation;
     orientation.ch = m_navigatorOrientationChanged;
     bool isVertical = settings()->value(NAVIGATOR_ORIENTATION).toBool() == NAVIGATOR_ORIENTATION_VERTICAL;
-    orientation.val = isVertical ? NavigatorOrientation::Vertical : NavigatorOrientation::Horizontal;
+    orientation.val = isVertical ? Orientation::Vertical : Orientation::Horizontal;
 
     return orientation;
 }
 
-void NotationConfiguration::setNavigatorOrientation(NavigatorOrientation orientation)
+void NotationConfiguration::setNavigatorOrientation(Orientation orientation)
 {
-    bool isVertical = orientation == NavigatorOrientation::Vertical;
+    bool isVertical = orientation == Orientation::Vertical;
     settings()->setValue(NAVIGATOR_ORIENTATION, Val(isVertical));
 }
 

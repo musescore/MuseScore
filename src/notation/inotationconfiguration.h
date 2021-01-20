@@ -26,6 +26,7 @@
 #include "retval.h"
 #include "io/path.h"
 #include "notationtypes.h"
+#include "global/globaltypes.h"
 
 namespace mu::notation {
 class INotationConfiguration : MODULE_EXPORT_INTERFACE
@@ -77,8 +78,8 @@ public:
     virtual ValCh<bool> isNavigatorVisible() const = 0;
     virtual void setNavigatorVisible(bool visible) = 0;
 
-    virtual ValCh<NavigatorOrientation> navigatorOrientation() const = 0;
-    virtual void setNavigatorOrientation(NavigatorOrientation orientation) = 0;
+    virtual ValCh<framework::Orientation> navigatorOrientation() const = 0;
+    virtual void setNavigatorOrientation(framework::Orientation orientation) = 0;
 };
 }
 
