@@ -20,12 +20,28 @@ FlatButton {
 
     accentButton: oppened
 
+    QtObject {
+        id: privateProperties
+
+        function formatNoteSymbol(noteIcon, withDot) {
+            var iconStr = String.fromCharCode(noteIcon)
+
+            if (Boolean(withDot)) {
+                return iconStr + String.fromCharCode(MusicalSymbolCodes.DOT)
+            }
+
+            return iconStr
+        }
+    }
+
     TempoView {
+        id: tempoView
+
         anchors.horizontalCenter: root.horizontalCenter
         anchors.verticalCenter: root.verticalCenter
 
-        tempoNote: MusicalSymbolCodes.CROTCHET // TODO: get from model
-        tempo: model.tempo
+        tempoValue: root.model.tempo.value
+        tempoNoteSymbol: privateProperties.formatNoteSymbol(model.tempo.noteIcon, model.tempo.withDot)
     }
 
     onClicked: {
@@ -72,48 +88,37 @@ FlatButton {
                 anchors.rightMargin: -(parent.anchors.rightMargin + popup.rightPadding)
             }
 
-            ListView {
+            RadioButtonGroup {
                 anchors.left: parent.left
                 anchors.right: parent.right
 
                 height: 50
 
                 model: root.model.tempoMarks()
-                orientation: ListView.Horizontal
-                spacing: 4
 
                 clip: true
                 boundsBehavior: ListView.StopAtBounds
 
-                delegate: FlatButton {
+                delegate: FlatRadioButton {
                     width: 48
                     height: width
 
                     enabled: withTempo.checked
 
-                    Row {
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.verticalCenter: parent.verticalCenter
+                    onClicked: {
+                        var tempo = root.model.tempo
+                        tempo.noteIcon = modelData.noteIcon
+                        tempo.withDot = modelData.withDot
+                        root.model.tempo = tempo
+                    }
 
-                        StyledIconLabel {
-                            topPadding: 14
-                            font.family: ui.theme.musicalFont.family
-                            font.pixelSize: 24
-                            lineHeightMode: Text.FixedHeight
-                            lineHeight: 10
-                            iconCode: modelData.icon
-                        }
-
-                        StyledIconLabel {
-                            topPadding: 14
-                            font.family: ui.theme.musicalFont.family
-                            font.pixelSize: 24
-                            lineHeightMode: Text.FixedHeight
-                            lineHeight: 10
-                            iconCode: MusicalSymbolCodes.DOT
-
-                            visible: Boolean(modelData.withDot)
-                        }
+                    StyledTextLabel {
+                        topPadding: 24
+                        font.family: ui.theme.musicalFont.family
+                        font.pixelSize: 24
+                        lineHeightMode: Text.FixedHeight
+                        lineHeight: 10
+                        text: privateProperties.formatNoteSymbol(modelData.noteIcon, modelData.withDot)
                     }
                 }
             }
@@ -122,10 +127,12 @@ FlatButton {
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 spacing: 20
+                enabled: withTempo.checked
 
                 StyledTextLabel {
                     anchors.verticalCenter: parent.verticalCenter
                     text: "="
+                    font: ui.theme.headerFont
                 }
 
                 IncrementalPropertyControl {
@@ -133,10 +140,8 @@ FlatButton {
 
                     implicitWidth: 126
 
-                    enabled: withTempo.checked
-
                     iconMode: iconModeEnum.hidden
-                    currentValue: root.model.tempo
+                    currentValue: root.model.tempo.value
                     step: 1
 
                     maxValue: root.model.tempoRange().max
@@ -147,7 +152,9 @@ FlatButton {
                     }
 
                     onValueEdited: {
-                        root.model.tempo = newValue
+                        var tempo = root.model.tempo
+                        tempo.value = newValue
+                        root.model.tempo = tempo
                     }
                 }
             }

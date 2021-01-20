@@ -21,16 +21,15 @@
 #include "log.h"
 #include "translation.h"
 
-#include "ui/view/iconcodes.h"
-#include "ui/view/musicalsymbolcodes.h"
-
 using namespace mu::userscores;
 using namespace mu::notation;
+using namespace mu::ui;
 
 const AdditionalInfoModel::TimeSignature AdditionalInfoModel::FOUR_FOUR_TIME_SIGNATURE(4, 4);
 const AdditionalInfoModel::TimeSignature AdditionalInfoModel::ALLA_BREVE_TIME_SIGNATURE(2, 2);
 
-static const QString ICON_KEY("icon");
+static const QString NOTE_ICON_KEY("noteIcon");
+static const QString WITH_DOT_KEY("withDot");
 static const QString MIN_KEY("min");
 static const QString MAX_KEY("max");
 
@@ -47,7 +46,11 @@ void AdditionalInfoModel::init()
     setTimeSignature(FOUR_FOUR_TIME_SIGNATURE.toMap());
 
     setWithTempo(false);
-    setTempo(120);
+
+    Tempo defaultTempo;
+    defaultTempo.noteIcon = MusicalSymbolCodes::Code::CROTCHET;
+    defaultTempo.value = 120;
+    setTempo(defaultTempo.toMap());
 
     setWithPickupMeasure(false);
     setMeasureCount(32);
@@ -164,9 +167,9 @@ QVariantList AdditionalInfoModel::musicSymbolCodes(int number) const
     return result;
 }
 
-int AdditionalInfoModel::tempo() const
+QVariantMap AdditionalInfoModel::tempo() const
 {
-    return m_tempo;
+    return m_tempo.toMap();
 }
 
 bool AdditionalInfoModel::withTempo() const
@@ -182,15 +185,15 @@ QVariantMap AdditionalInfoModel::tempoRange()
 QVariantList AdditionalInfoModel::tempoMarks()
 {
     QVariantList marks;
-    marks << QVariantMap { { ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::SEMIQUAVER) } }
-          << QVariantMap { { ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::SEMIQUAVER) }, { "withDot", true } }
-          << QVariantMap { { ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::QUAVER) } }
-          << QVariantMap { { ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::QUAVER) }, { "withDot", true } }
-          << QVariantMap { { ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::CROTCHET) } }
-          << QVariantMap { { ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::CROTCHET) }, { "withDot", true } }
-          << QVariantMap { { ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::MINIM) } }
-          << QVariantMap { { ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::MINIM) }, { "withDot", true } }
-          << QVariantMap { { ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::SEMIBREVE) } };
+    marks << QVariantMap { { NOTE_ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::SEMIQUAVER) } }
+          << QVariantMap { { NOTE_ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::SEMIQUAVER) }, { WITH_DOT_KEY, true } }
+          << QVariantMap { { NOTE_ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::QUAVER) } }
+          << QVariantMap { { NOTE_ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::QUAVER) }, { WITH_DOT_KEY, true } }
+          << QVariantMap { { NOTE_ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::CROTCHET) } }
+          << QVariantMap { { NOTE_ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::CROTCHET) }, { WITH_DOT_KEY, true } }
+          << QVariantMap { { NOTE_ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::MINIM) } }
+          << QVariantMap { { NOTE_ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::MINIM) }, { WITH_DOT_KEY, true } }
+          << QVariantMap { { NOTE_ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::SEMIBREVE) } };
 
     return marks;
 }
@@ -265,14 +268,10 @@ void AdditionalInfoModel::setTimeSignatureType(int timeSignatureType)
     updateTimeSignature();
 }
 
-void AdditionalInfoModel::setTempo(int tempo)
+void AdditionalInfoModel::setTempo(QVariantMap tempo)
 {
-    if (m_tempo == tempo) {
-        return;
-    }
-
-    m_tempo = tempo;
-    emit tempoChanged(m_tempo);
+    m_tempo = Tempo(tempo);
+    emit tempoChanged(tempo);
 }
 
 void AdditionalInfoModel::setWithTempo(bool withTempo)

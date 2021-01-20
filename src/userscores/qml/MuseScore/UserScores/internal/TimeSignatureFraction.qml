@@ -5,8 +5,8 @@ import MuseScore.UiComponents 1.0
 Row {
     id: root
 
-    property var numerator: 0
-    property var denominator: 0
+    property int numerator: 0
+    property int denominator: 0
     property var availableDenominators: null
 
     spacing: 14
@@ -28,7 +28,7 @@ Row {
         }
 
         onValueEdited: {
-            numerator = newValue
+            root.numerator = newValue
         }
     }
 
@@ -60,7 +60,7 @@ Row {
         }
 
         onValueChanged: {
-            denominator = value
+            root.denominator = value
         }
     }
 }
