@@ -388,7 +388,7 @@ void Measure::checkMeasure(int staffIdx)
             if (f > expectedPos) {
                   // don't fill empty voices
                   if (expectedPos.isNotZero())
-                        fillGap(expectedPos, ticks() - expectedPos, track, stretch);
+                        fillGap(expectedPos, f - expectedPos, track, stretch);
                   }
             else if (f < expectedPos)
                   qDebug("measure overrun %6d, %d > %d, track %d", tick().ticks(), expectedPos.ticks(), f.ticks(), track);
