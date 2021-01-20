@@ -30,6 +30,9 @@ class IMixer
 {
 public:
 
+    //! number of mix channel
+    using ChannelID = unsigned int;
+
     enum Mode {
         MONO,
         STEREO,
@@ -42,7 +45,7 @@ public:
     virtual Mode mode() const = 0;
     virtual void setMode(const Mode& mode) = 0;
 
-    //!set master level
+    //! set master level
     virtual void setLevel(float level) = 0;
 
     //! return insert at master
@@ -52,17 +55,16 @@ public:
     virtual void setInsert(unsigned int number, std::shared_ptr<IAudioInsert> insert) = 0;
 
     //! add source to the mix
-    virtual unsigned int addChannel(std::shared_ptr<IAudioSource> source) = 0;
-    virtual void removeChannel(unsigned int channelId) = 0;
+    virtual ChannelID addChannel(std::shared_ptr<IAudioSource> source) = 0;
+    virtual void removeChannel(ChannelID channelId) = 0;
+    virtual std::shared_ptr<IMixerChannel> channel(ChannelID channelId) const = 0;
 
     //! mixed source
     virtual IAudioSourcePtr mixedSource() = 0;
 
-    virtual void setActive(unsigned int channelId, bool active) = 0;
-    virtual void setLevel(unsigned int channelId, unsigned int streamId, float level) = 0;
-    virtual void setBalance(unsigned int channelId, unsigned int streamId, std::complex<float> balance) = 0;
-
-    virtual std::shared_ptr<IMixerChannel> channel(unsigned int number) const = 0;
+    virtual void setActive(ChannelID channelId, bool active) = 0;
+    virtual void setLevel(ChannelID channelId, unsigned int streamId, float level) = 0;
+    virtual void setBalance(ChannelID channelId, unsigned int streamId, std::complex<float> balance) = 0;
 };
 
 using IMixerPtr = std::shared_ptr<IMixer>;
