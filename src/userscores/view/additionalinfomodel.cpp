@@ -30,6 +30,10 @@ using namespace mu::notation;
 const AdditionalInfoModel::TimeSignature AdditionalInfoModel::FOUR_FOUR_TIME_SIGNATURE(4, 4);
 const AdditionalInfoModel::TimeSignature AdditionalInfoModel::ALLA_BREVE_TIME_SIGNATURE(2, 2);
 
+static const QString ICON_KEY("icon");
+static const QString MIN_KEY("min");
+static const QString MAX_KEY("max");
+
 AdditionalInfoModel::AdditionalInfoModel(QObject* parent)
     : QObject(parent)
 {
@@ -172,21 +176,21 @@ bool AdditionalInfoModel::withTempo() const
 
 QVariantMap AdditionalInfoModel::tempoRange()
 {
-    return QVariantMap { { "min", 20 }, { "max", 400 } };
+    return QVariantMap { { MIN_KEY, 20 }, { MAX_KEY, 400 } };
 }
 
 QVariantList AdditionalInfoModel::tempoMarks()
 {
     QVariantList marks;
-    marks << QVariantMap { { "icon", static_cast<int>(MusicalSymbolCodes::Code::SEMIQUAVER) } }
-          << QVariantMap { { "icon", static_cast<int>(MusicalSymbolCodes::Code::SEMIQUAVER) }, { "withDot", true } }
-          << QVariantMap { { "icon", static_cast<int>(MusicalSymbolCodes::Code::CROTCHET) } }
-          << QVariantMap { { "icon", static_cast<int>(MusicalSymbolCodes::Code::CROTCHET) }, { "withDot", true } }
-          << QVariantMap { { "icon", static_cast<int>(MusicalSymbolCodes::Code::QUAVER) } }
-          << QVariantMap { { "icon", static_cast<int>(MusicalSymbolCodes::Code::QUAVER) }, { "withDot", true } }
-          << QVariantMap { { "icon", static_cast<int>(MusicalSymbolCodes::Code::MINIM) } }
-          << QVariantMap { { "icon", static_cast<int>(MusicalSymbolCodes::Code::MINIM) }, { "withDot", true } }
-          << QVariantMap { { "icon", static_cast<int>(MusicalSymbolCodes::Code::SEMIBREVE) } };
+    marks << QVariantMap { { ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::SEMIQUAVER) } }
+          << QVariantMap { { ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::SEMIQUAVER) }, { "withDot", true } }
+          << QVariantMap { { ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::QUAVER) } }
+          << QVariantMap { { ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::QUAVER) }, { "withDot", true } }
+          << QVariantMap { { ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::CROTCHET) } }
+          << QVariantMap { { ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::CROTCHET) }, { "withDot", true } }
+          << QVariantMap { { ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::MINIM) } }
+          << QVariantMap { { ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::MINIM) }, { "withDot", true } }
+          << QVariantMap { { ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::SEMIBREVE) } };
 
     return marks;
 }
@@ -228,7 +232,7 @@ int AdditionalInfoModel::measureCount() const
 
 QVariantMap AdditionalInfoModel::measureCountRange()
 {
-    return QVariantMap { { "min", 1 }, { "max", 9999 } };
+    return QVariantMap { { MIN_KEY, 1 }, { MAX_KEY, 9999 } };
 }
 
 QVariantList AdditionalInfoModel::timeSignatureDenominators()
