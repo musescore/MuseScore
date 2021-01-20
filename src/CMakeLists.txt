@@ -36,6 +36,9 @@ add_subdirectory(palette)
 add_subdirectory(inspector)
 add_subdirectory(instruments)
 
+# Stubs
+add_subdirectory(stubs)
+
 if (BUILD_UNIT_TESTS)
 #    add_subdirectory(notation/tests) no tests at moment
     add_subdirectory(userscores/tests)

@@ -5,7 +5,11 @@ add_subdirectory(uicomponents)
 add_subdirectory(fonts)
 add_subdirectory(actions)
 add_subdirectory(shortcuts)
-add_subdirectory(network)
+
+if (BUILD_NETWORK_MODULE)
+    add_subdirectory(network)
+endif (BUILD_NETWORK_MODULE)
+
 add_subdirectory(system)
 add_subdirectory(audio)
 add_subdirectory(midi)
