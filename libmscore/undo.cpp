@@ -2174,6 +2174,14 @@ void SwapCR::flip(EditData*)
       Segment* s2 = cr2->segment();
       int track = cr1->track();
 
+      if (cr1->isChord() && cr2->isChord() && (toChord(cr1)->tremolo() == toChord(cr2)->tremolo())) {
+            Tremolo* t = toChord(cr1)->tremolo();
+            Chord* c1 = t->chord1();
+            Chord* c2 = t->chord2();
+            t->setParent(toChord(c2));
+            t->setChords(toChord(c2), toChord(c1));
+            }
+
       Element* cr = s1->element(track);
       s1->setElement(track, s2->element(track));
       s2->setElement(track, cr);
