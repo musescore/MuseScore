@@ -38,6 +38,7 @@ class ConverterController : public IConverterController
 public:
     ConverterController() = default;
 
+    Ret fileConvert(const io::path& in, const io::path& out) override;
     Ret batchConvert(const io::path& batchJobFile) override;
 
 private:
@@ -50,8 +51,6 @@ private:
     using BatchJob = std::list<Job>;
 
     RetVal<BatchJob> parseBatchJob(const io::path& batchJobFile) const;
-
-    Ret convert(const io::path& in, const io::path& out);
 };
 }
 
