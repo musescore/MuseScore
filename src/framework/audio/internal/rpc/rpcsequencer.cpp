@@ -177,20 +177,11 @@ float RpcSequencer::playbackPosition() const
     return m_playbackPosition;
 }
 
-ISequencer::MidiTrack RpcSequencer::instantlyPlayMidi(const midi::MidiData& data)
+void RpcSequencer::instantlyPlayMidi(const midi::MidiData& data)
 {
     if (rpcChannel()->isSerialized()) {
         NOT_IMPLEMENTED;
     } else {
         rpcChannel()->send(Msg(m_target, "instantlyPlayMidi", Args::make_arg1<midi::MidiData>(data)));
     }
-
-    //! TODO It is necessary to remove the return of the pointer to the player object.
-    //! This is thread-unsafe code, see https://github.com/musescore/MuseScore/pull/6848#discussion_r558445611
-    //! If we need to control this playback, then we need to
-    //! add the generation of the ID,
-    //! transfer it to the real sequencer,
-    //! return this ID from the method,
-    //! and add methods for control by passing this ID to them.
-    return nullptr;
 }
