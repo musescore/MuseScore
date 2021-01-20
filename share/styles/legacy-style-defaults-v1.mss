@@ -412,7 +412,6 @@
     <tremoloBoxHeight>0.65</tremoloBoxHeight>
     <tremoloLineWidth>0.5</tremoloLineWidth>
     <tremoloDistance>0.8</tremoloDistance>
-    <tremoloPlacement>0</tremoloPlacement>
     <tremoloStrokeStyle>0</tremoloStrokeStyle>
     <linearStretch>1.5</linearStretch>
     <crossMeasureValues>0</crossMeasureValues>
