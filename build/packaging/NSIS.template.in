@@ -151,11 +151,11 @@ Var AR_RegFlags
 ;--- End of Add/Remove macros ---
 
 Function InstallDesktopShortcut
-  CreateShortcut "$DESKTOP\MuseScore 2.lnk" "$INSTDIR\bin\MuseScore.exe"
+  CreateShortcut "$DESKTOP\MuseScore 3.lnk" "$INSTDIR\bin\MuseScore3.exe"
 FunctionEnd
 
 Function un.InstallDesktopShortcut
-  Delete "$DESKTOP\MuseScore 2.lnk"
+  Delete "$DESKTOP\MuseScore 3.lnk"
 FunctionEnd
 
 ;--------------------------------
@@ -165,7 +165,7 @@ FunctionEnd
   !define MUI_ABORTWARNING
   !define MUI_FINISHPAGE_LINK "http://musescore.org"
   !define MUI_FINISHPAGE_LINK_LOCATION "http://musescore.org"
-  !define MUI_FINISHPAGE_RUN "$INSTDIR\bin\MuseScore.exe"
+  !define MUI_FINISHPAGE_RUN "$INSTDIR\bin\MuseScore3.exe"
   !define MUI_FINISHPAGE_SHOWREADME ""
   !define MUI_FINISHPAGE_SHOWREADME_CHECKED
   !define MUI_FINISHPAGE_SHOWREADME_TEXT $(createDesktopShortcut)
