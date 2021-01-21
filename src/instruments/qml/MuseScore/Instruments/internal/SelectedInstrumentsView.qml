@@ -113,6 +113,7 @@ Item {
 
                 horizontalAlignment: Text.AlignLeft
                 text: modelData.name
+                font: ui.theme.bodyBoldFont
             }
 
             onClicked: {
