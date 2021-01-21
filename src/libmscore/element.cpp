@@ -1685,45 +1685,12 @@ QRectF Element::symBbox(const std::vector<SymId>& s) const
 }
 
 //---------------------------------------------------------
-//   symStemDownNW
+//   symSmuflAnchor
 //---------------------------------------------------------
 
-QPointF Element::symStemDownNW(SymId id) const
+QPointF Element::symSmuflAnchor(SymId symId, SmuflAnchorId anchorId) const
 {
-    return score()->scoreFont()->stemDownNW(id, magS());
-}
-
-//---------------------------------------------------------
-//   symStemUpSE
-//---------------------------------------------------------
-
-QPointF Element::symStemUpSE(SymId id) const
-{
-    return score()->scoreFont()->stemUpSE(id, magS());
-}
-
-//---------------------------------------------------------
-//   symCutOutNE / symCutOutNW / symCutOutSE / symCutOutNW
-//---------------------------------------------------------
-
-QPointF Element::symCutOutNE(SymId id) const
-{
-    return score()->scoreFont()->cutOutNE(id, magS());
-}
-
-QPointF Element::symCutOutNW(SymId id) const
-{
-    return score()->scoreFont()->cutOutNW(id, magS());
-}
-
-QPointF Element::symCutOutSE(SymId id) const
-{
-    return score()->scoreFont()->cutOutSE(id, magS());
-}
-
-QPointF Element::symCutOutSW(SymId id) const
-{
-    return score()->scoreFont()->cutOutSW(id, magS());
+    return score()->scoreFont()->smuflAnchor(symId, anchorId, magS());
 }
 
 //---------------------------------------------------------

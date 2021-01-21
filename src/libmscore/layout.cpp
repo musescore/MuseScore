@@ -882,8 +882,8 @@ void Score::layoutChords3(std::vector<Note*>& notes, const Staff* staff, Segment
                 acel.width  = ac->width();
                 QPointF bboxNE = ac->symBbox(ac->symbol()).topRight();
                 QPointF bboxSW = ac->symBbox(ac->symbol()).bottomLeft();
-                QPointF cutOutNE = ac->symCutOutNE(ac->symbol());
-                QPointF cutOutSW = ac->symCutOutSW(ac->symbol());
+                QPointF cutOutNE = ac->symSmuflAnchor(ac->symbol(), SmuflAnchorId::cutOutNE);
+                QPointF cutOutSW = ac->symSmuflAnchor(ac->symbol(), SmuflAnchorId::cutOutSW);
                 if (!cutOutNE.isNull()) {
                     acel.ascent     = cutOutNE.y() - bboxNE.y();
                     acel.rightClear = bboxNE.x() - cutOutNE.x();

@@ -6692,11 +6692,11 @@ void ScoreFont::load()
                error.offset, qPrintable(error.errorString()));
     }
 
-    QJsonObject oo = metadataJson.value("glyphsWithAnchors").toObject();
-    for (auto i : oo.keys()) {
+    QJsonObject glyphsWithAnchors = metadataJson.value("glyphsWithAnchors").toObject();
+    for (auto symName : glyphsWithAnchors.keys()) {
         constexpr qreal scale = SPATIUM20;
-        QJsonObject ooo = oo.value(i).toObject();
-        SymId symId = Sym::lnhash.value(i, SymId::noSym);
+        QJsonObject anchors = glyphsWithAnchors.value(symName).toObject();
+        SymId symId = Sym::lnhash.value(symName, SymId::noSym);
         if (symId == SymId::noSym) {
             // currently, Bravura contains a bunch of entries in glyphsWithAnchors
             // for glyph names that will not be found - flag32ndUpStraight, etc.
@@ -6704,35 +6704,43 @@ void ScoreFont::load()
             continue;
         }
         Sym* sym = &_symbols[int(symId)];
-        for (auto j : ooo.keys()) {
+        for (auto j : anchors.keys()) {
             if (j == "stemDownNW") {
-                qreal x = ooo.value(j).toArray().at(0).toDouble();
-                qreal y = ooo.value(j).toArray().at(1).toDouble();
-                sym->setStemDownNW(QPointF(4.0 * DPI_F * x, 4.0 * DPI_F * -y));
+                qreal x = anchors.value(j).toArray().at(0).toDouble();
+                qreal y = anchors.value(j).toArray().at(1).toDouble();
+                sym->setSmuflAnchor(SmuflAnchorId::stemDownNW, QPointF(4.0 * DPI_F * x, 4.0 * DPI_F * -y));
             } else if (j == "stemUpSE") {
-                qreal x = ooo.value(j).toArray().at(0).toDouble();
-                qreal y = ooo.value(j).toArray().at(1).toDouble();
-                sym->setStemUpSE(QPointF(4.0 * DPI_F * x, 4.0 * DPI_F * -y));
+                qreal x = anchors.value(j).toArray().at(0).toDouble();
+                qreal y = anchors.value(j).toArray().at(1).toDouble();
+                sym->setSmuflAnchor(SmuflAnchorId::stemUpSE, QPointF(4.0 * DPI_F * x, 4.0 * DPI_F * -y));
+            } else if (j == "stemDownSW") {
+                qreal x = anchors.value(j).toArray().at(0).toDouble();
+                qreal y = anchors.value(j).toArray().at(1).toDouble();
+                sym->setSmuflAnchor(SmuflAnchorId::stemDownSW, QPointF(4.0 * DPI_F * x, 4.0 * DPI_F * -y));
+            } else if (j == "stemUpNW") {
+                qreal x = anchors.value(j).toArray().at(0).toDouble();
+                qreal y = anchors.value(j).toArray().at(1).toDouble();
+                sym->setSmuflAnchor(SmuflAnchorId::stemUpNW, QPointF(4.0 * DPI_F * x, 4.0 * DPI_F * -y));
             } else if (j == "cutOutNE") {
-                qreal x = ooo.value(j).toArray().at(0).toDouble() * scale;
-                qreal y = ooo.value(j).toArray().at(1).toDouble() * scale;
-                sym->setCutOutNE(QPointF(x, -y));
+                qreal x = anchors.value(j).toArray().at(0).toDouble() * scale;
+                qreal y = anchors.value(j).toArray().at(1).toDouble() * scale;
+                sym->setSmuflAnchor(SmuflAnchorId::cutOutNE, QPointF(x, -y));
             } else if (j == "cutOutNW") {
-                qreal x = ooo.value(j).toArray().at(0).toDouble() * scale;
-                qreal y = ooo.value(j).toArray().at(1).toDouble() * scale;
-                sym->setCutOutNW(QPointF(x, -y));
+                qreal x = anchors.value(j).toArray().at(0).toDouble() * scale;
+                qreal y = anchors.value(j).toArray().at(1).toDouble() * scale;
+                sym->setSmuflAnchor(SmuflAnchorId::cutOutNW, QPointF(x, -y));
             } else if (j == "cutOutSE") {
-                qreal x = ooo.value(j).toArray().at(0).toDouble() * scale;
-                qreal y = ooo.value(j).toArray().at(1).toDouble() * scale;
-                sym->setCutOutSE(QPointF(x, -y));
+                qreal x = anchors.value(j).toArray().at(0).toDouble() * scale;
+                qreal y = anchors.value(j).toArray().at(1).toDouble() * scale;
+                sym->setSmuflAnchor(SmuflAnchorId::cutOutSE, QPointF(x, -y));
             } else if (j == "cutOutSW") {
-                qreal x = ooo.value(j).toArray().at(0).toDouble() * scale;
-                qreal y = ooo.value(j).toArray().at(1).toDouble() * scale;
-                sym->setCutOutSW(QPointF(x, -y));
+                qreal x = anchors.value(j).toArray().at(0).toDouble() * scale;
+                qreal y = anchors.value(j).toArray().at(1).toDouble() * scale;
+                sym->setSmuflAnchor(SmuflAnchorId::cutOutSW, QPointF(x, -y));
             }
         }
     }
-    oo = metadataJson.value("engravingDefaults").toObject();
+    glyphsWithAnchors = metadataJson.value("engravingDefaults").toObject();
     static std::list<std::pair<QString, Sid> > engravingDefaultsMapping = {
         { "staffLineThickness",            Sid::staffLineWidth },
         { "stemThickness",                 Sid::stemWidth },
@@ -6757,12 +6765,12 @@ void ScoreFont::load()
         { "lyricLineThickness",            Sid::lyricsLineThickness },
         { "tupletBracketThickness",        Sid::tupletBracketWidth }
     };
-    for (auto i : oo.keys()) {
+    for (auto i : glyphsWithAnchors.keys()) {
         for (auto mapping : engravingDefaultsMapping) {
             if (i == mapping.first) {
-                _engravingDefaults.push_back(std::make_pair(mapping.second, oo.value(i).toDouble()));
+                _engravingDefaults.push_back(std::make_pair(mapping.second, glyphsWithAnchors.value(i).toDouble()));
             } else if (i == "textEnclosureThickness") {
-                _textEnclosureThickness = oo.value(i).toDouble();
+                _textEnclosureThickness = glyphsWithAnchors.value(i).toDouble();
             }
         }
     }
@@ -7095,52 +7103,12 @@ qreal ScoreFont::width(const std::vector<SymId>& s, qreal mag) const
     return bbox(s, mag).width();
 }
 
-QPointF ScoreFont::stemDownNW(SymId id, qreal mag) const
+QPointF ScoreFont::smuflAnchor(SymId symId, SmuflAnchorId anchorId, qreal mag) const
 {
-    if (useFallbackFont(id)) {
-        return fallbackFont()->stemDownNW(id, mag);
+    if (useFallbackFont(symId)) {
+        return fallbackFont()->smuflAnchor(symId, anchorId, mag);
     }
-    return sym(id).stemDownNW() * mag;
-}
-
-QPointF ScoreFont::stemUpSE(SymId id, qreal mag) const
-{
-    if (useFallbackFont(id)) {
-        return fallbackFont()->stemUpSE(id, mag);
-    }
-    return sym(id).stemUpSE() * mag;
-}
-
-QPointF ScoreFont::cutOutNE(SymId id, qreal mag) const
-{
-    if (useFallbackFont(id)) {
-        return fallbackFont()->cutOutNE(id, mag);
-    }
-    return sym(id).cutOutNE() * mag;
-}
-
-QPointF ScoreFont::cutOutNW(SymId id, qreal mag) const
-{
-    if (useFallbackFont(id)) {
-        return fallbackFont()->cutOutNW(id, mag);
-    }
-    return sym(id).cutOutNW() * mag;
-}
-
-QPointF ScoreFont::cutOutSE(SymId id, qreal mag) const
-{
-    if (useFallbackFont(id)) {
-        return fallbackFont()->cutOutSE(id, mag);
-    }
-    return sym(id).cutOutSE() * mag;
-}
-
-QPointF ScoreFont::cutOutSW(SymId id, qreal mag) const
-{
-    if (useFallbackFont(id)) {
-        return fallbackFont()->cutOutSW(id, mag);
-    }
-    return sym(id).cutOutSW() * mag;
+    return sym(symId).smuflAnchor(anchorId) * mag;
 }
 
 //---------------------------------------------------------

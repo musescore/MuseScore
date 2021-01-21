@@ -168,7 +168,7 @@ void ShadowNote::draw(QPainter* painter) const
     if (flag != SymId::noSym) {
         QPointF pos;
         pos.rx() = up == 1 ? (noteheadWidth - (lw / 2)) : lw / 2;
-        qreal yOffset = up == 1 ? symStemUpSE(_notehead).y() * magS() : symStemDownNW(_notehead).y() * magS();
+        qreal yOffset = symSmuflAnchor(_notehead, up == 1 ? SmuflAnchorId::stemUpSE : SmuflAnchorId::stemDownNW).y() * magS();
         if (flag != SymId::lastSym) {
             qreal flagHeight
                 = (_duration.type() < TDuration::DurationType::V_256TH) ? symHeight(flag) : symHeight(flag) / 2;
