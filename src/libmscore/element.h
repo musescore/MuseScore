@@ -511,12 +511,7 @@ public:
     qreal symWidth(const std::vector<SymId>&) const;
     QRectF symBbox(SymId id) const;
     QRectF symBbox(const std::vector<SymId>&) const;
-    QPointF symStemDownNW(SymId id) const;
-    QPointF symStemUpSE(SymId id) const;
-    QPointF symCutOutNE(SymId id) const;
-    QPointF symCutOutNW(SymId id) const;
-    QPointF symCutOutSE(SymId id) const;
-    QPointF symCutOutSW(SymId id) const;
+    QPointF symSmuflAnchor(SymId symId, SmuflAnchorId anchorId) const;
     qreal symAdvance(SymId id) const;
     bool symIsValid(SymId id) const;
 

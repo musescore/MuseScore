@@ -3019,6 +3019,21 @@ enum class SymId {
 END_QT_REGISTERED_ENUM(SymId)
 
 //---------------------------------------------------------
+//   SmuflAnchorId
+//---------------------------------------------------------
+
+enum class SmuflAnchorId {
+    stemDownNW,
+    stemUpSE,
+    stemDownSW,
+    stemUpNW,
+    cutOutNE,
+    cutOutNW,
+    cutOutSE,
+    cutOutSW,
+};
+
+//---------------------------------------------------------
 //   Sym
 ///   \cond PLUGIN_API \private \endcond
 //---------------------------------------------------------
@@ -3031,13 +3046,8 @@ protected:
     QRectF _bbox;
     qreal _advance = 0.0;
 
-    QPointF _stemDownNW;
-    QPointF _stemUpSE;
-    QPointF _cutOutNE;
-    QPointF _cutOutNW;
-    QPointF _cutOutSE;
-    QPointF _cutOutSW;
-    std::vector<SymId> _ids;              // not empty if this is a compound symbol
+    std::map<SmuflAnchorId, QPointF> smuflAnchors;
+    std::vector<SymId> _ids; // not empty if this is a compound symbol
 
 public:
     Sym() { }
@@ -3059,18 +3069,8 @@ public:
     qreal advance() const { return _advance; }
     void setAdvance(qreal val) { _advance = val; }
 
-    QPointF stemDownNW() const { return _stemDownNW; }
-    void setStemDownNW(const QPointF& r) { _stemDownNW = r; }
-    QPointF stemUpSE() const { return _stemUpSE; }
-    void setStemUpSE(const QPointF& r) { _stemUpSE = r; }
-    QPointF cutOutNE() const { return _cutOutNE; }
-    void setCutOutNE(const QPointF& r) { _cutOutNE = r; }
-    QPointF cutOutNW() const { return _cutOutNW; }
-    void setCutOutNW(const QPointF& r) { _cutOutNW = r; }
-    QPointF cutOutSE() const { return _cutOutSE; }
-    void setCutOutSE(const QPointF& r) { _cutOutSE = r; }
-    QPointF cutOutSW() const { return _cutOutSW; }
-    void setCutOutSW(const QPointF& r) { _cutOutSW = r; }
+    QPointF smuflAnchor(SmuflAnchorId anchorId) { return smuflAnchors[anchorId]; }
+    void setSmuflAnchor(SmuflAnchorId anchorId, const QPointF& newValue) { smuflAnchors[anchorId] = newValue; }
 
     static SymId name2id(const QString& s) { return lnhash.value(s, SymId::noSym); }           // return noSym if not found
     static SymId oldName2id(const QString s) { return lonhash.value(s, SymId::noSym); }
@@ -3192,12 +3192,7 @@ public:
     const QRectF bbox(SymId id, qreal mag) const;
     const QRectF bbox(const std::vector<SymId>& s, const QSizeF& mag) const;
     const QRectF bbox(const std::vector<SymId>& s, qreal mag) const;
-    QPointF stemDownNW(SymId id, qreal mag) const;
-    QPointF stemUpSE(SymId id, qreal mag) const;
-    QPointF cutOutNE(SymId id, qreal mag) const;
-    QPointF cutOutNW(SymId id, qreal mag) const;
-    QPointF cutOutSE(SymId id, qreal mag) const;
-    QPointF cutOutSW(SymId id, qreal mag) const;
+    QPointF smuflAnchor(SymId symId, SmuflAnchorId anchorId, qreal mag) const;
 
     bool isValid(SymId id) const { return sym(id).isValid(); }
     bool useFallbackFont(SymId id) const;
