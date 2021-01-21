@@ -21,13 +21,24 @@
 #include "log.h"
 
 using namespace mu::userscores;
-using namespace mu::actions;
 using namespace mu::notation;
 using namespace mu::instruments;
+
+using PreferredScoreCreationMode = IUserScoresConfiguration::PreferredScoreCreationMode;
 
 NewScoreModel::NewScoreModel(QObject* parent)
     : QObject(parent)
 {
+}
+
+QString NewScoreModel::preferredScoreCreationMode() const
+{
+    switch (configuration()->preferredScoreCreationMode()) {
+    case PreferredScoreCreationMode::FromInstruments: return "FromInstruments";
+    case PreferredScoreCreationMode::FromTemplate: return "FromTemplate";
+    }
+
+    return "";
 }
 
 bool NewScoreModel::createScore(const QVariant& info)
@@ -47,6 +58,9 @@ bool NewScoreModel::createScore(const QVariant& info)
     }
 
     globalContext()->setCurrentMasterNotation(notation);
+
+    bool isScoreCreatedFromInstruments = options.templatePath.empty();
+    updatePreferredScoreCreationMode(isScoreCreatedFromInstruments);
 
     return true;
 }
@@ -88,4 +102,13 @@ ScoreCreateOptions NewScoreModel::parseOptions(const QVariantMap& info) const
     }
 
     return options;
+}
+
+void NewScoreModel::updatePreferredScoreCreationMode(bool isScoreCreatedFromInstruments)
+{
+    if (isScoreCreatedFromInstruments) {
+        configuration()->setPreferredScoreCreationMode(PreferredScoreCreationMode::FromInstruments);
+    } else {
+        configuration()->setPreferredScoreCreationMode(PreferredScoreCreationMode::FromTemplate);
+    }
 }
