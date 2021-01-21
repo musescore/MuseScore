@@ -25,8 +25,9 @@ using namespace mu::userscores;
 using namespace mu::notation;
 using namespace mu::ui;
 
-const AdditionalInfoModel::TimeSignature AdditionalInfoModel::FOUR_FOUR_TIME_SIGNATURE(4, 4);
-const AdditionalInfoModel::TimeSignature AdditionalInfoModel::ALLA_BREVE_TIME_SIGNATURE(2, 2);
+static const mu::notation::Fraction FOUR_FOUR_TIME_SIGNATURE(4, 4);
+static const mu::notation::Fraction ALLA_BREVE_TIME_SIGNATURE(2, 2);
+static const mu::notation::Fraction DEFAULT_PICKUP_TIME_SIGNATURE(1, 4);
 
 static const QString NOTE_ICON_KEY("noteIcon");
 static const QString WITH_DOT_KEY("withDot");
@@ -43,7 +44,7 @@ void AdditionalInfoModel::init()
     setKeySignature(KeySignature(qtrc("userscore", "None"), IconCode::Code::KEY_SIGNATURE_NONE, Key::C, KeyMode::MAJOR).toMap());
 
     setTimeSignatureType(static_cast<int>(TimeSignatureType::Fraction));
-    setTimeSignature(FOUR_FOUR_TIME_SIGNATURE.toMap());
+    setTimeSignature(FOUR_FOUR_TIME_SIGNATURE);
 
     setWithTempo(false);
 
@@ -54,7 +55,7 @@ void AdditionalInfoModel::init()
 
     setWithPickupMeasure(false);
     setMeasureCount(32);
-    setPickupTimeSignature(TimeSignature(1, 4).toMap());
+    setPickupTimeSignature(DEFAULT_PICKUP_TIME_SIGNATURE);
 }
 
 QVariantList AdditionalInfoModel::keySignatureMajorList()
@@ -110,6 +111,15 @@ QVariantMap AdditionalInfoModel::keySignature() const
 
 QVariantMap AdditionalInfoModel::timeSignature() const
 {
+    switch (m_timeSignatureType) {
+    case TimeSigType::FOUR_FOUR:
+        return FOUR_FOUR_TIME_SIGNATURE.toMap();
+    case TimeSigType::ALLA_BREVE:
+        return ALLA_BREVE_TIME_SIGNATURE.toMap();
+    case TimeSigType::NORMAL:
+        break;
+    }
+
     return m_timeSignature.toMap();
 }
 
@@ -118,29 +128,37 @@ int AdditionalInfoModel::timeSignatureType() const
     return static_cast<int>(m_timeSignatureType);
 }
 
-QVariantMap AdditionalInfoModel::defaultTimeSignature() const
+void AdditionalInfoModel::setTimeSignatureType(int timeSignatureType)
 {
-    return FOUR_FOUR_TIME_SIGNATURE.toMap();
+    TimeSigType type = static_cast<TimeSigType>(timeSignatureType);
+    if (m_timeSignatureType == type) {
+        return;
+    }
+
+    m_timeSignatureType = type;
+    emit timeSignatureChanged();
 }
 
 void AdditionalInfoModel::setTimeSignatureNumerator(int numerator)
 {
-    if (m_timeSignature.numerator == numerator) {
-        return;
-    }
-
-    m_timeSignature.numerator = numerator;
-    setTimeSignature(m_timeSignature.toMap());
+    notation::Fraction newTimeSignature(numerator, m_timeSignature.denominator());
+    setTimeSignature(newTimeSignature);
 }
 
 void AdditionalInfoModel::setTimeSignatureDenominator(int denominator)
 {
-    if (m_timeSignature.denominator == denominator) {
+    notation::Fraction newTimeSignature(m_timeSignature.numerator(), denominator);
+    setTimeSignature(newTimeSignature);
+}
+
+void AdditionalInfoModel::setTimeSignature(const notation::Fraction& timeSignature)
+{
+    if (m_timeSignature == timeSignature) {
         return;
     }
 
-    m_timeSignature.denominator = denominator;
-    setTimeSignature(m_timeSignature.toMap());
+    m_timeSignature = timeSignature;
+    emit timeSignatureChanged();
 }
 
 QVariantList AdditionalInfoModel::musicSymbolCodes(int number) const
@@ -205,22 +223,24 @@ QVariantMap AdditionalInfoModel::pickupTimeSignature() const
 
 void AdditionalInfoModel::setPickupTimeSignatureNumerator(int numerator)
 {
-    if (m_pickupTimeSignature.numerator == numerator) {
-        return;
-    }
-
-    m_pickupTimeSignature.numerator = numerator;
-    setPickupTimeSignature(m_pickupTimeSignature.toMap());
+    notation::Fraction newTimeSignature(numerator, m_pickupTimeSignature.denominator());
+    setPickupTimeSignature(newTimeSignature);
 }
 
 void AdditionalInfoModel::setPickupTimeSignatureDenominator(int denominator)
 {
-    if (m_pickupTimeSignature.denominator == denominator) {
+    notation::Fraction newTimeSignature(m_pickupTimeSignature.numerator(), denominator);
+    setPickupTimeSignature(newTimeSignature);
+}
+
+void AdditionalInfoModel::setPickupTimeSignature(const notation::Fraction& pickupTimeSignature)
+{
+    if (m_pickupTimeSignature == pickupTimeSignature) {
         return;
     }
 
-    m_pickupTimeSignature.denominator = denominator;
-    setPickupTimeSignature(m_pickupTimeSignature.toMap());
+    m_pickupTimeSignature = pickupTimeSignature;
+    emit pickupTimeSignatureChanged();
 }
 
 bool AdditionalInfoModel::withPickupMeasure() const
@@ -249,25 +269,6 @@ void AdditionalInfoModel::setKeySignature(QVariantMap keySignature)
     emit keySignatureChanged(keySignature);
 }
 
-void AdditionalInfoModel::setTimeSignature(QVariantMap timeSignature)
-{
-    m_timeSignature = TimeSignature(timeSignature);
-    emit timeSignatureChanged(timeSignature);
-}
-
-void AdditionalInfoModel::setTimeSignatureType(int timeSignatureType)
-{
-    TimeSigType type = static_cast<TimeSigType>(timeSignatureType);
-    if (m_timeSignatureType == type) {
-        return;
-    }
-
-    m_timeSignatureType = type;
-    emit timeSignatureTypeChanged(timeSignatureType);
-
-    updateTimeSignature();
-}
-
 void AdditionalInfoModel::setTempo(QVariantMap tempo)
 {
     m_tempo = Tempo(tempo);
@@ -282,12 +283,6 @@ void AdditionalInfoModel::setWithTempo(bool withTempo)
 
     m_withTempo = withTempo;
     emit withTempoChanged(m_withTempo);
-}
-
-void AdditionalInfoModel::setPickupTimeSignature(QVariantMap pickupTimeSignature)
-{
-    m_pickupTimeSignature = TimeSignature(pickupTimeSignature);
-    emit pickupTimeSignatureChanged(pickupTimeSignature);
 }
 
 void AdditionalInfoModel::setWithPickupMeasure(bool withPickupMeasure)
@@ -308,18 +303,4 @@ void AdditionalInfoModel::setMeasureCount(int measureCount)
 
     m_measureCount = measureCount;
     emit measureCountChanged(m_measureCount);
-}
-
-void AdditionalInfoModel::updateTimeSignature()
-{
-    switch (m_timeSignatureType) {
-    case TimeSigType::FOUR_FOUR:
-        setTimeSignature(FOUR_FOUR_TIME_SIGNATURE.toMap());
-        break;
-    case TimeSigType::ALLA_BREVE:
-        setTimeSignature(ALLA_BREVE_TIME_SIGNATURE.toMap());
-        break;
-    case TimeSigType::NORMAL:
-        break;
-    }
 }

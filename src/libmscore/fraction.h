@@ -281,8 +281,17 @@ public:
         return (i == -1) ? Fraction(str.toInt(), 1) : Fraction(str.leftRef(i).toInt(), str.midRef(i + 1).toInt());
     }
 
-    operator QVariant() const {
+    operator QVariant() const
+    {
         return QVariant::fromValue(*this);
+    }
+
+    QVariantMap toMap() const
+    {
+        return {
+            { "numerator", numerator() },
+            { "denominator", denominator() }
+        };
     }
 };
 
@@ -290,6 +299,6 @@ inline Fraction operator*(const Fraction& f, int v) { return Fraction(f) *= v; }
 inline Fraction operator*(int v, const Fraction& f) { return Fraction(f) *= v; }
 }     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::Fraction);
+Q_DECLARE_METATYPE(Ms::Fraction)
 
 #endif
