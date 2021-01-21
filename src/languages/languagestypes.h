@@ -26,8 +26,7 @@
 #include <QMetaObject>
 #include <QJsonArray>
 
-namespace mu {
-namespace languages {
+namespace mu::languages {
 class LanguageStatus
 {
     Q_GADGET
@@ -102,7 +101,6 @@ struct Language
 };
 
 using LanguagesHash = QHash<QString /*code*/, Language>;
-}
 }
 
 #endif // MU_LANGUAGES_LANGUAGESTYPES_H

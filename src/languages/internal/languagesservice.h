@@ -16,12 +16,12 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_LANGUAGES_LANGUAGESCONTROLLER_H
-#define MU_LANGUAGES_LANGUAGESCONTROLLER_H
+#ifndef MU_LANGUAGES_LANGUAGESSERVICE_H
+#define MU_LANGUAGES_LANGUAGESSERVICE_H
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "ilanguagescontroller.h"
+#include "ilanguagesservice.h"
 #include "ilanguagesconfiguration.h"
 #include "ilanguageunpacker.h"
 #include "iglobalconfiguration.h"
@@ -30,9 +30,8 @@
 
 class QTranslator;
 
-namespace mu {
-namespace languages {
-class LanguagesController : public ILanguagesController, public async::Asyncable
+namespace mu::languages {
+class LanguagesService : public ILanguagesService, public async::Asyncable
 {
     INJECT(languages, ILanguagesConfiguration, configuration)
     INJECT(languages, ILanguageUnpacker, languageUnpacker)
@@ -100,6 +99,5 @@ private:
     mutable QHash<QString, Operation> m_operationsHash;
 };
 }
-}
 
-#endif // MU_LANGUAGES_LANGUAGESCONTROLLER_H
+#endif // MU_LANGUAGES_LANGUAGESSERVICE_H

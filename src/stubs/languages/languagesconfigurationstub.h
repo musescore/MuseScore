@@ -16,23 +16,15 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_LANGUAGES_LANGUAGESCONFIGURATION_H
-#define MU_LANGUAGES_LANGUAGESCONFIGURATION_H
+#ifndef MU_LANGUAGES_LANGUAGESCONFIGURATIONSTUB_H
+#define MU_LANGUAGES_LANGUAGESCONFIGURATIONSTUB_H
 
-#include "modularity/ioc.h"
-#include "ilanguagesconfiguration.h"
-#include "iglobalconfiguration.h"
-#include "framework/system/ifilesystem.h"
+#include "languages/ilanguagesconfiguration.h"
 
 namespace mu::languages {
-class LanguagesConfiguration : public ILanguagesConfiguration
+class LanguagesConfigurationStub : public ILanguagesConfiguration
 {
-    INJECT(languages, framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(languages, system::IFileSystem, fileSystem)
-
 public:
-    void init();
-
     QString currentLanguageCode() const override;
     Ret setCurrentLanguageCode(const QString& languageCode) const override;
 
@@ -47,13 +39,7 @@ public:
 
     io::paths languageFilePaths(const QString& languageCode) const override;
     io::path languageArchivePath(const QString& languageCode) const override;
-
-private:
-    LanguagesHash parseLanguagesConfig(const QByteArray& json) const;
-    io::path languageFileName(const QString& languageCode) const;
-
-    async::Channel<LanguagesHash> m_languagesHashChanged;
 };
 }
 
-#endif // MU_LANGUAGES_LANGUAGESCONFIGURATION_H
+#endif // MU_LANGUAGES_LANGUAGESCONFIGURATIONSTUB_H

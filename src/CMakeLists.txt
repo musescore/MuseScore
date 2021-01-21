@@ -26,7 +26,11 @@ if (NOT OS_IS_WASM)
 
     add_subdirectory(cloud)
     add_subdirectory(extensions)
-    add_subdirectory(languages)
+
+    if (BUILD_LANGUAGES_MODULE)
+        add_subdirectory(languages)
+    endif (BUILD_LANGUAGES_MODULE)
+
     add_subdirectory(plugins)
 endif()
 

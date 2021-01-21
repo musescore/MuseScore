@@ -16,28 +16,25 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_LANGUAGES_LANGUAGEUNPACKER_H
-#define MU_LANGUAGES_LANGUAGEUNPACKER_H
+#ifndef MU_LANGUAGES_LANGUAGESSERVICESTUB_H
+#define MU_LANGUAGES_LANGUAGESSERVICESTUB_H
 
-#include "retval.h"
-
-#include "../ilanguageunpacker.h"
-
-class MQZipReader;
+#include "languages/ilanguagesservice.h"
 
 namespace mu::languages {
-class LanguageUnpacker : public ILanguageUnpacker
+class LanguagesServiceStub : public ILanguagesService
 {
 public:
-    Ret unpack(const QString& languageCode, const QString& source, const QString& destination) const override;
+    ValCh<LanguagesHash> languages() const override;
+    RetCh<LanguageProgress> install(const QString& languageCode) override;
+    RetCh<LanguageProgress> update(const QString& languageCode) override;
+    Ret uninstall(const QString& languageCode) override;
 
-private:
-    Ret checkDirectoryIsWritable(const QString& directoryPath) const;
-    Ret checkFreeSpace(const QString& directoryPath, quint64 neededSpace) const;
+    RetVal<Language> currentLanguage() const override;
+    Ret setCurrentLanguage(const QString& languageCode) override;
 
-    Ret removePreviousVersion(const QString& path, const QString& languageCode) const;
-    Ret unzip(const MQZipReader* zip, const QString& destination) const;
+    RetCh<Language> languageChanged() override;
 };
 }
 
-#endif // MU_LANGUAGES_LANGUAGEUNPACKER_H
+#endif // MU_LANGUAGES_LANGUAGESSERVICESTUB_H

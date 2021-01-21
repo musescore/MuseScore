@@ -16,37 +16,32 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_LANGUAGES_ILANGUAGESCONFIGURATION_H
-#define MU_LANGUAGES_ILANGUAGESCONFIGURATION_H
+#ifndef MU_LANGUAGES_ILANGUAGESSERVICE_H
+#define MU_LANGUAGES_ILANGUAGESSERVICE_H
 
 #include "modularity/imoduleexport.h"
 #include "retval.h"
-#include "io/path.h"
+
 #include "languagestypes.h"
 
 namespace mu::languages {
-class ILanguagesConfiguration : MODULE_EXPORT_INTERFACE
+class ILanguagesService : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(ILanguagesConfiguration)
+    INTERFACE_ID(ILanguagesService)
 
 public:
-    virtual ~ILanguagesConfiguration() = default;
-
-    virtual QString currentLanguageCode() const = 0;
-    virtual Ret setCurrentLanguageCode(const QString& languageCode) const = 0;
-
-    virtual QUrl languagesUpdateUrl() const = 0;
-    virtual QUrl languageFileServerUrl(const QString& languageCode) const = 0;
+    virtual ~ILanguagesService() = default;
 
     virtual ValCh<LanguagesHash> languages() const = 0;
-    virtual Ret setLanguages(const LanguagesHash& languages) const = 0;
+    virtual RetCh<LanguageProgress> install(const QString& languageCode) = 0;
+    virtual RetCh<LanguageProgress> update(const QString& languageCode) = 0;
+    virtual Ret uninstall(const QString& languageCode) = 0;
 
-    virtual io::path languagesSharePath() const = 0;
-    virtual io::path languagesDataPath() const = 0;
+    virtual RetVal<Language> currentLanguage() const = 0;
+    virtual Ret setCurrentLanguage(const QString& languageCode) = 0;
 
-    virtual io::paths languageFilePaths(const QString& languageCode) const = 0;
-    virtual io::path languageArchivePath(const QString& languageCode) const = 0;
+    virtual RetCh<Language> languageChanged() = 0;
 };
 }
 
-#endif // MU_LANGUAGES_ILANGUAGESCONFIGURATION_H
+#endif // MU_LANGUAGES_ILANGUAGESSERVICE_H
