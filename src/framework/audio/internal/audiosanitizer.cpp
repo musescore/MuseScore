@@ -16,39 +16,20 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUDIO_RPCCONTROLLER_H
-#define MU_AUDIO_RPCCONTROLLER_H
+#include "audiosanitizer.h"
 
-#include <functional>
+#include <thread>
 
-#include "modularity/ioc.h"
-#include "irpcchannel.h"
-#include "../audioengine.h"
+using namespace mu::audio;
 
-namespace mu::audio::rpc {
-class RpcController : public async::Asyncable
+static std::thread::id s_as_workerThreadID;
+
+void AudioSanitizer::setupWorkerThread()
 {
-    INJECT(audio, IRpcChannel, rpcChannel)
-
-public:
-    RpcController() = default;
-
-    void init();
-
-private:
-
-    using Call = std::function<void (const Args& args)>;
-    using Calls = std::map<Method, Call>;
-
-    AudioEngine* audioEngine() const;
-    ISequencerPtr sequencer() const;
-
-    void bindMethod(Calls& calls, const Method& method, const Call& call);
-    void doCall(const Calls& calls, const Msg& msg);
-
-    void audioEngineHandle(const Msg& msg);
-    void sequencerHandle(const Msg& msg);
-};
+    s_as_workerThreadID = std::this_thread::get_id();
 }
 
-#endif // MU_AUDIO_RPCCONTROLLER_H
+bool AudioSanitizer::isWorkerThread()
+{
+    return std::this_thread::get_id() == s_as_workerThreadID;
+}

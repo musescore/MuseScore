@@ -24,11 +24,15 @@
 #include <vector>
 #include <functional>
 #include <memory>
+
+#include "modularity/imoduleexport.h"
 #include "async/notification.h"
 
 namespace mu::audio {
-class IAudioDriver
+class IAudioDriver : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(IAudioDriver)
+
 public:
     virtual ~IAudioDriver() = default;
 

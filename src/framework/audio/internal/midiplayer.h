@@ -133,6 +133,7 @@ private:
         std::vector<float> buf;
     };
     std::vector<SynthState> m_synthStates = {};
+    midi::tick_t m_lastSentTick = -1;
     async::Channel<midi::tick_t> m_onTickPlayed;
 };
 }

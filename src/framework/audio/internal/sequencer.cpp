@@ -149,9 +149,10 @@ void Sequencer::timeUpdate()
     }
 
     bool willcontinue = false;
-    for (auto& track : m_tracks) {
-        track.second->forwardTime(m_clock->timeInMiliSeconds());
-        willcontinue |= track.second->isRunning();
+    for (auto& val : m_tracks) {
+        Track& track = val.second;
+        track->forwardTime(m_clock->timeInMiliSeconds());
+        willcontinue |= track->isRunning();
     }
     m_positionChanged.notify();
     if (!willcontinue) {

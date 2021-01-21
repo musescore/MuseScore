@@ -23,6 +23,7 @@
 #include <memory>
 #include <thread>
 #include <atomic>
+#include <functional>
 
 #include "iaudiobuffer.h"
 #include "modularity/ioc.h"
@@ -36,7 +37,9 @@ public:
     AudioThread();
     ~AudioThread();
 
-    void run();
+    using OnStart = std::function<void ()>;
+
+    void run(const OnStart& onStart = nullptr);
     void stop();
 
     void setAudioBuffer(std::shared_ptr<IAudioBuffer> buffer);
@@ -49,6 +52,7 @@ public:
 private:
     void main();
 
+    OnStart m_onStart;
     rpc::QueuedRpcChannelPtr m_channel;
     std::shared_ptr<rpc::RpcController> m_controller;
     std::shared_ptr<IAudioBuffer> m_buffer = nullptr;

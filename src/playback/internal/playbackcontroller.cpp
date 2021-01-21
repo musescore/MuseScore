@@ -56,6 +56,7 @@ void PlaybackController::init()
 
     case STEPPED:
         sequencer()->midiTickPlayed(MIDI_TRACK).onReceive(this, [this](midi::tick_t tick) {
+            LOGI() << "midiTickPlayed tick: " << tick;
             m_tickPlayed.send(tick);
         });
         break;

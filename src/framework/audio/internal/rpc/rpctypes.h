@@ -26,7 +26,8 @@
 namespace mu::audio::rpc {
 enum class TargetName {
     Undefined = 0,
-    Sequencer = 1
+    AudioEngine = 1,
+    Sequencer = 2,
 };
 
 struct Target {
