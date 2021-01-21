@@ -27,6 +27,7 @@ class Score;
 
 bool saveMxl(Score*, QIODevice*);
 bool saveXml(Score*, QIODevice*);
+bool saveXml(Score*, const QString&);
 }
 
 #endif // MU_IMPORTEXPORT_EXPORTXML_H

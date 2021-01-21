@@ -16,23 +16,19 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_IMPORTEXPORT_IMPORTEXPORTMODULE_H
-#define MU_IMPORTEXPORT_IMPORTEXPORTMODULE_H
 
-#include "modularity/imodulesetup.h"
+#include "testing/environment.h"
 
-namespace mu {
-namespace importexport {
-class ImportExportModule : public framework::IModuleSetup
+#include "log.h"
+#include "framework/fonts/fontsmodule.h"
+#include "importexport/importexportmodule.h"
+
+static mu::testing::SuiteEnvironment importexport_se(
 {
-public:
-
-    std::string moduleName() const override;
-    void registerResources() override;
-    void registerExports() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
-};
+    new mu::fonts::FontsModule(), // needs for libmscore
+    new mu::importexport::ImportExportModule() // needs for init resources
+},
+    []() {
+    LOGI() << "importexport tests suite post init";
 }
-}
-
-#endif // MU_IMPORTEXPORT_IMPORTEXPORTMODULE_H
+    );
