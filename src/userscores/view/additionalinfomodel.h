@@ -33,13 +33,13 @@ class AdditionalInfoModel : public QObject
 
     Q_PROPERTY(QVariantMap keySignature READ keySignature WRITE setKeySignature NOTIFY keySignatureChanged)
 
-    Q_PROPERTY(QVariantMap timeSignature READ timeSignature WRITE setTimeSignature NOTIFY timeSignatureChanged)
-    Q_PROPERTY(int timeSignatureType READ timeSignatureType WRITE setTimeSignatureType NOTIFY timeSignatureTypeChanged)
+    Q_PROPERTY(QVariantMap timeSignature READ timeSignature NOTIFY timeSignatureChanged)
+    Q_PROPERTY(int timeSignatureType READ timeSignatureType WRITE setTimeSignatureType NOTIFY timeSignatureChanged)
 
     Q_PROPERTY(QVariantMap tempo READ tempo WRITE setTempo NOTIFY tempoChanged)
     Q_PROPERTY(bool withTempo READ withTempo WRITE setWithTempo NOTIFY withTempoChanged)
 
-    Q_PROPERTY(QVariantMap pickupTimeSignature READ pickupTimeSignature WRITE setPickupTimeSignature NOTIFY pickupTimeSignatureChanged)
+    Q_PROPERTY(QVariantMap pickupTimeSignature READ pickupTimeSignature NOTIFY pickupTimeSignatureChanged)
     Q_PROPERTY(bool withPickupMeasure READ withPickupMeasure WRITE setWithPickupMeasure NOTIFY withPickupMeasureChanged)
     Q_PROPERTY(int measureCount READ measureCount WRITE setMeasureCount NOTIFY measureCountChanged)
 
@@ -56,7 +56,6 @@ public:
     QVariantMap timeSignature() const;
     int timeSignatureType() const;
 
-    Q_INVOKABLE QVariantMap defaultTimeSignature() const;
     Q_INVOKABLE void setTimeSignatureNumerator(int numerator);
     Q_INVOKABLE void setTimeSignatureDenominator(int denominator);
 
@@ -86,26 +85,23 @@ public:
 public slots:
     void setKeySignature(QVariantMap keySignature);
 
-    void setTimeSignature(QVariantMap timeSignature);
     void setTimeSignatureType(int timeSignatureType);
 
     void setTempo(QVariantMap tempo);
     void setWithTempo(bool withTempo);
 
-    void setPickupTimeSignature(QVariantMap pickupTimeSignature);
     void setWithPickupMeasure(bool withPickupMeasure);
     void setMeasureCount(int measureCount);
 
 signals:
     void keySignatureChanged(QVariantMap keySignature);
 
-    void timeSignatureChanged(QVariantMap timeSignature);
-    void timeSignatureTypeChanged(int timeSignatureType);
+    void timeSignatureChanged();
+    void pickupTimeSignatureChanged();
 
     void tempoChanged(QVariantMap tempo);
     void withTempoChanged(bool withTempo);
 
-    void pickupTimeSignatureChanged(QVariantMap pickupTimeSignature);
     void withPickupMeasureChanged(bool withPickupMeasure);
     void measureCountChanged(int measureCount);
 
@@ -141,30 +137,6 @@ private:
         }
     };
 
-    struct TimeSignature {
-        int numerator = 0;
-        int denominator = 1;
-
-        QVariantMap toMap() const
-        {
-            return {
-                { "numerator", numerator },
-                { "denominator", denominator }
-            };
-        }
-
-        TimeSignature() = default;
-
-        TimeSignature(int numetator, int denominator)
-            : numerator(numetator), denominator(denominator) {}
-
-        TimeSignature(const QVariantMap& map)
-        {
-            numerator = map["numerator"].toInt();
-            denominator = map["denominator"].toInt();
-        }
-    };
-
     struct Tempo {
         int value = 0;
         ui::MusicalSymbolCodes::Code noteIcon;
@@ -189,14 +161,12 @@ private:
         }
     };
 
-    static const TimeSignature FOUR_FOUR_TIME_SIGNATURE;
-    static const TimeSignature ALLA_BREVE_TIME_SIGNATURE;
-
-    void updateTimeSignature();
+    void setTimeSignature(const notation::Fraction& timeSignature);
+    void setPickupTimeSignature(const notation::Fraction& pickupTimeSignature);
 
     KeySignature m_keySignature;
 
-    TimeSignature m_timeSignature;
+    notation::Fraction m_timeSignature;
     bool m_timeCommon = false;
     bool m_timeCut = false;
     bool m_timeFraction = false;
@@ -204,7 +174,7 @@ private:
     Tempo m_tempo;
     bool m_withTempo = false;
 
-    TimeSignature m_pickupTimeSignature;
+    notation::Fraction m_pickupTimeSignature;
     bool m_withPickupMeasure = false;
     int m_measureCount = 0;
     notation::TimeSigType m_timeSignatureType = notation::TimeSigType::NORMAL;
