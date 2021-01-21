@@ -22,17 +22,12 @@ FlatButton {
 
     TimeSignatureView {
         id: timeSignatureView
+
         anchors.horizontalCenter: root.horizontalCenter
         anchors.verticalCenter: root.verticalCenter
 
-        Connections {
-            target: model
-
-            function onTimeSignatureChanged(timeSignature) {
-                timeSignatureView.numerator = model.musicSymbolCodes(timeSignature.numerator)
-                timeSignatureView.denominator = model.musicSymbolCodes(timeSignature.denominator)
-            }
-        }
+        numerator: root.model.musicSymbolCodes(root.model.timeSignature.numerator)
+        denominator: root.model.musicSymbolCodes(root.model.timeSignature.denominator)
     }
 
     onClicked: {
@@ -97,30 +92,15 @@ FlatButton {
             enabled: (root.model.timeSignatureType === AdditionalInfoModel.Fraction)
             availableDenominators: root.model.timeSignatureDenominators()
 
-            onNumeratorChanged: {
-                updateTimeSignature()
+            numerator: enabled ? root.model.timeSignature.numerator : numerator
+            denominator: enabled ? root.model.timeSignature.denominator : denominator
+
+            onNumeratorSelected: {
+                root.model.setTimeSignatureNumerator(value)
             }
 
-            onDenominatorChanged: {
-                updateTimeSignature()
-            }
-
-            onEnabledChanged: {
-                if (enabled) {
-                    updateTimeSignature()
-                }
-            }
-
-            Component.onCompleted: {
-                var defaultTimeSignature = root.model.defaultTimeSignature()
-
-                numerator = defaultTimeSignature.numerator
-                denominator = defaultTimeSignature.denominator
-            }
-
-            function updateTimeSignature() {
-                root.model.setTimeSignatureNumerator(numerator)
-                root.model.setTimeSignatureDenominator(denominator)
+            onDenominatorSelected: {
+                root.model.setTimeSignatureDenominator(value)
             }
         }
     }
