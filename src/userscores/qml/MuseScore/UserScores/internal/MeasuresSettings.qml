@@ -24,9 +24,17 @@ FlatButton {
         anchors.horizontalCenter: root.horizontalCenter
         anchors.verticalCenter: root.verticalCenter
 
+        property string pickupMessage: {
+            if (withPickupMeasure.checked) {
+                return qsTrc("userscores", "Pickup: ") +
+                        model.pickupTimeSignature.numerator + "/" + model.pickupTimeSignature.denominator
+            }
+
+            return qsTrc("userscores", "No pickup")
+        }
+
         font: ui.theme.tabFont
-        text: model.measureCount + qsTrc("userscores", " measures,\n Pickup: ") +
-              model.pickupTimeSignature.numerator + "/" + model.pickupTimeSignature.denominator
+        text: model.measureCount + qsTrc("userscores", " measures, \n") + pickupMessage
     }
 
     onClicked: {
@@ -113,8 +121,6 @@ FlatButton {
                     id: measuresCountControl
 
                     implicitWidth: 80
-
-                    enabled: withPickupMeasure.checked
 
                     iconMode: iconModeEnum.hidden
                     currentValue: root.model.measureCount
