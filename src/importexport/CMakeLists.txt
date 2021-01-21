@@ -19,6 +19,8 @@
 
 set(MODULE importexport)
 
+set(MODULE_QRC importexport.qrc)
+
 include(${CMAKE_CURRENT_LIST_DIR}/internal/musicxml/musicxml.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/internal/midiimport/midiimport.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/internal/ove/ove.cmake)
@@ -86,9 +88,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/mxlwriter.h
     )
 
-add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/beatroot beatroot) # for midiimport
-add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/rtf2html rtf2html) # for capella
-
 set(MODULE_LINK
     midi_old    # for midiimport
     beatroot    # for midiimport
@@ -98,6 +97,5 @@ set(MODULE_LINK
     notation
     )
 
-set(MODULE_USE_UNITBUILD ON)
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 

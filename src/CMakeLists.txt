@@ -21,6 +21,9 @@ add_subdirectory(workspace)
 
 if (NOT OS_IS_WASM)
     add_subdirectory(importexport)
+    add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/beatroot beatroot) # for midiimport
+    add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/rtf2html rtf2html) # for capella
+
     add_subdirectory(cloud)
     add_subdirectory(extensions)
     add_subdirectory(languages)
@@ -43,6 +46,7 @@ if (BUILD_UNIT_TESTS)
 #    add_subdirectory(notation/tests) no tests at moment
     add_subdirectory(userscores/tests)
     add_subdirectory(libmscore/tests)
+    add_subdirectory(importexport/tests)
 endif(BUILD_UNIT_TESTS)
 
 if (OS_IS_WASM)
