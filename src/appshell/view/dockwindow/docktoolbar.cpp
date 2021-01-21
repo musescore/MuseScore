@@ -25,9 +25,13 @@
 
 using namespace mu::dock;
 
-static const QString TOOLBAR_QSS = QString("QToolBar { background: %1; border: 0; padding: 0; }");
+static const qreal TOOLBAR_GRIP_WIDTH(32);
+static const qreal TOOLBAR_GRIP_HEIGHT(36);
 
-static const qreal MOVING_BUTTON_WIDTH(10);
+static const QString TOOLBAR_QSS = QString("QToolBar { background: %4; border: 0; padding: 0; } "
+                                           "QToolBar::handle::horizontal { image: url(\":/view/dockwindow/resources/toolbar_grip_%3_horizontal.svg\"); width: %1px; height: %2px; } "
+                                           "QToolBar::handle::vertical { image: url(\":/view/dockwindow/resources/toolbar_grip_%3_vertical.svg\"); width: %2px; height: %1px; } "
+                                           ).arg(TOOLBAR_GRIP_WIDTH).arg(TOOLBAR_GRIP_HEIGHT);
 
 DockToolBar::DockToolBar(QQuickItem* parent)
     : DockView(parent)
@@ -57,7 +61,7 @@ DockToolBar::~DockToolBar()
 void DockToolBar::onComponentCompleted()
 {
     m_tool.bar->setObjectName("w_" + objectName());
-    m_tool.bar->setStyleSheet(TOOLBAR_QSS.arg(color().name()));
+    updateStyle();
 
     QWidget* w = view();
     w->setMinimumWidth(minimumWidth());
@@ -67,7 +71,11 @@ void DockToolBar::onComponentCompleted()
 
 void DockToolBar::updateStyle()
 {
-    m_tool.bar->setStyleSheet(TOOLBAR_QSS.arg(color().name()));
+    qDebug() << TOOLBAR_QSS;
+    QString theme = uiConfiguration()->actualThemeType() == ui::IUiConfiguration::ThemeType::LIGHT_THEME
+                    ? "light"
+                    : "dark";
+    m_tool.bar->setStyleSheet(TOOLBAR_QSS.arg(theme, color().name()));
 }
 
 void DockToolBar::onToolbarEvent(QEvent* e)
@@ -84,9 +92,9 @@ void DockToolBar::resize(const QSize& size)
 {
     QSize newSize = size;
     if (m_tool.bar->orientation() == Qt::Horizontal) {
-        newSize.setWidth(newSize.width() - MOVING_BUTTON_WIDTH);
+        newSize.setWidth(newSize.width() - TOOLBAR_GRIP_WIDTH);
     } else {
-        newSize.setHeight(newSize.height() - MOVING_BUTTON_WIDTH);
+        newSize.setHeight(newSize.height() - TOOLBAR_GRIP_WIDTH);
     }
     view()->resize(newSize);
 }

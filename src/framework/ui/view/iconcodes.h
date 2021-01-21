@@ -259,6 +259,8 @@ public:
         RE_PITH = 0xF3A0,
         FOOT_PEDAL = 0xF3A1,
 
+        TOOLBAR_GRIP = 0xF3A2,
+
         AUTO,
         NONE,
         CUSTOM

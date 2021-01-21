@@ -25,5 +25,9 @@
         <file>qml/DevTools/Gallery/GeneralComponentsGallery.qml</file>
         <file>qml/DevTools/Telemetry/TelemetryInfo.qml</file>
         <file>qml/main.wasm.qml</file>
+        <file>view/dockwindow/resources/toolbar_grip_light_horizontal.svg</file>
+        <file>view/dockwindow/resources/toolbar_grip_light_vertical.svg</file>
+        <file>view/dockwindow/resources/toolbar_grip_dark_horizontal.svg</file>
+        <file>view/dockwindow/resources/toolbar_grip_dark_vertical.svg</file>
     </qresource>
 </RCC>

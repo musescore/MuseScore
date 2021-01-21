@@ -38,6 +38,10 @@ Rectangle {
             normalStateColor: Boolean(item) && item.checkedRole ? ui.theme.accentColor : "transparent"
 
             icon: Boolean(item) ? item.iconRole : null
+            iconPixelSize: 20
+
+            width: gridView.cellWidth
+            height: gridView.cellWidth
 
             onClicked: {
                 noteInputModel.handleAction(item.codeRole)
