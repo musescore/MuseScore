@@ -6,6 +6,7 @@ Item {
     id: root
 
     property bool isSelected: false
+    property alias radius: background.radius
 
     signal clicked()
     signal doubleClicked()

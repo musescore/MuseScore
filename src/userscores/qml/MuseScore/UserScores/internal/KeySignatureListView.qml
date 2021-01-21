@@ -8,6 +8,7 @@ GridView {
     id: root
     
     property var currentSignature: null
+    signal signatureSelected(var signature)
 
     height: contentHeight
 
@@ -18,22 +19,13 @@ GridView {
     
     interactive: height < contentHeight
     
-    signal signatureSelected(var signature)
-
-    delegate: Item {
+    delegate: ListItemBlank {
         height: root.cellHeight
         width: root.cellWidth
-        
-        property bool isCurrent: modelData.title === currentSignature.title
-        
-        Rectangle {
-            anchors.fill: parent
-            
-            color: isCurrent ? ui.theme.accentColor : ui.theme.backgroundPrimaryColor
-            opacity: isCurrent ? 0.7 : 1
-            radius: 3
-        }
-        
+
+        radius: 3
+        isSelected: modelData.title === currentSignature.title
+
         Column {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
@@ -54,12 +46,8 @@ GridView {
             }
         }
         
-        MouseArea {
-            anchors.fill: parent
-            
-            onClicked: {
-                signatureSelected(modelData)
-            }
+        onClicked: {
+            root.signatureSelected(modelData)
         }
     }
 }
