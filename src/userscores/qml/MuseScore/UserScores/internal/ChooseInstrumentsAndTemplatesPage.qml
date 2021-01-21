@@ -38,7 +38,6 @@ Item {
         id: bar
 
         anchors.top: parent.top
-        anchors.topMargin: 24
         anchors.horizontalCenter: parent.horizontalCenter
 
         contentHeight: 28
