@@ -1033,7 +1033,7 @@ Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError)
                               return FileError::FILE_OLD_300_FORMAT;
                         }
 
-                  if (created() && preferences.getString(PREF_SCORE_STYLE_DEFAULTSTYLEFILE).isEmpty()) {
+                  if (created() && !preferences.getString(PREF_SCORE_STYLE_DEFAULTSTYLEFILE).isEmpty()) {
                         setStyle(MScore::defaultStyle());
                         }
                   else {

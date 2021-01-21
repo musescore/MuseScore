@@ -62,6 +62,8 @@
     <staffFontFace>Edwin</staffFontFace>
     <rehearsalMarkFontFace>Edwin</rehearsalMarkFontFace>
     <rehearsalMarkFontSize>14</rehearsalMarkFontSize>
+    <rehearsalMarkFrameWidth>0.16</rehearsalMarkFrameWidth>
+    <rehearsalMarkFrameRound>0</rehearsalMarkFrameRound>
     <repeatLeftFontFace>Edwin</repeatLeftFontFace>
     <repeatLeftFontSize>18</repeatLeftFontSize>
     <repeatRightFontFace>Edwin</repeatRightFontFace>
