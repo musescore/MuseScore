@@ -46,7 +46,6 @@
 #include "cloud/cloudmodule.h"
 #include "context/contextmodule.h"
 #include "userscores/userscoresmodule.h"
-#include "extensions/extensionsmodule.h"
 #include "plugins/pluginsmodule.h"
 #include "notation/notationmodule.h"
 #include "importexport/importexportmodule.h"
@@ -71,7 +70,12 @@
 #include "plugins/pluginsmodule.h"
 #include "importexport/importexportmodule.h"
 #include "cloud/cloudmodule.h"
+
+#ifdef BUILD_EXTENSIONS_MODULE
 #include "extensions/extensionsmodule.h"
+#else
+#include "stubs/extensions/extensionsstubmodule.h"
+#endif
 
 #ifdef BUILD_LANGUAGES_MODULE
 #include "languages/languagesmodule.h"
@@ -143,12 +147,18 @@ int main(int argc, char** argv)
     app.addModule(new mu::workspace::WorkspaceModule());
     app.addModule(new mu::plugins::PluginsModule());
     app.addModule(new mu::cloud::CloudModule());
+
+#ifdef BUILD_EXTENSIONS_MODULE
     app.addModule(new mu::extensions::ExtensionsModule());
+#else
+    app.addModule(new mu::extensions::ExtensionsStubModule());
+#endif
 #ifdef BUILD_LANGUAGES_MODULE
     app.addModule(new mu::languages::LanguagesModule());
 #else
     app.addModule(new mu::languages::LanguagesStubModule());
 #endif
+
 #else
     app.addModule(new mu::wasmtest::WasmTestModule());
 #endif

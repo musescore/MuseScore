@@ -16,20 +16,19 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_EXTENSIONS_EXTENSIONSCONTROLLER_H
-#define MU_EXTENSIONS_EXTENSIONSCONTROLLER_H
+#ifndef MU_EXTENSIONS_EXTENSIONSSERVICE_H
+#define MU_EXTENSIONS_EXTENSIONSSERVICE_H
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "iextensionscontroller.h"
+#include "iextensionsservice.h"
 #include "iextensionsconfiguration.h"
 #include "iextensionunpacker.h"
 #include "framework/system/ifilesystem.h"
 #include "framework/network/inetworkmanagercreator.h"
 
-namespace mu {
-namespace extensions {
-class ExtensionsController : public IExtensionsController, public async::Asyncable
+namespace mu::extensions {
+class ExtensionsService : public IExtensionsService, public async::Asyncable
 {
     INJECT(extensions, IExtensionsConfiguration, configuration)
     INJECT(extensions, IExtensionUnpacker, extensionUnpacker)
@@ -86,6 +85,5 @@ private:
     mutable QHash<QString, Operation> m_operationsHash;
 };
 }
-}
 
-#endif // MU_EXTENSIONS_EXTENSIONSCONTROLLER_H
+#endif // MU_EXTENSIONS_EXTENSIONSSERVICE_H

@@ -16,29 +16,17 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "instrumentsconfiguration.h"
+#ifndef MU_EXTENSIONS_EXTENSIONUNPACKERSTUB_H
+#define MU_EXTENSIONS_EXTENSIONUNPACKERSTUB_H
 
-#include "log.h"
-#include "settings.h"
+#include "extensions/iextensionunpacker.h"
 
-using namespace mu::instruments;
-
-mu::io::paths InstrumentsConfiguration::instrumentPaths() const
+namespace mu::extensions {
+class ExtensionUnpackerStub : public IExtensionUnpacker
 {
-    io::paths paths;
-    io::path sharePath = globalConfiguration()->sharePath() + "/instruments";
-    paths.push_back(sharePath);
-
-    io::path dataPath = globalConfiguration()->dataPath() + "/instruments";
-    paths.push_back(dataPath);
-
-    io::paths extensionsPath = this->extensionsPaths();
-    paths.insert(paths.end(), extensionsPath.begin(), extensionsPath.end());
-
-    return paths;
+public:
+    Ret unpack(const QString& source, const QString& destination) const override;
+};
 }
 
-mu::io::paths InstrumentsConfiguration::extensionsPaths() const
-{
-    return extensionsConfigurator()->instrumentsPaths();
-}
+#endif // MU_EXTENSIONS_EXTENSIONUNPACKERSTUB_H

@@ -16,22 +16,21 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_EXTENSIONS_IEXTENSIONSCONTROLLER_H
-#define MU_EXTENSIONS_IEXTENSIONSCONTROLLER_H
+#ifndef MU_EXTENSIONS_IEXTENSIONSSERVICE_H
+#define MU_EXTENSIONS_IEXTENSIONSSERVICE_H
 
 #include "modularity/imoduleexport.h"
 #include "retval.h"
 
 #include "extensionstypes.h"
 
-namespace mu {
-namespace extensions {
-class IExtensionsController : MODULE_EXPORT_INTERFACE
+namespace mu::extensions {
+class IExtensionsService : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IExtensionsController)
+    INTERFACE_ID(IExtensionsService)
 
 public:
-    virtual ~IExtensionsController() = default;
+    virtual ~IExtensionsService() = default;
 
     virtual ValCh<ExtensionsHash> extensions() const = 0;
     virtual RetCh<ExtensionProgress> install(const QString& extensionCode) = 0;
@@ -41,6 +40,5 @@ public:
     virtual RetCh<Extension> extensionChanged() const = 0;
 };
 }
-}
 
-#endif // MU_EXTENSIONS_IEXTENSIONSCONTROLLER_H
+#endif // MU_EXTENSIONS_IEXTENSIONSSERVICE_H

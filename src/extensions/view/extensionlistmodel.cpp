@@ -71,13 +71,13 @@ QHash<int, QByteArray> mu::extensions::ExtensionListModel::roleNames() const
 
 void ExtensionListModel::load()
 {
-    ValCh<ExtensionsHash> extensions = extensionsController()->extensions();
+    ValCh<ExtensionsHash> extensions = extensionsService()->extensions();
 
     beginResetModel();
     m_list = extensions.val.values();
     endResetModel();
 
-    RetCh<Extension> extensionChanged = extensionsController()->extensionChanged();
+    RetCh<Extension> extensionChanged = extensionsService()->extensionChanged();
     extensionChanged.ch.onReceive(this, [this](const Extension& newExtension) {
         for (int i = 0; i < m_list.count(); i++) {
             if (m_list[i].code == newExtension.code) {
@@ -98,7 +98,7 @@ void ExtensionListModel::install(QString code)
         return;
     }
 
-    RetCh<ExtensionProgress> installRet = extensionsController()->install(m_list.at(index).code);
+    RetCh<ExtensionProgress> installRet = extensionsService()->install(m_list.at(index).code);
     if (!installRet.ret) {
         LOGE() << installRet.ret.toString();
         return;
@@ -121,7 +121,7 @@ void ExtensionListModel::uninstall(QString code)
         return;
     }
 
-    Ret uninstallRet = extensionsController()->uninstall(m_list.at(index).code);
+    Ret uninstallRet = extensionsService()->uninstall(m_list.at(index).code);
     if (!uninstallRet) {
         LOGE() << uninstallRet.toString();
         return;
@@ -138,7 +138,7 @@ void ExtensionListModel::update(QString code)
         return;
     }
 
-    RetCh<ExtensionProgress> updateRet = extensionsController()->update(m_list.at(index).code);
+    RetCh<ExtensionProgress> updateRet = extensionsService()->update(m_list.at(index).code);
     if (!updateRet.ret) {
         LOGE() << updateRet.ret.toString();
         return;

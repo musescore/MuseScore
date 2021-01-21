@@ -16,29 +16,22 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "instrumentsconfiguration.h"
+#ifndef MU_EXTENSIONS_EXTENSIONSSERVICESTUB_H
+#define MU_EXTENSIONS_EXTENSIONSSERVICESTUB_H
 
-#include "log.h"
-#include "settings.h"
+#include "extensions/iextensionsservice.h"
 
-using namespace mu::instruments;
-
-mu::io::paths InstrumentsConfiguration::instrumentPaths() const
+namespace mu::extensions {
+class ExtensionsServiceStub : public IExtensionsService
 {
-    io::paths paths;
-    io::path sharePath = globalConfiguration()->sharePath() + "/instruments";
-    paths.push_back(sharePath);
+public:
+    ValCh<ExtensionsHash> extensions() const override;
+    RetCh<ExtensionProgress> install(const QString& extensionCode) override;
+    RetCh<ExtensionProgress> update(const QString& extensionCode) override;
+    Ret uninstall(const QString& extensionCode) override;
 
-    io::path dataPath = globalConfiguration()->dataPath() + "/instruments";
-    paths.push_back(dataPath);
-
-    io::paths extensionsPath = this->extensionsPaths();
-    paths.insert(paths.end(), extensionsPath.begin(), extensionsPath.end());
-
-    return paths;
+    RetCh<Extension> extensionChanged() const override;
+};
 }
 
-mu::io::paths InstrumentsConfiguration::extensionsPaths() const
-{
-    return extensionsConfigurator()->instrumentsPaths();
-}
+#endif // MU_EXTENSIONS_EXTENSIONSSERVICESTUB_H
