@@ -16,34 +16,17 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_LANGUAGES_ILANGUAGESCONTROLLER_H
-#define MU_LANGUAGES_ILANGUAGESCONTROLLER_H
+#ifndef MU_LANGUAGES_LANGUAGEUNPACKERSTUB_H
+#define MU_LANGUAGES_LANGUAGEUNPACKERSTUB_H
 
-#include "modularity/imoduleexport.h"
-#include "retval.h"
+#include "languages/ilanguageunpacker.h"
 
-#include "languagestypes.h"
-
-namespace mu {
-namespace languages {
-class ILanguagesController : MODULE_EXPORT_INTERFACE
+namespace mu::languages {
+class LanguageUnpackerStub : public ILanguageUnpacker
 {
-    INTERFACE_ID(ILanguagesController)
-
 public:
-    virtual ~ILanguagesController() = default;
-
-    virtual ValCh<LanguagesHash> languages() const = 0;
-    virtual RetCh<LanguageProgress> install(const QString& languageCode) = 0;
-    virtual RetCh<LanguageProgress> update(const QString& languageCode) = 0;
-    virtual Ret uninstall(const QString& languageCode) = 0;
-
-    virtual RetVal<Language> currentLanguage() const = 0;
-    virtual Ret setCurrentLanguage(const QString& languageCode) = 0;
-
-    virtual RetCh<Language> languageChanged() = 0;
+    Ret unpack(const QString& languageCode, const QString& source, const QString& destination) const override;
 };
 }
-}
 
-#endif // MU_LANGUAGES_ILANGUAGESCONTROLLER_H
+#endif // MU_LANGUAGES_LANGUAGEUNPACKERSTUB_H

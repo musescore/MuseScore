@@ -16,28 +16,12 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_LANGUAGES_LANGUAGEUNPACKER_H
-#define MU_LANGUAGES_LANGUAGEUNPACKER_H
+#include "languageunpackerstub.h"
 
-#include "retval.h"
+using namespace mu::languages;
+using namespace mu;
 
-#include "../ilanguageunpacker.h"
-
-class MQZipReader;
-
-namespace mu::languages {
-class LanguageUnpacker : public ILanguageUnpacker
+Ret LanguageUnpackerStub::unpack(const QString&, const QString&, const QString&) const
 {
-public:
-    Ret unpack(const QString& languageCode, const QString& source, const QString& destination) const override;
-
-private:
-    Ret checkDirectoryIsWritable(const QString& directoryPath) const;
-    Ret checkFreeSpace(const QString& directoryPath, quint64 neededSpace) const;
-
-    Ret removePreviousVersion(const QString& path, const QString& languageCode) const;
-    Ret unzip(const MQZipReader* zip, const QString& destination) const;
-};
+    return make_ret(Ret::Code::NotSupported);
 }
-
-#endif // MU_LANGUAGES_LANGUAGEUNPACKER_H

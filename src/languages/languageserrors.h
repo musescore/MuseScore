@@ -22,8 +22,7 @@
 #include "ret.h"
 #include "translation.h"
 
-namespace mu {
-namespace languages {
+namespace mu::languages {
 enum class Err {
     Undefined       = int(Ret::Code::Undefined),
     NoError         = int(Ret::Code::Ok),
@@ -62,7 +61,6 @@ inline Ret make_ret(Err e)
     }
 
     return retCode;
-}
 }
 }
 

@@ -16,28 +16,21 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_LANGUAGES_LANGUAGEUNPACKER_H
-#define MU_LANGUAGES_LANGUAGEUNPACKER_H
+#ifndef MU_LANGUAGES_LANGUAGESSTUBMODULE_H
+#define MU_LANGUAGES_LANGUAGESSTUBMODULE_H
 
-#include "retval.h"
-
-#include "../ilanguageunpacker.h"
-
-class MQZipReader;
+#include "modularity/imodulesetup.h"
 
 namespace mu::languages {
-class LanguageUnpacker : public ILanguageUnpacker
+class LanguagesStubModule : public framework::IModuleSetup
 {
 public:
-    Ret unpack(const QString& languageCode, const QString& source, const QString& destination) const override;
+    std::string moduleName() const override;
 
-private:
-    Ret checkDirectoryIsWritable(const QString& directoryPath) const;
-    Ret checkFreeSpace(const QString& directoryPath, quint64 neededSpace) const;
-
-    Ret removePreviousVersion(const QString& path, const QString& languageCode) const;
-    Ret unzip(const MQZipReader* zip, const QString& destination) const;
+    void registerExports() override;
+    void registerResources() override;
+    void registerUiTypes() override;
 };
 }
 
-#endif // MU_LANGUAGES_LANGUAGEUNPACKER_H
+#endif // MU_LANGUAGES_LANGUAGESSTUBMODULE_H

@@ -24,8 +24,7 @@
 #include "modularity/imoduleexport.h"
 #include "ret.h"
 
-namespace mu {
-namespace languages {
+namespace mu::languages {
 class ILanguageUnpacker : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(ILanguageUnpacker)
@@ -35,7 +34,6 @@ public:
 
     virtual Ret unpack(const QString& languageCode, const QString& source, const QString& destination) const = 0;
 };
-}
 }
 
 #endif // MU_LANGUAGES_ILANGUAGEUNPACKER_H

@@ -47,7 +47,6 @@
 #include "context/contextmodule.h"
 #include "userscores/userscoresmodule.h"
 #include "extensions/extensionsmodule.h"
-#include "languages/languagesmodule.h"
 #include "plugins/pluginsmodule.h"
 #include "notation/notationmodule.h"
 #include "importexport/importexportmodule.h"
@@ -73,7 +72,13 @@
 #include "importexport/importexportmodule.h"
 #include "cloud/cloudmodule.h"
 #include "extensions/extensionsmodule.h"
+
+#ifdef BUILD_LANGUAGES_MODULE
 #include "languages/languagesmodule.h"
+#else
+#include "stubs/languages/languagesstubmodule.h"
+#endif
+
 #else
 #include "wasmtest/wasmtestmodule.h"
 #endif
@@ -139,7 +144,11 @@ int main(int argc, char** argv)
     app.addModule(new mu::plugins::PluginsModule());
     app.addModule(new mu::cloud::CloudModule());
     app.addModule(new mu::extensions::ExtensionsModule());
+#ifdef BUILD_LANGUAGES_MODULE
     app.addModule(new mu::languages::LanguagesModule());
+#else
+    app.addModule(new mu::languages::LanguagesStubModule());
+#endif
 #else
     app.addModule(new mu::wasmtest::WasmTestModule());
 #endif
