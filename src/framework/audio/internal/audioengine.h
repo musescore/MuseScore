@@ -25,27 +25,28 @@
 
 #include "iaudioengine.h"
 #include "modularity/ioc.h"
-#include "iaudiodriver.h"
 
 #include "ret.h"
 #include "retval.h"
-#include "invoker.h"
 
 #include "mixer.h"
 #include "audiobuffer.h"
 #include "internal/sequencer.h"
 #include "async/asyncable.h"
-#include "internal/audiothread.h"
+#include "midi/isynthesizersregister.h"
 
 namespace mu::audio {
 class AudioEngine : public IAudioEngine, public async::Asyncable
 {
+    INJECT(audio, midi::ISynthesizersRegister, synthesizersRegister)
 public:
-    AudioEngine();
     ~AudioEngine();
 
-    Ret init(IAudioDriverPtr driver, uint16_t bufferSize) override;
-    void deinit() override;
+    static AudioEngine* instance();
+
+    Ret init(int sampleRate, uint16_t readBufferSize);
+    void deinit();
+
     bool isInited() const override;
     async::Channel<bool> initChanged() const override;
     unsigned int sampleRate() const override;
@@ -54,14 +55,14 @@ public:
     std::shared_ptr<ISequencer> sequencer() const override;
     IAudioBufferPtr buffer() const override;
     void setBuffer(IAudioBufferPtr buffer) override;
-    IAudioDriverPtr driver() const override;
-    void resumeDriver() override;
-    void suspendDriver() override;
 
 private:
+
+    AudioEngine();
+
     bool m_inited = false;
-    IAudioDriver::Spec m_format;
     mu::async::Channel<bool> m_initChanged;
+    unsigned int m_sampleRate = 0;
     std::shared_ptr<Sequencer> m_sequencer = nullptr;
     std::shared_ptr<IAudioDriver> m_driver = nullptr;
     std::shared_ptr<Mixer> m_mixer = nullptr;

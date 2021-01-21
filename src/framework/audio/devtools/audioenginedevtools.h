@@ -37,7 +37,7 @@ class AudioEngineDevTools : public QObject, public async::Asyncable
 {
     Q_OBJECT
     INJECT(audio, IAudioEngine, audioEngine)
-    //INJECT(audio, IAudioDriver, audioDriver)
+    INJECT(audio, IAudioDriver, audioDriver)
     INJECT(audio, context::IGlobalContext, globalContext)
     INJECT(audio, audio::ISequencer, sequencer)
     INJECT(audio, framework::IInteractive, interactive)

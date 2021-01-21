@@ -22,22 +22,19 @@
 #include "log.h"
 #include "ptrutils.h"
 #include "audioerrors.h"
+#include "audiosanitizer.h"
 
 using namespace mu::audio;
 
+AudioEngine* AudioEngine::instance()
+{
+    static AudioEngine e;
+    return &e;
+}
+
 AudioEngine::AudioEngine()
 {
-    m_sequencer = std::make_shared<Sequencer>();
-
-    m_mixer = std::make_shared<Mixer>();
-    m_mixer->setClock(m_sequencer->clock());
-
     m_buffer = std::make_shared<AudioBuffer>();
-    m_buffer->setSource(m_mixer->mixedSource());
-
-    m_sequencer->audioTrackAdded().onReceive(this, [this](ISequencer::AudioTrack player) {
-        m_mixer->addChannel(player->audioSource());
-    });
 }
 
 AudioEngine::~AudioEngine()
@@ -49,34 +46,33 @@ bool AudioEngine::isInited() const
     return m_inited;
 }
 
-mu::Ret AudioEngine::init(IAudioDriverPtr driver, uint16_t bufferSize)
+mu::Ret AudioEngine::init(int sampleRate, uint16_t readBufferSize)
 {
+    ONLY_AUDIO_WORKER_THREAD;
+
     if (isInited()) {
         return make_ret(Ret::Code::Ok);
     }
 
-    m_format = {
-        48000,
-        IAudioDriver::Format::AudioF32,
-        2,
-        bufferSize,
-        [this](void* userdata, uint8_t* stream, int byteCount) {
-            UNUSED(userdata);
-            auto samples = byteCount / (2 * sizeof(float));
-            m_buffer->pop(reinterpret_cast<float*>(stream), samples);
-        },
-        nullptr
-    };
+    m_sequencer = std::make_shared<Sequencer>();
 
-    m_driver = driver;
-    if (m_driver) {
-        auto audioOpened = m_driver->open(m_format, &m_format);
-        if (!audioOpened) {
-            LOGE() << "audioOutput open failed";
-            return make_ret(Err::DriverOpenFailed);
-        }
-        m_mixer->setSampleRate(m_format.sampleRate);
-        m_buffer->setMinSampleLag(m_format.samples);
+    m_mixer = std::make_shared<Mixer>();
+    m_mixer->setClock(m_sequencer->clock());
+
+    m_buffer->setSource(m_mixer->mixedSource());
+
+    m_sequencer->audioTrackAdded().onReceive(this, [this](ISequencer::AudioTrack player) {
+        m_mixer->addChannel(player->audioSource());
+    });
+
+    m_sampleRate = sampleRate;
+    m_mixer->setSampleRate(sampleRate);
+    m_buffer->setMinSampleLag(readBufferSize);
+
+    //! TODO Add a subscription to add or remove synthesizers
+    std::vector<std::shared_ptr<midi::ISynthesizer> > synths = synthesizersRegister()->synthesizers();
+    for (auto synth : synths) {
+        startSynthesizer(synth);
     }
 
     m_inited = true;
@@ -90,9 +86,6 @@ void AudioEngine::deinit()
     if (isInited()) {
         m_inited = false;
         m_initChanged.send(m_inited);
-        if (m_driver) {
-            m_driver->close();
-        }
     }
 }
 
@@ -103,17 +96,12 @@ mu::async::Channel<bool> AudioEngine::initChanged() const
 
 unsigned int AudioEngine::sampleRate() const
 {
-    return m_format.sampleRate;
+    return m_sampleRate;
 }
 
 std::shared_ptr<IAudioBuffer> AudioEngine::buffer() const
 {
     return m_buffer;
-}
-
-IAudioDriverPtr AudioEngine::driver() const
-{
-    return m_driver;
 }
 
 IMixer::ChannelID AudioEngine::startSynthesizer(std::shared_ptr<midi::ISynthesizer> synthesizer)
@@ -140,14 +128,4 @@ void AudioEngine::setBuffer(IAudioBufferPtr buffer)
     //! TODO It doesn't look obvious.
     //! Requires detailed research
     //m_worker->setAudioBuffer(m_buffer);
-}
-
-void AudioEngine::resumeDriver()
-{
-    m_driver->resume();
-}
-
-void AudioEngine::suspendDriver()
-{
-    m_driver->suspend();
 }

@@ -183,7 +183,10 @@ void MIDIPlayer::forwardTime(unsigned long miliseconds)
 
     sendEvents(prevTicks, toTick);
 
-    m_onTickPlayed.send(m_playTick);
+    if (m_lastSentTick != m_playTick) {
+        m_lastSentTick = m_playTick;
+        m_onTickPlayed.send(m_playTick);
+    }
 
     m_prevMSec = m_curMSec;
     checkPosition();

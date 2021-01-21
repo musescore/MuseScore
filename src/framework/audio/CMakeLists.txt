@@ -93,6 +93,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/equaliser.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiothread.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiothread.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/audiosanitizer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/audiosanitizer.h
     ${CMAKE_CURRENT_LIST_DIR}/devtools/audioenginedevtools.cpp
     ${CMAKE_CURRENT_LIST_DIR}/devtools/audioenginedevtools.h
 
