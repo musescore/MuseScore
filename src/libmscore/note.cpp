@@ -1135,7 +1135,7 @@ qreal Note::tabHeadHeight(const StaffType* tab) const
 
 QPointF Note::stemDownNW() const
 {
-    return symStemDownNW(noteHead());
+    return symSmuflAnchor(noteHead(), SmuflAnchorId::stemDownNW);
 }
 
 //---------------------------------------------------------
@@ -1144,7 +1144,7 @@ QPointF Note::stemDownNW() const
 
 QPointF Note::stemUpSE() const
 {
-    return symStemUpSE(noteHead());
+    return symSmuflAnchor(noteHead(), SmuflAnchorId::stemUpSE);
 }
 
 //---------------------------------------------------------
