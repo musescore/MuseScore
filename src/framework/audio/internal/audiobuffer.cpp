@@ -30,29 +30,20 @@ AudioBuffer::AudioBuffer(unsigned int streamsPerSample, unsigned int size)
 
 void AudioBuffer::setSource(std::shared_ptr<IAudioSource> source)
 {
+    std::lock_guard<std::recursive_mutex> lock(m_mutex);
     m_source = source;
-}
-
-void AudioBuffer::fillup()
-{
-    IF_ASSERT_FAILED(m_source) {
-        return;
-    }
-    while (sampleLag() < m_minSampleLag + FILL_OVER) {
-        m_source->setBufferSize(FILL_SAMPLES);
-        m_source->forward(FILL_SAMPLES);
-        push(m_source->data(), FILL_SAMPLES);
-    }
 }
 
 void AudioBuffer::forward()
 {
-    std::lock_guard<std::mutex> guard(m_dataMutex);
+    std::lock_guard<std::recursive_mutex> lock(m_mutex);
     fillup();
 }
 
 void AudioBuffer::push(const float* source, int sampleCount)
 {
+    std::lock_guard<std::recursive_mutex> lock(m_mutex);
+
     unsigned int from = m_writeIndex;
     auto memStep = sizeof(float);
     auto to = m_writeIndex + sampleCount * m_streamsPerSample;
@@ -76,7 +67,7 @@ void AudioBuffer::push(const float* source, int sampleCount)
 
 void AudioBuffer::pop(float* dest, unsigned int sampleCount)
 {
-    std::lock_guard<std::mutex> guard(m_dataMutex);
+    std::lock_guard<std::recursive_mutex> lock(m_mutex);
 
     //catch up if we are fall behind
     if (sampleCount > sampleLag()) {
@@ -106,12 +97,27 @@ void AudioBuffer::pop(float* dest, unsigned int sampleCount)
 
 void AudioBuffer::setMinSampleLag(unsigned int lag)
 {
+    std::lock_guard<std::recursive_mutex> lock(m_mutex);
+
     IF_ASSERT_FAILED(lag < m_data.size()) {
         lag = m_data.size();
     }
     m_minSampleLag = lag;
     if (m_data.size() < 2 * m_minSampleLag * m_streamsPerSample) {
         m_data.resize(2 * m_minSampleLag * m_streamsPerSample, 0.f);
+    }
+}
+
+void AudioBuffer::fillup()
+{
+    if (!m_source) {
+        return;
+    }
+
+    while (sampleLag() < m_minSampleLag + FILL_OVER) {
+        m_source->setBufferSize(FILL_SAMPLES);
+        m_source->forward(FILL_SAMPLES);
+        push(m_source->data(), FILL_SAMPLES);
     }
 }
 

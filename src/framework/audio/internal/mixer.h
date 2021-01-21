@@ -74,7 +74,6 @@ private:
     float m_masterLevel = 1.f;
     std::map<ChannelID, std::shared_ptr<MixerChannel> > m_inputList = {};
     std::map<unsigned int, std::shared_ptr<IAudioInsert> > m_insertList = {};
-    std::mutex m_mutex;
     std::shared_ptr<Clock> m_clock;
 };
 }

@@ -39,8 +39,6 @@ class IAudioEngine : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IAudioEngine() = default;
 
-    virtual Ret init(IAudioDriverPtr, uint16_t bufferSize) = 0;
-    virtual void deinit() = 0;
     virtual bool isInited() const = 0;
     virtual async::Channel<bool> initChanged() const = 0;
     virtual unsigned int sampleRate() const = 0;
@@ -49,9 +47,6 @@ public:
     virtual IMixerPtr mixer() const = 0;
     virtual IAudioBufferPtr buffer() const = 0;
     virtual void setBuffer(IAudioBufferPtr) = 0;
-    virtual IAudioDriverPtr driver() const = 0;
-    virtual void resumeDriver() = 0;
-    virtual void suspendDriver() = 0;
 };
 }
 #endif // MU_AUDIO_IAUDIOENGINE_H

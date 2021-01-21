@@ -41,8 +41,10 @@ AudioThread::~AudioThread()
     }
 }
 
-void AudioThread::run()
+void AudioThread::run(const OnStart& onStart)
 {
+    m_onStart = onStart;
+
 #ifndef Q_OS_WASM
     m_running = true;
     m_thread = std::make_shared<std::thread>([this]() {
@@ -81,6 +83,10 @@ void AudioThread::loopBody()
 void AudioThread::main()
 {
     mu::runtime::setThreadName("audio_worker");
+
+    if (m_onStart) {
+        m_onStart();
+    }
 
     m_channel->setupWorkerThread();
     m_controller->init();

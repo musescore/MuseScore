@@ -32,6 +32,9 @@ void RpcController::init()
     //! So, a factory is deliberately not used to have everything in one place.
     rpcChannel()->listen([this](const Msg& msg) {
         switch (msg.target.name) {
+        case TargetName::AudioEngine:
+            audioEngineHandle(msg);
+            break;
         case TargetName::Sequencer:
             sequencerHandle(msg);
             break;
@@ -42,17 +45,49 @@ void RpcController::init()
     });
 }
 
+AudioEngine* RpcController::audioEngine() const
+{
+    return AudioEngine::instance();
+}
+
 ISequencerPtr RpcController::sequencer() const
 {
     return audioEngine()->sequencer();
 }
 
+void RpcController::bindMethod(Calls& calls, const Method& method, const Call& call)
+{
+    calls.insert({ method, call });
+}
+
+void RpcController::doCall(const Calls& calls, const Msg& msg)
+{
+    auto it = calls.find(msg.method);
+    if (it == calls.end()) {
+        LOGE() << "not found method: " << msg.method;
+        return;
+    }
+
+    it->second(msg.args);
+}
+
+void RpcController::audioEngineHandle(const Msg& msg)
+{
+    static Calls calls;
+    if (calls.empty()) {
+        bindMethod(calls, "init", [this](const Args& args) {
+            int sampleRate = args.arg<int>(0);
+            uint16_t readBufferSize = args.arg<uint16_t>(1);
+            audioEngine()->init(sampleRate, readBufferSize);
+        });
+    }
+
+    doCall(calls, msg);
+}
+
 void RpcController::sequencerHandle(const Msg& msg)
 {
-    static std::map<Method, Call> calls;
-    auto bindMethod = [](std::map<Method, Call>& calls, const Method& method, const Call& call) {
-        calls.insert({ method, call });
-    };
+    static Calls calls;
 
     //! NOTE We could use reflection here so as not to write this code of the same type.
     //! But it's not that simple. Rpc can work in serialization mode,
@@ -150,11 +185,5 @@ void RpcController::sequencerHandle(const Msg& msg)
         });
     }
 
-    auto it = calls.find(msg.method);
-    if (it == calls.end()) {
-        LOGE() << "not found method: " << msg.method;
-        return;
-    }
-
-    it->second(msg.args);
+    doCall(calls, msg);
 }

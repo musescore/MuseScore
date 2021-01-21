@@ -27,12 +27,15 @@
 
 #include "internal/rpc/queuedrpcchannel.h"
 #include "internal/rpc/rpcsequencer.h"
+#include "internal/audiosanitizer.h"
+#include "internal/audiothread.h"
+
+#include "log.h"
 
 using namespace mu::framework;
 using namespace mu::audio;
 
 static std::shared_ptr<AudioConfiguration> s_audioConfiguration = std::make_shared<AudioConfiguration>();
-static std::shared_ptr<AudioEngine> s_audioEngine = std::make_shared<AudioEngine>();
 static std::shared_ptr<AudioThread> s_audioWorker = std::make_shared<AudioThread>();
 static std::shared_ptr<rpc::RpcSequencer> s_rpcSequencer = std::make_shared<rpc::RpcSequencer>();
 
@@ -63,9 +66,12 @@ std::string AudioModule::moduleName() const
 
 void AudioModule::registerExports()
 {
-    ioc()->registerExport<IAudioEngine>(moduleName(), s_audioEngine);
+    //! TODO Will be removed
+    ioc()->registerExportNoDelete<IAudioEngine>(moduleName(), AudioEngine::instance());
+
     ioc()->registerExport<rpc::IRpcChannel>(moduleName(), s_audioWorker->channel());
 
+    ioc()->registerExport<IAudioDriver>(moduleName(), s_audioDriver);
     ioc()->registerExport<ISequencer>(moduleName(), s_rpcSequencer);
 }
 
@@ -79,18 +85,81 @@ void AudioModule::registerUiTypes()
 
 void AudioModule::onInit(const framework::IApplication::RunMode&)
 {
+    /** We have three layers
+        ------------------------
+        Main (main thread) - public client interface
+            see registerExports
+        ------------------------
+        Worker (worker thread) - generate and mix audio data
+            * AudioEngine
+            * Sequencer
+            * Players
+            * Synthesizers
+            * Audio decode (.ogg ...)
+            * Mixer
+        ------------------------
+        Driver (driver thread) - request audio data to play
+        ------------------------
+
+        All layers work in separate threads.
+        We need to make sure that each part of the system works only in its thread and,
+        ideally, there is no access to the same object from different threads,
+        in order to avoid problems associated with access data thread safety.
+
+        Objects from different layers (threads) must interact only through:
+            * Rpc (remote call procedure) channel - controls and pass midi data
+            * AudioBuffer - pass audio data from worker to driver for play
+
+        AudioEngine is in the worker and operates only with the buffer,
+        in fact, it knows nothing about the data consumer, about the audio driver.
+
+    **/
+
+    //! TODO It looks like the audio buffer should not be created in the audio engine,
+    //! but should be created externally and set to the audio engine.
+
+    // Init configuration
     s_audioConfiguration->init();
-    s_audioEngine->init(s_audioDriver, s_audioConfiguration->driverBufferSize());
 
+    // Setup rpc system and worker
     s_rpcSequencer->setup();
-
     s_audioWorker->channel()->setupMainThread();
-    s_audioWorker->setAudioBuffer(s_audioEngine->buffer());
-    s_audioWorker->run();
+    s_audioWorker->setAudioBuffer(AudioEngine::instance()->buffer());
+    s_audioWorker->run([]() {
+        AudioSanitizer::setupWorkerThread();
+    });
+
+    // Setup audio driver
+    IAudioDriver::Spec requiredSpec;
+    requiredSpec.sampleRate = 48000;
+    requiredSpec.format = IAudioDriver::Format::AudioF32;
+    requiredSpec.channels = 2; // stereo
+    requiredSpec.samples = s_audioConfiguration->driverBufferSize();
+    requiredSpec.callback = [](void* /*userdata*/, uint8_t* stream, int byteCount) {
+        auto samples = byteCount / (2 * sizeof(float));
+        AudioEngine::instance()->buffer()->pop(reinterpret_cast<float*>(stream), samples);
+    };
+
+    IAudioDriver::Spec activeSpec;
+    bool driverOpened = s_audioDriver->open(requiredSpec, &activeSpec);
+    if (!driverOpened) {
+        LOGE() << "audio output open failed";
+        return;
+    }
+
+    // Setup audio engine
+    //! NOTE Send msg for init audio engine to worker
+    s_audioWorker->channel()->send(
+        rpc::Msg(
+            rpc::TargetName::AudioEngine,
+            "init",
+            rpc::Args::make_arg2<int, uint16_t>(activeSpec.sampleRate, activeSpec.samples)
+            ));
 }
 
 void AudioModule::onDeinit()
 {
     s_audioWorker->stop();
-    s_audioEngine->deinit();
+    s_audioDriver->close();
+    AudioEngine::instance()->deinit();
 }
