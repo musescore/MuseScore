@@ -663,6 +663,7 @@ MasterScore* MuseScore::getNewFile()
       QList<Excerpt*> excerpts;
       if (!newWizard->emptyScore()) {
             MasterScore* tscore = new MasterScore(MScore::defaultStyle());
+            tscore->setCreated(true);
             Score::FileError rv = Ms::readScore(tscore, tp, false);
             if (rv != Score::FileError::FILE_NO_ERROR) {
                   readScoreError(newWizard->templatePath(), rv, false);
