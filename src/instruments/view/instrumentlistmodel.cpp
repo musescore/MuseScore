@@ -87,15 +87,23 @@ void InstrumentListModel::initSelectedInstruments(const IDList& selectedInstrume
 
 QVariantList InstrumentListModel::families() const
 {
+    auto toMap = [](const InstrumentGenre& genre) {
+        return QVariantMap {
+            { ID_KEY, genre.id },
+            { NAME_KEY, genre.name }
+        };
+    };
+
     QVariantList result;
+    result << toMap(m_instrumentsMeta.genres[COMMON_GENRE_ID]);
     result << allInstrumentsItem();
 
     for (const InstrumentGenre& genre: m_instrumentsMeta.genres) {
-        QVariantMap obj;
-        obj[ID_KEY] = genre.id;
-        obj[NAME_KEY] = genre.name;
+        if (genre.id == COMMON_GENRE_ID) {
+            continue;
+        }
 
-        result << obj;
+        result << toMap(genre);
     }
 
     return result;

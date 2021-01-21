@@ -9,17 +9,17 @@ import MuseScore.Instruments 1.0
 Item {
     id: root
 
-    property var families: null
+    property alias families: familiesBox.model
     property var groups: null
+
+    signal familySelected(string familyId)
+    signal groupSelected(string groupId)
 
     QtObject {
         id: privateProperties
 
         property int currentGroupIndex: -1
     }
-
-    signal familySelected(string familyId)
-    signal groupSelected(string groupId)
 
     function selectFirstGroup() {
         if (groupsView.count == 0) {
@@ -63,23 +63,11 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
 
-        textRoleName: "text"
-        valueRoleName: "value"
-
-        model: {
-            var resultList = []
-
-            var _families = families
-
-            for (var i = 0; i < _families.length; ++i) {
-                resultList.push({"text" : _families[i].name, "value" : _families[i].id})
-            }
-
-            return resultList
-        }
+        textRoleName: "name"
+        valueRoleName: "id"
 
         onValueChanged: {
-            familySelected(value)
+            root.familySelected(value)
         }
     }
 
@@ -117,7 +105,7 @@ Item {
 
             onClicked: {
                 privateProperties.currentGroupIndex = index
-                groupSelected(modelData.id)
+                root.groupSelected(modelData.id)
             }
         }
     }
