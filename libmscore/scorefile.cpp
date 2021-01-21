@@ -1033,10 +1033,15 @@ Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError)
                               return FileError::FILE_OLD_300_FORMAT;
                         }
 
-                  int defaultsVersion = readStyleDefaultsVersion();
+                  if (created() && preferences.getString(PREF_SCORE_STYLE_DEFAULTSTYLEFILE).isEmpty()) {
+                        setStyle(MScore::defaultStyle());
+                        }
+                  else {
+                        int defaultsVersion = readStyleDefaultsVersion();
 
-                  setStyle(*MStyle::resolveStyleDefaults(defaultsVersion));
-                  style().setDefaultStyleVersion(defaultsVersion);
+                        setStyle(*MStyle::resolveStyleDefaults(defaultsVersion));
+                        style().setDefaultStyleVersion(defaultsVersion);
+                        }
 
                   Score::FileError error;
                   if (mscVersion() <= 114)
