@@ -25,6 +25,7 @@
 #include "modularity/imoduleexport.h"
 #include "retval.h"
 #include "io/path.h"
+#include "userscorestypes.h"
 
 namespace mu::userscores {
 class IUserScoresConfiguration : MODULE_EXPORT_INTERFACE
@@ -43,6 +44,14 @@ public:
 
     virtual QColor templatePreviewBackgroundColor() const = 0;
     virtual async::Channel<QColor> templatePreviewBackgroundColorChanged() const = 0;
+
+    enum class PreferredScoreCreationMode {
+        FromInstruments,
+        FromTemplate
+    };
+
+    virtual PreferredScoreCreationMode preferredScoreCreationMode() const = 0;
+    virtual void setPreferredScoreCreationMode(PreferredScoreCreationMode mode) = 0;
 };
 }
 

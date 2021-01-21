@@ -23,30 +23,30 @@
 
 #include "modularity/ioc.h"
 
-#include "actions/iactionsdispatcher.h"
-#include "iglobalconfiguration.h"
+#include "iuserscoresconfiguration.h"
+
 #include "notation/inotationcreator.h"
 #include "notation/notationtypes.h"
 #include "context/iglobalcontext.h"
-#include "instruments/instrumentstypes.h"
 
 namespace mu::userscores {
 class NewScoreModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(scores, actions::IActionsDispatcher, dispatcher)
-    INJECT(scores, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(scores, IUserScoresConfiguration, configuration)
     INJECT(scores, notation::INotationCreator, notationCreator)
     INJECT(scores, context::IGlobalContext, globalContext)
 
 public:
     explicit NewScoreModel(QObject* parent = nullptr);
 
+    Q_INVOKABLE QString preferredScoreCreationMode() const;
     Q_INVOKABLE bool createScore(const QVariant& info);
 
 private:
     notation::ScoreCreateOptions parseOptions(const QVariantMap& info) const;
+    void updatePreferredScoreCreationMode(bool isScoreCreatedFromInstruments);
 };
 }
 

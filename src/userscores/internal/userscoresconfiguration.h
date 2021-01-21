@@ -33,7 +33,6 @@ class UserScoresConfiguration : public IUserScoresConfiguration
     INJECT(userscores, notation::INotationConfiguration, notationConfiguration)
 
 public:
-
     static const QString DEFAULT_FILE_SUFFIX;
 
     void init();
@@ -47,6 +46,9 @@ public:
 
     QColor templatePreviewBackgroundColor() const override;
     async::Channel<QColor> templatePreviewBackgroundColorChanged() const override;
+
+    PreferredScoreCreationMode preferredScoreCreationMode() const override;
+    void setPreferredScoreCreationMode(PreferredScoreCreationMode mode) override;
 
 private:
     QStringList parseRecentList(const std::string& recents) const;

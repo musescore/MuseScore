@@ -31,6 +31,7 @@ static const std::string module_name("userscores");
 static const Settings::Key RECENT_LIST(module_name, "userscores/recentList");
 static const Settings::Key USER_TEMPLATES_PATH(module_name, "application/paths/myTemplates");
 static const Settings::Key USER_SCORES_PATH(module_name, "application/paths/myScores");
+static const Settings::Key PREFERRED_SCORE_CREATION_MODE_KEY(module_name, "userscores/preferedScoreCreationMode");
 
 const QString UserScoresConfiguration::DEFAULT_FILE_SUFFIX(".mscz");
 
@@ -43,6 +44,9 @@ void UserScoresConfiguration::init()
         QStringList recentList = parseRecentList(val.toString());
         m_recentListChanged.send(recentList);
     });
+
+    Val preferredScoreCreationMode = Val(static_cast<int>(PreferredScoreCreationMode::FromInstruments));
+    settings()->setDefaultValue(PREFERRED_SCORE_CREATION_MODE_KEY, preferredScoreCreationMode);
 }
 
 ValCh<QStringList> UserScoresConfiguration::recentScoreList() const
@@ -101,4 +105,14 @@ QColor UserScoresConfiguration::templatePreviewBackgroundColor() const
 async::Channel<QColor> UserScoresConfiguration::templatePreviewBackgroundColorChanged() const
 {
     return notationConfiguration()->backgroundColorChanged();
+}
+
+UserScoresConfiguration::PreferredScoreCreationMode UserScoresConfiguration::preferredScoreCreationMode() const
+{
+    return static_cast<PreferredScoreCreationMode>(settings()->value(PREFERRED_SCORE_CREATION_MODE_KEY).toInt());
+}
+
+void UserScoresConfiguration::setPreferredScoreCreationMode(PreferredScoreCreationMode mode)
+{
+    settings()->setValue(PREFERRED_SCORE_CREATION_MODE_KEY, Val(static_cast<int>(mode)));
 }
