@@ -1,4 +1,4 @@
-﻿//=============================================================================
+//=============================================================================
 //  MuseScore
 //  Music Composition & Notation
 //
@@ -24,8 +24,7 @@
 
 class QToolBar;
 
-namespace mu {
-namespace dock {
+namespace mu::dock {
 class DockToolBar : public DockView
 {
     Q_OBJECT
@@ -78,7 +77,6 @@ private:
     int m_minimumHeight = 0;
     int m_minimumWidth = 0;
 };
-}
 }
 
 #endif // MU_DOCK_DOCKTOOLBAR_H

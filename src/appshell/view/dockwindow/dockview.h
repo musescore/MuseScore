@@ -20,12 +20,14 @@
 #ifndef MU_DOCK_DOCKVIEW_H
 #define MU_DOCK_DOCKVIEW_H
 
+#include "modularity/ioc.h"
+#include "framework/ui/iuiconfiguration.h"
+
 #include <QQuickItem>
 #include <QQmlComponent>
 #include <QQuickView>
 
-namespace mu {
-namespace dock {
+namespace mu::dock {
 class EventsWatcher;
 class DockView : public QQuickItem
 {
@@ -35,6 +37,8 @@ class DockView : public QQuickItem
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
 
     Q_CLASSINFO("DefaultProperty", "content")
+
+    INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
 
 public:
     explicit DockView(QQuickItem* parent = nullptr);
@@ -73,7 +77,6 @@ private:
     EventsWatcher* _eventsWatcher = nullptr;
     QColor _color;
 };
-}
 }
 
 #endif // MU_DOCK_DOCKVIEW_H
