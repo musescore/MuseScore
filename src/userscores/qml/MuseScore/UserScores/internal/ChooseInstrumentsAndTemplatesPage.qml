@@ -10,6 +10,8 @@ import MuseScore.Instruments 1.0
 Item {
     id: root
 
+    property string preferredScoreCreationMode: ""
+
     property bool hasSelection: {
         if (pagesStack.currentIndex === 0) {
             return instrumentsPage.hasSelectedInstruments
@@ -47,15 +49,25 @@ Item {
             sideMargin: 22
             isCurrent: bar.currentIndex === 0
         }
+
         StyledTabButton {
             text: qsTrc("userscores", "Choose from template")
             sideMargin: 22
             isCurrent: bar.currentIndex === 1
         }
+
+        Component.onCompleted: {
+            if (root.preferredScoreCreationMode === "FromInstruments") {
+                currentIndex = 0
+            } else if (root.preferredScoreCreationMode === "FromTemplate") {
+                currentIndex = 1
+            }
+        }
     }
 
     StackLayout {
         id: pagesStack
+
         anchors.top: bar.bottom
         anchors.topMargin: 24
         anchors.left: parent.left

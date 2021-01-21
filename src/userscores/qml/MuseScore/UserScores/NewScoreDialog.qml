@@ -34,6 +34,10 @@ QmlDialog {
 
             ChooseInstrumentsAndTemplatesPage {
                 id: chooseInstrumentsAndTemplatePage
+
+                Component.onCompleted: {
+                    preferredScoreCreationMode = newScoreModel.preferredScoreCreationMode()
+                }
             }
 
             ScoreInfoPage {
