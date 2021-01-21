@@ -472,8 +472,7 @@
         <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>Title</style>
-          <text>Bluegrass Band
-</text>
+          <text>Bluegrass Band</text>
           </Text>
         </VBox>
       <Measure>
