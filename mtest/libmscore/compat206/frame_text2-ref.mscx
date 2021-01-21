@@ -147,6 +147,7 @@
       <rehearsalMarkFontFace>FreeSerif</rehearsalMarkFontFace>
       <rehearsalMarkFontSize>10</rehearsalMarkFontSize>
       <rehearsalMarkFramePadding>0.1</rehearsalMarkFramePadding>
+      <rehearsalMarkFrameWidth>0.2</rehearsalMarkFrameWidth>
       <repeatLeftFontFace>FreeSerif</repeatLeftFontFace>
       <repeatLeftFontSize>20</repeatLeftFontSize>
       <repeatLeftFramePadding>0</repeatLeftFramePadding>
