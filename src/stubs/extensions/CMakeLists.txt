@@ -24,25 +24,14 @@ set(MODULE_QRC extensions.qrc)
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml )
 
 set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/extensionsmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/extensionsmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/iextensionsservice.h
-    ${CMAKE_CURRENT_LIST_DIR}/iextensionsconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/iextensionunpacker.h
-    ${CMAKE_CURRENT_LIST_DIR}/extensionstypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/extensionserrors.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/extensionsservice.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/extensionsservice.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/extensionsconfiguration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/extensionsconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/extensionunpacker.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/extensionunpacker.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/extensionlistmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/extensionlistmodel.h
-    )
-
-set(MODULE_LINK
-    qzip
+    ${CMAKE_CURRENT_LIST_DIR}/extensionsstubmodule.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/extensionsstubmodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/extensionsservicestub.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/extensionsservicestub.h
+    ${CMAKE_CURRENT_LIST_DIR}/extensionsconfigurationstub.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/extensionsconfigurationstub.h
+    ${CMAKE_CURRENT_LIST_DIR}/extensionunpackerstub.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/extensionunpackerstub.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

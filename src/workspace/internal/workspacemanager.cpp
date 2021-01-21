@@ -156,7 +156,7 @@ void WorkspaceManager::init()
         LOGE() << ret.toString();
     }
 
-    RetCh<Extension> extensionChanged = extensionsController()->extensionChanged();
+    RetCh<Extension> extensionChanged = extensionsService()->extensionChanged();
     if (extensionChanged.ret) {
         extensionChanged.ch.onReceive(this, [this](const Extension& newExtension) {
             if (newExtension.types.testFlag(Extension::Workspaces)) {

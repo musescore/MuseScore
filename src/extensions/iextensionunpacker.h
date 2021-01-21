@@ -24,8 +24,7 @@
 #include "modularity/imoduleexport.h"
 #include "ret.h"
 
-namespace mu {
-namespace extensions {
+namespace mu::extensions {
 class IExtensionUnpacker : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IExtensionUnpacker)
@@ -35,7 +34,6 @@ public:
 
     virtual Ret unpack(const QString& source, const QString& destination) const = 0;
 };
-}
 }
 
 #endif // MU_EXTENSIONS_IEXTENSIONUNPACKER_H

@@ -24,8 +24,7 @@
 #include <QJsonObject>
 #include <QObject>
 
-namespace mu {
-namespace extensions {
+namespace mu::extensions {
 class ExtensionStatus
 {
     Q_GADGET
@@ -91,7 +90,6 @@ struct Extension
 Q_DECLARE_OPERATORS_FOR_FLAGS(Extension::ExtensionTypes)
 
 using ExtensionsHash = QHash<QString /*code*/, Extension>;
-}
 }
 
 #endif // MU_EXTENSIONS_EXTENSIONSTYPES_H

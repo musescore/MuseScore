@@ -28,8 +28,7 @@
 class MQZipReader;
 class QVersionNumber;
 
-namespace mu {
-namespace extensions {
+namespace mu::extensions {
 class ExtensionUnpacker : public IExtensionUnpacker
 {
     INJECT(extensions, system::IFileSystem, fileSystem)
@@ -48,7 +47,6 @@ private:
     Ret removePreviousVersion(const QString& path) const;
     Ret unzip(const MQZipReader* zip, const QString& destination) const;
 };
-}
 }
 
 #endif // MU_EXTENSIONS_EXTENSIONUNPACKER_H

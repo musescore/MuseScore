@@ -16,29 +16,12 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "instrumentsconfiguration.h"
+#include "extensionunpackerstub.h"
 
-#include "log.h"
-#include "settings.h"
+using namespace mu::extensions;
+using namespace mu;
 
-using namespace mu::instruments;
-
-mu::io::paths InstrumentsConfiguration::instrumentPaths() const
+Ret ExtensionUnpackerStub::unpack(const QString&, const QString&) const
 {
-    io::paths paths;
-    io::path sharePath = globalConfiguration()->sharePath() + "/instruments";
-    paths.push_back(sharePath);
-
-    io::path dataPath = globalConfiguration()->dataPath() + "/instruments";
-    paths.push_back(dataPath);
-
-    io::paths extensionsPath = this->extensionsPaths();
-    paths.insert(paths.end(), extensionsPath.begin(), extensionsPath.end());
-
-    return paths;
-}
-
-mu::io::paths InstrumentsConfiguration::extensionsPaths() const
-{
-    return extensionsConfigurator()->instrumentsPaths();
+    return make_ret(Ret::Code::NotSupported);
 }
