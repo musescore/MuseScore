@@ -16,27 +16,19 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_EXTENSIONS_EXTENSIONSCONFIGURATION_H
-#define MU_EXTENSIONS_EXTENSIONSCONFIGURATION_H
+#ifndef MU_EXTENSIONS_EXTENSIONSCONFIGURATIONSTUB_H
+#define MU_EXTENSIONS_EXTENSIONSCONFIGURATIONSTUB_H
 
-#include "modularity/ioc.h"
-#include "iextensionsconfiguration.h"
-#include "iglobalconfiguration.h"
-#include "framework/system/ifilesystem.h"
+#include "extensions/iextensionsconfiguration.h"
 
 namespace mu::extensions {
-class ExtensionsConfiguration : public IExtensionsConfiguration
+class ExtensionsConfigurationStub : public IExtensionsConfiguration
 {
-    INJECT(extensions, framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(extensions, system::IFileSystem, fileSystem)
-
 public:
-    void init();
+    QUrl extensionsUpdateUrl() const;
+    QUrl extensionFileServerUrl(const QString&) const;
 
-    QUrl extensionsUpdateUrl() const override;
-    QUrl extensionFileServerUrl(const QString& extensionCode) const override;
-
-    ValCh<ExtensionsHash> extensions() const override;
+    ValCh<ExtensionsHash> extensions() const;
     Ret setExtensions(const ExtensionsHash& extensions) const override;
 
     io::path extensionPath(const QString& extensionCode) const override;
@@ -52,19 +44,7 @@ public:
     io::paths instrumentsPaths() const override;
 
     io::paths templatesPaths() const override;
-
-private:
-    ExtensionsHash parseExtensionConfig(const QByteArray& json) const;
-
-    io::path extensionFileName(const QString& extensionCode) const;
-    io::paths fileList(const io::path& directory, const QStringList& filters) const;
-
-    io::path extensionWorkspacesPath(const QString& extensionCode) const;
-    io::path extensionInstrumentsPath(const QString& extensionCode) const;
-    io::path extensionTemplatesPath(const QString& extensionCode) const;
-
-    async::Channel<ExtensionsHash> m_extensionHashChanged;
 };
 }
 
-#endif // MU_EXTENSIONS_EXTENSIONSCONFIGURATION_H
+#endif // MU_EXTENSIONS_IEXTENSIONSCONFIGURATION_H

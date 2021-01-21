@@ -21,7 +21,7 @@
 #include <QQmlEngine>
 
 #include "internal/extensionsconfiguration.h"
-#include "internal/extensionscontroller.h"
+#include "internal/extensionsservice.h"
 #include "internal/extensionunpacker.h"
 #include "view/extensionlistmodel.h"
 
@@ -31,7 +31,7 @@
 using namespace mu::extensions;
 
 static ExtensionsConfiguration* m_extensionsConfiguration = new ExtensionsConfiguration();
-static ExtensionsController* m_extensionsController = new ExtensionsController();
+static ExtensionsService* m_extensionsService = new ExtensionsService();
 
 static void extensions_init_qrc()
 {
@@ -46,7 +46,7 @@ std::string ExtensionsModule::moduleName() const
 void ExtensionsModule::registerExports()
 {
     framework::ioc()->registerExport<IExtensionsConfiguration>(moduleName(), m_extensionsConfiguration);
-    framework::ioc()->registerExport<IExtensionsController>(moduleName(), m_extensionsController);
+    framework::ioc()->registerExport<IExtensionsService>(moduleName(), m_extensionsService);
     framework::ioc()->registerExport<IExtensionUnpacker>(moduleName(), new ExtensionUnpacker());
 }
 
@@ -69,6 +69,6 @@ void ExtensionsModule::onInit(const framework::IApplication::RunMode& runMode)
         return;
     }
 
-    m_extensionsController->init();
+    m_extensionsService->init();
     m_extensionsConfiguration->init();
 }

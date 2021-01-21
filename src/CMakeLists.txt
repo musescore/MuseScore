@@ -25,7 +25,11 @@ if (NOT OS_IS_WASM)
     add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/rtf2html rtf2html) # for capella
 
     add_subdirectory(cloud)
-    add_subdirectory(extensions)
+
+    if (BUILD_EXTENSIONS_MODULE)
+        add_subdirectory(extensions)
+    endif (BUILD_EXTENSIONS_MODULE)
+
 
     if (BUILD_LANGUAGES_MODULE)
         add_subdirectory(languages)

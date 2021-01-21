@@ -22,16 +22,15 @@
 #include <QAbstractListModel>
 
 #include "modularity/ioc.h"
-#include "iextensionscontroller.h"
+#include "iextensionsservice.h"
 #include "async/asyncable.h"
 
-namespace mu {
-namespace extensions {
+namespace mu::extensions {
 class ExtensionListModel : public QAbstractListModel, async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(extensions, IExtensionsController, extensionsController)
+    INJECT(extensions, IExtensionsService, extensionsService)
 
 public:
     ExtensionListModel(QObject* parent = nullptr);
@@ -69,7 +68,6 @@ private:
     QHash<int, QByteArray> m_roles;
     QList<Extension> m_list;
 };
-}
 }
 
 #endif // MU_EXTENSIONS_EXTENSIONLISTMODEL_H

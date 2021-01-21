@@ -24,8 +24,7 @@
 #include "io/path.h"
 #include "extensionstypes.h"
 
-namespace mu {
-namespace extensions {
+namespace mu::extensions {
 class IExtensionsConfiguration : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IExtensionsConfiguration)
@@ -53,7 +52,6 @@ public:
 
     virtual io::paths templatesPaths() const = 0;
 };
-}
 }
 
 #endif // MU_EXTENSIONS_IEXTENSIONSCONFIGURATION_H

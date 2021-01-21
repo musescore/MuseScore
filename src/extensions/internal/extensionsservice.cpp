@@ -16,7 +16,7 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "extensionscontroller.h"
+#include "extensionsservice.h"
 
 #include <QBuffer>
 #include <QFile>
@@ -35,14 +35,14 @@ using namespace mu::network;
 static const QString ANALYSING_STATUS = qtrc("extensions", "Analysing...");
 static const QString DOWNLOADING_STATUS = qtrc("extensions", "Downloading...");
 
-void ExtensionsController::init()
+void ExtensionsService::init()
 {
     fileSystem()->makePath(configuration()->extensionsSharePath());
     fileSystem()->makePath(configuration()->extensionsDataPath());
-    QtConcurrent::run(this, &ExtensionsController::th_refreshExtensions);
+    QtConcurrent::run(this, &ExtensionsService::th_refreshExtensions);
 }
 
-ValCh<ExtensionsHash> ExtensionsController::extensions() const
+ValCh<ExtensionsHash> ExtensionsService::extensions() const
 {
     ValCh<ExtensionsHash> extensionHash = configuration()->extensions();
     extensionHash.val = correctExtensionsStates(extensionHash.val).val;
@@ -50,7 +50,7 @@ ValCh<ExtensionsHash> ExtensionsController::extensions() const
     return extensionHash;
 }
 
-RetCh<ExtensionProgress> ExtensionsController::install(const QString& extensionCode)
+RetCh<ExtensionProgress> ExtensionsService::install(const QString& extensionCode)
 {
     RetCh<ExtensionProgress> result;
 
@@ -93,12 +93,12 @@ RetCh<ExtensionProgress> ExtensionsController::install(const QString& extensionC
         closeOperation(extensionCode, extensionProgressStatus);
     }, Asyncable::AsyncMode::AsyncSetRepeat);
 
-    QtConcurrent::run(this, &ExtensionsController::th_install, extensionCode, extensionProgressStatus, extensionFinishChannel);
+    QtConcurrent::run(this, &ExtensionsService::th_install, extensionCode, extensionProgressStatus, extensionFinishChannel);
 
     return result;
 }
 
-RetCh<ExtensionProgress> ExtensionsController::update(const QString& extensionCode)
+RetCh<ExtensionProgress> ExtensionsService::update(const QString& extensionCode)
 {
     RetCh<ExtensionProgress> result;
 
@@ -141,12 +141,12 @@ RetCh<ExtensionProgress> ExtensionsController::update(const QString& extensionCo
         closeOperation(extensionCode, extensionProgressStatus);
     }, Asyncable::AsyncMode::AsyncSetRepeat);
 
-    QtConcurrent::run(this, &ExtensionsController::th_update, extensionCode, extensionProgressStatus, extensionFinishChannel);
+    QtConcurrent::run(this, &ExtensionsService::th_update, extensionCode, extensionProgressStatus, extensionFinishChannel);
 
     return result;
 }
 
-Ret ExtensionsController::uninstall(const QString& extensionCode)
+Ret ExtensionsService::uninstall(const QString& extensionCode)
 {
     ExtensionsHash extensionHash = extensions().val;
 
@@ -170,7 +170,7 @@ Ret ExtensionsController::uninstall(const QString& extensionCode)
     return make_ret(Err::NoError);
 }
 
-RetCh<Extension> ExtensionsController::extensionChanged() const
+RetCh<Extension> ExtensionsService::extensionChanged() const
 {
     RetCh<Extension> result;
     result.ret = make_ret(Err::NoError);
@@ -178,7 +178,7 @@ RetCh<Extension> ExtensionsController::extensionChanged() const
     return result;
 }
 
-RetVal<ExtensionsHash> ExtensionsController::parseExtensionConfig(const QByteArray& json) const
+RetVal<ExtensionsHash> ExtensionsService::parseExtensionConfig(const QByteArray& json) const
 {
     RetVal<ExtensionsHash> result;
 
@@ -213,12 +213,12 @@ RetVal<ExtensionsHash> ExtensionsController::parseExtensionConfig(const QByteArr
     return result;
 }
 
-bool ExtensionsController::isExtensionExists(const QString& extensionCode) const
+bool ExtensionsService::isExtensionExists(const QString& extensionCode) const
 {
     return fileSystem()->exists(configuration()->extensionPath(extensionCode));
 }
 
-RetVal<ExtensionsHash> ExtensionsController::correctExtensionsStates(ExtensionsHash& extensions) const
+RetVal<ExtensionsHash> ExtensionsService::correctExtensionsStates(ExtensionsHash& extensions) const
 {
     RetVal<ExtensionsHash> result;
     bool isNeedUpdate = false;
@@ -245,8 +245,8 @@ RetVal<ExtensionsHash> ExtensionsController::correctExtensionsStates(ExtensionsH
     return result;
 }
 
-RetVal<QString> ExtensionsController::downloadExtension(const QString& extensionCode,
-                                                        async::Channel<ExtensionProgress>* progressChannel) const
+RetVal<QString> ExtensionsService::downloadExtension(const QString& extensionCode,
+                                                     async::Channel<ExtensionProgress>* progressChannel) const
 {
     RetVal<QString> result;
 
@@ -279,7 +279,7 @@ RetVal<QString> ExtensionsController::downloadExtension(const QString& extension
     return result;
 }
 
-Ret ExtensionsController::removeExtension(const QString& extensionCode) const
+Ret ExtensionsService::removeExtension(const QString& extensionCode) const
 {
     io::path extensionPath = configuration()->extensionPath(extensionCode);
     Ret ret = fileSystem()->remove(extensionPath);
@@ -290,7 +290,7 @@ Ret ExtensionsController::removeExtension(const QString& extensionCode) const
     return make_ret(Err::NoError);
 }
 
-Extension::ExtensionTypes ExtensionsController::extensionTypes(const QString& extensionCode) const
+Extension::ExtensionTypes ExtensionsService::extensionTypes(const QString& extensionCode) const
 {
     Extension::ExtensionTypes result;
 
@@ -307,7 +307,7 @@ Extension::ExtensionTypes ExtensionsController::extensionTypes(const QString& ex
     return result;
 }
 
-void ExtensionsController::th_refreshExtensions()
+void ExtensionsService::th_refreshExtensions()
 {
     QBuffer buff;
     INetworkManagerPtr networkManagerPtr = networkManagerCreator()->makeNetworkManager();
@@ -355,9 +355,9 @@ void ExtensionsController::th_refreshExtensions()
     configuration()->setExtensions(resultExtensions);
 }
 
-void ExtensionsController::th_install(const QString& extensionCode,
-                                      async::Channel<ExtensionProgress>* progressChannel,
-                                      async::Channel<Ret>* finishChannel)
+void ExtensionsService::th_install(const QString& extensionCode,
+                                   async::Channel<ExtensionProgress>* progressChannel,
+                                   async::Channel<Ret>* finishChannel)
 {
     progressChannel->send(ExtensionProgress(ANALYSING_STATUS, true));
 
@@ -385,8 +385,8 @@ void ExtensionsController::th_install(const QString& extensionCode,
     finishChannel->send(make_ret(Err::NoError));
 }
 
-void ExtensionsController::th_update(const QString& extensionCode, async::Channel<ExtensionProgress>* progressChannel,
-                                     async::Channel<Ret>* finishChannel)
+void ExtensionsService::th_update(const QString& extensionCode, async::Channel<ExtensionProgress>* progressChannel,
+                                  async::Channel<Ret>* finishChannel)
 {
     progressChannel->send(ExtensionProgress(ANALYSING_STATUS, true));
 
@@ -415,7 +415,7 @@ void ExtensionsController::th_update(const QString& extensionCode, async::Channe
     finishChannel->send(make_ret(Err::NoError));
 }
 
-void ExtensionsController::closeOperation(const QString& extensionCode, async::Channel<ExtensionProgress>* progressChannel)
+void ExtensionsService::closeOperation(const QString& extensionCode, async::Channel<ExtensionProgress>* progressChannel)
 {
     progressChannel->close();
     m_operationsHash.remove(extensionCode);
