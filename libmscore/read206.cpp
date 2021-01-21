@@ -3621,7 +3621,7 @@ static bool readScore(Score* score, XmlReader& e)
                         e.tracks().clear();
                         e.clearUserTextStyles();
                         MasterScore* m = score->masterScore();
-                        Score* s = new Score(m, MScore::baseStyle());
+                        Score* s = new Score(m);
                         s->setEnableVerticalSpread(false);
                         Excerpt* ex = new Excerpt(m);
 
