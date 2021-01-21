@@ -103,6 +103,8 @@ struct InstrumentGenre
 };
 using InstrumentGenreMap = QMap<QString /*id*/, InstrumentGenre>;
 
+static const QString COMMON_GENRE_ID("common");
+
 struct Transposition
 {
     QString id;
