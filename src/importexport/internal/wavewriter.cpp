@@ -24,7 +24,7 @@
 using namespace mu::importexport;
 using namespace mu::framework;
 
-mu::Ret WaveWriter::write(const notation::INotationPtr notation, IODevice& destinationDevice, const Options& options)
+mu::Ret WaveWriter::write(const notation::INotationPtr notation, system::IODevice& destinationDevice, const Options& options)
 {
     UNUSED(notation)
     UNUSED(destinationDevice)
