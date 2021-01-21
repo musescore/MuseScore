@@ -162,7 +162,7 @@ FocusScope {
             search: searchField.searchText
             backgroundColor: root.color
         }
-        
+
         LanguagesPage {
             id: languagesComp
 

@@ -24,24 +24,15 @@ set(MODULE_QRC languages.qrc)
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml )
 
 set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/languagesmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/languagesmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/languagestypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/languageserrors.h
-    ${CMAKE_CURRENT_LIST_DIR}/ilanguagesconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/ilanguagesservice.h
-    ${CMAKE_CURRENT_LIST_DIR}/ilanguageunpacker.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/languagesconfiguration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/languagesconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/languagesservice.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/languagesservice.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/languageunpacker.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/languageunpacker.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/languagelistmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/languagelistmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/languagesstubmodule.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/languagesstubmodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/languagesconfigurationstub.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/languagesconfigurationstub.h
+    ${CMAKE_CURRENT_LIST_DIR}/languagesservicestub.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/languagesservicestub.h
+    ${CMAKE_CURRENT_LIST_DIR}/languageunpackerstub.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/languageunpackerstub.h
     )
-
-set(MODULE_LINK qzip)
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 

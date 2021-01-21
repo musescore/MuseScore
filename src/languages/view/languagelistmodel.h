@@ -22,17 +22,16 @@
 #include <QAbstractListModel>
 
 #include "modularity/ioc.h"
-#include "../ilanguagescontroller.h"
+#include "../ilanguagesservice.h"
 #include "iinteractive.h"
 #include "async/asyncable.h"
 
-namespace mu {
-namespace languages {
+namespace mu::languages {
 class LanguageListModel : public QAbstractListModel, async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(languages, ILanguagesController, languagesController)
+    INJECT(languages, ILanguagesService, languagesService)
     INJECT(languages, framework::IInteractive, interactive)
 
 public:
@@ -73,7 +72,6 @@ private:
     QHash<int, QByteArray> m_roles;
     QList<Language> m_list;
 };
-}
 }
 
 #endif // MU_LANGUAGES_LANGUAGELISTMODEL_H
