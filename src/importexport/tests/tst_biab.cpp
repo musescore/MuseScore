@@ -10,11 +10,13 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
-#include "mtest/testutils.h"
+#include <QString>
+
+#include "testing/qtestsuite.h"
+#include "testbase.h"
 #include "libmscore/score.h"
 
-#define DIR QString("biab/")
+static const QString BIAB_DIR("biab_data/");
 
 using namespace Ms;
 
@@ -64,13 +66,13 @@ void TestBiab::biab()
 {
     QFETCH(QString, file);
 
-    QString readFile(DIR + file + ".SGU");
+    QString readFile(BIAB_DIR + file + ".SGU");
     QString writeFile(file + "-test.mscx");
-    QString reference(DIR + file + "-ref.mscx");
+    QString reference(BIAB_DIR + file + "-ref.mscx");
 
     MasterScore* score = readScore(readFile);
-    score->doLayout();
     QVERIFY(score);
+    score->doLayout();
     QVERIFY(saveCompareScore(score, writeFile, reference));
 }
 
