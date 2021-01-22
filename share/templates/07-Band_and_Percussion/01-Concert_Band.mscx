@@ -102,6 +102,7 @@
       <section id="brass" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
         <family>cornets</family>
         <family>trumpets</family>
+        <family>flugelhorns</family>
         <family>horns</family>
         <family>trombones</family>
         <family>baritone-horns</family>

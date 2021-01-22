@@ -87,6 +87,7 @@
       <section id="brass" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="false">
         <family>trumpets</family>
         <family>cornets</family>
+        <family>flugelhorns</family>
         <family>horns</family>
         <family>trombones</family>
         <family>tubas</family>
