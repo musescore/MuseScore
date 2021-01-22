@@ -9,16 +9,10 @@ import MuseScore.UserScores 1.0
 FlatButton {
     id: root
 
-    height: 96
-
     property var model: null
 
-    property var arrowX
-    property var popupPositionX
-    property var popupPositionY: height
-    property alias oppened: popup.visible
-
-    accentButton: oppened
+    height: 96
+    accentButton: popup.visible
 
     QtObject {
         id: privateProperties
@@ -58,9 +52,8 @@ FlatButton {
         implicitHeight: 250
         implicitWidth: 520
 
-        arrowX: root.arrowX
-        x: popupPositionX
-        y: popupPositionY
+        x: root.x - (width - root.width) / 2
+        y: root.height
 
         Column {
             anchors.fill: parent
@@ -89,8 +82,7 @@ FlatButton {
             }
 
             RadioButtonGroup {
-                anchors.left: parent.left
-                anchors.right: parent.right
+                anchors.horizontalCenter: parent.horizontalCenter
 
                 height: 50
 

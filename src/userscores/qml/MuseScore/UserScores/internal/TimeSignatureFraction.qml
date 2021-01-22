@@ -17,7 +17,7 @@ Row {
     IncrementalPropertyControl {
         id: control
 
-        implicitWidth: 80
+        implicitWidth: 68
 
         iconMode: iconModeEnum.hidden
         currentValue: root.numerator
@@ -37,14 +37,14 @@ Row {
 
     StyledTextLabel {
         anchors.verticalCenter: parent.verticalCenter
-        font: ui.theme.tabFont
+        font: ui.theme.largeBodyFont
         text: "/"
     }
 
     StyledComboBox {
         id: timeComboBox
 
-        implicitWidth: 90
+        implicitWidth: control.width
 
         textRoleName: "text"
         valueRoleName: "value"
