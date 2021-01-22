@@ -35,8 +35,8 @@ Rectangle {
     Component.onCompleted: {
         instrumentsModel.load(canSelectMultipleInstruments, currentInstrumentId, initiallySelectedInstrumentIds)
 
-        var group = instrumentsModel.selectedGroup()
-        familyView.focusGroup(group)
+        var groupId = instrumentsModel.selectedGroupId()
+        familyView.focusGroup(groupId)
 
         if (currentInstrumentId !== "") {
             focusOnCurrentInstrument()
@@ -65,17 +65,23 @@ Rectangle {
 
             onFamilySelected: {
                 instrumentsModel.selectFamily(familyId)
+                instrumentsView.clearSearch()
             }
 
             onGroupSelected: {
                 instrumentsModel.selectGroup(groupId)
+                instrumentsView.clearSearch()
             }
 
             Connections {
                 target: instrumentsModel
 
-                function onSelectedFamilyChanged(family) {
-                    Qt.callLater(familyView.setFamily, family)
+                function onSelectedFamilyChanged(familyId) {
+                    Qt.callLater(familyView.setFamily, familyId)
+                }
+
+                function onSelectedGroupChanged(groupId) {
+                    Qt.callLater(familyView.focusGroup, groupId)
                 }
             }
         }
@@ -92,8 +98,8 @@ Rectangle {
             instruments: instrumentsModel.instruments
 
             onSearchChanged: {
+                familyView.clearSelection()
                 instrumentsModel.setSearchText(search)
-                Qt.callLater(familyView.selectFirstGroup)
             }
 
             onSelectInstrumentRequested: {
@@ -102,12 +108,12 @@ Rectangle {
             }
 
             onInstrumentClicked: {
-                if (root.canSelectMultipleInstruments) {
-                    return
-                }
+                var currentSelection = instrumentsView.currentInstrument()
+                familyView.focusGroup(currentSelection.instrument.groupId)
 
-                var currentSelect = instrumentsView.currentInstrument()
-                instrumentsModel.selectInstrument(currentSelect.instrument.id, currentSelect.transposition)
+                if (!root.canSelectMultipleInstruments) {
+                    instrumentsModel.selectInstrument(currentSelection.instrument.id, currentSelection.transposition)
+                }
             }
 
             Connections {

@@ -21,23 +21,17 @@ Item {
         property int currentGroupIndex: -1
     }
 
-    function selectFirstGroup() {
-        if (groupsView.count == 0) {
-            privateProperties.currentGroupIndex = -1
-            return
-        }
-
-        privateProperties.currentGroupIndex = 0
-        groupSelected(root.groups[0].id)
+    function clearSelection() {
+        privateProperties.currentGroupIndex = -1
     }
 
-    function setFamily(family) {
-        familiesBox.currentIndex = familiesBox.indexOfValue(family)
+    function setFamily(familyId) {
+        familiesBox.currentIndex = familiesBox.indexOfValue(familyId)
     }
 
-    function focusGroup(group) {
+    function focusGroup(groupId) {
         for (var i in root.groups) {
-            if (root.groups[i].id === group) {
+            if (root.groups[i].id === groupId) {
                 privateProperties.currentGroupIndex = i
                 groupsView.positionViewAtIndex(groupsView.currentGroupIndex, ListView.Beginning)
                 return
