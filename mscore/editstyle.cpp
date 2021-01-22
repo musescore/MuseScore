@@ -1152,7 +1152,10 @@ void EditStyle::on_resetStylesButton_clicked()
 
 void EditStyle::resetStyle(Score* score)
 {
-    score->style().resetAllStyles(score, pageStyles());
+      auto ignoreStyles = pageStyles();
+      ignoreStyles.insert(Sid::concertPitch);
+      ignoreStyles.insert(Sid::createMultiMeasureRests);
+      score->style().resetAllStyles(score, ignoreStyles);
 }
 
 void EditStyle::applyToAllParts()
