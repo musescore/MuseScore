@@ -1,4 +1,5 @@
 import QtQuick 2.7
+
 import MuseScore.UiComponents 1.0
 import MuseScore.Cloud 1.0
 
