@@ -98,6 +98,7 @@ Rectangle {
 
             onSelectInstrumentRequested: {
                 instrumentsModel.selectInstrument(instrumentId, transposition)
+                Qt.callLater(selectedInstrumentsView.scrollViewToEnd)
             }
 
             onInstrumentClicked: {

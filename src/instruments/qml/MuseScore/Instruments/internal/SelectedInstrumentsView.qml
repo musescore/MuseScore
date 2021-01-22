@@ -21,6 +21,10 @@ Item {
     signal unselectInstrumentRequested(string id)
     signal orderChanged(string id)
 
+    function scrollViewToEnd() {
+        instrumentsView.positionViewAtEnd()
+    }
+
     StyledTextLabel {
         id: instrumentsLabel
 
