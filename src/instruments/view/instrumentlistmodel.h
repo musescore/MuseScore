@@ -49,10 +49,10 @@ public:
     QVariantList instruments() const;
     QVariantList selectedInstruments() const;
 
-    Q_INVOKABLE QString selectedGroup() const;
+    Q_INVOKABLE QString selectedGroupId() const;
 
-    Q_INVOKABLE void selectFamily(const QString& family);
-    Q_INVOKABLE void selectGroup(const QString& group);
+    Q_INVOKABLE void selectFamily(const QString& familyId);
+    Q_INVOKABLE void selectGroup(const QString& groupId);
 
     Q_INVOKABLE void selectInstrument(const QString& instrumentId, const QString& transpositionId = QString());
     Q_INVOKABLE void unselectInstrument(const QString& instrumentId);
@@ -69,13 +69,16 @@ public:
 signals:
     void dataChanged();
 
-    void selectedFamilyChanged(QString family);
-    void selectedGroupChanged(QString group);
+    void selectedFamilyChanged(QString familyId);
+    void selectedGroupChanged(QString groupId);
+
     void searchStringChanged(QString searchString);
     void selectedInstrumentsChanged();
 
 private:
     void initSelectedInstruments(const notation::IDList& selectedInstrumentIds);
+
+    void sortInstruments(QVariantList& instruments) const;
 
     bool isSearching() const;
 
@@ -93,9 +96,8 @@ private:
     InstrumentTemplate instrumentTemplate(const QString& instrumentId) const;
 
     bool m_canSelectMultipleInstruments = false;
-    QString m_selectedFamilyId;
-    QString m_savedSelectedFamilyId;
 
+    QString m_selectedFamilyId;
     QString m_selectedGroupId;
 
     InstrumentsMeta m_instrumentsMeta;

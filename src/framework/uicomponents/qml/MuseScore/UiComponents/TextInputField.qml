@@ -26,6 +26,7 @@ Rectangle {
 
     function clear() {
         valueInput.text = ""
+        currentText = ""
         textCleared()
     }
 

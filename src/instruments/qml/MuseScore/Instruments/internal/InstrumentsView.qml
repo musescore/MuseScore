@@ -24,6 +24,10 @@ Item {
         property var currentInstrument: null
     }
 
+    function clearSearch() {
+        searchField.clear()
+    }
+
     function currentInstrument() {
         if (!isInstrumentSelected) {
             return null
@@ -63,6 +67,10 @@ Item {
         anchors.topMargin: 16
         anchors.left: parent.left
         anchors.right: parent.right
+
+        onTextCleared: {
+            root.resetSelectedInstrument()
+        }
     }
 
     ListView {
