@@ -40,17 +40,6 @@ public:
     // GuitarPro
     virtual std::string importGuitarProCharset() const = 0;
 
-    // MusicXml
-    virtual bool musicxmlImportBreaks() const = 0;
-    virtual bool musicxmlImportLayout() const = 0;
-    virtual bool musicxmlExportLayout() const = 0;
-
-    enum class MusicxmlExportBreaksType {
-        All, Manual, No
-    };
-
-    virtual MusicxmlExportBreaksType musicxmlExportBreaksType() const = 0;
-
     // Pdf
     virtual int exportPdfDpiResolution() const = 0;
 

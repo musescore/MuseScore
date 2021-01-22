@@ -30,10 +30,6 @@ static const std::string module_name("importexport");
 static const Settings::Key SHORTEST_NOTE_KEY(module_name, "io/midi/shortestNote");
 static const Settings::Key IMPORT_OVERTUNE_CHARSET_KEY(module_name, "import/overture/charset");
 static const Settings::Key IMPORT_GUITARPRO_CHARSET_KEY(module_name, "import/guitarpro/charset");
-static const Settings::Key MUSICXML_IMPORT_BREAKS_KEY(module_name, "import/musicXML/importBreaks");
-static const Settings::Key MUSICXML_IMPORT_LAYOUT_KEY(module_name, "import/musicXML/importLayout");
-static const Settings::Key MUSICXML_EXPORT_LAYOUT_KEY(module_name, "export/musicXML/exportLayout");
-static const Settings::Key MUSICXML_EXPORT_BREAKS_TYPE_KEY(module_name, "export/musicXML/exportBreaks");
 static const Settings::Key EXPORT_PDF_DPI_RESOLUTION_KEY(module_name, "export/pdf/dpi");
 static const Settings::Key EXPORT_PNG_DPI_RESOLUTION_KEY(module_name, "export/png/resolution");
 static const Settings::Key EXPORT_PNG_USE_TRASNPARENCY_KEY(module_name, "export/png/useTransparency");
@@ -44,11 +40,6 @@ void ImportexportConfiguration::init()
 
     settings()->setDefaultValue(IMPORT_OVERTUNE_CHARSET_KEY, Val("GBK"));
     settings()->setDefaultValue(IMPORT_GUITARPRO_CHARSET_KEY, Val("UTF-8"));
-
-    settings()->setDefaultValue(MUSICXML_IMPORT_BREAKS_KEY, Val(true));
-    settings()->setDefaultValue(MUSICXML_IMPORT_LAYOUT_KEY, Val(true));
-    settings()->setDefaultValue(MUSICXML_EXPORT_LAYOUT_KEY, Val(true));
-    settings()->setDefaultValue(MUSICXML_EXPORT_BREAKS_TYPE_KEY, Val(static_cast<int>(MusicxmlExportBreaksType::All)));
 
     settings()->setDefaultValue(EXPORT_PNG_DPI_RESOLUTION_KEY, Val(Ms::DPI));
     settings()->setDefaultValue(EXPORT_PNG_USE_TRASNPARENCY_KEY, Val(true));
@@ -68,26 +59,6 @@ std::string ImportexportConfiguration::importOvertuneCharset() const
 std::string ImportexportConfiguration::importGuitarProCharset() const
 {
     return settings()->value(IMPORT_GUITARPRO_CHARSET_KEY).toString();
-}
-
-bool ImportexportConfiguration::musicxmlImportBreaks() const
-{
-    return settings()->value(MUSICXML_IMPORT_BREAKS_KEY).toBool();
-}
-
-bool ImportexportConfiguration::musicxmlImportLayout() const
-{
-    return settings()->value(MUSICXML_IMPORT_LAYOUT_KEY).toBool();
-}
-
-bool ImportexportConfiguration::musicxmlExportLayout() const
-{
-    return settings()->value(MUSICXML_EXPORT_LAYOUT_KEY).toBool();
-}
-
-ImportexportConfiguration::MusicxmlExportBreaksType ImportexportConfiguration::musicxmlExportBreaksType() const
-{
-    return static_cast<MusicxmlExportBreaksType>(settings()->value(MUSICXML_EXPORT_BREAKS_TYPE_KEY).toInt());
 }
 
 int ImportexportConfiguration::exportPdfDpiResolution() const

@@ -38,11 +38,11 @@
 #include "importmxmlpass2.h"
 
 #include "modularity/ioc.h"
-#include "importexport/iimportexportconfiguration.h"
+#include "importexport/musicxml/imusicxmlconfiguration.h"
 
-static std::shared_ptr<mu::importexport::IImportexportConfiguration> configuration()
+static std::shared_ptr<mu::iex::musicxml::IMusicXmlConfiguration> configuration()
 {
-    return mu::framework::ioc()->resolve<mu::importexport::IImportexportConfiguration>("importexport");
+    return mu::framework::ioc()->resolve<mu::iex::musicxml::IMusicXmlConfiguration>("iex_musicxml");
 }
 
 static bool musicxmlImportBreaks()

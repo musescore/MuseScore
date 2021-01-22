@@ -19,4 +19,3 @@
 
 add_subdirectory(biab)
 add_subdirectory(braille)
-add_subdirectory(musicxml)

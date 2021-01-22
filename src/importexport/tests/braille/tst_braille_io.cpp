@@ -19,7 +19,7 @@
 
 #include "testing/qtestsuite.h"
 
-#include "../testbase.h"
+#include "testbase.h"
 
 #include "libmscore/score.h"
 

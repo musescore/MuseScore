@@ -13,7 +13,7 @@
 #include <QString>
 
 #include "testing/qtestsuite.h"
-#include "../testbase.h"
+#include "testbase.h"
 #include "libmscore/score.h"
 
 static const QString BIAB_DIR("data/");

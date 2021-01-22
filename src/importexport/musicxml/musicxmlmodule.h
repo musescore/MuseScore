@@ -16,19 +16,21 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#ifndef MU_IMPORTEXPORT_MUSICXMLMODULE_H
+#define MU_IMPORTEXPORT_MUSICXMLMODULE_H
 
-#include "testing/environment.h"
+#include "modularity/imodulesetup.h"
 
-#include "log.h"
-#include "framework/fonts/fontsmodule.h"
-#include "importexport/importexportmodule.h"
-
-static mu::testing::SuiteEnvironment importexport_se(
+namespace mu::iex::musicxml {
+class MusicXmlModule : public framework::IModuleSetup
 {
-    new mu::fonts::FontsModule(), // needs for libmscore
-    new mu::importexport::ImportExportModule() // needs for init resources
-},
-    []() {
-    LOGI() << "importexport tests suite post init";
+public:
+
+    std::string moduleName() const override;
+    void registerResources() override;
+    void registerExports() override;
+    void onInit(const framework::IApplication::RunMode& mode) override;
+};
 }
-    );
+
+#endif // MU_IMPORTEXPORT_MUSICXMLMODULE_H

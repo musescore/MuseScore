@@ -17,11 +17,12 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
+add_subdirectory(musicxml)
+
+# We are separating the importexport module into separate modules,
+# soon there will be nothing left of it
 set(MODULE importexport)
 
-set(MODULE_QRC importexport.qrc)
-
-include(${CMAKE_CURRENT_LIST_DIR}/internal/musicxml/musicxml.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/internal/midiimport/midiimport.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/internal/ove/ove.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/internal/guitarpro/guitarpro.cmake)
@@ -32,7 +33,6 @@ include(${CMAKE_CURRENT_LIST_DIR}/internal/bww/bww.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/internal/braille/braille.cmake)
 
 set(MODULE_SRC
-    ${MUSICXML_SRC}
     ${BRAILLE_SRC}
     ${MIDIIMPORT_SRC}
     ${OVE_SRC}
@@ -47,8 +47,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/importexportconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/importexportconfiguration.h
     
-    ${CMAKE_CURRENT_LIST_DIR}/internal/musicxmlreader.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/musicxmlreader.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationmidireader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationmidireader.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/musedatareader.cpp
@@ -82,10 +80,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/flacwriter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationmidiwriter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationmidiwriter.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/musicxmlwriter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/musicxmlwriter.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/mxlwriter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/mxlwriter.h
     )
 
 set(MODULE_LINK

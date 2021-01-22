@@ -16,22 +16,18 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_IMPORTEXPORT_IMPORTEXPORTMODULE_H
-#define MU_IMPORTEXPORT_IMPORTEXPORTMODULE_H
 
-#include "modularity/imodulesetup.h"
+#ifndef MU_IMPORTEXPORT_MUSICXMLWRITER_H
+#define MU_IMPORTEXPORT_MUSICXMLWRITER_H
 
-namespace mu {
-namespace importexport {
-class ImportExportModule : public framework::IModuleSetup
+#include "notation/abstractnotationwriter.h"
+
+namespace mu::iex::musicxml {
+class MusicXmlWriter : public notation::AbstractNotationWriter
 {
 public:
-
-    std::string moduleName() const override;
-    void registerExports() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
+    Ret write(const notation::INotationPtr notation, system::IODevice& destinationDevice, const Options& options = Options()) override;
 };
 }
-}
 
-#endif // MU_IMPORTEXPORT_IMPORTEXPORTMODULE_H
+#endif // MU_IMPORTEXPORT_MUSICXMLWRITER_H
