@@ -16,3 +16,7 @@ endif (NOT BUILD_LANGUAGES_MODULE)
 if (NOT BUILD_INSTRUMENTS_MODULE)
     add_subdirectory(instruments)
 endif (NOT BUILD_INSTRUMENTS_MODULE)
+
+if (NOT BUILD_INSPECTOR_MODULE)
+    add_subdirectory(inspector)
+endif (NOT BUILD_INSPECTOR_MODULE)
