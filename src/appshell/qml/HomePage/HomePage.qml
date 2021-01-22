@@ -13,14 +13,6 @@ DockPage {
 
     objectName: "Home"
 
-    AccountModel {
-        id: accountModel
-
-        onUserAuthorizedChanged: {
-            homeCentral.load("scores")
-        }
-    }
-
     panels: [
         DockPanel {
             id: resourcesPanel
@@ -48,13 +40,14 @@ DockPage {
 
                         ButtonGroup.group: homeMenuButtons.radioButtonGroup
 
-                        userName: accountModel.accountInfo.userName
-                        avatarUrl: accountModel.accountInfo.avatarUrl
-
                         checked: homeCentral.currentCompName == "account"
 
                         onToggled: {
                             homeCentral.load("account")
+                        }
+
+                        onUserAuthorizedChanged: {
+                            homeCentral.load("scores")
                         }
                     }
 
@@ -89,7 +82,7 @@ DockPage {
             case "feautured":   currentComp = feauturedComp; break
             case "learn":       currentComp = learnComp; break
             case "support":     currentComp = supportComp; break
-            case "account":     currentComp = accountModel.userAuthorized ? accountDetailsComp : authorizationComp; break;
+            case "account":     currentComp = accountComp; break;
             }
         }
 
@@ -99,40 +92,13 @@ DockPage {
                 anchors.fill: parent
                 sourceComponent: homeCentral.currentComp
             }
-
-            Component.onCompleted: {
-                accountModel.load()
-            }
         }
     }
 
     Component {
-        id: authorizationComp
+        id: accountComp
 
-        AuthorizationPage {
-            onSignInRequested: {
-                accountModel.signIn()
-            }
-
-            onCreateAccountRequested: {
-                accountModel.createAccount()
-            }
-        }
-    }
-
-    Component {
-        id: accountDetailsComp
-
-        AccountDetailsPage {
-            userName: accountModel.accountInfo.userName
-            avatarUrl: accountModel.accountInfo.avatarUrl
-            profileUrl: accountModel.accountInfo.profileUrl
-            sheetmusicUrl: accountModel.accountInfo.sheetmusicUrl
-
-            onSignOutRequested: {
-                accountModel.signOut()
-            }
-        }
+        AccountPage {}
     }
 
     Component {

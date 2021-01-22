@@ -1,5 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Layouts 1.3
+
 import MuseScore.UiComponents 1.0
 import MuseScore.Cloud 1.0
 
@@ -45,11 +46,11 @@ FocusScope {
 
         visible: root.height > 600
 
-        source: "resources/mu_logo_background.jpeg"
+        source: "qrc:/qml/MuseScore/Cloud/resources/mu_logo_background.jpeg"
 
         Image {
             anchors.centerIn: parent
-            source: "resources/mu_logo.svg"
+            source: "qrc:/qml/MuseScore/Cloud/resources/mu_logo.svg"
         }
     }
 
