@@ -35,6 +35,7 @@ namespace Ms {
 extern Score::FileError importMusicXml(MasterScore*, const QString&);
 extern Score::FileError importCompressedMusicXml(MasterScore*, const QString&);
 extern Score::FileError importBB(MasterScore* score, const QString& name);
+extern bool saveBraille(Score* score, const QString& name);
 }
 
 namespace Ms {
@@ -189,6 +190,17 @@ bool MTest::saveMusicXml(MasterScore* score, const QString& saveName)
 bool MTest::saveCompareMusicXmlScore(MasterScore* score, const QString& saveName, const QString& compareWith)
 {
     saveMusicXml(score, saveName);
+    return compareFiles(saveName, compareWith);
+}
+
+bool MTest::saveBraille(MasterScore* score, const QString& saveName)
+{
+    return Ms::saveBraille(score, saveName);
+}
+
+bool MTest::saveCompareBrailleScore(MasterScore* score, const QString& saveName, const QString& compareWith)
+{
+    saveBraille(score, saveName);
     return compareFiles(saveName, compareWith);
 }
 

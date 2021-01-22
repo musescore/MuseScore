@@ -17,10 +17,12 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include <QtTest/QtTest>
-#include "mtest/testutils.h"
+#include "testing/qtestsuite.h"
+
+#include "testbase.h"
+
 #include "libmscore/score.h"
-#include "mscore/preferences.h"
+
 // start includes required for fixupScore()
 #include "libmscore/measure.h"
 #include "libmscore/staff.h"
@@ -31,7 +33,7 @@ namespace Ms {
 extern bool saveBraille(Score*, const QString&);
 }
 
-#define DIR QString("braille/")
+static const QString BRAILLE_DIR("braille_data/");
 
 using namespace Ms;
 
@@ -136,12 +138,12 @@ static void fixupScore(Score* score)
 void TestBrailleIO::brailleMscxExportTestRef(const char* file)
 {
     MScore::debugMode = true;
-    MasterScore* score = readScore(DIR + file + ".mscx");
+    MasterScore* score = readScore(BRAILLE_DIR + file + ".mscx");
     QVERIFY(score);
     fixupScore(score);
     score->doLayout();
     QVERIFY(saveBraille(score, QString(file) + ".brf"));
-    QVERIFY(saveCompareBrailleScore(score, QString(file) + ".brf", DIR + file + "_ref.brf"));
+    QVERIFY(saveCompareBrailleScore(score, QString(file) + ".brf", BRAILLE_DIR + file + "_ref.brf"));
     delete score;
 }
 

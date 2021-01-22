@@ -43,6 +43,9 @@ protected:
     bool saveMusicXml(Ms::MasterScore*, const QString& name);
     bool saveCompareMusicXmlScore(Ms::MasterScore*, const QString& saveName, const QString& compareWith);
 
+    bool saveBraille(Ms::MasterScore*, const QString& name);
+    bool saveCompareBrailleScore(MasterScore* score, const QString& saveName, const QString& compareWith);
+
     bool saveCompareMimeData(QByteArray, const QString& saveName, const QString& compareWith);
     Ms::Element* writeReadElement(Ms::Element* element);
     void initMTest();
