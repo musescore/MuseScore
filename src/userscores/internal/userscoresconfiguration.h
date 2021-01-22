@@ -25,8 +25,7 @@
 #include "extensions/iextensionsconfiguration.h"
 #include "notation/inotationconfiguration.h"
 
-namespace mu {
-namespace userscores {
+namespace mu::userscores {
 class UserScoresConfiguration : public IUserScoresConfiguration
 {
     INJECT(usescores, framework::IGlobalConfiguration, globalConfiguration)
@@ -54,7 +53,6 @@ private:
 
     async::Channel<QStringList> m_recentListChanged;
 };
-}
 }
 
 #endif // MU_USERSCORES_USERSCORECONFIGURATION_H

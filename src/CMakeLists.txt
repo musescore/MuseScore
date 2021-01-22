@@ -15,7 +15,11 @@ add_subdirectory(appshell)
 add_subdirectory(audiofile)
 add_subdirectory(context)
 add_subdirectory(notation)
-add_subdirectory(userscores)
+
+if (BUILD_USERSCORES_MODULE)
+    add_subdirectory(userscores)
+endif (BUILD_USERSCORES_MODULE)
+
 add_subdirectory(converter)
 add_subdirectory(workspace)
 

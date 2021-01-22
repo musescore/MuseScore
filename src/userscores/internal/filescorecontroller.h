@@ -28,8 +28,7 @@
 #include "notation/inotationcreator.h"
 #include "context/iglobalcontext.h"
 
-namespace mu {
-namespace userscores {
+namespace mu::userscores {
 class FileScoreController : public IFileScoreController, public actions::Actionable
 {
     INJECT(scores, actions::IActionsDispatcher, dispatcher)
@@ -58,7 +57,6 @@ private:
 
     void prependToRecentScoreList(io::path filePath);
 };
-}
 }
 
 #endif // MU_USERSCORES_FILESCORECONTROLLER_H

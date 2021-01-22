@@ -24,8 +24,7 @@
 #include "ui/view/iconcodes.h"
 #include "notation/notationtypes.h"
 
-namespace mu {
-namespace userscores {
+namespace mu::userscores {
 class AdditionalInfoModel : public QObject
 {
     Q_OBJECT
@@ -179,7 +178,6 @@ private:
     int m_measureCount = 0;
     notation::TimeSigType m_timeSignatureType;
 };
-}
 }
 
 #endif // MU_USERSCORES_ADDITIONALINFOMODEL_H

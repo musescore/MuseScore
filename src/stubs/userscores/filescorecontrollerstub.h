@@ -16,28 +16,22 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_USERSCORES_SCORETHUMBNAIL_H
-#define MU_USERSCORES_SCORETHUMBNAIL_H
+#ifndef MU_USERSCORES_FILESCORECONTROLLERSTUB_H
+#define MU_USERSCORES_FILESCORECONTROLLERSTUB_H
 
-#include <QQuickPaintedItem>
-#include <QPainter>
+#include "userscores/ifilescorecontroller.h"
 
 namespace mu::userscores {
-class ScoreThumbnail : public QQuickPaintedItem
+class FileScoreControllerStub : public IFileScoreController
 {
-    Q_OBJECT
-
 public:
-    ScoreThumbnail(QQuickItem* parent = nullptr);
+    void openScore(const actions::ActionData& args = actions::ActionData()) override;
+    void importScore() override;
+    void newScore() override;
 
-    Q_INVOKABLE void setThumbnail(QVariant pixmap);
-
-protected:
-    virtual void paint(QPainter* painter) override;
-
-private:
-    QPixmap m_thumbnail;
+    void saveScore() override;
+    void saveScoreAs() override;
 };
 }
 
-#endif // MU_USERSCORES_SCORETHUMBNAIL_H
+#endif // MU_USERSCORES_FILESCORECONTROLLERSTUB_H
