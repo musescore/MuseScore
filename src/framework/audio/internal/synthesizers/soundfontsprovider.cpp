@@ -25,7 +25,7 @@ static const std::string SF3_FILTER("*.sf3");
 static const std::string SFZ_FILTER("*.sfz");
 
 using namespace mu;
-using namespace mu::midi;
+using namespace mu::audio::synth;
 using namespace mu::framework;
 
 std::vector<io::path> SoundFontsProvider::soundFontPathsForSynth(const SynthName& synthName) const

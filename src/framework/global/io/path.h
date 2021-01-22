@@ -54,7 +54,7 @@ private:
     QByteArray m_path;
 };
 
-inline mu::log::Stream& operator<<(mu::log::Stream& s, const mu::io::path& p)
+inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::io::path& p)
 {
     s << p.c_str();
     return s;

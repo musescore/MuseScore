@@ -16,29 +16,28 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_MIDI_SYNTHESIZERSREGISTER_H
-#define MU_MIDI_SYNTHESIZERSREGISTER_H
+#ifndef MU_AUDIO_ISOUNDFONTSPROVIDER_H
+#define MU_AUDIO_ISOUNDFONTSPROVIDER_H
 
-#include <map>
-#include "../isynthesizersregister.h"
+#include <vector>
+#include "modularity/imoduleexport.h"
 
-namespace mu::midi {
-class SynthesizersRegister : public ISynthesizersRegister
+#include "synthtypes.h"
+#include "io/path.h"
+#include "async/notification.h"
+
+namespace mu::audio::synth {
+class ISoundFontsProvider : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(ISoundFontsProvider)
 public:
+    virtual ~ISoundFontsProvider() = default;
 
-    void registerSynthesizer(const SynthName& name, std::shared_ptr<ISynthesizer> s) override;
-    std::shared_ptr<ISynthesizer> synthesizer(const SynthName& name) const override;
-    std::vector<std::shared_ptr<ISynthesizer> > synthesizers() const override;
+    virtual std::vector<io::path> soundFontPathsForSynth(const SynthName& synth) const = 0;
+    virtual async::Notification soundFontPathsForSynthChanged(const SynthName& synth) const = 0;
 
-    void setDefaultSynthesizer(const SynthName& name) override;
-    std::shared_ptr<ISynthesizer> defaultSynthesizer() const override;
-
-private:
-
-    std::map<std::string, std::shared_ptr<ISynthesizer> > m_synths;
-    SynthName m_defaultName;
+    virtual std::vector<io::path> soundFontPaths(SoundFontFormats formats) const = 0;
 };
 }
 
-#endif // MU_MIDI_SYNTHESIZERSREGISTER_H
+#endif // MU_AUDIO_ISOUNDFONTSPROVIDER_H

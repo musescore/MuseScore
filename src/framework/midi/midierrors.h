@@ -27,12 +27,6 @@ enum class Err {
     NoError         = int(Ret::Code::Ok),
     UnknownError    = int(Ret::Code::MidiFirst),
 
-    // synth
-    SynthNotInited = 601,
-    SoundFontNotLoaded = 602,
-    SoundFontFailedLoad = 603,
-    SoundFontFailedUnload = 604,
-
     // midiport
     MidiInvalidDeviceID = 620,
     MidiFailedConnect = 621,

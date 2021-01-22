@@ -17,15 +17,16 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_MIDI_ISYNTHESIZER_H
-#define MU_MIDI_ISYNTHESIZER_H
+#ifndef MU_AUDIO_ISYNTHESIZER_H
+#define MU_AUDIO_ISYNTHESIZER_H
 
-#include "miditypes.h"
 #include "io/path.h"
 #include "ret.h"
+#include "synthtypes.h"
+#include "midi/miditypes.h"
 #include "audio/iaudiosource.h"
 
-namespace mu::midi {
+namespace mu::audio::synth {
 class ISynthesizer : public audio::IAudioSource
 {
 public:
@@ -43,27 +44,19 @@ public:
     virtual bool isActive() const = 0;
     virtual void setIsActive(bool arg) = 0;
 
-    virtual Ret setupChannels(const std::vector<Event>& events) = 0;
-    virtual bool handleEvent(const Event& e) = 0;
+    virtual Ret setupChannels(const std::vector<midi::Event>& events) = 0;
+    virtual bool handleEvent(const midi::Event& e) = 0;
     virtual void writeBuf(float* stream, unsigned int samples) = 0;
 
     virtual void allSoundsOff() = 0; // all channels
     virtual void flushSound() = 0;
-    virtual void channelSoundsOff(channel_t chan) = 0;
-    virtual bool channelVolume(channel_t chan, float val) = 0;  // 0. - 1.
-    virtual bool channelBalance(channel_t chan, float val) = 0; // -1. - 1.
-    virtual bool channelPitch(channel_t chan, int16_t val) = 0; // -12 - 12
-
-//    virtual unsigned int streamCount() const override = 0;
-//    {
-//        return AUDIO_CHANNELS;
-//    }
-
-//    virtual void forward(unsigned int sampleCount) override = 0;
-//    {
-//        writeBuf(m_buffer.data(), sampleCount);
-//    }
+    virtual void channelSoundsOff(midi::channel_t chan) = 0;
+    virtual bool channelVolume(midi::channel_t chan, float val) = 0;  // 0. - 1.
+    virtual bool channelBalance(midi::channel_t chan, float val) = 0; // -1. - 1.
+    virtual bool channelPitch(midi::channel_t chan, int16_t val) = 0; // -12 - 12
 };
+
+using ISynthesizerPtr = std::shared_ptr<ISynthesizer>;
 }
 
-#endif // MU_MIDI_ISYNTHESIZER_H
+#endif // MU_AUDIO_ISYNTHESIZER_H

@@ -20,7 +20,7 @@
 
 #include "log.h"
 
-using namespace mu::midi;
+using namespace mu::audio::synth;
 
 SynthsSettingsModel::SynthsSettingsModel(QObject* parent)
     : QObject(parent)

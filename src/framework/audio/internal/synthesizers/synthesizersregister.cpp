@@ -18,7 +18,7 @@
 //=============================================================================
 #include "synthesizersregister.h"
 
-using namespace mu::midi;
+using namespace mu::audio::synth;
 
 void SynthesizersRegister::registerSynthesizer(const SynthName& name, std::shared_ptr<ISynthesizer> s)
 {

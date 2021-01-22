@@ -32,8 +32,6 @@
 #include "midievent.h"
 
 namespace mu::midi {
-static const unsigned int AUDIO_CHANNELS = 2;
-
 using track_t = unsigned int;
 using program_t = unsigned int;
 using bank_t = unsigned int;
@@ -43,47 +41,7 @@ using tempo_t = unsigned int;
 using TempoMap = std::map<tick_t, tempo_t>;
 
 using SynthName = std::string;
-using SynthMap = std::map<channel_t, SynthName>;
-
-enum class SoundFontFormat {
-    Undefined = 0,
-    SF2,
-    SF3,
-    SFZ,
-};
-using SoundFontFormats = std::set<SoundFontFormat>;
-
-struct SynthesizerState {
-    enum class ValID {
-        UndefinedID = -1,
-        SoundFontID = 0,
-    };
-
-    struct Val {
-        ValID id = ValID::UndefinedID;
-        std::string val;
-        Val() = default;
-        Val(ValID id, const std::string& val)
-            : id(id), val(val) {}
-
-        bool operator ==(const Val& other) const { return other.id == id && other.val == val; }
-        bool operator !=(const Val& other) const { return !operator ==(other); }
-    };
-
-    struct Group {
-        std::string name;
-        std::vector<Val> vals;
-
-        bool isValid() const { return !name.empty(); }
-
-        bool operator ==(const Group& other) const { return other.name == name && other.vals == vals; }
-        bool operator !=(const Group& other) const { return !operator ==(other); }
-    };
-
-    std::map<std::string, Group> groups;
-
-    bool isNull() const { return groups.empty(); }
-};
+using SynthMap = std::map<midi::channel_t, SynthName>;
 
 using EventType = Ms::EventType;
 using CntrType = Ms::CntrType;

@@ -168,9 +168,9 @@ void PluginInstance::process(float* input, float* output, unsigned int samples)
 
     if (output && m_busInfo.audioOutput.size()) {
         for (unsigned int i = 0; i < samples; ++i) {
-            for (unsigned int s = 0; s < mu::midi::AUDIO_CHANNELS; ++s) {
+            for (unsigned int s = 0; s < audio::synth::AUDIO_CHANNELS; ++s) {
                 auto getFromChannel = std::min<unsigned int>(s, out[0].numChannels - 1);
-                output[i * mu::midi::AUDIO_CHANNELS + s] = out[0].channelBuffers32[getFromChannel][i];
+                output[i * audio::synth::AUDIO_CHANNELS + s] = out[0].channelBuffers32[getFromChannel][i];
             }
         }
     }

@@ -35,6 +35,12 @@ enum class Err {
     EngineInvalidParameter = 310,
 
     AudioStreamNotPresent = 320,
+
+    // synth
+    SynthNotInited = 331,
+    SoundFontNotLoaded = 332,
+    SoundFontFailedLoad = 333,
+    SoundFontFailedUnload = 334,
 };
 
 inline Ret make_ret(Err e)

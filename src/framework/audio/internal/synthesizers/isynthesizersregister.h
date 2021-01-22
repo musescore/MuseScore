@@ -16,28 +16,29 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_MIDI_ISOUNDFONTSPROVIDER_H
-#define MU_MIDI_ISOUNDFONTSPROVIDER_H
+#ifndef MU_AUDIO_ISYNTHESIZERSREGISTER_H
+#define MU_AUDIO_ISYNTHESIZERSREGISTER_H
 
-#include <vector>
+#include <string>
+#include <memory>
+
 #include "modularity/imoduleexport.h"
+#include "isynthesizer.h"
 
-#include "miditypes.h"
-#include "io/path.h"
-#include "async/notification.h"
-
-namespace mu::midi {
-class ISoundFontsProvider : MODULE_EXPORT_INTERFACE
+namespace mu::audio::synth {
+class ISynthesizersRegister : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(ISoundFontsProvider)
+    INTERFACE_ID(ISynthesizersRegister)
 public:
-    virtual ~ISoundFontsProvider() = default;
+    virtual ~ISynthesizersRegister() = default;
 
-    virtual std::vector<io::path> soundFontPathsForSynth(const SynthName& synth) const = 0;
-    virtual async::Notification soundFontPathsForSynthChanged(const SynthName& synth) const = 0;
+    virtual void registerSynthesizer(const SynthName& name, std::shared_ptr<ISynthesizer> s) = 0;
+    virtual std::shared_ptr<ISynthesizer> synthesizer(const SynthName& name) const = 0;
+    virtual std::vector<std::shared_ptr<ISynthesizer> > synthesizers() const = 0;
 
-    virtual std::vector<io::path> soundFontPaths(SoundFontFormats formats) const = 0;
+    virtual void setDefaultSynthesizer(const SynthName& name) = 0;
+    virtual std::shared_ptr<ISynthesizer> defaultSynthesizer() const = 0;
 };
 }
 
-#endif // MU_MIDI_ISOUNDFONTSPROVIDER_H
+#endif // MU_AUDIO_ISYNTHESIZERSREGISTER_H
