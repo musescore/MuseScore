@@ -24,6 +24,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/testbase.cpp
     ${CMAKE_CURRENT_LIST_DIR}/testbase.h
     ${CMAKE_CURRENT_LIST_DIR}/tst_mxml_io.cpp
+    #${CMAKE_CURRENT_LIST_DIR}/tst_biab.cpp fail compare with ref
 )
 
 set(MODULE_TEST_LINK
