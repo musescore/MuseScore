@@ -26,8 +26,7 @@
 #include "retval.h"
 #include "io/path.h"
 
-namespace mu {
-namespace userscores {
+namespace mu::userscores {
 class IUserScoresConfiguration : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IUserScoresConfiguration)
@@ -45,7 +44,6 @@ public:
     virtual QColor templatePreviewBackgroundColor() const = 0;
     virtual async::Channel<QColor> templatePreviewBackgroundColorChanged() const = 0;
 };
-}
 }
 
 #endif // MU_USERSCORES_IUSERSCORESCONFIGURATION_H

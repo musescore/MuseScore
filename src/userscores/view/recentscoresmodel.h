@@ -27,8 +27,7 @@
 #include "iuserscoresconfiguration.h"
 #include "notation/imsczmetareader.h"
 
-namespace mu {
-namespace userscores {
+namespace mu::userscores {
 class RecentScoresModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
@@ -60,7 +59,6 @@ private:
     QVariantList m_recentScores;
     QHash<int, QByteArray> m_roles;
 };
-}
 }
 
 #endif // MU_USERSCORES_RECENTSCORESMODEL_H

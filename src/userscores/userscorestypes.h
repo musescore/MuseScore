@@ -24,8 +24,7 @@
 
 #include "notation/notationtypes.h"
 
-namespace mu {
-namespace userscores {
+namespace mu::userscores {
 struct Template : public notation::Meta {
     QString categoryTitle;
 
@@ -35,7 +34,6 @@ struct Template : public notation::Meta {
 };
 
 using Templates = QList<Template>;
-}
 }
 
 #endif // MU_USERSCORES_TYPES_H

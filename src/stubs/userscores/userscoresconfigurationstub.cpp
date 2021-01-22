@@ -16,28 +16,41 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_USERSCORES_SCORETHUMBNAIL_H
-#define MU_USERSCORES_SCORETHUMBNAIL_H
+#include "userscoresconfigurationstub.h"
 
-#include <QQuickPaintedItem>
-#include <QPainter>
+using namespace mu::userscores;
+using namespace mu;
 
-namespace mu::userscores {
-class ScoreThumbnail : public QQuickPaintedItem
+ValCh<QStringList> UserScoresConfigurationStub::recentScoreList() const
 {
-    Q_OBJECT
-
-public:
-    ScoreThumbnail(QQuickItem* parent = nullptr);
-
-    Q_INVOKABLE void setThumbnail(QVariant pixmap);
-
-protected:
-    virtual void paint(QPainter* painter) override;
-
-private:
-    QPixmap m_thumbnail;
-};
+    return ValCh<QStringList>();
 }
 
-#endif // MU_USERSCORES_SCORETHUMBNAIL_H
+void UserScoresConfigurationStub::setRecentScoreList(const QStringList&)
+{
+}
+
+io::paths UserScoresConfigurationStub::templatesDirPaths() const
+{
+    return {};
+}
+
+io::path UserScoresConfigurationStub::scoresPath() const
+{
+    return io::path();
+}
+
+io::path UserScoresConfigurationStub::defaultSavingFilePath(const std::string&) const
+{
+    return io::path();
+}
+
+QColor UserScoresConfigurationStub::templatePreviewBackgroundColor() const
+{
+    return QColor();
+}
+
+async::Channel<QColor> UserScoresConfigurationStub::templatePreviewBackgroundColorChanged() const
+{
+    return async::Channel<QColor>();
+}

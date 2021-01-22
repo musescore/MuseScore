@@ -22,8 +22,7 @@
 #include "modularity/ioc.h"
 #include "internal/itemplatesrepository.h"
 
-namespace mu {
-namespace userscores {
+namespace mu::userscores {
 class TemplatesModel : public QObject
 {
     Q_OBJECT
@@ -69,7 +68,6 @@ private:
     int m_currentCategoryIndex = 0;
     int m_currentTemplateIndex = 0;
 };
-}
 }
 
 #endif // MU_USERSCORES_TEMPLATESMODEL_H

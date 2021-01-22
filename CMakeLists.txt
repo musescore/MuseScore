@@ -55,6 +55,7 @@ set(TELEMETRY_TRACK_ID "" CACHE STRING "Telemetry track id")
 set(CRASH_REPORT_URL "" CACHE STRING "URL where to send crash reports")
 
 option(BUILD_NETWORK_MODULE "Build network module" ON)
+option(BUILD_USERSCORES_MODULE "Build userscores module" ON)
 option(BUILD_EXTENSIONS_MODULE "Build extensions module" ON)
 option(BUILD_LANGUAGES_MODULE "Build languages module" ON)
 
