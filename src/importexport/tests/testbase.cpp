@@ -34,6 +34,7 @@
 namespace Ms {
 extern Score::FileError importMusicXml(MasterScore*, const QString&);
 extern Score::FileError importCompressedMusicXml(MasterScore*, const QString&);
+extern Score::FileError importBB(MasterScore* score, const QString& name);
 }
 
 namespace Ms {
@@ -104,6 +105,8 @@ MasterScore* MTest::readCreatedScore(const QString& name)
         rv = importMusicXml(score, name);
     } else if (csl == "mxl") {
         rv = importCompressedMusicXml(score, name);
+    } else if (csl == "sgu") {
+        rv = importBB(score, name);
     } else {
         rv = Score::FileError::FILE_UNKNOWN_TYPE;
     }
