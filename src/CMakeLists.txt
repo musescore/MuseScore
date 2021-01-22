@@ -28,12 +28,13 @@ if (NOT OS_IS_WASM)
     add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/beatroot beatroot) # for midiimport
     add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/rtf2html rtf2html) # for capella
 
-    add_subdirectory(cloud)
+    if (BUILD_CLOUD_MODULE)
+        add_subdirectory(cloud)
+    endif (BUILD_CLOUD_MODULE)
 
     if (BUILD_EXTENSIONS_MODULE)
         add_subdirectory(extensions)
     endif (BUILD_EXTENSIONS_MODULE)
-
 
     if (BUILD_LANGUAGES_MODULE)
         add_subdirectory(languages)

@@ -16,21 +16,28 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_CLOUD_CLOUDMODULE_H
-#define MU_CLOUD_CLOUDMODULE_H
+#include "accountcontrollerstub.h"
 
-#include "modularity/imodulesetup.h"
+using namespace mu::cloud;
 
-namespace mu::cloud {
-class CloudModule : public framework::IModuleSetup
+void AccountControllerStub::createAccount()
 {
-public:
-    std::string moduleName() const override;
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
-};
 }
 
-#endif // MU_CLOUD_CLOUDMODULE_H
+void AccountControllerStub::signIn()
+{
+}
+
+void AccountControllerStub::signOut()
+{
+}
+
+mu::ValCh<bool> AccountControllerStub::userAuthorized() const
+{
+    return mu::ValCh<bool>();
+}
+
+mu::ValCh<AccountInfo> AccountControllerStub::accountInfo() const
+{
+    return mu::ValCh<AccountInfo>();
+}

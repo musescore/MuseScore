@@ -71,7 +71,6 @@ void DockToolBar::onComponentCompleted()
 
 void DockToolBar::updateStyle()
 {
-    qDebug() << TOOLBAR_QSS;
     QString theme = uiConfiguration()->actualThemeType() == ui::IUiConfiguration::ThemeType::LIGHT_THEME
                     ? "light"
                     : "dark";
