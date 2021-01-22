@@ -30,8 +30,7 @@ namespace Ms {
 class XmlReader;
 }
 
-namespace mu {
-namespace instruments {
+namespace mu::instruments {
 class InstrumentsReader : public IInstrumentsReader
 {
     INJECT(instruments, system::IFileSystem, fileSystem)
@@ -59,7 +58,6 @@ private:
     void fillByDeffault(Instrument& instrument) const;
     void initInstrument(Instrument& sourceInstrument, const Instrument& destinationInstrument) const;
 };
-}
 }
 
 #endif // MU_INSTRUMENTS_INSTRUMENTSREADER_H

@@ -25,8 +25,7 @@
 
 #include "iinstrumentsconfiguration.h"
 
-namespace mu {
-namespace instruments {
+namespace mu::instruments {
 class InstrumentsConfiguration : public IInstrumentsConfiguration
 {
     INJECT(instruments, framework::IGlobalConfiguration, globalConfiguration)
@@ -38,7 +37,6 @@ public:
 private:
     io::paths extensionsPaths() const;
 };
-}
 }
 
 #endif // MU_INSTRUMENTS_INSTRUMENTSCONFIGURATION_H

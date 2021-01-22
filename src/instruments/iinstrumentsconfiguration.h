@@ -24,8 +24,7 @@
 #include <vector>
 #include "io/path.h"
 
-namespace mu {
-namespace instruments {
+namespace mu::instruments {
 class IInstrumentsConfiguration : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IInstrumentsConfiguration)
@@ -35,7 +34,6 @@ public:
 
     virtual io::paths instrumentPaths() const = 0;
 };
-}
 }
 
 #endif // MU_INSTRUMENTS_IINSTRUMENTSSCONFIGURATION_H

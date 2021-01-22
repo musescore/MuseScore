@@ -9,29 +9,27 @@
 //
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  MERCHANTABILITY or FIT-0NESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_INSTRUMENTS_INSTRUMENTSMODULE_H
-#define MU_INSTRUMENTS_INSTRUMENTSMODULE_H
+#include "selectinstrumentscenariostub.h"
 
-#include "modularity/imodulesetup.h"
+using namespace mu::instruments;
 
-namespace mu::instruments {
-class InstrumentsModule : public framework::IModuleSetup
+mu::RetVal<InstrumentList> SelectInstrumentsScenario::selectInstruments(ISelectInstrumentsScenario::SelectInstrumentsMode) const
 {
-public:
-    std::string moduleName() const override;
-    void registerExports() override;
-    void resolveImports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
-};
+    mu::RetVal<InstrumentList> result;
+    result.ret = make_ret(Ret::Code::NotSupported);
+    return result;
 }
 
-#endif // MU_INSTRUMENTS_INSTRUMENTSMODULE_H
+mu::RetVal<Instrument> SelectInstrumentsScenario::selectInstrument(const std::string&) const
+{
+    mu::RetVal<Instrument> result;
+    result.ret = make_ret(Ret::Code::NotSupported);
+    return result;
+}

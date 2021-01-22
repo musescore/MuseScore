@@ -34,8 +34,7 @@
 #include "iinstrumentsconfiguration.h"
 #include "iinstrumentsreader.h"
 
-namespace mu {
-namespace instruments {
+namespace mu::instruments {
 class InstrumentsRepository : public IInstrumentsRepository, public async::Asyncable
 {
     INJECT(instruments, IInstrumentsConfiguration, configuration)
@@ -59,7 +58,6 @@ private:
 
     async::Channel<InstrumentsMeta> m_instrumentsMetaChannel;
 };
-}
 }
 
 #endif // MU_INSTRUMENTS_INSTRUMENTSREPOSITORY_H
