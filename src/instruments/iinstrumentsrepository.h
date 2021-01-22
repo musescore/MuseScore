@@ -24,8 +24,7 @@
 #include "retval.h"
 #include "instrumentstypes.h"
 
-namespace mu {
-namespace instruments {
+namespace mu::instruments {
 class IInstrumentsRepository : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IInstrumentsRepository)
@@ -35,7 +34,6 @@ public:
 
     virtual RetValCh<InstrumentsMeta> instrumentsMeta() = 0;
 };
-}
 }
 
 #endif // MU_INSTRUMENTS_IINSTRUMENTSREPOSITORY_H

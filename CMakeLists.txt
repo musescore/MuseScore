@@ -57,6 +57,7 @@ set(CRASH_REPORT_URL "" CACHE STRING "URL where to send crash reports")
 option(BUILD_NETWORK_MODULE "Build network module" ON)
 option(BUILD_EXTENSIONS_MODULE "Build extensions module" ON)
 option(BUILD_LANGUAGES_MODULE "Build languages module" ON)
+option(BUILD_INSTRUMENTS_MODULE "Build instruments module" ON)
 
 option(SOUNDFONT3    "Ogg Vorbis compressed fonts"        ON)  # Enable Ogg Vorbis compressed fonts, requires Ogg & Vorbis
 option(DOWNLOAD_SOUNDFONT "Download the latest soundfont version as part of the build process" ON)

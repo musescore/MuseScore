@@ -45,7 +45,9 @@ add_subdirectory(playback)
 # Notation
 add_subdirectory(palette)
 add_subdirectory(inspector)
-add_subdirectory(instruments)
+if (BUILD_INSTRUMENTS_MODULE)
+    add_subdirectory(instruments)
+endif (BUILD_INSTRUMENTS_MODULE)
 
 # Stubs
 add_subdirectory(stubs)
