@@ -48,12 +48,12 @@ protected:
 
     bool saveCompareMimeData(QByteArray, const QString& saveName, const QString& compareWith);
     Ms::Element* writeReadElement(Ms::Element* element);
-    void initMTest();
+    void initMTest(const QString& root);
 
 public:
     static bool compareFilesFromPaths(const QString& f1, const QString& f2);
 
-    static QString rootPath();
+    QString rootPath();
 };
 }
 
