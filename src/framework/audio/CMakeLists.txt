@@ -42,11 +42,15 @@ elseif(OS_IS_WASM)
     )
 endif()
 
+include(${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/zerberus/internal/zerberus.cmake)
+add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/fluidsynth fluidsynth)
+
 set(MODULE_SRC
     ${DRIVER_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/audiomodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/audiomodule.h
     ${CMAKE_CURRENT_LIST_DIR}/audioerrors.h
+    ${CMAKE_CURRENT_LIST_DIR}/iaudioconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudioengine.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudioinsert.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiostream.h
@@ -98,6 +102,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/devtools/audioenginedevtools.cpp
     ${CMAKE_CURRENT_LIST_DIR}/devtools/audioenginedevtools.h
 
+    # rpc
     ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpctypes.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/irpcchannel.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/queuedrpcchannel.cpp
@@ -106,10 +111,43 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpccontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpcsequencer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpcsequencer.h
+
+    # synthesizers
+    ${ZERBERUS_SRC}
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/synthtypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/isynthesizer.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/isynthesizersregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/isoundfontsprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidsynth.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidsynth.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/zerberus/zerberussynth.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/zerberus/zerberussynth.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/synthesizercontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/synthesizercontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/synthesizersregister.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/synthesizersregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/soundfontsprovider.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/soundfontsprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/synthssettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/synthssettingsmodel.h
     )
 
-set(MODULE_INCLUDE
-    ${CMAKE_CURRENT_LIST_DIR}
+set(FLUIDSYNTH_DIR ${PROJECT_SOURCE_DIR}/thirdparty/fluidsynth/fluidsynth-2.1.4)
+set (FLUIDSYNTH_INC
+    ${FLUIDSYNTH_DIR}/include
+    ${FLUIDSYNTH_DIR}/src
+    ${FLUIDSYNTH_DIR}/src/external
+    ${FLUIDSYNTH_DIR}/src/utils
+    ${FLUIDSYNTH_DIR}/src/midi
+    ${FLUIDSYNTH_DIR}/src/rvoice
+    ${FLUIDSYNTH_DIR}/src/sfloader
+    ${FLUIDSYNTH_DIR}/src/bindings
+    ${FLUIDSYNTH_DIR}/src/synth
+    ${FLUIDSYNTH_DIR}/src/drivers
+    )
+
+set (MODULE_INCLUDE
+    ${FLUIDSYNTH_INC}
     )
 
 if(OS_IS_WIN)
@@ -121,5 +159,7 @@ if(OS_IS_LIN)
     set(MODULE_LINK ${ALSA_LIBRARIES} pthread )
     set(MODULE_INCLUDE ${MODULE_INCLUDE} ${ALSA_INCLUDE_DIRS} )
 endif()
+
+set(MODULE_LINK ${MODULE_LINK} fluidsynth )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

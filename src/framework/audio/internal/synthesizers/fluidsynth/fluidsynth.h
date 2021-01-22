@@ -17,8 +17,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_MIDI_FLUIDSYNTH_H
-#define MU_MIDI_FLUIDSYNTH_H
+#ifndef MU_AUDIO_FLUIDSYNTH_H
+#define MU_AUDIO_FLUIDSYNTH_H
 
 #include <memory>
 #include <vector>
@@ -26,13 +26,8 @@
 #include <functional>
 
 #include "../isynthesizer.h"
-#include "../miditypes.h"
 
-#include "modularity/ioc.h"
-
-//! NOTE Used for the test, the main synthesizer will not be this one.
-
-namespace mu::midi {
+namespace mu::audio::synth {
 struct Fluid;
 class FluidSynth : public ISynthesizer
 {
@@ -52,17 +47,17 @@ public:
     bool isActive() const override;
     void setIsActive(bool arg) override;
 
-    Ret setupChannels(const std::vector<Event>& events) override;
-    bool handleEvent(const Event& e) override;
+    Ret setupChannels(const std::vector<midi::Event>& events) override;
+    bool handleEvent(const midi::Event& e) override;
     void writeBuf(float* stream, unsigned int samples) override;
 
     void allSoundsOff() override; // all channels
     void flushSound() override;
 
-    void channelSoundsOff(channel_t chan) override;
-    bool channelVolume(channel_t chan, float val) override;  // 0. - 1.
-    bool channelBalance(channel_t chan, float val) override; // -1. - 1.
-    bool channelPitch(channel_t chan, int16_t pitch) override; // -12 - 12
+    void channelSoundsOff(midi::channel_t chan) override;
+    bool channelVolume(midi::channel_t chan, float val) override;  // 0. - 1.
+    bool channelBalance(midi::channel_t chan, float val) override; // -1. - 1.
+    bool channelPitch(midi::channel_t chan, int16_t pitch) override; // -12 - 12
 
     unsigned int streamCount() const override;
     void forward(unsigned int sampleCount) override;
@@ -81,7 +76,7 @@ private:
     };
 
     struct SoundFont {
-        int id;
+        int id = -1;
         io::path path;
     };
 
@@ -99,4 +94,4 @@ private:
 };
 }
 
-#endif //MU_MIDI_FLUIDSYNTH_H
+#endif //MU_AUDIO_FLUIDSYNTH_H

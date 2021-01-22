@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_MIDI_ZERBERUSSYNTH_H
-#define MU_MIDI_ZERBERUSSYNTH_H
+#ifndef MU_AUDIO_ZERBERUSSYNTH_H
+#define MU_AUDIO_ZERBERUSSYNTH_H
 
 #include "../isynthesizer.h"
 
@@ -25,7 +25,7 @@ namespace mu::zerberus {
 class Zerberus;
 }
 
-namespace mu::midi {
+namespace mu::audio::synth {
 class ZerberusSynth : public ISynthesizer
 {
 public:
@@ -46,17 +46,17 @@ public:
     bool isActive() const override;
     void setIsActive(bool arg) override;
 
-    Ret setupChannels(const std::vector<Event>& events) override;
-    bool handleEvent(const Event& e) override;
+    Ret setupChannels(const std::vector<midi::Event>& events) override;
+    bool handleEvent(const midi::Event& e) override;
     void writeBuf(float* stream, unsigned int samples) override;
 
     void allSoundsOff() override; // all channels
     void flushSound() override;
 
-    void channelSoundsOff(channel_t chan) override;
-    bool channelVolume(channel_t chan, float val) override;  // 0. - 1.
-    bool channelBalance(channel_t chan, float val) override; // -1. - 1.
-    bool channelPitch(channel_t chan, int16_t pitch) override; // -12 - 12
+    void channelSoundsOff(midi::channel_t chan) override;
+    bool channelVolume(midi::channel_t chan, float val) override;  // 0. - 1.
+    bool channelBalance(midi::channel_t chan, float val) override; // -1. - 1.
+    bool channelPitch(midi::channel_t chan, int16_t pitch) override; // -12 - 12
 
     unsigned int streamCount() const override;
     void forward(unsigned int sampleCount) override;
@@ -77,4 +77,4 @@ private:
 };
 }
 
-#endif // MU_MIDI_ZERBERUSSYNTH_H
+#endif // MU_AUDIO_ZERBERUSSYNTH_H

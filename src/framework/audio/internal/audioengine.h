@@ -33,12 +33,12 @@
 #include "audiobuffer.h"
 #include "internal/sequencer.h"
 #include "async/asyncable.h"
-#include "midi/isynthesizersregister.h"
+#include "synthesizers/isynthesizersregister.h"
 
 namespace mu::audio {
 class AudioEngine : public IAudioEngine, public async::Asyncable
 {
-    INJECT(audio, midi::ISynthesizersRegister, synthesizersRegister)
+    INJECT(audio, synth::ISynthesizersRegister, synthesizersRegister)
 public:
     ~AudioEngine();
 
@@ -50,7 +50,7 @@ public:
     bool isInited() const override;
     async::Channel<bool> initChanged() const override;
     unsigned int sampleRate() const override;
-    IMixer::ChannelID startSynthesizer(std::shared_ptr<midi::ISynthesizer> synthesizer) override;
+    IMixer::ChannelID startSynthesizer(synth::ISynthesizerPtr synthesizer) override;
     std::shared_ptr<IMixer> mixer() const override;
     std::shared_ptr<ISequencer> sequencer() const override;
     IAudioBufferPtr buffer() const override;

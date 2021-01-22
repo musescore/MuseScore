@@ -19,14 +19,38 @@
 #ifndef MU_AUDIO_AUDIOCONFIGURATION_H
 #define MU_AUDIO_AUDIOCONFIGURATION_H
 
+#include "../iaudioconfiguration.h"
+#include "modularity/ioc.h"
+#include "iglobalconfiguration.h"
+
 namespace mu::audio {
-class AudioConfiguration
+class AudioConfiguration : public IAudioConfiguration
 {
+    INJECT(audio, framework::IGlobalConfiguration, globalConfiguration)
 public:
     AudioConfiguration() = default;
 
     void init();
-    unsigned int driverBufferSize() const;
+
+    unsigned int driverBufferSize() const override;
+
+    std::vector<io::path> soundFontPaths() const override;
+
+    const synth::SynthesizerState& defaultSynthesizerState() const;
+    const synth::SynthesizerState& synthesizerState() const override;
+    Ret saveSynthesizerState(const synth::SynthesizerState& state) override;
+    async::Notification synthesizerStateChanged() const override;
+    async::Notification synthesizerStateGroupChanged(const std::string& groupName) const override;
+
+private:
+
+    io::path stateFilePath() const;
+    bool readState(const io::path& path, synth::SynthesizerState& state) const;
+    bool writeState(const io::path& path, const synth::SynthesizerState& state);
+
+    mutable synth::SynthesizerState m_state;
+    async::Notification m_synthesizerStateChanged;
+    mutable std::map<std::string, async::Notification> m_synthesizerStateGroupChanged;
 };
 }
 

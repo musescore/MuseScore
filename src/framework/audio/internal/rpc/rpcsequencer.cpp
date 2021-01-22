@@ -20,7 +20,7 @@
 
 #include "log.h"
 
-using namespace mu::async;
+using namespace mu;
 using namespace mu::audio;
 using namespace mu::audio::rpc;
 
@@ -87,7 +87,7 @@ ISequencer::Status RpcSequencer::status() const
     return m_status;
 }
 
-Channel<ISequencer::Status> RpcSequencer::statusChanged() const
+async::Channel<ISequencer::Status> RpcSequencer::statusChanged() const
 {
     return m_statusChanged;
 }
@@ -155,7 +155,7 @@ void RpcSequencer::unsetLoop()
     rpcChannel()->send(Msg(m_target, "unsetLoop"));
 }
 
-Channel<mu::midi::tick_t> RpcSequencer::midiTickPlayed(TrackID id) const
+async::Channel<mu::midi::tick_t> RpcSequencer::midiTickPlayed(TrackID id) const
 {
     auto found = m_midiTickPlayed.find(id);
     if (found == m_midiTickPlayed.end()) {
@@ -167,7 +167,7 @@ Channel<mu::midi::tick_t> RpcSequencer::midiTickPlayed(TrackID id) const
     return m_midiTickPlayed[id];
 }
 
-Notification RpcSequencer::positionChanged() const
+async::Notification RpcSequencer::positionChanged() const
 {
     return m_positionChanged;
 }

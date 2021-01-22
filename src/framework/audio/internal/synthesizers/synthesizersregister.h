@@ -16,36 +16,29 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_MIDI_SYNTHESIZERCONTROLLER_H
-#define MU_MIDI_SYNTHESIZERCONTROLLER_H
+#ifndef MU_AUDIO_SYNTHESIZERSREGISTER_H
+#define MU_AUDIO_SYNTHESIZERSREGISTER_H
 
-#include <future>
-#include <memory>
-#include "modularity/ioc.h"
-#include "iglobalconfiguration.h"
-#include "audio/iaudioengine.h"
-#include "async/asyncable.h"
-#include "../isynthesizersregister.h"
-#include "../isoundfontsprovider.h"
+#include <map>
+#include "isynthesizersregister.h"
 
-namespace mu::midi {
-class SynthesizerController : public async::Asyncable
+namespace mu::audio::synth {
+class SynthesizersRegister : public ISynthesizersRegister
 {
-    INJECT(midi, audio::IAudioEngine, audioEngine)
-    INJECT(midi, ISynthesizersRegister, synthRegister)
-    INJECT(midi, ISoundFontsProvider, sfprovider)
-
 public:
-    SynthesizerController();
-    ~SynthesizerController();
-    void init();
+
+    void registerSynthesizer(const SynthName& name, std::shared_ptr<ISynthesizer> s) override;
+    std::shared_ptr<ISynthesizer> synthesizer(const SynthName& name) const override;
+    std::vector<std::shared_ptr<ISynthesizer> > synthesizers() const override;
+
+    void setDefaultSynthesizer(const SynthName& name) override;
+    std::shared_ptr<ISynthesizer> defaultSynthesizer() const override;
 
 private:
-    void initSoundFonts(unsigned int sampleRate);
-    void reloadSoundFonts(std::shared_ptr<ISynthesizer> synth);
 
-    std::future<void> m_initilizer;
+    std::map<std::string, std::shared_ptr<ISynthesizer> > m_synths;
+    SynthName m_defaultName;
 };
 }
 
-#endif // MU_MIDI_SYNTHESIZERCONTROLLER_H
+#endif // MU_AUDIO_SYNTHESIZERSREGISTER_H

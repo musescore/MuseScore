@@ -56,10 +56,10 @@ std::string VSTSynthesizer::name() const
     return m_name;
 }
 
-midi::SoundFontFormats VSTSynthesizer::soundFontFormats() const
+audio::synth::SoundFontFormats VSTSynthesizer::soundFontFormats() const
 {
     NOT_SUPPORTED;
-    return { mu::midi::SoundFontFormat::Undefined };
+    return { audio::synth::SoundFontFormat::Undefined };
 }
 
 Ret VSTSynthesizer::addSoundFonts(std::vector<io::path> sfonts)
@@ -164,7 +164,7 @@ bool VSTSynthesizer::channelPitch(midi::channel_t chan, int16_t val)
 
 unsigned int VSTSynthesizer::streamCount() const
 {
-    return midi::AUDIO_CHANNELS;
+    return audio::synth::AUDIO_CHANNELS;
 }
 
 void VSTSynthesizer::forward(unsigned int sampleCount)

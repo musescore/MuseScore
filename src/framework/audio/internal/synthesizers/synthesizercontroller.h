@@ -16,38 +16,37 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_MIDI_SOUNDFONTSPROVIDER_H
-#define MU_MIDI_SOUNDFONTSPROVIDER_H
+#ifndef MU_AUDIO_SYNTHESIZERCONTROLLER_H
+#define MU_AUDIO_SYNTHESIZERCONTROLLER_H
 
-#include <map>
-
-#include "../isoundfontsprovider.h"
+#include <future>
+#include <memory>
 
 #include "modularity/ioc.h"
-#include "../imidiconfiguration.h"
-#include "../isynthesizersregister.h"
 #include "iglobalconfiguration.h"
-#include "system/ifilesystem.h"
+#include "audio/iaudioengine.h"
 #include "async/asyncable.h"
+#include "isynthesizersregister.h"
+#include "isoundfontsprovider.h"
 
-namespace mu::midi {
-class SoundFontsProvider : public ISoundFontsProvider, public async::Asyncable
+namespace mu::audio::synth {
+class SynthesizerController : public async::Asyncable
 {
-    INJECT(midi, IMidiConfiguration, configuration)
-    INJECT(midi, ISynthesizersRegister, synthRegister)
-    INJECT(midi, system::IFileSystem, fileSystem)
+    INJECT(audio, IAudioEngine, audioEngine)
+    INJECT(audio, ISynthesizersRegister, synthRegister)
+    INJECT(audio, ISoundFontsProvider, sfprovider)
 
 public:
-
-    std::vector<io::path> soundFontPathsForSynth(const SynthName& synthName) const override;
-    async::Notification soundFontPathsForSynthChanged(const SynthName& synth) const override;
-
-    std::vector<io::path> soundFontPaths(SoundFontFormats formats) const override;
+    SynthesizerController();
+    ~SynthesizerController();
+    void init();
 
 private:
+    void initSoundFonts(unsigned int sampleRate);
+    void reloadSoundFonts(std::shared_ptr<ISynthesizer> synth);
 
-    mutable std::map<SynthName, async::Notification > m_soundFontPathsForSynthChangedMap;
+    std::future<void> m_initilizer;
 };
 }
 
-#endif // MU_MIDI_SOUNDFONTSPROVIDER_H
+#endif // MU_AUDIO_SYNTHESIZERCONTROLLER_H
