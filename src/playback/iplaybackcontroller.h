@@ -25,8 +25,7 @@
 
 #include "notation/notationtypes.h"
 
-namespace mu {
-namespace playback {
+namespace mu::playback {
 class IPlaybackController : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IPlaybackController)
@@ -50,7 +49,6 @@ public:
 
     virtual void playElementOnClick(const notation::Element* e) = 0;
 };
-}
 }
 
 #endif // MU_PLAYBACK_IPLAYBACKCONTROLLER_H

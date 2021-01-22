@@ -44,7 +44,9 @@ endif()
 
 # Scenes common
 add_subdirectory(commonscene)
-add_subdirectory(playback)
+if (BUILD_PLAYBACK_MODULE)
+    add_subdirectory(playback)
+endif (BUILD_PLAYBACK_MODULE)
 
 # Notation
 add_subdirectory(palette)

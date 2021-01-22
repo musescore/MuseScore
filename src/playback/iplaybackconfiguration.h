@@ -20,8 +20,7 @@
 
 #include "modularity/imoduleexport.h"
 
-namespace mu {
-namespace playback {
+namespace mu::playback {
 class IPlaybackConfiguration : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IPlaybackConfiguration)
@@ -32,7 +31,6 @@ public:
     virtual bool isPlayElementOnClick() const = 0;
     virtual bool isPlayHarmonyOnClick() const = 0;
 };
-}
 }
 
 #endif // MU_PLAYBACK_IPLAYBACKCONFIGURATION_H
