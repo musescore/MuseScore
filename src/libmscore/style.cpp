@@ -192,7 +192,7 @@ static const StyleType styleTypes[] {
     { Sid::fourMeasureRepeatShowExtenders, "fourMeasureRepeatShowExtenders", QVariant(false) },
     { Sid::staffLineWidth,          "staffLineWidth",          Spatium(0.08) },       // 0.09375
     { Sid::ledgerLineWidth,         "ledgerLineWidth",         Spatium(0.16) },       // 0.1875
-    { Sid::ledgerLineLength,        "ledgerLineLength",        Spatium(.76) },        // notehead width + this value
+    { Sid::ledgerLineLength,        "ledgerLineLength",        Spatium(0.35) },        // notehead width + this value
     { Sid::accidentalDistance,      "accidentalDistance",      Spatium(0.22) },
     { Sid::accidentalNoteDistance,  "accidentalNoteDistance",  Spatium(0.22) },
     { Sid::bracketedAccidentalPadding,  "bracketedAccidentalPadding",  Spatium(0.175) }, // Padding inside parentheses for bracketed accidentals
