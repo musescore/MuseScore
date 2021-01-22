@@ -19,10 +19,6 @@
 
 set(MODULE midi)
 
-include(${CMAKE_CURRENT_LIST_DIR}/internal/zerberus/zerberus.cmake)
-
-add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/fluidsynth fluidsynth)
-
 include(GetPlatformInfo)
 if (OS_IS_WIN)
     set(DRIVER_SRC
@@ -49,13 +45,9 @@ endif()
 
 
 set(MODULE_SRC
-    ${ZERBERUS_SRC}
     ${DRIVER_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/midimodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/midimodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/isynthesizer.h
-    ${CMAKE_CURRENT_LIST_DIR}/isynthesizersregister.h
-    ${CMAKE_CURRENT_LIST_DIR}/isoundfontsprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/imidiconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/imidiinport.h
     ${CMAKE_CURRENT_LIST_DIR}/imidioutport.h
@@ -63,18 +55,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/midievent.h
     ${CMAKE_CURRENT_LIST_DIR}/miditypes.h
     ${CMAKE_CURRENT_LIST_DIR}/midierrors.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fluidsynth.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fluidsynth.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/synthssettingsmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/synthssettingsmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizercontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizercontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/zerberussynth.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/zerberussynth.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizersregister.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizersregister.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/soundfontsprovider.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/soundfontsprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/midiconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/midiconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/dummymidioutport.cpp
@@ -87,27 +67,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/devtools/midiportdevmodel.h
     )
 
-
-set(FLUIDSYNTH_DIR ${PROJECT_SOURCE_DIR}/thirdparty/fluidsynth/fluidsynth-2.1.4)
-set (FLUIDSYNTH_INC
-    ${FLUIDSYNTH_DIR}/include
-    ${FLUIDSYNTH_DIR}/src
-    ${FLUIDSYNTH_DIR}/src/external
-    ${FLUIDSYNTH_DIR}/src/utils
-    ${FLUIDSYNTH_DIR}/src/midi
-    ${FLUIDSYNTH_DIR}/src/rvoice
-    ${FLUIDSYNTH_DIR}/src/sfloader
-    ${FLUIDSYNTH_DIR}/src/bindings
-    ${FLUIDSYNTH_DIR}/src/synth
-    ${FLUIDSYNTH_DIR}/src/drivers
-    )
-
-set (MODULE_INCLUDE
-    ${FLUIDSYNTH_INC}
-    )
-
 set(MODULE_LINK
-    fluidsynth
     audiofile
     qzip
     )

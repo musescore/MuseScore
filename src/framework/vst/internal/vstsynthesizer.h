@@ -20,15 +20,14 @@
 #define MU_VST_VSTSYNTHESIZER_H
 
 #include "modularity/ioc.h"
-#include "framework/midi/isynthesizer.h"
-#include "framework/midi/isynthesizersregister.h"
+#include "framework/audio/internal/synthesizers/isynthesizer.h"
+#include "framework/audio/internal/synthesizers/isynthesizersregister.h"
 
-namespace mu {
-namespace vst {
+namespace mu::vst {
 class PluginInstance;
-class VSTSynthesizer : public mu::midi::ISynthesizer
+class VSTSynthesizer : public mu::audio::synth::ISynthesizer
 {
-    INJECT_STATIC(midi, mu::midi::ISynthesizersRegister, synthesizersRegister)
+    INJECT_STATIC(vst, mu::audio::synth::ISynthesizersRegister, synthesizersRegister)
 
 public:
     static std::shared_ptr<VSTSynthesizer> create(std::shared_ptr<PluginInstance> instance);
@@ -37,7 +36,7 @@ public:
     bool isValid() const override;
 
     std::string name() const override;
-    midi::SoundFontFormats soundFontFormats() const override;
+    audio::synth::SoundFontFormats soundFontFormats() const override;
 
     Ret init(float samplerate) override;
     void setSampleRate(unsigned int sampleRate) override;
@@ -72,5 +71,5 @@ private:
     async::Channel<unsigned int> m_streamsCountChanged;
 };
 }
-}
+
 #endif // MU_VST_VSTSYNTHESIZER_H

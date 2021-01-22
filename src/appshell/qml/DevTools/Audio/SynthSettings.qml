@@ -2,7 +2,7 @@ import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import MuseScore.UiComponents 1.0
-import MuseScore.Midi 1.0
+import MuseScore.Audio 1.0
 
 Rectangle {
 

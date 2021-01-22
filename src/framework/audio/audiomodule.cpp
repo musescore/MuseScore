@@ -30,6 +30,14 @@
 #include "internal/audiosanitizer.h"
 #include "internal/audiothread.h"
 
+// synthesizers
+#include "internal/synthesizers/fluidsynth/fluidsynth.h"
+#include "internal/synthesizers/zerberus/zerberussynth.h"
+#include "internal/synthesizers/soundfontsprovider.h"
+#include "internal/synthesizers/synthesizercontroller.h"
+#include "internal/synthesizers/synthesizersregister.h"
+#include "view/synthssettingsmodel.h"
+
 #include "log.h"
 
 using namespace mu::framework;
@@ -38,6 +46,7 @@ using namespace mu::audio;
 static std::shared_ptr<AudioConfiguration> s_audioConfiguration = std::make_shared<AudioConfiguration>();
 static std::shared_ptr<AudioThread> s_audioWorker = std::make_shared<AudioThread>();
 static std::shared_ptr<rpc::RpcSequencer> s_rpcSequencer = std::make_shared<rpc::RpcSequencer>();
+static synth::SynthesizerController s_synthesizerController;
 
 #ifdef Q_OS_LINUX
 #include "internal/platform/lin/linuxaudiodriver.h"
@@ -66,18 +75,30 @@ std::string AudioModule::moduleName() const
 
 void AudioModule::registerExports()
 {
-    //! TODO Will be removed
-    ioc()->registerExportNoDelete<IAudioEngine>(moduleName(), AudioEngine::instance());
-
-    ioc()->registerExport<rpc::IRpcChannel>(moduleName(), s_audioWorker->channel());
-
+    ioc()->registerExport<IAudioConfiguration>(moduleName(), s_audioConfiguration);
     ioc()->registerExport<IAudioDriver>(moduleName(), s_audioDriver);
     ioc()->registerExport<ISequencer>(moduleName(), s_rpcSequencer);
+
+    // synthesizers
+    std::shared_ptr<synth::ISynthesizersRegister> sreg = std::make_shared<synth::SynthesizersRegister>();
+    sreg->registerSynthesizer("Zerberus", std::make_shared<synth::ZerberusSynth>());
+    sreg->registerSynthesizer("Fluid", std::make_shared<synth::FluidSynth>());
+    sreg->setDefaultSynthesizer("Fluid");
+
+    ioc()->registerExport<synth::ISynthesizersRegister>(moduleName(), sreg);
+    ioc()->registerExport<synth::ISoundFontsProvider>(moduleName(), new synth::SoundFontsProvider());
+
+    //! TODO maybe need remove
+    ioc()->registerExport<rpc::IRpcChannel>(moduleName(), s_audioWorker->channel());
+
+    //! TODO Will be removed
+    ioc()->registerExportNoDelete<IAudioEngine>(moduleName(), AudioEngine::instance());
 }
 
 void AudioModule::registerUiTypes()
 {
     qmlRegisterType<AudioEngineDevTools>("MuseScore.Audio", 1, 0, "AudioEngineDevTools");
+    qmlRegisterType<synth::SynthsSettingsModel>("MuseScore.Audio", 1, 0, "SynthsSettingsModel");
 
     //! NOTE No Qml, as it will be, need to uncomment
     //framework::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(mu4_audio_QML_IMPORT);
@@ -146,6 +167,9 @@ void AudioModule::onInit(const framework::IApplication::RunMode&)
         LOGE() << "audio output open failed";
         return;
     }
+
+    // Setup synthesizers
+    s_synthesizerController.init();
 
     // Setup audio engine
     //! NOTE Send msg for init audio engine to worker

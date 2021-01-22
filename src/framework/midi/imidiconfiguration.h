@@ -19,12 +19,11 @@
 #ifndef MU_MIDI_IMIDICONFIGURATION_H
 #define MU_MIDI_IMIDICONFIGURATION_H
 
-#include <vector>
 #include "modularity/imoduleexport.h"
-#include "ret.h"
-#include "io/path.h"
-#include "miditypes.h"
-#include "async/notification.h"
+
+//! NOTE There used to be synthesizer settings here, now nothing
+//! but we will keep the interface, maybe something will appear,
+//! for example, midi port settings
 
 namespace mu::midi {
 class IMidiConfiguration : MODULE_EXPORT_INTERFACE
@@ -32,13 +31,6 @@ class IMidiConfiguration : MODULE_EXPORT_INTERFACE
     INTERFACE_ID(IMidiConfiguration)
 public:
     virtual ~IMidiConfiguration() = default;
-
-    virtual std::vector<io::path> soundFontPaths() const = 0;
-
-    virtual const SynthesizerState& synthesizerState() const = 0;
-    virtual Ret saveSynthesizerState(const SynthesizerState& state) = 0;
-    virtual async::Notification synthesizerStateChanged() const = 0;
-    virtual async::Notification synthesizerStateGroupChanged(const std::string& gname) const = 0;
 };
 }
 

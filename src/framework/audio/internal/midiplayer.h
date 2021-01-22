@@ -30,14 +30,14 @@
 #include "imidiplayer.h"
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "midi/isynthesizersregister.h"
+#include "synthesizers/isynthesizersregister.h"
 #include "midi/imidiportdatasender.h"
 
 namespace mu::audio {
 class MIDIPlayer : public IMIDIPlayer, public async::Asyncable
 {
-    INJECT(midi, midi::ISynthesizersRegister, synthesizersRegister)
-    INJECT(midi, midi::IMidiPortDataSender, midiPortDataSender)
+    INJECT(audio, synth::ISynthesizersRegister, synthesizersRegister)
+    INJECT(audio, midi::IMidiPortDataSender, midiPortDataSender)
 
 public:
     MIDIPlayer();
@@ -77,9 +77,8 @@ private:
     bool sendEvents(midi::tick_t fromTick, midi::tick_t toTick);
     void sendClear();
 
-    std::shared_ptr<midi::ISynthesizer> determineSynthesizer(midi::channel_t ch, const std::map<midi::channel_t,
-                                                                                                std::string>& synthmap) const;
-    std::shared_ptr<midi::ISynthesizer> synth(midi::channel_t ch) const;
+    synth::ISynthesizerPtr determineSynthesizer(midi::channel_t ch, const synth::SynthMap& synthmap) const;
+    synth::ISynthesizerPtr synth(midi::channel_t ch) const;
 
     void buildTempoMap();
     void setupChannels();
@@ -129,7 +128,7 @@ private:
 
     struct SynthState {
         std::set<midi::channel_t> channels;
-        std::shared_ptr<midi::ISynthesizer> synth;
+        synth::ISynthesizerPtr synth;
         std::vector<float> buf;
     };
     std::vector<SynthState> m_synthStates = {};

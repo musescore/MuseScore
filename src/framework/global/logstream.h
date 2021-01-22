@@ -20,7 +20,7 @@
 #define MU_LOGSTREAM_H
 
 #include "thirdparty/haw_logger/logger/logstream.h"
-namespace mu::log {
+namespace mu::logger {
 using Stream = haw::logger::Stream;
 }
 

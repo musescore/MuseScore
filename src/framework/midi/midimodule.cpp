@@ -22,19 +22,12 @@
 #include "log.h"
 
 #include "modularity/ioc.h"
-#include "internal/fluidsynth.h"
-#include "internal/zerberussynth.h"
-#include "internal/synthesizersregister.h"
+
 #include "internal/midiconfiguration.h"
-#include "internal/soundfontsprovider.h"
-
 #include "internal/midiportdatasender.h"
-
-#include "view/synthssettingsmodel.h"
 
 #include "internal/platform/lin/alsamidioutport.h"
 
-#include "internal/synthesizercontroller.h"
 #include "ui/iuiengine.h"
 #include "devtools/midiportdevmodel.h"
 
@@ -65,8 +58,6 @@ static std::shared_ptr<IMidiOutPort> midiOutPort = std::make_shared<DummyMidiOut
 static std::shared_ptr<IMidiInPort> midiInPort = std::make_shared<DummyMidiInPort>();
 #endif
 
-static SynthesizerController s_synthesizerController;
-
 std::string MidiModule::moduleName() const
 {
     return "midi";
@@ -74,14 +65,7 @@ std::string MidiModule::moduleName() const
 
 void MidiModule::registerExports()
 {
-    std::shared_ptr<ISynthesizersRegister> sreg = std::make_shared<SynthesizersRegister>();
-    sreg->registerSynthesizer("Zerberus", std::make_shared<ZerberusSynth>());
-    sreg->registerSynthesizer("Fluid", std::make_shared<FluidSynth>());
-    sreg->setDefaultSynthesizer("Fluid");
-
-    framework::ioc()->registerExport<ISynthesizersRegister>(moduleName(), sreg);
     framework::ioc()->registerExport<IMidiConfiguration>(moduleName(), new MidiConfiguration());
-    framework::ioc()->registerExport<ISoundFontsProvider>(moduleName(), new SoundFontsProvider());
     framework::ioc()->registerExport<IMidiPortDataSender>(moduleName(), new MidiPortDataSender());
     framework::ioc()->registerExport<IMidiOutPort>(moduleName(), midiOutPort);
     framework::ioc()->registerExport<IMidiInPort>(moduleName(), midiInPort);
@@ -89,11 +73,5 @@ void MidiModule::registerExports()
 
 void MidiModule::registerUiTypes()
 {
-    qmlRegisterType<SynthsSettingsModel>("MuseScore.Midi", 1, 0, "SynthsSettingsModel");
     qmlRegisterType<MidiPortDevModel>("MuseScore.Midi", 1, 0, "MidiPortDevModel");
-}
-
-void MidiModule::onInit(const framework::IApplication::RunMode&)
-{
-    s_synthesizerController.init();
 }

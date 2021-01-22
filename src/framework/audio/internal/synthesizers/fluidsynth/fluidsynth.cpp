@@ -27,14 +27,15 @@
 #include <fluidsynth.h>
 
 #include "log.h"
-#include "../midierrors.h"
+#include "audioerrors.h"
 
 static const double FLUID_GLOBAL_VOLUME_GAIN{ 1.8 };
 
 using namespace mu;
 using namespace mu::midi;
+using namespace mu::audio::synth;
 
-struct mu::midi::Fluid {
+struct mu::audio::synth::Fluid {
     fluid_settings_t* settings = nullptr;
     fluid_synth_t* synth = nullptr;
 
@@ -373,7 +374,7 @@ void FluidSynth::writeBuf(float* stream, unsigned int samples)
 
 unsigned int FluidSynth::streamCount() const
 {
-    return midi::AUDIO_CHANNELS;
+    return synth::AUDIO_CHANNELS;
 }
 
 void FluidSynth::forward(unsigned int sampleCount)

@@ -25,6 +25,7 @@
 #include "audiosanitizer.h"
 
 using namespace mu::audio;
+using namespace mu::audio::synth;
 
 AudioEngine* AudioEngine::instance()
 {
@@ -70,8 +71,8 @@ mu::Ret AudioEngine::init(int sampleRate, uint16_t readBufferSize)
     m_buffer->setMinSampleLag(readBufferSize);
 
     //! TODO Add a subscription to add or remove synthesizers
-    std::vector<std::shared_ptr<midi::ISynthesizer> > synths = synthesizersRegister()->synthesizers();
-    for (auto synth : synths) {
+    std::vector<ISynthesizerPtr> synths = synthesizersRegister()->synthesizers();
+    for (const ISynthesizerPtr& synth : synths) {
         startSynthesizer(synth);
     }
 
@@ -104,7 +105,7 @@ std::shared_ptr<IAudioBuffer> AudioEngine::buffer() const
     return m_buffer;
 }
 
-IMixer::ChannelID AudioEngine::startSynthesizer(std::shared_ptr<midi::ISynthesizer> synthesizer)
+IMixer::ChannelID AudioEngine::startSynthesizer(synth::ISynthesizerPtr synthesizer)
 {
     synthesizer->setSampleRate(sampleRate());
     return m_mixer->addChannel(synthesizer);

@@ -19,7 +19,7 @@
 #include "synthesizercontroller.h"
 #include "log.h"
 
-using namespace mu::midi;
+using namespace mu::audio::synth;
 
 SynthesizerController::SynthesizerController()
     : m_initilizer()

@@ -24,20 +24,20 @@
 #include <QStringList>
 
 #include "modularity/ioc.h"
-#include "midi/isoundfontsprovider.h"
-#include "midi/isynthesizersregister.h"
-#include "midi/imidiconfiguration.h"
+#include "internal/synthesizers/isoundfontsprovider.h"
+#include "internal/synthesizers/isynthesizersregister.h"
+#include "iaudioconfiguration.h"
 #include "iinteractive.h"
 
-namespace mu::midi {
+namespace mu::audio::synth {
 class SynthsSettingsModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(midi, ISoundFontsProvider, sfprovider)
-    INJECT(midi, ISynthesizersRegister, synthRegister)
-    INJECT(midi, IMidiConfiguration, configuration)
-    INJECT(midi, framework::IInteractive, interactive)
+    INJECT(audio, ISoundFontsProvider, sfprovider)
+    INJECT(audio, ISynthesizersRegister, synthRegister)
+    INJECT(audio, IAudioConfiguration, configuration)
+    INJECT(audio, framework::IInteractive, interactive)
 
 public:
     explicit SynthsSettingsModel(QObject* parent = nullptr);

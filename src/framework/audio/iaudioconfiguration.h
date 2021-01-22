@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2020 MuseScore BVBA and others
+//  Copyright (C) 2021 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -16,37 +16,31 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUDIO_IAUDIOENGINE_H
-#define MU_AUDIO_IAUDIOENGINE_H
-
-#include <string>
+#ifndef MU_AUDIO_IAUDIOCONFIGURATION_H
+#define MU_AUDIO_IAUDIOCONFIGURATION_H
 
 #include "modularity/imoduleexport.h"
-
+#include "io/path.h"
 #include "ret.h"
-#include "async/channel.h"
-#include "isequencer.h"
-#include "iaudiodriver.h"
-#include "iaudiobuffer.h"
-#include "imixer.h"
-#include "internal/synthesizers/isynthesizer.h"
+#include "async/notification.h"
+#include "internal/synthesizers/synthtypes.h"
 
 namespace mu::audio {
-class IAudioEngine : MODULE_EXPORT_INTERFACE
+class IAudioConfiguration : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IAudioEngine)
-
+    INTERFACE_ID(IAudioConfiguration)
 public:
-    virtual ~IAudioEngine() = default;
+    virtual ~IAudioConfiguration() = default;
 
-    virtual bool isInited() const = 0;
-    virtual async::Channel<bool> initChanged() const = 0;
-    virtual unsigned int sampleRate() const = 0;
-    virtual ISequencerPtr sequencer() const = 0;
-    virtual unsigned int startSynthesizer(synth::ISynthesizerPtr synthesizer) = 0;
-    virtual IMixerPtr mixer() const = 0;
-    virtual IAudioBufferPtr buffer() const = 0;
-    virtual void setBuffer(IAudioBufferPtr) = 0;
+    virtual unsigned int driverBufferSize() const = 0; // samples
+
+    // synthesizers
+    virtual std::vector<io::path> soundFontPaths() const = 0;
+    virtual const synth::SynthesizerState& synthesizerState() const = 0;
+    virtual Ret saveSynthesizerState(const synth::SynthesizerState& state) = 0;
+    virtual async::Notification synthesizerStateChanged() const = 0;
+    virtual async::Notification synthesizerStateGroupChanged(const std::string& groupName) const = 0;
 };
 }
-#endif // MU_AUDIO_IAUDIOENGINE_H
+
+#endif // MU_AUDIO_IAUDIOCONFIGURATION_H

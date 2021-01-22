@@ -21,13 +21,14 @@
 
 #include "log.h"
 #include "io/path.h"
-#include "zerberus/zerberus.h"
-#include "zerberus/controllers.h"
-#include "../miditypes.h"
-#include "../midierrors.h"
+#include "internal/zerberus.h"
+#include "internal/controllers.h"
+#include "midi/miditypes.h"
+#include "midi/midierrors.h"
 
 using namespace mu;
 using namespace mu::midi;
+using namespace mu::audio::synth;
 
 ZerberusSynth::ZerberusSynth()
 {
@@ -261,7 +262,7 @@ void ZerberusSynth::writeBuf(float* stream, unsigned int samples)
 
 unsigned int ZerberusSynth::streamCount() const
 {
-    return midi::AUDIO_CHANNELS;
+    return synth::AUDIO_CHANNELS;
 }
 
 void ZerberusSynth::forward(unsigned int sampleCount)
