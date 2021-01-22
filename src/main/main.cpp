@@ -57,7 +57,11 @@
 #include "commonscene/commonscenemodule.h"
 #include "palette/palettemodule.h"
 #include "inspector/inspectormodule.h"
+#ifdef BUILD_PLAYBACK_MODULE
 #include "playback/playbackmodule.h"
+#else
+#include "stubs/playback/playbackstubmodule.h"
+#endif
 #ifdef BUILD_INSTRUMENTS_MODULE
 #include "instruments/instrumentsmodule.h"
 #else
@@ -145,7 +149,11 @@ int main(int argc, char** argv)
 
     app.addModule(new mu::notation::NotationModule());
     app.addModule(new mu::commonscene::CommonSceneModule());
+#ifdef BUILD_PLAYBACK_MODULE
     app.addModule(new mu::playback::PlaybackModule());
+#else
+    app.addModule(new mu::playback::PlaybackStubModule());
+#endif
 
 #ifdef BUILD_INSTRUMENTS_MODULE
     app.addModule(new mu::instruments::InstrumentsModule());

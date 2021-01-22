@@ -58,6 +58,7 @@ option(BUILD_NETWORK_MODULE "Build network module" ON)
 option(BUILD_USERSCORES_MODULE "Build userscores module" ON)
 option(BUILD_EXTENSIONS_MODULE "Build extensions module" ON)
 option(BUILD_LANGUAGES_MODULE "Build languages module" ON)
+option(BUILD_PLAYBACK_MODULE "Build playback module" ON)
 option(BUILD_INSTRUMENTS_MODULE "Build instruments module" ON)
 option(BUILD_INSPECTOR_MODULE "Build inspector module" ON)
 

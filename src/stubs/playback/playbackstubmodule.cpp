@@ -16,19 +16,39 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_PLAYBACK_PLAYBACKCONFIGURATION_H
-#define MU_PLAYBACK_PLAYBACKCONFIGURATION_H
+#include "playbackstubmodule.h"
 
-#include "../iplaybackconfiguration.h"
+#include "modularity/ioc.h"
+#include "ui/iuiengine.h"
 
-namespace mu::playback {
-class PlaybackConfiguration : public IPlaybackConfiguration
+#include "playbackcontrollerstub.h"
+#include "playbackconfigurationstub.h"
+
+using namespace mu::playback;
+using namespace mu::framework;
+
+static void playback_init_qrc()
 {
-public:
-
-    bool isPlayElementOnClick() const override;
-    bool isPlayHarmonyOnClick() const override;
-};
+    Q_INIT_RESOURCE(playback);
 }
 
-#endif // MU_PLAYBACK_PLAYBACKCONFIGURATION_H
+std::string PlaybackStubModule::moduleName() const
+{
+    return "playback_stub";
+}
+
+void PlaybackStubModule::registerExports()
+{
+    ioc()->registerExport<IPlaybackController>(moduleName(), new PlaybackControllerStub());
+    ioc()->registerExport<IPlaybackConfiguration>(moduleName(), new PlaybackConfigurationStub());
+}
+
+void PlaybackStubModule::registerResources()
+{
+    playback_init_qrc();
+}
+
+void PlaybackStubModule::registerUiTypes()
+{
+    ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(playback_QML_IMPORT);
+}

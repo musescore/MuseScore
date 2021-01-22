@@ -15,20 +15,18 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-//=============================================================================
-#ifndef MU_PLAYBACK_PLAYBACKCONFIGURATION_H
-#define MU_PLAYBACK_PLAYBACKCONFIGURATION_H
+#ifndef MU_PLAYBACK_PLAYBACKCONFIGURATIONSTUB_H
+#define MU_PLAYBACK_PLAYBACKCONFIGURATIONSTUB_H
 
-#include "../iplaybackconfiguration.h"
+#include "playback/iplaybackconfiguration.h"
 
 namespace mu::playback {
-class PlaybackConfiguration : public IPlaybackConfiguration
+class PlaybackConfigurationStub : public IPlaybackConfiguration
 {
 public:
-
     bool isPlayElementOnClick() const override;
     bool isPlayHarmonyOnClick() const override;
 };
 }
 
-#endif // MU_PLAYBACK_PLAYBACKCONFIGURATION_H
+#endif // MU_PLAYBACK_PLAYBACKCONFIGURATIONSTUB_H

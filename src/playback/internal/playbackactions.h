@@ -22,8 +22,7 @@
 #include <vector>
 #include "actions/imoduleactions.h"
 
-namespace mu {
-namespace playback {
+namespace mu::playback {
 class PlaybackActions : public actions::IModuleActions
 {
 public:
@@ -34,7 +33,6 @@ private:
 
     static const std::vector<actions::ActionItem> m_actions;
 };
-}
 }
 
 #endif // MU_PLAYBACK_PLAYBACKACTIONS_H
