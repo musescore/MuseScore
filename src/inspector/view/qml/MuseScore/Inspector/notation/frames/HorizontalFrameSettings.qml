@@ -10,7 +10,7 @@ PopupViewButton {
     property alias model: horizontalFramePopup.model
 
     icon: IconCode.HORIZONTAL_FRAME
-    text: qsTrc("palette", "Horizontal frames")
+    text: qsTrc("inspector", "Horizontal frames")
 
     visible: root.model ? !root.model.isEmpty : false
 

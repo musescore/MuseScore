@@ -26,6 +26,8 @@ import MuseScore.Palette 1.0
 // TODO: make some properties 'property alias`?
 // and `readonly property`?
 
+import "internal"
+
 Rectangle {
     id: palettesWidget
 
