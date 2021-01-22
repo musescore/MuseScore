@@ -476,25 +476,25 @@ void Ambitus::draw(QPainter* p) const
 
     // draw ledger lines (if not in a palette)
     if (segment() && track() > -1) {
-        Fraction tick          = segment()->tick();
-        Staff* stf        = score()->staff(staffIdx());
-        qreal lineDist    = stf->lineDistance(tick);
-        int numOfLines    = stf->lines(tick);
-        qreal step        = lineDist * _spatium;
-        qreal stepTolerance = step * 0.1;
-        qreal ledgerOffset = score()->styleS(Sid::ledgerLineLength).val() * 0.5 * _spatium;
-        p->setPen(QPen(curColor(), score()->styleS(Sid::ledgerLineWidth).val() * _spatium,
-                       Qt::SolidLine, Qt::FlatCap));
+        Fraction tick  = segment()->tick();
+        Staff* staff   = score()->staff(staffIdx());
+        qreal lineDist = staff->lineDistance(tick);
+        int numOfLines = staff->lines(tick);
+        qreal step     = lineDist * _spatium;
+        qreal stepTolerance    = step * 0.1;
+        qreal ledgerLineLength = score()->styleS(Sid::ledgerLineLength).val() * _spatium;
+        qreal ledgerLineWidth  = score()->styleS(Sid::ledgerLineWidth).val() * _spatium;
+        p->setPen(QPen(curColor(), ledgerLineWidth, Qt::SolidLine, Qt::FlatCap));
         if (_topPos.y() - stepTolerance <= -step) {
-            qreal xMin = _topPos.x() - ledgerOffset;
-            qreal xMax = _topPos.x() + headWidth() + ledgerOffset;
+            qreal xMin = _topPos.x() - ledgerLineLength;
+            qreal xMax = _topPos.x() + headWidth() + ledgerLineLength;
             for (qreal y = -step; y >= _topPos.y() - stepTolerance; y -= step) {
                 p->drawLine(QPointF(xMin, y), QPointF(xMax, y));
             }
         }
         if (_bottomPos.y() + stepTolerance >= numOfLines * step) {
-            qreal xMin = _bottomPos.x() - ledgerOffset;
-            qreal xMax = _bottomPos.x() + headWidth() + ledgerOffset;
+            qreal xMin = _bottomPos.x() - ledgerLineLength;
+            qreal xMax = _bottomPos.x() + headWidth() + ledgerLineLength;
             for (qreal y = numOfLines * step; y <= _bottomPos.y() + stepTolerance; y += step) {
                 p->drawLine(QPointF(xMin, y), QPointF(xMax, y));
             }
