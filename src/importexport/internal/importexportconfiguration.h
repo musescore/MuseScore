@@ -33,12 +33,6 @@ public:
 
     std::string importGuitarProCharset() const override;
 
-    bool musicxmlImportBreaks() const override;
-    bool musicxmlImportLayout() const override;
-    bool musicxmlExportLayout() const override;
-
-    MusicxmlExportBreaksType musicxmlExportBreaksType() const override;
-
     int exportPdfDpiResolution() const override;
 
     void setExportPngDpiResolution(std::optional<float> dpi) override;

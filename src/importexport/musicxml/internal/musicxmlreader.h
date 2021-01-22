@@ -21,14 +21,12 @@
 
 #include "notation/inotationreader.h"
 
-namespace mu {
-namespace importexport {
+namespace mu::iex::musicxml {
 class MusicXmlReader : public notation::INotationReader
 {
 public:
 
     Ret read(Ms::MasterScore* score, const io::path& path) override;
 };
-}
 }
 #endif // MU_IMPORTEXPORT_MUSICXMLREADER_H

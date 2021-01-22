@@ -23,7 +23,6 @@
 #include "modularity/ioc.h"
 
 #include "notation/inotationreadersregister.h"
-#include "internal/musicxmlreader.h"
 #include "internal/notationmidireader.h"
 #include "internal/musedatareader.h"
 #include "internal/notationbbreader.h"
@@ -33,7 +32,6 @@
 #include "internal/guitarproreader.h"
 
 #include "notation/inotationwritersregister.h"
-#include "internal/musicxmlwriter.h"
 #include "internal/notationmidiwriter.h"
 #include "internal/pdfwriter.h"
 #include "internal/pngwriter.h"
@@ -42,8 +40,6 @@
 #include "internal/wavewriter.h"
 #include "internal/oggwriter.h"
 #include "internal/flacwriter.h"
-#include "internal/musicxmlwriter.h"
-#include "internal/mxlwriter.h"
 
 #include "internal/importexportconfiguration.h"
 
@@ -52,19 +48,9 @@ using namespace mu::notation;
 
 static std::shared_ptr<ImportexportConfiguration> s_configuration = std::make_shared<ImportexportConfiguration>();
 
-static void importexport_init_qrc()
-{
-    Q_INIT_RESOURCE(importexport);
-}
-
 std::string ImportExportModule::moduleName() const
 {
     return "importexport";
-}
-
-void ImportExportModule::registerResources()
-{
-    importexport_init_qrc();
 }
 
 void ImportExportModule::registerExports()
@@ -78,7 +64,6 @@ void ImportExportModule::onInit(const framework::IApplication::RunMode&)
 
     auto readers = framework::ioc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
-        readers->reg({ "xml", "musicxml", "mxl" }, std::make_shared<MusicXmlReader>());
         readers->reg({ "mid", "midi", "kar" }, std::make_shared<NotationMidiReader>());
         readers->reg({ "md" }, std::make_shared<MuseDataReader>());
         readers->reg({ "mgu", "sgu" }, std::make_shared<NotationBBReader>());
@@ -90,8 +75,6 @@ void ImportExportModule::onInit(const framework::IApplication::RunMode&)
 
     auto writers = framework::ioc()->resolve<INotationWritersRegister>(moduleName());
     if (writers) {
-        writers->reg({ "musicxml", "xml" }, std::make_shared<MusicXmlWriter>());
-        writers->reg({ "mxl" }, std::make_shared<MxlWriter>());
         writers->reg({ "mid", "midi", "kar" }, std::make_shared<NotationMidiWriter>());
         writers->reg({ "pdf" }, std::make_shared<PdfWriter>());
         writers->reg({ "svg" }, std::make_shared<SvgWriter>());

@@ -112,10 +112,10 @@
 #include "musicxmlfonthandler.h"
 #include "musicxmlsupport.h"
 
-#include "../../iimportexportconfiguration.h"
+#include "../../imusicxmlconfiguration.h"
 #include "modularity/ioc.h"
 
-using namespace mu::importexport;
+using namespace mu::iex::musicxml;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -328,7 +328,7 @@ typedef QMap<const Instrument*, int> MxmlInstrumentMap;
 
 class ExportMusicXml
 {
-    INJECT_STATIC(importexport, mu::importexport::IImportexportConfiguration, configuration)
+    INJECT_STATIC(iex_musicxml, mu::iex::musicxml::IMusicXmlConfiguration, configuration)
 
     Score* _score;
     XmlWriter _xml;
@@ -5658,8 +5658,8 @@ void ExportMusicXml::identification(XmlWriter& xml, Score const* const score)
     xml.tagE("supports element=\"beam\" type=\"yes\"");
     // set support for print new-page and new-system to match user preference
     // for MusicxmlExportBreaks::MANUAL support is "no" because "yes" breaks Finale NotePad import
-    IImportexportConfiguration::MusicxmlExportBreaksType breaksType = configuration()->musicxmlExportBreaksType();
-    if (configuration()->musicxmlExportLayout() && breaksType == IImportexportConfiguration::MusicxmlExportBreaksType::All) {
+    IMusicXmlConfiguration::MusicxmlExportBreaksType breaksType = configuration()->musicxmlExportBreaksType();
+    if (configuration()->musicxmlExportLayout() && breaksType == IMusicXmlConfiguration::MusicxmlExportBreaksType::All) {
         xml.tagE("supports element=\"print\" attribute=\"new-page\" type=\"yes\" value=\"yes\"");
         xml.tagE("supports element=\"print\" attribute=\"new-system\" type=\"yes\" value=\"yes\"");
     } else {
@@ -5831,15 +5831,15 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
 
     QString newSystemOrPage;               // new-[system|page]="yes" or empty
     if (!mpc.scoreStart) {
-        IImportexportConfiguration::MusicxmlExportBreaksType exportBreaksType = configuration()->musicxmlExportBreaksType();
+        IMusicXmlConfiguration::MusicxmlExportBreaksType exportBreaksType = configuration()->musicxmlExportBreaksType();
 
-        if (exportBreaksType == IImportexportConfiguration::MusicxmlExportBreaksType::All) {
+        if (exportBreaksType == IMusicXmlConfiguration::MusicxmlExportBreaksType::All) {
             if (mpc.pageStart) {
                 newSystemOrPage = " new-page=\"yes\"";
             } else if (mpc.systemStart) {
                 newSystemOrPage = " new-system=\"yes\"";
             }
-        } else if (exportBreaksType == IImportexportConfiguration::MusicxmlExportBreaksType::Manual) {
+        } else if (exportBreaksType == IMusicXmlConfiguration::MusicxmlExportBreaksType::Manual) {
             if (mpc.pageStart && prevPageBreak) {
                 newSystemOrPage = " new-page=\"yes\"";
             } else if (mpc.systemStart && (prevMeasLineBreak || prevMeasSectionBreak)) {

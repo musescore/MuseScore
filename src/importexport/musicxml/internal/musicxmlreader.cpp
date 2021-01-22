@@ -16,18 +16,27 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#include "musicxmlreader.h"
 
-#ifndef MU_IMPORTEXPORT_MXLWRITER_H
-#define MU_IMPORTEXPORT_MXLWRITER_H
+#include "io/path.h"
+#include "libmscore/score.h"
+#include "notation/notationerrors.h"
 
-#include "notation/abstractnotationwriter.h"
-
-namespace mu::importexport {
-class MxlWriter : public notation::AbstractNotationWriter
-{
-public:
-    Ret write(const notation::INotationPtr notation, system::IODevice& destinationDevice, const Options& options = Options()) override;
-};
+namespace Ms {
+extern Score::FileError importMusicXml(MasterScore*, const QString&);
+extern Score::FileError importCompressedMusicXml(MasterScore*, const QString&);
 }
 
-#endif // MU_IMPORTEXPORT_MXLWRITER_H
+using namespace mu::iex::musicxml;
+
+mu::Ret MusicXmlReader::read(Ms::MasterScore* score, const io::path& path)
+{
+    Ms::Score::FileError err = Ms::Score::FileError::FILE_UNKNOWN_TYPE;
+    std::string syffix = mu::io::syffix(path);
+    if (syffix == "xml" || syffix == "musicxml") {
+        err = Ms::importMusicXml(score, path.toQString());
+    } else if (syffix == "mxl") {
+        err = Ms::importCompressedMusicXml(score, path.toQString());
+    }
+    return mu::notation::scoreFileErrorToRet(err);
+}

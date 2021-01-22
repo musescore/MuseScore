@@ -17,17 +17,17 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_IMPORTEXPORT_MUSICXMLWRITER_H
-#define MU_IMPORTEXPORT_MUSICXMLWRITER_H
+#ifndef MU_IMPORTEXPORT_MXLWRITER_H
+#define MU_IMPORTEXPORT_MXLWRITER_H
 
 #include "notation/abstractnotationwriter.h"
 
-namespace mu::importexport {
-class MusicXmlWriter : public notation::AbstractNotationWriter
+namespace mu::iex::musicxml {
+class MxlWriter : public notation::AbstractNotationWriter
 {
 public:
     Ret write(const notation::INotationPtr notation, system::IODevice& destinationDevice, const Options& options = Options()) override;
 };
 }
 
-#endif // MU_IMPORTEXPORT_MUSICXMLWRITER_H
+#endif // MU_IMPORTEXPORT_MXLWRITER_H

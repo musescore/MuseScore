@@ -16,25 +16,23 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#ifndef MU_IMPORTEXPORT_MUSICXMLCONFIGURATION_H
+#define MU_IMPORTEXPORT_MUSICXMLCONFIGURATION_H
 
-#include "mxlwriter.h"
+#include "../imusicxmlconfiguration.h"
 
-#include "log.h"
-
-#include "musicxml/exportxml.h"
-
-using namespace mu::importexport;
-using namespace mu::system;
-
-mu::Ret MxlWriter::write(const notation::INotationPtr notation, IODevice& destinationDevice, const Options&)
+namespace mu::iex::musicxml {
+class MusicXmlConfiguration : public IMusicXmlConfiguration
 {
-    IF_ASSERT_FAILED(notation) {
-        return make_ret(Ret::Code::UnknownError);
-    }
-    Ms::Score* score = notation->elements()->msScore();
-    IF_ASSERT_FAILED(score) {
-        return make_ret(Ret::Code::UnknownError);
-    }
+public:
+    void init();
 
-    return Ms::saveMxl(score, &destinationDevice);
+    bool musicxmlImportBreaks() const override;
+    bool musicxmlImportLayout() const override;
+    bool musicxmlExportLayout() const override;
+
+    MusicxmlExportBreaksType musicxmlExportBreaksType() const override;
+};
 }
+
+#endif // MU_IMPORTEXPORT_MUSICXMLCONFIGURATION_H

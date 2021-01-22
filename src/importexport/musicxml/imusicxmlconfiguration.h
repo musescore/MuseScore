@@ -16,25 +16,31 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#ifndef MU_IMPORTEXPORT_IMUSICXMLCONFIGURATION_H
+#define MU_IMPORTEXPORT_IMUSICXMLCONFIGURATION_H
 
-#include "musicxmlwriter.h"
+#include <string>
+#include <optional>
+#include "modularity/imoduleexport.h"
 
-#include "log.h"
-
-#include "libmscore/score.h"
-#include "musicxml/exportxml.h"
-
-using namespace mu::importexport;
-using namespace mu::system;
-
-mu::Ret MusicXmlWriter::write(const notation::INotationPtr notation, IODevice& destinationDevice, const Options&)
+namespace mu::iex::musicxml {
+class IMusicXmlConfiguration : MODULE_EXPORT_INTERFACE
 {
-    IF_ASSERT_FAILED(notation) {
-        return make_ret(Ret::Code::UnknownError);
-    }
-    Ms::Score* score = notation->elements()->msScore();
-    IF_ASSERT_FAILED(score) {
-        return make_ret(Ret::Code::UnknownError);
-    }
-    return Ms::saveXml(score, &destinationDevice);
+    INTERFACE_ID(IMusicXmlConfiguration)
+
+public:
+    virtual ~IMusicXmlConfiguration() = default;
+
+    virtual bool musicxmlImportBreaks() const = 0;
+    virtual bool musicxmlImportLayout() const = 0;
+    virtual bool musicxmlExportLayout() const = 0;
+
+    enum class MusicxmlExportBreaksType {
+        All, Manual, No
+    };
+
+    virtual MusicxmlExportBreaksType musicxmlExportBreaksType() const = 0;
+};
 }
+
+#endif // MU_IMPORTEXPORT_IMUSICXMLCONFIGURATION_H
