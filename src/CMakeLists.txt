@@ -50,7 +50,9 @@ if (BUILD_PLAYBACK_MODULE)
 endif (BUILD_PLAYBACK_MODULE)
 
 # Notation
-add_subdirectory(palette)
+if (BUILD_PALETTE_MODULE)
+    add_subdirectory(palette)
+endif (BUILD_PALETTE_MODULE)
 if (BUILD_INSTRUMENTS_MODULE)
     add_subdirectory(instruments)
 endif (BUILD_INSTRUMENTS_MODULE)

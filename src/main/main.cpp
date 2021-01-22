@@ -54,7 +54,11 @@
 #include "importexport/importexportmodule.h"
 #include "importexport/musicxml/musicxmlmodule.h"
 #include "commonscene/commonscenemodule.h"
+#ifdef BUILD_PALETTE_MODULE
 #include "palette/palettemodule.h"
+#else
+#include "stubs/palette/palettestubmodule.h"
+#endif
 #include "inspector/inspectormodule.h"
 #ifdef BUILD_PLAYBACK_MODULE
 #include "playback/playbackmodule.h"
@@ -168,7 +172,11 @@ int main(int argc, char** argv)
 #endif
 
     app.addModule(new mu::inspector::InspectorModule());
+#ifdef BUILD_PALETTE_MODULE
     app.addModule(new mu::palette::PaletteModule());
+#else
+    app.addModule(new mu::palette::PaletteStubModule());
+#endif
     app.addModule(new mu::converter::ConverterModule());
 
 #ifndef Q_OS_WASM

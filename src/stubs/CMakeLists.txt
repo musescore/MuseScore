@@ -21,6 +21,10 @@ if (NOT BUILD_PLAYBACK_MODULE)
     add_subdirectory(playback)
 endif (NOT BUILD_PLAYBACK_MODULE)
 
+if (NOT BUILD_PALETTE_MODULE)
+    add_subdirectory(palette)
+endif (NOT BUILD_PALETTE_MODULE)
+
 if (NOT BUILD_INSTRUMENTS_MODULE)
     add_subdirectory(instruments)
 endif (NOT BUILD_INSTRUMENTS_MODULE)
