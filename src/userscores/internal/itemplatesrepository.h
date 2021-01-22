@@ -26,8 +26,7 @@
 
 #include "retval.h"
 
-namespace mu {
-namespace userscores {
+namespace mu::userscores {
 class ITemplatesRepository : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(ITemplatesRepository)
@@ -37,7 +36,6 @@ public:
 
     virtual RetVal<Templates> templates() const = 0;
 };
-}
 }
 
 #endif // MU_USERSCORES_ITEMPLATESREPOSITORY_H

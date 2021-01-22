@@ -25,8 +25,7 @@
 #include "io/path.h"
 #include "actions/actiontypes.h"
 
-namespace mu {
-namespace userscores {
+namespace mu::userscores {
 class IFileScoreController : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IFileScoreController)
@@ -41,7 +40,6 @@ public:
     virtual void saveScore() = 0;
     virtual void saveScoreAs() = 0;
 };
-}
 }
 
 #endif // MU_USERSCORES_IFILESCORECONTROLLER_H

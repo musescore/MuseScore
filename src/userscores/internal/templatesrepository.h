@@ -27,8 +27,7 @@
 #include "notation/imsczmetareader.h"
 #include "system/ifilesystem.h"
 
-namespace mu {
-namespace userscores {
+namespace mu::userscores {
 class TemplatesRepository : public ITemplatesRepository
 {
     INJECT(userscores, IUserScoresConfiguration, configuration)
@@ -42,7 +41,6 @@ private:
     Templates loadTemplates(const io::paths& filePaths) const;
     QString correctedTitle(const QString& title) const;
 };
-}
 }
 
 #endif // MU_USERSCORES_TEMPLATESREPOSITORY_H

@@ -16,28 +16,25 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_USERSCORES_SCORETHUMBNAIL_H
-#define MU_USERSCORES_SCORETHUMBNAIL_H
+#ifndef MU_USERSCORES_USERSCORESCONFIGURATIONSTUB_H
+#define MU_USERSCORES_USERSCORESCONFIGURATIONSTUB_H
 
-#include <QQuickPaintedItem>
-#include <QPainter>
+#include "userscores/iuserscoresconfiguration.h"
 
 namespace mu::userscores {
-class ScoreThumbnail : public QQuickPaintedItem
+class UserScoresConfigurationStub : public IUserScoresConfiguration
 {
-    Q_OBJECT
-
 public:
-    ScoreThumbnail(QQuickItem* parent = nullptr);
+    ValCh<QStringList> recentScoreList() const override;
+    void setRecentScoreList(const QStringList& recentScoreList) override;
 
-    Q_INVOKABLE void setThumbnail(QVariant pixmap);
+    io::paths templatesDirPaths() const override;
+    io::path scoresPath() const override;
+    io::path defaultSavingFilePath(const std::string& fileName) const override;
 
-protected:
-    virtual void paint(QPainter* painter) override;
-
-private:
-    QPixmap m_thumbnail;
+    QColor templatePreviewBackgroundColor() const override;
+    async::Channel<QColor> templatePreviewBackgroundColorChanged() const override;
 };
 }
 
-#endif // MU_USERSCORES_SCORETHUMBNAIL_H
+#endif // MU_USERSCORES_USERSCORESCONFIGURATIONSTUB_H

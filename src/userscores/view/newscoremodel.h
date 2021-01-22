@@ -30,8 +30,7 @@
 #include "context/iglobalcontext.h"
 #include "instruments/instrumentstypes.h"
 
-namespace mu {
-namespace userscores {
+namespace mu::userscores {
 class NewScoreModel : public QObject
 {
     Q_OBJECT
@@ -49,7 +48,6 @@ public:
 private:
     notation::ScoreCreateOptions parseOptions(const QVariantMap& info) const;
 };
-}
 }
 
 #endif // MU_USERSCORES_NEWSCOREMODEL_H
