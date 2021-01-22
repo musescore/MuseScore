@@ -17,6 +17,21 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-add_subdirectory(biab)
-add_subdirectory(braille)
-add_subdirectory(musicxml)
+set(MODULE_TEST importexport_musicxml_tests)
+
+set(MODULE_TEST_SRC
+    ${CMAKE_CURRENT_LIST_DIR}/../environment.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../testbase.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../testbase.h
+    ${CMAKE_CURRENT_LIST_DIR}/tst_mxml_io.cpp
+)
+
+set(MODULE_TEST_LINK
+    libmscore
+    fonts
+    importexport
+    )
+
+set(MODULE_TEST_DATA_ROOT ${CMAKE_CURRENT_LIST_DIR})
+
+include(${PROJECT_SOURCE_DIR}/src/framework/testing/qtest.cmake)

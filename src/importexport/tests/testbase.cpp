@@ -231,14 +231,14 @@ bool MTest::saveCompareMimeData(QByteArray mimeData, const QString& saveName, co
 
 QString MTest::rootPath()
 {
-    return QString(importexport_tests_DATA_ROOT);
+    return root;
 }
 
 //---------------------------------------------------------
 //   initMTest
 //---------------------------------------------------------
 
-void MTest::initMTest()
+void MTest::initMTest(const QString& rootDir)
 {
 //      DPI  = 120;
 //      PDPI = 120;
@@ -249,8 +249,8 @@ void MTest::initMTest()
     new MuseScoreCore;
     mscore->init();
 
-    root = rootPath();
+    root = rootDir;
     loadInstrumentTemplates(":/instruments.xml");
-    score = readScore("test.mscx");
+    score = readScore("../test.mscx");
 }
 }
