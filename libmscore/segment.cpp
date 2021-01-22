@@ -1165,7 +1165,7 @@ void Segment::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
       for (int track = 0; track < score()->nstaves() * VOICES; ++track) {
             int staffIdx = track/VOICES;
-            if (!all && !(score()->staff(staffIdx)->show())) {
+            if (!all && !(score()->staff(staffIdx)->show() && system() && !system()->staves()->empty() && system()->staff(staffIdx)->show())) {
                   track += VOICES - 1;
                   continue;
                   }
