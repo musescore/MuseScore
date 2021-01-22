@@ -12,7 +12,7 @@
 
 #include "testing/qtestsuite.h"
 
-#include "testbase.h"
+#include "../testbase.h"
 
 #include "libmscore/score.h"
 
@@ -33,7 +33,7 @@ namespace Ms {
 extern bool saveMxl(Score*, const QString&);
 }
 
-static const QString XML_IO_DATA_DIR("xml_io_data/");
+static const QString XML_IO_DATA_DIR("data/");
 
 static const std::string MODULE_NAME("importexport");
 
@@ -236,7 +236,7 @@ private slots:
 
 void TestMxmlIO::initTestCase()
 {
-    initMTest();
+    initMTest(QString(importexport_musicxml_tests_DATA_ROOT));
 }
 
 //---------------------------------------------------------

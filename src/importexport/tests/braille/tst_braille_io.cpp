@@ -19,7 +19,7 @@
 
 #include "testing/qtestsuite.h"
 
-#include "testbase.h"
+#include "../testbase.h"
 
 #include "libmscore/score.h"
 
@@ -33,7 +33,7 @@ namespace Ms {
 extern bool saveBraille(Score*, const QString&);
 }
 
-static const QString BRAILLE_DIR("braille_data/");
+static const QString BRAILLE_DIR("data/");
 
 using namespace Ms;
 
@@ -114,7 +114,7 @@ private slots:
 
 void TestBrailleIO::initTestCase()
 {
-    initMTest();
+    initMTest(QString(importexport_braille_tests_DATA_ROOT));
 }
 
 //---------------------------------------------------------
