@@ -4,16 +4,32 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Cloud 1.0
 
+import "internal"
+
 GradientTabButton {
     id: root
 
-    property string userName: ""
-    property string avatarUrl: ""
+    property string userName: accountModel.accountInfo.userName
+    property string avatarUrl: accountModel.accountInfo.avatarUrl
+
+    signal userAuthorizedChanged()
 
     orientation: Qt.Horizontal
 
     title: Boolean(userName) ? userName : qsTrc("cloud", "My Account")
     iconComponent: Boolean(avatarUrl) ? avatarComp : stubAvatarComp
+
+    AccountModel {
+        id: accountModel
+
+        onUserAuthorizedChanged: {
+            root.userAuthorizedChanged()
+        }
+    }
+
+    Component.onCompleted: {
+        accountModel.load()
+    }
 
     Component {
         id: stubAvatarComp
