@@ -16,21 +16,39 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_CLOUD_CLOUDMODULE_H
-#define MU_CLOUD_CLOUDMODULE_H
+#include "cloudstubmodule.h"
 
-#include "modularity/imodulesetup.h"
+#include "modularity/ioc.h"
+#include "ui/iuiengine.h"
 
-namespace mu::cloud {
-class CloudModule : public framework::IModuleSetup
+#include "accountcontrollerstub.h"
+#include "mp3exporterstub.h"
+
+using namespace mu::cloud;
+using namespace mu::framework;
+
+static void cloud_init_qrc()
 {
-public:
-    std::string moduleName() const override;
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
-};
+    Q_INIT_RESOURCE(cloud);
 }
 
-#endif // MU_CLOUD_CLOUDMODULE_H
+std::string CloudStubModule::moduleName() const
+{
+    return "cloud_stub";
+}
+
+void CloudStubModule::registerExports()
+{
+    ioc()->registerExport<IAccountController>(moduleName(), new AccountControllerStub());
+    ioc()->registerExport<IMp3Exporter>(moduleName(), new Mp3Exporter());
+}
+
+void CloudStubModule::registerResources()
+{
+    cloud_init_qrc();
+}
+
+void CloudStubModule::registerUiTypes()
+{
+    ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(cloud_QML_IMPORT);
+}

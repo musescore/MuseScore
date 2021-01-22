@@ -16,21 +16,17 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_CLOUD_CLOUDMODULE_H
-#define MU_CLOUD_CLOUDMODULE_H
+#ifndef MU_CLOUD_MP3EXPORTERSTUB_H
+#define MU_CLOUD_MP3EXPORTERSTUB_H
 
-#include "modularity/imodulesetup.h"
+#include "cloud/imp3exporter.h"
 
 namespace mu::cloud {
-class CloudModule : public framework::IModuleSetup
+class Mp3Exporter : public IMp3Exporter
 {
 public:
-    std::string moduleName() const override;
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
+    Ret saveCurrentScoreMp3(const QString& mp3Path, int mp3Bitrate) override;
 };
 }
 
-#endif // MU_CLOUD_CLOUDMODULE_H
+#endif // MU_CLOUD_MP3EXPORTERSTUB_H

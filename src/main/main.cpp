@@ -43,7 +43,6 @@
 #include "framework/midi/midimodule.h"
 
 #include "appshell/appshellmodule.h"
-#include "cloud/cloudmodule.h"
 #include "context/contextmodule.h"
 #ifdef BUILD_USERSCORES_MODULE
 #include "userscores/userscoresmodule.h"
@@ -81,7 +80,11 @@
 #include "workspace/workspacemodule.h"
 #include "plugins/pluginsmodule.h"
 #include "importexport/importexportmodule.h"
+#ifdef BUILD_CLOUD_MODULE
 #include "cloud/cloudmodule.h"
+#else
+#include "stubs/cloud/cloudstubmodule.h"
+#endif
 
 #ifdef BUILD_EXTENSIONS_MODULE
 #include "extensions/extensionsmodule.h"
@@ -173,8 +176,11 @@ int main(int argc, char** argv)
     app.addModule(new mu::iex::musicxml::MusicXmlModule());
     app.addModule(new mu::workspace::WorkspaceModule());
     app.addModule(new mu::plugins::PluginsModule());
+#ifdef BUILD_CLOUD_MODULE
     app.addModule(new mu::cloud::CloudModule());
-
+#else
+    app.addModule(new mu::cloud::CloudStubModule());
+#endif
 #ifdef BUILD_EXTENSIONS_MODULE
     app.addModule(new mu::extensions::ExtensionsModule());
 #else
