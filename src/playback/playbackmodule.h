@@ -21,8 +21,7 @@
 
 #include "modularity/imodulesetup.h"
 
-namespace mu {
-namespace playback {
+namespace mu::playback {
 class PlaybackModule : public framework::IModuleSetup
 {
 public:
@@ -34,7 +33,6 @@ public:
     void registerUiTypes() override;
     void onInit(const framework::IApplication::RunMode& mode) override;
 };
-}
 }
 
 #endif // MU_PLAYBACK_PLAYBACKMODULE_H

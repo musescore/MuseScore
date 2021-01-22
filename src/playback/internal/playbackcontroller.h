@@ -29,8 +29,7 @@
 #include "async/asyncable.h"
 #include "audio/isequencer.h"
 
-namespace mu {
-namespace playback {
+namespace mu::playback {
 class PlaybackController : public IPlaybackController, public actions::Actionable, public async::Asyncable
 {
     INJECT(playback, actions::IActionsDispatcher, dispatcher)
@@ -69,7 +68,6 @@ private:
     async::Channel<uint32_t> m_tickPlayed;
     CursorType m_cursorType;
 };
-}
 }
 
 #endif // MU_PLAYBACK_PLAYBACKCONTROLLER_H

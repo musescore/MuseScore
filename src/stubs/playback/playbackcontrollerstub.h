@@ -16,19 +16,26 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_PLAYBACK_PLAYBACKCONFIGURATION_H
-#define MU_PLAYBACK_PLAYBACKCONFIGURATION_H
+#ifndef MU_PLAYBACK_PLAYBACKCONTROLLERSTUB_H
+#define MU_PLAYBACK_PLAYBACKCONTROLLERSTUB_H
 
-#include "../iplaybackconfiguration.h"
+#include "playback/iplaybackcontroller.h"
 
 namespace mu::playback {
-class PlaybackConfiguration : public IPlaybackConfiguration
+class PlaybackControllerStub : public IPlaybackController
 {
 public:
+    bool isPlayAllowed() const override;
+    async::Notification isPlayAllowedChanged() const override;
 
-    bool isPlayElementOnClick() const override;
-    bool isPlayHarmonyOnClick() const override;
+    bool isPlaying() const override;
+    async::Notification isPlayingChanged() const override;
+
+    float playbackPosition() const override;
+    async::Channel<uint32_t> midiTickPlayed() const override;
+
+    void playElementOnClick(const notation::Element* e) override;
 };
 }
 
-#endif // MU_PLAYBACK_PLAYBACKCONFIGURATION_H
+#endif // MU_PLAYBACK_PLAYBACKCONTROLLERSTUB_H

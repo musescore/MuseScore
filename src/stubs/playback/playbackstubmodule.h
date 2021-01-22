@@ -16,19 +16,21 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_PLAYBACK_PLAYBACKCONFIGURATION_H
-#define MU_PLAYBACK_PLAYBACKCONFIGURATION_H
+#ifndef MU_PLAYBACK_PLAYBACKSTUBMODULE_H
+#define MU_PLAYBACK_PLAYBACKSTUBMODULE_H
 
-#include "../iplaybackconfiguration.h"
+#include "modularity/imodulesetup.h"
 
 namespace mu::playback {
-class PlaybackConfiguration : public IPlaybackConfiguration
+class PlaybackStubModule : public framework::IModuleSetup
 {
 public:
+    std::string moduleName() const override;
 
-    bool isPlayElementOnClick() const override;
-    bool isPlayHarmonyOnClick() const override;
+    void registerExports() override;
+    void registerResources() override;
+    void registerUiTypes() override;
 };
 }
 
-#endif // MU_PLAYBACK_PLAYBACKCONFIGURATION_H
+#endif // MU_PLAYBACK_PLAYBACKSTUBMODULE_H
