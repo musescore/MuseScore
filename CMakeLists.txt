@@ -59,6 +59,7 @@ option(BUILD_USERSCORES_MODULE "Build userscores module" ON)
 option(BUILD_EXTENSIONS_MODULE "Build extensions module" ON)
 option(BUILD_LANGUAGES_MODULE "Build languages module" ON)
 option(BUILD_INSTRUMENTS_MODULE "Build instruments module" ON)
+option(BUILD_INSPECTOR_MODULE "Build inspector module" ON)
 
 option(SOUNDFONT3    "Ogg Vorbis compressed fonts"        ON)  # Enable Ogg Vorbis compressed fonts, requires Ogg & Vorbis
 option(DOWNLOAD_SOUNDFONT "Download the latest soundfont version as part of the build process" ON)

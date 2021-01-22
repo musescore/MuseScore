@@ -16,22 +16,37 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_INSPECTOR_INSPECTORMODULE_H
-#define MU_INSPECTOR_INSPECTORMODULE_H
+#include "inspectorstubmodule.h"
 
-#include "modularity/imodulesetup.h"
+#include "modularity/ioc.h"
+#include "ui/iuiengine.h"
 
-namespace mu::inspector {
-class InspectorModule : public mu::framework::IModuleSetup
+#include "inspectoradapterstub.h"
+
+using namespace mu::inspector;
+using namespace mu::framework;
+
+static void inspector_init_qrc()
 {
-public:
-    InspectorModule() = default;
-
-    std::string moduleName() const override;
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-};
+    Q_INIT_RESOURCE(inspector_resources);
 }
 
-#endif // MU_INSPECTOR_INSPECTORMODULE_H
+std::string InspectorModule::moduleName() const
+{
+    return "inspector";
+}
+
+void InspectorModule::registerExports()
+{
+    ioc()->registerExport<IInspectorAdapter>(moduleName(), new InspectorAdapterStub());
+}
+
+void InspectorModule::registerResources()
+{
+    inspector_init_qrc();
+}
+
+void InspectorModule::registerUiTypes()
+{
+    ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(inspector_QML_IMPORT);
+}
