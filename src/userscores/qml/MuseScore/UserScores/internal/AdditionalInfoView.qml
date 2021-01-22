@@ -62,8 +62,6 @@ Row {
             height: privatesProperties.buttonHeight
 
             model: infoModel
-            arrowX: Boolean(oppened) ? popupPositionX + (width / 2) : 0
-            popupPositionX: Boolean(oppened) ? mapToGlobal(root.x, root.y).x - mapToGlobal(x, y).x : 0
         }
     }
 
@@ -91,8 +89,6 @@ Row {
             height: privatesProperties.buttonHeight
 
             model: infoModel
-            arrowX: Boolean(oppened) ? popupPositionX + (width / 2) : 0
-            popupPositionX: Boolean(oppened) ? mapToGlobal(root.x, root.y).x - mapToGlobal(x, y).x : 0
         }
     }
 
@@ -120,8 +116,6 @@ Row {
             height: privatesProperties.buttonHeight
 
             model: infoModel
-            arrowX: Boolean(oppened) ? popupPositionX + (width / 2) : 0
-            popupPositionX: Boolean(oppened) ? mapToGlobal(root.x, root.y).x - mapToGlobal(x, y).x : 0
         }
     }
 
@@ -149,8 +143,6 @@ Row {
             height: privatesProperties.buttonHeight
 
             model: infoModel
-            arrowX: Boolean(oppened) ? popupPositionX + (width / 2) : 0
-            popupPositionX: Boolean(oppened) ? mapToGlobal(root.x, root.y).x - mapToGlobal(x, y).x : 0
         }
     }
 }

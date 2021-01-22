@@ -9,16 +9,10 @@ import MuseScore.UserScores 1.0
 FlatButton {
     id: root
 
-    height: 96
-
     property var model: null
 
-    property var arrowX
-    property var popupPositionX
-    property var popupPositionY: height
-    property alias oppened: popup.visible
-
-    accentButton: oppened
+    height: 96
+    accentButton: popup.visible
 
     StyledTextLabel {
         anchors.horizontalCenter: root.horizontalCenter
@@ -51,9 +45,9 @@ FlatButton {
         implicitHeight: 310
         implicitWidth: 320
 
-        arrowX: root.arrowX
-        x: popupPositionX
-        y: popupPositionY
+        x: root.x - (width - root.width)
+        y: root.height
+        arrowX: root.x + root.width
 
         Column {
             anchors.fill: parent
@@ -120,7 +114,7 @@ FlatButton {
                 IncrementalPropertyControl {
                     id: measuresCountControl
 
-                    implicitWidth: 80
+                    implicitWidth: 68
 
                     iconMode: iconModeEnum.hidden
                     currentValue: root.model.measureCount

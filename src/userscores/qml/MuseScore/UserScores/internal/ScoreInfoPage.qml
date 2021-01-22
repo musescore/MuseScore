@@ -33,7 +33,6 @@ Item {
         id: title
 
         anchors.top: parent.top
-        anchors.topMargin: 24
         anchors.horizontalCenter: parent.horizontalCenter
 
         font: ui.theme.largeBodyBoldFont
@@ -56,7 +55,7 @@ Item {
             Layout.fillWidth: true
         }
 
-        SeparatorLine { }
+        SeparatorLine {}
 
         GeneralInfoView {
             id: generalInfo

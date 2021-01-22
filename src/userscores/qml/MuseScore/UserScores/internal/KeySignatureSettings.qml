@@ -9,16 +9,10 @@ import MuseScore.UserScores 1.0
 FlatButton {
     id: root
 
-    height: 96
-
     property var model: null
 
-    property var arrowX
-    property var popupPositionX
-    property var popupPositionY: height
-    property alias oppened: popup.visible
-
-    accentButton: oppened
+    height: 96
+    accentButton: popup.visible
 
     Column {
         anchors.horizontalCenter: root.horizontalCenter
@@ -53,9 +47,8 @@ FlatButton {
         implicitHeight: 300
         implicitWidth: 724
 
-        arrowX: root.arrowX
-        x: popupPositionX
-        y: popupPositionY
+        arrowX: root.x + root.width / 2
+        y: root.height
 
         Column {
             id: column
