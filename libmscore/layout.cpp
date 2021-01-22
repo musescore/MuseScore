@@ -3784,7 +3784,7 @@ System* Score::collectSystem(LayoutContext& lc)
                   Measure* m = toMeasure(lc.curMeasure);
                   if (firstMeasure) {
                         layoutSystemMinWidth = minWidth;
-                        system->layoutSystem(minWidth);
+                        system->layoutSystem(minWidth, lc.firstSystem, lc.firstSystemIndent);
                         minWidth += system->leftMargin();
                         if (m->repeatStart()) {
                               Segment* s = m->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0,1));
