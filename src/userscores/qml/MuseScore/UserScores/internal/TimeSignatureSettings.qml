@@ -9,16 +9,10 @@ import MuseScore.UserScores 1.0
 FlatButton {
     id: root
 
-    height: 96
-
     property var model: null
 
-    property var arrowX
-    property var popupPositionX
-    property var popupPositionY: height
-    property alias oppened: popup.visible
-
-    accentButton: oppened
+    height: 96
+    accentButton: popup.visible
 
     TimeSignatureView {
         id: timeSignatureView
@@ -44,9 +38,8 @@ FlatButton {
         implicitHeight: radioButtonList.height + topPadding + bottomPadding + 40
         implicitWidth: 310
 
-        arrowX: root.arrowX
-        x: popupPositionX
-        y: popupPositionY
+        x: root.x - (width - root.width) / 2
+        y: root.height
 
         RadioButtonGroup {
             id: radioButtonList
