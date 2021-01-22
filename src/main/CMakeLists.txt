@@ -165,6 +165,7 @@ if (NOT CC_IS_EMSCRIPTEN)
     list(APPEND LINK_LIB extensions)
     list(APPEND LINK_LIB languages)
     list(APPEND LINK_LIB importexport)
+    list(APPEND LINK_LIB iex_musicxml)
     list(APPEND LINK_LIB plugins)
 endif()
 

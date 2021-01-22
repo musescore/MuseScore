@@ -16,22 +16,25 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_IMPORTEXPORT_IMPORTEXPORTMODULE_H
-#define MU_IMPORTEXPORT_IMPORTEXPORTMODULE_H
 
-#include "modularity/imodulesetup.h"
+#include "mxlwriter.h"
 
-namespace mu {
-namespace importexport {
-class ImportExportModule : public framework::IModuleSetup
+#include "log.h"
+
+#include "musicxml/exportxml.h"
+
+using namespace mu::iex::musicxml;
+using namespace mu::system;
+
+mu::Ret MxlWriter::write(const notation::INotationPtr notation, IODevice& destinationDevice, const Options&)
 {
-public:
+    IF_ASSERT_FAILED(notation) {
+        return make_ret(Ret::Code::UnknownError);
+    }
+    Ms::Score* score = notation->elements()->msScore();
+    IF_ASSERT_FAILED(score) {
+        return make_ret(Ret::Code::UnknownError);
+    }
 
-    std::string moduleName() const override;
-    void registerExports() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
-};
+    return Ms::saveMxl(score, &destinationDevice);
 }
-}
-
-#endif // MU_IMPORTEXPORT_IMPORTEXPORTMODULE_H

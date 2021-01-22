@@ -20,9 +20,9 @@
 set(MODULE_TEST importexport_braille_tests)
 
 set(MODULE_TEST_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/../environment.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/../testbase.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/../testbase.h
+    ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/testbase.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/testbase.h
     ${CMAKE_CURRENT_LIST_DIR}/tst_braille_io.cpp
 )
 
