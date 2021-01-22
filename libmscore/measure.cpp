@@ -2884,7 +2884,10 @@ bool Measure::isEmpty(int staffIdx) const
 
 bool Measure::isCutawayClef(int staffIdx) const
       {
-      if (!isEmpty(staffIdx))
+      if (!score()->staff(staffIdx) || !_mstaves[staffIdx])
+            return false;
+      bool empty = (score()->staff(staffIdx)->cutaway() && isEmpty(staffIdx)) || !_mstaves[staffIdx]->visible();
+      if (!empty)
             return false;
       int strack;
       int etrack;
