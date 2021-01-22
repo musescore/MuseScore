@@ -9,29 +9,25 @@
 //
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  MERCHANTABILITY or FIT-0NESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_INSTRUMENTS_INSTRUMENTSMODULE_H
-#define MU_INSTRUMENTS_INSTRUMENTSMODULE_H
+#ifndef MU_INSTRUMENTS_SELECTINSTRUMENTSSCENARIOSTUB_H
+#define MU_INSTRUMENTS_SELECTINSTRUMENTSSCENARIOSTUB_H
 
-#include "modularity/imodulesetup.h"
+#include "instruments/iselectinstrumentscenario.h"
 
 namespace mu::instruments {
-class InstrumentsModule : public framework::IModuleSetup
+class SelectInstrumentsScenario : public ISelectInstrumentsScenario
 {
 public:
-    std::string moduleName() const override;
-    void registerExports() override;
-    void resolveImports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
+    RetVal<InstrumentList> selectInstruments(SelectInstrumentsMode mode = SelectInstrumentsMode::None) const override;
+    RetVal<Instrument> selectInstrument(const std::string& currentInstrumentId = "") const override;
 };
 }
 
-#endif // MU_INSTRUMENTS_INSTRUMENTSMODULE_H
+#endif // MU_INSTRUMENTS_SELECTINSTRUMENTSSCENARIOSTUB_H

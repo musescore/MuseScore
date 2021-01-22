@@ -26,8 +26,7 @@
 #include "iinstrumentsrepository.h"
 #include "context/iglobalcontext.h"
 
-namespace mu {
-namespace instruments {
+namespace mu::instruments {
 class InstrumentListModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
@@ -113,7 +112,6 @@ private:
 
     QList<SelectedInstrumentInfo> m_selectedInstruments;
 };
-}
 }
 
 #endif // MU_INSTRUMENTS_INSTRUMENTLISTMODEL_H

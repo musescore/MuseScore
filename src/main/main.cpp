@@ -58,7 +58,11 @@
 #include "palette/palettemodule.h"
 #include "inspector/inspectormodule.h"
 #include "playback/playbackmodule.h"
+#ifdef BUILD_INSTRUMENTS_MODULE
 #include "instruments/instrumentsmodule.h"
+#else
+#include "stubs/instruments/instrumentsstubmodule.h"
+#endif
 #include "converter/convertermodule.h"
 #include "workspace/workspacemodule.h"
 
@@ -142,7 +146,12 @@ int main(int argc, char** argv)
     app.addModule(new mu::notation::NotationModule());
     app.addModule(new mu::commonscene::CommonSceneModule());
     app.addModule(new mu::playback::PlaybackModule());
+
+#ifdef BUILD_INSTRUMENTS_MODULE
     app.addModule(new mu::instruments::InstrumentsModule());
+#else
+    app.addModule(new mu::instruments::InstrumentsStubModule());
+#endif
 #ifdef BUILD_VST
     app.addModule(new mu::vst::VSTModule());
 #endif

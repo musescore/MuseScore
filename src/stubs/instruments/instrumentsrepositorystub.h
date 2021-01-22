@@ -16,22 +16,17 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_INSTRUMENTS_INSTRUMENTSMODULE_H
-#define MU_INSTRUMENTS_INSTRUMENTSMODULE_H
+#ifndef MU_INSTRUMENTS_INSTRUMENTSREPOSITORYSTUB_H
+#define MU_INSTRUMENTS_INSTRUMENTSREPOSITORYSTUB_H
 
-#include "modularity/imodulesetup.h"
+#include "instruments/iinstrumentsrepository.h"
 
 namespace mu::instruments {
-class InstrumentsModule : public framework::IModuleSetup
+class InstrumentsRepositoryStub : public IInstrumentsRepository
 {
 public:
-    std::string moduleName() const override;
-    void registerExports() override;
-    void resolveImports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
+    RetValCh<InstrumentsMeta> instrumentsMeta() override;
 };
 }
 
-#endif // MU_INSTRUMENTS_INSTRUMENTSMODULE_H
+#endif // MU_INSTRUMENTS_INSTRUMENTSREPOSITORYSTUB_H

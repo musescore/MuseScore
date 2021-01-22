@@ -25,8 +25,7 @@
 #include "io/path.h"
 #include "instrumentstypes.h"
 
-namespace mu {
-namespace instruments {
+namespace mu::instruments {
 class IInstrumentsReader : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IInstrumentsReader)
@@ -36,7 +35,6 @@ public:
 
     virtual RetVal<InstrumentsMeta> readMeta(const io::path& path) const = 0;
 };
-}
 }
 
 #endif // MU_INSTRUMENTS_IINSTRUMENTSREADER_H

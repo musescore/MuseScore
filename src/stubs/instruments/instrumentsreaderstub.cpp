@@ -16,22 +16,13 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_INSTRUMENTS_INSTRUMENTSMODULE_H
-#define MU_INSTRUMENTS_INSTRUMENTSMODULE_H
+#include "instrumentsreaderstub.h"
 
-#include "modularity/imodulesetup.h"
+using namespace mu::instruments;
 
-namespace mu::instruments {
-class InstrumentsModule : public framework::IModuleSetup
+mu::RetVal<InstrumentsMeta> InstrumentsReaderStub::readMeta(const mu::io::path&) const
 {
-public:
-    std::string moduleName() const override;
-    void registerExports() override;
-    void resolveImports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
-};
+    mu::RetVal<InstrumentsMeta> result;
+    result.ret = make_ret(Ret::Code::NotSupported);
+    return result;
 }
-
-#endif // MU_INSTRUMENTS_INSTRUMENTSMODULE_H
