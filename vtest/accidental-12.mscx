@@ -26,6 +26,7 @@
       <harmonyFretDist>0.5</harmonyFretDist>
       <harmonyPlay>0</harmonyPlay>
       <showMeasureNumber>0</showMeasureNumber>
+      <enableIndentationOnFirstSystem>0</enableIndentationOnFirstSystem>
       <showFooter>0</showFooter>
       <defaultFramePadding>0.5</defaultFramePadding>
       <defaultFrameWidth>0.2</defaultFrameWidth>
@@ -104,13 +105,14 @@
         <defaultClef>F</defaultClef>
         </Staff>
       <trackName>Piano</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <shortName>Pno.</shortName>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
         <minPitchA>21</minPitchA>
         <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>70</gateTime>
