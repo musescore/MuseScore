@@ -149,7 +149,7 @@ void FluidSynth::setSampleRate(unsigned int sampleRate)
     }
 }
 
-Ret FluidSynth::addSoundFonts(std::vector<io::path> sfonts)
+Ret FluidSynth::addSoundFonts(const std::vector<io::path>& sfonts)
 {
     IF_ASSERT_FAILED(m_fluid->synth) {
         return make_ret(Err::SynthNotInited);
@@ -180,6 +180,10 @@ Ret FluidSynth::removeSoundFonts()
         return make_ret(Err::SynthNotInited);
     }
 
+    if (m_soundFonts.empty()) {
+        return make_ret(Err::NoError);
+    }
+
     bool ok = true;
     for (const SoundFont& sf : m_soundFonts) {
         int ret = fluid_synth_sfunload(m_fluid->synth, sf.id, true);
@@ -190,8 +194,6 @@ Ret FluidSynth::removeSoundFonts()
     }
 
     m_soundFonts.clear();
-
-    LOGI() << "sound fonts removed";
 
     return ok ? make_ret(Err::NoError) : make_ret(Err::SoundFontFailedUnload);
 }

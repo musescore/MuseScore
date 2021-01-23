@@ -24,6 +24,7 @@
 
 #include "log.h"
 #include "realfn.h"
+#include "audiosanitizer.h"
 
 using namespace mu::audio;
 using namespace mu::midi;
@@ -32,10 +33,12 @@ static tick_t REQUEST_BUFFER_SIZE = 480 * 4 * 10; // about 10 measures of 4/4 ti
 
 MIDIPlayer::MIDIPlayer()
 {
+    ONLY_AUDIO_WORKER_THREAD;
 }
 
 MIDIPlayer::~MIDIPlayer()
 {
+    ONLY_AUDIO_WORKER_THREAD;
     if (isRunning()) {
         stop();
     }
@@ -43,11 +46,13 @@ MIDIPlayer::~MIDIPlayer()
 
 IPlayer::Status MIDIPlayer::status() const
 {
+    ONLY_AUDIO_WORKER_THREAD;
     return m_status;
 }
 
 void MIDIPlayer::setStatus(const Status& status)
 {
+    ONLY_AUDIO_WORKER_THREAD;
     if (m_status == status) {
         return;
     }
@@ -57,16 +62,19 @@ void MIDIPlayer::setStatus(const Status& status)
 
 mu::async::Channel<IPlayer::Status> MIDIPlayer::statusChanged() const
 {
+    ONLY_AUDIO_WORKER_THREAD;
     return m_statusChanged;
 }
 
 bool MIDIPlayer::isRunning() const
 {
+    ONLY_AUDIO_WORKER_THREAD;
     return m_status == Status::Running;
 }
 
 void MIDIPlayer::loadMIDI(const std::shared_ptr<MidiStream>& stream)
 {
+    ONLY_AUDIO_WORKER_THREAD;
     m_midiStream = stream;
     m_streamState.reset();
 
@@ -138,6 +146,7 @@ void MIDIPlayer::onChunkReceived(const Chunk& chunk)
 
 void MIDIPlayer::forwardTime(unsigned long miliseconds)
 {
+    ONLY_AUDIO_WORKER_THREAD;
     if (!isRunning()) {
         return;
     }
@@ -327,6 +336,7 @@ void MIDIPlayer::sendClear()
 
 void MIDIPlayer::run()
 {
+    ONLY_AUDIO_WORKER_THREAD;
     if (m_midiStream && status() != Status::Error) {
         setStatus(Status::Running);
     }
@@ -334,6 +344,7 @@ void MIDIPlayer::run()
 
 void MIDIPlayer::stop()
 {
+    ONLY_AUDIO_WORKER_THREAD;
     if (status() != Status::Error) {
         setStatus(Status::Stoped);
     }
@@ -342,16 +353,19 @@ void MIDIPlayer::stop()
 
 unsigned long MIDIPlayer::miliseconds() const
 {
+    ONLY_AUDIO_WORKER_THREAD;
     return m_curMSec;
 }
 
 mu::async::Channel<tick_t> MIDIPlayer::tickPlayed() const
 {
+    ONLY_AUDIO_WORKER_THREAD;
     return m_onTickPlayed;
 }
 
 void MIDIPlayer::seek(unsigned long miliseconds)
 {
+    ONLY_AUDIO_WORKER_THREAD;
     m_curMSec = miliseconds;
     m_prevMSec = miliseconds;
 
@@ -440,11 +454,13 @@ tick_t MIDIPlayer::tick(uint64_t msec) const
 
 float MIDIPlayer::playbackSpeed() const
 {
+    ONLY_AUDIO_WORKER_THREAD;
     return m_playSpeed;
 }
 
 void MIDIPlayer::setPlaybackSpeed(float speed)
 {
+    ONLY_AUDIO_WORKER_THREAD;
     m_playSpeed = speed;
 }
 
@@ -463,6 +479,7 @@ bool MIDIPlayer::hasTrack(track_t ti) const
 
 void MIDIPlayer::setIsTrackMuted(track_t trackIndex, bool mute)
 {
+    ONLY_AUDIO_WORKER_THREAD;
     IF_ASSERT_FAILED(hasTrack(trackIndex)) {
         return;
     }
@@ -481,6 +498,7 @@ void MIDIPlayer::setIsTrackMuted(track_t trackIndex, bool mute)
 
 void MIDIPlayer::setTrackVolume(track_t trackIndex, float volume)
 {
+    ONLY_AUDIO_WORKER_THREAD;
     IF_ASSERT_FAILED(hasTrack(trackIndex)) {
         return;
     }
@@ -493,6 +511,7 @@ void MIDIPlayer::setTrackVolume(track_t trackIndex, float volume)
 
 void MIDIPlayer::setTrackBalance(track_t trackIndex, float balance)
 {
+    ONLY_AUDIO_WORKER_THREAD;
     IF_ASSERT_FAILED(hasTrack(trackIndex)) {
         return;
     }

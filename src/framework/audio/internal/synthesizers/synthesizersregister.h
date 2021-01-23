@@ -20,6 +20,7 @@
 #define MU_AUDIO_SYNTHESIZERSREGISTER_H
 
 #include <map>
+#include <mutex>
 #include "isynthesizersregister.h"
 
 namespace mu::audio::synth {
@@ -27,7 +28,7 @@ class SynthesizersRegister : public ISynthesizersRegister
 {
 public:
 
-    void registerSynthesizer(const SynthName& name, std::shared_ptr<ISynthesizer> s) override;
+    void registerSynthesizer(const SynthName& name, ISynthesizerPtr s) override;
     std::shared_ptr<ISynthesizer> synthesizer(const SynthName& name) const override;
     std::vector<std::shared_ptr<ISynthesizer> > synthesizers() const override;
 
@@ -36,6 +37,7 @@ public:
 
 private:
 
+    mutable std::mutex m_mutex;
     std::map<std::string, std::shared_ptr<ISynthesizer> > m_synths;
     SynthName m_defaultName;
 };

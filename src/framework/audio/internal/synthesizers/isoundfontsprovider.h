@@ -20,6 +20,7 @@
 #define MU_AUDIO_ISOUNDFONTSPROVIDER_H
 
 #include <vector>
+#include <memory>
 #include "modularity/imoduleexport.h"
 
 #include "synthtypes.h"
@@ -38,6 +39,8 @@ public:
 
     virtual std::vector<io::path> soundFontPaths(SoundFontFormats formats) const = 0;
 };
+
+using ISoundFontsProviderPtr = std::shared_ptr<ISoundFontsProvider>;
 }
 
 #endif // MU_AUDIO_ISOUNDFONTSPROVIDER_H

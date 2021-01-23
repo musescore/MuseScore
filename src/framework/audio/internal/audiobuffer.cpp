@@ -71,7 +71,9 @@ void AudioBuffer::pop(float* dest, unsigned int sampleCount)
 
     //catch up if we are fall behind
     if (sampleCount > sampleLag()) {
-        fillup();
+        //! TODO We have to decide to wait or skip.
+        //! We cannot make a direct call, this is a thread-unsafe.
+        //fillup();
     }
 
     unsigned int from = m_readIndex;

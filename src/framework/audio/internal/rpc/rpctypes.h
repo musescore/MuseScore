@@ -28,6 +28,7 @@ enum class TargetName {
     Undefined = 0,
     AudioEngine = 1,
     Sequencer = 2,
+    DevTools = 11
 };
 
 struct Target {

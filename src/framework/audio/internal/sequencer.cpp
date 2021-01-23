@@ -20,6 +20,7 @@
 
 #include "log.h"
 
+#include "internal/audiosanitizer.h"
 #include "internal/midiplayer.h"
 #include "internal/audioplayer.h"
 
@@ -27,6 +28,8 @@ using namespace mu::audio;
 
 Sequencer::Sequencer()
 {
+    ONLY_AUDIO_WORKER_THREAD;
+
     m_clock = std::make_shared<Clock>();
     m_clock->addAfterCallback([this](Clock::time_t) {
         timeUpdate();
@@ -36,49 +39,63 @@ Sequencer::Sequencer()
     });
 }
 
+Sequencer::~Sequencer()
+{
+    ONLY_AUDIO_WORKER_THREAD;
+}
+
 ISequencer::Status Sequencer::status() const
 {
+    ONLY_AUDIO_WORKER_THREAD;
     return m_status;
 }
 
 mu::async::Channel<ISequencer::Status> Sequencer::statusChanged() const
 {
+    ONLY_AUDIO_WORKER_THREAD;
     return m_statusChanged;
 }
 
 void Sequencer::play()
 {
+    ONLY_AUDIO_WORKER_THREAD;
     m_nextStatus = PLAYING;
 }
 
 void Sequencer::pause()
 {
+    ONLY_AUDIO_WORKER_THREAD;
     m_nextStatus = STOPED;
 }
 
 void Sequencer::stop()
 {
+    ONLY_AUDIO_WORKER_THREAD;
     m_nextStatus = STOPED;
     rewind();
 }
 
 void Sequencer::seek(uint64_t miliseconds)
 {
+    ONLY_AUDIO_WORKER_THREAD;
     m_nextSeek = miliseconds;
 }
 
 void Sequencer::rewind()
 {
+    ONLY_AUDIO_WORKER_THREAD;
     seek(0);
 }
 
 void Sequencer::initMIDITrack(ISequencer::TrackID id)
 {
+    ONLY_AUDIO_WORKER_THREAD;
     createMIDITrack(id);
 }
 
 void Sequencer::setMIDITrack(ISequencer::TrackID id, const std::shared_ptr<mu::midi::MidiStream>& stream)
 {
+    ONLY_AUDIO_WORKER_THREAD;
     MidiTrack track = midiTrack(id);
     if (!track) {
         track = createMIDITrack(id);
@@ -88,6 +105,7 @@ void Sequencer::setMIDITrack(ISequencer::TrackID id, const std::shared_ptr<mu::m
 
 void Sequencer::setAudioTrack(ISequencer::TrackID id, const std::shared_ptr<audio::IAudioStream>& stream)
 {
+    ONLY_AUDIO_WORKER_THREAD;
     AudioTrack track = audioTrack(id);
     if (!track) {
         track = createAudioTrack(id);
@@ -97,16 +115,19 @@ void Sequencer::setAudioTrack(ISequencer::TrackID id, const std::shared_ptr<audi
 
 mu::async::Channel<ISequencer::AudioTrack> Sequencer::audioTrackAdded() const
 {
+    ONLY_AUDIO_WORKER_THREAD;
     return m_audioTrackAdded;
 }
 
 void Sequencer::initAudioTrack(ISequencer::TrackID id)
 {
+    ONLY_AUDIO_WORKER_THREAD;
     createAudioTrack(id);
 }
 
 mu::async::Channel<mu::midi::tick_t> Sequencer::midiTickPlayed(ISequencer::TrackID id) const
 {
+    ONLY_AUDIO_WORKER_THREAD;
     if (MidiTrack track = midiTrack(id)) {
         return track->tickPlayed();
     }
@@ -115,22 +136,26 @@ mu::async::Channel<mu::midi::tick_t> Sequencer::midiTickPlayed(ISequencer::Track
 
 mu::async::Notification Sequencer::positionChanged() const
 {
+    ONLY_AUDIO_WORKER_THREAD;
     return m_positionChanged;
 }
 
 float Sequencer::playbackPosition() const
 {
+    ONLY_AUDIO_WORKER_THREAD;
     return clock()->timeInSeconds();
 }
 
 void Sequencer::setLoop(uint64_t fromMiliSeconds, uint64_t toMiliSeconds)
 {
+    ONLY_AUDIO_WORKER_THREAD;
     m_loopStart = fromMiliSeconds;
     m_loopEnd = toMiliSeconds;
 }
 
 void Sequencer::unsetLoop()
 {
+    ONLY_AUDIO_WORKER_THREAD;
     m_loopStart.reset();
     m_loopEnd.reset();
 }
@@ -254,6 +279,7 @@ Sequencer::AudioTrack Sequencer::audioTrack(TrackID id) const
 
 void Sequencer::instantlyPlayMidi(const midi::MidiData& data)
 {
+    ONLY_AUDIO_WORKER_THREAD;
     if (!data.isValid()) {
         return;
     }

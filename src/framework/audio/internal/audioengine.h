@@ -33,11 +33,14 @@
 #include "audiobuffer.h"
 #include "internal/sequencer.h"
 #include "async/asyncable.h"
+#include "synthesizers/isoundfontsprovider.h"
 #include "synthesizers/isynthesizersregister.h"
+#include "synthesizers/synthesizercontroller.h"
 
 namespace mu::audio {
 class AudioEngine : public IAudioEngine, public async::Asyncable
 {
+    INJECT(audio, synth::ISoundFontsProvider, soundFontsProvider)
     INJECT(audio, synth::ISynthesizersRegister, synthesizersRegister)
 public:
     ~AudioEngine();
@@ -54,7 +57,7 @@ public:
     std::shared_ptr<IMixer> mixer() const override;
     std::shared_ptr<ISequencer> sequencer() const override;
     IAudioBufferPtr buffer() const override;
-    void setBuffer(IAudioBufferPtr buffer) override;
+    void setAudioBuffer(IAudioBufferPtr buffer) override;
 
 private:
 
@@ -67,6 +70,10 @@ private:
     std::shared_ptr<IAudioDriver> m_driver = nullptr;
     std::shared_ptr<Mixer> m_mixer = nullptr;
     std::shared_ptr<IAudioBuffer> m_buffer = nullptr;
+
+    // synthesizers
+
+    std::shared_ptr<synth::SynthesizerController> m_synthesizerController = nullptr;
 };
 }
 

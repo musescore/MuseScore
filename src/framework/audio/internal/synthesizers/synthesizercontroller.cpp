@@ -18,65 +18,47 @@
 //=============================================================================
 #include "synthesizercontroller.h"
 #include "log.h"
+#include "internal/audiosanitizer.h"
 
 using namespace mu::audio::synth;
 
-SynthesizerController::SynthesizerController()
-    : m_initilizer()
+SynthesizerController::SynthesizerController(const ISynthesizersRegisterPtr& reg, const ISoundFontsProviderPtr& prov)
+    : m_synthRegister(reg), m_soundFontProvider(prov)
 {
+    ONLY_AUDIO_WORKER_THREAD;
 }
 
-SynthesizerController::~SynthesizerController()
+void SynthesizerController::init(uint sampleRate)
 {
-    if (m_initilizer.valid()) {
-        m_initilizer.wait();
-    }
-}
-
-void SynthesizerController::init()
-{
-    IF_ASSERT_FAILED(audioEngine()) {
+    ONLY_AUDIO_WORKER_THREAD;
+    IF_ASSERT_FAILED(m_synthRegister) {
         return;
     }
 
-    if (audioEngine()->isInited()) {
-        initSoundFonts(audioEngine()->sampleRate());
-    } else {
-        audioEngine()->initChanged().onReceive(this, [this](bool inited) {
-            if (inited) {
-                initSoundFonts(audioEngine()->sampleRate());
-            }
+    IF_ASSERT_FAILED(m_soundFontProvider) {
+        return;
+    }
+
+    std::vector<ISynthesizerPtr> synthesizers = m_synthRegister->synthesizers();
+    for (ISynthesizerPtr& synth : synthesizers) {
+        synth->init(sampleRate);
+
+        reloadSoundFonts(synth);
+        auto notification = m_soundFontProvider->soundFontPathsForSynthChanged(synth->name());
+        notification.onNotify(this, [this, synth]() {
+            reloadSoundFonts(synth);
         });
     }
 }
 
-void SynthesizerController::initSoundFonts(unsigned int sampleRate)
-{
-    auto task = [=]() {
-        std::vector<std::shared_ptr<ISynthesizer> > synthesizers = synthRegister()->synthesizers();
-
-        for (std::shared_ptr<ISynthesizer> synth : synthesizers) {
-            synth->init(sampleRate);
-
-            reloadSoundFonts(synth);
-            auto notification = sfprovider()->soundFontPathsForSynthChanged(synth->name());
-            notification.onNotify(this, [this, synth]() { reloadSoundFonts(synth); });
-        }
-    };
-#ifndef Q_OS_WASM
-    m_initilizer = std::async(task);
-#else
-    task();
-#endif
-}
-
 void SynthesizerController::reloadSoundFonts(std::shared_ptr<ISynthesizer> synth)
 {
+    ONLY_AUDIO_WORKER_THREAD;
     Ret ret = synth->removeSoundFonts();
     if (!ret) {
         LOGE() << "failed remove sound font, synth: " << synth->name();
     }
 
-    std::vector<io::path> sfonts = sfprovider()->soundFontPathsForSynth(synth->name());
+    std::vector<io::path> sfonts = m_soundFontProvider->soundFontPathsForSynth(synth->name());
     synth->addSoundFonts(sfonts);
 }

@@ -28,11 +28,16 @@ class AudioSanitizer
 {
 public:
 
+    static void setupMainThread();
+    static bool isMainThread();
+
     static void setupWorkerThread();
     static bool isWorkerThread();
 };
 }
 
 #define ONLY_AUDIO_WORKER_THREAD assert(mu::audio::AudioSanitizer::isWorkerThread())
+#define ONLY_AUDIO_MAIN_THREAD assert(mu::audio::AudioSanitizer::isMainThread())
+#define ONLY_AUDIO_MAIN_OR_WORKER_THREAD assert((mu::audio::AudioSanitizer::isWorkerThread() || mu::audio::AudioSanitizer::isMainThread()))
 
 #endif // MU_AUDIO_AUDIOSANITIZER_H

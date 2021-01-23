@@ -40,7 +40,7 @@ public:
 
     Ret init(float samplerate) override;
     void setSampleRate(unsigned int sampleRate) override;
-    Ret addSoundFonts(std::vector<io::path> sfonts) override;
+    Ret addSoundFonts(const std::vector<io::path>& sfonts) override;
     Ret removeSoundFonts() override;
 
     bool isActive() const override;

@@ -26,6 +26,8 @@ namespace mu::audio {
 class AudioModule : public framework::IModuleSetup, public async::Asyncable
 {
 public:
+    AudioModule();
+
     std::string moduleName() const override;
 
     void registerExports() override;

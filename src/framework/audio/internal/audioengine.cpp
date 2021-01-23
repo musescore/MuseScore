@@ -35,15 +35,17 @@ AudioEngine* AudioEngine::instance()
 
 AudioEngine::AudioEngine()
 {
-    m_buffer = std::make_shared<AudioBuffer>();
+    ONLY_AUDIO_WORKER_THREAD;
 }
 
 AudioEngine::~AudioEngine()
 {
+    ONLY_AUDIO_WORKER_THREAD;
 }
 
 bool AudioEngine::isInited() const
 {
+    ONLY_AUDIO_WORKER_THREAD;
     return m_inited;
 }
 
@@ -53,6 +55,10 @@ mu::Ret AudioEngine::init(int sampleRate, uint16_t readBufferSize)
 
     if (isInited()) {
         return make_ret(Ret::Code::Ok);
+    }
+
+    IF_ASSERT_FAILED(m_buffer) {
+        return make_ret(Ret::Code::InternalError);
     }
 
     m_sequencer = std::make_shared<Sequencer>();
@@ -70,6 +76,9 @@ mu::Ret AudioEngine::init(int sampleRate, uint16_t readBufferSize)
     m_mixer->setSampleRate(sampleRate);
     m_buffer->setMinSampleLag(readBufferSize);
 
+    m_synthesizerController = std::make_shared<SynthesizerController>(synthesizersRegister(), soundFontsProvider());
+    m_synthesizerController->init(sampleRate);
+
     //! TODO Add a subscription to add or remove synthesizers
     std::vector<ISynthesizerPtr> synths = synthesizersRegister()->synthesizers();
     for (const ISynthesizerPtr& synth : synths) {
@@ -84,7 +93,11 @@ mu::Ret AudioEngine::init(int sampleRate, uint16_t readBufferSize)
 
 void AudioEngine::deinit()
 {
+    ONLY_AUDIO_WORKER_THREAD;
     if (isInited()) {
+        m_buffer->setSource(nullptr);
+        m_mixer = nullptr;
+        m_sequencer = nullptr;
         m_inited = false;
         m_initChanged.send(m_inited);
     }
@@ -92,41 +105,46 @@ void AudioEngine::deinit()
 
 mu::async::Channel<bool> AudioEngine::initChanged() const
 {
+    ONLY_AUDIO_WORKER_THREAD;
     return m_initChanged;
 }
 
 unsigned int AudioEngine::sampleRate() const
 {
+    ONLY_AUDIO_WORKER_THREAD;
     return m_sampleRate;
 }
 
 std::shared_ptr<IAudioBuffer> AudioEngine::buffer() const
 {
+    ONLY_AUDIO_WORKER_THREAD;
     return m_buffer;
 }
 
 IMixer::ChannelID AudioEngine::startSynthesizer(synth::ISynthesizerPtr synthesizer)
 {
+    ONLY_AUDIO_WORKER_THREAD;
     synthesizer->setSampleRate(sampleRate());
     return m_mixer->addChannel(synthesizer);
 }
 
 std::shared_ptr<IMixer> AudioEngine::mixer() const
 {
+    ONLY_AUDIO_WORKER_THREAD;
     return m_mixer;
 }
 
 std::shared_ptr<ISequencer> AudioEngine::sequencer() const
 {
+    ONLY_AUDIO_WORKER_THREAD;
     return m_sequencer;
 }
 
-void AudioEngine::setBuffer(IAudioBufferPtr buffer)
+void AudioEngine::setAudioBuffer(IAudioBufferPtr buffer)
 {
+    ONLY_AUDIO_WORKER_THREAD;
     m_buffer = buffer;
-    m_buffer->setSource(m_mixer);
-
-    //! TODO It doesn't look obvious.
-    //! Requires detailed research
-    //m_worker->setAudioBuffer(m_buffer);
+    if (m_buffer && m_mixer) {
+        m_buffer->setSource(m_mixer->mixedSource());
+    }
 }

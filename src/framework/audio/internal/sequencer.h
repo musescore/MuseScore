@@ -32,6 +32,7 @@ class Sequencer : public ISequencer, public async::Asyncable
 {
 public:
     Sequencer();
+    ~Sequencer();
 
     Status status() const override;
     async::Channel<Status> statusChanged() const override;
