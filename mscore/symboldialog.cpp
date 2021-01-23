@@ -37,6 +37,7 @@ extern MasterScore* gscore;
 void SymbolDialog::createSymbolPalette()
       {
       sp = new Palette();
+      sp->setIsSymbolsPaletteInMasterPalette(true);
       createSymbols();
       }
 
@@ -57,7 +58,7 @@ void SymbolDialog::createSymbols()
                || Sym::id2userName(id).contains(search->text(), Qt::CaseInsensitive)) {
                   Symbol* s = new Symbol(gscore);
                   s->setSym(SymId(id), f);
-                  sp->append(s, Sym::id2userName(SymId(id)));
+                  sp->append(s, qApp->translate("symUserNames", Sym::id2userName(SymId(id)).toUtf8()) + " \"<sym>" + Sym::id2name(SymId(id)) + "</sym>\"");
                   }
             }
       }
