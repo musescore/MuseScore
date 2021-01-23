@@ -263,7 +263,7 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
       int i = idx(event->pos());
       if (i == -1) {
             // palette context menu
-            if (!_moreElements)
+            if (_isSymbolsPaletteInMasterPalette || !_moreElements)
                   return;
             QMenu menu;
             QAction* moreAction = menu.addAction(tr("More Elements…"));
@@ -271,6 +271,20 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
             QAction* action = menu.exec(mapToGlobal(event->pos()));
             if (action == moreAction)
                   emit displayMore(_name);
+            return;
+            }
+
+      if (_isSymbolsPaletteInMasterPalette) {
+            QMenu menu;
+            QAction* copyNameMenuItem = menu.addAction(tr("Copy SMuFL Symbol Code"));
+            if (menu.exec(mapToGlobal(event->pos())) == copyNameMenuItem) {
+                  PaletteCell* cell = cellAt(i);
+                  if (cell) {
+                        QRegularExpression regex("<sym>(.+?)</sym>");
+                        QString symSmuflName = QString("<sym>%1</sym>").arg(regex.match(cell->name).captured(1));
+                        QApplication::clipboard()->setText(symSmuflName);
+                        }
+                  }
             return;
             }
 

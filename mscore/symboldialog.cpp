@@ -37,6 +37,7 @@ extern MasterScore* gscore;
 void SymbolDialog::createSymbolPalette()
       {
       sp = new Palette();
+      sp->setIsSymbolsPaletteInMasterPalette(true);
       createSymbols();
       }
 
