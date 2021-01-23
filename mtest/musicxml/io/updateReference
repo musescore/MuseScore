@@ -29,3 +29,4 @@ cp $S/testTablature3.xml testTablature3.xml
 cp $S/testTablature4.xml testTablature4.xml
 cp $S/testTablature5.xml testTablature5_ref.xml
 cp $S/testBeams3.xml testBeams3_ref.xml
+cp $S/testTempoPrecision.xml testTempoPrecision_ref.xml
