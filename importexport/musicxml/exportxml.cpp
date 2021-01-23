@@ -3959,7 +3959,11 @@ void ExportMusicXml::tempoText(TempoText const* const text, int staff)
 
       if (staff)
             _xml.tag("staff", staff);
-      _xml.tagE(QString("sound tempo=\"%1\"").arg(QString::number(text->tempo()*60.0)));
+      // Format tempo with maximum 2 decimal places, because in some MuseScore files tempo is stored
+      // imprecisely and this could cause rounding errors (e.g. 92 BPM would be saved as 91.9998).
+      qreal bpm = text->tempo() * 60.0;
+      qreal bpmRounded = round(bpm * 100) / 100;
+      _xml.tagE(QString("sound tempo=\"%1\"").arg(QString::number(bpmRounded)));
       _xml.etag();
       }
 
