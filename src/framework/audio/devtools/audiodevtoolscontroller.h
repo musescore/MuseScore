@@ -16,39 +16,38 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUDIO_RPCCONTROLLER_H
-#define MU_AUDIO_RPCCONTROLLER_H
+#ifndef MU_AUDIO_AUDIODEVTOOLSCONTROLLER_H
+#define MU_AUDIO_AUDIODEVTOOLSCONTROLLER_H
 
 #include <functional>
+#include <optional>
 
-#include "modularity/ioc.h"
-#include "irpcchannel.h"
-#include "../audioengine.h"
+#include "internal/rpc/rpctypes.h"
+#include "internal/audioengine.h"
 
-namespace mu::audio::rpc {
-class RpcController : public async::Asyncable
+namespace mu::audio {
+class AudioDevToolsController
 {
-    INJECT(audio, IRpcChannel, rpcChannel)
-
 public:
-    RpcController() = default;
 
-    void init();
+    static AudioDevToolsController* instance();
+
+    void handleRpcMsg(const rpc::Msg& msg);
 
 private:
+    AudioDevToolsController() = default;
 
-    using Call = std::function<void (const Args& args)>;
-    using Calls = std::map<Method, Call>;
+    using Call = std::function<void (const rpc::Args& args)>;
+    using Calls = std::map<rpc::Method, Call>;
 
-    void bindMethod(Calls& calls, const Method& method, const Call& call);
-    void doCall(const Calls& calls, const Msg& msg);
+    void bindMethod(Calls& calls, const rpc::Method& method, const Call& call);
+    void doCall(const Calls& calls, const rpc::Msg& msg);
 
     AudioEngine* audioEngine() const;
-    ISequencerPtr sequencer() const;
 
-    void audioEngineHandle(const Msg& msg);
-    void sequencerHandle(const Msg& msg);
+    std::optional<unsigned int> m_sineChannelId;
+    std::optional<unsigned int> m_noiseChannel;
 };
 }
 
-#endif // MU_AUDIO_RPCCONTROLLER_H
+#endif // MU_AUDIO_AUDIODEVTOOLSCONTROLLER_H

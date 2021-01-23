@@ -19,12 +19,6 @@
 #ifndef MU_AUDIO_SYNTHESIZERCONTROLLER_H
 #define MU_AUDIO_SYNTHESIZERCONTROLLER_H
 
-#include <future>
-#include <memory>
-
-#include "modularity/ioc.h"
-#include "iglobalconfiguration.h"
-#include "audio/iaudioengine.h"
 #include "async/asyncable.h"
 #include "isynthesizersregister.h"
 #include "isoundfontsprovider.h"
@@ -32,20 +26,16 @@
 namespace mu::audio::synth {
 class SynthesizerController : public async::Asyncable
 {
-    INJECT(audio, IAudioEngine, audioEngine)
-    INJECT(audio, ISynthesizersRegister, synthRegister)
-    INJECT(audio, ISoundFontsProvider, sfprovider)
-
 public:
-    SynthesizerController();
-    ~SynthesizerController();
-    void init();
+    SynthesizerController(const ISynthesizersRegisterPtr& reg, const ISoundFontsProviderPtr& prov);
+
+    void init(uint sampleRate);
 
 private:
-    void initSoundFonts(unsigned int sampleRate);
-    void reloadSoundFonts(std::shared_ptr<ISynthesizer> synth);
+    void reloadSoundFonts(ISynthesizerPtr synth);
 
-    std::future<void> m_initilizer;
+    ISynthesizersRegisterPtr m_synthRegister;
+    ISoundFontsProviderPtr m_soundFontProvider;
 };
 }
 

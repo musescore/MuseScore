@@ -26,6 +26,7 @@
 
 using namespace mu::audio;
 using namespace mu::midi;
+using namespace mu::audio::rpc;
 
 AudioEngineDevTools::AudioEngineDevTools(QObject* parent)
     : QObject(parent)
@@ -41,108 +42,58 @@ AudioEngineDevTools::AudioEngineDevTools(QObject* parent)
 
 void AudioEngineDevTools::playSine()
 {
-    auto source = std::make_shared<SineSource>();
-
-    if (!m_sineChannelId) {
-        m_sineChannelId = audioEngine()->mixer()->addChannel(source);
-    }
+    rpcChannel()->send(Msg(TargetName::DevTools, "playSine"));
 }
 
 void AudioEngineDevTools::stopSine()
 {
-    audioEngine()->mixer()->removeChannel(m_sineChannelId.value_or(-1));
-    m_sineChannelId.reset();
+    rpcChannel()->send(Msg(TargetName::DevTools, "stopSine"));
 }
 
 void AudioEngineDevTools::setMuteSine(bool mute)
 {
-    if (m_sineChannelId) {
-        auto channel = audioEngine()->mixer()->channel(m_sineChannelId.value_or(-1));
-        channel->setActive(!mute);
-    }
-}
-
-void AudioEngineDevTools::setMuteNoise(bool mute)
-{
-    if (m_noiseChannel) {
-        auto channel = audioEngine()->mixer()->channel(m_noiseChannel.value_or(-1));
-        if (channel) {
-            channel->setActive(!mute);
-        }
-    }
+    rpcChannel()->send(Msg(TargetName::DevTools, "setMuteSine", Args::make_arg1<bool>(mute)));
 }
 
 void AudioEngineDevTools::setLevelSine(float level)
 {
-    if (m_sineChannelId) {
-        auto channel = audioEngine()->mixer()->channel(m_sineChannelId.value_or(-1));
-        if (channel) {
-            channel->setLevel(level);
-        }
-    }
-}
-
-void AudioEngineDevTools::setLevelNoise(float level)
-{
-    if (m_noiseChannel) {
-        auto channel = audioEngine()->mixer()->channel(m_noiseChannel.value_or(-1));
-        if (channel) {
-            channel->setLevel(level);
-        }
-    }
+    rpcChannel()->send(Msg(TargetName::DevTools, "setLevelSine", Args::make_arg1<float>(level)));
 }
 
 void AudioEngineDevTools::setBalanceSine(float balance)
 {
-    if (m_sineChannelId) {
-        auto channel = audioEngine()->mixer()->channel(m_sineChannelId.value_or(-1));
-        if (channel) {
-            channel->setBalance(balance);
-        }
-    }
+    rpcChannel()->send(Msg(TargetName::DevTools, "setBalanceSine", Args::make_arg1<float>(balance)));
 }
 
-void AudioEngineDevTools::setBalanceNoise(float balance)
-{
-    if (m_noiseChannel) {
-        auto channel = audioEngine()->mixer()->channel(m_noiseChannel.value_or(-1));
-        if (channel) {
-            channel->setBalance(balance);
-        }
-    }
-}
-
-void AudioEngineDevTools::enableNoiseEq(bool enable)
-{
-    if (m_noiseChannel) {
-        auto channel = audioEngine()->mixer()->channel(m_noiseChannel.value_or(-1));
-        if (channel) {
-            channel->insert(0)->setActive(enable);
-        }
-    }
-}
-
+// Noise
 void AudioEngineDevTools::playNoise()
 {
-    auto source = std::make_shared<NoiseSource>();
-    source->setType(NoiseSource::Type::PINK);
-
-    auto eq = std::make_shared<Equaliser>();
-    eq->setFrequency(500);
-    eq->setQ(3);
-    eq->setGain(-12);
-    eq->setActive(false);
-    if (!m_noiseChannel) {
-        m_noiseChannel = audioEngine()->mixer()->addChannel(source);
-        auto channel = audioEngine()->mixer()->channel(m_noiseChannel.value_or(-1));
-        channel->setInsert(0, eq);
-    }
+    rpcChannel()->send(Msg(TargetName::DevTools, "playNoise"));
 }
 
 void AudioEngineDevTools::stopNoise()
 {
-    audioEngine()->mixer()->removeChannel(m_noiseChannel.value_or(-1));
-    m_noiseChannel.reset();
+    rpcChannel()->send(Msg(TargetName::DevTools, "stopNoise"));
+}
+
+void AudioEngineDevTools::setMuteNoise(bool mute)
+{
+    rpcChannel()->send(Msg(TargetName::DevTools, "setMuteNoise", Args::make_arg1<bool>(mute)));
+}
+
+void AudioEngineDevTools::setLevelNoise(float level)
+{
+    rpcChannel()->send(Msg(TargetName::DevTools, "setLevelNoise", Args::make_arg1<float>(level)));
+}
+
+void AudioEngineDevTools::setBalanceNoise(float balance)
+{
+    rpcChannel()->send(Msg(TargetName::DevTools, "setBalanceSine", Args::make_arg1<float>(balance)));
+}
+
+void AudioEngineDevTools::enableNoiseEq(bool enable)
+{
+    rpcChannel()->send(Msg(TargetName::DevTools, "enableNoiseEq", Args::make_arg1<bool>(enable)));
 }
 
 void AudioEngineDevTools::playSequencerMidi()

@@ -62,18 +62,16 @@ audio::synth::SoundFontFormats VSTSynthesizer::soundFontFormats() const
     return { audio::synth::SoundFontFormat::Undefined };
 }
 
-Ret VSTSynthesizer::addSoundFonts(std::vector<io::path> sfonts)
+Ret VSTSynthesizer::addSoundFonts(const std::vector<io::path>& sfonts)
 {
     UNUSED(sfonts)
     NOT_SUPPORTED;
-    LOGE() << "Sound font can't be added to VST";
     return Ret(Ret::Code::NotSupported);
 }
 
 Ret VSTSynthesizer::removeSoundFonts()
 {
     NOT_SUPPORTED;
-    LOGE() << "VST can't have sound fonts";
     return Ret(Ret::Code::NotSupported);
 }
 

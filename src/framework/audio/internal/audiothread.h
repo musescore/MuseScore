@@ -38,9 +38,10 @@ public:
     ~AudioThread();
 
     using OnStart = std::function<void ()>;
+    using OnFinished = std::function<void ()>;
 
     void run(const OnStart& onStart = nullptr);
-    void stop();
+    void stop(const OnFinished& onFinished = nullptr);
 
     void setAudioBuffer(std::shared_ptr<IAudioBuffer> buffer);
 
@@ -53,6 +54,7 @@ private:
     void main();
 
     OnStart m_onStart;
+    OnFinished m_onFinished;
     rpc::QueuedRpcChannelPtr m_channel;
     std::shared_ptr<rpc::RpcController> m_controller;
     std::shared_ptr<IAudioBuffer> m_buffer = nullptr;

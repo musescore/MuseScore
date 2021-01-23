@@ -22,7 +22,18 @@
 
 using namespace mu::audio;
 
+static std::thread::id s_as_mainThreadID;
 static std::thread::id s_as_workerThreadID;
+
+void AudioSanitizer::setupMainThread()
+{
+    s_as_mainThreadID = std::this_thread::get_id();
+}
+
+bool AudioSanitizer::isMainThread()
+{
+    return std::this_thread::get_id() == s_as_mainThreadID;
+}
 
 void AudioSanitizer::setupWorkerThread()
 {

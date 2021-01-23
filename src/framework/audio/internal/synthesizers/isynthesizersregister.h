@@ -32,13 +32,15 @@ class ISynthesizersRegister : MODULE_EXPORT_INTERFACE
 public:
     virtual ~ISynthesizersRegister() = default;
 
-    virtual void registerSynthesizer(const SynthName& name, std::shared_ptr<ISynthesizer> s) = 0;
-    virtual std::shared_ptr<ISynthesizer> synthesizer(const SynthName& name) const = 0;
-    virtual std::vector<std::shared_ptr<ISynthesizer> > synthesizers() const = 0;
+    virtual void registerSynthesizer(const SynthName& name, ISynthesizerPtr synthesizer) = 0;
+    virtual ISynthesizerPtr synthesizer(const SynthName& name) const = 0;
+    virtual std::vector<ISynthesizerPtr> synthesizers() const = 0;
 
     virtual void setDefaultSynthesizer(const SynthName& name) = 0;
-    virtual std::shared_ptr<ISynthesizer> defaultSynthesizer() const = 0;
+    virtual ISynthesizerPtr defaultSynthesizer() const = 0;
 };
+
+using ISynthesizersRegisterPtr = std::shared_ptr<ISynthesizersRegister>;
 }
 
 #endif // MU_AUDIO_ISYNTHESIZERSREGISTER_H

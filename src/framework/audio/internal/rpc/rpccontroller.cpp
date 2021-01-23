@@ -20,6 +20,8 @@
 
 #include "log.h"
 
+#include "devtools/audiodevtoolscontroller.h"
+
 using namespace mu::audio;
 using namespace mu::audio::rpc;
 
@@ -30,6 +32,9 @@ void RpcController::init()
     //! NOTE We could use a by target controller factory here,
     //! but we have not abstract RPC system, but a specialized one for audio, and the targets are known in advance.
     //! So, a factory is deliberately not used to have everything in one place.
+
+    //! NOTE UPD. It seems complex and requires a controller factory
+
     rpcChannel()->listen([this](const Msg& msg) {
         switch (msg.target.name) {
         case TargetName::AudioEngine:
@@ -37,6 +42,9 @@ void RpcController::init()
             break;
         case TargetName::Sequencer:
             sequencerHandle(msg);
+            break;
+        case TargetName::DevTools:
+            AudioDevToolsController::instance()->handleRpcMsg(msg);
             break;
         case TargetName::Undefined: {
             LOGE() << "received message for undefined target, will be ignored";

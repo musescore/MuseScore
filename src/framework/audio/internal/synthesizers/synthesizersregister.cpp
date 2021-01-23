@@ -17,16 +17,22 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 #include "synthesizersregister.h"
+#include "internal/audiosanitizer.h"
+#include "sanitysynthesizer.h"
 
 using namespace mu::audio::synth;
 
-void SynthesizersRegister::registerSynthesizer(const SynthName& name, std::shared_ptr<ISynthesizer> s)
+void SynthesizersRegister::registerSynthesizer(const SynthName& name, ISynthesizerPtr s)
 {
-    m_synths[name] = s;
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+    std::lock_guard<std::mutex> lock(m_mutex);
+    m_synths[name] = std::make_shared<SanitySynthesizer>(s);
 }
 
 std::shared_ptr<ISynthesizer> SynthesizersRegister::synthesizer(const SynthName& name) const
 {
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+    std::lock_guard<std::mutex> lock(m_mutex);
     auto it = m_synths.find(name);
     if (it != m_synths.end()) {
         return it->second;
@@ -36,6 +42,8 @@ std::shared_ptr<ISynthesizer> SynthesizersRegister::synthesizer(const SynthName&
 
 std::vector<std::shared_ptr<ISynthesizer> > SynthesizersRegister::synthesizers() const
 {
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+    std::lock_guard<std::mutex> lock(m_mutex);
     std::vector<std::shared_ptr<ISynthesizer> > synths;
     for (auto it = m_synths.begin(); it != m_synths.end(); ++it) {
         synths.push_back(it->second);
@@ -45,16 +53,20 @@ std::vector<std::shared_ptr<ISynthesizer> > SynthesizersRegister::synthesizers()
 
 void SynthesizersRegister::setDefaultSynthesizer(const SynthName& name)
 {
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+    std::lock_guard<std::mutex> lock(m_mutex);
     m_defaultName = name;
 }
 
 std::shared_ptr<ISynthesizer> SynthesizersRegister::defaultSynthesizer() const
 {
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
     std::shared_ptr<ISynthesizer> s = synthesizer(m_defaultName);
     if (s) {
         return s;
     }
 
+    std::lock_guard<std::mutex> lock(m_mutex);
     if (!m_synths.empty()) {
         return m_synths.begin()->second;
     }
