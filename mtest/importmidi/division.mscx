@@ -101,7 +101,7 @@
             <sigD>4</sigD>
             </TimeSig>
           <Tempo>
-            <tempo>2.08333</tempo>
+            <tempo>2.0833333333333335</tempo>
             <text><sym>metNoteQuarterUp</sym> = 125</text>
             </Tempo>
           <Rest>

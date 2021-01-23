@@ -72,7 +72,7 @@
             <sigD>4</sigD>
             </TimeSig>
           <Tempo>
-            <tempo>4.16667</tempo>
+            <tempo>4.166666666666667</tempo>
             <linkedMain/>
             <text><sym>metNoteQuarterUp</sym> = 250</text>
             </Tempo>
@@ -173,7 +173,7 @@
       <Measure>
         <voice>
           <Tempo>
-            <tempo>1.33333</tempo>
+            <tempo>1.3333333333333333</tempo>
             <linkedMain/>
             <text><sym>metNoteQuarterUp</sym> = 80</text>
             </Tempo>
@@ -328,7 +328,7 @@
               <sigD>4</sigD>
               </TimeSig>
             <Tempo>
-              <tempo>4.16667</tempo>
+              <tempo>4.166666666666667</tempo>
               <linked>
                 </linked>
               <text><sym>metNoteQuarterUp</sym> = 250</text>
@@ -446,7 +446,7 @@
         <Measure>
           <voice>
             <Tempo>
-              <tempo>1.33333</tempo>
+              <tempo>1.3333333333333333</tempo>
               <linked>
                 </linked>
               <text><sym>metNoteQuarterUp</sym> = 80</text>

@@ -87,7 +87,7 @@
             <linkedMain/>
             </Dynamic>
           <Tempo>
-            <tempo>1.66667</tempo>
+            <tempo>1.6666666666666667</tempo>
             <linkedMain/>
             <text><sym>metNoteQuarterUp</sym> = 100</text>
             </Tempo>
@@ -1327,7 +1327,7 @@
                 </linked>
               </Dynamic>
             <Tempo>
-              <tempo>1.66667</tempo>
+              <tempo>1.6666666666666667</tempo>
               <linked>
                 </linked>
               <text><sym>metNoteQuarterUp</sym> = 100</text>

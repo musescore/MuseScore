@@ -10,6 +10,7 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include <limits>
 #include "score.h"
 #include "tempotext.h"
 #include "tempo.h"
@@ -58,7 +59,11 @@ TempoText::TempoText(Score* s)
 void TempoText::write(XmlWriter& xml) const
       {
       xml.stag(this);
+      // Use maximum precision for formatting the tempo, since it's often a long decimal fraction.
+      int previousPrecision = xml.realNumberPrecision();
+      xml.setRealNumberPrecision(std::numeric_limits<decltype(_tempo)>::max_digits10);
       xml.tag("tempo", _tempo);
+      xml.setRealNumberPrecision(previousPrecision);
       if (_followText)
             xml.tag("followText", _followText);
       TextBase::writeProperties(xml);

@@ -123,7 +123,7 @@
             <sigD>4</sigD>
             </TimeSig>
           <Tempo>
-            <tempo>1.66667</tempo>
+            <tempo>1.6666666666666667</tempo>
             <text>𝅘𝅥 = 100</text>
             </Tempo>
           <Chord>
@@ -386,7 +386,7 @@
               <sigD>4</sigD>
               </TimeSig>
             <Tempo>
-              <tempo>1.66667</tempo>
+              <tempo>1.6666666666666667</tempo>
               <text>𝅘𝅥 = 100</text>
               </Tempo>
             <Chord>
@@ -614,7 +614,7 @@
               <sigD>4</sigD>
               </TimeSig>
             <Tempo>
-              <tempo>1.66667</tempo>
+              <tempo>1.6666666666666667</tempo>
               <linkedMain/>
               <text>𝅘𝅥 = 100</text>
               </Tempo>
@@ -635,7 +635,7 @@
               <sigD>4</sigD>
               </TimeSig>
             <Tempo>
-              <tempo>1.66667</tempo>
+              <tempo>1.6666666666666667</tempo>
               <linked>
                 <score>same</score>
                 <location>
