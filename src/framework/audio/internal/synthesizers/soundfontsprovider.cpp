@@ -19,6 +19,7 @@
 #include "soundfontsprovider.h"
 
 #include "log.h"
+#include "internal/audiosanitizer.h"
 
 static const std::string SF2_FILTER("*.sf2");
 static const std::string SF3_FILTER("*.sf3");
@@ -30,6 +31,7 @@ using namespace mu::framework;
 
 std::vector<io::path> SoundFontsProvider::soundFontPathsForSynth(const SynthName& synthName) const
 {
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
     const SynthesizerState& state = configuration()->synthesizerState();
 
     auto it = state.groups.find(synthName);
@@ -68,6 +70,7 @@ std::vector<io::path> SoundFontsProvider::soundFontPathsForSynth(const SynthName
     }
 
     configuration()->synthesizerStateGroupChanged(synthName).onNotify(this, [this, synthName]() {
+        std::lock_guard<std::mutex> lock(m_mutex);
         m_soundFontPathsForSynthChangedMap[synthName].notify();
     });
 
@@ -76,11 +79,18 @@ std::vector<io::path> SoundFontsProvider::soundFontPathsForSynth(const SynthName
 
 async::Notification SoundFontsProvider::soundFontPathsForSynthChanged(const SynthName& synth) const
 {
-    return m_soundFontPathsForSynthChangedMap[synth];
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+    async::Notification n;
+    {
+        std::lock_guard<std::mutex> lock(m_mutex);
+        n = m_soundFontPathsForSynthChangedMap[synth];
+    }
+    return n;
 }
 
 std::vector<io::path> SoundFontsProvider::soundFontPaths(SoundFontFormats formats) const
 {
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
     std::vector<io::path> paths = configuration()->soundFontPaths();
 
     QStringList filter;

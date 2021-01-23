@@ -101,36 +101,6 @@ Rectangle {
             height:  40
             spacing: 8
             FlatButton {
-                text: "RPCPlay"
-                width: 120
-                onClicked: devtools.rpcPlay()
-            }
-
-            FlatButton {
-                text: "RPCStop"
-                width: 120
-                onClicked: devtools.rpcStop()
-            }
-
-            FlatButton {
-                text: "RPC Set loop"
-                width: 120
-                onClicked: devtools.rpcSetLoop(1000, 4000)
-            }
-
-            FlatButton {
-                text: "RPC unset loop"
-                width: 120
-                onClicked: devtools.rpcUnsetLoop()
-            }
-        }
-
-        Row {
-            anchors.left:  parent.left
-            anchors.right: parent.right
-            height:  40
-            spacing: 8
-            FlatButton {
                 text: "Open audio file"
                 width: 120
                 onClicked: devtools.openAudio()

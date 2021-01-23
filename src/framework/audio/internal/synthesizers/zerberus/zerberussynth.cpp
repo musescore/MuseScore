@@ -75,7 +75,7 @@ void ZerberusSynth::setSampleRate(unsigned int sampleRate)
     }
 }
 
-Ret ZerberusSynth::addSoundFonts(std::vector<io::path> sfonts)
+Ret ZerberusSynth::addSoundFonts(const std::vector<io::path>& sfonts)
 {
     IF_ASSERT_FAILED(m_zerb) {
         return make_ret(Err::SynthNotInited);
@@ -102,6 +102,10 @@ Ret ZerberusSynth::removeSoundFonts()
     }
 
     QStringList paths = m_zerb->soundFonts();
+    if (paths.empty()) {
+        return make_ret(Err::NoError);
+    }
+
     bool ok = true;
     for (const QString& path : paths) {
         ok &= m_zerb->removeSoundFont(path);

@@ -58,8 +58,9 @@ void AudioThread::run(const OnStart& onStart)
 #endif
 }
 
-void AudioThread::stop()
+void AudioThread::stop(const OnFinished& onFinished)
 {
+    m_onFinished = onFinished;
     m_running = false;
     if (m_thread) {
         m_thread->join();
@@ -94,6 +95,10 @@ void AudioThread::main()
     while (m_running) {
         loopBody();
         std::this_thread::sleep_for(std::chrono::milliseconds(2));
+    }
+
+    if (m_onFinished) {
+        m_onFinished();
     }
 }
 

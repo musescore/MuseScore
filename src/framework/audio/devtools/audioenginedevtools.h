@@ -25,18 +25,19 @@
 
 #include <optional>
 #include "modularity/ioc.h"
-#include "iaudioengine.h"
-#include "imidiplayer.h"
+#include "iaudiodriver.h"
+#include "isequencer.h"
 #include "context/iglobalcontext.h"
 #include "async/asyncable.h"
 #include "global/iinteractive.h"
 #include "iaudiostream.h"
+#include "internal/rpc/irpcchannel.h"
 
 namespace mu::audio {
 class AudioEngineDevTools : public QObject, public async::Asyncable
 {
     Q_OBJECT
-    INJECT(audio, IAudioEngine, audioEngine)
+    INJECT(audio, rpc::IRpcChannel, rpcChannel)
     INJECT(audio, IAudioDriver, audioDriver)
     INJECT(audio, context::IGlobalContext, globalContext)
     INJECT(audio, audio::ISequencer, sequencer)
@@ -92,10 +93,8 @@ signals:
 private:
     void makeArpeggio();
 
-    std::optional<unsigned int> m_sineChannelId, m_noiseChannel;
     std::shared_ptr<midi::MidiStream> m_midiStream = nullptr;
     std::shared_ptr<IAudioStream> m_audioStream = nullptr;
-    std::weak_ptr<IMIDIPlayer> m_threadMIDIPlayer;
 };
 }
 

@@ -46,7 +46,7 @@ public:
     virtual unsigned int startSynthesizer(synth::ISynthesizerPtr synthesizer) = 0;
     virtual IMixerPtr mixer() const = 0;
     virtual IAudioBufferPtr buffer() const = 0;
-    virtual void setBuffer(IAudioBufferPtr) = 0;
+    virtual void setAudioBuffer(IAudioBufferPtr) = 0;
 };
 }
 #endif // MU_AUDIO_IAUDIOENGINE_H

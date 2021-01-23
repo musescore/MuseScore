@@ -101,6 +101,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiosanitizer.h
     ${CMAKE_CURRENT_LIST_DIR}/devtools/audioenginedevtools.cpp
     ${CMAKE_CURRENT_LIST_DIR}/devtools/audioenginedevtools.h
+    ${CMAKE_CURRENT_LIST_DIR}/devtools/audiodevtoolscontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/devtools/audiodevtoolscontroller.h
 
     # rpc
     ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpctypes.h
@@ -118,6 +120,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/isynthesizer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/isynthesizersregister.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/isoundfontsprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/sanitysynthesizer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/sanitysynthesizer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidsynth.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidsynth.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/zerberus/zerberussynth.cpp

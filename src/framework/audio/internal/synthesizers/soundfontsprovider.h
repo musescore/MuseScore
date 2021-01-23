@@ -20,6 +20,7 @@
 #define MU_AUDIO_SOUNDFONTSPROVIDER_H
 
 #include <map>
+#include <mutex>
 
 #include "isoundfontsprovider.h"
 
@@ -45,7 +46,7 @@ public:
     std::vector<io::path> soundFontPaths(SoundFontFormats formats) const override;
 
 private:
-
+    mutable std::mutex m_mutex;
     mutable std::map<SynthName, async::Notification > m_soundFontPathsForSynthChangedMap;
 };
 }

@@ -29,6 +29,7 @@
 #include "internal/rpc/rpcsequencer.h"
 #include "internal/audiosanitizer.h"
 #include "internal/audiothread.h"
+#include "internal/audiobuffer.h"
 
 // synthesizers
 #include "internal/synthesizers/fluidsynth/fluidsynth.h"
@@ -45,8 +46,8 @@ using namespace mu::audio;
 
 static std::shared_ptr<AudioConfiguration> s_audioConfiguration = std::make_shared<AudioConfiguration>();
 static std::shared_ptr<AudioThread> s_audioWorker = std::make_shared<AudioThread>();
+static std::shared_ptr<mu::audio::AudioBuffer> s_audioBuffer = std::make_shared<mu::audio::AudioBuffer>();
 static std::shared_ptr<rpc::RpcSequencer> s_rpcSequencer = std::make_shared<rpc::RpcSequencer>();
-static synth::SynthesizerController s_synthesizerController;
 
 #ifdef Q_OS_LINUX
 #include "internal/platform/lin/linuxaudiodriver.h"
@@ -67,6 +68,11 @@ static std::shared_ptr<IAudioDriver> s_audioDriver = std::shared_ptr<IAudioDrive
 #include "internal/platform/web/webaudiodriver.h"
 static std::shared_ptr<IAudioDriver> s_audioDriver = std::shared_ptr<IAudioDriver>(new WebAudioDriver());
 #endif
+
+AudioModule::AudioModule()
+{
+    AudioSanitizer::setupMainThread();
+}
 
 std::string AudioModule::moduleName() const
 {
@@ -90,9 +96,6 @@ void AudioModule::registerExports()
 
     //! TODO maybe need remove
     ioc()->registerExport<rpc::IRpcChannel>(moduleName(), s_audioWorker->channel());
-
-    //! TODO Will be removed
-    ioc()->registerExportNoDelete<IAudioEngine>(moduleName(), AudioEngine::instance());
 }
 
 void AudioModule::registerUiTypes()
@@ -145,9 +148,10 @@ void AudioModule::onInit(const framework::IApplication::RunMode&)
     // Setup rpc system and worker
     s_rpcSequencer->setup();
     s_audioWorker->channel()->setupMainThread();
-    s_audioWorker->setAudioBuffer(AudioEngine::instance()->buffer());
+    s_audioWorker->setAudioBuffer(s_audioBuffer);
     s_audioWorker->run([]() {
         AudioSanitizer::setupWorkerThread();
+        AudioEngine::instance()->setAudioBuffer(s_audioBuffer);
     });
 
     // Setup audio driver
@@ -158,7 +162,7 @@ void AudioModule::onInit(const framework::IApplication::RunMode&)
     requiredSpec.samples = s_audioConfiguration->driverBufferSize();
     requiredSpec.callback = [](void* /*userdata*/, uint8_t* stream, int byteCount) {
         auto samples = byteCount / (2 * sizeof(float));
-        AudioEngine::instance()->buffer()->pop(reinterpret_cast<float*>(stream), samples);
+        s_audioBuffer->pop(reinterpret_cast<float*>(stream), samples);
     };
 
     IAudioDriver::Spec activeSpec;
@@ -167,9 +171,6 @@ void AudioModule::onInit(const framework::IApplication::RunMode&)
         LOGE() << "audio output open failed";
         return;
     }
-
-    // Setup synthesizers
-    s_synthesizerController.init();
 
     // Setup audio engine
     //! NOTE Send msg for init audio engine to worker
@@ -183,7 +184,8 @@ void AudioModule::onInit(const framework::IApplication::RunMode&)
 
 void AudioModule::onDeinit()
 {
-    s_audioWorker->stop();
     s_audioDriver->close();
-    AudioEngine::instance()->deinit();
+    s_audioWorker->stop([]() {
+        AudioEngine::instance()->deinit();
+    });
 }
