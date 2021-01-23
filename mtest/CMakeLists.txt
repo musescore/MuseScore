@@ -216,6 +216,7 @@ subdirs (
         libmscore/spanners
         libmscore/split
         libmscore/splitstaff
+        libmscore/tempotext
         libmscore/timesig
         libmscore/tools                # Some tests disabled
         libmscore/transpose

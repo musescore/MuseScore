@@ -36,6 +36,7 @@ const char* tests[] = {
       "libmscore/hairpin/tst_hairpin",
       "libmscore/chordsymbol/tst_chordsymbol",
       "libmscore/text/tst_text",
+      "libmscore/tempotext/tst_tempotext",
       "libmscore/measure/tst_measure",
       "libmscore/beam/tst_beam",
       "libmscore/layout/tst_benchmark",

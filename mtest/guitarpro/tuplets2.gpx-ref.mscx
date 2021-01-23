@@ -138,7 +138,7 @@ solo concert</text>
             <text>Free time</text>
             </StaffText>
           <Tempo>
-            <tempo>2.66667</tempo>
+            <tempo>2.6666666666666665</tempo>
             <linkedMain/>
             <text><sym>metNoteQuarterUp</sym> = 160</text>
             </Tempo>
@@ -892,7 +892,7 @@ solo concert</text>
               <text>Free time</text>
               </StaffText>
             <Tempo>
-              <tempo>2.66667</tempo>
+              <tempo>2.6666666666666665</tempo>
               <linked>
                 </linked>
               <text><sym>metNoteQuarterUp</sym> = 160</text>

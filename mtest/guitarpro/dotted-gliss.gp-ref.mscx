@@ -82,7 +82,7 @@ Innuendo</text>
             <sigD>8</sigD>
             </TimeSig>
           <Tempo>
-            <tempo>1.51667</tempo>
+            <tempo>1.5166666666666666</tempo>
             <linkedMain/>
             <text><sym>metNoteQuarterUp</sym> = 91</text>
             </Tempo>
@@ -276,7 +276,7 @@ Innuendo</text>
               <sigD>8</sigD>
               </TimeSig>
             <Tempo>
-              <tempo>1.51667</tempo>
+              <tempo>1.5166666666666666</tempo>
               <linked>
                 </linked>
               <text><sym>metNoteQuarterUp</sym> = 91</text>
