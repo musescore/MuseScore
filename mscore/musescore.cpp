@@ -6009,14 +6009,10 @@ void MuseScore::cmd(QAction* a)
             }
       if (cmdn == "toggle-palette") {
             showPalette(a->isChecked());
-            if (a->isChecked()) {
-                  lastFocusWidget = QApplication::focusWidget();
+            if (a->isChecked())
                   paletteWidget->activateSearchBox();
-                  }
-            else {
-                  if (lastFocusWidget)
-                        lastFocusWidget->setFocus();
-                  }
+            else if (cv)
+                  cv->setFocus();
             return;
             }
       if (cmdn == "palette-search") {
