@@ -1293,59 +1293,6 @@ void Chord::setScore(Score* s)
 }
 
 //-----------------------------------------------------------------------------
-//   hookAdjustment
-//    Adjustment to the length of the stem in order to accommodate hooks
-//    This function replaces this bit of code:
-//      switch (hookIdx) {
-//            case 3: normalStemLen += small() ? .5  : 0.75; break; //32nd notes
-//            case 4: normalStemLen += small() ? 1.0 : 1.5;  break; //64th notes
-//            case 5: normalStemLen += small() ? 1.5 : 2.25; break; //128th notes
-//            }
-//    which was not sufficient for two reasons:
-//      1. It only lengthened the stem for 3, 4, or 5 hooks.
-//      2. It was too general to produce good results for all combinations of factors.
-//    This provides a way to take a number of factors into account. Further tweaking may be in order.
-//-----------------------------------------------------------------------------
-
-qreal hookAdjustment(QString font, int hooks, bool up, bool small)
-{
-    bool fallback = MScore::useFallbackFont && (hooks > 5);
-
-    if (font == "Emmentaler" && !fallback) {
-        if (up) {
-            if (hooks > 2) {
-                return (hooks - 2) * (small ? .75 : 1);
-            }
-        } else {
-            if (hooks == 3) {
-                return small ? .75 : 1;
-            } else if (hooks > 3) {
-                return (hooks - 2) * (small ? .5 : .75);
-            }
-        }
-    } else if (font == "Gonville" && !fallback) {
-        if (up) {
-            if (hooks > 2) {
-                return (hooks - 2) * (small ? .5 : .75);
-            }
-        } else {
-            if (hooks > 1) {
-                return (hooks - 1) * (small ? .5 : .75);
-            }
-        }
-    } else if (font == "MuseJazz") {
-        if (hooks > 2) {
-            return (hooks - 2) * (small ? .75 : 1);
-        }
-    } else {
-        if (hooks > 2) {
-            return (hooks - 2) * (small ? .5 : .75);
-        }
-    }
-    return 0;
-}
-
-//-----------------------------------------------------------------------------
 //   defaultStemLength
 ///   Get the default stem length for this chord
 //-----------------------------------------------------------------------------
@@ -1399,7 +1346,6 @@ qreal Chord::defaultStemLength() const
     }
 
     qreal normalStemLen = small() ? 2.5 : 3.5;
-    normalStemLen += hookAdjustment(score()->styleSt(Sid::MusicalSymbolFont), hookIdx, up(), small());
     if (hookIdx && tab == 0) {
         if (up() && durationType().dots()) {
             //
@@ -1627,13 +1573,7 @@ void Chord::layoutStem()
 #if 0
                     _hook->layout();
                     QPointF p(_stem->hookPos());
-                    if (up()) {
-                        p.ry() -= _hook->bbox().top();
-                        p.rx() -= _stem->width();
-                    } else {
-                        p.ry() -= _hook->bbox().bottom();
-                        p.rx() -= _stem->width();
-                    }
+                    p.rx() -= _stem->width();
                     _hook->setPos(p);
 #endif
                 }
@@ -1650,13 +1590,7 @@ void Chord::layoutStem()
         if (_hook) {
             _hook->layout();
             QPointF p(_stem->hookPos());
-            if (up()) {
-                p.ry() -= _hook->bbox().top();
-                p.rx() -= _stem->width();
-            } else {
-                p.ry() -= _hook->bbox().bottom();
-                p.rx() -= _stem->width();
-            }
+            p.rx() -= _stem->width();
             _hook->setPos(p);
         }
         if (_stemSlash) {
@@ -2366,13 +2300,7 @@ void Chord::layoutTablature()
                 }
 
                 QPointF p(_stem->hookPos());
-                if (up()) {
-                    p.ry() -= _hook->bbox().top();
-                    p.rx() -= _stem->width();
-                } else {
-                    p.ry() -= _hook->bbox().bottom();
-                    p.rx() -= _stem->width();
-                }
+                p.rx() -= _stem->width();
                 _hook->setPos(p);
             }
         }
