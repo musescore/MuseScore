@@ -421,7 +421,7 @@ void Glissando::read(XmlReader& e)
             const QStringRef& tag = e.name();
             if (tag == "text") {
                   _showText = true;
-                  _text = e.readElementText();
+                  readProperty(e, Pid::GLISS_TEXT);
                   }
             else if (tag == "subtype")
                   _glissandoType = GlissandoType(e.readInt());
