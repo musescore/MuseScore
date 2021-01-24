@@ -1403,7 +1403,7 @@ qreal System::minDistance(System* s2) const
             }
 
       dist = qMax(dist, score()->staff(firstStaff)->userDist());
-      fixedDownDistance = false;
+      fixedSpacer = nullptr;
 
       for (MeasureBase* mb1 : ml) {
             if (mb1->isMeasure()) {
@@ -1411,8 +1411,8 @@ qreal System::minDistance(System* s2) const
                   Spacer* sp = m->vspacerDown(lastStaff);
                   if (sp) {
                         if (sp->spacerType() == SpacerType::FIXED) {
+                              fixedSpacer = sp;
                               dist = sp->gap();
-                              fixedDownDistance = true;
                               break;
                               }
                         else
@@ -1420,7 +1420,7 @@ qreal System::minDistance(System* s2) const
                         }
                   }
             }
-      if (!fixedDownDistance) {
+      if (!getFixedSpacer()) {
             for (MeasureBase* mb2 : s2->ml) {
                   if (mb2->isMeasure()) {
                         Measure* m = toMeasure(mb2);

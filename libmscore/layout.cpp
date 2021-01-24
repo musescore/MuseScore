@@ -1570,15 +1570,16 @@ static void distributeStaves(Page* page)
       VerticalGapDataList vgdl;
 
       // Find and classify all gaps between staves.
-      int ngaps { 0 };
-      qreal prevYBottom { page->tm() };
-      qreal yBottom     { 0.0        };
-      bool  vbox        { false      };
+      int    ngaps { 0 };
+      qreal  prevYBottom  { page->tm() };
+      qreal  yBottom      { 0.0        };
+      bool   vbox         { false      };
+      Spacer* fixedSpacer { nullptr    };
       bool transferNormalBracket { false };
       bool transferCurlyBracket  { false };
       for (System* system : page->systems()) {
             if (system->vbox()) {
-                  VerticalGapData* vgd = new VerticalGapData(!ngaps++, system, nullptr, nullptr, prevYBottom);
+                  VerticalGapData* vgd = new VerticalGapData(!ngaps++, system, nullptr, nullptr, nullptr, prevYBottom);
                   vgd->addSpaceAroundVBox(true);
                   prevYBottom = system->y();
                   yBottom     = system->y() + system->height();
@@ -1612,7 +1613,8 @@ static void distributeStaves(Page* page)
                         if (!sysStaff->show())
                               continue;
 
-                        VerticalGapData* vgd = new VerticalGapData(!ngaps++, system, staff, sysStaff, prevYBottom);
+                        VerticalGapData* vgd = new VerticalGapData(!ngaps++, system, staff, sysStaff, fixedSpacer, prevYBottom);
+                        fixedSpacer = nullptr;
 
                         if (newSystem) {
                               vgd->addSpaceBetweenSections();
@@ -1644,6 +1646,7 @@ static void distributeStaves(Page* page)
                   transferNormalBracket = endNormalBracket >= 0;
                   transferCurlyBracket  = endCurlyBracket >= 0;
                   }
+            fixedSpacer = system->getFixedSpacer();
             }
       --ngaps;
 
@@ -1773,7 +1776,7 @@ static void layoutPage(Page* page, qreal restHeight)
             System* s1 = page->systems().at(i);
             System* s2 = page->systems().at(i+1);
             s1->setDistance(s2->y() - s1->y());
-            if (s1->vbox() || s2->vbox() || s1->hasFixedDownDistance()) {
+            if (s1->vbox() || s2->vbox() || s1->getFixedSpacer()) {
                   if (s2->vbox()) {
                         checkDivider(true, s1, 0.0, true);      // remove
                         checkDivider(false, s1, 0.0, true);     // remove
@@ -4761,7 +4764,7 @@ void LayoutContext::collectPage()
                   if (vbox) {
                         dist += vbox->bottomGap();
                         }
-                  else if (!prevSystem->hasFixedDownDistance()) {
+                  else if (!prevSystem->getFixedSpacer()) {
                         qreal margin = qMax(curSystem->minBottom(), curSystem->spacerDistance(false));
                         dist += qMax(margin, slb);
                         }
@@ -5098,7 +5101,7 @@ LayoutContext::~LayoutContext()
 //   VerticalStretchData
 //---------------------------------------------------------
 
-VerticalGapData::VerticalGapData(bool first, System *sys, Staff *st, SysStaff *sst, qreal y)
+VerticalGapData::VerticalGapData(bool first, System *sys, Staff *st, SysStaff *sst, const Spacer* spacer, qreal y)
       : _fixedHeight(first), system(sys), sysStaff(sst), staff(st)
       {
       if (_fixedHeight) {
@@ -5106,8 +5109,15 @@ VerticalGapData::VerticalGapData(bool first, System *sys, Staff *st, SysStaff *s
             _maxActualSpacing = _normalisedSpacing;
             }
       else {
-            _normalisedSpacing = system->y() + (sysStaff ? sysStaff->y() : 0.0) - y;
-            _maxActualSpacing = system->score()->styleP(Sid::maxStaffSpread);
+            if (spacer) {
+                  _fixedHeight = true;
+                  _normalisedSpacing = spacer->gap();
+                  _maxActualSpacing = _normalisedSpacing;
+                  }
+            else {
+                  _normalisedSpacing = system->y() + (sysStaff ? sysStaff->y() : 0.0) - y;
+                  _maxActualSpacing = system->score()->styleP(Sid::maxStaffSpread);
+                  }
             }
       }
 

@@ -41,7 +41,7 @@ class VerticalGapData {
       SysStaff* sysStaff { nullptr };
       Staff*    staff    { nullptr };
 
-      VerticalGapData(bool first, System* sys, Staff* st, SysStaff* sst, qreal y);
+      VerticalGapData(bool first, System* sys, Staff* st, SysStaff* sst, const Spacer* spacer, qreal y);
 
       void addSpaceBetweenSections();
       void addSpaceAroundVBox(bool above);
