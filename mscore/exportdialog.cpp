@@ -446,7 +446,7 @@ void ExportDialog::accept()
       QString name = QString("%1/%2").arg(saveDirectory, cs->masterScore()->fileInfo()->completeBaseName());
       if (oneScore) {
             Score* score = scores.first();
-            name.append(QString("%1").arg(score->isMaster() ? "" : "-" + score->title()));
+            name.append(QString("%1").arg(score->isMaster() ? "" : "-" + mscore->saveFilename(score->title())));
             }
       else if (singlePDF)
             name.append(QString("-%1").arg(containsMasterScore ? tr("Score_and_Parts") : tr("Parts")));
@@ -487,7 +487,7 @@ void ExportDialog::accept()
                   QString definitiveFilename = QString("%1/%2%3.%4")
                         .arg(fileinfo.absolutePath(),
                              fileinfo.completeBaseName(),
-                             score->isMaster() ? "" : "-" + score->title(),
+                             score->isMaster() ? "" : "-" + mscore->saveFilename(score->title()),
                              suffix);
                   if (saveFormat != "png" && saveFormat != "svg" && QFileInfo(definitiveFilename).exists()) {
                         // Png and Svg export functions change the filename, so they
