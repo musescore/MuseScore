@@ -15,6 +15,7 @@
 
 #include "element.h"
 #include "durationtype.h"
+#include "staff.h"
 
 class QPointF;
 class QRectF;
@@ -30,14 +31,14 @@ namespace Ms {
 
 class ShadowNote final : public Element
 {
-    int _line;
-    SymId _notehead;
-    TDuration _duration;
-    int _voice;
-    bool _rest;
+    Fraction m_tick;
+    int m_lineIndex;
+    SymId m_noteheadSymbol;
+    TDuration m_duration;
+    bool m_isRest;
 
-    qreal _segmentSkylineTopY = 0;
-    qreal _segmentSkylineBottomY = 0;
+    qreal m_segmentSkylineTopY = 0;
+    qreal m_segmentSkylineBottomY = 0;
 
 public:
     ShadowNote(Score*);
@@ -45,23 +46,26 @@ public:
     ShadowNote* clone() const override { return new ShadowNote(*this); }
     ElementType type() const override { return ElementType::SHADOW_NOTE; }
 
+    bool isValid() const;
+
+    Fraction tick() const override { return m_tick; }
+    void setTick(Fraction t) { m_tick = t; }
+
+    int lineIndex() const { return m_lineIndex; }
+    void setLineIndex(int n) { m_lineIndex = n; }
+
+    void setState(SymId noteSymbol, TDuration duration, bool isRest, qreal segmentSkylineTopY, qreal segmentSkylineBottomY);
+
     void layout() override;
-    int line() const { return _line; }
-    void setLine(int n) { _line = n; }
 
     void draw(QPainter*) const override;
     void drawArticulations(QPainter* painter) const;
-    void drawMarcatto(QPainter* painter, const SymId& articulation, QRectF& boundRect) const;
+    void drawMarcato(QPainter* painter, const SymId& articulation, QRectF& boundRect) const;
     void drawArticulation(QPainter* painter, const SymId& articulation, QRectF& boundRect) const;
 
-    void setState(SymId noteSymbol, int voice, TDuration duration, bool rest = false, qreal segmentSkylineTopY = 0,
-                  qreal segmentSkylineBottomY = 0);
-
-    SymId getNoteFlag() const;
     bool computeUp() const;
-
-    SymId notehead() const { return _notehead; }
-    bool isValid() const;
+    SymId noteheadSymbol() const { return m_noteheadSymbol; }
+    SymId getNoteFlag() const;
 };
-}     // namespace Ms
+} // namespace Ms
 #endif

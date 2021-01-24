@@ -84,6 +84,7 @@ public:
     void setDrumNote(int v) { _drumNote = v; }
 
     int voice() const { return _track == -1 ? 0 : (_track % VOICES); }
+    void setVoice(int v) { setTrack((_track & ~3) | v); }
     int track() const { return _track; }
     void setTrack(int v) { _prevTrack = _track; _track = v; }
     int prevTrack() const { return _prevTrack; }
