@@ -233,9 +233,7 @@ void NotationNoteInput::setCurrentVoiceIndex(int voiceIndex)
     }
 
     Ms::InputState& inputState = score()->inputState();
-    int track = (inputState.track() / VOICES) * VOICES + voiceIndex;
-
-    inputState.setTrack(track);
+    inputState.setVoice(voiceIndex);
 
     if (inputState.segment()) {
         Ms::Segment* segment = inputState.segment()->measure()->first(Ms::SegmentType::ChordRest);

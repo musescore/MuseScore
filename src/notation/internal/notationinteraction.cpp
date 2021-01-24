@@ -143,74 +143,81 @@ INotationNoteInputPtr NotationInteraction::noteInput() const
     return m_noteInput;
 }
 
-//! NOTE This method copied from ScoreView::setShadowNote
 void NotationInteraction::showShadowNote(const QPointF& pos)
 {
-    const Ms::InputState& is = score()->inputState();
+    const Ms::InputState& inputState = score()->inputState();
     Ms::Position position;
-    if (!score()->getPosition(&position, pos, is.voice())) {
+    if (!score()->getPosition(&position, pos, inputState.voice())) {
         m_shadowNote->setVisible(false);
         return;
     }
 
-    // in any empty measure, pos will be right next to barline
-    // so pad this by barNoteDistance
-    qreal mag = score()->staff(position.staffIdx)->staffMag(Fraction(0,1));
-    qreal relX = position.pos.x() - position.segment->measure()->canvasPos().x();
-    position.pos.rx() -= qMin(relX - score()->styleP(Ms::Sid::barNoteDistance) * mag, 0.0);
-
-    m_shadowNote->setVisible(true);
-
     Staff* staff = score()->staff(position.staffIdx);
-    m_shadowNote->setMag(staff->staffMag(Fraction(0,1)));
     const Ms::Instrument* instr = staff->part()->instrument();
-    Ms::NoteHead::Group noteheadGroup = Ms::NoteHead::Group::HEAD_NORMAL;
-    int line = position.line;
-    Ms::NoteHead::Type noteHead = is.duration().headType();
 
-    if (instr->useDrumset()) {
-        const Ms::Drumset* ds  = instr->drumset();
-        int pitch    = is.drumNote();
-        if (pitch >= 0 && ds->isValid(pitch)) {
-            line     = ds->line(pitch);
-            noteheadGroup = ds->noteHead(pitch);
-        }
-    }
-
-    m_shadowNote->setLine(line);
-
-    int voice = 0;
-    if (is.drumNote() != -1 && is.drumset() && is.drumset()->isValid(is.drumNote())) {
-        voice = is.drumset()->voice(is.drumNote());
-    } else {
-        voice = is.voice();
-    }
-
-    Ms::SymId symNotehead;
-    Ms::TDuration d(is.duration());
-
+    Ms::Segment* segment = position.segment;
     qreal segmentSkylineTopY = 0;
     qreal segmentSkylineBottomY = 0;
+
     Ms::Segment* shadowNoteActualSegment = position.segment->prev1enabled();
     if (shadowNoteActualSegment) {
+        segment = shadowNoteActualSegment;
         segmentSkylineTopY = shadowNoteActualSegment->elementsTopOffsetFromSkyline(position.staffIdx);
         segmentSkylineBottomY = shadowNoteActualSegment->elementsBottomOffsetFromSkyline(position.staffIdx);
     }
 
-    if (is.rest()) {
+    Fraction tick = segment->tick();
+    qreal mag = staff->staffMag(tick);
+
+    // in any empty measure, pos will be right next to barline
+    // so pad this by barNoteDistance
+    qreal relX = position.pos.x() - position.segment->measure()->canvasPos().x();
+    position.pos.rx() -= qMin(relX - score()->styleP(Ms::Sid::barNoteDistance) * mag, 0.0);
+
+    Ms::NoteHead::Group noteheadGroup = Ms::NoteHead::Group::HEAD_NORMAL;
+    Ms::NoteHead::Type noteHead = inputState.duration().headType();
+    int line = position.line;
+
+    if (instr->useDrumset()) {
+        const Ms::Drumset* ds  = instr->drumset();
+        int pitch = inputState.drumNote();
+        if (pitch >= 0 && ds->isValid(pitch)) {
+            line = ds->line(pitch);
+            noteheadGroup = ds->noteHead(pitch);
+        }
+    }
+
+    int voice = 0;
+    if (inputState.drumNote() != -1 && inputState.drumset() && inputState.drumset()->isValid(inputState.drumNote())) {
+        voice = inputState.drumset()->voice(inputState.drumNote());
+    } else {
+        voice = inputState.voice();
+    }
+
+    m_shadowNote->setVisible(true);
+    m_shadowNote->setMag(mag);
+    m_shadowNote->setTick(tick);
+    m_shadowNote->setStaffIdx(position.staffIdx);
+    m_shadowNote->setVoice(voice);
+    m_shadowNote->setLineIndex(line);
+
+    Ms::SymId symNotehead;
+    Ms::TDuration duration(inputState.duration());
+
+    if (inputState.rest()) {
         int yo = 0;
-        Ms::Rest rest(Ms::gscore, d.type());
-        rest.setTicks(d.fraction());
-        symNotehead = rest.getSymbol(is.duration().type(), 0, staff->lines(position.segment->tick()), &yo);
-        m_shadowNote->setState(symNotehead, voice, d, true, segmentSkylineTopY, segmentSkylineBottomY);
+        Ms::Rest rest(Ms::gscore, duration.type());
+        rest.setTicks(duration.fraction());
+        symNotehead = rest.getSymbol(inputState.duration().type(), 0, staff->lines(position.segment->tick()), &yo);
+        m_shadowNote->setState(symNotehead, duration, true, segmentSkylineTopY, segmentSkylineBottomY);
     } else {
         if (Ms::NoteHead::Group::HEAD_CUSTOM == noteheadGroup) {
-            symNotehead = instr->drumset()->noteHeads(is.drumNote(), noteHead);
+            symNotehead = instr->drumset()->noteHeads(inputState.drumNote(), noteHead);
         } else {
             symNotehead = Note::noteHead(0, noteheadGroup, noteHead);
         }
 
-        m_shadowNote->setState(symNotehead, voice, d, false, segmentSkylineTopY, segmentSkylineBottomY);
+        m_shadowNote->setState(symNotehead, duration, false, segmentSkylineTopY, segmentSkylineBottomY);
     }
 
     m_shadowNote->layout();
