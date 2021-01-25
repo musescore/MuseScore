@@ -38,7 +38,7 @@ InstrumentPanelTreeModel::InstrumentPanelTreeModel(QObject* parent)
     : QAbstractItemModel(parent)
 {
     context()->currentMasterNotationChanged().onNotify(this, [this]() {
-        INotationPtr masterNotation = context()->currentMasterNotation();
+        IMasterNotationPtr masterNotation = context()->currentMasterNotation();
         m_masterNotationParts = masterNotation ? masterNotation->parts() : nullptr;
     });
 

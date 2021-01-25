@@ -60,20 +60,21 @@ void NotationSwitchListModel::loadNotations()
     beginResetModel();
     m_notations.clear();
 
-    if (!masterNotation()) {
+    IMasterNotationPtr masterNotation = this->masterNotation();
+    if (!masterNotation) {
         endResetModel();
         return;
     }
 
-    m_notations << masterNotation();
-    listenNotationOpeningStatus(masterNotation());
+    m_notations << masterNotation->notation();
+    listenNotationOpeningStatus(masterNotation->notation());
 
-    for (IExcerptNotationPtr excerpt: masterNotation()->excerpts().val) {
-        if (excerpt->opened().val) {
-            m_notations << excerpt;
+    for (IExcerptNotationPtr excerpt: masterNotation->excerpts().val) {
+        if (excerpt->notation()->opened().val) {
+            m_notations << excerpt->notation();
         }
 
-        listenNotationOpeningStatus(excerpt);
+        listenNotationOpeningStatus(excerpt->notation());
     }
 
     endResetModel();

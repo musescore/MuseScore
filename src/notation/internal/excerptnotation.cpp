@@ -45,6 +45,11 @@ ExcerptNotation::~ExcerptNotation()
     setScore(nullptr);
 }
 
+INotationPtr ExcerptNotation::notation()
+{
+    return shared_from_this();
+}
+
 Ms::Excerpt* ExcerptNotation::excerpt() const
 {
     return m_excerpt;

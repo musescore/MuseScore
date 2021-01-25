@@ -23,8 +23,15 @@
 #include "inotation.h"
 
 namespace mu::notation {
-class IExcerptNotation : virtual public INotation
+class IExcerptNotation
 {
+public:
+    virtual INotationPtr notation() = 0;
+
+    virtual Meta metaInfo() const = 0;
+    virtual void setMetaInfo(const Meta& meta) = 0;
+
+    virtual INotationPtr clone() const = 0;
 };
 using IExcerptNotationPtr = std::shared_ptr<IExcerptNotation>;
 }
