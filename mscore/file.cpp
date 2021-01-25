@@ -3368,17 +3368,19 @@ bool MuseScore::exportMp3AsJSON(const QString& inFilePath, const QString& outFil
 
 QByteArray MuseScore::exportPdfAsJSON(Score* score)
       {
+      QTemporaryFile tempPdfFile;
+      bool ok = tempPdfFile.open();
+
+      if (!ok) {
+          return QByteArray();
+      }
+
       QPrinter printer;
-      auto tempPdfFileName = "/tmp/MUTempPdf.pdf";
-      printer.setOutputFileName(tempPdfFileName);
+      printer.setOutputFileName(tempPdfFile.fileName());
       mscore->savePdf(score, printer);
-      QFile tempPdfFile(tempPdfFileName);
-      QByteArray pdfData;
-      if (tempPdfFile.open(QIODevice::ReadWrite)) {
-            pdfData = tempPdfFile.readAll();
-            tempPdfFile.close();
-            tempPdfFile.remove();
-            }
+
+      QByteArray pdfData = tempPdfFile.readAll();
+      tempPdfFile.close();
 
       return pdfData.toBase64();
       }
