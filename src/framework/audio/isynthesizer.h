@@ -24,10 +24,10 @@
 #include "ret.h"
 #include "synthtypes.h"
 #include "midi/miditypes.h"
-#include "audio/iaudiosource.h"
+#include "iaudiosource.h"
 
 namespace mu::audio::synth {
-class ISynthesizer : public audio::IAudioSource
+class ISynthesizer : public IAudioSource
 {
 public:
     virtual ~ISynthesizer() = default;

@@ -20,7 +20,7 @@
 
 #include <QQmlEngine>
 #include "modularity/ioc.h"
-#include "internal/audioengine.h"
+#include "internal/worker/audioengine.h"
 #include "internal/audioconfiguration.h"
 #include "ui/iuiengine.h"
 #include "devtools/audioenginedevtools.h"

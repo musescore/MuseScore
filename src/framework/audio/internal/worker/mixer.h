@@ -23,8 +23,8 @@
 #include <map>
 #include "imixer.h"
 #include "abstractaudiosource.h"
-#include "internal/mixerchannel.h"
-#include "internal/clock.h"
+#include "mixerchannel.h"
+#include "clock.h"
 
 namespace mu::audio {
 class Mixer : public IMixer, public AbstractAudioSource, public std::enable_shared_from_this<Mixer>

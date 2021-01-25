@@ -19,7 +19,7 @@
 #ifndef MU_AUDIO_ZERBERUSSYNTH_H
 #define MU_AUDIO_ZERBERUSSYNTH_H
 
-#include "../isynthesizer.h"
+#include "isynthesizer.h"
 
 namespace mu::zerberus {
 class Zerberus;

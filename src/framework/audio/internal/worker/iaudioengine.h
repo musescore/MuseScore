@@ -27,9 +27,9 @@
 #include "async/channel.h"
 #include "isequencer.h"
 #include "iaudiodriver.h"
-#include "iaudiobuffer.h"
+#include "internal/iaudiobuffer.h"
 #include "imixer.h"
-#include "internal/synthesizers/isynthesizer.h"
+#include "isynthesizer.h"
 
 namespace mu::audio {
 class IAudioEngine : MODULE_EXPORT_INTERFACE

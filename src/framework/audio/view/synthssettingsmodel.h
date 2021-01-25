@@ -24,8 +24,8 @@
 #include <QStringList>
 
 #include "modularity/ioc.h"
-#include "internal/synthesizers/isoundfontsprovider.h"
-#include "internal/synthesizers/isynthesizersregister.h"
+#include "isoundfontsprovider.h"
+#include "isynthesizersregister.h"
 #include "iaudioconfiguration.h"
 #include "iinteractive.h"
 

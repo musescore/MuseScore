@@ -23,7 +23,7 @@
 #include <optional>
 
 #include "internal/rpc/rpctypes.h"
-#include "internal/audioengine.h"
+#include "internal/worker/audioengine.h"
 
 namespace mu::audio {
 class AudioDevToolsController

@@ -23,7 +23,7 @@
 
 #include "modularity/ioc.h"
 #include "irpcchannel.h"
-#include "../audioengine.h"
+#include "internal/worker/audioengine.h"
 
 namespace mu::audio::rpc {
 class RpcController : public async::Asyncable

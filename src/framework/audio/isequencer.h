@@ -19,13 +19,13 @@
 #ifndef MU_AUDIO_ISEQUENCER_H
 #define MU_AUDIO_ISEQUENCER_H
 
-#include <variant>
-
-#include "async/channel.h"
 #include "modularity/imoduleexport.h"
-#include "iaudioplayer.h"
-#include "imidiplayer.h"
+#include "async/channel.h"
+#include "async/notification.h"
+
+#include "midi/miditypes.h"
 #include "iaudiostream.h"
+
 namespace mu::audio {
 class ISequencer : MODULE_EXPORT_INTERFACE
 {
@@ -34,9 +34,6 @@ class ISequencer : MODULE_EXPORT_INTERFACE
 public:
     virtual ~ISequencer() = default;
 
-    using MidiTrack = std::shared_ptr<IMIDIPlayer>;
-    using AudioTrack = std::shared_ptr<IAudioPlayer>;
-    using Track = std::shared_ptr<IPlayer>;
     using TrackID = unsigned int;
 
     enum Status {

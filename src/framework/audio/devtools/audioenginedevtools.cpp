@@ -17,12 +17,9 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 #include "audioenginedevtools.h"
-#include "framework/audio/internal/mixer.h"
-#include "internal/noisesource.h"
-#include "internal/sinesource.h"
-#include "internal/equaliser.h"
-#include "internal/audiostream.h"
 #include "log.h"
+
+#include "internal/worker/audiostream.h"
 
 using namespace mu::audio;
 using namespace mu::midi;

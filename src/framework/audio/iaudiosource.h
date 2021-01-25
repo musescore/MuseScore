@@ -20,6 +20,7 @@
 #ifndef MU_AUDIO_ISOURCE_H
 #define MU_AUDIO_ISOURCE_H
 
+#include <memory>
 #include <vector>
 #include "async/channel.h"
 
