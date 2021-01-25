@@ -56,7 +56,7 @@ void MusicXmlModule::registerExports()
     framework::ioc()->registerExport<IMusicXmlConfiguration>(moduleName(), s_configuration);
 }
 
-void MusicXmlModule::onInit(const framework::IApplication::RunMode&)
+void MusicXmlModule::resolveImports()
 {
     s_configuration->init();
 

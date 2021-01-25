@@ -17,7 +17,7 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-set(MODULE_TEST importexport_braille_tests)
+set(MODULE_TEST iex_braille_tests)
 
 set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
@@ -29,7 +29,7 @@ set(MODULE_TEST_SRC
 set(MODULE_TEST_LINK
     libmscore
     fonts
-    importexport
+    iex_braille
     )
 
 set(MODULE_TEST_DATA_ROOT ${CMAKE_CURRENT_LIST_DIR})

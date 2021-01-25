@@ -17,21 +17,17 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-set(MODULE_TEST importexport_biab_tests)
+set(MODULE iex_braille)
 
-set(MODULE_TEST_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/testbase.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/testbase.h
-    ${CMAKE_CURRENT_LIST_DIR}/tst_biab.cpp #fail compare with ref
-)
-
-set(MODULE_TEST_LINK
-    libmscore
-    fonts
-    importexport
+set(MODULE_SRC
+    ${CMAKE_CURRENT_LIST_DIR}/braillemodule.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/braillemodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/exportbraille.cpp
     )
 
-set(MODULE_TEST_DATA_ROOT ${CMAKE_CURRENT_LIST_DIR})
+set(MODULE_LINK
+    libmscore
+    )
 
-include(${PROJECT_SOURCE_DIR}/src/framework/testing/qtest.cmake)
+include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+

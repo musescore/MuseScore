@@ -17,13 +17,13 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-set(MODULE_TEST importexport_biab_tests)
+set(MODULE_TEST iex_bb_tests)
 
 set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
     ${CMAKE_CURRENT_LIST_DIR}/testbase.cpp
     ${CMAKE_CURRENT_LIST_DIR}/testbase.h
-    ${CMAKE_CURRENT_LIST_DIR}/tst_biab.cpp #fail compare with ref
+    ${CMAKE_CURRENT_LIST_DIR}/tst_biab.cpp
 )
 
 set(MODULE_TEST_LINK
