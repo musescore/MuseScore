@@ -54,8 +54,8 @@ mu::Ret ConverterController::fileConvert(const io::path& in, const io::path& out
 {
     TRACEFUNC;
     LOGI() << "in: " << in << ", out: " << out;
-    auto notation = notationCreator()->newMasterNotation();
-    IF_ASSERT_FAILED(notation) {
+    auto masterNotation = notationCreator()->newMasterNotation();
+    IF_ASSERT_FAILED(masterNotation) {
         return make_ret(Err::UnknownError);
     }
 
@@ -65,7 +65,7 @@ mu::Ret ConverterController::fileConvert(const io::path& in, const io::path& out
         return make_ret(Err::ConvertTypeUnknown);
     }
 
-    Ret ret = notation->load(in);
+    Ret ret = masterNotation->load(in);
     if (!ret) {
         LOGE() << "failed load notation, err: " << ret.toString() << ", path: " << in;
         return make_ret(Err::InFileFailedLoad);
@@ -76,7 +76,7 @@ mu::Ret ConverterController::fileConvert(const io::path& in, const io::path& out
         return make_ret(Err::OutFileFailedOpen);
     }
 
-    ret = writer->write(notation, file);
+    ret = writer->write(masterNotation->notation(), file);
     if (!ret) {
         LOGE() << "failed write, err: " << ret.toString() << ", path: " << out;
         return make_ret(Err::OutFileFailedWrite);

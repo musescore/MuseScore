@@ -50,16 +50,16 @@ bool GlobalContext::containsMasterNotation(const io::path& path) const
     return false;
 }
 
-void GlobalContext::setCurrentMasterNotation(const IMasterNotationPtr& notation)
+void GlobalContext::setCurrentMasterNotation(const IMasterNotationPtr& masterNotation)
 {
-    if (m_currentMasterNotation == notation) {
+    if (m_currentMasterNotation == masterNotation) {
         return;
     }
 
-    m_currentMasterNotation = notation;
+    m_currentMasterNotation = masterNotation;
     m_currentMasterNotationChanged.notify();
 
-    setCurrentNotation(notation);
+    setCurrentNotation(masterNotation->notation());
 }
 
 IMasterNotationPtr GlobalContext::currentMasterNotation() const

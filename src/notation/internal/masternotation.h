@@ -42,6 +42,8 @@ class MasterNotation : public IMasterNotation, public Notation, public std::enab
 public:
     explicit MasterNotation();
 
+    INotationPtr notation() override;
+
     Meta metaInfo() const override;
 
     Ret load(const io::path& path) override;

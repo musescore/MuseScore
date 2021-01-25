@@ -52,6 +52,11 @@ MasterNotation::MasterNotation()
     m_parts = std::make_shared<MasterNotationParts>(this, interaction(), undoStack());
 }
 
+INotationPtr MasterNotation::notation()
+{
+    return shared_from_this();
+}
+
 Meta MasterNotation::metaInfo() const
 {
     Meta meta = Notation::metaInfo();
@@ -610,7 +615,7 @@ void MasterNotation::createNonexistentExcerpts(const ExcerptNotationList& newExc
 {
     for (IExcerptNotationPtr excerptNotation : newExcerpts) {
         bool isNewExcerpt = std::find(m_excerpts.val.begin(), m_excerpts.val.end(), excerptNotation) == m_excerpts.val.end();
-        bool isEmpty = excerptNotation->parts()->partList().empty();
+        bool isEmpty = excerptNotation->notation()->parts()->partList().empty();
 
         if (isNewExcerpt && isEmpty) {
             Ms::Excerpt* excerpt = new Ms::Excerpt(masterScore());
