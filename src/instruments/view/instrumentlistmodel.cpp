@@ -52,7 +52,7 @@ void InstrumentListModel::load(bool canSelectMultipleInstruments, const QString&
         setInstrumentsMeta(newInstrumentsMeta);
     });
 
-    m_selectedFamilyId = ALL_INSTRUMENTS_ID;
+    m_selectedFamilyId = COMMON_FAMILY_ID;
     m_canSelectMultipleInstruments = canSelectMultipleInstruments;
     setInstrumentsMeta(instrumentsMeta.val);
 
@@ -61,10 +61,6 @@ void InstrumentListModel::load(bool canSelectMultipleInstruments, const QString&
     if (!currentInstrumentId.isEmpty()) {
         InstrumentTemplate instrumentTemplate = this->instrumentTemplate(currentInstrumentId);
         selectGroup(instrumentTemplate.instrument.groupId);
-    } else {
-        QVariantList groups = this->groups();
-        QString firstGroupId = !groups.isEmpty() ? groups.first().toMap().value("id").toString() : "";
-        selectGroup(firstGroupId);
     }
 }
 
@@ -88,23 +84,23 @@ void InstrumentListModel::initSelectedInstruments(const IDList& selectedInstrume
 
 QVariantList InstrumentListModel::families() const
 {
-    auto toMap = [](const InstrumentGenre& genre) {
+    auto toMap = [](const InstrumentFamily& family) {
         return QVariantMap {
-            { ID_KEY, genre.id },
-            { NAME_KEY, genre.name }
+            { ID_KEY, family.id },
+            { NAME_KEY, family.name }
         };
     };
 
     QVariantList result;
-    result << toMap(m_instrumentsMeta.genres[COMMON_GENRE_ID]);
+    result << toMap(m_instrumentsMeta.families[COMMON_FAMILY_ID]);
     result << allInstrumentsItem();
 
-    for (const InstrumentGenre& genre: m_instrumentsMeta.genres) {
-        if (genre.id == COMMON_GENRE_ID) {
+    for (const InstrumentFamily& family: m_instrumentsMeta.families) {
+        if (family.id == COMMON_FAMILY_ID) {
             continue;
         }
 
-        result << toMap(genre);
+        result << toMap(family);
     }
 
     return result;
@@ -112,16 +108,13 @@ QVariantList InstrumentListModel::families() const
 
 QVariantList InstrumentListModel::groups() const
 {
-    bool allInstrumentsSelected = m_selectedFamilyId.isEmpty() || m_selectedFamilyId == ALL_INSTRUMENTS_ID;
-    if (!isSearching() && allInstrumentsSelected) {
-        return allInstrumentsGroupList();
-    }
-
     QStringList availableGroups;
+
     for (const InstrumentTemplate& templ: m_instrumentsMeta.instrumentTemplates) {
         const Instrument& instrument = templ.instrument;
 
-        if (!isInstrumentAccepted(instrument)) {
+        constexpr bool compareWithSelectedGroup = false;
+        if (!isInstrumentAccepted(instrument, compareWithSelectedGroup)) {
             continue;
         }
 
@@ -359,21 +352,6 @@ void InstrumentListModel::setInstrumentsMeta(const InstrumentsMeta& meta)
     emit dataChanged();
 }
 
-QVariantList InstrumentListModel::allInstrumentsGroupList() const
-{
-    QVariantList result;
-
-    for (const InstrumentGroup& group: sortedGroupList()) {
-        QVariantMap obj;
-        obj[ID_KEY] = group.id;
-        obj[NAME_KEY] = group.name;
-
-        result << obj;
-    }
-
-    return result;
-}
-
 InstrumentGroupList InstrumentListModel::sortedGroupList() const
 {
     InstrumentGroupList result = m_instrumentsMeta.groups.values();
@@ -410,13 +388,13 @@ void InstrumentListModel::updateFamilyStateBySearch()
     }
 }
 
-bool InstrumentListModel::isInstrumentAccepted(const Instrument& instrument) const
+bool InstrumentListModel::isInstrumentAccepted(const Instrument& instrument, bool compareWithSelectedGroup) const
 {
     if (isSearching()) {
         return instrument.name.contains(m_searchText, Qt::CaseInsensitive);
     }
 
-    if (instrument.groupId != m_selectedGroupId && !m_selectedGroupId.isEmpty()) {
+    if (instrument.groupId != m_selectedGroupId && compareWithSelectedGroup) {
         return false;
     }
 
@@ -424,7 +402,7 @@ bool InstrumentListModel::isInstrumentAccepted(const Instrument& instrument) con
         return true;
     }
 
-    if (instrument.genreIds.contains(m_selectedFamilyId)) {
+    if (instrument.familyIds.contains(m_selectedFamilyId)) {
         return true;
     }
 

@@ -128,6 +128,7 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
 
                 width: 72
+                implicitHeight: 24
 
                 textRoleName: "text"
                 valueRoleName: "value"
