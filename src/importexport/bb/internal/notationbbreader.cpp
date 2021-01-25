@@ -16,20 +16,19 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_IMPORTEXPORT_NOTATIONBBREADER_H
-#define MU_IMPORTEXPORT_NOTATIONBBREADER_H
+#include "notationbbreader.h"
 
-#include "notation/inotationreader.h"
+#include "libmscore/score.h"
+#include "notation/notationerrors.h"
 
-namespace mu {
-namespace importexport {
-class NotationBBReader : public notation::INotationReader
+namespace Ms {
+extern Score::FileError importBB(MasterScore*, const QString& name);
+}
+
+using namespace mu::iex::bb;
+
+mu::Ret NotationBBReader::read(Ms::MasterScore* score, const io::path& path)
 {
-public:
-
-    Ret read(Ms::MasterScore* score, const io::path& path) override;
-};
+    Ms::Score::FileError err = Ms::importBB(score, path.toQString());
+    return mu::notation::scoreFileErrorToRet(err);
 }
-}
-
-#endif // MU_IMPORTEXPORT_NOTATIONBBREADER_H

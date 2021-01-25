@@ -17,6 +17,7 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
+add_subdirectory(bb)
 add_subdirectory(musicxml)
 
 # We are separating the importexport module into separate modules,
@@ -27,7 +28,6 @@ include(${CMAKE_CURRENT_LIST_DIR}/internal/midiimport/midiimport.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/internal/ove/ove.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/internal/guitarpro/guitarpro.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/internal/musedata/musedata.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/internal/bb/bb.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/internal/capella/capella.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/internal/bww/bww.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/internal/braille/braille.cmake)
@@ -38,7 +38,6 @@ set(MODULE_SRC
     ${OVE_SRC}
     ${GUITARPRO_SRC}
     ${MUSEDATA_SRC}
-    ${BB_SRC}
     ${CAPELLA_SRC}
     ${BWW_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/importexportmodule.cpp
@@ -51,8 +50,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationmidireader.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/musedatareader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/musedatareader.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationbbreader.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationbbreader.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/capellareader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/capellareader.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/overeader.cpp
