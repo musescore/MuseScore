@@ -16,26 +16,16 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#ifndef MU_PLUGINS_PLUGINSSERVICESTUB_H
+#define MU_PLUGINS_PLUGINSSERVICESTUB_H
 
-#ifndef MU_PLUGINS_PLUGINSSERVICE_H
-#define MU_PLUGINS_PLUGINSSERVICE_H
-
-#include "ipluginsservice.h"
-#include "ipluginsconfiguration.h"
-#include "system/ifilesystem.h"
-
-#include "modularity/ioc.h"
-#include "io/path.h"
-#include "async/asyncable.h"
+#include "plugins/ipluginsservice.h"
 
 namespace mu::plugins {
-class PluginsService : public IPluginsService, public async::Asyncable
+class PluginsServiceStub : public IPluginsService
 {
-    INJECT(plugins, IPluginsConfiguration, configuration)
-    INJECT(plugins, system::IFileSystem, fileSystem)
-
 public:
-    mu::RetVal<PluginInfoList> plugins(PluginsStatus status = PluginsStatus::All) const override;
+    RetVal<PluginInfoList> plugins(PluginsStatus status = All) const override;
 
     RetValCh<framework::Progress> install(const CodeKey& codeKey) override;
     RetValCh<framework::Progress> update(const CodeKey& codeKey) override;
@@ -44,22 +34,7 @@ public:
     Ret run(const CodeKey& codeKey) override;
 
     async::Channel<PluginInfo> pluginChanged() const override;
-
-private:
-    bool isAccepted(const CodeKey& codeKey, PluginsStatus status) const;
-
-    CodeKeyList installedPlugins() const;
-    void setInstalledPlugins(const CodeKeyList& codeKeyList);
-
-    bool isInstalled(const CodeKey& codeKey) const;
-
-    PluginInfoList readPlugins() const;
-    io::paths scanFileSystemForPlugins() const;
-
-    mu::RetVal<PluginInfo> pluginInfo(const CodeKey& codeKey) const;
-
-    async::Channel<PluginInfo> m_pluginChanged;
 };
 }
 
-#endif // MU_PLUGINS_PLUGINSSERVICE_H
+#endif // MU_PLUGINS_IPLUGINSSERVICE_H

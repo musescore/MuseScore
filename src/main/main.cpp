@@ -49,7 +49,6 @@
 #else
 #include "stubs/userscores/userscoresstubmodule.h"
 #endif
-#include "plugins/pluginsmodule.h"
 #include "notation/notationmodule.h"
 #include "importexport/importexportmodule.h"
 #include "importexport/musicxml/musicxmlmodule.h"
@@ -83,7 +82,11 @@
 
 #ifndef Q_OS_WASM
 #include "workspace/workspacemodule.h"
+#ifdef BUILD_PLUGINS_MODULE
 #include "plugins/pluginsmodule.h"
+#else
+#include "stubs/plugins/pluginsstubmodule.h"
+#endif
 #include "importexport/importexportmodule.h"
 #ifdef BUILD_CLOUD_MODULE
 #include "cloud/cloudmodule.h"
@@ -185,7 +188,11 @@ int main(int argc, char** argv)
     app.addModule(new mu::iex::bb::BBModule());
     app.addModule(new mu::iex::musicxml::MusicXmlModule());
     app.addModule(new mu::workspace::WorkspaceModule());
+#ifdef BUILD_PLUGINS_MODULE
     app.addModule(new mu::plugins::PluginsModule());
+#else
+    app.addModule(new mu::plugins::PluginsStubModule());
+#endif
 #ifdef BUILD_CLOUD_MODULE
     app.addModule(new mu::cloud::CloudModule());
 #else

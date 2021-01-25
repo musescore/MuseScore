@@ -28,8 +28,7 @@
 #include <QAbstractListModel>
 #include <QList>
 
-namespace mu {
-namespace plugins {
+namespace mu::plugins {
 class PluginsModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
@@ -73,7 +72,6 @@ private:
     QHash<int, QByteArray> m_roles;
     QList<PluginInfo> m_plugins;
 };
-}
 }
 
 #endif // MU_PLUGINS_PLUGINSMODEL_H
