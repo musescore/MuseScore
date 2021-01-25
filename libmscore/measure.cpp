@@ -4432,13 +4432,21 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
 
       while (s) {
             s->rxpos() = x;
-            if (!s->enabled() || !s->visible() || s->allElementsInvisible()) {
+            // skip disabled / invisible segments
+            // segments with all elements invisible are skipped,
+            // but only for headers or segments later in the measure -
+            // invisible key or time signatures at the beginning of non-header measures are treated normally here
+            // otherwise we would not allocate enough space for the first note
+            // as it is, this isn't quite right as the space will be given by key or time margins,
+            // not the bar to note distance
+            // TODO: skip these segments entirely and get the correct bar to note distance
+            if (!s->enabled() || !s->visible() || ((header() || s->rtick().isNotZero()) && s->allElementsInvisible())) {
                   s->setWidth(0);
                   s = s->next();
                   continue;
                   }
             Segment* ns = s->nextActive();
-            while (ns && ns->allElementsInvisible())
+            while (ns && ((header() || ns->rtick().isNotZero()) && ns->allElementsInvisible()))
                   ns = ns->nextActive();
             // end barline might be disabled
             // but still consider it for spacing of previous segment
@@ -4520,6 +4528,9 @@ void Measure::computeMinWidth()
       //
       // skip disabled segment
       //
+      // TODO: skip segments with all elements invisible also
+      // this will eventually allow us to calculate correct bar to note distance
+      // even if there is an invisible key or time signature present
       for (s = first(); s && !s->enabled(); s = s->next()) {
             s->rxpos() = 0;
             s->setWidth(0);
