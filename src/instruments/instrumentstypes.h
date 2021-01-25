@@ -96,14 +96,14 @@ struct InstrumentGroup
 using InstrumentGroupList = QList<InstrumentGroup>;
 using InstrumentGroupMap = QMap<QString /*id*/, InstrumentGroup>;
 
-struct InstrumentGenre
+struct InstrumentFamily
 {
     QString id;
     QString name;
 };
-using InstrumentGenreMap = QMap<QString /*id*/, InstrumentGenre>;
+using InstrumentFamilyMap = QMap<QString /*id*/, InstrumentFamily>;
 
-static const QString COMMON_GENRE_ID("common");
+static const QString COMMON_FAMILY_ID("common");
 
 struct Transposition
 {
@@ -125,7 +125,7 @@ struct Instrument
     int staves = 1;
 
     QString groupId;
-    QStringList genreIds;
+    QStringList familyIds;
 
     PitchRange amateurPitchRange;
     PitchRange professionalPitchRange;
@@ -176,7 +176,7 @@ struct InstrumentsMeta
 {
     InstrumentTemplateMap instrumentTemplates;
     InstrumentGroupMap groups;
-    InstrumentGenreMap genres;
+    InstrumentFamilyMap families;
     MidiArticulationMap articulations;
 };
 
