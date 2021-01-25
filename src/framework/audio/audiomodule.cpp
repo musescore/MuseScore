@@ -26,7 +26,12 @@
 #include "devtools/audioenginedevtools.h"
 
 #include "internal/rpc/queuedrpcchannel.h"
+#include "internal/rpc/rpccontrollers.h"
+#include "internal/rpc/rpcaudioenginecontroller.h"
 #include "internal/rpc/rpcsequencer.h"
+#include "internal/rpc/rpcsequencercontroller.h"
+#include "internal/rpc/rpcdevtoolscontroller.h"
+
 #include "internal/audiosanitizer.h"
 #include "internal/audiothread.h"
 #include "internal/audiobuffer.h"
@@ -47,6 +52,8 @@ using namespace mu::audio;
 static std::shared_ptr<AudioConfiguration> s_audioConfiguration = std::make_shared<AudioConfiguration>();
 static std::shared_ptr<AudioThread> s_audioWorker = std::make_shared<AudioThread>();
 static std::shared_ptr<mu::audio::AudioBuffer> s_audioBuffer = std::make_shared<mu::audio::AudioBuffer>();
+
+static std::shared_ptr<rpc::RpcControllers> s_rpcControllers = std::make_shared<rpc::RpcControllers>();
 static std::shared_ptr<rpc::RpcSequencer> s_rpcSequencer = std::make_shared<rpc::RpcSequencer>();
 
 #ifdef Q_OS_LINUX
@@ -151,7 +158,14 @@ void AudioModule::onInit(const framework::IApplication::RunMode&)
     s_audioWorker->setAudioBuffer(s_audioBuffer);
     s_audioWorker->run([]() {
         AudioSanitizer::setupWorkerThread();
+        ONLY_AUDIO_WORKER_THREAD;
+
         AudioEngine::instance()->setAudioBuffer(s_audioBuffer);
+
+        s_rpcControllers->reg(std::make_shared<rpc::RpcAudioEngineController>());
+        s_rpcControllers->reg(std::make_shared<rpc::RpcSequencerController>());
+        s_rpcControllers->reg(std::make_shared<rpc::RpcDevToolsController>());
+        s_rpcControllers->init(s_audioWorker->channel());
     });
 
     // Setup audio driver
@@ -186,6 +200,8 @@ void AudioModule::onDeinit()
 {
     s_audioDriver->close();
     s_audioWorker->stop([]() {
+        ONLY_AUDIO_WORKER_THREAD;
+        s_rpcControllers->deinit();
         AudioEngine::instance()->deinit();
     });
 }

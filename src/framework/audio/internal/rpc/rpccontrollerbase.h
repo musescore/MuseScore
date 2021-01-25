@@ -16,36 +16,41 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "audiosanitizer.h"
+#ifndef MU_AUDIO_RPCCONTROLLERBASE_H
+#define MU_AUDIO_RPCCONTROLLERBASE_H
 
-#include <thread>
+#include <functional>
+#include <map>
 
-using namespace mu::audio;
+#include "irpccontroller.h"
+#include "internal/worker/audioengine.h"
 
-static std::thread::id s_as_mainThreadID;
-static std::thread::id s_as_workerThreadID;
-
-void AudioSanitizer::setupMainThread()
+namespace mu::audio::rpc {
+class RpcControllerBase : public IRpcController
 {
-    s_as_mainThreadID = std::this_thread::get_id();
+public:
+
+    void init(const IRpcChannelPtr& channel) override;
+
+    void handle(const Msg& msg) override;
+
+protected:
+
+    virtual void doBind() = 0;
+
+    RpcControllerBase() = default;
+
+    using Call = std::function<void (const rpc::Args& args)>;
+    using Calls = std::map<rpc::Method, Call>;
+
+    bool isSerialized() const;
+    void bindMethod(const rpc::Method& method, const Call& call);
+    void doCall(const rpc::Msg& msg);
+    void sendToMain(const Msg& msg);
+
+    IRpcChannelPtr m_channel;
+    Calls m_calls;
+};
 }
 
-bool AudioSanitizer::isMainThread()
-{
-    return std::this_thread::get_id() == s_as_mainThreadID;
-}
-
-void AudioSanitizer::setupWorkerThread()
-{
-    s_as_workerThreadID = std::this_thread::get_id();
-}
-
-std::thread::id AudioSanitizer::workerThread()
-{
-    return s_as_workerThreadID;
-}
-
-bool AudioSanitizer::isWorkerThread()
-{
-    return std::this_thread::get_id() == s_as_workerThreadID;
-}
+#endif // MU_AUDIO_RPCCONTROLLERBASE_H

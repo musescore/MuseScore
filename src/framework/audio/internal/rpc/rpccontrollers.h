@@ -16,35 +16,44 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUDIO_IRPCCHANNEL_H
-#define MU_AUDIO_IRPCCHANNEL_H
+#ifndef MU_AUDIO_RPCCONTROLLERS_H
+#define MU_AUDIO_RPCCONTROLLERS_H
 
-#include <memory>
 #include <functional>
 
-#include "modularity/imoduleexport.h"
-#include "rpctypes.h"
+#include "irpcchannel.h"
+#include "irpccontroller.h"
+#include "internal/worker/audioengine.h"
 
 namespace mu::audio::rpc {
-class IRpcChannel : MODULE_EXPORT_INTERFACE
+class RpcControllers : public async::Asyncable
 {
-    INTERFACE_ID(mu::audio::IRpcChannel)
-
 public:
-    virtual ~IRpcChannel() = default;
+    RpcControllers() = default;
 
-    using ListenID = int;
-    using Handler = std::function<void (const Msg& msg)>;
+    void reg(const IRpcControllerPtr& controller);
 
-    virtual bool isSerialized() const = 0;
+    void init(const IRpcChannelPtr& channel);
+    void deinit();
 
-    virtual void send(const Msg& msg) = 0;
+private:
 
-    virtual ListenID listen(Handler h) = 0;
-    virtual void unlisten(ListenID id) = 0;
+    using Call = std::function<void (const Args& args)>;
+    using Calls = std::map<Method, Call>;
+
+    void bindMethod(Calls& calls, const Method& method, const Call& call);
+    void doCall(const Calls& calls, const Msg& msg);
+
+    AudioEngine* audioEngine() const;
+    ISequencerPtr sequencer() const;
+
+    void audioEngineHandle(const Msg& msg);
+    void sequencerHandle(const Msg& msg);
+
+    std::vector<IRpcControllerPtr> m_controllers;
+    IRpcChannelPtr m_channel;
+    IRpcChannel::ListenID m_listenID = -1;
 };
-
-using IRpcChannelPtr = std::shared_ptr<IRpcChannel>;
 }
 
-#endif // MU_AUDIO_IRPCCHANNEL_H
+#endif // MU_AUDIO_RPCCONTROLLERS_H
