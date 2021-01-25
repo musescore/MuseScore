@@ -16,23 +16,22 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#ifndef MU_WORKSPACE_WORKSPACESTUBMODULE_H
+#define MU_WORKSPACE_WORKSPACESTUBMODULE_H
 
-#ifndef MU_WORKSPACE_IWORKSPACECREATOR_H
-#define MU_WORKSPACE_IWORKSPACECREATOR_H
-
-#include "../iworkspace.h"
-#include "modularity/imoduleexport.h"
+#include "modularity/imodulesetup.h"
 
 namespace mu::workspace {
-class IWorkspaceCreator : MODULE_EXPORT_INTERFACE
+class WorkspaceStubModule : public framework::IModuleSetup
 {
-    INTERFACE_ID(IWorkspaceCreator)
-
 public:
-    virtual ~IWorkspaceCreator() = default;
+    std::string moduleName() const override;
 
-    virtual IWorkspacePtr newWorkspace(const std::string& workspaceName) const = 0;
+    void registerExports() override;
+    void resolveImports() override;
+    void registerUiTypes() override;
+    void registerResources() override;
 };
 }
 
-#endif // MU_WORKSPACE_IWORKSPACECREATOR_H
+#endif // MU_WORKSPACE_WORKSPACESTUBMODULE_H

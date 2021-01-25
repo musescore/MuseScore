@@ -71,7 +71,6 @@
 #include "stubs/instruments/instrumentsstubmodule.h"
 #endif
 #include "converter/convertermodule.h"
-#include "workspace/workspacemodule.h"
 
 #ifdef BUILD_VST
 #include "framework/vst/vstmodule.h"
@@ -81,7 +80,11 @@
 #endif
 
 #ifndef Q_OS_WASM
+#ifdef BUILD_WORKSPACE_MODULE
 #include "workspace/workspacemodule.h"
+#else
+#include "stubs/workspace/workspacestubmodule.h"
+#endif
 #ifdef BUILD_PLUGINS_MODULE
 #include "plugins/pluginsmodule.h"
 #else
@@ -187,7 +190,11 @@ int main(int argc, char** argv)
     app.addModule(new mu::importexport::ImportExportModule());
     app.addModule(new mu::iex::bb::BBModule());
     app.addModule(new mu::iex::musicxml::MusicXmlModule());
+#ifdef BUILD_WORKSPACE_MODULE
     app.addModule(new mu::workspace::WorkspaceModule());
+#else
+    app.addModule(new mu::workspace::WorkspaceStubModule());
+#endif
 #ifdef BUILD_PLUGINS_MODULE
     app.addModule(new mu::plugins::PluginsModule());
 #else
