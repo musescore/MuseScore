@@ -46,13 +46,13 @@ void PluginsModel::load()
 
     // TODO: this is temporary solution and will be changed in future
     QList<QString> thumbnailUrlExamples {
-        "placeholders/placeholder1.jpeg",
-        "placeholders/placeholder2.jpeg",
-        "placeholders/placeholder3.jpeg",
-        "placeholders/placeholder4.jpeg",
-        "placeholders/placeholder5.jpeg",
-        "placeholders/placeholder6.jpeg",
-        "placeholders/placeholder7.jpeg"
+        "qrc:/qml/MuseScore/Plugins/internal/placeholders/placeholder1.jpeg",
+        "qrc:/qml/MuseScore/Plugins/internal/placeholders/placeholder2.jpeg",
+        "qrc:/qml/MuseScore/Plugins/internal/placeholders/placeholder3.jpeg",
+        "qrc:/qml/MuseScore/Plugins/internal/placeholders/placeholder4.jpeg",
+        "qrc:/qml/MuseScore/Plugins/internal/placeholders/placeholder5.jpeg",
+        "qrc:/qml/MuseScore/Plugins/internal/placeholders/placeholder6.jpeg",
+        "qrc:/qml/MuseScore/Plugins/internal/placeholders/placeholder7.jpeg"
     };
 
     QList<QString> categoriesExamples {

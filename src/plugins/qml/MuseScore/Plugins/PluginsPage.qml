@@ -4,6 +4,8 @@ import QtQuick.Controls 2.2
 import MuseScore.UiComponents 1.0
 import MuseScore.Plugins 1.0
 
+import "internal"
+
 Item {
     id: root
 

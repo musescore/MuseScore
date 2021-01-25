@@ -17,6 +17,10 @@ if (NOT BUILD_LANGUAGES_MODULE)
     add_subdirectory(languages)
 endif (NOT BUILD_LANGUAGES_MODULE)
 
+if (NOT BUILD_PLUGINS_MODULE)
+    add_subdirectory(plugins)
+endif (NOT BUILD_PLUGINS_MODULE)
+
 if (NOT BUILD_PLAYBACK_MODULE)
     add_subdirectory(playback)
 endif (NOT BUILD_PLAYBACK_MODULE)

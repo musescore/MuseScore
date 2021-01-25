@@ -16,34 +16,42 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_PLUGINS_PLUGINSERRORS_H
-#define MU_PLUGINS_PLUGINSERRORS_H
+#include "pluginsstubmodule.h"
 
-#include "ret.h"
-#include "translation.h"
+#include "modularity/ioc.h"
+#include "ui/iuiengine.h"
 
-namespace mu::plugins {
-enum class Err {
-    Undefined       = int(Ret::Code::Undefined),
-    NoError         = int(Ret::Code::Ok),
-    UnknownError    = int(Ret::Code::ExtensionsFirst),
+#include "pluginsservicestub.h"
+#include "pluginsconfigurationstub.h"
 
-    PluginNotFound
-};
+#include "ui/iinteractiveuriregister.h"
 
-inline Ret make_ret(Err e)
+using namespace mu::plugins;
+using namespace mu::framework;
+using namespace mu::ui;
+
+static void plugins_init_qrc()
 {
-    int retCode = static_cast<int>(e);
-
-    switch (e) {
-    case Err::Undefined: return Ret(retCode);
-    case Err::NoError: return Ret(retCode);
-    case Err::UnknownError: return Ret(retCode);
-    case Err::PluginNotFound: return Ret(retCode, trc("plugins", "Plugin not found"));
-    }
-
-    return Ret(static_cast<int>(e));
-}
+    Q_INIT_RESOURCE(plugins);
 }
 
-#endif // MU_EXTENSIONS_EXTENSIONSERRORS_H
+std::string PluginsStubModule::moduleName() const
+{
+    return "plugins_stub";
+}
+
+void PluginsStubModule::registerExports()
+{
+    ioc()->registerExport<IPluginsService>(moduleName(), new PluginsServiceStub());
+    ioc()->registerExport<IPluginsConfiguration>(moduleName(), new PluginsConfigurationStub());
+}
+
+void PluginsStubModule::registerResources()
+{
+    plugins_init_qrc();
+}
+
+void PluginsStubModule::registerUiTypes()
+{
+    ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(plugins_QML_IMPORT);
+}
