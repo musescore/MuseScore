@@ -53,10 +53,8 @@ FlatButton {
         Column {
             id: column
 
-            anchors.top: parent.top
+            anchors.fill: parent
             anchors.topMargin: 10
-            anchors.left: parent.left
-            anchors.right: parent.right
             anchors.margins: 20
 
             spacing: 20
@@ -66,7 +64,7 @@ FlatButton {
 
                 anchors.horizontalCenter: parent.horizontalCenter
 
-                contentHeight: 28
+                implicitHeight: 28
                 spacing: 0
 
                 StyledTabButton {
