@@ -83,7 +83,6 @@ private:
     bool isSearching() const;
 
     void setInstrumentsMeta(const InstrumentsMeta& meta);
-    QVariantList allInstrumentsGroupList() const;
     QVariantMap allInstrumentsItem() const;
     InstrumentGroupList sortedGroupList() const;
 
@@ -91,7 +90,7 @@ private:
 
     void updateFamilyStateBySearch();
 
-    bool isInstrumentAccepted(const Instrument& instrument) const;
+    bool isInstrumentAccepted(const Instrument& instrument, bool compareWithSelectedGroup = true) const;
 
     InstrumentTemplate instrumentTemplate(const QString& instrumentId) const;
 
