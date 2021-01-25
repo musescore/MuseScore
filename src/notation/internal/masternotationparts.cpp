@@ -302,7 +302,7 @@ std::vector<INotationPartsPtr> MasterNotationParts::excerptsParts() const
     std::vector<INotationPartsPtr> result;
 
     for (IExcerptNotationPtr excerpt : m_excerpts) {
-        result.push_back(excerpt->parts());
+        result.push_back(excerpt->notation()->parts());
     }
 
     return result;

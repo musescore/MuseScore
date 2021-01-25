@@ -28,13 +28,15 @@ class Score;
 }
 
 namespace mu::notation {
-class ExcerptNotation : public IExcerptNotation, public Notation
+class ExcerptNotation : public IExcerptNotation, public Notation, public std::enable_shared_from_this<ExcerptNotation>
 {
 public:
     explicit ExcerptNotation() = default;
     explicit ExcerptNotation(Ms::Excerpt* excerpt);
 
     ~ExcerptNotation() override;
+
+    INotationPtr notation() override;
 
     Ms::Excerpt* excerpt() const;
     void setExcerpt(Ms::Excerpt* excerpt);

@@ -44,17 +44,16 @@ void TemplatePaintView::load(const QString& templatePath)
 
 void TemplatePaintView::load()
 {
-    IMasterNotationPtr notation = notationCreator()->newMasterNotation();
-    Ret ret = notation->load(m_templatePath);
+    IMasterNotationPtr masterNotation = notationCreator()->newMasterNotation();
+    Ret ret = masterNotation->load(m_templatePath);
 
     if (!ret) {
         LOGE() << ret.toString();
-        notation = nullptr;
     }
 
-    setNotation(notation);
+    setNotation(masterNotation->notation());
 
-    if (notation) {
+    if (masterNotation) {
         adjustCanvas();
     }
 }

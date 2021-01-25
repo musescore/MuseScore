@@ -20,16 +20,21 @@
 #define MU_NOTATION_IMASTERNOTATION_H
 
 #include "modularity/imoduleexport.h"
+#include "inotation.h"
 #include "iexcerptnotation.h"
-#include "ret.h"
+#include "retval.h"
 #include "io/path.h"
 
 namespace mu::notation {
 using ExcerptNotationList = std::vector<IExcerptNotationPtr>;
 
-class IMasterNotation : virtual public INotation
+class IMasterNotation
 {
 public:
+    virtual INotationPtr notation() = 0;
+
+    virtual Meta metaInfo() const = 0;
+
     virtual Ret load(const io::path& path) = 0;
     virtual io::path path() const = 0;
 
@@ -41,6 +46,9 @@ public:
 
     virtual ValCh<ExcerptNotationList> excerpts() const = 0;
     virtual void setExcerpts(const ExcerptNotationList& excerpts) = 0;
+
+    virtual INotationPartsPtr parts() const = 0;
+    virtual INotationPtr clone() const = 0;
 };
 
 using IMasterNotationPtr = std::shared_ptr<IMasterNotation>;

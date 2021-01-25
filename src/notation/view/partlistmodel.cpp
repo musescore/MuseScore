@@ -37,9 +37,15 @@ void PartListModel::load()
 {
     beginResetModel();
 
-    m_notations << masterNotation();
-    for (IExcerptNotationPtr excerpt : masterNotation()->excerpts().val) {
-        m_notations << excerpt;
+    IMasterNotationPtr masterNotation = this->masterNotation();
+    if (!masterNotation) {
+        endResetModel();
+        return;
+    }
+
+    m_notations << masterNotation->notation();
+    for (IExcerptNotationPtr excerpt : masterNotation->excerpts().val) {
+        m_notations << excerpt->notation();
     }
 
     endResetModel();
@@ -71,7 +77,7 @@ QVariant PartListModel::data(const QModelIndex& index, int role) const
 
 bool PartListModel::isMainNotation(INotationPtr notation) const
 {
-    return notation == masterNotation();
+    return notation == masterNotation()->notation();
 }
 
 QString PartListModel::formatVoicesTitle(INotationPtr notation) const
@@ -154,7 +160,7 @@ void PartListModel::createNewPart()
     Meta meta;
     meta.title = qtrc("notation", "Part");
 
-    INotationPtr notation = notationCreator()->newExcerptNotation();
+    INotationPtr notation = notationCreator()->newExcerptNotation()->notation();
 
     notation->setMetaInfo(meta);
 
