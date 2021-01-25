@@ -114,7 +114,7 @@ private slots:
 
 void TestBrailleIO::initTestCase()
 {
-    initMTest(QString(importexport_braille_tests_DATA_ROOT));
+    initMTest(QString(iex_braille_tests_DATA_ROOT));
 }
 
 //---------------------------------------------------------

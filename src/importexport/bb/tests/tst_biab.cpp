@@ -40,7 +40,7 @@ private slots:
 
 void TestBiab::initTestCase()
 {
-    initMTest(QString(importexport_biab_tests_DATA_ROOT));
+    initMTest(QString(iex_bb_tests_DATA_ROOT));
 }
 
 //---------------------------------------------------------
