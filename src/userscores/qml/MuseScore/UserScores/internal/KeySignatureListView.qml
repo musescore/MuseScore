@@ -26,24 +26,9 @@ GridView {
         radius: 3
         isSelected: modelData.title === currentSignature.title
 
-        Column {
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-            spacing: 10
-            
-            StyledIconLabel {
-                anchors.horizontalCenter: parent.horizontalCenter
-                height: 50
-                
-                font.pixelSize: 65
-                iconCode: modelData.icon
-            }
-            
-            StyledTextLabel {
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                text: modelData.title
-            }
+        KeySignature {
+            icon: modelData.icon
+            text: modelData.title
         }
         
         onClicked: {
