@@ -13,10 +13,12 @@
 // Note: this file is currently unfinished. It does not yet work in the mtest framework,
 // but serves as a data file for the iotest in this directory.
 
-#include <QtTest/QtTest>
-#include "mtest/testutils.h"
+#include "testing/qtestsuite.h"
+
+#include "testbase.h"
+
 #include "libmscore/score.h"
-#include "mscore/preferences.h"
+
 // start includes required for fixupScore()
 #include "libmscore/measure.h"
 #include "libmscore/staff.h"
@@ -27,7 +29,7 @@ namespace Ms {
 extern bool saveMxl(Score*, const QString&);
 }
 
-#define DIR QString("bww/io/")
+static const QString BWW_DIR("data/");
 
 using namespace Ms;
 
@@ -74,7 +76,7 @@ private slots:
 
 void TestBwwIO::initTestCase()
 {
-    initMTest();
+    initMTest(QString(iex_bww_tests_DATA_ROOT));
 }
 
 //---------------------------------------------------------
@@ -140,14 +142,14 @@ static void fixupScore(Score* score)
 void TestBwwIO::IoTest(const char* file)
 {
     MScore::debugMode = true;
-    preferences.musicxmlExportBreaks = MusicxmlExportBreaks::MANUAL;
-    preferences.musicxmlImportBreaks = true;
-    Score* score = readScore(DIR + file + ".xml");
+//    preferences.musicxmlExportBreaks = MusicxmlExportBreaks::MANUAL;
+//    preferences.musicxmlImportBreaks = true;
+    Score* score = readScore(BWW_DIR + file + ".xml");
     QVERIFY(score);
     fixupScore(score);
     score->doLayout();
     QVERIFY(saveMusicXml(score, QString(file) + ".xml"));
-    QVERIFY(saveCompareMusicXmlScore(score, QString(file) + ".xml", DIR + file + ".xml"));
+    QVERIFY(saveCompareMusicXmlScore(score, QString(file) + ".xml", BWW_DIR + file + ".xml"));
     delete score;
 }
 
@@ -159,16 +161,16 @@ void TestBwwIO::IoTest(const char* file)
 void TestBwwIO::IoTestRef(const char* file)
 {
     MScore::debugMode = true;
-    preferences.musicxmlExportBreaks = MusicxmlExportBreaks::MANUAL;
-    preferences.musicxmlImportBreaks = true;
-    Score* score = readScore(DIR + file + ".xml");
+//    preferences.musicxmlExportBreaks = MusicxmlExportBreaks::MANUAL;
+//    preferences.musicxmlImportBreaks = true;
+    Score* score = readScore(BWW_DIR + file + ".xml");
     QVERIFY(score);
     fixupScore(score);
     score->doLayout();
     QVERIFY(saveMusicXml(score, QString(file) + ".xml"));
-    QVERIFY(saveCompareMusicXmlScore(score, QString(file) + ".xml", DIR + file + "_ref.xml"));
+    QVERIFY(saveCompareMusicXmlScore(score, QString(file) + ".xml", BWW_DIR + file + "_ref.xml"));
     delete score;
 }
 
 QTEST_MAIN(TestBwwIO)
-#include "tst__io.moc"
+#include "tst_bww_io.moc"
