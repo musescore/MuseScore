@@ -50,9 +50,12 @@
 #include "stubs/userscores/userscoresstubmodule.h"
 #endif
 #include "notation/notationmodule.h"
+
 #include "importexport/importexportmodule.h"
 #include "importexport/musicxml/musicxmlmodule.h"
 #include "importexport/bb/bbmodule.h"
+#include "importexport/bww/bwwmodule.h"
+
 #include "commonscene/commonscenemodule.h"
 #ifdef BUILD_PALETTE_MODULE
 #include "palette/palettemodule.h"
@@ -189,7 +192,9 @@ int main(int argc, char** argv)
 #ifndef Q_OS_WASM
     app.addModule(new mu::importexport::ImportExportModule());
     app.addModule(new mu::iex::bb::BBModule());
+    app.addModule(new mu::iex::bww::BwwModule());
     app.addModule(new mu::iex::musicxml::MusicXmlModule());
+
 #ifdef BUILD_WORKSPACE_MODULE
     app.addModule(new mu::workspace::WorkspaceModule());
 #else
