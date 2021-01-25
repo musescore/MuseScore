@@ -16,18 +16,19 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_IEXBB_NOTATIONBBREADER_H
-#define MU_IEXBB_NOTATIONBBREADER_H
+#ifndef MU_IMPORTEXPORT_BWWMODULE_H
+#define MU_IMPORTEXPORT_BWWMODULE_H
 
-#include "notation/inotationreader.h"
+#include "modularity/imodulesetup.h"
 
-namespace mu::iex::bb {
-class NotationBBReader : public notation::INotationReader
+namespace mu::iex::bww {
+class BwwModule : public framework::IModuleSetup
 {
 public:
 
-    Ret read(Ms::MasterScore* score, const io::path& path) override;
+    std::string moduleName() const override;
+    void resolveImports() override;
 };
 }
 
-#endif // MU_IEXBB_NOTATIONBBREADER_H
+#endif // MU_IMPORTEXPORT_BWWMODULE_H

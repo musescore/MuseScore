@@ -16,18 +16,26 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_IEXBB_NOTATIONBBREADER_H
-#define MU_IEXBB_NOTATIONBBREADER_H
+#include "bwwmodule.h"
 
-#include "notation/inotationreader.h"
+#include "log.h"
+#include "modularity/ioc.h"
 
-namespace mu::iex::bb {
-class NotationBBReader : public notation::INotationReader
+#include "notation/inotationreadersregister.h"
+#include "internal/notationbwwreader.h"
+
+using namespace mu::iex::bww;
+using namespace mu::notation;
+
+std::string BwwModule::moduleName() const
 {
-public:
-
-    Ret read(Ms::MasterScore* score, const io::path& path) override;
-};
+    return "iex_bww";
 }
 
-#endif // MU_IEXBB_NOTATIONBBREADER_H
+void BwwModule::resolveImports()
+{
+    auto readers = framework::ioc()->resolve<INotationReadersRegister>(moduleName());
+    if (readers) {
+        readers->reg({ "bmw", "bww" }, std::make_shared<NotationBwwReader>());
+    }
+}
