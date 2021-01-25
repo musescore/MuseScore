@@ -62,7 +62,7 @@ void PaletteWorkspaceSetup::setup()
     };
 
     RetValCh<workspace::IWorkspacePtr> workspace = workspaceManager()->currentWorkspace();
-    if (workspace.val) {
+    if (workspace.ret) {
         bool ok = applyWorkspaceData(workspace.val);
         if (!ok) {
             Ms::PaletteTreePtr tree(Ms::PaletteCreator::newDefaultPaletteTree());
