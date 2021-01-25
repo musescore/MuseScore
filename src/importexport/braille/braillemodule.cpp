@@ -16,17 +16,24 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-
-#include "testing/environment.h"
+#include "braillemodule.h"
 
 #include "log.h"
-#include "framework/fonts/fontsmodule.h"
+#include "modularity/ioc.h"
 
-static mu::testing::SuiteEnvironment importexport_se(
+#include "notation/inotationwritersregister.h"
+
+using namespace mu::iex::braille;
+using namespace mu::notation;
+
+std::string BrailleModule::moduleName() const
 {
-    new mu::fonts::FontsModule(), // needs for libmscore
-},
-    []() {
-    LOGI() << "bb tests suite post init";
+    return "iex_braille";
 }
-    );
+
+void BrailleModule::resolveImports()
+{
+    auto writers = framework::ioc()->resolve<INotationWritersRegister>(moduleName());
+    if (writers) {
+    }
+}

@@ -16,21 +16,19 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_IMPORTEXPORT_MUSICXMLMODULE_H
-#define MU_IMPORTEXPORT_MUSICXMLMODULE_H
+#ifndef MU_IMPORTEXPORT_BRAILLEMODULE_H
+#define MU_IMPORTEXPORT_BRAILLEMODULE_H
 
 #include "modularity/imodulesetup.h"
 
-namespace mu::iex::musicxml {
-class MusicXmlModule : public framework::IModuleSetup
+namespace mu::iex::braille {
+class BrailleModule : public framework::IModuleSetup
 {
 public:
 
     std::string moduleName() const override;
-    void registerResources() override;
-    void registerExports() override;
     void resolveImports() override;
 };
 }
 
-#endif // MU_IMPORTEXPORT_MUSICXMLMODULE_H
+#endif // MU_IMPORTEXPORT_BRAILLEMODULE_H
