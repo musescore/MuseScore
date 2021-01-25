@@ -28,7 +28,6 @@
 #include "iaudiobuffer.h"
 #include "modularity/ioc.h"
 #include "rpc/queuedrpcchannel.h"
-#include "rpc/rpccontroller.h"
 
 namespace mu::audio {
 class AudioThread
@@ -56,7 +55,7 @@ private:
     OnStart m_onStart;
     OnFinished m_onFinished;
     rpc::QueuedRpcChannelPtr m_channel;
-    std::shared_ptr<rpc::RpcController> m_controller;
+    std::shared_ptr<rpc::RpcControllers> m_controller;
     std::shared_ptr<IAudioBuffer> m_buffer = nullptr;
     std::shared_ptr<std::thread> m_thread = nullptr;
     std::atomic<bool> m_running = false;

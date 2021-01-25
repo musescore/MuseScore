@@ -16,36 +16,46 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "audiosanitizer.h"
+#include "rpccontrollers.h"
 
-#include <thread>
+#include "log.h"
 
 using namespace mu::audio;
+using namespace mu::audio::rpc;
 
-static std::thread::id s_as_mainThreadID;
-static std::thread::id s_as_workerThreadID;
-
-void AudioSanitizer::setupMainThread()
+void RpcControllers::reg(const IRpcControllerPtr& controller)
 {
-    s_as_mainThreadID = std::this_thread::get_id();
+    IF_ASSERT_FAILED(controller) {
+        return;
+    }
+    m_controllers.push_back(controller);
+    if (m_channel) {
+        controller->init(m_channel);
+    }
 }
 
-bool AudioSanitizer::isMainThread()
+void RpcControllers::init(const IRpcChannelPtr& channel)
 {
-    return std::this_thread::get_id() == s_as_mainThreadID;
+    m_channel = channel;
+    if (m_channel) {
+        for (auto& cont : m_controllers) {
+            cont->init(channel);
+        }
+
+        m_listenID = m_channel->listen([this](const Msg& msg) {
+            for (auto& cont : m_controllers) {
+                if (cont->target() == msg.target.name) {
+                    cont->handle(msg);
+                }
+            }
+        });
+    }
 }
 
-void AudioSanitizer::setupWorkerThread()
+void RpcControllers::deinit()
 {
-    s_as_workerThreadID = std::this_thread::get_id();
-}
-
-std::thread::id AudioSanitizer::workerThread()
-{
-    return s_as_workerThreadID;
-}
-
-bool AudioSanitizer::isWorkerThread()
-{
-    return std::this_thread::get_id() == s_as_workerThreadID;
+    if (m_channel) {
+        m_channel->unlisten(m_listenID);
+        m_listenID = -1;
+    }
 }

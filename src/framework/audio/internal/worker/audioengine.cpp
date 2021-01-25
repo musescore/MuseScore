@@ -40,7 +40,6 @@ AudioEngine::AudioEngine()
 
 AudioEngine::~AudioEngine()
 {
-    ONLY_AUDIO_WORKER_THREAD;
 }
 
 bool AudioEngine::isInited() const

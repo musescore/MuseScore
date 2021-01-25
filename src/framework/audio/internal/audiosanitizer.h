@@ -22,6 +22,7 @@
 //! NOTE This is dev tools
 
 #include <cassert>
+#include <thread>
 
 namespace mu::audio {
 class AudioSanitizer
@@ -32,6 +33,7 @@ public:
     static bool isMainThread();
 
     static void setupWorkerThread();
+    static std::thread::id workerThread();
     static bool isWorkerThread();
 };
 }
