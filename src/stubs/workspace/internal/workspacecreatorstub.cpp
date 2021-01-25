@@ -16,23 +16,13 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#include "workspacecreatorstub.h"
 
-#ifndef MU_WORKSPACE_IWORKSPACECREATOR_H
-#define MU_WORKSPACE_IWORKSPACECREATOR_H
+#include "workspacestub.h"
 
-#include "../iworkspace.h"
-#include "modularity/imoduleexport.h"
+using namespace mu::workspace;
 
-namespace mu::workspace {
-class IWorkspaceCreator : MODULE_EXPORT_INTERFACE
+IWorkspacePtr WorkspaceCreatorStub::newWorkspace(const std::string&) const
 {
-    INTERFACE_ID(IWorkspaceCreator)
-
-public:
-    virtual ~IWorkspaceCreator() = default;
-
-    virtual IWorkspacePtr newWorkspace(const std::string& workspaceName) const = 0;
-};
+    return std::make_shared<WorkspaceStub>();
 }
-
-#endif // MU_WORKSPACE_IWORKSPACECREATOR_H

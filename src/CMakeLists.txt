@@ -21,7 +21,10 @@ if (BUILD_USERSCORES_MODULE)
 endif (BUILD_USERSCORES_MODULE)
 
 add_subdirectory(converter)
-add_subdirectory(workspace)
+
+if (BUILD_WORKSPACE_MODULE)
+    add_subdirectory(workspace)
+endif (BUILD_WORKSPACE_MODULE)
 
 if (NOT OS_IS_WASM)
     add_subdirectory(importexport)

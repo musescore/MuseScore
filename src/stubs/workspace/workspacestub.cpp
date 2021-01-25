@@ -16,23 +16,45 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#include "workspacestub.h"
 
-#ifndef MU_WORKSPACE_IWORKSPACECREATOR_H
-#define MU_WORKSPACE_IWORKSPACECREATOR_H
+using namespace mu::workspace;
 
-#include "../iworkspace.h"
-#include "modularity/imoduleexport.h"
-
-namespace mu::workspace {
-class IWorkspaceCreator : MODULE_EXPORT_INTERFACE
+std::string WorkspaceStub::name() const
 {
-    INTERFACE_ID(IWorkspaceCreator)
-
-public:
-    virtual ~IWorkspaceCreator() = default;
-
-    virtual IWorkspacePtr newWorkspace(const std::string& workspaceName) const = 0;
-};
+    return std::string();
 }
 
-#endif // MU_WORKSPACE_IWORKSPACECREATOR_H
+std::string WorkspaceStub::title() const
+{
+    return std::string();
+}
+
+AbstractDataPtr WorkspaceStub::data(WorkspaceTag, const std::string&) const
+{
+    return std::make_shared<AbstractData>();
+}
+
+AbstractDataPtrList WorkspaceStub::dataList(WorkspaceTag) const
+{
+    return {};
+}
+
+void WorkspaceStub::addData(AbstractDataPtr)
+{
+}
+
+mu::async::Channel<AbstractDataPtr> WorkspaceStub::dataChanged() const
+{
+    return mu::async::Channel<AbstractDataPtr>();
+}
+
+mu::Val WorkspaceStub::settingValue(const std::string&) const
+{
+    return mu::Val();
+}
+
+std::vector<std::string> WorkspaceStub::toolbarActions(const std::string&) const
+{
+    return {};
+}

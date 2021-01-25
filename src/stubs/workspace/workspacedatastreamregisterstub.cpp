@@ -16,23 +16,15 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#include "workspacedatastreamregisterstub.h"
 
-#ifndef MU_WORKSPACE_IWORKSPACECREATOR_H
-#define MU_WORKSPACE_IWORKSPACECREATOR_H
+using namespace mu::workspace;
 
-#include "../iworkspace.h"
-#include "modularity/imoduleexport.h"
-
-namespace mu::workspace {
-class IWorkspaceCreator : MODULE_EXPORT_INTERFACE
+void WorkspaceDataStreamRegisterStub::regStream(IWorkspaceDataStreamPtr)
 {
-    INTERFACE_ID(IWorkspaceCreator)
-
-public:
-    virtual ~IWorkspaceCreator() = default;
-
-    virtual IWorkspacePtr newWorkspace(const std::string& workspaceName) const = 0;
-};
 }
 
-#endif // MU_WORKSPACE_IWORKSPACECREATOR_H
+IWorkspaceDataStreamPtrList WorkspaceDataStreamRegisterStub::streams() const
+{
+    return {};
+}

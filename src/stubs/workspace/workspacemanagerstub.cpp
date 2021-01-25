@@ -16,23 +16,26 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#include "workspacemanagerstub.h"
 
-#ifndef MU_WORKSPACE_IWORKSPACECREATOR_H
-#define MU_WORKSPACE_IWORKSPACECREATOR_H
+using namespace mu::workspace;
+using namespace mu;
 
-#include "../iworkspace.h"
-#include "modularity/imoduleexport.h"
-
-namespace mu::workspace {
-class IWorkspaceCreator : MODULE_EXPORT_INTERFACE
+RetValCh<IWorkspacePtr> WorkspaceManagerStub::currentWorkspace() const
 {
-    INTERFACE_ID(IWorkspaceCreator)
-
-public:
-    virtual ~IWorkspaceCreator() = default;
-
-    virtual IWorkspacePtr newWorkspace(const std::string& workspaceName) const = 0;
-};
+    RetValCh<IWorkspacePtr> result;
+    result.ret = make_ret(Ret::Code::NotSupported);
+    return result;
 }
 
-#endif // MU_WORKSPACE_IWORKSPACECREATOR_H
+RetVal<IWorkspacePtrList> WorkspaceManagerStub::workspaces() const
+{
+    RetVal<IWorkspacePtrList> result;
+    result.ret = make_ret(Ret::Code::NotSupported);
+    return result;
+}
+
+Ret WorkspaceManagerStub::setWorkspaces(const IWorkspacePtrList&)
+{
+    return make_ret(Ret::Code::NotSupported);
+}
