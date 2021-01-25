@@ -24,9 +24,10 @@
 
 #include "log.h"
 #include "realfn.h"
-#include "audiosanitizer.h"
+#include "internal/audiosanitizer.h"
 
 using namespace mu::audio;
+using namespace mu::audio::synth;
 using namespace mu::midi;
 
 static tick_t REQUEST_BUFFER_SIZE = 480 * 4 * 10; // about 10 measures of 4/4 time signature
@@ -100,7 +101,7 @@ void MIDIPlayer::setupChannels()
     std::set<channel_t> chans = m_midiData.channels();
     m_synthStates.clear();
     for (channel_t ch : chans) {
-        std::shared_ptr<ISynthesizer> synth = determineSynthesizer(ch, m_midiData.synthMap);
+        ISynthesizerPtr synth = determineSynthesizer(ch, m_midiData.synthMap);
         synth->setIsActive(false);
 
         auto it = std::find_if(m_synthStates.begin(), m_synthStates.end(), [&synth](const SynthState& st) {

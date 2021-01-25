@@ -22,7 +22,7 @@
 #include "log.h"
 #include "ptrutils.h"
 #include "audioerrors.h"
-#include "audiosanitizer.h"
+#include "internal/audiosanitizer.h"
 
 using namespace mu::audio;
 using namespace mu::audio::synth;
@@ -68,7 +68,7 @@ mu::Ret AudioEngine::init(int sampleRate, uint16_t readBufferSize)
 
     m_buffer->setSource(m_mixer->mixedSource());
 
-    m_sequencer->audioTrackAdded().onReceive(this, [this](ISequencer::AudioTrack player) {
+    m_sequencer->audioTrackAdded().onReceive(this, [this](Sequencer::AudioTrack player) {
         m_mixer->addChannel(player->audioSource());
     });
 

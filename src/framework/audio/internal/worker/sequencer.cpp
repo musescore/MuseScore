@@ -21,8 +21,8 @@
 #include "log.h"
 
 #include "internal/audiosanitizer.h"
-#include "internal/midiplayer.h"
-#include "internal/audioplayer.h"
+#include "midiplayer.h"
+#include "audioplayer.h"
 
 using namespace mu::audio;
 
@@ -113,7 +113,7 @@ void Sequencer::setAudioTrack(ISequencer::TrackID id, const std::shared_ptr<audi
     track->load(stream);
 }
 
-mu::async::Channel<ISequencer::AudioTrack> Sequencer::audioTrackAdded() const
+mu::async::Channel<Sequencer::AudioTrack> Sequencer::audioTrackAdded() const
 {
     ONLY_AUDIO_WORKER_THREAD;
     return m_audioTrackAdded;
