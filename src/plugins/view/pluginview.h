@@ -35,8 +35,7 @@ class QmlPlugin;
 class QQuickView;
 class QQmlComponent;
 
-namespace mu {
-namespace plugins {
+namespace mu::plugins {
 class PluginView : public QObject
 {
     Q_OBJECT
@@ -66,7 +65,6 @@ private:
     QQmlComponent* m_component = nullptr;
     QQuickView* m_view = nullptr;
 };
-}
 }
 
 #endif // MU_PLUGINS_PLUGINVIEW_H
