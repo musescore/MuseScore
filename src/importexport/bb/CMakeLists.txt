@@ -17,4 +17,20 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-add_subdirectory(braille)
+set(MODULE iex_bb)
+
+set(MODULE_SRC
+    ${CMAKE_CURRENT_LIST_DIR}/bbmodule.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/bbmodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/bb.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/bb.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationbbreader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationbbreader.h
+    )
+
+set(MODULE_LINK
+    libmscore
+    )
+
+include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+

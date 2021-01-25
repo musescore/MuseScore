@@ -68,6 +68,7 @@ if (BUILD_UNIT_TESTS)
     add_subdirectory(userscores/tests)
     add_subdirectory(libmscore/tests)
     add_subdirectory(importexport/tests)
+    add_subdirectory(importexport/bb/tests)
     add_subdirectory(importexport/musicxml/tests)
 endif(BUILD_UNIT_TESTS)
 
