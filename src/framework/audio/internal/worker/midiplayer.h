@@ -30,7 +30,7 @@
 #include "imidiplayer.h"
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "synthesizers/isynthesizersregister.h"
+#include "isynthesizersregister.h"
 #include "midi/imidiportdatasender.h"
 
 namespace mu::audio {

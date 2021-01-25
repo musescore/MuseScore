@@ -26,6 +26,7 @@
 #include "clock.h"
 #include "isequencer.h"
 #include "imidiplayer.h"
+#include "iaudioplayer.h"
 
 namespace mu::audio {
 class Sequencer : public ISequencer, public async::Asyncable
@@ -33,6 +34,10 @@ class Sequencer : public ISequencer, public async::Asyncable
 public:
     Sequencer();
     ~Sequencer();
+
+    using MidiTrack = std::shared_ptr<IMIDIPlayer>;
+    using AudioTrack = std::shared_ptr<IAudioPlayer>;
+    using Track = std::shared_ptr<IPlayer>;
 
     Status status() const override;
     async::Channel<Status> statusChanged() const override;

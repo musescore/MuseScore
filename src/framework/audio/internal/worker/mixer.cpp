@@ -18,7 +18,7 @@
 //=============================================================================
 #include "mixer.h"
 #include "log.h"
-#include "audiosanitizer.h"
+#include "internal/audiosanitizer.h"
 
 using namespace mu::audio;
 

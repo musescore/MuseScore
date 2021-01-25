@@ -21,9 +21,9 @@
 #include "log.h"
 #include "internal/audiosanitizer.h"
 
-#include "internal/sinesource.h"
-#include "internal/noisesource.h"
-#include "internal/equaliser.h"
+#include "internal/worker/sinesource.h"
+#include "internal/worker/noisesource.h"
+#include "internal/worker/equaliser.h"
 
 using namespace mu::audio;
 using namespace mu::audio::rpc;

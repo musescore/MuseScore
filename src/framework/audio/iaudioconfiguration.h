@@ -23,7 +23,7 @@
 #include "io/path.h"
 #include "ret.h"
 #include "async/notification.h"
-#include "internal/synthesizers/synthtypes.h"
+#include "synthtypes.h"
 
 namespace mu::audio {
 class IAudioConfiguration : MODULE_EXPORT_INTERFACE

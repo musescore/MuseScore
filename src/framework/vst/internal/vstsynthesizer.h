@@ -20,8 +20,8 @@
 #define MU_VST_VSTSYNTHESIZER_H
 
 #include "modularity/ioc.h"
-#include "framework/audio/internal/synthesizers/isynthesizer.h"
-#include "framework/audio/internal/synthesizers/isynthesizersregister.h"
+#include "framework/audio/isynthesizer.h"
+#include "framework/audio/isynthesizersregister.h"
 
 namespace mu::vst {
 class PluginInstance;

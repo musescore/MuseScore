@@ -32,10 +32,8 @@ if (OS_IS_MAC)
     set_source_files_properties(${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosplatformtheme.mm
                                 PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON)
 
-    if (NOT (CC_IS_CLANG AND CMAKE_GENERATOR STREQUAL "Xcode"))
-        set_source_files_properties(${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosplatformtheme.mm
-                                    PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
-    endif()
+    set_source_files_properties(${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosplatformtheme.mm
+                                PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
 else()
     set(PLATFORM_THEME_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/stub/stubplatformtheme.cpp

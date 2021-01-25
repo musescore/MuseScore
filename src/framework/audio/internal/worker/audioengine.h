@@ -30,12 +30,12 @@
 #include "retval.h"
 
 #include "mixer.h"
-#include "audiobuffer.h"
-#include "internal/sequencer.h"
+#include "internal/audiobuffer.h"
+#include "sequencer.h"
 #include "async/asyncable.h"
-#include "synthesizers/isoundfontsprovider.h"
-#include "synthesizers/isynthesizersregister.h"
-#include "synthesizers/synthesizercontroller.h"
+#include "isoundfontsprovider.h"
+#include "isynthesizersregister.h"
+#include "internal/synthesizers/synthesizercontroller.h"
 
 namespace mu::audio {
 class AudioEngine : public IAudioEngine, public async::Asyncable

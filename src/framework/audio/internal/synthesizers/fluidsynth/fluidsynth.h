@@ -25,7 +25,7 @@
 #include <cstdint>
 #include <functional>
 
-#include "../isynthesizer.h"
+#include "isynthesizer.h"
 
 namespace mu::audio::synth {
 struct Fluid;
