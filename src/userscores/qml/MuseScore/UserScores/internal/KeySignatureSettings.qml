@@ -14,23 +14,9 @@ FlatButton {
     height: 96
     accentButton: popup.visible
 
-    Column {
-        anchors.horizontalCenter: root.horizontalCenter
-        anchors.verticalCenter: root.verticalCenter
-
-        spacing: 10
-
-        StyledIconLabel {
-            anchors.horizontalCenter: parent.horizontalCenter
-            height: 50
-
-            font.pixelSize: 65
-            iconCode: model.keySignature.icon
-        }
-
-        StyledTextLabel {
-            text: model.keySignature.title
-        }
+    KeySignature {
+        icon: model.keySignature.icon
+        text: model.keySignature.title
     }
 
     onClicked: {
@@ -72,6 +58,7 @@ FlatButton {
                     sideMargin: 22
                     isCurrent: bar.currentIndex === 0
                 }
+
                 StyledTabButton {
                     text: qsTrc("appshell", "Minor")
                     sideMargin: 22
