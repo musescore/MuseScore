@@ -16,23 +16,26 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#ifndef MU_WORKSPACE_WORKSPACESTUB_H
+#define MU_WORKSPACE_WORKSPACESTUB_H
 
-#ifndef MU_WORKSPACE_IWORKSPACECREATOR_H
-#define MU_WORKSPACE_IWORKSPACECREATOR_H
-
-#include "../iworkspace.h"
-#include "modularity/imoduleexport.h"
+#include "workspace/iworkspace.h"
 
 namespace mu::workspace {
-class IWorkspaceCreator : MODULE_EXPORT_INTERFACE
+class WorkspaceStub : public IWorkspace
 {
-    INTERFACE_ID(IWorkspaceCreator)
-
 public:
-    virtual ~IWorkspaceCreator() = default;
+    std::string name() const override;
+    std::string title() const override;
 
-    virtual IWorkspacePtr newWorkspace(const std::string& workspaceName) const = 0;
+    AbstractDataPtr data(WorkspaceTag tag, const std::string& name = std::string()) const override;
+    AbstractDataPtrList dataList(WorkspaceTag tag) const override;
+    void addData(AbstractDataPtr data) override;
+    async::Channel<AbstractDataPtr> dataChanged() const override;
+
+    Val settingValue(const std::string& key) const override;
+    std::vector<std::string> toolbarActions(const std::string& toolbarName) const override;
 };
 }
 
-#endif // MU_WORKSPACE_IWORKSPACECREATOR_H
+#endif // MU_WORKSPACE_WORKSPACESTUB_H
