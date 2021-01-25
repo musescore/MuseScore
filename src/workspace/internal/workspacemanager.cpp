@@ -217,8 +217,10 @@ void WorkspaceManager::setupCurrentWorkspace()
         workspace = findAndInit(defaultWorkspaceName);
     }
 
-    m_currentWorkspace = workspace;
-    m_currentWorkspaceChanged.send(workspace);
+    if (workspace) {
+        m_currentWorkspace = workspace;
+        m_currentWorkspaceChanged.send(workspace);
+    }
 }
 
 WorkspacePtr WorkspaceManager::findByName(const std::string& name) const

@@ -10,7 +10,10 @@ if (BUILD_NETWORK_MODULE)
     add_subdirectory(network)
 endif (BUILD_NETWORK_MODULE)
 
-add_subdirectory(system)
+if (BUILD_SYSTEM_MODULE)
+    add_subdirectory(system)
+endif (BUILD_SYSTEM_MODULE)
+
 add_subdirectory(audio)
 add_subdirectory(midi)
 add_subdirectory(midi_old)
