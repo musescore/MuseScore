@@ -16,19 +16,18 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "notationbwwreader.h"
+#ifndef MU_IEXBWW_NOTATIONBWWREADER_H
+#define MU_IEXBWW_NOTATIONBWWREADER_H
 
-#include "libmscore/score.h"
-#include "notation/notationerrors.h"
+#include "notation/inotationreader.h"
 
-namespace Ms {
-extern Score::FileError importBww(MasterScore*, const QString& name);
-}
-
-using namespace mu::importexport;
-
-mu::Ret NotationBwwReader::read(Ms::MasterScore* score, const io::path& path)
+namespace mu::iex::bww {
+class NotationBwwReader : public notation::INotationReader
 {
-    Ms::Score::FileError err = Ms::importBww(score, path.toQString());
-    return mu::notation::scoreFileErrorToRet(err);
+public:
+
+    Ret read(Ms::MasterScore* score, const io::path& path) override;
+};
 }
+
+#endif // MU_IEXBWW_NOTATIONBWWREADER_H
