@@ -16,36 +16,27 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "audiosanitizer.h"
+#ifndef MU_AUDIO_IRPCCONTROLLER_H
+#define MU_AUDIO_IRPCCONTROLLER_H
 
-#include <thread>
+#include <memory>
+#include "rpctypes.h"
+#include "irpcchannel.h"
 
-using namespace mu::audio;
-
-static std::thread::id s_as_mainThreadID;
-static std::thread::id s_as_workerThreadID;
-
-void AudioSanitizer::setupMainThread()
+namespace mu::audio::rpc {
+class IRpcController
 {
-    s_as_mainThreadID = std::this_thread::get_id();
+public:
+    virtual ~IRpcController() = default;
+
+    virtual TargetName target() const = 0;
+
+    virtual void init(const IRpcChannelPtr& channel) = 0;
+
+    virtual void handle(const Msg& msg) = 0;
+};
+
+using IRpcControllerPtr = std::shared_ptr<IRpcController>;
 }
 
-bool AudioSanitizer::isMainThread()
-{
-    return std::this_thread::get_id() == s_as_mainThreadID;
-}
-
-void AudioSanitizer::setupWorkerThread()
-{
-    s_as_workerThreadID = std::this_thread::get_id();
-}
-
-std::thread::id AudioSanitizer::workerThread()
-{
-    return s_as_workerThreadID;
-}
-
-bool AudioSanitizer::isWorkerThread()
-{
-    return std::this_thread::get_id() == s_as_workerThreadID;
-}
+#endif // MU_AUDIO_IRPCCONTROLLER_H

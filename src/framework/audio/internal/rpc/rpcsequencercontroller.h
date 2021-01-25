@@ -16,39 +16,24 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUDIO_RPCCONTROLLER_H
-#define MU_AUDIO_RPCCONTROLLER_H
+#ifndef MU_AUDIO_RPCSEQUENCERCONTROLLER_H
+#define MU_AUDIO_RPCSEQUENCERCONTROLLER_H
 
-#include <functional>
-
-#include "modularity/ioc.h"
-#include "irpcchannel.h"
-#include "internal/worker/audioengine.h"
+#include "async/asyncable.h"
+#include "rpccontrollerbase.h"
 
 namespace mu::audio::rpc {
-class RpcController : public async::Asyncable
+class RpcSequencerController : public RpcControllerBase, public async::Asyncable
 {
-    INJECT(audio, IRpcChannel, rpcChannel)
-
 public:
-    RpcController() = default;
+    TargetName target() const override;
 
-    void init();
+protected:
 
-private:
+    void doBind() override;
 
-    using Call = std::function<void (const Args& args)>;
-    using Calls = std::map<Method, Call>;
-
-    void bindMethod(Calls& calls, const Method& method, const Call& call);
-    void doCall(const Calls& calls, const Msg& msg);
-
-    AudioEngine* audioEngine() const;
     ISequencerPtr sequencer() const;
-
-    void audioEngineHandle(const Msg& msg);
-    void sequencerHandle(const Msg& msg);
 };
 }
 
-#endif // MU_AUDIO_RPCCONTROLLER_H
+#endif // MU_AUDIO_RPCSEQUENCERCONTROLLER_H

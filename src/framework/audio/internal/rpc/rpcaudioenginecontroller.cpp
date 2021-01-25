@@ -16,36 +16,22 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "audiosanitizer.h"
+#include "rpcaudioenginecontroller.h"
 
-#include <thread>
+#include "internal/worker/audioengine.h"
 
-using namespace mu::audio;
+using namespace mu::audio::rpc;
 
-static std::thread::id s_as_mainThreadID;
-static std::thread::id s_as_workerThreadID;
-
-void AudioSanitizer::setupMainThread()
+TargetName RpcAudioEngineController::target() const
 {
-    s_as_mainThreadID = std::this_thread::get_id();
+    return TargetName::AudioEngine;
 }
 
-bool AudioSanitizer::isMainThread()
+void RpcAudioEngineController::doBind()
 {
-    return std::this_thread::get_id() == s_as_mainThreadID;
-}
-
-void AudioSanitizer::setupWorkerThread()
-{
-    s_as_workerThreadID = std::this_thread::get_id();
-}
-
-std::thread::id AudioSanitizer::workerThread()
-{
-    return s_as_workerThreadID;
-}
-
-bool AudioSanitizer::isWorkerThread()
-{
-    return std::this_thread::get_id() == s_as_workerThreadID;
+    bindMethod("init", [this](const Args& args) {
+        int sampleRate = args.arg<int>(0);
+        uint16_t readBufferSize = args.arg<uint16_t>(1);
+        AudioEngine::instance()->init(sampleRate, readBufferSize);
+    });
 }

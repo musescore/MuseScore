@@ -136,12 +136,24 @@ set(MODULE_SRC
     # Rpc
     ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpctypes.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/irpcchannel.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/irpccontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/queuedrpcchannel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/queuedrpcchannel.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpccontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpccontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpccontrollers.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpccontrollers.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpccontrollerbase.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpccontrollerbase.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpcdevtoolscontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpcdevtoolscontroller.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpcaudioenginecontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpcaudioenginecontroller.h
+
     ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpcsequencer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpcsequencer.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpcsequencercontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpcsequencercontroller.h
 
     # DevTools
     ${CMAKE_CURRENT_LIST_DIR}/devtools/audioenginedevtools.cpp
