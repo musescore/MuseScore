@@ -53,6 +53,7 @@
 #include "notation/notationmodule.h"
 #include "importexport/importexportmodule.h"
 #include "importexport/musicxml/musicxmlmodule.h"
+#include "importexport/bb/bbmodule.h"
 #include "commonscene/commonscenemodule.h"
 #include "palette/palettemodule.h"
 #include "inspector/inspectormodule.h"
@@ -173,6 +174,7 @@ int main(int argc, char** argv)
 
 #ifndef Q_OS_WASM
     app.addModule(new mu::importexport::ImportExportModule());
+    app.addModule(new mu::iex::bb::BBModule());
     app.addModule(new mu::iex::musicxml::MusicXmlModule());
     app.addModule(new mu::workspace::WorkspaceModule());
     app.addModule(new mu::plugins::PluginsModule());

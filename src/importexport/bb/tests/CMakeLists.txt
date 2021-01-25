@@ -17,4 +17,21 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-add_subdirectory(braille)
+set(MODULE_TEST importexport_biab_tests)
+
+set(MODULE_TEST_SRC
+    ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/testbase.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/testbase.h
+    ${CMAKE_CURRENT_LIST_DIR}/tst_biab.cpp #fail compare with ref
+)
+
+set(MODULE_TEST_LINK
+    libmscore
+    fonts
+    iex_bb
+    )
+
+set(MODULE_TEST_DATA_ROOT ${CMAKE_CURRENT_LIST_DIR})
+
+include(${PROJECT_SOURCE_DIR}/src/framework/testing/qtest.cmake)

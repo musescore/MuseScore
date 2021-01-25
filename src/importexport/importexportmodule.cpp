@@ -25,7 +25,6 @@
 #include "notation/inotationreadersregister.h"
 #include "internal/notationmidireader.h"
 #include "internal/musedatareader.h"
-#include "internal/notationbbreader.h"
 #include "internal/capellareader.h"
 #include "internal/overeader.h"
 #include "internal/notationbwwreader.h"
@@ -66,7 +65,6 @@ void ImportExportModule::onInit(const framework::IApplication::RunMode&)
     if (readers) {
         readers->reg({ "mid", "midi", "kar" }, std::make_shared<NotationMidiReader>());
         readers->reg({ "md" }, std::make_shared<MuseDataReader>());
-        readers->reg({ "mgu", "sgu" }, std::make_shared<NotationBBReader>());
         readers->reg({ "cap", "capx" }, std::make_shared<CapellaReader>());
         readers->reg({ "ove", "scw" }, std::make_shared<OveReader>());
         readers->reg({ "bmw", "bww" }, std::make_shared<NotationBwwReader>());
