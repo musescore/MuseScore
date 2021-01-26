@@ -39,8 +39,7 @@ static const QString WITH_DOT_KEY("withDot");
 static const QString MIN_KEY("min");
 static const QString MAX_KEY("max");
 
-AdditionalInfoModel::KeySignature::KeySignature(const QString& title,
-        IconCode::Code icon, Key key, KeyMode mode)
+AdditionalInfoModel::KeySignature::KeySignature(const QString& title, IconCode::Code icon, Key key, KeyMode mode)
     : title(title), icon(icon), key(key), mode(mode)
 {
 }
