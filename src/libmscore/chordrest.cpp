@@ -542,7 +542,7 @@ Element* ChordRest::drop(EditData& data)
     case ElementType::REHEARSAL_MARK:
     {
         e->setParent(segment());
-        e->setTrack((track() / VOICES) * VOICES);
+        e->setTrack(trackZeroVoice(track()));
         if (e->isRehearsalMark()) {
             RehearsalMark* r = toRehearsalMark(e);
             if (fromPalette) {
@@ -560,7 +560,7 @@ Element* ChordRest::drop(EditData& data)
         } else {
             InstrumentChange* ic = toInstrumentChange(e);
             ic->setParent(segment());
-            ic->setTrack((track() / VOICES) * VOICES);
+            ic->setTrack(trackZeroVoice(track()));
             Instrument* instr = ic->instrument();
             Instrument* prevInstr = part()->instrument(tick());
             if (instr && instr->isDifferentInstrument(*prevInstr)) {
@@ -574,7 +574,7 @@ Element* ChordRest::drop(EditData& data)
         bool bNew;
         FiguredBass* fb = toFiguredBass(e);
         fb->setParent(segment());
-        fb->setTrack((track() / VOICES) * VOICES);
+        fb->setTrack(trackZeroVoice(track()));
         fb->setTicks(ticks());
         fb->setOnNote(true);
         FiguredBass::addFiguredBassToSegment(segment(), fb->track(), fb->ticks(), &bNew);

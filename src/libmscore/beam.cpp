@@ -461,9 +461,9 @@ void Beam::layout1()
 
         _cross = minMove < maxMove;
         if (minMove == 1 && maxMove == 1) {
-            setTrack(staffIdx * VOICES + voice());
+            setStaffIdx(staffIdx);
         } else if (c1) {
-            setTrack(c1->staffIdx() * VOICES + voice());
+            setStaffIdx(c1->staffIdx());
         }
 
         // int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;

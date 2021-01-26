@@ -382,11 +382,11 @@ public:
     int z() const;
     void setZ(int val) { _z = val; }
 
-    int staffIdx() const { return _track >> 2; }
-    void setStaffIdx(int val) { _track = val << 2 | voice(); }
+    int staffIdx() const { return _track / VOICES; }
+    void setStaffIdx(int val) { _track = val * VOICES + voice(); }
     virtual int vStaffIdx() const { return staffIdx(); }
-    int voice() const { return _track & 3; }
-    void setVoice(int v) { _track = (_track & ~3) | v; }
+    int voice() const { return _track % VOICES; }
+    void setVoice(int v) { _track = (_track / VOICES) * VOICES + v; }
     Staff* staff() const;
     const StaffType* staffType() const;
     bool onTabStaff() const;
