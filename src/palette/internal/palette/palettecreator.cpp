@@ -552,9 +552,6 @@ PalettePanel* PaletteCreator::newAccidentalsPalettePanel(bool defaultPalettePane
         end = int(AccidentalType::END);
     }
 
-    Accidental* a = new Accidental(gscore);
-    a->setAccidentalType(AccidentalType::NONE);
-    sp->append(a, a->subtypeUserName());
     for (int i = int(AccidentalType::FLAT); i < end; ++i) {
         Accidental* ac = new Accidental(gscore);
         ac->setAccidentalType(AccidentalType(i));
