@@ -196,7 +196,15 @@ struct Meta
 
 using MetaList = QList<Meta>;
 
-struct ScoreCreateOptions {
+struct Tempo
+{
+    int value = 0;
+    DurationType note = DurationType::V_QUARTER;
+    bool withDot = false;
+};
+
+struct ScoreCreateOptions
+{
     QString title;
     QString subtitle;
     QString composer;
@@ -204,7 +212,7 @@ struct ScoreCreateOptions {
     QString copyright;
 
     bool withTempo = false;
-    double tempo = 0.0;
+    Tempo tempo;
 
     int timesigNumerator = 0;
     int timesigDenominator = 1;

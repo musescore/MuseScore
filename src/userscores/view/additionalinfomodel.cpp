@@ -29,10 +29,55 @@ static const mu::notation::Fraction FOUR_FOUR_TIME_SIGNATURE(4, 4);
 static const mu::notation::Fraction ALLA_BREVE_TIME_SIGNATURE(2, 2);
 static const mu::notation::Fraction DEFAULT_PICKUP_TIME_SIGNATURE(1, 4);
 
+static const QString VALUE_KEY("value");
 static const QString NOTE_ICON_KEY("noteIcon");
+static const QString TITLE_KEY("title");
+static const QString ICON_KEY("icon");
+static const QString SIGNATURE_KEY("key");
+static const QString MODE_KEY("mode");
 static const QString WITH_DOT_KEY("withDot");
 static const QString MIN_KEY("min");
 static const QString MAX_KEY("max");
+
+AdditionalInfoModel::KeySignature::KeySignature(const QString& title,
+        IconCode::Code icon, Key key, KeyMode mode)
+    : title(title), icon(icon), key(key), mode(mode)
+{
+}
+
+AdditionalInfoModel::KeySignature::KeySignature(const QVariantMap& map)
+{
+    title = map[TITLE_KEY].toString();
+    icon = static_cast<IconCode::Code>(map[ICON_KEY].toInt());
+    key = static_cast<Key>(map[SIGNATURE_KEY].toInt());
+    mode = static_cast<KeyMode>(map[MODE_KEY].toInt());
+}
+
+QVariantMap AdditionalInfoModel::KeySignature::toMap() const
+{
+    return {
+        { TITLE_KEY, title },
+        { ICON_KEY, static_cast<int>(icon) },
+        { SIGNATURE_KEY, static_cast<int>(key) },
+        { MODE_KEY, static_cast<int>(mode) }
+    };
+}
+
+AdditionalInfoModel::Tempo::Tempo(const QVariantMap& map)
+{
+    value = map[VALUE_KEY].toInt();
+    noteIcon = static_cast<MusicalSymbolCodes::Code>(map[NOTE_ICON_KEY].toInt());
+    withDot = map[WITH_DOT_KEY].toBool();
+}
+
+QVariantMap AdditionalInfoModel::Tempo::toMap() const
+{
+    return {
+        { VALUE_KEY, value },
+        { NOTE_ICON_KEY, static_cast<int>(noteIcon) },
+        { WITH_DOT_KEY, withDot }
+    };
+}
 
 AdditionalInfoModel::AdditionalInfoModel(QObject* parent)
     : QObject(parent)
@@ -58,7 +103,7 @@ void AdditionalInfoModel::init()
     setPickupTimeSignature(DEFAULT_PICKUP_TIME_SIGNATURE);
 }
 
-QVariantList AdditionalInfoModel::keySignatureMajorList()
+QVariantList AdditionalInfoModel::keySignatureMajorList() const
 {
     QVariantList majorList;
     majorList << KeySignature(qtrc("userscore", "C major"), IconCode::Code::KEY_SIGNATURE_NONE, Key::C, KeyMode::MAJOR).toMap()
@@ -81,7 +126,7 @@ QVariantList AdditionalInfoModel::keySignatureMajorList()
     return majorList;
 }
 
-QVariantList AdditionalInfoModel::keySignatureMinorList()
+QVariantList AdditionalInfoModel::keySignatureMinorList() const
 {
     QVariantList minorList;
     minorList << KeySignature(qtrc("userscore", "A minor"), IconCode::Code::KEY_SIGNATURE_NONE, Key::C, KeyMode::MINOR).toMap()
@@ -185,22 +230,35 @@ QVariantList AdditionalInfoModel::musicSymbolCodes(int number) const
     return result;
 }
 
-QVariantMap AdditionalInfoModel::tempo() const
-{
-    return m_tempo.toMap();
-}
-
 bool AdditionalInfoModel::withTempo() const
 {
     return m_withTempo;
 }
 
-QVariantMap AdditionalInfoModel::tempoRange()
+QVariantMap AdditionalInfoModel::tempo() const
+{
+    return m_tempo.toMap();
+}
+
+int AdditionalInfoModel::currentTempoNoteIndex() const
+{
+    QVariantMap selectedNote;
+    selectedNote[NOTE_ICON_KEY] = static_cast<int>(m_tempo.noteIcon);
+
+    if (m_tempo.withDot) {
+        selectedNote[WITH_DOT_KEY] = m_tempo.withDot;
+    }
+
+    int index = tempoNotes().indexOf(selectedNote);
+    return index;
+}
+
+QVariantMap AdditionalInfoModel::tempoRange() const
 {
     return QVariantMap { { MIN_KEY, 20 }, { MAX_KEY, 400 } };
 }
 
-QVariantList AdditionalInfoModel::tempoMarks()
+QVariantList AdditionalInfoModel::tempoNotes() const
 {
     QVariantList marks;
     marks << QVariantMap { { NOTE_ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::SEMIQUAVER) } }
@@ -253,24 +311,32 @@ int AdditionalInfoModel::measureCount() const
     return m_measureCount;
 }
 
-QVariantMap AdditionalInfoModel::measureCountRange()
+QVariantMap AdditionalInfoModel::measureCountRange() const
 {
     return QVariantMap { { MIN_KEY, 1 }, { MAX_KEY, 9999 } };
 }
 
-QVariantList AdditionalInfoModel::timeSignatureDenominators()
+QVariantList AdditionalInfoModel::timeSignatureDenominators() const
 {
     return QVariantList { 1, 2, 4, 8, 16, 32, 64 };
 }
 
 void AdditionalInfoModel::setKeySignature(QVariantMap keySignature)
 {
+    if (m_keySignature.toMap() == keySignature) {
+        return;
+    }
+
     m_keySignature = KeySignature(keySignature);
     emit keySignatureChanged(keySignature);
 }
 
 void AdditionalInfoModel::setTempo(QVariantMap tempo)
 {
+    if (m_tempo.toMap() == tempo) {
+        return;
+    }
+
     m_tempo = Tempo(tempo);
     emit tempoChanged(tempo);
 }

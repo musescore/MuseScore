@@ -46,6 +46,7 @@ public:
 
 private:
     notation::ScoreCreateOptions parseOptions(const QVariantMap& info) const;
+    notation::DurationType noteIconToDurationType(int noteIconCode) const;
     void updatePreferredScoreCreationMode(bool isScoreCreatedFromInstruments);
 };
 }

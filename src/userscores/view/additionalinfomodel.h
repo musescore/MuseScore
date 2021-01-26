@@ -36,8 +36,9 @@ class AdditionalInfoModel : public QObject
     Q_PROPERTY(QVariantMap timeSignature READ timeSignature NOTIFY timeSignatureChanged)
     Q_PROPERTY(int timeSignatureType READ timeSignatureType WRITE setTimeSignatureType NOTIFY timeSignatureChanged)
 
-    Q_PROPERTY(QVariantMap tempo READ tempo WRITE setTempo NOTIFY tempoChanged)
     Q_PROPERTY(bool withTempo READ withTempo WRITE setWithTempo NOTIFY withTempoChanged)
+    Q_PROPERTY(QVariantMap tempo READ tempo WRITE setTempo NOTIFY tempoChanged)
+    Q_PROPERTY(int currentTempoNoteIndex READ currentTempoNoteIndex NOTIFY tempoChanged)
 
     Q_PROPERTY(QVariantMap pickupTimeSignature READ pickupTimeSignature NOTIFY pickupTimeSignatureChanged)
     Q_PROPERTY(bool withPickupMeasure READ withPickupMeasure WRITE setWithPickupMeasure NOTIFY withPickupMeasureChanged)
@@ -48,8 +49,8 @@ public:
 
     Q_INVOKABLE void init();
 
-    Q_INVOKABLE QVariantList keySignatureMajorList();
-    Q_INVOKABLE QVariantList keySignatureMinorList();
+    Q_INVOKABLE QVariantList keySignatureMajorList() const;
+    Q_INVOKABLE QVariantList keySignatureMinorList() const;
 
     QVariantMap keySignature() const;
 
@@ -61,19 +62,20 @@ public:
 
     Q_INVOKABLE QVariantList musicSymbolCodes(int number) const;
 
-    Q_INVOKABLE QVariantList timeSignatureDenominators();
+    Q_INVOKABLE QVariantList timeSignatureDenominators() const;
 
-    QVariantMap tempo() const;
     bool withTempo() const;
-    Q_INVOKABLE QVariantMap tempoRange();
-    Q_INVOKABLE QVariantList tempoMarks();
+    QVariantMap tempo() const;
+    int currentTempoNoteIndex() const;
+    Q_INVOKABLE QVariantMap tempoRange() const;
+    Q_INVOKABLE QVariantList tempoNotes() const;
 
     QVariantMap pickupTimeSignature() const;
     Q_INVOKABLE void setPickupTimeSignatureNumerator(int numerator);
     Q_INVOKABLE void setPickupTimeSignatureDenominator(int denominator);
     bool withPickupMeasure() const;
     int measureCount() const;
-    Q_INVOKABLE QVariantMap measureCountRange();
+    Q_INVOKABLE QVariantMap measureCountRange() const;
 
     enum TimeSignatureType {
         Fraction,
@@ -112,29 +114,11 @@ private:
         notation::Key key = notation::Key::C;
         notation::KeyMode mode = notation::KeyMode::UNKNOWN;
 
-        QVariantMap toMap() const
-        {
-            return {
-                { "title", title },
-                { "icon", static_cast<int>(icon) },
-                { "key", static_cast<int>(key) },
-                { "mode", static_cast<int>(mode) }
-            };
-        }
-
         KeySignature() = default;
+        KeySignature(const QVariantMap& map);
+        KeySignature(const QString& title, ui::IconCode::Code icon, notation::Key key, notation::KeyMode mode);
 
-        KeySignature(const QString& title, const ui::IconCode::Code& icon, const notation::Key& key,
-                     const notation::KeyMode& mode)
-            : title(title), icon(icon), key(key), mode(mode) {}
-
-        KeySignature(const QVariantMap& map)
-        {
-            title = map["title"].toString();
-            icon = static_cast<ui::IconCode::Code>(map["icon"].toInt());
-            key = static_cast<Ms::Key>(map["key"].toInt());
-            mode = static_cast<Ms::KeyMode>(map["mode"].toInt());
-        }
+        QVariantMap toMap() const;
     };
 
     struct Tempo {
@@ -143,22 +127,9 @@ private:
         bool withDot = false;
 
         Tempo() = default;
+        Tempo(const QVariantMap& map);
 
-        Tempo(const QVariantMap& map)
-        {
-            value = map["value"].toInt();
-            noteIcon = static_cast<ui::MusicalSymbolCodes::Code>(map["noteIcon"].toInt());
-            withDot = map["withDot"].toBool();
-        }
-
-        QVariantMap toMap() const
-        {
-            return {
-                { "value", value },
-                { "noteIcon", static_cast<int>(noteIcon) },
-                { "withDot", withDot }
-            };
-        }
+        QVariantMap toMap() const;
     };
 
     void setTimeSignature(const notation::Fraction& timeSignature);
