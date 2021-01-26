@@ -954,7 +954,7 @@ if (MSVC)
    set(CMAKE_SKIP_PACKAGE_ALL_DEPENDENCY true)
 
    # Set the startup project to "mscore".
-   if (NOT ${CMAKE_VERSION} VERSION_LESS "3.6.0")
+   if (NOT ${CMAKE_VERSION} VERSION_LESS "3.6.1")
       set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT mscore)
    endif ()
 
