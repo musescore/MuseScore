@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2020 MuseScore BVBA and others
+//  Copyright (C) 2021 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -16,26 +16,23 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUDIO_AUDIOMODULE_H
-#define MU_AUDIO_AUDIOMODULE_H
+#ifndef MU_AUDIO_AUDIOCONFIGURATIONSTUB_H
+#define MU_AUDIO_AUDIOCONFIGURATIONSTUB_H
 
-#include "modularity/imodulesetup.h"
-#include "async/asyncable.h"
+#include "audio/iaudioconfiguration.h"
 
 namespace mu::audio {
-class AudioModule : public framework::IModuleSetup, public async::Asyncable
+class AudioConfigurationStub : public IAudioConfiguration
 {
 public:
-    AudioModule();
+    unsigned int driverBufferSize() const override;
 
-    std::string moduleName() const override;
-
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
-    void onDeinit() override;
+    std::vector<io::path> soundFontPaths() const override;
+    const synth::SynthesizerState& synthesizerState() const override;
+    Ret saveSynthesizerState(const synth::SynthesizerState& state) override;
+    async::Notification synthesizerStateChanged() const override;
+    async::Notification synthesizerStateGroupChanged(const std::string& groupName) const override;
 };
 }
 
-#endif // MU_AUDIO_AUDIOMODULE_H
+#endif // MU_AUDIO_AUDIOCONFIGURATIONSTUB_H

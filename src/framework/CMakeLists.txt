@@ -17,7 +17,10 @@ if (BUILD_SYSTEM_MODULE)
     add_subdirectory(system)
 endif (BUILD_SYSTEM_MODULE)
 
-add_subdirectory(audio)
+if (BUILD_AUDIO_MODULE)
+    add_subdirectory(audio)
+endif (BUILD_AUDIO_MODULE)
+
 add_subdirectory(midi)
 add_subdirectory(midi_old)
 

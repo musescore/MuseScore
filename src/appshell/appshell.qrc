@@ -13,13 +13,9 @@
         <file>qml/DevTools/Interactive/InteractiveTests.qml</file>
         <file>qml/DevTools/DevToolsPage.qml</file>
         <file>qml/DevTools/DevToolsMenu.qml</file>
-        <file>qml/DevTools/Audio/AudioEngineTests.qml</file>
         <file>qml/DevTools/NotationDialogs/MU3Dialogs.qml</file>
         <file>qml/NotationPage/NotationStatusBar.qml</file>
         <file>qml/HomePage/AddonsContent.qml</file>
-        <file>qml/DevTools/Audio/SynthSettings.qml</file>
-        <file>qml/DevTools/Audio/SoundFontsPanel.qml</file>
-        <file>qml/DevTools/Audio/MidiPorts.qml</file>
         <file>qml/DevTools/VST/VSTTests.qml</file>
         <file>qml/DevTools/Gallery/GeneralComponentsGallery.qml</file>
         <file>qml/DevTools/Telemetry/TelemetryInfo.qml</file>

@@ -47,7 +47,11 @@
 #include "stubs/framework/network/networkstubmodule.h"
 #endif
 
+#ifdef BUILD_AUDIO_MODULE
 #include "framework/audio/audiomodule.h"
+#else
+#include "stubs/framework/audio/audiostubmodule.h"
+#endif
 #include "framework/midi/midimodule.h"
 
 #include "appshell/appshellmodule.h"
@@ -171,7 +175,11 @@ int main(int argc, char** argv)
     app.addModule(new mu::shortcuts::ShortcutsStubModule());
 #endif
 
+#ifdef BUILD_AUDIO_MODULE
     app.addModule(new mu::audio::AudioModule());
+#else
+    app.addModule(new mu::audio::AudioStubModule());
+#endif
     app.addModule(new mu::midi::MidiModule());
 
 #ifdef BUILD_USERSCORES_MODULE

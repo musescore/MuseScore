@@ -4,12 +4,12 @@ import MuseScore.Dock 1.0
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Plugins 1.0
+import MuseScore.Audio 1.0
 
 import "./Gallery"
 import "./Interactive"
 import "./NotationDialogs"
 import "./Telemetry"
-import "./Audio"
 import "./VST"
 
 DockPage {
