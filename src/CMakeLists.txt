@@ -12,7 +12,6 @@ add_subdirectory(libmscore)
 add_subdirectory(appshell)
 
 # Modules
-add_subdirectory(audiofile)
 add_subdirectory(context)
 add_subdirectory(notation)
 

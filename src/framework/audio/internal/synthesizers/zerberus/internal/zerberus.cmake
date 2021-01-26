@@ -1,5 +1,7 @@
 
 set(ZERBERUS_SRC
+    ${CMAKE_CURRENT_LIST_DIR}/audiofile/audiofile.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/audiofile/audiofile.h
     ${CMAKE_CURRENT_LIST_DIR}/channel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/channel.h
     ${CMAKE_CURRENT_LIST_DIR}/filter.cpp
