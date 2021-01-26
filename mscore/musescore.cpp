@@ -3020,6 +3020,9 @@ void MuseScore::reDisplayDockWidget(QDockWidget* widget, bool visible)
             widget->setFloating(true);
             }
       widget->setVisible(visible);
+
+      //Bring the widget to the top of the dock
+      widget->raise();
       }
 
 //---------------------------------------------------------
