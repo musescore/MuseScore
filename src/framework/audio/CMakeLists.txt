@@ -63,6 +63,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/isoundfontsprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiodriver.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiosource.h
+    ${CMAKE_CURRENT_LIST_DIR}/iaudioprocessor.h
     ${CMAKE_CURRENT_LIST_DIR}/synthtypes.h
 
     # Common internal
@@ -81,7 +82,6 @@ set(MODULE_SRC
 
     # Worker
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/iaudioengine.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/iaudioinsert.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/imixer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/imixerchannel.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/iplayer.h
@@ -89,8 +89,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/imidiplayer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/abstractaudiosource.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/abstractaudiosource.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/abstractaudioinsert.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/abstractaudioinsert.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/samplerateconvertor.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/samplerateconvertor.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/audiostream.cpp

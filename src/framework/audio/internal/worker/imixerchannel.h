@@ -23,7 +23,7 @@
 #include <memory>
 #include "async/asyncable.h"
 #include "iaudiosource.h"
-#include "iaudioinsert.h"
+#include "iaudioprocessor.h"
 
 namespace mu::audio {
 class IMixerChannel
@@ -44,8 +44,8 @@ public:
     virtual void setBalance(std::complex<float> value) = 0;
     virtual void setBalance(unsigned int streamId, std::complex<float> value) = 0;
 
-    virtual std::shared_ptr<IAudioInsert> insert(unsigned int number) const = 0;
-    virtual void setInsert(unsigned int number, std::shared_ptr<IAudioInsert> insert) = 0;
+    virtual IAudioProcessorPtr processor(unsigned int number) const = 0;
+    virtual void setProcessor(unsigned int number, IAudioProcessorPtr proc) = 0;
 };
 }
 

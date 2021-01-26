@@ -24,7 +24,7 @@
 #include <map>
 #include "async/asyncable.h"
 #include "iaudiosource.h"
-#include "iaudioinsert.h"
+#include "iaudioprocessor.h"
 #include "imixerchannel.h"
 #include "abstractaudiosource.h"
 
@@ -53,8 +53,8 @@ public:
     void setBalance(std::complex<float> value) override;
     void setBalance(unsigned int streamId, std::complex<float> value) override;
 
-    std::shared_ptr<IAudioInsert> insert(unsigned int number) const override;
-    void setInsert(unsigned int number, std::shared_ptr<IAudioInsert> insert) override;
+    IAudioProcessorPtr processor(unsigned int number) const override;
+    void setProcessor(unsigned int number, IAudioProcessorPtr proc) override;
 
 protected:
     void updateBalanceLevelMaps();
@@ -63,7 +63,7 @@ protected:
     std::shared_ptr<IAudioSource> m_source = nullptr;
     std::map<unsigned int, std::complex<float> > m_balance = {};
     std::map<unsigned int, float> m_level = {};
-    std::map<unsigned int, std::shared_ptr<IAudioInsert> > m_insertList = {};
+    std::map<unsigned int, IAudioProcessorPtr > m_processorList = {};
 };
 }
 

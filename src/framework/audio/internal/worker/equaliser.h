@@ -19,16 +19,19 @@
 #ifndef MU_AUDIO_EQUALISER_H
 #define MU_AUDIO_EQUALISER_H
 
-#include "abstractaudioinsert.h"
+#include "iaudioprocessor.h"
 
 namespace mu::audio {
-class Equaliser : public AbstractAudioInsert
+class Equaliser : public IAudioProcessor
 {
 public:
     Equaliser();
 
     unsigned int streamCount() const override;
     void setSampleRate(unsigned int sampleRate) override;
+
+    bool active() const override;
+    void setActive(bool active) override;
 
     void setFrequency(float value);
     void setGain(float value);
@@ -38,6 +41,9 @@ public:
 
 private:
     void calculate();
+
+    unsigned int m_sampleRate = 0;
+    bool m_active = true;
 
     float m_gain = 0, m_frequency = 1'000.f, m_q = 1.f;
     float m_a[3] = { 0, 0, 0 };
