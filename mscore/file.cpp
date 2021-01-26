@@ -395,7 +395,7 @@ void MuseScore::askAboutApplyingEdwinIfNeed(const QString& fileSuffix)
 //   openScore
 //---------------------------------------------------------
 
-Score* MuseScore::openScore(const QString& fn, bool switchTab, const bool considerInCurrentSession)
+Score* MuseScore::openScore(const QString& fn, bool switchTab, const bool considerInCurrentSession, const QString& name)
       {
       //
       // make sure we load a file only once
@@ -414,6 +414,10 @@ Score* MuseScore::openScore(const QString& fn, bool switchTab, const bool consid
 
       MasterScore* score = readScore(fn);
       if (score) {
+            if (!name.isEmpty())
+                  score->masterScore()->fileInfo()->setFile(name);
+                  // TODO: what if that path is no longer valid?
+            
             ScoreMigrator_3_6 migrator;
 
             migrator.registerHandler(new StyleDefaultsHandler());

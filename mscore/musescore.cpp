@@ -3496,21 +3496,7 @@ static void loadScores(const QStringList& argv)
             else {
                   switch (preferences.sessionStart()) {
                         case SessionStart::LAST:
-                              {
-                              QSettings settings;
-                              int n = settings.value("scores", 0).toInt();
-                              int c = settings.value("currentScore", 0).toInt();
-                              for (int i = 0; i < n; ++i) {
-                                    QString s = settings.value(QString("score-%1").arg(i),"").toString();
-                                    MasterScore* score = mscore->readScore(s);
-                                    if (score) {
-                                          int view = mscore->appendScore(score);
-                                          if (i == c)
-                                                currentScoreView = view;
-                                          }
-                                    }
-                              }
-                              break;
+                              return; // Already managed by `restoreSession`
                         case SessionStart::EMPTY:
                               break;
                         case SessionStart::NEW:
@@ -5336,13 +5322,8 @@ bool MuseScore::restoreSession(bool always)
                                     else if (t == "dirty")
                                           /*int dirty =*/ e.readInt();
                                     else if (t == "path") {
-                                          Score* score = openScore(e.readElementText());
+                                          Score* score = openScore(e.readElementText(), false, true, name);
                                           if (score) {
-                                                if (!name.isEmpty()) {
-                                                      QFileInfo* fi = score->masterScore()->fileInfo();
-                                                      fi->setFile(name);
-                                                      // TODO: what if that path is no longer valid?
-                                                      }
                                                 if (cleanExit) {
                                                       // override if last session did a clean exit
                                                       created = false;
@@ -5393,7 +5374,7 @@ bool MuseScore::restoreSession(bool always)
                                           return false;
                                           }
                                     }
-                              (tab3 == 0 ? tab1 : tab2)->initScoreView(idx1, logicalZoomLevel, zoomIndex, x, y);
+                              (tab3 == 0 ? tab1 : tab2)->queueInitScoreView(idx1, logicalZoomLevel, zoomIndex, x, y);
                               }
                         else if (tag == "tab")
                               tab = e.readInt();
