@@ -102,7 +102,7 @@ void AudioDevToolsController::handleRpcMsg(const rpc::Msg& msg)
             if (!m_noiseChannel) {
                 m_noiseChannel = audioEngine()->mixer()->addChannel(source);
                 auto channel = audioEngine()->mixer()->channel(m_noiseChannel.value_or(-1));
-                channel->setInsert(0, eq);
+                channel->setProcessor(0, eq);
             }
         });
 
@@ -142,7 +142,7 @@ void AudioDevToolsController::handleRpcMsg(const rpc::Msg& msg)
             if (m_noiseChannel) {
                 auto channel = audioEngine()->mixer()->channel(m_noiseChannel.value_or(-1));
                 if (channel) {
-                    channel->insert(0)->setActive(args.arg<bool>(0));
+                    channel->processor(0)->setActive(args.arg<bool>(0));
                 }
             }
         });

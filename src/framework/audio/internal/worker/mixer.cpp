@@ -86,7 +86,7 @@ void Mixer::setLevel(float level)
     m_masterLevel = level;
 }
 
-std::shared_ptr<IAudioInsert> Mixer::insert(unsigned int number) const
+std::shared_ptr<IAudioProcessor> Mixer::processor(unsigned int number) const
 {
     ONLY_AUDIO_WORKER_THREAD;
     IF_ASSERT_FAILED(m_insertList.find(number) != m_insertList.end()) {
@@ -95,7 +95,7 @@ std::shared_ptr<IAudioInsert> Mixer::insert(unsigned int number) const
     return m_insertList.at(number);
 }
 
-void Mixer::setInsert(unsigned int number, std::shared_ptr<IAudioInsert> insert)
+void Mixer::setProcessor(unsigned int number, std::shared_ptr<IAudioProcessor> insert)
 {
     ONLY_AUDIO_WORKER_THREAD;
     IF_ASSERT_FAILED(insert->streamCount() == streamCount()) {

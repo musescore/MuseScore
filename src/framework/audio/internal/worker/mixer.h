@@ -39,8 +39,8 @@ public:
 
     void setLevel(float level) override;
 
-    std::shared_ptr<IAudioInsert> insert(unsigned int number) const override;
-    void setInsert(unsigned int number, std::shared_ptr<IAudioInsert> insert) override;
+    std::shared_ptr<IAudioProcessor> processor(unsigned int number) const override;
+    void setProcessor(unsigned int number, std::shared_ptr<IAudioProcessor> insert) override;
 
     IAudioSourcePtr mixedSource() override;
 
@@ -73,7 +73,7 @@ private:
     Mode m_mode = STEREO;
     float m_masterLevel = 1.f;
     std::map<ChannelID, std::shared_ptr<MixerChannel> > m_inputList = {};
-    std::map<unsigned int, std::shared_ptr<IAudioInsert> > m_insertList = {};
+    std::map<unsigned int, std::shared_ptr<IAudioProcessor> > m_insertList = {};
     std::shared_ptr<Clock> m_clock;
 };
 }

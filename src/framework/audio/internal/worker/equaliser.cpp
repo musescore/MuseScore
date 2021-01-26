@@ -32,8 +32,18 @@ unsigned int Equaliser::streamCount() const
 
 void Equaliser::setSampleRate(unsigned int sampleRate)
 {
-    AbstractAudioInsert::setSampleRate(sampleRate);
+    m_sampleRate = sampleRate;
     calculate();
+}
+
+bool Equaliser::active() const
+{
+    return m_active;
+}
+
+void Equaliser::setActive(bool active)
+{
+    m_active = active;
 }
 
 void Equaliser::process(float* input, float* output, unsigned int sampleCount)
