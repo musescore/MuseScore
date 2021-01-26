@@ -16,26 +16,20 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUDIO_AUDIOMODULE_H
-#define MU_AUDIO_AUDIOMODULE_H
+#ifndef MU_AUDIO_SOUNDFONTSPROVIDERSTUB_H
+#define MU_AUDIO_SOUNDFONTSPROVIDERSTUB_H
 
-#include "modularity/imodulesetup.h"
-#include "async/asyncable.h"
+#include "audio/isoundfontsprovider.h"
 
-namespace mu::audio {
-class AudioModule : public framework::IModuleSetup, public async::Asyncable
+namespace mu::audio::synth {
+class SoundFontsProviderStub : public ISoundFontsProvider
 {
 public:
-    AudioModule();
+    std::vector<io::path> soundFontPathsForSynth(const SynthName& synth) const override;
+    async::Notification soundFontPathsForSynthChanged(const SynthName& synth) const override;
 
-    std::string moduleName() const override;
-
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
-    void onDeinit() override;
+    std::vector<io::path> soundFontPaths(SoundFontFormats formats) const override;
 };
 }
 
-#endif // MU_AUDIO_AUDIOMODULE_H
+#endif // MU_AUDIO_SOUNDFONTSPROVIDERSTUB_H

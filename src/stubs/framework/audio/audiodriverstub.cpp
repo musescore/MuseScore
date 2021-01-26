@@ -16,26 +16,53 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUDIO_AUDIOMODULE_H
-#define MU_AUDIO_AUDIOMODULE_H
+#include "audiodriverstub.h"
 
-#include "modularity/imodulesetup.h"
-#include "async/asyncable.h"
+using namespace mu::audio;
 
-namespace mu::audio {
-class AudioModule : public framework::IModuleSetup, public async::Asyncable
+std::string AudioDriverStub::name() const
 {
-public:
-    AudioModule();
-
-    std::string moduleName() const override;
-
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
-    void onDeinit() override;
-};
+    return std::string();
 }
 
-#endif // MU_AUDIO_AUDIOMODULE_H
+bool AudioDriverStub::open(const IAudioDriver::Spec&, IAudioDriver::Spec*)
+{
+    return false;
+}
+
+void AudioDriverStub::close()
+{
+}
+
+bool AudioDriverStub::isOpened() const
+{
+    return false;
+}
+
+std::string AudioDriverStub::outputDevice() const
+{
+    return std::string();
+}
+
+bool AudioDriverStub::selectOutputDevice(const std::string&)
+{
+    return false;
+}
+
+std::vector<std::string> AudioDriverStub::availableOutputDevices() const
+{
+    return {};
+}
+
+mu::async::Notification AudioDriverStub::availableOutputDevicesChanged() const
+{
+    return async::Notification();
+}
+
+void AudioDriverStub::resume()
+{
+}
+
+void AudioDriverStub::suspend()
+{
+}

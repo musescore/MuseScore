@@ -16,26 +16,22 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUDIO_AUDIOMODULE_H
-#define MU_AUDIO_AUDIOMODULE_H
+#ifndef MU_AUDIO_AUDIOSTUBMODULE_H
+#define MU_AUDIO_AUDIOSTUBMODULE_H
 
 #include "modularity/imodulesetup.h"
 #include "async/asyncable.h"
 
 namespace mu::audio {
-class AudioModule : public framework::IModuleSetup, public async::Asyncable
+class AudioStubModule : public framework::IModuleSetup, public async::Asyncable
 {
 public:
-    AudioModule();
-
     std::string moduleName() const override;
 
     void registerExports() override;
     void registerResources() override;
     void registerUiTypes() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
-    void onDeinit() override;
 };
 }
 
-#endif // MU_AUDIO_AUDIOMODULE_H
+#endif // MU_AUDIO_AUDIOSTUBMODULE_H

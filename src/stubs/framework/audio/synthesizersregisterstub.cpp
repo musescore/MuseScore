@@ -16,26 +16,32 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUDIO_AUDIOMODULE_H
-#define MU_AUDIO_AUDIOMODULE_H
+#include "synthesizersregisterstub.h"
 
-#include "modularity/imodulesetup.h"
-#include "async/asyncable.h"
+#include "synthesizerstub.h"
 
-namespace mu::audio {
-class AudioModule : public framework::IModuleSetup, public async::Asyncable
+using namespace mu::audio;
+using namespace mu::audio::synth;
+
+void SynthesizersRegisterStub::registerSynthesizer(const SynthName&, ISynthesizerPtr)
 {
-public:
-    AudioModule();
-
-    std::string moduleName() const override;
-
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
-    void onDeinit() override;
-};
 }
 
-#endif // MU_AUDIO_AUDIOMODULE_H
+ISynthesizerPtr SynthesizersRegisterStub::synthesizer(const SynthName&) const
+{
+    return std::make_shared<SynthesizerStub>();
+}
+
+std::vector<ISynthesizerPtr> SynthesizersRegisterStub::synthesizers() const
+{
+    return {};
+}
+
+void SynthesizersRegisterStub::setDefaultSynthesizer(const SynthName&)
+{
+}
+
+ISynthesizerPtr SynthesizersRegisterStub::defaultSynthesizer() const
+{
+    return std::make_shared<SynthesizerStub>();
+}
