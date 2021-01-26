@@ -25,7 +25,6 @@
 #include "notation/inotationreadersregister.h"
 #include "internal/notationmidireader.h"
 #include "internal/musedatareader.h"
-#include "internal/capellareader.h"
 #include "internal/overeader.h"
 #include "internal/guitarproreader.h"
 
@@ -64,7 +63,6 @@ void ImportExportModule::onInit(const framework::IApplication::RunMode&)
     if (readers) {
         readers->reg({ "mid", "midi", "kar" }, std::make_shared<NotationMidiReader>());
         readers->reg({ "md" }, std::make_shared<MuseDataReader>());
-        readers->reg({ "cap", "capx" }, std::make_shared<CapellaReader>());
         readers->reg({ "ove", "scw" }, std::make_shared<OveReader>());
         readers->reg({ "gtp", "gp3", "gp4", "gp5", "gpx", "gp", "ptb" }, std::make_shared<GuitarProReader>());
     }
