@@ -4,7 +4,10 @@ add_subdirectory(ui)
 add_subdirectory(uicomponents)
 add_subdirectory(fonts)
 add_subdirectory(actions)
-add_subdirectory(shortcuts)
+
+if (BUILD_SHORTCUTS_MODULE)
+    add_subdirectory(shortcuts)
+endif (BUILD_SHORTCUTS_MODULE)
 
 if (BUILD_NETWORK_MODULE)
     add_subdirectory(network)
