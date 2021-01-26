@@ -1043,9 +1043,13 @@ void Timeline::drawGrid(int globalRows, int globalCols, int startMeasure, int en
                   if (partList.size() > row) {
                         doc.setHtml(partList.at(row)->longName());
                         partName = doc.toPlainText();
+                        if (partName.isEmpty()) { // No Long instrument name? Fall back to Part name
+                              doc.setHtml(partList.at(row)->partName());
+                              partName = doc.toPlainText();
+                              }
+                        if (partName.isEmpty()) // No Part name? Fall back to Instrument name
+                              partName = partList.at(row)->instrumentName();
                         }
-                  if (partName.isEmpty() && partList.size() > row)
-                        partName = partList.at(row)->instrumentName();
 
                   graphicsRectItem->setToolTip(initialLetter + QString(" ") + QString::number(currMeasure->no() + 1) + QString(", ") + partName);
                   graphicsRectItem->setPen(QPen(activeTheme().backgroundColor));
@@ -2766,7 +2770,11 @@ std::vector<std::pair<QString, bool>> Timeline::getLabels()
             QString partName = "";
             doc.setHtml(partList.at(stave)->longName());
             partName = doc.toPlainText();
-            if (partName.isEmpty())
+            if (partName.isEmpty()) { // No Long instrument name? Fall back to Part name
+                  doc.setHtml(partList.at(stave)->partName());
+                  partName = doc.toPlainText();
+                  }
+            if (partName.isEmpty()) // No Part name? Fall back to Instrument name
                   partName = partList.at(stave)->instrumentName();
 
             std::pair<QString, bool> instrumentLabel = std::make_pair(partName, partList.at(stave)->show());
