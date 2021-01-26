@@ -283,7 +283,7 @@ Staff* Element::staff() const
         return 0;
     }
 
-    return score()->staff(_track >> 2);
+    return score()->staff(staffIdx());
 }
 
 //---------------------------------------------------------
@@ -770,7 +770,7 @@ bool Element::readProperties(XmlReader& e)
     } else if (tag == "pos") {           // obsolete
         readProperty(e, Pid::OFFSET);
     } else if (tag == "voice") {
-        setTrack((_track / VOICES) * VOICES + e.readInt());
+        setVoice(e.readInt());
     } else if (tag == "tag") {
         QString val(e.readElementText());
         for (int i = 1; i < MAX_TAGS; i++) {

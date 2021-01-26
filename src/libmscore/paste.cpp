@@ -393,8 +393,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                     // be sure to paste the element in the destination track;
                     // setting track needs to be repeated, as it might have been overwritten by el->read()
                     // preserve *voice* from source, though
-                    el->setTrack((e.track() / VOICES) * VOICES + el->voice());
-
+                    el->setStaffIdx(e.track() / VOICES);
                     undoAddElement(el);
                 } else if (tag == "Clef") {
                     Clef* clef = new Clef(this);

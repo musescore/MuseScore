@@ -300,7 +300,7 @@ void Tuplet::layout()
     qreal noteRight     = score()->styleP(Sid::tupletNoteRightDistance);
 
     int move = 0;
-    setTrack(cr1->staffIdx() * VOICES + voice());
+    setStaffIdx(cr1->vStaffIdx());
     if (outOfStaff && cr1->isChordRest() && cr2->isChordRest()) {
         // account for staff move when adjusting bracket to avoid staff
         // but don't attempt adjustment unless both endpoints are in same staff
@@ -308,7 +308,7 @@ void Tuplet::layout()
         if (toChordRest(cr1)->staffMove() == toChordRest(cr2)->staffMove() && !tuplet() && !nested) {
             move = toChordRest(cr1)->staffMove();
             if (move == 1) {
-                setTrack(cr1->vStaffIdx() * VOICES + voice());
+                setStaffIdx(cr1->vStaffIdx());
             }
         } else {
             outOfStaff = false;
