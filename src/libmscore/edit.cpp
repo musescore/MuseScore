@@ -5513,7 +5513,7 @@ void Score::undoAddElement(Element* element)
                     }
                     nsp->setTrack2(tl2.at(it));
                 } else if (!element->isSlur()) {
-                    nsp->setTrack(ntrack & ~3);
+                    nsp->setTrack(trackZeroVoice(ntrack));
                 }
 #endif
 

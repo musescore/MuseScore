@@ -4160,7 +4160,7 @@ void Score::cmdAddPitch(const EditData& ed, int note, bool addFlag, bool insert)
             return;
         }
         is.setDrumNote(pitch);
-        is.setTrack((is.track() / VOICES) * VOICES + voice);
+        is.setTrack(trackZeroVoice(is.track()) + voice);
         octave = pitch / 12;
         if (is.segment()) {
             Segment* seg = is.segment();
@@ -4204,7 +4204,7 @@ void Score::cmdAddPitch(const EditData& ed, int note, bool addFlag, bool insert)
                             break;
                         }
                     } else if (seg->isClefType() || seg->isHeaderClefType()) {
-                        Element* p = seg->element((is.track() / VOICES) * VOICES);              // clef on voice 1
+                        Element* p = seg->element(trackZeroVoice(is.track()));              // clef on voice 1
                         if (p && p->isClef()) {
                             Clef* clef = toClef(p);
                             // check if it's an actual change or just a courtesy

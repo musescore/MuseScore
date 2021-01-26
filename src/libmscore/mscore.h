@@ -72,10 +72,10 @@ enum class HairpinType : signed char;
 #define VOICES 4
 #endif
 
-inline int staff2track(int staffIdx) { return staffIdx << 2; }
-inline int track2staff(int voice) { return voice >> 2; }
-inline int track2voice(int track) { return track & 3; }
-inline int trackZeroVoice(int track) { return track & ~3; }
+inline int staff2track(int staffIdx) { return staffIdx * VOICES; }
+inline int track2staff(int track) { return track / VOICES; }
+inline int track2voice(int track) { return track % VOICES; }
+inline int trackZeroVoice(int track) { return (track / VOICES) * VOICES; }
 
 static const int MAX_TAGS = 32;
 
