@@ -22,7 +22,7 @@
 #include <memory>
 #include <complex>
 #include "iaudiosource.h"
-#include "iaudioinsert.h"
+#include "iaudioprocessor.h"
 #include "imixerchannel.h"
 
 namespace mu::audio {
@@ -48,11 +48,11 @@ public:
     //! set master level
     virtual void setLevel(float level) = 0;
 
-    //! return insert at master
-    virtual std::shared_ptr<IAudioInsert> insert(unsigned int number) const = 0;
+    //! return processor at master
+    virtual IAudioProcessorPtr processor(unsigned int number) const = 0;
 
-    //! set master insert
-    virtual void setInsert(unsigned int number, std::shared_ptr<IAudioInsert> insert) = 0;
+    //! set master processors
+    virtual void setProcessor(unsigned int number, IAudioProcessorPtr proc) = 0;
 
     //! add source to the mix
     virtual ChannelID addChannel(std::shared_ptr<IAudioSource> source) = 0;

@@ -16,21 +16,29 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "abstractaudioinsert.h"
+#ifndef MU_AUDIO_IAUDIOPROCESSOR_H
+#define MU_AUDIO_IAUDIOPROCESSOR_H
 
-using namespace mu::audio;
+#include <memory>
 
-void AbstractAudioInsert::setSampleRate(unsigned int sampleRate)
+namespace mu::audio {
+class IAudioProcessor
 {
-    m_sampleRate = sampleRate;
+public:
+    virtual ~IAudioProcessor() = default;
+
+    virtual void setSampleRate(unsigned int sampleRate) = 0;
+
+    virtual bool active() const = 0;
+    virtual void setActive(bool active) = 0;
+
+    //! return streams count for this insert: 1 for mono, 2 for stereo
+    virtual unsigned int streamCount() const = 0;
+
+    virtual void process(float* input, float* output, unsigned int sampleCount) = 0;
+};
+
+using IAudioProcessorPtr = std::shared_ptr<IAudioProcessor>;
 }
 
-bool AbstractAudioInsert::active() const
-{
-    return m_active;
-}
-
-void AbstractAudioInsert::setActive(bool active)
-{
-    m_active = active;
-}
+#endif // MU_AUDIO_IAUDIOPROCESSOR_H

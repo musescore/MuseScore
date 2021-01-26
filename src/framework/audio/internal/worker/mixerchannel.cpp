@@ -52,9 +52,9 @@ void MixerChannel::forward(unsigned int sampleCount)
     //you can use source's buffer as pre proccesing KEY, current buffer as post processing KEY
     std::memcpy(m_buffer.data(), m_source->data(), m_buffer.size() * sizeof(float));
 
-    for (auto& insert : m_insertList) {
-        if (insert.second->active()) {
-            insert.second->process(m_buffer.data(), m_buffer.data(), sampleCount);
+    for (std::pair<const unsigned int, IAudioProcessorPtr>& p : m_processorList) {
+        if (p.second->active()) {
+            p.second->process(m_buffer.data(), m_buffer.data(), sampleCount);
         }
     }
 }
@@ -75,8 +75,8 @@ void MixerChannel::setSampleRate(unsigned int sampleRate)
         return;
     }
     m_source->setSampleRate(sampleRate);
-    for (auto& insert : m_insertList) {
-        insert.second->setSampleRate(sampleRate);
+    for (std::pair<const unsigned int, IAudioProcessorPtr>& p : m_processorList) {
+        p.second->setSampleRate(sampleRate);
     }
 }
 
@@ -140,22 +140,22 @@ void MixerChannel::setBalance(unsigned int streamId, std::complex<float> value)
     m_balance[streamId] = value;
 }
 
-std::shared_ptr<IAudioInsert> MixerChannel::insert(unsigned int number) const
+IAudioProcessorPtr MixerChannel::processor(unsigned int number) const
 {
-    IF_ASSERT_FAILED(m_insertList.find(number) != m_insertList.end()) {
+    IF_ASSERT_FAILED(m_processorList.find(number) != m_processorList.end()) {
         return nullptr;
     }
-    return m_insertList.at(number);
+    return m_processorList.at(number);
 }
 
-void MixerChannel::setInsert(unsigned int number, std::shared_ptr<IAudioInsert> insert)
+void MixerChannel::setProcessor(unsigned int number, IAudioProcessorPtr proc)
 {
-    IF_ASSERT_FAILED(insert->streamCount() == streamCount()) {
-        LOGE() << "Insert's stream count not equal to the channel";
+    IF_ASSERT_FAILED(proc->streamCount() == streamCount()) {
+        LOGE() << "Processor's stream count not equal to the channel";
         return;
     }
-    insert->setSampleRate(m_sampleRate);
-    m_insertList[number] = insert;
+    proc->setSampleRate(m_sampleRate);
+    m_processorList[number] = proc;
 }
 
 void MixerChannel::updateBalanceLevelMaps()
