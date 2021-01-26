@@ -10,12 +10,11 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
-#include "mtest/testutils.h"
+#include "testing/qtestsuite.h"
+#include "testbase.h"
 #include "libmscore/score.h"
-#include "mscore/preferences.h"
 
-#define DIR QString("capella/io/")
+static const QString CAPELLA_DIR("data/");
 
 using namespace Ms;
 
@@ -73,7 +72,7 @@ private slots:
 
 void TestCapellaIO::initTestCase()
 {
-    initMTest();
+    initMTest(QString(iex_capella_tests_DATA_ROOT));
 }
 
 //---------------------------------------------------------
@@ -83,10 +82,10 @@ void TestCapellaIO::initTestCase()
 
 void TestCapellaIO::capReadTest(const char* file)
 {
-    MasterScore* score = readScore(DIR + file + ".cap");
+    MasterScore* score = readScore(CAPELLA_DIR + file + ".cap");
     QVERIFY(score);
     QVERIFY(saveCompareScore(score, QString("%1.cap.mscx").arg(file),
-                             DIR + QString("%1.cap-ref.mscx").arg(file)));
+                             CAPELLA_DIR + QString("%1.cap-ref.mscx").arg(file)));
     delete score;
 }
 
@@ -97,10 +96,10 @@ void TestCapellaIO::capReadTest(const char* file)
 
 void TestCapellaIO::capxReadTest(const char* file)
 {
-    MasterScore* score = readScore(DIR + file + ".capx");
+    MasterScore* score = readScore(CAPELLA_DIR + file + ".capx");
     QVERIFY(score);
     QVERIFY(saveCompareScore(score, QString("%1.capx.mscx").arg(file),
-                             DIR + QString("%1.capx-ref.mscx").arg(file)));
+                             CAPELLA_DIR + QString("%1.capx-ref.mscx").arg(file)));
     delete score;
 }
 
