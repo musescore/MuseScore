@@ -1,4 +1,4 @@
-FONTLOG for the Leland font
+FONTLOG for the Leland fonts
 ============================
 
 This file provides detailed information on the Leland Font Software. This information should be distributed along with the Leland fonts and any derivative works.
@@ -8,7 +8,8 @@ The Leland Font Software is a family consisting of two fonts, Leland and Leland 
 
 Basic font information
 ----------------------
-Leland is a Unicode typeface designed by MuseScore for its music notation and scoring applications.
+
+Leland is a Unicode typeface designed by MuseScore BVBA for its music notation and scoring applications.
 
 It is compliant with version 1.2 of the Standard Music Font Layout (SMuFL), a community-driven standard for how music symbols should be laid out in the Unicode Private Use Area (PUA) in the Basic Multilingual Plane (BMP) for compatibility between different scoring applications.
 
@@ -23,16 +24,20 @@ If you are intending to use Leland as part of your own software application and 
 
 https://w3c.github.io/smufl/gitbook/specification/index.html
 
-
 You can also get in touch with a member of our team:
 
 https://musescore.org/en/forum
 https://musescore.com/contact
 
 
-
 Change log
 ----------
+
+25 January 2021 (Martin Keary & Simon Smith) Leland Version 0.51
+- Packaged with MuseScore 3.6.1
+- Corrected drawing direction of many symbols
+- Very slightly reshaped quarter/half noteheads (E0A3/E0A4)
+- Narrowed double whole rest (E4E2)
 
 14 December 2020 (Martin Keary & Simon Smith) Leland Version 0.5
 - Initial release to be packaged with MuseScore 3.6 public beta
