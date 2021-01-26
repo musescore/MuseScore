@@ -130,6 +130,26 @@ enum class ViewState {
       };
 
 //---------------------------------------------------------
+//   ScoreViewState
+//---------------------------------------------------------
+
+struct ScoreViewState {
+      qreal logicalZoomLevel = 1.0;
+      ZoomIndex zoomIndex = ZoomIndex::ZOOM_FREE;
+      qreal xOffset = 0.0;
+      qreal yOffset = 0.0;
+
+      ScoreViewState() {}
+      ScoreViewState(qreal zl, ZoomIndex zi, qreal x, qreal y)
+            {
+            logicalZoomLevel = zl;
+            zoomIndex = zi;
+            xOffset = x;
+            yOffset = y;
+            }
+};
+
+//---------------------------------------------------------
 //   ScoreView
 //---------------------------------------------------------
 

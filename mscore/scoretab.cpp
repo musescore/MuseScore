@@ -332,6 +332,8 @@ void ScoreTab::setCurrent(int n)
             tab2->setVisible(false);
             }
       emit currentScoreViewChanged(v);
+
+      initScoreView(n);
       }
 
 //---------------------------------------------------------
@@ -555,26 +557,26 @@ void ScoreTab::removeTab(int idx, bool noCurrentChangedSignal)
 //   initScoreView
 //---------------------------------------------------------
 
-void ScoreTab::initScoreView(const int idx, const qreal logicalZoomLevel, const ZoomIndex zoomIndex, const qreal xoffset, const qreal yoffset)
+void ScoreTab::initScoreView(int idx)
       {
-      ScoreView* v = view(idx);
-      if (!v)  {
-            v = new ScoreView;
-            Score* sc = scoreList->value(idx);
-            if( sc != 0 )
-                  v->setScore(sc);
-            else {
-                  delete v;
-                  return;
+      auto it = scoreViewsToInit.find(idx);
+      if (it != scoreViewsToInit.end()) {
+            ScoreViewState s = it->second;
+            if (ScoreView* v = view(idx)) {
+                  v->setLogicalZoom(s.zoomIndex, s.logicalZoomLevel);
+                  v->setOffset(s.xOffset, s.yOffset);
                   }
-            QSplitter* vs = new QSplitter;
-            vs->setObjectName("score");
-            vs->setAccessibleName("");
-            vs->addWidget(v);
-            stack->addWidget(vs);
+            scoreViewsToInit.erase(it); // Init only one time
             }
-      v->setLogicalZoom(zoomIndex, logicalZoomLevel);
-      v->setOffset(xoffset, yoffset);
       }
-}
 
+//---------------------------------------------------------
+//   queueInitScoreView
+//---------------------------------------------------------
+
+void ScoreTab::queueInitScoreView(const int idx, const qreal logicalZoomLevel, const ZoomIndex zoomIndex, const qreal xoffset, const qreal yoffset)
+      {
+      scoreViewsToInit[idx] = ScoreViewState(logicalZoomLevel, zoomIndex, xoffset, yoffset);
+      }
+
+}
