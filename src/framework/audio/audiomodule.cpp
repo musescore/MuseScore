@@ -76,6 +76,11 @@ static std::shared_ptr<IAudioDriver> s_audioDriver = std::shared_ptr<IAudioDrive
 static std::shared_ptr<IAudioDriver> s_audioDriver = std::shared_ptr<IAudioDriver>(new WebAudioDriver());
 #endif
 
+static void audio_init_qrc()
+{
+    Q_INIT_RESOURCE(audio);
+}
+
 AudioModule::AudioModule()
 {
     AudioSanitizer::setupMainThread();
@@ -105,13 +110,17 @@ void AudioModule::registerExports()
     ioc()->registerExport<rpc::IRpcChannel>(moduleName(), s_audioWorker->channel());
 }
 
+void AudioModule::registerResources()
+{
+    audio_init_qrc();
+}
+
 void AudioModule::registerUiTypes()
 {
     qmlRegisterType<AudioEngineDevTools>("MuseScore.Audio", 1, 0, "AudioEngineDevTools");
     qmlRegisterType<synth::SynthsSettingsModel>("MuseScore.Audio", 1, 0, "SynthsSettingsModel");
 
-    //! NOTE No Qml, as it will be, need to uncomment
-    //framework::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(mu4_audio_QML_IMPORT);
+    ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(audio_QML_IMPORT);
 }
 
 void AudioModule::onInit(const framework::IApplication::RunMode&)

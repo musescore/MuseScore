@@ -28,6 +28,10 @@ if (OS_IS_WIN)
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmidiinport.h
     )
 elseif(OS_IS_LIN)
+    find_package(ALSA REQUIRED)
+    set(MODULE_LINK ${ALSA_LIBRARIES} pthread )
+    set(MODULE_INCLUDE ${MODULE_INCLUDE} ${ALSA_INCLUDE_DIRS} )
+
     set(DRIVER_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidioutport.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidioutport.h
@@ -68,6 +72,7 @@ set(MODULE_SRC
     )
 
 set(MODULE_LINK
+    ${MODULE_LINK}
     qzip
     )
 

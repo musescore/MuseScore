@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2020 MuseScore BVBA and others
+//  Copyright (C) 2021 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -16,26 +16,24 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUDIO_AUDIOMODULE_H
-#define MU_AUDIO_AUDIOMODULE_H
+#include "rpcchannelstub.h"
 
-#include "modularity/imodulesetup.h"
-#include "async/asyncable.h"
+using namespace mu::audio::rpc;
 
-namespace mu::audio {
-class AudioModule : public framework::IModuleSetup, public async::Asyncable
+bool RpcChannelStub::isSerialized() const
 {
-public:
-    AudioModule();
-
-    std::string moduleName() const override;
-
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
-    void onDeinit() override;
-};
+    return false;
 }
 
-#endif // MU_AUDIO_AUDIOMODULE_H
+void RpcChannelStub::send(const Msg&)
+{
+}
+
+IRpcChannel::ListenID RpcChannelStub::listen(IRpcChannel::Handler)
+{
+    return 0;
+}
+
+void RpcChannelStub::unlisten(IRpcChannel::ListenID)
+{
+}

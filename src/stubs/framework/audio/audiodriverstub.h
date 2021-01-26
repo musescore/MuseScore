@@ -16,26 +16,28 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUDIO_AUDIOMODULE_H
-#define MU_AUDIO_AUDIOMODULE_H
+#ifndef MU_AUDIO_AUDIODRIVERSTUB_H
+#define MU_AUDIO_AUDIODRIVERSTUB_H
 
-#include "modularity/imodulesetup.h"
-#include "async/asyncable.h"
+#include "audio/iaudiodriver.h"
 
 namespace mu::audio {
-class AudioModule : public framework::IModuleSetup, public async::Asyncable
+class AudioDriverStub : public IAudioDriver
 {
 public:
-    AudioModule();
+    std::string name() const override;
+    bool open(const Spec& spec, Spec* activeSpec) override;
+    void close() override;
+    bool isOpened() const override;
 
-    std::string moduleName() const override;
+    std::string outputDevice() const override;
+    bool selectOutputDevice(const std::string& name) override;
+    std::vector<std::string> availableOutputDevices() const override;
+    async::Notification availableOutputDevicesChanged() const override;
 
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
-    void onDeinit() override;
+    void resume() override;
+    void suspend() override;
 };
 }
 
-#endif // MU_AUDIO_AUDIOMODULE_H
+#endif // MU_AUDIO_AUDIODRIVERSTUB_H
