@@ -76,6 +76,7 @@ if (BUILD_UNIT_TESTS)
     add_subdirectory(importexport/bb/tests)
     add_subdirectory(importexport/braille/tests)
     add_subdirectory(importexport/bww/tests)
+    add_subdirectory(importexport/capella/tests)
     add_subdirectory(importexport/musicxml/tests)
 endif(BUILD_UNIT_TESTS)
 
