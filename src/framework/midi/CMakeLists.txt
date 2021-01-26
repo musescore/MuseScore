@@ -68,7 +68,6 @@ set(MODULE_SRC
     )
 
 set(MODULE_LINK
-    audiofile
     qzip
     )
 
