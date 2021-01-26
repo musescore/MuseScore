@@ -30,7 +30,11 @@
 #include "framework/uicomponents/uicomponentsmodule.h"
 #include "framework/fonts/fontsmodule.h"
 #include "framework/actions/actionsmodule.h"
+#ifdef BUILD_SHORTCUTS_MODULE
 #include "framework/shortcuts/shortcutsmodule.h"
+#else
+#include "stubs/framework/shortcuts/shortcutsstubmodule.h"
+#endif
 
 #ifdef BUILD_SYSTEM_MODULE
 #include "framework/system/systemmodule.h"
@@ -161,7 +165,11 @@ int main(int argc, char** argv)
     app.addModule(new mu::appshell::AppShellModule());
 
     app.addModule(new mu::context::ContextModule());
+#ifdef BUILD_SHORTCUTS_MODULE
     app.addModule(new mu::shortcuts::ShortcutsModule());
+#else
+    app.addModule(new mu::shortcuts::ShortcutsStubModule());
+#endif
 
     app.addModule(new mu::audio::AudioModule());
     app.addModule(new mu::midi::MidiModule());
