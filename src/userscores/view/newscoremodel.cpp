@@ -20,9 +20,12 @@
 
 #include "log.h"
 
+#include "ui/view/musicalsymbolcodes.h"
+
 using namespace mu::userscores;
 using namespace mu::notation;
 using namespace mu::instruments;
+using namespace mu::ui;
 
 using PreferredScoreCreationMode = IUserScoresConfiguration::PreferredScoreCreationMode;
 
@@ -78,7 +81,9 @@ ScoreCreateOptions NewScoreModel::parseOptions(const QVariantMap& info) const
     options.withTempo = info["withTempo"].toBool();
 
     QVariantMap tempo = info["tempo"].toMap();
-    options.tempo = tempo["value"].toDouble();
+    options.tempo.value = tempo["value"].toInt();
+    options.tempo.note = noteIconToDurationType(tempo["noteIcon"].toInt());
+    options.tempo.withDot = tempo["withDot"].toBool();
 
     QVariantMap timeSignature = info["timeSignature"].toMap();
     options.timesigType = static_cast<TimeSigType>(info["timeSignatureType"].toInt());
@@ -102,6 +107,20 @@ ScoreCreateOptions NewScoreModel::parseOptions(const QVariantMap& info) const
     }
 
     return options;
+}
+
+DurationType NewScoreModel::noteIconToDurationType(int noteIconCode) const
+{
+    static const QMap<MusicalSymbolCodes::Code, DurationType> iconToDuration {
+        { MusicalSymbolCodes::Code::SEMIBREVE, DurationType::V_WHOLE },
+        { MusicalSymbolCodes::Code::MINIM, DurationType::V_HALF },
+        { MusicalSymbolCodes::Code::CROTCHET, DurationType::V_QUARTER },
+        { MusicalSymbolCodes::Code::QUAVER, DurationType::V_EIGHTH },
+        { MusicalSymbolCodes::Code::SEMIQUAVER, DurationType::V_16TH }
+    };
+
+    MusicalSymbolCodes::Code symbol = static_cast<MusicalSymbolCodes::Code>(noteIconCode);
+    return iconToDuration.value(symbol, DurationType::V_QUARTER);
 }
 
 void NewScoreModel::updatePreferredScoreCreationMode(bool isScoreCreatedFromInstruments)

@@ -86,7 +86,7 @@ FlatButton {
 
                 height: 50
 
-                model: root.model.tempoMarks()
+                model: root.model.tempoNotes()
 
                 clip: true
                 boundsBehavior: ListView.StopAtBounds
@@ -96,6 +96,7 @@ FlatButton {
                     height: width
 
                     enabled: withTempo.checked
+                    checked: model.index === root.model.currentTempoNoteIndex
 
                     onClicked: {
                         var tempo = root.model.tempo
