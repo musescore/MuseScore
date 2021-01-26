@@ -16,27 +16,27 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "capellareader.h"
+#include "capellamodule.h"
 
-#include "io/path.h"
-#include "libmscore/score.h"
-#include "notation/notationerrors.h"
+#include "log.h"
+#include "config.h"
+#include "modularity/ioc.h"
 
-namespace Ms {
-extern Score::FileError importCapella(MasterScore*, const QString& name);
-extern Score::FileError importCapXml(MasterScore*, const QString& name);
+#include "notation/inotationreadersregister.h"
+#include "internal/capellareader.h"
+
+using namespace mu::iex::capella;
+using namespace mu::notation;
+
+std::string CapellaModule::moduleName() const
+{
+    return "iex_capella";
 }
 
-using namespace mu::importexport;
-
-mu::Ret CapellaReader::read(Ms::MasterScore* score, const io::path& path)
+void CapellaModule::resolveImports()
 {
-    Ms::Score::FileError err = Ms::Score::FileError::FILE_UNKNOWN_TYPE;
-    std::string syffix = mu::io::syffix(path);
-    if (syffix == "cap") {
-        err = Ms::importCapella(score, path.toQString());
-    } else if (syffix == "capx") {
-        err = Ms::importCapXml(score, path.toQString());
+    auto readers = framework::ioc()->resolve<INotationReadersRegister>(moduleName());
+    if (readers) {
+        readers->reg({ "cap", "capx" }, std::make_shared<CapellaReader>());
     }
-    return mu::notation::scoreFileErrorToRet(err);
 }

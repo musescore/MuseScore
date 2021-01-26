@@ -20,6 +20,7 @@
 add_subdirectory(bb)
 add_subdirectory(braille)
 add_subdirectory(bww)
+add_subdirectory(capella)
 add_subdirectory(musicxml)
 
 # We are separating the importexport module into separate modules,
@@ -30,7 +31,6 @@ include(${CMAKE_CURRENT_LIST_DIR}/internal/midiimport/midiimport.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/internal/ove/ove.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/internal/guitarpro/guitarpro.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/internal/musedata/musedata.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/internal/capella/capella.cmake)
 
 set(MODULE_SRC
     ${BRAILLE_SRC}
@@ -38,7 +38,6 @@ set(MODULE_SRC
     ${OVE_SRC}
     ${GUITARPRO_SRC}
     ${MUSEDATA_SRC}
-    ${CAPELLA_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/importexportmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/importexportmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iimportexportconfiguration.h
@@ -49,8 +48,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationmidireader.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/musedatareader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/musedatareader.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/capellareader.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/capellareader.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/overeader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/overeader.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/guitarproreader.cpp

@@ -16,13 +16,12 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_IMPORTEXPORT_CAPELLAREADER_H
-#define MU_IMPORTEXPORT_CAPELLAREADER_H
+#ifndef MU_IEXCAPELLA_CAPELLAREADER_H
+#define MU_IEXCAPELLA_CAPELLAREADER_H
 
 #include "notation/inotationreader.h"
 
-namespace mu {
-namespace importexport {
+namespace mu::iex::capella {
 class CapellaReader : public notation::INotationReader
 {
 public:
@@ -30,6 +29,5 @@ public:
     Ret read(Ms::MasterScore* score, const io::path& path) override;
 };
 }
-}
 
-#endif // MU_IMPORTEXPORT_CAPELLAREADER_H
+#endif // MU_IEXCAPELLA_CAPELLAREADER_H
