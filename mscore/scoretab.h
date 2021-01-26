@@ -26,6 +26,7 @@ class MuseScore;
 class ScoreView;
 class Score;
 enum class ZoomIndex : char;
+struct ScoreViewState;
 
 //---------------------------------------------------------
 //   TabScoreView
@@ -69,6 +70,7 @@ class ScoreTab : public QWidget {
       void clearTab2();
       TabScoreView* tabScoreView(int idx);
       const TabScoreView* tabScoreView(int idx) const;
+      std::map<int, ScoreViewState> scoreViewsToInit;
 
    signals:
       void currentScoreViewChanged(ScoreView*);
@@ -103,7 +105,8 @@ class ScoreTab : public QWidget {
       QSplitter* viewSplitter(int n) const;
       ScoreView* view() const { return view(currentIndex()); }
       bool contains(ScoreView*) const;
-      void initScoreView(int idx, qreal logicalZoomLevel, ZoomIndex zoomIndex, qreal xoffset, qreal yoffset);
+      void initScoreView(int idx);
+      void queueInitScoreView(int idx, qreal logicalZoomLevel, ZoomIndex zoomIndex, qreal xoffset, qreal yoffset);
       };
 
 
