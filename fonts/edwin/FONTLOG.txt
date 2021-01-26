@@ -1,5 +1,5 @@
-FONTLOG for the Edwin font
-============================
+FONTLOG for the Edwin fonts
+===========================
 
 This file provides detailed information on the Edwin Font Software. This information should be distributed along with the Edwin fonts and any derivative works.
 
@@ -8,12 +8,16 @@ The Edwin Font Software is a family consisting of four fonts, Edwin Roman, Edwin
 
 Basic font information
 ----------------------
-Edwin is a typeface adapted from the **URW++ Design and Development GmbH** typeface, **C059** by MuseScore for its music notation and scoring applications.
+
+Edwin is a typeface adapted from the C059 typeface (from URW++ Design and Development GmbH) by MuseScore BVBA for its music notation and scoring applications.
 
 
 Change log
 ----------
 
-14 December 2020 (Martin Keary & Simon Smith) Leland Version 0.5
+4 January 2021 (Martin Keary & Simon Smith) Edwin Version 0.51
+- Added double-flat (U+1D12A) and double-sharp (U+1D12B) accidentals
+
+14 December 2020 (Martin Keary & Simon Smith) Edwin Version 0.5
 - Initial release to be packaged with MuseScore 3.6 beta
 - Added flat (U+266D), natural (U+266E) and sharp (U+266F) accidentals
