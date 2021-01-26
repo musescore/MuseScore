@@ -161,8 +161,6 @@ mu::io::path MasterNotation::path() const
 //! source: file.cpp, MuseScore::getNewFile()
 mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
 {
-    double tempo = scoreOptions.tempo;
-
     io::path templatePath = scoreOptions.templatePath;
 
     int measures = scoreOptions.measures;
@@ -417,7 +415,7 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
         Ms::Fraction ts = timesig;
 
         QString text("<sym>metNoteQuarterUp</sym> = %1");
-        double bpm = scoreOptions.tempo;
+        double bpm = scoreOptions.tempo.value;
         switch (ts.denominator()) {
         case 1:
             text = "<sym>metNoteWhole</sym> = %1";
@@ -472,7 +470,9 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
 
         Ms::TempoText* tt = new Ms::TempoText(score);
         tt->setXmlText(text.arg(bpm));
-        tempo /= 60;          // bpm -> bps
+
+        double tempo = scoreOptions.tempo.value;
+        tempo /= 60; // bpm -> bps
 
         tt->setTempo(tempo);
         tt->setFollowText(true);
