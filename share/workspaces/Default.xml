@@ -447,10 +447,6 @@
         <mag>1</mag>
         <grid>1</grid>
         <moreElements>1</moreElements>
-        <Cell name="No symbol">
-          <Accidental>
-            </Accidental>
-          </Cell>
         <Cell name="Flat">
           <Accidental>
             <subtype>accidentalFlat</subtype>

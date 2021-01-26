@@ -36,6 +36,9 @@ public:
 
     MOCK_METHOD(QColor, templatePreviewBackgroundColor, (), (const, override));
     MOCK_METHOD(async::Channel<QColor>, templatePreviewBackgroundColorChanged, (), (const, override));
+
+    MOCK_METHOD(PreferredScoreCreationMode, preferredScoreCreationMode, (), (const, override));
+    MOCK_METHOD(void, setPreferredScoreCreationMode, (PreferredScoreCreationMode), (override));
 };
 }
 
