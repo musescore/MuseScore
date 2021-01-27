@@ -24,11 +24,17 @@
 using namespace mu::testing;
 
 Environment::Modules Environment::m_dependencyModules;
+Environment::PreInit Environment::m_preInit;
 Environment::PostInit Environment::m_postInit;
 
 void Environment::setDependency(const Modules& modules)
 {
     m_dependencyModules = modules;
+}
+
+void Environment::setPreInit(const PreInit& preInit)
+{
+    m_preInit = preInit;
 }
 
 void Environment::setPostInit(const PostInit& postInit)
@@ -61,6 +67,10 @@ void Environment::setup()
     for (mu::framework::IModuleSetup* m : m_dependencyModules) {
         m->registerUiTypes();
         m->resolveImports();
+    }
+
+    if (m_preInit) {
+        m_preInit();
     }
 
     for (mu::framework::IModuleSetup* m : m_dependencyModules) {
