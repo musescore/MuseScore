@@ -67,7 +67,7 @@ public:
     bool withTempo() const;
     QVariantMap tempo() const;
     int currentTempoNoteIndex() const;
-    Q_INVOKABLE QVariantMap tempoRange() const;
+    Q_INVOKABLE QVariantMap tempoValueRange() const;
     Q_INVOKABLE QVariantList tempoNotes() const;
 
     QVariantMap pickupTimeSignature() const;

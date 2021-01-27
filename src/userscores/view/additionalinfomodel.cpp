@@ -31,6 +31,7 @@ static const mu::notation::Fraction DEFAULT_PICKUP_TIME_SIGNATURE(1, 4);
 
 static const QString VALUE_KEY("value");
 static const QString NOTE_ICON_KEY("noteIcon");
+static const QString NOTE_SYMBOL_KEY("noteSymbol");
 static const QString TITLE_KEY("title");
 static const QString ICON_KEY("icon");
 static const QString SIGNATURE_KEY("key");
@@ -38,6 +39,19 @@ static const QString MODE_KEY("mode");
 static const QString WITH_DOT_KEY("withDot");
 static const QString MIN_KEY("min");
 static const QString MAX_KEY("max");
+
+using MusicalSymbolCode = MusicalSymbolCodes::Code;
+
+QString formatNoteSymbol(MusicalSymbolCode noteIcon, bool withDot)
+{
+    QString noteSymbol = QString(QChar(static_cast<char16_t>(noteIcon)));
+
+    if (withDot) {
+        noteSymbol += QChar(static_cast<char16_t>(MusicalSymbolCode::DOT));
+    }
+
+    return noteSymbol;
+}
 
 AdditionalInfoModel::KeySignature::KeySignature(const QString& title, IconCode::Code icon, Key key, KeyMode mode)
     : title(title), icon(icon), key(key), mode(mode)
@@ -65,7 +79,7 @@ QVariantMap AdditionalInfoModel::KeySignature::toMap() const
 AdditionalInfoModel::Tempo::Tempo(const QVariantMap& map)
 {
     value = map[VALUE_KEY].toInt();
-    noteIcon = static_cast<MusicalSymbolCodes::Code>(map[NOTE_ICON_KEY].toInt());
+    noteIcon = static_cast<MusicalSymbolCode>(map[NOTE_ICON_KEY].toInt());
     withDot = map[WITH_DOT_KEY].toBool();
 }
 
@@ -74,7 +88,8 @@ QVariantMap AdditionalInfoModel::Tempo::toMap() const
     return {
         { VALUE_KEY, value },
         { NOTE_ICON_KEY, static_cast<int>(noteIcon) },
-        { WITH_DOT_KEY, withDot }
+        { WITH_DOT_KEY, withDot },
+        { NOTE_SYMBOL_KEY, formatNoteSymbol(noteIcon, withDot) }
     };
 }
 
@@ -93,7 +108,7 @@ void AdditionalInfoModel::init()
     setWithTempo(false);
 
     Tempo defaultTempo;
-    defaultTempo.noteIcon = MusicalSymbolCodes::Code::CROTCHET;
+    defaultTempo.noteIcon = MusicalSymbolCode::CROTCHET;
     defaultTempo.value = 120;
     setTempo(defaultTempo.toMap());
 
@@ -207,17 +222,17 @@ void AdditionalInfoModel::setTimeSignature(const notation::Fraction& timeSignatu
 
 QVariantList AdditionalInfoModel::musicSymbolCodes(int number) const
 {
-    static QMap<QChar, MusicalSymbolCodes::Code> numeralsMusicSymbolCodes = {
-        { '0', MusicalSymbolCodes::Code::ZERO },
-        { '1', MusicalSymbolCodes::Code::ONE },
-        { '2', MusicalSymbolCodes::Code::TWO },
-        { '3', MusicalSymbolCodes::Code::THREE },
-        { '4', MusicalSymbolCodes::Code::FOUR },
-        { '5', MusicalSymbolCodes::Code::FIVE },
-        { '6', MusicalSymbolCodes::Code::SIX },
-        { '7', MusicalSymbolCodes::Code::SEVEN },
-        { '8', MusicalSymbolCodes::Code::EIGHT },
-        { '9', MusicalSymbolCodes::Code::NINE },
+    static QMap<QChar, MusicalSymbolCode> numeralsMusicSymbolCodes = {
+        { '0', MusicalSymbolCode::ZERO },
+        { '1', MusicalSymbolCode::ONE },
+        { '2', MusicalSymbolCode::TWO },
+        { '3', MusicalSymbolCode::THREE },
+        { '4', MusicalSymbolCode::FOUR },
+        { '5', MusicalSymbolCode::FIVE },
+        { '6', MusicalSymbolCode::SIX },
+        { '7', MusicalSymbolCode::SEVEN },
+        { '8', MusicalSymbolCode::EIGHT },
+        { '9', MusicalSymbolCode::NINE },
     };
 
     QVariantList result;
@@ -241,36 +256,53 @@ QVariantMap AdditionalInfoModel::tempo() const
 
 int AdditionalInfoModel::currentTempoNoteIndex() const
 {
-    QVariantMap selectedNote;
-    selectedNote[NOTE_ICON_KEY] = static_cast<int>(m_tempo.noteIcon);
+    QString selectedNoteSymbol = formatNoteSymbol(m_tempo.noteIcon, m_tempo.withDot);
+    QVariantList notes = tempoNotes();
 
-    if (m_tempo.withDot) {
-        selectedNote[WITH_DOT_KEY] = m_tempo.withDot;
+    for (int i = 0; i < notes.size(); ++i) {
+        QVariantMap note = notes[i].toMap();
+
+        if (note[NOTE_SYMBOL_KEY].toString() == selectedNoteSymbol) {
+            return i;
+        }
     }
 
-    int index = tempoNotes().indexOf(selectedNote);
-    return index;
+    return -1;
 }
 
-QVariantMap AdditionalInfoModel::tempoRange() const
+QVariantMap AdditionalInfoModel::tempoValueRange() const
 {
     return QVariantMap { { MIN_KEY, 20 }, { MAX_KEY, 400 } };
 }
 
 QVariantList AdditionalInfoModel::tempoNotes() const
 {
-    QVariantList marks;
-    marks << QVariantMap { { NOTE_ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::SEMIQUAVER) } }
-          << QVariantMap { { NOTE_ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::SEMIQUAVER) }, { WITH_DOT_KEY, true } }
-          << QVariantMap { { NOTE_ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::QUAVER) } }
-          << QVariantMap { { NOTE_ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::QUAVER) }, { WITH_DOT_KEY, true } }
-          << QVariantMap { { NOTE_ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::CROTCHET) } }
-          << QVariantMap { { NOTE_ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::CROTCHET) }, { WITH_DOT_KEY, true } }
-          << QVariantMap { { NOTE_ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::MINIM) } }
-          << QVariantMap { { NOTE_ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::MINIM) }, { WITH_DOT_KEY, true } }
-          << QVariantMap { { NOTE_ICON_KEY, static_cast<int>(MusicalSymbolCodes::Code::SEMIBREVE) } };
+    auto makeNote = [](MusicalSymbolCodes::Code icon, bool withDot = false)  {
+        QVariantMap note;
+        note[NOTE_ICON_KEY] = static_cast<int>(icon);
+        note[NOTE_SYMBOL_KEY] = formatNoteSymbol(icon, withDot);
 
-    return marks;
+        if (withDot) {
+            note[WITH_DOT_KEY] = withDot;
+        }
+
+        return note;
+    };
+
+    constexpr bool WITH_DOT = true;
+
+    QVariantList notes;
+    notes << makeNote(MusicalSymbolCode::SEMIQUAVER)
+          << makeNote(MusicalSymbolCode::SEMIQUAVER, WITH_DOT)
+          << makeNote(MusicalSymbolCode::QUAVER)
+          << makeNote(MusicalSymbolCode::QUAVER, WITH_DOT)
+          << makeNote(MusicalSymbolCode::CROTCHET)
+          << makeNote(MusicalSymbolCode::CROTCHET, WITH_DOT)
+          << makeNote(MusicalSymbolCode::MINIM)
+          << makeNote(MusicalSymbolCode::MINIM, WITH_DOT)
+          << makeNote(MusicalSymbolCode::SEMIBREVE);
+
+    return notes;
 }
 
 QVariantMap AdditionalInfoModel::pickupTimeSignature() const

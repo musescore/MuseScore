@@ -14,20 +14,6 @@ FlatButton {
     height: 96
     accentButton: popup.visible
 
-    QtObject {
-        id: privateProperties
-
-        function formatNoteSymbol(noteIcon, withDot) {
-            var iconStr = String.fromCharCode(noteIcon)
-
-            if (Boolean(withDot)) {
-                return iconStr + String.fromCharCode(MusicalSymbolCodes.DOT)
-            }
-
-            return iconStr
-        }
-    }
-
     TempoView {
         id: tempoView
 
@@ -35,7 +21,7 @@ FlatButton {
         anchors.verticalCenter: root.verticalCenter
 
         tempoValue: root.model.tempo.value
-        tempoNoteSymbol: privateProperties.formatNoteSymbol(model.tempo.noteIcon, model.tempo.withDot)
+        tempoNoteSymbol: root.model.tempo.noteSymbol
     }
 
     onClicked: {
@@ -109,9 +95,10 @@ FlatButton {
                         topPadding: 24
                         font.family: ui.theme.musicalFont.family
                         font.pixelSize: 24
+                        font.letterSpacing: 1
                         lineHeightMode: Text.FixedHeight
                         lineHeight: 10
-                        text: privateProperties.formatNoteSymbol(modelData.noteIcon, modelData.withDot)
+                        text: modelData.noteSymbol
                     }
                 }
             }
@@ -137,8 +124,8 @@ FlatButton {
                     currentValue: root.model.tempo.value
                     step: 1
 
-                    maxValue: root.model.tempoRange().max
-                    minValue: root.model.tempoRange().min
+                    maxValue: root.model.tempoValueRange().max
+                    minValue: root.model.tempoValueRange().min
                     validator: IntInputValidator {
                         top: control.maxValue
                         bottom: control.minValue
