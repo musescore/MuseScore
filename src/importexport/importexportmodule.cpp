@@ -26,7 +26,6 @@
 #include "internal/notationmidireader.h"
 #include "internal/musedatareader.h"
 #include "internal/overeader.h"
-#include "internal/guitarproreader.h"
 
 #include "notation/inotationwritersregister.h"
 #include "internal/notationmidiwriter.h"
@@ -64,7 +63,6 @@ void ImportExportModule::onInit(const framework::IApplication::RunMode&)
         readers->reg({ "mid", "midi", "kar" }, std::make_shared<NotationMidiReader>());
         readers->reg({ "md" }, std::make_shared<MuseDataReader>());
         readers->reg({ "ove", "scw" }, std::make_shared<OveReader>());
-        readers->reg({ "gtp", "gp3", "gp4", "gp5", "gpx", "gp", "ptb" }, std::make_shared<GuitarProReader>());
     }
 
     auto writers = framework::ioc()->resolve<INotationWritersRegister>(moduleName());

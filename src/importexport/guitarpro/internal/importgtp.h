@@ -39,7 +39,7 @@
 #include <libmscore/drumset.h>
 
 #include "modularity/ioc.h"
-#include "importexport/iimportexportconfiguration.h"
+#include "importexport/guitarpro/iguitarproconfiguration.h"
 
 namespace Ms {
 class Score;
@@ -125,7 +125,7 @@ struct GpBar {
 
 class GuitarPro
 {
-    INJECT(importexport, mu::importexport::IImportexportConfiguration, configuration)
+    INJECT(iex_guitarpro, mu::iex::guitarpro::IGuitarProConfiguration, configuration)
 
 protected:
     std::list<Note*> slideList;   //list of start slide notes

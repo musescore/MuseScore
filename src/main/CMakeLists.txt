@@ -169,6 +169,8 @@ if (NOT CC_IS_EMSCRIPTEN)
     list(APPEND LINK_LIB iex_bb)
     list(APPEND LINK_LIB iex_braille)
     list(APPEND LINK_LIB iex_bww)
+    list(APPEND LINK_LIB iex_capella)
+    list(APPEND LINK_LIB iex_guitarpro)
     list(APPEND LINK_LIB plugins)
 endif()
 

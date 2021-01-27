@@ -27,6 +27,12 @@ endif (BUILD_WORKSPACE_MODULE)
 
 if (NOT OS_IS_WASM)
     add_subdirectory(importexport)
+    add_subdirectory(importexport/bb)
+    add_subdirectory(importexport/braille)
+    add_subdirectory(importexport/bww)
+    add_subdirectory(importexport/capella)
+    add_subdirectory(importexport/guitarpro)
+    add_subdirectory(importexport/musicxml)
 
     add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/beatroot beatroot) # for midiimport
     add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/rtf2html rtf2html) # for capella
