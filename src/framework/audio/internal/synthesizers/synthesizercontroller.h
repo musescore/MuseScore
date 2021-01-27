@@ -29,7 +29,7 @@ class SynthesizerController : public async::Asyncable
 public:
     SynthesizerController(const ISynthesizersRegisterPtr& reg, const ISoundFontsProviderPtr& prov);
 
-    void init(uint sampleRate);
+    void init();
 
 private:
     void reloadSoundFonts(ISynthesizerPtr synth);

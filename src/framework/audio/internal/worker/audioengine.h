@@ -47,8 +47,10 @@ public:
 
     static AudioEngine* instance();
 
-    Ret init(int sampleRate, uint16_t readBufferSize);
+    Ret init();
     void deinit();
+    void setSampleRate(unsigned int sampleRate);
+    void setReadBufferSize(uint16_t readBufferSize);
 
     bool isInited() const override;
     async::Channel<bool> initChanged() const override;

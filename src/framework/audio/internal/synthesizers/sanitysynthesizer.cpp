@@ -45,10 +45,10 @@ SoundFontFormats SanitySynthesizer::soundFontFormats() const
     return m_synth->soundFontFormats();
 }
 
-Ret SanitySynthesizer::init(float samplerate)
+Ret SanitySynthesizer::init()
 {
     ONLY_AUDIO_WORKER_THREAD;
-    return m_synth->init(samplerate);
+    return m_synth->init();
 }
 
 Ret SanitySynthesizer::addSoundFonts(const std::vector<io::path>& sfonts)
