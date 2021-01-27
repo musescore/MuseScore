@@ -21,15 +21,13 @@
 
 #include "notation/inotationreader.h"
 
-namespace mu {
-namespace importexport {
+namespace mu::iex::guitarpro {
 class GuitarProReader : public notation::INotationReader
 {
 public:
 
     Ret read(Ms::MasterScore* score, const io::path& path) override;
 };
-}
 }
 
 #endif // MU_IMPORTEXPORT_GUITARPROREADER_H

@@ -25,7 +25,7 @@ namespace Ms {
 extern Score::FileError importGTP(MasterScore*, const QString& name);
 }
 
-using namespace mu::importexport;
+using namespace mu::iex::guitarpro;
 
 mu::Ret GuitarProReader::read(Ms::MasterScore* score, const io::path& path)
 {
