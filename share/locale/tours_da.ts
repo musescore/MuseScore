@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="da" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="da">
 <context>
     <name>TourXML</name>
     <message>
@@ -356,7 +358,7 @@ Hvis du har flere nodeark åbne, kan du skifte mellem dem ved at vælge fane øv
  Samtidig kan mange kommandoer udføres med genvejstaster eller ved at højreklikke (macOS: &quot;Ctrl&quot;+klikke) på nodearket.</translation>
     </message>
     <message>
-        <source>That's the end of this tour!
+        <source>That&apos;s the end of this tour!
     As you use MuseScore, more tours will pop up to further explain functionality.
     To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
     You can also enable/disable and reset tours in Help &gt; Tours.</source>

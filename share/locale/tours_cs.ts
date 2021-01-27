@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="cs" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="cs">
 <context>
     <name>TourXML</name>
     <message>
@@ -357,7 +359,7 @@
     Mnoho příkazů je navíc přístupných prostřednictvím klávesových zkratek nebo klepnutím pravým tlačítkem myši (macOS: Ctrl+klepnutí) do okna s notovým zápisem.</translation>
     </message>
     <message>
-        <source>That's the end of this tour!
+        <source>That&apos;s the end of this tour!
     As you use MuseScore, more tours will pop up to further explain functionality.
     To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
     You can also enable/disable and reset tours in Help &gt; Tours.</source>
