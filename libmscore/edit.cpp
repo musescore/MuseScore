@@ -5157,7 +5157,7 @@ void Score::undoChangeSpannerElements(Spanner* spanner, Element* startElement, E
             if (sp != spanner) {
                   if (startElement) {
                         // determine the track where to expect the 'parallel' start element
-                        int newTrack = sp->startElement() ? sp->startElement()->track() + startDeltaTrack : 0;
+                        int newTrack = sp->startElement() ? sp->startElement()->track() + startDeltaTrack : sp->track();
                         // look in elements linked to new start element for an element with
                         // same score as linked spanner and appropriate track
                         for (ScoreElement* ee : startElement->linkList()) {
@@ -5170,7 +5170,7 @@ void Score::undoChangeSpannerElements(Spanner* spanner, Element* startElement, E
                         }
                   // similarly to determine the 'parallel' end element
                   if (endElement) {
-                        int newTrack = sp->endElement() ? sp->endElement()->track() + endDeltaTrack : 0;
+                        int newTrack = sp->endElement() ? sp->endElement()->track() + endDeltaTrack : sp->track2();
                         for (ScoreElement* ee : endElement->linkList()) {
                               Element* e = toElement(ee);
                               if (e->score() == sp->score() && e->track() == newTrack) {
