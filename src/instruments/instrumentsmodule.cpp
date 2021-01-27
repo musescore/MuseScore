@@ -89,7 +89,10 @@ void InstrumentsModule::registerUiTypes()
     qmlRegisterUncreatableType<InstrumentTreeItemType>("MuseScore.Instruments", 1, 0, "InstrumentTreeItemType",
                                                        "Cannot create a ContainerType");
 
-    framework::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(instruments_QML_IMPORT);
+    auto uiengine = framework::ioc()->resolve<ui::IUiEngine>(moduleName());
+    if (uiengine) {
+        uiengine->addSourceImportPath(instruments_QML_IMPORT);
+    }
 }
 
 void InstrumentsModule::onInit(const IApplication::RunMode&)

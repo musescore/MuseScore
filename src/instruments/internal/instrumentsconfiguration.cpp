@@ -40,5 +40,8 @@ mu::io::paths InstrumentsConfiguration::instrumentPaths() const
 
 mu::io::paths InstrumentsConfiguration::extensionsPaths() const
 {
-    return extensionsConfigurator()->instrumentsPaths();
+    if (extensionsConfigurator()) {
+        return extensionsConfigurator()->instrumentsPaths();
+    }
+    return mu::io::paths();
 }
