@@ -16,28 +16,30 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "guitarproconfiguration.h"
 
-#include "settings.h"
+#include "testing/environment.h"
 
-#include "libmscore/mscore.h"
+#include "log.h"
+#include "framework/fonts/fontsmodule.h"
+#include "instruments/instrumentsmodule.h"
+#include "framework/system/systemmodule.h"
+#include "importexport/guitarpro/guitarpromodule.h"
 
-using namespace mu::framework;
-using namespace mu::iex::guitarpro;
+#include "libmscore/score.h"
+#include "libmscore/musescoreCore.h"
 
-static const Settings::Key IMPORT_GUITARPRO_CHARSET_KEY("iex_guitarpro", "import/guitarpro/charset");
-
-void GuitarProConfiguration::init()
+static mu::testing::SuiteEnvironment importexport_se(
 {
-    settings()->setDefaultValue(IMPORT_GUITARPRO_CHARSET_KEY, Val("UTF-8"));
-}
+    new mu::fonts::FontsModule(), // needs for libmscore
+    new mu::instruments::InstrumentsModule(),
+    new mu::system::SystemModule(),
+    new mu::iex::guitarpro::GuitarProModule()
+},
+    []() {
+    LOGI() << "guitarpro tests suite post init";
+    Ms::MScore::noGui = true;
 
-std::string GuitarProConfiguration::importGuitarProCharset() const
-{
-    return settings()->value(IMPORT_GUITARPRO_CHARSET_KEY).toString();
+    new Ms::MuseScoreCore();
+    Ms::MScore::init(); // initialize libmscore
 }
-
-void GuitarProConfiguration::setImportGuitarProCharset(const std::string& charset)
-{
-    settings()->setValue(IMPORT_GUITARPRO_CHARSET_KEY, Val(charset));
-}
+    );

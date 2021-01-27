@@ -30,17 +30,20 @@ class Environment
 public:
 
     using Modules = std::vector<framework::IModuleSetup*>;
+    using PreInit = std::function<void ()>;
     using PostInit = std::function<void ()>;
 
     Environment() = default;
 
     static void setDependency(const Modules& modules);
+    static void setPreInit(const PreInit& preInit);
     static void setPostInit(const PostInit& postInit);
 
     static void setup();
 
 private:
     static Modules m_dependencyModules;
+    static PreInit m_preInit;
     static PostInit m_postInit;
 };
 
@@ -48,9 +51,12 @@ class SuiteEnvironment
 {
 public:
 
-    SuiteEnvironment(const Environment::Modules& dependencyModules, const Environment::PostInit& postInit = nullptr)
+    SuiteEnvironment(const Environment::Modules& dependencyModules
+                     , const Environment::PreInit& preInit = nullptr
+                     , const Environment::PostInit& postInit = nullptr)
     {
         Environment::setDependency(dependencyModules);
+        Environment::setPreInit(preInit);
         Environment::setPostInit(postInit);
     }
 };

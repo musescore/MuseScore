@@ -636,7 +636,8 @@ bool loadInstrumentTemplates(const QString& instrTemplates)
 
 InstrumentTemplate* searchTemplate(const QString& name)
 {
-    for (InstrumentGroup* g : instrumentGroups) {
+    QList<InstrumentGroup*>& list = instrumentGroups;
+    for (InstrumentGroup* g : list) {
         for (InstrumentTemplate* it : g->instrumentTemplates) {
             if (it->id == name) {
                 return it;

@@ -30,7 +30,10 @@ using namespace mu::framework;
 
 void InstrumentsRepository::init()
 {
-    RetCh<Extension> extensionChanged = extensionsService()->extensionChanged();
+    RetCh<Extension> extensionChanged;
+    if (extensionsService()) {
+        extensionChanged = extensionsService()->extensionChanged();
+    }
     if (extensionChanged.ret) {
         extensionChanged.ch.onReceive(this, [this](const Extension& newExtension) {
             if (newExtension.types.testFlag(Extension::Instruments)) {
