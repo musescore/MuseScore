@@ -33,7 +33,7 @@
         <Property Id="WIXUI_INSTALLDIR" Value="INSTALL_ROOT"/>
 
         <!-- See https://docs.microsoft.com/ru-ru/windows/win32/msi/reinstallmode that explains different modes -->
-        <Property Id='REINSTALLMODE' Value='dmus'/>
+        <Property Id='REINSTALLMODE' Value='amus'/>
 
         <?ifdef CPACK_WIX_PRODUCT_ICON?>
         <Property Id="ARPPRODUCTICON">ProductIcon.ico</Property>
