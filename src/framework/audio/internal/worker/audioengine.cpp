@@ -48,7 +48,7 @@ bool AudioEngine::isInited() const
     return m_inited;
 }
 
-mu::Ret AudioEngine::init(int sampleRate, uint16_t readBufferSize)
+mu::Ret AudioEngine::init()
 {
     ONLY_AUDIO_WORKER_THREAD;
 
@@ -71,12 +71,8 @@ mu::Ret AudioEngine::init(int sampleRate, uint16_t readBufferSize)
         m_mixer->addChannel(player->audioSource());
     });
 
-    m_sampleRate = sampleRate;
-    m_mixer->setSampleRate(sampleRate);
-    m_buffer->setMinSampleLag(readBufferSize);
-
     m_synthesizerController = std::make_shared<SynthesizerController>(synthesizersRegister(), soundFontsProvider());
-    m_synthesizerController->init(sampleRate);
+    m_synthesizerController->init();
 
     //! TODO Add a subscription to add or remove synthesizers
     std::vector<ISynthesizerPtr> synths = synthesizersRegister()->synthesizers();
@@ -100,6 +96,23 @@ void AudioEngine::deinit()
         m_inited = false;
         m_initChanged.send(m_inited);
     }
+}
+
+void AudioEngine::setSampleRate(unsigned int sampleRate)
+{
+    ONLY_AUDIO_WORKER_THREAD;
+    m_sampleRate = sampleRate;
+    m_mixer->setSampleRate(sampleRate);
+    std::vector<ISynthesizerPtr> synths = synthesizersRegister()->synthesizers();
+    for (const ISynthesizerPtr& synth : synths) {
+        synth->setSampleRate(sampleRate);
+    }
+}
+
+void AudioEngine::setReadBufferSize(uint16_t readBufferSize)
+{
+    ONLY_AUDIO_WORKER_THREAD;
+    m_buffer->setMinSampleLag(readBufferSize);
 }
 
 mu::async::Channel<bool> AudioEngine::initChanged() const

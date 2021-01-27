@@ -37,7 +37,7 @@ public:
     virtual std::string name() const = 0;
     virtual SoundFontFormats soundFontFormats() const = 0;
 
-    virtual Ret init(float samplerate) = 0;
+    virtual Ret init() = 0;
     virtual Ret addSoundFonts(const std::vector<io::path>& sfonts) = 0;
     virtual Ret removeSoundFonts() = 0;
 

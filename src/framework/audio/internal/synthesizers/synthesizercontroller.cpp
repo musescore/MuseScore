@@ -28,7 +28,7 @@ SynthesizerController::SynthesizerController(const ISynthesizersRegisterPtr& reg
     ONLY_AUDIO_WORKER_THREAD;
 }
 
-void SynthesizerController::init(uint sampleRate)
+void SynthesizerController::init()
 {
     ONLY_AUDIO_WORKER_THREAD;
     IF_ASSERT_FAILED(m_synthRegister) {
@@ -41,7 +41,7 @@ void SynthesizerController::init(uint sampleRate)
 
     std::vector<ISynthesizerPtr> synthesizers = m_synthRegister->synthesizers();
     for (ISynthesizerPtr& synth : synthesizers) {
-        synth->init(sampleRate);
+        synth->init();
 
         reloadSoundFonts(synth);
         auto notification = m_soundFontProvider->soundFontPathsForSynthChanged(synth->name());

@@ -57,12 +57,12 @@ SoundFontFormats ZerberusSynth::soundFontFormats() const
     return { SoundFontFormat::SFZ };
 }
 
-Ret ZerberusSynth::init(float samplerate)
+Ret ZerberusSynth::init()
 {
     if (!m_zerb) {
         m_zerb = new zerberus::Zerberus();
+        m_zerb->setSampleRate(m_sampleRate);
     }
-    setSampleRate(samplerate);
     return true;
 }
 

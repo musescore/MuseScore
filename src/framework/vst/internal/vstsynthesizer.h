@@ -38,7 +38,7 @@ public:
     std::string name() const override;
     audio::synth::SoundFontFormats soundFontFormats() const override;
 
-    Ret init(float samplerate) override;
+    Ret init() override;
     void setSampleRate(unsigned int sampleRate) override;
     Ret addSoundFonts(const std::vector<io::path>& sfonts) override;
     Ret removeSoundFonts() override;

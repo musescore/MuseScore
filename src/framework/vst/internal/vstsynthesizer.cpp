@@ -75,9 +75,8 @@ Ret VSTSynthesizer::removeSoundFonts()
     return Ret(Ret::Code::NotSupported);
 }
 
-Ret VSTSynthesizer::init(float samplerate)
+Ret VSTSynthesizer::init()
 {
-    setSampleRate(samplerate);
     return true;
 }
 
