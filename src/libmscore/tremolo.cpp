@@ -63,6 +63,15 @@ Tremolo::Tremolo(const Tremolo& t)
 }
 
 //---------------------------------------------------------
+//   chordMag
+//---------------------------------------------------------
+
+qreal Tremolo::chordMag() const
+{
+    return parent() ? toChord(parent())->chordMag() : 1.0;
+}
+
+//---------------------------------------------------------
 //   mag
 //---------------------------------------------------------
 
@@ -77,8 +86,8 @@ qreal Tremolo::mag() const
 
 qreal Tremolo::minHeight() const
 {
-    const qreal sw = score()->styleS(Sid::tremoloStrokeWidth).val() * mag();
-    const qreal td = score()->styleS(Sid::tremoloDistance).val() * mag();
+    const qreal sw = score()->styleS(Sid::tremoloStrokeWidth).val() * chordMag();
+    const qreal td = score()->styleS(Sid::tremoloDistance).val() * chordMag();
     return (lines() - 1) * td + sw;
 }
 
@@ -179,9 +188,10 @@ QPainterPath Tremolo::basePath() const
         return QPainterPath();
     }
 
-    const qreal _spatium  = spatium() * mag();
+    const qreal _spatium  = spatium() * chordMag();
 
-    qreal w2  = _spatium * score()->styleS(Sid::tremoloWidth).val() * .5;
+    // overall width of two-note tremolos should not be changed if chordMag() isn't 1.0
+    qreal w2  = _spatium * score()->styleS(Sid::tremoloWidth).val() * .5 / (twoNotes() ? chordMag() : 1.0);
     qreal nw2 = w2 * score()->styleD(Sid::tremoloStrokeLengthMultiplier);
     qreal lw  = _spatium * score()->styleS(Sid::tremoloStrokeWidth).val();
     qreal td  = _spatium * score()->styleS(Sid::tremoloDistance).val();
@@ -248,18 +258,18 @@ void Tremolo::layoutOneNoteTremolo(qreal x, qreal y, qreal spatium)
     qreal t = 0.0;
     // nearest distance between note and tremolo stroke should be no less than 3.0
     if (chord()->hook() || chord()->beam()) {
-        t = up ? -3.0 * mag() - 2.0 * minHeight() : 3.0 * mag();
+        t = up ? -3.0 * chordMag() - 2.0 * minHeight() : 3.0 * chordMag();
     } else {
         const qreal offset = 2.0 * score()->styleS(Sid::tremoloStrokeWidth).val();
 
         if (!up && !(line & 1)) {              // stem is down; even line
-            t = qMax((4.0 + offset) * mag() - 2.0 * minHeight(), 3.0 * mag());
+            t = qMax((4.0 + offset) * chordMag() - 2.0 * minHeight(), 3.0 * chordMag());
         } else if (!up && (line & 1)) {        // stem is down; odd line
-            t = qMax(5.0 * mag() - 2.0 * minHeight(), 3.0 * mag());
+            t = qMax(5.0 * chordMag() - 2.0 * minHeight(), 3.0 * chordMag());
         } else if (up && !(line & 1)) {        // stem is up; even line
-            t = qMin(-3.0 * mag() - 2.0 * minHeight(), (-4.0 - offset) * mag());
+            t = qMin(-3.0 * chordMag() - 2.0 * minHeight(), (-4.0 - offset) * chordMag());
         } else { /*if ( up &&  (line & 1))*/   // stem is up; odd line
-            t = qMin(-3.0 * mag() - 2.0 * minHeight(), -5.0 * mag());
+            t = qMin(-3.0 * chordMag() - 2.0 * minHeight(), -5.0 * chordMag());
         }
     }
 
@@ -369,17 +379,17 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium)
     qreal x2 = _chord2->stemPosBeam().x();
     if (stem2) {
         if (defaultStyle && _chord2->up()) {
-            x2 -= stem2->lineWidth();
+            x2 -= stem2->lineWidthMag();
         } else if (!defaultStyle && !_chord2->up()) {
-            x2 += stem2->lineWidth();
+            x2 += stem2->lineWidthMag();
         }
     }
     qreal x1 = _chord1->stemPosBeam().x();
     if (stem1) {
         if (defaultStyle && !_chord1->up()) {
-            x1 += stem1->lineWidth();
+            x1 += stem1->lineWidthMag();
         } else if (!defaultStyle && _chord1->up()) {
-            x1 -= stem1->lineWidth();
+            x1 -= stem1->lineWidthMag();
         }
     }
 
@@ -413,7 +423,7 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium)
 
     if (_chord1->beams() == _chord2->beams() && _chord1->beam()) {
         int beams = _chord1->beams();
-        qreal beamHalfLineWidth = point(score()->styleS(Sid::beamWidth)) * .5 * mag();
+        qreal beamHalfLineWidth = point(score()->styleS(Sid::beamWidth)) * .5 * chordMag();
         beamYOffset = beams * _chord1->beam()->beamDist() - beamHalfLineWidth;
         if (_chord1->up() != _chord2->up()) {      // cross-staff
             beamYOffset = 2 * beamYOffset + beamHalfLineWidth;

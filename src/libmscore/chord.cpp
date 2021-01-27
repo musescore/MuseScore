@@ -1483,8 +1483,8 @@ qreal Chord::minAbsStemLength() const
         return 0.0;
     }
 
-    const qreal sw = score()->styleS(Sid::tremoloStrokeWidth).val() * mag();
-    const qreal td = score()->styleS(Sid::tremoloDistance).val() * mag();
+    const qreal sw = score()->styleS(Sid::tremoloStrokeWidth).val() * chordMag();
+    const qreal td = score()->styleS(Sid::tremoloDistance).val() * chordMag();
     int beamLvl = beams();
     const qreal beamDist = beam() ? beam()->beamDist() : (sw * spatium());
 
@@ -3165,13 +3165,12 @@ void Chord::removeMarkings(bool keepTremolo)
 }
 
 //---------------------------------------------------------
-//   mag
+//   chordMag
 //---------------------------------------------------------
 
-qreal Chord::mag() const
+qreal Chord::chordMag() const
 {
-    const Staff* st = staff();
-    qreal m = st ? st->staffMag(this) : 1.0;
+    qreal m = 1.0;
     if (small()) {
         m *= score()->styleD(Sid::smallNoteMag);
     }
@@ -3179,6 +3178,16 @@ qreal Chord::mag() const
         m *= score()->styleD(Sid::graceNoteMag);
     }
     return m;
+}
+
+//---------------------------------------------------------
+//   mag
+//---------------------------------------------------------
+
+qreal Chord::mag() const
+{
+    const Staff* st = staff();
+    return (st ? st->staffMag(this) : 1.0) * chordMag();
 }
 
 //---------------------------------------------------------

@@ -76,6 +76,7 @@ public:
 
     qreal minHeight() const;
 
+    qreal chordMag() const;
     qreal mag() const override;
     void draw(QPainter*) const override;
     void layout() override;
