@@ -23,6 +23,7 @@ Item {
             topPadding: 22
             font.family: ui.theme.musicalFont.family
             font.pixelSize: 36
+            font.letterSpacing: 1
             lineHeightMode: Text.FixedHeight
             lineHeight: 10
             text: root.tempoNoteSymbol
