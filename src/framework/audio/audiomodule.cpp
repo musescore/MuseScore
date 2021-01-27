@@ -157,9 +157,6 @@ void AudioModule::onInit(const framework::IApplication::RunMode&)
 
     **/
 
-    //! TODO It looks like the audio buffer should not be created in the audio engine,
-    //! but should be created externally and set to the audio engine.
-
     // Init configuration
     s_audioConfiguration->init();
 
@@ -172,6 +169,7 @@ void AudioModule::onInit(const framework::IApplication::RunMode&)
         ONLY_AUDIO_WORKER_THREAD;
 
         AudioEngine::instance()->setAudioBuffer(s_audioBuffer);
+        AudioEngine::instance()->init();
 
         s_rpcControllers->reg(std::make_shared<rpc::RpcAudioEngineController>());
         s_rpcControllers->reg(std::make_shared<rpc::RpcSequencerController>());
@@ -198,12 +196,19 @@ void AudioModule::onInit(const framework::IApplication::RunMode&)
     }
 
     // Setup audio engine
-    //! NOTE Send msg for init audio engine to worker
+    //! NOTE Send msg for audio engine to worker
     s_audioWorker->channel()->send(
         rpc::Msg(
             rpc::TargetName::AudioEngine,
-            "init",
-            rpc::Args::make_arg2<int, uint16_t>(activeSpec.sampleRate, activeSpec.samples)
+            "setSampleRate",
+            rpc::Args::make_arg1<int>(activeSpec.sampleRate)
+            ));
+
+    s_audioWorker->channel()->send(
+        rpc::Msg(
+            rpc::TargetName::AudioEngine,
+            "setReadBufferSize",
+            rpc::Args::make_arg1<uint16_t>(activeSpec.samples)
             ));
 }
 

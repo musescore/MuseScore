@@ -66,7 +66,7 @@ SoundFontFormats FluidSynth::soundFontFormats() const
     return { SoundFontFormat::SF2, SoundFontFormat::SF3 };
 }
 
-Ret FluidSynth::init(float samplerate)
+Ret FluidSynth::init()
 {
     auto fluid_log_out = [](int level, const char* message, void*) {
         switch (level) {
@@ -102,7 +102,7 @@ Ret FluidSynth::init(float samplerate)
     fluid_settings_setint(m_fluid->settings, "synth.audio-channels", 1);
     fluid_settings_setint(m_fluid->settings, "synth.lock-memory", 0);
     fluid_settings_setint(m_fluid->settings, "synth.threadsafe-api", 0);
-    fluid_settings_setnum(m_fluid->settings, "synth.sample-rate", static_cast<double>(samplerate));
+    fluid_settings_setnum(m_fluid->settings, "synth.sample-rate", static_cast<double>(m_sampleRate));
     fluid_settings_setint(m_fluid->settings, "synth.midi-channels", 80);
 
     //fluid_settings_setint(_fluid->settings, "synth.min-note-length", 50);
@@ -133,8 +133,6 @@ Ret FluidSynth::init(float samplerate)
     fluid_settings_setstr(m_fluid->settings, "audio.sample-format", "float");
 
     m_fluid->synth = new_fluid_synth(m_fluid->settings);
-
-    setSampleRate(samplerate);
 
     LOGD() << "synth inited\n";
     return true;

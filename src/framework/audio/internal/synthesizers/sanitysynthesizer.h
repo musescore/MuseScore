@@ -32,7 +32,7 @@ public:
     std::string name() const override;
     SoundFontFormats soundFontFormats() const override;
 
-    Ret init(float samplerate) override;
+    Ret init() override;
     Ret addSoundFonts(const std::vector<io::path>& sfonts) override;
     Ret removeSoundFonts() override;
 
