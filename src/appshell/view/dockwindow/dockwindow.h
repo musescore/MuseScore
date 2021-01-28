@@ -31,14 +31,14 @@ class QMainWindow;
 class QStackedWidget;
 class QStatusBar;
 
-namespace mu {
-namespace dock {
+namespace mu::dock {
 class EventsWatcher;
 class DockWindow : public QQuickItem, public ui::IMainWindow
 {
     Q_OBJECT
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
+    Q_PROPERTY(QColor borderColor READ borderColor WRITE setBorderColor NOTIFY borderColorChanged)
 
     Q_PROPERTY(QQmlListProperty<mu::dock::DockToolBar> toolbars READ toolbars)
 
@@ -53,6 +53,7 @@ public:
 
     QString title() const;
     QColor color() const;
+    QColor borderColor() const;
 
     QQmlListProperty<DockToolBar> toolbars();
     QQmlListProperty<DockPage> pages();
@@ -65,11 +66,13 @@ public:
 public slots:
     void setTitle(QString title);
     void setColor(QColor color);
+    void setBorderColor(QColor color);
     void setCurrentPageUri(QString uri);
 
 signals:
     void titleChanged(QString title);
     void colorChanged(QColor color);
+    void borderColorChanged(QColor color);
     void currentPageUriChanged(QString currentPageUri);
 
 private slots:
@@ -98,8 +101,8 @@ private:
     QString m_currentPageUri;
     bool m_isComponentComplete = false;
     QColor m_color;
+    QColor m_borderColor;
 };
-}
 }
 
 #endif // MU_DOCK_DOCKWINDOW_H

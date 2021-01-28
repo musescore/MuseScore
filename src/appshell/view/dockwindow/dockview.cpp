@@ -38,10 +38,6 @@ DockView::DockView(QQuickItem* parent)
     connect(this, &DockView::colorChanged, this, &DockView::updateStyle);
 }
 
-DockView::~DockView()
-{
-}
-
 void DockView::forceActiveFocus()
 {
     view()->setFocus();
@@ -56,69 +52,84 @@ void DockView::componentComplete()
         Q_ASSERT(!objectName().isEmpty());
     }
 
-    if (_content) {
+    if (m_content) {
         QQmlEngine* engine = nullptr;
 #if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
         engine = framework::ioc()->resolve<ui::IUiEngine>("appshell")->qmlEngine();
 #else
-        engine = _content->engine();
+        engine = m_content->engine();
 #endif
 
-        _view = new QQuickView(engine, nullptr);
-        _view->setResizeMode(QQuickView::SizeRootObjectToView);
-        _widget = QWidget::createWindowContainer(_view, nullptr, Qt::Widget);
-        _widget->setObjectName("w_" + objectName());
+        m_view = new QQuickView(engine, nullptr);
+        m_view->setResizeMode(QQuickView::SizeRootObjectToView);
+        m_widget = QWidget::createWindowContainer(m_view, nullptr, Qt::Widget);
+        m_widget->setObjectName("w_" + objectName());
 
-        _view->resize(width(), height());
-        _widget->resize(_view->size());
+        m_view->resize(width(), height());
+        m_widget->resize(m_view->size());
 
         QQmlContext* ctx = QQmlEngine::contextForObject(this);
-        QQuickItem* obj = qobject_cast<QQuickItem*>(_content->create(ctx));
-        _view->setContent(QUrl(), _content, obj);
+        QQuickItem* obj = qobject_cast<QQuickItem*>(m_content->create(ctx));
+        m_view->setContent(QUrl(), m_content, obj);
     }
 
     onComponentCompleted();
 }
 
-void DockView::onWidgetEvent(QEvent* e)
+void DockView::onWidgetEvent(QEvent* event)
 {
-    if (QEvent::Resize == e->type()) {
-        QResizeEvent* re = static_cast<QResizeEvent*>(e);
+    if (QEvent::Resize == event->type()) {
+        QResizeEvent* re = static_cast<QResizeEvent*>(event);
         setSize(QSizeF(re->size()));
     }
 }
 
 QWidget* DockView::view() const
 {
-    return _widget;
+    return m_widget;
 }
 
 QQmlComponent* DockView::content() const
 {
-    return _content;
+    return m_content;
 }
 
 void DockView::setContent(QQmlComponent* component)
 {
-    if (_content == component) {
+    if (m_content == component) {
         return;
     }
 
-    _content = component;
+    m_content = component;
     emit contentChanged();
 }
 
 QColor DockView::color() const
 {
-    return _color;
+    return m_color;
 }
 
 void DockView::setColor(QColor color)
 {
-    if (_color == color) {
+    if (m_color == color) {
         return;
     }
 
-    _color = color;
-    emit colorChanged(_color);
+    m_color = color;
+    emit colorChanged(m_color);
+}
+
+QColor DockView::borderColor() const
+{
+    return m_borderColor;
+}
+
+void DockView::setBorderColor(QColor color)
+{
+    if (m_borderColor == color) {
+        return;
+    }
+
+    m_borderColor = color;
+    emit borderColorChanged(color);
 }

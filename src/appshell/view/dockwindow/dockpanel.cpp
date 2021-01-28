@@ -23,7 +23,7 @@
 
 using namespace mu::dock;
 
-static const QString PANEL_QSS = QString("QDockWidget { border: 1; color: white; }"
+static const QString PANEL_QSS = QString("QDockWidget { border: 1 solid %2; color: transparent; }"
                                          "QDockWidget::title { background: %1; } ");
 
 DockPanel::DockPanel(QQuickItem* parent)
@@ -44,7 +44,7 @@ void DockPanel::onComponentCompleted()
     panel()->setObjectName("w_" + objectName());
     panel()->setWidget(view());
     panel()->setWindowTitle(m_title);
-    panel()->setStyleSheet(PANEL_QSS.arg(color().name()));
+    panel()->setStyleSheet(PANEL_QSS.arg(color().name()).arg(borderColor().name()));
 
     m_preferedWidth = width();
 

@@ -34,11 +34,11 @@ DockStatusBar::~DockStatusBar()
 
 DockStatusBar::Widget DockStatusBar::widget() const
 {
-    return _widget;
+    return m_widget;
 }
 
 void DockStatusBar::onComponentCompleted()
 {
-    _widget.widget = view();
-    _widget.widget->setFixedHeight(height());
+    m_widget.widget = view();
+    m_widget.widget->setFixedHeight(height());
 }

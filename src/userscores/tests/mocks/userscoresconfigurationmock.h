@@ -23,8 +23,7 @@
 
 #include "userscores/iuserscoresconfiguration.h"
 
-namespace mu {
-namespace userscores {
+namespace mu::userscores {
 class UserScoresConfigurationMock : public IUserScoresConfiguration
 {
 public:
@@ -37,8 +36,10 @@ public:
 
     MOCK_METHOD(QColor, templatePreviewBackgroundColor, (), (const, override));
     MOCK_METHOD(async::Channel<QColor>, templatePreviewBackgroundColorChanged, (), (const, override));
+
+    MOCK_METHOD(PreferredScoreCreationMode, preferredScoreCreationMode, (), (const, override));
+    MOCK_METHOD(void, setPreferredScoreCreationMode, (PreferredScoreCreationMode), (override));
 };
-}
 }
 
 #endif // MU_USERSCORES_USERSCORESCONFIGURATIONMOCK_H

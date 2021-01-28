@@ -36,11 +36,11 @@
 using namespace mu::dock;
 
 static const QString WINDOW_QSS = QString("QMainWindow { background: %1; } "
-                                          "QMainWindow::separator { background: %1; width: 4px; } "
+                                          "QMainWindow::separator { background: %2; width: 1px; } "
                                           "QTabBar::tab { background: %1; border: 2px solid; padding: 2px; }"
                                           "QTabBar::tab:selected { border-color: #9B9B9B; border-bottom-color: #C2C7CB; }");
 
-static const QString STATUS_QSS = QString("QStatusBar { background: %1; } QStatusBar::item { border: 0 }");
+static const QString STATUS_QSS = QString("QStatusBar { background: %1; border-top: 1px solid %2; } QStatusBar::item { border: 0 }");
 
 DockWindow::DockWindow(QQuickItem* parent)
     : QQuickItem(parent), m_toolbars(this), m_pages(this)
@@ -73,6 +73,7 @@ DockWindow::DockWindow(QQuickItem* parent)
 
     connect(m_pages.notifier(), &uicomponents::QmlListPropertyNotifier::appended, this, &DockWindow::onPageAppended);
     connect(this, &DockWindow::colorChanged, this, &DockWindow::updateStyle);
+    connect(this, &DockWindow::borderColorChanged, this, &DockWindow::updateStyle);
 }
 
 void DockWindow::componentComplete()
@@ -259,8 +260,8 @@ void DockWindow::showPage(DockPage* page)
 
 void DockWindow::updateStyle()
 {
-    m_window->setStyleSheet(WINDOW_QSS.arg(m_color.name()));
-    m_statusbar->setStyleSheet(STATUS_QSS.arg(m_color.name()));
+    m_window->setStyleSheet(WINDOW_QSS.arg(m_color.name()).arg(m_borderColor.name()));
+    m_statusbar->setStyleSheet(STATUS_QSS.arg(m_color.name()).arg(m_borderColor.name()));
 }
 
 DockPage* DockWindow::currentPage() const
@@ -298,6 +299,21 @@ void DockWindow::setColor(QColor color)
 
     m_color = color;
     emit colorChanged(m_color);
+}
+
+QColor DockWindow::borderColor() const
+{
+    return m_borderColor;
+}
+
+void DockWindow::setBorderColor(QColor color)
+{
+    if (m_borderColor == color) {
+        return;
+    }
+
+    m_borderColor = color;
+    emit borderColorChanged(color);
 }
 
 QQmlListProperty<DockToolBar> DockWindow::toolbars()
