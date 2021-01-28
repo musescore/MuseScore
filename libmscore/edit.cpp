@@ -517,7 +517,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
 
             Fraction tick1 = m1->tick();
             Fraction tick2 = m2->endTick();
-            auto spanners = s->spannerMap().findOverlapping(tick1.ticks(), tick2.ticks());
+            auto spanners = s->spannerMap().findOverlapping(tick1.ticks(), tick2.ticks(), Limits::SOFT_STOP);
             for (auto i : spanners) {
                   if (i.value->tick() >= tick1)
                         undo(new RemoveElement(i.value));
