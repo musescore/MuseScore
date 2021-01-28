@@ -16,6 +16,7 @@ DockWindow {
     title: qsTrc("appshell", "MuseScore 4")
 
     color: ui.theme.backgroundPrimaryColor
+    borderColor: ui.theme.strokeColor
 
     Component.onCompleted: {
         api.launcher.open(homePage.uri)

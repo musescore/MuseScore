@@ -32,10 +32,10 @@ DockCentral::~DockCentral()
 
 DockCentral::Widget DockCentral::widget() const
 {
-    return _widget;
+    return m_widget;
 }
 
 void DockCentral::onComponentCompleted()
 {
-    _widget.widget = view();
+    m_widget.widget = view();
 }

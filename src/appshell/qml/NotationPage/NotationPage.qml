@@ -12,6 +12,7 @@ DockPage {
     objectName: "Notation"
 
     property var color: ui.theme.backgroundPrimaryColor
+    property var borderColor: ui.theme.strokeColor
 
     toolbar: DockToolBar {
         id: notationNoteInputBar
@@ -42,6 +43,7 @@ DockPage {
             minimumWidth: minimumPanelWidth
 
             color: notationPage.color
+            borderColor: notationPage.borderColor
             floatable: true
 
             PalettesWidget {}
@@ -57,6 +59,7 @@ DockPage {
             minimumWidth: minimumPanelWidth
 
             color: notationPage.color
+            borderColor: notationPage.borderColor
 
             tabifyObjectName: "palettePanel"
             floatable: true
@@ -76,6 +79,7 @@ DockPage {
             minimumWidth: minimumPanelWidth
 
             color: notationPage.color
+            borderColor: notationPage.borderColor
 
             tabifyObjectName: "instrumentsPanel"
             floatable: true
