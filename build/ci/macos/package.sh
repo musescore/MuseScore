@@ -50,14 +50,32 @@ fi
 
 BUILD_MODE=$(cat $ARTIFACTS_DIR/env/build_mode.env)
 BUILD_VERSION=$(cat $ARTIFACTS_DIR/env/build_version.env)
+BUILD_REVISION=$(cat $ARTIFACTS_DIR/env/build_revision.env)
 
-APP_LONGER_NAME="MuseScore 3"
-if [ "$BUILD_MODE" == "devel_build" ]; then APP_LONGER_NAME="MuseScore $BUILD_VERSION Devel"; fi
-if [ "$BUILD_MODE" == "nightly_build" ]; then APP_LONGER_NAME="MuseScore $BUILD_VERSION Nightly"; fi
-if [ "$BUILD_MODE" == "testing_build" ]; then APP_LONGER_NAME="MuseScore $BUILD_VERSION Testing"; fi
-if [ "$BUILD_MODE" == "stable_build" ]; then APP_LONGER_NAME="MuseScore 3"; fi
+VERSION_MAJOR="$(cut -d'.' -f1 <<<"$BUILD_VERSION")"
+VERSION_MINOR="$(cut -d'.' -f2 <<<"$BUILD_VERSION")"
+VERSION_PATCH="$(cut -d'.' -f3 <<<"$BUILD_VERSION")"
 
-build/package_mac --longer_name "$APP_LONGER_NAME"
+APP_LONGER_NAME="MuseScore $VERSION_MAJOR"
+PACKAGE_VERSION="$BUILD_VERSION"
+if [ "$BUILD_MODE" == "devel_build" ]; then
+  APP_LONGER_NAME="MuseScore $BUILD_VERSION Devel"
+  PACKAGE_VERSION="${VERSION_MAJOR}.${VERSION_MINOR}b-${BUILD_REVISION}"
+fi
+if [ "$BUILD_MODE" == "nightly_build" ]; then
+  APP_LONGER_NAME="MuseScore $BUILD_VERSION Nightly";
+  PACKAGE_VERSION="${VERSION_MAJOR}.${VERSION_MINOR}b-${BUILD_REVISION}"
+fi
+if [ "$BUILD_MODE" == "testing_build" ]; then
+  APP_LONGER_NAME="MuseScore $BUILD_VERSION Testing";
+  PACKAGE_VERSION="${VERSION_MAJOR}.${VERSION_MINOR}b-${BUILD_REVISION}"
+fi
+if [ "$BUILD_MODE" == "stable_build" ]; then
+  APP_LONGER_NAME="MuseScore $VERSION_MAJOR";
+  PACKAGE_VERSION="${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}"
+fi
+
+build/package_mac --longer_name "$APP_LONGER_NAME" --version "$PACKAGE_VERSION"
 
 DMGFILE="$(ls applebuild/*.dmg)"
 echo "DMGFILE: $DMGFILE"
@@ -66,7 +84,6 @@ if [ "$BUILD_MODE" == "nightly_build" ]; then
 
   BUILD_DATETIME=$(cat $ARTIFACTS_DIR/env/build_datetime.env)
   BUILD_BRANCH=$(cat $ARTIFACTS_DIR/env/build_branch.env)
-  BUILD_REVISION=$(cat $ARTIFACTS_DIR/env/build_revision.env)
   ARTIFACT_NAME=MuseScoreNightly-${BUILD_DATETIME}-${BUILD_BRANCH}-${BUILD_REVISION}.dmg
 
 else
