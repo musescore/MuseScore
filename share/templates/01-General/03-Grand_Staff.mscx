@@ -41,6 +41,8 @@
         <family>trumpets</family>
         <family>cornets</family>
         <family>trombones</family>
+        <family>baritone-horns</family>
+        <family>euphoniums</family>
         <family>tubas</family>
         </section>
       <section id="timpani" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">

@@ -16,6 +16,8 @@
             <family>cornets</family>
             <family>flugelhorns</family>
             <family>trombones</family>
+            <family>baritone-horns</family>
+            <family>euphoniums</family>
             <family>tubas</family>
         </section>
         <section id="timpani">
@@ -278,6 +280,8 @@
             <family>cornets</family>
             <family>flugelhorns</family>
             <family>horns</family>
+            <family>baritone-horns</family>
+            <family>euphoniums</family>
             <family>trombones</family>
             <family>tubas</family>
         </section>
