@@ -60,7 +60,7 @@ Item {
         textRoleName: "name"
         valueRoleName: "id"
 
-        onValueChanged: {
+        onActivated: {
             root.familySelected(value)
         }
     }
