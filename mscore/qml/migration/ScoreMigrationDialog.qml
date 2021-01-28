@@ -134,6 +134,9 @@ FocusScope {
                     horizontalAlignment: Qt.AlignLeft
 
                     text: "<a href=\"%1\">%2</a>".arg(Qt.locale().name === "zh_CN" ? "https://www.bilibili.com/video/BV1FT4y1K7UM" : "https://youtu.be/qLR40BGNy68").arg(qsTr("Watch our release video to learn more"))
+                    Accessible.name: qsTr("Watch our release video to learn more")
+                    Accessible.role: Accessible.Button
+                    Accessible.onPressAction: linkActivated()
 
                     onLinkActivated: {
                         if (root.model) {
