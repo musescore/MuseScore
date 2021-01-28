@@ -20,12 +20,14 @@ Rectangle {
     ListView {
         id: view
 
+        anchors.verticalCenter: parent.verticalCenter
+
         width: contentWidth
         height: contentItem.childrenRect.height
 
         orientation: Qt.Horizontal
         interactive: false
-        spacing: 12
+        spacing: 2
 
         model: toolbarModel
 
