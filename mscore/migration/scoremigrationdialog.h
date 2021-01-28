@@ -3,7 +3,7 @@
 
 #include "scoremigrationdialogmodel.h"
 
-class ScoreMigrationDialog : public QQuickWidget
+class ScoreMigrationDialog : public QQuickView
       {
       Q_OBJECT
 
@@ -11,7 +11,6 @@ class ScoreMigrationDialog : public QQuickWidget
       explicit ScoreMigrationDialog(QQmlEngine* engine, Ms::Score *score);
 
    private:
-      void showEvent(QShowEvent* event) override;
       void focusInEvent(QFocusEvent* event) override;
 
       ScoreMigrationDialogModel* m_dialogModel = nullptr;
