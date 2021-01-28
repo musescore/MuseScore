@@ -26,10 +26,6 @@ DockCentral::DockCentral(QQuickItem* parent)
 {
 }
 
-DockCentral::~DockCentral()
-{
-}
-
 DockCentral::Widget DockCentral::widget() const
 {
     return m_widget;

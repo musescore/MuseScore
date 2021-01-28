@@ -23,11 +23,11 @@
 
 class QWidget;
 
-namespace mu {
-namespace dock {
+namespace mu::dock {
 class DockStatusBar : public DockView
 {
     Q_OBJECT
+
 public:
     explicit DockStatusBar(QQuickItem* parent = nullptr);
     ~DockStatusBar();
@@ -39,12 +39,10 @@ public:
     Widget widget() const;
 
 private:
-
     void onComponentCompleted() override;
 
     Widget m_widget;
 };
-}
 }
 
 #endif // MU_DOCK_DOCKSTATUSBAR_H
