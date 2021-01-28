@@ -47,7 +47,7 @@ private:
 
     void loadGroupMeta(Ms::XmlReader& reader, InstrumentsMeta& generalMeta, int groupIndex) const;
     MidiArticulation readArticulation(Ms::XmlReader& reader) const;
-    InstrumentFamily readFamily(Ms::XmlReader& reader) const;
+    InstrumentGenre readGenre(Ms::XmlReader& reader) const;
     InstrumentTemplate readInstrumentTemplate(Ms::XmlReader& reader, InstrumentsMeta& generalMeta) const;
 
     int readStaffIndex(Ms::XmlReader& reader) const;

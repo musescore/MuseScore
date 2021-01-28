@@ -123,7 +123,7 @@ private:
 
     struct Tempo {
         int value = 0;
-        ui::MusicalSymbolCodes::Code noteIcon;
+        ui::MusicalSymbolCodes::Code noteIcon = ui::MusicalSymbolCodes::Code::NONE;
         bool withDot = false;
 
         Tempo() = default;

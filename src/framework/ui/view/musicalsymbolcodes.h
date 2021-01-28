@@ -56,7 +56,9 @@ public:
         QUAVER = 0xE1D7,
         SEMIQUAVER = 0xE1D9,
         DEMISEMIQUAVER = 0xE1DB,
-        DOT = 0xE1E7
+        DOT = 0xE1E7,
+
+        NONE
     };
 
     Q_ENUM(Code)
