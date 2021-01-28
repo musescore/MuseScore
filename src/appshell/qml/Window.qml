@@ -1,4 +1,5 @@
 import QtQuick 2.7
+
 import MuseScore.Dock 1.0
 import MuseScore.Ui 1.0
 import MuseScore.Playback 1.0
@@ -10,7 +11,6 @@ import "./Settings"
 import "./DevTools"
 
 DockWindow {
-
     id: dockWindow
 
     title: qsTrc("appshell", "MuseScore 4")
@@ -18,7 +18,7 @@ DockWindow {
     color: ui.theme.backgroundPrimaryColor
 
     Component.onCompleted: {
-        api.launcher.open(home.uri)
+        api.launcher.open(homePage.uri)
     }
 
     property var provider: InteractiveProvider {
@@ -28,63 +28,65 @@ DockWindow {
         }
     }
 
+    readonly property int toolbarHeight: 48
+
     toolbars: [
         DockToolBar {
-            id: mainToolBar
             objectName: "mainToolBar"
-
-            minimumWidth: 900
-            minimumHeight: 48
+            minimumWidth: 456
+            minimumHeight: dockWindow.toolbarHeight
 
             color: dockWindow.color
             allowedAreas: Qt.TopToolBarArea
 
-            content: Rectangle {
+            content: MainToolBar {
                 color: dockWindow.color
+                currentUri: dockWindow.currentPageUri
 
-                Item {
-                    height: parent.height
-                    width: parent.width
-
-                    MainToolBar {
-                        anchors.left: parent.left
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-
-                        color: dockWindow.color
-                        currentUri: dockWindow.currentPageUri
-                        onSelected: {
-                            api.launcher.open(uri)
-                        }
-                    }
-
-                    NotationToolBar {
-                        anchors.centerIn: parent
-
-                        visible: dockWindow.currentPageUri !== home.uri
-                        color: dockWindow.color
-                    }
-
-                    PlaybackToolBar {
-                        anchors.right: parent.right
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-
-                        visible: dockWindow.currentPageUri !== home.uri
-                        color: dockWindow.color
-                    }
+                onSelected: {
+                    api.launcher.open(uri)
                 }
+            }
+        },
+
+        DockToolBar {
+            objectName: "notationToolBar"
+            minimumWidth: 176
+            minimumHeight: dockWindow.toolbarHeight
+
+            color: dockWindow.color
+            allowedAreas: Qt.TopToolBarArea
+            visible: dockWindow.currentPageUri === notationPage.uri
+
+            content: NotationToolBar {
+                color: dockWindow.color
+            }
+        },
+
+        DockToolBar {
+            objectName: "playbackToolBar"
+            minimumWidth: 200
+            minimumHeight: dockWindow.toolbarHeight
+
+            color: dockWindow.color
+            allowedAreas: Qt.TopToolBarArea
+            visible: dockWindow.currentPageUri === notationPage.uri
+
+            content: PlaybackToolBar {
+                color: dockWindow.color
             }
         }
     ]
 
     HomePage {
-        id: home
+        id: homePage
 
         uri: "musescore://home"
     }
 
     NotationPage {
+        id: notationPage
+
         uri: "musescore://notation"
     }
 
