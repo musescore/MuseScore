@@ -24,8 +24,7 @@
 
 class QDockWidget;
 
-namespace mu {
-namespace dock {
+namespace mu::dock {
 class DockPanel : public DockView
 {
     Q_OBJECT
@@ -34,6 +33,7 @@ class DockPanel : public DockView
     Q_PROPERTY(Qt::DockWidgetArea area READ area WRITE setArea NOTIFY areaChanged)
     Q_PROPERTY(QString tabifyObjectName READ tabifyObjectName WRITE setTabifyObjectName NOTIFY tabifyObjectNameChanged)
     Q_PROPERTY(int minimumWidth READ minimumWidth WRITE setMinimumWidth NOTIFY minimumWidthChanged)
+    Q_PROPERTY(bool floatable READ floatable WRITE setFloatable NOTIFY floatableChanged)
 
 public:
     explicit DockPanel(QQuickItem* parent = nullptr);
@@ -45,6 +45,8 @@ public:
 
     int minimumWidth() const;
     int preferedWidth() const;
+
+    bool floatable() const;
 
     struct Widget {
         QDockWidget* panel = nullptr;
@@ -59,12 +61,14 @@ public slots:
     void setArea(Qt::DockWidgetArea area);
     void setTabifyObjectName(QString tabifyObjectName);
     void setMinimumWidth(int width);
+    void setFloatable(bool floatable);
 
 signals:
     void titleChanged(QString title);
     void areaChanged(Qt::DockWidgetArea area);
     void tabifyObjectNameChanged(QString tabifyObjectName);
     void minimumWidthChanged(int width);
+    void floatableChanged(bool floatable);
 
 protected:
     void onComponentCompleted() override;
@@ -78,7 +82,6 @@ private:
 
     int m_preferedWidth = 0;
 };
-}
 }
 
 #endif // MU_DOCK_DOCKPANEL_H
