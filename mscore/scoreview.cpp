@@ -1397,6 +1397,8 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                         if (MScore::showSkylines) {
                               for (const System* system : page->systems()) {
                                     for (SysStaff* ss : *system->staves()) {
+                                          if (!ss->show())
+                                                continue;
                                           QPointF pt(system->ipos().x(), system->ipos().y() + ss->y());
                                           p.translate(pt);
                                           ss->skyline().paint(p);
