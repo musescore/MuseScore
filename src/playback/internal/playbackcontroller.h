@@ -35,7 +35,7 @@ class PlaybackController : public IPlaybackController, public actions::Actionabl
     INJECT(playback, actions::IActionsDispatcher, dispatcher)
     INJECT(playback, context::IGlobalContext, globalContext)
     INJECT(playback, IPlaybackConfiguration, configuration)
-    INJECT(audio, audio::ISequencer, sequencer)
+    INJECT(playback, audio::ISequencer, sequencer)
 
 public:
     void init();
@@ -54,14 +54,26 @@ public:
 private:
     static const unsigned int MIDI_TRACK = 0;
 
+    notation::INotationPlaybackPtr playback() const;
     bool isPaused() const;
 
     void onNotationChanged();
     void togglePlay();
+    void rewindToStart();
+    void loopPlayback();
     void play();
     void seek(int tick);
     void pause();
     void resume();
+
+    void togglePlayRepeats();
+    void toggleAutomaticallyPan();
+    void toggleMetronome();
+    void toggleMidiInput();
+
+    void playCountIn();
+    void setLoopInPosition();
+    void setLoopOutPosition();
 
     notation::INotationPtr m_notation;
     async::Notification m_isPlayAllowedChanged;

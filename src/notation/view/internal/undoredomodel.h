@@ -16,26 +16,43 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_PLAYBACK_PLAYBACKCONFIGURATION_H
-#define MU_PLAYBACK_PLAYBACKCONFIGURATION_H
+#ifndef MU_NOTATION_UNDOREDOMODEL_H
+#define MU_NOTATION_UNDOREDOMODEL_H
 
-#include "../iplaybackconfiguration.h"
-#include "notation/inotationconfiguration.h"
+#include <QObject>
 
+#include "context/iglobalcontext.h"
+#include "actions/iactionsregister.h"
 #include "modularity/ioc.h"
+#include "async/asyncable.h"
 
-namespace mu::playback {
-class PlaybackConfiguration : public IPlaybackConfiguration
+namespace mu::notation {
+class UndoRedoModel : public QObject, public async::Asyncable
 {
-    INJECT(playback, notation::INotationConfiguration, notationConfiguration)
+    Q_OBJECT
+
+    Q_PROPERTY(QVariant undoItem READ undoItem NOTIFY stackChanged)
+    Q_PROPERTY(QVariant redoItem READ redoItem NOTIFY stackChanged)
+
+    INJECT(notation, context::IGlobalContext, context)
+    INJECT(notation, actions::IActionsRegister, actionsRegister)
 
 public:
-    bool isPlayElementOnClick() const override;
-    bool isPlayHarmonyOnClick() const override;
+    explicit UndoRedoModel(QObject* parent = nullptr);
 
-    bool isMidiInputEnabled() const override;
-    void setIsMidiInputEnabled(bool enabled) override;
+    QVariant undoItem() const;
+    QVariant redoItem() const;
+
+    Q_INVOKABLE void load();
+    Q_INVOKABLE void undo();
+    Q_INVOKABLE void redo();
+
+signals:
+    void stackChanged();
+
+private:
+    INotationUndoStackPtr undoStack() const;
 };
 }
 
-#endif // MU_PLAYBACK_PLAYBACKCONFIGURATION_H
+#endif // MU_NOTATION_UNDOREDOMODEL_H

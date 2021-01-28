@@ -31,3 +31,13 @@ bool PlaybackConfiguration::isPlayHarmonyOnClick() const
     //! TODO Add settings
     return isPlayElementOnClick();
 }
+
+bool PlaybackConfiguration::isMidiInputEnabled() const
+{
+    return notationConfiguration()->isMidiInputEnabled();
+}
+
+void PlaybackConfiguration::setIsMidiInputEnabled(bool enabled)
+{
+    notationConfiguration()->setIsMidiInputEnabled(enabled);
+}
