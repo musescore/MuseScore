@@ -44,7 +44,9 @@ DockPage {
 
             color: notationPage.color
             borderColor: notationPage.borderColor
+
             floatable: true
+            closable: true
 
             PalettesWidget {}
         },
@@ -62,7 +64,9 @@ DockPage {
             borderColor: notationPage.borderColor
 
             tabifyObjectName: "palettePanel"
+
             floatable: true
+            closable: true
 
             InstrumentsPanel {
                 anchors.fill: parent
@@ -82,7 +86,9 @@ DockPage {
             borderColor: notationPage.borderColor
 
             tabifyObjectName: "instrumentsPanel"
+
             floatable: true
+            closable: true
 
             InspectorForm {
                 anchors.fill: parent
