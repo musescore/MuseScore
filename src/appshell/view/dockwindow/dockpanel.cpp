@@ -30,6 +30,8 @@ DockPanel::DockPanel(QQuickItem* parent)
     : DockView(parent)
 {
     m_dock.panel = new QDockWidget();
+    m_dock.panel->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    m_dock.panel->setFeatures(QDockWidget::DockWidgetMovable);
 }
 
 DockPanel::~DockPanel()
@@ -39,8 +41,6 @@ DockPanel::~DockPanel()
 
 void DockPanel::onComponentCompleted()
 {
-    panel()->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    panel()->setFeatures(QDockWidget::DockWidgetMovable);
     panel()->setObjectName("w_" + objectName());
     panel()->setWidget(view());
     panel()->setWindowTitle(m_title);
@@ -126,6 +126,25 @@ void DockPanel::setMinimumWidth(int width)
 
     panel()->setMinimumWidth(width);
     emit minimumWidthChanged(width);
+}
+
+bool DockPanel::floatable() const
+{
+    return panel()->features().testFlag(QDockWidget::DockWidgetFloatable);
+}
+
+void DockPanel::setFloatable(bool floatable)
+{
+    if (floatable == this->floatable()) {
+        return;
+    }
+
+    QDockWidget::DockWidgetFeatures features = panel()->features();
+    features.setFlag(QDockWidget::DockWidgetFloatable, floatable);
+
+    panel()->setFeatures(features);
+
+    emit floatableChanged(floatable);
 }
 
 QDockWidget* DockPanel::panel() const
