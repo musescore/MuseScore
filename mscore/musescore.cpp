@@ -8438,12 +8438,12 @@ bool MuseScore::exportPartsPdfsToJSON(const QString& inFilePath, const QString& 
 
       jsonForPdfs["scoreFullPostfix"] = QString("-Score_and_parts") + ".pdf";
 
-      QString tempFileName = outPath + "tempPdf.pdf";
-      bool res = mscore->savePdf(scores, tempFileName);
-      QFile tempPdf(tempFileName);
-      tempPdf.open(QIODevice::ReadWrite);
+      QTemporaryFile tempPdf;
+      tempPdf.open();
+
+      bool res = mscore->savePdf(scores, tempPdf.fileName());
       QByteArray fullScoreData = tempPdf.readAll();
-      tempPdf.remove();
+
       jsonForPdfs["scoreFullBin"] = QString::fromLatin1(fullScoreData.toBase64());
 
       QJsonDocument jsonDoc(jsonForPdfs);
