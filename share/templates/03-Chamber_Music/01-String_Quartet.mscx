@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
-  <programVersion>3.0.0</programVersion>
-  <programRevision>3543170</programRevision>
+<museScore version="3.02">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
-    <Synthesizer>
-      </Synthesizer>
     <Division>480</Division>
     <Style>
+      <enableVerticalSpread>1</enableVerticalSpread>
+      <useStandardNoteNames>0</useStandardNoteNames>
       <concertPitch>1</concertPitch>
-      <Spatium>1.76389</Spatium>
+      <Spatium>1.75</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -27,16 +25,34 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
+    <Order id="string-ensemble" customized="1">
+      <name>String Ensemble</name>
+      <instrument id="viola">
+        <family id="orchestral-strings">Orchestral Strings</family>
+        </instrument>
+      <instrument id="violin">
+        <family id="orchestral-strings">Orchestral Strings</family>
+        </instrument>
+      <instrument id="violoncello">
+        <family id="orchestral-strings">Orchestral Strings</family>
+        </instrument>
+      <soloists/>
+      <section id="strings" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="false">
+        <family>orchestral-strings</family>
+        </section>
+      <family>keyboards</family>
+      <unsorted/>
+      </Order>
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         <bracket type="0" span="4" col="0"/>
-        <barLineSpan>3</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Violin I</trackName>
-      <Instrument>
+      <Instrument id="violin">
         <longName>Violin I</longName>
         <trackName>Violin</trackName>
         <minPitchP>55</minPitchP>
@@ -92,6 +108,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel name="arco">
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="40"/>
           <synti>Fluid</synti>
           </Channel>
@@ -100,6 +118,8 @@
           <synti>Fluid</synti>
           </Channel>
         <Channel name="tremolo">
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="44"/>
           <synti>Fluid</synti>
           </Channel>
@@ -110,10 +130,10 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <barLineSpan>2</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Violin II</trackName>
-      <Instrument>
+      <Instrument id="violin">
         <longName>Violin II</longName>
         <trackName>Violin</trackName>
         <minPitchP>55</minPitchP>
@@ -169,6 +189,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel name="arco">
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="40"/>
           <synti>Fluid</synti>
           </Channel>
@@ -177,6 +199,8 @@
           <synti>Fluid</synti>
           </Channel>
         <Channel name="tremolo">
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="44"/>
           <synti>Fluid</synti>
           </Channel>
@@ -191,7 +215,7 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Viola</trackName>
-      <Instrument>
+      <Instrument id="viola">
         <longName>Viola</longName>
         <trackName>Viola</trackName>
         <minPitchP>48</minPitchP>
@@ -248,6 +272,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel name="arco">
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="41"/>
           <synti>Fluid</synti>
           </Channel>
@@ -256,6 +282,8 @@
           <synti>Fluid</synti>
           </Channel>
         <Channel name="tremolo">
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="44"/>
           <synti>Fluid</synti>
           </Channel>
@@ -269,7 +297,7 @@
         <defaultClef>F</defaultClef>
         </Staff>
       <trackName>Violoncello</trackName>
-      <Instrument>
+      <Instrument id="violoncello">
         <longName>Violoncello</longName>
         <trackName>Violoncello</trackName>
         <minPitchP>36</minPitchP>
@@ -326,6 +354,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel name="arco">
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="42"/>
           <synti>Fluid</synti>
           </Channel>
@@ -334,6 +364,8 @@
           <synti>Fluid</synti>
           </Channel>
         <Channel name="tremolo">
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="44"/>
           <synti>Fluid</synti>
           </Channel>
@@ -342,6 +374,7 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>Title</style>
           <text>String Quartet</text>
@@ -350,7 +383,6 @@
       <Measure>
         <voice>
           <BarLine>
-            <span>1</span>
             </BarLine>
           <TimeSig>
             <sigN>4</sigN>
@@ -504,7 +536,6 @@
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -513,7 +544,6 @@
       <Measure>
         <voice>
           <BarLine>
-            <span>1</span>
             </BarLine>
           <TimeSig>
             <sigN>4</sigN>
@@ -661,7 +691,6 @@
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
