@@ -153,6 +153,8 @@ class VBox : public Box {
       QVariant getProperty(Pid propertyId) const override;
       void layout() override;
 
+      void startEditDrag(EditData&) override;
+
       std::vector<QPointF> gripsPositions(const EditData&) const override;
       };
 

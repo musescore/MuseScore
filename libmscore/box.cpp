@@ -796,6 +796,20 @@ void VBox::layout()
       }
 
 //---------------------------------------------------------
+//   startEditDrag
+//---------------------------------------------------------
+
+void VBox::startEditDrag(EditData& ed)
+      {
+      if (isAutoSizeEnabled()) {
+            setAutoSizeEnabled(false);
+            setBoxHeight(Spatium(height() / spatium()));
+      }
+      Box::startEditDrag(ed);
+      }
+
+
+//---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 
