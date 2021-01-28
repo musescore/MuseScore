@@ -37,3 +37,13 @@ Changelog
 3 December 2018 (Anthony Hughes) Petaluma version 1.055 / Petaluma Script version 1.10
 – Repositioned beat units for metronome marks
 – Larger accidentals for chord symbols
+
+10 May 2020 (Anthony Hughes) Petaluma version 1.063
+– Added handwritten-style glyphs for Figured Bass and Multi-Segment Lines ranges.
+
+10 June 2020 (Anthony Hughes) Petaluma version 1.064
+– Fixed rotation of downward arpeggio swash and arrow.
+
+27 January 2021 (Daniel Spreadbury) Petaluma version 1.065
+– Fixed registration of reversedBracketBottom (U+E006).
+– Increased size of 'Dynamics' range (U+E520–U+E54F) in Petaluma Text.
