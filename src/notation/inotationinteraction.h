@@ -84,6 +84,12 @@ public:
     virtual async::Notification textEditingStarted() const = 0;
     virtual async::Notification textEditingChanged() const = 0;
 
+    // Grip edit
+    virtual bool isGripEditStarted() const = 0;
+    virtual bool isHitGrip(const QPointF& pos) const = 0;
+    virtual void startEditGrip(const QPointF& pos) = 0;
+    virtual void endEditGrip() = 0;
+
     virtual void splitSelectedMeasure() = 0;
     virtual void joinSelectedMeasures() = 0;
 

@@ -210,6 +210,11 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         }
     }
 
+    if (m_view->notationInteraction()->isHitGrip(logicPos)) {
+        m_view->notationInteraction()->startEditGrip(logicPos);
+        return;
+    }
+
     if (event->button() == Qt::MouseButton::RightButton) {
         ElementType type = selectionType();
         m_view->showContextMenu(type, event->pos());
@@ -217,6 +222,8 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
 
     if (m_interactData.hitElement) {
         playbackController()->playElementOnClick(m_interactData.hitElement);
+    } else {
+        m_view->notationInteraction()->endEditGrip();
     }
 
     if (m_view->notationInteraction()->isTextEditingStarted()) {
@@ -257,8 +264,9 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
     }
 
     // drag element
-    if (m_interactData.hitElement && m_interactData.hitElement->isMovable()) {
-        if (!m_view->notationInteraction()->isDragStarted()) {
+    if ((m_interactData.hitElement && m_interactData.hitElement->isMovable())
+        || m_view->notationInteraction()->isGripEditStarted()) {
+        if (m_interactData.hitElement && !m_view->notationInteraction()->isDragStarted()) {
             startDragElements(m_interactData.hitElement->type(), m_interactData.hitElement->offset());
         }
 
@@ -303,7 +311,7 @@ void NotationViewInputController::startDragElements(ElementType elementsType, co
 
 void NotationViewInputController::mouseReleaseEvent(QMouseEvent*)
 {
-    if (!m_interactData.hitElement && !m_isCanvasDragged) {
+    if (!m_interactData.hitElement && !m_isCanvasDragged && !m_view->notationInteraction()->isGripEditStarted()) {
         m_view->notationInteraction()->clearSelection();
     }
 
