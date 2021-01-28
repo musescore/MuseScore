@@ -42,6 +42,7 @@ DockPage {
             minimumWidth: minimumPanelWidth
 
             color: notationPage.color
+            floatable: true
 
             PalettesWidget {}
         },
@@ -58,6 +59,7 @@ DockPage {
             color: notationPage.color
 
             tabifyObjectName: "palettePanel"
+            floatable: true
 
             InstrumentsPanel {
                 anchors.fill: parent
@@ -76,6 +78,7 @@ DockPage {
             color: notationPage.color
 
             tabifyObjectName: "instrumentsPanel"
+            floatable: true
 
             InspectorForm {
                 anchors.fill: parent
