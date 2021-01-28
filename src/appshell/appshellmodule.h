@@ -22,8 +22,7 @@
 
 #include "modularity/imodulesetup.h"
 
-namespace mu {
-namespace appshell {
+namespace mu::appshell {
 class AppShellModule : public framework::IModuleSetup
 {
 public:
@@ -36,7 +35,6 @@ public:
     void registerResources() override;
     void registerUiTypes() override;
 };
-}
 }
 
 #endif // MU_APPSHELL_APPSHELLMODULE_H

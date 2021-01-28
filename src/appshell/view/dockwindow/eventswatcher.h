@@ -22,11 +22,11 @@
 
 #include <QObject>
 
-namespace mu {
-namespace dock {
+namespace mu::dock {
 class EventsWatcher : public QObject
 {
     Q_OBJECT
+
 public:
     explicit EventsWatcher(QObject* parent = nullptr);
 
@@ -36,7 +36,6 @@ signals:
 protected:
     bool eventFilter(QObject* obj, QEvent* ev) override;
 };
-}
 }
 
 #endif // MU_DOCK_EVENTSWATCHER_H

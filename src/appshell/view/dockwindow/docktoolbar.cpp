@@ -63,10 +63,10 @@ void DockToolBar::onComponentCompleted()
     m_tool.bar->setObjectName("w_" + objectName());
     updateStyle();
 
-    QWidget* w = view();
-    w->setMinimumWidth(minimumWidth());
-    w->setMinimumHeight(minimumHeight());
-    m_tool.bar->addWidget(w);
+    QWidget* widget = view();
+    widget->setMinimumWidth(minimumWidth());
+    widget->setMinimumHeight(minimumHeight());
+    m_tool.bar->addWidget(widget);
 }
 
 void DockToolBar::updateStyle()

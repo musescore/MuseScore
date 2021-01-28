@@ -28,8 +28,7 @@
 #include "dockpanel.h"
 #include "dockstatusbar.h"
 
-namespace mu {
-namespace dock {
+namespace mu::dock {
 class DockPage : public QQuickItem
 {
     Q_OBJECT
@@ -51,7 +50,7 @@ public:
     DockStatusBar* statusbar() const;
 
     QByteArray state() const;
-    void setState(const QByteArray& st);
+    void setState(const QByteArray& state);
 
 public slots:
     void setUri(QString uri);
@@ -66,18 +65,16 @@ signals:
     void statusbarChanged(DockStatusBar* statusbar);
 
 private:
-
     void componentComplete() override;
 
     QString m_uri;
-    DockCentral* _central = nullptr;
-    DockToolBar* _toolbar = nullptr;
-    uicomponents::QmlListProperty<DockPanel> _panels;
-    DockStatusBar* _statusbar = nullptr;
+    DockCentral* m_central = nullptr;
+    DockToolBar* m_toolbar = nullptr;
+    uicomponents::QmlListProperty<DockPanel> m_panels;
+    DockStatusBar* m_statusbar = nullptr;
 
-    QByteArray _state;
+    QByteArray m_state;
 };
-}
 }
 
 #endif // MU_DOCK_DOCKPAGE_H

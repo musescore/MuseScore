@@ -30,6 +30,7 @@ DockWindow {
     }
 
     readonly property int toolbarHeight: 48
+    property bool isNotationPage: currentPageUri === notationPage.uri
 
     toolbars: [
         DockToolBar {
@@ -57,7 +58,7 @@ DockWindow {
 
             color: dockWindow.color
             allowedAreas: Qt.TopToolBarArea
-            visible: dockWindow.currentPageUri === notationPage.uri
+            visible: dockWindow.isNotationPage
 
             content: NotationToolBar {
                 color: dockWindow.color
@@ -71,7 +72,7 @@ DockWindow {
 
             color: dockWindow.color
             allowedAreas: Qt.TopToolBarArea
-            visible: dockWindow.currentPageUri === notationPage.uri
+            visible: dockWindow.isNotationPage
 
             content: PlaybackToolBar {
                 color: dockWindow.color
