@@ -35,6 +35,7 @@ class DockView : public QQuickItem
 
     Q_PROPERTY(QQmlComponent * content READ content WRITE setContent NOTIFY contentChanged)
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
+    Q_PROPERTY(QColor borderColor READ borderColor WRITE setBorderColor NOTIFY borderColorChanged)
 
     Q_CLASSINFO("DefaultProperty", "content")
 
@@ -42,40 +43,42 @@ class DockView : public QQuickItem
 
 public:
     explicit DockView(QQuickItem* parent = nullptr);
-    ~DockView();
 
     Q_INVOKABLE void forceActiveFocus();
 
     QQmlComponent* content() const;
     QColor color() const;
+    QColor borderColor() const;
 
     QWidget* view() const;
 
 public slots:
     void setContent(QQmlComponent* component);
     void setColor(QColor color);
+    void setBorderColor(QColor color);
 
 signals:
     void sourceChanged();
     void contentChanged();
     void colorChanged(QColor color);
+    void borderColorChanged(QColor color);
 
 private slots:
-    void onWidgetEvent(QEvent* e);
+    void onWidgetEvent(QEvent* event);
 
 protected:
     virtual void onComponentCompleted() {}
     virtual void updateStyle() {}
 
 private:
-
     void componentComplete() override;
 
-    QQuickView* _view = nullptr;
-    QWidget* _widget = nullptr;
-    QQmlComponent* _content = nullptr;
-    EventsWatcher* _eventsWatcher = nullptr;
-    QColor _color;
+    QQuickView* m_view = nullptr;
+    QWidget* m_widget = nullptr;
+    QQmlComponent* m_content = nullptr;
+    EventsWatcher* m_eventsWatcher = nullptr;
+    QColor m_color;
+    QColor m_borderColor;
 };
 }
 

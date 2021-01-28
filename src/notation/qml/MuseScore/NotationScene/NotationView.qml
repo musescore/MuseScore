@@ -19,6 +19,10 @@ FocusScope {
 
         NotationSwitchPanel {
             Layout.fillWidth: true
+
+            //! NOTE: need to hide left and right borders of the panel
+            Layout.leftMargin: -1
+            Layout.rightMargin: -1
         }
 
         SplitView {

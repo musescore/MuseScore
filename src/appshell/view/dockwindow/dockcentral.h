@@ -45,7 +45,7 @@ private:
 
     void onComponentCompleted() override;
 
-    Widget _widget;
+    Widget m_widget;
 };
 }
 }
