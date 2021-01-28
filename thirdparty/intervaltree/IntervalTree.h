@@ -5,6 +5,13 @@
 #include <algorithm>
 #include <iostream>
 
+enum class Limits {
+    HARD_BOTH  = 0,
+    SOFT_START = 1,
+    SOFT_STOP  = 2,
+    SOFT_BOTH  = 3,
+};
+
 template <class T, typename K = int>
 class Interval {
 public:
@@ -161,42 +168,108 @@ public:
         }
     }
 
-    void findOverlapping(K start, K stop, intervalVector& overlapping) {
+    void findOverlapping(K start, K stop, intervalVector& overlapping, Limits limits = Limits::HARD_BOTH) {
         if (!intervals.empty() && ! (stop < intervals.front().start)) {
-            for (typename intervalVector::iterator i = intervals.begin(); i != intervals.end(); ++i) {
-                interval& interval = *i;
-                if (interval.stop >= start && interval.start <= stop) {
-                    overlapping.push_back(interval);
+            switch (limits) {
+                case Limits::HARD_BOTH:
+                default: {
+                    for (typename intervalVector::iterator i = intervals.begin(); i != intervals.end(); ++i) {
+                        interval& interval = *i;
+                        if (interval.stop >= start && interval.start <= stop) {
+                            overlapping.push_back(interval);
+                        }
+                    }
+                    break;
+                }
+                case Limits::SOFT_START: {
+                    for (typename intervalVector::iterator i = intervals.begin(); i != intervals.end(); ++i) {
+                        interval& interval = *i;
+                        if (interval.stop > start && interval.start <= stop) {
+                            overlapping.push_back(interval);
+                        }
+                    }
+                    break;
+                }
+                case Limits::SOFT_STOP: {
+                    for (typename intervalVector::iterator i = intervals.begin(); i != intervals.end(); ++i) {
+                        interval& interval = *i;
+                        if (interval.stop >= start && interval.start < stop) {
+                            overlapping.push_back(interval);
+                        }
+                    }
+                    break;
+                }
+                case Limits::SOFT_BOTH: {
+                    for (typename intervalVector::iterator i = intervals.begin(); i != intervals.end(); ++i) {
+                        interval& interval = *i;
+                        if (interval.stop > start && interval.start < stop) {
+                            overlapping.push_back(interval);
+                        }
+                    }
+                    break;
                 }
             }
         }
 
         if (left && start <= center) {
-            left->findOverlapping(start, stop, overlapping);
+            left->findOverlapping(start, stop, overlapping, limits);
         }
 
         if (right && stop >= center) {
-            right->findOverlapping(start, stop, overlapping);
+            right->findOverlapping(start, stop, overlapping, limits);
         }
 
     }
 
-    void findContained(K start, K stop, intervalVector& contained) {
+    void findContained(K start, K stop, intervalVector& contained, Limits limits = Limits::HARD_BOTH) {
         if (!intervals.empty() && ! (stop < intervals.front().start)) {
-            for (typename intervalVector::iterator i = intervals.begin(); i != intervals.end(); ++i) {
-                interval& interval = *i;
-                if (interval.start >= start && interval.stop <= stop) {
-                    contained.push_back(interval);
+            switch (limits) {
+                case Limits::HARD_BOTH:
+                default: {
+                    for (typename intervalVector::iterator i = intervals.begin(); i != intervals.end(); ++i) {
+                        interval& interval = *i;
+                        if (interval.start >= start && interval.stop <= stop) {
+                            contained.push_back(interval);
+                        }
+                    }
+                    break;
+                }
+                case Limits::SOFT_START: {
+                    for (typename intervalVector::iterator i = intervals.begin(); i != intervals.end(); ++i) {
+                        interval& interval = *i;
+                        if (interval.start > start && interval.stop <= stop) {
+                            contained.push_back(interval);
+                        }
+                    }
+                    break;
+                }
+                case Limits::SOFT_STOP: {
+                    for (typename intervalVector::iterator i = intervals.begin(); i != intervals.end(); ++i) {
+                        interval& interval = *i;
+                        if (interval.start >= start && interval.stop < stop) {
+                            contained.push_back(interval);
+                        }
+                    }
+                    break;
+                }
+                case Limits::SOFT_BOTH: {
+                    for (typename intervalVector::iterator i = intervals.begin(); i != intervals.end(); ++i) {
+                        interval& interval = *i;
+                        if (interval.start > start && interval.stop < stop) {
+                            contained.push_back(interval);
+                        }
+                    }
+                    break;
                 }
             }
         }
 
         if (left && start <= center) {
-            left->findContained(start, stop, contained);
+            left->findContained(start, stop, contained, limits);
         }
 
         if (right && stop >= center) {
-            right->findContained(start, stop, contained);
+            right->findContained(start, stop, contained, limits);
         }
 
     }
