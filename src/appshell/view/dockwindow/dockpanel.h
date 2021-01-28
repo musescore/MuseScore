@@ -22,7 +22,7 @@
 
 #include "dockview.h"
 
-class QDockWidget;
+#include <QDockWidget>
 
 namespace mu::dock {
 class DockPanel : public DockView
@@ -34,6 +34,7 @@ class DockPanel : public DockView
     Q_PROPERTY(QString tabifyObjectName READ tabifyObjectName WRITE setTabifyObjectName NOTIFY tabifyObjectNameChanged)
     Q_PROPERTY(int minimumWidth READ minimumWidth WRITE setMinimumWidth NOTIFY minimumWidthChanged)
     Q_PROPERTY(bool floatable READ floatable WRITE setFloatable NOTIFY floatableChanged)
+    Q_PROPERTY(bool closable READ closable WRITE setClosable NOTIFY closableChanged)
 
 public:
     explicit DockPanel(QQuickItem* parent = nullptr);
@@ -47,6 +48,7 @@ public:
     int preferedWidth() const;
 
     bool floatable() const;
+    bool closable() const;
 
     struct Widget {
         QDockWidget* panel = nullptr;
@@ -62,6 +64,7 @@ public slots:
     void setTabifyObjectName(QString tabifyObjectName);
     void setMinimumWidth(int width);
     void setFloatable(bool floatable);
+    void setClosable(bool closable);
 
 signals:
     void titleChanged(QString title);
@@ -69,6 +72,7 @@ signals:
     void tabifyObjectNameChanged(QString tabifyObjectName);
     void minimumWidthChanged(int width);
     void floatableChanged(bool floatable);
+    void closableChanged(bool closable);
 
 protected:
     void onComponentCompleted() override;
@@ -76,6 +80,9 @@ protected:
 
 private:
     QDockWidget* panel() const;
+
+    void setFeature(QDockWidget::DockWidgetFeature feature, bool value);
+    bool featureEnabled(QDockWidget::DockWidgetFeature feature) const;
 
     Widget m_dock;
     QString m_title;

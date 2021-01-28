@@ -19,8 +19,6 @@
 
 #include "dockpanel.h"
 
-#include <QDockWidget>
-
 using namespace mu::dock;
 
 static const QString PANEL_QSS = QString("QDockWidget { border: 1 solid %2; color: transparent; }"
@@ -130,7 +128,7 @@ void DockPanel::setMinimumWidth(int width)
 
 bool DockPanel::floatable() const
 {
-    return panel()->features().testFlag(QDockWidget::DockWidgetFloatable);
+    return featureEnabled(QDockWidget::DockWidgetFloatable);
 }
 
 void DockPanel::setFloatable(bool floatable)
@@ -139,12 +137,38 @@ void DockPanel::setFloatable(bool floatable)
         return;
     }
 
-    QDockWidget::DockWidgetFeatures features = panel()->features();
-    features.setFlag(QDockWidget::DockWidgetFloatable, floatable);
-
-    panel()->setFeatures(features);
+    setFeature(QDockWidget::DockWidgetFloatable, floatable);
 
     emit floatableChanged(floatable);
+}
+
+bool DockPanel::closable() const
+{
+    return featureEnabled(QDockWidget::DockWidgetClosable);
+}
+
+void DockPanel::setClosable(bool closable)
+{
+    if (closable == this->closable()) {
+        return;
+    }
+
+    setFeature(QDockWidget::DockWidgetClosable, closable);
+
+    emit closableChanged(closable);
+}
+
+void DockPanel::setFeature(QDockWidget::DockWidgetFeature feature, bool value)
+{
+    QDockWidget::DockWidgetFeatures features = panel()->features();
+    features.setFlag(feature, value);
+
+    panel()->setFeatures(features);
+}
+
+bool DockPanel::featureEnabled(QDockWidget::DockWidgetFeature feature) const
+{
+    return panel()->features().testFlag(feature);
 }
 
 QDockWidget* DockPanel::panel() const
