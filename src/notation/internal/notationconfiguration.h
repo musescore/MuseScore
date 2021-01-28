@@ -70,6 +70,7 @@ public:
     io::path stylesDirPath() const override;
 
     bool isMidiInputEnabled() const override;
+    void setIsMidiInputEnabled(bool enabled) override;
 
     float guiScaling() const override;
     float notationScaling() const override;

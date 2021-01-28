@@ -30,6 +30,9 @@ public:
 
     virtual bool isPlayElementOnClick() const = 0;
     virtual bool isPlayHarmonyOnClick() const = 0;
+
+    virtual bool isMidiInputEnabled() const = 0;
+    virtual void setIsMidiInputEnabled(bool enabled) = 0;
 };
 }
 

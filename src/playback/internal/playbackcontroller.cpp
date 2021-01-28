@@ -29,6 +29,15 @@ using namespace mu::audio;
 void PlaybackController::init()
 {
     dispatcher()->reg(this, "play", this, &PlaybackController::togglePlay);
+    dispatcher()->reg(this, "rewind", this, &PlaybackController::rewindToStart);
+    dispatcher()->reg(this, "loop", this, &PlaybackController::loopPlayback);
+    dispatcher()->reg(this, "repeat", this, &PlaybackController::togglePlayRepeats);
+    dispatcher()->reg(this, "pan", this, &PlaybackController::toggleAutomaticallyPan);
+    dispatcher()->reg(this, "metronome", this, &PlaybackController::toggleMetronome);
+    dispatcher()->reg(this, "midi-on", this, &PlaybackController::toggleMidiInput);
+    dispatcher()->reg(this, "countin", this, &PlaybackController::playCountIn);
+    dispatcher()->reg(this, "loop-in", this, &PlaybackController::setLoopInPosition);
+    dispatcher()->reg(this, "loop-out", this, &PlaybackController::setLoopOutPosition);
 
     onNotationChanged();
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
@@ -105,7 +114,7 @@ void PlaybackController::playElementOnClick(const notation::Element* element)
         return;
     }
 
-    IF_ASSERT_FAILED(m_notation) {
+    IF_ASSERT_FAILED(playback()) {
         return;
     }
 
@@ -113,9 +122,14 @@ void PlaybackController::playElementOnClick(const notation::Element* element)
         return;
     }
 
-    midi::MidiData midiData = m_notation->playback()->playElementMidiData(element);
+    MidiData midiData = playback()->playElementMidiData(element);
 
     sequencer()->instantlyPlayMidi(midiData);
+}
+
+INotationPlaybackPtr PlaybackController::playback() const
+{
+    return m_notation ? m_notation->playback() : nullptr;
 }
 
 void PlaybackController::onNotationChanged()
@@ -152,14 +166,14 @@ void PlaybackController::togglePlay()
 
 void PlaybackController::play()
 {
-    IF_ASSERT_FAILED(m_notation) {
+    IF_ASSERT_FAILED(playback()) {
         return;
     }
 
-    auto stream = m_notation->playback()->midiStream();
+    auto stream = playback()->midiStream();
     sequencer()->setMIDITrack(MIDI_TRACK, stream);
 
-    RetVal<int> tick = m_notation->playback()->playPositionTick();
+    RetVal<int> tick = playback()->playPositionTick();
     if (!tick.ret) {
         LOGE() << "unable play, err: " << tick.ret.toString();
         return;
@@ -169,13 +183,18 @@ void PlaybackController::play()
     sequencer()->play();
 }
 
+void PlaybackController::rewindToStart()
+{
+    sequencer()->rewind();
+}
+
 void PlaybackController::seek(int tick)
 {
-    IF_ASSERT_FAILED(m_notation) {
+    IF_ASSERT_FAILED(playback()) {
         return;
     }
 
-    uint64_t milliseconds = m_notation->playback()->tickToSec(tick) * 1000;
+    uint64_t milliseconds = playback()->tickToSec(tick) * 1000;
     sequencer()->seek(milliseconds);
 }
 
@@ -187,4 +206,45 @@ void PlaybackController::pause()
 void PlaybackController::resume()
 {
     sequencer()->play();
+}
+
+void PlaybackController::loopPlayback()
+{
+    NOT_SUPPORTED;
+}
+
+void PlaybackController::togglePlayRepeats()
+{
+    NOT_IMPLEMENTED;
+}
+
+void PlaybackController::toggleAutomaticallyPan()
+{
+    NOT_IMPLEMENTED;
+}
+
+void PlaybackController::toggleMetronome()
+{
+    NOT_IMPLEMENTED;
+}
+
+void PlaybackController::toggleMidiInput()
+{
+    bool midiInputEnabled = configuration()->isMidiInputEnabled();
+    configuration()->setIsMidiInputEnabled(!midiInputEnabled);
+}
+
+void PlaybackController::playCountIn()
+{
+    NOT_IMPLEMENTED;
+}
+
+void PlaybackController::setLoopInPosition()
+{
+    NOT_IMPLEMENTED;
+}
+
+void PlaybackController::setLoopOutPosition()
+{
+    NOT_IMPLEMENTED;
 }

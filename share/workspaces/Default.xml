@@ -3515,8 +3515,6 @@
       <action>rewind</action>
       <action>play</action>
       <action>loop</action>
-      <action>repeat</action>
-      <action>pan</action>
       <action>metronome</action>
       </Toolbar>
     </Workspace>
