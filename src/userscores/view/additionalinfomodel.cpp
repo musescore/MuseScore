@@ -277,7 +277,7 @@ QVariantMap AdditionalInfoModel::tempoValueRange() const
 
 QVariantList AdditionalInfoModel::tempoNotes() const
 {
-    auto makeNote = [](MusicalSymbolCodes::Code icon, bool withDot = false)  {
+    auto makeNote = [](MusicalSymbolCodes::Code icon, bool withDot = false) {
         QVariantMap note;
         note[NOTE_ICON_KEY] = static_cast<int>(icon);
         note[NOTE_SYMBOL_KEY] = formatNoteSymbol(icon, withDot);

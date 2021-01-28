@@ -98,6 +98,7 @@ private:
 
     QString m_selectedFamilyId;
     QString m_selectedGroupId;
+    QString m_savedFamilyId;
 
     InstrumentsMeta m_instrumentsMeta;
     QString m_searchText;

@@ -101,9 +101,9 @@ void InstrumentsRepository::load()
             m_instrumentsMeta.articulations.insert(it.key(), it.value());
         }
 
-        const InstrumentFamilyMap& families = metaInstrument.val.families;
-        for (auto it = families.cbegin(); it != families.cend(); ++it) {
-            m_instrumentsMeta.families.insert(it.key(), it.value());
+        const InstrumentGenreMap& genres = metaInstrument.val.genres;
+        for (auto it = genres.cbegin(); it != genres.cend(); ++it) {
+            m_instrumentsMeta.genres.insert(it.key(), it.value());
         }
 
         const InstrumentGroupMap& groups = metaInstrument.val.groups;
@@ -128,7 +128,7 @@ void InstrumentsRepository::clear()
     Ms::clearInstrumentTemplates();
 
     m_instrumentsMeta.instrumentTemplates.clear();
-    m_instrumentsMeta.families.clear();
+    m_instrumentsMeta.genres.clear();
     m_instrumentsMeta.groups.clear();
     m_instrumentsMeta.articulations.clear();
 }

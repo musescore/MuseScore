@@ -56,8 +56,8 @@ RetVal<InstrumentsMeta> InstrumentsReader::readMeta(const io::path& path) const
                 MidiArticulation articulation = readArticulation(reader);
                 meta.articulations.insert(articulation.name, articulation); // TODO: name?
             } else if (reader.name() == "Genre") {
-                InstrumentFamily family = readFamily(reader);
-                meta.families.insert(family.id, family);
+                InstrumentGenre genre = readGenre(reader);
+                meta.genres.insert(genre.id, genre);
             } else {
                 reader.skipCurrentElement();
             }
@@ -131,20 +131,20 @@ MidiArticulation InstrumentsReader::readArticulation(Ms::XmlReader& reader) cons
     return articulation;
 }
 
-InstrumentFamily InstrumentsReader::readFamily(Ms::XmlReader& reader) const
+InstrumentGenre InstrumentsReader::readGenre(Ms::XmlReader& reader) const
 {
-    InstrumentFamily family;
-    family.id = reader.attributes().value("id").toString();
+    InstrumentGenre genre;
+    genre.id = reader.attributes().value("id").toString();
 
     while (reader.readNextStartElement()) {
         if (reader.name() == "name") {
-            family.name = qApp->translate("InstrumentsXML", reader.readElementText().toUtf8().data());
+            genre.name = qApp->translate("InstrumentsXML", reader.readElementText().toUtf8().data());
         } else {
             reader.skipCurrentElement();
         }
     }
 
-    return family;
+    return genre;
 }
 
 InstrumentTemplate InstrumentsReader::readInstrumentTemplate(Ms::XmlReader& reader, InstrumentsMeta& generalMeta) const
@@ -295,7 +295,7 @@ InstrumentTemplate InstrumentsReader::readInstrumentTemplate(Ms::XmlReader& read
         } else if (reader.name() == "musicXMLid") {
             instrument.id = reader.readElementText();
         } else if (reader.name() == "genre") {
-            instrument.familyIds << reader.readElementText();
+            instrument.genreIds << reader.readElementText();
         } else if (reader.name() == "singleNoteDynamics") {
             instrument.singleNoteDynamics = reader.readElementText().toInt();
         } else {
