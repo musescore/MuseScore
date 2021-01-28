@@ -404,7 +404,7 @@ Score* MuseScore::openScore(const QString& fn, bool switchTab, const bool consid
       QString path = fi.canonicalFilePath();
       for (Score* s : scoreList) {
             if (s->masterScore() && s->masterScore()->fileInfo()->canonicalFilePath() == path) {
-                  if (switchTab && QApplication::activeModalWidget() == nullptr)
+                  if (switchTab && !isModalDialogOpen())
                         setCurrentScoreView(scoreList.indexOf(s->masterScore()));
                   return 0;
                   }
@@ -442,7 +442,7 @@ Score* MuseScore::openScore(const QString& fn, bool switchTab, const bool consid
 
             if (considerInCurrentSession) {
                   const int tabIdx = appendScore(score);
-                  if (switchTab && QApplication::activeModalWidget() == nullptr)
+                  if (switchTab && !isModalDialogOpen())
                         setCurrentScoreView(tabIdx);
                   writeSessionFile(false);
                   }

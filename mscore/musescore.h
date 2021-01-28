@@ -879,6 +879,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       TourHandler* tourHandler()       { return _tourHandler; }
 
+      bool isModalDialogOpen() { return QApplication::activeModalWidget() != nullptr || QApplication::modalWindow() != nullptr; }
+
 #ifdef SCRIPT_INTERFACE
       void registerPlugin(PluginDescription*);
       void unregisterPlugin(PluginDescription*);
