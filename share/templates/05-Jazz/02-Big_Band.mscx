@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
-  <programVersion>3.0.0</programVersion>
-  <programRevision>3543170</programRevision>
+<museScore version="3.02">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
-    <Synthesizer>
-      </Synthesizer>
     <Division>480</Division>
     <Style>
+      <enableVerticalSpread>1</enableVerticalSpread>
       <lyricsLineThickness>0.3</lyricsLineThickness>
       <lyricsOddFontFace>MuseJazz Text</lyricsOddFontFace>
       <lyricsEvenFontFace>MuseJazz Text</lyricsEvenFontFace>
@@ -41,6 +38,7 @@
       <maxFretShiftAbove>3</maxFretShiftAbove>
       <maxFretShiftBelow>3</maxFretShiftBelow>
       <showMeasureNumber>0</showMeasureNumber>
+      <useStandardNoteNames>0</useStandardNoteNames>
       <chordStyle>jazz</chordStyle>
       <chordDescriptionFile>chords_jazz.xml</chordDescriptionFile>
       <slurEndWidth>0.12</slurEndWidth>
@@ -112,15 +110,83 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Big Band</metaTag>
+    <Order id="bigband" customized="1">
+      <name>Big Band</name>
+      <instrument id="acoustic-bass">
+        <family id="bass-guitars">Bass Guitars</family>
+        </instrument>
+      <instrument id="alto-saxophone">
+        <family id="saxophones">Saxophones</family>
+        </instrument>
+      <instrument id="baritone-saxophone">
+        <family id="saxophones">Saxophones</family>
+        </instrument>
+      <instrument id="bb-trumpet">
+        <family id="trumpets">Trumpets</family>
+        </instrument>
+      <instrument id="contrabass">
+        <family id="contrabasses">Basses</family>
+        </instrument>
+      <instrument id="double-bass">
+        <family id="contrabasses">Basses</family>
+        </instrument>
+      <instrument id="drumset">
+        <family id="drums">Drums</family>
+        </instrument>
+      <instrument id="electric-guitar">
+        <family id="guitars">Guitars</family>
+        </instrument>
+      <instrument id="piano">
+        <family id="keyboards">Keyboards</family>
+        </instrument>
+      <instrument id="tenor-saxophone">
+        <family id="saxophones">Saxophones</family>
+        </instrument>
+      <instrument id="trombone">
+        <family id="trombones">Trombones</family>
+        </instrument>
+      <soloists/>
+      <section id="woodwind" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="false">
+        <family>flutes</family>
+        <family>clarinets</family>
+        <family>saxophones</family>
+        </section>
+      <section id="trumpets" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="false">
+        <family>trumpets</family>
+        </section>
+      <section id="trombones" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="false">
+        <family>trombones</family>
+        </section>
+      <section id="vocals" brackets="true" showSystemMarkings="false" barLineSpan="false" thinBrackets="false">
+        <family>voices</family>
+        </section>
+      <unsorted/>
+      <section id="guitars" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="false">
+        <family>guitars</family>
+        </section>
+      <family>keyboards</family>
+      <section id="basses" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
+        <family>bass-guitars</family>
+        <family>contrabasses</family>
+        </section>
+      <family>drums</family>
+      <section id="pitched-percussion" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="false">
+        <unsorted group="pitched-percussion"/>
+        </section>
+      <section id="percussion" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="false">
+        <unsorted group="unpitched-percussion"/>
+        </section>
+      </Order>
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         <bracket type="0" span="5" col="0"/>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Alto Sax 1</trackName>
-      <Instrument>
+      <Instrument id="alto-saxophone">
         <longName>Alto Sax 1</longName>
         <shortName>Alto 1</shortName>
         <trackName>Alto Saxophone</trackName>
@@ -172,6 +238,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="65"/>
           <synti>Fluid</synti>
           <midiPort>0</midiPort>
@@ -184,9 +252,10 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Alto Sax 2</trackName>
-      <Instrument>
+      <Instrument id="alto-saxophone">
         <longName>Alto Sax 2</longName>
         <shortName>Alto 2</shortName>
         <trackName>Alto Saxophone</trackName>
@@ -226,6 +295,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="65"/>
           <synti>Fluid</synti>
           <midiPort>0</midiPort>
@@ -240,9 +311,10 @@
           </StaffType>
         <defaultConcertClef>G8vb</defaultConcertClef>
         <defaultTransposingClef>G</defaultTransposingClef>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Tenor Sax 1</trackName>
-      <Instrument>
+      <Instrument id="tenor-saxophone">
         <longName>Tenor Sax 1</longName>
         <shortName>Tenor 1</shortName>
         <trackName>Tenor Saxophone</trackName>
@@ -284,6 +356,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="66"/>
           <synti>Fluid</synti>
           <midiPort>0</midiPort>
@@ -298,9 +372,10 @@
           </StaffType>
         <defaultConcertClef>G8vb</defaultConcertClef>
         <defaultTransposingClef>G</defaultTransposingClef>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Tenor Sax 2</trackName>
-      <Instrument>
+      <Instrument id="tenor-saxophone">
         <longName>Tenor Sax 2</longName>
         <shortName>Tenor 2</shortName>
         <trackName>Tenor Saxophone</trackName>
@@ -342,6 +417,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="66"/>
           <synti>Fluid</synti>
           <midiPort>0</midiPort>
@@ -358,7 +435,7 @@
         <defaultTransposingClef>G</defaultTransposingClef>
         </Staff>
       <trackName>Bari Sax</trackName>
-      <Instrument>
+      <Instrument id="baritone-saxophone">
         <longName>Bari Sax</longName>
         <shortName>Bari</shortName>
         <trackName>Baritone Saxophone</trackName>
@@ -400,6 +477,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="67"/>
           <synti>Fluid</synti>
           <midiPort>0</midiPort>
@@ -413,9 +492,10 @@
           <name>stdNormal</name>
           </StaffType>
         <bracket type="0" span="4" col="0"/>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Trumpet 1</trackName>
-      <Instrument>
+      <Instrument id="bb-trumpet">
         <longName>Trumpet 1</longName>
         <shortName>Tpt. 1</shortName>
         <trackName>B♭ Trumpet</trackName>
@@ -455,12 +535,16 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel name="open">
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="56"/>
           <synti>Fluid</synti>
           <midiPort>0</midiPort>
           <midiChannel>5</midiChannel>
           </Channel>
         <Channel name="mute">
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="59"/>
           <synti>Fluid</synti>
           <midiPort>0</midiPort>
@@ -473,9 +557,10 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Trumpet 2</trackName>
-      <Instrument>
+      <Instrument id="bb-trumpet">
         <longName>Trumpet 2</longName>
         <shortName>Tpt. 2</shortName>
         <trackName>B♭ Trumpet</trackName>
@@ -515,12 +600,16 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel name="open">
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="56"/>
           <synti>Fluid</synti>
           <midiPort>0</midiPort>
           <midiChannel>7</midiChannel>
           </Channel>
         <Channel name="mute">
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="59"/>
           <synti>Fluid</synti>
           <midiPort>0</midiPort>
@@ -533,9 +622,10 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Trumpet 3</trackName>
-      <Instrument>
+      <Instrument id="bb-trumpet">
         <longName>Trumpet 3</longName>
         <shortName>Tpt. 3</shortName>
         <trackName>B♭ Trumpet</trackName>
@@ -575,12 +665,16 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel name="open">
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="56"/>
           <synti>Fluid</synti>
           <midiPort>0</midiPort>
           <midiChannel>10</midiChannel>
           </Channel>
         <Channel name="mute">
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="59"/>
           <synti>Fluid</synti>
           <midiPort>0</midiPort>
@@ -595,7 +689,7 @@
           </StaffType>
         </Staff>
       <trackName>Trumpet 4</trackName>
-      <Instrument>
+      <Instrument id="bb-trumpet">
         <longName>Trumpet 4</longName>
         <shortName>Tpt. 4</shortName>
         <trackName>B♭ Trumpet</trackName>
@@ -635,12 +729,16 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel name="open">
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="56"/>
           <synti>Fluid</synti>
           <midiPort>0</midiPort>
           <midiChannel>12</midiChannel>
           </Channel>
         <Channel name="mute">
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="59"/>
           <synti>Fluid</synti>
           <midiPort>0</midiPort>
@@ -655,9 +753,10 @@
           </StaffType>
         <defaultClef>F</defaultClef>
         <bracket type="0" span="4" col="0"/>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Trombone 1</trackName>
-      <Instrument>
+      <Instrument id="trombone">
         <longName>Trombone 1</longName>
         <shortName>Tbn. 1</shortName>
         <trackName>Trombone</trackName>
@@ -696,6 +795,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="57"/>
           <synti>Fluid</synti>
           <midiPort>0</midiPort>
@@ -709,9 +810,10 @@
           <name>stdNormal</name>
           </StaffType>
         <defaultClef>F</defaultClef>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Trombone 2</trackName>
-      <Instrument>
+      <Instrument id="trombone">
         <longName>Trombone 2</longName>
         <shortName>Tbn. 2</shortName>
         <trackName>Trombone</trackName>
@@ -750,6 +852,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="57"/>
           <synti>Fluid</synti>
           <midiPort>0</midiPort>
@@ -763,9 +867,10 @@
           <name>stdNormal</name>
           </StaffType>
         <defaultClef>F</defaultClef>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Trombone 3</trackName>
-      <Instrument>
+      <Instrument id="trombone">
         <longName>Trombone 3</longName>
         <shortName>Tbn. 3</shortName>
         <trackName>Trombone</trackName>
@@ -804,6 +909,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="57"/>
           <synti>Fluid</synti>
           <midiPort>1</midiPort>
@@ -819,7 +926,7 @@
         <defaultClef>F</defaultClef>
         </Staff>
       <trackName>Trombone 4</trackName>
-      <Instrument>
+      <Instrument id="trombone">
         <longName>Trombone 4</longName>
         <shortName>Tbn. 4</shortName>
         <trackName>Trombone</trackName>
@@ -858,6 +965,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="57"/>
           <synti>Fluid</synti>
           <midiPort>1</midiPort>
@@ -873,7 +982,7 @@
         <defaultClef>G8vb</defaultClef>
         </Staff>
       <trackName>Guitar</trackName>
-      <Instrument>
+      <Instrument id="electric-guitar">
         <longName>Guitar</longName>
         <shortName>Gtr.</shortName>
         <trackName>Electric Guitar</trackName>
@@ -935,22 +1044,32 @@
         <Channel>
           <program value="27"/>
           <synti>Fluid</synti>
+          <midiPort>1</midiPort>
+          <midiChannel>2</midiChannel>
           </Channel>
         <Channel name="harmonics">
           <program value="31"/>
           <synti>Fluid</synti>
+          <midiPort>1</midiPort>
+          <midiChannel>10</midiChannel>
           </Channel>
         <Channel name="distortion">
           <program value="30"/>
           <synti>Fluid</synti>
+          <midiPort>1</midiPort>
+          <midiChannel>11</midiChannel>
           </Channel>
         <Channel name="overdriven">
           <program value="29"/>
           <synti>Fluid</synti>
+          <midiPort>1</midiPort>
+          <midiChannel>12</midiChannel>
           </Channel>
         <Channel name="mute">
           <program value="28"/>
           <synti>Fluid</synti>
+          <midiPort>1</midiPort>
+          <midiChannel>13</midiChannel>
           </Channel>
         <Channel name="jazz">
           <program value="26"/>
@@ -965,7 +1084,7 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="1" span="2" col="0"/>
+        <bracket type="1" span="2" col="2"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="16">
@@ -975,7 +1094,7 @@
         <defaultClef>F</defaultClef>
         </Staff>
       <trackName>Piano</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Piano</longName>
         <shortName>Pno.</shortName>
         <trackName>Piano</trackName>
@@ -1030,7 +1149,7 @@
         <defaultTransposingClef>F</defaultTransposingClef>
         </Staff>
       <trackName>Bass</trackName>
-      <Instrument>
+      <Instrument id="acoustic-bass">
         <longName>Bass</longName>
         <shortName>Bass</shortName>
         <trackName>Acoustic Bass</trackName>
@@ -1119,7 +1238,7 @@
         <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Drums</trackName>
-      <Instrument>
+      <Instrument id="drumset">
         <longName>Drums</longName>
         <shortName>Drums</shortName>
         <trackName>Drumset</trackName>
@@ -1338,6 +1457,7 @@
           </Articulation>
         <Channel>
           <controller ctrl="0" value="1"/>
+          <controller ctrl="32" value="0"/>
           <program value="0"/>
           <synti>Fluid</synti>
           <midiPort>0</midiPort>
@@ -1348,6 +1468,7 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>Title</style>
           <text>Big Band</text>

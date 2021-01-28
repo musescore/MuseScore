@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
-  <programVersion>3.0.0</programVersion>
-  <programRevision>3543170</programRevision>
+<museScore version="3.02">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
-    <Synthesizer>
-      </Synthesizer>
     <Division>480</Division>
     <Style>
-      <Spatium>1.76389</Spatium>
+      <enableVerticalSpread>1</enableVerticalSpread>
+      <useStandardNoteNames>0</useStandardNoteNames>
+      <Spatium>1.75</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -37,7 +35,7 @@
         <barLineSpan>3</barLineSpan>
         </Staff>
       <trackName>Snare Drum</trackName>
-      <Instrument>
+      <Instrument id="snare-drum">
         <longName>Snare Drum</longName>
         <shortName>S.D.</shortName>
         <trackName>Snare Drum</trackName>
@@ -153,27 +151,28 @@
           <gateTime>67</gateTime>
           </Articulation>
         <Articulation name="sforzato">
-            <velocity>150</velocity>
-            <gateTime>100</gateTime>
-        </Articulation>
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
         <Articulation name="sforzatoStaccato">
-              <velocity>150</velocity>
-              <gateTime>50</gateTime>
-        </Articulation>
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
         <Articulation name="marcatoStaccato">
-              <velocity>120</velocity>
-              <gateTime>50</gateTime>
-        </Articulation>
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
         <Articulation name="marcatoTenuto">
-              <velocity>120</velocity>
-              <gateTime>100</gateTime>
-        </Articulation>
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
         <Articulation name="umarcato">
           <velocity>500</velocity>
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
           <controller ctrl="0" value="1"/>
+          <controller ctrl="32" value="0"/>
           <program value="56"/>
           <synti>Fluid</synti>
           </Channel>
@@ -189,7 +188,7 @@
         <barLineSpan>2</barLineSpan>
         </Staff>
       <trackName>Tenor Drums</trackName>
-      <Instrument>
+      <Instrument id="marching-tenor-drums">
         <longName>Tenor Drums</longName>
         <shortName>T.D.</shortName>
         <trackName>Tenor Drums</trackName>
@@ -391,6 +390,7 @@
           </Articulation>
         <Channel>
           <controller ctrl="0" value="1"/>
+          <controller ctrl="32" value="0"/>
           <program value="95"/>
           <synti>Fluid</synti>
           </Channel>
@@ -406,7 +406,7 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Bass Drums</trackName>
-      <Instrument>
+      <Instrument id="bass-drum">
         <longName>Bass Drums</longName>
         <shortName>B.D.</shortName>
         <trackName>Bass Drums</trackName>
@@ -524,6 +524,7 @@
           </Articulation>
         <Channel>
           <controller ctrl="0" value="1"/>
+          <controller ctrl="32" value="0"/>
           <program value="57"/>
           <synti>Fluid</synti>
           </Channel>
@@ -538,7 +539,7 @@
         <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Cymbals</trackName>
-      <Instrument>
+      <Instrument id="cymbal">
         <longName>Cymbals</longName>
         <shortName>Cym.</shortName>
         <trackName>Cymbals</trackName>
@@ -677,6 +678,7 @@
           </Articulation>
         <Channel>
           <controller ctrl="0" value="1"/>
+          <controller ctrl="32" value="0"/>
           <program value="58"/>
           <synti>Fluid</synti>
           </Channel>
@@ -685,6 +687,7 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>Title</style>
           <text>Battery Percussion</text>
