@@ -47,6 +47,7 @@
 #include "view/noteinputbarmodel.h"
 #include "view/noteinputbarcustomisemodel.h"
 #include "view/internal/abstractnoteinputbaritem.h"
+#include "view/internal/undoredomodel.h"
 #include "view/notationtoolbarmodel.h"
 #include "view/notationnavigator.h"
 

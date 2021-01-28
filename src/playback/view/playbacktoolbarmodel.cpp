@@ -21,9 +21,17 @@
 #include "log.h"
 #include "translation.h"
 
+#include "shortcuts/shortcutstypes.h"
+
 using namespace mu::playback;
 using namespace mu::actions;
 using namespace mu::uicomponents;
+using namespace mu::workspace;
+using namespace mu::shortcuts;
+using namespace mu::ui;
+
+static const std::string PLAYBACK_TOOLBAR_KEY("playbackControl");
+static const std::string PLAYBACK_SETTINGS_KEY("playback-settings");
 
 PlaybackToolBarModel::PlaybackToolBarModel(QObject* parent)
     : QAbstractListModel(parent)
@@ -34,7 +42,8 @@ QVariant PlaybackToolBarModel::data(const QModelIndex& index, int role) const
 {
     const MenuItem& item = m_items.at(index.row());
     switch (role) {
-    case TitleRole: return QString::fromStdString(item.title);
+    case HintRole: return QString::fromStdString(item.description);
+    case IconRole: return static_cast<int>(item.iconCode);
     case CodeRole: return QString::fromStdString(item.code);
     case EnabledRole: return item.enabled;
     case CheckedRole: return item.checked;
@@ -49,20 +58,27 @@ int PlaybackToolBarModel::rowCount(const QModelIndex&) const
 
 QHash<int,QByteArray> PlaybackToolBarModel::roleNames() const
 {
-    static const QHash<int, QByteArray> roles = {
-        { CodeRole, "codeRole" },
-        { TitleRole, "titleRole" },
-        { EnabledRole, "enabledRole" },
-        { CheckedRole, "checkedRole" }
+    static const QHash<int, QByteArray> roles {
+        { CodeRole, "code" },
+        { HintRole, "hint" },
+        { IconRole, "icon" },
+        { EnabledRole, "enabled" },
+        { CheckedRole, "checked" }
     };
+
     return roles;
 }
 
 void PlaybackToolBarModel::load()
 {
     beginResetModel();
+    m_items.clear();
 
-    m_items << ActionItem("play", shortcuts::ShortcutContext::Any, trc("playback", "Play"));
+    for (const ActionItem& action : currentWorkspaceActions()) {
+        m_items << action;
+    }
+
+    m_items << buildSettingsItem();
 
     endResetModel();
 
@@ -75,31 +91,54 @@ void PlaybackToolBarModel::load()
     playbackController()->isPlayingChanged().onNotify(this, [this]() {
         updateState();
     });
+
+    workspaceManager()->currentWorkspace().ch.onReceive(this, [this](IWorkspacePtr) {
+        load();
+    });
 }
 
-void PlaybackToolBarModel::click(const QString& action)
+ActionList PlaybackToolBarModel::currentWorkspaceActions() const
 {
-    LOGI() << action;
+    RetValCh<IWorkspacePtr> workspace = workspaceManager()->currentWorkspace();
+    if (!workspace.ret || !workspace.val) {
+        LOGE() << workspace.ret.toString();
+        return ActionList();
+    }
 
+    AbstractDataPtr abstractData = workspace.val->data(WorkspaceTag::Toolbar, PLAYBACK_TOOLBAR_KEY);
+    ToolbarDataPtr toolbar = std::dynamic_pointer_cast<ToolbarData>(abstractData);
+    if (!toolbar) {
+        return ActionList();
+    }
+
+    ActionList actions;
+    for (const std::string& actionCode : toolbar->actions) {
+        actions.push_back(actionsRegister()->action(actionCode));
+    }
+
+    return actions;
+}
+
+void PlaybackToolBarModel::handleAction(const QString& action)
+{
     dispatcher()->dispatch(actions::codeFromQString(action));
 }
 
 void PlaybackToolBarModel::updateState()
 {
-    bool isPlayAllowed = playbackController()->isPlayAllowed();
-
-    if (!isPlayAllowed) {
-        for (MenuItem& item : m_items) {
-            item.enabled = false;
-            item.checked = false;
-        }
-    } else {
+    if (playbackController()->isPlayAllowed()) {
         for (MenuItem& item : m_items) {
             item.enabled = true;
             item.checked = false;
         }
 
-        item("play").checked = playbackController()->isPlaying();
+        bool isPlaying = playbackController()->isPlaying();
+        item("play").iconCode = isPlaying ? IconCode::Code::STOP : IconCode::Code::PLAY;
+    } else {
+        for (MenuItem& item : m_items) {
+            item.enabled = false;
+            item.checked = false;
+        }
     }
 
     emit dataChanged(index(0), index(rowCount() - 1));
@@ -116,4 +155,14 @@ MenuItem& PlaybackToolBarModel::item(const actions::ActionCode& actionCode)
     LOGE() << "item not found with name: " << actionCode;
     static MenuItem null;
     return null;
+}
+
+MenuItem PlaybackToolBarModel::buildSettingsItem() const
+{
+    return ActionItem(PLAYBACK_SETTINGS_KEY,
+                      ShortcutContext::Any,
+                      QT_TRANSLATE_NOOP("action", "Playback settings"),
+                      QT_TRANSLATE_NOOP("action", "Open playback settings"),
+                      IconCode::Code::SETTINGS_COG
+                      );
 }

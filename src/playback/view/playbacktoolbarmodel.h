@@ -24,39 +24,48 @@
 #include "modularity/ioc.h"
 #include "iplaybackcontroller.h"
 #include "actions/iactionsdispatcher.h"
+#include "actions/iactionsregister.h"
 #include "async/asyncable.h"
 #include "actions/actiontypes.h"
 #include "uicomponents/uicomponentstypes.h"
+#include "workspace/iworkspacemanager.h"
 
 namespace mu::playback {
 class PlaybackToolBarModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
+
     INJECT(playback, actions::IActionsDispatcher, dispatcher)
+    INJECT(playback, actions::IActionsRegister, actionsRegister)
     INJECT(playback, IPlaybackController, playbackController)
+    INJECT(playback, workspace::IWorkspaceManager, workspaceManager)
 
 public:
     explicit PlaybackToolBarModel(QObject* parent = nullptr);
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QVariant data(const QModelIndex& index, int role) const override;
-    QHash<int,QByteArray> roleNames() const override;
+    QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void load();
-    Q_INVOKABLE void click(const QString& action);
+    Q_INVOKABLE void handleAction(const QString& action);
 
 private:
-
     enum Roles {
         CodeRole = Qt::UserRole + 1,
-        TitleRole,
+        HintRole,
+        IconRole,
         EnabledRole,
         CheckedRole
     };
 
     void updateState();
 
+    actions::ActionList currentWorkspaceActions() const;
+
     uicomponents::MenuItem& item(const actions::ActionCode& actionCode);
+    uicomponents::MenuItem buildSettingsItem() const;
+
     QList<uicomponents::MenuItem> m_items;
 };
 }

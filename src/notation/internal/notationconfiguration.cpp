@@ -246,6 +246,11 @@ bool NotationConfiguration::isMidiInputEnabled() const
     return settings()->value(IS_MIDI_INPUT_ENABLED).toBool();
 }
 
+void NotationConfiguration::setIsMidiInputEnabled(bool enabled)
+{
+    settings()->setValue(IS_MIDI_INPUT_ENABLED, Val(enabled));
+}
+
 float NotationConfiguration::guiScaling() const
 {
     return uiConfiguration()->guiScaling();

@@ -149,6 +149,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/abstractnoteinputbaritem.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/actionnoteinputbaritem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/actionnoteinputbaritem.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/undoredomodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/undoredomodel.h
     )
 
 set(MODULE_UI
