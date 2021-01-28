@@ -80,10 +80,8 @@ void DockWindow::componentComplete()
 {
     QQuickItem::componentComplete();
 
-    updateStyle();
-
-    for (DockToolBar* t : m_toolbars.list()) {
-        DockToolBar::Widget tw = t->widget();
+    for (DockToolBar* toolbar : m_toolbars.list()) {
+        DockToolBar::Widget tw = toolbar->widget();
         tw.bar->setParent(m_window);
         m_window->addToolBar(tw.bar);
     }
@@ -91,6 +89,7 @@ void DockWindow::componentComplete()
     togglePage(nullptr, currentPage());
 
     m_window->show();
+    updateStyle();
 
     m_isComponentComplete = true;
 }
