@@ -19,6 +19,7 @@
 
 install(FILES
       instruments.xml
+      orders.xml
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}instruments
       )
 
