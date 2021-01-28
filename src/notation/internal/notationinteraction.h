@@ -100,6 +100,12 @@ public:
     async::Notification textEditingStarted() const override;
     async::Notification textEditingChanged() const override;
 
+    // Grip edit
+    bool isGripEditStarted() const override;
+    bool isHitGrip(const QPointF& pos) const override;
+    void startEditGrip(const QPointF& pos) override;
+    void endEditGrip() override;
+
     // Measure
     void splitSelectedMeasure() override;
     void joinSelectedMeasures() override;
@@ -152,6 +158,7 @@ private:
     void drawAnchorLines(QPainter* painter);
     void drawTextEditMode(QPainter* painter);
     void drawSelectionRange(QPainter* painter);
+    void drawGripPoints(QPainter* painter);
     void moveElementSelection(MoveDirection d);
 
     Element* dropTarget(Ms::EditData& ed) const;
@@ -172,6 +179,9 @@ private:
     bool notesHaveActiculation(const std::vector<Note*>& notes, SymbolId articulationSymbolId) const;
 
     bool needEndTextEditing(const std::vector<Element*>& newSelectedElements) const;
+
+    void updateGripEdit(const std::vector<Element*>& elements);
+    void resetGripEdit();
 
     struct HitMeasureData
     {
@@ -213,6 +223,8 @@ private:
     Ms::EditData m_textEditData;
     async::Notification m_textEditingStarted;
     async::Notification m_textEditingChanged;
+
+    Ms::EditData m_gripEditData;
 
     DropData m_dropData;
     async::Notification m_dropChanged;
