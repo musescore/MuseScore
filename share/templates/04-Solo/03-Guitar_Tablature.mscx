@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
-  <programVersion>3.5.0</programVersion>
-  <programRevision>fb3c202</programRevision>
+<museScore version="3.02">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
-    <Synthesizer>
-      </Synthesizer>
     <Division>480</Division>
     <Style>
-      <Spatium>1.76389</Spatium>
+      <enableVerticalSpread>1</enableVerticalSpread>
+      <useStandardNoteNames>0</useStandardNoteNames>
+      <Spatium>1.75</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -52,7 +50,7 @@
         <defaultClef>G8vb</defaultClef>
         </Staff>
       <trackName>Guitar [Tablature]</trackName>
-      <Instrument>
+      <Instrument id="guitar-nylon">
         <longName>Guitar</longName>
         <shortName>Guit.</shortName>
         <trackName>Classical Guitar [Tablature]</trackName>
@@ -128,6 +126,7 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>Title</style>
           <text>Guitar Tablature</text>

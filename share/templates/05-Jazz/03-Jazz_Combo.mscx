@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
-  <programVersion>3.0.0</programVersion>
-  <programRevision>3543170</programRevision>
+<museScore version="3.02">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
-    <Synthesizer>
-      </Synthesizer>
     <Division>480</Division>
     <Style>
+      <enableVerticalSpread>1</enableVerticalSpread>
       <lyricsLineThickness>0.3</lyricsLineThickness>
       <lyricsOddFontFace>MuseJazz Text</lyricsOddFontFace>
       <lyricsEvenFontFace>MuseJazz Text</lyricsEvenFontFace>
@@ -41,6 +38,7 @@
       <chordSymbolBFontSize>12</chordSymbolBFontSize>
       <chordSymbolBAlign>left,baseline</chordSymbolBAlign>
       <showMeasureNumber>0</showMeasureNumber>
+      <useStandardNoteNames>0</useStandardNoteNames>
       <chordStyle>jazz</chordStyle>
       <chordDescriptionFile>chords_jazz.xml</chordDescriptionFile>
       <slurEndWidth>0.12</slurEndWidth>
@@ -112,6 +110,54 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Jazz Combo</metaTag>
+    <Order id="jazz-combo" customized="1">
+      <name>Jazz Combo</name>
+      <instrument id="acoustic-bass">
+        <family id="bass-guitars">Bass Guitars</family>
+        </instrument>
+      <instrument id="alto-saxophone">
+        <family id="saxophones">Saxophones</family>
+        </instrument>
+      <instrument id="bb-trumpet">
+        <family id="trumpets">Trumpets</family>
+        </instrument>
+      <instrument id="contrabass">
+        <family id="contrabasses">Basses</family>
+        </instrument>
+      <instrument id="double-bass">
+        <family id="contrabasses">Basses</family>
+        </instrument>
+      <instrument id="drumset">
+        <family id="drums">Drums</family>
+        </instrument>
+      <instrument id="electric-guitar">
+        <family id="guitars">Guitars</family>
+        </instrument>
+      <instrument id="piano">
+        <family id="keyboards">Keyboards</family>
+        </instrument>
+      <instrument id="tenor-saxophone">
+        <family id="saxophones">Saxophones</family>
+        </instrument>
+      <instrument id="trombone">
+        <family id="trombones">Trombones</family>
+        </instrument>
+      <soloists/>
+      <family>voices</family>
+      <family>flutes</family>
+      <family>clarinets</family>
+      <family>trumpets</family>
+      <family>saxophones</family>
+      <family>trombones</family>
+      <unsorted/>
+      <family>guitars</family>
+      <family>keyboards</family>
+      <family>bass-guitars</family>
+      <family>contrabasses</family>
+      <family>drums</family>
+      <unsorted group="pitched-percussion"/>
+      <unsorted group="unpitched-percussion"/>
+      </Order>
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
@@ -119,7 +165,7 @@
           </StaffType>
         </Staff>
       <trackName>Trumpet</trackName>
-      <Instrument>
+      <Instrument id="bb-trumpet">
         <longName>Trumpet</longName>
         <shortName>Tpt.</shortName>
         <trackName>B♭ Trumpet</trackName>
@@ -171,10 +217,14 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel name="open">
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="56"/>
           <synti>Fluid</synti>
           </Channel>
         <Channel name="mute">
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="59"/>
           <synti>Fluid</synti>
           </Channel>
@@ -187,7 +237,7 @@
           </StaffType>
         </Staff>
       <trackName>Alto Sax</trackName>
-      <Instrument>
+      <Instrument id="alto-saxophone">
         <longName>Alto Sax</longName>
         <shortName>Alto</shortName>
         <trackName>Alto Saxophone</trackName>
@@ -227,6 +277,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="65"/>
           <synti>Fluid</synti>
           </Channel>
@@ -241,7 +293,7 @@
         <defaultTransposingClef>G</defaultTransposingClef>
         </Staff>
       <trackName>Tenor Sax</trackName>
-      <Instrument>
+      <Instrument id="tenor-saxophone">
         <longName>Tenor Sax</longName>
         <shortName>Tenor</shortName>
         <trackName>Tenor Saxophone</trackName>
@@ -283,6 +335,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="66"/>
           <synti>Fluid</synti>
           </Channel>
@@ -296,7 +350,7 @@
         <defaultClef>F</defaultClef>
         </Staff>
       <trackName>Trombone</trackName>
-      <Instrument>
+      <Instrument id="trombone">
         <longName>Trombone</longName>
         <shortName>Tbn.</shortName>
         <trackName>Trombone</trackName>
@@ -335,6 +389,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="57"/>
           <synti>Fluid</synti>
           </Channel>
@@ -348,7 +404,7 @@
         <defaultClef>G8vb</defaultClef>
         </Staff>
       <trackName>Guitar</trackName>
-      <Instrument>
+      <Instrument id="electric-guitar">
         <longName>Guitar</longName>
         <shortName>Gtr.</shortName>
         <trackName>Electric Guitar</trackName>
@@ -438,7 +494,7 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="1" span="2" col="0"/>
+        <bracket type="1" span="2" col="2"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="7">
@@ -448,7 +504,7 @@
         <defaultClef>F</defaultClef>
         </Staff>
       <trackName>Piano</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Piano</longName>
         <shortName>Piano</shortName>
         <trackName>Piano</trackName>
@@ -501,7 +557,7 @@
         <defaultTransposingClef>F</defaultTransposingClef>
         </Staff>
       <trackName>Bass</trackName>
-      <Instrument>
+      <Instrument id="acoustic-bass">
         <longName>Bass</longName>
         <shortName>Bass</shortName>
         <trackName>Acoustic Bass</trackName>
@@ -580,7 +636,7 @@
         <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Drums</trackName>
-      <Instrument>
+      <Instrument id="drumset">
         <longName>Drums</longName>
         <shortName>Drums</shortName>
         <trackName>Drumset</trackName>
@@ -799,6 +855,7 @@
           </Articulation>
         <Channel>
           <controller ctrl="0" value="1"/>
+          <controller ctrl="32" value="0"/>
           <program value="0"/>
           <synti>Fluid</synti>
           </Channel>
@@ -807,6 +864,7 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>Title</style>
           <text>Jazz Combo</text>

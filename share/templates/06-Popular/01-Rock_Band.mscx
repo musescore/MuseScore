@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
-  <programVersion>3.0.0</programVersion>
-  <programRevision>3543170</programRevision>
+<museScore version="3.02">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
-    <Synthesizer>
-      </Synthesizer>
     <Division>480</Division>
     <Style>
-      <Spatium>1.664</Spatium>
+      <enableVerticalSpread>1</enableVerticalSpread>
+      <useStandardNoteNames>0</useStandardNoteNames>
+      <Spatium>1.65</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -26,6 +24,29 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
+    <Order id="rock-band" customized="1">
+      <name>Rock Band</name>
+      <instrument id="bass-guitar">
+        <family id="bass-guitars">Bass Guitars</family>
+        </instrument>
+      <instrument id="drumset">
+        <family id="drums">Drums</family>
+        </instrument>
+      <instrument id="electric-guitar">
+        <family id="guitars">Guitars</family>
+        </instrument>
+      <instrument id="voice">
+        <family id="voices">Voices</family>
+        </instrument>
+      <section id="vocals" brackets="true" showSystemMarkings="false" barLineSpan="false" thinBrackets="false">
+        <family>voices</family>
+        </section>
+      <section id="guitars" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="false">
+        <family>plucked-strings</family>
+        </section>
+      <family>drumset</family>
+      <unsorted/>
+      </Order>
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
@@ -34,7 +55,7 @@
         <bracket type="0" span="2" col="0"/>
         </Staff>
       <trackName>Lead Vocals</trackName>
-      <Instrument>
+      <Instrument id="voice">
         <longName>Lead Vocals</longName>
         <shortName>L. Voc.</shortName>
         <trackName>Voice</trackName>
@@ -84,6 +105,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="52"/>
           <synti>Fluid</synti>
           </Channel>
@@ -96,7 +119,7 @@
           </StaffType>
         </Staff>
       <trackName>Backing Vocals</trackName>
-      <Instrument>
+      <Instrument id="voice">
         <longName>Backing Vocals</longName>
         <shortName>Bk. Voc.</shortName>
         <trackName>Voice</trackName>
@@ -134,6 +157,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="0" value="0"/>
+          <controller ctrl="32" value="17"/>
           <program value="52"/>
           <synti>Fluid</synti>
           </Channel>
@@ -145,12 +170,10 @@
           <name>stdNormal</name>
           </StaffType>
         <defaultClef>G8vb</defaultClef>
-        <bracket type="0" span="3" col="0"/>
-        <barLineSpan>2</barLineSpan>
         <distOffset>1.5</distOffset>
         </Staff>
       <trackName>Lead Guitar</trackName>
-      <Instrument>
+      <Instrument id="electric-guitar">
         <longName>Lead Guitar</longName>
         <shortName>L. Gtr.</shortName>
         <trackName>Electric Guitar</trackName>
@@ -241,10 +264,9 @@
           <name>stdNormal</name>
           </StaffType>
         <defaultClef>G8vb</defaultClef>
-        <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Rhythm Guitar</trackName>
-      <Instrument>
+      <Instrument id="electric-guitar">
         <longName>Rhythm Guitar</longName>
         <shortName>R. Gtr.</shortName>
         <trackName>Electric Guitar</trackName>
@@ -338,7 +360,7 @@
         <defaultTransposingClef>F</defaultTransposingClef>
         </Staff>
       <trackName>Bass Guitar</trackName>
-      <Instrument>
+      <Instrument id="bass-guitar">
         <longName>Bass Guitar</longName>
         <shortName>B. Guit.</shortName>
         <trackName>Bass Guitar</trackName>
@@ -402,7 +424,7 @@
         <distOffset>1.5</distOffset>
         </Staff>
       <trackName>Drumset</trackName>
-      <Instrument>
+      <Instrument id="drumset">
         <longName>Drumset</longName>
         <shortName>Drs.</shortName>
         <trackName>Drumset</trackName>
@@ -621,6 +643,7 @@
           </Articulation>
         <Channel>
           <controller ctrl="0" value="1"/>
+          <controller ctrl="32" value="0"/>
           <program value="0"/>
           <synti>Fluid</synti>
           </Channel>
@@ -629,6 +652,7 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>Title</style>
           <text>Rock Band</text>
