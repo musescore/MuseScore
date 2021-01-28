@@ -6,9 +6,6 @@ import MuseScore.UiComponents 1.0
 Rectangle {
     id: root
 
-    width: view.width
-    height: view.height
-
     NotationToolBarModel {
         id: toolbarModel
     }

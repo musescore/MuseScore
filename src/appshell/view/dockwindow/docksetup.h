@@ -20,8 +20,7 @@
 #ifndef MU_DOCK_DOCKSETUP_H
 #define MU_DOCK_DOCKSETUP_H
 
-namespace mu {
-namespace dock {
+namespace mu::dock {
 class DockSetup
 {
 public:
@@ -29,7 +28,6 @@ public:
 
     static void registerQmlTypes();
 };
-}
 }
 
 #endif // MU_DOCK_DOCKSETUP_H

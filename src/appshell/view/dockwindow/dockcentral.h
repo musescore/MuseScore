@@ -26,14 +26,13 @@
 
 class QWidget;
 
-namespace mu {
-namespace dock {
+namespace mu::dock {
 class DockCentral : public DockView
 {
     Q_OBJECT
+
 public:
     explicit DockCentral(QQuickItem* parent = nullptr);
-    ~DockCentral();
 
     struct Widget {
         QWidget* widget = nullptr;
@@ -42,12 +41,10 @@ public:
     Widget widget() const;
 
 private:
-
     void onComponentCompleted() override;
 
     Widget m_widget;
 };
-}
 }
 
 #endif // MU_DOCK_DOCKCENTRAL_H

@@ -24,7 +24,7 @@
 using namespace mu::dock;
 
 DockPage::DockPage(QQuickItem* parent)
-    : QQuickItem(parent), _panels(this)
+    : QQuickItem(parent), m_panels(this)
 {
     setFlag(QQuickItem::ItemHasContents, true);
 }
@@ -44,7 +44,7 @@ QString DockPage::uri() const
 
 DockCentral* DockPage::central() const
 {
-    return _central;
+    return m_central;
 }
 
 void DockPage::setUri(QString uri)
@@ -59,61 +59,61 @@ void DockPage::setUri(QString uri)
 
 void DockPage::setCentral(DockCentral* central)
 {
-    if (_central == central) {
+    if (m_central == central) {
         return;
     }
 
-    _central = central;
-    emit centralChanged(_central);
+    m_central = central;
+    emit centralChanged(m_central);
 }
 
 DockToolBar* DockPage::toolbar() const
 {
-    return _toolbar;
+    return m_toolbar;
 }
 
 void DockPage::setToolbar(DockToolBar* toolbar)
 {
-    if (_toolbar == toolbar) {
+    if (m_toolbar == toolbar) {
         return;
     }
 
-    _toolbar = toolbar;
+    m_toolbar = toolbar;
     //_toolbar->setParentItem(this);
-    emit toolbarChanged(_toolbar);
+    emit toolbarChanged(m_toolbar);
 }
 
 QQmlListProperty<DockPanel> DockPage::panelsProperty()
 {
-    return _panels.property();
+    return m_panels.property();
 }
 
 QList<DockPanel*> DockPage::panels() const
 {
-    return _panels.list();
+    return m_panels.list();
 }
 
 DockStatusBar* DockPage::statusbar() const
 {
-    return _statusbar;
+    return m_statusbar;
 }
 
 void DockPage::setStatusbar(DockStatusBar* statusbar)
 {
-    if (_statusbar == statusbar) {
+    if (m_statusbar == statusbar) {
         return;
     }
 
-    _statusbar = statusbar;
-    emit statusbarChanged(_statusbar);
+    m_statusbar = statusbar;
+    emit statusbarChanged(m_statusbar);
 }
 
 QByteArray DockPage::state() const
 {
-    return _state;
+    return m_state;
 }
 
-void DockPage::setState(const QByteArray& st)
+void DockPage::setState(const QByteArray& state)
 {
-    _state = st;
+    m_state = state;
 }
