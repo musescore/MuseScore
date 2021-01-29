@@ -83,7 +83,7 @@
           </property>
           <property name="icon">
            <iconset resource="../musescore.qrc">
-            <normaloff>:/data/icons/png/window-close.png</normaloff>:/data/icons/png/window-close.png</iconset>
+            <normaloff>:/data/icons/window-close.svg</normaloff>:/data/icons/window-close.svg</iconset>
           </property>
           <property name="autoRaise">
            <bool>true</bool>
