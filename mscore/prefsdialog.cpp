@@ -46,6 +46,34 @@
 
 namespace Ms {
 
+#ifdef Q_OS_WIN
+//---------------------------------------------------------
+//   checkWindowsDarkSupport
+//---------------------------------------------------------
+bool checkWindowsDarkSupport()
+      {
+      std::wstring subKey = L"Software\\Microsoft\\Windows NT\\CurrentVersion";
+      std::wstring keyVal = L"CurrentMajorVersionNumber";
+
+      DWORD version{};
+      DWORD datasize = sizeof(version);
+      LONG retCode = RegGetValue(HKEY_LOCAL_MACHINE, subKey.c_str(), keyVal.c_str(), RRF_RT_REG_DWORD, nullptr, &version, &datasize);
+
+      std::string build;
+      keyVal = L"ReleaseId";
+      retCode = RegGetValue(HKEY_LOCAL_MACHINE, subKey.c_str(), keyVal.c_str(), RRF_RT_REG_SZ, nullptr, nullptr, &datasize);	
+      build.resize(datasize / sizeof(char));
+      retCode = RegGetValue(HKEY_LOCAL_MACHINE, subKey.c_str(), keyVal.c_str(), RRF_RT_REG_SZ, nullptr, &build[0], &datasize);
+
+      std::string buildNumber = { build[0], build[2], build[4], build[6] };
+
+      if (retCode == ERROR_SUCCESS)
+            return version >= 10 && std::stoi(buildNumber) >= 1809;
+      else
+            return false;
+      }
+#endif
+
 //---------------------------------------------------------
 //   startPreferenceDialog
 //---------------------------------------------------------
@@ -80,6 +108,10 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       styleName->addItem(tr("Dark"));
 #ifdef Q_OS_MAC // On Mac, we have a theme option to follow the system's Dark Mode
       if (CocoaBridge::isSystemDarkModeSupported())
+            styleName->addItem(tr("System"));
+#endif
+#ifdef Q_OS_WIN
+      if (checkWindowsDarkSupport())
             styleName->addItem(tr("System"));
 #endif
 
@@ -652,6 +684,10 @@ void PreferenceDialog::updateValues(bool useDefaultValues, bool setup)
       styleName->addItem(tr("Dark"));
 #ifdef Q_OS_MAC // On Mac, we have a theme option to follow the system's Dark Mode
       if (CocoaBridge::isSystemDarkModeSupported())
+            styleName->addItem(tr("System"));
+#endif
+#ifdef Q_OS_WIN
+      if (checkWindowsDarkSupport())
             styleName->addItem(tr("System"));
 #endif
 

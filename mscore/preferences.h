@@ -68,7 +68,7 @@ enum {
 enum class MuseScorePreferredStyleType : char {
       LIGHT_FUSION = 0,
       DARK_FUSION,
-#ifdef Q_OS_MAC
+#if defined(Q_OS_MAC) || defined(Q_OS_WIN)
       FOLLOW_SYSTEM,
 #endif
       };

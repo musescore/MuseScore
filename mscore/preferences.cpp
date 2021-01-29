@@ -25,6 +25,12 @@
 #include "macos/cocoabridge.h"
 #endif
 
+#ifdef Q_OS_WIN
+#include <Windows.h>
+#include <Winreg.h>
+#include <string>
+#endif
+
 namespace Ms {
 //! Note: see musescore.h getSharePath(). This copy is needed for build without MuseScore
 QString sharePath()
@@ -511,6 +517,19 @@ MuseScoreEffectiveStyleType Preferences::effectiveGlobalStyle() const
 #ifdef Q_OS_MAC // On Mac, follow system theme if desired
       if (s == MuseScorePreferredStyleType::FOLLOW_SYSTEM)
             return CocoaBridge::isSystemDarkTheme() ? MuseScoreEffectiveStyleType::DARK_FUSION : MuseScoreEffectiveStyleType::LIGHT_FUSION;
+#endif
+#ifdef Q_OS_WIN
+      if (s == MuseScorePreferredStyleType::FOLLOW_SYSTEM) {
+            std::wstring subKey = L"Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
+            std::wstring keyVal = L"AppsUseLightTheme";
+            DWORD data{};
+            DWORD datasize = sizeof(data);
+            LONG retCode = RegGetValue(HKEY_CURRENT_USER, subKey.c_str(), keyVal.c_str(), RRF_RT_REG_DWORD, nullptr, &data, &datasize);
+            if (retCode == ERROR_SUCCESS)
+                return data == 0 ? MuseScoreEffectiveStyleType::DARK_FUSION : MuseScoreEffectiveStyleType::LIGHT_FUSION;
+            else
+                return MuseScoreEffectiveStyleType::LIGHT_FUSION;
+            }
 #endif
       return MuseScoreEffectiveStyleType(s);
       }
