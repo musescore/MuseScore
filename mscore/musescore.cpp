@@ -8404,7 +8404,7 @@ QByteArray MuseScore::exportMsczAsJSON(Score* score)
 
 bool MuseScore::exportPartsPdfsToJSON(const QString& inFilePath, const QString& outFilePath)
 {
-      Score* score = mscore->openScore(inFilePath);
+      MasterScore* score = mscore->readScore(inFilePath);
       if (!score)
             return false;
 
@@ -8427,7 +8427,7 @@ bool MuseScore::exportPartsPdfsToJSON(const QString& inFilePath, const QString& 
       //save extended score+parts and separate parts pdfs
       //if no parts, generate parts from existing instruments
       if (score->excerpts().size() == 0) {
-            auto excerpts = Excerpt::createAllExcerpt(score->masterScore());
+            auto excerpts = Excerpt::createAllExcerpt(score);
             for (Excerpt* e : excerpts) {
                   Score* nscore = new Score(e->oscore());
                   e->setPartScore(nscore);
