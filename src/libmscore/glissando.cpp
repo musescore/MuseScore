@@ -146,7 +146,9 @@ Element* GlissandoSegment::propertyDelegate(Pid pid)
     case Pid::GLISS_TYPE:
     case Pid::GLISS_TEXT:
     case Pid::GLISS_SHOW_TEXT:
-    case Pid::GLISSANDO_STYLE:
+    case Pid::GLISS_STYLE:
+    case Pid::GLISS_EASEIN:
+    case Pid::GLISS_EASEOUT:
     case Pid::PLAY:
     case Pid::FONT_FACE:
     case Pid::FONT_SIZE:
@@ -172,9 +174,11 @@ Glissando::Glissando(Score* s)
 
     resetProperty(Pid::GLISS_SHOW_TEXT);
     resetProperty(Pid::PLAY);
-    resetProperty(Pid::GLISSANDO_STYLE);
+    resetProperty(Pid::GLISS_STYLE);
     resetProperty(Pid::GLISS_TYPE);
     resetProperty(Pid::GLISS_TEXT);
+    resetProperty(Pid::GLISS_EASEIN);
+    resetProperty(Pid::GLISS_EASEOUT);
 }
 
 Glissando::Glissando(const Glissando& g)
@@ -185,6 +189,8 @@ Glissando::Glissando(const Glissando& g)
     _fontSize       = g._fontSize;
     _glissandoType  = g._glissandoType;
     _glissandoStyle = g._glissandoStyle;
+    _easeIn         = g._easeIn;
+    _easeOut        = g._easeOut;
     _showText       = g._showText;
     _playGlissando  = g._playGlissando;
     _fontStyle      = g._fontStyle;
@@ -374,7 +380,7 @@ void Glissando::write(XmlWriter& xml) const
         xml.tag("text", _text);
     }
 
-    for (auto id : { Pid::GLISS_TYPE, Pid::PLAY, Pid::GLISSANDO_STYLE }) {
+    for (auto id : { Pid::GLISS_TYPE, Pid::PLAY, Pid::GLISS_STYLE, Pid::GLISS_EASEIN, Pid::GLISS_EASEOUT }) {
         writeProperty(xml, id);
     }
     for (const StyledProperty& spp : *styledProperties()) {
@@ -406,7 +412,11 @@ void Glissando::read(XmlReader& e)
         } else if (tag == "subtype") {
             _glissandoType = GlissandoType(e.readInt());
         } else if (tag == "glissandoStyle") {
-            readProperty(e, Pid::GLISSANDO_STYLE);
+            readProperty(e, Pid::GLISS_STYLE);
+        } else if (tag == "easeInSpin") {
+            _easeIn = e.readInt();
+        } else if (tag == "easeOutSpin") {
+            _easeOut = e.readInt();
         } else if (tag == "play") {
             setPlayGlissando(e.readBool());
         } else if (readStyledProperty(e, tag)) {
@@ -626,8 +636,12 @@ QVariant Glissando::getProperty(Pid propertyId) const
         return text();
     case Pid::GLISS_SHOW_TEXT:
         return showText();
-    case Pid::GLISSANDO_STYLE:
+    case Pid::GLISS_STYLE:
         return int(glissandoStyle());
+    case Pid::GLISS_EASEIN:
+        return easeIn();
+    case Pid::GLISS_EASEOUT:
+        return easeOut();
     case Pid::PLAY:
         return bool(playGlissando());
     case Pid::FONT_FACE:
@@ -658,8 +672,14 @@ bool Glissando::setProperty(Pid propertyId, const QVariant& v)
     case Pid::GLISS_SHOW_TEXT:
         setShowText(v.toBool());
         break;
-    case Pid::GLISSANDO_STYLE:
+    case Pid::GLISS_STYLE:
         setGlissandoStyle(GlissandoStyle(v.toInt()));
+        break;
+    case Pid::GLISS_EASEIN:
+        setEaseIn(v.toInt());
+        break;
+    case Pid::GLISS_EASEOUT:
+        setEaseOut(v.toInt());
         break;
     case Pid::PLAY:
         setPlayGlissando(v.toBool());
@@ -694,8 +714,11 @@ QVariant Glissando::propertyDefault(Pid propertyId) const
         return int(GlissandoType::STRAIGHT);
     case Pid::GLISS_SHOW_TEXT:
         return true;
-    case Pid::GLISSANDO_STYLE:
+    case Pid::GLISS_STYLE:
         return int(GlissandoStyle::CHROMATIC);
+    case Pid::GLISS_EASEIN:
+    case Pid::GLISS_EASEOUT:
+        return 0;
     case Pid::PLAY:
         return true;
     default:
