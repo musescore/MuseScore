@@ -22,7 +22,7 @@
 
 namespace Ms {
 QList<InstrumentGroup*> instrumentGroups;
-QList<MidiArticulation> articulation;                // global articulations
+QList<MidiArticulation> articulation;                 // global articulations
 QList<InstrumentGenre*> instrumentGenres;
 
 //---------------------------------------------------------
@@ -31,7 +31,7 @@ QList<InstrumentGenre*> instrumentGenres;
 
 static InstrumentGenre* searchInstrumentGenre(const QString& genre)
 {
-    foreach (InstrumentGenre* ig, instrumentGenres) {
+    for (InstrumentGenre* ig : qAsConst(instrumentGenres)) {
         if (ig->id == genre) {
             return ig;
         }
@@ -43,9 +43,9 @@ static InstrumentGenre* searchInstrumentGenre(const QString& genre)
 //   searchInstrumentGroup
 //---------------------------------------------------------
 
-static InstrumentGroup* searchInstrumentGroup(const QString& name)
+InstrumentGroup* searchInstrumentGroup(const QString& name)
 {
-    foreach (InstrumentGroup* g, instrumentGroups) {
+    for (InstrumentGroup* g : qAsConst(instrumentGroups)) {
         if (g->id == name) {
             return g;
         }
@@ -59,7 +59,7 @@ static InstrumentGroup* searchInstrumentGroup(const QString& name)
 
 static MidiArticulation searchArticulation(const QString& name)
 {
-    foreach (MidiArticulation a, articulation) {
+    for (MidiArticulation a : qAsConst(articulation)) {
         if (a.name == name) {
             return a;
         }
@@ -324,7 +324,7 @@ void InstrumentTemplate::write(XmlWriter& xml) const
     }
     for (const MidiArticulation& ma : articulation) {
         bool isGlobal = false;
-        for (const MidiArticulation& ga : Ms::articulation) {
+        for (const MidiArticulation& ga : qAsConst(Ms::articulation)) {
             if (ma == ga) {
                 isGlobal = true;
                 break;
@@ -571,7 +571,7 @@ void InstrumentTemplate::setPitchRange(const QString& s, char* a, char* b) const
 
 void clearInstrumentTemplates()
 {
-    for (InstrumentGroup* g : instrumentGroups) {
+    for (InstrumentGroup* g : qAsConst(instrumentGroups)) {
         g->clear();
     }
     qDeleteAll(instrumentGroups);
@@ -636,9 +636,8 @@ bool loadInstrumentTemplates(const QString& instrTemplates)
 
 InstrumentTemplate* searchTemplate(const QString& name)
 {
-    QList<InstrumentGroup*>& list = instrumentGroups;
-    for (InstrumentGroup* g : list) {
-        for (InstrumentTemplate* it : g->instrumentTemplates) {
+    for (InstrumentGroup* g : qAsConst(instrumentGroups)) {
+        for (InstrumentTemplate* it : qAsConst(g->instrumentTemplates)) {
             if (it->id == name) {
                 return it;
             }
@@ -653,8 +652,8 @@ InstrumentTemplate* searchTemplate(const QString& name)
 
 InstrumentTemplate* searchTemplateForMusicXmlId(const QString& mxmlId)
 {
-    for (InstrumentGroup* g : instrumentGroups) {
-        for (InstrumentTemplate* it : g->instrumentTemplates) {
+    for (InstrumentGroup* g : qAsConst(instrumentGroups)) {
+        for (InstrumentTemplate* it : qAsConst(g->instrumentTemplates)) {
             if (it->musicXMLid == mxmlId) {
                 return it;
             }
@@ -747,8 +746,8 @@ ClefType defaultClef(int program)
         return ClefType::F8_VB;
     }
 
-    for (InstrumentGroup* g : instrumentGroups) {
-        for (InstrumentTemplate* it : g->instrumentTemplates) {
+    for (InstrumentGroup* g : qAsConst(instrumentGroups)) {
+        for (InstrumentTemplate* it : qAsConst(g->instrumentTemplates)) {
             if (it->channel[0].bank() == 0 && it->channel[0].program() == program) {
                 return it->clefTypes[0]._concertClef;
             }

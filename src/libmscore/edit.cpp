@@ -374,8 +374,7 @@ ChordRest* Score::addClone(ChordRest* cr, const Fraction& tick, const TDuration&
 //    create one or more rests to fill "l"
 //---------------------------------------------------------
 
-Rest* Score::setRest(const Fraction& _tick, int track, const Fraction& _l, bool useDots, Tuplet* tuplet,
-                     bool useFullMeasureRest)
+Rest* Score::setRest(const Fraction& _tick, int track, const Fraction& _l, bool useDots, Tuplet* tuplet, bool useFullMeasureRest)
 {
     Fraction l       = _l;
     Fraction tick    = _tick;
@@ -1192,8 +1191,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
         return;
     }
 
-    auto getStaffIdxRange
-        = [this, local, staffIdx](const Score* score) -> std::pair<int /*start*/, int /*end*/> {
+    auto getStaffIdxRange = [this, local, staffIdx](const Score* score) -> std::pair<int /*start*/, int /*end*/> {
         int startStaffIdx, endStaffIdx;
         if (local) {
             if (score == this) {
@@ -1510,8 +1508,7 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                 // combine tied chords
                 Chord* chord = toChord(curr);
                 Chord* lastTiedChord = chord;
-                for (Chord* next = chord->nextTiedChord(); next && next->tick() + next->ticks() <= maxTick;
-                     next = next->nextTiedChord()) {
+                for (Chord* next = chord->nextTiedChord(); next && next->tick() + next->ticks() <= maxTick; next = next->nextTiedChord()) {
                     lastTiedChord = next;
                 }
                 if (!lastTiedChord) {
@@ -1570,8 +1567,7 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                         }
                         measure = segment->measure();
                         std::vector<TDuration> dl;
-                        dl = toRhythmicDurationList(dd, false, segment->rtick(), sigmap()->timesig(
-                                                        tick.ticks()).nominal(), measure, 1);
+                        dl = toRhythmicDurationList(dd, false, segment->rtick(), sigmap()->timesig(tick.ticks()).nominal(), measure, 1);
                         size_t n = dl.size();
                         for (size_t i = 0; i < n; ++i) {
                             const TDuration& d = dl[i];
@@ -2050,10 +2046,9 @@ void Score::cmdFlip()
                     continue;
                 }
             } else {
-                flipOnce(chord, [this, chord]() {
+                flipOnce(chord, [chord]() {
                     Direction dir = chord->up() ? Direction::DOWN : Direction::UP;
-                    chord->undoChangeProperty(Pid::STEM_DIRECTION, QVariant::fromValue<Direction>(dir),
-                                              propertyFlags(Pid::STEM_DIRECTION));
+                    chord->undoChangeProperty(Pid::STEM_DIRECTION, QVariant::fromValue<Direction>(dir));
                 });
             }
         }
@@ -2101,8 +2096,7 @@ void Score::cmdFlip()
             auto tuplet = toTuplet(e);
             flipOnce(tuplet, [tuplet]() {
                 Direction dir = tuplet->isUp() ? Direction::DOWN : Direction::UP;
-                tuplet->undoChangeProperty(Pid::DIRECTION, QVariant::fromValue<Direction>(dir),
-                                           PropertyFlags::UNSTYLED);
+                tuplet->undoChangeProperty(Pid::DIRECTION, QVariant::fromValue<Direction>(dir), PropertyFlags::UNSTYLED);
             });
         } else if (e->isNoteDot() && e->parent()->isNote()) {
             Note* note = toNote(e->parent());
@@ -2260,7 +2254,7 @@ void Score::deleteItem(Element* el)
                 QList<ScoreElement*> tl = tuplet->linkList();
                 for (ScoreElement* e : rest->linkList()) {
                     DurationElement* de = toDurationElement(e);
-                    for (ScoreElement* ee : tl) {
+                    for (ScoreElement* ee : qAsConst(tl)) {
                         Tuplet* t = toTuplet(ee);
                         if (t->score() == de->score() && t->track() == de->track()) {
                             de->setTuplet(t);
@@ -2832,8 +2826,7 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
 ///   given selection filter.
 //---------------------------------------------------------
 
-void Score::deleteSpannersFromRange(const Fraction& t1, const Fraction& t2, int track1, int track2,
-                                    const SelectionFilter& filter)
+void Score::deleteSpannersFromRange(const Fraction& t1, const Fraction& t2, int track1, int track2, const SelectionFilter& filter)
 {
     auto spanners = _spanner.findOverlapping(t1.ticks(), t2.ticks() - 1);
     for (auto i : spanners) {
@@ -3050,8 +3043,7 @@ void Score::cmdDeleteSelection()
         Segment* s2 = selection().endSegment();
         const Fraction stick1 = selection().tickStart();
         const Fraction stick2 = selection().tickEnd();
-        cr = deleteRange(s1, s2, staff2track(selection().staffStart()), staff2track(
-                             selection().staffEnd()), selectionFilter());
+        cr = deleteRange(s1, s2, staff2track(selection().staffStart()), staff2track(selection().staffEnd()), selectionFilter());
         s1 = tick2segment(stick1);
         s2 = tick2segment(stick2, true);
         if (s1 == 0 || s2 == 0) {
@@ -3117,7 +3109,7 @@ void Score::cmdDeleteSelection()
                         } else {
                             linkedSpanners.append(spanner);
                         }
-                        for (ScoreElement* se : linkedSpanners) {
+                        for (ScoreElement* se : qAsConst(linkedSpanners)) {
                             deletedSpanners.append(toSpanner(se));
                         }
                     }
@@ -3131,7 +3123,7 @@ void Score::cmdDeleteSelection()
             }
 
             // add these linked elements to list of already-deleted elements
-            for (ScoreElement* se : links) {
+            for (ScoreElement* se : qAsConst(links)) {
                 deletedElements.append(se);
             }
         }
@@ -3489,6 +3481,7 @@ void Score::cmdEnterRest(const TDuration& d)
 void Score::enterRest(const TDuration& d, InputState* externalInputState)
 {
     InputState& is = externalInputState ? (*externalInputState) : _is;
+
     expandVoice(is.segment(), is.track());
 
     if (!is.cr()) {
@@ -3580,7 +3573,7 @@ void Score::nextInputPos(ChordRest* cr, bool doSelect)
             select(ncr, SelectType::SINGLE, 0);
         }
         setPlayPos(ncr->tick());
-        for (MuseScoreView* v : viewer) {
+        for (MuseScoreView* v : qAsConst(viewer)) {
             v->moveCursor();
         }
     }
@@ -4854,7 +4847,7 @@ static Chord* findLinkedChord(Chord* c, Staff* nstaff)
 void Score::undoChangeChordRestLen(ChordRest* cr, const TDuration& d)
 {
     auto sl = cr->staff()->staffList();
-    for (Staff* staff : sl) {
+    for (Staff* staff : qAsConst(sl)) {
         ChordRest* ncr;
         if (cr->isGrace()) {
             ncr = findLinkedChord(toChord(cr), staff);
@@ -4910,7 +4903,7 @@ void Score::undoExchangeVoice(Measure* measure, int srcVoice, int dstVoice, int 
                 QList<int> srcTrackList = tracks.values(srcTrack);
                 QList<int> dstTrackList = tracks.values(dstTrack);
 
-                for (int srcTrack2 : srcTrackList) {
+                for (int srcTrack2 : qAsConst(srcTrackList)) {
                     // don't care about other linked staves
                     if (!(staffTrack <= srcTrack2) || !(srcTrack2 < staffTrack + VOICES)) {
                         continue;
@@ -4919,9 +4912,8 @@ void Score::undoExchangeVoice(Measure* measure, int srcVoice, int dstVoice, int 
                     int tempTrack = tracks.key(srcTrack2);
                     QList<int> testTracks = tracks.values(tempTrack + trackDiff);
                     bool hasVoice = false;
-                    for (int testTrack : testTracks) {
-                        if (staffTrack <= testTrack && testTrack < staffTrack + VOICES
-                            && dstTrackList.contains(testTrack)) {
+                    for (int testTrack : qAsConst(testTracks)) {
+                        if (staffTrack <= testTrack && testTrack < staffTrack + VOICES && dstTrackList.contains(testTrack)) {
                             hasVoice = true;
                             // voice is simply exchangeable now (deal directly)
                             undo(new ExchangeVoice(measure2, srcTrack2, testTrack, staffTrack / 4));
@@ -4936,7 +4928,7 @@ void Score::undoExchangeVoice(Measure* measure, int srcVoice, int dstVoice, int 
                     }
                 }
 
-                for (int dstTrack2 : dstTrackList) {
+                for (int dstTrack2 : qAsConst(dstTrackList)) {
                     // don't care about other linked staves
                     if (!(staffTrack <= dstTrack2) || !(dstTrack2 < staffTrack + VOICES)) {
                         continue;
@@ -4945,7 +4937,7 @@ void Score::undoExchangeVoice(Measure* measure, int srcVoice, int dstVoice, int 
                     int tempTrack = tracks.key(dstTrack2);
                     QList<int> testTracks = tracks.values(tempTrack - trackDiff);
                     bool hasVoice = false;
-                    for (int testTrack : testTracks) {
+                    for (int testTrack : qAsConst(testTracks)) {
                         if (staffTrack <= testTrack && testTrack < staffTrack + VOICES
                             && srcTrackList.contains(testTrack)) {
                             hasVoice = true;
@@ -5156,8 +5148,7 @@ void Score::undoAddElement(Element* element)
                 ne->setParent(m);
                 undo(new AddElement(ne));
             } else if (et == ElementType::MEASURE_NUMBER) {
-                toMeasure(element->parent())->undoChangeProperty(Pid::MEASURE_NUMBER_MODE,
-                                                                 static_cast<int>(MeasureNumberMode::SHOW));
+                toMeasure(element->parent())->undoChangeProperty(Pid::MEASURE_NUMBER_MODE, static_cast<int>(MeasureNumberMode::SHOW));
             } else {
                 Segment* segment  = toSegment(element->parent());
                 Fraction tick     = segment->tick();
@@ -5293,7 +5284,7 @@ void Score::undoAddElement(Element* element)
             if (mapping.isEmpty()) {
                 // This can happen during reading the score and there is
                 // no Tracklist tag specified.
-                // TODO solve this in read301.cpp.
+                // TODO solve this in read302.cpp.
                 tr.append(strack);
             } else {
                 for (int track : mapping.values(strack)) {
@@ -5526,7 +5517,7 @@ void Score::undoAddElement(Element* element)
                 if (element->isSlur() && sp != nsp) {
                     if (sp->startElement()) {
                         QList<ScoreElement*> sel = sp->startElement()->linkList();
-                        for (ScoreElement* ee : sel) {
+                        for (ScoreElement* ee : qAsConst(sel)) {
                             Element* e = static_cast<Element*>(ee);
                             if (e->score() == nsp->score() && e->track() == nsp->track()) {
                                 nsp->setStartElement(e);
@@ -5536,7 +5527,7 @@ void Score::undoAddElement(Element* element)
                     }
                     if (sp->endElement()) {
                         QList<ScoreElement*> eel = sp->endElement()->linkList();
-                        for (ScoreElement* ee : eel) {
+                        for (ScoreElement* ee : qAsConst(eel)) {
                             Element* e = static_cast<Element*>(ee);
                             if (e->score() == nsp->score() && e->track() == nsp->track2()) {
                                 nsp->setEndElement(e);
@@ -5626,8 +5617,7 @@ void Score::undoAddElement(Element* element)
                 // transpose root score; parts will follow
                 if (score->isMaster() && part->instrument(tickStart)->transpose() != oldV) {
                     auto i = part->instruments()->upper_bound(tickStart.ticks());
-                    Fraction tickEnd = i
-                                       == part->instruments()->end() ? Fraction(-1, 1) : Fraction::fromTicks(i->first);
+                    Fraction tickEnd = i == part->instruments()->end() ? Fraction(-1, 1) : Fraction::fromTicks(i->first);
                     transpositionChanged(part, oldV, tickStart, tickEnd);
                 }
             } else if (element->isBreath()) {
@@ -5801,6 +5791,9 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, const Fraction& tick)
 
 void Score::undoRemoveElement(Element* element)
 {
+    if (!element) {
+        return;
+    }
     QList<Segment*> segments;
     for (ScoreElement* ee : element->linkList()) {
         Element* e = static_cast<Element*>(ee);

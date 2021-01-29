@@ -332,6 +332,6 @@ Element* Marker::prevSegmentElement()
 
 QString Marker::accessibleInfo() const
 {
-    return QString("%1: %2").arg(Element::accessibleInfo()).arg(markerTypeUserName());
+    return QString("%1: %2").arg(Element::accessibleInfo(), markerTypeUserName());
 }
 }

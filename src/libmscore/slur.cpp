@@ -98,8 +98,7 @@ bool SlurSegment::edit(EditData& ed)
     Slur* sl = slur();
 
     if (ed.key == Qt::Key_X) {
-        sl->undoChangeProperty(Pid::SLUR_DIRECTION,
-                               QVariant::fromValue<Direction>(sl->up() ? Direction::DOWN : Direction::UP));
+        sl->undoChangeProperty(Pid::SLUR_DIRECTION, QVariant::fromValue<Direction>(sl->up() ? Direction::DOWN : Direction::UP));
         sl->layout();
         return true;
     }
@@ -110,8 +109,7 @@ bool SlurSegment::edit(EditData& ed)
     }
 
     if (!((ed.modifiers & Qt::ShiftModifier)
-          && (isSingleType() || (isBeginType() && ed.curGrip == Grip::START)
-              || (isEndType() && ed.curGrip == Grip::END)))) {
+          && (isSingleType() || (isBeginType() && ed.curGrip == Grip::START) || (isEndType() && ed.curGrip == Grip::END)))) {
         return false;
     }
 
@@ -197,7 +195,7 @@ void SlurSegment::changeAnchor(EditData& ed, Element* element)
             Element* ee = 0;
             if (scr) {
                 QList<ScoreElement*> sel = scr->linkList();
-                for (ScoreElement* lcr : sel) {
+                for (ScoreElement* lcr : qAsConst(sel)) {
                     Element* le = toElement(lcr);
                     if (le->score() == sp->score() && le->track() == sp->track()) {
                         se = le;
@@ -207,7 +205,7 @@ void SlurSegment::changeAnchor(EditData& ed, Element* element)
             }
             if (ecr) {
                 QList<ScoreElement*> sel = ecr->linkList();
-                for (ScoreElement* lcr : sel) {
+                for (ScoreElement* lcr : qAsConst(sel)) {
                     Element* le = toElement(lcr);
                     if (le->score() == sp->score() && le->track() == sp->track2()) {
                         ee = le;
@@ -252,8 +250,7 @@ void SlurSegment::computeBezier(QPointF p6o)
         Measure* m1 = slur()->startCR()->segment()->measure();
         Measure* m2 = slur()->endCR()->segment()->measure();
         qDebug("zero slur at tick %d(%d) track %d in measure %d-%d  tick %d ticks %d",
-               m1->tick().ticks(), tick().ticks(), track(), m1->no(), m2->no(), slur()->tick().ticks(),
-               slur()->ticks().ticks());
+               m1->tick().ticks(), tick().ticks(), track(), m1->no(), m2->no(), slur()->tick().ticks(), slur()->ticks().ticks());
         slur()->setBroken(true);
         return;
     }

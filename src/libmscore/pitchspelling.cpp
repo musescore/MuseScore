@@ -255,8 +255,7 @@ QString tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, 
 //   tpc2name
 //---------------------------------------------------------
 
-void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, QString& s, QString& acc,
-              bool explicitAccidental)
+void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, QString& s, QString& acc, bool explicitAccidental)
 {
     AccidentalVal accVal;
     tpc2name(tpc, noteSpelling, noteCase, s, accVal);

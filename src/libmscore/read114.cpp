@@ -1310,7 +1310,7 @@ static void readVolta114(XmlReader& e, Volta* volta)
             QString s = e.readElementText();
             QStringList sl = s.split(",", Qt::SkipEmptyParts);
             volta->endings().clear();
-            for (const QString& l : sl) {
+            for (const QString& l : qAsConst(sl)) {
                 int i = l.simplified().toInt();
                 volta->endings().append(i);
             }
@@ -1416,15 +1416,13 @@ static void readTextLine114(XmlReader& e, TextLine* textLine)
             QString text(e.readElementText());
             textLine->setBeginText(QString("<sym>%1</sym>").arg(
                                        text[0].isNumber()
-                                       ? resolveSymCompatibility(SymId(text.toInt()),
-                                                                 textLine->score()->mscoreVersion())
+                                       ? resolveSymCompatibility(SymId(text.toInt()), textLine->score()->mscoreVersion())
                                        : text));
         } else if (tag == "continueSymbol") {
             QString text(e.readElementText());
             textLine->setContinueText(QString("<sym>%1</sym>").arg(
                                           text[0].isNumber()
-                                          ? resolveSymCompatibility(SymId(text.toInt()),
-                                                                    textLine->score()->mscoreVersion())
+                                          ? resolveSymCompatibility(SymId(text.toInt()), textLine->score()->mscoreVersion())
                                           : text));
         } else if (tag == "endSymbol") {
             QString text(e.readElementText());
@@ -1729,8 +1727,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                     if (tremolo->twoNotes()) {
                         int track = chord->track();
                         Segment* ss = 0;
-                        for (Segment* ps = m->first(SegmentType::ChordRest); ps;
-                             ps = ps->next(SegmentType::ChordRest)) {
+                        for (Segment* ps = m->first(SegmentType::ChordRest); ps; ps = ps->next(SegmentType::ChordRest)) {
                             if (ps->tick() >= e.tick()) {
                                 break;
                             }
@@ -2240,11 +2237,9 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                 continue;
             }
             // int possibleDuration = tuplet2->duration().ticks() * tuplet->ratio().denominator() / tuplet->ratio().numerator() - 1;
-            Fraction possibleDuration = tuplet2->ticks()
-                                        * Fraction(tuplet->ratio().denominator(), (tuplet->ratio().numerator() - 1));
+            Fraction possibleDuration = tuplet2->ticks() * Fraction(tuplet->ratio().denominator(), (tuplet->ratio().numerator() - 1));
 
-            if ((tuplet2 != tuplet) && (tuplet2->tick() >= tupletTick)
-                && (tuplet2->tick() < tupletTick + tupletDuration)
+            if ((tuplet2 != tuplet) && (tuplet2->tick() >= tupletTick) && (tuplet2->tick() < tupletTick + tupletDuration)
                 && (tuplet2->tick() + possibleDuration < tupletTick + tupletDuration)) {
                 bool found = false;
                 for (DurationElement* de : tElements) {
@@ -2795,8 +2790,7 @@ static void readStyle(MStyle* style, XmlReader& e)
             }
             style->setCustomChordList(true);
             chordListTag = true;
-        } else if (tag == "pageFillLimit" || tag == "genTimesig" || tag == "FixMeasureNumbers"
-                   || tag == "FixMeasureWidth") {                                                                               // obsolete
+        } else if (tag == "pageFillLimit" || tag == "genTimesig" || tag == "FixMeasureNumbers" || tag == "FixMeasureWidth") {   // obsolete
             e.skipCurrentElement();
         } else if (tag == "systemDistance") {  // obsolete
             style->set(Sid::minSystemDistance, QVariant(e.readDouble()));
@@ -2865,8 +2859,7 @@ static void readStyle(MStyle* style, XmlReader& e)
             // but treat as "old" (114) score just in case
             style->set(Sid::chordStyle, QVariant(QString("custom")));
             style->set(Sid::chordsXmlFile, QVariant(true));
-            qDebug("StyleData::load: custom chord description file %s with chordStyle == std",
-                   qPrintable(newChordDescriptionFile));
+            qDebug("StyleData::load: custom chord description file %s with chordStyle == std", qPrintable(newChordDescriptionFile));
         }
         if (style->value(Sid::chordStyle).toString() == "custom") {
             style->setCustomChordList(true);
@@ -3318,7 +3311,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
     // add invisible tempo text if necessary
     // some 1.3 scores have tempolist but no tempo text
     fixTicks();
-    for (auto i : tm) {
+    for (const auto& i : tm) {
         Fraction tick = Fraction::fromTicks(i.first);
         qreal tempo   = i.second.tempo;
         if (tempomap()->tempo(tick.ticks()) != tempo) {

@@ -240,19 +240,13 @@ void XmlWriter::tag(const QString& name, QVariant data)
     case QVariant::Rect:
     {
         const QRect& r(data.value<QRect>());
-        *this
-            << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg(name).arg(r.x()).arg(r.y()).arg(r.width())
-            .arg(
-            r.height());
+        *this << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg(name).arg(r.x()).arg(r.y()).arg(r.width()).arg(r.height());
     }
     break;
     case QVariant::RectF:
     {
         const QRectF& r(data.value<QRectF>());
-        *this
-            << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg(name).arg(r.x()).arg(r.y()).arg(r.width())
-            .arg(
-            r.height());
+        *this << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg(name).arg(r.x()).arg(r.y()).arg(r.width()).arg(r.height());
     }
     break;
     case QVariant::PointF:
@@ -277,7 +271,7 @@ void XmlWriter::tag(const QString& name, QVariant data)
             const Fraction& f = data.value<Fraction>();
             *this << QString("<%1>%2/%3</%1>\n").arg(name).arg(f.numerator()).arg(f.denominator());
         } else if (strcmp(type, "Ms::Direction") == 0) {
-            *this << QString("<%1>%2</%1>\n").arg(name).arg(toString(data.value<Direction>()));
+            *this << QString("<%1>%2</%1>\n").arg(name, toString(data.value<Direction>()));
         } else if (strcmp(type, "Ms::Align") == 0) {
             // TODO: remove from here? (handled in Ms::propertyWritableValue())
             Align a = Align(data.toInt());
@@ -299,7 +293,8 @@ void XmlWriter::tag(const QString& name, QVariant data)
             } else {
                 v = "top";
             }
-            *this << QString("<%1>%2,%3</%1>\n").arg(name).arg(h).arg(v);
+            *this << QString("<%1>%2,%3</%1>\n").arg(name)
+                .arg(h, v);
         } else {
             qFatal("XmlWriter::tag: unsupported type %d %s", data.type(), type);
         }

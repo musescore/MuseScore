@@ -100,7 +100,7 @@ void System::clear()
         }
     }
     ml.clear();
-    for (SpannerSegment* ss : _spannerSegments) {
+    for (SpannerSegment* ss : qAsConst(_spannerSegments)) {
         if (ss->system() == this) {
             ss->setParent(0);             // assume parent() is System
         }
@@ -278,7 +278,7 @@ void System::layoutSystem(qreal xo1)
         }
     }
 
-    for (Bracket* b : bl) {
+    for (Bracket* b : qAsConst(bl)) {
         delete b;
     }
 
@@ -328,8 +328,8 @@ void System::layoutSystem(qreal xo1)
     //     be hidden, so layout all instrument names
     //---------------------------------------------------
 
-    for (SysStaff* s : _staves) {
-        for (InstrumentName* t : s->instrumentNames) {
+    for (SysStaff* s : qAsConst(_staves)) {
+        for (InstrumentName* t : qAsConst(s->instrumentNames)) {
             switch (int(t->align()) & int(Align::HMASK)) {
             case int(Align::LEFT):
                 t->rxpos() = 0;
@@ -467,9 +467,9 @@ int System::getBracketsColumnsCount()
 void System::setBracketsXPosition(const qreal xPosition)
 {
     qreal bracketDistance = score()->styleP(Sid::bracketDistance);
-    for (Bracket* b1 : _brackets) {
+    for (Bracket* b1 : qAsConst(_brackets)) {
         qreal xOffset = 0;
-        for (const Bracket* b2 : _brackets) {
+        for (const Bracket* b2 : qAsConst(_brackets)) {
             bool b1FirstStaffInB2 = (b1->firstStaff() >= b2->firstStaff() && b1->firstStaff() <= b2->lastStaff());
             bool b1LastStaffInB2 = (b1->lastStaff() >= b2->firstStaff() && b1->lastStaff() <= b2->lastStaff());
             if (b1->column() > b2->column()
@@ -855,7 +855,7 @@ void System::setInstrumentNames(bool longName, Fraction tick)
     }
     if (!score()->showInstrumentNames()
         || (score()->styleB(Sid::hideInstrumentNameIfOneInstrument) && score()->parts().size() == 1)) {
-        for (SysStaff* staff : _staves) {
+        for (SysStaff* staff : qAsConst(_staves)) {
             foreach (InstrumentName* t, staff->instrumentNames) {
                 score()->removeElement(t);
             }
@@ -864,10 +864,10 @@ void System::setInstrumentNames(bool longName, Fraction tick)
     }
 
     int staffIdx = 0;
-    for (SysStaff* staff : _staves) {
+    for (SysStaff* staff : qAsConst(_staves)) {
         Staff* s = score()->staff(staffIdx);
         if (!s->isTop() || !s->show()) {
-            for (InstrumentName* t : staff->instrumentNames) {
+            for (InstrumentName* t : qAsConst(staff->instrumentNames)) {
                 score()->removeElement(t);
             }
             ++staffIdx;

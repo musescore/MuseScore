@@ -1085,8 +1085,7 @@ void BarLine::endEdit(EditData&)
     }
 
     // if same as staff settings, do nothing
-    if (staff()->barLineSpan() == _spanStaff && staff()->barLineFrom() == _spanFrom
-        && staff()->barLineTo() == _spanTo) {
+    if (staff()->barLineSpan() == _spanStaff && staff()->barLineFrom() == _spanFrom && staff()->barLineTo() == _spanTo) {
         return;
     }
 
@@ -1171,9 +1170,7 @@ void BarLine::editDrag(EditData& ed)
         // max is the bottom of the system
         const System* system = segment() ? segment()->system() : nullptr;
         const int st = staffIdx();
-        const qreal max
-            = (system
-               && st != -1) ? (system->height() - y2 - system->staff(st)->y()) : std::numeric_limits<qreal>::max();
+        const qreal max = (system && st != -1) ? (system->height() - y2 - system->staff(st)->y()) : std::numeric_limits<qreal>::max();
         // update yoff2 and bring it within limit
         bed->yoff2 += ed.delta.y();
         if (bed->yoff2 < min) {
@@ -1752,7 +1749,7 @@ Element* BarLine::prevSegmentElement()
 
 QString BarLine::accessibleInfo() const
 {
-    return QString("%1: %2").arg(Element::accessibleInfo()).arg(BarLine::userTypeName(barLineType()));
+    return QString("%1: %2").arg(Element::accessibleInfo(), BarLine::userTypeName(barLineType()));
 }
 
 //---------------------------------------------------------
@@ -1768,7 +1765,7 @@ QString BarLine::accessibleExtraInfo() const
         if (!score()->selectionFilter().canSelect(e)) {
             continue;
         }
-        rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
+        rez = QString("%1 %2").arg(rez, e->screenReaderInfo());
     }
 
     for (const Element* e : seg->annotations()) {
@@ -1776,7 +1773,7 @@ QString BarLine::accessibleExtraInfo() const
             continue;
         }
         if (e->track() == track()) {
-            rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
+            rez = QString("%1 %2").arg(rez, e->screenReaderInfo());
         }
     }
     Measure* m = seg->measure();
@@ -1788,12 +1785,12 @@ QString BarLine::accessibleExtraInfo() const
                 continue;
             }
             if (e->type() == ElementType::JUMP) {
-                rez= QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
+                rez= QString("%1 %2").arg(rez, e->screenReaderInfo());
             }
             if (e->type() == ElementType::MARKER) {
                 const Marker* m1 = toMarker(e);
                 if (m1->markerType() == Marker::Type::FINE) {
-                    rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
+                    rez = QString("%1 %2").arg(rez, e->screenReaderInfo());
                 }
             }
         }
@@ -1808,7 +1805,7 @@ QString BarLine::accessibleExtraInfo() const
                     if (toMarker(e)->markerType() == Marker::Type::FINE) {
                         continue;             //added above^
                     }
-                    rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
+                    rez = QString("%1 %2").arg(rez, e->screenReaderInfo());
                 }
             }
         }
@@ -1824,10 +1821,10 @@ QString BarLine::accessibleExtraInfo() const
         }
         if (s->type() == ElementType::VOLTA) {
             if (s->tick() == tick) {
-                rez = QObject::tr("%1 Start of %2").arg(rez).arg(s->screenReaderInfo());
+                rez = QObject::tr("%1 Start of %2").arg(rez, s->screenReaderInfo());
             }
             if (s->tick2() == tick) {
-                rez = QObject::tr("%1 End of %2").arg(rez).arg(s->screenReaderInfo());
+                rez = QObject::tr("%1 End of %2").arg(rez, s->screenReaderInfo());
             }
         }
     }

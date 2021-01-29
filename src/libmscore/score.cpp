@@ -424,7 +424,7 @@ void Score::onElementDestruction(Element* e)
     }
     score->selection().remove(e);
     score->cmdState().unsetElement(e);
-    for (MuseScoreView* v : score->viewer) {
+    for (MuseScoreView* v : qAsConst(score->viewer)) {
         v->onElementDestruction(e);
     }
 }
@@ -462,7 +462,7 @@ void Score::fixTicks()
         return;
     }
 
-    for (Staff* staff : _staves) {
+    for (Staff* staff : qAsConst(_staves)) {
         staff->clearTimeSig();
     }
 
@@ -1036,7 +1036,7 @@ QList<System*> Score::searchSystem(const QPointF& pos, const System* preferredSy
 Measure* Score::searchMeasure(const QPointF& p, const System* preferredSystem, qreal spacingFactor, qreal preferredSpacingFactor) const
 {
     QList<System*> systems = searchSystem(p, preferredSystem, spacingFactor, preferredSpacingFactor);
-    for (System* system : systems) {
+    for (System* system : qAsConst(systems)) {
         qreal x = p.x() - system->canvasPos().x();
         for (MeasureBase* mb : system->measures()) {
             if (mb->isMeasure() && (x < (mb->x() + mb->bbox().width()))) {
@@ -1228,8 +1228,7 @@ bool Score::getPosition(Position* pos, const QPointF& p, int voice) const
     const Fraction tick = segment->tick();
     const qreal mag     = s->staffMag(tick);
     // in TABs, step from one string to another; in other staves, step on and between lines
-    qreal lineDist = s->staffType(tick)->lineDistance().val() * (s->isTabStaff(measure->tick()) ? 1 : .5) * mag
-                     * spatium();
+    qreal lineDist = s->staffType(tick)->lineDistance().val() * (s->isTabStaff(measure->tick()) ? 1 : .5) * mag * spatium();
 
     const qreal yOff = sstaff->yOffset();  // Get system staff vertical offset (usually for 1-line staves)
     pos->line  = lrint((pppp.y() - sstaff->bbox().y() - yOff) / lineDist);
@@ -1309,7 +1308,7 @@ void Score::spatiumChanged(qreal oldValue, qreal newValue)
     data[0] = oldValue;
     data[1] = newValue;
     scanElements(data, spatiumHasChanged, true);
-    for (Staff* staff : _staves) {
+    for (Staff* staff : qAsConst(_staves)) {
         staff->spatiumChanged(oldValue, newValue);
     }
     _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, newValue / SPATIUM20);
@@ -2833,7 +2832,7 @@ void Score::cmdConcertPitchChanged(bool flag)
 {
     undoChangeStyleVal(Sid::concertPitch, flag);         // change style flag
 
-    for (Staff* staff : _staves) {
+    for (Staff* staff : qAsConst(_staves)) {
         if (staff->staffType(Fraction(0,1))->group() == StaffGroup::PERCUSSION) {         // TODO
             continue;
         }
@@ -2852,8 +2851,7 @@ void Score::cmdConcertPitchChanged(bool flag)
 
         transposeKeys(staffIdx, staffIdx + 1, Fraction(0,1), lastSegment()->tick(), interval, true, !flag);
 
-        for (Segment* segment = firstSegment(SegmentType::ChordRest); segment;
-             segment = segment->next1(SegmentType::ChordRest)) {
+        for (Segment* segment = firstSegment(SegmentType::ChordRest); segment; segment = segment->next1(SegmentType::ChordRest)) {
             interval = staff->part()->instrument(segment->tick())->transpose();
             if (!flag) {
                 interval.flip();
@@ -3563,7 +3561,7 @@ void Score::selectSimilar(Element* e, bool sameStaff)
     score->scanElements(&pattern, collectMatch);
 
     score->select(0, SelectType::SINGLE, 0);
-    for (Element* ee : pattern.el) {
+    for (Element* ee : qAsConst(pattern.el)) {
         score->select(ee, SelectType::ADD, 0);
     }
 }
@@ -3598,7 +3596,7 @@ void Score::selectSimilarInRange(Element* e)
     score->scanElementsInRange(&pattern, collectMatch);
 
     score->select(0, SelectType::SINGLE, 0);
-    for (Element* ee : pattern.el) {
+    for (Element* ee : qAsConst(pattern.el)) {
         score->select(ee, SelectType::ADD, 0);
     }
 }
@@ -4343,6 +4341,10 @@ ChordRest* Score::cmdTopStaff(ChordRest* cr)
 
 bool Score::hasLyrics()
 {
+    if (!firstMeasure()) {
+        return false;
+    }
+
     SegmentType st = SegmentType::ChordRest;
     for (Segment* seg = firstMeasure()->first(st); seg; seg = seg->next1(st)) {
         for (int i = 0; i < ntracks(); ++i) {
@@ -4361,6 +4363,10 @@ bool Score::hasLyrics()
 
 bool Score::hasHarmonies()
 {
+    if (!firstMeasure()) {
+        return false;
+    }
+
     SegmentType st = SegmentType::ChordRest;
     for (Segment* seg = firstMeasure()->first(st); seg; seg = seg->next1(st)) {
         for (Element* e : seg->annotations()) {
@@ -4486,8 +4492,7 @@ QString Score::extractLyrics()
                         QString lyric = l->plainText().trimmed();
                         if (l->syllabic() == Lyrics::Syllabic::SINGLE || l->syllabic() == Lyrics::Syllabic::END) {
                             result += lyric + " ";
-                        } else if (l->syllabic() == Lyrics::Syllabic::BEGIN
-                                   || l->syllabic() == Lyrics:: Syllabic::MIDDLE) {
+                        } else if (l->syllabic() == Lyrics::Syllabic::BEGIN || l->syllabic() == Lyrics:: Syllabic::MIDDLE) {
                             result += lyric;
                         }
                     }
@@ -4512,8 +4517,7 @@ int Score::keysig()
         Staff* st = staff(staffIdx);
         constexpr Fraction t(0,1);
         Key key = st->key(t);
-        if (st->staffType(t)->group() == StaffGroup::PERCUSSION || st->keySigEvent(t).custom()
-            || st->keySigEvent(t).isAtonal()) {                                                                                            // ignore percussion and custom / atonal key
+        if (st->staffType(t)->group() == StaffGroup::PERCUSSION || st->keySigEvent(t).custom() || st->keySigEvent(t).isAtonal()) {         // ignore percussion and custom / atonal key
             continue;
         }
         result = key;
@@ -4893,8 +4897,7 @@ QString Score::getTextStyleUserName(Tid tid)
     if (int(tid) >= int(Tid::USER1) && int(tid) <= int(Tid::USER12)) {
         int idx = int(tid) - int(Tid::USER1);
         Sid sid[] = { Sid::user1Name, Sid::user2Name, Sid::user3Name, Sid::user4Name, Sid::user5Name, Sid::user6Name,
-                      Sid::user7Name, Sid::user8Name, Sid::user9Name, Sid::user10Name, Sid::user11Name,
-                      Sid::user12Name };
+                      Sid::user7Name, Sid::user8Name, Sid::user9Name, Sid::user10Name, Sid::user11Name, Sid::user12Name };
         name = styleSt(sid[idx]);
     }
     if (name == "") {
@@ -5186,7 +5189,7 @@ void MasterScore::updateExpressive(Synthesizer* synth)
     SynthesizerGroup g = s.group("master");
 
     int method = 1;
-    for (IdValue idVal : g) {
+    for (const IdValue& idVal : g) {
         if (idVal.id == 4) {
             method = idVal.data.toInt();
             break;
@@ -5206,7 +5209,7 @@ void MasterScore::updateExpressive(Synthesizer* synth, bool expressive, bool for
         SynthesizerState s = synthesizerState();
         SynthesizerGroup g = s.group("master");
 
-        for (IdValue idVal : g) {
+        for (const IdValue& idVal : g) {
             if (idVal.id == 4) {
                 int method = idVal.data.toInt();
                 if (expressive == (method == 0)) {

@@ -741,7 +741,7 @@ QString ChordRest::durationUserName() const
     default:
         dotString += durationType().durationTypeUserName();
     }
-    return QString("%1%2").arg(tupletType).arg(dotString);
+    return QString("%1%2").arg(tupletType, dotString);
 }
 
 //---------------------------------------------------------
@@ -958,8 +958,7 @@ bool ChordRest::isGraceBefore() const
 {
     return isChord()
            && (toChord(this)->noteType() & (
-                   NoteType::ACCIACCATURA | NoteType::APPOGGIATURA | NoteType::GRACE4 | NoteType::GRACE16
-                   | NoteType::GRACE32
+                   NoteType::ACCIACCATURA | NoteType::APPOGGIATURA | NoteType::GRACE4 | NoteType::GRACE16 | NoteType::GRACE32
                    ));
 }
 
@@ -1223,7 +1222,7 @@ QString ChordRest::accessibleExtraInfo() const
         if (!score()->selectionFilter().canSelect(l)) {
             continue;
         }
-        rez = QString("%1 %2").arg(rez).arg(l->screenReaderInfo());
+        rez = QString("%1 %2").arg(rez, l->screenReaderInfo());
     }
 
     if (segment()) {
@@ -1232,7 +1231,7 @@ QString ChordRest::accessibleExtraInfo() const
                 continue;
             }
             if (e->track() == track()) {
-                rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
+                rez = QString("%1 %2").arg(rez, e->screenReaderInfo());
             }
         }
 
@@ -1250,20 +1249,20 @@ QString ChordRest::accessibleExtraInfo() const
 
             if (s->type() == ElementType::SLUR) {
                 if (s->tick() == tick() && s->track() == track()) {
-                    rez = QObject::tr("%1 Start of %2").arg(rez).arg(s->screenReaderInfo());
+                    rez = QObject::tr("%1 Start of %2").arg(rez, s->screenReaderInfo());
                 }
                 if (s->tick2() == tick() && s->track2() == track()) {
-                    rez = QObject::tr("%1 End of %2").arg(rez).arg(s->screenReaderInfo());
+                    rez = QObject::tr("%1 End of %2").arg(rez, s->screenReaderInfo());
                 }
             } else if (s->staffIdx() == staffIdx()) {
                 bool start = s->tick() == tick();
                 bool end   = s->tick2() == tick() + ticks();
                 if (start && end) {
-                    rez = QObject::tr("%1 Start and end of %2").arg(rez).arg(s->screenReaderInfo());
+                    rez = QObject::tr("%1 Start and end of %2").arg(rez, s->screenReaderInfo());
                 } else if (start) {
-                    rez = QObject::tr("%1 Start of %2").arg(rez).arg(s->screenReaderInfo());
+                    rez = QObject::tr("%1 Start of %2").arg(rez, s->screenReaderInfo());
                 } else if (end) {
-                    rez = QObject::tr("%1 End of %2").arg(rez).arg(s->screenReaderInfo());
+                    rez = QObject::tr("%1 End of %2").arg(rez, s->screenReaderInfo());
                 }
             }
         }
@@ -1312,8 +1311,7 @@ Shape ChordRest::shape() const
             qreal lmargin = score()->styleS(Sid::lyricsMinDistance).val() * spatium() * 0.5;
             qreal rmargin = lmargin;
             Lyrics::Syllabic syl = l->syllabic();
-            if ((syl == Lyrics::Syllabic::BEGIN || syl == Lyrics::Syllabic::MIDDLE)
-                && score()->styleB(Sid::lyricsDashForce)) {
+            if ((syl == Lyrics::Syllabic::BEGIN || syl == Lyrics::Syllabic::MIDDLE) && score()->styleB(Sid::lyricsDashForce)) {
                 rmargin = qMax(rmargin, styleP(Sid::lyricsDashMinLength));
             }
             // for horizontal spacing we only need the lyrics width:

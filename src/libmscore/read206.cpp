@@ -632,10 +632,8 @@ void readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, std::map<Si
                 qDebug("User style index %d outside of range.", idx);
                 return;
             }
-            Sid sid[]
-                = { Sid::user1Name, Sid::user2Name, Sid::user3Name, Sid::user4Name, Sid::user5Name, Sid::user6Name,
-                    Sid::user7Name, Sid::user8Name, Sid::user9Name, Sid::user10Name, Sid::user11Name,
-                    Sid::user12Name };
+            Sid sid[] = { Sid::user1Name, Sid::user2Name, Sid::user3Name, Sid::user4Name, Sid::user5Name, Sid::user6Name,
+                          Sid::user7Name, Sid::user8Name, Sid::user9Name, Sid::user10Name, Sid::user11Name, Sid::user12Name };
             style->set(sid[idx], name);
         }
     }
@@ -2454,7 +2452,7 @@ static void readVolta206(XmlReader& e, Volta* volta)
             QString s = e.readElementText();
             QStringList sl = s.split(",", Qt::SkipEmptyParts);
             volta->endings().clear();
-            for (const QString& l : sl) {
+            for (const QString& l : qAsConst(sl)) {
                 int i = l.simplified().toInt();
                 volta->endings().append(i);
             }
@@ -3533,8 +3531,7 @@ static void readStaffContent(Score* score, XmlReader& e)
 
             if (tag == "Measure") {
                 if (lastReadBox) {
-                    lastReadBox->setBottomGap(lastReadBox->bottomGap() + lastReadBox->propertyDefault(
-                                                  Pid::BOTTOM_GAP).toReal());
+                    lastReadBox->setBottomGap(lastReadBox->bottomGap() + lastReadBox->propertyDefault(Pid::BOTTOM_GAP).toReal());
                     lastReadBox = nullptr;
                 }
                 readMeasureLast = true;
@@ -3698,8 +3695,7 @@ static void readStyle(MStyle* style, XmlReader& e)
             // but treat as "old" (114) score just in case
             style->set(Sid::chordStyle, QVariant(QString("custom")));
             style->set(Sid::chordsXmlFile, QVariant(true));
-            qDebug("StyleData::load: custom chord description file %s with chordStyle == std",
-                   qPrintable(newChordDescriptionFile));
+            qDebug("StyleData::load: custom chord description file %s with chordStyle == std", qPrintable(newChordDescriptionFile));
         }
         if (style->value(Sid::chordStyle).toString() == "custom") {
             style->setCustomChordList(true);

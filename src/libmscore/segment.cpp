@@ -2171,9 +2171,7 @@ void Segment::createShape(int staffIdx)
     Shape& s = _shapes[staffIdx];
     s.clear();
 
-    if (segmentType()
-        & (SegmentType::BarLine | SegmentType::EndBarLine | SegmentType::StartRepeatBarLine
-           | SegmentType::BeginBarLine)) {
+    if (segmentType() & (SegmentType::BarLine | SegmentType::EndBarLine | SegmentType::StartRepeatBarLine | SegmentType::BeginBarLine)) {
         setVisible(true);
         BarLine* bl = toBarLine(element(staffIdx * VOICES));
         if (bl) {

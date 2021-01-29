@@ -424,8 +424,7 @@ void FretDiagram::draw(QPainter* painter) const
     if (_fretOffset > 0) {
         qreal fretNumMag = score()->styleD(Sid::fretNumMag);
         QFont scaledFont(font);
-        scaledFont.setPointSizeF(font.pointSize() * _userMag * (spatium() / SPATIUM20)
-                                 * MScore::pixelRatio* fretNumMag);
+        scaledFont.setPointSizeF(font.pointSize() * _userMag * (spatium() / SPATIUM20) * MScore::pixelRatio* fretNumMag);
         painter->setFont(scaledFont);
         QString text = QString("%1").arg(_fretOffset + 1);
 
@@ -552,9 +551,7 @@ void FretDiagram::layout()
         int si     = staffIdx();
 
         SysStaff* ss = m->system()->staff(si);
-        QRectF r
-            = _harmony->bbox().translated(m->pos() + s->pos() + pos() + _harmony->pos()
-                                          + QPointF(_harmony->xShapeOffset(), 0.0));
+        QRectF r     = _harmony->bbox().translated(m->pos() + s->pos() + pos() + _harmony->pos() + QPointF(_harmony->xShapeOffset(), 0.0));
 
         qreal minDistance = _harmony->minDistance().val() * spatium();
         SkylineLine sk(false);
@@ -678,8 +675,7 @@ void FretDiagram::writeOld(XmlWriter& xml) const
         FretItem::Barre b = i.second;
         if (b.exists()) {
             int fret = i.first;
-            if (fret <= lowestDotFret && b.endString == -1
-                && !(fret == lowestDotFret && b.startString > furthestLeftLowestDot)) {
+            if (fret <= lowestDotFret && b.endString == -1 && !(fret == lowestDotFret && b.startString > furthestLeftLowestDot)) {
                 barreStartString = b.startString;
                 barreFret = fret;
                 break;
@@ -1002,8 +998,7 @@ void FretDiagram::setBarre(int string, int fret, bool add /*= false*/)
 //   undoSetFretDot
 //---------------------------------------------------------
 
-void FretDiagram::undoSetFretDot(int _string, int _fret, bool _add /*= true*/,
-                                 FretDotType _dtype /*= FretDotType::NORMAl*/)
+void FretDiagram::undoSetFretDot(int _string, int _fret, bool _add /*= true*/, FretDotType _dtype /*= FretDotType::NORMAl*/)
 {
     for (ScoreElement* e : linkList()) {
         FretDiagram* fd = toFretDiagram(e);
@@ -1472,9 +1467,8 @@ void FretDiagram::endEditDrag(EditData& editData)
 
 QString FretDiagram::accessibleInfo() const
 {
-    QString chordName = _harmony ? QObject::tr("with chord symbol %1").arg(_harmony->harmonyName()) : QObject::tr(
-        "without chord symbol");
-    return QString("%1 %2").arg(userName()).arg(chordName);
+    QString chordName = _harmony ? QObject::tr("with chord symbol %1").arg(_harmony->harmonyName()) : QObject::tr("without chord symbol");
+    return QString("%1 %2").arg(userName(), chordName);
 }
 
 //---------------------------------------------------------
@@ -1536,7 +1530,7 @@ QString FretDiagram::screenReaderInfo() const
         //: Omit the "%n " for the singular translation (and the "(s)" too)
         QString dotsInfo = QObject::tr("%n dot(s) on fret(s) %1", "", dotsCount).arg(fretInfo);
 
-        detailedInfo = QString("%1 %2 %3 %4").arg(detailedInfo).arg(stringIdent).arg(markerName).arg(dotsInfo);
+        detailedInfo = QString("%1 %2 %3 %4").arg(detailedInfo, stringIdent, markerName, dotsInfo);
     }
 
     QString barreInfo;
@@ -1558,26 +1552,25 @@ QString FretDiagram::screenReaderInfo() const
                 endPart = QObject::tr("and ending string %1").arg(b.endString + 1);
             }
 
-            newBarreInfo = QObject::tr("partial barré %1 %2 %3").arg(fretInfo).arg(startPart).arg(endPart);
+            newBarreInfo = QObject::tr("partial barré %1 %2 %3").arg(fretInfo, startPart, endPart);
         }
 
-        barreInfo = QString("%1 %2").arg(barreInfo).arg(newBarreInfo);
+        barreInfo = QString("%1 %2").arg(barreInfo, newBarreInfo);
     }
 
-    detailedInfo = QString("%1 %2").arg(detailedInfo).arg(barreInfo);
+    detailedInfo = QString("%1 %2").arg(detailedInfo, barreInfo);
 
     if (detailedInfo.trimmed().length() == 0) {
         detailedInfo = QObject::tr("no content");
     }
 
-    QString chordName
-        = _harmony ? QObject::tr("with chord symbol %1").arg(_harmony->generateScreenReaderInfo()) : QObject::tr(
-              "without chord symbol");
-    QString basicInfo = QString("%1 %2").arg(userName()).arg(chordName);
+    QString chordName = _harmony ? QObject::tr("with chord symbol %1").arg(_harmony->generateScreenReaderInfo()) : QObject::tr(
+        "without chord symbol");
+    QString basicInfo = QString("%1 %2").arg(userName(), chordName);
 
     QString generalInfo = QObject::tr("%n string(s) total", "", _strings);
 
-    QString res = QString("%1 %2 %3").arg(basicInfo).arg(generalInfo).arg(detailedInfo);
+    QString res = QString("%1 %2 %3").arg(basicInfo, generalInfo, detailedInfo);
 
     return res;
 }

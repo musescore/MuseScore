@@ -167,6 +167,7 @@ const RealizedHarmony::PitchMap RealizedHarmony::generateNotes(int rootTpc, int 
     break;
     case Voicing::FOUR_NOTE:
     case Voicing::SIX_NOTE:
+        //FALLTHROUGH
     {
         //four/six note voicing, drop every other note
         PitchMap relIntervals = getIntervals(rootTpc, literal);
@@ -219,8 +220,7 @@ void RealizedHarmony::update(int rootTpc, int bassTpc, int transposeOffset /*= 0
     //otherwise checked by RealizedHarmony. This saves us 3 ints of space, but
     //has the added risk
     if (!_dirty) {
-        Q_ASSERT(_harmony->harmonyType() != HarmonyType::STANDARD
-                 || (_notes.first() == rootTpc || _notes.first() == bassTpc));
+        Q_ASSERT(_harmony->harmonyType() != HarmonyType::STANDARD || (_notes.first() == rootTpc || _notes.first() == bassTpc));
         return;
     }
 
@@ -263,8 +263,7 @@ Fraction RealizedHarmony::getActualDuration(int utick, HDuration durationType) c
     case HDuration::STOP_AT_MEASURE_END:
         return _harmony->ticksTillNext(utick, true);
         break;
-    case HDuration::SEGMENT_DURATION:
-    {
+    case HDuration::SEGMENT_DURATION: {
         Segment* s = _harmony->getParentSeg();
         if (s) {
             // TODO - use duration of chordrest on this segment / track

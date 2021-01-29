@@ -727,9 +727,8 @@ bool Element::readProperties(XmlReader& e)
                 if (linked->type() == type()) {
                     linkTo(linked);
                 } else {
-                    qWarning(
-                        "Element::readProperties: linked elements have different types: %s, %s. Input file corrupted?",
-                        name(), linked->name());
+                    qWarning("Element::readProperties: linked elements have different types: %s, %s. Input file corrupted?",
+                             name(), linked->name());
                 }
             }
             if (!_links) {
@@ -1383,8 +1382,7 @@ bool Element::setProperty(Pid propertyId, const QVariant& v)
             return parent()->setProperty(propertyId, v);
         }
 
-        qDebug("%s unknown <%s>(%d), data <%s>", name(), propertyName(propertyId), int(propertyId),
-               qPrintable(v.toString()));
+        qDebug("%s unknown <%s>(%d), data <%s>", name(), propertyName(propertyId), int(propertyId), qPrintable(v.toString()));
         return false;
     }
     triggerLayout();
@@ -2182,7 +2180,7 @@ void Element::endDrag(EditData& ed)
     if (!eed) {
         return;
     }
-    for (PropertyData pd : eed->propertyData) {
+    for (const PropertyData& pd : qAsConst(eed->propertyData)) {
         setPropertyFlags(pd.id, pd.f);     // reset initial property flags state
         PropertyFlags f = pd.f;
         if (f == PropertyFlags::STYLED) {

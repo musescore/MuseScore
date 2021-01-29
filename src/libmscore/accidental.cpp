@@ -43,7 +43,7 @@ static Acc accList[] = {
     Acc(AccidentalVal::FLAT2,      0,   SymId::accidentalDoubleFlat),   // FLAT2
     Acc(AccidentalVal::SHARP3,     0,   SymId::accidentalTripleSharp),  // SHARP3
     Acc(AccidentalVal::FLAT3,      0,   SymId::accidentalTripleFlat),   // FLAT3
-    Acc(AccidentalVal::FLAT,       0, SymId::accidentalNaturalFlat),    // NATURAL_FLAT
+    Acc(AccidentalVal::FLAT,       0,   SymId::accidentalNaturalFlat),  // NATURAL_FLAT
     Acc(AccidentalVal::SHARP,      0,   SymId::accidentalNaturalSharp), // NATURAL_SHARP
     Acc(AccidentalVal::SHARP2,     0,   SymId::accidentalSharpSharp),   // SHARP_SHARP
 
@@ -67,7 +67,7 @@ static Acc accList[] = {
     Acc(AccidentalVal::NATURAL,   50,   SymId::accidentalQuarterToneSharpStein),         // SHARP_SLASH
     Acc(AccidentalVal::NATURAL,  150,   SymId::accidentalThreeQuarterTonesSharpStein),   // SHARP_SLASH4
 
-    //Arel-Ezgi-Uzdilek (AEU)
+    // Arel-Ezgi-Uzdilek (AEU)
     Acc(AccidentalVal::NATURAL,    0,   SymId::accidentalBuyukMucennebFlat),    // FLAT_SLASH2
     Acc(AccidentalVal::NATURAL,    0,   SymId::accidentalBakiyeFlat),           // FLAT_SLASH
     Acc(AccidentalVal::NATURAL,    0,   SymId::accidentalKucukMucennebSharp),   // SHARP_SLASH3
@@ -353,7 +353,7 @@ void Accidental::layout()
     // TODO: remove Accidental in layout()
     // don't show accidentals for tab or slash notation
     if (onTabStaff() || (note() && note()->fixed())) {
-        setbbox(r);
+        setbbox(QRectF());
         return;
     }
 
@@ -592,6 +592,6 @@ QString Accidental::propertyUserValue(Pid pid) const
 
 QString Accidental::accessibleInfo() const
 {
-    return QString("%1: %2").arg(Element::accessibleInfo()).arg(Accidental::subtypeUserName());
+    return QString("%1: %2").arg(Element::accessibleInfo(), Accidental::subtypeUserName());
 }
 }

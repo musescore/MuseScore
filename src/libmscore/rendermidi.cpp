@@ -94,7 +94,7 @@ bool graceNotesMerged(Chord* chord);
 
 void Score::updateSwing()
 {
-    for (Staff* s : _staves) {
+    for (Staff* s : qAsConst(_staves)) {
         s->clearSwingList();
     }
     Measure* fm = firstMeasure();
@@ -118,7 +118,7 @@ void Score::updateSwing()
             sp.swingRatio = st->swingParameters()->swingRatio;
             sp.swingUnit = st->swingParameters()->swingUnit;
             if (st->systemFlag()) {
-                for (Staff* sta : _staves) {
+                for (Staff* sta : qAsConst(_staves)) {
                     sta->insertIntoSwingList(s->tick(),sp);
                 }
             } else {
@@ -134,7 +134,7 @@ void Score::updateSwing()
 
 void Score::updateCapo()
 {
-    for (Staff* s : _staves) {
+    for (Staff* s : qAsConst(_staves)) {
         s->clearCapoList();
     }
     Measure* fm = firstMeasure();
@@ -687,7 +687,7 @@ static void renderHarmony(EventMap* events, Measure const* m, Harmony* h, int ti
     ev.setTuning(0.0);
 
     //add play events
-    for (int p : pitches) {
+    for (int p : qAsConst(pitches)) {
         ev.setPitch(p);
         ev.setVelo(velocity);
         events->insert(std::pair<int, NPlayEvent>(onTime, ev));
@@ -944,7 +944,7 @@ void Score::updateHairpin(Hairpin* h)
         }
         break;
     case Dynamic::Range::SYSTEM:
-        for (Staff* s : _staves) {
+        for (Staff* s : qAsConst(_staves)) {
             s->velocities().addRamp(tick, tick2, veloChange, method, direction);
         }
         break;
@@ -965,7 +965,7 @@ void Score::updateVelo()
         return;
     }
 
-    for (Staff* st : _staves) {
+    for (Staff* st : qAsConst(_staves)) {
         st->velocities().clear();
         st->velocityMultiplications().clear();
     }
@@ -1085,7 +1085,7 @@ void Score::updateVelo()
         }
     }
 
-    for (Staff* st : _staves) {
+    for (Staff* st : qAsConst(_staves)) {
         st->velocities().cleanup();
         st->velocityMultiplications().cleanup();
     }
@@ -1460,8 +1460,7 @@ void renderArpeggio(Chord* chord, QList<NoteEventList>& ell)
         l = 2 * l / 3;
     }
     int start, end, step;
-    bool up = chord->arpeggio()->arpeggioType() != ArpeggioType::DOWN
-              && chord->arpeggio()->arpeggioType() != ArpeggioType::DOWN_STRAIGHT;
+    bool up = chord->arpeggio()->arpeggioType() != ArpeggioType::DOWN && chord->arpeggio()->arpeggioType() != ArpeggioType::DOWN_STRAIGHT;
     if (up) {
         start = 0;
         end   = notes;
@@ -1620,8 +1619,7 @@ int articulationExcursion(Note* noteL, Note* noteR, int deltastep)
 int totalTiedNoteTicks(Note* note)
 {
     Fraction total = note->chord()->actualTicks();
-    while (note->tieFor() && note->tieFor()->endNote()
-           && (note->chord()->tick() < note->tieFor()->endNote()->chord()->tick())) {
+    while (note->tieFor() && note->tieFor()->endNote() && (note->chord()->tick() < note->tieFor()->endNote()->chord()->tick())) {
         note = note->tieFor()->endNote();
         total += note->chord()->actualTicks();
     }
@@ -1879,8 +1877,7 @@ std::vector<OrnamentExcursion> excursions = {
 //   renderNoteArticulation
 //---------------------------------------------------------
 
-bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, SymId articulationType,
-                            MScore::OrnamentStyle ornamentStyle)
+bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, SymId articulationType, MScore::OrnamentStyle ornamentStyle)
 {
     if (!note->staff()->isPitchedStaff(note->tick())) { // not enough info in tab staff
         return false;
@@ -1901,8 +1898,7 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, S
 //   renderNoteArticulation
 //---------------------------------------------------------
 
-bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, Trill::Type trillType,
-                            MScore::OrnamentStyle ornamentStyle)
+bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, Trill::Type trillType, MScore::OrnamentStyle ornamentStyle)
 {
     std::map<Trill::Type,SymId> articulationMap = {
         { Trill::Type::TRILL_LINE,      SymId::ornamentTrill },

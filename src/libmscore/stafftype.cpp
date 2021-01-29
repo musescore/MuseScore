@@ -235,8 +235,7 @@ void StaffType::write(XmlWriter& xml) const
         xml.tag("timesig", _genTimesig);
     }
     if (_group == StaffGroup::STANDARD) {
-        xml.tag("noteheadScheme", NoteHead::scheme2name(_noteHeadScheme),
-                NoteHead::scheme2name(NoteHead::Scheme::HEAD_NORMAL));
+        xml.tag("noteheadScheme", NoteHead::scheme2name(_noteHeadScheme), NoteHead::scheme2name(NoteHead::Scheme::HEAD_NORMAL));
     }
     if (_group == StaffGroup::STANDARD || _group == StaffGroup::PERCUSSION) {
         if (!_genKeysig) {
@@ -579,8 +578,7 @@ qreal StaffType::chordRestStemPosY(const ChordRest* chordRest) const
     // if stems beside staff, position are fixed, but take into account delta for half notes
     qreal delta                                 // displacement for half note stems (if used)
         =   // if half notes have not a short stem OR not a half note => 0
-          (minimStyle() != TablatureMinimStyle::SHORTER
-           || chordRest->durationType().type() != TDuration::DurationType::V_HALF)
+          (minimStyle() != TablatureMinimStyle::SHORTER || chordRest->durationType().type() != TDuration::DurationType::V_HALF)
           ? 0.0
           :       // if stem is up, displace of half stem length down (positive)
                   // if stem is down, displace of half stem length up (negative)
@@ -590,10 +588,8 @@ qreal StaffType::chordRestStemPosY(const ChordRest* chordRest) const
     if (!onLines() && chordRest->up()) {
         delta -= _lineDistance.val() * 0.5;
     }
-    qreal y
-        = (chordRest->up() ? STAFFTYPE_TAB_DEFAULTSTEMPOSY_UP : (_lines - 1) * _lineDistance.val()
-           + STAFFTYPE_TAB_DEFAULTSTEMPOSY_DN)
-          + delta;
+    qreal y = (chordRest->up() ? STAFFTYPE_TAB_DEFAULTSTEMPOSY_UP : (_lines - 1) * _lineDistance.val() + STAFFTYPE_TAB_DEFAULTSTEMPOSY_DN)
+              + delta;
     return y;
 }
 
@@ -643,8 +639,7 @@ qreal StaffType::chordStemLength(const Chord* chord) const
     }
     // if stems beside staff, length is fixed, but take into account shorter half note stems
     else {
-        bool shrt = (minimStyle() == TablatureMinimStyle::SHORTER)
-                    && (chord->durationType().type() == TDuration::DurationType::V_HALF);
+        bool shrt = (minimStyle() == TablatureMinimStyle::SHORTER) && (chord->durationType().type() == TDuration::DurationType::V_HALF);
         stemLen = (stemsDown() ? STAFFTYPE_TAB_DEFAULTSTEMLEN_DN : STAFFTYPE_TAB_DEFAULTSTEMLEN_UP)
                   * (shrt ? STAFFTYPE_TAB_SHORTSTEMRATIO : 1.0);
     }
@@ -1242,8 +1237,7 @@ bool StaffType::readConfigFile(const QString& fileName)
     QFile f(path);
 
     if (!fi.exists() || !f.open(QIODevice::ReadOnly)) {
-        MScore::lastError = QObject::tr("Cannot open tablature font description:\n%1\n%2").arg(f.fileName()).arg(
-            f.errorString());
+        MScore::lastError = QObject::tr("Cannot open tablature font description:\n%1\n%2").arg(f.fileName(), f.errorString());
         qDebug("StaffTypeTablature::readConfigFile failed: <%s>", qPrintable(path));
         return false;
     }

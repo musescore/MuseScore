@@ -111,7 +111,7 @@ int SynthesizerState::ccToUse() const
     int method = 1;
     int cc = -1;
 
-    for (IdValue idVal : g) {
+    for (const IdValue& idVal : g) {
         if (idVal.id == 4) {
             method = idVal.data.toInt();
         } else if (idVal.id == 5) {
@@ -151,7 +151,7 @@ int SynthesizerState::method() const
 
     int method = -1;
 
-    for (IdValue idVal : g) {
+    for (const IdValue& idVal : g) {
         if (idVal.id == 4) {
             method = idVal.data.toInt();
             break;
