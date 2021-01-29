@@ -312,9 +312,7 @@ void TimeSig::layout()
     } else {
         if (_numeratorString.isEmpty()) {
             ns = toTimeSigString(_numeratorString.isEmpty() ? QString::number(_sig.numerator()) : _numeratorString);
-            ds
-                = toTimeSigString(_denominatorString.isEmpty() ? QString::number(
-                                      _sig.denominator()) : _denominatorString);
+            ds = toTimeSigString(_denominatorString.isEmpty() ? QString::number(_sig.denominator()) : _denominatorString);
         } else {
             ns = toTimeSigString(_numeratorString);
             ds = toTimeSigString(_denominatorString);
@@ -571,15 +569,15 @@ QString TimeSig::accessibleInfo() const
     QString timeSigString;
     switch (timeSigType()) {
     case TimeSigType::FOUR_FOUR:
-        timeSigString = QObject::tr("Common time");
+        timeSigString = qApp->translate("symUserNames", "Common time");
         break;
     case TimeSigType::ALLA_BREVE:
-        timeSigString = QObject::tr("Cut time");
+        timeSigString = qApp->translate("symUserNames", "Cut time");
         break;
     default:
-        timeSigString = QObject::tr("%1/%2 time").arg(QString::number(numerator())).arg(QString::number(denominator()));
+        timeSigString = QObject::tr("%1/%2 time").arg(QString::number(numerator()), QString::number(denominator()));
     }
-    return QString("%1: %2").arg(Element::accessibleInfo()).arg(timeSigString);
+    return QString("%1: %2").arg(Element::accessibleInfo(), timeSigString);
 }
 
 //---------------------------------------------------------

@@ -329,7 +329,7 @@ void Score::update(bool resetCmdState)
         CmdState& cs = ms->cmdState();
         if (updateAll || cs.updateAll()) {
             for (Score* s : scoreList()) {
-                for (MuseScoreView* v : s->viewer) {
+                for (MuseScoreView* v : qAsConst(s->viewer)) {
                     v->updateAll();
                 }
             }
@@ -337,7 +337,7 @@ void Score::update(bool resetCmdState)
             // updateRange updates only current score
             qreal d = spatium() * .5;
             _updateState.refresh.adjust(-d, -d, 2 * d, 2 * d);
-            for (MuseScoreView* v : viewer) {
+            for (MuseScoreView* v : qAsConst(viewer)) {
                 v->dataChanged(_updateState.refresh);
             }
             _updateState.refresh = QRectF();
@@ -367,7 +367,7 @@ void Score::update(bool resetCmdState)
 
 void Score::deletePostponed()
 {
-    for (ScoreElement* e : _updateState._deleteList) {
+    for (ScoreElement* e : qAsConst(_updateState._deleteList)) {
         if (e->isSystem()) {
             System* s = toSystem(e);
             for (SpannerSegment* ss : s->spannerSegments()) {
@@ -1380,7 +1380,7 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
     Chord* oc      = 0;
 
     bool first = true;
-    for (Fraction f2 : flist) {
+    for (Fraction f2 : qAsConst(flist)) {
         f  -= f2;
         makeGap(cr1->segment(), cr1->track(), f2, tuplet, first);
 
@@ -1534,7 +1534,7 @@ void Score::upDown(bool up, UpDownMode mode)
 {
     QList<Note*> el = selection().uniqueNotes();
 
-    for (Note* oNote : el) {
+    for (Note* oNote : qAsConst(el)) {
         Fraction tick     = oNote->chord()->tick();
         Staff* staff = oNote->staff();
         Part* part   = staff->part();
@@ -1673,7 +1673,7 @@ void Score::upDown(bool up, UpDownMode mode)
             // because they're now harder to be re-entered due to the revised note-input workflow
             if (mode != UpDownMode::OCTAVE) {
                 auto l = oNote->linkList();
-                for (ScoreElement* e : l) {
+                for (ScoreElement* e : qAsConst(l)) {
                     Note* ln = toNote(e);
                     if (ln->accidental()) {
                         undo(new RemoveElement(ln->accidental()));
@@ -2316,7 +2316,7 @@ bool Score::processMidiInput()
         //after relayout
         Element* e = inputState().cr();
         if (e) {
-            for (MuseScoreView* v : viewer) {
+            for (MuseScoreView* v : qAsConst(viewer)) {
                 v->adjustCanvasPosition(e, false);
             }
         }
@@ -2349,7 +2349,7 @@ Element* Score::move(const QString& cmd)
         cr = selection().lastChordRest();
     }
 
-    // no chord/rest found? look for another type of element
+    // no chord/rest found? look for another type of element,
     // but commands [empty-trailing-measure] and [top-staff] don't
     // necessarily need an active selection for appropriate functioning
     if (!cr && cmd != "empty-trailing-measure" && cmd != "top-staff") {
@@ -2569,7 +2569,7 @@ Element* Score::move(const QString& cmd)
             } else {
                 setPlayNote(false);
             }
-            for (MuseScoreView* view : viewer) {
+            for (MuseScoreView* view : qAsConst(viewer)) {
                 view->moveCursor();
             }
         } else {
@@ -3227,7 +3227,7 @@ void Score::cmdImplode()
         // first four non-empty tracks to win
         for (int track = startTrack; track < endTrack && full < VOICES; ++track) {
             Measure* m = startMeasure;
-            do{
+            do {
                 if (m->hasVoice(track) && !m->isOnlyRests(track)) {
                     tracks[full++] = track;
                     break;
@@ -3317,8 +3317,7 @@ void Score::cmdSlashFill()
                     // no chordrest or ordinary rest == OK to use voice
                     // if there are nothing but rests for duration of measure / selection
                     bool ok = true;
-                    for (Segment* ns = s->next(SegmentType::ChordRest); ns && ns != endSegment;
-                         ns = ns->next(SegmentType::ChordRest)) {
+                    for (Segment* ns = s->next(SegmentType::ChordRest); ns && ns != endSegment; ns = ns->next(SegmentType::ChordRest)) {
                         ChordRest* ncr = toChordRest(ns->element(track + voice));
                         if (ncr && ncr->type() == ElementType::CHORD) {
                             ok = false;
@@ -3781,9 +3780,7 @@ void Score::cmdPitchUp()
     if (el && el->isLyrics()) {
         cmdMoveLyrics(toLyrics(el), Direction::UP);
     } else if (el && (el->isArticulation() || el->isTextBase())) {
-        el->undoChangeProperty(Pid::OFFSET, el->offset() + QPointF(0.0,
-                                                                   -MScore::nudgeStep* el->spatium()),
-                               PropertyFlags::UNSTYLED);
+        el->undoChangeProperty(Pid::OFFSET, el->offset() + QPointF(0.0, -MScore::nudgeStep* el->spatium()), PropertyFlags::UNSTYLED);
     } else if (el && el->isRest()) {
         cmdMoveRest(toRest(el), Direction::UP);
     } else {
@@ -3801,9 +3798,7 @@ void Score::cmdPitchDown()
     if (el && el->isLyrics()) {
         cmdMoveLyrics(toLyrics(el), Direction::DOWN);
     } else if (el && (el->isArticulation() || el->isTextBase())) {
-        el->undoChangeProperty(Pid::OFFSET, el->offset() + QPointF(0.0,
-                                                                   MScore::nudgeStep* el->spatium()),
-                               PropertyFlags::UNSTYLED);
+        el->undoChangeProperty(Pid::OFFSET, el->offset() + QPointF(0.0, MScore::nudgeStep* el->spatium()), PropertyFlags::UNSTYLED);
     } else if (el && el->isRest()) {
         cmdMoveRest(toRest(el), Direction::DOWN);
     } else {
@@ -3838,9 +3833,7 @@ void Score::cmdPitchUpOctave()
 {
     Element* el = selection().element();
     if (el && (el->isArticulation() || el->isTextBase())) {
-        el->undoChangeProperty(Pid::OFFSET, el->offset() + QPointF(0.0,
-                                                                   -MScore::nudgeStep10* el->spatium()),
-                               PropertyFlags::UNSTYLED);
+        el->undoChangeProperty(Pid::OFFSET, el->offset() + QPointF(0.0, -MScore::nudgeStep10* el->spatium()), PropertyFlags::UNSTYLED);
     } else {
         upDown(true, UpDownMode::OCTAVE);
     }
@@ -3854,9 +3847,7 @@ void Score::cmdPitchDownOctave()
 {
     Element* el = selection().element();
     if (el && (el->isArticulation() || el->isTextBase())) {
-        el->undoChangeProperty(Pid::OFFSET, el->offset() + QPointF(0.0,
-                                                                   MScore::nudgeStep10* el->spatium()),
-                               PropertyFlags::UNSTYLED);
+        el->undoChangeProperty(Pid::OFFSET, el->offset() + QPointF(0.0, MScore::nudgeStep10* el->spatium()), PropertyFlags::UNSTYLED);
     } else {
         upDown(false, UpDownMode::OCTAVE);
     }
@@ -4193,8 +4184,7 @@ void Score::cmdAddPitch(const EditData& ed, int note, bool addFlag, bool insert)
             int curPitch = 60;
             if (is.segment()) {
                 Staff* staff = Score::staff(is.track() / VOICES);
-                Segment* seg
-                    = is.segment()->prev1(SegmentType::ChordRest | SegmentType::Clef | SegmentType::HeaderClef);
+                Segment* seg = is.segment()->prev1(SegmentType::ChordRest | SegmentType::Clef | SegmentType::HeaderClef);
                 while (seg) {
                     if (seg->isChordRestType()) {
                         Element* p = seg->element(is.track());
@@ -4390,6 +4380,7 @@ void Score::cmd(const QAction* a, EditData& ed)
         const char* name;
         std::function<void(Score* cs, EditData& ed)> cmd;
     };
+
     static const std::vector<ScoreCmd> cmdList {
         { "note-c",                     [](Score* cs, EditData& ed) { cs->cmdAddPitch(ed, 0, false, false); } },
         { "note-d",                     [](Score* cs, EditData& ed) { cs->cmdAddPitch(ed, 1, false, false); } },

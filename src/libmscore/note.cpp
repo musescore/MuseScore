@@ -1333,8 +1333,7 @@ void Note::draw(QPainter* painter) const
         const Staff* st = staff();
         const StaffType* tab = st->staffTypeForElement(this);
         if (tieBack() && !tab->showBackTied()) {
-            if (chord()->measure()->system() == tieBack()->startNote()->chord()->measure()->system()
-                && el().size() == 0) {
+            if (chord()->measure()->system() == tieBack()->startNote()->chord()->measure()->system() && el().size() == 0) {
                 // fret should be hidden, so return without drawing it
                 return;
             }
@@ -1342,8 +1341,7 @@ void Note::draw(QPainter* painter) const
         // draw background, if required (to hide a segment of string line or to show a fretting conflict)
         if (!tab->linesThrough() || fretConflict()) {
             qreal d  = spatium() * .1;
-            QRectF bb = QRectF(bbox().x() - d, tab->fretMaskY() * magS(), bbox().width() + 2 * d,
-                               tab->fretMaskH() * magS());
+            QRectF bb = QRectF(bbox().x() - d, tab->fretMaskY() * magS(), bbox().width() + 2 * d, tab->fretMaskH() * magS());
             // we do not know which viewer did this draw() call
             // so update all:
             if (!score()->getViewer().empty()) {
@@ -1898,8 +1896,7 @@ Element* Note::drop(EditData& data)
                 for (ScoreElement* se : *links()) {
                     se->undoChangeProperty(Pid::HEAD_GROUP, int(group));
                     Note* note = toNote(se);
-                    if (note->staff() && note->staff()->isTabStaff(ch->tick())
-                        && group == NoteHead::Group::HEAD_CROSS) {
+                    if (note->staff() && note->staff()->isTabStaff(ch->tick()) && group == NoteHead::Group::HEAD_CROSS) {
                         se->undoChangeProperty(Pid::GHOST, true);
                     }
                 }
@@ -1985,7 +1982,7 @@ Element* Note::drop(EditData& data)
 
     case ElementType::GLISSANDO:
     {
-        for (auto ee : _spannerFor) {
+        for (auto ee : qAsConst(_spannerFor)) {
             if (ee->type() == ElementType::GLISSANDO) {
                 qDebug("there is already a glissando");
                 delete e;
@@ -2137,7 +2134,7 @@ void Note::setDotY(Direction pos)
             score()->undoRemoveElement(_dots.back());
         }
     }
-    for (NoteDot* dot : _dots) {
+    for (NoteDot* dot : qAsConst(_dots)) {
         dot->layout();
         dot->rypos() = y;
     }
@@ -2221,7 +2218,7 @@ void Note::layout2()
         }
         // apply to dots
         qreal xx = x + d;
-        for (NoteDot* dot : _dots) {
+        for (NoteDot* dot : qAsConst(_dots)) {
             dot->rxpos() = xx;
             xx += dd;
         }
@@ -2415,10 +2412,10 @@ void Note::setTrack(int val)
             seg->setTrack(val);
         }
     }
-    for (Spanner* s : _spannerFor) {
+    for (Spanner* s : qAsConst(_spannerFor)) {
         s->setTrack(val);
     }
-    for (Spanner* s : _spannerBack) {
+    for (Spanner* s : qAsConst(_spannerBack)) {
         s->setTrack2(val);
     }
     for (Element* e : _el) {
@@ -2430,7 +2427,7 @@ void Note::setTrack(int val)
     if (!chord()) {     // if note is dragged with shift+ctrl
         return;
     }
-    for (NoteDot* dot : _dots) {
+    for (NoteDot* dot : qAsConst(_dots)) {
         dot->setTrack(val);
     }
 }
@@ -2653,7 +2650,7 @@ void Note::endDrag(EditData& ed)
         return;
     }
     for (Note* nn : tiedNotes()) {
-        for (const PropertyData& pd : ned->propertyData) {
+        for (const PropertyData& pd : qAsConst(ned->propertyData)) {
             setPropertyFlags(pd.id, pd.f);       // reset initial property flags state
             score()->undoPropertyChanged(nn, pd.id, pd.data);
         }
@@ -3157,7 +3154,7 @@ void Note::setScore(Score* s)
     if (_accidental) {
         _accidental->setScore(s);
     }
-    for (NoteDot* dot : _dots) {
+    for (NoteDot* dot : qAsConst(_dots)) {
         dot->setScore(s);
     }
     for (Element* el : _el) {
@@ -3189,9 +3186,7 @@ QString Note::accessibleInfo() const
     } else if (staff()->isDrumStaff(tick()) && drumset) {
         pitchName = qApp->translate("drumset", drumset->name(pitch()).toUtf8().constData());
     } else if (staff()->isTabStaff(tick())) {
-        pitchName
-            = QObject::tr("%1; String: %2; Fret: %3").arg(tpcUserName(false)).arg(QString::number(string() + 1)).arg(QString::number(
-                                                                                                                         fret()));
+        pitchName = QObject::tr("%1; String: %2; Fret: %3").arg(tpcUserName(false), QString::number(string() + 1), QString::number(fret()));
     } else {
         pitchName = tpcUserName(false);
         if (tuning() != 0) {
@@ -3238,13 +3233,11 @@ QString Note::screenReaderInfo() const
     } else if (staff()->isDrumStaff(tick()) && drumset) {
         pitchName = qApp->translate("drumset", drumset->name(pitch()).toUtf8().constData());
     } else if (staff()->isTabStaff(tick())) {
-        pitchName = QObject::tr("%1 String: %2 Fret: %3").arg(tpcUserName(true)).arg(QString::number(string() + 1)).arg(QString::number(
-                                                                                                                            fret()));
+        pitchName = QObject::tr("%1; String: %2; Fret: %3").arg(tpcUserName(true), QString::number(string() + 1), QString::number(fret()));
     } else {
         pitchName = tpcUserName(true);
     }
-    return QString("%1 %2 %3%4").arg(noteTypeUserName()).arg(pitchName).arg(duration).arg((chord()->isGrace() ? ""
-                                                                                           : QString("; %1").arg(voice)));
+    return QString("%1 %2 %3%4").arg(noteTypeUserName(), pitchName, duration, (chord()->isGrace() ? "" : QString("; %1").arg(voice)));
 }
 
 //---------------------------------------------------------
@@ -3255,22 +3248,22 @@ QString Note::accessibleExtraInfo() const
 {
     QString rez = "";
     if (accidental()) {
-        rez = QString("%1 %2").arg(rez).arg(accidental()->screenReaderInfo());
+        rez = QString("%1 %2").arg(rez, accidental()->screenReaderInfo());
     }
     if (!el().empty()) {
         for (Element* e : el()) {
             if (!score()->selectionFilter().canSelect(e)) {
                 continue;
             }
-            rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
+            rez = QString("%1 %2").arg(rez, e->screenReaderInfo());
         }
     }
     if (tieFor()) {
-        rez = QObject::tr("%1 Start of %2").arg(rez).arg(tieFor()->screenReaderInfo());
+        rez = QObject::tr("%1 Start of %2").arg(rez, tieFor()->screenReaderInfo());
     }
 
     if (tieBack()) {
-        rez = QObject::tr("%1 End of %2").arg(rez).arg(tieBack()->screenReaderInfo());
+        rez = QObject::tr("%1 End of %2").arg(rez, tieBack()->screenReaderInfo());
     }
 
     if (!spannerFor().empty()) {
@@ -3278,7 +3271,7 @@ QString Note::accessibleExtraInfo() const
             if (!score()->selectionFilter().canSelect(s)) {
                 continue;
             }
-            rez = QObject::tr("%1 Start of %2").arg(rez).arg(s->screenReaderInfo());
+            rez = QObject::tr("%1 Start of %2").arg(rez, s->screenReaderInfo());
         }
     }
     if (!spannerBack().empty()) {
@@ -3286,14 +3279,14 @@ QString Note::accessibleExtraInfo() const
             if (!score()->selectionFilter().canSelect(s)) {
                 continue;
             }
-            rez = QObject::tr("%1 End of %2").arg(rez).arg(s->screenReaderInfo());
+            rez = QObject::tr("%1 End of %2").arg(rez, s->screenReaderInfo());
         }
     }
 
     // only read extra information for top note of chord
     // (it is reached directly on next/previous element)
     if (this == chord()->upNote()) {
-        rez = QString("%1 %2").arg(rez).arg(chord()->accessibleExtraInfo());
+        rez = QString("%1 %2").arg(rez, chord()->accessibleExtraInfo());
     }
 
     return rez;
@@ -3398,7 +3391,7 @@ Element* Note::nextElement()
         } else if (tieValid(_tieFor)) {
             return _tieFor->frontSegment();
         } else if (!_spannerFor.empty()) {
-            for (auto i : _spannerFor) {
+            for (auto i : qAsConst(_spannerFor)) {
                 if (i->type() == ElementType::GLISSANDO) {
                     return i->spannerSegments().front();
                 }
@@ -3409,7 +3402,7 @@ Element* Note::nextElement()
 
     case ElementType::TIE_SEGMENT:
         if (!_spannerFor.empty()) {
-            for (auto i : _spannerFor) {
+            for (auto i : qAsConst(_spannerFor)) {
                 if (i->type() == ElementType::GLISSANDO) {
                     return i->spannerSegments().front();
                 }
@@ -3428,7 +3421,7 @@ Element* Note::nextElement()
             return _tieFor->frontSegment();
         }
         if (!_spannerFor.empty()) {
-            for (auto i : _spannerFor) {
+            for (auto i : qAsConst(_spannerFor)) {
                 if (i->isGlissando()) {
                     return i->spannerSegments().front();
                 }
@@ -3444,7 +3437,7 @@ Element* Note::nextElement()
             return _tieFor->frontSegment();
         }
         if (!_spannerFor.empty()) {
-            for (auto i : _spannerFor) {
+            for (auto i : qAsConst(_spannerFor)) {
                 if (i->isGlissando()) {
                     return i->spannerSegments().front();
                 }
@@ -3508,7 +3501,7 @@ Element* Note::prevElement()
 Element* Note::lastElementBeforeSegment()
 {
     if (!_spannerFor.empty()) {
-        for (auto i : _spannerFor) {
+        for (auto i : qAsConst(_spannerFor)) {
             if (i->type() == ElementType::GLISSANDO) {
                 return i->spannerSegments().front();
             }

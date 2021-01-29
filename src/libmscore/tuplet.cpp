@@ -199,6 +199,7 @@ void Tuplet::layout()
         } else {
             _number->setXmlText(QString("%1:%2").arg(_ratio.numerator()).arg(_ratio.denominator()));
         }
+
         bool small = true;
         for (const DurationElement* e : _elements) {
             if (e->isChordRest() && !toChordRest(e)->small()) {
@@ -731,8 +732,7 @@ public:
 Rect::Rect(const QPointF& p1, const QPointF& p2, qreal w)
 {
     qreal w2 = w * .5;
-    setCoords(qMin(p1.x(), p2.x()) - w2, qMin(p1.y(), p2.y()) - w2,  qMax(p1.x(), p2.x()) + w2, qMax(p1.y(),
-                                                                                                     p2.y()) + w2);
+    setCoords(qMin(p1.x(), p2.x()) - w2, qMin(p1.y(), p2.y()) - w2,  qMax(p1.x(), p2.x()) + w2, qMax(p1.y(), p2.y()) + w2);
 }
 
 //---------------------------------------------------------
@@ -1335,8 +1335,7 @@ void Tuplet::addMissingElements()
     }
     // calculate the tick where we would expect a tuplet of this duration to start
     // TODO: check:
-    expectedTick = elements().front()->tick()
-                   - Fraction::fromTicks(elements().front()->tick().ticks() % ticks().ticks());
+    expectedTick = elements().front()->tick() - Fraction::fromTicks(elements().front()->tick().ticks() % ticks().ticks());
     if (expectedTick != elements().front()->tick()) {
         // try to fill a hole at the beginning of the tuplet
         Fraction firstAvailableTick = measure()->tick();

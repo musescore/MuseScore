@@ -423,7 +423,6 @@ void PosLen::write(XmlWriter& xml, const char* name) const
 
 void PosLen::read(XmlReader& e)
 {
-    QString s;
     if (e.hasAttribute("tick")) {
         setType(TType::TICKS);
         setTick(e.intAttribute("tick"));

@@ -50,7 +50,7 @@ void Score::resetSystems(bool layoutAll, LayoutContext& lc)
 {
     Page* page = 0;
     if (layoutAll) {
-        for (System* s : _systems) {
+        for (System* s : qAsConst(_systems)) {
             for (SpannerSegment* ss : s->spannerSegments()) {
                 ss->setParent(0);
             }

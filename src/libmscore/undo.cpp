@@ -96,8 +96,7 @@ void updateNoteLines(Segment* segment, int track)
         return;
     }
     for (Segment* s = segment->next1(); s; s = s->next1()) {
-        if ((s->segmentType() & (SegmentType::Clef | SegmentType::HeaderClef)) && s->element(track)
-            && !s->element(track)->generated()) {
+        if ((s->segmentType() & (SegmentType::Clef | SegmentType::HeaderClef)) && s->element(track) && !s->element(track)->generated()) {
             break;
         }
         if (!s->isChordRestType()) {
@@ -139,7 +138,7 @@ UndoCommand::~UndoCommand()
 
 void UndoCommand::cleanup(bool undo)
 {
-    for (auto c : childList) {
+    for (auto c : qAsConst(childList)) {
         c->cleanup(undo);
     }
 }
@@ -227,7 +226,7 @@ bool UndoCommand::hasUnfilteredChildren(const std::vector<UndoCommand::Filter>& 
 void UndoCommand::filterChildren(UndoCommand::Filter f, Element* target)
 {
     QList<UndoCommand*> acceptedList;
-    for (UndoCommand* cmd : childList) {
+    for (UndoCommand* cmd : qAsConst(childList)) {
         if (cmd->isFiltered(f, target)) {
             delete cmd;
         } else {
@@ -271,7 +270,7 @@ UndoStack::UndoStack()
 UndoStack::~UndoStack()
 {
     int idx = 0;
-    for (auto c : list) {
+    for (auto c : qAsConst(list)) {
         c->cleanup(idx++ < curIdx);
     }
     qDeleteAll(list);
@@ -589,8 +588,7 @@ void UndoMacro::append(UndoMacro&& other)
 //   CloneVoice
 //---------------------------------------------------------
 
-CloneVoice::CloneVoice(Segment* _sf, const Fraction& _lTick, Segment* _d, int _strack, int _dtrack, int _otrack,
-                       bool _linked)
+CloneVoice::CloneVoice(Segment* _sf, const Fraction& _lTick, Segment* _d, int _strack, int _dtrack, int _otrack, bool _linked)
 {
     sf      = _sf;            // first source segment
     lTick   = _lTick;         // last tick to clone
@@ -1837,8 +1835,7 @@ std::vector<Clef*> InsertRemoveMeasures::getCourtesyClefs(Measure* m)
     std::vector<Clef*> startClefs;
     if (m->prev() && m->prev()->isMeasure()) {
         Measure* prevMeasure = toMeasure(m->prev());
-        const Segment* clefSeg = prevMeasure->findSegmentR(SegmentType::Clef | SegmentType::HeaderClef,
-                                                           prevMeasure->ticks());
+        const Segment* clefSeg = prevMeasure->findSegmentR(SegmentType::Clef | SegmentType::HeaderClef, prevMeasure->ticks());
         if (clefSeg) {
             for (int st = 0; st < score->nstaves(); ++st) {
                 Element* clef = clefSeg->element(staff2track(st));
@@ -1868,8 +1865,7 @@ void InsertRemoveMeasures::insertMeasures()
         fs = toMeasure(fm)->first();
         ls = toMeasure(lm)->last();
         for (Segment* s = fs; s && s != ls; s = s->next1()) {
-            if (!s->enabled()
-                || !(s->segmentType() & (SegmentType::Clef | SegmentType::HeaderClef | SegmentType::KeySig))) {
+            if (!s->enabled() || !(s->segmentType() & (SegmentType::Clef | SegmentType::HeaderClef | SegmentType::KeySig))) {
                 continue;
             }
             for (int track = 0; track < score->ntracks(); track += VOICES) {

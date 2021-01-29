@@ -81,8 +81,7 @@ qreal Bracket::width() const
     qreal w;
     switch (bracketType()) {
     case BracketType::BRACE:
-        if (score()->styleSt(Sid::MusicalSymbolFont) == "Emmentaler"
-            || score()->styleSt(Sid::MusicalSymbolFont) == "Gonville") {
+        if (score()->styleSt(Sid::MusicalSymbolFont) == "Emmentaler" || score()->styleSt(Sid::MusicalSymbolFont) == "Gonville") {
             w = score()->styleP(Sid::akkoladeWidth) + score()->styleP(Sid::akkoladeBarDistance);
         } else {
             w = (symWidth(_braceSymbol) * _magx) + score()->styleP(Sid::akkoladeBarDistance);
@@ -146,8 +145,7 @@ void Bracket::layout()
     _shape.clear();
     switch (bracketType()) {
     case BracketType::BRACE: {
-        if (score()->styleSt(Sid::MusicalSymbolFont) == "Emmentaler"
-            || score()->styleSt(Sid::MusicalSymbolFont) == "Gonville") {
+        if (score()->styleSt(Sid::MusicalSymbolFont) == "Emmentaler" || score()->styleSt(Sid::MusicalSymbolFont) == "Gonville") {
             _braceSymbol = SymId::noSym;
             qreal w = score()->styleP(Sid::akkoladeWidth);
 

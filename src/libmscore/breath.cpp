@@ -186,7 +186,6 @@ bool Breath::setProperty(Pid propertyId, const QVariant& v)
     case Pid::SYMBOL:
         setSymId(v.value<SymId>());
         break;
-
     case Pid::PAUSE:
         setPause(v.toDouble());
         break;

@@ -340,6 +340,7 @@ QVector<QLineF> Arpeggio::gripAnchorLines(Grip grip) const
 
     const Page* p = toPage(findAncestor(ElementType::PAGE));
     const QPointF pageOffset = p ? p->pos() : QPointF();
+
     const QPointF gripCanvasPos = gripsPositions()[static_cast<int>(grip)] + pageOffset;
 
     if (grip == Grip::START) {

@@ -269,9 +269,7 @@ public:
         // MScore::division * 4 - ticks per whole note
         // result: rounded (MScore::division * 4 * _numerator * 1.0 / _denominator) value
         const int sgn = (_numerator < 0) ? -1 : 1;
-        const auto result = sgn
-                            * (static_cast<int_least64_t>(sgn * _numerator) * MScore::division * 4
-                               + (_denominator / 2)) / _denominator;
+        const auto result = sgn * (static_cast<int_least64_t>(sgn * _numerator) * MScore::division * 4 + (_denominator / 2)) / _denominator;
         return static_cast<int>(result);
     }
 

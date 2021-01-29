@@ -535,8 +535,7 @@ bool Measure::showsMeasureNumberInAutoMode()
         //   2) (measureNumber + 1) % interval == 0 (or 1 if measure number one is numbered.)
         // If measure number 1 is numbered, and the interval is let's say 5, then we should number #1, 6, 11, 16, etc.
         // If measure number 1 is not numbered, with the same interval (5), then we should number #5, 10, 15, 20, etc.
-        return ((no() + 1) % score()->styleI(Sid::measureNumberInterval))
-               == (score()->styleB(Sid::showMeasureNumberOne) ? 1 : 0);
+        return ((no() + 1) % score()->styleI(Sid::measureNumberInterval)) == (score()->styleB(Sid::showMeasureNumberOne) ? 1 : 0);
     }
 }
 
@@ -569,6 +568,7 @@ void Measure::layoutMeasureNumber()
     if (smn) {
         s = QString("%1").arg(no() + 1);
     }
+
     unsigned nn = 1;
     bool nas = score()->styleB(Sid::measureNumberAllStaves);
 
@@ -1755,8 +1755,7 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
         if (nl > ol) {
             // move EndBarLine, TimeSigAnnounce, KeySigAnnounce
             for (Segment* seg = m->first(); seg; seg = seg->next()) {
-                if (seg->segmentType()
-                    & (SegmentType::EndBarLine | SegmentType::TimeSigAnnounce | SegmentType::KeySigAnnounce)) {
+                if (seg->segmentType() & (SegmentType::EndBarLine | SegmentType::TimeSigAnnounce | SegmentType::KeySigAnnounce)) {
                     seg->setRtick(nl);
                 }
             }
@@ -1766,7 +1765,7 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
     Measure* m    = s->tick2measure(tick());
     QList<int> sl = s->uniqueStaves();
 
-    for (int staffIdx : sl) {
+    for (int staffIdx : qAsConst(sl)) {
         int rests  = 0;
         int chords = 0;
         Rest* rest = 0;
@@ -1791,8 +1790,7 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
             // if measure value didn't change, stick to whole measure rest
             if (m_timesig == nf) {
                 rest->undoChangeProperty(Pid::DURATION, QVariant::fromValue<Fraction>(nf * stretch));
-                rest->undoChangeProperty(Pid::DURATION_TYPE,
-                                         QVariant::fromValue<TDuration>(TDuration::DurationType::V_MEASURE));
+                rest->undoChangeProperty(Pid::DURATION_TYPE, QVariant::fromValue<TDuration>(TDuration::DurationType::V_MEASURE));
             } else {          // if measure value did change, represent with rests actual measure value
 #if 0
                 // any reason not to do this instead?
@@ -1994,8 +1992,7 @@ void Measure::read(XmlReader& e, int staffIdx)
         }
         irregular = true;
         if (_len.numerator() <= 0 || _len.denominator() <= 0) {
-            e.raiseError(QObject::tr("MSCX error at line %1: invalid measure length: %2").arg(e.lineNumber()).arg(_len.
-                                                                                                                  toString()));
+            e.raiseError(QObject::tr("MSCX error at line %1: invalid measure length: %2").arg(e.lineNumber()).arg(_len.toString()));
             return;
         }
         score()->sigmap()->add(tick().ticks(), SigEvent(_len, m_timesig));
@@ -2389,8 +2386,7 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
             tuplet = tuplet->tuplet();
             if (oldTuplet->elements().empty()) {
                 // this should not happen and is a sign of input file corruption
-                qDebug("Measure:read: empty tuplet in measure index=%d, input file corrupted?",
-                       e.currentMeasureIndex());
+                qDebug("Measure:read: empty tuplet in measure index=%d, input file corrupted?", e.currentMeasureIndex());
                 if (tuplet) {
                     tuplet->remove(oldTuplet);
                 }
@@ -3113,8 +3109,7 @@ Fraction Measure::snapNote(const Fraction& /*tick*/, const QPointF p, int staff)
 ///   \returns The segment that was found.
 //---------------------------------------------------------
 
-Segment* Measure::searchSegment(qreal x, SegmentType st, int strack, int etrack, const Segment* preferredSegment,
-                                qreal spacingFactor) const
+Segment* Measure::searchSegment(qreal x, SegmentType st, int strack, int etrack, const Segment* preferredSegment, qreal spacingFactor) const
 {
     const int lastTrack = etrack - 1;
     for (Segment* segment = first(st); segment; segment = segment->next(st)) {
@@ -3489,7 +3484,7 @@ Element* Measure::prevElementStaff(int staff)
 
 QString Measure::accessibleInfo() const
 {
-    return QString("%1: %2").arg(Element::accessibleInfo()).arg(QString::number(no() + 1));
+    return QString("%1: %2").arg(Element::accessibleInfo(), QString::number(no() + 1));
 }
 
 //-----------------------------------------------------------------------------
@@ -3947,8 +3942,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
         } else if (visibleInt == 1) {  // all (courtesy) clefs in the clef segment are not visible
             clefSeg->setVisible(false);
         } else { // should never happen
-            qDebug("Clef Segment without Clef elements at tick %d/%d",clefSeg->tick().numerator(),
-                   clefSeg->tick().denominator());
+            qDebug("Clef Segment without Clef elements at tick %d/%d",clefSeg->tick().numerator(),clefSeg->tick().denominator());
         }
         if ((wasVisible != clefSeg->visible()) && system()) {   // recompute the width only if necessary
             computeMinWidth();

@@ -1518,8 +1518,7 @@ void SpannerWriter::fillSpannerPosition(Location& l, const MeasureBase* m, const
 //   SpannerWriter::SpannerWriter
 //---------------------------------------------------------
 
-SpannerWriter::SpannerWriter(XmlWriter& xml, const Element* current, const Spanner* sp, int track, Fraction frac,
-                             bool start)
+SpannerWriter::SpannerWriter(XmlWriter& xml, const Element* current, const Spanner* sp, int track, Fraction frac, bool start)
     : ConnectorInfoWriter(xml, current, sp, track, frac)
 {
     const bool clipboardmode = xml.clipboardmode();

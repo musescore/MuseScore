@@ -30,7 +30,7 @@ HChord::HChord(const QString& str)
     };
     keys = 0;
     QStringList sl = str.split(" ", Qt::SkipEmptyParts);
-    for (const QString& s : sl) {
+    for (const QString& s : qAsConst(sl)) {
         for (int i = 0; i < 12; ++i) {
             if (s == scaleNames[0][i] || s == scaleNames[1][i]) {
                 operator+=(i);
@@ -317,7 +317,7 @@ static void readRenderList(QString val, QList<RenderAction>& renderList)
 {
     renderList.clear();
     QStringList sl = val.split(" ", Qt::SkipEmptyParts);
-    for (const QString& s : sl) {
+    for (const QString& s : qAsConst(sl)) {
         if (s.startsWith("m:")) {
             QStringList ssl = s.split(":", Qt::SkipEmptyParts);
             if (ssl.size() == 3) {
@@ -545,8 +545,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
         }
         tok1.push_back(s[i]);
         tok1L.push_back(s[i].toLower());
-        if (tok1L == "m" || major.contains(tok1L) || minor.contains(tok1L) || diminished.contains(tok1L)
-            || augmented.contains(tok1L)) {
+        if (tok1L == "m" || major.contains(tok1L) || minor.contains(tok1L) || diminished.contains(tok1L) || augmented.contains(tok1L)) {
             initial = tok1;
         }
     }
@@ -814,7 +813,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
             chord += 9;
             chord += 2;
         }
-        for (QString e : extl) {
+        for (const QString& e : qAsConst(extl)) {
             QString d = "add" + e;
             _xmlDegrees += d;
         }
@@ -1187,7 +1186,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
         // fix "add" / "alt" conflicts
         // so add9,altb9 -> addb9
         QStringList altList = _xmlDegrees.filter("alt");
-        for (const QString& d : altList) {
+        for (const QString& d : qAsConst(altList)) {
             QString unalt(d);
             unalt.replace(QRegExp("alt[b#]"),"add");
             if (_xmlDegrees.removeAll(unalt) > 0) {
@@ -1431,7 +1430,7 @@ QString ParsedChord::fromXml(const QString& rawKind, const QString& rawKindText,
     if (parens) {
         _name += "(";
     }
-    for (QString mod : _modifierList) {
+    for (QString mod : qAsConst(_modifierList)) {
         mod.replace("major","maj");
         if (kindText != "" && kind.contains("suspended") && mod.startsWith("sus")) {
             continue;
@@ -1501,15 +1500,15 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
         _renderList.clear();
     }
     bool adjust = cl ? cl->autoAdjust() : false;
-    for (ChordToken tok : _tokenList) {
+    for (const ChordToken& tok : qAsConst(_tokenList)) {
         QString n = tok.names.first();
         QList<RenderAction> rl;
         QList<ChordToken> definedTokens;
         bool found = false;
         // potential definitions for token
         if (cl) {
-            for (ChordToken ct : cl->chordTokenList) {
-                for (QString ctn : ct.names) {
+            for (const ChordToken& ct : cl->chordTokenList) {
+                for (const QString& ctn : qAsConst(ct.names)) {
                     if (ctn == n) {
                         definedTokens += ct;
                     }
@@ -1518,7 +1517,7 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
         }
         // find matching class, fallback on ChordTokenClass::ALL
         ChordTokenClass ctc = ChordTokenClass::ALL;
-        for (ChordToken matchingTok : definedTokens) {
+        for (const ChordToken& matchingTok : qAsConst(definedTokens)) {
             if (tok.tokenClass == matchingTok.tokenClass) {
                 rl = matchingTok.renderList;
                 ctc = tok.tokenClass;
@@ -1846,15 +1845,15 @@ void ChordList::read(XmlReader& e)
 void ChordList::write(XmlWriter& xml) const
 {
     int fontIdx = 0;
-    for (ChordFont f : fonts) {
+    for (const ChordFont& f : fonts) {
         xml.stag(QString("font id=\"%1\" family=\"%2\"").arg(fontIdx).arg(f.family));
         xml.tag("mag", f.mag);
-        for (ChordSymbol s : symbols) {
+        for (const ChordSymbol& s : symbols) {
             if (s.fontIdx == fontIdx) {
                 if (s.code.isNull()) {
-                    xml.tagE(QString("sym name=\"%1\" value=\"%2\"").arg(s.name).arg(s.value));
+                    xml.tagE(QString("sym name=\"%1\" value=\"%2\"").arg(s.name, s.value));
                 } else {
-                    xml.tagE(QString("sym name=\"%1\" code=\"0x%2\"").arg(s.name).arg(s.code.unicode(),0,16));
+                    xml.tagE(QString("sym name=\"%1\" code=\"0x%2\"").arg(s.name).arg(s.code.unicode(), 0, 16));
                 }
             }
         }
@@ -1864,7 +1863,7 @@ void ChordList::write(XmlWriter& xml) const
     if (_autoAdjust) {
         xml.tagE(QString("autoAdjust mag=\"%1\" adjust=\"%2\"").arg(_nmag).arg(_nadjust));
     }
-    for (ChordToken t : chordTokenList) {
+    for (const ChordToken& t : chordTokenList) {
         t.write(xml);
     }
     if (!renderListRoot.empty()) {
@@ -1899,7 +1898,7 @@ bool ChordList::read(const QString& name)
 #elif defined(Q_OS_ANDROID)
         path = QString(":/styles/%1").arg(name);
 #else
-        path = QString("%1styles/%2").arg(MScore::globalShare()).arg(name);
+        path = QString("%1styles/%2").arg(MScore::globalShare(), name);
 #endif
     }
     // default to chords_std.xml
@@ -1915,7 +1914,7 @@ bool ChordList::read(const QString& name)
     }
 #else
     {
-        path = QString("%1styles/%2").arg(MScore::globalShare()).arg("chords_std.xml");
+        path = QString("%1styles/%2").arg(MScore::globalShare(), "chords_std.xml");
     }
 #endif
 
@@ -1924,8 +1923,7 @@ bool ChordList::read(const QString& name)
     }
     QFile f(path);
     if (!f.open(QIODevice::ReadOnly)) {
-        MScore::lastError
-            = QObject::tr("Cannot open chord description:\n%1\n%2").arg(f.fileName()).arg(f.errorString());
+        MScore::lastError = QObject::tr("Cannot open chord description:\n%1\n%2").arg(f.fileName(), f.errorString());
         qDebug("ChordList::read failed: <%s>", qPrintable(path));
         return false;
     }
@@ -1960,8 +1958,7 @@ bool ChordList::write(const QString& name) const
     QFile f(info.filePath());
 
     if (!f.open(QIODevice::WriteOnly)) {
-        MScore::lastError
-            = QObject::tr("Open chord description\n%1\nfailed: %2").arg(f.fileName()).arg(f.errorString());
+        MScore::lastError = QObject::tr("Open chord description\n%1\nfailed: %2").arg(f.fileName(), f.errorString());
         return false;
     }
 

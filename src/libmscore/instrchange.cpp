@@ -81,8 +81,7 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
         for (int i = 0; i < part->nstaves(); i++) {
             if (part->instrument(tickStart)->clefType(i) != instrument->clefType(i)) {
                 ClefType clefType
-                    = score()->styleB(Sid::concertPitch) ? instrument->clefType(i)._concertClef : instrument->clefType(i)
-                      ._transposingClef;
+                    = score()->styleB(Sid::concertPitch) ? instrument->clefType(i)._concertClef : instrument->clefType(i)._transposingClef;
                 // If instrument change is at the start of a measure, use the measure as the element, as this will place the instrument change before the barline.
                 Element* element = rtick().isZero() ? toElement(findMeasure()) : toElement(this);
                 score()->undoChangeClef(part->staff(i), element, clefType, true);

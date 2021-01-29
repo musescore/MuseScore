@@ -1389,12 +1389,12 @@ void FiguredBass::endEdit(EditData& ed)
     }
 
     // split text into lines and create an item for each line
-    QStringList list = txt.split("\n", Qt::SkipEmptyParts);
+    QStringList list = txt.split('\n', Qt::SkipEmptyParts);
     qDeleteAll(items);
     items.clear();
     QString normalizedText = QString();
     idx = 0;
-    for (QString str : list) {
+    for (QString str : qAsConst(list)) {
         FiguredBassItem* pItem = new FiguredBassItem(score(), idx++);
         if (!pItem->parse(str)) {               // if any item fails parsing
             qDeleteAll(items);
@@ -1610,8 +1610,7 @@ FiguredBass* FiguredBass::addFiguredBassToSegment(Segment* seg, int track, const
         // locate previous FB for same staff
         Segment* prevSegm;
         FiguredBass* prevFB = 0;
-        for (prevSegm = seg->prev1(SegmentType::ChordRest); prevSegm;
-             prevSegm = prevSegm->prev1(SegmentType::ChordRest)) {
+        for (prevSegm = seg->prev1(SegmentType::ChordRest); prevSegm; prevSegm = prevSegm->prev1(SegmentType::ChordRest)) {
             for (Element* e : prevSegm->annotations()) {
                 if (e->type() == ElementType::FIGURED_BASS && (e->track()) == track) {
                     prevFB = toFiguredBass(e);             // previous FB found
@@ -1680,31 +1679,29 @@ bool FiguredBassFont::read(XmlReader& e)
             while (e.readNextStartElement()) {
                 const QStringRef& t(e.name());
                 if (t == "simple") {
-                    displayDigit[int(FiguredBassItem::Style::MODERN)]  [digit][int(FiguredBassItem::Combination::SIMPLE)
-                    ]      = e.readElementText()[0];
+                    displayDigit[int(FiguredBassItem::Style::MODERN)]  [digit][int(FiguredBassItem::Combination::SIMPLE)]
+                        = e.readElementText()[0];
                 } else if (t == "crossed") {
-                    displayDigit[int(FiguredBassItem::Style::MODERN)]  [digit][int(FiguredBassItem::Combination::CROSSED)
-                    ]     = e.readElementText()[0];
+                    displayDigit[int(FiguredBassItem::Style::MODERN)]  [digit][int(FiguredBassItem::Combination::CROSSED)]
+                        = e.readElementText()[0];
                 } else if (t == "backslashed") {
-                    displayDigit[int(FiguredBassItem::Style::MODERN)]  [digit][int(FiguredBassItem::Combination::
-                                                                                   BACKSLASHED)]
+                    displayDigit[int(FiguredBassItem::Style::MODERN)]  [digit][int(FiguredBassItem::Combination::BACKSLASHED)]
                         = e.readElementText()[0];
                 } else if (t == "slashed") {
-                    displayDigit[int(FiguredBassItem::Style::MODERN)]  [digit][int(FiguredBassItem::Combination::SLASHED)
-                    ]     = e.readElementText()[0];
+                    displayDigit[int(FiguredBassItem::Style::MODERN)]  [digit][int(FiguredBassItem::Combination::SLASHED)]
+                        = e.readElementText()[0];
                 } else if (t == "simpleHistoric") {
-                    displayDigit[int(FiguredBassItem::Style::HISTORIC)][digit][int(FiguredBassItem::Combination::SIMPLE)
-                    ]      = e.readElementText()[0];
+                    displayDigit[int(FiguredBassItem::Style::HISTORIC)][digit][int(FiguredBassItem::Combination::SIMPLE)]
+                        = e.readElementText()[0];
                 } else if (t == "crossedHistoric") {
-                    displayDigit[int(FiguredBassItem::Style::HISTORIC)][digit][int(FiguredBassItem::Combination::CROSSED)
-                    ]     = e.readElementText()[0];
+                    displayDigit[int(FiguredBassItem::Style::HISTORIC)][digit][int(FiguredBassItem::Combination::CROSSED)]
+                        = e.readElementText()[0];
                 } else if (t == "backslashedHistoric") {
-                    displayDigit[int(FiguredBassItem::Style::HISTORIC)][digit][int(FiguredBassItem::Combination::
-                                                                                   BACKSLASHED)]
+                    displayDigit[int(FiguredBassItem::Style::HISTORIC)][digit][int(FiguredBassItem::Combination::BACKSLASHED)]
                         = e.readElementText()[0];
                 } else if (t == "slashedHistoric") {
-                    displayDigit[int(FiguredBassItem::Style::HISTORIC)][digit][int(FiguredBassItem::Combination::SLASHED)
-                    ]     = e.readElementText()[0];
+                    displayDigit[int(FiguredBassItem::Style::HISTORIC)][digit][int(FiguredBassItem::Combination::SLASHED)]
+                        = e.readElementText()[0];
                 } else {
                     e.unknown();
                     return false;
@@ -1747,8 +1744,7 @@ bool FiguredBass::readConfigFile(const QString& fileName)
 
     QFile fi(path);
     if (!fi.open(QIODevice::ReadOnly)) {
-        MScore::lastError = QObject::tr("Cannot open figured bass description:\n%1\n%2").arg(fi.fileName()).arg(
-            fi.errorString());
+        MScore::lastError = QObject::tr("Cannot open figured bass description:\n%1\n%2").arg(fi.fileName(), fi.errorString());
         qDebug("FiguredBass::read failed: <%s>", qPrintable(path));
         return false;
     }

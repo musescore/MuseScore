@@ -292,14 +292,11 @@ void ChordLine::editDrag(EditData& ed)
     int slideBoundary = 5;
     if ((_chordLineType == ChordLineType::PLOP || _chordLineType == ChordLineType::FALL) && _lengthY < -slideBoundary) {
         _lengthY = -slideBoundary;
-    } else if ((_chordLineType == ChordLineType::FALL || _chordLineType == ChordLineType::DOIT)
-               && _lengthX < -slideBoundary) {
+    } else if ((_chordLineType == ChordLineType::FALL || _chordLineType == ChordLineType::DOIT) && _lengthX < -slideBoundary) {
         _lengthX = -slideBoundary;
-    } else if ((_chordLineType == ChordLineType::DOIT || _chordLineType == ChordLineType::SCOOP)
-               && _lengthY > slideBoundary) {
+    } else if ((_chordLineType == ChordLineType::DOIT || _chordLineType == ChordLineType::SCOOP) && _lengthY > slideBoundary) {
         _lengthY = slideBoundary;
-    } else if ((_chordLineType == ChordLineType::SCOOP || _chordLineType == ChordLineType::PLOP)
-               && _lengthX > slideBoundary) {
+    } else if ((_chordLineType == ChordLineType::SCOOP || _chordLineType == ChordLineType::PLOP) && _lengthX > slideBoundary) {
         _lengthX = slideBoundary;
     }
 
@@ -403,7 +400,7 @@ QString ChordLine::accessibleInfo() const
 {
     QString rez = Element::accessibleInfo();
     if (chordLineType() != ChordLineType::NOTYPE) {
-        rez = QString("%1: %2").arg(rez).arg(scorelineNames[static_cast<int>(chordLineType()) - 1]);
+        rez = QString("%1: %2").arg(rez, scorelineNames[static_cast<int>(chordLineType()) - 1]);
     }
     return rez;
 }

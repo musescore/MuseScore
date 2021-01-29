@@ -561,6 +561,11 @@ int Part::lyricCount() const
     if (!score()) {
         return 0;
     }
+
+    if (!score()->firstMeasure()) {
+        return 0;
+    }
+
     size_t count = 0;
     SegmentType st = SegmentType::ChordRest;
     for (Segment* seg = score()->firstMeasure()->first(st); seg; seg = seg->next1(st)) {
@@ -616,7 +621,7 @@ void Part::updateHarmonyChannels(bool isDoOnInstrumentChanged, bool checkRemoval
         masterScore()->rebuildMidiMapping();
         masterScore()->updateChannel();
         score()->setInstrumentsChanged(true);
-        score()->setLayoutAll();                            //do we need this?
+        score()->setLayoutAll();     //do we need this?
     };
 
     // usage of harmony count is okay even if expensive since checking harmony channel will shortcircuit if existent

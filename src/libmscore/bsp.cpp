@@ -141,7 +141,7 @@ QList<Element*> BspTree::items(const QRectF& rec)
     FindItemBspTreeVisitor findVisitor;
     climbTree(&findVisitor, rec);
     QList<Element*> l;
-    for (Element* e : findVisitor.foundItems) {
+    for (Element* e : qAsConst(findVisitor.foundItems)) {
         e->itemDiscovered = false;
         if (e->pageBoundingRect().intersects(rec)) {
             l.append(e);
@@ -160,7 +160,7 @@ QList<Element*> BspTree::items(const QPointF& pos)
     climbTree(&findVisitor, pos);
 
     QList<Element*> l;
-    for (Element* e : findVisitor.foundItems) {
+    for (Element* e : qAsConst(findVisitor.foundItems)) {
         e->itemDiscovered = false;
         if (e->contains(pos)) {
             l.append(e);
