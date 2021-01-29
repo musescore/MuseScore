@@ -32,6 +32,8 @@ struct MenuItem : public actions::ActionItem
     bool enabled = false;
     bool checked = false;
 
+    QList<MenuItem> subitems;
+
     MenuItem() = default;
 
     MenuItem(const actions::ActionItem& parent)
@@ -39,6 +41,11 @@ struct MenuItem : public actions::ActionItem
 
     QVariantMap toVariantMap() const
     {
+        QVariantList _subitems;
+        for (const MenuItem& item: subitems) {
+            _subitems << item.toVariantMap();
+        }
+
         return {
             { "code", QString::fromStdString(code) },
             { "shortcut", QString::fromStdString(shortcut) },
@@ -47,10 +54,31 @@ struct MenuItem : public actions::ActionItem
             { "section", QString::fromStdString(section) },
             { "icon", static_cast<int>(iconCode) },
             { "enabled", enabled },
-            { "checked", checked }
+            { "checked", checked },
+            { "subitems", _subitems }
         };
     }
+
+    static MenuItem fromVariantMap(const QVariantMap& map)
+    {
+        MenuItem item;
+        item.code = map.value("code").toString().toStdString();
+        item.shortcut = map.value("shortcut").toString().toStdString();
+        item.title = map.value("title").toString().toStdString();
+        item.description = map.value("description").toString().toStdString();
+        item.section = map.value("section").toString().toStdString();
+        item.iconCode = static_cast<ui::IconCode::Code>(map.value("icon").toInt());
+        item.enabled = map.value("enabled").toBool();
+        item.checked = map.value("checked").toBool();
+
+        for (const QVariant& _item: map.value("subitems").toList()) {
+            item.subitems << fromVariantMap(_item.toMap());
+        }
+
+        return item;
+    }
 };
+
 using MenuItemList = QList<MenuItem>;
 }
 

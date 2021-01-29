@@ -33,6 +33,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/commandlinecontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/view/settings/settingslistmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/settings/settingslistmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/menumodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/menumodel.h
     ${DOCKWINDOW_SRC}
     )
 
