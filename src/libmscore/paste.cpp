@@ -525,7 +525,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
             s = s->next1MM();
         }
 
-        for (MuseScoreView* v : viewer) {
+        for (MuseScoreView* v : qAsConst(viewer)) {
             v->adjustCanvasPosition(el, false);
         }
         if (!selection().isRange()) {
@@ -609,6 +609,7 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t, const Interval& src
             }
         }
     }
+
     // we can paste a measure rest as such only at start of measure
     // and only if the lengths of the rest and measure match
     // otherwise, we need to convert to duration rest(s)
@@ -700,9 +701,8 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t, const Interval& src
                 measure       = tick2measure(tick);
                 Fraction mlen = measure->tick() + measure->ticks() - tick;
                 Fraction len  = rest > mlen ? mlen : rest;
-                std::vector<TDuration> dl
-                    = toRhythmicDurationList(len, true, tick - measure->tick(), sigmap()->timesig(
-                                                 tick).nominal(), measure, MAX_DOTS);
+                std::vector<TDuration> dl = toRhythmicDurationList(len, true, tick - measure->tick(), sigmap()->timesig(
+                                                                       tick).nominal(), measure, MAX_DOTS);
                 TDuration d = dl[0];
                 r2->setDurationType(d);
                 r2->setTicks(d.isMeasure() ? measure->ticks() : d.fraction());

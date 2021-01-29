@@ -288,8 +288,7 @@ void Bend::draw(QPainter* painter) const
             QFontMetrics fm(f, MScore::paintDevice());
             qreal textWidth = fm.width(s);
             qreal textHeight = fm.height();
-            painter->drawText(QRectF(x2 - textWidth / 2, y2 - textHeight / 2, .0,
-                                     .0), Qt::AlignVCenter | Qt::TextDontClip, s);
+            painter->drawText(QRectF(x2 - textWidth / 2, y2 - textHeight / 2, .0, .0), Qt::AlignVCenter | Qt::TextDontClip, s);
 #endif
 
             y = y2;
@@ -414,6 +413,7 @@ QVariant Bend::getProperty(Pid id) const
 //---------------------------------------------------------
 //   setProperty
 //---------------------------------------------------------
+
 bool Bend::setProperty(Pid id, const QVariant& v)
 {
     switch (id) {

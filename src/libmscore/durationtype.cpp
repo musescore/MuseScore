@@ -554,8 +554,7 @@ std::vector<TDuration> toDurationList(Fraction l, bool useDots, int maxDots, boo
         maxDots = 0;
     }
 
-    for (TDuration dd(l, true, maxDots); dd.isValid() && l.numerator() > 0;
-         dd = TDuration(l, true, maxDots, dd.type())) {
+    for (TDuration dd(l, true, maxDots); dd.isValid() && l.numerator() > 0; dd = TDuration(l, true, maxDots, dd.type())) {
         dList.push_back(dd);
         l -= dd.fraction();
     }
@@ -645,8 +644,7 @@ void populateRhythmicList(std::vector<TDuration>* dList, const Fraction& l, bool
         bool useLast = startBeat <= BeatType::SIMPLE_UNSTRESSED;     // split on the later beat if starting on a beat
 
         BeatType strongestBeatCrossed = nominal.strongestBeatInRange(rtickStart.ticks(),
-                                                                     rtickEnd.ticks(), &dUnitsCrossed, &rtickSplit,
-                                                                     useLast);
+                                                                     rtickEnd.ticks(), &dUnitsCrossed, &rtickSplit, useLast);
 
         needToSplit = forceRhythmicSplit(isRest, startBeat, endBeat, dUnitsCrossed, strongestBeatCrossed, nominal);
     }
@@ -694,8 +692,7 @@ void splitCompoundBeatsForList(std::vector<TDuration>* dList, const Fraction& l,
             Fraction leftSplit = Fraction::fromTicks(splitTicks);
             Fraction rightSplit = l - leftSplit;
             populateRhythmicList(dList, leftSplit, isRest, rtickStart, nominal, maxDots);       // this side is ok to proceed
-            splitCompoundBeatsForList(dList, rightSplit, isRest, rtickStart + Fraction::fromTicks(
-                                          splitTicks), nominal, maxDots);                                                               // not checked yet
+            splitCompoundBeatsForList(dList, rightSplit, isRest, rtickStart + Fraction::fromTicks(splitTicks), nominal, maxDots);       // not checked yet
             return;
         }
     }
@@ -709,8 +706,7 @@ void splitCompoundBeatsForList(std::vector<TDuration>* dList, const Fraction& l,
             Fraction rightSplit = Fraction::fromTicks(splitTicks);
             Fraction leftSplit = l - rightSplit;
             populateRhythmicList(dList, leftSplit, isRest, rtickStart, nominal, maxDots);       // must add leftSplit to list first
-            populateRhythmicList(dList, rightSplit, isRest, rtickEnd - Fraction::fromTicks(splitTicks), nominal,
-                                 maxDots);
+            populateRhythmicList(dList, rightSplit, isRest, rtickEnd - Fraction::fromTicks(splitTicks), nominal, maxDots);
             return;
         }
     }
@@ -783,8 +779,7 @@ bool forceRhythmicSplit(bool isRest, BeatType startBeat, BeatType endBeat,
 //   forceRhythmicSplitCompound
 //---------------------------------------------------------
 
-bool forceRhythmicSplitCompound(bool isRest, BeatType startBeat, BeatType endBeat, int dUnitsCrossed,
-                                BeatType strongestBeatCrossed)
+bool forceRhythmicSplitCompound(bool isRest, BeatType startBeat, BeatType endBeat, int dUnitsCrossed, BeatType strongestBeatCrossed)
 {
     switch (strongestBeatCrossed) {
     case BeatType::COMPOUND_STRESSED:
@@ -820,8 +815,7 @@ bool forceRhythmicSplitCompound(bool isRest, BeatType startBeat, BeatType endBea
 //    >, >= instead of == and != when appropriate. (See sig.h)
 //---------------------------------------------------------
 
-bool forceRhythmicSplitSimple(bool isRest, BeatType startBeat, BeatType endBeat, int beatsCrossed,
-                              BeatType strongestBeatCrossed)
+bool forceRhythmicSplitSimple(bool isRest, BeatType startBeat, BeatType endBeat, int beatsCrossed, BeatType strongestBeatCrossed)
 {
     switch (strongestBeatCrossed) {
     case BeatType::SIMPLE_STRESSED:

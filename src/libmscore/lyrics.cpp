@@ -254,8 +254,7 @@ void Lyrics::layout()
     QString trailing;
 
     if (score()->styleB(Sid::lyricsAlignVerseNumber)) {
-        QRegularExpression punctuationPattern("(^[\\d\\W]*)([^\\d\\W].*?)([\\d\\W]*$)",
-                                              QRegularExpression::UseUnicodePropertiesOption);
+        QRegularExpression punctuationPattern("(^[\\d\\W]*)([^\\d\\W].*?)([\\d\\W]*$)", QRegularExpression::UseUnicodePropertiesOption);
         QRegularExpressionMatch punctuationMatch = punctuationPattern.match(text);
         if (punctuationMatch.hasMatch()) {
             // leading and trailing punctuation

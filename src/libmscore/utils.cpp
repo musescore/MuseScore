@@ -801,6 +801,10 @@ int diatonicUpDown(Key k, int pitch, int steps)
 
 Note* searchTieNote(Note* note)
 {
+    if (!note) {
+        return nullptr;
+    }
+
     Note* note2  = 0;
     Chord* chord = note->chord();
     Segment* seg = chord->segment();

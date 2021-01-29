@@ -333,7 +333,7 @@ void Chord::undoUnlink()
     for (Chord* gn : graceNotes()) {
         gn->undoUnlink();
     }
-    for (Articulation* a : _articulations) {
+    for (Articulation* a : qAsConst(_articulations)) {
         a->undoUnlink();
     }
 /*      if (_glissando)
@@ -1572,7 +1572,7 @@ void Chord::layoutStem1()
 
 void Chord::layoutStem()
 {
-    for (Chord* c : _graceNotes) {
+    for (Chord* c : qAsConst(_graceNotes)) {
         c->layoutStem();
     }
     if (_beam) {
@@ -1706,7 +1706,7 @@ bool Chord::underBeam() const
 
 void Chord::layout2()
 {
-    for (Chord* c : _graceNotes) {
+    for (Chord* c : qAsConst(_graceNotes)) {
         c->layout2();
     }
 
@@ -1732,8 +1732,7 @@ void Chord::layout2()
         // start from the right (if next segment found, x of it relative to this chord;
         // chord right space otherwise)
         Chord* last = gna.last();
-        qreal xOff =  s ? (s->pos().x() - s->staffShape(last->vStaffIdx()).left())
-                     - (segment()->pos().x() + pos().x()) : _spaceRw;
+        qreal xOff =  s ? (s->pos().x() - s->staffShape(last->vStaffIdx()).left()) - (segment()->pos().x() + pos().x()) : _spaceRw;
         // final distance: if near to another chord, leave minNoteDist at right of last grace
         // else leave note-to-barline distance;
         xOff -= (s != nullptr && s->segmentType() != SegmentType::ChordRest)
@@ -2203,7 +2202,7 @@ void Chord::layoutTablature()
     qreal minNoteDistance   = score()->styleP(Sid::minNoteDistance);
     qreal minTieLength      = score()->styleP(Sid::MinTieLength);
 
-    for (Chord* c : _graceNotes) {
+    for (Chord* c : qAsConst(_graceNotes)) {
         c->layoutTablature();
     }
 
@@ -2920,8 +2919,8 @@ void Chord::localSpatiumChanged(qreal oldValue, qreal newValue)
 QVariant Chord::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
-    case Pid::NO_STEM: return noStem();
-    case Pid::SMALL: return small();
+    case Pid::NO_STEM:        return noStem();
+    case Pid::SMALL:          return small();
     case Pid::STEM_DIRECTION: return QVariant::fromValue<Direction>(stemDirection());
     case Pid::PLAY: return isChordPlayable();
     default:
@@ -2936,8 +2935,8 @@ QVariant Chord::getProperty(Pid propertyId) const
 QVariant Chord::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
-    case Pid::NO_STEM: return false;
-    case Pid::SMALL: return false;
+    case Pid::NO_STEM:        return false;
+    case Pid::SMALL:          return false;
     case Pid::STEM_DIRECTION: return QVariant::fromValue<Direction>(Direction::AUTO);
     case Pid::PLAY: return true;
     default:
@@ -2977,7 +2976,7 @@ bool Chord::setProperty(Pid propertyId, const QVariant& v)
 
 Articulation* Chord::hasArticulation(const Articulation* aa)
 {
-    for (Articulation* a : _articulations) {
+    for (Articulation* a : qAsConst(_articulations)) {
         if (a->subtype() == aa->subtype()) {
             return a;
         }
@@ -3359,8 +3358,7 @@ TremoloChordType Chord::tremoloChordType() const
         } else if (_tremolo->chord2() == this) {
             return TremoloChordType::TremoloSecondNote;
         } else {
-            qFatal("Chord::tremoloChordType(): inconsistency %p - %p, this is %p", _tremolo->chord1(),
-                   _tremolo->chord2(), this);
+            qFatal("Chord::tremoloChordType(): inconsistency %p - %p, this is %p", _tremolo->chord1(), _tremolo->chord2(), this);
         }
     }
     return TremoloChordType::TremoloSingle;
@@ -3579,7 +3577,7 @@ QString Chord::accessibleExtraInfo() const
             continue;
         }
         for (const Note* n : c->notes()) {
-            rez = QString("%1 %2").arg(rez).arg(n->screenReaderInfo());
+            rez = QString("%1 %2").arg(rez, n->screenReaderInfo());
         }
     }
 
@@ -3587,25 +3585,25 @@ QString Chord::accessibleExtraInfo() const
         if (!score()->selectionFilter().canSelect(a)) {
             continue;
         }
-        rez = QString("%1 %2").arg(rez).arg(a->screenReaderInfo());
+        rez = QString("%1 %2").arg(rez, a->screenReaderInfo());
     }
 
     if (arpeggio() && score()->selectionFilter().canSelect(arpeggio())) {
-        rez = QString("%1 %2").arg(rez).arg(arpeggio()->screenReaderInfo());
+        rez = QString("%1 %2").arg(rez, arpeggio()->screenReaderInfo());
     }
 
     if (tremolo() && score()->selectionFilter().canSelect(tremolo())) {
-        rez = QString("%1 %2").arg(rez).arg(tremolo()->screenReaderInfo());
+        rez = QString("%1 %2").arg(rez, tremolo()->screenReaderInfo());
     }
 
     foreach (Element* e, el()) {
         if (!score()->selectionFilter().canSelect(e)) {
             continue;
         }
-        rez = QString("%1 %2").arg(rez).arg(e->screenReaderInfo());
+        rez = QString("%1 %2").arg(rez, e->screenReaderInfo());
     }
 
-    return QString("%1 %2").arg(rez).arg(ChordRest::accessibleExtraInfo());
+    return QString("%1 %2").arg(rez, ChordRest::accessibleExtraInfo());
 }
 
 //---------------------------------------------------------
@@ -3709,7 +3707,7 @@ void Chord::layoutArticulations()
     //
 
     Articulation* prevArticulation = nullptr;
-    for (Articulation* a : _articulations) {
+    for (Articulation* a : qAsConst(_articulations)) {
         if (a->anchor() == ArticulationAnchor::CHORD) {
             if (measure()->hasVoices(a->staffIdx(), tick(), actualTicks())) {
                 a->setUp(up());         // if there are voices place articulation at stem
@@ -3856,10 +3854,9 @@ void Chord::layoutArticulations2()
     qreal distance1 = score()->styleP(Sid::propertyDistanceHead);
     chordTopY -= up() ? 0.5 * _spatium : distance1;
     chordBotY += up() ? distance1 : 0.5 * _spatium;
-    for (Articulation* a : _articulations) {
+    for (Articulation* a : qAsConst(_articulations)) {
         ArticulationAnchor aa = a->anchor();
-        if (aa != ArticulationAnchor::CHORD && aa != ArticulationAnchor::TOP_CHORD
-            && aa != ArticulationAnchor::BOTTOM_CHORD) {
+        if (aa != ArticulationAnchor::CHORD && aa != ArticulationAnchor::TOP_CHORD && aa != ArticulationAnchor::BOTTOM_CHORD) {
             continue;
         }
 
@@ -3889,7 +3886,7 @@ void Chord::layoutArticulations2()
 
     staffTopY = qMin(staffTopY, chordTopY - distance0 - 0.5 * _spatium);
     staffBotY = qMax(staffBotY, chordBotY + distance0 + 0.5 * _spatium);
-    for (Articulation* a : _articulations) {
+    for (Articulation* a : qAsConst(_articulations)) {
         ArticulationAnchor aa = a->anchor();
         if (aa == ArticulationAnchor::TOP_STAFF || aa == ArticulationAnchor::BOTTOM_STAFF) {
             a->layout();
@@ -3907,7 +3904,7 @@ void Chord::layoutArticulations2()
             a->doAutoplace();
         }
     }
-    for (Articulation* a : _articulations) {
+    for (Articulation* a : qAsConst(_articulations)) {
         if (a->addToSkyline()) {
             // the segment shape has already been calculated
             // so measure width and spacing is already determined
@@ -3950,7 +3947,7 @@ void Chord::layoutArticulations3(Slur* slur)
     Segment* s = segment();
     Measure* m = measure();
     SysStaff* sstaff = m->system() ? m->system()->staff(vStaffIdx()) : nullptr;
-    for (Articulation* a : _articulations) {
+    for (Articulation* a : qAsConst(_articulations)) {
         if (a->layoutCloseToNote() || !a->autoplace() || !slur->addToSkyline()) {
             continue;
         }

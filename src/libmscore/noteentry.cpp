@@ -100,9 +100,7 @@ NoteVal Score::noteValForPosition(Position pos, AccidentalType at, bool& error)
 
     case StaffGroup::STANDARD: {
         AccidentalVal acci
-            = (at
-               == AccidentalType::NONE ? s->measure()->findAccidental(s, staffIdx, line,
-                                                                      error) : Accidental::subtype2value(at));
+            = (at == AccidentalType::NONE ? s->measure()->findAccidental(s, staffIdx, line, error) : Accidental::subtype2value(at));
         if (error) {
             return nval;
         }
@@ -176,8 +174,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
     Fraction duration;
     if (is.usingNoteEntryMethod(NoteEntryMethod::REPITCH)) {
         duration = is.cr()->ticks();
-    } else if (is.usingNoteEntryMethod(NoteEntryMethod::REALTIME_AUTO)
-               || is.usingNoteEntryMethod(NoteEntryMethod::REALTIME_MANUAL)) {
+    } else if (is.usingNoteEntryMethod(NoteEntryMethod::REALTIME_AUTO) || is.usingNoteEntryMethod(NoteEntryMethod::REALTIME_MANUAL)) {
         // FIXME: truncate duration at barline in real-time modes.
         //   The user might try to enter a duration that is too long to fit in the remaining space in the measure.
         //   We could split the duration at the barline and continue into the next bar, but this would create extra
@@ -338,8 +335,7 @@ void Score::putNote(const Position& p, bool replace)
     _is.setTrack(p.staffIdx * VOICES + _is.voice());
     _is.setSegment(s);
 
-    if (score()->excerpt() && !score()->excerpt()->tracks().isEmpty()
-        && score()->excerpt()->tracks().key(_is.track(), -1) == -1) {
+    if (score()->excerpt() && !score()->excerpt()->tracks().isEmpty() && score()->excerpt()->tracks().key(_is.track(), -1) == -1) {
         return;
     }
 
@@ -472,10 +468,8 @@ void Score::repitchNote(const Position& p, bool replace)
     if (_is.drumset() && _is.drumNote() != -1) {
         nval.pitch = _is.drumNote();
     } else {
-        AccidentalVal acci = (at == AccidentalType::NONE)
-                             ? s->measure()->findAccidental(s, p.staffIdx, p.line, error)
-                             : Accidental::subtype2value(at);
-
+        AccidentalVal acci
+            = (at == AccidentalType::NONE ? s->measure()->findAccidental(s, p.staffIdx, p.line, error) : Accidental::subtype2value(at));
         if (error) {
             return;
         }
@@ -483,6 +477,7 @@ void Score::repitchNote(const Position& p, bool replace)
         int step   = absStep(p.line, clef);
         int octave = step / 7;
         nval.pitch = step2pitch(step) + octave * 12 + int(acci);
+
         if (styleB(Sid::concertPitch)) {
             nval.tpc1 = step2tpc(step % 7, acci);
         } else {
@@ -676,9 +671,7 @@ void Score::localInsertChord(const Position& pos)
             // the whole measure with rests.
             measureIsFull = measureRest->rtick().isZero();
             const Fraction fillLen = measureIsFull ? targetMeasureLen : measureRest->ticks();
-            ms->setRest(
-                measureRest->tick(), track, fillLen, /* useDots */ false, /* tuplet */ nullptr,
-                /* useFullMeasureRest */ false);
+            ms->setRest(measureRest->tick(), track, fillLen, /* useDots */ false, /* tuplet */ nullptr, /* useFullMeasureRest */ false);
         }
 
         // II. Make chord or rest in other track longer if it crosses the insert area
@@ -688,9 +681,7 @@ void Score::localInsertChord(const Position& pos)
                 if (cr->isRest()) {
                     const Fraction fillLen = cr->ticks() + fraction;
                     ms->undoRemoveElement(cr);
-                    ms->setRest(
-                        cr->tick(), track, fillLen, /* useDots */ false, /* tuplet */ nullptr,
-                        /* useFullMeasureRest */ false);
+                    ms->setRest(cr->tick(), track, fillLen, /* useDots */ false, /* tuplet */ nullptr, /* useFullMeasureRest */ false);
                 } else if (cr->isChord()) {
                     Chord* chord = toChord(cr);
                     std::vector<TDuration> durations = toDurationList(chord->ticks() + fraction, /* useDots */ true);

@@ -390,12 +390,8 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                         // unison
                         conflictUnison = true;
                         matchPending = false;
-                        nHeadType
-                            = (n->headType()
-                               == NoteHead::Type::HEAD_AUTO) ? n->chord()->durationType().headType() : n->headType();
-                        pHeadType
-                            = (p->headType()
-                               == NoteHead::Type::HEAD_AUTO) ? p->chord()->durationType().headType() : p->headType();
+                        nHeadType = (n->headType() == NoteHead::Type::HEAD_AUTO) ? n->chord()->durationType().headType() : n->headType();
+                        pHeadType = (p->headType() == NoteHead::Type::HEAD_AUTO) ? p->chord()->durationType().headType() : p->headType();
                         // the most important rules for sharing noteheads on unisons between voices are
                         // that notes must be one same line with same tpc
                         // noteheads must be unmirrored and of same group
@@ -413,10 +409,10 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                             // thus user can force notes to be shared despite differing number of dots or either being stemless
                             // by setting one of the notehead types to match the other or by making one notehead invisible
                             // TODO: consider adding a style option, staff properties, or note property to control sharing
-                            if ((nchord->dots() != pchord->dots() || !nchord->stem() || !pchord->stem()
-                                 || nHeadType != pHeadType || n->small() || p->small())
-                                && ((n->headType() == NoteHead::Type::HEAD_AUTO
-                                     && p->headType() == NoteHead::Type::HEAD_AUTO) || nHeadType != pHeadType)
+                            if ((nchord->dots() != pchord->dots() || !nchord->stem() || !pchord->stem() || nHeadType != pHeadType
+                                 || n->small() || p->small())
+                                && ((n->headType() == NoteHead::Type::HEAD_AUTO && p->headType() == NoteHead::Type::HEAD_AUTO)
+                                    || nHeadType != pHeadType)
                                 && (n->visible() == p->visible())) {
                                 shareHeads = false;
                             }
@@ -503,8 +499,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                         clearLeft = topDownNote->chord()->stem()->lineWidth() + 0.3 * sp;
                     }
                     if (bottomUpNote->chord()->stem()) {
-                        clearRight = bottomUpNote->chord()->stem()->lineWidth()
-                                     + qMax(maxDownWidth - maxUpWidth, 0.0) + 0.3 * sp;
+                        clearRight = bottomUpNote->chord()->stem()->lineWidth() + qMax(maxDownWidth - maxUpWidth, 0.0) + 0.3 * sp;
                     } else {
                         downDots = 0;             // no need to adjust for dots in this case
                     }
@@ -1208,7 +1203,7 @@ void Score::layoutChords3(std::vector<Note*>& notes, const Staff* staff, Segment
         }
     }
 
-    for (const AcEl& e : aclist) {
+    for (const AcEl& e : qAsConst(aclist)) {
         // even though we initially calculate accidental position relative to segment
         // we must record pos for accidental relative to note,
         // since pos is always interpreted relative to parent
@@ -1236,7 +1231,7 @@ void Score::beamGraceNotes(Chord* mainNote, bool after)
     Beam::Mode bm = Beam::Mode::AUTO;
     QVector<Chord*> graceNotes = after ? mainNote->graceNotesAfter() : mainNote->graceNotesBefore();
 
-    for (ChordRest* cr : graceNotes) {
+    for (ChordRest* cr : qAsConst(graceNotes)) {
         bm = Groups::endBeam(cr);
         if ((cr->durationType().type() <= TDuration::DurationType::V_QUARTER) || (bm == Beam::Mode::NONE)) {
             if (beam) {
@@ -1339,7 +1334,7 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
     int staffIdx = 0;
     bool systemIsEmpty = true;
 
-    for (Staff* staff : _staves) {
+    for (Staff* staff : qAsConst(_staves)) {
         SysStaff* ss  = system->staff(staffIdx);
 
         Staff::HideMode hideMode = staff->hideWhenEmpty();
@@ -1415,7 +1410,7 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
     }
     Staff* firstVisible = nullptr;
     if (systemIsEmpty) {
-        for (Staff* staff : _staves) {
+        for (Staff* staff : qAsConst(_staves)) {
             SysStaff* ss  = system->staff(staff->idx());
             if (staff->showIfEmpty() && !ss->show()) {
                 ss->setShow(true);
@@ -1466,8 +1461,7 @@ void Score::connectTies(bool silent)
                     }
                     if (nnote == 0) {
                         if (!silent) {
-                            qDebug("next note at %d track %d for tie not found (version %d)",
-                                   s->tick().ticks(), i, _mscVersion);
+                            qDebug("next note at %d track %d for tie not found (version %d)", s->tick().ticks(), i, _mscVersion);
                             delete tie;
                             n->setTieFor(0);
                         }
@@ -1624,17 +1618,17 @@ static void layoutPage(Page* page, qreal restHeight)
         s1->setDistance(s2->y() - s1->y());
         if (s1->vbox() || s2->vbox() || s1->hasFixedDownDistance()) {
             if (s2->vbox()) {
-                checkDivider(true, s1, 0.0, true);      // remove
-                checkDivider(false, s1, 0.0, true);     // remove
-                checkDivider(true, s2, 0.0, true);      // remove
-                checkDivider(false, s2, 0.0, true);     // remove
+                checkDivider(true, s1, 0.0, true);              // remove
+                checkDivider(false, s1, 0.0, true);             // remove
+                checkDivider(true, s2, 0.0, true);              // remove
+                checkDivider(false, s2, 0.0, true);             // remove
             }
             continue;
         }
         sList.push_back(s1);
     }
 
-    // last systenm needs no divider
+    // last system needs no divider
     System* lastSystem = page->systems().back();
     checkDivider(true, lastSystem, 0.0, true);        // remove
     checkDivider(false, lastSystem, 0.0, true);       // remove
@@ -1646,6 +1640,7 @@ static void layoutPage(Page* page, qreal restHeight)
                 system->move(QPointF(0.0, y));
             }
         }
+
         // system dividers
         for (int i = 0; i < gaps; ++i) {
             System* s1 = page->systems().at(i);
@@ -1662,9 +1657,7 @@ static void layoutPage(Page* page, qreal restHeight)
     qreal maxDist = score->styleP(Sid::maxSystemDistance);
 
     // allocate space as needed to normalize system distance (bottom of one system to top of next)
-    std::sort(sList.begin(), sList.end(), [](System* a, System* b) {
-        return a->distance() - a->height() < b->distance() - b->height();
-    });
+    std::sort(sList.begin(), sList.end(), [](System* a, System* b) { return a->distance() - a->height() < b->distance() - b->height(); });
     System* s0 = sList[0];
     qreal dist = s0->distance() - s0->height();             // distance for shortest system
     for (int i = 1; i < sList.size(); ++i) {
@@ -1695,7 +1688,7 @@ static void layoutPage(Page* page, qreal restHeight)
 
     if (restHeight > 0.0) {                                 // space left?
         qreal fill = restHeight / sList.size();
-        for (System* s : sList) {                           // allocate it to systems equally
+        for (System* s : qAsConst(sList)) {                           // allocate it to systems equally
             qreal d = s->distance() + fill;
             if ((d - s->height()) > maxDist) {              // but don't exceed max system distance
                 d = qMax(maxDist + s->height(), s->distance());
@@ -1865,8 +1858,7 @@ void LayoutContext::getNextPage()
         if (MScore::verticalOrientation()) {
             y = prevPage->pos().y() + page->height() + MScore::verticalPageGap;
         } else {
-            qreal gap = (curPage + score->pageNumberOffset())
-                        & 1 ? MScore::horizontalPageGapOdd : MScore::horizontalPageGapEven;
+            qreal gap = (curPage + score->pageNumberOffset()) & 1 ? MScore::horizontalPageGapOdd : MScore::horizontalPageGapEven;
             x = prevPage->pos().x() + page->width() + gap;
         }
     }
@@ -2392,8 +2384,7 @@ static bool breakMultiMeasureRest(Measure* m)
                 BarLine* bl = toBarLine(s->element(staffIdx * VOICES));
                 if (bl) {
                     BarLineType t = bl->barLineType();
-                    if (t != BarLineType::NORMAL && t != BarLineType::BROKEN && t != BarLineType::DOTTED
-                        && !bl->generated()) {
+                    if (t != BarLineType::NORMAL && t != BarLineType::BROKEN && t != BarLineType::DOTTED && !bl->generated()) {
                         return true;
                     } else {
                         break;
@@ -3342,8 +3333,7 @@ static void restoreBeams(Measure* m)
 void Score::layoutLyrics(System* system)
 {
     std::vector<int> visibleStaves;
-    for (int staffIdx = system->firstVisibleStaff(); staffIdx < nstaves();
-         staffIdx = system->nextVisibleStaff(staffIdx)) {
+    for (int staffIdx = system->firstVisibleStaff(); staffIdx < nstaves(); staffIdx = system->nextVisibleStaff(staffIdx)) {
         visibleStaves.push_back(staffIdx);
     }
 
@@ -4175,8 +4165,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                 }
                 QPointF p(s.pos() + m->pos());
                 if (s.segmentType()
-                    & (SegmentType::BarLine | SegmentType::EndBarLine | SegmentType::StartRepeatBarLine
-                       | SegmentType::BeginBarLine)) {
+                    & (SegmentType::BarLine | SegmentType::EndBarLine | SegmentType::StartRepeatBarLine | SegmentType::BeginBarLine)) {
                     BarLine* bl = toBarLine(s.element(staffIdx * VOICES));
                     if (bl && bl->addToSkyline()) {
                         QRectF r = bl->layoutRect();
@@ -4291,8 +4280,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                     f->layout();
                     if (f->addToSkyline()) {
                         Note* n = f->note();
-                        QRectF r = f->bbox().translated(
-                            f->pos() + n->pos() + n->chord()->pos() + s->pos() + s->measure()->pos());
+                        QRectF r = f->bbox().translated(f->pos() + n->pos() + n->chord()->pos() + s->pos() + s->measure()->pos());
                         system->staff(f->note()->chord()->vStaffIdx())->skyline().add(r);
                     }
                     recreateShapes.insert(f->staffIdx());
@@ -5052,7 +5040,7 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
         // lc.systemList  = _systems;
         // _systems.clear();
 
-        for (System* s : _systems) {
+        for (System* s : qAsConst(_systems)) {
             for (Bracket* b : s->brackets()) {
                 if (b->selected()) {
                     _selection.remove(b);
@@ -5093,7 +5081,7 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
 void LayoutContext::layout()
 {
     MeasureBase* lmb;
-    do{
+    do {
         getNextPage();
         collectPage();
 

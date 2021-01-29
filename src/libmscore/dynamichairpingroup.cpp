@@ -43,8 +43,7 @@ static std::pair<Hairpin*, Hairpin*> findAdjacentHairpins(Dynamic* d)
     return { leftHairpin, rightHairpin };
 }
 
-std::unique_ptr<ElementGroup> HairpinWithDynamicsDragGroup::detectFor(HairpinSegment* hs,
-                                                                      std::function<bool(const Element*)> isDragged)
+std::unique_ptr<ElementGroup> HairpinWithDynamicsDragGroup::detectFor(HairpinSegment* hs, std::function<bool(const Element*)> isDragged)
 {
     if (!hs->isSingleType()) {
         return nullptr;
@@ -73,8 +72,7 @@ std::unique_ptr<ElementGroup> HairpinWithDynamicsDragGroup::detectFor(HairpinSeg
     return nullptr;
 }
 
-std::unique_ptr<ElementGroup> HairpinWithDynamicsDragGroup::detectFor(Dynamic* d,
-                                                                      std::function<bool(const Element*)> isDragged)
+std::unique_ptr<ElementGroup> HairpinWithDynamicsDragGroup::detectFor(Dynamic* d, std::function<bool(const Element*)> isDragged)
 {
     Hairpin* leftHairpin = nullptr;
     Hairpin* rightHairpin = nullptr;
@@ -149,8 +147,7 @@ void HairpinWithDynamicsDragGroup::endDrag(EditData& ed)
     }
 }
 
-std::unique_ptr<ElementGroup> DynamicNearHairpinsDragGroup::detectFor(Dynamic* d,
-                                                                      std::function<bool(const Element*)> isDragged)
+std::unique_ptr<ElementGroup> DynamicNearHairpinsDragGroup::detectFor(Dynamic* d, std::function<bool(const Element*)> isDragged)
 {
     Hairpin* leftHairpin = nullptr;
     Hairpin* rightHairpin = nullptr;

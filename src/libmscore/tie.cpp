@@ -144,9 +144,7 @@ void TieSegment::editDrag(EditData& ed)
             Spanner* spanner = tie();
             Element* e = ed.view->elementNear(ed.pos);
             Note* note = (e && e->isNote()) ? toNote(e) : nullptr;
-            if (note
-                && ((g == Grip::END && note->tick() > tie()->tick())
-                    || (g == Grip::START && note->tick() < tie()->tick2()))) {
+            if (note && ((g == Grip::END && note->tick() > tie()->tick()) || (g == Grip::START && note->tick() < tie()->tick2()))) {
                 if (g == Grip::END) {
                     Tie* tie = toTie(spanner);
                     if (tie->startNote()->pitch() == note->pitch()
@@ -564,8 +562,7 @@ void Tie::calculateDirection()
     if (_slurDirection == Direction::AUTO) {
         std::vector<Note*> notes = c1->notes();
         size_t n = notes.size();
-        if (m1->hasVoices(c1->staffIdx(), c1->tick(),
-                          c1->actualTicks()) || m2->hasVoices(c2->staffIdx(), c2->tick(), c2->actualTicks())) {
+        if (m1->hasVoices(c1->staffIdx(), c1->tick(), c1->actualTicks()) || m2->hasVoices(c2->staffIdx(), c2->tick(), c2->actualTicks())) {
             // in polyphonic passage, ties go on the stem side
             _up = c1->up();
         } else if (n == 1) {
@@ -693,8 +690,7 @@ TieSegment* Tie::layoutFor(System* system)
     TieSegment* segment = segmentAt(0);
     segment->setSystem(system);   // Needed to populate System.spannerSegments
     segment->layoutSegment(sPos.p1, sPos.p2);
-    segment->setSpannerSegmentType(sPos.system1
-                                   != sPos.system2 ? SpannerSegmentType::BEGIN : SpannerSegmentType::SINGLE);
+    segment->setSpannerSegmentType(sPos.system1 != sPos.system2 ? SpannerSegmentType::BEGIN : SpannerSegmentType::SINGLE);
     return segment;
 }
 

@@ -129,8 +129,7 @@ static int distance(const Location& l1, const Location& l2)
     Fraction dfrac = (l2.frac() - l1.frac()).absValue();
     int dpos = dfrac.numerator() * commonDenominator / dfrac.denominator();
     dpos += 10000 * qAbs(l2.measure() - l1.measure());
-    return 1000 * dpos + 100 * qAbs(l2.track() - l1.track()) + 10 * qAbs(l2.note() - l1.note()) + qAbs(
-        l2.graceIndex() - l1.graceIndex());
+    return 1000 * dpos + 100 * qAbs(l2.track() - l1.track()) + 10 * qAbs(l2.note() - l1.note()) + qAbs(l2.graceIndex() - l1.graceIndex());
 }
 
 //---------------------------------------------------------
@@ -319,8 +318,7 @@ ConnectorInfoReader::ConnectorInfoReader(XmlReader& e, Score* current, int track
 //   ConnectorInfoWriter
 //---------------------------------------------------------
 
-ConnectorInfoWriter::ConnectorInfoWriter(XmlWriter& xml, const Element* current, const Element* connector, int track,
-                                         Fraction frac)
+ConnectorInfoWriter::ConnectorInfoWriter(XmlWriter& xml, const Element* current, const Element* connector, int track, Fraction frac)
     : ConnectorInfo(current, track, frac), _xml(&xml), _connector(connector)
 {
     if (!connector) {
@@ -341,7 +339,7 @@ void ConnectorInfoWriter::write()
     if (!xml.canWrite(_connector)) {
         return;
     }
-    xml.stag(QString("%1 type=\"%2\"").arg(tagName()).arg(_connector->name()));
+    xml.stag(QString("%1 type=\"%2\"").arg(tagName(), _connector->name()));
     if (isStart()) {
         _connector->write(xml);
     }
@@ -383,9 +381,8 @@ bool ConnectorInfoReader::read()
             if (tag == name) {
                 _connector = Element::name2Element(tag, _connectorReceiver->score());
             } else {
-                qWarning(
-                    "ConnectorInfoReader::read: element tag (%s) does not match connector type (%s). Is the file corrupted?",
-                    tag.toLatin1().constData(), name.toLatin1().constData());
+                qWarning("ConnectorInfoReader::read: element tag (%s) does not match connector type (%s). Is the file corrupted?",
+                         tag.toLatin1().constData(), name.toLatin1().constData());
             }
 
             if (!_connector) {
