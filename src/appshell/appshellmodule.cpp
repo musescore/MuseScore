@@ -27,6 +27,7 @@
 
 #include "view/dockwindow/docksetup.h"
 #include "view/settings/settingslistmodel.h"
+#include "view/menumodel.h"
 
 using namespace mu::appshell;
 using namespace mu::framework;
@@ -69,4 +70,5 @@ void AppShellModule::registerUiTypes()
     dock::DockSetup::registerQmlTypes();
 
     qmlRegisterType<SettingListModel>("MuseScore.Settings", 1, 0, "SettingListModel");
+    qmlRegisterType<MenuModel>("MuseScore.Menu", 1, 0, "MenuModel");
 }
