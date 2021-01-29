@@ -23,6 +23,7 @@
 #include <QQuickItem>
 
 #include "uicomponents/view/qmllistproperty.h"
+#include "uicomponents/uicomponentstypes.h"
 #include "dockpage.h"
 
 #include "ui/imainwindow.h"
@@ -41,6 +42,8 @@ class DockWindow : public QQuickItem, public ui::IMainWindow
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
     Q_PROPERTY(QColor borderColor READ borderColor WRITE setBorderColor NOTIFY borderColorChanged)
 
+    Q_PROPERTY(QVariantList menues READ menues WRITE setMenues NOTIFY menuesChanged)
+
     Q_PROPERTY(QQmlListProperty<mu::dock::DockToolBar> toolbars READ toolbars)
 
     Q_PROPERTY(QQmlListProperty<mu::dock::DockPage> pages READ pages)
@@ -58,6 +61,7 @@ public:
     QColor color() const;
     QColor borderColor() const;
 
+    QVariantList menues();
     QQmlListProperty<DockToolBar> toolbars();
     QQmlListProperty<DockPage> pages();
 
@@ -71,12 +75,15 @@ public slots:
     void setColor(QColor color);
     void setBorderColor(QColor color);
     void setCurrentPageUri(QString uri);
+    void setMenues(QVariantList menues);
 
 signals:
     void titleChanged(QString title);
     void colorChanged(QColor color);
     void borderColorChanged(QColor color);
     void currentPageUriChanged(QString currentPageUri);
+    void menuesChanged(QVariantList menues);
+    void actionTriggered(QString action);
 
 private slots:
     void onMainWindowEvent(QEvent* event);
@@ -94,9 +101,13 @@ private:
     void showPage(DockPage* page);
     void adjustPanelsSize(DockPage* page);
 
+    QMenu* makeMenu(const uicomponents::MenuItem& menuItem) const;
+    QAction* makeAction(const uicomponents::MenuItem& menuItem) const;
+
     QMainWindow* m_window = nullptr;
     EventsWatcher* m_eventsWatcher = nullptr;
     QString m_title;
+    uicomponents::MenuItemList m_menues;
     uicomponents::QmlListProperty<DockToolBar> m_toolbars;
     QStackedWidget* m_central = nullptr;
     QStatusBar* m_statusbar = nullptr;

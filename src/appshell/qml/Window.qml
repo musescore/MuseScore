@@ -4,6 +4,7 @@ import MuseScore.Dock 1.0
 import MuseScore.Ui 1.0
 import MuseScore.Playback 1.0
 import MuseScore.NotationScene 1.0
+import MuseScore.Menu 1.0
 
 import "./HomePage"
 import "./NotationPage"
@@ -19,6 +20,7 @@ DockWindow {
     borderColor: ui.theme.strokeColor
 
     Component.onCompleted: {
+        menuModel.load()
         api.launcher.open(homePage.uri)
     }
 
@@ -31,6 +33,13 @@ DockWindow {
 
     readonly property int toolbarHeight: 48
     property bool isNotationPage: currentPageUri === notationPage.uri
+
+    property var menuModel: MenuModel {}
+
+    menues: menuModel.items
+    onActionTriggered: {
+        menuModel.handleAction(action)
+    }
 
     toolbars: [
         DockToolBar {
