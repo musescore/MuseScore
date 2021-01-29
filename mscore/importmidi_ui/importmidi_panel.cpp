@@ -132,6 +132,8 @@ void ImportMidiPanel::setupUi()
       connect(_ui->pushButtonDown, SIGNAL(clicked()), SLOT(moveTrackDown()));
       connect(_ui->toolButtonHideMidiPanel, SIGNAL(clicked()), SLOT(hidePanel()));
 
+      _ui->toolButtonHideMidiPanel->setIcon(*icons[int(Icons::close_ICON)]);
+      _ui->pushButtonUp->setIcon(*icons[int(Icons::arrowUp_ICON)]);
       _ui->pushButtonDown->setIcon(*icons[int(Icons::arrowDown_ICON)]);
       
       _updateUiTimer->start(100);
