@@ -9,7 +9,7 @@
     <message>
         <source>The Playback Controls toolbar allows you to play/pause your score and control various aspects of playback.</source>
         <comment>welcome</comment>
-        <translation>Du kan bruge Afspilningsstyring til at afspille/pause dit nodeark samt styre afspilningsmulighederne.</translation>
+        <translation>Afspilningskontroller bruges til at afspille/pause dit nodeark samt styre afspilningsmulighederne.</translation>
     </message>
     <message>
         <source>The Note Input toolbar allows you to enter notes and rests into your score.</source>
@@ -24,12 +24,12 @@
     <message>
         <source>Each palette contains items that can be added to the score.</source>
         <comment>show-palette</comment>
-        <translation>Hver palet indeholder elementer, som du kan tilføje nodearket.</translation>
+        <translation>Hver palette indeholder elementer, som du kan tilføje nodearket.</translation>
     </message>
     <message>
         <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
-        <translation>Velkommen til Paletter, hvor du kan tilføje forskellige elementer til dit nodeark. Tryk &quot;Næste&quot; for at lære mere.</translation>
+        <translation>Velkommen til Paletter hvor du kan tilføje forskellige elementer til dit nodeark. Tryk &quot;Næste&quot; for at lære mere.</translation>
     </message>
     <message>
         <source>To enter notes with different rhythms in the same measure, use multiple voices.
@@ -47,20 +47,20 @@
     The main three are File Operations, Playback Controls, and Note Input.</source>
         <comment>welcome</comment>
         <translation>Dette er værktøjslinjerne.
-De tre vigtigste er Filfunktioner, Afspilningsstyring og Nodeindtastning.</translation>
+De tre vigtigste er Filfunktioner, Afspilningskontroller og Nodeindtastning.</translation>
     </message>
     <message>
         <source>There are different workspaces available with different sets of palettes.
     The &quot;Advanced&quot; workspace contains more items than the &quot;Basic&quot; workspace.</source>
         <comment>show-palette</comment>
         <translation>Der er forskellige arbejdsområder tilgængelige med forskelligt indhold af paletter.
- Arbejdsområdet &apos;Avanceret&apos; giver flere muligheder end arbejdsområdet &apos;Grundlæggende&apos;.</translation>
+ Arbejdsområdet &apos;Udvidet&apos; giver flere muligheder end arbejdsområdet &apos;Grundlæggende&apos;.</translation>
     </message>
     <message>
         <source>To add a palette item to your score, first select an element or range in your score, then double-click on the palette item to add it to the selected elements.
     You can also drag an item from the palette and drop it on a specific element in your score.</source>
         <comment>show-palette</comment>
-        <translation>Et paletelement tilføjes til nodearket ved først at vælge elementplacering eller område i nodearket og derefter dobbeltklikke på paletsymbolet.
+        <translation>Et palettelement tilføjes til nodearket ved først at vælge elementplacering eller område i nodearket og derefter dobbeltklikke på palettesymbolet.
  Du kan også trække symbolet fra paletten hen på det ønskede element i nodearket.</translation>
     </message>
     <message>
@@ -76,7 +76,7 @@ For at skifte kan du bruge genvejstasten &quot;M&quot;.</translation>
         <source>Welcome to note input, where you will enter notes and rests into your score.
     Click &quot;Next&quot; to learn more.</source>
         <comment>note-input</comment>
-        <translation>Velkommen til Nodeindtastning, hvor du indsætter noder og pauser i nodearket.
+        <translation>Velkommen til Nodeindtastning hvor du indsætter noder og pauser i nodearket.
  Klik på &quot;Næste&quot; for at lære mere.</translation>
     </message>
     <message>
@@ -99,7 +99,7 @@ For at skifte kan du bruge genvejstasten &quot;M&quot;.</translation>
     <message>
         <source>To extend a note by adding a tied note, select the duration to extend by, then press &quot;+&quot; or click this button.</source>
         <comment>note-input</comment>
-        <translation>En node kan forlænges med en sammenbundet node ved at vælge varighed og genvejstasten &quot;+&quot; - eller ved at klikke på denne knap.</translation>
+        <translation>En node kan forlænges med en sammenbundet node ved at vælge varighed og genvejstasten &quot;+&quot; eller ved at klikke på denne knap.</translation>
     </message>
     <message>
         <source>MuseScore provides many ways to navigate through your score.
@@ -111,40 +111,40 @@ For at skifte kan du bruge genvejstasten &quot;M&quot;.</translation>
     <message>
         <source>Additional navigation tools include the Timeline and Navigator, both found in the View menu.</source>
         <comment>navigate-tour</comment>
-        <translation>Menuen &quot;Vis&quot; har flere værktøjer til navigering såsom Navigator og Tidslinje.</translation>
+        <translation>Flere værktøjer til navigering som Navigation og Tidslinje kan man finde i menuen &quot;Vis&quot;.</translation>
     </message>
     <message>
         <source>Welcome to the Inspector, where you can change individual properties for selected elements.
     Click &quot;Next&quot; to learn more.</source>
         <comment>inspector-tour</comment>
-        <translation>Velkommen til Egenskaber, hvor indstillingerne for de markerede elementer kan sættes individuelt.
+        <translation>Velkommen til Inspektør hvor indstillingerne for de markerede elementer kan sættes individuelt.
  Tryk på &quot;Næste&quot; for at lære mere.</translation>
     </message>
     <message>
         <source>Begin by selecting one or more elements in your score, then use the check boxes, spin boxes, dropdown menus, and other controls to change values for the various properties.
     The set of properties available will differ according to the type of selected elements or elements.</source>
         <comment>inspector-tour</comment>
-        <translation>Start med at markere et eller flere elementer i nodearket. Brug derefter checkbokse, spinbokse, dropdownmenuer osv. til at ændre værdier for de forskellige egenskaber.
+        <translation>Start med at markere et eller flere elementer i nodearket. Brug derefter tjekbokse, spinbokse, dropdown menuer osv. til at ændre værdier for de forskellige egenskaber.
   De egenskaber, som er til rådighed, vil variere i forhold den valgte type af elementer.</translation>
     </message>
     <message>
         <source>If you have selected elements of different types, only a few settings common to all elements will be available.
     You can click the &quot;Notes&quot; and other buttons at the bottom of the Inspector to limit the selection to just the elements of the specified type.</source>
         <comment>inspector-tour</comment>
-        <translation>Hvis du vælger elementer af forskellig type, kan du kun vælge indstillinger, der er fælles for elementerne.
- Ved at klikke på &quot;Noder&quot; eller en af de andre knapper i bunden af Egenskaber kan det valgte begrænses til denne type elementer.</translation>
+        <translation>Hvis du vælger elementer af forskellig type er kun få fælles indstillinger tilgængelige.
+ Ved at klikke på &quot;Noder&quot; eller en af de andre knapper i bunden af Egenskaber kan det valgte begrænses til kun denne type elementer.</translation>
     </message>
     <message>
         <source>The Inspector allows you to control various properties of the elements in your score.</source>
         <comment>welcome</comment>
-        <translation>Ved at rette Egenskaber kan du styre forskellige indstillinger for elementerne i nodearket.</translation>
+        <translation>¨Egenskaber&apos; giver dig mulighed for at ændre indstillinger for de forskellige elementerne i nodearket.</translation>
     </message>
     <message>
         <source>Autoplace is a new feature that automatically detects and avoids many types of collisions between elements.
     You can also manually adjust the position of autoplaced elements, or disable autoplace for selected elements.
     Click &quot;Next&quot; to learn more.</source>
         <comment>autoplace-tour</comment>
-        <translation>Autoplacering er en ny funktion, som automatisk finder, og undgår, de fleste typer kollision mellem elementer.
+        <translation>Autoplacering er en ny funktion, som automatisk finder, og undgår de fleste kollisioner mellem elementer.
  Du kan finjustere placeringen af autoplacerede elementer eller slå autoplacering fra for udvalgte elementer.
  Klik på &quot;Næste&quot; for at lære mere.</translation>
     </message>
@@ -154,7 +154,7 @@ For at skifte kan du bruge genvejstasten &quot;M&quot;.</translation>
     In many cases, this means that no further adjustments will be required at all.</source>
         <comment>autoplace-tour</comment>
         <translation>Autoplacering vil vælge placering for de fleste elementer ifølge almen praksis for udgivne noder.
- F.eks. ved at flytte tempoangivelser op over andre tekster eller ved at gøre kiler kortere for at undgå dynamikudtryk.
+ F.eks. ved at flytte tempoangivelser op over andre tekster eller ved at gøre kiler kortere for at undgå kollision med dynamikudtryk.
  I mange tilfælde vil det betyde, at der slet ikke er brug for flere justeringer.</translation>
     </message>
     <message>
@@ -162,28 +162,28 @@ For at skifte kan du bruge genvejstasten &quot;M&quot;.</translation>
     or by using the &quot;Offset&quot; fields in the Inspector.
     This allows you to make adjustments while leaving autoplace enabled to continue avoiding collisions.</source>
         <comment>autoplace-tour</comment>
-        <translation>Om nødvendigt kan du finjustere elementplacering ved at  trække med markørtasterne i Redigeringstilstand (dobbeltklik) eller ved at bruge &quot;Offset&quot; felterne i Egenskaber.
- Det muliggør finjustering med aktiveret Autoplacering, så du fortsat undgår kollisioner.</translation>
+        <translation>Om nødvendigt kan du finjustere elementplacering ved at  trække med musen, bruge markørtasterne i Redigeringstilstand (dobbeltklik) eller ved at bruge &quot;Offset&quot; felterne i Egenskaber.
+ Det muliggør finjustering med aktiveret Autoplacering så du fortsat undgår kollisioner.</translation>
     </message>
     <message>
         <source>For larger adjustments, it may be more convenient to disable autoplace for selected elements using the Inspector.
     This will remove them from collision detection and allow you to place them more freely.</source>
         <comment>autoplace-tour</comment>
-        <translation>Ved større justeringer kan det være mere praktisk at slå Autoplacering fra for udvalgte elementer ved at rette Egenskaber.
+        <translation>Ved større justeringer kan det være praktisk at slå Autoplacering fra for udvalgte elementer under Egenskaber.
  Det vil frigøre elementerne fra kollisionsdetektion og dermed tillade en mere fri placering.</translation>
     </message>
     <message>
         <source>Welcome to the Timeline, where you can view a high-level reduction of the score for easier navigation.
     Click &quot;Next&quot; to learn more.</source>
         <comment>timeline-tour</comment>
-        <translation>Velkommen til Tidslinje, hvor du kan se nodearket i fugleperspektiv for et bedre overblik.
+        <translation>Velkommen til Tidslinjen hvor du får et større overblik over nodearket.
  Klik på &quot;Næste&quot; for at lære mere.</translation>
     </message>
     <message>
         <source>The timeline shows rehearsal marks, changes of tempo, key, and time signature, and other points of interest.
     You can click anywhere to jump to the corresponding location in your score.</source>
         <comment>timeline-tour</comment>
-        <translation>Tidslinjen viser øvemærker, ændringer i tempo, toneart, takt og andre interessepunkter.
+        <translation>Tidslinjen viser tempo, taktart, øvemærker, toneart og andre interessepunkter.
  Du kan klikke på tidslinjen for at hoppe til det tilsvarende sted i nodearket.</translation>
     </message>
     <message>
@@ -192,7 +192,7 @@ For at skifte kan du bruge genvejstasten &quot;M&quot;.</translation>
     If the box is highlighted, then there are notes in that measure.
     Boxes with a thin blue outline represent measures that are currently in view.</source>
         <comment>timeline-tour</comment>
-        <translation>Herunder har hvert instrument en række.
+        <translation>Området herunder indeholder en række for hvert instrument..
  Hver boks i en række repræsenterer en takt for instrumentet.
  Hvis boksen er fremhævet, er der noder for instrumentet i takten.
  Bokse med tyndt blåt omrids angiver de takter, som aktuelt vises i nodearket.</translation>
@@ -201,13 +201,13 @@ For at skifte kan du bruge genvejstasten &quot;M&quot;.</translation>
         <source>MuseScore supports different types of selections: single, list, and range.
     Click &quot;Next&quot; to learn more.</source>
         <comment>select-tour</comment>
-        <translation>MuseScore understøtter forskellige valgmetoder: Enkelt, liste eller område.
+        <translation>MuseScore understøtter forskellige markeringstyper: Enkelt, liste eller område.
  Klik på &quot;Næste&quot; for at lære mere.</translation>
     </message>
     <message>
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
         <comment>select-tour</comment>
-        <translation>Endelig muliggør Valgfilter (fra menuen Vis) udelukkelse af en bestemt type elementer fra et valgt område.</translation>
+        <translation>Endelig muliggør Afgrænsningsfilter (fra menuen Vis) udelukkelse af en bestemt type elementer fra et valgt område.</translation>
     </message>
     <message>
         <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
@@ -258,12 +258,12 @@ Du kan også vælge områder ved at holde &quot;Skift&quot; nede, mens du trækk
     <message>
         <source>To add a note to a chord, press &quot;Shift&quot; while typing its letter name, or click on the staff.</source>
         <comment>note-input</comment>
-        <translation>For at tilføje en node til en akkord hold &quot;Skift&quot; nede mens du taster nodebogstavet, eller klikker på nodelinjen.</translation>
+        <translation>For at tilføje en node til en akkord hold &quot;Skift&quot; nede mens du taster nodebogstavet eller klikker på nodelinjen.</translation>
     </message>
     <message>
         <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press &quot;Ctrl+number&quot; or use Add &gt; Tuplets.</source>
         <comment>note-input</comment>
-        <translation>For at skabe en triol eller en anden tuplet: Vælg varigheden - totallængden af tupletten. Derefter tastes &quot;Ctrl&quot;+ciffer eller anvend funktionen Tilføj&gt;Tupletter.</translation>
+        <translation>For at skabe en triol eller en anden tuplet: Vælg varigheden - totallængden af tupletten. Derefter tastes &quot;Ctrl+ciffer&quot; (Mac: &quot;cmd + ciffer&quot;) eller anvend funktionen Tilføj&gt;Tupletter.</translation>
     </message>
     <message>
         <source>To make a single selection, click the element you want to select.
@@ -319,7 +319,7 @@ Du kan også vælge områder ved at holde &quot;Skift&quot; nede, mens du trækk
         <comment>spanner-drop-apply</comment>
         <translation>De fleste elementer på linjepaletten spænder fra et startelement til et slutelement.
 
- For at redigere omfanget skal du dobbeltklikke på linjen, så slutpunktet automatisk vælges, og derefter:
+ For at redigere omfanget skal du dobbeltklikke på linjen så slutpunktet automatisk vælges og derefter:
 
  - Tast &quot;Skift+Højre&quot; for at flytte slutpunktet frem.
 
@@ -344,7 +344,7 @@ Hvis du har flere nodeark åbne, kan du skifte mellem dem ved at vælge fane øv
     You can also save to your musescore.com account if you go to File &gt; Save Online.
     The controls at the right of this toolbar control the display of your score.</source>
         <comment>welcome</comment>
-        <translation>Værktøjslinjen Filfunktioner giver mulighed for at oprette/gemme/indlæse/udskrive filer og for at fortryde/gendanne ændringer.
+        <translation>Værktøjslinjen Filfunktioner giver mulighed for at oprette/gemme/indlæse/udskrive filer.
  Du kan også gemme under din konto på musescore.com ved at bruge Fil&gt;Gem Online.
  Styringsmulighederne til højre for denne værktøjslinje kontrollerer visningen af nodearket.</translation>
     </message>

@@ -231,9 +231,9 @@ Per scorrere orizzontalmente, tenere premuto &quot;Shift&quot; mentre si usa la 
     to move between pages.
     Keyboards that lack these keys often provide equivalents such as &quot;Fn+Up/Down/Left/Right&quot;.</source>
         <comment>navigate-tour</comment>
-        <translation>I tasti di navigazione sulla tastiera come &quot;PgSu&quot;, PgGiù&quot;, Home, e Fine funzionano come nelle altre applicazioni
+        <translation>I tasti di navigazione sulla tastiera come &quot;PgSu&quot;, PgGiù&quot;, &quot;Home&quot;, e &quot;Fine&quot; funzionano come nelle altre applicazioni
   per spostarsi tra le pagine.
-  Le tastiere senza questi tasti spesso hanno i loro equivalenti con Fn+Su/Giù/Sinistra/Destra.</translation>
+  Le tastiere senza questi tasti spesso hanno i loro equivalenti con &quot;Fn+Su/Giù/Sinistra/Destra&quot;.</translation>
     </message>
     <message>
         <source>You can move the score short distances by clicking an empty area of the page and dragging.
@@ -277,7 +277,7 @@ oppure fare clic su una di queste icone.</translation>
         <translation>Per effettuare una singola selezione, fare clic sull&apos;elemento che si desidera selezionare.
 Viene evidenziato per indicare che è stato selezionato.
 È possibile utilizzare i tasti cursore sinistro e destro per spostare la selezione tra le note e le pause della partitura.
-Suggerimento: se premete il tasto Alt (&quot;Opzione&quot; su macOS) insieme ai tasti cursore potete spostarvi anche tra altri elementi,
+Suggerimento: se premete il tasto &quot;Alt&quot; (&quot;Opzione&quot; su macOS) insieme ai tasti cursore potete spostarvi anche tra altri elementi,
 e anche spostarvi da pentagramma a pentagramma.</translation>
     </message>
     <message>
