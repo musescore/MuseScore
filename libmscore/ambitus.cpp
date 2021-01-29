@@ -579,10 +579,10 @@ void Ambitus::updateRange()
       Chord* chord;
       int   firstTrack  = track();
       int   lastTrack   = firstTrack + VOICES-1;
-      int   pitchTop    = -1000;
-      int   pitchBottom = 1000;
-      int   tpcTop      = 0;  // Initialized to prevent warning
-      int   tpcBottom   = 0;  // Initialized to prevent warning
+      int   pitchTop    = SCHAR_MIN-1; // just outside Interval::{chromatic,diatonic}
+      int   pitchBottom = SCHAR_MAX+1; // just outside Interval::{chromatic,diatonic}
+      int   tpcTop      = Tpc::TPC_INVALID;  // Initialized to prevent warning
+      int   tpcBottom   = Tpc::TPC_INVALID;  // Initialized to prevent warning
       int   trk;
       Measure* meas     = segment()->measure();
       Segment* segm     = meas->findSegment(SegmentType::ChordRest, segment()->tick());
@@ -621,7 +621,8 @@ void Ambitus::updateRange()
             segm = segm->nextCR();
             }
 
-      if (pitchTop > -1000) {             // if something has been found, update this
+      if (pitchTop > SCHAR_MIN-1/* || pitchBottom < SCHAR_MAX+1 || tpcTop != Tpc::TPC_INVALID || tpc_Bottom != Tpc::TPC_INVALID*/) {
+            // if anything has been found, no matter what, update these
             _topPitch    = pitchTop;
             _bottomPitch = pitchBottom;
             _topTpc      = tpcTop;
