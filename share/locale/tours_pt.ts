@@ -183,7 +183,8 @@ Pressione &quot;Seguinte&quot; para saber mais. </translation>
         <source>The timeline shows rehearsal marks, changes of tempo, key, and time signature, and other points of interest.
     You can click anywhere to jump to the corresponding location in your score.</source>
         <comment>timeline-tour</comment>
-        <translation type="unfinished"/>
+        <translation>A linha do tempo mostra marcas de ensaio, mudanças de tempo, tonalidade e compasso, bem como outros elementos de interesse.
+    Pode clicar em qualquer lado para saltar para a localização correspondente na sua partitura.</translation>
     </message>
     <message>
         <source>The section below contains a row for each instrument.
@@ -191,66 +192,78 @@ Pressione &quot;Seguinte&quot; para saber mais. </translation>
     If the box is highlighted, then there are notes in that measure.
     Boxes with a thin blue outline represent measures that are currently in view.</source>
         <comment>timeline-tour</comment>
-        <translation type="unfinished"/>
+        <translation>A secção abaixo contém uma linha por cada instrumento.
+    Cada caixa dentro das linhas representa um compasso para esse instrumento.
+    Se a caixa estiver realçada, então esse compasso terá notas.
+    Caixas com um contorno azul fino representam os compassos que estão a ser visualizados.</translation>
     </message>
     <message>
         <source>MuseScore supports different types of selections: single, list, and range.
     Click &quot;Next&quot; to learn more.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"/>
+        <translation>MuseScore suporta vários tipos de seleção: única, lista e gama.
+    Clique &quot;Seguinte&quot; para saber mais.</translation>
     </message>
     <message>
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Finalmente, o Filtro de Seleção (disponível no menu Ver) permite-lhe excluir elementos de um tipo de entre a seleção.</translation>
     </message>
     <message>
         <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
     If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
     You can also set style defaults using Format &gt; Style….</source>
         <comment>inspector-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Se alterou um valor, pode clicar no botão &quot;Repor&quot; para alterar para o valor predefinido.
+    Se o valor for controlado por uma definição de estilo, pode clicar no botão &quot;Definir como estilo&quot; para definir o valor atual como a nova predefinição para esse estilo.
+    Pode também definir as predefinições de estilo através de Formatação &gt; Estilo….</translation>
     </message>
     <message>
         <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
     To scroll horizontally, hold &quot;Shift&quot; while using the mouse wheel or touch gesture.</source>
         <comment>navigate-tour</comment>
-        <translation type="unfinished"/>
+        <translation>A forma mais rápida de navegar pela página é através da utilização da roda do seu rato, ou de movimentos de toque equivalentes (por exemplo, arrastar com dois dedos).
+     Para navegar horizontalmente, pressione &quot;Shift&quot; enquanto utiliza a roda do rato ou faz um movimento de toque.</translation>
     </message>
     <message>
         <source>The navigation keys on your keyboard such as &quot;PgUp&quot;, &quot;PgDn&quot;, &quot;Home&quot;, and &quot;End&quot; function as in other applications
     to move between pages.
     Keyboards that lack these keys often provide equivalents such as &quot;Fn+Up/Down/Left/Right&quot;.</source>
         <comment>navigate-tour</comment>
-        <translation type="unfinished"/>
+        <translation>As teclas de navegação no seu teclado, como &quot;PgUp&quot;, &quot;PgDn&quot;, &quot;Home&quot; e &quot;End&quot;, funcionam como noutras aplicações.
+    para navegar entre páginas.
+    Teclados sem estas teclas costumam oferecer algo semelhante através de sequências de teclas, como &quot;Fn+Cima/Baixo/Esquerda/Direita&quot;.</translation>
     </message>
     <message>
         <source>You can move the score short distances by clicking an empty area of the page and dragging.
     By the way, you can also select regions by holding &quot;Shift&quot; while dragging.</source>
         <comment>navigate-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Pode mover a pauta por curtas distâncias, clicando numa área vazia na página e arrastando-a.
+    Para além disso, pode também selecionar zonas, pressionando &quot;Shift&quot; enquanto arrasta.</translation>
     </message>
     <message>
         <source>To enter a note of the selected duration, type its letter name or click on the staff.
     Press &quot;Ctrl+Up/Down&quot; (macOS: &quot;Cmd+Up/Down&quot;) to change octave.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Para inserir uma nota com a duração selecionada, escreva o seu nome ou clique no compasso.
+    Clique em &quot;Ctrl+Cima/Baixo&quot; (macOS: &quot;Cmd+Cima/Baixo&quot;) para alterar a oitava.</translation>
     </message>
     <message>
         <source>To add an accidental to a note, press the shortcut &quot;Up&quot; or &quot;Down&quot; to raise or lower its pitch,
     or click one of these icons.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Para adicionar uma alteração a uma nota, utilize os atalhos &quot;Cima&quot; ou &quot;Baixo&quot; para subir ou baixar o tom,
+    ou clique num destes ícones. </translation>
     </message>
     <message>
         <source>To add a note to a chord, press &quot;Shift&quot; while typing its letter name, or click on the staff.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Para adicionar uma nota a um acorde, clique em &quot;Shift&quot; enquanto escreve o nome da nota, ou clique no compasso.</translation>
     </message>
     <message>
         <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press &quot;Ctrl+number&quot; or use Add &gt; Tuplets.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Para criar uma tercina ou outra quiáltera, selecione a duração que representa o tempo total to quiáltera, e pressione &quot;Ctrl+número&quot; ou utilize o menu Adicionar &gt; Quiálteras.</translation>
     </message>
     <message>
         <source>To make a single selection, click the element you want to select.
@@ -259,7 +272,11 @@ Pressione &quot;Seguinte&quot; para saber mais. </translation>
     Tip: if you press the &quot;Alt&quot; key (&quot;Option&quot; on macOS) along with the cursor keys you can move through other elements too,
     and also move up and down from staff to staff.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Para fazer uma seleção simples, clique no elemento que quer selecionar.
+    Este ficará realçado para indicar que está selecionado.
+    Pode utilizar os botões esquerdo e direito do seu rato para mover a selecção através das notas e pausas da sua partitura.
+    Dica: se pressionar a tecla &quot;Alt&quot; (&quot;Option&quot; no macOS) em conjunto com os botões do rato, poderá mover a seleção através de outros elementos,
+    bem como mover para cima e para baixo, entre as linhas de partitura.</translation>
     </message>
     <message>
         <source>A list selection is a combination of single selections.
@@ -267,7 +284,10 @@ Pressione &quot;Seguinte&quot; para saber mais. </translation>
     You can also quickly select similar elements by right-clicking (macOS: &quot;Ctrl&quot;+clicking) one
     and then choosing one of the &quot;Select&quot; options from the resulting popup menu.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"/>
+        <translation>A seleção em lista é uma combinação de seleções simples.
+    Pressione &quot;Ctrl&quot; (macOS: &quot;Cmd&quot;) enquanto clica para adicionar ou remover elementos da lista selecionada.
+    Pode também selecionar elementos semelhantes mais rapidamente, clicando com o botão direito do rato (macOS: &quot;Ctrl&quot;+clique) num desses elementos
+    e selecionando depois uma das opções do menu popup &quot;Selecionar&quot;.</translation>
     </message>
     <message>
         <source>A range selection includes everything from one point in time to another across one or more staves.
@@ -275,14 +295,19 @@ Pressione &quot;Seguinte&quot; para saber mais. </translation>
     To make a range selection, click the first note, rest, or measure you want to select, then &quot;Shift&quot;+click the last.
     You can also extend range selections by holding the &quot;Shift&quot; key while moving the cursor.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"/>
+        <translation>A seleção de gama inclui todos os elementos desde um ponto no tempo até outro, mesmo que a seleção inclua várias linhas ou pautas.
+    Esta seleção é assinalada através de um realce retangular de cor azul ao longo de toda a seleção.
+    Para fazer uma seleção de gama, clique na primeira nota, pausa ou compasso que deseja selecionar, e depois faça &quot;Shift&quot;+clique na última que desejar.
+    Pode também estender seleções já existentes, carregando na tecla &quot;Shift&quot; enquanto move o rato.</translation>
     </message>
     <message>
         <source>Another way to make selections is to hold &quot;Shift&quot; while dragging.
     If your selection includes notes, it will automatically be made as a range selection;
     otherwise it will be made as a list selection.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Outra forma de fazer seleções é pressionar a tecla &quot;Shift&quot; enquanto arrasta o rato.
+    Se a sua seleção incluir notas, ela será automaticamente transformada numa seleção de gama;
+    caso contrário, será transformada numa seleção de lista.</translation>
     </message>
     <message>
         <source>Most elements on the lines palette span a range from a start element to an end element.
@@ -293,32 +318,43 @@ Pressione &quot;Seguinte&quot; para saber mais. </translation>
 
     - Press &quot;Shift+Left&quot; to move that handle backward.</source>
         <comment>spanner-drop-apply</comment>
-        <translation type="unfinished"/>
+        <translation>A maioria dos elementos na palete de linhas permite selecionar um elemento de início e de fim.
+
+    Para editar esta gama, faça duplo clique na linha (que selecionará automaticamente a sua posição final) e:
+
+    - Pressione &quot;Shift+Direita&quot; para mover a posição final para a frente.
+
+    - Pressione &quot;Shift+Esquerda&quot; para mover a posição final para trás.</translation>
     </message>
     <message>
         <source>Alternatively, first selecting a range of elements in the score and then double-clicking a line element in the palette will add that new element across the selected range.</source>
         <comment>spanner-drop-apply</comment>
-        <translation type="unfinished"/>
+        <translation>Em alternativa, selecione primeiro uma gama de elementos na partitura e depois, clique duas vezes num elemento da palete para adicionar esse novo elemento ao longo de toda a gama selecionada.</translation>
     </message>
     <message>
         <source>This is the score view, where you can view and edit your score.
     Use your mouse wheel or touchpad to scroll (with &quot;Shift&quot; to scroll horizontally).
     If you have multiple scores open, you can switch between them using tabs at the top of your score view.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Esta é a vista de partitura, onde poderá ver e editar a sua partitura.
+    Use a roda do seu rato ou touchpad para navegar (pressione &quot;Shift&quot; para navegar na horizontal).
+    Se tiver várias partituras abertas, pode alternar entre elas utilizando as abas no topo da vista de partitura.</translation>
     </message>
     <message>
         <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
     You can also save to your musescore.com account if you go to File &gt; Save Online.
     The controls at the right of this toolbar control the display of your score.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>A barra de Operações de Ficheiro permite-lhe criar/guardar/abrir/imprimir ficheiros, bem como reverter/refazer alterações.
+    Pode também guardar o ficheiro diretamente na sua conta musescore.com, através do menu Ficheiro &gt; Guardar Online.
+    Os controlos à direita desta barra de ferramentas controlam a forma como a sua partitura é mostrada.</translation>
     </message>
     <message>
         <source>The main menu contains most other commands.
     In addition, many commands can be accessed via keyboard shortcuts or by right-clicking (macOS: &quot;Ctrl&quot;+clicking) within the score view.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>O menu principal contém a maioria dos outros comandos.
+    Para além disso, muitos dos comandos podem ser acedidos através de atalhos de teclado ou clicando na partitura com o botão direito do rato (macOS: &quot;Ctrl&quot; + clique).</translation>
     </message>
     <message>
         <source>That's the end of this tour!
@@ -326,7 +362,10 @@ Pressione &quot;Seguinte&quot; para saber mais. </translation>
     To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
     You can also enable/disable and reset tours in Help &gt; Tours.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Chegou ao fim do guia!
+    À medida que for utilizando o MuseScore, mais guias irão aparecer para explicar outras funcionalidades.
+    Para desligar os guias, remova a seleção de&quot; Continuar a mostrar guias&quot; antes de fechar esta janela.
+    Pode também ligar/desligar e restaurar os guias para a predefinição através do menu Ajuda &gt; Guias.</translation>
     </message>
 </context>
 </TS>

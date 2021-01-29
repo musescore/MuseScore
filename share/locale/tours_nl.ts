@@ -274,7 +274,7 @@ Om horizontaal te scrollen houdt u de &quot;shift&quot; ingedrukt terwijl u het 
         <comment>select-tour</comment>
         <translation>Om een enkele selectie te maken klikt u op het element dat u wilt selecteren.
  Het element licht op om aan te geven dat het geselecteerd is.
- U kunt de cursor naar links en rechts gebruiken om de selectie te verplaatsen tussen de noten en rusten in de partituur. Tip: indien u de &quot;Alt&quot; (&quot;Option&quot; voor macOS) indrukt bij het gebruik van de pijltjes toetsen dan kun je ook andere element kiezen
+ U kunt de cursor naar links en rechts gebruiken om de selectie te verplaatsen tussen de noten en rusten in de partituur. Tip: indien u de &quot;Alt&quot; (&quot;Option&quot; voor macOS) indrukt bij het gebruik van de pijltjes toetsen dan kunt u ook andere element kiezen
  en ook naar boven en beneden van de ene notenbalk naar de andere.
 </translation>
     </message>

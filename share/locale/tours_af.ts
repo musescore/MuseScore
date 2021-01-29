@@ -70,7 +70,7 @@
         <comment>mmrest</comment>
         <translation>Jy het veelmaat-rustekens in hierdie partituur.
     Dit kombineer veelvuldige mate van rustekens in &apos;n enkele veelmaat-rusteken.
-    Om hierdie instelling weer te wissel, druk die &quot;M&quot;-sneltoets. </translation>
+    Om hierdie instelling weer te wissel, druk die &quot;M&quot;-kortpad. </translation>
     </message>
     <message>
         <source>Welcome to note input, where you will enter notes and rests into your score.
@@ -82,19 +82,19 @@
     <message>
         <source>To enable note input mode, click the &quot;Note input&quot; icon or press the shortcut &quot;N&quot;.</source>
         <comment>note-input</comment>
-        <translation>Om noottoevoermodus te aktiveer, klik die &quot;Noottoevoer&quot;-ikoon of klik die sneltoets &quot;N&quot;.</translation>
+        <translation>Om noottoevoermodus te aktiveer, klik die &quot;Noottoevoer&quot;-ikoon of klik die kortpad &quot;N&quot;.</translation>
     </message>
     <message>
         <source>Select a duration by clicking one of these icons or pressing the shortcuts &quot;1&quot; - &quot;9&quot;.
     To include an augmentation dot, click the appropriate icon or press the shortcut &quot;.&quot;.</source>
         <comment>note-input</comment>
-        <translation>Kies &apos;n duur deur op een van hierdie ikone te klik of deur die sneltoetse &quot;1&quot; - &quot;9&quot; te druk.
-    Om &apos;n vergrotingspunt in te sluit, klik die mees toepaslike ikoon of klik die sneltoets &quot;.&quot;.</translation>
+        <translation>Kies &apos;n duur deur op een van hierdie ikone te klik of deur die kortpaaie &quot;1&quot; - &quot;9&quot; te druk.
+    Om &apos;n vergrotingspunt in te sluit, klik die mees toepaslike ikoon of klik die kortpad &quot;.&quot;.</translation>
     </message>
     <message>
         <source>To enter a rest of the selected duration, press the shortcut &quot;0&quot;, or select this icon then click on the staff.</source>
         <comment>note-input</comment>
-        <translation>Om &apos;n rusteken van die gekose duur in te voeg, druk die sneltoets &quot;0&quot;, of kies hierdie ikoon en klik dan op die notebalk.</translation>
+        <translation>Om &apos;n rusteken van die gekose duur in te voeg, druk die kortpad &quot;0&quot;, of kies hierdie ikoon en klik dan op die notebalk.</translation>
     </message>
     <message>
         <source>To extend a note by adding a tied note, select the duration to extend by, then press &quot;+&quot; or click this button.</source>
@@ -131,8 +131,8 @@
         <source>If you have selected elements of different types, only a few settings common to all elements will be available.
     You can click the &quot;Notes&quot; and other buttons at the bottom of the Inspector to limit the selection to just the elements of the specified type.</source>
         <comment>inspector-tour</comment>
-        <translation>As jy elemente van verskillende soorte geselekteer het, is slegs &apos;n paar instellings wat algemeen aan alle elemente is, beskikbaar.
-    Jy kan op die &quot;Note&quot; en ander knoppies aan die onderkant van die inspekteur klik om die seleksie te bepeperk tot slegs die elemente van die gespesifiseerde tipe.</translation>
+        <translation>As jy elemente van verskillende soorte geselekteer het, is slegs &apos;n paar instellings wat gemeenskaplik aan alle elemente is beskikbaar.
+    Jy kan op die &quot;Note&quot; en ander knoppies aan die onderkant van die inspekteur klik om die seleksie te beperk tot slegs die elemente van die gespesifiseerde tipe.</translation>
     </message>
     <message>
         <source>The Inspector allows you to control various properties of the elements in your score.</source>
@@ -217,7 +217,7 @@
         <comment>inspector-tour</comment>
         <translation>As jy &apos;n waarde gewysig het, kan jy op die &quot;Stel terug&quot;-knoppie klik om dit na die verstek terug te stel.
     As die waarde beheer word deur &apos;n stylinstelling, kan jy die &quot;Stel as styl&quot;-knoppie druk om die huidige waarde as die nuwe verstek vir die styl te stel.
-    Jy kan ook styl-verstekwaardes via Formaat &gt; Styl….</translation>
+    Jy kan ook styl-verstekwaardes stel via Formaat &gt; Styl….</translation>
     </message>
     <message>
         <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
@@ -298,7 +298,7 @@
         <comment>select-tour</comment>
         <translation>&apos;n Reeksseleksie sluit in als van een punt in tyd na &apos;n ander oor een of meer notebalke. 
     Dit word aangedui deur &apos;n blou reghoek wat die hele reeks omvat. 
-    Om &apos;n reeksseleksie te maak, kliek op die eerste noot, rus of maat wat jy wil kies, en &quot;Shift&quot;+kliek dan die laaste.
+    Om &apos;n reeksseleksie te maak, kliek op die eerste noot, rusteken of maat wat jy wil kies, en &quot;Shift&quot;+kliek dan die laaste.
     Jy kan ook reeksseleksies uitbrei deur die &quot;Shift&quot;-sleutel in te hou terwyl jy die wyser beweeg. </translation>
     </message>
     <message>
@@ -321,7 +321,7 @@
         <comment>spanner-drop-apply</comment>
         <translation>Meeste elemente op die lynepalette strek oor &apos;n reeks van &apos;n beginelement na &apos;n endelement.
 
-    Om die reeks te redigeer, dubbelkliek die lyn (wat outomaties sy eindhandvatsel kies) en: 
+    Om die reeks te wysig, dubbelkliek die lyn (wat outomaties sy eindhandvatsel kies) en: 
 
    - Druk &quot;Shift+Right&quot; om die handvatsel vorentoe te beweeg.
 
@@ -337,7 +337,7 @@
     Use your mouse wheel or touchpad to scroll (with &quot;Shift&quot; to scroll horizontally).
     If you have multiple scores open, you can switch between them using tabs at the top of your score view.</source>
         <comment>welcome</comment>
-        <translation>Hierdie is die partituuraansig, vanwaar jy jou partituur kan besigtig en redigeer.
+        <translation>Hierdie is die partituuraansig, vanwaar jy jou partituur kan besigtig en wysig.
   Gebruik jou muiswiel of raakblad om te rol (met &quot;Shift&quot; om horisontaal te rol).
   As jy verskeie partiture oop het, kan jy tussen hulle skakel deur die oortjies bo-aan jou partituuraansig te gebruik.</translation>
     </message>
@@ -355,7 +355,7 @@
     In addition, many commands can be accessed via keyboard shortcuts or by right-clicking (macOS: &quot;Ctrl&quot;+clicking) within the score view.</source>
         <comment>welcome</comment>
         <translation>Die hoofkieslys bevat meeste ander opdragte.
-    Daarbenewens kan mens toegang verkry tot baie opdragte via toetsbord-sneltoetse of deur te regsklik (macOS: &quot;Ctrl&quot;+klik) binne die partituur-aansig.</translation>
+    Daarbenewens kan mens toegang verkry tot baie opdragte via toetsbord-kortpaaie of deur te regsklik (macOS: &quot;Ctrl&quot;+klik) binne die partituur-aansig.</translation>
     </message>
     <message>
         <source>That's the end of this tour!

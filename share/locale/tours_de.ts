@@ -61,7 +61,7 @@ Der Arbeitsplatz &quot;Erweitert&quot; enthält mehr Optionen, als der Arbeitspl
     You can also drag an item from the palette and drop it on a specific element in your score.</source>
         <comment>show-palette</comment>
         <translation>Um etwas aus einer Palette in eine Partitur einzufügen, wählen Sie zuerst ein Element oder einen Bereich in Ihrer Partitur, dann doppelklicken Sie auf das Objekt in der Palette, um es zu dem gewählten Element hinzuzufügen.
-Ein Objekt aus der Palette kann auch mittels &quot;Drag&amp;Drop&quot; zu einem Element in Ihrer Partitur hinzugefügt werden.</translation>
+    Ein Objekt aus der Palette kann auch mittels &quot;Drag&amp;&amp;Drop&quot; zu einem Element in Ihrer Partitur hinzugefügt werden.</translation>
     </message>
     <message>
         <source>You have toggled multimeasure rests in this score.
@@ -362,9 +362,9 @@ Außerdem können viele Befehle mittels Tastenkürzel oder durch Rechtsklick (ma
     You can also enable/disable and reset tours in Help &gt; Tours.</source>
         <comment>welcome</comment>
         <translation>Das ist das Ende dieser Tour!
-    Während des Benutzens von MuseScore werden weitere Touren auftauchen, die Ihnen die jeweiligen Funktionen erklären.
+    Während Sie MuseScore. benutzen werden weitere Touren auftauchen, die Ihnen die jeweiligen Funktionen erklären.
     Um diese zu deaktivieren, entfernen Sie die Auswahl &quot;Weitere Touren zeigen&quot;, bevor Sie dieses Fenster schließen.
-    Touren können außerdem auch aktiviert und deaktiviert werden in dem Reiter &quot;Hilfe &gt; Touren&quot;.</translation>
+    Touren können außerdem auch im Reiter &quot;Hilfe &gt; Touren&quot; aktiviert und deaktiviert werden.</translation>
     </message>
 </context>
 </TS>

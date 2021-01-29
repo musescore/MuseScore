@@ -37,8 +37,8 @@
     The default is voice 1, and it should be used first for each staff.
     To enter notes into a different voice, click one of these icons.</source>
         <comment>note-input</comment>
-        <translation>För att ange noter med olika rytmer i samma takt, använd flera stämmor. Varje
-    notrad kan innehålla upp till fyra stämmor.
+        <translation>För att ange noter med olika rytmer i samma takt, använd flera stämmor.
+    Varje notrad kan innehålla upp till fyra stämmor.
     Förvalet är stämma 1, och den bör användas i första hand för varje system.
     För att ange noter i en annan stämma, klicka på en av dessa ikoner.</translation>
     </message>
