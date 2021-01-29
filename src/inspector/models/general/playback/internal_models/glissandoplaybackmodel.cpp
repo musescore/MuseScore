@@ -12,7 +12,7 @@ GlissandoPlaybackModel::GlissandoPlaybackModel(QObject* parent, IElementReposito
 
 void GlissandoPlaybackModel::createProperties()
 {
-    m_styleType = buildPropertyItem(Ms::Pid::GLISSANDO_STYLE);
+    m_styleType = buildPropertyItem(Ms::Pid::GLISS_STYLE);
 }
 
 void GlissandoPlaybackModel::requestElements()

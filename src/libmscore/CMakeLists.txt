@@ -78,6 +78,8 @@ set(MODULE_SRC
     dynamic.h
     dynamichairpingroup.cpp
     dynamichairpingroup.h
+    easeInOut.cpp
+    easeInOut.h
     edit.cpp
     element.cpp
     elementgroup.cpp
