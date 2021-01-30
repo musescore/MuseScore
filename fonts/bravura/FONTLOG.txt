@@ -446,3 +446,25 @@ Changelog
 
 30 June 2020 (Daniel Spreadbury) Bravura 1.39
 – Reduced size of accidentals in stylistic set ss10 to match published editions more closely
+
+29 January 2021 (Daniel Spreadbury) Bravura 1.392
+– Added headless notes (U+E204–U+E20A) to 'Beamed groups of notes' range
+– Added glyphs to new 'Scale degrees' range (U+EF00–U+EF07)
+– Added glyphs in new 'Note name noteheads supplement' range (U+EEE0–U+EEFF)
+– Added mensuralWhiteSemibrevis (U+E962) to 'Medieval and Renaissance individual notes' range
+– Added guitar10, guitar11, guitar12, guitar13 (U+E84A–U+E84D) to 'Guitar' range
+– Added glyphs in 'Medieval and Renaissance prolations supplement' (U+EE90–U+EE94)
+– Added Cowell's noteheads for irrational durations (U+EEA1–U+EEB5) to 'Noteheads supplement' range
+– Added noteheadNancarrowSine (U+EEA0) in 'Noteheads supplement' range
+– Added arpeggiato (U+E63C) to 'Plucked techniques' range
+– Add caesuraSingleStroke (U+E4D7) to the 'Holds and pauses' range
+– Added Alois Hába's set of accidentals for 24-EDO quarter-tones (U+EE63–U+EE69) to the 'Other accidentals supplement' range
+– Added 'Chop (percussive bowing) notation' range (U+EE80–U+EE8F)
+– Added swissRudimentsNoteheadBlackFlam (U+EE70), swissRudimentsNoteheadHalfFlam (U+EE71), swissRudimentsNoteheadBlackDouble (U+EE72), swissRudimentsNoteheadHalfDouble (U+EE73) to the new 'Techniques noteheads' range
+– Changed registration of fretboardFilledCircle (U+E858), fretboardX (U+E859) and fretboardO (U+E85A) so that they are centred vertically and horizontally around the origin
+– Added ups and downs accidentals (U+EE60–U+EE63) to new 'Other accidentals supplement' range
+– Added stylistic alternates for U+E4A0 and U+E4A1, Rossini accent above and below
+– Added 'Extended Helmholtz-Ellis accidentals (just intonation) supplement' range (U+EE50–U+EE5F); revised appearance of accidentalCombiningLower31Schisma (U+E2EC) and accidentalCombiningRaise31Schisma (U+E2ED)
+– Replaced Sagittal outlines with those optimized by Douglas Blumeyer for design space of 1000 fu per em. Changed side bearings of accSagittalShaftUp (U+E3F0) and accSagittalShaftDown (U+E3F1)
+– Add kerning pairs for new Sagittal glyphs (U+E3F4–U+E40B)
+– Added glyphs to the 'Olympian Sagittal extension (extreme precision) accidental diacritics' (U+E3F4–U+E3F7) and 'Magrathean Sagittal extension (insane precision) accidental diacritics' (U+E3F8–U+E41F) ranges of Sagittal accidentals.
