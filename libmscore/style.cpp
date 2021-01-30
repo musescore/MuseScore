@@ -3015,7 +3015,7 @@ void MStyle::load(XmlReader& e)
             else if (tag == "displayInConcertPitch")
                   set(Sid::concertPitch, QVariant(bool(e.readInt())));
             else if (tag == "ChordList") {
-                  _chordList.clear();
+                  _chordList.unload();
                   _chordList.read(e);
                   _customChordList = true;
                   chordListTag = true;

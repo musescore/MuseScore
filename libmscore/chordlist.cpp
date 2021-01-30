@@ -1662,7 +1662,7 @@ void ChordList::configureAutoAdjust(qreal emag, qreal eadjust, qreal mmag, qreal
 
 void ChordList::read(XmlReader& e)
       {
-      int fontIdx = 0;
+      int fontIdx = fonts.size();
       _autoAdjust = false;
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
