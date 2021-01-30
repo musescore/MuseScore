@@ -1723,6 +1723,7 @@ void ChangeStyleVal::flip(EditData*)
                         if (score->styleB(Sid::chordsXmlFile))
                             score->style().chordList()->read("chords.xml");
                         score->style().chordList()->read(score->styleSt(Sid::chordDescriptionFile));
+                        score->style().setCustomChordList(score->styleSt(Sid::chordStyle) == "custom");
                         }
                         break;
                   case Sid::spatium:
