@@ -1,4 +1,4 @@
-﻿//=============================================================================
+//=============================================================================
 //  MuseScore
 //  Music Composition & Notation
 //
@@ -257,6 +257,7 @@ enum MsError {
       NO_MIME,
       DEST_NO_CR,
       CANNOT_CHANGE_LOCAL_TIMESIG,
+      CORRUPTED_MEASURE,
       };
 
 /// \cond PLUGIN_API \private \endcond
