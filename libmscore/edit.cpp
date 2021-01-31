@@ -628,13 +628,6 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
                                           break;
                                     }
                               }
-                        else {
-                              // this can be hit for local time signatures as well
-                              // (if we are rewriting all staves, but one has a local time signature)
-                              // TODO: detect error conditions better, have clearer error messages
-                              // and perform necessary fixups
-                              MScore::setError(TUPLET_CROSSES_BAR);
-                              }
                         for (Measure* m = fm1; m; m = m->nextMeasure()) {
                               if (m->first(SegmentType::TimeSig))
                                     break;

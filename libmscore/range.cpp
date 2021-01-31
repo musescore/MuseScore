@@ -348,7 +348,7 @@ void TrackList::read(const Segment* fs, const Segment* es)
 //   checkRest
 //---------------------------------------------------------
 
-static void checkRest(Fraction& rest, Measure*& m, const Fraction& d)
+static bool checkRest(Fraction& rest, Measure*& m, const Fraction& d)
       {
       if (rest.isZero()) {
             if (m->nextMeasure()) {
@@ -356,9 +356,11 @@ static void checkRest(Fraction& rest, Measure*& m, const Fraction& d)
                   rest = m->ticks();
                   }
             else {
-                  qFatal("premature end of measure list, rest %d/%d", d.numerator(), d.denominator());
+                  qWarning("premature end of measure list, rest %d/%d", d.numerator(), d.denominator());
+                  return false;
                   }
             }
+      return true;
       }
 
 //---------------------------------------------------------
@@ -477,7 +479,10 @@ bool TrackList::write(Score* score, const Fraction& tick) const
       for (Element* e : *this) {
             if (e->isDurationElement()) {
                   Fraction duration = toDurationElement(e)->ticks();
-                  checkRest(remains, m, duration);     // go to next measure, if necessary
+                  if (!checkRest(remains, m, duration)) {     // go to next measure, if necessary
+                        MScore::setError(CORRUPTED_MEASURE);
+                        return false;
+                        }
                   if (duration > remains && e->isTuplet()) {
                         // experimental: allow tuplet split in the middle
                         if (duration != remains * 2) {
@@ -510,7 +515,10 @@ bool TrackList::write(Score* score, const Fraction& tick) const
                         else if (e->isChordRest()) {
                               Fraction du               = qMin(remains, duration);
                               std::vector<TDuration> dl = toDurationList(du, e->isChord());
-                              Q_ASSERT(!dl.empty());
+                              if (dl.empty()) {
+                                    MScore::setError(CORRUPTED_MEASURE);
+                                    return false;
+                                    }
                               for (const TDuration& k : dl) {
                                     segment       = m->undoGetSegmentR(SegmentType::ChordRest, m->ticks() - remains);
                                     ChordRest* cr = toChordRest(e->clone());
@@ -551,8 +559,12 @@ bool TrackList::write(Score* score, const Fraction& tick) const
                               duration = Fraction();
                               }
                         firstpart = false;
-                        if (duration > Fraction(0,1))
-                              checkRest(remains, m, duration);     // go to next measure, if necessary
+                        if (duration > Fraction(0,1)) {
+                              if (!checkRest(remains, m, duration)) {     // go to next measure, if necessary
+                                    MScore::setError(CORRUPTED_MEASURE);
+                                    return false;
+                                    }
+                              }
                         }
                   }
             else if (e->isBarLine()) {
