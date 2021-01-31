@@ -330,7 +330,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       Inspector* _inspector          { 0 };
       OmrPanel* omrPanel             { 0 };
-      QWidget* lastFocusWidget       { 0 };
 
       QPushButton* showMidiImportButton {0};
 
