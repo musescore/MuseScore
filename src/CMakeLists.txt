@@ -84,6 +84,7 @@ if (BUILD_UNIT_TESTS)
     add_subdirectory(importexport/bww/tests)
     add_subdirectory(importexport/capella/tests)
     add_subdirectory(importexport/guitarpro/tests)
+    add_subdirectory(importexport/midiimport/tests)
     add_subdirectory(importexport/musicxml/tests)
 endif(BUILD_UNIT_TESTS)
 

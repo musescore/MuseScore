@@ -10,7 +10,9 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include <QtTest/QtTest>
+#include "testing/qtestsuite.h"
+
+#include "testbase.h"
 
 #include "libmscore/mscore.h"
 #include "libmscore/score.h"
@@ -20,21 +22,23 @@
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
 #include "libmscore/keysig.h"
-#include "audio/exports/exportmidi.h"
+
+//#include "audio/exports/exportmidi.h"
 
 #include "libmscore/mcursor.h"
 #include "mtest/testutils.h"
 #include "inner_func_decl.h"
-#include "mu4/importexport/internal/midiimport/importmidi_chord.h"
-#include "mu4/importexport/internal/midiimport/importmidi_tuplet.h"
-#include "mu4/importexport/internal/midiimport/importmidi_meter.h"
-#include "mu4/importexport/internal/midiimport/importmidi_inner.h"
-#include "mu4/importexport/internal/midiimport/importmidi_quant.h"
-#include "mu4/importexport/internal/midiimport/importmidi_fraction.h"
-#include "mu4/importexport/internal/midiimport/importmidi_operations.h"
-#include "mu4/importexport/internal/midiimport/importmidi_model.h"
-#include "mu4/importexport/internal/midiimport/importmidi_lyrics.h"
-#include "mscore/preferences.h"
+#include "importexport/midiimport/internal/midiimport/importmidi_chord.h"
+#include "importexport/midiimport/internal/midiimport/importmidi_tuplet.h"
+#include "importexport/midiimport/internal/midiimport/importmidi_meter.h"
+#include "importexport/midiimport/internal/midiimport/importmidi_inner.h"
+#include "importexport/midiimport/internal/midiimport/importmidi_quant.h"
+#include "importexport/midiimport/internal/midiimport/importmidi_fraction.h"
+#include "importexport/midiimport/internal/midiimport/importmidi_operations.h"
+#include "importexport/midiimport/internal/midiimport/importmidi_model.h"
+#include "importexport/midiimport/internal/midiimport/importmidi_lyrics.h"
+
+//#include "mscore/preferences.h"
 
 namespace Ms {
 extern Score::FileError importMidi(MasterScore*, const QString&);
@@ -42,7 +46,7 @@ extern Score::FileError importMidi(MasterScore*, const QString&);
 
 using namespace Ms;
 
-#define DIR QString("importmidi/")
+static const QString MIDIIMPORT_DIR("data/");
 
 //---------------------------------------------------------
 //   TestImportMidi
@@ -424,7 +428,7 @@ private slots:
 
 void TestImportMidi::initTestCase()
 {
-    initMTest();
+    initMTest(QString(iex_midiimport_tests_DATA_ROOT));
 }
 
 //---------------------------------------------------------
@@ -437,14 +441,14 @@ void TestImportMidi::mf(const char* name) const
     score->setName(name);
     const QString mscorename = QString(name) + ".mscx";
     QCOMPARE(importMidi(score,  midiFilePath(name)), Score::FileError::FILE_NO_ERROR);
-    QVERIFY(saveCompareScore(score, mscorename, DIR + mscorename));
+    QVERIFY(saveCompareScore(score, mscorename, MIDIIMPORT_DIR + mscorename));
     delete score;
 }
 
 QString TestImportMidi::midiFilePath(const QString& fileName) const
 {
     const QString nameWithExtention = fileName + ".mid";
-    return QString(TESTROOT "/mtest/" + DIR + nameWithExtention);
+    return QString(QString(iex_midiimport_tests_DATA_ROOT) + "/" + MIDIIMPORT_DIR + nameWithExtention);
 }
 
 QString TestImportMidi::midiFilePath(const char* fileName) const
