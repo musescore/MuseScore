@@ -16,20 +16,21 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_IMPORTEXPORT_NOTATIONMIDIREADER_H
-#define MU_IMPORTEXPORT_NOTATIONMIDIREADER_H
+#ifndef MU_IMPORTEXPORT_MIDIIMPORTMODULE_H
+#define MU_IMPORTEXPORT_MIDIIMPORTMODULE_H
 
-#include "notation/inotationreader.h"
+#include "modularity/imodulesetup.h"
 
-namespace mu {
-namespace importexport {
-class NotationMidiReader : public notation::INotationReader
+namespace mu::iex::midiimport {
+class MidiImportModule : public framework::IModuleSetup
 {
 public:
 
-    Ret read(Ms::MasterScore* score, const io::path& path) override;
+    std::string moduleName() const override;
+    void registerExports() override;
+    void resolveImports() override;
+    void onInit(const framework::IApplication::RunMode& mode) override;
 };
 }
-}
 
-#endif // MU_IMPORTEXPORT_NOTATIONMIDIREADER_H
+#endif // MU_IMPORTEXPORT_MIDIIMPORTMODULE_H

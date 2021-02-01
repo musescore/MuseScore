@@ -21,13 +21,11 @@
 # soon there will be nothing left of it
 set(MODULE importexport)
 
-include(${CMAKE_CURRENT_LIST_DIR}/internal/midiimport/midiimport.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/internal/ove/ove.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/internal/musedata/musedata.cmake)
 
 set(MODULE_SRC
     ${BRAILLE_SRC}
-    ${MIDIIMPORT_SRC}
     ${OVE_SRC}
     ${GUITARPRO_SRC}
     ${MUSEDATA_SRC}
@@ -37,8 +35,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/importexportconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/importexportconfiguration.h
     
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationmidireader.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationmidireader.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/musedatareader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/musedatareader.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/overeader.cpp
@@ -60,13 +56,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/oggwriter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/flacwriter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/flacwriter.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationmidiwriter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationmidiwriter.h
     )
 
 set(MODULE_LINK
-    midi_old    # for midiimport
-    beatroot    # for midiimport
     rtf2html    # for capella
     libmscore
     qzip

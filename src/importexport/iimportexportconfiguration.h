@@ -31,9 +31,6 @@ class IImportexportConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IImportexportConfiguration() = default;
 
-    // Midi
-    virtual int midiShortestNote() const = 0; //ticks
-
     // Ove
     virtual std::string importOvertuneCharset() const = 0;
 
