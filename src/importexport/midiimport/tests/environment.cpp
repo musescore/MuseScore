@@ -16,23 +16,17 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "midiimportconfiguration.h"
 
-#include "settings.h"
+#include "testing/environment.h"
 
-#include "libmscore/mscore.h"
+#include "log.h"
+#include "framework/fonts/fontsmodule.h"
 
-using namespace mu::framework;
-using namespace mu::iex::midiimport;
-
-static const Settings::Key SHORTEST_NOTE_KEY("iex_midiimport", "io/midi/shortestNote");
-
-void MidiImportConfiguration::init()
+static mu::testing::SuiteEnvironment importexport_se(
 {
-    settings()->setDefaultValue(SHORTEST_NOTE_KEY, Val(Ms::MScore::division / 4));
+    new mu::fonts::FontsModule(), // needs for libmscore
+},
+    []() {
+    LOGI() << "braille tests suite post init";
 }
-
-int MidiImportConfiguration::midiShortestNote() const
-{
-    return settings()->value(SHORTEST_NOTE_KEY).toInt();
-}
+    );
