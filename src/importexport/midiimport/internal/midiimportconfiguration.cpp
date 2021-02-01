@@ -16,18 +16,24 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#include "midiimportconfiguration.h"
 
-#ifndef MU_IMPORTEXPORT_NOTATIONMIDIWRITER_H
-#define MU_IMPORTEXPORT_NOTATIONMIDIWRITER_H
+#include "settings.h"
 
-#include "notation/abstractnotationwriter.h"
+#include "libmscore/mscore.h"
 
-namespace mu::importexport {
-class NotationMidiWriter : public notation::AbstractNotationWriter
+using namespace mu::framework;
+using namespace mu::iex::midiimport;
+
+static const Settings::Key SHORTEST_NOTE_KEY("iex_midiimport", "io/midi/shortestNote");
+
+void MidiImportConfiguration::init()
 {
-public:
-    Ret write(const notation::INotationPtr notation, system::IODevice& destinationDevice, const Options& options = Options()) override;
-};
+    settings()->setDefaultValue(SHORTEST_NOTE_KEY, Val(Ms::MScore::division / 4));
 }
 
-#endif // MU_IMPORTEXPORT_NOTATIONMIDIWRITER_H
+int MidiImportConfiguration::midiShortestNote() const
+{
+    return settings()->value(SHORTEST_NOTE_KEY).toInt();
+}
+

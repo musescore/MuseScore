@@ -16,32 +16,21 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_IMPORTEXPORT_IMPORTEXPORTCONFIGURATION_H
-#define MU_IMPORTEXPORT_IMPORTEXPORTCONFIGURATION_H
 
-#include "../iimportexportconfiguration.h"
+#include "notationmidiwriter.h"
 
-namespace mu::importexport {
-class ImportexportConfiguration : public IImportexportConfiguration
+#include "log.h"
+
+using namespace mu::iex::midiimport;
+using namespace mu::system;
+
+mu::Ret NotationMidiWriter::write(const notation::INotationPtr notation, IODevice& destinationDevice, const Options& options)
 {
-public:
-    void init();
+    UNUSED(notation)
+    UNUSED(destinationDevice)
+    UNUSED(options)
 
-    std::string importOvertuneCharset() const override;
+    NOT_IMPLEMENTED;
 
-    std::string importGuitarProCharset() const override;
-
-    int exportPdfDpiResolution() const override;
-
-    void setExportPngDpiResolution(std::optional<float> dpi) override;
-    float exportPngDpiResolution() const override;
-
-    bool exportPngWithTransparentBackground() const override;
-
-private:
-
-    std::optional<float> m_customExportPngDpi;
-};
+    return make_ret(Ret::Code::NotImplemented);
 }
-
-#endif // MU_IMPORTEXPORT_IMPORTEXPORTCONFIGURATION_H

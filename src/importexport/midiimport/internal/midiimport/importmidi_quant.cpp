@@ -17,7 +17,7 @@
 #include "importmidi_operations.h"
 
 #include "modularity/ioc.h"
-#include "importexport/iimportexportconfiguration.h"
+#include "importexport/midiimport/imidiimportconfiguration.h"
 
 namespace Ms {
 namespace Quantize {
@@ -97,7 +97,7 @@ MidiOperations::QuantValue fractionToQuantValue(const ReducedFraction& fraction)
 
 MidiOperations::QuantValue defaultQuantValueFromPreferences()
 {
-    auto conf = mu::framework::ioc()->resolve<mu::importexport::IImportexportConfiguration>("importexport");
+    auto conf = mu::framework::ioc()->resolve<mu::iex::midiimport::IMidiImportConfiguration>("iex_midiimport");
     int ticks = conf ? conf->midiShortestNote() : (MScore::division / 4);
     const auto fraction = ReducedFraction::fromTicks(ticks);
     MidiOperations::QuantValue quantValue = fractionToQuantValue(fraction);

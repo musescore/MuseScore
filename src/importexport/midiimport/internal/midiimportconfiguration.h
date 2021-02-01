@@ -16,19 +16,19 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "notationmidireader.h"
+#ifndef MU_IMPORTEXPORT_MIDIIMPORTCONFIGURATION_H
+#define MU_IMPORTEXPORT_MIDIIMPORTCONFIGURATION_H
 
-#include "libmscore/score.h"
-#include "notation/notationerrors.h"
+#include "../imidiimportconfiguration.h"
 
-namespace Ms {
-extern Score::FileError importMidi(MasterScore*, const QString& name);
-}
-
-using namespace mu::importexport;
-
-mu::Ret NotationMidiReader::read(Ms::MasterScore* score, const io::path& path)
+namespace mu::iex::midiimport {
+class MidiImportConfiguration : public IMidiImportConfiguration
 {
-    Ms::Score::FileError err = Ms::importMidi(score, path.toQString());
-    return mu::notation::scoreFileErrorToRet(err);
+public:
+    void init();
+
+    int midiShortestNote() const override; // ticks
+};
 }
+
+#endif // MU_IMPORTEXPORT_MIDIIMPORTCONFIGURATION_H
