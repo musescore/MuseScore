@@ -69,6 +69,19 @@ QHash<int,QByteArray> PlaybackToolBarModel::roleNames() const
     return roles;
 }
 
+qreal PlaybackToolBarModel::playPosition() const
+{
+    NOT_IMPLEMENTED;
+    return 0.75;
+}
+
+void PlaybackToolBarModel::setPlayPosition(qreal position)
+{
+    Q_UNUSED(position)
+    NOT_IMPLEMENTED;
+    emit playPositionChanged(position);
+}
+
 void PlaybackToolBarModel::load()
 {
     beginResetModel();

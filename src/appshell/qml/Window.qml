@@ -70,7 +70,7 @@ DockWindow {
 
         DockToolBar {
             objectName: "notationToolBar"
-            minimumWidth: 188
+            minimumWidth: 164
             minimumHeight: dockWindow.toolbarHeight
 
             color: dockWindow.color
@@ -83,9 +83,11 @@ DockWindow {
         },
 
         DockToolBar {
+            id: playbackToolBar
+
             objectName: "playbackToolBar"
-            minimumWidth: 60
-            minimumHeight: dockWindow.toolbarHeight
+            minimumWidth: 380
+            minimumHeight: floating ? 76 : dockWindow.toolbarHeight
 
             color: dockWindow.color
             allowedAreas: Qt.TopToolBarArea
@@ -93,6 +95,7 @@ DockWindow {
 
             content: PlaybackToolBar {
                 color: dockWindow.color
+                floating: playbackToolBar.floating
             }
         },
 
