@@ -130,8 +130,7 @@ extern QString mscoreGlobalShare;
 std::vector<MScoreError> MScore::errorList {
     { MsError::MS_NO_ERROR,                     0,    0 },
 
-    { MsError::NO_NOTE_SELECTED,                "s1", QT_TRANSLATE_NOOP("error",
-                                                                        "No note selected:\nPlease select a note and retry") },
+    { MsError::NO_NOTE_SELECTED,                "s1", QT_TRANSLATE_NOOP("error", "No note selected:\nPlease select a note and retry") },
     { MsError::NO_CHORD_REST_SELECTED,          "s2", QT_TRANSLATE_NOOP("error",
                                                                         "No chord/rest selected:\nPlease select a chord or rest and retry") },
     { MsError::NO_LYRICS_SELECTED,              "s3", QT_TRANSLATE_NOOP("error",
@@ -147,12 +146,8 @@ std::vector<MScoreError> MScore::errorList {
 
     { MsError::CANNOT_INSERT_TUPLET,            "t1", QT_TRANSLATE_NOOP("error", "Cannot insert chord/rest in tuplet") },
     { MsError::CANNOT_SPLIT_TUPLET,             "t2", QT_TRANSLATE_NOOP("error", "Cannot split tuplet") },
-
-    { MsError::CANNOT_SPLIT_MEASURE_FIRST_BEAT, "m1", QT_TRANSLATE_NOOP("error",
-                                                                        "Cannot split measure here:\n"
-                                                                        "First beat of measure") },
-    { MsError::CANNOT_SPLIT_MEASURE_TUPLET,     "m2", QT_TRANSLATE_NOOP("error",
-                                                                        "Cannot split measure here:\n" "Cannot split tuplet") },
+    { MsError::CANNOT_SPLIT_MEASURE_FIRST_BEAT, "m1", QT_TRANSLATE_NOOP("error", "Cannot split measure here:\n" "First beat of measure") },
+    { MsError::CANNOT_SPLIT_MEASURE_TUPLET,     "m2", QT_TRANSLATE_NOOP("error", "Cannot split measure here:\n" "Cannot split tuplet") },
     { MsError::INSUFFICIENT_MEASURES,           "m3", QT_TRANSLATE_NOOP("error",
                                                                         "Measure repeat cannot be added here:\nInsufficient or unequal measures") },
     { MsError::CANNOT_SPLIT_MEASURE_REPEAT,     "m4", QT_TRANSLATE_NOOP("error", "Cannot split measure repeat") },
@@ -169,8 +164,8 @@ std::vector<MScoreError> MScore::errorList {
     { MsError::DEST_TREMOLO,                    "p5", QT_TRANSLATE_NOOP("error", "Cannot paste in tremolo") },
     { MsError::NO_MIME,                         "p6", QT_TRANSLATE_NOOP("error", "Nothing to paste") },
     { MsError::DEST_NO_CR,                      "p7", QT_TRANSLATE_NOOP("error", "Destination is not a chord or rest") },
-    { MsError::CANNOT_CHANGE_LOCAL_TIMESIG,     "l1", QT_TRANSLATE_NOOP("error",
-                                                                        "Cannot change local time signature:\nMeasure is not empty") },
+    { MsError::CANNOT_CHANGE_LOCAL_TIMESIG,     "l1",
+      QT_TRANSLATE_NOOP("error", "Cannot change local time signature:\nMeasure is not empty") },
 };
 
 MsError MScore::_error { MsError::MS_NO_ERROR };

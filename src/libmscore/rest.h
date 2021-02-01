@@ -105,6 +105,7 @@ protected:
     virtual QRectF numberRect() const { return QRectF(); } // TODO: add style to show number over 1-measure rests
 
 private:
+
     // values calculated by layout:
     SymId m_sym;
     int m_dotline   { -1 };          // depends on rest symbol
