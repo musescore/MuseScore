@@ -100,6 +100,8 @@ public:
     bool acceptDrop(EditData&) const override;
     Element* drop(EditData&) override;
     void layout() override;
+    void layoutMultiGlyphAccidental();
+    void layoutSingleGlyphAccidental();
     void draw(QPainter*) const override;
     bool isEditable() const override { return true; }
     void startEdit(EditData&) override { setGenerated(false); }
