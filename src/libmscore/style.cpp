@@ -195,6 +195,8 @@ static const StyleType styleTypes[] {
     { Sid::ledgerLineLength,        "ledgerLineLength",        Spatium(.76) },        // notehead width + this value
     { Sid::accidentalDistance,      "accidentalDistance",      Spatium(0.22) },
     { Sid::accidentalNoteDistance,  "accidentalNoteDistance",  Spatium(0.22) },
+    { Sid::bracketedAccidentalPadding,  "bracketedAccidentalPadding",  Spatium(0.175) }, // Padding inside parentheses for bracketed accidentals
+    { Sid::alignAccidentalsLeft,    "alignAccidentalsLeft",    QVariant(false) },   // When laid out in columns, whether accidentals align left or right. Musescore <= 3.5 uses left alignment.
 
     { Sid::beamWidth,               "beamWidth",               Spatium(0.5) },        // was 0.48
     { Sid::beamDistance,            "beamDistance",            QVariant(0.5) },       // 0.25sp units

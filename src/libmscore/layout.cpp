@@ -779,8 +779,8 @@ static bool resolveAccidentals(AcEl* left, AcEl* right, qreal& lx, qreal pd, qre
 //   layoutAccidental
 //---------------------------------------------------------
 
-static qreal layoutAccidental(AcEl* me, AcEl* above, AcEl* below, qreal colOffset, QVector<Note*>& leftNotes, qreal pnd,
-                              qreal pd, qreal sp)
+static QPair<qreal, qreal> layoutAccidental(AcEl* me, AcEl* above, AcEl* below, qreal colOffset, QVector<Note*>& leftNotes, qreal pnd,
+                                            qreal pd, qreal sp)
 {
     qreal lx = colOffset;
     Accidental* acc = me->note->accidental();
@@ -790,7 +790,7 @@ static qreal layoutAccidental(AcEl* me, AcEl* above, AcEl* below, qreal colOffse
 
     // extra space for ledger lines
     if (me->line <= -2 || me->line >= me->note->staff()->lines(me->note->chord()->tick()) * 2) {
-        lx = qMin(lx, -0.2 * sp);
+        lx = qMin(lx, -acc->staff()->spatium(acc->tick()) * acc->score()->styleS(Sid::ledgerLineLength).val());
     }
 
     // clear left notes
@@ -830,7 +830,7 @@ static qreal layoutAccidental(AcEl* me, AcEl* above, AcEl* below, qreal colOffse
         me->x = lx - pnd - acc->width() - acc->bbox().x();
     }
 
-    return me->x;
+    return QPair<qreal, qreal>(me->x, me->x + me->width);
 }
 
 //---------------------------------------------------------
@@ -1044,7 +1044,6 @@ void Score::layoutChords3(std::vector<Note*>& notes, const Staff* staff, Segment
         // unmatched accidentals will use zig zag approach (see below)
         // starting to the left of the octave columns
 
-        qreal minX = 0.0;
         int columnTop[7] = { -1, -1, -1, -1, -1, -1, -1 };
 
         // find columns of octaves
@@ -1138,26 +1137,39 @@ void Score::layoutChords3(std::vector<Note*>& notes, const Staff* staff, Segment
             std::sort(umi.begin(), umi.end());
         }
 
-        // lay out columns
+        bool alignLeft = score()->styleB(Sid::alignAccidentalsLeft);
+
+        // through columns
         for (int i = 0; i < nColumns; ++i) {
-            int pc = column[i];
+            // column index
+            const int pc = column[i];
+
+            qreal minX = 0.0;
+            qreal maxX = 0.0;
             AcEl* below = 0;
-            // lay out accidentals
+            // through accidentals in this column
             for (int j = columnBottom[pc]; j != -1; j = aclist[j].next) {
-                qreal x = layoutAccidental(&aclist[j], 0, below, colOffset, leftNotes, pnd, pd, sp);
-                minX = qMin(minX, x);
+                QPair<qreal, qreal> x = layoutAccidental(&aclist[j], 0, below, colOffset, leftNotes, pnd, pd, sp);
+                minX = qMin(minX, x.first);
+                maxX = qMin(maxX, x.second);
                 below = &aclist[j];
             }
-            // align within column
+
+            // align
             int next = -1;
             for (int j = columnBottom[pc]; j != -1; j = next) {
-                next = aclist[j].next;
-                if (next != -1 && aclist[j].line == aclist[next].line) {
+                AcEl* current = &aclist[j];
+                next = current->next;
+                if (next != -1 && current->line == aclist[next].line) {
                     continue;
                 }
-                aclist[j].x = minX;
+
+                if (alignLeft) {
+                    current->x = minX;
+                } else {
+                    current->x = maxX - current->width;
+                }
             }
-            // move to next column
             colOffset = minX;
         }
     } else {
