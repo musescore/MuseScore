@@ -270,6 +270,11 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
             startDragElements(m_interactData.hitElement->type(), m_interactData.hitElement->offset());
         }
 
+        if (m_view->notationInteraction()->isGripEditStarted() && !m_view->notationInteraction()->isDragStarted()) {
+            Element* selectedElement = m_view->notationInteraction()->selection()->element();
+            startDragElements(selectedElement->type(), selectedElement->offset());
+        }
+
         DragMode mode = DragMode::BothXY;
         if (keyState & Qt::ShiftModifier) {
             mode = DragMode::OnlyY;
