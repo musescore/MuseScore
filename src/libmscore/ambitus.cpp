@@ -204,7 +204,7 @@ void Ambitus::write(XmlWriter& xml) const
     xml.tag(Pid::HEAD_TYPE,  int(_noteHeadType),  int(NOTEHEADTYPE_DEFAULT));
     xml.tag(Pid::MIRROR_HEAD,int(_dir),           int(DIR_DEFAULT));
     xml.tag("hasLine",    _hasLine, true);
-    xml.tag(Pid::LINE_WIDTH_SPATIUM, _lineWidth,  LINEWIDTH_DEFAULT);
+    xml.tag(Pid::LINE_WIDTH_SPATIUM, _lineWidth, LINEWIDTH_DEFAULT);
     xml.tag("topPitch",   _topPitch);
     xml.tag("topTpc",     _topTpc);
     xml.tag("bottomPitch",_bottomPitch);
@@ -467,7 +467,7 @@ void Ambitus::draw(QPainter* p) const
 {
     qreal _spatium = spatium();
     qreal lw = lineWidth().val() * _spatium;
-    p->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::RoundCap));
+    p->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::FlatCap));
     drawSymbol(noteHead(), p, _topPos);
     drawSymbol(noteHead(), p, _bottomPos);
     if (_hasLine) {
@@ -484,7 +484,7 @@ void Ambitus::draw(QPainter* p) const
         qreal stepTolerance = step * 0.1;
         qreal ledgerOffset = score()->styleS(Sid::ledgerLineLength).val() * 0.5 * _spatium;
         p->setPen(QPen(curColor(), score()->styleS(Sid::ledgerLineWidth).val() * _spatium,
-                       Qt::SolidLine, Qt::RoundCap));
+                       Qt::SolidLine, Qt::FlatCap));
         if (_topPos.y() - stepTolerance <= -step) {
             qreal xMin = _topPos.x() - ledgerOffset;
             qreal xMax = _topPos.x() + headWidth() + ledgerOffset;
