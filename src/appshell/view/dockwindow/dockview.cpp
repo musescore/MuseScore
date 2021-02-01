@@ -36,6 +36,7 @@ DockView::DockView(QQuickItem* parent)
     setFlag(QQuickItem::ItemHasContents, true);
 
     connect(this, &DockView::colorChanged, this, &DockView::updateStyle);
+    connect(this, &DockView::borderColorChanged, this, &DockView::updateStyle);
 }
 
 void DockView::forceActiveFocus()
@@ -53,12 +54,7 @@ void DockView::componentComplete()
     }
 
     if (m_content) {
-        QQmlEngine* engine = nullptr;
-#if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
-        engine = framework::ioc()->resolve<ui::IUiEngine>("appshell")->qmlEngine();
-#else
-        engine = m_content->engine();
-#endif
+        QQmlEngine* engine = m_content->engine();
 
         m_view = new QQuickView(engine, nullptr);
         m_view->setResizeMode(QQuickView::SizeRootObjectToView);
