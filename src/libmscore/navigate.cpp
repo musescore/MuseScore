@@ -394,7 +394,7 @@ ChordRest* Score::nextTrack(ChordRest* cr, bool skipMeasureRepeatRests)
         return 0;
     }
 
-    ChordRest* el = 0;
+    ChordRest* el = nullptr;
     Measure* measure = cr->measure();
     int track = cr->track();
     int tracks = nstaves() * VOICES;
@@ -442,7 +442,7 @@ ChordRest* Score::prevTrack(ChordRest* cr, bool skipMeasureRepeatRests)
         return 0;
     }
 
-    ChordRest* el = 0;
+    ChordRest* el = nullptr;
     Measure* measure = cr->measure();
     int track = cr->track();
 
@@ -486,7 +486,7 @@ ChordRest* Score::nextMeasure(ChordRest* element, bool selectBehavior, bool mmRe
         return 0;
     }
 
-    Measure* measure = 0;
+    Measure* measure = nullptr;
     if (mmRest) {
         measure = element->measure()->nextMeasureMM();
     } else {

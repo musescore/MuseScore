@@ -2731,8 +2731,7 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
                 lastDeletedKeySig = toKeySig(sts->element(0));
                 if (lastDeletedKeySig) {
                     lastDeletedKeySigEvent = lastDeletedKeySig->keySigEvent();
-                    if (!styleB(Sid::concertPitch) && !lastDeletedKeySigEvent.isAtonal()
-                        && !lastDeletedKeySigEvent.custom()) {
+                    if (!styleB(Sid::concertPitch) && !lastDeletedKeySigEvent.isAtonal() && !lastDeletedKeySigEvent.custom()) {
                         // convert to concert pitch
                         transposeKeySigEvent = true;
                         Interval v = staff(0)->part()->instrument(m->tick())->transpose();
@@ -3087,8 +3086,7 @@ void Score::cmdDeleteSelection()
                 } else if (e->isSpannerSegment()) {
                     tick = toSpannerSegment(e)->spanner()->tick();
                 } else if (e->parent()
-                           && (e->parent()->isSegment() || e->parent()->isChord() || e->parent()->isNote()
-                               || e->parent()->isRest())) {
+                           && (e->parent()->isSegment() || e->parent()->isChord() || e->parent()->isNote() || e->parent()->isRest())) {
                     tick = e->parent()->tick();
                 }
                 //else tick < 0

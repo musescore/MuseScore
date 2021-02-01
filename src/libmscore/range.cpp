@@ -494,8 +494,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
             }
             bool firstpart = true;
             while (duration > Fraction(0,1)) {
-                if ((e->isRest() || e->isMeasureRepeat()) && (duration >= remains || e == back())
-                    && (remains == m->ticks())) {
+                if ((e->isRest() || e->isMeasureRepeat()) && (duration >= remains || e == back()) && (remains == m->ticks())) {
                     //
                     // handle full measure rest
                     //

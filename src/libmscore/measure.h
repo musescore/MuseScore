@@ -41,8 +41,6 @@ class Spanner;
 class Part;
 class MeasureRepeat;
 
-class MStaff;
-
 //---------------------------------------------------------
 //   MeasureNumberMode
 //---------------------------------------------------------
@@ -281,7 +279,7 @@ public:
     Measure* mmRest() const { return m_mmRest; }
     const Measure* mmRest1() const;
     void setMMRest(Measure* m) { m_mmRest = m; }
-    int mmRestCount() const { return m_mmRestCount; }                       // number of measures m_mmRest spans
+    int mmRestCount() const { return m_mmRestCount; }            // number of measures m_mmRest spans
     void setMMRestCount(int n) { m_mmRestCount = n; }
     Measure* mmRestFirst() const;
     Measure* mmRestLast() const;
@@ -333,15 +331,15 @@ private:
 
     std::vector<MStaff*> m_mstaves;
     SegmentList m_segments;
-    Measure* m_mmRest;          // multi measure rest which replaces a measure range
+    Measure* m_mmRest;         // multi measure rest which replaces a measure range
 
     qreal m_userStretch;
 
     Fraction m_timesig;
 
-    int m_mmRestCount;          // > 0 if this is a multimeasure rest
-                                // 0 if this is the start of am mmrest (m_mmRest != 0)
-                                // < 0 if this measure is covered by an mmrest
+    int m_mmRestCount;         // > 0 if this is a multimeasure rest
+                               // 0 if this is the start of am mmrest (m_mmRest != 0)
+                               // < 0 if this measure is covered by an mmrest
 
     int m_playbackCount { 0 };  // temp. value used in RepeatList
                                 // counts how many times this measure was already played
