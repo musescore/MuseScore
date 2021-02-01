@@ -46,8 +46,10 @@ Rectangle {
                     { textRole: "SearchField", componentRole: searchFieldSample },
                     { textRole: "TabPanel", componentRole: tabPanelSample },
                     { textRole: "GradientTabButton", componentRole: gradientTabButtonsSample },
-                    { textRole: "GridView", componentRole: gridViewVertical }
+                    { textRole: "GridView", componentRole: gridViewVertical },
+                    { textRole: "StyledSlider", componentRole: slidersSample }
                 ]
+
                 delegate: Column {
                     anchors.left: parent.left
                     anchors.right: parent.right
@@ -716,6 +718,23 @@ Rectangle {
 
                     text: Boolean(item) ? item.name : ""
                 }
+            }
+        }
+    }
+
+    Component {
+        id: slidersSample
+
+        Column {
+            spacing: 12
+
+            StyledSlider {
+                value: 0.25
+            }
+
+            StyledSlider {
+                orientation: Qt.Vertical
+                value: 0.75
             }
         }
     }
