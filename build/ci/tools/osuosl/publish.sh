@@ -69,8 +69,12 @@ if [ "$OS" == "linux" ]; then
     if [ -f "$ARTIFACTS_DIR/${ARTIFACT_NAME}.zsync" ]; then
         echo "Copy ${ARTIFACTS_DIR}/${ARTIFACT_NAME}.zsync to $FTP_PATH"
         scp -oStrictHostKeyChecking=no -C -i $SSH_KEY $ARTIFACTS_DIR/${ARTIFACT_NAME}.zsync musescore-nightlies@ftp-osl.osuosl.org:~/ftp/$FTP_PATH
-        # zsync file must be available at stable URL and we don't need historic versions of this file
-        ssh -i $SSH_KEY musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/$FTP_PATH; mv -f ${ARTIFACT_NAME}.zsync ${LATEST_NAME}.zsync"
+        if [ "$BUILD_MODE" == "stable_build" ]; then
+            : # Do nothing. zsync file is in the right place on OSUOSL, but don't forget to upload it to GitHub Releases with the AppImage.
+        elif [ "$BUILD_MODE" == "nightly_build" ]; then
+            # zsync file must be available at stable URL. We don't need historic versions of this file so overwrite previous 'latest' zsync.
+            ssh -i $SSH_KEY musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/$FTP_PATH; mv -f ${ARTIFACT_NAME}.zsync ${LATEST_NAME}.zsync"
+        fi
     fi
 fi
 
@@ -80,7 +84,7 @@ cat $ARTIFACTS_DIR/env/publish_url.env
 
 # Create link to latest
 if [ "$BUILD_MODE" == "nightly_build" ]; then
-    echo "Create link to latest"
+    echo "Create/update link to latest"
     ssh -i $SSH_KEY musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/$FTP_PATH; ln -sf $ARTIFACT_NAME $LATEST_NAME"
 fi
 
