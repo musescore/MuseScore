@@ -128,8 +128,7 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
                         }
                     } else {
                         lscore->undo(new ChangeProperty(lbl, Pid::GENERATED, generated, PropertyFlags::NOSTYLE));
-                        lscore->undo(new ChangeProperty(lbl, Pid::BARLINE_TYPE, QVariant::fromValue(barType),
-                                                        PropertyFlags::NOSTYLE));
+                        lscore->undo(new ChangeProperty(lbl, Pid::BARLINE_TYPE, QVariant::fromValue(barType), PropertyFlags::NOSTYLE));
                         // set generated flag before and after so it sticks on type change and also works on undo/redo
                         lscore->undo(new ChangeProperty(lbl, Pid::GENERATED, generated, PropertyFlags::NOSTYLE));
                         if (lbl != sbl && !generated && !lbl->links()) {
@@ -145,8 +144,7 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
             for (Element* e : segment1->elist()) {
                 if (e) {
                     e->score()->undo(new ChangeProperty(e, Pid::GENERATED, false, PropertyFlags::NOSTYLE));
-                    e->score()->undo(new ChangeProperty(e, Pid::BARLINE_TYPE, QVariant::fromValue(barType),
-                                                        PropertyFlags::NOSTYLE));
+                    e->score()->undo(new ChangeProperty(e, Pid::BARLINE_TYPE, QVariant::fromValue(barType), PropertyFlags::NOSTYLE));
                     // set generated flag before and after so it sticks on type change and also works on undo/redo
                     e->score()->undo(new ChangeProperty(e, Pid::GENERATED, false, PropertyFlags::NOSTYLE));
                 }

@@ -1210,6 +1210,7 @@ void Segment::scanElements(void* data, void (* func)(void*, Element*), bool all)
     if (!enabled()) {
         return;
     }
+
     for (ScoreElement* el : (*this)) {
         Element* e = toElement(el);
         if (all || e->systemFlag() || (score()->staff(e->staffIdx())->show() && measure()->visible(e->staffIdx()))) {

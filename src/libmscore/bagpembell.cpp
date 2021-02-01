@@ -522,9 +522,7 @@ void BagpipeEmbellishment::layout()
 
         // flag
         if (drawFlag) {
-            addbbox(score()->scoreFont()->bbox(flagsym,
-                                               dx.mags).translated(QPointF(x - dx.lw * .5 + dx.xcorr,
-                                                                           dy.y1f + dy.ycorr)));
+            addbbox(score()->scoreFont()->bbox(flagsym, dx.mags).translated(QPointF(x - dx.lw * .5 + dx.xcorr, dy.y1f + dy.ycorr)));
             // printBBox(" notehead + stem + flag", bbox());
         }
 
