@@ -1403,7 +1403,7 @@ qreal System::minDistance(System* s2) const
             }
 
       dist = qMax(dist, score()->staff(firstStaff)->userDist());
-      fixedSpacer = nullptr;
+      fixedDownDistance = false;
 
       for (MeasureBase* mb1 : ml) {
             if (mb1->isMeasure()) {
@@ -1411,8 +1411,8 @@ qreal System::minDistance(System* s2) const
                   Spacer* sp = m->vspacerDown(lastStaff);
                   if (sp) {
                         if (sp->spacerType() == SpacerType::FIXED) {
-                              fixedSpacer = sp;
                               dist = sp->gap();
+                              fixedDownDistance = true;
                               break;
                               }
                         else
@@ -1420,7 +1420,7 @@ qreal System::minDistance(System* s2) const
                         }
                   }
             }
-      if (!getFixedSpacer()) {
+      if (!fixedDownDistance) {
             for (MeasureBase* mb2 : s2->ml) {
                   if (mb2->isMeasure()) {
                         Measure* m = toMeasure(mb2);
@@ -1540,17 +1540,23 @@ qreal System::spacerDistance(bool up) const
       if (staff < 0)
             return 0.0;
       qreal dist = 0.0;
+      activeSpacer = nullptr;
       for (MeasureBase* mb : measures()) {
             if (mb->isMeasure()) {
                   Measure* m = toMeasure(mb);
                   Spacer* sp = up ? m->vspacerUp(staff) : m->vspacerDown(staff);
                   if (sp) {
                         if (sp->spacerType() == SpacerType::FIXED) {
+                              activeSpacer = sp;
                               dist = sp->gap();
                               break;
                               }
-                        else
-                              dist = qMax(dist, sp->gap());
+                        else {
+                              if (sp->gap() > dist) {
+                                    activeSpacer = sp;
+                                    dist = sp->gap();
+                                    }
+                              }
                         }
                   }
             }
