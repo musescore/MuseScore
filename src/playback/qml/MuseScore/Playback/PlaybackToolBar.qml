@@ -8,6 +8,8 @@ import MuseScore.NotationScene 1.0
 Rectangle {
     id: root
 
+    property bool floating: false
+
     PlaybackToolBarModel {
         id: playbackModel
     }
@@ -16,38 +18,66 @@ Rectangle {
         playbackModel.load()
     }
 
-    Row {
+    Column {
+        spacing: 14
+
         anchors.verticalCenter: parent.verticalCenter
 
-        ListView {
-            height: childrenRect.height
+        height: childrenRect.height
+        width: parent.width
+
+        Row {
+            id: playbackActions
+
             width: childrenRect.width
+            height: childrenRect.height
 
-            contentHeight: 32
-            contentWidth: contentHeight
+            spacing: 2
 
-            model: playbackModel
+            ListView {
+                height: childrenRect.height
+                width: childrenRect.width
 
-            orientation: Qt.Horizontal
-            interactive: false
+                contentHeight: 32
+                contentWidth: contentHeight
 
-            delegate: FlatButton {
-                id: playbackButton
+                model: playbackModel
 
-                icon: model.icon
-                hint: model.hint
-                enabled: model.enabled
+                orientation: Qt.Horizontal
+                interactive: false
 
-                normalStateColor: model.checked ? ui.theme.accentColor : "transparent"
+                delegate: FlatButton {
+                    id: playbackButton
 
-                onClicked: {
-                    if (enabled) {
-                        playbackModel.handleAction(model.code)
+                    icon: model.icon
+                    hint: model.hint
+                    enabled: model.enabled
+
+                    normalStateColor: model.checked ? ui.theme.accentColor : "transparent"
+
+                    onClicked: {
+                        if (enabled) {
+                            playbackModel.handleAction(model.code)
+                        }
                     }
                 }
             }
+
+            SeparatorLine { orientation: Qt.Vertical }
+
+            Rectangle {
+                height: parent.height
+                width: 200
+                opacity: 0.5
+            }
+
+            SeparatorLine { orientation: Qt.Vertical }
         }
 
-        UndoRedoControls {}
+        StyledSlider {
+            width: playbackActions.width
+            visible: root.floating
+            value: playbackModel.playPosition
+        }
     }
 }

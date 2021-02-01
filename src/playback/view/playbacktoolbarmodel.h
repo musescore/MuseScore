@@ -40,6 +40,8 @@ class PlaybackToolBarModel : public QAbstractListModel, public async::Asyncable
     INJECT(playback, IPlaybackController, playbackController)
     INJECT(playback, workspace::IWorkspaceManager, workspaceManager)
 
+    Q_PROPERTY(qreal playPosition READ playPosition WRITE setPlayPosition NOTIFY playPositionChanged)
+
 public:
     explicit PlaybackToolBarModel(QObject* parent = nullptr);
 
@@ -47,8 +49,16 @@ public:
     QVariant data(const QModelIndex& index, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
 
+    qreal playPosition() const;
+
     Q_INVOKABLE void load();
     Q_INVOKABLE void handleAction(const QString& action);
+
+public slots:
+    void setPlayPosition(qreal position);
+
+signals:
+    void playPositionChanged(qreal position);
 
 private:
     enum Roles {
