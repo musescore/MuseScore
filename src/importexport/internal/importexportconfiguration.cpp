@@ -46,11 +46,6 @@ void ImportexportConfiguration::init()
     settings()->setDefaultValue(EXPORT_PDF_DPI_RESOLUTION_KEY, Val(Ms::DPI));
 }
 
-int ImportexportConfiguration::midiShortestNote() const
-{
-    return settings()->value(SHORTEST_NOTE_KEY).toInt();
-}
-
 std::string ImportexportConfiguration::importOvertuneCharset() const
 {
     return settings()->value(IMPORT_OVERTUNE_CHARSET_KEY).toString();

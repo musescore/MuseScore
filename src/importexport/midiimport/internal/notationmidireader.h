@@ -16,32 +16,18 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_IMPORTEXPORT_IMPORTEXPORTCONFIGURATION_H
-#define MU_IMPORTEXPORT_IMPORTEXPORTCONFIGURATION_H
+#ifndef MU_IMPORTEXPORT_NOTATIONMIDIREADER_H
+#define MU_IMPORTEXPORT_NOTATIONMIDIREADER_H
 
-#include "../iimportexportconfiguration.h"
+#include "notation/inotationreader.h"
 
-namespace mu::importexport {
-class ImportexportConfiguration : public IImportexportConfiguration
+namespace mu::iex::midiimport {
+class NotationMidiReader : public notation::INotationReader
 {
 public:
-    void init();
 
-    std::string importOvertuneCharset() const override;
-
-    std::string importGuitarProCharset() const override;
-
-    int exportPdfDpiResolution() const override;
-
-    void setExportPngDpiResolution(std::optional<float> dpi) override;
-    float exportPngDpiResolution() const override;
-
-    bool exportPngWithTransparentBackground() const override;
-
-private:
-
-    std::optional<float> m_customExportPngDpi;
+    Ret read(Ms::MasterScore* score, const io::path& path) override;
 };
 }
 
-#endif // MU_IMPORTEXPORT_IMPORTEXPORTCONFIGURATION_H
+#endif // MU_IMPORTEXPORT_NOTATIONMIDIREADER_H

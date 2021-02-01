@@ -17,20 +17,17 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "notationmidiwriter.h"
+#ifndef MU_IMPORTEXPORT_NOTATIONMIDIWRITER_H
+#define MU_IMPORTEXPORT_NOTATIONMIDIWRITER_H
 
-#include "log.h"
+#include "notation/abstractnotationwriter.h"
 
-using namespace mu::importexport;
-using namespace mu::system;
-
-mu::Ret NotationMidiWriter::write(const notation::INotationPtr notation, IODevice& destinationDevice, const Options& options)
+namespace mu::iex::midiimport {
+class NotationMidiWriter : public notation::AbstractNotationWriter
 {
-    UNUSED(notation)
-    UNUSED(destinationDevice)
-    UNUSED(options)
-
-    NOT_IMPLEMENTED;
-
-    return make_ret(Ret::Code::NotImplemented);
+public:
+    Ret write(const notation::INotationPtr notation, system::IODevice& destinationDevice, const Options& options = Options()) override;
+};
 }
+
+#endif // MU_IMPORTEXPORT_NOTATIONMIDIWRITER_H

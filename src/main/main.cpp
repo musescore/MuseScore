@@ -69,6 +69,7 @@
 #include "importexport/bww/bwwmodule.h"
 #include "importexport/capella/capellamodule.h"
 #include "importexport/guitarpro/guitarpromodule.h"
+#include "importexport/midiimport/midiimportmodule.h"
 
 #include "commonscene/commonscenemodule.h"
 #ifdef BUILD_PALETTE_MODULE
@@ -222,6 +223,7 @@ int main(int argc, char** argv)
     app.addModule(new mu::iex::musicxml::MusicXmlModule());
     app.addModule(new mu::iex::capella::CapellaModule());
     app.addModule(new mu::iex::guitarpro::GuitarProModule());
+    app.addModule(new mu::iex::midiimport::MidiImportModule());
 
 #ifdef BUILD_WORKSPACE_MODULE
     app.addModule(new mu::workspace::WorkspaceModule());

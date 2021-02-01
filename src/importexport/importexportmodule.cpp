@@ -23,12 +23,10 @@
 #include "modularity/ioc.h"
 
 #include "notation/inotationreadersregister.h"
-#include "internal/notationmidireader.h"
 #include "internal/musedatareader.h"
 #include "internal/overeader.h"
 
 #include "notation/inotationwritersregister.h"
-#include "internal/notationmidiwriter.h"
 #include "internal/pdfwriter.h"
 #include "internal/pngwriter.h"
 #include "internal/svgwriter.h"
@@ -60,14 +58,12 @@ void ImportExportModule::onInit(const framework::IApplication::RunMode&)
 
     auto readers = framework::ioc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
-        readers->reg({ "mid", "midi", "kar" }, std::make_shared<NotationMidiReader>());
         readers->reg({ "md" }, std::make_shared<MuseDataReader>());
         readers->reg({ "ove", "scw" }, std::make_shared<OveReader>());
     }
 
     auto writers = framework::ioc()->resolve<INotationWritersRegister>(moduleName());
     if (writers) {
-        writers->reg({ "mid", "midi", "kar" }, std::make_shared<NotationMidiWriter>());
         writers->reg({ "pdf" }, std::make_shared<PdfWriter>());
         writers->reg({ "svg" }, std::make_shared<SvgWriter>());
         writers->reg({ "png" }, std::make_shared<PngWriter>());

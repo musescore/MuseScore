@@ -16,32 +16,19 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_IMPORTEXPORT_IMPORTEXPORTCONFIGURATION_H
-#define MU_IMPORTEXPORT_IMPORTEXPORTCONFIGURATION_H
+#include "notationmidireader.h"
 
-#include "../iimportexportconfiguration.h"
+#include "libmscore/score.h"
+#include "notation/notationerrors.h"
 
-namespace mu::importexport {
-class ImportexportConfiguration : public IImportexportConfiguration
-{
-public:
-    void init();
-
-    std::string importOvertuneCharset() const override;
-
-    std::string importGuitarProCharset() const override;
-
-    int exportPdfDpiResolution() const override;
-
-    void setExportPngDpiResolution(std::optional<float> dpi) override;
-    float exportPngDpiResolution() const override;
-
-    bool exportPngWithTransparentBackground() const override;
-
-private:
-
-    std::optional<float> m_customExportPngDpi;
-};
+namespace Ms {
+extern Score::FileError importMidi(MasterScore*, const QString& name);
 }
 
-#endif // MU_IMPORTEXPORT_IMPORTEXPORTCONFIGURATION_H
+using namespace mu::iex::midiimport;
+
+mu::Ret NotationMidiReader::read(Ms::MasterScore* score, const io::path& path)
+{
+    Ms::Score::FileError err = Ms::importMidi(score, path.toQString());
+    return mu::notation::scoreFileErrorToRet(err);
+}
