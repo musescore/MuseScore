@@ -59,7 +59,7 @@ const std::array<const char*, int(SymId::lastSym) + 1> Sym::symNames = { {
     "noSym",
 
     // DO NOT edit the SMuFL standard symbol names (see below) manually!
-    // They are generated from fonttools/smufl2sym.{bat,sh} and then
+    // They are generated from tools/fonttools/smufl2sym.{bat,sh} and then
     // copied into this file!
 
     // SMuFL standard symbol names {{{
@@ -2894,8 +2894,8 @@ const std::array<const char*, int(SymId::lastSym) + 1> Sym::symUserNames = { {
     QT_TRANSLATE_NOOP("symUserNames", "No symbol"),
 
     // DO NOT edit the SMuFL standard symbol user names (see below) manually!
-    // They are generated from fonttools/smufl2sym.{bat,sh} and then
-    // copied into this file! Edit fonttools/smufl2sym-in-trans.json
+    // They are generated from tools/fonttools/smufl2sym.{bat,sh} and then
+    // copied into this file! Edit tools/fonttools/smufl2sym-in-trans.json
     // to make more strings translatable!
 
     // SMuFL standard symbol user names {{{
