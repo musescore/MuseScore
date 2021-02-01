@@ -69,6 +69,7 @@ NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackP
 
     m_dragData.ed.view = new ScoreCallbacks();
     m_dropData.ed.view = new ScoreCallbacks();
+    m_gripEditData.view = new ScoreCallbacks();
 }
 
 NotationInteraction::~NotationInteraction()
@@ -464,12 +465,12 @@ void NotationInteraction::startDrag(const std::vector<Element*>& elems,
         }
     }
 
+    startEdit();
+
     if (isGripEditStarted()) {
         m_gripEditData.element->startEditDrag(m_gripEditData);
         return;
     }
-
-    startEdit();
 
     for (auto& group : m_dragData.dragGroups) {
         group->startDrag(m_dragData.ed);
@@ -1601,8 +1602,12 @@ void NotationInteraction::drawGripPoints(QPainter* painter)
     qreal gripWidth = DEFAULT_GRIP_SIZE / painter->worldTransform().m11();
     qreal gripHeight = DEFAULT_GRIP_SIZE / painter->worldTransform().m22();
     QRectF newRect(-gripWidth / 2, -gripHeight / 2, gripWidth, gripHeight);
+
+    Element* page = m_gripEditData.element->findAncestor(ElementType::PAGE);
+    QPointF pageOffset = page ? page->pos() : m_gripEditData.element->pos();
+
     for (QRectF& gripRect: m_gripEditData.grip) {
-        gripRect = newRect;
+        gripRect = newRect.translated(pageOffset);
     }
 
     m_gripEditData.element->updateGrips(m_gripEditData);
