@@ -740,6 +740,7 @@ Note::Note(const Note& n, bool link)
     if (n._tieFor) {
         _tieFor = new Tie(*n._tieFor);
         _tieFor->setStartNote(this);
+        _tieFor->setTick(_tieFor->startNote()->tick());
         _tieFor->setEndNote(0);
     } else {
         _tieFor = 0;
@@ -1230,6 +1231,7 @@ void Note::add(Element* e)
     case ElementType::TIE: {
         Tie* tie = toTie(e);
         tie->setStartNote(this);
+        tie->setTick(tie->startNote()->tick());
         tie->setTrack(track());
         setTieFor(tie);
         if (tie->endNote()) {

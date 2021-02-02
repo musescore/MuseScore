@@ -2205,9 +2205,13 @@ QVector<QLineF> Element::genericDragAnchorLines() const
     if (parent()->isSegment()) {
         System* system = toSegment(parent())->measure()->system();
         const int stIdx = staffIdx();
-        yp = system->staffCanvasYpage(stIdx);
+        yp = system ? system->staffCanvasYpage(stIdx) : 0.0;
         if (placement() == Placement::BELOW) {
-            yp += system->staff(stIdx)->bbox().height();
+            yp += system ? system->staff(stIdx)->bbox().height() : 0.0;
+        }
+        //adjust anchor Y positions to staffType offset
+        if (staff()) {
+            yp += staff()->staffTypeForElement(this)->yoffset().val() * spatium();
         }
     } else {
         yp = parent()->canvasPos().y();
@@ -2603,6 +2607,12 @@ void Element::autoplaceSegmentElement(bool above, bool add)
 
         SysStaff* ss = m->system()->staff(si);
         QRectF r = bbox().translated(m->pos() + s->pos() + pos());
+
+        // Adjust bbox Y pos for staffType offset
+        if (staffType()) {
+            qreal stYOffset = staffType()->yoffset().val() * sp;
+            r.translate(0.0, stYOffset);
+        }
 
         SkylineLine sk(!above);
         qreal d;

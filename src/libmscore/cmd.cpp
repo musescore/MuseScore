@@ -725,6 +725,8 @@ void Score::createCRSequence(const Fraction& f, ChordRest* cr, const Fraction& t
                 Tie* tie = new Tie(this);
                 tie->setStartNote(on);
                 tie->setEndNote(nn);
+                tie->setTick(tie->startNote()->tick());
+                tie->setTick2(tie->endNote()->tick());
                 tie->setTrack(cr->track());
                 on->setTieFor(tie);
                 nn->setTieBack(tie);
@@ -793,6 +795,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
 
                 if (tie) {
                     tie->setEndNote(note);
+                    tie->setTick2(tie->endNote()->tick());
                     note->setTieBack(tie);
                     addTie = tie;
                 }
@@ -817,6 +820,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                 if (i + 1 < n) {
                     tie = new Tie(this);
                     tie->setStartNote(note);
+                    tie->setTick(tie->startNote()->tick());
                     tie->setTrack(track);
                     note->setTieFor(tie);
                 }
@@ -863,6 +867,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
         if (!isRest) {
             tie = new Tie(this);
             tie->setStartNote((Note*)nr);
+            tie->setTick(tie->startNote()->tick());
             tie->setTrack(nr->track());
             ((Note*)nr)->setTieFor(tie);
         }
@@ -3188,6 +3193,8 @@ void Score::cmdImplode()
                                         Tie* tie = new Tie(this);
                                         tie->setStartNote(tn);
                                         tie->setEndNote(nn);
+                                        tie->setTick(tie->startNote()->tick());
+                                        tie->setTick2(tie->endNote()->tick());
                                         tie->setTrack(tn->track());
                                         undoAddElement(tie);
                                     }
@@ -3591,6 +3598,7 @@ Segment* Score::setChord(Segment* segment, int track, Chord* chordTemplate, Frac
                 for (size_t j = 0; j < notes.size(); ++j) {
                     tie[j] = new Tie(this);
                     tie[j]->setStartNote(notes[j]);
+                    tie[j]->setTick(tie[j]->startNote()->tick());
                     tie[j]->setTrack(track);
                     notes[j]->setTieFor(tie[j]);
                     addTie = true;
@@ -3637,6 +3645,7 @@ Segment* Score::setChord(Segment* segment, int track, Chord* chordTemplate, Frac
         for (size_t i = 0; i < notes.size(); ++i) {
             tie[i] = new Tie(this);
             tie[i]->setStartNote(notes[i]);
+            tie[i]->setTick(tie[i]->startNote()->tick());
             tie[i]->setTrack(notes[i]->track());
             notes[i]->setTieFor(tie[i]);
         }

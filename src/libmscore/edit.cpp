@@ -338,6 +338,8 @@ Chord* Score::addChord(const Fraction& tick, TDuration d, Chord* oc, bool genTie
             Tie* tie = new Tie(this);
             tie->setStartNote(n1);
             tie->setEndNote(n2);
+            tie->setTick(tie->startNote()->tick());
+            tie->setTick2(tie->endNote()->tick());
             tie->setTrack(n1->track());
             undoAddElement(tie);
         }
@@ -1410,6 +1412,8 @@ Note* Score::addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord)
             Tie* tie = new Tie(this);
             tie->setStartNote(nn);
             tie->setEndNote(n);
+            tie->setTick(tie->startNote()->tick());
+            tie->setTick2(tie->endNote()->tick());
             tie->setTrack(n->track());
             n->setTieBack(tie);
             nn->setTieFor(tie);
@@ -1554,7 +1558,7 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                         n->setTieBack(0);
                     }
                     Chord* startChord = nchord;
-                    Measure* measure = 0;
+                    Measure* measure = nullptr;
                     bool firstpart = true;
                     for (;;) {
                         if (tr % VOICES) {
@@ -1584,6 +1588,8 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                                     tie = new Tie(this);
                                     tie->setStartNote(nl1[j]);
                                     tie->setEndNote(nl2[j]);
+                                    tie->setTick(tie->startNote()->tick());
+                                    tie->setTick2(tie->endNote()->tick());
                                     tie->setTrack(tr);
                                     nl1[j]->setTieFor(tie);
                                     nl2[j]->setTieBack(tie);
@@ -1635,6 +1641,8 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                             tie = new Tie(this);
                             tie->setStartNote(tieBack[i]);
                             tie->setEndNote(n);
+                            tie->setTick(tie->startNote()->tick());
+                            tie->setTick2(tie->endNote()->tick());
                             tie->setTrack(track);
                             n->setTieBack(tie);
                             tieBack[i]->setTieFor(tie);
@@ -1644,6 +1652,8 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                             tie = new Tie(this);
                             tie->setStartNote(nn);
                             tie->setEndNote(tieFor[i]);
+                            tie->setTick(tie->startNote()->tick());
+                            tie->setTick2(tie->endNote()->tick());
                             tie->setTrack(track);
                             n->setTieFor(tie);
                             tieFor[i]->setTieBack(tie);
@@ -3640,7 +3650,7 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
         mb->setTick(tick);
 
         if (im) {
-            im = im->top();        // don't try to insert in front of nested frame
+            im = im->top();       // don't try to insert in front of nested frame
         }
         mb->setNext(im);
         mb->setPrev(im ? im->prev() : score->last());
@@ -4763,7 +4773,7 @@ static Element* findLinkedVoiceElement(Element* e, Staff* nstaff)
             }
             return 0;
         }
-        for (int i : l) {
+        for (int i : qAsConst(l)) {
             if (nstaff->idx() * VOICES <= i && (nstaff->idx() + 1) * VOICES > i) {
                 dtrack = i;
                 break;
@@ -4806,7 +4816,7 @@ static Chord* findLinkedChord(Chord* c, Staff* nstaff)
             }
             return 0;
         }
-        for (int i : l) {
+        for (int i : qAsConst(l)) {
             if (nstaff->idx() * VOICES <= i && (nstaff->idx() + 1) * VOICES > i) {
                 dtrack = i;
                 break;
