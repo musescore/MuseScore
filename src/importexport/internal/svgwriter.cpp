@@ -96,7 +96,7 @@ mu::Ret SvgWriter::write(const notation::INotationPtr notation, IODevice& destin
         int stavesCount = system->staves()->size();
 
         for (int staffIndex = 0; staffIndex < stavesCount; ++staffIndex) {
-            if (score->staff(staffIndex)->invisible() || !score->staff(staffIndex)->show()) {
+            if (score->staff(staffIndex)->invisible(Ms::Fraction(0,1)) || !score->staff(staffIndex)->show()) {
                 continue; // ignore invisible staves
             }
 

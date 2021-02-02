@@ -55,8 +55,10 @@ StaffType::StaffType()
 
 StaffType::StaffType(StaffTypes type, StaffGroup sg, const QString& xml, const QString& name, int lines, int stpOff, qreal lineDist,
                      bool genClef, bool showBarLines, bool stemless, bool genTimeSig, bool genKeySig,
-                     bool showLedgerLines)
+                     bool showLedgerLines, bool invisible, const QColor& color)
     : _group(sg), _type(type), _xmlName(xml), _name(name),
+    _invisible(invisible),
+    _color(color),
     _lines(lines),
     _stepOffset(stpOff),
     _lineDistance(Spatium(lineDist)),
@@ -71,13 +73,15 @@ StaffType::StaffType(StaffTypes type, StaffGroup sg, const QString& xml, const Q
 
 StaffType::StaffType(StaffTypes type, StaffGroup sg, const QString& xml, const QString& name, int lines, int stpOff, qreal lineDist,
                      bool genClef,
-                     bool showBarLines, bool stemless, bool genTimesig,
+                     bool showBarLines, bool stemless, bool genTimesig, bool invisible, const QColor& color,
                      const QString& durFontName, qreal durFontSize, qreal durFontUserY, qreal genDur,
                      const QString& fretFontName, qreal fretFontSize, qreal fretFontUserY,
                      TablatureSymbolRepeat symRepeat, bool linesThrough, TablatureMinimStyle minimStyle, bool onLines,
                      bool showRests, bool stemsDown, bool stemThrough, bool upsideDown, bool showTabFingering,
                      bool useNumbers, bool showBackTied)
 {
+    Q_UNUSED(invisible);
+    Q_UNUSED(color);
     _type    = type;
     _group   = sg;
     _xmlName = xml;
@@ -234,6 +238,12 @@ void StaffType::write(XmlWriter& xml) const
     if (!_genTimesig) {
         xml.tag("timesig", _genTimesig);
     }
+    if (_invisible) {
+        xml.tag("invisible", _invisible);
+    }
+    if (_color != QColor(Qt::black)) {
+        xml.tag("color", _color);
+    }
     if (_group == StaffGroup::STANDARD) {
         xml.tag("noteheadScheme", NoteHead::scheme2name(_noteHeadScheme), NoteHead::scheme2name(NoteHead::Scheme::HEAD_NORMAL));
     }
@@ -328,6 +338,10 @@ void StaffType::read(XmlReader& e)
             _genKeysig = e.readInt();
         } else if (tag == "ledgerlines") {
             _showLedgerLines = e.readInt();
+        } else if (tag == "invisible") {
+            _invisible = e.readInt();
+        } else if (tag == "color") {
+            _color = e.readColor();
         } else if (tag == "durations") {
             setGenDurations(e.readBool());
         } else if (tag == "durationFontName") {
@@ -1408,69 +1422,76 @@ void StaffType::initStaffTypes()
 
     // keep in sync with enum class StaffTypes
     _presets = {
-//                                      group,              xml-name,  human-readable-name,          lin stpOff  dist clef   bars stmless time  key    ledger
+//                                      group,              xml-name,  human-readable-name,          lin stpOff  dist clef   bars stmless time  key    ledger invis     color
         StaffType(StaffTypes::STANDARD, StaffGroup::STANDARD,   "stdNormal", QObject::tr(
-                      "Standard"),        5, 0,     1,   true,  true, false, true, true,  true),
-//       StaffType(StaffGroup::PERCUSSION, "perc1Line", QObject::tr("Perc. 1 line"),    1, -4,    1,   true,  true, false, true, false, true),
+                      "Standard"),        5, 0,     1,   true,  true, false, true, true, true, false,  Qt::black),
+//       StaffType(StaffGroup::PERCUSSION, "perc1Line", QObject::tr(
+//                    "Perc. 1 line"),    1, -4,    1,   true,  true, false, true, false, true, false,  Qt::black),
         StaffType(StaffTypes::PERC_1LINE, StaffGroup::PERCUSSION, "perc1Line", QObject::tr(
-                      "Perc. 1 line"),    1, 0,     1,   true,  true, false, true, false, true),
+                      "Perc. 1 line"),    1, 0,     1,   true,  true, false, true, false, true, false,  Qt::black),
         StaffType(StaffTypes::PERC_3LINE, StaffGroup::PERCUSSION, "perc3Line", QObject::tr(
-                      "Perc. 3 lines"),   3, 0,     2,   true,  true, false, true, false, true),
+                      "Perc. 3 lines"),   3, 0,     2,   true,  true, false, true, false, true, false,  Qt::black),
         StaffType(StaffTypes::PERC_5LINE, StaffGroup::PERCUSSION, "perc5Line", QObject::tr(
-                      "Perc. 5 lines"),   5, 0,     1,   true,  true, false, true, false, true),
-//                 group            xml-name,     human-readable-name                  lin stpOff dist clef   bars stemless time      duration font     size off genDur     fret font          size off  duration symbol repeat      thru       minim style              onLin  rests  stmDn  stmThr upsDn  sTFing nums  bkTied
-//       StaffType(StaffGroup::TAB, "tab6StrSimple", QObject::tr("Tab. 6-str. simple"), 6, 2,     1.5, true,  true, true,  false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Sans",    9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,   true,  false, true,  false, false, false, true, false),
-//       StaffType(StaffGroup::TAB, "tab6StrCommon", QObject::tr("Tab. 6-str. common"), 6, 2,     1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  false, true,  false, false, false, true, true),
-//       StaffType(StaffGroup::TAB, "tab6StrFull",   QObject::tr("Tab. 6-str. full"),   6, 2,     1.5, true,  true, false, true,  "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SLASHED,true,  true,  true,  true,  false, false, true, true),
+                      "Perc. 5 lines"),   5, 0,     1,   true,  true, false, true, false, true, false,  Qt::black),
+//                 group            xml-name,     human-readable-name                  lin stpOff dist clef   bars stemless time   invis     color   duration font     size off genDur     fret font          size off  duration symbol repeat      thru       minim style              onLin  rests  stmDn  stmThr upsDn  sTFing nums  bkTied
+//        StaffType(StaffGroup::TAB, "tab6StrSimple", QObject::tr(
+//                      "Tab. 6-str. simple"), 6, 2,     1.5, true,  true, true,  false, false, Qt::black, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Sans",    9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,   true,  false, true,  false, false, false, true,
+//                  false),
+//        StaffType(StaffGroup::TAB, "tab6StrCommon", QObject::tr(
+//                      "Tab. 6-str. common"), 6, 2,     1.5, true,  true, false, false, false, Qt::black, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  false, true,  false, false, false, true,
+//                  true),
+//        StaffType(StaffGroup::TAB, "tab6StrFull",   QObject::tr(
+//                      "Tab. 6-str. full"),   6, 2,     1.5, true,  true, false, true, false, Qt::black, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SLASHED,true,  true,  true,  true,  false, false, true,
+//                  true),
         StaffType(StaffTypes::TAB_6SIMPLE, StaffGroup::TAB, "tab6StrSimple", QObject::tr(
-                      "Tab. 6-str. simple"), 6, 0,     1.5, true,  true, true,  false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Sans",    9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,   true,  false, true,  false, false, false, true,
+                      "Tab. 6-str. simple"), 6, 0,     1.5, true,  true, true,  false, false, Qt::black, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Sans",    9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,   true,  false, true,  false, false, false, true,
                   false),
         StaffType(StaffTypes::TAB_6COMMON, StaffGroup::TAB, "tab6StrCommon", QObject::tr(
-                      "Tab. 6-str. common"), 6, 0,     1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  false, true,  false, false, false, true,
+                      "Tab. 6-str. common"), 6, 0,     1.5, true,  true, false, false, false, Qt::black, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  false, true,  false, false, false, true,
                   true),
         StaffType(StaffTypes::TAB_6FULL, StaffGroup::TAB, "tab6StrFull",   QObject::tr(
-                      "Tab. 6-str. full"),   6, 0,     1.5, true,  true, false, true,  "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SLASHED,true,  true,  true,  true,  false, false, true,
+                      "Tab. 6-str. full"),   6, 0,     1.5, true,  true, false, true, false, Qt::black,  "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SLASHED,true,  true,  true,  true,  false, false, true,
                   true),
         StaffType(StaffTypes::TAB_4SIMPLE, StaffGroup::TAB, "tab4StrSimple", QObject::tr(
-                      "Tab. 4-str. simple"), 4, 0,     1.5, true,  true, true,  false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Sans",    9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,   true,  false, true,  false, false, false, true,
+                      "Tab. 4-str. simple"), 4, 0,     1.5, true,  true, true,  false, false, Qt::black, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Sans",    9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,   true,  false, true,  false, false, false, true,
                   false),
         StaffType(StaffTypes::TAB_4COMMON, StaffGroup::TAB, "tab4StrCommon", QObject::tr(
-                      "Tab. 4-str. common"), 4, 0,     1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  false, true,  false, false, false, true,
+                      "Tab. 4-str. common"), 4, 0,     1.5, true,  true, false, false, false, Qt::black, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  false, true,  false, false, false, true,
                   true),
         StaffType(StaffTypes::TAB_4FULL, StaffGroup::TAB, "tab4StrFull",   QObject::tr(
-                      "Tab. 4-str. full"),   4, 0,     1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SLASHED,true,  true,  true,  true,  false, false, true,
+                      "Tab. 4-str. full"),   4, 0,     1.5, true,  true, false, false, false, Qt::black, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SLASHED,true,  true,  true,  true,  false, false, true,
                   true),
         StaffType(StaffTypes::TAB_5SIMPLE, StaffGroup::TAB, "tab5StrSimple", QObject::tr(
-                      "Tab. 5-str. simple"), 5, 0,     1.5, true,  true, true,  false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Sans",    9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,   true,  false, true,  false, false, false, true,
+                      "Tab. 5-str. simple"), 5, 0,     1.5, true,  true, true,  false, false, Qt::black, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Sans",    9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,   true,  false, true,  false, false, false, true,
                   false),
         StaffType(StaffTypes::TAB_5COMMON, StaffGroup::TAB, "tab5StrCommon", QObject::tr(
-                      "Tab. 5-str. common"), 5, 0,     1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  false, true,  false, false, false, true,
+                      "Tab. 5-str. common"), 5, 0,     1.5, true,  true, false, false, false, Qt::black, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  false, true,  false, false, false, true,
                   true),
         StaffType(StaffTypes::TAB_5FULL, StaffGroup::TAB, "tab5StrFull",   QObject::tr(
-                      "Tab. 5-str. full"),   5, 0,     1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SLASHED,true,  true,  true,  true,  false, false, true,
+                      "Tab. 5-str. full"),   5, 0,     1.5, true,  true, false, false, false, Qt::black, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SLASHED,true,  true,  true,  true,  false, false, true,
                   true),
         StaffType(StaffTypes::TAB_UKULELE, StaffGroup::TAB, "tabUkulele",    QObject::tr(
-                      "Tab. ukulele"),       4, 0,     1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  true,  true,  false, false, false, true,
+                      "Tab. ukulele"),       4, 0,     1.5, true,  true, false, false, false, Qt::black, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  true,  true,  false, false, false, true,
                   true),
         StaffType(StaffTypes::TAB_BALALAJKA, StaffGroup::TAB, "tabBalajka",    QObject::tr(
-                      "Tab. balalaika"),     3, 0,     1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  true,  true,  false, false, false, true,
+                      "Tab. balalaika"),     3, 0,     1.5, true,  true, false, false, false, Qt::black, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  true,  true,  false, false, false, true,
                   true),
         StaffType(StaffTypes::TAB_DULCIMER, StaffGroup::TAB, "tabDulcimer",   QObject::tr(
-                      "Tab. dulcimer"),      3, 0,     1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  true,  true,  false, true,  false, true,
+                      "Tab. dulcimer"),      3, 0,     1.5, true,  true, false, false, false, Qt::black, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  true,  true,  false, true,  false, true,
                   true),
 //       StaffType(StaffGroup::TAB, "tab6StrItalian",QObject::tr("Tab. 6-str. Italian"),6, 2,     1.5, false, true, true,  true,  "MuseScore Tab Italian",15, 0, true,  "MuseScore Tab Renaiss",10, 0, TablatureSymbolRepeat::NEVER, true,  TablatureMinimStyle::NONE,   true,  true,  false, false, true,  false, true, false),
 //       StaffType(StaffGroup::TAB, "tab6StrFrench", QObject::tr("Tab. 6-str. French"), 6, 2,     1.5, false, true, true,  true,  "MuseScore Tab French", 15, 0, true,  "MuseScore Tab Renaiss",10, 0, TablatureSymbolRepeat::NEVER, true,  TablatureMinimStyle::NONE,   false, false, false, false, false, false, false,false)
         StaffType(StaffTypes::TAB_ITALIAN, StaffGroup::TAB, "tab6StrItalian",QObject::tr(
-                      "Tab. 6-str. Italian"),6, 0,     1.5, false, true, true,  true,  "MuseScore Tab Italian",15, 0, true,  "MuseScore Tab Renaiss",10, 0, TablatureSymbolRepeat::NEVER, true,  TablatureMinimStyle::NONE,   true,  true,  false, false, true,  false, true,
+                      "Tab. 6-str. Italian"),6, 0,     1.5, false, true, true,  true, false, Qt::black,  "MuseScore Tab Italian",15, 0, true,  "MuseScore Tab Renaiss",10, 0, TablatureSymbolRepeat::NEVER, true,  TablatureMinimStyle::NONE,   true,  true,  false, false, true,  false, true,
                   false),
         StaffType(StaffTypes::TAB_FRENCH, StaffGroup::TAB, "tab6StrFrench", QObject::tr(
-                      "Tab. 6-str. French"), 6, 0,     1.5, false, true, true,  true,  "MuseScore Tab French", 15, 0, true,  "MuseScore Tab Renaiss",10, 0, TablatureSymbolRepeat::NEVER, true,  TablatureMinimStyle::NONE,   false, false, false, false, false, false, false,
+                      "Tab. 6-str. French"), 6, 0,     1.5, false, true, true,  true, false, Qt::black,  "MuseScore Tab French", 15, 0, true,  "MuseScore Tab Renaiss",10, 0, TablatureSymbolRepeat::NEVER, true,  TablatureMinimStyle::NONE,   false, false, false, false, false, false, false,
                   false),
         StaffType(StaffTypes::TAB_7COMMON, StaffGroup::TAB, "tab7StrCommon", QObject::tr(
-                      "Tab. 7-str. common"), 7, 0,     1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  false, true,  false, false, false, true,
+                      "Tab. 7-str. common"), 7, 0,     1.5, true,  true, false, false, false, Qt::black, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  false, true,  false, false, false, true,
                   true),
         StaffType(StaffTypes::TAB_8COMMON, StaffGroup::TAB, "tab8StrCommon", QObject::tr(
-                      "Tab. 8-str. common"), 8, 0,     1.5, true,  true, false, false, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  false, true,  false, false, false, true,
+                      "Tab. 8-str. common"), 8, 0,     1.5, true,  true, false, false, false, Qt::black, "MuseScore Tab Modern", 15, 0, false, "MuseScore Tab Serif",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  false, true,  false, false, false, true,
                   true),
     };
 }

@@ -752,7 +752,7 @@ void Chord::addLedgerLines()
         lineBelow     = (st->lines(tick) - 1) * 2;
         lineDistance  = st->lineDistance(tick);
         mag           = staff()->staffMag(tick);
-        staffVisible  = !staff()->invisible();
+        staffVisible  = !staff()->invisible(tick);
     }
 
     // need ledger lines?
