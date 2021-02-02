@@ -32,6 +32,8 @@ struct MenuItem : public actions::ActionItem
     bool enabled = false;
     bool checked = false;
 
+    actions::ActionData data;
+
     QList<MenuItem> subitems;
 
     MenuItem() = default;

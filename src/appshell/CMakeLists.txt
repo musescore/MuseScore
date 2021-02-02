@@ -31,6 +31,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/appshell.h
     ${CMAKE_CURRENT_LIST_DIR}/commandlinecontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/commandlinecontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/applicationactions.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/applicationactions.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/applicationactioncontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/applicationactioncontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/view/settings/settingslistmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/settings/settingslistmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/menumodel.cpp

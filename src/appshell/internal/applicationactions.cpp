@@ -16,27 +16,29 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#include "applicationactions.h"
 
-#ifndef MU_APPSHELL_APPSHELLMODULE_H
-#define MU_APPSHELL_APPSHELLMODULE_H
+#include "ui/view/iconcodes.h"
 
-#include "modularity/imodulesetup.h"
+using namespace mu::appshell;
+using namespace mu::actions;
+using namespace mu::shortcuts;
 
-namespace mu::appshell {
-class AppShellModule : public framework::IModuleSetup
-{
-public:
-    AppShellModule();
-
-    std::string moduleName() const override;
-
-    void resolveImports() override;
-
-    void registerResources() override;
-    void registerUiTypes() override;
-
-    void onInit(const framework::IApplication::RunMode& mode) override;
+const ActionList ApplicationActions::m_actions = {
+    ActionItem("quit",
+               ShortcutContext::Any,
+               QT_TRANSLATE_NOOP("action", "Quit")
+               )
 };
-}
 
-#endif // MU_APPSHELL_APPSHELLMODULE_H
+const ActionItem& ApplicationActions::action(const ActionCode& actionCode) const
+{
+    for (const ActionItem& action : m_actions) {
+        if (action.code == actionCode) {
+            return action;
+        }
+    }
+
+    static ActionItem null;
+    return null;
+}

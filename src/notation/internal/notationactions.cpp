@@ -79,46 +79,42 @@ const ActionList NotationActions::m_actions = {
     ActionItem("next-measure",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Next Measure"),
-               QT_TRANSLATE_NOOP("action","Go to next measure or move text right")
+               QT_TRANSLATE_NOOP("action", "Go to next measure or move text right")
                ),
     ActionItem("prev-measure",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Previous Measure"),
-               QT_TRANSLATE_NOOP("action","Go to previous measure or move text left")
-
+               QT_TRANSLATE_NOOP("action", "Go to previous measure or move text left")
                ),
     ActionItem("next-track",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Next staff or voice"),
-               QT_TRANSLATE_NOOP("action","Next staff or voice")
-
+               QT_TRANSLATE_NOOP("action", "Next staff or voice")
                ),
     ActionItem("prev-track",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Previous staff or voice"),
-               QT_TRANSLATE_NOOP("action","Previous staff or voice")
-
+               QT_TRANSLATE_NOOP("action", "Previous staff or voice")
                ),
     ActionItem("pitch-up",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Up"),
-               QT_TRANSLATE_NOOP("action","Pitch up or move text or articulation up")
-
+               QT_TRANSLATE_NOOP("action", "Pitch up or move text or articulation up")
                ),
     ActionItem("pitch-down",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Down"),
-               QT_TRANSLATE_NOOP("action","Pitch down or move text or articulation down")
+               QT_TRANSLATE_NOOP("action", "Pitch down or move text or articulation down")
                ),
     ActionItem("pitch-down-octave",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Down Octave"),
-               QT_TRANSLATE_NOOP("action","Pitch down by an octave or move text or articulation down")
+               QT_TRANSLATE_NOOP("action", "Pitch down by an octave or move text or articulation down")
                ),
     ActionItem("pitch-up-octave",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Up Octave"),
-               QT_TRANSLATE_NOOP("action","Pitch up by an octave or move text or articulation up")
+               QT_TRANSLATE_NOOP("action", "Pitch up by an octave or move text or articulation up")
                ),
     ActionItem("cut",
                ShortcutContext::NotationActive,
@@ -192,7 +188,7 @@ const ActionList NotationActions::m_actions = {
     ActionItem("parts",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Parts"),
-               QT_TRANSLATE_NOOP("action","Manage parts")
+               QT_TRANSLATE_NOOP("action", "Manage parts")
                ),
     ActionItem("view-mode-page",
                ShortcutContext::NotationActive,
@@ -225,12 +221,12 @@ const ActionList NotationActions::m_actions = {
     ActionItem("undo",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Undo"),
-               QT_TRANSLATE_NOOP("action","Undo last change")
+               QT_TRANSLATE_NOOP("action", "Undo last change")
                ),
     ActionItem("redo",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Redo"),
-               QT_TRANSLATE_NOOP("action","Redo last undo")
+               QT_TRANSLATE_NOOP("action", "Redo last undo")
                ),
     ActionItem("voice-x12",
                ShortcutContext::NotationActive,
@@ -259,7 +255,7 @@ const ActionList NotationActions::m_actions = {
     ActionItem("split-measure",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Split measure"),
-               QT_TRANSLATE_NOOP("action","Split measure before selected note/rest")
+               QT_TRANSLATE_NOOP("action", "Split measure before selected note/rest")
                ),
     ActionItem("join-measures",
                ShortcutContext::NotationActive,
@@ -595,37 +591,37 @@ const ActionList NotationActions::m_noteInputActions = {
     ActionItem("note-input",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Default (Step time)"),
-               QT_TRANSLATE_NOOP("action","Enter notes with a mouse or keyboard"),
+               QT_TRANSLATE_NOOP("action", "Enter notes with a mouse or keyboard"),
                IconCode::Code::EDIT
                ),
     ActionItem("note-input-rhythm",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Rhythm only (not pitch)"),
-               QT_TRANSLATE_NOOP("action","Enter durations with a single click or keypress"),
+               QT_TRANSLATE_NOOP("action", "Enter durations with a single click or keypress"),
                IconCode::Code::RHYTHM_ONLY
                ),
     ActionItem("note-input-repitch",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Re-pitch existing notes"),
-               QT_TRANSLATE_NOOP("action","Replace pitches without changing rhythms"),
+               QT_TRANSLATE_NOOP("action", "Replace pitches without changing rhythms"),
                IconCode::Code::RE_PITH
                ),
     ActionItem("note-input-realtime-auto",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Real-time (metronome)"),
-               QT_TRANSLATE_NOOP("action","Enter notes at a fixed tempo indicated by a metronome beat"),
+               QT_TRANSLATE_NOOP("action", "Enter notes at a fixed tempo indicated by a metronome beat"),
                IconCode::Code::METRONOME
                ),
     ActionItem("note-input-realtime-manual",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Real-time (foot pedal)"),
-               QT_TRANSLATE_NOOP("action","Enter notes while tapping a key or pedal to set the tempo"),
+               QT_TRANSLATE_NOOP("action", "Enter notes while tapping a key or pedal to set the tempo"),
                IconCode::Code::FOOT_PEDAL
                ),
     ActionItem("note-input-timewise",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Insert"),
-               QT_TRANSLATE_NOOP("action","Insert notes by increasing measure duration"),
+               QT_TRANSLATE_NOOP("action", "Insert notes by increasing measure duration"),
                IconCode::Code::NOTE_PLUS
                ),
     ActionItem("note-longa",

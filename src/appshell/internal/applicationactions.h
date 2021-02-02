@@ -16,27 +16,20 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#ifndef MU_APPSHELL_APPLICATIONACTIONS_H
+#define MU_APPSHELL_APPLICATIONACTIONS_H
 
-#ifndef MU_APPSHELL_APPSHELLMODULE_H
-#define MU_APPSHELL_APPSHELLMODULE_H
-
-#include "modularity/imodulesetup.h"
+#include "actions/imoduleactions.h"
 
 namespace mu::appshell {
-class AppShellModule : public framework::IModuleSetup
+class ApplicationActions : public actions::IModuleActions
 {
 public:
-    AppShellModule();
+    const actions::ActionItem& action(const actions::ActionCode& actionCode) const override;
 
-    std::string moduleName() const override;
-
-    void resolveImports() override;
-
-    void registerResources() override;
-    void registerUiTypes() override;
-
-    void onInit(const framework::IApplication::RunMode& mode) override;
+private:
+    static const actions::ActionList m_actions;
 };
 }
 
-#endif // MU_APPSHELL_APPSHELLMODULE_H
+#endif // MU_APPSHELL_APPLICATIONACTIONS_H

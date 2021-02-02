@@ -16,27 +16,19 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#include "applicationactioncontroller.h"
 
-#ifndef MU_APPSHELL_APPSHELLMODULE_H
-#define MU_APPSHELL_APPSHELLMODULE_H
+#include <QCoreApplication>
 
-#include "modularity/imodulesetup.h"
+using namespace mu::appshell;
+using namespace mu::actions;
 
-namespace mu::appshell {
-class AppShellModule : public framework::IModuleSetup
+void ApplicationActionController::init()
 {
-public:
-    AppShellModule();
-
-    std::string moduleName() const override;
-
-    void resolveImports() override;
-
-    void registerResources() override;
-    void registerUiTypes() override;
-
-    void onInit(const framework::IApplication::RunMode& mode) override;
-};
+    dispatcher()->reg(this, "quit", this, &ApplicationActionController::quit);
 }
 
-#endif // MU_APPSHELL_APPSHELLMODULE_H
+void ApplicationActionController::quit()
+{
+    QCoreApplication::quit();
+}
