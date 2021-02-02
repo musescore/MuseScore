@@ -451,6 +451,11 @@ void LyricsLineSegment::layout()
         }
     }
 
+    // apply yoffset for staff type change (keeps lyrics lines aligned with lyrics)
+    if (staffType()) {
+        rypos() += staffType()->yoffset().val() * spatium();
+    }
+
     // set bounding box
     QRectF r = QRectF(0.0, 0.0, pos2().x(), pos2().y()).normalized();
     qreal lw = lyricsLine()->lineWidth() * .5;
