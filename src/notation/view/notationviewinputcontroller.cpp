@@ -144,27 +144,37 @@ void NotationViewInputController::wheelEvent(QWheelEvent* event)
     QPoint pixelsScrolled = event->pixelDelta();
     QPoint stepsScrolled = event->angleDelta();
 
+    int dx = 0;
     int dy = 0;
-    qreal steps = 0.0;
+    qreal stepsX = 0.0;
+    qreal stepsY = 0.0;
 
     if (!pixelsScrolled.isNull()) {
+        dx = pixelsScrolled.x();
         dy = pixelsScrolled.y();
-        steps = static_cast<qreal>(dy) / static_cast<qreal>(PIXELSSTEPSFACTOR);
+        stepsX = static_cast<qreal>(dx) / static_cast<qreal>(PIXELSSTEPSFACTOR);
+        stepsY = static_cast<qreal>(dy) / static_cast<qreal>(PIXELSSTEPSFACTOR);
     } else if (!stepsScrolled.isNull()) {
+        dx = (stepsScrolled.x() * qMax(2.0, m_view->width() / 10.0)) / QWheelEvent::DefaultDeltasPerStep;
         dy = (stepsScrolled.y() * qMax(2.0, m_view->height() / 10.0)) / QWheelEvent::DefaultDeltasPerStep;
-        steps = static_cast<qreal>(stepsScrolled.y()) / static_cast<qreal>(QWheelEvent::DefaultDeltasPerStep);
+        stepsX = static_cast<qreal>(stepsScrolled.x()) / static_cast<qreal>(QWheelEvent::DefaultDeltasPerStep);
+        stepsY = static_cast<qreal>(stepsScrolled.y()) / static_cast<qreal>(QWheelEvent::DefaultDeltasPerStep);
     }
 
     Qt::KeyboardModifiers keyState = event->modifiers();
 
     // Windows touch pad pinches also execute this
     if (keyState & Qt::ControlModifier) {
-        int zoom = currentZoomPercentage() * qPow(1.1, steps);
+        int absSteps = sqrt(stepsX * stepsX + stepsY * stepsY) * (stepsY > -stepsX ? 1 : -1);
+        int zoom = currentZoomPercentage() * qPow(1.01, absSteps);
         setZoom(zoom, event->position().toPoint());
     } else if (keyState & Qt::ShiftModifier) {
-        m_view->moveCanvasHorizontal(dy);
+        int abs = sqrt(dx * dx + dy * dy) * (dy > -dx ? 1 : -1);
+        QPoint d = m_view->toLogical(QPoint(0, abs)) - m_view->toLogical(QPoint(0, 0));
+        m_view->moveCanvasHorizontal(d.y());
     } else {
-        m_view->moveCanvasVertical(dy);
+        QPoint d = m_view->toLogical(QPoint(dx, dy)) - m_view->toLogical(QPoint(0, 0));
+        m_view->moveCanvas(d.x(), d.y());
     }
 }
 
