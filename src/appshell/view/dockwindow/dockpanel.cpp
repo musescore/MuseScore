@@ -42,7 +42,7 @@ void DockPanel::onComponentCompleted()
     panel()->setObjectName("w_" + objectName());
     panel()->setWidget(view());
     panel()->setWindowTitle(m_title);
-    panel()->setStyleSheet(PANEL_QSS.arg(color().name()).arg(borderColor().name()));
+    updateStyle();
 
     m_preferedWidth = width();
 
@@ -53,7 +53,7 @@ void DockPanel::onComponentCompleted()
 
 void DockPanel::updateStyle()
 {
-    panel()->setStyleSheet(PANEL_QSS.arg(color().name()));
+    panel()->setStyleSheet(PANEL_QSS.arg(color().name(), borderColor().name()));
 }
 
 DockPanel::Widget DockPanel::widget() const
