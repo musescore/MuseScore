@@ -48,6 +48,8 @@ public:
     virtual async::Channel<uint32_t> midiTickPlayed() const = 0;
 
     virtual void playElementOnClick(const notation::Element* element) = 0;
+
+    virtual bool isActionEnabled(const std::string& actionCode) const = 0;
 };
 }
 
