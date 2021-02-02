@@ -422,6 +422,7 @@ QMenu* DockWindow::makeMenu(const MenuItem& menuItem) const
 {
     QMenu* menu = new QMenu();
     menu->setTitle(QString::fromStdString(menuItem.title));
+    menu->setEnabled(menuItem.enabled);
 
     for (const MenuItem& menuItem: menuItem.subitems) {
         if (menuItem.title.empty()) {

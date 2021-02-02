@@ -23,19 +23,24 @@
 
 #include "modularity/ioc.h"
 
+#include "async/asyncable.h"
 #include "actions/iactionsregister.h"
 #include "actions/iactionsdispatcher.h"
 #include "shortcuts/ishortcutsregister.h"
 #include "uicomponents/uicomponentstypes.h"
+#include "context/iglobalcontext.h"
+#include "workspace/iworkspacemanager.h"
 
 namespace mu::appshell {
-class MenuModel : public QObject
+class MenuModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
     INJECT(appshell, actions::IActionsRegister, actionsRegister)
     INJECT(appshell, actions::IActionsDispatcher, actionsDispatcher)
-    INJECT(dock, shortcuts::IShortcutsRegister, shortcutsRegister)
+    INJECT(appshell, shortcuts::IShortcutsRegister, shortcutsRegister)
+    INJECT(appshell, context::IGlobalContext, globalContext)
+    INJECT(appshell, workspace::IWorkspaceManager, workspacesManager)
 
     Q_PROPERTY(QVariantList items READ items NOTIFY itemsChanged)
 
@@ -51,12 +56,37 @@ signals:
     void itemsChanged();
 
 private:
-    uicomponents::MenuItem fileItem();
+    notation::IMasterNotationPtr currentMasterNotation() const;
+    notation::INotationPtr currentNotation() const;
 
-    uicomponents::MenuItem makeMenu(const std::string& title, const uicomponents::MenuItemList& actions);
-    uicomponents::MenuItem makeAction(const actions::ActionItem& action, const std::string& section = "", bool enabled = true,
-                                      bool checked = false) const;
-    uicomponents::MenuItem makeSeparator();
+    uicomponents::MenuItem fileItem();
+    uicomponents::MenuItem editItem();
+    uicomponents::MenuItem viewItem();
+    uicomponents::MenuItem addItem();
+    uicomponents::MenuItem formatItem();
+    uicomponents::MenuItem toolsItem();
+    uicomponents::MenuItem helpItem();
+
+    uicomponents::MenuItemList notesItems() const;
+    uicomponents::MenuItemList intervalsItems() const;
+    uicomponents::MenuItemList tupletsItems() const;
+    uicomponents::MenuItemList measuresItems() const;
+    uicomponents::MenuItemList framesItems() const;
+    uicomponents::MenuItemList textItems() const;
+    uicomponents::MenuItemList linesItems() const;
+    uicomponents::MenuItemList workspacesItems() const;
+
+    uicomponents::MenuItem makeMenu(const std::string& title, const uicomponents::MenuItemList& actions, bool enabled = true);
+    uicomponents::MenuItem makeAction(const actions::ActionItem& action, bool enabled = true, bool checked = false,
+                                      const std::string& section = "") const;
+    uicomponents::MenuItem makeSeparator() const;
+
+    bool needSaveScore() const;
+    bool scoreOpened() const;
+    bool canUndo() const;
+    bool canRedo() const;
+    bool selectedElementOnScore() const;
+    bool isNoteInputMode() const;
 
     uicomponents::MenuItemList m_items;
 };
