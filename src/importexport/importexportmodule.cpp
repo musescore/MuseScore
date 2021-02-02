@@ -23,7 +23,6 @@
 #include "modularity/ioc.h"
 
 #include "notation/inotationreadersregister.h"
-#include "internal/musedatareader.h"
 #include "internal/overeader.h"
 
 #include "notation/inotationwritersregister.h"
@@ -58,7 +57,6 @@ void ImportExportModule::onInit(const framework::IApplication::RunMode&)
 
     auto readers = framework::ioc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
-        readers->reg({ "md" }, std::make_shared<MuseDataReader>());
         readers->reg({ "ove", "scw" }, std::make_shared<OveReader>());
     }
 

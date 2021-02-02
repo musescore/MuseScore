@@ -16,20 +16,26 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_IMPORTEXPORT_MUSEDATAREADER_H
-#define MU_IMPORTEXPORT_MUSEDATAREADER_H
+#include "musedatamodule.h"
 
-#include "notation/inotationreader.h"
+#include "log.h"
+#include "modularity/ioc.h"
 
-namespace mu {
-namespace importexport {
-class MuseDataReader : public notation::INotationReader
+#include "notation/inotationreadersregister.h"
+#include "internal/musedatareader.h"
+
+using namespace mu::iex::musedata;
+using namespace mu::notation;
+
+std::string MuseDataModule::moduleName() const
 {
-public:
-
-    Ret read(Ms::MasterScore* score, const io::path& path) override;
-};
-}
+    return "iex_musedata";
 }
 
-#endif // MU_IMPORTEXPORT_MUSEDATAREADER_H
+void MuseDataModule::registerResources()
+{
+    auto readers = framework::ioc()->resolve<INotationReadersRegister>(moduleName());
+    if (readers) {
+        readers->reg({ "md" }, std::make_shared<MuseDataReader>());
+    }
+}
