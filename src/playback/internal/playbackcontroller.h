@@ -51,6 +51,8 @@ public:
 
     void playElementOnClick(const notation::Element* element) override;
 
+    bool isActionEnabled(const std::string& actionCode) const override;
+
 private:
     static const unsigned int MIDI_TRACK = 0;
 
@@ -60,7 +62,6 @@ private:
     void onNotationChanged();
     void togglePlay();
     void rewindToStart();
-    void loopPlayback();
     void play();
     void seek(int tick);
     void pause();
@@ -70,8 +71,9 @@ private:
     void toggleAutomaticallyPan();
     void toggleMetronome();
     void toggleMidiInput();
+    void toggleCountIn();
 
-    void playCountIn();
+    void loopPlayback();
     void setLoopInPosition();
     void setLoopOutPosition();
 
