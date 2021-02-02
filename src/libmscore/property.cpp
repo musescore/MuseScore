@@ -448,6 +448,10 @@ static constexpr PropertyMetaData propertyList[] = {
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "showing ledgerlines") },
     { Pid::STAFF_STEMLESS,          false, "",                      P_TYPE::BOOL,
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "stemless") },
+    { Pid::STAFF_INVISIBLE,         false, "",                      P_TYPE::BOOL,
+      DUMMY_QT_TRANSLATE_NOOP("propertyName", "invisible") },
+    { Pid::STAFF_COLOR,             false, "color",                 P_TYPE::COLOR,
+      DUMMY_QT_TRANSLATE_NOOP("propertyName", "color") },
 
     { Pid::HEAD_SCHEME,             false, "headScheme",            P_TYPE::HEAD_SCHEME,
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "notehead scheme") },

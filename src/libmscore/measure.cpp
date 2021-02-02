@@ -172,7 +172,7 @@ Measure::Measure(Score* s)
         ms->setLines(new StaffLines(score()));
         ms->lines()->setTrack(staffIdx * VOICES);
         ms->lines()->setParent(this);
-        ms->lines()->setVisible(!staff->invisible());
+        ms->lines()->setVisible(!staff->invisible(tick()));
         m_mstaves.push_back(ms);
     }
     setIrregular(false);
@@ -232,7 +232,7 @@ void Measure::createStaves(int staffIdx)
         s->setLines(new StaffLines(score()));
         s->lines()->setParent(this);
         s->lines()->setTrack(n * VOICES);
-        s->lines()->setVisible(!staff->invisible());
+        s->lines()->setVisible(!staff->invisible(tick()));
         m_mstaves.push_back(s);
     }
 }
@@ -889,7 +889,7 @@ void Measure::add(Element* e)
         break;
 
     case ElementType::MEASURE:
-        m_mmRest= toMeasure(e);
+        m_mmRest = toMeasure(e);
         break;
 
     case ElementType::STAFFTYPE_CHANGE:
@@ -999,7 +999,7 @@ void Measure::remove(Element* e)
         break;
 
     case ElementType::MEASURE:
-        m_mmRest= 0;
+        m_mmRest = 0;
         break;
 
     case ElementType::STAFFTYPE_CHANGE:
@@ -1191,7 +1191,7 @@ void Measure::cmdAddStaves(int sStaff, int eStaff, bool createRest)
         ms->setLines(new StaffLines(score()));
         ms->lines()->setTrack(i * VOICES);
         ms->lines()->setParent(this);
-        ms->lines()->setVisible(!staff->invisible());
+        ms->lines()->setVisible(!staff->invisible(tick()));
         score()->undo(new InsertMStaff(this, ms, i));
     }
 
@@ -1313,7 +1313,7 @@ void Measure::insertStaff(Staff* staff, int staffIdx)
     ms->setLines(new StaffLines(score()));
     ms->lines()->setParent(this);
     ms->lines()->setTrack(staffIdx * VOICES);
-    ms->lines()->setVisible(!staff->invisible());
+    ms->lines()->setVisible(!staff->invisible(tick()));
     insertMStaff(ms, staffIdx);
 }
 
@@ -1978,7 +1978,7 @@ void Measure::read(XmlReader& e, int staffIdx)
         s->setLines(new StaffLines(score()));
         s->lines()->setParent(this);
         s->lines()->setTrack(n * VOICES);
-        s->lines()->setVisible(!staff->invisible());
+        s->lines()->setVisible(!staff->invisible(tick()));
         m_mstaves.push_back(s);
     }
 

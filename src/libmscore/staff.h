@@ -180,8 +180,6 @@ public:
 
     bool show() const;
     bool stemless(const Fraction&) const;
-    bool invisible() const { return _invisible; }
-    void setInvisible(bool val) { _invisible = val; }
     bool cutaway() const { return _cutaway; }
     void setCutaway(bool val) { _cutaway = val; }
     bool showIfEmpty() const { return _showIfEmpty; }
@@ -238,6 +236,9 @@ public:
     void setLines(const Fraction&, int lines);
     qreal lineDistance(const Fraction&) const;
 
+    bool invisible(const Fraction&) const;
+    void setInvisible(const Fraction&, bool val);
+
     void setSlashStyle(const Fraction&, bool val);
     int middleLine(const Fraction&) const;
     int bottomLine(const Fraction&) const;
@@ -266,8 +267,8 @@ public:
     bool genKeySig();
     bool showLedgerLines(const Fraction&) const;
 
-    QColor color() const override { return _color; }
-    void setColor(const QColor& val) override { _color = val; }
+    QColor color(const Fraction&) const;
+    void setColor(const Fraction&, const QColor& val);
     void undoSetColor(const QColor& val);
     void insertTime(const Fraction&, const Fraction& len);
 
