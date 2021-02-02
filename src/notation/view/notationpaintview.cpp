@@ -203,10 +203,10 @@ void NotationPaintView::onViewSizeChanged()
         return;
     }
 
-    QPoint topLeft = toLogical(QPoint(0, 0));
-    QPoint bottomRight = toLogical(QPoint(width(), height()));
-    notation()->setViewSize(QSizeF(bottomRight.x() - topLeft.x(), bottomRight.y() - topLeft.y()));
+    notation()->setViewSize(viewport().size());
 
+    emit horizontalScrollChanged();
+    emit verticalScrollChanged();
     emit viewportChanged(viewport());
 }
 
