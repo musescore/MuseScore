@@ -23,12 +23,15 @@
 
 #include "shortcuts/shortcutstypes.h"
 
+#include "ui/view/musicalsymbolcodes.h"
+
 using namespace mu::playback;
 using namespace mu::actions;
 using namespace mu::uicomponents;
 using namespace mu::workspace;
 using namespace mu::shortcuts;
 using namespace mu::ui;
+using namespace mu::notation;
 
 static const std::string PLAYBACK_TOOLBAR_KEY("playbackControl");
 static const std::string PLAYBACK_SETTINGS_KEY("playback-settings");
@@ -80,6 +83,25 @@ void PlaybackToolBarModel::setPlayPosition(qreal position)
     Q_UNUSED(position)
     NOT_IMPLEMENTED;
     emit playPositionChanged(position);
+}
+
+QTime PlaybackToolBarModel::playTime() const
+{
+    NOT_IMPLEMENTED;
+    return QTime::currentTime();
+}
+
+void PlaybackToolBarModel::setPlayTime(const QTime& time)
+{
+    Q_UNUSED(time)
+    NOT_IMPLEMENTED;
+    emit playTimeChanged(time);
+}
+
+QString PlaybackToolBarModel::tempo() const
+{
+    NOT_IMPLEMENTED;
+    return QString();
 }
 
 void PlaybackToolBarModel::load()
@@ -152,7 +174,7 @@ void PlaybackToolBarModel::updateState()
         }
 
         bool isPlaying = playbackController()->isPlaying();
-        item("play").iconCode = isPlaying ? IconCode::Code::STOP : IconCode::Code::PLAY;
+        item("play").iconCode = isPlaying ? IconCode::Code::PAUSE : IconCode::Code::PLAY;
     } else {
         for (MenuItem& item : m_items) {
             item.enabled = false;

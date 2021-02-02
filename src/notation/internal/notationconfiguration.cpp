@@ -58,6 +58,10 @@ static const Settings::Key CURRENT_ZOOM(module_name, "ui/canvas/misc/currentZoom
 static const Settings::Key STYLES_DIR_KEY(module_name, "application/paths/myStyles");
 
 static const Settings::Key IS_MIDI_INPUT_ENABLED(module_name, "io/midi/enableInput");
+static const Settings::Key IS_AUTOMATICALLY_PAN_ENABLED(module_name, "application/playback/panPlayback");
+static const Settings::Key IS_PLAY_REPEATS_ENABLED(module_name, "application/playback/playRepeats");
+static const Settings::Key IS_METRONOME_ENABLED(module_name, "application/playback/metronomeEnabled");
+static const Settings::Key IS_COUNT_IN_ENABLED(module_name, "application/playback/countInEnabled");
 
 static const Settings::Key TOOLBAR_KEY(module_name, "ui/toolbar/");
 
@@ -99,6 +103,10 @@ void NotationConfiguration::init()
 
     settings()->setDefaultValue(SELECTION_PROXIMITY, Val(6));
     settings()->setDefaultValue(IS_MIDI_INPUT_ENABLED, Val(false));
+    settings()->setDefaultValue(IS_AUTOMATICALLY_PAN_ENABLED, Val(true));
+    settings()->setDefaultValue(IS_PLAY_REPEATS_ENABLED, Val(false));
+    settings()->setDefaultValue(IS_METRONOME_ENABLED, Val(false));
+    settings()->setDefaultValue(IS_COUNT_IN_ENABLED, Val(false));
 
     settings()->setDefaultValue(NAVIGATOR_VISIBLE_KEY, Val(false));
     settings()->valueChanged(NAVIGATOR_VISIBLE_KEY).onReceive(nullptr, [this](const Val&) {
@@ -249,6 +257,48 @@ bool NotationConfiguration::isMidiInputEnabled() const
 void NotationConfiguration::setIsMidiInputEnabled(bool enabled)
 {
     settings()->setValue(IS_MIDI_INPUT_ENABLED, Val(enabled));
+}
+
+bool NotationConfiguration::isAutomaticallyPanEnabled() const
+{
+    return settings()->value(IS_AUTOMATICALLY_PAN_ENABLED).toBool();
+}
+
+void NotationConfiguration::setIsAutomaticallyPanEnabled(bool enabled)
+{
+    settings()->setValue(IS_AUTOMATICALLY_PAN_ENABLED, Val(enabled));
+    Ms::MScore::panPlayback = enabled;
+}
+
+bool NotationConfiguration::isPlayRepeatsEnabled() const
+{
+    return settings()->value(IS_PLAY_REPEATS_ENABLED).toBool();
+}
+
+void NotationConfiguration::setIsPlayRepeatsEnabled(bool enabled)
+{
+    settings()->setValue(IS_PLAY_REPEATS_ENABLED, Val(enabled));
+    Ms::MScore::playRepeats = enabled;
+}
+
+bool NotationConfiguration::isMetronomeEnabled() const
+{
+    return settings()->value(IS_METRONOME_ENABLED).toBool();
+}
+
+void NotationConfiguration::setIsMetronomeEnabled(bool enabled)
+{
+    settings()->setValue(IS_METRONOME_ENABLED, Val(enabled));
+}
+
+bool NotationConfiguration::isCountInEnabled() const
+{
+    return settings()->value(IS_COUNT_IN_ENABLED).toBool();
+}
+
+void NotationConfiguration::setIsCountInEnabled(bool enabled)
+{
+    settings()->setValue(IS_COUNT_IN_ENABLED, Val(enabled));
 }
 
 float NotationConfiguration::guiScaling() const

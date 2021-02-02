@@ -55,8 +55,9 @@ NotationPlayback::NotationPlayback(IGetScore* getScore)
     m_midiStream->request.onReceive(this, [this](tick_t tick) { onChunkRequest(tick); });
 }
 
-NotationPlayback::~NotationPlayback()
+Ms::MasterScore* NotationPlayback::masterScore() const
 {
+    return m_getScore ? m_getScore->score()->masterScore() : nullptr;
 }
 
 Ms::Score* NotationPlayback::score() const
@@ -225,9 +226,11 @@ void NotationPlayback::makeChunk(midi::Chunk& chunk, tick_t fromTick) const
     chunk.beginTick = mschunk.tick1();
     chunk.endTick = mschunk.tick2();
 
+    masterScore()->setExpandRepeats(configuration()->isPlayRepeatsEnabled());
+
     Ms::SynthesizerState synState;// = mscore->synthesizerState();
     Ms::MidiRenderer::Context ctx(synState);
-    ctx.metronome = true;
+    ctx.metronome = configuration()->isMetronomeEnabled();
     ctx.renderHarmony = true;
     m_midiRenderer->renderChunk(mschunk, &msevents, ctx);
 

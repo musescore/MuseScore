@@ -26,6 +26,7 @@
 
 #include "libmscore/score.h"
 #include "libmscore/page.h"
+#include "libmscore/rendermidi.h"
 
 #include "notationinteraction.h"
 #include "notationplayback.h"
@@ -137,6 +138,9 @@ void Notation::init()
     Ms::MScore::setVerticalOrientation(isVertical);
 
     Ms::MScore::pixelRatio = Ms::DPI / QGuiApplication::primaryScreen()->logicalDotsPerInch();
+
+    Ms::MScore::panPlayback = configuration()->isAutomaticallyPanEnabled();
+    Ms::MScore::playRepeats = configuration()->isPlayRepeatsEnabled();
 }
 
 void Notation::setScore(Ms::Score* score)

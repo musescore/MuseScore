@@ -81,13 +81,13 @@ const ActionList PlaybackActions::m_settingsActions = {
                ShortcutContext::Any,
                QT_TRANSLATE_NOOP("action", "Loop In"),
                QT_TRANSLATE_NOOP("action", "Set loop marker left"),
-               IconCode::Code::ARROW_LEFT
+               IconCode::Code::LOOP_IN
                ),
     ActionItem("loop-out",
                ShortcutContext::Any,
                QT_TRANSLATE_NOOP("action", "Loop Out"),
                QT_TRANSLATE_NOOP("action", "Set loop marker right"),
-               IconCode::Code::ARROW_RIGHT
+               IconCode::Code::LOOP_OUT
                ),
 };
 

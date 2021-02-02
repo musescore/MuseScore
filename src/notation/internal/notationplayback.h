@@ -24,6 +24,9 @@
 #include "../inotationplayback.h"
 #include "igetscore.h"
 #include "async/asyncable.h"
+#include "inotationconfiguration.h"
+
+#include "modularity/ioc.h"
 
 namespace Ms {
 class Score;
@@ -34,9 +37,10 @@ class MidiRenderer;
 namespace mu::notation {
 class NotationPlayback : public INotationPlayback, public async::Asyncable
 {
+    INJECT(notation, INotationConfiguration, configuration)
+
 public:
     NotationPlayback(IGetScore* getScore);
-    ~NotationPlayback();
 
     void init();
 
@@ -59,6 +63,7 @@ public:
 
 private:
     Ms::Score* score() const;
+    Ms::MasterScore* masterScore() const;
 
     void makeInitData(midi::MidiData& data, Ms::Score* score) const;
     void makeInitEvents(std::vector<midi::Event>& events, const Ms::Score* score) const;

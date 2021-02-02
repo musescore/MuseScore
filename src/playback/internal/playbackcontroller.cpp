@@ -35,7 +35,7 @@ void PlaybackController::init()
     dispatcher()->reg(this, "pan", this, &PlaybackController::toggleAutomaticallyPan);
     dispatcher()->reg(this, "metronome", this, &PlaybackController::toggleMetronome);
     dispatcher()->reg(this, "midi-on", this, &PlaybackController::toggleMidiInput);
-    dispatcher()->reg(this, "countin", this, &PlaybackController::playCountIn);
+    dispatcher()->reg(this, "countin", this, &PlaybackController::toggleCountIn);
     dispatcher()->reg(this, "loop-in", this, &PlaybackController::setLoopInPosition);
     dispatcher()->reg(this, "loop-out", this, &PlaybackController::setLoopOutPosition);
 
@@ -208,24 +208,22 @@ void PlaybackController::resume()
     sequencer()->play();
 }
 
-void PlaybackController::loopPlayback()
-{
-    NOT_SUPPORTED;
-}
-
 void PlaybackController::togglePlayRepeats()
 {
-    NOT_IMPLEMENTED;
+    bool playRepeatsEnabled = configuration()->isPlayRepeatsEnabled();
+    configuration()->setIsPlayRepeatsEnabled(!playRepeatsEnabled);
 }
 
 void PlaybackController::toggleAutomaticallyPan()
 {
-    NOT_IMPLEMENTED;
+    bool panEnabled = configuration()->isAutomaticallyPanEnabled();
+    configuration()->setIsAutomaticallyPanEnabled(!panEnabled);
 }
 
 void PlaybackController::toggleMetronome()
 {
-    NOT_IMPLEMENTED;
+    bool metronomeEnabled = configuration()->isMetronomeEnabled();
+    configuration()->setIsMetronomeEnabled(!metronomeEnabled);
 }
 
 void PlaybackController::toggleMidiInput()
@@ -234,9 +232,15 @@ void PlaybackController::toggleMidiInput()
     configuration()->setIsMidiInputEnabled(!midiInputEnabled);
 }
 
-void PlaybackController::playCountIn()
+void PlaybackController::toggleCountIn()
 {
-    NOT_IMPLEMENTED;
+    bool countInEnabled = configuration()->isCountInEnabled();
+    configuration()->setIsCountInEnabled(!countInEnabled);
+}
+
+void PlaybackController::loopPlayback()
+{
+    NOT_SUPPORTED;
 }
 
 void PlaybackController::setLoopInPosition()
@@ -247,4 +251,17 @@ void PlaybackController::setLoopInPosition()
 void PlaybackController::setLoopOutPosition()
 {
     NOT_IMPLEMENTED;
+}
+
+bool PlaybackController::isActionEnabled(const std::string &actionCode) const
+{
+    QMap<std::string, bool> isEnabled {
+        { "midi-on", configuration()->isMidiInputEnabled() },
+        { "repeat", configuration()->isPlayRepeatsEnabled() },
+        { "pan", configuration()->isAutomaticallyPanEnabled() },
+        { "metronome", configuration()->isMetronomeEnabled() },
+        { "countin", configuration()->isCountInEnabled() }
+    };
+
+    return isEnabled[actionCode];
 }

@@ -24,6 +24,7 @@
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
 #include "uicomponents/uicomponentstypes.h"
+#include "playback/iplaybackcontroller.h"
 
 namespace mu::playback {
 class PlaybackSettingsModel : public QAbstractListModel
@@ -31,6 +32,7 @@ class PlaybackSettingsModel : public QAbstractListModel
     Q_OBJECT
 
     INJECT(playback, actions::IActionsDispatcher, dispatcher)
+    INJECT(playback, playback::IPlaybackController, controller)
 
 public:
     explicit PlaybackSettingsModel(QObject* parent = nullptr);
@@ -51,7 +53,10 @@ private:
         SectionRole
     };
 
-    QString resolveSection(const std::string& actionCode) const;
+    void updateCheckedState();
+
+    std::string resolveSection(const std::string& actionCode) const;
+    bool isActionEnabled(const std::string& actionCode) const;
 
     QList<uicomponents::MenuItem> m_items;
 };

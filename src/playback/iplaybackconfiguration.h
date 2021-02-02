@@ -33,6 +33,18 @@ public:
 
     virtual bool isMidiInputEnabled() const = 0;
     virtual void setIsMidiInputEnabled(bool enabled) = 0;
+
+    virtual bool isAutomaticallyPanEnabled() const = 0;
+    virtual void setIsAutomaticallyPanEnabled(bool enabled) = 0;
+
+    virtual bool isPlayRepeatsEnabled() const = 0;
+    virtual void setIsPlayRepeatsEnabled(bool enabled) = 0;
+
+    virtual bool isMetronomeEnabled() const = 0;
+    virtual void setIsMetronomeEnabled(bool enabled) = 0;
+
+    virtual bool isCountInEnabled() const = 0;
+    virtual void setIsCountInEnabled(bool enabled) = 0;
 };
 }
 

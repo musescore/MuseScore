@@ -1,5 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
+import QtQuick.Layouts 1.12
 
 import MuseScore.Playback 1.0
 import MuseScore.UiComponents 1.0
@@ -26,17 +27,14 @@ Rectangle {
         height: childrenRect.height
         width: parent.width
 
-        Row {
+        RowLayout {
             id: playbackActions
-
-            width: childrenRect.width
-            height: childrenRect.height
 
             spacing: 2
 
             ListView {
-                height: childrenRect.height
-                width: childrenRect.width
+                Layout.preferredWidth: childrenRect.width
+                Layout.preferredHeight: childrenRect.height
 
                 contentHeight: 32
                 contentWidth: contentHeight
@@ -65,10 +63,10 @@ Rectangle {
 
             SeparatorLine { orientation: Qt.Vertical }
 
-            Rectangle {
-                height: parent.height
-                width: 200
-                opacity: 0.5
+            TimeInputField {
+                Layout.leftMargin: 25
+                Layout.rightMargin: 25
+                time: playbackModel.playTime
             }
 
             SeparatorLine { orientation: Qt.Vertical }

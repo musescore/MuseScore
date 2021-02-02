@@ -35,6 +35,18 @@ public:
 
     bool isMidiInputEnabled() const override;
     void setIsMidiInputEnabled(bool enabled) override;
+
+    bool isAutomaticallyPanEnabled() const override;
+    void setIsAutomaticallyPanEnabled(bool enabled) override;
+
+    bool isPlayRepeatsEnabled() const override;
+    void setIsPlayRepeatsEnabled(bool enabled) override;
+
+    bool isMetronomeEnabled() const override;
+    void setIsMetronomeEnabled(bool enabled) override;
+
+    bool isCountInEnabled() const override;
+    void setIsCountInEnabled(bool enabled) override;
 };
 }
 

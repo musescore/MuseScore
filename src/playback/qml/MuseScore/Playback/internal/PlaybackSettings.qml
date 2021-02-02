@@ -72,7 +72,7 @@ QmlDialog {
                 }
 
                 onClicked: {
-                    root.handleAction(model.code)
+                    settingsModel.handleAction(model.code)
                 }
             }
         }

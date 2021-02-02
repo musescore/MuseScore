@@ -44,8 +44,8 @@ QVariant PlaybackSettingsModel::data(const QModelIndex& index, int role) const
     case IconRole: return static_cast<int>(item.iconCode);
     case DescriptionRole: return QString::fromStdString(item.description);
     case CodeRole: return QString::fromStdString(item.code);
+    case SectionRole: return QString::fromStdString(item.section);
     case CheckedRole: return item.checked;
-    case SectionRole: return resolveSection(item.code);
     }
 
     return QVariant();
@@ -72,22 +72,47 @@ QHash<int, QByteArray> PlaybackSettingsModel::roleNames() const
 void PlaybackSettingsModel::load()
 {
     beginResetModel();
-
     m_items.clear();
 
     for (const ActionItem& action : PlaybackActions::settingsActions()) {
-        m_items.push_back(action);
+        MenuItem item(action);
+        item.section = resolveSection(action.code);
+        item.checked = isActionEnabled(action.code);
+        m_items.push_back(item);
     }
 
     endResetModel();
 }
 
-QString PlaybackSettingsModel::resolveSection(const std::string& actionCode) const
+void PlaybackSettingsModel::updateCheckedState()
 {
-    return QString::fromStdString(actionCode).contains("loop") ? "loop" : "main";
+    for (int i = 0; i < m_items.size(); ++i) {
+        MenuItem& item = m_items[i];
+        bool newCheckedValue = isActionEnabled(item.code);
+
+        if (item.checked == newCheckedValue) {
+            continue;
+        }
+
+        item.checked = newCheckedValue;
+
+        QModelIndex index = this->index(i);
+        emit dataChanged(index, index, { CheckedRole });
+    }
+}
+
+std::string PlaybackSettingsModel::resolveSection(const std::string& actionCode) const
+{
+    return actionCode.find("loop") == std::string::npos ? "main" : "loop";
+}
+
+bool PlaybackSettingsModel::isActionEnabled(const std::string& actionCode) const
+{
+    return controller()->isActionEnabled(actionCode);
 }
 
 void PlaybackSettingsModel::handleAction(const QString& action)
 {
     dispatcher()->dispatch(action.toStdString());
+    updateCheckedState();
 }
