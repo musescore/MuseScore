@@ -24,12 +24,14 @@
 #include "ui/iuiengine.h"
 
 #include "actions/iactionsregister.h"
+#include "ui/iinteractiveuriregister.h"
 
 #include "internal/playbackcontroller.h"
 #include "internal/playbackactions.h"
 #include "internal/playbackconfiguration.h"
 
 #include "view/playbacktoolbarmodel.h"
+#include "view/internal/playbacksettingsmodel.h"
 
 using namespace mu::playback;
 using namespace mu::framework;
@@ -60,6 +62,13 @@ void PlaybackModule::resolveImports()
     if (ar) {
         ar->reg(std::make_shared<PlaybackActions>());
     }
+
+    auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
+    if (ir) {
+        //! NOTE: Temporary solution
+        ir->registerUri(Uri("musescore://playback/settings"),
+                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/Playback/internal/PlaybackSettings.qml"));
+    }
 }
 
 void PlaybackModule::registerResources()
@@ -70,6 +79,7 @@ void PlaybackModule::registerResources()
 void PlaybackModule::registerUiTypes()
 {
     qmlRegisterType<PlaybackToolBarModel>("MuseScore.Playback", 1, 0, "PlaybackToolBarModel");
+    qmlRegisterType<PlaybackSettingsModel>("MuseScore.Playback", 1, 0, "PlaybackSettingsModel");
 
     ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(playback_QML_IMPORT);
 }

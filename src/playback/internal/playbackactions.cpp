@@ -25,7 +25,7 @@ using namespace mu::actions;
 using namespace mu::shortcuts;
 using namespace mu::ui;
 
-const mu::actions::ActionList PlaybackActions::m_actions = {
+const ActionList PlaybackActions::m_actions = {
     ActionItem("play",
                ShortcutContext::Any,
                QT_TRANSLATE_NOOP("action", "Play"),
@@ -44,6 +44,21 @@ const mu::actions::ActionList PlaybackActions::m_actions = {
                QT_TRANSLATE_NOOP("action", "Toggle 'Loop Playback'"),
                IconCode::Code::LOOP
                ),
+    ActionItem("metronome",
+               ShortcutContext::Any,
+               QT_TRANSLATE_NOOP("action", "Metronome"),
+               QT_TRANSLATE_NOOP("action", "Play metronome during playback"),
+               IconCode::Code::METRONOME
+               )
+};
+
+const ActionList PlaybackActions::m_settingsActions = {
+    ActionItem("midi-on",
+               ShortcutContext::Any,
+               QT_TRANSLATE_NOOP("action", "MIDI Input"),
+               QT_TRANSLATE_NOOP("action", "Enable 'MIDI Input'"),
+               IconCode::Code::MIDI_INPUT
+               ),
     ActionItem("repeat",
                ShortcutContext::Any,
                QT_TRANSLATE_NOOP("action", "Play Repeats"),
@@ -56,41 +71,40 @@ const mu::actions::ActionList PlaybackActions::m_actions = {
                QT_TRANSLATE_NOOP("action", "Pan score automatically"),
                IconCode::Code::PAN_SCORE
                ),
-    ActionItem("metronome",
-               ShortcutContext::Any,
-               QT_TRANSLATE_NOOP("action", "Metronome"),
-               QT_TRANSLATE_NOOP("action", "Play metronome during playback"),
-               IconCode::Code::METRONOME
-               ),
-    ActionItem("midi-on",
-               ShortcutContext::Any,
-               QT_TRANSLATE_NOOP("action", "MIDI Input"),
-               QT_TRANSLATE_NOOP("action", "Toggle 'MIDI Input'"),
-               IconCode::Code::MIDI_INPUT
-               ),
     ActionItem("countin",
                ShortcutContext::Any,
                QT_TRANSLATE_NOOP("action", "Count-In"),
-               QT_TRANSLATE_NOOP("action", "Play count-in at playback start"),
-               IconCode::Code::CLOSE_X_ROUNDED
+               QT_TRANSLATE_NOOP("action", "Enable count-in when playing"),
+               IconCode::Code::COUNT_IN
                ),
     ActionItem("loop-in",
                ShortcutContext::Any,
                QT_TRANSLATE_NOOP("action", "Loop In"),
-               QT_TRANSLATE_NOOP("action", "Set loop in position"),
+               QT_TRANSLATE_NOOP("action", "Set loop marker left"),
                IconCode::Code::ARROW_LEFT
                ),
     ActionItem("loop-out",
                ShortcutContext::Any,
                QT_TRANSLATE_NOOP("action", "Loop Out"),
-               QT_TRANSLATE_NOOP("action", "Set loop out position"),
+               QT_TRANSLATE_NOOP("action", "Set loop marker right"),
                IconCode::Code::ARROW_RIGHT
                ),
 };
 
+const ActionList& PlaybackActions::settingsActions()
+{
+    return m_settingsActions;
+}
+
 const ActionItem& PlaybackActions::action(const ActionCode& actionCode) const
 {
     for (const ActionItem& action : m_actions) {
+        if (action.code == actionCode) {
+            return action;
+        }
+    }
+
+    for (const ActionItem& action : m_settingsActions) {
         if (action.code == actionCode) {
             return action;
         }
