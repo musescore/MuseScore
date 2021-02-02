@@ -78,6 +78,7 @@ private slots:
     void showBarlinesChanged();
     void gotoNextStaff();
     void gotoPreviousStaff();
+    void invisibleChanged();
     void transpositionChanged();
     void setStaffIdx(int staffIdx);
 

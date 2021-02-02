@@ -47,15 +47,13 @@ class XmlWriter;
 #define STAFFTYPE_TAB_SLASH_DISPL         0.8   /* the total displacement between one slash and the next:
                                                       includes slash thickness and empty space between slashes*/
 // the total height of a double slash
-#define STAFFTYPE_TAB_SLASH_2TOTHEIGHT     (STAFFTYPE_TAB_SLASH_THICK + STAFFTYPE_TAB_SLASH_DISPL \
-                                            + STAFFTYPE_TAB_SLASH_SLANTY)
+#define STAFFTYPE_TAB_SLASH_2TOTHEIGHT     (STAFFTYPE_TAB_SLASH_THICK + STAFFTYPE_TAB_SLASH_DISPL + STAFFTYPE_TAB_SLASH_SLANTY)
 // the initial Y coord for a double shash on an UP stem = topmost corner of topmost slash
 #define STAFFTYPE_TAB_SLASH_2STARTY_UP     ((STAFFTYPE_TAB_DEFAULTSTEMLEN_UP - STAFFTYPE_TAB_SLASH_2TOTHEIGHT) * 0.5)
 // the initial Y coord for a double shash on an DN stem = topmost corner of topmost slash
 #define STAFFTYPE_TAB_SLASH_2STARTY_DN     ((STAFFTYPE_TAB_DEFAULTSTEMLEN_UP + STAFFTYPE_TAB_SLASH_2TOTHEIGHT) * 0.5)
 // same for a 4-ple slash
-#define STAFFTYPE_TAB_SLASH_4TOTHEIGHT     (STAFFTYPE_TAB_SLASH_THICK + STAFFTYPE_TAB_SLASH_DISPL * 3 \
-                                            + STAFFTYPE_TAB_SLASH_SLANTY)
+#define STAFFTYPE_TAB_SLASH_4TOTHEIGHT     (STAFFTYPE_TAB_SLASH_THICK + STAFFTYPE_TAB_SLASH_DISPL * 3 + STAFFTYPE_TAB_SLASH_SLANTY)
 // the initial Y coord for a double shash on an UP stem = topmost corner of topmost slash
 #define STAFFTYPE_TAB_SLASH_4STARTY_UP     ((STAFFTYPE_TAB_DEFAULTSTEMLEN_UP - STAFFTYPE_TAB_SLASH_4TOTHEIGHT) * 0.5)
 // the initial Y coord for a double shash on an DN stem = topmost corner of topmost slash
@@ -188,6 +186,9 @@ class StaffType
     qreal _userMag           { 1.0 };           // allowed 0.1 - 10.0
     Spatium _yoffset         { 0.0 };
     bool _small              { false };
+    bool _invisible          { false };
+    QColor _color            { QColor(Qt::black) };
+
     int _lines            = 5;
     int _stepOffset       = 0;
     Spatium _lineDistance = Spatium(1);
@@ -265,13 +266,13 @@ public:
     StaffType();
 
     StaffType(StaffTypes type, StaffGroup sg, const QString& xml, const QString& name, int lines, int stpOff, qreal lineDist, bool genClef,
-              bool showBarLines, bool stemless, bool genTimeSig, bool genKeySig, bool showLedgerLines);
+              bool showBarLines, bool stemless, bool genTimeSig, bool genKeySig, bool showLedgerLiness, bool invisible,const QColor& color);
 
     StaffType(StaffTypes type, StaffGroup sg, const QString& xml, const QString& name, int lines, int stpOff, qreal lineDist, bool genClef,
-              bool showBarLines, bool stemless, bool genTimesig, const QString& durFontName, qreal durFontSize, qreal durFontUserY,
-              qreal genDur, const QString& fretFontName, qreal fretFontSize, qreal fretFontUserY, TablatureSymbolRepeat symRepeat,
-              bool linesThrough, TablatureMinimStyle minimStyle, bool onLines, bool showRests, bool stemsDown, bool stemThrough,
-              bool upsideDown, bool showTabFingering, bool useNumbers, bool showBackTied);
+              bool showBarLines, bool stemless, bool genTimesig, bool invisible, const QColor& color, const QString& durFontName,
+              qreal durFontSize, qreal durFontUserY,qreal genDur, const QString& fretFontName, qreal fretFontSize, qreal fretFontUserY,
+              TablatureSymbolRepeat symRepeat,bool linesThrough, TablatureMinimStyle minimStyle, bool onLines, bool showRests,
+              bool stemsDown, bool stemThrough,bool upsideDown, bool showTabFingering, bool useNumbers, bool showBackTied);
 
     virtual ~StaffType() {}
     bool operator==(const StaffType&) const;
@@ -298,8 +299,12 @@ public:
     bool showBarlines() const { return _showBarlines; }
     qreal userMag() const { return _userMag; }
     bool small() const { return _small; }
+    bool invisible() const { return _invisible; }
+    const QColor& color() const { return _color; }
     void setUserMag(qreal val) { _userMag = val; }
     void setSmall(bool val) { _small = val; }
+    void setInvisible(bool val) { _invisible = val; }
+    void setColor(const QColor& val) { _color = val; }
     Spatium yoffset() const { return _yoffset; }
     void setYoffset(Spatium val) { _yoffset = val; }
     qreal spatium(Score*) const;
@@ -345,12 +350,7 @@ public:
     const QString durationFontName() const { return _durationFonts[_durationFontIdx].displayName; }
     qreal durationFontSize() const { return _durationFontSize; }
     qreal durationFontUserY() const { return _durationFontUserY; }
-    qreal durationFontYOffset() const
-    {
-        setDurationMetrics();
-        return _durationYOffset + _durationFontUserY * SPATIUM20;
-    }
-
+    qreal durationFontYOffset() const { setDurationMetrics(); return _durationYOffset + _durationFontUserY * SPATIUM20; }
     qreal durationGridYOffset() const { setDurationMetrics(); return _durationGridYOffset; }
     qreal fretBoxH() const { setFretMetrics(); return _fretBoxH; }
     qreal fretBoxY() const { setFretMetrics(); return _fretBoxY + _fretFontUserY * SPATIUM20; }

@@ -715,8 +715,8 @@ void Staff::write(XmlWriter& xml) const
         xml.tag("defaultTransposingClef", ClefInfo::tag(ct._transposingClef));
     }
 
-    if (invisible()) {
-        xml.tag("invisible", invisible());
+    if (invisible(Fraction(0,1))) {
+        xml.tag("invisible", invisible(Fraction(0,1)));
     }
     if (hideWhenEmpty() != HideMode::AUTO) {
         xml.tag("hideWhenEmpty", int(hideWhenEmpty()));
@@ -747,7 +747,7 @@ void Staff::write(XmlWriter& xml) const
     writeProperty(xml, Pid::STAFF_BARLINE_SPAN_FROM);
     writeProperty(xml, Pid::STAFF_BARLINE_SPAN_TO);
     writeProperty(xml, Pid::STAFF_USERDIST);
-    writeProperty(xml, Pid::COLOR);
+    writeProperty(xml, Pid::STAFF_COLOR);
     writeProperty(xml, Pid::PLAYBACK_VOICE1);
     writeProperty(xml, Pid::PLAYBACK_VOICE2);
     writeProperty(xml, Pid::PLAYBACK_VOICE3);
@@ -792,7 +792,7 @@ bool Staff::readProperties(XmlReader& e)
     } else if (tag == "small") {                // obsolete
         staffType(Fraction(0,1))->setSmall(e.readInt());
     } else if (tag == "invisible") {
-        setInvisible(e.readInt());
+        staffType(Fraction(0,1))->setInvisible(e.readInt());              // same as: setInvisible(Fraction(0,1)), e.readInt())
     } else if (tag == "hideWhenEmpty") {
         setHideWhenEmpty(HideMode(e.readInt()));
     } else if (tag == "cutaway") {
@@ -845,7 +845,7 @@ bool Staff::readProperties(XmlReader& e)
             qDebug("staff %d not found in parent", v);
         }
     } else if (tag == "color") {
-        _color = e.readColor();
+        staffType(Fraction(0,1))->setColor(e.readColor());
     } else if (tag == "transposeDiatonic") {
         e.setTransposeDiatonic(e.readInt());
     } else if (tag == "transposeChromatic") {
@@ -1287,6 +1287,24 @@ bool Staff::showLedgerLines(const Fraction& tick) const
 }
 
 //---------------------------------------------------------
+//   color
+//---------------------------------------------------------
+
+QColor Staff::color(const Fraction& tick) const
+{
+    return staffType(tick)->color();
+}
+
+//---------------------------------------------------------
+//   setColor
+//---------------------------------------------------------
+
+void Staff::setColor(const Fraction& tick, const QColor& val)
+{
+    staffType(tick)->setColor(val);
+}
+
+//---------------------------------------------------------
 //   updateOttava
 //---------------------------------------------------------
 
@@ -1429,8 +1447,10 @@ QVariant Staff::getProperty(Pid id) const
         return staffType(Fraction(0,1))->small();
     case Pid::MAG:
         return staffType(Fraction(0,1))->userMag();
-    case Pid::COLOR:
-        return color();
+    case Pid::STAFF_INVISIBLE:
+        return staffType(Fraction(0,1))->invisible();
+    case Pid::STAFF_COLOR:
+        return staffType(Fraction(0,1))->color();
     case Pid::PLAYBACK_VOICE1:
         return playbackVoice(0);
     case Pid::PLAYBACK_VOICE2:
@@ -1474,8 +1494,8 @@ bool Staff::setProperty(Pid id, const QVariant& v)
         setLocalSpatium(_spatium, spatium(Fraction(0,1)), Fraction(0, 1));
     }
     break;
-    case Pid::COLOR:
-        setColor(v.value<QColor>());
+    case Pid::STAFF_COLOR:
+        setColor(Fraction(0,1),v.value<QColor>());
         break;
     case Pid::PLAYBACK_VOICE1:
         setPlaybackVoice(0, v.toBool());
@@ -1649,5 +1669,23 @@ void Staff::setLines(const Fraction& tick, int val)
 qreal Staff::lineDistance(const Fraction& tick) const
 {
     return staffType(tick)->lineDistance().val();
+}
+
+//---------------------------------------------------------
+//   invisible
+//---------------------------------------------------------
+
+bool Staff::invisible(const Fraction& tick) const
+{
+    return staffType(tick)->invisible();
+}
+
+//---------------------------------------------------------
+//   setInvisible
+//---------------------------------------------------------
+
+void Staff::setInvisible(const Fraction& tick, bool val)
+{
+    staffType(tick)->setInvisible(val);
 }
 }
