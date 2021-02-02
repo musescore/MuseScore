@@ -37,6 +37,7 @@ public:
     void run() override;
     void seek(unsigned long miliseconds) override;
     void stop() override;
+    void pause() override;
 
     unsigned long miliseconds() const override;
     void forwardTime(unsigned long) override;

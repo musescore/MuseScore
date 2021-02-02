@@ -18,6 +18,9 @@
 
 #include "easeInOut.h"
 
+#include <QList>
+#include <cmath>
+
 namespace Ms {
 //-------------------------------------------------------------------------------------------------
 // The following function is inspired by "A Primer on Bézier Curve" sections 17 and 23 by Pomax:

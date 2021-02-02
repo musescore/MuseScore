@@ -20,14 +20,11 @@
 
 #include "log.h"
 
-using namespace mu;
 using namespace mu::playback;
 using namespace mu::midi;
-
-PlaybackController::PlaybackController()
-    : m_cursorType(STEPPED)
-{
-}
+using namespace mu::notation;
+using namespace mu::async;
+using namespace mu::audio;
 
 void PlaybackController::init()
 {
@@ -68,17 +65,22 @@ bool PlaybackController::isPlayAllowed() const
     return m_notation != nullptr;
 }
 
-async::Notification PlaybackController::isPlayAllowedChanged() const
+Notification PlaybackController::isPlayAllowedChanged() const
 {
     return m_isPlayAllowedChanged;
 }
 
 bool PlaybackController::isPlaying() const
 {
-    return sequencer()->status() == audio::ISequencer::PLAYING;
+    return sequencer()->status() == ISequencer::PLAYING;
 }
 
-async::Notification PlaybackController::isPlayingChanged() const
+bool PlaybackController::isPaused() const
+{
+    return sequencer()->status() == ISequencer::PAUSED;
+}
+
+Notification PlaybackController::isPlayingChanged() const
 {
     return m_isPlayingChanged;
 }
@@ -88,18 +90,18 @@ float PlaybackController::playbackPosition() const
     return sequencer()->playbackPosition();
 }
 
-async::Channel<uint32_t> PlaybackController::midiTickPlayed() const
+Channel<uint32_t> PlaybackController::midiTickPlayed() const
 {
     return m_tickPlayed;
 }
 
-void PlaybackController::playElementOnClick(const notation::Element* e)
+void PlaybackController::playElementOnClick(const notation::Element* element)
 {
     if (!configuration()->isPlayElementOnClick()) {
         return;
     }
 
-    IF_ASSERT_FAILED(e) {
+    IF_ASSERT_FAILED(element) {
         return;
     }
 
@@ -107,11 +109,11 @@ void PlaybackController::playElementOnClick(const notation::Element* e)
         return;
     }
 
-    if (e->isHarmony() && !configuration()->isPlayHarmonyOnClick()) {
+    if (element->isHarmony() && !configuration()->isPlayHarmonyOnClick()) {
         return;
     }
 
-    midi::MidiData midiData = m_notation->playback()->playElementMidiData(e);
+    midi::MidiData midiData = m_notation->playback()->playElementMidiData(element);
 
     sequencer()->instantlyPlayMidi(midiData);
 }
@@ -140,7 +142,9 @@ void PlaybackController::togglePlay()
     }
 
     if (isPlaying()) {
-        stop();
+        pause();
+    } else if (isPaused()) {
+        resume();
     } else {
         play();
     }
@@ -175,7 +179,12 @@ void PlaybackController::seek(int tick)
     sequencer()->seek(miliseconds);
 }
 
-void PlaybackController::stop()
+void PlaybackController::pause()
 {
-    sequencer()->stop();
+    sequencer()->pause();
+}
+
+void PlaybackController::resume()
+{
+    sequencer()->play();
 }

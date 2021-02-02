@@ -33,6 +33,7 @@ public:
 
     enum Status {
         Stoped = 0,
+        Paused,
         Running
     };
 
@@ -55,6 +56,7 @@ public:
     void start();
     void reset();
     void stop();
+    void pause();
     void seek(time_t time);
     void seekMiliseconds(time_t value);
     void seekSeconds(float seconds);
