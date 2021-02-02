@@ -1284,7 +1284,7 @@ void BarLine::endEditDrag(EditData& ed)
         newSpanTo   = 0;
     }
 
-    bool localDrag = ed.control() || segment()->isBarLine();
+    bool localDrag = ed.control() || segment()->isBarLineType();
     if (localDrag) {
         Segment* s = segment();
         for (int staffIdx = staffIdx1; staffIdx < staffIdx2; ++staffIdx) {

@@ -252,6 +252,7 @@ public:
     void checkMultiVoices(int staffIdx);
     bool hasVoice(int track) const;
     bool isEmpty(int staffIdx) const;
+    bool isCutawayClef(int staffIdx) const;
     bool isFullMeasureRest() const;
     bool visible(int staffIdx) const;
     bool stemless(int staffIdx) const;
