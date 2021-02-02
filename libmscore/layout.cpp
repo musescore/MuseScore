@@ -27,6 +27,7 @@
 #include "lyrics.h"
 #include "marker.h"
 #include "measure.h"
+#include "mmrestrange.h"
 #include "mscore.h"
 #include "notedot.h"
 #include "note.h"
@@ -4147,11 +4148,14 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                         continue;
                   Measure* m = toMeasure(mb);
                   MeasureNumber* mno = m->noText(staffIdx);
+                  MMRestRange* mmrr  = m->mmRangeText(staffIdx);
                   // no need to build skyline outside of range in continuous view
                   if (lineMode() && (m->tick() < lc.startTick || m->tick() > lc.endTick))
                         continue;
                   if (mno && mno->addToSkyline())
                         ss->skyline().add(mno->bbox().translated(m->pos() + mno->pos()));
+                  if (mmrr && mmrr->addToSkyline())
+                        ss->skyline().add(mmrr->bbox().translated(m->pos() + mmrr->pos()));
                   if (m->staffLines(staffIdx)->addToSkyline())
                         ss->skyline().add(m->staffLines(staffIdx)->bbox().translated(m->pos()));
                   for (Segment& s : m->segments()) {
