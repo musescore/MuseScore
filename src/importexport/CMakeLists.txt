@@ -22,21 +22,15 @@
 set(MODULE importexport)
 
 include(${CMAKE_CURRENT_LIST_DIR}/internal/ove/ove.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/internal/musedata/musedata.cmake)
 
 set(MODULE_SRC
-    ${BRAILLE_SRC}
     ${OVE_SRC}
-    ${GUITARPRO_SRC}
-    ${MUSEDATA_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/importexportmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/importexportmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iimportexportconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/importexportconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/importexportconfiguration.h
     
-    ${CMAKE_CURRENT_LIST_DIR}/internal/musedatareader.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/musedatareader.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/overeader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/overeader.h
     

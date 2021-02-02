@@ -33,6 +33,7 @@ if (NOT OS_IS_WASM)
     add_subdirectory(importexport/capella)
     add_subdirectory(importexport/guitarpro)
     add_subdirectory(importexport/midiimport)
+    add_subdirectory(importexport/musedata)
     add_subdirectory(importexport/musicxml)
 
     add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/beatroot beatroot) # for midiimport

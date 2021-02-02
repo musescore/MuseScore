@@ -16,19 +16,19 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "musedatareader.h"
+#ifndef MU_IMPORTEXPORT_MUSEDATAMODULE_H
+#define MU_IMPORTEXPORT_MUSEDATAMODULE_H
 
-#include "libmscore/score.h"
-#include "notation/notationerrors.h"
+#include "modularity/imodulesetup.h"
 
-namespace Ms {
-extern Score::FileError importMuseData(MasterScore*, const QString& name);
-}
-
-using namespace mu::importexport;
-
-mu::Ret MuseDataReader::read(Ms::MasterScore* score, const io::path& path)
+namespace mu::iex::musedata {
+class MuseDataModule : public framework::IModuleSetup
 {
-    Ms::Score::FileError err = Ms::importMuseData(score, path.toQString());
-    return mu::notation::scoreFileErrorToRet(err);
+public:
+
+    std::string moduleName() const override;
+    void registerResources() override;
+};
 }
+
+#endif // MU_IMPORTEXPORT_MUSEDATAMODULE_H
