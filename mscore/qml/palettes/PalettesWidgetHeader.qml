@@ -224,7 +224,7 @@ Item {
 
     Connections {
         target: palettesWidget
-        onHasFocusChanged: {
+        function onHasFocusChanged () {
             if (!palettesWidget.hasFocus && !palettesListPopup.inMenuAction)
                 palettesListPopup.visible = false;
         }
