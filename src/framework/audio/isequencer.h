@@ -38,6 +38,7 @@ public:
 
     enum Status {
         STOPED,
+        PAUSED,
         PLAYING
     };
 

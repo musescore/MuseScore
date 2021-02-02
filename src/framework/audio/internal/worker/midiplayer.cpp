@@ -352,6 +352,15 @@ void MIDIPlayer::stop()
     sendClear();
 }
 
+void MIDIPlayer::pause()
+{
+    ONLY_AUDIO_WORKER_THREAD;
+    if (status() != Status::Error) {
+        setStatus(Status::Paused);
+    }
+    sendClear();
+}
+
 unsigned long MIDIPlayer::miliseconds() const
 {
     ONLY_AUDIO_WORKER_THREAD;

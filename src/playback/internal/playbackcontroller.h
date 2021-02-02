@@ -37,10 +37,7 @@ class PlaybackController : public IPlaybackController, public actions::Actionabl
     INJECT(playback, IPlaybackConfiguration, configuration)
     INJECT(audio, audio::ISequencer, sequencer)
 
-    static const unsigned int MIDI_TRACK = 0;
-
 public:
-    PlaybackController();
     void init();
 
     bool isPlayAllowed() const override;
@@ -52,21 +49,25 @@ public:
     float playbackPosition() const override;
     async::Channel<uint32_t> midiTickPlayed() const override;
 
-    void playElementOnClick(const notation::Element* e) override;
+    void playElementOnClick(const notation::Element* element) override;
 
 private:
+    static const unsigned int MIDI_TRACK = 0;
+
+    bool isPaused() const;
 
     void onNotationChanged();
     void togglePlay();
     void play();
     void seek(int tick);
-    void stop();
+    void pause();
+    void resume();
 
     notation::INotationPtr m_notation;
     async::Notification m_isPlayAllowedChanged;
     async::Notification m_isPlayingChanged;
     async::Channel<uint32_t> m_tickPlayed;
-    CursorType m_cursorType;
+    CursorType m_cursorType = CursorType::STEPPED;
 };
 }
 
