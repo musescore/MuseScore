@@ -507,7 +507,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
 
         //finding the first element that has a track
         //the canvas position will be set to this element
-        Element* el = 0;
+        Element* el = nullptr;
         Segment* s = tick2segmentMM(dstTick);
         Segment* s2 = tick2segmentMM(dstTick + tickLen);
         bool found = false;
@@ -676,6 +676,8 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t, const Interval& src
                         Tie* tie = new Tie(this);
                         tie->setStartNote(nl1[i]);
                         tie->setEndNote(nl2[i]);
+                        tie->setTick(tie->startNote()->tick());
+                        tie->setTick2(tie->endNote()->tick());
                         tie->setTrack(c->track());
                         Tie* tie2 = nl1[i]->tieFor();
                         if (tie2) {

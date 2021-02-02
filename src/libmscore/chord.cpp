@@ -743,6 +743,7 @@ void Chord::addLedgerLines()
     qreal lineDistance = 1;
     qreal mag         = 1;
     bool staffVisible  = true;
+    int stepOffset = 0;                         // for staff type changes with a step offset
 
     if (segment()) {   //not palette
         Fraction tick = segment()->tick();
@@ -753,10 +754,11 @@ void Chord::addLedgerLines()
         lineDistance  = st->lineDistance(tick);
         mag           = staff()->staffMag(tick);
         staffVisible  = !staff()->invisible(tick);
+        stepOffset = st->staffType(tick)->stepOffset();
     }
 
     // need ledger lines?
-    if (downLine() <= lineBelow + 1 && upLine() >= -1) {
+    if (downLine() + stepOffset <= lineBelow + 1 && upLine() + stepOffset >= -1) {
         return;
     }
 
@@ -789,7 +791,7 @@ void Chord::addLedgerLines()
         }
         for (int i = from; i < int(n) && i >= 0; i += delta) {
             Note* note = _notes.at(i);
-            int l = note->line();
+            int l = note->line() + stepOffset;
 
             // if 1st pass and note not below staff or 2nd pass and note not above staff
             if ((!j && l <= lineBelow + 1) || (j && l >= -1)) {
@@ -1860,7 +1862,8 @@ QPointF Chord::pagePos() const
         if (!system) {
             return p;
         }
-        p.ry() += system->staffYpage(vStaffIdx());
+        qreal staffYOffset = staff() ? staff()->staffType(tick())->yoffset().val() * spatium() : 0.0;
+        p.ry() += system->staffYpage(vStaffIdx()) + staffYOffset;
         return p;
     }
     return Element::pagePos();
