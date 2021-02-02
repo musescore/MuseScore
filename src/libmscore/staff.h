@@ -267,6 +267,8 @@ public:
     bool genKeySig();
     bool showLedgerLines(const Fraction&) const;
 
+    using Element::color;
+    using Element::setColor;
     QColor color(const Fraction&) const;
     void setColor(const Fraction&, const QColor& val);
     void undoSetColor(const QColor& val);

@@ -127,8 +127,9 @@ class Channel
     bool _solo;
 
     // MuseScore General-specific SND flags:
+    //! TODO Needs porting to MU4
     bool _userBankController = false;     // if the user has changed the bank controller as opposed to switchExpressive
-    bool _switchedToExpressive = false;   // if the patch has been automatically switched to and expr variant
+    //bool _switchedToExpressive = false;   // if the patch has been automatically switched to an expr variant
 
     mutable std::vector<MidiCoreEvent> _init;
     mutable bool _mustUpdateInit = true;
