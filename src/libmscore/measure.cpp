@@ -215,8 +215,16 @@ Measure::Measure(const Measure& m)
 
 void Measure::layoutStaffLines()
 {
+    int staffIdx = 0;
     for (MStaff* ms : m_mstaves) {
-        ms->lines()->layout();
+        if (isCutawayClef(staffIdx) && (score()->staff(staffIdx)->cutaway() || !visible(staffIdx))) {
+            // draw short staff lines for a courtesy clef on a hidden measure
+            ms->lines()->layoutPartialWidth(width(), 4.0, true);
+        } else {
+            // normal staff lines
+            ms->lines()->layout();
+        }
+        staffIdx += 1;
     }
 }
 
@@ -2795,6 +2803,7 @@ bool Measure::isEmpty(int staffIdx) const
 {
     int strack;
     int etrack;
+    bool hasStaves = score()->staff(staffIdx)->part()->staves()->size() > 1;
     if (staffIdx < 0) {
         strack = 0;
         etrack = score()->nstaves() * VOICES;
@@ -2808,6 +2817,21 @@ bool Measure::isEmpty(int staffIdx) const
             if (e && !e->isRest()) {
                 return false;
             }
+            // Check for cross-staff chords
+            if (hasStaves) {
+                if (strack >= VOICES) {
+                    e = s->element(track - VOICES);
+                    if (e && !e->isRest() && e->vStaffIdx() == staffIdx) {
+                        return false;
+                    }
+                }
+                if (etrack < score()->nstaves() * VOICES) {
+                    e = s->element(track + VOICES);
+                    if (e && !e->isRest() && e->vStaffIdx() == staffIdx) {
+                        return false;
+                    }
+                }
+            }
         }
         for (Element* a : s->annotations()) {
             if (!a || a->systemFlag() || !a->visible() || a->isFermata()) {
@@ -2820,6 +2844,53 @@ bool Measure::isEmpty(int staffIdx) const
         }
     }
     return true;
+}
+
+//---------------------------------------------------------
+//   isCutawayClef
+///    Check for empty measure with only
+///    a Courtesy Clef before End Bar Line
+//---------------------------------------------------------
+
+bool Measure::isCutawayClef(int staffIdx) const
+{
+    if (!score()->staff(staffIdx) || !m_mstaves[staffIdx]) {
+        return false;
+    }
+    bool empty = (score()->staff(staffIdx)->cutaway() && isEmpty(staffIdx)) || !m_mstaves[staffIdx]->visible();
+    if (!empty) {
+        return false;
+    }
+    int strack;
+    int etrack;
+    if (staffIdx < 0) {
+        strack = 0;
+        etrack = score()->nstaves() * VOICES;
+    } else {
+        strack = staffIdx * VOICES;
+        etrack = strack + VOICES;
+    }
+    // find segment before EndBarLine
+    Segment* s = nullptr;
+    for (Segment* ls = last(); ls; ls = ls->prev()) {
+        if (ls->segmentType() == SegmentType::EndBarLine) {
+            s = ls->prev();
+            break;
+        }
+    }
+    if (!s) {
+        return false;
+    }
+    for (int track = strack; track < etrack; ++track) {
+        Element* e = s->element(track);
+        if (!e || !e->isClef()) {
+            continue;
+        }
+        if ((nextMeasure() && (nextMeasure()->system() == system())) || toClef(e)->showCourtesy()) {
+            return true;
+        }
+    }
+    return false;
 }
 
 //---------------------------------------------------------
