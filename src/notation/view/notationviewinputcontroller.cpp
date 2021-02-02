@@ -183,6 +183,12 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     QPoint logicPos = m_view->toLogical(event->pos());
     Qt::KeyboardModifiers keyState = event->modifiers();
 
+    // When using MiddleButton, just start moving the canvas
+    if (event->button() == Qt::MiddleButton) {
+        m_interactData.beginPoint = logicPos;
+        return;
+    }
+
     // note enter mode
     if (m_view->isNoteEnterMode()) {
         bool replace = keyState & Qt::ShiftModifier;
@@ -260,7 +266,8 @@ bool NotationViewInputController::isDragAllowed() const
 
 void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
 {
-    if (!isDragAllowed()) {
+    bool middleButton = event->buttons() == Qt::MiddleButton;
+    if (!isDragAllowed() && !middleButton) {
         return;
     }
 
@@ -274,8 +281,8 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
     }
 
     // drag element
-    if ((m_interactData.hitElement && m_interactData.hitElement->isMovable())
-        || m_view->notationInteraction()->isGripEditStarted()) {
+    if (!middleButton && ((m_interactData.hitElement && m_interactData.hitElement->isMovable())
+                          || m_view->notationInteraction()->isGripEditStarted())) {
         if (m_interactData.hitElement && !m_view->notationInteraction()->isDragStarted()) {
             startDragElements(m_interactData.hitElement->type(), m_interactData.hitElement->offset());
         }
