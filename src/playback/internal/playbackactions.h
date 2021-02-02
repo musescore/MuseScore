@@ -19,19 +19,19 @@
 #ifndef MU_PLAYBACK_PLAYBACKACTIONS_H
 #define MU_PLAYBACK_PLAYBACKACTIONS_H
 
-#include <vector>
 #include "actions/imoduleactions.h"
 
 namespace mu::playback {
 class PlaybackActions : public actions::IModuleActions
 {
 public:
-
     const actions::ActionItem& action(const actions::ActionCode& actionCode) const override;
 
-private:
+    static const actions::ActionList& settingsActions();
 
-    static const std::vector<actions::ActionItem> m_actions;
+private:
+    static const actions::ActionList m_actions;
+    static const actions::ActionList m_settingsActions;
 };
 }
 
