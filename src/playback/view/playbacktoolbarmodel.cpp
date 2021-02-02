@@ -91,7 +91,7 @@ void PlaybackToolBarModel::load()
         m_items << action;
     }
 
-    m_items << buildSettingsItem();
+    m_items << settingsItem();
 
     endResetModel();
 
@@ -134,6 +134,12 @@ ActionList PlaybackToolBarModel::currentWorkspaceActions() const
 
 void PlaybackToolBarModel::handleAction(const QString& action)
 {
+    //! NOTE: Temporary solution
+    if (action.toStdString() == PLAYBACK_SETTINGS_KEY) {
+        interactive()->open("musescore://playback/settings");
+        return;
+    }
+
     dispatcher()->dispatch(actions::codeFromQString(action));
 }
 
@@ -170,7 +176,7 @@ MenuItem& PlaybackToolBarModel::item(const actions::ActionCode& actionCode)
     return null;
 }
 
-MenuItem PlaybackToolBarModel::buildSettingsItem() const
+MenuItem PlaybackToolBarModel::settingsItem() const
 {
     return ActionItem(PLAYBACK_SETTINGS_KEY,
                       ShortcutContext::Any,
