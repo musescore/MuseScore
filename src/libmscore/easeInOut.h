@@ -13,6 +13,9 @@
 #ifndef __EASEINOUT_H__
 #define __EASEINOUT_H__
 
+#include <QtGlobal>
+#include <QPointF>
+
 namespace Ms {
 //---------------------------------------------------------
 //   @@ EaseInOut

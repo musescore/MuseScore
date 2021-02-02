@@ -72,6 +72,11 @@ void Clock::stop()
     reset();
 }
 
+void Clock::pause()
+{
+    m_status = Paused;
+}
+
 void Clock::seek(time_t time)
 {
     m_time = time;

@@ -91,6 +91,13 @@ void AudioPlayer::stop()
     }
 }
 
+void AudioPlayer::pause()
+{
+    if (status() != Status::Error) {
+        setStatus(Status::Paused);
+    }
+}
+
 unsigned long AudioPlayer::miliseconds() const
 {
     if (!m_stream) {

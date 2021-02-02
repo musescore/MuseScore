@@ -65,7 +65,7 @@ void Sequencer::play()
 void Sequencer::pause()
 {
     ONLY_AUDIO_WORKER_THREAD;
-    m_nextStatus = STOPED;
+    m_nextStatus = PAUSED;
 }
 
 void Sequencer::stop()
@@ -217,20 +217,24 @@ void Sequencer::setStatus(Status status)
     m_status = status;
     m_statusChanged.send(m_status);
 
-    std::function<void(const Track&)> applyStaus = [](const Track&) {};
+    std::function<void(const Track&)> applyStatus = [](const Track&) {};
     switch (m_status) {
     case PLAYING:
-        applyStaus = [](const Track& track) { track->run(); };
+        applyStatus = [](const Track& track) { track->run(); };
         m_clock->start();
         break;
+    case PAUSED:
+        applyStatus = [](const Track& track) { track->pause(); };
+        m_clock->pause();
+        break;
     case STOPED:
-        applyStaus = [](const Track& track) { track->stop(); };
+        applyStatus = [](const Track& track) { track->stop(); };
         m_clock->stop();
         break;
     }
 
     for (auto& track : m_tracks) {
-        applyStaus(track.second);
+        applyStatus(track.second);
     }
 }
 
