@@ -16,27 +16,24 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#ifndef MU_APPSHELL_APPLICATIONCONTROLLER_H
+#define MU_APPSHELL_APPLICATIONCONTROLLER_H
 
-#ifndef MU_APPSHELL_APPSHELLMODULE_H
-#define MU_APPSHELL_APPSHELLMODULE_H
-
-#include "modularity/imodulesetup.h"
+#include "modularity/ioc.h"
+#include "actions/iactionsdispatcher.h"
+#include "actions/actionable.h"
 
 namespace mu::appshell {
-class AppShellModule : public framework::IModuleSetup
+class ApplicationActionController : public actions::Actionable
 {
+    INJECT(notation, actions::IActionsDispatcher, dispatcher)
+
 public:
-    AppShellModule();
+    void init();
 
-    std::string moduleName() const override;
-
-    void resolveImports() override;
-
-    void registerResources() override;
-    void registerUiTypes() override;
-
-    void onInit(const framework::IApplication::RunMode& mode) override;
+private:
+    void quit();
 };
 }
 
-#endif // MU_APPSHELL_APPSHELLMODULE_H
+#endif // MU_APPSHELL_APPLICATIONCONTROLLER_H

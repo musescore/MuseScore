@@ -23,8 +23,11 @@
 
 #include "modularity/ioc.h"
 
+#include "actions/iactionsregister.h"
 #include "ui/iinteractiveuriregister.h"
 
+#include "internal/applicationactions.h"
+#include "internal/applicationactioncontroller.h"
 #include "view/dockwindow/docksetup.h"
 #include "view/settings/settingslistmodel.h"
 #include "view/menumodel.h"
@@ -32,6 +35,8 @@
 using namespace mu::appshell;
 using namespace mu::framework;
 using namespace mu::ui;
+
+static std::shared_ptr<ApplicationActionController> s_actionController = std::make_shared<ApplicationActionController>();
 
 static void appshell_init_qrc()
 {
@@ -49,6 +54,11 @@ std::string AppShellModule::moduleName() const
 
 void AppShellModule::resolveImports()
 {
+    auto ar = framework::ioc()->resolve<actions::IActionsRegister>(moduleName());
+    if (ar) {
+        ar->reg(std::make_shared<ApplicationActions>());
+    }
+
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerUri(Uri("musescore://home"), ContainerMeta(ContainerType::PrimaryPage));
@@ -71,4 +81,9 @@ void AppShellModule::registerUiTypes()
 
     qmlRegisterType<SettingListModel>("MuseScore.Settings", 1, 0, "SettingListModel");
     qmlRegisterType<MenuModel>("MuseScore.Menu", 1, 0, "MenuModel");
+}
+
+void AppShellModule::onInit(const IApplication::RunMode&)
+{
+    s_actionController->init();
 }
