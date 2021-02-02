@@ -117,7 +117,6 @@ private:
     QList<int> m_possibleZoomsPercentage;
 
     bool m_readonly = false;
-    int m_currentZoomPercentage = 0;
     bool m_isCanvasDragged = false;
 };
 }
