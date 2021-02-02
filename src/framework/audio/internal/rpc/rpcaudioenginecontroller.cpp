@@ -29,16 +29,16 @@ TargetName RpcAudioEngineController::target() const
 
 void RpcAudioEngineController::doBind()
 {
-    bindMethod("init", [this](const Args&) {
+    bindMethod("init", [](const Args&) {
         AudioEngine::instance()->init();
     });
 
-    bindMethod("setSampleRate", [this](const Args& args) {
+    bindMethod("setSampleRate", [](const Args& args) {
         int sampleRate = args.arg<int>(0);
         AudioEngine::instance()->setSampleRate(sampleRate);
     });
 
-    bindMethod("setReadBufferSize", [this](const Args& args) {
+    bindMethod("setReadBufferSize", [](const Args& args) {
         uint16_t readBufferSize = args.arg<uint16_t>(0);
         AudioEngine::instance()->setReadBufferSize(readBufferSize);
     });
