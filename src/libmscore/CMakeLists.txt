@@ -235,6 +235,8 @@ set(MODULE_SRC
     scoreElement.cpp
     scoreElement.h
     scorefile.cpp
+    scoreOrder.cpp
+    scoreOrder.h
     score.h
     scoretree.cpp
     segment.cpp
