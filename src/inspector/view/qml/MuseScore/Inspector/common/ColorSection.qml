@@ -1,7 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Dialogs 1.2
 import MuseScore.UiComponents 1.0
-import "../../../common"
 
 InspectorPropertyView {
     id: root
@@ -11,7 +10,7 @@ InspectorPropertyView {
     height: implicitHeight
     width: parent.width
 
-    titleText: qsTrc("inspector", "Colour")
+    titleText: qsTrc("inspector", "Color")
     propertyItem: root.color
 
     ColorPicker {

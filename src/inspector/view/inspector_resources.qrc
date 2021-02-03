@@ -64,7 +64,6 @@
         <file>qml/MuseScore/Inspector/general/appearance/internal/HorizontalSpacingSection.qml</file>
         <file>qml/MuseScore/Inspector/general/appearance/internal/OffsetSection.qml</file>
         <file>qml/MuseScore/Inspector/general/appearance/internal/ArrangeSection.qml</file>
-        <file>qml/MuseScore/Inspector/general/appearance/internal/ColorSection.qml</file>
         <file>qml/MuseScore/Inspector/general/appearance/internal/VerticalSpacingSection.qml</file>
         <file>resources/icons/question_mark.svg</file>
         <file>qml/MuseScore/Inspector/notation/fermatas/FermataPopup.qml</file>
@@ -159,5 +158,6 @@
         <file>qml/MuseScore/Inspector/notation/tremolos/TremoloPopup.qml</file>
         <file>qml/MuseScore/Inspector/notation/measurerepeats/MeasureRepeatPopup.qml</file>
         <file>qml/MuseScore/Inspector/notation/measurerepeats/MeasureRepeatSettings.qml</file>
+        <file>qml/MuseScore/Inspector/common/ColorSection.qml</file>
     </qresource>
 </RCC>
