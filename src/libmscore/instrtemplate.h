@@ -156,7 +156,6 @@ extern QList<MidiArticulation> articulation;
 extern QList<InstrumentGroup*> instrumentGroups;
 extern void clearInstrumentTemplates();
 extern bool loadInstrumentTemplates(const QString& instrTemplates);
-extern bool saveInstrumentTemplates(const QString& instrTemplates);
 extern InstrumentTemplate* searchTemplate(const QString& name);
 extern InstrumentIndex searchTemplateIndexForTrackName(const QString& trackName);
 extern InstrumentIndex searchTemplateIndexForId(const QString& id);
