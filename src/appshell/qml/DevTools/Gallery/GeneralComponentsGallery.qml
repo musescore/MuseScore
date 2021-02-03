@@ -47,7 +47,8 @@ Rectangle {
                     { textRole: "TabPanel", componentRole: tabPanelSample },
                     { textRole: "GradientTabButton", componentRole: gradientTabButtonsSample },
                     { textRole: "GridView", componentRole: gridViewVertical },
-                    { textRole: "StyledSlider", componentRole: slidersSample }
+                    { textRole: "StyledSlider", componentRole: slidersSample },
+                    { textRole: "NumberInputField", componentRole: numberInputFieldSample }
                 ]
 
                 delegate: Column {
@@ -738,4 +739,14 @@ Rectangle {
             }
         }
     }
+
+    Component {
+        id: numberInputFieldSample
+
+        NumberInputField {
+            maxValue: 999
+            value: 33
+        }
+    }
+
 }

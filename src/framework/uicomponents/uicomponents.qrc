@@ -34,6 +34,7 @@
         <file>qml/MuseScore/UiComponents/GridViewSectional.qml</file>
         <file>qml/MuseScore/UiComponents/ListItemBlank.qml</file>
         <file>qml/MuseScore/UiComponents/StyledSlider.qml</file>
+        <file>qml/MuseScore/UiComponents/NumberInputField.qml</file>
         <file>qml/MuseScore/UiComponents/internal/GridViewDelegate.qml</file>
         <file>qml/MuseScore/UiComponents/internal/GridViewSection.qml</file>
     </qresource>
