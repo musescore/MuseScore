@@ -2681,8 +2681,14 @@ Element* Chord::drop(EditData& data)
                         t->setChords(this, ch2);
                         }
                   }
-                  if (tremolo())
+                  if (tremolo()) {
+                        bool sameType = (e->subtype() == tremolo()->subtype());
                         score()->undoRemoveElement(tremolo());
+                        if (sameType) {
+                              delete e;
+                              return 0;
+                              }
+                        }
                   e->setParent(this);
                   e->setTrack(track());
                   score()->undoAddElement(e);
