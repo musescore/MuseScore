@@ -31,9 +31,6 @@ class IImportexportConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IImportexportConfiguration() = default;
 
-    // Ove
-    virtual std::string importOvertuneCharset() const = 0;
-
     // GuitarPro
     virtual std::string importGuitarProCharset() const = 0;
 

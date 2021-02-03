@@ -28,7 +28,6 @@ using namespace mu::importexport;
 static const std::string module_name("importexport");
 
 static const Settings::Key SHORTEST_NOTE_KEY(module_name, "io/midi/shortestNote");
-static const Settings::Key IMPORT_OVERTUNE_CHARSET_KEY(module_name, "import/overture/charset");
 static const Settings::Key IMPORT_GUITARPRO_CHARSET_KEY(module_name, "import/guitarpro/charset");
 static const Settings::Key EXPORT_PDF_DPI_RESOLUTION_KEY(module_name, "export/pdf/dpi");
 static const Settings::Key EXPORT_PNG_DPI_RESOLUTION_KEY(module_name, "export/png/resolution");
@@ -38,17 +37,11 @@ void ImportexportConfiguration::init()
 {
     settings()->setDefaultValue(SHORTEST_NOTE_KEY, Val(Ms::MScore::division / 4));
 
-    settings()->setDefaultValue(IMPORT_OVERTUNE_CHARSET_KEY, Val("GBK"));
     settings()->setDefaultValue(IMPORT_GUITARPRO_CHARSET_KEY, Val("UTF-8"));
 
     settings()->setDefaultValue(EXPORT_PNG_DPI_RESOLUTION_KEY, Val(Ms::DPI));
     settings()->setDefaultValue(EXPORT_PNG_USE_TRASNPARENCY_KEY, Val(true));
     settings()->setDefaultValue(EXPORT_PDF_DPI_RESOLUTION_KEY, Val(Ms::DPI));
-}
-
-std::string ImportexportConfiguration::importOvertuneCharset() const
-{
-    return settings()->value(IMPORT_OVERTUNE_CHARSET_KEY).toString();
 }
 
 std::string ImportexportConfiguration::importGuitarProCharset() const

@@ -16,17 +16,19 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "overeader.h"
+#ifndef MU_IMPORTEXPORT_OVECONFIGURATION_H
+#define MU_IMPORTEXPORT_OVECONFIGURATION_H
 
-#include "libmscore/score.h"
-#include "notation/notationerrors.h"
+#include "../ioveconfiguration.h"
 
-extern Ms::Score::FileError importOve(Ms::MasterScore*, const QString& name);
-
-using namespace mu::importexport;
-
-mu::Ret OveReader::read(Ms::MasterScore* score, const io::path& path)
+namespace mu::iex::ove {
+class OveConfiguration : public IOveConfiguration
 {
-    Ms::Score::FileError err = importOve(score, path.toQString());
-    return mu::notation::scoreFileErrorToRet(err);
+public:
+    void init();
+
+    std::string importOvertuneCharset() const override;
+};
 }
+
+#endif // MU_IMPORTEXPORT_OVECONFIGURATION_H

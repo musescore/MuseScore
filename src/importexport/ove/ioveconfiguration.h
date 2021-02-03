@@ -16,30 +16,22 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_IMPORTEXPORT_IMPORTEXPORTCONFIGURATION_H
-#define MU_IMPORTEXPORT_IMPORTEXPORTCONFIGURATION_H
+#ifndef MU_IMPORTEXPORT_IIMPORTEXPORTCONFIGURATION_H
+#define MU_IMPORTEXPORT_IIMPORTEXPORTCONFIGURATION_H
 
-#include "../iimportexportconfiguration.h"
+#include <string>
+#include "modularity/imoduleexport.h"
 
-namespace mu::importexport {
-class ImportexportConfiguration : public IImportexportConfiguration
+namespace mu::iex::ove {
+class IOveConfiguration : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(IOveConfiguration)
+
 public:
-    void init();
+    virtual ~IOveConfiguration() = default;
 
-    std::string importGuitarProCharset() const override;
-
-    int exportPdfDpiResolution() const override;
-
-    void setExportPngDpiResolution(std::optional<float> dpi) override;
-    float exportPngDpiResolution() const override;
-
-    bool exportPngWithTransparentBackground() const override;
-
-private:
-
-    std::optional<float> m_customExportPngDpi;
+    virtual std::string importOvertuneCharset() const = 0;
 };
 }
 
-#endif // MU_IMPORTEXPORT_IMPORTEXPORTCONFIGURATION_H
+#endif // MU_IMPORTEXPORT_IIMPORTEXPORTCONFIGURATION_H
