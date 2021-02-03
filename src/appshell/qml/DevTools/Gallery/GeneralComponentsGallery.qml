@@ -48,7 +48,8 @@ Rectangle {
                     { textRole: "GradientTabButton", componentRole: gradientTabButtonsSample },
                     { textRole: "GridView", componentRole: gridViewVertical },
                     { textRole: "StyledSlider", componentRole: slidersSample },
-                    { textRole: "NumberInputField", componentRole: numberInputFieldSample }
+                    { textRole: "NumberInputField", componentRole: numberInputFieldSample },
+                    { textRole: "TimeInputField", componentRole: timeInputFieldSample }
                 ]
 
                 delegate: Column {
@@ -749,4 +750,13 @@ Rectangle {
         }
     }
 
+    Component {
+        id: timeInputFieldSample
+
+        TimeInputField {
+            Component.onCompleted: {
+                time = new Date(2021, 1, 3, 1, 23, 44, 3)
+            }
+        }
+    }
 }
