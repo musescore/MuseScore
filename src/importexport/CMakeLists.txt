@@ -21,18 +21,12 @@
 # soon there will be nothing left of it
 set(MODULE importexport)
 
-include(${CMAKE_CURRENT_LIST_DIR}/internal/ove/ove.cmake)
-
 set(MODULE_SRC
-    ${OVE_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/importexportmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/importexportmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iimportexportconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/importexportconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/importexportconfiguration.h
-    
-    ${CMAKE_CURRENT_LIST_DIR}/internal/overeader.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/overeader.h
     
     ${CMAKE_CURRENT_LIST_DIR}/internal/svgwriter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/svgwriter.h
@@ -53,7 +47,6 @@ set(MODULE_SRC
     )
 
 set(MODULE_LINK
-    rtf2html    # for capella
     libmscore
     qzip
     notation

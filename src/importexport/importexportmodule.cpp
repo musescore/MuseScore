@@ -23,7 +23,6 @@
 #include "modularity/ioc.h"
 
 #include "notation/inotationreadersregister.h"
-#include "internal/overeader.h"
 
 #include "notation/inotationwritersregister.h"
 #include "internal/pdfwriter.h"
@@ -54,11 +53,6 @@ void ImportExportModule::registerExports()
 void ImportExportModule::onInit(const framework::IApplication::RunMode&)
 {
     s_configuration->init();
-
-    auto readers = framework::ioc()->resolve<INotationReadersRegister>(moduleName());
-    if (readers) {
-        readers->reg({ "ove", "scw" }, std::make_shared<OveReader>());
-    }
 
     auto writers = framework::ioc()->resolve<INotationWritersRegister>(moduleName());
     if (writers) {

@@ -16,30 +16,40 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_IMPORTEXPORT_IMPORTEXPORTCONFIGURATION_H
-#define MU_IMPORTEXPORT_IMPORTEXPORTCONFIGURATION_H
+#include "ovemodule.h"
 
-#include "../iimportexportconfiguration.h"
+#include "log.h"
+#include "modularity/ioc.h"
 
-namespace mu::importexport {
-class ImportexportConfiguration : public IImportexportConfiguration
+#include "notation/inotationreadersregister.h"
+#include "internal/overeader.h"
+
+#include "internal/oveconfiguration.h"
+
+using namespace mu::iex::ove;
+using namespace mu::notation;
+
+static std::shared_ptr<OveConfiguration> s_configuration = std::make_shared<OveConfiguration>();
+
+std::string OveModule::moduleName() const
 {
-public:
-    void init();
-
-    std::string importGuitarProCharset() const override;
-
-    int exportPdfDpiResolution() const override;
-
-    void setExportPngDpiResolution(std::optional<float> dpi) override;
-    float exportPngDpiResolution() const override;
-
-    bool exportPngWithTransparentBackground() const override;
-
-private:
-
-    std::optional<float> m_customExportPngDpi;
-};
+    return "iex_ove";
 }
 
-#endif // MU_IMPORTEXPORT_IMPORTEXPORTCONFIGURATION_H
+void OveModule::registerExports()
+{
+    framework::ioc()->registerExport<IOveConfiguration>(moduleName(), s_configuration);
+}
+
+void OveModule::resolveImports()
+{
+    auto readers = framework::ioc()->resolve<INotationReadersRegister>(moduleName());
+    if (readers) {
+        readers->reg({ "ove", "scw" }, std::make_shared<OveReader>());
+    }
+}
+
+void OveModule::onInit(const framework::IApplication::RunMode&)
+{
+    s_configuration->init();
+}

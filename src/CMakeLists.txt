@@ -35,6 +35,7 @@ if (NOT OS_IS_WASM)
     add_subdirectory(importexport/midiimport)
     add_subdirectory(importexport/musedata)
     add_subdirectory(importexport/musicxml)
+    add_subdirectory(importexport/ove)
 
     add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/beatroot beatroot) # for midiimport
     add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/rtf2html rtf2html) # for capella
