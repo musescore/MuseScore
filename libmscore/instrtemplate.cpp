@@ -329,7 +329,7 @@ void InstrumentTemplate::write(XmlWriter& xml) const
             if (!isGlobal)
                   ma.write(xml);
             }
-      if (!family)
+      if (family)
             xml.tag("family", family->id);
       xml.etag();
       }
