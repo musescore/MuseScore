@@ -30,7 +30,7 @@
 #define DLL_EXPORT
 #endif
 
-namespace OVE {
+namespace ovebase {
 class OveSong;
 class Track;
 class Page;
@@ -86,14 +86,14 @@ const int OCTAVE = 7;
 
 enum class CondType : char {
     None,
-    Time_Parameters    = 0x09,   // size - 7, TimeSignature
-    Bar_Number         = 0x0A,   // size, compatible with previous version
+    Time_Parameters    = 0x09, // size - 7, TimeSignature
+    Bar_Number         = 0x0A, // size, compatible with previous version
     Decorator          = 0x16,
-    Tempo              = 0x1C,   // size - 7
-    Text               = 0x1D,   // size - 7, Rehearsal | SystemText
-    Expression         = 0x25,   // size - 7, if set playback parameters in Expression, will store in COND
-    Barline_Parameters = 0x30,   // size - 7, include :|| repeat count
-    Repeat             = 0x31,   //
+    Tempo              = 0x1C, // size - 7
+    Text               = 0x1D, // size - 7, Rehearsal | SystemText
+    Expression         = 0x25, // size - 7, if set playback parameters in Expression, will store in COND
+    Barline_Parameters = 0x30, // size - 7, include :|| repeat count
+    Repeat             = 0x31, //
     Numeric_Ending     = 0x32,
 };
 
@@ -106,9 +106,9 @@ enum class BdatType : unsigned char {
     Harmony               = 0x11,
     Clef                  = 0x12,
     Dynamics              = 0x13,
-    Wedge                 = 0x14,   // cresendo, decresendo
+    Wedge                 = 0x14, // cresendo, decresendo
     Glissando             = 0x15,
-    Decorator             = 0x16,   // measure repeat | piano pedal | dotted barline
+    Decorator             = 0x16, // measure repeat | piano pedal | dotted barline
     Key                   = 0x17,
     Lyric                 = 0x18,
     Octave_Shift          = 0x19,
@@ -116,15 +116,15 @@ enum class BdatType : unsigned char {
     Text                  = 0x1D,
     Tie                   = 0x1E,
     Tuplet                = 0x1F,
-    Guitar_Bend           = 0x21,   //
-    Guitar_Barre          = 0x22,   //
+    Guitar_Bend           = 0x21, //
+    Guitar_Barre          = 0x22, //
     Pedal                 = 0x23,
-    KuoHao                = 0x24,   // () [] {}
+    KuoHao                = 0x24, // () [] {}
     Expressions           = 0x25,
     Harp_Pedal            = 0x26,
     Multi_Measure_Rest    = 0x27,
     Harmony_GuitarFrame   = 0x28,
-    Graphics_40           = 0x40,   // unknown
+    Graphics_40           = 0x40, // unknown
     Graphics_RoundRect    = 0x41,
     Graphics_Rect         = 0x42,
     Graphics_Round        = 0x43,
@@ -137,8 +137,6 @@ enum class BdatType : unsigned char {
     Midi_Pitch_Wheel      = 0xAE,
     Bar_End               = 0xFF,
 };
-
-////////////////////////////////////////
 
 enum class MusicDataType : char {
     None,
@@ -193,20 +191,20 @@ enum class MidiType : signed char {
 };
 
 enum class ClefType : char {
-    Treble = 0x00,   //0x00
-    Bass,            //0x01
-    Alto,            //0x02
-    UpAlto,          //0x03
-    DownDownAlto,    //0x04
-    DownAlto,        //0x05
-    UpUpAlto,        //0x06
-    Treble8va,       //0x07
-    Bass8va,         //0x08
-    Treble8vb,       //0x09
-    Bass8vb,         //0x0A
-    Percussion1,     //0x0B
-    Percussion2,     //0x0C
-    TAB              //0x0D
+    Treble = 0x00, // 0x00
+    Bass,          // 0x01
+    Alto,          // 0x02
+    UpAlto,        // 0x03
+    DownDownAlto,  // 0x04
+    DownAlto,      // 0x05
+    UpUpAlto,      // 0x06
+    Treble8va,     // 0x07
+    Bass8va,       // 0x08
+    Treble8vb,     // 0x09
+    Bass8vb,       // 0x0A
+    Percussion1,   // 0x0B
+    Percussion2,   // 0x0C
+    TAB            // 0x0D
 };
 
 enum class GroupType : char {
@@ -309,7 +307,7 @@ enum class ArticulationType : char {
     Heel_Pedal                   = 0x2D,
     Toe_To_Heel_Pedal            = 0x2E,
     Heel_To_Toe_Pedal            = 0x2F,
-    Open_String                  = 0x30,   // finger 0 in guitar
+    Open_String                  = 0x30, // finger 0 in guitar
     Guitar_Lift                  = 0x46,
     Guitar_Slide_Up              = 0x47,
     Guitar_Rip                   = 0x48,
@@ -333,14 +331,16 @@ enum class ArticulationType : char {
 
     None
 
-    /*	Detached_Legato,
+    /*
+    Detached_Legato,
     Spiccato,
     Scoop,
     Plop,
     Doit,
     Falloff,
     Breath_Mark,
-    Caesura,*/
+    Caesura
+    */
 };
 
 enum class NoteType : char {
@@ -354,8 +354,8 @@ enum class NoteType : char {
     Note_64          = 0x7,
     Note_128         = 0x8,
     Note_256         = 0x9,
-//      Note_512         = 0xa,
-//      Note_1024        = 0xb,
+//  Note_512         = 0xa,
+//  Note_1024        = 0xb,
 
     Note_None
 };
@@ -386,11 +386,11 @@ enum class DynamicsType : char {
 };
 
 enum class WedgeType : char {
-    Cres_Line = 0,   // <
-    Double_Line,     // <>, not appear in xml
-    Decresc_Line,    // >
-    Cres,            // cresc., not appear in xml, will create Expression
-    Decresc          // decresc., not appear in xml, will create Expression
+    Cres_Line = 0, // <
+    Double_Line,   // <>, not appear in xml
+    Decresc_Line,  // >
+    Cres,          // cresc., not appear in xml, will create Expression
+    Decresc        // decresc., not appear in xml, will create Expression
 };
 
 enum class KuoHaoType : char {
@@ -426,26 +426,26 @@ enum class RepeatType : char {
 };
 
 enum class BarLineType : char {
-    Default = 0,   //0x00 will be | or final (at last measure)
-    Double,        //0x01 ||
-    RepeatLeft,    //0x02 ||:
-    RepeatRight,   //0x03 :||
-    Final,         //0x04
-    Dashed,        //0x05
-    Null           //0x06
+    Default = 0, // 0x00 will be | or final (at last measure)
+    Double,      // 0x01 ||
+    RepeatLeft,  // 0x02 ||:
+    RepeatRight, // 0x03 :||
+    Final,       // 0x04
+    Dashed,      // 0x05
+    Null         // 0x06
 };
 
 enum class NoteDuration {
     D_256 = 15,
-    D_128 = NoteDuration::D_256 * 2,             // 30
-    D_64 = NoteDuration::D_128 * 2,              // 60
-    D_32 = NoteDuration::D_64 * 2,               // 120
-    D_16 = NoteDuration::D_32 * 2,               // 240
-    D_8 = NoteDuration::D_16 * 2,                // 480
-    D_4 = NoteDuration::D_8 * 2,                 // 960
-    D_2 = NoteDuration::D_4 * 2,                 // 1920
-    D_Whole = NoteDuration::D_2 * 2,             // 3840
-    D_Double_Whole = NoteDuration::D_Whole * 2   // 7680
+    D_128 = D_256 * 2,           // 30
+    D_64 = D_128 * 2,            // 60
+    D_32 = D_64 * 2,             // 120
+    D_16 = D_32 * 2,             // 240
+    D_8 = D_16 * 2,              // 480
+    D_4 = D_8 * 2,               // 960
+    D_2 = D_4 * 2,               // 1920
+    D_Whole = D_2 * 2,           // 3840
+    D_Double_Whole = D_Whole * 2 // 7680
 };
 
 enum class ToneType : char {
@@ -459,21 +459,21 @@ enum class ToneType : char {
 };
 
 enum class KeyType : char {
-    Key_C = 0,          // C
-    Key_Bass_1,         // F
-    Key_Bass_2,         // Bb
-    Key_Bass_3,         // Eb
-    Key_Bass_4,         // Ab
-    Key_Bass_5,         // Db
-    Key_Bass_6,         // Gb
-    Key_Bass_7,         // Cb
-    Key_Sharp_1,        // G
-    Key_Sharp_2,        // D
-    Key_Sharp_3,        // A
-    Key_Sharp_4,        // E
-    Key_Sharp_5,        // B
-    Key_Sharp_6,        // F#
-    Key_Sharp_7         // C#
+    Key_C = 0,   // C
+    Key_Bass_1,  // F
+    Key_Bass_2,  // Bb
+    Key_Bass_3,  // Eb
+    Key_Bass_4,  // Ab
+    Key_Bass_5,  // Db
+    Key_Bass_6,  // Gb
+    Key_Bass_7,  // Cb
+    Key_Sharp_1, // G
+    Key_Sharp_2, // D
+    Key_Sharp_3, // A
+    Key_Sharp_4, // E
+    Key_Sharp_5, // B
+    Key_Sharp_6, // F#
+    Key_Sharp_7  // C#
 };
 
 // IOveNotify.h
@@ -508,7 +508,6 @@ public:
 
 DLL_EXPORT IOVEStreamLoader* createOveStreamLoader();
 
-/////////////////////////////////////////////////////////////////////////////
 // basic element
 class TickElement
 {
@@ -521,7 +520,7 @@ public:
     int getTick(void) const;
 
 private:
-    int tick_;
+    int m_tick;
 };
 
 class MeasurePos
@@ -538,18 +537,18 @@ public:
     int getOffset() const;
 
     MeasurePos shiftMeasure(int measure) const;
-    MeasurePos shiftOffset(int offset) const;   // ignore cross measure
+    MeasurePos shiftOffset(int offset) const; // ignore cross measure
 
-    bool operator ==(const MeasurePos& mp) const;
-    bool operator !=(const MeasurePos& mp) const;
-    bool operator <(const MeasurePos& mp) const;
-    bool operator <=(const MeasurePos& mp) const;
-    bool operator >(const MeasurePos& mp) const;
-    bool operator >=(const MeasurePos& mp) const;
+    bool operator==(const MeasurePos& mp) const;
+    bool operator!=(const MeasurePos& mp) const;
+    bool operator<(const MeasurePos& mp) const;
+    bool operator<=(const MeasurePos& mp) const;
+    bool operator>(const MeasurePos& mp) const;
+    bool operator>=(const MeasurePos& mp) const;
 
 private:
-    int measure_;
-    int offset_;
+    int m_measure;
+    int m_offset;
 };
 
 class PairElement
@@ -563,8 +562,8 @@ public:
     MeasurePos* stop() const;
 
 private:
-    MeasurePos* start_;
-    MeasurePos* stop_;
+    MeasurePos* m_start;
+    MeasurePos* m_stop;
 };
 
 class PairEnds
@@ -581,10 +580,10 @@ public:
     OffsetElement* getRightShoulder() const;
 
 private:
-    LineElement* leftLine_;
-    LineElement* rightLine_;
-    OffsetElement* leftShoulder_;
-    OffsetElement* rightShoulder_;
+    LineElement* m_leftLine;
+    LineElement* m_rightLine;
+    OffsetElement* m_leftShoulder;
+    OffsetElement* m_rightShoulder;
 };
 
 class LineElement
@@ -594,11 +593,11 @@ public:
     virtual ~LineElement() {}
 
 public:
-    virtual void setLine(int line);   // middle line (3rd line of each clef) is set 0
+    virtual void setLine(int line); // middle line (3rd line of each clef) is set 0
     virtual int getLine(void) const;
 
 private:
-    int line_;
+    int m_line;
 };
 
 class OffsetElement
@@ -615,8 +614,8 @@ public:
     virtual int getYOffset() const;
 
 private:
-    int xOffset_;
-    int yOffset_;
+    int m_xOffset;
+    int m_yOffset;
 };
 
 class LengthElement
@@ -630,7 +629,7 @@ public:
     int getLength() const;
 
 private:
-    int length_;   // tick
+    int m_length; // tick
 };
 
 // base class of many ove music element
@@ -647,14 +646,14 @@ public:
         Attributes = 0, NoteBeam, Notations, Direction, None
     };
     static XmlDataType getXmlDataType(MusicDataType type);
-    //	static bool get_is_pair_element(MusicDataType type) ;
+    // static bool get_is_pair_element(MusicDataType type) ;
 
     // show / hide
     void setShow(bool show);
     bool getShow() const;
 
     // color
-    void setColor(unsigned int color);   // not exists in ove 3
+    void setColor(unsigned int color); // not exists in ove 3
     unsigned int getColor() const;
 
     void setVoice(unsigned int voice);
@@ -663,12 +662,12 @@ public:
     void copyCommonBlock(const MusicData& source);
 
 protected:
-    MusicDataType musicDataType_;
+    MusicDataType m_musicDataType;
 
 private:
-    bool show_;
-    unsigned int color_;
-    unsigned int voice_;
+    bool m_show;
+    unsigned int m_color;
+    unsigned int m_voice;
 };
 
 class MidiData : public TickElement
@@ -681,10 +680,9 @@ public:
     MidiType getMidiType() const;
 
 protected:
-    MidiType midiType_;
+    MidiType m_midiType;
 };
 
-////////////////////////////////////////////////////////////////////////////////
 class OveSong
 {
 public:
@@ -762,7 +760,7 @@ public:
 
     void addMeasureData(MeasureData* ptr);
     int getMeasureDataCount(void) const;
-    MeasureData* getMeasureData(int part, int staff /*=0*/, int bar) const;
+    MeasureData* getMeasureData(int part, int staff /* = 0 */, int bar) const;
     MeasureData* getMeasureData(int track, int bar) const;
 
     // tool
@@ -782,33 +780,33 @@ private:
     int partStaffToTrack(int part, int staff) const;
 
 private:
-    bool version4_;
-    int quarter_;
+    bool m_version4;
+    int m_quarter;
 
-    bool showPageMargin_;
-    bool showTransposeTrack;
-    bool showLineBreak_;
-    bool showRuler_;
-    bool showColor_;
-    bool playRepeat_;
-    PlayStyle playStyle_;
+    bool m_showPageMargin;
+    bool m_showTransposeTrack;
+    bool m_showLineBreak;
+    bool m_showRuler;
+    bool m_showColor;
+    bool m_playRepeat;
+    PlayStyle m_playStyle;
 
-    QList<QString> titles_;
-    QList<QString> annotates_;
-    QList<QString> writers_;
-    QList<QString> copyrights_;
-    QList<QString> headers_;
-    QList<QString> footers_;
+    QList<QString> m_titles;
+    QList<QString> m_annotates;
+    QList<QString> m_writers;
+    QList<QString> m_copyrights;
+    QList<QString> m_headers;
+    QList<QString> m_footers;
 
-    QList<Track*> tracks_;
-    QList<Page*> pages_;
-    QList<Line*> lines_;
-    QList<Measure*> measures_;
-    QList<MeasureData*> measureDatas_;
-    int trackBarCount_;       //equal to measures_.size()
+    QList<Track*> m_tracks;
+    QList<Page*> m_pages;
+    QList<Line*> m_lines;
+    QList<Measure*> m_measures;
+    QList<MeasureData*> m_measureDatas;
+    int m_trackBarCount; // equal to m_measures.size()
 
-    QList<int> partStaffCounts_;
-    QTextCodec* codec_;
+    QList<int> m_partStaffCounts;
+    QTextCodec* m_codec;
 };
 
 class Voice
@@ -840,12 +838,12 @@ public:
     static int getDefaultVolume();
 
 private:
-    int channel_;             // [0, 15]
-    int volume_;              // [-1, 127], -1 default
-    int pitchShift_;    // [-36, 36]
-    int pan_;                 // [-64, 63]
-    int patch_;               // [0, 127]
-    int stemType_;            // 0, 1, 2
+    int m_channel;    // [0, 15]
+    int m_volume;     // [-1, 127], -1 default
+    int m_pitchShift; // [-36, 36]
+    int m_pan;        // [-64, 63]
+    int m_patch;      // [0, 127]
+    int m_stemType;   // 0, 1, 2
 };
 
 class Track
@@ -861,7 +859,7 @@ public:
     void setBriefName(const QString& str);
     QString getBriefName(void) const;
 
-    void setPatch(unsigned int patch);   // -1: percussion
+    void setPatch(unsigned int patch); // -1: percussion
     unsigned int getPatch() const;
 
     void setChannel(int channel);
@@ -897,16 +895,16 @@ public:
     void setNoteShift(int shift);
     int getNoteShift() const;
 
-    void setStartClef(int clef /*in ClefType*/);
+    void setStartClef(int clef /* in ClefType */);
     ClefType getStartClef() const;
 
-    void setTransposeClef(int clef /*in ClefType*/);
+    void setTransposeClef(int clef /* in ClefType */);
     ClefType getTansposeClef() const;
 
-    void setStartKey(int key /*in KeyType*/);
+    void setStartKey(int key /* in KeyType */);
     int getStartKey() const;
 
-    void setDisplayPercent(unsigned int percent /*25~100*/);
+    void setDisplayPercent(unsigned int percent /* 25~100 */);
     unsigned int getDisplayPercent() const;
 
     void setShowLegerLine(bool show);
@@ -934,60 +932,58 @@ public:
     bool getShowClefEachLine() const;
 
     struct DrumNode {
-        int line_;
-        int headType_;
-        int pitch_;
-        int voice_;
+        int m_line;
+        int m_headType;
+        int m_pitch;
+        int m_voice;
 
     public:
         DrumNode()
-            : line_(0), headType_(0), pitch_(0), voice_(0) {}
+            : m_line(0), m_headType(0), m_pitch(0), m_voice(0) {}
     };
     void addDrum(const DrumNode& node);
     QList<DrumNode> getDrumKit() const;
 
     void clear(void);
 
-    /////////////////////////////////////////////////
     void setPart(int part);
     int getPart() const;
 
 private:
-    int number_;
-    QString name_;
-    QString briefName_;
-    unsigned int patch_;
-    int channel_;
-    int transpose_;
-    bool showTranspose_;
-    int noteShift_;
-    ClefType startClef_;
-    ClefType transposeClef_;
-    unsigned int displayPercent_;
-    int startKey_;
-    int voiceCount_;
-    QList<Voice*> voices_;
+    int m_number;
+    QString m_name;
+    QString m_briefName;
+    unsigned int m_patch;
+    int m_channel;
+    int m_transpose;
+    bool m_showTranspose;
+    int m_noteShift;
+    ClefType m_startClef;
+    ClefType m_transposeClef;
+    unsigned int m_displayPercent;
+    int m_startKey;
+    int m_voiceCount;
+    QList<Voice*> m_voices;
 
-    bool showName_;
-    bool showBriefName_;
-    bool showKeyEachLine_;
-    bool showLegerLine_;
-    bool showClef_;
-    bool showTimeSignature_;
-    bool showKeySignature_;
-    bool showBarline_;
-    bool showClefEachLine_;
+    bool m_showName;
+    bool m_showBriefName;
+    bool m_showKeyEachLine;
+    bool m_showLegerLine;
+    bool m_showClef;
+    bool m_showTimeSignature;
+    bool m_showKeySignature;
+    bool m_showBarline;
+    bool m_showClefEachLine;
 
-    bool fillWithRest_;
-    bool flatTail_;
+    bool m_fillWithRest;
+    bool m_flatTail;
 
-    bool mute_;
-    bool solo_;
+    bool m_mute;
+    bool m_solo;
 
-    QList<DrumNode> drumKit_;
+    QList<DrumNode> m_drumKit;
 
-    //////////////////////////////
-    int part_;
+    int m_part;
 };
 
 class Page
@@ -1003,13 +999,13 @@ public:
     void setLineCount(int count);
     int getLineCount() const;
 
-    void setLineInterval(int interval);   // between system
+    void setLineInterval(int interval); // between system
     int getLineInterval() const;
 
     void setStaffInterval(int interval);
     int getStaffInterval() const;
 
-    void setStaffInlineInterval(int interval);   // between treble-bass staff
+    void setStaffInlineInterval(int interval); // between treble-bass staff
     int getStaffInlineInterval() const;
 
     void setLineBarCount(int count);
@@ -1037,23 +1033,23 @@ public:
     int getPageHeight() const;
 
 private:
-    int beginLine_;
-    int lineCount_;
+    int m_beginLine;
+    int m_lineCount;
 
-    int lineInterval_;
-    int staffInterval_;
-    int staffInlineInterval_;
+    int m_lineInterval;
+    int m_staffInterval;
+    int m_staffInlineInterval;
 
-    int lineBarCount_;
-    int pageLineCount_;
+    int m_lineBarCount;
+    int m_pageLineCount;
 
-    int leftMargin_;
-    int topMargin_;
-    int rightMargin_;
-    int bottomMargin_;
+    int m_leftMargin;
+    int m_topMargin;
+    int m_rightMargin;
+    int m_bottomMargin;
 
-    int pageWidth_;
-    int pageHeight_;
+    int m_pageWidth;
+    int m_pageHeight;
 };
 
 class Line
@@ -1083,12 +1079,12 @@ public:
     int getRightXOffset() const;
 
 private:
-    QList<Staff*> staves_;
-    unsigned int beginBar_;
-    unsigned int barCount_;
-    int yOffset_;
-    int leftXOffset_;
-    int rightXOffset_;
+    QList<Staff*> m_staves;
+    unsigned int m_beginBar;
+    unsigned int m_barCount;
+    int m_yOffset;
+    int m_leftXOffset;
+    int m_rightXOffset;
 };
 
 class Staff : public OffsetElement
@@ -1114,14 +1110,12 @@ public:
     int getGroupStaffCount() const;
 
 private:
-    ClefType clef_;
-    int key_;
-    bool visible_;
-    GroupType groupType_;
-    int groupStaffCount_;
+    ClefType m_clef;
+    int m_key;
+    bool m_visible;
+    GroupType m_groupType;
+    int m_groupStaffCount;
 };
-
-///////////////////////////////////////////////////////////////////////////////
 
 class Note : public LineElement
 {
@@ -1136,7 +1130,7 @@ public:
     void setNote(unsigned int note);
     unsigned int getNote() const;
 
-    void setAccidental(int type);         //AccidentalType
+    void setAccidental(int type); // AccidentalType
     AccidentalType getAccidental() const;
 
     void setShowAccidental(bool show);
@@ -1148,13 +1142,13 @@ public:
     void setOffVelocity(unsigned int velocity);
     unsigned int getOffVelocity() const;
 
-    void setHeadType(int type);           //NoteHeadType
+    void setHeadType(int type); // NoteHeadType
     NoteHeadType getHeadType() const;
 
     void setTiePos(int tiePos);
     TiePos getTiePos() const;
 
-    void setOffsetStaff(int offset);      // cross staff notes
+    void setOffsetStaff(int offset); // cross staff notes
     int getOffsetStaff() const;
 
     void setShow(bool show);
@@ -1164,17 +1158,17 @@ public:
     int getOffsetTick() const;
 
 private:
-    bool rest_;
-    unsigned int note_;
-    AccidentalType accidental_;
-    bool showAccidental_;
-    unsigned int onVelocity_;
-    unsigned int offVelocity_;
-    NoteHeadType headType_;
-    TiePos tiePos_;
-    int offsetStaff_;
-    bool show_;
-    int offsetTick_;  //for playback
+    bool m_rest;
+    unsigned int m_note;
+    AccidentalType m_accidental;
+    bool m_showAccidental;
+    unsigned int m_onVelocity;
+    unsigned int m_offVelocity;
+    NoteHeadType m_headType;
+    TiePos m_tiePos;
+    int m_offsetStaff;
+    bool m_show;
+    int m_offsetTick; // for playback
 };
 
 class Articulation : public OffsetElement
@@ -1184,7 +1178,7 @@ public:
     virtual ~Articulation() {}
 
 public:
-    void setArtType(int type);  //ArticulationType
+    void setArtType(int type); // ArticulationType
     ArticulationType getArtType() const;
 
     void setPlacementAbove(bool above);
@@ -1261,25 +1255,25 @@ public:
     AccelerateType getAccelerateType() const;
 
 private:
-    ArticulationType type_;
-    bool above_;
+    ArticulationType m_type;
+    bool m_above;
 
-    bool changeSoundEffect_;
-    QPair<int, int> soundEffect_;
-    bool changeLength_;
-    int lengthPercentage_;
-    bool changeVelocity_;
-    VelocityType velocityType_;
-    int velocityValue_;
-    bool changeExtraLength_;
-    int extraLength_;
+    bool m_changeSoundEffect;
+    QPair<int, int> m_soundEffect;
+    bool m_changeLength;
+    int m_lengthPercentage;
+    bool m_changeVelocity;
+    VelocityType m_velocityType;
+    int m_velocityValue;
+    bool m_changeExtraLength;
+    int m_extraLength;
 
     // trill
-    TrillInterval trillInterval_;
-    bool auxiliaryFirst_;
-    NoteType trillRate_;
-    int trillNoteLength_;
-    AccelerateType accelerateType_;
+    TrillInterval m_trillInterval;
+    bool m_auxiliaryFirst;
+    NoteType m_trillRate;
+    int m_trillNoteLength;
+    AccelerateType m_accelerateType;
 };
 
 class NoteContainer : public MusicData, public LengthElement
@@ -1295,7 +1289,7 @@ public:
     void setIsCue(bool cue);
     bool getIsCue() const;
 
-    void setIsRest(bool rest /*or note*/);
+    void setIsRest(bool rest /* or note */);
     bool getIsRest() const;
 
     void setIsRaw(bool raw);
@@ -1342,23 +1336,23 @@ public:
     int getDuration() const;
 
 private:
-    bool grace_;
-    bool cue_;
-    bool rest_;
-    bool raw_;
-    NoteType noteType_;
-    int dot_;
-    NoteType graceNoteType_;
-    int tuplet_;
-    int space_;
-    bool inBeam_;
-    bool stemUp_;
-    bool showStem_;
-    int stemLength_;    // line count span
-    int noteShift_;
+    bool m_grace;
+    bool m_cue;
+    bool m_rest;
+    bool m_raw;
+    NoteType m_noteType;
+    int m_dot;
+    NoteType m_graceNoteType;
+    int m_tuplet;
+    int m_space;
+    bool m_inBeam;
+    bool m_stemUp;
+    bool m_showStem;
+    int m_stemLength; // line count span
+    int m_noteShift;
 
-    QList<Note*> notes_;
-    QList<Articulation*> articulations_;
+    QList<Note*> m_notes;
+    QList<Articulation*> m_articulations;
 };
 
 class Beam : public MusicData, public PairEnds
@@ -1375,8 +1369,8 @@ public:
     const QList<QPair<MeasurePos, MeasurePos> > getLines() const;
 
 private:
-    bool grace_;
-    QList<QPair<MeasurePos, MeasurePos> > lines_;
+    bool m_grace;
+    QList<QPair<MeasurePos, MeasurePos> > m_lines;
 };
 
 class Tie : public MusicData, public PairEnds
@@ -1389,16 +1383,16 @@ public:
     void setShowOnTop(bool top);
     bool getShowOnTop() const;
 
-    void setNote(int note);  // note value tie point to
+    void setNote(int note); // note value tie point to
     int getNote() const;
 
     void setHeight(int height);
     int getHeight() const;
 
 private:
-    bool showOnTop_;
-    int note_;
-    int height_;
+    bool m_showOnTop;
+    int m_note;
+    int m_height;
 };
 
 class Glissando : public MusicData, public PairEnds
@@ -1418,9 +1412,9 @@ public:
     int getLineThick() const;
 
 private:
-    bool straight_;
-    QString text_;
-    int lineThick_;
+    bool m_straight;
+    QString m_text;
+    int m_lineThick;
 };
 
 class Decorator : public MusicData
@@ -1441,8 +1435,8 @@ public:
     ArticulationType getArticulationType() const;
 
 private:
-    Type decoratorType_;
-    ArticulationType artType_;
+    Type m_decoratorType;
+    ArticulationType m_artType;
 };
 
 class MeasureRepeat : public MusicData
@@ -1452,11 +1446,11 @@ public:
     virtual ~MeasureRepeat() {}
 
 public:
-    void setSingleRepeat(bool single);   // false : double
+    void setSingleRepeat(bool single); // false : double
     bool getSingleRepeat() const;
 
 private:
-    bool singleRepeat_;
+    bool m_singleRepeat;
 };
 
 class Tuplet : public MusicData, public PairEnds
@@ -1481,11 +1475,11 @@ public:
     OffsetElement* getMarkHandle() const;
 
 private:
-    int tuplet_;
-    int space_;
-    int height_;
-    NoteType noteType_;
-    OffsetElement* mark_;
+    int m_tuplet;
+    int m_space;
+    int m_height;
+    NoteType m_noteType;
+    OffsetElement* m_mark;
 };
 
 class Harmony : public MusicData, public LengthElement
@@ -1498,7 +1492,7 @@ public:
     void setHarmonyType(QString type);
     QString getHarmonyType() const;
 
-    void setRoot(int root=0);  //C
+    void setRoot(int root=0); // C
     int getRoot() const;
 
     void setBass(int bass);
@@ -1517,13 +1511,13 @@ public:
     int getAngle() const;
 
 private:
-    QString harmonyType_;
-    int root_;
-    int bass_;
-    int alterRoot_;
-    int alterBass_;
-    bool bassOnBottom_;
-    int angle_;
+    QString m_harmonyType;
+    int m_root;
+    int m_bass;
+    int m_alterRoot;
+    int m_alterBass;
+    bool m_bassOnBottom;
+    int m_angle;
 };
 
 class Clef : public MusicData, public LineElement
@@ -1533,11 +1527,11 @@ public:
     virtual ~Clef() {}
 
 public:
-    void setClefType(int type);     // ClefType
+    void setClefType(int type); // ClefType
     ClefType getClefType() const;
 
 private:
-    ClefType clefType_;
+    ClefType m_clefType;
 };
 
 class Lyric : public MusicData
@@ -1554,8 +1548,8 @@ public:
     int getVerse() const;
 
 private:
-    QString lyric_;
-    int verse_;
+    QString m_lyric;
+    int m_verse;
 };
 
 class Slur : public MusicData, public PairEnds
@@ -1565,7 +1559,7 @@ public:
     virtual ~Slur();
 
 public:
-    void setContainerCount(int count);   // span
+    void setContainerCount(int count); // span
     int getContainerCount() const;
 
     void setShowOnTop(bool top);
@@ -1574,15 +1568,15 @@ public:
     OffsetElement* getHandle2() const;
     OffsetElement* getHandle3() const;
 
-    void setNoteTimePercent(int percent);   // 50% ~ 200%
+    void setNoteTimePercent(int percent); // 50% ~ 200%
     int getNoteTimePercent() const;
 
 private:
-    int containerCount_;
-    bool showOnTop_;
-    int noteTimePercent_;
-    OffsetElement* handle_2_;
-    OffsetElement* handle_3_;
+    int m_containerCount;
+    bool m_showOnTop;
+    int m_noteTimePercent;
+    OffsetElement* m_handle_2;
+    OffsetElement* m_handle_3;
 };
 
 class Dynamics : public MusicData
@@ -1592,7 +1586,7 @@ public:
     virtual ~Dynamics() {}
 
 public:
-    void setDynamicsType(int type);  //DynamicsType
+    void setDynamicsType(int type); // DynamicsType
     DynamicsType getDynamicsType() const;
 
     void setIsPlayback(bool play);
@@ -1602,9 +1596,9 @@ public:
     int getVelocity() const;
 
 private:
-    DynamicsType dynamicsType_;
-    bool playback_;
-    int velocity_;
+    DynamicsType m_dynamicsType;
+    bool m_playback;
+    int m_velocity;
 };
 
 class WedgeEndPoint : public MusicData
@@ -1624,9 +1618,9 @@ public:
     bool getWedgeStart() const;
 
 private:
-    int height_;
-    WedgeType wedgeType_;
-    bool wedgeStart_;
+    int m_height;
+    WedgeType m_wedgeType;
+    bool m_wedgeStart;
 };
 
 class Wedge : public MusicData
@@ -1643,8 +1637,8 @@ public:
     int getHeight() const;
 
 private:
-    int height_;
-    WedgeType wedgeType_;
+    int m_height;
+    WedgeType m_wedgeType;
 };
 
 class Pedal : public MusicData, public PairEnds
@@ -1660,16 +1654,16 @@ public:
     void setIsPlayback(bool playback);
     bool getIsPlayback() const;
 
-    void setPlayOffset(int offset);   // -127~127
+    void setPlayOffset(int offset); // -127~127
     int getPlayOffset() const;
 
-    OffsetElement* getPedalHandle() const;   //only on half pedal
+    OffsetElement* getPedalHandle() const; // only on half pedal
 
 private:
-    bool half_;
-    bool playback_;
-    int playOffset_;
-    OffsetElement* pedalHandle_;
+    bool m_half;
+    bool m_playback;
+    int m_playOffset;
+    OffsetElement* m_pedalHandle;
 };
 
 class KuoHao : public MusicData, public PairEnds
@@ -1682,12 +1676,12 @@ public:
     void setHeight(int height);
     int getHeight() const;
 
-    void setKuohaoType(int type);  // KuoHaoType
+    void setKuohaoType(int type); // KuoHaoType
     KuoHaoType getKuohaoType() const;
 
 private:
-    int height_;
-    KuoHaoType kuohaoType_;
+    int m_height;
+    KuoHaoType m_kuohaoType;
 };
 
 class Expressions : public MusicData
@@ -1701,7 +1695,7 @@ public:
     QString getText() const;
 
 private:
-    QString text_;
+    QString m_text;
 };
 
 class HarpPedal : public MusicData
@@ -1711,15 +1705,15 @@ public:
     virtual ~HarpPedal() {}
 
 public:
-    void setShowType(int type);  //0:graph, 1:char, 2:char cut, 3:change
+    void setShowType(int type); // 0: graph, 1: char, 2: char cut, 3: change
     int getShowType() const;
 
-    void setShowCharFlag(int flag);  //each bit is a bool, total 7 bools
+    void setShowCharFlag(int flag); // each bit is a bool, total 7 bools
     int getShowCharFlag() const;
 
 private:
-    int showType_;
-    int showCharFlag_;
+    int m_showType;
+    int m_showCharFlag;
 };
 
 class OctaveShift : public MusicData, public LengthElement
@@ -1741,9 +1735,9 @@ public:
     int getEndTick() const;
 
 private:
-    OctaveShiftType octaveShiftType_;
-    OctaveShiftPosition octaveShiftPosition_;
-    int endTick_;
+    OctaveShiftType m_octaveShiftType;
+    OctaveShiftPosition m_octaveShiftPosition;
+    int m_endTick;
 };
 
 class OctaveShiftEndPoint : public MusicData, public LengthElement
@@ -1763,9 +1757,9 @@ public:
     int getEndTick() const;
 
 private:
-    OctaveShiftType octaveShiftType_;
-    OctaveShiftPosition octaveShiftPosition_;
-    int endTick_;
+    OctaveShiftType m_octaveShiftType;
+    OctaveShiftPosition m_octaveShiftPosition;
+    int m_endTick;
 };
 
 class MultiMeasureRest : public MusicData
@@ -1779,7 +1773,7 @@ public:
     int getMeasureCount() const;
 
 private:
-    int measureCount_;
+    int m_measureCount;
 };
 
 class Tempo : public MusicData
@@ -1789,7 +1783,7 @@ public:
     virtual ~Tempo() {}
 
 public:
-    void setLeftNoteType(int type);  //NoteType
+    void setLeftNoteType(int type); // NoteType
     NoteType getLeftNoteType() const;
 
     void setShowMark(bool show);
@@ -1801,11 +1795,11 @@ public:
     void setShowParenthesis(bool show);
     bool getShowParenthesis() const;
 
-    void setTypeTempo(double tempo);   //0x2580 = 96.00
+    void setTypeTempo(double tempo); // 0x2580 = 96.00
     double getTypeTempo() const;
     double getQuarterTempo() const;
 
-    void setLeftText(const QString& str);  // string at left of the mark
+    void setLeftText(const QString& str); // string at left of the mark
     QString getLeftText() const;
 
     void setRightText(const QString& str);
@@ -1827,18 +1821,18 @@ public:
     int getRightSideType() const;
 
 private:
-    int leftNoteType_;
-    bool showMark_;
-    bool showText_;
-    bool showParenthesis_;
-    double typeTempo_;
-    QString leftText_;
-    QString rightText_;
-    bool swingEighth_;
-    int rightNoteType_;
-    bool leftNoteDot_;
-    bool rightNoteDot_;
-    int rightSideType_;
+    int m_leftNoteType;
+    bool m_showMark;
+    bool m_showText;
+    bool m_showParenthesis;
+    double m_typeTempo;
+    QString m_leftText;
+    QString m_rightText;
+    bool m_swingEighth;
+    int m_rightNoteType;
+    bool m_leftNoteDot;
+    bool m_rightNoteDot;
+    int m_rightSideType;
 };
 
 class Text : public MusicData, public LengthElement
@@ -1876,16 +1870,14 @@ public:
     int getHeight() const;
 
 private:
-    Type textType_;
-    int horiMargin_;
-    int vertMargin_;
-    int lineThick_;
-    QString text_;
-    int width_;
-    int height_;
+    Type m_textType;
+    int m_horiMargin;
+    int m_vertMargin;
+    int m_lineThick;
+    QString m_text;
+    int m_width;
+    int m_height;
 };
-
-///////////////////////////////////////////////////////////////////////////////
 
 class TimeSignature : public MusicData
 {
@@ -1900,13 +1892,13 @@ public:
     void setDenominator(int denominator);
     int getDenominator() const;
 
-    void setIsSymbol(bool symbol);   //4/4:common, 2/2:cut
+    void setIsSymbol(bool symbol); // 4/4: common, 2/2: cut
     bool getIsSymbol() const;
 
-    void setBeatLength(int length);   // tick
+    void setBeatLength(int length); // tick
     int getBeatLength() const;
 
-    void setBarLength(int length);   // tick
+    void setBarLength(int length); // tick
     int getBarLength() const;
 
     void addBeat(int startUnit, int lengthUnit, int startTick);
@@ -1935,44 +1927,44 @@ public:
     void set32thBeamCount(int count);
 
 private:
-    int numerator_;
-    int denominator_;
-    bool isSymbol_;
-    int beatLength_;
-    int barLength_;
+    int m_numerator;
+    int m_denominator;
+    bool m_isSymbol;
+    int m_beatLength;
+    int m_barLength;
 
     struct BeatNode {
-        int startUnit_;
-        int lengthUnit_;
-        int startTick_;
+        int m_startUnit;
+        int m_lengthUnit;
+        int m_startTick;
 
         BeatNode()
-            : startUnit_(0),
-            lengthUnit_(0),
-            startTick_(0)
+            : m_startUnit(0),
+            m_lengthUnit(0),
+            m_startTick(0)
         {
         }
     };
-    QList<BeatNode> beats_;
-    int barLengthUnits_;
+    QList<BeatNode> m_beats;
+    int m_barLengthUnits;
 
-    bool replaceFont_;
-    bool showBeatGroup_;
+    bool m_replaceFont;
+    bool m_showBeatGroup;
 
-    int groupNumerator1_;
-    int groupNumerator2_;
-    int groupNumerator3_;
-    int groupDenominator1_;
-    int groupDenominator2_;
-    int groupDenominator3_;
+    int m_groupNumerator1;
+    int m_groupNumerator2;
+    int m_groupNumerator3;
+    int m_groupDenominator1;
+    int m_groupDenominator2;
+    int m_groupDenominator3;
 
-    int beamGroup1_;
-    int beamGroup2_;
-    int beamGroup3_;
-    int beamGroup4_;
+    int m_beamGroup1;
+    int m_beamGroup2;
+    int m_beamGroup3;
+    int m_beamGroup4;
 
-    int beamCount16th_;
-    int beamCount32th_;
+    int m_beamCount16th;
+    int m_beamCount32th;
 };
 
 class Key : public MusicData
@@ -1982,7 +1974,7 @@ public:
     virtual ~Key() {}
 
 public:
-    void setKey(int key);   //C=0x0, G=0x8, C#=0xE, F=0x1, Db=0x7
+    void setKey(int key); // C = 0x0, G = 0x8, C# = 0xE, F = 0x1, Db = 0x7
     int getKey() const;
     bool getSetKey() const;
 
@@ -1993,10 +1985,10 @@ public:
     int getSymbolCount() const;
 
 private:
-    int key_;
-    bool set_;
-    int previousKey_;
-    int symbolCount_;
+    int m_key;
+    bool m_set;
+    int m_previousKey;
+    int m_symbolCount;
 };
 
 class RepeatSymbol : public MusicData
@@ -2013,8 +2005,8 @@ public:
     RepeatType getRepeatType() const;
 
 private:
-    QString text_;
-    RepeatType repeatType_;
+    QString m_text;
+    RepeatType m_repeatType;
 };
 
 class NumericEnding : public MusicData, public PairEnds
@@ -2035,9 +2027,9 @@ public:
     int getJumpCount() const;
 
 private:
-    int height_;
-    QString text_;
-    OffsetElement* numericHandle_;
+    int m_height;
+    QString m_text;
+    OffsetElement* m_numericHandle;
 };
 
 class BarNumber : public MusicData
@@ -2053,10 +2045,10 @@ public:
     void setShowOnParagraphStart(bool show);
     bool getShowOnParagraphStart() const;
 
-    void setAlign(int align);  // 0:left, 1:center, 2:right
+    void setAlign(int align); // 0: left, 1: center, 2: right
     int getAlign() const;
 
-    void setShowFlag(int flag);   // 0:page, 1:staff, 2:bar, 3:none
+    void setShowFlag(int flag); // 0: page, 1: staff, 2: bar, 3: none
     int getShowFlag() const;
 
     void setShowEveryBarCount(int count);
@@ -2066,15 +2058,14 @@ public:
     QString getPrefix() const;
 
 private:
-    int index_;
-    bool showOnParagraphStart_;
-    int align_;
-    int showFlag_;
-    int barRange_;
-    QString prefix_;
+    int m_index;
+    bool m_showOnParagraphStart;
+    int m_align;
+    int m_showFlag;
+    int m_barRange;
+    QString m_prefix;
 };
 
-///////////////////////////////////////////////////////////////////////////////
 // MIDI
 class MidiController : public MidiData
 {
@@ -2090,8 +2081,8 @@ public:
     int getValue() const;
 
 private:
-    int controller_;
-    int value_;
+    int m_controller;
+    int m_value;
 };
 
 class MidiProgramChange : public MidiData
@@ -2105,7 +2096,7 @@ public:
     int getPatch() const;
 
 private:
-    int patch_;
+    int m_patch;
 };
 
 class MidiChannelPressure : public MidiData
@@ -2119,7 +2110,7 @@ public:
     int getPressure() const;
 
 private:
-    int pressure_;
+    int m_pressure;
 };
 
 class MidiPitchWheel : public MidiData
@@ -2133,10 +2124,9 @@ public:
     int getValue() const;
 
 private:
-    int value_;
+    int m_value;
 };
 
-///////////////////////////////////////////////////////////////////////////////
 class Measure : public LengthElement
 {
 public:
@@ -2150,10 +2140,10 @@ public:
     BarNumber* getBarNumber() const;
     TimeSignature* getTime() const;
 
-    void setLeftBarline(int barline /*in BarLineType*/);
+    void setLeftBarline(int barline /* in BarLineType */);
     BarLineType getLeftBarline() const;
 
-    void setRightBarline(int barline /*in BarLineType*/);
+    void setRightBarline(int barline /* in BarLineType */);
     BarLineType getRightBarline() const;
 
     // set when rightBarline == Baline_Backward
@@ -2175,16 +2165,16 @@ public:
 private:
     void clear();
 
-    BarNumber* barNumber_;
-    TimeSignature* time_;
+    BarNumber* m_barNumber;
+    TimeSignature* m_time;
 
-    BarLineType leftBarline_;
-    BarLineType rightBarline_;
-    int repeatCount_;
-    double typeTempo_;   // based on some type
-    bool pickup_;
-    bool multiMeasureRest_;
-    int multiMeasureRestCount_;
+    BarLineType m_leftBarline;
+    BarLineType m_rightBarline;
+    int m_repeatCount;
+    double m_typeTempo; // based on some type
+    bool m_pickup;
+    bool m_multiMeasureRest;
+    int m_multiMeasureRestCount;
 };
 
 class MeasureData
@@ -2203,9 +2193,9 @@ public:
     // put Tempo, Text, RepeatSymbol to MeasureData at part=0 && staff=0
     void addMusicData(MusicData* ptr);
     // if type==MusicData_None, return all
-    QList<MusicData*> getMusicDatas(MusicDataType type);  //MusicXml: note|direction|harmony
+    QList<MusicData*> getMusicDatas(MusicDataType type); // MusicXml: note | direction | harmony
 
-    // put NumericEnding to MeasureData at part=0 && staff=0
+    // put NumericEnding to MeasureData at part = 0 && staff = 0
     void addCrossMeasureElement(MusicData* ptr, bool start);
     enum class PairType : char {
         Start,
@@ -2219,15 +2209,14 @@ public:
     QList<MidiData*> getMidiDatas(MidiType type);
 
 private:
-    Key* key_;
-    Clef* clef_;
-    QList<MusicData*> musicDatas_;
-    QList<NoteContainer*> noteContainers_;
-    QList<QPair<MusicData*, bool> > crossMeasureElements_;
-    QList<MidiData*> midiDatas_;
+    Key* m_key;
+    Clef* m_clef;
+    QList<MusicData*> m_musicDatas;
+    QList<NoteContainer*> m_noteContainers;
+    QList<QPair<MusicData*, bool> > m_crossMeasureElements;
+    QList<MidiData*> m_midiDatas;
 };
 
-// StreamHandle
 class StreamHandle
 {
 public:
@@ -2242,12 +2231,11 @@ public:
     virtual bool write(char* buff, int size);
 
 private:
-    int size_;
-    int curPos_;
-    unsigned char* point_;
+    int m_size;
+    int m_curPos;
+    unsigned char* m_point;
 };
 
-// Block.h
 // base block, or resizable block in ove to store data
 class Block
 {
@@ -2266,21 +2254,21 @@ public:
     unsigned char* data();
     int size() const;
 
-    bool operator ==(const Block& block) const;
-    bool operator !=(const Block& block) const;
+    bool operator==(const Block& block) const;
+    bool operator!=(const Block& block) const;
 
     bool toBoolean() const;
     unsigned int toUnsignedInt() const;
     int toInt() const;
-    QByteArray toStrByteArray() const;                            // string
-    QByteArray fixedSizeBufferToStrByteArray() const;       // string
+    QByteArray toStrByteArray() const;                // string
+    QByteArray fixedSizeBufferToStrByteArray() const; // string
 
 private:
     void doResize(unsigned int count);
 
 private:
     // char [-128, 127], unsigned char [0, 255]
-    QList<unsigned char> data_;
+    QList<unsigned char> m_data;
 };
 
 class FixedBlock : public Block
@@ -2299,7 +2287,6 @@ private:
     virtual void resize(unsigned int count);
 };
 
-///////////////////////////////////////////////////////////////////////////////
 // 4 byte block in ove to store size
 class SizeBlock : public FixedBlock
 {
@@ -2310,7 +2297,7 @@ public:
     }
 
 public:
-    //	void fromUnsignedInt(unsigned int count) ;
+    // void fromUnsignedInt(unsigned int count);
 
     unsigned int toSize() const;
 };
@@ -2339,12 +2326,11 @@ public:
     }
 
 public:
-    //	void setValue(unsigned short count) ;
+    // void setValue(unsigned short count);
 
     unsigned short toCount() const;
 };
 
-// Chunk.h
 // content : name
 class Chunk
 {
@@ -2366,7 +2352,7 @@ public:
     NameBlock getName() const;
 
 protected:
-    NameBlock nameBlock_;
+    NameBlock m_nameBlock;
 };
 
 // content : name / size / data
@@ -2383,8 +2369,8 @@ public:
     const static unsigned int version3TrackSize;
 
 protected:
-    SizeBlock* sizeBlock_;
-    Block* dataBlock_;
+    SizeBlock* m_sizeBlock;
+    Block* m_dataBlock;
 };
 
 // content : name / count
@@ -2398,7 +2384,7 @@ public:
     CountBlock* getCountBlock() const;
 
 protected:
-    CountBlock* childCount_;
+    CountBlock* m_childCount;
 };
 
 // ChunkParse.h
@@ -2422,12 +2408,10 @@ protected:
     void messageOut(const QString& str);
 
 protected:
-    OveSong* ove_;
-    StreamHandle* handle_;
-    IOveNotify* notify_;
+    OveSong* m_ove;
+    StreamHandle* m_handle;
+    IOveNotify* m_notify;
 };
-
-///////////////////////////////////////////////////////////////////////////////
 
 class OvscParse : public BasicParse
 {
@@ -2441,7 +2425,7 @@ public:
     virtual bool parse();
 
 private:
-    SizeChunk* chunk_;
+    SizeChunk* m_chunk;
 };
 
 class TrackParse : public BasicParse
@@ -2456,7 +2440,7 @@ public:
     virtual bool parse();
 
 private:
-    SizeChunk* chunk_;
+    SizeChunk* m_chunk;
 };
 
 class GroupParse : BasicParse
@@ -2471,7 +2455,7 @@ public:
     virtual bool parse();
 
 private:
-    QList<SizeChunk*> sizeChunks_;
+    QList<SizeChunk*> m_sizeChunks;
 };
 
 class PageGroupParse : public BasicParse
@@ -2489,7 +2473,7 @@ private:
     bool parsePage(SizeChunk* chunk, Page* page);
 
 private:
-    QList<SizeChunk*> pageChunks_;
+    QList<SizeChunk*> m_pageChunks;
 };
 
 class StaffCountGetter : public BasicParse
@@ -2520,9 +2504,9 @@ private:
     bool parseStaff(SizeChunk* chunk, Staff* staff);
 
 private:
-    GroupChunk* chunk_;
-    QList<SizeChunk*> lineChunks_;
-    QList<SizeChunk*> staffChunks_;
+    GroupChunk* m_chunk;
+    QList<SizeChunk*> m_lineChunks;
+    QList<SizeChunk*> m_staffChunks;
 };
 
 class BarsParse : public BasicParse
@@ -2586,13 +2570,13 @@ private:
     bool parseMidiCommon(MidiData* ptr);
     bool parseCommonBlock(MusicData* ptr);
     bool parseOffsetCommonBlock(MusicData* ptr);
-    bool parsePairLinesBlock(PairEnds* ptr);   //size==2
-    bool parseOffsetElement(OffsetElement* ptr);  //size==2
+    bool parsePairLinesBlock(PairEnds* ptr); // size == 2
+    bool parseOffsetElement(OffsetElement* ptr); // size == 2
 
 private:
-    QList<SizeChunk*> measureChunks_;
-    QList<SizeChunk*> conductChunks_;
-    QList<SizeChunk*> bdatChunks_;
+    QList<SizeChunk*> m_measureChunks;
+    QList<SizeChunk*> m_conductChunks;
+    QList<SizeChunk*> m_bdatChunks;
 };
 
 class LyricChunkParse : public BasicParse
@@ -2608,28 +2592,28 @@ public:
 
 private:
     struct LyricInfo {
-        int track_;
-        int measure_;
-        int verse_;
-        int voice_;
-        int wordCount_;
-        int lyricSize_;
-        QString name_;
-        QString lyric_;
-        int font_;
-        int fontSize_;
-        int fontStyle_;
+        int m_track;
+        int m_measure;
+        int m_verse;
+        int m_voice;
+        int m_wordCount;
+        int m_lyricSize;
+        QString m_name;
+        QString m_lyric;
+        int m_font;
+        int m_fontSize;
+        int m_fontStyle;
 
         LyricInfo()
-            : track_(0), measure_(0), verse_(0), voice_(0), wordCount_(0),
-            lyricSize_(0), name_(QString()), lyric_(QString()),
-            font_(0), fontSize_(12), fontStyle_(0) {}
+            : m_track(0), m_measure(0), m_verse(0), m_voice(0), m_wordCount(0),
+            m_lyricSize(0), m_name(QString()), m_lyric(QString()),
+            m_font(0), m_fontSize(12), m_fontStyle(0) {}
     };
 
     void processLyricInfo(const LyricInfo& info);
 
 private:
-    SizeChunk* chunk_;
+    SizeChunk* m_chunk;
 };
 
 class TitleChunkParse : public BasicParse
@@ -2647,14 +2631,14 @@ private:
     void addToOve(const QString& str, unsigned int titleType);
 
 private:
-    unsigned int titleType_;
-    unsigned int annotateType_;
-    unsigned int writerType_;
-    unsigned int copyrightType_;
-    unsigned int headerType_;
-    unsigned int footerType_;
+    unsigned int m_titleType;
+    unsigned int m_annotateType;
+    unsigned int m_writerType;
+    unsigned int m_copyrightType;
+    unsigned int m_headerType;
+    unsigned int m_footerType;
 
-    SizeChunk* chunk_;
+    SizeChunk* m_chunk;
 };
 
 // OveOrganizer.h
@@ -2682,10 +2666,9 @@ private:
     void organizeWedge(Wedge* wedge, int part, int track, Measure* measure, MeasureData* measureData);
 
 private:
-    OveSong* ove_;
+    OveSong* m_ove;
 };
 
-// OveSerialize.h
 class StreamHandle;
 class Block;
 class NameBlock;
@@ -2710,7 +2693,7 @@ public:
 private:
     bool readNameBlock(NameBlock& nameBlock);
     bool readChunkName(Chunk* chunk, const QString& name);
-    bool readSizeChunk(SizeChunk* sizeChunk);   // contains a SizeChunk and data buffer
+    bool readSizeChunk(SizeChunk* sizeChunk); // contains a SizeChunk and data buffer
     bool readDataChunk(Block* block, unsigned int size);
     bool readGroupChunk(GroupChunk* groupChunk);
 
@@ -2726,9 +2709,9 @@ private:
     void messageOut(const QString& str);
 
 private:
-    OveSong* ove_;
-    StreamHandle* streamHandle_;
-    IOveNotify* notify_;
+    OveSong* m_ove;
+    StreamHandle* m_streamHandle;
+    IOveNotify* m_notify;
 };
 }
 
