@@ -15,6 +15,8 @@ class StaffTypeSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * lineCount READ lineCount CONSTANT)
     Q_PROPERTY(PropertyItem * lineDistance READ lineDistance CONSTANT)
     Q_PROPERTY(PropertyItem * stepOffset READ stepOffset CONSTANT)
+    Q_PROPERTY(PropertyItem * isInvisible READ isInvisible CONSTANT)
+    Q_PROPERTY(PropertyItem * color READ color CONSTANT)
 
     Q_PROPERTY(PropertyItem * noteheadSchemeType READ noteheadSchemeType CONSTANT)
     Q_PROPERTY(PropertyItem * isStemless READ isStemless CONSTANT)
@@ -38,6 +40,8 @@ public:
     PropertyItem* lineCount() const;
     PropertyItem* lineDistance() const;
     PropertyItem* stepOffset() const;
+    PropertyItem* isInvisible() const;
+    PropertyItem* color() const;
 
     PropertyItem* noteheadSchemeType() const;
     PropertyItem* isStemless() const;
@@ -55,6 +59,8 @@ private:
     PropertyItem* m_lineCount = nullptr;
     PropertyItem* m_lineDistance = nullptr;
     PropertyItem* m_stepOffset = nullptr;
+    PropertyItem* m_isInvisible = nullptr;
+    PropertyItem* m_color = nullptr;
 
     PropertyItem* m_noteheadSchemeType = nullptr;
     PropertyItem* m_isStemless = nullptr;

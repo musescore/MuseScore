@@ -166,6 +166,19 @@ StyledPopup {
             }
         }
 
+        CheckBox {
+            isIndeterminate: root.model ? root.model.isInvisible.isUndefined : false
+            checked: root.model && !isIndeterminate ? root.model.isInvisible.value : false
+            text: qsTrc("inspector", "Invisible staff lines")
+
+            onClicked: { root.model.isInvisible.value = !checked }
+        }
+
+        ColorSection {
+            titleText: qsTrc("inspector", "Staff line color")
+            color: root.model ? root.model.color : null
+        }
+
         SeparatorLine { anchors.margins: -10 }
 
         InspectorPropertyView {

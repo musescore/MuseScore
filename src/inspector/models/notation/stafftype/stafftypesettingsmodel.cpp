@@ -25,6 +25,8 @@ void StaffTypeSettingsModel::createProperties()
     m_lineCount = buildPropertyItem(Ms::Pid::STAFF_LINES); // int
     m_lineDistance = buildPropertyItem(Ms::Pid::LINE_DISTANCE);
     m_stepOffset = buildPropertyItem(Ms::Pid::STEP_OFFSET); // int
+    m_isInvisible = buildPropertyItem(Ms::Pid::STAFF_INVISIBLE);
+    m_color = buildPropertyItem(Ms::Pid::STAFF_COLOR);
 
     m_noteheadSchemeType = buildPropertyItem(Ms::Pid::HEAD_SCHEME);
     m_isStemless = buildPropertyItem(Ms::Pid::STAFF_STEMLESS);
@@ -55,6 +57,8 @@ void StaffTypeSettingsModel::loadProperties()
     loadPropertyItem(m_lineCount);
     loadPropertyItem(m_lineDistance, formatDoubleFunc);
     loadPropertyItem(m_stepOffset);
+    loadPropertyItem(m_isInvisible);
+    loadPropertyItem(m_color);
 
     loadPropertyItem(m_noteheadSchemeType);
     loadPropertyItem(m_isStemless);
@@ -74,6 +78,8 @@ void StaffTypeSettingsModel::resetProperties()
     m_lineCount->resetToDefault();
     m_lineDistance->resetToDefault();
     m_stepOffset->resetToDefault();
+    m_isInvisible->resetToDefault();
+    m_color->resetToDefault();
 
     m_noteheadSchemeType->resetToDefault();
     m_isStemless->resetToDefault();
@@ -112,6 +118,16 @@ PropertyItem* StaffTypeSettingsModel::lineDistance() const
 PropertyItem* StaffTypeSettingsModel::stepOffset() const
 {
     return m_stepOffset;
+}
+
+PropertyItem* StaffTypeSettingsModel::isInvisible() const
+{
+    return m_isInvisible;
+}
+
+PropertyItem* StaffTypeSettingsModel::color() const
+{
+    return m_color;
 }
 
 PropertyItem* StaffTypeSettingsModel::noteheadSchemeType() const
