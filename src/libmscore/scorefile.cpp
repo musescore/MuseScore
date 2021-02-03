@@ -39,6 +39,7 @@
 #include "mscore.h"
 #include "stafftype.h"
 #include "sym.h"
+#include "scoreOrder.h"
 
 #include "preferences.h"
 
@@ -172,6 +173,13 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
         if ((!MScore::testMode && !MScore::saveTemplateMode) || (i.key() != "platform" && i.key() != "creationDate")) {
             xml.tag(QString("metaTag name=\"%1\"").arg(i.key().toHtmlEscaped()), i.value());
         }
+    }
+
+    if (_scoreOrder && !_scoreOrder->isCustom()) {
+        ScoreOrder* order = _scoreOrder->clone();
+        order->updateInstruments(this);
+        order->write(xml);
+        delete order;
     }
 
     xml.setCurTrack(0);

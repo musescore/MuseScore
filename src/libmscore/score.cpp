@@ -65,6 +65,8 @@
 #include "layoutbreak.h"
 #include "harmony.h"
 #include "mscore.h"
+#include "scoreOrder.h"
+
 #include "bracket.h"
 #include "audio.h"
 #include "instrtemplate.h"
@@ -297,6 +299,7 @@ Score::Score()
     _style  = MScore::defaultStyle();
 //      accInfo = tr("No selection");     // ??
     accInfo = "No selection";
+    _scoreOrder = nullptr;
 }
 
 Score::Score(MasterScore* parent, bool forcePartStyle /* = true */)

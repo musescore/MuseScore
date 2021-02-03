@@ -99,6 +99,7 @@ class UndoStack;
 class Volta;
 class XmlWriter;
 class Channel;
+class ScoreOrder;
 struct Interval;
 struct TEvent;
 struct LayoutContext;
@@ -496,6 +497,7 @@ private:
                                                 ///< saves will not overwrite the backup file.
     bool _defaultsRead        { false };        ///< defaults were read at MusicXML import, allow export of defaults in convertermode
     bool _isPalette           { false };
+    ScoreOrder* _scoreOrder   { nullptr };      ///< used for score ordering
 
     int _mscVersion { MSCVERSION };     ///< version of current loading *.msc file
 
@@ -1037,6 +1039,9 @@ public:
 
     bool isPalette() const { return _isPalette; }
     void setPaletteMode(bool palette) { _isPalette = palette; }
+
+    ScoreOrder* scoreOrder() const { return _scoreOrder; }
+    void setScoreOrder(ScoreOrder* order) { _scoreOrder = order; }
 
     void lassoSelect(const QRectF&);
     void lassoSelectEnd();
