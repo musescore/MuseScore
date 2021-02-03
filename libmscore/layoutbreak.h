@@ -54,6 +54,7 @@ class LayoutBreak final : public Element {
 
       LayoutBreak* clone() const override { return new LayoutBreak(*this); }
       ElementType type() const override   { return ElementType::LAYOUT_BREAK; }
+      int subtype() const override        { return static_cast<int>(_layoutBreakType); }
 
       void setLayoutBreakType(Type);
       Type layoutBreakType() const  { return _layoutBreakType; }
