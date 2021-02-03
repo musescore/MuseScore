@@ -16,20 +16,17 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_IMPORTEXPORT_OVEREADER_H
-#define MU_IMPORTEXPORT_OVEREADER_H
+#include "overeader.h"
 
-#include "notation/inotationreader.h"
+#include "libmscore/score.h"
+#include "notation/notationerrors.h"
 
-namespace mu {
-namespace importexport {
-class OveReader : public notation::INotationReader
+extern Ms::Score::FileError importOve(Ms::MasterScore*, const QString& name);
+
+using namespace mu::iex::ove;
+
+mu::Ret OveReader::read(Ms::MasterScore* score, const io::path& path)
 {
-public:
-
-    Ret read(Ms::MasterScore* score, const io::path& path) override;
-};
+    Ms::Score::FileError err = importOve(score, path.toQString());
+    return mu::notation::scoreFileErrorToRet(err);
 }
-}
-
-#endif // MU_IMPORTEXPORT_OVEREADER_H

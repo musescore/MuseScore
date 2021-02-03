@@ -67,12 +67,12 @@
 #include "libmscore/bracketItem.h"
 
 #include "modularity/ioc.h"
-#include "importexport/iimportexportconfiguration.h"
+#include "importexport/ove/ioveconfiguration.h"
 
 namespace ove {
-static std::shared_ptr<mu::importexport::IImportexportConfiguration> configuration()
+static std::shared_ptr<mu::iex::ove::IOveConfiguration> configuration()
 {
-    return mu::framework::ioc()->resolve<mu::importexport::IImportexportConfiguration>("importexport");
+    return mu::framework::ioc()->resolve<mu::iex::ove::IOveConfiguration>("iex_ove");
 }
 }
 

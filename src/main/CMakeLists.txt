@@ -173,6 +173,7 @@ if (NOT CC_IS_EMSCRIPTEN)
     list(APPEND LINK_LIB iex_guitarpro)
     list(APPEND LINK_LIB iex_midiimport)
     list(APPEND LINK_LIB iex_musedata)
+    list(APPEND LINK_LIB iex_ove)
     list(APPEND LINK_LIB plugins)
 endif()
 

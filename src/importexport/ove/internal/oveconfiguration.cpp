@@ -16,30 +16,21 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_IMPORTEXPORT_IMPORTEXPORTCONFIGURATION_H
-#define MU_IMPORTEXPORT_IMPORTEXPORTCONFIGURATION_H
+#include "oveconfiguration.h"
 
-#include "../iimportexportconfiguration.h"
+#include "settings.h"
 
-namespace mu::importexport {
-class ImportexportConfiguration : public IImportexportConfiguration
+using namespace mu::framework;
+using namespace mu::iex::ove;
+
+static const Settings::Key IMPORT_OVERTUNE_CHARSET_KEY("iex_ove", "import/overture/charset");
+
+void OveConfiguration::init()
 {
-public:
-    void init();
-
-    std::string importGuitarProCharset() const override;
-
-    int exportPdfDpiResolution() const override;
-
-    void setExportPngDpiResolution(std::optional<float> dpi) override;
-    float exportPngDpiResolution() const override;
-
-    bool exportPngWithTransparentBackground() const override;
-
-private:
-
-    std::optional<float> m_customExportPngDpi;
-};
+    settings()->setDefaultValue(IMPORT_OVERTUNE_CHARSET_KEY, Val("GBK"));
 }
 
-#endif // MU_IMPORTEXPORT_IMPORTEXPORTCONFIGURATION_H
+std::string OveConfiguration::importOvertuneCharset() const
+{
+    return settings()->value(IMPORT_OVERTUNE_CHARSET_KEY).toString();
+}
