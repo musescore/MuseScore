@@ -1069,7 +1069,7 @@ bool Segment::hasElements(int minTrack, int maxTrack) const
 
 bool Segment::allElementsInvisible() const
       {
-      if (isType(SegmentType::BarLineType | SegmentType::ChordRest | SegmentType::Breath))
+      if (isType(SegmentType::BarLineType | SegmentType::ChordRest))
             return false;
 
       for (Element* e : _elist) {
