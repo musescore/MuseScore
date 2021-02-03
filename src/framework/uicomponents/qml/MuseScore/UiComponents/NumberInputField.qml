@@ -10,8 +10,12 @@ Item {
     property int maxValue: 999
     property int value: 0
 
+    property alias font: textField.font
+
     implicitWidth: textField.contentWidth
     implicitHeight: 30
+
+    opacity: enabled ? 1 : ui.theme.itemOpacityDisabled
 
     QtObject {
         id: privateProperties
@@ -54,7 +58,6 @@ Item {
             id: textFieldBackground
 
             color: "transparent"
-            opacity: 1
         }
 
         cursorDelegate: Item {}
