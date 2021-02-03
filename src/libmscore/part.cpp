@@ -37,8 +37,9 @@ Part::Part(Score* s)
     static std::atomic_int currentId { 0 };
     _id = QString::number(++currentId);
 
-    _color = DEFAULT_COLOR;
-    _show  = true;
+    _color   = DEFAULT_COLOR;
+    _show    = true;
+    _soloist = false;
     _instruments.setInstrument(new Instrument, -1);     // default instrument
     _preferSharpFlat = PreferSharpFlat::DEFAULT;
 }
@@ -127,6 +128,8 @@ bool Part::readProperties(XmlReader& e)
         _partName = e.readElementText();
     } else if (tag == "show") {
         _show = e.readInt();
+    } else if (tag == "soloist") {
+        _soloist = e.readInt();
     } else if (tag == "preferSharpFlat") {
         _preferSharpFlat
             =e.readElementText() == "sharps" ? PreferSharpFlat::SHARPS : PreferSharpFlat::FLATS;

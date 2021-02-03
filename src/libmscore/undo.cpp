@@ -2735,4 +2735,15 @@ void MoveTremolo::undo(EditData*)
     trem->setChords(oldC1, oldC2);
     trem->setParent(oldC1);
 }
+
+//---------------------------------------------------------
+//   ChangeScoreOrder
+//---------------------------------------------------------
+
+void ChangeScoreOrder::flip(EditData*)
+{
+    ScoreOrder* s = score->scoreOrder();
+    score->setScoreOrder(order);
+    order = s;
+}
 }

@@ -23,6 +23,7 @@
 #include "barline.h"
 #include "excerpt.h"
 #include "spanner.h"
+#include "scoreOrder.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -32,6 +33,7 @@ namespace Ms {
 
 bool Score::read(XmlReader& e)
 {
+    ScoreOrder* order { nullptr };
     while (e.readNextStartElement()) {
         e.setTrack(-1);
         const QStringRef& tag(e.name());
@@ -106,6 +108,9 @@ bool Score::read(XmlReader& e)
         } else if (tag == "metaTag") {
             QString name = e.attribute("name");
             setMetaTag(name, e.readElementText());
+        } else if (tag == "Order") {
+            order = new ScoreOrder(e.attribute("id"));
+            order->read(e);
         } else if (tag == "Part") {
             Part* part = new Part(this);
             part->read(e);
@@ -245,6 +250,30 @@ bool Score::read(XmlReader& e)
         }
     }
 #endif
+    // Make sure every instrument has an instrumentId set.
+    for (Part* part : parts()) {
+        const InstrumentList* il = part->instruments();
+        for (auto it = il->begin(); it != il->end(); it++) {
+            static_cast<Instrument*>(it->second)->updateInstrumentId();
+        }
+    }
+    if (order) {
+        ScoreOrder* defined = scoreOrders.findByName(order->getName());
+        if (defined) {
+            if (defined->isScoreOrder(this)) {
+                // The order in the score file matches a score order
+                // which is already defined so use that order.
+                setScoreOrder(defined);
+                delete order;
+            } else {
+                // The order in the score file is already defined in the score order
+                // but the order is of the instruments is not the same so use the
+                // order as a customized version of the already defined order.
+                scoreOrders.addScoreOrder(order);
+                setScoreOrder(order);
+            }
+        }
+    }
 
     if (!masterScore()->omr()) {
         masterScore()->setShowOmr(false);
@@ -252,7 +281,7 @@ bool Score::read(XmlReader& e)
 
     fixTicks();
 
-    for (Part* p : _parts) {
+    for (Part* p : qAsConst(_parts)) {
         p->updateHarmonyChannels(false);
     }
 
