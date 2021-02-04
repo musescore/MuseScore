@@ -25,9 +25,10 @@
 #include "actions/iactionsdispatcher.h"
 #include "uicomponents/uicomponentstypes.h"
 #include "playback/iplaybackcontroller.h"
+#include "async/asyncable.h"
 
 namespace mu::playback {
-class PlaybackSettingsModel : public QAbstractListModel
+class PlaybackSettingsModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
@@ -42,7 +43,7 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void load();
-    Q_INVOKABLE void handleAction(const QString& action);
+    Q_INVOKABLE void handleAction(const QString& actionCode);
 
 private:
     enum Roles {
@@ -53,10 +54,10 @@ private:
         SectionRole
     };
 
-    void updateCheckedState();
+    void updateCheckedState(const actions::ActionCode& actionCode);
 
-    std::string resolveSection(const std::string& actionCode) const;
-    bool isActionEnabled(const std::string& actionCode) const;
+    std::string resolveSection(const actions::ActionCode& actionCode) const;
+    bool isActionEnabled(const actions::ActionCode& actionCode) const;
 
     QList<uicomponents::MenuItem> m_items;
 };

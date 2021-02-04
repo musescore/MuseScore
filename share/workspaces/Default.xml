@@ -3516,6 +3516,8 @@
       <action>play</action>
       <action>loop</action>
       <action>metronome</action>
+      <action>loop-in</action>
+      <action>loop-out</action>
       </Toolbar>
     </Workspace>
   </museScore>

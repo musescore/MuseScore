@@ -25,19 +25,27 @@ using namespace mu::midi;
 using namespace mu::notation;
 using namespace mu::async;
 using namespace mu::audio;
+using namespace mu::actions;
+
+static const ActionCode METRONOME_CODE("metronome");
+static const ActionCode MIDI_ON_CODE("midi-on");
+static const ActionCode COUNT_IN_CODE("countin");
+static const ActionCode PAN_CODE("pan");
+static const ActionCode REPEAT_CODE("repeat");
 
 void PlaybackController::init()
 {
     dispatcher()->reg(this, "play", this, &PlaybackController::togglePlay);
     dispatcher()->reg(this, "rewind", this, &PlaybackController::rewindToStart);
     dispatcher()->reg(this, "loop", this, &PlaybackController::loopPlayback);
-    dispatcher()->reg(this, "repeat", this, &PlaybackController::togglePlayRepeats);
-    dispatcher()->reg(this, "pan", this, &PlaybackController::toggleAutomaticallyPan);
-    dispatcher()->reg(this, "metronome", this, &PlaybackController::toggleMetronome);
-    dispatcher()->reg(this, "midi-on", this, &PlaybackController::toggleMidiInput);
-    dispatcher()->reg(this, "countin", this, &PlaybackController::toggleCountIn);
     dispatcher()->reg(this, "loop-in", this, &PlaybackController::setLoopInPosition);
     dispatcher()->reg(this, "loop-out", this, &PlaybackController::setLoopOutPosition);
+
+    dispatcher()->reg(this, REPEAT_CODE, this, &PlaybackController::togglePlayRepeats);
+    dispatcher()->reg(this, PAN_CODE, this, &PlaybackController::toggleAutomaticallyPan);
+    dispatcher()->reg(this, METRONOME_CODE, this, &PlaybackController::toggleMetronome);
+    dispatcher()->reg(this, MIDI_ON_CODE, this, &PlaybackController::toggleMidiInput);
+    dispatcher()->reg(this, COUNT_IN_CODE, this, &PlaybackController::toggleCountIn);
 
     onNotationChanged();
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
@@ -212,30 +220,35 @@ void PlaybackController::togglePlayRepeats()
 {
     bool playRepeatsEnabled = configuration()->isPlayRepeatsEnabled();
     configuration()->setIsPlayRepeatsEnabled(!playRepeatsEnabled);
+    notifyActionEnabledChanged(REPEAT_CODE);
 }
 
 void PlaybackController::toggleAutomaticallyPan()
 {
     bool panEnabled = configuration()->isAutomaticallyPanEnabled();
     configuration()->setIsAutomaticallyPanEnabled(!panEnabled);
+    notifyActionEnabledChanged(PAN_CODE);
 }
 
 void PlaybackController::toggleMetronome()
 {
     bool metronomeEnabled = configuration()->isMetronomeEnabled();
     configuration()->setIsMetronomeEnabled(!metronomeEnabled);
+    notifyActionEnabledChanged(METRONOME_CODE);
 }
 
 void PlaybackController::toggleMidiInput()
 {
     bool midiInputEnabled = configuration()->isMidiInputEnabled();
     configuration()->setIsMidiInputEnabled(!midiInputEnabled);
+    notifyActionEnabledChanged(MIDI_ON_CODE);
 }
 
 void PlaybackController::toggleCountIn()
 {
     bool countInEnabled = configuration()->isCountInEnabled();
     configuration()->setIsCountInEnabled(!countInEnabled);
+    notifyActionEnabledChanged(COUNT_IN_CODE);
 }
 
 void PlaybackController::loopPlayback()
@@ -253,15 +266,25 @@ void PlaybackController::setLoopOutPosition()
     NOT_IMPLEMENTED;
 }
 
-bool PlaybackController::isActionEnabled(const std::string &actionCode) const
+void PlaybackController::notifyActionEnabledChanged(const ActionCode& actionCode)
+{
+    m_actionEnabledChanged.send(actionCode);
+}
+
+bool PlaybackController::isActionEnabled(const ActionCode& actionCode) const
 {
     QMap<std::string, bool> isEnabled {
-        { "midi-on", configuration()->isMidiInputEnabled() },
-        { "repeat", configuration()->isPlayRepeatsEnabled() },
-        { "pan", configuration()->isAutomaticallyPanEnabled() },
-        { "metronome", configuration()->isMetronomeEnabled() },
-        { "countin", configuration()->isCountInEnabled() }
+        { MIDI_ON_CODE, configuration()->isMidiInputEnabled() },
+        { REPEAT_CODE, configuration()->isPlayRepeatsEnabled() },
+        { PAN_CODE, configuration()->isAutomaticallyPanEnabled() },
+        { METRONOME_CODE, configuration()->isMetronomeEnabled() },
+        { COUNT_IN_CODE, configuration()->isCountInEnabled() }
     };
 
     return isEnabled[actionCode];
+}
+
+Channel<ActionCode> PlaybackController::actionEnabledChanged() const
+{
+    return m_actionEnabledChanged;
 }

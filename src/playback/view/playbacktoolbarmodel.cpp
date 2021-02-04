@@ -50,6 +50,7 @@ QVariant PlaybackToolBarModel::data(const QModelIndex& index, int role) const
     case CodeRole: return QString::fromStdString(item.code);
     case EnabledRole: return item.enabled;
     case CheckedRole: return item.checked;
+    case IsAdditionalRole: return isAdditionalAction(item.code);
     }
     return QVariant();
 }
@@ -66,7 +67,8 @@ QHash<int,QByteArray> PlaybackToolBarModel::roleNames() const
         { HintRole, "hint" },
         { IconRole, "icon" },
         { EnabledRole, "enabled" },
-        { CheckedRole, "checked" }
+        { CheckedRole, "checked" },
+        { IsAdditionalRole, "isAdditional" }
     };
 
     return roles;
@@ -98,6 +100,10 @@ void PlaybackToolBarModel::load()
     workspaceManager()->currentWorkspace().ch.onReceive(this, [this](IWorkspacePtr) {
         load();
     });
+
+    playbackController()->actionEnabledChanged().onReceive(this, [this](const ActionCode&) {
+        updateState();
+    });
 }
 
 ActionList PlaybackToolBarModel::currentWorkspaceActions() const
@@ -115,7 +121,7 @@ ActionList PlaybackToolBarModel::currentWorkspaceActions() const
     }
 
     ActionList actions;
-    for (const std::string& actionCode : toolbar->actions) {
+    for (const ActionCode& actionCode : toolbar->actions) {
         actions.push_back(actionsRegister()->action(actionCode));
     }
 
@@ -210,25 +216,22 @@ void PlaybackToolBarModel::handleAction(const QString& action)
 
 void PlaybackToolBarModel::updateState()
 {
-    if (playbackController()->isPlayAllowed()) {
-        for (MenuItem& item : m_items) {
-            item.enabled = true;
-            item.checked = false;
-        }
+    bool isPlayAllowed = playbackController()->isPlayAllowed();
 
+    for (MenuItem& item : m_items) {
+        item.enabled = isPlayAllowed;
+        item.checked = playbackController()->isActionEnabled(item.code);
+    }
+
+    if (isPlayAllowed) {
         bool isPlaying = playbackController()->isPlaying();
         item("play").iconCode = isPlaying ? IconCode::Code::PAUSE : IconCode::Code::PLAY;
-    } else {
-        for (MenuItem& item : m_items) {
-            item.enabled = false;
-            item.checked = false;
-        }
     }
 
     emit dataChanged(index(0), index(rowCount() - 1));
 }
 
-MenuItem& PlaybackToolBarModel::item(const actions::ActionCode& actionCode)
+MenuItem& PlaybackToolBarModel::item(const ActionCode& actionCode)
 {
     for (MenuItem& item : m_items) {
         if (item.code == actionCode) {
@@ -249,4 +252,9 @@ MenuItem PlaybackToolBarModel::settingsItem() const
                       QT_TRANSLATE_NOOP("action", "Open playback settings"),
                       IconCode::Code::SETTINGS_COG
                       );
+}
+
+bool PlaybackToolBarModel::isAdditionalAction(const ActionCode& actionCode) const
+{
+    return actionCode == "loop-in" || actionCode == "loop-out";
 }

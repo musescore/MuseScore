@@ -39,7 +39,18 @@ Rectangle {
                 contentHeight: 32
                 contentWidth: contentHeight
 
-                model: playbackModel
+                model: FilterProxyModel {
+                    sourceModel: playbackModel
+
+                    filters: [
+                        FilterValue {
+                            roleName: "isAdditional"
+                            roleValue: false
+                            compareType: CompareType.Equal
+                            enabled: !root.floating
+                        }
+                    ]
+                }
 
                 orientation: Qt.Horizontal
                 interactive: false
@@ -54,9 +65,7 @@ Rectangle {
                     normalStateColor: model.checked ? ui.theme.accentColor : "transparent"
 
                     onClicked: {
-                        if (enabled) {
-                            playbackModel.handleAction(model.code)
-                        }
+                        playbackModel.handleAction(model.code)
                     }
                 }
             }
