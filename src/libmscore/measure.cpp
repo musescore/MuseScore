@@ -69,6 +69,7 @@
 #include "system.h"
 #include "tempotext.h"
 #include "measurenumber.h"
+#include "mmrestrange.h"
 #include "tie.h"
 #include "tiemap.h"
 #include "timesig.h"
@@ -94,6 +95,7 @@ namespace Ms {
 MStaff::~MStaff()
 {
     delete m_noText;
+    delete m_mmRangeText;
     delete m_lines;
     delete m_vspacerUp;
     delete m_vspacerDown;
@@ -102,6 +104,7 @@ MStaff::~MStaff()
 MStaff::MStaff(const MStaff& m)
 {
     m_noText    = 0;
+    m_mmRangeText = 0;
     m_lines     = new StaffLines(*m.m_lines);
     m_hasVoices = m.m_hasVoices;
     m_vspacerUp = 0;
@@ -132,6 +135,9 @@ void MStaff::setScore(Score* score)
     if (m_noText) {
         m_noText->setScore(score);
     }
+    if (m_mmRangeText) {
+        m_mmRangeText->setScore(score);
+    }
 }
 
 //---------------------------------------------------------
@@ -151,6 +157,9 @@ void MStaff::setTrack(int track)
     }
     if (m_noText) {
         m_noText->setTrack(track);
+    }
+    if (m_mmRangeText) {
+        m_mmRangeText->setTrack(track);
     }
 }
 
@@ -269,7 +278,6 @@ MStaff* Measure::mstaff(int staffIndex) const
 bool Measure::hasVoices(int staffIdx) const
 {
     MStaff* staff = mstaff(staffIdx);
-
     return staff ? staff->hasVoices() : false;
 }
 
@@ -319,6 +327,16 @@ void Measure::setStaffStemless(int staffIdx, bool stemless)
     if (staff) {
         staff->setStemless(stemless);
     }
+}
+
+void Measure::setMMRangeText(int staffIdx, MMRestRange* t)
+{
+    m_mstaves[staffIdx]->setMMRangeText(t);
+}
+
+MMRestRange* Measure::mmRangeText(int staffIdx) const
+{
+    return m_mstaves[staffIdx]->mmRangeText();
 }
 
 //---------------------------------------------------------
@@ -464,7 +482,7 @@ AccidentalVal Measure::findAccidental(Segment* s, int staffIdx, int line, bool& 
 
 //---------------------------------------------------------
 //   tick2pos
-//    return x position for tick relative to System
+///    return x position for tick relative to System
 //---------------------------------------------------------
 
 qreal Measure::tick2pos(Fraction tck) const
@@ -614,6 +632,51 @@ void Measure::layoutMeasureNumber()
                 }
             }
         }
+    }
+}
+
+void Measure::layoutMMRestRange()
+{
+    if (!isMMRest() || !score()->styleB(Sid::mmRestShowMeasureNumberRange)) {
+        // Remove existing
+        for (unsigned staffIdx = 0; staffIdx < m_mstaves.size(); ++staffIdx) {
+            MStaff* ms = m_mstaves[staffIdx];
+            MMRestRange* rr = ms->mmRangeText();
+            if (rr) {
+                if (rr->generated()) {
+                    score()->removeElement(rr);
+                } else {
+                    score()->undo(new RemoveElement(rr));
+                }
+            }
+        }
+
+        return;
+    }
+
+    QString s;
+    if (mmRestCount() > 1) {
+        // middle char is an en dash (not em)
+        s = QString("%1–%2").arg(no() + 1).arg(no() + mmRestCount());
+    } else {
+        // If the minimum range to create a mmrest is set to 1,
+        // then simply show the measure number as there is no range
+        s = QString("%1").arg(no() + 1);
+    }
+
+    for (unsigned staffIdx = 0; staffIdx < m_mstaves.size(); ++staffIdx) {
+        MStaff* ms = m_mstaves[staffIdx];
+        MMRestRange* rr = ms->mmRangeText();
+        if (!rr) {
+            rr = new MMRestRange(score());
+            rr->setTrack(staffIdx * VOICES);
+            rr->setGenerated(true);
+            rr->setParent(this);
+            add(rr);
+        }
+        // setXmlText is reimplemented to take care of brackets
+        rr->setXmlText(s);
+        rr->layout();
     }
 }
 
@@ -866,6 +929,15 @@ void Measure::add(Element* e)
         }
         break;
 
+    case ElementType::MMREST_RANGE:
+        if (e->staffIdx() < int(m_mstaves.size())) {
+            if (e->isStyled(Pid::OFFSET)) {
+                e->setOffset(e->propertyDefault(Pid::OFFSET).toPointF());
+            }
+            m_mstaves[e->staffIdx()]->setMMRangeText(toMMRestRange(e));
+        }
+        break;
+
     case ElementType::SPACER:
     {
         Spacer* sp = toSpacer(e);
@@ -962,6 +1034,10 @@ void Measure::remove(Element* e)
 
     case ElementType::MEASURE_NUMBER:
         m_mstaves[e->staffIdx()]->setNoText(nullptr);
+        break;
+
+    case ElementType::MMREST_RANGE:
+        m_mstaves[e->staffIdx()]->setMMRangeText(nullptr);
         break;
 
     case ElementType::SPACER:
@@ -1932,6 +2008,10 @@ void Measure::write(XmlWriter& xml, int staff, bool writeSystemElements, bool fo
         mstaff->noText()->write(xml);
     }
 
+    if (mstaff->mmRangeText() && !mstaff->mmRangeText()->generated()) {
+        mstaff->mmRangeText()->write(xml);
+    }
+
     if (mstaff->vspacerUp()) {
         xml.tag("vspacerUp", mstaff->vspacerUp()->gap() / _spatium);
     }
@@ -2085,6 +2165,11 @@ void Measure::read(XmlReader& e, int staffIdx)
             noText->read(e);
             noText->setTrack(e.track());
             add(noText);
+        } else if (tag == "MMRestRange") {
+            MMRestRange* range = new MMRestRange(score());
+            range->read(e);
+            range->setTrack(e.track());
+            add(range);
         } else if (MeasureBase::readProperties(e)) {
         } else {
             e.unknown();

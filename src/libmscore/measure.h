@@ -29,6 +29,7 @@ class Tuplet;
 class Staff;
 class Chord;
 class MeasureNumber;
+class MMRestRange;
 class ChordRest;
 class Score;
 class MuseScoreView;
@@ -69,6 +70,9 @@ public:
     MeasureNumber* noText() const { return m_noText; }
     void setNoText(MeasureNumber* t) { m_noText = t; }
 
+    MMRestRange* mmRangeText() const { return m_mmRangeText; }
+    void setMMRangeText(MMRestRange* r) { m_mmRangeText = r; }
+
     StaffLines* lines() const { return m_lines; }
     void setLines(StaffLines* l) { m_lines = l; }
 
@@ -96,6 +100,7 @@ public:
 
 private:
     MeasureNumber* m_noText { nullptr };      ///< Measure number text object
+    MMRestRange* m_mmRangeText { nullptr };    ///< Multi measure rest range text object
     StaffLines* m_lines     { nullptr };
     Spacer* m_vspacerUp     { nullptr };
     Spacer* m_vspacerDown   { nullptr };
@@ -166,6 +171,9 @@ public:
     MeasureNumber* noText(int staffIdx) const { return m_mstaves[staffIdx]->noText(); }
     void setNoText(int staffIdx, MeasureNumber* t) { m_mstaves[staffIdx]->setNoText(t); }
 
+    void setMMRangeText(int staffIdx, MMRestRange*);
+    MMRestRange* mmRangeText(int staffIdx) const;
+
     void createStaves(int);
 
     MeasureNumberMode measureNumberMode() const { return m_noMode; }
@@ -195,6 +203,7 @@ public:
     bool showsMeasureNumber();
     bool showsMeasureNumberInAutoMode();
     void layoutMeasureNumber();
+    void layoutMMRestRange();
 
     Chord* findChord(Fraction tick, int track);
     ChordRest* findChordRest(Fraction tick, int track);

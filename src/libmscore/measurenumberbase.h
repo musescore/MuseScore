@@ -17,26 +17,36 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef __MEASURENUMBER_H__
-#define __MEASURENUMBER_H__
+#ifndef __MEASURENUMBERBASE_H__
+#define __MEASURENUMBERBASE_H__
 
-#include "measurenumberbase.h"
+#include "textbase.h"
 
 namespace Ms {
 //---------------------------------------------------------
-//   MeasureNumber
+//   MeasureNumberBase
+///   The basic element making measure numbers.
+///   Reimplemented by MMRestRange
 //---------------------------------------------------------
 
-class MeasureNumber : public MeasureNumberBase
+class MeasureNumberBase : public TextBase
 {
+    M_PROPERTY(HPlacement, hPlacement, setHPlacement)    // Horizontal Placement
+
 public:
-    MeasureNumber(Score* = nullptr, Tid tid = Tid::MEASURE_NUMBER);
-    MeasureNumber(const MeasureNumber& other);
+    MeasureNumberBase(Score* = nullptr, Tid = Tid::DEFAULT);
+    MeasureNumberBase(const MeasureNumberBase& other);
 
-    virtual ElementType type() const override { return ElementType::MEASURE_NUMBER; }
-    virtual MeasureNumber* clone() const override { return new MeasureNumber(*this); }
-
+    virtual QVariant getProperty(Pid id) const override;
+    virtual bool setProperty(Pid id, const QVariant& val) override;
     virtual QVariant propertyDefault(Pid id) const override;
+
+    virtual bool readProperties(XmlReader&) override;
+
+    virtual void layout() override;
+    Measure* measure() const { return toMeasure(parent()); }
+
+    virtual bool isEditable() const override { return false; }   // The measure numbers' text should not be editable
 };
 }     // namespace Ms
 
