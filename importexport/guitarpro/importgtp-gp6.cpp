@@ -1224,6 +1224,8 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                                 Staff* staff        = note->staff();
                                                 int fretNumber      = fretNum.toInt();
                                                 int musescoreString = staff->part()->instrument()->stringData()->strings() - 1 - stringNum.toInt();
+                                                if (fretNumber > 0 && musescoreString == 4)
+                                                      fretNumber = staff->part()->instrument()->stringData()->adjustBanjo5thFret(fretNumber);
                                                 auto pitch          = staff->part()->instrument()->stringData()->getPitch(musescoreString, fretNumber, nullptr, Fraction(0,1));
                                                 note->setFret(fretNumber);
                                                 // we need to turn this string number for GP to the correct string number for musescore

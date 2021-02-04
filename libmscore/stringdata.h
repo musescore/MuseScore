@@ -28,6 +28,7 @@ class Note;
 struct instrString {
       int   pitch;      // the pitch of the string
       bool  open;       // true: string is open | false: string is fretted
+      int   startFret = 0;  // banjo 5th string starts on 5th fret
 
       bool operator==(const instrString& d) const { return d.pitch == pitch && d.open == open; }
       };
@@ -44,11 +45,13 @@ class StringData {
       int         fret(int pitch, int string, int pitchOffset) const;
       int         getPitch(int string, int fret, int pitchOffset) const;
       void        sortChordNotes(QMap<int, Note *>& sortedNotes, const Chord* chord, int pitchOffset, int* count) const;
+      void        configBanjo5thString();
 
 public:
       StringData() {}
       StringData(int numFrets, int numStrings, int strings[]);
       StringData(int numFrets, QList<instrString>& strings);
+      void        set(const StringData& src);
       bool        convertPitch(int pitch, Staff* staff, const Fraction& tick, int* string, int* fret) const;
       int         fret(int pitch, int string, Staff* staff, const Fraction& tick) const;
       void        fretChords(Chord * chord) const;
@@ -64,6 +67,7 @@ public:
       void        write(XmlWriter&) const;
       void        writeMusicXML(XmlWriter& xml) const;
       bool operator==(const StringData& d) const { return d._frets == _frets && d.stringTable == stringTable; }
+      int         adjustBanjo5thFret(int fret) const;
       };
 
 }     // namespace Ms

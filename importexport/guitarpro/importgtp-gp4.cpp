@@ -434,6 +434,8 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
       // dead note represented as high numbers - fix to zero
       if (fretNumber > 99 || fretNumber == -1)
             fretNumber = 0;
+      if (fretNumber > 0 && string == 4)
+          fretNumber = staff->part()->instrument()->stringData()->adjustBanjo5thFret(fretNumber);
       int pitch = staff->part()->instrument()->stringData()->getPitch(string, fretNumber, nullptr, Fraction(0,1));
       note->setFret(fretNumber);
       note->setString(string);

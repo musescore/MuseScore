@@ -1278,7 +1278,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
 			      case 9: fret += 28; break;
 			      default: fret += octave * 12;
 			      }
-		      harmonicNote->setString(note->string());
+		    harmonicNote->setString(note->string());
 			harmonicNote->setFret(fret);
 			harmonicNote->setPitch(staff->part()->instrument()->stringData()->getPitch(note->string(), fret, nullptr, Fraction(0,1)));
 			harmonicNote->setTpcFromPitch();
@@ -1437,6 +1437,8 @@ bool GuitarPro5::readNote(int string, Note* note)
             note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
             note->setGhost(true);
             }
+      if (fretNumber > 0 && string == 4)
+          fretNumber = staff->part()->instrument()->stringData()->adjustBanjo5thFret(fretNumber);
       int pitch = staff->part()->instrument()->stringData()->getPitch(string, fretNumber, nullptr, Fraction(0,1));
       note->setFret(fretNumber);
       note->setString(string);
