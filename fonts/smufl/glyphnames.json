@@ -149,7 +149,7 @@
 	},
 	"accSagittal35LargeDiesisUp": {
 		"codepoint": "U+E30E",
-		"description": "35 large diesis up, (35L, ~13L, ~125L,  sharp less 35M), 2\u00b050 up"
+		"description": "35 large diesis up, (35L, ~13L, ~125L, sharp less 35M), 2\u00b050 up"
 	},
 	"accSagittal35MediumDiesisDown": {
 		"codepoint": "U+E309",
@@ -409,7 +409,7 @@
 	},
 	"accSagittalDoubleFlat5v23SUp": {
 		"codepoint": "U+E383",
-		"description": "Double flat 5:23S-up, 8\u00b0 down  [60 EDO], 4/5-tone down"
+		"description": "Double flat 5:23S-up, 8\u00b0 down [60 EDO], 4/5-tone down"
 	},
 	"accSagittalDoubleFlat5v7kUp": {
 		"codepoint": "U+E333",
