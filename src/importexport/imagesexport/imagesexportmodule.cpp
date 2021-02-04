@@ -16,44 +16,44 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "importexportmodule.h"
+#include "imagesexportmodule.h"
 
 #include "log.h"
-#include "config.h"
 #include "modularity/ioc.h"
-
-#include "notation/inotationreadersregister.h"
 
 #include "notation/inotationwritersregister.h"
 #include "internal/pdfwriter.h"
 #include "internal/pngwriter.h"
 #include "internal/svgwriter.h"
 
-#include "internal/importexportconfiguration.h"
+#include "internal/imagesexportconfiguration.h"
 
-using namespace mu::importexport;
+using namespace mu::iex::imagesexport;
 using namespace mu::notation;
 
-static std::shared_ptr<ImportexportConfiguration> s_configuration = std::make_shared<ImportexportConfiguration>();
+static std::shared_ptr<ImagesExportConfiguration> s_configuration = std::make_shared<ImagesExportConfiguration>();
 
-std::string ImportExportModule::moduleName() const
+std::string ImagesExportModule::moduleName() const
 {
-    return "importexport";
+    return "iex_imagesexport";
 }
 
-void ImportExportModule::registerExports()
+void ImagesExportModule::registerExports()
 {
-    framework::ioc()->registerExport<IImportexportConfiguration>(moduleName(), s_configuration);
+    framework::ioc()->registerExport<IImagesExportConfiguration>(moduleName(), s_configuration);
 }
 
-void ImportExportModule::onInit(const framework::IApplication::RunMode&)
+void ImagesExportModule::resolveImports()
 {
-    s_configuration->init();
-
     auto writers = framework::ioc()->resolve<INotationWritersRegister>(moduleName());
     if (writers) {
         writers->reg({ "pdf" }, std::make_shared<PdfWriter>());
         writers->reg({ "svg" }, std::make_shared<SvgWriter>());
         writers->reg({ "png" }, std::make_shared<PngWriter>());
     }
+}
+
+void ImagesExportModule::onInit(const framework::IApplication::RunMode&)
+{
+    s_configuration->init();
 }
