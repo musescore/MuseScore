@@ -17,22 +17,22 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_IMPORTEXPORT_SVGWRITER_H
-#define MU_IMPORTEXPORT_SVGWRITER_H
+#ifndef MU_IMPORTEXPORT_PNGWRITER_H
+#define MU_IMPORTEXPORT_PNGWRITER_H
 
 #include "notation/abstractnotationwriter.h"
 
-namespace mu::importexport {
-class SvgWriter : public notation::AbstractNotationWriter
+#include "../iimagesexportconfiguration.h"
+#include "modularity/ioc.h"
+
+namespace mu::iex::imagesexport {
+class PngWriter : public notation::AbstractNotationWriter
 {
+    INJECT(iex_imagesexport, IImagesExportConfiguration, configuration)
+
 public:
     Ret write(const notation::INotationPtr notation, system::IODevice& destinationDevice, const Options& options = Options()) override;
-
-private:
-    using NotesColors = QHash<int /* noteIndex */, QColor>;
-
-    NotesColors parseNotesColors(const QVariant& obj) const;
 };
 }
 
-#endif // MU_IMPORTEXPORT_SVGWRITER_H
+#endif // MU_IMPORTEXPORT_PNGWRITER_H

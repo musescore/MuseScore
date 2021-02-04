@@ -16,34 +16,28 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_IMPORTEXPORT_IIMPORTEXPORTCONFIGURATION_H
-#define MU_IMPORTEXPORT_IIMPORTEXPORTCONFIGURATION_H
+#ifndef MU_IMPORTEXPORT_IMAGESEXPORTCONFIGURATION_H
+#define MU_IMPORTEXPORT_IMAGESEXPORTCONFIGURATION_H
 
-#include <string>
-#include <optional>
-#include "modularity/imoduleexport.h"
+#include "../iimagesexportconfiguration.h"
 
-namespace mu::importexport {
-class IImportexportConfiguration : MODULE_EXPORT_INTERFACE
+namespace mu::iex::imagesexport {
+class ImagesExportConfiguration : public IImagesExportConfiguration
 {
-    INTERFACE_ID(IImportexportConfiguration)
-
 public:
-    virtual ~IImportexportConfiguration() = default;
+    void init();
 
-    // GuitarPro
-    virtual std::string importGuitarProCharset() const = 0;
+    int exportPdfDpiResolution() const override;
 
-    // Pdf
-    virtual int exportPdfDpiResolution() const = 0;
+    void setExportPngDpiResolution(std::optional<float> dpi) override;
+    float exportPngDpiResolution() const override;
 
-    // Png
-    virtual float exportPngDpiResolution() const = 0;
-    virtual bool exportPngWithTransparentBackground() const = 0;
+    bool exportPngWithTransparentBackground() const override;
 
-    //! NOTE Maybe set from command line
-    virtual void setExportPngDpiResolution(std::optional<float> dpi) = 0;
+private:
+
+    std::optional<float> m_customExportPngDpi;
 };
 }
 
-#endif // MU_IMPORTEXPORT_IIMPORTEXPORTCONFIGURATION_H
+#endif // MU_IMPORTEXPORT_IMAGESEXPORTCONFIGURATION_H

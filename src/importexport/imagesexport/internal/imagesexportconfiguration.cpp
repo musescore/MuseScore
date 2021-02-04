@@ -16,50 +16,37 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "importexportconfiguration.h"
+#include "imagesexportconfiguration.h"
 
 #include "settings.h"
 
 #include "libmscore/mscore.h"
 
 using namespace mu::framework;
-using namespace mu::importexport;
+using namespace mu::iex::imagesexport;
 
-static const std::string module_name("importexport");
+static const Settings::Key EXPORT_PDF_DPI_RESOLUTION_KEY("iex_imagesexport", "export/pdf/dpi");
+static const Settings::Key EXPORT_PNG_DPI_RESOLUTION_KEY("iex_imagesexport", "export/png/resolution");
+static const Settings::Key EXPORT_PNG_USE_TRASNPARENCY_KEY("iex_imagesexport", "export/png/useTransparency");
 
-static const Settings::Key SHORTEST_NOTE_KEY(module_name, "io/midi/shortestNote");
-static const Settings::Key IMPORT_GUITARPRO_CHARSET_KEY(module_name, "import/guitarpro/charset");
-static const Settings::Key EXPORT_PDF_DPI_RESOLUTION_KEY(module_name, "export/pdf/dpi");
-static const Settings::Key EXPORT_PNG_DPI_RESOLUTION_KEY(module_name, "export/png/resolution");
-static const Settings::Key EXPORT_PNG_USE_TRASNPARENCY_KEY(module_name, "export/png/useTransparency");
-
-void ImportexportConfiguration::init()
+void ImagesExportConfiguration::init()
 {
-    settings()->setDefaultValue(SHORTEST_NOTE_KEY, Val(Ms::MScore::division / 4));
-
-    settings()->setDefaultValue(IMPORT_GUITARPRO_CHARSET_KEY, Val("UTF-8"));
-
     settings()->setDefaultValue(EXPORT_PNG_DPI_RESOLUTION_KEY, Val(Ms::DPI));
     settings()->setDefaultValue(EXPORT_PNG_USE_TRASNPARENCY_KEY, Val(true));
     settings()->setDefaultValue(EXPORT_PDF_DPI_RESOLUTION_KEY, Val(Ms::DPI));
 }
 
-std::string ImportexportConfiguration::importGuitarProCharset() const
-{
-    return settings()->value(IMPORT_GUITARPRO_CHARSET_KEY).toString();
-}
-
-int ImportexportConfiguration::exportPdfDpiResolution() const
+int ImagesExportConfiguration::exportPdfDpiResolution() const
 {
     return settings()->value(EXPORT_PDF_DPI_RESOLUTION_KEY).toInt();
 }
 
-void ImportexportConfiguration::setExportPngDpiResolution(std::optional<float> dpi)
+void ImagesExportConfiguration::setExportPngDpiResolution(std::optional<float> dpi)
 {
     m_customExportPngDpi = dpi;
 }
 
-float ImportexportConfiguration::exportPngDpiResolution() const
+float ImagesExportConfiguration::exportPngDpiResolution() const
 {
     if (m_customExportPngDpi) {
         return m_customExportPngDpi.value();
@@ -68,7 +55,7 @@ float ImportexportConfiguration::exportPngDpiResolution() const
     return settings()->value(EXPORT_PNG_DPI_RESOLUTION_KEY).toFloat();
 }
 
-bool ImportexportConfiguration::exportPngWithTransparentBackground() const
+bool ImagesExportConfiguration::exportPngWithTransparentBackground() const
 {
     return settings()->value(EXPORT_PNG_USE_TRASNPARENCY_KEY).toBool();
 }
