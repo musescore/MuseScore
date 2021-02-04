@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.12
 
 import MuseScore.Playback 1.0
 import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 import MuseScore.NotationScene 1.0
 
 Rectangle {
@@ -24,7 +25,6 @@ Rectangle {
 
         anchors.verticalCenter: parent.verticalCenter
 
-        height: childrenRect.height
         width: parent.width
 
         RowLayout {
@@ -64,9 +64,60 @@ Rectangle {
             SeparatorLine { orientation: Qt.Vertical }
 
             TimeInputField {
-                Layout.leftMargin: 25
-                Layout.rightMargin: 25
+                Layout.leftMargin: 20
+
                 time: playbackModel.playTime
+
+                onTimeChanged: {
+                    playbackModel.playTime = time
+                }
+            }
+
+            NumberInputField {
+                Layout.leftMargin: 20
+
+                maxValue: playbackModel.maxBeatNumber
+                value: playbackModel.measureNumber
+
+                onValueChanged: {
+                    playbackModel.measureNumber = value
+                }
+            }
+
+            StyledTextLabel {
+                text: "."
+                font: ui.theme.tabFont
+            }
+
+            NumberInputField {
+                Layout.leftMargin: 4
+
+                maxValue: playbackModel.maxBeatNumber
+                value: playbackModel.beatNumber
+
+                onValueChanged: {
+                    playbackModel.beatNumber = value
+                }
+            }
+
+            StyledTextLabel {
+                Layout.leftMargin: 20
+                topPadding: 10
+
+                text: playbackModel.tempo.noteSymbol
+
+                font.family: ui.theme.musicalFont
+                font.pixelSize: ui.theme.tabFont.pixelSize
+                font.letterSpacing: 1
+
+                lineHeightMode: Text.FixedHeight
+            }
+
+            StyledTextLabel {
+                Layout.rightMargin: 20
+
+                text: "= " + playbackModel.tempo.value
+                font: ui.theme.tabFont
             }
 
             SeparatorLine { orientation: Qt.Vertical }

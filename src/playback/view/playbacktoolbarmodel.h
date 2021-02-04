@@ -44,7 +44,13 @@ class PlaybackToolBarModel : public QAbstractListModel, public async::Asyncable
 
     Q_PROPERTY(qreal playPosition READ playPosition WRITE setPlayPosition NOTIFY playPositionChanged)
     Q_PROPERTY(QTime playTime READ playTime WRITE setPlayTime NOTIFY playTimeChanged)
-    Q_PROPERTY(QString tempo READ tempo NOTIFY tempoChanged)
+
+    Q_PROPERTY(int measureNumber READ measureNumber WRITE setMeasureNumber NOTIFY measureNumberChanged)
+    Q_PROPERTY(int maxMeasureNumber READ maxMeasureNumber NOTIFY maxMeasureNumberChanged)
+    Q_PROPERTY(int beatNumber READ beatNumber WRITE setBeatNumber NOTIFY beatNumberChanged)
+    Q_PROPERTY(int maxBeatNumber READ maxBeatNumber NOTIFY maxBeatNumberChanged)
+
+    Q_PROPERTY(QVariant tempo READ tempo NOTIFY tempoChanged)
 
 public:
     explicit PlaybackToolBarModel(QObject* parent = nullptr);
@@ -55,7 +61,13 @@ public:
 
     qreal playPosition() const;
     QTime playTime() const;
-    QString tempo() const;
+
+    int measureNumber() const;
+    int maxMeasureNumber() const;
+    int beatNumber() const;
+    int maxBeatNumber() const;
+
+    QVariant tempo() const;
 
     Q_INVOKABLE void load();
     Q_INVOKABLE void handleAction(const QString& action);
@@ -63,11 +75,17 @@ public:
 public slots:
     void setPlayPosition(qreal position);
     void setPlayTime(const QTime& time);
+    void setMeasureNumber(int measureNumber);
+    void setBeatNumber(int beatNumber);
 
 signals:
     void playPositionChanged(qreal position);
     void playTimeChanged(QTime time);
-    void tempoChanged(QString tempo);
+    void measureNumberChanged(int number);
+    void maxMeasureNumberChanged(int number);
+    void beatNumberChanged(int number);
+    void maxBeatNumberChanged(int number);
+    void tempoChanged(QVariant tempo);
 
 private:
     enum Roles {
@@ -86,7 +104,6 @@ private:
     uicomponents::MenuItem settingsItem() const;
 
     QList<uicomponents::MenuItem> m_items;
-    QTime m_playTime;
 };
 }
 
