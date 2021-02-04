@@ -29,7 +29,7 @@
 #include <QImage>
 #include <QPainter>
 
-using namespace mu::importexport;
+using namespace mu::iex::imagesexport;
 using namespace mu::system;
 
 mu::Ret PngWriter::write(const notation::INotationPtr notation, IODevice& destinationDevice, const Options& options)

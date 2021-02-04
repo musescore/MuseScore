@@ -69,7 +69,7 @@ void CommandLineController::apply()
     if (m_parser.isSet("r")) {
         std::optional<float> val = floatValue("r");
         if (val) {
-            importexportConfiguration()->setExportPngDpiResolution(val);
+            imagesExportConfiguration()->setExportPngDpiResolution(val);
         } else {
             LOGE() << "Option: -r not recognized DPI value: " << m_parser.value("r");
         }
