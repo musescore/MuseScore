@@ -26,7 +26,7 @@
 #include <QPdfWriter>
 #include <QPainter>
 
-using namespace mu::importexport;
+using namespace mu::iex::imagesexport;
 using namespace mu::system;
 using namespace Ms;
 

@@ -17,32 +17,15 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-# We are separating the importexport module into separate modules,
-# soon there will be nothing left of it
-set(MODULE importexport)
-
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/importexportmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/importexportmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/iimportexportconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/importexportconfiguration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/importexportconfiguration.h
-    
-    ${CMAKE_CURRENT_LIST_DIR}/internal/svgwriter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/svgwriter.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/svggenerator.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/svggenerator.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/pngwriter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/pngwriter.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/pdfwriter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/pdfwriter.h
-    )
-
-set(MODULE_LINK
-    libmscore
-    qzip
-    notation
-    )
-
-include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+add_subdirectory(bb)
+add_subdirectory(braille)
+add_subdirectory(bww)
+add_subdirectory(capella)
+add_subdirectory(guitarpro)
+add_subdirectory(midiimport)
+add_subdirectory(musedata)
+add_subdirectory(musicxml)
+add_subdirectory(ove)
+add_subdirectory(audioexport)
+add_subdirectory(imagesexport)
 

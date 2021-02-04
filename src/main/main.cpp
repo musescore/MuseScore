@@ -63,7 +63,6 @@
 #endif
 #include "notation/notationmodule.h"
 
-#include "importexport/importexportmodule.h"
 #include "importexport/musicxml/musicxmlmodule.h"
 #include "importexport/bb/bbmodule.h"
 #include "importexport/bww/bwwmodule.h"
@@ -72,6 +71,7 @@
 #include "importexport/midiimport/midiimportmodule.h"
 #include "importexport/ove/ovemodule.h"
 #include "importexport/audioexport/audioexportmodule.h"
+#include "importexport/imagesexport/imagesexportmodule.h"
 
 #include "commonscene/commonscenemodule.h"
 #ifdef BUILD_PALETTE_MODULE
@@ -110,7 +110,7 @@
 #else
 #include "stubs/plugins/pluginsstubmodule.h"
 #endif
-#include "importexport/importexportmodule.h"
+
 #ifdef BUILD_CLOUD_MODULE
 #include "cloud/cloudmodule.h"
 #else
@@ -219,7 +219,6 @@ int main(int argc, char** argv)
     app.addModule(new mu::converter::ConverterModule());
 
 #ifndef Q_OS_WASM
-    app.addModule(new mu::importexport::ImportExportModule());
     app.addModule(new mu::iex::bb::BBModule());
     app.addModule(new mu::iex::bww::BwwModule());
     app.addModule(new mu::iex::musicxml::MusicXmlModule());
@@ -228,6 +227,7 @@ int main(int argc, char** argv)
     app.addModule(new mu::iex::midiimport::MidiImportModule());
     app.addModule(new mu::iex::ove::OveModule());
     app.addModule(new mu::iex::audioexport::AudioExportModule());
+    app.addModule(new mu::iex::imagesexport::ImagesExportModule());
 
 #ifdef BUILD_WORKSPACE_MODULE
     app.addModule(new mu::workspace::WorkspaceModule());

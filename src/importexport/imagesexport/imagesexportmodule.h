@@ -16,30 +16,21 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_IMPORTEXPORT_IMPORTEXPORTCONFIGURATION_H
-#define MU_IMPORTEXPORT_IMPORTEXPORTCONFIGURATION_H
+#ifndef MU_IMPORTEXPORT_IMAGESEXPORTMODULE_H
+#define MU_IMPORTEXPORT_IMAGESEXPORTMODULE_H
 
-#include "../iimportexportconfiguration.h"
+#include "modularity/imodulesetup.h"
 
-namespace mu::importexport {
-class ImportexportConfiguration : public IImportexportConfiguration
+namespace mu::iex::imagesexport {
+class ImagesExportModule : public framework::IModuleSetup
 {
 public:
-    void init();
 
-    std::string importGuitarProCharset() const override;
-
-    int exportPdfDpiResolution() const override;
-
-    void setExportPngDpiResolution(std::optional<float> dpi) override;
-    float exportPngDpiResolution() const override;
-
-    bool exportPngWithTransparentBackground() const override;
-
-private:
-
-    std::optional<float> m_customExportPngDpi;
+    std::string moduleName() const override;
+    void registerExports() override;
+    void resolveImports() override;
+    void onInit(const framework::IApplication::RunMode& mode) override;
 };
 }
 
-#endif // MU_IMPORTEXPORT_IMPORTEXPORTCONFIGURATION_H
+#endif // MU_IMPORTEXPORT_IMAGESEXPORTMODULE_H
