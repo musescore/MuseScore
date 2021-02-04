@@ -165,11 +165,15 @@ set(MODULE_SRC
     measure.h
     measurenumber.cpp
     measurenumber.h
+    measurenumberbase.cpp
+    measurenumberbase.h
     measurerepeat.cpp
     measurerepeat.h
     midimapping.cpp
     mmrest.cpp
     mmrest.h
+    mmrestrange.cpp
+    mmrestrange.h
     mscore.cpp
     mscore.h
     mscoreview.cpp

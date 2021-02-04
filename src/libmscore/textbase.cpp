@@ -2813,6 +2813,7 @@ QString TextBase::accessibleInfo() const
     case Tid::POET:
     case Tid::TRANSLATOR:
     case Tid::MEASURE_NUMBER:
+    case Tid::MMREST_RANGE:
         rez = score() ? score()->getTextStyleUserName(tid()) : textStyleUserName(tid());
         break;
     default:
@@ -2842,6 +2843,7 @@ QString TextBase::screenReaderInfo() const
     case Tid::POET:
     case Tid::TRANSLATOR:
     case Tid::MEASURE_NUMBER:
+    case Tid::MMREST_RANGE:
         rez = score() ? score()->getTextStyleUserName(tid()) : textStyleUserName(tid());
         break;
     default:
@@ -3180,6 +3182,8 @@ Sid TextBase::offsetSid() const
         return above ? Sid::systemTextPosAbove : Sid::systemTextPosBelow;
     case Tid::TEMPO:
         return above ? Sid::tempoPosAbove : Sid::tempoPosBelow;
+    case Tid::MMREST_RANGE:
+        return above ? Sid::mmRestRangePosAbove : Sid::mmRestRangePosBelow;
     default:
         break;
     }
