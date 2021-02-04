@@ -36,7 +36,7 @@ static const ActionCode REPEAT_CODE("repeat");
 void PlaybackController::init()
 {
     dispatcher()->reg(this, "play", this, &PlaybackController::togglePlay);
-    dispatcher()->reg(this, "rewind", this, &PlaybackController::rewindToStart);
+    dispatcher()->reg(this, "rewind", this, &PlaybackController::rewind);
     dispatcher()->reg(this, "loop", this, &PlaybackController::loopPlayback);
     dispatcher()->reg(this, "loop-in", this, &PlaybackController::setLoopInPosition);
     dispatcher()->reg(this, "loop-out", this, &PlaybackController::setLoopOutPosition);
@@ -75,6 +75,8 @@ void PlaybackController::init()
         });
         break;
     }
+
+    m_needRewindBeforePlay = true;
 }
 
 bool PlaybackController::isPlayAllowed() const
@@ -187,13 +189,25 @@ void PlaybackController::play()
         return;
     }
 
-    seek(tick.val);
+    if (m_needRewindBeforePlay) {
+        seek(tick.val);
+    } else {
+        m_needRewindBeforePlay = true;
+    }
+
     sequencer()->play();
 }
 
-void PlaybackController::rewindToStart()
+void PlaybackController::rewind(const ActionData& args)
 {
-    sequencer()->rewind();
+    if (args.count() == 0) {
+        sequencer()->rewind();
+        return;
+    }
+
+    uint64_t msec = args.arg<uint64_t>(0);
+    sequencer()->seek(msec);
+    m_needRewindBeforePlay = false;
 }
 
 void PlaybackController::seek(int tick)
