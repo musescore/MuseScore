@@ -91,9 +91,10 @@ class System final : public Element
     QList<Bracket*> _brackets;
     QList<SpannerSegment*> _spannerSegments;
 
-    qreal _leftMargin              { 0.0 };         ///< left margin for instrument name, brackets etc.
-    mutable bool fixedDownDistance { false };
-    qreal _distance                { 0.0 };         // temp. variable used during layout
+    qreal _leftMargin           { 0.0 };           ///< left margin for instrument name, brackets etc.
+    mutable Spacer* fixedSpacer { nullptr };
+    qreal _distance             { 0.0 };           // temp. variable used during layout
+    qreal _systemHeight         { 0.0 };
 
     int firstVisibleSysStaff() const;
     int lastVisibleSysStaff() const;
@@ -129,6 +130,9 @@ public:
     Page* page() const { return (Page*)parent(); }
 
     void layoutSystem(qreal);
+    void setMeasureHeight(qreal height);
+    void layoutBracketsVertical();
+    void layoutInstrumentNames();
 
     void addBrackets(Measure* measure);
 
@@ -185,7 +189,7 @@ public:
     qreal spacerDistance(bool up) const;
 
     void moveBracket(int staffIdx, int srcCol, int dstCol);
-    bool hasFixedDownDistance() const { return fixedDownDistance; }
+    Spacer* getFixedSpacer() const { return fixedSpacer; }
     int firstVisibleStaff() const;
     int nextVisibleStaff(int) const;
     qreal distance() const { return _distance; }
