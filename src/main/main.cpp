@@ -71,6 +71,7 @@
 #include "importexport/guitarpro/guitarpromodule.h"
 #include "importexport/midiimport/midiimportmodule.h"
 #include "importexport/ove/ovemodule.h"
+#include "importexport/audioexport/audioexportmodule.h"
 
 #include "commonscene/commonscenemodule.h"
 #ifdef BUILD_PALETTE_MODULE
@@ -226,6 +227,7 @@ int main(int argc, char** argv)
     app.addModule(new mu::iex::guitarpro::GuitarProModule());
     app.addModule(new mu::iex::midiimport::MidiImportModule());
     app.addModule(new mu::iex::ove::OveModule());
+    app.addModule(new mu::iex::audioexport::AudioExportModule());
 
 #ifdef BUILD_WORKSPACE_MODULE
     app.addModule(new mu::workspace::WorkspaceModule());

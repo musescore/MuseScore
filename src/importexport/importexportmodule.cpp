@@ -28,10 +28,6 @@
 #include "internal/pdfwriter.h"
 #include "internal/pngwriter.h"
 #include "internal/svgwriter.h"
-#include "internal/mp3writer.h"
-#include "internal/wavewriter.h"
-#include "internal/oggwriter.h"
-#include "internal/flacwriter.h"
 
 #include "internal/importexportconfiguration.h"
 
@@ -59,9 +55,5 @@ void ImportExportModule::onInit(const framework::IApplication::RunMode&)
         writers->reg({ "pdf" }, std::make_shared<PdfWriter>());
         writers->reg({ "svg" }, std::make_shared<SvgWriter>());
         writers->reg({ "png" }, std::make_shared<PngWriter>());
-        writers->reg({ "wav" }, std::make_shared<WaveWriter>());
-        writers->reg({ "mp3" }, std::make_shared<Mp3Writer>());
-        writers->reg({ "ogg" }, std::make_shared<OggWriter>());
-        writers->reg({ "flac" }, std::make_shared<FlacWriter>());
     }
 }
