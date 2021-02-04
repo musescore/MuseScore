@@ -749,12 +749,12 @@ bool Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
     XmlWriter xml(this, f);
     xml.setWriteOmr(msczFormat);
     xml.header();
+
+    xml.stag("museScore version=\"" MSC_VERSION "\"");
+
     if (!MScore::testMode) {
-        xml.stag("museScore version=\"" MSC_VERSION "\"");
         xml.tag("programVersion", VERSION);
         xml.tag("programRevision", revision);
-    } else {
-        xml.stag("museScore version=\"3.01\"");
     }
     write(xml, onlySelection);
     xml.etag();

@@ -235,9 +235,6 @@ void Score::updateChannel()
                     if (note->hidden()) {
                         continue;
                     }
-                    if (note->tieBack()) {
-                        continue;
-                    }
                     note->setSubchannel(channel);
                 }
             }
