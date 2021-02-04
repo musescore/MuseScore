@@ -3848,6 +3848,7 @@ static bool readScore(Score* score, XmlReader& e)
                 e.tracks().clear();
                 MasterScore* m = score->masterScore();
                 Score* s = new Score(m, MScore::baseStyle());
+                s->setEnableVerticalSpread(false);
                 Excerpt* ex = new Excerpt(m);
 
                 ex->setPartScore(s);
@@ -4060,6 +4061,9 @@ Score::FileError MasterScore::read206(XmlReader& e)
             revisions()->add(revision);
         }
     }
+
+    setEnableVerticalSpread(false);
+
     int id = 1;
     for (LinkedElements* le : e.linkIds()) {
         le->setLid(this, id++);
