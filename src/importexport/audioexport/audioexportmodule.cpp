@@ -16,18 +16,32 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#include "audioexportmodule.h"
 
-#ifndef MU_IMPORTEXPORT_MP3WRITER_H
-#define MU_IMPORTEXPORT_MP3WRITER_H
+#include "log.h"
+#include "modularity/ioc.h"
 
-#include "notation/abstractnotationwriter.h"
+#include "notation/inotationwritersregister.h"
+#include "internal/mp3writer.h"
+#include "internal/wavewriter.h"
+#include "internal/oggwriter.h"
+#include "internal/flacwriter.h"
 
-namespace mu::importexport {
-class Mp3Writer : public notation::AbstractNotationWriter
+using namespace mu::iex::audioexport;
+using namespace mu::notation;
+
+std::string AudioExportModule::moduleName() const
 {
-public:
-    Ret write(const notation::INotationPtr notation, system::IODevice& destinationDevice, const Options& options = Options()) override;
-};
+    return "iex_audioexport";
 }
 
-#endif // MU_IMPORTEXPORT_MP3WRITER_H
+void AudioExportModule::resolveImports()
+{
+    auto writers = framework::ioc()->resolve<INotationWritersRegister>(moduleName());
+    if (writers) {
+        writers->reg({ "wav" }, std::make_shared<WaveWriter>());
+        writers->reg({ "mp3" }, std::make_shared<Mp3Writer>());
+        writers->reg({ "ogg" }, std::make_shared<OggWriter>());
+        writers->reg({ "flac" }, std::make_shared<FlacWriter>());
+    }
+}

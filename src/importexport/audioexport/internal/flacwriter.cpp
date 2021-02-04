@@ -17,17 +17,20 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_IMPORTEXPORT_OGGWRITER_H
-#define MU_IMPORTEXPORT_OGGWRITER_H
+#include "flacwriter.h"
 
-#include "notation/abstractnotationwriter.h"
+#include "log.h"
 
-namespace mu::importexport {
-class OggWriter : public notation::AbstractNotationWriter
+using namespace mu::iex::audioexport;
+using namespace mu::system;
+
+mu::Ret FlacWriter::write(const notation::INotationPtr notation, IODevice& destinationDevice, const Options& options)
 {
-public:
-    Ret write(const notation::INotationPtr notation, system::IODevice& destinationDevice, const Options& options = Options()) override;
-};
-}
+    UNUSED(notation)
+    UNUSED(destinationDevice)
+    UNUSED(options)
 
-#endif // MU_IMPORTEXPORT_OGGWRITER_H
+    NOT_IMPLEMENTED;
+
+    return make_ret(Ret::Code::NotImplemented);
+}
