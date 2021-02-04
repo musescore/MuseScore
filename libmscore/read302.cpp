@@ -415,6 +415,7 @@ Score::FileError MasterScore::read302(XmlReader& e)
                   else {
                         score = new MasterScore();
                         score->setMscVersion(mscVersion());
+                        score->setMscoreVersionName(mscVersionName());
                         addMovement(score);
                         }
                   if (!score->read(e)) {

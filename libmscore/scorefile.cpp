@@ -763,11 +763,11 @@ bool Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
       xml.setWriteOmr(msczFormat);
       xml.header();
 
-      xml.stag("museScore version=\"" MSC_VERSION "\"");
+      xml.stag("museScore version=\"" + mscVersionName() + "\"");
 
       if (!MScore::testMode) {
-            xml.tag("programVersion", VERSION);
-            xml.tag("programRevision", revision);
+            xml.tag("programVersion", mscVersion());
+            xml.tag("programRevision", mscoreRevision());
             }
       write(xml, onlySelection);
       xml.etag();
@@ -1023,6 +1023,7 @@ Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError)
                   const QString& version = e.attribute("version");
                   QStringList sl = version.split('.');
                   setMscVersion(sl[0].toInt() * 100 + sl[1].toInt());
+                  setMscoreVersionName(version);
 
                   if (!ignoreVersionError) {
                         if (mscVersion() > MSCVERSION)

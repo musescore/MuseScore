@@ -476,6 +476,7 @@ class Score : public QObject, public ScoreElement {
       ScoreOrder* _scoreOrder   { nullptr };    ///< used for score ordering
 
       int _mscVersion { MSCVERSION };   ///< version of current loading *.msc file
+      QString _mscVersionName { MSC_VERSION };
 
       QMap<QString, QString> _metaTags;
 
@@ -944,6 +945,9 @@ class Score : public QObject, public ScoreElement {
 
       int mscVersion() const    { return _mscVersion; }
       void setMscVersion(int v) { _mscVersion = v; }
+
+      QString mscVersionName() const { return _mscVersionName; }
+      void setMscoreVersionName(const QString& v) { _mscVersionName = v; }
 
       void addLyrics(const Fraction& tick, int staffIdx, const QString&);
 
