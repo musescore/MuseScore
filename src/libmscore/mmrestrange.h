@@ -17,27 +17,37 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef __MEASURENUMBER_H__
-#define __MEASURENUMBER_H__
+#ifndef __MMRESTRANGE_H__
+#define __MMRESTRANGE_H__
 
 #include "measurenumberbase.h"
+#include "property.h"
 
 namespace Ms {
 //---------------------------------------------------------
-//   MeasureNumber
+//   MMRestRange
 //---------------------------------------------------------
 
-class MeasureNumber : public MeasureNumberBase
+class MMRestRange : public MeasureNumberBase
 {
+    /// Bracketing: [18-24], (18-24) or 18-24
+    M_PROPERTY(MMRestRangeBracketType, bracketType, setBracketType)
+
 public:
-    MeasureNumber(Score* = nullptr, Tid tid = Tid::MEASURE_NUMBER);
-    MeasureNumber(const MeasureNumber& other);
+    MMRestRange(Score* s = nullptr);
+    MMRestRange(const MMRestRange& other);
 
-    virtual ElementType type() const override { return ElementType::MEASURE_NUMBER; }
-    virtual MeasureNumber* clone() const override { return new MeasureNumber(*this); }
+    virtual ElementType type()   const override { return ElementType::MMREST_RANGE; }
+    virtual MMRestRange* clone() const override { return new MMRestRange(*this); }
 
+    virtual QVariant getProperty(Pid id) const override;
+    virtual bool setProperty(Pid id, const QVariant& val) override;
     virtual QVariant propertyDefault(Pid id) const override;
+
+    virtual bool readProperties(XmlReader&) override;
+
+    virtual void setXmlText(const QString&) override;
 };
-}     // namespace Ms
+} // namespace Ms
 
 #endif

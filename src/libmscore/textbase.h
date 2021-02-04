@@ -288,7 +288,7 @@ public:
 
     static QString plainToXmlText(const QString& s) { return s.toHtmlEscaped(); }
     void setPlainText(const QString& t) { setXmlText(plainToXmlText(t)); }
-    void setXmlText(const QString&);
+    virtual void setXmlText(const QString&);
     QString xmlText() const;
     QString plainText() const;
 

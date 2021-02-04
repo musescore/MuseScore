@@ -269,6 +269,8 @@ static constexpr PropertyMetaData propertyList[] = {
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "placement") },
     { Pid::HPLACEMENT,              false, "hplacement",            P_TYPE::HPLACEMENT,
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "horizontal placement") },
+    { Pid::MMREST_RANGE_BRACKET_TYPE, false, "mmrestRangeBracketType", P_TYPE::INT,
+      DUMMY_QT_TRANSLATE_NOOP("propertyName", "multimeasure rest range bracket type") },
     { Pid::VELOCITY,                false, "velocity",              P_TYPE::INT,
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "velocity") },
     { Pid::JUMP_TO,                 true,  "jumpTo",                P_TYPE::STRING,
