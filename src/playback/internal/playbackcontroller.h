@@ -51,7 +51,8 @@ public:
 
     void playElementOnClick(const notation::Element* element) override;
 
-    bool isActionEnabled(const std::string& actionCode) const override;
+    bool isActionEnabled(const actions::ActionCode& actionCode) const override;
+    async::Channel<actions::ActionCode> actionEnabledChanged() const override;
 
 private:
     static const unsigned int MIDI_TRACK = 0;
@@ -77,10 +78,13 @@ private:
     void setLoopInPosition();
     void setLoopOutPosition();
 
+    void notifyActionEnabledChanged(const actions::ActionCode& actionCode);
+
     notation::INotationPtr m_notation;
     async::Notification m_isPlayAllowedChanged;
     async::Notification m_isPlayingChanged;
     async::Channel<uint32_t> m_tickPlayed;
+    async::Channel<actions::ActionCode> m_actionEnabledChanged;
     CursorType m_cursorType = CursorType::STEPPED;
 };
 }

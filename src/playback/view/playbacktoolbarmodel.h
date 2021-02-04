@@ -93,7 +93,8 @@ private:
         HintRole,
         IconRole,
         EnabledRole,
-        CheckedRole
+        CheckedRole,
+        IsAdditionalRole
     };
 
     void updateState();
@@ -102,6 +103,8 @@ private:
 
     uicomponents::MenuItem& item(const actions::ActionCode& actionCode);
     uicomponents::MenuItem settingsItem() const;
+
+    bool isAdditionalAction(const actions::ActionCode& actionCode) const;
 
     QList<uicomponents::MenuItem> m_items;
 };
