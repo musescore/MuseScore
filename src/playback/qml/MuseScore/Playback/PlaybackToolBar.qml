@@ -73,12 +73,17 @@ Rectangle {
             SeparatorLine { orientation: Qt.Vertical }
 
             TimeInputField {
+                id: timeField
+
                 Layout.leftMargin: 20
 
                 time: playbackModel.playTime
 
-                onTimeChanged: {
-                    playbackModel.playTime = time
+                maxHours: 9
+                maxMilliseconds: 9
+
+                onTimeEdited: {
+                    playbackModel.playTime = newTime
                 }
             }
 
@@ -95,7 +100,7 @@ Rectangle {
 
             StyledTextLabel {
                 text: "."
-                font: ui.theme.tabFont
+                font: timeField.font
             }
 
             NumberInputField {
@@ -126,7 +131,7 @@ Rectangle {
                 Layout.rightMargin: 20
 
                 text: "= " + playbackModel.tempo.value
-                font: ui.theme.tabFont
+                font: timeField.font
             }
 
             SeparatorLine { orientation: Qt.Vertical }
