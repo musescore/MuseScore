@@ -46,12 +46,17 @@ bool FilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& source
 {
     QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
 
-    QHashIterator<int, FilterValue*> i(m_roleIdToValueHash);
-    while (i.hasNext()) {
-        i.next();
+    QHashIterator<int, FilterValue*> it(m_roleIdToValueHash);
+    while (it.hasNext()) {
+        it.next();
 
-        QVariant data = sourceModel()->data(index, i.key());
-        FilterValue* value = i.value();
+        QVariant data = sourceModel()->data(index, it.key());
+        FilterValue* value = it.value();
+
+        if (!value->enabled()) {
+            continue;
+        }
+
         CompareType::Type compreType = value->compareType().value<CompareType::Type>();
 
         if (CompareType::Contains == compreType) {
@@ -90,12 +95,12 @@ void FilterProxyModel::fillRoleIds()
     }
 
     QHash<int, QByteArray> roles = sourceModel()->roleNames();
-    QHash<int, QByteArray>::const_iterator i = roles.constBegin();
-    while (i != roles.constEnd()) {
-        if (roleNameToValueHash.contains(i.value())) {
-            m_roleIdToValueHash.insert(i.key(), roleNameToValueHash[i.value()]);
+    QHash<int, QByteArray>::const_iterator it = roles.constBegin();
+    while (it != roles.constEnd()) {
+        if (roleNameToValueHash.contains(it.value())) {
+            m_roleIdToValueHash.insert(it.key(), roleNameToValueHash[it.value()]);
         }
-        ++i;
+        ++it;
     }
 
     setFilterFixedString(filterRegExp().pattern());

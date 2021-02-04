@@ -40,6 +40,11 @@ QVariant FilterValue::compareType() const
     return m_compareType;
 }
 
+bool FilterValue::enabled() const
+{
+    return m_enabled;
+}
+
 void FilterValue::setRoleName(QString roleName)
 {
     if (m_roleName == roleName) {
@@ -67,5 +72,15 @@ void FilterValue::setCompareType(QVariant type)
     }
 
     m_compareType = type;
+    emit dataChanged();
+}
+
+void FilterValue::setEnabled(bool enabled)
+{
+    if (m_enabled == enabled) {
+        return;
+    }
+
+    m_enabled = enabled;
     emit dataChanged();
 }

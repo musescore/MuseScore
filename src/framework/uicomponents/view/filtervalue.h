@@ -43,6 +43,7 @@ class FilterValue : public QObject
     Q_PROPERTY(QString roleName READ roleName WRITE setRoleName NOTIFY dataChanged)
     Q_PROPERTY(QVariant roleValue READ roleValue WRITE setRoleValue NOTIFY dataChanged)
     Q_PROPERTY(QVariant compareType READ compareType WRITE setCompareType NOTIFY dataChanged)
+    Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY dataChanged)
 
 public:
     explicit FilterValue(QObject* parent = nullptr);
@@ -50,11 +51,13 @@ public:
     QString roleName() const;
     QVariant roleValue() const;
     QVariant compareType() const;
+    bool enabled() const;
 
 public slots:
     void setRoleName(QString roleName);
     void setRoleValue(QVariant roleValue);
     void setCompareType(QVariant compareType);
+    void setEnabled(bool enabled);
 
 signals:
     void dataChanged();
@@ -63,6 +66,7 @@ private:
     QString m_roleName;
     QVariant m_roleValue;
     QVariant m_compareType;
+    bool m_enabled = true;
 };
 }
 
