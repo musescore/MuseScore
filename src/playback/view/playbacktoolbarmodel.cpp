@@ -25,6 +25,8 @@
 
 #include "ui/view/musicalsymbolcodes.h"
 
+#include "global/realfn.h"
+
 using namespace mu::playback;
 using namespace mu::actions;
 using namespace mu::uicomponents;
@@ -36,6 +38,27 @@ using namespace mu::notation;
 static const std::string PLAYBACK_TOOLBAR_KEY("playbackControl");
 static const std::string PLAYBACK_SETTINGS_KEY("playback-settings");
 
+QTime timeFromSeconds(float seconds)
+{
+    constexpr int PRECISION = 1;
+
+    float secondsPart = 0;
+
+    float frac = std::modf(seconds, &secondsPart);
+    int milliseconds = static_cast<int>(frac * std::pow(10, PRECISION));
+
+    QTime time(0, 0, 0, 0);
+    time = time.addSecs(static_cast<int>(secondsPart));
+    time = time.addMSecs(milliseconds);
+
+    return time;
+}
+
+uint64_t timeToMilliseconds(const QTime& time)
+{
+    return QTime(0, 0, 0, 0).msecsTo(time);
+}
+
 PlaybackToolBarModel::PlaybackToolBarModel(QObject* parent)
     : QAbstractListModel(parent)
 {
@@ -43,7 +66,12 @@ PlaybackToolBarModel::PlaybackToolBarModel(QObject* parent)
 
 QVariant PlaybackToolBarModel::data(const QModelIndex& index, int role) const
 {
+    if (!index.isValid()) {
+        return QVariant();
+    }
+
     const MenuItem& item = m_items.at(index.row());
+
     switch (role) {
     case HintRole: return QString::fromStdString(item.description);
     case IconRole: return static_cast<int>(item.iconCode);
@@ -52,6 +80,7 @@ QVariant PlaybackToolBarModel::data(const QModelIndex& index, int role) const
     case CheckedRole: return item.checked;
     case IsAdditionalRole: return isAdditionalAction(item.code);
     }
+
     return QVariant();
 }
 
@@ -95,6 +124,10 @@ void PlaybackToolBarModel::load()
 
     playbackController()->isPlayingChanged().onNotify(this, [this]() {
         updateState();
+    });
+
+    playbackController()->midiTickPlayed().onReceive(this, [this](uint64_t) {
+        updatePlayTime();
     });
 
     workspaceManager()->currentWorkspace().ch.onReceive(this, [this](IWorkspacePtr) {
@@ -141,17 +174,45 @@ void PlaybackToolBarModel::setPlayPosition(qreal position)
     emit playPositionChanged(position);
 }
 
-QTime PlaybackToolBarModel::playTime() const
+QDateTime PlaybackToolBarModel::playTime() const
 {
-    NOT_IMPLEMENTED;
-    return QTime::currentTime();
+    return QDateTime(QDate::currentDate(), m_playTime);
 }
 
-void PlaybackToolBarModel::setPlayTime(const QTime& time)
+void PlaybackToolBarModel::setPlayTime(const QDateTime& time)
 {
-    Q_UNUSED(time)
-    NOT_IMPLEMENTED;
+    QTime newTime = time.time();
+    if (m_playTime == newTime) {
+        return;
+    }
+
+    doSetPlayTime(newTime);
+
+    uint64_t msec = timeToMilliseconds(m_playTime);
+    rewind(msec);
+}
+
+void PlaybackToolBarModel::updatePlayTime()
+{
+    float seconds = playbackController()->playbackPositionInSeconds();
+    QTime playTime = timeFromSeconds(seconds);
+
+    if (m_playTime == playTime) {
+        return;
+    }
+
+    doSetPlayTime(playTime);
+}
+
+void PlaybackToolBarModel::doSetPlayTime(const QTime& time)
+{
+    m_playTime = time;
     emit playTimeChanged(time);
+}
+
+void PlaybackToolBarModel::rewind(uint64_t milliseconds)
+{
+    dispatcher()->dispatch("rewind", ActionData::make_arg1<uint64_t>(milliseconds));
 }
 
 int PlaybackToolBarModel::measureNumber() const

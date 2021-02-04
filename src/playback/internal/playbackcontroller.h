@@ -62,7 +62,7 @@ private:
 
     void onNotationChanged();
     void togglePlay();
-    void rewindToStart();
+    void rewind(const actions::ActionData& args);
     void play();
     void seek(int tick);
     void pause();
@@ -86,6 +86,8 @@ private:
     async::Channel<uint32_t> m_tickPlayed;
     async::Channel<actions::ActionCode> m_actionEnabledChanged;
     CursorType m_cursorType = CursorType::STEPPED;
+
+    bool m_needRewindBeforePlay = false;
 };
 }
 

@@ -43,7 +43,7 @@ class PlaybackToolBarModel : public QAbstractListModel, public async::Asyncable
     INJECT(playback, framework::IInteractive, interactive)
 
     Q_PROPERTY(qreal playPosition READ playPosition WRITE setPlayPosition NOTIFY playPositionChanged)
-    Q_PROPERTY(QTime playTime READ playTime WRITE setPlayTime NOTIFY playTimeChanged)
+    Q_PROPERTY(QDateTime playTime READ playTime WRITE setPlayTime NOTIFY playTimeChanged)
 
     Q_PROPERTY(int measureNumber READ measureNumber WRITE setMeasureNumber NOTIFY measureNumberChanged)
     Q_PROPERTY(int maxMeasureNumber READ maxMeasureNumber NOTIFY maxMeasureNumberChanged)
@@ -60,7 +60,7 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     qreal playPosition() const;
-    QTime playTime() const;
+    QDateTime playTime() const;
 
     int measureNumber() const;
     int maxMeasureNumber() const;
@@ -74,7 +74,7 @@ public:
 
 public slots:
     void setPlayPosition(qreal position);
-    void setPlayTime(const QTime& time);
+    void setPlayTime(const QDateTime& time);
     void setMeasureNumber(int measureNumber);
     void setBeatNumber(int beatNumber);
 
@@ -97,6 +97,10 @@ private:
         IsAdditionalRole
     };
 
+    void updatePlayTime();
+    void doSetPlayTime(const QTime& time);
+    void rewind(uint64_t milliseconds);
+
     void updateState();
 
     actions::ActionList currentWorkspaceActions() const;
@@ -107,6 +111,7 @@ private:
     bool isAdditionalAction(const actions::ActionCode& actionCode) const;
 
     QList<uicomponents::MenuItem> m_items;
+    QTime m_playTime;
 };
 }
 
