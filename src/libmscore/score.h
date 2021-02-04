@@ -1040,6 +1040,10 @@ public:
     bool isPalette() const { return _isPalette; }
     void setPaletteMode(bool palette) { _isPalette = palette; }
 
+    bool enableVerticalSpread() const;
+    void setEnableVerticalSpread(bool val);
+    qreal maxSystemDistance() const;
+
     ScoreOrder* scoreOrder() const { return _scoreOrder; }
     void setScoreOrder(ScoreOrder* order) { _scoreOrder = order; }
 
