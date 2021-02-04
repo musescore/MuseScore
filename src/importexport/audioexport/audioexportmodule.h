@@ -16,18 +16,19 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#ifndef MU_IMPORTEXPORT_AUDIOEXPORTMODULE_H
+#define MU_IMPORTEXPORT_AUDIOEXPORTMODULE_H
 
-#ifndef MU_IMPORTEXPORT_FLACWRITER_H
-#define MU_IMPORTEXPORT_FLACWRITER_H
+#include "modularity/imodulesetup.h"
 
-#include "notation/abstractnotationwriter.h"
-
-namespace mu::importexport {
-class FlacWriter : public notation::AbstractNotationWriter
+namespace mu::iex::audioexport {
+class AudioExportModule : public framework::IModuleSetup
 {
 public:
-    Ret write(const notation::INotationPtr notation, system::IODevice& destinationDevice, const Options& options = Options()) override;
+
+    std::string moduleName() const override;
+    void resolveImports() override;
 };
 }
 
-#endif // MU_IMPORTEXPORT_FLACWRITER_H
+#endif // MU_IMPORTEXPORT_AUDIOEXPORTMODULE_H

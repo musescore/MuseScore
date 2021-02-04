@@ -17,14 +17,14 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "wavewriter.h"
+#include "oggwriter.h"
 
 #include "log.h"
 
-using namespace mu::importexport;
-using namespace mu::framework;
+using namespace mu::iex::audioexport;
+using namespace mu::system;
 
-mu::Ret WaveWriter::write(const notation::INotationPtr notation, system::IODevice& destinationDevice, const Options& options)
+mu::Ret OggWriter::write(const notation::INotationPtr notation, IODevice& destinationDevice, const Options& options)
 {
     UNUSED(notation)
     UNUSED(destinationDevice)

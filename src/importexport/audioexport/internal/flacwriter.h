@@ -17,20 +17,17 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "mp3writer.h"
+#ifndef MU_IMPORTEXPORT_FLACWRITER_H
+#define MU_IMPORTEXPORT_FLACWRITER_H
 
-#include "log.h"
+#include "notation/abstractnotationwriter.h"
 
-using namespace mu::importexport;
-using namespace mu::framework;
-
-mu::Ret Mp3Writer::write(const notation::INotationPtr notation, system::IODevice& destinationDevice, const Options& options)
+namespace mu::iex::audioexport {
+class FlacWriter : public notation::AbstractNotationWriter
 {
-    UNUSED(notation)
-    UNUSED(destinationDevice)
-    UNUSED(options)
-
-    NOT_IMPLEMENTED;
-
-    return make_ret(Ret::Code::NotImplemented);
+public:
+    Ret write(const notation::INotationPtr notation, system::IODevice& destinationDevice, const Options& options = Options()) override;
+};
 }
+
+#endif // MU_IMPORTEXPORT_FLACWRITER_H
