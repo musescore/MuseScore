@@ -24,6 +24,7 @@
 #include "async/channel.h"
 
 #include "notation/notationtypes.h"
+#include "actions/actiontypes.h"
 
 namespace mu::playback {
 class IPlaybackController : MODULE_EXPORT_INTERFACE
@@ -49,7 +50,8 @@ public:
 
     virtual void playElementOnClick(const notation::Element* element) = 0;
 
-    virtual bool isActionEnabled(const std::string& actionCode) const = 0;
+    virtual bool isActionEnabled(const actions::ActionCode& actionCode) const = 0;
+    virtual async::Channel<actions::ActionCode> actionEnabledChanged() const = 0;
 };
 }
 

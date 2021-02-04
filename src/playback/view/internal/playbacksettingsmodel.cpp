@@ -81,38 +81,38 @@ void PlaybackSettingsModel::load()
         m_items.push_back(item);
     }
 
+    controller()->actionEnabledChanged().onReceive(this, [this](const ActionCode& actionCode) {
+        updateCheckedState(actionCode);
+    });
+
     endResetModel();
 }
 
-void PlaybackSettingsModel::updateCheckedState()
+void PlaybackSettingsModel::updateCheckedState(const ActionCode& actionCode)
 {
     for (int i = 0; i < m_items.size(); ++i) {
         MenuItem& item = m_items[i];
-        bool newCheckedValue = isActionEnabled(item.code);
 
-        if (item.checked == newCheckedValue) {
-            continue;
+        if (item.code == actionCode) {
+            item.checked = isActionEnabled(actionCode);
+            QModelIndex index = this->index(i);
+            emit dataChanged(index, index, { CheckedRole });
+            return;
         }
-
-        item.checked = newCheckedValue;
-
-        QModelIndex index = this->index(i);
-        emit dataChanged(index, index, { CheckedRole });
     }
 }
 
-std::string PlaybackSettingsModel::resolveSection(const std::string& actionCode) const
+std::string PlaybackSettingsModel::resolveSection(const ActionCode& actionCode) const
 {
     return actionCode.find("loop") == std::string::npos ? "main" : "loop";
 }
 
-bool PlaybackSettingsModel::isActionEnabled(const std::string& actionCode) const
+bool PlaybackSettingsModel::isActionEnabled(const ActionCode& actionCode) const
 {
     return controller()->isActionEnabled(actionCode);
 }
 
-void PlaybackSettingsModel::handleAction(const QString& action)
+void PlaybackSettingsModel::handleAction(const QString& actionCode)
 {
-    dispatcher()->dispatch(action.toStdString());
-    updateCheckedState();
+    dispatcher()->dispatch(actionCode.toStdString());
 }
