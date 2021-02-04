@@ -72,38 +72,6 @@ QHash<int,QByteArray> PlaybackToolBarModel::roleNames() const
     return roles;
 }
 
-qreal PlaybackToolBarModel::playPosition() const
-{
-    NOT_IMPLEMENTED;
-    return 0.75;
-}
-
-void PlaybackToolBarModel::setPlayPosition(qreal position)
-{
-    Q_UNUSED(position)
-    NOT_IMPLEMENTED;
-    emit playPositionChanged(position);
-}
-
-QTime PlaybackToolBarModel::playTime() const
-{
-    NOT_IMPLEMENTED;
-    return QTime::currentTime();
-}
-
-void PlaybackToolBarModel::setPlayTime(const QTime& time)
-{
-    Q_UNUSED(time)
-    NOT_IMPLEMENTED;
-    emit playTimeChanged(time);
-}
-
-QString PlaybackToolBarModel::tempo() const
-{
-    NOT_IMPLEMENTED;
-    return QString();
-}
-
 void PlaybackToolBarModel::load()
 {
     beginResetModel();
@@ -152,6 +120,81 @@ ActionList PlaybackToolBarModel::currentWorkspaceActions() const
     }
 
     return actions;
+}
+
+qreal PlaybackToolBarModel::playPosition() const
+{
+    NOT_IMPLEMENTED;
+    return 0.75;
+}
+
+void PlaybackToolBarModel::setPlayPosition(qreal position)
+{
+    Q_UNUSED(position)
+    NOT_IMPLEMENTED;
+    emit playPositionChanged(position);
+}
+
+QTime PlaybackToolBarModel::playTime() const
+{
+    NOT_IMPLEMENTED;
+    return QTime::currentTime();
+}
+
+void PlaybackToolBarModel::setPlayTime(const QTime& time)
+{
+    Q_UNUSED(time)
+    NOT_IMPLEMENTED;
+    emit playTimeChanged(time);
+}
+
+int PlaybackToolBarModel::measureNumber() const
+{
+    NOT_IMPLEMENTED;
+    return 2;
+}
+
+void PlaybackToolBarModel::setMeasureNumber(int measureNumber)
+{
+    Q_UNUSED(measureNumber)
+    NOT_IMPLEMENTED;
+    emit measureNumberChanged(measureNumber);
+}
+
+int PlaybackToolBarModel::maxMeasureNumber() const
+{
+    NOT_IMPLEMENTED;
+    return 8;
+}
+
+int PlaybackToolBarModel::beatNumber() const
+{
+    NOT_IMPLEMENTED;
+    return 3;
+}
+
+void PlaybackToolBarModel::setBeatNumber(int beatNumber)
+{
+    Q_UNUSED(beatNumber)
+    NOT_IMPLEMENTED;
+    emit beatNumberChanged(beatNumber);
+}
+
+int PlaybackToolBarModel::maxBeatNumber() const
+{
+    NOT_IMPLEMENTED;
+    return 9;
+}
+
+QVariant PlaybackToolBarModel::tempo() const
+{
+    NOT_IMPLEMENTED;
+
+    QVariantMap tempo;
+    tempo["noteSymbol"] = noteIconToString(MusicalSymbolCodes::Code::CROTCHET, true);
+    tempo["value"] = 180;
+
+    return tempo;
 }
 
 void PlaybackToolBarModel::handleAction(const QString& action)
