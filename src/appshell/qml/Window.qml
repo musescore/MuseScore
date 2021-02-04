@@ -35,7 +35,7 @@ DockWindow {
     toolbars: [
         DockToolBar {
             objectName: "mainToolBar"
-            minimumWidth: 456
+            minimumWidth: 376
             minimumHeight: dockWindow.toolbarHeight
 
             color: dockWindow.color
@@ -98,10 +98,6 @@ DockWindow {
 
     PublishPage {
         uri: "musescore://publish"
-    }
-
-    SettingsPage {
-        uri: "musescore://settings"
     }
 
     DevToolsPage {

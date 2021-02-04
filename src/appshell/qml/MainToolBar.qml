@@ -27,10 +27,6 @@ Rectangle {
             uri: "musescore://publish"
         },
         {
-            title: qsTrc("appshell", "Settings"),
-            uri: "musescore://settings"
-        },
-        {
             title: qsTrc("appshell", "DevTools"),
             uri: "musescore://devtools"
         }
@@ -39,7 +35,7 @@ Rectangle {
     signal selected(string uri)
 
     function select(uri) {
-        root.selected(uri);
+        root.selected(uri)
     }
 
     RadioButtonGroup {

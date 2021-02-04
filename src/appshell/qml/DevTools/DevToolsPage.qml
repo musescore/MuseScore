@@ -6,6 +6,7 @@ import MuseScore.UiComponents 1.0
 import MuseScore.Plugins 1.0
 import MuseScore.Audio 1.0
 
+import "../Settings"
 import "./Gallery"
 import "./Interactive"
 import "./NotationDialogs"
@@ -37,6 +38,7 @@ DockPage {
                     anchors.right: parent.right
 
                     model: [
+                        { "name": "settings", "title": "Settings" },
                         { "name": "gallery", "title": "UI Gallery" },
                         { "name": "interactive", "title": "Interactive" },
                         { "name": "mu3dialogs", "title": "MU3Dialogs" },
@@ -60,11 +62,12 @@ DockPage {
         id: devtoolsCentral
         objectName: "devtoolsCentral"
 
-        property var currentComp: galleryComp
+        property var currentComp: settingsComp
 
         function load(name) {
             console.info("loadCentral: " + name)
             switch (name) {
+            case "settings": currentComp = settingsComp; break
             case "gallery": currentComp = galleryComp; break
             case "interactive": currentComp = interactiveComp; break
             case "mu3dialogs": currentComp = notationDialogs; break
@@ -84,6 +87,11 @@ DockPage {
                 sourceComponent: devtoolsCentral.currentComp
             }
         }
+    }
+
+    Component {
+        id: settingsComp
+        SettingsPage {}
     }
 
     Component {
