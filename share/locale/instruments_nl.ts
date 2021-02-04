@@ -1733,7 +1733,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1016"/>
         <source>Thundersheet</source>
-        <translation>Thundersheet</translation>
+        <translation>Donderblad</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1018"/>
@@ -4355,7 +4355,7 @@
         <location filename="../instruments/instrumentsxml.h" line="862"/>
         <source>Cme.</source>
         <comment>Chimes</comment>
-        <translation>Klok.</translation>
+        <translation>Buisk.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="864"/>
@@ -4810,7 +4810,7 @@
         <location filename="../instruments/instrumentsxml.h" line="995"/>
         <source>Cwb.</source>
         <comment>Cowbell</comment>
-        <translation>Cwb.</translation>
+        <translation>Koeb.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="997"/>
@@ -4881,7 +4881,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1017"/>
         <source>Thu.</source>
         <comment>Thundersheet</comment>
-        <translation>Thu.</translation>
+        <translation>Don.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1019"/>

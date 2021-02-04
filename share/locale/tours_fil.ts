@@ -177,7 +177,8 @@ Upang ma-toggle muli ang tinatakdang ito, pindutin ang shortcut &quot;M&quot;.</
         <source>The timeline shows rehearsal marks, changes of tempo, key, and time signature, and other points of interest.
     You can click anywhere to jump to the corresponding location in your score.</source>
         <comment>timeline-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Pinapakita ng hanay-panahon ang mga marka sa pag-eensayo, mga pagbabago sa tempo, key, at time signature, at iba pang mga puntong kinawiwilihan.
+    Maaari kang magklik kahit saan upang tumalon sa kaakibat na lokasyon sa iyong iskor.</translation>
     </message>
     <message>
         <source>The section below contains a row for each instrument.

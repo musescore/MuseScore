@@ -33673,7 +33673,7 @@ Takt ist nicht leer</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4957"/>
         <source>Mordent</source>
-        <translation>Doppelschlag</translation>
+        <translation>Mordent</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4977"/>
@@ -33688,7 +33688,7 @@ Takt ist nicht leer</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4999"/>
         <source>Short trill</source>
-        <translation>Kurzer Triller</translation>
+        <translation>Pralltriller</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5004"/>

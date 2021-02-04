@@ -4523,7 +4523,7 @@ Alapértelmezés szerint a jobb szélük lesz egy vonalhoz illesztve. Ezzel a ka
         <location filename="../../mscore/editstyle.ui" line="9902"/>
         <location filename="../../mscore/editstyle.ui" line="10723"/>
         <source>Line height:</source>
-        <translation>Vonal magassága:</translation>
+        <translation>Sormagasság:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="10775"/>
@@ -4943,7 +4943,7 @@ Alapértelmezés szerint a jobb szélük lesz egy vonalhoz illesztve. Ezzel a ka
     <message>
         <location filename="../../mscore/editstyle.ui" line="10014"/>
         <source>Reset &apos;Line height&apos; value</source>
-        <translation>„Vonal magasság” alaphelyzetbe</translation>
+        <translation>„Sormagasság” alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="10054"/>
@@ -13616,7 +13616,7 @@ Hangszín: %5</translation>
     <message>
         <location filename="../../mscore/musescore.cpp" line="4466"/>
         <source>Drumset input mode</source>
-        <translation>Dobkészlet beviteli mód</translation>
+        <translation>Dobkottaírás</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="6006"/>
@@ -14130,12 +14130,12 @@ válassz ki egy ütemet és próbáld újra</translation>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2114"/>
         <source>Note Input</source>
-        <translation>Hangjegybevitel</translation>
+        <translation>Hangjegyírás</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="582"/>
         <source>Note Entry Methods</source>
-        <translation>Hangjegy-beviteli módszerek</translation>
+        <translation>Hangjegyírási módszerek</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2141"/>
@@ -14357,27 +14357,27 @@ Biztosan szeretné folytatni?</translation>
     <message>
         <location filename="../../mscore/musescore.cpp" line="4422"/>
         <source>Repitch input mode</source>
-        <translation>„Új hangmagasság” beviteli mód</translation>
+        <translation>„Új hangmagasság” írási mód</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="4427"/>
         <source>Rhythm input mode</source>
-        <translation>Ritmusbeviteli mód</translation>
+        <translation>Ritmusírás</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="4432"/>
         <source>Realtime (automatic) note input mode</source>
-        <translation>Valósidejű (automatikus) hangjegy-beviteli mód</translation>
+        <translation>Valósidejű (automatikus) hangjegyírási mód</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="4437"/>
         <source>Realtime (manual) note input mode</source>
-        <translation>Valósidejű (kézi) hangjegy-beviteli mód</translation>
+        <translation>Valósidejű (kézi) hangjegyírási mód</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="4447"/>
         <source>Steptime note input mode</source>
-        <translation>Léptetett idejű hangjegy-beviteli mód</translation>
+        <translation>Egyenkénti hangjegyírási mód</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="4486"/>
@@ -15465,13 +15465,13 @@ Ennek a pluginnek a futtatásához megnyitott kottára van szükség.</translati
         <location filename="../../mscore/prefsdialog.cpp" line="1012"/>
         <location filename="../../mscore/prefsdialog.cpp" line="1030"/>
         <source>Choose Score Order List</source>
-        <translation>Válasszon kottasorrend listát</translation>
+        <translation>Válasszon szólamsorrendeket</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="1014"/>
         <location filename="../../mscore/prefsdialog.cpp" line="1032"/>
         <source>Score Order List</source>
-        <translation>Kottasorrend lista</translation>
+        <translation>Szólamsorrend</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="1058"/>
@@ -18350,17 +18350,17 @@ paletta-fájl írása sikertelen:</translation>
     <message>
         <location filename="../../mscore/pianoroll/pianolevelsfilter.cpp" line="14"/>
         <source>Move the selected note(s) forward or backward by thousandths of the full note duration</source>
-        <translation type="unfinished"/>
+        <translation>A kijelölt hang(ok) mozgatása előre/hátra a ritmusérték ezredrészeiben kifejezve</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll/pianolevelsfilter.cpp" line="16"/>
         <source>Duration (multiplier)</source>
-        <translation type="unfinished"/>
+        <translation>Hossz (szorzó)</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll/pianolevelsfilter.cpp" line="17"/>
         <source>Multiply the duration by thousandths of the full note duration</source>
-        <translation type="unfinished"/>
+        <translation>A hossz megszorzása a hossz ezredrészeiben kifejezve</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll/pianolevelsfilter.cpp" line="19"/>
@@ -18370,27 +18370,27 @@ paletta-fájl írása sikertelen:</translation>
     <message>
         <location filename="../../mscore/pianoroll/pianolevelsfilter.cpp" line="20"/>
         <source>Shorten or lengthen by thousandths of a whole note</source>
-        <translation type="unfinished"/>
+        <translation>Rövidítés/nyújtás az egészhang ezredrészeivel</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll/pianolevelsfilter.cpp" line="22"/>
         <source>Velocity (relative)</source>
-        <translation type="unfinished"/>
+        <translation>Hangindítás (relatív)</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll/pianolevelsfilter.cpp" line="23"/>
         <source>Increase or decrease the velocity by the specified value</source>
-        <translation type="unfinished"/>
+        <translation>Növelje vagy csökkentse a hangindítás sebességét a megadott értékkel</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll/pianolevelsfilter.cpp" line="25"/>
         <source>Velocity (absolute)</source>
-        <translation type="unfinished"/>
+        <translation>Hangindítás (abszolút)</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll/pianolevelsfilter.cpp" line="26"/>
         <source>Ignore dynamic markings and set the velocity directly</source>
-        <translation type="unfinished"/>
+        <translation>Hagyja figyelmen kívül a dinamikai jelzéseket és közvetlenül állítsa be a hangindítást</translation>
     </message>
 </context>
 <context>
@@ -18453,7 +18453,7 @@ hangerő</translation>
         <location filename="../../mscore/playpanel.ui" line="651"/>
         <location filename="../../mscore/playpanel.ui" line="654"/>
         <source>Playback speed (as percentage)</source>
-        <translation type="unfinished"/>
+        <translation>Lejátszás sebessége (százalékban)</translation>
     </message>
     <message>
         <location filename="../../mscore/playpanel.ui" line="663"/>
@@ -18477,7 +18477,7 @@ hangerő</translation>
         <location filename="../../mscore/playpanel.ui" line="839"/>
         <location filename="../../mscore/playpanel.ui" line="842"/>
         <source>Playback speed</source>
-        <translation type="unfinished"/>
+        <translation>Lejátszás sebessége</translation>
     </message>
     <message>
         <location filename="../../mscore/playpanel.ui" line="898"/>
@@ -19111,7 +19111,7 @@ Ez az összes bővítményt újra beolvassa, és életbe lépteti a változások
         <location filename="../../mscore/prefsdialog.ui" line="1290"/>
         <location filename="../../mscore/prefsdialog.ui" line="1296"/>
         <source>Note Input</source>
-        <translation>Hangjegybevitel</translation>
+        <translation>Hangjegyírás</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1302"/>
@@ -19154,7 +19154,7 @@ Ez az összes bővítményt újra beolvassa, és életbe lépteti a változások
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="506"/>
         <source>Theme:</source>
-        <translation type="unfinished"/>
+        <translation>Téma:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1052"/>
@@ -19165,60 +19165,60 @@ Ez az összes bővítményt újra beolvassa, és életbe lépteti a változások
         <location filename="../../mscore/prefsdialog.ui" line="1061"/>
         <location filename="../../mscore/prefsdialog.ui" line="1067"/>
         <source>The default zoom level for new scores</source>
-        <translation type="unfinished"/>
+        <translation>Új kották alapértelmezett nagyítása</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1064"/>
         <source>Default zoom level</source>
-        <translation type="unfinished"/>
+        <translation>Alapértelmezett nagyítás</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1096"/>
         <source>Keyboard zoom precision:</source>
-        <translation type="unfinished"/>
+        <translation>Billentyűvezérelt nagyítás pontossága:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1103"/>
         <location filename="../../mscore/prefsdialog.ui" line="1109"/>
         <source>The number of steps it takes to double the zoom level using the mouse</source>
-        <translation type="unfinished"/>
+        <translation>Az egér használatakor hány lépés alatt duplázza a nagyítást</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1106"/>
         <source>Mouse zoom precision</source>
-        <translation type="unfinished"/>
+        <translation>Egérvezérelt nagyítás pontossága</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1125"/>
         <source>Mouse zoom precision:</source>
-        <translation type="unfinished"/>
+        <translation>Egérvezérelt nagyítás pontossága:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1138"/>
         <location filename="../../mscore/prefsdialog.ui" line="1144"/>
         <source>The default zoom type for new scores</source>
-        <translation type="unfinished"/>
+        <translation>Új kották alapértelmezett nagyítási módja</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1141"/>
         <source>Default zoom type</source>
-        <translation type="unfinished"/>
+        <translation>Alapértelmezett nagyítási mód</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1174"/>
         <location filename="../../mscore/prefsdialog.ui" line="1180"/>
         <source>The number of steps it takes to double the zoom level using the keyboard</source>
-        <translation type="unfinished"/>
+        <translation>Az billentyűzet használatakor hány lépés alatt duplázza a nagyítást</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1177"/>
         <source>Keyboard zoom precision</source>
-        <translation type="unfinished"/>
+        <translation>Billentyűvezérelt nagyítás pontossága</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1418"/>
         <source>Play chord symbol when editing</source>
-        <translation type="unfinished"/>
+        <translation>Akkordjelzés lejátszása szerkesztés közben</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1438"/>
@@ -19462,17 +19462,17 @@ Ez az összes bővítményt újra beolvassa, és életbe lépteti a változások
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2190"/>
         <source>Note input</source>
-        <translation>Hangjegybevitel</translation>
+        <translation>Hangjegyírás</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2206"/>
         <source>Note input is active</source>
-        <translation>Hangjegybevitel aktív</translation>
+        <translation>Hangjegyírás aktív</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2227"/>
         <source>Note input record</source>
-        <translation>Hangjegybevitel felvétele</translation>
+        <translation>Hangjegyírás felvétele</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2242"/>
@@ -19670,27 +19670,27 @@ Ez az összes bővítményt újra beolvassa, és életbe lépteti a változások
         <location filename="../../mscore/prefsdialog.ui" line="2613"/>
         <location filename="../../mscore/prefsdialog.ui" line="2660"/>
         <source>Insert path to an instrument list file</source>
-        <translation type="unfinished"/>
+        <translation>Illessze be a hangszerlistát tartalmazó fájl elérési útvonalát</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2673"/>
         <source>Score order list 1:</source>
-        <translation type="unfinished"/>
+        <translation>Szólamsorrendek 1:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2683"/>
         <source>Score order list 2:</source>
-        <translation type="unfinished"/>
+        <translation>Szólamsorrendek 2:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2723"/>
         <source>Score Order List 1</source>
-        <translation type="unfinished"/>
+        <translation>Szólamsorrendek 1:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2730"/>
         <source>Score Order List 2</source>
-        <translation type="unfinished"/>
+        <translation>Szólamsorrendek 2:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2779"/>
@@ -19844,7 +19844,7 @@ A késleltetés állítása lehetővé teszi, hogy a MIDI eszközt szinkronizál
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3389"/>
         <source>Apply default typeface (Edwin) to imported scores</source>
-        <translation type="unfinished"/>
+        <translation>Alkalmazzuk az alapértelmezett betűtípust (Edwin) az importált kottákon</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3399"/>
@@ -19910,7 +19910,7 @@ A késleltetés állítása lehetővé teszi, hogy a MIDI eszközt szinkronizál
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1287"/>
         <source>Note input tab</source>
-        <translation>Hangjegybevitel fül</translation>
+        <translation>Hangjegyírás fül</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1316"/>
@@ -20120,27 +20120,27 @@ A késleltetés állítása lehetővé teszi, hogy a MIDI eszközt szinkronizál
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3582"/>
         <source>OMR</source>
-        <translation type="unfinished"/>
+        <translation>OMR</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3588"/>
         <source>Use local OMR engine</source>
-        <translation type="unfinished"/>
+        <translation>Használja a helyi OMR motort</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3598"/>
         <source>When opening scores from older MuseScore versions</source>
-        <translation type="unfinished"/>
+        <translation>Amikor régebbi MuseScore verzióval készült kottát nyitunk meg</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3604"/>
         <source>Show option to apply improved engraving and style settings</source>
-        <translation type="unfinished"/>
+        <translation>Mutassa a megújított kottagrafikai és stílusbeállítások alkalmazásának lehetőségét</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3745"/>
         <source>Export all layout</source>
-        <translation type="unfinished"/>
+        <translation>A teljes elrendezés exportálása</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3958"/>
@@ -20589,7 +20589,7 @@ sikertelen: %2</translation>
     <message>
         <location filename="../../libmscore/stafftype.cpp" line="1372"/>
         <source>Tab. dulcimer</source>
-        <translation type="unfinished"/>
+        <translation>Tab. dulcimer</translation>
     </message>
     <message>
         <location filename="../../libmscore/stafftype.cpp" line="1375"/>
@@ -20659,7 +20659,7 @@ Keresse fel a %1MuseScore honlapot%2 és töltse le a legújabb verziót.</trans
     <message>
         <location filename="../../mscore/file.cpp" line="214"/>
         <source>File &quot;%1&quot; is critically corrupted and cannot be processed.</source>
-        <translation type="unfinished"/>
+        <translation>&quot;%1&quot; sérült és nem feldolgozható.</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="218"/>
@@ -20899,7 +20899,7 @@ Keresse fel a %1MuseScore honlapot%2 és töltse le a legújabb verziót.</trans
     <message>
         <location filename="../../libmscore/note.cpp" line="844"/>
         <source>%1 (sounding as %2%3)</source>
-        <translation type="unfinished"/>
+        <translation>%1 (hangzás mint %2%3)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="2250"/>
@@ -20937,7 +20937,7 @@ Keresse fel a %1MuseScore honlapot%2 és töltse le a legújabb verziót.</trans
     <message>
         <location filename="../../libmscore/note.cpp" line="3041"/>
         <source> (on %1‰ off %2‰)</source>
-        <translation type="unfinished"/>
+        <translation> (be %1‰ ki %2‰)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="3045"/>
@@ -20958,7 +20958,7 @@ Keresse fel a %1MuseScore honlapot%2 és töltse le a legújabb verziót.</trans
     <message>
         <location filename="../../libmscore/note.cpp" line="3052"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
-        <translation type="unfinished"/>
+        <translation>%1; Hangmagasság: %2; Hossz: %3%4%5</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="3068"/>
@@ -21144,7 +21144,7 @@ Keresse fel a %1MuseScore honlapot%2 és töltse le a legújabb verziót.</trans
     <message>
         <location filename="../../libmscore/pitchspelling.cpp" line="251"/>
         <source>triple ♭</source>
-        <translation type="unfinished"/>
+        <translation>tripla ♭</translation>
     </message>
     <message>
         <location filename="../../libmscore/pitchspelling.cpp" line="266"/>
@@ -21154,7 +21154,7 @@ Keresse fel a %1MuseScore honlapot%2 és töltse le a legújabb verziót.</trans
     <message>
         <location filename="../../libmscore/pitchspelling.cpp" line="302"/>
         <source>triple ♯</source>
-        <translation type="unfinished"/>
+        <translation>tripla ♯</translation>
     </message>
     <message>
         <location filename="../../libmscore/harmony.cpp" line="1982"/>
@@ -21191,7 +21191,7 @@ Keresse fel a %1MuseScore honlapot%2 és töltse le a legújabb verziót.</trans
     <message>
         <location filename="../../mscore/instrwidget.cpp" line="405"/>
         <source>Soloist: %1</source>
-        <translation type="unfinished"/>
+        <translation>Szólista: %1</translation>
     </message>
     <message>
         <location filename="../../mscore/instrwidget.cpp" line="589"/>
@@ -21212,17 +21212,17 @@ Keresse fel a %1MuseScore honlapot%2 és töltse le a legújabb verziót.</trans
     <message>
         <location filename="../../avsomr/ret.cpp" line="114"/>
         <source>Failed reading file</source>
-        <translation type="unfinished"/>
+        <translation>A fájl beolvasása nem sikerült</translation>
     </message>
     <message>
         <location filename="../../avsomr/ret.cpp" line="115"/>
         <source>Failed clearing directory</source>
-        <translation type="unfinished"/>
+        <translation>A könyvtár törlése nem sikerült</translation>
     </message>
     <message>
         <location filename="../../avsomr/ret.cpp" line="116"/>
         <source>File not supported</source>
-        <translation type="unfinished"/>
+        <translation>Nem támogatott fájl</translation>
     </message>
     <message>
         <location filename="../../avsomr/ret.cpp" line="118"/>
@@ -21232,47 +21232,47 @@ Keresse fel a %1MuseScore honlapot%2 és töltse le a legújabb verziót.</trans
     <message>
         <location filename="../../avsomr/ret.cpp" line="119"/>
         <source>Server error</source>
-        <translation type="unfinished"/>
+        <translation>Szerverhiba</translation>
     </message>
     <message>
         <location filename="../../avsomr/ret.cpp" line="121"/>
         <source>Local OMR engine not installed</source>
-        <translation type="unfinished"/>
+        <translation>Helyi OMR motor nincs telepítve</translation>
     </message>
     <message>
         <location filename="../../avsomr/ret.cpp" line="122"/>
         <source>Local OMR engine installing…</source>
-        <translation type="unfinished"/>
+        <translation>Helyi OMR motor telepítse...</translation>
     </message>
     <message>
         <location filename="../../avsomr/ret.cpp" line="123"/>
         <source>Failed executing local OMR engine</source>
-        <translation type="unfinished"/>
+        <translation>A helyi OMR motor indítása sikertelen</translation>
     </message>
     <message>
         <location filename="../../avsomr/ret.cpp" line="124"/>
         <source>Local OMR engine already building…</source>
-        <translation type="unfinished"/>
+        <translation>A helyi OMR motor készül...</translation>
     </message>
     <message>
         <location filename="../../avsomr/ret.cpp" line="140"/>
         <source>Please try again</source>
-        <translation type="unfinished"/>
+        <translation>Próbálja újra</translation>
     </message>
     <message>
         <location filename="../../avsomr/ret.cpp" line="149"/>
         <source>Choose another file</source>
-        <translation type="unfinished"/>
+        <translation>Válasszon másik fájlt</translation>
     </message>
     <message>
         <location filename="../../avsomr/ret.cpp" line="151"/>
         <source>Check your internet connection</source>
-        <translation type="unfinished"/>
+        <translation>Ellenőrizze az internetkapcsolatot</translation>
     </message>
     <message>
         <location filename="../../avsomr/ret.cpp" line="154"/>
         <source>Try to uncheck and check again to use the local OMR engine</source>
-        <translation type="unfinished"/>
+        <translation>Próbálja meg ki és bekapcsolni a helyi OMR motor használatához</translation>
     </message>
     <message>
         <location filename="../../avsomr/ui/recognitionproccessdialog.cpp" line="36"/>
@@ -21488,7 +21488,7 @@ Keresse fel a %1MuseScore honlapot%2 és töltse le a legújabb verziót.</trans
         <location filename="../../libmscore/textbase.cpp" line="661"/>
         <location filename="../../libmscore/textbase.cpp" line="666"/>
         <source>%1 unselected</source>
-        <translation type="unfinished"/>
+        <translation>%1 nincs kijelölve</translation>
     </message>
     <message>
         <location filename="../../libmscore/textbase.cpp" line="614"/>
@@ -21501,12 +21501,12 @@ Keresse fel a %1MuseScore honlapot%2 és töltse le a legújabb verziót.</trans
         <location filename="../../libmscore/textbase.cpp" line="662"/>
         <location filename="../../libmscore/textbase.cpp" line="665"/>
         <source>%1 selected</source>
-        <translation type="unfinished"/>
+        <translation>%1 kijelölve</translation>
     </message>
     <message>
         <location filename="../../libmscore/cmd.cpp" line="1710"/>
         <source>%1 added</source>
-        <translation type="unfinished"/>
+        <translation>%1 hozzáadva</translation>
     </message>
     <message>
         <location filename="../../libmscore/cmd.cpp" line="1712"/>
@@ -21516,12 +21516,12 @@ Keresse fel a %1MuseScore honlapot%2 és töltse le a legújabb verziót.</trans
     <message>
         <location filename="../../libmscore/cmd.cpp" line="1714"/>
         <source>%1, added %2, removed %3</source>
-        <translation type="unfinished"/>
+        <translation>%1, hozzáadva %2, eltávolítva %3</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="1193"/>
         <source>Use local OMR engine</source>
-        <translation type="unfinished"/>
+        <translation>Használja a helyi OMR motort</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="1195"/>
@@ -21978,7 +21978,7 @@ Szeretnéd felülírni?</translation>
     <message>
         <location filename="../../mscore/qml/migration/ScoreMigrationDialog.qml" line="136"/>
         <source>Watch our release video to learn more</source>
-        <translation type="unfinished"/>
+        <translation>Nézze meg a megjelenéshez készített videónkat további információért</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/migration/ScoreMigrationDialog.qml" line="164"/>
@@ -21988,12 +21988,12 @@ Szeretnéd felülírni?</translation>
     <message>
         <location filename="../../mscore/qml/migration/ScoreMigrationDialog.qml" line="180"/>
         <source>Keep old style</source>
-        <translation type="unfinished"/>
+        <translation>Tartsa meg a régi stílust</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/migration/ScoreMigrationDialog.qml" line="186"/>
         <source>Apply new style</source>
-        <translation type="unfinished"/>
+        <translation>Használja az új stílust</translation>
     </message>
 </context>
 <context>
@@ -22050,7 +22050,7 @@ Szeretnéd felülírni?</translation>
     <message>
         <location filename="../../mscore/selectdialog.ui" line="47"/>
         <source>Same beat</source>
-        <translation type="unfinished"/>
+        <translation>Azonos leütés</translation>
     </message>
     <message>
         <location filename="../../mscore/selectdialog.ui" line="82"/>
@@ -22065,7 +22065,7 @@ Szeretnéd felülírni?</translation>
     <message>
         <location filename="../../mscore/selectdialog.ui" line="110"/>
         <source>Same measure</source>
-        <translation type="unfinished"/>
+        <translation>Azonos ütem</translation>
     </message>
     <message>
         <location filename="../../mscore/selectdialog.ui" line="120"/>
@@ -22186,12 +22186,12 @@ Szeretnéd felülírni?</translation>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="166"/>
         <source>Same beat</source>
-        <translation type="unfinished"/>
+        <translation>Azonos leütés</translation>
     </message>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="173"/>
         <source>Same measure</source>
-        <translation type="unfinished"/>
+        <translation>Azonos ütem</translation>
     </message>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="183"/>
@@ -22956,7 +22956,7 @@ Megjegyzés: pl. a Ctrl+Shift+1 egy kombinációnak számít.</translation>
     <message>
         <location filename="../../libmscore/style.cpp" line="2453"/>
         <source>Multimeasure Rest Range</source>
-        <translation type="unfinished"/>
+        <translation>Többütemes szünet tartomány</translation>
     </message>
     <message>
         <location filename="../../libmscore/style.cpp" line="2466"/>
@@ -23483,7 +23483,7 @@ Megjegyzés: pl. a Ctrl+Shift+1 egy kombinációnak számít.</translation>
         <location filename="../../mscore/timesigwizard.ui" line="443"/>
         <location filename="../../mscore/timesigwizard.ui" line="446"/>
         <source>Quarter notes per minute</source>
-        <translation type="unfinished"/>
+        <translation>Negyedhangok percenként</translation>
     </message>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="166"/>
@@ -23546,7 +23546,7 @@ Megjegyzés: pl. a Ctrl+Shift+1 egy kombinációnak számít.</translation>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="348"/>
         <source>Enter Number of Measures:</source>
-        <translation type="unfinished"/>
+        <translation>Adja meg az ütemek számát:</translation>
     </message>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="363"/>
@@ -23575,7 +23575,7 @@ Megjegyzés: pl. a Ctrl+Shift+1 egy kombinációnak számít.</translation>
     <message>
         <location filename="../../mscore/toolbarEditor.ui" line="14"/>
         <source>Edit Toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Eszköztár szerkesztése</translation>
     </message>
     <message>
         <location filename="../../mscore/toolbarEditor.ui" line="26"/>
@@ -23613,12 +23613,12 @@ Megjegyzés: pl. a Ctrl+Shift+1 egy kombinációnak számít.</translation>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="32"/>
         <source>Transpose to key (specified at concert pitch)</source>
-        <translation type="unfinished"/>
+        <translation>Transzponálás hangnembe (hangzó magasságban megadva)</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="35"/>
         <source>To Key</source>
-        <translation type="unfinished"/>
+        <translation>Hangnembe</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="57"/>
@@ -24131,18 +24131,18 @@ Megjegyzés: pl. a Ctrl+Shift+1 egy kombinációnak számít.</translation>
     <message>
         <location filename="../../mscore/inspector/voicing_select.ui" line="45"/>
         <source>Interpretation:</source>
-        <translation type="unfinished"/>
+        <translation>Értelmezés:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/voicing_select.ui" line="55"/>
         <source>Voicing:</source>
-        <translation type="unfinished"/>
+        <translation>Felrakás:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/voicing_select.ui" line="69"/>
         <source>Jazz</source>
         <extracomment>adding 9th and 13th as desired</extracomment>
-        <translation type="unfinished"/>
+        <translation>Jazz</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/voicing_select.ui" line="74"/>
@@ -24153,7 +24153,7 @@ Megjegyzés: pl. a Ctrl+Shift+1 egy kombinációnak számít.</translation>
     <message>
         <location filename="../../mscore/inspector/voicing_select.ui" line="83"/>
         <source>Auto</source>
-        <translation type="unfinished"/>
+        <translation>Auto</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/voicing_select.ui" line="88"/>
@@ -24164,7 +24164,7 @@ Megjegyzés: pl. a Ctrl+Shift+1 egy kombinációnak számít.</translation>
         <location filename="../../mscore/inspector/voicing_select.ui" line="93"/>
         <source>Close</source>
         <extracomment>all notes within an octave</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bezárás</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/voicing_select.ui" line="98"/>
@@ -24198,7 +24198,7 @@ Megjegyzés: pl. a Ctrl+Shift+1 egy kombinációnak számít.</translation>
     <message>
         <location filename="../../mscore/inspector/voicing_select.ui" line="127"/>
         <source>Until Measure End</source>
-        <translation type="unfinished"/>
+        <translation>Az ütem végéig</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/voicing_select.ui" line="132"/>
@@ -24213,7 +24213,9 @@ Megjegyzés: pl. a Ctrl+Shift+1 egy kombinációnak számít.</translation>
         <source>Writing Workspace File
 %1
 failed</source>
-        <translation type="unfinished"/>
+        <translation>A munkaterületfájl írása:
+%1
+sikertelen</translation>
     </message>
     <message>
         <location filename="../../mscore/workspace.cpp" line="305"/>
@@ -24496,17 +24498,17 @@ failed</source>
         <location filename="../../mscore/shortcut.cpp" line="259"/>
         <location filename="../../mscore/shortcut.cpp" line="2139"/>
         <source>Note Input</source>
-        <translation>Hangjegybevitel</translation>
+        <translation>Hangjegyírás</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="261"/>
         <source>Enter notes with a mouse or keyboard</source>
-        <translation>Hangjegyek bevitele egérrel vagy billentyűzettel</translation>
+        <translation>Hangjegyírás egérrel vagy billentyűzettel</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="272"/>
         <source>Enter notes in Step-time</source>
-        <translation>Hangjegyek bevitele egyenként</translation>
+        <translation>Hangjegyírás egyenként</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="281"/>
@@ -24526,7 +24528,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="294"/>
         <source>Enter durations with a single click or keypress</source>
-        <translation>Időtartamok bevitele kattintással vagy billentyűleütéssel</translation>
+        <translation>Időtartamok megadása kattintással vagy billentyűleütéssel</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="336"/>
@@ -24716,7 +24718,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="466"/>
         <source>Enter note A</source>
-        <translation>A hang bevitele</translation>
+        <translation>A hang írása</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="472"/>
@@ -24726,7 +24728,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="473"/>
         <source>Enter note B</source>
-        <translation>H hang bevitele</translation>
+        <translation>H hang írása</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="479"/>
@@ -24736,7 +24738,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="480"/>
         <source>Enter note C</source>
-        <translation>C hang bevitele</translation>
+        <translation>C hang írása</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="486"/>
@@ -24746,7 +24748,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="487"/>
         <source>Enter note D</source>
-        <translation>D hang bevitele</translation>
+        <translation>D hang írása</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="493"/>
@@ -24756,7 +24758,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="494"/>
         <source>Enter note E</source>
-        <translation>E hang bevitele</translation>
+        <translation>E hang írása</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="500"/>
@@ -24766,7 +24768,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="501"/>
         <source>Enter note F</source>
-        <translation>F hang bevitele</translation>
+        <translation>F hang írása</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="507"/>
@@ -24776,7 +24778,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="508"/>
         <source>Enter note G</source>
-        <translation>G hang bevitele</translation>
+        <translation>G hang írása</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="515"/>
@@ -24893,12 +24895,12 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="620"/>
         <source>Enter rest</source>
-        <translation>Szünet bevitele</translation>
+        <translation>Szünet írása</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="629"/>
         <source>Move the cursor forward in real-time input mode</source>
-        <translation>A kurzor továbbvitele valósidejű beviteli módban</translation>
+        <translation>A kurzor továbbvitele valós idejű hangjegyíráskor</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="636"/>
@@ -25642,7 +25644,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1483"/>
         <source>Note duration: Longa</source>
-        <translation>Hangjegy hossz: Longa</translation>
+        <translation>Ritmusérték: Longa</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1493"/>
@@ -25652,7 +25654,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1494"/>
         <source>Note duration: Double whole</source>
-        <translation>Hangjegy hosszúsága: Kétszeres egész</translation>
+        <translation>Ritmusérték: Kétszeres egész</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1495"/>
@@ -25668,7 +25670,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1505"/>
         <source>Note duration: Whole</source>
-        <translation>Hangjegy hosszúsága: Egész</translation>
+        <translation>Ritmusérték: Egész</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1506"/>
@@ -25684,7 +25686,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1516"/>
         <source>Note duration: Half</source>
-        <translation>Hangjegy hosszúsága: Fél</translation>
+        <translation>Ritmusérték: Fél</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1517"/>
@@ -25700,7 +25702,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1527"/>
         <source>Note duration: Quarter</source>
-        <translation>Hangjegy hosszúsága: Negyed</translation>
+        <translation>Ritmusérték: Negyed</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1528"/>
@@ -25716,7 +25718,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1538"/>
         <source>Note duration: Eighth</source>
-        <translation>Hangjegy hosszúsága: Nyolcad</translation>
+        <translation>Ritmusérték: Nyolcad</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1539"/>
@@ -25732,7 +25734,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1549"/>
         <source>Note duration: 16th</source>
-        <translation>Hangjegy hosszúsága: 1/16</translation>
+        <translation>Ritmusérték: 1/16</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1550"/>
@@ -25748,7 +25750,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1560"/>
         <source>Note duration: 32nd</source>
-        <translation>Hangjegy hosszúsága: 1/32</translation>
+        <translation>Ritmusérték: 1/32</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1561"/>
@@ -25764,7 +25766,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1571"/>
         <source>Note duration: 64th</source>
-        <translation>Hangjegy hosszúsága: 1/64</translation>
+        <translation>Ritmusérték: 1/64</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1572"/>
@@ -25780,7 +25782,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1582"/>
         <source>Note duration: 128th</source>
-        <translation>Hangjegy hosszúsága: 1/128</translation>
+        <translation>Ritmusérték: 1/128</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1583"/>
@@ -25816,7 +25818,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1640"/>
         <source>Note duration: Augmentation dot</source>
-        <translation>Hangjegy hossz: pontozás</translation>
+        <translation>Ritmusérték: pontozás</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1641"/>
@@ -25831,7 +25833,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1651"/>
         <source>Note duration: Double augmentation dot</source>
-        <translation>Hangjegy hossz: kétszeres pontozás</translation>
+        <translation>Ritmusérték: kétszeres pontozás</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1652"/>
@@ -25846,7 +25848,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1662"/>
         <source>Note duration: Triple augmentation dot</source>
-        <translation>Hangjegy hossz: háromszoros pontozás</translation>
+        <translation>Ritmusérték: háromszoros pontozás</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1663"/>
@@ -25861,7 +25863,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1673"/>
         <source>Note duration: Quadruple augmentation dot</source>
-        <translation>Hangjegy hossz: négyszeres pontozás</translation>
+        <translation>Ritmusérték: négyszeres pontozás</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1674"/>
@@ -25877,12 +25879,12 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1684"/>
         <source>Note duration: Tie</source>
-        <translation>Hangjegy hossza: Átkötés</translation>
+        <translation>Ritmusérték: Átkötés</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1695"/>
         <source>Note input: Rest</source>
-        <translation>Hangjegybevitel: Szünet</translation>
+        <translation>Hangjegyírás: Szünet</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1815"/>
@@ -26061,7 +26063,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2322"/>
         <source>Add image</source>
-        <translation type="unfinished"/>
+        <translation>Kép hozzáadása</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2329"/>
@@ -26181,22 +26183,22 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2744"/>
         <source>Find / Go To</source>
-        <translation type="unfinished"/>
+        <translation>Keresés / Ugrás</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2745"/>
         <source>Find / Go to</source>
-        <translation type="unfinished"/>
+        <translation>Keresés / Ugrás</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2773"/>
         <source>Zoom to Page Width or Previous Magnification Level</source>
-        <translation type="unfinished"/>
+        <translation>Nagyítás a lapszélességhez vagy az előző szinthez illeszkedve</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2774"/>
         <source>Zoom to page-width / previous magnification level</source>
-        <translation type="unfinished"/>
+        <translation>Nagyítás a lapszélességhez / előző nagyítási szinthez illeszkedve</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2790"/>
@@ -26216,7 +26218,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2919"/>
         <source>Par&amp;ts…</source>
-        <translation type="unfinished"/>
+        <translation>Szólamok...</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2926"/>
@@ -26286,7 +26288,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3115"/>
         <source>&amp;Resource Manager…</source>
-        <translation type="unfinished"/>
+        <translation>Erőforráskezelő</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3126"/>
@@ -26383,7 +26385,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="56"/>
         <source>&amp;Save</source>
-        <translation type="unfinished"/>
+        <translation>Menté&amp;s</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="57"/>
@@ -26398,7 +26400,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="77"/>
         <source>Save &amp;As…</source>
-        <translation type="unfinished"/>
+        <translation>Mentés m&amp;ásként...</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="78"/>
@@ -26413,7 +26415,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="110"/>
         <source>&amp;Export…</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Exportálás...</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="130"/>
@@ -26428,12 +26430,12 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="147"/>
         <source>&amp;Print…</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Nyomtatás</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="149"/>
         <source>Print score/part</source>
-        <translation type="unfinished"/>
+        <translation>Kotta/szólam nyomtatása</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="211"/>
@@ -26468,27 +26470,27 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="260"/>
         <source>Note input: Toggle Entry/Normal mode</source>
-        <translation type="unfinished"/>
+        <translation>Hangjegyírás: Bevitel/Normál mód átkapcsolás</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="270"/>
         <source>Step-Time (Default)</source>
-        <translation>Egyenkénti bevitel (Alapértelmezett)</translation>
+        <translation>Egyenként (Alapértelmezett)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="271"/>
         <source>Note input: Enter Step-Time mode</source>
-        <translation type="unfinished"/>
+        <translation>Hangjegyírás: egyenként</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="282"/>
         <source>Note input: Enter Re-Pitch mode</source>
-        <translation type="unfinished"/>
+        <translation>Hangjegyírás: &apos;Új hangmagasság&apos; mód</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="293"/>
         <source>Note input: Enter Rhythm mode</source>
-        <translation type="unfinished"/>
+        <translation>Hangjegyírás: &apos;Ritmusírás&apos; mód</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="303"/>
@@ -26498,12 +26500,12 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="304"/>
         <source>Note input: Enter Real-Time (Automatic) mode</source>
-        <translation type="unfinished"/>
+        <translation>Hangjegyírás: Valósidejű (automatikus) mód</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="305"/>
         <source>Enter notes at a fixed tempo indicated by a metronome beat</source>
-        <translation type="unfinished"/>
+        <translation>A hangok folyamatos írása a metronóm által diktált ütem szerint </translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="314"/>
@@ -26513,12 +26515,12 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="315"/>
         <source>Note input: Enter Real-Time (Manual) mode</source>
-        <translation type="unfinished"/>
+        <translation>Hangjegyírás: Valós idejű (manuális) mód</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="316"/>
         <source>Enter notes while tapping a key or pedal to set the tempo</source>
-        <translation type="unfinished"/>
+        <translation>A hangok folyamatos írása billentyűvel vagy pedállal diktált tempó szerint</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="325"/>
@@ -26528,12 +26530,12 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="326"/>
         <source>Note input: Enter Insert mode</source>
-        <translation type="unfinished"/>
+        <translation>Hangjegyírás: Beszúrás mód</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="327"/>
         <source>Insert notes by increasing measure duration</source>
-        <translation type="unfinished"/>
+        <translation>Hangjegyek beszúrása az ütemhossz növelésével</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="514"/>
@@ -26628,42 +26630,42 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="746"/>
         <source>Reset Text Style Overrides</source>
-        <translation type="unfinished"/>
+        <translation>A módosított szövegstílusok alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="747"/>
         <source>Reset text style overrides</source>
-        <translation type="unfinished"/>
+        <translation>A módosított szövegstílusok alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="748"/>
         <source>Reset all text style overrides to default</source>
-        <translation type="unfinished"/>
+        <translation>Minden módosított szövegstílus alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="797"/>
         <source>Diatonic Up (Keep Degree Alterations)</source>
-        <translation type="unfinished"/>
+        <translation>Diatonikusan föl (fok alterációk megtartásával)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="798"/>
         <source>Diatonic pitch up (Keep degree alterations)</source>
-        <translation type="unfinished"/>
+        <translation>Diatonikus hangmagasság föl (fok alterációk megtartásával)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="839"/>
         <source>Move chord/rest to staff above</source>
-        <translation type="unfinished"/>
+        <translation>Mozgassa az akkordot/szünetet a feljebb lévő kottasorba</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="870"/>
         <source>Diatonic Down (Keep Degree Alterations)</source>
-        <translation type="unfinished"/>
+        <translation>Diatonikusan le (fok alterációk megtartásával)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="871"/>
         <source>Diatonic pitch down (Keep degree alterations)</source>
-        <translation type="unfinished"/>
+        <translation>Diatonikus hangmagasság le (fok alterációk megtartásával)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="947"/>
@@ -26678,7 +26680,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1014"/>
         <source>Move chord/rest to staff below</source>
-        <translation type="unfinished"/>
+        <translation>Mozgassa az akkordot/szünetet a lejjeb lévő kottasorba</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1038"/>
@@ -26718,57 +26720,57 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1081"/>
         <source>Go to next system</source>
-        <translation type="unfinished"/>
+        <translation>Ugrás a következő sorcsoporthoz</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1087"/>
         <source>Next Frame</source>
-        <translation type="unfinished"/>
+        <translation>Következő keret</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1088"/>
         <source>Go to next frame</source>
-        <translation type="unfinished"/>
+        <translation>Ugrás a következő kerethez</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1094"/>
         <source>Next Section</source>
-        <translation type="unfinished"/>
+        <translation>Következő szakasz</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1095"/>
         <source>Go to next section</source>
-        <translation type="unfinished"/>
+        <translation>Ugrás a következő szakaszhoz</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1101"/>
         <source>Top Staff</source>
-        <translation type="unfinished"/>
+        <translation>Legfelső kottasor</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1102"/>
         <source>Go to top staff</source>
-        <translation type="unfinished"/>
+        <translation>Ugrás a legfelső kottasorhoz</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1108"/>
         <source>Playback Cursor Position</source>
-        <translation type="unfinished"/>
+        <translation>A lejátszási kurzor pozíciója</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1109"/>
         <source>Go to recent playback cursor position</source>
-        <translation type="unfinished"/>
+        <translation>Ugrás a legutóbbi lejátszási kurzorpozícióhoz</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1115"/>
         <source>First Empty Trailing Measure</source>
-        <translation type="unfinished"/>
+        <translation>Első üres záróütem</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1116"/>
         <source>Go to first empty trailing measure</source>
-        <translation type="unfinished"/>
+        <translation>Ugrás az első üres záróütemhez</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1220"/>
@@ -26828,50 +26830,50 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1592"/>
         <source>256th Note</source>
-        <translation type="unfinished"/>
+        <translation>256-od hang</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1593"/>
         <source>Note duration: 256th</source>
-        <translation type="unfinished"/>
+        <translation>Ritmusérték: 256-od</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1594"/>
         <location filename="../../mscore/shortcut.cpp" line="3440"/>
         <source>256th note</source>
-        <translation type="unfinished"/>
+        <translation>256-od hang</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1603"/>
         <source>512th Note</source>
-        <translation type="unfinished"/>
+        <translation>512-ed hang</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1604"/>
         <source>Note duration: 512th</source>
-        <translation type="unfinished"/>
+        <translation>Ritmusérték: 512-ed</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1605"/>
         <location filename="../../mscore/shortcut.cpp" line="3450"/>
         <source>512th note</source>
-        <translation type="unfinished"/>
+        <translation>512-ed hang</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1614"/>
         <source>1024th Note</source>
-        <translation type="unfinished"/>
+        <translation>1024-ed hang</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1615"/>
         <source>Note duration: 1024th</source>
-        <translation type="unfinished"/>
+        <translation>Ritmusérték: 1024-ed</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1616"/>
         <location filename="../../mscore/shortcut.cpp" line="3460"/>
         <source>1024th note</source>
-        <translation type="unfinished"/>
+        <translation>1024-ed hang</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1705"/>
@@ -26882,7 +26884,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1706"/>
         <source>Note input: Double ♯</source>
-        <translation>Hangjegybevitel: Duplakereszt</translation>
+        <translation>Hangjegyírás: kettőskereszt</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1716"/>
@@ -26893,7 +26895,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1717"/>
         <source>Note input: ♯</source>
-        <translation>Hangjegybevitel: Kereszt</translation>
+        <translation>Hangjegyírás: kereszt</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1727"/>
@@ -26904,7 +26906,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1728"/>
         <source>Note input: ♮</source>
-        <translation>Hangjegybevitel: Feloldójel</translation>
+        <translation>Hangjegyírás: Feloldójel</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1738"/>
@@ -26915,7 +26917,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1739"/>
         <source>Note input: ♭</source>
-        <translation>Hangjegybevitel: Bé</translation>
+        <translation>Hangjegyírás: Bé</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1749"/>
@@ -26926,62 +26928,62 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1750"/>
         <source>Note input: Double ♭</source>
-        <translation>Hangjegybevitel: Duplabé</translation>
+        <translation>Hangjegyírás: kettősbé</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1760"/>
         <location filename="../../mscore/shortcut.cpp" line="1762"/>
         <source>Double ♯ (non-toggle)</source>
-        <translation type="unfinished"/>
+        <translation>Kettőskereszt (nem ki-be)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1761"/>
         <source>Note input (non-toggle): Double ♯</source>
-        <translation type="unfinished"/>
+        <translation>Hangjegyírás (nem ki-be): kettőskereszt</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1771"/>
         <location filename="../../mscore/shortcut.cpp" line="1773"/>
         <source>♯ (non-toggle)</source>
-        <translation type="unfinished"/>
+        <translation>♯ (nem ki-be)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1772"/>
         <source>Note input (non-toggle): ♯</source>
-        <translation type="unfinished"/>
+        <translation>Hangjegyírás (nem ki-be): ♯</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1782"/>
         <location filename="../../mscore/shortcut.cpp" line="1784"/>
         <source>♮ (non-toggle)</source>
-        <translation type="unfinished"/>
+        <translation>♮ (nem ki-be)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1783"/>
         <source>Note input (non-toggle): ♮</source>
-        <translation type="unfinished"/>
+        <translation>Hangjegyírás (nem ki-be): ♮</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1793"/>
         <location filename="../../mscore/shortcut.cpp" line="1795"/>
         <source>♭ (non-toggle)</source>
-        <translation type="unfinished"/>
+        <translation>♭ (nem ki-be)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1794"/>
         <source>Note input (non-toggle): ♭</source>
-        <translation type="unfinished"/>
+        <translation>Hangjegyírás (nem ki-be): ♭</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1804"/>
         <location filename="../../mscore/shortcut.cpp" line="1806"/>
         <source>Double ♭ (non-toggle)</source>
-        <translation type="unfinished"/>
+        <translation>Kettősbé (nem ki-be)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1805"/>
         <source>Note input (non-toggle): Double ♭</source>
-        <translation type="unfinished"/>
+        <translation>Hangjegyírás (nem ki-be): Kettősbé</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1874"/>
@@ -27163,7 +27165,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2140"/>
         <source>Toggle &apos;Note Input&apos; toolbar</source>
-        <translation>„Hangjegybevitel” eszköztár ki/be</translation>
+        <translation>„Hangjegyírás” eszköztár ki/be</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2146"/>
@@ -27394,42 +27396,42 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3992"/>
         <source>Zoom In Horizontally</source>
-        <translation type="unfinished"/>
+        <translation>Nagyítás vízszintesen</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3993"/>
         <source>Zoom in horizontally - piano roll editor</source>
-        <translation type="unfinished"/>
+        <translation>Nagyítás vízszintesen - zongoratekercs-szerkesztő</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="4001"/>
         <source>Zoom Out Horizontally</source>
-        <translation type="unfinished"/>
+        <translation>Kicsinyítés vízszintesen</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="4002"/>
         <source>Zoom out horizontally - piano roll editor</source>
-        <translation type="unfinished"/>
+        <translation>Kicsinyítés vízszintesen - zongoratekercs-szerkesztő</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="4010"/>
         <source>Zoom In Vertically</source>
-        <translation type="unfinished"/>
+        <translation>Nagyítás függőlegesen</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="4011"/>
         <source>Zoom in vertically - piano roll editor</source>
-        <translation type="unfinished"/>
+        <translation>Nagyítás függőlegesen - zongoratekercs-szerkresztő</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="4019"/>
         <source>Zoom Out Vertically</source>
-        <translation type="unfinished"/>
+        <translation>Kicsinyítés vízszintesen</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="4020"/>
         <source>Zoom out vertically - piano roll editor</source>
-        <translation type="unfinished"/>
+        <translation>Kicsinyítés vízszintesen - zongoratekercs-szerkesztő</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2328"/>
@@ -27729,7 +27731,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2706"/>
         <source>Note input: Whole rest</source>
-        <translation>Hangjegybevitel: Egész szünet</translation>
+        <translation>Hangjegyírás: Egész szünet</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2712"/>
@@ -27739,7 +27741,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2713"/>
         <source>Note input: Half rest</source>
-        <translation>Hangjegybevitel: Fél szünet</translation>
+        <translation>Hangjegyírás: Fél szünet</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2719"/>
@@ -27749,7 +27751,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2720"/>
         <source>Note input: Quarter rest</source>
-        <translation>Hangjegybevitel: Negyed szünet</translation>
+        <translation>Hangjegyírás: Negyed szünet</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2726"/>
@@ -27759,7 +27761,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2727"/>
         <source>Note input: Eighth rest</source>
-        <translation>Hangjegybevitel: Nyolcad szünet</translation>
+        <translation>Hangjegyírás: Nyolcad szünet</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2733"/>
@@ -28155,47 +28157,47 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3187"/>
         <source>Increase Playback Speed</source>
-        <translation type="unfinished"/>
+        <translation>Lejátszási sebesség növelése</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3188"/>
         <source>Increase playback speed</source>
-        <translation type="unfinished"/>
+        <translation>Lejátszási sebesség növelése</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3189"/>
         <source>Increase the playback speed</source>
-        <translation type="unfinished"/>
+        <translation>Lejátszási sebesség növelése</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3195"/>
         <source>Decrease Playback Speed</source>
-        <translation type="unfinished"/>
+        <translation>Lejátszási sebesség csökkentése</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3196"/>
         <source>Decrease playback speed</source>
-        <translation type="unfinished"/>
+        <translation>Lejátszási sebesség csökkentése</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3197"/>
         <source>Decrease the playback speed</source>
-        <translation type="unfinished"/>
+        <translation>Lejátszási sebesség csökkentése</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3203"/>
         <source>Reset Playback Speed</source>
-        <translation type="unfinished"/>
+        <translation>Lejátszási sebesség alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3204"/>
         <source>Reset playback speed</source>
-        <translation type="unfinished"/>
+        <translation>Lejátszási sebesség alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3205"/>
         <source>Reset the playback speed to 100%</source>
-        <translation type="unfinished"/>
+        <translation>Lejátszási sebesség visszaállítása 100%-ra</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3211"/>
@@ -28345,7 +28347,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3339"/>
         <source>Note duration: Longa (TAB)</source>
-        <translation>Hangjegy hossz: Longa (TAB)</translation>
+        <translation>Ritmusérték: Longa (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3340"/>
@@ -28360,7 +28362,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3349"/>
         <source>Note duration: Double whole (TAB)</source>
-        <translation>Hangjegy hossz: Kétszeres egész (TAB)</translation>
+        <translation>Ritmusérték: Kétszeres egész (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3358"/>
@@ -28370,7 +28372,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3359"/>
         <source>Note duration: Whole (TAB)</source>
-        <translation>Hangjegy hosszúsága: Egész (TAB)</translation>
+        <translation>Ritmusérték: Egész (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3368"/>
@@ -28380,7 +28382,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3369"/>
         <source>Note duration: Half (TAB)</source>
-        <translation>Hangjegy hosszúsága: Fél (TAB)</translation>
+        <translation>Ritmusérték: Fél (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3378"/>
@@ -28390,7 +28392,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3379"/>
         <source>Note duration: Quarter (TAB)</source>
-        <translation>Hangjegy hosszúsága: Negyed (TAB)</translation>
+        <translation>Ritmusérték: Negyed (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3388"/>
@@ -28400,7 +28402,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3389"/>
         <source>Note duration: Eighth (TAB)</source>
-        <translation>Hangjegy hosszúsága: Nyolcad (TAB)</translation>
+        <translation>Ritmusérték: Nyolcad (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3398"/>
@@ -28410,7 +28412,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3399"/>
         <source>Note duration: 16th (TAB)</source>
-        <translation>Hangjegy hosszúsága: 1/16 (TAB)</translation>
+        <translation>Ritmusérték: 1/16 (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3408"/>
@@ -28420,7 +28422,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3409"/>
         <source>Note duration: 32nd (TAB)</source>
-        <translation>Hangjegy hosszúsága: 1/32 (TAB)</translation>
+        <translation>Ritmusérték: 1/32 (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3418"/>
@@ -28430,7 +28432,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3419"/>
         <source>Note duration: 64th (TAB)</source>
-        <translation>Hangjegy hosszúsága: 1/64 (TAB)</translation>
+        <translation>Ritmusérték: 1/64 (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3428"/>
@@ -28440,37 +28442,37 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3429"/>
         <source>Note duration: 128th (TAB)</source>
-        <translation>Hangjegy hosszúsága: 1/128 (TAB)</translation>
+        <translation>Ritmusérték: 1/128 (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3438"/>
         <source>256th Note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>256-od hang (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3439"/>
         <source>Note duration: 256th (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Ritmusérték: 256-od</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3448"/>
         <source>512th Note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>512-ed hang (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3449"/>
         <source>Note duration: 512th (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Ritmusérték: 512-ed (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3458"/>
         <source>1024th Note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>1024-ed hang (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3459"/>
         <source>Note duration: 1024th (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Ritmusérték: 1024-ed</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3468"/>
@@ -28501,12 +28503,12 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3483"/>
         <source>Enter rest (TAB)</source>
-        <translation>Szünet bevitele (TAB)</translation>
+        <translation>Szünet írása (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3492"/>
         <source>Note input: Rest (TAB)</source>
-        <translation>Hangjegybevitel: szünet (TAB)</translation>
+        <translation>Hangjegyírás: szünet (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3498"/>
@@ -28811,12 +28813,12 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3731"/>
         <source>Add Braces to Element</source>
-        <translation type="unfinished"/>
+        <translation>Elem gömbölyű zárójelbe</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3732"/>
         <source>Add Braces to element</source>
-        <translation type="unfinished"/>
+        <translation>Elem gömbölyű zárójelbe</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3812"/>
@@ -28826,7 +28828,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3813"/>
         <source>Realize chord symbols</source>
-        <translation type="unfinished"/>
+        <translation>Akkordjelzések realizálása</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3814"/>
@@ -31008,7 +31010,7 @@ failed</source>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="39"/>
         <source>Multimeasure Rest Range</source>
-        <translation type="unfinished"/>
+        <translation>Többütemes szünet tartomány</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="65"/>
@@ -31240,19 +31242,22 @@ Válassz ki egy hangjegyet vagy szünetet és próbáld újra</translation>
         <location filename="../../libmscore/mscore.cpp" line="133"/>
         <source>No note selected:
 Please select a note and retry</source>
-        <translation type="unfinished"/>
+        <translation>Nincs kijelölve hangjegy:
+jelöljön ki egyet és próbálja újra!</translation>
     </message>
     <message>
         <location filename="../../libmscore/mscore.cpp" line="137"/>
         <source>No flippable element selected:
 Please select an element that can be flipped and retry</source>
-        <translation type="unfinished"/>
+        <translation>Nincs tükrözhető elem kijelölve:
+jelöljön ki egyet és próbálja újra!</translation>
     </message>
     <message>
         <location filename="../../libmscore/mscore.cpp" line="138"/>
         <source>No staff selected:
 Please select one or more staves and retry</source>
-        <translation type="unfinished"/>
+        <translation>Nincs kijelölve kottasor:
+jelöljön ki legalább egyet és próbálja újra!</translation>
     </message>
     <message>
         <location filename="../../libmscore/mscore.cpp" line="139"/>
@@ -31606,7 +31611,7 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/marker.cpp" line="39"/>
         <source>To Coda (Symbol)</source>
-        <translation type="unfinished"/>
+        <translation>A Coda-hoz (szimbólum)</translation>
     </message>
     <message>
         <location filename="../../libmscore/marker.cpp" line="40"/>
@@ -32191,132 +32196,132 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2904"/>
         <source>11 large diesis down, 3° down [46 EDO]</source>
-        <translation type="unfinished"/>
+        <translation>11 nagy diesis le, 3° le [46 EDO]</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2905"/>
         <source>11 large diesis up, (11L), (sharp less 11M), 3° up [46 EDO]</source>
-        <translation type="unfinished"/>
+        <translation>11 nagy diesis fel, (11L), (kisebb felemelés 11M), 3° fel [46 EDO]</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2906"/>
         <source>11 medium diesis down, 1°[17 31] 2°46 down, 1/4-tone down</source>
-        <translation type="unfinished"/>
+        <translation>11 közepes diesis le, 1°[17 31] 2°46 le, negyedhang le</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2907"/>
         <source>11 medium diesis up, (11M), 1°[17 31] 2°46 up, 1/4-tone up</source>
-        <translation type="unfinished"/>
+        <translation>11 közepes diesis fel, (11M), 1°[17 31] 2°46 fel, negyedhang fel</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2928"/>
         <source>25 small diesis down, 2° down [53 EDO]</source>
-        <translation type="unfinished"/>
+        <translation>25 kis diesis le, 2° le [53 EDO]</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2929"/>
         <source>25 small diesis up, (25S, ~5:13S, ~37S, 5C plus 5C), 2° up [53 EDO]</source>
-        <translation type="unfinished"/>
+        <translation>25 kis diesis fel, (25S, ~5:13S, ~37S, 5C plusz 5C), 2° fel [53 EDO]</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2930"/>
         <source>35 large diesis down, 2° down [50 EDO], 5/18-tone down</source>
-        <translation type="unfinished"/>
+        <translation>35 nagy diesis le, 2° le [50 EDO], 5/18-hang le</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2931"/>
         <source>35 large diesis up, (35L, ~13L, ~125L, sharp less 35M), 2°50 up</source>
-        <translation type="unfinished"/>
+        <translation>35 nagy diesis fel, (35L, ~13L, ~125L, kisebb felemelés 35M), 2°50 fel</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2932"/>
         <source>35 medium diesis down, 1°[50] 2°[27] down, 2/9-tone down</source>
-        <translation type="unfinished"/>
+        <translation>35 közepes diesis le, 1°[50] 2°[27] le, 2/9-hang le</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2933"/>
         <source>35 medium diesis up, (35M, ~13M, ~125M, 5C plus 7C), 2/9-tone up</source>
-        <translation type="unfinished"/>
+        <translation>35 közepes diesis fel, (35M, ~13M, ~125M, 5C plusz 7C), 2/9-hang fel</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2942"/>
         <source>5 comma down, 1° down [22 27 29 34 41 46 53 96 EDOs], 1/12-tone down</source>
-        <translation type="unfinished"/>
+        <translation>5 komma le, 1° le [22 27 29 34 41 46 53 96 EDO-k], 1/12-hang le</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2943"/>
         <source>5 comma up, (5C), 1° up [22 27 29 34 41 46 53 96 EDOs], 1/12-tone up</source>
-        <translation type="unfinished"/>
+        <translation>5 komma fel, (5C), 1° fel [22 27 29 34 41 46 53 96 EDO-k], 1/12-hang fel</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2956"/>
         <source>5:7 kleisma down</source>
-        <translation type="unfinished"/>
+        <translation>5:7 kleiszma le</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2957"/>
         <source>5:7 kleisma up, (5:7k, ~11:13k, 7C less 5C)</source>
-        <translation type="unfinished"/>
+        <translation>5:7 kleiszma fel, (5:7k, ~11:13k, 7C kisebb 5C)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2958"/>
         <source>7 comma down, 1° down [43 EDO], 2° down [72 EDO], 1/6-tone down</source>
-        <translation type="unfinished"/>
+        <translation>7 komma le, 1° le [43 EDO], 2° le [72 EDO], 1/6-hang le</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2959"/>
         <source>7 comma up, (7C), 1° up [43 EDO], 2° up [72 EDO], 1/6-tone up</source>
-        <translation type="unfinished"/>
+        <translation>7 komma fel, (7C), 1° le [43 EDO], 2° fel [72 EDO], 1/6-hang fel</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3009"/>
         <source>Flat, (apotome down)[almost all EDOs], 1/2-tone down</source>
-        <translation type="unfinished"/>
+        <translation>Leszállítás, (apotóma le)[majdnem az összes EDO], 1/2-hang le</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3031"/>
         <source>Flat 25S-up, 3° down [53 EDO]</source>
-        <translation type="unfinished"/>
+        <translation>Leszállított 25S-fel, 3° le [53 EDO]</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3041"/>
         <source>Flat 5C-up, 2°[22,29] 3°[34 41] 4°[46 53 60] down, 5/12-tone down</source>
-        <translation type="unfinished"/>
+        <translation>Leszállított 5C-fel, 2°[22,29] 3°[34 41] 4°[46 53 60] le, 5/12-hang le</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3052"/>
         <source>Flat 5:7k-up</source>
-        <translation type="unfinished"/>
+        <translation>Leszállított 5:7k-fel</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3054"/>
         <source>Flat 7C-up, 2° down [43 EDO], 4° down [72 EDO], 1/3-tone down</source>
-        <translation type="unfinished"/>
+        <translation>Leszállított 7C-fel, 2° le [43 EDO], 4° le [72 EDO], 1/3-hang le</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3064"/>
         <source>Sharp, (apotome up)[almost all EDOs], 1/2-tone up</source>
-        <translation type="unfinished"/>
+        <translation>Felemelés, (apotóma fel)[majdnem az összes EDO], 1/2-hang fel</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3085"/>
         <source>Sharp 25S-down, 3° up [53 EDO]</source>
-        <translation type="unfinished"/>
+        <translation>Felemelés 25S-le, 3° fel [53 EDO]</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3095"/>
         <source>Sharp 5C-down, 2°[22 29] 3°[34 41] 4°[46 53 60] up, 5/12-tone up</source>
-        <translation type="unfinished"/>
+        <translation>Felemelés 5C-le, 2°[22 29] 3°[34 41] 4°[46 53 60] fel, 5/12-hang fel</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3106"/>
         <source>Sharp 5:7k-down</source>
-        <translation type="unfinished"/>
+        <translation>Felemelés 5:7k-le</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3108"/>
         <source>Sharp 7C-down, 2° up [43 EDO], 4° up [72 EDO], 1/3-tone up</source>
-        <translation type="unfinished"/>
+        <translation>Felemelés 7C-le, 2° fel [43 EDO], 4° fel [72 EDO], 1/3-hang le</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3120"/>
@@ -32601,12 +32606,12 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3184"/>
         <source>Arrow down (lower by one quarter-tone)</source>
-        <translation type="unfinished"/>
+        <translation>Nyíl le (egy negyedhanggal lejjebb)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3185"/>
         <source>Arrow up (raise by one quarter-tone)</source>
-        <translation type="unfinished"/>
+        <translation>Nyíl fel (egy negyedhanggal feljebb)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3186"/>
@@ -32626,52 +32631,52 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3193"/>
         <source>Combining lower by one 17-limit schisma</source>
-        <translation type="unfinished"/>
+        <translation>Kombináló leszállítás egy 17-limites szkizmával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3194"/>
         <source>Combining lower by one 19-limit schisma</source>
-        <translation type="unfinished"/>
+        <translation>Kombináló leszállítás egy 19-limites szkizmával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3195"/>
         <source>Combining lower by one 23-limit comma or 29-limit comma</source>
-        <translation type="unfinished"/>
+        <translation>Kombináló leszállítás egy 23-limites vagy 29-limites szkizmával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3196"/>
         <source>Combining lower by one 31-limit schisma</source>
-        <translation type="unfinished"/>
+        <translation>Kombináló leszállítás egy 31-limites szkizmával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3197"/>
         <source>Combining lower by one 53-limit comma</source>
-        <translation type="unfinished"/>
+        <translation>Kombináló leszállítás egy 53-limites szkizmával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3199"/>
         <source>Combining raise by one 17-limit schisma</source>
-        <translation type="unfinished"/>
+        <translation>Kombináló emelés egy 17-limites szkizmával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3200"/>
         <source>Combining raise by one 19-limit schisma</source>
-        <translation type="unfinished"/>
+        <translation>Kombináló emelés egy 19-limites szkizmával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3201"/>
         <source>Combining raise by one 23-limit comma or 29-limit comma</source>
-        <translation type="unfinished"/>
+        <translation>Kombináló emelés egy 23-limit vagy 29-limites szkizmával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3202"/>
         <source>Combining raise by one 31-limit schisma</source>
-        <translation type="unfinished"/>
+        <translation>Kombináló emelés egy 31-limites szkizmával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3203"/>
         <source>Combining raise by one 53-limit comma</source>
-        <translation type="unfinished"/>
+        <translation>Kombináló emelés egy 53-limites szkizmával</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3206"/>
@@ -33010,122 +33015,122 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3361"/>
         <source>Triple flat</source>
-        <translation type="unfinished"/>
+        <translation>Hármasbé</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3362"/>
         <source>Triple sharp</source>
-        <translation type="unfinished"/>
+        <translation>Hármaskereszt</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3367"/>
         <source>5/6 tone flat (Wyschnegradsky)</source>
-        <translation type="unfinished"/>
+        <translation>5/6 hang leszállítás (Wyschnegradsky)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3368"/>
         <source>5/6 tone sharp (Wyschnegradsky)</source>
-        <translation type="unfinished"/>
+        <translation>5/6 hang emelés (Wyschnegradsky)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3369"/>
         <source>11/12 tone flat (Wyschnegradsky)</source>
-        <translation type="unfinished"/>
+        <translation>11/12 hang leszállítás (Wyschnegradsky)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3370"/>
         <source>11/12 tone sharp (Wyschnegradsky)</source>
-        <translation type="unfinished"/>
+        <translation>11/12 hang emelés (Wyschnegradsky)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3371"/>
         <source>1/12 tone flat (Wyschnegradsky)</source>
-        <translation type="unfinished"/>
+        <translation>1/12 hang leszállítás (Wyschnegradsky)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3372"/>
         <source>1/12 tone sharp (Wyschnegradsky)</source>
-        <translation type="unfinished"/>
+        <translation>1/12 hang emelés (Wyschnegradsky)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3373"/>
         <source>1/6 tone flat (Wyschnegradsky)</source>
-        <translation type="unfinished"/>
+        <translation>1/6 hang leszállítás (Wyschnegradsky)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3374"/>
         <source>1/6 tone sharp (Wyschnegradsky)</source>
-        <translation type="unfinished"/>
+        <translation>1/6 hang emelés (Wyschnegradsky)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3375"/>
         <source>1/4 tone flat (Wyschnegradsky)</source>
-        <translation type="unfinished"/>
+        <translation>1/4 hang leszállítás (Wyschnegradsky)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3376"/>
         <source>1/4 tone sharp (Wyschnegradsky)</source>
-        <translation type="unfinished"/>
+        <translation>1/4 hang emelés (Wyschnegradsky)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3377"/>
         <source>1/3 tone flat (Wyschnegradsky)</source>
-        <translation type="unfinished"/>
+        <translation>1/3 hang leszállítás (Wyschnegradsky)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3378"/>
         <source>1/3 tone sharp (Wyschnegradsky)</source>
-        <translation type="unfinished"/>
+        <translation>1/3 hang emelés (Wyschnegradsky)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3379"/>
         <source>5/12 tone flat (Wyschnegradsky)</source>
-        <translation type="unfinished"/>
+        <translation>5/12 hang leszállítás (Wyschnegradsky)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3380"/>
         <source>5/12 tone sharp (Wyschnegradsky)</source>
-        <translation type="unfinished"/>
+        <translation>5/12 hang emelés (Wyschnegradsky)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3381"/>
         <source>1/2 tone flat (Wyschnegradsky)</source>
-        <translation type="unfinished"/>
+        <translation>1/2 hang leszállítás (Wyschnegradsky)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3382"/>
         <source>1/2 tone sharp (Wyschnegradsky)</source>
-        <translation type="unfinished"/>
+        <translation>1/2 hang emelés (Wyschnegradsky)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3383"/>
         <source>7/12 tone flat (Wyschnegradsky)</source>
-        <translation type="unfinished"/>
+        <translation>7/12 hang leszállítás (Wyschnegradsky)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3384"/>
         <source>7/12 tone sharp (Wyschnegradsky)</source>
-        <translation type="unfinished"/>
+        <translation>7/12 hang emelés (Wyschnegradsky)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3385"/>
         <source>2/3 tone flat (Wyschnegradsky)</source>
-        <translation type="unfinished"/>
+        <translation>2/3 hang leszállítás (Wyschnegradsky)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3386"/>
         <source>2/3 tone sharp (Wyschnegradsky)</source>
-        <translation type="unfinished"/>
+        <translation>2/3 hang emelés (Wyschnegradsky)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3387"/>
         <source>3/4 tone flat (Wyschnegradsky)</source>
-        <translation type="unfinished"/>
+        <translation>3/4 hang leszállítás (Wyschnegradsky)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3388"/>
         <source>3/4 tone sharp (Wyschnegradsky)</source>
-        <translation type="unfinished"/>
+        <translation>3/4 hang emelés (Wyschnegradsky)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3453"/>
@@ -33340,32 +33345,32 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3496"/>
         <source>Heavy barline</source>
-        <translation type="unfinished"/>
+        <translation>Vastag ütemvonal</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3497"/>
         <source>Heavy double barline</source>
-        <translation type="unfinished"/>
+        <translation>Vastag kettőzött ütemvonal</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3498"/>
         <source>Reverse final barline</source>
-        <translation type="unfinished"/>
+        <translation>Fordított záróvonal</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3499"/>
         <source>Short barline</source>
-        <translation type="unfinished"/>
+        <translation>Rövid ütemvonal</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3500"/>
         <source>Single barline</source>
-        <translation type="unfinished"/>
+        <translation>Egyszeres ütemvonal</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3501"/>
         <source>Tick barline</source>
-        <translation type="unfinished"/>
+        <translation>Vonalka ütemvonal</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3547"/>
@@ -33606,7 +33611,7 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4507"/>
         <source>1024th note (semihemidemisemihemidemisemiquaver) stem up</source>
-        <translation type="unfinished"/>
+        <translation>1024-ed hang (semihemidemisemihemidemisemiquaver) szár föl</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4509"/>
@@ -33621,7 +33626,7 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4513"/>
         <source>256th note (demisemihemidemisemiquaver) stem up</source>
-        <translation type="unfinished"/>
+        <translation>256-od hang (demisemihemidemisemiquaver) szár föl</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4515"/>
@@ -33631,7 +33636,7 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4517"/>
         <source>512th note (hemidemisemihemidemisemiquaver) stem up</source>
-        <translation type="unfinished"/>
+        <translation>512-ed hang (hemidemisemihemidemisemiquaver) szár le</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4519"/>
@@ -33676,7 +33681,7 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4999"/>
         <source>Short trill</source>
-        <translation type="unfinished"/>
+        <translation>Rövid trilla</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5004"/>
@@ -33701,7 +33706,7 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5009"/>
         <source>Turn with slash</source>
-        <translation type="unfinished"/>
+        <translation>Kettős ékesítés vonásal</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5307"/>
@@ -33731,17 +33736,17 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5322"/>
         <source>Left (start) repeat sign</source>
-        <translation type="unfinished"/>
+        <translation>Bal (kezdő) ismétlőjel</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5323"/>
         <source>Right (end) repeat sign</source>
-        <translation type="unfinished"/>
+        <translation>Jobb (záró) ismétlőjel</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5324"/>
         <source>Right and left repeat sign</source>
-        <translation type="unfinished"/>
+        <translation>Jobb és bal ismétlőjel</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5325"/>
@@ -33786,17 +33791,17 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5333"/>
         <source>Double whole (breve) rest</source>
-        <translation type="unfinished"/>
+        <translation>Két egész (breve) szünet</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5334"/>
         <source>Double whole rest on leger lines</source>
-        <translation type="unfinished"/>
+        <translation>Két egész szünet pótvonalon</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5339"/>
         <source>Half (minim) rest</source>
-        <translation type="unfinished"/>
+        <translation>Fél (minim) szünet</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5340"/>
@@ -33806,12 +33811,12 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5341"/>
         <source>Longa rest</source>
-        <translation type="unfinished"/>
+        <translation>Longa szünet</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5342"/>
         <source>Maxima rest</source>
-        <translation type="unfinished"/>
+        <translation>Maxima szünet</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5343"/>
@@ -33821,7 +33826,7 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5346"/>
         <source>Whole (semibreve) rest</source>
-        <translation type="unfinished"/>
+        <translation>Egész (semibreve) szünet</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5347"/>
@@ -33885,14 +33890,14 @@ az ütem nem üres</translation>
         <location filename="../../libmscore/timesig.cpp" line="590"/>
         <location filename="../../mscore/menus.cpp" line="1749"/>
         <source>Cut time (Bach)</source>
-        <translation type="unfinished"/>
+        <translation>Alla breve (Bach)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5518"/>
         <location filename="../../libmscore/timesig.cpp" line="593"/>
         <location filename="../../mscore/menus.cpp" line="1750"/>
         <source>Cut triple time (9/8)</source>
-        <translation type="unfinished"/>
+        <translation>Alla breve (9/8)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5519"/>
@@ -33964,12 +33969,12 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../mscore/menus.cpp" line="667"/>
         <source>Tick barline 2</source>
-        <translation type="unfinished"/>
+        <translation>Vonalka ütemvonal 2</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="669"/>
         <source>Short barline 2</source>
-        <translation type="unfinished"/>
+        <translation>Rövid ütemvonal 2</translation>
     </message>
 </context>
 <context>
@@ -35193,7 +35198,7 @@ az ütem nem üres</translation>
     <message>
         <location filename="../../mscore/toolbarEditor.cpp" line="21"/>
         <source>Note Input</source>
-        <translation>Hangjegybevitel</translation>
+        <translation>Hangjegyírás</translation>
     </message>
     <message>
         <location filename="../../mscore/toolbarEditor.cpp" line="22"/>

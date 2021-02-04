@@ -10963,12 +10963,12 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/instrwidget.ui" line="116"/>
         <source>Add to score</source>
-        <translation type="unfinished"/>
+        <translation>Legg afturat</translation>
     </message>
     <message>
         <location filename="../../mscore/instrwidget.ui" line="141"/>
         <source>Remove from score</source>
-        <translation type="unfinished"/>
+        <translation>Strika nótalinju</translation>
     </message>
     <message>
         <location filename="../../mscore/instrwidget.ui" line="167"/>

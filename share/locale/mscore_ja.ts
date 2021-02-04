@@ -14303,7 +14303,7 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2015"/>
         <source>No login credentials stored. Please sign in via the GUI.</source>
-        <translation type="unfinished"/>
+        <translation>ログインの資格がストアされていません。GUI経由でサインインしてください。</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2116"/>
@@ -14553,7 +14553,7 @@ Restore session?</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="7819"/>
         <source>--run-test-script is incompatible with --diff and --raw-diff</source>
-        <translation type="unfinished"/>
+        <translation>--run-test-script is incompatible with --diff and --raw-diff</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="7852"/>

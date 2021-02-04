@@ -127,7 +127,7 @@
     <message>
         <location filename="../../mscore/inspector/align_select.ui" line="43"/>
         <source>Align left edge of text to reference point</source>
-        <translation>Alinear vora esquerra del text al punt de referència</translation>
+        <translation>Alinea la vora esquerra del text al punt de referència</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/align_select.ui" line="72"/>
@@ -137,12 +137,12 @@
     <message>
         <location filename="../../mscore/inspector/align_select.ui" line="101"/>
         <source>Align right edge of text to reference point</source>
-        <translation>Alinear vora dreta del text al punt de referència</translation>
+        <translation>Alinea la vora dreta del text al punt de referència</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/align_select.ui" line="143"/>
         <source>Align top edge of text to reference point</source>
-        <translation>Alinear vora superior del text al punt de referència</translation>
+        <translation>Alinea la vora superior del text al punt de referència</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/align_select.ui" line="172"/>
@@ -152,12 +152,12 @@
     <message>
         <location filename="../../mscore/inspector/align_select.ui" line="230"/>
         <source>Align baseline of text to reference point</source>
-        <translation>Alinear la base de text al punt de referència</translation>
+        <translation>Alinea la base de text al punt de referència</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/align_select.ui" line="201"/>
         <source>Align bottom edge of text to reference point</source>
-        <translation>Alinear vora inferior del text al punt de referència</translation>
+        <translation>Alinea la vora inferior del text al punt de referència</translation>
     </message>
 </context>
 <context>
@@ -1892,12 +1892,12 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="933"/>
         <source>Go to previous staff</source>
-        <translation>Anar al pentagrama anterior</translation>
+        <translation>Vés al pentagrama anterior</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="953"/>
         <source>Go to next staff</source>
-        <translation>Anar al pentagrama següent</translation>
+        <translation>Vés al pentagrama següent</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="44"/>
@@ -3341,7 +3341,7 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="158"/>
         <location filename="../../mscore/editstyle.ui" line="8594"/>
         <source>System Text Line</source>
-        <translation type="unfinished"/>
+        <translation>Línia de text del sistema</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="183"/>
@@ -3553,17 +3553,17 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="524"/>
         <source>Enable indentation on first system</source>
-        <translation type="unfinished"/>
+        <translation>Habilita el sagnat en el primer sistema</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="542"/>
         <source>First system indentation:</source>
-        <translation type="unfinished"/>
+        <translation>Sagnat del primer sistema:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="571"/>
         <source>Reset &apos;First system indentation&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Restableix el valor «Primer sagnat del sistema»</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="601"/>
@@ -3593,32 +3593,32 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1278"/>
         <source>Enable vertical justification of staves</source>
-        <translation type="unfinished"/>
+        <translation>Habilita la justificació vertical dels pentagrames</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1300"/>
         <source>Max. grand staff distance:</source>
-        <translation type="unfinished"/>
+        <translation>Distància màxima dels pentagrames del piano:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1335"/>
         <source>Max. staff distance:</source>
-        <translation type="unfinished"/>
+        <translation>Distància màxima entre pentagrames:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1387"/>
         <source>Reset &apos;Factor for distance above/below bracket&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Restableix el valor «Factor per a la distància per sobre/per sota del claudàtor»</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1433"/>
         <source>Reset &apos;Min. staff distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Restableix el valor «Distància mínima entre pentagrames»</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1447"/>
         <source>Max. page fill distance:</source>
-        <translation type="unfinished"/>
+        <translation>Distància màxima d&apos;ompliment de la pàgina:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1460"/>
@@ -3628,17 +3628,17 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1477"/>
         <source>Reset &apos;Max. staff distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Restableix el valor «Distància màxima entre pentagrames»</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1491"/>
         <source>Reset &apos;Max. grand staff distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Restableix el valor «Distància màxima de sistema de piano»</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1505"/>
         <source>Min. staff distance:</source>
-        <translation type="unfinished"/>
+        <translation>Distància mínima entre pentagrama:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1588"/>
@@ -3648,7 +3648,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1601"/>
         <source>Factor for distance above/below bracket:</source>
-        <translation type="unfinished"/>
+        <translation>Factor per a la distància per sobre/per sota del claudàtor:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1656"/>
@@ -3993,22 +3993,22 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1670"/>
         <source>Reset &apos;Max. page fill distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Restableix el valor «Distància màxima d&apos;emplenament de la pàgina»</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1712"/>
         <source>Reset &apos;Factor for distance between systems&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Restableix el valor «Factor per a la distància entre sistemes»</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1729"/>
         <source>Factor for distance between systems:</source>
-        <translation type="unfinished"/>
+        <translation>Factor per a la distància entre sistemes:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1755"/>
         <source>Disable vertical justification of staves</source>
-        <translation type="unfinished"/>
+        <translation>Desactiva la justificació vertical dels pentagrames</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3058"/>
@@ -4025,7 +4025,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3166"/>
         <source>Show measure number range at multimeasure rests</source>
-        <translation type="unfinished"/>
+        <translation>Mostra l&apos;interval del nombre de compassos en un silenci multicompàs</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3377"/>
@@ -4042,48 +4042,49 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3799"/>
         <source>Reset to align accidentals within octaves to default</source>
-        <translation type="unfinished"/>
+        <translation>Restableix per alinear les alteracions dins de les octaves per defecte</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3802"/>
         <source>Reset &apos;Align octaves left&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Restableix el valor «Alinea les octaves a l&apos;esquerra»</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3829"/>
         <source>When a chord has accidentals octave apart, these will be placed in the same columns. However, sometimes one of these accidentals can be larger than another, causing thus moving the others. 
 By default, they will be placed such as that their right end are at the same level. Use this checkbox to override this behaviour.</source>
-        <translation type="unfinished"/>
+        <translation>Quan un acord té alteracions en octaves separades, aquestes es col·locaran en les mateixes columnes. No obstant això, de vegades una d&apos;aquestes alteracions pot ser més gran que un altre, causant així el desplaçament de les altres.
+Per defecte, es col·locaran tal que el seu extrem dret estigui al mateix nivell. Utilitzeu aquesta casella de selecció per sobreescriure aquest comportament.</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3833"/>
         <source>Align octaves left</source>
-        <translation type="unfinished"/>
+        <translation>Alinea les octaves a l&apos;esquerra</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3846"/>
         <source>Set value for padding inside parentheses around accidentals</source>
-        <translation type="unfinished"/>
+        <translation>Estableix el valor per a la separació entre parèntesis al voltant de les alteracions</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3868"/>
         <source>Reset padding inside parentheses to default</source>
-        <translation type="unfinished"/>
+        <translation>Restableix la separació entre parèntesis per defecte</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3871"/>
         <source>Reset &apos;Padding inside parentheses&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Restableix el valor «Separació entre parèntesis»</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3891"/>
         <source>Bracketed accidentals have a margin between the accidental and the brackets.</source>
-        <translation type="unfinished"/>
+        <translation>Les alteracions amb parèntesis tenen un marge entre l&apos;accident i els parèntesis.</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3894"/>
         <source>Padding inside parentheses:</source>
-        <translation type="unfinished"/>
+        <translation>Separació entre parèntesis:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3907"/>
@@ -4110,7 +4111,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/editstyle.ui" line="11115"/>
         <source>Spelling</source>
-        <translation type="unfinished"/>
+        <translation>LLetreja</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="11235"/>
@@ -4172,7 +4173,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/editstyle.ui" line="12297"/>
         <source>li</source>
-        <translation type="unfinished"/>
+        <translation>li</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="12310"/>
@@ -4967,7 +4968,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/editstyle.ui" line="9831"/>
         <source>Align verse number</source>
-        <translation>Alinear el número del vers</translation>
+        <translation>Alinea el número del vers</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9855"/>
@@ -5273,12 +5274,12 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/exportdialog.ui" line="191"/>
         <source>Export each score as a separate file</source>
-        <translation type="unfinished"/>
+        <translation>Exporta cada partitura com un fitxer separat</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="198"/>
         <source>All scores combined into one file</source>
-        <translation type="unfinished"/>
+        <translation>Totes les partitures s&apos;han combinat en un fitxer</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="255"/>
@@ -5289,12 +5290,12 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/exportdialog.ui" line="284"/>
         <source>Each page of the selected scores will be exported as a separate PNG file.</source>
-        <translation type="unfinished"/>
+        <translation>Cada pàgina de les partitures seleccionades s&apos;exportarà com un fitxer PNG separat.</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="317"/>
         <source>Each page of the selected scores will be exported as a separate SVG file.</source>
-        <translation type="unfinished"/>
+        <translation>Cada pàgina de les partitures seleccionades s&apos;exportarà com un fitxer SVG separat.</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="331"/>
@@ -5351,7 +5352,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/exportdialog.ui" line="512"/>
         <source>Each selected score will be exported as a separate audio file. </source>
-        <translation type="unfinished"/>
+        <translation>Cada pàgina de les partitures seleccionades s&apos;exportarà com un fitxer d&apos;àudio separat.</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="526"/>
@@ -5361,7 +5362,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/exportdialog.ui" line="539"/>
         <source>Each selected score will be exported as a separate MIDI file. </source>
-        <translation type="unfinished"/>
+        <translation>Cada pàgina de les partitures seleccionades s&apos;exportarà com un fitxer MIDI separat.</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="549"/>
@@ -5386,42 +5387,42 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/exportdialog.ui" line="591"/>
         <source>Uncompressed (outdated)</source>
-        <translation type="unfinished"/>
+        <translation>Sense comprimir (obsolet)</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="615"/>
         <source>Include in export:</source>
-        <translation type="unfinished"/>
+        <translation>Inclou a l&apos;exportació:</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="682"/>
         <source>All layout</source>
-        <translation type="unfinished"/>
+        <translation>Tots els dissenys</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="698"/>
         <source>System and page breaks</source>
-        <translation type="unfinished"/>
+        <translation>Salts de sistema i de pàgina</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="714"/>
         <source>Manually added system and page breaks only</source>
-        <translation type="unfinished"/>
+        <translation>Només s&apos;han afegit manualment els salts de sistema i de pàgina</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="730"/>
         <source>No system or page breaks</source>
-        <translation type="unfinished"/>
+        <translation>Sense salts de sistema o de pàgina</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="765"/>
         <source>Each selected score will be exported to a separate uncompressed MuseScore file. </source>
-        <translation type="unfinished"/>
+        <translation>Cada partitura seleccionada s&apos;exportarà a un fitxer MuseScore sense comprimir separat.</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="782"/>
         <source>What to export</source>
-        <translation type="unfinished"/>
+        <translation>Què exportar</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="788"/>
@@ -5432,18 +5433,18 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/exportdialog.ui" line="791"/>
         <source>Select the score and all parts</source>
-        <translation type="unfinished"/>
+        <translation>Selecciona la partitura i totes les particel·les</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="801"/>
         <location filename="../../mscore/exportdialog.ui" line="804"/>
         <source>Select nothing</source>
-        <translation type="unfinished"/>
+        <translation>No seleccionis res</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="807"/>
         <source>Clear selection</source>
-        <translation type="unfinished"/>
+        <translation>Esborra la selecció</translation>
     </message>
 </context>
 <context>
@@ -5471,7 +5472,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../audio/midi/fluid/fluid_gui.ui" line="122"/>
         <source>Move SoundFont to Bottom</source>
-        <translation type="unfinished"/>
+        <translation>Mou el SoundFont al capdavall</translation>
     </message>
     <message>
         <location filename="../../audio/midi/fluid/fluid_gui.ui" line="161"/>
@@ -5685,7 +5686,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="507"/>
         <source>Slash</source>
-        <translation>Barra obliqua</translation>
+        <translation>Barra inclinada</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="512"/>
@@ -7514,12 +7515,12 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/inspector/inspector_group_element.ui" line="122"/>
         <source>Enable Autoplace</source>
-        <translation>Activar Autoplace</translation>
+        <translation>Habilita Autoplace</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_group_element.ui" line="132"/>
         <source>Disable Autoplace</source>
-        <translation>Desactivar Autoplace</translation>
+        <translation>Desactiva Autoplace</translation>
     </message>
 </context>
 <context>
@@ -8517,7 +8518,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="278"/>
         <source>Flag</source>
-        <translation type="unfinished"/>
+        <translation>Marca</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="332"/>
@@ -8976,7 +8977,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="173"/>
         <source>Start new section with first system indentation</source>
-        <translation type="unfinished"/>
+        <translation>Inicia una secció nova amb el primer sagnat del sistema</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_sectionbreak.ui" line="140"/>
@@ -9223,7 +9224,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="385"/>
         <source>Reset &apos;Invisible staff lines&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Restableix el valor «Línies de pentagrama invisible»</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="402"/>
@@ -9795,17 +9796,17 @@ By default, they will be placed such as that their right end are at the same lev
         <location filename="../../mscore/inspector/inspector_text.ui" line="543"/>
         <location filename="../../mscore/inspector/inspector_text.ui" line="546"/>
         <source>Line spacing</source>
-        <translation type="unfinished"/>
+        <translation>Interlineat</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="549"/>
         <source>li</source>
-        <translation type="unfinished"/>
+        <translation>li</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="568"/>
         <source>Reset &apos;Line Spacing&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Restableix el valor «Interlineat»</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="603"/>
@@ -9886,7 +9887,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/inspector/inspector_textline.ui" line="140"/>
         <source>System Text Line</source>
-        <translation type="unfinished"/>
+        <translation>Línia de text del sistema</translation>
     </message>
 </context>
 <context>
@@ -10175,12 +10176,12 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/inspector/inspector_tremolo.ui" line="94"/>
         <source>Traditional</source>
-        <translation type="unfinished"/>
+        <translation>Tradicional</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tremolo.ui" line="99"/>
         <source>Traditional (Alternate)</source>
-        <translation type="unfinished"/>
+        <translation>Tradicional (alternat)</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tremolo.ui" line="107"/>
@@ -10608,12 +10609,12 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="424"/>
         <source>Enable Auto-Size</source>
-        <translation type="unfinished"/>
+        <translation>Habilita Auto-Size</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="437"/>
         <source>Reset &apos;Auto-Size&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Restableix el valor «Auto-Size»</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="186"/>
@@ -10967,17 +10968,17 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/instrwidget.ui" line="141"/>
         <source>Remove from score</source>
-        <translation type="unfinished"/>
+        <translation>Suprimeix de la partitura</translation>
     </message>
     <message>
         <location filename="../../mscore/instrwidget.ui" line="167"/>
         <source>Ordering:</source>
-        <translation type="unfinished"/>
+        <translation>Ordenació:</translation>
     </message>
     <message>
         <location filename="../../mscore/instrwidget.ui" line="184"/>
         <source>Make soloist</source>
-        <translation type="unfinished"/>
+        <translation>Fes solista</translation>
     </message>
     <message>
         <location filename="../../mscore/instrwidget.ui" line="219"/>
@@ -11633,12 +11634,12 @@ el grup artificial sobrepassa el compàs</translation>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="457"/>
         <source>Go to previous measure</source>
-        <translation>Anar a compàs previ</translation>
+        <translation>Vés al compàs previ</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="477"/>
         <source>Go to next measure</source>
-        <translation>Anar al compàs següent</translation>
+        <translation>Vés al compàs següent</translation>
     </message>
 </context>
 <context>
@@ -12061,7 +12062,8 @@ Ajuda MuseScore amb la teva %3donació%4.</translation>
         <location filename="../../mscore/musescoredialogs.cpp" line="157"/>
         <source>Copyright &amp;copy; 1999-2021 MuseScore BVBA and others.
 Published under the GNU General Public License.</source>
-        <translation type="unfinished"/>
+        <translation>Copyright &amp;copy; 1999-2021 MuseScore BVBA i altres. 
+Publicat sota la Llicència Pública General GNU.</translation>
     </message>
 </context>
 <context>
@@ -12351,7 +12353,7 @@ error: %2</translation>
         <location filename="../../mscore/editstyle.cpp" line="431"/>
         <location filename="../../mscore/editstyle.cpp" line="803"/>
         <source>Parentheses</source>
-        <translation type="unfinished"/>
+        <translation>Parèntesis</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="434"/>
@@ -12469,7 +12471,7 @@ error: %2</translation>
         <location filename="../../mscore/editstyle.cpp" line="493"/>
         <location filename="../../mscore/editstyle.cpp" line="829"/>
         <source>Until End of Measure</source>
-        <translation type="unfinished"/>
+        <translation>Fins al final del compàs</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="494"/>
@@ -12550,12 +12552,12 @@ error: %2</translation>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="886"/>
         <source>MuseScore version this score was last saved with</source>
-        <translation type="unfinished"/>
+        <translation>La versió de MuseScore amb la qual es va desar per darrera vegada aquesta partitura.</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="888"/>
         <source>MuseScore revision this score was last saved with</source>
-        <translation type="unfinished"/>
+        <translation>La versió de MuseScore amb la qual es va desar per darrera vegada aquesta partitura.</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="890"/>
@@ -12618,7 +12620,7 @@ error: %2</translation>
         <location filename="../../mscore/exportdialog.cpp" line="50"/>
         <location filename="../../mscore/exportdialog.cpp" line="129"/>
         <source>Full Score</source>
-        <translation type="unfinished"/>
+        <translation>Partitura completa</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.cpp" line="96"/>
@@ -12768,7 +12770,7 @@ error: %2</translation>
     <message>
         <location filename="../../mscore/exportdialog.cpp" line="144"/>
         <source>Uncompressed (outdated)</source>
-        <translation type="unfinished"/>
+        <translation>Sense comprimir (obsolet)</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.cpp" line="146"/>
@@ -12794,7 +12796,7 @@ error: %2</translation>
     <message>
         <location filename="../../mscore/exportdialog.cpp" line="469"/>
         <source>Cannot determine file type.</source>
-        <translation type="unfinished"/>
+        <translation>No es pot determinar el tipus de fitxer.</translation>
     </message>
 </context>
 <context>
@@ -13223,12 +13225,12 @@ error: %2</translation>
     <message>
         <location filename="../../mscore/instrwidget.cpp" line="1460"/>
         <source>Undo soloist</source>
-        <translation type="unfinished"/>
+        <translation>Desfer solista</translation>
     </message>
     <message>
         <location filename="../../mscore/instrwidget.cpp" line="1462"/>
         <source>Make soloist</source>
-        <translation type="unfinished"/>
+        <translation>Fes solista</translation>
     </message>
 </context>
 <context>
@@ -13472,7 +13474,7 @@ Save?</source>
     <message>
         <location filename="../../mscore/mixer/mixerdetails.cpp" line="281"/>
         <source>Staff %1:</source>
-        <translation type="unfinished"/>
+        <translation>Pentagrama %1:</translation>
     </message>
 </context>
 <context>
@@ -13630,7 +13632,7 @@ So: %5</translation>
     <message>
         <location filename="../../mscore/musescore.cpp" line="6894"/>
         <source>Find / Go to:</source>
-        <translation type="unfinished"/>
+        <translation>Cerca / Vés a:</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="7151"/>
@@ -13900,7 +13902,7 @@ abans de tancar?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="3410"/>
         <source>Error: Saving scores online is disabled in this unstable prerelease version of MuseScore.</source>
-        <translation type="unfinished"/>
+        <translation>Hi ha un error: la funció per desar les partitures en línia està desactivat en aquesta versió de prellançament inestable de MuseScore.</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="3419"/>
@@ -13910,17 +13912,17 @@ abans de tancar?</translation>
     <message>
         <location filename="../../mscore/file.cpp" line="3438"/>
         <source>Error: &apos;%1&apos; tag missing or malformed in %2</source>
-        <translation type="unfinished"/>
+        <translation>Hi ha un error: falta l&apos;etiqueta «%1» o està mal formada a %2</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="3444"/>
         <source>Error: You are not the owner of the online score for %1</source>
-        <translation type="unfinished"/>
+        <translation>Hi ha un error: No sou el propietari de la partitura en línia per a %1</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="3465"/>
         <source>Uploaded score</source>
-        <translation type="unfinished"/>
+        <translation>Partitura pujada</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="2535"/>
@@ -14302,7 +14304,7 @@ Selecciona un compàs i torna a intentar-ho</translation>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2015"/>
         <source>No login credentials stored. Please sign in via the GUI.</source>
-        <translation type="unfinished"/>
+        <translation>No s&apos;han desat les credencials d&apos;inici de sessió. Si us plau, inicieu la sessió a través de la interfície gràfica.</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2116"/>
@@ -14548,22 +14550,22 @@ Restore session?</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="7758"/>
         <source>Must specify at least one score to save online.</source>
-        <translation type="unfinished"/>
+        <translation>Cal especificar com a mínim una partitura per desar-la en línia.</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="7819"/>
         <source>--run-test-script is incompatible with --diff and --raw-diff</source>
-        <translation type="unfinished"/>
+        <translation>-run-test-script és incompatible amb --diff i --raw-diff</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="7852"/>
         <source>Only two scores are needed for performing a comparison</source>
-        <translation type="unfinished"/>
+        <translation>Només es necessiten dues partitures per fer una comparació</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="7857"/>
         <source>Please specify scripts to execute</source>
-        <translation type="unfinished"/>
+        <translation>Si us plau, especifica els scripts a executar</translation>
     </message>
 </context>
 <context>
@@ -14728,7 +14730,7 @@ a internet habilitada</translation>
     <message>
         <location filename="../../mscore/palette.cpp" line="279"/>
         <source>Copy SMuFL Symbol Code</source>
-        <translation type="unfinished"/>
+        <translation>Copia el codi de símbol SMuFL</translation>
     </message>
     <message>
         <location filename="../../mscore/palette.cpp" line="292"/>
@@ -15465,13 +15467,13 @@ Aquest complement requereix una partitura oberta per funcionar.
         <location filename="../../mscore/prefsdialog.cpp" line="1012"/>
         <location filename="../../mscore/prefsdialog.cpp" line="1030"/>
         <source>Choose Score Order List</source>
-        <translation type="unfinished"/>
+        <translation>Tria la llista de comandes de la partitura</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="1014"/>
         <location filename="../../mscore/prefsdialog.cpp" line="1032"/>
         <source>Score Order List</source>
-        <translation type="unfinished"/>
+        <translation>Llista de comandes de la partitura</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="1058"/>
@@ -15657,7 +15659,7 @@ Aquest complement requereix una partitura oberta per funcionar.
         <location filename="../../mscore/resourceManager.cpp" line="353"/>
         <location filename="../../mscore/resourceManager.cpp" line="404"/>
         <source>Up to date</source>
-        <translation type="unfinished"/>
+        <translation>Fins avui</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.cpp" line="317"/>
@@ -15843,7 +15845,7 @@ error: %2</translation>
     <message>
         <location filename="../../mscore/instrwidget.cpp" line="62"/>
         <source>Ordering</source>
-        <translation type="unfinished"/>
+        <translation>Ordenació</translation>
     </message>
 </context>
 <context>
@@ -16615,7 +16617,7 @@ nivell de música i preferències personals.</translation>
     <message>
         <location filename="../../mscore/cloud/uploadscoredialog.cpp" line="177"/>
         <source>Finished! %1Go to my score%2.</source>
-        <translation>Acabat! %1Anar cap a la meva partitura%2.</translation>
+        <translation>Acabat! %1Vés cap a la meva partitura%2.</translation>
     </message>
     <message>
         <location filename="../../mscore/cloud/uploadscoredialog.cpp" line="190"/>
@@ -16905,12 +16907,12 @@ tria un altre nom:</translation>
     <message>
         <location filename="../../mscore/cloud/uploadscoredialog.cpp" line="32"/>
         <source>Save online</source>
-        <translation type="unfinished"/>
+        <translation>Desa en línia</translation>
     </message>
     <message>
         <location filename="../../mscore/cloud/uploadscoredialog.cpp" line="32"/>
         <source>Saving scores online is disabled in this unstable prerelease version of MuseScore.</source>
-        <translation type="unfinished"/>
+        <translation>La funció per desar les partitures en línia està desactivat en aquesta versió de prellançament inestable de MuseScore.</translation>
     </message>
     <message>
         <location filename="../../mscore/cloud/uploadscoredialog.cpp" line="40"/>
@@ -17253,7 +17255,7 @@ tria un altre nom:</translation>
     <message>
         <location filename="../../mscore/pagesettings.ui" line="253"/>
         <source>Reset All Page Settings to Default</source>
-        <translation type="unfinished"/>
+        <translation>Restableix tots els paràmetres de la pàgina per defecte</translation>
     </message>
     <message>
         <location filename="../../mscore/pagesettings.ui" line="273"/>
@@ -17602,12 +17604,12 @@ tria un altre nom:</translation>
     <message>
         <location filename="../../mscore/menus.cpp" line="1471"/>
         <source>Staff Text line</source>
-        <translation type="unfinished"/>
+        <translation>Línia de text del pentagrama</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1477"/>
         <source>System Text line</source>
-        <translation type="unfinished"/>
+        <translation>Línia de text del sistema</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1521"/>
@@ -18133,22 +18135,22 @@ error:</translation>
     <message>
         <location filename="../../mscore/qml/palettes/PalettesWidgetHeader.qml" line="163"/>
         <source>Stop search</source>
-        <translation type="unfinished"/>
+        <translation>Atura la cerca</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/PalettesWidgetHeader.qml" line="204"/>
         <source>Open only one Palette at a time</source>
-        <translation type="unfinished"/>
+        <translation>Obre només una paleta alhora</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/PalettesWidgetHeader.qml" line="214"/>
         <source>Collapse all Palettes</source>
-        <translation type="unfinished"/>
+        <translation>Col·lapsa totes les paletes</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/PalettesWidgetHeader.qml" line="220"/>
         <source>Expand all Palettes</source>
-        <translation type="unfinished"/>
+        <translation>Expandeix totes les paletes</translation>
     </message>
 </context>
 <context>
@@ -19116,7 +19118,7 @@ Això revaluarà tots els complements, recollint els canvis que s&apos;hagin pro
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1302"/>
         <source>Enable MIDI input</source>
-        <translation>Activar l&apos;entrada MIDI</translation>
+        <translation>Habilita l&apos;entrada MIDI</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1309"/>
@@ -19223,7 +19225,7 @@ Això revaluarà tots els complements, recollint els canvis que s&apos;hagin pro
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1438"/>
         <source>Enable MIDI remote control</source>
-        <translation>Activar el telecontrol MIDI</translation>
+        <translation>Habilita el telecontrol MIDI</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1441"/>
@@ -19675,22 +19677,22 @@ Això revaluarà tots els complements, recollint els canvis que s&apos;hagin pro
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2673"/>
         <source>Score order list 1:</source>
-        <translation type="unfinished"/>
+        <translation>Llista de comandes de la partitura 1:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2683"/>
         <source>Score order list 2:</source>
-        <translation type="unfinished"/>
+        <translation>Llista de comandes de la partitura 2:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2723"/>
         <source>Score Order List 1</source>
-        <translation type="unfinished"/>
+        <translation>Llista de comandes de la partitura 1</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2730"/>
         <source>Score Order List 2</source>
-        <translation type="unfinished"/>
+        <translation>Llista de comandes de la partitura 2</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2779"/>
@@ -19844,7 +19846,7 @@ L&apos;ajustament de la latència pot ajudar a sincronitzar el maquinari MIDI am
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3389"/>
         <source>Apply default typeface (Edwin) to imported scores</source>
-        <translation type="unfinished"/>
+        <translation>Aplica la tipografia predeterminada (Edwin) a les partitures importades</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3399"/>
@@ -20130,12 +20132,12 @@ L&apos;ajustament de la latència pot ajudar a sincronitzar el maquinari MIDI am
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3598"/>
         <source>When opening scores from older MuseScore versions</source>
-        <translation type="unfinished"/>
+        <translation>En obrir les partitures de les versions anteriors de MuseScore</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3604"/>
         <source>Show option to apply improved engraving and style settings</source>
-        <translation type="unfinished"/>
+        <translation>Mostra l&apos;opció d&apos;aplicar la configuració millorada del gravat i l&apos;estil</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3745"/>
@@ -20682,22 +20684,22 @@ Visita la %1pàgina web de MuseScore %2 per a obtenir la darrera versió.</trans
     <message>
         <location filename="../../mscore/file.cpp" line="374"/>
         <source>Would you like to apply our default typeface (Edwin) to this score?</source>
-        <translation type="unfinished"/>
+        <translation>Voleu aplicar la nostra tipografia predeterminada (Edwin) a aquesta partitura?</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="375"/>
         <source>Do not apply Edwin</source>
-        <translation type="unfinished"/>
+        <translation>No apliquis la tipografia Edwin</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="376"/>
         <source>Apply Edwin</source>
-        <translation type="unfinished"/>
+        <translation>Aplica la tipografia Edwin</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="379"/>
         <source>Remember my choice and don&apos;t ask again</source>
-        <translation type="unfinished"/>
+        <translation>Recorda la meva elecció i no tornis a preguntar</translation>
     </message>
     <message>
         <location filename="../../importexport/musicxml/importxml.cpp" line="69"/>
@@ -20901,7 +20903,7 @@ Visita la %1pàgina web de MuseScore %2 per a obtenir la darrera versió.</trans
     <message>
         <location filename="../../libmscore/note.cpp" line="844"/>
         <source>%1 (sounding as %2%3)</source>
-        <translation type="unfinished"/>
+        <translation>%1 (sona com a %2%3)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="2250"/>
@@ -20939,17 +20941,17 @@ Visita la %1pàgina web de MuseScore %2 per a obtenir la darrera versió.</trans
     <message>
         <location filename="../../libmscore/note.cpp" line="3041"/>
         <source> (on %1‰ off %2‰)</source>
-        <translation type="unfinished"/>
+        <translation> (obert %1‰ apagat %2‰)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="3045"/>
         <source>Beat slash</source>
-        <translation>Temps amb barra obliqua</translation>
+        <translation>Temps amb barra inclinada</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="3045"/>
         <source>Rhythm slash</source>
-        <translation>Ritme amb barra obliqua</translation>
+        <translation>Ritme amb barra inclinada</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="3049"/>
@@ -20960,17 +20962,17 @@ Visita la %1pàgina web de MuseScore %2 per a obtenir la darrera versió.</trans
     <message>
         <location filename="../../libmscore/note.cpp" line="3052"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
-        <translation type="unfinished"/>
+        <translation>%1; To: %2; Durada: %3%4%5</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="3068"/>
         <source>Beat Slash</source>
-        <translation>Temps amb barra obliqua</translation>
+        <translation>Temps amb barra inclinada</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="3068"/>
         <source>Rhythm Slash</source>
-        <translation>Ritme amb barra obliqua</translation>
+        <translation>Ritme amb barra inclinada</translation>
     </message>
     <message>
         <location filename="../../libmscore/read206.cpp" line="3658"/>
@@ -21587,7 +21589,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="2235"/>
         <source>SoundFont installed. Please go to View &gt; Synthesizer to add it and View &gt; Mixer to choose an instrument sound.</source>
-        <translation>SoundFont instal·lat. Aneu a Visualització &gt; Sintetitzador per a afegir-lo i Visualització &gt; Mesclador per triar un so d&apos;instrument.</translation>
+        <translation>SoundFont instal·lat. Vés a Visualització &gt; Sintetitzador per a afegir-lo i Visualització &gt; Mesclador per triar un so d&apos;instrument.</translation>
     </message>
     <message>
         <location filename="../../importexport/midiimport/importmidi.cpp" line="1201"/>
@@ -21950,27 +21952,27 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/qml/migration/ScoreMigrationDialog.qml" line="69"/>
         <source>Would you like to try our improved score style?</source>
-        <translation type="unfinished"/>
+        <translation>¿Voleu provar el nostre estil de partitura millorat?</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/migration/ScoreMigrationDialog.qml" line="88"/>
         <source>Our new professional notation font, Leland</source>
-        <translation type="unfinished"/>
+        <translation>El nostre nou tipus de lletra de notació professional, Leland</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/migration/ScoreMigrationDialog.qml" line="97"/>
         <source>Our improved text font, Edwin</source>
-        <translation type="unfinished"/>
+        <translation>La nostra lletra de text millorada, Edwin</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/migration/ScoreMigrationDialog.qml" line="107"/>
         <source>Automatic placement (spacing changes introduced in V3.0)</source>
-        <translation type="unfinished"/>
+        <translation>Col·locació automàtica (canvis d&apos;espais introduïts a V3.0)</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/migration/ScoreMigrationDialog.qml" line="123"/>
         <source>Since this file was created in MuseScore %1, some layout changes may occur.</source>
-        <translation type="unfinished"/>
+        <translation>Atès que aquest fitxer es va crear al MuseScore %1, es poden produir alguns canvis de disposició.</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/migration/ScoreMigrationDialog.qml" line="124"/>
@@ -21980,22 +21982,22 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/qml/migration/ScoreMigrationDialog.qml" line="136"/>
         <source>Watch our release video to learn more</source>
-        <translation type="unfinished"/>
+        <translation>Observa el nostre vídeo de llançament per aprendre més</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/migration/ScoreMigrationDialog.qml" line="164"/>
         <source>Remember my choice and don&apos;t ask again</source>
-        <translation type="unfinished"/>
+        <translation>Recorda la meva elecció i no tornis a preguntar</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/migration/ScoreMigrationDialog.qml" line="180"/>
         <source>Keep old style</source>
-        <translation type="unfinished"/>
+        <translation>Mantén l&apos;estil antic</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/migration/ScoreMigrationDialog.qml" line="186"/>
         <source>Apply new style</source>
-        <translation type="unfinished"/>
+        <translation>Aplica un estil nou</translation>
     </message>
 </context>
 <context>
@@ -22958,7 +22960,7 @@ Nota: «Ctrl+Maj+1» és una combinació de tecles.</translation>
     <message>
         <location filename="../../libmscore/style.cpp" line="2453"/>
         <source>Multimeasure Rest Range</source>
-        <translation type="unfinished"/>
+        <translation>Inverval de silenci multicompàs</translation>
     </message>
     <message>
         <location filename="../../libmscore/style.cpp" line="2466"/>
@@ -23957,7 +23959,7 @@ Nota: «Ctrl+Maj+1» és una combinació de tecles.</translation>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="174"/>
         <source>Enable Editing</source>
-        <translation>Activa l&apos;edició</translation>
+        <translation>Habilita l&apos;edició</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="181"/>
@@ -24215,7 +24217,9 @@ Nota: «Ctrl+Maj+1» és una combinació de tecles.</translation>
         <source>Writing Workspace File
 %1
 failed</source>
-        <translation type="unfinished"/>
+        <translation>S&apos;està escrivint el fitxer de l&apos;espai de treball 
+%1 
+ha fallat</translation>
     </message>
     <message>
         <location filename="../../mscore/workspace.cpp" line="305"/>
@@ -24276,7 +24280,7 @@ failed</source>
     <message>
         <location filename="../../audio/midi/zerberus/zerberus_gui.ui" line="121"/>
         <source>Move SoundFont to Bottom</source>
-        <translation type="unfinished"/>
+        <translation>Mou el SoundFont al capdavall</translation>
     </message>
     <message>
         <location filename="../../audio/midi/zerberus/zerberus_gui.ui" line="160"/>
@@ -25060,7 +25064,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="819"/>
         <source>Go to higher pitched note in chord</source>
-        <translation>Anar a la nota més aguda de l&apos;acord</translation>
+        <translation>Vés a la nota més aguda de l&apos;acord</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="828"/>
@@ -25070,7 +25074,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="829"/>
         <source>Go to top note in chord</source>
-        <translation>Anar a la nota més alta de l&apos;acord</translation>
+        <translation>Vés a la nota més alta de l&apos;acord</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="838"/>
@@ -25120,7 +25124,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="893"/>
         <source>Go to lower pitched note in chord</source>
-        <translation>Anar a la nota més greu de l&apos;acord</translation>
+        <translation>Vés a la nota més greu de l&apos;acord</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="903"/>
@@ -25187,7 +25191,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="981"/>
         <source>Go to the first element</source>
-        <translation>Anar al primer element</translation>
+        <translation>Vés al primer element</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="991"/>
@@ -25197,7 +25201,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="992"/>
         <source>Go to the last element</source>
-        <translation>Anar a l&apos;últim element</translation>
+        <translation>Vés a l&apos;últim element</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1002"/>
@@ -25207,7 +25211,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1003"/>
         <source>Go to bottom note in chord</source>
-        <translation>Anar a la nota més baixa de l&apos;acord</translation>
+        <translation>Vés a la nota més baixa de l&apos;acord</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1013"/>
@@ -25222,7 +25226,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1025"/>
         <source>Go to previous chord or move text left</source>
-        <translation>Anar a l&apos;acord anterior o mou el text a l&apos;esquerra</translation>
+        <translation>Vés a l&apos;acord anterior o mou el text a l&apos;esquerra</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1031"/>
@@ -25232,7 +25236,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1032"/>
         <source>Go to previous measure or move text left</source>
-        <translation>Anar al compàs anterior o mou el text a l&apos;esquerra</translation>
+        <translation>Vés al compàs anterior o mou el text a l&apos;esquerra</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1059"/>
@@ -25252,7 +25256,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1067"/>
         <source>Go to next chord or move text right</source>
-        <translation>Va a l&apos;acord següent o mou el text a l&apos;esquerra</translation>
+        <translation>Vés a l&apos;acord següent o mou el text a l&apos;esquerra</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1073"/>
@@ -25262,7 +25266,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1074"/>
         <source>Go to next measure or move text right</source>
-        <translation>Anar al compàs següent o mou el text a la dreta</translation>
+        <translation>Vés al compàs següent o mou el text a la dreta</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1122"/>
@@ -26183,12 +26187,12 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2744"/>
         <source>Find / Go To</source>
-        <translation type="unfinished"/>
+        <translation>Cerca / Vés a</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2745"/>
         <source>Find / Go to</source>
-        <translation type="unfinished"/>
+        <translation>Cerca / Vés a</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2773"/>
@@ -26218,7 +26222,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2919"/>
         <source>Par&amp;ts…</source>
-        <translation type="unfinished"/>
+        <translation>Particel·l&amp;es...</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2926"/>
@@ -26288,7 +26292,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3115"/>
         <source>&amp;Resource Manager…</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Gestor de recursos...</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3126"/>
@@ -26360,7 +26364,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3843"/>
         <source>Toggle &apos;Rhythmic Slash Notation&apos;</source>
-        <translation>Commuta «Notació rítmica amb barra obliqua»</translation>
+        <translation>Commuta «Notació rítmica amb barra inclinada»</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3852"/>
@@ -26385,7 +26389,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="56"/>
         <source>&amp;Save</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Desa</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="57"/>
@@ -26400,7 +26404,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="77"/>
         <source>Save &amp;As…</source>
-        <translation type="unfinished"/>
+        <translation>Anomena i &amp;desa…</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="78"/>
@@ -26415,7 +26419,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="110"/>
         <source>&amp;Export…</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Exporta…</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="130"/>
@@ -26430,7 +26434,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="147"/>
         <source>&amp;Print…</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Imprimeix …</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="149"/>
@@ -26630,17 +26634,17 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="746"/>
         <source>Reset Text Style Overrides</source>
-        <translation type="unfinished"/>
+        <translation>Restableix la sobreescriptura de l&apos;estil de text</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="747"/>
         <source>Reset text style overrides</source>
-        <translation type="unfinished"/>
+        <translation>Restableix la sobreescriptura de l&apos;estil de text</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="748"/>
         <source>Reset all text style overrides to default</source>
-        <translation type="unfinished"/>
+        <translation>Restableix totes les excepcions d&apos;estil de text per defecte</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="797"/>
@@ -26655,7 +26659,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="839"/>
         <source>Move chord/rest to staff above</source>
-        <translation type="unfinished"/>
+        <translation>Mou l&apos;acord/silenci al pentagrama damunt</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="870"/>
@@ -26680,7 +26684,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1014"/>
         <source>Move chord/rest to staff below</source>
-        <translation type="unfinished"/>
+        <translation>Mou l&apos;acord/restaura al pentagrama de sota</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1038"/>
@@ -26690,27 +26694,27 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1039"/>
         <source>Go to previous system</source>
-        <translation>Va al sistema anterior</translation>
+        <translation>Vés al sistema anterior</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1045"/>
         <source>Previous Frame</source>
-        <translation type="unfinished"/>
+        <translation>Marc anterior</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1046"/>
         <source>Go to previous frame</source>
-        <translation type="unfinished"/>
+        <translation>Vés al marc anterior</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1052"/>
         <source>Previous Section</source>
-        <translation type="unfinished"/>
+        <translation>Secció anterior</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1053"/>
         <source>Go to previous section</source>
-        <translation type="unfinished"/>
+        <translation>Vés a la secció anterior</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1080"/>
@@ -26720,27 +26724,27 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1081"/>
         <source>Go to next system</source>
-        <translation>Va al sistema següent</translation>
+        <translation>Vés al sistema següent</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1087"/>
         <source>Next Frame</source>
-        <translation type="unfinished"/>
+        <translation>Marc següent</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1088"/>
         <source>Go to next frame</source>
-        <translation type="unfinished"/>
+        <translation>Vés al marc següent</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1094"/>
         <source>Next Section</source>
-        <translation type="unfinished"/>
+        <translation>Secció següent</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1095"/>
         <source>Go to next section</source>
-        <translation type="unfinished"/>
+        <translation>Vés a la secció següent</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1101"/>
@@ -26750,17 +26754,17 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1102"/>
         <source>Go to top staff</source>
-        <translation>Va al pentagrama superior</translation>
+        <translation>Vés al pentagrama superior</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1108"/>
         <source>Playback Cursor Position</source>
-        <translation type="unfinished"/>
+        <translation>Posició del cursor de reproducció</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1109"/>
         <source>Go to recent playback cursor position</source>
-        <translation type="unfinished"/>
+        <translation>Vés a la posició recent del cursor de reproducció</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1115"/>
@@ -26939,51 +26943,51 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1761"/>
         <source>Note input (non-toggle): Double ♯</source>
-        <translation type="unfinished"/>
+        <translation>Entrada de nota (sense commutar): Doble ♯</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1771"/>
         <location filename="../../mscore/shortcut.cpp" line="1773"/>
         <source>♯ (non-toggle)</source>
-        <translation type="unfinished"/>
+        <translation>♯ (sense commutar)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1772"/>
         <source>Note input (non-toggle): ♯</source>
-        <translation type="unfinished"/>
+        <translation>Entrada de nota (sense commutar): ♯</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1782"/>
         <location filename="../../mscore/shortcut.cpp" line="1784"/>
         <source>♮ (non-toggle)</source>
-        <translation type="unfinished"/>
+        <translation>♮ (sense commutar)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1783"/>
         <source>Note input (non-toggle): ♮</source>
-        <translation type="unfinished"/>
+        <translation>Entrada de nota (sense commutar): ♮</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1793"/>
         <location filename="../../mscore/shortcut.cpp" line="1795"/>
         <source>♭ (non-toggle)</source>
-        <translation type="unfinished"/>
+        <translation>♭ (sense commutar)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1794"/>
         <source>Note input (non-toggle): ♭</source>
-        <translation type="unfinished"/>
+        <translation>Entrada de nota (sense commutar): ♭</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1804"/>
         <location filename="../../mscore/shortcut.cpp" line="1806"/>
         <source>Double ♭ (non-toggle)</source>
-        <translation type="unfinished"/>
+        <translation>Doble ♭ (sense commutar)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1805"/>
         <source>Note input (non-toggle): Double ♭</source>
-        <translation type="unfinished"/>
+        <translation>Entrada de nota (sense commutar): Doble ♭</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1874"/>
@@ -27401,7 +27405,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3993"/>
         <source>Zoom in horizontally - piano roll editor</source>
-        <translation type="unfinished"/>
+        <translation>Apropa horitzontalment - editor rotlle de pianola</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="4001"/>
@@ -27411,7 +27415,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="4002"/>
         <source>Zoom out horizontally - piano roll editor</source>
-        <translation type="unfinished"/>
+        <translation>Alluna horitzontalment - editor rotlle de pianola</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="4010"/>
@@ -27421,7 +27425,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="4011"/>
         <source>Zoom in vertically - piano roll editor</source>
-        <translation type="unfinished"/>
+        <translation>Apropa verticalment - editor rotlle de pianola</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="4019"/>
@@ -27431,7 +27435,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="4020"/>
         <source>Zoom out vertically - piano roll editor</source>
-        <translation type="unfinished"/>
+        <translation>Alluna verticalment - editor rotlle de pianola</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2328"/>
@@ -27967,22 +27971,22 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2976"/>
         <source>Enable Snap to Horizontal Grid</source>
-        <translation>Activar l&apos;ajustament a la reixa horitzontal</translation>
+        <translation>Habilita l&apos;ajustament a la reixa horitzontal</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2977"/>
         <source>Enable snap to horizontal grid</source>
-        <translation>Activar l&apos;ajustament a la reixa horitzontal</translation>
+        <translation>Habilita l&apos;ajustament a la reixa horitzontal</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2987"/>
         <source>Enable Snap to Vertical Grid</source>
-        <translation>Activar l&apos;ajustament a la reixa vertical</translation>
+        <translation>Habilita l&apos;ajustament a la reixa vertical</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2988"/>
         <source>Enable snap to vertical grid</source>
-        <translation>Activar l&apos;ajustament a la reixa vertical</translation>
+        <translation>Habilita l&apos;ajustament a la reixa vertical</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2998"/>
@@ -29001,17 +29005,17 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3832"/>
         <source>Fill With Slashes</source>
-        <translation>Omple amb barres obliqües</translation>
+        <translation>Omple amb barres inclinades</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3833"/>
         <source>Fill with slashes</source>
-        <translation>Omple amb barres obliqües</translation>
+        <translation>Omple amb barres inclinades</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3842"/>
         <source>Toggle Rhythmic Slash Notation</source>
-        <translation>Commuta notació rítmica amb barra obliqua</translation>
+        <translation>Commuta notació rítmica amb la barra inclinada</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3863"/>
@@ -31010,12 +31014,12 @@ failed</source>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="39"/>
         <source>Multimeasure Rest Range</source>
-        <translation type="unfinished"/>
+        <translation>Inverval de silenci multicompàs</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="65"/>
         <source>Flag</source>
-        <translation type="unfinished"/>
+        <translation>Marca</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="97"/>
@@ -31645,7 +31649,7 @@ El compàs no és buit</translation>
     <message>
         <location filename="../../libmscore/note.cpp" line="250"/>
         <source>Slash</source>
-        <translation>Barra obliqua</translation>
+        <translation>Barra inclinada</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="236"/>
@@ -31675,12 +31679,12 @@ El compàs no és buit</translation>
     <message>
         <location filename="../../libmscore/note.cpp" line="241"/>
         <source>Slashed (Forwards)</source>
-        <translation>Barra obliqua (endavant)</translation>
+        <translation>Barra inclinada (endavant)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="242"/>
         <source>Slashed (Backwards)</source>
-        <translation>Barra obliqua (cap enrere)</translation>
+        <translation>Barra inclinada (cap enrere)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="244"/>
@@ -33016,12 +33020,12 @@ El compàs no és buit</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3361"/>
         <source>Triple flat</source>
-        <translation type="unfinished"/>
+        <translation>Triple bemoll</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3362"/>
         <source>Triple sharp</source>
-        <translation type="unfinished"/>
+        <translation>Triple sostingut</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3367"/>
@@ -33346,17 +33350,17 @@ El compàs no és buit</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3496"/>
         <source>Heavy barline</source>
-        <translation type="unfinished"/>
+        <translation>Barra forta</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3497"/>
         <source>Heavy double barline</source>
-        <translation type="unfinished"/>
+        <translation>Doble barra forta</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3498"/>
         <source>Reverse final barline</source>
-        <translation type="unfinished"/>
+        <translation>Inverteix la barra final</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3499"/>
@@ -33682,7 +33686,7 @@ El compàs no és buit</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4999"/>
         <source>Short trill</source>
-        <translation type="unfinished"/>
+        <translation>Trinat curt</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5004"/>
@@ -33707,7 +33711,7 @@ El compàs no és buit</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5009"/>
         <source>Turn with slash</source>
-        <translation type="unfinished"/>
+        <translation>Gira amb la barra inclinada</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5307"/>
