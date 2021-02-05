@@ -70,7 +70,7 @@ DockWindow {
 
         DockToolBar {
             objectName: "notationToolBar"
-            minimumWidth: 176
+            minimumWidth: 188
             minimumHeight: dockWindow.toolbarHeight
 
             color: dockWindow.color

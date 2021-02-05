@@ -6,11 +6,20 @@ FocusableItem {
 
     property alias icon: buttonIcon.iconCode
     property alias text: textLabel.text
-    property int iconPixelSize: buttonIcon.isEmpty ? 0 : ui.theme.iconsFont.pixelSize
+
+    property alias iconFont: buttonIcon.font
+    property alias textFont: textLabel.font
+
+    property color normalStateColor: privateProperties.defaultColor
+    property color hoveredStateColor: privateProperties.defaultColor
+    property color pressedStateColor: privateProperties.defaultColor
+    property bool accentButton: false
 
     property int orientation: Qt.Vertical
 
-    property bool accentButton: false
+    property alias hovered: mouseArea.containsMouse
+
+    signal clicked()
 
     QtObject {
         id: privateProperties
@@ -18,14 +27,6 @@ FocusableItem {
         property color defaultColor: accentButton ? ui.theme.accentColor : ui.theme.buttonColor
         property bool isVertical: orientation === Qt.Vertical
     }
-
-    property color normalStateColor: privateProperties.defaultColor
-    property color hoveredStateColor: privateProperties.defaultColor
-    property color pressedStateColor: privateProperties.defaultColor
-
-    property alias hovered: clickableArea.containsMouse
-
-    signal clicked
 
     height: contentWrapper.height + 14
     width: (Boolean(text) ? Math.max(contentWrapper.width + 32, privateProperties.isVertical ? 132 : 0) : contentWrapper.width + 16)
@@ -57,7 +58,7 @@ FocusableItem {
         StyledIconLabel {
             id: buttonIcon
 
-            font.pixelSize: root.iconPixelSize
+            font.pixelSize: isEmpty ? 0 : ui.theme.iconsFont.pixelSize
         }
 
         StyledTextLabel {
@@ -106,7 +107,7 @@ FocusableItem {
     }
 
     MouseArea {
-        id: clickableArea
+        id: mouseArea
 
         anchors.fill: parent
 
@@ -120,7 +121,7 @@ FocusableItem {
     states: [
         State {
             name: "PRESSED"
-            when: clickableArea.pressed
+            when: mouseArea.pressed
 
             PropertyChanges {
                 target: backgroundRect
@@ -131,7 +132,7 @@ FocusableItem {
 
         State {
             name: "HOVERED"
-            when: clickableArea.containsMouse && !clickableArea.pressed
+            when: mouseArea.containsMouse && !mouseArea.pressed
 
             PropertyChanges {
                 target: backgroundRect

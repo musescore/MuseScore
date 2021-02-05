@@ -70,7 +70,7 @@ void NotationToolBarModel::load()
 
     m_items.clear();
 
-    m_items << makeItem("Parts", IconCode::Code::NEW_FILE, "musescore://notation/parts", hasNotation());
+    m_items << makeItem("Parts", IconCode::Code::PAGE, "musescore://notation/parts", hasNotation());
     m_items << makeItem("Mixer", IconCode::Code::MIXER, "musescore://notation/mixer");
 
     endResetModel();

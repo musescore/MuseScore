@@ -63,7 +63,6 @@ public:
         OPEN_FILE = 0xEF23,
         SHARE_FILE = 0xEF24,
         CLOUD_FILE = 0xEF25,
-        PAGE = 0xF3A5,
         REWIND = 0xEF26,
         MIXER = 0xEF27,
         CONFIGURE = 0xEF28,
@@ -260,6 +259,8 @@ public:
         FOOT_PEDAL = 0xF3A1,
 
         TOOLBAR_GRIP = 0xF3A2,
+
+        PAGE = 0xF3A5,
 
         AUTO,
         NONE,
