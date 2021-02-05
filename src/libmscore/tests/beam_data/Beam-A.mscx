@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
+<museScore version="3.02">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -29,12 +29,13 @@
           </StaffType>
         </Staff>
       <trackName>Voice</trackName>
-      <Instrument>
+      <Instrument id="voice">
         <trackName>Voice</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>94</maxPitchP>
         <minPitchA>40</minPitchA>
         <maxPitchA>79</maxPitchA>
+        <instrumentId>voice.vocals</instrumentId>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -52,6 +53,7 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <program value="52"/>
           </Channel>
         </Instrument>
       </Part>
@@ -174,8 +176,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>-3</l1>
-            <l2>-5</l2>
+            <l1>21</l1>
+            <l2>19</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
