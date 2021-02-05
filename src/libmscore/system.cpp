@@ -306,7 +306,7 @@ void System::layoutSystem(qreal xo1)
         ++nVisible;
         qreal staffMag = staff->staffMag(Fraction(0,1));         // ??? TODO
         int staffLines = staff->lines(Fraction(0,1));
-        if (staffLines == 1) {
+        if (staffLines <= 1) {
             qreal h = staff->lineDistance(Fraction(0,1)) * staffMag * spatium();
             s->bbox().setRect(_leftMargin + xo1, -h, 0.0, 2 * h);
         } else {
