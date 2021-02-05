@@ -49,7 +49,15 @@ StaffGroup InputState::staffGroup() const
     if (_segment == 0 || _track == -1) {
         return StaffGroup::STANDARD;
     }
-    return _segment->score()->staff(_track / VOICES)->staffType(_segment->tick())->group();
+
+    StaffGroup staffGroup = _segment->score()->staff(_track / VOICES)->staffType(_segment->tick())->group();
+    Instrument* instrument = _segment->score()->staff(_track / VOICES)->part()->instrument(_segment->tick());
+
+    // if not tab, pitched/unpitched input depends on instrument, not staff (override StaffGroup)
+    if (staffGroup != StaffGroup::TAB) {
+        staffGroup = instrument->useDrumset() ? StaffGroup::PERCUSSION : StaffGroup::STANDARD;
+    }
+    return staffGroup;
 }
 
 //---------------------------------------------------------
@@ -209,7 +217,7 @@ void InputState::update(Selection& selection)
 
     setDrumNote(-1);
     if (n) {
-        const Instrument* instr = n->part()->instrument();
+        const Instrument* instr = n->part()->instrument(n->tick());
         if (instr->useDrumset()) {
             setDrumNote(n->pitch());
         }

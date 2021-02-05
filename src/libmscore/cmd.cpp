@@ -1553,10 +1553,16 @@ void Score::upDown(bool up, UpDownMode mode)
         int string   = oNote->string();
         int fret     = oNote->fret();
 
-        switch (staff->staffType(oNote->chord()->tick())->group()) {
+        StaffGroup staffGroup = staff->staffType(oNote->chord()->tick())->group();
+        // if not tab, check for instrument instead of staffType (for pitched to unpitched instrument changes)
+        if (staffGroup != StaffGroup::TAB) {
+            staffGroup = staff->part()->instrument(oNote->tick())->useDrumset() ? StaffGroup::PERCUSSION : StaffGroup::STANDARD;
+        }
+
+        switch (staffGroup) {
         case StaffGroup::PERCUSSION:
         {
-            const Drumset* ds = part->instrument()->drumset();
+            const Drumset* ds = part->instrument(tick)->drumset();
             if (ds) {
                 newPitch = up ? ds->nextPitch(pitch) : ds->prevPitch(pitch);
                 newTpc1 = pitch2tpc(newPitch, Key::C, Prefer::NEAREST);
@@ -1566,7 +1572,7 @@ void Score::upDown(bool up, UpDownMode mode)
         break;
         case StaffGroup::TAB:
         {
-            const StringData* stringData = part->instrument()->stringData();
+            const StringData* stringData = part->instrument(tick)->stringData();
             switch (mode) {
             case UpDownMode::OCTAVE:                            // move same note to next string, if possible
             {
@@ -1700,7 +1706,7 @@ void Score::upDown(bool up, UpDownMode mode)
                 refret = true;
             }
             if (refret) {
-                const StringData* stringData = part->instrument()->stringData();
+                const StringData* stringData = part->instrument(tick)->stringData();
                 stringData->fretChords(oNote->chord());
             }
         }
@@ -1832,7 +1838,7 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
             // as pitch has changed, calculate new
             // string & fret
             //
-            const StringData* stringData = n->part()->instrument()->stringData();
+            const StringData* stringData = n->part()->instrument(n->tick())->stringData();
             if (stringData) {
                 stringData->convertPitch(pitch, st, chord->tick(), &string, &fret);
             }
@@ -2265,7 +2271,7 @@ bool Score::processMidiInput()
                     ev.pitch += p->instrument(selection().tickStart())->transpose().chromatic;
                 }
                 MScore::seq->startNote(
-                    p->instrument()->channel(0)->channel(),
+                    p->instrument(selection().tickStart())->channel(0)->channel(),                         // tick that way?
                     ev.pitch,
                     ev.velocity,
                     0.0);
