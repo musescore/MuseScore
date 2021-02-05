@@ -37,6 +37,7 @@
 #include "libmscore/chordrest.h"
 #include "libmscore/chord.h"
 #include "libmscore/harmony.h"
+#include "libmscore/tempo.h"
 
 #include "framework/midi_old/event.h" //! TODO Remove me
 
@@ -55,9 +56,14 @@ NotationPlayback::NotationPlayback(IGetScore* getScore)
     m_midiStream->request.onReceive(this, [this](tick_t tick) { onChunkRequest(tick); });
 }
 
+Ms::Score* NotationPlayback::score() const
+{
+    return m_getScore ? m_getScore->score() : nullptr;
+}
+
 Ms::MasterScore* NotationPlayback::masterScore() const
 {
-    return m_getScore ? m_getScore->score()->masterScore() : nullptr;
+    return score() ? score()->masterScore() : nullptr;
 }
 
 Ms::Score* NotationPlayback::score() const
@@ -691,4 +697,39 @@ QRect NotationPlayback::loopBoundaryRectByTick(LoopBoundaryType boundaryType, in
 mu::async::Channel<LoopBoundary> NotationPlayback::loopBoundaryChanged() const
 {
     return m_loopBoundaryChanged;
+}
+
+Tempo NotationPlayback::tempo(int tick) const
+{
+    if (!score()) {
+        return Tempo();
+    }
+
+    Tempo tempo;
+    tempo.value = score()->tempomap()->tempo(tick) * score()->tempomap()->relTempo() * 60;
+    tempo.duration = DurationType::V_QUARTER;
+    tempo.withDot = true;
+
+    return tempo;
+}
+
+MeasureBeat NotationPlayback::measureBeat(int tick) const
+{
+    MeasureBeat measureBeat;
+
+    int dummy = 0;
+
+    if (score() && score()->checkHasMeasures()) {
+        score()->sigmap()->tickValues(tick, &measureBeat.measureNumber, &measureBeat.beatNumber, &dummy);
+
+        measureBeat.maxMeasureNumber = score()->measures()->size();
+        measureBeat.maxBeatNumber = 4; // TODO
+    }
+
+    return measureBeat;
+}
+
+int NotationPlayback::measureBeatToTick(const MeasureBeat& measureBeat) const
+{
+    return score() ? score()->sigmap()->bar2tick(measureBeat.measureNumber, measureBeat.beatNumber) : 0;
 }

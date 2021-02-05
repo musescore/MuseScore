@@ -36,6 +36,19 @@ using namespace mu::notation;
 static const std::string PLAYBACK_TOOLBAR_KEY("playbackControl");
 static const std::string PLAYBACK_SETTINGS_KEY("playback-settings");
 
+static MusicalSymbolCodes::Code tempoDurationToNoteIcon(DurationType durationType)
+{
+    QMap<DurationType, MusicalSymbolCodes::Code> durationToNoteIcon {
+        { DurationType::V_WHOLE, MusicalSymbolCodes::Code::SEMIBREVE },
+        { DurationType::V_HALF, MusicalSymbolCodes::Code::MINIM },
+        { DurationType::V_QUARTER, MusicalSymbolCodes::Code::CROTCHET },
+        { DurationType::V_EIGHTH, MusicalSymbolCodes::Code::SEMIQUAVER },
+        { DurationType::V_16TH, MusicalSymbolCodes::Code::DEMISEMIQUAVER }
+    };
+
+    return durationToNoteIcon[durationType];
+}
+
 PlaybackToolBarModel::PlaybackToolBarModel(QObject* parent)
     : QAbstractListModel(parent)
 {
@@ -97,6 +110,7 @@ void PlaybackToolBarModel::load()
 
     playbackController()->isPlayAllowedChanged().onNotify(this, [this]() {
         updateState();
+        updatePlayTime();
     });
 
     playbackController()->isPlayingChanged().onNotify(this, [this]() {
@@ -185,6 +199,11 @@ uint64_t PlaybackToolBarModel::totalPlayTimeMilliseconds() const
     return timeToMilliseconds(totalPlayTime());
 }
 
+MeasureBeat PlaybackToolBarModel::measureBeat() const
+{
+    return playbackController()->currentMeasureBeat();
+}
+
 void PlaybackToolBarModel::updatePlayTime()
 {
     float seconds = playbackController()->playbackPositionInSeconds();
@@ -203,6 +222,10 @@ void PlaybackToolBarModel::doSetPlayTime(const QTime& time)
 
     emit playTimeChanged(time);
     emit playPositionChanged(playPosition());
+    emit measureNumberChanged(measureNumber());
+    emit maxMeasureNumberChanged(maxMeasureNumber());
+    emit beatNumberChanged(beatNumber());
+    emit maxBeatNumberChanged(maxBeatNumber());
 }
 
 void PlaybackToolBarModel::rewind(uint64_t milliseconds)
@@ -210,53 +233,70 @@ void PlaybackToolBarModel::rewind(uint64_t milliseconds)
     dispatcher()->dispatch("rewind", ActionData::make_arg1<uint64_t>(milliseconds));
 }
 
+void PlaybackToolBarModel::rewindToMeasureBeat(const notation::MeasureBeat& barBeat)
+{
+    uint64_t milliseconds = playbackController()->measureBeatToMilliseconds(barBeat);
+    rewind(milliseconds);
+}
+
 int PlaybackToolBarModel::measureNumber() const
 {
-    NOT_IMPLEMENTED;
-    return 2;
+    return measureBeat().measureNumber;
 }
 
 void PlaybackToolBarModel::setMeasureNumber(int measureNumber)
 {
-    Q_UNUSED(measureNumber)
-    NOT_IMPLEMENTED;
+    MeasureBeat measureBeat = this->measureBeat();
+
+    if (measureNumber == measureBeat.measureNumber) {
+        return;
+    }
+
+    measureBeat.measureNumber = measureNumber;
+    rewindToMeasureBeat(measureBeat);
+
     emit measureNumberChanged(measureNumber);
 }
 
 int PlaybackToolBarModel::maxMeasureNumber() const
 {
-    NOT_IMPLEMENTED;
-    return 8;
+    return measureBeat().maxMeasureNumber;
 }
 
 int PlaybackToolBarModel::beatNumber() const
 {
-    NOT_IMPLEMENTED;
-    return 3;
+    return measureBeat().beatNumber;
 }
 
 void PlaybackToolBarModel::setBeatNumber(int beatNumber)
 {
-    Q_UNUSED(beatNumber)
-    NOT_IMPLEMENTED;
+    MeasureBeat measureBeat = this->measureBeat();
+
+    if (beatNumber == measureBeat.beatNumber) {
+        return;
+    }
+
+    measureBeat.beatNumber = beatNumber;
+    rewindToMeasureBeat(measureBeat);
+
     emit beatNumberChanged(beatNumber);
 }
 
 int PlaybackToolBarModel::maxBeatNumber() const
 {
-    NOT_IMPLEMENTED;
-    return 9;
+    return measureBeat().maxBeatNumber;
 }
 
 QVariant PlaybackToolBarModel::tempo() const
 {
-    NOT_IMPLEMENTED;
+    Tempo tempo = playbackController()->currentTempo();
+    MusicalSymbolCodes::Code noteIcon = tempoDurationToNoteIcon(tempo.duration);
 
-    QVariantMap tempo;
-    tempo["noteSymbol"] = noteIconToString(MusicalSymbolCodes::Code::CROTCHET, true);
-    tempo["value"] = 180;
+    QVariantMap obj;
+    obj["noteSymbol"] = noteIconToString(noteIcon, tempo.withDot);
+    obj["value"] = tempo.value;
 
-    return tempo;
+    return obj;
 }
 
 void PlaybackToolBarModel::handleAction(const QString& action)
