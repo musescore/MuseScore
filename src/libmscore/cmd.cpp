@@ -2337,7 +2337,8 @@ bool Score::processMidiInput()
 
 Element* Score::move(const QString& cmd)
 {
-    ChordRest* cr;
+    ChordRest* cr { nullptr };
+    Box* box { nullptr };
     if (noteEntryMode()) {
         // if selection exists and is grace note, use it
         // otherwise use chord/rest at input position
@@ -2369,7 +2370,9 @@ Element* Score::move(const QString& cmd)
         // trg is the element to select on "next-chord" cmd
         // cr is the ChordRest to move from on other cmd's
         int track = el->track();                // keep note of element track
-        el = el->parent();
+        if (!el->isBox()) {
+            el = el->parent();
+        }
         // element with no parent (eg, a newly-added line) - no way to find context
         if (!el) {
             return 0;
@@ -2412,6 +2415,11 @@ Element* Score::move(const QString& cmd)
             }
             break;
         }
+        case ElementType::HBOX:           // fallthrough
+        case ElementType::VBOX:           // fallthrough
+        case ElementType::TBOX:
+            box = toBox(el);
+            break;
         default:                                // on anything else, return failure
             return 0;
         }
@@ -2426,8 +2434,8 @@ Element* Score::move(const QString& cmd)
             select(trg, SelectType::SINGLE, 0);
             return trg;
         }
-        // if no chordrest found, do nothing
-        if (!cr) {
+        // if no chordrest and no box (frame) found, do nothing
+        if (!cr && !box) {
             return 0;
         }
         // if some chordrest found, continue with default processing
@@ -2437,7 +2445,7 @@ Element* Score::move(const QString& cmd)
     Segment* ois = noteEntryMode() ? _is.segment() : nullptr;
     Measure* oim = ois ? ois->measure() : nullptr;
 
-    if (cmd == "next-chord") {
+    if (cmd == "next-chord" && cr) {
         // note input cursor
         if (noteEntryMode()) {
             _is.moveToNextInputPos();
@@ -2466,7 +2474,7 @@ Element* Score::move(const QString& cmd)
         } else if (!el) {
             el = cr;
         }
-    } else if (cmd == "prev-chord") {
+    } else if (cmd == "prev-chord" && cr) {
         // note input cursor
         if (noteEntryMode() && _is.segment()) {
             Measure* m = _is.segment()->measure();
@@ -2509,31 +2517,57 @@ Element* Score::move(const QString& cmd)
             el = cr;
         }
     } else if (cmd == "next-measure") {
-        el = nextMeasure(cr);
-        if (noteEntryMode()) {
+        if (box && box->nextMeasure() && box->nextMeasure()->first()) {
+            el = box->nextMeasure()->first()->nextChordRest(0, false);
+        }
+        if (cr) {
+            el = nextMeasure(cr);
+        }
+        if (el && noteEntryMode()) {
             _is.moveInputPos(el);
         }
     } else if (cmd == "prev-measure") {
-        el = prevMeasure(cr);
-        if (noteEntryMode()) {
+        if (box && box->prevMeasure() && box->prevMeasure()->first()) {
+            el = box->prevMeasure()->first()->nextChordRest(0, false);
+        }
+        if (cr) {
+            el = prevMeasure(cr);
+        }
+        if (el && noteEntryMode()) {
             _is.moveInputPos(el);
         }
-    } else if (cmd == "next-system") {
+    } else if (cmd == "next-system" && cr) {
         el = cmdNextPrevSystem(cr, true);
         if (noteEntryMode()) {
             _is.moveInputPos(el);
         }
-    } else if (cmd == "prev-system") {
+    } else if (cmd == "prev-system" && cr) {
         el = cmdNextPrevSystem(cr, false);
         if (noteEntryMode()) {
             _is.moveInputPos(el);
         }
-    } else if (cmd == "next-track") {
+    } else if (cmd == "next-frame") {
+        auto measureBase = cr ? cr->measure()->findMeasureBase() : box->findMeasureBase();
+        el = measureBase ? cmdNextPrevFrame(measureBase, true) : nullptr;
+    } else if (cmd == "prev-frame") {
+        auto measureBase = cr ? cr->measure()->findMeasureBase() : box->findMeasureBase();
+        el = measureBase ? cmdNextPrevFrame(measureBase, false) : nullptr;
+    } else if (cmd == "next-section") {
+        if (!(el = box)) {
+            el = cr;
+        }
+        el = cmdNextPrevSection(el, true);
+    } else if (cmd == "prev-section") {
+        if (!(el = box)) {
+            el = cr;
+        }
+        el = cmdNextPrevSection(el, false);
+    } else if (cmd == "next-track" && cr) {
         el = nextTrack(cr);
         if (noteEntryMode()) {
             _is.moveInputPos(el);
         }
-    } else if (cmd == "prev-track") {
+    } else if (cmd == "prev-track" && cr) {
         el = prevTrack(cr);
         if (noteEntryMode()) {
             _is.moveInputPos(el);
