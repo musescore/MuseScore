@@ -185,11 +185,9 @@ void Stem::draw(QPainter* painter) const
     bool isUp = up();
 
     // slashed half note stem
-    if (chord()->durationType().type() == TDuration::DurationType::V_HALF
-        && stt->minimStyle() == TablatureMinimStyle::SLASHED) {
+    if (chord()->durationType().type() == TDuration::DurationType::V_HALF && stt->minimStyle() == TablatureMinimStyle::SLASHED) {
         // position slashes onto stem
-        qreal y = isUp ? -(_len + _userLen) + STAFFTYPE_TAB_SLASH_2STARTY_UP * sp : (_len + _userLen)
-                  - STAFFTYPE_TAB_SLASH_2STARTY_DN * sp;
+        qreal y = isUp ? -(_len + _userLen) + STAFFTYPE_TAB_SLASH_2STARTY_UP * sp : (_len + _userLen) - STAFFTYPE_TAB_SLASH_2STARTY_DN * sp;
         // if stems through, try to align slashes within or across lines
         if (stt->stemThrough()) {
             qreal halfLineDist = stt->lineDistance().val() * sp * 0.5;
