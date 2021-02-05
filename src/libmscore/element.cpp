@@ -39,6 +39,7 @@
 #include "figuredbass.h"
 #include "fingering.h"
 #include "fret.h"
+#include "fraction.h"
 #include "glissando.h"
 #include "hairpin.h"
 #include "harmony.h"
@@ -361,6 +362,23 @@ Fraction Element::playTick() const
 {
     // Play from the element's tick position by default.
     return tick();
+}
+
+//---------------------------------------------------------
+//   beat
+//---------------------------------------------------------
+
+Fraction Element::beat() const
+{
+    // Returns an appropriate fraction of ticks for use as a "Beat" reference
+    // in the Select All Similar filter.
+    int bar, beat, ticks;
+    TimeSigMap* tsm = score()->sigmap();
+    tsm->tickValues(tick().ticks(), &bar, &beat, &ticks);
+    int ticksB = ticks_beat(tsm->timesig(tick().ticks()).timesig().denominator());
+
+    Fraction complexFraction((++beat * ticksB) + ticks, ticksB);
+    return complexFraction.reduced();
 }
 
 //---------------------------------------------------------
