@@ -29,7 +29,7 @@ bool StringData::bFretting = false;
 
 StringData::StringData(int numFrets, int numStrings, int strings[])
       {
-      instrString strg = { 0, false};
+      instrString strg = { 0, false, 0};
       _frets = numFrets;
 
       for (int i = 0; i < numStrings; i++) {
@@ -45,6 +45,14 @@ StringData::StringData(int numFrets, QList<instrString>& strings)
       stringTable.clear();
       foreach(instrString i, strings)
             stringTable.append(i);
+      }
+
+// called from import (musicxml/guitarpro/...)
+void StringData::set(const StringData& src)
+      {
+      *this = src;
+      if (isFiveStringBanjo())
+            configBanjo5thString();
       }
 
 //---------------------------------------------------------
@@ -67,6 +75,8 @@ void StringData::read(XmlReader& e)
             else
                   e.unknown();
             }
+      if (isFiveStringBanjo())
+            configBanjo5thString();
       }
 
 //---------------------------------------------------------
@@ -316,16 +326,35 @@ bool StringData::convertPitch(int pitch, int pitchOffset, int* string, int* fret
             return false;
             }
 
-      // look for a suitable string, starting from the highest
-      // NOTE: this assumes there are always enough frets to fill
-      // the interval between any fretted string and the next
-      for (int i = strings-1; i >=0; i--) {
-            instrString strg = stringTable.at(i);
-            if(pitch >= strg.pitch) {
-                  if (pitch == strg.pitch || !strg.open)
-                  *string = strings - i - 1;
-                  *fret   = pitch - strg.pitch;
+      if (isFiveStringBanjo()) {
+            // special case: open banjo 5th string
+            if (pitch == stringTable.at(0).pitch) {
+                  *string = 4;
+                  *fret = 0;
                   return true;
+                  }
+            // test remaining 4 strings from highest to lowest
+            for (int i = 4; i > 0; i--) {
+                  instrString strg = stringTable.at(i);
+                  if (pitch >= strg.pitch) {
+                        *string = strings - i - 1;
+                        *fret = pitch - strg.pitch;
+                        return true;
+                        }
+                  }
+            }
+      else {
+            // look for a suitable string, starting from the highest
+            // NOTE: this assumes there are always enough frets to fill
+            // the interval between any fretted string and the next
+            for (int i = strings-1; i >=0; i--) {
+                  instrString strg = stringTable.at(i);
+                  if(pitch >= strg.pitch) {
+                        if (pitch == strg.pitch || !strg.open)
+                        *string = strings - i - 1;
+                        *fret   = pitch - strg.pitch;
+                        return true;
+                        }
                   }
             }
 
@@ -349,7 +378,10 @@ int StringData::getPitch(int string, int fret, int pitchOffset) const
       if (string < 0 || string >= strings)
             return INVALID_PITCH;
       instrString strg = stringTable.at(strings - string - 1);
-      return strg.pitch - pitchOffset + (strg.open ? 0 : fret);
+      int pitch = strg.pitch - pitchOffset + (strg.open ? 0 : fret);
+      if (strg.startFret > 0 && fret >= strg.startFret)
+            pitch -= strg.startFret; // banjo 5th string adjustment
+      return pitch;      
       }
 
 //---------------------------------------------------------
@@ -369,9 +401,13 @@ int StringData::fret(int pitch, int string, int pitchOffset) const
 
       pitch += pitchOffset;
 
-      int fret = pitch - stringTable[strings - string - 1].pitch;
+      const instrString& strg = stringTable[strings - string - 1];
+      int fret = pitch - strg.pitch;
+      if (fret > 0 && strg.startFret > 0)
+             fret += strg.startFret;  // banjo 5th string adjustment
+
       // fret number is invalid or string cannot be fretted
-      if (fret < 0 || fret >= _frets || (fret > 0 && stringTable[strings - string - 1].open))
+      if (fret < 0 || fret >= _frets || (fret > 0 && strg.open))
             return FRET_NONE;
       return fret;
       }
@@ -408,6 +444,51 @@ void StringData::sortChordNotes(QMap<int, Note *>& sortedNotes, const Chord *cho
             (*count)++;
             }
 }
+
+//---------------------------------------------------------
+//   configBanjo5thString
+//   Assumes isFiveStringBanjo() has already been called.
+//   This method looks at the banjo tuning and sets startFret 
+//   appropriately.
+//---------------------------------------------------------
+
+void StringData::configBanjo5thString()
+      {
+      // banjo 5th string (pitch 67 == G)
+      instrString& strg5 = stringTable[0];
+
+      _frets = 24; // not needed after bug #316931 is fixed
+
+      // adjust startFret if using a 5th string capo (6..12)
+      if (strg5.pitch > 67 && strg5.pitch < 74)
+            strg5.startFret = strg5.pitch - 62;
+      else
+            strg5.startFret = 5;  // no 5th string capo
+      }
+
+//---------------------------------------------------------
+//   adjustBanjo5thFret
+//   Convert 5th string fret number from (0, 1, 2, 3...) to (0, 6, 7, 8...).
+//   Called from import (GuitarPro mostly)
+//   Returns adjusted fret number
+//---------------------------------------------------------
+
+int StringData::adjustBanjo5thFret(int fret) const
+      {
+      return (fret > 0 && isFiveStringBanjo()) ? fret + stringTable[0].startFret : fret;
+      }
+
+//---------------------------------------------------------
+//    isFiveStringBanjo
+//    Based only on number of strings and tuning - other info
+//    may not be available when this is called. Checks 5th string
+//    pitch is higher than 4th (i.e. not a 5 string bass)
+//---------------------------------------------------------
+
+bool StringData::isFiveStringBanjo() const
+      {
+      return stringTable.size() == 5 && stringTable[0].pitch > stringTable[1].pitch;
+      }
 
 #if 0
 //---------------------------------------------------------
