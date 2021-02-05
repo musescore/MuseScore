@@ -1409,7 +1409,7 @@ qreal Chord::defaultStemLength() const
     }
 
     const qreal sgn = up() ? -1.0 : 1.0;
-    qreal stemLenPoints = stemLen * _spatium;
+    qreal stemLenPoints = point(Spatium(stemLen));
     const qreal minAbsStemLen = minAbsStemLength();
     if (sgn * stemLenPoints < minAbsStemLen) {
         stemLenPoints = sgn * minAbsStemLen;
