@@ -26,9 +26,10 @@ class Note;
 
 // defines the string of an instrument
 struct instrString {
+      instrString(int p=0, bool o=false, int s=0) : pitch(p), open(o), startFret(s) {};
       int   pitch;      // the pitch of the string
       bool  open;       // true: string is open | false: string is fretted
-      int   startFret = 0;  // banjo 5th string starts on 5th fret
+      int   startFret;  // banjo 5th string starts on 5th fret
 
       bool operator==(const instrString& d) const { return d.pitch == pitch && d.open == open; }
       };
