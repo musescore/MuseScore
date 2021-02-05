@@ -26,8 +26,10 @@ class Note;
 
 // defines the string of an instrument
 struct instrString {
+      instrString(int p=0, bool o=false, int s=0) : pitch(p), open(o), startFret(s) {};
       int   pitch;      // the pitch of the string
       bool  open;       // true: string is open | false: string is fretted
+      int   startFret;  // banjo 5th string starts on 5th fret
 
       bool operator==(const instrString& d) const { return d.pitch == pitch && d.open == open; }
       };
@@ -49,6 +51,7 @@ public:
       StringData() {}
       StringData(int numFrets, int numStrings, int strings[]);
       StringData(int numFrets, QList<instrString>& strings);
+      void        set(const StringData& src);
       bool        convertPitch(int pitch, Staff* staff, const Fraction& tick, int* string, int* fret) const;
       int         fret(int pitch, int string, Staff* staff, const Fraction& tick) const;
       void        fretChords(Chord * chord) const;
@@ -64,6 +67,9 @@ public:
       void        write(XmlWriter&) const;
       void        writeMusicXML(XmlWriter& xml) const;
       bool operator==(const StringData& d) const { return d._frets == _frets && d.stringTable == stringTable; }
+      void        configBanjo5thString();
+      int         adjustBanjo5thFret(int fret) const;
+      bool        isFiveStringBanjo() const;
       };
 
 }     // namespace Ms
