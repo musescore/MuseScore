@@ -38,6 +38,9 @@ public:
 
     Widget widget() const;
 
+signals:
+    void visibleChanged(bool visible);
+
 private:
     void onComponentCompleted() override;
 

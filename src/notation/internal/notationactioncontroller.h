@@ -118,6 +118,10 @@ private:
 
     void toggleNavigator();
     void toggleMixer();
+    void togglePalettePanel();
+    void toggleInstrumentsPanel();
+    void toggleInspectorPanel();
+    void toggleStatusBar();
 
     bool isTextEditting() const;
 

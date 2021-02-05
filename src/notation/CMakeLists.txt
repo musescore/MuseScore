@@ -143,6 +143,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/notationcontextmenu.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationnavigator.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/notationnavigator.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationpagemodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationpagemodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/abstractnoteinputbaritem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/abstractnoteinputbaritem.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/actionnoteinputbaritem.cpp

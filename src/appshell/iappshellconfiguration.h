@@ -21,6 +21,7 @@
 
 #include "modularity/imoduleexport.h"
 #include "retval.h"
+#include "io/path.h"
 
 namespace mu::appshell {
 class IAppShellConfiguration : MODULE_EXPORT_INTERFACE
@@ -38,6 +39,11 @@ public:
     virtual std::string leaveFeedbackUrl() const = 0;
 
     virtual ValCh<QStringList> recentScoreList() const = 0;
+
+    virtual ValCh<bool> isPalettePanelVisible() const = 0;
+    virtual ValCh<bool> isInstrumentsPanelVisible() const = 0;
+    virtual ValCh<bool> isInspectorPanelVisible() const = 0;
+    virtual ValCh<bool> isStatusBarVisible() const = 0;
 
     virtual void revertToFactorySettings(bool keepDefaultSettings = false) const = 0;
 };

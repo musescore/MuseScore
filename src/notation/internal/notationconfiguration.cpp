@@ -68,6 +68,11 @@ static const Settings::Key TOOLBAR_KEY(module_name, "ui/toolbar/");
 static const Settings::Key NAVIGATOR_VISIBLE_KEY(module_name, "ui/application/startup/showNavigator");
 static const Settings::Key IS_CANVAS_ORIENTATION_VERTICAL_KEY(module_name, "ui/canvas/scroll/verticalOrientation");
 
+static const Settings::Key PALETTEPANEL_VISIBLE_KEY(module_name, "ui/application/showPalettePanel");
+static const Settings::Key INSTRUMENTSPANEL_VISIBLE_KEY(module_name, "ui/application/showInstrumentsPanel");
+static const Settings::Key INSPECTORPANEL_VISIBLE_KEY(module_name, "ui/application/showInspectorPanel");
+static const Settings::Key STATUSBAR_VISIBLE_KEY(module_name, "ui/application/showStatusBar");
+
 void NotationConfiguration::init()
 {
     settings()->setDefaultValue(ANCHORLINE_COLOR, Val(QColor("#C31989")));
@@ -110,6 +115,26 @@ void NotationConfiguration::init()
     settings()->setDefaultValue(IS_CANVAS_ORIENTATION_VERTICAL_KEY, Val(false));
     settings()->valueChanged(IS_CANVAS_ORIENTATION_VERTICAL_KEY).onReceive(nullptr, [this](const Val&) {
         m_canvasOrientationChanged.send(canvasOrientation().val);
+    });
+
+    settings()->setDefaultValue(PALETTEPANEL_VISIBLE_KEY, Val(true));
+    settings()->valueChanged(PALETTEPANEL_VISIBLE_KEY).onReceive(nullptr, [this](const Val&) {
+        m_palettePanelVisibleChanged.send(isPalettePanelVisible().val);
+    });
+
+    settings()->setDefaultValue(INSTRUMENTSPANEL_VISIBLE_KEY, Val(true));
+    settings()->valueChanged(INSTRUMENTSPANEL_VISIBLE_KEY).onReceive(nullptr, [this](const Val&) {
+        m_instrumentsPanelVisibleChanged.send(isInstrumentsPanelVisible().val);
+    });
+
+    settings()->setDefaultValue(INSPECTORPANEL_VISIBLE_KEY, Val(true));
+    settings()->valueChanged(INSPECTORPANEL_VISIBLE_KEY).onReceive(nullptr, [this](const Val&) {
+        m_inspectorPanelVisibleChanged.send(isInspectorPanelVisible().val);
+    });
+
+    settings()->setDefaultValue(STATUSBAR_VISIBLE_KEY, Val(true));
+    settings()->valueChanged(STATUSBAR_VISIBLE_KEY).onReceive(nullptr, [this](const Val&) {
+        m_statusBarVisibleChanged.send(isStatusBarVisible().val);
     });
 
     // libmscore
@@ -325,7 +350,7 @@ ValCh<bool> NotationConfiguration::isNavigatorVisible() const
     return visible;
 }
 
-void NotationConfiguration::setNavigatorVisible(bool visible)
+void NotationConfiguration::setIsNavigatorVisible(bool visible)
 {
     settings()->setValue(NAVIGATOR_VISIBLE_KEY, Val(visible));
 }
@@ -344,6 +369,62 @@ void NotationConfiguration::setCanvasOrientation(Orientation orientation)
 {
     bool isVertical = orientation == Orientation::Vertical;
     settings()->setValue(IS_CANVAS_ORIENTATION_VERTICAL_KEY, Val(isVertical));
+}
+
+ValCh<bool> NotationConfiguration::isPalettePanelVisible() const
+{
+    ValCh<bool> visible;
+    visible.ch = m_palettePanelVisibleChanged;
+    visible.val = settings()->value(PALETTEPANEL_VISIBLE_KEY).toBool();
+
+    return visible;
+}
+
+void NotationConfiguration::setIsPalettePanelVisible(bool visible)
+{
+    settings()->setValue(PALETTEPANEL_VISIBLE_KEY, Val(visible));
+}
+
+ValCh<bool> NotationConfiguration::isInstrumentsPanelVisible() const
+{
+    ValCh<bool> visible;
+    visible.ch = m_instrumentsPanelVisibleChanged;
+    visible.val = settings()->value(INSTRUMENTSPANEL_VISIBLE_KEY).toBool();
+
+    return visible;
+}
+
+void NotationConfiguration::setIsInstrumentsPanelVisible(bool visible)
+{
+    settings()->setValue(INSTRUMENTSPANEL_VISIBLE_KEY, Val(visible));
+}
+
+ValCh<bool> NotationConfiguration::isInspectorPanelVisible() const
+{
+    ValCh<bool> visible;
+    visible.ch = m_inspectorPanelVisibleChanged;
+    visible.val = settings()->value(INSPECTORPANEL_VISIBLE_KEY).toBool();
+
+    return visible;
+}
+
+void NotationConfiguration::setIsInspectorPanelVisible(bool visible)
+{
+    settings()->setValue(INSPECTORPANEL_VISIBLE_KEY, Val(visible));
+}
+
+ValCh<bool> NotationConfiguration::isStatusBarVisible() const
+{
+    ValCh<bool> visible;
+    visible.ch = m_statusBarVisibleChanged;
+    visible.val = settings()->value(STATUSBAR_VISIBLE_KEY).toBool();
+
+    return visible;
+}
+
+void NotationConfiguration::setIsStatusBarVisible(bool visible)
+{
+    settings()->setValue(STATUSBAR_VISIBLE_KEY, Val(visible));
 }
 
 std::vector<std::string> NotationConfiguration::parseToolbarActions(const std::string& actions) const

@@ -75,6 +75,26 @@ mu::ValCh<QStringList> AppShellConfiguration::recentScoreList() const
     return userScoresConfiguration()->recentScoreList();
 }
 
+mu::ValCh<bool> AppShellConfiguration::isPalettePanelVisible() const
+{
+    return notationConfiguration()->isPalettePanelVisible();
+}
+
+mu::ValCh<bool> AppShellConfiguration::isInstrumentsPanelVisible() const
+{
+    return notationConfiguration()->isInstrumentsPanelVisible();
+}
+
+mu::ValCh<bool> AppShellConfiguration::isInspectorPanelVisible() const
+{
+    return notationConfiguration()->isInspectorPanelVisible();
+}
+
+mu::ValCh<bool> AppShellConfiguration::isStatusBarVisible() const
+{
+    return notationConfiguration()->isStatusBarVisible();
+}
+
 void AppShellConfiguration::revertToFactorySettings(bool keepDefaultSettings) const
 {
     settings()->reset(keepDefaultSettings);
