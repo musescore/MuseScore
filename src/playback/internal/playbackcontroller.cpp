@@ -20,6 +20,8 @@
 
 #include "log.h"
 
+#include "playbacktypes.h"
+
 using namespace mu::playback;
 using namespace mu::midi;
 using namespace mu::notation;
@@ -32,6 +34,11 @@ static const ActionCode MIDI_ON_CODE("midi-on");
 static const ActionCode COUNT_IN_CODE("countin");
 static const ActionCode PAN_CODE("pan");
 static const ActionCode REPEAT_CODE("repeat");
+
+uint64_t secondsToMilliseconds(float seconds)
+{
+    return seconds * 1000;
+}
 
 void PlaybackController::init()
 {
@@ -61,17 +68,16 @@ void PlaybackController::init()
     case SMOOTH:
         sequencer()->positionChanged().onNotify(this, [this]() {
             if (m_notation) {
-                auto seconds = sequencer()->playbackPositionInSeconds();
-                auto ticks = m_notation->playback()->secToTick(seconds);
-                m_tickPlayed.send(ticks);
+                float seconds = sequencer()->playbackPositionInSeconds();
+                int ticks = m_notation->playback()->secToTick(seconds);
+                m_tickPlayed.set(ticks);
             }
         });
         break;
 
     case STEPPED:
         sequencer()->midiTickPlayed(MIDI_TRACK).onReceive(this, [this](midi::tick_t tick) {
-            LOGI() << "midiTickPlayed tick: " << tick;
-            m_tickPlayed.send(tick);
+            m_tickPlayed.set(tick);
         });
         break;
     }
@@ -111,7 +117,7 @@ float PlaybackController::playbackPositionInSeconds() const
 
 Channel<uint32_t> PlaybackController::midiTickPlayed() const
 {
-    return m_tickPlayed;
+    return m_tickPlayed.ch;
 }
 
 void PlaybackController::playElementOnClick(const notation::Element* element)
@@ -216,7 +222,7 @@ void PlaybackController::seek(int tick)
         return;
     }
 
-    uint64_t milliseconds = playback()->tickToSec(tick) * 1000;
+    uint64_t milliseconds = secondsToMilliseconds(playback()->tickToSec(tick));
     sequencer()->seek(milliseconds);
 }
 
@@ -267,7 +273,7 @@ void PlaybackController::toggleCountIn()
 
 void PlaybackController::loopPlayback()
 {
-    NOT_SUPPORTED;
+    NOT_IMPLEMENTED;
 }
 
 void PlaybackController::setLoopInPosition()
@@ -306,4 +312,26 @@ Channel<ActionCode> PlaybackController::actionEnabledChanged() const
 QTime PlaybackController::totalPlayTime() const
 {
     return playback() ? playback()->totalPlayTime() : QTime(0, 0, 0, 0);
+}
+
+Tempo PlaybackController::currentTempo() const
+{
+    return playback() ? playback()->tempo(m_tickPlayed.val) : Tempo();
+}
+
+MeasureBeat PlaybackController::currentMeasureBeat() const
+{
+    return playback() ? playback()->measureBeat(m_tickPlayed.val) : MeasureBeat();
+}
+
+uint64_t PlaybackController::measureBeatToMilliseconds(const MeasureBeat& measureBeat) const
+{
+    if (!playback()) {
+        return 0;
+    }
+
+    int tick = playback()->measureBeatToTick(measureBeat);
+    uint64_t milliseconds = secondsToMilliseconds(playback()->tickToSec(tick));
+
+    return milliseconds;
 }

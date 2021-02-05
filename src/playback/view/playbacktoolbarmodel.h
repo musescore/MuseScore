@@ -99,10 +99,13 @@ private:
 
     QTime totalPlayTime() const;
     uint64_t totalPlayTimeMilliseconds() const;
+    notation::MeasureBeat measureBeat() const;
 
     void updatePlayTime();
     void doSetPlayTime(const QTime& time);
+
     void rewind(uint64_t milliseconds);
+    void rewindToMeasureBeat(const notation::MeasureBeat& barBeat);
 
     void updateState();
 
