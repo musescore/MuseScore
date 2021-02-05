@@ -727,6 +727,31 @@ const ActionList NotationActions::m_actions = {
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Reset Shapes and Positions"),
                QT_TRANSLATE_NOOP("action", "Reset shapes and positions of selected elements to their defaults")
+               ),
+    ActionItem("show-invisible",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Show Invisible"),
+               QT_TRANSLATE_NOOP("action", "Show invisible")
+               ),
+    ActionItem("show-unprintable",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Show Unprintable"),
+               QT_TRANSLATE_NOOP("action", "Show unprintable")
+               ),
+    ActionItem("show-frames",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Show Frames"),
+               QT_TRANSLATE_NOOP("action", "Show frames")
+               ),
+    ActionItem("show-pageborders",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Show Page Margins"),
+               QT_TRANSLATE_NOOP("action", "Show page margins")
+               ),
+    ActionItem("show-irregular",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Mark Irregular Measures"),
+               QT_TRANSLATE_NOOP("action", "Mark irregular measures")
                )
 };
 

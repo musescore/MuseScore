@@ -1339,7 +1339,7 @@ void paintElements(QPainter& painter, const QList<Element*>& elements)
     });
 
     for (const Element* element : sortedElements) {
-        if (!element->visible()) {
+        if (!element->visible() && (element->score()->printing() || !element->score()->showInvisible())) {
             continue;
         }
 
