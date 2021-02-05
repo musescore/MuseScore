@@ -44,6 +44,7 @@ public:
     Segment* first(ElementFlag) const;
 
     Segment* last() const { return _last; }
+    Segment* last(ElementFlag) const;
     Segment* firstCRSegment() const;
     void remove(Segment*);
     void push_back(Segment*);

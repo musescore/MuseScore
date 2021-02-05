@@ -186,10 +186,12 @@ public:
     bool isIrregular() const { return m_timesig != _len; }
 
     int size() const { return m_segments.size(); }
-    Segment* first() const { return m_segments.first(); }
+    Ms::Segment* first() const { return m_segments.first(); }
     Segment* first(SegmentType t) const { return m_segments.first(t); }
     Segment* firstEnabled() const { return m_segments.first(ElementFlag::ENABLED); }
-    Segment* last() const { return m_segments.last(); }
+
+    Ms::Segment* last() const { return m_segments.last(); }
+    Segment* lastEnabled() const { return m_segments.last(ElementFlag::ENABLED); }
     SegmentList& segments() { return m_segments; }
     const SegmentList& segments() const { return m_segments; }
 
