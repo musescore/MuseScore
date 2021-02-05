@@ -1724,12 +1724,15 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
     const Staff* st = staff();
     StaffGroup staffGroup = st->staffTypeForElement(this)->group();
     if (staffGroup == StaffGroup::TAB) {
-        const Instrument* instrument = part()->instrument();
+        const Instrument* instrument = part()->instrument(this->tick());
         for (Chord* ch : graceNotes()) {
             instrument->stringData()->fretChords(ch);
         }
         instrument->stringData()->fretChords(this);
         return;
+    } else {
+        // if not tablature, use instrument->useDrumset to set staffGroup (to allow pitched to unpitched in same staff)
+        staffGroup = st->part()->instrument(this->tick())->useDrumset() ? StaffGroup::PERCUSSION : StaffGroup::STANDARD;
     }
 
     // PITCHED_ and PERCUSSION_STAFF can go note by note
@@ -1765,7 +1768,7 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
             ch->sortNotes();
         }
     } else if (staffGroup == StaffGroup::PERCUSSION) {
-        const Instrument* instrument = part()->instrument();
+        const Instrument* instrument = part()->instrument(this->tick());
         const Drumset* drumset = instrument->drumset();
         if (!drumset) {
             qWarning("no drumset");
@@ -2982,7 +2985,7 @@ void Chord::setSlash(bool flag, bool stemless)
             n->undoChangeProperty(Pid::PLAY, true);
             n->undoChangeProperty(Pid::VISIBLE, true);
             if (staff()->isDrumStaff(tick())) {
-                const Drumset* ds = part()->instrument()->drumset();
+                const Drumset* ds = part()->instrument(tick())->drumset();
                 int pitch = n->pitch();
                 if (ds && ds->isValid(pitch)) {
                     undoChangeProperty(Pid::STEM_DIRECTION, QVariant::fromValue<Direction>(ds->stemDirection(pitch)));
