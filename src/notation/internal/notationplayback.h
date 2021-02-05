@@ -46,6 +46,8 @@ public:
 
     std::shared_ptr<midi::MidiStream> midiStream() const override;
 
+    QTime totalPlayTime() const override;
+
     float tickToSec(int tick) const override;
     int secToTick(float sec) const override;
 

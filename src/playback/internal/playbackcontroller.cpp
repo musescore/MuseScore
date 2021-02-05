@@ -302,3 +302,8 @@ Channel<ActionCode> PlaybackController::actionEnabledChanged() const
 {
     return m_actionEnabledChanged;
 }
+
+QTime PlaybackController::totalPlayTime() const
+{
+    return playback() ? playback()->totalPlayTime() : QTime(0, 0, 0, 0);
+}

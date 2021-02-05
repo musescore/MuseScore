@@ -70,7 +70,7 @@ DockWindow {
 
         DockToolBar {
             objectName: "notationToolBar"
-            minimumWidth: 164
+            minimumWidth: 188
             minimumHeight: dockWindow.toolbarHeight
 
             color: dockWindow.color
@@ -86,7 +86,7 @@ DockWindow {
             id: playbackToolBar
 
             objectName: "playbackToolBar"
-            minimumWidth: floating ? 516 : 448
+            minimumWidth: floating ? 492 : 420
             minimumHeight: floating ? 76 : dockWindow.toolbarHeight
 
             color: dockWindow.color
