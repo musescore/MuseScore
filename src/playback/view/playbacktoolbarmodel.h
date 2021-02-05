@@ -42,8 +42,8 @@ class PlaybackToolBarModel : public QAbstractListModel, public async::Asyncable
     INJECT(playback, workspace::IWorkspaceManager, workspaceManager)
     INJECT(playback, framework::IInteractive, interactive)
 
-    Q_PROPERTY(qreal playPosition READ playPosition WRITE setPlayPosition NOTIFY playPositionChanged)
     Q_PROPERTY(QDateTime playTime READ playTime WRITE setPlayTime NOTIFY playTimeChanged)
+    Q_PROPERTY(qreal playPosition READ playPosition WRITE setPlayPosition NOTIFY playPositionChanged)
 
     Q_PROPERTY(int measureNumber READ measureNumber WRITE setMeasureNumber NOTIFY measureNumberChanged)
     Q_PROPERTY(int maxMeasureNumber READ maxMeasureNumber NOTIFY maxMeasureNumberChanged)
@@ -59,8 +59,8 @@ public:
     QVariant data(const QModelIndex& index, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    qreal playPosition() const;
     QDateTime playTime() const;
+    qreal playPosition() const;
 
     int measureNumber() const;
     int maxMeasureNumber() const;
@@ -79,8 +79,8 @@ public slots:
     void setBeatNumber(int beatNumber);
 
 signals:
-    void playPositionChanged(qreal position);
     void playTimeChanged(QTime time);
+    void playPositionChanged(qreal position);
     void measureNumberChanged(int number);
     void maxMeasureNumberChanged(int number);
     void beatNumberChanged(int number);
@@ -96,6 +96,9 @@ private:
         CheckedRole,
         IsAdditionalRole
     };
+
+    QTime totalPlayTime() const;
+    uint64_t totalPlayTimeMilliseconds() const;
 
     void updatePlayTime();
     void doSetPlayTime(const QTime& time);

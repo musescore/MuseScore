@@ -22,10 +22,8 @@
 #include "translation.h"
 
 #include "shortcuts/shortcutstypes.h"
-
 #include "ui/view/musicalsymbolcodes.h"
-
-#include "global/realfn.h"
+#include "playback/playbacktypes.h"
 
 using namespace mu::playback;
 using namespace mu::actions;
@@ -37,27 +35,6 @@ using namespace mu::notation;
 
 static const std::string PLAYBACK_TOOLBAR_KEY("playbackControl");
 static const std::string PLAYBACK_SETTINGS_KEY("playback-settings");
-
-QTime timeFromSeconds(float seconds)
-{
-    constexpr int PRECISION = 1;
-
-    float secondsPart = 0;
-
-    float frac = std::modf(seconds, &secondsPart);
-    int milliseconds = static_cast<int>(frac * std::pow(10, PRECISION));
-
-    QTime time(0, 0, 0, 0);
-    time = time.addSecs(static_cast<int>(secondsPart));
-    time = time.addMSecs(milliseconds);
-
-    return time;
-}
-
-uint64_t timeToMilliseconds(const QTime& time)
-{
-    return QTime(0, 0, 0, 0).msecsTo(time);
-}
 
 PlaybackToolBarModel::PlaybackToolBarModel(QObject* parent)
     : QAbstractListModel(parent)
@@ -124,6 +101,7 @@ void PlaybackToolBarModel::load()
 
     playbackController()->isPlayingChanged().onNotify(this, [this]() {
         updateState();
+        updatePlayTime();
     });
 
     playbackController()->midiTickPlayed().onReceive(this, [this](uint64_t) {
@@ -161,19 +139,6 @@ ActionList PlaybackToolBarModel::currentWorkspaceActions() const
     return actions;
 }
 
-qreal PlaybackToolBarModel::playPosition() const
-{
-    NOT_IMPLEMENTED;
-    return 0.75;
-}
-
-void PlaybackToolBarModel::setPlayPosition(qreal position)
-{
-    Q_UNUSED(position)
-    NOT_IMPLEMENTED;
-    emit playPositionChanged(position);
-}
-
 QDateTime PlaybackToolBarModel::playTime() const
 {
     return QDateTime(QDate::currentDate(), m_playTime);
@@ -188,8 +153,36 @@ void PlaybackToolBarModel::setPlayTime(const QDateTime& time)
 
     doSetPlayTime(newTime);
 
-    uint64_t msec = timeToMilliseconds(m_playTime);
+    uint64_t msec = timeToMilliseconds(newTime);
     rewind(msec);
+}
+
+qreal PlaybackToolBarModel::playPosition() const
+{
+    qreal allMsecs = totalPlayTimeMilliseconds();
+    qreal msecsDifference = allMsecs - m_playTime.msecsTo(totalPlayTime());
+
+    qreal position = msecsDifference / allMsecs;
+    return position;
+}
+
+void PlaybackToolBarModel::setPlayPosition(qreal position)
+{
+    uint64_t allMsecs = totalPlayTimeMilliseconds();
+    uint64_t playPositionMsecs = allMsecs * position;
+
+    QTime time = timeFromMillisecons(playPositionMsecs);
+    setPlayTime(QDateTime(QDate::currentDate(), time));
+}
+
+QTime PlaybackToolBarModel::totalPlayTime() const
+{
+    return playbackController()->totalPlayTime();
+}
+
+uint64_t PlaybackToolBarModel::totalPlayTimeMilliseconds() const
+{
+    return timeToMilliseconds(totalPlayTime());
 }
 
 void PlaybackToolBarModel::updatePlayTime()
@@ -207,7 +200,9 @@ void PlaybackToolBarModel::updatePlayTime()
 void PlaybackToolBarModel::doSetPlayTime(const QTime& time)
 {
     m_playTime = time;
+
     emit playTimeChanged(time);
+    emit playPositionChanged(playPosition());
 }
 
 void PlaybackToolBarModel::rewind(uint64_t milliseconds)

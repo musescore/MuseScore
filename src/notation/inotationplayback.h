@@ -34,6 +34,8 @@ public:
 
     virtual std::shared_ptr<midi::MidiStream> midiStream() const = 0;
 
+    virtual QTime totalPlayTime() const = 0;
+
     virtual float tickToSec(int tick) const = 0;
     virtual int secToTick(float sec) const = 0;
 

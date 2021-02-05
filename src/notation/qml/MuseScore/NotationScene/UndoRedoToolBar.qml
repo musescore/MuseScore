@@ -15,7 +15,7 @@ Rectangle {
     }
 
     Row {
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.centerIn: parent
 
         height: childrenRect.height
         spacing: 2

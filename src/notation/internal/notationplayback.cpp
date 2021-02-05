@@ -255,6 +255,21 @@ void NotationPlayback::makeChunk(midi::Chunk& chunk, tick_t fromTick) const
     }
 }
 
+QTime NotationPlayback::totalPlayTime() const
+{
+    QTime time(0, 0, 0, 0);
+
+    Ms::Score* score = m_getScore->score();
+    if (!score) {
+        return time;
+    }
+
+    int lastTick = score->repeatList().ticks();
+    int secs = score->utick2utime(lastTick);
+
+    return time.addSecs(secs);
+}
+
 float NotationPlayback::tickToSec(int tick) const
 {
     return score() ? score()->utick2utime(tick) : 0.0;
