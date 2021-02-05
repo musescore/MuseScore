@@ -2692,8 +2692,9 @@ void Note::verticalDrag(EditData& ed)
     Fraction _tick      = chord()->tick();
     const Staff* stf    = staff();
     const StaffType* st = stf->staffType(_tick);
+    const Instrument* instr = part()->instrument(_tick);
 
-    if (st->isDrumStaff()) {
+    if (instr->useDrumset()) {
         return;
     }
 
@@ -2705,7 +2706,7 @@ void Note::verticalDrag(EditData& ed)
     int lineOffset      = lrint(ed.moveDelta.y() / step);
 
     if (tab) {
-        const StringData* strData = staff()->part()->instrument()->stringData();
+        const StringData* strData = staff()->part()->instrument(_tick)->stringData();
         int nString = ned->string + (st->upsideDown() ? -lineOffset : lineOffset);
         int nFret   = strData->fret(_pitch, nString, staff(), _tick);
 
@@ -3182,7 +3183,7 @@ QString Note::accessibleInfo() const
             onofftime = QObject::tr(" (on %1‰ off %2‰)").arg(on).arg(off);
         }
     }
-    const Drumset* drumset = part()->instrument()->drumset();
+    const Drumset* drumset = part()->instrument(chord()->tick())->drumset();
     if (fixed() && headGroup() == NoteHead::Group::HEAD_SLASH) {
         pitchName = chord()->noStem() ? QObject::tr("Beat slash") : QObject::tr("Rhythm slash");
     } else if (staff()->isDrumStaff(tick()) && drumset) {
@@ -3209,13 +3210,8 @@ QString Note::accessibleInfo() const
                    .arg((chord()->isGrace() ? "" : QString("; %1").arg(voice)));
         }
     }
-    return QObject::tr("%1; Pitch: %2%3; Duration: %4%5%6")
-           .arg(noteTypeUserName())
-           .arg(pitchName)
-           .arg(pitchOffset)
-           .arg(duration)
-           .arg(onofftime)
-           .arg((chord()->isGrace() ? "" : QString("; %1").arg(voice)));
+    return QObject::tr("%1; Pitch: %2; Duration: %3%4%5").arg(noteTypeUserName(), pitchName, duration, onofftime,
+                                                              (chord()->isGrace() ? "" : QString("; %1").arg(voice)));
 }
 
 //---------------------------------------------------------
@@ -3229,7 +3225,7 @@ QString Note::screenReaderInfo() const
     bool voices = m ? m->hasVoices(staffIdx()) : false;
     QString voice = voices ? QObject::tr("Voice: %1").arg(QString::number(track() % VOICES + 1)) : "";
     QString pitchName;
-    const Drumset* drumset = part()->instrument()->drumset();
+    const Drumset* drumset = part()->instrument(chord()->tick())->drumset();
     if (fixed() && headGroup() == NoteHead::Group::HEAD_SLASH) {
         pitchName = chord()->noStem() ? QObject::tr("Beat Slash") : QObject::tr("Rhythm Slash");
     } else if (staff()->isDrumStaff(tick()) && drumset) {

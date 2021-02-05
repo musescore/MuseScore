@@ -2840,7 +2840,7 @@ void Score::cmdConcertPitchChanged(bool flag)
             continue;
         }
         // if this staff has no transposition, and no instrument changes, we can skip it
-        Interval interval = staff->part()->instrument()->transpose();
+        Interval interval = staff->part()->instrument()->transpose(); //tick?
         if (interval.isZero() && staff->part()->instruments()->size() == 1) {
             continue;
         }
@@ -4701,7 +4701,7 @@ int Score::keysig()
             continue;
         }
         result = key;
-        int diff = st->part()->instrument()->transpose().chromatic;
+        int diff = st->part()->instrument()->transpose().chromatic; //TODO keySigs and pitched to unpitched instr changes
         if (!styleB(Sid::concertPitch) && diff) {
             result = transposeKey(key, diff, st->part()->preferSharpFlat());
         }
