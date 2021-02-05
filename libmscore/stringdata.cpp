@@ -29,7 +29,7 @@ bool StringData::bFretting = false;
 
 StringData::StringData(int numFrets, int numStrings, int strings[])
       {
-      instrString strg = { 0, false };
+      instrString strg = { 0, false};
       _frets = numFrets;
 
       for (int i = 0; i < numStrings; i++) {
