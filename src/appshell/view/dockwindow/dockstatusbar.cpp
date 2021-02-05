@@ -26,6 +26,14 @@ DockStatusBar::DockStatusBar(QQuickItem* parent)
     : DockView(parent)
 {
     setHeight(40);
+
+    connect(this, &DockPanel::visibleChanged, this, [this]() {
+        if (view()) {
+            view()->setVisible(isVisible());
+        }
+
+        emit visibleChanged(isVisible());
+    });
 }
 
 DockStatusBar::~DockStatusBar()

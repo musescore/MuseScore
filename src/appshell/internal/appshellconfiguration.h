@@ -42,6 +42,11 @@ public:
 
     ValCh<QStringList> recentScoreList() const override;
 
+    ValCh<bool> isPalettePanelVisible() const override;
+    ValCh<bool> isInstrumentsPanelVisible() const override;
+    ValCh<bool> isInspectorPanelVisible() const override;
+    ValCh<bool> isStatusBarVisible() const override;
+
     void revertToFactorySettings(bool keepDefaultSettings = false) const override;
 
 private:

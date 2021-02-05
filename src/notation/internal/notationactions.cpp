@@ -678,6 +678,26 @@ const ActionList NotationActions::m_actions = {
                QT_TRANSLATE_NOOP("action", "Navigator"),
                QT_TRANSLATE_NOOP("action", "Toggle 'Navigator'")
                ),
+    ActionItem("toggle-palette",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Palettes"),
+               QT_TRANSLATE_NOOP("action", "Toggle Palettes")
+               ),
+    ActionItem("toggle-instruments",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Instruments"),
+               QT_TRANSLATE_NOOP("action", "Toggle Instruments")
+               ),
+    ActionItem("inspector",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Inspector"),
+               QT_TRANSLATE_NOOP("action", "Toggle Inspector")
+               ),
+    ActionItem("toggle-statusbar",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Status Bar"),
+               QT_TRANSLATE_NOOP("action", "Toggle Status Bar")
+               ),
     ActionItem("stretch-",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Increase Layout Stretch"),

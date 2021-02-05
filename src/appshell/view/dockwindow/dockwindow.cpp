@@ -227,6 +227,9 @@ void DockWindow::showPage(DockPage* page)
         DockStatusBar::Widget sw = status->widget();
         m_statusbar->setFixedHeight(sw.widget->height());
         m_statusbar->addWidget(sw.widget, 1);
+        connect(status, &DockStatusBar::visibleChanged, this, [this](bool visible) {
+            m_statusbar->setVisible(visible);
+        });
         m_statusbar->show();
         sw.widget->show();
     } else {

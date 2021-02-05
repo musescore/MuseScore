@@ -14,6 +14,8 @@ DockPage {
     property var color: ui.theme.backgroundPrimaryColor
     property var borderColor: ui.theme.strokeColor
 
+    property var pageModel: NotationPageModel {}
+
     toolbar: DockToolBar {
         id: notationNoteInputBar
         objectName: "notationNoteInputBar"
@@ -47,6 +49,11 @@ DockPage {
 
             floatable: true
             closable: true
+            visible: notationPage.pageModel.isPalettePanelVisible
+
+            onVisibleChanged: {
+                notationPage.pageModel.isPalettePanelVisible = visible
+            }
 
             PalettesWidget {}
         },
@@ -67,6 +74,11 @@ DockPage {
 
             floatable: true
             closable: true
+            visible: notationPage.pageModel.isInstrumentsPanelVisible
+
+            onVisibleChanged: {
+                notationPage.pageModel.isInstrumentsPanelVisible = visible
+            }
 
             InstrumentsPanel {
                 anchors.fill: parent
@@ -89,6 +101,11 @@ DockPage {
 
             floatable: true
             closable: true
+            visible: notationPage.pageModel.isInspectorPanelVisible
+
+            onVisibleChanged: {
+                notationPage.pageModel.isInspectorPanelVisible = visible
+            }
 
             InspectorForm {
                 anchors.fill: parent
@@ -115,6 +132,12 @@ DockPage {
 
         width: notationPage.width
         color: notationPage.color
+
+        visible: notationPage.pageModel.isStatusBarVisible
+
+        onVisibleChanged: {
+            notationPage.pageModel.isStatusBarVisible = visible
+        }
 
         NotationStatusBar {
             anchors.fill: parent

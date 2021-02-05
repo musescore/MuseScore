@@ -30,6 +30,18 @@ DockPanel::DockPanel(QQuickItem* parent)
     m_dock.panel = new QDockWidget();
     m_dock.panel->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     m_dock.panel->setFeatures(QDockWidget::DockWidgetMovable);
+
+    connect(this, &DockPanel::visibleChanged, this, [this]() {
+        if (isVisible()) {
+            m_dock.panel->show();
+        } else {
+            m_dock.panel->hide();
+        }
+    });
+
+    connect(m_dock.panel, &QDockWidget::visibilityChanged, [this](bool) {
+        setVisible(m_dock.panel->isVisible());
+    });
 }
 
 DockPanel::~DockPanel()

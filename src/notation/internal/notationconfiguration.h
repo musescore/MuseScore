@@ -91,10 +91,22 @@ public:
     void setToolbarActions(const std::string& toolbarName, const std::vector<std::string>& actions) override;
 
     ValCh<bool> isNavigatorVisible() const override;
-    void setNavigatorVisible(bool visible) override;
+    void setIsNavigatorVisible(bool visible) override;
 
     ValCh<framework::Orientation> canvasOrientation() const override;
     void setCanvasOrientation(framework::Orientation orientation) override;
+
+    ValCh<bool> isPalettePanelVisible() const override;
+    void setIsPalettePanelVisible(bool visible) override;
+
+    ValCh<bool> isInstrumentsPanelVisible() const override;
+    void setIsInstrumentsPanelVisible(bool visible) override;
+
+    ValCh<bool> isInspectorPanelVisible() const override;
+    void setIsInspectorPanelVisible(bool visible) override;
+
+    ValCh<bool> isStatusBarVisible() const override;
+    void setIsStatusBarVisible(bool visible) override;
 
 private:
     std::vector<std::string> parseToolbarActions(const std::string& actions) const;
@@ -106,6 +118,10 @@ private:
     async::Channel<int> m_currentZoomChanged;
     async::Channel<bool> m_navigatorVisibleChanged;
     async::Channel<framework::Orientation> m_canvasOrientationChanged;
+    async::Channel<bool> m_palettePanelVisibleChanged;
+    async::Channel<bool> m_instrumentsPanelVisibleChanged;
+    async::Channel<bool> m_inspectorPanelVisibleChanged;
+    async::Channel<bool> m_statusBarVisibleChanged;
 };
 }
 
