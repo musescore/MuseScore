@@ -52,6 +52,8 @@ public:
 
     virtual bool isActionEnabled(const actions::ActionCode& actionCode) const = 0;
     virtual async::Channel<actions::ActionCode> actionEnabledChanged() const = 0;
+
+    virtual QTime totalPlayTime() const = 0;
 };
 }
 

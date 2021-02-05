@@ -54,6 +54,8 @@ public:
     bool isActionEnabled(const actions::ActionCode& actionCode) const override;
     async::Channel<actions::ActionCode> actionEnabledChanged() const override;
 
+    QTime totalPlayTime() const override;
+
 private:
     static const unsigned int MIDI_TRACK = 0;
 

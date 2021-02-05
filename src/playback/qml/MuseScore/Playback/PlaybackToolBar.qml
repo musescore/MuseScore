@@ -76,6 +76,7 @@ Rectangle {
                 id: timeField
 
                 Layout.leftMargin: 20
+                Layout.preferredWidth: 90
 
                 time: playbackModel.playTime
 
@@ -141,6 +142,10 @@ Rectangle {
             width: playbackActions.width
             visible: root.floating
             value: playbackModel.playPosition
+
+            onMoved: {
+                playbackModel.playPosition = value
+            }
         }
     }
 }

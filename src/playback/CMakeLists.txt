@@ -30,6 +30,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/playbackmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iplaybackcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/iplaybackconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/playbacktypes.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/playbackcontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/playbackcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/playbackactions.cpp
