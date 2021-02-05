@@ -201,6 +201,11 @@ struct Tempo
     int value = 0;
     DurationType duration = DurationType::V_QUARTER;
     bool withDot = false;
+
+    bool operator==(const Tempo& other) const
+    {
+        return value == other.value && duration == other.duration && withDot == other.withDot;
+    }
 };
 
 struct ScoreCreateOptions
@@ -350,6 +355,14 @@ inline QList<StaffType> allStaffTypes()
 
     return result;
 }
+
+struct MeasureBeat
+{
+    int measureNumber = 0;
+    int maxMeasureNumber = 0;
+    int beatNumber = 0;
+    int maxBeatNumber = 0;
+};
 
 static constexpr int MIN_NOTES_INTERVAL = -9;
 static constexpr int MAX_NOTES_INTERVAL = 9;

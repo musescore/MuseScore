@@ -63,6 +63,11 @@ public:
     void addLoopBoundaryToSelectedNote(LoopBoundaryType boundaryType) override;
     async::Channel<LoopBoundary> loopBoundaryChanged() const override;
 
+    Tempo tempo(int tick) const override;
+
+    MeasureBeat measureBeat(int tick) const override;
+    int measureBeatToTick(const MeasureBeat& measureBeat) const override;
+
 private:
     Ms::Score* score() const;
     Ms::MasterScore* masterScore() const;

@@ -56,6 +56,11 @@ public:
 
     QTime totalPlayTime() const override;
 
+    notation::Tempo currentTempo() const override;
+    notation::MeasureBeat currentMeasureBeat() const override;
+
+    uint64_t measureBeatToMilliseconds(const notation::MeasureBeat& measureBeat) const override;
+
 private:
     static const unsigned int MIDI_TRACK = 0;
 
@@ -85,7 +90,7 @@ private:
     notation::INotationPtr m_notation;
     async::Notification m_isPlayAllowedChanged;
     async::Notification m_isPlayingChanged;
-    async::Channel<uint32_t> m_tickPlayed;
+    ValCh<uint32_t> m_tickPlayed;
     async::Channel<actions::ActionCode> m_actionEnabledChanged;
     CursorType m_cursorType = CursorType::STEPPED;
 

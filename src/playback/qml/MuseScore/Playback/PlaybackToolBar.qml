@@ -56,8 +56,6 @@ Rectangle {
                 interactive: false
 
                 delegate: FlatButton {
-                    id: playbackButton
-
                     icon: model.icon
                     hint: model.hint
                     enabled: model.enabled
@@ -91,7 +89,7 @@ Rectangle {
             NumberInputField {
                 Layout.leftMargin: 20
 
-                maxValue: playbackModel.maxBeatNumber
+                maxValue: playbackModel.maxMeasureNumber
                 value: playbackModel.measureNumber
 
                 onValueChanged: {
