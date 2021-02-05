@@ -241,6 +241,9 @@ void Box::read(XmlReader& e)
     _boxHeight       = Spatium(0);       // override default set in constructor
     _boxWidth        = Spatium(0);
     MeasureBase::read(e);
+    if (score()->mscVersion() < 302) {
+        _isAutoSizeEnabled = false;     // disable auto-size for older scores by default.
+    }
 }
 
 //---------------------------------------------------------
