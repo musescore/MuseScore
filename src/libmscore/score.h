@@ -893,6 +893,10 @@ public:
     Element* nextElement();
     Element* prevElement();
     ChordRest* cmdNextPrevSystem(ChordRest*, bool);
+    Box* cmdNextPrevFrame(MeasureBase*, bool) const;
+    Element* cmdNextPrevSection(Element*, bool) const;
+    MeasureBase* getNextPrevSectionBreak(MeasureBase*, bool) const;
+    Element* getScoreElementOfMeasureBase(MeasureBase*) const;
 
     void cmd(const QAction*, EditData&);
     int fileDivision(int t) const { return ((qint64)t * MScore::division + _fileDivision / 2) / _fileDivision; }
