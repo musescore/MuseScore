@@ -41,7 +41,7 @@ FlatRadioButton {
 
             normalStateColor: "transparent"
             icon: IconCode.CLOSE_X_ROUNDED
-            iconPixelSize: ui.theme.bodyFont.pixelSize
+            iconFont.pixelSize: ui.theme.bodyFont.pixelSize
             onClicked: root.closeRequested()
         }
 
