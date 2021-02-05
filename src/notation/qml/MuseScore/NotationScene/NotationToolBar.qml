@@ -32,6 +32,7 @@ Rectangle {
             text: model.title
             icon: model.icon
             enabled: model.enabled
+            textFont: ui.theme.tabFont
 
             normalStateColor: "transparent"
             orientation: Qt.Horizontal
