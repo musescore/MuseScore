@@ -37,6 +37,7 @@ InspectorGlissando::InspectorGlissando(QWidget* parent)
             { Pid::FONT_FACE,       0, g.fontFace,       g.resetFontFace       },
             { Pid::FONT_SIZE,       0, g.fontSize,       g.resetFontSize       },
             { Pid::FONT_STYLE,      0, g.fontStyle,      g.resetFontStyle      },
+            { Pid::LINE_WIDTH,      0, g.lineWidthSpin,  g.resetLineWidth      },
             };
       const std::vector<InspectorPanel> ppList = {
             { g.title, g.panel }
@@ -76,6 +77,8 @@ void InspectorGlissando::valueChanged(int n)
             g.easeInOutCanvas->setEaseInOut(g.easeInSpin->value(), g.easeOutSpin->value());
       else if (iList[n].t == Pid::GLISS_STYLE)
             updateEvents();
+      else if (iList[n].t == Pid::GLISS_TYPE)
+            g.lineWidthWidget->setHidden(g.type->currentIndex() == 1);
       update();
       }
 
