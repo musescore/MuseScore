@@ -381,6 +381,15 @@ struct LoopBoundaries
     }
 };
 
+struct ScoreConfig
+{
+    bool isShowInvisibleElements = false;
+    bool isShowUnprintableElements = false;
+    bool isShowFrames = false;
+    bool isShowPageMargins = false;
+    bool isMarkIrregularMeasures = false;
+};
+
 inline QString staffTypeToString(StaffType type)
 {
     return Ms::StaffType::preset(type)->name();

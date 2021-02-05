@@ -123,6 +123,12 @@ private:
     void toggleInspectorPanel();
     void toggleStatusBar();
 
+    void toggleShowingInvisibleElements();
+    void toggleShowingUnprintableElements();
+    void toggleShowingFrames();
+    void toggleShowingPageMargins();
+    void toggleMarkIrregularMeasures();
+
     bool isTextEditting() const;
 
     enum class PastingType {

@@ -307,6 +307,11 @@ QList<Ms::Element*> NotationInteraction::hitElements(const QPointF& p_in, float 
         if (!e->selectable() || e->isPage()) {
             continue;
         }
+
+        if (!e->visible() && (e->score()->printing() || !e->score()->showInvisible())) {
+            continue;
+        }
+
         if (e->contains(p)) {
             ll.append(e);
         }
@@ -321,6 +326,11 @@ QList<Ms::Element*> NotationInteraction::hitElements(const QPointF& p_in, float 
             if (e->isPage() || !e->selectable()) {
                 continue;
             }
+
+            if (!e->visible() && (e->score()->printing() || !e->score()->showInvisible())) {
+                continue;
+            }
+
             if (e->intersects(r)) {
                 ll.append(e);
             }
@@ -2368,6 +2378,31 @@ void NotationInteraction::resetToDefault(ResettableValueType type)
         resetTextStyleOverrides();
         break;
     }
+}
+
+ScoreConfig NotationInteraction::scoreConfig() const
+{
+    ScoreConfig config;
+    config.isShowInvisibleElements = score()->showInvisible();
+    config.isShowUnprintableElements = score()->showUnprintable();
+    config.isShowFrames = score()->showFrames();
+    config.isShowPageMargins = score()->showPageborders();
+    config.isMarkIrregularMeasures = score()->markIrregularMeasures();
+
+    return config;
+}
+
+void NotationInteraction::setScoreConfig(ScoreConfig config)
+{
+    startEdit();
+    score()->setShowInvisible(config.isShowInvisibleElements);
+    score()->setShowUnprintable(config.isShowUnprintableElements);
+    score()->setShowFrames(config.isShowFrames);
+    score()->setShowPageborders(config.isShowPageMargins);
+    score()->setMarkIrregularMeasures(config.isMarkIrregularMeasures);
+    apply();
+
+    notifyAboutNotationChanged();
 }
 
 bool NotationInteraction::needEndTextEditing(const std::vector<Element*>& newSelectedElements) const

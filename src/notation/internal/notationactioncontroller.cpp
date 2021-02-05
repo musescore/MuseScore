@@ -209,6 +209,12 @@ void NotationActionController::init()
     dispatcher()->reg(this, "reset-beammode", this, &NotationActionController::resetBeamMode);
     dispatcher()->reg(this, "reset", this, &NotationActionController::resetShapesAndPosition);
 
+    dispatcher()->reg(this, "show-invisible", this, &NotationActionController::toggleShowingInvisibleElements);
+    dispatcher()->reg(this, "show-unprintable", this, &NotationActionController::toggleShowingUnprintableElements);
+    dispatcher()->reg(this, "show-frames", this, &NotationActionController::toggleShowingFrames);
+    dispatcher()->reg(this, "show-pageborders", this, &NotationActionController::toggleShowingPageMargins);
+    dispatcher()->reg(this, "show-irregular", this, &NotationActionController::toggleMarkIrregularMeasures);
+
     for (int i = MIN_NOTES_INTERVAL; i <= MAX_NOTES_INTERVAL; ++i) {
         if (isNotesIntervalValid(i)) {
             dispatcher()->reg(this, "interval" + std::to_string(i), [this, i]() { addInterval(i); });
@@ -1109,6 +1115,66 @@ void NotationActionController::toggleStatusBar()
 {
     bool visible = configuration()->isStatusBarVisible().val;
     configuration()->setIsStatusBarVisible(!visible);
+}
+
+void NotationActionController::toggleShowingInvisibleElements()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    ScoreConfig config = interaction->scoreConfig();
+    config.isShowInvisibleElements = !config.isShowInvisibleElements;
+    interaction->setScoreConfig(config);
+}
+
+void NotationActionController::toggleShowingUnprintableElements()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    ScoreConfig config = interaction->scoreConfig();
+    config.isShowUnprintableElements = !config.isShowUnprintableElements;
+    interaction->setScoreConfig(config);
+}
+
+void NotationActionController::toggleShowingFrames()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    ScoreConfig config = interaction->scoreConfig();
+    config.isShowFrames = !config.isShowFrames;
+    interaction->setScoreConfig(config);
+}
+
+void NotationActionController::toggleShowingPageMargins()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    ScoreConfig config = interaction->scoreConfig();
+    config.isShowPageMargins = !config.isShowPageMargins;
+    interaction->setScoreConfig(config);
+}
+
+void NotationActionController::toggleMarkIrregularMeasures()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    ScoreConfig config = interaction->scoreConfig();
+    config.isMarkIrregularMeasures = !config.isMarkIrregularMeasures;
+    interaction->setScoreConfig(config);
 }
 
 void NotationActionController::startNoteInputIfNeed()
