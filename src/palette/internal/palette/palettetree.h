@@ -20,6 +20,7 @@
 #ifndef __PALETTETREE_H__
 #define __PALETTETREE_H__
 
+#include <functional>
 #include <QIconEngine>
 
 #include "libmscore/element.h"
@@ -173,6 +174,7 @@ private:
     bool _expanded = false;
 
     Type guessType() const;
+    std::function<void(PaletteCell*)> cellHandlerByPaletteType(const Type& type) const;
 
     void showWritingPaletteError(const QString& path) const;
 
