@@ -114,11 +114,15 @@ void Bracket::setStaffSpan(int a, int b)
     _lastStaff = b;
 
     if (bracketType() == BracketType::BRACE
-        && score()->styleSt(Sid::MusicalSymbolFont) != "Emmentaler"
-        && score()->styleSt(Sid::MusicalSymbolFont) != "Gonville") {
+        && score()->styleSt(Sid::MusicalSymbolFont) != "Emmentaler" && score()->styleSt(Sid::MusicalSymbolFont) != "Gonville") {
         int v = _lastStaff - _firstStaff + 1;
+        if (score()->styleSt(Sid::MusicalSymbolFont) == "Leland") {
+            v = qMin(4, v);
+        }
         // total default height of a system of n staves / height of a 5 line staff
-        _magx = v + ((v - 1) * score()->styleS(Sid::akkoladeDistance).val() / 4.0);
+        qreal dist = score()->enableVerticalSpread() ? score()->styleS(Sid::maxAkkoladeDistance).val() : score()->styleS(
+            Sid::akkoladeDistance).val();
+        _magx = v + ((v - 1) * dist / 4.0);
         if (v == 1) {
             _braceSymbol = SymId::braceSmall;
         } else if (v <= 2) {
