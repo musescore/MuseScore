@@ -35,6 +35,8 @@ public:
     async::Channel<bool> darkModeSwitched() const override;
 
     void setAppThemeDark(bool) override;
+    void styleWindow(QWidget*) override;
+
 private:
     async::Channel<bool> m_darkModeSwitched;
 };

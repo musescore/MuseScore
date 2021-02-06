@@ -26,6 +26,7 @@
 #include "dockpage.h"
 
 #include "ui/imainwindow.h"
+#include "ui/iplatformtheme.h"
 
 class QMainWindow;
 class QStackedWidget;
@@ -47,6 +48,8 @@ class DockWindow : public QQuickItem, public ui::IMainWindow
 
     Q_CLASSINFO("DefaultProperty", "pages")
     Q_INTERFACES(QQmlParserStatus)
+
+    INJECT(dock, ui::IPlatformTheme, platformTheme)
 
 public:
     explicit DockWindow(QQuickItem* parent = nullptr);
@@ -76,7 +79,7 @@ signals:
     void currentPageUriChanged(QString currentPageUri);
 
 private slots:
-    void onMainWindowEvent(QEvent* e);
+    void onMainWindowEvent(QEvent* event);
     void onPageAppended(int index);
     void updateStyle();
 

@@ -40,3 +40,7 @@ Channel<bool> StubPlatformTheme::darkModeSwitched() const
 void StubPlatformTheme::setAppThemeDark(bool)
 {
 }
+
+void StubPlatformTheme::styleWindow(QWidget*)
+{
+}
