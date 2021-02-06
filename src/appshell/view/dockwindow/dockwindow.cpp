@@ -94,14 +94,22 @@ void DockWindow::componentComplete()
     m_isComponentComplete = true;
 }
 
-void DockWindow::onMainWindowEvent(QEvent* e)
+void DockWindow::onMainWindowEvent(QEvent* event)
 {
-    if (QEvent::Resize == e->type()) {
-        QResizeEvent* re = static_cast<QResizeEvent*>(e);
-        setSize(QSizeF(re->size()));
+    switch (event->type()) {
+    case QEvent::Paint: {
+        platformTheme()->styleWindow(m_window);
+    } break;
+    case QEvent::Resize: {
+        QResizeEvent* resizeEvent = static_cast<QResizeEvent*>(event);
+        setSize(QSizeF(resizeEvent->size()));
         adjustPanelsSize(currentPage());
-    } else if (QEvent::Close == e->type()) {
+    } break;
+    case QEvent::Close: {
         WidgetStateStore::saveGeometry(m_window);
+    } break;
+    default:
+        break;
     }
 }
 
@@ -261,6 +269,7 @@ void DockWindow::updateStyle()
 {
     m_window->setStyleSheet(WINDOW_QSS.arg(m_color.name()).arg(m_borderColor.name()));
     m_statusbar->setStyleSheet(STATUS_QSS.arg(m_color.name()).arg(m_borderColor.name()));
+    platformTheme()->styleWindow(m_window);
 }
 
 DockPage* DockWindow::currentPage() const
