@@ -21,7 +21,7 @@
 
 #include <Cocoa/Cocoa.h>
 
-using namespace mu::framework;
+using namespace mu::ui;
 using namespace mu::async;
 
 id<NSObject> darkModeObserverToken;
@@ -60,4 +60,18 @@ Channel<bool> MacOSPlatformTheme::darkModeSwitched() const
 void MacOSPlatformTheme::setAppThemeDark(bool dark)
 {
     [NSApp setAppearance:[NSAppearance appearanceNamed:dark ? NSAppearanceNameDarkAqua : NSAppearanceNameAqua]];
+}
+
+void MacOSPlatformTheme::styleWindow(QWidget* widget)
+{
+    QColor backgroundColor = widget->palette().window().color();
+    NSView* nsView = (__bridge NSView*)reinterpret_cast<void*>(widget->winId());
+    NSWindow* nsWindow = [nsView window];
+    if (nsWindow) {
+        [nsWindow setTitlebarAppearsTransparent:YES];
+        [nsWindow setBackgroundColor:[NSColor colorWithRed:backgroundColor.red() / 255.0
+                                                     green:backgroundColor.green() / 255.0
+                                                      blue:backgroundColor.blue() / 255.0
+                                                     alpha:backgroundColor.alpha() / 255.0]];
+    }
 }
