@@ -1729,6 +1729,9 @@ void ChangeStyleVal::flip(EditData*)
                   case Sid::spatium:
                         score->spatiumChanged(v.toDouble(), value.toDouble());
                         break;
+                  case Sid::defaultsVersion:
+                        score->style().setDefaultStyleVersion(value.toInt());
+                        break;
                   default:
                         break;
                   }
