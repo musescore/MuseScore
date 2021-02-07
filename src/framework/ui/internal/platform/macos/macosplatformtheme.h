@@ -29,6 +29,8 @@ public:
     MacOSPlatformTheme();
     ~MacOSPlatformTheme();
 
+    void init() override;
+
     bool isFollowSystemThemeAvailable() const override;
 
     bool isDarkMode() const override;

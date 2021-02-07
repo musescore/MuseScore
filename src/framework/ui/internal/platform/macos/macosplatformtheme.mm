@@ -41,6 +41,10 @@ MacOSPlatformTheme::~MacOSPlatformTheme()
     [n removeObserver:darkModeObserverToken];
 }
 
+void MacOSPlatformTheme::init()
+{
+}
+
 bool MacOSPlatformTheme::isFollowSystemThemeAvailable() const
 {
     return true;
