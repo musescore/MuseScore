@@ -1540,27 +1540,78 @@ qreal System::spacerDistance(bool up) const
       if (staff < 0)
             return 0.0;
       qreal dist = 0.0;
-      activeSpacer = nullptr;
       for (MeasureBase* mb : measures()) {
             if (mb->isMeasure()) {
                   Measure* m = toMeasure(mb);
                   Spacer* sp = up ? m->vspacerUp(staff) : m->vspacerDown(staff);
                   if (sp) {
                         if (sp->spacerType() == SpacerType::FIXED) {
-                              activeSpacer = sp;
                               dist = sp->gap();
                               break;
                               }
-                        else {
-                              if (sp->gap() > dist) {
-                                    activeSpacer = sp;
-                                    dist = sp->gap();
-                                    }
-                              }
+                        else
+                              dist = qMax(dist, sp->gap());
                         }
                   }
             }
       return dist;
+      }
+
+//---------------------------------------------------------
+//   upSpacer
+//    Return largest upSpacer for this system. This can
+//    be a downSpacer of the previous system.
+//---------------------------------------------------------
+
+Spacer* System::upSpacer(int staffIdx, Spacer* prevDownSpacer) const
+      {
+      if (staffIdx < 0)
+            return nullptr;
+
+      if (prevDownSpacer && (prevDownSpacer->spacerType() == SpacerType::FIXED))
+            return prevDownSpacer;
+
+      Spacer* spacer { prevDownSpacer };
+      for (MeasureBase* mb : measures()) {
+            if (!(mb && mb->isMeasure()))
+                  continue;
+            Spacer* sp { toMeasure(mb)->vspacerUp(staffIdx)} ;
+            if (sp) {
+                  if (!spacer || ((spacer->spacerType() == SpacerType::UP) && (sp->gap() > spacer->gap()))) {
+                        spacer = sp;
+                        }
+                  continue;
+                  }
+            }
+      return spacer;
+      }
+
+//---------------------------------------------------------
+//   downSpacer
+//    Return the largest downSpacer for this system.
+//---------------------------------------------------------
+
+Spacer* System::downSpacer(int staffIdx) const
+      {
+      if (staffIdx < 0)
+            return nullptr;
+
+      Spacer* spacer { nullptr };
+      for (MeasureBase* mb : measures()) {
+            if (!(mb && mb->isMeasure()))
+                  continue;
+            Spacer* sp { toMeasure(mb)->vspacerDown(staffIdx) };
+            if (sp) {
+                  if (sp->spacerType() == SpacerType::FIXED) {
+                        return sp;
+                        }
+                  else {
+                        if (!spacer || (sp->gap() > spacer->gap()))
+                              spacer = sp;
+                        }
+                  }
+            }
+      return spacer;
       }
 
 //---------------------------------------------------------
