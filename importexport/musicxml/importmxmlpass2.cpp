@@ -5671,7 +5671,6 @@ void MusicXMLParserNotations::technical()
                                                                        _e.attributes(), "technical");
                   notation.setText(_e.readElementText());
                   _notations.push_back(notation);
-                  _e.readNext();
                   }
             else if (_e.name() == "harmonic") {
                   harmonic();

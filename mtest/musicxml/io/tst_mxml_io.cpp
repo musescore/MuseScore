@@ -129,6 +129,7 @@ private slots:
       void invisibleElements() { mxmlIoTest("testInvisibleElements"); }
       void keysig1() { mxmlIoTest("testKeysig1"); }
       void keysig2() { mxmlIoTest("testKeysig2"); }
+      void lessWhiteSpace() { mxmlIoTestRef("testLessWhiteSpace"); }
       void lines1() { mxmlIoTest("testLines1"); }
       void lines2() { mxmlIoTest("testLines2"); }
       void lines3() { mxmlIoTest("testLines3"); }
