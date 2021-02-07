@@ -33,6 +33,8 @@ class IPlatformTheme : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IPlatformTheme() = default;
 
+    virtual void init() = 0;
+
     virtual bool isFollowSystemThemeAvailable() const = 0;
 
     virtual bool isDarkMode() const = 0;

@@ -17,17 +17,23 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_UI_STUBPLATFORMTHEME_H
-#define MU_UI_STUBPLATFORMTHEME_H
+#ifndef MU_UI_WINDOWSPLATFORMTHEME_H
+#define MU_UI_WINDOWSPLATFORMTHEME_H
 
 #include "iplatformtheme.h"
 
+#include "modularity/ioc.h"
+#include "async/asyncable.h"
+#include "iuiconfiguration.h"
+
 namespace mu::ui {
-class StubPlatformTheme : public IPlatformTheme
+class WindowsPlatformTheme : public IPlatformTheme, public async::Asyncable
 {
+    INJECT(ui, IUiConfiguration, configuration)
+
 public:
-    StubPlatformTheme() = default;
-    ~StubPlatformTheme() = default;
+    WindowsPlatformTheme();
+    ~WindowsPlatformTheme();
 
     void init() override;
 
@@ -41,7 +47,14 @@ public:
 
 private:
     async::Channel<bool> m_darkModeSwitched;
+    int m_buildNumber = 0;
+    std::atomic<bool> m_isListening = false;
+    std::thread m_listenThread;
+    void updateListeningStatus(IUiConfiguration::ThemeType themeType);
+    void startListening();
+    void th_listen();
+    void stopListening();
 };
 }
 
-#endif // MU_UI_STUBPLATFORMTHEME_H
+#endif // MU_UI_WINDOWSPLATFORMTHEME_H
