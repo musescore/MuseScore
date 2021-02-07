@@ -22,6 +22,10 @@
 using namespace mu::ui;
 using namespace mu::async;
 
+void StubPlatformTheme::init()
+{
+}
+
 bool StubPlatformTheme::isFollowSystemThemeAvailable() const
 {
     return false;

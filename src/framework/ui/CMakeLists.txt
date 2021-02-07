@@ -34,6 +34,11 @@ if (OS_IS_MAC)
 
     set_source_files_properties(${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosplatformtheme.mm
                                 PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
+elseif(OS_IS_WIN)
+    set(PLATFORM_THEME_SRC
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/windows/windowsplatformtheme.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/windows/windowsplatformtheme.h
+    )
 else()
     set(PLATFORM_THEME_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/stub/stubplatformtheme.cpp

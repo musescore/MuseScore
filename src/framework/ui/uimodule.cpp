@@ -10,6 +10,8 @@
 
 #ifdef Q_OS_MAC
 #include "internal/platform/macos/macosplatformtheme.h"
+#elif defined(Q_OS_WIN)
+#include "internal/platform/windows/windowsplatformtheme.h"
 #else
 #include "internal/platform/stub/stubplatformtheme.h"
 #endif
@@ -26,6 +28,14 @@ using namespace mu::ui;
 using namespace mu::framework;
 
 static std::shared_ptr<UiConfiguration> s_configuration = std::make_shared<UiConfiguration>();
+
+#ifdef Q_OS_MAC
+static std::shared_ptr<MacOSPlatformTheme> s_platformTheme = std::make_shared<MacOSPlatformTheme>();
+#elif defined(Q_OS_WIN)
+static std::shared_ptr<WindowsPlatformTheme> s_platformTheme = std::make_shared<WindowsPlatformTheme>();
+#else
+static std::shared_ptr<StubPlatformTheme> s_platformTheme = std::make_shared<StubPlatformTheme>();
+#endif
 
 static void ui_init_qrc()
 {
@@ -44,12 +54,7 @@ void UiModule::registerExports()
     ioc()->registerExportNoDelete<ITheme>(moduleName(), UiEngine::instance()->theme());
     ioc()->registerExport<IInteractiveProvider>(moduleName(), UiEngine::instance()->interactiveProvider());
     ioc()->registerExport<IInteractiveUriRegister>(moduleName(), new InteractiveUriRegister());
-
-#ifdef Q_OS_MAC
-    ioc()->registerExport<IPlatformTheme>(moduleName(), new MacOSPlatformTheme());
-#else
-    ioc()->registerExport<IPlatformTheme>(moduleName(), new StubPlatformTheme());
-#endif
+    ioc()->registerExport<IPlatformTheme>(moduleName(), s_platformTheme);
 }
 
 void UiModule::resolveImports()
@@ -87,8 +92,11 @@ void UiModule::registerUiTypes()
     framework::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(ui_QML_IMPORT);
 }
 
-void UiModule::onInit(const IApplication::RunMode&)
+void UiModule::onInit(const IApplication::RunMode& runMode)
 {
     //! NOTE It is also needed in converter mode, because it defines the notation rendering settings
     s_configuration->init();
+    if (runMode == IApplication::RunMode::Editor) {
+        s_platformTheme->init();
+    }
 }
