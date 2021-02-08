@@ -77,8 +77,8 @@ void DockView::onWidgetEvent(QEvent* event)
     if (QEvent::Resize == event->type()) {
         QResizeEvent* re = static_cast<QResizeEvent*>(event);
         setSize(QSizeF(re->size()));
-    } else if (QEvent::Move == e->type()) {
-        QMoveEvent* me = static_cast<QMoveEvent*>(e);
+    } else if (QEvent::Move == event->type()) {
+        QMoveEvent* me = static_cast<QMoveEvent*>(event);
         setPosition(me->pos());
         emit positionChanged(me->pos());
     }
