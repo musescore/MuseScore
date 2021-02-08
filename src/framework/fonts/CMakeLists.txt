@@ -23,9 +23,11 @@ set(MODULE_QRC
     fonts_Leland.qrc
     fonts_Bravura.qrc
     fonts_Campania.qrc
+    fonts_Edwin.qrc
     fonts_Free.qrc
     fonts_FreeSerif.qrc
     fonts_Gootville.qrc
+    fonts_Leland.qrc
     fonts_MScore.qrc
     fonts_MuseJazz.qrc
     fonts_Smufl.qrc

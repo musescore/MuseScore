@@ -1837,8 +1837,7 @@ static void readTuplet(Tuplet* tuplet, XmlReader& e)
             _number->setVisible(tuplet->visible());           //?? override saved property
             _number->setTrack(tuplet->track());
             // move property flags from _number
-            for (auto p :
-                 { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_STYLE, Pid::ALIGN, Pid::SIZE_SPATIUM_DEPENDENT }) {
+            for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_STYLE, Pid::ALIGN, Pid::SIZE_SPATIUM_DEPENDENT }) {
                 tuplet->setPropertyFlags(p, _number->propertyFlags(p));
             }
         } else if (!readTupletProperties206(e, tuplet)) {
@@ -2644,7 +2643,7 @@ static void setFermataPlacement(Element* el, ArticulationAnchor anchor, Directio
 
 Element* readArticulation(Element* parent, XmlReader& e)
 {
-    Element* el = 0;
+    Element* el = nullptr;
     SymId sym = SymId::fermataAbove;            // default -- backward compatibility (no type = ufermata in 1.2)
     ArticulationAnchor anchor  = ArticulationAnchor::TOP_STAFF;
     Direction direction = Direction::AUTO;
@@ -3542,7 +3541,7 @@ static void readStaffContent(Score* score, XmlReader& e)
                 }
                 readMeasureLast = true;
 
-                Measure* measure = 0;
+                Measure* measure = nullptr;
                 measure = new Measure(score);
                 measure->setTick(e.tick());
                 //
@@ -3882,8 +3881,8 @@ static bool readScore(Score* score, XmlReader& e)
         qDebug("%s: xml read error at line %lld col %lld: %s",
                qPrintable(e.getDocName()), e.lineNumber(), e.columnNumber(),
                e.name().toUtf8().data());
-        MScore::lastError = QObject::tr("XML read error at line %1, column %2: %3").arg(e.lineNumber()).arg(
-            e.columnNumber()).arg(e.name().toString());
+        MScore::lastError = QObject::tr("XML read error at line %1, column %2: %3").arg(e.lineNumber()).arg(e.columnNumber()).arg(
+            e.name().toString());
         return false;
     }
 

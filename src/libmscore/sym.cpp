@@ -40,6 +40,7 @@ namespace Ms {
 static const int FALLBACK_FONT = 0;       // Bravura
 
 QVector<ScoreFont> ScoreFont::_scoreFonts {
+    ScoreFont("Leland",     "Leland",      ":/fonts/leland/",    "Leland.otf"),
     ScoreFont("Bravura",    "Bravura",     ":/fonts/bravura/",   "Bravura.otf"),
     ScoreFont("Emmentaler", "MScore",      ":/fonts/mscore/",    "mscore.ttf"),
     ScoreFont("Gonville",   "Gootville",   ":/fonts/gootville/", "Gootville.otf"),
@@ -6584,14 +6585,16 @@ void initScoreFonts()
             qDebug("codepoint not recognized for glyph %s", qPrintable(name));
         }
     }
-    for (oldName i : oldNames) {
+    for (oldName i : qAsConst(oldNames)) {
         Sym::lonhash.insert(i.name, SymId(i.symId));
     }
-    QFont::insertSubstitution("MScore Text",    "Bravura Text");
-    QFont::insertSubstitution("Gootville Text", "Bravura Text");
-    QFont::insertSubstitution("ScoreFont",      "Bravura Text");
-    QFont::insertSubstitution("MuseJazz Text",  "Bravura Text");
-    QFont::insertSubstitution("Petaluma Text",  "Bravura Text");
+    QFont::insertSubstitution("Leland Text",    "Bravura Text");
+    QFont::insertSubstitution("Bravura Text",   "Leland Text");
+    QFont::insertSubstitution("MScore Text",    "Leland Text");
+    QFont::insertSubstitution("Gootville Text", "Leland Text");
+    QFont::insertSubstitution("MuseJazz Text",  "Leland Text");
+    QFont::insertSubstitution("Petaluma Text",  "MuseJazz Text");
+    QFont::insertSubstitution("ScoreFont",      "Leland Text");   // alias for current Musical Text Font
     ScoreFont::fallbackFont();     // load fallback font
 }
 

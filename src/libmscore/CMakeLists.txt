@@ -220,7 +220,7 @@ set(MODULE_SRC
     read114.cpp
     read206.cpp
     read206.h
-    read301.cpp
+    read302.cpp
     realizedharmony.cpp
     realizedharmony.h
     rehearsalmark.cpp

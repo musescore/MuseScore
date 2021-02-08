@@ -648,6 +648,8 @@ public:
     void layoutSystemElements(System* system, LayoutContext& lc);
     void getNextMeasure(LayoutContext&);        // get next measure for layout
 
+    void resetAllPositions();
+
     void cmdRemovePart(Part*);
     void cmdAddTie(bool addToChord = false);
     void cmdToggleTie();
@@ -935,41 +937,12 @@ public:
     bool saveStyle(const QString&);
 
     QVariant styleV(Sid idx) const { return style().value(idx); }
-    Spatium  styleS(Sid idx) const
-    {
-        Q_ASSERT(!strcmp(MStyle::valueType(idx),"Ms::Spatium"));
-        return style().value(idx).value<Spatium>();
-    }
-
-    qreal    styleP(Sid idx) const
-    {
-        Q_ASSERT(!strcmp(MStyle::valueType(idx),"Ms::Spatium"));
-        return style().pvalue(idx);
-    }
-
-    QString  styleSt(Sid idx) const
-    {
-        Q_ASSERT(!strcmp(MStyle::valueType(idx),"QString"));
-        return style().value(idx).toString();
-    }
-
-    bool     styleB(Sid idx) const
-    {
-        Q_ASSERT(!strcmp(MStyle::valueType(idx),"bool"));
-        return style().value(idx).toBool();
-    }
-
-    qreal    styleD(Sid idx) const
-    {
-        Q_ASSERT(!strcmp(MStyle::valueType(idx),"double"));
-        return style().value(idx).toDouble();
-    }
-
-    int      styleI(Sid idx) const
-    {
-        Q_ASSERT(!strcmp(MStyle::valueType(idx),"int"));
-        return style().value(idx).toInt();
-    }
+    Spatium  styleS(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx),"Ms::Spatium")); return style().value(idx).value<Spatium>(); }
+    qreal    styleP(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx),"Ms::Spatium")); return style().pvalue(idx); }
+    QString  styleSt(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx),"QString")); return style().value(idx).toString(); }
+    bool     styleB(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx),"bool")); return style().value(idx).toBool(); }
+    qreal    styleD(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx),"double")); return style().value(idx).toDouble(); }
+    int      styleI(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx),"int")); return style().value(idx).toInt(); }
 
     void setStyleValue(Sid sid, QVariant value) { style().set(sid, value); }
     QString getTextStyleUserName(Tid tid);
@@ -1288,6 +1261,7 @@ public:
     QImage createThumbnail();
     QString createRehearsalMarkText(RehearsalMark* current) const;
     QString nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* current) const;
+
     //@ ??
 //      Q_INVOKABLE void cropPage(qreal margins);
     bool sanityCheck(const QString& name = QString());
@@ -1458,7 +1432,7 @@ public:
     FileError loadMsc(QString name, QIODevice*, bool ignoreVersionError);
     FileError read114(XmlReader&);
     FileError read206(XmlReader&);
-    FileError read301(XmlReader&);
+    FileError read302(XmlReader&);
     QByteArray readToBuffer();
     QByteArray readCompressedToBuffer();
 
