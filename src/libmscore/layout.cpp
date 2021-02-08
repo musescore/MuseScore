@@ -3947,9 +3947,14 @@ System* Score::collectSystem(LayoutContext& lc)
     if (!lc.curMeasure) {
         return 0;
     }
-    Measure* measure = _systems.empty() ? 0 : _systems.back()->lastMeasure();
+    const MeasureBase* measure  = _systems.empty() ? 0 : _systems.back()->measures().back();
+    if (measure) {
+        measure = measure->findPotentialSectionBreak();
+    }
     if (measure) {
         lc.firstSystem        = measure->sectionBreak() && _layoutMode != LayoutMode::FLOAT;
+        lc.firstSystemIndent  = lc.firstSystem && measure->sectionBreakElement()->firstSystemIdentation() && styleB(
+            Sid::enableIndentationOnFirstSystem);
         lc.startWithLongNames = lc.firstSystem && measure->sectionBreakElement()->startWithLongNames();
     }
     System* system = getNextSystem(lc);
@@ -3978,7 +3983,7 @@ System* Score::collectSystem(LayoutContext& lc)
             Measure* m = toMeasure(lc.curMeasure);
             if (firstMeasure) {
                 layoutSystemMinWidth = minWidth;
-                system->layoutSystem(minWidth);
+                system->layoutSystem(minWidth, lc.firstSystem, lc.firstSystemIndent);
                 minWidth += system->leftMargin();
                 if (m->repeatStart()) {
                     Segment* s = m->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0,1));
@@ -4050,6 +4055,10 @@ System* Score::collectSystem(LayoutContext& lc)
             // measure in the system and we finally can create the end barline for it
 
             Measure* m = toMeasure(lc.prevMeasure);
+            // TODO: if lc.curMeasure is a frame, removing the trailer may be premature
+            // but merely skipping this code isn't good enough,
+            // we need to find the right time to re-enable the trailer,
+            // since it seems to be disabled somewhere else
             if (m->trailer()) {
                 qreal ow = m->width();
                 m->removeSystemTrailer();
@@ -4070,6 +4079,12 @@ System* Score::collectSystem(LayoutContext& lc)
                     }
                 }
             }
+            // TODO: we actually still don't know for sure
+            // if this will be the last true measure of the system or not
+            // since the lc.curMeasure may be a frame
+            // but at this point we have no choice but to assume it isn't
+            // since we don't know yet if another true measure will fit
+            // worst that happens is we don't get the automatic double bar before a courtesy key signature
             minWidth += m->createEndBarLines(false);          // create final barLine
         }
 
@@ -4136,6 +4151,7 @@ System* Score::collectSystem(LayoutContext& lc)
                         s->setEnabled(true);
                     }
                 }
+                // TODO: use findPotentialSectionBreak here to handle breaks on frames correctly?
                 bool firstSystem = lc.prevMeasure->sectionBreak() && _layoutMode != LayoutMode::FLOAT;
                 MeasureBase* nm = breakMeasure ? breakMeasure : m;
                 if (curHeader) {
@@ -4174,20 +4190,11 @@ System* Score::collectSystem(LayoutContext& lc)
     }
 
     hideEmptyStaves(system, lc.firstSystem);
-    bool allShown = true;
-    for (const SysStaff* ss : *system->staves()) {
-        if (!ss->show()) {
-            allShown = false;
-            break;
-        }
-    }
-    if (!allShown) {
-        // Relayout system decorations to reuse space properly for
-        // hidden staves' instrument names or other hidden elements.
-        minWidth -= system->leftMargin();
-        system->layoutSystem(layoutSystemMinWidth);
-        minWidth += system->leftMargin();
-    }
+    // Relayout system decorations to reuse space properly for
+    // hidden staves' instrument names or other hidden elements.
+    minWidth -= system->leftMargin();
+    system->layoutSystem(layoutSystemMinWidth, lc.firstSystem, lc.firstSystemIndent);
+    minWidth += system->leftMargin();
 
     //-------------------------------------------------------
     //    add system trailer if needed
@@ -4281,13 +4288,21 @@ System* Score::collectSystem(LayoutContext& lc)
 
     layoutSystemElements(system, lc);
     system->layout2();     // compute staff distances
-
-    lm  = system->lastMeasure();
-    if (lm) {
-        lc.firstSystem        = lm->sectionBreak() && _layoutMode != LayoutMode::FLOAT;
-        lc.startWithLongNames = lc.firstSystem && lm->sectionBreakElement()->startWithLongNames();
+    // TODO: now that the code at the top of this function does this same backwards search,
+    // we might be able to eliminate this block
+    // but, lc might be used elsewhere so we need to be careful
+#if 1
+    measure = system->measures().back();
+    if (measure) {
+        measure = measure->findPotentialSectionBreak();
     }
-
+    if (measure) {
+        lc.firstSystem        = measure->sectionBreak() && _layoutMode != LayoutMode::FLOAT;
+        lc.firstSystemIndent  = lc.firstSystem && measure->sectionBreakElement()->firstSystemIdentation() && styleB(
+            Sid::enableIndentationOnFirstSystem);
+        lc.startWithLongNames = lc.firstSystem && measure->sectionBreakElement()->startWithLongNames();
+    }
+#endif
     return system;
 }
 
@@ -5238,7 +5253,13 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
             lc.measureNo = 0;
             lc.tick      = Fraction(0,1);
         } else {
-            LayoutBreak* sectionBreak = lc.nextMeasure->prevMeasure()->sectionBreakElement();
+            const MeasureBase* mb = lc.nextMeasure->prev();
+            if (mb) {
+                mb->findPotentialSectionBreak();
+            }
+            LayoutBreak* sectionBreak = mb->sectionBreakElement();
+            // TODO: also use mb in else clause here?
+            // probably not, only actual measures have meaningful numbers
             if (sectionBreak && sectionBreak->startWithMeasureOne()) {
                 lc.measureNo = 0;
             } else {
@@ -5335,6 +5356,16 @@ void LayoutContext::layout()
         }
     }
     score->systems().append(systemList);       // TODO
+}
+
+//---------------------------------------------------------
+//   LayoutContext::LayoutContext
+//---------------------------------------------------------
+
+LayoutContext::LayoutContext(Score* s)
+    : score(s)
+{
+    firstSystemIndent = score && score->styleB(Sid::enableIndentationOnFirstSystem);
 }
 
 //---------------------------------------------------------

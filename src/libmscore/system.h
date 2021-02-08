@@ -129,7 +129,8 @@ public:
 
     Page* page() const { return (Page*)parent(); }
 
-    void layoutSystem(qreal);
+    void layoutSystem(qreal, const bool isFirstSystem = false, bool firstSystemIndent = false);
+
     void setMeasureHeight(qreal height);
     void layoutBracketsVertical();
     void layoutInstrumentNames();

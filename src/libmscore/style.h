@@ -412,6 +412,8 @@ enum class Sid {
     mmRestOldStyleSpacing,
     hideEmptyStaves,
     dontHideStavesInFirstSystem,
+    enableIndentationOnFirstSystem,
+    firstSystemIndentationValue,
     alwaysShowBracketsWhenEmptyStavesAreHidden,
     hideInstrumentNameIfOneInstrument,
     gateTime,

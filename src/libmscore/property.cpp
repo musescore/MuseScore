@@ -624,6 +624,8 @@ static constexpr PropertyMetaData propertyList[] = {
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "start with long names") },
     { Pid::START_WITH_MEASURE_ONE,  true,  "startWithMeasureOne",   P_TYPE::BOOL,
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "start with measure one") },
+    { Pid::FIRST_SYSTEM_INDENTATION,true,  "firstSystemIndentation",P_TYPE::BOOL,
+      DUMMY_QT_TRANSLATE_NOOP("propertyName", "first system indentation") },
 
     { Pid::PATH,                    false, "path",                  P_TYPE::PATH,
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "path") },
