@@ -38,5 +38,6 @@
         <file>qml/MuseScore/UiComponents/TimeInputField.qml</file>
         <file>qml/MuseScore/UiComponents/internal/GridViewDelegate.qml</file>
         <file>qml/MuseScore/UiComponents/internal/GridViewSection.qml</file>
+        <file>qml/MuseScore/UiComponents/StyledPopupView.qml</file>
     </qresource>
 </RCC>
