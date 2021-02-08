@@ -1227,8 +1227,8 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
 //   fromXml
 //---------------------------------------------------------
 
-QString ParsedChord::fromXml(const QString& rawKind, const QString& rawKindText, const QString& useSymbols,
-                             const QString& useParens, const QList<HDegree>& dl, const ChordList* cl)
+QString ParsedChord::fromXml(const QString& rawKind, const QString& rawKindText, const QString& useSymbols, const QString& useParens,
+                             const QList<HDegree>& dl, const ChordList* cl)
 {
     QString kind = rawKind;
     QString kindText = rawKindText;

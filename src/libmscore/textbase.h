@@ -285,6 +285,7 @@ public:
 
     virtual void draw(QPainter*) const override;
     virtual void drawEditMode(QPainter* p, EditData& ed) override;
+    static void drawTextWorkaround(QPainter* p, QFont& f, const QPointF pos, const QString text);
 
     static QString plainToXmlText(const QString& s) { return s.toHtmlEscaped(); }
     void setPlainText(const QString& t) { setXmlText(plainToXmlText(t)); }

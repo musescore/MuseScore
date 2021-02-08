@@ -245,6 +245,7 @@ public:
     virtual void resetProperty(Pid id);
     QVariant propertyDefault(Pid pid, Tid tid) const;
     virtual bool sizeIsSpatiumDependent() const { return true; }
+    virtual bool offsetIsSpatiumDependent() const { return true; }
 
     virtual void reset();                       // reset all properties & position to default
 

@@ -969,8 +969,7 @@ bool ChordRest::isGraceBefore() const
 bool ChordRest::isGraceAfter() const
 {
     return isChord()
-           && (toChord(this)->noteType()
-               & (NoteType::GRACE8_AFTER | NoteType::GRACE16_AFTER | NoteType::GRACE32_AFTER));
+           && (toChord(this)->noteType() & (NoteType::GRACE8_AFTER | NoteType::GRACE16_AFTER | NoteType::GRACE32_AFTER));
 }
 
 //---------------------------------------------------------
