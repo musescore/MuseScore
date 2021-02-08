@@ -1158,6 +1158,10 @@ void TextBlock::layout(TextBase* t)
             _lineSpacing = qMax(_lineSpacing, fm.lineSpacing());
         }
     }
+
+    // Apply style/custom line spacing
+    _lineSpacing *= t->textLineSpacing();
+
     qreal rx;
     if (t->align() & Align::RIGHT) {
         rx = layoutWidth - _bbox.right();
@@ -1686,6 +1690,7 @@ TextBase::TextBase(Score* s, Tid tid, ElementFlags f)
     setFamily("FreeSerif");
     setSize(10.0);
     setFontStyle(FontStyle::Normal);
+    _textLineSpacing        = 1.0;
 
     _tid                    = tid;
     _bgColor                = QColor(255, 255, 255, 0);
@@ -1714,6 +1719,7 @@ TextBase::TextBase(const TextBase& st)
     hexState                     = -1;
 
     _tid                         = st._tid;
+    _textLineSpacing             = st._textLineSpacing;
     _bgColor                     = st._bgColor;
     _frameColor                  = st._frameColor;
     _align                       = st._align;
@@ -2404,6 +2410,7 @@ static constexpr std::array<Pid, 18> pids { {
     Pid::SUB_STYLE,
     Pid::FONT_FACE,
     Pid::FONT_SIZE,
+    Pid::TEXT_LINE_SPACING,
     Pid::FONT_STYLE,
     Pid::COLOR,
     Pid::FRAME_TYPE,
@@ -3017,6 +3024,8 @@ QVariant TextBase::getProperty(Pid propertyId) const
         return _cursor->selectedFragmentsFormat().fontSize();
     case Pid::FONT_STYLE:
         return static_cast<int>(_cursor->selectedFragmentsFormat().style());
+    case Pid::TEXT_LINE_SPACING:
+        return textLineSpacing();
     case Pid::FRAME_TYPE:
         return static_cast<int>(frameType());
     case Pid::FRAME_WIDTH:
@@ -3063,6 +3072,9 @@ bool TextBase::setProperty(Pid pid, const QVariant& v)
         break;
     case Pid::FONT_STYLE:
         setFontStyle(FontStyle(v.toInt()));
+        break;
+    case Pid::TEXT_LINE_SPACING:
+        setTextLineSpacing(v.toReal());
         break;
     case Pid::FRAME_TYPE:
         setFrameType(FrameType(v.toInt()));

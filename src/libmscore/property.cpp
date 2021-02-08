@@ -492,6 +492,8 @@ static constexpr PropertyMetaData propertyList[] = {
 //200
     { Pid::FONT_STYLE,              false, "fontStyle",             P_TYPE::INT,
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "font style") },
+    { Pid::TEXT_LINE_SPACING,       false, "textLineSpacing",       P_TYPE::REAL,
+      DUMMY_QT_TRANSLATE_NOOP("propertyName", "user line distancing") },
 
     { Pid::FRAME_TYPE,              false, "frameType",             P_TYPE::INT,
       DUMMY_QT_TRANSLATE_NOOP("propertyName", "frame type") },
