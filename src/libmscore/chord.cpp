@@ -2270,8 +2270,7 @@ void Chord::layoutTablature()
     // or duration longer than half (if halves have stems) or duration longer than crochet
     // remove stems
     if (tab->stemless() || _noStem || measure()->stemless(staffIdx()) || durationType().type()
-        < (tab->minimStyle()
-           != TablatureMinimStyle::NONE ? TDuration::DurationType::V_HALF : TDuration::DurationType::V_QUARTER)) {
+        < (tab->minimStyle() != TablatureMinimStyle::NONE ? TDuration::DurationType::V_HALF : TDuration::DurationType::V_QUARTER)) {
         if (_stem) {
             score()->undo(new RemoveElement(_stem));
         }

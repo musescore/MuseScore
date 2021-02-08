@@ -114,7 +114,7 @@ namespace Ms {
 
 void Element::spatiumChanged(qreal oldValue, qreal newValue)
 {
-    if (sizeIsSpatiumDependent()) {
+    if (offsetIsSpatiumDependent()) {
         _offset *= (newValue / oldValue);
     }
 }
@@ -126,7 +126,7 @@ void Element::spatiumChanged(qreal oldValue, qreal newValue)
 
 void Element::localSpatiumChanged(qreal oldValue, qreal newValue)
 {
-    if (sizeIsSpatiumDependent()) {
+    if (offsetIsSpatiumDependent()) {
         _offset *= (newValue / oldValue);
     }
 }
@@ -143,6 +143,15 @@ qreal Element::spatium() const
         Staff* s = staff();
         return s ? s->spatium(this) : score()->spatium();
     }
+}
+
+//---------------------------------------------------------
+//   offsetIsSpatiumDependent
+//---------------------------------------------------------
+
+bool Element::offsetIsSpatiumDependent() const
+{
+    return sizeIsSpatiumDependent() || (_flags & ElementFlag::ON_STAFF);
 }
 
 //---------------------------------------------------------
@@ -461,8 +470,8 @@ QPointF Element::pagePos() const
     }
 
     if (_flags & ElementFlag::ON_STAFF) {
-        System* system = 0;
-        Measure* measure = 0;
+        System* system = nullptr;
+        Measure* measure = nullptr;
         if (parent()->isSegment()) {
             measure = toSegment(parent())->measure();
         } else if (parent()->isMeasure()) {           // used in measure number
@@ -2286,7 +2295,7 @@ void Element::endEditDrag(EditData& ed)
     ElementEditData* eed = ed.getData(this);
     bool changed = false;
     if (eed) {
-        for (PropertyData pd : eed->propertyData) {
+        for (const PropertyData& pd : qAsConst(eed->propertyData)) {
             setPropertyFlags(pd.id, pd.f);       // reset initial property flags state
             if (score()->undoPropertyChanged(this, pd.id, pd.data)) {
                 changed = true;

@@ -533,10 +533,9 @@ void ChangeMap::dump()
         if (event.type == ChangeEventType::FIX) {
             qDebug().nospace() << "===" << tick.ticks() << " : FIX " << event.value;
         } else if (event.type == ChangeEventType::RAMP) {
-            qDebug().nospace() << "===" << tick.ticks() << " to " << (tick + event.length).ticks() << " : RAMP diff "
-                               << event.value << " " << ChangeMap::changeMethodToName(event.method) << " ("
-                               << event.cachedStartVal
-                               << ", " << event.cachedEndVal << ")";
+            qDebug().nospace() << "===" << tick.ticks() << " to " << (tick + event.length).ticks() << " : RAMP diff " << event.value
+                               << " " << ChangeMap::changeMethodToName(event.method) << " (" << event.cachedStartVal << ", "
+                               << event.cachedEndVal << ")";
         } else if (event.type == ChangeEventType::INVALID) {
             qDebug().nospace() << "===" << tick.ticks() << " : INVALID value" << event.value;
         }
