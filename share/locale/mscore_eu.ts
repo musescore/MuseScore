@@ -4116,7 +4116,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/editstyle.ui" line="11235"/>
         <source>Load XML</source>
-        <translation type="unfinished"/>
+        <translation>XML-a kargatu</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="11271"/>
@@ -5372,7 +5372,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/exportdialog.ui" line="573"/>
         <source>MusicXML file type:</source>
-        <translation type="unfinished"/>
+        <translation>MusicXML fitxategi mota:</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="581"/>
@@ -5422,7 +5422,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/exportdialog.ui" line="782"/>
         <source>What to export</source>
-        <translation type="unfinished"/>
+        <translation>Zer esportatu</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="788"/>
@@ -10963,12 +10963,12 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/instrwidget.ui" line="116"/>
         <source>Add to score</source>
-        <translation type="unfinished"/>
+        <translation>Partiturara gehitu</translation>
     </message>
     <message>
         <location filename="../../mscore/instrwidget.ui" line="141"/>
         <source>Remove from score</source>
-        <translation type="unfinished"/>
+        <translation>Partituratik kendu</translation>
     </message>
     <message>
         <location filename="../../mscore/instrwidget.ui" line="167"/>
@@ -12468,7 +12468,7 @@ huts egin du: %2</translation>
         <location filename="../../mscore/editstyle.cpp" line="493"/>
         <location filename="../../mscore/editstyle.cpp" line="829"/>
         <source>Until End of Measure</source>
-        <translation type="unfinished"/>
+        <translation>Konpasaren Bukaera Arte</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="494"/>
@@ -13473,7 +13473,7 @@ Gorde?</translation>
     <message>
         <location filename="../../mscore/mixer/mixerdetails.cpp" line="281"/>
         <source>Staff %1:</source>
-        <translation type="unfinished"/>
+        <translation>%1. pentagrama:</translation>
     </message>
 </context>
 <context>
@@ -15655,7 +15655,7 @@ Plugin honek partitura ireki bat behar du ibiltzeko.</translation>
         <location filename="../../mscore/resourceManager.cpp" line="353"/>
         <location filename="../../mscore/resourceManager.cpp" line="404"/>
         <source>Up to date</source>
-        <translation type="unfinished"/>
+        <translation>Eguneratuta</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.cpp" line="317"/>
@@ -16902,7 +16902,7 @@ mesedez, izen ezberdina aukeratu:</translation>
     <message>
         <location filename="../../mscore/cloud/uploadscoredialog.cpp" line="32"/>
         <source>Save online</source>
-        <translation type="unfinished"/>
+        <translation>Sarean gorde</translation>
     </message>
     <message>
         <location filename="../../mscore/cloud/uploadscoredialog.cpp" line="32"/>
@@ -18130,7 +18130,7 @@ huts egin du:</translation>
     <message>
         <location filename="../../mscore/qml/palettes/PalettesWidgetHeader.qml" line="163"/>
         <source>Stop search</source>
-        <translation type="unfinished"/>
+        <translation>Bilaketa gelditu</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/PalettesWidgetHeader.qml" line="204"/>
@@ -21982,12 +21982,12 @@ Gainidatzi nahi duzu?</translation>
     <message>
         <location filename="../../mscore/qml/migration/ScoreMigrationDialog.qml" line="180"/>
         <source>Keep old style</source>
-        <translation type="unfinished"/>
+        <translation>Lehengo estiloa mantendu</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/migration/ScoreMigrationDialog.qml" line="186"/>
         <source>Apply new style</source>
-        <translation type="unfinished"/>
+        <translation>Estilo berria ezarri</translation>
     </message>
 </context>
 <context>
@@ -26718,12 +26718,12 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1087"/>
         <source>Next Frame</source>
-        <translation type="unfinished"/>
+        <translation>Hurrengo Markoa</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1088"/>
         <source>Go to next frame</source>
-        <translation type="unfinished"/>
+        <translation>Hurrengo markora joan</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1094"/>
@@ -33007,12 +33007,12 @@ Konpasa ez dago hutsik</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3361"/>
         <source>Triple flat</source>
-        <translation type="unfinished"/>
+        <translation>Bemol hirukoitza</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3362"/>
         <source>Triple sharp</source>
-        <translation type="unfinished"/>
+        <translation>Sostenitu hirukoitza</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3367"/>

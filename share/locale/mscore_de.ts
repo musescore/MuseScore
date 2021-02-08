@@ -22864,7 +22864,7 @@ Hinweis: &quot;Strg+Umschalt+1&quot; ist eine Tastenkombination.</translation>
     <message>
         <location filename="../../telemetry/qml/TelemetryPermissionDialog.qml" line="72"/>
         <source>Help us improve MuseScore</source>
-        <translation>Helfen Sie uns MuseScore zu verbessen</translation>
+        <translation>Helfen Sie uns MuseScore zu verbessern</translation>
     </message>
     <message>
         <location filename="../../telemetry/qml/TelemetryPermissionDialog.qml" line="92"/>

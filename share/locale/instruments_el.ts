@@ -2039,42 +2039,42 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="62"/>
         <source>Flutes</source>
-        <translation type="unfinished"/>
+        <translation>Φλάουτα</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="63"/>
         <source>Oboes</source>
-        <translation type="unfinished"/>
+        <translation>Όμποε Περισσότερα του ενός</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="64"/>
         <source>Clarinets</source>
-        <translation type="unfinished"/>
+        <translation>Κλαρινέτα</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="65"/>
         <source>Bassoons</source>
-        <translation type="unfinished"/>
+        <translation>Φαγκότα</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="66"/>
         <source>Saxophones</source>
-        <translation type="unfinished"/>
+        <translation>Σαξόφωνα</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="67"/>
         <source>Recorders</source>
-        <translation type="unfinished"/>
+        <translation>Φλάουτα με Ράμφος</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="68"/>
         <source>Horns</source>
-        <translation type="unfinished"/>
+        <translation>Κόρνο Περισσότερα του ενός</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="69"/>
         <source>Cornets</source>
-        <translation type="unfinished"/>
+        <translation>Κορνέτες</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="70"/>
@@ -2084,12 +2084,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="71"/>
         <source>Alto Horns</source>
-        <translation type="unfinished"/>
+        <translation>Άλτο Κόρνο Περισσότερα του ενός</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="72"/>
         <source>Baritone Horns</source>
-        <translation type="unfinished"/>
+        <translation>Βαρύτονα Κόρνο Περισσότερα του ενός</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="73"/>
@@ -2099,42 +2099,42 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="74"/>
         <source>Trumpets</source>
-        <translation type="unfinished"/>
+        <translation>Τρομπέτες</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="75"/>
         <source>Trombones</source>
-        <translation type="unfinished"/>
+        <translation>Τρομπόνια</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="76"/>
         <source>Tubas</source>
-        <translation type="unfinished"/>
+        <translation>Τούμπες</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="78"/>
         <source>Keyboard Percussion</source>
-        <translation type="unfinished"/>
+        <translation>Κρουστά Πλήκτρα</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="79"/>
         <source>Harps</source>
-        <translation type="unfinished"/>
+        <translation>Άρπες</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="80"/>
         <source>Orff Percussion</source>
-        <translation type="unfinished"/>
+        <translation>Κρουστά Orff</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="82"/>
         <source>Unpitched Metal Percussion</source>
-        <translation type="unfinished"/>
+        <translation>Μεταλλικά Κρουστά χωρίς τονικό ύψος</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="83"/>
         <source>Unpitched Wooden Percussion</source>
-        <translation type="unfinished"/>
+        <translation>Ξύλινα κρουστά χωρίς τονικό ύψος</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="84"/>
@@ -2149,7 +2149,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="86"/>
         <source>Other Percussion</source>
-        <translation type="unfinished"/>
+        <translation>Άλλα Κρουστά</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="87"/>
@@ -2164,22 +2164,22 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="90"/>
         <source>Synths</source>
-        <translation type="unfinished"/>
+        <translation>Συνθεσάιζερ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="92"/>
         <source>Guitars</source>
-        <translation type="unfinished"/>
+        <translation>Κιθάρες</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="93"/>
         <source>Bass Guitars</source>
-        <translation type="unfinished"/>
+        <translation>Μπάσα Κιθάρες</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="94"/>
         <source>Orchestral Strings</source>
-        <translation type="unfinished"/>
+        <translation>Ορχηστρικά Έγχορδα</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="95"/>
@@ -6884,7 +6884,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1549"/>
         <source>Choir</source>
-        <translation type="unfinished"/>
+        <translation>Χορωδία</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1550"/>
@@ -6919,17 +6919,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1556"/>
         <source>Woodwind Ensemble</source>
-        <translation type="unfinished"/>
+        <translation>Σύνολο Ξύλινων Πνευστών</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1557"/>
         <source>Brass Ensemble</source>
-        <translation type="unfinished"/>
+        <translation>Σύνολο Χάλκινων Πνευστών</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1558"/>
         <source>String Ensemble</source>
-        <translation type="unfinished"/>
+        <translation>Σύνολο Εγχόρδων</translation>
     </message>
 </context>
 <context>

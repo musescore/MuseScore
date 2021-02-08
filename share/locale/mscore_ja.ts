@@ -17045,7 +17045,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/pianoroll/notetweakerdialog.ui" line="14"/>
         <source>Note Tweaker</source>
-        <translation type="unfinished"/>
+        <translation>Note Tweaker</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll/notetweakerdialog.ui" line="20"/>
@@ -18060,7 +18060,7 @@ failed: </source>
         <location filename="../../mscore/qml/palettes/PaletteTree.qml" line="512"/>
         <source>%1 expanded</source>
         <comment>tree item not collapsed</comment>
-        <translation type="unfinished"/>
+        <translation>%1 拡張</translation>
     </message>
 </context>
 <context>
@@ -18327,12 +18327,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/pianoroll/pianolevelschooser.ui" line="25"/>
         <source>Note event data type</source>
-        <translation type="unfinished"/>
+        <translation>ノートイベント データタイプ</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll/pianolevelschooser.ui" line="37"/>
         <source>Set selected note event data</source>
-        <translation type="unfinished"/>
+        <translation>選択したノートイベント データをセット</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll/pianolevelschooser.ui" line="40"/>
@@ -18345,17 +18345,17 @@ failed: </source>
     <message>
         <location filename="../../mscore/pianoroll/pianolevelsfilter.cpp" line="13"/>
         <source>Position</source>
-        <translation>Position</translation>
+        <translation>位置</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll/pianolevelsfilter.cpp" line="14"/>
         <source>Move the selected note(s) forward or backward by thousandths of the full note duration</source>
-        <translation type="unfinished"/>
+        <translation>選択した音を前後に1000分の1動かす</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll/pianolevelsfilter.cpp" line="16"/>
         <source>Duration (multiplier)</source>
-        <translation type="unfinished"/>
+        <translation>範囲 (乗数)</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll/pianolevelsfilter.cpp" line="17"/>
@@ -20901,7 +20901,7 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
     <message>
         <location filename="../../libmscore/note.cpp" line="844"/>
         <source>%1 (sounding as %2%3)</source>
-        <translation type="unfinished"/>
+        <translation>%1 ( %2%3のように鳴る)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="2250"/>
@@ -21274,7 +21274,7 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
     <message>
         <location filename="../../avsomr/ret.cpp" line="154"/>
         <source>Try to uncheck and check again to use the local OMR engine</source>
-        <translation type="unfinished"/>
+        <translation>ローカルOMRエンジンを使用するためにチェックを外してもう一度チェックを入れてください。</translation>
     </message>
     <message>
         <location filename="../../avsomr/ui/recognitionproccessdialog.cpp" line="36"/>
@@ -21402,7 +21402,7 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
     <message>
         <location filename="../../libmscore/measure.cpp" line="2021"/>
         <source>MSCX error at line %1: invalid measure length: %2</source>
-        <translation type="unfinished"/>
+        <translation>MSCXの %1 行目でエラーが発生しました: 無効な小節の長さ: %2</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreOrder.cpp" line="408"/>

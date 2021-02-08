@@ -2150,7 +2150,7 @@
     <message>
         <location filename="../../mscore/editstafftype.ui" line="867"/>
         <source>Stems and beams</source>
-        <translation>Gövdeler ve kirişler</translation>
+        <translation>Nota sapları ve kirişleri</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="917"/>
@@ -2180,7 +2180,7 @@
     <message>
         <location filename="../../mscore/editstafftype.ui" line="1016"/>
         <source>Stem style:</source>
-        <translation>Sap türü</translation>
+        <translation>Nota sapı stili</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="1032"/>
@@ -2195,7 +2195,7 @@
     <message>
         <location filename="../../mscore/editstafftype.ui" line="1089"/>
         <source>Stem position:</source>
-        <translation>Sap konumu:</translation>
+        <translation>Nota sapı konumu:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="1105"/>
@@ -2221,12 +2221,12 @@
     <message>
         <location filename="../../mscore/editstafftype.ui" line="1197"/>
         <source>As short stem</source>
-        <translation>Nota saplarını kısalt</translation>
+        <translation>Kısa nota sapı</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="1207"/>
         <source>As slashed stem</source>
-        <translation type="unfinished"/>
+        <translation>Eğik çizgili nota sapı</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="1235"/>
@@ -3107,7 +3107,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5909"/>
         <source>Avoid staves</source>
-        <translation type="unfinished"/>
+        <translation>Dizeklerden kaçının</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="6236"/>
@@ -3891,7 +3891,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4164"/>
         <source>System header with time signature distance:</source>
-        <translation type="unfinished"/>
+        <translation>Sistem başlığı ile ölçü sayısı arası mesafe:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4304"/>
@@ -3901,7 +3901,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4769"/>
         <source>Time signature to barline distance:</source>
-        <translation type="unfinished"/>
+        <translation>Ölçü sayısı ölçü çizgisi arası mesafe</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4479"/>
@@ -3928,7 +3928,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="10988"/>
         <source>Extension scaling:</source>
-        <translation type="unfinished"/>
+        <translation>Uzantı ölçekleme:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="11001"/>
@@ -3948,7 +3948,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="10978"/>
         <source>Extension vertical offset:</source>
-        <translation type="unfinished"/>
+        <translation>Uzantının dikey uzaklığı:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="10964"/>
@@ -4025,7 +4025,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3166"/>
         <source>Show measure number range at multimeasure rests</source>
-        <translation type="unfinished"/>
+        <translation>Batonlarda ölçü numarası aralığını göster</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3377"/>
@@ -4486,7 +4486,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/editstyle.ui" line="7573"/>
         <source>Hook height above:</source>
-        <translation type="unfinished"/>
+        <translation>Yukarıdaki kanca yüksekliği:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="7651"/>
@@ -4496,7 +4496,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/editstyle.ui" line="7609"/>
         <source>Hook height below:</source>
-        <translation type="unfinished"/>
+        <translation>Aşağıdaki kanca yüksekliği:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="8171"/>
@@ -4580,7 +4580,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/editstyle.ui" line="8839"/>
         <source>Stem distance:</source>
-        <translation>Sap mesafesi:</translation>
+        <translation>Nota sapı mesafesi:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="8766"/>
@@ -4664,7 +4664,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/editstyle.ui" line="5982"/>
         <source>Number</source>
-        <translation>numara</translation>
+        <translation>Sayı</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5987"/>
@@ -4674,7 +4674,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/editstyle.ui" line="6032"/>
         <source>Number type:</source>
-        <translation type="unfinished"/>
+        <translation>Sayı tipi:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="6051"/>
@@ -4742,7 +4742,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/editstyle.ui" line="5612"/>
         <source>Beam distance (relative to beam thickness):</source>
-        <translation type="unfinished"/>
+        <translation>Kiriş mesafesi (kiriş kalınlığına göre):</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="8755"/>
@@ -4817,7 +4817,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/editstyle.ui" line="9750"/>
         <source>Dash Y position ratio:</source>
-        <translation type="unfinished"/>
+        <translation>Tire Y konumu oranı:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9549"/>
@@ -4857,7 +4857,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/editstyle.ui" line="10119"/>
         <source>Min. distance:</source>
-        <translation type="unfinished"/>
+        <translation>Min. mesafe:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="9888"/>
@@ -6330,7 +6330,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="255"/>
         <source>Span to next staff</source>
-        <translation>Sonraki dizeğe uza</translation>
+        <translation>Sonraki dizeğe atla</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="296"/>
@@ -6674,7 +6674,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="116"/>
         <source>Stem direction:</source>
-        <translation>Nota-sapı Yönü</translation>
+        <translation>Nota sapı yönü:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="88"/>
@@ -6699,7 +6699,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="135"/>
         <source>Reset &apos;Stemless&apos; value</source>
-        <translation>&apos;Sapsız&apos; değerini sıfırlayın</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="148"/>
@@ -7118,12 +7118,12 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="14"/>
         <source>Fretboard Diagram Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Klavye Diyagramı Denetçisi</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="57"/>
         <source>Fretboard Diagram</source>
-        <translation type="unfinished"/>
+        <translation>Klavye Diyagramı</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="488"/>
@@ -7133,7 +7133,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="493"/>
         <source>Horizontal</source>
-        <translation type="unfinished"/>
+        <translation>Yatay</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="501"/>
@@ -7143,7 +7143,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="150"/>
         <source>Fret number:</source>
-        <translation type="unfinished"/>
+        <translation>Perde numarası:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="166"/>
@@ -7168,7 +7168,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="204"/>
         <source>Show nut</source>
-        <translation type="unfinished"/>
+        <translation>Eşiği göster</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="538"/>
@@ -7188,7 +7188,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="88"/>
         <source>Fret number</source>
-        <translation type="unfinished"/>
+        <translation>Perde numarası</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="243"/>
@@ -7198,12 +7198,12 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="179"/>
         <source>Scale</source>
-        <translation>Dizi</translation>
+        <translation>Ölçek</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="143"/>
         <source>Orientation:</source>
-        <translation type="unfinished"/>
+        <translation>Yön:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="272"/>
@@ -7213,7 +7213,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="293"/>
         <source>Use square symbol</source>
-        <translation type="unfinished"/>
+        <translation>Kare sembolünü kullan</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="318"/>
@@ -7223,32 +7223,32 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="343"/>
         <source>Use triangle symbol</source>
-        <translation type="unfinished"/>
+        <translation>Üçgen sembolünü kullan</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="368"/>
         <source>Use black dot symbol</source>
-        <translation type="unfinished"/>
+        <translation>Siyah nokta sembolünü kullan</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="393"/>
         <source>Add a barre (Shift)</source>
-        <translation type="unfinished"/>
+        <translation>Bir bare ekle (Shift)</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="396"/>
         <source>Add a barre</source>
-        <translation type="unfinished"/>
+        <translation>Bir bare ekle</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="399"/>
         <source>Barre</source>
-        <translation type="unfinished"/>
+        <translation>Bare</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="424"/>
         <source>Clear the fretboard diagram</source>
-        <translation type="unfinished"/>
+        <translation>Klavye diyagramını temizleyin</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="427"/>
@@ -7278,22 +7278,22 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="133"/>
         <source>Frets:</source>
-        <translation type="unfinished"/>
+        <translation>Perdeler:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="477"/>
         <source>Strings:</source>
-        <translation type="unfinished"/>
+        <translation>Teller:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="256"/>
         <source>Frets</source>
-        <translation type="unfinished"/>
+        <translation>Perdeler</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="514"/>
         <source>Strings</source>
-        <translation>Yaylılar</translation>
+        <translation>Teller</translation>
     </message>
 </context>
 <context>
@@ -7306,7 +7306,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="57"/>
         <source>Glissando</source>
-        <translation>Yavaşlama (Glissando)</translation>
+        <translation>Kaydırma (Glissando)</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="221"/>
@@ -7714,7 +7714,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="403"/>
         <source>Continue height</source>
-        <translation type="unfinished"/>
+        <translation>Devam yüksekliği</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="161"/>
@@ -8763,12 +8763,12 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="14"/>
         <source>Ottava Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Oktav Denetçisi</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="57"/>
         <source>Ottava</source>
-        <translation>Ottava</translation>
+        <translation>Oktav</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="82"/>
@@ -8894,7 +8894,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/inspector/inspector_pedal.ui" line="57"/>
         <source>Pedal</source>
-        <translation>pedal</translation>
+        <translation>Pedal</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_pedal.ui" line="82"/>
@@ -9369,7 +9369,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="152"/>
         <source>Generate time signatures</source>
-        <translation type="unfinished"/>
+        <translation>Ölçü sayısı oluştur</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="519"/>
@@ -9407,7 +9407,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/inspector/inspector_stem.ui" line="178"/>
         <source>Stem direction</source>
-        <translation>Sap yönü</translation>
+        <translation>Nota sapı yönü</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stem.ui" line="182"/>
@@ -9927,7 +9927,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="396"/>
         <source>Begin hook:</source>
-        <translation type="unfinished"/>
+        <translation>Baştaki kanca:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="57"/>
@@ -9943,7 +9943,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="438"/>
         <source>End hook:</source>
-        <translation type="unfinished"/>
+        <translation>Sondaki kanca:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="1041"/>
@@ -9964,7 +9964,7 @@ By default, they will be placed such as that their right end are at the same lev
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="389"/>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="928"/>
         <source>End text</source>
-        <translation>Metin sonu</translation>
+        <translation>Sondaki metin</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="260"/>
@@ -10103,13 +10103,13 @@ By default, they will be placed such as that their right end are at the same lev
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="457"/>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="522"/>
         <source>Continue text</source>
-        <translation type="unfinished"/>
+        <translation>Devamındaki metin</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="371"/>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="428"/>
         <source>Begin text</source>
-        <translation type="unfinished"/>
+        <translation>Baştaki metin</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="415"/>
@@ -10122,7 +10122,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/inspector/inspector_timesig.ui" line="14"/>
         <source>Time Signature Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Ölçü sayısı denetçisi</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_timesig.ui" line="60"/>
@@ -10404,12 +10404,12 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="161"/>
         <source>Number type</source>
-        <translation type="unfinished"/>
+        <translation>Sayı tipi</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="165"/>
         <source>Number</source>
-        <translation>numara</translation>
+        <translation>Sayı</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="170"/>
@@ -10429,7 +10429,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="142"/>
         <source>Number type:</source>
-        <translation type="unfinished"/>
+        <translation>Sayı tipi:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="380"/>
@@ -11603,7 +11603,7 @@ tuplet diğer ölçüye taşamaz</translation>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="378"/>
         <source>Add to measure number:</source>
-        <translation>Ölçünün numarasına ekle:</translation>
+        <translation>Ölçünün sayısına ekle:</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="401"/>
@@ -22942,32 +22942,32 @@ Note: &quot;Ctrl+Shift+1&quot; is one key combination.</source>
     <message>
         <location filename="../../libmscore/style.cpp" line="2495"/>
         <source>User-7</source>
-        <translation type="unfinished"/>
+        <translation>Kullanıcı-7</translation>
     </message>
     <message>
         <location filename="../../libmscore/style.cpp" line="2496"/>
         <source>User-8</source>
-        <translation type="unfinished"/>
+        <translation>Kullanıcı-8</translation>
     </message>
     <message>
         <location filename="../../libmscore/style.cpp" line="2497"/>
         <source>User-9</source>
-        <translation type="unfinished"/>
+        <translation>Kullanıcı-9</translation>
     </message>
     <message>
         <location filename="../../libmscore/style.cpp" line="2498"/>
         <source>User-10</source>
-        <translation type="unfinished"/>
+        <translation>Kullanıcı-10</translation>
     </message>
     <message>
         <location filename="../../libmscore/style.cpp" line="2499"/>
         <source>User-11</source>
-        <translation type="unfinished"/>
+        <translation>Kullanıcı-11</translation>
     </message>
     <message>
         <location filename="../../libmscore/style.cpp" line="2500"/>
         <source>User-12</source>
-        <translation type="unfinished"/>
+        <translation>Kullanıcı-12</translation>
     </message>
     <message>
         <location filename="../../libmscore/style.cpp" line="2446"/>
@@ -23092,12 +23092,12 @@ Note: &quot;Ctrl+Shift+1&quot; is one key combination.</source>
     <message>
         <location filename="../../libmscore/style.cpp" line="2482"/>
         <source>Ottava</source>
-        <translation>Ottava</translation>
+        <translation>Oktav</translation>
     </message>
     <message>
         <location filename="../../libmscore/style.cpp" line="2484"/>
         <source>Pedal</source>
-        <translation>pedal</translation>
+        <translation>Pedal</translation>
     </message>
     <message>
         <location filename="../../libmscore/style.cpp" line="2486"/>
@@ -26324,7 +26324,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1952"/>
         <source>Beam Start</source>
-        <translation type="unfinished"/>
+        <translation>Kiriş Başlangıcı</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="47"/>
@@ -26952,22 +26952,22 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1953"/>
         <source>Beam start</source>
-        <translation type="unfinished"/>
+        <translation>Kiriş başlangıcı</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1963"/>
         <source>Beam Middle</source>
-        <translation type="unfinished"/>
+        <translation>Kiriş Ortası</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1964"/>
         <source>Beam middle</source>
-        <translation type="unfinished"/>
+        <translation>Kiriş ortası</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1974"/>
         <source>No Beam</source>
-        <translation type="unfinished"/>
+        <translation>Kiriş Yok</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1975"/>
@@ -26997,12 +26997,12 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2007"/>
         <source>Auto Beam</source>
-        <translation type="unfinished"/>
+        <translation>Otomatik Nota Kirişi</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2008"/>
         <source>Auto beam</source>
-        <translation type="unfinished"/>
+        <translation>Otomatik nota kirişi</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2018"/>
@@ -30664,7 +30664,7 @@ failed</source>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="46"/>
         <source>Stem Slash</source>
-        <translation type="unfinished"/>
+        <translation>Eğik Çizgili Nota Sapı</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="47"/>
@@ -30719,7 +30719,7 @@ failed</source>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="58"/>
         <source>Repeat Measure</source>
-        <translation type="unfinished"/>
+        <translation>Ölçüyü Tekrar Et</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="100"/>
@@ -30859,7 +30859,7 @@ failed</source>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="79"/>
         <source>Fretboard Diagram</source>
-        <translation type="unfinished"/>
+        <translation>Klavye Diyagramı</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="80"/>
@@ -33662,7 +33662,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5314"/>
         <source>Repeat last bar</source>
-        <translation type="unfinished"/>
+        <translation>Son ölçüyü tekrara et</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5315"/>

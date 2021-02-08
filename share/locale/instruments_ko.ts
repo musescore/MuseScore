@@ -2039,42 +2039,42 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="62"/>
         <source>Flutes</source>
-        <translation type="unfinished"/>
+        <translation>플루트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="63"/>
         <source>Oboes</source>
-        <translation type="unfinished"/>
+        <translation>오보에</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="64"/>
         <source>Clarinets</source>
-        <translation type="unfinished"/>
+        <translation>클라리넷</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="65"/>
         <source>Bassoons</source>
-        <translation type="unfinished"/>
+        <translation>바순</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="66"/>
         <source>Saxophones</source>
-        <translation type="unfinished"/>
+        <translation>색소폰</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="67"/>
         <source>Recorders</source>
-        <translation type="unfinished"/>
+        <translation>리코더</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="68"/>
         <source>Horns</source>
-        <translation type="unfinished"/>
+        <translation>호른</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="69"/>
         <source>Cornets</source>
-        <translation type="unfinished"/>
+        <translation>코넷</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="70"/>
@@ -2084,42 +2084,42 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="71"/>
         <source>Alto Horns</source>
-        <translation type="unfinished"/>
+        <translation>알토 호른</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="72"/>
         <source>Baritone Horns</source>
-        <translation type="unfinished"/>
+        <translation>바리톤 호른</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="73"/>
         <source>Euphoniums</source>
-        <translation type="unfinished"/>
+        <translation>유포늄</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="74"/>
         <source>Trumpets</source>
-        <translation type="unfinished"/>
+        <translation>트럼펫</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="75"/>
         <source>Trombones</source>
-        <translation type="unfinished"/>
+        <translation>트롬본</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="76"/>
         <source>Tubas</source>
-        <translation type="unfinished"/>
+        <translation>튜바</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="78"/>
         <source>Keyboard Percussion</source>
-        <translation type="unfinished"/>
+        <translation>키보드 타악기</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="79"/>
         <source>Harps</source>
-        <translation type="unfinished"/>
+        <translation>하프</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="80"/>
@@ -2149,7 +2149,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="86"/>
         <source>Other Percussion</source>
-        <translation type="unfinished"/>
+        <translation>기타 타악기</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="87"/>
@@ -2159,32 +2159,32 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="89"/>
         <source>Organs</source>
-        <translation type="unfinished"/>
+        <translation>오르간</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="90"/>
         <source>Synths</source>
-        <translation type="unfinished"/>
+        <translation>신디사이저</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="92"/>
         <source>Guitars</source>
-        <translation type="unfinished"/>
+        <translation>기타</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="93"/>
         <source>Bass Guitars</source>
-        <translation type="unfinished"/>
+        <translation>베이스 기타</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="94"/>
         <source>Orchestral Strings</source>
-        <translation type="unfinished"/>
+        <translation>오케스트라 현악기</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="95"/>
         <source>Viols</source>
-        <translation type="unfinished"/>
+        <translation>비올</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="96"/>
@@ -6884,7 +6884,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1549"/>
         <source>Choir</source>
-        <translation type="unfinished"/>
+        <translation>합창단</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1550"/>

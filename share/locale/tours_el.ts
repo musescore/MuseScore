@@ -206,7 +206,7 @@
     <message>
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Τέλος, το Φίλτρο Επιλογής (το οποίο βρίσκεται στο Μενού Προβολής) επιτρέπει την εξαίρεση στοιχείων συγκεκριμένου τύπου από μια επιλογή εύρους.</translation>
     </message>
     <message>
         <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
@@ -302,14 +302,16 @@
     <message>
         <source>Alternatively, first selecting a range of elements in the score and then double-clicking a line element in the palette will add that new element across the selected range.</source>
         <comment>spanner-drop-apply</comment>
-        <translation type="unfinished"/>
+        <translation>Εναλλακτικά, επιλέγοντας αρχικά ένα εύρος στοιχείων στην παρτιτούρα και κάνοντας διπλό κλικ σε ένα γραμμικό στοιχείο της παλλέτας θα προστεθεί αυτό το νέο στοιχείο σε όλο το επιλεγμένο εύρος.</translation>
     </message>
     <message>
         <source>This is the score view, where you can view and edit your score.
     Use your mouse wheel or touchpad to scroll (with &quot;Shift&quot; to scroll horizontally).
     If you have multiple scores open, you can switch between them using tabs at the top of your score view.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Αυτή είναι η προβολή παρτιτούρας, στην οποία μπορείς να δεις και να επεξεργαστείς την παρτιτούρα σου.
+Χρησιμοποίησε τον τροχό του ποντικιού ή την επιφάνεια αφής (και με το &quot;Shift&quot; για κύλιση οριζόντια).
+Σε περίπτωση που έχεις πάνω από μία παρτιτούρα ανοιχτή, μπορείς να μεταβείς από την μία στην άλλη χρησιμοποιώντας τις καρτέλες στο πάνω τμήμα της προβολής παρτιτούρας.</translation>
     </message>
     <message>
         <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
@@ -322,7 +324,8 @@
         <source>The main menu contains most other commands.
     In addition, many commands can be accessed via keyboard shortcuts or by right-clicking (macOS: &quot;Ctrl&quot;+clicking) within the score view.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Το κυρίως μενού περιλαμβάνει τις περισσότερες περαιτέρω εντολές.
+Επιπλέον, πολλές εντολές μπορούν να προσπελαστούν μέσω των συντομεύσεων πληκτρολογίου ή με το δεξί κλικ (macOS: &quot;Ctrl&quot;+κλικ) μέσω της προβολής παρτιτούρας.</translation>
     </message>
     <message>
         <source>That's the end of this tour!
@@ -330,7 +333,10 @@
     To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
     You can also enable/disable and reset tours in Help &gt; Tours.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Αυτό είναι το τέλος αυτής της περιήγησης!
+Καθώς χρησιμοποιείς το MuseScore, περισσότερες περιηγήσεις θα εμφανιστούν, ώστε να εξηγήσουν περαιτέρω διάφορες λειτουργίες.
+Για να τις απενεργοποιήσεις, απενεργοποίησε την επιλογή &quot;Συνέχισε να εμφανίζεις περιηγήσεις&quot; πριν να κλείσεις αυτό το παράθυρο.
+Μπορείς να ενεργοποιήσεις/απενεργοποιήσεις και να επαναφέρεις τις περιηγήσεις μέσω της Βοήθειας &gt; Περιηγήσεις.</translation>
     </message>
 </context>
 </TS>
