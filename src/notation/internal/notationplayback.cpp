@@ -58,17 +58,12 @@ NotationPlayback::NotationPlayback(IGetScore* getScore)
 
 Ms::Score* NotationPlayback::score() const
 {
-    return m_getScore ? m_getScore->score() : nullptr;
+    return m_getScore->score();
 }
 
 Ms::MasterScore* NotationPlayback::masterScore() const
 {
     return score() ? score()->masterScore() : nullptr;
-}
-
-Ms::Score* NotationPlayback::score() const
-{
-    return m_getScore->score();
 }
 
 void NotationPlayback::init()
@@ -720,10 +715,10 @@ MeasureBeat NotationPlayback::measureBeat(int tick) const
     int dummy = 0;
 
     if (score() && score()->checkHasMeasures()) {
-        score()->sigmap()->tickValues(tick, &measureBeat.measureNumber, &measureBeat.beatNumber, &dummy);
+        score()->sigmap()->tickValues(tick, &measureBeat.measureIndex, &measureBeat.beatIndex, &dummy);
 
-        measureBeat.maxMeasureNumber = score()->measures()->size();
-        measureBeat.maxBeatNumber = 4; // TODO
+        measureBeat.maxMeasureIndex = score()->measures()->size() - 1;
+        measureBeat.maxBeatIndex = 4; // TODO
     }
 
     return measureBeat;
@@ -731,5 +726,5 @@ MeasureBeat NotationPlayback::measureBeat(int tick) const
 
 int NotationPlayback::measureBeatToTick(const MeasureBeat& measureBeat) const
 {
-    return score() ? score()->sigmap()->bar2tick(measureBeat.measureNumber, measureBeat.beatNumber) : 0;
+    return score() ? score()->sigmap()->bar2tick(measureBeat.measureIndex, measureBeat.beatIndex) : 0;
 }

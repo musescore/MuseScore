@@ -35,7 +35,7 @@ QVariant UndoRedoModel::undoItem() const
     MenuItem item = actionsRegister()->action("undo");
     item.enabled = undoStack() ? undoStack()->canUndo() : false;
 
-    return item.toVariantMap();
+    return item.toMap();
 }
 
 QVariant UndoRedoModel::redoItem() const
@@ -43,7 +43,7 @@ QVariant UndoRedoModel::redoItem() const
     MenuItem item = actionsRegister()->action("redo");
     item.enabled = undoStack() ? undoStack()->canRedo() : false;
 
-    return item.toVariantMap();
+    return item.toMap();
 }
 
 void UndoRedoModel::load()

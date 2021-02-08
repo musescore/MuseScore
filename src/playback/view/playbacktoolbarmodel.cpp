@@ -241,18 +241,19 @@ void PlaybackToolBarModel::rewindToMeasureBeat(const notation::MeasureBeat& barB
 
 int PlaybackToolBarModel::measureNumber() const
 {
-    return measureBeat().measureNumber;
+    return measureBeat().measureIndex + 1;
 }
 
 void PlaybackToolBarModel::setMeasureNumber(int measureNumber)
 {
+    int measureIndex = measureNumber - 1;
     MeasureBeat measureBeat = this->measureBeat();
 
-    if (measureNumber == measureBeat.measureNumber) {
+    if (measureIndex == measureBeat.measureIndex) {
         return;
     }
 
-    measureBeat.measureNumber = measureNumber;
+    measureBeat.measureIndex = measureIndex;
     rewindToMeasureBeat(measureBeat);
 
     emit measureNumberChanged(measureNumber);
@@ -260,23 +261,24 @@ void PlaybackToolBarModel::setMeasureNumber(int measureNumber)
 
 int PlaybackToolBarModel::maxMeasureNumber() const
 {
-    return measureBeat().maxMeasureNumber;
+    return measureBeat().maxMeasureIndex + 1;
 }
 
 int PlaybackToolBarModel::beatNumber() const
 {
-    return measureBeat().beatNumber;
+    return measureBeat().beatIndex + 1;
 }
 
 void PlaybackToolBarModel::setBeatNumber(int beatNumber)
 {
+    int beatIndex = beatNumber - 1;
     MeasureBeat measureBeat = this->measureBeat();
 
-    if (beatNumber == measureBeat.beatNumber) {
+    if (beatIndex == measureBeat.beatIndex) {
         return;
     }
 
-    measureBeat.beatNumber = beatNumber;
+    measureBeat.beatIndex = beatIndex;
     rewindToMeasureBeat(measureBeat);
 
     emit beatNumberChanged(beatNumber);
@@ -284,7 +286,7 @@ void PlaybackToolBarModel::setBeatNumber(int beatNumber)
 
 int PlaybackToolBarModel::maxBeatNumber() const
 {
-    return measureBeat().maxBeatNumber;
+    return measureBeat().maxBeatIndex + 1;
 }
 
 QVariant PlaybackToolBarModel::tempo() const

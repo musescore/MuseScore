@@ -88,7 +88,9 @@ Rectangle {
 
             NumberInputField {
                 Layout.leftMargin: 20
+                Layout.preferredWidth: 10
 
+                minValue: 1
                 maxValue: playbackModel.maxMeasureNumber
                 value: playbackModel.measureNumber
 
@@ -98,13 +100,16 @@ Rectangle {
             }
 
             StyledTextLabel {
+                Layout.leftMargin: 4
                 text: "."
                 font: timeField.font
             }
 
             NumberInputField {
                 Layout.leftMargin: 4
+                Layout.preferredWidth: 10
 
+                minValue: 1
                 maxValue: playbackModel.maxBeatNumber
                 value: playbackModel.beatNumber
 

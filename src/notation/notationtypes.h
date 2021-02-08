@@ -358,10 +358,10 @@ inline QList<StaffType> allStaffTypes()
 
 struct MeasureBeat
 {
-    int measureNumber = 0;
-    int maxMeasureNumber = 0;
-    int beatNumber = 0;
-    int maxBeatNumber = 0;
+    int measureIndex = 0;
+    int maxMeasureIndex = 0;
+    int beatIndex = 0;
+    int maxBeatIndex = 0;
 };
 
 static constexpr int MIN_NOTES_INTERVAL = -9;
