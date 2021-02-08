@@ -207,7 +207,7 @@ void System::adjustStavesNumber(int nstaves)
 ///   Layout the System
 //---------------------------------------------------------
 
-void System::layoutSystem(qreal xo1)
+void System::layoutSystem(qreal xo1, const bool isFirstSystem, bool firstSystemIndent)
 {
     if (_staves.empty()) {                 // ignore vbox
         return;
@@ -220,8 +220,7 @@ void System::layoutSystem(qreal xo1)
     //---------------------------------------------------
     //  find x position of staves
     //---------------------------------------------------
-
-    qreal xoff2 = 0.0;           // x offset for instrument name
+    qreal xoff2 = 0.0;   // x offset for instrument name
 
     for (const Part* p : score()->parts()) {
         if (firstVisibleSysStaffOfPart(p) < 0) {
@@ -233,7 +232,7 @@ void System::layoutSystem(qreal xo1)
                 continue;
             }
 
-            for (InstrumentName* t : staff->instrumentNames) {
+            for (InstrumentName* t : qAsConst(staff->instrumentNames)) {
                 t->layout();
                 qreal w = t->width() + point(instrumentNameOffset);
                 if (w > xoff2) {
@@ -241,6 +240,10 @@ void System::layoutSystem(qreal xo1)
                 }
             }
         }
+    }
+
+    if (isFirstSystem && firstSystemIndent) {
+        xoff2 = qMax(xoff2, styleP(Sid::firstSystemIndentationValue) * mag());
     }
 
     //---------------------------------------------------
