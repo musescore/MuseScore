@@ -159,8 +159,7 @@ bool FiguredBassItem::parse(QString& str)
     // prefix, digit, suffix and cont.line cannot be ALL empty
     // suffix cannot combine with empty digit
     if ((_prefix != Modifier::NONE && _suffix != Modifier::NONE)
-        || (_prefix == Modifier::NONE && _digit == FBIDigitNone && _suffix == Modifier::NONE
-            && _contLine == ContLine::NONE)
+        || (_prefix == Modifier::NONE && _digit == FBIDigitNone && _suffix == Modifier::NONE && _contLine == ContLine::NONE)
         || ((_suffix == Modifier::CROSS || _suffix == Modifier::BACKSLASH || _suffix == Modifier::SLASH)
             && _digit == FBIDigitNone)) {
         return false;

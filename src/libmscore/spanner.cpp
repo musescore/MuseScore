@@ -108,7 +108,7 @@ void SpannerSegment::setSystem(System* s)
 void SpannerSegment::spatiumChanged(qreal ov, qreal nv)
 {
     Element::spatiumChanged(ov, nv);
-    if (sizeIsSpatiumDependent()) {
+    if (offsetIsSpatiumDependent()) {
         _offset2 *= (nv / ov);
     }
 }

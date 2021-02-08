@@ -440,8 +440,14 @@ Rest* Score::setRest(const Fraction& _tick, int track, const Fraction& _l, bool 
             //
             // compute list of durations which will fit l
             //
-            std::vector<TDuration> dList = toRhythmicDurationList(f, true, tick - measure->tick(), sigmap()->timesig(
-                                                                      tick).nominal(), measure, useDots ? 1 : 0);
+            std::vector<TDuration> dList;
+            if (tuplet || staff->isLocalTimeSignature(tick)) {
+                dList = toDurationList(l, useDots);
+                std::reverse(dList.begin(), dList.end());
+            } else {
+                dList
+                    = toRhythmicDurationList(f, true, tick - measure->tick(), sigmap()->timesig(tick).nominal(), measure, useDots ? 1 : 0);
+            }
             if (dList.empty()) {
                 return 0;
             }
@@ -876,9 +882,8 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
                         if (trem->chord2() == chord) {
                             continue;
                         }
-                        auto newP = std::tuple<Fraction, Fraction, Tremolo*, int>(cr->tick(),
-                                                                                  trem->chord2()->segment()->tick(), trem,
-                                                                                  track);
+                        auto newP
+                            = std::tuple<Fraction, Fraction, Tremolo*, int>(cr->tick(), trem->chord2()->segment()->tick(), trem, track);
                         tremoloChordTicks.push_back(newP);
                     }
                 }
@@ -1228,22 +1233,22 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                 if (changeActual) {
                     m->undoChangeProperty(Pid::TIMESIG_ACTUAL, QVariant::fromValue(ns));
                 }
-                std::pair<int, int> staffIdxRange = getStaffIdxRange(score);
-                for (int si = staffIdxRange.first; si < staffIdxRange.second; ++si) {
-                    TimeSig* nsig = toTimeSig(seg->element(si * VOICES));
-                    if (!nsig) {
-                        continue;
-                    }
-                    nsig->undoChangeProperty(Pid::SHOW_COURTESY, ts->showCourtesySig());
-                    nsig->undoChangeProperty(Pid::TIMESIG, QVariant::fromValue(ts->sig()));
-                    nsig->undoChangeProperty(Pid::TIMESIG_TYPE, int(ts->timeSigType()));
-                    nsig->undoChangeProperty(Pid::NUMERATOR_STRING, ts->numeratorString());
-                    nsig->undoChangeProperty(Pid::DENOMINATOR_STRING, ts->denominatorString());
-                    nsig->undoChangeProperty(Pid::TIMESIG_STRETCH, QVariant::fromValue(ts->stretch()));
-                    nsig->undoChangeProperty(Pid::GROUPS, QVariant::fromValue(ts->groups()));
-                    nsig->setSelected(false);
-                    nsig->setDropTarget(0);
+            }
+            std::pair<int, int> staffIdxRange = getStaffIdxRange(score);
+            for (int si = staffIdxRange.first; si < staffIdxRange.second; ++si) {
+                TimeSig* nsig = toTimeSig(seg->element(si * VOICES));
+                if (!nsig) {
+                    continue;
                 }
+                nsig->undoChangeProperty(Pid::SHOW_COURTESY, ts->showCourtesySig());
+                nsig->undoChangeProperty(Pid::TIMESIG, QVariant::fromValue(ts->sig()));
+                nsig->undoChangeProperty(Pid::TIMESIG_TYPE, int(ts->timeSigType()));
+                nsig->undoChangeProperty(Pid::NUMERATOR_STRING, ts->numeratorString());
+                nsig->undoChangeProperty(Pid::DENOMINATOR_STRING, ts->denominatorString());
+                nsig->undoChangeProperty(Pid::TIMESIG_STRETCH, QVariant::fromValue(ts->stretch()));
+                nsig->undoChangeProperty(Pid::GROUPS, QVariant::fromValue(ts->groups()));
+                nsig->setSelected(false);
+                nsig->setDropTarget(0);
             }
         }
     } else {
@@ -1364,7 +1369,9 @@ void Score::cmdRemoveTimeSig(TimeSig* ts)
     Score* rScore = masterScore();
     Measure* rm = rScore->tick2measure(m->tick());
     Segment* rs = rm->findSegment(SegmentType::TimeSig, s->tick());
-    rScore->undoRemoveElement(rs);
+    if (rs) {
+        rScore->undoRemoveElement(rs);
+    }
 
     Measure* pm = m->prevMeasure();
     Fraction ns(pm ? pm->timesig() : Fraction(4,4));
@@ -5364,7 +5371,7 @@ void Score::undoAddElement(Element* element)
                 if (ne->isFretDiagram()) {
                     FretDiagram* fd = toFretDiagram(ne);
                     Harmony* fdHarmony = fd->harmony();
-                    if (fd) {
+                    if (fdHarmony) {
                         fdHarmony->setScore(score);
                         fdHarmony->setSelected(false);
                         fdHarmony->setTrack(staffIdx * VOICES + element->voice());
@@ -5442,8 +5449,7 @@ void Score::undoAddElement(Element* element)
                      || element->isFermata()
                      || element->isHarmony()) {
                 Segment* segment
-                    = element->parent()->isFretDiagram() ? toSegment(element->parent()->parent()) : toSegment(
-                          element->parent());
+                    = element->parent()->isFretDiagram() ? toSegment(element->parent()->parent()) : toSegment(element->parent());
                 Fraction tick    = segment->tick();
                 Measure* m       = score->tick2measure(tick);
                 if ((segment->segmentType() == SegmentType::EndBarLine) && (m->tick() == tick)) {

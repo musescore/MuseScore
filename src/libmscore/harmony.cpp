@@ -1207,8 +1207,8 @@ const ChordDescription* Harmony::fromXml(const QString& kind)
 //    then generate chord description from that
 //---------------------------------------------------------
 
-const ChordDescription* Harmony::fromXml(const QString& kind, const QString& kindText, const QString& symbols,
-                                         const QString& parens, const QList<HDegree>& dl)
+const ChordDescription* Harmony::fromXml(const QString& kind, const QString& kindText, const QString& symbols, const QString& parens,
+                                         const QList<HDegree>& dl)
 {
     ParsedChord* pc = new ParsedChord;
     _textName = pc->fromXml(kind, kindText, symbols, parens, dl, score()->style().chordList());
@@ -1546,8 +1546,12 @@ void Harmony::draw(QPainter* painter) const
     for (const TextSegment* ts : textList) {
         QFont f(ts->font);
         f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+#ifndef Q_OS_MACOS
+        TextBase::drawTextWorkaround(painter, f, ts->pos(), ts->text);
+#else
         painter->setFont(f);
         painter->drawText(ts->pos(), ts->text);
+#endif
     }
 }
 
