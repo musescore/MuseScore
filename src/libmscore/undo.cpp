@@ -79,6 +79,7 @@
 #include "bracket.h"
 #include "fret.h"
 #include "textedit.h"
+#include "textline.h"
 
 namespace Ms {
 extern Measure* tick2measure(int tick);
@@ -2300,6 +2301,18 @@ void ChangeBracketProperty::flip(EditData* ed)
     element = staff->brackets()[level];
     ChangeProperty::flip(ed);
     level = toBracketItem(element)->column();
+}
+
+//---------------------------------------------------------
+//   ChangeTextLineProperty::flip
+//---------------------------------------------------------
+
+void ChangeTextLineProperty::flip(EditData* ed)
+{
+    ChangeProperty::flip(ed);
+    if (element->isTextLine()) {
+        toTextLine(element)->initStyle();
+    }
 }
 
 //---------------------------------------------------------

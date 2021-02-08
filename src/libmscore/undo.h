@@ -1126,6 +1126,20 @@ public:
 };
 
 //---------------------------------------------------------
+//   ChangeTextLineProperty
+//---------------------------------------------------------
+
+class ChangeTextLineProperty : public ChangeProperty
+{
+    void flip(EditData*) override;
+
+public:
+    ChangeTextLineProperty(ScoreElement* e, QVariant v)
+        : ChangeProperty(e, Pid::SYSTEM_FLAG, v, PropertyFlags::NOSTYLE) {}
+    UNDO_NAME("ChangeTextLineProperty")
+};
+
+//---------------------------------------------------------
 //   ChangeMetaText
 //---------------------------------------------------------
 
