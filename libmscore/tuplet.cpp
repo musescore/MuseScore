@@ -188,6 +188,12 @@ void Tuplet::layout()
                   _number->setVisible(visible());
                   resetNumberProperty();
                   }
+            // tuplet properties are propagated to number automatically by setProperty()
+            // but we need to make sure flags are as well
+            _number->setPropertyFlags(Pid::FONT_FACE, propertyFlags(Pid::FONT_FACE));
+            _number->setPropertyFlags(Pid::FONT_SIZE, propertyFlags(Pid::FONT_SIZE));
+            _number->setPropertyFlags(Pid::FONT_STYLE, propertyFlags(Pid::FONT_STYLE));
+            _number->setPropertyFlags(Pid::ALIGN, propertyFlags(Pid::ALIGN));
             if (_numberType == TupletNumberType::SHOW_NUMBER)
                   _number->setXmlText(QString("%1").arg(_ratio.numerator()));
             else
@@ -783,7 +789,8 @@ void Tuplet::write(XmlWriter& xml) const
 
       if (_number) {
             xml.stag("Number", _number);
-            _number->writeProperties(xml);
+            _number->writeProperty(xml, Pid::SUB_STYLE);
+            _number->writeProperty(xml, Pid::TEXT);
             xml.etag();
             }
 
@@ -821,19 +828,22 @@ bool Tuplet::readProperties(XmlReader& e)
             ;
       else if (tag == "bold") { //important that these properties are read after number is created
             bool val = e.readInt();
-            _number->setBold(val);
+            if (_number)
+                  _number->setBold(val);
             if (isStyled(Pid::FONT_STYLE))
                   setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
             }
       else if (tag == "italic") {
             bool val = e.readInt();
-            _number->setItalic(val);
+            if (_number)
+                  _number->setItalic(val);
             if (isStyled(Pid::FONT_STYLE))
                   setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
             }
       else if (tag == "underline") {
             bool val = e.readInt();
-            _number->setUnderline(val);
+            if (_number)
+                  _number->setUnderline(val);
             if (isStyled(Pid::FONT_STYLE))
                   setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
             }
