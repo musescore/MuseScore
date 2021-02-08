@@ -186,8 +186,8 @@ bool Score::read(XmlReader& e)
         if (e.error() == QXmlStreamReader::CustomError) {
             MScore::lastError = e.errorString();
         } else {
-            MScore::lastError = QObject::tr("XML read error at line %1, column %2: %3").arg(e.lineNumber()).arg(
-                e.columnNumber()).arg(e.name().toString());
+            MScore::lastError = QObject::tr("XML read error at line %1, column %2: %3").arg(e.lineNumber()).arg(e.columnNumber()).arg(
+                e.name().toString());
         }
         return false;
     }
@@ -331,7 +331,7 @@ void MasterScore::addMovement(MasterScore* score)
 //   read301
 //---------------------------------------------------------
 
-Score::FileError MasterScore::read301(XmlReader& e)
+Score::FileError MasterScore::read302(XmlReader& e)
 {
     bool top = true;
     while (e.readNextStartElement()) {

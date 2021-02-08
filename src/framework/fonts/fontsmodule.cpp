@@ -32,9 +32,11 @@ static void init_fonts_qrc()
     Q_INIT_RESOURCE(fonts_Leland);
     Q_INIT_RESOURCE(fonts_Bravura);
     Q_INIT_RESOURCE(fonts_Campania);
+    Q_INIT_RESOURCE(fonts_Edwin);
     Q_INIT_RESOURCE(fonts_Free);
     Q_INIT_RESOURCE(fonts_FreeSerif);
     Q_INIT_RESOURCE(fonts_Gootville);
+    Q_INIT_RESOURCE(fonts_Leland);
     Q_INIT_RESOURCE(fonts_MScore);
     Q_INIT_RESOURCE(fonts_MuseJazz);
     Q_INIT_RESOURCE(fonts_Smufl);
