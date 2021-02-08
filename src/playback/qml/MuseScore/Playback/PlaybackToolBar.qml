@@ -92,8 +92,8 @@ Rectangle {
                 maxValue: playbackModel.maxMeasureNumber
                 value: playbackModel.measureNumber
 
-                onValueChanged: {
-                    playbackModel.measureNumber = value
+                onValueEdited: {
+                    playbackModel.measureNumber = newValue
                 }
             }
 
@@ -108,8 +108,8 @@ Rectangle {
                 maxValue: playbackModel.maxBeatNumber
                 value: playbackModel.beatNumber
 
-                onValueChanged: {
-                    playbackModel.beatNumber = value
+                onValueEdited: {
+                    playbackModel.beatNumber = newValue
                 }
             }
 
