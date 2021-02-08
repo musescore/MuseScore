@@ -67,7 +67,7 @@ protected:
     void updateStyle() override;
 
 private slots:
-    void onToolbarEvent(QEvent* e);
+    void onWidgetEvent(QEvent* e) override;
 
 private:
     void resize(const QSize& size);
