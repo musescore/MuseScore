@@ -110,6 +110,7 @@ static const StyleType styleTypes[] {
 
     { Sid::lyricsOddFontFace,       "lyricsOddFontFace",       "Edwin" },
     { Sid::lyricsOddFontSize,       "lyricsOddFontSize",       11.0 },
+    { Sid::lyricsOddLineSpacing,    "lyricsOddLineSpacing",    1.0 },
     { Sid::lyricsOddFontSpatiumDependent, "lyricsOddFontSpatiumDependent", true },
     { Sid::lyricsOddFontStyle,      "lyricsOddFontStyle",      int(FontStyle::Normal) },
     { Sid::lyricsOddColor,          "lyricsOddColor",          QColor(0, 0, 0, 255) },
@@ -123,6 +124,7 @@ static const StyleType styleTypes[] {
 
     { Sid::lyricsEvenFontFace,      "lyricsEvenFontFace",      "Edwin" },
     { Sid::lyricsEvenFontSize,      "lyricsEvenFontSize",      11.0 },
+    { Sid::lyricsEvenLineSpacing,   "lyricsEvenLineSpacing",   1.0 },
     { Sid::lyricsEvenFontSpatiumDependent, "lyricsEvenFontSpatiumDependent", true },
     { Sid::lyricsEvenFontStyle,     "lyricsEvenFontStyle",     int(FontStyle::Normal) },
     { Sid::lyricsEvenColor,         "lyricsEvenColor",         QColor(0, 0, 0, 255) },
@@ -239,6 +241,7 @@ static const StyleType styleTypes[] {
     { Sid::hairpinLineWidth,        "hairpinWidth",            Spatium(0.13) },
     { Sid::hairpinFontFace,         "hairpinFontFace",         "Edwin" },
     { Sid::hairpinFontSize,         "hairpinFontSize",         12.0 },
+    { Sid::hairpinLineSpacing,      "hairpinLineSpacing",      1.0 },
     { Sid::hairpinFontSpatiumDependent, "hairpinFontSpatiumDependent", true },
     { Sid::hairpinFontStyle,        "hairpinFontStyle",        int(FontStyle::Italic) },
     { Sid::hairpinColor,            "hairpinColor",            QColor(0, 0, 0, 255) },
@@ -266,6 +269,7 @@ static const StyleType styleTypes[] {
     { Sid::pedalHookHeight,         "pedalHookHeight",         Spatium(-1.2) },
     { Sid::pedalFontFace,           "pedalFontFace",           "Edwin" },
     { Sid::pedalFontSize,           "pedalFontSize",           12.0 },
+    { Sid::pedalLineSpacing,        "pedalLineSpacing",        1.0 },
     { Sid::pedalFontSpatiumDependent, "pedalFontSpatiumDependent", true },
     { Sid::pedalFontStyle,          "pedalFontStyle",          int(FontStyle::Normal) },
     { Sid::pedalColor,              "pedalColor",              QColor(0, 0, 0, 255) },
@@ -313,6 +317,7 @@ static const StyleType styleTypes[] {
 
     { Sid::chordSymbolAFontFace,      "chordSymbolAFontFace",      "Edwin" },
     { Sid::chordSymbolAFontSize,      "chordSymbolAFontSize",      12.0 },
+    { Sid::chordSymbolALineSpacing,   "chordSymbolALineSpacing",   1.0 },
     { Sid::chordSymbolAFontSpatiumDependent, "chordSymbolAFontSpatiumDependent", true },
     { Sid::chordSymbolAFontStyle,     "chordSymbolAFontStyle",     int(FontStyle::Normal) },
     { Sid::chordSymbolAColor,         "chordSymbolAColor",         QColor(0, 0, 0, 255) },
@@ -326,6 +331,7 @@ static const StyleType styleTypes[] {
 
     { Sid::chordSymbolBFontFace,      "chordSymbolBFontFace",      "Edwin" },
     { Sid::chordSymbolBFontSize,      "chordSymbolBFontSize",      12.0 },
+    { Sid::chordSymbolBLineSpacing,   "chordSymbolBLineSpacing",   1.0 },
     { Sid::chordSymbolBFontSpatiumDependent, "chordSymbolBFontSpatiumDependent", true },
     { Sid::chordSymbolBFontStyle,     "chordSymbolBFontStyle",     int(FontStyle::Italic) },
     { Sid::chordSymbolBColor,         "chordSymbolBColor",         QColor(0, 0, 0, 255) },
@@ -339,6 +345,7 @@ static const StyleType styleTypes[] {
 
     { Sid::romanNumeralFontFace,      "romanNumeralFontFace",      "Campania" },
     { Sid::romanNumeralFontSize,      "romanNumeralFontSize",      12.0 },
+    { Sid::romanNumeralLineSpacing,   "romanNumeralLineSpacing",   1.0 },
     { Sid::romanNumeralFontSpatiumDependent, "romanNumeralFontSpatiumDependent", true },
     { Sid::romanNumeralFontStyle,     "romanNumeralFontStyle",     int(FontStyle::Normal) },
     { Sid::romanNumeralColor,         "romanNumeralColor",         QColor(0, 0, 0, 255) },
@@ -352,6 +359,7 @@ static const StyleType styleTypes[] {
 
     { Sid::nashvilleNumberFontFace,      "nashvilleNumberFontFace",      "FreeSerif" },
     { Sid::nashvilleNumberFontSize,      "nashvilleNumberFontSize",      12.0 },
+    { Sid::nashvilleNumberLineSpacing,   "nashvilleNumberLineSpacing",   1.0 },
     { Sid::nashvilleNumberFontSpatiumDependent, "nashvilleNumberFontSpatiumDependent", true },
     { Sid::nashvilleNumberFontStyle,     "nashvilleNumberFontStyle",     int(FontStyle::Normal) },
     { Sid::nashvilleNumberColor,         "nashvilleNumberColor",         QColor(0, 0, 0, 255) },
@@ -486,6 +494,7 @@ static const StyleType styleTypes[] {
     { Sid::voltaLineStyle,          "voltaLineStyle",          QVariant(int(Qt::SolidLine)) },
     { Sid::voltaFontFace,           "voltaFontFace",           "Edwin" },
     { Sid::voltaFontSize,           "voltaFontSize",           11.0 },
+    { Sid::voltaLineSpacing,        "voltaLineSpacing",        1.0 },
     { Sid::voltaFontSpatiumDependent, "voltaFontSpatiumDependent", true },
     { Sid::voltaFontStyle,          "voltaFontStyle",          int(FontStyle::Bold) },
     { Sid::voltaColor,              "voltaColor",              QColor(0, 0, 0, 255) },
@@ -540,6 +549,7 @@ static const StyleType styleTypes[] {
     { Sid::ottavaNumbersOnly,       "ottavaNumbersOnly",       true },
     { Sid::ottavaFontFace,          "ottavaFontFace",          "Edwin" },
     { Sid::ottavaFontSize,          "ottavaFontSize",          10.0 },
+    { Sid::ottavaLineSpacing,       "ottavaLineSpacing",       1.0 },
     { Sid::ottavaFontSpatiumDependent, "ottavaFontSpatiumDependent", true },
     { Sid::ottavaFontStyle,         "ottavaFontStyle",         int(FontStyle::Normal) },
     { Sid::ottavaColor,             "ottavaColor",             QColor(0, 0, 0, 255) },
@@ -578,6 +588,7 @@ static const StyleType styleTypes[] {
     { Sid::tupletBracketType,       "tupletBracketType",       int(TupletBracketType::AUTO_BRACKET) },
     { Sid::tupletFontFace,          "tupletFontFace",          "Edwin" },
     { Sid::tupletFontSize,          "tupletFontSize",          10.0 },
+    { Sid::tupletLineSpacing,       "tupletLineSpacing",       1.0 },
     { Sid::tupletFontSpatiumDependent, "tupletFontSpatiumDependent", true },
     { Sid::tupletFontStyle,         "tupletFontStyle",         int(FontStyle::Italic) },
     { Sid::tupletColor,             "tupletColor",             QColor(0, 0, 0, 255) },
@@ -633,6 +644,7 @@ static const StyleType styleTypes[] {
 
     { Sid::defaultFontFace,               "defaultFontFace",               "Edwin" },
     { Sid::defaultFontSize,               "defaultFontSize",               10.0 },
+    { Sid::defaultLineSpacing,            "defaultLineSpacing",            1.0 },
     { Sid::defaultFontSpatiumDependent,   "defaultFontSpatiumDependent",   true },
     { Sid::defaultFontStyle,              "defaultFontStyle",              int(FontStyle::Normal) },
     { Sid::defaultColor,                  "defaultColor",                  QColor(0, 0, 0, 255) },
@@ -650,6 +662,7 @@ static const StyleType styleTypes[] {
 
     { Sid::titleFontFace,                 "titleFontFace",                 "Edwin" },
     { Sid::titleFontSize,                 "titleFontSize",                 24.0 },
+    { Sid::titleLineSpacing,              "titleLineSpacing",              1.0 },
     { Sid::titleFontSpatiumDependent,     "titleFontSpatiumDependent",     false },
     { Sid::titleFontStyle,                "titleFontStyle",                int(FontStyle::Normal) },
     { Sid::titleColor,                    "titleColor",                    QColor(0, 0, 0, 255) },
@@ -665,6 +678,7 @@ static const StyleType styleTypes[] {
 
     { Sid::subTitleFontFace,              "subTitleFontFace",              "Edwin" },
     { Sid::subTitleFontSize,              "subTitleFontSize",              14.0 },
+    { Sid::subTitleLineSpacing,           "subTitleLineSpacing",           1.0 },
     { Sid::subTitleFontSpatiumDependent,  "subTitleFontSpatiumDependent",  false },
     { Sid::subTitleFontStyle,             "subTitleFontStyle",             int(FontStyle::Normal) },
     { Sid::subTitleColor,                 "subTitleColor",                 QColor(0, 0, 0, 255) },
@@ -680,6 +694,7 @@ static const StyleType styleTypes[] {
 
     { Sid::composerFontFace,              "composerFontFace",              "Edwin" },
     { Sid::composerFontSize,              "composerFontSize",              11.0 },
+    { Sid::composerLineSpacing,           "composerLineSpacing",           1.0 },
     { Sid::composerFontSpatiumDependent,  "composerFontSpatiumDependent",  false },
     { Sid::composerFontStyle,             "composerFontStyle",             int(FontStyle::Normal) },
     { Sid::composerColor,                 "composerColor",                 QColor(0, 0, 0, 255) },
@@ -695,6 +710,7 @@ static const StyleType styleTypes[] {
 
     { Sid::lyricistFontFace,              "lyricistFontFace",              "Edwin" },
     { Sid::lyricistFontSize,              "lyricistFontSize",              11.0 },
+    { Sid::lyricistLineSpacing,           "lyricistLineSpacing",           1.0 },
     { Sid::lyricistFontSpatiumDependent,  "lyricistFontSpatiumDependent",  false },
     { Sid::lyricistFontStyle,             "lyricistFontStyle",             int(FontStyle::Normal) },
     { Sid::lyricistColor,                 "lyricistColor",                 QColor(0, 0, 0, 255) },
@@ -710,6 +726,7 @@ static const StyleType styleTypes[] {
 
     { Sid::fingeringFontFace,             "fingeringFontFace",             "Edwin" },
     { Sid::fingeringFontSize,             "fingeringFontSize",             8.0 },
+    { Sid::fingeringLineSpacing,          "fingeringLineSpacing",          1.0 },
     { Sid::fingeringFontSpatiumDependent, "fingeringFontSpatiumDependent", true },
     { Sid::fingeringFontStyle,            "fingeringFontStyle",             int(FontStyle::Normal) },
     { Sid::fingeringColor,                "fingeringColor",                QColor(0, 0, 0, 255) },
@@ -724,6 +741,7 @@ static const StyleType styleTypes[] {
 
     { Sid::lhGuitarFingeringFontFace,     "lhGuitarFingeringFontFace",     "Edwin" },
     { Sid::lhGuitarFingeringFontSize,     "lhGuitarFingeringFontSize",     8.0 },
+    { Sid::lhGuitarFingeringLineSpacing,  "lhGuitarFingeringLineSpacing",  1.0 },
     { Sid::lhGuitarFingeringFontSpatiumDependent, "lhGuitarFingeringFontSpatiumDependent", true },
     { Sid::lhGuitarFingeringFontStyle,    "lhGuitarFingeringFontStyle",    int(FontStyle::Normal) },
     { Sid::lhGuitarFingeringColor,        "lhGuitarFingeringColor",        QColor(0, 0, 0, 255) },
@@ -738,6 +756,7 @@ static const StyleType styleTypes[] {
 
     { Sid::rhGuitarFingeringFontFace,     "rhGuitarFingeringFontFace",     "Edwin" },
     { Sid::rhGuitarFingeringFontSize,     "rhGuitarFingeringFontSize",     8.0 },
+    { Sid::rhGuitarFingeringLineSpacing,  "rhGuitarFingeringLineSpacing",  1.0 },
     { Sid::rhGuitarFingeringFontSpatiumDependent, "rhGuitarFingeringFontSpatiumDependent", true },
     { Sid::rhGuitarFingeringFontStyle,    "rhGuitarFingeringFontStyle",    int(FontStyle::Normal) },
     { Sid::rhGuitarFingeringColor,        "rhGuitarFingeringColor",        QColor(0, 0, 0, 255) },
@@ -752,6 +771,7 @@ static const StyleType styleTypes[] {
 
     { Sid::stringNumberFontFace,          "stringNumberFontFace",          "Edwin" },
     { Sid::stringNumberFontSize,          "stringNumberFontSize",          8.0 },
+    { Sid::stringNumberLineSpacing,       "stringNumberLineSpacing",       1.0 },
     { Sid::stringNumberFontSpatiumDependent, "stringNumberFontSpatiumDependent", true },
     { Sid::stringNumberFontStyle,         "stringNumberFontStyle",         int(FontStyle::Normal) },
     { Sid::stringNumberColor,             "stringNumberColor",             QColor(0, 0, 0, 255) },
@@ -766,6 +786,7 @@ static const StyleType styleTypes[] {
 
     { Sid::longInstrumentFontFace,        "longInstrumentFontFace",       "Edwin" },
     { Sid::longInstrumentFontSize,        "longInstrumentFontSize",       12.0 },
+    { Sid::longInstrumentLineSpacing,     "longInstrumentLineSpacing",    1.0 },
     { Sid::longInstrumentFontSpatiumDependent, "longInstrumentFontSpatiumDependent", true },
     { Sid::longInstrumentFontStyle,       "longInstrumentFontStyle",      int(FontStyle::Normal) },
     { Sid::longInstrumentColor,           "longInstrumentColor",          QColor(0, 0, 0, 255) },
@@ -780,6 +801,7 @@ static const StyleType styleTypes[] {
 
     { Sid::shortInstrumentFontFace,       "shortInstrumentFontFace",      "Edwin" },
     { Sid::shortInstrumentFontSize,       "shortInstrumentFontSize",      12.0 },
+    { Sid::shortInstrumentLineSpacing,    "shortInstrumentLineSpacing",   1.0 },
     { Sid::shortInstrumentFontSpatiumDependent, "shortInstrumentFontSpatiumDependent", true },
     { Sid::shortInstrumentFontStyle,      "shortInstrumentFontStyle",     int(FontStyle::Normal) },
     { Sid::shortInstrumentColor,          "shortInstrumentColor",         QColor(0, 0, 0, 255) },
@@ -794,6 +816,7 @@ static const StyleType styleTypes[] {
 
     { Sid::partInstrumentFontFace,        "partInstrumentFontFace",       "Edwin" },
     { Sid::partInstrumentFontSize,        "partInstrumentFontSize",       18.0 },
+    { Sid::partInstrumentLineSpacing,     "partInstrumentLineSpacing",    1.0 },
     { Sid::partInstrumentFontSpatiumDependent, "partInstrumentFontSpatiumDependent", false },
     { Sid::partInstrumentFontStyle,       "partInstrumentFontStyle",      int(FontStyle::Normal) },
     { Sid::partInstrumentColor,           "partInstrumentColor",          QColor(0, 0, 0, 255) },
@@ -808,6 +831,7 @@ static const StyleType styleTypes[] {
 
     { Sid::dynamicsFontFace,              "dynamicsFontFace",             "Edwin" },
     { Sid::dynamicsFontSize,              "dynamicsFontSize",             12.0 },
+    { Sid::dynamicsLineSpacing,           "dynamicsLineSpacing",          1.0 },
     { Sid::dynamicsFontSpatiumDependent,  "dynamicsFontSpatiumDependent", true },
     { Sid::dynamicsFontStyle,             "dynamicsFontStyle",            int(FontStyle::Italic) },
     { Sid::dynamicsColor,                 "dynamicsColor",                QColor(0, 0, 0, 255) },
@@ -821,6 +845,7 @@ static const StyleType styleTypes[] {
 
     { Sid::expressionFontFace,            "expressionFontFace",           "Edwin" },
     { Sid::expressionFontSize,            "expressionFontSize",           11.0 },
+    { Sid::expressionLineSpacing,         "expressionLineSpacing",        1.0 },
     { Sid::expressionFontSpatiumDependent, "expressionFontSpatiumDependent", true },
     { Sid::expressionFontStyle,           "expressionFontStyle",          int(FontStyle::Italic) },
     { Sid::expressionColor,               "expressionColor",              QColor(0, 0, 0, 255) },
@@ -836,6 +861,7 @@ static const StyleType styleTypes[] {
 
     { Sid::tempoFontFace,                 "tempoFontFace",                "Edwin" },
     { Sid::tempoFontSize,                 "tempoFontSize",                12.0 },
+    { Sid::tempoLineSpacing,              "tempoLineSpacing",             1.0 },
     { Sid::tempoFontSpatiumDependent,     "tempoFontSpatiumDependent",    true },
     { Sid::tempoFontStyle,                "tempoFontStyle",               int(FontStyle::Bold) },
     { Sid::tempoColor,                    "tempoColor",                   QColor(0, 0, 0, 255) },
@@ -854,6 +880,7 @@ static const StyleType styleTypes[] {
 
     { Sid::metronomeFontFace,             "metronomeFontFace",            "Edwin" },
     { Sid::metronomeFontSize,             "metronomeFontSize",            12.0 },
+    { Sid::metronomeLineSpacing,          "metronomeLineSpacing",         1.0 },
     { Sid::metronomeFontSpatiumDependent, "metronomeFontSpatiumDependent", false },
     { Sid::metronomeFontStyle,            "metronomeFontStyle",           int(FontStyle::Bold) },
     { Sid::metronomeColor,                "metronomeColor",               QColor(0, 0, 0, 255) },
@@ -869,6 +896,7 @@ static const StyleType styleTypes[] {
 
     { Sid::measureNumberFontFace,         "measureNumberFontFace",        "Edwin" },
     { Sid::measureNumberFontSize,         "measureNumberFontSize",        8.0 },
+    { Sid::measureNumberLineSpacing,      "measureNumberLineSpacing",     1.0 },
     { Sid::measureNumberFontSpatiumDependent, "measureNumberFontSpatiumDependent", true },
     { Sid::measureNumberFontStyle,        "measureNumberFontStyle",       int(FontStyle::Normal) },
     { Sid::measureNumberColor,            "measureNumberColor",           QColor(0, 0, 0, 255) },
@@ -907,6 +935,8 @@ static const StyleType styleTypes[] {
 
     { Sid::translatorFontFace,            "translatorFontFace",           "Edwin" },
     { Sid::translatorFontSize,            "translatorFontSize",           11.0 },
+    { Sid::translatorLineSpacing,         "translatorLineSpacing",        1.0 },
+
     { Sid::translatorFontSpatiumDependent, "translatorFontSpatiumDependent", false },
     { Sid::translatorFontStyle,           "translatorFontStyle",          int(FontStyle::Normal) },
     { Sid::translatorColor,               "translatorColor",              QColor(0, 0, 0, 255) },
@@ -921,6 +951,7 @@ static const StyleType styleTypes[] {
 
     { Sid::systemTextFontFace,            "systemFontFace",               "Edwin" },
     { Sid::systemTextFontSize,            "systemFontSize",               10.0 },
+    { Sid::systemTextLineSpacing,         "systemTextLineSpacing",        1.0 },
     { Sid::systemTextFontSpatiumDependent, "systemFontSpatiumDependent",  true },
     { Sid::systemTextFontStyle,           "systemFontStyle",              int(FontStyle::Normal) },
     { Sid::systemTextColor,               "systemTextColor",              QColor(0, 0, 0, 255) },
@@ -939,6 +970,7 @@ static const StyleType styleTypes[] {
 
     { Sid::staffTextFontFace,             "staffFontFace",                "Edwin" },
     { Sid::staffTextFontSize,             "staffFontSize",                10.0 },
+    { Sid::staffTextLineSpacing,          "staffTextLineSpacing",         1.0 },
     { Sid::staffTextFontSpatiumDependent, "staffFontSpatiumDependent",    true },
     { Sid::staffTextFontStyle,            "staffFontStyle",               int(FontStyle::Normal) },
     { Sid::staffTextColor,                "staffTextColor",               QColor(0, 0, 0, 255) },
@@ -957,6 +989,7 @@ static const StyleType styleTypes[] {
 
     { Sid::rehearsalMarkFontFace,         "rehearsalMarkFontFace",        "Edwin" },
     { Sid::rehearsalMarkFontSize,         "rehearsalMarkFontSize",        14.0 },
+    { Sid::rehearsalMarkLineSpacing,      "rehearsalMarkLineSpacing",     1.0 },
     { Sid::rehearsalMarkFontSpatiumDependent, "rehearsalMarkFontSpatiumDependent", true },
     { Sid::rehearsalMarkFontStyle,        "rehearsalMarkFontStyle",       int(FontStyle::Bold) },
     { Sid::rehearsalMarkColor,            "rehearsalMarkColor",           QColor(0, 0, 0, 255) },
@@ -974,6 +1007,7 @@ static const StyleType styleTypes[] {
 
     { Sid::repeatLeftFontFace,            "repeatLeftFontFace",           "Edwin" },
     { Sid::repeatLeftFontSize,            "repeatLeftFontSize",           20.0 },
+    { Sid::repeatLeftLineSpacing,         "repeatLeftLineSpacing",        1.0 },
     { Sid::repeatLeftFontSpatiumDependent, "repeatLeftFontSpatiumDependent", true },
     { Sid::repeatLeftFontStyle,           "repeatLeftFontStyle",          int(FontStyle::Normal) },
     { Sid::repeatLeftColor,               "repeatLeftColor",              QColor(0, 0, 0, 255) },
@@ -988,6 +1022,7 @@ static const StyleType styleTypes[] {
 
     { Sid::repeatRightFontFace,           "repeatRightFontFace",          "Edwin" },
     { Sid::repeatRightFontSize,           "repeatRightFontSize",          12.0 },
+    { Sid::repeatRightLineSpacing,        "repeatRightLineSpacing",       1.0 },
     { Sid::repeatRightFontSpatiumDependent, "repeatRightFontSpatiumDependent", true },
     { Sid::repeatRightFontStyle,          "repeatRightFontStyle",         int(FontStyle::Normal) },
     { Sid::repeatRightColor,              "repeatRightColor",             QColor(0, 0, 0, 255) },
@@ -1002,6 +1037,7 @@ static const StyleType styleTypes[] {
 
     { Sid::frameFontFace,                 "frameFontFace",                "Edwin" },
     { Sid::frameFontSize,                 "frameFontSize",                12.0 },
+    { Sid::frameLineSpacing,              "frameLineSpacing",             1.0 },
     { Sid::frameFontSpatiumDependent,     "frameFontSpatiumDependent",    false },
     { Sid::frameFontStyle,                "frameFontStyle",               int(FontStyle::Normal) },
     { Sid::frameColor,                    "frameColor",                   QColor(0, 0, 0, 255) },
@@ -1016,6 +1052,7 @@ static const StyleType styleTypes[] {
 
     { Sid::textLineFontFace,              "textLineFontFace",             "Edwin" },
     { Sid::textLineFontSize,              "textLineFontSize",             11.0 },
+    { Sid::textLineLineSpacing,           "textLineLineSpacing",          1.0 },
     { Sid::textLineFontSpatiumDependent,  "textLineFontSpatiumDependent", true },
     { Sid::textLineFontStyle,             "textLineFontStyle",            int(FontStyle::Normal) },
     { Sid::textLineColor,                 "textLineColor",                QColor(0, 0, 0, 255) },
@@ -1032,6 +1069,7 @@ static const StyleType styleTypes[] {
 
     { Sid::glissandoFontFace,             "glissandoFontFace",            "Edwin" },
     { Sid::glissandoFontSize,             "glissandoFontSize",            QVariant(8.0) },
+    { Sid::glissandoLineSpacing,          "glissandoLineSpacing",          1.0 },
     { Sid::glissandoFontSpatiumDependent, "glissandoFontSpatiumDependent", true },
     { Sid::glissandoFontStyle,            "glissandoFontStyle",           int(FontStyle::Italic) },
     { Sid::glissandoColor,                "glissandoColor",               QColor(0, 0, 0, 255) },
@@ -1048,6 +1086,7 @@ static const StyleType styleTypes[] {
 
     { Sid::bendFontFace,                  "bendFontFace",                 "Edwin" },
     { Sid::bendFontSize,                  "bendFontSize",                 8.0 },
+    { Sid::bendLineSpacing,               "bendLineSpacing",              1.0 },
     { Sid::bendFontSpatiumDependent,      "bendFontSpatiumDependent",     true },
     { Sid::bendFontStyle,                 "bendFontStyle",                int(FontStyle::Normal) },
     { Sid::bendColor,                     "bendColor",                    QColor(0, 0, 0, 255) },
@@ -1064,6 +1103,7 @@ static const StyleType styleTypes[] {
 
     { Sid::headerFontFace,                "headerFontFace",               "Edwin" },
     { Sid::headerFontSize,                "headerFontSize",               8.0 },
+    { Sid::headerLineSpacing,             "headerLineSpacing",            1.0 },
     { Sid::headerFontSpatiumDependent,    "headerFontSpatiumDependent",   false },
     { Sid::headerFontStyle,               "headerFontStyle",              int(FontStyle::Normal) },
     { Sid::headerColor,                   "headerColor",                  QColor(0, 0, 0, 255) },
@@ -1078,6 +1118,7 @@ static const StyleType styleTypes[] {
 
     { Sid::footerFontFace,                "footerFontFace",               "Edwin" },
     { Sid::footerFontSize,                "footerFontSize",               8.0 },
+    { Sid::footerLineSpacing,             "footerLineSpacing",            1.0 },
     { Sid::footerFontSpatiumDependent,    "footerFontSpatiumDependent",   false },
     { Sid::footerFontStyle,               "footerFontStyle",              int(FontStyle::Normal) },
     { Sid::footerColor,                   "footerColor",                  QColor(0, 0, 0, 255) },
@@ -1092,6 +1133,7 @@ static const StyleType styleTypes[] {
 
     { Sid::instrumentChangeFontFace,      "instrumentChangeFontFace",     "Edwin" },
     { Sid::instrumentChangeFontSize,      "instrumentChangeFontSize",     12.0 },
+    { Sid::instrumentChangeLineSpacing,   "instrumentChangeLineSpacing",  1.0 },
     { Sid::instrumentChangeFontSpatiumDependent, "instrumentChangeFontSpatiumDependent", true },
     { Sid::instrumentChangeFontStyle,     "instrumentChangeFontStyle",    int(FontStyle::Bold) },
     { Sid::instrumentChangeColor,         "instrumentChangeColor",        QColor(0, 0, 0, 255) },
@@ -1110,6 +1152,7 @@ static const StyleType styleTypes[] {
 
     { Sid::stickingFontFace,              "stickingFontFace",     "Edwin" },
     { Sid::stickingFontSize,              "stickingFontSize",     12.0 },
+    { Sid::stickingLineSpacing,           "stickingLineSpacing",  1.0 },
     { Sid::stickingFontSpatiumDependent,  "stickingFontSpatiumDependent", true },
     { Sid::stickingFontStyle,             "stickingFontStyle",    int(FontStyle::Normal) },
     { Sid::stickingColor,                 "stickingColor",        QColor(0, 0, 0, 255) },
@@ -1128,6 +1171,7 @@ static const StyleType styleTypes[] {
 
     { Sid::figuredBassFontFace,           "figuredBassFontFace",          "MScoreBC" },
     { Sid::figuredBassFontSize,           "figuredBassFontSize",          8.0 },
+    { Sid::figuredBassLineSpacing,        "figuredBassLineSpacing",       1.0 },
     { Sid::figuredBassFontSpatiumDependent, "figuredBassFontSpatiumDependent", true },
     { Sid::figuredBassFontStyle,          "figuredBassFontStyle",         int(FontStyle::Normal) },
     { Sid::figuredBassColor,              "figuredBassColor",             QColor(0, 0, 0, 255) },
@@ -1135,6 +1179,7 @@ static const StyleType styleTypes[] {
     { Sid::user1Name,                     "user1Name",                    "" },
     { Sid::user1FontFace,                 "user1FontFace",                "Edwin" },
     { Sid::user1FontSize,                 "user1FontSize",                10.0 },
+    { Sid::user1LineSpacing,              "user1LineSpacing",             1.0 },
     { Sid::user1FontSpatiumDependent,     "user1FontSpatiumDependent",    true },
     { Sid::user1FontStyle,                "user1FontStyle",               int(FontStyle::Normal) },
     { Sid::user1Color,                    "user1Color",                   QColor(0, 0, 0, 255) },
@@ -1151,6 +1196,7 @@ static const StyleType styleTypes[] {
     { Sid::user2Name,                     "user2Name",                    "" },
     { Sid::user2FontFace,                 "user2FontFace",                "Edwin" },
     { Sid::user2FontSize,                 "user2FontSize",                10.0 },
+    { Sid::user2LineSpacing,              "user2LineSpacing",             1.0 },
     { Sid::user2FontSpatiumDependent,     "user2FontSpatiumDependent",    true },
     { Sid::user2FontStyle,                "user2FontStyle",               int(FontStyle::Normal) },
     { Sid::user2Color,                    "user2Color",                   QColor(0, 0, 0, 255) },
@@ -1167,6 +1213,7 @@ static const StyleType styleTypes[] {
     { Sid::user3Name,                     "user3Name",                    "" },
     { Sid::user3FontFace,                 "user3FontFace",                "Edwin" },
     { Sid::user3FontSize,                 "user3FontSize",                10.0 },
+    { Sid::user3LineSpacing,              "user3LineSpacing",             1.0 },
     { Sid::user3FontSpatiumDependent,     "user3FontSpatiumDependent",    true },
     { Sid::user3FontStyle,                "user3FontStyle",               int(FontStyle::Normal) },
     { Sid::user3Color,                    "user3Color",                   QColor(0, 0, 0, 255) },
@@ -1183,6 +1230,7 @@ static const StyleType styleTypes[] {
     { Sid::user4Name,                     "user4Name",                    "" },
     { Sid::user4FontFace,                 "user4FontFace",                "Edwin" },
     { Sid::user4FontSize,                 "user4FontSize",                10.0 },
+    { Sid::user4LineSpacing,              "user4LineSpacing",             1.0 },
     { Sid::user4FontSpatiumDependent,     "user4FontSpatiumDependent",    true },
     { Sid::user4FontStyle,                "user4FontStyle",               int(FontStyle::Normal) },
     { Sid::user4Color,                    "user4Color",                   QColor(0, 0, 0, 255) },
@@ -1199,6 +1247,7 @@ static const StyleType styleTypes[] {
     { Sid::user5Name,                     "user5Name",                    "" },
     { Sid::user5FontFace,                 "user5FontFace",                "Edwin" },
     { Sid::user5FontSize,                 "user5FontSize",                10.0 },
+    { Sid::user5LineSpacing,              "user5LineSpacing",             1.0 },
     { Sid::user5FontSpatiumDependent,     "user5FontSpatiumDependent",    true },
     { Sid::user5FontStyle,                "user5FontStyle",               int(FontStyle::Normal) },
     { Sid::user5Color,                    "user5Color",                   QColor(0, 0, 0, 255) },
@@ -1215,6 +1264,7 @@ static const StyleType styleTypes[] {
     { Sid::user6Name,                     "user6Name",                    "" },
     { Sid::user6FontFace,                 "user6FontFace",                "Edwin" },
     { Sid::user6FontSize,                 "user6FontSize",                10.0 },
+    { Sid::user6LineSpacing,              "user6LineSpacing",             1.0 },
     { Sid::user6FontSpatiumDependent,     "user6FontSpatiumDependent",    true },
     { Sid::user6FontStyle,                "user6FontStyle",               int(FontStyle::Normal) },
     { Sid::user6Color,                    "user6Color",                   QColor(0, 0, 0, 255) },
@@ -1231,6 +1281,7 @@ static const StyleType styleTypes[] {
     { Sid::user7Name,                     "user7Name",                    "" },
     { Sid::user7FontFace,                 "user7FontFace",                "Edwin" },
     { Sid::user7FontSize,                 "user7FontSize",                10.0 },
+    { Sid::user7LineSpacing,              "user7LineSpacing",             1.0 },
     { Sid::user7FontSpatiumDependent,     "user7FontSpatiumDependent",    true },
     { Sid::user7FontStyle,                "user7FontStyle",               int(FontStyle::Normal) },
     { Sid::user7Color,                    "user7Color",                   QColor(0, 0, 0, 255) },
@@ -1247,6 +1298,7 @@ static const StyleType styleTypes[] {
     { Sid::user8Name,                     "user8Name",                    "" },
     { Sid::user8FontFace,                 "user8FontFace",                "Edwin" },
     { Sid::user8FontSize,                 "user8FontSize",                10.0 },
+    { Sid::user8LineSpacing,              "user8LineSpacing",             1.0 },
     { Sid::user8FontSpatiumDependent,     "user8FontSpatiumDependent",    true },
     { Sid::user8FontStyle,                "user8FontStyle",               int(FontStyle::Normal) },
     { Sid::user8Color,                    "user8Color",                   QColor(0, 0, 0, 255) },
@@ -1263,6 +1315,7 @@ static const StyleType styleTypes[] {
     { Sid::user9Name,                     "user9Name",                    "" },
     { Sid::user9FontFace,                 "user9FontFace",                "Edwin" },
     { Sid::user9FontSize,                 "user9FontSize",                10.0 },
+    { Sid::user9LineSpacing,              "user9LineSpacing",             1.0 },
     { Sid::user9FontSpatiumDependent,     "user9FontSpatiumDependent",    true },
     { Sid::user9FontStyle,                "user9FontStyle",               int(FontStyle::Normal) },
     { Sid::user9Color,                    "user9Color",                   QColor(0, 0, 0, 255) },
@@ -1279,6 +1332,7 @@ static const StyleType styleTypes[] {
     { Sid::user10Name,                    "user10Name",                   "" },
     { Sid::user10FontFace,                "user10FontFace",               "Edwin" },
     { Sid::user10FontSize,                "user10FontSize",               10.0 },
+    { Sid::user10LineSpacing,             "user10LineSpacing",            1.0 },
     { Sid::user10FontSpatiumDependent,    "user10FontSpatiumDependent",   true },
     { Sid::user10FontStyle,               "user10FontStyle",              int(FontStyle::Normal) },
     { Sid::user10Color,                   "user10Color",                  QColor(0, 0, 0, 255) },
@@ -1295,6 +1349,7 @@ static const StyleType styleTypes[] {
     { Sid::user11Name,                    "user11Name",                   "" },
     { Sid::user11FontFace,                "user11FontFace",               "Edwin" },
     { Sid::user11FontSize,                "user11FontSize",               10.0 },
+    { Sid::user11LineSpacing,             "user11LineSpacing",            1.0 },
     { Sid::user11FontSpatiumDependent,    "user11FontSpatiumDependent",   true },
     { Sid::user11FontStyle,               "user11FontStyle",              int(FontStyle::Normal) },
     { Sid::user11Color,                   "user11Color",                  QColor(0, 0, 0, 255) },
@@ -1311,6 +1366,7 @@ static const StyleType styleTypes[] {
     { Sid::user12Name,                    "user12Name",                   "" },
     { Sid::user12FontFace,                "user12FontFace",               "Edwin" },
     { Sid::user12FontSize,                "user12FontSize",               10.0 },
+    { Sid::user12LineSpacing,             "user12LineSpacing",            1.0 },
     { Sid::user12FontSpatiumDependent,    "user12FontSpatiumDependent",   true },
     { Sid::user12FontStyle,               "user12FontStyle",              int(FontStyle::Normal) },
     { Sid::user12Color,                   "user12Color",                  QColor(0, 0, 0, 255) },
@@ -1326,6 +1382,7 @@ static const StyleType styleTypes[] {
 
     { Sid::letRingFontFace,               "letRingFontFace",              "Edwin" },
     { Sid::letRingFontSize,               "letRingFontSize",              10.0 },
+    { Sid::letRingLineSpacing,            "letRingLineSpacing",           1.0 },
     { Sid::letRingFontSpatiumDependent,   "letRingFontSpatiumDependent",  true },
     { Sid::letRingFontStyle,              "letRingFontStyle",             int(FontStyle::Normal) },
     { Sid::letRingColor,                  "letRingColor",                 QColor(0, 0, 0, 255) },
@@ -1348,6 +1405,7 @@ static const StyleType styleTypes[] {
 
     { Sid::palmMuteFontFace,              "palmMuteFontFace",              "Edwin" },
     { Sid::palmMuteFontSize,              "palmMuteFontSize",              10.0 },
+    { Sid::palmMuteLineSpacing,           "palmMuteLineSpacing",           1.0 },
     { Sid::palmMuteFontSpatiumDependent,  "palmMuteFontSpatiumDependent",  true },
     { Sid::palmMuteFontStyle,             "palmMuteFontStyle",             int(FontStyle::Normal) },
     { Sid::palmMuteColor,                 "palmMuteColor",                 QColor(0, 0, 0, 255) },
@@ -1404,6 +1462,7 @@ MStyle MScore::_defaultStyle;
 const TextStyle defaultTextStyle { {
     { Sid::defaultFontFace,                    Pid::FONT_FACE },
     { Sid::defaultFontSize,                    Pid::FONT_SIZE },
+    { Sid::defaultLineSpacing,                 Pid::TEXT_LINE_SPACING },
     { Sid::defaultFontSpatiumDependent,        Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::defaultFontStyle,                   Pid::FONT_STYLE },
     { Sid::defaultColor,                       Pid::COLOR },
@@ -1420,6 +1479,7 @@ const TextStyle defaultTextStyle { {
 const TextStyle titleTextStyle { {
     { Sid::titleFontFace,                      Pid::FONT_FACE },
     { Sid::titleFontSize,                      Pid::FONT_SIZE },
+    { Sid::titleLineSpacing,                   Pid::TEXT_LINE_SPACING },
     { Sid::titleFontSpatiumDependent,          Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::titleFontStyle,                     Pid::FONT_STYLE },
     { Sid::titleColor,                         Pid::COLOR },
@@ -1436,6 +1496,7 @@ const TextStyle titleTextStyle { {
 const TextStyle subTitleTextStyle { {
     { Sid::subTitleFontFace,                   Pid::FONT_FACE },
     { Sid::subTitleFontSize,                   Pid::FONT_SIZE },
+    { Sid::subTitleLineSpacing,                Pid::TEXT_LINE_SPACING },
     { Sid::subTitleFontSpatiumDependent,       Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::subTitleFontStyle,                  Pid::FONT_STYLE },
     { Sid::subTitleColor,                      Pid::COLOR },
@@ -1452,6 +1513,7 @@ const TextStyle subTitleTextStyle { {
 const TextStyle composerTextStyle { {
     { Sid::composerFontFace,                   Pid::FONT_FACE },
     { Sid::composerFontSize,                   Pid::FONT_SIZE },
+    { Sid::composerLineSpacing,                Pid::TEXT_LINE_SPACING },
     { Sid::composerFontSpatiumDependent,       Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::composerFontStyle,                  Pid::FONT_STYLE },
     { Sid::composerColor,                      Pid::COLOR },
@@ -1468,6 +1530,7 @@ const TextStyle composerTextStyle { {
 const TextStyle lyricistTextStyle { {
     { Sid::lyricistFontFace,                   Pid::FONT_FACE },
     { Sid::lyricistFontSize,                   Pid::FONT_SIZE },
+    { Sid::lyricistLineSpacing,                Pid::TEXT_LINE_SPACING },
     { Sid::lyricistFontSpatiumDependent,       Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::lyricistFontStyle,                  Pid::FONT_STYLE },
     { Sid::lyricistColor,                      Pid::COLOR },
@@ -1484,6 +1547,7 @@ const TextStyle lyricistTextStyle { {
 const TextStyle lyricsEvenTextStyle { {
     { Sid::lyricsEvenFontFace,                 Pid::FONT_FACE },
     { Sid::lyricsEvenFontSize,                 Pid::FONT_SIZE },
+    { Sid::lyricsEvenLineSpacing,              Pid::TEXT_LINE_SPACING },
     { Sid::lyricsEvenFontSpatiumDependent,     Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::lyricsEvenFontStyle,                Pid::FONT_STYLE },
     { Sid::lyricsEvenColor,                    Pid::COLOR },
@@ -1500,6 +1564,7 @@ const TextStyle lyricsEvenTextStyle { {
 const TextStyle lyricsOddTextStyle { {
     { Sid::lyricsOddFontFace,                  Pid::FONT_FACE },
     { Sid::lyricsOddFontSize,                  Pid::FONT_SIZE },
+    { Sid::lyricsOddLineSpacing,               Pid::TEXT_LINE_SPACING },
     { Sid::lyricsOddFontSpatiumDependent,      Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::lyricsOddFontStyle,                 Pid::FONT_STYLE },
     { Sid::lyricsOddColor,                     Pid::COLOR },
@@ -1516,6 +1581,7 @@ const TextStyle lyricsOddTextStyle { {
 const TextStyle fingeringTextStyle { {
     { Sid::fingeringFontFace,                  Pid::FONT_FACE },
     { Sid::fingeringFontSize,                  Pid::FONT_SIZE },
+    { Sid::fingeringLineSpacing,               Pid::TEXT_LINE_SPACING },
     { Sid::fingeringFontSpatiumDependent,      Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::fingeringFontStyle,                 Pid::FONT_STYLE },
     { Sid::fingeringColor,                     Pid::COLOR },
@@ -1532,6 +1598,7 @@ const TextStyle fingeringTextStyle { {
 const TextStyle lhGuitarFingeringTextStyle { {
     { Sid::lhGuitarFingeringFontFace,             Pid::FONT_FACE },
     { Sid::lhGuitarFingeringFontSize,             Pid::FONT_SIZE },
+    { Sid::lhGuitarFingeringLineSpacing,          Pid::TEXT_LINE_SPACING },
     { Sid::lhGuitarFingeringFontSpatiumDependent, Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::lhGuitarFingeringFontStyle,            Pid::FONT_STYLE },
     { Sid::lhGuitarFingeringColor,                Pid::COLOR },
@@ -1548,6 +1615,7 @@ const TextStyle lhGuitarFingeringTextStyle { {
 const TextStyle rhGuitarFingeringTextStyle { {
     { Sid::rhGuitarFingeringFontFace,             Pid::FONT_FACE },
     { Sid::rhGuitarFingeringFontSize,             Pid::FONT_SIZE },
+    { Sid::rhGuitarFingeringLineSpacing,          Pid::TEXT_LINE_SPACING },
     { Sid::rhGuitarFingeringFontSpatiumDependent, Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::rhGuitarFingeringFontStyle,            Pid::FONT_STYLE },
     { Sid::rhGuitarFingeringColor,                Pid::COLOR },
@@ -1564,6 +1632,7 @@ const TextStyle rhGuitarFingeringTextStyle { {
 const TextStyle stringNumberTextStyle { {
     { Sid::stringNumberFontFace,               Pid::FONT_FACE },
     { Sid::stringNumberFontSize,               Pid::FONT_SIZE },
+    { Sid::stringNumberLineSpacing,            Pid::TEXT_LINE_SPACING },
     { Sid::stringNumberFontSpatiumDependent,   Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::stringNumberFontStyle,              Pid::FONT_STYLE },
     { Sid::stringNumberColor,                  Pid::COLOR },
@@ -1580,6 +1649,7 @@ const TextStyle stringNumberTextStyle { {
 const TextStyle longInstrumentTextStyle { {
     { Sid::longInstrumentFontFace,             Pid::FONT_FACE },
     { Sid::longInstrumentFontSize,             Pid::FONT_SIZE },
+    { Sid::longInstrumentLineSpacing,          Pid::TEXT_LINE_SPACING },
     { Sid::longInstrumentFontSpatiumDependent, Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::longInstrumentFontStyle,            Pid::FONT_STYLE },
     { Sid::longInstrumentColor,                Pid::COLOR },
@@ -1596,6 +1666,7 @@ const TextStyle longInstrumentTextStyle { {
 const TextStyle shortInstrumentTextStyle { {
     { Sid::shortInstrumentFontFace,             Pid::FONT_FACE },
     { Sid::shortInstrumentFontSize,             Pid::FONT_SIZE },
+    { Sid::shortInstrumentLineSpacing,          Pid::TEXT_LINE_SPACING },
     { Sid::shortInstrumentFontSpatiumDependent, Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::shortInstrumentFontStyle,            Pid::FONT_STYLE },
     { Sid::shortInstrumentColor,                Pid::COLOR },
@@ -1612,6 +1683,7 @@ const TextStyle shortInstrumentTextStyle { {
 const TextStyle partInstrumentTextStyle { {
     { Sid::partInstrumentFontFace,             Pid::FONT_FACE },
     { Sid::partInstrumentFontSize,             Pid::FONT_SIZE },
+    { Sid::partInstrumentLineSpacing,          Pid::TEXT_LINE_SPACING },
     { Sid::partInstrumentFontSpatiumDependent, Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::partInstrumentFontStyle,            Pid::FONT_STYLE },
     { Sid::partInstrumentColor,                Pid::COLOR },
@@ -1628,6 +1700,7 @@ const TextStyle partInstrumentTextStyle { {
 const TextStyle dynamicsTextStyle { {
     { Sid::dynamicsFontFace,                   Pid::FONT_FACE },
     { Sid::dynamicsFontSize,                   Pid::FONT_SIZE },
+    { Sid::dynamicsLineSpacing,                Pid::TEXT_LINE_SPACING },
     { Sid::dynamicsFontSpatiumDependent,       Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::dynamicsFontStyle,                  Pid::FONT_STYLE },
     { Sid::dynamicsColor,                      Pid::COLOR },
@@ -1644,6 +1717,7 @@ const TextStyle dynamicsTextStyle { {
 const TextStyle expressionTextStyle { {
     { Sid::expressionFontFace,                 Pid::FONT_FACE },
     { Sid::expressionFontSize,                 Pid::FONT_SIZE },
+    { Sid::expressionLineSpacing,              Pid::TEXT_LINE_SPACING },
     { Sid::expressionFontSpatiumDependent,     Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::expressionFontStyle,                Pid::FONT_STYLE },
     { Sid::expressionColor,                    Pid::COLOR },
@@ -1660,6 +1734,7 @@ const TextStyle expressionTextStyle { {
 const TextStyle tempoTextStyle { {
     { Sid::tempoFontFace,                      Pid::FONT_FACE },
     { Sid::tempoFontSize,                      Pid::FONT_SIZE },
+    { Sid::tempoLineSpacing,                   Pid::TEXT_LINE_SPACING },
     { Sid::tempoFontSpatiumDependent,          Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::tempoFontStyle,                     Pid::FONT_STYLE },
     { Sid::tempoColor,                         Pid::COLOR },
@@ -1676,6 +1751,7 @@ const TextStyle tempoTextStyle { {
 const TextStyle metronomeTextStyle { {
     { Sid::metronomeFontFace,                  Pid::FONT_FACE },
     { Sid::metronomeFontSize,                  Pid::FONT_SIZE },
+    { Sid::metronomeLineSpacing,               Pid::TEXT_LINE_SPACING },
     { Sid::metronomeFontSpatiumDependent,      Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::metronomeFontStyle,                 Pid::FONT_STYLE },
     { Sid::metronomeColor,                     Pid::COLOR },
@@ -1692,6 +1768,7 @@ const TextStyle metronomeTextStyle { {
 const TextStyle measureNumberTextStyle { {
     { Sid::measureNumberFontFace,              Pid::FONT_FACE },
     { Sid::measureNumberFontSize,              Pid::FONT_SIZE },
+    { Sid::measureNumberLineSpacing,           Pid::TEXT_LINE_SPACING },
     { Sid::measureNumberFontSpatiumDependent,  Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::measureNumberFontStyle,             Pid::FONT_STYLE },
     { Sid::measureNumberColor,                 Pid::COLOR },
@@ -1724,6 +1801,7 @@ const TextStyle mmRestRangeTextStyle { {
 const TextStyle translatorTextStyle { {
     { Sid::translatorFontFace,                 Pid::FONT_FACE },
     { Sid::translatorFontSize,                 Pid::FONT_SIZE },
+    { Sid::translatorLineSpacing,              Pid::TEXT_LINE_SPACING },
     { Sid::translatorFontSpatiumDependent,     Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::translatorFontStyle,                Pid::FONT_STYLE },
     { Sid::translatorColor,                    Pid::COLOR },
@@ -1740,6 +1818,7 @@ const TextStyle translatorTextStyle { {
 const TextStyle tupletTextStyle { {
     { Sid::tupletFontFace,                     Pid::FONT_FACE },
     { Sid::tupletFontSize,                     Pid::FONT_SIZE },
+    { Sid::tupletLineSpacing,                  Pid::TEXT_LINE_SPACING },
     { Sid::tupletFontSpatiumDependent,         Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::tupletFontStyle,                    Pid::FONT_STYLE },
     { Sid::tupletColor,                        Pid::COLOR },
@@ -1756,6 +1835,7 @@ const TextStyle tupletTextStyle { {
 const TextStyle systemTextStyle { {
     { Sid::systemTextFontFace,                 Pid::FONT_FACE },
     { Sid::systemTextFontSize,                 Pid::FONT_SIZE },
+    { Sid::systemTextLineSpacing,              Pid::TEXT_LINE_SPACING },
     { Sid::systemTextFontSpatiumDependent,     Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::systemTextFontStyle,                Pid::FONT_STYLE },
     { Sid::systemTextColor,                    Pid::COLOR },
@@ -1772,6 +1852,7 @@ const TextStyle systemTextStyle { {
 const TextStyle staffTextStyle { {
     { Sid::staffTextFontFace,                  Pid::FONT_FACE },
     { Sid::staffTextFontSize,                  Pid::FONT_SIZE },
+    { Sid::staffTextLineSpacing,               Pid::TEXT_LINE_SPACING },
     { Sid::staffTextFontSpatiumDependent,      Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::staffTextFontStyle,                 Pid::FONT_STYLE },
     { Sid::staffTextColor,                     Pid::COLOR },
@@ -1788,6 +1869,7 @@ const TextStyle staffTextStyle { {
 const TextStyle chordSymbolTextStyleA { {
     { Sid::chordSymbolAFontFace,               Pid::FONT_FACE },
     { Sid::chordSymbolAFontSize,               Pid::FONT_SIZE },
+    { Sid::chordSymbolALineSpacing,            Pid::TEXT_LINE_SPACING },
     { Sid::chordSymbolAFontSpatiumDependent,   Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::chordSymbolAFontStyle,              Pid::FONT_STYLE },
     { Sid::chordSymbolAColor,                  Pid::COLOR },
@@ -1804,6 +1886,7 @@ const TextStyle chordSymbolTextStyleA { {
 const TextStyle chordSymbolTextStyleB { {
     { Sid::chordSymbolBFontFace,               Pid::FONT_FACE },
     { Sid::chordSymbolBFontSize,               Pid::FONT_SIZE },
+    { Sid::chordSymbolBLineSpacing,            Pid::TEXT_LINE_SPACING },
     { Sid::chordSymbolBFontSpatiumDependent,   Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::chordSymbolBFontStyle,              Pid::FONT_STYLE },
     { Sid::chordSymbolBColor,                  Pid::COLOR },
@@ -1820,6 +1903,7 @@ const TextStyle chordSymbolTextStyleB { {
 const TextStyle romanNumeralTextStyle { {
     { Sid::romanNumeralFontFace,               Pid::FONT_FACE },
     { Sid::romanNumeralFontSize,               Pid::FONT_SIZE },
+    { Sid::romanNumeralLineSpacing,            Pid::TEXT_LINE_SPACING },
     { Sid::romanNumeralFontSpatiumDependent,   Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::romanNumeralFontStyle,              Pid::FONT_STYLE },
     { Sid::romanNumeralColor,                  Pid::COLOR },
@@ -1836,6 +1920,7 @@ const TextStyle romanNumeralTextStyle { {
 const TextStyle nashvilleNumberTextStyle { {
     { Sid::nashvilleNumberFontFace,               Pid::FONT_FACE },
     { Sid::nashvilleNumberFontSize,               Pid::FONT_SIZE },
+    { Sid::nashvilleNumberLineSpacing,            Pid::TEXT_LINE_SPACING },
     { Sid::nashvilleNumberFontSpatiumDependent,   Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::nashvilleNumberFontStyle,              Pid::FONT_STYLE },
     { Sid::nashvilleNumberColor,                  Pid::COLOR },
@@ -1852,6 +1937,7 @@ const TextStyle nashvilleNumberTextStyle { {
 const TextStyle rehearsalMarkTextStyle { {
     { Sid::rehearsalMarkFontFace,              Pid::FONT_FACE },
     { Sid::rehearsalMarkFontSize,              Pid::FONT_SIZE },
+    { Sid::rehearsalMarkLineSpacing,           Pid::TEXT_LINE_SPACING },
     { Sid::rehearsalMarkFontSpatiumDependent,  Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::rehearsalMarkFontStyle,             Pid::FONT_STYLE },
     { Sid::rehearsalMarkColor,                 Pid::COLOR },
@@ -1868,6 +1954,7 @@ const TextStyle rehearsalMarkTextStyle { {
 const TextStyle repeatLeftTextStyle { {
     { Sid::repeatLeftFontFace,                 Pid::FONT_FACE },
     { Sid::repeatLeftFontSize,                 Pid::FONT_SIZE },
+    { Sid::repeatLeftLineSpacing,              Pid::TEXT_LINE_SPACING },
     { Sid::repeatLeftFontSpatiumDependent,     Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::repeatLeftFontStyle,                Pid::FONT_STYLE },
     { Sid::repeatLeftColor,                    Pid::COLOR },
@@ -1884,6 +1971,7 @@ const TextStyle repeatLeftTextStyle { {
 const TextStyle repeatRightTextStyle { {
     { Sid::repeatRightFontFace,                Pid::FONT_FACE },
     { Sid::repeatRightFontSize,                Pid::FONT_SIZE },
+    { Sid::repeatRightLineSpacing,             Pid::TEXT_LINE_SPACING },
     { Sid::repeatRightFontSpatiumDependent,    Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::repeatRightFontStyle,               Pid::FONT_STYLE },
     { Sid::repeatRightColor,                   Pid::COLOR },
@@ -1900,6 +1988,7 @@ const TextStyle repeatRightTextStyle { {
 const TextStyle frameTextStyle { {
     { Sid::frameFontFace,                      Pid::FONT_FACE },
     { Sid::frameFontSize,                      Pid::FONT_SIZE },
+    { Sid::frameLineSpacing,                   Pid::TEXT_LINE_SPACING },
     { Sid::frameFontSpatiumDependent,          Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::frameFontStyle,                     Pid::FONT_STYLE },
     { Sid::frameColor,                         Pid::COLOR },
@@ -1916,6 +2005,7 @@ const TextStyle frameTextStyle { {
 const TextStyle textLineTextStyle { {
     { Sid::textLineFontFace,                   Pid::BEGIN_FONT_FACE },
     { Sid::textLineFontSize,                   Pid::BEGIN_FONT_SIZE },
+    { Sid::textLineLineSpacing,                Pid::TEXT_LINE_SPACING },
     { Sid::textLineFontSpatiumDependent,       Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::textLineFontStyle,                  Pid::BEGIN_FONT_STYLE },
     { Sid::textLineColor,                      Pid::COLOR },
@@ -1932,6 +2022,7 @@ const TextStyle textLineTextStyle { {
 const TextStyle glissandoTextStyle { {
     { Sid::glissandoFontFace,                  Pid::FONT_FACE },
     { Sid::glissandoFontSize,                  Pid::FONT_SIZE },
+    { Sid::glissandoLineSpacing,               Pid::TEXT_LINE_SPACING },
     { Sid::glissandoFontSpatiumDependent,      Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::glissandoFontStyle,                 Pid::FONT_STYLE },
     { Sid::glissandoColor,                     Pid::COLOR },
@@ -1948,6 +2039,7 @@ const TextStyle glissandoTextStyle { {
 const TextStyle ottavaTextStyle { {
     { Sid::ottavaFontFace,                     Pid::BEGIN_FONT_FACE },
     { Sid::ottavaFontSize,                     Pid::BEGIN_FONT_SIZE },
+    { Sid::ottavaLineSpacing,                  Pid::TEXT_LINE_SPACING },
     { Sid::ottavaFontSpatiumDependent,         Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::ottavaFontStyle,                    Pid::BEGIN_FONT_STYLE },
     { Sid::ottavaColor,                        Pid::COLOR },
@@ -1964,6 +2056,7 @@ const TextStyle ottavaTextStyle { {
 const TextStyle voltaTextStyle { {
     { Sid::voltaFontFace,                      Pid::BEGIN_FONT_FACE },
     { Sid::voltaFontSize,                      Pid::BEGIN_FONT_SIZE },
+    { Sid::voltaLineSpacing,                   Pid::TEXT_LINE_SPACING },
     { Sid::voltaFontSpatiumDependent,          Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::voltaFontStyle,                     Pid::BEGIN_FONT_STYLE },
     { Sid::voltaColor,                         Pid::COLOR },
@@ -1980,6 +2073,7 @@ const TextStyle voltaTextStyle { {
 const TextStyle pedalTextStyle { {
     { Sid::pedalFontFace,                      Pid::BEGIN_FONT_FACE },
     { Sid::pedalFontSize,                      Pid::BEGIN_FONT_SIZE },
+    { Sid::pedalLineSpacing,                   Pid::TEXT_LINE_SPACING },
     { Sid::pedalFontSpatiumDependent,          Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::pedalFontStyle,                     Pid::BEGIN_FONT_STYLE },
     { Sid::pedalColor,                         Pid::COLOR },
@@ -1996,6 +2090,7 @@ const TextStyle pedalTextStyle { {
 const TextStyle letRingTextStyle { {
     { Sid::letRingFontFace,                    Pid::BEGIN_FONT_FACE },
     { Sid::letRingFontSize,                    Pid::BEGIN_FONT_SIZE },
+    { Sid::letRingLineSpacing,                 Pid::TEXT_LINE_SPACING },
     { Sid::letRingFontSpatiumDependent,        Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::letRingFontStyle,                   Pid::BEGIN_FONT_STYLE },
     { Sid::letRingColor,                       Pid::COLOR },
@@ -2012,6 +2107,7 @@ const TextStyle letRingTextStyle { {
 const TextStyle palmMuteTextStyle { {
     { Sid::palmMuteFontFace,                   Pid::BEGIN_FONT_FACE },
     { Sid::palmMuteFontSize,                   Pid::BEGIN_FONT_SIZE },
+    { Sid::palmMuteLineSpacing,                Pid::TEXT_LINE_SPACING },
     { Sid::palmMuteFontSpatiumDependent,       Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::palmMuteFontStyle,                  Pid::BEGIN_FONT_STYLE },
     { Sid::palmMuteColor,                      Pid::COLOR },
@@ -2028,6 +2124,7 @@ const TextStyle palmMuteTextStyle { {
 const TextStyle hairpinTextStyle { {
     { Sid::hairpinFontFace,                    Pid::BEGIN_FONT_FACE },
     { Sid::hairpinFontSize,                    Pid::BEGIN_FONT_SIZE },
+    { Sid::hairpinLineSpacing,                 Pid::TEXT_LINE_SPACING },
     { Sid::hairpinFontSpatiumDependent,        Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::hairpinFontStyle,                   Pid::BEGIN_FONT_STYLE },
     { Sid::hairpinColor,                       Pid::COLOR },
@@ -2044,6 +2141,7 @@ const TextStyle hairpinTextStyle { {
 const TextStyle bendTextStyle { {
     { Sid::bendFontFace,                       Pid::FONT_FACE },
     { Sid::bendFontSize,                       Pid::FONT_SIZE },
+    { Sid::bendLineSpacing,                    Pid::TEXT_LINE_SPACING },
     { Sid::bendFontSpatiumDependent,           Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::bendFontStyle,                      Pid::FONT_STYLE },
     { Sid::bendColor,                          Pid::COLOR },
@@ -2060,6 +2158,7 @@ const TextStyle bendTextStyle { {
 const TextStyle headerTextStyle { {
     { Sid::headerFontFace,                     Pid::FONT_FACE },
     { Sid::headerFontSize,                     Pid::FONT_SIZE },
+    { Sid::headerLineSpacing,                  Pid::TEXT_LINE_SPACING },
     { Sid::headerFontSpatiumDependent,         Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::headerFontStyle,                    Pid::FONT_STYLE },
     { Sid::headerColor,                        Pid::COLOR },
@@ -2076,6 +2175,7 @@ const TextStyle headerTextStyle { {
 const TextStyle footerTextStyle { {
     { Sid::footerFontFace,                     Pid::FONT_FACE },
     { Sid::footerFontSize,                     Pid::FONT_SIZE },
+    { Sid::footerLineSpacing,                  Pid::TEXT_LINE_SPACING },
     { Sid::footerFontSpatiumDependent,         Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::footerFontStyle,                    Pid::FONT_STYLE },
     { Sid::footerColor,                        Pid::COLOR },
@@ -2092,6 +2192,7 @@ const TextStyle footerTextStyle { {
 const TextStyle instrumentChangeTextStyle { {
     { Sid::instrumentChangeFontFace,             Pid::FONT_FACE },
     { Sid::instrumentChangeFontSize,             Pid::FONT_SIZE },
+    { Sid::instrumentChangeLineSpacing,          Pid::TEXT_LINE_SPACING },
     { Sid::instrumentChangeFontSpatiumDependent, Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::instrumentChangeFontStyle,            Pid::FONT_STYLE },
     { Sid::instrumentChangeColor,                Pid::COLOR },
@@ -2108,6 +2209,7 @@ const TextStyle instrumentChangeTextStyle { {
 const TextStyle stickingTextStyle { {
     { Sid::stickingFontFace,                   Pid::FONT_FACE },
     { Sid::stickingFontSize,                   Pid::FONT_SIZE },
+    { Sid::stickingLineSpacing,                Pid::TEXT_LINE_SPACING },
     { Sid::stickingFontSpatiumDependent,       Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::stickingFontStyle,                  Pid::FONT_STYLE },
     { Sid::stickingColor,                      Pid::COLOR },
@@ -2124,6 +2226,7 @@ const TextStyle stickingTextStyle { {
 const TextStyle user1TextStyle { {
     { Sid::user1FontFace,                      Pid::FONT_FACE },
     { Sid::user1FontSize,                      Pid::FONT_SIZE },
+    { Sid::user1LineSpacing,                   Pid::TEXT_LINE_SPACING },
     { Sid::user1FontSpatiumDependent,          Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::user1FontStyle,                     Pid::FONT_STYLE },
     { Sid::user1Color,                         Pid::COLOR },
@@ -2140,6 +2243,7 @@ const TextStyle user1TextStyle { {
 const TextStyle user2TextStyle { {
     { Sid::user2FontFace,                      Pid::FONT_FACE },
     { Sid::user2FontSize,                      Pid::FONT_SIZE },
+    { Sid::user2LineSpacing,                   Pid::TEXT_LINE_SPACING },
     { Sid::user2FontSpatiumDependent,          Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::user2FontStyle,                     Pid::FONT_STYLE },
     { Sid::user2Color,                         Pid::COLOR },
@@ -2156,6 +2260,7 @@ const TextStyle user2TextStyle { {
 const TextStyle user3TextStyle { {
     { Sid::user3FontFace,                      Pid::FONT_FACE },
     { Sid::user3FontSize,                      Pid::FONT_SIZE },
+    { Sid::user3LineSpacing,                   Pid::TEXT_LINE_SPACING },
     { Sid::user3FontSpatiumDependent,          Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::user3FontStyle,                     Pid::FONT_STYLE },
     { Sid::user3Color,                         Pid::COLOR },
@@ -2172,6 +2277,7 @@ const TextStyle user3TextStyle { {
 const TextStyle user4TextStyle { {
     { Sid::user4FontFace,                      Pid::FONT_FACE },
     { Sid::user4FontSize,                      Pid::FONT_SIZE },
+    { Sid::user4LineSpacing,                   Pid::TEXT_LINE_SPACING },
     { Sid::user4FontSpatiumDependent,          Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::user4FontStyle,                     Pid::FONT_STYLE },
     { Sid::user4Color,                         Pid::COLOR },
@@ -2188,6 +2294,7 @@ const TextStyle user4TextStyle { {
 const TextStyle user5TextStyle { {
     { Sid::user5FontFace,                      Pid::FONT_FACE },
     { Sid::user5FontSize,                      Pid::FONT_SIZE },
+    { Sid::user5LineSpacing,                   Pid::TEXT_LINE_SPACING },
     { Sid::user5FontSpatiumDependent,          Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::user5FontStyle,                     Pid::FONT_STYLE },
     { Sid::user5Color,                         Pid::COLOR },
@@ -2204,6 +2311,7 @@ const TextStyle user5TextStyle { {
 const TextStyle user6TextStyle { {
     { Sid::user6FontFace,                      Pid::FONT_FACE },
     { Sid::user6FontSize,                      Pid::FONT_SIZE },
+    { Sid::user6LineSpacing,                   Pid::TEXT_LINE_SPACING },
     { Sid::user6FontSpatiumDependent,          Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::user6FontStyle,                     Pid::FONT_STYLE },
     { Sid::user6Color,                         Pid::COLOR },
@@ -2220,6 +2328,7 @@ const TextStyle user6TextStyle { {
 const TextStyle user7TextStyle { {
     { Sid::user7FontFace,                      Pid::FONT_FACE },
     { Sid::user7FontSize,                      Pid::FONT_SIZE },
+    { Sid::user7LineSpacing,                   Pid::TEXT_LINE_SPACING },
     { Sid::user7FontSpatiumDependent,          Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::user7FontStyle,                     Pid::FONT_STYLE },
     { Sid::user7Color,                         Pid::COLOR },
@@ -2236,6 +2345,7 @@ const TextStyle user7TextStyle { {
 const TextStyle user8TextStyle { {
     { Sid::user8FontFace,                      Pid::FONT_FACE },
     { Sid::user8FontSize,                      Pid::FONT_SIZE },
+    { Sid::user8LineSpacing,                   Pid::TEXT_LINE_SPACING },
     { Sid::user8FontSpatiumDependent,          Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::user8FontStyle,                     Pid::FONT_STYLE },
     { Sid::user8Color,                         Pid::COLOR },
@@ -2252,6 +2362,7 @@ const TextStyle user8TextStyle { {
 const TextStyle user9TextStyle { {
     { Sid::user9FontFace,                      Pid::FONT_FACE },
     { Sid::user9FontSize,                      Pid::FONT_SIZE },
+    { Sid::user9LineSpacing,                   Pid::TEXT_LINE_SPACING },
     { Sid::user9FontSpatiumDependent,          Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::user9FontStyle,                     Pid::FONT_STYLE },
     { Sid::user9Color,                         Pid::COLOR },
@@ -2268,6 +2379,7 @@ const TextStyle user9TextStyle { {
 const TextStyle user10TextStyle { {
     { Sid::user10FontFace,                     Pid::FONT_FACE },
     { Sid::user10FontSize,                     Pid::FONT_SIZE },
+    { Sid::user10LineSpacing,                  Pid::TEXT_LINE_SPACING },
     { Sid::user10FontSpatiumDependent,         Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::user10FontStyle,                    Pid::FONT_STYLE },
     { Sid::user10Color,                        Pid::COLOR },
@@ -2284,6 +2396,7 @@ const TextStyle user10TextStyle { {
 const TextStyle user11TextStyle { {
     { Sid::user11FontFace,                     Pid::FONT_FACE },
     { Sid::user11FontSize,                     Pid::FONT_SIZE },
+    { Sid::user11LineSpacing,                  Pid::TEXT_LINE_SPACING },
     { Sid::user11FontSpatiumDependent,         Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::user11FontStyle,                    Pid::FONT_STYLE },
     { Sid::user11Color,                        Pid::COLOR },
@@ -2300,6 +2413,7 @@ const TextStyle user11TextStyle { {
 const TextStyle user12TextStyle { {
     { Sid::user12FontFace,                     Pid::FONT_FACE },
     { Sid::user12FontSize,                     Pid::FONT_SIZE },
+    { Sid::user12LineSpacing,                  Pid::TEXT_LINE_SPACING },
     { Sid::user12FontSpatiumDependent,         Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::user12FontStyle,                    Pid::FONT_STYLE },
     { Sid::user12Color,                        Pid::COLOR },
