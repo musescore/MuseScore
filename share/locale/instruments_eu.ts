@@ -2044,42 +2044,42 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="63"/>
         <source>Oboes</source>
-        <translation type="unfinished"/>
+        <translation>Oboeak</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="64"/>
         <source>Clarinets</source>
-        <translation type="unfinished"/>
+        <translation>Klarineteak</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="65"/>
         <source>Bassoons</source>
-        <translation type="unfinished"/>
+        <translation>Fagotak</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="66"/>
         <source>Saxophones</source>
-        <translation type="unfinished"/>
+        <translation>Saxofoiak</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="67"/>
         <source>Recorders</source>
-        <translation type="unfinished"/>
+        <translation>Txirula eztiak</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="68"/>
         <source>Horns</source>
-        <translation type="unfinished"/>
+        <translation>Tronpak</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="69"/>
         <source>Cornets</source>
-        <translation type="unfinished"/>
+        <translation>Kornetak</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="70"/>
         <source>Flugelhorns</source>
-        <translation type="unfinished"/>
+        <translation>Fliskornoak</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="71"/>
@@ -2119,7 +2119,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="79"/>
         <source>Harps</source>
-        <translation type="unfinished"/>
+        <translation>Harpak</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="80"/>
@@ -6884,7 +6884,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1549"/>
         <source>Choir</source>
-        <translation type="unfinished"/>
+        <translation>Abesbatza</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1550"/>

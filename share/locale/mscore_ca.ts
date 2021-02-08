@@ -32201,132 +32201,132 @@ El compàs no és buit</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2904"/>
         <source>11 large diesis down, 3° down [46 EDO]</source>
-        <translation type="unfinished"/>
+        <translation>11 grans diesis avall, 3° avall [46 EDO]</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2905"/>
         <source>11 large diesis up, (11L), (sharp less 11M), 3° up [46 EDO]</source>
-        <translation type="unfinished"/>
+        <translation>11 grans diesis amunt, (11L), (sense sostingut 11M), 3° amunt [46 EDO]</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2906"/>
         <source>11 medium diesis down, 1°[17 31] 2°46 down, 1/4-tone down</source>
-        <translation type="unfinished"/>
+        <translation>11 diesis mitjans avall, 1°[17 31] 2°46 avall, 1/4 de to avall</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2907"/>
         <source>11 medium diesis up, (11M), 1°[17 31] 2°46 up, 1/4-tone up</source>
-        <translation type="unfinished"/>
+        <translation>11 diesis mitjans amunt, (11M), 1°[17 31] 2°46 amunt, 1/4 de to amunt</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2928"/>
         <source>25 small diesis down, 2° down [53 EDO]</source>
-        <translation type="unfinished"/>
+        <translation>25 petits diesis avall, 2° avall [53 EDO]</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2929"/>
         <source>25 small diesis up, (25S, ~5:13S, ~37S, 5C plus 5C), 2° up [53 EDO]</source>
-        <translation type="unfinished"/>
+        <translation>25 petits diesis amunt, (25S, ~5:13S, ~37S, 5C més 5C), 2° amunt [53 EDO]</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2930"/>
         <source>35 large diesis down, 2° down [50 EDO], 5/18-tone down</source>
-        <translation type="unfinished"/>
+        <translation>35 grans diesis avall, 2° avall [50 EDO], 5/18 de to avall</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2931"/>
         <source>35 large diesis up, (35L, ~13L, ~125L, sharp less 35M), 2°50 up</source>
-        <translation type="unfinished"/>
+        <translation>35 grans diesis amunt, (35L, ~13L, ~125L, sense sostingut 35M), 2°50 amunt</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2932"/>
         <source>35 medium diesis down, 1°[50] 2°[27] down, 2/9-tone down</source>
-        <translation type="unfinished"/>
+        <translation>35 diesis mitjans avall, 1°[50] 2°[27] avall, 2/9 de to avall</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2933"/>
         <source>35 medium diesis up, (35M, ~13M, ~125M, 5C plus 7C), 2/9-tone up</source>
-        <translation type="unfinished"/>
+        <translation>35 diesis mitjans amunt, (35M, ~13M, ~125M, 5C més 7C), 2/9 de to amunt</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2942"/>
         <source>5 comma down, 1° down [22 27 29 34 41 46 53 96 EDOs], 1/12-tone down</source>
-        <translation type="unfinished"/>
+        <translation>5 comes avall, 1° avall [22 27 29 34 41 46 53 96 EDOs], 1/12 de to avall</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2943"/>
         <source>5 comma up, (5C), 1° up [22 27 29 34 41 46 53 96 EDOs], 1/12-tone up</source>
-        <translation type="unfinished"/>
+        <translation>5 comes amunt, (5C), 1° amunt [22 27 29 34 41 46 53 96 EDOs], 1/12 to amunt</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2956"/>
         <source>5:7 kleisma down</source>
-        <translation type="unfinished"/>
+        <translation>5:7 kleisma avall</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2957"/>
         <source>5:7 kleisma up, (5:7k, ~11:13k, 7C less 5C)</source>
-        <translation type="unfinished"/>
+        <translation>5:7 kleisma amunt, (5:7k, ~11:13k, 7C sense 5C)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2958"/>
         <source>7 comma down, 1° down [43 EDO], 2° down [72 EDO], 1/6-tone down</source>
-        <translation type="unfinished"/>
+        <translation>7 comes avall, 1° avall [43 EDO], 2° avall [72 EDO], 1/6 de to avall</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="2959"/>
         <source>7 comma up, (7C), 1° up [43 EDO], 2° up [72 EDO], 1/6-tone up</source>
-        <translation type="unfinished"/>
+        <translation>7 comes amunt, (7C), 1° amunt [43 EDO], 2° amunt [72 EDO], 1/6 de to amunt</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3009"/>
         <source>Flat, (apotome down)[almost all EDOs], 1/2-tone down</source>
-        <translation type="unfinished"/>
+        <translation>Bemoll, (apotome avall)[gairebé tots els EDOs], 1/2 de to avall</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3031"/>
         <source>Flat 25S-up, 3° down [53 EDO]</source>
-        <translation type="unfinished"/>
+        <translation>Bemoll 25S-amunt, 3° avall [53 EDO]</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3041"/>
         <source>Flat 5C-up, 2°[22,29] 3°[34 41] 4°[46 53 60] down, 5/12-tone down</source>
-        <translation type="unfinished"/>
+        <translation>Bemoll 5C-amunt, 2°[22,29] 3°[34 41] 4°[46 53 60] avall, 5/12 de to avall</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3052"/>
         <source>Flat 5:7k-up</source>
-        <translation type="unfinished"/>
+        <translation>Bemoll 5:7k-amunt</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3054"/>
         <source>Flat 7C-up, 2° down [43 EDO], 4° down [72 EDO], 1/3-tone down</source>
-        <translation type="unfinished"/>
+        <translation>Bemoll 7C-amunt, 2° avall [43 EDO], 4° avall [72 EDO], 1/3 de to avall</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3064"/>
         <source>Sharp, (apotome up)[almost all EDOs], 1/2-tone up</source>
-        <translation type="unfinished"/>
+        <translation>Sostingut, (apotome amunt)[gairebé tots els EDOs], 1/2 de to amunt</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3085"/>
         <source>Sharp 25S-down, 3° up [53 EDO]</source>
-        <translation type="unfinished"/>
+        <translation>Sostingut 25S-avall, 3° amunt [53 EDO]</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3095"/>
         <source>Sharp 5C-down, 2°[22 29] 3°[34 41] 4°[46 53 60] up, 5/12-tone up</source>
-        <translation type="unfinished"/>
+        <translation>Sostingut 5C-avall, 2°[22 29] 3°[34 41] 4°[46 53 60] amunt, 5/12 de to amunt</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3106"/>
         <source>Sharp 5:7k-down</source>
-        <translation type="unfinished"/>
+        <translation>Sostingut 5:7k-avall</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3108"/>
         <source>Sharp 7C-down, 2° up [43 EDO], 4° up [72 EDO], 1/3-tone up</source>
-        <translation type="unfinished"/>
+        <translation>Sostingut 7C-avall, 2° amunt [43 EDO], 4° amunt [72 EDO], 1/3 de to amunt</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3120"/>
@@ -32611,12 +32611,12 @@ El compàs no és buit</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3184"/>
         <source>Arrow down (lower by one quarter-tone)</source>
-        <translation type="unfinished"/>
+        <translation>Fletxa avall (baixa un quart de to)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3185"/>
         <source>Arrow up (raise by one quarter-tone)</source>
-        <translation type="unfinished"/>
+        <translation>Fletxa amunt (puja un quart de to)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3186"/>
@@ -32636,52 +32636,52 @@ El compàs no és buit</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3193"/>
         <source>Combining lower by one 17-limit schisma</source>
-        <translation type="unfinished"/>
+        <translation>Combinant més baix un 17-limit schisma</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3194"/>
         <source>Combining lower by one 19-limit schisma</source>
-        <translation type="unfinished"/>
+        <translation>Combinant més baix un 19-limit schisma</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3195"/>
         <source>Combining lower by one 23-limit comma or 29-limit comma</source>
-        <translation type="unfinished"/>
+        <translation>Combinant més baix un 23-limit coma o 29-limit coma</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3196"/>
         <source>Combining lower by one 31-limit schisma</source>
-        <translation type="unfinished"/>
+        <translation>Combinant més baix un 31-limit schisma</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3197"/>
         <source>Combining lower by one 53-limit comma</source>
-        <translation type="unfinished"/>
+        <translation>Combinant més baix un 53-limit coma</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3199"/>
         <source>Combining raise by one 17-limit schisma</source>
-        <translation type="unfinished"/>
+        <translation>Combinant més alt un 17-limit schisma</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3200"/>
         <source>Combining raise by one 19-limit schisma</source>
-        <translation type="unfinished"/>
+        <translation>Combinant més alt un 19-limit schisma</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3201"/>
         <source>Combining raise by one 23-limit comma or 29-limit comma</source>
-        <translation type="unfinished"/>
+        <translation>Combinant més alt un 23-limit coma o 29-limit coma</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3202"/>
         <source>Combining raise by one 31-limit schisma</source>
-        <translation type="unfinished"/>
+        <translation>Combinant més alt un 31-limit schisma</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3203"/>
         <source>Combining raise by one 53-limit comma</source>
-        <translation type="unfinished"/>
+        <translation>Combinant més alt un 53-limit coma</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3206"/>

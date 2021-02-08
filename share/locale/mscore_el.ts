@@ -1671,7 +1671,7 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="304"/>
         <source>Merge matching rests</source>
-        <translation type="unfinished"/>
+        <translation>Ένωση αντίστοιχων παύσεων</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="450"/>
@@ -1691,7 +1691,7 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="591"/>
         <source>Interval from written to sounding pitch</source>
-        <translation type="unfinished"/>
+        <translation>Διάστημα από γραπτό σε πραγματικό τόνο</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="594"/>
@@ -3341,7 +3341,7 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="158"/>
         <location filename="../../mscore/editstyle.ui" line="8594"/>
         <source>System Text Line</source>
-        <translation type="unfinished"/>
+        <translation>Γραμμή Κειμένου Συστήματος</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="183"/>
@@ -3603,7 +3603,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1335"/>
         <source>Max. staff distance:</source>
-        <translation type="unfinished"/>
+        <translation>Μέγιστη απόσταση πεντάγραμμου:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1387"/>
@@ -3613,7 +3613,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1433"/>
         <source>Reset &apos;Min. staff distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Επαναφορά τιμής &quot;Ελάχιστη απόσταση πενταγράμμου&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1447"/>
@@ -3638,7 +3638,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1505"/>
         <source>Min. staff distance:</source>
-        <translation type="unfinished"/>
+        <translation>Ελάχιστη απόσταση πενταγράμμου:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1588"/>
@@ -3968,12 +3968,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="11631"/>
         <source>Barre line thickness</source>
-        <translation type="unfinished"/>
+        <translation>Πάχος γραμμής Μπαρρέ</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="11634"/>
         <source>Barre line thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Πάχος γραμμής Μπαρρέ:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="12175"/>
@@ -4008,7 +4008,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1755"/>
         <source>Disable vertical justification of staves</source>
-        <translation type="unfinished"/>
+        <translation>Απενεργοποίηση κάθετης στοίχισης των πενταγράμμων</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3058"/>
@@ -4053,12 +4053,13 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="3829"/>
         <source>When a chord has accidentals octave apart, these will be placed in the same columns. However, sometimes one of these accidentals can be larger than another, causing thus moving the others. 
 By default, they will be placed such as that their right end are at the same level. Use this checkbox to override this behaviour.</source>
-        <translation type="unfinished"/>
+        <translation>Όταν μια συχορδία περιέχει νότες εκτός κλίμακας, οι οποίες βρίσκονται σε διάστημα μεγαλύτερο της οκτάβας, τότε αυτές θα τοποθετηθούν στις ίδιες στήλες. Ωστόσο, μερικές φορές αυτές οι νότες μπορούν να είναι η μια μεγαλύτερη από την άλλη, προκαλλώντας, έτσι, την μετακίνηση και των άλλων.
+Με την προκαθορισμένη στοίχιση, θα τοποθετηθούν έτσι ώστε το δεξί τους τέλος να βρίσκεται στο ίδιο επίπεδο. Επέλεξε το συγκεκριμένο πλαίσιο ώστε να παρακάμψεις αυτήν την συμπεριφορά.</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3833"/>
         <source>Align octaves left</source>
-        <translation type="unfinished"/>
+        <translation>Στοίχιση οκτάβας στα αριστερά</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3846"/>
@@ -4110,7 +4111,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/editstyle.ui" line="11115"/>
         <source>Spelling</source>
-        <translation type="unfinished"/>
+        <translation>Ορθογραφία</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="11235"/>
@@ -4177,12 +4178,12 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/editstyle.ui" line="12310"/>
         <source>Line Spacing: </source>
-        <translation type="unfinished"/>
+        <translation>Διάστιχο:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="12394"/>
         <source>Reset All Styles to Default</source>
-        <translation type="unfinished"/>
+        <translation>Επαναφορά Όλων των Στυλ στο Προκαθορισμένο</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5052"/>
@@ -4202,27 +4203,27 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/editstyle.ui" line="5076"/>
         <source>Reset &apos;Thick barline distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Επαναφορά τιμής &quot;Απόσταση Παχιάς Γραμμής&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5100"/>
         <source>Thick barline distance:</source>
-        <translation type="unfinished"/>
+        <translation>Απόσταση Παχιάς Γραμμής </translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5195"/>
         <source>Thick barline thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Πάχος παχιάς γραμμής:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4969"/>
         <source>Thin barline thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Πάχος λεπτής γραμμής:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5228"/>
         <source>Reset &apos;Thick barline thickness&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Επαναφορά τιμής &quot;Πάχος παχιάς γραμμής&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5205"/>
@@ -4232,7 +4233,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/editstyle.ui" line="4938"/>
         <source>Reset &apos;Thin barline thickness&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Επαναφορά τιμής &quot;Πάχος λεπτής γραμμής&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5154"/>
@@ -9886,7 +9887,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/inspector/inspector_textline.ui" line="140"/>
         <source>System Text Line</source>
-        <translation type="unfinished"/>
+        <translation>Γραμμή Κειμένου Συστήματος</translation>
     </message>
 </context>
 <context>
@@ -33565,17 +33566,17 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4343"/>
         <source>Elision</source>
-        <translation type="unfinished"/>
+        <translation>Έκθλιψη Γράμματος</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4344"/>
         <source>Narrow elision</source>
-        <translation type="unfinished"/>
+        <translation>&quot;Στενή&quot; Έκθλιψη</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4345"/>
         <source>Wide elision</source>
-        <translation type="unfinished"/>
+        <translation>&quot;Πλατιά&quot; Έκθλιψη</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4505"/>
@@ -33620,7 +33621,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4521"/>
         <source>Eighth note (quaver) stem up</source>
-        <translation type="unfinished"/>
+        <translation>Αλλαγή Στελέχους Νότας Ογδόου (quaver) προς τα πάνω</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4525"/>
@@ -33640,7 +33641,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4957"/>
         <source>Mordent</source>
-        <translation type="unfinished"/>
+        <translation>Μονή Τρίλια</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4977"/>
@@ -33655,12 +33656,12 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4999"/>
         <source>Short trill</source>
-        <translation type="unfinished"/>
+        <translation>Κοφτή Τρίλια</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5004"/>
         <source>Tremblement</source>
-        <translation type="unfinished"/>
+        <translation>Τρίλια Μπαρόκ</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5006"/>
@@ -33825,7 +33826,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5439"/>
         <source>Harmonic</source>
-        <translation type="unfinished"/>
+        <translation>Αρμονική</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5449"/>
@@ -33864,14 +33865,14 @@ Measure is not empty</source>
         <location filename="../../libmscore/timesig.cpp" line="590"/>
         <location filename="../../mscore/menus.cpp" line="1749"/>
         <source>Cut time (Bach)</source>
-        <translation type="unfinished"/>
+        <translation>Κομμένο Μέτρο (Μπαχ)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5518"/>
         <location filename="../../libmscore/timesig.cpp" line="593"/>
         <location filename="../../mscore/menus.cpp" line="1750"/>
         <source>Cut triple time (9/8)</source>
-        <translation type="unfinished"/>
+        <translation>Κομμένο Μέτρο (9/8)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5519"/>
@@ -33913,7 +33914,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5713"/>
         <source>Up mordent</source>
-        <translation type="unfinished"/>
+        <translation>Μονή Τρίλια Πάνω</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5714"/>
@@ -33928,7 +33929,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5716"/>
         <source>Down mordent</source>
-        <translation type="unfinished"/>
+        <translation>Μονή Τρίλια Κάτω</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5717"/>
