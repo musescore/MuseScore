@@ -33,6 +33,10 @@ https://musescore.com/contact
 Change log
 ----------
 
+04 February 2021 (Martin Keary & Simon Smith) Leland Version 0.52
+- Packaged with MuseScore 3.6.2
+- Added kerning for fz pairs in dynamics
+
 25 January 2021 (Martin Keary & Simon Smith) Leland Version 0.51
 - Packaged with MuseScore 3.6.1
 - Corrected drawing direction of many symbols
