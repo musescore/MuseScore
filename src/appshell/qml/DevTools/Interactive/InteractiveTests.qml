@@ -119,24 +119,10 @@ Rectangle {
             onClicked: testModel.openWidgetDialog()
         }
 
-        PopupView {
-            id: popup
-
-            Rectangle {
-                color: "red"
-                width: 300
-                height: 300
-            }
-        }
-
         FlatButton {
             width: 200
             text: "Widget dialogg async"
-            onClicked: popup.show()//testModel.openWidgetDialogAsync()
-
-            Component.onCompleted: {
-                var i = 0
-            }
+            onClicked: testModel.openWidgetDialogAsync()
         }
     }
 }
