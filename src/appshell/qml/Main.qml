@@ -1,14 +1,10 @@
 import QtQuick 2.7
-import MuseScore.Shortcuts 1.0
 
 Rectangle {
 
     id: root
 
     color: "#0F9D58"
-
-    //! NOTE Need only create
-    Shortcuts {}
 
     Loader {
         id: windowLoader
