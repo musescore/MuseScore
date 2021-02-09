@@ -15,6 +15,7 @@
 
 #include <array>
 #include <QFile>
+#include <QSet>
 
 #include "chordlist.h"
 #include "types.h"
@@ -26,6 +27,21 @@ class XmlWriter;
 struct ChordDescription;
 class Element;
 class Score;
+
+// Needs to be duplicated here and in sym.h since moc doesn't handle macros from #include'd files
+#ifdef SCRIPT_INTERFACE
+#define BEGIN_QT_REGISTERED_ENUM(Name) \
+    class MSQE_##Name { \
+        Q_GADGET \
+    public:
+#define END_QT_REGISTERED_ENUM(Name) \
+    Q_ENUM(Name); \
+}; \
+    using Name = MSQE_##Name::Name;
+#else
+#define BEGIN_QT_REGISTERED_ENUM(Name)
+#define END_QT_REGISTERED_ENUM(Name)
+#endif
 
 //---------------------------------------------------------
 //   Sid
@@ -54,7 +70,6 @@ enum class Sid {
     staffLowerBorder,
     staffDistance,
     akkoladeDistance,
-
     minSystemDistance,
     maxSystemDistance,
 
@@ -117,7 +132,7 @@ enum class Sid {
     lyricsEvenFrameBgColor,
 
     figuredBassFontFamily,
-//      figuredBassFontSize,
+    //      figuredBassFontSize,
     figuredBassYOffset,
     figuredBassLineHeight,
     figuredBassAlignment,
@@ -878,7 +893,8 @@ enum class Sid {
     measureNumberFontSpatiumDependent,
     measureNumberFontStyle,
     measureNumberColor,
-    measureNumberOffset,
+    measureNumberPosAbove,
+    measureNumberPosBelow,
     measureNumberOffsetType,
     measureNumberVPlacement,
     measureNumberHPlacement,
@@ -1426,11 +1442,18 @@ enum class Sid {
     tupletMinDistance,
 
     autoplaceEnabled,
+    usePre_3_6_defaults,
+    defaultsVersion,
 
     STYLES
     ///\}
 };
 END_QT_REGISTERED_ENUM(Sid)
+
+inline uint qHash(Sid id)
+{
+    return static_cast<uint>(id);
+}
 
 //---------------------------------------------------------
 //   MStyle
@@ -1446,6 +1469,7 @@ class MStyle
 
     ChordList _chordList;
     bool _customChordList;          // if true, chordlist will be saved as part of score
+    int _defaultStyleVersion = -1;
 
 public:
     MStyle();
@@ -1456,6 +1480,8 @@ public:
     void set(Sid idx, const QVariant& v);
 
     bool isDefault(Sid idx) const;
+    void setDefaultStyleVersion(const int defaultsVersion);
+    int defaultStyleVersion() const { return _defaultStyleVersion; }
 
     const ChordDescription* chordDescription(int id) const;
     ChordList* chordList() { return &_chordList; }
@@ -1465,16 +1491,19 @@ public:
 
     bool load(QFile* qf, bool ign = false);
     void load(XmlReader& e);
+    void applyNewDefaults(const MStyle& other, const int defaultsVersion);
     void save(XmlWriter& xml, bool optimize);
     bool readProperties(XmlReader&);
     bool readStyleValCompat(XmlReader&);
     bool readTextStyleValCompat(XmlReader&);
 
-    void reset(Score*);
+    void resetAllStyles(Score* score, const QSet<Sid>& ignoredStyles = QSet<Sid>());
+    void resetStyles(Score* score, const QSet<Sid>& stylesToReset);
 
     static const char* valueType(const Sid);
     static const char* valueName(const Sid);
     static Sid styleIdx(const QString& name);
+    static MStyle* resolveStyleDefaults(const int defaultsVersion);
 };
 
 //---------------------------------------------------------
@@ -1502,6 +1531,8 @@ Tid textStyleFromName(const QString&);
 
 const std::vector<Tid>& allTextStyles();
 const std::vector<Tid>& primaryTextStyles();
+
+QSet<Sid> pageStyles();
 
 #ifndef NDEBUG
 extern void checkStyles();

@@ -3077,7 +3077,7 @@ const std::array<const char*, int(SymId::lastSym) + 1> Sym::symUserNames = { {
     "23 small diesis down",
     "23 small diesis up, (23S)",
     QT_TRANSLATE_NOOP("symUserNames", "25 small diesis down, 2° down [53 EDO]"),
-    QT_TRANSLATE_NOOP("symUserNames", "25 small diesis up, (25S, ~5:13S, ~37S, 5C plus 5C), 2° up [53 EDO]"),
+    QT_TRANSLATE_NOOP("symUserNames", "25 small diesis up, (25S, ~5:13S, ~37S, 5C plus 5C), 2° up [53 EDO]"),
     "2 minas down, 65/77-schismina down, 0.83 cents down",
     "2 minas up, 65/77-schismina up, 0.83 cents up",
     "2 tinas down, 1/(7³⋅17)-schismina down, 0.30 cents down",
@@ -3085,7 +3085,7 @@ const std::array<const char*, int(SymId::lastSym) + 1> Sym::symUserNames = { {
     QT_TRANSLATE_NOOP("symUserNames", "35 large diesis down, 2° down [50 EDO], 5/18-tone down"),
     QT_TRANSLATE_NOOP("symUserNames", "35 large diesis up, (35L, ~13L, ~125L, sharp less 35M), 2°50 up"),
     QT_TRANSLATE_NOOP("symUserNames", "35 medium diesis down, 1°[50] 2°[27] down, 2/9-tone down"),
-    QT_TRANSLATE_NOOP("symUserNames", "35 medium diesis up, (35M, ~13M, ~125M, 5C plus 7C), 2/9-tone up"),
+    QT_TRANSLATE_NOOP("symUserNames", "35 medium diesis up, (35M, ~13M, ~125M, 5C plus 7C), 2/9-tone up"),
     "3 tinas down, 1 mina down, 1/(5⋅7⋅13)-schismina down, 0.42 cents down",
     "3 tinas up, 1 mina up, 1/(5⋅7⋅13)-schismina up, 0.42 cents up",
     "49 large diesis down",
@@ -3115,7 +3115,7 @@ const std::array<const char*, int(SymId::lastSym) + 1> Sym::symUserNames = { {
     "5:49 medium diesis down",
     "5:49 medium diesis up, (5:49M, half apotome)",
     QT_TRANSLATE_NOOP("symUserNames", "5:7 kleisma down"),
-    QT_TRANSLATE_NOOP("symUserNames", "5:7 kleisma up, (5:7k, ~11:13k, 7C less 5C)"),
+    QT_TRANSLATE_NOOP("symUserNames", "5:7 kleisma up, (5:7k, ~11:13k, 7C less 5C)"),
     "6 tinas down, 2 minas down, 65/77-schismina down, 0.83 cents down",
     "6 tinas up, 2 minas up, 65/77-schismina up, 0.83 cents up",
     QT_TRANSLATE_NOOP("symUserNames", "7 comma down, 1° down [43 EDO], 2° down [72 EDO], 1/6-tone down"),
@@ -6768,10 +6768,17 @@ void ScoreFont::load()
         { "lyricLineThickness",            Sid::lyricsLineThickness },
         { "tupletBracketThickness",        Sid::tupletBracketWidth }
     };
-    for (auto i : glyphsWithAnchors.keys()) {
+
+    for (const auto& i : glyphsWithAnchors.keys()) {
         for (auto mapping : engravingDefaultsMapping) {
             if (i == mapping.first) {
-                _engravingDefaults.push_back(std::make_pair(mapping.second, glyphsWithAnchors.value(i).toDouble()));
+                qreal value = glyphsWithAnchors.value(i).toDouble();
+
+                if (i == "beamSpacing") {
+                    value /= glyphsWithAnchors.value("beamThickness").toDouble();
+                }
+
+                _engravingDefaults.push_back(std::make_pair(mapping.second, value));
             } else if (i == "textEnclosureThickness") {
                 _textEnclosureThickness = glyphsWithAnchors.value(i).toDouble();
             }

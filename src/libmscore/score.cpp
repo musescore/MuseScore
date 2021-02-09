@@ -5062,9 +5062,22 @@ QVariant Score::propertyDefault(Pid /*id*/) const
 //   setStyle
 //---------------------------------------------------------
 
-void Score::setStyle(const MStyle& s)
+void Score::setStyle(const MStyle& s, const bool overlap)
 {
-    style() = s;
+    if (!overlap) {
+        style() = s;
+        return;
+    }
+
+    MStyle styleCopy = s;
+
+    for (int i = static_cast<int>(Sid::NOSTYLE) + 1; i < static_cast<int>(Sid::STYLES); i++) {
+        Sid sid = static_cast<Sid>(i);
+
+        if (!styleCopy.isDefault(sid)) {
+            style().set(sid, styleCopy.value(sid));
+        }
+    }
 }
 
 //---------------------------------------------------------

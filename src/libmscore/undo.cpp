@@ -1687,8 +1687,8 @@ void ChangePart::flip(EditData*)
 //   ChangeStyle
 //---------------------------------------------------------
 
-ChangeStyle::ChangeStyle(Score* s, const MStyle& st)
-    : score(s), style(st)
+ChangeStyle::ChangeStyle(Score* s, const MStyle& st, const bool overlapOnly)
+    : score(s), style(st), overlap(overlapOnly)
 {
 }
 
@@ -1706,9 +1706,16 @@ void ChangeStyle::flip(EditData*)
     if (score->styleV(Sid::MusicalSymbolFont) != style.value(Sid::MusicalSymbolFont)) {
         score->setScoreFont(ScoreFont::fontFactory(style.value(Sid::MusicalSymbolFont).toString()));
     }
-    score->setStyle(style);
+
+    score->setStyle(style, overlap);
     score->styleChanged();
     style = tmp;
+}
+
+void ChangeStyle::undo(EditData* ed)
+{
+    overlap = false;
+    UndoCommand::undo(ed);
 }
 
 //---------------------------------------------------------

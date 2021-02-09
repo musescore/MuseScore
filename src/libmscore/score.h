@@ -521,7 +521,7 @@ private:
     ChordRest* nextMeasure(ChordRest* element, bool selectBehavior = false, bool mmRest = false);
     ChordRest* prevMeasure(ChordRest* element, bool mmRest = false);
     void cmdSetBeamMode(Beam::Mode);
-    void cmdResetStyle();
+    void cmdResetAllStyle();
     Note* getSelectedNote();
     ChordRest* upStaff(ChordRest* cr);
     ChordRest* downStaff(ChordRest* cr);
@@ -932,8 +932,8 @@ public:
     virtual MStyle& style() { return _style; }
     virtual const MStyle& style() const { return _style; }
 
-    void setStyle(const MStyle& s);
-    bool loadStyle(const QString&, bool ign = false);
+    void setStyle(const MStyle& s, const bool overlap = false);
+    bool loadStyle(const QString&, bool ign = false, const bool overlap = false);
     bool saveStyle(const QString&);
 
     QVariant styleV(Sid idx) const { return style().value(idx); }
@@ -1435,6 +1435,8 @@ public:
     FileError read302(XmlReader&);
     QByteArray readToBuffer();
     QByteArray readCompressedToBuffer();
+    int readStyleDefaultsVersion();
+    int styleDefaultByMscVersion(const int mscVer) const;
 
     Omr* omr() const { return _omr; }
     void setOmr(Omr* o) { _omr = o; }
@@ -1525,11 +1527,7 @@ inline std::list<MidiInputEvent>* Score::activeMidiPitches() { return _masterSco
 inline void Score::setUpdateAll() { _masterScore->setUpdateAll(); }
 
 inline void Score::setLayoutAll(int staff, const Element* e) { _masterScore->setLayoutAll(staff, e); }
-inline void Score::setLayout(const Fraction& tick, int staff, const Element* e)
-{
-    _masterScore->setLayout(tick, staff, e);
-}
-
+inline void Score::setLayout(const Fraction& tick, int staff, const Element* e) { _masterScore->setLayout(tick, staff, e); }
 inline void Score::setLayout(const Fraction& tick1, const Fraction& tick2, int staff1, int staff2, const Element* e)
 {
     _masterScore->setLayout(tick1, tick2, staff1, staff2, e);
@@ -1546,6 +1544,10 @@ inline Fraction Score::pos(POS pos) const { return _masterScore->pos(pos); }
 inline void Score::setPos(POS pos, Fraction tick) { _masterScore->setPos(pos, tick); }
 
 extern Ms::MasterScore* gscore;
+
+extern MStyle* styleDefaults114();
+extern MStyle* styleDefaults206();
+extern MStyle* styleDefaults301();
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(LayoutFlags);
 }     // namespace Ms
