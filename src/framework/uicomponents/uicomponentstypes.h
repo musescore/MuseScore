@@ -41,11 +41,11 @@ struct MenuItem : public actions::ActionItem
     MenuItem(const actions::ActionItem& parent)
         : ActionItem(parent) {}
 
-    QVariantMap toVariantMap() const
+    QVariantMap toMap() const
     {
         QVariantList _subitems;
         for (const MenuItem& item: subitems) {
-            _subitems << item.toVariantMap();
+            _subitems << item.toMap();
         }
 
         return {
@@ -61,7 +61,7 @@ struct MenuItem : public actions::ActionItem
         };
     }
 
-    static MenuItem fromVariantMap(const QVariantMap& map)
+    static MenuItem fromMap(const QVariantMap& map)
     {
         MenuItem item;
         item.code = map.value("code").toString().toStdString();
@@ -74,7 +74,7 @@ struct MenuItem : public actions::ActionItem
         item.checked = map.value("checked").toBool();
 
         for (const QVariant& _item: map.value("subitems").toList()) {
-            item.subitems << fromVariantMap(_item.toMap());
+            item.subitems << fromMap(_item.toMap());
         }
 
         return item;

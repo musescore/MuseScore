@@ -69,6 +69,8 @@
 
 #cmakedefine Q_WS_UIKIT
 
+#cmakedefine APP_UPDATABLE
+
 #define USE_BSP     true
 
 // does not work on windows/mac:

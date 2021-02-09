@@ -16,20 +16,15 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_APPSHELL_APPLICATIONACTIONS_H
-#define MU_APPSHELL_APPLICATIONACTIONS_H
+#include "appshellconfiguration.h"
 
-#include "actions/imoduleactions.h"
+using namespace mu::appshell;
 
-namespace mu::appshell {
-class ApplicationActions : public actions::IModuleActions
+bool AppShellConfiguration::isAppUpdatable() const
 {
-public:
-    const actions::ActionItem& action(const actions::ActionCode& actionCode) const override;
-
-private:
-    static const actions::ActionList m_actions;
-};
+#if defined(APP_UPDATABLE)
+    return true;
+#else
+    return false;
+#endif
 }
-
-#endif // MU_APPSHELL_APPLICATIONACTIONS_H

@@ -25,6 +25,7 @@
 #include "uicomponents/view/qmllistproperty.h"
 #include "uicomponents/uicomponentstypes.h"
 #include "dockpage.h"
+#include "dockmenubar.h"
 
 #include "ui/imainwindow.h"
 #include "ui/iplatformtheme.h"
@@ -42,7 +43,7 @@ class DockWindow : public QQuickItem, public ui::IMainWindow
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
     Q_PROPERTY(QColor borderColor READ borderColor WRITE setBorderColor NOTIFY borderColorChanged)
 
-    Q_PROPERTY(QVariantList menues READ menues WRITE setMenues NOTIFY menuesChanged)
+    Q_PROPERTY(mu::dock::DockMenuBar* menuBar READ menuBar WRITE setMenuBar NOTIFY menuBarChanged)
 
     Q_PROPERTY(QQmlListProperty<mu::dock::DockToolBar> toolbars READ toolbars)
 
@@ -61,7 +62,7 @@ public:
     QColor color() const;
     QColor borderColor() const;
 
-    QVariantList menues();
+    DockMenuBar* menuBar() const;
     QQmlListProperty<DockToolBar> toolbars();
     QQmlListProperty<DockPage> pages();
 
@@ -75,20 +76,20 @@ public slots:
     void setColor(QColor color);
     void setBorderColor(QColor color);
     void setCurrentPageUri(QString uri);
-    void setMenues(QVariantList menues);
+    void setMenuBar(DockMenuBar* menuBar);
 
 signals:
     void titleChanged(QString title);
     void colorChanged(QColor color);
     void borderColorChanged(QColor color);
     void currentPageUriChanged(QString currentPageUri);
-    void menuesChanged(QVariantList menues);
-    void actionTriggered(QString action);
+    void menuBarChanged(DockMenuBar* menuBar);
 
 private slots:
     void onMainWindowEvent(QEvent* event);
     void onPageAppended(int index);
     void updateStyle();
+    void onMenusChanged(const QList<QMenu*>& menus);
 
 private:
     void componentComplete() override;
@@ -101,13 +102,10 @@ private:
     void showPage(DockPage* page);
     void adjustPanelsSize(DockPage* page);
 
-    QMenu* makeMenu(const uicomponents::MenuItem& menuItem) const;
-    QAction* makeAction(const uicomponents::MenuItem& menuItem) const;
-
     QMainWindow* m_window = nullptr;
     EventsWatcher* m_eventsWatcher = nullptr;
     QString m_title;
-    uicomponents::MenuItemList m_menues;
+    DockMenuBar* m_menuBar = nullptr;
     uicomponents::QmlListProperty<DockToolBar> m_toolbars;
     QStackedWidget* m_central = nullptr;
     QStatusBar* m_statusbar = nullptr;

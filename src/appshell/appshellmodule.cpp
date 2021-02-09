@@ -28,15 +28,17 @@
 
 #include "internal/applicationactions.h"
 #include "internal/applicationactioncontroller.h"
+#include "internal/appshellconfiguration.h"
 #include "view/dockwindow/docksetup.h"
 #include "view/settings/settingslistmodel.h"
-#include "view/menumodel.h"
+#include "view/appmenumodel.h"
 
 using namespace mu::appshell;
 using namespace mu::framework;
 using namespace mu::ui;
 
-static std::shared_ptr<ApplicationActionController> s_actionController = std::make_shared<ApplicationActionController>();
+static std::shared_ptr<ApplicationActionController> s_applicationActionController = std::make_shared<ApplicationActionController>();
+static std::shared_ptr<AppShellConfiguration> s_appShellConfiguration = std::make_shared<AppShellConfiguration>();
 
 static void appshell_init_qrc()
 {
@@ -52,9 +54,14 @@ std::string AppShellModule::moduleName() const
     return "appshell";
 }
 
+void AppShellModule::registerExports()
+{
+    ioc()->registerExport<IAppShellConfiguration>(moduleName(), s_appShellConfiguration);
+}
+
 void AppShellModule::resolveImports()
 {
-    auto ar = framework::ioc()->resolve<actions::IActionsRegister>(moduleName());
+    auto ar = ioc()->resolve<actions::IActionsRegister>(moduleName());
     if (ar) {
         ar->reg(std::make_shared<ApplicationActions>());
     }
@@ -80,10 +87,10 @@ void AppShellModule::registerUiTypes()
     dock::DockSetup::registerQmlTypes();
 
     qmlRegisterType<SettingListModel>("MuseScore.Settings", 1, 0, "SettingListModel");
-    qmlRegisterType<MenuModel>("MuseScore.Menu", 1, 0, "MenuModel");
+    qmlRegisterType<AppMenuModel>("MuseScore.AppMenu", 1, 0, "AppMenuModel");
 }
 
 void AppShellModule::onInit(const IApplication::RunMode&)
 {
-    s_actionController->init();
+    s_applicationActionController->init();
 }

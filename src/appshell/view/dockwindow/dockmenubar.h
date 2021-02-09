@@ -16,20 +16,41 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_APPSHELL_APPLICATIONACTIONS_H
-#define MU_APPSHELL_APPLICATIONACTIONS_H
+#ifndef MU_DOCK_DOCKMENUBAR_H
+#define MU_DOCK_DOCKMENUBAR_H
 
-#include "actions/imoduleactions.h"
+#include "dockview.h"
 
-namespace mu::appshell {
-class ApplicationActions : public actions::IModuleActions
+class QMenu;
+namespace mu::dock {
+class DockMenuBar : public DockView
 {
+    Q_OBJECT
+
+    Q_PROPERTY(QVariantList items READ items WRITE setItems NOTIFY itemsChanged)
+
 public:
-    const actions::ActionItem& action(const actions::ActionCode& actionCode) const override;
+    explicit DockMenuBar(QQuickItem* parent = nullptr);
+
+    QVariantList items() const;
+
+public slots:
+    void setItems(QVariantList items);
+    void onActionTriggered(QAction* action);
+
+signals:
+    void itemsChanged(QVariantList items);
+    void changed(const QList<QMenu*>& menus);
+    void actionTringgered(const QString& action);
 
 private:
-    static const actions::ActionList m_actions;
+    void updateMenus();
+
+    QMenu* makeMenu(const QVariantMap& menuItem) const;
+    QAction* makeAction(const QVariantMap& menuItem) const;
+
+    QVariantList m_items;
 };
 }
 
-#endif // MU_APPSHELL_APPLICATIONACTIONS_H
+#endif // MU_DOCK_DOCKMENUBAR_H

@@ -4,7 +4,7 @@ import MuseScore.Dock 1.0
 import MuseScore.Ui 1.0
 import MuseScore.Playback 1.0
 import MuseScore.NotationScene 1.0
-import MuseScore.Menu 1.0
+import MuseScore.AppMenu 1.0
 import MuseScore.Shortcuts 1.0
 
 import "./HomePage"
@@ -22,7 +22,7 @@ DockWindow {
 
     Component.onCompleted: {
         shortcutsModel.load()
-        menuModel.load()
+        appMenuModel.load()
         api.launcher.open(homePage.uri)
     }
 
@@ -36,12 +36,17 @@ DockWindow {
     readonly property int toolbarHeight: 48
     property bool isNotationPage: currentPageUri === notationPage.uri
 
-    property ShortcutsInstanceModel shortcutsModel: ShortcutsInstanceModel { }
-    property var menuModel: MenuModel {}
+    property ShortcutsInstanceModel shortcutsModel: ShortcutsInstanceModel {}
+    property var appMenuModel: AppMenuModel {}
 
-    menues: menuModel.items
-    onActionTriggered: {
-        menuModel.handleAction(action)
+    menuBar: DockMenuBar {
+        objectName: "mainMenuBar"
+
+        items: appMenuModel.items
+
+        onActionTringgered: {
+            appMenuModel.handleAction(action)
+        }
     }
 
     toolbars: [
