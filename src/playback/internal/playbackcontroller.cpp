@@ -175,8 +175,8 @@ void PlaybackController::seek(int tick)
         return;
     }
 
-    uint64_t miliseconds = m_notation->playback()->tickToSec(tick) * 1000;
-    sequencer()->seek(miliseconds);
+    uint64_t milliseconds = m_notation->playback()->tickToSec(tick) * 1000;
+    sequencer()->seek(milliseconds);
 }
 
 void PlaybackController::pause()

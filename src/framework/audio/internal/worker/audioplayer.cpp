@@ -77,10 +77,10 @@ void AudioPlayer::run()
     }
 }
 
-void AudioPlayer::seek(unsigned long miliseconds)
+void AudioPlayer::seek(unsigned long milliseconds)
 {
     if (m_stream) {
-        m_position = miliseconds * m_stream->sampleRate() / 1000;
+        m_position = milliseconds * m_stream->sampleRate() / 1000;
     }
 }
 
@@ -98,7 +98,7 @@ void AudioPlayer::pause()
     }
 }
 
-unsigned long AudioPlayer::miliseconds() const
+unsigned long AudioPlayer::milliseconds() const
 {
     if (!m_stream) {
         return 0;
@@ -106,9 +106,9 @@ unsigned long AudioPlayer::miliseconds() const
     return m_position * 1000 / m_stream->sampleRate();
 }
 
-void AudioPlayer::forwardTime(unsigned long miliseconds)
+void AudioPlayer::forwardTime(unsigned long milliseconds)
 {
-    UNUSED(miliseconds)
+    UNUSED(milliseconds)
 
     //position changed by calling forward method
     //here can be placed methods for preparing automatization

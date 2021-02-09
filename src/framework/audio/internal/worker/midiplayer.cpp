@@ -145,14 +145,14 @@ void MIDIPlayer::onChunkReceived(const Chunk& chunk)
     m_streamState.requested = false;
 }
 
-void MIDIPlayer::forwardTime(unsigned long miliseconds)
+void MIDIPlayer::forwardTime(unsigned long milliseconds)
 {
     ONLY_AUDIO_WORKER_THREAD;
     if (!isRunning()) {
         return;
     }
 
-    msec_t msec = static_cast<msec_t>(miliseconds);
+    msec_t msec = static_cast<msec_t>(milliseconds);
     msec_t delta = msec - m_prevMSec;
 
     if (delta < 1) {
@@ -361,7 +361,7 @@ void MIDIPlayer::pause()
     sendClear();
 }
 
-unsigned long MIDIPlayer::miliseconds() const
+unsigned long MIDIPlayer::milliseconds() const
 {
     ONLY_AUDIO_WORKER_THREAD;
     return m_curMSec;
@@ -373,11 +373,11 @@ mu::async::Channel<tick_t> MIDIPlayer::tickPlayed() const
     return m_onTickPlayed;
 }
 
-void MIDIPlayer::seek(unsigned long miliseconds)
+void MIDIPlayer::seek(unsigned long milliseconds)
 {
     ONLY_AUDIO_WORKER_THREAD;
-    m_curMSec = miliseconds;
-    m_prevMSec = miliseconds;
+    m_curMSec = milliseconds;
+    m_prevMSec = milliseconds;
 
     if (m_midiStream && m_midiStream->isStreamingAllowed) {
         tick_t curTick = tick(m_curMSec);

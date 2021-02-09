@@ -47,7 +47,7 @@ public:
     //! return current position in seconds
     float timeInSeconds() const;
 
-    //! return current position in miliseconds
+    //! return current position in milliseconds
     time_t timeInMiliSeconds() const;
 
     void setSampleRate(unsigned int sampleRate);
@@ -66,7 +66,7 @@ public:
     void addAfterCallback(SyncCallback callback);
 
 private:
-    void runCallbacks(const std::list<SyncCallback>& list, time_t miliseconds);
+    void runCallbacks(const std::list<SyncCallback>& list, time_t milliseconds);
 
     std::atomic<Status> m_status = Stoped;
     time_t m_time = 0;
