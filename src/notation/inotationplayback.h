@@ -45,6 +45,9 @@ public:
     virtual async::Channel<int> playPositionTickChanged() const = 0;
 
     virtual midi::MidiData playElementMidiData(const Element* element) const = 0;
+
+    virtual void addLoopBoundaryToSelectedNote(LoopBoundaryType boundaryType) = 0;
+    virtual async::Channel<LoopBoundary> loopBoundaryChanged() const = 0;
 };
 
 using INotationPlaybackPtr = std::shared_ptr<INotationPlayback>;
