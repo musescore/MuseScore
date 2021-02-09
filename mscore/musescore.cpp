@@ -439,6 +439,7 @@ void updateExternalValuesFromPreferences() {
       MScore::selectColor[1] = preferences.getColor(PREF_UI_SCORE_VOICE2_COLOR);
       MScore::selectColor[2] = preferences.getColor(PREF_UI_SCORE_VOICE3_COLOR);
       MScore::selectColor[3] = preferences.getColor(PREF_UI_SCORE_VOICE4_COLOR);
+      MScore::cursorColor    = preferences.getColor(PREF_UI_SCORE_CURSOR_COLOR);
 
       MScore::setHRaster(preferences.getInt(PREF_UI_APP_RASTER_HORIZONTAL));
       MScore::setVRaster(preferences.getInt(PREF_UI_APP_RASTER_VERTICAL));

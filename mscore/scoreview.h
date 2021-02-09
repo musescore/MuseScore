@@ -186,6 +186,8 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       //--input state:
       PositionCursor* _cursor;
+      QColor _cursorColor;
+      const int MAX_CURSOR_ALPHA = 220;
 
       PositionCursor* _controlCursor;
       SmoothPanSettings _panSettings;
