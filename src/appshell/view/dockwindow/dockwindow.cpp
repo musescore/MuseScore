@@ -442,7 +442,11 @@ QAction* DockWindow::makeAction(const MenuItem& menuItem) const
     QAction* action = new QAction();
     action->setData(QString::fromStdString(menuItem.code));
     action->setText(QString::fromStdString(menuItem.title));
-    action->setShortcut(QKeySequence(shortcutsRegister()->shortcut(menuItem.code).standardKey));
+
+    action->setShortcut(QString::fromStdString(menuItem.shortcut));
+    // NOTE: Disable activate by hotkey
+    action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+
     action->setEnabled(menuItem.enabled);
     action->setChecked(menuItem.checked);
     return action;

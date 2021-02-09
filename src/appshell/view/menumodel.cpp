@@ -48,6 +48,10 @@ void MenuModel::load()
         currentMasterNotation()->notation()->notationChanged().onNotify(this, [this]() {
             load();
         });
+
+        currentMasterNotation()->notation()->interaction()->selectionChanged().onNotify(this, [this]() {
+            load();
+        });
     });
 
     emit itemsChanged();

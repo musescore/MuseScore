@@ -18,6 +18,9 @@
 //=============================================================================
 #include "shortcutsinstancemodel.h"
 
+#include <QMainWindow>
+#include <QShortcut>
+
 #include "log.h"
 
 using namespace mu::shortcuts;
@@ -27,30 +30,34 @@ ShortcutsInstanceModel::ShortcutsInstanceModel(QObject* parent)
 {
 }
 
+ShortcutsInstanceModel::~ShortcutsInstanceModel()
+{
+    m_shortcuts.clear();
+}
+
 void ShortcutsInstanceModel::load()
 {
     m_shortcuts.clear();
 
-    const ShortcutList& shortcuts = shortcutsRegister()->shortcuts();
-    for (const Shortcut& sc : shortcuts) {
-        QString sequence = QString::fromStdString(sc.sequence);
-
-        //! NOTE There may be several identical shortcuts for different contexts.
-        //! We only need a list of unique ones.
-        if (!m_shortcuts.contains(sequence)) {
-            m_shortcuts << sequence;
-        }
+    QWidget* mainWindowWidget = dynamic_cast<QWidget*>(mainWindow()->qMainWindow());
+    if (!mainWindowWidget) {
+        LOGE() << "Main window widget is not valid";
+        return;
     }
 
-    emit shortcutsChanged();
-}
+    QList<std::string> sequences;
+    for (const Shortcut& shortcut: shortcutsRegister()->shortcuts()) {
+        //! NOTE There may be several identical shortcuts for different contexts.
+        //! We only need a list of unique ones.
+        if (sequences.contains(shortcut.sequence)) {
+            continue;
+        }
 
-QStringList ShortcutsInstanceModel::shortcuts() const
-{
-    return m_shortcuts;
-}
+        QShortcut* qshortcut = new QShortcut(QString::fromStdString(shortcut.sequence), mainWindowWidget, [this, shortcut]() {
+            controller()->activate(shortcut.sequence);
+        }, Qt::ApplicationShortcut);
 
-void ShortcutsInstanceModel::activate(const QString& key)
-{
-    controller()->activate(key.toStdString());
+        m_shortcuts.push_back(qshortcut);
+        sequences << shortcut.sequence;
+    }
 }

@@ -26,6 +26,9 @@
 #include "modularity/ioc.h"
 #include "ishortcutsregister.h"
 #include "ishortcutscontroller.h"
+#include "ui/imainwindow.h"
+
+class QShortcut;
 
 namespace mu::shortcuts {
 class ShortcutsInstanceModel : public QObject
@@ -34,22 +37,16 @@ class ShortcutsInstanceModel : public QObject
 
     INJECT(shortcuts, IShortcutsRegister, shortcutsRegister)
     INJECT(shortcuts, IShortcutsController, controller)
-
-    Q_PROPERTY(QStringList shortcuts READ shortcuts NOTIFY shortcutsChanged)
+    INJECT(shortcuts, ui::IMainWindow, mainWindow)
 
 public:
     explicit ShortcutsInstanceModel(QObject* parent = nullptr);
-
-    QStringList shortcuts() const;
+    ~ShortcutsInstanceModel();
 
     Q_INVOKABLE void load();
-    Q_INVOKABLE void activate(const QString& key);
-
-signals:
-    void shortcutsChanged();
 
 private:
-    QStringList m_shortcuts;
+    std::vector<QShortcut*> m_shortcuts;
 };
 }
 
