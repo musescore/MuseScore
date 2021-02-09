@@ -290,7 +290,7 @@ void NotationPaintView::showContextMenu(const ElementType& elementType, const QP
     QVariantList menuItems;
 
     for (const MenuItem& menuItem: notationContextMenu()->items(elementType)) {
-        menuItems << menuItem.toVariantMap();
+        menuItems << menuItem.toMap();
     }
 
     emit openContextMenuRequested(menuItems, pos);

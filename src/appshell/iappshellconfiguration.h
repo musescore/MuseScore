@@ -16,20 +16,21 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_APPSHELL_APPLICATIONACTIONS_H
-#define MU_APPSHELL_APPLICATIONACTIONS_H
+#ifndef MU_APPSHELL_IAPPSHELLCONFIGURATION_H
+#define MU_APPSHELL_IAPPSHELLCONFIGURATION_H
 
-#include "actions/imoduleactions.h"
+#include "modularity/imoduleexport.h"
 
 namespace mu::appshell {
-class ApplicationActions : public actions::IModuleActions
+class IAppShellConfiguration : MODULE_EXPORT_INTERFACE
 {
-public:
-    const actions::ActionItem& action(const actions::ActionCode& actionCode) const override;
+    INTERFACE_ID(IAppshellConfiguration)
 
-private:
-    static const actions::ActionList m_actions;
+public:
+    virtual ~IAppShellConfiguration() = default;
+
+    virtual bool isAppUpdatable() const = 0;
 };
 }
 
-#endif // MU_APPSHELL_APPLICATIONACTIONS_H
+#endif // MU_APPSHELL_IAPPSHELLCONFIGURATION_H

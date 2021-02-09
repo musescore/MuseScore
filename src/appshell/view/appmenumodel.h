@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2020 MuseScore BVBA and others
+//  Copyright (C) 2021 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_APPSHELL_MENUMODEL_H
-#define MU_APPSHELL_MENUMODEL_H
+#ifndef MU_APPSHELL_APPMENUMODEL_H
+#define MU_APPSHELL_APPMENUMODEL_H
 
 #include <QObject>
 
@@ -30,9 +30,10 @@
 #include "uicomponents/uicomponentstypes.h"
 #include "context/iglobalcontext.h"
 #include "workspace/iworkspacemanager.h"
+#include "iappshellconfiguration.h"
 
 namespace mu::appshell {
-class MenuModel : public QObject, public async::Asyncable
+class AppMenuModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
@@ -41,11 +42,12 @@ class MenuModel : public QObject, public async::Asyncable
     INJECT(appshell, shortcuts::IShortcutsRegister, shortcutsRegister)
     INJECT(appshell, context::IGlobalContext, globalContext)
     INJECT(appshell, workspace::IWorkspaceManager, workspacesManager)
+    INJECT(appshell, IAppShellConfiguration, configuration)
 
     Q_PROPERTY(QVariantList items READ items NOTIFY itemsChanged)
 
 public:
-    explicit MenuModel(QObject* parent = nullptr);
+    explicit AppMenuModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void load();
     Q_INVOKABLE void handleAction(const QString& actionCode);
@@ -77,7 +79,7 @@ private:
     uicomponents::MenuItemList workspacesItems() const;
 
     uicomponents::MenuItem makeMenu(const std::string& title, const uicomponents::MenuItemList& actions, bool enabled = true);
-    uicomponents::MenuItem makeAction(const actions::ActionItem& action, bool enabled = true, bool checked = false,
+    uicomponents::MenuItem makeAction(const actions::ActionCode& actionCode, bool enabled = true, bool checked = false,
                                       const std::string& section = "") const;
     uicomponents::MenuItem makeSeparator() const;
 
@@ -92,4 +94,4 @@ private:
 };
 }
 
-#endif // MU_APPSHELL_MENUMODEL_H
+#endif // MU_APPSHELL_APPMENUMODEL_H

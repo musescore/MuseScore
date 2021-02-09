@@ -101,6 +101,13 @@ if (BUILD_FOR_WINSTORE)
     set(FOR_WINSTORE 1)
 endif(BUILD_FOR_WINSTORE)
 
+set(APP_UPDATABLE 1)
+if (OS_IS_MAC OR OS_IS_WIN)
+    if (WIN_PORTABLE OR FOR_WINSTORE)
+        set(APP_UPDATABLE 0)
+    endif(WIN_PORTABLE OR FOR_WINSTORE)
+endif(OS_IS_MAC OR OS_IS_WIN)
+
 ###########################################
 # Setup compiler and build environment
 ###########################################

@@ -71,10 +71,6 @@ DockWindow::DockWindow(QQuickItem* parent)
     m_statusbar->setSizeGripEnabled(false);
     m_window->setStatusBar(m_statusbar);
 
-    connect(m_window->menuBar(), &QMenuBar::triggered, this, [this](const QAction* action) {
-        emit actionTriggered(action->data().toString());
-    });
-
     WidgetStateStore::restoreGeometry(m_window);
 
     connect(m_pages.notifier(), &uicomponents::QmlListPropertyNotifier::appended, this, &DockWindow::onPageAppended);
@@ -278,6 +274,15 @@ void DockWindow::updateStyle()
     platformTheme()->styleWindow(m_window);
 }
 
+void DockWindow::onMenusChanged(const QList<QMenu*>& menus)
+{
+    m_window->menuBar()->clear();
+
+    for (QMenu* menu: menus) {
+        m_window->menuBar()->addMenu(menu);
+    }
+}
+
 DockPage* DockWindow::currentPage() const
 {
     return page(m_currentPageUri);
@@ -320,6 +325,11 @@ QColor DockWindow::borderColor() const
     return m_borderColor;
 }
 
+DockMenuBar* DockWindow::menuBar() const
+{
+    return m_menuBar;
+}
+
 void DockWindow::setBorderColor(QColor color)
 {
     if (m_borderColor == color) {
@@ -328,17 +338,6 @@ void DockWindow::setBorderColor(QColor color)
 
     m_borderColor = color;
     emit borderColorChanged(color);
-}
-
-QVariantList DockWindow::menues()
-{
-    QVariantList menuItems;
-
-    for (const uicomponents::MenuItem& menuItem: m_menues) {
-        menuItems << menuItem.toVariantMap();
-    }
-
-    return menuItems;
 }
 
 QQmlListProperty<DockToolBar> DockWindow::toolbars()
@@ -391,21 +390,18 @@ void DockWindow::setCurrentPageUri(QString uri)
     emit currentPageUriChanged(m_currentPageUri);
 }
 
-void DockWindow::setMenues(QVariantList menues)
+void DockWindow::setMenuBar(DockMenuBar* menuBar)
 {
-    MenuItemList items;
-    for (const QVariant& item: menues) {
-        items << MenuItem::fromVariantMap(item.toMap());
+    if (m_menuBar == menuBar) {
+        return;
     }
 
-    m_menues = items;
+    m_menuBar = menuBar;
 
-    m_window->menuBar()->clear();
-    for (const MenuItem& menu: m_menues) {
-        m_window->menuBar()->addMenu(makeMenu(menu));
-    }
+    connect(menuBar, &DockMenuBar::changed, this, &DockWindow::onMenusChanged);
+    connect(m_window->menuBar(), &QMenuBar::triggered, menuBar, &DockMenuBar::onActionTriggered);
 
-    emit menuesChanged(menues);
+    emit menuBarChanged(m_menuBar);
 }
 
 QMainWindow* DockWindow::qMainWindow()
@@ -416,38 +412,4 @@ QMainWindow* DockWindow::qMainWindow()
 void DockWindow::stackUnder(QWidget* w)
 {
     m_window->stackUnder(w);
-}
-
-QMenu* DockWindow::makeMenu(const MenuItem& menuItem) const
-{
-    QMenu* menu = new QMenu();
-    menu->setTitle(QString::fromStdString(menuItem.title));
-    menu->setEnabled(menuItem.enabled);
-
-    for (const MenuItem& menuItem: menuItem.subitems) {
-        if (menuItem.title.empty()) {
-            menu->addSeparator();
-        } else if (!menuItem.subitems.empty()) {
-            menu->addMenu(makeMenu(menuItem));
-        } else {
-            menu->addAction(makeAction(menuItem));
-        }
-    }
-
-    return menu;
-}
-
-QAction* DockWindow::makeAction(const MenuItem& menuItem) const
-{
-    QAction* action = new QAction();
-    action->setData(QString::fromStdString(menuItem.code));
-    action->setText(QString::fromStdString(menuItem.title));
-
-    action->setShortcut(QString::fromStdString(menuItem.shortcut));
-    // NOTE: Disable activate by hotkey
-    action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-
-    action->setEnabled(menuItem.enabled);
-    action->setChecked(menuItem.checked);
-    return action;
 }
