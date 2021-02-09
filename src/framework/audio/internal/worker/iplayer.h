@@ -40,12 +40,12 @@ public:
     virtual bool isRunning() const = 0;
 
     virtual void run() = 0;
-    virtual void seek(unsigned long miliseconds) = 0;
+    virtual void seek(unsigned long milliseconds) = 0;
     virtual void stop() = 0;
     virtual void pause() = 0;
 
-    virtual unsigned long miliseconds() const = 0;
-    virtual void forwardTime(unsigned long miliseconds) = 0;
+    virtual unsigned long milliseconds() const = 0;
+    virtual void forwardTime(unsigned long milliseconds) = 0;
 };
 }
 #endif // MU_AUDIO_IPLAYER_H

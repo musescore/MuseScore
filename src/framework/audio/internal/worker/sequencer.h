@@ -45,9 +45,9 @@ public:
     void play() override;
     void pause() override;
     void stop() override;
-    void seek(uint64_t miliseconds) override;
+    void seek(uint64_t milliseconds) override;
     void rewind() override;
-    void setLoop(uint64_t fromMiliSeconds, uint64_t toMiliSeconds) override;
+    void setLoop(uint64_t fromMilliSeconds, uint64_t toMilliSeconds) override;
     void unsetLoop() override;
 
     std::shared_ptr<Clock> clock() const;

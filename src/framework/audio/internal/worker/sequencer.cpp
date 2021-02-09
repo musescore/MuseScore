@@ -34,8 +34,8 @@ Sequencer::Sequencer()
     m_clock->addAfterCallback([this](Clock::time_t) {
         timeUpdate();
     });
-    m_clock->addBeforeCallback([this](Clock::time_t miliseconds) {
-        beforeTimeUpdate(miliseconds);
+    m_clock->addBeforeCallback([this](Clock::time_t milliseconds) {
+        beforeTimeUpdate(milliseconds);
     });
 }
 
@@ -75,10 +75,10 @@ void Sequencer::stop()
     rewind();
 }
 
-void Sequencer::seek(uint64_t miliseconds)
+void Sequencer::seek(uint64_t milliseconds)
 {
     ONLY_AUDIO_WORKER_THREAD;
-    m_nextSeek = miliseconds;
+    m_nextSeek = milliseconds;
 }
 
 void Sequencer::rewind()
@@ -146,11 +146,11 @@ float Sequencer::playbackPositionInSeconds() const
     return clock()->timeInSeconds();
 }
 
-void Sequencer::setLoop(uint64_t fromMiliSeconds, uint64_t toMiliSeconds)
+void Sequencer::setLoop(uint64_t fromMilliSeconds, uint64_t toMilliSeconds)
 {
     ONLY_AUDIO_WORKER_THREAD;
-    m_loopStart = fromMiliSeconds;
-    m_loopEnd = toMiliSeconds;
+    m_loopStart = fromMilliSeconds;
+    m_loopEnd = toMilliSeconds;
 }
 
 void Sequencer::unsetLoop()
@@ -185,25 +185,25 @@ void Sequencer::timeUpdate()
     }
 }
 
-void Sequencer::beforeTimeUpdate(Clock::time_t miliseconds)
+void Sequencer::beforeTimeUpdate(Clock::time_t milliseconds)
 {
     if (m_nextStatus != m_status) {
         setStatus(m_nextStatus);
     }
 
     if (m_nextSeek.has_value()) {
-        auto miliseconds = m_nextSeek.value_or(0);
+        auto milliseconds = m_nextSeek.value_or(0);
         m_nextSeek.reset();
 
-        m_clock->seekMiliseconds(miliseconds);
+        m_clock->seekMiliseconds(milliseconds);
         for (auto& track : m_tracks) {
-            track.second->seek(miliseconds);
+            track.second->seek(milliseconds);
         }
         m_positionChanged.notify();
     }
 
-    std::for_each(m_backgroudPlayers.begin(), m_backgroudPlayers.end(), [&miliseconds](auto& player) {
-        player.first += miliseconds;
+    std::for_each(m_backgroudPlayers.begin(), m_backgroudPlayers.end(), [&milliseconds](auto& player) {
+        player.first += milliseconds;
         player.second->forwardTime(player.first);
     });
 

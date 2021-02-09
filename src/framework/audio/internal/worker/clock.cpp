@@ -109,9 +109,9 @@ void Clock::addAfterCallback(Clock::SyncCallback callback)
     m_afterCallbacks.push_back(callback);
 }
 
-void Clock::runCallbacks(const std::list<Clock::SyncCallback>& list, time_t miliseconds)
+void Clock::runCallbacks(const std::list<Clock::SyncCallback>& list, time_t milliseconds)
 {
     for (auto& callback : list) {
-        callback(miliseconds);
+        callback(milliseconds);
     }
 }

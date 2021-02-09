@@ -50,12 +50,12 @@ public:
     bool isRunning() const override;
 
     void run() override;
-    void seek(unsigned long miliseconds) override;
+    void seek(unsigned long milliseconds) override;
     void stop() override;
     void pause() override;
 
-    unsigned long miliseconds() const override;
-    void forwardTime(unsigned long miliseconds) override;
+    unsigned long milliseconds() const override;
+    void forwardTime(unsigned long milliseconds) override;
 
     // IMIDIPlayer
     void loadMIDI(const std::shared_ptr<midi::MidiStream>& stream) override;
