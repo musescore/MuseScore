@@ -4,7 +4,8 @@
 #include <QUrl>
 #include <QQmlContext>
 
-PopupView::PopupView(QQuickItem* parent) : QQuickItem(parent)
+PopupView::PopupView(QQuickItem* parent)
+    : QQuickItem(parent)
 {
     setFlag(QQuickItem::ItemHasContents, true);
 
@@ -82,8 +83,9 @@ qreal PopupView::padding() const
 
 void PopupView::setBackgroundItem(QQuickItem* backgroundItem)
 {
-    if (m_backgroundItem == backgroundItem)
+    if (m_backgroundItem == backgroundItem) {
         return;
+    }
 
     m_backgroundItem = backgroundItem;
     emit backgroundItemChanged(m_backgroundItem);
@@ -91,8 +93,9 @@ void PopupView::setBackgroundItem(QQuickItem* backgroundItem)
 
 void PopupView::setContentItem(QQuickItem* contentItem)
 {
-    if (m_contentItem == contentItem)
+    if (m_contentItem == contentItem) {
         return;
+    }
 
     m_contentItem = contentItem;
     emit contentItemChanged(m_contentItem);
@@ -100,8 +103,9 @@ void PopupView::setContentItem(QQuickItem* contentItem)
 
 void PopupView::setClosePolicy(PopupView::ClosePolicy closePolicy)
 {
-    if (m_closePolicy == closePolicy)
+    if (m_closePolicy == closePolicy) {
         return;
+    }
 
     m_closePolicy = closePolicy;
     emit closePolicyChanged(m_closePolicy);
@@ -109,8 +113,9 @@ void PopupView::setClosePolicy(PopupView::ClosePolicy closePolicy)
 
 void PopupView::setIsOpened(bool isOpened)
 {
-    if (m_isOpened == isOpened)
+    if (m_isOpened == isOpened) {
         return;
+    }
 
     m_isOpened = isOpened;
     emit isOpenedChanged(m_isOpened);
@@ -118,8 +123,9 @@ void PopupView::setIsOpened(bool isOpened)
 
 void PopupView::setPadding(qreal padding)
 {
-    if (qFuzzyCompare(m_padding, padding))
+    if (qFuzzyCompare(m_padding, padding)) {
         return;
+    }
 
     m_padding = padding;
     emit paddingChanged(m_padding);
@@ -127,8 +133,9 @@ void PopupView::setPadding(qreal padding)
 
 void PopupView::setPositionDisplacementX(qreal positionDisplacementX)
 {
-    if (qFuzzyCompare(m_positionDisplacementX, positionDisplacementX))
+    if (qFuzzyCompare(m_positionDisplacementX, positionDisplacementX)) {
         return;
+    }
 
     m_positionDisplacementX = positionDisplacementX;
     setX(positionDisplacementX);
@@ -137,8 +144,9 @@ void PopupView::setPositionDisplacementX(qreal positionDisplacementX)
 
 void PopupView::setPositionDisplacementY(qreal positionDisplacementY)
 {
-    if (qFuzzyCompare(m_positionDisplacementY, positionDisplacementY))
+    if (qFuzzyCompare(m_positionDisplacementY, positionDisplacementY)) {
         return;
+    }
 
     m_positionDisplacementY = positionDisplacementY;
     setY(positionDisplacementY);
@@ -147,8 +155,9 @@ void PopupView::setPositionDisplacementY(qreal positionDisplacementY)
 
 void PopupView::setGlobalPos(QPointF globalPos)
 {
-    if (m_globalPos == globalPos)
+    if (m_globalPos == globalPos) {
         return;
+    }
 
     m_globalPos = globalPos;
     m_containerView->setPosition(globalPos.toPoint());
@@ -188,7 +197,6 @@ void PopupView::mousePressEvent(QMouseEvent* event)
     }
 
     if (m_closePolicy == ClosePolicy::CloseOnPressOutsideParent) {
-
         if (!isMouseWithinBoundaries(event->globalPos())) {
             close();
         }
@@ -202,7 +210,6 @@ void PopupView::mouseReleaseEvent(QMouseEvent* event)
     }
 
     if (m_closePolicy == ClosePolicy::CloseOnReleaseOutsideParent) {
-
         if (!isMouseWithinBoundaries(event->globalPos())) {
             close();
         }
