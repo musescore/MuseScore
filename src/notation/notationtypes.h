@@ -319,6 +319,13 @@ struct TupletOptions
     TupletBracketType bracketType = TupletBracketType::AUTO_BRACKET;
 };
 
+enum class LoopCursorType
+{
+    Unknown,
+    LoopIn,
+    LoopOut
+};
+
 inline QString staffTypeToString(StaffType type)
 {
     return Ms::StaffType::preset(type)->name();

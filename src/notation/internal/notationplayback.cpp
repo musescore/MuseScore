@@ -45,7 +45,7 @@
 using namespace mu::notation;
 using namespace mu::midi;
 
-static int MIN_CHUNK_SIZE(10); // measure
+static constexpr int MIN_CHUNK_SIZE(10); // measure
 
 NotationPlayback::NotationPlayback(IGetScore* getScore)
     : m_getScore(getScore)
@@ -59,17 +59,21 @@ NotationPlayback::~NotationPlayback()
 {
 }
 
+Ms::Score* NotationPlayback::score() const
+{
+    return m_getScore->score();
+}
+
 void NotationPlayback::init()
 {
-    Ms::Score* score = m_getScore->score();
-    IF_ASSERT_FAILED(score) {
+    IF_ASSERT_FAILED(score()) {
         return;
     }
 
-    m_midiRenderer = std::unique_ptr<Ms::MidiRenderer>(new Ms::MidiRenderer(score));
+    m_midiRenderer = std::unique_ptr<Ms::MidiRenderer>(new Ms::MidiRenderer(score()));
     m_midiRenderer->setMinChunkSize(MIN_CHUNK_SIZE);
 
-    QObject::connect(score, &Ms::Score::posChanged, [this](Ms::POS pos, int tick) {
+    QObject::connect(score(), &Ms::Score::posChanged, [this](Ms::POS pos, int tick) {
         if (Ms::POS::CURRENT == pos) {
             m_playPositionTickChanged.send(tick);
         }
@@ -78,8 +82,7 @@ void NotationPlayback::init()
 
 std::shared_ptr<MidiStream> NotationPlayback::midiStream() const
 {
-    Ms::Score* score = m_getScore->score();
-    if (!score) {
+    if (!score()) {
         return nullptr;
     }
 
@@ -90,12 +93,12 @@ std::shared_ptr<MidiStream> NotationPlayback::midiStream() const
     m_midiStream->initData = MidiData();
     m_midiRenderer->setScoreChanged();
 
-    makeInitData(m_midiStream->initData, score);
+    makeInitData(m_midiStream->initData, score());
     midi::Chunk firstChunk;
     makeChunk(firstChunk, 0 /*fromTick*/);
     m_midiStream->initData.chunks.insert({ firstChunk.beginTick, std::move(firstChunk) });
 
-    m_midiStream->lastTick = score->lastMeasure()->endTick().ticks();
+    m_midiStream->lastTick = score()->lastMeasure()->endTick().ticks();
 
     return m_midiStream;
 }
@@ -113,10 +116,10 @@ void NotationPlayback::makeInitData(MidiData& data, Ms::Score* score) const
     //fillMetronome(data.metronome, score, midiSpec);
 }
 
-int NotationPlayback::instrumentBank(const Ms::Instrument* instr) const
+int NotationPlayback::instrumentBank(const Ms::Instrument* instrument) const
 {
     //! NOTE Temporary solution
-    if (instr->useDrumset()) {
+    if (instrument->useDrumset()) {
         return 128;
     }
     return 0;
@@ -244,35 +247,24 @@ void NotationPlayback::makeChunk(midi::Chunk& chunk, tick_t fromTick) const
 
 float NotationPlayback::tickToSec(int tick) const
 {
-    Ms::Score* score = m_getScore->score();
-    if (!score) {
-        return 0.0f;
-    }
-
-    return score->utick2utime(tick);
+    return score() ? score()->utick2utime(tick) : 0.0;
 }
 
 int NotationPlayback::secToTick(float sec) const
 {
-    Ms::Score* score = m_getScore->score();
-    if (!score) {
-        return 0;
-    }
-
-    return score->utime2utick(sec);
+    return score() ? score()->utime2utick(sec) : 0;
 }
 
 //! NOTE Copied from ScoreView::moveCursor(const Fraction& tick)
 QRect NotationPlayback::playbackCursorRectByTick(int _tick) const
 {
-    Ms::Score* score = m_getScore->score();
-    if (!score) {
+    if (!score()) {
         return QRect();
     }
 
     Fraction tick = Fraction::fromTicks(_tick);
 
-    Measure* measure = score->tick2measureMM(tick);
+    Measure* measure = score()->tick2measureMM(tick);
     if (!measure) {
         return QRect();
     }
@@ -320,19 +312,19 @@ QRect NotationPlayback::playbackCursorRectByTick(int _tick) const
     }
 
     double y = system->staffYpage(0) + system->page()->pos().y();
-    double _spatium = score->spatium();
+    double _spatium = score()->spatium();
 
     qreal mag = _spatium / Ms::SPATIUM20;
-    double w  = _spatium * 2.0 + score->scoreFont()->width(Ms::SymId::noteheadBlack, mag);
+    double w  = _spatium * 2.0 + score()->scoreFont()->width(Ms::SymId::noteheadBlack, mag);
     double h  = 6 * _spatium;
     //
     // set cursor height for whole system
     //
     double y2 = 0.0;
 
-    for (int i = 0; i < score->nstaves(); ++i) {
+    for (int i = 0; i < score()->nstaves(); ++i) {
         Ms::SysStaff* ss = system->staff(i);
-        if (!ss->show() || !score->staff(i)->show()) {
+        if (!ss->show() || !score()->staff(i)->show()) {
             continue;
         }
         y2 = ss->bbox().bottom();
@@ -346,48 +338,45 @@ QRect NotationPlayback::playbackCursorRectByTick(int _tick) const
 
 mu::RetVal<int> NotationPlayback::playPositionTick() const
 {
-    Ms::Score* score = m_getScore->score();
-    if (!score) {
+    if (!score()) {
         return RetVal<int>(make_ret(Err::NoScore));
     }
 
-    return RetVal<int>::make_ok(score->playPos().ticks());
+    return RetVal<int>::make_ok(score()->playPos().ticks());
 }
 
 void NotationPlayback::setPlayPositionTick(int tick)
 {
-    Ms::Score* score = m_getScore->score();
-    if (!score) {
+    if (!score()) {
         return;
     }
 
-    score->setPlayPos(Ms::Fraction::fromTicks(tick));
+    score()->setPlayPos(Ms::Fraction::fromTicks(tick));
 }
 
-bool NotationPlayback::setPlayPositionByElement(const Element* e)
+bool NotationPlayback::setPlayPositionByElement(const Element* element)
 {
-    IF_ASSERT_FAILED(e) {
+    IF_ASSERT_FAILED(element) {
         return false;
     }
 
-    Ms::Score* score = m_getScore->score();
-    if (!score) {
+    if (!score()) {
         return false;
     }
 
     //! NOTE Copied from void ScoreView::mousePressEvent(QMouseEvent* ev)  case ViewState::PLAY: {
-    if (!(e->isNote() || e->isRest())) {
+    if (!(element->isNote() || element->isRest())) {
         return false;
     }
 
-    if (e->isNote()) {
-        e = e->parent();
+    if (element->isNote()) {
+        element = element->parent();
     }
 
-    const Ms::ChordRest* cr = Ms::toChordRest(e);
+    const Ms::ChordRest* cr = Ms::toChordRest(element);
 
-    int ticks = score->repeatList().tick2utick(cr->tick().ticks());
-    score->setPlayPos(Ms::Fraction::fromTicks(ticks));
+    int ticks = score()->repeatList().tick2utick(cr->tick().ticks());
+    score()->setPlayPos(Ms::Fraction::fromTicks(ticks));
 
     return true;
 }
@@ -397,29 +386,29 @@ mu::async::Channel<int> NotationPlayback::playPositionTickChanged() const
     return m_playPositionTickChanged;
 }
 
-MidiData NotationPlayback::playElementMidiData(const Element* e) const
+MidiData NotationPlayback::playElementMidiData(const Element* element) const
 {
-    if (e->isNote()) {
-        const Ms::Note* note = Ms::toNote(e);
+    if (element->isNote()) {
+        const Ms::Note* note = Ms::toNote(element);
         IF_ASSERT_FAILED(note) {
             return MidiData();
         }
         return playNoteMidiData(note);
-    } else if (e->isChord()) {
-        const Ms::Chord* chord = Ms::toChord(e);
+    } else if (element->isChord()) {
+        const Ms::Chord* chord = Ms::toChord(element);
         IF_ASSERT_FAILED(chord) {
             return MidiData();
         }
         return playChordMidiData(chord);
-    } else if (e->isHarmony()) {
-        const Ms::Harmony* h = Ms::toHarmony(e);
+    } else if (element->isHarmony()) {
+        const Ms::Harmony* h = Ms::toHarmony(element);
         IF_ASSERT_FAILED(h) {
             return MidiData();
         }
         return playHarmonyMidiData(h);
     }
 
-    NOT_SUPPORTED << e->name();
+    NOT_SUPPORTED << element->name();
     return MidiData();
 }
 
