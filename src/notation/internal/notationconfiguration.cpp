@@ -188,6 +188,11 @@ int NotationConfiguration::cursorOpacity() const
     return 50;
 }
 
+QColor NotationConfiguration::loopCursorColor() const
+{
+    return QColor("0x2456AA");
+}
+
 QColor NotationConfiguration::layoutBreakColor() const
 {
     return QColor("0xA0A0A4");

@@ -54,6 +54,9 @@ NotationPaintView::NotationPaintView(QQuickItem* parent)
     m_playbackCursor = std::make_unique<PlaybackCursor>();
     m_playbackCursor->setVisible(false);
     m_noteInputCursor = std::make_unique<NoteInputCursor>();
+
+    m_loopInCursor = std::make_unique<LoopCursor>(LoopCursorType::LoopIn);
+    m_loopOutCursor = std::make_unique<LoopCursor>(LoopCursorType::LoopOut);
 }
 
 void NotationPaintView::load()
@@ -194,6 +197,9 @@ void NotationPaintView::onCurrentNotationChanged()
         }
     });
 
+    m_loopInCursor->setStyle(m_notation->style());
+    m_loopOutCursor->setStyle(m_notation->style());
+
     update();
 }
 
@@ -311,6 +317,8 @@ void NotationPaintView::paint(QPainter* painter)
 
     m_playbackCursor->paint(painter);
     m_noteInputCursor->paint(painter);
+    m_loopInCursor->paint(painter);
+    m_loopOutCursor->paint(painter);
 }
 
 QRect NotationPaintView::viewport() const
