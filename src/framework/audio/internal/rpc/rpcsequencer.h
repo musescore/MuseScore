@@ -50,8 +50,7 @@ public:
     void setLoop(uint64_t fromMiliSeconds, uint64_t toMiliSeconds) override;
     void unsetLoop() override;
 
-    //!return position in seconds
-    float playbackPosition() const override;
+    float playbackPositionInSeconds() const override;
     async::Notification positionChanged() const override;
     async::Channel<mu::midi::tick_t> midiTickPlayed(TrackID id) const override;
 

@@ -172,7 +172,7 @@ async::Notification RpcSequencer::positionChanged() const
     return m_positionChanged;
 }
 
-float RpcSequencer::playbackPosition() const
+float RpcSequencer::playbackPositionInSeconds() const
 {
     return m_playbackPosition;
 }

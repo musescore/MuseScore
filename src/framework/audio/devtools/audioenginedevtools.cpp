@@ -166,7 +166,7 @@ void AudioEngineDevTools::closeAudio()
 
 float AudioEngineDevTools::time() const
 {
-    return sequencer()->playbackPosition();
+    return sequencer()->playbackPositionInSeconds();
 }
 
 QVariantList AudioEngineDevTools::devices() const

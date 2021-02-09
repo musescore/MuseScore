@@ -140,7 +140,7 @@ mu::async::Notification Sequencer::positionChanged() const
     return m_positionChanged;
 }
 
-float Sequencer::playbackPosition() const
+float Sequencer::playbackPositionInSeconds() const
 {
     ONLY_AUDIO_WORKER_THREAD;
     return clock()->timeInSeconds();

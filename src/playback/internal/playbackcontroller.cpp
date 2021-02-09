@@ -44,7 +44,7 @@ void PlaybackController::init()
     case SMOOTH:
         sequencer()->positionChanged().onNotify(this, [this]() {
             if (m_notation) {
-                auto seconds = sequencer()->playbackPosition();
+                auto seconds = sequencer()->playbackPositionInSeconds();
                 auto ticks = m_notation->playback()->secToTick(seconds);
                 m_tickPlayed.send(ticks);
             }
@@ -85,9 +85,9 @@ Notification PlaybackController::isPlayingChanged() const
     return m_isPlayingChanged;
 }
 
-float PlaybackController::playbackPosition() const
+float PlaybackController::playbackPositionInSeconds() const
 {
-    return sequencer()->playbackPosition();
+    return sequencer()->playbackPositionInSeconds();
 }
 
 Channel<uint32_t> PlaybackController::midiTickPlayed() const
