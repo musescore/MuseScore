@@ -35,6 +35,7 @@
 #include "notationviewinputcontroller.h"
 #include "noteinputcursor.h"
 #include "playbackcursor.h"
+#include "loopcursor.h"
 
 namespace mu::notation {
 class NotationPaintView : public QQuickPaintedItem, public IControlledView, public async::Asyncable, public actions::Actionable
@@ -170,6 +171,8 @@ private:
     std::unique_ptr<NotationViewInputController> m_inputController;
     std::unique_ptr<PlaybackCursor> m_playbackCursor;
     std::unique_ptr<NoteInputCursor> m_noteInputCursor;
+    std::unique_ptr<LoopCursor> m_loopInCursor;
+    std::unique_ptr<LoopCursor> m_loopOutCursor;
 
     qreal m_previousVerticalScrollPosition = 0;
     qreal m_previousHorizontalScrollPosition = 0;

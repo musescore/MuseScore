@@ -26,8 +26,7 @@
 
 #include "notationtypes.h"
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class INotationPlayback
 {
 public:
@@ -42,14 +41,13 @@ public:
 
     virtual RetVal<int> playPositionTick() const = 0;
     virtual void setPlayPositionTick(int tick) = 0;
-    virtual bool setPlayPositionByElement(const Element* e) = 0;
+    virtual bool setPlayPositionByElement(const Element* element) = 0;
     virtual async::Channel<int> playPositionTickChanged() const = 0;
 
-    virtual midi::MidiData playElementMidiData(const Element* e) const = 0;
+    virtual midi::MidiData playElementMidiData(const Element* element) const = 0;
 };
 
 using INotationPlaybackPtr = std::shared_ptr<INotationPlayback>;
-}
 }
 
 #endif // MU_NOTATION_INOTATIONPLAYBACK_H

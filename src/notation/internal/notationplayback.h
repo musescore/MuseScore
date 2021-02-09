@@ -31,8 +31,7 @@ class EventMap;
 class MidiRenderer;
 }
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class NotationPlayback : public INotationPlayback, public async::Asyncable
 {
 public:
@@ -50,12 +49,13 @@ public:
 
     RetVal<int> playPositionTick() const override;
     void setPlayPositionTick(int tick) override;
-    bool setPlayPositionByElement(const Element* e) override;
+    bool setPlayPositionByElement(const Element* element) override;
     async::Channel<int> playPositionTickChanged() const override;
 
-    midi::MidiData playElementMidiData(const Element* e) const override;
+    midi::MidiData playElementMidiData(const Element* element) const override;
 
 private:
+    Ms::Score* score() const;
 
     void makeInitData(midi::MidiData& data, Ms::Score* score) const;
     void makeInitEvents(std::vector<midi::Event>& events, const Ms::Score* score) const;
@@ -66,7 +66,7 @@ private:
     void onChunkRequest(midi::tick_t tick);
     void makeChunk(midi::Chunk& chunk, midi::tick_t fromTick) const;
 
-    int instrumentBank(const Ms::Instrument* inst) const;
+    int instrumentBank(const Ms::Instrument* instrument) const;
 
     // play element
     midi::MidiData playNoteMidiData(const Ms::Note* note) const;
@@ -78,7 +78,6 @@ private:
     std::unique_ptr<Ms::MidiRenderer> m_midiRenderer;
     async::Channel<int> m_playPositionTickChanged;
 };
-}
 }
 
 #endif // MU_NOTATION_NOTATIONPLAYBACK_H
