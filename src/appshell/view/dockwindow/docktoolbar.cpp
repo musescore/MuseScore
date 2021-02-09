@@ -50,7 +50,7 @@ DockToolBar::DockToolBar(QQuickItem* parent)
 
     m_eventsWatcher = new EventsWatcher(this);
     m_tool.bar->installEventFilter(m_eventsWatcher);
-    connect(m_eventsWatcher, &EventsWatcher::eventReceived, this, &DockToolBar::onToolbarEvent);
+    connect(m_eventsWatcher, &EventsWatcher::eventReceived, this, &DockToolBar::onWidgetEvent);
 }
 
 DockToolBar::~DockToolBar()
@@ -77,13 +77,15 @@ void DockToolBar::updateStyle()
     m_tool.bar->setStyleSheet(TOOLBAR_QSS.arg(theme, color().name()));
 }
 
-void DockToolBar::onToolbarEvent(QEvent* e)
+void DockToolBar::onWidgetEvent(QEvent* e)
 {
     if (QEvent::Resize == e->type()) {
         QResizeEvent* resizeEvent = static_cast<QResizeEvent*>(e);
         resize(resizeEvent->size());
     } else if (QEvent::ShowToParent == e->type()) {
         resize(m_tool.bar->size());
+    } else {
+        DockView::onWidgetEvent(e);
     }
 }
 

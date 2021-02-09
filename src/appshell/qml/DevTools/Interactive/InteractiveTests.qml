@@ -121,7 +121,7 @@ Rectangle {
 
         FlatButton {
             width: 200
-            text: "Widget dialog async"
+            text: "Widget dialogg async"
             onClicked: testModel.openWidgetDialogAsync()
         }
     }

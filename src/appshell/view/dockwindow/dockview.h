@@ -62,9 +62,10 @@ signals:
     void contentChanged();
     void colorChanged(QColor color);
     void borderColorChanged(QColor color);
+    void positionChanged(const QPointF& pos);
 
-private slots:
-    void onWidgetEvent(QEvent* event);
+protected slots:
+    virtual void onWidgetEvent(QEvent* event);
 
 protected:
     virtual void onComponentCompleted() {}
