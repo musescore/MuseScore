@@ -61,8 +61,7 @@ public:
     virtual async::Channel<midi::tick_t> midiTickPlayed(TrackID id) const = 0;
     virtual async::Notification positionChanged() const = 0;
 
-    //!return position in seconds
-    virtual float playbackPosition() const = 0;
+    virtual float playbackPositionInSeconds() const = 0;
 
     virtual void instantlyPlayMidi(const midi::MidiData& data) = 0;
 };

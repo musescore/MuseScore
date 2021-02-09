@@ -118,7 +118,7 @@ void RpcSequencerController::doBind()
     });
 
     sequencer()->positionChanged().onNotify(this, [this]() {
-        float pos = sequencer()->playbackPosition();
+        float pos = sequencer()->playbackPositionInSeconds();
         sendToMain(Msg(rpcSeqTarget, "positionChanged", Args::make_arg1<float>(pos)));
     });
 }
