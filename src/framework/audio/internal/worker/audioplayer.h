@@ -35,11 +35,11 @@ public:
     bool isRunning() const override;
 
     void run() override;
-    void seek(unsigned long miliseconds) override;
+    void seek(unsigned long milliseconds) override;
     void stop() override;
     void pause() override;
 
-    unsigned long miliseconds() const override;
+    unsigned long milliseconds() const override;
     void forwardTime(unsigned long) override;
 
     // IAudioPlayer

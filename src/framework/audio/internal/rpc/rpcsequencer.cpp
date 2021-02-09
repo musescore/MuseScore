@@ -145,9 +145,9 @@ void RpcSequencer::rewind()
     rpcChannel()->send(Msg(m_target, "rewind"));
 }
 
-void RpcSequencer::setLoop(uint64_t fromMiliSeconds, uint64_t toMiliSeconds)
+void RpcSequencer::setLoop(uint64_t fromMilliSeconds, uint64_t toMilliSeconds)
 {
-    rpcChannel()->send(Msg(m_target, "setLoop", Args::make_arg2<uint64_t, uint64_t>(fromMiliSeconds, toMiliSeconds)));
+    rpcChannel()->send(Msg(m_target, "setLoop", Args::make_arg2<uint64_t, uint64_t>(fromMilliSeconds, toMilliSeconds)));
 }
 
 void RpcSequencer::unsetLoop()
