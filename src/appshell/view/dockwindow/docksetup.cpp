@@ -27,6 +27,7 @@
 #include "dockpanel.h"
 #include "dockcentral.h"
 #include "dockstatusbar.h"
+#include "dockmenubar.h"
 
 using namespace mu::dock;
 
@@ -42,4 +43,5 @@ void DockSetup::registerQmlTypes()
     qmlRegisterType<DockPanel>("MuseScore.Dock", 1, 0, "DockPanel");
     qmlRegisterType<DockCentral>("MuseScore.Dock", 1, 0, "DockCentral");
     qmlRegisterType<DockStatusBar>("MuseScore.Dock", 1, 0, "DockStatusBar");
+    qmlRegisterType<DockMenuBar>("MuseScore.Dock", 1, 0, "DockMenuBar");
 }
