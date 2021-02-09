@@ -8,8 +8,8 @@ class PopupView : public QQuickItem
 {
     Q_OBJECT
 
-    Q_PROPERTY(QQuickItem* backgroundItem READ backgroundItem WRITE setBackgroundItem NOTIFY backgroundItemChanged)
-    Q_PROPERTY(QQuickItem* contentItem READ contentItem WRITE setContentItem NOTIFY contentItemChanged)
+    Q_PROPERTY(QQuickItem * backgroundItem READ backgroundItem WRITE setBackgroundItem NOTIFY backgroundItemChanged)
+    Q_PROPERTY(QQuickItem * contentItem READ contentItem WRITE setContentItem NOTIFY contentItemChanged)
     Q_PROPERTY(ClosePolicy closePolicy READ closePolicy WRITE setClosePolicy NOTIFY closePolicyChanged)
 
     Q_PROPERTY(QPointF globalPos READ globalPos WRITE setGlobalPos NOTIFY globalPosChanged)
