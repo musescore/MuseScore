@@ -6,6 +6,7 @@
 #include "view/validators/intinputvalidator.h"
 #include "view/iconview.h"
 #include "view/filterproxymodel.h"
+#include "view/popupview.h"
 
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
@@ -43,6 +44,8 @@ void UiComponentsModule::registerUiTypes()
     qmlRegisterType<FilterProxyModel>("MuseScore.UiComponents", 1, 0, "FilterProxyModel");
     qmlRegisterType<FilterValue>("MuseScore.UiComponents", 1, 0, "FilterValue");
     qmlRegisterUncreatableType<CompareType>("MuseScore.UiComponents", 1, 0, "CompareType", "Cannot create a CompareType");
+
+    qmlRegisterType<PopupView>("MuseScore.UiComponents", 1, 0, "PopupView");
 
     framework::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(uicomponents_QML_IMPORT);
 }

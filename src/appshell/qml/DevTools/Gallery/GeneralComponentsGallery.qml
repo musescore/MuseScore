@@ -42,6 +42,7 @@ Rectangle {
                     { textRole: "IncrementalPropertyControl (Hidden icon, Icon left, Icon right)", componentRole: incrementalPropertyControlSample },
                     { textRole: "FlatToogleButton", componentRole: flatToogleButtonSample },
                     { textRole: "RoundedRectangle (which allows to round the particular corners)", componentRole: roundedRectangleSample },
+                    { textRole: "StyledPopupView", componentRole: styledPopupViewComponent },
                     { textRole: "TextInputField", componentRole: textInputFieldSample },
                     { textRole: "SearchField", componentRole: searchFieldSample },
                     { textRole: "TabPanel", componentRole: tabPanelSample },
@@ -523,6 +524,53 @@ Rectangle {
         id: searchFieldSample
 
         SearchField {}
+    }
+
+    Component {
+        id: styledPopupViewComponent
+
+        FlatButton {
+            text: "Show popup view"
+
+            onClicked: {
+                if (!popupView.isOpened) {
+                    popupView.open()
+                } else {
+                    popupView.close()
+                }
+            }
+
+            StyledPopupView {
+                id: popupView
+
+                positionDisplacementX: parent.width/2 - width/2
+                positionDisplacementY: parent.height
+
+                padding: 24
+
+                Column {
+                    spacing: 12
+
+                    CheckBox {
+                        text: "Some checkbox"
+                    }
+
+                    FlatButton {
+                        text: "Some buton"
+                    }
+
+                    FlatButton {
+                        text: "Accent button 1"
+                        accentButton: true
+                    }
+
+                    FlatButton {
+                        text: "Accent button 2"
+                        accentButton: true
+                    }
+                }
+            }
+        }
     }
 
     Component {
