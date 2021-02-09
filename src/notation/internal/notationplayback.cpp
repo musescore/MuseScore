@@ -76,6 +76,13 @@ void NotationPlayback::init()
     QObject::connect(score(), &Ms::Score::posChanged, [this](Ms::POS pos, int tick) {
         if (Ms::POS::CURRENT == pos) {
             m_playPositionTickChanged.send(tick);
+        } else {
+            LoopBoundary boundary;
+            boundary.loopInTick = score()->loopInTick().ticks();
+            boundary.loopOutTick = score()->loopOutTick().ticks();
+            boundary.loopInRect = loopBoundaryRectByTick(LoopBoundaryType::LoopIn, boundary.loopInTick);
+            boundary.loopOutRect = loopBoundaryRectByTick(LoopBoundaryType::LoopOut, boundary.loopOutTick);
+            m_loopBoundaryChanged.send(boundary);
         }
     });
 }
@@ -336,6 +343,7 @@ QRect NotationPlayback::playbackCursorRectByTick(int _tick) const
     return QRect(x, y, w, h);
 }
 
+//! NOTE Copied from PositionCursor::move(const Fraction& t)
 mu::RetVal<int> NotationPlayback::playPositionTick() const
 {
     if (!score()) {
@@ -540,4 +548,129 @@ MidiData NotationPlayback::playHarmonyMidiData(const Ms::Harmony* harmony) const
     midiData.chunks.insert({ chunk.beginTick, std::move(chunk) });
 
     return midiData;
+}
+
+void NotationPlayback::addLoopBoundaryToSelectedNote(LoopBoundaryType boundaryType)
+{
+    switch (boundaryType) {
+    case LoopBoundaryType::LoopIn:
+        addLoopInToSelectedNote();
+        break;
+    case LoopBoundaryType::LoopOut:
+        addLoopOutToSelectedNote();
+        break;
+    case LoopBoundaryType::Unknown:
+        break;
+    }
+}
+
+void NotationPlayback::addLoopInToSelectedNote()
+{
+    Fraction tick = score()->pos();
+
+    if (tick >= score()->loopOutTick()) { // If In pos >= Out pos, reset Out pos to end of score
+        score()->setPos(Ms::POS::RIGHT, score()->lastMeasure()->endTick());
+    }
+
+    score()->setPos(Ms::POS::LEFT, tick);
+}
+
+void NotationPlayback::addLoopOutToSelectedNote()
+{
+    Fraction tick = score()->pos() + score()->inputState().ticks();
+
+    if (tick <= score()->loopInTick()) { // If Out pos <= In pos, reset In pos to beginning of score
+        score()->setPos(Ms::POS::LEFT, Fraction(0, 1));
+    } else {
+        if (tick > score()->lastMeasure()->endTick()) {
+            tick = score()->lastMeasure()->endTick();
+        }
+    }
+
+    score()->setPos(Ms::POS::RIGHT, tick);
+}
+
+QRect NotationPlayback::loopBoundaryRectByTick(LoopBoundaryType boundaryType, int _tick) const
+{
+    Fraction tick = Fraction::fromTicks(_tick);
+
+    // set mark height for whole system
+    if (boundaryType == LoopBoundaryType::LoopOut && tick > Fraction(0, 1)) {
+        tick -= Fraction::fromTicks(1);
+    }
+
+    Measure* measure = score()->tick2measureMM(tick);
+    if (measure == nullptr) {
+        return QRect();
+    }
+
+    qreal x = 0.0;
+    const Fraction offset = { 0, 1 };
+
+    Ms::Segment* s = nullptr;
+    for (s = measure->first(Ms::SegmentType::ChordRest); s;) {
+        Fraction t1 = s->tick();
+        int x1 = s->canvasPos().x();
+        qreal x2 = 0;
+        Fraction t2;
+        Ms::Segment* ns = s->next(Ms::SegmentType::ChordRest);
+        if (ns) {
+            t2 = ns->tick();
+            x2 = ns->canvasPos().x();
+        } else {
+            t2 = measure->endTick();
+            x2 = measure->canvasPos().x() + measure->width();
+        }
+        t1 += offset;
+        t2 += offset;
+        if (tick >= t1 && tick < t2) {
+            Fraction dt = t2 - t1;
+            qreal dx = x2 - x1;
+            x = x1 + dx * (tick - t1).ticks() / dt.ticks();
+            break;
+        }
+        s = ns;
+    }
+
+    if (s == nullptr) {
+        return QRect();
+    }
+
+    Ms::System* system = measure->system();
+    if (system == nullptr || system->page() == nullptr) {
+        return QRect();
+    }
+
+    double y = system->staffYpage(0) + system->page()->pos().y();
+    double _spatium = score()->spatium();
+
+    qreal mag = _spatium / Ms::SPATIUM20;
+    double width = (_spatium * 2.0 + score()->scoreFont()->width(Ms::SymId::noteheadBlack, mag)) / 3;
+    double height = 6 * _spatium;
+
+    // set cursor height for whole system
+    double y2 = 0.0;
+
+    for (int i = 0; i < score()->nstaves(); ++i) {
+        Ms::SysStaff* ss = system->staff(i);
+        if (!ss->show() || !score()->staff(i)->show()) {
+            continue;
+        }
+        y2 = ss->y() + ss->bbox().height();
+    }
+    height += y2;
+    y -= 3 * _spatium;
+
+    if (boundaryType == LoopBoundaryType::LoopIn) {
+        x = x - _spatium + width / 1.5;
+    } else {
+        x = x - _spatium * .5;
+    }
+
+    return QRect(x, y, width, height);
+}
+
+mu::async::Channel<LoopBoundary> NotationPlayback::loopBoundaryChanged() const
+{
+    return m_loopBoundaryChanged;
 }

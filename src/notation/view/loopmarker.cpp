@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2020 MuseScore BVBA and others
+//  Copyright (C) 2021 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -17,31 +17,31 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "loopcursor.h"
+#include "loopmarker.h"
 
 using namespace mu::notation;
 
-LoopCursor::LoopCursor(LoopCursorType type)
+LoopMarker::LoopMarker(LoopBoundaryType type)
     : m_type(type)
 {
 }
 
-void LoopCursor::setRect(const QRect& rect)
+void LoopMarker::setRect(const QRect& rect)
 {
     m_rect = rect;
 }
 
-void LoopCursor::setVisible(bool visible)
+void LoopMarker::setVisible(bool visible)
 {
     m_visible = visible;
 }
 
-void LoopCursor::setStyle(INotationStylePtr style)
+void LoopMarker::setStyle(INotationStylePtr style)
 {
     m_style = style;
 }
 
-void LoopCursor::paint(QPainter* painter)
+void LoopMarker::paint(QPainter* painter)
 {
     if (!m_visible || !m_style) {
         return;
@@ -53,22 +53,23 @@ void LoopCursor::paint(QPainter* painter)
     qreal y = m_rect.top();
     qreal h = m_style->styleValue(StyleId::spatium).toDouble() * 2;
 
-    QColor color = configuration()->loopCursorColor();
+    QColor color = configuration()->loopMarkerColor();
 
     switch (m_type) {
-    case LoopCursorType::LoopIn: { // draw a right-pointing triangle
+    case LoopBoundaryType::LoopIn: { // draw a right-pointing triangle
         qreal tx = x - 1.0;
         triangle[0] = QPointF(tx, y);
         triangle[1] = QPointF(tx, y + h);
         triangle[2] = QPointF(tx + h, y + h / 2);
     }
-        break;
-    case LoopCursorType::LoopOut: // draw a left-pointing triangle
+    break;
+    case LoopBoundaryType::LoopOut: { // draw a left-pointing triangle
         triangle[0] = QPointF(x, y);
         triangle[1] = QPointF(x, y + h);
         triangle[2] = QPointF(x - h, y + h / 2);
-        break;
-    case LoopCursorType::Unknown: return;
+    }
+    break;
+    case LoopBoundaryType::Unknown: return;
     }
 
     painter->setPen(QPen(color, 2.0, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));

@@ -188,14 +188,14 @@ int NotationConfiguration::cursorOpacity() const
     return 50;
 }
 
-QColor NotationConfiguration::loopCursorColor() const
+QColor NotationConfiguration::loopMarkerColor() const
 {
-    return QColor("0x2456AA");
+    return QColor(0x2456AA);
 }
 
 QColor NotationConfiguration::layoutBreakColor() const
 {
-    return QColor("0xA0A0A4");
+    return QColor(0xA0A0A4);
 }
 
 QColor NotationConfiguration::selectionColor(int voiceIndex) const

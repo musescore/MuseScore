@@ -47,7 +47,7 @@ public:
     void stop() override;
     void seek(uint64_t position) override;
     void rewind() override;
-    void setLoop(uint64_t fromMilliSeconds, uint64_t toMilliSeconds) override;
+    void setLoop(uint64_t fromMilliseconds, uint64_t toMilliseconds) override;
     void unsetLoop() override;
 
     float playbackPositionInSeconds() const override;

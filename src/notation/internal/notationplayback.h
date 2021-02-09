@@ -54,6 +54,9 @@ public:
 
     midi::MidiData playElementMidiData(const Element* element) const override;
 
+    void addLoopBoundaryToSelectedNote(LoopBoundaryType boundaryType) override;
+    async::Channel<LoopBoundary> loopBoundaryChanged() const override;
+
 private:
     Ms::Score* score() const;
 
@@ -73,10 +76,15 @@ private:
     midi::MidiData playChordMidiData(const Ms::Chord* chord) const;
     midi::MidiData playHarmonyMidiData(const Ms::Harmony* harmony) const;
 
+    void addLoopInToSelectedNote();
+    void addLoopOutToSelectedNote();
+    QRect loopBoundaryRectByTick(LoopBoundaryType boundaryType, int tick) const;
+
     IGetScore* m_getScore = nullptr;
     std::shared_ptr<midi::MidiStream> m_midiStream;
     std::unique_ptr<Ms::MidiRenderer> m_midiRenderer;
     async::Channel<int> m_playPositionTickChanged;
+    async::Channel<LoopBoundary> m_loopBoundaryChanged;
 };
 }
 

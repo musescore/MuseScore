@@ -146,11 +146,11 @@ float Sequencer::playbackPositionInSeconds() const
     return clock()->timeInSeconds();
 }
 
-void Sequencer::setLoop(uint64_t fromMilliSeconds, uint64_t toMilliSeconds)
+void Sequencer::setLoop(uint64_t fromMilliseconds, uint64_t toMilliseconds)
 {
     ONLY_AUDIO_WORKER_THREAD;
-    m_loopStart = fromMilliSeconds;
-    m_loopEnd = toMilliSeconds;
+    m_loopStart = fromMilliseconds;
+    m_loopEnd = toMilliseconds;
 }
 
 void Sequencer::unsetLoop()
