@@ -88,6 +88,7 @@ qreal   MScore::horizontalPageGapEven = 1.0;
 qreal   MScore::horizontalPageGapOdd = 50.0;
 
 QColor  MScore::selectColor[VOICES];
+QColor  MScore::cursorColor;
 QColor  MScore::defaultColor;
 QColor  MScore::layoutBreakColor;
 QColor  MScore::frameMarginColor;

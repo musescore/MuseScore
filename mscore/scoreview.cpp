@@ -613,9 +613,10 @@ void ScoreView::moveCursor(const Fraction& tick)
       if (s == 0)
             return;
 
-      QColor c(MScore::selectColor[0]);
-      c.setAlpha(50);
-      _cursor->setColor(c);
+      _cursorColor = QColor(MScore::cursorColor);
+      if(_cursorColor.alpha() > MAX_CURSOR_ALPHA)
+            _cursorColor.setAlpha(50);
+      _cursor->setColor(_cursorColor);
       _cursor->setTick(tick);
 
       System* system = measure->system();

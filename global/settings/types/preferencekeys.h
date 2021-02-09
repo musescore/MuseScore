@@ -151,6 +151,7 @@
 #define PREF_UI_SCORE_DEFAULTCOLOR                          "ui/score/defaultColor"
 #define PREF_UI_SCORE_FRAMEMARGINCOLOR                      "ui/score/frameMarginColor"
 #define PREF_UI_SCORE_LAYOUTBREAKCOLOR                      "ui/score/layoutBreakColor"
+#define PREF_UI_SCORE_CURSOR_COLOR                          "ui/score/playbackCursor/color"
 #define PREF_UI_SCORE_VOICE1_COLOR                          "ui/score/voice1/color"
 #define PREF_UI_SCORE_VOICE2_COLOR                          "ui/score/voice2/color"
 #define PREF_UI_SCORE_VOICE3_COLOR                          "ui/score/voice3/color"
