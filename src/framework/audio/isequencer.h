@@ -55,7 +55,7 @@ public:
     virtual void stop() = 0;
     virtual void seek(uint64_t sec) = 0;
     virtual void rewind() = 0;
-    virtual void setLoop(uint64_t fromMilliSeconds, uint64_t toMilliSeconds) = 0;
+    virtual void setLoop(uint64_t fromMilliseconds, uint64_t toMilliseconds) = 0;
     virtual void unsetLoop() = 0;
 
     virtual async::Channel<midi::tick_t> midiTickPlayed(TrackID id) const = 0;

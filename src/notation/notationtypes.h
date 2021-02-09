@@ -319,11 +319,20 @@ struct TupletOptions
     TupletBracketType bracketType = TupletBracketType::AUTO_BRACKET;
 };
 
-enum class LoopCursorType
+enum class LoopBoundaryType
 {
     Unknown,
     LoopIn,
     LoopOut
+};
+
+struct LoopBoundary
+{
+    int loopInTick = 0;
+    int loopOutTick = 0;
+
+    QRect loopInRect;
+    QRect loopOutRect;
 };
 
 inline QString staffTypeToString(StaffType type)

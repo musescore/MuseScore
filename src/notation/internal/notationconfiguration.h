@@ -52,7 +52,7 @@ public:
     io::path foregroundWallpaper() const override;
 
     QColor playbackCursorColor() const override;
-    QColor loopCursorColor() const override;
+    QColor loopMarkerColor() const override;
     int cursorOpacity() const override;
 
     QColor selectionColor(int voiceIndex = 0) const override;

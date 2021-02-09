@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2020 MuseScore BVBA and others
+//  Copyright (C) 2021 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -17,20 +17,20 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_NOTATION_LOOPCURSOR_H
-#define MU_NOTATION_LOOPCURSOR_H
+#ifndef MU_NOTATION_LOOPMARKER_H
+#define MU_NOTATION_LOOPMARKER_H
 
 #include "notation/inotationconfiguration.h"
 #include "notation/inotationstyle.h"
 #include "modularity/ioc.h"
 
 namespace mu::notation {
-class LoopCursor
+class LoopMarker
 {
     INJECT(notation, INotationConfiguration, configuration)
 
 public:
-    LoopCursor(LoopCursorType type);
+    LoopMarker(LoopBoundaryType type);
 
     void setRect(const QRect& rect);
     void setVisible(bool visible);
@@ -39,11 +39,11 @@ public:
     void paint(QPainter* painter);
 
 private:
-    LoopCursorType m_type;
+    LoopBoundaryType m_type = LoopBoundaryType::Unknown;
     QRect m_rect;
     bool m_visible = false;
     INotationStylePtr m_style;
 };
 }
 
-#endif // MU_NOTATION_LOOPCURSOR_H
+#endif // MU_NOTATION_LOOPMARKER_H

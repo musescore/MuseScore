@@ -55,8 +55,8 @@ NotationPaintView::NotationPaintView(QQuickItem* parent)
     m_playbackCursor->setVisible(false);
     m_noteInputCursor = std::make_unique<NoteInputCursor>();
 
-    m_loopInCursor = std::make_unique<LoopCursor>(LoopCursorType::LoopIn);
-    m_loopOutCursor = std::make_unique<LoopCursor>(LoopCursorType::LoopOut);
+    m_loopInMarker = std::make_unique<LoopMarker>(LoopBoundaryType::LoopIn);
+    m_loopOutMarker = std::make_unique<LoopMarker>(LoopBoundaryType::LoopOut);
 }
 
 void NotationPaintView::load()
@@ -197,8 +197,12 @@ void NotationPaintView::onCurrentNotationChanged()
         }
     });
 
-    m_loopInCursor->setStyle(m_notation->style());
-    m_loopOutCursor->setStyle(m_notation->style());
+    notationPlayback()->loopBoundaryChanged().onReceive(this, [this](const LoopBoundary& boundary) {
+        updateLoopMarkers(boundary);
+    });
+
+    m_loopInMarker->setStyle(m_notation->style());
+    m_loopOutMarker->setStyle(m_notation->style());
 
     update();
 }
@@ -214,6 +218,17 @@ void NotationPaintView::onViewSizeChanged()
     emit horizontalScrollChanged();
     emit verticalScrollChanged();
     emit viewportChanged(viewport());
+}
+
+void NotationPaintView::updateLoopMarkers(const LoopBoundary& boundary)
+{
+    m_loopInMarker->setRect(boundary.loopInRect);
+    m_loopOutMarker->setRect(boundary.loopOutRect);
+
+    m_loopInMarker->setVisible(true);
+    m_loopOutMarker->setVisible(true);
+
+    update();
 }
 
 INotationPtr NotationPaintView::notation() const
@@ -317,8 +332,8 @@ void NotationPaintView::paint(QPainter* painter)
 
     m_playbackCursor->paint(painter);
     m_noteInputCursor->paint(painter);
-    m_loopInCursor->paint(painter);
-    m_loopOutCursor->paint(painter);
+    m_loopInMarker->paint(painter);
+    m_loopOutMarker->paint(painter);
 }
 
 QRect NotationPaintView::viewport() const

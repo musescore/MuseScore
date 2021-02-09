@@ -35,7 +35,7 @@
 #include "notationviewinputcontroller.h"
 #include "noteinputcursor.h"
 #include "playbackcursor.h"
-#include "loopcursor.h"
+#include "loopmarker.h"
 
 namespace mu::notation {
 class NotationPaintView : public QQuickPaintedItem, public IControlledView, public async::Asyncable, public actions::Actionable
@@ -162,6 +162,8 @@ private:
     void onPlayingChanged();
     void movePlaybackCursor(uint32_t tick);
 
+    void updateLoopMarkers(const LoopBoundary& boundary);
+
     const Page* pointToPage(const QPointF& point) const;
     QPointF alignToCurrentPageBorder(const QRectF& showRect, const QPointF& pos) const;
 
@@ -171,8 +173,8 @@ private:
     std::unique_ptr<NotationViewInputController> m_inputController;
     std::unique_ptr<PlaybackCursor> m_playbackCursor;
     std::unique_ptr<NoteInputCursor> m_noteInputCursor;
-    std::unique_ptr<LoopCursor> m_loopInCursor;
-    std::unique_ptr<LoopCursor> m_loopOutCursor;
+    std::unique_ptr<LoopMarker> m_loopInMarker;
+    std::unique_ptr<LoopMarker> m_loopOutMarker;
 
     qreal m_previousVerticalScrollPosition = 0;
     qreal m_previousHorizontalScrollPosition = 0;
