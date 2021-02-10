@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2020 MuseScore BVBA and others
+//  Copyright (C) 2021 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -22,28 +22,22 @@
 #include "ui_font_style_select.h"
 #include "libmscore/types.h"
 
-namespace mu {
-namespace notation {
-//---------------------------------------------------------
-//   FontStyleSelect
-//---------------------------------------------------------
-
+namespace mu::notation {
 class FontStyleSelect : public QWidget, public Ui::FontStyleSelect
 {
     Q_OBJECT
-
-private slots:
-    void _fontStyleChanged();
-
-signals:
-    void fontStyleChanged(Ms::FontStyle);
 
 public:
     FontStyleSelect(QWidget* parent);
     Ms::FontStyle fontStyle() const;
     void setFontStyle(Ms::FontStyle);
+
+signals:
+    void fontStyleChanged(Ms::FontStyle);
+
+private slots:
+    void _fontStyleChanged();
 };
-}
 }
 
 #endif // MU_NOTATION_FONTSTYLESELECT_H

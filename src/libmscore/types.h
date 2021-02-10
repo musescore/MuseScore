@@ -530,7 +530,6 @@ enum class Tid {
     BEND,
     LET_RING,
     PALM_MUTE,
-    FIGURED_BASS,
     USER1,
     USER2,
     USER3,

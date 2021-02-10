@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2020 MuseScore BVBA and others
+//  Copyright (C) 2021 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -22,23 +22,10 @@
 
 #include "ui_offset_select.h"
 
-namespace mu {
-namespace notation {
-//---------------------------------------------------------
-//   OffsetSelect
-//---------------------------------------------------------
-
+namespace mu::notation {
 class OffsetSelect : public QWidget, public Ui::OffsetSelect
 {
     Q_OBJECT
-
-    void blockOffset(bool val);
-
-private slots:
-    void _offsetChanged();
-
-signals:
-    void offsetChanged(const QPointF&);
 
 public:
     OffsetSelect(QWidget* parent);
@@ -46,8 +33,16 @@ public:
     QPointF offset() const;
     void setOffset(const QPointF&);
     void showRaster(bool);
+
+signals:
+    void offsetChanged(const QPointF&);
+
+private:
+    void blockOffset(bool val);
+
+private slots:
+    void _offsetChanged();
 };
-}
 }
 
 #endif

@@ -15,6 +15,7 @@ set (WIDGETS_UI
     ${CMAKE_CURRENT_LIST_DIR}/selectnotedialog.ui
     ${CMAKE_CURRENT_LIST_DIR}/selectdialog.ui
     ${CMAKE_CURRENT_LIST_DIR}/tupletdialog.ui
+    ${CMAKE_CURRENT_LIST_DIR}/voicing_select.ui
     )
 
 set(WIDGETS_SRC
@@ -40,6 +41,8 @@ set(WIDGETS_SRC
     ${CMAKE_CURRENT_LIST_DIR}/editpitch.h
     ${CMAKE_CURRENT_LIST_DIR}/breaksdialog.cpp
     ${CMAKE_CURRENT_LIST_DIR}/breaksdialog.h
+    ${CMAKE_CURRENT_LIST_DIR}/radiobuttongroupbox.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/radiobuttongroupbox.h
     ${CMAKE_CURRENT_LIST_DIR}/scoreproperties.cpp
     ${CMAKE_CURRENT_LIST_DIR}/scoreproperties.h
     ${CMAKE_CURRENT_LIST_DIR}/transposedialog.cpp
@@ -50,4 +53,6 @@ set(WIDGETS_SRC
     ${CMAKE_CURRENT_LIST_DIR}/selectdialog.h
     ${CMAKE_CURRENT_LIST_DIR}/tupletdialog.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tupletdialog.h
+    ${CMAKE_CURRENT_LIST_DIR}/voicingSelect.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/voicingSelect.h
     )

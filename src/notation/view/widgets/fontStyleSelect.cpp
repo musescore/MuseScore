@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2020 MuseScore BVBA and others
+//  Copyright (C) 2021 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -24,10 +24,6 @@
 using namespace mu::framework;
 using namespace mu::notation;
 
-//---------------------------------------------------------
-//    FontStyleSelect
-//---------------------------------------------------------
-
 FontStyleSelect::FontStyleSelect(QWidget* parent)
     : QWidget(parent)
 {
@@ -42,18 +38,10 @@ FontStyleSelect::FontStyleSelect(QWidget* parent)
     connect(underline, SIGNAL(toggled(bool)), SLOT(_fontStyleChanged()));
 }
 
-//---------------------------------------------------------
-//   _fontStyleChanged
-//---------------------------------------------------------
-
 void FontStyleSelect::_fontStyleChanged()
 {
     emit fontStyleChanged(fontStyle());
 }
-
-//---------------------------------------------------------
-//   fontStyle
-//---------------------------------------------------------
 
 Ms::FontStyle FontStyleSelect::fontStyle() const
 {
@@ -71,10 +59,6 @@ Ms::FontStyle FontStyleSelect::fontStyle() const
 
     return fs;
 }
-
-//---------------------------------------------------------
-//   setFontStyle
-//---------------------------------------------------------
 
 void FontStyleSelect::setFontStyle(Ms::FontStyle fs)
 {
