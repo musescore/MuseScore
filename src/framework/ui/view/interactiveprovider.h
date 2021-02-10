@@ -56,21 +56,32 @@ public:
     explicit InteractiveProvider();
 
     RetVal<Val> open(const UriQuery& uri) override;
+    RetVal<bool> isOpened(const Uri& uri) const override;
+
+    void close(const Uri& uri) override;
+
     ValCh<Uri> currentUri() const override;
 
     Q_INVOKABLE QString objectID(const QVariant& val) const;
 
-    Q_INVOKABLE void onOpen(const QVariant& type);
+    Q_INVOKABLE void onOpen(const QVariant& type, const QVariant& objectId);
     Q_INVOKABLE void onPopupClose(const QString& objectID, const QVariant& rv);
 
 signals:
     void fireOpen(QmlLaunchData* data);
+    void fireClose(QVariant data);
 
 private:
     struct OpenData
     {
         bool sync = false;
         QString objectID;
+    };
+
+    struct ObjectInfo
+    {
+        UriQuery uriQuery;
+        QVariant objectId;
     };
 
     void fillData(QmlLaunchData* data, const UriQuery& q) const;
@@ -81,8 +92,11 @@ private:
     RetVal<OpenData> openWidgetDialog(const UriQuery& q);
     RetVal<OpenData> openQml(const UriQuery& q);
 
+    void closeWidgetDialog(const QVariant& dialogMetaTypeId);
+    void closeQml(const QVariant& objectID);
+
     UriQuery m_openingUriQuery;
-    QStack<UriQuery> m_stack;
+    QStack<ObjectInfo> m_stack;
     async::Channel<Uri> m_currentUriChanged;
     QMap<QString, RetVal<Val> > m_retvals;
 };

@@ -23,6 +23,8 @@
 #include <QMetaProperty>
 #include <QMainWindow>
 
+#include "widgetdialog.h"
+
 using namespace mu;
 using namespace mu::ui;
 
@@ -70,6 +72,39 @@ RetVal<Val> InteractiveProvider::open(const UriQuery& q)
     return returnedRV;
 }
 
+RetVal<bool> InteractiveProvider::isOpened(const Uri& uri) const
+{
+    for (const ObjectInfo& objectInfo: m_stack) {
+        if (objectInfo.uriQuery.uri() == uri) {
+            return RetVal<bool>::make_ok(true);
+        }
+    }
+
+    return RetVal<bool>::make_ok(false);
+}
+
+void InteractiveProvider::close(const Uri& uri)
+{
+    for (const ObjectInfo& objectInfo: m_stack) {
+        if (objectInfo.uriQuery.uri() != uri) {
+            continue;
+        }
+
+        ContainerMeta openMeta = uriRegister()->meta(objectInfo.uriQuery.uri());
+        switch (openMeta.type) {
+        case ContainerType::QWidgetDialog:
+            closeWidgetDialog(objectInfo.objectId);
+            break;
+        case ContainerType::QmlDialog:
+            closeQml(objectInfo.objectId);
+            break;
+        case ContainerType::PrimaryPage:
+        case ContainerType::Undefined:
+            break;
+        }
+    }
+}
+
 void InteractiveProvider::fillData(QmlLaunchData* data, const UriQuery& q) const
 {
     ContainerMeta meta = uriRegister()->meta(q.uri());
@@ -111,7 +146,7 @@ ValCh<Uri> InteractiveProvider::currentUri() const
 {
     ValCh<Uri> v;
     if (!m_stack.empty()) {
-        v.val = m_stack.last().uri();
+        v.val = m_stack.last().uriQuery.uri();
     }
     v.ch = m_currentUriChanged;
     return v;
@@ -130,7 +165,7 @@ QString InteractiveProvider::objectID(const QVariant& val) const
             return QString();
         }
 
-        objectID = QString(obj->metaObject()->className()) + "_" + QString::number(count);
+        objectID = QString(obj->metaObject()->className());
     } else {
         objectID = "unknown_" + QString::number(count);
     }
@@ -212,7 +247,7 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(cons
         dialog->deleteLater();
     });
 
-    onOpen(ContainerType::QWidgetDialog);
+    onOpen(ContainerType::QWidgetDialog, widgetMetaTypeId);
 
     bool sync = q.param("sync", Val(false)).toBool();
     if (sync) {
@@ -244,7 +279,24 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openQml(const UriQuer
     return result;
 }
 
-void InteractiveProvider::onOpen(const QVariant& type)
+void InteractiveProvider::closeWidgetDialog(const QVariant& dialogMetaTypeId)
+{
+    int _dialogMetaTypeId = dialogMetaTypeId.toInt();
+
+    for (QObject* object : mainWindow()->qMainWindow()->children()) {
+        WidgetDialog* dialog = dynamic_cast<WidgetDialog*>(object);
+        if (dialog && dialog->metaTypeId() == _dialogMetaTypeId) {
+            dialog->close();
+        }
+    }
+}
+
+void InteractiveProvider::closeQml(const QVariant& objectID)
+{
+    emit fireClose(objectID);
+}
+
+void InteractiveProvider::onOpen(const QVariant& type, const QVariant& objectId)
 {
     ContainerType::Type containerType = type.value<ContainerType::Type>();
 
@@ -252,16 +304,20 @@ void InteractiveProvider::onOpen(const QVariant& type)
         containerType = ContainerType::QmlDialog;
     }
 
+    ObjectInfo objectInfo;
+    objectInfo.uriQuery = m_openingUriQuery;
+    objectInfo.objectId = objectId;
+
     if (ContainerType::PrimaryPage == containerType) {
         m_stack.clear();
-        m_stack.push(m_openingUriQuery);
+        m_stack.push(objectInfo);
     } else if (ContainerType::QmlDialog == containerType) {
-        m_stack.push(m_openingUriQuery);
+        m_stack.push(objectInfo);
     } else if (ContainerType::QWidgetDialog == containerType) {
-        m_stack.push(m_openingUriQuery);
+        m_stack.push(objectInfo);
     } else {
         IF_ASSERT_FAILED_X(false, "unknown page type") {
-            m_stack.push(m_openingUriQuery);
+            m_stack.push(objectInfo);
         }
     }
 

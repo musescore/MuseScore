@@ -24,8 +24,7 @@
 #include "ui/iinteractiveprovider.h"
 #include "ui/imainwindow.h"
 
-namespace mu {
-namespace framework {
+namespace mu::framework {
 class Interactive : public IInteractive
 {
     INJECT(global, ui::IInteractiveProvider, provider)
@@ -51,11 +50,14 @@ public:
     // custom
     RetVal<Val> open(const std::string& uri) const override;
     RetVal<Val> open(const UriQuery& uri) const override;
+    RetVal<bool> isOpened(const std::string& uri) const override;
+
+    void close(const std::string& uri) override;
+
     ValCh<Uri> currentUri() const override;
 
     Ret openUrl(const std::string& url) const override;
 };
-}
 }
 
 #endif // MU_FRAMEWORK_UIINTERACTIVE_H

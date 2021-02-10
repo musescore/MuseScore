@@ -83,6 +83,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/qmldialog.h
     ${CMAKE_CURRENT_LIST_DIR}/view/qmltooltip.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/qmltooltip.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgetdialog.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgetdialog.h
 
     ${CMAKE_CURRENT_LIST_DIR}/dev/interactivetestsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dev/interactivetestsmodel.h

@@ -62,7 +62,7 @@ void UiModule::resolveImports()
     auto ir = framework::ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerUri(Uri("musescore://devtools/interactive/testdialog"),
-                        ContainerMeta(ContainerType::QWidgetDialog, TestDialog::metaTypeId()));
+                        ContainerMeta(ContainerType::QWidgetDialog, TestDialog::static_metaTypeId()));
         ir->registerUri(Uri("musescore://devtools/interactive/sample"),
                         ContainerMeta(ContainerType::QmlDialog, "DevTools/Interactive/SampleDialog.qml"));
     }

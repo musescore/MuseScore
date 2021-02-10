@@ -71,6 +71,12 @@ Rectangle {
 
         FlatButton {
             width: 200
+            text: "[cpp] Sample dialog close"
+            onClicked: testModel.closeSampleDialog()
+        }
+
+        FlatButton {
+            width: 200
             text: "Open musescore.com"
             onClicked: {
                 api.launcher.openUrl("https://musescore.com/")
@@ -121,8 +127,14 @@ Rectangle {
 
         FlatButton {
             width: 200
-            text: "Widget dialogg async"
+            text: "Widget dialog async"
             onClicked: testModel.openWidgetDialogAsync()
+        }
+
+        FlatButton {
+            width: 200
+            text: "Widget dialog close"
+            onClicked: testModel.closeWidgetDialog()
         }
     }
 }
