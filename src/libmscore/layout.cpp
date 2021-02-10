@@ -3841,7 +3841,7 @@ void alignHarmonies(const System* system, const std::vector<Segment*>& sl, bool 
 
         void addToSkyline(const System* system)
         {
-            for (Element* e : modified) {
+            for (Element* e : qAsConst(modified)) {
                 const Segment* s = toSegment(e->parent());
                 const MeasureBase* m = toMeasureBase(s->parent());
                 system->staff(e->staffIdx())->skyline().add(e->shape().translated(e->pos() + s->pos() + m->pos()));

@@ -155,6 +155,7 @@ void ShadowNote::draw(QPainter* painter) const
     qreal sp = spatium();
     qreal sp2 = sp / 2;
     qreal noteheadWidth = symWidth(m_noteheadSymbol);
+
     QPointF posDot;
     if (m_duration.dots() > 0) {
         qreal d  = score()->styleP(Sid::dotNoteDistance) * mag();

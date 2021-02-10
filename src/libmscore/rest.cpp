@@ -507,7 +507,9 @@ int Rest::computeLineOffset(int lines)
                         Chord* chord = toChord(e);
                         StaffGroup staffGroup = staff()->staffType(chord->tick())->group();
                         for (Note* note : chord->notes()) {
-                            int nline = staffGroup == StaffGroup::TAB ? note->string() * 2 : note->line();
+                            int nline = staffGroup == StaffGroup::TAB
+                                        ? note->string() * 2
+                                        : note->line();
                             nline = nline - centerDiff;
                             if (up && nline <= line) {
                                 line = nline - extraOffsetForFewLines;

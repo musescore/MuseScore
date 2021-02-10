@@ -345,11 +345,9 @@ RealizedHarmony::PitchMap RealizedHarmony::getIntervals(int rootTpc, bool litera
                 QString extType = s.left(cutoff);
                 if (extType == "" || extType == "major") {         //alteration
                     if (deg == 9) {
-                        ret.insert(step2pitchInterval(deg, alter) + RANK_MULT * RANK_9TH,
-                                   tpcInterval(rootTpc, deg, alter));
+                        ret.insert(step2pitchInterval(deg, alter) + RANK_MULT * RANK_9TH, tpcInterval(rootTpc, deg, alter));
                     } else {
-                        ret.insert(step2pitchInterval(deg, alter) + RANK_MULT * RANK_ADD,
-                                   tpcInterval(rootTpc, deg, alter));
+                        ret.insert(step2pitchInterval(deg, alter) + RANK_MULT * RANK_ADD, tpcInterval(rootTpc, deg, alter));
                     }
                     if (deg == 5) {
                         alt5 = true;
@@ -368,7 +366,6 @@ RealizedHarmony::PitchMap RealizedHarmony::getIntervals(int rootTpc, bool litera
                     omit |= 1 << deg;
                     modded = true;
                 }
-
                 break;
             }
         }
@@ -540,8 +537,8 @@ RealizedHarmony::PitchMap RealizedHarmony::getIntervals(int rootTpc, bool litera
 ///
 ///   enforceMaxEquals - enforce the max as a goal so that the max is how many notes is inserted
 //---------------------------------------------------
-RealizedHarmony::PitchMap RealizedHarmony::normalizeNoteMap(const PitchMap& intervals, int rootTpc, int rootPitch,
-                                                            int max, bool enforceMaxAsGoal) const
+RealizedHarmony::PitchMap RealizedHarmony::normalizeNoteMap(const PitchMap& intervals, int rootTpc, int rootPitch, int max,
+                                                            bool enforceMaxAsGoal) const
 {
     PitchMap ret;
     PitchMapIterator itr(intervals);

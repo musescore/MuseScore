@@ -2773,8 +2773,8 @@ void Measure::exchangeVoice(int strack, int dtrack, int staffIdx)
         Spanner* sp = i->value;
         Fraction spStart = sp->tick();
         Fraction spEnd = spStart + sp->ticks();
-        qDebug("Start %d End %d Diff %d \n Measure Start %d End %d", spStart.ticks(),
-               spEnd.ticks(), (spEnd - spStart).ticks(), start.ticks(), end.ticks());
+        qDebug("Start %d End %d Diff %d \n Measure Start %d End %d", spStart.ticks(), spEnd.ticks(), (spEnd - spStart).ticks(),
+               start.ticks(), end.ticks());
         if (sp->isSlur() && (spStart >= start || spEnd < end)) {
             if (sp->track() == strack && spStart >= start) {
                 sp->setTrack(dtrack);
