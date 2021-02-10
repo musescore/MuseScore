@@ -26,6 +26,7 @@ ElementStyle const ScoreElement::emptyStyle;
 //
 // list has to be synchronized with ElementType enum
 //
+/* *INDENT-OFF* */
 static const ElementName elementNames[] = {
     { ElementType::INVALID,              "invalid",              QT_TRANSLATE_NOOP("elementName", "Invalid") },
     { ElementType::BRACKET_ITEM,         "BracketItem",          QT_TRANSLATE_NOOP("elementName", "Bracket") },
@@ -53,8 +54,7 @@ static const ElementName elementNames[] = {
     { ElementType::AMBITUS,              "Ambitus",              QT_TRANSLATE_NOOP("elementName", "Ambitus") },
     { ElementType::TIMESIG,              "TimeSig",              QT_TRANSLATE_NOOP("elementName", "Time Signature") },
     { ElementType::REST,                 "Rest",                 QT_TRANSLATE_NOOP("elementName", "Rest") },
-    { ElementType::MMREST,               "MMRest",
-      QT_TRANSLATE_NOOP("elementName", "Multimeasure Rest") },
+    { ElementType::MMREST,               "MMRest",               QT_TRANSLATE_NOOP("elementName", "Multimeasure Rest") },
     { ElementType::BREATH,               "Breath",               QT_TRANSLATE_NOOP("elementName", "Breath") },
     { ElementType::MEASURE_REPEAT,       "MeasureRepeat",        QT_TRANSLATE_NOOP("elementName", "Measure Repeat") },
     { ElementType::TIE,                  "Tie",                  QT_TRANSLATE_NOOP("elementName", "Tie") },
@@ -74,13 +74,10 @@ static const ElementName elementNames[] = {
     { ElementType::STAFF_TEXT,           "StaffText",            QT_TRANSLATE_NOOP("elementName", "Staff Text") },
     { ElementType::SYSTEM_TEXT,          "SystemText",           QT_TRANSLATE_NOOP("elementName", "System Text") },
     { ElementType::REHEARSAL_MARK,       "RehearsalMark",        QT_TRANSLATE_NOOP("elementName", "Rehearsal Mark") },
-    { ElementType::INSTRUMENT_CHANGE,    "InstrumentChange",
-      QT_TRANSLATE_NOOP("elementName", "Instrument Change") },
-    { ElementType::STAFFTYPE_CHANGE,     "StaffTypeChange",
-      QT_TRANSLATE_NOOP("elementName", "Staff Type Change") },
+    { ElementType::INSTRUMENT_CHANGE,    "InstrumentChange",     QT_TRANSLATE_NOOP("elementName", "Instrument Change") },
+    { ElementType::STAFFTYPE_CHANGE,     "StaffTypeChange",      QT_TRANSLATE_NOOP("elementName", "Staff Type Change") },
     { ElementType::HARMONY,              "Harmony",              QT_TRANSLATE_NOOP("elementName", "Chord Symbol") },
-    { ElementType::FRET_DIAGRAM,         "FretDiagram",
-      QT_TRANSLATE_NOOP("elementName", "Fretboard Diagram") },
+    { ElementType::FRET_DIAGRAM,         "FretDiagram",          QT_TRANSLATE_NOOP("elementName", "Fretboard Diagram") },
     { ElementType::BEND,                 "Bend",                 QT_TRANSLATE_NOOP("elementName", "Bend") },
     { ElementType::TREMOLOBAR,           "TremoloBar",           QT_TRANSLATE_NOOP("elementName", "Tremolo Bar") },
     { ElementType::VOLTA,                "Volta",                QT_TRANSLATE_NOOP("elementName", "Volta") },
@@ -89,16 +86,12 @@ static const ElementName elementNames[] = {
     { ElementType::TRILL_SEGMENT,        "TrillSegment",         QT_TRANSLATE_NOOP("elementName", "Trill Segment") },
     { ElementType::LET_RING_SEGMENT,     "LetRingSegment",       QT_TRANSLATE_NOOP("elementName", "Let Ring Segment") },
     { ElementType::VIBRATO_SEGMENT,      "VibratoSegment",       QT_TRANSLATE_NOOP("elementName", "Vibrato Segment") },
-    { ElementType::PALM_MUTE_SEGMENT,    "PalmMuteSegment",
-      QT_TRANSLATE_NOOP("elementName", "Palm Mute Segment") },
-    { ElementType::TEXTLINE_SEGMENT,     "TextLineSegment",
-      QT_TRANSLATE_NOOP("elementName", "Text Line Segment") },
+    { ElementType::PALM_MUTE_SEGMENT,    "PalmMuteSegment",      QT_TRANSLATE_NOOP("elementName", "Palm Mute Segment") },
+    { ElementType::TEXTLINE_SEGMENT,     "TextLineSegment",      QT_TRANSLATE_NOOP("elementName", "Text Line Segment") },
     { ElementType::VOLTA_SEGMENT,        "VoltaSegment",         QT_TRANSLATE_NOOP("elementName", "Volta Segment") },
     { ElementType::PEDAL_SEGMENT,        "PedalSegment",         QT_TRANSLATE_NOOP("elementName", "Pedal Segment") },
-    { ElementType::LYRICSLINE_SEGMENT,   "LyricsLineSegment",
-      QT_TRANSLATE_NOOP("elementName", "Melisma Line Segment") },
-    { ElementType::GLISSANDO_SEGMENT,    "GlissandoSegment",
-      QT_TRANSLATE_NOOP("elementName", "Glissando Segment") },
+    { ElementType::LYRICSLINE_SEGMENT,   "LyricsLineSegment",    QT_TRANSLATE_NOOP("elementName", "Melisma Line Segment") },
+    { ElementType::GLISSANDO_SEGMENT,    "GlissandoSegment",     QT_TRANSLATE_NOOP("elementName", "Glissando Segment") },
     { ElementType::LAYOUT_BREAK,         "LayoutBreak",          QT_TRANSLATE_NOOP("elementName", "Layout Break") },
     { ElementType::SPACER,               "Spacer",               QT_TRANSLATE_NOOP("elementName", "Spacer") },
     { ElementType::STAFF_STATE,          "StaffState",           QT_TRANSLATE_NOOP("elementName", "Staff State") },
@@ -110,8 +103,7 @@ static const ElementName elementNames[] = {
     { ElementType::SELECTION,            "Selection",            QT_TRANSLATE_NOOP("elementName", "Selection") },
     { ElementType::LASSO,                "Lasso",                QT_TRANSLATE_NOOP("elementName", "Lasso") },
     { ElementType::SHADOW_NOTE,          "ShadowNote",           QT_TRANSLATE_NOOP("elementName", "Shadow Note") },
-    { ElementType::TAB_DURATION_SYMBOL,  "TabDurationSymbol",
-      QT_TRANSLATE_NOOP("elementName", "Tab Duration Symbol") },
+    { ElementType::TAB_DURATION_SYMBOL,  "TabDurationSymbol",    QT_TRANSLATE_NOOP("elementName", "Tab Duration Symbol") },
     { ElementType::FSYMBOL,              "FSymbol",              QT_TRANSLATE_NOOP("elementName", "Font Symbol") },
     { ElementType::PAGE,                 "Page",                 QT_TRANSLATE_NOOP("elementName", "Page") },
     { ElementType::HAIRPIN,              "HairPin",              QT_TRANSLATE_NOOP("elementName", "Hairpin") },
@@ -139,15 +131,13 @@ static const ElementName elementNames[] = {
     { ElementType::HBOX,                 "HBox",                 QT_TRANSLATE_NOOP("elementName", "Horizontal Frame") },
     { ElementType::VBOX,                 "VBox",                 QT_TRANSLATE_NOOP("elementName", "Vertical Frame") },
     { ElementType::TBOX,                 "TBox",                 QT_TRANSLATE_NOOP("elementName", "Text Frame") },
-    { ElementType::FBOX,                 "FBox",                 QT_TRANSLATE_NOOP("elementName",
-                                                                                   "Fretboard Diagram Frame") },
+    { ElementType::FBOX,                 "FBox",                 QT_TRANSLATE_NOOP("elementName", "Fretboard Diagram Frame") },
     { ElementType::ICON,                 "Icon",                 QT_TRANSLATE_NOOP("elementName", "Icon") },
     { ElementType::OSSIA,                "Ossia",                QT_TRANSLATE_NOOP("elementName", "Ossia") },
-    { ElementType::BAGPIPE_EMBELLISHMENT,"BagpipeEmbellishment", QT_TRANSLATE_NOOP("elementName",
-                                                                                   "Bagpipe Embellishment") },
+    { ElementType::BAGPIPE_EMBELLISHMENT,"BagpipeEmbellishment", QT_TRANSLATE_NOOP("elementName", "Bagpipe Embellishment") },
     { ElementType::STICKING,             "Sticking",             QT_TRANSLATE_NOOP("elementName", "Sticking") }
 };
-
+/* *INDENT-ON* */
 //---------------------------------------------------------
 //   ScoreElement
 //---------------------------------------------------------
@@ -355,8 +345,7 @@ void ScoreElement::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags p
             } else {
                 sp = score()->spatium();
             }
-            ScoreElement::undoChangeProperty(Pid::OFFSET,
-                                             score()->styleV(getPropertyStyle(Pid::OFFSET)).toPointF() * sp);
+            ScoreElement::undoChangeProperty(Pid::OFFSET, score()->styleV(getPropertyStyle(Pid::OFFSET)).toPointF() * sp);
             Element* e = toElement(this);
             e->setOffsetChanged(false);
         }

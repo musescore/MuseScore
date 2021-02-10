@@ -497,16 +497,12 @@ static void readAccidental(Accidental* a, XmlReader& e)
                     { "flat", AccidentalType::FLAT }, { "natural", AccidentalType::NATURAL },
                     { "double sharp", AccidentalType::SHARP2 }, { "double flat", AccidentalType::FLAT2 },
                     { "flat-slash", AccidentalType::FLAT_SLASH }, { "flat-slash2", AccidentalType::FLAT_SLASH2 },
-                    { "mirrored-flat2", AccidentalType::MIRRORED_FLAT2 },
-                    { "mirrored-flat", AccidentalType::MIRRORED_FLAT },
+                    { "mirrored-flat2", AccidentalType::MIRRORED_FLAT2 }, { "mirrored-flat", AccidentalType::MIRRORED_FLAT },
                     { "sharp-slash", AccidentalType::SHARP_SLASH }, { "sharp-slash2", AccidentalType::SHARP_SLASH2 },
                     { "sharp-slash3", AccidentalType::SHARP_SLASH3 }, { "sharp-slash4", AccidentalType::SHARP_SLASH4 },
-                    { "sharp arrow up", AccidentalType::SHARP_ARROW_UP },
-                    { "sharp arrow down", AccidentalType::SHARP_ARROW_DOWN },
-                    { "flat arrow up", AccidentalType::FLAT_ARROW_UP },
-                    { "flat arrow down", AccidentalType::FLAT_ARROW_DOWN },
-                    { "natural arrow up", AccidentalType::NATURAL_ARROW_UP },
-                    { "natural arrow down", AccidentalType::NATURAL_ARROW_DOWN },
+                    { "sharp arrow up", AccidentalType::SHARP_ARROW_UP }, { "sharp arrow down", AccidentalType::SHARP_ARROW_DOWN },
+                    { "flat arrow up", AccidentalType::FLAT_ARROW_UP }, { "flat arrow down", AccidentalType::FLAT_ARROW_DOWN },
+                    { "natural arrow up", AccidentalType::NATURAL_ARROW_UP }, { "natural arrow down", AccidentalType::NATURAL_ARROW_DOWN },
                     { "sori", AccidentalType::SORI }, { "koron", AccidentalType::KORON }
                 };
                 auto it = accMap.find(text);

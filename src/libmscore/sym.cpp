@@ -6534,8 +6534,7 @@ void ScoreFont::draw(const std::vector<SymId>& ids, QPainter* p, const QSizeF& m
     draw(ids, p, mag, _pos, scale);
 }
 
-void ScoreFont::draw(const std::vector<SymId>& ids, QPainter* p, const QSizeF& mag, const QPointF& _pos,
-                     qreal scale) const
+void ScoreFont::draw(const std::vector<SymId>& ids, QPainter* p, const QSizeF& mag, const QPointF& _pos, qreal scale) const
 {
     QPointF pos(_pos);
     for (SymId id : ids) {
@@ -6696,7 +6695,7 @@ void ScoreFont::load()
     }
 
     QJsonObject glyphsWithAnchors = metadataJson.value("glyphsWithAnchors").toObject();
-    for (auto symName : glyphsWithAnchors.keys()) {
+    for (const auto& symName : glyphsWithAnchors.keys()) {
         constexpr qreal scale = SPATIUM20;
         QJsonObject anchors = glyphsWithAnchors.value(symName).toObject();
         SymId symId = Sym::lnhash.value(symName, SymId::noSym);
@@ -6707,7 +6706,7 @@ void ScoreFont::load()
             continue;
         }
         Sym* sym = &_symbols[int(symId)];
-        for (auto j : anchors.keys()) {
+        for (const auto& j : anchors.keys()) {
             if (j == "stemDownNW") {
                 qreal x = anchors.value(j).toArray().at(0).toDouble();
                 qreal y = anchors.value(j).toArray().at(1).toDouble();
@@ -6947,7 +6946,7 @@ void ScoreFont::load()
         if (i != oa.end()) {
             QJsonArray oaa = i.value().toObject().value("alternates").toArray();
             // locate the relevant altKey in alternate array
-            for (auto j : oaa) {
+            for (const auto& j : qAsConst(oaa)) {
                 QJsonObject jo = j.toObject();
                 if (jo.value("name") == c.altKey) {
                     Sym* sym = &_symbols[int(c.id)];

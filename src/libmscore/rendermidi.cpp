@@ -331,8 +331,8 @@ static void playNote(EventMap* events, const Note* note, int channel, int pitch,
 //   collectNote
 //---------------------------------------------------------
 
-static void collectNote(EventMap* events, int channel, const Note* note, qreal velocityMultiplier, int tickOffset,
-                        Staff* staff, SndConfig config)
+static void collectNote(EventMap* events, int channel, const Note* note, qreal velocityMultiplier, int tickOffset, Staff* staff,
+                        SndConfig config)
 {
     if (!note->play() || note->hidden()) {      // do not play overlapping notes
         return;
@@ -1172,17 +1172,11 @@ void MidiRenderer::renderSpanners(const Chunk& chunk, EventMap* events)
                     channelPedalEvents.at(channel).pop_back();
                     channelPedalEvents.at(channel).push_back(std::pair<int,
                                                                        std::pair<bool,
-                                                                                 int> >(st + tickOffset
-                                                                                        + (2
-                                                                                           - MScore::pedalEventsMinTicks),
-                                                                                        std::pair<bool,
-                                                                                                  int>(false, staff)));
+                                                                                 int> >(st + tickOffset + (2 - MScore::pedalEventsMinTicks),
+                                                                                        std::pair<bool, int>(false, staff)));
                 }
                 int a = st + tickOffset + 2;
-                channelPedalEvents.at(channel).push_back(std::pair<int, std::pair<bool, int> >(a,
-                                                                                               std::pair<bool,
-                                                                                                         int>(true,
-                                                                                                              staff)));
+                channelPedalEvents.at(channel).push_back(std::pair<int, std::pair<bool, int> >(a, std::pair<bool, int>(true, staff)));
             }
             if (s->tick2().ticks() >= tick1 && s->tick2().ticks() <= tick2) {
                 int t = s->tick2().ticks() + tickOffset + (2 - MScore::pedalEventsMinTicks);
@@ -1190,10 +1184,7 @@ void MidiRenderer::renderSpanners(const Chunk& chunk, EventMap* events)
                 if (t > lastRepeat.utick + lastRepeat.len()) {
                     t = lastRepeat.utick + lastRepeat.len();
                 }
-                channelPedalEvents.at(channel).push_back(std::pair<int, std::pair<bool, int> >(t,
-                                                                                               std::pair<bool,
-                                                                                                         int>(false,
-                                                                                                              staff)));
+                channelPedalEvents.at(channel).push_back(std::pair<int, std::pair<bool, int> >(t, std::pair<bool, int>(false, staff)));
             }
         } else if (s->isVibrato()) {
             int stick = s->tick().ticks();
@@ -2020,8 +2011,7 @@ void renderGlissando(NoteEventList* events, Note* notestart)
 Trill* findFirstTrill(Chord* chord)
 {
     auto spanners = chord->score()->spannerMap().findOverlapping(1 + chord->tick().ticks(),
-                                                                 chord->tick().ticks() + chord->actualTicks().ticks()
-                                                                 - 1);
+                                                                 chord->tick().ticks() + chord->actualTicks().ticks() - 1);
     for (auto i : spanners) {
         if (i.value->type() != ElementType::TRILL) {
             continue;

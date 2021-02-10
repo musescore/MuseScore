@@ -1481,8 +1481,7 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
 //   upDownChromatic
 //---------------------------------------------------------
 
-static void upDownChromatic(bool up, int pitch, Note* n, Key key, int tpc1, int tpc2, int& newPitch, int& newTpc1,
-                            int& newTpc2)
+static void upDownChromatic(bool up, int pitch, Note* n, Key key, int tpc1, int tpc2, int& newPitch, int& newTpc1, int& newTpc2)
 {
     if (up && pitch < 127) {
         newPitch = pitch + 1;
@@ -2131,8 +2130,7 @@ void Score::cmdResetBeamMode()
 
     Fraction endTick = selection().tickEnd();
 
-    for (Segment* seg = selection().firstChordRestSegment(); seg && seg->tick() < endTick;
-         seg = seg->next1(SegmentType::ChordRest)) {
+    for (Segment* seg = selection().firstChordRestSegment(); seg && seg->tick() < endTick; seg = seg->next1(SegmentType::ChordRest)) {
         for (int track = selection().staffStart() * VOICES; track < selection().staffEnd() * VOICES; ++track) {
             ChordRest* cr = toChordRest(seg->element(track));
             if (!cr) {
@@ -2766,8 +2764,8 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
 
     // if measure rest is selected as input, then the correct initialDuration will be the
     // duration of the measure's time signature, else is just the input state's duration
-    TDuration initialDuration = (cr->durationType() == TDuration::DurationType::V_MEASURE) ? TDuration(
-        cr->measure()->timesig()) : _is.duration();
+    TDuration initialDuration
+        = (cr->durationType() == TDuration::DurationType::V_MEASURE) ? TDuration(cr->measure()->timesig()) : _is.duration();
     TDuration d = initialDuration.shiftRetainDots(nSteps, stepDotted);
     if (!d.isValid()) {
         return;
@@ -4542,21 +4540,11 @@ void Score::cmd(const QAction* a, EditData& ed)
         { "beam32",                     [](Score* cs, EditData&) { cs->cmdSetBeamMode(Beam::Mode::BEGIN32); } },
         { "beam64",                     [](Score* cs, EditData&) { cs->cmdSetBeamMode(Beam::Mode::BEGIN64); } },
         { "auto-beam",                  [](Score* cs, EditData&) { cs->cmdSetBeamMode(Beam::Mode::AUTO); } },
-        { "sharp2",                     [](Score* cs, EditData& ed) {
-                cs->toggleAccidental(AccidentalType::SHARP2, ed);
-            } },
-        { "sharp",                      [](Score* cs, EditData& ed) {
-                cs->toggleAccidental(AccidentalType::SHARP, ed);
-            } },
-        { "nat",                        [](Score* cs, EditData& ed) {
-                cs->toggleAccidental(AccidentalType::NATURAL, ed);
-            } },
-        { "flat",                       [](Score* cs, EditData& ed) {
-                cs->toggleAccidental(AccidentalType::FLAT, ed);
-            } },
-        { "flat2",                      [](Score* cs, EditData& ed) {
-                cs->toggleAccidental(AccidentalType::FLAT2, ed);
-            } },
+        { "sharp2",                     [](Score* cs, EditData& ed) { cs->toggleAccidental(AccidentalType::SHARP2, ed); } },
+        { "sharp",                      [](Score* cs, EditData& ed) { cs->toggleAccidental(AccidentalType::SHARP, ed); } },
+        { "nat",                        [](Score* cs, EditData& ed) { cs->toggleAccidental(AccidentalType::NATURAL, ed); } },
+        { "flat",                       [](Score* cs, EditData& ed) { cs->toggleAccidental(AccidentalType::FLAT, ed); } },
+        { "flat2",                      [](Score* cs, EditData& ed) { cs->toggleAccidental(AccidentalType::FLAT2, ed); } },
         { "flip",                       [](Score* cs, EditData&) { cs->cmdFlip(); } },
         { "stretch+",                   [](Score* cs, EditData&) { cs->cmdAddStretch(0.1); } },
         { "stretch-",                   [](Score* cs, EditData&) { cs->cmdAddStretch(-0.1); } },

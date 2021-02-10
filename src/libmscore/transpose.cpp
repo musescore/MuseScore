@@ -536,8 +536,8 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
 //    key -   -7(Cb) - +7(C#)
 //---------------------------------------------------------
 
-void Score::transposeKeys(int staffStart, int staffEnd, const Fraction& ts, const Fraction& tickEnd,
-                          const Interval& interval, bool useInstrument, bool flip)
+void Score::transposeKeys(int staffStart, int staffEnd, const Fraction& ts, const Fraction& tickEnd, const Interval& interval,
+                          bool useInstrument, bool flip)
 {
     Fraction tickStart(ts);
     Interval firstInterval = interval;

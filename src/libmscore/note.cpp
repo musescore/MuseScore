@@ -121,16 +121,16 @@ static const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS) - 1][int(NoteH
 
         { SymId::noteShapeKeystoneWhite,          SymId::noteShapeKeystoneWhite,          SymId::noteShapeKeystoneBlack,
           SymId::noteShapeKeystoneDoubleWhole },
-        { SymId::noteShapeQuarterMoonWhite,       SymId::noteShapeQuarterMoonWhite,
-          SymId::noteShapeQuarterMoonBlack,       SymId::noteShapeQuarterMoonDoubleWhole },
-        { SymId::noteShapeIsoscelesTriangleWhite, SymId::noteShapeIsoscelesTriangleWhite,
-          SymId::noteShapeIsoscelesTriangleBlack, SymId::noteShapeIsoscelesTriangleDoubleWhole },
+        { SymId::noteShapeQuarterMoonWhite,       SymId::noteShapeQuarterMoonWhite,       SymId::noteShapeQuarterMoonBlack,
+          SymId::noteShapeQuarterMoonDoubleWhole },
+        { SymId::noteShapeIsoscelesTriangleWhite, SymId::noteShapeIsoscelesTriangleWhite, SymId::noteShapeIsoscelesTriangleBlack,
+          SymId::noteShapeIsoscelesTriangleDoubleWhole },
         { SymId::noteShapeMoonLeftWhite,          SymId::noteShapeMoonLeftWhite,          SymId::noteShapeMoonLeftBlack,
           SymId::noteShapeMoonLeftDoubleWhole },
-        { SymId::noteShapeArrowheadLeftWhite,     SymId::noteShapeArrowheadLeftWhite,
-          SymId::noteShapeArrowheadLeftBlack,     SymId::noteShapeArrowheadLeftDoubleWhole },
-        { SymId::noteShapeTriangleRoundLeftWhite, SymId::noteShapeTriangleRoundLeftWhite,
-          SymId::noteShapeTriangleRoundLeftBlack, SymId::noteShapeTriangleRoundLeftDoubleWhole },
+        { SymId::noteShapeArrowheadLeftWhite,     SymId::noteShapeArrowheadLeftWhite,     SymId::noteShapeArrowheadLeftBlack,
+          SymId::noteShapeArrowheadLeftDoubleWhole },
+        { SymId::noteShapeTriangleRoundLeftWhite, SymId::noteShapeTriangleRoundLeftWhite, SymId::noteShapeTriangleRoundLeftBlack,
+          SymId::noteShapeTriangleRoundLeftDoubleWhole },
 
         { SymId::noteDoWhole,  SymId::noteDoHalf,  SymId::noteDoBlack,  SymId::noSym },
         { SymId::noteReWhole,  SymId::noteReHalf,  SymId::noteReBlack,  SymId::noSym },
@@ -219,16 +219,16 @@ static const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS) - 1][int(NoteH
 
         { SymId::noteShapeKeystoneWhite,          SymId::noteShapeKeystoneWhite,          SymId::noteShapeKeystoneBlack,
           SymId::noteShapeKeystoneDoubleWhole },
-        { SymId::noteShapeQuarterMoonWhite,       SymId::noteShapeQuarterMoonWhite,
-          SymId::noteShapeQuarterMoonBlack,       SymId::noteShapeQuarterMoonDoubleWhole },
-        { SymId::noteShapeIsoscelesTriangleWhite, SymId::noteShapeIsoscelesTriangleWhite,
-          SymId::noteShapeIsoscelesTriangleBlack, SymId::noteShapeIsoscelesTriangleDoubleWhole },
+        { SymId::noteShapeQuarterMoonWhite,       SymId::noteShapeQuarterMoonWhite,       SymId::noteShapeQuarterMoonBlack,
+          SymId::noteShapeQuarterMoonDoubleWhole },
+        { SymId::noteShapeIsoscelesTriangleWhite, SymId::noteShapeIsoscelesTriangleWhite, SymId::noteShapeIsoscelesTriangleBlack,
+          SymId::noteShapeIsoscelesTriangleDoubleWhole },
         { SymId::noteShapeMoonLeftWhite,          SymId::noteShapeMoonLeftWhite,          SymId::noteShapeMoonLeftBlack,
           SymId::noteShapeMoonLeftDoubleWhole },
-        { SymId::noteShapeArrowheadLeftWhite,     SymId::noteShapeArrowheadLeftWhite,
-          SymId::noteShapeArrowheadLeftBlack,     SymId::noteShapeArrowheadLeftDoubleWhole },
-        { SymId::noteShapeTriangleRoundLeftWhite, SymId::noteShapeTriangleRoundLeftWhite,
-          SymId::noteShapeTriangleRoundLeftBlack, SymId::noteShapeTriangleRoundLeftDoubleWhole },
+        { SymId::noteShapeArrowheadLeftWhite,     SymId::noteShapeArrowheadLeftWhite,     SymId::noteShapeArrowheadLeftBlack,
+          SymId::noteShapeArrowheadLeftDoubleWhole },
+        { SymId::noteShapeTriangleRoundLeftWhite, SymId::noteShapeTriangleRoundLeftWhite, SymId::noteShapeTriangleRoundLeftBlack,
+          SymId::noteShapeTriangleRoundLeftDoubleWhole },
 
         { SymId::noteDoWhole,  SymId::noteDoHalf,  SymId::noteDoBlack,  SymId::noSym },
         { SymId::noteReWhole,  SymId::noteReHalf,  SymId::noteReBlack,  SymId::noSym },
@@ -901,6 +901,7 @@ QString Note::tpcUserName(const int tpc, const int pitch, const bool explicitAcc
                           tpc2name(tpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, explicitAccidental).replace("b", "♭").replace("#",
                                                                                                                                       "♯").toUtf8().constData());
     const auto octaveStr = QString::number(((pitch - static_cast<int>(tpc2alter(tpc))) / PITCH_DELTA_OCTAVE) - 1);
+
     return pitchStr + (explicitAccidental ? " " : "") + octaveStr;
 }
 
