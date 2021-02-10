@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2020 MuseScore BVBA and others
+//  Copyright (C) 2021 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -22,10 +22,6 @@
 #include "libmscore/types.h"
 
 using namespace mu::notation;
-
-//---------------------------------------------------------
-//   OffsetSelect
-//---------------------------------------------------------
 
 OffsetSelect::OffsetSelect(QWidget* parent)
     : QWidget(parent)
@@ -56,19 +52,11 @@ OffsetSelect::OffsetSelect(QWidget* parent)
     connect(yVal, SIGNAL(valueChanged(double)), SLOT(_offsetChanged()));
 }
 
-//---------------------------------------------------------
-//   setSuffix
-//---------------------------------------------------------
-
 void OffsetSelect::setSuffix(const QString& s)
 {
     xVal->setSuffix(s);
     yVal->setSuffix(s);
 }
-
-//---------------------------------------------------------
-//   showRaster
-//---------------------------------------------------------
 
 void OffsetSelect::showRaster(bool v)
 {
@@ -76,37 +64,21 @@ void OffsetSelect::showRaster(bool v)
     vRaster->setVisible(v);
 }
 
-//---------------------------------------------------------
-//   _offsetChanged
-//---------------------------------------------------------
-
 void OffsetSelect::_offsetChanged()
 {
     emit offsetChanged(QPointF(xVal->value(), yVal->value()));
 }
-
-//---------------------------------------------------------
-//   offset
-//---------------------------------------------------------
 
 QPointF OffsetSelect::offset() const
 {
     return QPointF(xVal->value(), yVal->value());
 }
 
-//---------------------------------------------------------
-//   blockOffset
-//---------------------------------------------------------
-
 void OffsetSelect::blockOffset(bool val)
 {
     xVal->blockSignals(val);
     yVal->blockSignals(val);
 }
-
-//---------------------------------------------------------
-//   setOffset
-//---------------------------------------------------------
 
 void OffsetSelect::setOffset(const QPointF& o)
 {

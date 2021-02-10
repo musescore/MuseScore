@@ -116,6 +116,7 @@ public:
     virtual void addAnchoredLineToSelectedNotes() = 0;
 
     virtual void addText(TextType type) = 0;
+    virtual void addFiguredBass() = 0;
 };
 
 using INotationInteractionPtr = std::shared_ptr<INotationInteraction>;

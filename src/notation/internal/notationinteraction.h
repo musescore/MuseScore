@@ -133,6 +133,7 @@ public:
     void addAnchoredLineToSelectedNotes() override;
 
     void addText(TextType type) override;
+    void addFiguredBass() override;
 
 private:
     Ms::Score* score() const;

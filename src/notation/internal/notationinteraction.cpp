@@ -39,6 +39,7 @@
 #include "libmscore/chord.h"
 #include "libmscore/elementgroup.h"
 #include "libmscore/textframe.h"
+#include "libmscore/figuredbass.h"
 #include "libmscore/stafflines.h"
 #include "libmscore/icon.h"
 #include "libmscore/undo.h"
@@ -2326,6 +2327,17 @@ void NotationInteraction::addText(TextType type)
     if (textBox) {
         select({ textBox }, SelectType::SINGLE);
         startEditText(textBox, QPointF());
+    }
+
+    notifyAboutSelectionChanged();
+}
+
+void NotationInteraction::addFiguredBass()
+{
+    Ms::FiguredBass* fb = score()->addFiguredBass();
+
+    if (fb) {
+        startEditText(fb, QPointF());
     }
 
     notifyAboutSelectionChanged();

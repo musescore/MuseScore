@@ -716,37 +716,6 @@ TextBase* Score::addText(Tid type)
         undoAddElement(textBox);
         break;
     }
-    case Tid::FIGURED_BASS: {
-        Element* element = selection().element();
-        if (!element || (!(element->isNote()) && !(element->isRest()) && !(element->isFiguredBass()))) {
-            break;
-        }
-
-        FiguredBass* fb;
-        bool bNew = false;
-        if (element->isNote()) {
-            ChordRest* cr = toNote(element)->chord();
-            fb = FiguredBass::addFiguredBassToSegment(cr->segment(), cr->staffIdx() * VOICES, Fraction(0,1), &bNew);
-        } else if (element->isRest()) {
-            ChordRest* cr = toRest(element);
-            fb = FiguredBass::addFiguredBassToSegment(cr->segment(), cr->staffIdx() * VOICES, Fraction(0, 1), &bNew);
-        } else if (element->isFiguredBass()) {
-            fb = toFiguredBass(element);
-            bNew = false;
-        } else {
-            break;
-        }
-
-        if (fb == nullptr) {
-            break;
-        }
-
-        if (bNew) {
-            textBox = fb;
-            undoAddElement(textBox);
-        }
-        break;
-    }
     case Tid::TEMPO: {
         ChordRest* chordRest = getSelectedChordRest();
         if (!chordRest) {

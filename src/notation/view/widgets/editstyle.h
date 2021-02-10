@@ -19,16 +19,13 @@
 #ifndef MU_NOTATION_EDITSTYLE_H
 #define MU_NOTATION_EDITSTYLE_H
 
-#include <QScrollArea>
-
 #include "ui_editstyle.h"
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "inotationconfiguration.h"
 #include "iinteractive.h"
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class Score;
 class EditStyle;
 
@@ -63,14 +60,24 @@ class EditStyle : public QDialog, private Ui::EditStyleBase
     INJECT(notation, mu::notation::INotationConfiguration, configuration)
     INJECT(notation, mu::framework::IInteractive, interactive)
 
-    QPushButton* buttonApplyToAllParts = nullptr;
-    QScrollArea* scrollArea = nullptr;
-    QVector<StyleWidget> styleWidgets;
-    bool isTooBig = false;
-    bool hasShown = false;
+    void showEvent(QShowEvent*);
+    void hideEvent(QHideEvent*);
+    void changeEvent(QEvent*);
 
-    virtual void showEvent(QShowEvent*);
-    virtual void hideEvent(QHideEvent*);
+    void retranslate();
+    void setHeaderFooterToolTip();
+    void adjustPagesStackSize(int currentPageIndex);
+
+    QVector<StyleWidget> styleWidgets;
+    const StyleWidget& styleWidget(StyleId id) const;
+
+    std::vector<QComboBox*> lineStyleComboBoxes;
+    std::vector<QComboBox*> verticalPlacementComboBoxes;
+    std::vector<QComboBox*> horizontalPlacementComboBoxes;
+
+    QPushButton* buttonApplyToAllParts = nullptr;
+
+    void unhandledType(const StyleWidget);
     QVariant getValue(StyleId idx);
     void setValues();
 
@@ -79,15 +86,14 @@ class EditStyle : public QDialog, private Ui::EditStyleBase
     bool hasDefaultStyleValue(StyleId id) const;
     void setStyleValue(StyleId id, const QVariant& value);
 
-    const StyleWidget& styleWidget(StyleId id) const;
-
-    void adjustPagesStackSize(int currentPageIndex);
-
-    static const std::map<ElementType, EditStylePage> PAGES;
+    static EditStylePage pageForElement(Element*);
 
 private slots:
     void selectChordDescriptionFile();
     void setChordStyle(bool);
+    void enableStyleWidget(const StyleId idx, bool enable);
+    void enableVerticalSpreadClicked(bool);
+    void disableVerticalSpreadClicked(bool);
     void toggleHeaderOddEven(bool);
     void toggleFooterOddEven(bool);
     void buttonClicked(QAbstractButton*);
@@ -104,6 +110,7 @@ private slots:
     void textStyleValueChanged(Ms::Pid, QVariant);
     void on_comboFBFont_currentIndexChanged(int index);
     void on_buttonTogglePagelist_clicked();
+    void on_resetStylesButton_clicked();
     void editUserStyleName();
     void endEditUserStyleName();
     void resetUserStyleName();
@@ -111,8 +118,15 @@ private slots:
 public:
     EditStyle(QWidget* = nullptr);
     EditStyle(const EditStyle&);
+
+    void setPage(int idx);
+    void gotoElement(Element* e);
+    static bool elementHasPage(Element* e);
+
+public slots:
+    void accept();
+    void reject();
 };
-}
 }
 
 Q_DECLARE_METATYPE(mu::notation::EditStyle)
