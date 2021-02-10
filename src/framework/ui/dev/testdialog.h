@@ -19,14 +19,14 @@
 #ifndef MU_UI_TESTDIALOG_H
 #define MU_UI_TESTDIALOG_H
 
-#include <QDialog>
+#include "view/widgetdialog.h"
 
 namespace Ui {
 class TestDialog;
 }
 
 namespace mu::ui {
-class TestDialog : public QDialog
+class TestDialog : public WidgetDialog
 {
     Q_OBJECT
 
@@ -37,9 +37,10 @@ public:
     explicit TestDialog(QWidget* parent = nullptr);
     ~TestDialog();
 
-    static int metaTypeId();
-
     QString title() const;
+
+    static int static_metaTypeId();
+    int metaTypeId() const override;
 
 public slots:
     void setTitle(QString title);
@@ -52,7 +53,5 @@ private:
     QString m_title;
 };
 }
-
-Q_DECLARE_METATYPE(mu::ui::TestDialog)
 
 #endif // MU_UI_TESTDIALOG_H

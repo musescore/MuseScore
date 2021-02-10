@@ -32,7 +32,7 @@ Item {
 
             if (page.type === ContainerType.PrimaryPage) {
                 root.requestedDockPage(data.value("uri"))
-                root.provider.onOpen(page.type)
+                root.provider.onOpen(page.type, {})
                 data.setValue("ret", {errcode: 0 })
                 return;
             }
@@ -62,12 +62,20 @@ Item {
                     obj.destroy()
                 })
 
-                root.provider.onOpen(page.type)
+                root.provider.onOpen(page.type, obj.objectID)
 
                 if (Boolean(data.value("sync")) && data.value("sync") === true) {
                     obj.exec()
                 } else {
                     obj.show()
+                }
+            }
+        }
+
+        function onFireClose(objectID) {
+            for(var i = 0; i < root.topParent.children.length; ++i) {
+                if (root.topParent.children[i].objectID === objectID) {
+                    root.topParent.children[i].hide()
                 }
             }
         }

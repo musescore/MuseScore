@@ -183,6 +183,16 @@ RetVal<Val> Interactive::open(const UriQuery& uri) const
     return provider()->open(uri);
 }
 
+RetVal<bool> Interactive::isOpened(const std::string& uri) const
+{
+    return provider()->isOpened(Uri(uri));
+}
+
+void Interactive::close(const std::string& uri)
+{
+    provider()->close(Uri(uri));
+}
+
 ValCh<Uri> Interactive::currentUri() const
 {
     return provider()->currentUri();

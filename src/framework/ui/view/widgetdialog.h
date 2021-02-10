@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2020 MuseScore BVBA and others
+//  Copyright (C) 2021 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -16,28 +16,22 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_UI_IINTERACTIVEPROVIDER_H
-#define MU_UI_IINTERACTIVEPROVIDER_H
+#ifndef MU_UI_WIDGETDIALOG_H
+#define MU_UI_WIDGETDIALOG_H
 
-#include "modularity/imoduleexport.h"
-#include "uri.h"
-#include "retval.h"
+#include <QDialog>
 
 namespace mu::ui {
-class IInteractiveProvider : MODULE_EXPORT_INTERFACE
+class WidgetDialog : public QDialog
 {
-    INTERFACE_ID(ILaunchProvider)
+    Q_OBJECT
 
 public:
-    virtual ~IInteractiveProvider() = default;
+    WidgetDialog(QWidget* parent = nullptr);
+    WidgetDialog(const WidgetDialog& other);
 
-    virtual RetVal<Val> open(const UriQuery& uri) = 0;
-    virtual RetVal<bool> isOpened(const Uri& uri) const = 0;
-
-    virtual void close(const Uri& uri) = 0;
-
-    virtual ValCh<Uri> currentUri() const = 0;
+    virtual int metaTypeId() const = 0;
 };
 }
 
-#endif // MU_UI_IINTERACTIVEPROVIDER_H
+#endif // MU_UI_QMLDIALOG_H

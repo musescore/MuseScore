@@ -22,13 +22,13 @@
 using namespace mu::ui;
 
 TestDialog::TestDialog(const TestDialog& dialog)
-    : QDialog(dialog.parentWidget()),
+    : WidgetDialog(dialog.parentWidget()),
     ui(dialog.ui)
 {
 }
 
 TestDialog::TestDialog(QWidget* parent)
-    : QDialog(parent),
+    : WidgetDialog(parent),
     ui(new Ui::TestDialog)
 {
     ui->setupUi(this);
@@ -39,14 +39,19 @@ TestDialog::~TestDialog()
     delete ui;
 }
 
-int TestDialog::metaTypeId()
-{
-    return QMetaType::type("TestDialog");
-}
-
 QString TestDialog::title() const
 {
     return m_title;
+}
+
+int TestDialog::static_metaTypeId()
+{
+    return qRegisterMetaType<TestDialog>("TestDialog");
+}
+
+int TestDialog::metaTypeId() const
+{
+    return static_metaTypeId();
 }
 
 void TestDialog::setTitle(QString title)
