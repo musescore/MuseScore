@@ -65,6 +65,8 @@ private:
     static const unsigned int MIDI_TRACK = 0;
 
     notation::INotationPlaybackPtr playback() const;
+    notation::INotationSelectionPtr selection() const;
+
     bool isPaused() const;
 
     void onNotationChanged();
@@ -80,10 +82,11 @@ private:
     void toggleMetronome();
     void toggleMidiInput();
     void toggleCountIn();
+    void toggleLoopPlayback();
 
-    void loopPlayback();
-    void setLoopInPosition();
-    void setLoopOutPosition();
+    void addLoopBoundary(notation::LoopBoundaryType type);
+    void setLoop(const notation::LoopBoundary& boundary);
+    void unsetLoop();
 
     void notifyActionEnabledChanged(const actions::ActionCode& actionCode);
 
@@ -95,6 +98,7 @@ private:
     CursorType m_cursorType = CursorType::STEPPED;
 
     bool m_needRewindBeforePlay = false;
+    bool m_isPlaybackLooped = false;
 };
 }
 

@@ -569,44 +569,58 @@ MidiData NotationPlayback::playHarmonyMidiData(const Ms::Harmony* harmony) const
     return midiData;
 }
 
-void NotationPlayback::addLoopBoundaryToSelectedNote(LoopBoundaryType boundaryType)
+void NotationPlayback::addLoopBoundary(LoopBoundaryType boundaryType, int tick)
 {
+    if (tick == BoundaryTick::FirstScoreTick) {
+        tick = score()->firstMeasure()->tick().ticks();
+    } else if (tick == BoundaryTick::LastScoreTick) {
+        tick = score()->lastMeasure()->endTick().ticks();
+    }
+
     switch (boundaryType) {
     case LoopBoundaryType::LoopIn:
-        addLoopInToSelectedNote();
+        addLoopIn(tick);
         break;
     case LoopBoundaryType::LoopOut:
-        addLoopOutToSelectedNote();
+        addLoopOut(tick);
         break;
     case LoopBoundaryType::Unknown:
         break;
     }
 }
 
-void NotationPlayback::addLoopInToSelectedNote()
+void NotationPlayback::addLoopIn(int _tick)
 {
-    Fraction tick = score()->pos();
+    Fraction tick = _tick == BoundaryTick::SelectedNoteTick ? score()->pos() : Fraction::fromTicks(_tick);
 
     if (tick >= score()->loopOutTick()) { // If In pos >= Out pos, reset Out pos to end of score
-        score()->setPos(Ms::POS::RIGHT, score()->lastMeasure()->endTick());
+        score()->setLoopOutTick(score()->lastMeasure()->endTick());
     }
 
-    score()->setPos(Ms::POS::LEFT, tick);
+    score()->setLoopInTick(tick);
 }
 
-void NotationPlayback::addLoopOutToSelectedNote()
+void NotationPlayback::addLoopOut(int _tick)
 {
-    Fraction tick = score()->pos() + score()->inputState().ticks();
+    Fraction tick = _tick == BoundaryTick::SelectedNoteTick ? score()->pos() + score()->inputState().ticks() :
+                                                              Fraction::fromTicks(_tick);
 
     if (tick <= score()->loopInTick()) { // If Out pos <= In pos, reset In pos to beginning of score
-        score()->setPos(Ms::POS::LEFT, Fraction(0, 1));
+        score()->setLoopInTick(Fraction(0, 1));
     } else {
         if (tick > score()->lastMeasure()->endTick()) {
             tick = score()->lastMeasure()->endTick();
         }
     }
 
-    score()->setPos(Ms::POS::RIGHT, tick);
+    score()->setLoopOutTick(tick);
+}
+
+void NotationPlayback::removeLoopBoundary()
+{
+    Fraction null = Fraction::fromTicks(0);
+    score()->setLoopInTick(null);
+    score()->setLoopOutTick(null);
 }
 
 QRect NotationPlayback::loopBoundaryRectByTick(LoopBoundaryType boundaryType, int _tick) const
@@ -712,13 +726,12 @@ MeasureBeat NotationPlayback::measureBeat(int tick) const
 {
     MeasureBeat measureBeat;
 
-    int dummy = 0;
-
     if (score() && score()->checkHasMeasures()) {
+        int dummy = 0;
         score()->sigmap()->tickValues(tick, &measureBeat.measureIndex, &measureBeat.beatIndex, &dummy);
 
         measureBeat.maxMeasureIndex = score()->measures()->size() - 1;
-        measureBeat.maxBeatIndex = 4; // TODO
+        measureBeat.maxBeatIndex = score()->sigmap()->timesig(Fraction::fromTicks(tick)).timesig().numerator() - 1;
     }
 
     return measureBeat;

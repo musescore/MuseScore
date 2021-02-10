@@ -225,8 +225,8 @@ void NotationPaintView::updateLoopMarkers(const LoopBoundary& boundary)
     m_loopInMarker->setRect(boundary.loopInRect);
     m_loopOutMarker->setRect(boundary.loopOutRect);
 
-    m_loopInMarker->setVisible(true);
-    m_loopOutMarker->setVisible(true);
+    m_loopInMarker->setVisible(!boundary.isNull());
+    m_loopOutMarker->setVisible(!boundary.isNull());
 
     update();
 }
