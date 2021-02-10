@@ -54,6 +54,7 @@ private:
     void toggleNoteInputMethod(NoteInputMethod method);
     void addNote(NoteName note, NoteAddingMode addingMode);
     void addText(TextType type);
+    void addFiguredBass();
     void padNote(const Pad& pad);
     void putNote(const actions::ActionData& data);
 

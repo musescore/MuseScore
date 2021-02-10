@@ -190,7 +190,7 @@ void NotationActionController::init()
     dispatcher()->reg(this, "roman-numeral-text", [this]() { addText(TextType::HARMONY_ROMAN); });
     dispatcher()->reg(this, "nashville-number-text", [this]() { addText(TextType::HARMONY_NASHVILLE); });
     dispatcher()->reg(this, "lyrics", [this]() { addText(TextType::LYRICS_ODD); });
-    dispatcher()->reg(this, "figured-bass", [this]() { addText(TextType::FIGURED_BASS); });
+    dispatcher()->reg(this, "figured-bass", [this]() { addFiguredBass(); });
     dispatcher()->reg(this, "tempo", [this]() { addText(TextType::TEMPO); });
 
     dispatcher()->reg(this, "toggle-navigator", this, &NotationActionController::toggleNavigator);
@@ -326,6 +326,16 @@ void NotationActionController::addText(TextType type)
     }
 
     interaction->addText(type);
+}
+
+void NotationActionController::addFiguredBass()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->addFiguredBass();
 }
 
 void NotationActionController::padNote(const Pad& pad)

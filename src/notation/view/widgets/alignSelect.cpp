@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2020 MuseScore BVBA and others
+//  Copyright (C) 2021 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -25,10 +25,6 @@
 
 using namespace mu::notation;
 using namespace mu::framework;
-
-//---------------------------------------------------------
-//   AlignSelect
-//---------------------------------------------------------
 
 AlignSelect::AlignSelect(QWidget* parent)
     : QWidget(parent)
@@ -58,18 +54,10 @@ AlignSelect::AlignSelect(QWidget* parent)
     connect(g2, SIGNAL(buttonToggled(int,bool)), SLOT(_alignChanged()));
 }
 
-///---------------------------------------------------------
-//   _alignChanged
-//---------------------------------------------------------
-
 void AlignSelect::_alignChanged()
 {
     emit alignChanged(align());
 }
-
-//---------------------------------------------------------
-//   align
-//---------------------------------------------------------
 
 Ms::Align AlignSelect::align() const
 {
@@ -88,20 +76,6 @@ Ms::Align AlignSelect::align() const
     }
     return a;
 }
-
-//---------------------------------------------------------
-//   blockAlign
-//---------------------------------------------------------
-
-void AlignSelect::blockAlign(bool val)
-{
-    g1->blockSignals(val);
-    g2->blockSignals(val);
-}
-
-//---------------------------------------------------------
-//   setElement
-//---------------------------------------------------------
 
 void AlignSelect::setAlign(Ms::Align a)
 {
@@ -123,4 +97,10 @@ void AlignSelect::setAlign(Ms::Align a)
         alignTop->setChecked(true);
     }
     blockAlign(false);
+}
+
+void AlignSelect::blockAlign(bool val)
+{
+    g1->blockSignals(val);
+    g2->blockSignals(val);
 }

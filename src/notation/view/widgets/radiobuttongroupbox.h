@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2021 MuseScore BVBA and others
+//  Copyright (C) 2020 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -16,34 +16,24 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATION_ALIGNSELECT_H
-#define MU_NOTATION_ALIGNSELECT_H
 
-#include "ui_align_select.h"
-#include "libmscore/types.h"
+#ifndef MU_NOTATION_RADIOBUTTONGROUPBOX_H
+#define MU_NOTATION_RADIOBUTTONGROUPBOX_H
+
+#include <QGroupBox>
 
 namespace mu::notation {
-class AlignSelect : public QWidget, public Ui::AlignSelect
+class RadioButtonGroupBox : public QGroupBox
 {
     Q_OBJECT
 
 public:
-    AlignSelect(QWidget* parent);
-    Ms::Align align() const;
-    void setAlign(Ms::Align);
-
-signals:
-    void alignChanged(Ms::Align);
+    explicit RadioButtonGroupBox(QWidget* parent = nullptr);
+    explicit RadioButtonGroupBox(const QString& title, QWidget* parent = nullptr);
 
 private:
-    QButtonGroup* g1;
-    QButtonGroup* g2;
-
-    void blockAlign(bool val);
-
-private slots:
-    void _alignChanged();
+    void paintEvent(QPaintEvent* event) override;
 };
 }
 
-#endif // MU_NOTATION_ALIGNSELECT_H
+#endif

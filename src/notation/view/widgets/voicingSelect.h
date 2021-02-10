@@ -15,35 +15,37 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-//=============================================================================
-#ifndef MU_NOTATION_ALIGNSELECT_H
-#define MU_NOTATION_ALIGNSELECT_H
+//============================================================================
 
-#include "ui_align_select.h"
-#include "libmscore/types.h"
+#ifndef MU_NOTATION_VOICINGSELECT_H
+#define MU_NOTATION_VOICINGSELECT_H
+
+#include "ui_voicing_select.h"
 
 namespace mu::notation {
-class AlignSelect : public QWidget, public Ui::AlignSelect
+class VoicingSelect : public QWidget, public Ui::VoicingSelect
 {
     Q_OBJECT
 
 public:
-    AlignSelect(QWidget* parent);
-    Ms::Align align() const;
-    void setAlign(Ms::Align);
+    VoicingSelect(QWidget* parent);
+    int getVoicing() { return voicingBox->currentIndex(); }
+    bool getLiteral() { return interpretBox->currentIndex(); }
+    int getDuration() { return durationBox->currentIndex(); }
+
+    void setVoicing(int idx);
+    void setLiteral(bool literal);
+    void setDuration(int duration);
 
 signals:
-    void alignChanged(Ms::Align);
+    void voicingChanged(bool, int, int);
 
 private:
-    QButtonGroup* g1;
-    QButtonGroup* g2;
-
-    void blockAlign(bool val);
+    void blockVoicingSignals(bool);
 
 private slots:
-    void _alignChanged();
+    void _voicingChanged();
 };
 }
 
-#endif // MU_NOTATION_ALIGNSELECT_H
+#endif // MU_NOTATION_VOICINGSELECT_H
