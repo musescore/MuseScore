@@ -7,6 +7,8 @@ import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
 import MuseScore.NotationScene 1.0
 
+import "internal"
+
 Rectangle {
     id: root
 
@@ -63,7 +65,16 @@ Rectangle {
                     normalStateColor: model.checked ? ui.theme.accentColor : "transparent"
 
                     onClicked: {
+                        if (model.code === "playback-settings") {
+                            playbackSettings.toggleOpened()
+                            return
+                        }
+
                         playbackModel.handleAction(model.code)
+                    }
+
+                    PlaybackSettingsPopup {
+                        id: playbackSettings
                     }
                 }
             }
