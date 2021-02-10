@@ -16,30 +16,23 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_USERSCORES_IFILESCORECONTROLLER_H
-#define MU_USERSCORES_IFILESCORECONTROLLER_H
-
-#include <QVariantMap>
+#ifndef MU_USERSCORES_IUSERSCORESSERVICE_H
+#define MU_USERSCORES_IUSERSCORESSERVICE_H
 
 #include "modularity/imoduleexport.h"
-#include "io/path.h"
-#include "actions/actiontypes.h"
+#include "retval.h"
+#include "notation/notationtypes.h"
 
 namespace mu::userscores {
-class IFileScoreController : MODULE_EXPORT_INTERFACE
+class IUserScoresService : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IFileScoreController)
+    INTERFACE_ID(IUserScoresService)
 
 public:
-    virtual ~IFileScoreController() = default;
+    virtual ~IUserScoresService() = default;
 
-    virtual void openScore(const actions::ActionData& args = actions::ActionData()) = 0;
-    virtual void importScore() = 0;
-    virtual void newScore() = 0;
-
-    virtual void saveScore() = 0;
-    virtual void saveScoreAs() = 0;
+    virtual ValCh<std::vector<notation::Meta> > recentScoreList() const = 0;
 };
 }
 
-#endif // MU_USERSCORES_IFILESCORECONTROLLER_H
+#endif // MU_USERSCORES_IUSERSCORESSERVICE_H

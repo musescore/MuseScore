@@ -42,23 +42,18 @@ void AppMenuModel::load()
             << toolsItem()
             << helpItem();
 
-    globalContext()->currentMasterNotationChanged().onNotify(this, [this]() {
-        load();
-
-        currentMasterNotation()->notation()->notationChanged().onNotify(this, [this]() {
-            load();
-        });
-
-        currentMasterNotation()->notation()->interaction()->selectionChanged().onNotify(this, [this]() {
-            load();
-        });
-    });
+    setupConnections();
 
     emit itemsChanged();
 }
 
-void AppMenuModel::handleAction(const QString& actionCode)
+void AppMenuModel::handleAction(const QString& actionCode, const QVariant& actionData)
 {
+    if (actionCode == "file-open") {
+        actionsDispatcher()->dispatch(codeFromQString(actionCode), ActionData::make_arg1<io::path>(actionData.toString().toStdString()));
+        return;
+    }
+
     actionsDispatcher()->dispatch(codeFromQString(actionCode));
 }
 
@@ -83,21 +78,40 @@ INotationPtr AppMenuModel::currentNotation() const
     return currentMasterNotation() ? currentMasterNotation()->notation() : nullptr;
 }
 
+void AppMenuModel::setupConnections()
+{
+    globalContext()->currentMasterNotationChanged().onNotify(this, [this]() {
+        load();
+
+        currentMasterNotation()->notation()->notationChanged().onNotify(this, [this]() {
+            load();
+        });
+
+        currentMasterNotation()->notation()->interaction()->selectionChanged().onNotify(this, [this]() {
+            load();
+        });
+    });
+
+    userScoresService()->recentScoreList().ch.onReceive(this, [this](const std::vector<Meta>&) {
+        load();
+    });
+}
+
 MenuItem AppMenuModel::fileItem()
 {
     MenuItemList fileItems {
         makeAction("file-new"),
         makeAction("file-open"),
-        makeAction("file-import"),
+        makeMenu(trc("appshell", "Open &Recent"), recentScores()),
         makeSeparator(),
         makeAction("file-close", scoreOpened()),
         makeAction("file-save", needSaveScore()),
         makeAction("file-save-as", scoreOpened()),
-        makeAction("file-save-a-copy", scoreOpened()), // need implement
-        makeAction("file-save-selection", scoreOpened()), // need implement
+        makeAction("file-save-a-copy", scoreOpened()),
+        makeAction("file-save-selection", scoreOpened()),
         makeAction("file-save-online", scoreOpened()), // need implement
         makeSeparator(),
-        makeAction("file-import-pdf", scoreOpened()), // need implement
+        makeAction("file-import-pdf", scoreOpened()),
         makeAction("file-export", scoreOpened()), // need implement
         makeSeparator(),
         makeAction("edit-info", scoreOpened()),
@@ -284,6 +298,29 @@ MenuItem AppMenuModel::helpItem()
     return makeMenu(trc("appshell", "&Help"), helpItems, scoreOpened());
 }
 
+MenuItemList AppMenuModel::recentScores() const
+{
+    MenuItemList items;
+    std::vector<Meta> recentScores = userScoresService()->recentScoreList().val;
+    if (recentScores.empty()) {
+        return items;
+    }
+
+    for (const Meta& meta: recentScores) {
+        MenuItem item = actionsRegister()->action("file-open");
+        item.title = !meta.title.isEmpty() ? meta.title.toStdString() : meta.fileName.toStdString();
+        item.data = QVariant::fromValue(meta.filePath);
+        item.enabled = true;
+
+        items << item;
+    }
+
+    items << makeSeparator()
+          << makeAction("clear-recent");
+
+    return items;
+}
+
 MenuItemList AppMenuModel::notesItems() const
 {
     MenuItemList items {
@@ -440,10 +477,13 @@ MenuItemList AppMenuModel::workspacesItems() const
     for (const IWorkspacePtr& workspace : workspaces.val) {
         MenuItem item = actionsRegister()->action("select-workspace"); // need implement
         item.title = workspace->title();
-        item.data = ActionData::make_arg1<std::string>(workspace->name());
+        item.data = QString::fromStdString(workspace->name());
 
         bool isCurrentWorkspace = workspace == currentWorkspace;
-        items << makeAction(item.code, true, isCurrentWorkspace);
+        item.checked = isCurrentWorkspace;
+        item.enabled = true;
+
+        items << item;
     }
 
     items << makeSeparator()

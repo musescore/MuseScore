@@ -52,7 +52,8 @@ public:
     Ret createNew(const ScoreCreateOptions& scoreOptions) override;
     RetVal<bool> created() const override;
 
-    Ret save(const io::path& path = io::path()) override;
+    Ret save(const io::path& path = io::path(), SaveMode saveMode = SaveMode::Unknown) override;
+    Ret saveSelection(const io::path& path = io::path()) override;
     mu::ValNt<bool> needSave() const override;
 
     ValCh<ExcerptNotationList> excerpts() const override;

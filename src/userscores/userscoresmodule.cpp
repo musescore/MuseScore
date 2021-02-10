@@ -31,15 +31,20 @@
 #include "view/templatepaintview.h"
 #include "internal/filescorecontroller.h"
 #include "internal/userscoresconfiguration.h"
+#include "internal/userscoresservice.h"
 #include "internal/templatesrepository.h"
+#include "internal/userscoresactions.h"
+
 #include "ui/iinteractiveuriregister.h"
+#include "actions/iactionsregister.h"
 
 using namespace mu::userscores;
 using namespace mu::framework;
 using namespace mu::ui;
 
-static FileScoreController* s_fileController = new FileScoreController();
-static UserScoresConfiguration* s_userScoresConfiguration = new UserScoresConfiguration();
+static std::shared_ptr<FileScoreController> s_fileController = std::make_shared<FileScoreController>();
+static std::shared_ptr<UserScoresConfiguration> s_userScoresConfiguration = std::make_shared<UserScoresConfiguration>();
+static std::shared_ptr<UserScoresService> s_userScoresService = std::make_shared<UserScoresService>();
 
 static void userscores_init_qrc()
 {
@@ -53,13 +58,18 @@ std::string UserScoresModule::moduleName() const
 
 void UserScoresModule::registerExports()
 {
-    ioc()->registerExport<IFileScoreController>(moduleName(), s_fileController);
     ioc()->registerExport<IUserScoresConfiguration>(moduleName(), s_userScoresConfiguration);
+    ioc()->registerExport<IUserScoresService>(moduleName(), s_userScoresService);
     ioc()->registerExport<ITemplatesRepository>(moduleName(), new TemplatesRepository());
 }
 
 void UserScoresModule::resolveImports()
 {
+    auto ar = ioc()->resolve<actions::IActionsRegister>(moduleName());
+    if (ar) {
+        ar->reg(std::make_shared<UserScoresActions>());
+    }
+
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerUri(Uri("musescore://userscores/newscore"),
@@ -82,7 +92,7 @@ void UserScoresModule::registerUiTypes()
     qmlRegisterType<TemplatesModel>("MuseScore.UserScores", 1, 0, "TemplatesModel");
     qmlRegisterType<TemplatePaintView>("MuseScore.UserScores", 1, 0, "TemplatePaintView");
 
-    framework::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(userscores_QML_IMPORT);
+    ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(userscores_QML_IMPORT);
 }
 
 void UserScoresModule::onInit(const IApplication::RunMode& mode)
@@ -91,5 +101,6 @@ void UserScoresModule::onInit(const IApplication::RunMode& mode)
         return;
     }
     s_userScoresConfiguration->init();
+    s_userScoresService->init();
     s_fileController->init();
 }
