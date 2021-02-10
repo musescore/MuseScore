@@ -26,6 +26,7 @@ using namespace mu::notation;
 using namespace mu::actions;
 using namespace mu::workspace;
 using namespace mu::ui;
+using namespace mu::uicomponents;
 
 static const std::string TOOLBAR_TAG("Toolbar");
 static const std::string TOOLBAR_NAME("noteInput");
