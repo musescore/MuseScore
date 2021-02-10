@@ -4,18 +4,17 @@ import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
 import MuseScore.Playback 1.0
 
-QmlDialog {
+StyledPopupView {
     id: root
 
-    signal clicked(var index)
+    positionDisplacementX: parent.width/2 - width/2
+    positionDisplacementY: parent.height
 
-    implicitWidth: 286
-    implicitHeight: 188
+    arrowVisible: false
 
-    Rectangle {
-        anchors.fill: parent
-
-        color: ui.theme.backgroundPrimaryColor
+    Item {
+        implicitWidth: 286
+        implicitHeight: 188
 
         PlaybackSettingsModel {
             id: settingsModel

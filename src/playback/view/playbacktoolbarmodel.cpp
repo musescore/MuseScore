@@ -303,12 +303,6 @@ QVariant PlaybackToolBarModel::tempo() const
 
 void PlaybackToolBarModel::handleAction(const QString& action)
 {
-    //! NOTE: Temporary solution
-    if (action.toStdString() == PLAYBACK_SETTINGS_KEY) {
-        interactive()->open("musescore://playback/settings");
-        return;
-    }
-
     dispatcher()->dispatch(actions::codeFromQString(action));
 }
 
