@@ -47,7 +47,8 @@ void DockMenuBar::setItems(QVariantList items)
 
 void DockMenuBar::onActionTriggered(QAction* action)
 {
-    emit actionTringgered(action->data().toString());
+    QVariantMap data = action->data().toMap();
+    emit actionTringgered(data.value("code").toString(), data.value("value"));
 }
 
 void DockMenuBar::updateMenus()
@@ -83,7 +84,12 @@ QMenu* DockMenuBar::makeMenu(const QVariantMap& menuItem) const
 QAction* DockMenuBar::makeAction(const QVariantMap& menuItem) const
 {
     QAction* action = new QAction();
-    action->setData(menuItem.value("code").toString());
+
+    QVariantMap data;
+    data["code"] = menuItem.value("code").toString();
+    data["value"] = menuItem.value("data");
+    action->setData(data);
+
     action->setText(menuItem.value("title").toString());
 
     action->setShortcut(menuItem.value("shortcut").toString());

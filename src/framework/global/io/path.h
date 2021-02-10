@@ -38,6 +38,7 @@ struct path {
     inline path& operator=(const QString& other) { m_path = other.toUtf8(); return *this; }
 
     inline bool operator==(const path& other) const { return m_path == other.m_path; }
+    inline bool operator!=(const path& other) const { return !(m_path == other.m_path); }
 
     inline path operator+(const path& other) const { path p = *this; p.m_path += other.m_path; return p; }
     inline path operator+(const QString& other) const { path p = *this; p.m_path += other.toUtf8(); return p; }

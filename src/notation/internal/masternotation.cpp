@@ -508,26 +508,40 @@ mu::RetVal<bool> MasterNotation::created() const
     return RetVal<bool>::make_ok(score()->created());
 }
 
-mu::Ret MasterNotation::save(const mu::io::path& path)
+mu::Ret MasterNotation::save(const io::path& path, SaveMode saveMode)
 {
     std::string suffix = io::syffix(path);
     if (suffix != "mscz" && suffix != "mscx" && !suffix.empty()) {
         return exportScore(path, suffix);
     }
 
+    io::path oldFilePath = score()->masterScore()->fileInfo()->filePath().toStdString();
+
     if (!path.empty()) {
         score()->masterScore()->fileInfo()->setFile(path.toQString());
     }
 
-    bool ok = score()->masterScore()->saveFile(true);
-    if (!ok) {
-        LOGE() << Ms::MScore::lastError;
-    } else {
+    Ret ret = score()->masterScore()->saveFile(true);
+    if (!ret) {
+        ret.setText(Ms::MScore::lastError.toStdString());
+    } else if (saveMode != SaveMode::SaveACopy || oldFilePath == path) {
         score()->setCreated(false);
         undoStack()->stackChanged().notify();
     }
 
-    return ok;
+    return ret;
+}
+
+mu::Ret MasterNotation::saveSelection(const mu::io::path& path)
+{
+    QFileInfo fileInfo(path.toQString());
+
+    Ret ret = score()->saveCompressedFile(fileInfo, true);
+    if (!ret) {
+        ret.setText(Ms::MScore::lastError.toStdString());
+    }
+
+    return ret;
 }
 
 mu::Ret MasterNotation::exportScore(const io::path& path, const std::string& suffix)

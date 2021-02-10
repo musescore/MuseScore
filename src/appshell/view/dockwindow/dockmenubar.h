@@ -41,7 +41,7 @@ public slots:
 signals:
     void itemsChanged(QVariantList items);
     void changed(const QList<QMenu*>& menus);
-    void actionTringgered(const QString& action);
+    void actionTringgered(const QString& actionCode, const QVariant& actionData);
 
 private:
     void updateMenus();

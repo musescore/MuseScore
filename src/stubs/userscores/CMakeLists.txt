@@ -26,8 +26,6 @@ set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/userscoresstubmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/userscoresstubmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/filescorecontrollerstub.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/filescorecontrollerstub.h
     ${CMAKE_CURRENT_LIST_DIR}/userscoresconfigurationstub.cpp
     ${CMAKE_CURRENT_LIST_DIR}/userscoresconfigurationstub.h
     )

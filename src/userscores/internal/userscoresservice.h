@@ -16,26 +16,31 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "filescorecontrollerstub.h"
+#ifndef MU_USERSCORES_USERSCORESSERVICE_H
+#define MU_USERSCORES_USERSCORESSERVICE_H
 
-using namespace mu::userscores;
+#include "iuserscoresservice.h"
+#include "modularity/ioc.h"
+#include "async/asyncable.h"
+#include "iuserscoresconfiguration.h"
+#include "notation/imsczmetareader.h"
 
-void FileScoreControllerStub::openScore(const mu::actions::ActionData&)
+namespace mu::userscores {
+class UserScoresService : public IUserScoresService, public async::Asyncable
 {
+    INJECT(usescores, IUserScoresConfiguration, configuration)
+    INJECT(usescores, notation::IMsczMetaReader, msczMetaReader)
+
+public:
+    void init();
+
+    ValCh<std::vector<notation::Meta> > recentScoreList() const override;
+
+private:
+    std::vector<notation::Meta> parseRecentList(const QStringList& recentScoresPathList) const;
+
+    async::Channel<std::vector<notation::Meta> > m_recentScoreListChanged;
+};
 }
 
-void FileScoreControllerStub::importScore()
-{
-}
-
-void FileScoreControllerStub::newScore()
-{
-}
-
-void FileScoreControllerStub::saveScore()
-{
-}
-
-void FileScoreControllerStub::saveScoreAs()
-{
-}
+#endif // MU_USERSCORES_USERSCORESSERVICE_H

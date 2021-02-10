@@ -19,13 +19,19 @@
 #ifndef MU_APPSHELL_APPSHELLCONFIGURATION_H
 #define MU_APPSHELL_APPSHELLCONFIGURATION_H
 
+#include "modularity/ioc.h"
 #include "iappshellconfiguration.h"
+#include "userscores/iuserscoresconfiguration.h"
 
 namespace mu::appshell {
 class AppShellConfiguration : public IAppShellConfiguration
 {
+    INJECT(appshell, userscores::IUserScoresConfiguration, userScoresConfiguration)
+
 public:
     bool isAppUpdatable() const override;
+
+    ValCh<QStringList> recentScoreList() const override;
 };
 }
 

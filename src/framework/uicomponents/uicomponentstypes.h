@@ -32,7 +32,7 @@ struct MenuItem : public actions::ActionItem
     bool enabled = false;
     bool checked = false;
 
-    actions::ActionData data;
+    QVariant data;
 
     QList<MenuItem> subitems;
 
@@ -57,7 +57,8 @@ struct MenuItem : public actions::ActionItem
             { "icon", static_cast<int>(iconCode) },
             { "enabled", enabled },
             { "checked", checked },
-            { "subitems", _subitems }
+            { "subitems", _subitems },
+            { "data", data }
         };
     }
 
@@ -72,6 +73,7 @@ struct MenuItem : public actions::ActionItem
         item.iconCode = static_cast<ui::IconCode::Code>(map.value("icon").toInt());
         item.enabled = map.value("enabled").toBool();
         item.checked = map.value("checked").toBool();
+        item.data = map.value("data");
 
         for (const QVariant& _item: map.value("subitems").toList()) {
             item.subitems << fromMap(_item.toMap());
