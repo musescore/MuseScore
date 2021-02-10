@@ -338,6 +338,11 @@ struct LoopBoundary
 
     QRect loopInRect;
     QRect loopOutRect;
+
+    bool isNull() const
+    {
+        return loopInTick == 0 && loopOutTick == 0;
+    }
 };
 
 inline QString staffTypeToString(StaffType type)

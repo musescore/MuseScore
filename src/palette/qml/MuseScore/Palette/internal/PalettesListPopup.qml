@@ -125,7 +125,6 @@ StyledPopup {
                         Layout.preferredWidth: width
 
                         icon: IconCode.PLUS
-                        hint: addButton.ToolTip.text
 
                         hint: qsTrc("palette", "Add %1 palette").arg(model.display)
                         Accessible.description: ToolTip.text

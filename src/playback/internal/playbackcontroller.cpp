@@ -29,6 +29,11 @@ using namespace mu::async;
 using namespace mu::audio;
 using namespace mu::actions;
 
+static const ActionCode PLAY_CODE("play");
+static const ActionCode REWIND_CODE("rewind");
+static const ActionCode LOOP_CODE("loop");
+static const ActionCode LOOP_IN_CODE("loop-in");
+static const ActionCode LOOP_OUT_CODE("loop-out");
 static const ActionCode METRONOME_CODE("metronome");
 static const ActionCode MIDI_ON_CODE("midi-on");
 static const ActionCode COUNT_IN_CODE("countin");
@@ -42,12 +47,11 @@ uint64_t secondsToMilliseconds(float seconds)
 
 void PlaybackController::init()
 {
-    dispatcher()->reg(this, "play", this, &PlaybackController::togglePlay);
-    dispatcher()->reg(this, "rewind", this, &PlaybackController::rewind);
-    dispatcher()->reg(this, "loop", this, &PlaybackController::loopPlayback);
-    dispatcher()->reg(this, "loop-in", this, &PlaybackController::setLoopInPosition);
-    dispatcher()->reg(this, "loop-out", this, &PlaybackController::setLoopOutPosition);
-
+    dispatcher()->reg(this, PLAY_CODE, this, &PlaybackController::togglePlay);
+    dispatcher()->reg(this, REWIND_CODE, this, &PlaybackController::rewind);
+    dispatcher()->reg(this, LOOP_CODE, this, &PlaybackController::toggleLoopPlayback);
+    dispatcher()->reg(this, LOOP_IN_CODE, [this]() { addLoopBoundary(LoopBoundaryType::LoopIn); });
+    dispatcher()->reg(this, LOOP_OUT_CODE, [this]() { addLoopBoundary(LoopBoundaryType::LoopOut); });
     dispatcher()->reg(this, REPEAT_CODE, this, &PlaybackController::togglePlayRepeats);
     dispatcher()->reg(this, PAN_CODE, this, &PlaybackController::toggleAutomaticallyPan);
     dispatcher()->reg(this, METRONOME_CODE, this, &PlaybackController::toggleMetronome);
@@ -148,6 +152,11 @@ INotationPlaybackPtr PlaybackController::playback() const
     return m_notation ? m_notation->playback() : nullptr;
 }
 
+INotationSelectionPtr PlaybackController::selection() const
+{
+    return m_notation ? m_notation->interaction()->selection() : nullptr;
+}
+
 void PlaybackController::onNotationChanged()
 {
     if (m_notation) {
@@ -158,6 +167,10 @@ void PlaybackController::onNotationChanged()
     if (m_notation) {
         m_notation->playback()->playPositionTickChanged().onReceive(this, [this](int tick) {
             seek(tick);
+        });
+
+        m_notation->playback()->loopBoundaryChanged().onReceive(this, [this](const LoopBoundary& boundary) {
+            setLoop(boundary);
         });
     }
 
@@ -271,19 +284,64 @@ void PlaybackController::toggleCountIn()
     notifyActionEnabledChanged(COUNT_IN_CODE);
 }
 
-void PlaybackController::loopPlayback()
+void PlaybackController::toggleLoopPlayback()
 {
-    NOT_IMPLEMENTED;
+    if (m_isPlaybackLooped) {
+        unsetLoop();
+        return;
+    }
+
+    int loopInTick = INotationPlayback::FirstScoreTick;
+    int loopOutTick = INotationPlayback::LastScoreTick;
+
+    if (!selection()->isNone()) {
+        loopInTick = selection()->range()->startTick().ticks();
+        loopOutTick = selection()->range()->endTick().ticks();
+    }
+
+    playback()->addLoopBoundary(LoopBoundaryType::LoopIn, loopInTick);
+    playback()->addLoopBoundary(LoopBoundaryType::LoopOut, loopOutTick);
+
+    m_isPlaybackLooped = true;
 }
 
-void PlaybackController::setLoopInPosition()
+void PlaybackController::addLoopBoundary(LoopBoundaryType type)
 {
-    NOT_IMPLEMENTED;
+    if (!playback()) {
+        return;
+    }
+
+    if (isPlaying()) {
+        playback()->addLoopBoundary(type, m_tickPlayed.val);
+    } else {
+        playback()->addLoopBoundary(type, INotationPlayback::SelectedNoteTick);
+    }
 }
 
-void PlaybackController::setLoopOutPosition()
+void PlaybackController::setLoop(const LoopBoundary& boundary)
 {
-    NOT_IMPLEMENTED;
+    if (boundary.isNull()) {
+        unsetLoop();
+        return;
+    }
+
+    uint64_t fromMilliseconds = secondsToMilliseconds(playback()->tickToSec(boundary.loopInTick));
+    uint64_t toMilliseconds = secondsToMilliseconds(playback()->tickToSec(boundary.loopOutTick));
+
+    sequencer()->setLoop(fromMilliseconds, toMilliseconds);
+
+    m_isPlaybackLooped = true;
+    notifyActionEnabledChanged(LOOP_CODE);
+}
+
+void PlaybackController::unsetLoop()
+{
+    if (playback() && m_isPlaybackLooped) {
+        m_isPlaybackLooped = false;
+        sequencer()->unsetLoop();
+        playback()->removeLoopBoundary();
+        notifyActionEnabledChanged(LOOP_CODE);
+    }
 }
 
 void PlaybackController::notifyActionEnabledChanged(const ActionCode& actionCode)
@@ -294,6 +352,7 @@ void PlaybackController::notifyActionEnabledChanged(const ActionCode& actionCode
 bool PlaybackController::isActionEnabled(const ActionCode& actionCode) const
 {
     QMap<std::string, bool> isEnabled {
+        { LOOP_CODE, m_isPlaybackLooped },
         { MIDI_ON_CODE, configuration()->isMidiInputEnabled() },
         { REPEAT_CODE, configuration()->isPlayRepeatsEnabled() },
         { PAN_CODE, configuration()->isAutomaticallyPanEnabled() },

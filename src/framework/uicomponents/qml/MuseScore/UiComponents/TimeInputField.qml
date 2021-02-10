@@ -15,8 +15,6 @@ Row {
 
     property var font: ui.theme.tabFont
 
-    signal timeEdited(var newTime)
-
     spacing: 4
 
     opacity: enabled ? 1 : ui.theme.itemOpacityDisabled

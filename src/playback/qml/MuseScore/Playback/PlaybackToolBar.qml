@@ -41,6 +41,8 @@ Rectangle {
                 contentHeight: 32
                 contentWidth: contentHeight
 
+                spacing: 2
+
                 model: FilterProxyModel {
                     sourceModel: playbackModel
 

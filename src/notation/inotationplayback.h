@@ -48,7 +48,14 @@ public:
 
     virtual midi::MidiData playElementMidiData(const Element* element) const = 0;
 
-    virtual void addLoopBoundaryToSelectedNote(LoopBoundaryType boundaryType) = 0;
+    enum BoundaryTick: int {
+        FirstScoreTick = -3,
+        SelectedNoteTick,
+        LastScoreTick
+    };
+
+    virtual void addLoopBoundary(LoopBoundaryType boundaryType, int tick) = 0;
+    virtual void removeLoopBoundary() = 0;
     virtual async::Channel<LoopBoundary> loopBoundaryChanged() const = 0;
 
     virtual Tempo tempo(int tick) const = 0;

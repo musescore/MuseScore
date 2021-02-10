@@ -63,7 +63,7 @@
 #include "view/widgets/selectdialog.h"
 #include "view/widgets/tupletdialog.h"
 #include "view/notationcontextmenu.h"
-#include "view/undoredomodel.h"
+#include "view/internal/undoredomodel.h"
 
 using namespace mu::notation;
 using namespace mu::framework;

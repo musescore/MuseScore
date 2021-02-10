@@ -60,7 +60,8 @@ public:
 
     midi::MidiData playElementMidiData(const Element* element) const override;
 
-    void addLoopBoundaryToSelectedNote(LoopBoundaryType boundaryType) override;
+    void addLoopBoundary(LoopBoundaryType boundaryType, int tick) override;
+    void removeLoopBoundary() override;
     async::Channel<LoopBoundary> loopBoundaryChanged() const override;
 
     Tempo tempo(int tick) const override;
@@ -88,8 +89,8 @@ private:
     midi::MidiData playChordMidiData(const Ms::Chord* chord) const;
     midi::MidiData playHarmonyMidiData(const Ms::Harmony* harmony) const;
 
-    void addLoopInToSelectedNote();
-    void addLoopOutToSelectedNote();
+    void addLoopIn(int tick);
+    void addLoopOut(int tick);
     QRect loopBoundaryRectByTick(LoopBoundaryType boundaryType, int tick) const;
 
     IGetScore* m_getScore = nullptr;
