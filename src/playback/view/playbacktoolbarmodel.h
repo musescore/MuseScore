@@ -40,7 +40,6 @@ class PlaybackToolBarModel : public QAbstractListModel, public async::Asyncable
     INJECT(playback, actions::IActionsRegister, actionsRegister)
     INJECT(playback, IPlaybackController, playbackController)
     INJECT(playback, workspace::IWorkspaceManager, workspaceManager)
-    INJECT(playback, framework::IInteractive, interactive)
 
     Q_PROPERTY(QDateTime playTime READ playTime WRITE setPlayTime NOTIFY playTimeChanged)
     Q_PROPERTY(qreal playPosition READ playPosition WRITE setPlayPosition NOTIFY playPositionChanged)

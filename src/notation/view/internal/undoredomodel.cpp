@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2020 MuseScore BVBA and others
+//  Copyright (C) 2021 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -25,7 +25,7 @@ using namespace mu::notation;
 using namespace mu::actions;
 using namespace mu::uicomponents;
 
-UndoRedoModel::UndoRedoModel(QObject *parent)
+UndoRedoModel::UndoRedoModel(QObject* parent)
     : QObject(parent)
 {
 }
