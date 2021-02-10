@@ -2,6 +2,6 @@
     <qresource prefix="/">
         <file>qml/MuseScore/Playback/qmldir</file>
         <file>qml/MuseScore/Playback/PlaybackToolBar.qml</file>
-        <file>qml/MuseScore/Playback/internal/PlaybackSettings.qml</file>
+        <file>qml/MuseScore/Playback/internal/PlaybackSettingsPopup.qml</file>
     </qresource>
 </RCC>

@@ -62,13 +62,6 @@ void PlaybackModule::resolveImports()
     if (ar) {
         ar->reg(std::make_shared<PlaybackActions>());
     }
-
-    auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
-    if (ir) {
-        //! NOTE: Temporary solution
-        ir->registerUri(Uri("musescore://playback/settings"),
-                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/Playback/internal/PlaybackSettings.qml"));
-    }
 }
 
 void PlaybackModule::registerResources()

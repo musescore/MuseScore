@@ -36,6 +36,14 @@ PopupView {
     property color fillColor: ui.theme.backgroundPrimaryColor
     readonly property int borderWidth: 1
 
+    function toggleOpened() {
+        if (isOpened) {
+            close()
+        } else {
+            open()
+        }
+    }
+
     closePolicy: PopupView.CloseOnPressOutsideParent
 
     onAboutToShow: {
