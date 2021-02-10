@@ -2508,17 +2508,6 @@ void ExportMusicXml::wavyLineStartStop(const ChordRest* const cr, Notations& not
 }
 
 //---------------------------------------------------------
-//   hasBreathMark - determine if chord has breath-mark
-//---------------------------------------------------------
-
-static Breath* hasBreathMark(Chord* ch)
-{
-    Fraction tick = ch->tick() + ch->actualTicks();
-    Segment* s = ch->measure()->findSegment(SegmentType::Breath, tick);
-    return s ? toBreath(s->element(ch->track())) : 0;
-}
-
-//---------------------------------------------------------
 //   tremoloSingleStartStop
 //---------------------------------------------------------
 
@@ -2846,7 +2835,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
         }
     }
 
-    if (Breath* b = hasBreathMark(chord)) {
+    if (Breath* b = chord->hasBreathMark()) {
         notations.tag(_xml);
         articulations.tag(_xml);
         _xml.tagE(b->isCaesura() ? "caesura" : "breath-mark");
@@ -3742,6 +3731,14 @@ void ExportMusicXml::rest(Rest* rest, int staff)
         }
     }
     fermatas(fl, _xml, notations);
+
+    Articulations articulations;
+    if (Breath* b = rest->hasBreathMark()) {
+        notations.tag(_xml);
+        articulations.tag(_xml);
+        _xml.tagE(b->isCaesura() ? "caesura" : "breath-mark");
+    }
+    articulations.etag(_xml);
 
     Ornaments ornaments;
     wavyLineStartStop(rest, notations, ornaments, _trillStart, _trillStop);
