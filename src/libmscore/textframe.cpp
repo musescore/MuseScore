@@ -61,7 +61,7 @@ void TBox::layout()
     bbox().setRect(0.0, 0.0, system()->width(), 0);
     _text->layout();
 
-    qreal h;
+    qreal h = 0.;
     if (_text->empty()) {
         QFontMetricsF fm = QFontMetricsF(_text->font(), MScore::paintDevice());
         h = fm.ascent();

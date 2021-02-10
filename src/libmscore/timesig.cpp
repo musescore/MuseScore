@@ -458,7 +458,7 @@ QVariant TimeSig::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::SHOW_COURTESY:
-        return showCourtesySig();
+        return int(showCourtesySig());
     case Pid::NUMERATOR_STRING:
         return numeratorString();
     case Pid::DENOMINATOR_STRING:

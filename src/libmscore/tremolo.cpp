@@ -262,13 +262,13 @@ void Tremolo::layoutOneNoteTremolo(qreal x, qreal y, qreal spatium)
     } else {
         const qreal offset = 2.0 * score()->styleS(Sid::tremoloStrokeWidth).val();
 
-        if (!up && !(line & 1)) {              // stem is down; even line
+        if (!up && !(line & 1)) {   // stem is down; even line
             t = qMax((4.0 + offset) * chordMag() - 2.0 * minHeight(), 3.0 * chordMag());
-        } else if (!up && (line & 1)) {        // stem is down; odd line
+        } else if (!up && (line & 1)) { // stem is down; odd line
             t = qMax(5.0 * chordMag() - 2.0 * minHeight(), 3.0 * chordMag());
-        } else if (up && !(line & 1)) {        // stem is up; even line
+        } else if (up && !(line & 1)) { // stem is up; even line
             t = qMin(-3.0 * chordMag() - 2.0 * minHeight(), (-4.0 - offset) * chordMag());
-        } else { /*if ( up &&  (line & 1))*/   // stem is up; odd line
+        } else { /*if ( up &&  (line & 1))*/ // stem is up; odd line
             t = qMin(-3.0 * chordMag() - 2.0 * minHeight(), -5.0 * chordMag());
         }
     }
@@ -300,9 +300,9 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium)
     const bool defaultStyle = (!customStyleApplicable()) || (_style == TremoloStyle::DEFAULT);
     const bool isTraditionalAlternate = (_style == TremoloStyle::TRADITIONAL_ALTERNATE);
 
-    //-----------------------------------------------------
+    //---------------------------------------------------
     //   Step 1: Calculate the position of the tremolo (x, y)
-    //-----------------------------------------------------
+    //---------------------------------------------------
 
     y += (h - bbox().height()) * .5;
 
@@ -349,12 +349,10 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium)
         // improve the case when one stem is up and another is down
         if (defaultStyle && _chord1->up() != _chord2->up() && !crossStaffBeamBetween()) {
             qreal meanNote1Y = .5
-                               * (_chord1->upNote()->pagePos().y() - firstChordStaffY
-                                  + _chord1->downNote()->pagePos().y()
+                               * (_chord1->upNote()->pagePos().y() - firstChordStaffY + _chord1->downNote()->pagePos().y()
                                   - firstChordStaffY);
             qreal meanNote2Y = .5
-                               * (_chord2->upNote()->pagePos().y() - firstChordStaffY
-                                  + _chord2->downNote()->pagePos().y()
+                               * (_chord2->upNote()->pagePos().y() - firstChordStaffY + _chord2->downNote()->pagePos().y()
                                   - firstChordStaffY);
             y1 = .5 * (y1 + meanNote1Y);
             y2 = .5 * (y2 + meanNote2Y);
@@ -395,11 +393,11 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium)
 
     x = (x1 + x2) * .5 - _chord1->pagePos().x();
 
-    //-----------------------------------------------------
+    //---------------------------------------------------
     //   Step 2: Stretch the tremolo strokes horizontally
     //    from the form of a one-note tremolo (done in basePath())
     //    to that of a two-note tremolo according to the distance between the two chords
-    //-----------------------------------------------------
+    //---------------------------------------------------
 
     QTransform xScaleTransform;
     const qreal H_MULTIPLIER = score()->styleD(Sid::tremoloStrokeLengthMultiplier);
@@ -414,10 +412,10 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium)
     xScaleTransform.scale(xScaleFactor, 1.0);
     path = xScaleTransform.map(path);
 
-    //-----------------------------------------------------
+    //---------------------------------------------------
     //   Step 3: Calculate the adjustment of the position of the tremolo
     //    if the chords are connected by a beam so as not to collide with it
-    //-----------------------------------------------------
+    //---------------------------------------------------
 
     qreal beamYOffset = 0.0;
 
@@ -432,9 +430,9 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium)
         }
     }
 
-    //-----------------------------------------------------
+    //---------------------------------------------------
     //   Step 4: Tilt the tremolo strokes according to the stems of the chords
-    //-----------------------------------------------------
+    //---------------------------------------------------
 
     QTransform shearTransform;
     qreal dy = y2 - y1;
@@ -465,13 +463,13 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium)
     shearTransform.shear(0.0, ds);
     path = shearTransform.map(path);
 
-    //-----------------------------------------------------
+    //---------------------------------------------------
     //   Step 5: Flip the tremolo strokes if necessary
     //    By default, a TRADITIONAL_ALTERNATE tremolo has its attached-to-stem stroke be above other strokes,
     //    see basePath().
     //    But if both chords have stems facing down,
     //    the tremolo should be flipped to have the attached-to-stem stroke be below other strokes.
-    //-----------------------------------------------------
+    //---------------------------------------------------
 
     if (isTraditionalAlternate && !_chord1->up() && !_chord2->up()) {
         QTransform rotateTransform;

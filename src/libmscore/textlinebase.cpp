@@ -116,6 +116,7 @@ void TextLineBaseSegment::draw(QPainter* painter) const
         pen.setDashPattern(dashes);
     }
 
+    //Draw lines
     if (twoLines) {     // hairpins
         painter->setPen(pen);
         painter->drawLines(&points[0], 1);

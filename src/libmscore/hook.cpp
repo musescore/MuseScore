@@ -103,6 +103,7 @@ void Hook::draw(QPainter* painter) const
     if (chord() && chord()->crossMeasure() == CrossMeasure::SECOND) {
         return;
     }
+
     painter->setPen(curColor());
     drawSymbol(_sym, painter);
 }

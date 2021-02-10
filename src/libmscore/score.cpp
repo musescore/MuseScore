@@ -3523,8 +3523,7 @@ void Score::collectNoteMatch(void* data, Element* e)
     if (p->notehead != NoteHead::Group::HEAD_INVALID && p->notehead != n->headGroup()) {
         return;
     }
-    if (p->durationType.type() != TDuration::DurationType::V_INVALID
-        && p->durationType != n->chord()->actualDurationType()) {
+    if (p->durationType.type() != TDuration::DurationType::V_INVALID && p->durationType != n->chord()->actualDurationType()) {
         return;
     }
     if (p->durationTicks != Fraction(-1,1) && p->durationTicks != n->chord()->actualTicks()) {
@@ -4158,7 +4157,7 @@ ChordRest* Score::findCR(Fraction tick, int track) const
     }
     Segment* s = m->first(SegmentType::ChordRest);
     for (Segment* ns = s;; ns = ns->next(SegmentType::ChordRest)) {
-        if (ns == nullptr || ns->tick() > tick) {
+        if (!ns || ns->tick() > tick) {
             break;
         }
         Element* el = ns->element(track);
