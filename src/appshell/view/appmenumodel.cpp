@@ -104,6 +104,10 @@ void AppMenuModel::setupConnections()
     userScoresService()->recentScoreList().ch.onReceive(this, [this](const std::vector<Meta>&) {
         load();
     });
+
+    paletteController()->isMasterPaletteOpened().ch.onReceive(this, [this](bool) {
+        load();
+    });
 }
 
 MenuItem& AppMenuModel::item(const ActionCode& actionCode)
@@ -209,31 +213,31 @@ MenuItem AppMenuModel::editItem()
 MenuItem AppMenuModel::viewItem()
 {
     MenuItemList viewItems {
-        makeAction("toggle-palette", canUndo()), // need implement
-        makeAction("masterpalette", canRedo()), // need implement
-        makeAction("inspector", selectedElementOnScore()), // need implement
-        makeAction("toggle-playpanel", selectedElementOnScore()), // need implement
-        makeAction("toggle-navigator", selectedElementOnScore()), // need implement
-        makeAction("toggle-timeline", selectedElementOnScore()), // need implement
-        makeAction("toggle-mixer", selectedElementOnScore()), // need implement
-        makeAction("synth-control", selectedElementOnScore()), // need implement
-        makeAction("toggle-selection-window", selectedElementOnScore()), // need implement
-        makeAction("toggle-piano", selectedElementOnScore()), // need implement
+        makeAction("toggle-palette", scoreOpened(), configuration()->isPalettePanelVisible().val),
+        makeAction("masterpalette", scoreOpened(), paletteController()->isMasterPaletteOpened().val),
+        makeAction("inspector", scoreOpened()),
+        makeAction("toggle-playpanel", scoreOpened()), // need implement
+        makeAction("toggle-navigator", scoreOpened()),
+        makeAction("toggle-timeline", scoreOpened()), // need implement
+        makeAction("toggle-mixer", scoreOpened()), // need implement
+        makeAction("synth-control", scoreOpened()), // need implement
+        makeAction("toggle-selection-window", scoreOpened()), // need implement
+        makeAction("toggle-piano", scoreOpened()), // need implement
         makeAction("toggle-scorecmp-tool", scoreOpened()), // need implement
         makeSeparator(),
-        makeAction("zoomin", selectedElementOnScore()),
+        makeAction("zoomin", scoreOpened()),
         makeAction("zoomout", scoreOpened()),
         makeSeparator(),
         makeMenu(trc("appshell", "W&orkspaces"), workspacesItems(), true, "select-workspace"),
         makeSeparator(),
-        makeAction("split-h"), // need implement
-        makeAction("split-v"), // need implement
+        makeAction("split-h", scoreOpened()), // need implement
+        makeAction("split-v", scoreOpened()), // need implement
         makeSeparator(),
-        makeAction("show-invisible"), // need implement
-        makeAction("show-unprintable"), // need implement
-        makeAction("show-frames"), // need implement
-        makeAction("show-pageborders"), // need implement
-        makeAction("mark-irregular"), // need implement
+        makeAction("show-invisible", scoreOpened()),
+        makeAction("show-unprintable", scoreOpened()),
+        makeAction("show-frames", scoreOpened()),
+        makeAction("show-pageborders", scoreOpened()),
+        makeAction("mark-irregular", scoreOpened()),
         makeSeparator(),
         makeAction("fullscreen") // need implement
     };
@@ -562,7 +566,7 @@ MenuItem AppMenuModel::makeMenu(const std::string& title, const MenuItemList& ac
     return item;
 }
 
-MenuItem AppMenuModel::makeAction(const ActionCode& actionCode, bool enabled, bool checked, const std::string& section) const
+MenuItem AppMenuModel::makeAction(const ActionCode& actionCode, bool enabled) const
 {
     ActionItem action = actionsRegister()->action(actionCode);
     if (!action.isValid()) {
@@ -571,13 +575,24 @@ MenuItem AppMenuModel::makeAction(const ActionCode& actionCode, bool enabled, bo
 
     MenuItem item = action;
     item.enabled = enabled;
-    item.checked = checked;
-    item.section = section;
 
     shortcuts::Shortcut shortcut = shortcutsRegister()->shortcut(action.code);
     if (shortcut.isValid()) {
         item.shortcut = shortcut.sequence;
     }
+
+    return item;
+}
+
+MenuItem AppMenuModel::makeAction(const ActionCode& actionCode, bool enabled, bool checked) const
+{
+    MenuItem item = makeAction(actionCode, enabled);
+    if (!item.isValid()) {
+        return item;
+    }
+
+    item.checkable = true;
+    item.checked = checked;
 
     return item;
 }

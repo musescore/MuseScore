@@ -119,7 +119,7 @@ void MasterPalette::addPalette(Palette* sp)
 //---------------------------------------------------------
 
 MasterPalette::MasterPalette(QWidget* parent)
-    : QDialog(parent)
+    : WidgetDialog(parent)
 {
     setObjectName("MasterPalette");
     setupUi(this);
@@ -192,9 +192,14 @@ MasterPalette::MasterPalette(QWidget* parent)
     WidgetStateStore::restoreGeometry(this);
 }
 
-MasterPalette::MasterPalette(const MasterPalette& dialog)
-    : MasterPalette(dialog.parentWidget())
+int MasterPalette::static_metaTypeId()
 {
+    return qRegisterMetaType<Ms::MasterPalette>("MasterPallette");
+}
+
+int MasterPalette::metaTypeId() const
+{
+    return static_metaTypeId();
 }
 
 //---------------------------------------------------------
@@ -251,7 +256,7 @@ void MasterPalette::closeEvent(QCloseEvent* ev)
     if (keyEditor->dirty()) {
         keyEditor->save();
     }
-    emit closed(false);
+    emit finished(QDialog::Accepted);
     QWidget::closeEvent(ev);
 }
 

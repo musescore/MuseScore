@@ -30,6 +30,7 @@
 #include "uicomponents/uicomponentstypes.h"
 #include "context/iglobalcontext.h"
 #include "workspace/iworkspacemanager.h"
+#include "palette/ipaletteactionscontroller.h"
 #include "iappshellconfiguration.h"
 #include "userscores/iuserscoresservice.h"
 
@@ -43,6 +44,7 @@ class AppMenuModel : public QObject, public async::Asyncable
     INJECT(appshell, shortcuts::IShortcutsRegister, shortcutsRegister)
     INJECT(appshell, context::IGlobalContext, globalContext)
     INJECT(appshell, workspace::IWorkspaceManager, workspacesManager)
+    INJECT(appshell, palette::IPaletteActionsController, paletteController)
     INJECT(appshell, IAppShellConfiguration, configuration)
     INJECT(appshell, userscores::IUserScoresService, userScoresService)
 
