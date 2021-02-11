@@ -221,12 +221,14 @@ const ActionList NotationActions::m_actions = {
     ActionItem("undo",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Undo"),
-               QT_TRANSLATE_NOOP("action", "Undo last change")
+               QT_TRANSLATE_NOOP("action", "Undo last change"),
+               IconCode::Code::UNDO
                ),
     ActionItem("redo",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Redo"),
-               QT_TRANSLATE_NOOP("action", "Redo last undo")
+               QT_TRANSLATE_NOOP("action", "Redo last undo"),
+               IconCode::Code::REDO
                ),
     ActionItem("voice-x12",
                ShortcutContext::NotationActive,
