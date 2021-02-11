@@ -84,7 +84,7 @@ DockWindow {
 
         DockToolBar {
             objectName: "playbackToolBar"
-            minimumWidth: 200
+            minimumWidth: 60
             minimumHeight: dockWindow.toolbarHeight
 
             color: dockWindow.color
@@ -103,9 +103,9 @@ DockWindow {
             minimumHeight: dockWindow.toolbarHeight
 
             color: dockWindow.color
-            allowedAreas: Qt.NoToolBarArea
             visible: dockWindow.isNotationPage
             floatable: false
+            movable: false
 
             content: UndoRedoToolBar {
                 color: dockWindow.color
