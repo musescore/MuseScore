@@ -33,6 +33,8 @@ class DockToolBar : public DockView
     Q_PROPERTY(int minimumHeight READ minimumHeight WRITE setMinimumHeight NOTIFY minimumHeightChanged)
     Q_PROPERTY(int minimumWidth READ minimumWidth WRITE setMinimumWidth NOTIFY minimumWidthChanged)
     Q_PROPERTY(Qt::ToolBarAreas allowedAreas READ allowedAreas WRITE setAllowedAreas NOTIFY allowedAreasChanged)
+    Q_PROPERTY(bool floating READ floating NOTIFY floatingChanged)
+    Q_PROPERTY(bool floatable READ floatable WRITE setFloatable NOTIFY floatableChanged)
 
 public:
     explicit DockToolBar(QQuickItem* parent = nullptr);
@@ -51,31 +53,41 @@ public:
 
     Qt::ToolBarAreas allowedAreas() const;
 
+    bool floating() const;
+    bool floatable() const;
+
 public slots:
     void setMinimumHeight(int minimumHeight);
     void setMinimumWidth(int minimumWidth);
     void setAllowedAreas(Qt::ToolBarAreas allowedAreas);
+    void setFloatable(bool floatable);
 
 signals:
     void orientationChanged(int orientation);
     void minimumHeightChanged(int minimumHeight);
     void minimumWidthChanged(int minimumWidth);
     void allowedAreasChanged(Qt::ToolBarAreas allowedAreas);
+    void floatingChanged(bool floating);
+    void floatableChanged(bool floatable);
 
 protected:
     void onComponentCompleted() override;
     void updateStyle() override;
 
 private slots:
-    void onWidgetEvent(QEvent* e) override;
+    void onWidgetEvent(QEvent* event) override;
 
 private:
+    QToolBar* toolBar() const;
+
     void resize(const QSize& size);
+    void setFloating(bool floating);
 
     Widget m_tool;
     EventsWatcher* m_eventsWatcher = nullptr;
     int m_minimumHeight = 0;
     int m_minimumWidth = 0;
+    bool m_floating = false;
 };
 }
 

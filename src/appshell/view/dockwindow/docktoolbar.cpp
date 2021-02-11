@@ -19,9 +19,9 @@
 
 #include "docktoolbar.h"
 
-#include <QToolBar>
-
 #include "eventswatcher.h"
+
+#include <QToolBar>
 
 using namespace mu::dock;
 
@@ -48,6 +48,10 @@ DockToolBar::DockToolBar(QQuickItem* parent)
         emit orientationChanged(orientation);
     });
 
+    connect(m_tool.bar, &QToolBar::topLevelChanged, [this](bool floating) {
+        setFloating(floating);
+    });
+
     m_eventsWatcher = new EventsWatcher(this);
     m_tool.bar->installEventFilter(m_eventsWatcher);
     connect(m_eventsWatcher, &EventsWatcher::eventReceived, this, &DockToolBar::onWidgetEvent);
@@ -58,15 +62,20 @@ DockToolBar::~DockToolBar()
     delete m_tool.bar;
 }
 
+QToolBar* DockToolBar::toolBar() const
+{
+    return m_tool.bar;
+}
+
 void DockToolBar::onComponentCompleted()
 {
-    m_tool.bar->setObjectName("w_" + objectName());
+    toolBar()->setObjectName("w_" + objectName());
     updateStyle();
 
     QWidget* widget = view();
     widget->setMinimumWidth(minimumWidth());
     widget->setMinimumHeight(minimumHeight());
-    m_tool.bar->addWidget(widget);
+    toolBar()->addWidget(widget);
 }
 
 void DockToolBar::updateStyle()
@@ -74,30 +83,40 @@ void DockToolBar::updateStyle()
     QString theme = uiConfiguration()->actualThemeType() == ui::IUiConfiguration::ThemeType::LIGHT_THEME
                     ? "light"
                     : "dark";
-    m_tool.bar->setStyleSheet(TOOLBAR_QSS.arg(theme, color().name()));
+    toolBar()->setStyleSheet(TOOLBAR_QSS.arg(theme, color().name()));
 }
 
-void DockToolBar::onWidgetEvent(QEvent* e)
+void DockToolBar::onWidgetEvent(QEvent* event)
 {
-    if (QEvent::Resize == e->type()) {
-        QResizeEvent* resizeEvent = static_cast<QResizeEvent*>(e);
+    if (QEvent::Resize == event->type()) {
+        QResizeEvent* resizeEvent = static_cast<QResizeEvent*>(event);
         resize(resizeEvent->size());
-    } else if (QEvent::ShowToParent == e->type()) {
-        resize(m_tool.bar->size());
+    } else if (QEvent::ShowToParent == event->type()) {
+        resize(toolBar()->size());
     } else {
-        DockView::onWidgetEvent(e);
+        DockView::onWidgetEvent(event);
     }
 }
 
 void DockToolBar::resize(const QSize& size)
 {
     QSize newSize = size;
-    if (m_tool.bar->orientation() == Qt::Horizontal) {
+    if (toolBar()->orientation() == Qt::Horizontal) {
         newSize.setWidth(newSize.width() - TOOLBAR_GRIP_WIDTH);
     } else {
         newSize.setHeight(newSize.height() - TOOLBAR_GRIP_WIDTH);
     }
     view()->resize(newSize);
+}
+
+void DockToolBar::setFloating(bool floating)
+{
+    if (m_floating == floating) {
+        return;
+    }
+
+    m_floating = floating;
+    emit floatingChanged(floating);
 }
 
 DockToolBar::Widget DockToolBar::widget() const
@@ -107,7 +126,7 @@ DockToolBar::Widget DockToolBar::widget() const
 
 int DockToolBar::orientation() const
 {
-    return m_tool.bar->orientation();
+    return toolBar()->orientation();
 }
 
 int DockToolBar::minimumHeight() const
@@ -122,7 +141,17 @@ int DockToolBar::minimumWidth() const
 
 Qt::ToolBarAreas DockToolBar::allowedAreas() const
 {
-    return widget().bar->allowedAreas();
+    return toolBar()->allowedAreas();
+}
+
+bool DockToolBar::floating() const
+{
+    return m_floating;
+}
+
+bool DockToolBar::floatable() const
+{
+    return toolBar()->isFloatable();
 }
 
 void DockToolBar::setMinimumHeight(int minimumHeight)
@@ -154,6 +183,20 @@ void DockToolBar::setMinimumWidth(int minimumWidth)
 
 void DockToolBar::setAllowedAreas(Qt::ToolBarAreas allowedAreas)
 {
-    widget().bar->setAllowedAreas(allowedAreas);
+    if (allowedAreas == this->allowedAreas()) {
+        return;
+    }
+
+    toolBar()->setAllowedAreas(allowedAreas);
     emit allowedAreasChanged(allowedAreas);
+}
+
+void DockToolBar::setFloatable(bool floatable)
+{
+    if (floatable == this->floatable()) {
+        return;
+    }
+
+    toolBar()->setFloatable(floatable);
+    emit floatableChanged(floatable);
 }
