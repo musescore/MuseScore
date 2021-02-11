@@ -63,6 +63,17 @@ public:
 
     Q_ENUM(Code)
 };
+
+QString noteIconToString(MusicalSymbolCodes::Code noteIcon, bool withDot)
+{
+    QString noteSymbol = QString(QChar(static_cast<char16_t>(noteIcon)));
+
+    if (withDot) {
+        noteSymbol += QChar(static_cast<char16_t>(MusicalSymbolCodes::Code::DOT));
+    }
+
+    return noteSymbol;
+}
 }
 
 #endif // MU_UI_MUSICALSYMBOLCODE_H

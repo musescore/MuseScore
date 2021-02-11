@@ -178,10 +178,12 @@ public:
         GRADUATION_CAP = 0xF19D,
 
         QUESTION_MARK = 0xF340,
+
         NOTE_HEAD_QUARTER = 0xF341,
         NOTE_HEAD_HALF = 0xF342,
         NOTE_HEAD_WHOLE = 0xF343,
         NOTE_HEAD_BREVIS = 0xF344,
+        PLAY_REPEATS = 0xF345,
         BARLINE_WINGED = 0xF34C,
         BARLINE_UNWINGED = 0xF34D,
         ORIENTATION_PORTRAIT = 0xF350,
@@ -251,6 +253,7 @@ public:
         NOTE_DOTTED_2 = 0xF395,
         NOTE_DOTTED_3 = 0xF396,
         NOTE_DOTTED_4 = 0xF397,
+        MIDI_INPUT = 0xEF98,
 
         NOTE_PLUS = 0xF39D,
         NOTE_TO_RIGHT = 0xF39E,
@@ -261,6 +264,12 @@ public:
         TOOLBAR_GRIP = 0xF3A2,
 
         PAGE = 0xF3A5,
+
+        PAN_SCORE = 0xF3B0,
+        COUNT_IN = 0xF3B1,
+        LOOP_IN = 0xF3C7,
+        LOOP_OUT = 0xF3C8,
+        PAUSE = 0xF3C9,
 
         AUTO,
         NONE,

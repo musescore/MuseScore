@@ -66,6 +66,7 @@
 using namespace mu::notation;
 using namespace mu::framework;
 using namespace mu::ui;
+using namespace mu::actions;
 
 static std::shared_ptr<NotationConfiguration> s_configuration = std::make_shared<NotationConfiguration>();
 static std::shared_ptr<NotationActionController> s_actionController = std::make_shared<NotationActionController>();
@@ -83,25 +84,25 @@ std::string NotationModule::moduleName() const
 
 void NotationModule::registerExports()
 {
-    framework::ioc()->registerExport<INotationCreator>(moduleName(), new NotationCreator());
-    framework::ioc()->registerExport<INotationConfiguration>(moduleName(), s_configuration);
-    framework::ioc()->registerExport<IMsczMetaReader>(moduleName(), new MsczMetaReader());
-    framework::ioc()->registerExport<INotationContextMenu>(moduleName(), new NotationContextMenu());
+    ioc()->registerExport<INotationCreator>(moduleName(), new NotationCreator());
+    ioc()->registerExport<INotationConfiguration>(moduleName(), s_configuration);
+    ioc()->registerExport<IMsczMetaReader>(moduleName(), new MsczMetaReader());
+    ioc()->registerExport<INotationContextMenu>(moduleName(), new NotationContextMenu());
 
     std::shared_ptr<INotationReadersRegister> readers = std::make_shared<NotationReadersRegister>();
     readers->reg({ "mscz", "mscx" }, std::make_shared<MsczNotationReader>());
-    framework::ioc()->registerExport<INotationReadersRegister>(moduleName(), readers);
-    framework::ioc()->registerExport<INotationWritersRegister>(moduleName(), std::make_shared<NotationWritersRegister>());
+    ioc()->registerExport<INotationReadersRegister>(moduleName(), readers);
+    ioc()->registerExport<INotationWritersRegister>(moduleName(), std::make_shared<NotationWritersRegister>());
 }
 
 void NotationModule::resolveImports()
 {
-    auto ar = framework::ioc()->resolve<actions::IActionsRegister>(moduleName());
+    auto ar = ioc()->resolve<IActionsRegister>(moduleName());
     if (ar) {
         ar->reg(std::make_shared<NotationActions>());
     }
 
-    auto ir = framework::ioc()->resolve<IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerUri(Uri("musescore://notation/style"),
                         ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<EditStyle>("EditStyle")));
@@ -167,7 +168,7 @@ void NotationModule::registerUiTypes()
     qRegisterMetaType<SelectNoteDialog>("SelectNoteDialog");
     qRegisterMetaType<SelectDialog>("SelectDialog");
 
-    framework::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(notation_QML_IMPORT);
+    ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(notation_QML_IMPORT);
 
     Ms::MScore::registerUiTypes();
 }

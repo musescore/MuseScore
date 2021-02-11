@@ -32,8 +32,11 @@
 #include "view/playbacktoolbarmodel.h"
 
 using namespace mu::playback;
+using namespace mu::framework;
+using namespace mu::ui;
+using namespace mu::actions;
 
-static std::shared_ptr<PlaybackController> pcontroller = std::make_shared<PlaybackController>();
+static std::shared_ptr<PlaybackController> s_playbackController = std::make_shared<PlaybackController>();
 
 static void playback_init_qrc()
 {
@@ -47,13 +50,13 @@ std::string PlaybackModule::moduleName() const
 
 void PlaybackModule::registerExports()
 {
-    framework::ioc()->registerExport<IPlaybackController>(moduleName(), pcontroller);
-    framework::ioc()->registerExport<IPlaybackConfiguration>(moduleName(), new PlaybackConfiguration());
+    ioc()->registerExport<IPlaybackController>(moduleName(), s_playbackController);
+    ioc()->registerExport<IPlaybackConfiguration>(moduleName(), new PlaybackConfiguration());
 }
 
 void PlaybackModule::resolveImports()
 {
-    auto ar = framework::ioc()->resolve<actions::IActionsRegister>(moduleName());
+    auto ar = ioc()->resolve<IActionsRegister>(moduleName());
     if (ar) {
         ar->reg(std::make_shared<PlaybackActions>());
     }
@@ -68,13 +71,13 @@ void PlaybackModule::registerUiTypes()
 {
     qmlRegisterType<PlaybackToolBarModel>("MuseScore.Playback", 1, 0, "PlaybackToolBarModel");
 
-    framework::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(playback_QML_IMPORT);
+    ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(playback_QML_IMPORT);
 }
 
-void PlaybackModule::onInit(const framework::IApplication::RunMode& mode)
+void PlaybackModule::onInit(const IApplication::RunMode& mode)
 {
-    if (framework::IApplication::RunMode::Editor != mode) {
+    if (IApplication::RunMode::Editor != mode) {
         return;
     }
-    pcontroller->init();
+    s_playbackController->init();
 }

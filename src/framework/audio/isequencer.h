@@ -53,7 +53,7 @@ public:
     virtual void play() = 0;
     virtual void pause() = 0;
     virtual void stop() = 0;
-    virtual void seek(uint64_t sec) = 0;
+    virtual void seek(uint64_t milliseconds) = 0;
     virtual void rewind() = 0;
     virtual void setLoop(uint64_t fromMilliseconds, uint64_t toMilliseconds) = 0;
     virtual void unsetLoop() = 0;

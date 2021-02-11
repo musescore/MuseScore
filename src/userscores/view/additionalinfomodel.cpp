@@ -44,17 +44,6 @@ static const QString MAX_KEY("max");
 
 using MusicalSymbolCode = MusicalSymbolCodes::Code;
 
-QString formatNoteSymbol(MusicalSymbolCode noteIcon, bool withDot)
-{
-    QString noteSymbol = QString(QChar(static_cast<char16_t>(noteIcon)));
-
-    if (withDot) {
-        noteSymbol += QChar(static_cast<char16_t>(MusicalSymbolCode::DOT));
-    }
-
-    return noteSymbol;
-}
-
 AdditionalInfoModel::KeySignature::KeySignature(const QString& title, IconCode::Code icon, Key key, KeyMode mode)
     : title(title), icon(icon), key(key), mode(mode)
 {
@@ -91,7 +80,7 @@ QVariantMap AdditionalInfoModel::Tempo::toMap() const
         { VALUE_KEY, value },
         { NOTE_ICON_KEY, static_cast<int>(noteIcon) },
         { WITH_DOT_KEY, withDot },
-        { NOTE_SYMBOL_KEY, formatNoteSymbol(noteIcon, withDot) }
+        { NOTE_SYMBOL_KEY, noteIconToString(noteIcon, withDot) }
     };
 }
 
@@ -264,7 +253,7 @@ QVariantMap AdditionalInfoModel::tempo() const
 
 int AdditionalInfoModel::currentTempoNoteIndex() const
 {
-    QString selectedNoteSymbol = formatNoteSymbol(m_tempo.noteIcon, m_tempo.withDot);
+    QString selectedNoteSymbol = noteIconToString(m_tempo.noteIcon, m_tempo.withDot);
     QVariantList notes = tempoNotes();
 
     for (int i = 0; i < notes.size(); ++i) {
@@ -288,7 +277,7 @@ QVariantList AdditionalInfoModel::tempoNotes() const
     auto makeNote = [](MusicalSymbolCodes::Code icon, bool withDot = false) {
         QVariantMap note;
         note[NOTE_ICON_KEY] = static_cast<int>(icon);
-        note[NOTE_SYMBOL_KEY] = formatNoteSymbol(icon, withDot);
+        note[NOTE_SYMBOL_KEY] = noteIconToString(icon, withDot);
 
         if (withDot) {
             note[WITH_DOT_KEY] = withDot;
