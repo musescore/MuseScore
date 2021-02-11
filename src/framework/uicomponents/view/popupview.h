@@ -43,6 +43,7 @@ class PopupView : public QQuickItem
     Q_CLASSINFO("DefaultProperty", "contentItem")
 
     Q_ENUMS(ClosePolicy)
+
 public:
     enum ClosePolicy {
         NoAutoClose = 0,
@@ -96,6 +97,9 @@ signals:
     void globalPosChanged(QPointF globalPos);
     void positionDisplacementXChanged(qreal positionDisplacementX);
     void positionDisplacementYChanged(qreal positionDisplacementY);
+
+private slots:
+    void onApplicationStateChanged(Qt::ApplicationState state);
 
 private:
     void componentComplete() override;
