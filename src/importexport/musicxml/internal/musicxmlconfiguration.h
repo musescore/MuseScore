@@ -32,6 +32,8 @@ public:
     bool musicxmlExportLayout() const override;
 
     MusicxmlExportBreaksType musicxmlExportBreaksType() const override;
+
+    bool needUseDefaultFont() const override;
 };
 }
 

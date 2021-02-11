@@ -40,6 +40,8 @@ public:
     };
 
     virtual MusicxmlExportBreaksType musicxmlExportBreaksType() const = 0;
+
+    virtual bool needUseDefaultFont() const = 0;
 };
 }
 

@@ -522,13 +522,15 @@ private:
     ChordRest* prevMeasure(ChordRest* element, bool mmRest = false);
     void cmdSetBeamMode(Beam::Mode);
     void cmdResetAllStyle();
+    void cmdResetTextStyleOverrides();
+
     Note* getSelectedNote();
     ChordRest* upStaff(ChordRest* cr);
     ChordRest* downStaff(ChordRest* cr);
     ChordRest* nextTrack(ChordRest* cr, bool skipMeasureRepeatRests = true);
     ChordRest* prevTrack(ChordRest* cr, bool skipMeasureRepeatRests = true);
 
-    void padToggle(Pad n, const EditData& ed);
+    void padToggle(Pad p, const EditData& ed);
     void addTempo();
     void addMetronome();
 

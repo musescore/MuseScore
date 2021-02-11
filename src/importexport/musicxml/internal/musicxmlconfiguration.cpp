@@ -27,6 +27,7 @@ static const Settings::Key MUSICXML_IMPORT_BREAKS_KEY("iex_musicxml", "import/mu
 static const Settings::Key MUSICXML_IMPORT_LAYOUT_KEY("iex_musicxml", "import/musicXML/importLayout");
 static const Settings::Key MUSICXML_EXPORT_LAYOUT_KEY("iex_musicxml", "export/musicXML/exportLayout");
 static const Settings::Key MUSICXML_EXPORT_BREAKS_TYPE_KEY("iex_musicxml", "export/musicXML/exportBreaks");
+static const Settings::Key MIGRATION_APPLY_EDWIN_FOR_XML("iex_musicxml", "import/compatibility/apply_edwin_for_xml");
 
 void MusicXmlConfiguration::init()
 {
@@ -54,4 +55,9 @@ bool MusicXmlConfiguration::musicxmlExportLayout() const
 MusicXmlConfiguration::MusicxmlExportBreaksType MusicXmlConfiguration::musicxmlExportBreaksType() const
 {
     return static_cast<MusicxmlExportBreaksType>(settings()->value(MUSICXML_EXPORT_BREAKS_TYPE_KEY).toInt());
+}
+
+bool MusicXmlConfiguration::needUseDefaultFont() const
+{
+    return settings()->value(MIGRATION_APPLY_EDWIN_FOR_XML).toBool();
 }
