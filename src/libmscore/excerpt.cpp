@@ -597,6 +597,12 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& sourceS
                             if (ne->isHarmony()) {
                                 Harmony* h = toHarmony(ne);
                                 h->render();
+                            } else if (ne->isFretDiagram()) {
+                                Harmony* h = toHarmony(toFretDiagram(ne)->harmony());
+                                if (h) {
+                                    processLinkedClone(h, score, strack);
+                                    h->render();
+                                }
                             }
                         }
                     }
