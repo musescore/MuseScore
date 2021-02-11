@@ -126,16 +126,8 @@ StyledPopup {
 
                         icon: IconCode.PLUS
 
-                        ToolTip.text: qsTrc("palette", "Add %1 palette").arg(model.display)
+                        hint: qsTrc("palette", "Add %1 palette").arg(model.display)
                         Accessible.description: ToolTip.text
-
-                        onHoveredChanged: {
-                            if (hovered) {
-                                ui.tooltip.show(addButton, addButton.ToolTip.text)
-                            } else {
-                                ui.tooltip.hide(addButton)
-                            }
-                        }
 
                         onClicked: {
                             if (paletteWorkspace.addPalette(model.paletteIndex)) {

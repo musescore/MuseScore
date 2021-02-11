@@ -601,13 +601,7 @@ GridView {
                 visible: !parent.paletteDrag || parent.dragCopy
             }
 
-            onHovered: {
-                if (hovered) {
-                    ui.tooltip.show(paletteCell, model.toolTip)
-                } else {
-                    ui.tooltip.hide(paletteCell)
-                }
-            }
+            hint: model.toolTip
 
             Accessible.name: model.accessibleText;
 

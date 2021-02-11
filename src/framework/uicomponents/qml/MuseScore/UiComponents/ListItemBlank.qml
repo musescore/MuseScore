@@ -5,6 +5,8 @@ import MuseScore.Ui 1.0
 Item {
     id: root
 
+    property string hint
+
     property bool isSelected: false
     property alias radius: background.radius
 
@@ -77,8 +79,16 @@ Item {
             root.doubleClicked()
         }
 
-        onHoveredChanged: {
-            root.hovered()
+        onContainsMouseChanged: {
+            if (!Boolean(root.hint)) {
+                return
+            }
+
+            if (containsMouse) {
+                ui.tooltip.show(this, root.hint)
+            } else {
+                ui.tooltip.hide(this)
+            }
         }
     }
 }

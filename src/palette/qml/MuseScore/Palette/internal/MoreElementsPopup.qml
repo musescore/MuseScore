@@ -211,23 +211,18 @@ StyledPopup {
 
                     FlatButton {
                         id: deleteButton
-                        width: height
+
                         anchors.right: parent.right
+                        width: height
+
                         icon: IconCode.DELETE_TANK
                         enabled: customPaletteSelectionModel.hasSelection
                         normalStateColor: "transparent"
+                        hint: text
 
-                        ToolTip.text: text
-
-                        onHoveredChanged: {
-                            if (hovered) {
-                                ui.tooltip.show(deleteButton, deleteButton.text)
-                            } else {
-                                ui.tooltip.hide(deleteButton)
-                            }
+                        onClicked: {
+                            Utils.removeSelectedItems(moreElementsPopup.customPaletteController, customPaletteSelectionModel, moreElementsPopup.customPaletteRootIndex)
                         }
-
-                        onClicked: Utils.removeSelectedItems(moreElementsPopup.customPaletteController, customPaletteSelectionModel, moreElementsPopup.customPaletteRootIndex);
                     }
                 }
 
