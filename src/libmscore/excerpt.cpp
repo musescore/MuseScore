@@ -876,6 +876,7 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& sourceS
             for (BracketItem* bi : srcStaff->brackets()) {
                 dstStaff->setBracketType(idx, bi->bracketType());
                 dstStaff->setBracketSpan(idx, bi->bracketSpan());
+                ++idx;
             }
         }
     }
