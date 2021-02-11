@@ -37,7 +37,7 @@
 #include "libmscore/chordrest.h"
 #include "libmscore/chord.h"
 #include "libmscore/harmony.h"
-#include "libmscore/tempo.h"
+#include "libmscore/tempotext.h"
 
 #include "framework/midi_old/event.h" //! TODO Remove me
 
@@ -714,12 +714,36 @@ Tempo NotationPlayback::tempo(int tick) const
         return Tempo();
     }
 
+    const Ms::TempoText* tempoText = this->tempoText(tick);
+    if (!tempoText) {
+        return Tempo();
+    }
+
+    Ms::TDuration duration = tempoText->duration();
+
     Tempo tempo;
-    tempo.value = score()->tempomap()->tempo(tick) * score()->tempomap()->relTempo() * 60;
-    tempo.duration = DurationType::V_QUARTER;
-    tempo.withDot = true;
+    tempo.value = tempoText->tempoBpm();
+    tempo.duration = duration.type();
+    tempo.withDot = duration.dots() > 0;
 
     return tempo;
+}
+
+const Ms::TempoText* NotationPlayback::tempoText(int _tick) const
+{
+    Fraction tick = Fraction::fromTicks(_tick);
+    Ms::TempoText* result = nullptr;
+
+    Ms::SegmentType segmentType = Ms::SegmentType::All;
+    for (const Ms::Segment* segment = score()->firstSegment(segmentType); segment; segment = segment->next1(segmentType)) {
+        for (Ms::Element* element: segment->annotations()) {
+            if (element && element->isTempoText() && element->tick() <= tick) {
+                result = Ms::toTempoText(element);
+            }
+        }
+    }
+
+    return result;
 }
 
 MeasureBeat NotationPlayback::measureBeat(int tick) const
