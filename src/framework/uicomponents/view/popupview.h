@@ -55,6 +55,7 @@ public:
 
     Q_INVOKABLE void open();
     Q_INVOKABLE void close();
+    Q_INVOKABLE void toggleOpened();
 
     QQuickItem* backgroundItem() const;
     QQuickItem* contentItem() const;

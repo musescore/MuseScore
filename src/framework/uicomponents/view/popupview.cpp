@@ -65,6 +65,15 @@ void PopupView::close()
     emit closed();
 }
 
+void PopupView::toggleOpened()
+{
+    if (m_isOpened) {
+        close();
+    } else {
+        open();
+    }
+}
+
 QQuickItem* PopupView::backgroundItem() const
 {
     return m_backgroundItem;
