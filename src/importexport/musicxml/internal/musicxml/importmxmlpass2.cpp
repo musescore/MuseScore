@@ -75,7 +75,15 @@
 #include "musicxmlfonthandler.h"
 #include "musicxmlsupport.h"
 
+#include "modularity/ioc.h"
+#include "importexport/musicxml/imusicxmlconfiguration.h"
+
 namespace Ms {
+static std::shared_ptr<mu::iex::musicxml::IMusicXmlConfiguration> configuration()
+{
+    return mu::framework::ioc()->resolve<mu::iex::musicxml::IMusicXmlConfiguration>("iex_musicxml");
+}
+
 //---------------------------------------------------------
 //   local defines for debug output
 //---------------------------------------------------------
@@ -701,7 +709,9 @@ static QString nextPartOfFormattedString(QXmlStreamReader& e)
             importedtext += QString("<font size=\"%1\"/>").arg(size);
         }
     }
-    if (!fontFamily.isEmpty() && txt == syms) {
+
+    bool needUseDefaultFont = configuration()->needUseDefaultFont();
+    if (!fontFamily.isEmpty() && txt == syms && !needUseDefaultFont) {
         // add font family only if no <sym> replacement made
         importedtext += QString("<font face=\"%1\"/>").arg(fontFamily);
     }
@@ -1150,7 +1160,8 @@ static void addTextToNote(int l, int c, QString txt, QString placement, QString 
         if (!txt.isEmpty()) {
             TextBase* t = new Fingering(score, subType);
             t->setPlainText(txt);
-            if (!fontFamily.isEmpty()) {
+            bool needUseDefaultFont = configuration()->needUseDefaultFont();
+            if (!fontFamily.isEmpty() && !needUseDefaultFont) {
                 t->setFamily(fontFamily);
                 t->setPropertyFlags(Pid::FONT_FACE, PropertyFlags::UNSTYLED);
             }
