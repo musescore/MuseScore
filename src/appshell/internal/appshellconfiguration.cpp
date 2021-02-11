@@ -41,6 +41,15 @@ bool AppShellConfiguration::isAppUpdatable() const
 #endif
 }
 
+bool AppShellConfiguration::isFullScreenAvailable() const
+{
+#if !defined(Q_OS_MAC)
+    return true;
+#elif
+    return false;
+#endif
+}
+
 std::string AppShellConfiguration::handbookUrl() const
 {
     std::string utm = utmParameters(UTM_MEDIUM_MENU);
@@ -93,6 +102,11 @@ mu::ValCh<bool> AppShellConfiguration::isInspectorPanelVisible() const
 mu::ValCh<bool> AppShellConfiguration::isStatusBarVisible() const
 {
     return notationConfiguration()->isStatusBarVisible();
+}
+
+mu::ValCh<bool> AppShellConfiguration::isNavigatorVisible() const
+{
+    return notationConfiguration()->isNavigatorVisible();
 }
 
 void AppShellConfiguration::revertToFactorySettings(bool keepDefaultSettings) const

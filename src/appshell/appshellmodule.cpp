@@ -57,6 +57,7 @@ std::string AppShellModule::moduleName() const
 void AppShellModule::registerExports()
 {
     ioc()->registerExport<IAppShellConfiguration>(moduleName(), s_appShellConfiguration);
+    ioc()->registerExport<IApplicationActionController>(moduleName(), s_applicationActionController);
 }
 
 void AppShellModule::resolveImports()

@@ -108,6 +108,26 @@ void AppMenuModel::setupConnections()
     paletteController()->isMasterPaletteOpened().ch.onReceive(this, [this](bool) {
         load();
     });
+
+    configuration()->isPalettePanelVisible().ch.onReceive(this, [this](bool) {
+        load();
+    });
+    configuration()->isInstrumentsPanelVisible().ch.onReceive(this, [this](bool) {
+        load();
+    });
+    configuration()->isInspectorPanelVisible().ch.onReceive(this, [this](bool) {
+        load();
+    });
+    configuration()->isStatusBarVisible().ch.onReceive(this, [this](bool) {
+        load();
+    });
+    configuration()->isNavigatorVisible().ch.onReceive(this, [this](bool) {
+        load();
+    });
+
+    controller()->isFullScreen().ch.onReceive(this, [this](bool) {
+        load();
+    });
 }
 
 MenuItem& AppMenuModel::item(const ActionCode& actionCode)
@@ -214,10 +234,11 @@ MenuItem AppMenuModel::viewItem()
 {
     MenuItemList viewItems {
         makeAction("toggle-palette", scoreOpened(), configuration()->isPalettePanelVisible().val),
+        makeAction("toggle-instruments", scoreOpened(), configuration()->isInstrumentsPanelVisible().val),
         makeAction("masterpalette", scoreOpened(), paletteController()->isMasterPaletteOpened().val),
-        makeAction("inspector", scoreOpened()),
+        makeAction("inspector", scoreOpened(), configuration()->isInspectorPanelVisible().val),
         makeAction("toggle-playpanel", scoreOpened()), // need implement
-        makeAction("toggle-navigator", scoreOpened()),
+        makeAction("toggle-navigator", scoreOpened(), configuration()->isNavigatorVisible().val),
         makeAction("toggle-timeline", scoreOpened()), // need implement
         makeAction("toggle-mixer", scoreOpened()), // need implement
         makeAction("synth-control", scoreOpened()), // need implement
@@ -229,18 +250,22 @@ MenuItem AppMenuModel::viewItem()
         makeAction("zoomout", scoreOpened()),
         makeSeparator(),
         makeMenu(trc("appshell", "W&orkspaces"), workspacesItems(), true, "select-workspace"),
+        makeAction("toggle-statusbar", scoreOpened(), configuration()->isStatusBarVisible().val),
         makeSeparator(),
         makeAction("split-h", scoreOpened()), // need implement
         makeAction("split-v", scoreOpened()), // need implement
         makeSeparator(),
-        makeAction("show-invisible", scoreOpened()),
-        makeAction("show-unprintable", scoreOpened()),
-        makeAction("show-frames", scoreOpened()),
-        makeAction("show-pageborders", scoreOpened()),
-        makeAction("mark-irregular", scoreOpened()),
-        makeSeparator(),
-        makeAction("fullscreen") // need implement
+        makeAction("show-invisible", scoreOpened(), scoreConfig().isShowInvisibleElements),
+        makeAction("show-unprintable", scoreOpened(), scoreConfig().isShowUnprintableElements),
+        makeAction("show-frames", scoreOpened(), scoreConfig().isShowFrames),
+        makeAction("show-pageborders", scoreOpened(), scoreConfig().isShowPageMargins),
+        makeAction("mark-irregular", scoreOpened(), scoreConfig().isMarkIrregularMeasures)
     };
+
+    if (configuration()->isFullScreenAvailable()) {
+        viewItems << makeSeparator()
+                  << makeAction("fullscreen", true, controller()->isFullScreen().val);
+    }
 
     return makeMenu(trc("appshell", "&View"), viewItems);
 }
@@ -535,7 +560,7 @@ MenuItemList AppMenuModel::workspacesItems() const
     });
 
     for (const IWorkspacePtr& workspace : workspaces.val) {
-        MenuItem item = actionsRegister()->action("select-workspace"); // need implement
+        MenuItem item = actionsRegister()->action("select-workspace");
         item.title = workspace->title();
         item.args = ActionData::make_arg1<std::string>(workspace->name());
 
@@ -642,4 +667,9 @@ bool AppMenuModel::hasSelectionOnScore() const
 bool AppMenuModel::isNoteInputMode() const
 {
     return currentNotation() ? currentNotation()->interaction()->noteInput()->isNoteInputMode() : false;
+}
+
+ScoreConfig AppMenuModel::scoreConfig() const
+{
+    return currentNotation() ? currentNotation()->interaction()->scoreConfig() : ScoreConfig();
 }

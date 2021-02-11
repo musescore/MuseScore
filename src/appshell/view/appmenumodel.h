@@ -33,6 +33,7 @@
 #include "palette/ipaletteactionscontroller.h"
 #include "iappshellconfiguration.h"
 #include "userscores/iuserscoresservice.h"
+#include "iapplicationactioncontroller.h"
 
 namespace mu::appshell {
 class AppMenuModel : public QObject, public async::Asyncable
@@ -47,6 +48,7 @@ class AppMenuModel : public QObject, public async::Asyncable
     INJECT(appshell, palette::IPaletteActionsController, paletteController)
     INJECT(appshell, IAppShellConfiguration, configuration)
     INJECT(appshell, userscores::IUserScoresService, userScoresService)
+    INJECT(appshell, IApplicationActionController, controller)
 
     Q_PROPERTY(QVariantList items READ items NOTIFY itemsChanged)
 
@@ -105,6 +107,8 @@ private:
     bool selectedRangeOnScore() const;
     bool hasSelectionOnScore() const;
     bool isNoteInputMode() const;
+
+    notation::ScoreConfig scoreConfig() const;
 
     uicomponents::MenuItemList m_items;
 };

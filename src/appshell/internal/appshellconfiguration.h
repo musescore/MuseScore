@@ -34,6 +34,7 @@ class AppShellConfiguration : public IAppShellConfiguration
 
 public:
     bool isAppUpdatable() const override;
+    bool isFullScreenAvailable() const override;
 
     std::string handbookUrl() const override;
     std::string askForHelpUrl() const override;
@@ -46,6 +47,7 @@ public:
     ValCh<bool> isInstrumentsPanelVisible() const override;
     ValCh<bool> isInspectorPanelVisible() const override;
     ValCh<bool> isStatusBarVisible() const override;
+    ValCh<bool> isNavigatorVisible() const override;
 
     void revertToFactorySettings(bool keepDefaultSettings = false) const override;
 

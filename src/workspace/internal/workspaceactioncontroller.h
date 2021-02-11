@@ -16,46 +16,26 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_APPSHELL_APPLICATIONCONTROLLER_H
-#define MU_APPSHELL_APPLICATIONCONTROLLER_H
+#ifndef MU_WORKSPACE_WORKSPACEACTIONCONTROLLER_H
+#define MU_WORKSPACE_WORKSPACEACTIONCONTROLLER_H
 
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
-#include "ui/imainwindow.h"
-#include "iapplicationactioncontroller.h"
-#include "languages/ilanguagesservice.h"
-#include "iinteractive.h"
-#include "iappshellconfiguration.h"
+#include "iworkspaceconfiguration.h"
 
-namespace mu::appshell {
-class ApplicationActionController : public IApplicationActionController, public actions::Actionable
+namespace mu::workspace {
+class WorkspaceActionController : public actions::Actionable
 {
     INJECT(appshell, actions::IActionsDispatcher, dispatcher)
-    INJECT(appshell, ui::IMainWindow, mainWindow)
-    INJECT(appshell, languages::ILanguagesService, languagesService)
-    INJECT(appshell, framework::IInteractive, interactive)
-    INJECT(appshell, IAppShellConfiguration, configuration)
+    INJECT(appshell, IWorkspaceConfiguration, configuration)
 
 public:
     void init();
 
-    ValCh<bool> isFullScreen() const override;
-
 private:
-    void quit();
-    void toggleFullScreen();
-    void openAboutQtDialog();
-
-    void openOnlineHandbookPage();
-    void openAskForHelpPage();
-    void openBugReportPage();
-    void openLeaveFeedbackPage();
-
-    void revertToFactorySettings();
-
-    async::Channel<bool> m_fullScreenChannel;
+    void selectWorkspace(const actions::ActionData& args);
 };
 }
 
-#endif // MU_APPSHELL_APPLICATIONCONTROLLER_H
+#endif // MU_WORKSPACE_WORKSPACEACTIONCONTROLLER_H
