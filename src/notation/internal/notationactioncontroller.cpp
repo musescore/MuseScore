@@ -27,6 +27,7 @@ using namespace mu::notation;
 using namespace mu::actions;
 
 static constexpr int INVALID_BOX_INDEX = -1;
+static constexpr qreal STRETCH_STEP = 0.1;
 static const ActionCode ESCAPE_ACTION_CODE = "escape";
 
 void NotationActionController::init()
@@ -195,6 +196,10 @@ void NotationActionController::init()
 
     dispatcher()->reg(this, "toggle-navigator", this, &NotationActionController::toggleNavigator);
     dispatcher()->reg(this, "toggle-mixer", this, &NotationActionController::toggleMixer);
+
+    dispatcher()->reg(this, "stretch-", [this]() { addStretch(-STRETCH_STEP); });
+    dispatcher()->reg(this, "stretch+", [this]() { addStretch(STRETCH_STEP); });
+    dispatcher()->reg(this, "reset-stretch", this, &NotationActionController::resetStretch);
 
     for (int i = MIN_NOTES_INTERVAL; i <= MAX_NOTES_INTERVAL; ++i) {
         if (isNotesIntervalValid(i)) {
@@ -891,6 +896,34 @@ void NotationActionController::addAnchoredNoteLine()
     }
 
     interaction->addAnchoredLineToSelectedNotes();
+}
+
+void NotationActionController::addStretch(qreal value)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    if (!interaction->selection()->isRange()) {
+        return;
+    }
+
+    interaction->addStretch(value);
+}
+
+void NotationActionController::resetStretch()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    if (!interaction->selection()->isRange()) {
+        return;
+    }
+
+    interaction->resetStretch();
 }
 
 void NotationActionController::selectMeasuresCountAndInsert()

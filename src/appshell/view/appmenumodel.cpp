@@ -77,6 +77,16 @@ INotationPtr AppMenuModel::currentNotation() const
     return currentMasterNotation() ? currentMasterNotation()->notation() : nullptr;
 }
 
+INotationInteractionPtr AppMenuModel::notationInteraction() const
+{
+    return currentNotation() ? currentNotation()->interaction() : nullptr;
+}
+
+INotationSelectionPtr AppMenuModel::notationSelection() const
+{
+    return notationInteraction() ? notationInteraction()->selection() : nullptr;
+}
+
 void AppMenuModel::setupConnections()
 {
     globalContext()->currentMasterNotationChanged().onNotify(this, [this]() {
@@ -250,9 +260,9 @@ MenuItem AppMenuModel::addItem()
 MenuItem AppMenuModel::formatItem()
 {
     MenuItemList stretchItems {
-        makeAction("stretch+"), // need implement
-        makeAction("stretch-"), // need implement
-        makeAction("reset-stretch") // need implement
+        makeAction("stretch+", scoreOpened(), selectedRangeOnScore()),
+        makeAction("stretch-", scoreOpened(), selectedRangeOnScore()),
+        makeAction("reset-stretch", scoreOpened(), selectedRangeOnScore())
     };
 
     MenuItemList formatItems {
@@ -601,7 +611,12 @@ bool AppMenuModel::canRedo() const
 
 bool AppMenuModel::selectedElementOnScore() const
 {
-    return currentNotation() ? !currentNotation()->interaction()->selection()->isNone() : false;
+    return notationSelection() ? notationSelection()->element() != nullptr : false;
+}
+
+bool AppMenuModel::selectedRangeOnScore() const
+{
+    return notationSelection() ? notationSelection()->isRange() : false;
 }
 
 bool AppMenuModel::isNoteInputMode() const

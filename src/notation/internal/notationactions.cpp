@@ -677,6 +677,21 @@ const ActionList NotationActions::m_actions = {
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Navigator"),
                QT_TRANSLATE_NOOP("action", "Toggle 'Navigator'")
+               ),
+    ActionItem("stretch-",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Increase Layout Stretch"),
+               QT_TRANSLATE_NOOP("action", "Increase layout stretch factor of selected measures")
+               ),
+    ActionItem("stretch+",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Decrease Layout Stretch"),
+               QT_TRANSLATE_NOOP("action", "Decrease layout stretch factor of selected measures")
+               ),
+    ActionItem("reset-stretch",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Reset Layout Stretch"),
+               QT_TRANSLATE_NOOP("action", "Reset layout stretch factor of selected measures or entire score")
                )
 };
 

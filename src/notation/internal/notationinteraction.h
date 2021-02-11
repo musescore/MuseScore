@@ -135,6 +135,9 @@ public:
     void addText(TextType type) override;
     void addFiguredBass() override;
 
+    void addStretch(qreal value) override;
+    void resetStretch() override;
+
 private:
     Ms::Score* score() const;
 

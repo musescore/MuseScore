@@ -62,6 +62,8 @@ signals:
 private:
     notation::IMasterNotationPtr currentMasterNotation() const;
     notation::INotationPtr currentNotation() const;
+    notation::INotationInteractionPtr notationInteraction() const;
+    notation::INotationSelectionPtr notationSelection() const;
 
     void setupConnections();
 
@@ -98,6 +100,7 @@ private:
     bool canUndo() const;
     bool canRedo() const;
     bool selectedElementOnScore() const;
+    bool selectedRangeOnScore() const;
     bool isNoteInputMode() const;
 
     uicomponents::MenuItemList m_items;
