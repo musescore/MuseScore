@@ -19,9 +19,9 @@
 
 #include "docktoolbar.h"
 
-#include "eventswatcher.h"
-
 #include <QToolBar>
+
+#include "eventswatcher.h"
 
 using namespace mu::dock;
 

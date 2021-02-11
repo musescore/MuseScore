@@ -166,6 +166,7 @@ public:
         RIGHT_MARGIN = 0xEF95,
         BOTTOM_MARGIN = 0xEF96,
         TOP_MARGIN = 0xEF97,
+        MIDI_INPUT = 0xEF98,
         ACCOUNT = 0xEF99,
 
         STAR = 0xEF9A,
@@ -253,7 +254,6 @@ public:
         NOTE_DOTTED_2 = 0xF395,
         NOTE_DOTTED_3 = 0xF396,
         NOTE_DOTTED_4 = 0xF397,
-        MIDI_INPUT = 0xEF98,
 
         NOTE_PLUS = 0xF39D,
         NOTE_TO_RIGHT = 0xF39E,
