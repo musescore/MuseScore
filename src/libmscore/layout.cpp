@@ -790,9 +790,26 @@ static QPair<qreal, qreal> layoutAccidental(AcEl* me, AcEl* above, AcEl* below, 
     pnd *= mag;
     pd *= mag;
 
+    Chord* chord = me->note->chord();
+    Staff* staff = chord->staff();
+    Fraction tick = chord->tick();
+
     // extra space for ledger lines
-    if (me->line <= -2 || me->line >= me->note->staff()->lines(me->note->chord()->tick()) * 2) {
-        lx = qMin(lx, -acc->staff()->spatium(acc->tick()) * acc->score()->styleS(Sid::ledgerLineLength).val());
+    qreal ledgerAdjust = 0.0;
+    qreal ledgerVerticalClear = 0.0;
+    bool ledgerAbove = chord->upNote()->line() <= -2;
+    bool ledgerBelow = chord->downNote()->line() >= staff->lines(tick) * 2;
+    if (ledgerAbove || ledgerBelow) {
+        // ledger lines are present
+        // check for collision with lines above & below staff
+        // note that on 1-line staff, both collisions are possible at once
+        // TODO: account for cutouts in accidental
+        qreal lds = staff->lineDistance(tick) * sp;
+        if ((ledgerAbove && me->top + lds <= pnd) || (ledgerBelow && staff->lines(tick) * lds - me->bottom <= pnd)) {
+            ledgerAdjust = -acc->score()->styleS(Sid::ledgerLineLength).val() * sp;
+            ledgerVerticalClear = acc->score()->styleS(Sid::ledgerLineWidth).val() * 0.5 * sp;
+            lx = qMin(lx, ledgerAdjust);
+        }
     }
 
     // clear left notes
@@ -803,11 +820,25 @@ static QPair<qreal, qreal> layoutAccidental(AcEl* me, AcEl* above, AcEl* below, 
         qreal lnTop = (lnLine - 1) * 0.5 * sp;
         qreal lnBottom = lnTop + sp;
         if (me->top - lnBottom <= pnd && lnTop - me->bottom <= pnd) {
+            qreal lnLedgerAdjust = 0.0;
+            if (lnLine <= -2 || lnLine >= staff->lines(tick) * 2) {
+                // left note has a ledger line we probably need to clear horizontally as well
+                // except for accidentals that clear the last extended ledger line vertically
+                // in these cases, the accidental may tuck closer
+                Note* lastLnNote = lnLine < 0 ? leftNotes[0] : leftNotes[lns - 1];
+                int lastLnLine = lastLnNote->line();
+                qreal ledgerY = (lastLnLine / 2) * sp;
+                if (me->line < 0 && ledgerY - me->bottom < ledgerVerticalClear) {
+                    lnLedgerAdjust = ledgerAdjust;
+                } else if (me->line > 0 && me->top - ledgerY < ledgerVerticalClear) {
+                    lnLedgerAdjust = ledgerAdjust;
+                }
+            }
             // undercut note above if possible
             if (lnBottom - me->top <= me->ascent - pnd) {
-                lx = qMin(lx, ln->x() + ln->chord()->x() + me->rightClear);
+                lx = qMin(lx, ln->x() + ln->chord()->x() + lnLedgerAdjust + me->rightClear);
             } else {
-                lx = qMin(lx, ln->x() + ln->chord()->x());
+                lx = qMin(lx, ln->x() + ln->chord()->x() + lnLedgerAdjust);
             }
         } else if (lnTop > me->bottom) {
             break;
