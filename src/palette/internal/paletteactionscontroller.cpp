@@ -32,7 +32,7 @@ mu::ValCh<bool> PaletteActionsController::isMasterPaletteOpened() const
 {
     ValCh<bool> result;
     result.ch = m_masterPaletteOpenChannel;
-    result.val = interactive()->isOpened(MASTER_PALETTE_URI);
+    result.val = interactive()->isOpened(MASTER_PALETTE_URI).val;
     return result;
 }
 

@@ -2400,6 +2400,14 @@ void NotationInteraction::setScoreConfig(ScoreConfig config)
     score()->setShowFrames(config.isShowFrames);
     score()->setShowPageborders(config.isShowPageMargins);
     score()->setMarkIrregularMeasures(config.isMarkIrregularMeasures);
+
+    Element* selectedElement = selection()->element();
+    if (selectedElement) {
+        if (!selectedElement->visible() && (selectedElement->score()->printing() || !selectedElement->score()->showInvisible())) {
+            clearSelection();
+        }
+    }
+
     apply();
 
     notifyAboutNotationChanged();

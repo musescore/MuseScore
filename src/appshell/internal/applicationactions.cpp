@@ -29,6 +29,10 @@ const ActionList ApplicationActions::m_actions = {
                ShortcutContext::Any,
                QT_TRANSLATE_NOOP("action", "Quit")
                ),
+    ActionItem("fullscreen",
+               ShortcutContext::Any,
+               QT_TRANSLATE_NOOP("action", "Full Screen")
+               ),
     ActionItem("about-qt",
                ShortcutContext::Any,
                QT_TRANSLATE_NOOP("action", "About Qt...")
