@@ -1172,6 +1172,7 @@ public:
     void cmdSelectSection();
     void respace(std::vector<ChordRest*>* elements);
     void transposeSemitone(int semitone);
+    void transposeDiatonicAlterations(TransposeDirection direction);
 
     void insertMeasure(ElementType type, MeasureBase*, bool createEmptyMeasures = false, bool moveSignaturesClef = true,
                        bool needDeselectAll = true);
