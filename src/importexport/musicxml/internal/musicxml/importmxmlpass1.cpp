@@ -1218,7 +1218,9 @@ static QString nextPartOfFormattedString(QXmlStreamReader& e)
             importedtext += QString("<font size=\"%1\"/>").arg(size);
         }
     }
-    if (!fontFamily.isEmpty() && txt == syms) {
+
+    bool needUseDefaultFont = configuration()->needUseDefaultFont();
+    if (!fontFamily.isEmpty() && txt == syms && !needUseDefaultFont) {
         // add font family only if no <sym> replacement made
         importedtext += QString("<font face=\"%1\"/>").arg(fontFamily);
     }
@@ -1364,6 +1366,8 @@ static void updateStyles(Score* score,
     const auto dblLyricSize = lyricSize.toDouble();   // but avoid comparing (double) floating point number with exact value later
     const auto epsilon = 0.001;                       // use epsilon instead
 
+    bool needUseDefaultFont = configuration()->needUseDefaultFont();
+
     // loop over all text styles (except the empty, always hidden, first one)
     // set all text styles to the MusicXML defaults
     for (const auto tid : allTextStyles()) {
@@ -1374,7 +1378,7 @@ static void updateStyles(Score* score,
         }
         const TextStyle* ts = textStyle(tid);
         for (const StyledProperty& a :*ts) {
-            if (a.pid == Pid::FONT_FACE && wordFamily != "") {
+            if (a.pid == Pid::FONT_FACE && wordFamily != "" && !needUseDefaultFont) {
                 score->style().set(a.sid, wordFamily);
             } else if (a.pid == Pid::FONT_SIZE && dblWordSize > epsilon) {
                 score->style().set(a.sid, dblWordSize);
@@ -1383,7 +1387,7 @@ static void updateStyles(Score* score,
     }
 
     // handle lyrics odd and even lines separately
-    if (lyricFamily != "") {
+    if (lyricFamily != "" && !needUseDefaultFont) {
         score->style().set(Sid::lyricsOddFontFace, lyricFamily);
         score->style().set(Sid::lyricsEvenFontFace, lyricFamily);
     }
