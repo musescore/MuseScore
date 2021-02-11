@@ -19,7 +19,7 @@ Slider {
         Rectangle {
             id: filledBackground
 
-            width: root.visualPosition * mainBackground.width
+            width: handleBackground.x + handleBackground.width / 2
             height: mainBackground.height
 
             opacity: 1
@@ -95,7 +95,7 @@ Slider {
             PropertyChanges {
                 target: filledBackground
 
-                y: root.visualPosition * mainBackground.height
+                y: handleBackground.y + handleBackground.height / 2
 
                 width: mainBackground.width
                 height: root.height - y
