@@ -94,6 +94,22 @@ DockWindow {
             content: PlaybackToolBar {
                 color: dockWindow.color
             }
+        },
+
+        DockToolBar	{
+            objectName: "undoRedoToolBar"
+
+            minimumWidth: 72
+            minimumHeight: dockWindow.toolbarHeight
+
+            color: dockWindow.color
+            allowedAreas: Qt.NoToolBarArea
+            visible: dockWindow.isNotationPage
+            floatable: false
+
+            content: UndoRedoToolBar {
+                color: dockWindow.color
+            }
         }
     ]
 
