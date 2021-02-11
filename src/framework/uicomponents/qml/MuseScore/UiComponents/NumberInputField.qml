@@ -12,6 +12,8 @@ Item {
 
     property alias font: textField.font
 
+    signal valueEdited(var newValue)
+
     implicitWidth: textField.contentWidth
     implicitHeight: 30
 
@@ -33,6 +35,10 @@ Item {
         }
     }
 
+    onValueChanged: {
+        textField.text = privateProperties.pad(value)
+    }
+
     TextField {
         id: textField
 
@@ -43,15 +49,17 @@ Item {
         onTextEdited: {
             var currentValue = parseInt(text)
             var str = currentValue.toString()
+            var newValue = 0
 
             if (str.length > privateProperties.maxNumberLength || currentValue > root.maxValue) {
                 var lastDigit = str.charAt(str.length - 1)
-                root.value = parseInt(lastDigit)
+                newValue = parseInt(lastDigit)
             } else {
-                root.value = currentValue
+                newValue = currentValue
             }
 
-            text = privateProperties.pad(root.value)
+            text = privateProperties.pad(newValue)
+            root.valueEdited(newValue)
         }
 
         background: Rectangle {
