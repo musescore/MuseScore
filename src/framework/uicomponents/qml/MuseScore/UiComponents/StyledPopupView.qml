@@ -20,6 +20,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtGraphicalEffects 1.0
+
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
 
@@ -29,10 +30,19 @@ PopupView {
     property bool opensUpward: false
     property var arrowX: width / 2
     property alias arrowHeight: arrow.height
+    property alias arrowVisible: arrow.visible
 
     property color borderColor: ui.theme.strokeColor
     property color fillColor: ui.theme.backgroundPrimaryColor
     readonly property int borderWidth: 1
+
+    function toggleOpened() {
+        if (isOpened) {
+            close()
+        } else {
+            open()
+        }
+    }
 
     closePolicy: PopupView.CloseOnPressOutsideParent
 
@@ -40,8 +50,10 @@ PopupView {
         //!Note For some reason the call of mapToGlobal in the QML scope and in C++ on the same object produces different results
         //      The only reliable option is QML version, that's why we have to do get globalPos from QML for now.
         //      Makes sense to check it again on next QT update
-        globalPos = mapToGlobal(x, y)
+        globalPos = mapToGlobal(parent.x + positionDisplacementX, parent.y + positionDisplacementY)
     }
+
+    padding: 24
 
     backgroundItem: Item {
         anchors.fill: parent
