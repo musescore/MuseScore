@@ -6,6 +6,7 @@ FocusableItem {
 
     property alias icon: buttonIcon.iconCode
     property alias text: textLabel.text
+    property string hint
 
     property alias iconFont: buttonIcon.font
     property alias textFont: textLabel.font
@@ -16,8 +17,6 @@ FocusableItem {
     property bool accentButton: false
 
     property int orientation: Qt.Vertical
-
-    property alias hovered: mouseArea.containsMouse
 
     signal clicked()
 
@@ -115,6 +114,18 @@ FocusableItem {
 
         onReleased: {
             root.clicked()
+        }
+
+        onContainsMouseChanged: {
+            if (!Boolean(root.hint)) {
+                return
+            }
+
+            if (containsMouse) {
+                ui.tooltip.show(this, root.hint)
+            } else {
+                ui.tooltip.hide(this)
+            }
         }
     }
 
