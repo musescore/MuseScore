@@ -199,7 +199,7 @@ using MetaList = QList<Meta>;
 struct Tempo
 {
     int value = 0;
-    DurationType note = DurationType::V_QUARTER;
+    DurationType duration = DurationType::V_QUARTER;
     bool withDot = false;
 };
 
