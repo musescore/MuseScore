@@ -84,12 +84,17 @@ Item {
 
     FlatButton {
         id: deleteButton
-        z: 1000
-        height: parent.height
-        width: height
+
         anchors.right: paletteHeaderMenuButton.left
         anchors.rightMargin: 6
+
+        height: parent.height
+        width: height
+
+        z: 1000
+
         icon: IconCode.DELETE_TANK
+        hint: deleteButton.text
         visible: paletteHeader.hidePaletteElementVisible && paletteHeader.editingEnabled
         activeFocusOnTab: mainPalette.currentItem === paletteTree.currentTreeItem
         normalStateColor: "transparent"
@@ -97,15 +102,9 @@ Item {
         KeyNavigation.backtab: mainPalette.currentItem
         KeyNavigation.tab: focusBreaker
 
-        onHoveredChanged: {
-            if (hovered) {
-                ui.tooltip.show(deleteButton, deleteButton.text)
-            } else {
-                ui.tooltip.hide(deleteButton)
-            }
+        onClicked: {
+            hideSelectedElementsRequested()
         }
-
-        onClicked: hideSelectedElementsRequested()
     }
 
     FlatButton {
