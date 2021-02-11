@@ -226,6 +226,7 @@ void PlaybackToolBarModel::doSetPlayTime(const QTime& time)
     emit maxMeasureNumberChanged(maxMeasureNumber());
     emit beatNumberChanged(beatNumber());
     emit maxBeatNumberChanged(maxBeatNumber());
+    emit tempoChanged(tempo());
 }
 
 void PlaybackToolBarModel::rewind(uint64_t milliseconds)

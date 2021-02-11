@@ -86,7 +86,7 @@ Rectangle {
             TimeInputField {
                 id: timeField
 
-                Layout.leftMargin: 20
+                Layout.leftMargin: 10
                 Layout.preferredWidth: 90
 
                 time: playbackModel.playTime
@@ -100,7 +100,7 @@ Rectangle {
             }
 
             NumberInputField {
-                Layout.leftMargin: 20
+                Layout.leftMargin: 10
                 Layout.preferredWidth: 10
 
                 minValue: 1
@@ -132,7 +132,8 @@ Rectangle {
             }
 
             StyledTextLabel {
-                Layout.leftMargin: 20
+                Layout.leftMargin: 10
+                Layout.preferredWidth: 20
                 topPadding: 10
 
                 text: playbackModel.tempo.noteSymbol
@@ -145,7 +146,7 @@ Rectangle {
             }
 
             StyledTextLabel {
-                Layout.rightMargin: 20
+                Layout.rightMargin: 10
 
                 text: "= " + playbackModel.tempo.value
                 font: timeField.font

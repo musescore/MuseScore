@@ -50,6 +50,7 @@ public:
     Measure* measure() const { return toMeasure(parent()->parent()); }
 
     qreal tempo() const { return _tempo; }
+    qreal tempoBpm() const;
     void setTempo(qreal v);
     void undoSetTempo(qreal v);
     bool isRelative() { return _isRelative; }
@@ -61,6 +62,8 @@ public:
     void updateRelative();
 
     void layout() override;
+
+    TDuration duration() const;
 
     static int findTempoDuration(const QString& s, int& len, TDuration& dur);
     static QString duration2tempoTextString(const TDuration dur);
