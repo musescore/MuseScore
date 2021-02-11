@@ -2297,7 +2297,11 @@ void Element::endEditDrag(EditData& ed)
     if (eed) {
         for (const PropertyData& pd : qAsConst(eed->propertyData)) {
             setPropertyFlags(pd.id, pd.f);       // reset initial property flags state
-            if (score()->undoPropertyChanged(this, pd.id, pd.data)) {
+            PropertyFlags f = pd.f;
+            if (f == PropertyFlags::STYLED) {
+                f = PropertyFlags::UNSTYLED;
+            }
+            if (score()->undoPropertyChanged(this, pd.id, pd.data, f)) {
                 changed = true;
             }
         }
