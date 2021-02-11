@@ -62,6 +62,7 @@
 #include "view/widgets/selectdialog.h"
 #include "view/widgets/tupletdialog.h"
 #include "view/notationcontextmenu.h"
+#include "view/undoredomodel.h"
 
 using namespace mu::notation;
 using namespace mu::framework;
@@ -162,6 +163,7 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<AbstractNoteInputBarItem>("MuseScore.NotationScene", 1, 0, "NoteInputBarItem");
     qmlRegisterType<NotationToolBarModel>("MuseScore.NotationScene", 1, 0, "NotationToolBarModel");
     qmlRegisterType<NotationNavigator>("MuseScore.NotationScene", 1, 0, "NotationNavigator");
+    qmlRegisterType<UndoRedoModel>("MuseScore.NotationScene", 1, 0, "UndoRedoModel");
 
     qRegisterMetaType<EditStyle>("EditStyle");
     qRegisterMetaType<EditStaff>("EditStaff");
