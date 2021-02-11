@@ -4167,11 +4167,13 @@ ChordRest* Score::findCR(Fraction tick, int track) const
             s = ns;
         }
     }
-    if (s) {
-        Element* el = s->element(track);
-        if (el && el->isRest() && toRest(el)->isGap()) {
-            s = nullptr;
-        }
+
+    if (!s) {
+        return nullptr;
+    }
+    Element* el = s->element(track);
+    if (el && el->isRest() && toRest(el)->isGap()) {
+        s = nullptr;
     }
     if (s) {
         return toChordRest(s->element(track));
