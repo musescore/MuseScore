@@ -189,6 +189,8 @@ public:
     qreal minBottom() const;
     qreal spacerDistance(bool up) const;
 
+    qreal firstNoteRestSegmentX(bool leading = false);
+
     void moveBracket(int staffIdx, int srcCol, int dstCol);
     Spacer* getFixedSpacer() const { return fixedSpacer; }
     int firstVisibleStaff() const;

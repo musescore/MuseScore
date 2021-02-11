@@ -140,7 +140,6 @@ protected:
     bool _up;                 // actual direction
 
     Direction _slurDirection;
-    qreal firstNoteRestSegmentX(System* system);
     void fixupSegments(unsigned nsegs);
 
 public:
