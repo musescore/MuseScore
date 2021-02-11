@@ -7,6 +7,8 @@ Row {
 
     property date time // format: h:mm:ss:ms
 
+    signal timeEdited(var newTime)
+
     spacing: 4
 
     opacity: enabled ? 1 : ui.theme.itemOpacityDisabled
@@ -18,10 +20,10 @@ Row {
 
         value: root.time.getHours()
 
-        onValueChanged: {
+        onValueEdited: {
             var newTime = root.time
-            newTime.setHours(value)
-            root.time = newTime
+            newTime.setHours(newValue)
+            root.timeEdited(newTime)
         }
     }
 
@@ -36,10 +38,10 @@ Row {
 
         value: root.time.getMinutes()
 
-        onValueChanged: {
+        onValueEdited: {
             var newTime = root.time
-            newTime.setMinutes(value)
-            root.time = newTime
+            newTime.setMinutes(newValue)
+            root.timeEdited(newTime)
         }
     }
 
@@ -54,10 +56,10 @@ Row {
 
         value: root.time.getSeconds()
 
-        onValueChanged: {
+        onValueEdited: {
             var newTime = root.time
-            newTime.setSeconds(value)
-            root.time = newTime
+            newTime.setSeconds(newValue)
+            root.timeEdited(newTime)
         }
     }
 
@@ -72,10 +74,10 @@ Row {
 
         value: root.time.getMilliseconds()
 
-        onValueChanged: {
+        onValueEdited: {
             var newTime = root.time
-            newTime.setMilliseconds(value)
-            root.time = newTime
+            newTime.setMilliseconds(newValue)
+            root.timeEdited(newTime)
         }
     }
 }
