@@ -154,6 +154,11 @@ bool DockToolBar::floatable() const
     return toolBar()->isFloatable();
 }
 
+bool DockToolBar::movable() const
+{
+    return toolBar()->isMovable();
+}
+
 void DockToolBar::setMinimumHeight(int minimumHeight)
 {
     if (m_minimumHeight == minimumHeight) {
@@ -199,4 +204,14 @@ void DockToolBar::setFloatable(bool floatable)
 
     toolBar()->setFloatable(floatable);
     emit floatableChanged(floatable);
+}
+
+void DockToolBar::setMovable(bool movable)
+{
+    if (movable == this->movable()) {
+        return;
+    }
+
+    toolBar()->setMovable(movable);
+    emit movableChanged(movable);
 }
