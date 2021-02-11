@@ -117,6 +117,9 @@ public:
 
     virtual void addText(TextType type) = 0;
     virtual void addFiguredBass() = 0;
+
+    virtual void addStretch(qreal value) = 0;
+    virtual void resetStretch() = 0;
 };
 
 using INotationInteractionPtr = std::shared_ptr<INotationInteraction>;

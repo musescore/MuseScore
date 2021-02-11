@@ -102,6 +102,9 @@ private:
     void addHairpin(HairpinType type);
     void addAnchoredNoteLine();
 
+    void addStretch(qreal value);
+    void resetStretch();
+
     void openPageStyle();
     void openStaffProperties();
     void openBreaksDialog();

@@ -2334,13 +2334,31 @@ void NotationInteraction::addText(TextType type)
 
 void NotationInteraction::addFiguredBass()
 {
-    Ms::FiguredBass* fb = score()->addFiguredBass();
+    Ms::FiguredBass* figuredBass = score()->addFiguredBass();
 
-    if (fb) {
-        startEditText(fb, QPointF());
+    if (figuredBass) {
+        startEditText(figuredBass, QPointF());
     }
 
     notifyAboutSelectionChanged();
+}
+
+void NotationInteraction::addStretch(qreal value)
+{
+    startEdit();
+    score()->cmdAddStretch(value);
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
+void NotationInteraction::resetStretch()
+{
+    startEdit();
+    score()->resetUserStretch();
+    apply();
+
+    notifyAboutNotationChanged();
 }
 
 bool NotationInteraction::needEndTextEditing(const std::vector<Element*>& newSelectedElements) const

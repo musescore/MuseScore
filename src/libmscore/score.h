@@ -545,7 +545,6 @@ private:
     void cmdAddBracket();
     void cmdAddParentheses();
     void cmdAddBraces();
-    void resetUserStretch();
 
     void createMMRest(Measure*, Measure*, const Fraction&);
 
@@ -671,6 +670,7 @@ public:
     void cmdAddMeasureRepeat(Measure*, int numMeasures, int staffIdx);
     bool makeMeasureRepeatGroup(Measure*, int numMeasures, int staffIdx);
     void cmdFlip();
+    void resetUserStretch();
 
     void addRemoveBreaks(int interval, bool lock);
 
@@ -1329,7 +1329,7 @@ static inline const Score* toScore(const ScoreElement* e)
 class MasterScore : public Score
 {
     Q_OBJECT
-    TimeSigMap * _sigmap;
+    TimeSigMap* _sigmap;
     TempoMap* _tempomap;
     RepeatList* _repeatList;
     RepeatList* _repeatList2;
