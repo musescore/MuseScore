@@ -93,6 +93,8 @@ private:
     void addLoopOut(int tick);
     QRect loopBoundaryRectByTick(LoopBoundaryType boundaryType, int tick) const;
 
+    const Ms::TempoText* tempoText(int tick) const;
+
     IGetScore* m_getScore = nullptr;
     std::shared_ptr<midi::MidiStream> m_midiStream;
     std::unique_ptr<Ms::MidiRenderer> m_midiRenderer;

@@ -90,6 +90,21 @@ void TempoText::read(XmlReader& e)
     }
 }
 
+qreal TempoText::tempoBpm() const
+{
+    //! NOTE: find tempo in format " = 180"
+    QRegExp regExp("\\s*=\\s*(\\d+[.]{0,1}\\d*)");
+    regExp.indexIn(xmlText());
+    QStringList matches = regExp.capturedTexts();
+
+    if (matches.empty() || matches.size() < 1) {
+        return 0;
+    }
+
+    qreal tempo = matches[1].toDouble();
+    return tempo;
+}
+
 //---------------------------------------------------------
 //   TempoPattern
 //---------------------------------------------------------
@@ -153,6 +168,16 @@ int TempoText::findTempoDuration(const QString& s, int& len, TDuration& dur)
         }
     }
     return -1;
+}
+
+TDuration TempoText::duration() const
+{
+    int dummy = 0;
+    TDuration result;
+
+    findTempoDuration(xmlText(), dummy, result);
+
+    return result;
 }
 
 static const TempoPattern tpSym[] = {
