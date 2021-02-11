@@ -64,7 +64,7 @@ public:
     Q_ENUM(Code)
 };
 
-QString noteIconToString(MusicalSymbolCodes::Code noteIcon, bool withDot)
+inline QString noteIconToString(MusicalSymbolCodes::Code noteIcon, bool withDot)
 {
     QString noteSymbol = QString(QChar(static_cast<char16_t>(noteIcon)));
 
