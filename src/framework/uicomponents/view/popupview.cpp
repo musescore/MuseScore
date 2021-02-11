@@ -22,6 +22,7 @@
 #include <QQmlEngine>
 #include <QUrl>
 #include <QQmlContext>
+#include <QApplication>
 
 using namespace mu::uicomponents;
 
@@ -31,11 +32,13 @@ PopupView::PopupView(QQuickItem* parent)
     setFlag(QQuickItem::ItemHasContents, true);
 
     qApp->installEventFilter(this);
+
+    connect(qApp, &QApplication::applicationStateChanged, this, &PopupView::onApplicationStateChanged);
 }
 
 void PopupView::open()
 {
-    if (!m_containerView) {
+    if (!m_containerView || m_isOpened) {
         return;
     }
 
@@ -50,7 +53,7 @@ void PopupView::open()
 
 void PopupView::close()
 {
-    if (!m_containerView) {
+    if (!m_containerView || !m_isOpened) {
         return;
     }
 
@@ -206,9 +209,18 @@ bool PopupView::eventFilter(QObject* watched, QEvent* event)
         mousePressEvent(static_cast<QMouseEvent*>(event));
     } else if (QEvent::MouseButtonRelease == event->type()) {
         mouseReleaseEvent(static_cast<QMouseEvent*>(event));
+    } else if (QEvent::Close == event->type()) {
+        close();
     }
 
     return QObject::eventFilter(watched, event);
+}
+
+void PopupView::onApplicationStateChanged(Qt::ApplicationState state)
+{
+    if (state != Qt::ApplicationActive) {
+        close();
+    }
 }
 
 void PopupView::mousePressEvent(QMouseEvent* event)
