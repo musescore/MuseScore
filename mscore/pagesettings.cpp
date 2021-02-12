@@ -104,6 +104,14 @@ void PageSettings::setScore(Score* s)
       cs = s;
       delete clonedScore;
       clonedScore = s->clone();
+      // HACK: clone doesn't actually copy style completely for older scores;
+      // instead it replaces any style settings that were at the older defaults with the current defaults
+      // this is not desired here, but might be in other places that Score::clone() is used
+      // so instead we simply re-copy the style here
+      int defaultsVersion = s->style().defaultStyleVersion();
+      clonedScore->style().setDefaultStyleVersion(defaultsVersion);
+      clonedScore->style() = s->style();
+
       clonedScore->setLayoutMode(LayoutMode::PAGE);
 
       clonedScore->doLayout();

@@ -358,6 +358,13 @@ Score* Score::clone()
       XmlWriter xml(this, &buffer);
       xml.header();
 
+      // TODO: this code to set MSC_VERSION explicitly causes the preview score in page settings dialog
+      // to always use current style defaults rather than those of the source score
+      // this clearly wrong for the page settings dialog and causes https://musescore.org/en/node/317272
+      // it's possible this code should be replaced by code that sets version based on the source score
+      // but it's also possible other code relies on the current behavior
+      // it's also possible MasterScore::clone() should contain the same change
+      // but for now, we are simply fixing up the style in PageSettings::setScore()
       xml.stag("museScore version=\"" MSC_VERSION "\"");
       write(xml, false);
       xml.etag();
