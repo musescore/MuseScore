@@ -106,8 +106,8 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                         break;
                         }
                   }
-            Fraction tickStart = Fraction::fromTicks(e.intAttribute("tick", 0));
-                tickLen       =  Fraction::fromTicks(e.intAttribute("len", 0));
+            Fraction tickStart = Fraction::fromString(e.attribute("tick", "0"));
+                tickLen       =  Fraction::fromString(e.attribute("len", "0"));
             Fraction oTickLen =  tickLen;
                 tickLen       *= scale;
             int staffStart    = e.intAttribute("staff", 0);
