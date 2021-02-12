@@ -333,7 +333,7 @@ void MeasureBase::triggerLayout() const
     const MeasureBase* mb = top();
     // avoid triggering layout before getting added to a score
     if (mb->prev() || mb->next()) {
-        score()->setLayout(mb->tick(), -1, this);
+        score()->setLayout(mb->tick(), -1, mb);
     }
 }
 
@@ -645,7 +645,7 @@ int MeasureBase::index() const
 int MeasureBase::measureIndex() const
 {
     int idx = 0;
-    MeasureBase* m = score()->first();
+    MeasureBase* m = score()->firstMeasure();
     while (m) {
         if (m == this) {
             return idx;
