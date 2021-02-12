@@ -1566,7 +1566,7 @@ QVariant Staff::propertyDefault(Pid id) const
         return false;
     case Pid::MAG:
         return 1.0;
-    case Pid::COLOR:
+    case Pid::STAFF_COLOR:
         return QColor(Qt::black);
     case Pid::PLAYBACK_VOICE1:
     case Pid::PLAYBACK_VOICE2:
