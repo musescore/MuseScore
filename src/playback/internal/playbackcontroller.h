@@ -48,8 +48,9 @@ public:
     bool isPlaying() const override;
     async::Notification isPlayingChanged() const override;
 
-    float playbackPositionInSeconds() const override;
+    async::Notification playbackPositionChanged() const override;
     async::Channel<uint32_t> midiTickPlayed() const override;
+    float playbackPositionInSeconds() const override;
 
     void playElementOnClick(const notation::Element* element) override;
 
@@ -59,11 +60,11 @@ public:
     QTime totalPlayTime() const override;
 
     notation::Tempo currentTempo() const override;
-    notation::MeasureBeat currentMeasureBeat() const override;
+    notation::MeasureBeat currentBeat() const override;
     uint64_t beatToMilliseconds(int measureIndex, int beatIndex) const override;
 
 private:
-    static const unsigned int MIDI_TRACK = 0;
+    static constexpr unsigned int MIDI_TRACK = 0;
 
     notation::INotationPlaybackPtr playback() const;
     notation::INotationSelectionPtr selection() const;
@@ -94,9 +95,9 @@ private:
     notation::INotationPtr m_notation;
     async::Notification m_isPlayAllowedChanged;
     async::Notification m_isPlayingChanged;
+    async::Notification m_playbackPositionChanged;
     ValCh<uint32_t> m_tickPlayed;
     async::Channel<actions::ActionCode> m_actionEnabledChanged;
-    CursorType m_cursorType = CursorType::STEPPED;
 
     bool m_needRewindBeforePlay = false;
     bool m_isPlaybackLooped = false;

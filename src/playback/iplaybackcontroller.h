@@ -31,11 +31,6 @@ class IPlaybackController : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IPlaybackController)
 
-    enum CursorType {
-        SMOOTH,
-        STEPPED
-    };
-
 public:
     virtual ~IPlaybackController() = default;
 
@@ -45,8 +40,9 @@ public:
     virtual bool isPlaying() const = 0;
     virtual async::Notification isPlayingChanged() const = 0;
 
-    virtual float playbackPositionInSeconds() const = 0;
+    virtual async::Notification playbackPositionChanged() const = 0;
     virtual async::Channel<uint32_t> midiTickPlayed() const = 0;
+    virtual float playbackPositionInSeconds() const = 0;
 
     virtual void playElementOnClick(const notation::Element* element) = 0;
 
@@ -56,7 +52,7 @@ public:
     virtual QTime totalPlayTime() const = 0;
 
     virtual notation::Tempo currentTempo() const = 0;
-    virtual notation::MeasureBeat currentMeasureBeat() const = 0;
+    virtual notation::MeasureBeat currentBeat() const = 0;
     virtual uint64_t beatToMilliseconds(int measureIndex, int beatIndex) const = 0;
 };
 }

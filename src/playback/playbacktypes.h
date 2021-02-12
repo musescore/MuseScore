@@ -23,6 +23,11 @@
 #include <QTime>
 
 namespace mu::playback {
+enum class PlaybackCursorType {
+    SMOOTH,
+    STEPPED
+};
+
 static const QTime ZERO_TIME(0, 0, 0, 0);
 
 inline uint64_t secondsToMilliseconds(float seconds)

@@ -19,6 +19,7 @@
 #define MU_PLAYBACK_IPLAYBACKCONFIGURATION_H
 
 #include "modularity/imoduleexport.h"
+#include "playbacktypes.h"
 
 namespace mu::playback {
 class IPlaybackConfiguration : MODULE_EXPORT_INTERFACE
@@ -30,6 +31,8 @@ public:
 
     virtual bool isPlayElementOnClick() const = 0;
     virtual bool isPlayHarmonyOnClick() const = 0;
+
+    virtual PlaybackCursorType cursorType() const = 0;
 };
 }
 

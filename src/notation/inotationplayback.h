@@ -48,7 +48,7 @@ public:
 
     virtual midi::MidiData playElementMidiData(const Element* element) const = 0;
 
-    enum BoundaryTick: int {
+    enum BoundaryTick : int {
         FirstScoreTick = -3,
         SelectedNoteTick,
         LastScoreTick

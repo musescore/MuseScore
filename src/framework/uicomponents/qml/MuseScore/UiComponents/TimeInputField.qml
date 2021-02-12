@@ -73,13 +73,13 @@ Row {
 
     NumberInputField {
         maxValue: 9
-        value: root.time.getMilliseconds()
+        value: root.time.getMilliseconds() / 100
 
         font: root.font
 
         onValueEdited: {
             var newTime = root.time
-            newTime.setMilliseconds(newValue)
+            newTime.setMilliseconds(newValue * 100)
             root.timeEdited(newTime)
         }
     }

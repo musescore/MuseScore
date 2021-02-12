@@ -17,8 +17,19 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 #include "playbackconfiguration.h"
+#include "settings.h"
+#include "playbacktypes.h"
 
 using namespace mu::playback;
+using namespace mu::framework;
+
+static const std::string moduleName("playback");
+static const Settings::Key PLAYBACK_CURSOR_TYPE_KEY(moduleName, "application/playback/cursorType");
+
+void PlaybackConfiguration::init()
+{
+    settings()->setDefaultValue(PLAYBACK_CURSOR_TYPE_KEY, Val(static_cast<int>(PlaybackCursorType::STEPPED)));
+}
 
 bool PlaybackConfiguration::isPlayElementOnClick() const
 {
@@ -30,4 +41,9 @@ bool PlaybackConfiguration::isPlayHarmonyOnClick() const
 {
     //! TODO Add settings
     return isPlayElementOnClick();
+}
+
+PlaybackCursorType PlaybackConfiguration::cursorType() const
+{
+    return static_cast<PlaybackCursorType>(settings()->value(PLAYBACK_CURSOR_TYPE_KEY).toInt());
 }
