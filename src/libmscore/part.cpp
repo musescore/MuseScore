@@ -168,6 +168,9 @@ void Part::write(XmlWriter& xml) const
     if (!_show) {
         xml.tag("show", _show);
     }
+    if (_soloist) {
+        xml.tag("soloist", _soloist);
+    }
     xml.tag("trackName", _partName);
     if (_color != DEFAULT_COLOR) {
         xml.tag("color", _color);
