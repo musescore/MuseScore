@@ -191,8 +191,8 @@ Fraction XmlReader::readFraction()
         if (i == -1) {
             return Fraction::fromTicks(s.toInt());
         } else {
-            z = s.left(i).toInt();
-            n = s.mid(i + 1).toInt();
+            z = s.leftRef(i).toInt();
+            n = s.midRef(i + 1).toInt();
         }
     }
     return Fraction(z, n);

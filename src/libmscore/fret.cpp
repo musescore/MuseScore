@@ -1296,9 +1296,6 @@ void FretDiagram::writeMusicXML(XmlWriter& xml) const
     xml.stag("frame");
     xml.tag("frame-strings", _strings);
     xml.tag("frame-frets", frets());
-    QString strDots = "'";
-    QString strMarker = "'";
-    QString strFingering = "'";
 
     for (int i = 0; i < _strings; ++i) {
         int mxmlString = _strings - i;
