@@ -577,9 +577,9 @@ private:
     void resetTempo();
     void resetTempoRange(const Fraction& tick1, const Fraction& tick2);
 
-    void deleteSpannersFromRange(const Fraction& t1, const Fraction& t2, int trackStart, int trackEnd,const SelectionFilter& filter);
-    void deleteAnnotationsFromRange(Segment* segStart, Segment* segEnd, int trackStart, int trackEnd,const SelectionFilter& filter);
-    ChordRest* deleteRange(Segment* segStart, Segment* segEnd, int trackStart, int trackEnd,const SelectionFilter& filter);
+    void deleteSpannersFromRange(const Fraction& t1, const Fraction& t2, int trackStart, int trackEnd, const SelectionFilter& filter);
+    void deleteAnnotationsFromRange(Segment* segStart, Segment* segEnd, int trackStart, int trackEnd, const SelectionFilter& filter);
+    ChordRest* deleteRange(Segment* segStart, Segment* segEnd, int trackStart, int trackEnd, const SelectionFilter& filter);
 
     void update(bool resetCmdState);
 
@@ -674,9 +674,9 @@ public:
     void addRemoveBreaks(int interval, bool lock);
 
     bool transpose(Note* n, Interval, bool useSharpsFlats);
-    void transposeKeys(int staffStart, int staffEnd, const Fraction& tickStart, const Fraction& tickEnd,const Interval&,
+    void transposeKeys(int staffStart, int staffEnd, const Fraction& tickStart, const Fraction& tickEnd, const Interval&,
                        bool useInstrument = false, bool flip = false);
-    bool transpose(TransposeMode mode, TransposeDirection, Key transposeKey, int transposeInterval,bool trKeys,bool transposeChordNames,
+    bool transpose(TransposeMode mode, TransposeDirection, Key transposeKey, int transposeInterval,bool trKeys, bool transposeChordNames,
                    bool useDoubleSharpsFlats);
 
     bool appendMeasuresFromScore(Score* score, const Fraction& startTick, const Fraction& endTick);
@@ -754,7 +754,7 @@ public:
     Tuplet* addTuplet(ChordRest* destinationChordRest, Fraction ratio, TupletNumberType numberType, TupletBracketType bracketType);
 
     ChordRest* addClone(ChordRest* cr, const Fraction& tick, const TDuration& d);
-    Rest* setRest(const Fraction& tick,  int track, const Fraction&, bool useDots, Tuplet* tuplet,bool useFullMeasureRest = true);
+    Rest* setRest(const Fraction& tick,  int track, const Fraction&, bool useDots, Tuplet* tuplet, bool useFullMeasureRest = true);
 
     void upDown(bool up, UpDownMode);
     void upDownDelta(int pitchDelta);
@@ -810,7 +810,7 @@ public:
     virtual inline void setUpdateAll();
     inline void setLayoutAll(int staff = -1, const Element* e = nullptr);
     inline void setLayout(const Fraction& tick, int staff, const Element* e = nullptr);
-    inline void setLayout(const Fraction& tick1, const Fraction& tick2, int staff1, int staff2,const Element* e = nullptr);
+    inline void setLayout(const Fraction& tick1, const Fraction& tick2, int staff1, int staff2, const Element* e = nullptr);
     virtual inline CmdState& cmdState();
     virtual inline const CmdState& cmdState() const;
     virtual inline void addLayoutFlags(LayoutFlags);
