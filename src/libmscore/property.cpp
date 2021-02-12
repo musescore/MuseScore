@@ -91,6 +91,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::BARLINE_SPAN_FROM,       false, "spanFromOffset",        P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "span from") },
     { Pid::BARLINE_SPAN_TO,         false, "spanToOffset",          P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "span to") },
     { Pid::BARLINE_SHOW_TIPS,       false, "showTips",              P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "show tips") },
+
     { Pid::OFFSET,                  false, "offset",                P_TYPE::POINT_SP_MM,    DUMMY_QT_TR_NOOP("propertyName", "offset") },
     { Pid::FRET,                    true,  "fret",                  P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "fret") },
     { Pid::STRING,                  true,  "string",                P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "string") },
@@ -213,6 +214,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::BREAK_MMR,               false, "breakMultiMeasureRest", P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "breaking multimeasure rest") },
     { Pid::MMREST_NUMBER_POS,       false, "mmRestNumberPos",       P_TYPE::SPATIUM,        DUMMY_QT_TR_NOOP("propertyName", "vertical position of multimeasure rest number") },
     { Pid::MMREST_NUMBER_VISIBLE,   false, "mmRestNumberVisible",   P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "visibility of multimeasure rest number") },
+
     { Pid::MEASURE_REPEAT_NUMBER_POS, false, "measureRepeatNumberPos", P_TYPE::SPATIUM,     DUMMY_QT_TR_NOOP("propertyName", "vertical position of measure repeat number") },
     { Pid::REPEAT_COUNT,            true,  "endRepeat",             P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "end repeat") },
 
