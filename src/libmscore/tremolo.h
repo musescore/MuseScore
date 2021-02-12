@@ -28,7 +28,7 @@ enum class TremoloType : signed char {
     C8, C16, C32, C64       // two note tremolo (change)
 };
 
-// only applicable to minim two-note tremolos in non-TAB staves
+// only applicable to minim two-note tremolo in non-TAB staves
 enum class TremoloStyle : signed char {
     DEFAULT = 0, TRADITIONAL, TRADITIONAL_ALTERNATE
 };
