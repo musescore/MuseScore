@@ -642,6 +642,7 @@ public:
     void addMeasure(MeasureBase*, MeasureBase*);
     void readStaff(XmlReader&);
     bool read(XmlReader&);
+    void linkMeasures(Score* score);
 
     Excerpt* excerpt() { return _excerpt; }
     void setExcerpt(Excerpt* e) { _excerpt = e; }
