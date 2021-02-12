@@ -1687,7 +1687,7 @@ TextBase::TextBase(Score* s, Tid tid, ElementFlags f)
 {
     _cursor                 = new TextCursor(this);
 
-    setFamily("FreeSerif");
+    setFamily("Edwin");
     setSize(10.0);
     setFontStyle(FontStyle::Normal);
     _textLineSpacing        = 1.0;
@@ -2261,7 +2261,9 @@ void TextBase::genText() const
 
     for (const TextBlock& block : _layout) {
         for (const TextFragment& f : block.fragments()) {
-            // don't skip empty text fragments. They hold information for empty lines. See #6328
+            // don't skip, empty text fragments hold information for empty lines
+//                  if (f.text.isEmpty())                     // skip empty fragments, not to
+//                        continue;                           // insert extra HTML formatting
             const CharFormat& format = f.format;
             if (fmt.bold() != format.bold()) {
                 if (format.bold()) {
