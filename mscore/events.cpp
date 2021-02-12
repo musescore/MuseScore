@@ -15,6 +15,7 @@
 #include "musescore.h"
 #include "seq.h"
 #include "texttools.h"
+#include "pianotools.h"
 #include "fotomode.h"
 #include "tourhandler.h"
 #include "scoreaccessibility.h"

@@ -552,6 +552,7 @@ void Seq::seqMessage(int msg, int arg)
 void Seq::playEvent(const NPlayEvent& event, unsigned framePos)
       {
       int type = event.type();
+      PianoTools* piano = mscore->pianoTools();
       if (type == ME_NOTEON) {
             if (!event.isMuted()) {
                   if (event.discard()) { // ignore noteoff but restrike noteon
@@ -561,6 +562,12 @@ void Seq::playEvent(const NPlayEvent& event, unsigned framePos)
                               return;
                         }
                   putEvent(event, framePos);
+                  if (piano && piano->isVisible()) {
+                        if (event.velo() > 0)
+                              piano->pressPlaybackPitch(event.pitch());
+                        else // Note-offs are synthesized as ME_NOTEON with 0 velocity
+                              piano->releasePlaybackPitch(event.pitch());
+                        }
                   }
             }
       else if (type == ME_CONTROLLER || type == ME_PITCHBEND || type == ME_AFTERTOUCH || type == ME_POLYAFTER)
@@ -622,7 +629,15 @@ void Seq::processMessages()
                         setPos(msg.intVal);
                         break;
                   case SeqMsgId::ALL_NOTE_OFF:
+                        {
                         _synti->allNotesOff(msg.intVal);
+                        PianoTools* piano = mscore->pianoTools();
+                        // PianoTools here returns the playback pitches by-value
+                        // to ensure no discrepancy while erasing items from
+                        // the _pressedPlaybackPitches container
+                        for (int pressedPitch : piano->pressedPlaybackPitches())
+                              piano->releasePlaybackPitch(pressedPitch);
+                        }
                         break;
                   default:
                         break;
@@ -1672,7 +1687,7 @@ void Seq::heartBeatTimeout()
 
       PianoTools* piano = mscore->pianoTools();
       if (piano && piano->isVisible())
-            piano->setPlaybackNotes(markedNotes);
+            piano->updateAllKeys();
 
       cv->update(cv->toPhysical(r));
       }

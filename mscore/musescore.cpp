@@ -2399,8 +2399,10 @@ void MuseScore::selectionChanged(SelState selectionState)
       if (timeline())
             timeline()->changeSelection(selectionState);
       if (_pianoTools && _pianoTools->isVisible()) {
-            if (cs)
-                  _pianoTools->changeSelection(cs->selection());
+            if (cs) {
+                  if (seq->isStopped())
+                        _pianoTools->changeSelection(cs->selection());
+                  }
             else
                   _pianoTools->clearSelection();
             }

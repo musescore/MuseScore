@@ -171,12 +171,32 @@ void HPiano::pressPitch(int pitch)
       }
 
 //---------------------------------------------------------
+//   pressPlaybackPitch
+//---------------------------------------------------------
+
+void HPiano::pressPlaybackPitch(int pitch)
+      {
+      _pressedPlaybackPitches.insert(pitch);
+      updateAllKeys();
+      }
+
+//---------------------------------------------------------
 //   releasePitch
 //---------------------------------------------------------
 
 void HPiano::releasePitch(int pitch)
       {
       _pressedPitches.remove(pitch);
+      updateAllKeys();
+      }
+
+//---------------------------------------------------------
+//   releasePlaybackPitch
+//---------------------------------------------------------
+
+void HPiano::releasePlaybackPitch(int pitch)
+      {
+      _pressedPlaybackPitches.remove(pitch);
       updateAllKeys();
       }
 
@@ -448,8 +468,8 @@ void PianoTools::setPlaybackNotes(QList<const Ms::Note *> notes)
       {
       QSet<int> pitches;
       for (const Note* note : notes) {
-          pitches.insert(note->ppitch());
-          }
+            pitches.insert(note->ppitch());
+            }
       _piano->setPressedPlaybackPitches(pitches);
       }
 
