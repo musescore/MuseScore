@@ -59,7 +59,8 @@ void GlobalContext::setCurrentMasterNotation(const IMasterNotationPtr& masterNot
     m_currentMasterNotation = masterNotation;
     m_currentMasterNotationChanged.notify();
 
-    setCurrentNotation(masterNotation->notation());
+    INotationPtr notation = masterNotation ? masterNotation->notation() : nullptr;
+    setCurrentNotation(notation);
 }
 
 IMasterNotationPtr GlobalContext::currentMasterNotation() const
