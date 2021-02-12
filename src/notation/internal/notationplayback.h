@@ -61,13 +61,12 @@ public:
     midi::MidiData playElementMidiData(const Element* element) const override;
 
     void addLoopBoundary(LoopBoundaryType boundaryType, int tick) override;
-    void removeLoopBoundary() override;
-    async::Channel<LoopBoundary> loopBoundaryChanged() const override;
+    void removeLoopBoundaries() override;
+    async::Channel<LoopBoundaries> loopBoundariesChanged() const override;
 
     Tempo tempo(int tick) const override;
-
-    MeasureBeat measureBeat(int tick) const override;
-    int measureBeatToTick(const MeasureBeat& measureBeat) const override;
+    MeasureBeat beat(int tick) const override;
+    int beatToTick(int measureIndex, int beatIndex) const override;
 
 private:
     Ms::Score* score() const;
@@ -99,7 +98,7 @@ private:
     std::shared_ptr<midi::MidiStream> m_midiStream;
     std::unique_ptr<Ms::MidiRenderer> m_midiRenderer;
     async::Channel<int> m_playPositionTickChanged;
-    async::Channel<LoopBoundary> m_loopBoundaryChanged;
+    async::Channel<LoopBoundaries> m_loopBoundariesChanged;
 };
 }
 

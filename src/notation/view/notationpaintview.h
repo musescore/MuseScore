@@ -162,7 +162,7 @@ private:
     void onPlayingChanged();
     void movePlaybackCursor(uint32_t tick);
 
-    void updateLoopMarkers(const LoopBoundary& boundary);
+    void updateLoopMarkers(const LoopBoundaries& boundaries);
 
     const Page* pointToPage(const QPointF& point) const;
     QPointF alignToCurrentPageBorder(const QRectF& showRect, const QPointF& pos) const;

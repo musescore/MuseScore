@@ -25,6 +25,7 @@
 #include "actions/actionable.h"
 #include "context/iglobalcontext.h"
 #include "../iplaybackconfiguration.h"
+#include "notation/inotationconfiguration.h"
 #include "retval.h"
 #include "async/asyncable.h"
 #include "audio/isequencer.h"
@@ -35,6 +36,7 @@ class PlaybackController : public IPlaybackController, public actions::Actionabl
     INJECT(playback, actions::IActionsDispatcher, dispatcher)
     INJECT(playback, context::IGlobalContext, globalContext)
     INJECT(playback, IPlaybackConfiguration, configuration)
+    INJECT(playback, notation::INotationConfiguration, notationConfiguration)
     INJECT(playback, audio::ISequencer, sequencer)
 
 public:
@@ -58,8 +60,7 @@ public:
 
     notation::Tempo currentTempo() const override;
     notation::MeasureBeat currentMeasureBeat() const override;
-
-    uint64_t measureBeatToMilliseconds(const notation::MeasureBeat& measureBeat) const override;
+    uint64_t beatToMilliseconds(int measureIndex, int beatIndex) const override;
 
 private:
     static const unsigned int MIDI_TRACK = 0;
@@ -85,7 +86,7 @@ private:
     void toggleLoopPlayback();
 
     void addLoopBoundary(notation::LoopBoundaryType type);
-    void setLoop(const notation::LoopBoundary& boundary);
+    void setLoop(const notation::LoopBoundaries& boundary);
     void unsetLoop();
 
     void notifyActionEnabledChanged(const actions::ActionCode& actionCode);
