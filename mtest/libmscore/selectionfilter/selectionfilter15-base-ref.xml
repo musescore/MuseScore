@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<StaffList version="2.00" tick="0" len="3840" staff="0" staves="1">
+<StaffList version="2.00" tick="0/1" len="8/4" staff="0" staves="1">
   <Staff id="0">
     <voiceOffset>
       <voice id="0">0</voice>
