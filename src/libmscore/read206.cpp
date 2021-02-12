@@ -3570,6 +3570,7 @@ static bool readScore(Score* score, XmlReader& e)
                 e.skipCurrentElement();
             } else {
                 e.tracks().clear();
+                e.clearUserTextStyles();
                 MasterScore* m = score->masterScore();
                 Score* s = new Score(m, MScore::baseStyle());
                 s->setEnableVerticalSpread(false);

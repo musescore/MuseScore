@@ -210,6 +210,7 @@ public:
     void checkTuplets();
     Tid addUserTextStyle(const QString& name);
     Tid lookupUserTextStyle(const QString& name) const;
+    void clearUserTextStyles() { userTextStyles.clear(); }
 
     QList<std::pair<Element*, QPointF> >& fixOffsets() { return _fixOffsets; }
 
