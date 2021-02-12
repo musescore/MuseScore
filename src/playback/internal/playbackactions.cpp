@@ -25,7 +25,7 @@ using namespace mu::actions;
 using namespace mu::shortcuts;
 using namespace mu::ui;
 
-const ActionList PlaybackActions::m_actions = {
+const ActionList PlaybackActions::m_mainActions = {
     ActionItem("play",
                ShortcutContext::Any,
                QT_TRANSLATE_NOOP("action", "Play"),
@@ -91,20 +91,46 @@ const ActionList PlaybackActions::m_settingsActions = {
                ),
 };
 
+const ActionList PlaybackActions::m_loopBoundaryActions = {
+    ActionItem("loop-in",
+               ShortcutContext::Any,
+               QT_TRANSLATE_NOOP("action", "Loop In"),
+               QT_TRANSLATE_NOOP("action", "Set loop marker left"),
+               IconCode::Code::LOOP_IN
+               ),
+    ActionItem("loop-out",
+               ShortcutContext::Any,
+               QT_TRANSLATE_NOOP("action", "Loop Out"),
+               QT_TRANSLATE_NOOP("action", "Set loop marker right"),
+               IconCode::Code::LOOP_OUT
+               ),
+};
+
 const ActionList& PlaybackActions::settingsActions()
 {
     return m_settingsActions;
 }
 
+const ActionList& PlaybackActions::loopBoundaryActions()
+{
+    return m_loopBoundaryActions;
+}
+
 const ActionItem& PlaybackActions::action(const ActionCode& actionCode) const
 {
-    for (const ActionItem& action : m_actions) {
+    for (const ActionItem& action : m_mainActions) {
         if (action.code == actionCode) {
             return action;
         }
     }
 
     for (const ActionItem& action : m_settingsActions) {
+        if (action.code == actionCode) {
+            return action;
+        }
+    }
+
+    for (const ActionItem& action : m_loopBoundaryActions) {
         if (action.code == actionCode) {
             return action;
         }

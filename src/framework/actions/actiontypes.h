@@ -59,6 +59,18 @@ struct ActionItem {
 };
 using ActionList = std::vector<ActionItem>;
 
+inline bool containsAction(const ActionList& list, const ActionCode& actionCode)
+{
+    return std::find_if(list.cbegin(), list.cend(), [actionCode](const ActionItem& item) {
+        return item.code == actionCode;
+    }) != list.cend();
+}
+
+inline bool containsAction(const ActionCodeList& list, const ActionCode& actionCode)
+{
+    return std::find(list.cbegin(), list.cend(), actionCode) != list.cend();
+}
+
 class ActionData
 {
 public:

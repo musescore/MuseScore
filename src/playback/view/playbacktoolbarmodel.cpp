@@ -24,6 +24,7 @@
 #include "shortcuts/shortcutstypes.h"
 #include "ui/view/musicalsymbolcodes.h"
 #include "playback/playbacktypes.h"
+#include "playback/internal/playbackactions.h"
 
 using namespace mu::playback;
 using namespace mu::actions;
@@ -219,14 +220,7 @@ void PlaybackToolBarModel::updatePlayTime()
 void PlaybackToolBarModel::doSetPlayTime(const QTime& time)
 {
     m_playTime = time;
-
     emit playTimeChanged(time);
-    emit playPositionChanged(playPosition());
-    emit measureNumberChanged(measureNumber());
-    emit maxMeasureNumberChanged(maxMeasureNumber());
-    emit beatNumberChanged(beatNumber());
-    emit maxBeatNumberChanged(maxBeatNumber());
-    emit tempoChanged(tempo());
 }
 
 void PlaybackToolBarModel::rewind(uint64_t milliseconds)
@@ -234,10 +228,10 @@ void PlaybackToolBarModel::rewind(uint64_t milliseconds)
     dispatcher()->dispatch("rewind", ActionData::make_arg1<uint64_t>(milliseconds));
 }
 
-void PlaybackToolBarModel::rewindToMeasureBeat(const notation::MeasureBeat& barBeat)
+void PlaybackToolBarModel::rewindToBeat(const MeasureBeat& beat)
 {
-    uint64_t milliseconds = playbackController()->measureBeatToMilliseconds(barBeat);
-    rewind(milliseconds);
+    uint64_t msec = playbackController()->beatToMilliseconds(beat.measureIndex, beat.beatIndex);
+    rewind(msec);
 }
 
 int PlaybackToolBarModel::measureNumber() const
@@ -255,9 +249,7 @@ void PlaybackToolBarModel::setMeasureNumber(int measureNumber)
     }
 
     measureBeat.measureIndex = measureIndex;
-    rewindToMeasureBeat(measureBeat);
-
-    emit measureNumberChanged(measureNumber);
+    rewindToBeat(measureBeat);
 }
 
 int PlaybackToolBarModel::maxMeasureNumber() const
@@ -280,9 +272,7 @@ void PlaybackToolBarModel::setBeatNumber(int beatNumber)
     }
 
     measureBeat.beatIndex = beatIndex;
-    rewindToMeasureBeat(measureBeat);
-
-    emit beatNumberChanged(beatNumber);
+    rewindToBeat(measureBeat);
 }
 
 int PlaybackToolBarModel::maxBeatNumber() const
@@ -302,9 +292,9 @@ QVariant PlaybackToolBarModel::tempo() const
     return obj;
 }
 
-void PlaybackToolBarModel::handleAction(const QString& action)
+void PlaybackToolBarModel::handleAction(const QString& actionCode)
 {
-    dispatcher()->dispatch(actions::codeFromQString(action));
+    dispatcher()->dispatch(actions::codeFromQString(actionCode));
 }
 
 void PlaybackToolBarModel::updateState()
@@ -332,7 +322,7 @@ MenuItem& PlaybackToolBarModel::item(const ActionCode& actionCode)
         }
     }
 
-    LOGE() << "item not found with name: " << actionCode;
+    LOGE() << "item not found: " << actionCode;
     static MenuItem null;
     return null;
 }
@@ -347,7 +337,7 @@ MenuItem PlaybackToolBarModel::settingsItem() const
                       );
 }
 
-bool PlaybackToolBarModel::isAdditionalAction(const ActionCode& actionCode) const
+bool PlaybackToolBarModel::isAdditionalAction(const actions::ActionCode& actionCode) const
 {
-    return actionCode == "loop-in" || actionCode == "loop-out";
+    return containsAction(PlaybackActions::loopBoundaryActions(), actionCode);
 }

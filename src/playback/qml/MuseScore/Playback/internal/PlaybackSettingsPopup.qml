@@ -1,4 +1,4 @@
-import QtQuick 2.7
+import QtQuick 2.15
 
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0

@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2020 MuseScore BVBA and others
+//  Copyright (C) 2021 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -21,28 +21,24 @@
 #define MU_PLAYBACK_PLAYBACKTYPES_H
 
 #include <QTime>
-#include <cmath>
 
 namespace mu::playback {
 static const QTime ZERO_TIME(0, 0, 0, 0);
 
-inline QTime timeFromSeconds(float seconds, int precision = 1)
+inline uint64_t secondsToMilliseconds(float seconds)
 {
-    float secondsPart = 0;
-
-    float frac = std::modf(seconds, &secondsPart);
-    int milliseconds = static_cast<int>(frac * std::pow(10, precision));
-
-    QTime time = ZERO_TIME;
-    time = time.addSecs(static_cast<int>(secondsPart));
-    time = time.addMSecs(milliseconds);
-
-    return time;
+    return seconds * 1000;
 }
 
 inline QTime timeFromMillisecons(uint64_t millisecons)
 {
     return ZERO_TIME.addMSecs(millisecons);
+}
+
+inline QTime timeFromSeconds(float seconds)
+{
+    uint64_t milliseconds = secondsToMilliseconds(seconds);
+    return timeFromMillisecons(milliseconds);
 }
 
 inline uint64_t timeToMilliseconds(const QTime& time)

@@ -28,10 +28,12 @@ public:
     const actions::ActionItem& action(const actions::ActionCode& actionCode) const override;
 
     static const actions::ActionList& settingsActions();
+    static const actions::ActionList& loopBoundaryActions();
 
 private:
-    static const actions::ActionList m_actions;
+    static const actions::ActionList m_mainActions;
     static const actions::ActionList m_settingsActions;
+    static const actions::ActionList m_loopBoundaryActions;
 };
 }
 

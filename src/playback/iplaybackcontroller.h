@@ -57,8 +57,7 @@ public:
 
     virtual notation::Tempo currentTempo() const = 0;
     virtual notation::MeasureBeat currentMeasureBeat() const = 0;
-
-    virtual uint64_t measureBeatToMilliseconds(const notation::MeasureBeat& measureBeat) const = 0;
+    virtual uint64_t beatToMilliseconds(int measureIndex, int beatIndex) const = 0;
 };
 }
 

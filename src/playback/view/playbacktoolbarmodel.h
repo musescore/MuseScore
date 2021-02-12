@@ -42,14 +42,14 @@ class PlaybackToolBarModel : public QAbstractListModel, public async::Asyncable
     INJECT(playback, workspace::IWorkspaceManager, workspaceManager)
 
     Q_PROPERTY(QDateTime playTime READ playTime WRITE setPlayTime NOTIFY playTimeChanged)
-    Q_PROPERTY(qreal playPosition READ playPosition WRITE setPlayPosition NOTIFY playPositionChanged)
+    Q_PROPERTY(qreal playPosition READ playPosition WRITE setPlayPosition NOTIFY playTimeChanged)
 
-    Q_PROPERTY(int measureNumber READ measureNumber WRITE setMeasureNumber NOTIFY measureNumberChanged)
-    Q_PROPERTY(int maxMeasureNumber READ maxMeasureNumber NOTIFY maxMeasureNumberChanged)
-    Q_PROPERTY(int beatNumber READ beatNumber WRITE setBeatNumber NOTIFY beatNumberChanged)
-    Q_PROPERTY(int maxBeatNumber READ maxBeatNumber NOTIFY maxBeatNumberChanged)
+    Q_PROPERTY(int measureNumber READ measureNumber WRITE setMeasureNumber NOTIFY playTimeChanged)
+    Q_PROPERTY(int maxMeasureNumber READ maxMeasureNumber NOTIFY playTimeChanged)
+    Q_PROPERTY(int beatNumber READ beatNumber WRITE setBeatNumber NOTIFY playTimeChanged)
+    Q_PROPERTY(int maxBeatNumber READ maxBeatNumber NOTIFY playTimeChanged)
 
-    Q_PROPERTY(QVariant tempo READ tempo NOTIFY tempoChanged)
+    Q_PROPERTY(QVariant tempo READ tempo NOTIFY playTimeChanged)
 
 public:
     explicit PlaybackToolBarModel(QObject* parent = nullptr);
@@ -69,7 +69,7 @@ public:
     QVariant tempo() const;
 
     Q_INVOKABLE void load();
-    Q_INVOKABLE void handleAction(const QString& action);
+    Q_INVOKABLE void handleAction(const QString& actionCode);
 
 public slots:
     void setPlayPosition(qreal position);
@@ -79,12 +79,6 @@ public slots:
 
 signals:
     void playTimeChanged(QTime time);
-    void playPositionChanged(qreal position);
-    void measureNumberChanged(int number);
-    void maxMeasureNumberChanged(int number);
-    void beatNumberChanged(int number);
-    void maxBeatNumberChanged(int number);
-    void tempoChanged(QVariant tempo);
 
 private:
     enum Roles {
@@ -104,7 +98,7 @@ private:
     void doSetPlayTime(const QTime& time);
 
     void rewind(uint64_t milliseconds);
-    void rewindToMeasureBeat(const notation::MeasureBeat& barBeat);
+    void rewindToBeat(const notation::MeasureBeat& beat);
 
     void updateState();
 

@@ -331,7 +331,7 @@ enum class LoopBoundaryType
     LoopOut
 };
 
-struct LoopBoundary
+struct LoopBoundaries
 {
     int loopInTick = 0;
     int loopOutTick = 0;
