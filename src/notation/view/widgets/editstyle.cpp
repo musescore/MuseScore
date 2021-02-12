@@ -143,6 +143,13 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::frameSystemDistance,     false, frameSystemDistance,     resetFrameSystemDistance },
         { StyleId::minMeasureWidth,         false, minMeasureWidth_2,       resetMinMeasureWidth },
         { StyleId::measureSpacing,          false, measureSpacing,          resetMeasureSpacing },
+        // TODO !!! See https://github.com/musescore/MuseScore/pull/6365
+//        { StyleId::measureRepeatNumberPos,  false, measureRepeatNumberPos,  resetMeasureRepeatNumberPos },
+//        { StyleId::mrNumberSeries,          false, mrNumberSeries,          0 },
+//        { StyleId::mrNumberEveryXMeasures,  false, mrNumberEveryXMeasures,  resetMRNumberEveryXMeasures },
+//        { StyleId::mrNumberSeriesWithParentheses, false, mrNumberSeriesWithParentheses, resetMRNumberSeriesWithParentheses },
+//        { StyleId::oneMeasureRepeatShow1,   false, oneMeasureRepeatShow1,   resetOneMeasureRepeatShow1 },
+//        { StyleId::fourMeasureRepeatShowExtenders, false, fourMeasureRepeatShowExtenders, resetFourMeasureRepeatShowExtenders },
 
         { StyleId::barWidth,                false, barWidth,                resetBarWidth },
         { StyleId::endBarWidth,             false, endBarWidth,             resetEndBarWidth },
@@ -172,6 +179,14 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::minEmptyMeasures,        false, minEmptyMeasures,        0 },
         { StyleId::minMMRestWidth,          false, minMeasureWidth,         resetMinMMRestWidth },
         { StyleId::mmRestNumberPos,         false, mmRestNumberPos,         resetMMRestNumberPos },
+        { StyleId::mmRestNumberMaskHBar,    false, mmRestNumberMaskHBar,    resetMMRestNumberMaskHBar },
+        { StyleId::mmRestHBarThickness,     false, mmRestHBarThickness,     resetMMRestHBarThickness },
+        { StyleId::multiMeasureRestMargin,  false, multiMeasureRestMargin,  resetMultiMeasureRestMargin },
+        { StyleId::mmRestHBarVStrokeThickness, false, mmRestHBarVStrokeThickness, resetMMRestHBarVStrokeThickness },
+        { StyleId::mmRestHBarVStrokeHeight, false, mmRestHBarVStrokeHeight, resetMMRestHBarVStrokeHeight },
+        { StyleId::oldStyleMultiMeasureRests, false, oldStyleMultiMeasureRests, 0 },
+        { StyleId::mmRestOldStyleMaxMeasures, false, mmRestOldStyleMaxMeasures, resetMMRestOldStyleMaxMeasures },
+        { StyleId::mmRestOldStyleSpacing,   false, mmRestOldStyleSpacing,   resetMMRestOldStyleSpacing },
         { StyleId::hideEmptyStaves,         false, hideEmptyStaves,         0 },
         { StyleId::dontHideStavesInFirstSystem, false, dontHideStavesInFirstSystem, 0 },
         { StyleId::enableIndentationOnFirstSystem, false, enableIndentationOnFirstSystem, 0 },
@@ -186,7 +201,6 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::minNoteDistance,         false, minNoteDistance,         resetMinNoteDistance },
         { StyleId::barNoteDistance,         false, barNoteDistance,         resetBarNoteDistance },
         { StyleId::barAccidentalDistance,   false, barAccidentalDistance,   resetBarAccidentalDistance },
-        { StyleId::multiMeasureRestMargin,  false, multiMeasureRestMargin,  resetMultiMeasureRestMargin },
         { StyleId::noteBarDistance,         false, noteBarDistance,         resetNoteBarDistance },
         { StyleId::clefLeftMargin,          false, clefLeftMargin,          resetClefLeftMargin },
         { StyleId::keysigLeftMargin,        false, keysigLeftMargin,        resetKeysigLeftMargin },
@@ -301,9 +315,8 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::measureNumberAllStaves,   false, showAllStavesMeasureNumber,   0 },
         { StyleId::measureNumberVPlacement,  false, measureNumberVPlacement,      resetMeasureNumberVPlacement },
         { StyleId::measureNumberHPlacement,  false, measureNumberHPlacement,      resetMeasureNumberHPlacement },
-        // TODO !!!
-//        { StyleId::measureNumberPosAbove,    false, measureNumberPosAbove,        resetMeasureNumberPosAbove },
-//        { StyleId::measureNumberPosBelow,    false, measureNumberPosBelow,        resetMeasureNumberPosBelow },
+        { StyleId::measureNumberPosAbove,    false, measureNumberPosAbove,        resetMeasureNumberPosAbove },
+        { StyleId::measureNumberPosBelow,    false, measureNumberPosBelow,        resetMeasureNumberPosBelow },
 
         { StyleId::mmRestShowMeasureNumberRange, false, mmRestShowMeasureNumberRange, 0 },
         { StyleId::mmRestRangeBracketType,   false, mmRestRangeBracketType,       resetMmRestRangeBracketType },
@@ -962,7 +975,6 @@ EditStylePage EditStyle::pageForElement(Element* e)
     case ElementType::KEYSIG:
         return &EditStyle::PageAccidentals;
     case ElementType::MEASURE:
-    case ElementType::REST:
         return &EditStyle::PageMeasure;
     case ElementType::BAR_LINE:
         return &EditStyle::PageBarlines;
@@ -973,6 +985,12 @@ EditStylePage EditStyle::pageForElement(Element* e)
     case ElementType::STEM_SLASH:
     case ElementType::LEDGER_LINE:
         return &EditStyle::PageNotes;
+    case ElementType::REST:
+    case ElementType::MMREST:
+        return &EditStyle::PageRests;
+// TODO !!!
+//    case ElementType::MEASURE_REPEAT:
+//        return &EditStyle:PageMeasureRepeats;
     case ElementType::BEAM:
         return &EditStyle::PageBeams;
     case ElementType::TUPLET:
