@@ -144,6 +144,9 @@ public:
 
     Chunk chunkAt(int utick);
 };
+
+class Spanner;
+extern bool glissandoPitchOffsets(const Spanner* spanner, std::vector<int>& pitchOffsets);
 } // namespace Ms
 
 #endif

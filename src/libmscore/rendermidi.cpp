@@ -297,28 +297,30 @@ static void playNote(EventMap* events, const Note* note, int channel, int pitch,
                 Note* nextNote = toNote(spanner->endElement());
                 double pitchDelta = (static_cast<double>(nextNote->pitch()) - pitch) * 50.0;
                 double timeDelta = static_cast<double>(offTime - onTime);
-                double timeStep = timeDelta / pitchDelta * 20.0;
-                double t = 0.0;
-                QList<int> onTimes;
-                EaseInOut easeInOut(static_cast<qreal>(glissando->easeIn()) / 100.0,
-                                    static_cast<qreal>(glissando->easeOut()) / 100.0);
-                easeInOut.timeList(static_cast<int>((timeDelta + timeStep * 0.5) / timeStep), int(timeDelta), &onTimes);
-                double nTimes = static_cast<double>(onTimes.size() - 1);
-                for (double time : onTimes) {
-                    int p = int(pitch + (t / nTimes) * pitchDelta);
-                    int timeStamp = std::min(onTime + int(time), offTime - 1);
-                    int midiPitch = (p * 16384) / 1200 + 8192;
-                    NPlayEvent evb(ME_PITCHBEND, channel, midiPitch % 128, midiPitch / 128);
+                if (pitchDelta != 0.0 && timeDelta != 0.0) {
+                    double timeStep = std::abs(timeDelta / pitchDelta * 20.0);
+                    double t = 0.0;
+                    QList<int> onTimes;
+                    EaseInOut easeInOut(static_cast<qreal>(glissando->easeIn()) / 100.0,
+                                        static_cast<qreal>(glissando->easeOut()) / 100.0);
+                    easeInOut.timeList(static_cast<int>((timeDelta + timeStep * 0.5) / timeStep), int(timeDelta), &onTimes);
+                    double nTimes = static_cast<double>(onTimes.size() - 1);
+                    for (double time : onTimes) {
+                        int p = static_cast<int>((t / nTimes) * pitchDelta);
+                        int timeStamp = std::min(onTime + int(time), offTime - 1);
+                        int midiPitch = (p * 16384) / 1200 + 8192;
+                        NPlayEvent evb(ME_PITCHBEND, channel, midiPitch % 128, midiPitch / 128);
+                        evb.setOriginatingStaff(staffIdx);
+                        events->insert(std::pair<int, NPlayEvent>(timeStamp, evb));
+                        t += 1.0;
+                    }
+                    ev.setVelo(0);
+                    events->insert(std::pair<int, NPlayEvent>(offTime, ev));
+                    NPlayEvent evb(ME_PITCHBEND, channel, 0, 64);           // 0:64 is 8192 - no pitch bend
                     evb.setOriginatingStaff(staffIdx);
-                    events->insert(std::pair<int, NPlayEvent>(timeStamp, evb));
-                    t += 1.0;
+                    events->insert(std::pair<int, NPlayEvent>(offTime, evb));
+                    return;
                 }
-                ev.setVelo(0);
-                events->insert(std::pair<int, NPlayEvent>(offTime, ev));
-                NPlayEvent evb(ME_PITCHBEND, channel, 0, 64);       // 0:64 is 8192 - no pitch bend
-                evb.setOriginatingStaff(staffIdx);
-                events->insert(std::pair<int, NPlayEvent>(offTime, evb));
-                return;
             }
         }
     }
@@ -1774,18 +1776,39 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
     }
 
     if (b > 0) {
-        // render the body, but not the final repetition
-        for (int r = 0; r < numrepeat - 1; r++) {
-            for (int j=0; j < b; j++) {
-                ontime = makeEvent(body[j], ontime, millespernote);
+        // Check that we are doing a glissando
+        bool isGlissando = false;
+        QList<int> onTimes;
+        for (Spanner* spanner : note->spannerFor()) {
+            if (spanner->type() == ElementType::GLISSANDO) {
+                Glissando* glissando = toGlissando(spanner);
+                EaseInOut easeInOut(static_cast<qreal>(glissando->easeIn()) / 100.0,
+                                    static_cast<qreal>(glissando->easeOut()) / 100.0);
+                easeInOut.timeList(b, millespernote * b, &onTimes);
+                isGlissando = true;
+                break;
             }
         }
-        // render the final repetition of body, but not the final note of the repition
-        for (int j = 0; j < b - 1; j++) {
-            ontime = makeEvent(body[j], ontime, millespernote);
+        if (isGlissando) {
+            // render the body, i.e. the glissando
+            for (int j = 0; j < b - 1; j++) {
+                makeEvent(body[j], onTimes[j], onTimes[j + 1] - onTimes[j]);
+            }
+            makeEvent(body[b - 1], onTimes[b - 1], (millespernote * b - onTimes[b - 1]) + sustain);
+        } else {
+            // render the body, but not the final repetition
+            for (int r = 0; r < numrepeat - 1; r++) {
+                for (int j = 0; j < b; j++) {
+                    ontime = makeEvent(body[j], ontime, millespernote);
+                }
+            }
+            // render the final repetition of body, but not the final note of the repetition
+            for (int j = 0; j < b - 1; j++) {
+                ontime = makeEvent(body[j], ontime, millespernote);
+            }
+            // render the final note of the final repeat of body
+            ontime = makeEvent(body[b - 1], ontime, millespernote + sustain);
         }
-        // render the final note of the final repeat of body
-        ontime = makeEvent(body[b - 1], ontime, millespernote + sustain);
     }
     // render the suffix
     for (int j = 0; j < s; j++) {
@@ -1930,74 +1953,75 @@ bool noteHasGlissando(Note* note)
 }
 
 //---------------------------------------------------------
+//   glissandoPitchOffsets
+//---------------------------------------------------------
+
+bool glissandoPitchOffsets(const Spanner* spanner, std::vector<int>& pitchOffsets)
+{
+    if (!spanner->endElement()->isNote()) {
+        return false;
+    }
+    const Glissando* glissando = toGlissando(spanner);
+    if (!glissando->playGlissando()) {
+        return false;
+    }
+    GlissandoStyle glissandoStyle = glissando->glissandoStyle();
+    if (glissandoStyle == GlissandoStyle::PORTAMENTO) {
+        return false;
+    }
+    // only consider glissando connected to NOTE.
+    Note* noteStart = toNote(spanner->startElement());
+    Note* noteEnd = toNote(spanner->endElement());
+    int pitchStart = noteStart->ppitch();
+    int pitchEnd = noteEnd->ppitch();
+    if (pitchEnd == pitchStart) {
+        return false;
+    }
+    int direction = pitchEnd > pitchStart ? 1 : -1;
+    pitchOffsets.clear();
+    if (glissandoStyle == GlissandoStyle::DIATONIC) {
+        int lineStart = noteStart->line();
+        // scale obeying accidentals
+        for (int line = lineStart, pitch = pitchStart; (direction == 1) ? (pitch < pitchEnd) : (pitch > pitchEnd); line -= direction) {
+            int halfSteps = articulationExcursion(noteStart, noteEnd, lineStart - line);
+            pitch = pitchStart + halfSteps;
+            if ((direction == 1) ? (pitch < pitchEnd) : (pitch > pitchEnd)) {
+                pitchOffsets.push_back(halfSteps);
+            }
+        }
+        return pitchOffsets.size() > 0;
+    }
+    if (glissandoStyle == GlissandoStyle::CHROMATIC) {
+        for (int pitch = pitchStart; pitch != pitchEnd; pitch += direction) {
+            pitchOffsets.push_back(pitch - pitchStart);
+        }
+        return true;
+    }
+    static std::vector<bool> whiteNotes = { true, false, true, false, true, true, false, true, false, true, false, true };
+    int Cnote = 60;   // pitch of middle C
+    bool notePick = glissandoStyle == GlissandoStyle::WHITE_KEYS;
+    for (int pitch = pitchStart; pitch != pitchEnd; pitch += direction) {
+        int idx = ((pitch - Cnote) + 1200) % 12;
+        if (whiteNotes[idx] == notePick) {
+            pitchOffsets.push_back(pitch - pitchStart);
+        }
+    }
+    return true;
+}
+
+//---------------------------------------------------------
 //   renderGlissando
 //---------------------------------------------------------
 
 void renderGlissando(NoteEventList* events, Note* notestart)
 {
     std::vector<int> empty = {};
-    int Cnote = 60;   // pitch of middle C
-    int pitchstart = notestart->ppitch();
-    int linestart = notestart->line();
-
-    std::set<int> blacknotes = { 1,  3,    6, 8, 10 };
-    std::set<int> whitenotes = { 0,  2, 4, 5, 7,  9, 11 };
-
+    std::vector<int> body;
     for (Spanner* spanner : notestart->spannerFor()) {
-        if (spanner->type() == ElementType::GLISSANDO) {
-            Glissando* glissando = toGlissando(spanner);
-            GlissandoStyle glissandoStyle = glissando->glissandoStyle();
-            Element* ee = spanner->endElement();
-            // handle this elsewhere in a different way
-            if (glissandoStyle == GlissandoStyle::PORTAMENTO) {
-                continue;
-            }
-            // only consider glissando connected to NOTE.
-            if (glissando->playGlissando() && ElementType::NOTE == ee->type()) {
-                std::vector<int> body;
-                Note* noteend  = toNote(ee);
-                int pitchend   = noteend->ppitch();
-                bool direction = pitchend > pitchstart;
-                if (pitchend == pitchstart) {
-                    continue;           // next spanner
-                }
-                if (glissandoStyle == GlissandoStyle::DIATONIC) {         // scale obeying accidentals
-                    int line;
-                    int p = pitchstart;
-                    // iterate as long as we haven't past the pitchend.
-                    for (line = linestart; (direction) ? (p < pitchend) : (p > pitchend);
-                         (direction) ? line-- : line++) {
-                        int halfsteps = articulationExcursion(notestart, noteend, linestart - line);
-                        p = pitchstart + halfsteps;
-                        if (direction ? p < pitchend : p > pitchend) {
-                            body.push_back(halfsteps);
-                        }
-                    }
-                } else {
-                    for (int p = pitchstart; direction ? p < pitchend : p > pitchend; p += (direction ? 1 : -1)) {
-                        bool choose = false;
-                        int mod = ((p - Cnote) + 1200) % 12;
-                        switch (glissandoStyle) {
-                        case GlissandoStyle::CHROMATIC:
-                            choose = true;
-                            break;
-                        case GlissandoStyle::WHITE_KEYS:                   // white note
-                            choose = (whitenotes.find(mod) != whitenotes.end());
-                            break;
-                        case GlissandoStyle::BLACK_KEYS:                   // black note
-                            choose =  (blacknotes.find(mod) != blacknotes.end());
-                            break;
-                        default:
-                            choose = false;
-                        }
-                        if (choose) {
-                            body.push_back(p - pitchstart);
-                        }
-                    }
-                }
-                renderNoteArticulation(events, notestart, true, MScore::division, empty, body, false, true, empty, 16,
-                                       0);
-            }
+        if (spanner->type() == ElementType::GLISSANDO
+            && toGlissando(spanner)->playGlissando()
+            && glissandoPitchOffsets(spanner, body)) {
+            renderNoteArticulation(events, notestart, true, MScore::division, empty, body, false, true, empty, 16, 0);
         }
     }
 }
