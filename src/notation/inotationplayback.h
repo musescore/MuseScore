@@ -55,13 +55,12 @@ public:
     };
 
     virtual void addLoopBoundary(LoopBoundaryType boundaryType, int tick) = 0;
-    virtual void removeLoopBoundary() = 0;
-    virtual async::Channel<LoopBoundary> loopBoundaryChanged() const = 0;
+    virtual void removeLoopBoundaries() = 0;
+    virtual async::Channel<LoopBoundaries> loopBoundariesChanged() const = 0;
 
     virtual Tempo tempo(int tick) const = 0;
-
-    virtual MeasureBeat measureBeat(int tick) const = 0;
-    virtual int measureBeatToTick(const MeasureBeat& measureBeat) const = 0;
+    virtual MeasureBeat beat(int tick) const = 0;
+    virtual int beatToTick(int measureIndex, int beatIndex) const = 0;
 };
 
 using INotationPlaybackPtr = std::shared_ptr<INotationPlayback>;

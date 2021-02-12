@@ -8,11 +8,6 @@ Row {
     property date time // format: h:mm:ss:ms
     signal timeEdited(var newTime)
 
-    property int maxHours: 9
-    property int maxMinutes: 60
-    property int maxSeconds: 60
-    property int maxMilliseconds: 9
-
     property var font: ui.theme.tabFont
 
     spacing: 4
@@ -20,7 +15,7 @@ Row {
     opacity: enabled ? 1 : ui.theme.itemOpacityDisabled
 
     NumberInputField {
-        maxValue: root.maxHours
+        maxValue: 9
         value: root.time.getHours()
 
         font: root.font
@@ -39,7 +34,7 @@ Row {
     }
 
     NumberInputField {
-        maxValue: root.maxMinutes
+        maxValue: 60
         value: root.time.getMinutes()
 
         font: root.font
@@ -58,7 +53,7 @@ Row {
     }
 
     NumberInputField {
-        maxValue: root.maxSeconds
+        maxValue: 60
         value: root.time.getSeconds()
 
         font: root.font
@@ -77,7 +72,7 @@ Row {
     }
 
     NumberInputField {
-        maxValue: root.maxMilliseconds
+        maxValue: 9
         value: root.time.getMilliseconds()
 
         font: root.font

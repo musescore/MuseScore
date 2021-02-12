@@ -79,12 +79,12 @@ void NotationPlayback::init()
         if (Ms::POS::CURRENT == pos) {
             m_playPositionTickChanged.send(tick);
         } else {
-            LoopBoundary boundary;
-            boundary.loopInTick = score()->loopInTick().ticks();
-            boundary.loopOutTick = score()->loopOutTick().ticks();
-            boundary.loopInRect = loopBoundaryRectByTick(LoopBoundaryType::LoopIn, boundary.loopInTick);
-            boundary.loopOutRect = loopBoundaryRectByTick(LoopBoundaryType::LoopOut, boundary.loopOutTick);
-            m_loopBoundaryChanged.send(boundary);
+            LoopBoundaries boundaries;
+            boundaries.loopInTick = score()->loopInTick().ticks();
+            boundaries.loopOutTick = score()->loopOutTick().ticks();
+            boundaries.loopInRect = loopBoundaryRectByTick(LoopBoundaryType::LoopIn, boundaries.loopInTick);
+            boundaries.loopOutRect = loopBoundaryRectByTick(LoopBoundaryType::LoopOut, boundaries.loopOutTick);
+            m_loopBoundariesChanged.send(boundaries);
         }
     });
 }
@@ -616,7 +616,7 @@ void NotationPlayback::addLoopOut(int _tick)
     score()->setLoopOutTick(tick);
 }
 
-void NotationPlayback::removeLoopBoundary()
+void NotationPlayback::removeLoopBoundaries()
 {
     Fraction null = Fraction::fromTicks(0);
     score()->setLoopInTick(null);
@@ -703,9 +703,9 @@ QRect NotationPlayback::loopBoundaryRectByTick(LoopBoundaryType boundaryType, in
     return QRect(x, y, width, height);
 }
 
-mu::async::Channel<LoopBoundary> NotationPlayback::loopBoundaryChanged() const
+mu::async::Channel<LoopBoundaries> NotationPlayback::loopBoundariesChanged() const
 {
-    return m_loopBoundaryChanged;
+    return m_loopBoundariesChanged;
 }
 
 Tempo NotationPlayback::tempo(int tick) const
@@ -746,7 +746,7 @@ const Ms::TempoText* NotationPlayback::tempoText(int _tick) const
     return result;
 }
 
-MeasureBeat NotationPlayback::measureBeat(int tick) const
+MeasureBeat NotationPlayback::beat(int tick) const
 {
     MeasureBeat measureBeat;
 
@@ -761,7 +761,7 @@ MeasureBeat NotationPlayback::measureBeat(int tick) const
     return measureBeat;
 }
 
-int NotationPlayback::measureBeatToTick(const MeasureBeat& measureBeat) const
+int NotationPlayback::beatToTick(int measureIndex, int beatIndex) const
 {
-    return score() ? score()->sigmap()->bar2tick(measureBeat.measureIndex, measureBeat.beatIndex) : 0;
+    return score() ? score()->sigmap()->bar2tick(measureIndex, beatIndex) : 0;
 }

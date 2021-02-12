@@ -85,11 +85,6 @@ bool NoteInputBarCustomiseModel::moveRows(const QModelIndex& sourceParent, int s
     return true;
 }
 
-static bool containsAction(const ActionCodeList& toolbarActionCodes, const ActionCode& actionCode)
-{
-    return std::find(toolbarActionCodes.begin(), toolbarActionCodes.end(), actionCode) != toolbarActionCodes.end();
-}
-
 static std::optional<size_t> indexOf(const ActionList& actions, const ActionCode& actionCode)
 {
     for (size_t i = 0; i < actions.size(); ++i) {

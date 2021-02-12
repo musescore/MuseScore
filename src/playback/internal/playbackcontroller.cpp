@@ -40,11 +40,6 @@ static const ActionCode COUNT_IN_CODE("countin");
 static const ActionCode PAN_CODE("pan");
 static const ActionCode REPEAT_CODE("repeat");
 
-uint64_t secondsToMilliseconds(float seconds)
-{
-    return seconds * 1000;
-}
-
 void PlaybackController::init()
 {
     dispatcher()->reg(this, PLAY_CODE, this, &PlaybackController::togglePlay);
@@ -169,7 +164,7 @@ void PlaybackController::onNotationChanged()
             seek(tick);
         });
 
-        m_notation->playback()->loopBoundaryChanged().onReceive(this, [this](const LoopBoundary& boundary) {
+        m_notation->playback()->loopBoundariesChanged().onReceive(this, [this](const LoopBoundaries& boundary) {
             setLoop(boundary);
         });
     }
@@ -251,36 +246,36 @@ void PlaybackController::resume()
 
 void PlaybackController::togglePlayRepeats()
 {
-    bool playRepeatsEnabled = configuration()->isPlayRepeatsEnabled();
-    configuration()->setIsPlayRepeatsEnabled(!playRepeatsEnabled);
+    bool playRepeatsEnabled = notationConfiguration()->isPlayRepeatsEnabled();
+    notationConfiguration()->setIsPlayRepeatsEnabled(!playRepeatsEnabled);
     notifyActionEnabledChanged(REPEAT_CODE);
 }
 
 void PlaybackController::toggleAutomaticallyPan()
 {
-    bool panEnabled = configuration()->isAutomaticallyPanEnabled();
-    configuration()->setIsAutomaticallyPanEnabled(!panEnabled);
+    bool panEnabled = notationConfiguration()->isAutomaticallyPanEnabled();
+    notationConfiguration()->setIsAutomaticallyPanEnabled(!panEnabled);
     notifyActionEnabledChanged(PAN_CODE);
 }
 
 void PlaybackController::toggleMetronome()
 {
-    bool metronomeEnabled = configuration()->isMetronomeEnabled();
-    configuration()->setIsMetronomeEnabled(!metronomeEnabled);
+    bool metronomeEnabled = notationConfiguration()->isMetronomeEnabled();
+    notationConfiguration()->setIsMetronomeEnabled(!metronomeEnabled);
     notifyActionEnabledChanged(METRONOME_CODE);
 }
 
 void PlaybackController::toggleMidiInput()
 {
-    bool midiInputEnabled = configuration()->isMidiInputEnabled();
-    configuration()->setIsMidiInputEnabled(!midiInputEnabled);
+    bool midiInputEnabled = notationConfiguration()->isMidiInputEnabled();
+    notationConfiguration()->setIsMidiInputEnabled(!midiInputEnabled);
     notifyActionEnabledChanged(MIDI_ON_CODE);
 }
 
 void PlaybackController::toggleCountIn()
 {
-    bool countInEnabled = configuration()->isCountInEnabled();
-    configuration()->setIsCountInEnabled(!countInEnabled);
+    bool countInEnabled = notationConfiguration()->isCountInEnabled();
+    notationConfiguration()->setIsCountInEnabled(!countInEnabled);
     notifyActionEnabledChanged(COUNT_IN_CODE);
 }
 
@@ -318,7 +313,7 @@ void PlaybackController::addLoopBoundary(LoopBoundaryType type)
     }
 }
 
-void PlaybackController::setLoop(const LoopBoundary& boundary)
+void PlaybackController::setLoop(const LoopBoundaries& boundary)
 {
     if (boundary.isNull()) {
         unsetLoop();
@@ -339,7 +334,7 @@ void PlaybackController::unsetLoop()
     if (playback() && m_isPlaybackLooped) {
         m_isPlaybackLooped = false;
         sequencer()->unsetLoop();
-        playback()->removeLoopBoundary();
+        playback()->removeLoopBoundaries();
         notifyActionEnabledChanged(LOOP_CODE);
     }
 }
@@ -353,11 +348,11 @@ bool PlaybackController::isActionEnabled(const ActionCode& actionCode) const
 {
     QMap<std::string, bool> isEnabled {
         { LOOP_CODE, m_isPlaybackLooped },
-        { MIDI_ON_CODE, configuration()->isMidiInputEnabled() },
-        { REPEAT_CODE, configuration()->isPlayRepeatsEnabled() },
-        { PAN_CODE, configuration()->isAutomaticallyPanEnabled() },
-        { METRONOME_CODE, configuration()->isMetronomeEnabled() },
-        { COUNT_IN_CODE, configuration()->isCountInEnabled() }
+        { MIDI_ON_CODE, notationConfiguration()->isMidiInputEnabled() },
+        { REPEAT_CODE, notationConfiguration()->isPlayRepeatsEnabled() },
+        { PAN_CODE, notationConfiguration()->isAutomaticallyPanEnabled() },
+        { METRONOME_CODE, notationConfiguration()->isMetronomeEnabled() },
+        { COUNT_IN_CODE, notationConfiguration()->isCountInEnabled() }
     };
 
     return isEnabled[actionCode];
@@ -370,7 +365,7 @@ Channel<ActionCode> PlaybackController::actionEnabledChanged() const
 
 QTime PlaybackController::totalPlayTime() const
 {
-    return playback() ? playback()->totalPlayTime() : QTime(0, 0, 0, 0);
+    return playback() ? playback()->totalPlayTime() : ZERO_TIME;
 }
 
 Tempo PlaybackController::currentTempo() const
@@ -380,16 +375,16 @@ Tempo PlaybackController::currentTempo() const
 
 MeasureBeat PlaybackController::currentMeasureBeat() const
 {
-    return playback() ? playback()->measureBeat(m_tickPlayed.val) : MeasureBeat();
+    return playback() ? playback()->beat(m_tickPlayed.val) : MeasureBeat();
 }
 
-uint64_t PlaybackController::measureBeatToMilliseconds(const MeasureBeat& measureBeat) const
+uint64_t PlaybackController::beatToMilliseconds(int measureIndex, int beatIndex) const
 {
     if (!playback()) {
         return 0;
     }
 
-    int tick = playback()->measureBeatToTick(measureBeat);
+    int tick = playback()->beatToTick(measureIndex, beatIndex);
     uint64_t milliseconds = secondsToMilliseconds(playback()->tickToSec(tick));
 
     return milliseconds;

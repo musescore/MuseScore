@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2020 MuseScore BVBA and others
+//  Copyright (C) 2021 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -74,6 +74,11 @@ void PlaybackSettingsModel::load()
     beginResetModel();
     m_items.clear();
 
+    ActionList settingsActions = PlaybackActions::settingsActions();
+    ActionList loopBoundaryActions = PlaybackActions::loopBoundaryActions();
+    ActionList allActions(settingsActions.begin(), settingsActions.end());
+    allActions.insert(allActions.end(), loopBoundaryActions.begin(), loopBoundaryActions.end());
+
     for (const ActionItem& action : PlaybackActions::settingsActions()) {
         MenuItem item(action);
         item.section = resolveSection(action.code);
@@ -102,9 +107,9 @@ void PlaybackSettingsModel::updateCheckedState(const ActionCode& actionCode)
     }
 }
 
-std::string PlaybackSettingsModel::resolveSection(const ActionCode& actionCode) const
+std::string PlaybackSettingsModel::resolveSection(const actions::ActionCode& actionCode) const
 {
-    return actionCode.find("loop") == std::string::npos ? "main" : "loop";
+    return containsAction(PlaybackActions::loopBoundaryActions(), actionCode) ? "loop" : "main";
 }
 
 bool PlaybackSettingsModel::isActionEnabled(const ActionCode& actionCode) const
@@ -114,5 +119,5 @@ bool PlaybackSettingsModel::isActionEnabled(const ActionCode& actionCode) const
 
 void PlaybackSettingsModel::handleAction(const QString& actionCode)
 {
-    dispatcher()->dispatch(actionCode.toStdString());
+    dispatcher()->dispatch(actions::codeFromQString(actionCode));
 }
