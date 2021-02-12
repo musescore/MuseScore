@@ -23,6 +23,9 @@
 #include <QQuickItem>
 #include <QQuickView>
 
+#include "ui/imainwindow.h"
+#include "modularity/ioc.h"
+
 namespace mu::uicomponents {
 class PopupView : public QQuickItem
 {
@@ -43,6 +46,8 @@ class PopupView : public QQuickItem
     Q_CLASSINFO("DefaultProperty", "contentItem")
 
     Q_ENUMS(ClosePolicy)
+
+    INJECT(uicomponents, ui::IMainWindow, mainWindow)
 
 public:
     enum ClosePolicy {

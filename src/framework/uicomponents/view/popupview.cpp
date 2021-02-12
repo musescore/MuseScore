@@ -23,6 +23,7 @@
 #include <QUrl>
 #include <QQmlContext>
 #include <QApplication>
+#include <QMainWindow>
 
 using namespace mu::uicomponents;
 
@@ -218,7 +219,7 @@ bool PopupView::eventFilter(QObject* watched, QEvent* event)
         mousePressEvent(static_cast<QMouseEvent*>(event));
     } else if (QEvent::MouseButtonRelease == event->type()) {
         mouseReleaseEvent(static_cast<QMouseEvent*>(event));
-    } else if (QEvent::Close == event->type()) {
+    } else if (QEvent::Close == event->type() && watched == mainWindow()->qMainWindow()) {
         close();
     }
 
