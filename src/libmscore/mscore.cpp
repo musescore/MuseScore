@@ -99,8 +99,11 @@ QColor MScore::dropColor;
 bool MScore::warnPitchRange;
 int MScore::pedalEventsMinTicks;
 
+bool MScore::harmonyPlayDisableCompatibility;
+bool MScore::harmonyPlayDisableNew;
 bool MScore::playRepeats;
 bool MScore::panPlayback;
+int MScore::playbackSpeedIncrement;
 qreal MScore::nudgeStep;
 qreal MScore::nudgeStep10;
 qreal MScore::nudgeStep50;
@@ -293,6 +296,7 @@ void MScore::init()
     pedalEventsMinTicks = 1;
     playRepeats         = true;
     panPlayback         = true;
+    playbackSpeedIncrement = 5;
 
     lastError           = "";
 
