@@ -61,7 +61,7 @@ void RpcSequencer::setup()
             });
 
             bindMethod(calls, "positionChanged", [this](const Args& args) {
-                m_playbackPosition = args.arg<float>(0);
+                m_playbackPositionInSeconds = args.arg<float>(0);
                 m_positionChanged.notify();
             });
 
@@ -174,7 +174,7 @@ async::Notification RpcSequencer::positionChanged() const
 
 float RpcSequencer::playbackPositionInSeconds() const
 {
-    return m_playbackPosition;
+    return m_playbackPositionInSeconds;
 }
 
 void RpcSequencer::instantlyPlayMidi(const midi::MidiData& data)
