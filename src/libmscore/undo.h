@@ -364,6 +364,23 @@ public:
 };
 
 //---------------------------------------------------------
+//   MapExcerptTracks
+//---------------------------------------------------------
+
+class MapExcerptTracks : public UndoCommand
+{
+    Score* score;
+    QList<int> list;
+    QList<int> rlist;
+
+public:
+    MapExcerptTracks(Score*, QList<int>);
+    virtual void undo(EditData*) override;
+    virtual void redo(EditData*) override;
+    UNDO_NAME("MapExcerptTracks")
+};
+
+//---------------------------------------------------------
 //   ChangePitch
 //---------------------------------------------------------
 

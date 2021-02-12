@@ -2791,6 +2791,8 @@ void Score::sortStaves(QList<int>& dst)
     _parts.clear();
     Part* curPart = 0;
     QList<Staff*> dl;
+    QMap<int, int> trackMap;
+    int track = 0;
     foreach (int idx, dst) {
         Staff* staff = _staves[idx];
         if (staff->part() != curPart) {
@@ -2800,6 +2802,9 @@ void Score::sortStaves(QList<int>& dst)
         }
         curPart->staves()->push_back(staff);
         dl.push_back(staff);
+        for (int itrack = 0; itrack < VOICES; ++itrack) {
+            trackMap.insert(idx * VOICES + itrack, track++);
+        }
     }
     _staves = dl;
 
@@ -2825,6 +2830,25 @@ void Score::sortStaves(QList<int>& dst)
         }
     }
     setLayoutAll();
+}
+
+//---------------------------------------------------------
+//   mapExcerptTracks
+//---------------------------------------------------------
+
+void Score::mapExcerptTracks(QList<int>& dst)
+{
+    for (Excerpt* e : excerpts()) {
+        QMultiMap<int, int> tr = e->tracks();
+        QMultiMap<int, int> tracks;
+        for (QMap<int, int>::iterator it = tr.begin(); it != tr.end(); ++it) {
+            int prvStaffIdx = it.key() / VOICES;
+            int curStaffIdx = dst.indexOf(prvStaffIdx);
+            int offset = (curStaffIdx - prvStaffIdx) * VOICES;
+            tracks.insert(it.key() + offset, it.value());
+        }
+        e->tracks() = tracks;
+    }
 }
 
 //---------------------------------------------------------
