@@ -1158,6 +1158,7 @@ void Measure::moveTicks(const Fraction& diff)
                     ChordRest* cr = toChordRest(e);
                     Tuplet* tuplet = cr->tuplet();
                     if (tuplet && tuplets.count(tuplet) == 0) {
+                        tuplet->setTick(tuplet->tick() + diff);
                         tuplets.insert(tuplet);
                     }
                 }
