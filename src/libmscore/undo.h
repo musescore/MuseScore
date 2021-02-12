@@ -1519,8 +1519,7 @@ class FretBarre : public UndoCommand
 
 public:
     FretBarre(FretDiagram* d, int _string, int _fret, bool _add = false)
-        : diagram(d), string(_string), fret(_fret),
-        add(_add) {}
+        : diagram(d), string(_string), fret(_fret), add(_add) {}
     UNDO_NAME("FretBarre")
 };
 
@@ -1562,8 +1561,7 @@ class MoveTremolo : public UndoCommand
 
 public:
     MoveTremolo(Score* s, Fraction c1, Fraction c2, Tremolo* tr, int t)
-        : score(s), chord1Tick(c1), chord2Tick(c2),
-        trem(tr), track(t) {}
+        : score(s), chord1Tick(c1), chord2Tick(c2), trem(tr), track(t) {}
     UNDO_NAME("MoveTremolo")
 };
 
