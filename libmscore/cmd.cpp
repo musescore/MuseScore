@@ -2647,6 +2647,34 @@ void Score::cmdMirrorNoteHead()
 
 void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
       {
+      if (selection().isRange()) {
+            if (!selection().canCopy())
+                  return;
+            QString mimeType = selection().mimeType();
+            if (mimeType.isEmpty())
+                  return;
+            ChordRest* firstCR = selection().firstChordRest();
+            if (firstCR->isGrace())
+                  firstCR = toChordRest(firstCR->parent());
+            TDuration initialDuration = firstCR->ticks();
+            TDuration d = initialDuration.shiftRetainDots(nSteps, stepDotted);
+            if (!d.isValid())
+                  return;
+            Fraction scale = d.ticks() / initialDuration.ticks();
+            for (ChordRest* cr : getSelectedChordRests()) {
+                  Fraction newTicks = cr->ticks() * scale;
+                  if (newTicks < Fraction(1, 1024) || (stepDotted && cr->durationType().dots() != firstCR->durationType().dots() && !cr->isGrace()))
+                        return;
+                  }
+            QMimeData* mimeData = new QMimeData;
+            mimeData->setData(mimeType, selection().mimeData());
+            QByteArray data(mimeData->data(mimeStaffListFormat));
+            XmlReader e(data);
+            e.setPasteMode(true);
+            deleteRange(selection().startSegment(), selection().endSegment(), staff2track(selection().staffStart()), staff2track(selection().staffEnd()), selectionFilter());
+            pasteStaff(e, selection().startSegment(), selection().staffStart(), scale);
+            return;
+            }
       Element* el = selection().element();
       if (el == 0)
             return;
