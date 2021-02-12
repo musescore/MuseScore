@@ -1326,8 +1326,8 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
             if (e->generated()) {
                 continue;
             }
-            if (forceTimeSig && track2voice(track) == 0 && segment->segmentType() == SegmentType::ChordRest
-                && !timeSigWritten && !crWritten) {
+            if (forceTimeSig && track2voice(track) == 0 && segment->segmentType() == SegmentType::ChordRest && !timeSigWritten
+                && !crWritten) {
                 // Ensure that <voice> tag is open
                 voiceTagWritten |= writeVoiceMove(xml, segment, startTick, track, &lastTrackWritten);
                 // we will miss a key sig!
