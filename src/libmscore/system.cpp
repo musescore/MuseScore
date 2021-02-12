@@ -1497,10 +1497,7 @@ qreal System::bottomDistance(int staffIdx, const SkylineLine& s) const
 {
     Q_ASSERT(!vbox());
     Q_ASSERT(s.isNorth());
-    // in continuous view, we only build a partial skyline for performance reasons
-    // this means we cannot expect the minDistance calculation to produce meaningful results
-    // so just give up on autoplace for spanners in continuous view
-    // (or any other calculations that rely on this value)
+    // see note on topDistance() above
     if (score()->lineMode()) {
         return 0.0;
     }
