@@ -565,6 +565,7 @@ void populateRhythmicList(std::vector<TDuration>* dList, const Fraction& l, bool
       if ((startLevel < 0) || (endLevel < 0) || (strongestLevelCrossed < 0)) {
             // Beyond maximum subbeat level so just split into largest possible durations.
             std::vector<TDuration> dList2 = toDurationList(l, maxDots > 0, maxDots, false);
+            std::reverse(dList2.begin(), dList2.end());
             dList->insert(dList->end(), dList2.begin(), dList2.end());
             return;
             }
