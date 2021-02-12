@@ -665,6 +665,8 @@ void Score::transposeSemitone(int step)
     if (!transpose(TransposeMode::BY_INTERVAL, dir, Key::C, interval, true, true, false)) {
         qDebug("Score::transposeSemitone: failed");
         // TODO: set error message
+    } else {
+        setSelectionChanged(true);
     }
 }
 
