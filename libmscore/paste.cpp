@@ -649,8 +649,7 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t, const Interval& src
                                           nl2[i]->setTieFor(nl1[i]->tieFor());
                                           tie2->setStartNote(nl2[i]);
                                           }
-                                    nl1[i]->setTieFor(tie);
-                                    nl2[i]->setTieBack(tie);
+                                    undoAddElement(tie);
                                     }
                         c = c2;
                         firstpart = false;
