@@ -3408,6 +3408,11 @@ static void readStyle(MStyle* style, XmlReader& e)
         }
     }
 
+    bool disableHarmonyPlay = MScore::harmonyPlayDisableCompatibility && !MScore::testMode;
+    if (disableHarmonyPlay) {
+        style->set(Sid::harmonyPlay, false);
+    }
+
     // if we just specified a new chord description file
     // and didn't encounter a ChordList tag
     // then load the chord description file
