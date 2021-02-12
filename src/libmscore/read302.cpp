@@ -272,6 +272,17 @@ bool Score::read(XmlReader& e)
                 scoreOrders.addScoreOrder(order);
                 setScoreOrder(order);
             }
+        } else {
+            defined = scoreOrders.findById(order->getId());
+            if (defined) {
+                // The order in the score file is already available, resuse it.
+                setScoreOrder(defined);
+                delete order;
+            } else {
+                // The order in the score file is new, add it to the score orders.
+                scoreOrders.addScoreOrder(order);
+                setScoreOrder(order);
+            }
         }
     }
 
