@@ -39,6 +39,7 @@ using namespace mu::ui;
 using namespace mu::actions;
 
 static std::shared_ptr<PlaybackController> s_playbackController = std::make_shared<PlaybackController>();
+static std::shared_ptr<PlaybackConfiguration> s_configuration = std::make_shared<PlaybackConfiguration>();
 
 static void playback_init_qrc()
 {
@@ -53,7 +54,7 @@ std::string PlaybackModule::moduleName() const
 void PlaybackModule::registerExports()
 {
     ioc()->registerExport<IPlaybackController>(moduleName(), s_playbackController);
-    ioc()->registerExport<IPlaybackConfiguration>(moduleName(), new PlaybackConfiguration());
+    ioc()->registerExport<IPlaybackConfiguration>(moduleName(), s_configuration);
 }
 
 void PlaybackModule::resolveImports()
@@ -82,5 +83,7 @@ void PlaybackModule::onInit(const IApplication::RunMode& mode)
     if (IApplication::RunMode::Editor != mode) {
         return;
     }
+
+    s_configuration->init();
     s_playbackController->init();
 }

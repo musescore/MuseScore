@@ -602,8 +602,8 @@ void NotationPlayback::addLoopIn(int _tick)
 
 void NotationPlayback::addLoopOut(int _tick)
 {
-    Fraction tick = _tick == BoundaryTick::SelectedNoteTick ? score()->pos() + score()->inputState().ticks() :
-                                                              Fraction::fromTicks(_tick);
+    Fraction tick = _tick == BoundaryTick::SelectedNoteTick ? score()->pos() + score()->inputState().ticks()
+                    : Fraction::fromTicks(_tick);
 
     if (tick <= score()->loopInTick()) { // If Out pos <= In pos, reset In pos to beginning of score
         score()->setLoopInTick(Fraction(0, 1));

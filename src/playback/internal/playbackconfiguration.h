@@ -30,8 +30,12 @@ class PlaybackConfiguration : public IPlaybackConfiguration
     INJECT(playback, notation::INotationConfiguration, notationConfiguration)
 
 public:
+    void init();
+
     bool isPlayElementOnClick() const override;
     bool isPlayHarmonyOnClick() const override;
+
+    PlaybackCursorType cursorType() const override;
 };
 }
 

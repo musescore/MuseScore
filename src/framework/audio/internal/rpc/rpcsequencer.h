@@ -62,7 +62,7 @@ private:
     Status m_status = Status::STOPED;
     async::Channel<Status> m_statusChanged;
     async::Notification m_positionChanged;
-    float m_playbackPosition = 0.f;
+    float m_playbackPositionInSeconds = 0.f;
 
     mutable std::map<TrackID, async::Channel<midi::tick_t> > m_midiTickPlayed;
 };

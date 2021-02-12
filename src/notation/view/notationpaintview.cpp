@@ -750,7 +750,7 @@ void NotationPaintView::onPlayingChanged()
 
     if (isPlaying) {
         float playPosSec = playbackController()->playbackPositionInSeconds();
-        int tick = notationPlayback()->secToTick(playPosSec);
+        uint32_t tick = notationPlayback()->secToTick(playPosSec);
         movePlaybackCursor(tick);
     } else {
         update();

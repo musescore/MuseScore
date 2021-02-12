@@ -58,27 +58,26 @@ void PlaybackController::init()
         onNotationChanged();
     });
 
-    sequencer()->statusChanged().onReceive(this, [this](const audio::ISequencer::Status&) {
+    sequencer()->statusChanged().onReceive(this, [this](const ISequencer::Status&) {
         m_isPlayingChanged.notify();
     });
+
     sequencer()->initMIDITrack(MIDI_TRACK);
 
-    switch (m_cursorType) {
-    case SMOOTH:
-        sequencer()->positionChanged().onNotify(this, [this]() {
-            if (m_notation) {
-                float seconds = sequencer()->playbackPositionInSeconds();
-                int ticks = m_notation->playback()->secToTick(seconds);
-                m_tickPlayed.set(ticks);
-            }
-        });
-        break;
+    sequencer()->positionChanged().onNotify(this, [this]() {
+        if (configuration()->cursorType() == PlaybackCursorType::SMOOTH) {
+            float seconds = sequencer()->playbackPositionInSeconds();
+            int tick = m_notation->playback()->secToTick(seconds);
+            m_tickPlayed.set(tick);
+        }
 
-    case STEPPED:
+        m_playbackPositionChanged.notify();
+    });
+
+    if (configuration()->cursorType() == PlaybackCursorType::STEPPED) {
         sequencer()->midiTickPlayed(MIDI_TRACK).onReceive(this, [this](midi::tick_t tick) {
             m_tickPlayed.set(tick);
         });
-        break;
     }
 
     m_needRewindBeforePlay = true;
@@ -109,14 +108,19 @@ Notification PlaybackController::isPlayingChanged() const
     return m_isPlayingChanged;
 }
 
-float PlaybackController::playbackPositionInSeconds() const
+Notification PlaybackController::playbackPositionChanged() const
 {
-    return sequencer()->playbackPositionInSeconds();
+    return m_playbackPositionChanged;
 }
 
 Channel<uint32_t> PlaybackController::midiTickPlayed() const
 {
     return m_tickPlayed.ch;
+}
+
+float PlaybackController::playbackPositionInSeconds() const
+{
+    return sequencer()->playbackPositionInSeconds();
 }
 
 void PlaybackController::playElementOnClick(const notation::Element* element)
@@ -373,7 +377,7 @@ Tempo PlaybackController::currentTempo() const
     return playback() ? playback()->tempo(m_tickPlayed.val) : Tempo();
 }
 
-MeasureBeat PlaybackController::currentMeasureBeat() const
+MeasureBeat PlaybackController::currentBeat() const
 {
     return playback() ? playback()->beat(m_tickPlayed.val) : MeasureBeat();
 }

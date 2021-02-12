@@ -111,15 +111,13 @@ void PlaybackToolBarModel::load()
 
     playbackController()->isPlayAllowedChanged().onNotify(this, [this]() {
         updateState();
-        updatePlayTime();
     });
 
     playbackController()->isPlayingChanged().onNotify(this, [this]() {
         updateState();
-        updatePlayTime();
     });
 
-    playbackController()->midiTickPlayed().onReceive(this, [this](uint64_t) {
+    playbackController()->playbackPositionChanged().onNotify(this, [this]() {
         updatePlayTime();
     });
 
@@ -202,7 +200,7 @@ uint64_t PlaybackToolBarModel::totalPlayTimeMilliseconds() const
 
 MeasureBeat PlaybackToolBarModel::measureBeat() const
 {
-    return playbackController()->currentMeasureBeat();
+    return playbackController()->currentBeat();
 }
 
 void PlaybackToolBarModel::updatePlayTime()
