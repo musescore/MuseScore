@@ -37,7 +37,7 @@ namespace Ms {
 //    this is the list of available score fonts
 //---------------------------------------------------------
 
-static const int FALLBACK_FONT = 0;       // Bravura
+static const int FALLBACK_FONT = 1;       // Bravura
 
 QVector<ScoreFont> ScoreFont::_scoreFonts {
     ScoreFont("Leland",     "Leland",      ":/fonts/leland/",    "Leland.otf"),
@@ -6539,7 +6539,7 @@ void ScoreFont::draw(const std::vector<SymId>& ids, QPainter* p, const QSizeF& m
     QPointF pos(_pos);
     for (SymId id : ids) {
         draw(id, p, mag, pos, scale);
-        pos.rx() += (sym(id).advance() * mag.width());
+        pos.rx() += advance(id, mag.width());
     }
 }
 
@@ -6577,7 +6577,7 @@ void initScoreFonts()
         const char* name = Sym::symNames[i];
         Sym::lnhash.insert(name, SymId(i));
         bool ok;
-        uint code = glyphNamesJson.value(name).toObject().value("codepoint").toString().mid(2).toUInt(&ok, 16);
+        uint code = glyphNamesJson.value(name).toObject().value("codepoint").toString().midRef(2).toUInt(&ok, 16);
         if (ok) {
             ScoreFont::_mainSymCodeTable[i] = code;
         } else if (MScore::debugMode) {
@@ -6950,7 +6950,7 @@ void ScoreFont::load()
                 QJsonObject jo = j.toObject();
                 if (jo.value("name") == c.altKey) {
                     Sym* sym = &_symbols[int(c.id)];
-                    int code = jo.value("codepoint").toString().mid(2).toInt(&ok, 16);
+                    int code = jo.value("codepoint").toString().midRef(2).toInt(&ok, 16);
                     if (ok) {
                         computeMetrics(sym, code);
                     }
@@ -7073,7 +7073,7 @@ const QRectF ScoreFont::bbox(SymId id, qreal mag) const
 const QRectF ScoreFont::bbox(SymId id, const QSizeF& mag) const
 {
     if (useFallbackFont(id)) {
-        return fallbackFont()->bbox(id, mag.width());
+        return fallbackFont()->bbox(id, mag);
     }
     QRectF r = sym(id).bbox();
     return QRectF(r.x() * mag.width(), r.y() * mag.height(), r.width() * mag.width(), r.height() * mag.height());
