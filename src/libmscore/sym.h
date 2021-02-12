@@ -22,6 +22,21 @@
 #include "ft2build.h"
 #include FT_FREETYPE_H
 
+// Needs to be duplicated here and in style.h since moc doesn't handle macros from #include'd files
+#ifdef SCRIPT_INTERFACE
+#define BEGIN_QT_REGISTERED_ENUM(Name) \
+    class MSQE_##Name { \
+        Q_GADGET \
+    public:
+#define END_QT_REGISTERED_ENUM(Name) \
+    Q_ENUM(Name); \
+}; \
+    using Name = MSQE_##Name::Name;
+#else
+#define BEGIN_QT_REGISTERED_ENUM(Name)
+#define END_QT_REGISTERED_ENUM(Name)
+#endif
+
 namespace Ms {
 //---------------------------------------------------------
 //   SymId
@@ -2986,7 +3001,7 @@ enum class SymId {
     braceLarge,
     braceLarger,
 
-//    MuseScore-local symbols, precomposed symbols to mimic some emmentaler glyphs
+//    MuseScore-local symbols, precomposed symbols to mimic some Emmentaler glyphs
 
     ornamentPrallMordent,
     ornamentUpPrall,
@@ -3192,6 +3207,7 @@ public:
     const QRectF bbox(SymId id, qreal mag) const;
     const QRectF bbox(const std::vector<SymId>& s, const QSizeF& mag) const;
     const QRectF bbox(const std::vector<SymId>& s, qreal mag) const;
+
     QPointF smuflAnchor(SymId symId, SmuflAnchorId anchorId, qreal mag) const;
 
     bool isValid(SymId id) const { return sym(id).isValid(); }
