@@ -160,6 +160,14 @@ enum class SaveMode
     SaveSelection
 };
 
+enum class ResettableValueType
+{
+    Stretch,
+    BeamMode,
+    ShapesAndPosition,
+    TextStyleOverriders
+};
+
 struct NoteInputState
 {
     NoteInputMethod method = NoteInputMethod::UNKNOWN;

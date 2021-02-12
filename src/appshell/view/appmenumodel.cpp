@@ -266,17 +266,17 @@ MenuItem AppMenuModel::formatItem()
     };
 
     MenuItemList formatItems {
-        makeAction("edit-style"),
-        makeAction("page-settings"), // need implement
+        makeAction("edit-style", scoreOpened()),
+        makeAction("page-settings", scoreOpened()), // need implement
         makeSeparator(),
         makeMenu(trc("appshell", "&Stretch"), stretchItems),
         makeSeparator(),
-        makeAction("reset-text-style-overrides"), // need implement
-        makeAction("reset-beammode"), // need implement
-        makeAction("reset"), // need implement
+        makeAction("reset-text-style-overrides", scoreOpened()),
+        makeAction("reset-beammode", scoreOpened(), !hasSelectionOnScore() || selectedRangeOnScore()),
+        makeAction("reset", scoreOpened(), hasSelectionOnScore()),
         makeSeparator(),
-        makeAction("load-style"), // need implement
-        makeAction("save-style") // need implement
+        makeAction("load-style", scoreOpened()), // need implement
+        makeAction("save-style", scoreOpened()) // need implement
     };
 
     return makeMenu(trc("appshell", "F&ormat"), formatItems, scoreOpened());
@@ -617,6 +617,11 @@ bool AppMenuModel::selectedElementOnScore() const
 bool AppMenuModel::selectedRangeOnScore() const
 {
     return notationSelection() ? notationSelection()->isRange() : false;
+}
+
+bool AppMenuModel::hasSelectionOnScore() const
+{
+    return notationSelection() ? !notationSelection()->isNone() : false;
 }
 
 bool AppMenuModel::isNoteInputMode() const

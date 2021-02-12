@@ -119,7 +119,8 @@ public:
     virtual void addFiguredBass() = 0;
 
     virtual void addStretch(qreal value) = 0;
-    virtual void resetStretch() = 0;
+
+    virtual void resetToDefault(ResettableValueType type) = 0;
 };
 
 using INotationInteractionPtr = std::shared_ptr<INotationInteraction>;

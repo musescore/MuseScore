@@ -101,6 +101,7 @@ private:
     bool canRedo() const;
     bool selectedElementOnScore() const;
     bool selectedRangeOnScore() const;
+    bool hasSelectionOnScore() const;
     bool isNoteInputMode() const;
 
     uicomponents::MenuItemList m_items;

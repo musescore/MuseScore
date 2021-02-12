@@ -136,7 +136,8 @@ public:
     void addFiguredBass() override;
 
     void addStretch(qreal value) override;
-    void resetStretch() override;
+
+    void resetToDefault(ResettableValueType type) override;
 
 private:
     Ms::Score* score() const;
@@ -186,6 +187,11 @@ private:
 
     void updateGripEdit(const std::vector<Element*>& elements);
     void resetGripEdit();
+
+    void resetStretch();
+    void resetTextStyleOverrides();
+    void resetBeamMode();
+    void resetShapesAndPosition();
 
     struct HitMeasureData
     {
