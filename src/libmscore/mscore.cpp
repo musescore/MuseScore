@@ -412,7 +412,7 @@ bool MScore::readDefaultStyle(QString file)
     if (!f.open(QIODevice::ReadOnly)) {
         return false;
     }
-    bool rv = style.load(&f);
+    bool rv = style.load(&f, true);
     if (rv) {
         setDefaultStyle(style);
     }
