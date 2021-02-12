@@ -522,7 +522,6 @@ private:
     ChordRest* prevMeasure(ChordRest* element, bool mmRest = false);
     void cmdSetBeamMode(Beam::Mode);
     void cmdResetAllStyle();
-    void cmdResetTextStyleOverrides();
 
     Note* getSelectedNote();
     ChordRest* upStaff(ChordRest* cr);
@@ -533,8 +532,6 @@ private:
     void padToggle(Pad p, const EditData& ed);
     void addTempo();
     void addMetronome();
-
-    void cmdResetBeamMode();
 
     void cmdInsertClef(ClefType);
     void cmdAddGrace(NoteType, int);
@@ -671,6 +668,8 @@ public:
     bool makeMeasureRepeatGroup(Measure*, int numMeasures, int staffIdx);
     void cmdFlip();
     void resetUserStretch();
+    void cmdResetBeamMode();
+    void cmdResetTextStyleOverrides();
 
     void addRemoveBreaks(int interval, bool lock);
 
@@ -1329,7 +1328,7 @@ static inline const Score* toScore(const ScoreElement* e)
 class MasterScore : public Score
 {
     Q_OBJECT
-    TimeSigMap* _sigmap;
+    TimeSigMap * _sigmap;
     TempoMap* _tempomap;
     RepeatList* _repeatList;
     RepeatList* _repeatList2;

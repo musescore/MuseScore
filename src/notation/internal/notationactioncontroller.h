@@ -49,8 +49,6 @@ private:
     INotationSelectionPtr currentNotationSelection() const;
     INotationNoteInputPtr currentNotationNoteInput() const;
 
-    void resetState();
-
     void toggleNoteInputMethod(NoteInputMethod method);
     void addNote(NoteName note, NoteAddingMode addingMode);
     void addText(TextType type);
@@ -103,7 +101,12 @@ private:
     void addAnchoredNoteLine();
 
     void addStretch(qreal value);
+
+    void resetState();
     void resetStretch();
+    void resetTextStyleOverrides();
+    void resetBeamMode();
+    void resetShapesAndPosition();
 
     void openPageStyle();
     void openStaffProperties();

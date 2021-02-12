@@ -199,7 +199,11 @@ void NotationActionController::init()
 
     dispatcher()->reg(this, "stretch-", [this]() { addStretch(-STRETCH_STEP); });
     dispatcher()->reg(this, "stretch+", [this]() { addStretch(STRETCH_STEP); });
+
     dispatcher()->reg(this, "reset-stretch", this, &NotationActionController::resetStretch);
+    dispatcher()->reg(this, "reset-text-style-overrides", this, &NotationActionController::resetTextStyleOverrides);
+    dispatcher()->reg(this, "reset-beammode", this, &NotationActionController::resetBeamMode);
+    dispatcher()->reg(this, "reset", this, &NotationActionController::resetShapesAndPosition);
 
     for (int i = MIN_NOTES_INTERVAL; i <= MAX_NOTES_INTERVAL; ++i) {
         if (isNotesIntervalValid(i)) {
@@ -905,7 +909,12 @@ void NotationActionController::addStretch(qreal value)
         return;
     }
 
-    if (!interaction->selection()->isRange()) {
+    auto selection = currentNotationSelection();
+    if (!selection) {
+        return;
+    }
+
+    if (!selection->isRange()) {
         return;
     }
 
@@ -919,11 +928,62 @@ void NotationActionController::resetStretch()
         return;
     }
 
-    if (!interaction->selection()->isRange()) {
+    auto selection = currentNotationSelection();
+    if (!selection) {
         return;
     }
 
-    interaction->resetStretch();
+    if (!selection->isRange()) {
+        return;
+    }
+
+    interaction->resetToDefault(ResettableValueType::Stretch);
+}
+
+void NotationActionController::resetTextStyleOverrides()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->resetToDefault(ResettableValueType::TextStyleOverriders);
+}
+
+void NotationActionController::resetBeamMode()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    auto selection = currentNotationSelection();
+    if (!selection) {
+        return;
+    }
+
+    if (selection->isNone() || selection->isRange()) {
+        interaction->resetToDefault(ResettableValueType::BeamMode);
+    }
+}
+
+void NotationActionController::resetShapesAndPosition()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    auto selection = currentNotationSelection();
+    if (!selection) {
+        return;
+    }
+
+    if (selection->isNone()) {
+        return;
+    }
+
+    interaction->resetToDefault(ResettableValueType::TextStyleOverriders);
 }
 
 void NotationActionController::selectMeasuresCountAndInsert()
