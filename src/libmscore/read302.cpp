@@ -34,6 +34,18 @@ namespace Ms {
 
 bool Score::read(XmlReader& e)
 {
+    // HACK
+    // style setting compatibility settings for minor versions
+    // this allows new style settings to be added
+    // with different default values for older vs newer scores
+    // note: older templates get the default values for older scores
+    // these can be forced back in MuseScore::getNewFile() if necessary
+    QString programVersion = masterScore()->mscoreVersion();
+    bool disableHarmonyPlay = MScore::harmonyPlayDisableCompatibility && !MScore::testMode;
+    if (!programVersion.isEmpty() && programVersion < "3.5" && disableHarmonyPlay) {
+        style().set(Sid::harmonyPlay, false);
+    }
+
     ScoreOrder* order { nullptr };
     while (e.readNextStartElement()) {
         e.setTrack(-1);
