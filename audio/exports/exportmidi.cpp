@@ -33,11 +33,10 @@ namespace Ms {
 //   writeHeader
 //---------------------------------------------------------
 
-void ExportMidi::writeHeader()
+void ExportMidi::writeHeader(MidiTrack& tempoTrack)
       {
       if (mf.tracks().isEmpty())
             return;
-      MidiTrack &track  = mf.tracks().front();
 #if 0 // TODO
       MeasureBase* measure  = cs->first();
 
@@ -86,7 +85,7 @@ void ExportMidi::writeHeader()
       //--------------------------------------------
 
       int staffIdx = 0;
-      for (auto& track1: mf.tracks()) {
+      for (auto& track: mf.tracks()) {
             Staff* staff  = cs->staff(staffIdx);
 
             QByteArray partName = staff->partName().toUtf8();
@@ -101,7 +100,7 @@ void ExportMidi::writeHeader()
             ev.setEData(data);
             ev.setLen(len);
 
-            track1.insert(0, ev);
+            track.insert(0, ev);
 
 
             ++staffIdx;
@@ -149,7 +148,7 @@ void ExportMidi::writeHeader()
                   ev.setMetaType(META_TIME_SIGNATURE);
                   ev.setEData(data);
                   ev.setLen(4);
-                  track.insert(pauseMap.addPauseTicks(is->first + tickOffset), ev);
+                  tempoTrack.insert(pauseMap.addPauseTicks(is->first + tickOffset), ev);
                   }
             }
 
@@ -159,7 +158,7 @@ void ExportMidi::writeHeader()
       //---------------------------------------------------
 
       staffIdx = 0;
-      for (auto& track1: mf.tracks()) {
+      for (auto& track: mf.tracks()) {
             Staff* staff  = cs->staff(staffIdx);
             KeyList* keys = staff->keyList();
 
@@ -183,7 +182,7 @@ void ExportMidi::writeHeader()
                         data[1]   = 0;  // major
                         ev.setEData(data);
                         int tick = ik->first + tickOffset;
-                        track1.insert(pauseMap.addPauseTicks(tick), ev);
+                        track.insert(pauseMap.addPauseTicks(tick), ev);
                         if (tick == 0)
                               initialKeySigFound = true;
                         }
@@ -200,7 +199,7 @@ void ExportMidi::writeHeader()
                   data[0]   = key;
                   data[1]   = 0;  // major
                   ev.setEData(data);
-                  track1.insert(0, ev);
+                  track.insert(0, ev);
                   }
 
             ++staffIdx;
@@ -228,7 +227,7 @@ void ExportMidi::writeHeader()
             data[1]   = tempo >> 8;
             data[2]   = tempo;
             ev.setEData(data);
-            track.insert(it->first, ev);
+            tempoTrack.insert(it->first, ev);
             }
       }
 
@@ -249,6 +248,8 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
       mf.setDivision(MScore::division);
       mf.setFormat(1);
       QList<MidiTrack>& tracks = mf.tracks();
+      MidiTrack tempoTrack;
+      tempoTrack.setOutChannel(0);
 
       for (int i = 0; i < cs->nstaves(); ++i)
             tracks.append(MidiTrack());
@@ -257,7 +258,7 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
       cs->renderMidi(&events, false, midiExpandRepeats, synthState);
 
       pauseMap.calculate(cs);
-      writeHeader();
+      writeHeader(tempoTrack);
 
       int staffIdx = 0;
       for (auto &track: tracks) {
@@ -370,6 +371,7 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
                   }
             ++staffIdx;
             }
+      tracks.prepend(tempoTrack);
       return !mf.write(device);
       }
 
