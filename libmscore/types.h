@@ -150,7 +150,7 @@ enum class ElementType {
 //---------------------------------------------------------
 // NOTE: keep this in sync with with accList array in accidentals.cpp
 
-enum class AccidentalType : unsigned char {
+enum class AccidentalType {
       ///.\{
       NONE,
       FLAT,
