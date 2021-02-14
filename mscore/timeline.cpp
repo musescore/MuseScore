@@ -2514,10 +2514,13 @@ void Timeline::updateGridFromCmdState()
 
       const bool layoutAll = layoutChanged && (cState.startTick() < Fraction(0, 1) || cState.endTick() < Fraction(0, 1));
 
-      const int startMeasure = layoutAll ? 0 : _score->tick2measure(cState.startTick())->measureIndex();
-      const int endMeasure = layoutAll ? _score->nmeasures() : (_score->tick2measure(cState.endTick())->measureIndex() + 1);
+      const Measure* startMeasure = layoutAll ? nullptr : _score->tick2measure(cState.startTick());
+      const int startMeasureIndex = startMeasure ? startMeasure->measureIndex() : 0;
 
-      updateGrid(startMeasure, endMeasure);
+      const Measure* endMeasure = layoutAll ? nullptr : _score->tick2measure(cState.endTick());
+      const int endMeasureIndex = endMeasure ? (endMeasure->measureIndex() + 1) : _score->nmeasures();
+
+      updateGrid(startMeasureIndex, endMeasureIndex);
       }
 
 //---------------------------------------------------------
