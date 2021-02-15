@@ -44,6 +44,7 @@ Item {
 
         anchors.centerIn: parent
 
+        readOnly: root.maxValue === 0
         text: privateProperties.pad(root.value)
 
         onTextEdited: {
@@ -56,6 +57,10 @@ Item {
                 newValue = parseInt(lastDigit)
             } else {
                 newValue = currentValue
+            }
+
+            if (newValue > root.maxValue) {
+                newValue = value
             }
 
             text = privateProperties.pad(newValue)
@@ -85,6 +90,8 @@ Item {
         anchors.fill: parent
 
         hoverEnabled: true
+
+        enabled: !textField.readOnly
 
         onClicked: {
             textField.forceActiveFocus()
@@ -116,7 +123,7 @@ Item {
 
         State {
             name: "FOCUSED"
-            when: textField.activeFocus
+            when: textField.activeFocus && !textField.readOnly
 
             PropertyChanges {
                 target: textFieldBackground

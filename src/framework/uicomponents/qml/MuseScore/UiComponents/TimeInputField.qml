@@ -5,17 +5,22 @@ import MuseScore.Ui 1.0
 Row {
     id: root
 
-    property date time // format: h:mm:ss:ms
-    signal timeEdited(var newTime)
+    property date time
+    property date maxTime
+    property alias maxMillisecondsNumber: millisecondsField.maxValue
 
     property var font: ui.theme.tabFont
+
+    signal timeEdited(var newTime)
 
     spacing: 4
 
     opacity: enabled ? 1 : ui.theme.itemOpacityDisabled
 
     NumberInputField {
-        maxValue: 9
+        id: hoursField
+
+        maxValue: root.maxTime.getHours()
         value: root.time.getHours()
 
         font: root.font
@@ -34,7 +39,9 @@ Row {
     }
 
     NumberInputField {
-        maxValue: 60
+        id: minutesField
+
+        maxValue: hoursField.value === root.maxTime.getHours() ? root.maxTime.getMinutes() : 60
         value: root.time.getMinutes()
 
         font: root.font
@@ -53,7 +60,9 @@ Row {
     }
 
     NumberInputField {
-        maxValue: 60
+        id: secondsField
+
+        maxValue: minutesField.value === root.maxTime.getMinutes() ? root.maxTime.getSeconds() : 60
         value: root.time.getSeconds()
 
         font: root.font
@@ -72,14 +81,19 @@ Row {
     }
 
     NumberInputField {
-        maxValue: 9
-        value: root.time.getMilliseconds() / 100
+        id: millisecondsField
+
+        readonly property int maxDigitCount: maxValue.toString().length
+        readonly property int precision: Math.max(1000 / Math.pow(10, maxDigitCount), 1)
+
+        maxValue: secondsField.value === root.maxTime.getSeconds() ? root.maxTime.getMilliseconds() : 1000
+        value: root.time.getMilliseconds() / precision
 
         font: root.font
 
         onValueEdited: {
             var newTime = root.time
-            newTime.setMilliseconds(newValue * 100)
+            newTime.setMilliseconds(newValue * precision)
             root.timeEdited(newTime)
         }
     }

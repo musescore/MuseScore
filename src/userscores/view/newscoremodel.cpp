@@ -81,7 +81,7 @@ ScoreCreateOptions NewScoreModel::parseOptions(const QVariantMap& info) const
     options.withTempo = info["withTempo"].toBool();
 
     QVariantMap tempo = info["tempo"].toMap();
-    options.tempo.value = tempo["value"].toInt();
+    options.tempo.valueBpm = tempo["value"].toInt();
     options.tempo.duration = noteIconToDurationType(tempo["noteIcon"].toInt());
     options.tempo.withDot = tempo["withDot"].toBool();
 

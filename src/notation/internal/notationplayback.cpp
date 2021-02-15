@@ -604,7 +604,11 @@ void NotationPlayback::addLoopBoundary(LoopBoundaryType boundaryType, int tick)
 
 void NotationPlayback::addLoopIn(int _tick)
 {
-    Fraction tick = _tick == BoundaryTick::SelectedNoteTick ? score()->pos() : Fraction::fromTicks(_tick);
+    Fraction tick = Fraction::fromTicks(_tick);
+
+    if (_tick == BoundaryTick::SelectedNoteTick) {
+        tick = score()->pos();
+    }
 
     if (tick >= score()->loopOutTick()) { // If In pos >= Out pos, reset Out pos to end of score
         score()->setLoopOutTick(score()->lastMeasure()->endTick());
@@ -615,8 +619,11 @@ void NotationPlayback::addLoopIn(int _tick)
 
 void NotationPlayback::addLoopOut(int _tick)
 {
-    Fraction tick = _tick == BoundaryTick::SelectedNoteTick ? score()->pos() + score()->inputState().ticks()
-                    : Fraction::fromTicks(_tick);
+    Fraction tick = Fraction::fromTicks(_tick);
+
+    if (_tick == BoundaryTick::SelectedNoteTick) {
+        tick = score()->pos() + score()->inputState().ticks();
+    }
 
     if (tick <= score()->loopInTick()) { // If Out pos <= In pos, reset In pos to beginning of score
         score()->setLoopInTick(Fraction(0, 1));
@@ -731,13 +738,13 @@ Tempo NotationPlayback::tempo(int tick) const
 
     const Ms::TempoText* tempoText = this->tempoText(tick);
     if (!tempoText) {
-        tempo.value = score()->tempo(Fraction::fromTicks(tick)) * 60;
+        tempo.valueBpm = score()->tempo(Fraction::fromTicks(tick)) * 60;
         return tempo;
     }
 
     Ms::TDuration duration = tempoText->duration();
 
-    tempo.value = tempoText->tempoBpm();
+    tempo.valueBpm = tempoText->tempoBpm();
     tempo.duration = duration.type();
     tempo.withDot = duration.dots() > 0;
 
