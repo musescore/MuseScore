@@ -169,6 +169,8 @@ std::vector<MScoreError> MScore::errorList {
     { MsError::DEST_NO_CR,                      "p7", QT_TRANSLATE_NOOP("error", "Destination is not a chord or rest") },
     { MsError::CANNOT_CHANGE_LOCAL_TIMESIG,     "l1",
       QT_TRANSLATE_NOOP("error", "Cannot change local time signature:\nMeasure is not empty") },
+    { MsError::CORRUPTED_MEASURE,               "c1", QT_TRANSLATE_NOOP("error",
+                                                                        "Cannot change time signature in front of a corrupted measure") },
 };
 
 MsError MScore::_error { MsError::MS_NO_ERROR };
