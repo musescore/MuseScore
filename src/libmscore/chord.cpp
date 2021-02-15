@@ -2759,7 +2759,12 @@ Element* Chord::drop(EditData& data)
         }
     }
         if (tremolo()) {
+            bool sameType = (e->subtype() == tremolo()->subtype());
             score()->undoRemoveElement(tremolo());
+            if (sameType) {
+                delete e;
+                return 0;
+            }
         }
         e->setParent(this);
         e->setTrack(track());
