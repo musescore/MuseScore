@@ -3066,6 +3066,14 @@ void Score::cmdDeleteSelection()
                     tick = toMeasureRepeat(e)->firstMeasureOfGroup()->first()->tick();
                 } else if (e->isSpannerSegment()) {
                     tick = toSpannerSegment(e)->spanner()->tick();
+                } else if (e->isBreath()) {
+                    // we want the tick of the ChordRest that precedes the breath mark (in the same track)
+                    for (Segment* s = toBreath(e)->segment()->prev(); s; s = s->prev()) {
+                        if (s->isChordRestType() && s->element(e->track())) {
+                            tick = s->tick();
+                            break;
+                        }
+                    }
                 } else if (e->parent()
                            && (e->parent()->isSegment() || e->parent()->isChord() || e->parent()->isNote() || e->parent()->isRest())) {
                     tick = e->parent()->tick();
