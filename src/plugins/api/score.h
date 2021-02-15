@@ -112,7 +112,7 @@ class Score : public Ms::PluginAPI::ScoreElement
 
     /**
      * List of staves in this score.
-     * \since MuseScore 3.5
+     * \since MuseScore 3.6.3
      */
     Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Staff> staves READ staves)
 
