@@ -198,13 +198,13 @@ using MetaList = QList<Meta>;
 
 struct Tempo
 {
-    int value = 0;
+    int valueBpm = 0;
     DurationType duration = DurationType::V_QUARTER;
     bool withDot = false;
 
     bool operator==(const Tempo& other) const
     {
-        return value == other.value && duration == other.duration && withDot == other.withDot;
+        return valueBpm == other.valueBpm && duration == other.duration && withDot == other.withDot;
     }
 };
 

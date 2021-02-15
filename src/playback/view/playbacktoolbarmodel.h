@@ -41,6 +41,7 @@ class PlaybackToolBarModel : public QAbstractListModel, public async::Asyncable
     INJECT(playback, IPlaybackController, playbackController)
     INJECT(playback, workspace::IWorkspaceManager, workspaceManager)
 
+    Q_PROPERTY(QDateTime maxPlayTime READ maxPlayTime NOTIFY maxPlayTimeChanged)
     Q_PROPERTY(QDateTime playTime READ playTime WRITE setPlayTime NOTIFY playTimeChanged)
     Q_PROPERTY(qreal playPosition READ playPosition WRITE setPlayPosition NOTIFY playTimeChanged)
 
@@ -58,6 +59,7 @@ public:
     QVariant data(const QModelIndex& index, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
 
+    QDateTime maxPlayTime() const;
     QDateTime playTime() const;
     qreal playPosition() const;
 
@@ -78,7 +80,8 @@ public slots:
     void setBeatNumber(int beatNumber);
 
 signals:
-    void playTimeChanged(QTime time);
+    void maxPlayTimeChanged();
+    void playTimeChanged();
 
 private:
     enum Roles {

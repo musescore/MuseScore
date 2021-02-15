@@ -89,6 +89,8 @@ Rectangle {
                 Layout.leftMargin: 10
                 Layout.preferredWidth: 90
 
+                maxTime: playbackModel.maxPlayTime
+                maxMillisecondsNumber: 9
                 time: playbackModel.playTime
 
                 onTimeEdited: {
