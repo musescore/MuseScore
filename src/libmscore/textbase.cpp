@@ -1856,6 +1856,12 @@ void TextBase::createLayout()
                 if (rows() <= cursor.row()) {
                     _layout.append(TextBlock());
                 }
+
+                if (cursor.row() < rows()) {
+                    if (_layout[cursor.row()].fragments().size() == 0) {
+                        _layout[cursor.row()].insertEmptyFragmentIfNeeded(&cursor); // an empty fragment may be needed on either side of the newline
+                    }
+                }
             } else {
                 if (symState) {
                     sym += c;
