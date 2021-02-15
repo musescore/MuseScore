@@ -48,12 +48,16 @@ using namespace mu::midi;
 
 static constexpr int MIN_CHUNK_SIZE(10); // measure
 
-NotationPlayback::NotationPlayback(IGetScore* getScore)
+NotationPlayback::NotationPlayback(IGetScore* getScore, async::Notification notationChanged)
     : m_getScore(getScore)
 {
     m_midiStream = std::make_shared<MidiStream>();
     m_midiStream->isStreamingAllowed = true;
     m_midiStream->request.onReceive(this, [this](tick_t tick) { onChunkRequest(tick); });
+
+    notationChanged.onNotify(this, [this]() {
+        updateLoopBoundaries();
+    });
 }
 
 Ms::Score* NotationPlayback::score() const
@@ -79,14 +83,22 @@ void NotationPlayback::init()
         if (Ms::POS::CURRENT == pos) {
             m_playPositionTickChanged.send(tick);
         } else {
-            LoopBoundaries boundaries;
-            boundaries.loopInTick = score()->loopInTick().ticks();
-            boundaries.loopOutTick = score()->loopOutTick().ticks();
-            boundaries.loopInRect = loopBoundaryRectByTick(LoopBoundaryType::LoopIn, boundaries.loopInTick);
-            boundaries.loopOutRect = loopBoundaryRectByTick(LoopBoundaryType::LoopOut, boundaries.loopOutTick);
-            m_loopBoundariesChanged.send(boundaries);
+            updateLoopBoundaries();
         }
     });
+}
+
+void NotationPlayback::updateLoopBoundaries()
+{
+    LoopBoundaries boundaries;
+    boundaries.loopInTick = score()->loopInTick().ticks();
+    boundaries.loopOutTick = score()->loopOutTick().ticks();
+    boundaries.loopInRect = loopBoundaryRectByTick(LoopBoundaryType::LoopIn, boundaries.loopInTick);
+    boundaries.loopOutRect = loopBoundaryRectByTick(LoopBoundaryType::LoopOut, boundaries.loopOutTick);
+
+    if (m_loopBoundaries.val != boundaries) {
+        m_loopBoundaries.set(boundaries);
+    }
 }
 
 std::shared_ptr<MidiStream> NotationPlayback::midiStream() const
@@ -705,7 +717,7 @@ QRect NotationPlayback::loopBoundaryRectByTick(LoopBoundaryType boundaryType, in
 
 mu::async::Channel<LoopBoundaries> NotationPlayback::loopBoundariesChanged() const
 {
-    return m_loopBoundariesChanged;
+    return m_loopBoundaries.ch;
 }
 
 Tempo NotationPlayback::tempo(int tick) const
