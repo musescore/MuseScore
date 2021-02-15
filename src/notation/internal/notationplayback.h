@@ -40,7 +40,7 @@ class NotationPlayback : public INotationPlayback, public async::Asyncable
     INJECT(notation, INotationConfiguration, configuration)
 
 public:
-    NotationPlayback(IGetScore* getScore);
+    NotationPlayback(IGetScore* getScore, async::Notification notationChanged);
 
     void init();
 
@@ -91,6 +91,7 @@ private:
     void addLoopIn(int tick);
     void addLoopOut(int tick);
     QRect loopBoundaryRectByTick(LoopBoundaryType boundaryType, int tick) const;
+    void updateLoopBoundaries();
 
     const Ms::TempoText* tempoText(int tick) const;
 
@@ -98,7 +99,7 @@ private:
     std::shared_ptr<midi::MidiStream> m_midiStream;
     std::unique_ptr<Ms::MidiRenderer> m_midiRenderer;
     async::Channel<int> m_playPositionTickChanged;
-    async::Channel<LoopBoundaries> m_loopBoundariesChanged;
+    ValCh<LoopBoundaries> m_loopBoundaries;
 };
 }
 
