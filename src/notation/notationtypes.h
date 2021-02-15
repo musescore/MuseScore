@@ -343,6 +343,23 @@ struct LoopBoundaries
     {
         return loopInTick == 0 && loopOutTick == 0;
     }
+
+    bool operator==(const LoopBoundaries& boundaries) const
+    {
+        bool equals = true;
+
+        equals &= loopInTick == boundaries.loopInTick;
+        equals &= loopOutTick == boundaries.loopOutTick;
+        equals &= loopInRect == boundaries.loopInRect;
+        equals &= loopOutRect == boundaries.loopOutRect;
+
+        return equals;
+    }
+
+    bool operator!=(const LoopBoundaries& boundaries) const
+    {
+        return !(*this == boundaries);
+    }
 };
 
 inline QString staffTypeToString(StaffType type)
