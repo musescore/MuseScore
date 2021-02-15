@@ -38,6 +38,7 @@
 #include "libmscore/chord.h"
 #include "libmscore/harmony.h"
 #include "libmscore/tempotext.h"
+#include "libmscore/tempo.h"
 
 #include "framework/midi_old/event.h" //! TODO Remove me
 
@@ -722,18 +723,20 @@ mu::async::Channel<LoopBoundaries> NotationPlayback::loopBoundariesChanged() con
 
 Tempo NotationPlayback::tempo(int tick) const
 {
+    Tempo tempo;
+
     if (!score()) {
-        return Tempo();
+        return tempo;
     }
 
     const Ms::TempoText* tempoText = this->tempoText(tick);
     if (!tempoText) {
-        return Tempo();
+        tempo.value = score()->tempo(Fraction::fromTicks(tick)) * 60;
+        return tempo;
     }
 
     Ms::TDuration duration = tempoText->duration();
 
-    Tempo tempo;
     tempo.value = tempoText->tempoBpm();
     tempo.duration = duration.type();
     tempo.withDot = duration.dots() > 0;

@@ -111,6 +111,7 @@ void PlaybackToolBarModel::load()
 
     playbackController()->isPlayAllowedChanged().onNotify(this, [this]() {
         updateState();
+        updatePlayTime();
     });
 
     playbackController()->isPlayingChanged().onNotify(this, [this]() {
