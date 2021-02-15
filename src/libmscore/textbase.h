@@ -69,7 +69,7 @@ class CharFormat
     VerticalAlignment _valign { VerticalAlignment::AlignNormal };
     qreal _fontSize           { 12.0 };
     qreal _textLineSpacing    { 1.0 };
-    QString _fontFamily       { "FreeSerif" };
+    QString _fontFamily;
 
 public:
     CharFormat() {}
