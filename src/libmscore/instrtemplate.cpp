@@ -352,7 +352,7 @@ void InstrumentTemplate::write(XmlWriter& xml) const
             ma.write(xml);
         }
     }
-    if (!family) {
+    if (family) {
         xml.tag("family", family->id);
     }
     xml.etag();
