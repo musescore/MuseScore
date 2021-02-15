@@ -44,13 +44,11 @@ apt_packages_standard=(
   libfreetype6
   libgl1-mesa-dev
   libjack-dev
-  libmp3lame-dev
   libnss3-dev
   libportmidi-dev
   libpulse-dev
   libsndfile1-dev
   make
-  portaudio19-dev
   wget
   )
 
@@ -70,6 +68,11 @@ apt_packages_runtime=(
   libxrandr2
   libxtst-dev
   libdrm-dev
+  libxcb-icccm4
+  libxcb-image0
+  libxcb-keysyms1
+  libxcb-render-util0
+  libxcb-xinerama0
   )
 
 apt-get update # no package lists in Docker image
@@ -83,14 +86,13 @@ apt-get install -y --no-install-recommends \
 ##########################################################################
 
 # Get newer Qt (only used cached version if it is the same)
-qt_version="598"
+qt_version="5151"
 qt_dir="Qt/${qt_version}"
 if [[ ! -d "${qt_dir}" ]]; then
   mkdir -p "${qt_dir}"
-  qt_url="https://s3.amazonaws.com/utils.musescore.org/qt${qt_version}.zip"
-  wget -q --show-progress -O qt5.zip "${qt_url}"
-  7z x -y qt5.zip -o"${qt_dir}"
-  rm -f qt5.zip
+  qt_url="https://s3.amazonaws.com/utils.musescore.org/Qt${qt_version}_gcc64.7z"
+  wget -q --show-progress -O qt5.7z "${qt_url}"
+  7z x -y qt5.7z -o"${qt_dir}"
 fi
 qt_path="${PWD%/}/${qt_dir}"
 
@@ -132,6 +134,26 @@ echo export PATH="${PWD%/}/${cmake_dir}/bin:\${PATH}" >> ${ENV_FILE}
 export PATH="${PWD%/}/${cmake_dir}/bin:${PATH}"
 cmake --version
 
+# Ninja
+echo "Get Ninja"
+mkdir -p $HOME/build_tools/Ninja
+wget -q --show-progress -O $HOME/build_tools/Ninja/ninja "https://s3.amazonaws.com/utils.musescore.org/build_tools/linux/Ninja/ninja"
+chmod +x $HOME/build_tools/Ninja/ninja
+echo export PATH="$HOME/build_tools/Ninja:\${PATH}" >> ${ENV_FILE}
+echo "ninja version"
+$HOME/build_tools/Ninja/ninja --version
+
+# Dump syms
+wget -q --show-progress -O dump_syms.7z "https://s3.amazonaws.com/utils.musescore.org/breakpad/linux/x86-64/dump_syms.7z"
+7z x -y dump_syms.7z -o"$HOME/breakpad"
+echo export DUMPSYMS_BIN="$HOME/breakpad/dump_syms" >> $ENV_FILE
+
+##########################################################################
+# OTHER
+##########################################################################
+wget -q --show-progress -O vst_sdk.7z "https://s3.amazonaws.com/utils.musescore.org/VST3_SDK_37.7z"
+7z x -y vst_sdk.7z -o"$HOME/vst"
+echo export VST3_SDK_PATH="$HOME/vst/VST3_SDK" >> $ENV_FILE
 
 ##########################################################################
 # POST INSTALL

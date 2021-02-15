@@ -29,35 +29,37 @@ if (MSVC)
             ${_all_h_file}
             ${PCH}
             )
-      include(FindStaticLibrary)
-endif (MSVC)
-
-target_link_libraries(
-      ${TARGET}
-      ${QT_LIBRARIES}
-      ${QT_QTTEST_LIBRARY}
-      testResources
-      libmscore
-      audio
-      qzip
-      )
-
-if (OMR)
-      target_link_libraries(${TARGET} omr poppler-qt5)
-      if (OCR)
-            target_link_libraries(${TARGET} tesseract_api)
-      endif (OCR)
-endif (OMR)
-
-# ZIP library
-if (MSVC)
       target_link_libraries(
             ${TARGET}
+            ${QT_QTTEST_LIBRARY}
+            testResources
+            libmscore
+            audio
+            qzip
             zlibstat
             )
 else (MSVC)
       target_link_libraries(
             ${TARGET}
+            ${QT_QTTEST_LIBRARY}
+            testResources
+            libmscore
+            audio
+            qzip
+            z
+            )
+endif (MSVC)
+
+if (MSVC)
+      target_link_libraries(
+            ${TARGET}
+            ${QT_LIBRARIES}
+            zlibstat
+            )
+else (MSVC)
+      target_link_libraries(
+            ${TARGET}
+            ${QT_LIBRARIES}
             z
             )
 endif (MSVC)
@@ -116,19 +118,19 @@ endif (APPLE AND (CMAKE_VERSION VERSION_LESS "3.5.0"))
 
 add_test(${TARGET} ${CMAKE_CURRENT_BINARY_DIR}/${TARGET}  -xunitxml -o result.xml)
 
-# On Windows some tests need access to supporting files
-# MSVC has a different definition for CMAKE_CURRENT_BINARY_DIR
-# so we use this install destination variable instead
+include_guard(DIRECTORY)
+
 if (MSVC)
-      set_target_properties(
-            ${TARGET}
-            PROPERTIES
-            MTEST_INSTALL_DESTINATION_DIR "${CMAKE_CURRENT_BINARY_DIR}"
-            )
-else (MSVC)
-      set_target_properties(
-            ${TARGET}
-            PROPERTIES
-            MTEST_INSTALL_DESTINATION_DIR "${CMAKE_CURRENT_BINARY_DIR}/.."
-            )
+install(FILES
+      ${PROJECT_SOURCE_DIR}/share/styles/chords_std.xml
+      ${PROJECT_SOURCE_DIR}/share/styles/chords_jazz.xml
+      ${PROJECT_SOURCE_DIR}/share/styles/chords.xml
+      ${PROJECT_SOURCE_DIR}/share/styles/stdchords.xml
+      ${PROJECT_SOURCE_DIR}/share/styles/jazzchords.xml
+      ${PROJECT_SOURCE_DIR}/share/styles/cchords_muse.xml
+      ${PROJECT_SOURCE_DIR}/share/styles/cchords_nrb.xml
+      ${PROJECT_SOURCE_DIR}/share/styles/cchords_rb.xml
+      ${PROJECT_SOURCE_DIR}/share/styles/cchords_sym.xml
+      DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/styles
+      )
 endif (MSVC)

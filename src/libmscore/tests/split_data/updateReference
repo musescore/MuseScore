@@ -1,0 +1,30 @@
+#!/bin/bash
+
+if [ "`uname`" = 'Darwin' ]; then
+   S=../../../build.xcode/mtest/libmscore/split/Debug
+else
+   S=../../../build.debug/mtest/libmscore/split
+fi
+
+cp $S/split08.mscx split08-ref.mscx
+cp $S/split07.mscx split07-ref.mscx
+cp $S/split06.mscx split06-ref.mscx
+cp $S/split05.mscx split05-ref.mscx
+cp $S/split04.mscx split04-ref.mscx
+cp $S/split03.mscx split03-ref.mscx
+cp $S/split02.mscx split02-ref.mscx
+cp $S/split01.mscx split01-ref.mscx
+
+cp $S/split183846-irregular-hn-hn-qn-qn-hn-hn.mscx split183846-irregular-hn-hn-qn-qn-hn-hn-ref.mscx
+cp $S/split183846-irregular-qn-qn-wn.mscx split183846-irregular-qn-qn-wn-ref.mscx
+cp $S/split183846-irregular-verylong.mscx split183846-irregular-verylong-ref.mscx
+cp $S/split183846-irregular-wn-wn.mscx split183846-irregular-wn-wn-ref.mscx
+cp $S/split183846-irregular-wn-wr-wn-hr-qr.mscx split183846-irregular-wn-wr-wn-hr-qr-ref.mscx
+cp $S/split183846-irregular-wr-wn-wr-hn-qn.mscx split183846-irregular-wr-wn-wr-hn-qn-ref.mscx
+
+cp $S/split184061-keep-tie-before-break-voice-4.mscx split184061-keep-tie-before-break-voice-4-ref.mscx
+cp $S/split184061-keep-tie.mscx split184061-keep-tie-ref.mscx
+cp $S/split184061-no-tie.mscx split184061-no-tie-ref.mscx
+cp $S/split184061-other-inst-only-one-tie.mscx split184061-other-inst-only-one-tie-ref.mscx
+
+

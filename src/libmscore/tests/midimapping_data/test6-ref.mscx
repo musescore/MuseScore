@@ -1,0 +1,1931 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="3.01">
+  <Score>
+    <LayerTag id="0" tag="default"></LayerTag>
+    <currentLayer>0</currentLayer>
+    <Division>480</Division>
+    <Style>
+      <lastSystemFillLimit>0</lastSystemFillLimit>
+      <Spatium>1.76389</Spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="poet"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <Part>
+      <Staff id="1">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <defaultClef>G8vb</defaultClef>
+        </Staff>
+      <trackName>Classical Guitar</trackName>
+      <Instrument>
+        <longName>Classical Guitar</longName>
+        <shortName>Guit.</shortName>
+        <trackName>Classical Guitar</trackName>
+        <minPitchP>40</minPitchP>
+        <maxPitchP>83</maxPitchP>
+        <minPitchA>40</minPitchA>
+        <maxPitchA>83</maxPitchA>
+        <instrumentId>pluck.guitar.nylon-string</instrumentId>
+        <clef>G8vb</clef>
+        <StringData>
+          <frets>19</frets>
+          <string>40</string>
+          <string>45</string>
+          <string>50</string>
+          <string>55</string>
+          <string>59</string>
+          <string>64</string>
+          </StringData>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="24"/>
+          <midiPort>0</midiPort>
+          <midiChannel>1</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="2">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Voice</trackName>
+      <Instrument>
+        <longName>Voice</longName>
+        <shortName>Vo.</shortName>
+        <trackName>Voice</trackName>
+        <minPitchP>36</minPitchP>
+        <maxPitchP>94</maxPitchP>
+        <minPitchA>40</minPitchA>
+        <maxPitchA>79</maxPitchA>
+        <instrumentId>voice.vocals</instrumentId>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="52"/>
+          <midiPort>0</midiPort>
+          <midiChannel>2</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="3">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Violin</trackName>
+      <Instrument>
+        <longName>Violin</longName>
+        <shortName>Vln.</shortName>
+        <trackName>Violin</trackName>
+        <minPitchP>55</minPitchP>
+        <maxPitchP>103</maxPitchP>
+        <minPitchA>55</minPitchA>
+        <maxPitchA>88</maxPitchA>
+        <instrumentId>strings.violin</instrumentId>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="40"/>
+          <midiPort>0</midiPort>
+          <midiChannel>3</midiChannel>
+          </Channel>
+        <Channel name="pizzicato">
+          <program value="45"/>
+          <midiPort>0</midiPort>
+          <midiChannel>4</midiChannel>
+          </Channel>
+        <Channel name="tremolo">
+          <program value="44"/>
+          <midiPort>0</midiPort>
+          <midiChannel>5</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="4">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <bracket type="1" span="2" col="0"/>
+        <barLineSpan>1</barLineSpan>
+        </Staff>
+      <Staff id="5">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <defaultClef>F</defaultClef>
+        </Staff>
+      <trackName>Harpsichord</trackName>
+      <Instrument>
+        <longName>Harpsichord</longName>
+        <shortName>Hch.</shortName>
+        <trackName>Harpsichord</trackName>
+        <minPitchP>29</minPitchP>
+        <maxPitchP>89</maxPitchP>
+        <minPitchA>29</minPitchA>
+        <maxPitchA>89</maxPitchA>
+        <instrumentId>keyboard.harpsichord</instrumentId>
+        <clef staff="2">F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="6"/>
+          <midiPort>0</midiPort>
+          <midiChannel>6</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="6">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Trumpet</trackName>
+      <Instrument>
+        <longName>Trumpet</longName>
+        <shortName>Tpt.</shortName>
+        <trackName>Trumpet</trackName>
+        <minPitchP>52</minPitchP>
+        <maxPitchP>85</maxPitchP>
+        <minPitchA>52</minPitchA>
+        <maxPitchA>80</maxPitchA>
+        <transposeDiatonic>-1</transposeDiatonic>
+        <transposeChromatic>-2</transposeChromatic>
+        <instrumentId>brass.trumpet</instrumentId>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="56"/>
+          <midiPort>0</midiPort>
+          <midiChannel>7</midiChannel>
+          </Channel>
+        <Channel name="mute">
+          <program value="59"/>
+          <midiPort>0</midiPort>
+          <midiChannel>8</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="7">
+        <StaffType group="percussion">
+          <name>perc5Line</name>
+          <keysig>0</keysig>
+          </StaffType>
+        <defaultClef>PERC</defaultClef>
+        </Staff>
+      <trackName>Drumset</trackName>
+      <Instrument>
+        <longName>Drumset</longName>
+        <shortName>Drs.</shortName>
+        <trackName>Drumset</trackName>
+        <instrumentId>drum.group.set</instrumentId>
+        <useDrumset>1</useDrumset>
+        <Drum pitch="35">
+          <head>normal</head>
+          <line>7</line>
+          <voice>1</voice>
+          <name>Acoustic Bass Drum</name>
+          <stem>2</stem>
+          </Drum>
+        <Drum pitch="36">
+          <head>normal</head>
+          <line>7</line>
+          <voice>1</voice>
+          <name>Bass Drum 1</name>
+          <stem>2</stem>
+          <shortcut>B</shortcut>
+          </Drum>
+        <Drum pitch="37">
+          <head>cross</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Side Stick</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="38">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Acoustic Snare</name>
+          <stem>1</stem>
+          <shortcut>A</shortcut>
+          </Drum>
+        <Drum pitch="40">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Electric Snare</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="41">
+          <head>normal</head>
+          <line>5</line>
+          <voice>0</voice>
+          <name>Low Floor Tom</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="42">
+          <head>cross</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Closed Hi-Hat</name>
+          <stem>1</stem>
+          <shortcut>G</shortcut>
+          </Drum>
+        <Drum pitch="43">
+          <head>normal</head>
+          <line>5</line>
+          <voice>1</voice>
+          <name>High Floor Tom</name>
+          <stem>2</stem>
+          </Drum>
+        <Drum pitch="44">
+          <head>cross</head>
+          <line>9</line>
+          <voice>1</voice>
+          <name>Pedal Hi-Hat</name>
+          <stem>2</stem>
+          <shortcut>F</shortcut>
+          </Drum>
+        <Drum pitch="45">
+          <head>normal</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Low Tom</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="46">
+          <head>cross</head>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Open Hi-Hat</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="47">
+          <head>normal</head>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Low-Mid Tom</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="48">
+          <head>normal</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Hi-Mid Tom</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="49">
+          <head>cross</head>
+          <line>-2</line>
+          <voice>0</voice>
+          <name>Crash Cymbal 1</name>
+          <stem>1</stem>
+          <shortcut>C</shortcut>
+          </Drum>
+        <Drum pitch="50">
+          <head>normal</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>High Tom</name>
+          <stem>1</stem>
+          <shortcut>E</shortcut>
+          </Drum>
+        <Drum pitch="51">
+          <head>cross</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Ride Cymbal 1</name>
+          <stem>1</stem>
+          <shortcut>D</shortcut>
+          </Drum>
+        <Drum pitch="52">
+          <head>cross</head>
+          <line>-3</line>
+          <voice>0</voice>
+          <name>Chinese Cymbal</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="53">
+          <head>diamond</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>Ride Bell</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="54">
+          <head>diamond</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Tambourine</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="55">
+          <head>cross</head>
+          <line>-3</line>
+          <voice>0</voice>
+          <name>Splash Cymbal</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="56">
+          <head>triangle-down</head>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Cowbell</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="57">
+          <head>cross</head>
+          <line>-3</line>
+          <voice>0</voice>
+          <name>Crash Cymbal 2</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="59">
+          <head>cross</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Ride Cymbal 2</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="63">
+          <head>cross</head>
+          <line>4</line>
+          <voice>0</voice>
+          <name>Open Hi Conga</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="64">
+          <head>cross</head>
+          <line>6</line>
+          <voice>0</voice>
+          <name>Low Conga</name>
+          <stem>1</stem>
+          </Drum>
+        <clef>PERC</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <controller ctrl="0" value="1"/>
+          <program value="0"/>
+          <midiPort>0</midiPort>
+          <midiChannel>9</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="8">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Flute</trackName>
+      <Instrument>
+        <longName>Flute</longName>
+        <shortName>Fl.</shortName>
+        <trackName>Flute</trackName>
+        <minPitchP>59</minPitchP>
+        <maxPitchP>98</maxPitchP>
+        <minPitchA>60</minPitchA>
+        <maxPitchA>93</maxPitchA>
+        <instrumentId>wind.flutes.flute</instrumentId>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="73"/>
+          <midiPort>0</midiPort>
+          <midiChannel>10</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="9">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <bracket type="1" span="2" col="0"/>
+        <barLineSpan>1</barLineSpan>
+        </Staff>
+      <Staff id="10">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <defaultClef>F</defaultClef>
+        </Staff>
+      <trackName>Reed Organ</trackName>
+      <Instrument>
+        <longName>Reed Organ</longName>
+        <shortName>Rd. Org.</shortName>
+        <trackName>Reed Organ</trackName>
+        <minPitchP>29</minPitchP>
+        <maxPitchP>89</maxPitchP>
+        <minPitchA>29</minPitchA>
+        <maxPitchA>89</maxPitchA>
+        <instrumentId>keyboard.organ.reed</instrumentId>
+        <clef staff="2">F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="20"/>
+          <midiPort>0</midiPort>
+          <midiChannel>11</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="11">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Dizi</trackName>
+      <Instrument>
+        <longName>Dizi</longName>
+        <shortName>Di.</shortName>
+        <trackName>Dizi</trackName>
+        <minPitchP>69</minPitchP>
+        <maxPitchP>100</maxPitchP>
+        <minPitchA>69</minPitchA>
+        <maxPitchA>100</maxPitchA>
+        <instrumentId>wind.flutes.di-zi</instrumentId>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="67"/>
+          <midiPort>0</midiPort>
+          <midiChannel>12</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="12">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <defaultClef>G8va</defaultClef>
+        </Staff>
+      <trackName>Tin Whistle</trackName>
+      <Instrument>
+        <longName>Tin Whistle</longName>
+        <shortName>Tin. Wh.</shortName>
+        <trackName>Tin Whistle</trackName>
+        <minPitchP>74</minPitchP>
+        <maxPitchP>98</maxPitchP>
+        <minPitchA>74</minPitchA>
+        <maxPitchA>98</maxPitchA>
+        <instrumentId>wind.flutes.whistle.tin.d</instrumentId>
+        <clef>G8va</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="78"/>
+          <midiPort>0</midiPort>
+          <midiChannel>13</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="13">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Cromorne</trackName>
+      <Instrument>
+        <longName>Cromorne</longName>
+        <shortName>Cr.</shortName>
+        <trackName>Cromorne</trackName>
+        <minPitchP>60</minPitchP>
+        <maxPitchP>77</maxPitchP>
+        <minPitchA>60</minPitchA>
+        <maxPitchA>74</maxPitchA>
+        <instrumentId>wind.reed.cromorne</instrumentId>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="67"/>
+          <midiPort>0</midiPort>
+          <midiChannel>14</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="14">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <bracket type="1" span="2" col="0"/>
+        <barLineSpan>1</barLineSpan>
+        </Staff>
+      <Staff id="15">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <defaultClef>F</defaultClef>
+        </Staff>
+      <trackName>Virginal</trackName>
+      <Instrument>
+        <longName>Virginal</longName>
+        <shortName>Vir.</shortName>
+        <trackName>Virginal</trackName>
+        <minPitchP>29</minPitchP>
+        <maxPitchP>89</maxPitchP>
+        <minPitchA>29</minPitchA>
+        <maxPitchA>89</maxPitchA>
+        <instrumentId>keyboard.virginal</instrumentId>
+        <clef staff="2">F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="6"/>
+          <midiPort>0</midiPort>
+          <midiChannel>15</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="16">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <defaultClef>G8vb</defaultClef>
+        </Staff>
+      <trackName>Banjo</trackName>
+      <Instrument>
+        <longName>Banjo</longName>
+        <shortName>Bj.</shortName>
+        <trackName>Banjo</trackName>
+        <minPitchP>48</minPitchP>
+        <maxPitchP>87</maxPitchP>
+        <minPitchA>48</minPitchA>
+        <maxPitchA>87</maxPitchA>
+        <instrumentId>pluck.banjo</instrumentId>
+        <clef>G8vb</clef>
+        <StringData>
+          <frets>19</frets>
+          <string>67</string>
+          <string>50</string>
+          <string>55</string>
+          <string>59</string>
+          <string>62</string>
+          </StringData>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="105"/>
+          <midiPort>1</midiPort>
+          <midiChannel>0</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="17">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <bracket type="1" span="2" col="0"/>
+        <barLineSpan>1</barLineSpan>
+        </Staff>
+      <Staff id="18">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <defaultClef>F</defaultClef>
+        </Staff>
+      <trackName>Harp</trackName>
+      <Instrument>
+        <longName>Harp</longName>
+        <shortName>Hrp.</shortName>
+        <trackName>Harp</trackName>
+        <minPitchP>23</minPitchP>
+        <maxPitchP>104</maxPitchP>
+        <minPitchA>23</minPitchA>
+        <maxPitchA>104</maxPitchA>
+        <instrumentId>pluck.harp</instrumentId>
+        <clef staff="2">F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="46"/>
+          <midiPort>1</midiPort>
+          <midiChannel>1</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="19">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Ukulele</trackName>
+      <Instrument>
+        <longName>Ukulele</longName>
+        <shortName>Uk.</shortName>
+        <trackName>Ukulele</trackName>
+        <minPitchP>60</minPitchP>
+        <maxPitchP>81</maxPitchP>
+        <minPitchA>60</minPitchA>
+        <maxPitchA>81</maxPitchA>
+        <instrumentId>pluck.ukulele</instrumentId>
+        <StringData>
+          <frets>18</frets>
+          <string>67</string>
+          <string>60</string>
+          <string>64</string>
+          <string>69</string>
+          </StringData>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="24"/>
+          <midiPort>1</midiPort>
+          <midiChannel>2</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>57</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="2">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="3">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="4">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="5">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="6">
+      <Measure>
+        <voice>
+          <KeySig>
+            <accidental>2</accidental>
+            </KeySig>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              <tpc2>17</tpc2>
+              </Note>
+            </Chord>
+          <Rest>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="7">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="8">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="9">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>half</durationType>
+            </Rest>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="10">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="11">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="12">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>81</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="13">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="14">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="15">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="16">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>57</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="17">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="18">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="19">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>

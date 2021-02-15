@@ -1,8 +1,6 @@
-![MuseScore](mscore/data/musescore_logo_full.png)  
+![MuseScore](assets/musescore_logo_full.png)  
 Music notation and composition software
 
-[![Travis CI](https://secure.travis-ci.org/musescore/MuseScore.svg?branch=master)](https://travis-ci.org/musescore/MuseScore)
-[![Appveyor](https://ci.appveyor.com/api/projects/status/bp3ww6v985i64ece/branch/master?svg=true)](https://ci.appveyor.com/project/MuseScore/musescore/branch/master)
 [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
 
 MuseScore is an open source and free music notation software. For support, contribution, and bug reports visit MuseScore.org. Fork and make pull requests!
@@ -29,60 +27,7 @@ MuseScore is an open source and free music notation software. For support, contr
 MuseScore is licensed under GPL version 2.0. See [LICENSE.GPL](https://github.com/musescore/MuseScore/blob/master/LICENSE.GPL) in the same directory.
 
 ## Packages
-- **aeolus:** Clone of [Aeolus](http://kokkinizita.linuxaudio.org/linuxaudio/aeolus/). Disabled by default in the stable releases. See http://dev-list.musescore.org/Aeolus-Organ-Synth-td7578364.html. Kept as an example of how to integrate with a complex synthesizer.
-
-- **assets:** Graphical assets, use them if you need a MuseScore icon. For logo, color, etc., see https://musescore.org/en/about/logos-and-graphics.
-
-- **awl:** Audio Widget Library, from the MusE project.
-
-- **build:** Utility files for build.
-
-- **bww2mxml:** Command line tool to convert BWW files to MusicXML. BWW parser is used by MuseScore to import BWW files.
-
-- **demos:** A few MuseScore files to demonstrate what can be done.
-
-- **fluid:** Clone of [FluidSynth@sourceforge](https://sourceforge.net/projects/fluidsynth), ported to C++ and customized. Code now at [fluidsynth@github](https://github.com/FluidSynth/fluidsynth).
-
-- **fonts:** Contains fontforge source (sfd) + ttf/otf fonts. MuseScore includes the "Emmentaler" font from the Lilypond project.
-
-- **libmscore:** Data model of MuseScore.
-
-- **mscore:** Main code for the MuseScore UI.
-
-- **msynth:** Abstract interface to Fluid + Aeolus.
-
-- **mtest:** Unit testing using QTest.
-
-- **omr:** Optical music recognition.
-
-- **share:** Files moved to /usr/share/... on install.
-
-- **test:** Old tests. Should move to mtest.
-
-- **vtest:** Visual tests. Compare reference images with current implementation.
-
-- **thirdparty:** Contains projects which are included for convenience, usually to integrate them into the build system to make them available for all supported platforms.
-
-    - **thirdparty/rtf2html:**
-    Used for capella import. Clone from [rtf2html@sourceforge](https://sourceforge.net/projects/rtf2html), code now at [rtf2html@github](https://github.com/lvu/rtf2html).
-
-    - **thirdparty/dtl:**
-    Used for the score comparison tool. [Diff Template Library](https://github.com/cubicdaiya/dtl).
-
-    - **thirdparty/ofqf:**
-    OSC server interface. Based on [OSC for Qt4](http://www.arnoldarts.de/projects/ofqf/), code now at [ofq@github](https://github.com/kampfschlaefer/ofq).
-
-    - **thirdparty/singleapp:**
-    Clone from [Qt Single Application](https://github.com/qtproject/qt-solutions/tree/master/qtsingleapplication).
-
-    - **thirdparty/portmidi:**
-    Clone from [PortMidi](https://sourceforge.net/projects/portmedia/).
-
-    - **thirdparty/beatroot:**
-    It's a core part of [BeatRoot Vamp Plugin](https://code.soundsoftware.ac.uk/projects/beatroot-vamp/repository) by Simon Dixon and Chris Cannam, used in MIDI import for beat detection.
-
-    - **thirdparty/qt-google-analytics:**
-    Clone from [qt-google-analytics](https://github.com/HSAnet/qt-google-analytics).
+See [Code Structure on Wiki](https://github.com/musescore/MuseScore/wiki/CodeStructure)
 
 
 ## Building
@@ -129,3 +74,9 @@ To run the debug version, type:
 See [mtest/README.md](/mtest/README.md) or [the developer handbook](https://musescore.org/handbook/developers-handbook/finding-your-way-around/automated-tests) for instructions on how to run the test suite.
 
 The new [script testing facility](https://musescore.org/node/278278) is also available to create your own automated tests. Please try it out!
+
+### Code Formatting
+
+Run `./hooks/install.sh` to install a pre-commit hook that will format your staged files. Requires that you install `uncrustify`.
+
+If you have problems, please report them. To uninstall, run `./hooks/uninstall.sh`.

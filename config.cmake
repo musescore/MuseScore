@@ -19,9 +19,9 @@
 
 # The MuseScore version number.
 SET(MUSESCORE_NAME "MuseScore")
-SET(MUSESCORE_VERSION_MAJOR  "3")
-SET(MUSESCORE_VERSION_MINOR  "6")
-SET(MUSESCORE_VERSION_PATCH  "2")
+SET(MUSESCORE_VERSION_MAJOR  "4")
+SET(MUSESCORE_VERSION_MINOR  "0")
+SET(MUSESCORE_VERSION_PATCH  "0")
 SET(MUSESCORE_VERSION_LABEL  "")
 
 message(STATUS "MUSESCORE_BUILD_CONFIG ${MUSESCORE_BUILD_CONFIG}")
@@ -29,11 +29,23 @@ if (NOT MUSESCORE_BUILD_CONFIG)
     SET(MUSESCORE_BUILD_CONFIG "dev")
 endif (NOT MUSESCORE_BUILD_CONFIG)
 
-include("${CMAKE_CURRENT_LIST_DIR}/build/config/${MUSESCORE_BUILD_CONFIG}.cmake")
+include(${CMAKE_CURRENT_LIST_DIR}/build/cmake/config/${MUSESCORE_BUILD_CONFIG}.cmake)
 
 SET(MUSESCORE_VERSION       "${MUSESCORE_VERSION_MAJOR}.${MUSESCORE_VERSION_MINOR}")
 # Version schema x.x.x is hardcoded in source
 SET(MUSESCORE_VERSION_FULL  "${MUSESCORE_VERSION}.${MUSESCORE_VERSION_PATCH}")
+
+if (MUSESCORE_LABEL)
+  set (MUSESCORE_NAME_VERSION "${MUSESCORE_NAME_VERSION} ${MUSESCORE_LABEL}")
+endif (MUSESCORE_LABEL)
+
+if (MSCORE_UNSTABLE)
+  set (MUSESCORE_NAME_VERSION "${MUSESCORE_NAME_VERSION} (${MUSESCORE_VERSION_FULL} unstable)")
+endif (MSCORE_UNSTABLE)
+
+# Set revision for local builds
+# Before need run 'make revision' or 'msvc_build.bat revision'
+include(${CMAKE_CURRENT_LIST_DIR}/build/cmake/TryUseLocalRevision.cmake)
 
 # Print variables which are needed by CI build scripts.
 # STATUS mode makes message() command use stdout for its output.
@@ -45,3 +57,20 @@ if (MSCORE_UNSTABLE)
 else (MSCORE_UNSTABLE)
     message(STATUS "VERSION ${MUSESCORE_VERSION_FULL}")
 endif (MSCORE_UNSTABLE)
+message(STATUS "MUSESCORE_REVISION: ${MUSESCORE_REVISION}")
+
+
+if (MINGW OR MSVC OR APPLE)
+  if(MINGW OR MSVC)
+      # Option for MINGW and MSVC
+      SET(Mscore_INSTALL_NAME  "")
+      SET(Mscore_SHARE_NAME    "./")
+  else(MINGW OR MSVC)
+       # Option for Apple
+       SET(Mscore_INSTALL_NAME  "Contents/Resources/")
+       SET(Mscore_SHARE_NAME    "mscore.app/")
+  endif(MINGW OR MSVC)
+else (MINGW OR MSVC OR APPLE)
+      SET(Mscore_INSTALL_NAME  "mscore${MSCORE_INSTALL_SUFFIX}-${MUSESCORE_VERSION}/")
+      SET(Mscore_SHARE_NAME    "share/")
+endif (MINGW OR MSVC OR APPLE)

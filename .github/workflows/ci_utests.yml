@@ -1,0 +1,45 @@
+name: CI_utests
+
+on:
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  run_tests:
+    runs-on: ubuntu-18.04
+    env:
+        # Enable AddressSanitizer in the mtest build
+        CFLAGS: "-fsanitize=address -fno-omit-frame-pointer"
+        CXXFLAGS: "-fsanitize=address -fno-omit-frame-pointer"
+    steps:
+    - name: Cancel Previous Runs
+      uses: styfle/cancel-workflow-action@0.5.0
+      with:
+        access_token: ${{ github.token }}
+    - name: Clone repository
+      uses: actions/checkout@v2
+    - name: Сcache cache files
+      uses: actions/cache@v2
+      with:
+        path: ~/.ccache
+        key: ${{github.workflow}}-ccache-$(date -u +"%F-%T")
+        restore-keys: ${{github.workflow}}-ccache-  # restore ccache from either previous build on this branch or on master  
+    - name: Setup ccache
+      run: |
+        sudo bash ./build/ci/tools/setup_ccache.sh     
+    - name: Setup environment
+      run: |
+        sudo bash ./build/ci/linux/setup.sh
+    - name: Build
+      run: |
+        mkdir -p build.artifacts/env
+        sudo bash ./build/ci/linux/build_utest.sh -n ${{ github.run_id }}
+    - name: Run tests 
+      run: |
+        # At moment build and run tests consume 13.4 Gb of the disk.
+        # After left too little free space.
+        # So, we remove unnecessary tools, for more free space
+        sudo docker system prune -a -f
+        sudo rm -rf /usr/local/lib/android
+        sudo bash ./build/ci/linux/runutests.sh

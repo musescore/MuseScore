@@ -6,7 +6,9 @@
 .directory
 build.release
 build.debug
+build.install
 build.qtc
+build-*
 win32build
 win32install
 win64build
@@ -14,6 +16,8 @@ win64install
 build.xcode
 applebuild
 build.artifacts
+build.symbols
+vtest.artifacts
 MuseScorePortable
 /*.config
 /*.creator
@@ -50,5 +54,6 @@ MuseScore_General_License.md
 MuseScore_General_Changelog.txt
 MuseScore_General_Readme.md
 VERSION
+SF_VERSION
 /mscore/data/mscore.aps
 /msvc.*

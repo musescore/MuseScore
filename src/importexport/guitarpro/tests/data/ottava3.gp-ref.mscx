@@ -1,0 +1,496 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="3.01">
+  <Score>
+    <LayerTag id="0" tag="default"></LayerTag>
+    <currentLayer>0</currentLayer>
+    <Division>480</Division>
+    <Style>
+      <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
+      <Spatium>1.76389</Spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="poet"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <Part>
+      <Staff id="1">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Nylon Guitar</trackName>
+      <Instrument>
+        <trackName></trackName>
+        <transposeDiatonic>-7</transposeDiatonic>
+        <transposeChromatic>-12</transposeChromatic>
+        <singleNoteDynamics>0</singleNoteDynamics>
+        <StringData>
+          <frets>24</frets>
+          <string>52</string>
+          <string>57</string>
+          <string>62</string>
+          <string>67</string>
+          <string>71</string>
+          <string>76</string>
+          </StringData>
+        <Channel>
+          <program value="24"/>
+          <midiPort>0</midiPort>
+          <midiChannel>0</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="2">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Electric Guitar</trackName>
+      <Instrument>
+        <trackName></trackName>
+        <transposeDiatonic>-7</transposeDiatonic>
+        <transposeChromatic>-12</transposeChromatic>
+        <singleNoteDynamics>0</singleNoteDynamics>
+        <StringData>
+          <frets>24</frets>
+          <string>52</string>
+          <string>57</string>
+          <string>62</string>
+          <string>67</string>
+          <string>71</string>
+          <string>76</string>
+          </StringData>
+        <Channel>
+          <program value="27"/>
+          <midiPort>0</midiPort>
+          <midiChannel>2</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <linkedMain/>
+        </VBox>
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <linkedMain/>
+            </Clef>
+          <KeySig>
+            <linkedMain/>
+            <accidental>0</accidental>
+            </KeySig>
+          <TimeSig>
+            <linkedMain/>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Dynamic>
+            <subtype>mf</subtype>
+            <velocity>80</velocity>
+            <linkedMain/>
+            </Dynamic>
+          <Tempo>
+            <tempo>2</tempo>
+            <linkedMain/>
+            <text><sym>metNoteQuarterUp</sym> = 120</text>
+            </Tempo>
+          <Spanner type="Ottava">
+            <Ottava>
+              <subtype>8va</subtype>
+              </Ottava>
+            <next>
+              <location>
+                <fractions>1/1</fractions>
+                </location>
+              </next>
+            </Spanner>
+          <Chord>
+            <linkedMain/>
+            <durationType>whole</durationType>
+            <Note>
+              <linkedMain/>
+              <Accidental>
+                <subtype>accidentalSharp</subtype>
+                </Accidental>
+              <pitch>49</pitch>
+              <tpc>21</tpc>
+              <fret>4</fret>
+              <string>4</string>
+              </Note>
+            </Chord>
+          <Spanner type="Ottava">
+            <prev>
+              <location>
+                <fractions>-1/1</fractions>
+                </location>
+              </prev>
+            </Spanner>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="2">
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <linkedMain/>
+            </Clef>
+          <KeySig>
+            <linkedMain/>
+            <accidental>0</accidental>
+            </KeySig>
+          <TimeSig>
+            <linkedMain/>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Dynamic>
+            <subtype>mf</subtype>
+            <velocity>80</velocity>
+            <linkedMain/>
+            </Dynamic>
+          <Chord>
+            <linkedMain/>
+            <durationType>whole</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>57</pitch>
+              <tpc>17</tpc>
+              <fret>2</fret>
+              <string>2</string>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      </Staff>
+    <Score>
+      <LayerTag id="0" tag="default"></LayerTag>
+      <currentLayer>0</currentLayer>
+      <Division>480</Division>
+      <Style>
+        <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
+        <Spatium>1.76389</Spatium>
+        </Style>
+      <showInvisible>1</showInvisible>
+      <showUnprintable>1</showUnprintable>
+      <showFrames>1</showFrames>
+      <showMargins>0</showMargins>
+      <Part>
+        <Staff id="1">
+          <linkedTo>1</linkedTo>
+          <StaffType group="pitched">
+            <name>stdNormal</name>
+            </StaffType>
+          <bracket type="0" span="2" col="0"/>
+          </Staff>
+        <Staff id="2">
+          <linkedTo>1</linkedTo>
+          <StaffType group="tablature">
+            <name>tab6StrCommon</name>
+            <lines>6</lines>
+            <lineDistance>1.5</lineDistance>
+            <timesig>0</timesig>
+            <durations>0</durations>
+            <durationFontName>MuseScore Tab Modern</durationFontName>
+            <durationFontSize>15</durationFontSize>
+            <durationFontY>0</durationFontY>
+            <fretFontName>MuseScore Tab Serif</fretFontName>
+            <fretFontSize>9</fretFontSize>
+            <fretFontY>0</fretFontY>
+            <linesThrough>0</linesThrough>
+            <minimStyle>1</minimStyle>
+            <onLines>1</onLines>
+            <showRests>0</showRests>
+            <stemsDown>1</stemsDown>
+            <stemsThrough>0</stemsThrough>
+            <upsideDown>0</upsideDown>
+            <useNumbers>1</useNumbers>
+            </StaffType>
+          </Staff>
+        <trackName></trackName>
+        <Instrument>
+          <trackName></trackName>
+          <transposeDiatonic>-7</transposeDiatonic>
+          <transposeChromatic>-12</transposeChromatic>
+          <singleNoteDynamics>0</singleNoteDynamics>
+          <StringData>
+            <frets>24</frets>
+            <string>52</string>
+            <string>57</string>
+            <string>62</string>
+            <string>67</string>
+            <string>71</string>
+            <string>76</string>
+            </StringData>
+          <Channel>
+            <program value="24"/>
+            </Channel>
+          </Instrument>
+        </Part>
+      <Staff id="1">
+        <VBox>
+          <height>10</height>
+          <linked>
+            </linked>
+          <Text>
+            <style>Instrument Name (Part)</style>
+            <text></text>
+            </Text>
+          </VBox>
+        <Measure>
+          <voice>
+            <Clef>
+              <concertClefType>G</concertClefType>
+              <transposingClefType>G</transposingClefType>
+              <linked>
+                </linked>
+              </Clef>
+            <KeySig>
+              <linked>
+                </linked>
+              <accidental>0</accidental>
+              </KeySig>
+            <TimeSig>
+              <linked>
+                </linked>
+              <sigN>4</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
+            <Dynamic>
+              <subtype>mf</subtype>
+              <velocity>80</velocity>
+              <linked>
+                </linked>
+              </Dynamic>
+            <Tempo>
+              <tempo>2</tempo>
+              <linked>
+                </linked>
+              <text><b></b><font face="ScoreText"/><b><font face="FreeSerif"/> = 120</b></text>
+              </Tempo>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <Accidental>
+                  <subtype>accidentalSharp</subtype>
+                  </Accidental>
+                <pitch>49</pitch>
+                <tpc>21</tpc>
+                <fret>4</fret>
+                <string>4</string>
+                </Note>
+              </Chord>
+            </voice>
+          </Measure>
+        </Staff>
+      <Staff id="2">
+        <Measure>
+          <voice>
+            <KeySig>
+              <linked>
+                <indexDiff>-6</indexDiff>
+                </linked>
+              <accidental>0</accidental>
+              </KeySig>
+            <Chord>
+              <linked>
+                <indexDiff>-3</indexDiff>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  <indexDiff>-3</indexDiff>
+                  </linked>
+                <pitch>49</pitch>
+                <tpc>21</tpc>
+                <fret>4</fret>
+                <string>4</string>
+                </Note>
+              </Chord>
+            </voice>
+          </Measure>
+        </Staff>
+      <name>Nylon Guitar</name>
+      </Score>
+    <Score>
+      <LayerTag id="0" tag="default"></LayerTag>
+      <currentLayer>0</currentLayer>
+      <Division>480</Division>
+      <Style>
+        <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
+        <Spatium>1.76389</Spatium>
+        </Style>
+      <showInvisible>1</showInvisible>
+      <showUnprintable>1</showUnprintable>
+      <showFrames>1</showFrames>
+      <showMargins>0</showMargins>
+      <Part>
+        <Staff id="1">
+          <linkedTo>2</linkedTo>
+          <StaffType group="pitched">
+            <name>stdNormal</name>
+            </StaffType>
+          <bracket type="0" span="2" col="0"/>
+          </Staff>
+        <Staff id="2">
+          <linkedTo>2</linkedTo>
+          <StaffType group="tablature">
+            <name>tab6StrCommon</name>
+            <lines>6</lines>
+            <lineDistance>1.5</lineDistance>
+            <timesig>0</timesig>
+            <durations>0</durations>
+            <durationFontName>MuseScore Tab Modern</durationFontName>
+            <durationFontSize>15</durationFontSize>
+            <durationFontY>0</durationFontY>
+            <fretFontName>MuseScore Tab Serif</fretFontName>
+            <fretFontSize>9</fretFontSize>
+            <fretFontY>0</fretFontY>
+            <linesThrough>0</linesThrough>
+            <minimStyle>1</minimStyle>
+            <onLines>1</onLines>
+            <showRests>0</showRests>
+            <stemsDown>1</stemsDown>
+            <stemsThrough>0</stemsThrough>
+            <upsideDown>0</upsideDown>
+            <useNumbers>1</useNumbers>
+            </StaffType>
+          </Staff>
+        <trackName></trackName>
+        <Instrument>
+          <trackName></trackName>
+          <transposeDiatonic>-7</transposeDiatonic>
+          <transposeChromatic>-12</transposeChromatic>
+          <singleNoteDynamics>0</singleNoteDynamics>
+          <StringData>
+            <frets>24</frets>
+            <string>52</string>
+            <string>57</string>
+            <string>62</string>
+            <string>67</string>
+            <string>71</string>
+            <string>76</string>
+            </StringData>
+          <Channel>
+            <program value="27"/>
+            </Channel>
+          </Instrument>
+        </Part>
+      <Staff id="1">
+        <VBox>
+          <height>10</height>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            <indexDiff>-11</indexDiff>
+            </linked>
+          <Text>
+            <style>Instrument Name (Part)</style>
+            <text></text>
+            </Text>
+          </VBox>
+        <Measure>
+          <voice>
+            <Clef>
+              <concertClefType>G</concertClefType>
+              <transposingClefType>G</transposingClefType>
+              <linked>
+                </linked>
+              </Clef>
+            <KeySig>
+              <linked>
+                </linked>
+              <accidental>0</accidental>
+              </KeySig>
+            <TimeSig>
+              <linked>
+                </linked>
+              <sigN>4</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
+            <Tempo>
+              <tempo>2</tempo>
+              <linked>
+                <location>
+                  <staves>-1</staves>
+                  </location>
+                <indexDiff>5</indexDiff>
+                </linked>
+              <text><b></b><font face="ScoreText"/><b><font face="FreeSerif"/> = 120</b></text>
+              </Tempo>
+            <Dynamic>
+              <subtype>mf</subtype>
+              <velocity>80</velocity>
+              <linked>
+                <indexDiff>3</indexDiff>
+                </linked>
+              </Dynamic>
+            <Chord>
+              <linked>
+                <indexDiff>3</indexDiff>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  <indexDiff>3</indexDiff>
+                  </linked>
+                <pitch>57</pitch>
+                <tpc>17</tpc>
+                <fret>2</fret>
+                <string>2</string>
+                </Note>
+              </Chord>
+            </voice>
+          </Measure>
+        </Staff>
+      <Staff id="2">
+        <Measure>
+          <voice>
+            <KeySig>
+              <linked>
+                <indexDiff>-2</indexDiff>
+                </linked>
+              <accidental>0</accidental>
+              </KeySig>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>57</pitch>
+                <tpc>17</tpc>
+                <fret>2</fret>
+                <string>2</string>
+                </Note>
+              </Chord>
+            </voice>
+          </Measure>
+        </Staff>
+      <name>Electric Guitar</name>
+      </Score>
+    </Score>
+  </museScore>

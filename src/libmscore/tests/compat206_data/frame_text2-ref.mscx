@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="3.01">
+  <Score>
+    <LayerTag id="0" tag="default"></LayerTag>
+    <currentLayer>0</currentLayer>
+    <Division>480</Division>
+    <Style>
+      <pageWidth>8.27007</pageWidth>
+      <pageHeight>11.6901</pageHeight>
+      <pagePrintableWidth>7.08897</pagePrintableWidth>
+      <pageEvenLeftMargin>0.590551</pageEvenLeftMargin>
+      <pageOddLeftMargin>0.590551</pageOddLeftMargin>
+      <pageEvenTopMargin>0.393701</pageEvenTopMargin>
+      <pageEvenBottomMargin>0.590551</pageEvenBottomMargin>
+      <pageOddTopMargin>0.393701</pageOddTopMargin>
+      <pageOddBottomMargin>0.590551</pageOddBottomMargin>
+      <staffUpperBorder>12</staffUpperBorder>
+      <staffLowerBorder>3</staffLowerBorder>
+      <akkoladeDistance>8.5</akkoladeDistance>
+      <minSystemDistance>9</minSystemDistance>
+      <maxSystemDistance>9</maxSystemDistance>
+      <lyricsDashForce>0</lyricsDashForce>
+      <lyricsOddFramePadding>0</lyricsOddFramePadding>
+      <lyricsOddFrameWidth>0</lyricsOddFrameWidth>
+      <lyricsEvenFramePadding>0</lyricsEvenFramePadding>
+      <lyricsEvenFrameWidth>0</lyricsEvenFrameWidth>
+      <frameSystemDistance>3</frameSystemDistance>
+      <doubleBarDistance>0.46</doubleBarDistance>
+      <endBarDistance>0.65</endBarDistance>
+      <clefLeftMargin>0.64</clefLeftMargin>
+      <clefKeyRightMargin>1.75</clefKeyRightMargin>
+      <barNoteDistance>1.2</barNoteDistance>
+      <hairpinFramePadding>0</hairpinFramePadding>
+      <hairpinFrameWidth>0</hairpinFrameWidth>
+      <pedalFramePadding>0</pedalFramePadding>
+      <pedalFrameWidth>0</pedalFrameWidth>
+      <harmonyFretDist>0.5</harmonyFretDist>
+      <chordSymbolAFramePadding>0</chordSymbolAFramePadding>
+      <chordSymbolAFrameWidth>0</chordSymbolAFrameWidth>
+      <showHeader>1</showHeader>
+      <headerFirstPage>1</headerFirstPage>
+      <evenHeaderL>$p</evenHeaderL>
+      <oddHeaderR>$p</oddHeaderR>
+      <footerOddEven>0</footerOddEven>
+      <evenFooterL></evenFooterL>
+      <evenFooterC>$C</evenFooterC>
+      <oddFooterC>$C</oddFooterC>
+      <oddFooterR></oddFooterR>
+      <voltaFontSize>10</voltaFontSize>
+      <voltaFramePadding>0</voltaFramePadding>
+      <voltaFrameWidth>0</voltaFrameWidth>
+      <ottavaHookAbove>0.5</ottavaHookAbove>
+      <ottavaHookBelow>-0.5</ottavaHookBelow>
+      <ottavaFontStyle>2</ottavaFontStyle>
+      <ottavaFramePadding>0</ottavaFramePadding>
+      <ottavaFrameWidth>0</ottavaFrameWidth>
+      <keySigNaturals>1</keySigNaturals>
+      <tupletVHeadDistance>0</tupletVHeadDistance>
+      <tupletVStemDistance>0</tupletVStemDistance>
+      <tupletFontSize>9</tupletFontSize>
+      <tupletFramePadding>0</tupletFramePadding>
+      <tupletFrameWidth>0</tupletFrameWidth>
+      <textLineFramePadding>0</textLineFramePadding>
+      <textLineFrameWidth>0</textLineFrameWidth>
+      <defaultFontSpatiumDependent>0</defaultFontSpatiumDependent>
+      <defaultAlign>left,baseline</defaultAlign>
+      <defaultFramePadding>0</defaultFramePadding>
+      <defaultFrameWidth>0</defaultFrameWidth>
+      <defaultFrameRound>25</defaultFrameRound>
+      <titleFontStyle>1</titleFontStyle>
+      <titleFramePadding>0</titleFramePadding>
+      <titleFrameWidth>0</titleFrameWidth>
+      <titleFrameRound>25</titleFrameRound>
+      <subTitleFontSize>13</subTitleFontSize>
+      <subTitleFramePadding>0</subTitleFramePadding>
+      <subTitleFrameWidth>0</subTitleFrameWidth>
+      <subTitleFrameRound>25</subTitleFrameRound>
+      <composerFontSize>13</composerFontSize>
+      <composerFontStyle>1</composerFontStyle>
+      <composerFramePadding>0</composerFramePadding>
+      <composerFrameWidth>0</composerFrameWidth>
+      <composerFrameRound>25</composerFrameRound>
+      <lyricistFontSize>13</lyricistFontSize>
+      <lyricistFramePadding>0</lyricistFramePadding>
+      <lyricistFrameWidth>0</lyricistFrameWidth>
+      <lyricistFrameRound>25</lyricistFrameRound>
+      <fingeringFramePadding>0</fingeringFramePadding>
+      <fingeringFrameWidth>0</fingeringFrameWidth>
+      <fingeringFrameRound>25</fingeringFrameRound>
+      <lhGuitarFingeringFramePadding>0</lhGuitarFingeringFramePadding>
+      <lhGuitarFingeringFrameWidth>0</lhGuitarFingeringFrameWidth>
+      <lhGuitarFingeringFrameRound>25</lhGuitarFingeringFrameRound>
+      <rhGuitarFingeringFontSize>10</rhGuitarFingeringFontSize>
+      <rhGuitarFingeringFontStyle>3</rhGuitarFingeringFontStyle>
+      <rhGuitarFingeringFramePadding>0</rhGuitarFingeringFramePadding>
+      <rhGuitarFingeringFrameWidth>0</rhGuitarFingeringFrameWidth>
+      <rhGuitarFingeringFrameRound>25</rhGuitarFingeringFrameRound>
+      <longInstrumentFontSize>11</longInstrumentFontSize>
+      <longInstrumentFramePadding>0</longInstrumentFramePadding>
+      <longInstrumentFrameWidth>0</longInstrumentFrameWidth>
+      <shortInstrumentFontSize>11</shortInstrumentFontSize>
+      <shortInstrumentFramePadding>0</shortInstrumentFramePadding>
+      <shortInstrumentFrameWidth>0</shortInstrumentFrameWidth>
+      <partInstrumentFramePadding>0</partInstrumentFramePadding>
+      <partInstrumentFrameWidth>0</partInstrumentFrameWidth>
+      <partInstrumentFrameRound>25</partInstrumentFrameRound>
+      <dynamicsFontStyle>0</dynamicsFontStyle>
+      <dynamicsFramePadding>0</dynamicsFramePadding>
+      <dynamicsFrameWidth>0</dynamicsFrameWidth>
+      <expressionFontSize>12</expressionFontSize>
+      <expressionFramePadding>0</expressionFramePadding>
+      <expressionFrameWidth>0</expressionFrameWidth>
+      <tempoFontSize>10</tempoFontSize>
+      <tempoFontStyle>0</tempoFontStyle>
+      <tempoFramePadding>0</tempoFramePadding>
+      <tempoFrameWidth>0</tempoFrameWidth>
+      <tempoFrameRound>25</tempoFrameRound>
+      <metronomeFramePadding>0</metronomeFramePadding>
+      <metronomeFrameWidth>0</metronomeFrameWidth>
+      <measureNumberAlign>center,bottom</measureNumberAlign>
+      <measureNumberFramePadding>0</measureNumberFramePadding>
+      <measureNumberFrameWidth>0</measureNumberFrameWidth>
+      <translatorAlign>center,top</translatorAlign>
+      <translatorFramePadding>0</translatorFramePadding>
+      <translatorFrameWidth>0</translatorFrameWidth>
+      <systemAlign>left,top</systemAlign>
+      <systemFramePadding>0</systemFramePadding>
+      <systemFrameWidth>0</systemFrameWidth>
+      <systemFrameRound>25</systemFrameRound>
+      <staffAlign>left,top</staffAlign>
+      <staffPosAbove x="0" y="-4"/>
+      <staffFramePadding>0</staffFramePadding>
+      <staffFrameWidth>0</staffFrameWidth>
+      <staffFrameRound>25</staffFrameRound>
+      <rehearsalMarkFontSize>10</rehearsalMarkFontSize>
+      <rehearsalMarkFramePadding>0.1</rehearsalMarkFramePadding>
+      <repeatLeftFramePadding>0</repeatLeftFramePadding>
+      <repeatLeftFrameWidth>0</repeatLeftFrameWidth>
+      <repeatLeftFrameRound>25</repeatLeftFrameRound>
+      <repeatRightFontSize>10</repeatRightFontSize>
+      <repeatRightFramePadding>0</repeatRightFramePadding>
+      <repeatRightFrameWidth>0</repeatRightFrameWidth>
+      <repeatRightFrameRound>25</repeatRightFrameRound>
+      <frameFontSize>11</frameFontSize>
+      <frameFontSpatiumDependent>1</frameFontSpatiumDependent>
+      <frameFramePadding>0</frameFramePadding>
+      <frameFrameWidth>0</frameFrameWidth>
+      <textLineFontSize>9</textLineFontSize>
+      <textLineTextAlign>right,center</textLineTextAlign>
+      <glissandoAlign>center,baseline</glissandoAlign>
+      <glissandoFramePadding>0</glissandoFramePadding>
+      <glissandoFrameWidth>0</glissandoFrameWidth>
+      <bendAlign>center,center</bendAlign>
+      <bendFramePadding>0</bendFramePadding>
+      <bendFrameWidth>0</bendFrameWidth>
+      <headerFontSize>11</headerFontSize>
+      <headerAlign>center,top</headerAlign>
+      <headerFramePadding>0</headerFramePadding>
+      <headerFrameWidth>0</headerFrameWidth>
+      <footerFontSize>11</footerFontSize>
+      <footerAlign>center,bottom</footerAlign>
+      <footerFramePadding>0</footerFramePadding>
+      <footerFrameWidth>0</footerFrameWidth>
+      <instrumentChangeAlign>left,bottom</instrumentChangeAlign>
+      <instrumentChangeFramePadding>0</instrumentChangeFramePadding>
+      <instrumentChangeFrameWidth>0</instrumentChangeFrameWidth>
+      <user1Name>Position text</user1Name>
+      <user1FontSize>9</user1FontSize>
+      <user1FramePadding>0</user1FramePadding>
+      <user1FrameWidth>0</user1FrameWidth>
+      <user2Name>Expression</user2Name>
+      <user2FontStyle>2</user2FontStyle>
+      <user2FramePadding>0</user2FramePadding>
+      <user2FrameWidth>0</user2FrameWidth>
+      <Spatium>1.94</Spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>0</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer">Trad air: Tout le long de la rivière</metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"> P. J. de Béranger</metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle">L'Académie et le Caveau</metaTag>
+    <metaTag name="originalFormat">xml</metaTag>
+    <metaTag name="poet"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <Part>
+      <Staff id="1">
+        <StaffType group="pitched">
+          </StaffType>
+        </Staff>
+      <trackName>Tenor</trackName>
+      <Instrument>
+        <longName>Tenor</longName>
+        <trackName>Choir Aahs</trackName>
+        <Channel>
+          <program value="0"/>
+          <controller ctrl="7" value="101"/>
+          <controller ctrl="10" value="63"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>25.5926</height>
+        <bottomGap>0</bottomGap>
+        <topMargin>3</topMargin>
+        <Text>
+          <style>Frame</style>
+          <text>îèéààéà</text>
+          </Text>
+        <Text>
+          <style>Frame</style>
+          <offset x="55" y="0.5"/>
+          <text>éééàè</text>
+          </Text>
+        </VBox>
+      <VBox>
+        <height>47.762</height>
+        <topGap>10</topGap>
+        <bottomGap>0</bottomGap>
+        <Text>
+          <style>Frame</style>
+          <text>êêàééééç*éô</text>
+          </Text>
+        <Text>
+          <style>Frame</style>
+          <offset x="55" y="0.5"/>
+          <text>àéùééé</text>
+          </Text>
+        </VBox>
+      </Staff>
+    </Score>
+  </museScore>

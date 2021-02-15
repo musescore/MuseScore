@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/MuseScore/Audio/qmldir</file>
+        <file>qml/MuseScore/Audio/DevTools/AudioEngineTests.qml</file>
+        <file>qml/MuseScore/Audio/DevTools/MidiPorts.qml</file>
+        <file>qml/MuseScore/Audio/DevTools/SoundFontsPanel.qml</file>
+        <file>qml/MuseScore/Audio/DevTools/SynthSettings.qml</file>
+    </qresource>
+</RCC>

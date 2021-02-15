@@ -13,7 +13,7 @@ import zipfile
 #needs to be equal or smaller than the cron
 period = 300
 outputDir = "share/locale/"
-s3Urls = ["s3://extensions.musescore.org/3.6/languages/"]
+s3Urls = ["s3://extensions.musescore.org/4.0/languages/"]
 
 print("Last changes: 07 Feb 2020")
 
@@ -82,6 +82,7 @@ else:
     data = {}
     data["type"] = "Languages"
     data["version"] = "2.0"
+
 
 translationChanged = newDetailsFile
 for lang_code, languageName in langCodeNameDict.items():

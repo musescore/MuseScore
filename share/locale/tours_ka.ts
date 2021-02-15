@@ -4,7 +4,7 @@
     <message>
         <source>Welcome to MuseScore! This brief tour will guide you through the MuseScore user interface.</source>
         <comment>welcome</comment>
-        <translation>მოგესალმებით MuseScore-ში! ეს სწრაფი ექსკურსია გასწავლით MuseScore-ს სამომხმარებლო ინტერფეისს.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>The Playback Controls toolbar allows you to play/pause your score and control various aspects of playback.</source>
@@ -14,22 +14,22 @@
     <message>
         <source>The Note Input toolbar allows you to enter notes and rests into your score.</source>
         <comment>welcome</comment>
-        <translation>ნოტის შეყვანის პანელი საშუალებას გაძლევთ შეიყვანოთ ნოტები და პაუზები თქვენს ნაწარმოებში.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>The Palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
-        <translation>პალიტრა საშუალებას გაძლევთ შეიყვანოს სხვა სანოტო აღნიშვნები თქვენს ნაწარმოებშ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Each palette contains items that can be added to the score.</source>
         <comment>show-palette</comment>
-        <translation>თითოეული პალიტრა შეიცავს აღნიშვნას რომელის შეიძლება შეტანილ იქნას ნაწარმოებში.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
-        <translation>მოგესალმებით პალიტრაში, საიდანაც თქვენ შეძლებთ შეიტანოთ სხვადასხვა ელემენტები თქვენს ნაწარმოებში. დააჭირეთ &quot;შემდეგს&quot; რათა გაიგოთ უფრო მეტი.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>To enter notes with different rhythms in the same measure, use multiple voices.
@@ -43,15 +43,13 @@
         <source>These are the toolbars.
     The main three are File Operations, Playback Controls, and Note Input.</source>
         <comment>welcome</comment>
-        <translation>ესენი პანელებია.
-მთავარი სამი არის: ფაილზე მოქმედებები, მოსმენის კონტროლი და ნოტების შეყვანა.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>There are different workspaces available with different sets of palettes.
     The &quot;Advanced&quot; workspace contains more items than the &quot;Basic&quot; workspace.</source>
         <comment>show-palette</comment>
-        <translation>აქ არის სხვადასხვა სამუშაო სივრცეები, რომლებთაც სხვადასხვა სანოტო პალიტრები აქვთ.
-&quot;გაძლიერებული&quot; სამუშაო სივრცე უფრო მეტ პალიტრას შეიცავს, ვიდრე &quot;ჩვეულებრივი&quot;.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>To add a palette item to your score, first select an element or range in your score, then double-click on the palette item to add it to the selected elements.
@@ -75,14 +73,13 @@
     <message>
         <source>To enable note input mode, click the &quot;Note input&quot; icon or press the shortcut &quot;N&quot;.</source>
         <comment>note-input</comment>
-        <translation>რათა გააქტიუროთ ნოტების შეყვანის რეჟიმი, დააჭირეთ &quot;ნოტის შეყვანის&quot; სიმბოლოს, არ გამოიყენეთ იარლიყი &quot;N&quot;.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Select a duration by clicking one of these icons or pressing the shortcuts &quot;1&quot; - &quot;9&quot;.
     To include an augmentation dot, click the appropriate icon or press the shortcut &quot;.&quot;.</source>
         <comment>note-input</comment>
-        <translation>აირჩიეთ ხანგრძლივობა ამ სიმბოლოებზე დაჭერით, ან ისარგებლეთ იარლიყებით &quot;1&quot;-დან &quot;9&quot;-მდე.
-თუ თქვენ წერტილის გამოყენება გნებავთ, მაშინ დააჭირეთ შესაბამის ღილაკს, ან გამოიყენეთ იარლიყი &quot;.&quot;.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>To enter a rest of the selected duration, press the shortcut &quot;0&quot;, or select this icon then click on the staff.</source>

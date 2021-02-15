@@ -20,27 +20,17 @@
 #ifndef MUSESCORE_CONFIG_H
 #define MUSESCORE_CONFIG_H
 
-#define USE_ALSA
-#define USE_JACK
-/* #undef USE_PORTAUDIO */
-/* #undef USE_PORTMIDI */
-
 #define MSCORE_UNSTABLE
 
 #define HAS_MIDI
 #define STATIC_SCRIPT_BINDINGS
 #define BUILD_SCRIPTGEN
 #define HAS_AUDIOFILE
-/* #undef USE_SSE */
 
 #define INSTALL_NAME      "mscore-2.0/"
 #define INSTPREFIX        "/usr/local"
 #define VERSION           "2.0.0"
 
-#define AEOLUS
-/* #undef OMR */
-/* #undef OCR */
-#define OSC
 /* #undef OPENGL */
 #define SOUNDFONT3
 

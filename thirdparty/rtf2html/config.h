@@ -71,7 +71,7 @@
 #define STDC_HEADERS 1
 
 /* Version number of package */
-#define VERSION "0.2.0"
+//#define VERSION "0.2.0"
 
 /* Define to 1 for debug version */
 /* #undef _DEBUG */

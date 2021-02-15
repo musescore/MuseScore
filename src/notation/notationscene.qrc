@@ -1,0 +1,27 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/MuseScore/NotationScene/NotationView.qml</file>
+        <file>qml/MuseScore/NotationScene/qmldir</file>
+        <file>qml/MuseScore/NotationScene/ZoomControl.qml</file>
+        <file>qml/MuseScore/NotationScene/ViewModeControl.qml</file>
+        <file>qml/MuseScore/NotationScene/NotationAccessibilityInfo.qml</file>
+        <file>qml/MuseScore/NotationScene/PartsDialog.qml</file>
+        <file>qml/MuseScore/NotationScene/NotationToolBar.qml</file>
+        <file>qml/MuseScore/NotationScene/ConcertPitchControl.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/SearchPopup.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/NotationSwitchButton.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/NotationSwitchPanel.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/PartsView.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/VoicesPopup.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/PartDelegate.qml</file>
+        <file>view/resources/data/std_sample.mscx</file>
+        <file>view/resources/data/tab_sample.mscx</file>
+        <file>view/resources/icons/go-next.svg</file>
+        <file>view/resources/icons/go-previous.svg</file>
+        <file>qml/MuseScore/NotationScene/NoteInputBar.qml</file>
+        <file>qml/MuseScore/NotationScene/NoteInputBarCustomiseDialog.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/NoteInputBarActionDelegate.qml</file>
+        <file>qml/MuseScore/NotationScene/SelectMeasuresCountDialog.qml</file>
+        <file>qml/MuseScore/NotationScene/UndoRedoToolBar.qml</file>
+    </qresource>
+</RCC>

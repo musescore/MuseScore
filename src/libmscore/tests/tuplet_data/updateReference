@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [ "`uname`" = 'Darwin' ]; then
+   S=../../../build.xcode/mtest/libmscore/tuplet/Debug
+else
+   S=../../../build.debug/mtest/libmscore/tuplet
+fi
+
+for a in 1; do
+      cp $S/tuplet${a}.mscx tuplet${a}-ref.mscx
+      cp $S/split1.mscx split1-ref.mscx
+      cp $S/split2.mscx split2-ref.mscx
+      cp $S/split3.mscx split3-ref.mscx
+      cp $S/split4.mscx split4-ref.mscx
+      done
+

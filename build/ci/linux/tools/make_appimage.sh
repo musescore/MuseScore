@@ -1,10 +1,7 @@
 #!/usr/bin/env bash
 
-INSTALL_DIR="$1" # MuseScore was installed here
-APPIMAGE_NAME="$2" # name for AppImage file (created outside $INSTALL_DIR)
-
+INSTALL_DIR=$1
 if [ -z "$INSTALL_DIR" ]; then echo "error: not set INSTALL_DIR"; exit 1; fi
-if [ -z "$APPIMAGE_NAME" ]; then echo "error: not set APPIMAGE_NAME"; exit 1; fi
 
 ##########################################################################
 # INSTALL APPIMAGETOOL AND LINUXDEPLOY
@@ -46,15 +43,6 @@ fi
 export PATH="${PWD%/}/appimagetool:${PATH}"
 appimagetool --version
 
-if [[ ! -d "appimageupdatetool" ]]; then
-  mkdir appimageupdatetool
-  cd appimageupdatetool
-  download_appimage_release AppImage/AppImageUpdate appimageupdatetool continuous
-  cd ..
-fi
-export PATH="${PWD%/}/appimageupdatetool:${PATH}"
-appimageupdatetool --version
-
 function download_linuxdeploy_component()
 {
   download_appimage_release "linuxdeploy/$1" "$1" continuous
@@ -69,6 +57,7 @@ if [[ ! -d "linuxdeploy" ]]; then
 fi
 export PATH="${PWD%/}/linuxdeploy:${PATH}"
 linuxdeploy --list-plugins
+
 
 ##########################################################################
 # BUNDLE DEPENDENCIES INTO APPDIR
@@ -168,13 +157,6 @@ fallback_libraries=(
   libjack.so.0 # https://github.com/LMMS/lmms/pull/3958
 )
 
-# PREVIOUSLY EXTRACTED APPIMAGES
-# These include their own dependencies. We bundle them uncompressed to avoid
-# creating a double layer of compression (AppImage inside AppImage).
-extracted_appimages=(
-  appimageupdatetool
-)
-
 for file in "${unwanted_files[@]}"; do
   rm -rf "${appdir}/${file}"
 done
@@ -191,19 +173,6 @@ done
 
 for fb_lib in "${fallback_libraries[@]}"; do
   fallback_library "${fb_lib}"
-done
-
-for name in "${extracted_appimages[@]}"; do
-  symlink="$(which "${name}")"
-  apprun="$(dirname "${symlink}")/$(readlink "${symlink}")"
-  if [[ ! -L "${symlink}" || ! -f "${apprun}" ]]; then
-    echo "$0: Warning: Unable to find AppImage for '${name}'. Will not bundle." >&2
-    continue
-  fi
-  extracted_appdir_path="$(dirname "${apprun}")"
-  extracted_appdir_name="$(basename "${extracted_appdir_path}")"
-  cp -r "${extracted_appdir_path}" "${appdir}/"
-  ln -s "../${extracted_appdir_name}/AppRun" "${appdir}/bin/${name}"
 done
 
 # METHOD OF LAST RESORT
@@ -242,7 +211,7 @@ done
 # TURN APPDIR INTO AN APPIMAGE
 ##########################################################################
 
-appimage="${APPIMAGE_NAME}" # name to use for AppImage file
+appimage="${appdir%.AppDir}.AppImage" # name to use for AppImage file
 
 appimagetool_args=( # array
   # none

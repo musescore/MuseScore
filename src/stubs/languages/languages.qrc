@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/MuseScore/Languages/qmldir</file>
+        <file>qml/MuseScore/Languages/LanguagesPage.qml</file>
+    </qresource>
+</RCC>

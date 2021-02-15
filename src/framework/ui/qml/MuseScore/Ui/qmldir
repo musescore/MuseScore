@@ -1,0 +1,3 @@
+module MuseScore.Ui
+InteractiveProvider 1.0 InteractiveProvider.qml
+

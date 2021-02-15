@@ -35,5 +35,4 @@ else (MSVC)
           COMPILE_FLAGS "-Wno-deprecated-declarations"
         )
     endif (MINGW OR APPLE)
-
 endif (MSVC)

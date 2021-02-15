@@ -1,0 +1,57 @@
+//=============================================================================
+//  MuseScore
+//  Music Composition & Notation
+//
+//  Copyright (C) 2020 MuseScore BVBA and others
+//
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License version 2.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program; if not, write to the Free Software
+//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//=============================================================================
+#include "pluginsstubmodule.h"
+
+#include "modularity/ioc.h"
+#include "ui/iuiengine.h"
+
+#include "pluginsservicestub.h"
+#include "pluginsconfigurationstub.h"
+
+#include "ui/iinteractiveuriregister.h"
+
+using namespace mu::plugins;
+using namespace mu::framework;
+using namespace mu::ui;
+
+static void plugins_init_qrc()
+{
+    Q_INIT_RESOURCE(plugins);
+}
+
+std::string PluginsStubModule::moduleName() const
+{
+    return "plugins_stub";
+}
+
+void PluginsStubModule::registerExports()
+{
+    ioc()->registerExport<IPluginsService>(moduleName(), new PluginsServiceStub());
+    ioc()->registerExport<IPluginsConfiguration>(moduleName(), new PluginsConfigurationStub());
+}
+
+void PluginsStubModule::registerResources()
+{
+    plugins_init_qrc();
+}
+
+void PluginsStubModule::registerUiTypes()
+{
+    ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(plugins_QML_IMPORT);
+}

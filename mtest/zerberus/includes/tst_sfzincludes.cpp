@@ -1,4 +1,3 @@
-
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
@@ -25,43 +24,41 @@ using namespace Ms;
 //---------------------------------------------------------
 
 class TestSfzIncludes : public QObject, public MTest
-      {
-      Q_OBJECT
+{
+    Q_OBJECT
 
-   private slots:
-      void initTestCase();
-      void testincludes();
-      };
+private slots:
+    void initTestCase();
+    void testincludes();
+};
 
 //---------------------------------------------------------
 //   initTestCase
 //---------------------------------------------------------
 
 void TestSfzIncludes::initTestCase()
-      {
-      initMTest();
-      }
+{
+    initMTest();
+}
 
 //---------------------------------------------------------
 //   testincludes
 //---------------------------------------------------------
 
 void TestSfzIncludes::testincludes()
-      {
-      Zerberus* synth = new Zerberus();
-      preferences.setPreference(PREF_APP_PATHS_MYSOUNDFONTS, root);
-      synth->loadInstrument("includeMain.sfz");
-      QCOMPARE(synth->instrument(0)->zones().size(), (size_t) 2);
-      QCOMPARE(synth->instrument(0)->zones().front()->keyLo, (char) 23);
-      QCOMPARE(synth->instrument(0)->zones().front()->keyHi, (char) 42);
-      QCOMPARE(synth->instrument(0)->zones().front()->keyBase, (char) 40);
-      QCOMPARE(synth->instrument(0)->zones().back()->keyLo, (char) 42);
-      QCOMPARE(synth->instrument(0)->zones().back()->keyHi, (char) 23);
-      QCOMPARE(synth->instrument(0)->zones().back()->keyBase, (char) 40);
-      }
+{
+    Zerberus* synth = new Zerberus();
+    preferences.setPreference(PREF_APP_PATHS_MYSOUNDFONTS, root);
+    synth->loadInstrument("includeMain.sfz");
+    QCOMPARE(synth->instrument(0)->zones().size(), (size_t)2);
+    QCOMPARE(synth->instrument(0)->zones().front()->keyLo, (char)23);
+    QCOMPARE(synth->instrument(0)->zones().front()->keyHi, (char)42);
+    QCOMPARE(synth->instrument(0)->zones().front()->keyBase, (char)40);
+    QCOMPARE(synth->instrument(0)->zones().back()->keyLo, (char)42);
+    QCOMPARE(synth->instrument(0)->zones().back()->keyHi, (char)23);
+    QCOMPARE(synth->instrument(0)->zones().back()->keyBase, (char)40);
+}
 
 QTEST_MAIN(TestSfzIncludes)
 
 #include "tst_sfzincludes.moc"
-
-

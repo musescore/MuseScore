@@ -1,0 +1,42 @@
+
+add_subdirectory(framework)
+
+if (NOT BUILD_USERSCORES_MODULE)
+    add_subdirectory(userscores)
+endif (NOT BUILD_USERSCORES_MODULE)
+
+if (NOT BUILD_WORKSPACE_MODULE)
+    add_subdirectory(workspace)
+endif (NOT BUILD_WORKSPACE_MODULE)
+
+if (NOT BUILD_CLOUD_MODULE)
+    add_subdirectory(cloud)
+endif (NOT BUILD_CLOUD_MODULE)
+
+if (NOT BUILD_EXTENSIONS_MODULE)
+    add_subdirectory(extensions)
+endif (NOT BUILD_EXTENSIONS_MODULE)
+
+if (NOT BUILD_LANGUAGES_MODULE)
+    add_subdirectory(languages)
+endif (NOT BUILD_LANGUAGES_MODULE)
+
+if (NOT BUILD_PLUGINS_MODULE)
+    add_subdirectory(plugins)
+endif (NOT BUILD_PLUGINS_MODULE)
+
+if (NOT BUILD_PLAYBACK_MODULE)
+    add_subdirectory(playback)
+endif (NOT BUILD_PLAYBACK_MODULE)
+
+if (NOT BUILD_PALETTE_MODULE)
+    add_subdirectory(palette)
+endif (NOT BUILD_PALETTE_MODULE)
+
+if (NOT BUILD_INSTRUMENTS_MODULE)
+    add_subdirectory(instruments)
+endif (NOT BUILD_INSTRUMENTS_MODULE)
+
+if (NOT BUILD_INSPECTOR_MODULE)
+    add_subdirectory(inspector)
+endif (NOT BUILD_INSPECTOR_MODULE)

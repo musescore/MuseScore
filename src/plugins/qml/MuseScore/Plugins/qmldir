@@ -1,0 +1,3 @@
+module MuseScore.Plugins
+PluginsPage 1.0 PluginsPage.qml
+PluginsTests 1.0 DevTools/PluginsTests.qml

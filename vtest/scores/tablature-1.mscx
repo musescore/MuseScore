@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="2.07">
+  <programVersion>2.1.0</programVersion>
+  <programRevision>3543170</programRevision>
+  <Score>
+    <LayerTag id="0" tag="default"></LayerTag>
+    <currentLayer>0</currentLayer>
+    <Synthesizer>
+      </Synthesizer>
+    <Division>480</Division>
+    <Style>
+      <staffUpperBorder>3.5</staffUpperBorder>
+      <staffLowerBorder>3.5</staffLowerBorder>
+      <showMeasureNumber>0</showMeasureNumber>
+      <showFooter>0</showFooter>
+      <page-layout>
+        <page-height>283.465</page-height>
+        <page-width>566.929</page-width>
+        <page-margins type="both">
+          <left-margin>11.3386</left-margin>
+          <right-margin>11.3386</right-margin>
+          <top-margin>0</top-margin>
+          <bottom-margin>0</bottom-margin>
+          </page-margins>
+        </page-layout>
+      <Spatium>1.764</Spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2013-09-17</metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="platform">X11</metaTag>
+    <metaTag name="poet"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <PageList>
+      <Page>
+        <System>
+          </System>
+        </Page>
+      </PageList>
+    <Part>
+      <Staff id="1">
+        <StaffType group="tablature">
+          <name>Tab. 6-str common</name>
+          <lines>6</lines>
+          <lineDistance>1.5</lineDistance>
+          <timesig>0</timesig>
+          <durations>0</durations>
+          <durationFontName>MuseScore Tab Modern</durationFontName>
+          <durationFontSize>15</durationFontSize>
+          <durationFontY>0</durationFontY>
+          <fretFontName>MuseScore Tab Serif</fretFontName>
+          <fretFontSize>9</fretFontSize>
+          <fretFontY>0</fretFontY>
+          <linesThrough>0</linesThrough>
+          <minimStyle>1</minimStyle>
+          <onLines>1</onLines>
+          <showRests>0</showRests>
+          <stemsDown>1</stemsDown>
+          <stemsThrough>0</stemsThrough>
+          <upsideDown>0</upsideDown>
+          <useNumbers>1</useNumbers>
+          </StaffType>
+        <bracket type="-1" span="0"/>
+        </Staff>
+      <trackName>Acoustic Guitar [Tablature]</trackName>
+      <Instrument>
+        <shortName>Guit.</shortName>
+        <trackName>Acoustic Guitar [Tablature]</trackName>
+        <minPitchP>40</minPitchP>
+        <maxPitchP>83</maxPitchP>
+        <minPitchA>40</minPitchA>
+        <maxPitchA>83</maxPitchA>
+        <StringData>
+          <frets>19</frets>
+          <string>40</string>
+          <string>45</string>
+          <string>50</string>
+          <string>55</string>
+          <string>59</string>
+          <string>64</string>
+          </StringData>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="25"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="2">
+        <StaffType group="tablature">
+          <name>Tab. 6-str common</name>
+          <lines>6</lines>
+          <lineDistance>1.5</lineDistance>
+          <slashStyle>1</slashStyle>
+          <timesig>0</timesig>
+          <durations>0</durations>
+          <durationFontName>MuseScore Tab Modern</durationFontName>
+          <durationFontSize>15</durationFontSize>
+          <durationFontY>0</durationFontY>
+          <fretFontName>MuseScore Tab Serif</fretFontName>
+          <fretFontSize>9</fretFontSize>
+          <fretFontY>0</fretFontY>
+          <linesThrough>0</linesThrough>
+          <minimStyle>1</minimStyle>
+          <onLines>1</onLines>
+          <showRests>0</showRests>
+          <stemsDown>1</stemsDown>
+          <stemsThrough>0</stemsThrough>
+          <upsideDown>0</upsideDown>
+          <useNumbers>1</useNumbers>
+          </StaffType>
+        <bracket type="-1" span="0"/>
+        </Staff>
+      <trackName>Acoustic Guitar [Tablature]</trackName>
+      <Instrument>
+        <shortName>Guit.</shortName>
+        <trackName>Acoustic Guitar [Tablature]</trackName>
+        <minPitchP>40</minPitchP>
+        <maxPitchP>83</maxPitchP>
+        <minPitchA>40</minPitchA>
+        <maxPitchA>83</maxPitchA>
+        <StringData>
+          <frets>19</frets>
+          <string>40</string>
+          <string>45</string>
+          <string>50</string>
+          <string>55</string>
+          <string>59</string>
+          <string>64</string>
+          </StringData>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="25"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure number="1">
+        <Clef>
+          <concertClefType>TAB</concertClefType>
+          <transposingClefType>TAB</transposingClefType>
+          </Clef>
+        <Chord>
+          <durationType>16th</durationType>
+          <Note>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            <fret>3</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>16th</durationType>
+          <Note>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            <fret>3</fret>
+            <string>0</string>
+            </Note>
+          <ChordLine>
+            <subtype>2</subtype>
+            </ChordLine>
+          </Chord>
+        <Chord>
+          <durationType>16th</durationType>
+          <Note>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            <fret>3</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>16th</durationType>
+          <Note>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            <fret>3</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>16th</durationType>
+          <Note>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            <fret>3</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>16th</durationType>
+          <Note>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            <fret>3</fret>
+            <string>0</string>
+            </Note>
+          <ChordLine>
+            <subtype>4</subtype>
+            </ChordLine>
+          </Chord>
+        <Chord>
+          <durationType>16th</durationType>
+          <Note>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            <fret>3</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>16th</durationType>
+          <Note>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            <fret>3</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>16th</durationType>
+          <Note>
+            <pitch>64</pitch>
+            <tpc>18</tpc>
+            <fret>0</fret>
+            <string>0</string>
+            <Glissando id="2">
+              <subtype>0</subtype>
+              <diagonal>1</diagonal>
+              <lineWidth>0.15</lineWidth>
+              <anchor>3</anchor>
+              </Glissando>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>16th</durationType>
+          <Note>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            <fret>3</fret>
+            <string>0</string>
+            <endSpanner id="2"/>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>16th</durationType>
+          <Note>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            <fret>3</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>16th</durationType>
+          <Note>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            <fret>3</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>16th</durationType>
+          <Note>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            <fret>3</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>16th</durationType>
+          <Note>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            <fret>3</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>16th</durationType>
+          <Note>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            <fret>3</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>16th</durationType>
+          <Note>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            <fret>3</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="2">
+        <Chord>
+          <durationType>whole</durationType>
+          <Note>
+            <pitch>64</pitch>
+            <tpc>18</tpc>
+            <fret>0</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <BarLine>
+          <subtype>end</subtype>
+          <span>1</span>
+          </BarLine>
+        </Measure>
+      </Staff>
+    <Staff id="2">
+      <Measure number="1">
+        <Clef>
+          <concertClefType>TAB</concertClefType>
+          <transposingClefType>TAB</transposingClefType>
+          </Clef>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="2">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        <BarLine>
+          <subtype>end</subtype>
+          <span>1</span>
+          </BarLine>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>

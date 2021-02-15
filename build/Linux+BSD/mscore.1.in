@@ -1,9 +1,9 @@
-.\" New manual page for MuseScore 3
-.\" Copyright (c) 2018, 2019, 2020, 2021
+.\" New manual page for MuseScore 4
+.\" Copyright (c) 2018, 2019, 2020
 .\"	mirabilos <m@mirbsd.org>
 .\" Published under the same terms as MuseScore itself.
 .\"-
-.Dd Janurary 12, 2021
+.Dd November 6, 2020
 .Dt @MAN_MSCORE_UPPER@ 1
 .Os MuseScore
 .Sh NAME@Variables_substituted_by_CMAKE_on_installation@
@@ -53,7 +53,6 @@
 .Op Fl \-score\-parts
 .Op Fl \-score\-parts\-pdf
 .Op Fl \-score\-transpose
-.Op Fl \-source\-update
 .Op Fl \-template\-mode
 .Op Fl \-test\-mode
 .Op Fl \-version
@@ -116,11 +115,6 @@ GNU General Public Licence (GPLv2).
 @MAN_PORTABLE@.Ar prefix
 @MAN_PORTABLE@to install into a custom location.
 @MAN_PORTABLE@Installation is not required to run the program.
-@MAN_PORTABLE@.It Cm update , Cm upgrade Oo Fl i Oc Op Ar prefix
-@MAN_PORTABLE@Updates MuseScore to the latest version. This uses your internet
-@MAN_PORTABLE@connection to check for an update and download it if one is
-@MAN_PORTABLE@available. A delta update mechanism is used to minimise the
-@MAN_PORTABLE@amount of data that is downloaded.
 @MAN_PORTABLE@.It Cm remove , Cm uninstall Op Ar prefix
 @MAN_PORTABLE@Removes icons and resources, and asks whether you would
 @MAN_PORTABLE@like to remove the program as well.
@@ -249,7 +243,7 @@ Print a conditioned diff between the given scores
 Display the full name, version and git revision of the application
 without starting the graphical user interface
 .It Fl \-no\-fallback\-font
-Don't use a fallback musical font
+Don't use Bravura as fallback musical font
 .It Fl \-raw\-diff
 Print a raw diff between the given scores
 .It Fl \-run\-test\-script
@@ -276,8 +270,6 @@ as a single JSON document to stdout
 .It Fl \-score\-transpose
 Transpose the given score and export the data to
 a single JSON file, print it to stdout
-.It Fl \-source\-update
-Update the source in the given score
 .It Fl \-template\-mode
 Save files in template mode (e.g. without page sizes)
 .El

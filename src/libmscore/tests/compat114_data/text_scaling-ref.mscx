@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="3.01">
+  <Score>
+    <LayerTag id="0" tag="default"></LayerTag>
+    <currentLayer>0</currentLayer>
+    <Division>480</Division>
+    <Style>
+      <lyricsDashForce>0</lyricsDashForce>
+      <minMeasureWidth>4</minMeasureWidth>
+      <bracketWidth>0.35</bracketWidth>
+      <bracketDistance>0.25</bracketDistance>
+      <clefLeftMargin>0.5</clefLeftMargin>
+      <clefKeyRightMargin>1.75</clefKeyRightMargin>
+      <clefBarlineDistance>0.18</clefBarlineDistance>
+      <minNoteDistance>0.4</minNoteDistance>
+      <barNoteDistance>1.2</barNoteDistance>
+      <measureSpacing>1.14</measureSpacing>
+      <ledgerLineWidth>0.12</ledgerLineWidth>
+      <beamWidth>0.48</beamWidth>
+      <beamMinLen>1.25</beamMinLen>
+      <propertyDistanceStem>0.5</propertyDistanceStem>
+      <chordStyle>custom</chordStyle>
+      <chordsXmlFile>1</chordsXmlFile>
+      <chordDescriptionFile>stdchords.xml</chordDescriptionFile>
+      <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>
+      <voltaPosAbove x="0" y="-2"/>
+      <keySigNaturals>1</keySigNaturals>
+      <tupletOufOfStaff>0</tupletOufOfStaff>
+      <Spatium>0.764</Spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="poet"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <Part>
+      <Staff id="1">
+        <StaffType group="pitched">
+          </StaffType>
+        <bracket type="-1" span="1" col="0"/>
+        </Staff>
+      <trackName>Flute</trackName>
+      <Instrument>
+        <longName><font size="11.5438"/><font face="Times New Roman"/>Flute</longName>
+        <shortName><font size="11.5438"/><font face="Times New Roman"/>Fl.</shortName>
+        <trackName>Flute</trackName>
+        <minPitchP>59</minPitchP>
+        <maxPitchP>98</maxPitchP>
+        <minPitchA>60</minPitchA>
+        <maxPitchA>93</maxPitchA>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="73"/>
+          <controller ctrl="93" value="30"/>
+          <controller ctrl="91" value="30"/>
+          </Channel>
+        <Channel name="harmony">
+          <program value="0"/>
+          <controller ctrl="93" value="30"/>
+          <controller ctrl="91" value="30"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <leftMargin>5</leftMargin>
+        <rightMargin>5</rightMargin>
+        <topMargin>5</topMargin>
+        <bottomMargin>5</bottomMargin>
+        <Text>
+          <style>Title</style>
+          <family>Times New Roman</family>
+          <text><font face="Times New Roman"/>Title</text>
+          </Text>
+        </VBox>
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            </Clef>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <StaffText>
+            <family>Times New Roman</family>
+            <text><font face="Times New Roman"/>staff text</text>
+            </StaffText>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Lyrics>
+              <syllabic>begin</syllabic>
+              <family>Times New Roman</family>
+              <text><font face="Times New Roman"/>ly</text>
+              </Lyrics>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Lyrics>
+              <syllabic>end</syllabic>
+              <family>Times New Roman</family>
+              <text><font face="Times New Roman"/>rics</text>
+              </Lyrics>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Harmony>
+            <root>14</root>
+            <extension>64</extension>
+            <name>7</name>
+            </Harmony>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>

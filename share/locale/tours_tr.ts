@@ -14,22 +14,22 @@
     <message>
         <source>The Note Input toolbar allows you to enter notes and rests into your score.</source>
         <comment>welcome</comment>
-        <translation>Nota Girişi Araç Çubuğu, partisyonunuza nota ve suslarınızı girmenize olanak tanır.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>The Palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
-        <translation>Paletler, partisyonunuza diğer notasyon öğelerinin çoğunu eklemenizi sağlar.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Each palette contains items that can be added to the score.</source>
         <comment>show-palette</comment>
-        <translation>Her palet, partisyona eklenebilecek öğeler içerir.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
-        <translation>Partisyonlarınıza çeşitli unsurlar ekleyeceğiniz Paletlere hoş geldiniz. Daha fazla bilgi edinmek için &quot;İleri&quot; yi tıklayın.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>To enter notes with different rhythms in the same measure, use multiple voices.
@@ -37,30 +37,25 @@
     The default is voice 1, and it should be used first for each staff.
     To enter notes into a different voice, click one of these icons.</source>
         <comment>note-input</comment>
-        <translation>Aynı ölçüde farklı ritimlere sahip notalar girmek için birden çok ses kullanılır.
-Her dizeğin en fazla dört sesi olabilir.
-Varsayılan ses 1&apos;dir ve her dizek için ilk olarak kullanılmalıdır.
-Notaları farklı bir sese girmek için bu simgelerden birine tıklayın.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>These are the toolbars.
     The main three are File Operations, Playback Controls, and Note Input.</source>
         <comment>welcome</comment>
-        <translation>Bunlar araç çubuklarıdır. Başlıca üçü Dosya İşlemleri, Oynatma Kontrolleri ve Nota Girişidir.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>There are different workspaces available with different sets of palettes.
     The &quot;Advanced&quot; workspace contains more items than the &quot;Basic&quot; workspace.</source>
         <comment>show-palette</comment>
-        <translation>Farklı palet setleriyle kullanılabilen farklı çalışma alanları vardır.
-&quot;Gelişmiş&quot; çalışma alanı, &quot;Temel&quot; çalışma alanından daha fazla öğe içerir.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>To add a palette item to your score, first select an element or range in your score, then double-click on the palette item to add it to the selected elements.
     You can also drag an item from the palette and drop it on a specific element in your score.</source>
         <comment>show-palette</comment>
-        <translation>Partisyonunuza bir palet öğesi eklemek için önce partisyonunuzda bir öğe veya aralık seçin, ardından palet öğesini çift tıklayarak onu seçilen öğelere ekleyin.
-Ayrıca paletten bir öğeyi sürükleyebilir ve partisyonunuzdaki belirli bir öğenin üzerine bırakabilirsiniz.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>You have toggled multimeasure rests in this score.
@@ -73,24 +68,23 @@ Ayrıca paletten bir öğeyi sürükleyebilir ve partisyonunuzdaki belirli bir �
         <source>Welcome to note input, where you will enter notes and rests into your score.
     Click &quot;Next&quot; to learn more.</source>
         <comment>note-input</comment>
-        <translation>Nota ve susları partisyonunuza gireceğiniz nota girişine hoş geldiniz. Daha fazla bilgi edinmek için &quot;İleri&quot; yi tıklayın.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>To enable note input mode, click the &quot;Note input&quot; icon or press the shortcut &quot;N&quot;.</source>
         <comment>note-input</comment>
-        <translation>Nota giriş modunu etkinleştirmek için, &quot;Nota girişi&quot; simgesine tıklayın veya &quot;N&quot; kısayoluna basın.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Select a duration by clicking one of these icons or pressing the shortcuts &quot;1&quot; - &quot;9&quot;.
     To include an augmentation dot, click the appropriate icon or press the shortcut &quot;.&quot;.</source>
         <comment>note-input</comment>
-        <translation>Bu simgelerden birine tıklayarak veya &quot;1&quot; - &quot;9&quot; kısa yollarına basarak bir süre seçin.
-Bir uzatma noktası eklemek için, uygun simgeye tıklayın veya &quot;.&quot; kısa yoluna basın.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>To enter a rest of the selected duration, press the shortcut &quot;0&quot;, or select this icon then click on the staff.</source>
         <comment>note-input</comment>
-        <translation>Seçilen sürenin sus değerini girmek için, &quot;0&quot; kısayoluna basın veya bu simgeyi seçin ve ardından dizeğe tıklayın.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>To extend a note by adding a tied note, select the duration to extend by, then press &quot;+&quot; or click this button.</source>
@@ -101,73 +95,62 @@ Bir uzatma noktası eklemek için, uygun simgeye tıklayın veya &quot;.&quot; k
         <source>MuseScore provides many ways to navigate through your score.
     Click &quot;Next&quot; to learn more.</source>
         <comment>navigate-tour</comment>
-        <translation>MuseScore, partisyonunuzda gezinmek için birçok yol sunar.
-Daha fazla bilgi edinmek için &quot;İleri&quot; yi tıklayın.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Additional navigation tools include the Timeline and Navigator, both found in the View menu.</source>
         <comment>navigate-tour</comment>
-        <translation>Ek gezinme araçları olan Zaman Çizelgesi ve Gezgine  Görünüm menüsünden ulaşılabilir.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Welcome to the Inspector, where you can change individual properties for selected elements.
     Click &quot;Next&quot; to learn more.</source>
         <comment>inspector-tour</comment>
-        <translation>Seçili elemanlar için ayrı özellikleri değiştirebileceğiniz Denetçiye hoş geldiniz.
-Daha fazla bilgi edinmek için &quot;İleri&quot; yi tıklayın.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Begin by selecting one or more elements in your score, then use the check boxes, spin boxes, dropdown menus, and other controls to change values for the various properties.
     The set of properties available will differ according to the type of selected elements or elements.</source>
         <comment>inspector-tour</comment>
-        <translation>Partisyonunuzdaki bir veya daha fazla öğeyi seçerek başlayın, ardından çeşitli özelliklerin değerlerini değiştirmek için onay kutularını, döndürme kutularını, açılır menüleri ve diğer denetimleri kullanın.
-Mevcut özellikler kümesi, seçilen öğelerin veya öğelerin türüne göre farklılık gösterecektir.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>If you have selected elements of different types, only a few settings common to all elements will be available.
     You can click the &quot;Notes&quot; and other buttons at the bottom of the Inspector to limit the selection to just the elements of the specified type.</source>
         <comment>inspector-tour</comment>
-        <translation>Farklı türlerde öğeler seçtiyseniz, tüm öğeler için ortak olan yalnızca birkaç ayar kullanılabilir olacaktır.
-Seçimi yalnızca belirtilen türdeki öğelerle sınırlandırmak için Denetçinin altındaki &quot;Notalar&quot; ve diğer düğmeleri tıklayabilirsiniz.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>The Inspector allows you to control various properties of the elements in your score.</source>
         <comment>welcome</comment>
-        <translation>Denetçi, partisyonunuzdaki öğelerin çeşitli özelliklerini kontrol etmenizi sağlar.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Autoplace is a new feature that automatically detects and avoids many types of collisions between elements.
     You can also manually adjust the position of autoplaced elements, or disable autoplace for selected elements.
     Click &quot;Next&quot; to learn more.</source>
         <comment>autoplace-tour</comment>
-        <translation>Autoplace, öğeler arasındaki birçok türde çarpışmayı otomatik olarak algılayan ve önleyen yeni bir özelliktir.
-Ayrıca otomatik olarak yerleştirilen öğelerin konumunu manuel olarak ayarlayabilir veya seçili öğeler için otomatik yerleştirmeyi devre dışı bırakabilirsiniz.
-Daha fazla bilgi edinmek için &quot;İleri&quot; yi tıklayın.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Autoplace positions most elements according to standard music engraving practice,
     such as by moving tempo markings above other text or by shortening hairpins to avoid dynamics.
     In many cases, this means that no further adjustments will be required at all.</source>
         <comment>autoplace-tour</comment>
-        <translation>Autoplace çoğu öğeyi standart müzik yazma uygulamasına göre konumlandırır,
-tempo işaretlerini metnin üzerine taşıyarak veya nüanslar için dinamik işaretleri kısaltmak gibi.
-Çoğu durumda bu, daha fazla ayarlamaya gerek olmadığı anlamına gelir.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>If necessary, you can fine-tune the position of elements by dragging, by using the cursor keys while in Edit mode (double-click),
     or by using the &quot;Offset&quot; fields in the Inspector.
     This allows you to make adjustments while leaving autoplace enabled to continue avoiding collisions.</source>
         <comment>autoplace-tour</comment>
-        <translation>Gerekirse, Düzenleme modundayken (çift tıklama) imleç tuşlarını kullanarak sürükleyerek öğelerin konumunda ince ayar yapabilirsiniz.
-veya Denetci&apos;deki &quot;Offset&quot; alanlarını kullanarak.
-Bu, çarpışmalardan kaçınmaya devam etmek için otomatik yerleştirmeyi etkin bırakırken ayarlamalar yapmanızı sağlar.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>For larger adjustments, it may be more convenient to disable autoplace for selected elements using the Inspector.
     This will remove them from collision detection and allow you to place them more freely.</source>
         <comment>autoplace-tour</comment>
-        <translation>Daha büyük ayarlamalar için, seçilen öğelere Denetçi&apos;yi kullanarak otomatik yerleştirmeyi devre dışı bırakmak daha uygun olabilir. 
-Bu, onları çarpışma tespitinden çıkaracak ve onları daha özgürce yerleştirmenize olanak sağlayacaktır.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Welcome to the Timeline, where you can view a high-level reduction of the score for easier navigation.

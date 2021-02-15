@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="3.01">
+  <programVersion>3.2.3</programVersion>
+  <programRevision>d2d863f</programRevision>
+  <Score>
+    <LayerTag id="0" tag="default"></LayerTag>
+    <currentLayer>0</currentLayer>
+    <Division>480</Division>
+    <Style>
+      <pageWidth>8.27008</pageWidth>
+      <pageHeight>11.6902</pageHeight>
+      <pagePrintableWidth>8.19134</pagePrintableWidth>
+      <pageEvenLeftMargin>0.0393701</pageEvenLeftMargin>
+      <pageOddLeftMargin>0.0393701</pageOddLeftMargin>
+      <Spatium>1.764</Spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2019-09-19</metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="platform">Microsoft Windows</metaTag>
+    <metaTag name="poet"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <Part>
+      <Staff id="1">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <barLineSpan>1</barLineSpan>
+        </Staff>
+      <trackName>Violin</trackName>
+      <Instrument>
+        <longName>Violin</longName>
+        <shortName>Vln.</shortName>
+        <trackName>Violin</trackName>
+        <minPitchP>55</minPitchP>
+        <maxPitchP>103</maxPitchP>
+        <minPitchA>55</minPitchA>
+        <maxPitchA>88</maxPitchA>
+        <instrumentId>strings.violin</instrumentId>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel name="arco">
+          <program value="40"/>
+          <synti>Fluid</synti>
+          </Channel>
+        <Channel name="pizzicato">
+          <program value="45"/>
+          <synti>Fluid</synti>
+          </Channel>
+        <Channel name="tremolo">
+          <program value="44"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="2">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <defaultClef>C3</defaultClef>
+        </Staff>
+      <trackName>Viola</trackName>
+      <Instrument>
+        <longName>Viola</longName>
+        <shortName>Vla.</shortName>
+        <trackName>Viola</trackName>
+        <minPitchP>48</minPitchP>
+        <maxPitchP>93</maxPitchP>
+        <minPitchA>48</minPitchA>
+        <maxPitchA>79</maxPitchA>
+        <instrumentId>strings.viola</instrumentId>
+        <clef>C3</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel name="arco">
+          <program value="41"/>
+          <synti>Fluid</synti>
+          </Channel>
+        <Channel name="pizzicato">
+          <program value="45"/>
+          <synti>Fluid</synti>
+          </Channel>
+        <Channel name="tremolo">
+          <program value="44"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure>
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="2">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>2</sigN>
+            <sigD>4</sigD>
+            <stretchN>1</stretchN>
+            <stretchD>2</stretchD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>2/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>

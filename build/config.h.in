@@ -20,12 +20,6 @@
 #ifndef MUSESCORE_CONFIG_H
 #define MUSESCORE_CONFIG_H
 
-#cmakedefine USE_ALSA
-#cmakedefine USE_JACK
-#cmakedefine USE_PORTAUDIO
-#cmakedefine USE_PORTMIDI
-#cmakedefine USE_PULSEAUDIO
-#cmakedefine USE_LAME
 #cmakedefine USE_WEBENGINE
 
 #cmakedefine FOR_WINSTORE
@@ -35,12 +29,10 @@
 #cmakedefine HAS_MIDI
 #cmakedefine SCRIPT_INTERFACE
 #cmakedefine HAS_AUDIOFILE
-#cmakedefine USE_SSE
 
-#cmakedefine BUILD_CRASH_REPORTER
-#define CRASHREPORTER_EXECUTABLE "${CRASHREPORTER_EXECUTABLE}"
 #define CRASH_REPORT_URL        "${CRASH_REPORT_URL}"
 #define MUSESCORE_NAME_VERSION  "${MUSESCORE_NAME_VERSION}"
+#define MUSESCORE_REVISION      "${MUSESCORE_REVISION}"
 #define INSTALL_NAME            "${Mscore_INSTALL_NAME}"
 #define INSTPREFIX              "${CMAKE_INSTALL_PREFIX}"
 #define VERSION                 "${MUSESCORE_VERSION_FULL}"
@@ -51,19 +43,33 @@
 #cmakedefine BUILD_TELEMETRY_MODULE
 #define TELEMETRY_TRACK_ID "${TELEMETRY_TRACK_ID}"
 
+#cmakedefine BUILD_SHORTCUTS_MODULE
+#cmakedefine BUILD_SYSTEM_MODULE
+#cmakedefine BUILD_NETWORK_MODULE
+#cmakedefine BUILD_AUDIO_MODULE
+#cmakedefine BUILD_USERSCORES_MODULE
+#cmakedefine BUILD_WORKSPACE_MODULE
+#cmakedefine BUILD_CLOUD_MODULE
+#cmakedefine BUILD_EXTENSIONS_MODULE
+#cmakedefine BUILD_LANGUAGES_MODULE
+#cmakedefine BUILD_PLUGINS_MODULE
+#cmakedefine BUILD_PLAYBACK_MODULE
+#cmakedefine BUILD_PALETTE_MODULE
+#cmakedefine BUILD_INSTRUMENTS_MODULE
+#cmakedefine BUILD_INSPECTOR_MODULE
+
 #cmakedefine WIN_SPARKLE_ENABLED
 #cmakedefine MAC_SPARKLE_ENABLED
-#cmakedefine AEOLUS
-#cmakedefine ZERBERUS
-#cmakedefine OMR
-#cmakedefine OCR
-#cmakedefine AVSOMR
-#cmakedefine OSC
 #cmakedefine OPENGL
 #cmakedefine SOUNDFONT3
 #cmakedefine WIN_PORTABLE
 
+#cmakedefine QML_LOAD_FROM_SOURCE
+#cmakedefine BUILD_VST
+
 #cmakedefine Q_WS_UIKIT
+
+#cmakedefine APP_UPDATABLE
 
 #define USE_BSP     true
 

@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="3.01">
+  <Score>
+    <LayerTag id="0" tag="default"></LayerTag>
+    <currentLayer>0</currentLayer>
+    <Division>480</Division>
+    <Style>
+      <lyricsDashForce>0</lyricsDashForce>
+      <minMeasureWidth>4</minMeasureWidth>
+      <bracketWidth>0.35</bracketWidth>
+      <bracketDistance>0.25</bracketDistance>
+      <clefLeftMargin>0.5</clefLeftMargin>
+      <clefKeyRightMargin>1.75</clefKeyRightMargin>
+      <clefBarlineDistance>0.18</clefBarlineDistance>
+      <minNoteDistance>0.4</minNoteDistance>
+      <barNoteDistance>1.2</barNoteDistance>
+      <measureSpacing>1.14</measureSpacing>
+      <ledgerLineWidth>0.12</ledgerLineWidth>
+      <beamWidth>0.48</beamWidth>
+      <beamMinLen>1.25</beamMinLen>
+      <propertyDistanceStem>0.5</propertyDistanceStem>
+      <chordStyle>custom</chordStyle>
+      <chordsXmlFile>1</chordsXmlFile>
+      <chordDescriptionFile>stdchords.xml</chordDescriptionFile>
+      <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>
+      <voltaPosAbove x="0" y="-2"/>
+      <keySigNaturals>1</keySigNaturals>
+      <tupletOufOfStaff>0</tupletOufOfStaff>
+      <Spatium>1.76389</Spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="poet"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <Part>
+      <Staff id="1">
+        <StaffType group="pitched">
+          </StaffType>
+        <bracket type="1" span="2" col="0"/>
+        <barLineSpan>2</barLineSpan>
+        </Staff>
+      <Staff id="2">
+        <StaffType group="pitched">
+          </StaffType>
+        </Staff>
+      <trackName>Piano</trackName>
+      <Instrument>
+        <longName><font face="Times New Roman"/>Piano</longName>
+        <shortName><font face="Times New Roman"/>Pno.</shortName>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          <controller ctrl="93" value="30"/>
+          <controller ctrl="91" value="30"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            </Clef>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Spanner type="Ottava">
+            <Ottava>
+              <subtype>8va</subtype>
+              <endHookHeight>1.5</endHookHeight>
+              <beginText>&lt;font size=&quot;12&quot;/&gt;&lt;font face=&quot;Times New Roman&quot;/&gt;&lt;i&gt;8va&lt;/i&gt;</beginText>
+              <continueText>&lt;font size=&quot;12&quot;/&gt;&lt;font face=&quot;Times New Roman&quot;/&gt;&lt;i&gt;(8va)&lt;/i&gt;</continueText>
+              <lineWidth>0.15</lineWidth>
+              <lineStyle>1</lineStyle>
+              </Ottava>
+            <next>
+              <location>
+                <measures>1</measures>
+                </location>
+              </next>
+            </Spanner>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Spanner type="Ottava">
+            <prev>
+              <location>
+                <measures>-1</measures>
+                </location>
+              </prev>
+            </Spanner>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="2">
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>F</concertClefType>
+            <transposingClefType>F</transposingClefType>
+            </Clef>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>
