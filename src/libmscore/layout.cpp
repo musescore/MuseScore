@@ -2735,8 +2735,7 @@ void Score::createBeams(LayoutContext& lc, Measure* measure)
                         if (!beamNoContinue(prevCR->beamMode())
                             && !pm->lineBreak() && !pm->pageBreak() && !pm->sectionBreak()
                             && lc.prevMeasure
-                            && prevCR->durationType().type() >= TDuration::DurationType::V_EIGHTH
-                            && prevCR->durationType().type() <= TDuration::DurationType::V_1024TH) {
+                            && !(prevCR->isChord() && prevCR->durationType().type() <= TDuration::DurationType::V_QUARTER)) {
                             beam = prevCR->beam();
                             //a1 = beam ? beam->elements().front() : prevCR;
                             a1 = beam ? nullptr : prevCR;               // when beam is found, a1 is no longer required.
@@ -2801,7 +2800,7 @@ void Score::createBeams(LayoutContext& lc, Measure* measure)
                 bm = Beam::Mode::NONE;
             }
 
-            if ((cr->durationType().type() <= TDuration::DurationType::V_QUARTER) || (bm == Beam::Mode::NONE)) {
+            if ((cr->isChord() && cr->durationType().type() <= TDuration::DurationType::V_QUARTER) || (bm == Beam::Mode::NONE)) {
                 bool removeBeam = true;
                 if (beam) {
                     beam->layout1();
