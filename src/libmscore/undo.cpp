@@ -1640,6 +1640,7 @@ void ChangeStaff::flip(EditData*)
     staff->setShowIfEmpty(showIfEmpty);
     staff->setCutaway(cutaway);
     staff->setHideSystemBarLine(hideSystemBarLine);
+    staff->setMergeMatchingRests(mergeMatchingRests);
 
     invisible   = oldInvisible;
     clefType    = oldClefType;
