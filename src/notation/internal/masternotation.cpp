@@ -415,7 +415,7 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
         Ms::Fraction ts = timesig;
 
         QString text("<sym>metNoteQuarterUp</sym> = %1");
-        double bpm = scoreOptions.tempo.value;
+        double bpm = scoreOptions.tempo.valueBpm;
         switch (ts.denominator()) {
         case 1:
             text = "<sym>metNoteWhole</sym> = %1";
@@ -471,7 +471,7 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
         Ms::TempoText* tt = new Ms::TempoText(score);
         tt->setXmlText(text.arg(bpm));
 
-        double tempo = scoreOptions.tempo.value;
+        double tempo = scoreOptions.tempo.valueBpm;
         tempo /= 60; // bpm -> bps
 
         tt->setTempo(tempo);

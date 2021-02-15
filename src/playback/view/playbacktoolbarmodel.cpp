@@ -153,6 +153,11 @@ ActionList PlaybackToolBarModel::currentWorkspaceActions() const
     return actions;
 }
 
+QDateTime PlaybackToolBarModel::maxPlayTime() const
+{
+    return QDateTime(QDate::currentDate(), totalPlayTime());
+}
+
 QDateTime PlaybackToolBarModel::playTime() const
 {
     return QDateTime(QDate::currentDate(), m_playTime);
@@ -161,7 +166,7 @@ QDateTime PlaybackToolBarModel::playTime() const
 void PlaybackToolBarModel::setPlayTime(const QDateTime& time)
 {
     QTime newTime = time.time();
-    if (m_playTime == newTime) {
+    if (m_playTime == newTime || time > maxPlayTime()) {
         return;
     }
 
@@ -219,7 +224,7 @@ void PlaybackToolBarModel::updatePlayTime()
 void PlaybackToolBarModel::doSetPlayTime(const QTime& time)
 {
     m_playTime = time;
-    emit playTimeChanged(time);
+    emit playTimeChanged();
 }
 
 void PlaybackToolBarModel::rewind(uint64_t milliseconds)
@@ -286,7 +291,7 @@ QVariant PlaybackToolBarModel::tempo() const
 
     QVariantMap obj;
     obj["noteSymbol"] = noteIconToString(noteIcon, tempo.withDot);
-    obj["value"] = tempo.value;
+    obj["value"] = tempo.valueBpm;
 
     return obj;
 }
@@ -311,6 +316,7 @@ void PlaybackToolBarModel::updateState()
     }
 
     emit dataChanged(index(0), index(rowCount() - 1));
+    emit maxPlayTimeChanged();
 }
 
 MenuItem& PlaybackToolBarModel::item(const ActionCode& actionCode)
