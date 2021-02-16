@@ -25,8 +25,7 @@
 
 #include "retval.h"
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class INotationAccessibility
 {
 public:
@@ -36,7 +35,6 @@ public:
 };
 
 using INotationAccessibilityPtr = std::shared_ptr<INotationAccessibility>;
-}
 }
 
 #endif // MU_NOTATION_INOTATIONACCESSIBILITY_H

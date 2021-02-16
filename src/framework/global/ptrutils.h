@@ -25,8 +25,7 @@
 #include "runtime.h"
 #include "log.h"
 
-namespace mu {
-namespace ptr {
+namespace mu::ptr {
 template<typename T, typename E> T* checked_cast(E* source)
 {
 #ifndef NDEBUG
@@ -51,7 +50,6 @@ template<typename T, typename E> const T* checked_cast(const E* source)
 #else
     return static_cast<T*>(source);
 #endif
-}
 }
 }
 

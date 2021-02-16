@@ -30,8 +30,7 @@
 #include "retval.h"
 #include "uri.h"
 
-namespace mu {
-namespace framework {
+namespace mu::framework {
 class IInteractive : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IInteractive)
@@ -164,7 +163,6 @@ public:
     virtual Ret openUrl(const std::string& url) const = 0;
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(IInteractive::Options)
-}
 }
 
 #endif // MU_FRAMEWORK_IINTERACTIVE_H

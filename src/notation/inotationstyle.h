@@ -26,8 +26,7 @@
 #include "notationtypes.h"
 #include "async/notification.h"
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class INotationStyle
 {
 public:
@@ -45,7 +44,6 @@ public:
 };
 
 using INotationStylePtr = std::shared_ptr<INotationStyle>;
-}
 }
 
 #endif // MU_NOTATION_INOTATIONSTYLE_H

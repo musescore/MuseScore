@@ -26,8 +26,7 @@
 #include <vector>
 #include <sstream>
 
-namespace mu {
-namespace strings {
+namespace mu::strings {
 bool replace(std::string& source, const std::string& what, const std::string& to);
 void split(const std::string& str, std::vector<std::string>& out, const std::string& delim);
 
@@ -46,7 +45,6 @@ std::string toString(const T& t)
     oss.imbue(std::locale::classic());
     oss << t;
     return oss.str();
-}
 }
 }
 
