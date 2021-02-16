@@ -70,6 +70,7 @@ QVariant PlaybackToolBarModel::data(const QModelIndex& index, int role) const
     case EnabledRole: return item.enabled;
     case CheckedRole: return item.checked;
     case IsAdditionalRole: return isAdditionalAction(item.code);
+    case IsPlaybackSettingsRole: return item.code == PLAYBACK_SETTINGS_KEY;
     }
 
     return QVariant();
@@ -88,7 +89,8 @@ QHash<int,QByteArray> PlaybackToolBarModel::roleNames() const
         { IconRole, "icon" },
         { EnabledRole, "enabled" },
         { CheckedRole, "checked" },
-        { IsAdditionalRole, "isAdditional" }
+        { IsAdditionalRole, "isAdditional" },
+        { IsPlaybackSettingsRole, "isPlaybackSettings" }
     };
 
     return roles;
