@@ -67,7 +67,6 @@ QVariant PlaybackToolBarModel::data(const QModelIndex& index, int role) const
     case HintRole: return QString::fromStdString(item.description);
     case IconRole: return static_cast<int>(item.iconCode);
     case CodeRole: return QString::fromStdString(item.code);
-    case EnabledRole: return item.enabled;
     case CheckedRole: return item.checked;
     case IsAdditionalRole: return isAdditionalAction(item.code);
     case IsPlaybackSettingsRole: return item.code == PLAYBACK_SETTINGS_KEY;
@@ -87,7 +86,6 @@ QHash<int,QByteArray> PlaybackToolBarModel::roleNames() const
         { CodeRole, "code" },
         { HintRole, "hint" },
         { IconRole, "icon" },
-        { EnabledRole, "enabled" },
         { CheckedRole, "checked" },
         { IsAdditionalRole, "isAdditional" },
         { IsPlaybackSettingsRole, "isPlaybackSettings" }
@@ -114,6 +112,7 @@ void PlaybackToolBarModel::load()
     playbackController()->isPlayAllowedChanged().onNotify(this, [this]() {
         updateState();
         updatePlayTime();
+        emit isPlayAllowedChanged();
     });
 
     playbackController()->isPlayingChanged().onNotify(this, [this]() {
@@ -153,6 +152,11 @@ ActionList PlaybackToolBarModel::currentWorkspaceActions() const
     }
 
     return actions;
+}
+
+bool PlaybackToolBarModel::isPlayAllowed() const
+{
+    return playbackController()->isPlayAllowed();
 }
 
 QDateTime PlaybackToolBarModel::maxPlayTime() const
@@ -305,14 +309,11 @@ void PlaybackToolBarModel::handleAction(const QString& actionCode)
 
 void PlaybackToolBarModel::updateState()
 {
-    bool isPlayAllowed = playbackController()->isPlayAllowed();
-
     for (MenuItem& item : m_items) {
-        item.enabled = isPlayAllowed;
         item.checked = playbackController()->isActionEnabled(item.code);
     }
 
-    if (isPlayAllowed) {
+    if (isPlayAllowed()) {
         bool isPlaying = playbackController()->isPlaying();
         item("play").iconCode = isPlaying ? IconCode::Code::PAUSE : IconCode::Code::PLAY;
     }
