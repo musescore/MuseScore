@@ -108,6 +108,10 @@ public:
     // custom
     virtual RetVal<Val> open(const std::string& uri) const = 0;
     virtual RetVal<Val> open(const UriQuery& uri) const = 0;
+    virtual RetVal<bool> isOpened(const std::string& uri) const = 0;
+
+    virtual void close(const std::string& uri) = 0;
+
     virtual ValCh<Uri> currentUri() const = 0;
 
     virtual Ret openUrl(const std::string& url) const = 0;

@@ -43,6 +43,7 @@ public:
     std::string path() const;
 
     inline bool operator==(const Uri& uri) const { return m_scheme == uri.m_scheme && m_path == uri.m_path; }
+    inline bool operator!=(const Uri& uri) const { return !(*this == uri); }
 
     std::string toString() const;
 
