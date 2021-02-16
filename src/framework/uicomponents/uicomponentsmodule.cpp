@@ -47,5 +47,8 @@ void UiComponentsModule::registerUiTypes()
 
     qmlRegisterType<PopupView>("MuseScore.UiComponents", 1, 0, "PopupView");
 
-    framework::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(uicomponents_QML_IMPORT);
+    auto ui = framework::ioc()->resolve<ui::IUiEngine>(moduleName());
+    if (ui) {
+        ui->addSourceImportPath(uicomponents_QML_IMPORT);
+    }
 }

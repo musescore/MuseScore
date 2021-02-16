@@ -1,0 +1,1145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="2.06">
+  <programVersion>2.3.2</programVersion>
+  <programRevision>4592407</programRevision>
+  <Score>
+    <LayerTag id="0" tag="default"></LayerTag>
+    <currentLayer>0</currentLayer>
+    <Synthesizer>
+      </Synthesizer>
+    <Division>480</Division>
+    <Style>
+      <lastSystemFillLimit>0</lastSystemFillLimit>
+      <TextStyle>
+        <halign>center</halign>
+        <valign>top</valign>
+        <offsetType>absolute</offsetType>
+        <name>Style1</name>
+        <family>FreeSans</family>
+        <size>24</size>
+        </TextStyle>
+      <TextStyle>
+        <halign>right</halign>
+        <valign>top</valign>
+        <offsetType>spatium</offsetType>
+        <name>Style2</name>
+        <family>MuseJazz</family>
+        <size>12</size>
+        </TextStyle>
+      <TextStyle>
+        <halign>left</halign>
+        <valign>center</valign>
+        <offsetType>spatium</offsetType>
+        <name>Style3</name>
+        <family>FreeSans</family>
+        <size>12</size>
+        </TextStyle>
+      <TextStyle>
+        <halign>center</halign>
+        <valign>center</valign>
+        <offsetType>spatium</offsetType>
+        <name>Style4</name>
+        <family>FreeSerif</family>
+        <size>12</size>
+        </TextStyle>
+      <TextStyle>
+        <halign>left</halign>
+        <valign>bottom</valign>
+        <offsetType>spatium</offsetType>
+        <name>Style5</name>
+        <family>FreeSerif</family>
+        <size>15</size>
+        </TextStyle>
+      <TextStyle>
+        <halign>center</halign>
+        <valign>bottom</valign>
+        <offsetType>spatium</offsetType>
+        <name>Style6</name>
+        <family>FreeSerif</family>
+        <size>12</size>
+        <bold>1</bold>
+        </TextStyle>
+      <TextStyle>
+        <halign>right</halign>
+        <valign>bottom</valign>
+        <offsetType>spatium</offsetType>
+        <name>Style7</name>
+        <family>FreeSerif</family>
+        <size>12</size>
+        <italic>1</italic>
+        </TextStyle>
+      <page-layout>
+        <page-height>1683.36</page-height>
+        <page-width>1190.88</page-width>
+        <page-margins type="even">
+          <left-margin>56.6929</left-margin>
+          <right-margin>56.6929</right-margin>
+          <top-margin>56.6929</top-margin>
+          <bottom-margin>113.386</bottom-margin>
+          </page-margins>
+        <page-margins type="odd">
+          <left-margin>56.6929</left-margin>
+          <right-margin>56.6929</right-margin>
+          <top-margin>56.6929</top-margin>
+          <bottom-margin>113.386</bottom-margin>
+          </page-margins>
+        </page-layout>
+      <Spatium>1.76389</Spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer">Composer</metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate"></metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="platform">Linux</metaTag>
+    <metaTag name="poet"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle">Title</metaTag>
+    <PageList>
+      <Page>
+        <System>
+          </System>
+        <System>
+          </System>
+        </Page>
+      </PageList>
+    <Part>
+      <Staff id="1">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Piano</trackName>
+      <Instrument>
+        <longName>Piano</longName>
+        <shortName>Pno.</shortName>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <clef staff="2">F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="2">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <bracket type="-1" span="0"/>
+        </Staff>
+      <trackName>Flute</trackName>
+      <Instrument>
+        <longName>Flute</longName>
+        <shortName>Fl.</shortName>
+        <trackName>Flute</trackName>
+        <minPitchP>59</minPitchP>
+        <maxPitchP>98</maxPitchP>
+        <minPitchA>60</minPitchA>
+        <maxPitchA>93</maxPitchA>
+        <instrumentId>wind.flutes.flute</instrumentId>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="73"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="3">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <bracket type="-1" span="0"/>
+        </Staff>
+      <trackName>Flute</trackName>
+      <Instrument>
+        <longName>Flute</longName>
+        <shortName>Fl.</shortName>
+        <trackName>Flute</trackName>
+        <minPitchP>59</minPitchP>
+        <maxPitchP>98</maxPitchP>
+        <minPitchA>60</minPitchA>
+        <maxPitchA>93</maxPitchA>
+        <instrumentId>wind.flutes.flute</instrumentId>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="73"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>36.9323</height>
+        <lid>1</lid>
+        <Text>
+          <lid>2</lid>
+          <style>Style1</style>
+          <text>Title</text>
+          </Text>
+        <Text>
+          <lid>3</lid>
+          <style>Style7</style>
+          <text>Text7</text>
+          </Text>
+        <Text>
+          <lid>4</lid>
+          <style>Style2</style>
+          <text>Text 2</text>
+          </Text>
+        <Text>
+          <lid>5</lid>
+          <style>Style3</style>
+          <text>Text3</text>
+          </Text>
+        <Text>
+          <lid>6</lid>
+          <style>Style4</style>
+          <text>Text4</text>
+          </Text>
+        <Text>
+          <lid>7</lid>
+          <style>Style5</style>
+          <text>Text5</text>
+          </Text>
+        <Text>
+          <lid>8</lid>
+          <style>Style6</style>
+          <text>Text6</text>
+          </Text>
+        </VBox>
+      <Measure number="1">
+        <TimeSig>
+          <lid>9</lid>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          <showCourtesySig>1</showCourtesySig>
+          </TimeSig>
+        <Rest>
+          <lid>10</lid>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="2">
+        <Rest>
+          <lid>11</lid>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="3">
+        <Rest>
+          <lid>12</lid>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        <BarLine>
+          <subtype>end</subtype>
+          <span>1</span>
+          <lid>13</lid>
+          </BarLine>
+        </Measure>
+      </Staff>
+    <Staff id="2">
+      <Measure number="1">
+        <TimeSig>
+          <lid>14</lid>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          <showCourtesySig>1</showCourtesySig>
+          </TimeSig>
+        <Rest>
+          <lid>15</lid>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="2">
+        <Rest>
+          <lid>16</lid>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="3">
+        <Rest>
+          <lid>17</lid>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        <BarLine>
+          <subtype>end</subtype>
+          <span>1</span>
+          <lid>18</lid>
+          </BarLine>
+        </Measure>
+      </Staff>
+    <Staff id="3">
+      <Measure number="1">
+        <TimeSig>
+          <lid>19</lid>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          <showCourtesySig>1</showCourtesySig>
+          </TimeSig>
+        <Rest>
+          <lid>20</lid>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="2">
+        <Rest>
+          <lid>21</lid>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="3">
+        <Rest>
+          <lid>22</lid>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        <BarLine>
+          <subtype>end</subtype>
+          <span>1</span>
+          <lid>23</lid>
+          </BarLine>
+        </Measure>
+      </Staff>
+    <Score>
+      <LayerTag id="0" tag="default"></LayerTag>
+      <currentLayer>0</currentLayer>
+      <Synthesizer>
+        </Synthesizer>
+      <Division>480</Division>
+      <Style>
+        <lastSystemFillLimit>0</lastSystemFillLimit>
+        <createMultiMeasureRests>1</createMultiMeasureRests>
+        <TextStyle>
+          <halign>center</halign>
+          <valign>top</valign>
+          <offsetType>absolute</offsetType>
+          <name>Style1</name>
+          <family>FreeSans</family>
+          <size>24</size>
+          </TextStyle>
+        <TextStyle>
+          <halign>right</halign>
+          <valign>top</valign>
+          <offsetType>spatium</offsetType>
+          <name>Style2</name>
+          <family>MuseJazz</family>
+          <size>12</size>
+          </TextStyle>
+        <TextStyle>
+          <halign>left</halign>
+          <valign>center</valign>
+          <offsetType>spatium</offsetType>
+          <name>Style3</name>
+          <family>FreeSans</family>
+          <size>12</size>
+          </TextStyle>
+        <TextStyle>
+          <halign>center</halign>
+          <valign>center</valign>
+          <offsetType>spatium</offsetType>
+          <name>Style4</name>
+          <family>FreeSerif</family>
+          <size>12</size>
+          </TextStyle>
+        <TextStyle>
+          <halign>left</halign>
+          <valign>bottom</valign>
+          <offsetType>spatium</offsetType>
+          <name>Style5</name>
+          <family>FreeSerif</family>
+          <size>15</size>
+          </TextStyle>
+        <TextStyle>
+          <halign>center</halign>
+          <valign>bottom</valign>
+          <offsetType>spatium</offsetType>
+          <name>Style6</name>
+          <family>FreeSerif</family>
+          <size>12</size>
+          <bold>1</bold>
+          </TextStyle>
+        <TextStyle>
+          <halign>right</halign>
+          <valign>bottom</valign>
+          <offsetType>spatium</offsetType>
+          <name>Style7</name>
+          <family>FreeSerif</family>
+          <size>12</size>
+          <italic>1</italic>
+          </TextStyle>
+        <page-layout>
+          <page-height>1683.36</page-height>
+          <page-width>1190.88</page-width>
+          <page-margins type="even">
+            <left-margin>56.6929</left-margin>
+            <right-margin>56.6929</right-margin>
+            <top-margin>56.6929</top-margin>
+            <bottom-margin>113.386</bottom-margin>
+            </page-margins>
+          <page-margins type="odd">
+            <left-margin>56.6929</left-margin>
+            <right-margin>56.6929</right-margin>
+            <top-margin>56.6929</top-margin>
+            <bottom-margin>113.386</bottom-margin>
+            </page-margins>
+          </page-layout>
+        <Spatium>1.76389</Spatium>
+        </Style>
+      <showInvisible>1</showInvisible>
+      <showUnprintable>1</showUnprintable>
+      <showFrames>1</showFrames>
+      <showMargins>0</showMargins>
+      <metaTag name="partName">Piano</metaTag>
+      <PageList>
+        <Page>
+          <System>
+            </System>
+          <System>
+            </System>
+          </Page>
+        </PageList>
+      <Part>
+        <Staff id="1">
+          <linkedTo>1</linkedTo>
+          <StaffType group="pitched">
+            <name>stdNormal</name>
+            </StaffType>
+          </Staff>
+        <trackName>Piano</trackName>
+        <Instrument>
+          <longName>Piano</longName>
+          <shortName>Pno.</shortName>
+          <trackName>Piano</trackName>
+          <minPitchP>21</minPitchP>
+          <maxPitchP>108</maxPitchP>
+          <minPitchA>21</minPitchA>
+          <maxPitchA>108</maxPitchA>
+          <clef staff="2">F</clef>
+          <Articulation>
+            <velocity>100</velocity>
+            <gateTime>95</gateTime>
+            </Articulation>
+          <Articulation name="staccatissimo">
+            <velocity>100</velocity>
+            <gateTime>33</gateTime>
+            </Articulation>
+          <Articulation name="staccato">
+            <velocity>100</velocity>
+            <gateTime>50</gateTime>
+            </Articulation>
+          <Articulation name="portato">
+            <velocity>100</velocity>
+            <gateTime>67</gateTime>
+            </Articulation>
+          <Articulation name="tenuto">
+            <velocity>100</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Articulation name="marcato">
+            <velocity>120</velocity>
+            <gateTime>67</gateTime>
+            </Articulation>
+          <Articulation name="sforzato">
+            <velocity>120</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Channel>
+            <program value="0"/>
+            <synti>Fluid</synti>
+            </Channel>
+          </Instrument>
+        </Part>
+      <Staff id="1">
+        <VBox>
+          <height>36.9323</height>
+          <lid>1</lid>
+          <Text>
+            <lid>2</lid>
+            <style>Style1</style>
+            <text>Title</text>
+            </Text>
+          <Text>
+            <lid>3</lid>
+            <style>Style7</style>
+            <text>Text7</text>
+            </Text>
+          <Text>
+            <lid>4</lid>
+            <style>Style2</style>
+            <text>Text 2</text>
+            </Text>
+          <Text>
+            <lid>5</lid>
+            <style>Style3</style>
+            <text>Text3</text>
+            </Text>
+          <Text>
+            <lid>6</lid>
+            <style>Style4</style>
+            <text>Text4</text>
+            </Text>
+          <Text>
+            <lid>7</lid>
+            <style>Style5</style>
+            <text>Text5</text>
+            </Text>
+          <Text>
+            <lid>8</lid>
+            <style>Style6</style>
+            <text>Text6</text>
+            </Text>
+          <Text>
+            <style>Instrument Name (Part)</style>
+            <text>Piano</text>
+            </Text>
+          </VBox>
+        <Measure number="1">
+          <TimeSig>
+            <lid>9</lid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            <showCourtesySig>1</showCourtesySig>
+            </TimeSig>
+          <Rest>
+            <lid>10</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          </Measure>
+        <Measure number="1" len="12/4">
+          <multiMeasureRest>3</multiMeasureRest>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            <showCourtesySig>1</showCourtesySig>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration z="12" n="4"/>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            </BarLine>
+          </Measure>
+        <tick>1920</tick>
+        <Measure number="2">
+          <Rest>
+            <lid>11</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          </Measure>
+        <Measure number="3">
+          <Rest>
+            <lid>12</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            <lid>13</lid>
+            </BarLine>
+          </Measure>
+        </Staff>
+      <name>Piano</name>
+      </Score>
+    <Score>
+      <LayerTag id="0" tag="default"></LayerTag>
+      <currentLayer>0</currentLayer>
+      <Synthesizer>
+        </Synthesizer>
+      <Division>480</Division>
+      <Style>
+        <lastSystemFillLimit>0</lastSystemFillLimit>
+        <createMultiMeasureRests>1</createMultiMeasureRests>
+        <TextStyle>
+          <halign>center</halign>
+          <valign>top</valign>
+          <offsetType>absolute</offsetType>
+          <name>Style1</name>
+          <family>FreeSans</family>
+          <size>24</size>
+          </TextStyle>
+        <TextStyle>
+          <halign>right</halign>
+          <valign>top</valign>
+          <offsetType>spatium</offsetType>
+          <name>Style2</name>
+          <family>MuseJazz</family>
+          <size>12</size>
+          </TextStyle>
+        <TextStyle>
+          <halign>left</halign>
+          <valign>center</valign>
+          <offsetType>spatium</offsetType>
+          <name>Style3</name>
+          <family>FreeSans</family>
+          <size>12</size>
+          </TextStyle>
+        <TextStyle>
+          <halign>center</halign>
+          <valign>center</valign>
+          <offsetType>spatium</offsetType>
+          <name>Style4</name>
+          <family>FreeSerif</family>
+          <size>12</size>
+          </TextStyle>
+        <TextStyle>
+          <halign>left</halign>
+          <valign>bottom</valign>
+          <offsetType>spatium</offsetType>
+          <name>Style5</name>
+          <family>FreeSerif</family>
+          <size>15</size>
+          </TextStyle>
+        <TextStyle>
+          <halign>center</halign>
+          <valign>bottom</valign>
+          <offsetType>spatium</offsetType>
+          <name>Style6</name>
+          <family>FreeSerif</family>
+          <size>12</size>
+          <bold>1</bold>
+          </TextStyle>
+        <TextStyle>
+          <halign>right</halign>
+          <valign>bottom</valign>
+          <offsetType>spatium</offsetType>
+          <name>Style7</name>
+          <family>FreeSerif</family>
+          <size>12</size>
+          <italic>1</italic>
+          </TextStyle>
+        <page-layout>
+          <page-height>1683.36</page-height>
+          <page-width>1190.88</page-width>
+          <page-margins type="even">
+            <left-margin>56.6929</left-margin>
+            <right-margin>56.6929</right-margin>
+            <top-margin>56.6929</top-margin>
+            <bottom-margin>113.386</bottom-margin>
+            </page-margins>
+          <page-margins type="odd">
+            <left-margin>56.6929</left-margin>
+            <right-margin>56.6929</right-margin>
+            <top-margin>56.6929</top-margin>
+            <bottom-margin>113.386</bottom-margin>
+            </page-margins>
+          </page-layout>
+        <Spatium>1.76389</Spatium>
+        </Style>
+      <showInvisible>1</showInvisible>
+      <showUnprintable>1</showUnprintable>
+      <showFrames>1</showFrames>
+      <showMargins>0</showMargins>
+      <metaTag name="partName">Flute 1</metaTag>
+      <PageList>
+        <Page>
+          <System>
+            </System>
+          <System>
+            </System>
+          </Page>
+        </PageList>
+      <Part>
+        <Staff id="1">
+          <linkedTo>2</linkedTo>
+          <StaffType group="pitched">
+            <name>stdNormal</name>
+            </StaffType>
+          <bracket type="-1" span="0"/>
+          </Staff>
+        <trackName>Flute</trackName>
+        <Instrument>
+          <longName>Flute</longName>
+          <shortName>Fl.</shortName>
+          <trackName>Flute</trackName>
+          <minPitchP>59</minPitchP>
+          <maxPitchP>98</maxPitchP>
+          <minPitchA>60</minPitchA>
+          <maxPitchA>93</maxPitchA>
+          <instrumentId>wind.flutes.flute</instrumentId>
+          <Articulation>
+            <velocity>100</velocity>
+            <gateTime>95</gateTime>
+            </Articulation>
+          <Articulation name="staccatissimo">
+            <velocity>100</velocity>
+            <gateTime>33</gateTime>
+            </Articulation>
+          <Articulation name="staccato">
+            <velocity>100</velocity>
+            <gateTime>50</gateTime>
+            </Articulation>
+          <Articulation name="portato">
+            <velocity>100</velocity>
+            <gateTime>67</gateTime>
+            </Articulation>
+          <Articulation name="tenuto">
+            <velocity>100</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Articulation name="marcato">
+            <velocity>120</velocity>
+            <gateTime>67</gateTime>
+            </Articulation>
+          <Articulation name="sforzato">
+            <velocity>120</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Channel>
+            <program value="73"/>
+            <synti>Fluid</synti>
+            </Channel>
+          </Instrument>
+        </Part>
+      <Staff id="1">
+        <VBox>
+          <height>36.9323</height>
+          <lid>1</lid>
+          <Text>
+            <lid>2</lid>
+            <style>Style1</style>
+            <text>Title</text>
+            </Text>
+          <Text>
+            <lid>3</lid>
+            <style>Style7</style>
+            <text>Text7</text>
+            </Text>
+          <Text>
+            <lid>4</lid>
+            <style>Style2</style>
+            <text>Text 2</text>
+            </Text>
+          <Text>
+            <lid>5</lid>
+            <style>Style3</style>
+            <text>Text3</text>
+            </Text>
+          <Text>
+            <lid>6</lid>
+            <style>Style4</style>
+            <text>Text4</text>
+            </Text>
+          <Text>
+            <lid>7</lid>
+            <style>Style5</style>
+            <text>Text5</text>
+            </Text>
+          <Text>
+            <lid>8</lid>
+            <style>Style6</style>
+            <text>Text6</text>
+            </Text>
+          <Text>
+            <style>Instrument Name (Part)</style>
+            <text>Flute 1</text>
+            </Text>
+          </VBox>
+        <Measure number="1">
+          <TimeSig>
+            <lid>14</lid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            <showCourtesySig>1</showCourtesySig>
+            </TimeSig>
+          <Rest>
+            <lid>15</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          </Measure>
+        <Measure number="1" len="12/4">
+          <multiMeasureRest>3</multiMeasureRest>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            <showCourtesySig>1</showCourtesySig>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration z="12" n="4"/>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            </BarLine>
+          </Measure>
+        <tick>1920</tick>
+        <Measure number="2">
+          <Rest>
+            <lid>16</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          </Measure>
+        <Measure number="3">
+          <Rest>
+            <lid>17</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            <lid>18</lid>
+            </BarLine>
+          </Measure>
+        </Staff>
+      <name>Flute 1</name>
+      </Score>
+    <Score>
+      <LayerTag id="0" tag="default"></LayerTag>
+      <currentLayer>0</currentLayer>
+      <Synthesizer>
+        </Synthesizer>
+      <Division>480</Division>
+      <Style>
+        <lastSystemFillLimit>0</lastSystemFillLimit>
+        <createMultiMeasureRests>1</createMultiMeasureRests>
+        <TextStyle>
+          <halign>center</halign>
+          <valign>top</valign>
+          <offsetType>absolute</offsetType>
+          <name>Style1</name>
+          <family>FreeSans</family>
+          <size>24</size>
+          </TextStyle>
+        <TextStyle>
+          <halign>right</halign>
+          <valign>top</valign>
+          <offsetType>spatium</offsetType>
+          <name>Style2</name>
+          <family>MuseJazz</family>
+          <size>12</size>
+          </TextStyle>
+        <TextStyle>
+          <halign>left</halign>
+          <valign>center</valign>
+          <offsetType>spatium</offsetType>
+          <name>Style3</name>
+          <family>FreeSans</family>
+          <size>12</size>
+          </TextStyle>
+        <TextStyle>
+          <halign>center</halign>
+          <valign>center</valign>
+          <offsetType>spatium</offsetType>
+          <name>Style4</name>
+          <family>FreeSerif</family>
+          <size>12</size>
+          </TextStyle>
+        <TextStyle>
+          <halign>left</halign>
+          <valign>bottom</valign>
+          <offsetType>spatium</offsetType>
+          <name>Style5</name>
+          <family>FreeSerif</family>
+          <size>15</size>
+          </TextStyle>
+        <TextStyle>
+          <halign>center</halign>
+          <valign>bottom</valign>
+          <offsetType>spatium</offsetType>
+          <name>Style6</name>
+          <family>FreeSerif</family>
+          <size>12</size>
+          <bold>1</bold>
+          </TextStyle>
+        <TextStyle>
+          <halign>right</halign>
+          <valign>bottom</valign>
+          <offsetType>spatium</offsetType>
+          <name>Style7</name>
+          <family>FreeSerif</family>
+          <size>12</size>
+          <italic>1</italic>
+          </TextStyle>
+        <page-layout>
+          <page-height>1683.36</page-height>
+          <page-width>1190.88</page-width>
+          <page-margins type="even">
+            <left-margin>56.6929</left-margin>
+            <right-margin>56.6929</right-margin>
+            <top-margin>56.6929</top-margin>
+            <bottom-margin>113.386</bottom-margin>
+            </page-margins>
+          <page-margins type="odd">
+            <left-margin>56.6929</left-margin>
+            <right-margin>56.6929</right-margin>
+            <top-margin>56.6929</top-margin>
+            <bottom-margin>113.386</bottom-margin>
+            </page-margins>
+          </page-layout>
+        <Spatium>1.76389</Spatium>
+        </Style>
+      <showInvisible>1</showInvisible>
+      <showUnprintable>1</showUnprintable>
+      <showFrames>1</showFrames>
+      <showMargins>0</showMargins>
+      <metaTag name="partName">Flute 2</metaTag>
+      <PageList>
+        <Page>
+          <System>
+            </System>
+          <System>
+            </System>
+          </Page>
+        </PageList>
+      <Part>
+        <Staff id="1">
+          <linkedTo>3</linkedTo>
+          <StaffType group="pitched">
+            <name>stdNormal</name>
+            </StaffType>
+          <bracket type="-1" span="0"/>
+          </Staff>
+        <trackName>Flute</trackName>
+        <Instrument>
+          <longName>Flute</longName>
+          <shortName>Fl.</shortName>
+          <trackName>Flute</trackName>
+          <minPitchP>59</minPitchP>
+          <maxPitchP>98</maxPitchP>
+          <minPitchA>60</minPitchA>
+          <maxPitchA>93</maxPitchA>
+          <instrumentId>wind.flutes.flute</instrumentId>
+          <Articulation>
+            <velocity>100</velocity>
+            <gateTime>95</gateTime>
+            </Articulation>
+          <Articulation name="staccatissimo">
+            <velocity>100</velocity>
+            <gateTime>33</gateTime>
+            </Articulation>
+          <Articulation name="staccato">
+            <velocity>100</velocity>
+            <gateTime>50</gateTime>
+            </Articulation>
+          <Articulation name="portato">
+            <velocity>100</velocity>
+            <gateTime>67</gateTime>
+            </Articulation>
+          <Articulation name="tenuto">
+            <velocity>100</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Articulation name="marcato">
+            <velocity>120</velocity>
+            <gateTime>67</gateTime>
+            </Articulation>
+          <Articulation name="sforzato">
+            <velocity>120</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Channel>
+            <program value="73"/>
+            <synti>Fluid</synti>
+            </Channel>
+          </Instrument>
+        </Part>
+      <Staff id="1">
+        <VBox>
+          <height>36.9323</height>
+          <lid>1</lid>
+          <Text>
+            <lid>2</lid>
+            <style>Style1</style>
+            <text>Title</text>
+            </Text>
+          <Text>
+            <lid>3</lid>
+            <style>Style7</style>
+            <text>Text7</text>
+            </Text>
+          <Text>
+            <lid>4</lid>
+            <style>Style2</style>
+            <text>Text 2</text>
+            </Text>
+          <Text>
+            <lid>5</lid>
+            <style>Style3</style>
+            <text>Text3</text>
+            </Text>
+          <Text>
+            <lid>6</lid>
+            <style>Style4</style>
+            <text>Text4</text>
+            </Text>
+          <Text>
+            <lid>7</lid>
+            <style>Style5</style>
+            <text>Text5</text>
+            </Text>
+          <Text>
+            <lid>8</lid>
+            <style>Style6</style>
+            <text>Text6</text>
+            </Text>
+          <Text>
+            <style>Instrument Name (Part)</style>
+            <text>Flute 2</text>
+            </Text>
+          </VBox>
+        <Measure number="1">
+          <TimeSig>
+            <lid>19</lid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            <showCourtesySig>1</showCourtesySig>
+            </TimeSig>
+          <Rest>
+            <lid>20</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          </Measure>
+        <Measure number="1" len="12/4">
+          <multiMeasureRest>3</multiMeasureRest>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            <showCourtesySig>1</showCourtesySig>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration z="12" n="4"/>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            </BarLine>
+          </Measure>
+        <tick>1920</tick>
+        <Measure number="2">
+          <Rest>
+            <lid>21</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          </Measure>
+        <Measure number="3">
+          <Rest>
+            <lid>22</lid>
+            <durationType>measure</durationType>
+            <duration z="4" n="4"/>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>1</span>
+            <lid>23</lid>
+            </BarLine>
+          </Measure>
+        </Staff>
+      <name>Flute 2</name>
+      </Score>
+    </Score>
+  </museScore>

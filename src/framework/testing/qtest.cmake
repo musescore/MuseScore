@@ -62,6 +62,7 @@ target_link_libraries(${MODULE_TEST}
     Qt5::Widgets
     Qt5::Test
     global
+    system
     ${MODULE_TEST_LINK}
     )
 

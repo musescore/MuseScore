@@ -73,7 +73,7 @@ if (BUILD_UNIT_TESTS)
     add_subdirectory(userscores/tests)
 
 # needs actualization
-#    add_subdirectory(libmscore/tests)
+    add_subdirectory(libmscore/tests)
 #    add_subdirectory(importexport/bb/tests)
 #    add_subdirectory(importexport/braille/tests)
 #    add_subdirectory(importexport/bww/tests)

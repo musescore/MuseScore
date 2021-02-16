@@ -20,6 +20,7 @@
 #include "environment.h"
 
 #include "framework/global/globalmodule.h"
+#include "framework/system/systemmodule.h"
 
 using namespace mu::testing;
 
@@ -54,6 +55,8 @@ void Environment::setup()
     globalModule.onInit(runMode);
 
     //! NOTE Now we can use logger and profiler
+
+    m_dependencyModules.push_back(new mu::system::SystemModule());
 
     for (mu::framework::IModuleSetup* m : m_dependencyModules) {
         m->registerResources();

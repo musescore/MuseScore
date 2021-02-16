@@ -134,7 +134,7 @@ p, li { white-space: pre-wrap; }
         </Measure>
       <Measure number="2">
         <Tempo>
-          <tempo>1.66667</tempo>
+          <tempo>1.6666666666666667</tempo>
           <text>𝅘𝅥 = 100</text>
           </Tempo>
         <Dynamic>
@@ -992,7 +992,7 @@ p, li { white-space: pre-wrap; }
           </Measure>
         <Measure number="2">
           <Tempo>
-            <tempo>1.66667</tempo>
+            <tempo>1.6666666666666667</tempo>
             <text>𝅘𝅥 = 100</text>
             </Tempo>
           <Dynamic>
@@ -1519,7 +1519,7 @@ p, li { white-space: pre-wrap; }
           </Measure>
         <Measure number="2">
           <Tempo>
-            <tempo>1.66667</tempo>
+            <tempo>1.6666666666666667</tempo>
             <text>𝅘𝅥 = 100</text>
             </Tempo>
           <Chord>

@@ -227,7 +227,7 @@
             <sigD>8</sigD>
             </TimeSig>
           <Tempo>
-            <tempo>1.66667</tempo>
+            <tempo>1.6666666666666667</tempo>
             <followText>1</followText>
             <text><b></b><font face="ScoreText"></font> <b><font face="FreeSerif"></font> = 100</b></text>
             </Tempo>

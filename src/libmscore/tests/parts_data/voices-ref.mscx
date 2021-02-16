@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
+<museScore version="3.02">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -38,7 +38,7 @@
         <defaultClef>F</defaultClef>
         </Staff>
       <trackName>Piano</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Piano</longName>
         <shortName>Pno.</shortName>
         <trackName>Piano</trackName>
@@ -96,7 +96,7 @@
         <defaultClef>F</defaultClef>
         </Staff>
       <trackName>Trombone</trackName>
-      <Instrument>
+      <Instrument id="trombone">
         <longName>Trombone</longName>
         <shortName>Tbn.</shortName>
         <trackName>Trombone</trackName>
@@ -1065,7 +1065,7 @@
       <Style>
         <lastSystemFillLimit>0</lastSystemFillLimit>
         <createMultiMeasureRests>1</createMultiMeasureRests>
-        <Spatium>1.76389</Spatium>
+        <Spatium>1.74978</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -1089,7 +1089,7 @@
           <defaultClef>F</defaultClef>
           </Staff>
         <trackName>Piano</trackName>
-        <Instrument>
+        <Instrument id="piano">
           <longName>Piano</longName>
           <shortName>Pno.</shortName>
           <trackName>Piano</trackName>
@@ -1372,7 +1372,7 @@
                       <voices>1</voices>
                       </location>
                     </linked>
-                  <offset x="1.05809" y="-4.67501"/>
+                  <offset x="1.06662" y="-4.71271"/>
                   <text>2</text>
                   </Fingering>
                 <pitch>63</pitch>
@@ -1922,7 +1922,7 @@
       <Style>
         <lastSystemFillLimit>0</lastSystemFillLimit>
         <createMultiMeasureRests>1</createMultiMeasureRests>
-        <Spatium>1.76389</Spatium>
+        <Spatium>1.74978</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -1938,7 +1938,7 @@
           <defaultClef>F</defaultClef>
           </Staff>
         <trackName>Trombone</trackName>
-        <Instrument>
+        <Instrument id="trombone">
           <longName>Trombone</longName>
           <shortName>Tbn.</shortName>
           <trackName>Trombone</trackName>
@@ -2129,7 +2129,7 @@
                       <voices>3</voices>
                       </location>
                     </linked>
-                  <offset x="1.05809" y="-4.67501"/>
+                  <offset x="1.06662" y="-4.71271"/>
                   <text>2</text>
                   </Fingering>
                 <pitch>43</pitch>
@@ -2463,7 +2463,7 @@
       <Style>
         <lastSystemFillLimit>0</lastSystemFillLimit>
         <createMultiMeasureRests>1</createMultiMeasureRests>
-        <Spatium>1.76389</Spatium>
+        <Spatium>1.74978</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -2479,7 +2479,7 @@
           <defaultClef>F</defaultClef>
           </Staff>
         <trackName>Trombone</trackName>
-        <Instrument>
+        <Instrument id="trombone">
           <longName>Trombone</longName>
           <shortName>Tbn.</shortName>
           <trackName>Trombone</trackName>
