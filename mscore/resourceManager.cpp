@@ -22,6 +22,8 @@ namespace Ms {
 extern QString dataPath;
 extern QString mscoreGlobalShare;
 
+static constexpr int extensionDownloadTimeoutMs = 20 * 60 * 1000;
+
 ResourceManager::ResourceManager(QWidget *parent) :
       QDialog(parent)
       {
@@ -379,7 +381,7 @@ void ResourceManager::downloadExtension()
       QString localPath = QDir::tempPath() + "/" + path.split('/')[1];
       QFile::remove(localPath);
       dl.setLocalFile(localPath);
-      dl.download(true);
+      dl.download(true, extensionDownloadTimeoutMs);
       bool saveFileRes = dl.saveFile();
       bool verifyFileRes = saveFileRes && verifyFile(localPath, hash);
       if(!verifyFileRes) {
