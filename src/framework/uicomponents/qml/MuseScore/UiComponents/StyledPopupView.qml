@@ -46,7 +46,7 @@ PopupView {
     }
 
     positionDisplacementX: parent.width / 2 - width / 2
-    positionDisplacementY: parent.y + parent.height
+    positionDisplacementY: parent.height
 
     padding: 24
 

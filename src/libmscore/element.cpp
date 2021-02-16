@@ -299,7 +299,7 @@ Staff* Element::staff() const
 
 bool Element::hasStaff() const
 {
-    return _track != INVALID_TRACK_INDEX;
+    return _track != INVALID_INDEX;
 }
 
 //---------------------------------------------------------
@@ -356,7 +356,7 @@ int Element::staffIdx() const
 
 void Element::setStaffIdx(int val)
 {
-    _track = staff2track(val);
+    _track = staff2track(val, voice());
 }
 
 int Element::vStaffIdx() const

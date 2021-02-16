@@ -74,27 +74,26 @@ enum class HairpinType : signed char;
 #define VOICES 4
 #endif
 
-static constexpr int INVALID_TRACK_INDEX = -1;
-static constexpr int INVALID_VOICE_INDEX = -1;
+static constexpr int INVALID_INDEX = -1;
 
-inline int staff2track(int staffIdx)
+inline int staff2track(int staffIdx, int voiceIdx = 0)
 {
-    return staffIdx >= 0 ? staffIdx * VOICES : INVALID_TRACK_INDEX;
+    return staffIdx >= 0 ? staffIdx * VOICES + voiceIdx : INVALID_INDEX;
 }
 
 inline int track2staff(int track)
 {
-    return track >= 0 ? track / VOICES : INVALID_TRACK_INDEX;
+    return track >= 0 ? track / VOICES : INVALID_INDEX;
 }
 
 inline int track2voice(int track)
 {
-    return track >= 0 ? track % VOICES : INVALID_VOICE_INDEX;
+    return track >= 0 ? track % VOICES : INVALID_INDEX;
 }
 
 inline int trackZeroVoice(int track)
 {
-    return track >= 0 ? (track / VOICES) * VOICES : INVALID_VOICE_INDEX;
+    return track >= 0 ? (track / VOICES) * VOICES : INVALID_INDEX;
 }
 
 static const int MAX_TAGS = 32;
