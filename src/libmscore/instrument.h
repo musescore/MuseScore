@@ -349,7 +349,7 @@ public:
     void setMidiActions(const QList<NamedEventList>& l) { _midiActions = l; }
     void setArticulation(const QList<MidiArticulation>& l) { _articulation = l; }
     const StringData* stringData() const { return &_stringData; }
-    void setStringData(const StringData& d) { _stringData.set(d); }
+    void setStringData(const StringData& d) { _stringData = d; }
 
     void setLongName(const QString& f);
     void setShortName(const QString& f);
