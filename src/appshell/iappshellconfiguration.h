@@ -20,6 +20,7 @@
 #define MU_APPSHELL_IAPPSHELLCONFIGURATION_H
 
 #include "modularity/imoduleexport.h"
+#include "retval.h"
 
 namespace mu::appshell {
 class IAppShellConfiguration : MODULE_EXPORT_INTERFACE
@@ -30,6 +31,8 @@ public:
     virtual ~IAppShellConfiguration() = default;
 
     virtual bool isAppUpdatable() const = 0;
+
+    virtual ValCh<QStringList> recentScoreList() const = 0;
 };
 }
 

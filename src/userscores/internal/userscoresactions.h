@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2020 MuseScore BVBA and others
+//  Copyright (C) 2021 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -16,22 +16,20 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_USERSCORES_FILESCORECONTROLLERSTUB_H
-#define MU_USERSCORES_FILESCORECONTROLLERSTUB_H
+#ifndef MU_USERSCORES_USERSCORESACTIONS_H
+#define MU_USERSCORES_USERSCORESACTIONS_H
 
-#include "userscores/ifilescorecontroller.h"
+#include "actions/imoduleactions.h"
 
 namespace mu::userscores {
-class FileScoreControllerStub : public IFileScoreController
+class UserScoresActions : public actions::IModuleActions
 {
 public:
-    void openScore(const actions::ActionData& args = actions::ActionData()) override;
-    void importScore() override;
-    void newScore() override;
+    const actions::ActionItem& action(const actions::ActionCode& actionCode) const override;
 
-    void saveScore() override;
-    void saveScoreAs() override;
+private:
+    static const actions::ActionList m_actions;
 };
 }
 
-#endif // MU_USERSCORES_FILESCORECONTROLLERSTUB_H
+#endif // MU_USERSCORES_USERSCORESACTIONS_H

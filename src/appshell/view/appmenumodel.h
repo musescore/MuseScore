@@ -31,6 +31,7 @@
 #include "context/iglobalcontext.h"
 #include "workspace/iworkspacemanager.h"
 #include "iappshellconfiguration.h"
+#include "userscores/iuserscoresservice.h"
 
 namespace mu::appshell {
 class AppMenuModel : public QObject, public async::Asyncable
@@ -43,6 +44,7 @@ class AppMenuModel : public QObject, public async::Asyncable
     INJECT(appshell, context::IGlobalContext, globalContext)
     INJECT(appshell, workspace::IWorkspaceManager, workspacesManager)
     INJECT(appshell, IAppShellConfiguration, configuration)
+    INJECT(appshell, userscores::IUserScoresService, userScoresService)
 
     Q_PROPERTY(QVariantList items READ items NOTIFY itemsChanged)
 
@@ -50,7 +52,7 @@ public:
     explicit AppMenuModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void load();
-    Q_INVOKABLE void handleAction(const QString& actionCode);
+    Q_INVOKABLE void handleAction(const QString& actionCodeStr, int actionIndex);
 
     QVariantList items();
 
@@ -61,6 +63,12 @@ private:
     notation::IMasterNotationPtr currentMasterNotation() const;
     notation::INotationPtr currentNotation() const;
 
+    void setupConnections();
+
+    uicomponents::MenuItem& item(const actions::ActionCode& actionCode);
+    uicomponents::MenuItem& itemByIndex(const actions::ActionCode& menuActionCode, int actionIndex);
+    uicomponents::MenuItem& menu(uicomponents::MenuItemList& items, const actions::ActionCode& subitemsActionCode);
+
     uicomponents::MenuItem fileItem();
     uicomponents::MenuItem editItem();
     uicomponents::MenuItem viewItem();
@@ -69,6 +77,7 @@ private:
     uicomponents::MenuItem toolsItem();
     uicomponents::MenuItem helpItem();
 
+    uicomponents::MenuItemList recentScores() const;
     uicomponents::MenuItemList notesItems() const;
     uicomponents::MenuItemList intervalsItems() const;
     uicomponents::MenuItemList tupletsItems() const;
@@ -78,7 +87,8 @@ private:
     uicomponents::MenuItemList linesItems() const;
     uicomponents::MenuItemList workspacesItems() const;
 
-    uicomponents::MenuItem makeMenu(const std::string& title, const uicomponents::MenuItemList& actions, bool enabled = true);
+    uicomponents::MenuItem makeMenu(const std::string& title, const uicomponents::MenuItemList& actions, bool enabled = true,
+                                    const actions::ActionCode& menuActionCode = "");
     uicomponents::MenuItem makeAction(const actions::ActionCode& actionCode, bool enabled = true, bool checked = false,
                                       const std::string& section = "") const;
     uicomponents::MenuItem makeSeparator() const;

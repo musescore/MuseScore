@@ -25,16 +25,16 @@
 #include "async/asyncable.h"
 #include "actions/iactionsdispatcher.h"
 #include "iuserscoresconfiguration.h"
-#include "notation/imsczmetareader.h"
+#include "iuserscoresservice.h"
 
 namespace mu::userscores {
 class RecentScoresModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(scores, actions::IActionsDispatcher, dispatcher)
-    INJECT(scores, IUserScoresConfiguration, configuration)
-    INJECT(scores, notation::IMsczMetaReader, msczMetaReader)
+    INJECT(usescores, actions::IActionsDispatcher, dispatcher)
+    INJECT(usescores, IUserScoresConfiguration, configuration)
+    INJECT(userscores, IUserScoresService, userScoresService)
 
 public:
     RecentScoresModel(QObject* parent = nullptr);
@@ -53,7 +53,7 @@ private:
         RoleScore
     };
 
-    void updateRecentScores(const QStringList& recentScoresPathList);
+    void updateRecentScores(const std::vector<notation::Meta>& recentScoresList);
     void setRecentScores(const QVariantList& recentScores);
 
     QVariantList m_recentScores;

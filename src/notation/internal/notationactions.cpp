@@ -28,26 +28,6 @@ using namespace mu::ui;
 //! NOTE Only actions processed by notation
 
 const ActionList NotationActions::m_actions = {
-    ActionItem("file-open",
-               ShortcutContext::Any,
-               QT_TRANSLATE_NOOP("action", "Open..."),
-               QT_TRANSLATE_NOOP("action", "Load score from file")
-               ),
-    ActionItem("file-new",
-               ShortcutContext::Any,
-               QT_TRANSLATE_NOOP("action", "New Score"),
-               QT_TRANSLATE_NOOP("action", "Create new score")
-               ),
-    ActionItem("file-save",
-               ShortcutContext::Any,
-               QT_TRANSLATE_NOOP("action", "Save Score"),
-               QT_TRANSLATE_NOOP("action", "Save score to file")
-               ),
-    ActionItem("file-save-as",
-               ShortcutContext::Any,
-               QT_TRANSLATE_NOOP("action", "Save Score As"),
-               QT_TRANSLATE_NOOP("action", "Save score under a new file name")
-               ),
     ActionItem("escape",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Esc")

@@ -19,7 +19,6 @@
 #ifndef MU_USERSCORES_FILESCORECONTROLLER_H
 #define MU_USERSCORES_FILESCORECONTROLLER_H
 
-#include "ifilescorecontroller.h"
 #include "iuserscoresconfiguration.h"
 #include "modularity/ioc.h"
 #include "iinteractive.h"
@@ -29,7 +28,7 @@
 #include "context/iglobalcontext.h"
 
 namespace mu::userscores {
-class FileScoreController : public IFileScoreController, public actions::Actionable
+class FileScoreController : public actions::Actionable
 {
     INJECT(scores, actions::IActionsDispatcher, dispatcher)
     INJECT(scores, framework::IInteractive, interactive)
@@ -40,18 +39,24 @@ class FileScoreController : public IFileScoreController, public actions::Actiona
 public:
     void init();
 
-    void openScore(const actions::ActionData& args) override;
-    void importScore() override;
-    void newScore() override;
-
-    void saveScore() override;
-    void saveScoreAs() override;
-
 private:
+    void openScore(const actions::ActionData& args);
+    void importScore();
+    void newScore();
+
+    void saveScore();
+    void saveScoreAs();
+    void saveScoreCopy();
+    void saveSelection();
+
+    void importPdf();
+
+    void clearRecentScores();
+
     io::path selectScoreOpenningFile(const QStringList& filter);
-    io::path selectScoreSavingFile(const io::path& defaultFilePath = QString());
+    io::path selectScoreSavingFile(const io::path& defaultFilePath, const QString& saveTitle);
     void doOpenScore(const io::path& filePath);
-    void doSaveScore(const io::path& filePath = io::path());
+    void doSaveScore(const io::path& filePath = io::path(), notation::SaveMode saveMode = notation::SaveMode::Unknown);
 
     io::path defaultSavingFilePath() const;
 
