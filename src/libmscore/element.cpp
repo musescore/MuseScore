@@ -290,11 +290,16 @@ void Element::change(Element* o, Element* n)
 
 Staff* Element::staff() const
 {
-    if (_track == -1 || score()->staves().empty()) {
-        return 0;
+    if (!hasStaff() || score()->staves().empty()) {
+        return nullptr;
     }
 
     return score()->staff(staffIdx());
+}
+
+bool Element::hasStaff() const
+{
+    return _track != INVALID_TRACK_INDEX;
 }
 
 //---------------------------------------------------------
@@ -317,6 +322,16 @@ bool Element::onTabStaff() const
     return stt ? stt->isTabStaff() : false;
 }
 
+int Element::track() const
+{
+    return _track;
+}
+
+void Element::setTrack(int val)
+{
+    _track = val;
+}
+
 //---------------------------------------------------------
 //   z
 //---------------------------------------------------------
@@ -327,6 +342,36 @@ int Element::z() const
         _z = int(type()) * 100;
     }
     return _z;
+}
+
+void Element::setZ(int val)
+{
+    _z = val;
+}
+
+int Element::staffIdx() const
+{
+    return track2staff(_track);
+}
+
+void Element::setStaffIdx(int val)
+{
+    _track = staff2track(val);
+}
+
+int Element::vStaffIdx() const
+{
+    return staffIdx();
+}
+
+int Element::voice() const
+{
+    return track2voice(_track);
+}
+
+void Element::setVoice(int v)
+{
+    _track = (_track / VOICES) * VOICES + v;
 }
 
 //---------------------------------------------------------
