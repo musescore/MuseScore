@@ -52,7 +52,7 @@ public:
     explicit AppMenuModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void load();
-    Q_INVOKABLE void handleAction(const QString& actionCode, const QVariant& actionData);
+    Q_INVOKABLE void handleAction(const QString& actionCodeStr, int actionIndex);
 
     QVariantList items();
 
@@ -64,6 +64,10 @@ private:
     notation::INotationPtr currentNotation() const;
 
     void setupConnections();
+
+    uicomponents::MenuItem& item(const actions::ActionCode& actionCode);
+    uicomponents::MenuItem& itemByIndex(const actions::ActionCode& menuActionCode, int actionIndex);
+    uicomponents::MenuItem& menu(uicomponents::MenuItemList& items, const actions::ActionCode& subitemsActionCode);
 
     uicomponents::MenuItem fileItem();
     uicomponents::MenuItem editItem();
@@ -83,7 +87,8 @@ private:
     uicomponents::MenuItemList linesItems() const;
     uicomponents::MenuItemList workspacesItems() const;
 
-    uicomponents::MenuItem makeMenu(const std::string& title, const uicomponents::MenuItemList& actions, bool enabled = true);
+    uicomponents::MenuItem makeMenu(const std::string& title, const uicomponents::MenuItemList& actions, bool enabled = true,
+                                    const actions::ActionCode& menuActionCode = "");
     uicomponents::MenuItem makeAction(const actions::ActionCode& actionCode, bool enabled = true, bool checked = false,
                                       const std::string& section = "") const;
     uicomponents::MenuItem makeSeparator() const;

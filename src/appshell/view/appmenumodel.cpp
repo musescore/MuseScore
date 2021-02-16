@@ -34,6 +34,7 @@ AppMenuModel::AppMenuModel(QObject* parent)
 void AppMenuModel::load()
 {
     m_items.clear();
+
     m_items << fileItem()
             << editItem()
             << viewItem()
@@ -47,14 +48,12 @@ void AppMenuModel::load()
     emit itemsChanged();
 }
 
-void AppMenuModel::handleAction(const QString& actionCode, const QVariant& actionData)
+void AppMenuModel::handleAction(const QString& actionCodeStr, int actionIndex)
 {
-    if (actionCode == "file-open") {
-        actionsDispatcher()->dispatch(codeFromQString(actionCode), ActionData::make_arg1<io::path>(actionData.toString().toStdString()));
-        return;
-    }
+    ActionCode actionCode = codeFromQString(actionCodeStr);
+    MenuItem menuItem = actionIndex == -1 ? item(actionCode) : itemByIndex(actionCode, actionIndex);
 
-    actionsDispatcher()->dispatch(codeFromQString(actionCode));
+    actionsDispatcher()->dispatch(actionCode, menuItem.args);
 }
 
 QVariantList AppMenuModel::items()
@@ -97,12 +96,59 @@ void AppMenuModel::setupConnections()
     });
 }
 
+MenuItem& AppMenuModel::item(const ActionCode& actionCode)
+{
+    for (MenuItem& item : m_items) {
+        if (item.code == actionCode) {
+            return item;
+        }
+    }
+
+    static MenuItem null;
+    return null;
+}
+
+MenuItem& AppMenuModel::itemByIndex(const ActionCode& menuActionCode, int actionIndex)
+{
+    MenuItem& menuItem = menu(m_items, menuActionCode);
+    MenuItemList& subitems = menuItem.subitems;
+    for (int i = 0; i < subitems.size(); ++i) {
+        if (i == actionIndex) {
+            return subitems[i];
+        }
+    }
+
+    static MenuItem null;
+    return null;
+}
+
+MenuItem& AppMenuModel::menu(MenuItemList& items, const ActionCode& subitemsActionCode)
+{
+    for (MenuItem& item : items) {
+        if (item.subitems.isEmpty()) {
+            continue;
+        }
+
+        if (item.code == subitemsActionCode) {
+            return item;
+        }
+
+        MenuItem& menuItem = menu(item.subitems, subitemsActionCode);
+        if (menuItem.isValid()) {
+            return menuItem;
+        }
+    }
+
+    static MenuItem null;
+    return null;
+}
+
 MenuItem AppMenuModel::fileItem()
 {
     MenuItemList fileItems {
         makeAction("file-new"),
         makeAction("file-open"),
-        makeMenu(trc("appshell", "Open &Recent"), recentScores()),
+        makeMenu(trc("appshell", "Open &Recent"), recentScores(), true, "file-open"),
         makeSeparator(),
         makeAction("file-close", scoreOpened()),
         makeAction("file-save", needSaveScore()),
@@ -168,7 +214,7 @@ MenuItem AppMenuModel::viewItem()
         makeAction("zoomin", selectedElementOnScore()),
         makeAction("zoomout", scoreOpened()),
         makeSeparator(),
-        makeMenu(trc("appshell", "W&orkspaces"), workspacesItems()),
+        makeMenu(trc("appshell", "W&orkspaces"), workspacesItems(), true, "select-workspace"),
         makeSeparator(),
         makeAction("split-h"), // need implement
         makeAction("split-v"), // need implement
@@ -309,7 +355,7 @@ MenuItemList AppMenuModel::recentScores() const
     for (const Meta& meta: recentScores) {
         MenuItem item = actionsRegister()->action("file-open");
         item.title = !meta.title.isEmpty() ? meta.title.toStdString() : meta.fileName.toStdString();
-        item.data = QVariant::fromValue(meta.filePath);
+        item.args = ActionData::make_arg1<io::path>(meta.filePath);
         item.enabled = true;
 
         items << item;
@@ -477,10 +523,11 @@ MenuItemList AppMenuModel::workspacesItems() const
     for (const IWorkspacePtr& workspace : workspaces.val) {
         MenuItem item = actionsRegister()->action("select-workspace"); // need implement
         item.title = workspace->title();
-        item.data = QString::fromStdString(workspace->name());
+        item.args = ActionData::make_arg1<std::string>(workspace->name());
 
         bool isCurrentWorkspace = workspace == currentWorkspace;
         item.checked = isCurrentWorkspace;
+        item.checkable = true;
         item.enabled = true;
 
         items << item;
@@ -495,9 +542,10 @@ MenuItemList AppMenuModel::workspacesItems() const
     return items;
 }
 
-MenuItem AppMenuModel::makeMenu(const std::string& title, const MenuItemList& actions, bool enabled)
+MenuItem AppMenuModel::makeMenu(const std::string& title, const MenuItemList& actions, bool enabled, const ActionCode& menuActionCode)
 {
     MenuItem item;
+    item.code = menuActionCode;
     item.title = title;
     item.subitems = actions;
     item.enabled = enabled;

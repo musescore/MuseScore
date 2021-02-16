@@ -30,9 +30,11 @@ struct MenuItem : public actions::ActionItem
     std::string shortcut;
     std::string section;
     bool enabled = false;
+
+    bool checkable = false;
     bool checked = false;
 
-    QVariant data;
+    actions::ActionData args;
 
     QList<MenuItem> subitems;
 
@@ -43,9 +45,9 @@ struct MenuItem : public actions::ActionItem
 
     QVariantMap toMap() const
     {
-        QVariantList _subitems;
+        QVariantList subitemsVariantList;
         for (const MenuItem& item: subitems) {
-            _subitems << item.toMap();
+            subitemsVariantList << item.toMap();
         }
 
         return {
@@ -56,9 +58,9 @@ struct MenuItem : public actions::ActionItem
             { "section", QString::fromStdString(section) },
             { "icon", static_cast<int>(iconCode) },
             { "enabled", enabled },
+            { "checkable", checkable },
             { "checked", checked },
-            { "subitems", _subitems },
-            { "data", data }
+            { "subitems", subitemsVariantList }
         };
     }
 
@@ -72,11 +74,11 @@ struct MenuItem : public actions::ActionItem
         item.section = map.value("section").toString().toStdString();
         item.iconCode = static_cast<ui::IconCode::Code>(map.value("icon").toInt());
         item.enabled = map.value("enabled").toBool();
+        item.checkable = map.value("checkable").toBool();
         item.checked = map.value("checked").toBool();
-        item.data = map.value("data");
 
-        for (const QVariant& _item: map.value("subitems").toList()) {
-            item.subitems << fromMap(_item.toMap());
+        for (const QVariant& subitem: map.value("subitems").toList()) {
+            item.subitems << fromMap(subitem.toMap());
         }
 
         return item;
