@@ -38,6 +38,12 @@ void FileScoreController::init()
 
     dispatcher()->reg(this, "file-save", this, &FileScoreController::saveScore);
     dispatcher()->reg(this, "file-save-as", this, &FileScoreController::saveScoreAs);
+    dispatcher()->reg(this, "file-save-a-copy", this, &FileScoreController::saveScoreCopy);
+    dispatcher()->reg(this, "file-save-selection", this, &FileScoreController::saveSelection);
+
+    dispatcher()->reg(this, "file-import-pdf", this, &FileScoreController::importPdf);
+
+    dispatcher()->reg(this, "clear-recent", this, &FileScoreController::clearRecentScores);
 }
 
 void FileScoreController::openScore(const actions::ActionData& args)
@@ -106,7 +112,7 @@ void FileScoreController::saveScore()
 
     io::path defaultFilePath = defaultSavingFilePath();
 
-    io::path filePath = selectScoreSavingFile(defaultFilePath);
+    io::path filePath = selectScoreSavingFile(defaultFilePath, qtrc("userscores", "Save Score"));
     if (filePath.empty()) {
         return;
     }
@@ -121,12 +127,47 @@ void FileScoreController::saveScore()
 void FileScoreController::saveScoreAs()
 {
     io::path defaultFilePath = defaultSavingFilePath();
-    io::path selectedFilePath = selectScoreSavingFile(defaultFilePath);
+    io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("userscores", "Save Score"));
     if (selectedFilePath.empty()) {
         return;
     }
 
-    doSaveScore(selectedFilePath);
+    doSaveScore(selectedFilePath, SaveMode::SaveAs);
+}
+
+void FileScoreController::saveScoreCopy()
+{
+    io::path defaultFilePath = defaultSavingFilePath();
+    io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("userscores", "Save a Copy"));
+    if (selectedFilePath.empty()) {
+        return;
+    }
+
+    doSaveScore(selectedFilePath, SaveMode::SaveCopy);
+}
+
+void FileScoreController::saveSelection()
+{
+    io::path defaultFilePath = defaultSavingFilePath();
+    io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("userscores", "Save Selection"));
+    if (selectedFilePath.empty()) {
+        return;
+    }
+
+    Ret save = globalContext()->currentMasterNotation()->save(selectedFilePath, SaveMode::SaveSelection);
+    if (!save) {
+        LOGE() << save.toString();
+    }
+}
+
+void FileScoreController::importPdf()
+{
+    interactive()->openUrl("https://musescore.com/import");
+}
+
+void FileScoreController::clearRecentScores()
+{
+    configuration()->setRecentScoreList({});
 }
 
 io::path FileScoreController::selectScoreOpenningFile(const QStringList& filter)
@@ -135,10 +176,10 @@ io::path FileScoreController::selectScoreOpenningFile(const QStringList& filter)
     return interactive()->selectOpeningFile(qtrc("userscores", "Score"), "", filterStr);
 }
 
-io::path FileScoreController::selectScoreSavingFile(const io::path& defaultFilePath)
+io::path FileScoreController::selectScoreSavingFile(const io::path& defaultFilePath, const QString& saveTitle)
 {
     QString filter = QObject::tr("MuseScore Files") + " (*.mscz *.mscx)";
-    io::path filePath = interactive()->selectSavingFile(qtrc("userscores", "Save Score"), defaultFilePath, filter);
+    io::path filePath = interactive()->selectSavingFile(saveTitle, defaultFilePath, filter);
 
     return filePath;
 }
@@ -170,9 +211,19 @@ void FileScoreController::doOpenScore(const io::path& filePath)
     interactive()->open("musescore://notation");
 }
 
-void FileScoreController::doSaveScore(const io::path& filePath)
+void FileScoreController::doSaveScore(const io::path& filePath, SaveMode saveMode)
 {
-    globalContext()->currentMasterNotation()->save(filePath);
+    io::path oldPath = globalContext()->currentMasterNotation()->metaInfo().filePath;
+
+    Ret save = globalContext()->currentMasterNotation()->save(filePath, saveMode);
+    if (!save) {
+        LOGE() << save.toString();
+        return;
+    }
+
+    if (saveMode == SaveMode::SaveAs && oldPath != filePath) {
+        globalContext()->currentMasterNotationChanged().notify();
+    }
 }
 
 io::path FileScoreController::defaultSavingFilePath() const

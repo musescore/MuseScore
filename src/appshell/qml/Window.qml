@@ -45,7 +45,7 @@ DockWindow {
         items: appMenuModel.items
 
         onActionTringgered: {
-            appMenuModel.handleAction(action)
+            appMenuModel.handleAction(actionCode, actionIndex)
         }
     }
 

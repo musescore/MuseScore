@@ -41,10 +41,10 @@ RecentScoresModel::RecentScoresModel(QObject* parent)
     m_roles.insert(RoleTitle, "title");
     m_roles.insert(RoleScore, "score");
 
-    ValCh<QStringList> recentScoresCh = configuration()->recentScoreList();
+    ValCh<std::vector<Meta> > recentScoresCh = userScoresService()->recentScoreList();
     updateRecentScores(recentScoresCh.val);
 
-    recentScoresCh.ch.onReceive(this, [this](const QStringList& list) {
+    recentScoresCh.ch.onReceive(this, [this](const std::vector<Meta>& list) {
         updateRecentScores(list);
     });
 }
@@ -101,24 +101,17 @@ void RecentScoresModel::setRecentScores(const QVariantList& recentScores)
     endResetModel();
 }
 
-void RecentScoresModel::updateRecentScores(const QStringList& recentScoresPathList)
+void RecentScoresModel::updateRecentScores(const std::vector<Meta>& recentScoresList)
 {
     QVariantList recentScores;
 
-    for (const QString& path : recentScoresPathList) {
-        RetVal<Meta> meta = msczMetaReader()->readMeta(path);
-
-        if (!meta.ret) {
-            LOGW() << "Score reader error" << path;
-            continue;
-        }
-
+    for (const Meta& meta : recentScoresList) {
         QVariantMap obj;
 
-        obj[SCORE_TITLE_KEY] = !meta.val.title.isEmpty() ? meta.val.title : meta.val.fileName;
-        obj[SCORE_PATH_KEY] = path;
-        obj[SCORE_THUMBNAIL_KEY] = meta.val.thumbnail;
-        obj[SCORE_TIME_SINCE_CREATION_KEY] = DataFormatter::formatTimeSinceCreation(meta.val.creationDate);
+        obj[SCORE_TITLE_KEY] = !meta.title.isEmpty() ? meta.title : meta.fileName;
+        obj[SCORE_PATH_KEY] = meta.filePath;
+        obj[SCORE_THUMBNAIL_KEY] = meta.thumbnail;
+        obj[SCORE_TIME_SINCE_CREATION_KEY] = DataFormatter::formatTimeSinceCreation(meta.creationDate);
         obj[SCORE_ADD_NEW_KEY] = false;
 
         recentScores << obj;

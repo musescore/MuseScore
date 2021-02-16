@@ -508,26 +508,18 @@ mu::RetVal<bool> MasterNotation::created() const
     return RetVal<bool>::make_ok(score()->created());
 }
 
-mu::Ret MasterNotation::save(const mu::io::path& path)
+mu::Ret MasterNotation::save(const io::path& path, SaveMode saveMode)
 {
-    std::string suffix = io::syffix(path);
-    if (suffix != "mscz" && suffix != "mscx" && !suffix.empty()) {
-        return exportScore(path, suffix);
+    switch (saveMode) {
+    case SaveMode::SaveSelection:
+        return saveSelectionOnScore(path);
+    case SaveMode::Unknown:
+    case SaveMode::SaveAs:
+    case SaveMode::SaveCopy:
+        return saveScore(path);
     }
 
-    if (!path.empty()) {
-        score()->masterScore()->fileInfo()->setFile(path.toQString());
-    }
-
-    bool ok = score()->masterScore()->saveFile(true);
-    if (!ok) {
-        LOGE() << Ms::MScore::lastError;
-    } else {
-        score()->setCreated(false);
-        undoStack()->stackChanged().notify();
-    }
-
-    return ok;
+    return make_ret(Err::UnknownError);
 }
 
 mu::Ret MasterNotation::exportScore(const io::path& path, const std::string& suffix)
@@ -660,4 +652,40 @@ IExcerptNotationPtr MasterNotation::createExcerpt(Part* part)
     masterScore()->initExcerpt(excerpt);
 
     return std::make_shared<ExcerptNotation>(excerpt);
+}
+
+mu::Ret MasterNotation::saveScore(const mu::io::path& path, SaveMode saveMode)
+{
+    std::string suffix = io::syffix(path);
+    if (suffix != "mscz" && suffix != "mscx" && !suffix.empty()) {
+        return exportScore(path, suffix);
+    }
+
+    io::path oldFilePath = score()->masterScore()->fileInfo()->filePath().toStdString();
+
+    if (!path.empty()) {
+        score()->masterScore()->fileInfo()->setFile(path.toQString());
+    }
+
+    Ret ret = score()->masterScore()->saveFile(true);
+    if (!ret) {
+        ret.setText(Ms::MScore::lastError.toStdString());
+    } else if (saveMode != SaveMode::SaveCopy || oldFilePath == path) {
+        score()->setCreated(false);
+        undoStack()->stackChanged().notify();
+    }
+
+    return make_ret(Ret::Code::Ok);
+}
+
+mu::Ret MasterNotation::saveSelectionOnScore(const mu::io::path& path)
+{
+    QFileInfo fileInfo(path.toQString());
+
+    Ret ret = score()->saveCompressedFile(fileInfo, true);
+    if (!ret) {
+        ret.setText(Ms::MScore::lastError.toStdString());
+    }
+
+    return ret;
 }

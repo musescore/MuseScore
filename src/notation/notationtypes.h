@@ -152,6 +152,14 @@ enum class NoteAddingMode
     InsertChord
 };
 
+enum class SaveMode
+{
+    Unknown,
+    SaveAs,
+    SaveCopy,
+    SaveSelection
+};
+
 struct NoteInputState
 {
     NoteInputMethod method = NoteInputMethod::UNKNOWN;

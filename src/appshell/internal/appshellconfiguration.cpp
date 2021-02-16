@@ -28,3 +28,8 @@ bool AppShellConfiguration::isAppUpdatable() const
     return false;
 #endif
 }
+
+mu::ValCh<QStringList> AppShellConfiguration::recentScoreList() const
+{
+    return userScoresConfiguration()->recentScoreList();
+}
