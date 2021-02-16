@@ -71,11 +71,13 @@ DockWindow::DockWindow(QQuickItem* parent)
     m_statusbar->setSizeGripEnabled(false);
     m_window->setStatusBar(m_statusbar);
 
-    WidgetStateStore::restoreGeometry(m_window);
-
     connect(m_pages.notifier(), &uicomponents::QmlListPropertyNotifier::appended, this, &DockWindow::onPageAppended);
     connect(this, &DockWindow::colorChanged, this, &DockWindow::updateStyle);
     connect(this, &DockWindow::borderColorChanged, this, &DockWindow::updateStyle);
+
+    configuration()->pageStateChanged().onNotify(nullptr, [this]() {
+        togglePage(nullptr, currentPage());
+    });
 }
 
 void DockWindow::componentComplete()
@@ -108,8 +110,11 @@ void DockWindow::onMainWindowEvent(QEvent* event)
         adjustPanelsSize(currentPage());
     } break;
     case QEvent::Close: {
-        WidgetStateStore::saveGeometry(m_window);
+        saveState(currentPage()->objectName());
     } break;
+    case QEvent::LayoutRequest: {
+        saveState(currentPage()->objectName());
+    }
     default:
         break;
     }
@@ -133,6 +138,20 @@ void DockWindow::adjustPanelsSize(DockPage* page)
     }
 }
 
+void DockWindow::saveState(const QString& pageName)
+{
+    WidgetStateStore::saveGeometry(m_window);
+
+    configuration()->setPageState(pageName.toStdString(), m_window->saveState());
+}
+
+void DockWindow::restoreState(const QString& pageName)
+{
+    WidgetStateStore::restoreGeometry(m_window);
+
+    m_window->restoreState(configuration()->pageState(pageName.toStdString()));
+}
+
 void DockWindow::togglePage(DockPage* old, DockPage* current)
 {
     if (old) {
@@ -146,7 +165,7 @@ void DockWindow::togglePage(DockPage* old, DockPage* current)
 
 void DockWindow::hidePage(DockPage* page)
 {
-    page->setState(m_window->saveState());
+    saveState(page->objectName());
 
     QList<QWidget*> widgetsToHide;
 
@@ -191,9 +210,6 @@ void DockWindow::hidePage(DockPage* page)
 
 void DockWindow::showPage(DockPage* page)
 {
-    QList<QWidget*> widgetsToShow;
-    QList<QWidget*> widgetsToHide;
-
     // ToolBar
     DockToolBar* tool = page->toolbar();
     if (tool) {
@@ -202,7 +218,6 @@ void DockWindow::showPage(DockPage* page)
             m_window->addToolBarBreak(tw.breakArea);
         }
         m_window->addToolBar(tw.bar);
-        widgetsToShow << tw.bar;
     }
 
     // StatusBar
@@ -211,9 +226,10 @@ void DockWindow::showPage(DockPage* page)
         DockStatusBar::Widget sw = status->widget();
         m_statusbar->setFixedHeight(sw.widget->height());
         m_statusbar->addWidget(sw.widget, 1);
-        widgetsToShow << sw.widget << m_statusbar;
+        m_statusbar->show();
+        sw.widget->show();
     } else {
-        widgetsToHide << m_statusbar;
+        m_statusbar->hide();
     }
 
     // Panels
@@ -221,7 +237,6 @@ void DockWindow::showPage(DockPage* page)
     for (DockPanel* panel : panels) {
         DockPanel::Widget dw = panel->widget();
         m_window->addDockWidget(dw.area, dw.panel);
-        widgetsToShow << dw.panel;
     }
 
     auto panelByName = [](const QList<DockPanel*> panels, const QString& objectName) -> DockPanel* {
@@ -250,21 +265,9 @@ void DockWindow::showPage(DockPage* page)
     if (central) {
         DockCentral::Widget cw = central->widget();
         m_central->addWidget(cw.widget);
-        widgetsToShow << cw.widget;
     }
 
-    QByteArray state = page->state();
-    if (!state.isEmpty()) {
-        m_window->restoreState(state);
-    }
-
-    for (QWidget* w : widgetsToShow) {
-        w->show();
-    }
-
-    for (QWidget* w : widgetsToHide) {
-        w->hide();
-    }
+    restoreState(page->objectName());
 }
 
 void DockWindow::updateStyle()

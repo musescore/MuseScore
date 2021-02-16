@@ -18,6 +18,8 @@ static const Settings::Key UI_ICONS_FONT_FAMILY_KEY("ui", "ui/theme/iconsFontFam
 static const Settings::Key UI_MUSICAL_FONT_FAMILY_KEY("ui", "ui/theme/musicalFontFamily");
 static const Settings::Key UI_MUSICAL_FONT_SIZE_KEY("ui", "ui/theme/musicalFontSize");
 
+static const std::string STATES_PATH("ui/states");
+
 void UiConfiguration::init()
 {
     settings()->setDefaultValue(UI_THEME_TYPE_KEY, Val(static_cast<int>(ThemeType::LIGHT_THEME)));
@@ -55,6 +57,10 @@ void UiConfiguration::init()
 
     settings()->valueChanged(UI_MUSICAL_FONT_SIZE_KEY).onReceive(nullptr, [this](const Val&) {
         m_musicalFontChanged.notify();
+    });
+
+    workspaceUiArrangment()->valuesChanged().onNotify(nullptr, [this]() {
+        m_pageStateChanged.notify();
     });
 }
 
@@ -172,4 +178,59 @@ float UiConfiguration::physicalDotsPerInch() const
         return mainWindow()->qMainWindow()->screen()->physicalDotsPerInch();
     }
     return 100;
+}
+
+QByteArray UiConfiguration::pageState(const std::string& pageName) const
+{
+    TRACEFUNC;
+    std::string stateString = uiValue(STATES_PATH + "/" + pageName).toString();
+    return stringToByteArray(stateString);
+}
+
+void UiConfiguration::setPageState(const std::string& pageName, const QByteArray& state)
+{
+    TRACEFUNC;
+    setUiValue(STATES_PATH + "/" + pageName, Val(byteArrayToString(state)));
+}
+
+Notification UiConfiguration::pageStateChanged() const
+{
+    return m_pageStateChanged;
+}
+
+QByteArray UiConfiguration::stringToByteArray(const std::string& string) const
+{
+    QString qString = QString::fromStdString(string);
+    QByteArray byteArray64(qString.toUtf8());
+    QByteArray byteArray = QByteArray::fromBase64(byteArray64);
+
+    return byteArray;
+}
+
+std::string UiConfiguration::byteArrayToString(const QByteArray& byteArray) const
+{
+    QByteArray byteArray64 = byteArray.toBase64();
+    return byteArray64.toStdString();
+}
+
+mu::Val UiConfiguration::uiValue(const std::string& key) const
+{
+    Val val = workspaceUiArrangment()->value(key);
+    if (!val.isNull()) {
+        return val;
+    }
+
+    Settings::Key settingsKey{ "global", key };
+    return settings()->value(settingsKey);
+}
+
+void UiConfiguration::setUiValue(const std::string& key, const Val& value)
+{
+    bool ok = workspaceUiArrangment()->setValue(key, value);
+    if (ok) {
+        return;
+    }
+
+    Settings::Key settingsKey{ "global", key };
+    settings()->setValue(settingsKey, value);
 }

@@ -23,6 +23,8 @@
 #include "iuiconfiguration.h"
 #include "imainwindow.h"
 #include "iplatformtheme.h"
+#include "iworkspaceuiarrangment.h"
+#include "val.h"
 
 #include "modularity/ioc.h"
 
@@ -31,6 +33,7 @@ class UiConfiguration : public IUiConfiguration
 {
     INJECT(ui, IMainWindow, mainWindow)
     INJECT(ui, IPlatformTheme, platformTheme)
+    INJECT(ui, framework::IWorkspaceUiArrangment, workspaceUiArrangment)
 
 public:
     void init();
@@ -57,13 +60,24 @@ public:
 
     void setPhysicalDotsPerInch(std::optional<float> dpi) override;
 
+    QByteArray pageState(const std::string& pageName) const override;
+    void setPageState(const std::string& pageName, const QByteArray& state) override;
+    async::Notification pageStateChanged() const override;
+
 private:
+    QByteArray stringToByteArray(const std::string& string) const;
+    std::string byteArrayToString(const QByteArray& byteArray) const;
+
+    Val uiValue(const std::string& key) const;
+    void setUiValue(const std::string& key, const Val& value);
+
     async::Channel<ThemeType> m_currentPreferredThemeTypeChannel;
     async::Channel<ThemeType> m_currentActualThemeTypeChannel;
 
     async::Notification m_fontChanged;
     async::Notification m_musicalFontChanged;
     async::Notification m_iconsFontChanged;
+    async::Notification m_pageStateChanged;
 
     std::optional<float> m_customDPI;
 };

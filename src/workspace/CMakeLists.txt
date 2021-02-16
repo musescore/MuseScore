@@ -47,11 +47,15 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspacedatastreamregister.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspacesettingsstream.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspacesettingsstream.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/workspaceuiarrangmentstream.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/workspaceuiarrangmentstream.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspacetoolbarstream.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspacetoolbarstream.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/iworkspacecreator.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspacecreator.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspacecreator.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/workspaceuiarrangment.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/workspaceuiarrangment.h
     )
 
 if (NOT MSVC AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 9.0)

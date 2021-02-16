@@ -15,8 +15,8 @@ DockPage {
 
     panels: [
         DockPanel {
-            id: resourcesPanel
-            objectName: "resourcesPanel"
+            id: homePanel
+            objectName: "homePanel"
 
             width: 292
             minimumWidth: 76

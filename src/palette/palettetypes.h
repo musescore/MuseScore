@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2020 MuseScore BVBA and others
+//  Copyright (C) 2021 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -16,33 +16,19 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_GLOBALCONFIGURATION_H
-#define MU_FRAMEWORK_GLOBALCONFIGURATION_H
+#ifndef MU_PALETTE_PALETTETYPES_H
+#define MU_PALETTE_PALETTETYPES_H
 
-#include "../iglobalconfiguration.h"
-#include "modularity/ioc.h"
+#include "internal/palette/palettetree.h"
+#include "workspace/workspacetypes.h"
 
-namespace mu::framework {
-class GlobalConfiguration : public IGlobalConfiguration
+namespace mu::palette {
+struct PaletteWorkspaceData : public workspace::AbstractData
 {
-public:
-    GlobalConfiguration() = default;
-
-    io::path appDirPath() const override;
-    io::path sharePath() const override;
-    io::path dataPath() const override;
-    io::path logsPath() const override;
-    io::path backupPath() const override;
-
-    bool useFactorySettings() const override;
-    bool enableExperimental() const override;
-
-private:
-    QString getSharePath() const;
-
-    mutable io::path m_sharePath;
-    mutable io::path m_dataPath;
+    Ms::PaletteTreePtr tree;
 };
+
+using PaletteWorkspaceDataPtr = std::shared_ptr<PaletteWorkspaceData>;
 }
 
-#endif // MU_FRAMEWORK_GLOBALCONFIGURATION_H
+#endif // MU_PALETTE_PALETTETYPES_H

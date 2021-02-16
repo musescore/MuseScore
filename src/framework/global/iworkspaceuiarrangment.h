@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2020 MuseScore BVBA and others
+//  Copyright (C) 2021 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -16,33 +16,25 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_GLOBALCONFIGURATION_H
-#define MU_FRAMEWORK_GLOBALCONFIGURATION_H
+#ifndef MU_FRAMEWORK_IWORKSPACEUIARRANGMENT_H
+#define MU_FRAMEWORK_IWORKSPACEUIARRANGMENT_H
 
-#include "../iglobalconfiguration.h"
-#include "modularity/ioc.h"
+#include "modularity/imoduleexport.h"
+#include "val.h"
+#include "async/notification.h"
 
 namespace mu::framework {
-class GlobalConfiguration : public IGlobalConfiguration
+class IWorkspaceUiArrangment : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(IWorkspaceUiArrangment)
 public:
-    GlobalConfiguration() = default;
 
-    io::path appDirPath() const override;
-    io::path sharePath() const override;
-    io::path dataPath() const override;
-    io::path logsPath() const override;
-    io::path backupPath() const override;
+    virtual ~IWorkspaceUiArrangment() = default;
 
-    bool useFactorySettings() const override;
-    bool enableExperimental() const override;
-
-private:
-    QString getSharePath() const;
-
-    mutable io::path m_sharePath;
-    mutable io::path m_dataPath;
+    virtual Val value(const std::string& key) const = 0;
+    virtual bool setValue(const std::string& key, const Val& value) const = 0;
+    virtual async::Notification valuesChanged() const = 0;
 };
 }
 
-#endif // MU_FRAMEWORK_GLOBALCONFIGURATION_H
+#endif // MU_FRAMEWORK_IWORKSPACEUIARRANGMENT_H
