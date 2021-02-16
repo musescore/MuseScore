@@ -20,7 +20,7 @@ DockPage {
 
     panels: [
         DockPanel {
-            id: resourcesPanel
+            id: devtoolsPanel
             objectName: "devtoolsPanel"
 
             width: 292

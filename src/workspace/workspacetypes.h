@@ -61,6 +61,13 @@ struct ToolbarData : public AbstractData
 
 using ToolbarDataPtr = std::shared_ptr<ToolbarData>;
 
+struct UiArrangmentData : public AbstractData
+{
+    std::map<std::string /*key*/, Val> values;
+};
+
+using UiArrangmentDataPtr = std::shared_ptr<UiArrangmentData>;
+
 static constexpr std::string_view DEFAULT_WORKSPACE_NAME("Default");
 }
 

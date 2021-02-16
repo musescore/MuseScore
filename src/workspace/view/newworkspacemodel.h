@@ -66,6 +66,8 @@ signals:
     void canCreateWorkspaceChanged();
 
 private:
+    void addStubData(IWorkspacePtr workspace, WorkspaceTag tag) const;
+
     QString m_workspaceName;
     bool m_importUiPreferences = false;
     bool m_importUiArrangement = false;

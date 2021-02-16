@@ -35,6 +35,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/palettemodule.h
     ${CMAKE_CURRENT_LIST_DIR}/ipaletteadapter.h
     ${CMAKE_CURRENT_LIST_DIR}/ipaletteconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/palettetypes.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/palette_config.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/mu4paletteadapter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/mu4paletteadapter.h

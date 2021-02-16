@@ -37,7 +37,7 @@ DockWindow {
     property bool isNotationPage: currentPageUri === notationPage.uri
 
     property ShortcutsInstanceModel shortcutsModel: ShortcutsInstanceModel {}
-    property var appMenuModel: AppMenuModel {}
+    property AppMenuModel appMenuModel: AppMenuModel {}
 
     menuBar: DockMenuBar {
         objectName: "mainMenuBar"

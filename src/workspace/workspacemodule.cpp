@@ -32,6 +32,9 @@
 
 #include "internal/workspacesettingsstream.h"
 #include "internal/workspacetoolbarstream.h"
+#include "internal/workspaceuiarrangmentstream.h"
+
+#include "internal/workspaceuiarrangment.h"
 
 #include "view/workspacelistmodel.h"
 #include "view/currentworkspacemodel.h"
@@ -44,6 +47,7 @@ using namespace mu::ui;
 static std::shared_ptr<WorkspaceManager> s_manager = std::make_shared<WorkspaceManager>();
 static std::shared_ptr<WorkspaceDataStreamRegister> s_streamRegister = std::make_shared<WorkspaceDataStreamRegister>();
 static std::shared_ptr<WorkspaceConfiguration> s_configuration = std::make_shared<WorkspaceConfiguration>();
+static std::shared_ptr<WorkspaceUiArrangment> s_uiArrangement = std::make_shared<WorkspaceUiArrangment>();
 
 static void workspace_init_qrc()
 {
@@ -61,12 +65,14 @@ void WorkspaceModule::registerExports()
     ioc()->registerExport<IWorkspaceManager>(moduleName(), s_manager);
     ioc()->registerExport<WorkspaceDataStreamRegister>(moduleName(), s_streamRegister);
     ioc()->registerExport<IWorkspaceCreator>(moduleName(), std::make_shared<WorkspaceCreator>());
+    ioc()->registerExport<IWorkspaceUiArrangment>(moduleName(), s_uiArrangement);
 }
 
 void WorkspaceModule::resolveImports()
 {
     s_streamRegister->regStream(std::make_shared<WorkspaceSettingsStream>());
     s_streamRegister->regStream(std::make_shared<WorkspaceToolbarStream>());
+    s_streamRegister->regStream(std::make_shared<WorkspaceUiArrangmentStream>());
 
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
@@ -100,6 +106,7 @@ void WorkspaceModule::onInit(const IApplication::RunMode& mode)
 
     s_configuration->init();
     s_manager->init();
+    s_uiArrangement->init();
 }
 
 void WorkspaceModule::onDeinit()

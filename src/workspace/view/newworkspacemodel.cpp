@@ -22,6 +22,8 @@
 #include "log.h"
 #include "translation.h"
 
+#include "palette/palettetypes.h"
+
 using namespace mu::workspace;
 
 NewWorkspaceModel::NewWorkspaceModel(QObject* parent)
@@ -143,10 +145,35 @@ QVariant NewWorkspaceModel::createWorkspace()
     }
 
     for (WorkspaceTag tag : importedTags) {
+        addStubData(newWorkspace, tag);
         for (AbstractDataPtr data : currentWorkspace->dataList(tag)) {
             newWorkspace->addData(data);
         }
     }
 
     return QVariant::fromValue(newWorkspace);
+}
+
+void NewWorkspaceModel::addStubData(IWorkspacePtr workspace, WorkspaceTag tag) const
+{
+    AbstractDataPtr stub;
+    switch (tag) {
+    case WorkspaceTag::UiArrangement:
+        stub = std::make_shared<UiArrangmentData>();
+        break;
+    case WorkspaceTag::Settings:
+        stub = std::make_shared<SettingsData>();
+        break;
+    case WorkspaceTag::Toolbar:
+        stub = std::make_shared<ToolbarData>();
+        break;
+    case WorkspaceTag::Palettes:
+        stub = std::make_shared<palette::PaletteWorkspaceData>();
+        break;
+    default:
+        break;
+    }
+
+    stub->tag = tag;
+    workspace->addData(stub);
 }
