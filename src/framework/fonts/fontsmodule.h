@@ -25,11 +25,9 @@ namespace mu::fonts {
 class FontsModule : public framework::IModuleSetup
 {
 public:
-
     std::string moduleName() const override;
 
     void registerResources() override;
-    void registerExports() override;
 
     void onInit(const framework::IApplication::RunMode&) override;
 };

@@ -19,13 +19,13 @@
 #include "fontsmodule.h"
 
 #include <QtGlobal>
-#include "modularity/ioc.h"
 
-#include "internal/fontscontroller.h"
+#include "modularity/ioc.h"
+#include "internal/fontssetup.h"
 
 using namespace mu::fonts;
 
-static FontsController* m_fontsController = nullptr;
+static std::shared_ptr<FontsSetup> s_fontsSetup = std::make_shared<FontsSetup>();
 
 static void init_fonts_qrc()
 {
@@ -55,12 +55,7 @@ void FontsModule::registerResources()
     init_fonts_qrc();
 }
 
-void FontsModule::registerExports()
-{
-    m_fontsController = new FontsController();
-}
-
 void FontsModule::onInit(const mu::framework::IApplication::RunMode&)
 {
-    m_fontsController->init();
+    s_fontsSetup->setup();
 }

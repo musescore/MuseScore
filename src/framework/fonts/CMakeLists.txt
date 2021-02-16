@@ -39,8 +39,8 @@ set(MODULE_QRC
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/fontsmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/fontsmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fontscontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/fontscontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fontssetup.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/fontssetup.h
     )
 
 set(MODULE_USE_UNITY_NONE ON)
