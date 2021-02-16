@@ -55,6 +55,7 @@ target_link_libraries(${MODULE_TEST}
     Qt5::Gui
     gmock
     global
+    system
     ${MODULE_TEST_LINK}
     )
 

@@ -19,6 +19,7 @@
 #ifndef MU_TESTING_QTESTSUITE_H
 #define MU_TESTING_QTESTSUITE_H
 
+#include <QDebug>
 #include <QtTest/QtTest>
 #include <QList>
 
@@ -65,6 +66,10 @@ public:
     inline static int run(int argc, char* argv[])
     {
         //! TODO Add filter by the test function
+        qDebug() << "========================== argc: " << argc;
+        for (int i = 0; i < argc; ++i) {
+            qDebug() << "========================== argv " << i << ": " << argv[i];
+        }
         int ret = 0;
         for (QObject* test : testList()) {
             ret += QTest::qExec(test, argc, argv);

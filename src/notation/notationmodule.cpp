@@ -171,7 +171,10 @@ void NotationModule::registerUiTypes()
     qRegisterMetaType<SelectNoteDialog>("SelectNoteDialog");
     qRegisterMetaType<SelectDialog>("SelectDialog");
 
-    ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(notation_QML_IMPORT);
+    auto ui = ioc()->resolve<IUiEngine>(moduleName());
+    if (ui) {
+        ui->addSourceImportPath(notation_QML_IMPORT);
+    }
 
     Ms::MScore::registerUiTypes();
 }
