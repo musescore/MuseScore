@@ -64,10 +64,10 @@ Rectangle {
                     hint: model.hint
                     enabled: model.enabled
 
-                    normalStateColor: model.checked ? ui.theme.accentColor : "transparent"
+                    normalStateColor: model.checked || playbackSettings.isOpened ? ui.theme.accentColor : "transparent"
 
                     onClicked: {
-                        if (model.code === "playback-settings") {
+                        if (model.isPlaybackSettings) {
                             playbackSettings.toggleOpened()
                             return
                         }
