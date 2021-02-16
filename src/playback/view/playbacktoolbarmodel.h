@@ -90,7 +90,8 @@ private:
         IconRole,
         EnabledRole,
         CheckedRole,
-        IsAdditionalRole
+        IsAdditionalRole,
+        IsPlaybackSettingsRole,
     };
 
     QTime totalPlayTime() const;
