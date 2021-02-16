@@ -539,9 +539,6 @@ Rectangle {
             StyledPopupView {
                 id: popupView
 
-                positionDisplacementX: parent.width/2 - width/2
-                positionDisplacementY: parent.height
-
                 Column {
                     spacing: 12
 

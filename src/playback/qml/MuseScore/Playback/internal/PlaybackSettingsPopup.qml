@@ -7,9 +7,7 @@ import MuseScore.Playback 1.0
 StyledPopupView {
     id: root
 
-    positionDisplacementX: parent.width/2 - width/2
-    positionDisplacementY: parent.height
-
+    positionDisplacementX: -padding / 2
     arrowVisible: false
 
     Item {
