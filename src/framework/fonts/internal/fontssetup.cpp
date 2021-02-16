@@ -16,7 +16,7 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "fontscontroller.h"
+#include "fontssetup.h"
 
 #include <QFontDatabase>
 #include <QCoreApplication>
@@ -27,12 +27,7 @@ using namespace mu::fonts;
 
 constexpr int INVALID_LOAD_FONTS_CODE = -1;
 
-void FontsController::init()
-{
-    loadInternalFonts();
-}
-
-void FontsController::loadInternalFonts()
+void FontsSetup::setup()
 {
     // Do not load application specific fonts
     // for MAC, they are in Resources/fonts
@@ -43,20 +38,25 @@ void FontsController::loadInternalFonts()
     static const QStringList fonts = {
         ":/fonts/musejazz/MuseJazzText.otf",
         ":/fonts/campania/Campania.otf",
+        ":/fonts/edwin/Edwin-Roman.otf",
+        ":/fonts/edwin/Edwin-Bold.otf",
+        ":/fonts/edwin/Edwin-Italic.otf",
+        ":/fonts/edwin/Edwin-BdIta.otf",
         ":/fonts/FreeSans.ttf",
-        ":/fonts/firasans/FiraSansRegular.ttf",
-        ":/fonts/firasans/FiraSansSemiBold.ttf",
         ":/fonts/FreeSerif.ttf",
         ":/fonts/FreeSerifBold.ttf",
         ":/fonts/FreeSerifItalic.ttf",
         ":/fonts/FreeSerifBoldItalic.ttf",
+        ":/fonts/firasans/FiraSansRegular.ttf",
+        ":/fonts/firasans/FiraSansSemiBold.ttf",
         ":/fonts/mscoreTab.ttf",
         ":/fonts/mscore-BC.ttf",
+        ":/fonts/leland/LelandText.otf",
+        ":/fonts/leland/Leland.otf",
+        ":/fonts/mscore/MusescoreIcon.ttf",
         ":/fonts/bravura/BravuraText.otf",
         ":/fonts/gootville/GootvilleText.otf",
         ":/fonts/mscore/MScoreText.ttf",
-        ":/fonts/mscore/MusescoreIcon.ttf",
-        ":/fonts/leland/Leland.otf",
         ":/fonts/petaluma/PetalumaText.otf",
         ":/fonts/petaluma/PetalumaScript.otf",
     };

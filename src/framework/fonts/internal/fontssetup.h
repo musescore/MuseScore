@@ -16,20 +16,15 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FONTS_FONTSCONTROLLER_H
-#define MU_FONTS_FONTSCONTROLLER_H
-
-#include "modularity/imoduleexport.h"
+#ifndef MU_FONTS_FONTSSETUP_H
+#define MU_FONTS_FONTSSETUP_H
 
 namespace mu::fonts {
-class FontsController
+class FontsSetup
 {
 public:
-    void init();
-
-private:
-    void loadInternalFonts();
+    void setup();
 };
 }
 
-#endif // MU_FONTS_FONTSCONTROLLER_H
+#endif // MU_FONTS_FONTSSETUP_H
