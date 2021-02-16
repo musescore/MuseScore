@@ -45,6 +45,9 @@ PopupView {
         globalPos = mapToGlobal(parent.x + positionDisplacementX, parent.y + positionDisplacementY)
     }
 
+    positionDisplacementX: parent.width / 2 - width / 2
+    positionDisplacementY: parent.y + parent.height
+
     padding: 24
 
     backgroundItem: Item {
