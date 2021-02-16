@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
+<museScore version="3.02">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -24,21 +24,14 @@
       <titleFontSpatiumDependent>1</titleFontSpatiumDependent>
       <subTitleFontSize>10</subTitleFontSize>
       <subTitleFontSpatiumDependent>1</subTitleFontSpatiumDependent>
-      <composerFontSize>10</composerFontSize>
       <composerFontSpatiumDependent>1</composerFontSpatiumDependent>
-      <lyricistFontSize>10</lyricistFontSize>
-      <longInstrumentFontSize>10</longInstrumentFontSize>
-      <shortInstrumentFontSize>10</shortInstrumentFontSize>
       <partInstrumentFontSize>10</partInstrumentFontSize>
       <dynamicsFontStyle>0</dynamicsFontStyle>
       <tempoFontSize>10</tempoFontSize>
       <metronomeFontSize>10</metronomeFontSize>
-      <translatorFontSize>10</translatorFontSize>
       <repeatLeftFontSize>10</repeatLeftFontSize>
       <repeatRightFontSize>10</repeatRightFontSize>
-      <textLineFontSize>10</textLineFontSize>
       <glissandoFontSize>10</glissandoFontSize>
-      <instrumentChangeFontSize>10</instrumentChangeFontSize>
       <figuredBassFontFace>FreeSerif</figuredBassFontFace>
       <Spatium>1.76389</Spatium>
       </Style>
@@ -64,10 +57,11 @@
           </StaffType>
         </Staff>
       <trackName>Piano</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Piano</longName>
         <shortName>Pno.</shortName>
         <trackName>Piano</trackName>
+        <instrumentId>keyboard.piano</instrumentId>
         <Channel>
           <program value="0"/>
           <controller ctrl="10" value="63"/>

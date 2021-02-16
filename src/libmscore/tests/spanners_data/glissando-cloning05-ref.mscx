@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
+<museScore version="3.02">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -41,7 +41,7 @@
         <defaultClef>F</defaultClef>
         </Staff>
       <trackName>Piano</trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Piano</longName>
         <shortName>Pno.</shortName>
         <trackName>Piano</trackName>
@@ -251,7 +251,7 @@
         <clefKeyRightMargin>1.75</clefKeyRightMargin>
         <createMultiMeasureRests>1</createMultiMeasureRests>
         <minMMRestWidth>0</minMMRestWidth>
-        <Spatium>1.76389</Spatium>
+        <Spatium>1.74978</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -275,7 +275,7 @@
           <defaultClef>F</defaultClef>
           </Staff>
         <trackName>Piano</trackName>
-        <Instrument>
+        <Instrument id="piano">
           <longName>Piano</longName>
           <shortName>Pno.</shortName>
           <trackName>Piano</trackName>

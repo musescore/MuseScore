@@ -1,33 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
+<museScore version="3.02">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <minSystemDistance>9.2</minSystemDistance>
-      <lyricsDashForce>0</lyricsDashForce>
-      <minMeasureWidth>4</minMeasureWidth>
-      <bracketWidth>0.35</bracketWidth>
+      <frameSystemDistance>13</frameSystemDistance>
       <bracketDistance>0.2</bracketDistance>
-      <clefLeftMargin>0.5</clefLeftMargin>
-      <clefKeyRightMargin>1.75</clefKeyRightMargin>
-      <clefBarlineDistance>0.18</clefBarlineDistance>
-      <minNoteDistance>0.4</minNoteDistance>
-      <barNoteDistance>1.2</barNoteDistance>
       <measureSpacing>1.14</measureSpacing>
-      <ledgerLineWidth>0.12</ledgerLineWidth>
-      <beamWidth>0.48</beamWidth>
-      <beamMinLen>1.25</beamMinLen>
-      <propertyDistanceStem>0.5</propertyDistanceStem>
-      <chordStyle>custom</chordStyle>
-      <chordsXmlFile>1</chordsXmlFile>
-      <chordDescriptionFile>stdchords.xml</chordDescriptionFile>
       <createMultiMeasureRests>1</createMultiMeasureRests>
-      <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>
       <voltaPosAbove x="0" y="-2"/>
-      <keySigNaturals>1</keySigNaturals>
-      <tupletOufOfStaff>0</tupletOufOfStaff>
       <Spatium>1.764</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -58,6 +41,7 @@
         <maxPitchP>98</maxPitchP>
         <minPitchA>60</minPitchA>
         <maxPitchA>93</maxPitchA>
+        <instrumentId>wind.flutes.flute</instrumentId>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -88,6 +72,7 @@
         <rightMargin>5</rightMargin>
         <topMargin>5</topMargin>
         <bottomMargin>5</bottomMargin>
+        <boxAutoSize>0</boxAutoSize>
         </HBox>
       <Measure>
         <voice>

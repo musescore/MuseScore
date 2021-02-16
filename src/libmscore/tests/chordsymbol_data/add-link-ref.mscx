@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
+<museScore version="3.02">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -36,12 +36,13 @@
           </StaffType>
         </Staff>
       <trackName>Classical Guitar</trackName>
-      <Instrument>
+      <Instrument id="guitar-nylon">
         <trackName>Classical Guitar</trackName>
         <minPitchP>40</minPitchP>
         <maxPitchP>83</maxPitchP>
         <minPitchA>40</minPitchA>
         <maxPitchA>83</maxPitchA>
+        <instrumentId>pluck.guitar.nylon-string</instrumentId>
         <StringData>
           <frets>19</frets>
           <string>40</string>

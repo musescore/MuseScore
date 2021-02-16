@@ -219,7 +219,7 @@ void MTest::initMTest()
     mscore->init();
 
     root = rootPath();
-    loadInstrumentTemplates(":/instruments.xml");
+    loadInstrumentTemplates(":/data/instruments.xml");
     score = readScore("test.mscx");
 }
 }
