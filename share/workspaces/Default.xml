@@ -414,22 +414,6 @@
             <sigD>2</sigD>
             </TimeSig>
           </Cell>
-        <Cell name="Cut time (Bach)">
-          <staff>1</staff>
-          <TimeSig>
-            <subtype>3</subtype>
-            <sigN>2</sigN>
-            <sigD>2</sigD>
-            </TimeSig>
-          </Cell>
-        <Cell name="Cut triple time (9/8)">
-          <staff>1</staff>
-          <TimeSig>
-            <subtype>4</subtype>
-            <sigN>9</sigN>
-            <sigD>8</sigD>
-            </TimeSig>
-          </Cell>
         </Palette>
       <Palette name="Brackets">
         <type>Bracket</type>
