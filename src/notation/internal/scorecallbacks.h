@@ -24,9 +24,6 @@
 
 #include "libmscore/mscoreview.h"
 
-class QRectF;
-class QRect;
-
 namespace mu::notation {
 class ScoreCallbacks : public Ms::MuseScoreView
 {

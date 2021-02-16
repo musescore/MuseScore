@@ -23,11 +23,9 @@
 #define MU_ASYNC_CHANNEL_H
 
 #include "thirdparty/deto_async/async/channel.h"
-namespace mu {
-namespace async {
+namespace mu::async {
 template<typename ... T>
 using Channel = deto::async::Channel<T...>;
-}
 }
 
 #endif // MU_ASYNC_CHANNEL_H
