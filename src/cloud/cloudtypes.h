@@ -24,8 +24,7 @@
 
 #include <QUrl>
 
-namespace mu {
-namespace cloud {
+namespace mu::cloud {
 struct AccountInfo {
     int id = 0;
     QString userName;
@@ -80,7 +79,6 @@ struct ScoreInfo {
         return id > 0 && !title.isEmpty();
     }
 };
-} // namespace cloud
-} // namespace mu
+}
 
 #endif // MU_CLOUD_ACCOUNTTYPES_H

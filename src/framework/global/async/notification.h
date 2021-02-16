@@ -23,10 +23,8 @@
 #define MU_ASYNC_NOTIFY_H
 
 #include "thirdparty/deto_async/async/notification.h"
-namespace mu {
-namespace async {
+namespace mu::async {
 using Notification = deto::async::Notification;
-}
 }
 
 #endif // MU_ASYNC_NOTIFY_H

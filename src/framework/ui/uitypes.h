@@ -297,4 +297,4 @@ struct ToolConfig
 };
 }
 
-#endif // MU_UI_UIERRORS_H
+#endif // MU_UI_UITYPES_H

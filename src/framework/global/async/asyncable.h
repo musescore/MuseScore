@@ -23,10 +23,8 @@
 #define MU_ASYNC_ASYNCABLE_H
 
 #include "thirdparty/deto_async/async/asyncable.h"
-namespace mu {
-namespace async {
+namespace mu::async {
 using Asyncable = deto::async::Asyncable;
-}
 }
 
 #endif // MU_ASYNC_ASYNCABLE_H

@@ -31,8 +31,7 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class EditStaff;
 class EditStaffType;
 
@@ -116,7 +115,6 @@ private:
 
     EditStaffType* editStaffTypeDialog = nullptr;
 };
-}
 }
 
 Q_DECLARE_METATYPE(mu::notation::EditStaff)
