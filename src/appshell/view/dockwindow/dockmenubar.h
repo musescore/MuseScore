@@ -22,6 +22,7 @@
 #include "dockview.h"
 
 class QMenu;
+class QActionGroup;
 namespace mu::dock {
 class DockMenuBar : public DockView
 {
@@ -41,13 +42,13 @@ public slots:
 signals:
     void itemsChanged(QVariantList items);
     void changed(const QList<QMenu*>& menus);
-    void actionTringgered(const QString& actionCode, const QVariant& actionData);
+    void actionTringgered(const QString& actionCode, int actionIndex);
 
 private:
     void updateMenus();
 
     QMenu* makeMenu(const QVariantMap& menuItem) const;
-    QAction* makeAction(const QVariantMap& menuItem) const;
+    QAction* makeAction(const QVariantMap& menuItem, QActionGroup* group) const;
 
     QVariantList m_items;
 };

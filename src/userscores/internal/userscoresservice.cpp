@@ -47,7 +47,7 @@ std::vector<Meta> UserScoresService::parseRecentList(const QStringList& recentSc
     for (const QString& path : recentScoresPathList) {
         RetVal<Meta> meta = msczMetaReader()->readMeta(path);
         if (!meta.ret) {
-            LOGW() << "Score reader error" << path;
+            LOGE() << "Score reader error" << path;
             continue;
         }
 

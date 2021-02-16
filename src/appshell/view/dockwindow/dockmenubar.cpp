@@ -19,8 +19,26 @@
 #include "dockmenubar.h"
 
 #include <QMenu>
+#include <QActionGroup>
 
 using namespace mu::dock;
+
+static int actionIndexInGroup(const QAction* action)
+{
+    QActionGroup* actionGroup = action->actionGroup();
+    if (!actionGroup) {
+        return -1;
+    }
+
+    QList<QAction*> actions = actionGroup->actions();
+    for (int i = 0; i < actions.size(); ++i) {
+        if (actions[i] == action) {
+            return i;
+        }
+    }
+
+    return -1;
+}
 
 DockMenuBar::DockMenuBar(QQuickItem* parent)
     : DockView(parent)
@@ -48,7 +66,8 @@ void DockMenuBar::setItems(QVariantList items)
 void DockMenuBar::onActionTriggered(QAction* action)
 {
     QVariantMap data = action->data().toMap();
-    emit actionTringgered(data.value("code").toString(), data.value("value"));
+    int actionIndex = actionIndexInGroup(action);
+    emit actionTringgered(data.value("code").toString(), actionIndex);
 }
 
 void DockMenuBar::updateMenus()
@@ -67,6 +86,10 @@ QMenu* DockMenuBar::makeMenu(const QVariantMap& menuItem) const
     menu->setTitle(menuItem.value("title").toString());
     menu->setEnabled(menuItem.value("enabled").toBool());
 
+    QString menuCode = menuItem.value("code").toString();
+
+    QActionGroup* group = new QActionGroup(view());
+
     for (const QVariant& menuObj: menuItem.value("subitems").toList()) {
         QVariantMap menuMap = menuObj.toMap();
         if (menuMap.value("title").toString().isEmpty()) {
@@ -74,20 +97,24 @@ QMenu* DockMenuBar::makeMenu(const QVariantMap& menuItem) const
         } else if (!menuMap.value("subitems").toList().empty()) {
             menu->addMenu(makeMenu(menuMap));
         } else {
-            menu->addAction(makeAction(menuMap));
+            bool isFromGroup = menuCode == menuMap.value("code").toString();
+            menu->addAction(makeAction(menuMap, isFromGroup ? group : nullptr));
         }
     }
 
     return menu;
 }
 
-QAction* DockMenuBar::makeAction(const QVariantMap& menuItem) const
+QAction* DockMenuBar::makeAction(const QVariantMap& menuItem, QActionGroup* group) const
 {
     QAction* action = new QAction();
 
+    if (group) {
+        group->addAction(action);
+    }
+
     QVariantMap data;
     data["code"] = menuItem.value("code").toString();
-    data["value"] = menuItem.value("data");
     action->setData(data);
 
     action->setText(menuItem.value("title").toString());
@@ -97,6 +124,11 @@ QAction* DockMenuBar::makeAction(const QVariantMap& menuItem) const
     action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 
     action->setEnabled(menuItem.value("enabled").toBool());
-    action->setChecked(menuItem.value("checked").toBool());
+
+    if (menuItem.value("checkable").toBool()) {
+        action->setCheckable(true);
+        action->setChecked(menuItem.value("checked").toBool());
+    }
+
     return action;
 }

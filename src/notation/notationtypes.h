@@ -156,7 +156,8 @@ enum class SaveMode
 {
     Unknown,
     SaveAs,
-    SaveACopy
+    SaveCopy,
+    SaveSelection
 };
 
 struct NoteInputState

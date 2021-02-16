@@ -38,7 +38,7 @@ void FileScoreController::init()
 
     dispatcher()->reg(this, "file-save", this, &FileScoreController::saveScore);
     dispatcher()->reg(this, "file-save-as", this, &FileScoreController::saveScoreAs);
-    dispatcher()->reg(this, "file-save-a-copy", this, &FileScoreController::saveScoreACopy);
+    dispatcher()->reg(this, "file-save-a-copy", this, &FileScoreController::saveScoreCopy);
     dispatcher()->reg(this, "file-save-selection", this, &FileScoreController::saveSelection);
 
     dispatcher()->reg(this, "file-import-pdf", this, &FileScoreController::importPdf);
@@ -135,7 +135,7 @@ void FileScoreController::saveScoreAs()
     doSaveScore(selectedFilePath, SaveMode::SaveAs);
 }
 
-void FileScoreController::saveScoreACopy()
+void FileScoreController::saveScoreCopy()
 {
     io::path defaultFilePath = defaultSavingFilePath();
     io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("userscores", "Save a Copy"));
@@ -143,7 +143,7 @@ void FileScoreController::saveScoreACopy()
         return;
     }
 
-    doSaveScore(selectedFilePath, SaveMode::SaveACopy);
+    doSaveScore(selectedFilePath, SaveMode::SaveCopy);
 }
 
 void FileScoreController::saveSelection()
@@ -154,7 +154,7 @@ void FileScoreController::saveSelection()
         return;
     }
 
-    Ret save = globalContext()->currentMasterNotation()->saveSelection(selectedFilePath);
+    Ret save = globalContext()->currentMasterNotation()->save(selectedFilePath, SaveMode::SaveSelection);
     if (!save) {
         LOGE() << save.toString();
     }
@@ -215,7 +215,7 @@ void FileScoreController::doSaveScore(const io::path& filePath, SaveMode saveMod
 {
     io::path oldPath = globalContext()->currentMasterNotation()->metaInfo().filePath;
 
-    Ret save = globalContext()->currentMasterNotation()->save(filePath);
+    Ret save = globalContext()->currentMasterNotation()->save(filePath, saveMode);
     if (!save) {
         LOGE() << save.toString();
         return;
