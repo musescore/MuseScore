@@ -426,7 +426,7 @@ PartListItem::PartListItem(Part* p, QTreeWidget* lv)
       part = p;
       it   = 0;
       op   = ListItemOp::KEEP;
-      _name = QString(p->instrument()->trackName());
+      _name = QString(p->partName().isEmpty() ? p->instrument()->trackName() : p->partName());
       setSoloist(false); //TODO, must be taken from part.
       setFlags(flags() | Qt::ItemIsUserCheckable);
       }
