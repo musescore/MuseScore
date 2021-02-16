@@ -26,8 +26,9 @@ Rectangle {
         spacing: 14
 
         anchors.verticalCenter: parent.verticalCenter
-
         width: parent.width
+
+        enabled: playbackModel.isPlayAllowed
 
         RowLayout {
             id: playbackActions
