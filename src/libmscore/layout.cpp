@@ -1659,7 +1659,7 @@ static void distributeStaves(Page* page)
     qreal prevYBottom  { page->tm() };
     qreal yBottom      { 0.0 };
     bool vbox         { false };
-    Spacer* fixedSpacer { nullptr };
+    Spacer* activeSpacer { nullptr };
     bool transferNormalBracket { false };
     bool transferCurlyBracket  { false };
     for (System* system : page->systems()) {
@@ -1697,8 +1697,8 @@ static void distributeStaves(Page* page)
                     continue;
                 }
 
-                VerticalGapData* vgd = new VerticalGapData(!ngaps++, system, staff, sysStaff, fixedSpacer, prevYBottom);
-                fixedSpacer = nullptr;
+                VerticalGapData* vgd = new VerticalGapData(!ngaps++, system, staff, sysStaff, activeSpacer, prevYBottom);
+                activeSpacer = nullptr;
 
                 if (newSystem) {
                     vgd->addSpaceBetweenSections();
@@ -1729,11 +1729,14 @@ static void distributeStaves(Page* page)
             transferNormalBracket = endNormalBracket >= 0;
             transferCurlyBracket  = endCurlyBracket >= 0;
         }
-        fixedSpacer = system->getFixedSpacer();
+        activeSpacer = system->getActiveSpacer();
     }
     --ngaps;
 
     qreal spaceLeft { page->height() - page->bm() - score->styleP(Sid::staffLowerBorder) - yBottom };
+    if (activeSpacer) {
+        spaceLeft -= activeSpacer->gap();
+    }
     if (spaceLeft <= 0.0) {
         return;
     }
@@ -1865,7 +1868,7 @@ static void layoutPage(Page* page, qreal restHeight)
         System* s1 = page->systems().at(i);
         System* s2 = page->systems().at(i + 1);
         s1->setDistance(s2->y() - s1->y());
-        if (s1->vbox() || s2->vbox() || s1->getFixedSpacer()) {
+        if (s1->vbox() || s2->vbox() || s1->hasFixedDownDistance()) {
             if (s2->vbox()) {
                 checkDivider(true, s1, 0.0, true);              // remove
                 checkDivider(false, s1, 0.0, true);             // remove
@@ -5066,7 +5069,7 @@ void LayoutContext::collectPage()
             Box* vbox = curSystem->vbox();
             if (vbox) {
                 dist += vbox->bottomGap();
-            } else if (!prevSystem->getFixedSpacer()) {
+            } else if (!prevSystem->hasFixedDownDistance()) {
                 qreal margin = qMax(curSystem->minBottom(), curSystem->spacerDistance(false));
                 dist += qMax(margin, slb);
             }
