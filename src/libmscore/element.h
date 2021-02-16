@@ -380,18 +380,19 @@ public:
     /** Returns grips positions in page coordinates. */
     virtual std::vector<QPointF> gripsPositions(const EditData& = EditData()) const { return std::vector<QPointF>(); }
 
-    int track() const { return _track; }
-    virtual void setTrack(int val) { _track = val; }
+    int track() const;
+    virtual void setTrack(int val);
 
     int z() const;
-    void setZ(int val) { _z = val; }
+    void setZ(int val);
 
-    int staffIdx() const { return _track / VOICES; }
-    void setStaffIdx(int val) { _track = val * VOICES + voice(); }
-    virtual int vStaffIdx() const { return staffIdx(); }
-    int voice() const { return _track % VOICES; }
-    void setVoice(int v) { _track = (_track / VOICES) * VOICES + v; }
+    int staffIdx() const;
+    void setStaffIdx(int val);
+    virtual int vStaffIdx() const;
+    int voice() const;
+    void setVoice(int v);
     Staff* staff() const;
+    bool hasStaff() const;
     const StaffType* staffType() const;
     bool onTabStaff() const;
     Part* part() const;

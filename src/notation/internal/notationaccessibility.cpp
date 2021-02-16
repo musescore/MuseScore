@@ -114,7 +114,7 @@ QString NotationAccessibility::singleElementAccessibilityInfo() const
         accessibilityInfo += "; " + barsAndBeats;
     }
 
-    if (element->staffIdx() + 1) {
+    if (element->hasStaff()) {
         QString staff = qtrc("notation", "Staff %1").arg(QString::number(element->staffIdx() + 1));
 
         QString staffName = element->staff()->part()->longName(element->tick());
