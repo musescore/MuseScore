@@ -33,6 +33,9 @@ public:
     virtual std::string name() const = 0;
     virtual std::string title() const = 0;
 
+    virtual std::vector<WorkspaceTag> tags() const = 0;
+    virtual void setTags(const std::vector<WorkspaceTag>& tags) = 0;
+
     virtual AbstractDataPtr data(WorkspaceTag tag, const std::string& name = std::string()) const = 0;
     virtual AbstractDataPtrList dataList(WorkspaceTag tag) const = 0;
     virtual void addData(AbstractDataPtr data) = 0;

@@ -23,7 +23,7 @@
 #include "iuiconfiguration.h"
 #include "imainwindow.h"
 #include "iplatformtheme.h"
-#include "iworkspaceuiarrangment.h"
+#include "iworkspacesettings.h"
 #include "val.h"
 
 #include "modularity/ioc.h"
@@ -33,7 +33,7 @@ class UiConfiguration : public IUiConfiguration
 {
     INJECT(ui, IMainWindow, mainWindow)
     INJECT(ui, IPlatformTheme, platformTheme)
-    INJECT(ui, framework::IWorkspaceUiArrangment, workspaceUiArrangment)
+    INJECT(ui, framework::IWorkspaceSettings, workspaceSettings)
 
 public:
     void init();
@@ -67,9 +67,6 @@ public:
 private:
     QByteArray stringToByteArray(const std::string& string) const;
     std::string byteArrayToString(const QByteArray& byteArray) const;
-
-    Val uiValue(const std::string& key) const;
-    void setUiValue(const std::string& key, const Val& value);
 
     async::Channel<ThemeType> m_currentPreferredThemeTypeChannel;
     async::Channel<ThemeType> m_currentActualThemeTypeChannel;

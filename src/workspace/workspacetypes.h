@@ -27,11 +27,18 @@
 namespace mu::workspace {
 enum class WorkspaceTag
 {
+    Unknown,
     UiArrangement,
     Settings,
     Palettes,
     Toolbar
 };
+using WorkspaceTagList = std::vector<WorkspaceTag>;
+
+inline bool containsTag(const WorkspaceTagList& list, const WorkspaceTag& tag)
+{
+    return std::find(list.cbegin(), list.cend(), tag) != list.cend();
+}
 
 struct AbstractData
 {
@@ -60,13 +67,6 @@ struct ToolbarData : public AbstractData
 };
 
 using ToolbarDataPtr = std::shared_ptr<ToolbarData>;
-
-struct UiArrangmentData : public AbstractData
-{
-    std::map<std::string /*key*/, Val> values;
-};
-
-using UiArrangmentDataPtr = std::shared_ptr<UiArrangmentData>;
 
 static constexpr std::string_view DEFAULT_WORKSPACE_NAME("Default");
 }

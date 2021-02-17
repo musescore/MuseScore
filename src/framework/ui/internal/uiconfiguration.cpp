@@ -59,7 +59,7 @@ void UiConfiguration::init()
         m_musicalFontChanged.notify();
     });
 
-    workspaceUiArrangment()->valuesChanged().onNotify(nullptr, [this]() {
+    workspaceSettings()->valuesChanged().onNotify(nullptr, [this]() {
         m_pageStateChanged.notify();
     });
 }
@@ -183,14 +183,32 @@ float UiConfiguration::physicalDotsPerInch() const
 QByteArray UiConfiguration::pageState(const std::string& pageName) const
 {
     TRACEFUNC;
-    std::string stateString = uiValue(STATES_PATH + "/" + pageName).toString();
+    std::string key = STATES_PATH + "/" + pageName;
+    std::string stateString;
+
+    if (workspaceSettings()->isManage(workspace::WorkspaceTag::UiArrangement)) {
+        stateString = workspaceSettings()->value(workspace::WorkspaceTag::UiArrangement, key).toString();
+    } else {
+        Settings::Key settingsKey{ "global", key };
+        stateString = settings()->value(settingsKey).toString();
+    }
+
     return stringToByteArray(stateString);
 }
 
 void UiConfiguration::setPageState(const std::string& pageName, const QByteArray& state)
 {
     TRACEFUNC;
-    setUiValue(STATES_PATH + "/" + pageName, Val(byteArrayToString(state)));
+    std::string key = STATES_PATH + "/" + pageName;
+    Val value = Val(byteArrayToString(state));
+
+    if (workspaceSettings()->isManage(workspace::WorkspaceTag::UiArrangement)) {
+        workspaceSettings()->setValue(workspace::WorkspaceTag::UiArrangement, key, value);
+        return;
+    }
+
+    Settings::Key settingsKey{ "global", key };
+    settings()->setValue(settingsKey, value);
 }
 
 Notification UiConfiguration::pageStateChanged() const
@@ -211,26 +229,4 @@ std::string UiConfiguration::byteArrayToString(const QByteArray& byteArray) cons
 {
     QByteArray byteArray64 = byteArray.toBase64();
     return byteArray64.toStdString();
-}
-
-mu::Val UiConfiguration::uiValue(const std::string& key) const
-{
-    Val val = workspaceUiArrangment()->value(key);
-    if (!val.isNull()) {
-        return val;
-    }
-
-    Settings::Key settingsKey{ "global", key };
-    return settings()->value(settingsKey);
-}
-
-void UiConfiguration::setUiValue(const std::string& key, const Val& value)
-{
-    bool ok = workspaceUiArrangment()->setValue(key, value);
-    if (ok) {
-        return;
-    }
-
-    Settings::Key settingsKey{ "global", key };
-    settings()->setValue(settingsKey, value);
 }

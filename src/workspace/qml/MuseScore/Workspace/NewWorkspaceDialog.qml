@@ -75,42 +75,42 @@ QmlDialog {
                 columnSpacing: rowSpacing * 4
 
                 CheckBox {
-                    checked: workspaceModel.importUiPreferences
+                    checked: workspaceModel.useUiPreferences
 
                     text: qsTrc("workspace", "UI preferences (colours, canvas style, etc.)")
 
                     onClicked: {
-                        workspaceModel.importUiPreferences = !checked
+                        workspaceModel.useUiPreferences = !checked
                     }
                 }
 
                 CheckBox {
-                    checked: workspaceModel.importUiArrangement
+                    checked: workspaceModel.useUiArrangement
 
                     text: qsTrc("workspace", "UI arrangement")
 
                     onClicked: {
-                        workspaceModel.importUiArrangement = !checked
+                        workspaceModel.useUiArrangement = !checked
                     }
                 }
 
                 CheckBox {
-                    checked: workspaceModel.importPalettes
+                    checked: workspaceModel.usePalettes
 
                     text: qsTrc("workspace", "Palettes")
 
                     onClicked: {
-                        workspaceModel.importPalettes = !checked
+                        workspaceModel.usePalettes = !checked
                     }
                 }
 
                 CheckBox {
-                    checked: workspaceModel.importToolbarCustomization
+                    checked: workspaceModel.useToolbarCustomization
 
                     text: qsTrc("workspace", "Toolbar customisations")
 
                     onClicked: {
-                        workspaceModel.importToolbarCustomization = !checked
+                        workspaceModel.useToolbarCustomization = !checked
                     }
                 }
             }

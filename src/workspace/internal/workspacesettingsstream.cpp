@@ -30,8 +30,14 @@ using namespace mu::framework;
 using namespace mu::system;
 
 static constexpr std::string_view SETTINGS_TAG("Preferences");
+static constexpr std::string_view UI_ARRANGMENT_TAG("UiArrangment");
 static constexpr std::string_view SETTING_ELEMENT_TAG("Preference");
 static constexpr std::string_view NAME_ATTRIBUTE("name");
+
+WorkspaceSettingsStream::WorkspaceSettingsStream(WorkspaceTag tag)
+    : m_tag(tag)
+{
+}
 
 AbstractDataPtrList WorkspaceSettingsStream::read(IODevice& sourceDevice) const
 {
@@ -40,7 +46,7 @@ AbstractDataPtrList WorkspaceSettingsStream::read(IODevice& sourceDevice) const
     while (reader.canRead()) {
         reader.readNextStartElement();
 
-        if (reader.tagName() == SETTINGS_TAG) {
+        if (reader.tagName() == tagName()) {
             return { readSettings(reader) };
         }
     }
@@ -82,7 +88,7 @@ void WorkspaceSettingsStream::writeSettings(XmlWriter& writer, const AbstractDat
         return;
     }
 
-    writer.writeStartElement(SETTINGS_TAG);
+    writer.writeStartElement(tagName());
 
     for (auto it = settings->values.begin(); it != settings->values.end(); ++it) {
         if (it->second.isNull()) {
@@ -100,5 +106,10 @@ void WorkspaceSettingsStream::writeSettings(XmlWriter& writer, const AbstractDat
 
 WorkspaceTag WorkspaceSettingsStream::tag() const
 {
-    return WorkspaceTag::Settings;
+    return m_tag;
+}
+
+std::string_view WorkspaceSettingsStream::tagName() const
+{
+    return tag() == WorkspaceTag::Settings ? SETTINGS_TAG : UI_ARRANGMENT_TAG;
 }

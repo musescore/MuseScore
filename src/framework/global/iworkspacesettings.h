@@ -16,25 +16,28 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_IWORKSPACEUIARRANGMENT_H
-#define MU_FRAMEWORK_IWORKSPACEUIARRANGMENT_H
+#ifndef MU_FRAMEWORK_IWORKSPACESETTINGS_H
+#define MU_FRAMEWORK_IWORKSPACESETTINGS_H
 
 #include "modularity/imoduleexport.h"
 #include "val.h"
 #include "async/notification.h"
+#include "workspace/workspacetypes.h"
 
 namespace mu::framework {
-class IWorkspaceUiArrangment : MODULE_EXPORT_INTERFACE
+class IWorkspaceSettings : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IWorkspaceUiArrangment)
+    INTERFACE_ID(IWorkspaceSettings)
 public:
 
-    virtual ~IWorkspaceUiArrangment() = default;
+    virtual ~IWorkspaceSettings() = default;
 
-    virtual Val value(const std::string& key) const = 0;
-    virtual bool setValue(const std::string& key, const Val& value) const = 0;
+    virtual bool isManage(workspace::WorkspaceTag tag) const = 0;
+
+    virtual Val value(workspace::WorkspaceTag tag, const std::string& key) const = 0;
+    virtual void setValue(workspace::WorkspaceTag tag, const std::string& key, const Val& value) const = 0;
     virtual async::Notification valuesChanged() const = 0;
 };
 }
 
-#endif // MU_FRAMEWORK_IWORKSPACEUIARRANGMENT_H
+#endif // MU_FRAMEWORK_IWORKSPACESETTINGS_H
