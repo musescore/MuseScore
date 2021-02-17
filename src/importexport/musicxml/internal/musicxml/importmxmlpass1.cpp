@@ -522,7 +522,9 @@ static void addText2(VBox* vbx, Score* s, const QString strTxt, const Tid stl, c
         Text* text = new Text(s, stl);
         text->setXmlText(strTxt);
         text->setAlign(align);
+        text->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
         text->setOffset(QPointF(0.0, yoffs));
+        text->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
         vbx->add(text);
     }
 }
@@ -570,10 +572,36 @@ static Align alignForCreditWords(const CreditWords* const w, const int pageWidth
 }
 
 //---------------------------------------------------------
-//   tidForCreditWords
+//   creditWordTypeToTid
 //---------------------------------------------------------
 
-static Tid tidForCreditWords(const CreditWords* const word, std::vector<const CreditWords*>& words, const int pageWidth)
+static Tid creditWordTypeToTid(const QString& type)
+{
+    if (type == "composer") {
+        return Tid::COMPOSER;
+    } else if (type == "lyricist") {
+        return Tid::POET;
+    }
+    /*
+    else if (type == "page number")
+          return Tid::;
+    else if (type == "rights")
+          return Tid::;
+     */
+    else if (type == "subtitle") {
+        return Tid::SUBTITLE;
+    } else if (type == "title") {
+        return Tid::TITLE;
+    } else {
+        return Tid::DEFAULT;
+    }
+}
+
+//---------------------------------------------------------
+//   creditWordTypeGuess
+//---------------------------------------------------------
+
+static Tid creditWordTypeGuess(const CreditWords* const word, std::vector<const CreditWords*>& words, const int pageWidth)
 {
     const auto pw1 = pageWidth / 3;
     const auto pw2 = pageWidth * 2 / 3;
@@ -593,16 +621,32 @@ static Tid tidForCreditWords(const CreditWords* const word, std::vector<const Cr
         // if another word in the middle column has a larger font size, this word is not the title
         for (const auto w : words) {
             if (w == word) {
-                continue;                       // it's me
+                continue;                 // it's me
             }
             if (w->defaultX < pw1 || pw2 < w->defaultX) {
-                continue;                       // it's not in the middle column
+                continue;                 // it's not in the middle column
             }
             if (word->fontSize < w->fontSize) {
-                return Tid::SUBTITLE;           // word does not have the largest font size, assume subtitle
+                return Tid::SUBTITLE;                  // word does not have the largest font size, assume subtitle
             }
         }
-        return Tid::TITLE;                      // no better title candidate found
+        return Tid::TITLE;                // no better title candidate found
+    }
+}
+
+//---------------------------------------------------------
+//   tidForCreditWords
+//---------------------------------------------------------
+
+static Tid tidForCreditWords(const CreditWords* const word, std::vector<const CreditWords*>& words, const int pageWidth)
+{
+    const Tid tid = creditWordTypeToTid(word->type);
+    if (tid != Tid::DEFAULT) {
+        // type recognized, done
+        return tid;
+    } else {
+        // type not recognized, guess
+        return creditWordTypeGuess(word, words, pageWidth);
     }
 }
 
@@ -624,6 +668,18 @@ static VBox* createAndAddVBoxForCreditWords(Score* const score, const int miny =
     vbox->setBoxHeight(Spatium(vboxHeight));
     score->measures()->add(vbox);
     return vbox;
+}
+
+//---------------------------------------------------------
+//   mustAddWordToVbox
+//---------------------------------------------------------
+
+// determine if specific types of credit words must be added: do not add copyright and page number,
+// as these typically conflict with MuseScore's style and/or layout
+
+static bool mustAddWordToVbox(const QString& creditType)
+{
+    return creditType != "rights" && creditType != "page number";
 }
 
 //---------------------------------------------------------
@@ -670,13 +726,15 @@ static VBox* addCreditWords(Score* const score, const CreditWordsList& crWords,
     findYMinYMaxInWords(words, miny, maxy);
 
     for (const auto w : words) {
-        const auto align = alignForCreditWords(w, pageSize.width());
-        const auto tid = (pageNr == 1 && top) ? tidForCreditWords(w, words, pageSize.width()) : Tid::DEFAULT;
-        double yoffs = (maxy - w->defaultY) * score->spatium() / 10;
-        if (!vbox) {
-            vbox = createAndAddVBoxForCreditWords(score, miny, maxy);
+        if (mustAddWordToVbox(w->type)) {
+            const auto align = alignForCreditWords(w, pageSize.width());
+            const auto tid = (pageNr == 1 && top) ? tidForCreditWords(w, words, pageSize.width()) : Tid::DEFAULT;
+            double yoffs = (maxy - w->defaultY) * score->spatium() / 10;
+            if (!vbox) {
+                vbox = createAndAddVBoxForCreditWords(score, miny, maxy);
+            }
+            addText2(vbox, score, w->words, tid, align, yoffs);
         }
-        addText2(vbox, score, w->words, tid, align, yoffs);
     }
 
     return vbox;
@@ -831,8 +889,9 @@ static void dumpCredits(const CreditWordsList& credits)
 {
 #if 0
     for (const auto w : credits) {
-        qDebug("credit-words pg=%d defx=%g defy=%g just=%s hal=%s val=%s words='%s'",
+        qDebug("credit-words pg=%d tp='%s' defx=%g defy=%g just=%s hal=%s val=%s words='%s'",
                w->page,
+               qPrintable(w->type),
                w->defaultX,
                w->defaultY,
                qPrintable(w->justify),
@@ -896,8 +955,7 @@ Score::FileError MusicXMLParserPass1::parse(QIODevice* device)
     dumpPageSize(_pageSize);
     dumpCredits(_credits);
     // Create the measures
-    createMeasuresAndVboxes(_score, _measureLength, _measureStart, _systemStartMeasureNrs, _pageStartMeasureNrs,
-                            _credits, _pageSize);
+    createMeasuresAndVboxes(_score, _measureLength, _measureStart, _systemStartMeasureNrs, _pageStartMeasureNrs, _credits, _pageSize);
 
     return res;
 }
@@ -946,8 +1004,7 @@ Score::FileError MusicXMLParserPass1::parse()
 static bool allStaffGroupsIdentical(Part const* const p)
 {
     for (int i = 1; i < p->nstaves(); ++i) {
-        if (p->staff(0)->constStaffType(Fraction(0,
-                                                 1))->group() != p->staff(i)->constStaffType(Fraction(0,1))->group()) {
+        if (p->staff(0)->constStaffType(Fraction(0,1))->group() != p->staff(i)->constStaffType(Fraction(0,1))->group()) {
             return false;
         }
     }
@@ -1153,7 +1210,7 @@ static QString text2syms(const QString& t)
             in.remove(0, maxMatch);
         } else {
             // not found, move one char from res to in
-            res += in.left(1);
+            res += in.leftRef(1);
             in.remove(0, 1);
         }
     }
@@ -1285,6 +1342,7 @@ void MusicXMLParserPass1::credit(CreditWordsList& credits)
     QString justify;
     QString halign;
     QString valign;
+    QStringList crtypes;
     QString crwords;
     while (_e.readNextStartElement()) {
         if (_e.name() == "credit-words") {
@@ -1300,13 +1358,18 @@ void MusicXMLParserPass1::credit(CreditWordsList& credits)
             }
             crwords += nextPartOfFormattedString(_e);
         } else if (_e.name() == "credit-type") {
-            _e.skipCurrentElement();              // skip but don't log
+            // multiple credit-type elements may be present, supported by
+            // e.g. Finale v26.3 for Mac.
+            crtypes += _e.readElementText();
         } else {
             skipLogCurrElem();
         }
     }
     if (crwords != "") {
-        CreditWords* cw = new CreditWords(page, defaultx, defaulty, fontSize, justify, halign, valign, crwords);
+        // as the meaning of multiple credit-types is undocumented,
+        // use credit-type only if exactly one was found
+        QString crtype = (crtypes.size() == 1) ? crtypes.at(0) : "";
+        CreditWords* cw = new CreditWords(page, crtype, defaultx, defaulty, fontSize, justify, halign, valign, crwords);
         credits.append(cw);
     }
 
@@ -1314,41 +1377,20 @@ void MusicXMLParserPass1::credit(CreditWordsList& credits)
 }
 
 //---------------------------------------------------------
-//   mustSetSize
+//   isTitleFrameStyle
 //---------------------------------------------------------
 
 /**
- Determine if i is a style type for which the default size must be set
+ Determine if tid is a style type used in a title frame
  */
 
-// The MusicXML specification does not specify to which kinds of text
-// the word-font setting applies. Setting all sizes to the size specified
-// gives bad results, e.g. for measure numbers, so a selection is made.
-// Some tweaking may still be required.
-#if 0
-static bool mustSetSize(const int i)
+static bool isTitleFrameStyle(const Tid tid)
 {
-    return
-        i == int(Tid::TITLE)
-        || i == int(Tid::SUBTITLE)
-        || i == int(Tid::COMPOSER)
-        || i == int(Tid::POET)
-        || i == int(Tid::INSTRUMENT_LONG)
-        || i == int(Tid::INSTRUMENT_SHORT)
-        || i == int(Tid::INSTRUMENT_EXCERPT)
-        || i == int(Tid::TEMPO)
-        || i == int(Tid::METRONOME)
-        || i == int(Tid::TRANSLATOR)
-        || i == int(Tid::SYSTEM)
-        || i == int(Tid::STAFF)
-        || i == int(Tid::REPEAT_LEFT)
-        || i == int(Tid::REPEAT_RIGHT)
-        || i == int(Tid::TEXTLINE)
-        || i == int(Tid::GLISSANDO)
-        || i == int(Tid::INSTRUMENT_CHANGE);
+    return tid == Tid::TITLE
+           || tid == Tid::SUBTITLE
+           || tid == Tid::COMPOSER
+           || tid == Tid::POET;
 }
-
-#endif
 
 //---------------------------------------------------------
 //   updateStyles
@@ -1371,9 +1413,17 @@ static void updateStyles(Score* score,
     // loop over all text styles (except the empty, always hidden, first one)
     // set all text styles to the MusicXML defaults
     for (const auto tid : allTextStyles()) {
-        // exclude lyrics odd and even lines (handled separately)
-        // and Roman numeral analysis (special case, leave untouched)
-        if (tid == Tid::LYRICS_ODD || tid == Tid::LYRICS_EVEN || tid == Tid::HARMONY_ROMAN) {
+        // The MusicXML specification does not specify to which kinds of text
+        // the word-font setting applies. Setting all sizes to the size specified
+        // gives bad results, so a selection is made:
+        // exclude lyrics odd and even lines (handled separately),
+        // Roman numeral analysis (special case, leave untouched)
+        // and text types used in the title frame
+        // Some further tweaking may still be required.
+
+        if (tid == Tid::LYRICS_ODD || tid == Tid::LYRICS_EVEN
+            || tid == Tid::HARMONY_ROMAN
+            || isTitleFrameStyle(tid)) {
             continue;
         }
         const TextStyle* ts = textStyle(tid);
