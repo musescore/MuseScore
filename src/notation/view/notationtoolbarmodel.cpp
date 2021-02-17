@@ -25,6 +25,8 @@
 
 using namespace mu::notation;
 using namespace mu::ui;
+using namespace mu::uicomponents;
+using namespace mu::actions;
 
 NotationToolBarModel::NotationToolBarModel(QObject* parent)
     : QAbstractListModel(parent)
@@ -42,11 +44,13 @@ QVariant NotationToolBarModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
 
-    ToolbarItem item = m_items[index.row()];
+    MenuItem item = m_items[index.row()];
 
     switch (role) {
-    case TitleRole: return item.title;
-    case IconRole: return item.icon;
+    case TitleRole: return QString::fromStdString(item.title);
+    case CodeRole: return QString::fromStdString(item.code);
+    case HintRole: return QString::fromStdString(item.description);
+    case IconRole: return static_cast<int>(item.iconCode);
     case EnabledRole: return item.enabled;
     }
 
@@ -57,8 +61,10 @@ QHash<int, QByteArray> NotationToolBarModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles {
         { TitleRole, "title" },
+        { CodeRole, "code" },
         { IconRole, "icon" },
-        { EnabledRole, "enabled" }
+        { EnabledRole, "enabled" },
+        { HintRole, "hint" }
     };
 
     return roles;
@@ -70,8 +76,8 @@ void NotationToolBarModel::load()
 
     m_items.clear();
 
-    m_items << makeItem("Parts", IconCode::Code::PAGE, "musescore://notation/parts", hasNotation());
-    m_items << makeItem("Mixer", IconCode::Code::MIXER, "musescore://notation/mixer");
+    m_items << makeItem("parts");
+    m_items << makeItem("toggle-mixer");
 
     endResetModel();
 
@@ -80,33 +86,15 @@ void NotationToolBarModel::load()
     });
 }
 
-void NotationToolBarModel::open(int index)
+void NotationToolBarModel::handleAction(const QString& actionCode)
 {
-    if (index < 0 || index >= m_items.size()) {
-        return;
-    }
-
-    Ret ret = interactive()->open(m_items[index].uri).ret;
-
-    if (!ret) {
-        LOGE() << ret.toString();
-    }
+    dispatcher()->dispatch(actions::codeFromQString(actionCode));
 }
 
-NotationToolBarModel::ToolbarItem NotationToolBarModel::makeItem(std::string_view title, IconCode::Code icon, std::string uri,
-                                                                 bool enabled) const
+MenuItem NotationToolBarModel::makeItem(const ActionCode& actionCode) const
 {
-    ToolbarItem item;
-
-    item.title = qtrc("notation", title.data());
-    item.icon = static_cast<int>(icon);
-    item.uri = std::move(uri);
-    item.enabled = enabled;
+    MenuItem item = actionsRegister()->action(actionCode);
+    item.enabled = context()->currentNotation() != nullptr;
 
     return item;
-}
-
-bool NotationToolBarModel::hasNotation() const
-{
-    return context()->currentNotation() != nullptr;
 }

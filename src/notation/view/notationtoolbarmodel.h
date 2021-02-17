@@ -23,11 +23,13 @@
 #include <QAbstractListModel>
 
 #include "context/iglobalcontext.h"
-#include "iinteractive.h"
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
+#include "actions/iactionsregister.h"
+#include "actions/iactionsdispatcher.h"
 
 #include "framework/ui/view/iconcodes.h"
+#include "framework/uicomponents/uicomponentstypes.h"
 
 namespace mu::notation {
 class NotationToolBarModel : public QAbstractListModel, public async::Asyncable
@@ -35,37 +37,31 @@ class NotationToolBarModel : public QAbstractListModel, public async::Asyncable
     Q_OBJECT
 
     INJECT(notation, context::IGlobalContext, context)
-    INJECT(notation, framework::IInteractive, interactive)
+    INJECT(notation, actions::IActionsRegister, actionsRegister)
+    INJECT(notation, actions::IActionsDispatcher, dispatcher)
 
 public:
     explicit NotationToolBarModel(QObject* parent = nullptr);
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QVariant data(const QModelIndex& index, int role) const override;
-    QHash<int,QByteArray> roleNames() const override;
+    QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void load();
-    Q_INVOKABLE void open(int index);
+    Q_INVOKABLE void handleAction(const QString& actionCode);
 
 private:
-    bool hasNotation() const;
-
     enum Roles {
         TitleRole = Qt::UserRole + 1,
+        CodeRole,
         IconRole,
-        EnabledRole
+        EnabledRole,
+        HintRole
     };
 
-    struct ToolbarItem {
-        QString title;
-        int icon = 0;
-        bool enabled = false;
-        std::string uri;
-    };
+    uicomponents::MenuItem makeItem(const actions::ActionCode& actionCode) const;
 
-    ToolbarItem makeItem(std::string_view title, ui::IconCode::Code, std::string uri, bool enabled = true) const;
-
-    QList<ToolbarItem> m_items;
+    QList<uicomponents::MenuItem> m_items;
 };
 }
 
