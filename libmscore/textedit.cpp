@@ -135,6 +135,7 @@ void TextBase::endEdit(EditData& ed)
             // command. Text shouldn't happen to be empty in other cases though.
             Q_ASSERT(newlyAdded || textWasEdited);
 
+            setXmlText(ted->oldXmlText);    // reset text to value before editing
             undo->reopen();
             score()->undoRemoveElement(this);
             ed.element = 0;
