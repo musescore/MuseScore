@@ -1,4 +1,5 @@
 module MuseScore.UiComponents
+Border 1.0 Border.qml
 CheckBox 1.0 CheckBox.qml
 FocusableItem 1.0 FocusableItem.qml
 StyledIconLabel 1.0 StyledIconLabel.qml
