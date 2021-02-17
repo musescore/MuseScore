@@ -31,7 +31,12 @@ class AppShellConfiguration : public IAppShellConfiguration
 public:
     bool isAppUpdatable() const override;
 
+    std::string handbookUrl(const std::string& languageCode) const override;
+
     ValCh<QStringList> recentScoreList() const override;
+
+private:
+    std::string utmParameters(const std::string& utmMedium) const;
 };
 }
 

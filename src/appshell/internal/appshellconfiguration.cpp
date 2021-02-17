@@ -18,6 +18,10 @@
 //=============================================================================
 #include "appshellconfiguration.h"
 
+#include "config.h"
+
+static const std::string ONLINE_HANDBOOK_URL("https://musescore.org/redirect/help?tag=handbook&locale=");
+
 using namespace mu::appshell;
 
 bool AppShellConfiguration::isAppUpdatable() const
@@ -29,7 +33,21 @@ bool AppShellConfiguration::isAppUpdatable() const
 #endif
 }
 
+std::string AppShellConfiguration::handbookUrl(const std::string& languageCode) const
+{
+    std::string utm = utmParameters("menu");
+
+    return ONLINE_HANDBOOK_URL + languageCode + "&" + utm;
+}
+
 mu::ValCh<QStringList> AppShellConfiguration::recentScoreList() const
 {
     return userScoresConfiguration()->recentScoreList();
+}
+
+std::string AppShellConfiguration::utmParameters(const std::string& utmMedium) const
+{
+    return "utm_source=desktop&utm_medium=" + utmMedium
+           + "&utm_content=" + MUSESCORE_REVISION
+           + "&utm_campaign=MuseScore" + VERSION;
 }
