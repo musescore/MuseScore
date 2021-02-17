@@ -347,19 +347,42 @@ void Theme::setupMusicFont()
 
 void Theme::setupWidgetTheme()
 {
+    QColor fontPrimaryColorDisabled = fontPrimaryColor();
+    fontPrimaryColorDisabled.setAlphaF(itemOpacityDisabled());
+
+    QColor backgroundPrimaryColorDisabled = backgroundPrimaryColor();
+    backgroundPrimaryColorDisabled.setAlphaF(itemOpacityDisabled());
+
+    QColor backgroundSecondaryColorDisabled = backgroundSecondaryColor();
+    backgroundSecondaryColorDisabled.setAlphaF(itemOpacityDisabled());
+
     QPalette palette(QApplication::palette());
     palette.setColor(QPalette::Window, backgroundPrimaryColor());
+    palette.setColor(QPalette::Disabled, QPalette::Window, backgroundPrimaryColorDisabled);
     palette.setColor(QPalette::WindowText, fontPrimaryColor());
+    palette.setColor(QPalette::Disabled, QPalette::WindowText, fontPrimaryColorDisabled);
+
     palette.setColor(QPalette::Base, backgroundSecondaryColor());
+    palette.setColor(QPalette::Disabled, QPalette::Base, backgroundSecondaryColorDisabled);
     palette.setColor(QPalette::AlternateBase, backgroundSecondaryColor());
+    palette.setColor(QPalette::Disabled, QPalette::AlternateBase, backgroundSecondaryColorDisabled);
+
     palette.setColor(QPalette::Text, fontPrimaryColor());
+    palette.setColor(QPalette::Disabled, QPalette::Text, fontPrimaryColorDisabled);
+
     palette.setColor(QPalette::Button, backgroundSecondaryColor());
+    palette.setColor(QPalette::Disabled, QPalette::Button, backgroundSecondaryColorDisabled);
     palette.setColor(QPalette::ButtonText, fontPrimaryColor());
+    palette.setColor(QPalette::Disabled, QPalette::ButtonText, fontPrimaryColorDisabled);
+
     palette.setColor(QPalette::ToolTipBase, popupBackgroundColor());
     palette.setColor(QPalette::ToolTipText, fontPrimaryColor());
+
     palette.setColor(QPalette::Highlight, accentColor());
     palette.setColor(QPalette::HighlightedText, fontPrimaryColor());
+
     palette.setColor(QPalette::PlaceholderText, fontPrimaryColor());
+    palette.setColor(QPalette::Disabled, QPalette::PlaceholderText, fontPrimaryColorDisabled);
 
     QApplication::setPalette(palette);
 
