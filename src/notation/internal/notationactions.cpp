@@ -182,7 +182,14 @@ const ActionList NotationActions::m_actions = {
     ActionItem("parts",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Parts"),
-               QT_TRANSLATE_NOOP("action", "Manage parts")
+               QT_TRANSLATE_NOOP("action", "Manage parts"),
+               IconCode::Code::PAGE
+               ),
+    ActionItem("toggle-mixer",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Mixer"),
+               QT_TRANSLATE_NOOP("action", "Toggle mixer"),
+               IconCode::Code::MIXER
                ),
     ActionItem("view-mode-page",
                ShortcutContext::NotationActive,

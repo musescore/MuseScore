@@ -111,6 +111,7 @@ private:
     void openTupletOtherDialog();
 
     void toggleNavigator();
+    void toggleMixer();
 
     bool isTextEditting() const;
 

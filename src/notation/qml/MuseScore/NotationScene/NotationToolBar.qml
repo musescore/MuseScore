@@ -31,6 +31,7 @@ Rectangle {
         delegate: FlatButton {
             text: model.title
             icon: model.icon
+            hint: model.hint
             enabled: model.enabled
             textFont: ui.theme.tabFont
 
@@ -38,7 +39,7 @@ Rectangle {
             orientation: Qt.Horizontal
 
             onClicked: {
-                toolbarModel.open(model.index)
+                toolbarModel.handleAction(model.code)
             }
         }
     }
