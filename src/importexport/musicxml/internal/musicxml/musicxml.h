@@ -42,6 +42,7 @@ struct MusicXmlPartGroup {
     int start;
     BracketType type;
     bool barlineSpan;
+    int column;
 };
 
 const int MAX_LYRICS       = 16;
