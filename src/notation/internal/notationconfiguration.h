@@ -25,14 +25,12 @@
 #include "ui/iuiconfiguration.h"
 #include "iglobalconfiguration.h"
 #include "settings.h"
-#include "ui/itheme.h"
 
 namespace mu::notation {
 class NotationConfiguration : public INotationConfiguration, public async::Asyncable
 {
     INJECT(notation, ui::IUiConfiguration, uiConfiguration)
     INJECT(notation, framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(notation, ui::ITheme, theme)
 
 public:
     void init();
@@ -100,8 +98,6 @@ private:
     std::vector<std::string> parseToolbarActions(const std::string& actions) const;
 
     framework::Settings::Key toolbarSettingsKey(const std::string& toolbarName) const;
-
-    QColor resolveColor(const framework::Settings::Key& key) const;
 
     async::Channel<QColor> m_backgroundColorChanged;
     async::Channel<QColor> m_foregroundColorChanged;

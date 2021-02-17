@@ -72,20 +72,15 @@ void NotationConfiguration::init()
 {
     settings()->setDefaultValue(ANCHORLINE_COLOR, Val(QColor("#C31989")));
 
-    settings()->setDefaultValue(BACKGROUND_COLOR, Val(theme()->backgroundSecondaryColor()));
+    settings()->setDefaultValue(BACKGROUND_COLOR, Val(QColor("#385f94")));
     settings()->valueChanged(BACKGROUND_COLOR).onReceive(nullptr, [this](const Val& val) {
         LOGD() << "BACKGROUND_COLOR changed: " << val.toString();
         m_backgroundColorChanged.send(val.toQColor());
     });
 
-    settings()->setDefaultValue(FOREGROUND_COLOR, Val(theme()->backgroundPrimaryColor()));
+    settings()->setDefaultValue(FOREGROUND_COLOR, Val(QColor("#f9f9f9")));
     settings()->valueChanged(FOREGROUND_COLOR).onReceive(nullptr, [this](const Val& val) {
         LOGD() << "FOREGROUND_COLOR changed: " << val.toString();
-        m_foregroundColorChanged.send(foregroundColor());
-    });
-
-    theme()->themeChanged().onNotify(this, [this]() {
-        m_backgroundColorChanged.send(backgroundColor());
         m_foregroundColorChanged.send(foregroundColor());
     });
 
@@ -128,12 +123,7 @@ QColor NotationConfiguration::anchorLineColor() const
 
 QColor NotationConfiguration::backgroundColor() const
 {
-    QColor color = resolveColor(BACKGROUND_COLOR);
-    if (!color.isValid()) {
-        color = theme()->backgroundSecondaryColor();
-    }
-
-    return color;
+    return settings()->value(BACKGROUND_COLOR).toQColor();
 }
 
 async::Channel<QColor> NotationConfiguration::backgroundColorChanged() const
@@ -167,12 +157,7 @@ QColor NotationConfiguration::foregroundColor() const
         return settings()->value(FOREGROUND_COLOR).toQColor();
     }
 
-    QColor color = resolveColor(FOREGROUND_COLOR);
-    if (!color.isValid()) {
-        color = theme()->backgroundSecondaryColor();
-    }
-
-    return color;
+    return settings()->defaultValue(FOREGROUND_COLOR).toQColor();
 }
 
 async::Channel<QColor> NotationConfiguration::foregroundColorChanged() const
@@ -377,15 +362,4 @@ Settings::Key NotationConfiguration::toolbarSettingsKey(const std::string& toolb
     Settings::Key toolbarKey = TOOLBAR_KEY;
     toolbarKey.key += toolbarName;
     return toolbarKey;
-}
-
-QColor NotationConfiguration::resolveColor(const Settings::Key& key) const
-{
-    QColor color = settings()->value(key).toQColor();
-    QColor defaultColor = settings()->defaultValue(key).toQColor();
-    if (!color.isValid() || color == defaultColor) {
-        return QColor();
-    }
-
-    return color;
 }
