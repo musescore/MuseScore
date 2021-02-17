@@ -1390,6 +1390,7 @@ void MusicXMLParserPass2::initPartState(const QString& partId)
     _tremStart = 0;
     _figBass = 0;
     _multiMeasureRestCount = -1;
+    _measureStyleSlash = MusicXmlSlash::NONE;
     _extendedLyrics.init();
 
     _nstaves = _pass1.getPart(partId)->nstaves();
@@ -2371,7 +2372,8 @@ void MusicXMLParserPass2::staffTuning(StringData* t)
 
 /**
  Parse the /score-partwise/part/measure/measure-style node.
- Initializes the "in multi-measure rest" state and the "in measure repeat" state
+ - Initializes the "in multi-measure rest" state
+ - Set/reset the "rhythmic/slash notation" state
  */
 
 void MusicXMLParserPass2::measureStyle(Measure* measure)
@@ -2420,6 +2422,11 @@ void MusicXMLParserPass2::measureStyle(Measure* measure)
                 }
                 _e.skipCurrentElement(); // since not reading any text inside stop tag, we are done with this element
             }
+        } else if (_e.name() == "slash") {
+            QString type = _e.attributes().value("type").toString();
+            QString stems = _e.attributes().value("use-stems").toString();
+            _measureStyleSlash = type == "start" ? (stems == "yes" ? MusicXmlSlash::RHYTHM : MusicXmlSlash::SLASH) : MusicXmlSlash::NONE;
+            _e.skipCurrentElement();
         } else {
             skipLogCurrElem();
         }
@@ -4799,6 +4806,12 @@ Note* MusicXMLParserPass2::note(const QString& partId,
 
     // add figured bass element
     addFiguredBassElemens(fbl, noteStartTime, msTrack, dura, measure);
+
+    // convert to slash or rhythmic notation if needed
+    // TODO in the case of slash notation, we assume that given notes do in fact correspond to slash beats
+    if (c && _measureStyleSlash != MusicXmlSlash::NONE) {
+        c->setSlash(true, _measureStyleSlash == MusicXmlSlash::SLASH);
+    }
 
     // don't count chord or grace note duration
     // note that this does not check the MusicXML requirement that notes in a chord
