@@ -92,8 +92,8 @@ public:
     virtual ValCh<bool> isNavigatorVisible() const = 0;
     virtual void setNavigatorVisible(bool visible) = 0;
 
-    virtual ValCh<framework::Orientation> navigatorOrientation() const = 0;
-    virtual void setNavigatorOrientation(framework::Orientation orientation) = 0;
+    virtual ValCh<framework::Orientation> canvasOrientation() const = 0;
+    virtual void setCanvasOrientation(framework::Orientation orientation) = 0;
 };
 }
 

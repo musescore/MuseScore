@@ -93,8 +93,8 @@ public:
     ValCh<bool> isNavigatorVisible() const override;
     void setNavigatorVisible(bool visible) override;
 
-    ValCh<framework::Orientation> navigatorOrientation() const override;
-    void setNavigatorOrientation(framework::Orientation orientation) override;
+    ValCh<framework::Orientation> canvasOrientation() const override;
+    void setCanvasOrientation(framework::Orientation orientation) override;
 
 private:
     std::vector<std::string> parseToolbarActions(const std::string& actions) const;
@@ -107,7 +107,7 @@ private:
     async::Channel<QColor> m_foregroundColorChanged;
     async::Channel<int> m_currentZoomChanged;
     async::Channel<bool> m_navigatorVisibleChanged;
-    async::Channel<framework::Orientation> m_navigatorOrientationChanged;
+    async::Channel<framework::Orientation> m_canvasOrientationChanged;
 };
 }
 
