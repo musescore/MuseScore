@@ -26,9 +26,18 @@ using namespace mu::actions;
 void ApplicationActionController::init()
 {
     dispatcher()->reg(this, "quit", this, &ApplicationActionController::quit);
+
+    dispatcher()->reg(this, "online-handbook", this, &ApplicationActionController::openOnlineHandbook);
 }
 
 void ApplicationActionController::quit()
 {
     QCoreApplication::quit();
+}
+
+void ApplicationActionController::openOnlineHandbook()
+{
+    QString currentLanguageCode = languagesService()->currentLanguage().val.code;
+    std::string handbookUrl = configuration()->handbookUrl(currentLanguageCode.toStdString());
+    interactive()->openUrl(handbookUrl);
 }

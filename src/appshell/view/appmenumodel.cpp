@@ -322,7 +322,7 @@ MenuItem AppMenuModel::helpItem()
     };
 
     MenuItemList helpItems {
-        makeAction("online-handbook"), // need implement
+        makeAction("online-handbook"),
         makeMenu(trc("appshell", "&Tours"), toursItems),
         makeSeparator(),
         makeAction("about"), // need implement
@@ -341,7 +341,7 @@ MenuItem AppMenuModel::helpItem()
               << makeSeparator()
               << makeAction("revert-factory"); // need implement
 
-    return makeMenu(trc("appshell", "&Help"), helpItems, scoreOpened());
+    return makeMenu(trc("appshell", "&Help"), helpItems);
 }
 
 MenuItemList AppMenuModel::recentScores() const
