@@ -22,8 +22,6 @@
 #include "log.h"
 #include "translation.h"
 
-#include "palette/palettetypes.h"
-
 using namespace mu::workspace;
 
 NewWorkspaceModel::NewWorkspaceModel(QObject* parent)
@@ -34,10 +32,10 @@ NewWorkspaceModel::NewWorkspaceModel(QObject* parent)
 void NewWorkspaceModel::load()
 {
     setWorkspaceName(qtrc("workspaces", "My new workspace"));
-    setImportUiPreferences(true);
-    setImportUiArrangement(true);
-    setImportPalettes(true);
-    setImportToolbarCustomization(true);
+    setUseUiPreferences(true);
+    setUseUiArrangement(true);
+    setUsePalettes(true);
+    setUseToolbarCustomization(true);
 }
 
 QString NewWorkspaceModel::workspaceName() const
@@ -45,24 +43,24 @@ QString NewWorkspaceModel::workspaceName() const
     return m_workspaceName;
 }
 
-bool NewWorkspaceModel::importUiPreferences() const
+bool NewWorkspaceModel::useUiPreferences() const
 {
-    return m_importUiPreferences;
+    return m_useUiPreferences;
 }
 
-bool NewWorkspaceModel::importUiArrangement() const
+bool NewWorkspaceModel::useUiArrangement() const
 {
-    return m_importUiArrangement;
+    return m_useUiArrangement;
 }
 
-bool NewWorkspaceModel::importPalettes() const
+bool NewWorkspaceModel::usePalettes() const
 {
-    return m_importPalettes;
+    return m_usePalettes;
 }
 
-bool NewWorkspaceModel::importToolbarCustomization() const
+bool NewWorkspaceModel::useToolbarCustomization() const
 {
-    return m_importToolbarCustomization;
+    return m_useToolbarCustomization;
 }
 
 bool NewWorkspaceModel::canCreateWorkspace() const
@@ -81,43 +79,43 @@ void NewWorkspaceModel::setWorkspaceName(const QString& name)
     emit canCreateWorkspaceChanged();
 }
 
-void NewWorkspaceModel::setImportUiPreferences(bool needImport)
+void NewWorkspaceModel::setUseUiPreferences(bool needUse)
 {
-    if (m_importUiPreferences == needImport) {
+    if (m_useUiPreferences == needUse) {
         return;
     }
 
-    m_importUiPreferences = needImport;
+    m_useUiPreferences = needUse;
     emit dataChanged();
 }
 
-void NewWorkspaceModel::setImportUiArrangement(bool needImport)
+void NewWorkspaceModel::setUseUiArrangement(bool needUse)
 {
-    if (m_importUiArrangement == needImport) {
+    if (m_useUiArrangement == needUse) {
         return;
     }
 
-    m_importUiArrangement = needImport;
+    m_useUiArrangement = needUse;
     emit dataChanged();
 }
 
-void NewWorkspaceModel::setImportPalettes(bool needImport)
+void NewWorkspaceModel::setUsePalettes(bool needUse)
 {
-    if (m_importPalettes == needImport) {
+    if (m_usePalettes == needUse) {
         return;
     }
 
-    m_importPalettes = needImport;
+    m_usePalettes = needUse;
     emit dataChanged();
 }
 
-void NewWorkspaceModel::setImportToolbarCustomization(bool needImport)
+void NewWorkspaceModel::setUseToolbarCustomization(bool needUse)
 {
-    if (m_importToolbarCustomization == needImport) {
+    if (m_useToolbarCustomization == needUse) {
         return;
     }
 
-    m_importToolbarCustomization = needImport;
+    m_useToolbarCustomization = needUse;
     emit dataChanged();
 }
 
@@ -126,54 +124,31 @@ QVariant NewWorkspaceModel::createWorkspace()
     IWorkspacePtr newWorkspace = workspaceCreator()->newWorkspace(m_workspaceName.toStdString());
     IWorkspacePtr currentWorkspace = workspaceManager()->currentWorkspace().val;
 
-    QList<WorkspaceTag> importedTags;
+    WorkspaceTagList usedTags;
 
-    if (importUiPreferences()) {
-        importedTags << WorkspaceTag::Settings;
+    if (useUiPreferences()) {
+        usedTags.push_back(WorkspaceTag::Settings);
     }
 
-    if (importUiArrangement()) {
-        importedTags << WorkspaceTag::UiArrangement;
+    if (useUiArrangement()) {
+        usedTags.push_back(WorkspaceTag::UiArrangement);
     }
 
-    if (importToolbarCustomization()) {
-        importedTags << WorkspaceTag::Toolbar;
+    if (useToolbarCustomization()) {
+        usedTags.push_back(WorkspaceTag::Toolbar);
     }
 
-    if (importPalettes()) {
-        importedTags << WorkspaceTag::Palettes;
+    if (usePalettes()) {
+        usedTags.push_back(WorkspaceTag::Palettes);
     }
 
-    for (WorkspaceTag tag : importedTags) {
-        addStubData(newWorkspace, tag);
+    newWorkspace->setTags(usedTags);
+
+    for (WorkspaceTag tag : usedTags) {
         for (AbstractDataPtr data : currentWorkspace->dataList(tag)) {
             newWorkspace->addData(data);
         }
     }
 
     return QVariant::fromValue(newWorkspace);
-}
-
-void NewWorkspaceModel::addStubData(IWorkspacePtr workspace, WorkspaceTag tag) const
-{
-    AbstractDataPtr stub;
-    switch (tag) {
-    case WorkspaceTag::UiArrangement:
-        stub = std::make_shared<UiArrangmentData>();
-        break;
-    case WorkspaceTag::Settings:
-        stub = std::make_shared<SettingsData>();
-        break;
-    case WorkspaceTag::Toolbar:
-        stub = std::make_shared<ToolbarData>();
-        break;
-    case WorkspaceTag::Palettes:
-        stub = std::make_shared<palette::PaletteWorkspaceData>();
-        break;
-    default:
-        break;
-    }
-
-    stub->tag = tag;
-    workspace->addData(stub);
 }

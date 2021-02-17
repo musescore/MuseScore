@@ -16,31 +16,33 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_WORKSPACE_WORKSPACEUIARRANGMENTSTREAM_H
-#define MU_WORKSPACE_WORKSPACEUIARRANGMENTSTREAM_H
+#ifndef MU_WORKSPACE_WORKSPACEUSETTINGS_H
+#define MU_WORKSPACE_WORKSPACEUSETTINGS_H
 
-#include "../iworkspacedatastream.h"
-
-namespace mu::framework {
-class XmlReader;
-class XmlWriter;
-}
+#include "modularity/ioc.h"
+#include "async/asyncable.h"
+#include "global/iworkspacesettings.h"
+#include "iworkspacemanager.h"
 
 namespace mu::workspace {
-class WorkspaceUiArrangmentStream : public IWorkspaceDataStream
+class WorkspaceSettings : public framework::IWorkspaceSettings, public async::Asyncable
 {
-public:
-    AbstractDataPtrList read(system::IODevice& sourceDevice) const override;
-    void write(const AbstractDataPtrList& settingsList, system::IODevice& destinationDevice) const override;
+    INJECT(workspace, IWorkspaceManager, manager)
 
-    WorkspaceTag tag() const override;
+public:
+    void init();
+
+    bool isManage(WorkspaceTag tag) const override;
+
+    Val value(WorkspaceTag tag, const std::string& key) const override;
+    void setValue(WorkspaceTag tag, const std::string& key, const Val& value) const override;
+    async::Notification valuesChanged() const override;
 
 private:
-    UiArrangmentDataPtr readSettings(framework::XmlReader& reader) const;
-    void writeSettings(framework::XmlWriter& writer, const AbstractDataPtr& data) const;
+    IWorkspacePtr currentWorkspace() const;
 
-    bool isTagStartWith(const std::string& tag, const std::string& string) const;
+    async::Notification m_valuesChanged;
 };
 }
 
-#endif // MU_WORKSPACE_WORKSPACEUIARRANGMENTSTREAM_H
+#endif // MU_WORKSPACE_WORKSPACEUSETTINGS_H
