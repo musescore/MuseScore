@@ -38,7 +38,7 @@ NotationNavigator::NotationNavigator(QQuickItem* parent)
 
 bool NotationNavigator::isVerticalOrientation() const
 {
-    return configuration()->navigatorOrientation().val == framework::Orientation::Vertical;
+    return configuration()->canvasOrientation().val == framework::Orientation::Vertical;
 }
 
 QRectF NotationNavigator::notationContentRect() const
@@ -180,7 +180,7 @@ void NotationNavigator::setCursorRect(const QRect& rect)
 
 int NotationNavigator::orientation() const
 {
-    return static_cast<int>(configuration()->navigatorOrientation().val);
+    return static_cast<int>(configuration()->canvasOrientation().val);
 }
 
 INotationPtr NotationNavigator::currentNotation() const
@@ -190,7 +190,7 @@ INotationPtr NotationNavigator::currentNotation() const
 
 void NotationNavigator::initOrientation()
 {
-    ValCh<framework::Orientation> orientation = configuration()->navigatorOrientation();
+    ValCh<framework::Orientation> orientation = configuration()->canvasOrientation();
     orientation.ch.onReceive(this, [this](framework::Orientation) {
         moveCanvasToPosition(QPoint(0, 0));
         emit orientationChanged();

@@ -66,8 +66,7 @@ static const Settings::Key IS_COUNT_IN_ENABLED(module_name, "application/playbac
 static const Settings::Key TOOLBAR_KEY(module_name, "ui/toolbar/");
 
 static const Settings::Key NAVIGATOR_VISIBLE_KEY(module_name, "ui/application/startup/showNavigator");
-static const Settings::Key NAVIGATOR_ORIENTATION(module_name, "ui/canvas/scroll/verticalOrientation");
-static const bool NAVIGATOR_ORIENTATION_VERTICAL(true);
+static const Settings::Key IS_CANVAS_ORIENTATION_VERTICAL_KEY(module_name, "ui/canvas/scroll/verticalOrientation");
 
 void NotationConfiguration::init()
 {
@@ -113,9 +112,9 @@ void NotationConfiguration::init()
         m_navigatorVisibleChanged.send(isNavigatorVisible().val);
     });
 
-    settings()->setDefaultValue(NAVIGATOR_ORIENTATION, Val(NAVIGATOR_ORIENTATION_VERTICAL));
-    settings()->valueChanged(NAVIGATOR_ORIENTATION).onReceive(nullptr, [this](const Val&) {
-        m_navigatorOrientationChanged.send(navigatorOrientation().val);
+    settings()->setDefaultValue(IS_CANVAS_ORIENTATION_VERTICAL_KEY, Val(false));
+    settings()->valueChanged(IS_CANVAS_ORIENTATION_VERTICAL_KEY).onReceive(nullptr, [this](const Val&) {
+        m_canvasOrientationChanged.send(canvasOrientation().val);
     });
 
     // libmscore
@@ -341,20 +340,20 @@ void NotationConfiguration::setNavigatorVisible(bool visible)
     settings()->setValue(NAVIGATOR_VISIBLE_KEY, Val(visible));
 }
 
-ValCh<Orientation> NotationConfiguration::navigatorOrientation() const
+ValCh<Orientation> NotationConfiguration::canvasOrientation() const
 {
     ValCh<Orientation> orientation;
-    orientation.ch = m_navigatorOrientationChanged;
-    bool isVertical = settings()->value(NAVIGATOR_ORIENTATION).toBool() == NAVIGATOR_ORIENTATION_VERTICAL;
+    orientation.ch = m_canvasOrientationChanged;
+    bool isVertical = settings()->value(IS_CANVAS_ORIENTATION_VERTICAL_KEY).toBool();
     orientation.val = isVertical ? Orientation::Vertical : Orientation::Horizontal;
 
     return orientation;
 }
 
-void NotationConfiguration::setNavigatorOrientation(Orientation orientation)
+void NotationConfiguration::setCanvasOrientation(Orientation orientation)
 {
     bool isVertical = orientation == Orientation::Vertical;
-    settings()->setValue(NAVIGATOR_ORIENTATION, Val(isVertical));
+    settings()->setValue(IS_CANVAS_ORIENTATION_VERTICAL_KEY, Val(isVertical));
 }
 
 std::vector<std::string> NotationConfiguration::parseToolbarActions(const std::string& actions) const

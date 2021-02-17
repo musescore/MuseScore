@@ -93,7 +93,7 @@ void NotationPaintView::initBackground()
 
 void NotationPaintView::initNavigatorOrientation()
 {
-    configuration()->navigatorOrientation().ch.onReceive(this, [this](framework::Orientation) {
+    configuration()->canvasOrientation().ch.onReceive(this, [this](framework::Orientation) {
         moveCanvasToPosition(QPoint(0, 0));
     });
 }
