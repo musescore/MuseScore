@@ -66,7 +66,8 @@ private:
         CodeRole = Qt::UserRole + 1,
         IconRole,
         SectionRole,
-        CheckedRole
+        CheckedRole,
+        HintRole
     };
 
     INotationPtr notation() const;

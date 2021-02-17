@@ -57,6 +57,7 @@ QVariant NoteInputBarModel::data(const QModelIndex& index, int role) const
     case SectionRole: return QString::fromStdString(item.section);
     case CodeRole: return QString::fromStdString(item.code);
     case CheckedRole: return item.checked;
+    case HintRole: return QString::fromStdString(item.description);
     }
     return QVariant();
 }
@@ -72,7 +73,8 @@ QHash<int,QByteArray> NoteInputBarModel::roleNames() const
         { IconRole, "iconRole" },
         { SectionRole, "sectionRole" },
         { CodeRole, "codeRole" },
-        { CheckedRole, "checkedRole" }
+        { CheckedRole, "checkedRole" },
+        { HintRole, "hintRole" }
     };
     return roles;
 }
