@@ -4075,8 +4075,9 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
         bool wasVisible = clefSeg->visible();
         int visibleInt = 0;
         for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-            if (!score()->staff(staffIdx)->show())
-                  continue;
+            if (!score()->staff(staffIdx)->show()) {
+                continue;
+            }
             int track    = staffIdx * VOICES;
             Clef* clef = toClef(clefSeg->element(track));
             if (clef) {
