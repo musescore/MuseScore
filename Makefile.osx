@@ -62,7 +62,8 @@ debug:
 xcode:
 	mkdir build.xcode;              \
     cd build.xcode;                                  \
-    cmake -DCMAKE_INSTALL_PREFIX=../build.xcode/main/Debug -DCMAKE_BUILD_TYPE=DEBUG \
+    cmake -DCMAKE_INSTALL_PREFIX=../build.xcode/src/main/Debug -DCMAKE_BUILD_TYPE=DEBUG \
+          -DBUILD_TELEMETRY_MODULE=OFF \
           -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}"  \
           .. -G Xcode;                         \
     xcodebuild -project ${XCODEPROJ} -target lrelease;
