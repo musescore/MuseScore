@@ -480,6 +480,8 @@ Rectangle {
                 topLeftRadius: 40
 
                 color: "gray"
+                border.color: "red"
+                border.width: 3
             }
 
             RoundedRectangle {
@@ -489,6 +491,8 @@ Rectangle {
                 topRightRadius: 30
 
                 color: "gray"
+                border.color: "yellow"
+                border.width: 10
             }
 
             RoundedRectangle {
@@ -498,6 +502,8 @@ Rectangle {
                 bottomLeftRadius: 20
 
                 color: "gray"
+                border.color: "green"
+                border.width: 8
             }
 
             RoundedRectangle {
@@ -507,6 +513,8 @@ Rectangle {
                 bottomRightRadius: 10
 
                 color: "gray"
+                border.color: "blue"
+                border.width: 5
             }
         }
     }
