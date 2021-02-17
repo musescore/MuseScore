@@ -223,7 +223,7 @@ static int MusicXMLStepAltOct2Pitch(int step, int alter, int octave)
  Note that n's staff and track have not been set yet
  */
 
-static void xmlSetPitch(Note* n, int step, int alter, int octave, const int octaveShift, const Instrument* instr)
+static void xmlSetPitch(Note* n, int step, int alter, int octave, const int octaveShift, const Instrument* const instr)
 {
     //qDebug("xmlSetPitch(n=%p, step=%d, alter=%d, octave=%d, octaveShift=%d)",
     //       n, step, alter, octave, octaveShift);
@@ -640,7 +640,7 @@ static QString text2syms(const QString& t)
             in.remove(0, maxMatch);
         } else {
             // not found, move one char from res to in
-            res += in.left(1);
+            res += in.leftRef(1);
             in.remove(0, 1);
         }
     }
@@ -1237,8 +1237,7 @@ static void setSLinePlacement(SLine* sli, const QString placement)
 // note that in case of overlapping spanners, handleSpannerStart is called for every spanner
 // as spanners QMap allows only one value per key, this does not hurt at all
 
-static void handleSpannerStart(SLine* new_sp, int track, QString& placement, const Fraction& tick,
-                               MusicXmlSpannerMap& spanners)
+static void handleSpannerStart(SLine* new_sp, int track, QString& placement, const Fraction& tick, MusicXmlSpannerMap& spanners)
 {
     //qDebug("handleSpannerStart(sp %p, track %d, tick %s (%d))", new_sp, track, qPrintable(tick.print()), tick.ticks());
     new_sp->setTrack(track);
@@ -2130,7 +2129,7 @@ void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
     const Key key = _score->staff(scoreRelStaff)->keySigEvent(time).key();
     markUserAccidentals(scoreRelStaff, part->nstaves(), key, measure, alterMap);
 
-    // multimeasure rest handling
+    // multi-measure rest handling
     if (getAndDecMultiMeasureRestCount() == 0) {
         // measure is first measure after a multi-measure rest
         measure->setBreakMultiMeasureRest(true);
@@ -3165,11 +3164,9 @@ QString MusicXmlExtendedSpannerDesc::toString() const
     QString string;
     QTextStream(&string) << _sp;
     return QString("sp %1 tp %2 tick2 %3 track2 %4 %5 %6")
-           .arg(string)
-           .arg(_tick2.print())
+           .arg(string, _tick2.print())
            .arg(_track2)
-           .arg(_isStarted ? "started" : "")
-           .arg(_isStopped ? "stopped" : "")
+           .arg(_isStarted ? "started" : "", _isStopped ? "stopped" : "")
     ;
 }
 
@@ -3589,8 +3586,7 @@ static void addSymToSig(KeySigEvent& sig, const QString& step, const QString& al
  Add a KeySigEvent to the score.
  */
 
-static void addKey(const KeySigEvent key, const bool printObj, Score* score, Measure* measure, const int staffIdx,
-                   const Fraction& tick)
+static void addKey(const KeySigEvent key, const bool printObj, Score* score, Measure* measure, const int staffIdx, const Fraction& tick)
 {
     Key oldkey = score->staff(staffIdx)->key(tick);
     // TODO only if different custom key ?
@@ -4079,8 +4075,7 @@ static bool isWholeMeasureRest(const bool rest, const QString& type, const Fract
  * This includes whole measure rest detection.
  */
 
-static TDuration determineDuration(const bool rest, const QString& type, const int dots, const Fraction dura,
-                                   const Fraction mDura)
+static TDuration determineDuration(const bool rest, const QString& type, const int dots, const Fraction dura, const Fraction mDura)
 {
     //qDebug("determineDuration rest %d type '%s' dots %d dura %s mDura %s",
     //       rest, qPrintable(type), dots, qPrintable(dura.print()), qPrintable(mDura.print()));
@@ -4219,8 +4214,7 @@ static void handleDisplayStep(ChordRest* cr, int step, int octave, const Fractio
  Set the notehead parameters.
  */
 
-static void setNoteHead(Note* note, const QColor noteheadColor, const bool noteheadParentheses,
-                        const QString& noteheadFilled)
+static void setNoteHead(Note* note, const QColor noteheadColor, const bool noteheadParentheses, const QString& noteheadFilled)
 {
     const auto score = note->score();
 
@@ -4384,8 +4378,7 @@ static void setPitch(Note* note, MusicXMLParserPass1& pass1, const QString& part
 // the MusicXML values for each note are simply copied to the defaults
 
 static void setDrumset(Chord* c, MusicXMLParserPass1& pass1, const QString& partId, const QString& instrumentId,
-                       const Fraction noteStartTime, const mxmlNotePitch& mnp, const Direction stemDir,
-                       const NoteHead::Group headGroup)
+                       const Fraction noteStartTime, const mxmlNotePitch& mnp, const Direction stemDir, const NoteHead::Group headGroup)
 {
     // determine staff line based on display-step / -octave and clef type
     const auto clef = c->staff()->clef(noteStartTime);
@@ -4586,8 +4579,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
     if (!chord && !grace) {
         auto& tuplet = tuplets[voice];
         auto& tupletState = tupletStates[voice];
-        tupletAction = tupletState.determineTupletAction(mnd.dura(), timeMod,
-                                                         notations.tupletDesc().type,
+        tupletAction = tupletState.determineTupletAction(mnd.dura(), timeMod, notations.tupletDesc().type,
                                                          mnd.normalType(), missingPrev, missingCurr);
         if (tupletAction & MxmlTupletFlag::STOP_PREVIOUS) {
             // tuplet start while already in tuplet
@@ -5058,8 +5050,7 @@ FretDiagram* MusicXMLParserPass2::frame()
                     } else if (t == "stop") {
                         bEnds[fret] = actualString;
                     } else {
-                        _logger->logError(QString("FretDiagram::readMusicXML: illegal frame-note barre type %1").arg(
-                                              t), &_e);
+                        _logger->logError(QString("FretDiagram::readMusicXML: illegal frame-note barre type %1").arg(t), &_e);
                     }
                     skipLogCurrElem();
                 } else {
@@ -5817,8 +5808,7 @@ void MusicXMLParserNotations::harmonic()
 {
     Q_ASSERT(_e.isStartElement() && _e.name() == "harmonic");
 
-    Notation notation = Notation::notationWithAttributes(_e.name().toString(),
-                                                         _e.attributes(), "technical", SymId::stringsHarmonic);
+    Notation notation = Notation::notationWithAttributes(_e.name().toString(), _e.attributes(), "technical", SymId::stringsHarmonic);
 
     while (_e.readNextStartElement()) {
         QString name = _e.name().toString();
@@ -5852,8 +5842,7 @@ void MusicXMLParserNotations::addTechnical(const Notation& notation, Note* note)
     if (notation.name() == "fingering") {
         // TODO: distinguish between keyboards (style Tid::FINGERING)
         // and (plucked) strings (style Tid::LH_GUITAR_FINGERING)
-        addTextToNote(_e.lineNumber(), _e.columnNumber(),
-                      notation.text(), placement, fontWeight, fontSize, fontStyle, fontFamily,
+        addTextToNote(_e.lineNumber(), _e.columnNumber(), notation.text(), placement, fontWeight, fontSize, fontStyle, fontFamily,
                       Tid::FINGERING, _score, note);
     } else if (notation.name() == "fret") {
         auto fret = notation.text().toInt();
@@ -5865,16 +5854,14 @@ void MusicXMLParserNotations::addTechnical(const Notation& notation, Note* note)
             _logger->logError("no note for fret", &_e);
         }
     } else if (notation.name() == "pluck") {
-        addTextToNote(_e.lineNumber(), _e.columnNumber(),
-                      notation.text(), placement, fontWeight, fontSize, fontStyle, fontFamily,
+        addTextToNote(_e.lineNumber(), _e.columnNumber(), notation.text(), placement, fontWeight, fontSize, fontStyle, fontFamily,
                       Tid::RH_GUITAR_FINGERING, _score, note);
     } else if (notation.name() == "string") {
         if (note) {
             if (note->staff()->isTabStaff(Fraction(0,1))) {
                 note->setString(notation.text().toInt() - 1);
             } else {
-                addTextToNote(_e.lineNumber(), _e.columnNumber(),
-                              notation.text(), placement, fontWeight, fontSize, fontStyle, fontFamily,
+                addTextToNote(_e.lineNumber(), _e.columnNumber(), notation.text(), placement, fontWeight, fontSize, fontStyle, fontFamily,
                               Tid::STRING_NUMBER, _score, note);
             }
         } else {
@@ -5950,8 +5937,7 @@ static void addGlissandoSlide(const Notation& notation, Note* note,
         if (gliss) {
             logger->logError(QString("overlapping glissando/slide number %1").arg(glissandoNumber + 1), xmlreader);
         } else if (!note) {
-            logger->logError(QString("no note for glissando/slide number %1 start").arg(glissandoNumber + 1),
-                             xmlreader);
+            logger->logError(QString("no note for glissando/slide number %1 start").arg(glissandoNumber + 1), xmlreader);
         } else {
             gliss = new Glissando(score);
             gliss->setAnchor(Spanner::Anchor::NOTE);
@@ -5969,8 +5955,7 @@ static void addGlissandoSlide(const Notation& notation, Note* note,
         }
     } else if (glissandoType == "stop") {
         if (!gliss) {
-            logger->logError(QString("glissando/slide number %1 stop without start").arg(glissandoNumber + 1),
-                             xmlreader);
+            logger->logError(QString("glissando/slide number %1 stop without start").arg(glissandoNumber + 1), xmlreader);
         } else if (!note) {
             logger->logError(QString("no note for glissando/slide number %1 stop").arg(glissandoNumber + 1), xmlreader);
         } else {
@@ -6322,7 +6307,7 @@ void MusicXMLParserNotations::addNotation(const Notation& notation, ChordRest* c
             if (notation.name() == "strong-accent") {
                 if (notationType != "" && notationType != "up" && notationType != "down") {
                     notationType = (const char*)0;
-                    _logger->logError(QString("unknown %1 type %2").arg(notation.name()).arg(notationType), &_e);
+                    _logger->logError(QString("unknown %1 type %2").arg(notation.name(), notationType), &_e);
                 }
             } else if (notation.name() == "harmonic" || notation.name() == "delayed-turn"
                        || notation.name() == "turn" || notation.name() == "inverted-turn") {
@@ -6331,7 +6316,7 @@ void MusicXMLParserNotations::addNotation(const Notation& notation, ChordRest* c
                 }
                 if (placement != "above" && placement != "below") {
                     placement = (const char*)0;
-                    _logger->logError(QString("unknown %1 placement %2").arg(notation.name()).arg(placement), &_e);
+                    _logger->logError(QString("unknown %1 placement %2").arg(notation.name(), placement), &_e);
                 }
             } else {
                 notationType = (const char*)0;           // TODO: Check for other symbols that have type
@@ -6390,7 +6375,7 @@ void MusicXMLParserNotations::addToScore(ChordRest* const cr, Note* const note, 
     // more than one dynamic ???
     // LVIFIX: check import/export of <other-dynamics>unknown_text</...>
     // TODO remove duplicate code (see MusicXml::direction)
-    for (const auto& d : _dynamicsList) {
+    for (const auto& d : qAsConst(_dynamicsList)) {
         auto dynamic = new Dynamic(_score);
         dynamic->setDynamicType(d);
 //TODO:ws            if (hasYoffset) dyn->textStyle().setYoff(yoffset);

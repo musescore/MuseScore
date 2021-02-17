@@ -1278,16 +1278,10 @@ static void defaults(XmlWriter& xml, const Score* const s, double& millimeters, 
     // and LYRIC1 to get MusicXML defaults
 
     // TODO xml.tagE("music-font font-family=\"TBD\" font-size=\"TBD\"");
-    xml.tagE(QString("word-font font-family=\"%1\" font-size=\"%2\"").arg(s->styleSt(Sid::staffTextFontFace)).arg(s->
-                                                                                                                  styleD(
-                                                                                                                      Sid
-                                                                                                                      ::
-                                                                                                                      staffTextFontSize)));
-    xml.tagE(QString("lyric-font font-family=\"%1\" font-size=\"%2\"").arg(s->styleSt(Sid::lyricsOddFontFace)).arg(s->
-                                                                                                                   styleD(
-                                                                                                                       Sid
-                                                                                                                       ::
-                                                                                                                       lyricsOddFontSize)));
+    xml.tagE(QString("word-font font-family=\"%1\" font-size=\"%2\"").arg(s->styleSt(Sid::staffTextFontFace)).arg(s->styleD(Sid::
+                                                                                                                            staffTextFontSize)));
+    xml.tagE(QString("lyric-font font-family=\"%1\" font-size=\"%2\"").arg(s->styleSt(Sid::lyricsOddFontFace)).arg(s->styleD(Sid::
+                                                                                                                             lyricsOddFontSize)));
     xml.etag();
 }
 
@@ -1678,7 +1672,7 @@ static void ending(XmlWriter& xml, Volta* v, bool left)
             return;
         }
     }
-    QString voltaXml = QString("ending number=\"%1\" type=\"%2\"").arg(number).arg(type);
+    QString voltaXml = QString("ending number=\"%1\" type=\"%2\"").arg(number, type);
     voltaXml += ExportMusicXml::positioningAttributes(v, left);
     xml.tagE(voltaXml);
 }
@@ -1849,7 +1843,7 @@ static void fermata(const Fermata* const a, XmlWriter& xml)
 //   barlineHasFermata -- search for fermata on barline
 //---------------------------------------------------------
 
-static bool barlineHasFermata(const BarLine* const barline, const int strack, const int etrack)             // TODO: track
+static bool barlineHasFermata(const BarLine* const barline, const int strack, const int etrack)       // TODO: track
 {
     const Segment* seg = barline ? barline->segment() : 0;
     if (seg) {
@@ -2351,8 +2345,7 @@ static void tupletActualAndNormal(const Tuplet* const t, XmlWriter& xml)
 //   <tuplet type="start" placement="above" bracket="no"/>
 // </notations>
 
-static void tupletStart(const Tuplet* const t, const int number, const bool needActualAndNormal, Notations& notations,
-                        XmlWriter& xml)
+static void tupletStart(const Tuplet* const t, const int number, const bool needActualAndNormal, Notations& notations, XmlWriter& xml)
 {
     notations.tag(xml);
     QString tupletTag = "tuplet type=\"start\"";
@@ -2711,7 +2704,7 @@ static QString symIdToOrnam(const SymId sid)
         return "mordent";
         break;
     case SymId::ornamentShortTrill:
-        // return "short-trill"
+        // return "short-trill";
         return "inverted-mordent";
         break;
     case SymId::ornamentTremblement:
@@ -2794,8 +2787,7 @@ static QString symIdToTechn(const SymId sid)
 //   writeChordLines
 //---------------------------------------------------------
 
-static void writeChordLines(const Chord* const chord, XmlWriter& xml, Notations& notations,
-                            Articulations& articulations)
+static void writeChordLines(const Chord* const chord, XmlWriter& xml, Notations& notations, Articulations& articulations)
 {
     for (Element* e : chord->el()) {
         qDebug("writeChordLines: el %p type %d (%s)", e, int(e->type()), e->name());
@@ -2900,8 +2892,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
         QString attr;
         if (!a->isStyled(Pid::ARTICULATION_ANCHOR) && a->anchor() != ArticulationAnchor::CHORD) {
             placement
-                = (a->anchor() == ArticulationAnchor::BOTTOM_STAFF
-                   || a->anchor() == ArticulationAnchor::BOTTOM_CHORD) ? "below" : "above";
+                = (a->anchor() == ArticulationAnchor::BOTTOM_STAFF || a->anchor() == ArticulationAnchor::BOTTOM_CHORD) ? "below" : "above";
         } else if (!a->isStyled(Pid::DIRECTION) && a->direction() != Direction::AUTO) {
             direction = (a->direction() == Direction::DOWN) ? "down" : "up";
         }
@@ -3491,8 +3482,6 @@ void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* 
 #endif
 
     for (Note* note : nl) {
-        QString val;
-
         _attr.doAttr(_xml, false);
         QString noteTag = QString("note");
 
@@ -3685,8 +3674,7 @@ void ExportMusicXml::rest(Rest* rest, int staff)
     // Determine y position, but leave at zero in case of tablature staff
     // as no display-step or display-octave should be written for a tablature staff,
 
-    if (clef != ClefType::TAB && clef != ClefType::TAB_SERIF && clef != ClefType::TAB4
-        && clef != ClefType::TAB4_SERIF) {
+    if (clef != ClefType::TAB && clef != ClefType::TAB_SERIF && clef != ClefType::TAB4 && clef != ClefType::TAB4_SERIF) {
         double yOffsSp = rest->offset().y() / rest->spatium();                  // y offset in spatium (negative = up)
         yOffsSt = -2 * int(yOffsSp > 0.0 ? yOffsSp + 0.5 : yOffsSp - 0.5);     // same rounded to int (positive = up)
 
@@ -4357,15 +4345,9 @@ static void writeHairpinText(XmlWriter& xml, const TextLineBase* const tlb, bool
             // text remaining and either no dynamic of not at front of text
             xml.stag("direction-type");
             QString tag = "words";
-            tag
-                += QString(" font-family=\"%1\"").arg(tlb->getProperty(
-                                                          isStart ? Pid::BEGIN_FONT_FACE : Pid::END_FONT_FACE).toString());
-            tag += QString(" font-size=\"%1\"").arg(tlb->getProperty(
-                                                        isStart ? Pid::BEGIN_FONT_SIZE : Pid::END_FONT_SIZE).toReal());
-            tag
-                += fontStyleToXML(static_cast<FontStyle>(tlb->getProperty(isStart ? Pid::BEGIN_FONT_STYLE : Pid::
-                                                                          END_FONT_STYLE)
-                                                         .toInt()));
+            tag += QString(" font-family=\"%1\"").arg(tlb->getProperty(isStart ? Pid::BEGIN_FONT_FACE : Pid::END_FONT_FACE).toString());
+            tag += QString(" font-size=\"%1\"").arg(tlb->getProperty(isStart ? Pid::BEGIN_FONT_SIZE : Pid::END_FONT_SIZE).toReal());
+            tag += fontStyleToXML(static_cast<FontStyle>(tlb->getProperty(isStart ? Pid::BEGIN_FONT_STYLE : Pid::END_FONT_STYLE).toInt()));
             tag += ExportMusicXml::positioningAttributes(tlb, isStart);
             xml.tag(tag, dynamicPosition == -1 ? text : text.left(dynamicPosition));
             xml.etag();
@@ -4534,7 +4516,7 @@ void ExportMusicXml::ottava(Ottava const* const ot, int staff, const Fraction& t
             qDebug("ottava subtype %d not understood", int(st));
         }
         if (sz && tp) {
-            octaveShiftXml = QString("octave-shift type=\"%1\" size=\"%2\" number=\"%3\"").arg(tp).arg(sz).arg(n + 1);
+            octaveShiftXml = QString("octave-shift type=\"%1\" size=\"%2\" number=\"%3\"").arg(tp, sz).arg(n + 1);
         }
     } else {
         if (st == OttavaType::OTTAVA_8VA || st == OttavaType::OTTAVA_8VB) {
@@ -4696,8 +4678,7 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, int staff, const Fra
     if (isDashes) {
         _xml.tagE(QString("dashes type=\"%1\" number=\"%2\"").arg(type, QString::number(n + 1)));
     } else {
-        _xml.tagE(QString("bracket type=\"%1\" number=\"%2\" line-end=\"%3\"%4").arg(type, QString::number(n + 1),
-                                                                                     lineEnd, rest));
+        _xml.tagE(QString("bracket type=\"%1\" number=\"%2\" line-end=\"%3\"%4").arg(type, QString::number(n + 1), lineEnd, rest));
     }
     _xml.etag();
 
@@ -4763,7 +4744,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
         // or other characters and write the runs.
         QString text;
         bool inDynamicsSym = false;
-        for (const auto& ch : dynText) {
+        for (const auto& ch : qAsConst(dynText)) {
             const auto it = map.find(ch.unicode());
             if (it != map.end()) {
                 // found a SMUFL single letter dynamics glyph
@@ -5020,8 +5001,7 @@ static void directionMarker(XmlWriter& xml, const Marker* const m)
         words = "Fine";
         sound = "fine=\"yes\"";
     } else if (mtp == Marker::Type::TOCODA
-               || mtp == Marker::Type::TOCODASYM
-               ) {
+               || mtp == Marker::Type::TOCODASYM) {
         if (m->xmlText() == "") {
             words = "To Coda";
         } else {
@@ -5085,8 +5065,7 @@ static int findTrackForAnnotations(int track, Segment* seg)
 //  repeatAtMeasureStart -- write repeats at begin of measure
 //---------------------------------------------------------
 
-static void repeatAtMeasureStart(XmlWriter& xml, Attributes& attr, const Measure* const m, int strack, int etrack,
-                                 int track)
+static void repeatAtMeasureStart(XmlWriter& xml, Attributes& attr, const Measure* const m, int strack, int etrack, int track)
 {
     // loop over all segments
     for (Element* e : m->el()) {
@@ -5149,8 +5128,7 @@ static void repeatAtMeasureStop(XmlWriter& xml, const Measure* const m, int stra
             Marker::Type mtp = mk->markerType();
             if (mtp == Marker::Type::FINE
                 || mtp == Marker::Type::TOCODA
-                || mtp == Marker::Type::TOCODASYM
-                ) {
+                || mtp == Marker::Type::TOCODASYM) {
                 directionMarker(xml, mk);
             } else if (mtp == Marker::Type::SEGNO || mtp == Marker::Type::CODA) {
                 // ignore
@@ -5378,8 +5356,7 @@ static void annotations(ExportMusicXml* exp, int strack, int etrack, int track, 
 //  figuredBass
 //---------------------------------------------------------
 
-static void figuredBass(XmlWriter& xml, int strack, int etrack, int track, const ChordRest* cr, FigBassMap& fbMap,
-                        int divisions)
+static void figuredBass(XmlWriter& xml, int strack, int etrack, int track, const ChordRest* cr, FigBassMap& fbMap, int divisions)
 {
     Segment* seg = cr->segment();
     if (seg->segmentType() == SegmentType::ChordRest) {
@@ -5410,8 +5387,7 @@ static void figuredBass(XmlWriter& xml, int strack, int etrack, int track, const
                                       writeDuration, divisions);
 
                     // Check for changing figures under a single note (each figure stored in a separate segment)
-                    for (Segment* segNext = seg->next(); segNext && segNext->element(track) == NULL;
-                         segNext = segNext->next()) {
+                    for (Segment* segNext = seg->next(); segNext && segNext->element(track) == NULL; segNext = segNext->next()) {
                         for (Element* annot : segNext->annotations()) {
                             if (annot->type() == ElementType::FIGURED_BASS && annot->track() == track) {
                                 fb = dynamic_cast<const FiguredBass*>(annot);
@@ -5459,8 +5435,7 @@ static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track,
 {
     if (seg->segmentType() == SegmentType::ChordRest) {
         Fraction stick = seg->tick();
-        for (auto it = exp->score()->spanner().lower_bound(stick.ticks());
-             it != exp->score()->spanner().upper_bound(stick.ticks()); ++it) {
+        for (auto it = exp->score()->spanner().lower_bound(stick.ticks()); it != exp->score()->spanner().upper_bound(stick.ticks()); ++it) {
             Spanner* e = it->second;
 
             int wtrack = -1;       // track to write spanner
@@ -5513,8 +5488,7 @@ static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track,
 // note that more than one voice may contains notes ending at tick2,
 // remember which spanners have already been stopped (the "stopped" set)
 
-static void spannerStop(ExportMusicXml* exp, int strack, int etrack, const Fraction& tick2, int sstaff,
-                        QSet<const Spanner*>& stopped)
+static void spannerStop(ExportMusicXml* exp, int strack, int etrack, const Fraction& tick2, int sstaff, QSet<const Spanner*>& stopped)
 {
     for (auto it : exp->score()->spanner()) {
         Spanner* e = it.second;
@@ -5666,7 +5640,7 @@ void ExportMusicXml::identification(XmlWriter& xml, Score const* const score)
     QStringList creators;
     // the creator types commonly found in MusicXML
     creators << "arranger" << "composer" << "lyricist" << "poet" << "translator";
-    for (QString type : creators) {
+    for (const QString& type : qAsConst(creators)) {
         QString creator = score->metaTag(type);
         if (!creator.isEmpty()) {
             xml.tag(QString("creator type=\"%1\"").arg(type), creator);
@@ -6065,8 +6039,7 @@ void ExportMusicXml::findAndExportClef(const Measure* const m, const int staves,
 
             Clef* cle = static_cast<Clef*>(seg->element(st));
             if (cle) {
-                clefDebug("exportxml: clef at start measure ti=%d ct=%d gen=%d", tick,
-                          int(cle->clefType()), cle->generated());
+                clefDebug("exportxml: clef at start measure ti=%d ct=%d gen=%d", tick, int(cle->clefType()), cle->generated());
                 // output only clef changes, not generated clefs at line beginning
                 // exception: at tick=0, export clef anyway
                 if (tick.isZero() || !cle->generated()) {
@@ -6235,8 +6208,7 @@ static void partList(XmlWriter& xml, Score* score, MxmlInstrumentMap& instrMap)
             MxmlReverseInstrumentMap rim;
             initReverseInstrMap(rim, instrMap);
             for (int instNr : rim.keys()) {
-                scoreInstrument(xml, idx + 1, instNr + 1,
-                                MScoreTextToMXML::toPlainText(rim.value(instNr)->trackName()));
+                scoreInstrument(xml, idx + 1, instNr + 1, MScoreTextToMXML::toPlainText(rim.value(instNr)->trackName()));
             }
             for (auto ii = rim.constBegin(); ii != rim.constEnd(); ii++) {
                 int instNr = ii.key();
@@ -6412,8 +6384,7 @@ void ExportMusicXml::writeInstrumentDetails(const Instrument* instrument)
  Write the annotations that could not be attached to notes.
  */
 
-static void annotationsWithoutNote(ExportMusicXml* exp, const int strack, const int staves,
-                                   const Measure* const measure)
+static void annotationsWithoutNote(ExportMusicXml* exp, const int strack, const int staves, const Measure* const measure)
 {
     for (auto segment = measure->first(); segment; segment = segment->next()) {
         if (segment->segmentType() == SegmentType::ChordRest) {
@@ -6507,8 +6478,7 @@ static bool isFirstMeasureInSystem(const Measure* const measure)
 {
     const auto system = measure->mmRest1()->system();
     const auto firstMeasureInSystem = system->firstMeasure();
-    const auto realFirstMeasureInSystem
-        = firstMeasureInSystem->isMMRest() ? firstMeasureInSystem->mmRestFirst() : firstMeasureInSystem;
+    const auto realFirstMeasureInSystem = firstMeasureInSystem->isMMRest() ? firstMeasureInSystem->mmRestFirst() : firstMeasureInSystem;
     return measure == realFirstMeasureInSystem;
 }
 
@@ -6584,8 +6554,7 @@ static std::vector<TBox*> findTextFramesToWriteAsWordsBelow(const Measure* const
     const auto systemIndex = page->systems().indexOf(system);
     std::vector<TBox*> tboxes;
     if (isFirstMeasureInLastSystem(measure)) {
-        for (auto idx = systemIndex + 1; idx < page->systems().size() /* && !systemHasMeasures(page->system(idx))*/;
-             ++idx) {
+        for (auto idx = systemIndex + 1; idx < page->systems().size() /* && !systemHasMeasures(page->system(idx))*/; ++idx) {
             const auto sys = page->system(idx);
             for (const auto mb : sys->measures()) {
                 if (mb->isTBox()) {
@@ -6778,8 +6747,7 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
     const bool isFirstActualMeasure = mnsh.isFirstActualMeasure();
 
     if (configuration()->musicxmlExportLayout()) {
-        measureTag += QString(" width=\"%1\"").arg(QString::number(
-                                                       m->bbox().width() / DPMM / millimeters * tenths,'f',2));
+        measureTag += QString(" width=\"%1\"").arg(QString::number(m->bbox().width() / DPMM / millimeters * tenths,'f',2));
     }
 
     _xml.stag(measureTag);
@@ -7149,14 +7117,14 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
             _xml.tag(s, h->xmlKind());
             QStringList l = h->xmlDegrees();
             if (!l.isEmpty()) {
-                for (QString tag : l) {
+                for (QString tag : qAsConst(l)) {
                     QString degreeText;
                     if (h->xmlKind().startsWith("suspended")
                         && tag.startsWith("add") && tag[3].isDigit()
                         && !kindText.isEmpty() && kindText[0].isDigit()) {
                         // hack to correct text for suspended chords whose kind text has degree information baked in
                         // (required by some other applications)
-                        int tagDegree = tag.mid(3).toInt();
+                        int tagDegree = tag.midRef(3).toInt();
                         QString kindTextExtension;
                         for (int i = 0; i < kindText.length() && kindText[i].isDigit(); ++i) {
                             kindTextExtension[i] = kindText[i];

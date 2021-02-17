@@ -74,8 +74,7 @@ void dumpText(const QList<TextFragment>& list)
 //   MScoreTextToMXML
 //---------------------------------------------------------
 
-MScoreTextToMXML::MScoreTextToMXML(const QString& tag, const QString& attr, const CharFormat& defFmt,
-                                   const QString& mtf)
+MScoreTextToMXML::MScoreTextToMXML(const QString& tag, const QString& attr, const CharFormat& defFmt, const QString& mtf)
     : attribs(attr), tagname(tag), oldFormat(defFmt), musicalTextFont(mtf)
 {
     // set MusicXML defaults
@@ -277,17 +276,11 @@ QString MScoreTextToMXML::updateFormat()
         newFormat.setFontFamily(musicalTextFont);
     }
     QString res;
-    res += attribute(newFormat.bold() != oldFormat.bold(),
-                     newFormat.bold(), "font-weight=\"bold\"", "font-weight=\"normal\"");
-    res += attribute(newFormat.italic() != oldFormat.italic(),
-                     newFormat.italic(), "font-style=\"italic\"", "font-style=\"normal\"");
-    res += attribute(newFormat.underline() != oldFormat.underline(),
-                     newFormat.underline(), "underline=\"1\"", "underline=\"0\"");
-    res
-        += attribute(newFormat.fontFamily() != oldFormat.fontFamily(), true,
-                     QString("font-family=\"%1\"").arg(newFormat.fontFamily()), "");
-    bool needSize = newFormat.fontSize() < 0.99 * oldFormat.fontSize()
-                    || newFormat.fontSize() > 1.01 * oldFormat.fontSize();
+    res += attribute(newFormat.bold() != oldFormat.bold(), newFormat.bold(), "font-weight=\"bold\"", "font-weight=\"normal\"");
+    res += attribute(newFormat.italic() != oldFormat.italic(), newFormat.italic(), "font-style=\"italic\"", "font-style=\"normal\"");
+    res += attribute(newFormat.underline() != oldFormat.underline(), newFormat.underline(), "underline=\"1\"", "underline=\"0\"");
+    res += attribute(newFormat.fontFamily() != oldFormat.fontFamily(), true, QString("font-family=\"%1\"").arg(newFormat.fontFamily()), "");
+    bool needSize = newFormat.fontSize() < 0.99 * oldFormat.fontSize() || newFormat.fontSize() > 1.01 * oldFormat.fontSize();
     res += attribute(needSize, true, QString("font-size=\"%1\"").arg(newFormat.fontSize()), "");
     //qDebug("updateFormat() res '%s'", qPrintable(res));
     oldFormat = newFormat;

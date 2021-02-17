@@ -138,8 +138,7 @@ static bool extractRootfile(QFile* qf, QByteArray& data)
     int line, column;
     QString err;
     if (!container.setContent(data, false, &err, &line, &column)) {
-        MScore::lastError
-            = QObject::tr("Error reading container.xml at line %1 column %2: %3\n").arg(line).arg(column).arg(err);
+        MScore::lastError = QObject::tr("Error reading container.xml at line %1 column %2: %3\n").arg(line).arg(column).arg(err);
         return false;
     }
 
