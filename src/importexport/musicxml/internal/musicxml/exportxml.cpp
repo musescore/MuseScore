@@ -1028,8 +1028,7 @@ public:
 
 // find all trills in this measure and this part
 
-static void findTrills(const Measure* const measure, int strack, int etrack, TrillHash& trillStart,
-                       TrillHash& trillStop)
+static void findTrills(const Measure* const measure, int strack, int etrack, TrillHash& trillStart, TrillHash& trillStop)
 {
     // loop over all spanners in this measure
     auto stick = measure->tick();
@@ -1181,8 +1180,7 @@ void ExportMusicXml::calcDivisions()
                     }
 
                     // must ignore start repeat to prevent spurious backup/forward
-                    if (el->type() == ElementType::BAR_LINE
-                        && static_cast<BarLine*>(el)->barLineType() == BarLineType::START_REPEAT) {
+                    if (el->type() == ElementType::BAR_LINE && static_cast<BarLine*>(el)->barLineType() == BarLineType::START_REPEAT) {
                         continue;
                     }
 
@@ -1311,7 +1309,7 @@ static CharFormat formatForWords(const Score* const s)
 
 static void creditWords(XmlWriter& xml, const Score* const s, const int pageNr,
                         const double x, const double y, const QString& just, const QString& val,
-                        const QList<TextFragment>& words)
+                        const QList<TextFragment>& words, const QString& creditType)
 {
     // prevent incorrect MusicXML for empty text
     if (words.isEmpty()) {
@@ -1323,6 +1321,9 @@ static void creditWords(XmlWriter& xml, const Score* const s, const int pageNr,
 
     // export formatted
     xml.stag(QString("credit page=\"%1\"").arg(pageNr));
+    if (creditType != "") {
+        xml.tag("credit-type", creditType);
+    }
     QString attr = QString(" default-x=\"%1\"").arg(x);
     attr += QString(" default-y=\"%1\"").arg(y);
     attr += " justify=\"" + just + "\"";
@@ -1352,13 +1353,39 @@ static double parentHeight(const Element* element)
 }
 
 //---------------------------------------------------------
+//   tidToCreditType
+//---------------------------------------------------------
+
+static QString tidToCreditType(const Tid tid)
+{
+    QString res;
+    switch (tid) {
+    case Tid::COMPOSER:
+        res = "composer";
+        break;
+    case Tid::POET:
+        res = "lyricist";
+        break;
+    case Tid::SUBTITLE:
+        res = "subtitle";
+        break;
+    case Tid::TITLE:
+        res = "title";
+        break;
+    default:
+        break;
+    }
+    return res;
+}
+
+//---------------------------------------------------------
 //   textAsCreditWords
 //---------------------------------------------------------
 
 // Refactor suggestion: make getTenthsFromInches static instead of ExportMusicXml member function
 
-static void textAsCreditWords(const ExportMusicXml* const expMxml, XmlWriter& xml, const Score* const s,
-                              const int pageNr, const Text* const text)
+static void textAsCreditWords(const ExportMusicXml* const expMxml, XmlWriter& xml, const Score* const s, const int pageNr,
+                              const Text* const text)
 {
     // determine page formatting
     const double h  = expMxml->getTenthsFromInches(s->styleD(Sid::pageHeight));
@@ -1399,7 +1426,9 @@ static void textAsCreditWords(const ExportMusicXml* const expMxml, XmlWriter& xm
         // ty already set correctly
     }
 
-    creditWords(xml, s, pageNr, tx, ty, just, val, text->fragmentList());
+    const QString creditType= tidToCreditType(text->tid());
+
+    creditWords(xml, s, pageNr, tx, ty, just, val, text->fragmentList(), creditType);
 }
 
 //---------------------------------------------------------
@@ -1445,7 +1474,7 @@ void ExportMusicXml::credits(XmlWriter& xml)
         QList<TextFragment> list;
         list.append(f);
         for (int pageIdx = 0; pageIdx < _score->npages(); ++pageIdx) {
-            creditWords(xml, _score, pageIdx + 1, w / 2, bm, "center", "bottom", list);
+            creditWords(xml, _score, pageIdx + 1, w / 2, bm, "center", "bottom", list, "rights");
         }
     }
 }
