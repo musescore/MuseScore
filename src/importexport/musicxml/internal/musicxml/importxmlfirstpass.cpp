@@ -63,6 +63,11 @@ QString MusicXmlPart::toString() const
     return res;
 }
 
+Interval MusicXmlPart::interval(const Fraction f) const
+{
+    return _intervals.interval(f);
+}
+
 int MusicXmlPart::octaveShift(const int staff, const Fraction f) const
 {
     if (staff < 0 || MAX_STAVES <= staff) {
@@ -90,6 +95,23 @@ void MusicXmlPart::calcOctaveShifts()
     for (int i = 0; i < MAX_STAVES; ++i) {
         octaveShifts[i].calcOctaveShiftShifts();
     }
+}
+
+//---------------------------------------------------------
+//   interval
+//---------------------------------------------------------
+
+Interval MusicXmlIntervalList::interval(const Fraction f) const
+{
+    if (empty()) {
+        return {};
+    }
+    auto i = upper_bound(f);
+    if (i == begin()) {
+        return {};
+    }
+    --i;
+    return i->second;
 }
 
 //---------------------------------------------------------
