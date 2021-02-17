@@ -86,7 +86,7 @@ bool NoteList::stavesOverlap(const int staff1, const int staff2) const
     for (int i = 0; i < _staffNoteLists.at(staff1).size(); ++i) {
         for (int j = 0; j < _staffNoteLists.at(staff2).size(); ++j) {
             if (notesOverlap(_staffNoteLists.at(staff1).at(i), _staffNoteLists.at(staff2).at(j))) {
-//printf(" %d-%d", staff1, staff2);
+                //printf(" %d-%d", staff1, staff2);
                 return true;
             }
         }
@@ -250,7 +250,7 @@ void domError(const QDomElement& e)
     if (col != -1) {
         m += QString("col:%1 ").arg(col);
     }
-    m += QString("%1: Unknown Node <%2>, type %3").arg(s).arg(e.tagName()).arg(e.nodeType());
+    m += QString("%1: Unknown Node <%2>, type %3").arg(s, e.tagName()).arg(e.nodeType());
     if (e.isText()) {
         m += QString("  text node <%1>").arg(e.toText().data());
     }
@@ -468,14 +468,14 @@ QString accSymId2MxmlString(const SymId id)
     case SymId::accidentalBuyukMucennebFlat:     s = "double-slash-flat";
         break;
 
-    //case SymId::noSym:                           s = "sharp1"; break;
-    //case SymId::noSym:                           s = "sharp2"; break;
-    //case SymId::noSym:                           s = "sharp3"; break;
-    //case SymId::noSym:                           s = "sharp4"; break;
-    //case SymId::noSym:                           s = "flat1"; break;
-    //case SymId::noSym:                           s = "flat2"; break;
-    //case SymId::noSym:                           s = "flat3"; break;
-    //case SymId::noSym:                           s = "flat4"; break;
+    //case SymId::noSym:                           s = "sharp1";               break;
+    //case SymId::noSym:                           s = "sharp2";               break;
+    //case SymId::noSym:                           s = "sharp3";               break;
+    //case SymId::noSym:                           s = "sharp4";               break;
+    //case SymId::noSym:                           s = "flat1";                break;
+    //case SymId::noSym:                           s = "flat2";                break;
+    //case SymId::noSym:                           s = "flat3";                break;
+    //case SymId::noSym:                           s = "flat4";                break;
 
     case SymId::accidentalSori:                  s = "sori";
         break;
@@ -683,17 +683,16 @@ AccidentalType mxmlString2accidentalType(const QString mxmlName)
     map["sharp-down"] = AccidentalType::SHARP_ARROW_DOWN;
     map["flat-down"] = AccidentalType::FLAT_ARROW_DOWN;
     map["flat-up"] = AccidentalType::FLAT_ARROW_UP;
+    map["double-sharp-down"] = AccidentalType::SHARP2_ARROW_DOWN;
+    map["double-sharp-up"] = AccidentalType::SHARP2_ARROW_UP;
+    map["flat-flat-down"] = AccidentalType::FLAT2_ARROW_DOWN;
+    map["flat-flat-up"] = AccidentalType::FLAT2_ARROW_UP;
 
     map["arrow-down"] = AccidentalType::ARROW_DOWN;
     map["arrow-up"] = AccidentalType::ARROW_UP;
 
     map["triple-sharp"] = AccidentalType::SHARP3;
     map["triple-flat"] = AccidentalType::FLAT3;
-
-    map["double-sharp-down"] = AccidentalType::SHARP2_ARROW_DOWN;
-    map["double-sharp-up"] = AccidentalType::SHARP2_ARROW_UP;
-    map["flat-flat-down"] = AccidentalType::FLAT2_ARROW_DOWN;
-    map["flat-flat-up"] = AccidentalType::FLAT2_ARROW_UP;
 
     map["slash-quarter-sharp"] = AccidentalType::SHARP_SLASH3;   // MIRRORED_FLAT_SLASH; ?
     map["slash-sharp"] = AccidentalType::SHARP_SLASH2;   // SHARP_SLASH; ?
