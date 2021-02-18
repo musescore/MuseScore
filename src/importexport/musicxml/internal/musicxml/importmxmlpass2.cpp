@@ -454,12 +454,13 @@ static Instrument createInstrument(const MusicXMLInstrument& mxmlInstr, const In
         it = Ms::searchTemplateForMusicXmlId(mxmlInstr.sound);
     }
 
-    /*
-    qDebug("sound '%s' it %p trackname '%s' program %d",
-           qPrintable(mxmlInstr.sound), it,
-           it ? qPrintable(it->trackName) : "",
-           mxmlInstr.midiProgram);
-     */
+    if (!it) {
+        it = Ms::searchTemplateForInstrNameList({ mxmlInstr.name });
+    }
+
+    if (!it) {
+        it = Ms::searchTemplateForMidiProgram(mxmlInstr.midiProgram);
+    }
 
     if (it) {
         // initialize from template with matching MusicXmlId
