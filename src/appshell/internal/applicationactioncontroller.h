@@ -43,6 +43,8 @@ private:
     void openAskForHelpPage();
     void openBugReportPage();
     void openLeaveFeedbackPage();
+
+    void revertToFactorySettings();
 };
 }
 

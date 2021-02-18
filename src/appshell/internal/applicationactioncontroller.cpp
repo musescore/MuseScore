@@ -23,6 +23,7 @@
 #include "translation.h"
 
 using namespace mu::appshell;
+using namespace mu::framework;
 
 void ApplicationActionController::init()
 {
@@ -32,6 +33,8 @@ void ApplicationActionController::init()
     dispatcher()->reg(this, "ask-help", this, &ApplicationActionController::openAskForHelpPage);
     dispatcher()->reg(this, "report-bug", this, &ApplicationActionController::openBugReportPage);
     dispatcher()->reg(this, "leave-feedback", this, &ApplicationActionController::openLeaveFeedbackPage);
+
+    dispatcher()->reg(this, "revert-factory", this, &ApplicationActionController::revertToFactorySettings);
 }
 
 void ApplicationActionController::quit()

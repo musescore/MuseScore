@@ -42,6 +42,8 @@ public:
 
     ValCh<QStringList> recentScoreList() const override;
 
+    void revertToFactorySettings(bool keepDefaultSettings = false) const override;
+
 private:
     std::string utmParameters(const std::string& utmMedium) const;
     std::string sha() const;

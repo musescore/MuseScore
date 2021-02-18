@@ -19,6 +19,7 @@
 #include "appshellconfiguration.h"
 
 #include "config.h"
+#include "settings.h"
 
 static const std::string ONLINE_HANDBOOK_URL("https://musescore.org/redirect/help?tag=handbook&locale=");
 static const std::string ASK_FOR_HELP_URL("https://musescore.org/redirect/post/question?locale=");
@@ -29,6 +30,7 @@ static const std::string UTM_MEDIUM_MENU("menu");
 static const std::string SYSTEM_LANGUAGE("system");
 
 using namespace mu::appshell;
+using namespace mu::framework;
 
 bool AppShellConfiguration::isAppUpdatable() const
 {
@@ -71,6 +73,11 @@ std::string AppShellConfiguration::leaveFeedbackUrl() const
 mu::ValCh<QStringList> AppShellConfiguration::recentScoreList() const
 {
     return userScoresConfiguration()->recentScoreList();
+}
+
+void AppShellConfiguration::revertToFactorySettings(bool keepDefaultSettings) const
+{
+    settings()->reset(keepDefaultSettings);
 }
 
 std::string AppShellConfiguration::utmParameters(const std::string& utmMedium) const

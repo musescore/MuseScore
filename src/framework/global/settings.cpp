@@ -22,6 +22,8 @@
 #include "log.h"
 
 #include <QSettings>
+#include <QStandardPaths>
+#include <QDir>
 
 using namespace mu;
 using namespace mu::framework;
@@ -36,11 +38,8 @@ Settings* Settings::instance()
 Settings::Settings()
 {
 #if defined(WIN_PORTABLE)
-    QString dataPath = QDir::cleanPath(QString("%1/../../../Data/settings")
-                                       .arg(QCoreApplication::applicationDirPath())
-                                       .arg(QCoreApplication::applicationName()));
-    QSettings::setPath(QSettings::IniFormat, QSettings::UserScope, dataPath);
-    QSettings::setPath(QSettings::IniFormat, QSettings::SystemScope, dataPath);
+    QSettings::setPath(QSettings::IniFormat, QSettings::UserScope, dataPath());
+    QSettings::setPath(QSettings::IniFormat, QSettings::SystemScope, dataPath());
 #endif
 
 #ifndef Q_OS_MAC
@@ -75,6 +74,22 @@ void Settings::reload()
 void Settings::load()
 {
     m_items = readItems();
+}
+
+void Settings::reset(bool keepDefaultSettings)
+{
+    m_settings->clear();
+
+    if (!keepDefaultSettings) {
+        QDir(dataPath()).removeRecursively();
+    }
+
+    for (auto it = m_items.begin(); it != m_items.end(); ++it) {
+        it->second.value = it->second.defaultValue;
+
+        Channel<Val>& channel = findChannel(it->first);
+        channel.send(it->second.value);
+    }
 }
 
 Settings::Items Settings::readItems() const
@@ -131,6 +146,17 @@ void Settings::writeValue(const Key& key, const Val& value)
     m_settings->setValue(QString::fromStdString(key.key), value.toQVariant());
 }
 
+QString Settings::dataPath() const
+{
+#if defined(WIN_PORTABLE)
+    return QDir::cleanPath(QString("%1/../../../Data/settings")
+                           .arg(QCoreApplication::applicationDirPath())
+                           .arg(QCoreApplication::applicationName()));
+#else
+    return QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+#endif
+}
+
 void Settings::setDefaultValue(const Key& key, const Val& value)
 {
     Item& item = findItem(key);
@@ -148,6 +174,18 @@ Settings::Item& Settings::findItem(const Key& key) const
 
     if (it == m_items.end()) {
         static Item null;
+        return null;
+    }
+
+    return it->second;
+}
+
+async::Channel<Val>& Settings::findChannel(const Settings::Key& key) const
+{
+    auto it = m_channels.find(key);
+
+    if (it == m_channels.end()) {
+        static async::Channel<Val> null;
         return null;
     }
 
