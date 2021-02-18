@@ -197,7 +197,7 @@ void NotationPaintView::onCurrentNotationChanged()
         }
     });
 
-    notationPlayback()->loopBoundariesChanged().onReceive(this, [this](const LoopBoundaries& boundaries) {
+    notationPlayback()->loopBoundaries().ch.onReceive(this, [this](const LoopBoundaries& boundaries) {
         updateLoopMarkers(boundaries);
     });
 
@@ -225,8 +225,8 @@ void NotationPaintView::updateLoopMarkers(const LoopBoundaries& boundaries)
     m_loopInMarker->setRect(boundaries.loopInRect);
     m_loopOutMarker->setRect(boundaries.loopOutRect);
 
-    m_loopInMarker->setVisible(!boundaries.isNull());
-    m_loopOutMarker->setVisible(!boundaries.isNull());
+    m_loopInMarker->setVisible(boundaries.visible);
+    m_loopOutMarker->setVisible(boundaries.visible);
 
     update();
 }

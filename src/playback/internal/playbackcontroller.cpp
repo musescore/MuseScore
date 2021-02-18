@@ -107,6 +107,16 @@ bool PlaybackController::isPaused() const
     return sequencer()->status() == ISequencer::PAUSED;
 }
 
+bool PlaybackController::isLoopVisible() const
+{
+    return playback() ? playback()->loopBoundaries().val.visible : false;
+}
+
+bool PlaybackController::isPlaybackLooped() const
+{
+    return playback() ? !playback()->loopBoundaries().val.isNull() : false;
+}
+
 Notification PlaybackController::isPlayingChanged() const
 {
     return m_isPlayingChanged;
@@ -172,8 +182,8 @@ void PlaybackController::onNotationChanged()
             seek(tick);
         });
 
-        m_notation->playback()->loopBoundariesChanged().onReceive(this, [this](const LoopBoundaries& boundary) {
-            setLoop(boundary);
+        m_notation->playback()->loopBoundaries().ch.onReceive(this, [this](const LoopBoundaries& boundaries) {
+            setLoop(boundaries);
         });
     }
 
@@ -289,8 +299,13 @@ void PlaybackController::toggleCountIn()
 
 void PlaybackController::toggleLoopPlayback()
 {
-    if (m_isPlaybackLooped) {
-        unsetLoop();
+    if (isLoopVisible()) {
+        hideLoop();
+        return;
+    }
+
+    if (isPlaybackLooped() && !selection()->isRange()) {
+        showLoop();
         return;
     }
 
@@ -302,47 +317,55 @@ void PlaybackController::toggleLoopPlayback()
         loopOutTick = selection()->range()->endTick().ticks();
     }
 
-    playback()->addLoopBoundary(LoopBoundaryType::LoopIn, loopInTick);
-    playback()->addLoopBoundary(LoopBoundaryType::LoopOut, loopOutTick);
-
-    m_isPlaybackLooped = true;
+    addLoopBoundaryToTick(LoopBoundaryType::LoopIn, loopInTick);
+    addLoopBoundaryToTick(LoopBoundaryType::LoopOut, loopOutTick);
 }
 
 void PlaybackController::addLoopBoundary(LoopBoundaryType type)
 {
-    if (!playback()) {
-        return;
-    }
-
     if (isPlaying()) {
-        playback()->addLoopBoundary(type, currentTick());
+        addLoopBoundaryToTick(type, currentTick());
     } else {
-        playback()->addLoopBoundary(type, INotationPlayback::SelectedNoteTick);
+        addLoopBoundaryToTick(type, INotationPlayback::SelectedNoteTick);
     }
 }
 
-void PlaybackController::setLoop(const LoopBoundaries& boundary)
+void PlaybackController::addLoopBoundaryToTick(LoopBoundaryType type, int tick)
 {
-    if (boundary.isNull()) {
-        unsetLoop();
+    if (playback()) {
+        playback()->addLoopBoundary(type, tick);
+        showLoop();
+    }
+}
+
+void PlaybackController::setLoop(const LoopBoundaries& boundaries)
+{
+    if (!boundaries.visible) {
+        hideLoop();
         return;
     }
 
-    uint64_t fromMilliseconds = secondsToMilliseconds(playback()->tickToSec(boundary.loopInTick));
-    uint64_t toMilliseconds = secondsToMilliseconds(playback()->tickToSec(boundary.loopOutTick));
+    uint64_t fromMilliseconds = secondsToMilliseconds(playback()->tickToSec(boundaries.loopInTick));
+    uint64_t toMilliseconds = secondsToMilliseconds(playback()->tickToSec(boundaries.loopOutTick));
 
     sequencer()->setLoop(fromMilliseconds, toMilliseconds);
+    showLoop();
 
-    m_isPlaybackLooped = true;
     notifyActionEnabledChanged(LOOP_CODE);
 }
 
-void PlaybackController::unsetLoop()
+void PlaybackController::showLoop()
 {
-    if (playback() && m_isPlaybackLooped) {
-        m_isPlaybackLooped = false;
+    if (playback()) {
+        playback()->setLoopBoundariesVisible(true);
+    }
+}
+
+void PlaybackController::hideLoop()
+{
+    if (playback()) {
         sequencer()->unsetLoop();
-        playback()->removeLoopBoundaries();
+        playback()->setLoopBoundariesVisible(false);
         notifyActionEnabledChanged(LOOP_CODE);
     }
 }
@@ -355,7 +378,7 @@ void PlaybackController::notifyActionEnabledChanged(const ActionCode& actionCode
 bool PlaybackController::isActionEnabled(const ActionCode& actionCode) const
 {
     QMap<std::string, bool> isEnabled {
-        { LOOP_CODE, m_isPlaybackLooped },
+        { LOOP_CODE, isLoopVisible() },
         { MIDI_ON_CODE, notationConfiguration()->isMidiInputEnabled() },
         { REPEAT_CODE, notationConfiguration()->isPlayRepeatsEnabled() },
         { PAN_CODE, notationConfiguration()->isAutomaticallyPanEnabled() },

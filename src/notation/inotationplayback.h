@@ -55,8 +55,8 @@ public:
     };
 
     virtual void addLoopBoundary(LoopBoundaryType boundaryType, int tick) = 0;
-    virtual void removeLoopBoundaries() = 0;
-    virtual async::Channel<LoopBoundaries> loopBoundariesChanged() const = 0;
+    virtual void setLoopBoundariesVisible(bool visible) = 0;
+    virtual ValCh<LoopBoundaries> loopBoundaries() const = 0;
 
     virtual Tempo tempo(int tick) const = 0;
     virtual MeasureBeat beat(int tick) const = 0;
