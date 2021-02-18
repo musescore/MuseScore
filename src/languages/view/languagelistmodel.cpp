@@ -94,6 +94,13 @@ bool defaultSort(const Language& l, const Language& r)
     return l.code < r.code;
 }
 
+void LanguageListModel::init()
+{
+    load();
+
+    setupConnections();
+}
+
 void LanguageListModel::load()
 {
     m_list.clear();
@@ -105,7 +112,10 @@ void LanguageListModel::load()
     std::sort(languageList.begin(), languageList.end(), defaultSort);
     m_list = languageList;
     endResetModel();
+}
 
+void LanguageListModel::setupConnections()
+{
     RetCh<Language> languageChanged = languagesService()->languageChanged();
     languageChanged.ch.onReceive(this, [this](const Language& newLanguage) {
         int index = itemIndexByCode(newLanguage.code);
@@ -117,6 +127,15 @@ void LanguageListModel::load()
         m_list[index] = newLanguage;
         QModelIndex _index = createIndex(index, 0);
         emit dataChanged(_index, _index);
+    });
+
+    ValCh<LanguagesHash> languages = languagesService()->languages();
+    languages.ch.onReceive(this, [this](const LanguagesHash&) {
+        load();
+    });
+
+    languagesService()->currentLanguage().ch.onReceive(this, [this](const Language&) {
+        load();
     });
 }
 
@@ -185,7 +204,7 @@ void LanguageListModel::uninstall(QString code)
 
 void LanguageListModel::openPreferences()
 {
-    interactive()->open("musescore://settings");
+    interactive()->open("musescore://devtools");
 }
 
 QVariantMap LanguageListModel::language(QString code)

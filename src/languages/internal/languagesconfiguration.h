@@ -33,8 +33,8 @@ class LanguagesConfiguration : public ILanguagesConfiguration
 public:
     void init();
 
-    QString currentLanguageCode() const override;
-    Ret setCurrentLanguageCode(const QString& languageCode) const override;
+    ValCh<QString> currentLanguageCode() const override;
+    void setCurrentLanguageCode(const QString& languageCode) const override;
 
     QUrl languagesUpdateUrl() const override;
     QUrl languageFileServerUrl(const QString& languageCode) const override;
@@ -52,6 +52,7 @@ private:
     LanguagesHash parseLanguagesConfig(const QByteArray& json) const;
     io::path languageFileName(const QString& languageCode) const;
 
+    async::Channel<QString> m_currentLanguageCodeChanged;
     async::Channel<LanguagesHash> m_languagesHashChanged;
 };
 }

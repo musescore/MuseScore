@@ -32,8 +32,8 @@ class ILanguagesConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~ILanguagesConfiguration() = default;
 
-    virtual QString currentLanguageCode() const = 0;
-    virtual Ret setCurrentLanguageCode(const QString& languageCode) const = 0;
+    virtual ValCh<QString> currentLanguageCode() const = 0;
+    virtual void setCurrentLanguageCode(const QString& languageCode) const = 0;
 
     virtual QUrl languagesUpdateUrl() const = 0;
     virtual QUrl languageFileServerUrl(const QString& languageCode) const = 0;
