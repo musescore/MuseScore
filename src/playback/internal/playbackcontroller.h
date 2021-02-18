@@ -72,6 +72,9 @@ private:
     int currentTick() const;
     bool isPaused() const;
 
+    bool isLoopVisible() const;
+    bool isPlaybackLooped() const;
+
     void onNotationChanged();
     void togglePlay();
     void rewind(const actions::ActionData& args);
@@ -88,8 +91,12 @@ private:
     void toggleLoopPlayback();
 
     void addLoopBoundary(notation::LoopBoundaryType type);
-    void setLoop(const notation::LoopBoundaries& boundary);
-    void unsetLoop();
+    void addLoopBoundaryToTick(notation::LoopBoundaryType type, int tick);
+
+    void setLoop(const notation::LoopBoundaries& boundaries);
+
+    void showLoop();
+    void hideLoop();
 
     void notifyActionEnabledChanged(const actions::ActionCode& actionCode);
 
@@ -101,7 +108,6 @@ private:
     async::Channel<actions::ActionCode> m_actionEnabledChanged;
 
     bool m_needRewindBeforePlay = false;
-    bool m_isPlaybackLooped = false;
 };
 }
 

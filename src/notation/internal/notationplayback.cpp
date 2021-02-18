@@ -96,6 +96,7 @@ void NotationPlayback::updateLoopBoundaries()
     boundaries.loopOutTick = score()->loopOutTick().ticks();
     boundaries.loopInRect = loopBoundaryRectByTick(LoopBoundaryType::LoopIn, boundaries.loopInTick);
     boundaries.loopOutRect = loopBoundaryRectByTick(LoopBoundaryType::LoopOut, boundaries.loopOutTick);
+    boundaries.visible = m_loopBoundaries.val.visible;
 
     if (m_loopBoundaries.val != boundaries) {
         m_loopBoundaries.set(boundaries);
@@ -636,11 +637,14 @@ void NotationPlayback::addLoopOut(int _tick)
     score()->setLoopOutTick(tick);
 }
 
-void NotationPlayback::removeLoopBoundaries()
+void NotationPlayback::setLoopBoundariesVisible(bool visible)
 {
-    Fraction null = Fraction::fromTicks(0);
-    score()->setLoopInTick(null);
-    score()->setLoopOutTick(null);
+    if (m_loopBoundaries.val.visible == visible) {
+        return;
+    }
+
+    m_loopBoundaries.val.visible = visible;
+    m_loopBoundaries.set(m_loopBoundaries.val);
 }
 
 QRect NotationPlayback::loopBoundaryRectByTick(LoopBoundaryType boundaryType, int _tick) const
@@ -723,9 +727,9 @@ QRect NotationPlayback::loopBoundaryRectByTick(LoopBoundaryType boundaryType, in
     return QRect(x, y, width, height);
 }
 
-mu::async::Channel<LoopBoundaries> NotationPlayback::loopBoundariesChanged() const
+mu::ValCh<LoopBoundaries> NotationPlayback::loopBoundaries() const
 {
-    return m_loopBoundaries.ch;
+    return m_loopBoundaries;
 }
 
 Tempo NotationPlayback::tempo(int tick) const
