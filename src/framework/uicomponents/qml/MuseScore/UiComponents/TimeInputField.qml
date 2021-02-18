@@ -44,6 +44,7 @@ Row {
         maxValue: hoursField.value === root.maxTime.getHours() ? root.maxTime.getMinutes() : 60
         value: root.time.getMinutes()
 
+        displayedNumberLength: 2
         font: root.font
 
         onValueEdited: {
@@ -65,6 +66,7 @@ Row {
         maxValue: minutesField.value === root.maxTime.getMinutes() ? root.maxTime.getSeconds() : 60
         value: root.time.getSeconds()
 
+        displayedNumberLength: 2
         font: root.font
 
         onValueEdited: {
