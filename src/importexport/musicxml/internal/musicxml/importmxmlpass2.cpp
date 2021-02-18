@@ -1392,8 +1392,9 @@ static void resetTuplets(Tuplets& tuplets)
             if (actualDuration > Fraction(0, 1) && missingDuration > Fraction(0, 1)) {
                 qDebug("add missing %s to previous tuplet", qPrintable(missingDuration.print()));
                 const auto& firstElement = tuplet->elements().at(0);
+                // appended the rest to the current end of the tuplet (firstElement->tick() + actualDuration)
                 const auto extraRest = addRest(firstElement->score(), firstElement->measure(),
-                                               firstElement->tick() + missingDuration, firstElement->track(), 0,
+                                               firstElement->tick() + actualDuration, firstElement->track(), 0,
                                                TDuration { missingDuration* tuplet->ratio() }, missingDuration);
                 if (extraRest) {
                     extraRest->setTuplet(tuplet);
@@ -2099,6 +2100,12 @@ void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
                     _logger->logError("backup beyond measure start", &_e);
                     mTime.set(0, 1);
                 }
+                // check if the tick position is smaller than the minimum division resolution
+                // (possibly caused by rounding errors) and in that case set position to 0
+                if (mTime.isNotZero() && (_divs > 0) && (mTime < Fraction(1, 4 * _divs))) {
+                    _logger->logError("backup to a fractional tick smaller than the minimum division", &_e);
+                    mTime.set(0, 1);
+                }
             }
         } else if (_e.name() == "sound") {
             QString tempo = _e.attributes().value("tempo").toString();
@@ -2148,6 +2155,9 @@ void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
     gac = gcl.size();
     addGraceChordsAfter(prevChord, gcl, gac);
 
+    // prevent tuplets from crossing measure boundaries
+    resetTuplets(tuplets);
+
     // fill possible gaps in voice 1
     Part* part = _pass1.getPart(partId);   // should not fail, we only get here if the part exists
     fillGapsInFirstVoices(measure, part);
@@ -2176,9 +2186,6 @@ void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
     }
 
     setMeasureRepeats(scoreRelStaff, measure);
-
-    // prevent tuplets from crossing measure boundaries
-    resetTuplets(tuplets);
 
     Q_ASSERT(_e.isEndElement() && _e.name() == "measure");
 }
