@@ -568,7 +568,7 @@ AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildPartItem(const P
 void InstrumentPanelTreeModel::updatePartItem(PartTreeItem* item, const Part* part)
 {
     item->setId(part->id());
-    item->setTitle(part->partName());
+    item->setTitle(part->partName().isEmpty() ? part->instrument()->name() : part->partName());
     item->setIsVisible(part->show());
     item->setInstrumentId(part->instrumentId());
     item->setInstrumentName(part->instrument()->name());
