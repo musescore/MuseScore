@@ -9,7 +9,9 @@ Item {
     property int minValue: 0
     property int maxValue: 999
     property int value: 0
-    property bool padWithZeros: true
+
+    property bool addLeadingZeros: true
+    property int displayedNumberLength: maxValue.toString().length
 
     property alias font: textField.font
 
@@ -23,16 +25,14 @@ Item {
     QtObject {
         id: privateProperties
 
-        property int maxNumberLength: root.maxValue.toString().length
-
         function pad(value) {
             var str = value.toString()
 
-            if (!padWithZeros) {
+            if (!addLeadingZeros) {
                 return str;
             }
 
-            while (str.length < maxNumberLength) {
+            while (str.length < root.displayedNumberLength) {
                 str = "0" + str
             }
 
@@ -53,22 +53,20 @@ Item {
         text: privateProperties.pad(root.value)
 
         onTextEdited: {
-            var currentValue = parseInt(text)
+            var currentValue = text.length > 0 ? parseInt(text) : 0
             var str = currentValue.toString()
             var newValue = 0
 
-            if (str.length > privateProperties.maxNumberLength || currentValue > root.maxValue) {
+            if (str.length > privateProperties.displayedNumberLength || currentValue > root.maxValue) {
                 var lastDigit = str.charAt(str.length - 1)
                 newValue = parseInt(lastDigit)
             } else {
                 newValue = currentValue
             }
 
-            if (newValue > root.maxValue) {
-                newValue = value
-            }
-
+            newValue = Math.min(newValue, root.maxValue)
             text = privateProperties.pad(newValue)
+
             root.valueEdited(newValue)
         }
 
@@ -78,7 +76,6 @@ Item {
             color: "transparent"
         }
 
-        cursorDelegate: Item {}
         selectByMouse: false
 
         color: ui.theme.fontPrimaryColor
@@ -100,6 +97,7 @@ Item {
 
         onClicked: {
             textField.forceActiveFocus()
+            textField.cursorPosition = textField.text.length
         }
     }
 
