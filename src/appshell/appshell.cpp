@@ -21,6 +21,7 @@
 
 #include <QApplication>
 #include <QQmlApplicationEngine>
+#include <QQuickWindow>
 #ifndef Q_OS_WASM
 #include <QThreadPool>
 #endif
@@ -168,6 +169,11 @@ int AppShell::run(int argc, char** argv)
         // ====================================================
         // Load Main qml
         // ====================================================
+
+        //! Needs to be set because we use transparent windows for PopupView.
+        //! Needs to be called before any QQuickWindows are shown.
+        QQuickWindow::setDefaultAlphaBuffer(true);
+
         engine->load(url);
     }
     }
