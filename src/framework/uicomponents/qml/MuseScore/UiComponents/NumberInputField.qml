@@ -9,6 +9,7 @@ Item {
     property int minValue: 0
     property int maxValue: 999
     property int value: 0
+    property bool padWithZeros: true
 
     property alias font: textField.font
 
@@ -26,6 +27,10 @@ Item {
 
         function pad(value) {
             var str = value.toString()
+
+            if (!padWithZeros) {
+                return str;
+            }
 
             while (str.length < maxNumberLength) {
                 str = "0" + str
