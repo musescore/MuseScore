@@ -38,6 +38,8 @@ public:
     virtual std::string leaveFeedbackUrl() const = 0;
 
     virtual ValCh<QStringList> recentScoreList() const = 0;
+
+    virtual void revertToFactorySettings(bool keepDefaultSettings = false) const = 0;
 };
 }
 

@@ -46,6 +46,11 @@ const ActionList ApplicationActions::m_actions = {
                ShortcutContext::Any,
                QT_TRANSLATE_NOOP("action", "Feedback"),
                QT_TRANSLATE_NOOP("action", "Leave feedback")
+               ),
+    ActionItem("revert-factory",
+               ShortcutContext::Any,
+               QT_TRANSLATE_NOOP("action", "Revert to Factory Settings"),
+               QT_TRANSLATE_NOOP("action", "Revert to factory settings")
                )
 };
 

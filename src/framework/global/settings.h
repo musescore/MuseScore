@@ -67,6 +67,8 @@ public:
     void reload();
     void load();
 
+    void reset(bool keepDefaultSettings = false);
+
     Val value(const Key& key) const;
     Val defaultValue(const Key& key) const;
 
@@ -80,9 +82,12 @@ private:
     ~Settings();
 
     Item& findItem(const Key& key) const;
+    async::Channel<Val>& findChannel(const Key& key) const;
 
     Items readItems() const;
     void writeValue(const Key& key, const Val& value);
+
+    QString dataPath() const;
 
     QSettings* m_settings = nullptr;
     mutable Items m_items;
