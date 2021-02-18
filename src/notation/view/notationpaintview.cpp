@@ -83,10 +83,10 @@ void NotationPaintView::load()
 
 void NotationPaintView::initBackground()
 {
-    m_backgroundColor = configuration()->backgroundColor();
+    setBackgroundColor(configuration()->backgroundColor());
 
     configuration()->backgroundColorChanged().onReceive(this, [this](const QColor& color) {
-        m_backgroundColor = color;
+        setBackgroundColor(color);
         update();
     });
 }
@@ -334,6 +334,11 @@ void NotationPaintView::paint(QPainter* painter)
     m_noteInputCursor->paint(painter);
     m_loopInMarker->paint(painter);
     m_loopOutMarker->paint(painter);
+}
+
+QColor NotationPaintView::backgroundColor() const
+{
+    return m_backgroundColor;
 }
 
 QRect NotationPaintView::viewport() const
@@ -626,6 +631,16 @@ void NotationPaintView::setNotation(INotationPtr notation)
 void NotationPaintView::setReadonly(bool readonly)
 {
     m_inputController->setReadonly(readonly);
+}
+
+void NotationPaintView::setBackgroundColor(const QColor& color)
+{
+    if (m_backgroundColor == color) {
+        return;
+    }
+
+    m_backgroundColor = color;
+    emit backgroundColorChanged(color);
 }
 
 void NotationPaintView::clear()

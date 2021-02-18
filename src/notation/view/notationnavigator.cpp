@@ -25,15 +25,19 @@ using namespace mu::notation;
 NotationNavigator::NotationNavigator(QQuickItem* parent)
     : NotationPaintView(parent)
 {
-    setAcceptedMouseButtons(Qt::AllButtons);
     setReadonly(true);
+}
 
+void NotationNavigator::load()
+{
     initOrientation();
     initVisible();
 
     theme()->themeChanged().onNotify(this, [this]() {
         update();
     });
+
+    NotationPaintView::load();
 }
 
 bool NotationNavigator::isVerticalOrientation() const

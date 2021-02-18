@@ -43,6 +43,7 @@ class NotationNavigator : public NotationPaintView
 public:
     NotationNavigator(QQuickItem* parent = nullptr);
 
+    Q_INVOKABLE void load() override;
     Q_INVOKABLE void setCursorRect(const QRect& rect);
 
     int orientation() const;
