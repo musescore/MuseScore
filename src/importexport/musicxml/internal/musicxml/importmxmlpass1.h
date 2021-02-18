@@ -127,7 +127,7 @@ public:
     void scoreInstrument(const QString& partId);
     void midiInstrument(const QString& partId);
     void part();
-    void measure(const QString& partId, const Fraction cTime, Fraction& mdur, VoiceOverlapDetector& vod,const int measureNr);
+    void measure(const QString& partId, const Fraction cTime, Fraction& mdur, VoiceOverlapDetector& vod, const int measureNr);
     void print(const int measureNr);
     void attributes(const QString& partId, const Fraction cTime);
     void clef(const QString& partId);
@@ -163,6 +163,7 @@ public:
     Fraction getMeasureStart(const int i) const;
     int octaveShift(const QString& id, const int staff, const Fraction f) const;
     const CreditWordsList& credits() const { return _credits; }
+    bool hasBeamingInfo() const { return _hasBeamingInfo; }
 
 private:
     // functions
@@ -181,6 +182,7 @@ private:
     QMap<QString, MusicXMLInstruments> _instruments;   ///< instruments for each part, mapped on part id
     Score* _score;                              ///< MuseScore score
     MxmlLogger* _logger;                        ///< Error logger
+    bool _hasBeamingInfo;                       ///< Whether the score supports or contains beaming info
 
     // part specific data (TODO: move to part-specific class)
     Fraction _timeSigDura;                      ///< Measure duration according to last timesig read
