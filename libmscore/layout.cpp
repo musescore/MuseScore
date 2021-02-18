@@ -4981,8 +4981,8 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
             else {
                   const MeasureBase* mb = lc.nextMeasure->prev();
                   if (mb)
-                        mb->findPotentialSectionBreak();
-                  LayoutBreak* sectionBreak = mb->sectionBreakElement();
+                        mb = mb->findPotentialSectionBreak();
+                  LayoutBreak* sectionBreak = mb ? mb->sectionBreakElement() : nullptr;
                   // TODO: also use mb in else clause here?
                   // probably not, only actual measures have meaningful numbers
                   if (sectionBreak && sectionBreak->startWithMeasureOne())
