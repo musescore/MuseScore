@@ -28,7 +28,7 @@ Item {
     }
 
     Component.onCompleted: {
-        languageListModel.load()
+        languageListModel.init()
     }
 
     LanguageListModel {
