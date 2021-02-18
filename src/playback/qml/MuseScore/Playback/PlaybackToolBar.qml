@@ -104,6 +104,8 @@ Rectangle {
 
                 minValue: 1
                 maxValue: playbackModel.maxMeasureNumber
+                padWithZeros: false
+
                 value: playbackModel.measureNumber
 
                 onValueEdited: {
@@ -123,6 +125,8 @@ Rectangle {
 
                 minValue: 1
                 maxValue: playbackModel.maxBeatNumber
+                padWithZeros: false
+
                 value: playbackModel.beatNumber
 
                 onValueEdited: {

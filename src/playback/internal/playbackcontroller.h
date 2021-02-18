@@ -69,6 +69,7 @@ private:
     notation::INotationPlaybackPtr playback() const;
     notation::INotationSelectionPtr selection() const;
 
+    int currentTick() const;
     bool isPaused() const;
 
     void onNotationChanged();
@@ -96,7 +97,7 @@ private:
     async::Notification m_isPlayAllowedChanged;
     async::Notification m_isPlayingChanged;
     async::Notification m_playbackPositionChanged;
-    ValCh<uint32_t> m_tickPlayed;
+    async::Channel<uint32_t> m_tickPlayed;
     async::Channel<actions::ActionCode> m_actionEnabledChanged;
 
     bool m_needRewindBeforePlay = false;

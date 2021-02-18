@@ -66,9 +66,7 @@ void PlaybackController::init()
 
     sequencer()->positionChanged().onNotify(this, [this]() {
         if (configuration()->cursorType() == PlaybackCursorType::SMOOTH) {
-            float seconds = sequencer()->playbackPositionInSeconds();
-            int tick = m_notation->playback()->secToTick(seconds);
-            m_tickPlayed.set(tick);
+            m_tickPlayed.send(currentTick());
         }
 
         m_playbackPositionChanged.notify();
@@ -76,11 +74,17 @@ void PlaybackController::init()
 
     if (configuration()->cursorType() == PlaybackCursorType::STEPPED) {
         sequencer()->midiTickPlayed(MIDI_TRACK).onReceive(this, [this](midi::tick_t tick) {
-            m_tickPlayed.set(tick);
+            m_tickPlayed.send(tick);
         });
     }
 
     m_needRewindBeforePlay = true;
+}
+
+int PlaybackController::currentTick() const
+{
+    float seconds = sequencer()->playbackPositionInSeconds();
+    return m_notation ? m_notation->playback()->secToTick(seconds) : 0;
 }
 
 bool PlaybackController::isPlayAllowed() const
@@ -115,7 +119,7 @@ Notification PlaybackController::playbackPositionChanged() const
 
 Channel<uint32_t> PlaybackController::midiTickPlayed() const
 {
-    return m_tickPlayed.ch;
+    return m_tickPlayed;
 }
 
 float PlaybackController::playbackPositionInSeconds() const
@@ -311,7 +315,7 @@ void PlaybackController::addLoopBoundary(LoopBoundaryType type)
     }
 
     if (isPlaying()) {
-        playback()->addLoopBoundary(type, m_tickPlayed.val);
+        playback()->addLoopBoundary(type, currentTick());
     } else {
         playback()->addLoopBoundary(type, INotationPlayback::SelectedNoteTick);
     }
@@ -374,12 +378,12 @@ QTime PlaybackController::totalPlayTime() const
 
 Tempo PlaybackController::currentTempo() const
 {
-    return playback() ? playback()->tempo(m_tickPlayed.val) : Tempo();
+    return playback() ? playback()->tempo(currentTick()) : Tempo();
 }
 
 MeasureBeat PlaybackController::currentBeat() const
 {
-    return playback() ? playback()->beat(m_tickPlayed.val) : MeasureBeat();
+    return playback() ? playback()->beat(currentTick()) : MeasureBeat();
 }
 
 uint64_t PlaybackController::beatToMilliseconds(int measureIndex, int beatIndex) const

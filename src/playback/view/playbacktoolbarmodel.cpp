@@ -309,11 +309,13 @@ void PlaybackToolBarModel::handleAction(const QString& actionCode)
 
 void PlaybackToolBarModel::updateState()
 {
+    bool playAllowed = isPlayAllowed();
+
     for (MenuItem& item : m_items) {
-        item.checked = playbackController()->isActionEnabled(item.code);
+        item.checked = playAllowed && playbackController()->isActionEnabled(item.code);
     }
 
-    if (isPlayAllowed()) {
+    if (playAllowed) {
         bool isPlaying = playbackController()->isPlaying();
         item("play").iconCode = isPlaying ? IconCode::Code::PAUSE : IconCode::Code::PLAY;
     }
