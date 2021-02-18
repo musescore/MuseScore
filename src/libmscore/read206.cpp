@@ -3573,6 +3573,9 @@ static bool readScore(Score* score, XmlReader& e)
                 e.clearUserTextStyles();
                 MasterScore* m = score->masterScore();
                 Score* s = new Score(m, MScore::baseStyle());
+                int defaultsVersion = m->style().defaultStyleVersion();
+                s->setStyle(*MStyle::resolveStyleDefaults(defaultsVersion));
+                s->style().setDefaultStyleVersion(defaultsVersion);
                 s->setEnableVerticalSpread(false);
                 Excerpt* ex = new Excerpt(m);
 
