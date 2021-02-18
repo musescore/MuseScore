@@ -30,14 +30,15 @@ Popup {
     property bool isOpened: false
     property bool opensUpward: false
 
-    property var arrowX: width / 2
+    property var arrowX: Boolean(anchorItem) ? anchorItem.x - x + anchorItem.width / 2 : width / 2
     property alias arrowHeight: arrow.height
 
     readonly property int borderWidth: 1
 
     property Item anchorItem: null
 
-    y: opensUpward ? anchorItem.y - height : anchorItem.y + anchorItem.height
+    x: Boolean(anchorItem) ? Math.max(anchorItem.x + (anchorItem.width - width) / 2, 0) : 0
+    y: Boolean(anchorItem) ? (opensUpward ? anchorItem.y - height : anchorItem.y + anchorItem.height) : 0
 
     property var popupPadding: 12
     topPadding: opensUpward ? popupPadding : popupPadding + arrowHeight
