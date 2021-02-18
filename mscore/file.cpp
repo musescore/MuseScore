@@ -732,6 +732,7 @@ MasterScore* MuseScore::getNewFile()
                   nvb->setBottomMargin(tvb->bottomMargin());
                   nvb->setLeftMargin(tvb->leftMargin());
                   nvb->setRightMargin(tvb->rightMargin());
+                  nvb->setAutoSizeEnabled(tvb->isAutoSizeEnabled());
                   }
             delete tscore;
             }
