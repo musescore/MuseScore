@@ -496,11 +496,11 @@ SymId mxmlString2accSymId(const QString mxmlName)
 {
     QMap<QString, SymId> map;   // map MusicXML accidental name to MuseScore enum SymId
     map["sharp"] = SymId::accidentalSharp;
-    map["natural"] = SymId::accidentalDoubleSharp;
+    map["natural"] = SymId::accidentalNatural;
     map["flat"] = SymId::accidentalFlat;
     map["double-sharp"] = SymId::accidentalDoubleSharp;
     map["sharp-sharp"] = SymId::accidentalDoubleSharp;
-    //map["double-flat"] = SymId::accidentalDoubleFlat;
+    //map["double-flat"] = SymId::accidentalDoubleFlat; // shouldn't harm, but doesn't exist in MusicXML
     map["flat-flat"] = SymId::accidentalDoubleFlat;
     map["natural-sharp"] = SymId::accidentalNaturalSharp;
     map["natural-flat"] = SymId::accidentalNaturalFlat;
@@ -588,7 +588,7 @@ QString accidentalType2MxmlString(const AccidentalType type)
         break;
     case AccidentalType::MIRRORED_FLAT2:     s = "three-quarters-flat";
         break;
-    //case AccidentalType::FLAT_FLAT_SLASH:    s = "three-quarters-flat"; break;
+    //case AccidentalType::FLAT_FLAT_SLASH:    s = "three-quarters-flat";  break; // MuseScore 1?
     case AccidentalType::SHARP_SLASH4:       s = "three-quarters-sharp";
         break;
     case AccidentalType::SHARP_ARROW_DOWN:   s = "sharp-down";
