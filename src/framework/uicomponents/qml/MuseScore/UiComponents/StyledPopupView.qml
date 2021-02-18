@@ -95,6 +95,7 @@ PopupView {
             Rectangle {
                 color: fillColor
                 border { width: root.borderWidth; color: root.borderColor }
+                radius: 3
 
                 anchors {
                     top: opensUpward ? parent.top : arrow.bottom
