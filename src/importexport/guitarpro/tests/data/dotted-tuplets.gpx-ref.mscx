@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
+<museScore version="3.02">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
-      <Spatium>1.76389</Spatium>
+      <Spatium>1.74978</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -30,7 +30,7 @@
           </StaffType>
         </Staff>
       <trackName>Bells</trackName>
-      <Instrument>
+      <Instrument id="guitar-steel-treble-clef">
         <longName>Guitar</longName>
         <shortName>Guit.</shortName>
         <trackName>Acoustic Guitar (Treble Clef)</trackName>
@@ -122,7 +122,7 @@
             <sigD>4</sigD>
             </TimeSig>
           <Tempo>
-            <tempo>1.66667</tempo>
+            <tempo>1.6666666666666667</tempo>
             <linkedMain/>
             <text><sym>metNoteQuarterUp</sym> = 100</text>
             </Tempo>
@@ -246,7 +246,7 @@
       <Division>480</Division>
       <Style>
         <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
-        <Spatium>1.76389</Spatium>
+        <Spatium>1.74978</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -285,7 +285,7 @@
             </StaffType>
           </Staff>
         <trackName></trackName>
-        <Instrument>
+        <Instrument id="guitar-steel-treble-clef">
           <longName>Guitar</longName>
           <shortName>Guit.</shortName>
           <trackName>Acoustic Guitar (Treble Clef)</trackName>
@@ -383,10 +383,10 @@
               <sigD>4</sigD>
               </TimeSig>
             <Tempo>
-              <tempo>1.66667</tempo>
+              <tempo>1.6666666666666667</tempo>
               <linked>
                 </linked>
-              <text><b></b><font face="ScoreText"/><b><font face="FreeSerif"/> = 100</b></text>
+              <text><sym>metNoteQuarterUp</sym> = 100</text>
               </Tempo>
             <Rest>
               <linked>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
+<museScore version="3.02">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
-      <Spatium>1.76389</Spatium>
+      <Spatium>1.74978</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -127,14 +127,12 @@
           </voice>
         </Measure>
       <Measure>
-        <measureRepeatCount>1</measureRepeatCount>
         <voice>
-          <MeasureRepeat>
-            <subtype>1</subtype>
+          <RepeatMeasure>
             <linkedMain/>
             <durationType>measure</durationType>
             <duration>4/4</duration>
-            </MeasureRepeat>
+            </RepeatMeasure>
           </voice>
         </Measure>
       </Staff>
@@ -144,7 +142,7 @@
       <Division>480</Division>
       <Style>
         <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
-        <Spatium>1.76389</Spatium>
+        <Spatium>1.74978</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -241,7 +239,7 @@
               <tempo>2</tempo>
               <linked>
                 </linked>
-              <text><b></b><font face="ScoreText"/><b><font face="FreeSerif"/> = 120</b></text>
+              <text><sym>metNoteQuarterUp</sym> = 120</text>
               </Tempo>
             <Chord>
               <linked>
@@ -298,15 +296,13 @@
             </voice>
           </Measure>
         <Measure>
-          <measureRepeatCount>1</measureRepeatCount>
           <voice>
-            <MeasureRepeat>
-              <subtype>1</subtype>
+            <RepeatMeasure>
               <linked>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
-              </MeasureRepeat>
+              </RepeatMeasure>
             </voice>
           </Measure>
         </Staff>
@@ -376,15 +372,13 @@
             </voice>
           </Measure>
         <Measure>
-          <measureRepeatCount>1</measureRepeatCount>
           <voice>
-            <MeasureRepeat>
-              <subtype>1</subtype>
+            <RepeatMeasure>
               <linked>
                 </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
-              </MeasureRepeat>
+              </RepeatMeasure>
             </voice>
           </Measure>
         </Staff>

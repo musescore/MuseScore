@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
+<museScore version="3.02">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
-      <Spatium>1.76389</Spatium>
+      <Spatium>1.74978</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -30,7 +30,7 @@
           </StaffType>
         </Staff>
       <trackName>Guitar</trackName>
-      <Instrument>
+      <Instrument id="guitar-nylon-treble-clef">
         <longName>Guitar</longName>
         <shortName>Guit.</shortName>
         <trackName>Guitar (Treble Clef)</trackName>
@@ -138,7 +138,7 @@ solo concert</text>
             <text>Free time</text>
             </StaffText>
           <Tempo>
-            <tempo>2.66667</tempo>
+            <tempo>2.6666666666666665</tempo>
             <linkedMain/>
             <text><sym>metNoteQuarterUp</sym> = 160</text>
             </Tempo>
@@ -734,7 +734,7 @@ solo concert</text>
       <Division>480</Division>
       <Style>
         <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
-        <Spatium>1.76389</Spatium>
+        <Spatium>1.74978</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -773,7 +773,7 @@ solo concert</text>
             </StaffType>
           </Staff>
         <trackName></trackName>
-        <Instrument>
+        <Instrument id="guitar-nylon-treble-clef">
           <longName>Guitar</longName>
           <shortName>Guit.</shortName>
           <trackName>Guitar (Treble Clef)</trackName>
@@ -892,10 +892,10 @@ solo concert</text>
               <text>Free time</text>
               </StaffText>
             <Tempo>
-              <tempo>2.66667</tempo>
+              <tempo>2.6666666666666665</tempo>
               <linked>
                 </linked>
-              <text><b></b><font face="ScoreText"/><b><font face="FreeSerif"/> = 160</b></text>
+              <text><sym>metNoteQuarterUp</sym> = 160</text>
               </Tempo>
             <Rest>
               <linked>
