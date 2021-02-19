@@ -111,13 +111,13 @@ Rectangle {
     Component {
         id: popupSample
 
-        Column {
+        Row {
             spacing: 12
 
             FlatButton {
                 id: popupDownButton
 
-                text: "Click to show popup downward"
+                text: "Show Popup downward"
 
                 onClicked: {
                     if (popupDown.opened) {
@@ -146,7 +146,7 @@ Rectangle {
             FlatButton {
                 id: popupUpButton
 
-                text: "Click to show popup upward"
+                text: "Show Popup upward"
 
                 onClicked: {
                     if (popupUp.opened) {
@@ -171,6 +171,83 @@ Rectangle {
                     text: "Hello, World!"
 
                     anchors.centerIn: parent
+                }
+            }
+        }
+    }
+
+    Component {
+        id: styledPopupViewComponent
+
+        Row {
+            spacing: 12
+
+            FlatButton {
+                text: "Show PopupView downward"
+
+                onClicked: {
+                    popupViewDown.toggleOpened()
+                }
+
+                StyledPopupView {
+                    id: popupViewDown
+
+                    Column {
+                        spacing: 12
+
+                        CheckBox {
+                            text: "Some checkbox"
+                        }
+
+                        FlatButton {
+                            text: "Some button"
+                        }
+
+                        FlatButton {
+                            text: "Accent button 1"
+                            accentButton: true
+                        }
+
+                        FlatButton {
+                            text: "Accent button 2"
+                            accentButton: true
+                        }
+                    }
+                }
+            }
+
+            FlatButton {
+                text: "Show PopupView upward"
+
+                onClicked: {
+                    popupViewUp.toggleOpened()
+                }
+
+                StyledPopupView {
+                    id: popupViewUp
+                    opensUpward: true
+
+                    Column {
+                        spacing: 12
+
+                        CheckBox {
+                            text: "Some checkbox"
+                        }
+
+                        FlatButton {
+                            text: "Some button"
+                        }
+
+                        FlatButton {
+                            text: "Accent button 1"
+                            accentButton: true
+                        }
+
+                        FlatButton {
+                            text: "Accent button 2"
+                            accentButton: true
+                        }
+                    }
                 }
             }
         }
@@ -532,44 +609,6 @@ Rectangle {
         id: searchFieldSample
 
         SearchField {}
-    }
-
-    Component {
-        id: styledPopupViewComponent
-
-        FlatButton {
-            text: "Show popup view"
-
-            onClicked: {
-                popupView.toggleOpened()
-            }
-
-            StyledPopupView {
-                id: popupView
-
-                Column {
-                    spacing: 12
-
-                    CheckBox {
-                        text: "Some checkbox"
-                    }
-
-                    FlatButton {
-                        text: "Some buton"
-                    }
-
-                    FlatButton {
-                        text: "Accent button 1"
-                        accentButton: true
-                    }
-
-                    FlatButton {
-                        text: "Accent button 2"
-                        accentButton: true
-                    }
-                }
-            }
-        }
     }
 
     Component {

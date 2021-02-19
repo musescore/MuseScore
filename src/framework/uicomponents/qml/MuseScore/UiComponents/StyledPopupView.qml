@@ -46,15 +46,16 @@ PopupView {
     }
 
     positionDisplacementX: parent.width / 2 - width / 2
-    positionDisplacementY: parent.height
+    positionDisplacementY: opensUpward ? -height : parent.height
 
     padding: 24
 
     backgroundItem: Item {
         anchors.fill: parent
+        anchors.topMargin: opensUpward ? 12 : 0
         anchors.leftMargin: 12
         anchors.rightMargin: 12
-        anchors.bottomMargin: 12
+        anchors.bottomMargin: opensUpward ? 0 : 12
 
         Item {
             id: mainBackground
@@ -94,6 +95,7 @@ PopupView {
             Rectangle {
                 color: fillColor
                 border { width: root.borderWidth; color: root.borderColor }
+                radius: 3
 
                 anchors {
                     top: opensUpward ? parent.top : arrow.bottom
