@@ -342,8 +342,7 @@ bool BBFile::read(const QString& name)
                     track->setOutChannel(channel);
                     _tracks.append(track);
                 }
-                Fraction tick
-                    = Fraction::fromTicks(a[idx] + (a[idx + 1] << 8) + (a[idx + 2] << 16) + (a[idx + 3] << 24));
+                Fraction tick = Fraction::fromTicks(a[idx] + (a[idx + 1] << 8) + (a[idx + 2] << 16) + (a[idx + 3] << 24));
                 tick -= Fraction::fromTicks(4 * bbDivision);
                 if (tick >= endTick) {
                     qDebug("event tick %d > %d", tick.ticks(), endTick.ticks());
@@ -387,7 +386,7 @@ bool BBFile::read(const QString& name)
 Score::FileError importBB(MasterScore* score, const QString& name)
 {
     BBFile bb;
-    if (!QFileInfo(name).exists()) {
+    if (!QFileInfo::exists(name)) {
         return Score::FileError::FILE_NOT_FOUND;
     }
     if (!bb.read(name)) {
