@@ -464,8 +464,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
             harmonicNote->setFret(harmonicFret);
             harmonicNote->setString(note->string());
             //TODO-ws			harmonicNote->setHarmonic(true);
-            harmonicNote->setPitch(note->staff()->part()->instrument()->stringData()->getPitch(note->string(),
-                                                                                               harmonicFret, nullptr,
+            harmonicNote->setPitch(note->staff()->part()->instrument()->stringData()->getPitch(note->string(), harmonicFret, nullptr,
                                                                                                Fraction(0,1)));
             harmonicNote->setTpcFromPitch();
         }
@@ -943,8 +942,7 @@ bool GuitarPro4::read(QFile* fp)
                 }
                 if (tuple) {
                     Tuplet* tuplet = tuplets[staffIdx];
-                    if ((tuplet == 0)
-                        || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
+                    if ((tuplet == 0) || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
                         tuplet = new Tuplet(score);
                         tuplet->setTick(tick);
                         tuplet->setTrack(cr->track());
@@ -1122,8 +1120,7 @@ bool GuitarPro4::read(QFile* fp)
                         for (auto e : nt->el()) {
                             if (e->isChordLine()) {
                                 auto cl = toChordLine(e);
-                                if (cl->chordLineType() == ChordLineType::PLOP
-                                    || cl->chordLineType() == ChordLineType::SCOOP) {
+                                if (cl->chordLineType() == ChordLineType::PLOP || cl->chordLineType() == ChordLineType::SCOOP) {
                                     br = true;
                                     break;
                                 }
