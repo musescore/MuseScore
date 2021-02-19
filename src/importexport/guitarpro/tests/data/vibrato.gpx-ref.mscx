@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
+<museScore version="3.02">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
-      <Spatium>1.76389</Spatium>
+      <Spatium>1.74978</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -30,7 +30,7 @@
           </StaffType>
         </Staff>
       <trackName>Electric Guitar</trackName>
-      <Instrument>
+      <Instrument id="electric-guitar-treble-clef">
         <longName>Electric Guitar</longName>
         <shortName>El. Guit.</shortName>
         <trackName>Electric Guitar (Treble Clef)</trackName>
@@ -314,7 +314,7 @@
       <Division>480</Division>
       <Style>
         <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
-        <Spatium>1.76389</Spatium>
+        <Spatium>1.74978</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -353,7 +353,7 @@
             </StaffType>
           </Staff>
         <trackName></trackName>
-        <Instrument>
+        <Instrument id="electric-guitar-treble-clef">
           <longName>Electric Guitar</longName>
           <shortName>El. Guit.</shortName>
           <trackName>Electric Guitar (Treble Clef)</trackName>
@@ -460,7 +460,7 @@
               <tempo>2</tempo>
               <linked>
                 </linked>
-              <text><b></b><font face="ScoreText"/><b><font face="FreeSerif"/> = 120</b></text>
+              <text><sym>metNoteQuarterUp</sym> = 120</text>
               </Tempo>
             <Spanner type="Vibrato">
               <Vibrato>
