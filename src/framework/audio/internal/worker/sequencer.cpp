@@ -71,6 +71,11 @@ void Sequencer::pause()
 void Sequencer::stop()
 {
     ONLY_AUDIO_WORKER_THREAD;
+
+    if (m_status == STOPED) {
+        return;
+    }
+
     m_nextStatus = STOPED;
     rewind();
 }

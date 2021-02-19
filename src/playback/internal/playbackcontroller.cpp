@@ -172,6 +172,8 @@ INotationSelectionPtr PlaybackController::selection() const
 
 void PlaybackController::onNotationChanged()
 {
+    sequencer()->stop();
+
     if (m_notation) {
         m_notation->playback()->playPositionTickChanged().resetOnReceive(this);
     }
