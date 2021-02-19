@@ -225,9 +225,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                         Breath* b = new Breath(score);
                         b->setTrack(track);
                         b->setSymId(SymId::caesura);
-                        Segment* seg
-                            = s->measure()->getSegment(SegmentType::Breath,
-                                                       s->tick() + (cr ? cr->actualTicks() : Fraction(0,1)));
+                        Segment* seg = s->measure()->getSegment(SegmentType::Breath, s->tick() + (cr ? cr->actualTicks() : Fraction(0,1)));
                         seg->add(b);
                     }
                     break;
