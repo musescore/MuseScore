@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
+<museScore version="3.02">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
-      <Spatium>1.76389</Spatium>
+      <Spatium>1.74978</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -82,7 +82,7 @@ Innuendo</text>
             <sigD>8</sigD>
             </TimeSig>
           <Tempo>
-            <tempo>1.51667</tempo>
+            <tempo>1.5166666666666666</tempo>
             <linkedMain/>
             <text><sym>metNoteQuarterUp</sym> = 91</text>
             </Tempo>
@@ -175,7 +175,7 @@ Innuendo</text>
       <Division>480</Division>
       <Style>
         <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
-        <Spatium>1.76389</Spatium>
+        <Spatium>1.74978</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -276,10 +276,10 @@ Innuendo</text>
               <sigD>8</sigD>
               </TimeSig>
             <Tempo>
-              <tempo>1.51667</tempo>
+              <tempo>1.5166666666666666</tempo>
               <linked>
                 </linked>
-              <text><b></b><font face="ScoreText"/><b><font face="FreeSerif"/> = 91</b></text>
+              <text><sym>metNoteQuarterUp</sym> = 91</text>
               </Tempo>
             <Rest>
               <linked>

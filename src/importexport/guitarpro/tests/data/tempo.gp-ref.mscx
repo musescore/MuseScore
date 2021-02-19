@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
+<museScore version="3.02">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
-      <Spatium>1.76389</Spatium>
+      <Spatium>1.74978</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -76,7 +76,7 @@
             <linkedMain/>
             </Dynamic>
           <Tempo>
-            <tempo>4.16667</tempo>
+            <tempo>4.166666666666667</tempo>
             <linkedMain/>
             <text><sym>metNoteQuarterUp</sym> = 250</text>
             </Tempo>
@@ -177,7 +177,7 @@
       <Measure>
         <voice>
           <Tempo>
-            <tempo>1.33333</tempo>
+            <tempo>1.3333333333333333</tempo>
             <linkedMain/>
             <text><sym>metNoteQuarterUp</sym> = 80</text>
             </Tempo>
@@ -243,7 +243,7 @@
       <Division>480</Division>
       <Style>
         <ArpeggioHiddenInStdIfTab>1</ArpeggioHiddenInStdIfTab>
-        <Spatium>1.76389</Spatium>
+        <Spatium>1.74978</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -337,10 +337,10 @@
                 </linked>
               </Dynamic>
             <Tempo>
-              <tempo>4.16667</tempo>
+              <tempo>4.166666666666667</tempo>
               <linked>
                 </linked>
-              <text><b></b><font face="ScoreText"/><b><font face="FreeSerif"/> = 250</b></text>
+              <text><sym>metNoteQuarterUp</sym> = 250</text>
               </Tempo>
             <Chord>
               <linked>
@@ -455,10 +455,10 @@
         <Measure>
           <voice>
             <Tempo>
-              <tempo>1.33333</tempo>
+              <tempo>1.3333333333333333</tempo>
               <linked>
                 </linked>
-              <text><b></b><font face="ScoreText"/><b><font face="FreeSerif"/> = 80</b></text>
+              <text><sym>metNoteQuarterUp</sym> = 80</text>
               </Tempo>
             <Chord>
               <linked>
