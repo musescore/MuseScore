@@ -11,6 +11,9 @@ function main() {
     install )
       installResources "$2" "$3" || errorMsg "Unable to install to '${prefix}'"
       ;;
+    update|upgrade )
+      update "$2" "$3"
+      ;;
     uninstall|remove )
       removeResources "$2" "$3" || errorMsg "Unable to remove from '${prefix}'"
       ;;
@@ -40,6 +43,7 @@ Special options for MuseScore Portable AppImage:
   -h, --help                    Displays this help and the normal help (below).
   man, manual, manpage          Displays MuseScore's man page.
   install [-i] [PREFIX]         Installs resources for desktop integration.
+  update, upgrade [-i] [PREFIX] Update MuseScore to the latest version.
   remove, uninstall [PREFIX]    Removes resources from desktop environment.
   check-depends [exes-only]     Displays system information for developers.
 
@@ -123,12 +127,13 @@ cat <<EOF
 Step 2 of 3.
 MuseScore is at: ${APPIMAGE}
 EOF
-  if [ ! "$interactive" ]; then
-    echo "Moving it to 'PREFIX/bin'."
-    mkdir -p "${bin}" && cp -r "${APPIMAGE}" -t "${bin}/" \
-    && APPIMAGE="${bin}/$(basename "${APPIMAGE}")" \
-    || errorMsg "Couldn't move to '${bin}'"
-  else
+  name="$(basename "${APPIMAGE}")"
+  dest="${bin}/${name}"
+  if [ ! "$interactive" ] && [ ! "${APPIMAGE}" -ef "${dest}" ]; then
+    echo "Moving AppImage to 'PREFIX/bin'."
+    mkdir -p "${bin}"
+    mv "${APPIMAGE}" "${dest}" && APPIMAGE="${dest}" || errorMsg "Couldn't move to '${bin}'"
+  elif [ ! "${APPIMAGE}" -ef "${dest}" ]; then
 cat <<EOF
 You can leave it there, but it is recommended that you move it to 'PREFIX/bin'.
 Options: move (m) or copy (c) MuseScore, do nothing (n), or show help (h)?
@@ -140,10 +145,16 @@ EOF
         N|n )
           break
           ;;
-        M|C|m|c )
-          mkdir -p "${bin}" && cp -r "${APPIMAGE}" -t "${bin}/" \
-          && APPIMAGE="${bin}/$(basename "${APPIMAGE}")" \
-          || errorMsg "Couldn't move to '${bin}'"
+        M|m )
+          echo "Moving AppImage to 'PREFIX/bin'."
+          mkdir -p "${bin}"
+          mv "${APPIMAGE}" "${dest}" && APPIMAGE="${dest}" || errorMsg "Couldn't move to '${bin}'"
+          break
+          ;;
+        C|c )
+          echo "Copying AppImage to 'PREFIX/bin'."
+          mkdir -p "${bin}"
+          cp "${APPIMAGE}" "${dest}" && APPIMAGE="${dest}" || errorMsg "Couldn't copy to '${bin}'"
           break
           ;;
         H|h )
@@ -154,7 +165,7 @@ Moving or copying MuseScore to 'PREFIX/bin' has these benefits:
     available to the same user(s) as the resources were installed for.)
 
  2) If 'PREFIX/bin' is in your PATH environment variable then you can launch
-    MuseScore by typing '$(basename ${APPIMAGE})' instead of the full path.
+    MuseScore by typing '${name}' instead of the full path.
     The default locations for PREFIX are in PATH on most systems.
 
 You should move rather than copy unless you want to keep another copy at the
@@ -182,10 +193,10 @@ EOF
   [ "$interactive" ] && printf "Create symlinks 'mscore@MSCORE_INSTALL_SUFFIX@' and 'musescore@MSCORE_INSTALL_SUFFIX@' [Y/n]?"
   if [ ! "$interactive" ] || readYes ; then
     cd bin
-    ln -s "$(basename ${APPIMAGE})" mscore@MSCORE_INSTALL_SUFFIX@
-    ln -s "$(basename ${APPIMAGE})" musescore@MSCORE_INSTALL_SUFFIX@
+    ln -sf "${name}" "mscore@MSCORE_INSTALL_SUFFIX@"
+    ln -sf "${name}" "musescore@MSCORE_INSTALL_SUFFIX@"
   fi
-  if [ ! "$(which "$(basename "${APPIMAGE}")")" ]; then
+  if ! which "${name}" >/dev/null; then
 cat <<EOF
 INFORMATION: MuseScore is not in PATH. If you want to run MuseScore from
 the command line you will have to type the full file path, like this:
@@ -197,12 +208,68 @@ EOF
   fi
 }
 
+function update() {
+  local interactive="" install=true
+  if [ "$1" == "-i" ]; then
+    interactive="$1"
+    prefix="$2"
+  elif [ "$2" == "-i" ]; then
+    interactive="$2"
+    prefix="$1"
+  fi
+  checkUpdate
+  if [ "${interactive}" ]; then
+    echo -n "Apply the update [Y/n]?"
+    readYes || exit 0
+  fi
+  doUpdate
+  if "${NEW_APPIMAGE}" --version; then
+    echo "New version appears to work properly."
+  else
+    echo "Error: Could not run new version"
+    exit 1
+  fi
+  echo "Removing old version..." # always interactive
+  removeResources "${prefix}"
+  if [ "${interactive}" ]; then
+    echo -n "Install the new version [Y/n]?"
+    readYes || install=""
+  fi
+  if [ "${install}" ]; then
+    "${NEW_APPIMAGE}" install "${interactive}" "${prefix}"
+  fi
+}
+
+function checkUpdate() {
+  echo "Checking for updates..."
+  "${APPDIR}/bin/appimageupdatetool" --check-for-update -- "${APPIMAGE}"
+  local -r result=$?
+  case ${result} in
+    0) echo "No update is available.";;
+    1) echo "An update is available."; return 0;; # don't exit
+    *) echo "Error: Unable to check for updates (status: ${result}).";;
+  esac
+  exit ${result} # don't return
+}
+
+function doUpdate() {
+  echo "Updating to the latest version..."
+  local -r output="$(stdouterr "${APPDIR}/bin/appimageupdatetool" -- "${APPIMAGE}")"
+  local -r result=$?
+  NEW_APPIMAGE="$(sed -n "s|^Update successful. New file created: ||p" <<<"${output}")"
+  case ${result} in
+    0) return 0;; # don't exit
+    *) echo "Error: Unable to apply update (status: ${result}).";;
+  esac
+  exit ${result} # don't return
+}
+
 function removeResources() {
   [ "$1" == "-i" ] && shift # ignore option. Remove is always interactive
   if [ "$1" != "" ]; then
     # User specified a directory
     prefix="$1"
-    echo -n "Remove resources from ${prefix} [Y/n]?"
+    echo -n "Remove MuseScore resources from ${prefix} [Y/n]?"
   elif [ "${EUID}" == "0" ]; then
     prefix=/usr/local
     echo -n "Running as root. Remove MuseScore resources from '$prefix' for all users [Y/n]?"
@@ -212,14 +279,15 @@ function removeResources() {
   fi
   readYes || return 0
   cd "$prefix" && <"${APPDIR}/install_manifest.txt" xargs rm || return 1
-  rm "$(dirname "${APPIMAGE}")/mscore@MSCORE_INSTALL_SUFFIX@"
-  rm "$(dirname "${APPIMAGE}")/musescore@MSCORE_INSTALL_SUFFIX@"
+  actual_location="$(readlink -f "${APPIMAGE}")" # get before deleting symlinks
+  rm "bin/mscore@MSCORE_INSTALL_SUFFIX@"
+  rm "bin/musescore@MSCORE_INSTALL_SUFFIX@"
   <"${APPDIR}/install_manifest.txt" xargs "${APPDIR}/bin/rm-empty-dirs"
-  updateCache $prefix
-  echo -ne "Resources removed from ${PWD}.\nRemove MuseScore itself (delete ${APPIMAGE}) [Y/n]?"
-  readYes || { echo -e "MuseScore remains at ${APPIMAGE}.\nYou may delete it yourself or install again at any time." && return 0 ; }
-  rm "${APPIMAGE}" && echo "Successfully removed MuseScore from $prefix"
-  rmdir "$(dirname "${APPIMAGE}")"
+  updateCache "${prefix}"
+  echo -ne "Resources removed from ${PWD}.\nRemove MuseScore itself (delete ${actual_location}) [Y/n]?"
+  readYes || { echo -e "MuseScore remains at ${actual_location}.\nYou may delete it yourself or install again at any time." && return 0 ; }
+  rm "${actual_location}" && echo "Successfully removed MuseScore from $prefix"
+  "${APPDIR}/bin/rm-empty-dirs" bin "${APPIMAGE}" "${actual_location}"
   return 0
 }
 
@@ -309,6 +377,13 @@ function updateCache() {
   gtk-update-icon-cache -f -t "$1/share/icons/hicolor" ; ret=$(($ret+$?))
   update-desktop-database "$1/share/applications"; ret=$(($ret+$?))
   return $ret
+}
+
+function stdouterr() {
+  # Run command & pipe output to both stdout and stderr, enabling you to
+  # capture the output while simultaneously printing it in the terminal.
+  set -o pipefail # preserve command exit status
+  "$@" 2>&1 | tee >(cat >&2) # duplicate output on stdout and stderr
 }
 
 function errorMsg() {

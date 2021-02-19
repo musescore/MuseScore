@@ -11,6 +11,7 @@ ARTIFACTS_DIR=build.artifacts
 TELEMETRY_TRACK_ID=""
 CRASH_REPORT_URL=""
 BUILD_MODE=""
+SUFFIX="" # appended to `mscore` command name to avoid conflicts (e.g. `mscore-dev`)
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
@@ -29,10 +30,17 @@ if [ -z "$BUILD_MODE" ]; then BUILD_MODE=$(cat $ARTIFACTS_DIR/env/build_mode.env
 
 MUSESCORE_BUILD_CONFIG=dev
 BUILD_UNIT_TESTS=OFF
-if [ "$BUILD_MODE" == "devel_build" ]; then MUSESCORE_BUILD_CONFIG=dev; fi
-if [ "$BUILD_MODE" == "nightly_build" ]; then MUSESCORE_BUILD_CONFIG=dev; fi
-if [ "$BUILD_MODE" == "testing_build" ]; then MUSESCORE_BUILD_CONFIG=testing; fi
-if [ "$BUILD_MODE" == "stable_build" ]; then MUSESCORE_BUILD_CONFIG=release; fi
+case "${BUILD_MODE}" in
+"devel_build")   MUSESCORE_BUILD_CONFIG=dev; SUFFIX=-dev;;
+"nightly_build") MUSESCORE_BUILD_CONFIG=dev; SUFFIX=-nightly;;
+"testing_build") MUSESCORE_BUILD_CONFIG=testing; SUFFIX=-testing;;
+"stable_build")  MUSESCORE_BUILD_CONFIG=release; SUFFIX="";;
+"mtests")        MUSESCORE_BUILD_CONFIG=dev; BUILDTYPE=installdebug; OPTIONS="USE_SYSTEM_FREETYPE=ON UPDATE_CACHE=FALSE PREFIX=$ARTIFACTS_DIR/software";;
+esac
+
+if [ "${BUILDTYPE}" == "portable" ]; then
+  SUFFIX="-portable${SUFFIX}" # special value needed for CMakeLists.txt
+fi
 
 echo "MUSESCORE_BUILD_CONFIG: $MUSESCORE_BUILD_CONFIG"
 echo "BUILD_NUMBER: $BUILD_NUMBER"
@@ -46,7 +54,7 @@ cat ./../musescore_environment.sh
 source ./../musescore_environment.sh
 
 echo " "
-${CXX} --version 
+${CXX} --version
 ${CC} --version
 echo " "
 cmake --version
@@ -65,6 +73,7 @@ MUSESCORE_REVISION=$(git rev-parse --short=7 HEAD)
 
 # Build portable AppImage
 MUSESCORE_BUILD_CONFIG=$MUSESCORE_BUILD_CONFIG \
+MUSESCORE_INSTALL_SUFFIX=$SUFFIX \
 MUSESCORE_BUILD_NUMBER=$BUILD_NUMBER \
 MUSESCORE_REVISION=$MUSESCORE_REVISION \
 MUSESCORE_TELEMETRY_ID=$TELEMETRY_TRACK_ID \
