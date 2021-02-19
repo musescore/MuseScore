@@ -119,8 +119,7 @@ ReducedFraction findMaxChordLength(const std::multimap<ReducedFraction, MidiChor
 
 std::vector<std::multimap<ReducedFraction, MidiChord>::const_iterator>
 findChordsForTimeRange(
-    int voice,const ReducedFraction& onTime,const ReducedFraction& offTime,const std::multimap<ReducedFraction,
-                                                                                               MidiChord>& chords,
+    int voice,const ReducedFraction& onTime,const ReducedFraction& offTime,const std::multimap<ReducedFraction, MidiChord>& chords,
     const ReducedFraction& maxChordLength);
 
 void setBarIndexes(
