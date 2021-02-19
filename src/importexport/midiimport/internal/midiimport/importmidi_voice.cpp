@@ -277,8 +277,7 @@ std::multimap<ReducedFraction,
 findInsertedTuplet(const ReducedFraction& onTime,
                    int voice,
                    const std::multimap<ReducedFraction,
-                                       std::multimap<ReducedFraction,
-                                                     MidiTuplet::TupletData>::iterator>& insertedTuplets)
+                                       std::multimap<ReducedFraction, MidiTuplet::TupletData>::iterator>& insertedTuplets)
 {
     const auto range = insertedTuplets.equal_range(onTime);
     for (auto it = range.first; it != range.second; ++it) {

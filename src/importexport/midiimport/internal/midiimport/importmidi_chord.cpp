@@ -391,7 +391,7 @@ void collectChords(
                 }
 
                 if (!hasNotesWithEqualPitch(chordAddTo->second, it->second)) {
-                    for (const auto& note: it->second.notes) {
+                    for (const auto& note: qAsConst(it->second.notes)) {
                         chordAddTo->second.notes.push_back(note);
                     }
                     if (maxNoteOffTime > maxOffTime) {
