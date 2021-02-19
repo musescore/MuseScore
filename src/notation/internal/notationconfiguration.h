@@ -25,12 +25,14 @@
 #include "ui/iuiconfiguration.h"
 #include "iglobalconfiguration.h"
 #include "settings.h"
+#include "iworkspacesettings.h"
 
 namespace mu::notation {
 class NotationConfiguration : public INotationConfiguration, public async::Asyncable
 {
     INJECT(notation, ui::IUiConfiguration, uiConfiguration)
     INJECT(notation, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(notation, framework::IWorkspaceSettings, workspaceSettings)
 
 public:
     void init();
@@ -118,9 +120,14 @@ private:
     async::Channel<int> m_currentZoomChanged;
     async::Channel<bool> m_navigatorVisibleChanged;
     async::Channel<framework::Orientation> m_canvasOrientationChanged;
+
+    bool m_isPalettePanelVisible = false;
     async::Channel<bool> m_palettePanelVisibleChanged;
+    bool m_isInstrumentsPanelVisible = false;
     async::Channel<bool> m_instrumentsPanelVisibleChanged;
+    bool m_isInspectorPanelVisible = false;
     async::Channel<bool> m_inspectorPanelVisibleChanged;
+    bool m_isStatusBarPanelVisible = false;
     async::Channel<bool> m_statusBarVisibleChanged;
 };
 }

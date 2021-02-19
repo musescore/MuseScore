@@ -95,8 +95,8 @@ private:
 
     uicomponents::MenuItem makeMenu(const std::string& title, const uicomponents::MenuItemList& actions, bool enabled = true,
                                     const actions::ActionCode& menuActionCode = "");
-    uicomponents::MenuItem makeAction(const actions::ActionCode& actionCode, bool enabled = true, bool checked = false,
-                                      const std::string& section = "") const;
+    uicomponents::MenuItem makeAction(const actions::ActionCode& actionCode, bool enabled = true) const;
+    uicomponents::MenuItem makeAction(const actions::ActionCode& actionCode, bool enabled, bool checked) const;
     uicomponents::MenuItem makeSeparator() const;
 
     bool needSaveScore() const;

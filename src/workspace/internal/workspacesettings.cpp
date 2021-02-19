@@ -21,11 +21,16 @@
 #include "log.h"
 
 using namespace mu::workspace;
+using namespace mu::async;
 
 void WorkspaceSettings::init()
 {
     manager()->currentWorkspace().ch.onReceive(this, [this](const IWorkspacePtr) {
         m_valuesChanged.notify();
+
+        for (auto it = m_channels.begin(); it != m_channels.end(); ++it) {
+            it->second.send(value(it->first));
+        }
     });
 }
 
@@ -43,42 +48,53 @@ bool WorkspaceSettings::isManage(WorkspaceTag tag) const
     return containsTag(currentWorkspace->tags(), tag);
 }
 
-mu::Val WorkspaceSettings::value(WorkspaceTag tag, const std::string& key) const
+mu::Val WorkspaceSettings::value(const Key& key) const
 {
     if (!currentWorkspace()) {
         return Val();
     }
 
-    AbstractDataPtr abstractData = currentWorkspace()->data(tag);
+    AbstractDataPtr abstractData = currentWorkspace()->data(key.tag);
     SettingsDataPtr settingsData = std::dynamic_pointer_cast<SettingsData>(abstractData);
-    if (settingsData && settingsData->values.find(key) != settingsData->values.end()) {
-        return settingsData->values[key];
+    if (settingsData && settingsData->values.find(key.key) != settingsData->values.end()) {
+        return settingsData->values[key.key];
     }
 
     return Val();
 }
 
-void WorkspaceSettings::setValue(WorkspaceTag tag, const std::string& key, const mu::Val& value) const
+void WorkspaceSettings::setValue(const Key& key, const mu::Val& value) const
 {
     if (!currentWorkspace()) {
         return;
     }
 
-    AbstractDataPtr abstractData = currentWorkspace()->data(tag);
+    AbstractDataPtr abstractData = currentWorkspace()->data(key.tag);
     SettingsDataPtr settingsData = std::dynamic_pointer_cast<SettingsData>(abstractData);
 
     if (settingsData) {
-        settingsData->values[key] = value;
+        settingsData->values[key.key] = value;
     } else {
         settingsData = std::make_shared<SettingsData>();
-        settingsData->tag = tag;
-        settingsData->values.insert({ key, value });
+        settingsData->tag = key.tag;
+        settingsData->values.insert({ key.key, value });
     }
 
     currentWorkspace()->addData(settingsData);
+
+    auto it = m_channels.find(key);
+    if (it != m_channels.end()) {
+        Channel<Val> channel = it->second;
+        channel.send(value);
+    }
 }
 
-mu::async::Notification WorkspaceSettings::valuesChanged() const
+Channel<mu::Val> WorkspaceSettings::valueChanged(const Key& key) const
+{
+    return m_channels[key];
+}
+
+Notification WorkspaceSettings::valuesChanged() const
 {
     return m_valuesChanged;
 }

@@ -40,8 +40,10 @@ DockToolBar::DockToolBar(QQuickItem* parent)
     m_tool.bar->setAllowedAreas(Qt::AllToolBarAreas);
     m_tool.bar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    connect(this, &QQuickItem::visibleChanged, this, [this]() {
-        m_tool.bar->setVisible(isVisible());
+    connect(this, &DockToolBar::visibleEdited, this, [this]() {
+        if (m_tool.bar->isVisible() != visible()) {
+            m_tool.bar->setVisible(visible());
+        }
     });
 
     connect(m_tool.bar, &QToolBar::orientationChanged, [this](int orientation) {
@@ -106,7 +108,9 @@ void DockToolBar::resize(const QSize& size)
     } else {
         newSize.setHeight(newSize.height() - TOOLBAR_GRIP_WIDTH);
     }
-    view()->resize(newSize);
+    if (view()) {
+        view()->resize(newSize);
+    }
 }
 
 void DockToolBar::setFloating(bool floating)

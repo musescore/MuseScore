@@ -19,6 +19,8 @@
 
 #include "dockpanel.h"
 
+#include "log.h"
+
 using namespace mu::dock;
 
 static const QString PANEL_QSS = QString("QDockWidget { border: 1 solid %2; color: transparent; }"
@@ -31,11 +33,9 @@ DockPanel::DockPanel(QQuickItem* parent)
     m_dock.panel->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     m_dock.panel->setFeatures(QDockWidget::DockWidgetMovable);
 
-    connect(this, &DockPanel::visibleChanged, this, [this]() {
-        if (isVisible()) {
-            m_dock.panel->show();
-        } else {
-            m_dock.panel->hide();
+    connect(this, &DockPanel::visibleEdited, this, [this](bool visible) {
+        if (m_dock.panel->isVisible() != visible) {
+            m_dock.panel->setVisible(visible);
         }
     });
 
@@ -159,6 +159,11 @@ bool DockPanel::closable() const
     return featureEnabled(QDockWidget::DockWidgetClosable);
 }
 
+bool DockPanel::visible() const
+{
+    return m_dock.panel ? m_dock.panel->isVisible() : false;
+}
+
 void DockPanel::setClosable(bool closable)
 {
     if (closable == this->closable()) {
@@ -168,6 +173,16 @@ void DockPanel::setClosable(bool closable)
     setFeature(QDockWidget::DockWidgetClosable, closable);
 
     emit closableChanged(closable);
+}
+
+void DockPanel::setVisible(bool visible)
+{
+    if (m_visible == visible) {
+        return;
+    }
+
+    m_visible = visible;
+    emit visibleEdited(m_visible);
 }
 
 void DockPanel::setFeature(QDockWidget::DockWidgetFeature feature, bool value)
