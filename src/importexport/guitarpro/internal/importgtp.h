@@ -244,7 +244,7 @@ protected:
     void applyBeatEffects(Chord*, int beatEffects);
     void readTremoloBar(int track, Segment*);
     void readChord(Segment* seg, int track, int numStrings, QString name, bool gpHeader);
-    void restsForEmptyBeats(Segment* seg, Measure* measure, ChordRest* cr, Fraction& l, int track,const Fraction& tick);
+    void restsForEmptyBeats(Segment* seg, Measure* measure, ChordRest* cr, Fraction& l, int track, const Fraction& tick);
     void createSlur(bool hasSlur, int staffIdx, ChordRest* cr);
     void createOttava(bool hasOttava, int track, ChordRest* cr, QString value);
     void createSlide(int slide, ChordRest* cr, int staffIdx, Note* note = nullptr);
@@ -365,7 +365,7 @@ class GuitarPro5 : public GuitarPro
     int readArtificialHarmonic();
     bool readTracks();
     void readMeasures(int startingTempo);
-    Fraction readBeat(const Fraction& tick, int voice, Measure* measure, int staffIdx, Tuplet** tuplets,bool mixChange);
+    Fraction readBeat(const Fraction& tick, int voice, Measure* measure, int staffIdx, Tuplet** tuplets, bool mixChange);
     bool readNoteEffects(Note*);
 
 public:
@@ -414,7 +414,7 @@ class GuitarPro6 : public GuitarPro
     int findNumMeasures(GPPartInfo* partInfo);
     void readMasterTracks(QDomNode* masterTrack);
     void readDrumNote(Note* note, int element, int variation);
-    Fraction readBeats(QString beats, GPPartInfo* partInfo, Measure* measure, const Fraction& startTick, int staffIdx,int voiceNum,
+    Fraction readBeats(QString beats, GPPartInfo* partInfo, Measure* measure, const Fraction& startTick, int staffIdx, int voiceNum,
                        Tuplet* tuplets[], int measureCounter);
     void readBars(QDomNode* barList, Measure* measure, ClefType oldClefId[], GPPartInfo* partInfo, int measureCounter);
     virtual void readTracks(QDomNode* tracks);
