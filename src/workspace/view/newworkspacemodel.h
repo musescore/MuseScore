@@ -35,10 +35,10 @@ class NewWorkspaceModel : public QObject
     INJECT(workspace, IWorkspaceManager, workspaceManager)
 
     Q_PROPERTY(QString workspaceName READ workspaceName WRITE setWorkspaceName NOTIFY dataChanged)
-    Q_PROPERTY(bool importUiPreferences READ importUiPreferences WRITE setImportUiPreferences NOTIFY dataChanged)
-    Q_PROPERTY(bool importUiArrangement READ importUiArrangement WRITE setImportUiArrangement NOTIFY dataChanged)
-    Q_PROPERTY(bool importPalettes READ importPalettes WRITE setImportPalettes NOTIFY dataChanged)
-    Q_PROPERTY(bool importToolbarCustomization READ importToolbarCustomization WRITE setImportToolbarCustomization NOTIFY dataChanged)
+    Q_PROPERTY(bool useUiPreferences READ useUiPreferences WRITE setUseUiPreferences NOTIFY dataChanged)
+    Q_PROPERTY(bool useUiArrangement READ useUiArrangement WRITE setUseUiArrangement NOTIFY dataChanged)
+    Q_PROPERTY(bool usePalettes READ usePalettes WRITE setUsePalettes NOTIFY dataChanged)
+    Q_PROPERTY(bool useToolbarCustomization READ useToolbarCustomization WRITE setUseToolbarCustomization NOTIFY dataChanged)
     Q_PROPERTY(bool canCreateWorkspace READ canCreateWorkspace NOTIFY canCreateWorkspaceChanged)
 
 public:
@@ -48,29 +48,31 @@ public:
     Q_INVOKABLE QVariant createWorkspace();
 
     QString workspaceName() const;
-    bool importUiPreferences() const;
-    bool importUiArrangement() const;
-    bool importPalettes() const;
-    bool importToolbarCustomization() const;
+    bool useUiPreferences() const;
+    bool useUiArrangement() const;
+    bool usePalettes() const;
+    bool useToolbarCustomization() const;
     bool canCreateWorkspace() const;
 
 public slots:
     void setWorkspaceName(const QString& name);
-    void setImportUiPreferences(bool needImport);
-    void setImportUiArrangement(bool needImport);
-    void setImportPalettes(bool needImport);
-    void setImportToolbarCustomization(bool needImport);
+    void setUseUiPreferences(bool needUse);
+    void setUseUiArrangement(bool needUse);
+    void setUsePalettes(bool needUse);
+    void setUseToolbarCustomization(bool needUse);
 
 signals:
     void dataChanged();
     void canCreateWorkspaceChanged();
 
 private:
+    void addStubData(IWorkspacePtr workspace, WorkspaceTag tag) const;
+
     QString m_workspaceName;
-    bool m_importUiPreferences = false;
-    bool m_importUiArrangement = false;
-    bool m_importPalettes = false;
-    bool m_importToolbarCustomization = false;
+    bool m_useUiPreferences = false;
+    bool m_useUiArrangement = false;
+    bool m_usePalettes = false;
+    bool m_useToolbarCustomization = false;
 };
 }
 

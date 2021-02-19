@@ -18,6 +18,8 @@ static const Settings::Key UI_ICONS_FONT_FAMILY_KEY("ui", "ui/theme/iconsFontFam
 static const Settings::Key UI_MUSICAL_FONT_FAMILY_KEY("ui", "ui/theme/musicalFontFamily");
 static const Settings::Key UI_MUSICAL_FONT_SIZE_KEY("ui", "ui/theme/musicalFontSize");
 
+static const std::string STATES_PATH("ui/states");
+
 void UiConfiguration::init()
 {
     settings()->setDefaultValue(UI_THEME_TYPE_KEY, Val(static_cast<int>(ThemeType::LIGHT_THEME)));
@@ -55,6 +57,10 @@ void UiConfiguration::init()
 
     settings()->valueChanged(UI_MUSICAL_FONT_SIZE_KEY).onReceive(nullptr, [this](const Val&) {
         m_musicalFontChanged.notify();
+    });
+
+    workspaceSettings()->valuesChanged().onNotify(nullptr, [this]() {
+        m_pageStateChanged.notify();
     });
 }
 
@@ -172,4 +178,55 @@ float UiConfiguration::physicalDotsPerInch() const
         return mainWindow()->qMainWindow()->screen()->physicalDotsPerInch();
     }
     return 100;
+}
+
+QByteArray UiConfiguration::pageState(const std::string& pageName) const
+{
+    TRACEFUNC;
+    std::string key = STATES_PATH + "/" + pageName;
+    std::string stateString;
+
+    if (workspaceSettings()->isManage(workspace::WorkspaceTag::UiArrangement)) {
+        stateString = workspaceSettings()->value(workspace::WorkspaceTag::UiArrangement, key).toString();
+    } else {
+        Settings::Key settingsKey{ "global", key };
+        stateString = settings()->value(settingsKey).toString();
+    }
+
+    return stringToByteArray(stateString);
+}
+
+void UiConfiguration::setPageState(const std::string& pageName, const QByteArray& state)
+{
+    TRACEFUNC;
+    std::string key = STATES_PATH + "/" + pageName;
+    Val value = Val(byteArrayToString(state));
+
+    if (workspaceSettings()->isManage(workspace::WorkspaceTag::UiArrangement)) {
+        workspaceSettings()->setValue(workspace::WorkspaceTag::UiArrangement, key, value);
+        return;
+    }
+
+    Settings::Key settingsKey{ "global", key };
+    settings()->setValue(settingsKey, value);
+}
+
+Notification UiConfiguration::pageStateChanged() const
+{
+    return m_pageStateChanged;
+}
+
+QByteArray UiConfiguration::stringToByteArray(const std::string& string) const
+{
+    QString qString = QString::fromStdString(string);
+    QByteArray byteArray64(qString.toUtf8());
+    QByteArray byteArray = QByteArray::fromBase64(byteArray64);
+
+    return byteArray;
+}
+
+std::string UiConfiguration::byteArrayToString(const QByteArray& byteArray) const
+{
+    QByteArray byteArray64 = byteArray.toBase64();
+    return byteArray64.toStdString();
 }

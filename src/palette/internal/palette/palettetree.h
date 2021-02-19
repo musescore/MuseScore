@@ -27,8 +27,8 @@
 #include "libmscore/xml.h"
 
 #include "modularity/ioc.h"
-#include "ipaletteadapter.h"
-#include "ipaletteconfiguration.h"
+#include "../../ipaletteadapter.h"
+#include "../../ipaletteconfiguration.h"
 #include "async/asyncable.h"
 #include "iinteractive.h"
 

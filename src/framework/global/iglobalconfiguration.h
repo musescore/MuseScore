@@ -22,8 +22,7 @@
 #include "modularity/imoduleexport.h"
 #include "io/path.h"
 
-namespace mu {
-namespace framework {
+namespace mu::framework {
 class IGlobalConfiguration : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IGlobalConfiguration)
@@ -40,7 +39,6 @@ public:
     virtual bool useFactorySettings() const = 0;
     virtual bool enableExperimental() const = 0;
 };
-}
 }
 
 #endif // MU_FRAMEWORK_IGLOBALCONFIGURATION_H

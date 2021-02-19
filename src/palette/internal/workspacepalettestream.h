@@ -21,20 +21,13 @@
 
 #include "workspace/iworkspacedatastream.h"
 
-#include "palette/palettetree.h"
+#include "palettetypes.h"
 
 namespace Ms {
 class XmlReader;
 }
 
 namespace mu::palette {
-struct PaletteWorkspaceData : public workspace::AbstractData
-{
-    Ms::PaletteTreePtr tree;
-};
-
-using PaletteWorkspaceDataPtr = std::shared_ptr<PaletteWorkspaceData>;
-
 class WorkspacePaletteStream : public workspace::IWorkspaceDataStream
 {
 public:

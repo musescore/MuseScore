@@ -38,6 +38,9 @@ public:
     std::string name() const override;
     std::string title() const override;
 
+    WorkspaceTagList tags() const override;
+    void setTags(const WorkspaceTagList& tags) override;
+
     AbstractDataPtr data(WorkspaceTag tag, const std::string& name = std::string()) const override;
     AbstractDataPtrList dataList(WorkspaceTag tag) const override;
     void addData(AbstractDataPtr data) override;
@@ -54,6 +57,9 @@ public:
 private:
     Ret readWorkspace(const QByteArray& data);
     void clear();
+
+    std::string tagsNames() const;
+    std::vector<WorkspaceTag> parseTags(const std::string& tagsStr) const;
 
     io::path m_filePath;
     bool m_isInited = false;
@@ -78,6 +84,8 @@ private:
 
     std::map<DataKey, AbstractDataPtr> m_data;
     async::Channel<AbstractDataPtr> m_dataChanged;
+
+    WorkspaceTagList m_tags;
 };
 
 using WorkspacePtr = std::shared_ptr<Workspace>;

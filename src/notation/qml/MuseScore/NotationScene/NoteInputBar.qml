@@ -37,7 +37,7 @@ Rectangle {
 
             normalStateColor: Boolean(item) && item.checkedRole ? ui.theme.accentColor : "transparent"
 
-            icon: Boolean(item) ? item.iconRole : null
+            icon: Boolean(item) ? item.iconRole : IconCode.NONE
             iconFont.pixelSize: 20
 
             width: gridView.cellWidth

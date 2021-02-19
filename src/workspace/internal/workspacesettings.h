@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2020 MuseScore BVBA and others
+//  Copyright (C) 2021 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -16,33 +16,33 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_FRAMEWORK_GLOBALCONFIGURATION_H
-#define MU_FRAMEWORK_GLOBALCONFIGURATION_H
+#ifndef MU_WORKSPACE_WORKSPACEUSETTINGS_H
+#define MU_WORKSPACE_WORKSPACEUSETTINGS_H
 
-#include "../iglobalconfiguration.h"
 #include "modularity/ioc.h"
+#include "async/asyncable.h"
+#include "global/iworkspacesettings.h"
+#include "iworkspacemanager.h"
 
-namespace mu::framework {
-class GlobalConfiguration : public IGlobalConfiguration
+namespace mu::workspace {
+class WorkspaceSettings : public framework::IWorkspaceSettings, public async::Asyncable
 {
+    INJECT(workspace, IWorkspaceManager, manager)
+
 public:
-    GlobalConfiguration() = default;
+    void init();
 
-    io::path appDirPath() const override;
-    io::path sharePath() const override;
-    io::path dataPath() const override;
-    io::path logsPath() const override;
-    io::path backupPath() const override;
+    bool isManage(WorkspaceTag tag) const override;
 
-    bool useFactorySettings() const override;
-    bool enableExperimental() const override;
+    Val value(WorkspaceTag tag, const std::string& key) const override;
+    void setValue(WorkspaceTag tag, const std::string& key, const Val& value) const override;
+    async::Notification valuesChanged() const override;
 
 private:
-    QString getSharePath() const;
+    IWorkspacePtr currentWorkspace() const;
 
-    mutable io::path m_sharePath;
-    mutable io::path m_dataPath;
+    async::Notification m_valuesChanged;
 };
 }
 
-#endif // MU_FRAMEWORK_GLOBALCONFIGURATION_H
+#endif // MU_WORKSPACE_WORKSPACEUSETTINGS_H

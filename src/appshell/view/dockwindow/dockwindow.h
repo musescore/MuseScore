@@ -54,6 +54,7 @@ class DockWindow : public QQuickItem, public ui::IMainWindow
     Q_INTERFACES(QQmlParserStatus)
 
     INJECT(dock, ui::IPlatformTheme, platformTheme)
+    INJECT(dock, ui::IUiConfiguration, configuration)
 
 public:
     explicit DockWindow(QQuickItem* parent = nullptr);
@@ -101,6 +102,9 @@ private:
     void hidePage(DockPage* page);
     void showPage(DockPage* page);
     void adjustPanelsSize(DockPage* page);
+
+    void saveState(const QString& pageName);
+    void restoreState(const QString& pageName);
 
     QMainWindow* m_window = nullptr;
     EventsWatcher* m_eventsWatcher = nullptr;

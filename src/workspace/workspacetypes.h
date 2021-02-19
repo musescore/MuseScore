@@ -27,11 +27,18 @@
 namespace mu::workspace {
 enum class WorkspaceTag
 {
+    Unknown,
     UiArrangement,
     Settings,
     Palettes,
     Toolbar
 };
+using WorkspaceTagList = std::vector<WorkspaceTag>;
+
+inline bool containsTag(const WorkspaceTagList& list, const WorkspaceTag& tag)
+{
+    return std::find(list.cbegin(), list.cend(), tag) != list.cend();
+}
 
 struct AbstractData
 {
