@@ -30,7 +30,9 @@ class Page;
 class VerticalGapData
 {
 private:
-    bool _fixedHeight          { false };
+    bool _fixedHeight        { false };
+    bool _hasSpacer          { false };
+    bool _fixedSpacer        { false };
     qreal _factor               { 1.0 };
     qreal _normalisedSpacing    { 0.0 };
     qreal _maxActualSpacing     { 0.0 };
