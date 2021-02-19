@@ -136,6 +136,10 @@ void NotationConfiguration::init()
     settings()->valueChanged(STATUSBAR_VISIBLE_KEY).onReceive(nullptr, [this](const Val&) {
         m_statusBarVisibleChanged.send(isStatusBarVisible().val);
     });
+    IWorkspaceSettings::Key workspaceKey{ workspace::WorkspaceTag::UiArrangement, STATUSBAR_VISIBLE_KEY.key };
+    workspaceSettings()->valueChanged(workspaceKey).onReceive(nullptr, [this](const Val&) {
+        m_statusBarVisibleChanged.send(isStatusBarVisible().val);
+    });
 
     // libmscore
     preferences().setBackupDirPath(globalConfiguration()->backupPath().toQString());
@@ -375,56 +379,70 @@ ValCh<bool> NotationConfiguration::isPalettePanelVisible() const
 {
     ValCh<bool> visible;
     visible.ch = m_palettePanelVisibleChanged;
-    visible.val = settings()->value(PALETTEPANEL_VISIBLE_KEY).toBool();
+    visible.val = m_isPalettePanelVisible;
 
     return visible;
 }
 
 void NotationConfiguration::setIsPalettePanelVisible(bool visible)
 {
-    settings()->setValue(PALETTEPANEL_VISIBLE_KEY, Val(visible));
+    m_isPalettePanelVisible = visible;
+    m_palettePanelVisibleChanged.send(visible);
 }
 
 ValCh<bool> NotationConfiguration::isInstrumentsPanelVisible() const
 {
     ValCh<bool> visible;
     visible.ch = m_instrumentsPanelVisibleChanged;
-    visible.val = settings()->value(INSTRUMENTSPANEL_VISIBLE_KEY).toBool();
+    visible.val = m_isInstrumentsPanelVisible;
 
     return visible;
 }
 
 void NotationConfiguration::setIsInstrumentsPanelVisible(bool visible)
 {
-    settings()->setValue(INSTRUMENTSPANEL_VISIBLE_KEY, Val(visible));
+    m_isInstrumentsPanelVisible = visible;
+    m_instrumentsPanelVisibleChanged.send(visible);
 }
 
 ValCh<bool> NotationConfiguration::isInspectorPanelVisible() const
 {
     ValCh<bool> visible;
     visible.ch = m_inspectorPanelVisibleChanged;
-    visible.val = settings()->value(INSPECTORPANEL_VISIBLE_KEY).toBool();
+    visible.val = m_isInspectorPanelVisible;
 
     return visible;
 }
 
 void NotationConfiguration::setIsInspectorPanelVisible(bool visible)
 {
-    settings()->setValue(INSPECTORPANEL_VISIBLE_KEY, Val(visible));
+    m_isInspectorPanelVisible = visible;
+    m_inspectorPanelVisibleChanged.send(visible);
 }
 
 ValCh<bool> NotationConfiguration::isStatusBarVisible() const
 {
     ValCh<bool> visible;
     visible.ch = m_statusBarVisibleChanged;
-    visible.val = settings()->value(STATUSBAR_VISIBLE_KEY).toBool();
+
+    if (workspaceSettings()->isManage(workspace::WorkspaceTag::UiArrangement)) {
+        IWorkspaceSettings::Key workspaceKey{ workspace::WorkspaceTag::UiArrangement, STATUSBAR_VISIBLE_KEY.key };
+        visible.val = workspaceSettings()->value(workspaceKey).toBool();
+    } else {
+        visible.val = settings()->value(STATUSBAR_VISIBLE_KEY).toBool();
+    }
 
     return visible;
 }
 
 void NotationConfiguration::setIsStatusBarVisible(bool visible)
 {
-    settings()->setValue(STATUSBAR_VISIBLE_KEY, Val(visible));
+    if (workspaceSettings()->isManage(workspace::WorkspaceTag::UiArrangement)) {
+        IWorkspaceSettings::Key workspaceKey{ workspace::WorkspaceTag::UiArrangement, STATUSBAR_VISIBLE_KEY.key };
+        workspaceSettings()->setValue(workspaceKey, Val(visible));
+    } else {
+        settings()->setValue(STATUSBAR_VISIBLE_KEY, Val(visible));
+    }
 }
 
 std::vector<std::string> NotationConfiguration::parseToolbarActions(const std::string& actions) const

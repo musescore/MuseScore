@@ -21,6 +21,7 @@
 
 #include "modularity/imoduleexport.h"
 #include "val.h"
+#include "async/channel.h"
 #include "async/notification.h"
 #include "workspace/workspacetypes.h"
 
@@ -28,14 +29,25 @@ namespace mu::framework {
 class IWorkspaceSettings : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IWorkspaceSettings)
-public:
 
+public:
     virtual ~IWorkspaceSettings() = default;
+
+    struct Key
+    {
+        workspace::WorkspaceTag tag = workspace::WorkspaceTag::Unknown;
+        std::string key;
+
+        bool operator==(const Key& other) const { return key == other.key; }
+        bool operator<(const Key& other) const { return key < other.key; }
+    };
 
     virtual bool isManage(workspace::WorkspaceTag tag) const = 0;
 
-    virtual Val value(workspace::WorkspaceTag tag, const std::string& key) const = 0;
-    virtual void setValue(workspace::WorkspaceTag tag, const std::string& key, const Val& value) const = 0;
+    virtual Val value(const Key& key) const = 0;
+    virtual void setValue(const Key& key, const Val& value) const = 0;
+
+    virtual async::Channel<Val> valueChanged(const Key& key) const = 0;
     virtual async::Notification valuesChanged() const = 0;
 };
 }

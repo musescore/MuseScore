@@ -42,6 +42,8 @@ class NotationPageModel : public QObject, public async::Asyncable
 public:
     explicit NotationPageModel(QObject* parent = nullptr);
 
+    Q_INVOKABLE void init();
+
     bool isPalettePanelVisible() const;
     bool isInstrumentsPanelVisible() const;
     bool isInspectorPanelVisible() const;

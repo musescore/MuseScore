@@ -27,6 +27,7 @@ namespace mu::dock {
 class DockStatusBar : public DockView
 {
     Q_OBJECT
+    Q_PROPERTY(bool visible READ visible WRITE setVisible NOTIFY visibleEdited)
 
 public:
     explicit DockStatusBar(QQuickItem* parent = nullptr);
@@ -38,13 +39,19 @@ public:
 
     Widget widget() const;
 
+    bool visible() const;
+
+public slots:
+    void setVisible(bool visible);
+
 signals:
-    void visibleChanged(bool visible);
+    void visibleEdited(bool visible);
 
 private:
     void onComponentCompleted() override;
 
     Widget m_widget;
+    bool m_visible = false;
 };
 }
 

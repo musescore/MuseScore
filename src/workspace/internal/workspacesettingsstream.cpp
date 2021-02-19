@@ -60,7 +60,7 @@ SettingsDataPtr WorkspaceSettingsStream::readSettings(XmlReader& reader) const
     settings->tag = tag();
 
     while (reader.readNextStartElement()) {
-        if (reader.tagName() != SETTING_ELEMENT_TAG) {
+        if (reader.tagName() == SETTING_ELEMENT_TAG) {
             std::string key = reader.attribute(NAME_ATTRIBUTE);
             Val val(reader.readString());
             settings->values.insert({ key, val });

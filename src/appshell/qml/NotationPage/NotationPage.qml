@@ -14,7 +14,23 @@ DockPage {
     property var color: ui.theme.backgroundPrimaryColor
     property var borderColor: ui.theme.strokeColor
 
-    property var pageModel: NotationPageModel {}
+    property NotationPageModel pageModel: NotationPageModel {}
+
+    Component.onCompleted: {
+        pageModel.isPalettePanelVisible = palettePanel.visible
+        palettePanel.visible = Qt.binding(function() { return pageModel.isPalettePanelVisible })
+
+        pageModel.isInstrumentsPanelVisible = instrumentsPanel.visible
+        instrumentsPanel.visible = Qt.binding(function() { return pageModel.isInstrumentsPanelVisible })
+
+        pageModel.isInspectorPanelVisible = inspectorPanel.visible
+        inspectorPanel.visible = Qt.binding(function() { return pageModel.isInspectorPanelVisible })
+
+//        notationStatusBar.visible = pageModel.isStatusBarVisible
+//        notationStatusBar.visible = Qt.binding(function() { return pageModel.isStatusBarVisible })
+
+        pageModel.init()
+    }
 
     toolbar: DockToolBar {
         id: notationNoteInputBar
@@ -49,9 +65,8 @@ DockPage {
 
             floatable: true
             closable: true
-            visible: notationPage.pageModel.isPalettePanelVisible
 
-            onVisibleChanged: {
+            onVisibleEdited: {
                 notationPage.pageModel.isPalettePanelVisible = visible
             }
 
@@ -74,9 +89,8 @@ DockPage {
 
             floatable: true
             closable: true
-            visible: notationPage.pageModel.isInstrumentsPanelVisible
 
-            onVisibleChanged: {
+            onVisibleEdited: {
                 notationPage.pageModel.isInstrumentsPanelVisible = visible
             }
 
@@ -101,9 +115,8 @@ DockPage {
 
             floatable: true
             closable: true
-            visible: notationPage.pageModel.isInspectorPanelVisible
 
-            onVisibleChanged: {
+            onVisibleEdited: {
                 notationPage.pageModel.isInspectorPanelVisible = visible
             }
 
@@ -134,10 +147,6 @@ DockPage {
         color: notationPage.color
 
         visible: notationPage.pageModel.isStatusBarVisible
-
-        onVisibleChanged: {
-            notationPage.pageModel.isStatusBarVisible = visible
-        }
 
         NotationStatusBar {
             anchors.fill: parent

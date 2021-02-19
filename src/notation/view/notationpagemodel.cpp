@@ -23,6 +23,10 @@ using namespace mu::notation;
 NotationPageModel::NotationPageModel(QObject* parent)
     : QObject(parent)
 {
+}
+
+void NotationPageModel::init()
+{
     configuration()->isPalettePanelVisible().ch.onReceive(this, [this](bool visible) {
         emit isPalettePanelVisibleChanged(visible);
     });

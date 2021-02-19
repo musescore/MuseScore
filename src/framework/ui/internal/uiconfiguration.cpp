@@ -192,7 +192,8 @@ QByteArray UiConfiguration::pageState(const std::string& pageName) const
     std::string stateString;
 
     if (workspaceSettings()->isManage(workspace::WorkspaceTag::UiArrangement)) {
-        stateString = workspaceSettings()->value(workspace::WorkspaceTag::UiArrangement, key).toString();
+        IWorkspaceSettings::Key workspaceKey{ workspace::WorkspaceTag::UiArrangement, key };
+        stateString = workspaceSettings()->value(workspaceKey).toString();
     } else {
         Settings::Key settingsKey{ "global", key };
         stateString = settings()->value(settingsKey).toString();
@@ -208,7 +209,8 @@ void UiConfiguration::setPageState(const std::string& pageName, const QByteArray
     Val value = Val(byteArrayToString(state));
 
     if (workspaceSettings()->isManage(workspace::WorkspaceTag::UiArrangement)) {
-        workspaceSettings()->setValue(workspace::WorkspaceTag::UiArrangement, key, value);
+        IWorkspaceSettings::Key workspaceKey{ workspace::WorkspaceTag::UiArrangement, key };
+        workspaceSettings()->setValue(workspaceKey, value);
         return;
     }
 
