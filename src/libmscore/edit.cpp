@@ -174,7 +174,7 @@ Fraction Score::pos()
             break;
         }
     }
-    return Fraction(-1, 1);
+    return Fraction(0, 1);
 }
 
 //---------------------------------------------------------
