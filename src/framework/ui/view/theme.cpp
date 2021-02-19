@@ -221,6 +221,11 @@ QFont Theme::iconsFont() const
     return m_iconsFont;
 }
 
+QFont Theme::toolbarIconsFont() const
+{
+    return m_toolbarIconsFont;
+}
+
 QFont Theme::musicalFont() const
 {
     return m_musicalFont;
@@ -335,8 +340,13 @@ void Theme::setupUiFonts()
 
 void Theme::setupIconsFont()
 {
-    m_iconsFont.setFamily(QString::fromStdString(configuration()->iconsFontFamily()));
-    m_iconsFont.setPixelSize(configuration()->iconsFontSize());
+    QString family = QString::fromStdString(configuration()->iconsFontFamily());
+
+    m_iconsFont.setFamily(family);
+    m_iconsFont.setPixelSize(configuration()->iconsFontSize(IUiConfiguration::IconSizeType::Regular));
+
+    m_toolbarIconsFont.setFamily(family);
+    m_toolbarIconsFont.setPixelSize(configuration()->iconsFontSize(IUiConfiguration::IconSizeType::Toolbar));
 }
 
 void Theme::setupMusicFont()

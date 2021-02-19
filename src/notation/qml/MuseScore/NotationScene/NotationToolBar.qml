@@ -31,6 +31,8 @@ Rectangle {
         delegate: FlatButton {
             text: model.title
             icon: model.icon
+            iconFont: ui.theme.toolbarIconsFont
+
             hint: model.hint
             enabled: model.enabled
             textFont: ui.theme.tabFont

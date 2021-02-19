@@ -40,7 +40,7 @@ Rectangle {
             icon: Boolean(item) ? item.iconRole : IconCode.NONE
             hint: Boolean(item) ? item.hintRole : ""
 
-            iconFont.pixelSize: 20
+            iconFont: ui.theme.toolbarIconsFont
 
             width: gridView.cellWidth
             height: gridView.cellWidth

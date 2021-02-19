@@ -22,6 +22,8 @@ Rectangle {
 
         FlatButton {
             icon: model.undoItem.icon
+            iconFont: ui.theme.toolbarIconsFont
+
             hint: model.undoItem.description
             enabled: model.undoItem.enabled
             normalStateColor: "transparent"
@@ -33,6 +35,8 @@ Rectangle {
 
         FlatButton {
             icon: model.redoItem.icon
+            iconFont: ui.theme.toolbarIconsFont
+
             hint: model.redoItem.description
             enabled: model.redoItem.enabled
             normalStateColor: "transparent"

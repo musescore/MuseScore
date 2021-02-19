@@ -130,9 +130,14 @@ std::string UiConfiguration::iconsFontFamily() const
     return settings()->value(UI_ICONS_FONT_FAMILY_KEY).toString();
 }
 
-int UiConfiguration::iconsFontSize() const
+int UiConfiguration::iconsFontSize(IconSizeType type) const
 {
-    return fontSize(FontSizeType::TAB);
+    switch (type) {
+    case IconSizeType::Regular: return 16;
+    case IconSizeType::Toolbar: return 20;
+    }
+
+    return 16;
 }
 
 Notification UiConfiguration::iconsFontChanged() const
