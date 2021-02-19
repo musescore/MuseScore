@@ -110,8 +110,8 @@ private slots:
 private:
     void componentComplete() override;
     bool eventFilter(QObject* watched, QEvent* event) override;
-    void mousePressEvent(QMouseEvent* event);
-    void mouseReleaseEvent(QMouseEvent* event);
+    void mousePressEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent* event) override;
 
     bool isMouseWithinBoundaries(const QPoint& mousePos) const;
 
