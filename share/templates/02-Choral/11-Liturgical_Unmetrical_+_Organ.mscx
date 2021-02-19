@@ -7,7 +7,6 @@
     <Style>
       <enableVerticalSpread>1</enableVerticalSpread>
       <barNoteDistance>1.2</barNoteDistance>
-      <useStandardNoteNames>0</useStandardNoteNames>
       <Spatium>1.75</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -166,7 +165,6 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>Title</style>
           <text>Liturgical Unmetrical + Organ</text>
