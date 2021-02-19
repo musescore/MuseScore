@@ -46,7 +46,7 @@
         </attributes>
       <direction placement="above">
         <direction-type>
-          <words valign="top" font-size="12">Tbox 1</words>
+          <words valign="top">Tbox 1</words>
           </direction-type>
         </direction>
       <note>
@@ -73,12 +73,12 @@
       <print new-system="yes"/>
       <direction placement="above">
         <direction-type>
-          <words valign="top" font-size="12">Tbox 2</words>
+          <words valign="top">Tbox 2</words>
           </direction-type>
         </direction>
       <direction placement="below">
         <direction-type>
-          <words valign="top" font-size="12">Tbox 3</words>
+          <words valign="top">Tbox 3</words>
           </direction-type>
         </direction>
       <note>

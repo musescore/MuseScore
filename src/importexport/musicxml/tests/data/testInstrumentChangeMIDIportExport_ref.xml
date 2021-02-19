@@ -1062,7 +1062,7 @@
     <measure number="2">
       <direction placement="above">
         <direction-type>
-          <words font-weight="bold" font-size="12">Voice</words>
+          <words font-weight="bold">Voice</words>
           </direction-type>
         <staff>1</staff>
         </direction>
