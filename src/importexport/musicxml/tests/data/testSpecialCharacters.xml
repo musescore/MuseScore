@@ -149,7 +149,7 @@
         <type>whole</type>
         <lyric number="1">
           <syllabic>single</syllabic>
-          <text font-family="MScore Text"></text>
+          <text font-family="Leland Text"></text>
           </lyric>
         </note>
       </measure>
@@ -164,7 +164,7 @@
         <type>whole</type>
         <lyric number="1">
           <syllabic>single</syllabic>
-          <text font-family="MScore Text"></text>
+          <text font-family="Leland Text"></text>
           </lyric>
         </note>
       </measure>
@@ -179,7 +179,7 @@
         <type>whole</type>
         <lyric number="1">
           <syllabic>single</syllabic>
-          <text font-family="MScore Text"></text>
+          <text font-family="Leland Text"></text>
           </lyric>
         </note>
       </measure>
@@ -194,7 +194,7 @@
         <type>whole</type>
         <lyric number="1">
           <syllabic>single</syllabic>
-          <text font-family="MScore Text"></text>
+          <text font-family="Leland Text"></text>
           </lyric>
         </note>
       </measure>

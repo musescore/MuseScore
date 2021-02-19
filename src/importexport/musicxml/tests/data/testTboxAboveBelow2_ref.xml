@@ -58,7 +58,7 @@
         </attributes>
       <direction placement="above">
         <direction-type>
-          <words valign="top" font-size="12">Above</words>
+          <words valign="top">Above</words>
           </direction-type>
         </direction>
       <note>
@@ -103,7 +103,7 @@
         </backup>
       <direction placement="below">
         <direction-type>
-          <words valign="top" font-size="12">Below</words>
+          <words valign="top">Below</words>
           </direction-type>
         <staff>2</staff>
         </direction>

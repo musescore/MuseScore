@@ -49,7 +49,7 @@
         </attributes>
       <harmony print-frame="no">
         <root>
-          <root-step>C</root-step>
+          <root-step text="">C</root-step>
           </root>
         <kind text="N.C.">none</kind>
         </harmony>

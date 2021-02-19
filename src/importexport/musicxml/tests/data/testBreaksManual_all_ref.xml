@@ -440,7 +440,6 @@
         </note>
       </measure>
     <measure number="36">
-      <print new-system="yes"/>
       <note>
         <pitch>
           <step>B</step>
@@ -623,7 +622,6 @@
         </note>
       </measure>
     <measure number="54">
-      <print new-system="yes"/>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -750,7 +748,6 @@
         </note>
       </measure>
     <measure number="72">
-      <print new-system="yes"/>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -877,7 +874,6 @@
         </note>
       </measure>
     <measure number="90">
-      <print new-system="yes"/>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -1004,7 +1000,6 @@
         </note>
       </measure>
     <measure number="108">
-      <print new-system="yes"/>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -1131,7 +1126,6 @@
         </note>
       </measure>
     <measure number="126">
-      <print new-system="yes"/>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -1258,7 +1252,6 @@
         </note>
       </measure>
     <measure number="144">
-      <print new-system="yes"/>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -1385,7 +1378,6 @@
         </note>
       </measure>
     <measure number="162">
-      <print new-system="yes"/>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -1512,7 +1504,6 @@
         </note>
       </measure>
     <measure number="180">
-      <print new-system="yes"/>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -1639,7 +1630,6 @@
         </note>
       </measure>
     <measure number="198">
-      <print new-system="yes"/>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -1766,7 +1756,6 @@
         </note>
       </measure>
     <measure number="216">
-      <print new-page="yes"/>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>

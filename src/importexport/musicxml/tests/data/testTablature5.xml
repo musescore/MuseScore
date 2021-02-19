@@ -16,13 +16,6 @@
       <supports element="print" attribute="new-system" type="no"/>
       <supports element="stem" type="yes"/>
       </encoding>
-    <miscellaneous>
-      <miscellaneous-field name="description">
-        Sibelius 18.1.0 (direct export) generates 'staff-details print-object="yes"'
-        at the start of every new system. As of April 2019, this broke TAB staff import,
-        because the instrument's string data was invalidated (issue #288271).
-        </miscellaneous-field>
-      </miscellaneous>
     </identification>
   <part-list>
     <score-part id="P1">
@@ -59,27 +52,27 @@
           <staff-lines>6</staff-lines>
           <staff-tuning line="1">
             <tuning-step>E</tuning-step>
-            <tuning-octave>2</tuning-octave>
+            <tuning-octave>3</tuning-octave>
             </staff-tuning>
           <staff-tuning line="2">
             <tuning-step>A</tuning-step>
-            <tuning-octave>2</tuning-octave>
+            <tuning-octave>3</tuning-octave>
             </staff-tuning>
           <staff-tuning line="3">
             <tuning-step>D</tuning-step>
-            <tuning-octave>3</tuning-octave>
+            <tuning-octave>4</tuning-octave>
             </staff-tuning>
           <staff-tuning line="4">
             <tuning-step>G</tuning-step>
-            <tuning-octave>3</tuning-octave>
+            <tuning-octave>4</tuning-octave>
             </staff-tuning>
           <staff-tuning line="5">
             <tuning-step>B</tuning-step>
-            <tuning-octave>3</tuning-octave>
+            <tuning-octave>4</tuning-octave>
             </staff-tuning>
           <staff-tuning line="6">
             <tuning-step>E</tuning-step>
-            <tuning-octave>4</tuning-octave>
+            <tuning-octave>5</tuning-octave>
             </staff-tuning>
           </staff-details>
         </attributes>
@@ -93,17 +86,14 @@
         <type>whole</type>
         <notations>
           <technical>
-            <string>2</string>
-            <fret>0</fret>
+            <string>5</string>
+            <fret>2</fret>
             </technical>
           </notations>
         </note>
       </measure>
     <measure number="2">
       <print new-system="yes"/>
-      <attributes>
-        <staff-details print-object="yes"/>
-        </attributes>
       <note>
         <pitch>
           <step>B</step>
@@ -115,8 +105,8 @@
         <type>whole</type>
         <notations>
           <technical>
-            <string>2</string>
-            <fret>1</fret>
+            <string>5</string>
+            <fret>3</fret>
             </technical>
           </notations>
         </note>
