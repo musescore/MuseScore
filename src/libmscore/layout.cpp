@@ -1658,8 +1658,8 @@ static void distributeStaves(Page* page)
     int ngaps { 0 };
     qreal prevYBottom  { page->tm() };
     qreal yBottom      { 0.0 };
-    bool vbox         { false };
-    Spacer* activeSpacer { nullptr };
+    bool vbox          { false };
+    Spacer* nextSpacer { nullptr };
     bool transferNormalBracket { false };
     bool transferCurlyBracket  { false };
     for (System* system : page->systems()) {
@@ -1697,8 +1697,33 @@ static void distributeStaves(Page* page)
                     continue;
                 }
 
+                Spacer* activeSpacer { nextSpacer };
+                nextSpacer = nullptr;
+                for (MeasureBase* mb : system->measures()) {
+                    Measure* m = toMeasure(mb);
+                    if (!mb->isMeasure()) {
+                        continue;
+                    }
+                    Spacer* sp = m->vspacerUp(staff->idx());
+                    if (sp) {
+                        if (!activeSpacer || ((activeSpacer->spacerType() == SpacerType::UP) && (sp->gap() > activeSpacer->gap()))) {
+                            activeSpacer = sp;
+                        }
+                        continue;
+                    }
+                    sp = m->vspacerDown(staff->idx());
+                    if (sp) {
+                        if (sp->spacerType() == SpacerType::FIXED) {
+                            nextSpacer = sp;
+                        } else {
+                            if (!nextSpacer || (sp->gap() > nextSpacer->gap())) {
+                                nextSpacer = sp;
+                            }
+                        }
+                    }
+                }
+
                 VerticalGapData* vgd = new VerticalGapData(!ngaps++, system, staff, sysStaff, activeSpacer, prevYBottom);
-                activeSpacer = nullptr;
 
                 if (newSystem) {
                     vgd->addSpaceBetweenSections();
@@ -1729,13 +1754,12 @@ static void distributeStaves(Page* page)
             transferNormalBracket = endNormalBracket >= 0;
             transferCurlyBracket  = endCurlyBracket >= 0;
         }
-        activeSpacer = system->getActiveSpacer();
     }
     --ngaps;
 
     qreal spaceLeft { page->height() - page->bm() - score->styleP(Sid::staffLowerBorder) - yBottom };
-    if (activeSpacer) {
-        spaceLeft -= activeSpacer->gap();
+    if (nextSpacer && (nextSpacer->spacerType() == SpacerType::DOWN)) {
+        spaceLeft -= nextSpacer->gap();
     }
     if (spaceLeft <= 0.0) {
         return;
@@ -1787,17 +1811,19 @@ static void distributeStaves(Page* page)
     }
 
     // If there is still space left, distribute the space of the staves.
+    // However, there is a limit on how much space is added per gap.
     const qreal maxPageFill { score->styleP(Sid::maxPageFillSpread) };
+    spaceLeft = qMin(maxPageFill * vgdl.length(), spaceLeft);
     pass = 0;
     ngaps = 1;
     while (!almostZero(spaceLeft) && !almostZero(maxPageFill) && (ngaps > 0) && (++pass < maxPasses)) {
         ngaps = 0;
         qreal addedSpace { 0.0 };
+        qreal step { spaceLeft / vgdl.sumStretchFactor() };
         for (VerticalGapData* vgd : vgdl) {
-            qreal step = spaceLeft / vgdl.sumStretchFactor();
-            step = vgd->addFillSpacing(step, maxPageFill);
-            if (!almostZero(step)) {
-                addedSpace += step * vgd->factor();
+            qreal res { vgd->addFillSpacing(step, maxPageFill) };
+            if (!almostZero(res)) {
+                addedSpace += res * vgd->factor();
                 ++ngaps;
             }
         }
@@ -5429,6 +5455,7 @@ LayoutContext::~LayoutContext()
 
 //---------------------------------------------------------
 //   VerticalStretchData
+//      defines a gap ABOVE the staff.
 //---------------------------------------------------------
 
 VerticalGapData::VerticalGapData(bool first, System* sys, Staff* st, SysStaff* sst, const Spacer* spacer, qreal y)
@@ -5438,13 +5465,15 @@ VerticalGapData::VerticalGapData(bool first, System* sys, Staff* st, SysStaff* s
         _normalisedSpacing = system->score()->styleP(Sid::staffUpperBorder);
         _maxActualSpacing = _normalisedSpacing;
     } else {
+        _normalisedSpacing = system->y() + (sysStaff ? sysStaff->y() : 0.0) - y;
+        _maxActualSpacing = system->score()->styleP(Sid::maxStaffSpread);
         if (spacer) {
-            _fixedHeight = true;
-            _normalisedSpacing = spacer->gap();
-            _maxActualSpacing = _normalisedSpacing;
-        } else {
-            _normalisedSpacing = system->y() + (sysStaff ? sysStaff->y() : 0.0) - y;
-            _maxActualSpacing = system->score()->styleP(Sid::maxStaffSpread);
+            _hasSpacer = true;
+            _fixedSpacer = spacer->spacerType() == SpacerType::FIXED;
+            _normalisedSpacing = qMax(_normalisedSpacing, spacer->gap());
+            if (_fixedSpacer) {
+                _maxActualSpacing = _normalisedSpacing;
+            }
         }
     }
 }
@@ -5470,8 +5499,8 @@ void VerticalGapData::updateFactor(qreal factor)
 void VerticalGapData::addSpaceBetweenSections()
 {
     updateFactor(system->score()->styleD(Sid::spreadSystem));
-    if (!_fixedHeight) {
-        _maxActualSpacing = qMax(_maxActualSpacing, system->score()->styleP(Sid::maxSystemSpread));
+    if (!(_fixedHeight | _fixedSpacer)) {
+        _maxActualSpacing = system->score()->styleP(Sid::maxSystemSpread) / _factor;
     }
 }
 
@@ -5485,7 +5514,7 @@ void VerticalGapData::addSpaceAroundVBox(bool above)
     _factor = 1.0;
     const Score* score { system->score() };
     _normalisedSpacing = above ? score->styleP(Sid::frameSystemDistance) : score->styleP(Sid::systemFrameDistance);
-    _maxActualSpacing = _normalisedSpacing;
+    _maxActualSpacing = _normalisedSpacing / _factor;
 }
 
 //---------------------------------------------------------
@@ -5512,7 +5541,7 @@ void VerticalGapData::addSpaceAroundCurlyBracket()
 
 void VerticalGapData::insideCurlyBracket()
 {
-    _maxActualSpacing = system->score()->styleP(Sid::maxAkkoladeDistance);
+    _maxActualSpacing = system->score()->styleP(Sid::maxAkkoladeDistance) / _factor;
 }
 
 //---------------------------------------------------------
@@ -5549,10 +5578,10 @@ qreal VerticalGapData::actualAddedSpace() const
 
 qreal VerticalGapData::addSpacing(qreal step)
 {
-    if (_fixedHeight) {
+    if (_fixedHeight | _fixedSpacer) {
         return 0.0;
     }
-    if ((_normalisedSpacing >= _maxActualSpacing)) {
+    if (_normalisedSpacing >= _maxActualSpacing) {
         _normalisedSpacing = _maxActualSpacing;
         step = 0.0;
     } else {
@@ -5572,7 +5601,7 @@ qreal VerticalGapData::addSpacing(qreal step)
 
 bool VerticalGapData::isFixedHeight() const
 {
-    return _fixedHeight;
+    return _fixedHeight || almostZero(_normalisedSpacing - _maxActualSpacing);
 }
 
 //---------------------------------------------------------
@@ -5591,8 +5620,12 @@ void VerticalGapData::undoLastAddSpacing()
 
 qreal VerticalGapData::addFillSpacing(qreal step, qreal maxFill)
 {
-    qreal res = addSpacing(qMin(maxFill - _fillSpacing, step));
-    _fillSpacing += res;
+    if (_fixedSpacer) {
+        return 0.0;
+    }
+    qreal actStep { ((step + _fillSpacing / _factor) > maxFill) ? (maxFill - _fillSpacing / _factor) : step };
+    qreal res = addSpacing(actStep);
+    _fillSpacing += res * _factor;
     return res;
 }
 
@@ -5615,7 +5648,9 @@ qreal VerticalGapDataList::sumStretchFactor() const
 {
     qreal sum { 0.0 };
     for (VerticalGapData* vsd : *this) {
-        sum += vsd->factor();
+        if (!vsd->isFixedHeight()) {
+            sum += vsd->factor();
+        }
     }
     return sum;
 }

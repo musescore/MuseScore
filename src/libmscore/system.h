@@ -98,7 +98,6 @@ class System final : public Element
 
     qreal _leftMargin              { 0.0 };     ///< left margin for instrument name, brackets etc.
     mutable bool fixedDownDistance { false };
-    mutable Spacer* activeSpacer   { nullptr };
     qreal _distance                { 0.0 };     /// temp. variable used during layout
     qreal _systemHeight            { 0.0 };
 
@@ -200,7 +199,6 @@ public:
 
     void moveBracket(int staffIdx, int srcCol, int dstCol);
     bool hasFixedDownDistance() const { return fixedDownDistance; }
-    Spacer* getActiveSpacer() const { return activeSpacer; }
     int firstVisibleStaff() const;
     int nextVisibleStaff(int) const;
     qreal distance() const { return _distance; }

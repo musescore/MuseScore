@@ -1581,22 +1581,16 @@ qreal System::spacerDistance(bool up) const
         return 0.0;
     }
     qreal dist = 0.0;
-    activeSpacer = nullptr;
     for (MeasureBase* mb : measures()) {
         if (mb->isMeasure()) {
             Measure* m = toMeasure(mb);
             Spacer* sp = up ? m->vspacerUp(staff) : m->vspacerDown(staff);
             if (sp) {
                 if (sp->spacerType() == SpacerType::FIXED) {
-                    activeSpacer = sp;
                     dist = sp->gap();
                     break;
                 } else {
                     dist = qMax(dist, sp->gap());
-                    if (sp->gap() > dist) {
-                        activeSpacer = sp;
-                        dist = sp->gap();
-                    }
                 }
             }
         }
