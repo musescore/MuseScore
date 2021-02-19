@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
+<museScore version="3.02">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <Spatium>1.76389</Spatium>
+      <Spatium>1.74978</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -32,7 +32,7 @@
         <defaultClef>PERC</defaultClef>
         </Staff>
       <trackName>Concert Snare Drum</trackName>
-      <Instrument>
+      <Instrument id="snare-drum">
         <longName>Concert Snare Drum</longName>
         <shortName>Con. Sn.</shortName>
         <trackName>Concert Snare Drum</trackName>

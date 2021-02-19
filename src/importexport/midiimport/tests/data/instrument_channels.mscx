@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
+<museScore version="3.02">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <Spatium>1.76389</Spatium>
+      <Spatium>1.74978</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -29,7 +29,7 @@
           </StaffType>
         </Staff>
       <trackName>Violins</trackName>
-      <Instrument>
+      <Instrument id="violins">
         <longName>Violins</longName>
         <shortName>Vlns.</shortName>
         <trackName>Violins</trackName>
@@ -109,7 +109,7 @@
           </StaffType>
         </Staff>
       <trackName>B♭ Trumpet</trackName>
-      <Instrument>
+      <Instrument id="bb-trumpet">
         <longName>B♭ Trumpet</longName>
         <shortName>B♭ Tpt.</shortName>
         <trackName>B♭ Trumpet</trackName>
@@ -181,7 +181,7 @@
         <defaultClef>F</defaultClef>
         </Staff>
       <trackName>Trombone</trackName>
-      <Instrument>
+      <Instrument id="trombone">
         <longName>Trombone</longName>
         <shortName>Tbn.</shortName>
         <trackName>Trombone</trackName>
