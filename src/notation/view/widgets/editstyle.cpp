@@ -143,13 +143,12 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::frameSystemDistance,     false, frameSystemDistance,     resetFrameSystemDistance },
         { StyleId::minMeasureWidth,         false, minMeasureWidth_2,       resetMinMeasureWidth },
         { StyleId::measureSpacing,          false, measureSpacing,          resetMeasureSpacing },
-        // TODO !!! See https://github.com/musescore/MuseScore/pull/6365
-//        { StyleId::measureRepeatNumberPos,  false, measureRepeatNumberPos,  resetMeasureRepeatNumberPos },
-//        { StyleId::mrNumberSeries,          false, mrNumberSeries,          0 },
-//        { StyleId::mrNumberEveryXMeasures,  false, mrNumberEveryXMeasures,  resetMRNumberEveryXMeasures },
-//        { StyleId::mrNumberSeriesWithParentheses, false, mrNumberSeriesWithParentheses, resetMRNumberSeriesWithParentheses },
-//        { StyleId::oneMeasureRepeatShow1,   false, oneMeasureRepeatShow1,   resetOneMeasureRepeatShow1 },
-//        { StyleId::fourMeasureRepeatShowExtenders, false, fourMeasureRepeatShowExtenders, resetFourMeasureRepeatShowExtenders },
+        { StyleId::measureRepeatNumberPos,  false, measureRepeatNumberPos,  resetMeasureRepeatNumberPos },
+        { StyleId::mrNumberSeries,          false, mrNumberSeries,          0 },
+        { StyleId::mrNumberEveryXMeasures,  false, mrNumberEveryXMeasures,  resetMRNumberEveryXMeasures },
+        { StyleId::mrNumberSeriesWithParentheses, false, mrNumberSeriesWithParentheses, resetMRNumberSeriesWithParentheses },
+        { StyleId::oneMeasureRepeatShow1,   false, oneMeasureRepeatShow1,   resetOneMeasureRepeatShow1 },
+        { StyleId::fourMeasureRepeatShowExtenders, false, fourMeasureRepeatShowExtenders, resetFourMeasureRepeatShowExtenders },
 
         { StyleId::barWidth,                false, barWidth,                resetBarWidth },
         { StyleId::endBarWidth,             false, endBarWidth,             resetEndBarWidth },
@@ -988,9 +987,8 @@ EditStylePage EditStyle::pageForElement(Element* e)
     case ElementType::REST:
     case ElementType::MMREST:
         return &EditStyle::PageRests;
-// TODO !!!
-//    case ElementType::MEASURE_REPEAT:
-//        return &EditStyle:PageMeasureRepeats;
+    case ElementType::MEASURE_REPEAT:
+        return &EditStyle::PageMeasureRepeats;
     case ElementType::BEAM:
         return &EditStyle::PageBeams;
     case ElementType::TUPLET:
