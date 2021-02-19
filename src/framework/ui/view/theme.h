@@ -67,6 +67,8 @@ class Theme : public QObject, public ITheme, public async::Asyncable
     Q_PROPERTY(QFont titleBoldFont READ titleBoldFont NOTIFY dataChanged)
 
     Q_PROPERTY(QFont iconsFont READ iconsFont NOTIFY dataChanged)
+    Q_PROPERTY(QFont toolbarIconsFont READ toolbarIconsFont NOTIFY dataChanged)
+
     Q_PROPERTY(QFont musicalFont READ musicalFont NOTIFY dataChanged)
 
 public:
@@ -96,6 +98,7 @@ public:
     QFont titleBoldFont() const override;
 
     QFont iconsFont() const override;
+    QFont toolbarIconsFont() const override;
     QFont musicalFont() const override;
 
     qreal accentOpacityNormal() const override;
@@ -138,6 +141,7 @@ private:
     QFont m_headerBoldFont;
     QFont m_titleBoldFont;
     QFont m_iconsFont;
+    QFont m_toolbarIconsFont;
     QFont m_musicalFont;
 
     async::Notification m_themeChanged;

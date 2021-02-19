@@ -48,7 +48,7 @@ public:
     async::Notification fontChanged() const override;
 
     std::string iconsFontFamily() const override;
-    int iconsFontSize() const override;
+    int iconsFontSize(IconSizeType type) const override;
     async::Notification iconsFontChanged() const override;
 
     std::string musicalFontFamily() const override;

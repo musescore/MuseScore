@@ -63,6 +63,7 @@ Rectangle {
                 delegate: FlatButton {
                     icon: model.icon
                     hint: model.hint
+                    iconFont: ui.theme.toolbarIconsFont
 
                     normalStateColor: model.checked || playbackSettings.isOpened ? ui.theme.accentColor : "transparent"
 
