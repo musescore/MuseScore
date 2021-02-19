@@ -9,7 +9,6 @@
     <Style>
       <enableVerticalSpread>1</enableVerticalSpread>
       <lastSystemFillLimit>0</lastSystemFillLimit>
-      <useStandardNoteNames>0</useStandardNoteNames>
       <Spatium>1.75</Spatium>
       </Style>
     <showInvisible>1</showInvisible>

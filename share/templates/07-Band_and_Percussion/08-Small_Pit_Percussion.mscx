@@ -6,7 +6,6 @@
     <Division>480</Division>
     <Style>
       <enableVerticalSpread>1</enableVerticalSpread>
-      <useStandardNoteNames>0</useStandardNoteNames>
       <Spatium>1.45</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -1625,7 +1624,6 @@
     <Staff id="1">
       <VBox>
         <height>7</height>
-        <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>Title</style>
           <text>Small Pit Percussion</text>

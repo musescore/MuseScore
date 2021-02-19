@@ -1680,7 +1680,6 @@
     <Staff id="1">
       <VBox>
         <height>7</height>
-        <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>Title</style>
           <text>Small Marching Band</text>
