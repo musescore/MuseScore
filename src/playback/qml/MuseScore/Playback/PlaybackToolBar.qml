@@ -82,7 +82,7 @@ Rectangle {
                 }
             }
 
-            SeparatorLine { orientation: Qt.Vertical }
+            SeparatorLine { orientation: Qt.Vertical; visible: !root.floating }
 
             TimeInputField {
                 id: timeField
@@ -158,7 +158,7 @@ Rectangle {
                 font: timeField.font
             }
 
-            SeparatorLine { orientation: Qt.Vertical }
+            SeparatorLine { orientation: Qt.Vertical; visible: !root.floating }
         }
 
         StyledSlider {

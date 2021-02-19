@@ -741,12 +741,13 @@ Tempo NotationPlayback::tempo(int tick) const
     }
 
     const Ms::TempoText* tempoText = this->tempoText(tick);
-    if (!tempoText) {
-        tempo.valueBpm = score()->tempo(Fraction::fromTicks(tick)) * 60;
+    Ms::TDuration duration = tempoText ? tempoText->duration() : Ms::TDuration();
+
+    if (!tempoText || !duration.isValid()) {
+        tempo.duration = DurationType::V_QUARTER;
+        tempo.valueBpm = std::round(score()->tempo(Fraction::fromTicks(tick)) * 60.);
         return tempo;
     }
-
-    Ms::TDuration duration = tempoText->duration();
 
     tempo.valueBpm = tempoText->tempoBpm();
     tempo.duration = duration.type();
