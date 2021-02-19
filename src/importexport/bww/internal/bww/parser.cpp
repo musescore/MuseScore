@@ -439,7 +439,6 @@ static void determineBeamStates(QList<Bww::MeasureDescription>& measures)
                     // if the beam does not end here (next note has beam "l")
                     // then beamState is CONTINUE else STOP
                     if (findNextNextNoteBeam(measures, j, i) == "l") {
-                        measures[j].notes[i].beamList[0] = Bww::BeamType::BM_END;
                         measures[j].notes[i].beamState = Bww::StartStop::ST_CONTINUE;
                         measures[j].notes[i].beamList[0] = Bww::BeamType::BM_CONTINUE;
                         state = State::RIGHT; // now in right part of beam
