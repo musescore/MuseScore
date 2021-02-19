@@ -99,16 +99,31 @@ void PlaybackToolBarModel::load()
     beginResetModel();
     m_items.clear();
 
+    ActionList additionalActions;
+
     for (const ActionItem& action : currentWorkspaceActions()) {
+        if (isAdditionalAction(action.code)) {
+            additionalActions.push_back(action);
+            continue;
+        }
+
         m_items << action;
     }
 
     m_items << settingsItem();
 
+    for (const ActionItem& action : additionalActions) {
+        m_items << action;
+    }
+
     endResetModel();
 
     updateState();
+    setupConnections();
+}
 
+void PlaybackToolBarModel::setupConnections()
+{
     playbackController()->isPlayAllowedChanged().onNotify(this, [this]() {
         updateState();
         updatePlayTime();
