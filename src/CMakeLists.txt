@@ -72,12 +72,11 @@ if (BUILD_UNIT_TESTS)
 #    add_subdirectory(notation/tests) no tests at moment
     add_subdirectory(userscores/tests)
 
-# needs actualization
-    add_subdirectory(libmscore/tests)
+#    add_subdirectory(libmscore/tests)
     add_subdirectory(importexport/bb/tests)
-#    add_subdirectory(importexport/braille/tests)
-#    add_subdirectory(importexport/bww/tests)
-#    add_subdirectory(importexport/capella/tests)
+    add_subdirectory(importexport/braille/tests)
+    add_subdirectory(importexport/bww/tests)
+    add_subdirectory(importexport/capella/tests)
 #    add_subdirectory(importexport/guitarpro/tests)
 #    add_subdirectory(importexport/midiimport/tests)
 #    add_subdirectory(importexport/musicxml/tests)
