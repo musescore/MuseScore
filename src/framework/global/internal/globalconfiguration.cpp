@@ -29,7 +29,7 @@
 using namespace mu;
 using namespace mu::framework;
 
-static const Settings::Key BACKUP_PATH("global", "application/backup/subfolder");
+static const Settings::Key BACKUP_KEY("global", "application/backup/subfolder");
 
 io::path GlobalConfiguration::appDirPath() const
 {
@@ -93,7 +93,7 @@ io::path GlobalConfiguration::logsPath() const
 
 io::path GlobalConfiguration::backupPath() const
 {
-    return settings()->value(BACKUP_PATH).toString();
+    return settings()->value(BACKUP_KEY).toString();
 }
 
 bool GlobalConfiguration::useFactorySettings() const

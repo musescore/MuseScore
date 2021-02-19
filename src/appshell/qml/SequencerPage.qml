@@ -75,7 +75,7 @@ DockPage {
 
             StyledTextLabel {
                 anchors.fill: parent
-                text: "Notation status bar"
+                text: "Sequencer status bar"
             }
         }
     }

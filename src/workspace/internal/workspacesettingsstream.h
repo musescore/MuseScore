@@ -30,6 +30,8 @@ namespace mu::workspace {
 class WorkspaceSettingsStream : public IWorkspaceDataStream
 {
 public:
+    WorkspaceSettingsStream(WorkspaceTag tag);
+
     AbstractDataPtrList read(system::IODevice& sourceDevice) const override;
     void write(const AbstractDataPtrList& settingsList, system::IODevice& destinationDevice) const override;
 
@@ -38,6 +40,10 @@ public:
 private:
     SettingsDataPtr readSettings(framework::XmlReader& reader) const;
     void writeSettings(framework::XmlWriter& writer, const AbstractDataPtr& data) const;
+
+    std::string_view tagName() const;
+
+    WorkspaceTag m_tag = WorkspaceTag::Unknown;
 };
 }
 
