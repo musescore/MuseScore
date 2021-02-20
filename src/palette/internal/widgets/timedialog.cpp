@@ -87,7 +87,7 @@ TimeDialog::TimeDialog(QWidget* parent)
 
 void TimeDialog::addClicked()
 {
-    TimeSig* ts = new TimeSig(gscore);
+    std::shared_ptr<TimeSig> ts = std::make_shared<TimeSig>(gscore);
     ts->setSig(Fraction(zNominal->value(), denominator()));
     ts->setGroups(groups->groups());
 
@@ -204,8 +204,10 @@ int TimeDialog::denominator() const
 
 void TimeDialog::paletteChanged(int idx)
 {
-    TimeSig* e = static_cast<TimeSig*>(sp->element(idx));
-    if (!e || e->type() != ElementType::TIMESIG) {
+    ElementPtr element = sp->element(idx);
+    const std::shared_ptr<TimeSig> timeSig = std::dynamic_pointer_cast<TimeSig>(element);
+
+    if (!timeSig || timeSig->type() != ElementType::TIMESIG) {
         zNominal->setEnabled(false);
         nNominal->setEnabled(false);
         zText->setEnabled(false);
@@ -214,6 +216,7 @@ void TimeDialog::paletteChanged(int idx)
         addButton->setEnabled(false);
         return;
     }
+
     zNominal->setEnabled(true);
     nNominal->setEnabled(true);
     zText->setEnabled(true);
@@ -221,15 +224,16 @@ void TimeDialog::paletteChanged(int idx)
     groups->setEnabled(true);
     addButton->setEnabled(true);
 
-    Fraction sig(e->sig());
-    Groups g = e->groups();
+    Fraction sig(timeSig->sig());
+    Groups g = timeSig->groups();
     if (g.empty()) {
         g = Groups::endings(sig);
     }
+
     zNominal->setValue(sig.numerator());
     nNominal->setCurrentIndex(denominator2Idx(sig.denominator()));
-    zText->setText(e->numeratorString());
-    nText->setText(e->denominatorString());
+    zText->setText(timeSig->numeratorString());
+    nText->setText(timeSig->denominatorString());
     groups->setSig(sig, g, zText->text(), nText->text());
 }
 
