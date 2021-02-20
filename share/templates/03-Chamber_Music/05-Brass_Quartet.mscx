@@ -6,7 +6,6 @@
     <Division>480</Division>
     <Style>
       <enableVerticalSpread>1</enableVerticalSpread>
-      <useStandardNoteNames>0</useStandardNoteNames>
       <concertPitch>1</concertPitch>
       <Spatium>1.75</Spatium>
       </Style>
@@ -291,7 +290,6 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>Title</style>
           <text>Brass Quartet</text>

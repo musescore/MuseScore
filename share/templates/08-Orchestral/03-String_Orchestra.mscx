@@ -10,7 +10,6 @@
       <staffUpperBorder>10</staffUpperBorder>
       <minSystemDistance>13.5</minSystemDistance>
       <enableVerticalSpread>1</enableVerticalSpread>
-      <useStandardNoteNames>0</useStandardNoteNames>
       <Spatium>1.75</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -453,7 +452,6 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>Title</style>
           <text>String Orchestra</text>
