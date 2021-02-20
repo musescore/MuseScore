@@ -38,7 +38,6 @@
       <chordSymbolBFontSize>12</chordSymbolBFontSize>
       <chordSymbolBAlign>left,baseline</chordSymbolBAlign>
       <showMeasureNumber>0</showMeasureNumber>
-      <useStandardNoteNames>0</useStandardNoteNames>
       <chordStyle>jazz</chordStyle>
       <chordDescriptionFile>chords_jazz.xml</chordDescriptionFile>
       <slurEndWidth>0.12</slurEndWidth>
@@ -864,7 +863,6 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>Title</style>
           <text>Jazz Combo</text>
