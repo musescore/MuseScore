@@ -39,7 +39,10 @@ public:
 
 private:
     void quit();
-    void openOnlineHandbook();
+    void openOnlineHandbookPage();
+    void openAskForHelpPage();
+    void openBugReportPage();
+    void openLeaveFeedbackPage();
 };
 }
 

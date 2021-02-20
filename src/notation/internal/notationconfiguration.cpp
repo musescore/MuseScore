@@ -311,6 +311,11 @@ float NotationConfiguration::notationScaling() const
     return uiConfiguration()->physicalDotsPerInch() / Ms::DPI;
 }
 
+std::string NotationConfiguration::notationRevision() const
+{
+    return Ms::revision.toStdString();
+}
+
 std::vector<std::string> NotationConfiguration::toolbarActions(const std::string& toolbarName) const
 {
     return parseToolbarActions(settings()->value(toolbarSettingsKey(toolbarName)).toString());

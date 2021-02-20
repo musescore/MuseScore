@@ -20,14 +20,18 @@
 
 #include <QCoreApplication>
 
+#include "translation.h"
+
 using namespace mu::appshell;
-using namespace mu::actions;
 
 void ApplicationActionController::init()
 {
     dispatcher()->reg(this, "quit", this, &ApplicationActionController::quit);
 
-    dispatcher()->reg(this, "online-handbook", this, &ApplicationActionController::openOnlineHandbook);
+    dispatcher()->reg(this, "online-handbook", this, &ApplicationActionController::openOnlineHandbookPage);
+    dispatcher()->reg(this, "ask-help", this, &ApplicationActionController::openAskForHelpPage);
+    dispatcher()->reg(this, "report-bug", this, &ApplicationActionController::openBugReportPage);
+    dispatcher()->reg(this, "leave-feedback", this, &ApplicationActionController::openLeaveFeedbackPage);
 }
 
 void ApplicationActionController::quit()
@@ -35,9 +39,43 @@ void ApplicationActionController::quit()
     QCoreApplication::quit();
 }
 
-void ApplicationActionController::openOnlineHandbook()
+void ApplicationActionController::openOnlineHandbookPage()
 {
-    QString currentLanguageCode = languagesService()->currentLanguage().val.code;
-    std::string handbookUrl = configuration()->handbookUrl(currentLanguageCode.toStdString());
+    std::string handbookUrl = configuration()->handbookUrl();
     interactive()->openUrl(handbookUrl);
+}
+
+void ApplicationActionController::openAskForHelpPage()
+{
+    std::string askForHelpUrl = configuration()->askForHelpUrl();
+    interactive()->openUrl(askForHelpUrl);
+}
+
+void ApplicationActionController::openBugReportPage()
+{
+    std::string bugReportUrl = configuration()->bugReportUrl();
+    interactive()->openUrl(bugReportUrl);
+}
+
+void ApplicationActionController::openLeaveFeedbackPage()
+{
+    std::string leaveFeedbackUrl = configuration()->leaveFeedbackUrl();
+    interactive()->openUrl(leaveFeedbackUrl);
+}
+
+void ApplicationActionController::revertToFactorySettings()
+{
+    std::string question = trc("appshell", "This will reset all your preferences.\n"
+                                           "Custom palettes, custom shortcuts, and the list of recent scores will be deleted. "
+                                           "Reverting will not remove any scores from your computer.\n"
+                                           "Are you sure you want to proceed?");
+
+    IInteractive::Button button = interactive()->question(std::string(), question, {
+        IInteractive::Button::Yes,
+        IInteractive::Button::No
+    });
+
+    if (button == IInteractive::Button::Yes) {
+        configuration()->revertToFactorySettings();
+    }
 }
