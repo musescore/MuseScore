@@ -335,9 +335,9 @@ MenuItem AppMenuModel::helpItem()
     }
 
     helpItems << makeSeparator()
-              << makeAction("ask-help") // need implement
-              << makeAction("report-bug") // need implement
-              << makeAction("leave-feedback") // need implement
+              << makeAction("ask-help")
+              << makeAction("report-bug")
+              << makeAction("leave-feedback")
               << makeSeparator()
               << makeAction("revert-factory"); // need implement
 

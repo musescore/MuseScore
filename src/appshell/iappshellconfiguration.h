@@ -32,7 +32,10 @@ public:
 
     virtual bool isAppUpdatable() const = 0;
 
-    virtual std::string handbookUrl(const std::string& languageCode) const = 0;
+    virtual std::string handbookUrl() const = 0;
+    virtual std::string askForHelpUrl() const = 0;
+    virtual std::string bugReportUrl() const = 0;
+    virtual std::string leaveFeedbackUrl() const = 0;
 
     virtual ValCh<QStringList> recentScoreList() const = 0;
 };
