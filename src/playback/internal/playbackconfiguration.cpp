@@ -47,3 +47,18 @@ PlaybackCursorType PlaybackConfiguration::cursorType() const
 {
     return static_cast<PlaybackCursorType>(settings()->value(PLAYBACK_CURSOR_TYPE_KEY).toInt());
 }
+
+mu::ValCh<bool> PlaybackConfiguration::isPlaybackToolBarVisible() const
+{
+    ValCh<bool> visible;
+    visible.ch = m_playbackToolBarVisibleChanged;
+    visible.val = m_isPlaybackToolBarVisible;
+
+    return visible;
+}
+
+void PlaybackConfiguration::setIsPlaybackToolBarVisible(bool visible)
+{
+    m_isPlaybackToolBarVisible = visible;
+    m_playbackToolBarVisibleChanged.send(visible);
+}

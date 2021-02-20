@@ -6,12 +6,14 @@ import MuseScore.NotationScene 1.0
 Rectangle {
     id: root
 
-    UndoRedoModel {
-        id: model
+    property alias isToolBarVisible: model.isToolBarVisible
+
+    function load() {
+        model.load()
     }
 
-    Component.onCompleted: {
-        model.load()
+    UndoRedoModel {
+        id: model
     }
 
     Row {

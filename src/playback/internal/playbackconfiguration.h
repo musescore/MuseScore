@@ -36,6 +36,13 @@ public:
     bool isPlayHarmonyOnClick() const override;
 
     PlaybackCursorType cursorType() const override;
+
+    ValCh<bool> isPlaybackToolBarVisible() const override;
+    void setIsPlaybackToolBarVisible(bool visible) override;
+
+private:
+    bool m_isPlaybackToolBarVisible = false;
+    async::Channel<bool> m_playbackToolBarVisibleChanged;
 };
 }
 

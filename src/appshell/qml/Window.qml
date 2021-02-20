@@ -69,16 +69,32 @@ DockWindow {
         },
 
         DockToolBar {
+            id: notationToolBar
             objectName: "notationToolBar"
             minimumWidth: 192
             minimumHeight: dockWindow.toolbarHeight
 
             color: dockWindow.color
             allowedAreas: Qt.TopToolBarArea
-            visible: dockWindow.isNotationPage
 
             content: NotationToolBar {
+                id: notationToolBarContent
                 color: dockWindow.color
+
+                Connections {
+                    target: notationToolBar
+
+                    Component.onCompleted: {
+                        notationToolBarContent.isToolBarVisible = notationToolBar.visible
+                        notationToolBar.visible = Qt.binding(function() { return dockWindow.isNotationPage && notationToolBarContent.isToolBarVisible})
+
+                        notationToolBarContent.load()
+                    }
+
+                    function onVisibleEdited(visible) {
+                        notationToolBarContent.isToolBarVisible = visible
+                    }
+                }
             }
         },
 
@@ -91,27 +107,58 @@ DockWindow {
 
             color: dockWindow.color
             allowedAreas: Qt.TopToolBarArea
-            visible: dockWindow.isNotationPage
 
             content: PlaybackToolBar {
+                id: playbackToolBarContent
                 color: dockWindow.color
                 floating: playbackToolBar.floating
+
+                Connections {
+                    target: playbackToolBar
+
+                    Component.onCompleted: {
+                        playbackToolBarContent.isToolBarVisible = playbackToolBar.visible
+                        playbackToolBar.visible = Qt.binding(function() { return dockWindow.isNotationPage && playbackToolBarContent.isToolBarVisible})
+
+                        playbackToolBarContent.load()
+                    }
+
+                    function onVisibleEdited(visible) {
+                        playbackToolBarContent.isToolBarVisible = visible
+                    }
+                }
             }
         },
 
         DockToolBar	{
+            id:undoRedoToolBar
             objectName: "undoRedoToolBar"
 
             minimumWidth: 72
             minimumHeight: dockWindow.toolbarHeight
 
             color: dockWindow.color
-            visible: dockWindow.isNotationPage
             floatable: false
             movable: false
 
             content: UndoRedoToolBar {
+                id: undoRedoToolBarContent
                 color: dockWindow.color
+
+                Connections {
+                    target: undoRedoToolBar
+
+                    Component.onCompleted: {
+                        undoRedoToolBarContent.isToolBarVisible = undoRedoToolBar.visible
+                        undoRedoToolBar.visible = Qt.binding(function() { return dockWindow.isNotationPage && undoRedoToolBarContent.isToolBarVisible})
+
+                        undoRedoToolBarContent.load()
+                    }
+
+                    function onVisibleEdited(visible) {
+                        undoRedoToolBarContent.isToolBarVisible = visible
+                    }
+                }
             }
         }
     ]

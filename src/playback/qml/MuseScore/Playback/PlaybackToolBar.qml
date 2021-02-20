@@ -13,13 +13,14 @@ Rectangle {
     id: root
 
     property bool floating: false
+    property alias isToolBarVisible: playbackModel.isToolBarVisible
+
+    function load() {
+        playbackModel.load()
+    }
 
     PlaybackToolBarModel {
         id: playbackModel
-    }
-
-    Component.onCompleted: {
-        playbackModel.load()
     }
 
     Column {

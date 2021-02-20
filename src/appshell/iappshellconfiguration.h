@@ -45,6 +45,10 @@ public:
     virtual ValCh<bool> isInspectorPanelVisible() const = 0;
     virtual ValCh<bool> isStatusBarVisible() const = 0;
     virtual ValCh<bool> isNavigatorVisible() const = 0;
+    virtual ValCh<bool> isNoteInputBarVisible() const = 0;
+    virtual ValCh<bool> isNotationToolBarVisible() const = 0;
+    virtual ValCh<bool> isUndoRedoToolBarVisible() const = 0;
+    virtual ValCh<bool> isPlaybackToolBarVisible() const = 0;
 
     virtual void revertToFactorySettings(bool keepDefaultSettings = false) const = 0;
 };

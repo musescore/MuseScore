@@ -34,6 +34,7 @@
 #include "iappshellconfiguration.h"
 #include "userscores/iuserscoresservice.h"
 #include "iapplicationactioncontroller.h"
+#include "iinteractive.h"
 
 namespace mu::appshell {
 class AppMenuModel : public QObject, public async::Asyncable
@@ -49,6 +50,7 @@ class AppMenuModel : public QObject, public async::Asyncable
     INJECT(appshell, IAppShellConfiguration, configuration)
     INJECT(appshell, userscores::IUserScoresService, userScoresService)
     INJECT(appshell, IApplicationActionController, controller)
+    INJECT(appshell, framework::IInteractive, interactive)
 
     Q_PROPERTY(QVariantList items READ items NOTIFY itemsChanged)
 
@@ -91,6 +93,7 @@ private:
     uicomponents::MenuItemList framesItems() const;
     uicomponents::MenuItemList textItems() const;
     uicomponents::MenuItemList linesItems() const;
+    uicomponents::MenuItemList toolbarsItems() const;
     uicomponents::MenuItemList workspacesItems() const;
 
     uicomponents::MenuItem makeMenu(const std::string& title, const uicomponents::MenuItemList& actions, bool enabled = true,
@@ -107,6 +110,7 @@ private:
     bool selectedRangeOnScore() const;
     bool hasSelectionOnScore() const;
     bool isNoteInputMode() const;
+    bool isNotationPage() const;
 
     notation::ScoreConfig scoreConfig() const;
 

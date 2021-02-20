@@ -84,6 +84,10 @@ void NotationToolBarModel::load()
     context()->currentNotationChanged().onNotify(this, [this]() {
         load();
     });
+
+    configuration()->isNotationToolBarVisible().ch.onReceive(this, [this](bool visible) {
+        emit isToolBarVisibleChanged(visible);
+    });
 }
 
 void NotationToolBarModel::handleAction(const QString& actionCode)
@@ -91,7 +95,22 @@ void NotationToolBarModel::handleAction(const QString& actionCode)
     dispatcher()->dispatch(actions::codeFromQString(actionCode));
 }
 
-MenuItem NotationToolBarModel::makeItem(const ActionCode& actionCode) const
+bool NotationToolBarModel::isToolBarVisible() const
+{
+    return configuration()->isNotationToolBarVisible().val;
+}
+
+void NotationToolBarModel::setIsToolBarVisible(bool visible)
+{
+    if (isToolBarVisible() == visible) {
+        return;
+    }
+
+    configuration()->setIsNotationToolBarVisible(visible);
+    emit isToolBarVisibleChanged(visible);
+}
+
+MenuItem NotationToolBarModel::makeItem(const actions::ActionCode& actionCode) const
 {
     MenuItem item = actionsRegister()->action(actionCode);
     item.enabled = context()->currentNotation() != nullptr;

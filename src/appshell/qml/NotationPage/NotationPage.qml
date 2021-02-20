@@ -26,8 +26,8 @@ DockPage {
         pageModel.isInspectorPanelVisible = inspectorPanel.visible
         inspectorPanel.visible = Qt.binding(function() { return pageModel.isInspectorPanelVisible })
 
-//        notationStatusBar.visible = pageModel.isStatusBarVisible
-//        notationStatusBar.visible = Qt.binding(function() { return pageModel.isStatusBarVisible })
+        pageModel.isNoteInputBarVisible = notationNoteInputBar.visible
+        notationNoteInputBar.visible = Qt.binding(function() { return pageModel.isNoteInputBarVisible })
 
         pageModel.init()
     }
@@ -40,6 +40,10 @@ DockPage {
         minimumHeight: orientation == Qt.Horizontal ? 48 : 0
 
         color: notationPage.color
+
+        onVisibleEdited: {
+            notationPage.pageModel.isNoteInputBarVisible = visible
+        }
 
         content: NoteInputBar {
             color: notationNoteInputBar.color

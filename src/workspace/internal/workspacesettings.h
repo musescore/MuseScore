@@ -37,7 +37,7 @@ public:
     Val value(const Key& key) const override;
     void setValue(const Key& key, const Val& value) const override;
 
-    async::Channel<Val> valueChanged(const Key& key) const;
+    async::Channel<Val> valueChanged(const Key& key) const override;
     async::Notification valuesChanged() const override;
 
 private:
