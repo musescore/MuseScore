@@ -38,7 +38,6 @@
       <maxFretShiftAbove>3</maxFretShiftAbove>
       <maxFretShiftBelow>3</maxFretShiftBelow>
       <showMeasureNumber>0</showMeasureNumber>
-      <useStandardNoteNames>0</useStandardNoteNames>
       <chordStyle>jazz</chordStyle>
       <chordDescriptionFile>chords_jazz.xml</chordDescriptionFile>
       <slurEndWidth>0.12</slurEndWidth>
@@ -1468,7 +1467,6 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>Title</style>
           <text>Big Band</text>
