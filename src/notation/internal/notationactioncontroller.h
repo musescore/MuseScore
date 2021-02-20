@@ -122,6 +122,9 @@ private:
     void toggleInstrumentsPanel();
     void toggleInspectorPanel();
     void toggleStatusBar();
+    void toggleNoteInputBar();
+    void toggleNotationToolBar();
+    void toggleUndoRedoToolBar();
 
     void toggleShowingInvisibleElements();
     void toggleShowingUnprintableElements();

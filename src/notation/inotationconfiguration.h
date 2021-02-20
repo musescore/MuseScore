@@ -108,6 +108,15 @@ public:
 
     virtual ValCh<bool> isStatusBarVisible() const = 0;
     virtual void setIsStatusBarVisible(bool visible) = 0;
+
+    virtual ValCh<bool> isNoteInputBarVisible() const = 0;
+    virtual void setIsNoteInputBarVisible(bool visible) = 0;
+
+    virtual ValCh<bool> isNotationToolBarVisible() const = 0;
+    virtual void setIsNotationToolBarVisible(bool visible) = 0;
+
+    virtual ValCh<bool> isUndoRedoToolBarVisible() const = 0;
+    virtual void setIsUndoRedoToolBarVisible(bool visible) = 0;
 };
 }
 

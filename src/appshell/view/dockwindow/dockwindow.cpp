@@ -115,7 +115,6 @@ void DockWindow::onMainWindowEvent(QEvent* event)
         saveState(currentPage()->objectName());
     } break;
     case QEvent::LayoutRequest: {
-        LOGI() << "XUY========= save state " << currentPage()->objectName();
         saveState(currentPage()->objectName());
     }
     default:

@@ -25,6 +25,7 @@
 #include "actions/iactionsregister.h"
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
+#include "inotationconfiguration.h"
 
 namespace mu::notation {
 class UndoRedoModel : public QObject, public async::Asyncable
@@ -36,6 +37,9 @@ class UndoRedoModel : public QObject, public async::Asyncable
 
     INJECT(notation, context::IGlobalContext, context)
     INJECT(notation, actions::IActionsRegister, actionsRegister)
+    INJECT(notation, INotationConfiguration, configuration)
+
+    Q_PROPERTY(bool isToolBarVisible READ isToolBarVisible WRITE setIsToolBarVisible NOTIFY isToolBarVisibleChanged)
 
 public:
     explicit UndoRedoModel(QObject* parent = nullptr);
@@ -47,8 +51,15 @@ public:
     Q_INVOKABLE void undo();
     Q_INVOKABLE void redo();
 
+    bool isToolBarVisible() const;
+
+public slots:
+    void setIsToolBarVisible(bool visible);
+
 signals:
     void stackChanged();
+
+    void isToolBarVisibleChanged(bool isToolBarVisible);
 
 private:
     INotationUndoStackPtr undoStack() const;

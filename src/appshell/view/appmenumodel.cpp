@@ -124,8 +124,24 @@ void AppMenuModel::setupConnections()
     configuration()->isNavigatorVisible().ch.onReceive(this, [this](bool) {
         load();
     });
+    configuration()->isNoteInputBarVisible().ch.onReceive(this, [this](bool) {
+        load();
+    });
+    configuration()->isNotationToolBarVisible().ch.onReceive(this, [this](bool) {
+        load();
+    });
+    configuration()->isUndoRedoToolBarVisible().ch.onReceive(this, [this](bool) {
+        load();
+    });
+    configuration()->isPlaybackToolBarVisible().ch.onReceive(this, [this](bool) {
+        load();
+    });
 
     controller()->isFullScreen().ch.onReceive(this, [this](bool) {
+        load();
+    });
+
+    interactive()->currentUri().ch.onReceive(this, [this](const Uri&) {
         load();
     });
 }
@@ -233,33 +249,34 @@ MenuItem AppMenuModel::editItem()
 MenuItem AppMenuModel::viewItem()
 {
     MenuItemList viewItems {
-        makeAction("toggle-palette", scoreOpened(), configuration()->isPalettePanelVisible().val),
-        makeAction("toggle-instruments", scoreOpened(), configuration()->isInstrumentsPanelVisible().val),
-        makeAction("masterpalette", scoreOpened(), paletteController()->isMasterPaletteOpened().val),
-        makeAction("inspector", scoreOpened(), configuration()->isInspectorPanelVisible().val),
-        makeAction("toggle-playpanel", scoreOpened()), // need implement
-        makeAction("toggle-navigator", scoreOpened(), configuration()->isNavigatorVisible().val),
-        makeAction("toggle-timeline", scoreOpened()), // need implement
-        makeAction("toggle-mixer", scoreOpened()), // need implement
-        makeAction("synth-control", scoreOpened()), // need implement
-        makeAction("toggle-selection-window", scoreOpened()), // need implement
-        makeAction("toggle-piano", scoreOpened()), // need implement
-        makeAction("toggle-scorecmp-tool", scoreOpened()), // need implement
+        makeAction("toggle-palette", isNotationPage(), configuration()->isPalettePanelVisible().val),
+        makeAction("toggle-instruments", isNotationPage(), configuration()->isInstrumentsPanelVisible().val),
+        makeAction("masterpalette", isNotationPage(), paletteController()->isMasterPaletteOpened().val),
+        makeAction("inspector", isNotationPage(), configuration()->isInspectorPanelVisible().val),
+        makeAction("toggle-playpanel", isNotationPage()), // need implement
+        makeAction("toggle-navigator", isNotationPage(), configuration()->isNavigatorVisible().val),
+        makeAction("toggle-timeline", isNotationPage()), // need implement
+        makeAction("toggle-mixer", isNotationPage()), // need implement
+        makeAction("synth-control", isNotationPage()), // need implement
+        makeAction("toggle-selection-window", isNotationPage()), // need implement
+        makeAction("toggle-piano", isNotationPage()), // need implement
+        makeAction("toggle-scorecmp-tool", isNotationPage()), // need implement
         makeSeparator(),
-        makeAction("zoomin", scoreOpened()),
-        makeAction("zoomout", scoreOpened()),
+        makeAction("zoomin", isNotationPage()),
+        makeAction("zoomout", isNotationPage()),
         makeSeparator(),
+        makeMenu(trc("appshell", "&Toolbars"), toolbarsItems()),
         makeMenu(trc("appshell", "W&orkspaces"), workspacesItems(), true, "select-workspace"),
-        makeAction("toggle-statusbar", scoreOpened(), configuration()->isStatusBarVisible().val),
+        makeAction("toggle-statusbar", isNotationPage(), configuration()->isStatusBarVisible().val),
         makeSeparator(),
-        makeAction("split-h", scoreOpened()), // need implement
-        makeAction("split-v", scoreOpened()), // need implement
+        makeAction("split-h", isNotationPage()), // need implement
+        makeAction("split-v", isNotationPage()), // need implement
         makeSeparator(),
-        makeAction("show-invisible", scoreOpened(), scoreConfig().isShowInvisibleElements),
-        makeAction("show-unprintable", scoreOpened(), scoreConfig().isShowUnprintableElements),
-        makeAction("show-frames", scoreOpened(), scoreConfig().isShowFrames),
-        makeAction("show-pageborders", scoreOpened(), scoreConfig().isShowPageMargins),
-        makeAction("mark-irregular", scoreOpened(), scoreConfig().isMarkIrregularMeasures)
+        makeAction("show-invisible", isNotationPage(), scoreConfig().isShowInvisibleElements),
+        makeAction("show-unprintable", isNotationPage(), scoreConfig().isShowUnprintableElements),
+        makeAction("show-frames", isNotationPage(), scoreConfig().isShowFrames),
+        makeAction("show-pageborders", isNotationPage(), scoreConfig().isShowPageMargins),
+        makeAction("mark-irregular", isNotationPage(), scoreConfig().isMarkIrregularMeasures)
     };
 
     if (configuration()->isFullScreenAvailable()) {
@@ -544,6 +561,18 @@ MenuItemList AppMenuModel::linesItems() const
     return items;
 }
 
+MenuItemList AppMenuModel::toolbarsItems() const
+{
+    MenuItemList items {
+        makeAction("toggle-transport", isNotationPage(), configuration()->isPlaybackToolBarVisible().val),
+        makeAction("toggle-noteinput", isNotationPage(), configuration()->isNoteInputBarVisible().val),
+        makeAction("toogle-notationtoolbar", isNotationPage(), configuration()->isNotationToolBarVisible().val),
+        makeAction("toogle-undoredo", isNotationPage(), configuration()->isUndoRedoToolBarVisible().val)
+    };
+
+    return items;
+}
+
 MenuItemList AppMenuModel::workspacesItems() const
 {
     MenuItemList items;
@@ -664,6 +693,11 @@ bool AppMenuModel::hasSelectionOnScore() const
 bool AppMenuModel::isNoteInputMode() const
 {
     return currentNotation() ? currentNotation()->interaction()->noteInput()->isNoteInputMode() : false;
+}
+
+bool AppMenuModel::isNotationPage() const
+{
+    return interactive()->isOpened("musescore://notation").val;
 }
 
 ScoreConfig AppMenuModel::scoreConfig() const

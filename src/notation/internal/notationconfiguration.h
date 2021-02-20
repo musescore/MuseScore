@@ -110,6 +110,15 @@ public:
     ValCh<bool> isStatusBarVisible() const override;
     void setIsStatusBarVisible(bool visible) override;
 
+    ValCh<bool> isNoteInputBarVisible() const override;
+    void setIsNoteInputBarVisible(bool visible) override;
+
+    ValCh<bool> isNotationToolBarVisible() const override;
+    void setIsNotationToolBarVisible(bool visible) override;
+
+    ValCh<bool> isUndoRedoToolBarVisible() const override;
+    void setIsUndoRedoToolBarVisible(bool visible) override;
+
 private:
     std::vector<std::string> parseToolbarActions(const std::string& actions) const;
 
@@ -129,6 +138,12 @@ private:
     async::Channel<bool> m_inspectorPanelVisibleChanged;
     bool m_isStatusBarPanelVisible = false;
     async::Channel<bool> m_statusBarVisibleChanged;
+    bool m_isNoteInputBarVisible = false;
+    async::Channel<bool> m_noteInputBarVisibleChanged;
+    bool m_isNotationToolBarVisible = false;
+    async::Channel<bool> m_notationToolBarVisibleChanged;
+    bool m_isUndoRedoToolBarVisible = false;
+    async::Channel<bool> m_undoRedoToolBarVisibleChanged;
 };
 }
 

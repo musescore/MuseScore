@@ -23,6 +23,7 @@
 #include "iappshellconfiguration.h"
 #include "userscores/iuserscoresconfiguration.h"
 #include "notation/inotationconfiguration.h"
+#include "playback/iplaybackconfiguration.h"
 #include "languages/ilanguagesconfiguration.h"
 
 namespace mu::appshell {
@@ -30,6 +31,7 @@ class AppShellConfiguration : public IAppShellConfiguration
 {
     INJECT(appshell, userscores::IUserScoresConfiguration, userScoresConfiguration)
     INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
+    INJECT(appshell, playback::IPlaybackConfiguration, playbackConfiguration)
     INJECT(appshell, languages::ILanguagesConfiguration, languagesConfiguration)
 
 public:
@@ -48,6 +50,10 @@ public:
     ValCh<bool> isInspectorPanelVisible() const override;
     ValCh<bool> isStatusBarVisible() const override;
     ValCh<bool> isNavigatorVisible() const override;
+    ValCh<bool> isNoteInputBarVisible() const override;
+    ValCh<bool> isNotationToolBarVisible() const override;
+    ValCh<bool> isUndoRedoToolBarVisible() const override;
+    ValCh<bool> isPlaybackToolBarVisible() const override;
 
     void revertToFactorySettings(bool keepDefaultSettings = false) const override;
 

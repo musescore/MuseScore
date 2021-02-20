@@ -50,7 +50,6 @@ public:
 
     bool floatable() const;
     bool closable() const;
-
     bool visible() const;
 
     struct Widget {

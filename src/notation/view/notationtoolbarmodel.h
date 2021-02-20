@@ -30,6 +30,7 @@
 
 #include "framework/ui/view/iconcodes.h"
 #include "framework/uicomponents/uicomponentstypes.h"
+#include "inotationconfiguration.h"
 
 namespace mu::notation {
 class NotationToolBarModel : public QAbstractListModel, public async::Asyncable
@@ -39,6 +40,9 @@ class NotationToolBarModel : public QAbstractListModel, public async::Asyncable
     INJECT(notation, context::IGlobalContext, context)
     INJECT(notation, actions::IActionsRegister, actionsRegister)
     INJECT(notation, actions::IActionsDispatcher, dispatcher)
+    INJECT(notation, INotationConfiguration, configuration)
+
+    Q_PROPERTY(bool isToolBarVisible READ isToolBarVisible WRITE setIsToolBarVisible NOTIFY isToolBarVisibleChanged)
 
 public:
     explicit NotationToolBarModel(QObject* parent = nullptr);
@@ -49,6 +53,14 @@ public:
 
     Q_INVOKABLE void load();
     Q_INVOKABLE void handleAction(const QString& actionCode);
+
+    bool isToolBarVisible() const;
+
+public slots:
+    void setIsToolBarVisible(bool visible);
+
+signals:
+    void isToolBarVisibleChanged(bool visible);
 
 private:
     enum Roles {

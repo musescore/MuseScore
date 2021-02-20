@@ -68,9 +68,6 @@ static const Settings::Key TOOLBAR_KEY(module_name, "ui/toolbar/");
 static const Settings::Key NAVIGATOR_VISIBLE_KEY(module_name, "ui/application/startup/showNavigator");
 static const Settings::Key IS_CANVAS_ORIENTATION_VERTICAL_KEY(module_name, "ui/canvas/scroll/verticalOrientation");
 
-static const Settings::Key PALETTEPANEL_VISIBLE_KEY(module_name, "ui/application/showPalettePanel");
-static const Settings::Key INSTRUMENTSPANEL_VISIBLE_KEY(module_name, "ui/application/showInstrumentsPanel");
-static const Settings::Key INSPECTORPANEL_VISIBLE_KEY(module_name, "ui/application/showInspectorPanel");
 static const Settings::Key STATUSBAR_VISIBLE_KEY(module_name, "ui/application/showStatusBar");
 
 void NotationConfiguration::init()
@@ -115,21 +112,6 @@ void NotationConfiguration::init()
     settings()->setDefaultValue(IS_CANVAS_ORIENTATION_VERTICAL_KEY, Val(false));
     settings()->valueChanged(IS_CANVAS_ORIENTATION_VERTICAL_KEY).onReceive(nullptr, [this](const Val&) {
         m_canvasOrientationChanged.send(canvasOrientation().val);
-    });
-
-    settings()->setDefaultValue(PALETTEPANEL_VISIBLE_KEY, Val(true));
-    settings()->valueChanged(PALETTEPANEL_VISIBLE_KEY).onReceive(nullptr, [this](const Val&) {
-        m_palettePanelVisibleChanged.send(isPalettePanelVisible().val);
-    });
-
-    settings()->setDefaultValue(INSTRUMENTSPANEL_VISIBLE_KEY, Val(true));
-    settings()->valueChanged(INSTRUMENTSPANEL_VISIBLE_KEY).onReceive(nullptr, [this](const Val&) {
-        m_instrumentsPanelVisibleChanged.send(isInstrumentsPanelVisible().val);
-    });
-
-    settings()->setDefaultValue(INSPECTORPANEL_VISIBLE_KEY, Val(true));
-    settings()->valueChanged(INSPECTORPANEL_VISIBLE_KEY).onReceive(nullptr, [this](const Val&) {
-        m_inspectorPanelVisibleChanged.send(isInspectorPanelVisible().val);
     });
 
     settings()->setDefaultValue(STATUSBAR_VISIBLE_KEY, Val(true));
@@ -443,6 +425,51 @@ void NotationConfiguration::setIsStatusBarVisible(bool visible)
     } else {
         settings()->setValue(STATUSBAR_VISIBLE_KEY, Val(visible));
     }
+}
+
+ValCh<bool> NotationConfiguration::isNoteInputBarVisible() const
+{
+    ValCh<bool> visible;
+    visible.ch = m_noteInputBarVisibleChanged;
+    visible.val = m_isNoteInputBarVisible;
+
+    return visible;
+}
+
+void NotationConfiguration::setIsNoteInputBarVisible(bool visible)
+{
+    m_isNoteInputBarVisible = visible;
+    m_noteInputBarVisibleChanged.send(visible);
+}
+
+ValCh<bool> NotationConfiguration::isNotationToolBarVisible() const
+{
+    ValCh<bool> visible;
+    visible.ch = m_notationToolBarVisibleChanged;
+    visible.val = m_isNotationToolBarVisible;
+
+    return visible;
+}
+
+void NotationConfiguration::setIsNotationToolBarVisible(bool visible)
+{
+    m_isNotationToolBarVisible = visible;
+    m_notationToolBarVisibleChanged.send(visible);
+}
+
+ValCh<bool> NotationConfiguration::isUndoRedoToolBarVisible() const
+{
+    ValCh<bool> visible;
+    visible.ch = m_undoRedoToolBarVisibleChanged;
+    visible.val = m_isUndoRedoToolBarVisible;
+
+    return visible;
+}
+
+void NotationConfiguration::setIsUndoRedoToolBarVisible(bool visible)
+{
+    m_isUndoRedoToolBarVisible = visible;
+    m_undoRedoToolBarVisibleChanged.send(visible);
 }
 
 std::vector<std::string> NotationConfiguration::parseToolbarActions(const std::string& actions) const

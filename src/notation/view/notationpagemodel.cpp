@@ -42,6 +42,14 @@ void NotationPageModel::init()
     configuration()->isStatusBarVisible().ch.onReceive(this, [this](bool visible) {
         emit isStatusBarVisibleChanged(visible);
     });
+
+    configuration()->isNoteInputBarVisible().ch.onReceive(this, [this](bool visible) {
+        emit isNoteInputBarVisibleChanged(visible);
+    });
+
+    configuration()->isNotationToolBarVisible().ch.onReceive(this, [this](bool visible) {
+        emit isNotationToolBarVisibleChanged(visible);
+    });
 }
 
 bool NotationPageModel::isPalettePanelVisible() const
@@ -62,6 +70,16 @@ bool NotationPageModel::isInspectorPanelVisible() const
 bool NotationPageModel::isStatusBarVisible() const
 {
     return configuration()->isStatusBarVisible().val;
+}
+
+bool NotationPageModel::isNoteInputBarVisible() const
+{
+    return configuration()->isNoteInputBarVisible().val;
+}
+
+bool NotationPageModel::isNotationToolBarVisible() const
+{
+    return configuration()->isNotationToolBarVisible().val;
 }
 
 void NotationPageModel::setIsPalettePanelVisible(bool visible)
@@ -102,4 +120,24 @@ void NotationPageModel::setIsStatusBarVisible(bool visible)
 
     configuration()->setIsStatusBarVisible(visible);
     emit isStatusBarVisibleChanged(visible);
+}
+
+void NotationPageModel::setIsNoteInputBarVisible(bool visible)
+{
+    if (isNoteInputBarVisible() == visible) {
+        return;
+    }
+
+    configuration()->setIsNoteInputBarVisible(visible);
+    emit isNoteInputBarVisibleChanged(visible);
+}
+
+void NotationPageModel::setIsNotationToolBarVisible(bool visible)
+{
+    if (isNotationToolBarVisible() == visible) {
+        return;
+    }
+
+    configuration()->setIsNotationToolBarVisible(visible);
+    emit isNotationToolBarVisibleChanged(visible);
 }

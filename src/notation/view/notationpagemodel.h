@@ -38,6 +38,9 @@ class NotationPageModel : public QObject, public async::Asyncable
     Q_PROPERTY(
         bool isInspectorPanelVisible READ isInspectorPanelVisible WRITE setIsInspectorPanelVisible NOTIFY isInspectorPanelVisibleChanged)
     Q_PROPERTY(bool isStatusBarVisible READ isStatusBarVisible WRITE setIsStatusBarVisible NOTIFY isStatusBarVisibleChanged)
+    Q_PROPERTY(bool isNoteInputBarVisible READ isNoteInputBarVisible WRITE setIsNoteInputBarVisible NOTIFY isNoteInputBarVisibleChanged)
+    Q_PROPERTY(
+        bool isNotationToolBarVisible READ isNotationToolBarVisible WRITE setIsNotationToolBarVisible NOTIFY isNotationToolBarVisibleChanged)
 
 public:
     explicit NotationPageModel(QObject* parent = nullptr);
@@ -48,18 +51,24 @@ public:
     bool isInstrumentsPanelVisible() const;
     bool isInspectorPanelVisible() const;
     bool isStatusBarVisible() const;
+    bool isNoteInputBarVisible() const;
+    bool isNotationToolBarVisible() const;
 
 public slots:
     void setIsPalettePanelVisible(bool visible);
     void setIsInstrumentsPanelVisible(bool visible);
     void setIsInspectorPanelVisible(bool visible);
     void setIsStatusBarVisible(bool visible);
+    void setIsNoteInputBarVisible(bool visible);
+    void setIsNotationToolBarVisible(bool visible);
 
 signals:
     void isPalettePanelVisibleChanged(bool isPalettePanelVisible);
     void isInstrumentsPanelVisibleChanged(bool isInstrumentsPanelVisible);
     void isInspectorPanelVisibleChanged(bool isInspectorPanelVisible);
     void isStatusBarVisibleChanged(bool isStatusBarVisible);
+    void isNotationToolBarVisibleChanged(bool isNotationToolBarVisible);
+    void isNoteInputBarVisibleChanged(bool isNoteInputBarVisible);
 };
 }
 

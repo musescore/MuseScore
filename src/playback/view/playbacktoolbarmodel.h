@@ -30,6 +30,7 @@
 #include "uicomponents/uicomponentstypes.h"
 #include "workspace/iworkspacemanager.h"
 #include "iinteractive.h"
+#include "iplaybackconfiguration.h"
 
 namespace mu::playback {
 class PlaybackToolBarModel : public QAbstractListModel, public async::Asyncable
@@ -40,6 +41,7 @@ class PlaybackToolBarModel : public QAbstractListModel, public async::Asyncable
     INJECT(playback, actions::IActionsRegister, actionsRegister)
     INJECT(playback, IPlaybackController, playbackController)
     INJECT(playback, workspace::IWorkspaceManager, workspaceManager)
+    INJECT(playback, IPlaybackConfiguration, configuration)
 
     Q_PROPERTY(bool isPlayAllowed READ isPlayAllowed NOTIFY isPlayAllowedChanged)
 
@@ -51,6 +53,8 @@ class PlaybackToolBarModel : public QAbstractListModel, public async::Asyncable
     Q_PROPERTY(int maxMeasureNumber READ maxMeasureNumber NOTIFY playTimeChanged)
     Q_PROPERTY(int beatNumber READ beatNumber WRITE setBeatNumber NOTIFY playTimeChanged)
     Q_PROPERTY(int maxBeatNumber READ maxBeatNumber NOTIFY playTimeChanged)
+
+    Q_PROPERTY(bool isToolBarVisible READ isToolBarVisible WRITE setIsToolBarVisible NOTIFY isToolBarVisibleChanged)
 
     Q_PROPERTY(QVariant tempo READ tempo NOTIFY playTimeChanged)
 
@@ -74,6 +78,8 @@ public:
 
     QVariant tempo() const;
 
+    bool isToolBarVisible() const;
+
     Q_INVOKABLE void load();
     Q_INVOKABLE void handleAction(const QString& actionCode);
 
@@ -82,11 +88,13 @@ public slots:
     void setPlayTime(const QDateTime& time);
     void setMeasureNumber(int measureNumber);
     void setBeatNumber(int beatNumber);
+    void setIsToolBarVisible(bool visible);
 
 signals:
     void isPlayAllowedChanged();
     void maxPlayTimeChanged();
     void playTimeChanged();
+    void isToolBarVisibleChanged(bool isToolBarVisible);
 
 private:
     enum Roles {

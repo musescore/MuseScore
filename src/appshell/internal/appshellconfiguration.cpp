@@ -34,7 +34,7 @@ using namespace mu::framework;
 
 bool AppShellConfiguration::isAppUpdatable() const
 {
-#if defined(APP_UPDATABLE)
+#ifdef APP_UPDATABLE
     return true;
 #else
     return false;
@@ -43,9 +43,9 @@ bool AppShellConfiguration::isAppUpdatable() const
 
 bool AppShellConfiguration::isFullScreenAvailable() const
 {
-#if !defined(Q_OS_MAC)
+#ifndef Q_OS_MAC
     return true;
-#elif
+#else
     return false;
 #endif
 }
@@ -107,6 +107,26 @@ mu::ValCh<bool> AppShellConfiguration::isStatusBarVisible() const
 mu::ValCh<bool> AppShellConfiguration::isNavigatorVisible() const
 {
     return notationConfiguration()->isNavigatorVisible();
+}
+
+mu::ValCh<bool> AppShellConfiguration::isNoteInputBarVisible() const
+{
+    return notationConfiguration()->isNoteInputBarVisible();
+}
+
+mu::ValCh<bool> AppShellConfiguration::isNotationToolBarVisible() const
+{
+    return notationConfiguration()->isNotationToolBarVisible();
+}
+
+mu::ValCh<bool> AppShellConfiguration::isUndoRedoToolBarVisible() const
+{
+    return notationConfiguration()->isUndoRedoToolBarVisible();
+}
+
+mu::ValCh<bool> AppShellConfiguration::isPlaybackToolBarVisible() const
+{
+    return playbackConfiguration()->isPlaybackToolBarVisible();
 }
 
 void AppShellConfiguration::revertToFactorySettings(bool keepDefaultSettings) const

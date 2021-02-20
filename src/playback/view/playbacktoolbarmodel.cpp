@@ -145,6 +145,10 @@ void PlaybackToolBarModel::setupConnections()
     playbackController()->actionEnabledChanged().onReceive(this, [this](const ActionCode&) {
         updateState();
     });
+
+    configuration()->isPlaybackToolBarVisible().ch.onReceive(this, [this](bool visible) {
+        emit isToolBarVisibleChanged(visible);
+    });
 }
 
 ActionList PlaybackToolBarModel::currentWorkspaceActions() const
@@ -300,6 +304,16 @@ void PlaybackToolBarModel::setBeatNumber(int beatNumber)
     rewindToBeat(measureBeat);
 }
 
+void PlaybackToolBarModel::setIsToolBarVisible(bool visible)
+{
+    if (isToolBarVisible() == visible) {
+        return;
+    }
+
+    configuration()->setIsPlaybackToolBarVisible(visible);
+    emit isToolBarVisibleChanged(visible);
+}
+
 int PlaybackToolBarModel::maxBeatNumber() const
 {
     return measureBeat().maxBeatIndex + 1;
@@ -315,6 +329,11 @@ QVariant PlaybackToolBarModel::tempo() const
     obj["value"] = tempo.valueBpm;
 
     return obj;
+}
+
+bool PlaybackToolBarModel::isToolBarVisible() const
+{
+    return configuration()->isPlaybackToolBarVisible().val;
 }
 
 void PlaybackToolBarModel::handleAction(const QString& actionCode)

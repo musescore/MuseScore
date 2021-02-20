@@ -200,6 +200,9 @@ void NotationActionController::init()
     dispatcher()->reg(this, "toggle-instruments", this, &NotationActionController::toggleInstrumentsPanel);
     dispatcher()->reg(this, "inspector", this, &NotationActionController::toggleInspectorPanel);
     dispatcher()->reg(this, "toggle-statusbar", this, &NotationActionController::toggleStatusBar);
+    dispatcher()->reg(this, "toggle-noteinput", this, &NotationActionController::toggleNoteInputBar);
+    dispatcher()->reg(this, "toogle-notationtoolbar", this, &NotationActionController::toggleNotationToolBar);
+    dispatcher()->reg(this, "toogle-undoredo", this, &NotationActionController::toggleUndoRedoToolBar);
 
     dispatcher()->reg(this, "stretch-", [this]() { addStretch(-STRETCH_STEP); });
     dispatcher()->reg(this, "stretch+", [this]() { addStretch(STRETCH_STEP); });
@@ -1115,6 +1118,24 @@ void NotationActionController::toggleStatusBar()
 {
     bool visible = configuration()->isStatusBarVisible().val;
     configuration()->setIsStatusBarVisible(!visible);
+}
+
+void NotationActionController::toggleNoteInputBar()
+{
+    bool visible = configuration()->isNoteInputBarVisible().val;
+    configuration()->setIsNoteInputBarVisible(!visible);
+}
+
+void NotationActionController::toggleNotationToolBar()
+{
+    bool visible = configuration()->isNotationToolBarVisible().val;
+    configuration()->setIsNotationToolBarVisible(!visible);
+}
+
+void NotationActionController::toggleUndoRedoToolBar()
+{
+    bool visible = configuration()->isUndoRedoToolBarVisible().val;
+    configuration()->setIsUndoRedoToolBarVisible(!visible);
 }
 
 void NotationActionController::toggleShowingInvisibleElements()
