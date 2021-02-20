@@ -29,6 +29,10 @@ const ActionList ApplicationActions::m_actions = {
                ShortcutContext::Any,
                QT_TRANSLATE_NOOP("action", "Quit")
                ),
+    ActionItem("about-qt",
+               ShortcutContext::Any,
+               QT_TRANSLATE_NOOP("action", "About Qt...")
+               ),
     ActionItem("online-handbook",
                ShortcutContext::Any,
                QT_TRANSLATE_NOOP("action", "Online Handbook")

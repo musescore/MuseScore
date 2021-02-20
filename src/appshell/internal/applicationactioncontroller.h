@@ -39,6 +39,8 @@ public:
 
 private:
     void quit();
+    void openAboutQtDialog();
+
     void openOnlineHandbookPage();
     void openAskForHelpPage();
     void openBugReportPage();
