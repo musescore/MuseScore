@@ -71,29 +71,29 @@ class Palette : public QWidget
     INJECT(palette, mu::framework::IInteractive, interactive)
 
     QString _name;
-    QList<PaletteCell*> cells;
-    QList<PaletteCell*> dragCells;    // used for filter & backup
+    QList<PaletteCellPtr> cells;
+    QList<PaletteCellPtr> dragCells; // used for filter & backup
 
-    int hgrid;
-    int vgrid;
-    int currentIdx;
+    int hgrid = -1;
+    int vgrid = -1;
+    int currentIdx = -1;
     int pressedIndex = -1;
-    int dragIdx;
-    int selectedIdx;
+    int dragIdx = -1;
+    int selectedIdx = -1;
     QPoint dragStartPosition;
 
-    qreal extraMag;
-    bool _drawGrid;
-    bool _selectable;
+    qreal extraMag = 0;
+    bool _drawGrid = false;
+    bool _selectable = false;
     bool _disableElementsApply { false };
     bool _useDoubleClickToActivate { false };
-    bool _readOnly;
-    bool _systemPalette;
-    qreal _yOffset;                  // in spatium units of "gscore"
-    bool filterActive { false };     // bool if filter is active
+    bool _readOnly = false;
+    bool _systemPalette = false;
+    qreal _yOffset = 0; // in spatium units of "gscore"
+    bool filterActive = false; // bool if filter is active
 
-    bool _moreElements;
-    bool _showContextMenu { true };
+    bool _moreElements = false;
+    bool _showContextMenu = true;
 
     virtual void paintEvent(QPaintEvent*) override;
     virtual void mousePressEvent(QMouseEvent*) override;
@@ -114,7 +114,7 @@ class Palette : public QWidget
     int idx2(const QPoint&) const;
     QRect idxRect(int) const;
 
-    const QList<PaletteCell*>* ccp() const { return filterActive ? &dragCells : &cells; }
+    const QList<PaletteCellPtr>& ccp() const;
     QPixmap pixmap(int cellIdx) const;
 
     void applyElementAtPosition(QPoint pos, Qt::KeyboardModifiers modifiers);
@@ -128,20 +128,19 @@ signals:
     void displayMore(const QString& paletteName);
 
 public:
-    Palette(QWidget* parent = 0);
+    Palette(QWidget* parent = nullptr);
     Palette(PalettePanelPtr, QWidget* parent = nullptr);
-    virtual ~Palette();
 
     void nextPaletteElement();
     void prevPaletteElement();
     void applyPaletteElement();
-    static bool applyPaletteElement(Element* element, Qt::KeyboardModifiers modifiers = {});
-    PaletteCell* append(Element*, const QString& name, QString tag = QString(),qreal mag = 1.0);
-    PaletteCell* add(int idx, Element*, const QString& name,const QString tag = QString(), qreal mag = 1.0);
+    static bool applyPaletteElement(ElementPtr element, Qt::KeyboardModifiers modifiers = {});
+    PaletteCellPtr append(ElementPtr element, const QString& name, QString tag = QString(), qreal mag = 1.0);
+    PaletteCellPtr add(int idx, ElementPtr element, const QString& name, const QString tag = QString(), qreal mag = 1.0);
 
     void emitChanged() { emit changed(); }
     void setGrid(int, int);
-    Element* element(int idx);
+    ElementPtr element(int idx) const;
     void setDrawGrid(bool val) { _drawGrid = val; }
     bool drawGrid() const { return _drawGrid; }
     bool read(const QString& path);   // TODO: remove/reuse PalettePanel code
@@ -171,7 +170,7 @@ public:
     int columns() const;
     int rows() const;
     int size() const { return filterActive ? dragCells.size() : cells.size(); }
-    PaletteCell* cellAt(int index) const { return ccp()->value(index); }
+    PaletteCellPtr cellAt(int index) const;
     void setCellReadOnly(int c, bool v) { cells[c]->readOnly = v; }
     QString name() const { return _name; }
     void setName(const QString& s) { _name = s; }
@@ -188,10 +187,10 @@ public:
     int gridWidthM() const { return hgrid * paletteScaling(); }
     int gridHeightM() const { return vgrid * paletteScaling(); }
 
-    int getCurrentIdx() { return currentIdx; }
+    int getCurrentIdx() const { return currentIdx; }
     void setCurrentIdx(int i) { currentIdx = i; }
     bool isFilterActive() { return filterActive == true; }
-    QList<PaletteCell*> getDragCells() { return dragCells; }
+    QList<PaletteCellPtr> getDragCells() { return dragCells; }
     virtual int heightForWidth(int) const override;
     virtual QSize sizeHint() const override;
     int idx(const QPoint&) const;
