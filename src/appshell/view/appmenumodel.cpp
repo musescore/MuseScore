@@ -326,7 +326,7 @@ MenuItem AppMenuModel::helpItem()
         makeMenu(trc("appshell", "&Tours"), toursItems),
         makeSeparator(),
         makeAction("about"), // need implement
-        makeAction("about-qt"), // need implement
+        makeAction("about-qt"),
         makeAction("about-musicxml"), // need implement
     };
 

@@ -29,6 +29,8 @@ void ApplicationActionController::init()
 {
     dispatcher()->reg(this, "quit", this, &ApplicationActionController::quit);
 
+    dispatcher()->reg(this, "about-qt", this, &ApplicationActionController::openAboutQtDialog);
+
     dispatcher()->reg(this, "online-handbook", this, &ApplicationActionController::openOnlineHandbookPage);
     dispatcher()->reg(this, "ask-help", this, &ApplicationActionController::openAskForHelpPage);
     dispatcher()->reg(this, "report-bug", this, &ApplicationActionController::openBugReportPage);
@@ -40,6 +42,11 @@ void ApplicationActionController::init()
 void ApplicationActionController::quit()
 {
     QCoreApplication::quit();
+}
+
+void ApplicationActionController::openAboutQtDialog()
+{
+    QApplication::aboutQt();
 }
 
 void ApplicationActionController::openOnlineHandbookPage()
