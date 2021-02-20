@@ -26,6 +26,10 @@ const ActionList WorkspaceActions::m_actions = {
     ActionItem("select-workspace",
                ShortcutContext::Any,
                QT_TRANSLATE_NOOP("action", "Select Workspace")
+               ),
+    ActionItem("configure-workspaces",
+               ShortcutContext::Any,
+               QT_TRANSLATE_NOOP("action", "Configure Workspace")
                )
 };
 

@@ -23,18 +23,23 @@
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
 #include "iworkspaceconfiguration.h"
+#include "iinteractive.h"
 
 namespace mu::workspace {
 class WorkspaceActionController : public actions::Actionable
 {
-    INJECT(appshell, actions::IActionsDispatcher, dispatcher)
-    INJECT(appshell, IWorkspaceConfiguration, configuration)
+    INJECT(workspace, actions::IActionsDispatcher, dispatcher)
+    INJECT(workspace, IWorkspaceConfiguration, configuration)
+    INJECT(workspace, framework::IInteractive, interactive)
 
 public:
     void init();
 
 private:
     void selectWorkspace(const actions::ActionData& args);
+    void openConfigureWorkspacesDialog();
+
+    void setCurrentWorkspaceName(const std::string& workspaceName);
 };
 }
 
