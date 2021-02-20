@@ -84,8 +84,8 @@ FocusScope {
                     orientation: Qt.Vertical
 
                     color: "black"
-                    withBorder: true
-                    borderColor: "white"
+                    border.width: 1
+                    border.color: "white"
 
                     size: notationView.verticalScrollSize
 
@@ -107,8 +107,8 @@ FocusScope {
                     orientation: Qt.Horizontal
 
                     color: "black"
-                    withBorder: true
-                    borderColor: "white"
+                    border.width: 1
+                    border.color: "white"
 
                     size: notationView.horizontalScrollSize
 
