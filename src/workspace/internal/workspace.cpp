@@ -25,14 +25,14 @@
 #include "global/xmlreader.h"
 #include "global/xmlwriter.h"
 
+#include "libmscore/mscore.h"
+
 #include <QBuffer>
 #include <QDomDocument>
 
 using namespace mu;
 using namespace mu::workspace;
 using namespace mu::system;
-
-#define MSC_VERSION "3.01" // FIXME
 
 static constexpr std::string_view WORKSPACE_MUSESCORE_TAG("museScore");
 static constexpr std::string_view WORKSPACE_VERSION_ATTRIBUTE("version");
