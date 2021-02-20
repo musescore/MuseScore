@@ -347,6 +347,8 @@ struct LoopBoundaries
     QRect loopInRect;
     QRect loopOutRect;
 
+    bool visible = false;
+
     bool isNull() const
     {
         return loopInTick == 0 && loopOutTick == 0;
@@ -360,6 +362,7 @@ struct LoopBoundaries
         equals &= loopOutTick == boundaries.loopOutTick;
         equals &= loopInRect == boundaries.loopInRect;
         equals &= loopOutRect == boundaries.loopOutRect;
+        equals &= visible == boundaries.visible;
 
         return equals;
     }

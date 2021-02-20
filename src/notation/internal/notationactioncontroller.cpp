@@ -194,6 +194,7 @@ void NotationActionController::init()
     dispatcher()->reg(this, "tempo", [this]() { addText(TextType::TEMPO); });
 
     dispatcher()->reg(this, "toggle-navigator", this, &NotationActionController::toggleNavigator);
+    dispatcher()->reg(this, "toggle-mixer", this, &NotationActionController::toggleMixer);
 
     for (int i = MIN_NOTES_INTERVAL; i <= MAX_NOTES_INTERVAL; ++i) {
         if (isNotesIntervalValid(i)) {
@@ -982,6 +983,11 @@ void NotationActionController::toggleNavigator()
 {
     bool visible = configuration()->isNavigatorVisible().val;
     configuration()->setNavigatorVisible(!visible);
+}
+
+void NotationActionController::toggleMixer()
+{
+    NOT_IMPLEMENTED;
 }
 
 void NotationActionController::startNoteInputIfNeed()

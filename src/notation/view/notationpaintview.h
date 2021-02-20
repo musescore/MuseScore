@@ -52,6 +52,8 @@ class NotationPaintView : public QQuickPaintedItem, public IControlledView, publ
     Q_PROPERTY(qreal horizontalScrollSize READ horizontalScrollSize NOTIFY horizontalScrollChanged)
     Q_PROPERTY(qreal startVerticalScrollPosition READ startVerticalScrollPosition NOTIFY verticalScrollChanged)
     Q_PROPERTY(qreal verticalScrollSize READ verticalScrollSize NOTIFY verticalScrollChanged)
+
+    Q_PROPERTY(QColor backgroundColor READ backgroundColor NOTIFY backgroundColorChanged)
     Q_PROPERTY(QRect viewport READ viewport NOTIFY viewportChanged)
 
 public:
@@ -89,6 +91,7 @@ public:
     qreal startVerticalScrollPosition() const;
     qreal verticalScrollSize() const;
 
+    QColor backgroundColor() const;
     QRect viewport() const;
 
 signals:
@@ -98,11 +101,13 @@ signals:
     void horizontalScrollChanged();
     void verticalScrollChanged();
 
+    void backgroundColorChanged(QColor color);
     void viewportChanged(QRect viewport);
 
 protected:
     void setNotation(INotationPtr notation);
     void setReadonly(bool readonly);
+    void setBackgroundColor(const QColor& color);
 
     void moveCanvasToCenter();
     void moveCanvasToPosition(const QPoint& logicPos);

@@ -61,8 +61,8 @@ public:
     midi::MidiData playElementMidiData(const Element* element) const override;
 
     void addLoopBoundary(LoopBoundaryType boundaryType, int tick) override;
-    void removeLoopBoundaries() override;
-    async::Channel<LoopBoundaries> loopBoundariesChanged() const override;
+    void setLoopBoundariesVisible(bool visible) override;
+    ValCh<LoopBoundaries> loopBoundaries() const override;
 
     Tempo tempo(int tick) const override;
     MeasureBeat beat(int tick) const override;

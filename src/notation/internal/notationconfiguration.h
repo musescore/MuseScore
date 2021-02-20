@@ -25,14 +25,12 @@
 #include "ui/iuiconfiguration.h"
 #include "iglobalconfiguration.h"
 #include "settings.h"
-#include "ui/itheme.h"
 
 namespace mu::notation {
 class NotationConfiguration : public INotationConfiguration, public async::Asyncable
 {
     INJECT(notation, ui::IUiConfiguration, uiConfiguration)
     INJECT(notation, framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(notation, ui::ITheme, theme)
 
 public:
     void init();
@@ -93,21 +91,19 @@ public:
     ValCh<bool> isNavigatorVisible() const override;
     void setNavigatorVisible(bool visible) override;
 
-    ValCh<framework::Orientation> navigatorOrientation() const override;
-    void setNavigatorOrientation(framework::Orientation orientation) override;
+    ValCh<framework::Orientation> canvasOrientation() const override;
+    void setCanvasOrientation(framework::Orientation orientation) override;
 
 private:
     std::vector<std::string> parseToolbarActions(const std::string& actions) const;
 
     framework::Settings::Key toolbarSettingsKey(const std::string& toolbarName) const;
 
-    QColor resolveColor(const framework::Settings::Key& key) const;
-
     async::Channel<QColor> m_backgroundColorChanged;
     async::Channel<QColor> m_foregroundColorChanged;
     async::Channel<int> m_currentZoomChanged;
     async::Channel<bool> m_navigatorVisibleChanged;
-    async::Channel<framework::Orientation> m_navigatorOrientationChanged;
+    async::Channel<framework::Orientation> m_canvasOrientationChanged;
 };
 }
 

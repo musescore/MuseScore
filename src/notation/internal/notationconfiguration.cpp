@@ -66,27 +66,21 @@ static const Settings::Key IS_COUNT_IN_ENABLED(module_name, "application/playbac
 static const Settings::Key TOOLBAR_KEY(module_name, "ui/toolbar/");
 
 static const Settings::Key NAVIGATOR_VISIBLE_KEY(module_name, "ui/application/startup/showNavigator");
-static const Settings::Key NAVIGATOR_ORIENTATION(module_name, "ui/canvas/scroll/verticalOrientation");
-static const bool NAVIGATOR_ORIENTATION_VERTICAL(true);
+static const Settings::Key IS_CANVAS_ORIENTATION_VERTICAL_KEY(module_name, "ui/canvas/scroll/verticalOrientation");
 
 void NotationConfiguration::init()
 {
     settings()->setDefaultValue(ANCHORLINE_COLOR, Val(QColor("#C31989")));
 
-    settings()->setDefaultValue(BACKGROUND_COLOR, Val(theme()->backgroundSecondaryColor()));
+    settings()->setDefaultValue(BACKGROUND_COLOR, Val(QColor("#385f94")));
     settings()->valueChanged(BACKGROUND_COLOR).onReceive(nullptr, [this](const Val& val) {
         LOGD() << "BACKGROUND_COLOR changed: " << val.toString();
         m_backgroundColorChanged.send(val.toQColor());
     });
 
-    settings()->setDefaultValue(FOREGROUND_COLOR, Val(theme()->backgroundPrimaryColor()));
+    settings()->setDefaultValue(FOREGROUND_COLOR, Val(QColor("#f9f9f9")));
     settings()->valueChanged(FOREGROUND_COLOR).onReceive(nullptr, [this](const Val& val) {
         LOGD() << "FOREGROUND_COLOR changed: " << val.toString();
-        m_foregroundColorChanged.send(foregroundColor());
-    });
-
-    theme()->themeChanged().onNotify(this, [this]() {
-        m_backgroundColorChanged.send(backgroundColor());
         m_foregroundColorChanged.send(foregroundColor());
     });
 
@@ -113,9 +107,9 @@ void NotationConfiguration::init()
         m_navigatorVisibleChanged.send(isNavigatorVisible().val);
     });
 
-    settings()->setDefaultValue(NAVIGATOR_ORIENTATION, Val(NAVIGATOR_ORIENTATION_VERTICAL));
-    settings()->valueChanged(NAVIGATOR_ORIENTATION).onReceive(nullptr, [this](const Val&) {
-        m_navigatorOrientationChanged.send(navigatorOrientation().val);
+    settings()->setDefaultValue(IS_CANVAS_ORIENTATION_VERTICAL_KEY, Val(false));
+    settings()->valueChanged(IS_CANVAS_ORIENTATION_VERTICAL_KEY).onReceive(nullptr, [this](const Val&) {
+        m_canvasOrientationChanged.send(canvasOrientation().val);
     });
 
     // libmscore
@@ -129,12 +123,7 @@ QColor NotationConfiguration::anchorLineColor() const
 
 QColor NotationConfiguration::backgroundColor() const
 {
-    QColor color = resolveColor(BACKGROUND_COLOR);
-    if (!color.isValid()) {
-        color = theme()->backgroundSecondaryColor();
-    }
-
-    return color;
+    return settings()->value(BACKGROUND_COLOR).toQColor();
 }
 
 async::Channel<QColor> NotationConfiguration::backgroundColorChanged() const
@@ -168,12 +157,7 @@ QColor NotationConfiguration::foregroundColor() const
         return settings()->value(FOREGROUND_COLOR).toQColor();
     }
 
-    QColor color = resolveColor(FOREGROUND_COLOR);
-    if (!color.isValid()) {
-        color = theme()->backgroundSecondaryColor();
-    }
-
-    return color;
+    return settings()->defaultValue(FOREGROUND_COLOR).toQColor();
 }
 
 async::Channel<QColor> NotationConfiguration::foregroundColorChanged() const
@@ -341,20 +325,20 @@ void NotationConfiguration::setNavigatorVisible(bool visible)
     settings()->setValue(NAVIGATOR_VISIBLE_KEY, Val(visible));
 }
 
-ValCh<Orientation> NotationConfiguration::navigatorOrientation() const
+ValCh<Orientation> NotationConfiguration::canvasOrientation() const
 {
     ValCh<Orientation> orientation;
-    orientation.ch = m_navigatorOrientationChanged;
-    bool isVertical = settings()->value(NAVIGATOR_ORIENTATION).toBool() == NAVIGATOR_ORIENTATION_VERTICAL;
+    orientation.ch = m_canvasOrientationChanged;
+    bool isVertical = settings()->value(IS_CANVAS_ORIENTATION_VERTICAL_KEY).toBool();
     orientation.val = isVertical ? Orientation::Vertical : Orientation::Horizontal;
 
     return orientation;
 }
 
-void NotationConfiguration::setNavigatorOrientation(Orientation orientation)
+void NotationConfiguration::setCanvasOrientation(Orientation orientation)
 {
     bool isVertical = orientation == Orientation::Vertical;
-    settings()->setValue(NAVIGATOR_ORIENTATION, Val(isVertical));
+    settings()->setValue(IS_CANVAS_ORIENTATION_VERTICAL_KEY, Val(isVertical));
 }
 
 std::vector<std::string> NotationConfiguration::parseToolbarActions(const std::string& actions) const
@@ -378,15 +362,4 @@ Settings::Key NotationConfiguration::toolbarSettingsKey(const std::string& toolb
     Settings::Key toolbarKey = TOOLBAR_KEY;
     toolbarKey.key += toolbarName;
     return toolbarKey;
-}
-
-QColor NotationConfiguration::resolveColor(const Settings::Key& key) const
-{
-    QColor color = settings()->value(key).toQColor();
-    QColor defaultColor = settings()->defaultValue(key).toQColor();
-    if (!color.isValid() || color == defaultColor) {
-        return QColor();
-    }
-
-    return color;
 }

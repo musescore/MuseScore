@@ -55,6 +55,7 @@ public:
     virtual QFont titleBoldFont() const = 0;
 
     virtual QFont iconsFont() const = 0;
+    virtual QFont toolbarIconsFont() const = 0;
     virtual QFont musicalFont() const = 0;
 
     virtual qreal accentOpacityNormal() const = 0;

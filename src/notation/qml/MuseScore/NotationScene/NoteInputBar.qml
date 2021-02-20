@@ -38,7 +38,9 @@ Rectangle {
             normalStateColor: Boolean(item) && item.checkedRole ? ui.theme.accentColor : "transparent"
 
             icon: Boolean(item) ? item.iconRole : IconCode.NONE
-            iconFont.pixelSize: 20
+            hint: Boolean(item) ? item.hintRole : ""
+
+            iconFont: ui.theme.toolbarIconsFont
 
             width: gridView.cellWidth
             height: gridView.cellWidth

@@ -98,6 +98,8 @@ private:
         IsPlaybackSettingsRole,
     };
 
+    void setupConnections();
+
     QTime totalPlayTime() const;
     uint64_t totalPlayTimeMilliseconds() const;
     notation::MeasureBeat measureBeat() const;
