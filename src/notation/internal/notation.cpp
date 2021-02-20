@@ -134,7 +134,7 @@ void Notation::init()
     Ms::MScore::setNudgeStep10(1.0); // Ctrl + cursor key (default 1.0)
     Ms::MScore::setNudgeStep50(0.01); // Alt  + cursor key (default 0.01)
 
-    bool isVertical = configuration()->navigatorOrientation().val == framework::Orientation::Vertical;
+    bool isVertical = configuration()->canvasOrientation().val == framework::Orientation::Vertical;
     Ms::MScore::setVerticalOrientation(isVertical);
 
     Ms::MScore::pixelRatio = Ms::DPI / QGuiApplication::primaryScreen()->logicalDotsPerInch();

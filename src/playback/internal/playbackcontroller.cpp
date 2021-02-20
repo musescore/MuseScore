@@ -66,9 +66,7 @@ void PlaybackController::init()
 
     sequencer()->positionChanged().onNotify(this, [this]() {
         if (configuration()->cursorType() == PlaybackCursorType::SMOOTH) {
-            float seconds = sequencer()->playbackPositionInSeconds();
-            int tick = m_notation->playback()->secToTick(seconds);
-            m_tickPlayed.set(tick);
+            m_tickPlayed.send(currentTick());
         }
 
         m_playbackPositionChanged.notify();
@@ -76,11 +74,17 @@ void PlaybackController::init()
 
     if (configuration()->cursorType() == PlaybackCursorType::STEPPED) {
         sequencer()->midiTickPlayed(MIDI_TRACK).onReceive(this, [this](midi::tick_t tick) {
-            m_tickPlayed.set(tick);
+            m_tickPlayed.send(tick);
         });
     }
 
     m_needRewindBeforePlay = true;
+}
+
+int PlaybackController::currentTick() const
+{
+    float seconds = sequencer()->playbackPositionInSeconds();
+    return m_notation ? m_notation->playback()->secToTick(seconds) : 0;
 }
 
 bool PlaybackController::isPlayAllowed() const
@@ -103,6 +107,16 @@ bool PlaybackController::isPaused() const
     return sequencer()->status() == ISequencer::PAUSED;
 }
 
+bool PlaybackController::isLoopVisible() const
+{
+    return playback() ? playback()->loopBoundaries().val.visible : false;
+}
+
+bool PlaybackController::isPlaybackLooped() const
+{
+    return playback() ? !playback()->loopBoundaries().val.isNull() : false;
+}
+
 Notification PlaybackController::isPlayingChanged() const
 {
     return m_isPlayingChanged;
@@ -115,7 +129,7 @@ Notification PlaybackController::playbackPositionChanged() const
 
 Channel<uint32_t> PlaybackController::midiTickPlayed() const
 {
-    return m_tickPlayed.ch;
+    return m_tickPlayed;
 }
 
 float PlaybackController::playbackPositionInSeconds() const
@@ -158,6 +172,8 @@ INotationSelectionPtr PlaybackController::selection() const
 
 void PlaybackController::onNotationChanged()
 {
+    sequencer()->stop();
+
     if (m_notation) {
         m_notation->playback()->playPositionTickChanged().resetOnReceive(this);
     }
@@ -168,8 +184,8 @@ void PlaybackController::onNotationChanged()
             seek(tick);
         });
 
-        m_notation->playback()->loopBoundariesChanged().onReceive(this, [this](const LoopBoundaries& boundary) {
-            setLoop(boundary);
+        m_notation->playback()->loopBoundaries().ch.onReceive(this, [this](const LoopBoundaries& boundaries) {
+            setLoop(boundaries);
         });
     }
 
@@ -285,8 +301,13 @@ void PlaybackController::toggleCountIn()
 
 void PlaybackController::toggleLoopPlayback()
 {
-    if (m_isPlaybackLooped) {
-        unsetLoop();
+    if (isLoopVisible()) {
+        hideLoop();
+        return;
+    }
+
+    if (isPlaybackLooped() && !selection()->isRange()) {
+        showLoop();
         return;
     }
 
@@ -298,47 +319,55 @@ void PlaybackController::toggleLoopPlayback()
         loopOutTick = selection()->range()->endTick().ticks();
     }
 
-    playback()->addLoopBoundary(LoopBoundaryType::LoopIn, loopInTick);
-    playback()->addLoopBoundary(LoopBoundaryType::LoopOut, loopOutTick);
-
-    m_isPlaybackLooped = true;
+    addLoopBoundaryToTick(LoopBoundaryType::LoopIn, loopInTick);
+    addLoopBoundaryToTick(LoopBoundaryType::LoopOut, loopOutTick);
 }
 
 void PlaybackController::addLoopBoundary(LoopBoundaryType type)
 {
-    if (!playback()) {
-        return;
-    }
-
     if (isPlaying()) {
-        playback()->addLoopBoundary(type, m_tickPlayed.val);
+        addLoopBoundaryToTick(type, currentTick());
     } else {
-        playback()->addLoopBoundary(type, INotationPlayback::SelectedNoteTick);
+        addLoopBoundaryToTick(type, INotationPlayback::SelectedNoteTick);
     }
 }
 
-void PlaybackController::setLoop(const LoopBoundaries& boundary)
+void PlaybackController::addLoopBoundaryToTick(LoopBoundaryType type, int tick)
 {
-    if (boundary.isNull()) {
-        unsetLoop();
+    if (playback()) {
+        playback()->addLoopBoundary(type, tick);
+        showLoop();
+    }
+}
+
+void PlaybackController::setLoop(const LoopBoundaries& boundaries)
+{
+    if (!boundaries.visible) {
+        hideLoop();
         return;
     }
 
-    uint64_t fromMilliseconds = secondsToMilliseconds(playback()->tickToSec(boundary.loopInTick));
-    uint64_t toMilliseconds = secondsToMilliseconds(playback()->tickToSec(boundary.loopOutTick));
+    uint64_t fromMilliseconds = secondsToMilliseconds(playback()->tickToSec(boundaries.loopInTick));
+    uint64_t toMilliseconds = secondsToMilliseconds(playback()->tickToSec(boundaries.loopOutTick));
 
     sequencer()->setLoop(fromMilliseconds, toMilliseconds);
+    showLoop();
 
-    m_isPlaybackLooped = true;
     notifyActionEnabledChanged(LOOP_CODE);
 }
 
-void PlaybackController::unsetLoop()
+void PlaybackController::showLoop()
 {
-    if (playback() && m_isPlaybackLooped) {
-        m_isPlaybackLooped = false;
+    if (playback()) {
+        playback()->setLoopBoundariesVisible(true);
+    }
+}
+
+void PlaybackController::hideLoop()
+{
+    if (playback()) {
         sequencer()->unsetLoop();
-        playback()->removeLoopBoundaries();
+        playback()->setLoopBoundariesVisible(false);
         notifyActionEnabledChanged(LOOP_CODE);
     }
 }
@@ -351,7 +380,7 @@ void PlaybackController::notifyActionEnabledChanged(const ActionCode& actionCode
 bool PlaybackController::isActionEnabled(const ActionCode& actionCode) const
 {
     QMap<std::string, bool> isEnabled {
-        { LOOP_CODE, m_isPlaybackLooped },
+        { LOOP_CODE, isLoopVisible() },
         { MIDI_ON_CODE, notationConfiguration()->isMidiInputEnabled() },
         { REPEAT_CODE, notationConfiguration()->isPlayRepeatsEnabled() },
         { PAN_CODE, notationConfiguration()->isAutomaticallyPanEnabled() },
@@ -374,12 +403,12 @@ QTime PlaybackController::totalPlayTime() const
 
 Tempo PlaybackController::currentTempo() const
 {
-    return playback() ? playback()->tempo(m_tickPlayed.val) : Tempo();
+    return playback() ? playback()->tempo(currentTick()) : Tempo();
 }
 
 MeasureBeat PlaybackController::currentBeat() const
 {
-    return playback() ? playback()->beat(m_tickPlayed.val) : MeasureBeat();
+    return playback() ? playback()->beat(currentTick()) : MeasureBeat();
 }
 
 uint64_t PlaybackController::beatToMilliseconds(int measureIndex, int beatIndex) const

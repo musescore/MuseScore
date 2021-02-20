@@ -93,7 +93,6 @@ void DockWindow::componentComplete()
     togglePage(nullptr, currentPage());
 
     m_window->show();
-    updateStyle();
 
     m_isComponentComplete = true;
 }
@@ -161,6 +160,8 @@ void DockWindow::togglePage(DockPage* old, DockPage* current)
     if (current) {
         showPage(current);
     }
+
+    updateStyle();
 }
 
 void DockWindow::hidePage(DockPage* page)

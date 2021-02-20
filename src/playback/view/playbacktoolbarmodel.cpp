@@ -99,16 +99,31 @@ void PlaybackToolBarModel::load()
     beginResetModel();
     m_items.clear();
 
+    ActionList additionalActions;
+
     for (const ActionItem& action : currentWorkspaceActions()) {
+        if (isAdditionalAction(action.code)) {
+            additionalActions.push_back(action);
+            continue;
+        }
+
         m_items << action;
     }
 
     m_items << settingsItem();
 
+    for (const ActionItem& action : additionalActions) {
+        m_items << action;
+    }
+
     endResetModel();
 
     updateState();
+    setupConnections();
+}
 
+void PlaybackToolBarModel::setupConnections()
+{
     playbackController()->isPlayAllowedChanged().onNotify(this, [this]() {
         updateState();
         updatePlayTime();
@@ -309,11 +324,13 @@ void PlaybackToolBarModel::handleAction(const QString& actionCode)
 
 void PlaybackToolBarModel::updateState()
 {
+    bool playAllowed = isPlayAllowed();
+
     for (MenuItem& item : m_items) {
-        item.checked = playbackController()->isActionEnabled(item.code);
+        item.checked = playAllowed && playbackController()->isActionEnabled(item.code);
     }
 
-    if (isPlayAllowed()) {
+    if (playAllowed) {
         bool isPlaying = playbackController()->isPlaying();
         item("play").iconCode = isPlaying ? IconCode::Code::PAUSE : IconCode::Code::PLAY;
     }

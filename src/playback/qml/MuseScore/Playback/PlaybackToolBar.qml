@@ -63,7 +63,7 @@ Rectangle {
                 delegate: FlatButton {
                     icon: model.icon
                     hint: model.hint
-                    enabled: model.enabled
+                    iconFont: ui.theme.toolbarIconsFont
 
                     normalStateColor: model.checked || playbackSettings.isOpened ? ui.theme.accentColor : "transparent"
 
@@ -82,7 +82,7 @@ Rectangle {
                 }
             }
 
-            SeparatorLine { orientation: Qt.Vertical }
+            SeparatorLine { orientation: Qt.Vertical; visible: !root.floating }
 
             TimeInputField {
                 id: timeField
@@ -105,6 +105,9 @@ Rectangle {
 
                 minValue: 1
                 maxValue: playbackModel.maxMeasureNumber
+
+                addLeadingZeros: false
+
                 value: playbackModel.measureNumber
 
                 onValueEdited: {
@@ -124,6 +127,9 @@ Rectangle {
 
                 minValue: 1
                 maxValue: playbackModel.maxBeatNumber
+
+                addLeadingZeros: false
+
                 value: playbackModel.beatNumber
 
                 onValueEdited: {
@@ -152,7 +158,7 @@ Rectangle {
                 font: timeField.font
             }
 
-            SeparatorLine { orientation: Qt.Vertical }
+            SeparatorLine { orientation: Qt.Vertical; visible: !root.floating }
         }
 
         StyledSlider {

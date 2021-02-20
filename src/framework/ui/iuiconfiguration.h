@@ -54,12 +54,17 @@ public:
         TITLE
     };
 
+    enum class IconSizeType {
+        Regular,
+        Toolbar
+    };
+
     virtual std::string fontFamily() const = 0;
     virtual int fontSize(FontSizeType type) const = 0;
     virtual async::Notification fontChanged() const = 0;
 
     virtual std::string iconsFontFamily() const = 0;
-    virtual int iconsFontSize() const = 0;
+    virtual int iconsFontSize(IconSizeType type) const = 0;
     virtual async::Notification iconsFontChanged() const = 0;
 
     virtual std::string musicalFontFamily() const = 0;

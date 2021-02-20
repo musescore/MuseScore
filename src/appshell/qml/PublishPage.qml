@@ -15,6 +15,8 @@ DockPage {
         objectName: "publishCentral"
 
         Rectangle {
+            color: ui.theme.backgroundSecondaryColor
+
             StyledTextLabel {
                 anchors.fill: parent
                 verticalAlignment: Text.AlignVCenter

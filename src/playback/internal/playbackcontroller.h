@@ -69,7 +69,11 @@ private:
     notation::INotationPlaybackPtr playback() const;
     notation::INotationSelectionPtr selection() const;
 
+    int currentTick() const;
     bool isPaused() const;
+
+    bool isLoopVisible() const;
+    bool isPlaybackLooped() const;
 
     void onNotationChanged();
     void togglePlay();
@@ -87,8 +91,12 @@ private:
     void toggleLoopPlayback();
 
     void addLoopBoundary(notation::LoopBoundaryType type);
-    void setLoop(const notation::LoopBoundaries& boundary);
-    void unsetLoop();
+    void addLoopBoundaryToTick(notation::LoopBoundaryType type, int tick);
+
+    void setLoop(const notation::LoopBoundaries& boundaries);
+
+    void showLoop();
+    void hideLoop();
 
     void notifyActionEnabledChanged(const actions::ActionCode& actionCode);
 
@@ -96,11 +104,10 @@ private:
     async::Notification m_isPlayAllowedChanged;
     async::Notification m_isPlayingChanged;
     async::Notification m_playbackPositionChanged;
-    ValCh<uint32_t> m_tickPlayed;
+    async::Channel<uint32_t> m_tickPlayed;
     async::Channel<actions::ActionCode> m_actionEnabledChanged;
 
     bool m_needRewindBeforePlay = false;
-    bool m_isPlaybackLooped = false;
 };
 }
 

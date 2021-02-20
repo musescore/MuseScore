@@ -33,6 +33,10 @@ FocusScope {
 
             orientation: notationNavigator.orientation
 
+            background: Rectangle {
+                color: notationView.backgroundColor
+            }
+
             NotationPaintView {
                 id: notationView
 
