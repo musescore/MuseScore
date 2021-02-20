@@ -239,6 +239,7 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
             nvb->setBottomMargin(tvb->bottomMargin());
             nvb->setLeftMargin(tvb->leftMargin());
             nvb->setRightMargin(tvb->rightMargin());
+            nvb->setAutoSizeEnabled(tvb->isAutoSizeEnabled());
         }
         delete tscore;
     } else {
