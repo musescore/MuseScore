@@ -18,21 +18,39 @@
 //=============================================================================
 #include "workspaceactioncontroller.h"
 
+#include "val.h"
+
 using namespace mu::workspace;
 using namespace mu::actions;
 
 void WorkspaceActionController::init()
 {
     dispatcher()->reg(this, "select-workspace", this, &WorkspaceActionController::selectWorkspace);
+    dispatcher()->reg(this, "configure-workspaces", this, &WorkspaceActionController::openConfigureWorkspacesDialog);
 }
 
 void WorkspaceActionController::selectWorkspace(const ActionData& args)
 {
     std::string selectedWorkspace = args.count() > 0 ? args.arg<std::string>(0) : "";
+    setCurrentWorkspaceName(selectedWorkspace);
+}
 
-    if (configuration()->currentWorkspaceName().val == selectedWorkspace || selectedWorkspace.empty()) {
+void WorkspaceActionController::openConfigureWorkspacesDialog()
+{
+    RetVal<Val> result = interactive()->open("musescore://workspace/select?sync=true");
+    if (!result.ret) {
         return;
     }
 
-    configuration()->setCurrentWorkspaceName(selectedWorkspace);
+    std::string selectedWorkspace = result.val.toString();
+    setCurrentWorkspaceName(selectedWorkspace);
+}
+
+void WorkspaceActionController::setCurrentWorkspaceName(const std::string& workspaceName)
+{
+    if (configuration()->currentWorkspaceName().val == workspaceName || workspaceName.empty()) {
+        return;
+    }
+
+    configuration()->setCurrentWorkspaceName(workspaceName);
 }

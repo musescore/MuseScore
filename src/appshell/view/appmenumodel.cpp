@@ -567,16 +567,13 @@ MenuItemList AppMenuModel::workspacesItems() const
         bool isCurrentWorkspace = workspace == currentWorkspace;
         item.checked = isCurrentWorkspace;
         item.checkable = true;
-        item.enabled = true;
+        item.enabled = isNotationPage();
 
         items << item;
     }
 
     items << makeSeparator()
-          << makeAction("new-workspace") // need implement
-          << makeAction("edit-workspace") // need implement
-          << makeAction("delete-workspace") // need implement
-          << makeAction("reset-workspace"); // need implement
+          << makeAction("configure-workspaces", isNotationPage());
 
     return items;
 }
