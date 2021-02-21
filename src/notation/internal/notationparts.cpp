@@ -136,10 +136,6 @@ void NotationParts::setInstruments(const mu::instruments::InstrumentList& instru
     removeMissingInstruments(instruments);
     appendNewInstruments(instruments);
 
-    if (score()->measures()->empty()) {
-        score()->insertMeasure(ElementType::MEASURE, 0, false);
-    }
-
     sortParts(instruments);
 
     updateScore();
