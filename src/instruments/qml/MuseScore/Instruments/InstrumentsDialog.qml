@@ -62,6 +62,7 @@ QmlDialog {
                 width: buttons.buttonWidth
 
                 text: qsTrc("global", "OK")
+                enabled: instrumentsPage.hasSelectedInstruments
 
                 onClicked: {
                     var selectedInstruments = instrumentsPage.selectedInstruments()
