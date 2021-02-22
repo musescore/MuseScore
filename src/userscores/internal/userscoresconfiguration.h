@@ -28,7 +28,7 @@
 namespace mu::userscores {
 class UserScoresConfiguration : public IUserScoresConfiguration
 {
-    INJECT(usescores, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(userscores, framework::IGlobalConfiguration, globalConfiguration)
     INJECT(userscores, extensions::IExtensionsConfiguration, extensionsConfiguration)
     INJECT(userscores, notation::INotationConfiguration, notationConfiguration)
 
