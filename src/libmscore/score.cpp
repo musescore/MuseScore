@@ -395,6 +395,8 @@ Score::~Score()
 
 Score* Score::clone()
 {
+    // TODO: see comments reagrding setting version in corresponding code in 3.x branch
+    // and also compare to MasterScore::clone()
     Excerpt* excerpt = new Excerpt(masterScore());
     excerpt->setTitle(title());
 
