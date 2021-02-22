@@ -32,8 +32,8 @@ class RecentScoresModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(usescores, actions::IActionsDispatcher, dispatcher)
-    INJECT(usescores, IUserScoresConfiguration, configuration)
+    INJECT(userscores, actions::IActionsDispatcher, dispatcher)
+    INJECT(userscores, IUserScoresConfiguration, configuration)
     INJECT(userscores, IUserScoresService, userScoresService)
 
 public:
