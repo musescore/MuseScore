@@ -149,6 +149,7 @@ void Volta::read(XmlReader& e)
                 int i = l.simplified().toInt();
                 _endings.append(i);
             }
+        } else if (readStyledProperty(e, tag)) {
         } else if (!readProperties(e)) {
             e.unknown();
         }
