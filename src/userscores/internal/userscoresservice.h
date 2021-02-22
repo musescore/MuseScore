@@ -28,8 +28,8 @@
 namespace mu::userscores {
 class UserScoresService : public IUserScoresService, public async::Asyncable
 {
-    INJECT(usescores, IUserScoresConfiguration, configuration)
-    INJECT(usescores, notation::IMsczMetaReader, msczMetaReader)
+    INJECT(userscores, IUserScoresConfiguration, configuration)
+    INJECT(userscores, notation::IMsczMetaReader, msczMetaReader)
 
 public:
     void init();
