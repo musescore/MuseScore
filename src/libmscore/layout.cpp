@@ -4187,8 +4187,8 @@ System* Score::collectSystem(LayoutContext& lc)
                         s->setEnabled(true);
                     }
                 }
-                // TODO: use findPotentialSectionBreak here to handle breaks on frames correctly?
-                bool firstSystem = lc.prevMeasure->sectionBreak() && _layoutMode != LayoutMode::FLOAT;
+                const MeasureBase* pbmb = lc.prevMeasure->findPotentialSectionBreak();
+                bool firstSystem = pbmb->sectionBreak() && _layoutMode != LayoutMode::FLOAT;
                 MeasureBase* nm = breakMeasure ? breakMeasure : m;
                 if (curHeader) {
                     m->addSystemHeader(firstSystem);
@@ -5300,7 +5300,7 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
         } else {
             const MeasureBase* mb = lc.nextMeasure->prev();
             if (mb) {
-                mb->findPotentialSectionBreak();
+                mb = mb->findPotentialSectionBreak();
             }
             LayoutBreak* sectionBreak = mb->sectionBreakElement();
             // TODO: also use mb in else clause here?
