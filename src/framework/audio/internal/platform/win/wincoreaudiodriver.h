@@ -21,8 +21,7 @@
 
 #include "iaudiodriver.h"
 #include <thread>
-#include "windows.h"
-#include "audioclient.h"
+#include <atomic>
 
 namespace mu::audio {
 class CoreAudioDriver : public IAudioDriver
@@ -43,13 +42,10 @@ public:
     void suspend() override;
 
 private:
-    void logError(HRESULT hr);
     void clean();
 
-    bool m_active = false;
+    std::atomic<bool> m_active { false };
     std::thread m_thread;
-    IAudioClient* m_audioClient = nullptr;
-    IAudioRenderClient* m_renderClient = nullptr;
 };
 }
 
