@@ -20,6 +20,8 @@
 
 #include <system_error>
 #include "mmdeviceapi.h"
+#include "windows.h"
+#include "audioclient.h"
 #include "log.h"
 
 #define CHECK_HRESULT(hr); if (hr != S_OK) { \
@@ -28,6 +30,18 @@
 } \
 
 using namespace mu::audio;
+
+struct WinCoreData {
+    IAudioClient* audioClient = nullptr;
+    IAudioRenderClient* renderClient = nullptr;
+    IAudioDriver::Callback callback;
+    WAVEFORMATEX pFormat;
+    HANDLE hEvent;
+};
+
+static void logError(HRESULT hr);
+
+static WinCoreData* s_data = nullptr;
 
 CoreAudioDriver::CoreAudioDriver()
 {
@@ -45,13 +59,19 @@ std::string CoreAudioDriver::name() const
 
 bool CoreAudioDriver::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* activeSpec)
 {
+    if (s_data) {
+        delete s_data;
+    }
+
+    s_data = new WinCoreData();
+
     HRESULT hr = S_OK;
-    const IID IID_IMMDeviceEnumerator = __uuidof(IMMDeviceEnumerator);
-    const IID IID_IAudioClient = __uuidof(IAudioClient);
-    const IID IID_IAudioRenderClient = __uuidof(IAudioRenderClient);
+    const IID MU_IID_IMMDeviceEnumerator = __uuidof(IMMDeviceEnumerator);
+    const IID MU_IID_IAudioClient = __uuidof(IAudioClient);
+    const IID MU_IID_IAudioRenderClient = __uuidof(IAudioRenderClient);
 
     IMMDeviceEnumerator* pEnumerator = nullptr;
-    hr = CoCreateInstance(__uuidof(MMDeviceEnumerator), NULL,CLSCTX_ALL, IID_IMMDeviceEnumerator, (void**)&pEnumerator);
+    hr = CoCreateInstance(__uuidof(MMDeviceEnumerator), NULL,CLSCTX_ALL, MU_IID_IMMDeviceEnumerator, (void**)&pEnumerator);
     CHECK_HRESULT(hr);
 
     IMMDevice* pDdevice = nullptr;
@@ -59,79 +79,79 @@ bool CoreAudioDriver::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
     pEnumerator->Release();
     CHECK_HRESULT(hr);
 
-    hr = pDdevice->Activate(IID_IAudioClient, CLSCTX_ALL,NULL, (void**)&m_audioClient);
+    hr = pDdevice->Activate(MU_IID_IAudioClient, CLSCTX_ALL,NULL, (void**)&s_data->audioClient);
     pDdevice->Release();
     CHECK_HRESULT(hr);
 
-    WAVEFORMATEX pFormat, * deviceFormat;
-    hr = m_audioClient->GetMixFormat(&deviceFormat);
+    WAVEFORMATEX* deviceFormat;
+    hr = s_data->audioClient->GetMixFormat(&deviceFormat);
     CHECK_HRESULT(hr);
 
     REFERENCE_TIME defaultTime, minimumTime;
-    hr = m_audioClient->GetDevicePeriod(&defaultTime, &minimumTime);
+    hr = s_data->audioClient->GetDevicePeriod(&defaultTime, &minimumTime);
     CHECK_HRESULT(hr);
 
-    pFormat = *deviceFormat;
-    pFormat.wFormatTag = WAVE_FORMAT_IEEE_FLOAT;
-    pFormat.nChannels = spec.channels;
-    LOGI() << pFormat.nSamplesPerSec;
-    pFormat.wBitsPerSample = 32;
-    pFormat.nAvgBytesPerSec = pFormat.nSamplesPerSec * pFormat.nChannels * sizeof(float);
-    pFormat.nBlockAlign = (pFormat.nChannels * pFormat.wBitsPerSample) / 8;
-    pFormat.cbSize = 0;
+    s_data->pFormat = *deviceFormat;
+    s_data->pFormat.wFormatTag = WAVE_FORMAT_IEEE_FLOAT;
+    s_data->pFormat.nChannels = spec.channels;
+    LOGI() << s_data->pFormat.nSamplesPerSec;
+    s_data->pFormat.wBitsPerSample = 32;
+    s_data->pFormat.nAvgBytesPerSec = s_data->pFormat.nSamplesPerSec * s_data->pFormat.nChannels * sizeof(float);
+    s_data->pFormat.nBlockAlign = (s_data->pFormat.nChannels * s_data->pFormat.wBitsPerSample) / 8;
+    s_data->pFormat.cbSize = 0;
+    s_data->callback = spec.callback;
     if (activeSpec) {
         *activeSpec = spec;
         activeSpec->format = Format::AudioF32;
-        activeSpec->sampleRate = pFormat.nSamplesPerSec;
+        activeSpec->sampleRate = s_data->pFormat.nSamplesPerSec;
     }
-    hr = m_audioClient->Initialize(AUDCLNT_SHAREMODE_SHARED, AUDCLNT_STREAMFLAGS_EVENTCALLBACK,
-                                   defaultTime, defaultTime, &pFormat, NULL);
+    hr = s_data->audioClient->Initialize(AUDCLNT_SHAREMODE_SHARED, AUDCLNT_STREAMFLAGS_EVENTCALLBACK,
+                                         defaultTime, defaultTime, &s_data->pFormat, NULL);
     CHECK_HRESULT(hr);
 
     UINT32 bufferFrameCount;
-    hr = m_audioClient->GetBufferSize(&bufferFrameCount);
+    hr = s_data->audioClient->GetBufferSize(&bufferFrameCount);
     CHECK_HRESULT(hr);
 
-    hr = m_audioClient->GetService(IID_IAudioRenderClient, (void**)&m_renderClient);
+    hr = s_data->audioClient->GetService(MU_IID_IAudioRenderClient, (void**)&s_data->renderClient);
     CHECK_HRESULT(hr);
 
-    auto hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
+    s_data->hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
     CHECK_HRESULT(hr);
-    hr = m_audioClient->SetEventHandle(hEvent);
+    hr = s_data->audioClient->SetEventHandle(s_data->hEvent);
 
     m_active = true;
-    m_thread = std::thread([=]() {
+    m_thread = std::thread([this]() {
         BYTE* pData;
         HRESULT hr = S_OK;
         do {
             UINT32 bufferFrameCount, bufferPading;
-            hr = m_audioClient->GetBufferSize(&bufferFrameCount);
+            hr = s_data->audioClient->GetBufferSize(&bufferFrameCount);
             logError(hr);
 
-            hr = m_audioClient->GetCurrentPadding(&bufferPading);
+            hr = s_data->audioClient->GetCurrentPadding(&bufferPading);
             logError(hr);
 
             auto bufferSize = bufferFrameCount - bufferPading;
-            hr = m_renderClient->GetBuffer(bufferSize, &pData);
+            hr = s_data->renderClient->GetBuffer(bufferSize, &pData);
             logError(hr);
             if (!pData || hr != S_OK) {
                 continue;
             }
-            activeSpec->callback(nullptr, reinterpret_cast<uint8_t*>(pData),
-                                 bufferSize * pFormat.wBitsPerSample * pFormat.nChannels / 8);
-            hr = m_renderClient->ReleaseBuffer(bufferSize, 0);
+            s_data->callback(nullptr, reinterpret_cast<uint8_t*>(pData),
+                             bufferSize * s_data->pFormat.wBitsPerSample * s_data->pFormat.nChannels / 8);
+            hr = s_data->renderClient->ReleaseBuffer(bufferSize, 0);
             logError(hr);
 
-            DWORD waitResult = WaitForSingleObject(hEvent, INFINITE);
+            DWORD waitResult = WaitForSingleObject(s_data->hEvent, INFINITE);
             if (waitResult != WAIT_OBJECT_0) {
                 LOGE() << "audio driver wait for signal failed: " << waitResult;
                 break;
             }
-        } while(m_active);
+        } while (m_active);
     });
-    m_thread.detach();
 
-    hr = m_audioClient->Start();
+    hr = s_data->audioClient->Start();
     CHECK_HRESULT(hr);
 
     LOGI() << "Core Audio driver started";
@@ -140,8 +160,12 @@ bool CoreAudioDriver::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
 
 void CoreAudioDriver::close()
 {
-    if (m_audioClient) {
-        m_audioClient->Stop();
+    if (!s_data) {
+        return;
+    }
+
+    if (s_data->audioClient) {
+        s_data->audioClient->Stop();
     }
     m_active = false;
     if (m_thread.joinable()) {
@@ -156,7 +180,7 @@ bool CoreAudioDriver::isOpened() const
     return m_active;
 }
 
-void CoreAudioDriver::logError(HRESULT hr)
+void logError(HRESULT hr)
 {
     switch (hr) {
     case S_OK: return;
@@ -235,12 +259,15 @@ void CoreAudioDriver::logError(HRESULT hr)
 
 void CoreAudioDriver::clean()
 {
-    if (m_audioClient) {
-        m_audioClient->Release();
+    if (s_data->audioClient) {
+        s_data->audioClient->Release();
     }
-    if (m_renderClient) {
-        m_renderClient->Release();
+    if (s_data->renderClient) {
+        s_data->renderClient->Release();
     }
+
+    delete s_data;
+    s_data = nullptr;
 }
 
 void CoreAudioDriver::resume()
@@ -259,6 +286,7 @@ std::string CoreAudioDriver::outputDevice() const
 
 bool CoreAudioDriver::selectOutputDevice(const std::string& name)
 {
+    UNUSED(name);
     NOT_IMPLEMENTED;
     return false;
 }

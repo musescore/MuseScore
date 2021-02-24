@@ -22,10 +22,10 @@ set(MODULE audio)
 include(GetPlatformInfo)
 if (OS_IS_WIN)
     set(DRIVER_SRC
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmmdriver.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmmdriver.h
-        #${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/wincoreaudiodriver.cpp
-        #${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/wincoreaudiodriver.h
+        #${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmmdriver.cpp
+        #${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmmdriver.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/wincoreaudiodriver.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/wincoreaudiodriver.h
     )
 elseif(OS_IS_LIN)
     set(DRIVER_SRC
