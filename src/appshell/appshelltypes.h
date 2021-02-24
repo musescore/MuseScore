@@ -16,21 +16,24 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_APPSHELL_IAPPLICATIONCONTROLLER_H
-#define MU_APPSHELL_IAPPLICATIONCONTROLLER_H
 
-#include "modularity/imoduleexport.h"
-#include "retval.h"
+#ifndef MU_APPSHELL_APPSHELLTYPES_H
+#define MU_APPSHELL_APPSHELLTYPES_H
 
 namespace mu::appshell {
-class IApplicationActionController : MODULE_EXPORT_INTERFACE
+enum class PanelType
 {
-    INTERFACE_ID(IApplicationActionController)
-public:
-    virtual ~IApplicationActionController() = default;
-
-    virtual ValCh<bool> isFullScreen() const = 0;
+    Palette,
+    Instruments,
+    Inspector,
+    NotationToolBar,
+    NoteInputBar,
+    UndoRedoToolBar,
+    NotationNavigator,
+    NotationStatusBar,
+    PlaybackToolBar,
+    Mixer
 };
 }
 
-#endif // MU_APPSHELL_APPLICATIONCONTROLLER_H
+#endif // MU_APPSHELL_APPSHELLTYPES_H

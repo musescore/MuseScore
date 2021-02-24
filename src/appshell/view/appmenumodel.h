@@ -35,6 +35,7 @@
 #include "userscores/iuserscoresservice.h"
 #include "iapplicationactioncontroller.h"
 #include "iinteractive.h"
+#include "inotationpagestate.h"
 
 namespace mu::appshell {
 class AppMenuModel : public QObject, public async::Asyncable
@@ -51,6 +52,7 @@ class AppMenuModel : public QObject, public async::Asyncable
     INJECT(appshell, userscores::IUserScoresService, userScoresService)
     INJECT(appshell, IApplicationActionController, controller)
     INJECT(appshell, framework::IInteractive, interactive)
+    INJECT(appshell, INotationPageState, notationPageState)
 
     Q_PROPERTY(QVariantList items READ items NOTIFY itemsChanged)
 

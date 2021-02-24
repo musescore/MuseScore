@@ -31,7 +31,6 @@ public:
     virtual ~IAppShellConfiguration() = default;
 
     virtual bool isAppUpdatable() const = 0;
-    virtual bool isFullScreenAvailable() const = 0;
 
     virtual std::string handbookUrl() const = 0;
     virtual std::string askForHelpUrl() const = 0;
@@ -40,15 +39,10 @@ public:
 
     virtual ValCh<QStringList> recentScoreList() const = 0;
 
-    virtual ValCh<bool> isPalettePanelVisible() const = 0;
-    virtual ValCh<bool> isInstrumentsPanelVisible() const = 0;
-    virtual ValCh<bool> isInspectorPanelVisible() const = 0;
-    virtual ValCh<bool> isStatusBarVisible() const = 0;
-    virtual ValCh<bool> isNavigatorVisible() const = 0;
-    virtual ValCh<bool> isNoteInputBarVisible() const = 0;
-    virtual ValCh<bool> isNotationToolBarVisible() const = 0;
-    virtual ValCh<bool> isUndoRedoToolBarVisible() const = 0;
-    virtual ValCh<bool> isPlaybackToolBarVisible() const = 0;
+    virtual ValCh<bool> isNotationStatusBarVisible() const = 0;
+    virtual void setIsNotationStatusBarVisible(bool visible) const = 0;
+    virtual ValCh<bool> isNotationNavigatorVisible() const = 0;
+    virtual void setIsNotationNavigatorVisible(bool visible) const = 0;
 
     virtual void revertToFactorySettings(bool keepDefaultSettings = false) const = 0;
 };

@@ -90,8 +90,6 @@ private:
     void toggleCountIn();
     void toggleLoopPlayback();
 
-    void togglePlaybackToolBar();
-
     void addLoopBoundary(notation::LoopBoundaryType type);
     void addLoopBoundaryToTick(notation::LoopBoundaryType type, int tick);
 

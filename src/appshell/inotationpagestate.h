@@ -16,21 +16,25 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_APPSHELL_IAPPLICATIONCONTROLLER_H
-#define MU_APPSHELL_IAPPLICATIONCONTROLLER_H
+#ifndef MU_APPSHELL_INOTATIONPAGESTATE_H
+#define MU_APPSHELL_INOTATIONPAGESTATE_H
 
 #include "modularity/imoduleexport.h"
-#include "retval.h"
+#include "appshelltypes.h"
+#include "async/channel.h"
 
 namespace mu::appshell {
-class IApplicationActionController : MODULE_EXPORT_INTERFACE
+class INotationPageState : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IApplicationActionController)
-public:
-    virtual ~IApplicationActionController() = default;
+    INTERFACE_ID(INotationPageState)
 
-    virtual ValCh<bool> isFullScreen() const = 0;
+public:
+    virtual ~INotationPageState() = default;
+
+    virtual bool isPanelVisible(PanelType type) const = 0;
+    virtual void setIsPanelVisible(PanelType type, bool visible) = 0;
+    virtual async::Channel<PanelType> panelVisibleChanged() const = 0;
 };
 }
 
-#endif // MU_APPSHELL_APPLICATIONCONTROLLER_H
+#endif // MU_APPSHELL_NOTATIONPAGESTATE_H

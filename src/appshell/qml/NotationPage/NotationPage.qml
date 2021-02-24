@@ -1,7 +1,9 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
+
 import MuseScore.Ui 1.0
 import MuseScore.Dock 1.0
+import MuseScore.PageState 1.0
 import MuseScore.NotationScene 1.0
 import MuseScore.Palette 1.0
 import MuseScore.Inspector 1.0
@@ -136,6 +138,8 @@ DockPage {
 
         NotationView {
             id: notationView
+
+            isNavigatorVisible: notationPage.pageModel.isNotationNavigatorVisible
 
             onTextEdittingStarted: {
                 notationCentral.forceActiveFocus()

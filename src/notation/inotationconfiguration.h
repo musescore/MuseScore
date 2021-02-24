@@ -91,32 +91,8 @@ public:
     virtual std::vector<std::string> toolbarActions(const std::string& toolbarName) const = 0;
     virtual void setToolbarActions(const std::string& toolbarName, const std::vector<std::string>& actions) = 0;
 
-    virtual ValCh<bool> isNavigatorVisible() const = 0;
-    virtual void setIsNavigatorVisible(bool visible) = 0;
-
     virtual ValCh<framework::Orientation> canvasOrientation() const = 0;
     virtual void setCanvasOrientation(framework::Orientation orientation) = 0;
-
-    virtual ValCh<bool> isPalettePanelVisible() const = 0;
-    virtual void setIsPalettePanelVisible(bool visible) = 0;
-
-    virtual ValCh<bool> isInstrumentsPanelVisible() const = 0;
-    virtual void setIsInstrumentsPanelVisible(bool visible) = 0;
-
-    virtual ValCh<bool> isInspectorPanelVisible() const = 0;
-    virtual void setIsInspectorPanelVisible(bool visible) = 0;
-
-    virtual ValCh<bool> isStatusBarVisible() const = 0;
-    virtual void setIsStatusBarVisible(bool visible) = 0;
-
-    virtual ValCh<bool> isNoteInputBarVisible() const = 0;
-    virtual void setIsNoteInputBarVisible(bool visible) = 0;
-
-    virtual ValCh<bool> isNotationToolBarVisible() const = 0;
-    virtual void setIsNotationToolBarVisible(bool visible) = 0;
-
-    virtual ValCh<bool> isUndoRedoToolBarVisible() const = 0;
-    virtual void setIsUndoRedoToolBarVisible(bool visible) = 0;
 };
 }
 

@@ -109,31 +109,7 @@ void AppMenuModel::setupConnections()
         load();
     });
 
-    configuration()->isPalettePanelVisible().ch.onReceive(this, [this](bool) {
-        load();
-    });
-    configuration()->isInstrumentsPanelVisible().ch.onReceive(this, [this](bool) {
-        load();
-    });
-    configuration()->isInspectorPanelVisible().ch.onReceive(this, [this](bool) {
-        load();
-    });
-    configuration()->isStatusBarVisible().ch.onReceive(this, [this](bool) {
-        load();
-    });
-    configuration()->isNavigatorVisible().ch.onReceive(this, [this](bool) {
-        load();
-    });
-    configuration()->isNoteInputBarVisible().ch.onReceive(this, [this](bool) {
-        load();
-    });
-    configuration()->isNotationToolBarVisible().ch.onReceive(this, [this](bool) {
-        load();
-    });
-    configuration()->isUndoRedoToolBarVisible().ch.onReceive(this, [this](bool) {
-        load();
-    });
-    configuration()->isPlaybackToolBarVisible().ch.onReceive(this, [this](bool) {
+    notationPageState()->panelVisibleChanged().onReceive(this, [this](PanelType) {
         load();
     });
 
@@ -249,12 +225,12 @@ MenuItem AppMenuModel::editItem()
 MenuItem AppMenuModel::viewItem()
 {
     MenuItemList viewItems {
-        makeAction("toggle-palette", isNotationPage(), configuration()->isPalettePanelVisible().val),
-        makeAction("toggle-instruments", isNotationPage(), configuration()->isInstrumentsPanelVisible().val),
+        makeAction("toggle-palette", isNotationPage(), notationPageState()->isPanelVisible(PanelType::Palette)),
+        makeAction("toggle-instruments", isNotationPage(), notationPageState()->isPanelVisible(PanelType::Instruments)),
         makeAction("masterpalette", isNotationPage(), paletteController()->isMasterPaletteOpened().val),
-        makeAction("inspector", isNotationPage(), configuration()->isInspectorPanelVisible().val),
+        makeAction("inspector", isNotationPage(), notationPageState()->isPanelVisible(PanelType::Inspector)),
         makeAction("toggle-playpanel", isNotationPage()), // need implement
-        makeAction("toggle-navigator", isNotationPage(), configuration()->isNavigatorVisible().val),
+        makeAction("toggle-navigator", isNotationPage(), notationPageState()->isPanelVisible(PanelType::NotationNavigator)),
         makeAction("toggle-timeline", isNotationPage()), // need implement
         makeAction("toggle-mixer", isNotationPage()), // need implement
         makeAction("synth-control", isNotationPage()), // need implement
@@ -267,7 +243,7 @@ MenuItem AppMenuModel::viewItem()
         makeSeparator(),
         makeMenu(trc("appshell", "&Toolbars"), toolbarsItems()),
         makeMenu(trc("appshell", "W&orkspaces"), workspacesItems(), true, "select-workspace"),
-        makeAction("toggle-statusbar", isNotationPage(), configuration()->isStatusBarVisible().val),
+        makeAction("toggle-statusbar", isNotationPage(), notationPageState()->isPanelVisible(PanelType::NotationStatusBar)),
         makeSeparator(),
         makeAction("split-h", isNotationPage()), // need implement
         makeAction("split-v", isNotationPage()), // need implement
@@ -276,13 +252,10 @@ MenuItem AppMenuModel::viewItem()
         makeAction("show-unprintable", isNotationPage(), scoreConfig().isShowUnprintableElements),
         makeAction("show-frames", isNotationPage(), scoreConfig().isShowFrames),
         makeAction("show-pageborders", isNotationPage(), scoreConfig().isShowPageMargins),
-        makeAction("mark-irregular", isNotationPage(), scoreConfig().isMarkIrregularMeasures)
+        makeAction("mark-irregular", isNotationPage(), scoreConfig().isMarkIrregularMeasures),
+        makeSeparator(),
+        makeAction("fullscreen", true, controller()->isFullScreen().val)
     };
-
-    if (configuration()->isFullScreenAvailable()) {
-        viewItems << makeSeparator()
-                  << makeAction("fullscreen", true, controller()->isFullScreen().val);
-    }
 
     return makeMenu(trc("appshell", "&View"), viewItems);
 }
@@ -306,9 +279,9 @@ MenuItem AppMenuModel::addItem()
 MenuItem AppMenuModel::formatItem()
 {
     MenuItemList stretchItems {
-        makeAction("stretch+", scoreOpened(), selectedRangeOnScore()),
-        makeAction("stretch-", scoreOpened(), selectedRangeOnScore()),
-        makeAction("reset-stretch", scoreOpened(), selectedRangeOnScore())
+        makeAction("stretch+", selectedRangeOnScore()),
+        makeAction("stretch-", selectedRangeOnScore()),
+        makeAction("reset-stretch", selectedRangeOnScore())
     };
 
     MenuItemList formatItems {
@@ -318,8 +291,8 @@ MenuItem AppMenuModel::formatItem()
         makeMenu(trc("appshell", "&Stretch"), stretchItems),
         makeSeparator(),
         makeAction("reset-text-style-overrides", scoreOpened()),
-        makeAction("reset-beammode", scoreOpened(), !hasSelectionOnScore() || selectedRangeOnScore()),
-        makeAction("reset", scoreOpened(), hasSelectionOnScore()),
+        makeAction("reset-beammode", !hasSelectionOnScore() || selectedRangeOnScore()),
+        makeAction("reset", hasSelectionOnScore()),
         makeSeparator(),
         makeAction("load-style", scoreOpened()), // need implement
         makeAction("save-style", scoreOpened()) // need implement
@@ -451,24 +424,24 @@ MenuItemList AppMenuModel::notesItems() const
 MenuItemList AppMenuModel::intervalsItems() const
 {
     MenuItemList items {
-        makeAction("interval1", true, selectedElementOnScore()),
-        makeAction("interval2", true, selectedElementOnScore()),
-        makeAction("interval3", true, selectedElementOnScore()),
-        makeAction("interval4", true, selectedElementOnScore()),
-        makeAction("interval5", true, selectedElementOnScore()),
-        makeAction("interval6", true, selectedElementOnScore()),
-        makeAction("interval7", true, selectedElementOnScore()),
-        makeAction("interval8", true, selectedElementOnScore()),
-        makeAction("interval9", true, selectedElementOnScore()),
+        makeAction("interval1", selectedElementOnScore()),
+        makeAction("interval2", selectedElementOnScore()),
+        makeAction("interval3", selectedElementOnScore()),
+        makeAction("interval4", selectedElementOnScore()),
+        makeAction("interval5", selectedElementOnScore()),
+        makeAction("interval6", selectedElementOnScore()),
+        makeAction("interval7", selectedElementOnScore()),
+        makeAction("interval8", selectedElementOnScore()),
+        makeAction("interval9", selectedElementOnScore()),
         makeSeparator(),
-        makeAction("interval-2", true, selectedElementOnScore()),
-        makeAction("interval-3", true, selectedElementOnScore()),
-        makeAction("interval-4", true, selectedElementOnScore()),
-        makeAction("interval-5", true, selectedElementOnScore()),
-        makeAction("interval-6", true, selectedElementOnScore()),
-        makeAction("interval-7", true, selectedElementOnScore()),
-        makeAction("interval-8", true, selectedElementOnScore()),
-        makeAction("interval-9", true, selectedElementOnScore())
+        makeAction("interval-2", selectedElementOnScore()),
+        makeAction("interval-3", selectedElementOnScore()),
+        makeAction("interval-4", selectedElementOnScore()),
+        makeAction("interval-5", selectedElementOnScore()),
+        makeAction("interval-6", selectedElementOnScore()),
+        makeAction("interval-7", selectedElementOnScore()),
+        makeAction("interval-8", selectedElementOnScore()),
+        makeAction("interval-9", selectedElementOnScore())
     };
 
     return items;
@@ -477,15 +450,15 @@ MenuItemList AppMenuModel::intervalsItems() const
 MenuItemList AppMenuModel::tupletsItems() const
 {
     MenuItemList items {
-        makeAction("duplet", true, selectedElementOnScore()),
-        makeAction("triplet", true, selectedElementOnScore()),
-        makeAction("quadruplet", true, selectedElementOnScore()),
-        makeAction("quintuplet", true, selectedElementOnScore()),
-        makeAction("sextuplet", true, selectedElementOnScore()),
-        makeAction("septuplet", true, selectedElementOnScore()),
-        makeAction("octuplet", true, selectedElementOnScore()),
-        makeAction("nonuplet", true, selectedElementOnScore()),
-        makeAction("tuplet-dialog", true, selectedElementOnScore())
+        makeAction("duplet", selectedElementOnScore()),
+        makeAction("triplet", selectedElementOnScore()),
+        makeAction("quadruplet", selectedElementOnScore()),
+        makeAction("quintuplet", selectedElementOnScore()),
+        makeAction("sextuplet", selectedElementOnScore()),
+        makeAction("septuplet", selectedElementOnScore()),
+        makeAction("octuplet", selectedElementOnScore()),
+        makeAction("nonuplet", selectedElementOnScore()),
+        makeAction("tuplet-dialog", selectedElementOnScore())
     };
 
     return items;
@@ -494,11 +467,11 @@ MenuItemList AppMenuModel::tupletsItems() const
 MenuItemList AppMenuModel::measuresItems() const
 {
     MenuItemList items {
-        makeAction("insert-measure", true, selectedElementOnScore()),
-        makeAction("insert-measures", true, selectedElementOnScore()),
+        makeAction("insert-measure", selectedElementOnScore()),
+        makeAction("insert-measures", selectedElementOnScore()),
         makeSeparator(),
-        makeAction("append-measure", true, selectedElementOnScore()),
-        makeAction("append-measures", true, selectedElementOnScore())
+        makeAction("append-measure", selectedElementOnScore()),
+        makeAction("append-measures", selectedElementOnScore())
     };
 
     return items;
@@ -507,13 +480,13 @@ MenuItemList AppMenuModel::measuresItems() const
 MenuItemList AppMenuModel::framesItems() const
 {
     MenuItemList items {
-        makeAction("insert-hbox", true, selectedElementOnScore()),
-        makeAction("insert-vbox", true, selectedElementOnScore()),
-        makeAction("insert-textframe", true, selectedElementOnScore()),
+        makeAction("insert-hbox", selectedElementOnScore()),
+        makeAction("insert-vbox", selectedElementOnScore()),
+        makeAction("insert-textframe", selectedElementOnScore()),
         makeSeparator(),
-        makeAction("append-hbox", true, selectedElementOnScore()),
-        makeAction("append-vbox", true, selectedElementOnScore()),
-        makeAction("append-textframe", true, selectedElementOnScore())
+        makeAction("append-hbox", selectedElementOnScore()),
+        makeAction("append-vbox", selectedElementOnScore()),
+        makeAction("append-textframe", selectedElementOnScore())
     };
 
     return items;
@@ -522,26 +495,26 @@ MenuItemList AppMenuModel::framesItems() const
 MenuItemList AppMenuModel::textItems() const
 {
     MenuItemList items {
-        makeAction("title-text", true, selectedElementOnScore()),
-        makeAction("subtitle-text", true, selectedElementOnScore()),
-        makeAction("composer-text", true, selectedElementOnScore()),
-        makeAction("poet-text", true, selectedElementOnScore()),
-        makeAction("part-text", true, selectedElementOnScore()),
+        makeAction("title-text", selectedElementOnScore()),
+        makeAction("subtitle-text", selectedElementOnScore()),
+        makeAction("composer-text", selectedElementOnScore()),
+        makeAction("poet-text", selectedElementOnScore()),
+        makeAction("part-text", selectedElementOnScore()),
         makeSeparator(),
-        makeAction("system-text", true, selectedElementOnScore()),
-        makeAction("staff-text", true, selectedElementOnScore()),
-        makeAction("expression-text", true, selectedElementOnScore()),
-        makeAction("rehearsalmark-text", true, selectedElementOnScore()),
-        makeAction("instrument-change-text", true, selectedElementOnScore()),
-        makeAction("fingering-text", true, selectedElementOnScore()),
+        makeAction("system-text", selectedElementOnScore()),
+        makeAction("staff-text", selectedElementOnScore()),
+        makeAction("expression-text", selectedElementOnScore()),
+        makeAction("rehearsalmark-text", selectedElementOnScore()),
+        makeAction("instrument-change-text", selectedElementOnScore()),
+        makeAction("fingering-text", selectedElementOnScore()),
         makeSeparator(),
-        makeAction("sticking-text", true, selectedElementOnScore()),
-        makeAction("chord-text", true, selectedElementOnScore()),
-        makeAction("roman-numeral-text", true, selectedElementOnScore()),
-        makeAction("nashville-number-text", true, selectedElementOnScore()),
-        makeAction("lyrics", true, selectedElementOnScore()),
-        makeAction("figured-bass", true, selectedElementOnScore()),
-        makeAction("tempo", true, selectedElementOnScore())
+        makeAction("sticking-text", selectedElementOnScore()),
+        makeAction("chord-text", selectedElementOnScore()),
+        makeAction("roman-numeral-text", selectedElementOnScore()),
+        makeAction("nashville-number-text", selectedElementOnScore()),
+        makeAction("lyrics", selectedElementOnScore()),
+        makeAction("figured-bass", selectedElementOnScore()),
+        makeAction("tempo", selectedElementOnScore())
     };
 
     return items;
@@ -550,12 +523,12 @@ MenuItemList AppMenuModel::textItems() const
 MenuItemList AppMenuModel::linesItems() const
 {
     MenuItemList items {
-        makeAction("add-slur", true, selectedElementOnScore()),
-        makeAction("add-hairpin", true, selectedElementOnScore()),
-        makeAction("add-hairpin-reverse", true, selectedElementOnScore()),
-        makeAction("add-8va", true, selectedElementOnScore()),
-        makeAction("add-8vb", true, selectedElementOnScore()),
-        makeAction("add-noteline", true, selectedElementOnScore()),
+        makeAction("add-slur", selectedElementOnScore()),
+        makeAction("add-hairpin", selectedElementOnScore()),
+        makeAction("add-hairpin-reverse", selectedElementOnScore()),
+        makeAction("add-8va", selectedElementOnScore()),
+        makeAction("add-8vb", selectedElementOnScore()),
+        makeAction("add-noteline", selectedElementOnScore()),
     };
 
     return items;
@@ -564,10 +537,10 @@ MenuItemList AppMenuModel::linesItems() const
 MenuItemList AppMenuModel::toolbarsItems() const
 {
     MenuItemList items {
-        makeAction("toggle-transport", isNotationPage(), configuration()->isPlaybackToolBarVisible().val),
-        makeAction("toggle-noteinput", isNotationPage(), configuration()->isNoteInputBarVisible().val),
-        makeAction("toogle-notationtoolbar", isNotationPage(), configuration()->isNotationToolBarVisible().val),
-        makeAction("toogle-undoredo", isNotationPage(), configuration()->isUndoRedoToolBarVisible().val)
+        makeAction("toggle-transport", isNotationPage(), notationPageState()->isPanelVisible(PanelType::PlaybackToolBar)),
+        makeAction("toggle-noteinput", isNotationPage(), notationPageState()->isPanelVisible(PanelType::NoteInputBar)),
+        makeAction("toggle-notationtoolbar", isNotationPage(), notationPageState()->isPanelVisible(PanelType::NotationToolBar)),
+        makeAction("toggle-undoredo", isNotationPage(), notationPageState()->isPanelVisible(PanelType::UndoRedoToolBar))
     };
 
     return items;

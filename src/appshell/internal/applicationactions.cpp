@@ -23,6 +23,7 @@
 using namespace mu::appshell;
 using namespace mu::actions;
 using namespace mu::shortcuts;
+using namespace mu::ui;
 
 const ActionList ApplicationActions::m_actions = {
     ActionItem("quit",
@@ -31,7 +32,8 @@ const ActionList ApplicationActions::m_actions = {
                ),
     ActionItem("fullscreen",
                ShortcutContext::Any,
-               QT_TRANSLATE_NOOP("action", "Full Screen")
+               QT_TRANSLATE_NOOP("action", "Full Screen"),
+               QT_TRANSLATE_NOOP("action", "Full screen")
                ),
     ActionItem("about-qt",
                ShortcutContext::Any,
@@ -59,6 +61,57 @@ const ActionList ApplicationActions::m_actions = {
                ShortcutContext::Any,
                QT_TRANSLATE_NOOP("action", "Revert to Factory Settings"),
                QT_TRANSLATE_NOOP("action", "Revert to factory settings")
+               ),
+    ActionItem("toggle-mixer",
+               ShortcutContext::Any,
+               QT_TRANSLATE_NOOP("action", "Mixer"),
+               QT_TRANSLATE_NOOP("action", "Toggle mixer"),
+               IconCode::Code::MIXER
+               ),
+    ActionItem("toggle-navigator",
+               ShortcutContext::Any,
+               QT_TRANSLATE_NOOP("action", "Navigator"),
+               QT_TRANSLATE_NOOP("action", "Toggle 'Navigator'")
+               ),
+    ActionItem("toggle-palette",
+               ShortcutContext::Any,
+               QT_TRANSLATE_NOOP("action", "Palettes"),
+               QT_TRANSLATE_NOOP("action", "Toggle 'Palettes'")
+               ),
+    ActionItem("toggle-instruments",
+               ShortcutContext::Any,
+               QT_TRANSLATE_NOOP("action", "Instruments"),
+               QT_TRANSLATE_NOOP("action", "Toggle 'Instruments'")
+               ),
+    ActionItem("inspector",
+               ShortcutContext::Any,
+               QT_TRANSLATE_NOOP("action", "Inspector"),
+               QT_TRANSLATE_NOOP("action", "Toggle 'Inspector'")
+               ),
+    ActionItem("toggle-statusbar",
+               ShortcutContext::Any,
+               QT_TRANSLATE_NOOP("action", "Status Bar"),
+               QT_TRANSLATE_NOOP("action", "Toggle 'Status Bar'")
+               ),
+    ActionItem("toggle-noteinput",
+               ShortcutContext::Any,
+               QT_TRANSLATE_NOOP("action", "Note Input"),
+               QT_TRANSLATE_NOOP("action", "Toggle 'Note Input' toolbar")
+               ),
+    ActionItem("toggle-notationtoolbar",
+               ShortcutContext::Any,
+               QT_TRANSLATE_NOOP("action", "Notation Toolbar"),
+               QT_TRANSLATE_NOOP("action", "Toggle 'Notation' toolbar")
+               ),
+    ActionItem("toggle-undoredo",
+               ShortcutContext::Any,
+               QT_TRANSLATE_NOOP("action", "Undo/Redo Toolbar"),
+               QT_TRANSLATE_NOOP("action", "Toggle 'Undo/Redo' toolbar")
+               ),
+    ActionItem("toggle-transport",
+               ShortcutContext::Any,
+               QT_TRANSLATE_NOOP("action", "Playback Controls"),
+               QT_TRANSLATE_NOOP("action", "Toggle Playback Controls toolbar")
                )
 };
 

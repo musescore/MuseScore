@@ -34,9 +34,6 @@ public:
     virtual bool isPlayHarmonyOnClick() const = 0;
 
     virtual PlaybackCursorType cursorType() const = 0;
-
-    virtual ValCh<bool> isPlaybackToolBarVisible() const = 0;
-    virtual void setIsPlaybackToolBarVisible(bool visible) = 0;
 };
 }
 

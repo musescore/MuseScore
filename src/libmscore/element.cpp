@@ -145,6 +145,15 @@ qreal Element::spatium() const
     }
 }
 
+bool Element::isInteractionAvailable() const
+{
+    if (!visible() && (score()->printing() || !score()->showInvisible())) {
+        return false;
+    }
+
+    return true;
+}
+
 //---------------------------------------------------------
 //   offsetIsSpatiumDependent
 //---------------------------------------------------------
@@ -1339,7 +1348,7 @@ void paintElements(QPainter& painter, const QList<Element*>& elements)
     });
 
     for (const Element* element : sortedElements) {
-        if (!element->visible() && (element->score()->printing() || !element->score()->showInvisible())) {
+        if (!element->isInteractionAvailable()) {
             continue;
         }
 

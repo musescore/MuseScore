@@ -175,16 +175,6 @@ void DockPanel::setClosable(bool closable)
     emit closableChanged(closable);
 }
 
-void DockPanel::setVisible(bool visible)
-{
-    if (m_visible == visible) {
-        return;
-    }
-
-    m_visible = visible;
-    emit visibleEdited(m_visible);
-}
-
 void DockPanel::setFeature(QDockWidget::DockWidgetFeature feature, bool value)
 {
     QDockWidget::DockWidgetFeatures features = panel()->features();

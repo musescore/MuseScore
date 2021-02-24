@@ -13,9 +13,8 @@ Rectangle {
     id: root
 
     property bool floating: false
-    property alias isToolBarVisible: playbackModel.isToolBarVisible
 
-    function load() {
+    Component.onCompleted: {
         playbackModel.load()
     }
 

@@ -65,10 +65,7 @@ static const Settings::Key IS_COUNT_IN_ENABLED(module_name, "application/playbac
 
 static const Settings::Key TOOLBAR_KEY(module_name, "ui/toolbar/");
 
-static const Settings::Key NAVIGATOR_VISIBLE_KEY(module_name, "ui/application/startup/showNavigator");
 static const Settings::Key IS_CANVAS_ORIENTATION_VERTICAL_KEY(module_name, "ui/canvas/scroll/verticalOrientation");
-
-static const Settings::Key STATUSBAR_VISIBLE_KEY(module_name, "ui/application/showStatusBar");
 
 void NotationConfiguration::init()
 {
@@ -104,23 +101,9 @@ void NotationConfiguration::init()
     settings()->setDefaultValue(IS_METRONOME_ENABLED, Val(false));
     settings()->setDefaultValue(IS_COUNT_IN_ENABLED, Val(false));
 
-    settings()->setDefaultValue(NAVIGATOR_VISIBLE_KEY, Val(false));
-    settings()->valueChanged(NAVIGATOR_VISIBLE_KEY).onReceive(nullptr, [this](const Val&) {
-        m_navigatorVisibleChanged.send(isNavigatorVisible().val);
-    });
-
     settings()->setDefaultValue(IS_CANVAS_ORIENTATION_VERTICAL_KEY, Val(false));
     settings()->valueChanged(IS_CANVAS_ORIENTATION_VERTICAL_KEY).onReceive(nullptr, [this](const Val&) {
         m_canvasOrientationChanged.send(canvasOrientation().val);
-    });
-
-    settings()->setDefaultValue(STATUSBAR_VISIBLE_KEY, Val(true));
-    settings()->valueChanged(STATUSBAR_VISIBLE_KEY).onReceive(nullptr, [this](const Val&) {
-        m_statusBarVisibleChanged.send(isStatusBarVisible().val);
-    });
-    IWorkspaceSettings::Key workspaceKey{ workspace::WorkspaceTag::UiArrangement, STATUSBAR_VISIBLE_KEY.key };
-    workspaceSettings()->valueChanged(workspaceKey).onReceive(nullptr, [this](const Val&) {
-        m_statusBarVisibleChanged.send(isStatusBarVisible().val);
     });
 
     // libmscore
@@ -327,20 +310,6 @@ void NotationConfiguration::setToolbarActions(const std::string& toolbarName, co
     settings()->setValue(toolbarSettingsKey(toolbarName), value);
 }
 
-ValCh<bool> NotationConfiguration::isNavigatorVisible() const
-{
-    ValCh<bool> visible;
-    visible.ch = m_navigatorVisibleChanged;
-    visible.val = settings()->value(NAVIGATOR_VISIBLE_KEY).toBool();
-
-    return visible;
-}
-
-void NotationConfiguration::setIsNavigatorVisible(bool visible)
-{
-    settings()->setValue(NAVIGATOR_VISIBLE_KEY, Val(visible));
-}
-
 ValCh<Orientation> NotationConfiguration::canvasOrientation() const
 {
     ValCh<Orientation> orientation;
@@ -355,121 +324,6 @@ void NotationConfiguration::setCanvasOrientation(Orientation orientation)
 {
     bool isVertical = orientation == Orientation::Vertical;
     settings()->setValue(IS_CANVAS_ORIENTATION_VERTICAL_KEY, Val(isVertical));
-}
-
-ValCh<bool> NotationConfiguration::isPalettePanelVisible() const
-{
-    ValCh<bool> visible;
-    visible.ch = m_palettePanelVisibleChanged;
-    visible.val = m_isPalettePanelVisible;
-
-    return visible;
-}
-
-void NotationConfiguration::setIsPalettePanelVisible(bool visible)
-{
-    m_isPalettePanelVisible = visible;
-    m_palettePanelVisibleChanged.send(visible);
-}
-
-ValCh<bool> NotationConfiguration::isInstrumentsPanelVisible() const
-{
-    ValCh<bool> visible;
-    visible.ch = m_instrumentsPanelVisibleChanged;
-    visible.val = m_isInstrumentsPanelVisible;
-
-    return visible;
-}
-
-void NotationConfiguration::setIsInstrumentsPanelVisible(bool visible)
-{
-    m_isInstrumentsPanelVisible = visible;
-    m_instrumentsPanelVisibleChanged.send(visible);
-}
-
-ValCh<bool> NotationConfiguration::isInspectorPanelVisible() const
-{
-    ValCh<bool> visible;
-    visible.ch = m_inspectorPanelVisibleChanged;
-    visible.val = m_isInspectorPanelVisible;
-
-    return visible;
-}
-
-void NotationConfiguration::setIsInspectorPanelVisible(bool visible)
-{
-    m_isInspectorPanelVisible = visible;
-    m_inspectorPanelVisibleChanged.send(visible);
-}
-
-ValCh<bool> NotationConfiguration::isStatusBarVisible() const
-{
-    ValCh<bool> visible;
-    visible.ch = m_statusBarVisibleChanged;
-
-    if (workspaceSettings()->isManage(workspace::WorkspaceTag::UiArrangement)) {
-        IWorkspaceSettings::Key workspaceKey{ workspace::WorkspaceTag::UiArrangement, STATUSBAR_VISIBLE_KEY.key };
-        visible.val = workspaceSettings()->value(workspaceKey).toBool();
-    } else {
-        visible.val = settings()->value(STATUSBAR_VISIBLE_KEY).toBool();
-    }
-
-    return visible;
-}
-
-void NotationConfiguration::setIsStatusBarVisible(bool visible)
-{
-    if (workspaceSettings()->isManage(workspace::WorkspaceTag::UiArrangement)) {
-        IWorkspaceSettings::Key workspaceKey{ workspace::WorkspaceTag::UiArrangement, STATUSBAR_VISIBLE_KEY.key };
-        workspaceSettings()->setValue(workspaceKey, Val(visible));
-    } else {
-        settings()->setValue(STATUSBAR_VISIBLE_KEY, Val(visible));
-    }
-}
-
-ValCh<bool> NotationConfiguration::isNoteInputBarVisible() const
-{
-    ValCh<bool> visible;
-    visible.ch = m_noteInputBarVisibleChanged;
-    visible.val = m_isNoteInputBarVisible;
-
-    return visible;
-}
-
-void NotationConfiguration::setIsNoteInputBarVisible(bool visible)
-{
-    m_isNoteInputBarVisible = visible;
-    m_noteInputBarVisibleChanged.send(visible);
-}
-
-ValCh<bool> NotationConfiguration::isNotationToolBarVisible() const
-{
-    ValCh<bool> visible;
-    visible.ch = m_notationToolBarVisibleChanged;
-    visible.val = m_isNotationToolBarVisible;
-
-    return visible;
-}
-
-void NotationConfiguration::setIsNotationToolBarVisible(bool visible)
-{
-    m_isNotationToolBarVisible = visible;
-    m_notationToolBarVisibleChanged.send(visible);
-}
-
-ValCh<bool> NotationConfiguration::isUndoRedoToolBarVisible() const
-{
-    ValCh<bool> visible;
-    visible.ch = m_undoRedoToolBarVisibleChanged;
-    visible.val = m_isUndoRedoToolBarVisible;
-
-    return visible;
-}
-
-void NotationConfiguration::setIsUndoRedoToolBarVisible(bool visible)
-{
-    m_isUndoRedoToolBarVisible = visible;
-    m_undoRedoToolBarVisibleChanged.send(visible);
 }
 
 std::vector<std::string> NotationConfiguration::parseToolbarActions(const std::string& actions) const

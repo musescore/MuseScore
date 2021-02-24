@@ -194,16 +194,6 @@ void NotationActionController::init()
     dispatcher()->reg(this, "figured-bass", [this]() { addFiguredBass(); });
     dispatcher()->reg(this, "tempo", [this]() { addText(TextType::TEMPO); });
 
-    dispatcher()->reg(this, "toggle-navigator", this, &NotationActionController::toggleNavigator);
-    dispatcher()->reg(this, "toggle-mixer", this, &NotationActionController::toggleMixer);
-    dispatcher()->reg(this, "toggle-palette", this, &NotationActionController::togglePalettePanel);
-    dispatcher()->reg(this, "toggle-instruments", this, &NotationActionController::toggleInstrumentsPanel);
-    dispatcher()->reg(this, "inspector", this, &NotationActionController::toggleInspectorPanel);
-    dispatcher()->reg(this, "toggle-statusbar", this, &NotationActionController::toggleStatusBar);
-    dispatcher()->reg(this, "toggle-noteinput", this, &NotationActionController::toggleNoteInputBar);
-    dispatcher()->reg(this, "toogle-notationtoolbar", this, &NotationActionController::toggleNotationToolBar);
-    dispatcher()->reg(this, "toogle-undoredo", this, &NotationActionController::toggleUndoRedoToolBar);
-
     dispatcher()->reg(this, "stretch-", [this]() { addStretch(-STRETCH_STEP); });
     dispatcher()->reg(this, "stretch+", [this]() { addStretch(STRETCH_STEP); });
 
@@ -1083,59 +1073,6 @@ bool NotationActionController::isTextEditting() const
 void NotationActionController::openTupletOtherDialog()
 {
     interactive()->open("musescore://notation/othertupletdialog");
-}
-
-void NotationActionController::toggleNavigator()
-{
-    bool visible = configuration()->isNavigatorVisible().val;
-    configuration()->setIsNavigatorVisible(!visible);
-}
-
-void NotationActionController::toggleMixer()
-{
-    NOT_IMPLEMENTED;
-}
-
-void NotationActionController::togglePalettePanel()
-{
-    bool visible = configuration()->isPalettePanelVisible().val;
-    configuration()->setIsPalettePanelVisible(!visible);
-}
-
-void NotationActionController::toggleInstrumentsPanel()
-{
-    bool visible = configuration()->isInstrumentsPanelVisible().val;
-    configuration()->setIsInstrumentsPanelVisible(!visible);
-}
-
-void NotationActionController::toggleInspectorPanel()
-{
-    bool visible = configuration()->isInspectorPanelVisible().val;
-    configuration()->setIsInspectorPanelVisible(!visible);
-}
-
-void NotationActionController::toggleStatusBar()
-{
-    bool visible = configuration()->isStatusBarVisible().val;
-    configuration()->setIsStatusBarVisible(!visible);
-}
-
-void NotationActionController::toggleNoteInputBar()
-{
-    bool visible = configuration()->isNoteInputBarVisible().val;
-    configuration()->setIsNoteInputBarVisible(!visible);
-}
-
-void NotationActionController::toggleNotationToolBar()
-{
-    bool visible = configuration()->isNotationToolBarVisible().val;
-    configuration()->setIsNotationToolBarVisible(!visible);
-}
-
-void NotationActionController::toggleUndoRedoToolBar()
-{
-    bool visible = configuration()->isUndoRedoToolBarVisible().val;
-    configuration()->setIsUndoRedoToolBarVisible(!visible);
 }
 
 void NotationActionController::toggleShowingInvisibleElements()
