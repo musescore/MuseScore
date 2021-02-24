@@ -5700,9 +5700,9 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="checked">
               <bool>false</bool>
              </property>
-             <layout class="QGridLayout" name="gridLayout_30">
+             <layout class="QGridLayout" name="gridLayout_301">
               <item row="0" column="3">
-               <spacer name="horizontalSpacer_15">
+               <spacer name="horizontalSpacer_151">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
@@ -5749,7 +5749,7 @@ By default, they will be placed such as that their right end are at the same lev
                </widget>
               </item>
               <item row="1" column="0">
-               <widget class="QLabel" name="label_147">
+               <widget class="QLabel" name="label_1471">
                 <property name="text">
                  <string>Spacing of symbols:</string>
                 </property>
@@ -8998,7 +8998,7 @@ By default, they will be placed such as that their right end are at the same lev
           <property name="title">
            <string>System Text Line</string>
           </property>
-          <layout class="QGridLayout" name="gridLayout_46">
+          <layout class="QGridLayout" name="gridLayout_461">
            <item row="2" column="0">
             <widget class="QLabel" name="label_211">
              <property name="sizePolicy">
@@ -9129,7 +9129,7 @@ By default, they will be placed such as that their right end are at the same lev
          </widget>
         </item>
         <item>
-         <spacer name="verticalSpacer_34">
+         <spacer name="verticalSpacer_341">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
@@ -11671,7 +11671,7 @@ By default, they will be placed such as that their right end are at the same lev
                  </property>
                  <layout class="QGridLayout" name="gridLayout_15">
                   <item row="4" column="0">
-                   <widget class="QLabel" name="label_146">
+                   <widget class="QLabel" name="label_1461">
                     <property name="text">
                      <string>Maximum shift below:</string>
                     </property>
@@ -11702,7 +11702,7 @@ By default, they will be placed such as that their right end are at the same lev
                    </widget>
                   </item>
                   <item row="3" column="0">
-                   <widget class="QLabel" name="label_123">
+                   <widget class="QLabel" name="label_1231">
                     <property name="text">
                      <string>Maximum shift above:</string>
                     </property>
@@ -11842,7 +11842,7 @@ By default, they will be placed such as that their right end are at the same lev
                 </spacer>
                </item>
                <item row="3" column="1" colspan="2">
-                <spacer name="verticalSpacer_341">
+                <spacer name="verticalSpacer_3411">
                  <property name="orientation">
                   <enum>Qt::Vertical</enum>
                  </property>
@@ -11878,7 +11878,7 @@ By default, they will be placed such as that their right end are at the same lev
           </property>
           <layout class="QGridLayout" name="gridLayout_471">
            <item row="9" column="0">
-            <widget class="QLabel" name="label_145">
+            <widget class="QLabel" name="label_1451">
              <property name="text">
               <string>Maximum shift below:</string>
              </property>
@@ -12098,7 +12098,7 @@ By default, they will be placed such as that their right end are at the same lev
             </widget>
            </item>
            <item row="8" column="0">
-            <widget class="QLabel" name="label_119">
+            <widget class="QLabel" name="label_1191">
              <property name="text">
               <string>Maximum shift above:</string>
              </property>
@@ -12710,7 +12710,7 @@ By default, they will be placed such as that their right end are at the same lev
             </widget>
            </item>
            <item row="3" column="0">
-            <widget class="QLabel" name="label_1471">
+            <widget class="QLabel" name="label_14711">
              <property name="text">
               <string>Line Spacing: </string>
              </property>
