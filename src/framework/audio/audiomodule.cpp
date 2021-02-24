@@ -62,10 +62,10 @@ static std::shared_ptr<IAudioDriver> s_audioDriver = std::shared_ptr<IAudioDrive
 #endif
 
 #ifdef Q_OS_WIN
-#include "internal/platform/win/winmmdriver.h"
-static std::shared_ptr<IAudioDriver> s_audioDriver = std::shared_ptr<IAudioDriver>(new WinmmDriver());
-//#include "internal/platform/win/wincoreaudiodriver.h"
-//static std::shared_ptr<IAudioDriver> s_audioDriver = std::shared_ptr<IAudioDriver>(new CoreAudioDriver());
+//#include "internal/platform/win/winmmdriver.h"
+//static std::shared_ptr<IAudioDriver> s_audioDriver = std::shared_ptr<IAudioDriver>(new WinmmDriver());
+#include "internal/platform/win/wincoreaudiodriver.h"
+static std::shared_ptr<IAudioDriver> s_audioDriver = std::shared_ptr<IAudioDriver>(new CoreAudioDriver());
 #endif
 
 #ifdef Q_OS_MACOS
