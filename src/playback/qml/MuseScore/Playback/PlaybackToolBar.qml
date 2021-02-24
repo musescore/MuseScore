@@ -33,7 +33,7 @@ Rectangle {
         RowLayout {
             id: playbackActions
 
-            spacing: 2
+            spacing: 0
 
             ListView {
                 Layout.preferredWidth: childrenRect.width
@@ -42,7 +42,7 @@ Rectangle {
                 contentHeight: 32
                 contentWidth: contentHeight
 
-                spacing: 2
+                spacing: 4
 
                 model: FilterProxyModel {
                     sourceModel: playbackModel
@@ -82,13 +82,17 @@ Rectangle {
                 }
             }
 
-            SeparatorLine { orientation: Qt.Vertical; visible: !root.floating }
+            SeparatorLine {
+                Layout.leftMargin: 12
+                orientation: Qt.Vertical
+                visible: !root.floating
+            }
 
             TimeInputField {
                 id: timeField
 
-                Layout.leftMargin: 10
-                Layout.preferredWidth: 90
+                Layout.leftMargin: 24
+                Layout.preferredWidth: 60
 
                 maxTime: playbackModel.maxPlayTime
                 maxMillisecondsNumber: 9
@@ -100,7 +104,7 @@ Rectangle {
             }
 
             NumberInputField {
-                Layout.leftMargin: 10
+                Layout.leftMargin: 24
                 Layout.preferredWidth: 10
 
                 minValue: 1
@@ -138,27 +142,29 @@ Rectangle {
             }
 
             StyledTextLabel {
-                Layout.leftMargin: 10
+                Layout.leftMargin: 24
                 Layout.preferredWidth: 20
                 topPadding: 10
 
                 text: playbackModel.tempo.noteSymbol
 
                 font.family: ui.theme.musicalFont
-                font.pixelSize: ui.theme.tabFont.pixelSize
+                font.pixelSize: ui.theme.iconsFont.pixelSize
                 font.letterSpacing: 1
 
                 lineHeightMode: Text.FixedHeight
             }
 
             StyledTextLabel {
-                Layout.rightMargin: 10
-
                 text: "= " + playbackModel.tempo.value
                 font: timeField.font
             }
 
-            SeparatorLine { orientation: Qt.Vertical; visible: !root.floating }
+            SeparatorLine {
+                Layout.leftMargin: 24
+                orientation: Qt.Vertical
+                visible: !root.floating
+            }
         }
 
         StyledSlider {
