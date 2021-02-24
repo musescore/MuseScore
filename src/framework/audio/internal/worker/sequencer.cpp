@@ -197,12 +197,12 @@ void Sequencer::beforeTimeUpdate(Clock::time_t milliseconds)
     }
 
     if (m_nextSeek.has_value()) {
-        auto milliseconds = m_nextSeek.value_or(0);
+        auto millisecs = m_nextSeek.value_or(0);
         m_nextSeek.reset();
 
-        m_clock->seekMiliseconds(milliseconds);
+        m_clock->seekMiliseconds(millisecs);
         for (auto& track : m_tracks) {
-            track.second->seek(milliseconds);
+            track.second->seek(millisecs);
         }
         m_positionChanged.notify();
     }

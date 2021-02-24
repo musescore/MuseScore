@@ -220,7 +220,7 @@ std::string WinmmDriver::outputDevice() const
     return "default";
 }
 
-bool WinmmDriver::selectOutputDevice(const std::string& name)
+bool WinmmDriver::selectOutputDevice(const std::string& /*name*/)
 {
     NOT_IMPLEMENTED;
     return false;
