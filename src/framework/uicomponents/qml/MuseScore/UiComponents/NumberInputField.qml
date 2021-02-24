@@ -48,6 +48,7 @@ Item {
         id: textField
 
         anchors.centerIn: parent
+        padding: 0
 
         readOnly: root.maxValue === 0
         text: privateProperties.pad(root.value)
