@@ -468,3 +468,6 @@ Changelog
 – Replaced Sagittal outlines with those optimized by Douglas Blumeyer for design space of 1000 fu per em. Changed side bearings of accSagittalShaftUp (U+E3F0) and accSagittalShaftDown (U+E3F1)
 – Add kerning pairs for new Sagittal glyphs (U+E3F4–U+E40B)
 – Added glyphs to the 'Olympian Sagittal extension (extreme precision) accidental diacritics' (U+E3F4–U+E3F7) and 'Magrathean Sagittal extension (insane precision) accidental diacritics' (U+E3F8–U+E41F) ranges of Sagittal accidentals.
+
+9 February 2021 (Daniel Spreadbury) Bravura Text 1.393
+– Corrected style name of Bravura Text to 'Regular' from incorrect 'Normal'
