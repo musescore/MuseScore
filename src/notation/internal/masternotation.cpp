@@ -169,7 +169,7 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
     ks.setKey(scoreOptions.key);
     Ms::VBox* nvb = nullptr;
 
-    bool pickupMeasure = scoreOptions.measureTimesigNumerator > 0 && scoreOptions.measureTimesigDenominator > 0;
+    bool pickupMeasure = scoreOptions.withPickupMeasure;
     if (pickupMeasure) {
         measures += 1;
     }
