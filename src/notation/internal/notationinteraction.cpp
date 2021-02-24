@@ -2334,13 +2334,40 @@ void NotationInteraction::addText(TextType type)
 
 void NotationInteraction::addFiguredBass()
 {
-    Ms::FiguredBass* fb = score()->addFiguredBass();
+    Ms::FiguredBass* figuredBass = score()->addFiguredBass();
 
-    if (fb) {
-        startEditText(fb, QPointF());
+    if (figuredBass) {
+        startEditText(figuredBass, QPointF());
     }
 
     notifyAboutSelectionChanged();
+}
+
+void NotationInteraction::addStretch(qreal value)
+{
+    startEdit();
+    score()->cmdAddStretch(value);
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
+void NotationInteraction::resetToDefault(ResettableValueType type)
+{
+    switch (type) {
+    case ResettableValueType::Stretch:
+        resetStretch();
+        break;
+    case ResettableValueType::BeamMode:
+        resetBeamMode();
+        break;
+    case ResettableValueType::ShapesAndPosition:
+        resetShapesAndPosition();
+        break;
+    case ResettableValueType::TextStyleOverriders:
+        resetTextStyleOverrides();
+        break;
+    }
 }
 
 bool NotationInteraction::needEndTextEditing(const std::vector<Element*>& newSelectedElements) const
@@ -2392,4 +2419,58 @@ void NotationInteraction::resetGripEdit()
     m_gripEditData.grip.clear();
 
     resetAnchorLines();
+}
+
+void NotationInteraction::resetStretch()
+{
+    startEdit();
+    score()->resetUserStretch();
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
+void NotationInteraction::resetTextStyleOverrides()
+{
+    startEdit();
+    score()->cmdResetTextStyleOverrides();
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
+void NotationInteraction::resetBeamMode()
+{
+    startEdit();
+    score()->cmdResetBeamMode();
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
+void NotationInteraction::resetShapesAndPosition()
+{
+    startEdit();
+
+    if (selection()->element()) {
+        clearSelection();
+        return;
+    }
+
+    for (Element* element : selection()->elements()) {
+        element->reset();
+
+        if (!element->isSpanner()) {
+            continue;
+        }
+
+        Ms::Spanner* spanner = toSpanner(element);
+        for (Ms::SpannerSegment* spannerSegment : spanner->spannerSegments()) {
+            spannerSegment->reset();
+        }
+    }
+
+    apply();
+
+    notifyAboutNotationChanged();
 }
