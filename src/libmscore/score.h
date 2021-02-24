@@ -522,7 +522,6 @@ private:
     ChordRest* prevMeasure(ChordRest* element, bool mmRest = false);
     void cmdSetBeamMode(Beam::Mode);
     void cmdResetAllStyle();
-    void cmdResetTextStyleOverrides();
 
     Note* getSelectedNote();
     ChordRest* upStaff(ChordRest* cr);
@@ -534,8 +533,6 @@ private:
     void addTempo();
     void addMetronome();
 
-    void cmdResetBeamMode();
-
     void cmdInsertClef(ClefType);
     void cmdAddGrace(NoteType, int);
     void removeChordRest(ChordRest* cr, bool clearSegment);
@@ -545,7 +542,6 @@ private:
     void cmdAddBracket();
     void cmdAddParentheses();
     void cmdAddBraces();
-    void resetUserStretch();
 
     void createMMRest(Measure*, Measure*, const Fraction&);
 
@@ -671,6 +667,9 @@ public:
     void cmdAddMeasureRepeat(Measure*, int numMeasures, int staffIdx);
     bool makeMeasureRepeatGroup(Measure*, int numMeasures, int staffIdx);
     void cmdFlip();
+    void resetUserStretch();
+    void cmdResetBeamMode();
+    void cmdResetTextStyleOverrides();
 
     void addRemoveBreaks(int interval, bool lock);
 

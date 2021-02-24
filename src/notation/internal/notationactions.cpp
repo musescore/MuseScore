@@ -677,6 +677,36 @@ const ActionList NotationActions::m_actions = {
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Navigator"),
                QT_TRANSLATE_NOOP("action", "Toggle 'Navigator'")
+               ),
+    ActionItem("stretch-",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Increase Layout Stretch"),
+               QT_TRANSLATE_NOOP("action", "Increase layout stretch factor of selected measures")
+               ),
+    ActionItem("stretch+",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Decrease Layout Stretch"),
+               QT_TRANSLATE_NOOP("action", "Decrease layout stretch factor of selected measures")
+               ),
+    ActionItem("reset-stretch",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Reset Layout Stretch"),
+               QT_TRANSLATE_NOOP("action", "Reset layout stretch factor of selected measures or entire score")
+               ),
+    ActionItem("reset-text-style-overrides",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Reset Text Style Overrides"),
+               QT_TRANSLATE_NOOP("action", "Reset all text style overrides to default")
+               ),
+    ActionItem("reset-beammode",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Reset Beams"),
+               QT_TRANSLATE_NOOP("action", "Reset beams of selected measures")
+               ),
+    ActionItem("reset",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Reset Shapes and Positions"),
+               QT_TRANSLATE_NOOP("action", "Reset shapes and positions of selected elements to their defaults")
                )
 };
 

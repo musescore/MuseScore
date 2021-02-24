@@ -27,6 +27,7 @@ using namespace mu::notation;
 using namespace mu::actions;
 
 static constexpr int INVALID_BOX_INDEX = -1;
+static constexpr qreal STRETCH_STEP = 0.1;
 static const ActionCode ESCAPE_ACTION_CODE = "escape";
 
 void NotationActionController::init()
@@ -195,6 +196,14 @@ void NotationActionController::init()
 
     dispatcher()->reg(this, "toggle-navigator", this, &NotationActionController::toggleNavigator);
     dispatcher()->reg(this, "toggle-mixer", this, &NotationActionController::toggleMixer);
+
+    dispatcher()->reg(this, "stretch-", [this]() { addStretch(-STRETCH_STEP); });
+    dispatcher()->reg(this, "stretch+", [this]() { addStretch(STRETCH_STEP); });
+
+    dispatcher()->reg(this, "reset-stretch", this, &NotationActionController::resetStretch);
+    dispatcher()->reg(this, "reset-text-style-overrides", this, &NotationActionController::resetTextStyleOverrides);
+    dispatcher()->reg(this, "reset-beammode", this, &NotationActionController::resetBeamMode);
+    dispatcher()->reg(this, "reset", this, &NotationActionController::resetShapesAndPosition);
 
     for (int i = MIN_NOTES_INTERVAL; i <= MAX_NOTES_INTERVAL; ++i) {
         if (isNotesIntervalValid(i)) {
@@ -891,6 +900,90 @@ void NotationActionController::addAnchoredNoteLine()
     }
 
     interaction->addAnchoredLineToSelectedNotes();
+}
+
+void NotationActionController::addStretch(qreal value)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    auto selection = currentNotationSelection();
+    if (!selection) {
+        return;
+    }
+
+    if (!selection->isRange()) {
+        return;
+    }
+
+    interaction->addStretch(value);
+}
+
+void NotationActionController::resetStretch()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    auto selection = currentNotationSelection();
+    if (!selection) {
+        return;
+    }
+
+    if (!selection->isRange()) {
+        return;
+    }
+
+    interaction->resetToDefault(ResettableValueType::Stretch);
+}
+
+void NotationActionController::resetTextStyleOverrides()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->resetToDefault(ResettableValueType::TextStyleOverriders);
+}
+
+void NotationActionController::resetBeamMode()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    auto selection = currentNotationSelection();
+    if (!selection) {
+        return;
+    }
+
+    if (selection->isNone() || selection->isRange()) {
+        interaction->resetToDefault(ResettableValueType::BeamMode);
+    }
+}
+
+void NotationActionController::resetShapesAndPosition()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    auto selection = currentNotationSelection();
+    if (!selection) {
+        return;
+    }
+
+    if (selection->isNone()) {
+        return;
+    }
+
+    interaction->resetToDefault(ResettableValueType::TextStyleOverriders);
 }
 
 void NotationActionController::selectMeasuresCountAndInsert()
