@@ -49,8 +49,12 @@ void LanguagesService::init()
     fileSystem()->makePath(configuration()->languagesSharePath());
     fileSystem()->makePath(configuration()->languagesDataPath());
 
-    QString code = configuration()->currentLanguageCode();
-    loadLanguage(code);
+    ValCh<QString> languageCode = configuration()->currentLanguageCode();
+    loadLanguage(languageCode.val);
+
+    languageCode.ch.onReceive(this, [this](const QString& languageCode) {
+        m_currentLanguageChanged.send(language(languageCode));
+    });
 
     QtConcurrent::run(this, &LanguagesService::th_refreshLanguages);
 }
@@ -184,26 +188,24 @@ Ret LanguagesService::uninstall(const QString& languageCode)
     return make_ret(Err::NoError);
 }
 
-RetVal<Language> LanguagesService::currentLanguage() const
+ValCh<Language> LanguagesService::currentLanguage() const
 {
-    RetVal<Language> result;
+    ValCh<Language> result;
 
-    QString languageCode = configuration()->currentLanguageCode();
+    ValCh<QString> languageCode = configuration()->currentLanguageCode();
+    result.ch = m_currentLanguageChanged;
 
-    if (languageCode == DEFAULT_LANGUAGE) {
-        result.ret = make_ret(Err::NoError);
-        result.val.code = DEFAULT_LANGUAGE;
+    if (languageCode.val == DEFAULT_LANGUAGE) {
+        result.val.code = QLocale::system().name();
         return result;
     }
 
-    LanguagesHash languageHash = this->languages().val;
-    if (!languageHash.contains(languageCode)) {
-        result.ret = make_ret(Err::ErrorLanguageNotFound);
+    LanguagesHash languageHash = languages().val;
+    if (!languageHash.contains(languageCode.val)) {
         return result;
     }
 
-    result.ret = make_ret(Err::NoError);
-    result.val = languageHash[languageCode];
+    result.val = languageHash[languageCode.val];
     return result;
 }
 
@@ -230,20 +232,17 @@ Ret LanguagesService::setCurrentLanguage(const QString& languageCode)
         return load;
     }
 
-    QString previousLanguage = configuration()->currentLanguageCode();
+    ValCh<QString> previousLanguage = configuration()->currentLanguageCode();
 
-    Ret save = configuration()->setCurrentLanguageCode(languageCode);
-    if (!save) {
-        return save;
-    }
+    configuration()->setCurrentLanguageCode(languageCode);
 
-    languageHash[previousLanguage].isCurrent = false;
-    m_languageChanged.send(languageHash[previousLanguage]);
+    languageHash[previousLanguage.val].isCurrent = false;
+    m_languageChanged.send(languageHash[previousLanguage.val]);
 
     languageHash[languageCode].isCurrent = true;
     m_languageChanged.send(languageHash[languageCode]);
 
-    return save;
+    return make_ret(Err::NoError);
 }
 
 RetCh<Language> LanguagesService::languageChanged()
@@ -346,12 +345,17 @@ bool LanguagesService::checkLanguageFilesHash(const QString& languageCode, const
     return true;
 }
 
+Language LanguagesService::language(const QString& languageCode) const
+{
+    return languages().val[languageCode];
+}
+
 RetVal<LanguagesHash> LanguagesService::correctLanguagesStates(LanguagesHash& languages) const
 {
     RetVal<LanguagesHash> result;
     bool isNeedUpdate = false;
 
-    QString currentLanguage = configuration()->currentLanguageCode();
+    ValCh<QString> currentLanguageCode = configuration()->currentLanguageCode();
 
     for (Language& language: languages) {
         LanguageStatus::Status status = languageStatus(language);
@@ -360,7 +364,7 @@ RetVal<LanguagesHash> LanguagesService::correctLanguagesStates(LanguagesHash& la
             isNeedUpdate = true;
         }
 
-        language.isCurrent = (language.code == currentLanguage);
+        language.isCurrent = (language.code == currentLanguageCode.val);
     }
 
     if (isNeedUpdate) {

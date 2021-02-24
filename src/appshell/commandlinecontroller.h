@@ -26,6 +26,7 @@
 #include "global/iapplication.h"
 #include "ui/iuiconfiguration.h"
 #include "importexport/imagesexport/iimagesexportconfiguration.h"
+#include "iappshellconfiguration.h"
 
 namespace mu::appshell {
 class CommandLineController
@@ -33,6 +34,8 @@ class CommandLineController
     INJECT(appshell, framework::IApplication, application)
     INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
     INJECT(appshell, iex::imagesexport::IImagesExportConfiguration, imagesExportConfiguration)
+    INJECT(appshell, IAppShellConfiguration, configuration)
+
 public:
     CommandLineController() = default;
 

@@ -47,7 +47,7 @@ public:
     RetCh<LanguageProgress> update(const QString& languageCode) override;
     Ret uninstall(const QString& languageCode) override;
 
-    RetVal<Language> currentLanguage() const override;
+    ValCh<Language> currentLanguage() const override;
     Ret setCurrentLanguage(const QString& languageCode) override;
 
     RetCh<Language> languageChanged() override;
@@ -58,6 +58,8 @@ private:
 
     bool isLanguageExists(const QString& languageCode) const;
     bool checkLanguageFilesHash(const QString& languageCode, const LanguageFiles& languageFiles) const;
+
+    Language language(const QString& languageCode) const;
 
     RetVal<LanguagesHash> correctLanguagesStates(LanguagesHash& languages) const;
     LanguageStatus::Status languageStatus(const Language& language) const;
@@ -94,6 +96,7 @@ private:
 
 private:
     async::Channel<Language> m_languageChanged;
+    async::Channel<Language> m_currentLanguageChanged;
     QList<QTranslator*> m_translatorList;
 
     mutable QHash<QString, Operation> m_operationsHash;

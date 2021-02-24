@@ -22,17 +22,31 @@
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
+#include "languages/ilanguagesservice.h"
+#include "iinteractive.h"
+#include "iappshellconfiguration.h"
 
 namespace mu::appshell {
 class ApplicationActionController : public actions::Actionable
 {
-    INJECT(notation, actions::IActionsDispatcher, dispatcher)
+    INJECT(appshell, actions::IActionsDispatcher, dispatcher)
+    INJECT(appshell, languages::ILanguagesService, languagesService)
+    INJECT(appshell, framework::IInteractive, interactive)
+    INJECT(appshell, IAppShellConfiguration, configuration)
 
 public:
     void init();
 
 private:
     void quit();
+    void openAboutQtDialog();
+
+    void openOnlineHandbookPage();
+    void openAskForHelpPage();
+    void openBugReportPage();
+    void openLeaveFeedbackPage();
+
+    void revertToFactorySettings();
 };
 }
 
