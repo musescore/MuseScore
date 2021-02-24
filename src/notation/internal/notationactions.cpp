@@ -938,6 +938,7 @@ const ActionList NotationActions::m_noteInputActions = {
     ActionItem("tuplet",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Tuplet"),
+               QT_TRANSLATE_NOOP("action", "Add tuplet"),
                IconCode::Code::NOTE_TUPLET
                ),
     ActionItem("voice-1",
