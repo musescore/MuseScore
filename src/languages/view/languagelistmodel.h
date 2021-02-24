@@ -50,7 +50,7 @@ public:
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QHash<int,QByteArray> roleNames() const override;
 
-    Q_INVOKABLE void load();
+    Q_INVOKABLE void init();
     Q_INVOKABLE void install(QString code);
     Q_INVOKABLE void update(QString code);
     Q_INVOKABLE void uninstall(QString code);
@@ -64,6 +64,9 @@ signals:
     void finish(const QVariantMap& item);
 
 private:
+    void load();
+    void setupConnections();
+
     int itemIndexByCode(const QString& code) const;
 
     QString languageStatusTitle(const Language& language) const;

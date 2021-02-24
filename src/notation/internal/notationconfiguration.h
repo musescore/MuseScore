@@ -85,6 +85,8 @@ public:
     float guiScaling() const override;
     float notationScaling() const override;
 
+    std::string notationRevision() const override;
+
     std::vector<std::string> toolbarActions(const std::string& toolbarName) const override;
     void setToolbarActions(const std::string& toolbarName, const std::vector<std::string>& actions) override;
 

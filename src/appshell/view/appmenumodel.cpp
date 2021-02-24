@@ -322,11 +322,11 @@ MenuItem AppMenuModel::helpItem()
     };
 
     MenuItemList helpItems {
-        makeAction("online-handbook"), // need implement
+        makeAction("online-handbook"),
         makeMenu(trc("appshell", "&Tours"), toursItems),
         makeSeparator(),
         makeAction("about"), // need implement
-        makeAction("about-qt"), // need implement
+        makeAction("about-qt"),
         makeAction("about-musicxml"), // need implement
     };
 
@@ -335,13 +335,13 @@ MenuItem AppMenuModel::helpItem()
     }
 
     helpItems << makeSeparator()
-              << makeAction("ask-help") // need implement
-              << makeAction("report-bug") // need implement
-              << makeAction("leave-feedback") // need implement
+              << makeAction("ask-help")
+              << makeAction("report-bug")
+              << makeAction("leave-feedback")
               << makeSeparator()
               << makeAction("revert-factory"); // need implement
 
-    return makeMenu(trc("appshell", "&Help"), helpItems, scoreOpened());
+    return makeMenu(trc("appshell", "&Help"), helpItems);
 }
 
 MenuItemList AppMenuModel::recentScores() const

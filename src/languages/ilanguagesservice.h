@@ -37,7 +37,7 @@ public:
     virtual RetCh<LanguageProgress> update(const QString& languageCode) = 0;
     virtual Ret uninstall(const QString& languageCode) = 0;
 
-    virtual RetVal<Language> currentLanguage() const = 0;
+    virtual ValCh<Language> currentLanguage() const = 0;
     virtual Ret setCurrentLanguage(const QString& languageCode) = 0;
 
     virtual RetCh<Language> languageChanged() = 0;

@@ -28,6 +28,33 @@ const ActionList ApplicationActions::m_actions = {
     ActionItem("quit",
                ShortcutContext::Any,
                QT_TRANSLATE_NOOP("action", "Quit")
+               ),
+    ActionItem("about-qt",
+               ShortcutContext::Any,
+               QT_TRANSLATE_NOOP("action", "About Qt...")
+               ),
+    ActionItem("online-handbook",
+               ShortcutContext::Any,
+               QT_TRANSLATE_NOOP("action", "Online Handbook")
+               ),
+    ActionItem("ask-help",
+               ShortcutContext::Any,
+               QT_TRANSLATE_NOOP("action", "Ask for Help")
+               ),
+    ActionItem("report-bug",
+               ShortcutContext::Any,
+               QT_TRANSLATE_NOOP("action", "Report a Bug"),
+               QT_TRANSLATE_NOOP("action", "Report a bug")
+               ),
+    ActionItem("leave-feedback",
+               ShortcutContext::Any,
+               QT_TRANSLATE_NOOP("action", "Feedback"),
+               QT_TRANSLATE_NOOP("action", "Leave feedback")
+               ),
+    ActionItem("revert-factory",
+               ShortcutContext::Any,
+               QT_TRANSLATE_NOOP("action", "Revert to Factory Settings"),
+               QT_TRANSLATE_NOOP("action", "Revert to factory settings")
                )
 };
 

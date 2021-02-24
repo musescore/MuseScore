@@ -22,16 +22,33 @@
 #include "modularity/ioc.h"
 #include "iappshellconfiguration.h"
 #include "userscores/iuserscoresconfiguration.h"
+#include "notation/inotationconfiguration.h"
+#include "languages/ilanguagesconfiguration.h"
 
 namespace mu::appshell {
 class AppShellConfiguration : public IAppShellConfiguration
 {
     INJECT(appshell, userscores::IUserScoresConfiguration, userScoresConfiguration)
+    INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
+    INJECT(appshell, languages::ILanguagesConfiguration, languagesConfiguration)
 
 public:
     bool isAppUpdatable() const override;
 
+    std::string handbookUrl() const override;
+    std::string askForHelpUrl() const override;
+    std::string bugReportUrl() const override;
+    std::string leaveFeedbackUrl() const override;
+
     ValCh<QStringList> recentScoreList() const override;
+
+    void revertToFactorySettings(bool keepDefaultSettings = false) const override;
+
+private:
+    std::string utmParameters(const std::string& utmMedium) const;
+    std::string sha() const;
+
+    std::string currentLanguageCode() const;
 };
 }
 

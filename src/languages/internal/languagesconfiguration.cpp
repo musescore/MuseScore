@@ -40,22 +40,29 @@ static const Settings::Key LANGUAGE("ui", "ui/application/language");
 void LanguagesConfiguration::init()
 {
     settings()->setDefaultValue(LANGUAGE, Val("system"));
+    settings()->valueChanged(LANGUAGE).onReceive(nullptr, [this](const Val& val) {
+        m_currentLanguageCodeChanged.send(val.toQString());
+    });
+
     settings()->valueChanged(LANGUAGES_JSON).onReceive(nullptr, [this](const Val& val) {
         LanguagesHash languagesHash = parseLanguagesConfig(val.toQString().toLocal8Bit());
         m_languagesHashChanged.send(languagesHash);
     });
 }
 
-QString LanguagesConfiguration::currentLanguageCode() const
+ValCh<QString> LanguagesConfiguration::currentLanguageCode() const
 {
-    return settings()->value(LANGUAGE).toQString();
+    ValCh<QString> result;
+    result.ch = m_currentLanguageCodeChanged;
+    result.val = settings()->value(LANGUAGE).toQString();
+
+    return result;
 }
 
-Ret LanguagesConfiguration::setCurrentLanguageCode(const QString& languageCode) const
+void LanguagesConfiguration::setCurrentLanguageCode(const QString& languageCode) const
 {
     Val value(languageCode.toStdString());
     settings()->setValue(LANGUAGE, value);
-    return make_ret(Err::NoError);
 }
 
 QUrl LanguagesConfiguration::languagesUpdateUrl() const
