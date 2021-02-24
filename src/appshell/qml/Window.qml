@@ -85,14 +85,12 @@ DockWindow {
                     target: notationToolBar
 
                     Component.onCompleted: {
-                        notationToolBarContent.isToolBarVisible = notationToolBar.visible
-                        notationToolBar.visible = Qt.binding(function() { return dockWindow.isNotationPage && notationToolBarContent.isToolBarVisible})
-
-                        notationToolBarContent.load()
+                        notationPage.pageModel.isNotationToolBarVisible = notationToolBar.visible
+                        notationToolBar.visible = Qt.binding(function() { return dockWindow.isNotationPage && notationPage.pageModel.isNotationToolBarVisible})
                     }
 
                     function onVisibleEdited(visible) {
-                        notationToolBarContent.isToolBarVisible = visible
+                        notationPage.pageModel.isNotationToolBarVisible = visible
                     }
                 }
             }
@@ -117,14 +115,12 @@ DockWindow {
                     target: playbackToolBar
 
                     Component.onCompleted: {
-                        playbackToolBarContent.isToolBarVisible = playbackToolBar.visible
-                        playbackToolBar.visible = Qt.binding(function() { return dockWindow.isNotationPage && playbackToolBarContent.isToolBarVisible})
-
-                        playbackToolBarContent.load()
+                        notationPage.pageModel.isPlaybackToolBarVisible = playbackToolBar.visible
+                        playbackToolBar.visible = Qt.binding(function() { return dockWindow.isNotationPage && notationPage.pageModel.isPlaybackToolBarVisible})
                     }
 
                     function onVisibleEdited(visible) {
-                        playbackToolBarContent.isToolBarVisible = visible
+                        notationPage.pageModel.isPlaybackToolBarVisible = visible
                     }
                 }
             }
@@ -149,14 +145,12 @@ DockWindow {
                     target: undoRedoToolBar
 
                     Component.onCompleted: {
-                        undoRedoToolBarContent.isToolBarVisible = undoRedoToolBar.visible
-                        undoRedoToolBar.visible = Qt.binding(function() { return dockWindow.isNotationPage && undoRedoToolBarContent.isToolBarVisible})
-
-                        undoRedoToolBarContent.load()
+                        notationPage.pageModel.isUndoRedoToolBarVisible = undoRedoToolBar.visible
+                        undoRedoToolBar.visible = Qt.binding(function() { return dockWindow.isNotationPage && notationPage.pageModel.isUndoRedoToolBarVisible})
                     }
 
                     function onVisibleEdited(visible) {
-                        undoRedoToolBarContent.isToolBarVisible = visible
+                        notationPage.pageModel.isUndoRedoToolBarVisible = visible
                     }
                 }
             }

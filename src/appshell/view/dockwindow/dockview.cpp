@@ -124,6 +124,11 @@ QColor DockView::borderColor() const
     return m_borderColor;
 }
 
+bool DockView::visible() const
+{
+    return view() ? view()->isVisible() : false;
+}
+
 void DockView::setBorderColor(QColor color)
 {
     if (m_borderColor == color) {
@@ -132,4 +137,13 @@ void DockView::setBorderColor(QColor color)
 
     m_borderColor = color;
     emit borderColorChanged(color);
+}
+
+void DockView::setVisible(bool value)
+{
+    if (view()) {
+        view()->setVisible(value);
+    }
+
+    emit visibleEdited(value);
 }

@@ -16,43 +16,30 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATION_UNDOREDOMODEL_H
-#define MU_NOTATION_UNDOREDOMODEL_H
+#ifndef MU_APPSHELL_NOTATIONPAGESTATE_H
+#define MU_APPSHELL_NOTATIONPAGESTATE_H
 
-#include <QObject>
-
-#include "context/iglobalcontext.h"
-#include "actions/iactionsregister.h"
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
+#include "inotationpagestate.h"
+#include "iappshellconfiguration.h"
 
-namespace mu::notation {
-class UndoRedoModel : public QObject, public async::Asyncable
+namespace mu::appshell {
+class NotationPageState : public INotationPageState, public async::Asyncable
 {
-    Q_OBJECT
-
-    Q_PROPERTY(QVariant undoItem READ undoItem NOTIFY stackChanged)
-    Q_PROPERTY(QVariant redoItem READ redoItem NOTIFY stackChanged)
-
-    INJECT(notation, context::IGlobalContext, context)
-    INJECT(notation, actions::IActionsRegister, actionsRegister)
+    INJECT(appshell, IAppShellConfiguration, configuration)
 
 public:
-    explicit UndoRedoModel(QObject* parent = nullptr);
+    void init();
 
-    QVariant undoItem() const;
-    QVariant redoItem() const;
-
-    Q_INVOKABLE void load();
-    Q_INVOKABLE void undo();
-    Q_INVOKABLE void redo();
-
-signals:
-    void stackChanged();
+    bool isPanelVisible(PanelType type) const override;
+    void setIsPanelVisible(PanelType type, bool visible) override;
+    mu::async::Channel<PanelType> panelVisibleChanged() const override;
 
 private:
-    INotationUndoStackPtr undoStack() const;
+    mutable std::map<PanelType, bool> m_panelVisibleMap;
+    async::Channel<PanelType> m_panelVisibleChanged;
 };
 }
 
-#endif // MU_NOTATION_UNDOREDOMODEL_H
+#endif // MU_APPSHELL_NOTATIONPAGESTATE_H

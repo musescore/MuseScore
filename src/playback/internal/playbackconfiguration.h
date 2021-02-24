@@ -20,15 +20,10 @@
 #define MU_PLAYBACK_PLAYBACKCONFIGURATION_H
 
 #include "../iplaybackconfiguration.h"
-#include "notation/inotationconfiguration.h"
-
-#include "modularity/ioc.h"
 
 namespace mu::playback {
 class PlaybackConfiguration : public IPlaybackConfiguration
 {
-    INJECT(playback, notation::INotationConfiguration, notationConfiguration)
-
 public:
     void init();
 
@@ -36,13 +31,6 @@ public:
     bool isPlayHarmonyOnClick() const override;
 
     PlaybackCursorType cursorType() const override;
-
-    ValCh<bool> isPlaybackToolBarVisible() const override;
-    void setIsPlaybackToolBarVisible(bool visible) override;
-
-private:
-    bool m_isPlaybackToolBarVisible = false;
-    async::Channel<bool> m_playbackToolBarVisibleChanged;
 };
 }
 

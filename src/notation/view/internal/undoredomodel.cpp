@@ -59,10 +59,6 @@ void UndoRedoModel::load()
         });
     });
 
-    configuration()->isUndoRedoToolBarVisible().ch.onReceive(this, [this](bool visible) {
-        emit isToolBarVisibleChanged(visible);
-    });
-
     emit stackChanged();
 }
 
@@ -71,21 +67,6 @@ void UndoRedoModel::redo()
     if (undoStack()) {
         undoStack()->redo();
     }
-}
-
-bool UndoRedoModel::isToolBarVisible() const
-{
-    return configuration()->isUndoRedoToolBarVisible().val;
-}
-
-void UndoRedoModel::setIsToolBarVisible(bool visible)
-{
-    if (isToolBarVisible() == visible) {
-        return;
-    }
-
-    configuration()->setIsUndoRedoToolBarVisible(visible);
-    emit isToolBarVisibleChanged(visible);
 }
 
 void UndoRedoModel::undo()

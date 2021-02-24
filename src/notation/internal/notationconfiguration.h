@@ -92,32 +92,8 @@ public:
     std::vector<std::string> toolbarActions(const std::string& toolbarName) const override;
     void setToolbarActions(const std::string& toolbarName, const std::vector<std::string>& actions) override;
 
-    ValCh<bool> isNavigatorVisible() const override;
-    void setIsNavigatorVisible(bool visible) override;
-
     ValCh<framework::Orientation> canvasOrientation() const override;
     void setCanvasOrientation(framework::Orientation orientation) override;
-
-    ValCh<bool> isPalettePanelVisible() const override;
-    void setIsPalettePanelVisible(bool visible) override;
-
-    ValCh<bool> isInstrumentsPanelVisible() const override;
-    void setIsInstrumentsPanelVisible(bool visible) override;
-
-    ValCh<bool> isInspectorPanelVisible() const override;
-    void setIsInspectorPanelVisible(bool visible) override;
-
-    ValCh<bool> isStatusBarVisible() const override;
-    void setIsStatusBarVisible(bool visible) override;
-
-    ValCh<bool> isNoteInputBarVisible() const override;
-    void setIsNoteInputBarVisible(bool visible) override;
-
-    ValCh<bool> isNotationToolBarVisible() const override;
-    void setIsNotationToolBarVisible(bool visible) override;
-
-    ValCh<bool> isUndoRedoToolBarVisible() const override;
-    void setIsUndoRedoToolBarVisible(bool visible) override;
 
 private:
     std::vector<std::string> parseToolbarActions(const std::string& actions) const;
@@ -127,23 +103,7 @@ private:
     async::Channel<QColor> m_backgroundColorChanged;
     async::Channel<QColor> m_foregroundColorChanged;
     async::Channel<int> m_currentZoomChanged;
-    async::Channel<bool> m_navigatorVisibleChanged;
     async::Channel<framework::Orientation> m_canvasOrientationChanged;
-
-    bool m_isPalettePanelVisible = false;
-    async::Channel<bool> m_palettePanelVisibleChanged;
-    bool m_isInstrumentsPanelVisible = false;
-    async::Channel<bool> m_instrumentsPanelVisibleChanged;
-    bool m_isInspectorPanelVisible = false;
-    async::Channel<bool> m_inspectorPanelVisibleChanged;
-    bool m_isStatusBarPanelVisible = false;
-    async::Channel<bool> m_statusBarVisibleChanged;
-    bool m_isNoteInputBarVisible = false;
-    async::Channel<bool> m_noteInputBarVisibleChanged;
-    bool m_isNotationToolBarVisible = false;
-    async::Channel<bool> m_notationToolBarVisibleChanged;
-    bool m_isUndoRedoToolBarVisible = false;
-    async::Channel<bool> m_undoRedoToolBarVisibleChanged;
 };
 }
 

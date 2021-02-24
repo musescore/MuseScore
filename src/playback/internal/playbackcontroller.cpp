@@ -39,7 +39,6 @@ static const ActionCode MIDI_ON_CODE("midi-on");
 static const ActionCode COUNT_IN_CODE("countin");
 static const ActionCode PAN_CODE("pan");
 static const ActionCode REPEAT_CODE("repeat");
-static const ActionCode TOGGLE_PLAYBACK_TOOLBAR("toggle-transport");
 
 void PlaybackController::init()
 {
@@ -53,7 +52,6 @@ void PlaybackController::init()
     dispatcher()->reg(this, METRONOME_CODE, this, &PlaybackController::toggleMetronome);
     dispatcher()->reg(this, MIDI_ON_CODE, this, &PlaybackController::toggleMidiInput);
     dispatcher()->reg(this, COUNT_IN_CODE, this, &PlaybackController::toggleCountIn);
-    dispatcher()->reg(this, TOGGLE_PLAYBACK_TOOLBAR, this, &PlaybackController::togglePlaybackToolBar);
 
     onNotationChanged();
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
@@ -323,12 +321,6 @@ void PlaybackController::toggleLoopPlayback()
 
     addLoopBoundaryToTick(LoopBoundaryType::LoopIn, loopInTick);
     addLoopBoundaryToTick(LoopBoundaryType::LoopOut, loopOutTick);
-}
-
-void PlaybackController::togglePlaybackToolBar()
-{
-    bool visible = configuration()->isPlaybackToolBarVisible().val;
-    configuration()->setIsPlaybackToolBarVisible(!visible);
 }
 
 void PlaybackController::addLoopBoundary(LoopBoundaryType type)

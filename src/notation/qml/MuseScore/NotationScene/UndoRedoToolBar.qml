@@ -6,9 +6,7 @@ import MuseScore.NotationScene 1.0
 Rectangle {
     id: root
 
-    property alias isToolBarVisible: model.isToolBarVisible
-
-    function load() {
+    Component.onCompleted: {
         model.load()
     }
 

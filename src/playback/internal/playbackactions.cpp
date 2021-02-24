@@ -49,11 +49,6 @@ const ActionList PlaybackActions::m_mainActions = {
                QT_TRANSLATE_NOOP("action", "Metronome"),
                QT_TRANSLATE_NOOP("action", "Play metronome during playback"),
                IconCode::Code::METRONOME
-               ),
-    ActionItem("toggle-transport",
-               ShortcutContext::Any,
-               QT_TRANSLATE_NOOP("action", "Playback Controls"),
-               QT_TRANSLATE_NOOP("action", "Toggle Playback Controls toolbar")
                )
 };
 

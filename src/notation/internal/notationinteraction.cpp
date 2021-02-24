@@ -292,7 +292,7 @@ QList<Ms::Element*> NotationInteraction::hitElements(const QPointF& p_in, float 
 
     QRectF r(p.x() - w, p.y() - w, 3.0 * w, 3.0 * w);
 
-    QList<Ms::Element*> el = page->items(r);
+    QList<Ms::Element*> elements = page->items(r);
     //! TODO
     //    for (int i = 0; i < MAX_HEADERS; i++)
     //        if (score()->headerText(i) != nullptr)      // gives the ability to select the header
@@ -302,18 +302,18 @@ QList<Ms::Element*> NotationInteraction::hitElements(const QPointF& p_in, float 
     //            el.push_back(score()->footerText(i));
     //! -------
 
-    for (Ms::Element* e : el) {
-        e->itemDiscovered = 0;
-        if (!e->selectable() || e->isPage()) {
+    for (Ms::Element* element : elements) {
+        element->itemDiscovered = 0;
+        if (!element->selectable() || element->isPage()) {
             continue;
         }
 
-        if (!e->visible() && (e->score()->printing() || !e->score()->showInvisible())) {
+        if (!element->isInteractionAvailable()) {
             continue;
         }
 
-        if (e->contains(p)) {
-            ll.append(e);
+        if (element->contains(p)) {
+            ll.append(element);
         }
     }
 
@@ -322,17 +322,17 @@ QList<Ms::Element*> NotationInteraction::hitElements(const QPointF& p_in, float 
         //
         // if no relevant element hit, look nearby
         //
-        for (Ms::Element* e : el) {
-            if (e->isPage() || !e->selectable()) {
+        for (Ms::Element* element : elements) {
+            if (element->isPage() || !element->selectable()) {
                 continue;
             }
 
-            if (!e->visible() && (e->score()->printing() || !e->score()->showInvisible())) {
+            if (!element->isInteractionAvailable()) {
                 continue;
             }
 
-            if (e->intersects(r)) {
-                ll.append(e);
+            if (element->intersects(r)) {
+                ll.append(element);
             }
         }
     }
@@ -2402,10 +2402,8 @@ void NotationInteraction::setScoreConfig(ScoreConfig config)
     score()->setMarkIrregularMeasures(config.isMarkIrregularMeasures);
 
     Element* selectedElement = selection()->element();
-    if (selectedElement) {
-        if (!selectedElement->visible() && (selectedElement->score()->printing() || !selectedElement->score()->showInvisible())) {
-            clearSelection();
-        }
+    if (selectedElement && !selectedElement->isInteractionAvailable()) {
+        clearSelection();
     }
 
     apply();

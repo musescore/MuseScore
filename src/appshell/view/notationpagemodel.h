@@ -16,21 +16,24 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATION_NOTATIONPAGEMODEL_H
-#define MU_NOTATION_NOTATIONPAGEMODEL_H
+#ifndef MU_APPSHELL_NOTATIONPAGEMODEL_H
+#define MU_APPSHELL_NOTATIONPAGEMODEL_H
 
 #include <QObject>
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "inotationconfiguration.h"
+#include "actions/actionable.h"
+#include "actions/iactionsdispatcher.h"
+#include "inotationpagestate.h"
 
-namespace mu::notation {
-class NotationPageModel : public QObject, public async::Asyncable
+namespace mu::appshell {
+class NotationPageModel : public QObject, public async::Asyncable, public actions::Actionable
 {
     Q_OBJECT
 
-    INJECT(notation, INotationConfiguration, configuration)
+    INJECT(appshell, INotationPageState, pageState)
+    INJECT(appshell, actions::IActionsDispatcher, dispatcher)
 
     Q_PROPERTY(bool isPalettePanelVisible READ isPalettePanelVisible WRITE setIsPalettePanelVisible NOTIFY isPalettePanelVisibleChanged)
     Q_PROPERTY(
@@ -41,6 +44,12 @@ class NotationPageModel : public QObject, public async::Asyncable
     Q_PROPERTY(bool isNoteInputBarVisible READ isNoteInputBarVisible WRITE setIsNoteInputBarVisible NOTIFY isNoteInputBarVisibleChanged)
     Q_PROPERTY(
         bool isNotationToolBarVisible READ isNotationToolBarVisible WRITE setIsNotationToolBarVisible NOTIFY isNotationToolBarVisibleChanged)
+    Q_PROPERTY(
+        bool isPlaybackToolBarVisible READ isPlaybackToolBarVisible WRITE setIsPlaybackToolBarVisible NOTIFY isPlaybackToolBarVisibleChanged)
+    Q_PROPERTY(
+        bool isUndoRedoToolBarVisible READ isUndoRedoToolBarVisible WRITE setIsUndoRedoToolBarVisible NOTIFY isUndoRedoToolBarVisibleChanged)
+    Q_PROPERTY(
+        bool isNotationNavigatorVisible READ isNotationNavigatorVisible WRITE setIsNotationNavigatorVisible NOTIFY isNotationNavigatorVisibleChanged)
 
 public:
     explicit NotationPageModel(QObject* parent = nullptr);
@@ -53,6 +62,9 @@ public:
     bool isStatusBarVisible() const;
     bool isNoteInputBarVisible() const;
     bool isNotationToolBarVisible() const;
+    bool isPlaybackToolBarVisible() const;
+    bool isUndoRedoToolBarVisible() const;
+    bool isNotationNavigatorVisible() const;
 
 public slots:
     void setIsPalettePanelVisible(bool visible);
@@ -61,15 +73,26 @@ public slots:
     void setIsStatusBarVisible(bool visible);
     void setIsNoteInputBarVisible(bool visible);
     void setIsNotationToolBarVisible(bool visible);
+    void setIsPlaybackToolBarVisible(bool visible);
+    void setIsUndoRedoToolBarVisible(bool visible);
+    void setIsNotationNavigatorVisible(bool visible);
 
 signals:
-    void isPalettePanelVisibleChanged(bool isPalettePanelVisible);
-    void isInstrumentsPanelVisibleChanged(bool isInstrumentsPanelVisible);
-    void isInspectorPanelVisibleChanged(bool isInspectorPanelVisible);
-    void isStatusBarVisibleChanged(bool isStatusBarVisible);
-    void isNotationToolBarVisibleChanged(bool isNotationToolBarVisible);
-    void isNoteInputBarVisibleChanged(bool isNoteInputBarVisible);
+    void isPalettePanelVisibleChanged();
+    void isInstrumentsPanelVisibleChanged();
+    void isInspectorPanelVisibleChanged();
+    void isStatusBarVisibleChanged();
+    void isNotationToolBarVisibleChanged();
+    void isNoteInputBarVisibleChanged();
+    void isPlaybackToolBarVisibleChanged();
+    void isUndoRedoToolBarVisibleChanged();
+    void isNotationNavigatorVisibleChanged();
+
+private:
+    void notifyAboutPanelChanged(PanelType type);
+
+    void togglePanel(PanelType type);
 };
 }
 
-#endif // MU_NOTATION_NOTATIONPAGEMODEL_H
+#endif // MU_APPSHELL_NOTATIONPAGEMODEL_H

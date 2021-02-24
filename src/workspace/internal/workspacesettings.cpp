@@ -72,13 +72,12 @@ void WorkspaceSettings::setValue(const Key& key, const mu::Val& value) const
     AbstractDataPtr abstractData = currentWorkspace()->data(key.tag);
     SettingsDataPtr settingsData = std::dynamic_pointer_cast<SettingsData>(abstractData);
 
-    if (settingsData) {
-        settingsData->values[key.key] = value;
-    } else {
+    if (!settingsData) {
         settingsData = std::make_shared<SettingsData>();
         settingsData->tag = key.tag;
-        settingsData->values.insert({ key.key, value });
     }
+
+    settingsData->values[key.key] = value;
 
     currentWorkspace()->addData(settingsData);
 

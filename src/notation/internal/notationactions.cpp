@@ -185,12 +185,6 @@ const ActionList NotationActions::m_actions = {
                QT_TRANSLATE_NOOP("action", "Manage parts"),
                IconCode::Code::PAGE
                ),
-    ActionItem("toggle-mixer",
-               ShortcutContext::NotationActive,
-               QT_TRANSLATE_NOOP("action", "Mixer"),
-               QT_TRANSLATE_NOOP("action", "Toggle mixer"),
-               IconCode::Code::MIXER
-               ),
     ActionItem("view-mode-page",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Page View")
@@ -672,46 +666,6 @@ const ActionList NotationActions::m_actions = {
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Other…"),
                QT_TRANSLATE_NOOP("action", "Other tuplets")
-               ),
-    ActionItem("toggle-navigator",
-               ShortcutContext::NotationActive,
-               QT_TRANSLATE_NOOP("action", "Navigator"),
-               QT_TRANSLATE_NOOP("action", "Toggle 'Navigator'")
-               ),
-    ActionItem("toggle-palette",
-               ShortcutContext::NotationActive,
-               QT_TRANSLATE_NOOP("action", "Palettes"),
-               QT_TRANSLATE_NOOP("action", "Toggle 'Palettes'")
-               ),
-    ActionItem("toggle-instruments",
-               ShortcutContext::NotationActive,
-               QT_TRANSLATE_NOOP("action", "Instruments"),
-               QT_TRANSLATE_NOOP("action", "Toggle 'Instruments'")
-               ),
-    ActionItem("inspector",
-               ShortcutContext::NotationActive,
-               QT_TRANSLATE_NOOP("action", "Inspector"),
-               QT_TRANSLATE_NOOP("action", "Toggle 'Inspector'")
-               ),
-    ActionItem("toggle-statusbar",
-               ShortcutContext::NotationActive,
-               QT_TRANSLATE_NOOP("action", "Status Bar"),
-               QT_TRANSLATE_NOOP("action", "Toggle 'Status Bar'")
-               ),
-    ActionItem("toggle-noteinput",
-               ShortcutContext::NotationActive,
-               QT_TRANSLATE_NOOP("action", "Note Input"),
-               QT_TRANSLATE_NOOP("action", "Toggle 'Note Input' toolbar")
-               ),
-    ActionItem("toogle-notationtoolbar",
-               ShortcutContext::NotationActive,
-               QT_TRANSLATE_NOOP("action", "Notation Toolbar"),
-               QT_TRANSLATE_NOOP("action", "Toggle 'Notation' toolbar")
-               ),
-    ActionItem("toogle-undoredo",
-               ShortcutContext::NotationActive,
-               QT_TRANSLATE_NOOP("action", "Undo/Redo Toolbar"),
-               QT_TRANSLATE_NOOP("action", "Toggle 'Undo/Redo' toolbar")
                ),
     ActionItem("stretch-",
                ShortcutContext::NotationActive,

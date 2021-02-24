@@ -6,14 +6,12 @@ import MuseScore.UiComponents 1.0
 Rectangle {
     id: root
 
-    property alias isToolBarVisible: toolbarModel.isToolBarVisible
+    Component.onCompleted: {
+        toolbarModel.load()
+    }
 
     NotationToolBarModel {
         id: toolbarModel
-    }
-
-    function load() {
-        toolbarModel.load()
     }
 
     ListView {

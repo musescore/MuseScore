@@ -205,13 +205,9 @@ void NotationNavigator::initOrientation()
 
 void NotationNavigator::initVisible()
 {
-    ValCh<bool> visible = configuration()->isNavigatorVisible();
-    visible.ch.onReceive(this, [this](bool visible) {
-        setVisible(visible);
+    connect(this, &NotationNavigator::visibleChanged, [this]() {
         update();
     });
-
-    setVisible(visible.val);
 }
 
 ViewMode NotationNavigator::notationViewMode() const

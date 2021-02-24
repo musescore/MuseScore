@@ -97,7 +97,7 @@ private:
     int m_minimumHeight = 0;
     int m_minimumWidth = 0;
     bool m_floating = false;
-    bool m_visible;
+    bool m_visible = false;
 };
 }
 
