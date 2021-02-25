@@ -179,6 +179,16 @@ const ActionList NotationActions::m_actions = {
                QT_TRANSLATE_NOOP("action", "&Transpose…"),
                QT_TRANSLATE_NOOP("action", "Transpose")
                ),
+    ActionItem("explode",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Explode"),
+               QT_TRANSLATE_NOOP("action", "Explode contents of top selected staff into staves below")
+               ),
+    ActionItem("implode",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Implode"),
+               QT_TRANSLATE_NOOP("action", "Implode contents of selected staves into top selected staff")
+               ),
     ActionItem("parts",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Parts"),

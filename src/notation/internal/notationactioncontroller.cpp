@@ -208,6 +208,9 @@ void NotationActionController::init()
     dispatcher()->reg(this, "show-pageborders", this, &NotationActionController::toggleShowingPageMargins);
     dispatcher()->reg(this, "show-irregular", this, &NotationActionController::toggleMarkIrregularMeasures);
 
+    dispatcher()->reg(this, "explode", this, &NotationActionController::explodeSelectedStaff);
+    dispatcher()->reg(this, "implode", this, &NotationActionController::implodeSelectedStaff);
+
     for (int i = MIN_NOTES_INTERVAL; i <= MAX_NOTES_INTERVAL; ++i) {
         if (isNotesIntervalValid(i)) {
             dispatcher()->reg(this, "interval" + std::to_string(i), [this, i]() { addInterval(i); });
@@ -903,6 +906,26 @@ void NotationActionController::addAnchoredNoteLine()
     }
 
     interaction->addAnchoredLineToSelectedNotes();
+}
+
+void NotationActionController::explodeSelectedStaff()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->explodeSelectedStaff();
+}
+
+void NotationActionController::implodeSelectedStaff()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->implodeSelectedStaff();
 }
 
 void NotationActionController::addStretch(qreal value)

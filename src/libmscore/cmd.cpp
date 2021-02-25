@@ -3058,10 +3058,6 @@ bool Score::makeMeasureRepeatGroup(Measure* firstMeasure, int numMeasures, int s
 
 void Score::cmdExplode()
 {
-    if (!selection().isRange()) {
-        return;
-    }
-
     int srcStaff  = selection().staffStart();
     int lastStaff = selection().staffEnd();
     int srcTrack  = srcStaff * VOICES;
@@ -3210,10 +3206,6 @@ void Score::cmdExplode()
 
 void Score::cmdImplode()
 {
-    if (!selection().isRange()) {
-        return;
-    }
-
     int dstStaff   = selection().staffStart();
     int endStaff   = selection().staffEnd();
     int dstTrack   = dstStaff * VOICES;
