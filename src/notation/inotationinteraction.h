@@ -129,6 +129,8 @@ public:
     virtual void fillSelectionWithSlashes() = 0;
     virtual void replaceSelectedNotesWithSlashes() = 0;
 
+    virtual void spellPitches() = 0;
+
     virtual void resetToDefault(ResettableValueType type) = 0;
 
     virtual ScoreConfig scoreConfig() const = 0;

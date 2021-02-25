@@ -108,6 +108,7 @@ private:
     void removeSelectedRange();
     void fillSelectionWithSlashes();
     void replaceSelectedNotesWithSlashes();
+    void spellPitches();
 
     void resetState();
     void resetStretch();

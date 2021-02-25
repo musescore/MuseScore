@@ -209,6 +209,11 @@ const ActionList NotationActions::m_actions = {
                QT_TRANSLATE_NOOP("action", "Toggle Rhythmic Slash Notation"),
                QT_TRANSLATE_NOOP("action", "Toggle 'Rhythmic Slash Notation'")
                ),
+    ActionItem("pitch-spell",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Respell Pitches"),
+               QT_TRANSLATE_NOOP("action", "Respell pitches")
+               ),
     ActionItem("parts",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Parts"),

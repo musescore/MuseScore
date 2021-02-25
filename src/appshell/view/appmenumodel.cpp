@@ -330,7 +330,7 @@ MenuItem AppMenuModel::toolsItem()
         makeAction("slash-fill"),
         makeAction("slash-rhythm"),
         makeSeparator(),
-        makeAction("pitch-spell"), // need implement
+        makeAction("pitch-spell"),
         makeAction("reset-groupings"), // need implement
         makeAction("resequence-rehearsal-marks"), // need implement
         makeAction("unroll-repeats"), // need implement
