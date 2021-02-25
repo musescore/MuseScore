@@ -41,10 +41,10 @@ RecentScoresModel::RecentScoresModel(QObject* parent)
     m_roles.insert(RoleTitle, "title");
     m_roles.insert(RoleScore, "score");
 
-    ValCh<std::vector<Meta> > recentScoresCh = userScoresService()->recentScoreList();
-    updateRecentScores(recentScoresCh.val);
+    ValCh<MetaList> recentScores = userScoresService()->recentScoreList();
+    updateRecentScores(recentScores.val);
 
-    recentScoresCh.ch.onReceive(this, [this](const std::vector<Meta>& list) {
+    recentScores.ch.onReceive(this, [this](const MetaList& list) {
         updateRecentScores(list);
     });
 }
@@ -101,7 +101,7 @@ void RecentScoresModel::setRecentScores(const QVariantList& recentScores)
     endResetModel();
 }
 
-void RecentScoresModel::updateRecentScores(const std::vector<Meta>& recentScoresList)
+void RecentScoresModel::updateRecentScores(const MetaList& recentScoresList)
 {
     QVariantList recentScores;
 
