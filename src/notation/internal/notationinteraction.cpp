@@ -2458,6 +2458,15 @@ void NotationInteraction::regroupNotesAndRests()
     notifyAboutNotationChanged();
 }
 
+void NotationInteraction::resequenceRehearsalMarks()
+{
+    startEdit();
+    score()->cmdResequenceRehearsalMarks();
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
 void NotationInteraction::resetToDefault(ResettableValueType type)
 {
     switch (type) {

@@ -216,6 +216,7 @@ void NotationActionController::init()
     dispatcher()->reg(this, "slash-rhythm", this, &NotationActionController::replaceSelectedNotesWithSlashes);
     dispatcher()->reg(this, "pitch-spell", this, &NotationActionController::spellPitches);
     dispatcher()->reg(this, "reset-groupings", this, &NotationActionController::regroupNotesAndRests);
+    dispatcher()->reg(this, "resequence-rehearsal-marks", this, &NotationActionController::resequenceRehearsalMarks);
 
     for (int i = MIN_NOTES_INTERVAL; i <= MAX_NOTES_INTERVAL; ++i) {
         if (isNotesIntervalValid(i)) {
@@ -992,6 +993,16 @@ void NotationActionController::regroupNotesAndRests()
     }
 
     interaction->regroupNotesAndRests();
+}
+
+void NotationActionController::resequenceRehearsalMarks()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->resequenceRehearsalMarks();
 }
 
 void NotationActionController::addStretch(qreal value)
