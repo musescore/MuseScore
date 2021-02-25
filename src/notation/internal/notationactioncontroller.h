@@ -104,6 +104,7 @@ private:
 
     void explodeSelectedStaff();
     void implodeSelectedStaff();
+    void realizeSelectedChordSymbols();
 
     void resetState();
     void resetStretch();

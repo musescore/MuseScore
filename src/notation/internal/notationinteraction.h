@@ -139,6 +139,7 @@ public:
 
     void explodeSelectedStaff() override;
     void implodeSelectedStaff() override;
+    void realizeSelectedChordSymbols() override;
 
     void resetToDefault(ResettableValueType type) override;
 

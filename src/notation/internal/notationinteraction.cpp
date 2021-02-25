@@ -2388,6 +2388,19 @@ void NotationInteraction::implodeSelectedStaff()
     notifyAboutNotationChanged();
 }
 
+void NotationInteraction::realizeSelectedChordSymbols()
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    startEdit();
+    score()->cmdRealizeChordSymbols();
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
 void NotationInteraction::resetToDefault(ResettableValueType type)
 {
     switch (type) {
