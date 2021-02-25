@@ -111,6 +111,7 @@ private:
     void spellPitches();
     void regroupNotesAndRests();
     void resequenceRehearsalMarks();
+    void unrollRepeats();
 
     void resetState();
     void resetStretch();

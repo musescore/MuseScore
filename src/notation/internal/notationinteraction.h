@@ -149,6 +149,7 @@ public:
     void spellPitches() override;
     void regroupNotesAndRests() override;
     void resequenceRehearsalMarks() override;
+    void unrollRepeats() override;
 
     void resetToDefault(ResettableValueType type) override;
 

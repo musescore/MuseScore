@@ -333,7 +333,7 @@ MenuItem AppMenuModel::toolsItem()
         makeAction("pitch-spell"),
         makeAction("reset-groupings"),
         makeAction("resequence-rehearsal-marks"),
-        makeAction("unroll-repeats"), // need implement
+        makeAction("unroll-repeats"),
         makeSeparator(),
         makeAction("copy-lyrics-to-clipboard"), // need implement
         makeAction("fotomode"), // need implement

@@ -2467,6 +2467,19 @@ void NotationInteraction::resequenceRehearsalMarks()
     notifyAboutNotationChanged();
 }
 
+void NotationInteraction::unrollRepeats()
+{
+    if (!score()->masterScore()) {
+        return;
+    }
+
+    startEdit();
+    score()->masterScore()->unrollRepeats();
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
 void NotationInteraction::resetToDefault(ResettableValueType type)
 {
     switch (type) {

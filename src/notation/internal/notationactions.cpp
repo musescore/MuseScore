@@ -224,6 +224,11 @@ const ActionList NotationActions::m_actions = {
                QT_TRANSLATE_NOOP("action", "Resequence Rehearsal Marks"),
                QT_TRANSLATE_NOOP("action", "Resequence rehearsal marks")
                ),
+    ActionItem("unroll-repeats",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Unroll Repeats"),
+               QT_TRANSLATE_NOOP("action", "Unroll Repeats")
+               ),
     ActionItem("parts",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Parts"),
