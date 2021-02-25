@@ -103,47 +103,28 @@ Rectangle {
                 }
             }
 
-            NumberInputField {
+            MeasureAndBeatFields {
                 Layout.leftMargin: 24
-                Layout.preferredWidth: 10
 
-                minValue: 1
-                maxValue: playbackModel.maxMeasureNumber
+                measureNumber: playbackModel.measureNumber
+                maxMeasureNumber: playbackModel.maxMeasureNumber
+                beatNumber: playbackModel.beatNumber
+                maxBeatNumber: playbackModel.maxBeatNumber
 
-                addLeadingZeros: false
+                font: timeField.font
 
-                value: playbackModel.measureNumber
-
-                onValueEdited: {
+                onMeasureNumberEdited: {
                     playbackModel.measureNumber = newValue
                 }
-            }
 
-            StyledTextLabel {
-                Layout.leftMargin: 4
-                text: "."
-                font: timeField.font
-            }
-
-            NumberInputField {
-                Layout.leftMargin: 4
-                Layout.preferredWidth: 10
-
-                minValue: 1
-                maxValue: playbackModel.maxBeatNumber
-
-                addLeadingZeros: false
-
-                value: playbackModel.beatNumber
-
-                onValueEdited: {
+                onBeatNumberEdited: {
                     playbackModel.beatNumber = newValue
                 }
             }
 
             TempoView {
                 Layout.leftMargin: 24
-                Layout.preferredWidth: 20
+                Layout.preferredWidth: 60
 
                 noteSymbol: playbackModel.tempo.noteSymbol
                 tempoValue: playbackModel.tempo.value
