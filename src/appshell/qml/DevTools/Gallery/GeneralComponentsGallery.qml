@@ -41,7 +41,7 @@ Rectangle {
                     { textRole: "RadioButtonGroup + FlatRadioButton", componentRole: flatRadioButtonSample },
                     { textRole: "RoundedRadioButton", componentRole: roundedRadioButtonSample },
                     { textRole: "IncrementalPropertyControl (Hidden icon, Icon left, Icon right)", componentRole: incrementalPropertyControlSample },
-                    { textRole: "FlatToogleButton", componentRole: flatToogleButtonSample },
+                    { textRole: "FlatToggleButton", componentRole: flatToggleButtonSample },
                     { textRole: "RoundedRectangle (which allows to round the particular corners)", componentRole: roundedRectangleSample },
                     { textRole: "TextInputField", componentRole: textInputFieldSample },
                     { textRole: "SearchField", componentRole: searchFieldSample },
@@ -524,9 +524,9 @@ Rectangle {
     }
 
     Component {
-        id: flatToogleButtonSample
+        id: flatToggleButtonSample
 
-        FlatToogleButton {
+        FlatToggleButton {
             id: lockButton
 
             height: 20

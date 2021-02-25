@@ -197,7 +197,7 @@ FocusableItem {
                                 onValueEdited: { model.beamVectorX.value = newValue }
                             }
 
-                            FlatToogleButton {
+                            FlatToggleButton {
                                 id: lockButton
 
                                 anchors.horizontalCenter: parent.horizontalCenter
