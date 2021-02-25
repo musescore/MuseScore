@@ -143,6 +143,7 @@ public:
 
     void realizeSelectedChordSymbols() override;
     void removeSelectedRange() override;
+    void removeEmptyTrailingMeasures() override;
 
     void fillSelectionWithSlashes() override;
     void replaceSelectedNotesWithSlashes() override;

@@ -234,6 +234,11 @@ const ActionList NotationActions::m_actions = {
                QT_TRANSLATE_NOOP("action", "Copy Lyrics to Clipboard"),
                QT_TRANSLATE_NOOP("action", "Copy lyrics to clipboard")
                ),
+    ActionItem("del-empty-measures",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Remove Empty Trailing Measures"),
+               QT_TRANSLATE_NOOP("action", "Remove empty trailing measures")
+               ),
     ActionItem("parts",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Parts"),

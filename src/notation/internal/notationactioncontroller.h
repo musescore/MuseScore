@@ -106,6 +106,7 @@ private:
     void implodeSelectedStaff();
     void realizeSelectedChordSymbols();
     void removeSelectedRange();
+    void removeEmptyTrailingMeasures();
     void fillSelectionWithSlashes();
     void replaceSelectedNotesWithSlashes();
     void spellPitches();
