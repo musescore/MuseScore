@@ -20,6 +20,8 @@
 
 #include "translation.h"
 
+#include "log.h"
+
 using namespace mu::appshell;
 using namespace mu::uicomponents;
 using namespace mu::notation;
@@ -33,6 +35,8 @@ AppMenuModel::AppMenuModel(QObject* parent)
 
 void AppMenuModel::load()
 {
+    TRACEFUNC;
+
     m_items.clear();
 
     m_items << fileItem()
@@ -101,7 +105,7 @@ void AppMenuModel::setupConnections()
         });
     });
 
-    userScoresService()->recentScoreList().ch.onReceive(this, [this](const std::vector<Meta>&) {
+    userScoresService()->recentScoreList().ch.onReceive(this, [this](const MetaList&) {
         load();
     });
 
@@ -376,7 +380,7 @@ MenuItem AppMenuModel::helpItem()
 MenuItemList AppMenuModel::recentScores() const
 {
     MenuItemList items;
-    std::vector<Meta> recentScores = userScoresService()->recentScoreList().val;
+    MetaList recentScores = userScoresService()->recentScoreList().val;
     if (recentScores.empty()) {
         return items;
     }

@@ -26,25 +26,31 @@ using namespace mu::notation;
 
 void UserScoresService::init()
 {
-    configuration()->recentScoreList().ch.onReceive(this, [this](const QStringList& recentScoresPathList) {
-        m_recentScoreListChanged.send(parseRecentList(recentScoresPathList));
+    updateRecentScoreList();
+
+    configuration()->recentScoreList().ch.onReceive(this, [this](const QStringList&) {
+        updateRecentScoreList();
     });
 }
 
-mu::ValCh<std::vector<Meta> > UserScoresService::recentScoreList() const
+void UserScoresService::updateRecentScoreList()
 {
-    TRACEFUNC;
-    ValCh<std::vector<Meta> > result;
-    result.ch = m_recentScoreListChanged;
-    result.val = parseRecentList(configuration()->recentScoreList().val);
-
-    return result;
+    QStringList paths = configuration()->recentScoreList().val;
+    m_recentScoreList.set(readMetaList(paths));
 }
 
-std::vector<Meta> UserScoresService::parseRecentList(const QStringList& recentScoresPathList) const
+mu::ValCh<MetaList> UserScoresService::recentScoreList() const
 {
-    std::vector<Meta> result;
-    for (const QString& path : recentScoresPathList) {
+    return m_recentScoreList;
+}
+
+MetaList UserScoresService::readMetaList(const QStringList& scoresPathList) const
+{
+    TRACEFUNC;
+
+    MetaList result;
+
+    for (const QString& path : scoresPathList) {
         RetVal<Meta> meta = msczMetaReader()->readMeta(path);
         if (!meta.ret) {
             LOGE() << "Score reader error" << path;
