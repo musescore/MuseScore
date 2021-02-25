@@ -2414,6 +2414,32 @@ void NotationInteraction::removeSelectedRange()
     notifyAboutNotationChanged();
 }
 
+void NotationInteraction::fillSelectionWithSlashes()
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    startEdit();
+    score()->cmdSlashFill();
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
+void NotationInteraction::replaceSelectedNotesWithSlashes()
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    startEdit();
+    score()->cmdSlashRhythm();
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
 void NotationInteraction::resetToDefault(ResettableValueType type)
 {
     switch (type) {

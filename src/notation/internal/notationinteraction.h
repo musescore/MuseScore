@@ -142,6 +142,9 @@ public:
     void realizeSelectedChordSymbols() override;
     void removeSelectedRange() override;
 
+    void fillSelectionWithSlashes() override;
+    void replaceSelectedNotesWithSlashes() override;
+
     void resetToDefault(ResettableValueType type) override;
 
     ScoreConfig scoreConfig() const override;

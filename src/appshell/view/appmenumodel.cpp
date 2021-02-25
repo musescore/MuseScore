@@ -327,8 +327,8 @@ MenuItem AppMenuModel::toolsItem()
         makeMenu(trc("appshell", "&Measures"), measuresItems),
         makeAction("time-delete"),
         makeSeparator(),
-        makeAction("slash-fill"), // need implement
-        makeAction("slash-rhythm"), // need implement
+        makeAction("slash-fill"),
+        makeAction("slash-rhythm"),
         makeSeparator(),
         makeAction("pitch-spell"), // need implement
         makeAction("reset-groupings"), // need implement
