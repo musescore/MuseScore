@@ -9141,7 +9141,6 @@ Aeolus organ synthesizer, currently disabled -->
                   <clef staff="2">F</clef>
                   <aPitchRange>29-89</aPitchRange>
                   <pPitchRange>29-89</pPitchRange>
-                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="20"/> <!--Reed Organ-->
                   </Channel>
