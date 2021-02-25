@@ -21,21 +21,14 @@
 
 #include "modularity/imodulesetup.h"
 
-namespace mu {
-namespace commonscene {
+namespace mu::commonscene {
 class CommonSceneModule : public framework::IModuleSetup
 {
 public:
-
     std::string moduleName() const override;
 
-    void registerExports() override;
-    void resolveImports() override;
-
     void registerResources() override;
-    void registerUiTypes() override;
 };
-}
 }
 
 #endif // MU_SCENECOMMON_COMMONSCENEMODULE_H

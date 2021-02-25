@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.12
 import MuseScore.Playback 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
-import MuseScore.NotationScene 1.0
+import MuseScore.CommonScene 1.0
 
 import "internal"
 
@@ -141,23 +141,15 @@ Rectangle {
                 }
             }
 
-            StyledTextLabel {
+            TempoView {
                 Layout.leftMargin: 24
                 Layout.preferredWidth: 20
-                topPadding: 10
 
-                text: playbackModel.tempo.noteSymbol
+                noteSymbol: playbackModel.tempo.noteSymbol
+                tempoValue: playbackModel.tempo.value
 
-                font.family: ui.theme.musicalFont
-                font.pixelSize: ui.theme.iconsFont.pixelSize
-                font.letterSpacing: 1
-
-                lineHeightMode: Text.FixedHeight
-            }
-
-            StyledTextLabel {
-                text: "= " + playbackModel.tempo.value
-                font: timeField.font
+                noteSymbolFont.pixelSize: ui.theme.iconsFont.pixelSize
+                tempoValueFont: timeField.font
             }
 
             SeparatorLine {
