@@ -102,6 +102,9 @@ private:
 
     void addStretch(qreal value);
 
+    void explodeSelectedStaff();
+    void implodeSelectedStaff();
+
     void resetState();
     void resetStretch();
     void resetTextStyleOverrides();

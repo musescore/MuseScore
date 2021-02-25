@@ -137,6 +137,9 @@ public:
 
     void addStretch(qreal value) override;
 
+    void explodeSelectedStaff() override;
+    void implodeSelectedStaff() override;
+
     void resetToDefault(ResettableValueType type) override;
 
     ScoreConfig scoreConfig() const override;

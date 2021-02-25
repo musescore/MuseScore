@@ -2362,6 +2362,32 @@ void NotationInteraction::addStretch(qreal value)
     notifyAboutNotationChanged();
 }
 
+void NotationInteraction::explodeSelectedStaff()
+{
+    if (!selection()->isRange()) {
+        return;
+    }
+
+    startEdit();
+    score()->cmdExplode();
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
+void NotationInteraction::implodeSelectedStaff()
+{
+    if (!selection()->isRange()) {
+        return;
+    }
+
+    startEdit();
+    score()->cmdImplode();
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
 void NotationInteraction::resetToDefault(ResettableValueType type)
 {
     switch (type) {

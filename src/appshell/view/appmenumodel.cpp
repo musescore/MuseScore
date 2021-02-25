@@ -320,8 +320,8 @@ MenuItem AppMenuModel::toolsItem()
     MenuItemList toolsItems {
         makeAction("transpose"),
         makeSeparator(),
-        makeAction("explode"), // need implement
-        makeAction("implode"), // need implement
+        makeAction("explode"),
+        makeAction("implode"),
         makeAction("realize-chord-symbols"), // need implement
         makeMenu(trc("appshell", "&Voices"), voicesItems),
         makeMenu(trc("appshell", "&Measures"), measuresItems),
