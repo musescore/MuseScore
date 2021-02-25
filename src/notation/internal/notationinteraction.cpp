@@ -2019,6 +2019,12 @@ void NotationInteraction::copySelection()
     QApplication::clipboard()->setMimeData(mimeData);
 }
 
+void NotationInteraction::copyLyrics()
+{
+    QString text = score()->extractLyrics();
+    QApplication::clipboard()->setText(text);
+}
+
 void NotationInteraction::pasteSelection(const Fraction& scale)
 {
     startEdit();

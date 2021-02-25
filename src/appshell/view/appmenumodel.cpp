@@ -335,7 +335,7 @@ MenuItem AppMenuModel::toolsItem()
         makeAction("resequence-rehearsal-marks"),
         makeAction("unroll-repeats"),
         makeSeparator(),
-        makeAction("copy-lyrics-to-clipboard"), // need implement
+        makeAction("copy-lyrics-to-clipboard"),
         makeAction("fotomode"), // need implement
         makeAction("del-empty-measures"), // need implement
     };

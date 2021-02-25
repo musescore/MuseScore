@@ -229,6 +229,11 @@ const ActionList NotationActions::m_actions = {
                QT_TRANSLATE_NOOP("action", "Unroll Repeats"),
                QT_TRANSLATE_NOOP("action", "Unroll Repeats")
                ),
+    ActionItem("copy-lyrics-to-clipboard",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Copy Lyrics to Clipboard"),
+               QT_TRANSLATE_NOOP("action", "Copy lyrics to clipboard")
+               ),
     ActionItem("parts",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Parts"),

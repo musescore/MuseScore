@@ -218,6 +218,7 @@ void NotationActionController::init()
     dispatcher()->reg(this, "reset-groupings", this, &NotationActionController::regroupNotesAndRests);
     dispatcher()->reg(this, "resequence-rehearsal-marks", this, &NotationActionController::resequenceRehearsalMarks);
     dispatcher()->reg(this, "unroll-repeats", this, &NotationActionController::unrollRepeats);
+    dispatcher()->reg(this, "copy-lyrics-to-clipboard", this, &NotationActionController::copyLyrics);
 
     for (int i = MIN_NOTES_INTERVAL; i <= MAX_NOTES_INTERVAL; ++i) {
         if (isNotesIntervalValid(i)) {
@@ -1014,6 +1015,16 @@ void NotationActionController::unrollRepeats()
     }
 
     interaction->unrollRepeats();
+}
+
+void NotationActionController::copyLyrics()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->copyLyrics();
 }
 
 void NotationActionController::addStretch(qreal value)

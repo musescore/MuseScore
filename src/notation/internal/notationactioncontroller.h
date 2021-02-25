@@ -112,6 +112,7 @@ private:
     void regroupNotesAndRests();
     void resequenceRehearsalMarks();
     void unrollRepeats();
+    void copyLyrics();
 
     void resetState();
     void resetStretch();
