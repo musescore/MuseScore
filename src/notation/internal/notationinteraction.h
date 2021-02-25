@@ -139,11 +139,14 @@ public:
 
     void explodeSelectedStaff() override;
     void implodeSelectedStaff() override;
+
     void realizeSelectedChordSymbols() override;
     void removeSelectedRange() override;
 
     void fillSelectionWithSlashes() override;
     void replaceSelectedNotesWithSlashes() override;
+
+    void spellPitches();
 
     void resetToDefault(ResettableValueType type) override;
 

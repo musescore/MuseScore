@@ -2440,6 +2440,15 @@ void NotationInteraction::replaceSelectedNotesWithSlashes()
     notifyAboutNotationChanged();
 }
 
+void NotationInteraction::spellPitches()
+{
+    startEdit();
+    score()->spell();
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
 void NotationInteraction::resetToDefault(ResettableValueType type)
 {
     switch (type) {
