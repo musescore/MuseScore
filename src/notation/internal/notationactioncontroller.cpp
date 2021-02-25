@@ -212,6 +212,8 @@ void NotationActionController::init()
     dispatcher()->reg(this, "implode", this, &NotationActionController::implodeSelectedStaff);
     dispatcher()->reg(this, "realize-chord-symbols", this, &NotationActionController::realizeSelectedChordSymbols);
     dispatcher()->reg(this, "time-delete", this, &NotationActionController::removeSelectedRange);
+    dispatcher()->reg(this, "slash-fill", this, &NotationActionController::fillSelectionWithSlashes);
+    dispatcher()->reg(this, "slash-rhythm", this, &NotationActionController::replaceSelectedNotesWithSlashes);
 
     for (int i = MIN_NOTES_INTERVAL; i <= MAX_NOTES_INTERVAL; ++i) {
         if (isNotesIntervalValid(i)) {
@@ -948,6 +950,26 @@ void NotationActionController::removeSelectedRange()
     }
 
     interaction->removeSelectedRange();
+}
+
+void NotationActionController::fillSelectionWithSlashes()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->fillSelectionWithSlashes();
+}
+
+void NotationActionController::replaceSelectedNotesWithSlashes()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->replaceSelectedNotesWithSlashes();
 }
 
 void NotationActionController::addStretch(qreal value)

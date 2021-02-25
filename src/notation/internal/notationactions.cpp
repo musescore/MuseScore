@@ -199,6 +199,16 @@ const ActionList NotationActions::m_actions = {
                QT_TRANSLATE_NOOP("action", "Remove Selected Range"),
                QT_TRANSLATE_NOOP("action", "Remove selected range")
                ),
+    ActionItem("slash-fill",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Fill With Slashes"),
+               QT_TRANSLATE_NOOP("action", "Fill with slashes")
+               ),
+    ActionItem("slash-rhythm",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Toggle Rhythmic Slash Notation"),
+               QT_TRANSLATE_NOOP("action", "Toggle 'Rhythmic Slash Notation'")
+               ),
     ActionItem("parts",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Parts"),

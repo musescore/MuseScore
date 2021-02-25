@@ -106,6 +106,8 @@ private:
     void implodeSelectedStaff();
     void realizeSelectedChordSymbols();
     void removeSelectedRange();
+    void fillSelectionWithSlashes();
+    void replaceSelectedNotesWithSlashes();
 
     void resetState();
     void resetStretch();
@@ -126,6 +128,8 @@ private:
     void toggleShowingFrames();
     void toggleShowingPageMargins();
     void toggleMarkIrregularMeasures();
+    void toggleNavigator();
+    void toggleMixer();
 
     bool isTextEditting() const;
 
