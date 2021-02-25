@@ -22,10 +22,11 @@
 
 #include <QObject>
 
-#include "iworkspaceconfiguration.h"
-#include "iinteractive.h"
-#include "async/asyncable.h"
 #include "modularity/ioc.h"
+#include "async/asyncable.h"
+#include "actions/iactionsdispatcher.h"
+#include "iinteractive.h"
+#include "iworkspaceconfiguration.h"
 
 namespace mu::workspace {
 class CurrentWorkspaceModel : public QObject, public async::Asyncable
@@ -34,6 +35,7 @@ class CurrentWorkspaceModel : public QObject, public async::Asyncable
 
     INJECT(workspace, IWorkspaceConfiguration, configuration)
     INJECT(workspace, framework::IInteractive, interactive)
+    INJECT(workspace, actions::IActionsDispatcher, dispatcher)
 
     Q_PROPERTY(QString currentWorkspaceName READ currentWorkspaceName NOTIFY currentWorkspaceNameChanged)
 

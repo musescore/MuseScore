@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2020 MuseScore BVBA and others
+//  Copyright (C) 2021 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -16,32 +16,20 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#ifndef MU_WORKSPACE_WORKSPACEACTIONS_H
+#define MU_WORKSPACE_WORKSPACEACTIONS_H
 
-#ifndef MU_PALETTE_PALETTEACTIONSCONTROLLER_H
-#define MU_PALETTE_PALETTEACTIONSCONTROLLER_H
+#include "actions/imoduleactions.h"
 
-#include "modularity/ioc.h"
-#include "actions/actionable.h"
-#include "actions/iactionsdispatcher.h"
-#include "iinteractive.h"
-#include "ipaletteactionscontroller.h"
-
-namespace mu::palette {
-class PaletteActionsController : public IPaletteActionsController, public actions::Actionable
+namespace mu::workspace {
+class WorkspaceActions : public actions::IModuleActions
 {
-    INJECT(palette, actions::IActionsDispatcher, dispatcher)
-    INJECT(palette, framework::IInteractive, interactive)
-
 public:
-    void init();
-
-    ValCh<bool> isMasterPaletteOpened() const override;
+    const actions::ActionItem& action(const actions::ActionCode& actionCode) const override;
 
 private:
-    void toggleMasterPalette();
-
-    async::Channel<bool> m_masterPaletteOpenChannel;
+    static const actions::ActionList m_actions;
 };
 }
 
-#endif // MU_PALETTE_PALETTEACTIONSCONTROLLER_H
+#endif // MU_WORKSPACE_WORKSPACEACTIONS_H

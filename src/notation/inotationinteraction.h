@@ -121,6 +121,9 @@ public:
     virtual void addStretch(qreal value) = 0;
 
     virtual void resetToDefault(ResettableValueType type) = 0;
+
+    virtual ScoreConfig scoreConfig() const = 0;
+    virtual void setScoreConfig(ScoreConfig config) = 0;
 };
 
 using INotationInteractionPtr = std::shared_ptr<INotationInteraction>;

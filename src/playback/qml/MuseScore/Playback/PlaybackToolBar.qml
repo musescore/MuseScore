@@ -14,12 +14,12 @@ Rectangle {
 
     property bool floating: false
 
-    PlaybackToolBarModel {
-        id: playbackModel
-    }
-
     Component.onCompleted: {
         playbackModel.load()
+    }
+
+    PlaybackToolBarModel {
+        id: playbackModel
     }
 
     Column {

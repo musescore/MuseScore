@@ -29,19 +29,28 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/appshellmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/appshell.cpp
     ${CMAKE_CURRENT_LIST_DIR}/appshell.h
+    ${CMAKE_CURRENT_LIST_DIR}/iapplicationactioncontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/inotationpagestate.h
     ${CMAKE_CURRENT_LIST_DIR}/commandlinecontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/commandlinecontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/iappshellconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/appshelltypes.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/applicationactions.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/applicationactions.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/appshellconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/appshellconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/applicationactioncontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/applicationactioncontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/appshellconfiguration.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/appshellconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationpagestate.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationpagestate.h
     ${CMAKE_CURRENT_LIST_DIR}/view/settings/settingslistmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/settings/settingslistmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/appmenumodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/appmenumodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationpagemodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationpagemodel.h
     ${DOCKWINDOW_SRC}
     )
 

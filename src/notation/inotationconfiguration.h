@@ -91,9 +91,6 @@ public:
     virtual std::vector<std::string> toolbarActions(const std::string& toolbarName) const = 0;
     virtual void setToolbarActions(const std::string& toolbarName, const std::vector<std::string>& actions) = 0;
 
-    virtual ValCh<bool> isNavigatorVisible() const = 0;
-    virtual void setNavigatorVisible(bool visible) = 0;
-
     virtual ValCh<framework::Orientation> canvasOrientation() const = 0;
     virtual void setCanvasOrientation(framework::Orientation orientation) = 0;
 };

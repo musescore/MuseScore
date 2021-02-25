@@ -10,6 +10,8 @@ import "internal"
 FocusScope {
     id: root
 
+    property alias isNavigatorVisible: notationNavigator.visible
+
     signal textEdittingStarted()
 
     ColumnLayout {

@@ -40,8 +40,14 @@ DockToolBar::DockToolBar(QQuickItem* parent)
     m_tool.bar->setAllowedAreas(Qt::AllToolBarAreas);
     m_tool.bar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    connect(this, &QQuickItem::visibleChanged, this, [this]() {
-        m_tool.bar->setVisible(isVisible());
+    connect(this, &DockToolBar::visibleEdited, this, [this](bool visible) {
+        if (m_tool.bar->isVisible() != visible) {
+            m_tool.bar->setVisible(visible);
+        }
+    });
+
+    connect(m_tool.bar, &QToolBar::visibilityChanged, [this](bool) {
+        setVisible(m_tool.bar->isVisible());
     });
 
     connect(m_tool.bar, &QToolBar::orientationChanged, [this](int orientation) {
@@ -106,7 +112,9 @@ void DockToolBar::resize(const QSize& size)
     } else {
         newSize.setHeight(newSize.height() - TOOLBAR_GRIP_WIDTH);
     }
-    view()->resize(newSize);
+    if (view()) {
+        view()->resize(newSize);
+    }
 }
 
 void DockToolBar::setFloating(bool floating)
@@ -157,6 +165,11 @@ bool DockToolBar::floatable() const
 bool DockToolBar::movable() const
 {
     return toolBar()->isMovable();
+}
+
+bool DockToolBar::visible() const
+{
+    return toolBar()->isVisible();
 }
 
 void DockToolBar::setMinimumHeight(int minimumHeight)
@@ -214,4 +227,14 @@ void DockToolBar::setMovable(bool movable)
 
     toolBar()->setMovable(movable);
     emit movableChanged(movable);
+}
+
+void DockToolBar::setVisible(bool visible)
+{
+    if (m_visible == visible) {
+        return;
+    }
+
+    m_visible = visible;
+    emit visibleEdited(m_visible);
 }

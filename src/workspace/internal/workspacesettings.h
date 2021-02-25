@@ -34,13 +34,16 @@ public:
 
     bool isManage(WorkspaceTag tag) const override;
 
-    Val value(WorkspaceTag tag, const std::string& key) const override;
-    void setValue(WorkspaceTag tag, const std::string& key, const Val& value) const override;
+    Val value(const Key& key) const override;
+    void setValue(const Key& key, const Val& value) const override;
+
+    async::Channel<Val> valueChanged(const Key& key) const override;
     async::Notification valuesChanged() const override;
 
 private:
     IWorkspacePtr currentWorkspace() const;
 
+    mutable std::map<Key, async::Channel<Val> > m_channels;
     async::Notification m_valuesChanged;
 };
 }

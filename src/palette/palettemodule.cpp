@@ -68,6 +68,7 @@ void PaletteModule::registerExports()
 {
     ioc()->registerExport<IPaletteAdapter>(moduleName(), s_adapter);
     ioc()->registerExport<IPaletteConfiguration>(moduleName(), std::make_shared<PaletteConfiguration>());
+    ioc()->registerExport<IPaletteActionsController>(moduleName(), s_actionsController);
 
     // create a score for internal use
     Ms::gscore = new Ms::MasterScore();
@@ -96,7 +97,7 @@ void PaletteModule::resolveImports()
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerUri(Uri("musescore://palette/masterpalette"),
-                        ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<Ms::MasterPalette>("MasterPallette")));
+                        ContainerMeta(ContainerType::QWidgetDialog, Ms::MasterPalette::static_metaTypeId()));
 
         ir->registerUri(Uri("musescore://palette/properties"),
                         ContainerMeta(ContainerType::QmlDialog, "MuseScore/Palette/PalettePropertiesDialog.qml"));

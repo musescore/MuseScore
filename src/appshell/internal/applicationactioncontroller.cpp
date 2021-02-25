@@ -19,6 +19,7 @@
 #include "applicationactioncontroller.h"
 
 #include <QCoreApplication>
+#include <QMainWindow>
 
 #include "translation.h"
 
@@ -28,6 +29,8 @@ using namespace mu::framework;
 void ApplicationActionController::init()
 {
     dispatcher()->reg(this, "quit", this, &ApplicationActionController::quit);
+
+    dispatcher()->reg(this, "fullscreen", this, &ApplicationActionController::toggleFullScreen);
 
     dispatcher()->reg(this, "about-qt", this, &ApplicationActionController::openAboutQtDialog);
 
@@ -39,9 +42,33 @@ void ApplicationActionController::init()
     dispatcher()->reg(this, "revert-factory", this, &ApplicationActionController::revertToFactorySettings);
 }
 
+mu::ValCh<bool> ApplicationActionController::isFullScreen() const
+{
+    ValCh<bool> result;
+    result.ch = m_fullScreenChannel;
+    result.val = mainWindow()->qMainWindow() ? mainWindow()->qMainWindow()->isFullScreen() : false;
+    return result;
+}
+
 void ApplicationActionController::quit()
 {
     QCoreApplication::quit();
+}
+
+void ApplicationActionController::toggleFullScreen()
+{
+    QMainWindow* qMainWindow = mainWindow()->qMainWindow();
+    if (!qMainWindow) {
+        return;
+    }
+
+    if (!qMainWindow->isFullScreen()) {
+        qMainWindow->showFullScreen();
+    } else {
+        qMainWindow->showNormal();
+    }
+
+    m_fullScreenChannel.send(qMainWindow->isFullScreen());
 }
 
 void ApplicationActionController::openAboutQtDialog()

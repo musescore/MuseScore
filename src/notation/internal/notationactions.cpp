@@ -185,12 +185,6 @@ const ActionList NotationActions::m_actions = {
                QT_TRANSLATE_NOOP("action", "Manage parts"),
                IconCode::Code::PAGE
                ),
-    ActionItem("toggle-mixer",
-               ShortcutContext::NotationActive,
-               QT_TRANSLATE_NOOP("action", "Mixer"),
-               QT_TRANSLATE_NOOP("action", "Toggle mixer"),
-               IconCode::Code::MIXER
-               ),
     ActionItem("view-mode-page",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Page View")
@@ -673,11 +667,6 @@ const ActionList NotationActions::m_actions = {
                QT_TRANSLATE_NOOP("action", "Other…"),
                QT_TRANSLATE_NOOP("action", "Other tuplets")
                ),
-    ActionItem("toggle-navigator",
-               ShortcutContext::NotationActive,
-               QT_TRANSLATE_NOOP("action", "Navigator"),
-               QT_TRANSLATE_NOOP("action", "Toggle 'Navigator'")
-               ),
     ActionItem("stretch-",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Increase Layout Stretch"),
@@ -707,6 +696,31 @@ const ActionList NotationActions::m_actions = {
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Reset Shapes and Positions"),
                QT_TRANSLATE_NOOP("action", "Reset shapes and positions of selected elements to their defaults")
+               ),
+    ActionItem("show-invisible",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Show Invisible"),
+               QT_TRANSLATE_NOOP("action", "Show invisible")
+               ),
+    ActionItem("show-unprintable",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Show Unprintable"),
+               QT_TRANSLATE_NOOP("action", "Show unprintable")
+               ),
+    ActionItem("show-frames",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Show Frames"),
+               QT_TRANSLATE_NOOP("action", "Show frames")
+               ),
+    ActionItem("show-pageborders",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Show Page Margins"),
+               QT_TRANSLATE_NOOP("action", "Show page margins")
+               ),
+    ActionItem("show-irregular",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Mark Irregular Measures"),
+               QT_TRANSLATE_NOOP("action", "Mark irregular measures")
                )
 };
 

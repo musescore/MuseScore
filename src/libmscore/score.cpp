@@ -710,7 +710,6 @@ void Score::setShowInvisible(bool v)
     // displayed, so we need to refresh it to get
     // invisible elements displayed or properly hidden.
     rebuildBspTree();
-    setUpdateAll();
 }
 
 //---------------------------------------------------------
@@ -720,7 +719,6 @@ void Score::setShowInvisible(bool v)
 void Score::setShowUnprintable(bool v)
 {
     _showUnprintable = v;
-    setUpdateAll();
 }
 
 //---------------------------------------------------------
@@ -730,7 +728,6 @@ void Score::setShowUnprintable(bool v)
 void Score::setShowFrames(bool v)
 {
     _showFrames = v;
-    setUpdateAll();
 }
 
 //---------------------------------------------------------
@@ -740,7 +737,6 @@ void Score::setShowFrames(bool v)
 void Score::setShowPageborders(bool v)
 {
     _showPageborders = v;
-    setUpdateAll();
 }
 
 //---------------------------------------------------------
@@ -750,7 +746,6 @@ void Score::setShowPageborders(bool v)
 void Score::setMarkIrregularMeasures(bool v)
 {
     _markIrregularMeasures = v;
-    setUpdateAll();
 }
 
 //---------------------------------------------------------

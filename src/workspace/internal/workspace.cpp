@@ -201,6 +201,11 @@ std::vector<WorkspaceTag> Workspace::parseTags(const std::string& tagsStr) const
         tags.erase(0, pos + WORKSPACE_TAGS_SEPARATOR.length());
     }
 
+    WorkspaceTag tag = tagByName(tags);
+    if (tag != WorkspaceTag::Unknown) {
+        result.push_back(tag);
+    }
+
     return result;
 }
 

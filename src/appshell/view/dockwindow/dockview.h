@@ -36,6 +36,7 @@ class DockView : public QQuickItem
     Q_PROPERTY(QQmlComponent * content READ content WRITE setContent NOTIFY contentChanged)
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
     Q_PROPERTY(QColor borderColor READ borderColor WRITE setBorderColor NOTIFY borderColorChanged)
+    Q_PROPERTY(bool visible READ visible WRITE setVisible NOTIFY visibleEdited)
 
     Q_CLASSINFO("DefaultProperty", "content")
 
@@ -49,6 +50,7 @@ public:
     QQmlComponent* content() const;
     QColor color() const;
     QColor borderColor() const;
+    virtual bool visible() const;
 
     QWidget* view() const;
 
@@ -56,6 +58,7 @@ public slots:
     void setContent(QQmlComponent* component);
     void setColor(QColor color);
     void setBorderColor(QColor color);
+    virtual void setVisible(bool value);
 
 signals:
     void sourceChanged();
@@ -63,6 +66,7 @@ signals:
     void colorChanged(QColor color);
     void borderColorChanged(QColor color);
     void positionChanged(const QPointF& pos);
+    void visibleEdited(bool visible);
 
 protected slots:
     virtual void onWidgetEvent(QEvent* event);

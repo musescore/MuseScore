@@ -6,12 +6,12 @@ import MuseScore.UiComponents 1.0
 Rectangle {
     id: root
 
-    NotationToolBarModel {
-        id: toolbarModel
-    }
-
     Component.onCompleted: {
         toolbarModel.load()
+    }
+
+    NotationToolBarModel {
+        id: toolbarModel
     }
 
     ListView {

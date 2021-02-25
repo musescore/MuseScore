@@ -65,7 +65,6 @@ static const Settings::Key IS_COUNT_IN_ENABLED(module_name, "application/playbac
 
 static const Settings::Key TOOLBAR_KEY(module_name, "ui/toolbar/");
 
-static const Settings::Key NAVIGATOR_VISIBLE_KEY(module_name, "ui/application/startup/showNavigator");
 static const Settings::Key IS_CANVAS_ORIENTATION_VERTICAL_KEY(module_name, "ui/canvas/scroll/verticalOrientation");
 
 void NotationConfiguration::init()
@@ -101,11 +100,6 @@ void NotationConfiguration::init()
     settings()->setDefaultValue(IS_PLAY_REPEATS_ENABLED, Val(false));
     settings()->setDefaultValue(IS_METRONOME_ENABLED, Val(false));
     settings()->setDefaultValue(IS_COUNT_IN_ENABLED, Val(false));
-
-    settings()->setDefaultValue(NAVIGATOR_VISIBLE_KEY, Val(false));
-    settings()->valueChanged(NAVIGATOR_VISIBLE_KEY).onReceive(nullptr, [this](const Val&) {
-        m_navigatorVisibleChanged.send(isNavigatorVisible().val);
-    });
 
     settings()->setDefaultValue(IS_CANVAS_ORIENTATION_VERTICAL_KEY, Val(false));
     settings()->valueChanged(IS_CANVAS_ORIENTATION_VERTICAL_KEY).onReceive(nullptr, [this](const Val&) {
@@ -314,20 +308,6 @@ void NotationConfiguration::setToolbarActions(const std::string& toolbarName, co
 
     Val value(qactions.join(",").toStdString());
     settings()->setValue(toolbarSettingsKey(toolbarName), value);
-}
-
-ValCh<bool> NotationConfiguration::isNavigatorVisible() const
-{
-    ValCh<bool> visible;
-    visible.ch = m_navigatorVisibleChanged;
-    visible.val = settings()->value(NAVIGATOR_VISIBLE_KEY).toBool();
-
-    return visible;
-}
-
-void NotationConfiguration::setNavigatorVisible(bool visible)
-{
-    settings()->setValue(NAVIGATOR_VISIBLE_KEY, Val(visible));
 }
 
 ValCh<Orientation> NotationConfiguration::canvasOrientation() const

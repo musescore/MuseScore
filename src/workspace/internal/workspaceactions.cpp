@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2020 MuseScore BVBA and others
+//  Copyright (C) 2021 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -16,32 +16,31 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#include "workspaceactions.h"
 
-#ifndef MU_PALETTE_PALETTEACTIONSCONTROLLER_H
-#define MU_PALETTE_PALETTEACTIONSCONTROLLER_H
+using namespace mu::workspace;
+using namespace mu::actions;
+using namespace mu::shortcuts;
 
-#include "modularity/ioc.h"
-#include "actions/actionable.h"
-#include "actions/iactionsdispatcher.h"
-#include "iinteractive.h"
-#include "ipaletteactionscontroller.h"
-
-namespace mu::palette {
-class PaletteActionsController : public IPaletteActionsController, public actions::Actionable
-{
-    INJECT(palette, actions::IActionsDispatcher, dispatcher)
-    INJECT(palette, framework::IInteractive, interactive)
-
-public:
-    void init();
-
-    ValCh<bool> isMasterPaletteOpened() const override;
-
-private:
-    void toggleMasterPalette();
-
-    async::Channel<bool> m_masterPaletteOpenChannel;
+const ActionList WorkspaceActions::m_actions = {
+    ActionItem("select-workspace",
+               ShortcutContext::Any,
+               QT_TRANSLATE_NOOP("action", "Select Workspace")
+               ),
+    ActionItem("configure-workspaces",
+               ShortcutContext::Any,
+               QT_TRANSLATE_NOOP("action", "Configure Workspace")
+               )
 };
-}
 
-#endif // MU_PALETTE_PALETTEACTIONSCONTROLLER_H
+const ActionItem& WorkspaceActions::action(const ActionCode& actionCode) const
+{
+    for (const ActionItem& action : m_actions) {
+        if (action.code == actionCode) {
+            return action;
+        }
+    }
+
+    static ActionItem null;
+    return null;
+}

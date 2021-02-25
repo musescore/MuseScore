@@ -292,7 +292,7 @@ QList<Ms::Element*> NotationInteraction::hitElements(const QPointF& p_in, float 
 
     QRectF r(p.x() - w, p.y() - w, 3.0 * w, 3.0 * w);
 
-    QList<Ms::Element*> el = page->items(r);
+    QList<Ms::Element*> elements = page->items(r);
     //! TODO
     //    for (int i = 0; i < MAX_HEADERS; i++)
     //        if (score()->headerText(i) != nullptr)      // gives the ability to select the header
@@ -302,13 +302,18 @@ QList<Ms::Element*> NotationInteraction::hitElements(const QPointF& p_in, float 
     //            el.push_back(score()->footerText(i));
     //! -------
 
-    for (Ms::Element* e : el) {
-        e->itemDiscovered = 0;
-        if (!e->selectable() || e->isPage()) {
+    for (Ms::Element* element : elements) {
+        element->itemDiscovered = 0;
+        if (!element->selectable() || element->isPage()) {
             continue;
         }
-        if (e->contains(p)) {
-            ll.append(e);
+
+        if (!element->isInteractionAvailable()) {
+            continue;
+        }
+
+        if (element->contains(p)) {
+            ll.append(element);
         }
     }
 
@@ -317,12 +322,17 @@ QList<Ms::Element*> NotationInteraction::hitElements(const QPointF& p_in, float 
         //
         // if no relevant element hit, look nearby
         //
-        for (Ms::Element* e : el) {
-            if (e->isPage() || !e->selectable()) {
+        for (Ms::Element* element : elements) {
+            if (element->isPage() || !element->selectable()) {
                 continue;
             }
-            if (e->intersects(r)) {
-                ll.append(e);
+
+            if (!element->isInteractionAvailable()) {
+                continue;
+            }
+
+            if (element->intersects(r)) {
+                ll.append(element);
             }
         }
     }
@@ -2368,6 +2378,37 @@ void NotationInteraction::resetToDefault(ResettableValueType type)
         resetTextStyleOverrides();
         break;
     }
+}
+
+ScoreConfig NotationInteraction::scoreConfig() const
+{
+    ScoreConfig config;
+    config.isShowInvisibleElements = score()->showInvisible();
+    config.isShowUnprintableElements = score()->showUnprintable();
+    config.isShowFrames = score()->showFrames();
+    config.isShowPageMargins = score()->showPageborders();
+    config.isMarkIrregularMeasures = score()->markIrregularMeasures();
+
+    return config;
+}
+
+void NotationInteraction::setScoreConfig(ScoreConfig config)
+{
+    startEdit();
+    score()->setShowInvisible(config.isShowInvisibleElements);
+    score()->setShowUnprintable(config.isShowUnprintableElements);
+    score()->setShowFrames(config.isShowFrames);
+    score()->setShowPageborders(config.isShowPageMargins);
+    score()->setMarkIrregularMeasures(config.isMarkIrregularMeasures);
+
+    Element* selectedElement = selection()->element();
+    if (selectedElement && !selectedElement->isInteractionAvailable()) {
+        clearSelection();
+    }
+
+    apply();
+
+    notifyAboutNotationChanged();
 }
 
 bool NotationInteraction::needEndTextEditing(const std::vector<Element*>& newSelectedElements) const

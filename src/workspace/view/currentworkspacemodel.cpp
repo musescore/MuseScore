@@ -37,18 +37,7 @@ void CurrentWorkspaceModel::load()
 
 void CurrentWorkspaceModel::selectWorkspace()
 {
-    RetVal<Val> result = interactive()->open("musescore://workspace/select?sync=true");
-    if (!result.ret) {
-        return;
-    }
-
-    std::string selectedWorkspace = result.val.toString();
-
-    if (configuration()->currentWorkspaceName().val == selectedWorkspace || selectedWorkspace.empty()) {
-        return;
-    }
-
-    configuration()->setCurrentWorkspaceName(selectedWorkspace);
+    dispatcher()->dispatch("configure-workspaces");
 }
 
 QString CurrentWorkspaceModel::currentWorkspaceName() const

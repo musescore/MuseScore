@@ -39,6 +39,11 @@ public:
 
     virtual ValCh<QStringList> recentScoreList() const = 0;
 
+    virtual ValCh<bool> isNotationStatusBarVisible() const = 0;
+    virtual void setIsNotationStatusBarVisible(bool visible) const = 0;
+    virtual ValCh<bool> isNotationNavigatorVisible() const = 0;
+    virtual void setIsNotationNavigatorVisible(bool visible) const = 0;
+
     virtual void revertToFactorySettings(bool keepDefaultSettings = false) const = 0;
 };
 }

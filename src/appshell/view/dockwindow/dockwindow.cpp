@@ -78,6 +78,8 @@ DockWindow::DockWindow(QQuickItem* parent)
     configuration()->pageStateChanged().onNotify(nullptr, [this]() {
         togglePage(nullptr, currentPage());
     });
+
+    WidgetStateStore::restoreGeometry(m_window);
 }
 
 void DockWindow::componentComplete()
@@ -109,6 +111,7 @@ void DockWindow::onMainWindowEvent(QEvent* event)
         adjustPanelsSize(currentPage());
     } break;
     case QEvent::Close: {
+        WidgetStateStore::saveGeometry(m_window);
         saveState(currentPage()->objectName());
     } break;
     case QEvent::LayoutRequest: {
@@ -139,16 +142,15 @@ void DockWindow::adjustPanelsSize(DockPage* page)
 
 void DockWindow::saveState(const QString& pageName)
 {
-    WidgetStateStore::saveGeometry(m_window);
-
     configuration()->setPageState(pageName.toStdString(), m_window->saveState());
 }
 
 void DockWindow::restoreState(const QString& pageName)
 {
-    WidgetStateStore::restoreGeometry(m_window);
-
-    m_window->restoreState(configuration()->pageState(pageName.toStdString()));
+    QByteArray state = configuration()->pageState(pageName.toStdString());
+    if (!state.isEmpty()) {
+        m_window->restoreState(state);
+    }
 }
 
 void DockWindow::togglePage(DockPage* old, DockPage* current)
@@ -201,7 +203,6 @@ void DockWindow::hidePage(DockPage* page)
 
     static QWidget* sDummy = new QWidget();
     for (QWidget* w : widgetsToHide) {
-        w->hide();
         w->setParent(sDummy);
     }
 
@@ -227,10 +228,15 @@ void DockWindow::showPage(DockPage* page)
         DockStatusBar::Widget sw = status->widget();
         m_statusbar->setFixedHeight(sw.widget->height());
         m_statusbar->addWidget(sw.widget, 1);
-        m_statusbar->show();
-        sw.widget->show();
+        connect(status, &DockStatusBar::visibleEdited, this, [this](bool visible) {
+            if (m_statusbar->isVisible() != visible) {
+                m_statusbar->setVisible(visible);
+            }
+        });
+        m_statusbar->setVisible(status->visible());
+        sw.widget->setVisible(status->visible());
     } else {
-        m_statusbar->hide();
+        m_statusbar->setVisible(false);
     }
 
     // Panels

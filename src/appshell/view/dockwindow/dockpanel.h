@@ -49,6 +49,7 @@ public:
 
     bool floatable() const;
     bool closable() const;
+    bool visible() const override;
 
     struct Widget {
         QDockWidget* panel = nullptr;

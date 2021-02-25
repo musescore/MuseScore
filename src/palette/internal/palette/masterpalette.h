@@ -19,6 +19,7 @@
 
 #include "modularity/ioc.h"
 #include "framework/ui/imainwindow.h"
+#include "ui/view/widgetdialog.h"
 
 namespace Ms {
 class Palette;
@@ -29,7 +30,7 @@ class KeyEditor;
 //   MasterPalette
 //---------------------------------------------------------
 
-class MasterPalette : public QDialog, Ui::MasterPalette
+class MasterPalette : public mu::ui::WidgetDialog, Ui::MasterPalette
 {
     Q_OBJECT
 
@@ -47,9 +48,6 @@ class MasterPalette : public QDialog, Ui::MasterPalette
     Palette* createPalette(int w, int h, bool grid, double mag = 1.0);
     void addPalette(Palette* sp);
 
-signals:
-    void closed(bool);
-
 private slots:
     void currentChanged(QTreeWidgetItem*, QTreeWidgetItem*);
     void clicked(QTreeWidgetItem*, int);
@@ -61,13 +59,13 @@ protected:
 
 public:
     MasterPalette(QWidget* parent = 0);
-    MasterPalette(const MasterPalette& dialog);
+
+    static int static_metaTypeId();
+    int metaTypeId() const override;
 
     void selectItem(const QString& s);
     QString selectedItem();
 };
 } // namespace Ms
-
-Q_DECLARE_METATYPE(Ms::MasterPalette)
 
 #endif
