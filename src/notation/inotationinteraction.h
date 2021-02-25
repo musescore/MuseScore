@@ -122,6 +122,7 @@ public:
 
     virtual void explodeSelectedStaff() = 0;
     virtual void implodeSelectedStaff() = 0;
+    virtual void realizeSelectedChordSymbols() = 0;
 
     virtual void resetToDefault(ResettableValueType type) = 0;
 

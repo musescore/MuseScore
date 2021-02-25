@@ -322,7 +322,7 @@ MenuItem AppMenuModel::toolsItem()
         makeSeparator(),
         makeAction("explode"),
         makeAction("implode"),
-        makeAction("realize-chord-symbols"), // need implement
+        makeAction("realize-chord-symbols"),
         makeMenu(trc("appshell", "&Voices"), voicesItems),
         makeMenu(trc("appshell", "&Measures"), measuresItems),
         makeAction("time-delete"), // need implement

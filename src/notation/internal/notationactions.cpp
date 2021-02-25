@@ -189,6 +189,11 @@ const ActionList NotationActions::m_actions = {
                QT_TRANSLATE_NOOP("action", "Implode"),
                QT_TRANSLATE_NOOP("action", "Implode contents of selected staves into top selected staff")
                ),
+    ActionItem("realize-chord-symbols",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Realize Chord Symbols"),
+               QT_TRANSLATE_NOOP("action", "Convert chord symbols into notes")
+               ),
     ActionItem("parts",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Parts"),
