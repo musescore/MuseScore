@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2020 MuseScore BVBA and others
+//  Copyright (C) 2021 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -16,32 +16,25 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#ifndef MU_APPSHELL_INOTATIONPAGESTATE_H
+#define MU_APPSHELL_INOTATIONPAGESTATE_H
 
-#ifndef MU_PALETTE_PALETTEACTIONSCONTROLLER_H
-#define MU_PALETTE_PALETTEACTIONSCONTROLLER_H
+#include "modularity/imoduleexport.h"
+#include "appshelltypes.h"
+#include "async/channel.h"
 
-#include "modularity/ioc.h"
-#include "actions/actionable.h"
-#include "actions/iactionsdispatcher.h"
-#include "iinteractive.h"
-#include "ipaletteactionscontroller.h"
-
-namespace mu::palette {
-class PaletteActionsController : public IPaletteActionsController, public actions::Actionable
+namespace mu::appshell {
+class INotationPageState : MODULE_EXPORT_INTERFACE
 {
-    INJECT(palette, actions::IActionsDispatcher, dispatcher)
-    INJECT(palette, framework::IInteractive, interactive)
+    INTERFACE_ID(INotationPageState)
 
 public:
-    void init();
+    virtual ~INotationPageState() = default;
 
-    ValCh<bool> isMasterPaletteOpened() const override;
-
-private:
-    void toggleMasterPalette();
-
-    async::Channel<bool> m_masterPaletteOpenChannel;
+    virtual bool isPanelVisible(PanelType type) const = 0;
+    virtual void setIsPanelVisible(PanelType type, bool visible) = 0;
+    virtual async::Channel<PanelType> panelVisibleChanged() const = 0;
 };
 }
 
-#endif // MU_PALETTE_PALETTEACTIONSCONTROLLER_H
+#endif // MU_APPSHELL_NOTATIONPAGESTATE_H

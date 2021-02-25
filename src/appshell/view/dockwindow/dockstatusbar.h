@@ -38,10 +38,16 @@ public:
 
     Widget widget() const;
 
+    bool visible() const override;
+
+public slots:
+    void setVisible(bool visible) override;
+
 private:
     void onComponentCompleted() override;
 
     Widget m_widget;
+    bool m_visible = false;
 };
 }
 

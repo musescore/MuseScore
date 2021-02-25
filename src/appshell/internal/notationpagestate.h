@@ -16,46 +16,30 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_APPSHELL_APPLICATIONCONTROLLER_H
-#define MU_APPSHELL_APPLICATIONCONTROLLER_H
+#ifndef MU_APPSHELL_NOTATIONPAGESTATE_H
+#define MU_APPSHELL_NOTATIONPAGESTATE_H
 
 #include "modularity/ioc.h"
-#include "actions/iactionsdispatcher.h"
-#include "actions/actionable.h"
-#include "ui/imainwindow.h"
-#include "iapplicationactioncontroller.h"
-#include "languages/ilanguagesservice.h"
-#include "iinteractive.h"
+#include "async/asyncable.h"
+#include "inotationpagestate.h"
 #include "iappshellconfiguration.h"
 
 namespace mu::appshell {
-class ApplicationActionController : public IApplicationActionController, public actions::Actionable
+class NotationPageState : public INotationPageState, public async::Asyncable
 {
-    INJECT(appshell, actions::IActionsDispatcher, dispatcher)
-    INJECT(appshell, ui::IMainWindow, mainWindow)
-    INJECT(appshell, languages::ILanguagesService, languagesService)
-    INJECT(appshell, framework::IInteractive, interactive)
     INJECT(appshell, IAppShellConfiguration, configuration)
 
 public:
     void init();
 
-    ValCh<bool> isFullScreen() const override;
+    bool isPanelVisible(PanelType type) const override;
+    void setIsPanelVisible(PanelType type, bool visible) override;
+    mu::async::Channel<PanelType> panelVisibleChanged() const override;
 
 private:
-    void quit();
-    void toggleFullScreen();
-    void openAboutQtDialog();
-
-    void openOnlineHandbookPage();
-    void openAskForHelpPage();
-    void openBugReportPage();
-    void openLeaveFeedbackPage();
-
-    void revertToFactorySettings();
-
-    async::Channel<bool> m_fullScreenChannel;
+    mutable std::map<PanelType, bool> m_panelVisibleMap;
+    async::Channel<PanelType> m_panelVisibleChanged;
 };
 }
 
-#endif // MU_APPSHELL_APPLICATIONCONTROLLER_H
+#endif // MU_APPSHELL_NOTATIONPAGESTATE_H

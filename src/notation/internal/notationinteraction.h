@@ -139,6 +139,9 @@ public:
 
     void resetToDefault(ResettableValueType type) override;
 
+    ScoreConfig scoreConfig() const override;
+    void setScoreConfig(ScoreConfig config) override;
+
 private:
     Ms::Score* score() const;
 

@@ -30,8 +30,12 @@
 #include "uicomponents/uicomponentstypes.h"
 #include "context/iglobalcontext.h"
 #include "workspace/iworkspacemanager.h"
+#include "palette/ipaletteactionscontroller.h"
 #include "iappshellconfiguration.h"
 #include "userscores/iuserscoresservice.h"
+#include "iapplicationactioncontroller.h"
+#include "iinteractive.h"
+#include "inotationpagestate.h"
 
 namespace mu::appshell {
 class AppMenuModel : public QObject, public async::Asyncable
@@ -43,8 +47,12 @@ class AppMenuModel : public QObject, public async::Asyncable
     INJECT(appshell, shortcuts::IShortcutsRegister, shortcutsRegister)
     INJECT(appshell, context::IGlobalContext, globalContext)
     INJECT(appshell, workspace::IWorkspaceManager, workspacesManager)
+    INJECT(appshell, palette::IPaletteActionsController, paletteController)
     INJECT(appshell, IAppShellConfiguration, configuration)
     INJECT(appshell, userscores::IUserScoresService, userScoresService)
+    INJECT(appshell, IApplicationActionController, controller)
+    INJECT(appshell, framework::IInteractive, interactive)
+    INJECT(appshell, INotationPageState, notationPageState)
 
     Q_PROPERTY(QVariantList items READ items NOTIFY itemsChanged)
 
@@ -87,12 +95,13 @@ private:
     uicomponents::MenuItemList framesItems() const;
     uicomponents::MenuItemList textItems() const;
     uicomponents::MenuItemList linesItems() const;
+    uicomponents::MenuItemList toolbarsItems() const;
     uicomponents::MenuItemList workspacesItems() const;
 
     uicomponents::MenuItem makeMenu(const std::string& title, const uicomponents::MenuItemList& actions, bool enabled = true,
                                     const actions::ActionCode& menuActionCode = "");
-    uicomponents::MenuItem makeAction(const actions::ActionCode& actionCode, bool enabled = true, bool checked = false,
-                                      const std::string& section = "") const;
+    uicomponents::MenuItem makeAction(const actions::ActionCode& actionCode, bool enabled = true) const;
+    uicomponents::MenuItem makeAction(const actions::ActionCode& actionCode, bool enabled, bool checked) const;
     uicomponents::MenuItem makeSeparator() const;
 
     bool needSaveScore() const;
@@ -103,6 +112,9 @@ private:
     bool selectedRangeOnScore() const;
     bool hasSelectionOnScore() const;
     bool isNoteInputMode() const;
+    bool isNotationPage() const;
+
+    notation::ScoreConfig scoreConfig() const;
 
     uicomponents::MenuItemList m_items;
 };

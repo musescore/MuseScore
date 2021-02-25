@@ -21,12 +21,28 @@
 
 using namespace mu::palette;
 
+static std::string MASTER_PALETTE_URI = "musescore://palette/masterpalette";
+
 void PaletteActionsController::init()
 {
-    dispatcher()->reg(this, "masterpalette", this, &PaletteActionsController::openMasterPalette);
+    dispatcher()->reg(this, "masterpalette", this, &PaletteActionsController::toggleMasterPalette);
 }
 
-void PaletteActionsController::openMasterPalette()
+mu::ValCh<bool> PaletteActionsController::isMasterPaletteOpened() const
 {
-    interactive()->open("musescore://palette/masterpalette?sync=false");
+    ValCh<bool> result;
+    result.ch = m_masterPaletteOpenChannel;
+    result.val = interactive()->isOpened(MASTER_PALETTE_URI).val;
+    return result;
+}
+
+void PaletteActionsController::toggleMasterPalette()
+{
+    if (interactive()->isOpened(MASTER_PALETTE_URI).val) {
+        interactive()->close(MASTER_PALETTE_URI);
+    } else {
+        interactive()->open(MASTER_PALETTE_URI + "?sync=false");
+    }
+
+    m_masterPaletteOpenChannel.send(interactive()->isOpened(MASTER_PALETTE_URI).val);
 }

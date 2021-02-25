@@ -116,8 +116,11 @@ private:
     void openPartsDialog();
     void openTupletOtherDialog();
 
-    void toggleNavigator();
-    void toggleMixer();
+    void toggleShowingInvisibleElements();
+    void toggleShowingUnprintableElements();
+    void toggleShowingFrames();
+    void toggleShowingPageMargins();
+    void toggleMarkIrregularMeasures();
 
     bool isTextEditting() const;
 

@@ -19,6 +19,7 @@
 #define MU_PLAYBACK_IPLAYBACKCONFIGURATION_H
 
 #include "modularity/imoduleexport.h"
+#include "retval.h"
 #include "playbacktypes.h"
 
 namespace mu::playback {

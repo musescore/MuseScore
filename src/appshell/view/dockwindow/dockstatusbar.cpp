@@ -26,6 +26,12 @@ DockStatusBar::DockStatusBar(QQuickItem* parent)
     : DockView(parent)
 {
     setHeight(40);
+
+    connect(this, &DockStatusBar::visibleEdited, this, [this](bool visible) {
+        if (view() && view()->isVisible() != visible) {
+            view()->setVisible(visible);
+        }
+    });
 }
 
 DockStatusBar::~DockStatusBar()
@@ -35,6 +41,21 @@ DockStatusBar::~DockStatusBar()
 DockStatusBar::Widget DockStatusBar::widget() const
 {
     return m_widget;
+}
+
+bool DockStatusBar::visible() const
+{
+    return m_visible;
+}
+
+void DockStatusBar::setVisible(bool visible)
+{
+    if (m_visible == visible) {
+        return;
+    }
+
+    m_visible = visible;
+    emit visibleEdited(m_visible);
 }
 
 void DockStatusBar::onComponentCompleted()

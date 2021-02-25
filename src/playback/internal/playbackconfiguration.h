@@ -20,15 +20,10 @@
 #define MU_PLAYBACK_PLAYBACKCONFIGURATION_H
 
 #include "../iplaybackconfiguration.h"
-#include "notation/inotationconfiguration.h"
-
-#include "modularity/ioc.h"
 
 namespace mu::playback {
 class PlaybackConfiguration : public IPlaybackConfiguration
 {
-    INJECT(playback, notation::INotationConfiguration, notationConfiguration)
-
 public:
     void init();
 

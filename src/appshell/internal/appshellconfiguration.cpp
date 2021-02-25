@@ -21,6 +21,8 @@
 #include "config.h"
 #include "settings.h"
 
+static const std::string module_name("appshell");
+
 static const std::string ONLINE_HANDBOOK_URL("https://musescore.org/redirect/help?tag=handbook&locale=");
 static const std::string ASK_FOR_HELP_URL("https://musescore.org/redirect/post/question?locale=");
 static const std::string BUG_REPORT_URL("https://musescore.org/redirect/post/bug-report?locale=");
@@ -29,12 +31,33 @@ static const std::string LEAVE_FEEDBACK_URL("https://musescore.com/content/edito
 static const std::string UTM_MEDIUM_MENU("menu");
 static const std::string SYSTEM_LANGUAGE("system");
 
+static const Settings::Key NOTATION_NAVIGATOR_VISIBLE_KEY(module_name, "ui/application/startup/showNavigator");
+static const Settings::Key NOTATION_STATUSBAR_VISIBLE_KEY(module_name, "ui/application/showStatusBar");
+
 using namespace mu::appshell;
+using namespace mu::notation;
 using namespace mu::framework;
+
+void AppShellConfiguration::init()
+{
+    settings()->setDefaultValue(NOTATION_NAVIGATOR_VISIBLE_KEY, Val(false));
+    settings()->valueChanged(NOTATION_NAVIGATOR_VISIBLE_KEY).onReceive(nullptr, [this](const Val&) {
+        m_notationNavigatorVisibleChanged.send(isNotationNavigatorVisible().val);
+    });
+
+    settings()->setDefaultValue(NOTATION_STATUSBAR_VISIBLE_KEY, Val(true));
+    settings()->valueChanged(NOTATION_STATUSBAR_VISIBLE_KEY).onReceive(nullptr, [this](const Val&) {
+        m_notationStatusBarVisibleChanged.send(isNotationStatusBarVisible().val);
+    });
+    IWorkspaceSettings::Key workspaceKey{ workspace::WorkspaceTag::UiArrangement, NOTATION_STATUSBAR_VISIBLE_KEY.key };
+    workspaceSettings()->valueChanged(workspaceKey).onReceive(nullptr, [this](const Val&) {
+        m_notationStatusBarVisibleChanged.send(isNotationStatusBarVisible().val);
+    });
+}
 
 bool AppShellConfiguration::isAppUpdatable() const
 {
-#if defined(APP_UPDATABLE)
+#ifdef APP_UPDATABLE
     return true;
 #else
     return false;
@@ -73,6 +96,39 @@ std::string AppShellConfiguration::leaveFeedbackUrl() const
 mu::ValCh<QStringList> AppShellConfiguration::recentScoreList() const
 {
     return userScoresConfiguration()->recentScoreList();
+}
+
+mu::ValCh<bool> AppShellConfiguration::isNotationStatusBarVisible() const
+{
+    ValCh<bool> visible;
+    visible.ch = m_notationStatusBarVisibleChanged;
+    visible.val = settings()->value(NOTATION_STATUSBAR_VISIBLE_KEY).toBool();
+
+    return visible;
+}
+
+void AppShellConfiguration::setIsNotationStatusBarVisible(bool visible) const
+{
+    if (workspaceSettings()->isManage(workspace::WorkspaceTag::UiArrangement)) {
+        IWorkspaceSettings::Key workspaceKey{ workspace::WorkspaceTag::UiArrangement, NOTATION_STATUSBAR_VISIBLE_KEY.key };
+        workspaceSettings()->setValue(workspaceKey, Val(visible));
+    } else {
+        settings()->setValue(NOTATION_STATUSBAR_VISIBLE_KEY, Val(visible));
+    }
+}
+
+mu::ValCh<bool> AppShellConfiguration::isNotationNavigatorVisible() const
+{
+    ValCh<bool> visible;
+    visible.ch = m_notationNavigatorVisibleChanged;
+    visible.val = settings()->value(NOTATION_NAVIGATOR_VISIBLE_KEY).toBool();
+
+    return visible;
+}
+
+void AppShellConfiguration::setIsNotationNavigatorVisible(bool visible) const
+{
+    settings()->setValue(NOTATION_NAVIGATOR_VISIBLE_KEY, Val(visible));
 }
 
 void AppShellConfiguration::revertToFactorySettings(bool keepDefaultSettings) const

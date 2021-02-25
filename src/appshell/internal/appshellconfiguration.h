@@ -23,16 +23,22 @@
 #include "iappshellconfiguration.h"
 #include "userscores/iuserscoresconfiguration.h"
 #include "notation/inotationconfiguration.h"
+#include "playback/iplaybackconfiguration.h"
 #include "languages/ilanguagesconfiguration.h"
+#include "global/iworkspacesettings.h"
 
 namespace mu::appshell {
 class AppShellConfiguration : public IAppShellConfiguration
 {
     INJECT(appshell, userscores::IUserScoresConfiguration, userScoresConfiguration)
     INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
+    INJECT(appshell, playback::IPlaybackConfiguration, playbackConfiguration)
     INJECT(appshell, languages::ILanguagesConfiguration, languagesConfiguration)
+    INJECT(appshell, framework::IWorkspaceSettings, workspaceSettings)
 
 public:
+    void init();
+
     bool isAppUpdatable() const override;
 
     std::string handbookUrl() const override;
@@ -42,6 +48,11 @@ public:
 
     ValCh<QStringList> recentScoreList() const override;
 
+    ValCh<bool> isNotationStatusBarVisible() const override;
+    void setIsNotationStatusBarVisible(bool visible) const override;
+    ValCh<bool> isNotationNavigatorVisible() const override;
+    void setIsNotationNavigatorVisible(bool visible) const override;
+
     void revertToFactorySettings(bool keepDefaultSettings = false) const override;
 
 private:
@@ -49,6 +60,9 @@ private:
     std::string sha() const;
 
     std::string currentLanguageCode() const;
+
+    async::Channel<bool> m_notationStatusBarVisibleChanged;
+    async::Channel<bool> m_notationNavigatorVisibleChanged;
 };
 }
 

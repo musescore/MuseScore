@@ -19,6 +19,8 @@
 
 #include "dockpanel.h"
 
+#include "log.h"
+
 using namespace mu::dock;
 
 static const QString PANEL_QSS = QString("QDockWidget { border: 1 solid %2; color: transparent; }"
@@ -30,6 +32,16 @@ DockPanel::DockPanel(QQuickItem* parent)
     m_dock.panel = new QDockWidget();
     m_dock.panel->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     m_dock.panel->setFeatures(QDockWidget::DockWidgetMovable);
+
+    connect(this, &DockPanel::visibleEdited, this, [this](bool visible) {
+        if (m_dock.panel->isVisible() != visible) {
+            m_dock.panel->setVisible(visible);
+        }
+    });
+
+    connect(m_dock.panel, &QDockWidget::visibilityChanged, [this](bool) {
+        setVisible(m_dock.panel->isVisible());
+    });
 }
 
 DockPanel::~DockPanel()
@@ -145,6 +157,11 @@ void DockPanel::setFloatable(bool floatable)
 bool DockPanel::closable() const
 {
     return featureEnabled(QDockWidget::DockWidgetClosable);
+}
+
+bool DockPanel::visible() const
+{
+    return m_dock.panel ? m_dock.panel->isVisible() : false;
 }
 
 void DockPanel::setClosable(bool closable)
