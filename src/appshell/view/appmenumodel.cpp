@@ -331,7 +331,7 @@ MenuItem AppMenuModel::toolsItem()
         makeAction("slash-rhythm"),
         makeSeparator(),
         makeAction("pitch-spell"),
-        makeAction("reset-groupings"), // need implement
+        makeAction("reset-groupings"),
         makeAction("resequence-rehearsal-marks"), // need implement
         makeAction("unroll-repeats"), // need implement
         makeSeparator(),

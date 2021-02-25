@@ -215,6 +215,7 @@ void NotationActionController::init()
     dispatcher()->reg(this, "slash-fill", this, &NotationActionController::fillSelectionWithSlashes);
     dispatcher()->reg(this, "slash-rhythm", this, &NotationActionController::replaceSelectedNotesWithSlashes);
     dispatcher()->reg(this, "pitch-spell", this, &NotationActionController::spellPitches);
+    dispatcher()->reg(this, "reset-groupings", this, &NotationActionController::regroupNotesAndRests);
 
     for (int i = MIN_NOTES_INTERVAL; i <= MAX_NOTES_INTERVAL; ++i) {
         if (isNotesIntervalValid(i)) {
@@ -981,6 +982,16 @@ void NotationActionController::spellPitches()
     }
 
     interaction->spellPitches();
+}
+
+void NotationActionController::regroupNotesAndRests()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->regroupNotesAndRests();
 }
 
 void NotationActionController::addStretch(qreal value)
