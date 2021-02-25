@@ -19,27 +19,20 @@
 #include "commonscenemodule.h"
 
 #include <QtQml>
-#include "modularity/ioc.h"
 
 using namespace mu::commonscene;
+
+static void commonscene_init_qrc()
+{
+    Q_INIT_RESOURCE(commonscene);
+}
 
 std::string CommonSceneModule::moduleName() const
 {
     return "commonscene";
 }
 
-void CommonSceneModule::registerExports()
-{
-}
-
-void CommonSceneModule::resolveImports()
-{
-}
-
 void CommonSceneModule::registerResources()
 {
-}
-
-void CommonSceneModule::registerUiTypes()
-{
+    commonscene_init_qrc();
 }
