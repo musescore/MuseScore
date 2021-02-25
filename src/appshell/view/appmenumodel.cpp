@@ -337,7 +337,7 @@ MenuItem AppMenuModel::toolsItem()
         makeSeparator(),
         makeAction("copy-lyrics-to-clipboard"),
         makeAction("fotomode"), // need implement
-        makeAction("del-empty-measures"), // need implement
+        makeAction("del-empty-measures"),
     };
 
     return makeMenu(trc("appshell", "&Tools"), toolsItems, scoreOpened());

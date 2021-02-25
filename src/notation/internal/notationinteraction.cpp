@@ -2420,6 +2420,15 @@ void NotationInteraction::removeSelectedRange()
     notifyAboutNotationChanged();
 }
 
+void NotationInteraction::removeEmptyTrailingMeasures()
+{
+    startEdit();
+    score()->cmdRemoveEmptyTrailingMeasures();
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
 void NotationInteraction::fillSelectionWithSlashes()
 {
     if (selection()->isNone()) {

@@ -126,6 +126,7 @@ public:
 
     virtual void realizeSelectedChordSymbols() = 0;
     virtual void removeSelectedRange() = 0;
+    virtual void removeEmptyTrailingMeasures() = 0;
 
     virtual void fillSelectionWithSlashes() = 0;
     virtual void replaceSelectedNotesWithSlashes() = 0;

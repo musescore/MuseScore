@@ -212,6 +212,7 @@ void NotationActionController::init()
     dispatcher()->reg(this, "implode", this, &NotationActionController::implodeSelectedStaff);
     dispatcher()->reg(this, "realize-chord-symbols", this, &NotationActionController::realizeSelectedChordSymbols);
     dispatcher()->reg(this, "time-delete", this, &NotationActionController::removeSelectedRange);
+    dispatcher()->reg(this, "del-empty-measures", this, &NotationActionController::removeEmptyTrailingMeasures);
     dispatcher()->reg(this, "slash-fill", this, &NotationActionController::fillSelectionWithSlashes);
     dispatcher()->reg(this, "slash-rhythm", this, &NotationActionController::replaceSelectedNotesWithSlashes);
     dispatcher()->reg(this, "pitch-spell", this, &NotationActionController::spellPitches);
@@ -955,6 +956,16 @@ void NotationActionController::removeSelectedRange()
     }
 
     interaction->removeSelectedRange();
+}
+
+void NotationActionController::removeEmptyTrailingMeasures()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->removeEmptyTrailingMeasures();
 }
 
 void NotationActionController::fillSelectionWithSlashes()
