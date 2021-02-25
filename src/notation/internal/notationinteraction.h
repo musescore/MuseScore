@@ -140,6 +140,7 @@ public:
     void explodeSelectedStaff() override;
     void implodeSelectedStaff() override;
     void realizeSelectedChordSymbols() override;
+    void removeSelectedRange() override;
 
     void resetToDefault(ResettableValueType type) override;
 

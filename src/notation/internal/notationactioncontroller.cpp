@@ -211,6 +211,7 @@ void NotationActionController::init()
     dispatcher()->reg(this, "explode", this, &NotationActionController::explodeSelectedStaff);
     dispatcher()->reg(this, "implode", this, &NotationActionController::implodeSelectedStaff);
     dispatcher()->reg(this, "realize-chord-symbols", this, &NotationActionController::realizeSelectedChordSymbols);
+    dispatcher()->reg(this, "time-delete", this, &NotationActionController::removeSelectedRange);
 
     for (int i = MIN_NOTES_INTERVAL; i <= MAX_NOTES_INTERVAL; ++i) {
         if (isNotesIntervalValid(i)) {
@@ -937,6 +938,16 @@ void NotationActionController::realizeSelectedChordSymbols()
     }
 
     interaction->realizeSelectedChordSymbols();
+}
+
+void NotationActionController::removeSelectedRange()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->removeSelectedRange();
 }
 
 void NotationActionController::addStretch(qreal value)

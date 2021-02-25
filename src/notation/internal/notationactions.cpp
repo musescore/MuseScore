@@ -194,6 +194,11 @@ const ActionList NotationActions::m_actions = {
                QT_TRANSLATE_NOOP("action", "Realize Chord Symbols"),
                QT_TRANSLATE_NOOP("action", "Convert chord symbols into notes")
                ),
+    ActionItem("time-delete",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Remove Selected Range"),
+               QT_TRANSLATE_NOOP("action", "Remove selected range")
+               ),
     ActionItem("parts",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Parts"),
