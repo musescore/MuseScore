@@ -821,6 +821,8 @@ static void addLyrics(MxmlLogger* logger, const QXmlStreamReader* const xmlreade
 
 static void addElemOffset(Element* el, int track, const QString& placement, Measure* measure, const Fraction& tick)
       {
+      if (!measure)
+          return;
       /*
        qDebug("addElem el %p track %d placement %s tick %d",
        el, track, qPrintable(placement), tick);
@@ -1973,6 +1975,7 @@ void MusicXMLParserPass2::measure(const QString& partId,
       if (!measure) {
             _logger->logError(QString("measure at tick %1 not found!").arg(time.ticks()), &_e);
             skipLogCurrElem();
+            return;
             }
 
       // handle implicit measure
