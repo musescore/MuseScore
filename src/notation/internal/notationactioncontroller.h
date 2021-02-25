@@ -110,6 +110,7 @@ private:
     void replaceSelectedNotesWithSlashes();
     void spellPitches();
     void regroupNotesAndRests();
+    void resequenceRehearsalMarks();
 
     void resetState();
     void resetStretch();
