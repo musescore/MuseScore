@@ -2449,6 +2449,15 @@ void NotationInteraction::spellPitches()
     notifyAboutNotationChanged();
 }
 
+void NotationInteraction::regroupNotesAndRests()
+{
+    startEdit();
+    score()->cmdResetNoteAndRestGroupings();
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
 void NotationInteraction::resetToDefault(ResettableValueType type)
 {
     switch (type) {

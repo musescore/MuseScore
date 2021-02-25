@@ -146,7 +146,8 @@ public:
     void fillSelectionWithSlashes() override;
     void replaceSelectedNotesWithSlashes() override;
 
-    void spellPitches();
+    void spellPitches() override;
+    void regroupNotesAndRests() override;
 
     void resetToDefault(ResettableValueType type) override;
 

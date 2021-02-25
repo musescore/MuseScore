@@ -214,6 +214,11 @@ const ActionList NotationActions::m_actions = {
                QT_TRANSLATE_NOOP("action", "Respell Pitches"),
                QT_TRANSLATE_NOOP("action", "Respell pitches")
                ),
+    ActionItem("reset-groupings",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Regroup Rhythms"),
+               QT_TRANSLATE_NOOP("action", "Combine rests and tied notes from selection and resplit at rhythmical")
+               ),
     ActionItem("parts",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Parts"),

@@ -130,6 +130,7 @@ public:
     virtual void replaceSelectedNotesWithSlashes() = 0;
 
     virtual void spellPitches() = 0;
+    virtual void regroupNotesAndRests() = 0;
 
     virtual void resetToDefault(ResettableValueType type) = 0;
 
