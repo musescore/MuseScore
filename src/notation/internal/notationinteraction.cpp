@@ -2401,6 +2401,19 @@ void NotationInteraction::realizeSelectedChordSymbols()
     notifyAboutNotationChanged();
 }
 
+void NotationInteraction::removeSelectedRange()
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    startEdit();
+    score()->cmdTimeDelete();
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
 void NotationInteraction::resetToDefault(ResettableValueType type)
 {
     switch (type) {

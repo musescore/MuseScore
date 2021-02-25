@@ -325,7 +325,7 @@ MenuItem AppMenuModel::toolsItem()
         makeAction("realize-chord-symbols"),
         makeMenu(trc("appshell", "&Voices"), voicesItems),
         makeMenu(trc("appshell", "&Measures"), measuresItems),
-        makeAction("time-delete"), // need implement
+        makeAction("time-delete"),
         makeSeparator(),
         makeAction("slash-fill"), // need implement
         makeAction("slash-rhythm"), // need implement
