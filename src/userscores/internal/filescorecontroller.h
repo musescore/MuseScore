@@ -40,6 +40,8 @@ public:
     void init();
 
 private:
+    notation::IMasterNotationPtr currentMasterNotation() const;
+
     void openScore(const actions::ActionData& args);
     void importScore();
     void newScore();

@@ -46,6 +46,11 @@ void FileScoreController::init()
     dispatcher()->reg(this, "clear-recent", this, &FileScoreController::clearRecentScores);
 }
 
+IMasterNotationPtr FileScoreController::currentMasterNotation() const
+{
+    return globalContext()->currentMasterNotation();
+}
+
 void FileScoreController::openScore(const actions::ActionData& args)
 {
     io::path scorePath = args.count() > 0 ? args.arg<io::path>(0) : "";
@@ -105,7 +110,7 @@ void FileScoreController::newScore()
 
 void FileScoreController::saveScore()
 {
-    if (!globalContext()->currentMasterNotation()->created().val) {
+    if (!currentMasterNotation()->created().val) {
         doSaveScore();
         return;
     }
@@ -154,9 +159,9 @@ void FileScoreController::saveSelection()
         return;
     }
 
-    Ret save = globalContext()->currentMasterNotation()->save(selectedFilePath, SaveMode::SaveSelection);
-    if (!save) {
-        LOGE() << save.toString();
+    Ret ret = currentMasterNotation()->save(selectedFilePath, SaveMode::SaveSelection);
+    if (!ret) {
+        LOGE() << ret.toString();
     }
 }
 
@@ -213,22 +218,24 @@ void FileScoreController::doOpenScore(const io::path& filePath)
 
 void FileScoreController::doSaveScore(const io::path& filePath, SaveMode saveMode)
 {
-    io::path oldPath = globalContext()->currentMasterNotation()->metaInfo().filePath;
+    io::path oldPath = currentMasterNotation()->metaInfo().filePath;
 
-    Ret save = globalContext()->currentMasterNotation()->save(filePath, saveMode);
-    if (!save) {
-        LOGE() << save.toString();
+    Ret ret = currentMasterNotation()->save(filePath, saveMode);
+    if (!ret) {
+        LOGE() << ret.toString();
         return;
     }
 
     if (saveMode == SaveMode::SaveAs && oldPath != filePath) {
         globalContext()->currentMasterNotationChanged().notify();
     }
+
+    prependToRecentScoreList(filePath);
 }
 
 io::path FileScoreController::defaultSavingFilePath() const
 {
-    Meta scoreMetaInfo = globalContext()->currentMasterNotation()->metaInfo();
+    Meta scoreMetaInfo = currentMasterNotation()->metaInfo();
 
     io::path fileName = scoreMetaInfo.title;
     if (fileName.empty()) {
@@ -240,6 +247,10 @@ io::path FileScoreController::defaultSavingFilePath() const
 
 void FileScoreController::prependToRecentScoreList(const io::path& filePath)
 {
+    if (filePath.empty()) {
+        return;
+    }
+
     io::paths recentScorePaths = configuration()->recentScorePaths().val;
 
     auto it = std::find(recentScorePaths.begin(), recentScorePaths.end(), filePath);
