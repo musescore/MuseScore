@@ -179,6 +179,66 @@ const ActionList NotationActions::m_actions = {
                QT_TRANSLATE_NOOP("action", "&Transpose…"),
                QT_TRANSLATE_NOOP("action", "Transpose")
                ),
+    ActionItem("explode",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Explode"),
+               QT_TRANSLATE_NOOP("action", "Explode contents of top selected staff into staves below")
+               ),
+    ActionItem("implode",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Implode"),
+               QT_TRANSLATE_NOOP("action", "Implode contents of selected staves into top selected staff")
+               ),
+    ActionItem("realize-chord-symbols",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Realize Chord Symbols"),
+               QT_TRANSLATE_NOOP("action", "Convert chord symbols into notes")
+               ),
+    ActionItem("time-delete",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Remove Selected Range"),
+               QT_TRANSLATE_NOOP("action", "Remove selected range")
+               ),
+    ActionItem("slash-fill",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Fill With Slashes"),
+               QT_TRANSLATE_NOOP("action", "Fill with slashes")
+               ),
+    ActionItem("slash-rhythm",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Toggle Rhythmic Slash Notation"),
+               QT_TRANSLATE_NOOP("action", "Toggle 'Rhythmic Slash Notation'")
+               ),
+    ActionItem("pitch-spell",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Respell Pitches"),
+               QT_TRANSLATE_NOOP("action", "Respell pitches")
+               ),
+    ActionItem("reset-groupings",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Regroup Rhythms"),
+               QT_TRANSLATE_NOOP("action", "Combine rests and tied notes from selection and resplit at rhythmical")
+               ),
+    ActionItem("resequence-rehearsal-marks",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Resequence Rehearsal Marks"),
+               QT_TRANSLATE_NOOP("action", "Resequence rehearsal marks")
+               ),
+    ActionItem("unroll-repeats",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Unroll Repeats"),
+               QT_TRANSLATE_NOOP("action", "Unroll Repeats")
+               ),
+    ActionItem("copy-lyrics-to-clipboard",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Copy Lyrics to Clipboard"),
+               QT_TRANSLATE_NOOP("action", "Copy lyrics to clipboard")
+               ),
+    ActionItem("del-empty-measures",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Remove Empty Trailing Measures"),
+               QT_TRANSLATE_NOOP("action", "Remove empty trailing measures")
+               ),
     ActionItem("parts",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Parts"),

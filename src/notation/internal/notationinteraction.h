@@ -113,6 +113,7 @@ public:
     void addBoxes(BoxType boxType, int count, int beforeBoxIndex = -1) override;
 
     void copySelection() override;
+    void copyLyrics() override;
     void pasteSelection(const Fraction& scale = Fraction(1, 1)) override;
     void swapSelection() override;
     void deleteSelection() override;
@@ -136,6 +137,21 @@ public:
     void addFiguredBass() override;
 
     void addStretch(qreal value) override;
+
+    void explodeSelectedStaff() override;
+    void implodeSelectedStaff() override;
+
+    void realizeSelectedChordSymbols() override;
+    void removeSelectedRange() override;
+    void removeEmptyTrailingMeasures() override;
+
+    void fillSelectionWithSlashes() override;
+    void replaceSelectedNotesWithSlashes() override;
+
+    void spellPitches() override;
+    void regroupNotesAndRests() override;
+    void resequenceRehearsalMarks() override;
+    void unrollRepeats() override;
 
     void resetToDefault(ResettableValueType type) override;
 
