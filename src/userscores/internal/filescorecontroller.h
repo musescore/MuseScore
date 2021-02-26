@@ -19,6 +19,7 @@
 #ifndef MU_USERSCORES_FILESCORECONTROLLER_H
 #define MU_USERSCORES_FILESCORECONTROLLER_H
 
+#include "../ifilescorecontroller.h"
 #include "iuserscoresconfiguration.h"
 #include "modularity/ioc.h"
 #include "iinteractive.h"
@@ -28,7 +29,7 @@
 #include "context/iglobalcontext.h"
 
 namespace mu::userscores {
-class FileScoreController : public actions::Actionable
+class FileScoreController : public IFileScoreController, public actions::Actionable
 {
     INJECT(scores, actions::IActionsDispatcher, dispatcher)
     INJECT(scores, framework::IInteractive, interactive)
@@ -38,6 +39,8 @@ class FileScoreController : public actions::Actionable
 
 public:
     void init();
+
+    Ret openScore(const io::path& scorePath) override;
 
 private:
     notation::IMasterNotationPtr currentMasterNotation() const;
@@ -57,7 +60,7 @@ private:
 
     io::path selectScoreOpenningFile(const QStringList& filter);
     io::path selectScoreSavingFile(const io::path& defaultFilePath, const QString& saveTitle);
-    void doOpenScore(const io::path& filePath);
+    Ret doOpenScore(const io::path& filePath);
     void doSaveScore(const io::path& filePath = io::path(), notation::SaveMode saveMode = notation::SaveMode::Unknown);
 
     io::path defaultSavingFilePath() const;
