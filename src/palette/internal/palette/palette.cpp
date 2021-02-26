@@ -1061,7 +1061,7 @@ bool Palette::event(QEvent* ev)
     int vgridM = gridHeightM();
     // disable mouse hover when keyboard navigation is enabled
     if (m_filterActive && (ev->type() == QEvent::MouseMove || ev->type() == QEvent::ToolTip
-                         || ev->type() == QEvent::WindowDeactivate)) {
+                           || ev->type() == QEvent::WindowDeactivate)) {
         return true;
     } else if (columns() && (ev->type() == QEvent::ToolTip)) {
         int rightBorder = width() % hgridM;

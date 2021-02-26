@@ -104,7 +104,7 @@ io::path UserScoresConfiguration::scoresPath() const
     return settings()->value(USER_SCORES_PATH).toString();
 }
 
-io::path UserScoresConfiguration::defaultSavingFilePath(const std::string& fileName) const
+io::path UserScoresConfiguration::defaultSavingFilePath(const io::path& fileName) const
 {
     return scoresPath() + "/" + fileName + DEFAULT_FILE_SUFFIX;
 }

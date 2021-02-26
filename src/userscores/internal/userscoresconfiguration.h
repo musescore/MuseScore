@@ -43,7 +43,7 @@ public:
 
     io::paths templatesDirPaths() const override;
     io::path scoresPath() const override;
-    io::path defaultSavingFilePath(const std::string& fileName) const override;
+    io::path defaultSavingFilePath(const io::path& fileName) const override;
 
     QColor templatePreviewBackgroundColor() const override;
     async::Channel<QColor> templatePreviewBackgroundColorChanged() const override;

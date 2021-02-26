@@ -230,12 +230,12 @@ io::path FileScoreController::defaultSavingFilePath() const
 {
     Meta scoreMetaInfo = globalContext()->currentMasterNotation()->metaInfo();
 
-    QString fileName = scoreMetaInfo.title;
-    if (fileName.isEmpty()) {
+    io::path fileName = scoreMetaInfo.title;
+    if (fileName.empty()) {
         fileName = scoreMetaInfo.fileName;
     }
 
-    return configuration()->defaultSavingFilePath(fileName.toStdString());
+    return configuration()->defaultSavingFilePath(fileName);
 }
 
 void FileScoreController::prependToRecentScoreList(const io::path& filePath)

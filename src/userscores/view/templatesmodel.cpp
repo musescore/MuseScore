@@ -45,7 +45,7 @@ QString TemplatesModel::currentTemplatePath() const
         return QString();
     }
 
-    return m_visibleTemplates[m_currentTemplateIndex].filePath;
+    return m_visibleTemplates[m_currentTemplateIndex].filePath.toQString();
 }
 
 QStringList TemplatesModel::templatesTitles() const

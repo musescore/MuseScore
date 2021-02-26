@@ -48,11 +48,12 @@ protected:
         m_repository->setfileSystem(m_fileSystem);
     }
 
-    Meta createMeta(const QString& title) const
+    Meta createMeta(const io::path& path) const
     {
         Meta meta;
 
-        meta.title = title;
+        meta.title = path.toQString();
+        meta.filePath = path;
         meta.creationDate = QDate::currentDate();
 
         return meta;
@@ -64,8 +65,7 @@ protected:
     std::shared_ptr<FileSystemMock> m_fileSystem;
 };
 
-namespace mu {
-namespace userscores {
+namespace mu::userscores {
 bool operator==(const Template& templ1, const Template& templ2)
 {
     bool equals = true;
@@ -75,7 +75,6 @@ bool operator==(const Template& templ1, const Template& templ2)
     equals &= (templ1.creationDate == templ2.creationDate);
 
     return equals;
-}
 }
 }
 
@@ -112,8 +111,8 @@ TEST_F(TemplatesRepositoryTest, Templates)
     for (const io::path& path: allPathsToMsczFiles) {
         Meta meta = createMeta(path.toQString());
 
-        ON_CALL(*m_msczReader, readMeta(path))
-        .WillByDefault(Return(RetVal<Meta>::make_ok(meta)));
+        ON_CALL(*m_msczReader, readMetaList(io::paths { path }))
+        .WillByDefault(Return(MetaList { meta }));
 
         Template templ(meta);
         templ.categoryTitle = io::dirname(path).toQString();
