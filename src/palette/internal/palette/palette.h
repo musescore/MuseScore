@@ -68,7 +68,7 @@ class Palette : public QWidget
 
     INJECT_STATIC(palette, mu::palette::IPaletteAdapter, adapter)
     INJECT_STATIC(palette, mu::palette::IPaletteConfiguration, configuration)
-    INJECT(palette, mu::framework::IInteractive, interactive)  
+    INJECT(palette, mu::framework::IInteractive, interactive)
 
 signals:
     void boxClicked(int);

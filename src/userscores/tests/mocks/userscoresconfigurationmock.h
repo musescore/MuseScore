@@ -27,12 +27,12 @@ namespace mu::userscores {
 class UserScoresConfigurationMock : public IUserScoresConfiguration
 {
 public:
-    MOCK_METHOD(ValCh<QStringList>, recentScoreList, (), (const, override));
-    MOCK_METHOD(void, setRecentScoreList, (const QStringList&), (override));
+    MOCK_METHOD(ValCh<io::paths>, recentScorePaths, (), (const, override));
+    MOCK_METHOD(void, setRecentScorePaths, (const io::paths&), (override));
 
     MOCK_METHOD(io::paths, templatesDirPaths, (), (const, override));
     MOCK_METHOD(io::path, scoresPath, (), (const, override));
-    MOCK_METHOD(io::path, defaultSavingFilePath, (const std::string&), (const, override));
+    MOCK_METHOD(io::path, defaultSavingFilePath, (const io::path&), (const, override));
 
     MOCK_METHOD(QColor, templatePreviewBackgroundColor, (), (const, override));
     MOCK_METHOD(async::Channel<QColor>, templatePreviewBackgroundColorChanged, (), (const, override));

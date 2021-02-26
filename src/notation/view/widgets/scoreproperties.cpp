@@ -66,7 +66,7 @@ ScorePropertiesDialog::ScorePropertiesDialog(QWidget* parent)
         revision->setText(QString::number(rev, 10));
     }
 
-    filePath->setText(meta.filePath);
+    filePath->setText(meta.filePath.toQString());
     filePath->setTextInteractionFlags(Qt::TextSelectableByMouse);
 
     initTags();

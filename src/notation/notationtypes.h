@@ -188,8 +188,8 @@ enum class NoteFilter
 
 struct Meta
 {
-    QString fileName;
-    QString filePath;
+    io::path fileName;
+    io::path filePath;
     QString title;
     QString subtitle;
     QString composer;
