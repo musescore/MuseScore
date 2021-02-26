@@ -36,13 +36,16 @@ public:
 
     // Pdf
     virtual int exportPdfDpiResolution() const = 0;
+    virtual void setExportPdfDpiResolution(int dpi) = 0;
 
     // Png
     virtual float exportPngDpiResolution() const = 0;
-    virtual bool exportPngWithTransparentBackground() const = 0;
 
     //! NOTE Maybe set from command line
     virtual void setExportPngDpiResolution(std::optional<float> dpi) = 0;
+
+    virtual bool exportPngWithTransparentBackground() const = 0;
+    virtual void setExportPngWithTransparentBackground(bool transparent) = 0;
 };
 }
 

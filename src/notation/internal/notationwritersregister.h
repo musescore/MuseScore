@@ -32,6 +32,8 @@ public:
     void reg(const std::vector<std::string>& suffixes, INotationWriterPtr writer) override;
     INotationWriterPtr writer(const std::string& suffix) const override;
 
+    std::vector<std::string> registeredSuffixes() const override;
+
 private:
     std::map<std::string, INotationWriterPtr> m_writers;
 };
