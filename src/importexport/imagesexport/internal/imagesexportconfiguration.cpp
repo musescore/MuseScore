@@ -44,6 +44,11 @@ int ImagesExportConfiguration::exportPdfDpiResolution() const
     return settings()->value(EXPORT_PDF_DPI_RESOLUTION_KEY).toInt();
 }
 
+void ImagesExportConfiguration::setExportPdfDpiResolution(int dpi)
+{
+    settings()->setValue(EXPORT_PDF_DPI_RESOLUTION_KEY, Val(dpi));
+}
+
 void ImagesExportConfiguration::setExportPngDpiResolution(std::optional<float> dpi)
 {
     m_customExportPngDpi = dpi;
@@ -61,4 +66,9 @@ float ImagesExportConfiguration::exportPngDpiResolution() const
 bool ImagesExportConfiguration::exportPngWithTransparentBackground() const
 {
     return settings()->value(EXPORT_PNG_USE_TRASNPARENCY_KEY).toBool();
+}
+
+void ImagesExportConfiguration::setExportPngWithTransparentBackground(bool transparent)
+{
+    settings()->setValue(EXPORT_PNG_USE_TRASNPARENCY_KEY, Val(transparent));
 }

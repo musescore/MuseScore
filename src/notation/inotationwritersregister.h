@@ -36,6 +36,8 @@ public:
 
     virtual void reg(const std::vector<std::string>& suffixes, INotationWriterPtr writer) = 0;
     virtual INotationWriterPtr writer(const std::string& suffix) const = 0;
+
+    virtual std::vector<std::string> registeredSuffixes() const = 0;
 };
 }
 

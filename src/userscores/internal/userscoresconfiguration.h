@@ -40,6 +40,7 @@ class UserScoresConfiguration : public IUserScoresConfiguration
 
 public:
     static const QString DEFAULT_FILE_SUFFIX;
+    static const QString DEFAULT_EXPORT_SUFFIX;
 
     void init();
 
@@ -57,6 +58,9 @@ public:
     void setScoresPath(const io::path& path) override;
 
     io::path defaultSavingFilePath(const io::path& fileName) const override;
+    io::path defaultExportPath(const std::string& fileName) const override;
+    io::path completeExportPath(io::path basePath, notation::INotationPtr notation, bool isMain, bool singlePage,
+                                int pageNumber) const override;
 
     QColor templatePreviewBackgroundColor() const override;
     async::Notification templatePreviewBackgroundChanged() const override;
