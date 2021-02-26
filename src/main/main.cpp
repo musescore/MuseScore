@@ -129,6 +129,8 @@
 #include "stubs/languages/languagesstubmodule.h"
 #endif
 
+#include "autobot/autobotmodule.h"
+
 #else
 #include "wasmtest/wasmtestmodule.h"
 #endif
@@ -254,6 +256,8 @@ int main(int argc, char** argv)
 #else
     app.addModule(new mu::languages::LanguagesStubModule());
 #endif
+
+    app.addModule(new mu::autobot::AutobotModule());
 
 #else
     app.addModule(new mu::wasmtest::WasmTestModule());

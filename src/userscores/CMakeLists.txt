@@ -28,6 +28,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/userscoresmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iuserscoresconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/iuserscoresservice.h
+    ${CMAKE_CURRENT_LIST_DIR}/ifilescorecontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/userscorestypes.h
     ${CMAKE_CURRENT_LIST_DIR}/view/recentscoresmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/recentscoresmodel.h

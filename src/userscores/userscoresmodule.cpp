@@ -61,6 +61,7 @@ void UserScoresModule::registerExports()
     ioc()->registerExport<IUserScoresConfiguration>(moduleName(), s_userScoresConfiguration);
     ioc()->registerExport<IUserScoresService>(moduleName(), s_userScoresService);
     ioc()->registerExport<ITemplatesRepository>(moduleName(), new TemplatesRepository());
+    ioc()->registerExport<IFileScoreController>(moduleName(), s_fileController);
 }
 
 void UserScoresModule::resolveImports()

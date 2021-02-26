@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/MuseScore/Autobot/qmldir</file>
+        <file>qml/MuseScore/Autobot/Autobot.qml</file>
+    </qresource>
+</RCC>

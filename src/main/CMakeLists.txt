@@ -176,6 +176,7 @@ if (NOT CC_IS_EMSCRIPTEN)
     list(APPEND LINK_LIB iex_audioexport)
     list(APPEND LINK_LIB iex_imagesexport)
     list(APPEND LINK_LIB plugins)
+    list(APPEND LINK_LIB autobot)
 endif()
 
 if (BUILD_VST)
