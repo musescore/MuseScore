@@ -65,6 +65,8 @@ if (BUILD_INSPECTOR_MODULE)
     add_subdirectory(inspector)
 endif (BUILD_INSPECTOR_MODULE)
 
+add_subdirectory(autobot)
+
 # Stubs
 add_subdirectory(stubs)
 

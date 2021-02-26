@@ -24,5 +24,6 @@
         <file>view/dockwindow/resources/toolbar_grip_light_vertical.svg</file>
         <file>view/dockwindow/resources/toolbar_grip_dark_horizontal.svg</file>
         <file>view/dockwindow/resources/toolbar_grip_dark_vertical.svg</file>
+        <file>qml/DevTools/Autobot/AutobotPanel.qml</file>
     </qresource>
 </RCC>

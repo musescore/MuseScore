@@ -51,6 +51,11 @@ IMasterNotationPtr FileScoreController::currentMasterNotation() const
     return globalContext()->currentMasterNotation();
 }
 
+Ret FileScoreController::openScore(const io::path& scorePath)
+{
+    return doOpenScore(scorePath);
+}
+
 void FileScoreController::openScore(const actions::ActionData& args)
 {
     io::path scorePath = args.count() > 0 ? args.arg<io::path>(0) : "";
@@ -189,20 +194,20 @@ io::path FileScoreController::selectScoreSavingFile(const io::path& defaultFileP
     return filePath;
 }
 
-void FileScoreController::doOpenScore(const io::path& filePath)
+Ret FileScoreController::doOpenScore(const io::path& filePath)
 {
     TRACEFUNC;
 
     auto notation = notationCreator()->newMasterNotation();
     IF_ASSERT_FAILED(notation) {
-        return;
+        return make_ret(Ret::Code::InternalError);
     }
 
     Ret ret = notation->load(filePath);
     if (!ret) {
         LOGE() << "failed load: " << filePath << ", ret: " << ret.toString();
         //! TODO Show dialog about error
-        return;
+        return make_ret(Ret::Code::InternalError);
     }
 
     if (!globalContext()->containsMasterNotation(filePath)) {
@@ -214,6 +219,8 @@ void FileScoreController::doOpenScore(const io::path& filePath)
     prependToRecentScoreList(filePath);
 
     interactive()->open("musescore://notation");
+
+    return make_ret(Ret::Code::Ok);
 }
 
 void FileScoreController::doSaveScore(const io::path& filePath, SaveMode saveMode)
