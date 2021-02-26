@@ -39,8 +39,6 @@ public:
 private:
     void updateRecentScoreList();
 
-    notation::MetaList readMetaList(const QStringList& scoresPathList) const;
-
     ValCh<notation::MetaList> m_recentScoreList;
 };
 }

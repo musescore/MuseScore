@@ -28,7 +28,7 @@ using namespace mu::notation;
 
 static const std::string module_name("userscores");
 
-static const Settings::Key RECENT_LIST(module_name, "userscores/recentList");
+static const Settings::Key RECENT_SCORE_PATHS(module_name, "userscores/recentList");
 static const Settings::Key USER_TEMPLATES_PATH(module_name, "application/paths/myTemplates");
 static const Settings::Key USER_SCORES_PATH(module_name, "application/paths/myScores");
 static const Settings::Key PREFERRED_SCORE_CREATION_MODE_KEY(module_name, "userscores/preferedScoreCreationMode");
@@ -38,40 +38,52 @@ const QString UserScoresConfiguration::DEFAULT_FILE_SUFFIX(".mscz");
 void UserScoresConfiguration::init()
 {
     settings()->setDefaultValue(USER_SCORES_PATH, Val(globalConfiguration()->sharePath().toStdString() + "Scores"));
-    settings()->valueChanged(RECENT_LIST).onReceive(nullptr, [this](const Val& val) {
-        LOGD() << "RECENT_LIST changed: " << val.toString();
-
-        QStringList recentList = parseRecentList(val.toString());
-        m_recentListChanged.send(recentList);
+    settings()->valueChanged(RECENT_SCORE_PATHS).onReceive(nullptr, [this](const Val& val) {
+        io::paths paths = parsePaths(val);
+        m_recentScorePathsChanged.send(paths);
     });
 
     Val preferredScoreCreationMode = Val(static_cast<int>(PreferredScoreCreationMode::FromInstruments));
     settings()->setDefaultValue(PREFERRED_SCORE_CREATION_MODE_KEY, preferredScoreCreationMode);
 }
 
-ValCh<QStringList> UserScoresConfiguration::recentScoreList() const
+ValCh<io::paths> UserScoresConfiguration::recentScorePaths() const
 {
     TRACEFUNC;
-    ValCh<QStringList> result;
-    result.ch = m_recentListChanged;
-    result.val = parseRecentList(settings()->value(RECENT_LIST).toString());
+
+    ValCh<io::paths> result;
+    result.ch = m_recentScorePathsChanged;
+    result.val = parsePaths(settings()->value(RECENT_SCORE_PATHS));
 
     return result;
 }
 
-void UserScoresConfiguration::setRecentScoreList(const QStringList& recentList)
+void UserScoresConfiguration::setRecentScorePaths(const io::paths& recentScorePaths)
 {
-    Val value(recentList.join(",").toStdString());
-    settings()->setValue(RECENT_LIST, value);
-}
+    QStringList paths;
 
-QStringList UserScoresConfiguration::parseRecentList(const std::string& recents) const
-{
-    if (recents.empty()) {
-        return QStringList();
+    for (const io::path& path : recentScorePaths) {
+        paths << path.toQString();
     }
 
-    return QString::fromStdString(recents).split(",");
+    Val value(paths.join(",").toStdString());
+    settings()->setValue(RECENT_SCORE_PATHS, value);
+}
+
+io::paths UserScoresConfiguration::parsePaths(const Val& value) const
+{
+    if (value.isNull()) {
+        return io::paths();
+    }
+
+    QStringList paths = value.toQString().split(",");
+    io::paths result;
+
+    for (const QString& path : paths) {
+        result.push_back(path);
+    }
+
+    return result;
 }
 
 io::paths UserScoresConfiguration::templatesDirPaths() const

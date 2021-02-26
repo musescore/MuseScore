@@ -60,7 +60,7 @@ private:
 
     io::path defaultSavingFilePath() const;
 
-    void prependToRecentScoreList(io::path filePath);
+    void prependToRecentScoreList(const io::path& filePath);
 };
 }
 

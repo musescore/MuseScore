@@ -50,17 +50,11 @@ RetVal<Templates> TemplatesRepository::templates() const
 Templates TemplatesRepository::loadTemplates(const io::paths& filePaths) const
 {
     Templates result;
+    MetaList metaList = msczReader()->readMetaList(filePaths);
 
-    for (const io::path& pathToFile: filePaths) {
-        RetVal<Meta> meta = msczReader()->readMeta(pathToFile);
-
-        if (!meta.ret) {
-            LOGE() << meta.ret.toString();
-            continue;
-        }
-
-        Template templ(meta.val);
-        templ.categoryTitle = correctedTitle(io::dirname(pathToFile).toQString());
+    for (const Meta& meta: metaList) {
+        Template templ(meta);
+        templ.categoryTitle = correctedTitle(io::dirname(meta.filePath).toQString());
 
         result << templ;
     }

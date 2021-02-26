@@ -46,7 +46,7 @@ public:
     std::string bugReportUrl() const override;
     std::string leaveFeedbackUrl() const override;
 
-    ValCh<QStringList> recentScoreList() const override;
+    ValCh<io::paths> recentScorePaths() const override;
 
     ValCh<bool> isNotationStatusBarVisible() const override;
     void setIsNotationStatusBarVisible(bool visible) const override;
