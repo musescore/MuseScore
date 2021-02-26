@@ -45,6 +45,23 @@ void UserScoresConfiguration::init()
 
     Val preferredScoreCreationMode = Val(static_cast<int>(PreferredScoreCreationMode::FromInstruments));
     settings()->setDefaultValue(PREFERRED_SCORE_CREATION_MODE_KEY, preferredScoreCreationMode);
+
+    io::paths paths = actualRecentScorePaths();
+    setRecentScorePaths(paths);
+}
+
+io::paths UserScoresConfiguration::actualRecentScorePaths() const
+{
+    io::paths allPaths = parsePaths(settings()->value(RECENT_SCORE_PATHS));
+    io::paths actualPaths;
+
+    for (const io::path& path: allPaths) {
+        if (fileSystem()->exists(path)) {
+            actualPaths.push_back(path);
+        }
+    }
+
+    return actualPaths;
 }
 
 ValCh<io::paths> UserScoresConfiguration::recentScorePaths() const
@@ -53,7 +70,7 @@ ValCh<io::paths> UserScoresConfiguration::recentScorePaths() const
 
     ValCh<io::paths> result;
     result.ch = m_recentScorePathsChanged;
-    result.val = parsePaths(settings()->value(RECENT_SCORE_PATHS));
+    result.val = actualRecentScorePaths();
 
     return result;
 }

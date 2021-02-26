@@ -9,8 +9,8 @@ ScrollBar {
     property alias color: handle.color
     property alias border: handle.border
 
-    width: orientation === Qt.Vertical ? 10: 0
-    height: orientation === Qt.Horizontal ? 10: 0
+    width: orientation === Qt.Vertical ? 10 : 0
+    height: orientation === Qt.Horizontal ? 10 : 0
 
     visible: size !== 0 && size !== 1
     padding: 0

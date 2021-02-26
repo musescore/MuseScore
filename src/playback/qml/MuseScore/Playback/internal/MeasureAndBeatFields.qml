@@ -13,7 +13,7 @@ RowLayout {
     property alias beatNumber: beatNumberField.value
     property alias maxBeatNumber: beatNumberField.maxValue
 
-    property var font
+    property var font: ui.theme.tabFont
 
     signal measureNumberEdited(var newValue)
     signal beatNumberEdited(var newValue)

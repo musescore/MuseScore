@@ -48,8 +48,9 @@ class PaletteScrollArea : public QScrollArea
 
 public:
     PaletteScrollArea(Palette* w, QWidget* parent = nullptr);
-    bool restrictHeight() const { return m_restrictHeight; }
-    void setRestrictHeight(bool val) { m_restrictHeight = val; }
+
+    bool restrictHeight() const;
+    void setRestrictHeight(bool val);
 
 private:
     void keyPressEvent(QKeyEvent*) override;
@@ -89,56 +90,56 @@ public:
     void emitChanged() { emit changed(); }
     void setGrid(int, int);
     ElementPtr element(int idx) const;
-    void setDrawGrid(bool val) { m_drawGrid = val; }
-    bool drawGrid() const { return m_drawGrid; }
+    void setDrawGrid(bool val);
+    bool drawGrid() const;
     bool read(const QString& path);   // TODO: remove/reuse PalettePanel code
     void write(const QString& path);   // TODO: remove/reuse PalettePanel code
     void read(XmlReader&);
     void write(XmlWriter&) const;
     void clear();
-    void setSelectable(bool val) { m_selectable = val; }
-    bool selectable() const { return m_selectable; }
-    int getSelectedIdx() const { return m_selectedIdx; }
-    void setSelected(int idx) { m_selectedIdx = idx; }
-    bool readOnly() const { return m_readOnly; }
+    void setSelectable(bool val);
+    bool selectable() const;
+    int getSelectedIdx() const;
+    void setSelected(int idx);
+    bool readOnly() const;
     void setReadOnly(bool val);
-    bool disableElementsApply() const { return m_disableElementsApply; }
-    void setDisableElementsApply(bool val) { m_disableElementsApply = val; }
+    bool disableElementsApply() const;
+    void setDisableElementsApply(bool val);
 
-    bool useDoubleClickToActivate() const { return m_useDoubleClickToActivate; }
-    void setUseDoubleClickToActivate(bool val) { m_useDoubleClickToActivate = val; }
+    bool useDoubleClickToActivate() const;
+    void setUseDoubleClickToActivate(bool val);
 
     bool systemPalette() const { return m_systemPalette; }
     void setSystemPalette(bool val);
 
     void setMag(qreal val);
-    qreal mag() const { return m_extraMag; }
-    void setYOffset(qreal val) { m_yOffsetSpatium = val; }
-    qreal yOffset() const { return m_yOffsetSpatium; }
+    qreal mag() const;
+    void setYOffset(qreal val);
+    qreal yOffset() const;
     int columns() const;
     int rows() const;
-    int size() const { return m_filterActive ? m_dragCells.size() : m_cells.size(); }
+    int size() const;
     PaletteCellPtr cellAt(int index) const;
-    void setCellReadOnly(int c, bool v) { m_cells[c]->readOnly = v; }
-    QString name() const { return m_name; }
-    void setName(const QString& s) { m_name = s; }
-    int gridWidth() const { return m_hgrid; }
-    int gridHeight() const { return m_vgrid; }
-    bool moreElements() const { return m_moreElements; }
+    void setCellReadOnly(int cellIndex, bool readonly);
+    QString name() const;
+    void setName(const QString& name);
+    int gridWidth() const;
+    int gridHeight() const;
+    bool moreElements() const;
     void setMoreElements(bool val);
     bool filter(const QString& text);
-    void setShowContextMenu(bool val) { m_showContextMenu = val; }
+    void setShowContextMenu(bool val);
 
     static qreal paletteScaling();
     static void paintPaletteElement(void* data, Element* element);
 
-    int gridWidthM() const { return m_hgrid * paletteScaling(); }
-    int gridHeightM() const { return m_vgrid * paletteScaling(); }
+    int gridWidthM() const;
+    int gridHeightM() const;
 
-    int getCurrentIdx() const { return m_currentIdx; }
-    void setCurrentIdx(int i) { m_currentIdx = i; }
-    bool isFilterActive() { return m_filterActive == true; }
-    QList<PaletteCellPtr> getDragCells() { return m_dragCells; }
+    int getCurrentIdx() const;
+    void setCurrentIdx(int i);
+    bool isFilterActive();
+    QList<PaletteCellPtr> getDragCells();
     int heightForWidth(int) const override;
     QSize sizeHint() const override;
     int idx(const QPoint&) const;
