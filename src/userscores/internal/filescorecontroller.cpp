@@ -41,6 +41,8 @@ void FileScoreController::init()
     dispatcher()->reg(this, "file-save-a-copy", this, &FileScoreController::saveScoreCopy);
     dispatcher()->reg(this, "file-save-selection", this, &FileScoreController::saveSelection);
 
+    dispatcher()->reg(this, "file-export", this, &FileScoreController::exportScore);
+
     dispatcher()->reg(this, "file-import-pdf", this, &FileScoreController::importPdf);
 
     dispatcher()->reg(this, "clear-recent", this, &FileScoreController::clearRecentScores);
@@ -178,6 +180,11 @@ void FileScoreController::importPdf()
 void FileScoreController::clearRecentScores()
 {
     configuration()->setRecentScorePaths({});
+}
+
+void FileScoreController::exportScore()
+{
+    interactive()->open("musescore://userscores/export");
 }
 
 io::path FileScoreController::selectScoreOpenningFile(const QStringList& filter)

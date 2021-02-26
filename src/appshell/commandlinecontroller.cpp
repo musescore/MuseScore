@@ -33,6 +33,8 @@ void CommandLineController::parse(const QStringList& args)
 
     m_parser.addOption(QCommandLineOption({ "D", "monitor-resolution" }, "Specify monitor resolution", "DPI"));
 
+    m_parser.addOption(QCommandLineOption({ "d", "debug" }, "Open in debug mode"));
+
     // Converter mode
     m_parser.addOption(QCommandLineOption({ "r", "image-resolution" }, "Set output resolution for image export", "DPI"));
     m_parser.addOption(QCommandLineOption({ "j", "job" }, "Process a conversion job", "file"));

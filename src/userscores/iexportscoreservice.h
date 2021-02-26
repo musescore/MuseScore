@@ -16,30 +16,21 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_IMPORTEXPORT_IMAGESEXPORTCONFIGURATION_H
-#define MU_IMPORTEXPORT_IMAGESEXPORTCONFIGURATION_H
 
-#include "../iimagesexportconfiguration.h"
+#ifndef MU_USERSCORES_IEXPORTSCORESERVICE_H
+#define MU_USERSCORES_IEXPORTSCORESERVICE_H
 
-namespace mu::iex::imagesexport {
-class ImagesExportConfiguration : public IImagesExportConfiguration
+#include "modularity/imoduleexport.h"
+#include "notation/inotation.h"
+
+namespace mu::userscores {
+class IExportScoreService : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(IExportScoreService)
+
 public:
-    void init();
-
-    int exportPdfDpiResolution() const override;
-    void setExportPdfDpiResolution(int dpi) override;
-
-    void setExportPngDpiResolution(std::optional<float> dpi) override;
-    float exportPngDpiResolution() const override;
-
-    bool exportPngWithTransparentBackground() const override;
-    void setExportPngWithTransparentBackground(bool transparent) override;
-
-private:
-
-    std::optional<float> m_customExportPngDpi;
+    virtual void exportScores(QList<notation::INotationPtr> notations, io::path basePath) = 0;
 };
 }
 
-#endif // MU_IMPORTEXPORT_IMAGESEXPORTCONFIGURATION_H
+#endif // MU_USERSCORES_IEXPORTSCORESERVICE_H

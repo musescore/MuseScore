@@ -37,3 +37,14 @@ INotationWriterPtr NotationWritersRegister::writer(const std::string& suffix) co
 
     return nullptr;
 }
+
+std::vector<std::string> NotationWritersRegister::getRegisteredSuffixes() const
+{
+    std::vector<std::string> suffixes;
+
+    for (auto& it : m_writers) {
+        suffixes.push_back(it.first);
+    }
+
+    return suffixes;
+}
