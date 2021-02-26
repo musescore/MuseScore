@@ -320,24 +320,24 @@ MenuItem AppMenuModel::toolsItem()
     MenuItemList toolsItems {
         makeAction("transpose"),
         makeSeparator(),
-        makeAction("explode"), // need implement
-        makeAction("implode"), // need implement
-        makeAction("realize-chord-symbols"), // need implement
+        makeAction("explode"),
+        makeAction("implode"),
+        makeAction("realize-chord-symbols"),
         makeMenu(trc("appshell", "&Voices"), voicesItems),
         makeMenu(trc("appshell", "&Measures"), measuresItems),
-        makeAction("time-delete"), // need implement
+        makeAction("time-delete"),
         makeSeparator(),
-        makeAction("slash-fill"), // need implement
-        makeAction("slash-rhythm"), // need implement
+        makeAction("slash-fill"),
+        makeAction("slash-rhythm"),
         makeSeparator(),
-        makeAction("pitch-spell"), // need implement
-        makeAction("reset-groupings"), // need implement
-        makeAction("resequence-rehearsal-marks"), // need implement
-        makeAction("unroll-repeats"), // need implement
+        makeAction("pitch-spell"),
+        makeAction("reset-groupings"),
+        makeAction("resequence-rehearsal-marks"),
+        makeAction("unroll-repeats"),
         makeSeparator(),
-        makeAction("copy-lyrics-to-clipboard"), // need implement
+        makeAction("copy-lyrics-to-clipboard"),
         makeAction("fotomode"), // need implement
-        makeAction("del-empty-measures"), // need implement
+        makeAction("del-empty-measures"),
     };
 
     return makeMenu(trc("appshell", "&Tools"), toolsItems, scoreOpened());

@@ -3923,15 +3923,15 @@ void Score::globalTimeDelete()
 
 void Score::localTimeDelete()
 {
-    Segment* startSegment;
-    Segment* endSegment;
+    Segment* startSegment = nullptr;
+    Segment* endSegment = nullptr;
 
     if (selection().state() != SelState::RANGE) {
         Element* el = selection().element();
         if (!el) {
             return;
         }
-        ChordRest* cr = 0;
+        ChordRest* cr = nullptr;
         if (el->isNote()) {
             cr = toNote(el)->chord();
         } else if (el->isChordRest()) {

@@ -96,6 +96,7 @@ public:
     virtual void addBoxes(BoxType boxType, int count, int beforeBoxIndex = -1) = 0;
 
     virtual void copySelection() = 0;
+    virtual void copyLyrics() = 0;
     virtual void pasteSelection(const Fraction& scale = Fraction(1, 1)) = 0;
     virtual void swapSelection() = 0;
     virtual void deleteSelection() = 0;
@@ -119,6 +120,21 @@ public:
     virtual void addFiguredBass() = 0;
 
     virtual void addStretch(qreal value) = 0;
+
+    virtual void explodeSelectedStaff() = 0;
+    virtual void implodeSelectedStaff() = 0;
+
+    virtual void realizeSelectedChordSymbols() = 0;
+    virtual void removeSelectedRange() = 0;
+    virtual void removeEmptyTrailingMeasures() = 0;
+
+    virtual void fillSelectionWithSlashes() = 0;
+    virtual void replaceSelectedNotesWithSlashes() = 0;
+
+    virtual void spellPitches() = 0;
+    virtual void regroupNotesAndRests() = 0;
+    virtual void resequenceRehearsalMarks() = 0;
+    virtual void unrollRepeats() = 0;
 
     virtual void resetToDefault(ResettableValueType type) = 0;
 

@@ -208,6 +208,19 @@ void NotationActionController::init()
     dispatcher()->reg(this, "show-pageborders", this, &NotationActionController::toggleShowingPageMargins);
     dispatcher()->reg(this, "show-irregular", this, &NotationActionController::toggleMarkIrregularMeasures);
 
+    dispatcher()->reg(this, "explode", this, &NotationActionController::explodeSelectedStaff);
+    dispatcher()->reg(this, "implode", this, &NotationActionController::implodeSelectedStaff);
+    dispatcher()->reg(this, "realize-chord-symbols", this, &NotationActionController::realizeSelectedChordSymbols);
+    dispatcher()->reg(this, "time-delete", this, &NotationActionController::removeSelectedRange);
+    dispatcher()->reg(this, "del-empty-measures", this, &NotationActionController::removeEmptyTrailingMeasures);
+    dispatcher()->reg(this, "slash-fill", this, &NotationActionController::fillSelectionWithSlashes);
+    dispatcher()->reg(this, "slash-rhythm", this, &NotationActionController::replaceSelectedNotesWithSlashes);
+    dispatcher()->reg(this, "pitch-spell", this, &NotationActionController::spellPitches);
+    dispatcher()->reg(this, "reset-groupings", this, &NotationActionController::regroupNotesAndRests);
+    dispatcher()->reg(this, "resequence-rehearsal-marks", this, &NotationActionController::resequenceRehearsalMarks);
+    dispatcher()->reg(this, "unroll-repeats", this, &NotationActionController::unrollRepeats);
+    dispatcher()->reg(this, "copy-lyrics-to-clipboard", this, &NotationActionController::copyLyrics);
+
     for (int i = MIN_NOTES_INTERVAL; i <= MAX_NOTES_INTERVAL; ++i) {
         if (isNotesIntervalValid(i)) {
             dispatcher()->reg(this, "interval" + std::to_string(i), [this, i]() { addInterval(i); });
@@ -903,6 +916,126 @@ void NotationActionController::addAnchoredNoteLine()
     }
 
     interaction->addAnchoredLineToSelectedNotes();
+}
+
+void NotationActionController::explodeSelectedStaff()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->explodeSelectedStaff();
+}
+
+void NotationActionController::implodeSelectedStaff()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->implodeSelectedStaff();
+}
+
+void NotationActionController::realizeSelectedChordSymbols()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->realizeSelectedChordSymbols();
+}
+
+void NotationActionController::removeSelectedRange()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->removeSelectedRange();
+}
+
+void NotationActionController::removeEmptyTrailingMeasures()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->removeEmptyTrailingMeasures();
+}
+
+void NotationActionController::fillSelectionWithSlashes()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->fillSelectionWithSlashes();
+}
+
+void NotationActionController::replaceSelectedNotesWithSlashes()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->replaceSelectedNotesWithSlashes();
+}
+
+void NotationActionController::spellPitches()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->spellPitches();
+}
+
+void NotationActionController::regroupNotesAndRests()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->regroupNotesAndRests();
+}
+
+void NotationActionController::resequenceRehearsalMarks()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->resequenceRehearsalMarks();
+}
+
+void NotationActionController::unrollRepeats()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->unrollRepeats();
+}
+
+void NotationActionController::copyLyrics()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->copyLyrics();
 }
 
 void NotationActionController::addStretch(qreal value)

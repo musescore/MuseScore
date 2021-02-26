@@ -2019,6 +2019,12 @@ void NotationInteraction::copySelection()
     QApplication::clipboard()->setMimeData(mimeData);
 }
 
+void NotationInteraction::copyLyrics()
+{
+    QString text = score()->extractLyrics();
+    QApplication::clipboard()->setText(text);
+}
+
 void NotationInteraction::pasteSelection(const Fraction& scale)
 {
     startEdit();
@@ -2357,6 +2363,133 @@ void NotationInteraction::addStretch(qreal value)
 {
     startEdit();
     score()->cmdAddStretch(value);
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
+void NotationInteraction::explodeSelectedStaff()
+{
+    if (!selection()->isRange()) {
+        return;
+    }
+
+    startEdit();
+    score()->cmdExplode();
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
+void NotationInteraction::implodeSelectedStaff()
+{
+    if (!selection()->isRange()) {
+        return;
+    }
+
+    startEdit();
+    score()->cmdImplode();
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
+void NotationInteraction::realizeSelectedChordSymbols()
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    startEdit();
+    score()->cmdRealizeChordSymbols();
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
+void NotationInteraction::removeSelectedRange()
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    startEdit();
+    score()->cmdTimeDelete();
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
+void NotationInteraction::removeEmptyTrailingMeasures()
+{
+    startEdit();
+    score()->cmdRemoveEmptyTrailingMeasures();
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
+void NotationInteraction::fillSelectionWithSlashes()
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    startEdit();
+    score()->cmdSlashFill();
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
+void NotationInteraction::replaceSelectedNotesWithSlashes()
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    startEdit();
+    score()->cmdSlashRhythm();
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
+void NotationInteraction::spellPitches()
+{
+    startEdit();
+    score()->spell();
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
+void NotationInteraction::regroupNotesAndRests()
+{
+    startEdit();
+    score()->cmdResetNoteAndRestGroupings();
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
+void NotationInteraction::resequenceRehearsalMarks()
+{
+    startEdit();
+    score()->cmdResequenceRehearsalMarks();
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
+void NotationInteraction::unrollRepeats()
+{
+    if (!score()->masterScore()) {
+        return;
+    }
+
+    startEdit();
+    score()->masterScore()->unrollRepeats();
     apply();
 
     notifyAboutNotationChanged();

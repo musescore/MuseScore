@@ -102,6 +102,19 @@ private:
 
     void addStretch(qreal value);
 
+    void explodeSelectedStaff();
+    void implodeSelectedStaff();
+    void realizeSelectedChordSymbols();
+    void removeSelectedRange();
+    void removeEmptyTrailingMeasures();
+    void fillSelectionWithSlashes();
+    void replaceSelectedNotesWithSlashes();
+    void spellPitches();
+    void regroupNotesAndRests();
+    void resequenceRehearsalMarks();
+    void unrollRepeats();
+    void copyLyrics();
+
     void resetState();
     void resetStretch();
     void resetTextStyleOverrides();
@@ -121,6 +134,8 @@ private:
     void toggleShowingFrames();
     void toggleShowingPageMargins();
     void toggleMarkIrregularMeasures();
+    void toggleNavigator();
+    void toggleMixer();
 
     bool isTextEditting() const;
 

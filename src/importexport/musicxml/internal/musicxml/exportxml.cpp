@@ -3318,11 +3318,8 @@ static Fraction timeModification(const Tuplet* const tuplet, const int tremolo =
 
 static void writeTypeAndDots(XmlWriter& xml, const Note* const note)
 {
-    // type
-    int dots { 0 };
+    int dots = 0;
     const auto ratio = timeModification(note->chord()->tuplet());
-    const auto actNotes = ratio.numerator();
-    const auto nrmNotes = ratio.denominator();
 
     const auto strActFraction = stretchCorrActFraction(note);
     const Fraction tt  = strActFraction * ratio * tremoloCorrection(note);
