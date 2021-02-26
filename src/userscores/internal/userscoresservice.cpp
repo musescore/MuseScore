@@ -28,37 +28,19 @@ void UserScoresService::init()
 {
     updateRecentScoreList();
 
-    configuration()->recentScoreList().ch.onReceive(this, [this](const QStringList&) {
+    configuration()->recentScorePaths().ch.onReceive(this, [this](const io::paths&) {
         updateRecentScoreList();
     });
 }
 
 void UserScoresService::updateRecentScoreList()
 {
-    QStringList paths = configuration()->recentScoreList().val;
-    m_recentScoreList.set(readMetaList(paths));
+    io::paths paths = configuration()->recentScorePaths().val;
+    MetaList metaList = msczMetaReader()->readMetaList(paths);
+    m_recentScoreList.set(metaList);
 }
 
 mu::ValCh<MetaList> UserScoresService::recentScoreList() const
 {
     return m_recentScoreList;
-}
-
-MetaList UserScoresService::readMetaList(const QStringList& scoresPathList) const
-{
-    TRACEFUNC;
-
-    MetaList result;
-
-    for (const QString& path : scoresPathList) {
-        RetVal<Meta> meta = msczMetaReader()->readMeta(path);
-        if (!meta.ret) {
-            LOGE() << "Score reader error" << path;
-            continue;
-        }
-
-        result.push_back(meta.val);
-    }
-
-    return result;
 }

@@ -24,6 +24,7 @@
 #include "iglobalconfiguration.h"
 #include "extensions/iextensionsconfiguration.h"
 #include "notation/inotationconfiguration.h"
+#include "global/val.h"
 
 namespace mu::userscores {
 class UserScoresConfiguration : public IUserScoresConfiguration
@@ -37,8 +38,8 @@ public:
 
     void init();
 
-    ValCh<QStringList> recentScoreList() const override;
-    void setRecentScoreList(const QStringList& recentScoreList) override;
+    ValCh<io::paths> recentScorePaths() const override;
+    void setRecentScorePaths(const io::paths& recentScorePaths) override;
 
     io::paths templatesDirPaths() const override;
     io::path scoresPath() const override;
@@ -51,9 +52,9 @@ public:
     void setPreferredScoreCreationMode(PreferredScoreCreationMode mode) override;
 
 private:
-    QStringList parseRecentList(const std::string& recents) const;
+    io::paths parsePaths(const mu::Val& value) const;
 
-    async::Channel<QStringList> m_recentListChanged;
+    async::Channel<io::paths> m_recentScorePathsChanged;
 };
 }
 

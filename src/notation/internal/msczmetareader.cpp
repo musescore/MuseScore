@@ -13,11 +13,28 @@
 
 #include "framework/global/xmlreader.h"
 
-using namespace mu;
 using namespace mu::notation;
 using namespace mu::framework;
 
-RetVal<Meta> MsczMetaReader::readMeta(const io::path& filePath) const
+MetaList MsczMetaReader::readMetaList(const io::paths& filePaths) const
+{
+    MetaList result;
+
+    for (const io::path& path: filePaths) {
+        RetVal<Meta> meta = readMeta(path);
+
+        if (!meta.ret) {
+            LOGE() << meta.ret.toString();
+            continue;
+        }
+
+        result.push_back(meta.val);
+    }
+
+    return result;
+}
+
+mu::RetVal<Meta> MsczMetaReader::readMeta(const io::path& filePath) const
 {
     RetVal<Meta> meta;
 
@@ -46,7 +63,7 @@ RetVal<Meta> MsczMetaReader::readMeta(const io::path& filePath) const
     return meta;
 }
 
-RetVal<Meta> MsczMetaReader::loadCompressedMsc(const io::path& filePath) const
+mu::RetVal<Meta> MsczMetaReader::loadCompressedMsc(const io::path& filePath) const
 {
     RetVal<Meta> meta;
 

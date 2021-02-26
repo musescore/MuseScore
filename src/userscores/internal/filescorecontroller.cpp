@@ -167,7 +167,7 @@ void FileScoreController::importPdf()
 
 void FileScoreController::clearRecentScores()
 {
-    configuration()->setRecentScoreList({});
+    configuration()->setRecentScorePaths({});
 }
 
 io::path FileScoreController::selectScoreOpenningFile(const QStringList& filter)
@@ -238,15 +238,15 @@ io::path FileScoreController::defaultSavingFilePath() const
     return configuration()->defaultSavingFilePath(fileName.toStdString());
 }
 
-void FileScoreController::prependToRecentScoreList(io::path filePath)
+void FileScoreController::prependToRecentScoreList(const io::path& filePath)
 {
-    QStringList recentScoreList = configuration()->recentScoreList().val;
-    QString path = filePath.toQString();
+    io::paths recentScorePaths = configuration()->recentScorePaths().val;
 
-    if (recentScoreList.contains(path)) {
-        recentScoreList.removeAll(path);
+    auto it = std::find(recentScorePaths.begin(), recentScorePaths.end(), filePath);
+    if (it != recentScorePaths.end()) {
+        recentScorePaths.erase(it);
     }
 
-    recentScoreList.prepend(path);
-    configuration()->setRecentScoreList(recentScoreList);
+    recentScorePaths.insert(recentScorePaths.begin(), filePath);
+    configuration()->setRecentScorePaths(recentScorePaths);
 }

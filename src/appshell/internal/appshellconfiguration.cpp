@@ -93,9 +93,9 @@ std::string AppShellConfiguration::leaveFeedbackUrl() const
     return LEAVE_FEEDBACK_URL + utm;
 }
 
-mu::ValCh<QStringList> AppShellConfiguration::recentScoreList() const
+mu::ValCh<mu::io::paths> AppShellConfiguration::recentScorePaths() const
 {
-    return userScoresConfiguration()->recentScoreList();
+    return userScoresConfiguration()->recentScorePaths();
 }
 
 mu::ValCh<bool> AppShellConfiguration::isNotationStatusBarVisible() const

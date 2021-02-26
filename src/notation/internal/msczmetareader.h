@@ -31,9 +31,11 @@ namespace mu::notation {
 class MsczMetaReader : public IMsczMetaReader
 {
 public:
-    RetVal<Meta> readMeta(const io::path& filePath) const override;
+    MetaList readMetaList(const io::paths& filePaths) const override;
 
 private:
+    RetVal<Meta> readMeta(const io::path& filePath) const;
+
     struct RawMeta {
         QString titleTag;
         QString titleAttribute;
