@@ -376,6 +376,81 @@ ElementPtr Palette::element(int idx) const
     return cell ? cell->element : nullptr;
 }
 
+void Palette::setDrawGrid(bool val)
+{
+    m_drawGrid = val;
+}
+
+bool Palette::drawGrid() const
+{
+    return m_drawGrid;
+}
+
+void Palette::setSelectable(bool val)
+{
+    m_selectable = val;
+}
+
+bool Palette::selectable() const
+{
+    return m_selectable;
+}
+
+int Palette::getSelectedIdx() const
+{
+    return m_selectedIdx;
+}
+
+void Palette::setSelected(int idx)
+{
+    m_selectedIdx = idx;
+}
+
+bool Palette::readOnly() const
+{
+    return m_readOnly;
+}
+
+bool Palette::disableElementsApply() const
+{
+    return m_disableElementsApply;
+}
+
+void Palette::setDisableElementsApply(bool val)
+{
+    m_disableElementsApply = val;
+}
+
+bool Palette::useDoubleClickToActivate() const
+{
+    return m_useDoubleClickToActivate;
+}
+
+void Palette::setUseDoubleClickToActivate(bool val)
+{
+    m_useDoubleClickToActivate = val;
+}
+
+qreal Palette::mag() const
+{
+    return m_extraMag;
+}
+
+void Palette::setYOffset(qreal val)
+{
+    m_yOffsetSpatium = val;
+}
+
+qreal Palette::yOffset() const
+{
+    return m_yOffsetSpatium;
+}
+
+int Palette::size() const
+{
+    return m_filterActive ? m_dragCells.size() : m_cells.size();
+}
+
 PaletteCellPtr Palette::cellAt(int index) const
 {
     if (index < 0 || index >= ccp().size()) {
@@ -383,6 +458,41 @@ PaletteCellPtr Palette::cellAt(int index) const
     }
 
     return ccp().value(index);
+}
+
+void Palette::setCellReadOnly(int cellIndex, bool readonly)
+{
+    m_cells[cellIndex]->readOnly = readonly;
+}
+
+QString Palette::name() const
+{
+    return m_name;
+}
+
+void Palette::setName(const QString& name)
+{
+    m_name = name;
+}
+
+int Palette::gridWidth() const
+{
+    return m_hgrid;
+}
+
+int Palette::gridHeight() const
+{
+    return m_vgrid;
+}
+
+bool Palette::moreElements() const
+{
+    return m_moreElements;
+}
+
+void Palette::setShowContextMenu(bool val)
+{
+    m_showContextMenu = val;
 }
 
 const QList<PaletteCellPtr>& Palette::ccp() const
@@ -521,6 +631,16 @@ void PaletteScrollArea::keyPressEvent(QKeyEvent* event)
         break;
     }
     QScrollArea::keyPressEvent(event);
+}
+
+bool PaletteScrollArea::restrictHeight() const
+{
+    return m_restrictHeight;
+}
+
+void PaletteScrollArea::setRestrictHeight(bool val)
+{
+    m_restrictHeight = val;
 }
 
 //---------------------------------------------------------
@@ -833,6 +953,36 @@ void Palette::paintPaletteElement(void* data, Element* element)
     element->undoSetColor(colorBackup);
     element->undoChangeProperty(Pid::FRAME_FG_COLOR, frameColorBackup);
     painter->restore();
+}
+
+int Palette::gridWidthM() const
+{
+    return m_hgrid * paletteScaling();
+}
+
+int Palette::gridHeightM() const
+{
+    return m_vgrid * paletteScaling();
+}
+
+int Palette::getCurrentIdx() const
+{
+    return m_currentIdx;
+}
+
+void Palette::setCurrentIdx(int i)
+{
+    m_currentIdx = i;
+}
+
+bool Palette::isFilterActive()
+{
+    return m_filterActive;
+}
+
+QList<PaletteCellPtr> Palette::getDragCells()
+{
+    return m_dragCells;
 }
 
 //---------------------------------------------------------

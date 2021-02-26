@@ -25,6 +25,7 @@
 #include "extensions/iextensionsconfiguration.h"
 #include "notation/inotationconfiguration.h"
 #include "global/val.h"
+#include "system/ifilesystem.h"
 
 namespace mu::userscores {
 class UserScoresConfiguration : public IUserScoresConfiguration
@@ -32,6 +33,7 @@ class UserScoresConfiguration : public IUserScoresConfiguration
     INJECT(userscores, framework::IGlobalConfiguration, globalConfiguration)
     INJECT(userscores, extensions::IExtensionsConfiguration, extensionsConfiguration)
     INJECT(userscores, notation::INotationConfiguration, notationConfiguration)
+    INJECT(userscores, system::IFileSystem, fileSystem)
 
 public:
     static const QString DEFAULT_FILE_SUFFIX;
@@ -52,6 +54,7 @@ public:
     void setPreferredScoreCreationMode(PreferredScoreCreationMode mode) override;
 
 private:
+    io::paths actualRecentScorePaths() const;
     io::paths parsePaths(const mu::Val& value) const;
 
     async::Channel<io::paths> m_recentScorePathsChanged;
