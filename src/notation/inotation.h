@@ -37,6 +37,7 @@ class QRect;
 namespace mu::notation {
 class INotation;
 using INotationPtr = std::shared_ptr<INotation>;
+using INotationPtrList = std::vector<INotationPtr>;
 
 class INotation
 {

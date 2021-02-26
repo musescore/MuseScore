@@ -29,6 +29,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iuserscoresconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/iuserscoresservice.h
     ${CMAKE_CURRENT_LIST_DIR}/ifilescorecontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/iexportscoreservice.h
     ${CMAKE_CURRENT_LIST_DIR}/userscorestypes.h
     ${CMAKE_CURRENT_LIST_DIR}/view/recentscoresmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/recentscoresmodel.h
@@ -42,6 +43,12 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/templatesmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/templatepaintview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/templatepaintview.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/exportscoremodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/exportscoremodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/exportscoresuffixmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/exportscoresuffixmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/exportscoresettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/exportscoresettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/filescorecontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/filescorecontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/userscoresconfiguration.cpp
@@ -53,6 +60,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/templatesrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/userscoresuiactions.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/userscoresuiactions.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/exportscoreservice.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/exportscoreservice.h
     )
 
 set(MODULE_LINK notation)

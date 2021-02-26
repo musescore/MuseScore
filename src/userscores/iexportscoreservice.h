@@ -17,23 +17,20 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_NOTATION_NOTATIONWRITERSREGISTER_H
-#define MU_NOTATION_NOTATIONWRITERSREGISTER_H
+#ifndef MU_USERSCORES_IEXPORTSCORESERVICE_H
+#define MU_USERSCORES_IEXPORTSCORESERVICE_H
 
-#include "../inotationwritersregister.h"
+#include "modularity/imoduleexport.h"
+#include "notation/inotation.h"
 
-namespace mu::notation {
-class NotationWritersRegister : public INotationWritersRegister
+namespace mu::userscores {
+class IExportScoreService : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(IExportScoreService)
+
 public:
-    void reg(const std::vector<std::string>& suffixes, INotationWriterPtr writer) override;
-    INotationWriterPtr writer(const std::string& suffix) const override;
-
-    std::vector<std::string> registeredSuffixes() const override;
-
-private:
-    std::map<std::string, INotationWriterPtr> m_writers;
+    virtual void exportScores(notation::INotationPtrList& notations, io::path& basePath) = 0;
 };
 }
 
-#endif // MU_NOTATION_NOTATIONWRITERSREGISTER_H
+#endif // MU_USERSCORES_IEXPORTSCORESERVICE_H

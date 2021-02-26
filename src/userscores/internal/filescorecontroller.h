@@ -71,6 +71,8 @@ private:
     Ret doOpenScore(const io::path& filePath);
     void doSaveScore(const io::path& filePath = io::path(), notation::SaveMode saveMode = notation::SaveMode::Save);
 
+    void exportScore();
+
     io::path defaultSavingFilePath() const;
 
     void prependToRecentScoreList(const io::path& filePath);

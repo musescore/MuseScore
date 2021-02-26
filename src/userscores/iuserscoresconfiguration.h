@@ -26,6 +26,7 @@
 #include "retval.h"
 #include "io/path.h"
 #include "userscorestypes.h"
+#include "notation/inotation.h"
 
 namespace mu::userscores {
 class IUserScoresConfiguration : MODULE_EXPORT_INTERFACE
@@ -49,6 +50,9 @@ public:
     virtual void setScoresPath(const io::path& path) = 0;
 
     virtual io::path defaultSavingFilePath(const io::path& fileName) const = 0;
+    virtual io::path defaultExportPath(const std::string& fileName) const = 0;
+    virtual io::path completeExportPath(io::path basePath, notation::INotationPtr notation, bool isMain, bool singlePage,
+                                        int pageNumber) const = 0;
 
     virtual QColor templatePreviewBackgroundColor() const = 0;
     virtual async::Notification templatePreviewBackgroundChanged() const = 0;
