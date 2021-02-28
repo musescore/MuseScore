@@ -1,26 +1,3 @@
-# SPDX-License-Identifier: MIT
-# MIT License  (a.k.a. the "Expat License")
-#
-# Copyright (c) 2019 Peter Jonas
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
-###############################################################################
 # This file contains generic functions that are useful for any CMake project.
 # Function names start with "fn__" so you can recognise them in other files.
 #
@@ -44,6 +21,61 @@
 # Where are we? Need to set these variables for use inside functions.
 set(_FUNCTIONS_FILE "${CMAKE_CURRENT_LIST_FILE}") # path to this file
 set(_FUNCTIONS_DIR "${CMAKE_CURRENT_LIST_DIR}") # path to this directory
+
+# Set a variable to a value only if the variable is currently undefined.
+function(fn__set_default
+  NAMEV # Name of the variable to set.
+  VALUE # Value to assign to the variable.
+)
+  if(NOT DEFINED "${NAMEV}")
+    set("${NAMEV}" "${VALUE}" PARENT_SCOPE)
+  endif()
+endfunction()
+
+# Set a variable to value of an option from a list of command line arguments.
+# The variable will only recieve a value if the relevant option was provided.
+function(fn__get_option
+  VAR_NAME # Name of the variable to set.
+  OPT_NAME # Name of the option to search for (e.g. "-foo").
+  # ARGN...  The command line arguments.
+)
+  list(LENGTH ARGN LEN)
+  set(i "0")
+  while(i LESS "${LEN}")
+    list(GET ARGN "${i}" ARG)
+    if(ARG MATCHES "^${OPT_NAME}")
+      if(ARG STREQUAL "${OPT_NAME}")
+        # Option and value in separate arguments ("-o VALUE" or "--option VALUE")
+        math(EXPR i "${i} + 1") # next argument (the value)
+        list(GET ARGN "${i}" OPT_VAL)
+        set("${VAR_NAME}" "${OPT_VAL}" PARENT_SCOPE)
+      elseif("${OPT_NAME}" MATCHES "^-[a-zA-Z0-9]$")
+        # Short option without equals sign before value ("-oVALUE")
+        string(REGEX REPLACE "^${OPT_NAME}(.*)$" "\\1" OPT_VAL "${ARG}")
+        set("${VAR_NAME}" "${OPT_VAL}" PARENT_SCOPE)
+      elseif(ARG MATCHES "^${OPT_NAME}=")
+        # Long option with equals sign before option value ("--option=VALUE")
+        string(REGEX REPLACE "^${OPT_NAME}=(.*)$" "\\1" OPT_VAL "${ARG}")
+        set("${VAR_NAME}" "${OPT_VAL}" PARENT_SCOPE)
+      endif()
+    endif()
+    math(EXPR i "${i} + 1") # next argument
+  endwhile()
+endfunction()
+
+# Turn a list of command line arguments into an escaped string
+function(fn__command_string
+  VAR_NAME # The variable to store the final string.
+  # ARGN ... The command line arguments.
+)
+  foreach(ARG IN LISTS ARGN)
+    if(ARG MATCHES " ")
+        set(ARG "\"${ARG}\"")
+    endif()
+    set("${VAR_NAME}" "${${VAR_NAME}} ${ARG}")
+  endforeach()
+  set("${VAR_NAME}" "${${VAR_NAME}}" PARENT_SCOPE)
+endfunction()
 
 function(fn__require_program # Ensure that a build dependency is installed.
   PATHV # Location of the program returned in this variable.
@@ -100,6 +132,22 @@ function(fn__require_program # Ensure that a build dependency is installed.
     endif(CMD)
   endif(NOT ${PATHV})
 endfunction(fn__require_program)
+
+# Get information about Qt based on the path to qmake executable
+function(fn__set_qt_variables
+  QMAKE # Path to qmake executable
+)
+  get_filename_component(dir "${QMAKE}" DIRECTORY)
+  get_filename_component(dir "${dir}" DIRECTORY)
+  set(ENV{QTDIR} "${dir}")
+  get_filename_component(QT_COMPILER "${dir}" NAME)
+  get_filename_component(dir "${dir}" DIRECTORY)
+  get_filename_component(QT_VERSION "${dir}" NAME)
+  get_filename_component(dir "${dir}" DIRECTORY)
+  set(QT_LOCATION "${dir}" PARENT_SCOPE)
+  set(QT_VERSION "${QT_VERSION}" PARENT_SCOPE)
+  set(QT_COMPILER "${QT_COMPILER}" PARENT_SCOPE)
+endfunction()
 
 function(fn__copy_during_build # copy a file at build time
   SOURCE_FILE # relative or absolute path to file being copied

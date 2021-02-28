@@ -1,4 +1,4 @@
-![MuseScore](assets/musescore_logo_full.png)  
+![MuseScore](assets/musescore_logo_full.png)
 Music notation and composition software
 
 [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
@@ -45,30 +45,29 @@ Otherwise, you can just download the latest source release tarball from the [Rel
     cd MuseScore-x.x.x
 
 ### Release Build
-To compile MuseScore, type:
+To compile MuseScore for release, type:
 
-    make release
+    cmake -P build.cmake -DCMAKE_BUILD_TYPE=Release
 
-If something goes wrong, then remove the whole build subdirectory with `make clean` and start new with `make release`.
+If something goes wrong, append the word "clean" to the above command to delete the build subdirectory:
+
+    cmake -P build.cmake -DCMAKE_BUILD_TYPE=Release clean
+
+Then try running the first command again.
 
 ### Running
 To start MuseScore, type:
 
-    ./build.release/mscore/mscore
+    cmake -P build.cmake -DCMAKE_BUILD_TYPE=Release run
 
-The Start Center window will appear on every invocation until you disable that setting via the "Preferences" dialog.
-
-### Installing
-To install to default prefix using root user, type:
-
-    sudo make install
+Or run the compiled executable directly.
 
 ### Debug Build
-A debug version can be built by doing `make debug` instead of `make release`.
+A debug version can be built and run by replacing `-DCMAKE_BUILD_TYPE=Release`
+with `-DCMAKE_BUILD_TYPE=Debug` in the above commands.
 
-To run the debug version, type:
-
-    ./build.debug/mscore/mscore
+If you omit the `-DCMAKE_BUILD_TYPE` option entirely then `RelWithDebInfo` is
+used by default, as it provides a useful compromise between Release and Debug.
 
 ### Testing
 See [mtest/README.md](/mtest/README.md) or [the developer handbook](https://musescore.org/handbook/developers-handbook/finding-your-way-around/automated-tests) for instructions on how to run the test suite.
