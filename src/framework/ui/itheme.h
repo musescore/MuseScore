@@ -43,6 +43,7 @@ public:
     virtual QColor buttonColor() const = 0;
     virtual QColor fontPrimaryColor() const = 0;
     virtual QColor fontSecondaryColor() const = 0;
+    virtual QColor linkColor() const = 0;
 
     virtual QFont bodyFont() const = 0;
     virtual QFont bodyBoldFont() const = 0;

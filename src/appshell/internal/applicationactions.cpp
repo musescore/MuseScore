@@ -35,9 +35,17 @@ const ActionList ApplicationActions::m_actions = {
                QT_TRANSLATE_NOOP("action", "Full Screen"),
                QT_TRANSLATE_NOOP("action", "Full screen")
                ),
+    ActionItem("about",
+               ShortcutContext::Any,
+               QT_TRANSLATE_NOOP("action", "About...")
+               ),
     ActionItem("about-qt",
                ShortcutContext::Any,
                QT_TRANSLATE_NOOP("action", "About Qt...")
+               ),
+    ActionItem("about-musicxml",
+               ShortcutContext::Any,
+               QT_TRANSLATE_NOOP("action", "About MusicXML...")
                ),
     ActionItem("online-handbook",
                ShortcutContext::Any,

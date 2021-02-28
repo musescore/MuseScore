@@ -27,6 +27,9 @@ static const std::string ONLINE_HANDBOOK_URL("https://musescore.org/redirect/hel
 static const std::string ASK_FOR_HELP_URL("https://musescore.org/redirect/post/question?locale=");
 static const std::string BUG_REPORT_URL("https://musescore.org/redirect/post/bug-report?locale=");
 static const std::string LEAVE_FEEDBACK_URL("https://musescore.com/content/editor-feedback?");
+static const std::string MUSESCORE_URL("http://www.musescore.org/");
+static const std::string MUSICXML_LICENSE_URL("https://www.w3.org/community/about/agreements/cla/");
+static const std::string MUSICXML_LICENSE_DEED_URL("https://www.w3.org/community/about/agreements/cla-deed/");
 
 static const std::string UTM_MEDIUM_MENU("menu");
 static const std::string SYSTEM_LANGUAGE("system");
@@ -93,6 +96,37 @@ std::string AppShellConfiguration::leaveFeedbackUrl() const
     return LEAVE_FEEDBACK_URL + utm;
 }
 
+std::string AppShellConfiguration::museScoreUrl() const
+{
+    std::string languageCode = currentLanguageCode();
+    return MUSESCORE_URL + languageCode;
+}
+
+std::string AppShellConfiguration::museScoreContributionUrl() const
+{
+    return museScoreUrl() + "/donate";
+}
+
+std::string AppShellConfiguration::musicXMLLicenseUrl() const
+{
+    return MUSICXML_LICENSE_URL;
+}
+
+std::string AppShellConfiguration::musicXMLLicenseDeedUrl() const
+{
+    return MUSICXML_LICENSE_DEED_URL;
+}
+
+std::string AppShellConfiguration::museScoreVersion() const
+{
+    return VERSION;
+}
+
+std::string AppShellConfiguration::museScoreRevision() const
+{
+    return MUSESCORE_REVISION;
+}
+
 mu::ValCh<mu::io::paths> AppShellConfiguration::recentScorePaths() const
 {
     return userScoresConfiguration()->recentScorePaths();
@@ -155,5 +189,7 @@ std::string AppShellConfiguration::currentLanguageCode() const
         languageCode = QLocale::system().name().toStdString();
     }
 
-    return languageCode;
+    QLocale locale(QString::fromStdString(languageCode));
+
+    return locale.bcp47Name().toStdString();
 }

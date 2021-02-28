@@ -37,6 +37,7 @@ enum StyleKeys {
     BUTTON_COLOR,
     FONT_PRIMARY_COLOR,
     FONT_SECONDARY_COLOR,
+    LINK_COLOR,
 
     ACCENT_OPACITY_NORMAL,
     ACCENT_OPACITY_HOVER,
@@ -59,6 +60,7 @@ static const QHash<int, QVariant> DARK_THEME {
     { BUTTON_COLOR, "#595959" },
     { FONT_PRIMARY_COLOR, "#EBEBEB" },
     { FONT_SECONDARY_COLOR, "#BDBDBD" },
+    { LINK_COLOR, "#70AFEA" },
 
     { ACCENT_OPACITY_NORMAL, 0.8 },
     { ACCENT_OPACITY_HOVER, 1.0 },
@@ -81,6 +83,7 @@ static const QHash<int, QVariant> LIGHT_THEME {
     { BUTTON_COLOR, "#CFD5DD" },
     { FONT_PRIMARY_COLOR, "#111132" },
     { FONT_SECONDARY_COLOR, "#FFFFFF" },
+    { LINK_COLOR, "#70AFEA" },
 
     { ACCENT_OPACITY_NORMAL, 0.3 },
     { ACCENT_OPACITY_HOVER, 0.15 },
@@ -169,6 +172,11 @@ QColor Theme::fontPrimaryColor() const
 QColor Theme::fontSecondaryColor() const
 {
     return currentThemeProperties().value(FONT_SECONDARY_COLOR).toString();
+}
+
+QColor Theme::linkColor() const
+{
+    return currentThemeProperties().value(LINK_COLOR).toString();
 }
 
 QFont Theme::bodyFont() const
