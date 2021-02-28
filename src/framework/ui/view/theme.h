@@ -45,6 +45,7 @@ class Theme : public QObject, public ITheme, public async::Asyncable
     Q_PROPERTY(QColor buttonColor READ buttonColor NOTIFY dataChanged)
     Q_PROPERTY(QColor fontPrimaryColor READ fontPrimaryColor NOTIFY dataChanged)
     Q_PROPERTY(QColor fontSecondaryColor READ fontSecondaryColor NOTIFY dataChanged)
+    Q_PROPERTY(QColor linkColor READ linkColor NOTIFY dataChanged)
 
     Q_PROPERTY(qreal accentOpacityNormal READ accentOpacityNormal NOTIFY dataChanged)
     Q_PROPERTY(qreal accentOpacityHit READ accentOpacityHit NOTIFY dataChanged)
@@ -86,6 +87,7 @@ public:
     QColor buttonColor() const override;
     QColor fontPrimaryColor() const override;
     QColor fontSecondaryColor() const override;
+    QColor linkColor() const override;
 
     QFont bodyFont() const override;
     QFont bodyBoldFont() const override;

@@ -45,6 +45,13 @@ public:
     std::string askForHelpUrl() const override;
     std::string bugReportUrl() const override;
     std::string leaveFeedbackUrl() const override;
+    std::string museScoreUrl() const override;
+    std::string museScoreContributionUrl() const override;
+    std::string musicXMLLicenseUrl() const override;
+    std::string musicXMLLicenseDeedUrl() const override;
+
+    std::string museScoreVersion() const override;
+    std::string museScoreRevision() const override;
 
     ValCh<io::paths> recentScorePaths() const override;
 

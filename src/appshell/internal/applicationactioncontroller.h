@@ -45,7 +45,9 @@ public:
 private:
     void quit();
     void toggleFullScreen();
+    void openAboutDialog();
     void openAboutQtDialog();
+    void openAboutMusicXMLDialog();
 
     void openOnlineHandbookPage();
     void openAskForHelpPage();
