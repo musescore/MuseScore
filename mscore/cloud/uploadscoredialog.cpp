@@ -29,7 +29,7 @@ namespace Ms {
 void MuseScore::showUploadScoreDialog()
       {
       if (MuseScore::unstable()) {
-            QMessageBox::warning(this, tr("Save online"), tr("Saving scores online is disabled in this unstable prerelease version of MuseScore."));
+            QMessageBox::warning(this, QObject::tr("Save online"), QObject::tr("Saving scores online is disabled in this unstable prerelease version of MuseScore."));
             return;
       }
       if (!currentScore())
@@ -37,7 +37,7 @@ void MuseScore::showUploadScoreDialog()
       if (!currentScore()->sanityCheck(QString())) {
             QMessageBox msgBox;
             msgBox.setWindowTitle(QObject::tr("Upload Error"));
-            msgBox.setText(tr("This score cannot be saved online. Please fix the corrupted measures and try again."));
+            msgBox.setText(QObject::tr("This score cannot be saved online. Please fix the corrupted measures and try again."));
             msgBox.setDetailedText(MScore::lastError);
             msgBox.setTextFormat(Qt::RichText);
             msgBox.setIcon(QMessageBox::Warning);
