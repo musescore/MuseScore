@@ -17,6 +17,15 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
+$(warning DEPRECATION NOTICE. This method of compiling will soon be removed.)
+$(warning )
+$(warning Please use 'build.cmake' instead:)
+$(warning )
+$(warning $    $$ ./build.cmake)
+$(warning )
+$(warning See https://github.com/musescore/MuseScore/pull/7531 for details.)
+$(warning )
+
 CPUS      := $(shell getconf _NPROCESSORS_ONLN 2>/dev/null || getconf NPROCESSORS_ONLN 2>/dev/null || echo 1)
 
 PREFIX    = "/usr/local"
@@ -191,7 +200,7 @@ portable: install
 
 installdebug: debug
 	cd build.debug \
-	&& make install 
+	&& make install
 
 uninstall:
 	cd build.release \
@@ -231,5 +240,3 @@ unix:
 
 zip:
 	zip -q -r MuseScore-${VERSION}.zip * -x .git\* -x vtest/html\*
-
-
