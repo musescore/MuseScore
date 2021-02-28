@@ -17,6 +17,15 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
+$(warning DEPRECATION NOTICE. This method of compiling will soon be removed.)
+$(warning )
+$(warning Please use 'build.cmake' instead with these options:)
+$(warning )
+$(warning $    $$ cmake -P build.cmake -G "MinGW Makefiles")
+$(warning )
+$(warning See https://github.com/musescore/MuseScore/pull/7531 for details.)
+$(warning )
+
 VERSION := $(cmake -P config.cmake | sed -n -e "s/^.*VERSION  *//p")
 BUILD_NUMBER=""
 CPUS = %NUMBER_OF_PROCESSORS%
@@ -59,5 +68,3 @@ version:
 
 clean:
 	-rmdir /S/Q build.debug build.release win32install
-
-
