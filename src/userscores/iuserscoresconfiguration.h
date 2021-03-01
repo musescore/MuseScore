@@ -35,12 +35,12 @@ class IUserScoresConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IUserScoresConfiguration() = default;
 
-    virtual ValCh<QStringList> recentScoreList() const = 0;
-    virtual void setRecentScoreList(const QStringList& recentScoreList) = 0;
+    virtual ValCh<io::paths> recentScorePaths() const = 0;
+    virtual void setRecentScorePaths(const io::paths& recentScorePaths) = 0;
 
     virtual io::paths templatesDirPaths() const = 0;
     virtual io::path scoresPath() const = 0;
-    virtual io::path defaultSavingFilePath(const std::string& fileName) const = 0;
+    virtual io::path defaultSavingFilePath(const io::path& fileName) const = 0;
 
     virtual QColor templatePreviewBackgroundColor() const = 0;
     virtual async::Channel<QColor> templatePreviewBackgroundColorChanged() const = 0;

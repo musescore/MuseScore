@@ -82,7 +82,7 @@ QString PaletteElementEditor::actionName() const
 //   PaletteElementEditor::onElementAdded
 //---------------------------------------------------------
 
-void PaletteElementEditor::onElementAdded(const Element* el)
+void PaletteElementEditor::onElementAdded(const ElementPtr element)
 {
     if (!_paletteIndex.isValid()
         || !_paletteIndex.data(PaletteTreeModel::VisibleRole).toBool()) {
@@ -90,7 +90,7 @@ void PaletteElementEditor::onElementAdded(const Element* el)
         return;
     }
     QVariantMap mimeData;
-    mimeData[mu::commonscene::MIME_SYMBOL_FORMAT] = el->mimeData(QPointF());
+    mimeData[mu::commonscene::MIME_SYMBOL_FORMAT] = element->mimeData(QPointF());
     _controller->insert(_paletteIndex, -1, mimeData, Qt::CopyAction);
 }
 
@@ -622,7 +622,7 @@ bool UserPaletteController::applyPaletteElement(const QModelIndex& index, Qt::Ke
 {
     const PaletteCell* cell = model()->data(index, PaletteTreeModel::PaletteCellRole).value<const PaletteCell*>();
     if (cell && cell->element) {
-        return Palette::applyPaletteElement(cell->element.get(), modifiers);
+        return Palette::applyPaletteElement(cell->element, modifiers);
     }
     return false;
 }

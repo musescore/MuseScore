@@ -31,7 +31,7 @@ class IUserScoresService : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IUserScoresService() = default;
 
-    virtual ValCh<std::vector<notation::Meta> > recentScoreList() const = 0;
+    virtual ValCh<notation::MetaList> recentScoreList() const = 0;
 };
 }
 

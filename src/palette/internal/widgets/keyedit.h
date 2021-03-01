@@ -51,7 +51,7 @@ private slots:
     void setDirty() { _dirty = true; }
 
 signals:
-    void keySigAdded(const KeySig*);
+    void keySigAdded(const std::shared_ptr<KeySig>);
 
 public:
     KeyEditor(QWidget* parent = 0);

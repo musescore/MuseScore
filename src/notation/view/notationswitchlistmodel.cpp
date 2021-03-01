@@ -102,11 +102,10 @@ void NotationSwitchListModel::listenNotationOpeningStatus(INotationPtr notation)
 
 void NotationSwitchListModel::listenNotationSavingStatus(IMasterNotationPtr masterNotation)
 {
-    masterNotation->needSave().notification.onNotify(this, [this]() {
-        for (int i = 0; i < m_notations.size(); i++) {
-            QModelIndex index = this->index(i);
-            emit dataChanged(index, index, { RoleNeedSave });
-        }
+    masterNotation->needSave().notification.onNotify(this, [this, masterNotation]() {
+        int index = m_notations.indexOf(masterNotation->notation());
+        QModelIndex modelIndex = this->index(index);
+        emit dataChanged(modelIndex, modelIndex);
     });
 }
 

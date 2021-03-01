@@ -558,6 +558,8 @@ public:
     qreal styleP(Sid idx) const;
 };
 
+using ElementPtr = std::shared_ptr<Element>;
+
 //-----------------------------------------------------------------------------
 //   ElementEditData
 //    holds element specific data during element editing:

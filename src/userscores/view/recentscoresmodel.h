@@ -53,7 +53,7 @@ private:
         RoleScore
     };
 
-    void updateRecentScores(const std::vector<notation::Meta>& recentScoresList);
+    void updateRecentScores(const notation::MetaList& recentScoresList);
     void setRecentScores(const QVariantList& recentScores);
 
     QVariantList m_recentScores;

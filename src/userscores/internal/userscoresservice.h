@@ -34,12 +34,12 @@ class UserScoresService : public IUserScoresService, public async::Asyncable
 public:
     void init();
 
-    ValCh<std::vector<notation::Meta> > recentScoreList() const override;
+    ValCh<notation::MetaList> recentScoreList() const override;
 
 private:
-    std::vector<notation::Meta> parseRecentList(const QStringList& recentScoresPathList) const;
+    void updateRecentScoreList();
 
-    async::Channel<std::vector<notation::Meta> > m_recentScoreListChanged;
+    ValCh<notation::MetaList> m_recentScoreList;
 };
 }
 

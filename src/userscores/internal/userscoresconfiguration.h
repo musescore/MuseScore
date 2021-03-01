@@ -24,6 +24,8 @@
 #include "iglobalconfiguration.h"
 #include "extensions/iextensionsconfiguration.h"
 #include "notation/inotationconfiguration.h"
+#include "global/val.h"
+#include "system/ifilesystem.h"
 
 namespace mu::userscores {
 class UserScoresConfiguration : public IUserScoresConfiguration
@@ -31,18 +33,19 @@ class UserScoresConfiguration : public IUserScoresConfiguration
     INJECT(userscores, framework::IGlobalConfiguration, globalConfiguration)
     INJECT(userscores, extensions::IExtensionsConfiguration, extensionsConfiguration)
     INJECT(userscores, notation::INotationConfiguration, notationConfiguration)
+    INJECT(userscores, system::IFileSystem, fileSystem)
 
 public:
     static const QString DEFAULT_FILE_SUFFIX;
 
     void init();
 
-    ValCh<QStringList> recentScoreList() const override;
-    void setRecentScoreList(const QStringList& recentScoreList) override;
+    ValCh<io::paths> recentScorePaths() const override;
+    void setRecentScorePaths(const io::paths& recentScorePaths) override;
 
     io::paths templatesDirPaths() const override;
     io::path scoresPath() const override;
-    io::path defaultSavingFilePath(const std::string& fileName) const override;
+    io::path defaultSavingFilePath(const io::path& fileName) const override;
 
     QColor templatePreviewBackgroundColor() const override;
     async::Channel<QColor> templatePreviewBackgroundColorChanged() const override;
@@ -51,9 +54,10 @@ public:
     void setPreferredScoreCreationMode(PreferredScoreCreationMode mode) override;
 
 private:
-    QStringList parseRecentList(const std::string& recents) const;
+    io::paths actualRecentScorePaths() const;
+    io::paths parsePaths(const mu::Val& value) const;
 
-    async::Channel<QStringList> m_recentListChanged;
+    async::Channel<io::paths> m_recentScorePathsChanged;
 };
 }
 

@@ -13,7 +13,7 @@ Row {
 
     signal timeEdited(var newTime)
 
-    spacing: 4
+    spacing: 0
 
     opacity: enabled ? 1 : ui.theme.itemOpacityDisabled
 

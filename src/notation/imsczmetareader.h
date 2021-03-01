@@ -26,8 +26,7 @@
 #include "retval.h"
 #include "notationtypes.h"
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class IMsczMetaReader : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IMsczMetaReader)
@@ -35,9 +34,8 @@ class IMsczMetaReader : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IMsczMetaReader() = default;
 
-    virtual RetVal<Meta> readMeta(const io::path& filePath) const = 0;
+    virtual MetaList readMetaList(const io::paths& filePaths) const = 0;
 };
-}
 }
 
 #endif // MU_NOTATION_IMSCZMETAREADER_H
