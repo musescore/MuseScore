@@ -103,8 +103,9 @@ void KeyCanvas::clear()
 
 void KeyCanvas::paintEvent(QPaintEvent*)
 {
-    QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing, true);
+    QPainter qp(this);
+    mu::draw::Painter painter(&qp);
+    painter.setRenderHint(mu::draw::Painter::Antialiasing, true);
     qreal wh = double(height());
     qreal ww = double(width());
     double y = wh * .5 - 2 * mu::palette::PALETTE_SPATIUM * extraMag;

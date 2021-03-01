@@ -66,11 +66,11 @@ class BarLine final : public Element
     ElementList _el;          ///< fermata or other articulations
 
     void getY() const;
-    void drawDots(QPainter* painter, qreal x) const;
-    void drawTips(QPainter* painter, bool reversed, qreal x) const;
+    void drawDots(mu::draw::Painter* painter, qreal x) const;
+    void drawTips(mu::draw::Painter* painter, bool reversed, qreal x) const;
     bool isTop() const;
     bool isBottom() const;
-    void drawEditMode(QPainter*, EditData&) override;
+    void drawEditMode(mu::draw::Painter*, EditData&) override;
 
 public:
     BarLine(Score* s = 0);
@@ -88,7 +88,7 @@ public:
     Fraction playTick() const override;
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
     QPointF canvasPos() const override;      ///< position in canvas coordinates
     QPointF pagePos() const override;        ///< position in page coordinates
     void layout() override;

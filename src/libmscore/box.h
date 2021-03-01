@@ -49,7 +49,7 @@ public:
 
     void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
 
-    virtual void draw(QPainter*) const override;
+    virtual void draw(mu::draw::Painter*) const override;
     virtual bool isEditable() const override { return true; }
 
     virtual void startEdit(EditData&) override;

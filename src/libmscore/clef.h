@@ -151,7 +151,7 @@ public:
     bool acceptDrop(EditData&) const override;
     Element* drop(EditData&) override;
     void layout() override;
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
     void read(XmlReader&) override;
     void write(XmlWriter&) const override;
 

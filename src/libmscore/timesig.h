@@ -75,7 +75,7 @@ public:
     bool operator!=(const TimeSig& ts) const { return !(*this == ts); }
 
     qreal mag() const override;
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;
     void layout() override;

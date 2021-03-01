@@ -175,7 +175,7 @@ public:
     TextFragment(const QString& s);
     TextFragment(TextCursor*, const QString&);
     TextFragment split(int column);
-    void draw(QPainter*, const TextBase*) const;
+    void draw(mu::draw::Painter*, const TextBase*) const;
     QFont font(const TextBase*) const;
     int columns() const;
     void changeFormat(FormatId id, QVariant data);
@@ -200,7 +200,7 @@ public:
     TextBlock() {}
     bool operator ==(const TextBlock& x) { return _fragments == x._fragments; }
     bool operator !=(const TextBlock& x) { return _fragments != x._fragments; }
-    void draw(QPainter*, const TextBase*) const;
+    void draw(mu::draw::Painter*, const TextBase*) const;
     void layout(TextBase*);
     const QList<TextFragment>& fragments() const { return _fragments; }
     QList<TextFragment>& fragments() { return _fragments; }
@@ -262,7 +262,7 @@ class TextBase : public Element
 
     TextCursor* _cursor           { nullptr };
 
-    void drawSelection(QPainter*, const QRectF&) const;
+    void drawSelection(mu::draw::Painter*, const QRectF&) const;
     void insert(TextCursor*, uint code);
     void genText() const;
     virtual int getPropertyFlagsIdx(Pid id) const override;
@@ -286,9 +286,9 @@ public:
 
     Text& operator=(const Text&) = delete;
 
-    virtual void draw(QPainter*) const override;
-    virtual void drawEditMode(QPainter* p, EditData& ed) override;
-    static void drawTextWorkaround(QPainter* p, QFont& f, const QPointF pos, const QString text);
+    virtual void draw(mu::draw::Painter*) const override;
+    virtual void drawEditMode(mu::draw::Painter* p, EditData& ed) override;
+    static void drawTextWorkaround(mu::draw::Painter* p, QFont& f, const QPointF pos, const QString text);
 
     static QString plainToXmlText(const QString& s) { return s.toHtmlEscaped(); }
     void setPlainText(const QString& t) { setXmlText(plainToXmlText(t)); }

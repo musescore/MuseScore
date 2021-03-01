@@ -51,7 +51,7 @@ public:
     void setLineWidth(qreal v) { _width = v; }
 
     void layout() override;
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
 
     qreal measureXPos() const;
     LedgerLine* next() const { return _next; }

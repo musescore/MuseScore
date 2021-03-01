@@ -206,7 +206,7 @@ QString Articulation::userName() const
 //   Symbol::draw
 //---------------------------------------------------------
 
-void Articulation::draw(QPainter* painter) const
+void Articulation::draw(mu::draw::Painter* painter) const
 {
 #if 0 //TODO
     SymId sym = symId();

@@ -169,10 +169,12 @@ void ScoreView::setScore(Ms::Score* s)
 //   paint
 //---------------------------------------------------------
 
-void ScoreView::paint(QPainter* p)
+void ScoreView::paint(QPainter* qp)
 {
-    p->setRenderHint(QPainter::Antialiasing, true);
-    p->setRenderHint(QPainter::TextAntialiasing, true);
+    mu::draw::Painter mup(qp);
+    mu::draw::Painter* p = &mup;
+    p->setRenderHint(mu::draw::Painter::Antialiasing, true);
+    p->setRenderHint(mu::draw::Painter::TextAntialiasing, true);
     p->fillRect(QRect(0, 0, width(), height()), _color);
     if (!score) {
         return;

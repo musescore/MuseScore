@@ -33,7 +33,7 @@ NoteDot::NoteDot(Score* s)
 //   NoteDot::draw
 //---------------------------------------------------------
 
-void NoteDot::draw(QPainter* p) const
+void NoteDot::draw(mu::draw::Painter* p) const
 {
     if (note() && note()->dotsHidden()) {     // don't draw dot if note is hidden
         return;

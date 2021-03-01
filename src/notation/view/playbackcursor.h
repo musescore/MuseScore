@@ -36,7 +36,7 @@ public:
 
     PlaybackCursor() = default;
 
-    void paint(QPainter* painter);
+    void paint(draw::Painter* painter);
     void move(const QRect& rect);
 
     const QRect& rect() const;

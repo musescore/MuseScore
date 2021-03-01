@@ -51,7 +51,7 @@ public:
     ~NotationInteraction() override;
 
     void init();
-    void paint(QPainter* painter);
+    void paint(draw::Painter* painter);
 
     // Put notes
     INotationNoteInputPtr noteInput() const override;
@@ -179,10 +179,10 @@ private:
 
     void setAnchorLines(const std::vector<QLineF>& anchorList);
     void resetAnchorLines();
-    void drawAnchorLines(QPainter* painter);
-    void drawTextEditMode(QPainter* painter);
-    void drawSelectionRange(QPainter* painter);
-    void drawGripPoints(QPainter* painter);
+    void drawAnchorLines(draw::Painter* painter);
+    void drawTextEditMode(mu::draw::Painter* painter);
+    void drawSelectionRange(mu::draw::Painter* painter);
+    void drawGripPoints(mu::draw::Painter* painter);
     void moveElementSelection(MoveDirection d);
 
     Element* dropTarget(Ms::EditData& ed) const;

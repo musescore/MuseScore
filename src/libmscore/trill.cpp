@@ -56,7 +56,7 @@ static const ElementStyle trillStyle {
 //   draw
 //---------------------------------------------------------
 
-void TrillSegment::draw(QPainter* painter) const
+void TrillSegment::draw(mu::draw::Painter* painter) const
 {
     painter->setPen(spanner()->curColor());
     drawSymbols(_symbols, painter);

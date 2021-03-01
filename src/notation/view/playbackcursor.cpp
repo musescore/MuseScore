@@ -22,7 +22,7 @@
 
 using namespace mu::notation;
 
-void PlaybackCursor::paint(QPainter* painter)
+void PlaybackCursor::paint(mu::draw::Painter* painter)
 {
     if (!m_visible) {
         return;

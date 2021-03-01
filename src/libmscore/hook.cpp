@@ -97,7 +97,7 @@ void Hook::layout()
 //   draw
 //---------------------------------------------------------
 
-void Hook::draw(QPainter* painter) const
+void Hook::draw(mu::draw::Painter* painter) const
 {
     // hide if belonging to the second chord of a cross-measure pair
     if (chord() && chord()->crossMeasure() == CrossMeasure::SECOND) {

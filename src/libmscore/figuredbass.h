@@ -154,7 +154,7 @@ public:
     // standard re-implemented virtual functions
     FiguredBassItem* clone() const override { return new FiguredBassItem(*this); }
     ElementType       type() const override { return ElementType::INVALID; }
-    void              draw(QPainter* painter) const override;
+    void              draw(mu::draw::Painter* painter) const override;
     void              layout() override;
     void              read(XmlReader&) override;
     void              write(XmlWriter& xml) const override;
@@ -258,7 +258,7 @@ public:
     // standard re-implemented virtual functions
     FiguredBass* clone() const override { return new FiguredBass(*this); }
     ElementType   type() const override { return ElementType::FIGURED_BASS; }
-    void      draw(QPainter* painter) const override;
+    void      draw(mu::draw::Painter* painter) const override;
     void      endEdit(EditData&) override;
     void      layout() override;
     void      read(XmlReader&) override;

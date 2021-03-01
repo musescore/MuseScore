@@ -126,7 +126,7 @@ public:
     void remove(Element*) override;
 
     void move(const QPointF&) override;
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
 
     bool up() const { return _up; }
     void setUp(bool v) { _up = v; }

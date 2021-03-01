@@ -78,7 +78,7 @@ void GlissandoSegment::layout()
 //   draw
 //---------------------------------------------------------
 
-void GlissandoSegment::draw(QPainter* painter) const
+void GlissandoSegment::draw(mu::draw::Painter* painter) const
 {
     painter->save();
     qreal _spatium = spatium();

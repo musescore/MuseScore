@@ -88,7 +88,7 @@ void HBox::computeMinWidth()
 //   draw
 //---------------------------------------------------------
 
-void Box::draw(QPainter* painter) const
+void Box::draw(mu::draw::Painter* painter) const
 {
     if (score() && score()->printing()) {
         return;

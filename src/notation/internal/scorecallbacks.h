@@ -35,7 +35,7 @@ public:
 
     void dataChanged(const QRectF&) override;
     void updateAll() override;
-    void drawBackground(QPainter*, const QRectF&) const override;
+    void drawBackground(mu::draw::Painter*, const QRectF&) const override;
     const QRect geometry() const override;
 };
 }

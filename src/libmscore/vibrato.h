@@ -41,7 +41,7 @@ public:
 
     Vibrato* vibrato() const { return toVibrato(spanner()); }
 
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
     void layout() override;
 
     Element* propertyDelegate(Pid) override;

@@ -822,7 +822,7 @@ PaletteCell* Palette::add(int idx, Element* s, const QString& name, QString tag,
 
 void Palette::paintPaletteElement(void* data, Element* element)
 {
-    QPainter* painter = static_cast<QPainter*>(data);
+    mu::draw::Painter* painter = static_cast<mu::draw::Painter*>(data);
     painter->save();
     painter->translate(element->pos()); // necessary for drawing child elements
 

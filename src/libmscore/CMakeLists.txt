@@ -352,6 +352,8 @@ set(MODULE_SRC
     xml.h
     xmlreader.cpp
     xmlwriter.cpp
+    draw/painter.cpp
+    draw/painter.h
     )
 
 set(MODULE_INCLUDE

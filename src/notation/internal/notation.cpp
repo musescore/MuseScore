@@ -239,7 +239,7 @@ ViewMode Notation::viewMode() const
     return score()->layoutMode();
 }
 
-void Notation::paint(QPainter* painter, const QRectF& frameRect)
+void Notation::paint(mu::draw::Painter* painter, const QRectF& frameRect)
 {
     const QList<Ms::Page*>& pages = score()->pages();
     if (pages.empty()) {
@@ -263,7 +263,7 @@ void Notation::paint(QPainter* painter, const QRectF& frameRect)
     static_cast<NotationInteraction*>(m_interaction.get())->paint(painter);
 }
 
-void Notation::paintPages(QPainter* painter, const QRectF& frameRect, const QList<Ms::Page*>& pages, bool paintBorders) const
+void Notation::paintPages(draw::Painter* painter, const QRectF& frameRect, const QList<Ms::Page*>& pages, bool paintBorders) const
 {
     for (Ms::Page* page : pages) {
         QRectF pageRect(page->abbox().translated(page->pos()));
@@ -291,7 +291,7 @@ void Notation::paintPages(QPainter* painter, const QRectF& frameRect, const QLis
     }
 }
 
-void Notation::paintPageBorder(QPainter* painter, const Ms::Page* page) const
+void Notation::paintPageBorder(draw::Painter* painter, const Ms::Page* page) const
 {
     QRectF boundingRect(page->canvasBoundingRect());
 

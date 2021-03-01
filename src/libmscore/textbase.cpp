@@ -873,7 +873,7 @@ bool TextFragment::operator ==(const TextFragment& f) const
 //   draw
 //---------------------------------------------------------
 
-void TextFragment::draw(QPainter* p, const TextBase* t) const
+void TextFragment::draw(mu::draw::Painter* p, const TextBase* t) const
 {
     QFont f(font(t));
     f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
@@ -889,7 +889,7 @@ void TextFragment::draw(QPainter* p, const TextBase* t) const
 //   drawTextWorkaround
 //---------------------------------------------------------
 
-void TextBase::drawTextWorkaround(QPainter* p, QFont& f, const QPointF pos, const QString text)
+void TextBase::drawTextWorkaround(mu::draw::Painter* p, QFont& f, const QPointF pos, const QString text)
 {
     qreal mm = p->worldTransform().m11();
     if (!(MScore::pdfPrinting) && (mm < 1.0) && f.bold() && !(f.underline())) {
@@ -1055,7 +1055,7 @@ QFont TextFragment::font(const TextBase* t) const
 //   draw
 //---------------------------------------------------------
 
-void TextBlock::draw(QPainter* p, const TextBase* t) const
+void TextBlock::draw(mu::draw::Painter* p, const TextBase* t) const
 {
     p->translate(0.0, _y);
     for (const TextFragment& f : _fragments) {
@@ -1741,7 +1741,7 @@ TextBase::TextBase(const TextBase& st)
 //   drawSelection
 //---------------------------------------------------------
 
-void TextBase::drawSelection(QPainter* p, const QRectF& r) const
+void TextBase::drawSelection(mu::draw::Painter* p, const QRectF& r) const
 {
     QBrush bg(QColor("steelblue"));
     p->setCompositionMode(QPainter::CompositionMode_HardLight);
@@ -3372,7 +3372,7 @@ TextCursor* TextBase::cursorFromEditData(const EditData& ed)
 //   draw
 //---------------------------------------------------------
 
-void TextBase::draw(QPainter* p) const
+void TextBase::draw(mu::draw::Painter* p) const
 {
     if (hasFrame()) {
         qreal baseSpatium = MScore::baseStyle().value(Sid::spatium).toDouble();
@@ -3412,7 +3412,7 @@ void TextBase::draw(QPainter* p) const
 //    draw edit mode decorations
 //---------------------------------------------------------
 
-void TextBase::drawEditMode(QPainter* p, EditData& ed)
+void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed)
 {
     QPointF pos(canvasPos());
     p->translate(pos);

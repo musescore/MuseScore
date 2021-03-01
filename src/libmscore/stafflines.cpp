@@ -175,7 +175,7 @@ void StaffLines::layoutPartialWidth(qreal w, qreal wPartial, bool alignRight)
 //   draw
 //---------------------------------------------------------
 
-void StaffLines::draw(QPainter* painter) const
+void StaffLines::draw(mu::draw::Painter* painter) const
 {
     painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::FlatCap));
     painter->drawLines(lines);

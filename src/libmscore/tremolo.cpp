@@ -95,7 +95,7 @@ qreal Tremolo::minHeight() const
 //   draw
 //---------------------------------------------------------
 
-void Tremolo::draw(QPainter* painter) const
+void Tremolo::draw(mu::draw::Painter* painter) const
 {
     if (isBuzzRoll()) {
         painter->setPen(curColor());

@@ -53,7 +53,7 @@ MMRest::MMRest(const MMRest& r, bool link)
 //   MMRest::draw
 //---------------------------------------------------------
 
-void MMRest::draw(QPainter* painter) const
+void MMRest::draw(mu::draw::Painter* painter) const
 {
     if (shouldNotBeDrawn() || (track() % VOICES)) {     //only on voice 1
         return;

@@ -378,7 +378,7 @@ void SlurTieSegment::read(XmlReader& e)
 //   drawEditMode
 //---------------------------------------------------------
 
-void SlurTieSegment::drawEditMode(QPainter* p, EditData& ed)
+void SlurTieSegment::drawEditMode(mu::draw::Painter* p, EditData& ed)
 {
     QPolygonF polygon(7);
     polygon[0] = QPointF(ed.grip[int(Grip::START)].center());

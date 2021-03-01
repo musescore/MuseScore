@@ -309,7 +309,7 @@ void KeySig::layout()
 //   set
 //---------------------------------------------------------
 
-void KeySig::draw(QPainter* p) const
+void KeySig::draw(mu::draw::Painter* p) const
 {
     p->setPen(curColor());
     for (const KeySym& ks: _sig.keySymbols()) {
