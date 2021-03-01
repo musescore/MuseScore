@@ -32,7 +32,7 @@ public:
     ElementType type() const override { return ElementType::NOTEDOT; }
     qreal mag() const override;
 
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
     void read(XmlReader&) override;
     void layout() override;
 

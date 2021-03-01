@@ -39,7 +39,7 @@ public:
     KeySig(const KeySig&);
 
     KeySig* clone() const override { return new KeySig(*this); }
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
     ElementType type() const override { return ElementType::KEYSIG; }
     bool acceptDrop(EditData&) const override;
     Element* drop(EditData&) override;

@@ -230,7 +230,7 @@ void Fingering::layout()
 //   draw
 //---------------------------------------------------------
 
-void Fingering::draw(QPainter* painter) const
+void Fingering::draw(mu::draw::Painter* painter) const
 {
     TextBase::draw(painter);
 }

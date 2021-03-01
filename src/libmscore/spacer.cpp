@@ -41,7 +41,7 @@ Spacer::Spacer(const Spacer& s)
 //   draw
 //---------------------------------------------------------
 
-void Spacer::draw(QPainter* painter) const
+void Spacer::draw(mu::draw::Painter* painter) const
 {
     if (score()->printing() || !score()->showUnprintable()) {
         return;

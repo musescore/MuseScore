@@ -129,7 +129,7 @@ void NotationInteraction::notifyAboutSelectionChanged()
     m_selectionChanged.notify();
 }
 
-void NotationInteraction::paint(QPainter* painter)
+void NotationInteraction::paint(mu::draw::Painter* painter)
 {
     m_shadowNote->draw(painter);
 
@@ -1544,7 +1544,7 @@ void NotationInteraction::resetAnchorLines()
     m_anchorLines.clear();
 }
 
-void NotationInteraction::drawAnchorLines(QPainter* painter)
+void NotationInteraction::drawAnchorLines(mu::draw::Painter* painter)
 {
     if (m_anchorLines.empty()) {
         return;
@@ -1569,7 +1569,7 @@ void NotationInteraction::drawAnchorLines(QPainter* painter)
     }
 }
 
-void NotationInteraction::drawTextEditMode(QPainter* painter)
+void NotationInteraction::drawTextEditMode(draw::Painter* painter)
 {
     if (!isTextEditingStarted()) {
         return;
@@ -1578,7 +1578,7 @@ void NotationInteraction::drawTextEditMode(QPainter* painter)
     m_textEditData.element->drawEditMode(painter, m_textEditData);
 }
 
-void NotationInteraction::drawSelectionRange(QPainter* painter)
+void NotationInteraction::drawSelectionRange(draw::Painter* painter)
 {
     if (!m_selection->isRange()) {
         return;
@@ -1607,7 +1607,7 @@ void NotationInteraction::drawSelectionRange(QPainter* painter)
     }
 }
 
-void NotationInteraction::drawGripPoints(QPainter* painter)
+void NotationInteraction::drawGripPoints(draw::Painter* painter)
 {
     if (!selection()->element() || !m_gripEditData.element) {
         return;

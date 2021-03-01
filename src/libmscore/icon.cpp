@@ -60,7 +60,7 @@ void Icon::layout()
 //   draw
 //---------------------------------------------------------
 
-void Icon::draw(QPainter* p) const
+void Icon::draw(mu::draw::Painter* p) const
 {
     QPixmap pm(_icon.pixmap(_extent, QIcon::Normal, QIcon::On));
     p->drawPixmap(0, 0, pm);

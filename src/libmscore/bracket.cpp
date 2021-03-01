@@ -236,7 +236,7 @@ void Bracket::layout()
 //   draw
 //---------------------------------------------------------
 
-void Bracket::draw(QPainter* painter) const
+void Bracket::draw(mu::draw::Painter* painter) const
 {
     if (h2 == 0.0) {
         return;

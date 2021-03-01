@@ -98,8 +98,8 @@ class Harmony final : public TextBase
     NoteCaseType _rootRenderCase, _baseRenderCase;    // case to render
 
     void determineRootBaseSpelling();
-    void draw(QPainter*) const override;
-    void drawEditMode(QPainter* p, EditData& ed) override;
+    void draw(mu::draw::Painter*) const override;
+    void drawEditMode(mu::draw::Painter* p, EditData& ed) override;
     void render(const QString&, qreal&, qreal&);
     void render(const QList<RenderAction>& renderList, qreal&, qreal&, int tpc,NoteSpellingType noteSpelling = NoteSpellingType::STANDARD,
                 NoteCaseType noteCase = NoteCaseType::AUTO);

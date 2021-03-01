@@ -77,9 +77,10 @@ mu::Ret PngWriter::write(const notation::INotationPtr notation, IODevice& destin
     double scaling = CANVAS_DPI / Ms::DPI;
     Ms::MScore::pixelRatio = 1.0 / scaling;
 
-    QPainter painter(&image);
-    painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setRenderHint(QPainter::TextAntialiasing, true);
+    QPainter qp(&image);
+    mu::draw::Painter painter(&qp);
+    painter.setRenderHint(mu::draw::Painter::Antialiasing, true);
+    painter.setRenderHint(mu::draw::Painter::TextAntialiasing, true);
     painter.scale(scaling, scaling);
     if (TRIM_MARGIN_SIZE >= 0) {
         painter.translate(-pageRect.topLeft());

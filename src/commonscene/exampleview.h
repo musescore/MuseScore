@@ -57,7 +57,7 @@ class ExampleView : public QFrame, public MuseScoreView
 
     double m_defaultScaling = 0;
 
-    void drawElements(QPainter& painter, const QList<Element*>& el);
+    void drawElements(mu::draw::Painter& painter, const QList<Element*>& el);
     void setDropTarget(const Element* el) override;
 
     virtual void paintEvent(QPaintEvent*) override;
@@ -91,7 +91,7 @@ public:
     virtual void setDropRectangle(const QRectF&) override;
     virtual void cmdAddSlur(Note* firstNote, Note* lastNote);
     virtual Element* elementNear(QPointF) override;
-    virtual void drawBackground(QPainter*, const QRectF&) const override;
+    virtual void drawBackground(mu::draw::Painter*, const QRectF&) const override;
     void dragExampleView(QMouseEvent* ev);
     virtual const QRect geometry() const override { return QFrame::geometry(); }
 };

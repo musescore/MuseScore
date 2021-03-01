@@ -566,9 +566,10 @@ QImage Score::createThumbnail()
     double pr = MScore::pixelRatio;
     MScore::pixelRatio = 1.0;
 
-    QPainter p(&pm);
-    p.setRenderHint(QPainter::Antialiasing, true);
-    p.setRenderHint(QPainter::TextAntialiasing, true);
+    QPainter qp(&pm);
+    mu::draw::Painter p(&qp);
+    p.setRenderHint(mu::draw::Painter::Antialiasing, true);
+    p.setRenderHint(mu::draw::Painter::TextAntialiasing, true);
     p.scale(mag, mag);
     print(&p, 0);
     p.end();
@@ -1040,7 +1041,7 @@ Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError)
 //   print
 //---------------------------------------------------------
 
-void Score::print(QPainter* painter, int pageNo)
+void Score::print(mu::draw::Painter* painter, int pageNo)
 {
     _printing  = true;
     MScore::pdfPrinting = true;

@@ -46,7 +46,7 @@ private:
     bool _firstSystemIdentation;
     Type _layoutBreakType;
 
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
     void layout0();
     void spatiumChanged(qreal oldValue, qreal newValue) override;
 

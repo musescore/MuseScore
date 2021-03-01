@@ -29,7 +29,7 @@ namespace Ms {
 //   draw
 //---------------------------------------------------------
 
-void SlurSegment::draw(QPainter* painter) const
+void SlurSegment::draw(mu::draw::Painter* painter) const
 {
     QPen pen(curColor());
     qreal mag = staff() ? staff()->staffMag(slur()->tick()) : 1.0;

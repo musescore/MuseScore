@@ -19,6 +19,8 @@
 #include "style.h"
 #include "qtenum.h"
 
+#include "draw/painter.h"
+
 #include "ft2build.h"
 #include FT_FREETYPE_H
 
@@ -3188,15 +3190,15 @@ public:
     QString toString(SymId) const;
     QPixmap sym2pixmap(SymId, qreal) { return QPixmap(); }        // TODOxxxx
 
-    void draw(SymId id,                  QPainter*, const QSizeF& mag, const QPointF& pos, qreal scale) const;
-    void draw(SymId id,                  QPainter*, qreal mag,         const QPointF& pos, qreal scale) const;
-    void draw(SymId id,                  QPainter*, qreal mag,         const QPointF& pos) const;
-    void draw(SymId id,                  QPainter*, const QSizeF& mag, const QPointF& pos) const;
-    void draw(SymId id,                  QPainter*, qreal mag,         const QPointF& pos, int n) const;
-    void draw(const std::vector<SymId>&, QPainter*, qreal mag,         const QPointF& pos) const;
-    void draw(const std::vector<SymId>&, QPainter*, const QSizeF& mag, const QPointF& pos) const;
-    void draw(const std::vector<SymId>&, QPainter*, qreal mag,         const QPointF& pos, qreal scale) const;
-    void draw(const std::vector<SymId>&, QPainter*, const QSizeF& mag, const QPointF& pos, qreal scale) const;
+    void draw(SymId id,                  mu::draw::Painter*, const QSizeF& mag, const QPointF& pos, qreal scale) const;
+    void draw(SymId id,                  mu::draw::Painter*, qreal mag,         const QPointF& pos, qreal scale) const;
+    void draw(SymId id,                  mu::draw::Painter*, qreal mag,         const QPointF& pos) const;
+    void draw(SymId id,                  mu::draw::Painter*, const QSizeF& mag, const QPointF& pos) const;
+    void draw(SymId id,                  mu::draw::Painter*, qreal mag,         const QPointF& pos, int n) const;
+    void draw(const std::vector<SymId>&, mu::draw::Painter*, qreal mag,         const QPointF& pos) const;
+    void draw(const std::vector<SymId>&, mu::draw::Painter*, const QSizeF& mag, const QPointF& pos) const;
+    void draw(const std::vector<SymId>&, mu::draw::Painter*, qreal mag,         const QPointF& pos, qreal scale) const;
+    void draw(const std::vector<SymId>&, mu::draw::Painter*, const QSizeF& mag, const QPointF& pos, qreal scale) const;
 
     qreal height(SymId id, qreal mag) const { return bbox(id, mag).height(); }
     qreal width(SymId id, qreal mag) const { return bbox(id, mag).width(); }

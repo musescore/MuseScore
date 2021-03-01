@@ -495,7 +495,7 @@ AccidentalType Accidental::value2subtype(AccidentalVal v)
 //   draw
 //---------------------------------------------------------
 
-void Accidental::draw(QPainter* painter) const
+void Accidental::draw(mu::draw::Painter* painter) const
 {
     // don't show accidentals for tab or slash notation
     if (onTabStaff() || (note() && note()->fixed())) {

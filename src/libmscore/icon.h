@@ -45,7 +45,7 @@ public:
     int extent() const { return _extent; }
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
     void layout() override;
 
     QVariant getProperty(Pid) const override;

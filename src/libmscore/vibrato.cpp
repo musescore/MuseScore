@@ -46,7 +46,7 @@ int vibratoTableSize()
 //   draw
 //---------------------------------------------------------
 
-void VibratoSegment::draw(QPainter* painter) const
+void VibratoSegment::draw(mu::draw::Painter* painter) const
 {
     painter->setPen(spanner()->curColor());
     drawSymbols(_symbols, painter);

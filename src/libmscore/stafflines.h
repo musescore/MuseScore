@@ -30,7 +30,7 @@ public:
     StaffLines* clone() const override { return new StaffLines(*this); }
     ElementType type() const override { return ElementType::STAFF_LINES; }
     void layout() override;
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
     QPointF pagePos() const override;      ///< position in page coordinates
     QPointF canvasPos() const override;    ///< position in page coordinates
 

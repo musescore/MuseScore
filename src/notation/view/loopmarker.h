@@ -36,7 +36,7 @@ public:
     void setVisible(bool visible);
     void setStyle(INotationStylePtr style);
 
-    void paint(QPainter* painter);
+    void paint(draw::Painter* painter);
 
 private:
     LoopBoundaryType m_type = LoopBoundaryType::Unknown;

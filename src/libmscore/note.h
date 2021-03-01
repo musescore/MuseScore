@@ -443,7 +443,7 @@ public:
 
     Chord* chord() const { return (Chord*)parent(); }
     void setChord(Chord* a) { setParent((Element*)a); }
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
 
     void read(XmlReader&) override;
     bool readProperties(XmlReader&) override;

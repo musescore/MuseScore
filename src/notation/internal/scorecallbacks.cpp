@@ -32,7 +32,7 @@ void ScoreCallbacks::updateAll()
     NOT_IMPLEMENTED;
 }
 
-void ScoreCallbacks::drawBackground(QPainter*, const QRectF&) const
+void ScoreCallbacks::drawBackground(draw::Painter*, const QRectF&) const
 {
     NOT_IMPLEMENTED;
 }

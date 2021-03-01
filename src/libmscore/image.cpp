@@ -116,14 +116,14 @@ QSizeF Image::imageSize() const
 //   draw
 //---------------------------------------------------------
 
-void Image::draw(QPainter* painter) const
+void Image::draw(mu::draw::Painter* painter) const
 {
     bool emptyImage = false;
     if (imageType == ImageType::SVG) {
         if (!svgDoc) {
             emptyImage = true;
         } else {
-            svgDoc->render(painter, bbox());
+            svgDoc->render(painter->qpainter(), bbox());
         }
     } else if (imageType == ImageType::RASTER) {
         if (rasterDoc == nullptr) {

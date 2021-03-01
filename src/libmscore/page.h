@@ -41,7 +41,7 @@ class Page final : public Element
     bool bspTreeValid;
 
     QString replaceTextMacros(const QString&) const;
-    void drawHeaderFooter(QPainter*, int area, const QString&) const;
+    void drawHeaderFooter(mu::draw::Painter*, int area, const QString&) const;
 
 public:
     Page(Score*);
@@ -71,7 +71,7 @@ public:
     qreal lm() const;
     qreal rm() const;
 
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
     void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
 
     QList<Element*> items(const QRectF& r);

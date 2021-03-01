@@ -60,7 +60,7 @@ public:
     void read(XmlReader&) override;
     void write(XmlWriter& xml) const override;
     void layout() override;
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
 
     void startEditDrag(EditData&) override;
     void editDrag(EditData&) override;

@@ -165,7 +165,7 @@ class ScoreView : public QQuickPaintedItem, public MuseScoreView
     virtual void paint(QPainter*) override;
 
     virtual QRectF boundingRect() const override { return _boundingRect; }
-    virtual void drawBackground(QPainter*, const QRectF&) const override {}
+    virtual void drawBackground(mu::draw::Painter*, const QRectF&) const override {}
 
 public slots:
     //@ --

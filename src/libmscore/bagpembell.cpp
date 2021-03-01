@@ -548,7 +548,7 @@ void BagpipeEmbellishment::layout()
 //      x2,y is the other side of the top beam
 //---------------------------------------------------------
 
-static void drawBeams(QPainter* painter, const qreal spatium,
+static void drawBeams(mu::draw::Painter* painter, const qreal spatium,
                       const qreal x1, const qreal x2, qreal y)
 {
     // draw the beams
@@ -566,7 +566,7 @@ static void drawBeams(QPainter* painter, const qreal spatium,
 //      x,y2 is the bottom of the stem
 //---------------------------------------------------------
 
-void BagpipeEmbellishment::drawGraceNote(QPainter* painter,
+void BagpipeEmbellishment::drawGraceNote(mu::draw::Painter* painter,
                                          const BEDrawingDataX& dx,
                                          const BEDrawingDataY& dy,
                                          SymId flagsym, const qreal x, const bool drawFlag) const
@@ -589,7 +589,7 @@ void BagpipeEmbellishment::drawGraceNote(QPainter* painter,
 //      y = 0 is the top staff line
 //---------------------------------------------------------
 
-void BagpipeEmbellishment::draw(QPainter* painter) const
+void BagpipeEmbellishment::draw(mu::draw::Painter* painter) const
 {
     SymId headsym = SymId::noteheadBlack;
     SymId flagsym = SymId::flag32ndUp;

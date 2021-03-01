@@ -254,7 +254,7 @@ void Clef::layout()
 //   draw
 //---------------------------------------------------------
 
-void Clef::draw(QPainter* painter) const
+void Clef::draw(mu::draw::Painter* painter) const
 {
     if (symId == SymId::noSym || (staff() && !const_cast<const Staff*>(staff())->staffType(tick())->genClef())) {
         return;

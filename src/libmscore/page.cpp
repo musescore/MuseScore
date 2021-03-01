@@ -98,7 +98,7 @@ void Page::appendSystem(System* s)
 //    bounding rectangle fr is relative to page QPointF
 //---------------------------------------------------------
 
-void Page::draw(QPainter* painter) const
+void Page::draw(mu::draw::Painter* painter) const
 {
     if (score()->layoutMode() != LayoutMode::PAGE) {
         return;
@@ -151,7 +151,7 @@ void Page::draw(QPainter* painter) const
 //   drawHeaderFooter
 //---------------------------------------------------------
 
-void Page::drawHeaderFooter(QPainter* p, int area, const QString& ss) const
+void Page::drawHeaderFooter(mu::draw::Painter* p, int area, const QString& ss) const
 {
     QString s = replaceTextMacros(ss);
     if (s.isEmpty()) {

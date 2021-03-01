@@ -294,7 +294,7 @@ void FretDiagram::init(StringData* stringData, Chord* chord)
 //   draw
 //---------------------------------------------------------
 
-void FretDiagram::draw(QPainter* painter) const
+void FretDiagram::draw(mu::draw::Painter* painter) const
 {
     QPointF translation = -QPointF(stringDist * (_strings - 1), 0);
     if (_orientation == Orientation::HORIZONTAL) {

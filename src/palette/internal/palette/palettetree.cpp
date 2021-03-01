@@ -1060,7 +1060,7 @@ void PaletteTree::retranslate()
 /// aspect ratio, and leaving a small margin around the edges.
 //---------------------------------------------------------
 
-static void paintIconElement(QPainter& painter, const QRect& rect, Element* e)
+static void paintIconElement(mu::draw::Painter& painter, const QRect& rect, Element* e)
 {
     Q_ASSERT(e && e->isIcon());
     painter.save();   // so we can restore it after we are done using it
@@ -1088,7 +1088,7 @@ static void paintIconElement(QPainter& painter, const QRect& rect, Element* e)
 /// appear at the correct height on the staff.
 //---------------------------------------------------------
 
-void PaletteCellIconEngine::paintScoreElement(QPainter& p, Element* e, qreal spatium, bool alignToStaff) const
+void PaletteCellIconEngine::paintScoreElement(mu::draw::Painter& p, Element* e, qreal spatium, bool alignToStaff) const
 {
     Q_ASSERT(e && !e->isIcon());
     p.save();   // so we can restore painter after we are done using it
@@ -1117,7 +1117,7 @@ void PaletteCellIconEngine::paintScoreElement(QPainter& p, Element* e, qreal spa
 /// distance from the top of the QRect to the uppermost staff line.
 //---------------------------------------------------------
 
-qreal PaletteCellIconEngine::paintStaff(QPainter& p, const QRect& rect, qreal spatium)
+qreal PaletteCellIconEngine::paintStaff(mu::draw::Painter& p, const QRect& rect, qreal spatium)
 {
     p.save();   // so we can restore painter after we are done using it
     QPen pen(configuration()->elementsColor());
@@ -1148,7 +1148,7 @@ qreal PaletteCellIconEngine::paintStaff(QPainter& p, const QRect& rect, qreal sp
 //   paintBackground
 //---------------------------------------------------------
 
-void PaletteCellIconEngine::paintBackground(QPainter& p, const QRect& r, bool selected, bool current)
+void PaletteCellIconEngine::paintBackground(mu::draw::Painter& p, const QRect& r, bool selected, bool current)
 {
     QColor c(configuration()->accentColor());
     if (current || selected) {
@@ -1161,7 +1161,7 @@ void PaletteCellIconEngine::paintBackground(QPainter& p, const QRect& r, bool se
 //   paintTag
 //---------------------------------------------------------
 
-void PaletteCellIconEngine::paintTag(QPainter& painter, const QRect& rect, QString tag)
+void PaletteCellIconEngine::paintTag(mu::draw::Painter& painter, const QRect& rect, QString tag)
 {
     if (tag.isEmpty()) {
         return;
@@ -1186,7 +1186,7 @@ void PaletteCellIconEngine::paintTag(QPainter& painter, const QRect& rect, QStri
 //   PaletteCellIconEngine::paintCell
 //---------------------------------------------------------
 
-void PaletteCellIconEngine::paintCell(QPainter& p, const QRect& r, bool selected, bool current) const
+void PaletteCellIconEngine::paintCell(mu::draw::Painter& p, const QRect& r, bool selected, bool current) const
 {
     const qreal _yOffset = 0.0;   // TODO
 
@@ -1230,11 +1230,11 @@ void PaletteCellIconEngine::paintCell(QPainter& p, const QRect& r, bool selected
 //   PaletteCellIconEngine::paint
 //---------------------------------------------------------
 
-void PaletteCellIconEngine::paint(QPainter* painter, const QRect& r, QIcon::Mode mode, QIcon::State state)
+void PaletteCellIconEngine::paint(QPainter* qp, const QRect& r, QIcon::Mode mode, QIcon::State state)
 {
-    QPainter& p = *painter;
+    mu::draw::Painter p(qp);
     p.save();   // so we can restore it later
-    p.setRenderHint(QPainter::Antialiasing, true);
+    p.setRenderHint(mu::draw::Painter::Antialiasing, true);
     paintCell(p, r, mode == QIcon::Selected, state == QIcon::On);
     p.restore();   // return painter to saved initial state (undo any changes to pen, coordinates, font, etc.)
 }

@@ -78,7 +78,7 @@ public:
 
     qreal chordMag() const;
     qreal mag() const override;
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
     void layout() override;
     void layout2();
     void write(XmlWriter& xml) const override;

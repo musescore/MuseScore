@@ -36,7 +36,7 @@ public:
     void setHookType(int v);
     int hookType() const { return _hookType; }
     void layout() override;
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
     Chord* chord() const { return (Chord*)parent(); }
 };
 }     // namespace Ms

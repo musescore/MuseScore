@@ -467,7 +467,7 @@ void HairpinSegment::editDrag(EditData& ed)
 //   draw
 //---------------------------------------------------------
 
-void HairpinSegment::draw(QPainter* painter) const
+void HairpinSegment::draw(mu::draw::Painter* painter) const
 {
     TextLineBaseSegment::draw(painter);
 

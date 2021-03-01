@@ -1336,7 +1336,7 @@ bool Note::isNoteName() const
 //   draw
 //---------------------------------------------------------
 
-void Note::draw(QPainter* painter) const
+void Note::draw(mu::draw::Painter* painter) const
 {
     if (_hidden) {
         return;

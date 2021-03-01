@@ -19,7 +19,7 @@ namespace Ms {
 //   draw
 //---------------------------------------------------------
 
-void StemSlash::draw(QPainter* painter) const
+void StemSlash::draw(mu::draw::Painter* painter) const
 {
     qreal lw = score()->styleP(Sid::stemWidth);
     painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::FlatCap));

@@ -94,7 +94,7 @@ void TremoloBar::layout()
 //   draw
 //---------------------------------------------------------
 
-void TremoloBar::draw(QPainter* painter) const
+void TremoloBar::draw(mu::draw::Painter* painter) const
 {
     QPen pen(curColor(), m_lw.val(), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
     painter->setPen(pen);

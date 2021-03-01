@@ -82,7 +82,7 @@ class Articulation final : public Element
     MScore::OrnamentStyle _ornamentStyle;       // for use in ornaments such as trill
     bool _playArticulation;
 
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
 
     enum class AnchorGroup {
         ARTICULATION,

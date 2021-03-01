@@ -38,7 +38,7 @@ public:
 
     NoteInputCursor() = default;
 
-    void paint(QPainter* painter);
+    void paint(draw::Painter* painter);
 
 private:
     INotationNoteInputPtr currentNoteInput() const;

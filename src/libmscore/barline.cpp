@@ -514,7 +514,7 @@ void BarLine::getY() const
 //   drawDots
 //---------------------------------------------------------
 
-void BarLine::drawDots(QPainter* painter, qreal x) const
+void BarLine::drawDots(mu::draw::Painter* painter, qreal x) const
 {
     qreal _spatium = spatium();
 
@@ -547,7 +547,7 @@ void BarLine::drawDots(QPainter* painter, qreal x) const
 //   drawTips
 //---------------------------------------------------------
 
-void BarLine::drawTips(QPainter* painter, bool reversed, qreal x) const
+void BarLine::drawTips(mu::draw::Painter* painter, bool reversed, qreal x) const
 {
     if (reversed) {
         if (isTop()) {
@@ -601,7 +601,7 @@ bool BarLine::isBottom() const
 //   draw
 //---------------------------------------------------------
 
-void BarLine::draw(QPainter* painter) const
+void BarLine::draw(mu::draw::Painter* painter) const
 {
     switch (barLineType()) {
     case BarLineType::NORMAL: {
@@ -776,7 +776,7 @@ void BarLine::draw(QPainter* painter) const
 //   drawEditMode
 //---------------------------------------------------------
 
-void BarLine::drawEditMode(QPainter* p, EditData& ed)
+void BarLine::drawEditMode(mu::draw::Painter* p, EditData& ed)
 {
     Element::drawEditMode(p, ed);
     BarLineEditData* bed = static_cast<BarLineEditData*>(ed.getData(this));

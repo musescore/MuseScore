@@ -58,10 +58,10 @@ public:
 
     void layout() override;
 
-    void draw(QPainter*) const override;
-    void drawArticulations(QPainter* painter) const;
-    void drawMarcato(QPainter* painter, const SymId& articulation, QRectF& boundRect) const;
-    void drawArticulation(QPainter* painter, const SymId& articulation, QRectF& boundRect) const;
+    void draw(mu::draw::Painter*) const override;
+    void drawArticulations(mu::draw::Painter* painter) const;
+    void drawMarcato(mu::draw::Painter* painter, const SymId& articulation, QRectF& boundRect) const;
+    void drawArticulation(mu::draw::Painter* painter, const SymId& articulation, QRectF& boundRect) const;
 
     bool computeUp() const;
     SymId noteheadSymbol() const { return m_noteheadSymbol; }

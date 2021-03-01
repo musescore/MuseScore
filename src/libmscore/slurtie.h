@@ -122,7 +122,7 @@ public:
 
     void writeSlur(XmlWriter& xml, int no) const;
     void read(XmlReader&) override;
-    virtual void drawEditMode(QPainter*, EditData&) override;
+    virtual void drawEditMode(mu::draw::Painter*, EditData&) override;
     virtual void computeBezier(QPointF so = QPointF()) = 0;
 };
 
