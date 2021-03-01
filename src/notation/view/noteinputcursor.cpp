@@ -22,7 +22,7 @@
 
 using namespace mu::notation;
 
-void NoteInputCursor::paint(QPainter* painter)
+void NoteInputCursor::paint(mu::draw::Painter* painter)
 {
     if (!isNoteInputMode()) {
         return;

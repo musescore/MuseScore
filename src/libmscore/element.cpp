@@ -956,7 +956,7 @@ Compound::Compound(const Compound& c)
 //   draw
 //---------------------------------------------------------
 
-void Compound::draw(QPainter* painter) const
+void Compound::draw(mu::draw::Painter* painter) const
 {
     foreach (Element* e, elements) {
         QPointF pt(e->pos());
@@ -1315,7 +1315,7 @@ void collectElements(void* data, Element* e)
     el->append(e);
 }
 
-void paintElement(QPainter& painter, const Element* element)
+void paintElement(mu::draw::Painter& painter, const Element* element)
 {
     element->itemDiscovered = false;
     QPointF elementPosition(element->pagePos());
@@ -1325,7 +1325,7 @@ void paintElement(QPainter& painter, const Element* element)
     painter.translate(-elementPosition);
 }
 
-void paintElements(QPainter& painter, const QList<Element*>& elements)
+void paintElements(mu::draw::Painter& painter, const QList<Element*>& elements)
 {
     QList<Ms::Element*> sortedElements = elements;
 
@@ -1701,22 +1701,22 @@ void Element::undoSetVisible(bool v)
 //   drawSymbol
 //---------------------------------------------------------
 
-void Element::drawSymbol(SymId id, QPainter* p, const QPointF& o, qreal scale) const
+void Element::drawSymbol(SymId id, mu::draw::Painter* p, const QPointF& o, qreal scale) const
 {
     score()->scoreFont()->draw(id, p, magS() * scale, o);
 }
 
-void Element::drawSymbol(SymId id, QPainter* p, const QPointF& o, int n) const
+void Element::drawSymbol(SymId id, mu::draw::Painter* p, const QPointF& o, int n) const
 {
     score()->scoreFont()->draw(id, p, magS(), o, n);
 }
 
-void Element::drawSymbols(const std::vector<SymId>& s, QPainter* p, const QPointF& o, qreal scale) const
+void Element::drawSymbols(const std::vector<SymId>& s, mu::draw::Painter* p, const QPointF& o, qreal scale) const
 {
     score()->scoreFont()->draw(s, p, magS() * scale, o);
 }
 
-void Element::drawSymbols(const std::vector<SymId>& s, QPainter* p, const QPointF& o, const QSizeF& scale) const
+void Element::drawSymbols(const std::vector<SymId>& s, mu::draw::Painter* p, const QPointF& o, const QSizeF& scale) const
 {
     score()->scoreFont()->draw(s, p, magS() * scale, o);
 }
@@ -2109,7 +2109,7 @@ void EditData::addData(ElementEditData* ed)
 //   drawEditMode
 //---------------------------------------------------------
 
-void Element::drawEditMode(QPainter* p, EditData& ed)
+void Element::drawEditMode(mu::draw::Painter* p, EditData& ed)
 {
     QPen pen(MScore::defaultColor, 0.0);
     p->setPen(pen);

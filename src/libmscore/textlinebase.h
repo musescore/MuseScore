@@ -43,7 +43,7 @@ public:
     ~TextLineBaseSegment();
 
     TextLineBase* textLineBase() const { return (TextLineBase*)spanner(); }
-    virtual void draw(QPainter*) const override;
+    virtual void draw(mu::draw::Painter*) const override;
 
     virtual void layout() override;
     virtual void setSelected(bool f) override;

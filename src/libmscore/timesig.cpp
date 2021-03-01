@@ -379,7 +379,7 @@ void TimeSig::layout()
 //   draw
 //---------------------------------------------------------
 
-void TimeSig::draw(QPainter* painter) const
+void TimeSig::draw(mu::draw::Painter* painter) const
 {
     if (staff() && !const_cast<const Staff*>(staff())->staffType(tick())->genTimesig()) {
         return;

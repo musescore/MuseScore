@@ -42,7 +42,7 @@ MeasureRepeat::MeasureRepeat(Score* score)
 //   draw
 //---------------------------------------------------------
 
-void MeasureRepeat::draw(QPainter* painter) const
+void MeasureRepeat::draw(mu::draw::Painter* painter) const
 {
     painter->setPen(curColor());
     drawSymbol(symId(), painter);

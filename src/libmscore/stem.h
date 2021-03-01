@@ -36,7 +36,7 @@ public:
 
     Stem* clone() const override { return new Stem(*this); }
     ElementType type() const override { return ElementType::STEM; }
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
     bool isEditable() const override { return true; }
     void layout() override;
     void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;

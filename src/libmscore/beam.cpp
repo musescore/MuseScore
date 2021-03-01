@@ -215,7 +215,7 @@ void Beam::removeChordRest(ChordRest* a)
 //   draw
 //---------------------------------------------------------
 
-void Beam::draw(QPainter* painter) const
+void Beam::draw(mu::draw::Painter* painter) const
 {
     if (beamSegments.empty()) {
         return;

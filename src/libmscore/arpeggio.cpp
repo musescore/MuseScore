@@ -215,7 +215,7 @@ void Arpeggio::layout()
 //   draw
 //---------------------------------------------------------
 
-void Arpeggio::draw(QPainter* p) const
+void Arpeggio::draw(mu::draw::Painter* p) const
 {
     if (_hidden) {
         return;

@@ -102,7 +102,7 @@ public:
     void layout() override;
     void layoutMultiGlyphAccidental();
     void layoutSingleGlyphAccidental();
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
     bool isEditable() const override { return true; }
     void startEdit(EditData&) override { setGenerated(false); }
 

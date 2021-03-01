@@ -49,14 +49,16 @@ mu::Ret PdfWriter::write(const notation::INotationPtr notation, IODevice& destin
     pdfWriter.setTitle(documentTitle(*score));
     pdfWriter.setPageMargins(QMarginsF());
 
-    QPainter painter;
-    if (!painter.begin(&pdfWriter)) {
+    QPainter qp;
+    if (!qp.begin(&pdfWriter)) {
         return false;
     }
 
+    mu::draw::Painter painter(&qp);
+
     QSizeF size(score->styleD(Sid::pageWidth), score->styleD(Sid::pageHeight));
-    painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setRenderHint(QPainter::TextAntialiasing, true);
+    painter.setRenderHint(mu::draw::Painter::Antialiasing, true);
+    painter.setRenderHint(mu::draw::Painter::TextAntialiasing, true);
     painter.setViewport(QRect(0.0, 0.0, size.width() * pdfWriter.logicalDpiX(),
                               size.height() * pdfWriter.logicalDpiY()));
     painter.setWindow(QRect(0.0, 0.0, size.width() * DPI, size.height() * DPI));

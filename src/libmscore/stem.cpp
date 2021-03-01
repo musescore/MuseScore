@@ -158,7 +158,7 @@ void Stem::spatiumChanged(qreal oldValue, qreal newValue)
 //   draw
 //---------------------------------------------------------
 
-void Stem::draw(QPainter* painter) const
+void Stem::draw(mu::draw::Painter* painter) const
 {
     if (!chord()) { // may be need assert?
         return;

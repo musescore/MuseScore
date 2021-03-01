@@ -601,7 +601,7 @@ void FiguredBassItem::layout()
 //   FiguredBassItem draw()
 //---------------------------------------------------------
 
-void FiguredBassItem::draw(QPainter* painter) const
+void FiguredBassItem::draw(mu::draw::Painter* painter) const
 {
     int font = 0;
     qreal _spatium = spatium();
@@ -1329,7 +1329,7 @@ void FiguredBass::layoutLines()
 //   draw
 //---------------------------------------------------------
 
-void FiguredBass::draw(QPainter* painter) const
+void FiguredBass::draw(mu::draw::Painter* painter) const
 {
     // if not printing, draw duration line(s)
     if (!score()->printing() && score()->showUnprintable()) {

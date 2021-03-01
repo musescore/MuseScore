@@ -18,6 +18,8 @@
 #include <QCursor>
 #include <QRectF>
 
+#include "draw/painter.h"
+
 namespace Ms {
 class Element;
 class Score;
@@ -64,7 +66,7 @@ public:
     virtual void addSlur(ChordRest*, ChordRest*, const Slur* /* slurTemplate */) {}
     virtual void startEdit(Element*, Grip /*startGrip*/) {}
     virtual void startNoteEntryMode() {}
-    virtual void drawBackground(QPainter*, const QRectF&) const = 0;
+    virtual void drawBackground(mu::draw::Painter*, const QRectF&) const = 0;
     virtual void setDropTarget(const Element*) {}
 
     virtual void textTab(bool /*back*/) {}

@@ -147,7 +147,7 @@ public:
 
     LyricsLineSegment* clone() const override { return new LyricsLineSegment(*this); }
     ElementType type() const override { return ElementType::LYRICSLINE_SEGMENT; }
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
     void layout() override;
     // helper functions
     LyricsLine* lyricsLine() const { return toLyricsLine(spanner()); }

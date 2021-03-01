@@ -46,7 +46,7 @@ public:
 
     Measure* firstMeasureOfGroup() const { return measure()->firstOfMeasureRepeatGroup(staffIdx()); }
 
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
     void layout() override;
     Fraction ticks() const override;
     Fraction actualTicks() const { return Rest::ticks(); }

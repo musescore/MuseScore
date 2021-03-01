@@ -76,7 +76,7 @@ Rest::Rest(const Rest& r, bool link)
 //   Rest::draw
 //---------------------------------------------------------
 
-void Rest::draw(QPainter* painter) const
+void Rest::draw(mu::draw::Painter* painter) const
 {
     if (shouldNotBeDrawn()) {
         return;

@@ -50,7 +50,7 @@ struct BEDrawingDataY;
 class BagpipeEmbellishment final : public Element
 {
     int _embelType;
-    void drawGraceNote(QPainter*, const BEDrawingDataX&, const BEDrawingDataY&,SymId, const qreal x,const bool drawFlag) const;
+    void drawGraceNote(mu::draw::Painter*, const BEDrawingDataX&, const BEDrawingDataY&,SymId, const qreal x,const bool drawFlag) const;
 
 public:
     BagpipeEmbellishment(Score* s)
@@ -65,7 +65,7 @@ public:
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
     void layout() override;
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
     static BagpipeEmbellishmentInfo BagpipeEmbellishmentList[];
     static int nEmbellishments();
     static BagpipeNoteInfo BagpipeNoteInfoList[];

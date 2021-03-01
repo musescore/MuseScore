@@ -41,7 +41,7 @@ public:
     Trill* trill() const { return (Trill*)spanner(); }
     ElementType type() const override { return ElementType::TRILL_SEGMENT; }
     TrillSegment* clone() const override { return new TrillSegment(*this); }
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
     bool acceptDrop(EditData&) const override;
     Element* drop(EditData&) override;
     void layout() override;

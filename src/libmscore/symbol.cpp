@@ -80,7 +80,7 @@ void Symbol::layout()
 //   Symbol::draw
 //---------------------------------------------------------
 
-void Symbol::draw(QPainter* p) const
+void Symbol::draw(mu::draw::Painter* p) const
 {
     if (!isNoteDot() || !staff()->isTabStaff(tick())) {
         p->setPen(curColor());
@@ -208,7 +208,7 @@ FSymbol::FSymbol(const FSymbol& s)
 //   draw
 //---------------------------------------------------------
 
-void FSymbol::draw(QPainter* painter) const
+void FSymbol::draw(mu::draw::Painter* painter) const
 {
     QString s;
     QFont f(_font);

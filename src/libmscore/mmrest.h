@@ -35,7 +35,7 @@ public:
     MMRest* clone() const override { return new MMRest(*this, false); }
     Element* linkedClone() override { return new MMRest(*this, true); }
 
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
     void layout() override;
     void setWidth(qreal width) override { m_width = width; }
     qreal width() const override { return m_width; }

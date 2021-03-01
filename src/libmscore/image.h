@@ -68,7 +68,7 @@ public:
     bool load(const QString& s);
     bool loadFromData(const QString&, const QByteArray&);
     void layout() override;
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
 
     bool isImageFramed() const;
     qreal imageAspectRatio() const;

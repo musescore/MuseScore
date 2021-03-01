@@ -440,7 +440,7 @@ public:
     TabDurationSymbol(Score* s, const StaffType* tab, TDuration::DurationType type, int dots);
     TabDurationSymbol(const TabDurationSymbol&);
     TabDurationSymbol* clone() const override { return new TabDurationSymbol(*this); }
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
     bool isEditable() const override { return false; }
     void layout() override;
     ElementType type() const override { return ElementType::TAB_DURATION_SYMBOL; }

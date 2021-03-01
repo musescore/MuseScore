@@ -161,7 +161,7 @@ Element* ExampleView::elementNear(QPointF)
     return 0;
 }
 
-void ExampleView::drawBackground(QPainter* p, const QRectF& r) const
+void ExampleView::drawBackground(mu::draw::Painter* p, const QRectF& r) const
 {
     if (_fgPixmap == 0 || _fgPixmap->isNull()) {
         p->fillRect(r, _fgColor);
@@ -175,7 +175,7 @@ void ExampleView::drawBackground(QPainter* p, const QRectF& r) const
 //   drawElements
 //---------------------------------------------------------
 
-void ExampleView::drawElements(QPainter& painter, const QList<Element*>& el)
+void ExampleView::drawElements(mu::draw::Painter& painter, const QList<Element*>& el)
 {
     for (Element* e : el) {
         e->itemDiscovered = 0;
@@ -193,9 +193,10 @@ void ExampleView::drawElements(QPainter& painter, const QList<Element*>& el)
 void ExampleView::paintEvent(QPaintEvent* ev)
 {
     if (_score) {
-        QPainter p(this);
-        p.setRenderHint(QPainter::Antialiasing, true);
-        p.setRenderHint(QPainter::TextAntialiasing, true);
+        QPainter qp(this);
+        mu::draw::Painter p(&qp);
+        p.setRenderHint(mu::draw::Painter::Antialiasing, true);
+        p.setRenderHint(mu::draw::Painter::TextAntialiasing, true);
         const QRect r(ev->rect());
 
         drawBackground(&p, r);

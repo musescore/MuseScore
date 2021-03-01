@@ -52,7 +52,7 @@ public:
 
     Segment* segment() const { return (Segment*)parent(); }
 
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
     void layout() override;
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;

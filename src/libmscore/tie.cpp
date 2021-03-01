@@ -27,7 +27,7 @@ Note* Tie::editEndNote;
 //   draw
 //---------------------------------------------------------
 
-void TieSegment::draw(QPainter* painter) const
+void TieSegment::draw(mu::draw::Painter* painter) const
 {
     // hide tie toward the second chord of a cross-measure value
     if (tie()->endNote() && tie()->endNote()->chord()->crossMeasure() == CrossMeasure::SECOND) {

@@ -21,6 +21,8 @@
 #include "sig.h"
 #include "sym.h"
 
+#include "draw/painter.h"
+
 namespace Ms {
 #ifdef Q_OS_MAC
 #define CONTROL_MODIFIER Qt::AltModifier
@@ -325,8 +327,8 @@ public:
 
     virtual int subtype() const { return -1; }                    // for select gui
 
-    virtual void draw(QPainter*) const {}
-    void drawAt(QPainter* p, const QPointF& pt) const { p->translate(pt); draw(p); p->translate(-pt); }
+    virtual void draw(mu::draw::Painter*) const {}
+    void drawAt(mu::draw::Painter* p, const QPointF& pt) const { p->translate(pt); draw(p); p->translate(-pt); }
 
     virtual void writeProperties(XmlWriter& xml) const;
     virtual bool readProperties(XmlReader&);
@@ -510,10 +512,10 @@ public:
     bool custom(Pid) const;
     virtual bool isUserModified() const;
 
-    void drawSymbol(SymId id, QPainter* p, const QPointF& o = QPointF(), qreal scale = 1.0) const;
-    void drawSymbol(SymId id, QPainter* p, const QPointF& o, int n) const;
-    void drawSymbols(const std::vector<SymId>&, QPainter* p, const QPointF& o = QPointF(), qreal scale = 1.0) const;
-    void drawSymbols(const std::vector<SymId>&, QPainter* p, const QPointF& o, const QSizeF& scale) const;
+    void drawSymbol(SymId id, mu::draw::Painter* p, const QPointF& o = QPointF(), qreal scale = 1.0) const;
+    void drawSymbol(SymId id, mu::draw::Painter* p, const QPointF& o, int n) const;
+    void drawSymbols(const std::vector<SymId>&, mu::draw::Painter* p, const QPointF& o = QPointF(), qreal scale = 1.0) const;
+    void drawSymbols(const std::vector<SymId>&, mu::draw::Painter* p, const QPointF& o, const QSizeF& scale) const;
     qreal symHeight(SymId id) const;
     qreal symWidth(SymId id) const;
     qreal symWidth(const std::vector<SymId>&) const;
@@ -545,7 +547,7 @@ public:
 
     virtual void triggerLayout() const;
     virtual void triggerLayoutAll() const;
-    virtual void drawEditMode(QPainter*, EditData&);
+    virtual void drawEditMode(mu::draw::Painter*, EditData&);
 
     void autoplaceSegmentElement(bool above, bool add);          // helper functions
     void autoplaceMeasureElement(bool above, bool add);
@@ -628,7 +630,7 @@ public:
     Compound(Score*);
     Compound(const Compound&);
 
-    virtual void draw(QPainter*) const;
+    virtual void draw(mu::draw::Painter*) const;
     virtual void addElement(Element*, qreal x, qreal y);
     void clear();
     virtual void setSelected(bool f);
@@ -639,8 +641,8 @@ public:
 extern bool elementLessThan(const Element* const, const Element* const);
 extern void collectElements(void* data, Element* e);
 
-extern void paintElement(QPainter& painter, const Element* element);
-extern void paintElements(QPainter& painter, const QList<Element*>& elements);
+extern void paintElement(mu::draw::Painter& painter, const Element* element);
+extern void paintElements(mu::draw::Painter& painter, const QList<Element*>& elements);
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::ElementType);

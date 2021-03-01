@@ -1512,7 +1512,7 @@ qreal Harmony::xShapeOffset() const
 //   draw
 //---------------------------------------------------------
 
-void Harmony::draw(QPainter* painter) const
+void Harmony::draw(mu::draw::Painter* painter) const
 {
     // painter->setPen(curColor());
     if (textList.empty()) {
@@ -1559,7 +1559,7 @@ void Harmony::draw(QPainter* painter) const
 //   drawEditMode
 //---------------------------------------------------------
 
-void Harmony::drawEditMode(QPainter* p, EditData& ed)
+void Harmony::drawEditMode(mu::draw::Painter* p, EditData& ed)
 {
     TextBase::drawEditMode(p, ed);
 

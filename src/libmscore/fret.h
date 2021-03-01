@@ -169,7 +169,7 @@ public:
     ScoreElement* treeChild(int idx) const override;
     int treeChildCount() const override;
 
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
     Element* linkedClone() override;
     FretDiagram* clone() const override { return new FretDiagram(*this); }
 
