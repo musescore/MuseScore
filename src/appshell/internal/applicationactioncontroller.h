@@ -61,6 +61,7 @@ private:
     void openAskForHelpPage();
     void openBugReportPage();
     void openLeaveFeedbackPage();
+    void openPreferencesDialog();
 
     void revertToFactorySettings();
 

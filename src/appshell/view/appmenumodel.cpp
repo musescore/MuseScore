@@ -141,7 +141,7 @@ MenuItem AppMenuModel::editItem() const
         makeAction("select-similar"),
         makeAction("find"),
         makeSeparator(),
-        makeAction("preference-dialog") // need implement
+        makeAction("preference-dialog")
     };
 
     return makeMenu(trc("appshell", "&Edit"), editItems);

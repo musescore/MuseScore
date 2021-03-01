@@ -6,7 +6,7 @@ import MuseScore.UiComponents 1.0
 import MuseScore.Plugins 1.0
 import MuseScore.Audio 1.0
 
-import "../Settings"
+import "./Preferences"
 import "./Gallery"
 import "./Interactive"
 import "./NotationDialogs"

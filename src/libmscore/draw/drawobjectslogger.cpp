@@ -20,6 +20,8 @@
 
 #include "log.h"
 
+#include <QPointF>
+
 using namespace mu::draw;
 
 static const std::string DRAW_OBJ_TAG("DRAW_OBJ");

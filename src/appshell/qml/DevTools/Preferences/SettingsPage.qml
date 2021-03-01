@@ -5,7 +5,7 @@ import QtQuick.Dialogs 1.2
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Dock 1.0
-import MuseScore.Settings 1.0
+import MuseScore.Preferences 1.0
 
 Rectangle {
     id: root
