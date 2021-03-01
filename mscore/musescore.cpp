@@ -2661,10 +2661,6 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
                   }
             cs = cv->score();
             cv->setFocusRect();
-            if (!cv->wasShown) {
-                  cv->wasShown = true;
-                  cv->pageTop();
-                  }
             }
       else
             cs = 0;

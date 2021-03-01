@@ -236,6 +236,7 @@ void ScoreView::setScore(Score* s)
                   }
             else
                   _score->addViewer(this);
+            pageTop(); // (re)set position
             }
 
       if (shadowNote == 0) {
@@ -3582,46 +3583,7 @@ void ScoreView::screenPrev()
 
 void ScoreView::pageTop()
       {
-      switch (score()->layoutMode()) {
-            case LayoutMode::PAGE:
-                  {
-                  qreal dx = thinPadding, dy = thinPadding;
-                  Page* firstPage = score()->pages().front();
-                  Page* lastPage  = score()->pages().back();
-                  if (firstPage && lastPage) {
-                        QPointF offsetPt(xoffset(), yoffset());
-                        QRectF firstPageRect(firstPage->pos().x() * physicalZoomLevel(),
-                                             firstPage->pos().y() * physicalZoomLevel(),
-                                             firstPage->width() * physicalZoomLevel(),
-                                             firstPage->height() * physicalZoomLevel());
-                        QRectF lastPageRect(lastPage->pos().x() * physicalZoomLevel(),
-                                            lastPage->pos().y() * physicalZoomLevel(),
-                                            lastPage->width() * physicalZoomLevel(),
-                                            lastPage->height() * physicalZoomLevel());
-                        QRectF pagesRect = firstPageRect.united(lastPageRect);
-                        dx = qMax(thinPadding, (width() - pagesRect.width()) / 2);
-                        dy = qMax(thinPadding, (height() - pagesRect.height()) / 2);
-                        }
-                  setOffset(dx, dy);
-                  break;
-                  }
-            case LayoutMode::LINE:
-                  setOffset(thinPadding, 0.0);
-                  break;
-            case LayoutMode::SYSTEM:
-                  {
-                  qreal dx = thinPadding, dy = thinPadding;
-                  Page* page = score()->pages().front();
-                  if (page) {
-                        dx = qMax(thinPadding, (width() - page->width() * physicalZoomLevel()) / 2);
-                        }
-                  setOffset(dx, dy);
-                  break;
-                  }
-            default:
-                  setOffset(thinPadding, thinPadding);
-                  break;
-      }
+      setOffset(thinPadding, score()->layoutMode() == LayoutMode::LINE ? 0.0 : thinPadding);
       update();
       }
 
