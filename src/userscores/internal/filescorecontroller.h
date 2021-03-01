@@ -40,6 +40,8 @@ public:
     void init();
 
 private:
+    notation::IMasterNotationPtr currentMasterNotation() const;
+
     void openScore(const actions::ActionData& args);
     void importScore();
     void newScore();
@@ -60,7 +62,7 @@ private:
 
     io::path defaultSavingFilePath() const;
 
-    void prependToRecentScoreList(io::path filePath);
+    void prependToRecentScoreList(const io::path& filePath);
 };
 }
 

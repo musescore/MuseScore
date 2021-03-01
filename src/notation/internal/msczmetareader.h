@@ -21,6 +21,9 @@
 
 #include "imsczmetareader.h"
 
+#include "system/ifilesystem.h"
+#include "modularity/ioc.h"
+
 namespace mu::framework {
 class XmlReader;
 }
@@ -30,10 +33,14 @@ class MQZipReader;
 namespace mu::notation {
 class MsczMetaReader : public IMsczMetaReader
 {
+    INJECT(notation, system::IFileSystem, fileSystem)
+
 public:
-    RetVal<Meta> readMeta(const io::path& filePath) const override;
+    MetaList readMetaList(const io::paths& filePaths) const override;
 
 private:
+    RetVal<Meta> readMeta(const io::path& filePath) const;
+
     struct RawMeta {
         QString titleTag;
         QString titleAttribute;

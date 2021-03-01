@@ -45,7 +45,7 @@ StyledPopup {
                 }
             }
 
-            FlatToogleButton {
+            FlatToggleButton {
                 id: lockButton
 
                 anchors.horizontalCenter: parent.horizontalCenter

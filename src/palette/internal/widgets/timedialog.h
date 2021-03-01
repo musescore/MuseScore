@@ -52,7 +52,7 @@ private slots:
     void setDirty() { _dirty = true; }
 
 signals:
-    void timeSigAdded(const TimeSig*);
+    void timeSigAdded(const std::shared_ptr<TimeSig>);
 
 public:
     TimeDialog(QWidget* parent = 0);

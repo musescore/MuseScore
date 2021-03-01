@@ -23,14 +23,12 @@
 
 #include "notation/imsczmetareader.h"
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class MsczReaderMock : public IMsczMetaReader
 {
 public:
-    MOCK_METHOD(RetVal<Meta>, readMeta, (const io::path&), (const, override));
+    MOCK_METHOD(MetaList, readMetaList, (const io::paths&), (const, override));
 };
-}
 }
 
 #endif // MU_NOTATION_NOTATIONMSCZREADERMOCK_H

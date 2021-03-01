@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.3
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.UserScores 1.0
+import MuseScore.CommonScene 1.0
 
 FlatButton {
     id: root
@@ -15,13 +16,15 @@ FlatButton {
     accentButton: popup.visible
 
     TempoView {
-        id: tempoView
+        anchors.centerIn: parent
 
-        anchors.horizontalCenter: root.horizontalCenter
-        anchors.verticalCenter: root.verticalCenter
-
+        noteSymbol: root.model.tempo.noteSymbol
         tempoValue: root.model.tempo.value
-        tempoNoteSymbol: root.model.tempo.noteSymbol
+
+        noteSymbolFont.pixelSize: 36
+        tempoValueFont: ui.theme.headerFont
+
+        noteSymbolTopPadding: 22
     }
 
     onClicked: {

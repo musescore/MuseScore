@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
+<museScore version="3.02">
   <Workspace>
     <source>Default</source>
     <PaletteBox>
@@ -428,6 +428,7 @@
             </Bracket>
           </Cell>
         <Cell name="Brace">
+          <mag>1.2</mag>
           <Bracket type="Brace">
             </Bracket>
           </Cell>
@@ -749,7 +750,7 @@
           </Cell>
         <Cell name="Inverted mordent">
           <Articulation>
-            <subtype>ornamentMordentInverted</subtype>
+            <subtype>ornamentMordent</subtype>
             </Articulation>
           </Cell>
         <Cell name="Tremblement" visible="0">
@@ -1060,7 +1061,7 @@
             <ticks>0/1</ticks>
             <ticks_f>0/1</ticks_f>
             <track>0</track>
-            <length>175</length>
+            <length>173.6</length>
             </HairPin>
           </Cell>
         <Cell name="Diminuendo hairpin">
@@ -1069,7 +1070,7 @@
             <ticks>0/1</ticks>
             <ticks_f>0/1</ticks_f>
             <track>0</track>
-            <length>175</length>
+            <length>173.6</length>
             </HairPin>
           </Cell>
         <Cell name="Crescendo line">
@@ -1079,7 +1080,7 @@
             <ticks>0/1</ticks>
             <ticks_f>0/1</ticks_f>
             <track>0</track>
-            <length>175</length>
+            <length>173.6</length>
             </HairPin>
           </Cell>
         <Cell name="Diminuendo line">
@@ -1089,7 +1090,7 @@
             <ticks>0/1</ticks>
             <ticks_f>0/1</ticks_f>
             <track>0</track>
-            <length>175</length>
+            <length>173.6</length>
             </HairPin>
           </Cell>
         <Cell name="Dynamic + hairpin">
@@ -1100,7 +1101,7 @@
             <ticks>0/1</ticks>
             <ticks_f>0/1</ticks_f>
             <track>0</track>
-            <length>175</length>
+            <length>173.6</length>
             </HairPin>
           </Cell>
         <Cell name="Prima volta">
@@ -1110,7 +1111,7 @@
             <ticks>0/1</ticks>
             <ticks_f>0/1</ticks_f>
             <track>0</track>
-            <length>175</length>
+            <length>173.6</length>
             <endings>1</endings>
             </Volta>
           </Cell>
@@ -1142,7 +1143,7 @@
             <ticks>0/1</ticks>
             <ticks_f>0/1</ticks_f>
             <track>0</track>
-            <length>175</length>
+            <length>173.6</length>
             <endings>2</endings>
             </Volta>
           </Cell>
@@ -1152,7 +1153,7 @@
             <ticks>0/1</ticks>
             <ticks_f>0/1</ticks_f>
             <track>0</track>
-            <length>175</length>
+            <length>173.6</length>
             </Ottava>
           </Cell>
         <Cell name="8va bassa">
@@ -1161,7 +1162,7 @@
             <ticks>0/1</ticks>
             <ticks_f>0/1</ticks_f>
             <track>0</track>
-            <length>175</length>
+            <length>173.6</length>
             </Ottava>
           </Cell>
         <Cell name="15ma alta">
@@ -1170,7 +1171,7 @@
             <ticks>0/1</ticks>
             <ticks_f>0/1</ticks_f>
             <track>0</track>
-            <length>175</length>
+            <length>173.6</length>
             </Ottava>
           </Cell>
         <Cell name="15ma bassa" visible="0">
@@ -1208,7 +1209,7 @@
             <ticks>0/1</ticks>
             <ticks_f>0/1</ticks_f>
             <track>0</track>
-            <length>175</length>
+            <length>173.6</length>
             </Pedal>
           </Cell>
         <Cell name="Pedal (with ped and asterisk)">
@@ -1220,7 +1221,7 @@
             <ticks>0/1</ticks>
             <ticks_f>0/1</ticks_f>
             <track>0</track>
-            <length>175</length>
+            <length>173.6</length>
             </Pedal>
           </Cell>
         <Cell name="Pedal (straight hooks)">
@@ -1230,7 +1231,7 @@
             <ticks>0/1</ticks>
             <ticks_f>0/1</ticks_f>
             <track>0</track>
-            <length>175</length>
+            <length>173.6</length>
             </Pedal>
           </Cell>
         <Cell name="Pedal (angled end hook)" visible="0">
@@ -1269,7 +1270,7 @@
             <ticks>0/1</ticks>
             <ticks_f>0/1</ticks_f>
             <track>0</track>
-            <length>175</length>
+            <length>173.6</length>
             </Trill>
           </Cell>
         <Cell name="Upprall line" visible="0">
@@ -1296,7 +1297,7 @@
             <ticks>0/1</ticks>
             <ticks_f>0/1</ticks_f>
             <track>0</track>
-            <length>175</length>
+            <length>173.6</length>
             </Trill>
           </Cell>
         <Cell name="Text line">
@@ -1306,7 +1307,7 @@
             <ticks>0/1</ticks>
             <ticks_f>0/1</ticks_f>
             <track>0</track>
-            <length>175</length>
+            <length>173.6</length>
             </TextLine>
           </Cell>
         <Cell name="Line">
@@ -1315,7 +1316,7 @@
             <ticks_f>0/1</ticks_f>
             <track>0</track>
             <diagonal>1</diagonal>
-            <length>175</length>
+            <length>173.6</length>
             </TextLine>
           </Cell>
         <Cell name="Ambitus">
@@ -1331,7 +1332,7 @@
             <ticks>0/1</ticks>
             <ticks_f>0/1</ticks_f>
             <track>0</track>
-            <length>175</length>
+            <length>173.6</length>
             </LetRing>
           </Cell>
         <Cell name="Guitar vibrato" visible="0">
@@ -1358,7 +1359,7 @@
             <ticks>0/1</ticks>
             <ticks_f>0/1</ticks_f>
             <track>0</track>
-            <length>175</length>
+            <length>173.6</length>
             </Vibrato>
           </Cell>
         <Cell name="Tremolo sawtooth wide" visible="0">
@@ -1375,7 +1376,7 @@
             <ticks>0/1</ticks>
             <ticks_f>0/1</ticks_f>
             <track>0</track>
-            <length>175</length>
+            <length>173.6</length>
             </PalmMute>
           </Cell>
         </Palette>
@@ -1644,7 +1645,9 @@
           <InstrumentChange>
             <Instrument>
               <trackName></trackName>
+              <instrumentId>keyboard.piano</instrumentId>
               <Channel>
+                <program value="0"/>
                 <synti>Fluid</synti>
                 </Channel>
               </Instrument>
@@ -1655,13 +1658,6 @@
           <RehearsalMark>
             <text>B1</text>
             </RehearsalMark>
-          </Cell>
-        <Cell name="Swing" trElement="1">
-          <SystemText>
-            <swing unit="eighth" ratio= "60"/>
-            <style>Tempo</style>
-            <text>Swing</text>
-            </SystemText>
           </Cell>
         <Cell name="System text" trElement="1">
           <SystemText>
@@ -1766,10 +1762,11 @@
         <mag>0.65</mag>
         <grid>1</grid>
         <moreElements>0</moreElements>
+        <expanded>1</expanded>
         <Cell name="Half note = 80 BPM">
           <mag>1.5</mag>
           <Tempo>
-            <tempo>2.66667</tempo>
+            <tempo>2.6666699999999999</tempo>
             <followText>1</followText>
             <text><sym>metNoteHalfUp</sym> = 80</text>
             </Tempo>
@@ -1777,7 +1774,7 @@
         <Cell name="Quarter note = 80 BPM">
           <mag>1.5</mag>
           <Tempo>
-            <tempo>1.33333</tempo>
+            <tempo>1.3333299999999999</tempo>
             <followText>1</followText>
             <text><sym>metNoteQuarterUp</sym> = 80</text>
             </Tempo>
@@ -1785,7 +1782,7 @@
         <Cell name="Eighth note = 80 BPM">
           <mag>1.5</mag>
           <Tempo>
-            <tempo>0.666667</tempo>
+            <tempo>0.66666700000000001</tempo>
             <followText>1</followText>
             <text><sym>metNote8thUp</sym> = 80</text>
             </Tempo>
@@ -1817,14 +1814,14 @@
         <Cell name="Grave">
           <mag>1.3</mag>
           <Tempo>
-            <tempo>0.583333</tempo>
+            <tempo>0.58333299999999999</tempo>
             <text>Grave</text>
             </Tempo>
           </Cell>
         <Cell name="Largo">
           <mag>1.3</mag>
           <Tempo>
-            <tempo>0.833333</tempo>
+            <tempo>0.83333299999999999</tempo>
             <text>Largo</text>
             </Tempo>
           </Cell>
@@ -1845,14 +1842,14 @@
         <Cell name="Andante">
           <mag>1.3</mag>
           <Tempo>
-            <tempo>1.53333</tempo>
+            <tempo>1.5333300000000001</tempo>
             <text>Andante</text>
             </Tempo>
           </Cell>
         <Cell name="Moderato">
           <mag>1.3</mag>
           <Tempo>
-            <tempo>1.9</tempo>
+            <tempo>1.8999999999999999</tempo>
             <text>Moderato</text>
             </Tempo>
           </Cell>
@@ -1866,23 +1863,30 @@
         <Cell name="Allegro">
           <mag>1.3</mag>
           <Tempo>
-            <tempo>2.4</tempo>
+            <tempo>2.3999999999999999</tempo>
             <text>Allegro</text>
             </Tempo>
           </Cell>
         <Cell name="Vivace">
           <mag>1.3</mag>
           <Tempo>
-            <tempo>2.86667</tempo>
+            <tempo>2.8666700000000001</tempo>
             <text>Vivace</text>
             </Tempo>
           </Cell>
         <Cell name="Presto">
           <mag>1.3</mag>
           <Tempo>
-            <tempo>3.11667</tempo>
+            <tempo>3.1166700000000001</tempo>
             <text>Presto</text>
             </Tempo>
+          </Cell>
+        <Cell name="Swing" trElement="1">
+          <SystemText>
+            <swing unit="eighth" ratio= "60"/>
+            <style>Tempo</style>
+            <text>Swing</text>
+            </SystemText>
           </Cell>
         <Cell name="Quarter note = dotted quarter note metric modulation">
           <mag>1.5</mag>

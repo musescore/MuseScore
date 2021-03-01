@@ -297,7 +297,7 @@ void PopupView::setupContentComponent(QQmlEngine* engine)
 void PopupView::setupContainerView(QQmlEngine* engine)
 {
     m_containerView = new QQuickView(engine, nullptr);
-    m_containerView->setFlags(Qt::Popup | Qt::FramelessWindowHint);
+    m_containerView->setFlags(Qt::Popup | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
     m_containerView->setResizeMode(QQuickView::SizeViewToRootObject);
     m_containerView->setColor("#00000000");
 }

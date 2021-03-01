@@ -99,7 +99,7 @@ void populateIconPalette(Palette* p, const IconAction* a)
 {
     auto adapter = mu::framework::ioc()->resolve<mu::palette::IPaletteAdapter>("palette");
     while (a->subtype != IconType::NONE) {
-        Icon* ik = new Icon(gscore);
+        std::shared_ptr<Icon> ik = std::make_shared<Icon>(gscore);
         ik->setIconType(a->subtype);
         QAction* action = adapter->getAction(a->action);
         QIcon icon(action->icon());

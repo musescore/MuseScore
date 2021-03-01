@@ -395,7 +395,10 @@ void Theme::setupWidgetTheme()
     palette.setColor(QPalette::Disabled, QPalette::PlaceholderText, fontPrimaryColorDisabled);
 
     QApplication::setPalette(palette);
-    QApplication::setFont(bodyFont());
+
+    QFont widgetsFont = bodyFont();
+    widgetsFont.setPointSize(configuration()->fontSize(FontSizeType::BODY));
+    QApplication::setFont(widgetsFont);
 
     platformTheme()->setAppThemeDark(configuration()->actualThemeType() == IUiConfiguration::ThemeType::DARK_THEME);
 }

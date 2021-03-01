@@ -75,7 +75,7 @@ InspectorSectionView {
                         { iconRole: IconCode.TEXT_UNDERLINE, valueRole: TextTypes.FONT_STYLE_UNDERLINE  }
                     ]
 
-                    delegate: FlatToogleButton {
+                    delegate: FlatToggleButton {
 
                         icon: modelData["iconRole"]
 

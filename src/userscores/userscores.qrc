@@ -13,7 +13,6 @@
         <file>qml/MuseScore/UserScores/internal/ScoreItem.qml</file>
         <file>qml/MuseScore/UserScores/internal/TemplatePreview.qml</file>
         <file>qml/MuseScore/UserScores/internal/TempoSettings.qml</file>
-        <file>qml/MuseScore/UserScores/internal/TempoView.qml</file>
         <file>qml/MuseScore/UserScores/internal/TimeSignatureFraction.qml</file>
         <file>qml/MuseScore/UserScores/internal/TimeSignatureSettings.qml</file>
         <file>qml/MuseScore/UserScores/internal/TimeSignatureView.qml</file>
