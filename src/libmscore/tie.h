@@ -41,7 +41,7 @@ public:
     TieSegment* clone() const override { return new TieSegment(*this); }
     ElementType type() const override { return ElementType::TIE_SEGMENT; }
     int subtype() const override { return static_cast<int>(spanner()->type()); }
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
 
     void layoutSegment(const QPointF& p1, const QPointF& p2);
 

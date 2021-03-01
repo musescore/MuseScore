@@ -144,7 +144,7 @@ QString Fermata::userName() const
 //   Symbol::draw
 //---------------------------------------------------------
 
-void Fermata::draw(QPainter* painter) const
+void Fermata::draw(mu::draw::Painter* painter) const
 {
 #if 0
     SymId sym = symId();

@@ -29,7 +29,7 @@ class StaffTypeChange final : public Element
 
     void layout() override;
     void spatiumChanged(qreal oldValue, qreal newValue) override;
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
 
 public:
     StaffTypeChange(Score* = 0);

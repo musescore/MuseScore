@@ -46,7 +46,7 @@ class HairpinSegment final : public TextLineBaseSegment
     void startEditDrag(EditData&) override;
     void editDrag(EditData&) override;
 
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
     Sid getPropertyStyle(Pid) const override;
 
     bool acceptDrop(EditData&) const override;

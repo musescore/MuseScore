@@ -41,7 +41,7 @@ void LoopMarker::setStyle(INotationStylePtr style)
     m_style = style;
 }
 
-void LoopMarker::paint(QPainter* painter)
+void LoopMarker::paint(mu::draw::Painter* painter)
 {
     if (!m_visible || !m_style) {
         return;

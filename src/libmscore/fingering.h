@@ -33,7 +33,7 @@ public:
     ElementType layoutType();
     Placement calculatePlacement() const;
 
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
     void layout() override;
 
     QVariant propertyDefault(Pid id) const override;

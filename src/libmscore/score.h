@@ -861,7 +861,7 @@ public:
     bool saveCompressedFile(QFileInfo&, bool onlySelection, bool createThumbnail = true);
     bool saveCompressedFile(QIODevice*, const QString& fileName, bool onlySelection, bool createThumbnail = true);
 
-    void print(QPainter* printer, int page);
+    void print(mu::draw::Painter* printer, int page);
     ChordRest* getSelectedChordRest() const;
     QSet<ChordRest*> getSelectedChordRests() const;
     void getSelectedChordRest2(ChordRest** cr1, ChordRest** cr2) const;

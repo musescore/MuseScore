@@ -34,7 +34,7 @@ class Fermata final : public Element
     qreal _timeStretch;
     bool _play;
 
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
     Sid getPropertyStyle(Pid) const override;
 
 public:

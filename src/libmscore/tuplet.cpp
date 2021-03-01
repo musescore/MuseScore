@@ -692,7 +692,7 @@ void Tuplet::layout()
 //   draw
 //---------------------------------------------------------
 
-void Tuplet::draw(QPainter* painter) const
+void Tuplet::draw(mu::draw::Painter* painter) const
 {
     // if in a TAB without stems, tuplets are not shown
     const StaffType* stt = staffType();

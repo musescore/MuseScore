@@ -38,7 +38,7 @@ class StaffState final : public Element
 
     Instrument* _instrument { nullptr };
 
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
     void layout() override;
 
 public:

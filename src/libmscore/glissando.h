@@ -40,7 +40,7 @@ public:
 
     ElementType type() const override { return ElementType::GLISSANDO_SEGMENT; }
     GlissandoSegment* clone() const override { return new GlissandoSegment(*this); }
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
     void layout() override;
 
     Element* propertyDelegate(Pid) override;

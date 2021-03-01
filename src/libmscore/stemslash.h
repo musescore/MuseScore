@@ -35,7 +35,7 @@ public:
 
     StemSlash* clone() const override { return new StemSlash(*this); }
     ElementType type() const override { return ElementType::STEM_SLASH; }
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
     void layout() override;
     Chord* chord() const { return (Chord*)parent(); }
 };

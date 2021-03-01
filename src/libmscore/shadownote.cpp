@@ -128,7 +128,7 @@ bool ShadowNote::computeUp() const
 //   draw
 //---------------------------------------------------------
 
-void ShadowNote::draw(QPainter* painter) const
+void ShadowNote::draw(mu::draw::Painter* painter) const
 {
     if (!visible() || !isValid()) {
         return;
@@ -217,7 +217,7 @@ void ShadowNote::draw(QPainter* painter) const
     painter->translate(-ap);
 }
 
-void ShadowNote::drawArticulations(QPainter* painter) const
+void ShadowNote::drawArticulations(mu::draw::Painter* painter) const
 {
     qreal noteheadWidth = symWidth(m_noteheadSymbol);
     qreal ms = spatium();
@@ -240,7 +240,7 @@ void ShadowNote::drawArticulations(QPainter* painter) const
     }
 }
 
-void ShadowNote::drawMarcato(QPainter* painter, const SymId& articulation, QRectF& boundRect) const
+void ShadowNote::drawMarcato(mu::draw::Painter* painter, const SymId& articulation, QRectF& boundRect) const
 {
     QPointF coord;
     qreal spacing = spatium();
@@ -255,7 +255,7 @@ void ShadowNote::drawMarcato(QPainter* painter, const SymId& articulation, QRect
     drawSymbol(articulation, painter, coord);
 }
 
-void ShadowNote::drawArticulation(QPainter* painter, const SymId& articulation, QRectF& boundRect) const
+void ShadowNote::drawArticulation(mu::draw::Painter* painter, const SymId& articulation, QRectF& boundRect) const
 {
     QPointF coord;
     qreal spacing = spatium();

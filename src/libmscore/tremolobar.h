@@ -44,7 +44,7 @@ public:
     ElementType type() const override { return ElementType::TREMOLOBAR; }
 
     void layout() override;
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
 
     void write(XmlWriter&) const override;
     void read(XmlReader& e) override;

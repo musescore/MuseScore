@@ -83,7 +83,7 @@ void LedgerLine::layout()
 //   draw
 //---------------------------------------------------------
 
-void LedgerLine::draw(QPainter* painter) const
+void LedgerLine::draw(mu::draw::Painter* painter) const
 {
     if (chord()->crossMeasure() == CrossMeasure::SECOND) {
         return;

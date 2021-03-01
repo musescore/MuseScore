@@ -104,7 +104,7 @@ void LayoutBreak::read(XmlReader& e)
 //   draw
 //---------------------------------------------------------
 
-void LayoutBreak::draw(QPainter* painter) const
+void LayoutBreak::draw(mu::draw::Painter* painter) const
 {
     if (score()->printing() || !score()->showUnprintable()) {
         return;

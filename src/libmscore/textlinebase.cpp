@@ -72,7 +72,7 @@ void TextLineBaseSegment::setSelected(bool f)
 //   draw
 //---------------------------------------------------------
 
-void TextLineBaseSegment::draw(QPainter* painter) const
+void TextLineBaseSegment::draw(mu::draw::Painter* painter) const
 {
     TextLineBase* tl   = textLineBase();
 

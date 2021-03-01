@@ -317,11 +317,14 @@ void NotationPaintView::showContextMenu(const ElementType& elementType, const QP
     emit openContextMenuRequested(menuItems, pos);
 }
 
-void NotationPaintView::paint(QPainter* painter)
+void NotationPaintView::paint(QPainter* qp)
 {
     if (!notation()) {
         return;
     }
+
+    mu::draw::Painter mup(qp);
+    mu::draw::Painter* painter = &mup;
 
     QRect rect(0, 0, width(), height());
     painter->fillRect(rect, m_backgroundColor);

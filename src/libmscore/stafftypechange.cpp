@@ -97,7 +97,7 @@ void StaffTypeChange::layout()
 //   draw
 //---------------------------------------------------------
 
-void StaffTypeChange::draw(QPainter* painter) const
+void StaffTypeChange::draw(mu::draw::Painter* painter) const
 {
     if (score()->printing() || !score()->showUnprintable()) {
         return;

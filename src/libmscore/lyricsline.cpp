@@ -455,7 +455,7 @@ void LyricsLineSegment::layout()
 //   draw
 //---------------------------------------------------------
 
-void LyricsLineSegment::draw(QPainter* painter) const
+void LyricsLineSegment::draw(mu::draw::Painter* painter) const
 {
     if (_numOfDashes < 1) {               // nothing to draw
         return;

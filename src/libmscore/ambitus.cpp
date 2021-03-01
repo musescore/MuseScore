@@ -463,7 +463,7 @@ void Ambitus::layout()
 //   draw
 //---------------------------------------------------------
 
-void Ambitus::draw(QPainter* p) const
+void Ambitus::draw(mu::draw::Painter* p) const
 {
     qreal _spatium = spatium();
     qreal lw = lineWidth().val() * _spatium;

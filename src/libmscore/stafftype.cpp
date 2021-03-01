@@ -1009,7 +1009,7 @@ void TabDurationSymbol::layout2()
 //   draw
 //---------------------------------------------------------
 
-void TabDurationSymbol::draw(QPainter* painter) const
+void TabDurationSymbol::draw(mu::draw::Painter* painter) const
 {
     if (!_tab) {
         return;

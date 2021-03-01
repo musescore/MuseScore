@@ -231,7 +231,7 @@ void ChordLine::write(XmlWriter& xml) const
 //   Symbol::draw
 //---------------------------------------------------------
 
-void ChordLine::draw(QPainter* painter) const
+void ChordLine::draw(mu::draw::Painter* painter) const
 {
     qreal _spatium = spatium();
 

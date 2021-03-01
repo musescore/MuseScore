@@ -53,7 +53,7 @@ public:
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
 
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
 
     void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
 

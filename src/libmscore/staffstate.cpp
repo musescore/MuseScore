@@ -79,7 +79,7 @@ void StaffState::read(XmlReader& e)
 //   draw
 //---------------------------------------------------------
 
-void StaffState::draw(QPainter* painter) const
+void StaffState::draw(mu::draw::Painter* painter) const
 {
     if (score()->printing() || !score()->showUnprintable()) {
         return;

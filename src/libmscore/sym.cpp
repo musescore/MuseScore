@@ -6390,24 +6390,24 @@ Sym ScoreFont::sym(SymId id) const
 //   draw
 //---------------------------------------------------------
 
-void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos) const
+void ScoreFont::draw(SymId id, mu::draw::Painter* painter, qreal mag, const QPointF& pos) const
 {
     qreal worldScale = painter->worldTransform().m11();
     draw(id, painter, mag, pos, worldScale);
 }
 
-void ScoreFont::draw(SymId id, QPainter* painter, const QSizeF& mag, const QPointF& pos) const
+void ScoreFont::draw(SymId id, mu::draw::Painter* painter, const QSizeF& mag, const QPointF& pos) const
 {
     qreal worldScale = painter->worldTransform().m11();
     draw(id, painter, mag, pos, worldScale);
 }
 
-void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos, qreal worldScale) const
+void ScoreFont::draw(SymId id, mu::draw::Painter* painter, qreal mag, const QPointF& pos, qreal worldScale) const
 {
     draw(id, painter, QSizeF(mag, mag), pos, worldScale);
 }
 
-void ScoreFont::draw(SymId id, QPainter* painter, const QSizeF& mag, const QPointF& pos, qreal worldScale) const
+void ScoreFont::draw(SymId id, mu::draw::Painter* painter, const QSizeF& mag, const QPointF& pos, qreal worldScale) const
 {
     if (!sym(id).symList().empty()) {    // is this a compound symbol?
         draw(sym(id).symList(), painter, mag, pos);
@@ -6510,7 +6510,7 @@ void ScoreFont::draw(SymId id, QPainter* painter, const QSizeF& mag, const QPoin
     painter->drawPixmap(pos + pm->offset, pm->pm);
 }
 
-void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos, int n) const
+void ScoreFont::draw(SymId id, mu::draw::Painter* painter, qreal mag, const QPointF& pos, int n) const
 {
     std::vector<SymId> d;
     for (int i = 0; i < n; ++i) {
@@ -6519,7 +6519,7 @@ void ScoreFont::draw(SymId id, QPainter* painter, qreal mag, const QPointF& pos,
     draw(d, painter, mag, pos);
 }
 
-void ScoreFont::draw(const std::vector<SymId>& ids, QPainter* p, qreal mag, const QPointF& _pos, qreal scale) const
+void ScoreFont::draw(const std::vector<SymId>& ids, mu::draw::Painter* p, qreal mag, const QPointF& _pos, qreal scale) const
 {
     QPointF pos(_pos);
     for (SymId id : ids) {
@@ -6528,13 +6528,13 @@ void ScoreFont::draw(const std::vector<SymId>& ids, QPainter* p, qreal mag, cons
     }
 }
 
-void ScoreFont::draw(const std::vector<SymId>& ids, QPainter* p, const QSizeF& mag, const QPointF& _pos) const
+void ScoreFont::draw(const std::vector<SymId>& ids, mu::draw::Painter* p, const QSizeF& mag, const QPointF& _pos) const
 {
     qreal scale = p->worldTransform().m11();
     draw(ids, p, mag, _pos, scale);
 }
 
-void ScoreFont::draw(const std::vector<SymId>& ids, QPainter* p, const QSizeF& mag, const QPointF& _pos, qreal scale) const
+void ScoreFont::draw(const std::vector<SymId>& ids, mu::draw::Painter* p, const QSizeF& mag, const QPointF& _pos, qreal scale) const
 {
     QPointF pos(_pos);
     for (SymId id : ids) {
@@ -6543,7 +6543,7 @@ void ScoreFont::draw(const std::vector<SymId>& ids, QPainter* p, const QSizeF& m
     }
 }
 
-void ScoreFont::draw(const std::vector<SymId>& ids, QPainter* p, qreal mag, const QPointF& _pos) const
+void ScoreFont::draw(const std::vector<SymId>& ids, mu::draw::Painter* p, qreal mag, const QPointF& _pos) const
 {
     qreal scale = p->worldTransform().m11();
     draw(ids, p, mag, _pos, scale);

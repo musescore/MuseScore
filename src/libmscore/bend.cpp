@@ -242,7 +242,7 @@ void Bend::layout()
 //   draw
 //---------------------------------------------------------
 
-void Bend::draw(QPainter* painter) const
+void Bend::draw(mu::draw::Painter* painter) const
 {
     qreal _spatium = spatium();
     qreal _lw = _lineWidth;

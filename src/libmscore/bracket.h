@@ -80,7 +80,7 @@ public:
 
     Shape shape() const override { return _shape; }
 
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
     void layout() override;
 
     void write(XmlWriter& xml) const override;

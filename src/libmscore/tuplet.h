@@ -115,7 +115,7 @@ public:
 
     void reset() override;
 
-    void draw(QPainter*) const override;
+    void draw(mu::draw::Painter*) const override;
     int id() const { return _id; }
     void setId(int i) const { _id = i; }
 

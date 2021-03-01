@@ -30,7 +30,7 @@ Lasso::Lasso(Score* s)
 //   draw
 //---------------------------------------------------------
 
-void Lasso::draw(QPainter* painter) const
+void Lasso::draw(mu::draw::Painter* painter) const
 {
     painter->setBrush(QBrush(QColor(0, 0, 50, 50)));
     // always 2 pixel width
