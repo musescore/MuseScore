@@ -130,7 +130,7 @@ void Notation::init()
 {
     Ms::MScore::init(); // initialize libmscore
 
-    Ms::MScore::setNudgeStep(.1); // cursor key (default 0.1)
+    Ms::MScore::setNudgeStep(0.1); // cursor key (default 0.1)
     Ms::MScore::setNudgeStep10(1.0); // Ctrl + cursor key (default 1.0)
     Ms::MScore::setNudgeStep50(0.01); // Alt  + cursor key (default 0.01)
 
@@ -141,6 +141,16 @@ void Notation::init()
 
     Ms::MScore::panPlayback = configuration()->isAutomaticallyPanEnabled();
     Ms::MScore::playRepeats = configuration()->isPlayRepeatsEnabled();
+
+    Ms::gscore = new Ms::MasterScore();
+    Ms::gscore->setPaletteMode(true);
+    Ms::gscore->setMovements(new Ms::Movements());
+    Ms::gscore->setStyle(Ms::MScore::baseStyle());
+
+    Ms::gscore->style().set(Ms::Sid::MusicalTextFont, QString("Leland Text"));
+    Ms::ScoreFont* scoreFont = Ms::ScoreFont::fontFactory("Leland");
+    Ms::gscore->setScoreFont(scoreFont);
+    Ms::gscore->setNoteHeadWidth(scoreFont->width(Ms::SymId::noteheadBlack, Ms::gscore->spatium()) / Ms::SPATIUM20);
 }
 
 void Notation::setScore(Ms::Score* score)
