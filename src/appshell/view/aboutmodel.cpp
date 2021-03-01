@@ -21,6 +21,8 @@
 #include "translation.h"
 
 #include <QClipboard>
+#include <QUrl>
+#include <QApplication>
 
 using namespace mu::appshell;
 
