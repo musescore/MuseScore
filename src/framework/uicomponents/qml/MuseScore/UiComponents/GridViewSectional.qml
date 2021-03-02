@@ -52,11 +52,13 @@ Item {
         id: horizontalView
 
         Row {
+            spacing: 0
+
             Repeater {
                 model: Boolean(root.model) ? privateProperties.modelSections() : []
 
                 Row {
-                    spacing: 2
+                    spacing: 0
 
                     GridViewSection {
                         width: root.sectionWidth
@@ -93,11 +95,13 @@ Item {
         id: verticalView
 
         Column {
+            spacing: 0
+
             Repeater {
                 model: Boolean(root.model) ? privateProperties.modelSections() : []
 
                 Column {
-                    spacing: 2
+                    spacing: 0
 
                     GridViewSection {
                         anchors.left: parent.left
