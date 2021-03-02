@@ -195,8 +195,7 @@ void ExampleView::paintEvent(QPaintEvent* ev)
     if (_score) {
         QPainter qp(this);
         mu::draw::Painter p(&qp);
-        p.setRenderHint(mu::draw::Painter::Antialiasing, true);
-        p.setRenderHint(mu::draw::Painter::TextAntialiasing, true);
+        p.setAntialiasing(true);
         const QRect r(ev->rect());
 
         drawBackground(&p, r);

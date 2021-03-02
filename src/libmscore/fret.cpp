@@ -377,7 +377,7 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
             case FretDotType::NORMAL:
             default:
                 painter->setBrush(symPen.color());
-                painter->setPen(Qt::NoPen);
+                painter->setNoPen();
                 painter->drawEllipse(QRectF(x, y, dotd, dotd));
                 break;
             }

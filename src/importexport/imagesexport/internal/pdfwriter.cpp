@@ -57,8 +57,7 @@ mu::Ret PdfWriter::write(const notation::INotationPtr notation, IODevice& destin
     mu::draw::Painter painter(&qp);
 
     QSizeF size(score->styleD(Sid::pageWidth), score->styleD(Sid::pageHeight));
-    painter.setRenderHint(mu::draw::Painter::Antialiasing, true);
-    painter.setRenderHint(mu::draw::Painter::TextAntialiasing, true);
+    painter.setAntialiasing(true);
     painter.setViewport(QRect(0.0, 0.0, size.width() * pdfWriter.logicalDpiX(),
                               size.height() * pdfWriter.logicalDpiY()));
     painter.setWindow(QRect(0.0, 0.0, size.width() * DPI, size.height() * DPI));

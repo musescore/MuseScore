@@ -79,8 +79,7 @@ mu::Ret PngWriter::write(const notation::INotationPtr notation, IODevice& destin
 
     QPainter qp(&image);
     mu::draw::Painter painter(&qp);
-    painter.setRenderHint(mu::draw::Painter::Antialiasing, true);
-    painter.setRenderHint(mu::draw::Painter::TextAntialiasing, true);
+    painter.setAntialiasing(true);
     painter.scale(scaling, scaling);
     if (TRIM_MARGIN_SIZE >= 0) {
         painter.translate(-pageRect.topLeft());
