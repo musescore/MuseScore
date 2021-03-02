@@ -3355,6 +3355,7 @@
       <action>repeat</action>
       <action>pan</action>
       <action>metronome</action>
+      <action>countin</action>
       </Toolbar>
     </Workspace>
   </museScore>
