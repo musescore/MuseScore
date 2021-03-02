@@ -1744,11 +1744,11 @@ TextBase::TextBase(const TextBase& st)
 void TextBase::drawSelection(mu::draw::Painter* p, const QRectF& r) const
 {
     QBrush bg(QColor("steelblue"));
-    p->setCompositionMode(mu::draw::Painter::CompositionMode::HardLight);
+    p->setCompositionMode(mu::draw::CompositionMode::HardLight);
     p->setBrush(bg);
     p->setNoPen();
     p->drawRect(r);
-    p->setCompositionMode(mu::draw::Painter::CompositionMode::SourceOver);
+    p->setCompositionMode(mu::draw::CompositionMode::SourceOver);
     p->setPen(textColor());
 }
 
