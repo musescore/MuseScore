@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>398</width>
-    <height>157</height>
+    <width>185</width>
+    <height>131</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -76,6 +76,45 @@
       <property name="spacing">
        <number>3</number>
       </property>
+      <item row="3" column="0" colspan="3">
+       <widget class="QCheckBox" name="startWithMeasureOne">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Measure number one</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="3">
+       <widget class="Ms::ResetButton" name="resetPause" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Pause' value</string>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
@@ -86,7 +125,20 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="2">
+      <item row="2" column="3">
+       <widget class="Ms::ResetButton" name="resetStartWithLongNames" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Long instrument names' value</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="3">
        <widget class="Ms::ResetButton" name="resetStartWithMeasureOne" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -95,11 +147,37 @@
          </sizepolicy>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Start new section with measure number one' value</string>
+         <string>Reset 'Measure number one' value</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
+      <item row="4" column="3">
+       <widget class="Ms::ResetButton" name="resetFirstSystemIndentation" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'First system indentation' value</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" colspan="3">
+       <widget class="QCheckBox" name="startWithLongNames">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Long instrument names</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
        <widget class="QDoubleSpinBox" name="pause">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -115,79 +193,20 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="2">
-       <widget class="Ms::ResetButton" name="resetPause" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Pause' value</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0" colspan="2">
-       <widget class="QCheckBox" name="startWithMeasureOne">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>Start new section with measure number one</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" colspan="2">
-       <widget class="QCheckBox" name="startWithLongNames">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>Start new section with long instrument names</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="Ms::ResetButton" name="resetStartWithLongNames" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Start new section with long instrument names' value</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
+      <item row="4" column="0" colspan="3">
        <widget class="QCheckBox" name="firstSystemIndentation">
         <property name="text">
-         <string>Start new section with first system indentation</string>
+         <string>First system indentation</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="2">
-       <widget class="Ms::ResetButton" name="resetFirstSystemIndentation" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Start new section with long instrument names' value</string>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Start new section with:</string>
         </property>
        </widget>
       </item>
-      
      </layout>
     </widget>
    </item>
