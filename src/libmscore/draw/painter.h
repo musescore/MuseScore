@@ -26,6 +26,9 @@
 #include <QFont>
 #include <QPainter>
 
+#include "drawtypes.h"
+#include "ipaintprovider.h"
+
 class QPaintDevice;
 class QImage;
 
@@ -33,17 +36,11 @@ namespace mu::draw {
 class Painter
 {
 public:
-    Painter(QPainter* painter);
-
-    enum class CompositionMode {
-        SourceOver,
-        HardLight
-    };
+    Painter(IPaintProviderPtr provider);
 
     QPaintDevice* device() const;
     QPainter* qpainter() const;
 
-    bool begin(QPaintDevice*);
     bool end();
     bool isActive() const;
 
@@ -141,7 +138,7 @@ public:
     void drawTiledPixmap(const QRectF& rect, const QPixmap& pm, const QPointF& offset = QPointF());
 
 private:
-    QPainter* m_painter = nullptr;
+    IPaintProviderPtr m_provider;
 };
 
 inline void Painter::translate(qreal dx, qreal dy)

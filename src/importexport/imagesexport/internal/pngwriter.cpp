@@ -26,8 +26,9 @@
 #include "libmscore/score.h"
 #include "libmscore/page.h"
 
+#include "libmscore/draw/qpainterprovider.h"
+
 #include <QImage>
-#include <QPainter>
 
 using namespace mu::iex::imagesexport;
 using namespace mu::system;
@@ -77,8 +78,7 @@ mu::Ret PngWriter::write(const notation::INotationPtr notation, IODevice& destin
     double scaling = CANVAS_DPI / Ms::DPI;
     Ms::MScore::pixelRatio = 1.0 / scaling;
 
-    QPainter qp(&image);
-    mu::draw::Painter painter(&qp);
+    mu::draw::Painter painter(mu::draw::QPainterProvider::make(&image));
     painter.setAntialiasing(true);
     painter.scale(scaling, scaling);
     if (TRIM_MARGIN_SIZE >= 0) {

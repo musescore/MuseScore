@@ -19,107 +19,95 @@
 #ifndef MU_DRAW_IPAINTPROVIDER_H
 #define MU_DRAW_IPAINTPROVIDER_H
 
+#include <memory>
+
+#include <QPoint>
+#include <QPointF>
+#include <QPen>
+#include <QColor>
+#include <QFont>
+#include <QGlyphRun>
+
+#include "drawtypes.h"
+
 namespace mu::draw {
 class IPaintProvider
 {
 public:
     virtual ~IPaintProvider() = default;
 
-//    QPaintDevice* device() const;
-//    QPainter* qpainter() const;
+    virtual QPaintDevice* device() const = 0;
+    virtual QPainter* qpainter() const = 0;
 
-//    bool begin(QPaintDevice*);
-//    bool end();
-//    bool isActive() const;
+    virtual bool end() = 0;
+    virtual bool isActive() const = 0;
 
-//    void setRenderHint(RenderHint hint, bool on = true);
-//    void setCompositionMode(QPainter::CompositionMode mode);
+    virtual void setAntialiasing(bool arg) = 0;
+    virtual void setCompositionMode(CompositionMode mode) = 0;
 
-//    void setFont(const QFont& f);
-//    const QFont& font() const;
+    virtual void setFont(const QFont& f) = 0;
+    virtual const QFont& font() const = 0;
 
-//    void setPen(const QColor& color);
-//    void setPen(const QPen& pen);
-//    void setPen(Qt::PenStyle style);
-//    const QPen& pen() const;
+    virtual void setPen(const QColor& color) = 0;
+    virtual void setPen(const QPen& pen) = 0;
+    virtual void setNoPen() = 0;
+    virtual const QPen& pen() const = 0;
 
-//    void setBrush(const QBrush& brush);
-//    void setBrush(Qt::BrushStyle style);
-//    const QBrush& brush() const;
+    virtual void setBrush(const QBrush& brush) = 0;
+    virtual const QBrush& brush() const = 0;
 
-//    void save();
-//    void restore();
+    virtual void save() = 0;
+    virtual void restore() = 0;
 
-//    void setWorldTransform(const QTransform& matrix, bool combine = false);
-//    const QTransform& worldTransform() const;
+    virtual void setWorldTransform(const QTransform& matrix, bool combine = false) = 0;
+    virtual const QTransform& worldTransform() const = 0;
 
-//    void setTransform(const QTransform& transform, bool combine = false);
-//    const QTransform& transform() const;
+    virtual void setTransform(const QTransform& transform, bool combine = false) = 0;
+    virtual const QTransform& transform() const = 0;
 
-//    void setMatrix(const QMatrix& matrix, bool combine = false);
+    virtual void setMatrix(const QMatrix& matrix, bool combine = false) = 0;
 
-//    void scale(qreal sx, qreal sy);
-//    void rotate(qreal a);
+    virtual void scale(qreal sx, qreal sy) = 0;
+    virtual void rotate(qreal a) = 0;
 
-//    void translate(const QPointF& offset);
-//    inline void translate(const QPoint& offset);
-//    inline void translate(qreal dx, qreal dy);
+    virtual void translate(const QPointF& offset) = 0;
 
-//    QRect window() const;
-//    void setWindow(const QRect& window);
-//    inline void setWindow(int x, int y, int w, int h);
+    virtual QRect window() const = 0;
+    virtual void setWindow(const QRect& window) = 0;
+    virtual QRect viewport() const = 0;
+    virtual void setViewport(const QRect& viewport) = 0;
 
-//    QRect viewport() const;
-//    void setViewport(const QRect& viewport);
-//    inline void setViewport(int x, int y, int w, int h);
+    // drawing functions
+    virtual void fillPath(const QPainterPath& path, const QBrush& brush) = 0;
+    virtual void drawPath(const QPainterPath& path) = 0;
 
-//    // drawing functions
-//    void strokePath(const QPainterPath& path, const QPen& pen);
-//    void fillPath(const QPainterPath& path, const QBrush& brush);
-//    void drawPath(const QPainterPath& path);
+    virtual void drawLines(const QLineF* lines, int lineCount) = 0;
+    virtual void drawLines(const QPointF* pointPairs, int lineCount) = 0;
 
-//    inline void drawLine(const QLineF& line);
-//    inline void drawLine(const QPointF& p1, const QPointF& p2);
-//    inline void drawLine(int x1, int y1, int x2, int y2);
+    virtual void drawRects(const QRectF* rects, int rectCount) = 0;
+    virtual void drawRoundedRect(const QRectF& rect, qreal xRadius, qreal yRadius, Qt::SizeMode mode = Qt::AbsoluteSize) = 0;
 
-//    void drawLines(const QLineF* lines, int lineCount);
-//    inline void drawLines(const QVector<QLineF>& lines);
-//    void drawLines(const QLine* lines, int lineCount);
-//    void drawLines(const QPointF* pointPairs, int lineCount);
+    virtual void drawEllipse(const QRectF& r) = 0;
 
-//    inline void drawRect(const QRectF& rect);
-//    inline void drawRect(int x1, int y1, int w, int h);
-//    inline void drawRect(const QRect& rect);
+    virtual void drawPolyline(const QPointF* points, int pointCount) = 0;
 
-//    void drawRects(const QRectF* rects, int rectCount);
-//    inline void drawRects(const QVector<QRectF>& rectangles);
-//    void drawRects(const QRect* rects, int rectCount);
-//    inline void drawRects(const QVector<QRect>& rectangles);
+    virtual void drawPolygon(const QPointF* points, int pointCount, Qt::FillRule fillRule = Qt::OddEvenFill) = 0;
+    virtual void drawConvexPolygon(const QPointF* points, int pointCount) = 0;
 
-//    void drawRoundedRect(const QRectF& rect, qreal xRadius, qreal yRadius, Qt::SizeMode mode = Qt::AbsoluteSize);
+    virtual void drawArc(const QRectF& rect, int a, int alen) = 0;
 
-//    void drawEllipse(const QRectF& r);
-//    void drawEllipse(const QRect& r);
+    virtual void drawText(const QPointF& p, const QString& s) = 0;
+    virtual void drawText(const QRectF& r, int flags, const QString& text, QRectF* br = nullptr) = 0;
 
-//    void drawPolyline(const QPointF* points, int pointCount);
-//    void drawPolyline(const QPoint* points, int pointCount);
+    virtual void drawGlyphRun(const QPointF& position, const QGlyphRun& glyphRun) = 0;
 
-//    void drawPolygon(const QPointF* points, int pointCount, Qt::FillRule fillRule = Qt::OddEvenFill);
-//    void drawPolygon(const QPoint* points, int pointCount, Qt::FillRule fillRule = Qt::OddEvenFill);
-//    void drawConvexPolygon(const QPointF* points, int pointCount);
+    virtual void fillRect(const QRectF& r, const QColor& color) = 0;
 
-//    void drawArc(const QRectF& rect, int a, int alen);
-
-//    void drawText(const QPointF& p, const QString& s);
-//    void drawText(const QRectF& r, int flags, const QString& text, QRectF* br = nullptr);
-
-//    void drawGlyphRun(const QPointF& position, const QGlyphRun& glyphRun);
-
-//    void fillRect(const QRectF& r, const QColor& color);
-
-//    void drawPixmap(const QPointF& p, const QPixmap& pm);
-//    void drawTiledPixmap(const QRectF& rect, const QPixmap& pm, const QPointF& offset = QPointF());
+    virtual void drawPixmap(const QPointF& p, const QPixmap& pm) = 0;
+    virtual void drawTiledPixmap(const QRectF& rect, const QPixmap& pm, const QPointF& offset = QPointF()) = 0;
 };
+
+using IPaintProviderPtr = std::shared_ptr<IPaintProvider>;
 }
 
 #endif // MU_DRAW_IPAINTPROVIDER_H

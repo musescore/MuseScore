@@ -34,6 +34,8 @@
 #include "libmscore/mscore.h"
 #include "libmscore/xml.h"
 
+#include "libmscore/draw/qpainterprovider.h"
+
 #include "commonscene/commonscenetypes.h"
 #include "translation.h"
 
@@ -103,8 +105,7 @@ void KeyCanvas::clear()
 
 void KeyCanvas::paintEvent(QPaintEvent*)
 {
-    QPainter qp(this);
-    mu::draw::Painter painter(&qp);
+    mu::draw::Painter painter(mu::draw::QPainterProvider::make(this));
     painter.setAntialiasing(true);
     qreal wh = double(height());
     qreal ww = double(width());

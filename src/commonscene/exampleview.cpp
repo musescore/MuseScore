@@ -23,6 +23,8 @@
 #include "libmscore/chord.h"
 #include "libmscore/xml.h"
 
+#include "libmscore/draw/qpainterprovider.h"
+
 #include "commonscenetypes.h"
 
 namespace Ms {
@@ -193,8 +195,7 @@ void ExampleView::drawElements(mu::draw::Painter& painter, const QList<Element*>
 void ExampleView::paintEvent(QPaintEvent* ev)
 {
     if (_score) {
-        QPainter qp(this);
-        mu::draw::Painter p(&qp);
+        mu::draw::Painter p(mu::draw::QPainterProvider::make(this));
         p.setAntialiasing(true);
         const QRect r(ev->rect());
 
