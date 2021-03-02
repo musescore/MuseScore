@@ -1744,11 +1744,11 @@ TextBase::TextBase(const TextBase& st)
 void TextBase::drawSelection(mu::draw::Painter* p, const QRectF& r) const
 {
     QBrush bg(QColor("steelblue"));
-    p->setCompositionMode(QPainter::CompositionMode_HardLight);
+    p->setCompositionMode(mu::draw::Painter::CompositionMode::HardLight);
     p->setBrush(bg);
-    p->setPen(Qt::NoPen);
+    p->setNoPen();
     p->drawRect(r);
-    p->setCompositionMode(QPainter::CompositionMode_SourceOver);
+    p->setCompositionMode(mu::draw::Painter::CompositionMode::SourceOver);
     p->setPen(textColor());
 }
 
@@ -3380,11 +3380,10 @@ void TextBase::draw(mu::draw::Painter* p) const
             QColor fColor = curColor(visible(), frameColor());
             qreal frameWidthVal = frameWidth().val() * (sizeIsSpatiumDependent() ? spatium() : baseSpatium);
 
-            QPen pen(fColor, frameWidthVal, Qt::SolidLine,
-                     Qt::SquareCap, Qt::MiterJoin);
+            QPen pen(fColor, frameWidthVal, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin);
             p->setPen(pen);
         } else {
-            p->setPen(Qt::NoPen);
+            p->setNoPen();
         }
         QColor bg(bgColor());
         p->setBrush(bg.alpha() ? QBrush(bg) : Qt::NoBrush);

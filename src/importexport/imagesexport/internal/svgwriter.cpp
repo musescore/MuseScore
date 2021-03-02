@@ -80,8 +80,7 @@ mu::Ret SvgWriter::write(const notation::INotationPtr notation, IODevice& destin
 
     QPainter qp(&printer);
     mu::draw::Painter painter(&qp);
-    painter.setRenderHint(mu::draw::Painter::Antialiasing, true);
-    painter.setRenderHint(mu::draw::Painter::TextAntialiasing, true);
+    painter.setAntialiasing(true);
     if (TRIM_MARGINS_SIZE >= 0) {
         painter.translate(-pageRect.topLeft());
     }

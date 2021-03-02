@@ -568,8 +568,7 @@ QImage Score::createThumbnail()
 
     QPainter qp(&pm);
     mu::draw::Painter p(&qp);
-    p.setRenderHint(mu::draw::Painter::Antialiasing, true);
-    p.setRenderHint(mu::draw::Painter::TextAntialiasing, true);
+    p.setAntialiasing(true);
     p.scale(mag, mag);
     print(&p, 0);
     p.end();

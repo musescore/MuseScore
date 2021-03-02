@@ -1526,7 +1526,7 @@ void Harmony::draw(mu::draw::Painter* painter) const
                      Qt::SquareCap, Qt::MiterJoin);
             painter->setPen(pen);
         } else {
-            painter->setPen(Qt::NoPen);
+            painter->setNoPen();
         }
         QColor bg(bgColor());
         painter->setBrush(bg.alpha() ? QBrush(bg) : Qt::NoBrush);
