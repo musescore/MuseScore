@@ -342,6 +342,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::showFooter,               false, showFooter,                   0 },
       { Sid::footerFirstPage,          false, showFooterFirstPage,          0 },
       { Sid::footerOddEven,            false, footerOddEven,                0 },
+      { Sid::footerInsideMargins,      false, footerInsideMargins,          0 },
       { Sid::evenFooterL,              false, evenFooterL,                  0 },
       { Sid::evenFooterC,              false, evenFooterC,                  0 },
       { Sid::evenFooterR,              false, evenFooterR,                  0 },

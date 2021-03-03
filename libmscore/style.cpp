@@ -473,6 +473,7 @@ static const StyleType styleTypes[] {
 
       { Sid::footerFirstPage,         "footerFirstPage",         QVariant(true) },
       { Sid::footerOddEven,           "footerOddEven",           QVariant(true) },
+      { Sid::footerInsideMargins,     "footerInsideMargins",     QVariant(false) },
       { Sid::evenFooterL,             "evenFooterL",             QVariant(QString()) },
       { Sid::evenFooterC,             "evenFooterC",             QVariant(QString("$:copyright:")) },
       { Sid::evenFooterR,             "evenFooterR",             QVariant(QString()) },
