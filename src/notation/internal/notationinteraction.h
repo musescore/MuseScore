@@ -124,8 +124,9 @@ public:
     void addHairpinToSelection(HairpinType type) override;
     void addAccidentalToSelection(AccidentalType type) override;
     void changeSelectedNotesArticulation(SymbolId articulationSymbolId) override;
-    void addTupletToSelectedChords(const TupletOptions& options) override;
     void addGraceNotesToSelectedNotes(GraceNoteType type) override;
+    void addTupletToSelectedChordRests(const TupletOptions& options) override;
+    void addBeamToSelectedChordRests(BeamMode mode) override;
 
     void setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval = 0) override;
     void transpose(const TransposeOptions& options) override;

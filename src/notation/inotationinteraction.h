@@ -107,8 +107,9 @@ public:
     virtual void addHairpinToSelection(HairpinType type) = 0;
     virtual void addAccidentalToSelection(AccidentalType type) = 0;
     virtual void changeSelectedNotesArticulation(SymbolId articulationSymbolId) = 0;
-    virtual void addTupletToSelectedChords(const TupletOptions& options) = 0;
     virtual void addGraceNotesToSelectedNotes(GraceNoteType type) = 0;
+    virtual void addTupletToSelectedChordRests(const TupletOptions& options) = 0;
+    virtual void addBeamToSelectedChordRests(BeamMode mode) = 0;
 
     virtual void setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval = 0) = 0;
     virtual void transpose(const TransposeOptions& options) = 0;
