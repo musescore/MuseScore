@@ -448,6 +448,24 @@ const ActionList NotationActions::m_actions = {
                QT_TRANSLATE_NOOP("action", "Auto beam"),
                IconCode::Code::AUTO_TEXT
                ),
+    ActionItem("add-brackets",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Add Brackets to Accidental"),
+               QT_TRANSLATE_NOOP("action", "Add brackets to accidental"),
+               IconCode::Code::BRACKET
+               ),
+    ActionItem("add-braces",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Add Braces to Element"),
+               QT_TRANSLATE_NOOP("action", "Add Braces to element"),
+               IconCode::Code::BRACE
+               ),
+    ActionItem("add-parentheses",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Add Parentheses to Element"),
+               QT_TRANSLATE_NOOP("action", "Add parentheses to element"),
+               IconCode::Code::BRACKET_PARENTHESES
+               ),
     ActionItem("interval1",
                ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Unison Above"),

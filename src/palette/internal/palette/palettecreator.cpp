@@ -571,19 +571,19 @@ PalettePanel* PaletteCreator::newAccidentalsPalettePanel(bool defaultPalettePane
     Icon* ik = new Icon(gscore);
     ik->setIconType(IconType::BRACKETS);
     ActionItem action = adapter()->getAction("add-brackets");
-    ik->setAction("add-brackets", static_cast<char16_t>(action.iconCode));
+    ik->setAction(action.code, static_cast<char16_t>(action.iconCode));
     sp->append(ik, QString::fromStdString(action.title));
 
     ik = new Icon(gscore);
     ik->setIconType(IconType::PARENTHESES);
     action = adapter()->getAction("add-parentheses");
-    ik->setAction("add-parentheses", static_cast<char16_t>(action.iconCode));
+    ik->setAction(action.code, static_cast<char16_t>(action.iconCode));
     sp->append(ik, QString::fromStdString(action.title));
 
     ik = new Icon(gscore);
     ik->setIconType(IconType::BRACES);
     action = adapter()->getAction("add-braces");
-    ik->setAction("add-braces", static_cast<char16_t>(action.iconCode));
+    ik->setAction(action.code, static_cast<char16_t>(action.iconCode));
     sp->append(ik, QString::fromStdString(action.title));
 
     return sp;

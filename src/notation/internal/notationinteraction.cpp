@@ -2175,6 +2175,31 @@ void NotationInteraction::addAccidentalToSelection(AccidentalType type)
     notifyAboutSelectionChanged();
 }
 
+void NotationInteraction::addBracketsToSelection(BracketsType type)
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    startEdit();
+
+    switch (type) {
+    case BracketsType::Brackets:
+        score()->cmdAddBracket();
+        break;
+    case BracketsType::Braces:
+        score()->cmdAddBraces();
+        break;
+    case BracketsType::Parentheses:
+        score()->cmdAddParentheses();
+        break;
+    }
+
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
 void NotationInteraction::changeSelectedNotesArticulation(SymbolId articulationSymbolId)
 {
     if (selection()->isNone()) {

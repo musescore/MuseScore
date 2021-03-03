@@ -526,9 +526,6 @@ private:
     void cmdMoveRest(Rest*, Direction);
     void cmdMoveLyrics(Lyrics*, Direction);
     void cmdIncDecDuration(int nSteps, bool stepDotted = false);
-    void cmdAddBracket();
-    void cmdAddParentheses();
-    void cmdAddBraces();
 
     void createMMRest(Measure*, Measure*, const Fraction&);
 
@@ -635,6 +632,9 @@ public:
 
     void resetAllPositions();
 
+    void cmdAddBracket();
+    void cmdAddParentheses();
+    void cmdAddBraces();
     void cmdSetBeamMode(Beam::Mode);
     void cmdRemovePart(Part*);
     void cmdAddTie(bool addToChord = false);

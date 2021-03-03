@@ -451,6 +451,13 @@ struct MeasureBeat
     int maxBeatIndex = 0;
 };
 
+enum class BracketsType
+{
+    Brackets,
+    Braces,
+    Parentheses
+};
+
 static constexpr int MIN_NOTES_INTERVAL = -9;
 static constexpr int MAX_NOTES_INTERVAL = 9;
 
