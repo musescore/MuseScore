@@ -2220,6 +2220,38 @@ void NotationInteraction::addTupletToSelectedChords(const TupletOptions& options
     notifyAboutSelectionChanged();
 }
 
+void NotationInteraction::addGraceNotesToSelectedNotes(GraceNoteType type)
+{
+    int denominator = 1;
+
+    switch (type) {
+    case GraceNoteType::GRACE4:
+    case GraceNoteType::INVALID:
+    case GraceNoteType::NORMAL:
+        denominator = 1;
+        break;
+    case GraceNoteType::ACCIACCATURA:
+    case GraceNoteType::APPOGGIATURA:
+    case GraceNoteType::GRACE8_AFTER:
+        denominator = 2;
+        break;
+    case GraceNoteType::GRACE16:
+    case GraceNoteType::GRACE16_AFTER:
+        denominator = 4;
+        break;
+    case GraceNoteType::GRACE32:
+    case GraceNoteType::GRACE32_AFTER:
+        denominator = 8;
+        break;
+    }
+
+    startEdit();
+    score()->cmdAddGrace(type, Ms::MScore::division / denominator);
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
 void NotationInteraction::setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval)
 {
     interval = intervalType == BreaksSpawnIntervalType::MeasuresInterval ? interval : 0;

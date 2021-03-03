@@ -88,6 +88,7 @@ using HairpinType = Ms::HairpinType;
 using TextType = Ms::Tid;
 using TupletNumberType = Ms::TupletNumberType;
 using TupletBracketType = Ms::TupletBracketType;
+using GraceNoteType = Ms::NoteType;
 
 using PageList = std::vector<const Page*>;
 using StaffList = QList<const Staff*>;

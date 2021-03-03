@@ -377,6 +377,38 @@ const ActionList NotationActions::m_actions = {
                QT_TRANSLATE_NOOP("action", "Append Text Frame"),
                QT_TRANSLATE_NOOP("action", "Append text frame")
                ),
+    ActionItem("acciaccatura",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Acciaccatura")
+               ),
+    ActionItem("appoggiatura",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Appoggiatura")
+               ),
+    ActionItem("grace4",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Grace: quarter")
+               ),
+    ActionItem("grace16",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Grace: 16th")
+               ),
+    ActionItem("grace32",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Grace: 32nd")
+               ),
+    ActionItem("grace8after",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Grace: 8th after")
+               ),
+    ActionItem("grace16after",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Grace: 16th after")
+               ),
+    ActionItem("grace32after",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Grace: 32nd after")
+               ),
     ActionItem("interval1",
                ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Unison Above"),
