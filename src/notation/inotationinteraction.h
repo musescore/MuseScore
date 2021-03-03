@@ -108,6 +108,7 @@ public:
     virtual void addAccidentalToSelection(AccidentalType type) = 0;
     virtual void changeSelectedNotesArticulation(SymbolId articulationSymbolId) = 0;
     virtual void addTupletToSelectedChords(const TupletOptions& options) = 0;
+    virtual void addGraceNotesToSelectedNotes(GraceNoteType type) = 0;
 
     virtual void setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval = 0) = 0;
     virtual void transpose(const TransposeOptions& options) = 0;

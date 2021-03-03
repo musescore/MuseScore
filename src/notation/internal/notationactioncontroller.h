@@ -124,6 +124,7 @@ private:
     void resequenceRehearsalMarks();
     void unrollRepeats();
     void copyLyrics();
+    void addGraceNotesToSelectedNotes(GraceNoteType type);
 
     void resetState();
     void resetStretch();
