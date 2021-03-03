@@ -25,18 +25,19 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "iinteractive.h"
+#include "actions/iactionsregister.h"
 
 namespace mu::palette {
 class MU4PaletteAdapter : public IPaletteAdapter
 {
     INJECT(palette, context::IGlobalContext, globalContext)
     INJECT(palette, framework::IInteractive, interactive)
+    INJECT(palette, actions::IActionsRegister, actionsRegister)
 
 public:
     MU4PaletteAdapter();
 
-    QAction* getAction(const char* id) const override;
-    QString actionHelp(const char* id) const override;
+    actions::ActionItem getAction(const actions::ActionCode& code) const override;
 
     void showMasterPalette(const QString&) override;
     bool isSelected() const override;
@@ -55,10 +56,8 @@ public:
     mu::async::Notification elementDraggedToScoreView() const override;
 
 private:
-
     ValCh<bool> m_paletteEnabled;
     mutable Ms::PaletteWorkspace* m_paletteWorkspace = nullptr;
-    mutable QHash<QString, QAction*> m_actions;
     mu::async::Notification m_paletteSearchRequested;
     mu::async::Notification m_elementDraggedToScoreView;
 };

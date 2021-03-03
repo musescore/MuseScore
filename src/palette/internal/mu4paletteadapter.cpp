@@ -35,20 +35,9 @@ MU4PaletteAdapter::MU4PaletteAdapter()
     m_paletteEnabled.val = true;
 }
 
-QAction* MU4PaletteAdapter::getAction(const char* id_) const
+actions::ActionItem MU4PaletteAdapter::getAction(const actions::ActionCode& code) const
 {
-    QString id(id_);
-    QAction* a = m_actions.value(id, nullptr);
-    if (!a) {
-        a = new QAction();
-        m_actions.insert(id, a);
-    }
-    return a;
-}
-
-QString MU4PaletteAdapter::actionHelp(const char* id) const
-{
-    return QString(id);
+    return actionsRegister()->action(code);
 }
 
 void MU4PaletteAdapter::showMasterPalette(const QString& arg)

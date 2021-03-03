@@ -350,17 +350,20 @@ const ActionList NotationActions::m_actions = {
     ActionItem("insert-hbox",
                ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Insert Horizontal Frame"),
-               QT_TRANSLATE_NOOP("action", "Insert horizontal frame")
+               QT_TRANSLATE_NOOP("action", "Insert horizontal frame"),
+               IconCode::Code::HORIZONTAL_FRAME
                ),
     ActionItem("insert-vbox",
                ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Insert Vertical Frame"),
-               QT_TRANSLATE_NOOP("action", "Insert vertical frame")
+               QT_TRANSLATE_NOOP("action", "Insert vertical frame"),
+               IconCode::Code::VERTICAL_FRAME
                ),
     ActionItem("insert-textframe",
                ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Insert Text Frame"),
-               QT_TRANSLATE_NOOP("action", "Insert text frame")
+               QT_TRANSLATE_NOOP("action", "Insert text frame"),
+               IconCode::Code::TEXT_FRAME
                ),
     ActionItem("append-hbox",
                ShortcutContext::NotationHasSelection,
@@ -412,27 +415,38 @@ const ActionList NotationActions::m_actions = {
     ActionItem("beam-start",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Beam Start"),
-               QT_TRANSLATE_NOOP("action", "Beam start")
+               QT_TRANSLATE_NOOP("action", "Beam start"),
+               IconCode::Code::BEAM_START
                ),
     ActionItem("beam-mid",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Beam Middle"),
-               QT_TRANSLATE_NOOP("action", "Beam middle")
+               QT_TRANSLATE_NOOP("action", "Beam middle"),
+               IconCode::Code::BEAM_MIDDLE
                ),
     ActionItem("no-beam",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "No Beam"),
-               QT_TRANSLATE_NOOP("action", "No beam")
+               QT_TRANSLATE_NOOP("action", "No beam"),
+               IconCode::Code::NOTE_HEAD_EIGHTH
                ),
     ActionItem("beam-32",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Beam 16th Sub"),
-               QT_TRANSLATE_NOOP("action", "Beam 16th sub")
+               QT_TRANSLATE_NOOP("action", "Beam 16th sub"),
+               IconCode::Code::BEAM_32
                ),
     ActionItem("beam-64",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Beam 32th Sub"),
-               QT_TRANSLATE_NOOP("action", "Beam 32th sub")
+               QT_TRANSLATE_NOOP("action", "Beam 32th sub"),
+               IconCode::Code::BEAM_64
+               ),
+    ActionItem("auto-beam",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Auto beam"),
+               QT_TRANSLATE_NOOP("action", "Auto beam"),
+               IconCode::Code::AUTO_TEXT
                ),
     ActionItem("interval1",
                ShortcutContext::NotationHasSelection,
