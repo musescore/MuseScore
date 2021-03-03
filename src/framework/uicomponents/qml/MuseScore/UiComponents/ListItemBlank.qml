@@ -1,4 +1,4 @@
-import QtQuick 2.5
+import QtQuick 2.15
 
 import MuseScore.Ui 1.0
 
@@ -10,9 +10,11 @@ Item {
     property bool isSelected: false
     property alias radius: background.radius
 
+    property color defaultColor: ui.theme.buttonColor
+
     signal clicked()
     signal doubleClicked()
-    signal hovered()
+    signal hovered(var isHovered, var mouseX, int mouseY)
 
     implicitHeight: 30
     implicitWidth: Boolean(ListView.view) ? ListView.view.width : 30
@@ -37,7 +39,7 @@ Item {
             PropertyChanges {
                 target: background
                 opacity: ui.theme.buttonOpacityHover
-                color: ui.theme.buttonColor
+                color: defaultColor
             }
         },
 
@@ -48,7 +50,7 @@ Item {
             PropertyChanges {
                 target: background
                 opacity: ui.theme.buttonOpacityHit
-                color: ui.theme.buttonColor
+                color: defaultColor
             }
         },
 
@@ -70,6 +72,10 @@ Item {
         anchors.fill: parent
 
         hoverEnabled: root.visible
+
+        onHoveredChanged: {
+            root.hovered(mouseArea.containsMouse, mouseX, mouseY)
+        }
 
         onClicked: {
             root.clicked()

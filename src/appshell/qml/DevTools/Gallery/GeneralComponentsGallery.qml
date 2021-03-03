@@ -33,6 +33,7 @@ Rectangle {
                     { textRole: "StyledComboBox", componentRole: comboboxSample },
                     { textRole: "StyledPopup", componentRole: popupSample },
                     { textRole: "StyledPopupView", componentRole: styledPopupViewComponent },
+                    { textRole: "StyledMenu", componentRole: styledMenuComponent },
                     { textRole: "CheckBox", componentRole: checkBoxSample },
                     { textRole: "ColorPicker", componentRole: colorPickerSample },
                     { textRole: "ExpandableBlank", componentRole: expandableBlankSample },
@@ -247,6 +248,52 @@ Rectangle {
                             text: "Accent button 2"
                             accentButton: true
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    Component {
+        id: styledMenuComponent
+
+        Row {
+            spacing: 12
+
+            FlatButton {
+                text: "Show Menu"
+
+                onClicked: {
+                    menu.clear()
+
+                    var _subitems = [
+                                {code: "2", icon: IconCode.PAGE, title: "first action", checkable: false, shortcut: "", subitems: []},
+                                {code: "3", icon: IconCode.PAGE, title: "second action", checkable: false, shortcut: "", subitems: [
+                                        {code: "2", icon: IconCode.PAGE, title: "first action", checkable: false, shortcut: "", subitems: []}
+                                    ]}
+                            ]
+
+                    var items = [
+                                {code: "0", icon: IconCode.PAGE, title: "first action", checkable: false, shortcut: "", subitems: []},
+                                {code: "1", icon: IconCode.AMBITUS, title: "second action", checkable: false, shortcut: "Ctrl+A", subitems: _subitems },
+                                {},
+                                {code: "4", title: "pre pre last action", checkable: false, shortcut: "Ctrl+Shift+G", subitems: []},
+                                {code: "5", icon: IconCode.PAGE, title: "pre last action", checkable: false, shortcut: "", subitems: []},
+                                {code: "6", icon: IconCode.CLEF_BASS, title: "last action", checkable: false, shortcut: "", subitems: []}
+                            ]
+
+                    for (var i in items) {
+                        menu.addMenuItem(items[i])
+                    }
+
+                    menu.toggleOpened()
+                }
+
+                StyledMenu {
+                    id: menu
+
+                    onHandleAction: {
+                        console.log("selected " + actionCode)
                     }
                 }
             }
