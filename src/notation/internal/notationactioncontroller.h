@@ -71,6 +71,7 @@ private:
 
     void putTuplet(int tupletCount);
     void addBeatToSelectedChordRests(BeamMode mode);
+    void addBracketsToSelection(BracketsType type);
 
     void moveAction(const actions::ActionCode& actionCode);
     void moveText(INotationInteractionPtr interaction, const actions::ActionCode& actionCode);

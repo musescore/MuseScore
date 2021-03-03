@@ -2409,6 +2409,7 @@
         <gridHeight>48</gridHeight>
         <mag>1</mag>
         <moreElements>0</moreElements>
+        <visible>0</visible>
         <Cell name="System break">
           <mag>1.2</mag>
           <LayoutBreak>

@@ -242,6 +242,10 @@ void NotationActionController::init()
     dispatcher()->reg(this, "beam-64", [this]() { addBeatToSelectedChordRests(BeamMode::BEGIN64); });
     dispatcher()->reg(this, "auto-beam", [this]() { addBeatToSelectedChordRests(BeamMode::AUTO); });
 
+    dispatcher()->reg(this, "add-brackets", [this]() { addBracketsToSelection(BracketsType::Brackets); });
+    dispatcher()->reg(this, "add-parentheses", [this]() { addBracketsToSelection(BracketsType::Parentheses); });
+    dispatcher()->reg(this, "add-braces", [this]() { addBracketsToSelection(BracketsType::Braces); });
+
     for (int i = MIN_NOTES_INTERVAL; i <= MAX_NOTES_INTERVAL; ++i) {
         if (isNotesIntervalValid(i)) {
             dispatcher()->reg(this, "interval" + std::to_string(i), [this, i]() { addInterval(i); });
@@ -563,6 +567,16 @@ void NotationActionController::addBeatToSelectedChordRests(BeamMode mode)
     }
 
     interaction->addBeamToSelectedChordRests(mode);
+}
+
+void NotationActionController::addBracketsToSelection(BracketsType type)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->addBracketsToSelection(type);
 }
 
 void NotationActionController::moveAction(const actions::ActionCode& actionCode)

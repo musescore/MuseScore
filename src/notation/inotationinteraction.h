@@ -106,6 +106,7 @@ public:
     virtual void addOttavaToSelection(OttavaType type) = 0;
     virtual void addHairpinToSelection(HairpinType type) = 0;
     virtual void addAccidentalToSelection(AccidentalType type) = 0;
+    virtual void addBracketsToSelection(BracketsType type) = 0;
     virtual void changeSelectedNotesArticulation(SymbolId articulationSymbolId) = 0;
     virtual void addGraceNotesToSelectedNotes(GraceNoteType type) = 0;
     virtual void addTupletToSelectedChordRests(const TupletOptions& options) = 0;
