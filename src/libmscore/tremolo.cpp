@@ -102,7 +102,7 @@ void Tremolo::draw(mu::draw::Painter* painter) const
         drawSymbol(SymId::buzzRoll, painter);
     } else {
         painter->setBrush(QBrush(curColor()));
-        painter->setPen(Qt::NoPen);
+        painter->setNoPen();
         painter->drawPath(path);
     }
     // for palette

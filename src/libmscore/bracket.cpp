@@ -244,7 +244,7 @@ void Bracket::draw(mu::draw::Painter* painter) const
     switch (bracketType()) {
     case BracketType::BRACE: {
         if (_braceSymbol == SymId::noSym) {
-            painter->setPen(Qt::NoPen);
+            painter->setNoPen();
             painter->setBrush(QBrush(curColor()));
             painter->drawPath(path);
         } else {

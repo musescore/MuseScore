@@ -30,7 +30,7 @@
 #include "libmscore/measure.h"
 #include "libmscore/stafflines.h"
 
-#include <QPainter>
+#include "libmscore/draw/qpainterprovider.h"
 
 using namespace mu::iex::imagesexport;
 using namespace mu::system;
@@ -78,10 +78,8 @@ mu::Ret SvgWriter::write(const notation::INotationPtr notation, IODevice& destin
     printer.setSize(QSize(width, height));
     printer.setViewBox(QRectF(0, 0, width, height));
 
-    QPainter qp(&printer);
-    mu::draw::Painter painter(&qp);
-    painter.setRenderHint(mu::draw::Painter::Antialiasing, true);
-    painter.setRenderHint(mu::draw::Painter::TextAntialiasing, true);
+    mu::draw::Painter painter(mu::draw::QPainterProvider::make(&printer));
+    painter.setAntialiasing(true);
     if (TRIM_MARGINS_SIZE >= 0) {
         painter.translate(-pageRect.topLeft());
     }

@@ -354,6 +354,10 @@ set(MODULE_SRC
     xmlwriter.cpp
     draw/painter.cpp
     draw/painter.h
+    draw/ipaintprovider.h
+    draw/drawtypes.h
+    draw/qpainterprovider.cpp
+    draw/qpainterprovider.h
     )
 
 set(MODULE_INCLUDE

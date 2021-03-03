@@ -221,7 +221,7 @@ void Beam::draw(mu::draw::Painter* painter) const
         return;
     }
     painter->setBrush(QBrush(curColor()));
-    painter->setPen(Qt::NoPen);
+    painter->setNoPen();
     qreal lw2 = point(score()->styleS(Sid::beamWidth)) * .5 * mag();
 
     // make beam thickness independent of slant
