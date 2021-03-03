@@ -23,6 +23,8 @@
 
 #include <QAction>
 
+#include "actions/actiontypes.h"
+
 #include "libmscore/score.h"
 #include "libmscore/note.h"
 #include "libmscore/chordrest.h"
@@ -83,6 +85,8 @@
 #include "palette/palette.h"
 #include "translation.h"
 
+using namespace mu::actions;
+
 namespace Ms {
 extern bool useFactorySettings;
 
@@ -101,10 +105,9 @@ void populateIconPalette(Palette* p, const IconAction* a)
     while (a->subtype != IconType::NONE) {
         std::shared_ptr<Icon> ik = std::make_shared<Icon>(gscore);
         ik->setIconType(a->subtype);
-        QAction* action = adapter->getAction(a->action);
-        QIcon icon(action->icon());
-        ik->setAction(a->action, icon);
-        p->append(ik, adapter->actionHelp(a->action));
+        ActionItem action = adapter->getAction(codeFromQString(a->action));
+        ik->setAction(a->action, static_cast<char16_t>(action.iconCode));
+        p->append(ik, QString::fromStdString(action.title));
         ++a;
     }
 }
@@ -419,10 +422,9 @@ static void populateIconPalettePanel(PalettePanel* p, const IconAction* a)
     while (a->subtype != IconType::NONE) {
         Icon* ik = new Icon(gscore);
         ik->setIconType(a->subtype);
-        QAction* action = adapter->getAction(a->action);
-        QIcon icon(action->icon());
-        ik->setAction(a->action, icon);
-        p->append(ik, adapter->actionHelp(a->action));
+        ActionItem action = adapter->getAction(codeFromQString(a->action));
+        ik->setAction(a->action, static_cast<char16_t>(action.iconCode));
+        p->append(ik, QString::fromStdString(action.title));
         ++a;
     }
 }
@@ -568,21 +570,21 @@ PalettePanel* PaletteCreator::newAccidentalsPalettePanel(bool defaultPalettePane
 
     Icon* ik = new Icon(gscore);
     ik->setIconType(IconType::BRACKETS);
-    QAction* action = adapter()->getAction("add-brackets");
-    ik->setAction(QByteArray("add-brackets"), action->icon());
-    sp->append(ik, adapter()->actionHelp("add-brackets"));
+    ActionItem action = adapter()->getAction("add-brackets");
+    ik->setAction("add-brackets", static_cast<char16_t>(action.iconCode));
+    sp->append(ik, QString::fromStdString(action.title));
 
     ik = new Icon(gscore);
     ik->setIconType(IconType::PARENTHESES);
     action = adapter()->getAction("add-parentheses");
-    ik->setAction(QByteArray("add-parentheses"), action->icon());
-    sp->append(ik, adapter()->actionHelp("add-parentheses"));
+    ik->setAction("add-parentheses", static_cast<char16_t>(action.iconCode));
+    sp->append(ik, QString::fromStdString(action.title));
 
     ik = new Icon(gscore);
     ik->setIconType(IconType::BRACES);
     action = adapter()->getAction("add-braces");
-    ik->setAction(QByteArray("add-braces"), action->icon());
-    sp->append(ik, adapter()->actionHelp("add-braces"));
+    ik->setAction("add-braces", static_cast<char16_t>(action.iconCode));
+    sp->append(ik, QString::fromStdString(action.title));
 
     return sp;
 }
@@ -851,12 +853,13 @@ PalettePanel* PaletteCreator::newNoteHeadsPalettePanel()
         nh->setSym(sym);
         sp->append(nh, NoteHead::group2userName(NoteHead::Group(i)));
     }
+
     Icon* ik = new Icon(gscore);
     ik->setIconType(IconType::PARENTHESES);
-    QAction* action = adapter()->getAction("add-parentheses");
-    QIcon icon(action->icon());
-    ik->setAction("add-parentheses", icon);
-    sp->append(ik, adapter()->actionHelp("add-parentheses"));
+    ActionItem action = adapter()->getAction("add-parentheses");
+    ik->setAction("add-parentheses", static_cast<char16_t>(action.iconCode));
+    sp->append(ik, QString::fromStdString(action.title));
+
     return sp;
 }
 

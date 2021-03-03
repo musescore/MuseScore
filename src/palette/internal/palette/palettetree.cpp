@@ -24,6 +24,8 @@
 #include "palette.h"
 #include "palettetree.h"
 
+#include "actions/actiontypes.h"
+
 #include "libmscore/articulation.h"
 #include "libmscore/fret.h"
 #include "libmscore/icon.h"
@@ -48,6 +50,7 @@
 
 using namespace mu::palette;
 using namespace mu::framework;
+using namespace mu::actions;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -307,14 +310,15 @@ bool PaletteCell::read(XmlReader& e)
             } else {
                 element->read(e);
                 element->styleChanged();
+
                 if (element->type() == ElementType::ICON) {
                     Icon* icon = static_cast<Icon*>(element.get());
-                    QAction* ac = adapter()->getAction(icon->action());
-                    if (ac) {
-                        QIcon qicon(ac->icon());
-                        icon->setAction(icon->action(), qicon);
+                    ActionItem actionItem = adapter()->getAction(icon->actionCode());
+
+                    if (actionItem.isValid()) {
+                        icon->setAction(icon->actionCode(), static_cast<char16_t>(actionItem.iconCode));
                     } else {
-                        add = false;             // action is not valid, don't add it to the palette.
+                        add = false;
                     }
                 }
             }
@@ -343,31 +347,27 @@ PaletteCellPtr PaletteCell::readElementMimeData(const QByteArray& data)
 {
     QPointF dragOffset;
     Fraction duration(1, 4);
-    std::shared_ptr<Element> e(Element::readMimeData(gscore, data, &dragOffset, &duration));
+    ElementPtr element(Element::readMimeData(gscore, data, &dragOffset, &duration));
 
-    if (!e) {
+    if (!element) {
         return nullptr;
     }
 
-    if (!e->isSymbol()) { // not sure this check is necessary, it was so in the old palette
-        e->setTrack(0);
+    if (!element->isSymbol()) { // not sure this check is necessary, it was so in the old palette
+        element->setTrack(0);
     }
 
-    if (e->isIcon()) {
-        Icon* i = toIcon(e.get());
-        const QByteArray& action = i->action();
-        if (!action.isEmpty()) {
-            QAction* a = adapter()->getAction(action);
-            if (a) {
-                QIcon icon(a->icon());
-                i->setAction(action, icon);
-            }
+    if (element->isIcon()) {
+        Icon* icon = toIcon(element.get());
+        ActionItem actionItem = adapter()->getAction(icon->actionCode());
+        if (actionItem.isValid()) {
+            icon->setAction(icon->actionCode(), static_cast<char16_t>(actionItem.iconCode));
         }
     }
 
-    const QString name = (e->isFretDiagram()) ? toFretDiagram(e.get())->harmonyText() : e->userName();
+    const QString name = (element->isFretDiagram()) ? toFretDiagram(element.get())->harmonyText() : element->userName();
 
-    return PaletteCellPtr(new PaletteCell(e, name));
+    return std::make_shared<PaletteCell>(element, name);
 }
 
 //---------------------------------------------------------
@@ -916,8 +916,9 @@ PalettePanel::Type PalettePanel::guessType() const
     case ElementType::SYMBOL:
         return Type::Accordion;
     case ElementType::ICON: {
-        const Icon* i = toIcon(e);
-        const QByteArray& action = i->action();
+        const Icon* icon = toIcon(e);
+        QString action = QString::fromStdString(icon->actionCode());
+
         if (action.contains("beam")) {
             return Type::Beam;
         }

@@ -22,20 +22,13 @@
 #include "modularity/imoduleexport.h"
 
 #include <QString>
-#include <QPointF>
 
 #include "retval.h"
-#include "async/notification.h"
 
-class QAction;
+#include "async/notification.h"
+#include "actions/actiontypes.h"
 
 namespace Ms {
-class InstrumentChange;
-class Score;
-class ScriptRecorder;
-enum class ViewState;
-class Slur;
-class Score;
 class Element;
 class PaletteWorkspace;
 }
@@ -50,8 +43,7 @@ class IPaletteAdapter : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IPaletteAdapter() = default;
 
-    virtual QAction* getAction(const char* id) const = 0;
-    virtual QString actionHelp(const char* id) const = 0;
+    virtual actions::ActionItem getAction(const actions::ActionCode& code) const = 0;
 
     virtual void showMasterPalette(const QString&) = 0;
 

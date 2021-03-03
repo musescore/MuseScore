@@ -24,6 +24,8 @@
 #include <QToolTip>
 #include <QBuffer>
 
+#include "actions/actiontypes.h"
+
 #include "libmscore/element.h"
 #include "libmscore/style.h"
 #include "libmscore/sym.h"
@@ -61,6 +63,7 @@
 
 using namespace mu::framework;
 using namespace mu::palette;
+using namespace mu::actions;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -922,7 +925,7 @@ PaletteCellPtr Palette::add(int idx, ElementPtr element, const QString& name, QS
 
     if (element && element->isIcon()) {
         const Icon* icon = toIcon(element.get());
-        connect(adapter()->getAction(icon->action()), SIGNAL(toggled(bool)), SLOT(actionToggled(bool)));
+        //connect(adapter()->getAction(icon->action()), SIGNAL(toggled(bool)), SLOT(actionToggled(bool)));
     }
 
     updateGeometry();
@@ -1517,14 +1520,15 @@ void Palette::read(XmlReader& e)
                     } else {
                         cell->element->read(e);
                         cell->element->styleChanged();
+
                         if (cell->element->type() == ElementType::ICON) {
                             Icon* icon = static_cast<Icon*>(cell->element.get());
-                            QAction* ac = adapter()->getAction(icon->action());
-                            if (ac) {
-                                QIcon qicon(ac->icon());
-                                icon->setAction(icon->action(), qicon);
+                            ActionItem actionItem = adapter()->getAction(icon->actionCode());
+
+                            if (actionItem.isValid()) {
+                                icon->setAction(icon->actionCode(), static_cast<char16_t>(actionItem.iconCode));
                             } else {
-                                add = false;                 // action is not valid, don't add it to the palette.
+                                add = false;
                             }
                         }
                     }
@@ -1625,11 +1629,12 @@ void Palette::actionToggled(bool /*val*/)
     for (int n = 0; n < nn; ++n) {
         const ElementPtr element = cellAt(n)->element;
         if (element && element->type() == ElementType::ICON) {
+            /*
             QAction* a = adapter()->getAction(std::dynamic_pointer_cast<Icon>(element)->action());
             if (a->isChecked()) {
                 m_selectedIdx = n;
                 break;
-            }
+            }*/
         }
     }
     update();
@@ -1768,15 +1773,13 @@ void Palette::dropEvent(QDropEvent* event)
             if (element) {
                 element->read(xml);
                 element->setTrack(0);
+
                 if (element->isIcon()) {
-                    Icon* i = toIcon(element.get());
-                    const QByteArray& action = i->action();
-                    if (!action.isEmpty()) {
-                        QAction* a = adapter()->getAction(action);
-                        if (a) {
-                            QIcon icon(a->icon());
-                            i->setAction(action, icon);
-                        }
+                    Icon* icon = toIcon(element.get());
+                    ActionItem actionItem = adapter()->getAction(icon->actionCode());
+
+                    if (actionItem.isValid()) {
+                        icon->setAction(icon->actionCode(), static_cast<char16_t>(actionItem.iconCode));
                     }
                 }
             }
