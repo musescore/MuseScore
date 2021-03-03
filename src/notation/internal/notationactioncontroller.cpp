@@ -235,6 +235,13 @@ void NotationActionController::init()
     dispatcher()->reg(this, "grace16after", [this]() { addGraceNotesToSelectedNotes(GraceNoteType::GRACE16_AFTER); });
     dispatcher()->reg(this, "grace32after", [this]() { addGraceNotesToSelectedNotes(GraceNoteType::GRACE32_AFTER); });
 
+    dispatcher()->reg(this, "beam-start", [this]() { addBeatToSelectedChordRests(BeamMode::BEGIN); });
+    dispatcher()->reg(this, "beam-mid", [this]() { addBeatToSelectedChordRests(BeamMode::MID); });
+    dispatcher()->reg(this, "no-beam", [this]() { addBeatToSelectedChordRests(BeamMode::NONE); });
+    dispatcher()->reg(this, "beam-32", [this]() { addBeatToSelectedChordRests(BeamMode::BEGIN32); });
+    dispatcher()->reg(this, "beam-64", [this]() { addBeatToSelectedChordRests(BeamMode::BEGIN64); });
+    dispatcher()->reg(this, "auto-beam", [this]() { addBeatToSelectedChordRests(BeamMode::AUTO); });
+
     for (int i = MIN_NOTES_INTERVAL; i <= MAX_NOTES_INTERVAL; ++i) {
         if (isNotesIntervalValid(i)) {
             dispatcher()->reg(this, "interval" + std::to_string(i), [this, i]() { addInterval(i); });
@@ -544,8 +551,18 @@ void NotationActionController::putTuplet(int tupletCount)
     if (noteInput->isNoteInputMode()) {
         noteInput->addTuplet(options);
     } else {
-        interaction->addTupletToSelectedChords(options);
+        interaction->addTupletToSelectedChordRests(options);
     }
+}
+
+void NotationActionController::addBeatToSelectedChordRests(BeamMode mode)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->addBeamToSelectedChordRests(mode);
 }
 
 void NotationActionController::moveAction(const actions::ActionCode& actionCode)
@@ -555,26 +572,26 @@ void NotationActionController::moveAction(const actions::ActionCode& actionCode)
         return;
     }
 
-    Element* el = interaction->selection()->element();
-    if (!el) {
+    Element* element = interaction->selection()->element();
+    if (!element) {
         LOGW() << "no selection element";
         return;
     }
 
-    if (el->isLyrics()) {
+    if (element->isLyrics()) {
         NOT_IMPLEMENTED;
-    } else if (el->isTextBase()) {
+    } else if (element->isTextBase()) {
         moveText(interaction, actionCode);
     } else {
         if ("pitch-up" == actionCode) {
-            if (el->isRest()) {
-                NOT_IMPLEMENTED << actionCode << ", el->isRest";
+            if (element->isRest()) {
+                NOT_IMPLEMENTED << actionCode << ", element->isRest";
             } else {
                 interaction->movePitch(MoveDirection::Up, PitchMode::CHROMATIC);
             }
         } else if ("pitch-down" == actionCode) {
-            if (el->isRest()) {
-                NOT_IMPLEMENTED << actionCode << ", el->isRest";
+            if (element->isRest()) {
+                NOT_IMPLEMENTED << actionCode << ", element->isRest";
             } else {
                 interaction->movePitch(MoveDirection::Down, PitchMode::CHROMATIC);
             }

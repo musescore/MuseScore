@@ -70,6 +70,7 @@ private:
     void addArticulation(SymbolId articulationSymbolId);
 
     void putTuplet(int tupletCount);
+    void addBeatToSelectedChordRests(BeamMode mode);
 
     void moveAction(const actions::ActionCode& actionCode);
     void moveText(INotationInteractionPtr interaction, const actions::ActionCode& actionCode);

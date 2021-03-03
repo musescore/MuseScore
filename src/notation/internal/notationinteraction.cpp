@@ -2203,25 +2203,12 @@ void NotationInteraction::changeSelectedNotesArticulation(SymbolId articulationS
     notifyAboutSelectionChanged();
 }
 
-void NotationInteraction::addTupletToSelectedChords(const TupletOptions& options)
+void NotationInteraction::addGraceNotesToSelectedNotes(GraceNoteType type)
 {
     if (selection()->isNone()) {
         return;
     }
 
-    startEdit();
-    for (ChordRest* chordRest : score()->getSelectedChordRests()) {
-        if (!chordRest->isGrace()) {
-            score()->addTuplet(chordRest, options.ratio, options.numberType, options.bracketType);
-        }
-    }
-    apply();
-
-    notifyAboutSelectionChanged();
-}
-
-void NotationInteraction::addGraceNotesToSelectedNotes(GraceNoteType type)
-{
     int denominator = 1;
 
     switch (type) {
@@ -2247,6 +2234,36 @@ void NotationInteraction::addGraceNotesToSelectedNotes(GraceNoteType type)
 
     startEdit();
     score()->cmdAddGrace(type, Ms::MScore::division / denominator);
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
+void NotationInteraction::addTupletToSelectedChordRests(const TupletOptions& options)
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    startEdit();
+    for (ChordRest* chordRest : score()->getSelectedChordRests()) {
+        if (!chordRest->isGrace()) {
+            score()->addTuplet(chordRest, options.ratio, options.numberType, options.bracketType);
+        }
+    }
+    apply();
+
+    notifyAboutSelectionChanged();
+}
+
+void NotationInteraction::addBeamToSelectedChordRests(BeamMode mode)
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    startEdit();
+    score()->cmdSetBeamMode(mode);
     apply();
 
     notifyAboutNotationChanged();

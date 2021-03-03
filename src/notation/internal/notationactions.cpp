@@ -409,6 +409,31 @@ const ActionList NotationActions::m_actions = {
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Grace: 32nd after")
                ),
+    ActionItem("beam-start",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Beam Start"),
+               QT_TRANSLATE_NOOP("action", "Beam start")
+               ),
+    ActionItem("beam-mid",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Beam Middle"),
+               QT_TRANSLATE_NOOP("action", "Beam middle")
+               ),
+    ActionItem("no-beam",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "No Beam"),
+               QT_TRANSLATE_NOOP("action", "No beam")
+               ),
+    ActionItem("beam-32",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Beam 16th Sub"),
+               QT_TRANSLATE_NOOP("action", "Beam 16th sub")
+               ),
+    ActionItem("beam-64",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Beam 32th Sub"),
+               QT_TRANSLATE_NOOP("action", "Beam 32th sub")
+               ),
     ActionItem("interval1",
                ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Unison Above"),

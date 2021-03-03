@@ -510,7 +510,6 @@ private:
 
     ChordRest* nextMeasure(ChordRest* element, bool selectBehavior = false, bool mmRest = false);
     ChordRest* prevMeasure(ChordRest* element, bool mmRest = false);
-    void cmdSetBeamMode(Beam::Mode);
     void cmdResetAllStyle();
 
     Note* getSelectedNote();
@@ -636,6 +635,7 @@ public:
 
     void resetAllPositions();
 
+    void cmdSetBeamMode(Beam::Mode);
     void cmdRemovePart(Part*);
     void cmdAddTie(bool addToChord = false);
     void cmdToggleTie();
