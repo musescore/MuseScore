@@ -54,6 +54,8 @@
 #include <windows.h>
 #endif
 
+#include "draw/qpainterprovider.h"
+
 namespace Ms {
 //---------------------------------------------------------
 //   writeMeasure
@@ -566,10 +568,8 @@ QImage Score::createThumbnail()
     double pr = MScore::pixelRatio;
     MScore::pixelRatio = 1.0;
 
-    QPainter qp(&pm);
-    mu::draw::Painter p(&qp);
-    p.setRenderHint(mu::draw::Painter::Antialiasing, true);
-    p.setRenderHint(mu::draw::Painter::TextAntialiasing, true);
+    mu::draw::Painter p(mu::draw::QPainterProvider::make(&pm));
+    p.setAntialiasing(true);
     p.scale(mag, mag);
     print(&p, 0);
     p.end();

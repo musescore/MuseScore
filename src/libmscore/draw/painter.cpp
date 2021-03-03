@@ -20,274 +20,234 @@
 
 using namespace mu::draw;
 
-Painter::Painter(QPainter* painter)
-    : m_painter(painter)
+Painter::Painter(IPaintProviderPtr provider)
+    : m_provider(provider)
 {
 }
 
 QPaintDevice* Painter::device() const
 {
-    return m_painter->device();
+    return m_provider->device();
 }
 
 QPainter* Painter::qpainter() const
 {
-    return m_painter;
-}
-
-bool Painter::begin(QPaintDevice* d)
-{
-    return m_painter->begin(d);
+    return m_provider->qpainter();
 }
 
 bool Painter::end()
 {
-    return m_painter->end();
+    return m_provider->end();
 }
 
 bool Painter::isActive() const
 {
-    return m_painter->isActive();
+    return m_provider->isActive();
 }
 
-void Painter::setRenderHint(RenderHint hint, bool on)
+void Painter::setAntialiasing(bool arg)
 {
-    m_painter->setRenderHint(static_cast<QPainter::RenderHint>(hint), on);
+    m_provider->setAntialiasing(arg);
 }
 
-void Painter::setCompositionMode(QPainter::CompositionMode mode)
+void Painter::setCompositionMode(CompositionMode mode)
 {
-    m_painter->setCompositionMode(mode);
+    m_provider->setCompositionMode(mode);
 }
 
 void Painter::setFont(const QFont& f)
 {
-    m_painter->setFont(f);
+    m_provider->setFont(f);
 }
 
 const QFont& Painter::font() const
 {
-    return m_painter->font();
+    return m_provider->font();
 }
 
 void Painter::setPen(const QColor& color)
 {
-    m_painter->setPen(color);
+    m_provider->setPen(color);
 }
 
 void Painter::setPen(const QPen& pen)
 {
-    m_painter->setPen(pen);
+    m_provider->setPen(pen);
 }
 
-void Painter::setPen(Qt::PenStyle style)
+void Painter::setNoPen()
 {
-    m_painter->setPen(style);
+    m_provider->setPen(QPen(Qt::NoPen));
 }
 
 const QPen& Painter::pen() const
 {
-    return m_painter->pen();
+    return m_provider->pen();
 }
 
 void Painter::setBrush(const QBrush& brush)
 {
-    m_painter->setBrush(brush);
-}
-
-void Painter::setBrush(Qt::BrushStyle style)
-{
-    m_painter->setBrush(style);
+    m_provider->setBrush(brush);
 }
 
 const QBrush& Painter::brush() const
 {
-    return m_painter->brush();
+    return m_provider->brush();
 }
 
 void Painter::save()
 {
-    m_painter->save();
+    m_provider->save();
 }
 
 void Painter::restore()
 {
-    m_painter->restore();
+    m_provider->restore();
 }
 
 void Painter::setWorldTransform(const QTransform& matrix, bool combine)
 {
-    m_painter->setWorldTransform(matrix, combine);
+    m_provider->setWorldTransform(matrix, combine);
 }
 
 const QTransform& Painter::worldTransform() const
 {
-    return m_painter->worldTransform();
+    return m_provider->worldTransform();
 }
 
 void Painter::setTransform(const QTransform& transform, bool combine)
 {
-    m_painter->setTransform(transform, combine);
+    m_provider->setTransform(transform, combine);
 }
 
 const QTransform& Painter::transform() const
 {
-    return m_painter->transform();
+    return m_provider->transform();
 }
 
 void Painter::setMatrix(const QMatrix& matrix, bool combine)
 {
-    m_painter->setMatrix(matrix, combine);
+    m_provider->setMatrix(matrix, combine);
 }
 
 void Painter::scale(qreal sx, qreal sy)
 {
-    m_painter->scale(sx, sy);
+    m_provider->scale(sx, sy);
 }
 
 void Painter::rotate(qreal a)
 {
-    m_painter->rotate(a);
+    m_provider->rotate(a);
 }
 
 void Painter::translate(const QPointF& offset)
 {
-    m_painter->translate(offset);
+    m_provider->translate(offset);
 }
 
 QRect Painter::window() const
 {
-    return m_painter->window();
+    return m_provider->window();
 }
 
 void Painter::setWindow(const QRect& window)
 {
-    m_painter->setWindow(window);
+    m_provider->setWindow(window);
 }
 
 QRect Painter::viewport() const
 {
-    return m_painter->viewport();
+    return m_provider->viewport();
 }
 
 void Painter::setViewport(const QRect& viewport)
 {
-    m_painter->setViewport(viewport);
+    m_provider->setViewport(viewport);
 }
 
 // drawing functions
 
-void Painter::strokePath(const QPainterPath& path, const QPen& pen)
-{
-    m_painter->strokePath(path, pen);
-}
-
 void Painter::fillPath(const QPainterPath& path, const QBrush& brush)
 {
-    m_painter->fillPath(path, brush);
+    m_provider->fillPath(path, brush);
 }
 
 void Painter::drawPath(const QPainterPath& path)
 {
-    m_painter->drawPath(path);
+    m_provider->drawPath(path);
 }
 
 void Painter::drawLines(const QLineF* lines, int lineCount)
 {
-    m_painter->drawLines(lines, lineCount);
-}
-
-void Painter::drawLines(const QLine* lines, int lineCount)
-{
-    m_painter->drawLines(lines, lineCount);
+    m_provider->drawLines(lines, lineCount);
 }
 
 void Painter::drawLines(const QPointF* pointPairs, int lineCount)
 {
-    m_painter->drawLines(pointPairs, lineCount);
+    m_provider->drawLines(pointPairs, lineCount);
 }
 
 void Painter::drawRects(const QRectF* rects, int rectCount)
 {
-    m_painter->drawRects(rects, rectCount);
-}
-
-void Painter::drawRects(const QRect* rects, int rectCount)
-{
-    m_painter->drawRects(rects, rectCount);
+    m_provider->drawRects(rects, rectCount);
 }
 
 void Painter::drawEllipse(const QRectF& r)
 {
-    m_painter->drawEllipse(r);
-}
-
-void Painter::drawEllipse(const QRect& r)
-{
-    m_painter->drawEllipse(r);
+    m_provider->drawEllipse(r);
 }
 
 void Painter::drawPolyline(const QPointF* points, int pointCount)
 {
-    m_painter->drawPolyline(points, pointCount);
-}
-
-void Painter::drawPolyline(const QPoint* points, int pointCount)
-{
-    m_painter->drawPolyline(points, pointCount);
+    m_provider->drawPolyline(points, pointCount);
 }
 
 void Painter::drawPolygon(const QPointF* points, int pointCount, Qt::FillRule fillRule)
 {
-    m_painter->drawPolygon(points, pointCount, fillRule);
-}
-
-void Painter::drawPolygon(const QPoint* points, int pointCount, Qt::FillRule fillRule)
-{
-    m_painter->drawPolygon(points, pointCount, fillRule);
+    m_provider->drawPolygon(points, pointCount, fillRule);
 }
 
 void Painter::drawConvexPolygon(const QPointF* points, int pointCount)
 {
-    m_painter->drawConvexPolygon(points, pointCount);
+    m_provider->drawConvexPolygon(points, pointCount);
 }
 
 void Painter::drawArc(const QRectF& rect, int a, int alen)
 {
-    m_painter->drawArc(rect, a, alen);
+    m_provider->drawArc(rect, a, alen);
 }
 
 void Painter::drawRoundedRect(const QRectF& rect, qreal xRadius, qreal yRadius, Qt::SizeMode mode)
 {
-    m_painter->drawRoundedRect(rect, xRadius, yRadius, mode);
+    m_provider->drawRoundedRect(rect, xRadius, yRadius, mode);
 }
 
 void Painter::drawText(const QPointF& p, const QString& s)
 {
-    m_painter->drawText(p, s);
+    m_provider->drawText(p, s);
 }
 
 void Painter::drawText(const QRectF& r, int flags, const QString& text, QRectF* br)
 {
-    m_painter->drawText(r, flags, text, br);
+    m_provider->drawText(r, flags, text, br);
 }
 
 void Painter::drawGlyphRun(const QPointF& position, const QGlyphRun& glyphRun)
 {
-    m_painter->drawGlyphRun(position, glyphRun);
+    m_provider->drawGlyphRun(position, glyphRun);
 }
 
 void Painter::fillRect(const QRectF& r, const QColor& color)
 {
-    m_painter->fillRect(r, color);
+    m_provider->fillRect(r, color);
 }
 
 void Painter::drawPixmap(const QPointF& p, const QPixmap& pm)
 {
-    m_painter->drawPixmap(p, pm);
+    m_provider->drawPixmap(p, pm);
 }
 
 void Painter::drawTiledPixmap(const QRectF& rect, const QPixmap& pm, const QPointF& offset)
 {
-    m_painter->drawTiledPixmap(rect, pm, offset);
+    m_provider->drawTiledPixmap(rect, pm, offset);
 }

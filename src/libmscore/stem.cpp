@@ -209,7 +209,7 @@ void Stem::draw(mu::draw::Painter* painter) const
             y += displ;
         }
         painter->setBrush(QBrush(curColor()));
-        painter->setPen(Qt::NoPen);
+        painter->setNoPen();
         painter->drawPath(path);
     }
 

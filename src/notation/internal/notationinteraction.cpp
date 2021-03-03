@@ -1561,7 +1561,7 @@ void NotationInteraction::drawAnchorLines(mu::draw::Painter* painter)
         QRectF rect(-d, -d, 2 * d, 2 * d);
 
         painter->setBrush(QBrush(dropAnchorColor));
-        painter->setPen(Qt::NoPen);
+        painter->setNoPen();
         rect.moveCenter(anchor.p1());
         painter->drawEllipse(rect);
         rect.moveCenter(anchor.p2());

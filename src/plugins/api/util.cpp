@@ -30,6 +30,8 @@
 #include "libmscore/system.h"
 #include "libmscore/staff.h"
 
+#include "libmscore/draw/qpainterprovider.h"
+
 namespace Ms {
 namespace PluginAPI {
 //---------------------------------------------------------
@@ -171,15 +173,13 @@ void ScoreView::setScore(Ms::Score* s)
 
 void ScoreView::paint(QPainter* qp)
 {
-    mu::draw::Painter mup(qp);
-    mu::draw::Painter* p = &mup;
-    p->setRenderHint(mu::draw::Painter::Antialiasing, true);
-    p->setRenderHint(mu::draw::Painter::TextAntialiasing, true);
-    p->fillRect(QRect(0, 0, width(), height()), _color);
+    mu::draw::Painter p(mu::draw::QPainterProvider::make(qp));
+    p.setAntialiasing(true);
+    p.fillRect(QRect(0, 0, width(), height()), _color);
     if (!score) {
         return;
     }
-    p->scale(mag, mag);
+    p.scale(mag, mag);
 
     Ms::Page* page = score->pages()[_currentPage];
     QList<const Ms::Element*> el;
@@ -192,9 +192,9 @@ void ScoreView::paint(QPainter* qp)
 
     foreach (const Ms::Element* e, el) {
         QPointF pos(e->pagePos());
-        p->translate(pos);
-        e->draw(p);
-        p->translate(-pos);
+        p.translate(pos);
+        e->draw(&p);
+        p.translate(-pos);
     }
 }
 

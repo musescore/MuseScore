@@ -22,9 +22,9 @@
 #include "log.h"
 
 #include "libmscore/score.h"
+#include "libmscore/draw/qpainterprovider.h"
 
 #include <QPdfWriter>
-#include <QPainter>
 
 using namespace mu::iex::imagesexport;
 using namespace mu::system;
@@ -49,16 +49,13 @@ mu::Ret PdfWriter::write(const notation::INotationPtr notation, IODevice& destin
     pdfWriter.setTitle(documentTitle(*score));
     pdfWriter.setPageMargins(QMarginsF());
 
-    QPainter qp;
-    if (!qp.begin(&pdfWriter)) {
+    mu::draw::Painter painter(mu::draw::QPainterProvider::make(&pdfWriter));
+    if (!painter.isActive()) {
         return false;
     }
 
-    mu::draw::Painter painter(&qp);
-
     QSizeF size(score->styleD(Sid::pageWidth), score->styleD(Sid::pageHeight));
-    painter.setRenderHint(mu::draw::Painter::Antialiasing, true);
-    painter.setRenderHint(mu::draw::Painter::TextAntialiasing, true);
+    painter.setAntialiasing(true);
     painter.setViewport(QRect(0.0, 0.0, size.width() * pdfWriter.logicalDpiX(),
                               size.height() * pdfWriter.logicalDpiY()));
     painter.setWindow(QRect(0.0, 0.0, size.width() * DPI, size.height() * DPI));
