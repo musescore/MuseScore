@@ -182,7 +182,7 @@ void TextCursor::clearSelection()
 
 void TextCursor::init()
 {
-    _format.setFontFamily("FreeSerif");
+    _format.setFontFamily("Edwin");
     _format.setFontSize(12.0);
     _format.setStyle(FontStyle::Normal);
     _format.setPreedit(false);
