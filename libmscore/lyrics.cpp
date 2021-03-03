@@ -40,7 +40,7 @@ static const ElementStyle lyricsElementStyle {
 Lyrics::Lyrics(Score* s)
    : TextBase(s, Tid::LYRICS_ODD)
       {
-      _even       = false;
+      _evenLyricStyle       = false;
       initElementStyle(&lyricsElementStyle);
       _no         = 0;
       _ticks      = Fraction(0,1);
@@ -51,7 +51,7 @@ Lyrics::Lyrics(Score* s)
 Lyrics::Lyrics(const Lyrics& l)
    : TextBase(l)
       {
-      _even      = l._even;
+      _evenLyricStyle      = l._evenLyricStyle;
       _no        = l._no;
       _ticks     = l._ticks;
       _syllabic  = l._syllabic;
@@ -153,6 +153,20 @@ bool Lyrics::readProperties(XmlReader& e)
       else if (!TextBase::readProperties(e))
             return false;
       return true;
+      }
+
+//---------------------------------------------------------
+//   setEvenLyricStyle
+//    used with setNo, when importing from mxml, to treat even lyrics correctly and preserve their style on the first call of layout
+//---------------------------------------------------------
+
+void Lyrics::setEvenLyricStyle(bool b)
+      {
+      if (b == true)
+            Q_ASSERT(isEven());
+      else
+            Q_ASSERT(!isEven());
+      _evenLyricStyle = b;
       }
 
 //---------------------------------------------------------
@@ -272,14 +286,16 @@ void Lyrics::layout()
             }
 
       bool styleDidChange = false;
-      if ((_no & 1) && !_even) {
+      if (isEven() && !_evenLyricStyle) {
+//            qDebug() << "was odd" << endl;
             initTid(Tid::LYRICS_EVEN, /* preserveDifferent */ true);
-            _even             = true;
+            _evenLyricStyle  = true;
             styleDidChange    = true;
             }
-      if (!(_no & 1) && _even) {
+      else if (!isEven() && _evenLyricStyle){
+//            qDebug() << "was even" << endl;
             initTid(Tid::LYRICS_ODD, /* preserveDifferent */ true);
-            _even             = false;
+            _evenLyricStyle  = false;
             styleDidChange    = true;
             }
 
@@ -600,7 +616,7 @@ QVariant Lyrics::propertyDefault(Pid id) const
       {
       switch (id) {
             case Pid::SUB_STYLE:
-                  return int((_no & 1) ? Tid::LYRICS_EVEN : Tid::LYRICS_ODD);
+                  return int(isEven() ? Tid::LYRICS_EVEN : Tid::LYRICS_ODD);
             case Pid::PLACEMENT:
                   return score()->styleV(Sid::lyricsPlacement);
             case Pid::SYLLABIC:

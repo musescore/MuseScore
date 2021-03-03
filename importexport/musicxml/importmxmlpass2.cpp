@@ -788,6 +788,7 @@ static void addLyric(MxmlLogger* logger, const QXmlStreamReader* const xmlreader
             }
       else {
             l->setNo(lyricNo);
+            l->setEvenLyricStyle(lyricNo & 1);
             cr->add(l);
             extendedLyrics.setExtend(lyricNo, cr->track(), cr->tick());
             }

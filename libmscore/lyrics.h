@@ -56,7 +56,7 @@ class Lyrics final : public TextBase {
 
    protected:
       int _no;                ///< row index
-      bool _even;
+      bool _evenLyricStyle;   ///< whether the lyric was even/odd the last time that layout was called
 
    public:
       Lyrics(Score* = 0);
@@ -82,8 +82,9 @@ class Lyrics final : public TextBase {
       int subtype() const override            { return _no; }
       QString subtypeName() const override    { return QObject::tr("Verse %1").arg(_no + 1); }
       void setNo(int n)                               { _no = n; }
+      void setEvenLyricStyle(bool b);
       int no() const                                  { return _no; }
-      bool isEven() const                             { return _no % 1; }
+      bool isEven() const                             { return _no & 1; }
       void setSyllabic(Syllabic s)                    { _syllabic = s; }
       Syllabic syllabic() const                       { return _syllabic; }
       void add(Element*) override;
