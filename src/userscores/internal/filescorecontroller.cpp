@@ -29,6 +29,8 @@ using namespace mu;
 using namespace mu::userscores;
 using namespace mu::notation;
 using namespace mu::framework;
+using namespace mu::actions;
+using namespace mu::shortcuts;
 
 void FileScoreController::init()
 {
@@ -51,9 +53,44 @@ IMasterNotationPtr FileScoreController::currentMasterNotation() const
     return globalContext()->currentMasterNotation();
 }
 
+INotationPtr FileScoreController::currentNotation() const
+{
+    return currentMasterNotation() ? currentMasterNotation()->notation() : nullptr;
+}
+
+INotationSelectionPtr FileScoreController::currentNotationSelection() const
+{
+    return currentNotation() ? currentNotationSelection() : nullptr;
+}
+
 Ret FileScoreController::openScore(const io::path& scorePath)
 {
     return doOpenScore(scorePath);
+}
+
+bool FileScoreController::actionAvailable(const actions::ActionCode& actionCode) const
+{
+    if (!canReceiveAction(actionCode)) {
+        return false;
+    }
+
+    ActionItem action = actionsRegister()->action(actionCode);
+    if (!action.isValid()) {
+        return false;
+    }
+
+    switch (action.shortcutContext) {
+    case ShortcutContext::NotationActive:
+        return isScoreOpened();
+    case ShortcutContext::NotationNeedSave:
+        return isNeedSaveScore();
+    case ShortcutContext::NotationHasSelection:
+        return hasSelection();
+    default:
+        break;
+    }
+
+    return true;
 }
 
 void FileScoreController::openScore(const actions::ActionData& args)
@@ -267,4 +304,19 @@ void FileScoreController::prependToRecentScoreList(const io::path& filePath)
 
     recentScorePaths.insert(recentScorePaths.begin(), filePath);
     configuration()->setRecentScorePaths(recentScorePaths);
+}
+
+bool FileScoreController::isScoreOpened() const
+{
+    return currentMasterNotation() != nullptr;
+}
+
+bool FileScoreController::isNeedSaveScore() const
+{
+    return currentMasterNotation() && currentMasterNotation()->needSave().val;
+}
+
+bool FileScoreController::hasSelection() const
+{
+    return currentNotationSelection() ? !currentNotationSelection()->isNone() : false;
 }

@@ -154,10 +154,11 @@ enum class NoteAddingMode
 
 enum class SaveMode
 {
-    Unknown,
+    Save,
     SaveAs,
     SaveCopy,
-    SaveSelection
+    SaveSelection,
+    SaveOnline
 };
 
 enum class ResettableValueType
@@ -554,6 +555,19 @@ inline std::string ottavaTypeToString(OttavaType type)
     };
 
     return ottavaTypeStrings[type];
+}
+
+inline std::string saveModeToString(SaveMode mode)
+{
+    std::map<SaveMode, std::string> saveModeStrings {
+        { SaveMode::Save, "" },
+        { SaveMode::SaveAs, "as" },
+        { SaveMode::SaveCopy, "a-copy" },
+        { SaveMode::SaveSelection, "selection" },
+        { SaveMode::SaveOnline, "online" },
+    };
+
+    return saveModeStrings[mode];
 }
 }
 
