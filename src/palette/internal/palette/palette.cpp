@@ -54,6 +54,8 @@
 #include "libmscore/slur.h"
 #include "libmscore/fret.h"
 
+#include "libmscore/draw/qpainterprovider.h"
+
 #include "translation.h"
 
 #include "widgetstatestore.h"
@@ -993,11 +995,11 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
     qreal mag      = magS / _spatium;
     gscore->setSpatium(SPATIUM20);
 
-    QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing, true);
+    mu::draw::Painter painter(mu::draw::QPainterProvider::make(this));
+    painter.setAntialiasing(true);
 
     painter.setPen(configuration()->gridColor());
-    painter.drawRoundedRect(0, 0, width(), height(), 2, 2);
+    painter.drawRoundedRect(QRectF(0, 0, width(), height()), 2, 2);
 
     //
     // draw grid
