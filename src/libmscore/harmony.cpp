@@ -1307,11 +1307,12 @@ const ChordDescription* Harmony::getDescription(const QString& name, const Parse
 
 const RealizedHarmony& Harmony::getRealizedHarmony() const
 {
-    int offset = 0;   //semitone offset for pitch adjustment
     Staff* st = staff();
+    int capo = st->capo(tick()) - 1;
+    int offset = (capo < 0 ? 0 : capo);   //semitone offset for pitch adjustment
     Interval interval = st->part()->instrument(tick())->transpose();
     if (!score()->styleB(Sid::concertPitch)) {
-        offset = interval.chromatic;
+        offset += interval.chromatic;
     }
 
     //Adjust for Nashville Notation, might be temporary
