@@ -568,10 +568,6 @@ GridView {
                 }
             }
 
-            onStateChanged: {
-                console.debug("STATE CHANGED " + state)
-            }
-
             states: [
                 // Note: if "when" is true for multiple states then
                 // the first state listed here takes precendence.
