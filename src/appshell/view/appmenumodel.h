@@ -42,6 +42,7 @@ class AddMenuController;
 }
 
 namespace mu::appshell {
+class FileMenuController;
 class AppMenuModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
@@ -123,6 +124,7 @@ private:
     uicomponents::MenuItemList m_items;
 
     notation::AddMenuController* m_addMenuController = nullptr;
+    FileMenuController* m_fileMenuController = nullptr;
 };
 }
 

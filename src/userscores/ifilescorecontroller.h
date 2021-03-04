@@ -20,11 +20,12 @@
 #define MU_USERSCORES_IFILESCORECONTROLLER_H
 
 #include "modularity/imoduleexport.h"
+#include "actions/iactionsavailability.h"
 #include "ret.h"
 #include "io/path.h"
 
 namespace mu::userscores {
-class IFileScoreController : MODULE_EXPORT_INTERFACE
+class IFileScoreController : public actions::IActionsAvailability, MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IFileScoreController)
 

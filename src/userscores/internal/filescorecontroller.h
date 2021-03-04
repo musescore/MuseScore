@@ -42,8 +42,13 @@ public:
 
     Ret openScore(const io::path& scorePath) override;
 
+    bool actionAvailable(const actions::ActionCode& actionCode) const override;
+    async::Channel<std::vector<actions::ActionCode>> actionsAvailableChanged() const override;
+
 private:
     notation::IMasterNotationPtr currentMasterNotation() const;
+    notation::INotationPtr currentNotation() const;
+    notation::INotationSelectionPtr currentNotationSelection() const;
 
     void openScore(const actions::ActionData& args);
     void importScore();
@@ -61,11 +66,17 @@ private:
     io::path selectScoreOpenningFile(const QStringList& filter);
     io::path selectScoreSavingFile(const io::path& defaultFilePath, const QString& saveTitle);
     Ret doOpenScore(const io::path& filePath);
-    void doSaveScore(const io::path& filePath = io::path(), notation::SaveMode saveMode = notation::SaveMode::Unknown);
+    void doSaveScore(const io::path& filePath = io::path(), notation::SaveMode saveMode = notation::SaveMode::Save);
 
     io::path defaultSavingFilePath() const;
 
     void prependToRecentScoreList(const io::path& filePath);
+
+    bool isScoreOpened() const;
+    bool isNeedSaveScore() const;
+    bool hasSelection() const;
+
+    async::Channel<std::vector<actions::ActionCode>> m_actionsReceiveAvailableChanged;
 };
 }
 

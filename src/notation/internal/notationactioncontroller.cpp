@@ -241,6 +241,10 @@ void NotationActionController::init()
 
 bool NotationActionController::actionAvailable(const ActionCode& actionCode) const
 {
+    if (!canReceiveAction(actionCode)) {
+        return false;
+    }
+
     ActionItem action = actionsRegister()->action(actionCode);
     if (!action.isValid()) {
         return false;

@@ -41,7 +41,7 @@ public:
     virtual Ret createNew(const ScoreCreateOptions& scoreInfo) = 0;
     virtual RetVal<bool> created() const = 0;
 
-    virtual Ret save(const io::path& path = io::path(), SaveMode saveMode = SaveMode::Unknown) = 0;
+    virtual Ret save(const io::path& path = io::path(), SaveMode saveMode = SaveMode::Save) = 0;
     virtual ValNt<bool> needSave() const = 0;
 
     virtual ValCh<ExcerptNotationList> excerpts() const = 0;

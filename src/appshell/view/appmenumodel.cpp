@@ -23,6 +23,7 @@
 #include "log.h"
 
 #include "notation/internal/addmenucontroller.h"
+#include "filemenucontroller.h"
 
 using namespace mu::appshell;
 using namespace mu::uicomponents;
@@ -34,6 +35,7 @@ AppMenuModel::AppMenuModel(QObject* parent)
     : QObject(parent)
 {
     m_addMenuController = new AddMenuController();
+    m_fileMenuController = new FileMenuController();
 }
 
 void AppMenuModel::load()
@@ -100,6 +102,15 @@ void AppMenuModel::setupConnections()
         for (const ActionCode& actionCode: actionCodes) {
             MenuItem& actionItem = item(m_items, actionCode);
             actionItem.enabled = m_addMenuController->isActionAvailable(actionCode);
+        }
+
+        emit itemsChanged();
+    });
+
+    m_fileMenuController->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
+        for (const ActionCode& actionCode: actionCodes) {
+            MenuItem& actionItem = item(m_items, actionCode);
+            actionItem.enabled = m_fileMenuController->isActionAvailable(actionCode);
         }
 
         emit itemsChanged();
@@ -195,26 +206,26 @@ MenuItem& AppMenuModel::menu(MenuItemList& items, const ActionCode& subitemsActi
 MenuItem AppMenuModel::fileItem()
 {
     MenuItemList fileItems {
-        makeAction("file-new"),
-        makeAction("file-open"),
+        makeAction("file-new", m_fileMenuController->isNewAvailable()),
+        makeAction("file-open", m_fileMenuController->isOpenAvailable()),
         makeMenu(trc("appshell", "Open &Recent"), recentScores(), true, "file-open"),
         makeSeparator(),
-        makeAction("file-close", scoreOpened()),
-        makeAction("file-save", needSaveScore()),
-        makeAction("file-save-as", scoreOpened()),
-        makeAction("file-save-a-copy", scoreOpened()),
-        makeAction("file-save-selection", scoreOpened()),
-        makeAction("file-save-online", scoreOpened()), // need implement
+        makeAction("file-close", m_fileMenuController->isCloseAvailable()),
+        makeAction("file-save", m_fileMenuController->isSaveAvailable(SaveMode::Save)),
+        makeAction("file-save-as", m_fileMenuController->isSaveAvailable(SaveMode::SaveAs)),
+        makeAction("file-save-a-copy", m_fileMenuController->isSaveAvailable(SaveMode::SaveCopy)),
+        makeAction("file-save-selection", m_fileMenuController->isSaveAvailable(SaveMode::SaveSelection)),
+        makeAction("file-save-online", m_fileMenuController->isSaveAvailable(SaveMode::SaveOnline)), // need implement
         makeSeparator(),
-        makeAction("file-import-pdf", scoreOpened()),
-        makeAction("file-export", scoreOpened()), // need implement
+        makeAction("file-import-pdf", m_fileMenuController->isImportAvailable()),
+        makeAction("file-export", m_fileMenuController->isExportAvailable()), // need implement
         makeSeparator(),
-        makeAction("edit-info", scoreOpened()),
-        makeAction("parts", scoreOpened()),
+        makeAction("edit-info", m_fileMenuController->isEditInfoAvailable()),
+        makeAction("parts", m_fileMenuController->isPartsAvailable()),
         makeSeparator(),
-        makeAction("print", scoreOpened()), // need implement
+        makeAction("print", m_fileMenuController->isPrintAvailable()), // need implement
         makeSeparator(),
-        makeAction("quit")
+        makeAction("quit", m_fileMenuController->isQuitAvailable())
     };
 
     return makeMenu(trc("appshell", "&File"), fileItems);
