@@ -21,17 +21,21 @@
 
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
+#include "actions/iactionsregister.h"
 #include "actions/actionable.h"
+#include "async/asyncable.h"
 #include "context/iglobalcontext.h"
 #include "inotation.h"
 #include "iinteractive.h"
 #include "audio/isequencer.h"
 #include "inotationconfiguration.h"
+#include "inotationactionscontroller.h"
 
 namespace mu::notation {
-class NotationActionController : public actions::Actionable
+class NotationActionController : public INotationActionsController, public actions::Actionable, public async::Asyncable
 {
     INJECT(notation, actions::IActionsDispatcher, dispatcher)
+    INJECT(notation, actions::IActionsRegister, actionsRegister)
     INJECT(notation, context::IGlobalContext, globalContext)
     INJECT(notation, framework::IInteractive, interactive)
     INJECT(notation, audio::ISequencer, sequencer)
@@ -39,6 +43,9 @@ class NotationActionController : public actions::Actionable
 
 public:
     void init();
+
+    bool actionAvailable(const actions::ActionCode& actionCode) const override;
+    async::Channel<std::vector<actions::ActionCode>> actionsAvailableChanged() const override;
 
 private:
     bool canReceiveAction(const actions::ActionCode& actionCode) const override;
@@ -48,6 +55,7 @@ private:
     INotationElementsPtr currentNotationElements() const;
     INotationSelectionPtr currentNotationSelection() const;
     INotationNoteInputPtr currentNotationNoteInput() const;
+    INotationUndoStackPtr currentNotationUndoStack() const;
 
     void toggleNoteInputMethod(NoteInputMethod method);
     void addNote(NoteName note, NoteAddingMode addingMode);
@@ -152,6 +160,14 @@ private:
     FilterElementsOptions elementsFilterOptions(const Element* element) const;
 
     void startNoteInputIfNeed();
+
+    void setupConnections();
+
+    bool hasSelection() const;
+    bool canUndo() const;
+    bool canRedo() const;
+
+    async::Channel<std::vector<actions::ActionCode>> m_actionsReceiveAvailableChanged;
 };
 }
 

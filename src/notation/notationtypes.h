@@ -168,6 +168,30 @@ enum class ResettableValueType
     TextStyleOverriders
 };
 
+enum class IntervalType
+{
+    Above,
+    Below
+};
+
+enum class TupletType
+{
+    Duplet,
+    Triplet,
+    Quadruplet,
+    Quintuplet,
+    Sextuplet,
+    Septuplet,
+    Octuplet,
+    Nonuplet
+};
+
+enum class ElementChangeOperation
+{
+    Insert,
+    Append
+};
+
 struct NoteInputState
 {
     NoteInputMethod method = NoteInputMethod::UNKNOWN;
@@ -426,6 +450,110 @@ inline bool isNotesIntervalValid(int interval)
 inline bool isVoiceIndexValid(int voiceIndex)
 {
     return 0 <= voiceIndex && voiceIndex < VOICES;
+}
+
+inline std::string noteNameToString(NoteName noteName)
+{
+    std::map<NoteName, std::string> noteNameStrings {
+        { NoteName::A, "a" },
+        { NoteName::B, "b" },
+        { NoteName::C, "c" },
+        { NoteName::D, "d" },
+        { NoteName::E, "e" },
+        { NoteName::F, "f" },
+        { NoteName::G, "g" }
+    };
+
+    return noteNameStrings[noteName];
+}
+
+inline std::string tupletToString(TupletType tuplet)
+{
+    std::map<TupletType, std::string> tupletStrings {
+        { TupletType::Duplet, "duplet" },
+        { TupletType::Triplet, "triplet" },
+        { TupletType::Quadruplet, "quadruplet" },
+        { TupletType::Quintuplet, "quintuplet" },
+        { TupletType::Sextuplet, "sextuplet" },
+        { TupletType::Septuplet, "septuplet" },
+        { TupletType::Octuplet, "octuplet" },
+        { TupletType::Nonuplet, "nonuplet" }
+    };
+
+    return tupletStrings[tuplet];
+}
+
+inline std::string elementChangeOperationToString(ElementChangeOperation operation)
+{
+    std::map<ElementChangeOperation, std::string> operationStrings {
+        { ElementChangeOperation::Insert, "insert" },
+        { ElementChangeOperation::Append, "append" }
+    };
+
+    return operationStrings[operation];
+}
+
+inline std::string boxTypeToString(BoxType type)
+{
+    std::map<BoxType, std::string> boxTypeStrings {
+        { BoxType::Vertical, "vbox" },
+        { BoxType::Horizontal, "hbox" },
+        { BoxType::Measure, "measure" },
+        { BoxType::Text, "textframe" }
+    };
+
+    return boxTypeStrings[type];
+}
+
+inline std::string textTypeToString(TextType type)
+{
+    std::map<TextType, std::string> textTypeStrings {
+        { TextType::TITLE, "title-text" },
+        { TextType::SUBTITLE, "subtitle-text" },
+        { TextType::COMPOSER, "composer-text" },
+        { TextType::POET, "poet-text" },
+        { TextType::INSTRUMENT_EXCERPT, "part-text" },
+        { TextType::SYSTEM, "system-text" },
+        { TextType::STAFF, "staff-text" },
+        { TextType::EXPRESSION, "expression-text" },
+        { TextType::REHEARSAL_MARK, "rehearsalmark-text" },
+        { TextType::INSTRUMENT_CHANGE, "instrument-change-text" },
+        { TextType::FINGERING, "fingering-text" },
+        { TextType::STICKING, "sticking-text" },
+        { TextType::HARMONY_A, "chord-text" },
+        { TextType::HARMONY_ROMAN, "roman-numeral-text" },
+        { TextType::HARMONY_NASHVILLE, "nashville-number-text" },
+        { TextType::LYRICS_ODD, "lyrics" },
+        { TextType::TEMPO, "tempo" }
+    };
+
+    return textTypeStrings[type];
+}
+
+inline std::string hairpinTypeToString(HairpinType type)
+{
+    std::map<HairpinType, std::string> hairpinTypeStrings {
+        { HairpinType::CRESC_HAIRPIN, "hairpin" },
+        { HairpinType::DECRESC_HAIRPIN, "hairpin-reverse" },
+        { HairpinType::CRESC_LINE, "line" },
+        { HairpinType::DECRESC_LINE, "line-reverse" }
+    };
+
+    return hairpinTypeStrings[type];
+}
+
+inline std::string ottavaTypeToString(OttavaType type)
+{
+    std::map<OttavaType, std::string> ottavaTypeStrings {
+        { OttavaType::OTTAVA_8VA, "8va" },
+        { OttavaType::OTTAVA_8VB, "8vb" },
+        { OttavaType::OTTAVA_15MA, "15ma" },
+        { OttavaType::OTTAVA_15MB, "15mb" },
+        { OttavaType::OTTAVA_22MA, "22ma" },
+        { OttavaType::OTTAVA_22MB, "22mb" }
+    };
+
+    return ottavaTypeStrings[type];
 }
 }
 
