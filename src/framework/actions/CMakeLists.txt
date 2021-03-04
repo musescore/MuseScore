@@ -25,6 +25,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iactionsdispatcher.h
     ${CMAKE_CURRENT_LIST_DIR}/imoduleactions.h
     ${CMAKE_CURRENT_LIST_DIR}/iactionsregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/iactionsavailability.h
     ${CMAKE_CURRENT_LIST_DIR}/actionable.h
     ${CMAKE_CURRENT_LIST_DIR}/actiontypes.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/actionsdispatcher.cpp

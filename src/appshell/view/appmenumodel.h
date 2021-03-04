@@ -37,6 +37,10 @@
 #include "iinteractive.h"
 #include "inotationpagestate.h"
 
+namespace mu::notation {
+class AddMenuController;
+}
+
 namespace mu::appshell {
 class AppMenuModel : public QObject, public async::Asyncable
 {
@@ -75,7 +79,7 @@ private:
 
     void setupConnections();
 
-    uicomponents::MenuItem& item(const actions::ActionCode& actionCode);
+    uicomponents::MenuItem& item(uicomponents::MenuItemList& items, const actions::ActionCode& actionCode);
     uicomponents::MenuItem& itemByIndex(const actions::ActionCode& menuActionCode, int actionIndex);
     uicomponents::MenuItem& menu(uicomponents::MenuItemList& items, const actions::ActionCode& subitemsActionCode);
 
@@ -117,6 +121,8 @@ private:
     notation::ScoreConfig scoreConfig() const;
 
     uicomponents::MenuItemList m_items;
+
+    notation::AddMenuController* m_addMenuController = nullptr;
 };
 }
 

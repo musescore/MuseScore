@@ -23,12 +23,17 @@
 #include "log.h"
 #include "notationtypes.h"
 
+#include "notationactions.h"
+
 using namespace mu::notation;
 using namespace mu::actions;
+using namespace mu::shortcuts;
 
 static constexpr int INVALID_BOX_INDEX = -1;
 static constexpr qreal STRETCH_STEP = 0.1;
 static const ActionCode ESCAPE_ACTION_CODE = "escape";
+static const ActionCode UNDO_ACTION_CODE = "undo";
+static const ActionCode REDO_ACTION_CODE = "redo";
 
 void NotationActionController::init()
 {
@@ -133,8 +138,8 @@ void NotationActionController::init()
     dispatcher()->reg(this, "tie", this, &NotationActionController::addTie);
     dispatcher()->reg(this, "add-slur", this, &NotationActionController::addSlur);
 
-    dispatcher()->reg(this, "undo", this, &NotationActionController::undo);
-    dispatcher()->reg(this, "redo", this, &NotationActionController::redo);
+    dispatcher()->reg(this, UNDO_ACTION_CODE, this, &NotationActionController::undo);
+    dispatcher()->reg(this, REDO_ACTION_CODE, this, &NotationActionController::redo);
 
     dispatcher()->reg(this, "select-similar", this, &NotationActionController::selectAllSimilarElements);
     dispatcher()->reg(this, "select-similar-staff", this, &NotationActionController::selectAllSimilarElementsInStaff);
@@ -230,6 +235,36 @@ void NotationActionController::init()
     for (int i = 0; i < VOICES; ++i) {
         dispatcher()->reg(this, "voice-" + std::to_string(i + 1), [this, i]() { changeVoice(i); });
     }
+
+    setupConnections();
+}
+
+bool NotationActionController::actionAvailable(const ActionCode& actionCode) const
+{
+    ActionItem action = actionsRegister()->action(actionCode);
+    if (!action.isValid()) {
+        return false;
+    }
+
+    switch (action.shortcutContext) {
+    case ShortcutContext::NotationHasSelection:
+        return hasSelection();
+    case ShortcutContext::NotationUndoRedo:
+        if (action.code == UNDO_ACTION_CODE) {
+            return canUndo();
+        } else if (action.code == REDO_ACTION_CODE) {
+            return canRedo();
+        }
+    default:
+        break;
+    }
+
+    return true;
+}
+
+mu::async::Channel<std::vector<ActionCode> > NotationActionController::actionsAvailableChanged() const
+{
+    return m_actionsReceiveAvailableChanged;
 }
 
 bool NotationActionController::canReceiveAction(const actions::ActionCode& actionCode) const
@@ -273,6 +308,16 @@ INotationNoteInputPtr NotationActionController::currentNotationNoteInput() const
     }
 
     return interaction->noteInput();
+}
+
+INotationUndoStackPtr NotationActionController::currentNotationUndoStack() const
+{
+    auto notation = currentNotation();
+    if (!notation) {
+        return nullptr;
+    }
+
+    return notation->undoStack();
 }
 
 void NotationActionController::resetState()
@@ -1283,4 +1328,34 @@ void NotationActionController::startNoteInputIfNeed()
     if (interaction->selection()->isNone() && !noteInput->isNoteInputMode()) {
         noteInput->startNoteInput();
     }
+}
+
+void NotationActionController::setupConnections()
+{
+    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+        currentNotationInteraction()->selectionChanged().onNotify(this, [this]() {
+            ActionCodeList actionCodes = NotationActions::actionCodes(shortcuts::ShortcutContext::NotationHasSelection);
+            m_actionsReceiveAvailableChanged.send(actionCodes);
+        });
+
+        currentNotation()->undoStack()->stackChanged().onNotify(this, [this]() {
+            ActionCodeList actionCodes = NotationActions::actionCodes(shortcuts::ShortcutContext::NotationUndoRedo);
+            m_actionsReceiveAvailableChanged.send(actionCodes);
+        });
+    });
+}
+
+bool NotationActionController::hasSelection() const
+{
+    return currentNotationSelection() ? !currentNotationSelection()->isNone() : false;
+}
+
+bool NotationActionController::canUndo() const
+{
+    return currentNotationUndoStack() ? currentNotationUndoStack()->canUndo() : false;
+}
+
+bool NotationActionController::canRedo() const
+{
+    return currentNotationUndoStack() ? currentNotationUndoStack()->canRedo() : false;
 }

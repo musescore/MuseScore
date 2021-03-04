@@ -90,6 +90,7 @@ void NotationModule::registerExports()
     ioc()->registerExport<INotationConfiguration>(moduleName(), s_configuration);
     ioc()->registerExport<IMsczMetaReader>(moduleName(), new MsczMetaReader());
     ioc()->registerExport<INotationContextMenu>(moduleName(), new NotationContextMenu());
+    ioc()->registerExport<INotationActionsController>(moduleName(), s_actionController);
 
     std::shared_ptr<INotationReadersRegister> readers = std::make_shared<NotationReadersRegister>();
     readers->reg({ "mscz", "mscx" }, std::make_shared<MsczNotationReader>());

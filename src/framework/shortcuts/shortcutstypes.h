@@ -45,6 +45,8 @@ enum class ShortcutContext {
     Undefined = 0,
     Any,
     NotationActive,
+    NotationHasSelection,
+    NotationUndoRedo,
     Playing
 };
 

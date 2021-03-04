@@ -22,6 +22,8 @@
 
 #include "log.h"
 
+#include "notation/internal/addmenucontroller.h"
+
 using namespace mu::appshell;
 using namespace mu::uicomponents;
 using namespace mu::notation;
@@ -31,6 +33,7 @@ using namespace mu::actions;
 AppMenuModel::AppMenuModel(QObject* parent)
     : QObject(parent)
 {
+    m_addMenuController = new AddMenuController();
 }
 
 void AppMenuModel::load()
@@ -55,7 +58,7 @@ void AppMenuModel::load()
 void AppMenuModel::handleAction(const QString& actionCodeStr, int actionIndex)
 {
     ActionCode actionCode = codeFromQString(actionCodeStr);
-    MenuItem menuItem = actionIndex == -1 ? item(actionCode) : itemByIndex(actionCode, actionIndex);
+    MenuItem menuItem = actionIndex == -1 ? item(m_items, actionCode) : itemByIndex(actionCode, actionIndex);
 
     actionsDispatcher()->dispatch(actionCode, menuItem.args);
 }
@@ -93,6 +96,15 @@ INotationSelectionPtr AppMenuModel::notationSelection() const
 
 void AppMenuModel::setupConnections()
 {
+    m_addMenuController->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
+        for (const ActionCode& actionCode: actionCodes) {
+            MenuItem& actionItem = item(m_items, actionCode);
+            actionItem.enabled = m_addMenuController->isActionAvailable(actionCode);
+        }
+
+        emit itemsChanged();
+    });
+
     globalContext()->currentMasterNotationChanged().onNotify(this, [this]() {
         load();
 
@@ -126,11 +138,18 @@ void AppMenuModel::setupConnections()
     });
 }
 
-MenuItem& AppMenuModel::item(const ActionCode& actionCode)
+MenuItem& AppMenuModel::item(MenuItemList& items, const ActionCode& actionCode)
 {
-    for (MenuItem& item : m_items) {
-        if (item.code == actionCode) {
-            return item;
+    for (MenuItem& menuItem : items) {
+        if (menuItem.code == actionCode) {
+            return menuItem;
+        }
+
+        if (!menuItem.subitems.empty()) {
+            MenuItem& subitem = item(menuItem.subitems, actionCode);
+            if (subitem.code == actionCode) {
+                return subitem;
+            }
         }
     }
 
@@ -403,23 +422,23 @@ MenuItemList AppMenuModel::recentScores() const
 MenuItemList AppMenuModel::notesItems() const
 {
     MenuItemList items {
-        makeAction("note-input", true, isNoteInputMode()),
+        makeAction("note-input", m_addMenuController->isNoteInputAvailable(), isNoteInputMode()),
         makeSeparator(),
-        makeAction("note-c", selectedElementOnScore()),
-        makeAction("note-d", selectedElementOnScore()),
-        makeAction("note-e", selectedElementOnScore()),
-        makeAction("note-f", selectedElementOnScore()),
-        makeAction("note-g", selectedElementOnScore()),
-        makeAction("note-a", selectedElementOnScore()),
-        makeAction("note-b", selectedElementOnScore()),
+        makeAction("note-c", m_addMenuController->isNoteAvailable(NoteName::C, NoteAddingMode::NextChord)),
+        makeAction("note-d", m_addMenuController->isNoteAvailable(NoteName::D, NoteAddingMode::NextChord)),
+        makeAction("note-e", m_addMenuController->isNoteAvailable(NoteName::E, NoteAddingMode::NextChord)),
+        makeAction("note-f", m_addMenuController->isNoteAvailable(NoteName::F, NoteAddingMode::NextChord)),
+        makeAction("note-g", m_addMenuController->isNoteAvailable(NoteName::G, NoteAddingMode::NextChord)),
+        makeAction("note-a", m_addMenuController->isNoteAvailable(NoteName::A, NoteAddingMode::NextChord)),
+        makeAction("note-b", m_addMenuController->isNoteAvailable(NoteName::B, NoteAddingMode::NextChord)),
         makeSeparator(),
-        makeAction("chord-c", selectedElementOnScore()),
-        makeAction("chord-d", selectedElementOnScore()),
-        makeAction("chord-e", selectedElementOnScore()),
-        makeAction("chord-f", selectedElementOnScore()),
-        makeAction("chord-g", selectedElementOnScore()),
-        makeAction("chord-a", selectedElementOnScore()),
-        makeAction("chord-b", selectedElementOnScore())
+        makeAction("chord-c", m_addMenuController->isNoteAvailable(NoteName::C, NoteAddingMode::CurrentChord)),
+        makeAction("chord-d", m_addMenuController->isNoteAvailable(NoteName::D, NoteAddingMode::CurrentChord)),
+        makeAction("chord-e", m_addMenuController->isNoteAvailable(NoteName::E, NoteAddingMode::CurrentChord)),
+        makeAction("chord-f", m_addMenuController->isNoteAvailable(NoteName::F, NoteAddingMode::CurrentChord)),
+        makeAction("chord-g", m_addMenuController->isNoteAvailable(NoteName::G, NoteAddingMode::CurrentChord)),
+        makeAction("chord-a", m_addMenuController->isNoteAvailable(NoteName::A, NoteAddingMode::CurrentChord)),
+        makeAction("chord-b", m_addMenuController->isNoteAvailable(NoteName::G, NoteAddingMode::CurrentChord))
     };
 
     return items;
@@ -428,24 +447,24 @@ MenuItemList AppMenuModel::notesItems() const
 MenuItemList AppMenuModel::intervalsItems() const
 {
     MenuItemList items {
-        makeAction("interval1", selectedElementOnScore()),
-        makeAction("interval2", selectedElementOnScore()),
-        makeAction("interval3", selectedElementOnScore()),
-        makeAction("interval4", selectedElementOnScore()),
-        makeAction("interval5", selectedElementOnScore()),
-        makeAction("interval6", selectedElementOnScore()),
-        makeAction("interval7", selectedElementOnScore()),
-        makeAction("interval8", selectedElementOnScore()),
-        makeAction("interval9", selectedElementOnScore()),
+        makeAction("interval1", m_addMenuController->isIntervalAvailable(1, IntervalType::Above)),
+        makeAction("interval2", m_addMenuController->isIntervalAvailable(2, IntervalType::Above)),
+        makeAction("interval3", m_addMenuController->isIntervalAvailable(3, IntervalType::Above)),
+        makeAction("interval4", m_addMenuController->isIntervalAvailable(4, IntervalType::Above)),
+        makeAction("interval5", m_addMenuController->isIntervalAvailable(5, IntervalType::Above)),
+        makeAction("interval6", m_addMenuController->isIntervalAvailable(6, IntervalType::Above)),
+        makeAction("interval7", m_addMenuController->isIntervalAvailable(7, IntervalType::Above)),
+        makeAction("interval8", m_addMenuController->isIntervalAvailable(8, IntervalType::Above)),
+        makeAction("interval9", m_addMenuController->isIntervalAvailable(9, IntervalType::Above)),
         makeSeparator(),
-        makeAction("interval-2", selectedElementOnScore()),
-        makeAction("interval-3", selectedElementOnScore()),
-        makeAction("interval-4", selectedElementOnScore()),
-        makeAction("interval-5", selectedElementOnScore()),
-        makeAction("interval-6", selectedElementOnScore()),
-        makeAction("interval-7", selectedElementOnScore()),
-        makeAction("interval-8", selectedElementOnScore()),
-        makeAction("interval-9", selectedElementOnScore())
+        makeAction("interval-2", m_addMenuController->isIntervalAvailable(2, IntervalType::Below)),
+        makeAction("interval-3", m_addMenuController->isIntervalAvailable(3, IntervalType::Below)),
+        makeAction("interval-4", m_addMenuController->isIntervalAvailable(4, IntervalType::Below)),
+        makeAction("interval-5", m_addMenuController->isIntervalAvailable(5, IntervalType::Below)),
+        makeAction("interval-6", m_addMenuController->isIntervalAvailable(6, IntervalType::Below)),
+        makeAction("interval-7", m_addMenuController->isIntervalAvailable(7, IntervalType::Below)),
+        makeAction("interval-8", m_addMenuController->isIntervalAvailable(8, IntervalType::Below)),
+        makeAction("interval-9", m_addMenuController->isIntervalAvailable(9, IntervalType::Below))
     };
 
     return items;
@@ -454,15 +473,15 @@ MenuItemList AppMenuModel::intervalsItems() const
 MenuItemList AppMenuModel::tupletsItems() const
 {
     MenuItemList items {
-        makeAction("duplet", selectedElementOnScore()),
-        makeAction("triplet", selectedElementOnScore()),
-        makeAction("quadruplet", selectedElementOnScore()),
-        makeAction("quintuplet", selectedElementOnScore()),
-        makeAction("sextuplet", selectedElementOnScore()),
-        makeAction("septuplet", selectedElementOnScore()),
-        makeAction("octuplet", selectedElementOnScore()),
-        makeAction("nonuplet", selectedElementOnScore()),
-        makeAction("tuplet-dialog", selectedElementOnScore())
+        makeAction("duplet", m_addMenuController->isTupletAvailable(TupletType::Duplet)),
+        makeAction("triplet", m_addMenuController->isTupletAvailable(TupletType::Triplet)),
+        makeAction("quadruplet", m_addMenuController->isTupletAvailable(TupletType::Quadruplet)),
+        makeAction("quintuplet", m_addMenuController->isTupletAvailable(TupletType::Quintuplet)),
+        makeAction("sextuplet", m_addMenuController->isTupletAvailable(TupletType::Sextuplet)),
+        makeAction("septuplet", m_addMenuController->isTupletAvailable(TupletType::Septuplet)),
+        makeAction("octuplet", m_addMenuController->isTupletAvailable(TupletType::Octuplet)),
+        makeAction("nonuplet", m_addMenuController->isTupletAvailable(TupletType::Nonuplet)),
+        makeAction("tuplet-dialog", m_addMenuController->isTupletDialogAvailable())
     };
 
     return items;
@@ -471,11 +490,11 @@ MenuItemList AppMenuModel::tupletsItems() const
 MenuItemList AppMenuModel::measuresItems() const
 {
     MenuItemList items {
-        makeAction("insert-measure", selectedElementOnScore()),
-        makeAction("insert-measures", selectedElementOnScore()),
+        makeAction("insert-measure", m_addMenuController->isMeasuresAvailable(ElementChangeOperation::Insert, 0)),
+        makeAction("insert-measures", m_addMenuController->isMeasuresAvailable(ElementChangeOperation::Insert, 2)),
         makeSeparator(),
-        makeAction("append-measure", selectedElementOnScore()),
-        makeAction("append-measures", selectedElementOnScore())
+        makeAction("append-measure", m_addMenuController->isMeasuresAvailable(ElementChangeOperation::Append, 0)),
+        makeAction("append-measures", m_addMenuController->isMeasuresAvailable(ElementChangeOperation::Append, 2))
     };
 
     return items;
@@ -484,13 +503,13 @@ MenuItemList AppMenuModel::measuresItems() const
 MenuItemList AppMenuModel::framesItems() const
 {
     MenuItemList items {
-        makeAction("insert-hbox", selectedElementOnScore()),
-        makeAction("insert-vbox", selectedElementOnScore()),
-        makeAction("insert-textframe", selectedElementOnScore()),
+        makeAction("insert-hbox", m_addMenuController->isBoxAvailable(ElementChangeOperation::Insert, BoxType::Horizontal)),
+        makeAction("insert-vbox", m_addMenuController->isBoxAvailable(ElementChangeOperation::Insert, BoxType::Vertical)),
+        makeAction("insert-textframe", m_addMenuController->isBoxAvailable(ElementChangeOperation::Insert, BoxType::Text)),
         makeSeparator(),
-        makeAction("append-hbox", selectedElementOnScore()),
-        makeAction("append-vbox", selectedElementOnScore()),
-        makeAction("append-textframe", selectedElementOnScore())
+        makeAction("append-hbox", m_addMenuController->isBoxAvailable(ElementChangeOperation::Append, BoxType::Horizontal)),
+        makeAction("append-vbox", m_addMenuController->isBoxAvailable(ElementChangeOperation::Append, BoxType::Vertical)),
+        makeAction("append-textframe", m_addMenuController->isBoxAvailable(ElementChangeOperation::Append, BoxType::Text))
     };
 
     return items;
@@ -499,26 +518,26 @@ MenuItemList AppMenuModel::framesItems() const
 MenuItemList AppMenuModel::textItems() const
 {
     MenuItemList items {
-        makeAction("title-text", selectedElementOnScore()),
-        makeAction("subtitle-text", selectedElementOnScore()),
-        makeAction("composer-text", selectedElementOnScore()),
-        makeAction("poet-text", selectedElementOnScore()),
-        makeAction("part-text", selectedElementOnScore()),
+        makeAction("title-text", m_addMenuController->isTextAvailable(TextType::TITLE)),
+        makeAction("subtitle-text", m_addMenuController->isTextAvailable(TextType::SUBTITLE)),
+        makeAction("composer-text", m_addMenuController->isTextAvailable(TextType::COMPOSER)),
+        makeAction("poet-text", m_addMenuController->isTextAvailable(TextType::POET)),
+        makeAction("part-text", m_addMenuController->isTextAvailable(TextType::INSTRUMENT_EXCERPT)),
         makeSeparator(),
-        makeAction("system-text", selectedElementOnScore()),
-        makeAction("staff-text", selectedElementOnScore()),
-        makeAction("expression-text", selectedElementOnScore()),
-        makeAction("rehearsalmark-text", selectedElementOnScore()),
-        makeAction("instrument-change-text", selectedElementOnScore()),
-        makeAction("fingering-text", selectedElementOnScore()),
+        makeAction("system-text", m_addMenuController->isTextAvailable(TextType::SYSTEM)),
+        makeAction("staff-text", m_addMenuController->isTextAvailable(TextType::STAFF)),
+        makeAction("expression-text", m_addMenuController->isTextAvailable(TextType::EXPRESSION)),
+        makeAction("rehearsalmark-text", m_addMenuController->isTextAvailable(TextType::REHEARSAL_MARK)),
+        makeAction("instrument-change-text", m_addMenuController->isTextAvailable(TextType::INSTRUMENT_CHANGE)),
+        makeAction("fingering-text", m_addMenuController->isTextAvailable(TextType::FINGERING)),
         makeSeparator(),
-        makeAction("sticking-text", selectedElementOnScore()),
-        makeAction("chord-text", selectedElementOnScore()),
-        makeAction("roman-numeral-text", selectedElementOnScore()),
-        makeAction("nashville-number-text", selectedElementOnScore()),
-        makeAction("lyrics", selectedElementOnScore()),
-        makeAction("figured-bass", selectedElementOnScore()),
-        makeAction("tempo", selectedElementOnScore())
+        makeAction("sticking-text", m_addMenuController->isTextAvailable(TextType::STICKING)),
+        makeAction("chord-text", m_addMenuController->isTextAvailable(TextType::HARMONY_A)),
+        makeAction("roman-numeral-text", m_addMenuController->isTextAvailable(TextType::HARMONY_ROMAN)),
+        makeAction("nashville-number-text", m_addMenuController->isTextAvailable(TextType::HARMONY_NASHVILLE)),
+        makeAction("lyrics", m_addMenuController->isTextAvailable(TextType::LYRICS_ODD)),
+        makeAction("figured-bass", m_addMenuController->isFiguredBassAvailable()),
+        makeAction("tempo", m_addMenuController->isTextAvailable(TextType::TEMPO))
     };
 
     return items;
@@ -527,12 +546,12 @@ MenuItemList AppMenuModel::textItems() const
 MenuItemList AppMenuModel::linesItems() const
 {
     MenuItemList items {
-        makeAction("add-slur", selectedElementOnScore()),
-        makeAction("add-hairpin", selectedElementOnScore()),
-        makeAction("add-hairpin-reverse", selectedElementOnScore()),
-        makeAction("add-8va", selectedElementOnScore()),
-        makeAction("add-8vb", selectedElementOnScore()),
-        makeAction("add-noteline", selectedElementOnScore()),
+        makeAction("add-slur", m_addMenuController->isSlurAvailable()),
+        makeAction("add-hairpin", m_addMenuController->isHarpinAvailable(HairpinType::CRESC_HAIRPIN)),
+        makeAction("add-hairpin-reverse", m_addMenuController->isHarpinAvailable(HairpinType::DECRESC_HAIRPIN)),
+        makeAction("add-8va", m_addMenuController->isOttavaAvailable(OttavaType::OTTAVA_8VA)),
+        makeAction("add-8vb", m_addMenuController->isOttavaAvailable(OttavaType::OTTAVA_8VB)),
+        makeAction("add-noteline", m_addMenuController->isNoteLineAvailable())
     };
 
     return items;

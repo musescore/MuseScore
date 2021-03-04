@@ -16,18 +16,17 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_ACTIONS_ACTIONSMODULE_H
-#define MU_ACTIONS_ACTIONSMODULE_H
+#ifndef MU_NOTATION_INOTATIONACTIONSCONTROLLER_H
+#define MU_NOTATION_INOTATIONACTIONSCONTROLLER_H
 
-#include "modularity/imodulesetup.h"
+#include "modularity/imoduleexport.h"
+#include "actions/iactionsavailability.h"
 
-namespace mu::actions {
-class ActionsModule : public framework::IModuleSetup
+namespace mu::notation {
+class INotationActionsController : public actions::IActionsAvailability, MODULE_EXPORT_INTERFACE
 {
-public:
-    std::string moduleName() const override;
-    void registerExports() override;
+    INTERFACE_ID(INotationActionsController)
 };
 }
 
-#endif // MU_ACTIONS_ACTIONSMODULE_H
+#endif // MU_NOTATION_INOTATIONACTIONSCONTROLLER_H
