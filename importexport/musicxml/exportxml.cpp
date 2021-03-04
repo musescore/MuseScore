@@ -2678,12 +2678,14 @@ static void writeChordLines(const Chord* const chord, XmlWriter& xml, Notations&
 void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technical& technical,
                                      TrillHash& trillStart, TrillHash& trillStop)
       {
-      QVector<Element*> fl;
-      for (Element* e : chord->segment()->annotations()) {
-            if (e->track() == chord->track() && e->isFermata())
-                  fl.push_back(e);
+      if (!chord->isGrace()) {
+            QVector<Element*> fl;
+            for (Element* e : chord->segment()->annotations()) {
+                  if (e->track() == chord->track() && e->isFermata())
+                        fl.push_back(e);
+                  }
+            fermatas(fl, _xml, notations);
             }
-      fermatas(fl, _xml, notations);
 
       const QVector<Articulation*> na = chord->articulations();
       // first the attributes whose elements are children of <articulations>
