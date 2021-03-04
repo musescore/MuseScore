@@ -2207,6 +2207,9 @@ void ScoreView::cmd(const char* s)
                   cv->changeState(ViewState::NORMAL);
                   cv->cmdAddChordName(HarmonyType::NASHVILLE);
                   }},
+            {{"frame-text"}, [](ScoreView* cv, const QByteArray&) {
+                  cv->cmdAddText(Tid::FRAME);
+                  }},
             {{"title-text"}, [](ScoreView* cv, const QByteArray&) {
                   cv->cmdAddText(Tid::TITLE);
                   }},
@@ -4645,6 +4648,7 @@ void ScoreView::cmdAddText(Tid tid, Tid customTid, PropertyFlags pf, Placement p
       if (tid == Tid::STAFF && customTid == Tid::EXPRESSION)
             tid = customTid;  // expression is not first class element, but treat as such
       switch (tid) {
+            case Tid::FRAME:
             case Tid::TITLE:
             case Tid::SUBTITLE:
             case Tid::COMPOSER:

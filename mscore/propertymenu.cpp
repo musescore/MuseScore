@@ -131,6 +131,12 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             popup->addAction(getAction("flip"));
       else if (e->isHook())
             popup->addAction(getAction("flip"));
+      else if (e->isTBox()) {
+            QMenu* textMenu = popup->addMenu(tr("Add"));
+            // borrow translation info from global actions
+            // but create new actions with local handler
+            textMenu->addAction(getAction("frame-text")->text())->setData("frame-text");
+            }
       else if (e->isHBox()) {
             QMenu* textMenu = popup->addMenu(tr("Add"));
             // borrow translation info from global actions
