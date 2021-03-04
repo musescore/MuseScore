@@ -4,6 +4,7 @@ Text {
     id: root
 
     color: ui.theme.fontPrimaryColor
+    linkColor: ui.theme.linkColor
     opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
 
     elide: Text.ElideRight
@@ -13,5 +14,13 @@ Text {
     font {
         family: ui.theme.bodyFont.family
         pixelSize: ui.theme.bodyFont.pixelSize
+    }
+
+    onLinkActivated: Qt.openUrlExternally(link)
+
+    MouseArea {
+        anchors.fill: parent
+        acceptedButtons: Qt.NoButton
+        cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
     }
 }

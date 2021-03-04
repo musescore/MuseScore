@@ -255,6 +255,8 @@ public:
         NOTE_DOTTED_3 = 0xF396,
         NOTE_DOTTED_4 = 0xF397,
 
+        COPY = 0xF398,
+
         NOTE_PLUS = 0xF39D,
         NOTE_TO_RIGHT = 0xF39E,
         RHYTHM_ONLY = 0xF39F,
