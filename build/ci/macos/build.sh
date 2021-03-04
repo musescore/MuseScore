@@ -8,6 +8,7 @@ SKIP_ERR=true
 ARTIFACTS_DIR=build.artifacts
 TELEMETRY_TRACK_ID=""
 BUILD_UI_MU4=OFF 		# not used, only for easier synchronization and compatibility
+BUILD_AUTOUPDATE=OFF
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
@@ -27,7 +28,10 @@ MUSESCORE_BUILD_CONFIG=dev
 if [ "$BUILD_MODE" == "devel_build" ]; then MUSESCORE_BUILD_CONFIG=dev; fi
 if [ "$BUILD_MODE" == "nightly_build" ]; then MUSESCORE_BUILD_CONFIG=dev; fi
 if [ "$BUILD_MODE" == "testing_build" ]; then MUSESCORE_BUILD_CONFIG=testing; fi
-if [ "$BUILD_MODE" == "stable_build" ]; then MUSESCORE_BUILD_CONFIG=release; fi
+if [ "$BUILD_MODE" == "stable_build" ]; then 
+    MUSESCORE_BUILD_CONFIG=release; 
+    BUILD_AUTOUPDATE=ON
+fi
 
 echo "MUSESCORE_BUILD_CONFIG: $MUSESCORE_BUILD_CONFIG"
 echo "BUILD_NUMBER: $BUILD_NUMBER"
@@ -40,6 +44,7 @@ make -f Makefile.osx \
     MUSESCORE_BUILD_CONFIG=$MUSESCORE_BUILD_CONFIG \
     MUSESCORE_REVISION=$MUSESCORE_REVISION \
     BUILD_NUMBER=$BUILD_NUMBER \
+    BUILD_AUTOUPDATE=$BUILD_AUTOUPDATE \
     TELEMETRY_TRACK_ID=$TELEMETRY_TRACK_ID \
     ci
 
