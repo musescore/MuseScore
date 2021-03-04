@@ -922,12 +922,6 @@ PaletteCellPtr Palette::add(int idx, ElementPtr element, const QString& name, QS
     cell->readOnly  = false;
 
     update();
-
-    if (element && element->isIcon()) {
-        const Icon* icon = toIcon(element.get());
-        //connect(adapter()->getAction(icon->action()), SIGNAL(toggled(bool)), SLOT(actionToggled(bool)));
-    }
-
     updateGeometry();
 
     return cell;
@@ -943,18 +937,18 @@ void Palette::paintPaletteElement(void* data, Element* element)
     painter->save();
     painter->translate(element->pos()); // necessary for drawing child elements
 
-    QColor color = configuration()->elementsColor();
-
-    QColor colorBackup = element->color();
-    element->undoSetColor(color);
-
+    QColor colorBackup = element->getProperty(Pid::COLOR).value<QColor>();
     QColor frameColorBackup = element->getProperty(Pid::FRAME_FG_COLOR).value<QColor>();
-    element->undoChangeProperty(Pid::FRAME_FG_COLOR, color);
+
+    QColor color = configuration()->elementsColor();
+    element->setProperty(Pid::COLOR, color);
+    element->setProperty(Pid::FRAME_FG_COLOR, color);
 
     element->draw(painter);
 
-    element->undoSetColor(colorBackup);
-    element->undoChangeProperty(Pid::FRAME_FG_COLOR, frameColorBackup);
+    element->setProperty(Pid::COLOR, colorBackup);
+    element->setProperty(Pid::FRAME_FG_COLOR, frameColorBackup);
+
     painter->restore();
 }
 
@@ -1616,28 +1610,6 @@ QSize Palette::sizeHint() const
     int h = heightForWidth(width());
     int hgridM = gridWidthM();
     return QSize((width() / hgridM) * hgridM, h);
-}
-
-//---------------------------------------------------------
-//   actionToggled
-//---------------------------------------------------------
-
-void Palette::actionToggled(bool /*val*/)
-{
-    m_selectedIdx = -1;
-    int nn = ccp().size();
-    for (int n = 0; n < nn; ++n) {
-        const ElementPtr element = cellAt(n)->element;
-        if (element && element->type() == ElementType::ICON) {
-            /*
-            QAction* a = adapter()->getAction(std::dynamic_pointer_cast<Icon>(element)->action());
-            if (a->isChecked()) {
-                m_selectedIdx = n;
-                break;
-            }*/
-        }
-    }
-    update();
 }
 
 //---------------------------------------------------------
