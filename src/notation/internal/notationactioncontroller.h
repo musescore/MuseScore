@@ -96,6 +96,7 @@ private:
     void selectAllSimilarElementsInRange();
     void openSelectionMoreOptions();
     void selectAll();
+    void selectSection();
 
     void splitMeasure();
     void joinSelectedMeasures();

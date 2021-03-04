@@ -46,7 +46,7 @@ static ActionCodeList scoreConfigActionCodes = {
     "show-unprintable",
     "show-frames",
     "show-pageborders",
-    "mark-irregular"
+    "show-irregular"
 };
 
 static ActionCodeList zoomActionCodes = {

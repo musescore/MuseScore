@@ -58,11 +58,10 @@ ActionCodeList EditMenuController::actions() const
         "paste",
         "paste-half",
         "paste-double",
-        "paste-special",
         "swap",
         "delete",
         "select-all",
-        "select-similar",
+        "select-section",
         "find",
         "preference-dialog"
     };

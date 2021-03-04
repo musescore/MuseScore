@@ -430,6 +430,13 @@ void NotationInteraction::selectAll()
     notifyAboutSelectionChanged();
 }
 
+void NotationInteraction::selectSection()
+{
+    score()->cmdSelectSection();
+
+    notifyAboutSelectionChanged();
+}
+
 INotationSelectionPtr NotationInteraction::selection() const
 {
     return m_selection;
