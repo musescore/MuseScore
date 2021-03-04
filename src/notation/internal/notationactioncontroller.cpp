@@ -146,6 +146,7 @@ void NotationActionController::init()
     dispatcher()->reg(this, "select-similar-range", this, &NotationActionController::selectAllSimilarElementsInRange);
     dispatcher()->reg(this, "select-dialog", this, &NotationActionController::openSelectionMoreOptions);
     dispatcher()->reg(this, "select-all", this, &NotationActionController::selectAll);
+    dispatcher()->reg(this, "select-section", this, &NotationActionController::selectSection);
 
     dispatcher()->reg(this, "split-measure", this, &NotationActionController::splitMeasure);
     dispatcher()->reg(this, "join-measures", this, &NotationActionController::joinSelectedMeasures);
@@ -901,6 +902,16 @@ void NotationActionController::selectAllSimilarElementsInStaff()
 void NotationActionController::selectAllSimilarElementsInRange()
 {
     NOT_IMPLEMENTED;
+}
+
+void NotationActionController::selectSection()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->selectSection();
 }
 
 void NotationActionController::openSelectionMoreOptions()

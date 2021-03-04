@@ -62,7 +62,8 @@ ActionCodeList FormatMenuController::actions() const
         "reset-beammode",
         "reset",
         "load-style",
-        "save-style"
+        "save-style",
+        "add-remove-breaks"
     };
 
     return actions;

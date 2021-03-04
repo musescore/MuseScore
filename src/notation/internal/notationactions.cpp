@@ -133,11 +133,10 @@ const ActionList NotationActions::m_actions = {
                QT_TRANSLATE_NOOP("action", "Select All"),
                QT_TRANSLATE_NOOP("action", "Select all")
                ),
-    ActionItem("delete",
-               ShortcutContext::NotationHasSelection,
-               QT_TRANSLATE_NOOP("action", "Delete"),
-               QT_TRANSLATE_NOOP("action", "Delete the selected element(s)"),
-               IconCode::Code::DELETE_TANK
+    ActionItem("select-section",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Select Section"),
+               QT_TRANSLATE_NOOP("action", "Select section")
                ),
     ActionItem("select-similar",
                ShortcutContext::NotationHasSelection,
@@ -158,6 +157,12 @@ const ActionList NotationActions::m_actions = {
                ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Select Dialog"),
                QT_TRANSLATE_NOOP("action", "Select all similar elements with more options")
+               ),
+    ActionItem("delete",
+               ShortcutContext::NotationHasSelection,
+               QT_TRANSLATE_NOOP("action", "Delete"),
+               QT_TRANSLATE_NOOP("action", "Delete the selected element(s)"),
+               IconCode::Code::DELETE_TANK
                ),
     ActionItem("edit-style",
                ShortcutContext::NotationActive,
@@ -793,7 +798,7 @@ const ActionList NotationActions::m_actions = {
                ),
     ActionItem("sextuplet",
                ShortcutContext::NotationHasSelection,
-               QT_TRANSLATE_NOOP("action", "sextuplet"),
+               QT_TRANSLATE_NOOP("action", "Sextuplet"),
                QT_TRANSLATE_NOOP("action", "Add sextuplet")
                ),
     ActionItem("septuplet",

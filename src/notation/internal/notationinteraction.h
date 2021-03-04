@@ -65,6 +65,7 @@ public:
     int hitStaffIndex(const QPointF& pos) const override;
     void select(const std::vector<Element*>& elements, SelectType type, int staffIndex = 0) override;
     void selectAll() override;
+    void selectSection() override;
     INotationSelectionPtr selection() const override;
     void clearSelection() override;
     async::Notification selectionChanged() const override;
