@@ -36,35 +36,42 @@ class MasterPalette : public mu::ui::WidgetDialog, Ui::MasterPalette
 
     INJECT(palette, mu::ui::IMainWindow, mainWindow)
 
-    TimeDialog* timeDialog;
-    KeyEditor* keyEditor;
-    QTreeWidgetItem* keyItem;
-    QTreeWidgetItem* timeItem;
-    QTreeWidgetItem* symbolItem;
+    Q_PROPERTY(QString selectedPaletteName READ selectedPaletteName WRITE setSelectedPaletteName NOTIFY selectedPaletteNameChanged)
 
-    int idxAllSymbols = -1;
+public:
+    MasterPalette(QWidget* parent = nullptr);
 
-    virtual void closeEvent(QCloseEvent*);
-    Palette* createPalette(int w, int h, bool grid, double mag = 1.0);
-    void addPalette(Palette* sp);
+    static int static_metaTypeId();
+    int metaTypeId() const override;
+
+    QString selectedPaletteName() const;
+
+public slots:
+    void setSelectedPaletteName(const QString& name);
+
+signals:
+    void selectedPaletteNameChanged(QString name);
 
 private slots:
     void currentChanged(QTreeWidgetItem*, QTreeWidgetItem*);
     void clicked(QTreeWidgetItem*, int);
 
-protected:
-    virtual void changeEvent(QEvent* event);
+    void changeEvent(QEvent* event) override;
+    void keyPressEvent(QKeyEvent* event) override;
+    void closeEvent(QCloseEvent* event) override;
+
+private:
+    Palette* createPalette(int w, int h, bool grid, double mag = 1.0);
+    void addPalette(Palette* sp);
     void retranslate(bool firstTime = false);
-    virtual void keyPressEvent(QKeyEvent* ev);
 
-public:
-    MasterPalette(QWidget* parent = 0);
+    TimeDialog* m_timeDialog = nullptr;
+    KeyEditor* m_keyEditor = nullptr;
+    QTreeWidgetItem* m_keyItem = nullptr;
+    QTreeWidgetItem* m_timeItem = nullptr;
+    QTreeWidgetItem* m_symbolItem = nullptr;
 
-    static int static_metaTypeId();
-    int metaTypeId() const override;
-
-    void selectItem(const QString& s);
-    QString selectedItem();
+    int m_idxAllSymbols = -1;
 };
 } // namespace Ms
 

@@ -39,7 +39,7 @@ public:
 
     actions::ActionItem getAction(const actions::ActionCode& code) const override;
 
-    void showMasterPalette(const QString&) override;
+    void showMasterPalette(const QString& selectedPaletteName) override;
     bool isSelected() const override;
 
     // score view
