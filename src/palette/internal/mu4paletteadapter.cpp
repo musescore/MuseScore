@@ -40,11 +40,15 @@ actions::ActionItem MU4PaletteAdapter::getAction(const actions::ActionCode& code
     return actionsRegister()->action(code);
 }
 
-void MU4PaletteAdapter::showMasterPalette(const QString& arg)
+void MU4PaletteAdapter::showMasterPalette(const QString& selectedPaletteName)
 {
-    Q_UNUSED(arg);
+    QStringList params {
+        "sync=false",
+        QString("selectedPaletteName=%1").arg(selectedPaletteName)
+    };
 
-    interactive()->open("musescore://palette/masterpalette?sync=false");
+    QString uri = QString("musescore://palette/masterpalette?%1").arg(params.join('&'));
+    interactive()->open(uri.toStdString());
 }
 
 bool MU4PaletteAdapter::isSelected() const
