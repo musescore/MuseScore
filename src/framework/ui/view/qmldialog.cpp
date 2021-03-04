@@ -84,7 +84,11 @@ void QmlDialog::componentComplete()
         m_view->setContent(QUrl(), m_content, obj);
 
         m_dialog->resize(m_view->size());
-        m_dialog->setMinimumSize(width(), height());
+        if (m_fixedSize.isValid()) {
+            m_dialog->setFixedSize(m_fixedSize);
+        } else {
+            m_dialog->setMinimumSize(width(), height());
+        }
         widget->setParent(m_dialog);
         QHBoxLayout* layout = new QHBoxLayout(m_dialog);
         layout->setMargin(0);
@@ -166,6 +170,11 @@ bool QmlDialog::modal() const
     return m_dialog->isModal();
 }
 
+QSize QmlDialog::fixedSize() const
+{
+    return m_fixedSize;
+}
+
 void QmlDialog::setModal(bool modal)
 {
     if (m_dialog->isModal() == modal) {
@@ -189,4 +198,14 @@ void QmlDialog::setRet(QVariantMap ret)
 
     m_ret = ret;
     emit retChanged(m_ret);
+}
+
+void QmlDialog::setFixedSize(QSize size)
+{
+    if (m_fixedSize == size) {
+        return;
+    }
+
+    m_fixedSize = size;
+    emit fixedSizeChanged(size);
 }

@@ -34,6 +34,7 @@
 #include "view/settings/settingslistmodel.h"
 #include "view/appmenumodel.h"
 #include "view/notationpagemodel.h"
+#include "view/aboutmodel.h"
 
 using namespace mu::appshell;
 using namespace mu::framework;
@@ -78,6 +79,8 @@ void AppShellModule::resolveImports()
         ir->registerUri(Uri("musescore://sequencer"), ContainerMeta(ContainerType::PrimaryPage));
         ir->registerUri(Uri("musescore://publish"), ContainerMeta(ContainerType::PrimaryPage));
         ir->registerUri(Uri("musescore://devtools"), ContainerMeta(ContainerType::PrimaryPage));
+        ir->registerUri(Uri("musescore://about/musescore"), ContainerMeta(ContainerType::QmlDialog, "AboutDialog.qml"));
+        ir->registerUri(Uri("musescore://about/musicxml"), ContainerMeta(ContainerType::QmlDialog, "AboutMusicXMLDialog.qml"));
     }
 }
 
@@ -92,7 +95,8 @@ void AppShellModule::registerUiTypes()
 
     qmlRegisterType<SettingListModel>("MuseScore.Settings", 1, 0, "SettingListModel");
     qmlRegisterType<AppMenuModel>("MuseScore.AppMenu", 1, 0, "AppMenuModel");
-    qmlRegisterType<NotationPageModel>("MuseScore.PageState", 1, 0, "NotationPageModel");
+    qmlRegisterType<NotationPageModel>("MuseScore.AppShell", 1, 0, "NotationPageModel");
+    qmlRegisterType<AboutModel>("MuseScore.AppShell", 1, 0, "AboutModel");
 }
 
 void AppShellModule::onInit(const IApplication::RunMode&)
