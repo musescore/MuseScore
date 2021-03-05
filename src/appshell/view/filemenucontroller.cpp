@@ -28,11 +28,6 @@ FileMenuController::FileMenuController()
     });
 }
 
-bool FileMenuController::isActionAvailable(const mu::actions::ActionCode& actionCode) const
-{
-    return controller()->actionAvailable(actionCode);
-}
-
 mu::async::Channel<std::vector<mu::actions::ActionCode> > FileMenuController::actionsAvailableChanged() const
 {
     return m_actionsReceiveAvailableChanged;

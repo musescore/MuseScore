@@ -193,6 +193,13 @@ enum class ElementChangeOperation
     Append
 };
 
+enum class PastingType {
+    Default,
+    Half,
+    Double,
+    Special
+};
+
 struct NoteInputState
 {
     NoteInputMethod method = NoteInputMethod::UNKNOWN;

@@ -129,7 +129,7 @@ const ActionList NotationActions::m_actions = {
                QT_TRANSLATE_NOOP("action", "Swap with clipboard")
                ),
     ActionItem("select-all",
-               ShortcutContext::NotationHasSelection,
+               ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Select All"),
                QT_TRANSLATE_NOOP("action", "Select all")
                ),

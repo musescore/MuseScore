@@ -43,6 +43,7 @@ class AddMenuController;
 
 namespace mu::appshell {
 class FileMenuController;
+class EditMenuController;
 class AppMenuModel : public uicomponents::AbstractMenuModel, public async::Asyncable
 {
     Q_OBJECT
@@ -104,6 +105,7 @@ private:
 
     notation::AddMenuController* m_addMenuController = nullptr;
     FileMenuController* m_fileMenuController = nullptr;
+    EditMenuController* m_editMenuController = nullptr;
 };
 }
 

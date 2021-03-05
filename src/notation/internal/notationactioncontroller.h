@@ -147,13 +147,6 @@ private:
 
     bool isTextEditting() const;
 
-    enum class PastingType {
-        Default,
-        Half,
-        Double,
-        Special
-    };
-
     void pasteSelection(PastingType type = PastingType::Default);
     Fraction resolvePastingScale(const INotationInteractionPtr& interaction, PastingType type) const;
 
