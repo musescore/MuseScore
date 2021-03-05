@@ -32,7 +32,6 @@
 #include "notationtypes.h"
 
 class QString;
-class QPainter;
 class QRect;
 
 namespace mu::notation {

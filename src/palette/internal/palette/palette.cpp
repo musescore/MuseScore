@@ -1724,7 +1724,7 @@ void Palette::dropEvent(QDropEvent* event)
         QList<QUrl> ul = event->mimeData()->urls();
         QUrl u = ul.front();
         if (u.scheme() == "file") {
-            std::shared_ptr<Image> image = std::make_shared<Image>(gscore);
+            auto image = makeElement<Image>(gscore);
             QString filePath(u.toLocalFile());
             image->load(filePath);
             element = image;
@@ -1739,7 +1739,7 @@ void Palette::dropEvent(QDropEvent* event)
         ElementType type = Element::readType(xml, &dragOffset, &duration);
 
         if (type == ElementType::SYMBOL) {
-            std::shared_ptr<Symbol> symbol = std::make_shared<Symbol>(gscore);
+            auto symbol = makeElement<Symbol>(gscore);
             symbol->read(xml);
             element = symbol;
         } else {

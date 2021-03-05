@@ -175,7 +175,7 @@ public:
 
     Segment* segment() const { return toSegment(parent()); }
 
-    static FretDiagram* fromString(Score* score, const QString& s);
+    static std::shared_ptr<FretDiagram> createFromString(Score* score, const QString& s);
 
     ElementType type() const override { return ElementType::FRET_DIAGRAM; }
     void layout() override;

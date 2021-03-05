@@ -105,9 +105,9 @@ Element* FretDiagram::linkedClone()
 ///   Always assume barre on the first visible fret
 //---------------------------------------------------------
 
-FretDiagram* FretDiagram::fromString(Score* score, const QString& s)
+std::shared_ptr<FretDiagram> FretDiagram::createFromString(Score* score, const QString& s)
 {
-    FretDiagram* fd = new FretDiagram(score);
+    auto fd = makeElement<FretDiagram>(score);
     int strings = s.size();
 
     fd->setStrings(strings);

@@ -19,15 +19,13 @@
 #ifndef MU_NOTATION_SCORECALLBACKS_H
 #define MU_NOTATION_SCORECALLBACKS_H
 
-#include <QRectF>
-#include <QRect>
-class QPainter;
-
 #include "libmscore/mscoreview.h"
 #include "libmscore/musescoreCore.h"
 
-namespace mu {
-namespace notation {
+class QRectF;
+class QRect;
+
+namespace mu::notation {
 class ScoreCallbacks : public Ms::MuseScoreView, public Ms::MuseScoreCore
 {
 public:
@@ -38,7 +36,6 @@ public:
     void drawBackground(mu::draw::Painter*, const QRectF&) const override;
     const QRect geometry() const override;
 };
-}
 }
 
 #endif // MU_NOTATION_SCORECALLBACKS_H
