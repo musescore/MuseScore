@@ -32,7 +32,12 @@ enum class PanelType
     NotationNavigator,
     NotationStatusBar,
     PlaybackToolBar,
-    Mixer
+    Mixer,
+    TimeLine,
+    Synthesizer,
+    SelectionFilter,
+    Piano,
+    ComparisonTool
 };
 }
 

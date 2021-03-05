@@ -207,11 +207,11 @@ void NotationActionController::init()
     dispatcher()->reg(this, "reset-beammode", this, &NotationActionController::resetBeamMode);
     dispatcher()->reg(this, "reset", this, &NotationActionController::resetShapesAndPosition);
 
-    dispatcher()->reg(this, "show-invisible", this, &NotationActionController::toggleShowingInvisibleElements);
-    dispatcher()->reg(this, "show-unprintable", this, &NotationActionController::toggleShowingUnprintableElements);
-    dispatcher()->reg(this, "show-frames", this, &NotationActionController::toggleShowingFrames);
-    dispatcher()->reg(this, "show-pageborders", this, &NotationActionController::toggleShowingPageMargins);
-    dispatcher()->reg(this, "show-irregular", this, &NotationActionController::toggleMarkIrregularMeasures);
+    dispatcher()->reg(this, "show-invisible", [this]() { toggleScoreConfig(ScoreConfigType::ShowInvisibleElements); });
+    dispatcher()->reg(this, "show-unprintable", [this]() { toggleScoreConfig(ScoreConfigType::ShowUnprintableElements); });
+    dispatcher()->reg(this, "show-frames", [this]() { toggleScoreConfig(ScoreConfigType::ShowFrames); });
+    dispatcher()->reg(this, "show-pageborders", [this]() { toggleScoreConfig(ScoreConfigType::ShowPageMargins); });
+    dispatcher()->reg(this, "show-irregular", [this]() { toggleScoreConfig(ScoreConfigType::MarkIrregularMeasures); });
 
     dispatcher()->reg(this, "explode", this, &NotationActionController::explodeSelectedStaff);
     dispatcher()->reg(this, "implode", this, &NotationActionController::implodeSelectedStaff);
@@ -259,6 +259,9 @@ bool NotationActionController::actionAvailable(const ActionCode& actionCode) con
         } else if (action.code == REDO_ACTION_CODE) {
             return canRedo();
         }
+        return false;
+    case ShortcutContext::NotationActive:
+        return isNotationPage() && (currentNotation() != nullptr);
     default:
         break;
     }
@@ -282,6 +285,31 @@ bool NotationActionController::canReceiveAction(const actions::ActionCode& actio
     }
 
     return true;
+}
+
+void NotationActionController::setupConnections()
+{
+    globalContext()->currentMasterNotationChanged().onNotify(this, [this]() {
+        ActionCodeList actionCodes = NotationActions::actionCodes(ShortcutContext::NotationActive);
+        m_actionsReceiveAvailableChanged.send(actionCodes);
+    });
+
+    interactive()->currentUri().ch.onReceive(this, [this](const Uri&) {
+        ActionCodeList actionCodes = NotationActions::actionCodes(ShortcutContext::NotationActive);
+        m_actionsReceiveAvailableChanged.send(actionCodes);
+    });
+
+    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+        currentNotationInteraction()->selectionChanged().onNotify(this, [this]() {
+            ActionCodeList actionCodes = NotationActions::actionCodes(ShortcutContext::NotationHasSelection);
+            m_actionsReceiveAvailableChanged.send(actionCodes);
+        });
+
+        currentNotation()->undoStack()->stackChanged().onNotify(this, [this]() {
+            ActionCodeList actionCodes = NotationActions::actionCodes(shortcuts::ShortcutContext::NotationUndoRedo);
+            m_actionsReceiveAvailableChanged.send(actionCodes);
+        });
+    });
 }
 
 INotationPtr NotationActionController::currentNotation() const
@@ -1257,7 +1285,7 @@ void NotationActionController::openTupletOtherDialog()
     interactive()->open("musescore://notation/othertupletdialog");
 }
 
-void NotationActionController::toggleShowingInvisibleElements()
+void NotationActionController::toggleScoreConfig(ScoreConfigType configType)
 {
     auto interaction = currentNotationInteraction();
     if (!interaction) {
@@ -1265,55 +1293,25 @@ void NotationActionController::toggleShowingInvisibleElements()
     }
 
     ScoreConfig config = interaction->scoreConfig();
-    config.isShowInvisibleElements = !config.isShowInvisibleElements;
-    interaction->setScoreConfig(config);
-}
 
-void NotationActionController::toggleShowingUnprintableElements()
-{
-    auto interaction = currentNotationInteraction();
-    if (!interaction) {
-        return;
+    switch (configType) {
+    case ScoreConfigType::ShowInvisibleElements:
+        config.isShowInvisibleElements = !config.isShowInvisibleElements;
+        break;
+    case ScoreConfigType::ShowUnprintableElements:
+        config.isShowUnprintableElements = !config.isShowUnprintableElements;
+        break;
+    case ScoreConfigType::ShowFrames:
+        config.isShowFrames = !config.isShowFrames;
+        break;
+    case ScoreConfigType::ShowPageMargins:
+        config.isShowPageMargins = !config.isShowPageMargins;
+        break;
+    case ScoreConfigType::MarkIrregularMeasures:
+        config.isMarkIrregularMeasures = !config.isMarkIrregularMeasures;
+        break;
     }
 
-    ScoreConfig config = interaction->scoreConfig();
-    config.isShowUnprintableElements = !config.isShowUnprintableElements;
-    interaction->setScoreConfig(config);
-}
-
-void NotationActionController::toggleShowingFrames()
-{
-    auto interaction = currentNotationInteraction();
-    if (!interaction) {
-        return;
-    }
-
-    ScoreConfig config = interaction->scoreConfig();
-    config.isShowFrames = !config.isShowFrames;
-    interaction->setScoreConfig(config);
-}
-
-void NotationActionController::toggleShowingPageMargins()
-{
-    auto interaction = currentNotationInteraction();
-    if (!interaction) {
-        return;
-    }
-
-    ScoreConfig config = interaction->scoreConfig();
-    config.isShowPageMargins = !config.isShowPageMargins;
-    interaction->setScoreConfig(config);
-}
-
-void NotationActionController::toggleMarkIrregularMeasures()
-{
-    auto interaction = currentNotationInteraction();
-    if (!interaction) {
-        return;
-    }
-
-    ScoreConfig config = interaction->scoreConfig();
-    config.isMarkIrregularMeasures = !config.isMarkIrregularMeasures;
     interaction->setScoreConfig(config);
 }
 
@@ -1334,21 +1332,6 @@ void NotationActionController::startNoteInputIfNeed()
     }
 }
 
-void NotationActionController::setupConnections()
-{
-    globalContext()->currentNotationChanged().onNotify(this, [this]() {
-        currentNotationInteraction()->selectionChanged().onNotify(this, [this]() {
-            ActionCodeList actionCodes = NotationActions::actionCodes(shortcuts::ShortcutContext::NotationHasSelection);
-            m_actionsReceiveAvailableChanged.send(actionCodes);
-        });
-
-        currentNotation()->undoStack()->stackChanged().onNotify(this, [this]() {
-            ActionCodeList actionCodes = NotationActions::actionCodes(shortcuts::ShortcutContext::NotationUndoRedo);
-            m_actionsReceiveAvailableChanged.send(actionCodes);
-        });
-    });
-}
-
 bool NotationActionController::hasSelection() const
 {
     return currentNotationSelection() ? !currentNotationSelection()->isNone() : false;
@@ -1362,4 +1345,9 @@ bool NotationActionController::canUndo() const
 bool NotationActionController::canRedo() const
 {
     return currentNotationUndoStack() ? currentNotationUndoStack()->canRedo() : false;
+}
+
+bool NotationActionController::isNotationPage() const
+{
+    return interactive()->isOpened("musescore://notation").val;
 }

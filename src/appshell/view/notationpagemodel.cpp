@@ -210,7 +210,7 @@ void NotationPageModel::notifyAboutPanelChanged(PanelType type)
     case PanelType::NotationNavigator:
         emit isNotationNavigatorVisibleChanged();
         break;
-    case PanelType::Mixer:
+    default:
         NOT_IMPLEMENTED;
         break;
     }

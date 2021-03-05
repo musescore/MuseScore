@@ -48,7 +48,7 @@ bool NotationPageState::isPanelVisible(PanelType type) const
         return configuration()->isNotationNavigatorVisible().val;
     case PanelType::NotationStatusBar:
         return configuration()->isNotationStatusBarVisible().val;
-    case PanelType::Mixer:
+    default:
         NOT_IMPLEMENTED;
         return false;
     }
@@ -78,7 +78,7 @@ void NotationPageState::setIsPanelVisible(PanelType type, bool visible)
         configuration()->setIsNotationStatusBarVisible(visible);
         break;
     }
-    case PanelType::Mixer: {
+    default: {
         NOT_IMPLEMENTED;
         break;
     }
