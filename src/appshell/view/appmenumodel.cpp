@@ -32,7 +32,7 @@ using namespace mu::workspace;
 using namespace mu::actions;
 
 AppMenuModel::AppMenuModel(QObject* parent)
-    : QObject(parent)
+    : AbstractMenuModel(parent)
 {
     m_addMenuController = new AddMenuController();
     m_fileMenuController = new FileMenuController();
@@ -42,15 +42,15 @@ void AppMenuModel::load()
 {
     TRACEFUNC;
 
-    m_items.clear();
+    clear();
 
-    m_items << fileItem()
-            << editItem()
-            << viewItem()
-            << addItem()
-            << formatItem()
-            << toolsItem()
-            << helpItem();
+    appendItem(fileItem());
+    appendItem(editItem());
+    appendItem(viewItem());
+    appendItem(addItem());
+    appendItem(formatItem());
+    appendItem(toolsItem());
+    appendItem(helpItem());
 
     setupConnections();
 
@@ -60,20 +60,9 @@ void AppMenuModel::load()
 void AppMenuModel::handleAction(const QString& actionCodeStr, int actionIndex)
 {
     ActionCode actionCode = codeFromQString(actionCodeStr);
-    MenuItem menuItem = actionIndex == -1 ? item(m_items, actionCode) : itemByIndex(actionCode, actionIndex);
+    MenuItem menuItem = actionIndex == -1 ? findItem(actionCode) : findItemByIndex(actionCode, actionIndex);
 
     actionsDispatcher()->dispatch(actionCode, menuItem.args);
-}
-
-QVariantList AppMenuModel::items()
-{
-    QVariantList menuItems;
-
-    for (const MenuItem& menuItem: m_items) {
-        menuItems << menuItem.toMap();
-    }
-
-    return menuItems;
 }
 
 IMasterNotationPtr AppMenuModel::currentMasterNotation() const
@@ -99,21 +88,11 @@ INotationSelectionPtr AppMenuModel::notationSelection() const
 void AppMenuModel::setupConnections()
 {
     m_addMenuController->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
-        for (const ActionCode& actionCode: actionCodes) {
-            MenuItem& actionItem = item(m_items, actionCode);
-            actionItem.enabled = m_addMenuController->isActionAvailable(actionCode);
-        }
-
-        emit itemsChanged();
+        updateItemsEnabled(actionCodes);
     });
 
     m_fileMenuController->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
-        for (const ActionCode& actionCode: actionCodes) {
-            MenuItem& actionItem = item(m_items, actionCode);
-            actionItem.enabled = m_fileMenuController->isActionAvailable(actionCode);
-        }
-
-        emit itemsChanged();
+        updateItemsEnabled(actionCodes);
     });
 
     globalContext()->currentMasterNotationChanged().onNotify(this, [this]() {
@@ -149,83 +128,29 @@ void AppMenuModel::setupConnections()
     });
 }
 
-MenuItem& AppMenuModel::item(MenuItemList& items, const ActionCode& actionCode)
-{
-    for (MenuItem& menuItem : items) {
-        if (menuItem.code == actionCode) {
-            return menuItem;
-        }
-
-        if (!menuItem.subitems.empty()) {
-            MenuItem& subitem = item(menuItem.subitems, actionCode);
-            if (subitem.code == actionCode) {
-                return subitem;
-            }
-        }
-    }
-
-    static MenuItem null;
-    return null;
-}
-
-MenuItem& AppMenuModel::itemByIndex(const ActionCode& menuActionCode, int actionIndex)
-{
-    MenuItem& menuItem = menu(m_items, menuActionCode);
-    MenuItemList& subitems = menuItem.subitems;
-    for (int i = 0; i < subitems.size(); ++i) {
-        if (i == actionIndex) {
-            return subitems[i];
-        }
-    }
-
-    static MenuItem null;
-    return null;
-}
-
-MenuItem& AppMenuModel::menu(MenuItemList& items, const ActionCode& subitemsActionCode)
-{
-    for (MenuItem& item : items) {
-        if (item.subitems.isEmpty()) {
-            continue;
-        }
-
-        if (item.code == subitemsActionCode) {
-            return item;
-        }
-
-        MenuItem& menuItem = menu(item.subitems, subitemsActionCode);
-        if (menuItem.isValid()) {
-            return menuItem;
-        }
-    }
-
-    static MenuItem null;
-    return null;
-}
-
 MenuItem AppMenuModel::fileItem()
 {
     MenuItemList fileItems {
-        makeAction("file-new", m_fileMenuController->isNewAvailable()),
-        makeAction("file-open", m_fileMenuController->isOpenAvailable()),
+        makeAction("file-new", [this]() { return m_fileMenuController->isNewAvailable(); }),
+        makeAction("file-open", [this]() { return m_fileMenuController->isOpenAvailable(); }),
         makeMenu(trc("appshell", "Open &Recent"), recentScores(), true, "file-open"),
         makeSeparator(),
-        makeAction("file-close", m_fileMenuController->isCloseAvailable()),
-        makeAction("file-save", m_fileMenuController->isSaveAvailable(SaveMode::Save)),
-        makeAction("file-save-as", m_fileMenuController->isSaveAvailable(SaveMode::SaveAs)),
-        makeAction("file-save-a-copy", m_fileMenuController->isSaveAvailable(SaveMode::SaveCopy)),
-        makeAction("file-save-selection", m_fileMenuController->isSaveAvailable(SaveMode::SaveSelection)),
-        makeAction("file-save-online", m_fileMenuController->isSaveAvailable(SaveMode::SaveOnline)), // need implement
+        makeAction("file-close", [this]() { return m_fileMenuController->isCloseAvailable(); }),
+        makeAction("file-save", [this]() { return m_fileMenuController->isSaveAvailable(SaveMode::Save); }),
+        makeAction("file-save-as", [this]() { return m_fileMenuController->isSaveAvailable(SaveMode::SaveAs); }),
+        makeAction("file-save-a-copy", [this]() { return m_fileMenuController->isSaveAvailable(SaveMode::SaveCopy); }),
+        makeAction("file-save-selection", [this]() { return m_fileMenuController->isSaveAvailable(SaveMode::SaveSelection); }),
+        makeAction("file-save-online", [this]() { return m_fileMenuController->isSaveAvailable(SaveMode::SaveOnline); }), // need implement
         makeSeparator(),
-        makeAction("file-import-pdf", m_fileMenuController->isImportAvailable()),
-        makeAction("file-export", m_fileMenuController->isExportAvailable()), // need implement
+        makeAction("file-import-pdf", [this]() { return m_fileMenuController->isImportAvailable(); }),
+        makeAction("file-export", [this]() { return m_fileMenuController->isExportAvailable(); }), // need implement
         makeSeparator(),
-        makeAction("edit-info", m_fileMenuController->isEditInfoAvailable()),
-        makeAction("parts", m_fileMenuController->isPartsAvailable()),
+        makeAction("edit-info", [this]() { return m_fileMenuController->isEditInfoAvailable(); }),
+        makeAction("parts", [this]() { return m_fileMenuController->isPartsAvailable(); }),
         makeSeparator(),
-        makeAction("print", m_fileMenuController->isPrintAvailable()), // need implement
+        makeAction("print", [this]() { return m_fileMenuController->isPrintAvailable(); }), // need implement
         makeSeparator(),
-        makeAction("quit", m_fileMenuController->isQuitAvailable())
+        makeAction("quit", [this]() { return m_fileMenuController->isQuitAvailable(); })
     };
 
     return makeMenu(trc("appshell", "&File"), fileItems);
@@ -407,7 +332,7 @@ MenuItem AppMenuModel::helpItem()
     return makeMenu(trc("appshell", "&Help"), helpItems);
 }
 
-MenuItemList AppMenuModel::recentScores() const
+MenuItemList AppMenuModel::recentScores()
 {
     MenuItemList items;
     MetaList recentScores = userScoresService()->recentScoreList().val;
@@ -430,145 +355,157 @@ MenuItemList AppMenuModel::recentScores() const
     return items;
 }
 
-MenuItemList AppMenuModel::notesItems() const
+MenuItemList AppMenuModel::notesItems()
 {
     MenuItemList items {
-        makeAction("note-input", m_addMenuController->isNoteInputAvailable(), isNoteInputMode()),
+        makeAction("note-input", isNoteInputMode(), [this]() { return m_addMenuController->isNoteInputAvailable(); }),
         makeSeparator(),
-        makeAction("note-c", m_addMenuController->isNoteAvailable(NoteName::C, NoteAddingMode::NextChord)),
-        makeAction("note-d", m_addMenuController->isNoteAvailable(NoteName::D, NoteAddingMode::NextChord)),
-        makeAction("note-e", m_addMenuController->isNoteAvailable(NoteName::E, NoteAddingMode::NextChord)),
-        makeAction("note-f", m_addMenuController->isNoteAvailable(NoteName::F, NoteAddingMode::NextChord)),
-        makeAction("note-g", m_addMenuController->isNoteAvailable(NoteName::G, NoteAddingMode::NextChord)),
-        makeAction("note-a", m_addMenuController->isNoteAvailable(NoteName::A, NoteAddingMode::NextChord)),
-        makeAction("note-b", m_addMenuController->isNoteAvailable(NoteName::B, NoteAddingMode::NextChord)),
+        makeAction("note-c", [this]() { return m_addMenuController->isNoteAvailable(NoteName::C, NoteAddingMode::NextChord); }),
+        makeAction("note-d", [this]() { return m_addMenuController->isNoteAvailable(NoteName::D, NoteAddingMode::NextChord); }),
+        makeAction("note-e", [this]() { return m_addMenuController->isNoteAvailable(NoteName::E, NoteAddingMode::NextChord); }),
+        makeAction("note-f", [this]() { return m_addMenuController->isNoteAvailable(NoteName::F, NoteAddingMode::NextChord); }),
+        makeAction("note-g", [this]() { return m_addMenuController->isNoteAvailable(NoteName::G, NoteAddingMode::NextChord); }),
+        makeAction("note-a", [this]() { return m_addMenuController->isNoteAvailable(NoteName::A, NoteAddingMode::NextChord); }),
+        makeAction("note-b", [this]() { return m_addMenuController->isNoteAvailable(NoteName::B, NoteAddingMode::NextChord); }),
         makeSeparator(),
-        makeAction("chord-c", m_addMenuController->isNoteAvailable(NoteName::C, NoteAddingMode::CurrentChord)),
-        makeAction("chord-d", m_addMenuController->isNoteAvailable(NoteName::D, NoteAddingMode::CurrentChord)),
-        makeAction("chord-e", m_addMenuController->isNoteAvailable(NoteName::E, NoteAddingMode::CurrentChord)),
-        makeAction("chord-f", m_addMenuController->isNoteAvailable(NoteName::F, NoteAddingMode::CurrentChord)),
-        makeAction("chord-g", m_addMenuController->isNoteAvailable(NoteName::G, NoteAddingMode::CurrentChord)),
-        makeAction("chord-a", m_addMenuController->isNoteAvailable(NoteName::A, NoteAddingMode::CurrentChord)),
-        makeAction("chord-b", m_addMenuController->isNoteAvailable(NoteName::G, NoteAddingMode::CurrentChord))
+        makeAction("chord-c", [this]() { return m_addMenuController->isNoteAvailable(NoteName::C, NoteAddingMode::CurrentChord); }),
+        makeAction("chord-d", [this]() { return m_addMenuController->isNoteAvailable(NoteName::D, NoteAddingMode::CurrentChord); }),
+        makeAction("chord-e", [this]() { return m_addMenuController->isNoteAvailable(NoteName::E, NoteAddingMode::CurrentChord); }),
+        makeAction("chord-f", [this]() { return m_addMenuController->isNoteAvailable(NoteName::F, NoteAddingMode::CurrentChord); }),
+        makeAction("chord-g", [this]() { return m_addMenuController->isNoteAvailable(NoteName::G, NoteAddingMode::CurrentChord); }),
+        makeAction("chord-a", [this]() { return m_addMenuController->isNoteAvailable(NoteName::A, NoteAddingMode::CurrentChord); }),
+        makeAction("chord-b", [this]() { return m_addMenuController->isNoteAvailable(NoteName::G, NoteAddingMode::CurrentChord); })
     };
 
     return items;
 }
 
-MenuItemList AppMenuModel::intervalsItems() const
+MenuItemList AppMenuModel::intervalsItems()
 {
     MenuItemList items {
-        makeAction("interval1", m_addMenuController->isIntervalAvailable(1, IntervalType::Above)),
-        makeAction("interval2", m_addMenuController->isIntervalAvailable(2, IntervalType::Above)),
-        makeAction("interval3", m_addMenuController->isIntervalAvailable(3, IntervalType::Above)),
-        makeAction("interval4", m_addMenuController->isIntervalAvailable(4, IntervalType::Above)),
-        makeAction("interval5", m_addMenuController->isIntervalAvailable(5, IntervalType::Above)),
-        makeAction("interval6", m_addMenuController->isIntervalAvailable(6, IntervalType::Above)),
-        makeAction("interval7", m_addMenuController->isIntervalAvailable(7, IntervalType::Above)),
-        makeAction("interval8", m_addMenuController->isIntervalAvailable(8, IntervalType::Above)),
-        makeAction("interval9", m_addMenuController->isIntervalAvailable(9, IntervalType::Above)),
+        makeAction("interval1", [this]() { return m_addMenuController->isIntervalAvailable(1, IntervalType::Above); }),
+        makeAction("interval2", [this]() { return m_addMenuController->isIntervalAvailable(2, IntervalType::Above); }),
+        makeAction("interval3", [this]() { return m_addMenuController->isIntervalAvailable(3, IntervalType::Above); }),
+        makeAction("interval4", [this]() { return m_addMenuController->isIntervalAvailable(4, IntervalType::Above); }),
+        makeAction("interval5", [this]() { return m_addMenuController->isIntervalAvailable(5, IntervalType::Above); }),
+        makeAction("interval6", [this]() { return m_addMenuController->isIntervalAvailable(6, IntervalType::Above); }),
+        makeAction("interval7", [this]() { return m_addMenuController->isIntervalAvailable(7, IntervalType::Above); }),
+        makeAction("interval8", [this]() { return m_addMenuController->isIntervalAvailable(8, IntervalType::Above); }),
+        makeAction("interval9", [this]() { return m_addMenuController->isIntervalAvailable(9, IntervalType::Above); }),
         makeSeparator(),
-        makeAction("interval-2", m_addMenuController->isIntervalAvailable(2, IntervalType::Below)),
-        makeAction("interval-3", m_addMenuController->isIntervalAvailable(3, IntervalType::Below)),
-        makeAction("interval-4", m_addMenuController->isIntervalAvailable(4, IntervalType::Below)),
-        makeAction("interval-5", m_addMenuController->isIntervalAvailable(5, IntervalType::Below)),
-        makeAction("interval-6", m_addMenuController->isIntervalAvailable(6, IntervalType::Below)),
-        makeAction("interval-7", m_addMenuController->isIntervalAvailable(7, IntervalType::Below)),
-        makeAction("interval-8", m_addMenuController->isIntervalAvailable(8, IntervalType::Below)),
-        makeAction("interval-9", m_addMenuController->isIntervalAvailable(9, IntervalType::Below))
+        makeAction("interval-2", [this]() { return m_addMenuController->isIntervalAvailable(2, IntervalType::Below); }),
+        makeAction("interval-3", [this]() { return m_addMenuController->isIntervalAvailable(3, IntervalType::Below); }),
+        makeAction("interval-4", [this]() { return m_addMenuController->isIntervalAvailable(4, IntervalType::Below); }),
+        makeAction("interval-5", [this]() { return m_addMenuController->isIntervalAvailable(5, IntervalType::Below); }),
+        makeAction("interval-6", [this]() { return m_addMenuController->isIntervalAvailable(6, IntervalType::Below); }),
+        makeAction("interval-7", [this]() { return m_addMenuController->isIntervalAvailable(7, IntervalType::Below); }),
+        makeAction("interval-8", [this]() { return m_addMenuController->isIntervalAvailable(8, IntervalType::Below); }),
+        makeAction("interval-9", [this]() { return m_addMenuController->isIntervalAvailable(9, IntervalType::Below); })
     };
 
     return items;
 }
 
-MenuItemList AppMenuModel::tupletsItems() const
+MenuItemList AppMenuModel::tupletsItems()
 {
     MenuItemList items {
-        makeAction("duplet", m_addMenuController->isTupletAvailable(TupletType::Duplet)),
-        makeAction("triplet", m_addMenuController->isTupletAvailable(TupletType::Triplet)),
-        makeAction("quadruplet", m_addMenuController->isTupletAvailable(TupletType::Quadruplet)),
-        makeAction("quintuplet", m_addMenuController->isTupletAvailable(TupletType::Quintuplet)),
-        makeAction("sextuplet", m_addMenuController->isTupletAvailable(TupletType::Sextuplet)),
-        makeAction("septuplet", m_addMenuController->isTupletAvailable(TupletType::Septuplet)),
-        makeAction("octuplet", m_addMenuController->isTupletAvailable(TupletType::Octuplet)),
-        makeAction("nonuplet", m_addMenuController->isTupletAvailable(TupletType::Nonuplet)),
-        makeAction("tuplet-dialog", m_addMenuController->isTupletDialogAvailable())
+        makeAction("duplet", [this]() { return m_addMenuController->isTupletAvailable(TupletType::Duplet); }),
+        makeAction("triplet", [this]() { return m_addMenuController->isTupletAvailable(TupletType::Triplet); }),
+        makeAction("quadruplet", [this]() { return m_addMenuController->isTupletAvailable(TupletType::Quadruplet); }),
+        makeAction("quintuplet", [this]() { return m_addMenuController->isTupletAvailable(TupletType::Quintuplet); }),
+        makeAction("sextuplet", [this]() { return m_addMenuController->isTupletAvailable(TupletType::Sextuplet); }),
+        makeAction("septuplet", [this]() { return m_addMenuController->isTupletAvailable(TupletType::Septuplet); }),
+        makeAction("octuplet", [this]() { return m_addMenuController->isTupletAvailable(TupletType::Octuplet); }),
+        makeAction("nonuplet", [this]() { return m_addMenuController->isTupletAvailable(TupletType::Nonuplet); }),
+        makeAction("tuplet-dialog", [this]() { return m_addMenuController->isTupletDialogAvailable(); })
     };
 
     return items;
 }
 
-MenuItemList AppMenuModel::measuresItems() const
+MenuItemList AppMenuModel::measuresItems()
 {
     MenuItemList items {
-        makeAction("insert-measure", m_addMenuController->isMeasuresAvailable(ElementChangeOperation::Insert, 0)),
-        makeAction("insert-measures", m_addMenuController->isMeasuresAvailable(ElementChangeOperation::Insert, 2)),
+        makeAction("insert-measure", [this]() { return m_addMenuController->isMeasuresAvailable(ElementChangeOperation::Insert, 0); }),
+        makeAction("insert-measures", [this]() { return m_addMenuController->isMeasuresAvailable(ElementChangeOperation::Insert, 2); }),
         makeSeparator(),
-        makeAction("append-measure", m_addMenuController->isMeasuresAvailable(ElementChangeOperation::Append, 0)),
-        makeAction("append-measures", m_addMenuController->isMeasuresAvailable(ElementChangeOperation::Append, 2))
+        makeAction("append-measure", [this]() { return m_addMenuController->isMeasuresAvailable(ElementChangeOperation::Append, 0); }),
+        makeAction("append-measures", [this]() { return m_addMenuController->isMeasuresAvailable(ElementChangeOperation::Append, 2); })
     };
 
     return items;
 }
 
-MenuItemList AppMenuModel::framesItems() const
+MenuItemList AppMenuModel::framesItems()
 {
     MenuItemList items {
-        makeAction("insert-hbox", m_addMenuController->isBoxAvailable(ElementChangeOperation::Insert, BoxType::Horizontal)),
-        makeAction("insert-vbox", m_addMenuController->isBoxAvailable(ElementChangeOperation::Insert, BoxType::Vertical)),
-        makeAction("insert-textframe", m_addMenuController->isBoxAvailable(ElementChangeOperation::Insert, BoxType::Text)),
+        makeAction("insert-hbox", [this]() {
+            return m_addMenuController->isBoxAvailable(ElementChangeOperation::Insert, BoxType::Horizontal);
+        }),
+        makeAction("insert-vbox", [this]() {
+            return m_addMenuController->isBoxAvailable(ElementChangeOperation::Insert, BoxType::Vertical);
+        }),
+        makeAction("insert-textframe", [this]() {
+            return m_addMenuController->isBoxAvailable(ElementChangeOperation::Insert, BoxType::Text);
+        }),
         makeSeparator(),
-        makeAction("append-hbox", m_addMenuController->isBoxAvailable(ElementChangeOperation::Append, BoxType::Horizontal)),
-        makeAction("append-vbox", m_addMenuController->isBoxAvailable(ElementChangeOperation::Append, BoxType::Vertical)),
-        makeAction("append-textframe", m_addMenuController->isBoxAvailable(ElementChangeOperation::Append, BoxType::Text))
+        makeAction("append-hbox", [this]() {
+            return m_addMenuController->isBoxAvailable(ElementChangeOperation::Append, BoxType::Horizontal);
+        }),
+        makeAction("append-vbox", [this]() {
+            return m_addMenuController->isBoxAvailable(ElementChangeOperation::Append, BoxType::Vertical);
+        }),
+        makeAction("append-textframe", [this]() {
+            return m_addMenuController->isBoxAvailable(ElementChangeOperation::Append, BoxType::Text);
+        })
     };
 
     return items;
 }
 
-MenuItemList AppMenuModel::textItems() const
+MenuItemList AppMenuModel::textItems()
 {
     MenuItemList items {
-        makeAction("title-text", m_addMenuController->isTextAvailable(TextType::TITLE)),
-        makeAction("subtitle-text", m_addMenuController->isTextAvailable(TextType::SUBTITLE)),
-        makeAction("composer-text", m_addMenuController->isTextAvailable(TextType::COMPOSER)),
-        makeAction("poet-text", m_addMenuController->isTextAvailable(TextType::POET)),
-        makeAction("part-text", m_addMenuController->isTextAvailable(TextType::INSTRUMENT_EXCERPT)),
+        makeAction("title-text", [this]() { return m_addMenuController->isTextAvailable(TextType::TITLE); }),
+        makeAction("subtitle-text", [this]() { return m_addMenuController->isTextAvailable(TextType::SUBTITLE); }),
+        makeAction("composer-text", [this]() { return m_addMenuController->isTextAvailable(TextType::COMPOSER); }),
+        makeAction("poet-text", [this]() { return m_addMenuController->isTextAvailable(TextType::POET); }),
+        makeAction("part-text", [this]() { return m_addMenuController->isTextAvailable(TextType::INSTRUMENT_EXCERPT); }),
         makeSeparator(),
-        makeAction("system-text", m_addMenuController->isTextAvailable(TextType::SYSTEM)),
-        makeAction("staff-text", m_addMenuController->isTextAvailable(TextType::STAFF)),
-        makeAction("expression-text", m_addMenuController->isTextAvailable(TextType::EXPRESSION)),
-        makeAction("rehearsalmark-text", m_addMenuController->isTextAvailable(TextType::REHEARSAL_MARK)),
-        makeAction("instrument-change-text", m_addMenuController->isTextAvailable(TextType::INSTRUMENT_CHANGE)),
-        makeAction("fingering-text", m_addMenuController->isTextAvailable(TextType::FINGERING)),
+        makeAction("system-text", [this]() { return m_addMenuController->isTextAvailable(TextType::SYSTEM); }),
+        makeAction("staff-text", [this]() { return m_addMenuController->isTextAvailable(TextType::STAFF); }),
+        makeAction("expression-text", [this]() { return m_addMenuController->isTextAvailable(TextType::EXPRESSION); }),
+        makeAction("rehearsalmark-text", [this]() { return m_addMenuController->isTextAvailable(TextType::REHEARSAL_MARK); }),
+        makeAction("instrument-change-text", [this]() { return m_addMenuController->isTextAvailable(TextType::INSTRUMENT_CHANGE); }),
+        makeAction("fingering-text", [this]() { return m_addMenuController->isTextAvailable(TextType::FINGERING); }),
         makeSeparator(),
-        makeAction("sticking-text", m_addMenuController->isTextAvailable(TextType::STICKING)),
-        makeAction("chord-text", m_addMenuController->isTextAvailable(TextType::HARMONY_A)),
-        makeAction("roman-numeral-text", m_addMenuController->isTextAvailable(TextType::HARMONY_ROMAN)),
-        makeAction("nashville-number-text", m_addMenuController->isTextAvailable(TextType::HARMONY_NASHVILLE)),
-        makeAction("lyrics", m_addMenuController->isTextAvailable(TextType::LYRICS_ODD)),
-        makeAction("figured-bass", m_addMenuController->isFiguredBassAvailable()),
-        makeAction("tempo", m_addMenuController->isTextAvailable(TextType::TEMPO))
+        makeAction("sticking-text", [this]() { return m_addMenuController->isTextAvailable(TextType::STICKING); }),
+        makeAction("chord-text", [this]() { return m_addMenuController->isTextAvailable(TextType::HARMONY_A); }),
+        makeAction("roman-numeral-text", [this]() { return m_addMenuController->isTextAvailable(TextType::HARMONY_ROMAN); }),
+        makeAction("nashville-number-text", [this]() { return m_addMenuController->isTextAvailable(TextType::HARMONY_NASHVILLE); }),
+        makeAction("lyrics", [this]() { return m_addMenuController->isTextAvailable(TextType::LYRICS_ODD); }),
+        makeAction("figured-bass", [this]() { return m_addMenuController->isFiguredBassAvailable(); }),
+        makeAction("tempo", [this]() { return m_addMenuController->isTextAvailable(TextType::TEMPO); })
     };
 
     return items;
 }
 
-MenuItemList AppMenuModel::linesItems() const
+MenuItemList AppMenuModel::linesItems()
 {
     MenuItemList items {
-        makeAction("add-slur", m_addMenuController->isSlurAvailable()),
-        makeAction("add-hairpin", m_addMenuController->isHarpinAvailable(HairpinType::CRESC_HAIRPIN)),
-        makeAction("add-hairpin-reverse", m_addMenuController->isHarpinAvailable(HairpinType::DECRESC_HAIRPIN)),
-        makeAction("add-8va", m_addMenuController->isOttavaAvailable(OttavaType::OTTAVA_8VA)),
-        makeAction("add-8vb", m_addMenuController->isOttavaAvailable(OttavaType::OTTAVA_8VB)),
-        makeAction("add-noteline", m_addMenuController->isNoteLineAvailable())
+        makeAction("add-slur", [this]() { return m_addMenuController->isSlurAvailable(); }),
+        makeAction("add-hairpin", [this]() { return m_addMenuController->isHarpinAvailable(HairpinType::CRESC_HAIRPIN); }),
+        makeAction("add-hairpin-reverse", [this]() { return m_addMenuController->isHarpinAvailable(HairpinType::DECRESC_HAIRPIN); }),
+        makeAction("add-8va", [this]() { return m_addMenuController->isOttavaAvailable(OttavaType::OTTAVA_8VA); }),
+        makeAction("add-8vb", [this]() { return m_addMenuController->isOttavaAvailable(OttavaType::OTTAVA_8VB); }),
+        makeAction("add-noteline", [this]() { return m_addMenuController->isNoteLineAvailable(); })
     };
 
     return items;
 }
 
-MenuItemList AppMenuModel::toolbarsItems() const
+MenuItemList AppMenuModel::toolbarsItems()
 {
     MenuItemList items {
         makeAction("toggle-transport", isNotationPage(), notationPageState()->isPanelVisible(PanelType::PlaybackToolBar)),
@@ -580,7 +517,7 @@ MenuItemList AppMenuModel::toolbarsItems() const
     return items;
 }
 
-MenuItemList AppMenuModel::workspacesItems() const
+MenuItemList AppMenuModel::workspacesItems()
 {
     MenuItemList items;
 
@@ -612,54 +549,6 @@ MenuItemList AppMenuModel::workspacesItems() const
           << makeAction("configure-workspaces", isNotationPage());
 
     return items;
-}
-
-MenuItem AppMenuModel::makeMenu(const std::string& title, const MenuItemList& actions, bool enabled, const ActionCode& menuActionCode)
-{
-    MenuItem item;
-    item.code = menuActionCode;
-    item.title = title;
-    item.subitems = actions;
-    item.enabled = enabled;
-    return item;
-}
-
-MenuItem AppMenuModel::makeAction(const ActionCode& actionCode, bool enabled) const
-{
-    ActionItem action = actionsRegister()->action(actionCode);
-    if (!action.isValid()) {
-        return MenuItem();
-    }
-
-    MenuItem item = action;
-    item.enabled = enabled;
-
-    shortcuts::Shortcut shortcut = shortcutsRegister()->shortcut(action.code);
-    if (shortcut.isValid()) {
-        item.shortcut = shortcut.sequence;
-    }
-
-    return item;
-}
-
-MenuItem AppMenuModel::makeAction(const ActionCode& actionCode, bool enabled, bool checked) const
-{
-    MenuItem item = makeAction(actionCode, enabled);
-    if (!item.isValid()) {
-        return item;
-    }
-
-    item.checkable = true;
-    item.checked = checked;
-
-    return item;
-}
-
-MenuItem AppMenuModel::makeSeparator() const
-{
-    MenuItem item;
-    item.title = std::string();
-    return item;
 }
 
 bool AppMenuModel::needSaveScore() const

@@ -58,9 +58,14 @@ INotationPtr FileScoreController::currentNotation() const
     return currentMasterNotation() ? currentMasterNotation()->notation() : nullptr;
 }
 
+INotationInteractionPtr FileScoreController::currentInteraction() const
+{
+    return currentNotation() ? currentNotation()->interaction() : nullptr;
+}
+
 INotationSelectionPtr FileScoreController::currentNotationSelection() const
 {
-    return currentNotation() ? currentNotationSelection() : nullptr;
+    return currentNotation() ? currentInteraction()->selection() : nullptr;
 }
 
 Ret FileScoreController::openScore(const io::path& scorePath)
@@ -91,6 +96,11 @@ bool FileScoreController::actionAvailable(const actions::ActionCode& actionCode)
     }
 
     return true;
+}
+
+async::Channel<std::vector<ActionCode> > FileScoreController::actionsAvailableChanged() const
+{
+    return m_actionsReceiveAvailableChanged;
 }
 
 void FileScoreController::openScore(const actions::ActionData& args)

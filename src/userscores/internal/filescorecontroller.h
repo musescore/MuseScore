@@ -24,6 +24,7 @@
 #include "modularity/ioc.h"
 #include "iinteractive.h"
 #include "actions/iactionsdispatcher.h"
+#include "actions/iactionsregister.h"
 #include "actions/actionable.h"
 #include "notation/inotationcreator.h"
 #include "context/iglobalcontext.h"
@@ -32,6 +33,7 @@ namespace mu::userscores {
 class FileScoreController : public IFileScoreController, public actions::Actionable
 {
     INJECT(scores, actions::IActionsDispatcher, dispatcher)
+    INJECT(scores, actions::IActionsRegister, actionsRegister)
     INJECT(scores, framework::IInteractive, interactive)
     INJECT(scores, notation::INotationCreator, notationCreator)
     INJECT(scores, context::IGlobalContext, globalContext)
@@ -48,6 +50,7 @@ public:
 private:
     notation::IMasterNotationPtr currentMasterNotation() const;
     notation::INotationPtr currentNotation() const;
+    notation::INotationInteractionPtr currentInteraction() const;
     notation::INotationSelectionPtr currentNotationSelection() const;
 
     void openScore(const actions::ActionData& args);
