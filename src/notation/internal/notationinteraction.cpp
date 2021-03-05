@@ -1238,6 +1238,7 @@ void NotationInteraction::applyDropPaletteElement(Ms::Score* score, Ms::Element*
                                                   QPointF pt, bool pasteMode)
 {
     Ms::EditData dropData;
+    dropData.view        = new ScoreCallbacks();
     dropData.pos         = pt.isNull() ? target->pagePos() : pt;
     dropData.dragOffset  = QPointF();
     dropData.modifiers   = modifiers;
