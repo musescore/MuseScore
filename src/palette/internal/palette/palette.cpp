@@ -1169,8 +1169,9 @@ QPixmap Palette::pixmap(int paletteIdx) const
 
     QPixmap pm(w, h);
     pm.fill(configuration()->elementsBackgroundColor());
-    QPainter painter(&pm);
-    painter.setRenderHint(QPainter::Antialiasing, true);
+
+    mu::draw::Painter painter(mu::draw::QPainterProvider::make(&pm));
+    painter.setAntialiasing(true);
 
     if (element->isIcon()) {
         toIcon(element.get())->setExtent(w < h ? w : h);
