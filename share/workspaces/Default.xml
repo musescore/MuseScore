@@ -399,10 +399,9 @@
             <sigD>2</sigD>
             </TimeSig>
           </Cell>
-        <Cell name="Time Signature" custom="1">
+        <Cell name="2/2">
           <staff>1</staff>
           <TimeSig>
-            <track>0</track>
             <sigN>2</sigN>
             <sigD>2</sigD>
             </TimeSig>
