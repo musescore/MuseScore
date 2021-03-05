@@ -204,14 +204,14 @@ void QPainterProvider::drawPath(const QPainterPath& path)
     m_painter->drawPath(path);
 }
 
+void QPainterProvider::strokePath(const QPainterPath& path, const QPen& pen)
+{
+    m_painter->strokePath(path, pen);
+}
+
 void QPainterProvider::drawLines(const QLineF* lines, int lineCount)
 {
     m_painter->drawLines(lines, lineCount);
-}
-
-void QPainterProvider::drawLines(const QPointF* pointPairs, int lineCount)
-{
-    m_painter->drawLines(pointPairs, lineCount);
 }
 
 void QPainterProvider::drawRects(const QRectF* rects, int rectCount)
@@ -239,24 +239,14 @@ void QPainterProvider::drawConvexPolygon(const QPointF* points, int pointCount)
     m_painter->drawConvexPolygon(points, pointCount);
 }
 
-void QPainterProvider::drawArc(const QRectF& rect, int a, int alen)
-{
-    m_painter->drawArc(rect, a, alen);
-}
-
-void QPainterProvider::drawRoundedRect(const QRectF& rect, qreal xRadius, qreal yRadius, Qt::SizeMode mode)
-{
-    m_painter->drawRoundedRect(rect, xRadius, yRadius, mode);
-}
-
 void QPainterProvider::drawText(const QPointF& p, const QString& s)
 {
     m_painter->drawText(p, s);
 }
 
-void QPainterProvider::drawText(const QRectF& r, int flags, const QString& text, QRectF* br)
+void QPainterProvider::drawText(const QRectF& r, int flags, const QString& text)
 {
-    m_painter->drawText(r, flags, text, br);
+    m_painter->drawText(r, flags, text);
 }
 
 void QPainterProvider::drawGlyphRun(const QPointF& position, const QGlyphRun& glyphRun)
@@ -264,9 +254,9 @@ void QPainterProvider::drawGlyphRun(const QPointF& position, const QGlyphRun& gl
     m_painter->drawGlyphRun(position, glyphRun);
 }
 
-void QPainterProvider::fillRect(const QRectF& r, const QColor& color)
+void QPainterProvider::fillRect(const QRectF& r, const QBrush& brush)
 {
-    m_painter->fillRect(r, color);
+    m_painter->fillRect(r, brush);
 }
 
 void QPainterProvider::drawPixmap(const QPointF& p, const QPixmap& pm)
