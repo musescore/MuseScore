@@ -94,7 +94,8 @@ public:
     void setFontFamily(const QString& val) { _fontFamily = val; }
     void setTextLineSpacing(qreal val) { _textLineSpacing = val; }
 
-    void setFormat(FormatId, QVariant);
+    QVariant formatValue(FormatId) const;
+    void setFormatValue(FormatId, QVariant);
 };
 
 //---------------------------------------------------------
