@@ -39,7 +39,8 @@ public:
     virtual QPaintDevice* device() const = 0;
     virtual QPainter* qpainter() const = 0;
 
-    virtual bool end() = 0;
+    virtual void begin(const std::string& name) = 0;
+    virtual bool end(const std::string& name) = 0;
     virtual bool isActive() const = 0;
 
     virtual void setAntialiasing(bool arg) = 0;
@@ -48,7 +49,6 @@ public:
     virtual void setFont(const QFont& f) = 0;
     virtual const QFont& font() const = 0;
 
-    virtual void setPen(const QColor& color) = 0;
     virtual void setPen(const QPen& pen) = 0;
     virtual void setNoPen() = 0;
     virtual const QPen& pen() const = 0;
@@ -64,8 +64,6 @@ public:
 
     virtual void setTransform(const QTransform& transform, bool combine = false) = 0;
     virtual const QTransform& transform() const = 0;
-
-    virtual void setMatrix(const QMatrix& matrix, bool combine = false) = 0;
 
     virtual void scale(qreal sx, qreal sy) = 0;
     virtual void rotate(qreal a) = 0;

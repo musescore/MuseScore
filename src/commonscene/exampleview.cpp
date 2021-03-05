@@ -195,7 +195,7 @@ void ExampleView::drawElements(mu::draw::Painter& painter, const QList<Element*>
 void ExampleView::paintEvent(QPaintEvent* ev)
 {
     if (_score) {
-        mu::draw::Painter p(mu::draw::QPainterProvider::make(this));
+        mu::draw::Painter p(this, "exampleview");
         p.setAntialiasing(true);
         const QRect r(ev->rect());
 
