@@ -23,14 +23,15 @@
 #include "iuserscoresconfiguration.h"
 #include "modularity/ioc.h"
 #include "iinteractive.h"
+#include "actions/actionable.h"
 #include "actions/iactionsdispatcher.h"
 #include "actions/iactionsregister.h"
-#include "actions/actionable.h"
+#include "async/asyncable.h"
 #include "notation/inotationcreator.h"
 #include "context/iglobalcontext.h"
 
 namespace mu::userscores {
-class FileScoreController : public IFileScoreController, public actions::Actionable
+class FileScoreController : public IFileScoreController, public actions::Actionable, public async::Asyncable
 {
     INJECT(scores, actions::IActionsDispatcher, dispatcher)
     INJECT(scores, actions::IActionsRegister, actionsRegister)
@@ -48,6 +49,8 @@ public:
     async::Channel<std::vector<actions::ActionCode>> actionsAvailableChanged() const override;
 
 private:
+    void setupConnections();
+
     notation::IMasterNotationPtr currentMasterNotation() const;
     notation::INotationPtr currentNotation() const;
     notation::INotationInteractionPtr currentInteraction() const;
