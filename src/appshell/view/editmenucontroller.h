@@ -16,38 +16,41 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATION_IFILEMENUCONTROLLER_H
-#define MU_NOTATION_IFILEMENUCONTROLLER_H
+#ifndef MU_NOTATION_IEDITMENUCONTROLLER_H
+#define MU_NOTATION_IEDITMENUCONTROLLER_H
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "userscores/ifilescorecontroller.h"
+#include "notation/inotationactionscontroller.h"
 #include "notation/notationtypes.h"
 
 namespace mu::appshell {
-class FileMenuController : public async::Asyncable
+class EditMenuController : public async::Asyncable
 {
-    INJECT(appshell, userscores::IFileScoreController, controller)
+    INJECT(appshell, notation::INotationActionsController, controller)
 
 public:
-    FileMenuController();
+    EditMenuController();
 
     async::Channel<std::vector<actions::ActionCode>> actionsAvailableChanged() const;
 
-    bool isNewAvailable() const;
-    bool isOpenAvailable() const;
-    bool isCloseAvailable() const;
-    bool isSaveAvailable(notation::SaveMode saveMode) const;
-    bool isImportAvailable() const;
-    bool isExportAvailable() const;
-    bool isEditInfoAvailable() const;
-    bool isPartsAvailable() const;
-    bool isPrintAvailable() const;
-    bool isQuitAvailable() const;
+    bool isUndoAvailable() const;
+    bool isRedoAvailable() const;
+    bool isCutAvailable() const;
+    bool isCopyAvailable() const;
+    bool isPasteAvailable(notation::PastingType pastingType) const;
+    bool isSwapAvailable() const;
+    bool isDeleteAvailable() const;
+    bool isSelectSimilarAvailable() const;
+    bool isSelectAllAvailable() const;
+    bool isFindAvailable() const;
+    bool isPreferenceDialogAvailable() const;
 
 private:
+    std::string pastingActionCode(notation::PastingType type) const;
+
     async::Channel<std::vector<actions::ActionCode>> m_actionsReceiveAvailableChanged;
 };
 }
 
-#endif // MU_NOTATION_IFILEMENUCONTROLLER_H
+#endif // MU_NOTATION_IEDITMENUCONTROLLER_H

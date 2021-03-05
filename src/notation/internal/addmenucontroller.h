@@ -32,7 +32,6 @@ class AddMenuController : public async::Asyncable
 public:
     AddMenuController();
 
-    bool isActionAvailable(const actions::ActionCode& actionCode) const;
     async::Channel<std::vector<actions::ActionCode>> actionsAvailableChanged() const;
 
     bool isNoteInputAvailable() const;

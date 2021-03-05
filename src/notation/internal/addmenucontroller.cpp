@@ -27,11 +27,6 @@ AddMenuController::AddMenuController()
     });
 }
 
-bool AddMenuController::isActionAvailable(const mu::actions::ActionCode& actionCode) const
-{
-    return controller()->actionAvailable(actionCode);
-}
-
 mu::async::Channel<std::vector<mu::actions::ActionCode> > AddMenuController::actionsAvailableChanged() const
 {
     return m_actionsReceiveAvailableChanged;

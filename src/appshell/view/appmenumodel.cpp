@@ -24,6 +24,7 @@
 
 #include "notation/internal/addmenucontroller.h"
 #include "filemenucontroller.h"
+#include "editmenucontroller.h"
 
 using namespace mu::appshell;
 using namespace mu::uicomponents;
@@ -36,6 +37,7 @@ AppMenuModel::AppMenuModel(QObject* parent)
 {
     m_addMenuController = new AddMenuController();
     m_fileMenuController = new FileMenuController();
+    m_editMenuController = new EditMenuController();
 }
 
 void AppMenuModel::load()
@@ -92,6 +94,10 @@ void AppMenuModel::setupConnections()
     });
 
     m_fileMenuController->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
+        updateItemsEnabled(actionCodes);
+    });
+
+    m_editMenuController->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
         updateItemsEnabled(actionCodes);
     });
 
@@ -159,23 +165,23 @@ MenuItem AppMenuModel::fileItem()
 MenuItem AppMenuModel::editItem()
 {
     MenuItemList editItems {
-        makeAction("undo", canUndo()),
-        makeAction("redo", canRedo()),
+        makeAction("undo", [this]() { return m_editMenuController->isUndoAvailable(); }),
+        makeAction("redo", [this]() { return m_editMenuController->isRedoAvailable(); }),
         makeSeparator(),
-        makeAction("cut", selectedElementOnScore()),
-        makeAction("copy", selectedElementOnScore()),
-        makeAction("paste", selectedElementOnScore()),
-        makeAction("paste-half", selectedElementOnScore()),
-        makeAction("paste-double", selectedElementOnScore()),
-        makeAction("paste-special", selectedElementOnScore()),
-        makeAction("swap", selectedElementOnScore()),
-        makeAction("delete", selectedElementOnScore()),
+        makeAction("cut", [this]() { return m_editMenuController->isCutAvailable(); }),
+        makeAction("copy", [this]() { return m_editMenuController->isCopyAvailable(); }),
+        makeAction("paste", [this]() { return m_editMenuController->isPasteAvailable(PastingType::Default); }),
+        makeAction("paste-half", [this]() { return m_editMenuController->isPasteAvailable(PastingType::Half); }),
+        makeAction("paste-double", [this]() { return m_editMenuController->isPasteAvailable(PastingType::Double); }),
+        makeAction("paste-special", [this]() { return m_editMenuController->isPasteAvailable(PastingType::Special); }),
+        makeAction("swap", [this]() { return m_editMenuController->isSwapAvailable(); }),
+        makeAction("delete", [this]() { return m_editMenuController->isDeleteAvailable(); }),
         makeSeparator(),
-        makeAction("select-all", scoreOpened()),
-        makeAction("select-similar", selectedElementOnScore()),
-        makeAction("find", scoreOpened()),
+        makeAction("select-all", [this]() { return m_editMenuController->isSelectAllAvailable(); }),
+        makeAction("select-similar", [this]() { return m_editMenuController->isSelectSimilarAvailable(); }),
+        makeAction("find", [this]() { return m_editMenuController->isFindAvailable(); }),
         makeSeparator(),
-        makeAction("preference-dialog") // need implement
+        makeAction("preference-dialog", [this]() { return m_editMenuController->isPreferenceDialogAvailable(); }) // need implement
     };
 
     return makeMenu(trc("appshell", "&Edit"), editItems);
