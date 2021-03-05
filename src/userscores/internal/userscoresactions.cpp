@@ -95,3 +95,15 @@ const ActionItem& UserScoresActions::action(const ActionCode& actionCode) const
     static ActionItem null;
     return null;
 }
+
+const ActionCodeList UserScoresActions::actionCodes(ShortcutContext context)
+{
+    ActionCodeList codes;
+    for (const ActionItem& action : m_actions) {
+        if (action.shortcutContext == context) {
+            codes.push_back(action.code);
+        }
+    }
+
+    return codes;
+}

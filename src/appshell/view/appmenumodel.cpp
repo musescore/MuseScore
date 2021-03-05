@@ -114,42 +114,45 @@ void AppMenuModel::setupConnections()
     m_viewMenuController->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
         updateItemsEnabled(actionCodes);
     });
-        currentMasterNotation()->notation()->notationChanged().onNotify(this, [this]() {
-            load();
-        });
-
-        currentMasterNotation()->notation()->interaction()->selectionChanged().onNotify(this, [this]() {
-            load();
-        });
-    });
 
     userScoresService()->recentScoreList().ch.onReceive(this, [this](const MetaList&) {
-        load();
+        MenuItem& recentScoreListItem = findMenu("file-open");
+        recentScoreListItem.subitems = recentScores();
+        emit itemsChanged();
     });
 
-    paletteController()->isMasterPaletteOpened().ch.onReceive(this, [this](bool) {
-        load();
+    paletteController()->isMasterPaletteOpened().ch.onReceive(this, [this](bool openned) {
+        MenuItem& menuItem = findItem("masterpalette");
+        menuItem.checked = openned;
+        emit itemsChanged();
     });
 
-    notationPageState()->panelVisibleChanged().onReceive(this, [this](PanelType) {
-        load();
+    notationPageState()->panelVisibleChanged().onReceive(this, [this](PanelType panelType) {
+        MenuItem& menuItem = findItem(panelActionCode(panelType));
+        menuItem.checked = isPanelVisible(panelType);
+        emit itemsChanged();
     });
 
-    controller()->isFullScreen().ch.onReceive(this, [this](bool) {
-        load();
+    controller()->isFullScreen().ch.onReceive(this, [this](bool isfullScreen) {
+        MenuItem& menuItem = findItem("fullscreen");
+        menuItem.checked = isfullScreen;
+        emit itemsChanged();
     });
 
-    interactive()->currentUri().ch.onReceive(this, [this](const Uri&) {
-        load();
+    workspacesManager()->currentWorkspace().ch.onReceive(this, [this](const IWorkspacePtr&) {
+        MenuItem& workspacesItem = findMenu("select-workspace");
+        workspacesItem.subitems = workspacesItems();
+        emit itemsChanged();
     });
 }
 
 MenuItem AppMenuModel::fileItem()
 {
+    MenuItemList recentScoresList = recentScores();
     MenuItemList fileItems {
         makeAction("file-new", [this]() { return m_fileMenuController->isNewAvailable(); }),
         makeAction("file-open", [this]() { return m_fileMenuController->isOpenAvailable(); }),
-        makeMenu(trc("appshell", "Open &Recent"), recentScores(), true, "file-open"),
+        makeMenu(trc("appshell", "Open &Recent"), recentScoresList, !recentScoresList.empty(), "file-open"),
         makeSeparator(),
         makeAction("file-close", [this]() { return m_fileMenuController->isCloseAvailable(); }),
         makeAction("file-save", [this]() { return m_fileMenuController->isSaveAvailable(SaveMode::Save); }),
@@ -368,9 +371,6 @@ MenuItemList AppMenuModel::recentScores()
 {
     MenuItemList items;
     MetaList recentScores = userScoresService()->recentScoreList().val;
-    if (recentScores.empty()) {
-        return items;
-    }
 
     for (const Meta& meta: recentScores) {
         MenuItem item = actionsRegister()->action("file-open");

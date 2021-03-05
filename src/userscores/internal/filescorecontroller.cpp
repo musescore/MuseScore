@@ -24,6 +24,7 @@
 #include "translation.h"
 
 #include "userscoresconfiguration.h"
+#include "userscoresactions.h"
 
 using namespace mu;
 using namespace mu::userscores;
@@ -46,6 +47,8 @@ void FileScoreController::init()
     dispatcher()->reg(this, "file-import-pdf", this, &FileScoreController::importPdf);
 
     dispatcher()->reg(this, "clear-recent", this, &FileScoreController::clearRecentScores);
+
+    setupConnections();
 }
 
 IMasterNotationPtr FileScoreController::currentMasterNotation() const
@@ -101,6 +104,24 @@ bool FileScoreController::actionAvailable(const actions::ActionCode& actionCode)
 async::Channel<std::vector<ActionCode> > FileScoreController::actionsAvailableChanged() const
 {
     return m_actionsReceiveAvailableChanged;
+}
+
+void FileScoreController::setupConnections()
+{
+    globalContext()->currentMasterNotationChanged().onNotify(this, [this]() {
+        ActionCodeList actionCodes = UserScoresActions::actionCodes(ShortcutContext::NotationActive);
+        m_actionsReceiveAvailableChanged.send(actionCodes);
+
+        currentMasterNotation()->needSave().notification.onNotify(this, [this]() {
+            ActionCodeList actionCodes = UserScoresActions::actionCodes(ShortcutContext::NotationNeedSave);
+            m_actionsReceiveAvailableChanged.send(actionCodes);
+        });
+
+        currentMasterNotation()->notation()->interaction()->selectionChanged().onNotify(this, [this]() {
+            ActionCodeList actionCodes = UserScoresActions::actionCodes(ShortcutContext::NotationHasSelection);
+            m_actionsReceiveAvailableChanged.send(actionCodes);
+        });
+    });
 }
 
 void FileScoreController::openScore(const actions::ActionData& args)

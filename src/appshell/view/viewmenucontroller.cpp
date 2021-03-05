@@ -80,29 +80,6 @@ bool ViewMenuController::isFullScreenAvailable() const
     return applicationController()->actionAvailable("fullscreen");
 }
 
-std::string ViewMenuController::panelActionCode(PanelType panelType) const
-{
-    std::map<PanelType, std::string> panelTypeStrings {
-        { PanelType::Palette, "toggle-palette" },
-        { PanelType::Instruments, "toggle-instruments" },
-        { PanelType::Inspector, "inspector" },
-        { PanelType::NotationToolBar, "toggle-notationtoolbar" },
-        { PanelType::NoteInputBar, "toggle-noteinput" },
-        { PanelType::UndoRedoToolBar, "toggle-undoredo" },
-        { PanelType::NotationNavigator, "toggle-navigator" },
-        { PanelType::NotationStatusBar, "toggle-statusbar" },
-        { PanelType::PlaybackToolBar, "toggle-transport" },
-        { PanelType::Mixer, "toggle-mixer" },
-        { PanelType::TimeLine, "toggle-timeline" },
-        { PanelType::Synthesizer, "synth-control" },
-        { PanelType::SelectionFilter, "toggle-selection-window" },
-        { PanelType::Piano, "toggle-piano" },
-        { PanelType::ComparisonTool, "toggle-scorecmp-tool" }
-    };
-
-    return panelTypeStrings[panelType];
-}
-
 std::string ViewMenuController::scoreConfigActionCode(ScoreConfigType configType) const
 {
     std::map<ScoreConfigType, std::string> scoreConfigStrings {

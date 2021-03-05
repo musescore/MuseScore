@@ -16,18 +16,20 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATION_IFILEMENUCONTROLLER_H
-#define MU_NOTATION_IFILEMENUCONTROLLER_H
+#ifndef MU_NOTATION_FILEMENUCONTROLLER_H
+#define MU_NOTATION_FILEMENUCONTROLLER_H
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "userscores/ifilescorecontroller.h"
+#include "notation/inotationactionscontroller.h"
 #include "notation/notationtypes.h"
 
 namespace mu::appshell {
 class FileMenuController : public async::Asyncable
 {
-    INJECT(appshell, userscores::IFileScoreController, controller)
+    INJECT(appshell, userscores::IFileScoreController, fileController)
+    INJECT(appshell, notation::INotationActionsController, notationController)
 
 public:
     FileMenuController();
@@ -50,4 +52,4 @@ private:
 };
 }
 
-#endif // MU_NOTATION_IFILEMENUCONTROLLER_H
+#endif // MU_NOTATION_FILEMENUCONTROLLER_H

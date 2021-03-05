@@ -19,13 +19,19 @@
 
 #include "paletteactionscontroller.h"
 
+#include "paletteactions.h"
+
 using namespace mu::palette;
+using namespace mu::actions;
+using namespace mu::shortcuts;
 
 static std::string MASTER_PALETTE_URI = "musescore://palette/masterpalette";
 
 void PaletteActionsController::init()
 {
     dispatcher()->reg(this, "masterpalette", this, &PaletteActionsController::toggleMasterPalette);
+
+    setupConnections();
 }
 
 mu::ValCh<bool> PaletteActionsController::isMasterPaletteOpened() const
@@ -34,6 +40,40 @@ mu::ValCh<bool> PaletteActionsController::isMasterPaletteOpened() const
     result.ch = m_masterPaletteOpenChannel;
     result.val = interactive()->isOpened(MASTER_PALETTE_URI).val;
     return result;
+}
+
+bool PaletteActionsController::actionAvailable(const ActionCode& actionCode) const
+{
+    if (!canReceiveAction(actionCode)) {
+        return false;
+    }
+
+    ActionItem action = actionsRegister()->action(actionCode);
+    if (!action.isValid()) {
+        return false;
+    }
+
+    switch (action.shortcutContext) {
+    case ShortcutContext::NotationActive:
+        return isNotationPage();
+    default:
+        break;
+    }
+
+    return true;
+}
+
+mu::async::Channel<std::vector<ActionCode> > PaletteActionsController::actionsAvailableChanged() const
+{
+    return m_actionsReceiveAvailableChanged;
+}
+
+void PaletteActionsController::setupConnections()
+{
+    interactive()->currentUri().ch.onReceive(this, [this](const Uri&) {
+        ActionCodeList actionCodes = PaletteActions::actionCodes(ShortcutContext::NotationActive);
+        m_actionsReceiveAvailableChanged.send(actionCodes);
+    });
 }
 
 void PaletteActionsController::toggleMasterPalette()
@@ -45,4 +85,9 @@ void PaletteActionsController::toggleMasterPalette()
     }
 
     m_masterPaletteOpenChannel.send(interactive()->isOpened(MASTER_PALETTE_URI).val);
+}
+
+bool PaletteActionsController::isNotationPage() const
+{
+    return interactive()->isOpened("musescore://notation").val;
 }

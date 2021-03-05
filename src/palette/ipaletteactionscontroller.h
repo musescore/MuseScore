@@ -20,10 +20,11 @@
 #define MU_PALETTE_IPALETTEACTIONCONTROLLER_H
 
 #include "modularity/imoduleexport.h"
+#include "actions/iactionsavailability.h"
 #include "retval.h"
 
 namespace mu::palette {
-class IPaletteActionsController : MODULE_EXPORT_INTERFACE
+class IPaletteActionsController : public actions::IActionsAvailability, MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IPaletteActionController)
 

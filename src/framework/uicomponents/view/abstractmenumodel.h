@@ -51,6 +51,7 @@ protected:
 
     MenuItem& findItem(const actions::ActionCode& actionCode);
     MenuItem& findItemByIndex(const actions::ActionCode& menuActionCode, int actionIndex);
+    MenuItem& findMenu(const actions::ActionCode& subitemsActionCode);
 
     using EnabledCallBack = std::function<bool ()>;
 

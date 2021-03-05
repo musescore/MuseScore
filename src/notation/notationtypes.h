@@ -413,6 +413,15 @@ struct LoopBoundaries
     }
 };
 
+enum class ScoreConfigType
+{
+    ShowInvisibleElements,
+    ShowUnprintableElements,
+    ShowFrames,
+    ShowPageMargins,
+    MarkIrregularMeasures
+};
+
 struct ScoreConfig
 {
     bool isShowInvisibleElements = false;
@@ -564,14 +573,14 @@ inline std::string ottavaTypeToString(OttavaType type)
     return ottavaTypeStrings[type];
 }
 
-inline std::string saveModeToString(SaveMode mode)
+inline std::string saveModeActionCode(SaveMode mode)
 {
     std::map<SaveMode, std::string> saveModeStrings {
-        { SaveMode::Save, "" },
-        { SaveMode::SaveAs, "as" },
-        { SaveMode::SaveCopy, "a-copy" },
-        { SaveMode::SaveSelection, "selection" },
-        { SaveMode::SaveOnline, "online" },
+        { SaveMode::Save, "file-save" },
+        { SaveMode::SaveAs, "file-save-as" },
+        { SaveMode::SaveCopy, "file-save-a-copy" },
+        { SaveMode::SaveSelection, "file-save-selection" },
+        { SaveMode::SaveOnline, "file-save-online" },
     };
 
     return saveModeStrings[mode];

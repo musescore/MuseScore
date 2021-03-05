@@ -50,7 +50,6 @@ public:
     bool isFullScreenAvailable() const;
 
 private:
-    std::string panelActionCode(PanelType panelType) const;
     std::string scoreConfigActionCode(notation::ScoreConfigType configType) const;
 
     async::Channel<std::vector<actions::ActionCode>> m_actionsReceiveAvailableChanged;

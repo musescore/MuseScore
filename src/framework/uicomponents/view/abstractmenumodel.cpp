@@ -66,6 +66,11 @@ MenuItem& AbstractMenuModel::findItemByIndex(const ActionCode& menuActionCode, i
     return null;
 }
 
+MenuItem& AbstractMenuModel::findMenu(const ActionCode& subitemsActionCode)
+{
+    return menu(m_items, subitemsActionCode);
+}
+
 MenuItem AbstractMenuModel::makeMenu(const std::string& title, const MenuItemList& actions, bool enabled, const ActionCode& menuActionCode)
 {
     MenuItem item;

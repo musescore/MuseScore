@@ -23,7 +23,11 @@ using namespace mu::notation;
 
 FileMenuController::FileMenuController()
 {
-    controller()->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
+    fileController()->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
+        m_actionsReceiveAvailableChanged.send(actionCodes);
+    });
+
+    notationController()->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
         m_actionsReceiveAvailableChanged.send(actionCodes);
     });
 }
@@ -35,50 +39,50 @@ mu::async::Channel<std::vector<mu::actions::ActionCode> > FileMenuController::ac
 
 bool FileMenuController::isNewAvailable() const
 {
-    return controller()->actionAvailable("file-new");
+    return fileController()->actionAvailable("file-new");
 }
 
 bool FileMenuController::isOpenAvailable() const
 {
-    return controller()->actionAvailable("file-open");
+    return fileController()->actionAvailable("file-open");
 }
 
 bool FileMenuController::isCloseAvailable() const
 {
-    return controller()->actionAvailable("file-close");
+    return fileController()->actionAvailable("file-close");
 }
 
 bool FileMenuController::isSaveAvailable(mu::notation::SaveMode saveMode) const
 {
-    return controller()->actionAvailable("file-save-" + saveModeToString(saveMode));
+    return fileController()->actionAvailable(saveModeActionCode(saveMode));
 }
 
 bool FileMenuController::isImportAvailable() const
 {
-    return controller()->actionAvailable("file-import-pdf");
+    return fileController()->actionAvailable("file-import-pdf");
 }
 
 bool FileMenuController::isExportAvailable() const
 {
-    return controller()->actionAvailable("file-export");
+    return fileController()->actionAvailable("file-export");
 }
 
 bool FileMenuController::isEditInfoAvailable() const
 {
-    return controller()->actionAvailable("edit-info");
+    return notationController()->actionAvailable("edit-info");
 }
 
 bool FileMenuController::isPartsAvailable() const
 {
-    return controller()->actionAvailable("parts");
+    return fileController()->actionAvailable("parts");
 }
 
 bool FileMenuController::isPrintAvailable() const
 {
-    return controller()->actionAvailable("print");
+    return fileController()->actionAvailable("print");
 }
 
 bool FileMenuController::isQuitAvailable() const
 {
-    return controller()->actionAvailable("quit");
+    return fileController()->actionAvailable("quit");
 }
