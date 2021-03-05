@@ -25,6 +25,7 @@
 #include "notation/internal/addmenucontroller.h"
 #include "filemenucontroller.h"
 #include "editmenucontroller.h"
+#include "viewmenucontroller.h"
 
 using namespace mu::appshell;
 using namespace mu::uicomponents;
@@ -38,6 +39,15 @@ AppMenuModel::AppMenuModel(QObject* parent)
     m_addMenuController = new AddMenuController();
     m_fileMenuController = new FileMenuController();
     m_editMenuController = new EditMenuController();
+    m_viewMenuController = new ViewMenuController();
+}
+
+AppMenuModel::~AppMenuModel()
+{
+    delete m_addMenuController;
+    delete m_fileMenuController;
+    delete m_editMenuController;
+    delete m_viewMenuController;
 }
 
 void AppMenuModel::load()
@@ -101,9 +111,9 @@ void AppMenuModel::setupConnections()
         updateItemsEnabled(actionCodes);
     });
 
-    globalContext()->currentMasterNotationChanged().onNotify(this, [this]() {
-        load();
-
+    m_viewMenuController->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
+        updateItemsEnabled(actionCodes);
+    });
         currentMasterNotation()->notation()->notationChanged().onNotify(this, [this]() {
             load();
         });
@@ -190,36 +200,52 @@ MenuItem AppMenuModel::editItem()
 MenuItem AppMenuModel::viewItem()
 {
     MenuItemList viewItems {
-        makeAction("toggle-palette", isNotationPage(), notationPageState()->isPanelVisible(PanelType::Palette)),
-        makeAction("toggle-instruments", isNotationPage(), notationPageState()->isPanelVisible(PanelType::Instruments)),
-        makeAction("masterpalette", isNotationPage(), paletteController()->isMasterPaletteOpened().val),
-        makeAction("inspector", isNotationPage(), notationPageState()->isPanelVisible(PanelType::Inspector)),
-        makeAction("toggle-playpanel", isNotationPage()), // need implement
-        makeAction("toggle-navigator", isNotationPage(), notationPageState()->isPanelVisible(PanelType::NotationNavigator)),
-        makeAction("toggle-timeline", isNotationPage()), // need implement
-        makeAction("toggle-mixer", isNotationPage()), // need implement
-        makeAction("synth-control", isNotationPage()), // need implement
-        makeAction("toggle-selection-window", isNotationPage()), // need implement
-        makeAction("toggle-piano", isNotationPage()), // need implement
-        makeAction("toggle-scorecmp-tool", isNotationPage()), // need implement
+        makeAction("toggle-palette", isPanelVisible(PanelType::Palette),
+                   [this]() { return m_viewMenuController->isPanelAvailable(PanelType::Palette); }),
+        makeAction("toggle-instruments", isPanelVisible(PanelType::Instruments),
+                   [this]() { return m_viewMenuController->isPanelAvailable(PanelType::Instruments); }),
+        makeAction("masterpalette", paletteController()->isMasterPaletteOpened().val,
+                   [this]() { return m_viewMenuController->isMasterPaletteAvailable(); }),
+        makeAction("inspector", isPanelVisible(PanelType::Inspector),
+                   [this]() { return m_viewMenuController->isPanelAvailable(PanelType::Inspector); }),
+        makeAction("toggle-navigator", isPanelVisible(PanelType::NotationNavigator),
+                   [this]() { return m_viewMenuController->isPanelAvailable(PanelType::NotationNavigator); }),
+        makeAction("toggle-timeline", isPanelVisible(PanelType::TimeLine),
+                   [this]() { return m_viewMenuController->isPanelAvailable(PanelType::TimeLine); }), // need implement
+        makeAction("toggle-mixer", isPanelVisible(PanelType::Mixer),
+                   [this]() { return m_viewMenuController->isPanelAvailable(PanelType::Mixer); }), // need implement
+        makeAction("synth-control", isPanelVisible(PanelType::Synthesizer),
+                   [this]() { return m_viewMenuController->isPanelAvailable(PanelType::Synthesizer); }), // need implement
+        makeAction("toggle-selection-window", isPanelVisible(PanelType::SelectionFilter),
+                   [this]() { return m_viewMenuController->isPanelAvailable(PanelType::SelectionFilter); }), // need implement
+        makeAction("toggle-piano", isPanelVisible(PanelType::Piano),
+                   [this]() { return m_viewMenuController->isPanelAvailable(PanelType::Piano); }), // need implement
+        makeAction("toggle-scorecmp-tool", isPanelVisible(PanelType::ComparisonTool),
+                   [this]() { return m_viewMenuController->isPanelAvailable(PanelType::ComparisonTool); }), // need implement
         makeSeparator(),
-        makeAction("zoomin", isNotationPage()),
-        makeAction("zoomout", isNotationPage()),
+        makeAction("zoomin", [this]() { return m_viewMenuController->isZoomInAvailable(); }),
+        makeAction("zoomout", [this]() { return m_viewMenuController->isZoomInAvailable(); }),
         makeSeparator(),
         makeMenu(trc("appshell", "&Toolbars"), toolbarsItems()),
         makeMenu(trc("appshell", "W&orkspaces"), workspacesItems(), true, "select-workspace"),
-        makeAction("toggle-statusbar", isNotationPage(), notationPageState()->isPanelVisible(PanelType::NotationStatusBar)),
+        makeAction("toggle-statusbar", isPanelVisible(PanelType::NotationStatusBar),
+                   [this]() { return m_viewMenuController->isPanelAvailable(PanelType::NotationStatusBar); }),
         makeSeparator(),
-        makeAction("split-h", isNotationPage()), // need implement
-        makeAction("split-v", isNotationPage()), // need implement
+        makeAction("split-h", false, [this]() { return m_viewMenuController->isSplitAvailable(framework::Orientation::Horizontal); }), // need implement
+        makeAction("split-v", false, [this]() { return m_viewMenuController->isSplitAvailable(framework::Orientation::Vertical); }), // need implement
         makeSeparator(),
-        makeAction("show-invisible", isNotationPage(), scoreConfig().isShowInvisibleElements),
-        makeAction("show-unprintable", isNotationPage(), scoreConfig().isShowUnprintableElements),
-        makeAction("show-frames", isNotationPage(), scoreConfig().isShowFrames),
-        makeAction("show-pageborders", isNotationPage(), scoreConfig().isShowPageMargins),
-        makeAction("mark-irregular", isNotationPage(), scoreConfig().isMarkIrregularMeasures),
+        makeAction("show-invisible", scoreConfig().isShowInvisibleElements,
+                   [this]() { return m_viewMenuController->isScoreConfigAvailable(ScoreConfigType::ShowInvisibleElements); }),
+        makeAction("show-unprintable", scoreConfig().isShowUnprintableElements,
+                   [this]() { return m_viewMenuController->isScoreConfigAvailable(ScoreConfigType::ShowUnprintableElements); }),
+        makeAction("show-frames", scoreConfig().isShowFrames,
+                   [this]() { return m_viewMenuController->isScoreConfigAvailable(ScoreConfigType::ShowFrames); }),
+        makeAction("show-pageborders", scoreConfig().isShowPageMargins,
+                   [this]() { return m_viewMenuController->isScoreConfigAvailable(ScoreConfigType::ShowPageMargins); }),
+        makeAction("mark-irregular", scoreConfig().isMarkIrregularMeasures,
+                   [this]() { return m_viewMenuController->isScoreConfigAvailable(ScoreConfigType::MarkIrregularMeasures); }),
         makeSeparator(),
-        makeAction("fullscreen", true, controller()->isFullScreen().val)
+        makeAction("fullscreen", controller()->isFullScreen().val, [this]() { return m_viewMenuController->isFullScreenAvailable(); })
     };
 
     return makeMenu(trc("appshell", "&View"), viewItems);
@@ -514,10 +540,14 @@ MenuItemList AppMenuModel::linesItems()
 MenuItemList AppMenuModel::toolbarsItems()
 {
     MenuItemList items {
-        makeAction("toggle-transport", isNotationPage(), notationPageState()->isPanelVisible(PanelType::PlaybackToolBar)),
-        makeAction("toggle-noteinput", isNotationPage(), notationPageState()->isPanelVisible(PanelType::NoteInputBar)),
-        makeAction("toggle-notationtoolbar", isNotationPage(), notationPageState()->isPanelVisible(PanelType::NotationToolBar)),
-        makeAction("toggle-undoredo", isNotationPage(), notationPageState()->isPanelVisible(PanelType::UndoRedoToolBar))
+        makeAction("toggle-transport", isPanelVisible(PanelType::PlaybackToolBar),
+                   [this]() { return m_viewMenuController->isPanelAvailable(PanelType::PlaybackToolBar); }),
+        makeAction("toggle-noteinput", isPanelVisible(PanelType::NoteInputBar),
+                   [this]() { return m_viewMenuController->isPanelAvailable(PanelType::NoteInputBar); }),
+        makeAction("toggle-notationtoolbar", isPanelVisible(PanelType::NotationToolBar),
+                   [this]() { return m_viewMenuController->isPanelAvailable(PanelType::NotationToolBar); }),
+        makeAction("toggle-undoredo", isPanelVisible(PanelType::UndoRedoToolBar),
+                   [this]() { return m_viewMenuController->isPanelAvailable(PanelType::UndoRedoToolBar); })
     };
 
     return items;
@@ -546,15 +576,20 @@ MenuItemList AppMenuModel::workspacesItems()
         bool isCurrentWorkspace = workspace == currentWorkspace;
         item.checked = isCurrentWorkspace;
         item.checkable = true;
-        item.enabled = isNotationPage();
+        item.enabled = true;
 
         items << item;
     }
 
     items << makeSeparator()
-          << makeAction("configure-workspaces", isNotationPage());
+          << makeAction("configure-workspaces");
 
     return items;
+}
+
+bool AppMenuModel::isPanelVisible(PanelType type) const
+{
+    return notationPageState()->isPanelVisible(type);
 }
 
 bool AppMenuModel::needSaveScore() const

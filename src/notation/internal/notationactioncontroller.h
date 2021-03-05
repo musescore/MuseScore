@@ -50,6 +50,8 @@ public:
 private:
     bool canReceiveAction(const actions::ActionCode& actionCode) const override;
 
+    void setupConnections();
+
     INotationPtr currentNotation() const;
     INotationInteractionPtr currentNotationInteraction() const;
     INotationElementsPtr currentNotationElements() const;
@@ -137,11 +139,7 @@ private:
     void openPartsDialog();
     void openTupletOtherDialog();
 
-    void toggleShowingInvisibleElements();
-    void toggleShowingUnprintableElements();
-    void toggleShowingFrames();
-    void toggleShowingPageMargins();
-    void toggleMarkIrregularMeasures();
+    void toggleScoreConfig(ScoreConfigType configType);
     void toggleNavigator();
     void toggleMixer();
 
@@ -154,11 +152,10 @@ private:
 
     void startNoteInputIfNeed();
 
-    void setupConnections();
-
     bool hasSelection() const;
     bool canUndo() const;
     bool canRedo() const;
+    bool isNotationPage() const;
 
     async::Channel<std::vector<actions::ActionCode>> m_actionsReceiveAvailableChanged;
 };

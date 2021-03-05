@@ -16,41 +16,45 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATION_EDITMENUCONTROLLER_H
-#define MU_NOTATION_EDITMENUCONTROLLER_H
+#ifndef MU_NOTATION_VIEWMENUCONTROLLER_H
+#define MU_NOTATION_VIEWMENUCONTROLLER_H
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
+#include "iapplicationactioncontroller.h"
 #include "notation/inotationactionscontroller.h"
+#include "palette/ipaletteactionscontroller.h"
+#include "actions/actiontypes.h"
+#include "appshelltypes.h"
+#include "globaltypes.h"
 #include "notation/notationtypes.h"
 
 namespace mu::appshell {
-class EditMenuController : public async::Asyncable
+class ViewMenuController : public async::Asyncable
 {
-    INJECT(appshell, notation::INotationActionsController, controller)
+    INJECT(appshell, notation::INotationActionsController, notationController)
+    INJECT(appshell, palette::IPaletteActionsController, paletteController)
+    INJECT(appshell, IApplicationActionController, applicationController)
 
 public:
-    EditMenuController();
+    ViewMenuController();
 
     async::Channel<std::vector<actions::ActionCode>> actionsAvailableChanged() const;
 
-    bool isUndoAvailable() const;
-    bool isRedoAvailable() const;
-    bool isCutAvailable() const;
-    bool isCopyAvailable() const;
-    bool isPasteAvailable(notation::PastingType pastingType) const;
-    bool isSwapAvailable() const;
-    bool isDeleteAvailable() const;
-    bool isSelectSimilarAvailable() const;
-    bool isSelectAllAvailable() const;
-    bool isFindAvailable() const;
-    bool isPreferenceDialogAvailable() const;
+    bool isPanelAvailable(PanelType panelType) const;
+    bool isMasterPaletteAvailable() const;
+    bool isZoomInAvailable() const;
+    bool isZoomOutAvailable() const;
+    bool isSplitAvailable(framework::Orientation orientation) const;
+    bool isScoreConfigAvailable(notation::ScoreConfigType configType) const;
+    bool isFullScreenAvailable() const;
 
 private:
-    std::string pastingActionCode(notation::PastingType type) const;
+    std::string panelActionCode(PanelType panelType) const;
+    std::string scoreConfigActionCode(notation::ScoreConfigType configType) const;
 
     async::Channel<std::vector<actions::ActionCode>> m_actionsReceiveAvailableChanged;
 };
 }
 
-#endif // MU_NOTATION_EDITMENUCONTROLLER_H
+#endif // MU_NOTATION_VIEWMENUCONTROLLER_H

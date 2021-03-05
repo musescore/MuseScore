@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATION_IADDMENUCONTROLLER_H
-#define MU_NOTATION_IADDMENUCONTROLLER_H
+#ifndef MU_NOTATION_ADDMENUCONTROLLER_H
+#define MU_NOTATION_ADDMENUCONTROLLER_H
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
@@ -57,4 +57,4 @@ private:
 };
 }
 
-#endif // MU_NOTATION_IADDMENUCONTROLLER_H
+#endif // MU_NOTATION_ADDMENUCONTROLLER_H

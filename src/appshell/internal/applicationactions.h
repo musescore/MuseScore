@@ -27,6 +27,8 @@ class ApplicationActions : public actions::IModuleActions
 public:
     const actions::ActionItem& action(const actions::ActionCode& actionCode) const override;
 
+    static const actions::ActionCodeList actionCodes(shortcuts::ShortcutContext context);
+
 private:
     static const actions::ActionList m_actions;
 };

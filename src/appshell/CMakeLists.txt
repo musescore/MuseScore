@@ -57,6 +57,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/filemenucontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/view/editmenucontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/editmenucontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/viewmenucontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/viewmenucontroller.h
     ${DOCKWINDOW_SRC}
     )
 

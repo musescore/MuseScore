@@ -44,6 +44,7 @@ class AddMenuController;
 namespace mu::appshell {
 class FileMenuController;
 class EditMenuController;
+class ViewMenuController;
 class AppMenuModel : public uicomponents::AbstractMenuModel, public async::Asyncable
 {
     Q_OBJECT
@@ -60,6 +61,7 @@ class AppMenuModel : public uicomponents::AbstractMenuModel, public async::Async
 
 public:
     explicit AppMenuModel(QObject* parent = nullptr);
+    ~AppMenuModel();
 
     Q_INVOKABLE void load();
     Q_INVOKABLE void handleAction(const QString& actionCodeStr, int actionIndex);
@@ -91,6 +93,8 @@ private:
     uicomponents::MenuItemList toolbarsItems();
     uicomponents::MenuItemList workspacesItems();
 
+    bool isPanelVisible(PanelType type) const;
+
     bool needSaveScore() const;
     bool scoreOpened() const;
     bool canUndo() const;
@@ -106,6 +110,7 @@ private:
     notation::AddMenuController* m_addMenuController = nullptr;
     FileMenuController* m_fileMenuController = nullptr;
     EditMenuController* m_editMenuController = nullptr;
+    ViewMenuController* m_viewMenuController = nullptr;
 };
 }
 

@@ -20,10 +20,11 @@
 #define MU_APPSHELL_IAPPLICATIONCONTROLLER_H
 
 #include "modularity/imoduleexport.h"
+#include "actions/iactionsavailability.h"
 #include "retval.h"
 
 namespace mu::appshell {
-class IApplicationActionController : MODULE_EXPORT_INTERFACE
+class IApplicationActionController : public actions::IActionsAvailability, MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IApplicationActionController)
 public:
