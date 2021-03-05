@@ -32,7 +32,7 @@ class AddMenuController : public async::Asyncable
 public:
     AddMenuController();
 
-    async::Channel<std::vector<actions::ActionCode>> actionsAvailableChanged() const;
+    async::Channel<std::vector<actions::ActionCode> > actionsAvailableChanged() const;
 
     bool isNoteInputAvailable() const;
     bool isNoteAvailable(NoteName noteName, NoteAddingMode addingMode) const;
@@ -53,7 +53,7 @@ private:
     std::string intervalTypeActionCode(IntervalType type) const;
     std::string measuresActionCode(int count) const;
 
-    async::Channel<std::vector<actions::ActionCode>> m_actionsReceiveAvailableChanged;
+    async::Channel<std::vector<actions::ActionCode> > m_actionsReceiveAvailableChanged;
 };
 }
 

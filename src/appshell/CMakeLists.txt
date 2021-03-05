@@ -63,6 +63,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/formatmenucontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/view/toolsmenucontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/toolsmenucontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/helpmenucontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/helpmenucontroller.h
     ${DOCKWINDOW_SRC}
     )
 

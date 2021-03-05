@@ -21,6 +21,8 @@
 
 #include <QObject>
 
+#include <optional>
+
 #include "modularity/ioc.h"
 #include "actions/actiontypes.h"
 #include "actions/iactionsregister.h"

@@ -31,7 +31,7 @@ class ToolsMenuController : public async::Asyncable
 public:
     ToolsMenuController();
 
-    async::Channel<std::vector<actions::ActionCode>> actionsAvailableChanged() const;
+    async::Channel<std::vector<actions::ActionCode> > actionsAvailableChanged() const;
 
     bool isVoiceAvailable(int voiceIndex1, int voiceIndex2) const;
     bool isSplitMeasureAvailable() const;
@@ -52,7 +52,7 @@ public:
     bool isFotomodeAvailable() const;
 
 private:
-    async::Channel<std::vector<actions::ActionCode>> m_actionsReceiveAvailableChanged;
+    async::Channel<std::vector<actions::ActionCode> > m_actionsReceiveAvailableChanged;
 };
 }
 

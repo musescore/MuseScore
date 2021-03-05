@@ -16,37 +16,38 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_APPSHELL_FORMATMENUCONTROLLER_H
-#define MU_APPSHELL_FORMATMENUCONTROLLER_H
+#ifndef MU_APPSHELL_HELPMENUCONTROLLER_H
+#define MU_APPSHELL_HELPMENUCONTROLLER_H
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "notation/inotationactionscontroller.h"
-#include "notation/notationtypes.h"
+#include "../iapplicationactioncontroller.h"
 
 namespace mu::appshell {
-class FormatMenuController : public async::Asyncable
+class HelpMenuController : public async::Asyncable
 {
-    INJECT(appshell, notation::INotationActionsController, controller)
+    INJECT(appshell, IApplicationActionController, controller)
 
 public:
-    FormatMenuController();
+    HelpMenuController();
 
     async::Channel<std::vector<actions::ActionCode> > actionsAvailableChanged() const;
 
-    bool isEditStyleAvailable() const;
-    bool isPageSettingsAvailable() const;
-    bool isStretchIncreaseAvailable() const;
-    bool isStretchDecreaseAvailable() const;
-    bool isResetAvailable(notation::ResettableValueType resettableValueType) const;
-    bool isLoadStyleAvailable() const;
-    bool isSaveStyleAvailable() const;
+    bool isShowToursAvailable() const;
+    bool isResetToursAvailable()const;
+    bool isOnlineHandbookAvailable() const;
+    bool isAboutAvailable() const;
+    bool isAboutQtAvailable() const;
+    bool isAboutMusicXMLAVailable() const;
+    bool isCheckUpdateAvailable() const;
+    bool isAskForHelpAvailable() const;
+    bool isBugReportAvailable() const;
+    bool isLeaveFeedbackAvailable() const;
+    bool isRevertToFactorySettingsAvailable() const;
 
 private:
-    std::string resetableValueTypeActionCode(notation::ResettableValueType valueType) const;
-
     async::Channel<std::vector<actions::ActionCode> > m_actionsReceiveAvailableChanged;
 };
 }
 
-#endif // MU_APPSHELL_FORMATMENUCONTROLLER_H
+#endif // MU_APPSHELL_HELPMENUCONTROLLER_H

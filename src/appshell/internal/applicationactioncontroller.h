@@ -46,7 +46,7 @@ public:
     ValCh<bool> isFullScreen() const override;
 
     bool actionAvailable(const actions::ActionCode& actionCode) const override;
-    async::Channel<std::vector<actions::ActionCode>> actionsAvailableChanged() const override;
+    async::Channel<std::vector<actions::ActionCode> > actionsAvailableChanged() const override;
 
 private:
     void setupConnections();
@@ -67,7 +67,7 @@ private:
     bool isNotationPage() const;
 
     async::Channel<bool> m_fullScreenChannel;
-    async::Channel<std::vector<actions::ActionCode>> m_actionsReceiveAvailableChanged;
+    async::Channel<std::vector<actions::ActionCode> > m_actionsReceiveAvailableChanged;
 };
 }
 
