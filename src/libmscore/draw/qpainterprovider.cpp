@@ -54,7 +54,11 @@ QPainter* QPainterProvider::qpainter() const
     return m_painter;
 }
 
-bool QPainterProvider::end()
+void QPainterProvider::begin(const std::string&)
+{
+}
+
+bool QPainterProvider::end(const std::string&)
 {
     return m_painter->end();
 }
@@ -90,11 +94,6 @@ void QPainterProvider::setFont(const QFont& f)
 const QFont& QPainterProvider::font() const
 {
     return m_painter->font();
-}
-
-void QPainterProvider::setPen(const QColor& color)
-{
-    m_painter->setPen(color);
 }
 
 void QPainterProvider::setPen(const QPen& pen)
@@ -150,11 +149,6 @@ void QPainterProvider::setTransform(const QTransform& transform, bool combine)
 const QTransform& QPainterProvider::transform() const
 {
     return m_painter->transform();
-}
-
-void QPainterProvider::setMatrix(const QMatrix& matrix, bool combine)
-{
-    m_painter->setMatrix(matrix, combine);
 }
 
 void QPainterProvider::scale(qreal sx, qreal sy)

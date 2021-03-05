@@ -1234,7 +1234,7 @@ void PaletteCellIconEngine::paintCell(mu::draw::Painter& p, const QRect& r, bool
 
 void PaletteCellIconEngine::paint(QPainter* qp, const QRect& r, QIcon::Mode mode, QIcon::State state)
 {
-    mu::draw::Painter p(mu::draw::QPainterProvider::make(qp));
+    mu::draw::Painter p(qp, "palettecell");
     p.save();   // so we can restore it later
     p.setAntialiasing(true);
     paintCell(p, r, mode == QIcon::Selected, state == QIcon::On);

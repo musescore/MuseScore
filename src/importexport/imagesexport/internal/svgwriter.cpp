@@ -78,7 +78,7 @@ mu::Ret SvgWriter::write(const notation::INotationPtr notation, IODevice& destin
     printer.setSize(QSize(width, height));
     printer.setViewBox(QRectF(0, 0, width, height));
 
-    mu::draw::Painter painter(mu::draw::QPainterProvider::make(&printer));
+    mu::draw::Painter painter(&printer, "svgwriter");
     painter.setAntialiasing(true);
     if (TRIM_MARGINS_SIZE >= 0) {
         painter.translate(-pageRect.topLeft());

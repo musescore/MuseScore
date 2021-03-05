@@ -49,7 +49,7 @@ mu::Ret PdfWriter::write(const notation::INotationPtr notation, IODevice& destin
     pdfWriter.setTitle(documentTitle(*score));
     pdfWriter.setPageMargins(QMarginsF());
 
-    mu::draw::Painter painter(mu::draw::QPainterProvider::make(&pdfWriter));
+    mu::draw::Painter painter(&pdfWriter, "pdfwriter");
     if (!painter.isActive()) {
         return false;
     }

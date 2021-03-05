@@ -173,7 +173,7 @@ void ScoreView::setScore(Ms::Score* s)
 
 void ScoreView::paint(QPainter* qp)
 {
-    mu::draw::Painter p(mu::draw::QPainterProvider::make(qp));
+    mu::draw::Painter p(qp, "plugins_scoreview");
     p.setAntialiasing(true);
     p.fillRect(QRect(0, 0, width(), height()), _color);
     if (!score) {

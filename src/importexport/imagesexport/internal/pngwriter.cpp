@@ -78,7 +78,7 @@ mu::Ret PngWriter::write(const notation::INotationPtr notation, IODevice& destin
     double scaling = CANVAS_DPI / Ms::DPI;
     Ms::MScore::pixelRatio = 1.0 / scaling;
 
-    mu::draw::Painter painter(mu::draw::QPainterProvider::make(&image));
+    mu::draw::Painter painter(&image, "pngwriter");
     painter.setAntialiasing(true);
     painter.scale(scaling, scaling);
     if (TRIM_MARGIN_SIZE >= 0) {

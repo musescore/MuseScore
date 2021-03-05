@@ -24,8 +24,6 @@ BufferedPaintProvider::BufferedPaintProvider()
 {
     //! NOTE Make data with default state
     m_buf.datas.push_back(DrawBuffer::Data());
-
-    m_isActive = true;
 }
 
 QPaintDevice* BufferedPaintProvider::device() const
@@ -38,7 +36,12 @@ QPainter* BufferedPaintProvider::qpainter() const
     return nullptr;
 }
 
-bool BufferedPaintProvider::end()
+void BufferedPaintProvider::begin(const std::string&)
+{
+    m_isActive = true;
+}
+
+bool BufferedPaintProvider::end(const std::string&)
 {
     m_isActive = false;
     return true;
@@ -58,7 +61,7 @@ DrawBuffer::State& BufferedPaintProvider::editableState()
 {
     DrawBuffer::Data& data = m_buf.datas.back();
     if (m_isCurDataEmpty) {
-        data.state;
+        return data.state;
     }
 
     {
@@ -94,11 +97,6 @@ void BufferedPaintProvider::setFont(const QFont& f)
 const QFont& BufferedPaintProvider::font() const
 {
     return currentState().font;
-}
-
-void BufferedPaintProvider::setPen(const QColor& color)
-{
-    editableState().pen.setColor(color);
 }
 
 void BufferedPaintProvider::setPen(const QPen& pen)
@@ -156,10 +154,6 @@ void BufferedPaintProvider::setTransform(const QTransform& transform, bool combi
 const QTransform& BufferedPaintProvider::transform() const
 {
     return currentState().transform;
-}
-
-void BufferedPaintProvider::setMatrix(const QMatrix& matrix, bool combine)
-{
 }
 
 void BufferedPaintProvider::scale(qreal sx, qreal sy)

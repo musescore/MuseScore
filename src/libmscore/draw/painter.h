@@ -19,6 +19,8 @@
 #ifndef MU_DRAW_PAINTER_H
 #define MU_DRAW_PAINTER_H
 
+#include <list>
+
 #include <QPoint>
 #include <QPointF>
 #include <QPen>
@@ -32,11 +34,22 @@
 class QPaintDevice;
 class QImage;
 
+#ifndef NO_QT_SUPPORT
+class QPainter;
+#endif
+
 namespace mu::draw {
 class Painter
 {
 public:
-    Painter(IPaintProviderPtr provider);
+    Painter(IPaintProviderPtr provider, const std::string& name);
+
+#ifndef NO_QT_SUPPORT
+    Painter(QPaintDevice* dp, const std::string& name);
+    Painter(QPainter* qp, const std::string& name, bool overship = false);
+#endif
+
+    ~Painter();
 
     QPaintDevice* device() const;
     QPainter* qpainter() const;
@@ -50,8 +63,8 @@ public:
     void setFont(const QFont& f);
     const QFont& font() const;
 
-    void setPen(const QColor& color);
     void setPen(const QPen& pen);
+    inline void setPen(const QColor& color);
     void setNoPen();
     const QPen& pen() const;
 
@@ -66,8 +79,6 @@ public:
 
     void setTransform(const QTransform& transform, bool combine = false);
     const QTransform& transform() const;
-
-    void setMatrix(const QMatrix& matrix, bool combine = false);
 
     void scale(qreal sx, qreal sy);
     void rotate(qreal a);
@@ -138,9 +149,19 @@ public:
     void drawPixmap(const QPointF& p, const QPixmap& pm);
     void drawTiledPixmap(const QRectF& rect, const QPixmap& pm, const QPointF& offset = QPointF());
 
+    //! NOTE Provider for tests.
+    //! We're not ready to use DI (ModuleIoC) here yet
+    static IPaintProviderPtr extended;
+
 private:
     IPaintProviderPtr m_provider;
+    std::string m_name;
 };
+
+inline void Painter::setPen(const QColor& color)
+{
+    setPen(QPen(color.isValid() ? color : QColor(Qt::black)));
+}
 
 inline void Painter::translate(qreal dx, qreal dy)
 {

@@ -905,20 +905,8 @@ void TextBase::drawTextWorkaround(mu::draw::Painter* p, QFont& f, const QPointF 
         qreal dx = p->worldTransform().dx();
         qreal dy = p->worldTransform().dy();
         // diagonal elements will now be changed to 1.0
-#if (defined (_MSCVER) || defined (_MSC_VER))
-#pragma warning (push)
-#pragma warning (disable: 4996)
-#else
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
-        // ToDo for Qt 5.15: setMatrix vs. setTransform() ??
-        p->setMatrix(QMatrix(1.0, 0.0, 0.0, 1.0, dx, dy));
-#if (defined (_MSCVER) || defined (_MSC_VER))
-#pragma warning (pop)
-#else
-#pragma GCC diagnostic pop
-#endif
+        p->setTransform(QTransform(1.0, 0.0, 0.0, 1.0, dx, dy));
+
         // correction factor for bold text drawing, due to the change of the diagonal elements
         qreal factor = 1.0 / mm;
         QFont fnew(f, p->device());
@@ -967,20 +955,7 @@ void TextBase::drawTextWorkaround(mu::draw::Painter* p, QFont& f, const QPointF 
             positions2.clear();
         }
         // Restore the QPainter to its former state
-#if (defined (_MSCVER) || defined (_MSC_VER))
-#pragma warning (push)
-#pragma warning (disable: 4996)
-#else
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
-        // ToDo for Qt 5.15: setMatrix vs. setTransform() ??
-        p->setMatrix(QMatrix(mm, 0.0, 0.0, mm, dx, dy));
-#if (defined (_MSCVER) || defined (_MSC_VER))
-#pragma warning (pop)
-#else
-#pragma GCC diagnostic pop
-#endif
+        p->setTransform(QTransform(mm, 0.0, 0.0, mm, dx, dy));
         p->restore();
     } else {
         p->setFont(f);

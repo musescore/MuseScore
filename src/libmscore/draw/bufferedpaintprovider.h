@@ -77,7 +77,8 @@ public:
     QPaintDevice* device() const override;
     QPainter* qpainter() const override;
 
-    bool end() override;
+    void begin(const std::string& name) override;
+    bool end(const std::string& name) override;
     bool isActive() const override;
 
     void setAntialiasing(bool arg) override;
@@ -86,7 +87,6 @@ public:
     void setFont(const QFont& f) override;
     const QFont& font() const override;
 
-    void setPen(const QColor& color) override;
     void setPen(const QPen& pen) override;
     void setNoPen() override;
     const QPen& pen() const override;
@@ -102,8 +102,6 @@ public:
 
     void setTransform(const QTransform& transform, bool combine = false) override;
     const QTransform& transform() const override;
-
-    void setMatrix(const QMatrix& matrix, bool combine = false) override;
 
     void scale(qreal sx, qreal sy) override;
     void rotate(qreal a) override;
