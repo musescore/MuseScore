@@ -80,12 +80,11 @@ public:
     // drawing functions
     virtual void fillPath(const QPainterPath& path, const QBrush& brush) = 0;
     virtual void drawPath(const QPainterPath& path) = 0;
+    virtual void strokePath(const QPainterPath& path, const QPen& pen) = 0;
 
     virtual void drawLines(const QLineF* lines, int lineCount) = 0;
-    virtual void drawLines(const QPointF* pointPairs, int lineCount) = 0;
 
     virtual void drawRects(const QRectF* rects, int rectCount) = 0;
-    virtual void drawRoundedRect(const QRectF& rect, qreal xRadius, qreal yRadius, Qt::SizeMode mode = Qt::AbsoluteSize) = 0;
 
     virtual void drawEllipse(const QRectF& r) = 0;
 
@@ -94,14 +93,12 @@ public:
     virtual void drawPolygon(const QPointF* points, int pointCount, Qt::FillRule fillRule = Qt::OddEvenFill) = 0;
     virtual void drawConvexPolygon(const QPointF* points, int pointCount) = 0;
 
-    virtual void drawArc(const QRectF& rect, int a, int alen) = 0;
-
     virtual void drawText(const QPointF& p, const QString& s) = 0;
-    virtual void drawText(const QRectF& r, int flags, const QString& text, QRectF* br = nullptr) = 0;
+    virtual void drawText(const QRectF& r, int flags, const QString& text) = 0;
 
     virtual void drawGlyphRun(const QPointF& position, const QGlyphRun& glyphRun) = 0;
 
-    virtual void fillRect(const QRectF& r, const QColor& color) = 0;
+    virtual void fillRect(const QRectF& r, const QBrush& brush) = 0;
 
     virtual void drawPixmap(const QPointF& p, const QPixmap& pm) = 0;
     virtual void drawTiledPixmap(const QRectF& rect, const QPixmap& pm, const QPointF& offset = QPointF()) = 0;

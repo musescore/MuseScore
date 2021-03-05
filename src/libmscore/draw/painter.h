@@ -84,6 +84,7 @@ public:
     // drawing functions
     void fillPath(const QPainterPath& path, const QBrush& brush);
     void drawPath(const QPainterPath& path);
+    void strokePath(const QPainterPath& path, const QPen& pen);
 
     inline void drawLine(const QLineF& line);
     inline void drawLine(const QPointF& p1, const QPointF& p2);
@@ -123,7 +124,7 @@ public:
     void drawArc(const QRectF& rect, int a, int alen);
 
     void drawText(const QPointF& p, const QString& s);
-    void drawText(const QRectF& r, int flags, const QString& text, QRectF* br = nullptr);
+    void drawText(const QRectF& r, int flags, const QString& text);
 
     //! NOTE Potentially dangerous method.
     //! Most of them are cut with fractional values.
@@ -132,7 +133,7 @@ public:
 
     void drawGlyphRun(const QPointF& position, const QGlyphRun& glyphRun);
 
-    void fillRect(const QRectF& r, const QColor& color);
+    void fillRect(const QRectF& r, const QBrush& brush);
 
     void drawPixmap(const QPointF& p, const QPixmap& pm);
     void drawTiledPixmap(const QRectF& rect, const QPixmap& pm, const QPointF& offset = QPointF());
