@@ -32,7 +32,7 @@ class EditMenuController : public async::Asyncable
 public:
     EditMenuController();
 
-    async::Channel<std::vector<actions::ActionCode>> actionsAvailableChanged() const;
+    async::Channel<std::vector<actions::ActionCode> > actionsAvailableChanged() const;
 
     bool isUndoAvailable() const;
     bool isRedoAvailable() const;
@@ -49,7 +49,7 @@ public:
 private:
     std::string pastingActionCode(notation::PastingType type) const;
 
-    async::Channel<std::vector<actions::ActionCode>> m_actionsReceiveAvailableChanged;
+    async::Channel<std::vector<actions::ActionCode> > m_actionsReceiveAvailableChanged;
 };
 }
 

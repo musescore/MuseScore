@@ -45,7 +45,7 @@ public:
     void init();
 
     bool actionAvailable(const actions::ActionCode& actionCode) const override;
-    async::Channel<std::vector<actions::ActionCode>> actionsAvailableChanged() const override;
+    async::Channel<std::vector<actions::ActionCode> > actionsAvailableChanged() const override;
 
 private:
     bool canReceiveAction(const actions::ActionCode& actionCode) const override;
@@ -157,7 +157,7 @@ private:
     bool canRedo() const;
     bool isNotationPage() const;
 
-    async::Channel<std::vector<actions::ActionCode>> m_actionsReceiveAvailableChanged;
+    async::Channel<std::vector<actions::ActionCode> > m_actionsReceiveAvailableChanged;
 };
 }
 

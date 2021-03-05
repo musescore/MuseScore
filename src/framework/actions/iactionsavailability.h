@@ -29,7 +29,7 @@ public:
     virtual ~IActionsAvailability() = default;
 
     virtual bool actionAvailable(const actions::ActionCode& actionCode) const = 0;
-    virtual async::Channel<std::vector<actions::ActionCode>> actionsAvailableChanged() const = 0;
+    virtual async::Channel<std::vector<actions::ActionCode> > actionsAvailableChanged() const = 0;
 };
 
 using IActionsAvailabilityPtr = std::shared_ptr<IActionsAvailability>;

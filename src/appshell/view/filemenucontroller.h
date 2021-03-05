@@ -34,7 +34,7 @@ class FileMenuController : public async::Asyncable
 public:
     FileMenuController();
 
-    async::Channel<std::vector<actions::ActionCode>> actionsAvailableChanged() const;
+    async::Channel<std::vector<actions::ActionCode> > actionsAvailableChanged() const;
 
     bool isNewAvailable() const;
     bool isOpenAvailable() const;
@@ -48,7 +48,7 @@ public:
     bool isQuitAvailable() const;
 
 private:
-    async::Channel<std::vector<actions::ActionCode>> m_actionsReceiveAvailableChanged;
+    async::Channel<std::vector<actions::ActionCode> > m_actionsReceiveAvailableChanged;
 };
 }
 

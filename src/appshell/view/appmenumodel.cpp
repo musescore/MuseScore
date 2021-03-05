@@ -28,6 +28,7 @@
 #include "viewmenucontroller.h"
 #include "formatmenucontroller.h"
 #include "toolsmenucontroller.h"
+#include "helpmenucontroller.h"
 
 using namespace mu::appshell;
 using namespace mu::uicomponents;
@@ -44,6 +45,7 @@ AppMenuModel::AppMenuModel(QObject* parent)
     m_viewMenuController = new ViewMenuController();
     m_formatMenuController = new FormatMenuController();
     m_toolsMenuController = new ToolsMenuController();
+    m_helpMenuController = new HelpMenuController();
 }
 
 AppMenuModel::~AppMenuModel()
@@ -54,6 +56,7 @@ AppMenuModel::~AppMenuModel()
     delete m_viewMenuController;
     delete m_formatMenuController;
     delete m_toolsMenuController;
+    delete m_helpMenuController;
 }
 
 void AppMenuModel::load()
@@ -126,6 +129,10 @@ void AppMenuModel::setupConnections()
     });
 
     m_toolsMenuController->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
+        updateItemsEnabled(actionCodes);
+    });
+
+    m_helpMenuController->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
         updateItemsEnabled(actionCodes);
     });
 
@@ -281,7 +288,7 @@ MenuItem AppMenuModel::addItem()
         makeMenu(trc("appshell", "&Lines"), linesItems()),
     };
 
-    return makeMenu(trc("appshell", "&Add"), addItems, scoreOpened());
+    return makeMenu(trc("appshell", "&Add"), addItems);
 }
 
 MenuItem AppMenuModel::formatItem()
@@ -355,29 +362,29 @@ MenuItem AppMenuModel::toolsItem()
 MenuItem AppMenuModel::helpItem()
 {
     MenuItemList toursItems {
-        makeAction("show-tours"), // need implement
-        makeAction("reset-tours") // need implement
+        makeAction("show-tours", [this]() { return m_helpMenuController->isShowToursAvailable(); }), // need implement
+        makeAction("reset-tours", [this]() { return m_helpMenuController->isResetToursAvailable(); }) // need implement
     };
 
     MenuItemList helpItems {
-        makeAction("online-handbook"),
+        makeAction("online-handbook", [this]() { return m_helpMenuController->isOnlineHandbookAvailable(); }),
         makeMenu(trc("appshell", "&Tours"), toursItems),
         makeSeparator(),
-        makeAction("about"), // need implement
-        makeAction("about-qt"),
-        makeAction("about-musicxml"), // need implement
+        makeAction("about", [this]() { return m_helpMenuController->isAboutAvailable(); }), // need implement
+        makeAction("about-qt", [this]() { return m_helpMenuController->isAboutQtAvailable(); }),
+        makeAction("about-musicxml", [this]() { return m_helpMenuController->isAboutMusicXMLAVailable(); }), // need implement
     };
 
     if (configuration()->isAppUpdatable()) {
-        helpItems << makeAction("check-update"); // need implement
+        helpItems << makeAction("check-update", [this]() { return m_helpMenuController->isCheckUpdateAvailable(); }); // need implement
     }
 
     helpItems << makeSeparator()
-              << makeAction("ask-help")
-              << makeAction("report-bug")
-              << makeAction("leave-feedback")
+              << makeAction("ask-help", [this]() { return m_helpMenuController->isAskForHelpAvailable(); })
+              << makeAction("report-bug", [this]() { return m_helpMenuController->isBugReportAvailable(); })
+              << makeAction("leave-feedback", [this]() { return m_helpMenuController->isLeaveFeedbackAvailable(); })
               << makeSeparator()
-              << makeAction("revert-factory"); // need implement
+              << makeAction("revert-factory", [this]() { return m_helpMenuController->isRevertToFactorySettingsAvailable(); }); // need implement
 
     return makeMenu(trc("appshell", "&Help"), helpItems);
 }

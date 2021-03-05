@@ -39,7 +39,7 @@ class ViewMenuController : public async::Asyncable
 public:
     ViewMenuController();
 
-    async::Channel<std::vector<actions::ActionCode>> actionsAvailableChanged() const;
+    async::Channel<std::vector<actions::ActionCode> > actionsAvailableChanged() const;
 
     bool isPanelAvailable(PanelType panelType) const;
     bool isMasterPaletteAvailable() const;
@@ -52,7 +52,7 @@ public:
 private:
     std::string scoreConfigActionCode(notation::ScoreConfigType configType) const;
 
-    async::Channel<std::vector<actions::ActionCode>> m_actionsReceiveAvailableChanged;
+    async::Channel<std::vector<actions::ActionCode> > m_actionsReceiveAvailableChanged;
 };
 }
 
