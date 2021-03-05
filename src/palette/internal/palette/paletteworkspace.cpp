@@ -723,10 +723,9 @@ AbstractPaletteController* PaletteWorkspace::getCustomElementsPaletteController(
 {
     if (!customElementsPaletteController) {
         customElementsPaletteController = new UserPaletteController(customElementsPaletteModel(), userPalette, this);
-        customElementsPaletteController->setVisible(false);
         customElementsPaletteController->setCustom(true);
     }
-//             customElementsPaletteController = new CustomPaletteController(customElementsPaletteModel(), this, this);
+
     return customElementsPaletteController;
 }
 
