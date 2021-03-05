@@ -56,7 +56,7 @@ void SymbolDialog::createSymbols()
         SymId id     = Sym::name2id(name);
         if (search->text().isEmpty()
             || Sym::id2userName(id).contains(search->text(), Qt::CaseInsensitive)) {
-            std::shared_ptr<Symbol> s = std::make_shared<Symbol>(gscore);
+            auto s = makeElement<Symbol>(gscore);
             s->setSym(SymId(id), f);
             sp->append(s, Sym::id2userName(SymId(id)));
         }

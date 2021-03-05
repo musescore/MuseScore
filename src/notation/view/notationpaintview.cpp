@@ -786,7 +786,7 @@ void NotationPaintView::movePlaybackCursor(uint32_t tick)
     TRACEFUNC;
 
     QRect cursorRect = notationPlayback()->playbackCursorRectByTick(tick);
-    m_playbackCursor->move(cursorRect);
+    m_playbackCursor->setRect(cursorRect);
 
     if (configuration()->isAutomaticallyPanEnabled()) {
         adjustCanvasPosition(cursorRect);

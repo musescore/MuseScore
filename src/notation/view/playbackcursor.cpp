@@ -18,8 +18,6 @@
 //=============================================================================
 #include "playbackcursor.h"
 
-#include <QPainter>
-
 using namespace mu::notation;
 
 void PlaybackCursor::paint(mu::draw::Painter* painter)
@@ -31,14 +29,14 @@ void PlaybackCursor::paint(mu::draw::Painter* painter)
     painter->fillRect(m_rect, color());
 }
 
-void PlaybackCursor::move(const QRect& rect)
-{
-    m_rect = rect;
-}
-
 const QRect& PlaybackCursor::rect() const
 {
     return m_rect;
+}
+
+void PlaybackCursor::setRect(const QRect& rect)
+{
+    m_rect = rect;
 }
 
 void PlaybackCursor::setVisible(bool arg)

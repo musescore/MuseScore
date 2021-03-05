@@ -18,7 +18,6 @@
 //=============================================================================
 #include "notation.h"
 
-#include <QPainter>
 #include <QGuiApplication>
 #include <QScreen>
 
