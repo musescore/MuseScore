@@ -24,9 +24,7 @@
 #include "modularity/ioc.h"
 
 #include "async/asyncable.h"
-#include "actions/iactionsregister.h"
 #include "actions/iactionsdispatcher.h"
-#include "shortcuts/ishortcutsregister.h"
 #include "uicomponents/uicomponentstypes.h"
 #include "context/iglobalcontext.h"
 #include "workspace/iworkspacemanager.h"
@@ -37,19 +35,19 @@
 #include "iinteractive.h"
 #include "inotationpagestate.h"
 
+#include "uicomponents/view/abstractmenumodel.h"
+
 namespace mu::notation {
 class AddMenuController;
 }
 
 namespace mu::appshell {
 class FileMenuController;
-class AppMenuModel : public QObject, public async::Asyncable
+class AppMenuModel : public uicomponents::AbstractMenuModel, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(appshell, actions::IActionsRegister, actionsRegister)
     INJECT(appshell, actions::IActionsDispatcher, actionsDispatcher)
-    INJECT(appshell, shortcuts::IShortcutsRegister, shortcutsRegister)
     INJECT(appshell, context::IGlobalContext, globalContext)
     INJECT(appshell, workspace::IWorkspaceManager, workspacesManager)
     INJECT(appshell, palette::IPaletteActionsController, paletteController)
@@ -59,18 +57,11 @@ class AppMenuModel : public QObject, public async::Asyncable
     INJECT(appshell, framework::IInteractive, interactive)
     INJECT(appshell, INotationPageState, notationPageState)
 
-    Q_PROPERTY(QVariantList items READ items NOTIFY itemsChanged)
-
 public:
     explicit AppMenuModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void load();
     Q_INVOKABLE void handleAction(const QString& actionCodeStr, int actionIndex);
-
-    QVariantList items();
-
-signals:
-    void itemsChanged();
 
 private:
     notation::IMasterNotationPtr currentMasterNotation() const;
@@ -80,10 +71,6 @@ private:
 
     void setupConnections();
 
-    uicomponents::MenuItem& item(uicomponents::MenuItemList& items, const actions::ActionCode& actionCode);
-    uicomponents::MenuItem& itemByIndex(const actions::ActionCode& menuActionCode, int actionIndex);
-    uicomponents::MenuItem& menu(uicomponents::MenuItemList& items, const actions::ActionCode& subitemsActionCode);
-
     uicomponents::MenuItem fileItem();
     uicomponents::MenuItem editItem();
     uicomponents::MenuItem viewItem();
@@ -92,22 +79,16 @@ private:
     uicomponents::MenuItem toolsItem();
     uicomponents::MenuItem helpItem();
 
-    uicomponents::MenuItemList recentScores() const;
-    uicomponents::MenuItemList notesItems() const;
-    uicomponents::MenuItemList intervalsItems() const;
-    uicomponents::MenuItemList tupletsItems() const;
-    uicomponents::MenuItemList measuresItems() const;
-    uicomponents::MenuItemList framesItems() const;
-    uicomponents::MenuItemList textItems() const;
-    uicomponents::MenuItemList linesItems() const;
-    uicomponents::MenuItemList toolbarsItems() const;
-    uicomponents::MenuItemList workspacesItems() const;
-
-    uicomponents::MenuItem makeMenu(const std::string& title, const uicomponents::MenuItemList& actions, bool enabled = true,
-                                    const actions::ActionCode& menuActionCode = "");
-    uicomponents::MenuItem makeAction(const actions::ActionCode& actionCode, bool enabled = true) const;
-    uicomponents::MenuItem makeAction(const actions::ActionCode& actionCode, bool enabled, bool checked) const;
-    uicomponents::MenuItem makeSeparator() const;
+    uicomponents::MenuItemList recentScores();
+    uicomponents::MenuItemList notesItems();
+    uicomponents::MenuItemList intervalsItems();
+    uicomponents::MenuItemList tupletsItems();
+    uicomponents::MenuItemList measuresItems();
+    uicomponents::MenuItemList framesItems();
+    uicomponents::MenuItemList textItems();
+    uicomponents::MenuItemList linesItems();
+    uicomponents::MenuItemList toolbarsItems();
+    uicomponents::MenuItemList workspacesItems();
 
     bool needSaveScore() const;
     bool scoreOpened() const;
@@ -120,8 +101,6 @@ private:
     bool isNotationPage() const;
 
     notation::ScoreConfig scoreConfig() const;
-
-    uicomponents::MenuItemList m_items;
 
     notation::AddMenuController* m_addMenuController = nullptr;
     FileMenuController* m_fileMenuController = nullptr;

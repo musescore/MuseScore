@@ -45,6 +45,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/qmllistproperty.h
     ${CMAKE_CURRENT_LIST_DIR}/view/popupview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/popupview.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/abstractmenumodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/abstractmenumodel.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

@@ -22,7 +22,7 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "userscores/ifilescorecontroller.h"
-#include "notationtypes.h"
+#include "notation/notationtypes.h"
 
 namespace mu::appshell {
 class FileMenuController : public async::Asyncable
