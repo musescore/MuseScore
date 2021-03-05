@@ -26,6 +26,7 @@
 #include "filemenucontroller.h"
 #include "editmenucontroller.h"
 #include "viewmenucontroller.h"
+#include "formatmenucontroller.h"
 
 using namespace mu::appshell;
 using namespace mu::uicomponents;
@@ -40,6 +41,7 @@ AppMenuModel::AppMenuModel(QObject* parent)
     m_fileMenuController = new FileMenuController();
     m_editMenuController = new EditMenuController();
     m_viewMenuController = new ViewMenuController();
+    m_formatMenuController = new FormatMenuController();
 }
 
 AppMenuModel::~AppMenuModel()
@@ -48,6 +50,7 @@ AppMenuModel::~AppMenuModel()
     delete m_fileMenuController;
     delete m_editMenuController;
     delete m_viewMenuController;
+    delete m_formatMenuController;
 }
 
 void AppMenuModel::load()
@@ -112,6 +115,10 @@ void AppMenuModel::setupConnections()
     });
 
     m_viewMenuController->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
+        updateItemsEnabled(actionCodes);
+    });
+
+    m_formatMenuController->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
         updateItemsEnabled(actionCodes);
     });
 
@@ -273,26 +280,27 @@ MenuItem AppMenuModel::addItem()
 MenuItem AppMenuModel::formatItem()
 {
     MenuItemList stretchItems {
-        makeAction("stretch+", selectedRangeOnScore()),
-        makeAction("stretch-", selectedRangeOnScore()),
-        makeAction("reset-stretch", selectedRangeOnScore())
+        makeAction("stretch+", [this]() { return m_formatMenuController->isStretchIncreaseAvailable(); }),
+        makeAction("stretch-", [this]() { return m_formatMenuController->isStretchDecreaseAvailable(); }),
+        makeAction("reset-stretch", [this]() { return m_formatMenuController->isResetAvailable(ResettableValueType::Stretch); })
     };
 
     MenuItemList formatItems {
-        makeAction("edit-style", scoreOpened()),
-        makeAction("page-settings", scoreOpened()), // need implement
+        makeAction("edit-style", [this]() { return m_formatMenuController->isEditStyleAvailable(); }),
+        makeAction("page-settings", [this]() { return m_formatMenuController->isPageSettingsAvailable(); }), // need implement
         makeSeparator(),
         makeMenu(trc("appshell", "&Stretch"), stretchItems),
         makeSeparator(),
-        makeAction("reset-text-style-overrides", scoreOpened()),
-        makeAction("reset-beammode", !hasSelectionOnScore() || selectedRangeOnScore()),
-        makeAction("reset", hasSelectionOnScore()),
+        makeAction("reset-text-style-overrides",
+                   [this]() { return m_formatMenuController->isResetAvailable(ResettableValueType::TextStyleOverriders); }),
+        makeAction("reset-beammode", [this]() { return m_formatMenuController->isResetAvailable(ResettableValueType::BeamMode); }),
+        makeAction("reset", [this]() { return m_formatMenuController->isResetAvailable(ResettableValueType::ShapesAndPosition); }),
         makeSeparator(),
-        makeAction("load-style", scoreOpened()), // need implement
-        makeAction("save-style", scoreOpened()) // need implement
+        makeAction("load-style", [this]() { return m_formatMenuController->isLoadStyleAvailable(); }), // need implement
+        makeAction("save-style", [this]() { return m_formatMenuController->isSaveStyleAvailable(); }) // need implement
     };
 
-    return makeMenu(trc("appshell", "F&ormat"), formatItems, scoreOpened());
+    return makeMenu(trc("appshell", "F&ormat"), formatItems);
 }
 
 MenuItem AppMenuModel::toolsItem()

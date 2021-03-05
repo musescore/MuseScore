@@ -16,40 +16,37 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_APPSHELL_FILEMENUCONTROLLER_H
-#define MU_APPSHELL_FILEMENUCONTROLLER_H
+#ifndef MU_APPSHELL_FORMATMENUCONTROLLER_H
+#define MU_APPSHELL_FORMATMENUCONTROLLER_H
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "userscores/ifilescorecontroller.h"
 #include "notation/inotationactionscontroller.h"
 #include "notation/notationtypes.h"
 
 namespace mu::appshell {
-class FileMenuController : public async::Asyncable
+class FormatMenuController : public async::Asyncable
 {
-    INJECT(appshell, userscores::IFileScoreController, fileController)
-    INJECT(appshell, notation::INotationActionsController, notationController)
+    INJECT(appshell, notation::INotationActionsController, controller)
 
 public:
-    FileMenuController();
+    FormatMenuController();
 
     async::Channel<std::vector<actions::ActionCode>> actionsAvailableChanged() const;
 
-    bool isNewAvailable() const;
-    bool isOpenAvailable() const;
-    bool isCloseAvailable() const;
-    bool isSaveAvailable(notation::SaveMode saveMode) const;
-    bool isImportAvailable() const;
-    bool isExportAvailable() const;
-    bool isEditInfoAvailable() const;
-    bool isPartsAvailable() const;
-    bool isPrintAvailable() const;
-    bool isQuitAvailable() const;
+    bool isEditStyleAvailable() const;
+    bool isPageSettingsAvailable() const;
+    bool isStretchIncreaseAvailable() const;
+    bool isStretchDecreaseAvailable() const;
+    bool isResetAvailable(notation::ResettableValueType resettableValueType) const;
+    bool isLoadStyleAvailable() const;
+    bool isSaveStyleAvailable() const;
 
 private:
+    std::string resetableValueTypeActionCode(notation::ResettableValueType valueType) const;
+
     async::Channel<std::vector<actions::ActionCode>> m_actionsReceiveAvailableChanged;
 };
 }
 
-#endif // MU_APPSHELL_FILEMENUCONTROLLER_H
+#endif // MU_APPSHELL_FORMATMENUCONTROLLER_H

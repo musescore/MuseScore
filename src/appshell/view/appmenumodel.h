@@ -45,6 +45,7 @@ namespace mu::appshell {
 class FileMenuController;
 class EditMenuController;
 class ViewMenuController;
+class FormatMenuController;
 class AppMenuModel : public uicomponents::AbstractMenuModel, public async::Asyncable
 {
     Q_OBJECT
@@ -111,6 +112,7 @@ private:
     FileMenuController* m_fileMenuController = nullptr;
     EditMenuController* m_editMenuController = nullptr;
     ViewMenuController* m_viewMenuController = nullptr;
+    FormatMenuController* m_formatMenuController = nullptr;
 };
 }
 
