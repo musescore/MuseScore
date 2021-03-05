@@ -46,6 +46,7 @@ class FileMenuController;
 class EditMenuController;
 class ViewMenuController;
 class FormatMenuController;
+class ToolsMenuController;
 class AppMenuModel : public uicomponents::AbstractMenuModel, public async::Asyncable
 {
     Q_OBJECT
@@ -113,6 +114,7 @@ private:
     EditMenuController* m_editMenuController = nullptr;
     ViewMenuController* m_viewMenuController = nullptr;
     FormatMenuController* m_formatMenuController = nullptr;
+    ToolsMenuController* m_toolsMenuController = nullptr;
 };
 }
 

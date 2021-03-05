@@ -27,6 +27,7 @@
 #include "editmenucontroller.h"
 #include "viewmenucontroller.h"
 #include "formatmenucontroller.h"
+#include "toolsmenucontroller.h"
 
 using namespace mu::appshell;
 using namespace mu::uicomponents;
@@ -42,6 +43,7 @@ AppMenuModel::AppMenuModel(QObject* parent)
     m_editMenuController = new EditMenuController();
     m_viewMenuController = new ViewMenuController();
     m_formatMenuController = new FormatMenuController();
+    m_toolsMenuController = new ToolsMenuController();
 }
 
 AppMenuModel::~AppMenuModel()
@@ -51,6 +53,7 @@ AppMenuModel::~AppMenuModel()
     delete m_editMenuController;
     delete m_viewMenuController;
     delete m_formatMenuController;
+    delete m_toolsMenuController;
 }
 
 void AppMenuModel::load()
@@ -119,6 +122,10 @@ void AppMenuModel::setupConnections()
     });
 
     m_formatMenuController->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
+        updateItemsEnabled(actionCodes);
+    });
+
+    m_toolsMenuController->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
         updateItemsEnabled(actionCodes);
     });
 
@@ -306,43 +313,43 @@ MenuItem AppMenuModel::formatItem()
 MenuItem AppMenuModel::toolsItem()
 {
     MenuItemList voicesItems {
-        makeAction("voice-x12"),
-        makeAction("voice-x13"),
-        makeAction("voice-x14"),
-        makeAction("voice-x23"),
-        makeAction("voice-x24"),
-        makeAction("voice-x34")
+        makeAction("voice-x12", [this]() { return m_toolsMenuController->isVoiceAvailable(1, 2); }),
+        makeAction("voice-x13", [this]() { return m_toolsMenuController->isVoiceAvailable(1, 3); }),
+        makeAction("voice-x14", [this]() { return m_toolsMenuController->isVoiceAvailable(1, 4); }),
+        makeAction("voice-x23", [this]() { return m_toolsMenuController->isVoiceAvailable(2, 3); }),
+        makeAction("voice-x24", [this]() { return m_toolsMenuController->isVoiceAvailable(2, 4); }),
+        makeAction("voice-x34", [this]() { return m_toolsMenuController->isVoiceAvailable(3, 4); })
     };
 
     MenuItemList measuresItems {
-        makeAction("split-measure"),
-        makeAction("join-measures"),
+        makeAction("split-measure", [this]() { return m_toolsMenuController->isSplitMeasureAvailable(); }),
+        makeAction("join-measures", [this]() { return m_toolsMenuController->isJoinMeasuresAvailable(); }),
     };
 
     MenuItemList toolsItems {
-        makeAction("transpose"),
+        makeAction("transpose", [this]() { return m_toolsMenuController->isTransposeAvailable(); }),
         makeSeparator(),
-        makeAction("explode"),
-        makeAction("implode"),
-        makeAction("realize-chord-symbols"),
+        makeAction("explode", [this]() { return m_toolsMenuController->isExplodeAvailable(); }),
+        makeAction("implode", [this]() { return m_toolsMenuController->isImplodeAvailable(); }),
+        makeAction("realize-chord-symbols", [this]() { return m_toolsMenuController->isRealizeSelectedChordSymbolsAvailable(); }),
         makeMenu(trc("appshell", "&Voices"), voicesItems),
         makeMenu(trc("appshell", "&Measures"), measuresItems),
-        makeAction("time-delete"),
+        makeAction("time-delete", [this]() { return m_toolsMenuController->isRemoveSelectedRangeAvailable(); }),
         makeSeparator(),
-        makeAction("slash-fill"),
-        makeAction("slash-rhythm"),
+        makeAction("slash-fill", [this]() { return m_toolsMenuController->isFillSelectionWithSlashesAvailable(); }),
+        makeAction("slash-rhythm", [this]() { return m_toolsMenuController->isReplaceSelectedNotesWithSlashesAvailable(); }),
         makeSeparator(),
-        makeAction("pitch-spell"),
-        makeAction("reset-groupings"),
-        makeAction("resequence-rehearsal-marks"),
-        makeAction("unroll-repeats"),
+        makeAction("pitch-spell", [this]() { return m_toolsMenuController->isSpellPitchesAvailable(); }),
+        makeAction("reset-groupings", [this]() { return m_toolsMenuController->isRegroupNotesAndRestsAvailable(); }),
+        makeAction("resequence-rehearsal-marks", [this]() { return m_toolsMenuController->isResequenceRehearsalMarksAvailable(); }),
+        makeAction("unroll-repeats", [this]() { return m_toolsMenuController->isUnrollRepeatsAvailable(); }),
         makeSeparator(),
-        makeAction("copy-lyrics-to-clipboard"),
-        makeAction("fotomode"), // need implement
-        makeAction("del-empty-measures"),
+        makeAction("copy-lyrics-to-clipboard", [this]() { return m_toolsMenuController->isCopyLyricsAvailable(); }),
+        makeAction("fotomode", [this]() { return m_toolsMenuController->isFotomodeAvailable(); }), // need implement
+        makeAction("del-empty-measures", [this]() { return m_toolsMenuController->isRemoveEmptyTrailingMeasuresAvailable(); }),
     };
 
-    return makeMenu(trc("appshell", "&Tools"), toolsItems, scoreOpened());
+    return makeMenu(trc("appshell", "&Tools"), toolsItems);
 }
 
 MenuItem AppMenuModel::helpItem()
