@@ -137,7 +137,10 @@ void Score::updateCapo()
       if (!fm)
             return;
       for (Segment* s = fm->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
-            for (const Element* e : s->annotations()) {
+            for (Element* e : s->annotations()) {
+                  if (e->isHarmony()) {
+                        toHarmony(e)->realizedHarmony().setDirty(true);
+                        }
                   if (!e->isStaffTextBase())
                         continue;
                   const StaffTextBase* st = toStaffTextBase(e);
