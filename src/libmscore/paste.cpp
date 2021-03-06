@@ -1173,9 +1173,11 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
             EditData ddata(view);
             ddata.view       = view;
             ddata.dropElement    = nel;
-            target->drop(ddata);
-            if (_selection.element()) {
-                addRefresh(_selection.element()->abbox());
+            if (target->acceptDrop(ddata)) {
+                target->drop(ddata);
+                if (_selection.element()) {
+                    addRefresh(_selection.element()->abbox());
+                }
             }
         }
         delete image;
