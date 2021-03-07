@@ -673,6 +673,10 @@ void ScoreView::moveControlCursor(const Fraction& tick)
       _controlCursor->setColor(c);
       _controlCursor->setTick(tick);
 
+      if (_timeElapsed < 0) {
+            _timeElapsed = 0;
+            }
+
       int realX = _cursor->rect().x();
       int controlX = _controlCursor->rect().x();
       double distance = realX - controlX;
@@ -719,8 +723,8 @@ void ScoreView::moveControlCursor(const Fraction& tick)
             _timeElapsed += addition;
             }
       else { // reposition the cursor when distance is too great
-            double curOffset = _cursor->rect().x() - score()->firstMeasure()->pos().x();
-            double length = score()->lastMeasure()->pos().x() - score()->firstMeasure()->pos().x();
+            double curOffset = _cursor->rect().x() - score()->firstMeasureMM()->pos().x();
+            double length = score()->lastMeasureMM()->pos().x() - score()->firstMeasureMM()->pos().x();
             _timeElapsed = (curOffset / length) * score()->durationWithoutRepeats() * 1000;
             _controlModifier = _panSettings.controlModifierBase;
             }
@@ -744,7 +748,7 @@ void ScoreView::moveControlCursor(const Fraction& tick)
 
 
       // Calculate the position of the controlCursor based on the timeElapsed (which is not the real time that has passed)
-      qreal x = score()->firstMeasure()->pos().x() + (score()->lastMeasure()->pos().x() - score()->firstMeasure()->pos().x()) * (_timeElapsed / (score()->durationWithoutRepeats() * 1000));
+      qreal x = score()->firstMeasureMM()->pos().x() + (score()->lastMeasureMM()->pos().x() - score()->firstMeasureMM()->pos().x()) * (_timeElapsed / (score()->durationWithoutRepeats() * 1000));
       x -= score()->spatium();
       _controlCursor->setRect(QRectF(x, _cursor->rect().y(), _cursor->rect().width(), _cursor->rect().height()));
       update(_matrix.mapRect(_controlCursor->rect()).toRect().adjusted(-1,-1,1,1));
