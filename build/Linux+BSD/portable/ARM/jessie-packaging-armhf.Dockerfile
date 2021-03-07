@@ -8,8 +8,8 @@ RUN apt-get update
 
 # need to be able to use https for wget
 RUN apt-get --no-install-recommends -y install \
-      ca-certificates \
-      wget
+  ca-certificates \
+  wget
 
 # get prebuilt AppImageKit
 RUN wget "https://bintray.com/artifact/download/ericfont/prebuilt-AppImageKit/AppImageKit-5_built-in-armv7hf-jessie.tar.gz" \
@@ -19,15 +19,15 @@ RUN wget "https://bintray.com/artifact/download/ericfont/prebuilt-AppImageKit/Ap
 
 # add AppImageKit dependencies
 RUN apt-get --no-install-recommends -y install \
-      libfuse-dev \
-      libglib2.0-dev \
-      cmake \
-      git \
-      libc6-dev \
-      binutils \
-      fuse \
-      python \
-      && apt-get clean \
-      && rm -rf /var/lib/apt/lists/*
+  libfuse-dev \
+  libglib2.0-dev \
+  cmake \
+  git \
+  libc6-dev \
+  binutils \
+  fuse \
+  python \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
 
 RUN [ "cross-build-end" ]
