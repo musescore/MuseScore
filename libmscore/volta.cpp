@@ -149,6 +149,8 @@ void Volta::read(XmlReader& e)
                         _endings.append(i);
                         }
                   }
+            else if (readStyledProperty(e, tag))
+                  ;
             else if (!readProperties(e))
                   e.unknown();
             }

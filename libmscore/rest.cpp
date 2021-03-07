@@ -968,6 +968,7 @@ void Rest::write(XmlWriter& xml) const
             return;
       writeBeam(xml);
       xml.stag(this);
+      writeStyledProperties(xml);
       ChordRest::writeProperties(xml);
       el().write(xml);
       bool write_dots = false;
@@ -1011,6 +1012,8 @@ void Rest::read(XmlReader& e)
                   dot->read(e);
                   add(dot);
                   }
+            else if (readStyledProperty(e, tag))
+                  ;
             else if (ChordRest::readProperties(e))
                   ;
             else
