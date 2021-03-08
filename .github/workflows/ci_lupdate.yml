@@ -9,7 +9,7 @@ on:
       publish:
         description: 'Publish to Transifex: on - publish'
         required: false
-        default: 'off'
+        default: 'on'
 jobs:
   lupdate:
     runs-on: macos-10.15

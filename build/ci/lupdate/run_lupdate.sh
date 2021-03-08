@@ -6,7 +6,7 @@ source $ENV_FILE
 # Translation routines
 # update translation on transifex
 # remove obsolete strings
-OBSOLETE=-no-obsolete # '-noobsolete' in older QT versions
+#OBSOLETE=-no-obsolete # '-noobsolete' in older QT versions
 
 ./build/gen-qt-projectfile . > mscore.pro
 lupdate ${OBSOLETE} mscore.pro
