@@ -25,11 +25,11 @@ using namespace mu::appshell;
 void NotationPageState::init()
 {
     configuration()->isNotationNavigatorVisible().ch.onReceive(this, [this](bool) {
-        m_panelVisibleChanged.send(PanelType::NotationNavigator);
+        m_panelsVisibleChanged.send({ PanelType::NotationNavigator });
     });
 
     configuration()->isNotationStatusBarVisible().ch.onReceive(this, [this](bool) {
-        m_panelVisibleChanged.send(PanelType::NotationStatusBar);
+        m_panelsVisibleChanged.send({ PanelType::NotationStatusBar });
     });
 }
 
@@ -56,6 +56,22 @@ bool NotationPageState::isPanelVisible(PanelType type) const
     return false;
 }
 
+void NotationPageState::setIsPanelsVisible(const std::map<PanelType, bool>& panelsVisible)
+{
+    std::vector<PanelType> changedTypes;
+    for (const auto& type: panelsVisible) {
+        setIsPanelVisible(type.first, type.second);
+        changedTypes.push_back(type.first);
+    }
+
+    m_panelsVisibleChanged.send(changedTypes);
+}
+
+mu::async::Channel<std::vector<PanelType> > NotationPageState::panelsVisibleChanged() const
+{
+    return m_panelsVisibleChanged;
+}
+
 void NotationPageState::setIsPanelVisible(PanelType type, bool visible)
 {
     switch (type) {
@@ -67,7 +83,6 @@ void NotationPageState::setIsPanelVisible(PanelType type, bool visible)
     case PanelType::UndoRedoToolBar:
     case PanelType::PlaybackToolBar: {
         m_panelVisibleMap[type] = visible;
-        m_panelVisibleChanged.send(type);
         break;
     }
     case PanelType::NotationNavigator: {
@@ -83,9 +98,4 @@ void NotationPageState::setIsPanelVisible(PanelType type, bool visible)
         break;
     }
     }
-}
-
-mu::async::Channel<PanelType> NotationPageState::panelVisibleChanged() const
-{
-    return m_panelVisibleChanged;
 }
