@@ -20,6 +20,7 @@
 #define MU_DRAW_QPAINTERPROVIDER_H
 
 #include "ipaintprovider.h"
+#include "drawobjectslogger.h"
 
 class QPainter;
 class QImage;
@@ -40,6 +41,9 @@ public:
     void begin(const std::string& name) override;
     bool end(const std::string& name) override;
     bool isActive() const override;
+
+    void beginObject(const std::string& name, const QPointF& pagePos) override;
+    void endObject(const std::string& name, const QPointF& pagePos) override;
 
     void setAntialiasing(bool arg) override;
     void setCompositionMode(CompositionMode mode) override;
@@ -102,6 +106,7 @@ public:
 private:
     QPainter* m_painter = nullptr;
     bool m_overship = false;
+    DrawObjectsLogger m_drawObjectsLogger;
 };
 }
 

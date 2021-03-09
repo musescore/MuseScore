@@ -33,8 +33,9 @@ NoteDot::NoteDot(Score* s)
 //   NoteDot::draw
 //---------------------------------------------------------
 
-void NoteDot::draw(mu::draw::Painter* p) const
+void NoteDot::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
     if (note() && note()->dotsHidden()) {     // don't draw dot if note is hidden
         return;
     }
@@ -45,8 +46,8 @@ void NoteDot::draw(mu::draw::Painter* p) const
     if (!staff()->isTabStaff(tick)
         || (n && staff()->staffType(tick)->stemThrough())
         || (!n && staff()->staffType(tick)->showRests())) {
-        p->setPen(curColor());
-        drawSymbol(SymId::augmentationDot, p);
+        painter->setPen(curColor());
+        drawSymbol(SymId::augmentationDot, painter);
     }
 }
 

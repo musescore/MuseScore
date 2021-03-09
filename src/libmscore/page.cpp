@@ -100,6 +100,7 @@ void Page::appendSystem(System* s)
 
 void Page::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
     if (score()->layoutMode() != LayoutMode::PAGE) {
         return;
     }

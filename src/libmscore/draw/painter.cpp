@@ -60,7 +60,6 @@ Painter::Painter(QPainter* qp, const std::string& name, bool overship)
 
 Painter::~Painter()
 {
-    end();
 }
 
 QPaintDevice* Painter::device() const
@@ -75,15 +74,32 @@ QPainter* Painter::qpainter() const
 
 bool Painter::end()
 {
-    return m_provider->end(m_name);
+    bool ok = m_provider->end(m_name);
     if (extended) {
         extended->end(m_name);
     }
+    return ok;
 }
 
 bool Painter::isActive() const
 {
     return m_provider->isActive();
+}
+
+void Painter::beginObject(const std::string& name, const QPointF& pagePos)
+{
+    m_provider->beginObject(name, pagePos);
+    if (extended) {
+        extended->beginObject(name, pagePos);
+    }
+}
+
+void Painter::endObject(const std::string& name, const QPointF& pagePos)
+{
+    m_provider->endObject(name, pagePos);
+    if (extended) {
+        extended->endObject(name, pagePos);
+    }
 }
 
 void Painter::setAntialiasing(bool arg)

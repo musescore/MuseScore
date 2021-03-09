@@ -84,7 +84,7 @@ public:
     qreal headWidth() const;
 
     // re-implemented virtual functions
-    void      draw(mu::draw::Painter*) const override;
+    void      draw(mu::draw::Painter* painter) const override;
     void      layout() override;
     QPointF   pagePos() const override;        ///< position in page coordinates
     void      read(XmlReader&) override;

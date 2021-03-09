@@ -497,10 +497,12 @@ AccidentalType Accidental::value2subtype(AccidentalVal v)
 
 void Accidental::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
     // don't show accidentals for tab or slash notation
     if (onTabStaff() || (note() && note()->fixed())) {
         return;
     }
+
     painter->setPen(curColor());
     for (const SymElement& e : el) {
         score()->scoreFont()->draw(e.sym, painter, magS(), QPointF(e.x, e.y));

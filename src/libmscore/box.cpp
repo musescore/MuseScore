@@ -90,10 +90,11 @@ void HBox::computeMinWidth()
 
 void Box::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
     if (score() && score()->printing()) {
         return;
     }
-    if (selected() || editMode || dropTarget() || score()->showFrames()) {
+    if (!(selected() || editMode || dropTarget() || score()->showFrames())) {
         qreal w = spatium() * .15;
         QPainterPathStroker stroker;
         stroker.setWidth(w);

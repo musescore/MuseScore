@@ -81,6 +81,9 @@
 #include "textedit.h"
 #include "textline.h"
 
+#include "log.h"
+#define LOG_UNDO() if (0) LOGD()
+
 namespace Ms {
 extern Measure* tick2measure(int tick);
 
@@ -152,7 +155,7 @@ void UndoCommand::undo(EditData* ed)
 {
     int n = childList.size();
     for (int i = n - 1; i >= 0; --i) {
-        qDebug() << "<" << childList[i]->name() << ">";
+        LOG_UNDO() << "<" << childList[i]->name() << ">";
         childList[i]->undo(ed);
     }
     flip(ed);
@@ -166,7 +169,7 @@ void UndoCommand::redo(EditData* ed)
 {
     int n = childList.size();
     for (int i = 0; i < n; ++i) {
-        qDebug() << "<" << childList[i]->name() << ">";
+        LOG_UNDO() << "<" << childList[i]->name() << ">";
         childList[i]->redo(ed);
     }
     flip(ed);
@@ -245,7 +248,7 @@ void UndoCommand::unwind()
 {
     while (!childList.empty()) {
         UndoCommand* c = childList.takeLast();
-        qDebug("unwind <%s>", c->name());
+        LOG_UNDO() << "unwind: " << c->name();
         c->undo(0);
         delete c;
     }
@@ -299,7 +302,7 @@ void UndoStack::push(UndoCommand* cmd, EditData* ed)
     if (!curCmd) {
         // this can happen for layout() outside of a command (load)
         if (!ScoreLoad::loading()) {
-            qDebug("no active command, UndoStack");
+            LOG_UNDO() << "no active command, UndoStack";
         }
 
         cmd->redo(ed);
@@ -309,9 +312,9 @@ void UndoStack::push(UndoCommand* cmd, EditData* ed)
 #ifndef QT_NO_DEBUG
     if (!strcmp(cmd->name(), "ChangeProperty")) {
         ChangeProperty* cp = static_cast<ChangeProperty*>(cmd);
-        qDebug("<%s> id %d %s", cmd->name(), int(cp->getId()), propertyName(cp->getId()));
+        LOG_UNDO() << cmd->name() << " id: " << int(cp->getId()) << ", property: " << propertyName(cp->getId());
     } else {
-        qDebug("<%s>", cmd->name());
+        LOG_UNDO() << cmd->name();
     }
 #endif
     curCmd->appendChild(cmd);
@@ -400,7 +403,7 @@ void UndoStack::pop()
 
 void UndoStack::rollback()
 {
-    qDebug("==");
+    LOG_UNDO() << "called";
     Q_ASSERT(curCmd == 0);
     Q_ASSERT(curIdx > 0);
     int idx = curIdx - 1;
@@ -441,14 +444,14 @@ void UndoStack::endMacro(bool rollback)
 
 void UndoStack::reopen()
 {
-    qDebug("curIdx %d size %d", curIdx, list.size());
+    LOG_UNDO() << "curIdx: " << curIdx << ", size: " << list.size();
     Q_ASSERT(curCmd == 0);
     Q_ASSERT(curIdx > 0);
     --curIdx;
     curCmd = list.takeAt(curIdx);
     stateList.erase(stateList.begin() + curIdx);
     for (auto i : curCmd->commands()) {
-        qDebug("   <%s>", i->name());
+        LOG_UNDO() << "   " << i->name();
     }
 }
 
@@ -467,7 +470,7 @@ void UndoStack::setClean()
 
 void UndoStack::undo(EditData* ed)
 {
-    qDebug() << "===";
+    LOG_UNDO() << "called";
     // Are we currently editing text?
     if (ed && ed->element && ed->element->isTextBase()) {
         TextEditData* ted = static_cast<TextEditData*>(ed->getData(ed->element));
@@ -489,7 +492,7 @@ void UndoStack::undo(EditData* ed)
 
 void UndoStack::redo(EditData* ed)
 {
-    qDebug() << "===";
+    LOG_UNDO() << "called";
     if (canRedo()) {
         list[curIdx++]->redo(ed);
     }
@@ -2321,7 +2324,7 @@ void MoveStaff::flip(EditData*)
 
 void ChangeProperty::flip(EditData*)
 {
-    qDebug() << element->name() << int(id) << "(" << propertyName(id) << ")" << element->getProperty(id) << "->" << property;
+    LOG_UNDO() << element->name() << int(id) << "(" << propertyName(id) << ")" << element->getProperty(id) << "->" << property;
 
     QVariant v       = element->getProperty(id);
     PropertyFlags ps = element->propertyFlags(id);

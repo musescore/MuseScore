@@ -81,6 +81,7 @@ void StaffState::read(XmlReader& e)
 
 void StaffState::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
     if (score()->printing() || !score()->showUnprintable()) {
         return;
     }

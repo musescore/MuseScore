@@ -57,6 +57,10 @@ public:
     bool end();
     bool isActive() const;
 
+    //! NOTE These are methods for debugging and automated testing.
+    void beginObject(const std::string& name, const QPointF& pagePos);
+    void endObject(const std::string& name, const QPointF& pagePos);
+
     void setAntialiasing(bool arg);
     void setCompositionMode(CompositionMode mode);
 
@@ -229,6 +233,37 @@ inline void Painter::drawText(int x, int y, const QString& text)
 {
     drawText(QPointF(x, y), text);
 }
+
+class PainterObjMarker
+{
+public:
+    PainterObjMarker(Painter* p, const std::string& name, const QPointF& objPagePos)
+        : m_painter(p), m_name(name), m_objPagePos(objPagePos)
+    {
+        p->beginObject(name, objPagePos);
+    }
+
+    ~PainterObjMarker()
+    {
+        m_painter->endObject(m_name, m_objPagePos);
+    }
+
+private:
+    Painter* m_painter = nullptr;
+    std::string m_name;
+    QPointF m_objPagePos;
+};
+
+#ifdef TRACE_OBJ_DRAW_ENABLED
+    #define TRACE_OBJ_DRAW \
+    mu::draw::PainterObjMarker __drawObjMarker(painter, name(), pagePos())
+
+    #define TRACE_OBJ_DRAW_C(painter, objName, objPagePos) \
+    mu::draw::PainterObjMarker __drawObjMarker(painter, objName, objPagePos)
+#else
+    #define TRACE_OBJ_DRAW
+    #define TRACE_OBJ_DRAW_C(painter, objName, objPagePos)
+#endif
 }
 
 #endif // MU_DRAW_PAINTER_H
