@@ -300,6 +300,10 @@ void NotationActionController::setupConnections()
     });
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
+        if (!currentNotation()) {
+            return;
+        }
+
         currentNotationInteraction()->selectionChanged().onNotify(this, [this]() {
             ActionCodeList actionCodes = NotationActions::actionCodes(ShortcutContext::NotationHasSelection);
             m_actionsReceiveAvailableChanged.send(actionCodes);

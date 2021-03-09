@@ -148,9 +148,11 @@ void AppMenuModel::setupConnections()
         emit itemsChanged();
     });
 
-    notationPageState()->panelVisibleChanged().onReceive(this, [this](PanelType panelType) {
-        MenuItem& menuItem = findItem(panelActionCode(panelType));
-        menuItem.checked = isPanelVisible(panelType);
+    notationPageState()->panelsVisibleChanged().onReceive(this, [this](const std::vector<PanelType>& panels) {
+        for (PanelType panelType: panels) {
+            MenuItem& menuItem = findItem(panelActionCode(panelType));
+            menuItem.checked = isPanelVisible(panelType);
+        }
         emit itemsChanged();
     });
 

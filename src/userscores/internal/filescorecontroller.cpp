@@ -112,6 +112,10 @@ void FileScoreController::setupConnections()
         ActionCodeList actionCodes = UserScoresActions::actionCodes(ShortcutContext::NotationActive);
         m_actionsReceiveAvailableChanged.send(actionCodes);
 
+        if (!currentMasterNotation()) {
+            return;
+        }
+
         currentMasterNotation()->needSave().notification.onNotify(this, [this]() {
             ActionCodeList actionCodes = UserScoresActions::actionCodes(ShortcutContext::NotationNeedSave);
             m_actionsReceiveAvailableChanged.send(actionCodes);

@@ -46,10 +46,6 @@ DockToolBar::DockToolBar(QQuickItem* parent)
         }
     });
 
-    connect(m_tool.bar, &QToolBar::visibilityChanged, [this](bool) {
-        setVisible(m_tool.bar->isVisible());
-    });
-
     connect(m_tool.bar, &QToolBar::orientationChanged, [this](int orientation) {
         emit orientationChanged(orientation);
     });

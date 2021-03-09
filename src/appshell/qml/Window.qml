@@ -86,11 +86,7 @@ DockWindow {
 
                     Component.onCompleted: {
                         notationPage.pageModel.isNotationToolBarVisible = notationToolBar.visible
-                        notationToolBar.visible = Qt.binding(function() { return dockWindow.isNotationPage && notationPage.pageModel.isNotationToolBarVisible})
-                    }
-
-                    function onVisibleEdited(visible) {
-                        notationPage.pageModel.isNotationToolBarVisible = visible
+                        notationToolBar.visible = Qt.binding(function() { return dockWindow.isNotationPage && notationPage.pageModel.isNotationToolBarVisible })
                     }
                 }
             }
@@ -118,10 +114,6 @@ DockWindow {
                         notationPage.pageModel.isPlaybackToolBarVisible = playbackToolBar.visible
                         playbackToolBar.visible = Qt.binding(function() { return dockWindow.isNotationPage && notationPage.pageModel.isPlaybackToolBarVisible})
                     }
-
-                    function onVisibleEdited(visible) {
-                        notationPage.pageModel.isPlaybackToolBarVisible = visible
-                    }
                 }
             }
         },
@@ -148,10 +140,6 @@ DockWindow {
                         notationPage.pageModel.isUndoRedoToolBarVisible = undoRedoToolBar.visible
                         undoRedoToolBar.visible = Qt.binding(function() { return dockWindow.isNotationPage && notationPage.pageModel.isUndoRedoToolBarVisible})
                     }
-
-                    function onVisibleEdited(visible) {
-                        notationPage.pageModel.isUndoRedoToolBarVisible = visible
-                    }
                 }
             }
         }
@@ -167,6 +155,18 @@ DockWindow {
         id: notationPage
 
         uri: "musescore://notation"
+
+        isNotationToolBarVisible: Boolean(currentPageUri) && notationToolBar.visible
+        isPlaybackToolBarVisible: Boolean(currentPageUri) && playbackToolBar.visible
+        isUndoRedoToolBarVisible: Boolean(currentPageUri) && undoRedoToolBar.visible
+
+        Connections {
+            target: dockWindow
+
+            function onCurrentPageUriChanged(currentPageUri) {
+                notationPage.updatePageState()
+            }
+        }
     }
 
     SequencerPage {
