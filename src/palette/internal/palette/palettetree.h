@@ -174,7 +174,7 @@ private:
     bool _expanded = false;
 
     Type guessType() const;
-    std::function<void (PaletteCellPtr)> cellHandlerByPaletteType(const Type& type) const;
+    std::function<void(PaletteCellPtr)> cellHandlerByPaletteType(const Type& type) const;
 
     void showWritingPaletteError(const QString& path) const;
 

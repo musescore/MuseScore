@@ -59,7 +59,7 @@ Score* NoteGroups::createScore(int n, TDuration::DurationType t, std::vector<Cho
     }
 
     c.score()->style().set(Sid::pageOddLeftMargin, 0.0);
-    c.score()->style().set(Sid::pageOddTopMargin, 10.0/INCH);
+    c.score()->style().set(Sid::pageOddTopMargin, 10.0 / INCH);
     c.score()->style().set(Sid::startBarlineSingle, true);
 
     StaffType* st = c.score()->staff(0)->staffType(Fraction(0,1));
