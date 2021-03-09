@@ -64,7 +64,7 @@
       <minEmptyMeasures>3</minEmptyMeasures>
       <minMMRestWidth>3</minMMRestWidth>
       <hideEmptyStaves>1</hideEmptyStaves>
-      <dontHidStavesInFirstSystm>0</dontHidStavesInFirstSystm>
+      <dontHideStavesInFirstSystem>0</dontHideStavesInFirstSystem>
       <ArpeggioNoteDistance>0.7</ArpeggioNoteDistance>
       <ArpeggioLineWidth>0.19</ArpeggioLineWidth>
       <ArpeggioHookLen>0.9</ArpeggioHookLen>
