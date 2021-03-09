@@ -2038,10 +2038,10 @@
             </Instrument>
             <Instrument id="bb-bass-clarinet-bass-clef">
                   <family>clarinets</family>
-                  <trackName>B♭ Bass Clarinet (Bass Clef)</trackName>
+                  <trackName>B♭ Bass Clarinet (bass clef)</trackName>
                   <longName>B♭ Bass Clarinet</longName>
                   <shortName>B♭ B. Cl.</shortName>
-                  <description>B♭ Bass Clarinet (Bass Clef)</description>
+                  <description>B♭ Bass Clarinet (bass clef)</description>
                   <musicXMLid>wind.reed.clarinet.bass</musicXMLid>
                   <transposingClef>F</transposingClef>
                   <concertClef>F</concertClef>
@@ -2056,10 +2056,10 @@
             </Instrument>
             <Instrument id="a-bass-clarinet-bass-clef">
                   <family>clarinets</family>
-                  <trackName>A Bass Clarinet (Bass Clef)</trackName>
+                  <trackName>A Bass Clarinet (bass clef)</trackName>
                   <longName>A Bass Clarinet</longName>
                   <shortName>A B. Cl.</shortName>
-                  <description>A Bass Clarinet (Bass Clef)</description>
+                  <description>A Bass Clarinet (bass clef)</description>
                   <musicXMLid>wind.reed.clarinet.bass</musicXMLid>
                   <transposingClef>F</transposingClef>
                   <concertClef>F</concertClef>
@@ -3328,7 +3328,7 @@
             </Instrument>
             <Instrument id="c-horn-bass">
                   <family>horns</family>
-                  <trackName>Horn in C (Bass Clef)</trackName>
+                  <trackName>Horn in C (bass clef)</trackName>
                   <longName>Horn in C</longName>
                   <shortName>C Hn.</shortName>
                   <description>Horn in C</description>
@@ -3538,7 +3538,7 @@
             </Instrument>
             <Instrument id="baritone-horn-treble">
                   <family>baritone-horns</family>
-                  <trackName>Baritone Horn (Treble Clef)</trackName>
+                  <trackName>Baritone Horn (treble clef)</trackName>
                   <longName>Baritone Horn</longName>
                   <shortName>Bar. Hn.</shortName>
                   <description>Baritone Horn</description>
@@ -3580,10 +3580,10 @@
             </Instrument>
             <Instrument id="baritone-horn-central-europe-treble">
                   <family>baritone-horns</family>
-                  <trackName>Baritone Horn (Central Europe, Treble Clef)</trackName>
+                  <trackName>Baritone Horn (Central Europe, treble clef)</trackName>
                   <longName>Baritone Horn</longName>
                   <shortName>Bar. Hn.</shortName>
-                  <description>Baritone Horn (Central Europe, Treble Clef)</description>
+                  <description>Baritone Horn (Central Europe, treble clef)</description>
                   <musicXMLid>brass.baritone-horn</musicXMLid>
                   <transposingClef>G</transposingClef>
                   <concertClef>F</concertClef>
@@ -4524,7 +4524,7 @@
             </Instrument>
             <Instrument id="trombone-treble">
                   <family>trombones</family>
-                  <trackName>Trombone (Treble Clef)</trackName>
+                  <trackName>Trombone (treble clef, in B♭)</trackName>
                   <longName>Trombone</longName>
                   <shortName>Tbn.</shortName>
                   <description>Trombone</description>
@@ -4666,7 +4666,7 @@
             </Instrument>
             <Instrument id="euphonium-treble">
                   <family>euphoniums</family>
-                  <trackName>Euphonium (Treble Clef)</trackName>
+                  <trackName>Euphonium (treble clef)</trackName>
                   <longName>Euphonium</longName>
                   <shortName>Euph.</shortName>
                   <description>Euphonium</description>
@@ -4734,7 +4734,7 @@
             </Instrument>
             <Instrument id="eb-tuba-treble">
                   <family>tubas</family>
-                  <trackName>E♭ Tuba (Treble Clef)</trackName>
+                  <trackName>E♭ Tuba (treble clef)</trackName>
                   <longName>E♭ Tuba</longName>
                   <shortName>E♭ Tb.</shortName>
                   <description>E♭ Tuba</description>
@@ -4781,7 +4781,7 @@
             </Instrument>
             <Instrument id="bb-tuba-treble">
                   <family>tubas</family>
-                  <trackName>B♭ Tuba (Treble Clef)</trackName>
+                  <trackName>B♭ Tuba (treble clef)</trackName>
                   <longName>B♭ Tuba</longName>
                   <shortName>B♭ Tb.</shortName>
                   <description>B♭ Tuba</description>
@@ -5551,7 +5551,7 @@
                   <longName>Marimba</longName>
                   <shortName>Mrm.</shortName>
                   <description>Marimba (grand staff)</description>
-                  <trackName>Marimba (Grand Staff)</trackName>
+                  <trackName>Marimba (grand staff)</trackName>
                   <musicXMLid>pitched-percussion.marimba</musicXMLid>
                   <staves>2</staves>
                   <clef>G</clef>
@@ -5576,7 +5576,7 @@
                   <longName>Marimba</longName>
                   <shortName>Mrm.</shortName>
                   <description>Single-staff marimba</description>
-                  <trackName>Marimba (Single Staff)</trackName>
+                  <trackName>Marimba (single staff)</trackName>
                   <musicXMLid>pitched-percussion.marimba</musicXMLid>
                   <staves>1</staves>
                   <clef>G</clef>
@@ -8173,10 +8173,10 @@
             </Instrument>
             <Instrument id="soprano-c-clef">
                   <family>voices</family>
-                  <trackName>Soprano (C Clef)</trackName>
+                  <trackName>Soprano (C clef)</trackName>
                   <longName>Soprano</longName>
                   <shortName>S.</shortName>
-                  <description>Soprano (C Clef)</description>
+                  <description>Soprano (C clef)</description>
                   <musicXMLid>voice.soprano</musicXMLid>
                   <clef>C1</clef>
                   <barlineSpan>1</barlineSpan>
@@ -8206,10 +8206,10 @@
             </Instrument>
             <Instrument id="mezzo-soprano-c-clef">
                   <family>voices</family>
-                  <trackName>Mezzo-soprano (C Clef)</trackName>
+                  <trackName>Mezzo-soprano (C clef)</trackName>
                   <longName>Mezzo-soprano</longName>
                   <shortName>Mzs.</shortName>
-                  <description>Mezzo-soprano (C Clef)</description>
+                  <description>Mezzo-soprano (C clef)</description>
                   <musicXMLid>voice.mezzo-soprano</musicXMLid>
                   <clef>C2</clef>
                   <barlineSpan>1</barlineSpan>
@@ -8240,10 +8240,10 @@
             </Instrument>
             <Instrument id="alto-c-clef">
                   <family>voices</family>
-                  <trackName>Alto (C Clef)</trackName>
+                  <trackName>Alto (C clef)</trackName>
                   <longName>Alto</longName>
                   <shortName>A.</shortName>
-                  <description>Alto (C Clef)</description>
+                  <description>Alto (C clef)</description>
                   <musicXMLid>voice.alto</musicXMLid>
                   <clef>C3</clef>
                   <barlineSpan>1</barlineSpan>
@@ -8305,10 +8305,10 @@
             </Instrument>
             <Instrument id="tenor-c-clef">
                   <family>voices</family>
-                  <trackName>Tenor (C Clef)</trackName>
+                  <trackName>Tenor (C clef)</trackName>
                   <longName>Tenor</longName>
                   <shortName>T.</shortName>
-                  <description>Tenor (C Clef)</description>
+                  <description>Tenor (C clef)</description>
                   <musicXMLid>voice.tenor</musicXMLid>
                   <clef>C4</clef>
                   <barlineSpan>1</barlineSpan>
@@ -8339,10 +8339,10 @@
             </Instrument>
             <Instrument id="baritone-c-clef">
                   <family>voices</family>
-                  <trackName>Baritone (C Clef)</trackName>
+                  <trackName>Baritone (C clef)</trackName>
                   <longName>Baritone</longName>
                   <shortName>Bar.</shortName>
-                  <description>Baritone (C Clef)</description>
+                  <description>Baritone (C clef)</description>
                   <musicXMLid>voice.baritone</musicXMLid>
                   <clef>C5</clef>
                   <barlineSpan>1</barlineSpan>
@@ -9494,9 +9494,9 @@
             </Instrument>
             <Instrument id="banjo-tablature">
                   <family>plucked-strings</family>
-                  <trackName>Banjo (Tablature)</trackName>
+                  <trackName>Banjo (tablature)</trackName>
                   <init>banjo</init>
-                  <description>Banjo (Tablature)</description>
+                  <description>Banjo (tablature)</description>
                   <musicXMLid>pluck.banjo</musicXMLid>
                   <stafftype staffTypePreset="tab5StrCommon">tablature</stafftype>
                   <!--                  <clef>TAB</clef> -->
@@ -9550,9 +9550,9 @@
             </Instrument>
             <Instrument id="irish-tenor-banjo-tablature">
                   <family>plucked-strings</family>
-                  <trackName>Irish Tenor Banjo (Tablature)</trackName>
+                  <trackName>Irish Tenor Banjo (tablature)</trackName>
                   <init>irish-tenor-banjo</init>
-                  <description>Irish Tenor Banjo (Tablature)</description>
+                  <description>Irish Tenor Banjo (tablature)</description>
                   <musicXMLid>pluck.banjo.tenor</musicXMLid>
                   <stafftype staffTypePreset="tab4StrCommon">tablature</stafftype>
                   <!--                  <clef>TAB</clef> -->
@@ -9847,10 +9847,10 @@
             </Instrument>
             <Instrument id="guitar-nylon-treble-clef">
                   <family>guitars</family>
-                  <trackName>Guitar (Treble Clef)</trackName>
+                  <trackName>Guitar (treble clef)</trackName>
                   <longName>Guitar</longName>
                   <shortName>Guit.</shortName>
-                  <description>Acoustic Nylon-strung Guitar (Treble Clef)</description>
+                  <description>Acoustic Nylon-strung Guitar (treble clef)</description>
                   <musicXMLid>pluck.guitar.nylon-string</musicXMLid>
                   <StringData>
                         <frets>19</frets>
@@ -9878,9 +9878,9 @@
             </Instrument>
             <Instrument id="guitar-nylon-tablature">
                   <family>guitars</family>
-                  <trackName>Classical Guitar (Tablature)</trackName>
+                  <trackName>Classical Guitar (tablature)</trackName>
                   <init>guitar-nylon</init>
-                  <description>Acoustic Nylon Strung Guitar (Tablature)</description>
+                  <description>Acoustic Nylon Strung Guitar (tablature)</description>
                   <musicXMLid>pluck.guitar.nylon-string</musicXMLid>
                   <stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
                   <!--                  <clef>TAB</clef> -->
@@ -9914,9 +9914,9 @@
             </Instrument>
             <Instrument id="7-string-guitar-tablature">
                   <family>guitars</family>
-                  <trackName>7-string Guitar (Tablature)</trackName>
+                  <trackName>7-string Guitar (tablature)</trackName>
                   <init>7-string-guitar</init>
-                  <description>7-string Guitar (Tablature)</description>
+                  <description>7-string Guitar (tablature)</description>
                   <musicXMLid>pluck.guitar.nylon-string</musicXMLid>
                   <stafftype staffTypePreset="tab7StrCommon">tablature</stafftype>
                   <!-- <clef>TAB</clef> -->
@@ -9926,7 +9926,7 @@
                   <family>plucked-strings</family>
                   <longName>Cavaquinho</longName>
                   <shortName>Cava.</shortName>
-                  <description>Cavaquinho (4-string Guitar)</description>
+                  <description>Cavaquinho (4-string guitar)</description>
                   <musicXMLid>pluck.guitar</musicXMLid>
                   <StringData>
                         <frets>19</frets>
@@ -9947,9 +9947,9 @@
             </Instrument>
             <Instrument id="cavaquinho-tablature">
                   <family>plucked-strings</family>
-                  <trackName>Cavaquinho (Tablature)</trackName>
+                  <trackName>Cavaquinho (tablature)</trackName>
                   <init>cavaquinho</init>
-                  <description>Cavaquinho (4-string Guitar) (Tablature)</description>
+                  <description>Cavaquinho (4-string guitar) (tablature)</description>
                   <musicXMLid>pluck.guitar</musicXMLid>
                   <stafftype staffTypePreset="tab4StrSimple">tablature</stafftype>
                   <!-- <clef>TAB</clef> -->
@@ -10052,10 +10052,10 @@
             </Instrument>
             <Instrument id="guitar-steel-treble-clef">
                   <family>guitar</family>
-                  <trackName>Acoustic Guitar (Treble Clef)</trackName>
+                  <trackName>Acoustic Guitar (treble clef)</trackName>
                   <longName>Guitar</longName>
                   <shortName>Guit.</shortName>
-                  <description>Acoustic Steel-strung Guitar (Treble Clef)</description>
+                  <description>Acoustic Steel-strung Guitar (treble clef)</description>
                   <musicXMLid>pluck.guitar.acoustic</musicXMLid>
                   <StringData>
                         <frets>20</frets>
@@ -10080,9 +10080,9 @@
             </Instrument>
             <Instrument id="guitar-steel-tablature">
                   <family>guitars</family>
-                  <trackName>Acoustic Guitar (Tablature)</trackName>
+                  <trackName>Acoustic Guitar (tablature)</trackName>
                   <init>guitar-steel</init>
-                  <description>Acoustic Steel Strung Guitar (Tablature)</description>
+                  <description>Acoustic Steel Strung Guitar (tablature)</description>
                   <musicXMLid>pluck.guitar.acoustic</musicXMLid>
                   <stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
                   <!--                  <clef>TAB</clef> -->
@@ -10225,7 +10225,7 @@
             </Instrument>
             <Instrument id="electric-guitar-treble-clef">
                   <family>guitars</family>
-                  <trackName>Electric Guitar (Treble Clef)</trackName>
+                  <trackName>Electric Guitar (treble clef)</trackName>
                   <longName>Electric Guitar</longName>
                   <shortName>El. Guit.</shortName>
                   <description>Electric Guitar</description>
@@ -10252,9 +10252,9 @@
                   </Channel>
             </Instrument>
             <Instrument id="electric-guitar-tablature">
-                  <trackName>Electric Guitar (Tablature)</trackName>
+                  <trackName>Electric Guitar (tablature)</trackName>
                   <init>electric-guitar</init>
-                  <description>Electric Guitar (Tablature)</description>
+                  <description>Electric Guitar (tablature)</description>
                   <stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
                   <!--                  <clef>TAB</clef> -->
                   <genre>common</genre>
@@ -10325,7 +10325,7 @@
             </Instrument>
 
             <Instrument id="mtn-dulcimer-std-chrom-tab">
-                  <trackName>Mtn. Dulcimer (Tablature)</trackName>
+                  <trackName>Mtn. Dulcimer (tablature)</trackName>
                   <init>mtn-dulcimer-std</init>
                   <description>Mtn. Dulcimer (3-str. chromatic TAB)</description>
                   <stafftype staffTypePreset="tabDulcimer">tablature</stafftype>
@@ -10356,7 +10356,7 @@
             </Instrument>
 
             <Instrument id="mtn-dulcimer-bartn-chrom-tab">
-                  <trackName>Mtn. Dulcimer - Baritone (Tablature)</trackName>
+                  <trackName>Mtn. Dulcimer - Baritone (tablature)</trackName>
                   <init>mtn-dulcimer-baritone</init>
                   <description>Baritone Mtn. Dulcimer (3-str. chromatic TAB)</description>
                   <stafftype staffTypePreset="tabDulcimer">tablature</stafftype>
@@ -10387,7 +10387,7 @@
             </Instrument>
 
             <Instrument id="mtn-dulcimer-bass-chrom-tab">
-                  <trackName>Mtn. Dulcimer - Bass (Tablature)</trackName>
+                  <trackName>Mtn. Dulcimer - Bass (tablature)</trackName>
                   <init>mtn-dulcimer-bass</init>
                   <description>Bass Mtn. Dulcimer (3-str. chromatic TAB)</description>
                   <stafftype staffTypePreset="tabDulcimer">tablature</stafftype>
@@ -10449,9 +10449,9 @@
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="lute-tablature">
-                  <trackName>Lute (Tablature)</trackName>
+                  <trackName>Lute (tablature)</trackName>
                   <init>lute</init>
-                  <description>Lute (Tablature)</description>
+                  <description>Lute (tablature)</description>
                   <musicXMLid>pluck.lute</musicXMLid>
                   <stafftype staffTypePreset="tab6StrFrench">tablature</stafftype>
                   <!--                  <clef>TAB</clef> -->
@@ -10747,9 +10747,9 @@
             </Instrument>
             <Instrument id="mandolin-tablature">
                   <family>plucked-strings</family>
-                  <trackName>Mandolin (Tablature)</trackName>
+                  <trackName>Mandolin (tablature)</trackName>
                   <init>mandolin</init>
-                  <description>Mandolin (Tablature)</description>
+                  <description>Mandolin (tablature)</description>
                   <musicXMLid>pluck.mandolin</musicXMLid>
                   <stafftype staffTypePreset="tab4StrCommon">tablature</stafftype>
                   <!--                  <clef>TAB</clef> -->
@@ -10924,7 +10924,7 @@
             </Instrument>
             <Instrument id="ukulele-4-str-tab">
                   <family>plucked-strings</family>
-                  <trackName>Ukulele (Tablature)</trackName>
+                  <trackName>Ukulele (tablature)</trackName>
                   <init>ukulele</init>
                   <description>Ukulele (4-str. TAB)</description>
                   <musicXMLid>pluck.ukulele</musicXMLid>
@@ -10936,9 +10936,9 @@
             </Instrument>
             <Instrument id="ukulele-low-g">
                   <family>plucked-strings</family>
-                  <longName>Ukulele (Low G)</longName>
+                  <longName>Ukulele (low G)</longName>
                   <shortName>Uk.</shortName>
-                  <description>Ukulele (Low G)</description>
+                  <description>Ukulele (low G)</description>
                   <musicXMLid>pluck.ukulele</musicXMLid>
                   <StringData>
                         <frets>18</frets>
@@ -11040,9 +11040,9 @@
             </Instrument>
             <Instrument id="bass-guitar-tablature">
                   <family>bass-guitars</family>
-                  <trackName>Bass Guitar (Tablature)</trackName>
+                  <trackName>Bass Guitar (tablature)</trackName>
                   <init>bass-guitar</init>
-                  <description>Bass Guitar (Tablature)</description>
+                  <description>Bass Guitar (tablature)</description>
                   <musicXMLid>pluck.bass</musicXMLid>
                   <stafftype staffTypePreset="tab4StrCommon">tablature</stafftype>
                   <!--                  <clef>TAB</clef> -->
@@ -11126,9 +11126,9 @@
             </Instrument>
             <Instrument id="electric-bass-4-str-tab">
                   <family>bass-guitars</family>
-                  <trackName>Electric Bass (Tablature)</trackName>
+                  <trackName>Electric Bass (tablature)</trackName>
                   <init>electric-bass</init>
-                  <description>Electric Bass (Tablature)</description>
+                  <description>Electric Bass (tablature)</description>
                   <musicXMLid>pluck.bass.electric</musicXMLid>
                   <stafftype staffTypePreset="tab4StrCommon">tablature</stafftype>
                   <!--                  <clef>TAB</clef> -->
@@ -11205,9 +11205,9 @@
             </Instrument>
             <Instrument id="5-string-electric-bass-tab">
                   <family>bass-guitars</family>
-                  <trackName>5-str. Electric Bass (Tablature)</trackName>
+                  <trackName>5-str. Electric Bass (tablature)</trackName>
                   <init>5-string-electric-bass</init>
-                  <description>5-string Electric Bass (Tablature)</description>
+                  <description>5-string Electric Bass (tablature)</description>
                   <stafftype staffTypePreset="tab5StrCommon">tablature</stafftype>
                   <!--                  <clef>TAB</clef> -->
                   <genre>common</genre>
@@ -11217,8 +11217,8 @@
                   <family>bass-guitars</family>
                   <longName>5-str. Electric Bass</longName>
                   <shortName>El. B.</shortName>
-                  <trackName>5-str. Electric Bass (High C/Tenor)</trackName>
-                  <description>5-string Electric Bass (High C/Tenor)</description>
+                  <trackName>5-str. Electric Bass (high C/tenor)</trackName>
+                  <description>5-string Electric Bass (high C/tenor)</description>
                   <musicXMLid>pluck.bass.electric</musicXMLid>
                   <StringData>
                         <frets>24</frets>
@@ -11249,9 +11249,9 @@
             </Instrument>
             <Instrument id="5-string-electric-bass-tab-high-c">
                   <family>bass-guitars</family>
-                  <trackName>5-str. Electric Bass (High C/Tenor) (Tablature)</trackName>
+                  <trackName>5-str. Electric Bass (high C/tenor) (tablature)</trackName>
                   <init>5-string-electric-bass-high-c</init>
-                  <description>5-string Electric Bass (High C/Tenor) (Tablature)</description>
+                  <description>5-string Electric Bass (high C/tenor) (tablature)</description>
                   <stafftype staffTypePreset="tab5StrCommon">tablature</stafftype>
                   <!--                  <clef>TAB</clef> -->
                   <genre>jazz</genre>
@@ -11292,9 +11292,9 @@
             </Instrument>
             <Instrument id="6-string-electric-bass-tab">
                   <family>guitars</family>
-                  <trackName>6-str. Electric Bass (Tablature)</trackName>
+                  <trackName>6-str. Electric Bass (tablature)</trackName>
                   <init>6-string-electric-bass</init>
-                  <description>6-string Electric Bass (Tablature)</description>
+                  <description>6-string Electric Bass (tablature)</description>
                   <stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
                   <!--                  <clef>TAB</clef> -->
                   <genre>jazz</genre>
@@ -11442,9 +11442,9 @@
                    <genre>popular</genre>
              </Instrument>
              <Instrument id="bandurria-tablature">
-                   <trackName>Bandurria (Tablature)</trackName>
+                   <trackName>Bandurria (tablature)</trackName>
                    <init>bandurria</init>
-                   <description>Bandurria (Tablature)</description>
+                   <description>Bandurria (tablature)</description>
                    <musicXMLid>pluck.bandurria</musicXMLid>
                    <stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
                    <!--                  <clef>TAB</clef> -->
@@ -11475,9 +11475,9 @@
                    <genre>popular</genre>
              </Instrument>
              <Instrument id="laud-tablature">
-                   <trackName>Laúd (Tablature)</trackName>
+                   <trackName>Laúd (tablature)</trackName>
                    <init>laud</init>
-                   <description>Spanish Laúd (Tablature)</description>
+                   <description>Spanish Laúd (tablature)</description>
                    <musicXMLid>pluck.laud</musicXMLid>
                    <stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
                    <!--                  <clef>TAB</clef> -->
@@ -11920,11 +11920,11 @@
             </Instrument>
             <Instrument id="viola-da-gamba-tablature">
                   <family>viols</family>
-                  <longName>Viola da gamba (Tab)</longName>
+                  <longName>Viola da gamba (tab)</longName>
                   <shortName>Vla. d. g.</shortName>
-                  <trackName>Viola da gamba (Tablature)</trackName>
+                  <trackName>Viola da gamba (tablature)</trackName>
                   <init>viola-da-gamba</init>
-                  <description>Viola da gamba (Tablature)</description>
+                  <description>Viola da gamba (tablature)</description>
                   <stafftype staffTypePreset="tab6StrFrench">tablature</stafftype>
                   <!--                  <clef>TAB</clef> -->
                   <genre>earlymusic</genre>
