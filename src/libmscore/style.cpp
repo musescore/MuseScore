@@ -447,7 +447,7 @@ static const StyleType styleTypes[] {
     { Sid::mmRestOldStyleSpacing,   "mmRestOldStyleSpacing",   Spatium(0.85) },
     { Sid::hideEmptyStaves,         "hideEmptyStaves",         QVariant(false) },
     { Sid::dontHideStavesInFirstSystem,
-      "dontHidStavesInFirstSystm",    QVariant(true) },
+      "dontHideStavesInFirstSystem",    QVariant(true) },
     { Sid::enableIndentationOnFirstSystem,
       "enableIndentationOnFirstSystem", QVariant(true) },
     { Sid::firstSystemIndentationValue, "firstSystemIndentationValue", Spatium(5.0) },
@@ -3041,6 +3041,8 @@ void MStyle::load(XmlReader& e)
             chordListTag = true;
         } else if (tag == "lyricsDashMaxLegth") { // pre-3.6 typo
             set(Sid::lyricsDashMaxLength, e.readDouble());
+        } else if (tag == "dontHidStavesInFirstSystm") { // pre-3.6.3/4.0 typo
+            set(Sid::dontHideStavesInFirstSystem, e.readBool());
         } else if (!readProperties(e)) {
             e.unknown();
         }
