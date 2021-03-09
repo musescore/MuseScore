@@ -324,7 +324,7 @@ void NotationPaintView::paint(QPainter* qp)
         return;
     }
 
-    mu::draw::Painter mup(mu::draw::QPainterProvider::make(qp));
+    mu::draw::Painter mup(qp, "notationview");
     mu::draw::Painter* painter = &mup;
 
     QRect rect(0, 0, width(), height());
