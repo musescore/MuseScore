@@ -28,7 +28,6 @@
 #include "libmscore/mscore.h"
 
 #include <QBuffer>
-#include <QDomDocument>
 
 using namespace mu;
 using namespace mu::workspace;
@@ -272,16 +271,8 @@ Ret Workspace::write()
     writer.writeEndElement();
     writer.writeEndDocument();
 
-    //! NOTE: correct formatting
-    buffer.seek(0);
-    QDomDocument document;
-    document.setContent(buffer.data());
-    constexpr int FORMATTING_INDENT = 4;
-    QByteArray xmlData = document.toByteArray(FORMATTING_INDENT);
-
     WorkspaceFile file(m_filePath);
-    Ret ret = file.writeRootFile(name() + ".xml", xmlData);
-    buffer.close();
+    Ret ret = file.writeRootFile(name() + ".xml", buffer.data());
     m_hasUnsavedChanges = false;
 
     return ret;

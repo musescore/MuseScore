@@ -1093,7 +1093,7 @@ static void paintIconElement(mu::draw::Painter& painter, const QRect& rect, Elem
 /// appear at the correct height on the staff.
 //---------------------------------------------------------
 
-void PaletteCellIconEngine::paintScoreElement(mu::draw::Painter& painter, Element *element, qreal spatium, bool alignToStaff) const
+void PaletteCellIconEngine::paintScoreElement(mu::draw::Painter& painter, Element* element, qreal spatium, bool alignToStaff) const
 {
     Q_ASSERT(element && !element->isIcon());
     painter.save(); // so we can restore painter after we are done using it

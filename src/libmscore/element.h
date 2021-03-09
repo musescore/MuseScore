@@ -648,7 +648,6 @@ template<typename T> std::shared_ptr<T> makeElement(Ms::Score* score)
 {
     return std::make_shared<T>(score);
 }
-
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::ElementType);

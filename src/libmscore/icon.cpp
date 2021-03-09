@@ -15,13 +15,12 @@
 #include "property.h"
 
 namespace Ms {
-
 Icon::Icon(Score* score)
     : Element(score)
 {
 }
 
-Icon *Icon::clone() const
+Icon* Icon::clone() const
 {
     return new Icon(*this);
 }
