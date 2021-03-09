@@ -1439,6 +1439,7 @@ void PreferenceDialog::apply()
       #ifdef USE_PORTMIDI
             preferences.setPreference(PREF_IO_PORTMIDI_INPUTDEVICE, portMidiInput->currentText());
             preferences.setPreference(PREF_IO_PORTMIDI_OUTPUTDEVICE, portMidiOutput->currentText());
+            preferences.setPreference(PREF_IO_PORTMIDI_OUTPUTLATENCYMILLISECONDS, portMidiOutputLatencyMilliseconds->value());
             if (seq->driver() && static_cast<PortMidiDriver*>(static_cast<Portaudio*>(seq->driver())->mididriver())->isSameCoreMidiIacBus(preferences.getString(PREF_IO_PORTMIDI_INPUTDEVICE), preferences.getString(PREF_IO_PORTMIDI_OUTPUTDEVICE))) {
                   QMessageBox msgBox;
                   msgBox.setWindowTitle(tr("Possible MIDI Loopback"));
