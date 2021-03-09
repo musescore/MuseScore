@@ -11,7 +11,7 @@
     <Style>
       <showMeasureNumber>0</showMeasureNumber>
       <hideEmptyStaves>1</hideEmptyStaves>
-      <dontHidStavesInFirstSystm>0</dontHidStavesInFirstSystm>
+      <dontHideStavesInFirstSystem>0</dontHideStavesInFirstSystem>
       <showFooter>0</showFooter>
       <page-layout>
         <page-height>283.465</page-height>
