@@ -161,9 +161,9 @@ void BufferedPaintProvider::scale(qreal sx, qreal sy)
     editableState().scale = Scale{ sx, sy };
 }
 
-void BufferedPaintProvider::rotate(qreal a)
+void BufferedPaintProvider::rotate(qreal angle)
 {
-    editableState().rotate = a;
+    editableState().rotate = angle;
 }
 
 void BufferedPaintProvider::translate(const QPointF& offset)
@@ -222,9 +222,9 @@ void BufferedPaintProvider::drawRects(const QRectF* rects, int rectCount)
     }
 }
 
-void BufferedPaintProvider::drawEllipse(const QRectF& r)
+void BufferedPaintProvider::drawEllipse(const QRectF& rect)
 {
-    editableData().ellipses.push_back(r);
+    editableData().ellipses.push_back(rect);
 }
 
 void BufferedPaintProvider::drawPolyline(const QPointF* points, int pointCount)
@@ -239,11 +239,11 @@ void BufferedPaintProvider::drawPolyline(const QPointF* points, int pointCount)
 
 void BufferedPaintProvider::drawPolygon(const QPointF* points, int pointCount, Qt::FillRule fillRule)
 {
-    QVector<QPointF> vec(pointCount);
+    QPolygonF pol(pointCount);
     for (int i = 0; i < pointCount; ++i) {
-        vec[i] = points[i];
+        pol[i] = points[i];
     }
-    editableData().polygons.push_back(FillPolygon { QPolygonF(vec), fillRule, false });
+    editableData().polygons.push_back(FillPolygon { pol, fillRule, false });
 }
 
 void BufferedPaintProvider::drawConvexPolygon(const QPointF* points, int pointCount)
@@ -255,14 +255,14 @@ void BufferedPaintProvider::drawConvexPolygon(const QPointF* points, int pointCo
     editableData().polygons.push_back(FillPolygon { QPolygonF(vec), Qt::OddEvenFill, true });
 }
 
-void BufferedPaintProvider::drawText(const QPointF& p, const QString& s)
+void BufferedPaintProvider::drawText(const QPointF& point, const QString& text)
 {
-    editableData().texts.push_back(DrawText { p, s });
+    editableData().texts.push_back(DrawText { point, text });
 }
 
-void BufferedPaintProvider::drawText(const QRectF& r, int flags, const QString& text)
+void BufferedPaintProvider::drawText(const QRectF& rect, int flags, const QString& text)
 {
-    editableData().rectTexts.push_back(DrawRectText { r, flags, text });
+    editableData().rectTexts.push_back(DrawRectText { rect, flags, text });
 }
 
 void BufferedPaintProvider::drawGlyphRun(const QPointF& position, const QGlyphRun& glyphRun)
@@ -270,9 +270,9 @@ void BufferedPaintProvider::drawGlyphRun(const QPointF& position, const QGlyphRu
     editableData().glyphs.push_back(DrawGlyphRun { position, glyphRun });
 }
 
-void BufferedPaintProvider::fillRect(const QRectF& r, const QBrush& brush)
+void BufferedPaintProvider::fillRect(const QRectF& rect, const QBrush& brush)
 {
-    editableData().fillRects.push_back(FillRect { r, brush });
+    editableData().fillRects.push_back(FillRect { rect, brush });
 }
 
 void BufferedPaintProvider::drawPixmap(const QPointF& p, const QPixmap& pm)

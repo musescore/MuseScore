@@ -60,7 +60,7 @@ public:
     void setAntialiasing(bool arg);
     void setCompositionMode(CompositionMode mode);
 
-    void setFont(const QFont& f);
+    void setFont(const QFont& font);
     const QFont& font() const;
 
     void setPen(const QPen& pen);
@@ -81,7 +81,7 @@ public:
     const QTransform& transform() const;
 
     void scale(qreal sx, qreal sy);
-    void rotate(qreal a);
+    void rotate(qreal angle);
 
     void translate(const QPointF& offset);
     inline void translate(const QPoint& offset);
@@ -120,7 +120,7 @@ public:
 
     void drawRoundedRect(const QRectF& rect, qreal xRadius, qreal yRadius, Qt::SizeMode mode = Qt::AbsoluteSize);
 
-    void drawEllipse(const QRectF& r);
+    void drawEllipse(const QRectF& rect);
     inline void drawEllipse(const QPointF& center, qreal rx, qreal ry);
 
     void drawPolyline(const QPointF* points, int pointCount);
@@ -134,19 +134,19 @@ public:
 
     void drawArc(const QRectF& rect, int a, int alen);
 
-    void drawText(const QPointF& p, const QString& s);
-    void drawText(const QRectF& r, int flags, const QString& text);
+    void drawText(const QPointF& point, const QString& text);
+    void drawText(const QRectF& rect, int flags, const QString& text);
 
     //! NOTE Potentially dangerous method.
     //! Most of them are cut with fractional values.
     //! Fractions are also passed to this method, and, accordingly, the fractional part is discarded.
-    inline void drawText(int x, int y, const QString& s);
+    inline void drawText(int x, int y, const QString& text);
 
     void drawGlyphRun(const QPointF& position, const QGlyphRun& glyphRun);
 
-    void fillRect(const QRectF& r, const QBrush& brush);
+    void fillRect(const QRectF& rect, const QBrush& brush);
 
-    void drawPixmap(const QPointF& p, const QPixmap& pm);
+    void drawPixmap(const QPointF& point, const QPixmap& pm);
     void drawTiledPixmap(const QRectF& rect, const QPixmap& pm, const QPointF& offset = QPointF());
 
     //! NOTE Provider for tests.
@@ -225,9 +225,9 @@ inline void Painter::drawConvexPolygon(const QPolygonF& poly)
     drawConvexPolygon(poly.constData(), poly.size());
 }
 
-inline void Painter::drawText(int x, int y, const QString& s)
+inline void Painter::drawText(int x, int y, const QString& text)
 {
-    drawText(QPointF(x, y), s);
+    drawText(QPointF(x, y), text);
 }
 }
 

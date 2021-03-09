@@ -102,11 +102,11 @@ void Painter::setCompositionMode(CompositionMode mode)
     }
 }
 
-void Painter::setFont(const QFont& f)
+void Painter::setFont(const QFont& font)
 {
-    m_provider->setFont(f);
+    m_provider->setFont(font);
     if (extended) {
-        extended->setFont(f);
+        extended->setFont(font);
     }
 }
 
@@ -190,11 +190,11 @@ void Painter::scale(qreal sx, qreal sy)
     }
 }
 
-void Painter::rotate(qreal a)
+void Painter::rotate(qreal angle)
 {
-    m_provider->rotate(a);
+    m_provider->rotate(angle);
     if (extended) {
-        extended->rotate(a);
+        extended->rotate(angle);
     }
 }
 
@@ -281,11 +281,11 @@ void Painter::drawRects(const QRectF* rects, int rectCount)
     }
 }
 
-void Painter::drawEllipse(const QRectF& r)
+void Painter::drawEllipse(const QRectF& rect)
 {
-    m_provider->drawEllipse(r);
+    m_provider->drawEllipse(rect);
     if (extended) {
-        extended->drawEllipse(r);
+        extended->drawEllipse(rect);
     }
 }
 
@@ -315,6 +315,8 @@ void Painter::drawConvexPolygon(const QPointF* points, int pointCount)
 
 void Painter::drawArc(const QRectF& r, int a, int alen)
 {
+    //! NOTE Copied from QPainter source code
+
     QRectF rect = r.normalized();
 
     QPainterPath path;
@@ -335,19 +337,19 @@ void Painter::drawRoundedRect(const QRectF& rect, qreal xRadius, qreal yRadius, 
     drawPath(path);
 }
 
-void Painter::drawText(const QPointF& p, const QString& s)
+void Painter::drawText(const QPointF& point, const QString& text)
 {
-    m_provider->drawText(p, s);
+    m_provider->drawText(point, text);
     if (extended) {
-        extended->drawText(p, s);
+        extended->drawText(point, text);
     }
 }
 
-void Painter::drawText(const QRectF& r, int flags, const QString& text)
+void Painter::drawText(const QRectF& rect, int flags, const QString& text)
 {
-    m_provider->drawText(r, flags, text);
+    m_provider->drawText(rect, flags, text);
     if (extended) {
-        extended->drawText(r, flags, text);
+        extended->drawText(rect, flags, text);
     }
 }
 
@@ -359,19 +361,19 @@ void Painter::drawGlyphRun(const QPointF& position, const QGlyphRun& glyphRun)
     }
 }
 
-void Painter::fillRect(const QRectF& r, const QBrush& brush)
+void Painter::fillRect(const QRectF& rect, const QBrush& brush)
 {
-    m_provider->fillRect(r, brush);
+    m_provider->fillRect(rect, brush);
     if (extended) {
-        extended->fillRect(r, brush);
+        extended->fillRect(rect, brush);
     }
 }
 
-void Painter::drawPixmap(const QPointF& p, const QPixmap& pm)
+void Painter::drawPixmap(const QPointF& point, const QPixmap& pm)
 {
-    m_provider->drawPixmap(p, pm);
+    m_provider->drawPixmap(point, pm);
     if (extended) {
-        extended->drawPixmap(p, pm);
+        extended->drawPixmap(point, pm);
     }
 }
 
