@@ -457,6 +457,7 @@ void LyricsLineSegment::layout()
 
 void LyricsLineSegment::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
     if (_numOfDashes < 1) {               // nothing to draw
         return;
     }

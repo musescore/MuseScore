@@ -309,16 +309,17 @@ void KeySig::layout()
 //   set
 //---------------------------------------------------------
 
-void KeySig::draw(mu::draw::Painter* p) const
+void KeySig::draw(mu::draw::Painter* painter) const
 {
-    p->setPen(curColor());
+    TRACE_OBJ_DRAW;
+    painter->setPen(curColor());
     for (const KeySym& ks: _sig.keySymbols()) {
-        drawSymbol(ks.sym, p, QPointF(ks.pos.x(), ks.pos.y()));
+        drawSymbol(ks.sym, painter, QPointF(ks.pos.x(), ks.pos.y()));
     }
     if (!parent() && (isAtonal() || isCustom()) && _sig.keySymbols().empty()) {
         // empty custom or atonal key signature - draw something for palette
-        p->setPen(Qt::gray);
-        drawSymbol(SymId::timeSigX, p, QPointF(symWidth(SymId::timeSigX) * -0.5, 2.0 * spatium()));
+        painter->setPen(Qt::gray);
+        drawSymbol(SymId::timeSigX, painter, QPointF(symWidth(SymId::timeSigX) * -0.5, 2.0 * spatium()));
     }
 }
 

@@ -233,6 +233,7 @@ void ChordLine::write(XmlWriter& xml) const
 
 void ChordLine::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
     qreal _spatium = spatium();
 
     if (this->isStraight()) {

@@ -160,6 +160,7 @@ void Stem::spatiumChanged(qreal oldValue, qreal newValue)
 
 void Stem::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
     if (!chord()) { // may be need assert?
         return;
     }

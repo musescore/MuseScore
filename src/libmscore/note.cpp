@@ -1338,6 +1338,7 @@ bool Note::isNoteName() const
 
 void Note::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
     if (_hidden) {
         return;
     }

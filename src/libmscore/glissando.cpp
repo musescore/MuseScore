@@ -80,6 +80,7 @@ void GlissandoSegment::layout()
 
 void GlissandoSegment::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
     painter->save();
     qreal _spatium = spatium();
 

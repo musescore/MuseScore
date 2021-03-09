@@ -78,6 +78,7 @@ Rest::Rest(const Rest& r, bool link)
 
 void Rest::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
     if (shouldNotBeDrawn()) {
         return;
     }

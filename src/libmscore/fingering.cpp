@@ -232,6 +232,7 @@ void Fingering::layout()
 
 void Fingering::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
     TextBase::draw(painter);
 }
 

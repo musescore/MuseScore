@@ -177,6 +177,7 @@ void StaffLines::layoutPartialWidth(qreal w, qreal wPartial, bool alignRight)
 
 void StaffLines::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
     painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::FlatCap));
     painter->drawLines(lines);
 }

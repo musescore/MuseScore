@@ -217,6 +217,7 @@ void Beam::removeChordRest(ChordRest* a)
 
 void Beam::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
     if (beamSegments.empty()) {
         return;
     }
