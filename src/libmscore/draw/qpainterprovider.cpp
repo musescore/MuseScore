@@ -86,9 +86,9 @@ void QPainterProvider::setCompositionMode(CompositionMode mode)
     m_painter->setCompositionMode(toQPainter(mode));
 }
 
-void QPainterProvider::setFont(const QFont& f)
+void QPainterProvider::setFont(const QFont& font)
 {
-    m_painter->setFont(f);
+    m_painter->setFont(font);
 }
 
 const QFont& QPainterProvider::font() const
@@ -156,9 +156,9 @@ void QPainterProvider::scale(qreal sx, qreal sy)
     m_painter->scale(sx, sy);
 }
 
-void QPainterProvider::rotate(qreal a)
+void QPainterProvider::rotate(qreal angle)
 {
-    m_painter->rotate(a);
+    m_painter->rotate(angle);
 }
 
 void QPainterProvider::translate(const QPointF& offset)
@@ -213,9 +213,9 @@ void QPainterProvider::drawRects(const QRectF* rects, int rectCount)
     m_painter->drawRects(rects, rectCount);
 }
 
-void QPainterProvider::drawEllipse(const QRectF& r)
+void QPainterProvider::drawEllipse(const QRectF& rect)
 {
-    m_painter->drawEllipse(r);
+    m_painter->drawEllipse(rect);
 }
 
 void QPainterProvider::drawPolyline(const QPointF* points, int pointCount)
@@ -233,14 +233,14 @@ void QPainterProvider::drawConvexPolygon(const QPointF* points, int pointCount)
     m_painter->drawConvexPolygon(points, pointCount);
 }
 
-void QPainterProvider::drawText(const QPointF& p, const QString& s)
+void QPainterProvider::drawText(const QPointF& point, const QString& text)
 {
-    m_painter->drawText(p, s);
+    m_painter->drawText(point, text);
 }
 
-void QPainterProvider::drawText(const QRectF& r, int flags, const QString& text)
+void QPainterProvider::drawText(const QRectF& rect, int flags, const QString& text)
 {
-    m_painter->drawText(r, flags, text);
+    m_painter->drawText(rect, flags, text);
 }
 
 void QPainterProvider::drawGlyphRun(const QPointF& position, const QGlyphRun& glyphRun)
@@ -248,14 +248,14 @@ void QPainterProvider::drawGlyphRun(const QPointF& position, const QGlyphRun& gl
     m_painter->drawGlyphRun(position, glyphRun);
 }
 
-void QPainterProvider::fillRect(const QRectF& r, const QBrush& brush)
+void QPainterProvider::fillRect(const QRectF& rect, const QBrush& brush)
 {
-    m_painter->fillRect(r, brush);
+    m_painter->fillRect(rect, brush);
 }
 
-void QPainterProvider::drawPixmap(const QPointF& p, const QPixmap& pm)
+void QPainterProvider::drawPixmap(const QPointF& point, const QPixmap& pm)
 {
-    m_painter->drawPixmap(p, pm);
+    m_painter->drawPixmap(point, pm);
 }
 
 void QPainterProvider::drawTiledPixmap(const QRectF& rect, const QPixmap& pm, const QPointF& offset)

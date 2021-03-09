@@ -84,7 +84,7 @@ public:
     void setAntialiasing(bool arg) override;
     void setCompositionMode(CompositionMode mode) override;
 
-    void setFont(const QFont& f) override;
+    void setFont(const QFont& font) override;
     const QFont& font() const override;
 
     void setPen(const QPen& pen) override;
@@ -104,7 +104,7 @@ public:
     const QTransform& transform() const override;
 
     void scale(qreal sx, qreal sy) override;
-    void rotate(qreal a) override;
+    void rotate(qreal angle) override;
 
     void translate(const QPointF& offset) override;
 
@@ -122,19 +122,19 @@ public:
 
     void drawRects(const QRectF* rects, int rectCount) override;
 
-    void drawEllipse(const QRectF& r) override;
+    void drawEllipse(const QRectF& rect) override;
 
     void drawPolyline(const QPointF* points, int pointCount) override;
 
     void drawPolygon(const QPointF* points, int pointCount, Qt::FillRule fillRule = Qt::OddEvenFill) override;
     void drawConvexPolygon(const QPointF* points, int pointCount) override;
 
-    void drawText(const QPointF& p, const QString& s) override;
-    void drawText(const QRectF& r, int flags, const QString& text) override;
+    void drawText(const QPointF& point, const QString& text) override;
+    void drawText(const QRectF& rect, int flags, const QString& text) override;
 
     void drawGlyphRun(const QPointF& position, const QGlyphRun& glyphRun) override;
 
-    void fillRect(const QRectF& r, const QBrush& brush) override;
+    void fillRect(const QRectF& rect, const QBrush& brush) override;
 
     void drawPixmap(const QPointF& p, const QPixmap& pm) override;
     void drawTiledPixmap(const QRectF& rect, const QPixmap& pm, const QPointF& offset = QPointF()) override;
