@@ -105,6 +105,9 @@
 #include "shape.h"
 //#include "musescoreCore.h"
 
+#include "log.h"
+#define LOG_PROP() if (0) LOGD()
+
 namespace Ms {
 // extern bool showInvisible;
 
@@ -1465,7 +1468,7 @@ bool Element::setProperty(Pid propertyId, const QVariant& v)
             return parent()->setProperty(propertyId, v);
         }
 
-        qDebug("%s unknown <%s>(%d), data <%s>", name(), propertyName(propertyId), int(propertyId), qPrintable(v.toString()));
+        LOG_PROP() << name() << " unknown <" << propertyName(propertyId) << ">(" << int(propertyId) << "), data: " << v.toString();
         return false;
     }
     triggerLayout();

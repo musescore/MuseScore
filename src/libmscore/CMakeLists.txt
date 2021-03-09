@@ -360,6 +360,8 @@ set(MODULE_SRC
     draw/qpainterprovider.h
     draw/bufferedpaintprovider.cpp
     draw/bufferedpaintprovider.h
+    draw/drawobjectslogger.cpp
+    draw/drawobjectslogger.h
     )
 
 set(MODULE_INCLUDE

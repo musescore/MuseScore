@@ -244,6 +244,7 @@ void Bend::layout()
 
 void Bend::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
     qreal _spatium = spatium();
     qreal _lw = _lineWidth;
 

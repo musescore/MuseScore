@@ -3347,8 +3347,9 @@ TextCursor* TextBase::cursorFromEditData(const EditData& ed)
 //   draw
 //---------------------------------------------------------
 
-void TextBase::draw(mu::draw::Painter* p) const
+void TextBase::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
     if (hasFrame()) {
         qreal baseSpatium = MScore::baseStyle().value(Sid::spatium).toDouble();
         if (frameWidth().val() != 0.0) {
@@ -3356,14 +3357,14 @@ void TextBase::draw(mu::draw::Painter* p) const
             qreal frameWidthVal = frameWidth().val() * (sizeIsSpatiumDependent() ? spatium() : baseSpatium);
 
             QPen pen(fColor, frameWidthVal, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin);
-            p->setPen(pen);
+            painter->setPen(pen);
         } else {
-            p->setNoPen();
+            painter->setNoPen();
         }
         QColor bg(bgColor());
-        p->setBrush(bg.alpha() ? QBrush(bg) : Qt::NoBrush);
+        painter->setBrush(bg.alpha() ? QBrush(bg) : Qt::NoBrush);
         if (circle()) {
-            p->drawEllipse(frame);
+            painter->drawEllipse(frame);
         } else {
             qreal frameRoundFactor = (sizeIsSpatiumDependent() ? (spatium() / baseSpatium) / 2 : 0.5f);
 
@@ -3371,13 +3372,13 @@ void TextBase::draw(mu::draw::Painter* p) const
             if (r2 > 99) {
                 r2 = 99;
             }
-            p->drawRoundedRect(frame, frameRound() * frameRoundFactor, r2);
+            painter->drawRoundedRect(frame, frameRound() * frameRoundFactor, r2);
         }
     }
-    p->setBrush(Qt::NoBrush);
-    p->setPen(textColor());
+    painter->setBrush(Qt::NoBrush);
+    painter->setPen(textColor());
     for (const TextBlock& t : _layout) {
-        t.draw(p, this);
+        t.draw(painter, this);
     }
 }
 

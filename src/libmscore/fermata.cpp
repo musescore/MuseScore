@@ -146,6 +146,7 @@ QString Fermata::userName() const
 
 void Fermata::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
 #if 0
     SymId sym = symId();
     FermataShowIn flags = articulationList[int(articulationType())].flags;

@@ -603,6 +603,7 @@ void FiguredBassItem::layout()
 
 void FiguredBassItem::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
     int font = 0;
     qreal _spatium = spatium();
     // set font from general style

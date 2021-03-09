@@ -19,6 +19,7 @@
 #include "qpainterprovider.h"
 
 #include <QPainter>
+#include "log.h"
 
 using namespace mu::draw;
 
@@ -66,6 +67,16 @@ bool QPainterProvider::end(const std::string&)
 bool QPainterProvider::isActive() const
 {
     return m_painter->isActive();
+}
+
+void QPainterProvider::beginObject(const std::string& name, const QPointF& pagePos)
+{
+    m_drawObjectsLogger.beginObject(name, pagePos);
+}
+
+void QPainterProvider::endObject(const std::string& name, const QPointF& pagePos)
+{
+    m_drawObjectsLogger.endObject(name, pagePos);
 }
 
 void QPainterProvider::setAntialiasing(bool arg)

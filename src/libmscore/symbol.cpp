@@ -80,14 +80,15 @@ void Symbol::layout()
 //   Symbol::draw
 //---------------------------------------------------------
 
-void Symbol::draw(mu::draw::Painter* p) const
+void Symbol::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
     if (!isNoteDot() || !staff()->isTabStaff(tick())) {
-        p->setPen(curColor());
+        painter->setPen(curColor());
         if (_scoreFont) {
-            _scoreFont->draw(_sym, p, magS(), QPointF());
+            _scoreFont->draw(_sym, painter, magS(), QPointF());
         } else {
-            drawSymbol(_sym, p);
+            drawSymbol(_sym, painter);
         }
     }
 }

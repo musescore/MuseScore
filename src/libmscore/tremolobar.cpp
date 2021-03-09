@@ -96,6 +96,7 @@ void TremoloBar::layout()
 
 void TremoloBar::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
     QPen pen(curColor(), m_lw.val(), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
     painter->setPen(pen);
     painter->drawPolyline(m_polygon);

@@ -74,6 +74,7 @@ void TextLineBaseSegment::setSelected(bool f)
 
 void TextLineBaseSegment::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
     TextLineBase* tl   = textLineBase();
 
     if (!_text->empty()) {

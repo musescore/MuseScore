@@ -603,6 +603,7 @@ bool BarLine::isBottom() const
 
 void BarLine::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
     switch (barLineType()) {
     case BarLineType::NORMAL: {
         qreal lw = score()->styleP(Sid::barWidth) * mag();

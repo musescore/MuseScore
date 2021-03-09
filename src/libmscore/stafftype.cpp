@@ -1011,6 +1011,7 @@ void TabDurationSymbol::layout2()
 
 void TabDurationSymbol::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
     if (!_tab) {
         return;
     }

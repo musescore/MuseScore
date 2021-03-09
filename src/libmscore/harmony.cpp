@@ -1514,6 +1514,7 @@ qreal Harmony::xShapeOffset() const
 
 void Harmony::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
     // painter->setPen(curColor());
     if (textList.empty()) {
         TextBase::draw(painter);

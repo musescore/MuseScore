@@ -18,6 +18,8 @@
 //=============================================================================
 #include "bufferedpaintprovider.h"
 
+#include "log.h"
+
 using namespace mu::draw;
 
 BufferedPaintProvider::BufferedPaintProvider()
@@ -50,6 +52,16 @@ bool BufferedPaintProvider::end(const std::string&)
 bool BufferedPaintProvider::isActive() const
 {
     return m_isActive;
+}
+
+void BufferedPaintProvider::beginObject(const std::string& name, const QPointF& pagePos)
+{
+    m_drawObjectsLogger.beginObject(name, pagePos);
+}
+
+void BufferedPaintProvider::endObject(const std::string& name, const QPointF& pagePos)
+{
+    m_drawObjectsLogger.endObject(name, pagePos);
 }
 
 const DrawBuffer::State& BufferedPaintProvider::currentState() const

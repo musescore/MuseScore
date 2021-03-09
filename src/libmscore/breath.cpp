@@ -137,10 +137,11 @@ qreal Breath::mag() const
 //   draw
 //---------------------------------------------------------
 
-void Breath::draw(mu::draw::Painter* p) const
+void Breath::draw(mu::draw::Painter* painter) const
 {
-    p->setPen(curColor());
-    drawSymbol(_symId, p);
+    TRACE_OBJ_DRAW;
+    painter->setPen(curColor());
+    drawSymbol(_symId, painter);
 }
 
 //---------------------------------------------------------

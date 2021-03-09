@@ -99,6 +99,7 @@ void StaffTypeChange::layout()
 
 void StaffTypeChange::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
     if (score()->printing() || !score()->showUnprintable()) {
         return;
     }
