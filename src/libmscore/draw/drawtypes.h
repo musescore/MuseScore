@@ -19,11 +19,69 @@
 #ifndef MU_DRAW_DRAWTYPES_H
 #define MU_DRAW_DRAWTYPES_H
 
+#include <QPainterPath>
+#include <QBrush>
+#include <QPen>
+#include <QGlyphRun>
+
 namespace mu::draw {
 enum class CompositionMode {
     SourceOver,
     HardLight
 };
-}
 
+struct Scale {
+    double x = 0.0;
+    double y = 0.0;
+};
+
+struct FillPath {
+    QPainterPath path;
+    QBrush brush;
+};
+
+struct FillRect {
+    QRectF rect;
+    QBrush brush;
+};
+
+struct FillPolygon {
+    QPolygonF polygon;
+    Qt::FillRule fillRule = Qt::OddEvenFill;
+    bool convexMode = false;
+};
+
+struct DrawPath {
+    QPainterPath path;
+    QPen pen;
+    bool stroke = false;
+};
+
+struct DrawText {
+    QPointF point;
+    QString text;
+};
+
+struct DrawRectText {
+    QRectF rect;
+    int flags = 0;
+    QString text;
+};
+
+struct DrawGlyphRun {
+    QPointF pos;
+    QGlyphRun glyphRun;
+};
+
+struct DrawPixmap {
+    QPointF point;
+    QPixmap pm;
+};
+
+struct DrawTiledPixmap {
+    QRectF rect;
+    QPixmap pm;
+    QPointF offset;
+};
+}
 #endif // MU_DRAW_DRAWTYPES_H

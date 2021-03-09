@@ -358,6 +358,8 @@ set(MODULE_SRC
     draw/drawtypes.h
     draw/qpainterprovider.cpp
     draw/qpainterprovider.h
+    draw/bufferedpaintprovider.cpp
+    draw/bufferedpaintprovider.h
     )
 
 set(MODULE_INCLUDE

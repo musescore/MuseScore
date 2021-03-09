@@ -16,23 +16,63 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DRAW_QPAINTERPROVIDER_H
-#define MU_DRAW_QPAINTERPROVIDER_H
+#ifndef MU_DRAW_BUFFEREDPAINTPROVIDER_H
+#define MU_DRAW_BUFFEREDPAINTPROVIDER_H
+
+#include <vector>
+
+#include <QPen>
+#include <QBrush>
+#include <QFont>
 
 #include "ipaintprovider.h"
-
-class QPainter;
-class QImage;
+#include "drawtypes.h"
 
 namespace mu::draw {
-class QPainterProvider : public IPaintProvider
+struct DrawBuffer
+{
+    struct State {
+        QPen pen;
+        QBrush brush;
+        QFont font;
+        bool isAntialiasing = false;
+        QTransform worldTransform;
+        bool worldTransformCombine = false;
+        QTransform transform;
+        bool transformCombine = false;
+        Scale scale;
+        double rotate = 0.0;
+        QPointF translate;
+        CompositionMode compositionMode = CompositionMode::SourceOver;
+    };
+
+    struct Data {
+        State state;
+
+        std::vector<FillPath> fillPaths;
+        std::vector<FillRect> fillRects;
+        std::vector<QPainterPath> paths;
+        std::vector<DrawPath> drawPaths;
+        std::vector<QLineF> lines;
+        std::vector<QRectF> rects;
+        std::vector<QRectF> ellipses;
+        std::vector<FillPolygon> polygons;
+        std::vector<DrawText> texts;
+        std::vector<DrawRectText> rectTexts;
+        std::vector<DrawGlyphRun> glyphs;
+        std::vector<DrawPixmap> pixmaps;
+        std::vector<DrawTiledPixmap> tiledPixmap;
+    };
+
+    QRect window;
+    QRect viewport;
+    std::vector<Data> datas;
+};
+
+class BufferedPaintProvider : public IPaintProvider
 {
 public:
-    QPainterProvider(QPainter* painter, bool overship = false);
-    ~QPainterProvider();
-
-    static IPaintProviderPtr make(QPaintDevice* dp);
-    static IPaintProviderPtr make(QPainter* qp, bool overship = false);
+    BufferedPaintProvider();
 
     QPaintDevice* device() const override;
     QPainter* qpainter() const override;
@@ -96,13 +136,19 @@ public:
 
     void fillRect(const QRectF& rect, const QBrush& brush) override;
 
-    void drawPixmap(const QPointF& point, const QPixmap& pm) override;
+    void drawPixmap(const QPointF& p, const QPixmap& pm) override;
     void drawTiledPixmap(const QRectF& rect, const QPixmap& pm, const QPointF& offset = QPointF()) override;
 
 private:
-    QPainter* m_painter = nullptr;
-    bool m_overship = false;
+
+    const DrawBuffer::State& currentState() const;
+    DrawBuffer::State& editableState();
+    DrawBuffer::Data& editableData();
+
+    DrawBuffer m_buf;
+    bool m_isCurDataEmpty = true;
+    bool m_isActive = false;
 };
 }
 
-#endif // MU_DRAW_QPAINTERPROVIDER_H
+#endif // MU_DRAW_BUFFEREDPAINTPROVIDER_H

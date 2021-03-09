@@ -568,7 +568,7 @@ QImage Score::createThumbnail()
     double pr = MScore::pixelRatio;
     MScore::pixelRatio = 1.0;
 
-    mu::draw::Painter p(mu::draw::QPainterProvider::make(&pm));
+    mu::draw::Painter p(&pm, "thumbnail");
     p.setAntialiasing(true);
     p.scale(mag, mag);
     print(&p, 0);

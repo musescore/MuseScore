@@ -18,11 +18,49 @@
 //=============================================================================
 #include "painter.h"
 
+#ifndef NO_QT_SUPPORT
+#include "qpainterprovider.h"
+#endif
+
 using namespace mu::draw;
 
-Painter::Painter(IPaintProviderPtr provider)
-    : m_provider(provider)
+IPaintProviderPtr Painter::extended;
+
+Painter::Painter(IPaintProviderPtr provider, const std::string& name)
+    : m_provider(provider), m_name(name)
 {
+    m_provider->begin(name);
+    if (extended) {
+        extended->begin(name);
+    }
+}
+
+#ifndef NO_QT_SUPPORT
+Painter::Painter(QPaintDevice* dp, const std::string& name)
+    : m_name(name)
+{
+    m_provider = QPainterProvider::make(dp);
+    m_provider->begin(name);
+    if (extended) {
+        extended->begin(name);
+    }
+}
+
+Painter::Painter(QPainter* qp, const std::string& name, bool overship)
+    : m_name(name)
+{
+    m_provider = QPainterProvider::make(qp, overship);
+    m_provider->begin(name);
+    if (extended) {
+        extended->begin(name);
+    }
+}
+
+#endif
+
+Painter::~Painter()
+{
+    end();
 }
 
 QPaintDevice* Painter::device() const
@@ -37,7 +75,10 @@ QPainter* Painter::qpainter() const
 
 bool Painter::end()
 {
-    return m_provider->end();
+    return m_provider->end(m_name);
+    if (extended) {
+        extended->end(m_name);
+    }
 }
 
 bool Painter::isActive() const
@@ -48,16 +89,25 @@ bool Painter::isActive() const
 void Painter::setAntialiasing(bool arg)
 {
     m_provider->setAntialiasing(arg);
+    if (extended) {
+        extended->setAntialiasing(arg);
+    }
 }
 
 void Painter::setCompositionMode(CompositionMode mode)
 {
     m_provider->setCompositionMode(mode);
+    if (extended) {
+        extended->setCompositionMode(mode);
+    }
 }
 
-void Painter::setFont(const QFont& f)
+void Painter::setFont(const QFont& font)
 {
-    m_provider->setFont(f);
+    m_provider->setFont(font);
+    if (extended) {
+        extended->setFont(font);
+    }
 }
 
 const QFont& Painter::font() const
@@ -65,19 +115,17 @@ const QFont& Painter::font() const
     return m_provider->font();
 }
 
-void Painter::setPen(const QColor& color)
-{
-    m_provider->setPen(color);
-}
-
 void Painter::setPen(const QPen& pen)
 {
     m_provider->setPen(pen);
+    if (extended) {
+        extended->setPen(pen);
+    }
 }
 
 void Painter::setNoPen()
 {
-    m_provider->setPen(QPen(Qt::NoPen));
+    setPen(QPen(Qt::NoPen));
 }
 
 const QPen& Painter::pen() const
@@ -88,6 +136,9 @@ const QPen& Painter::pen() const
 void Painter::setBrush(const QBrush& brush)
 {
     m_provider->setBrush(brush);
+    if (extended) {
+        extended->setBrush(brush);
+    }
 }
 
 const QBrush& Painter::brush() const
@@ -108,6 +159,9 @@ void Painter::restore()
 void Painter::setWorldTransform(const QTransform& matrix, bool combine)
 {
     m_provider->setWorldTransform(matrix, combine);
+    if (extended) {
+        extended->setWorldTransform(matrix, combine);
+    }
 }
 
 const QTransform& Painter::worldTransform() const
@@ -118,6 +172,9 @@ const QTransform& Painter::worldTransform() const
 void Painter::setTransform(const QTransform& transform, bool combine)
 {
     m_provider->setTransform(transform, combine);
+    if (extended) {
+        extended->setTransform(transform, combine);
+    }
 }
 
 const QTransform& Painter::transform() const
@@ -125,24 +182,28 @@ const QTransform& Painter::transform() const
     return m_provider->transform();
 }
 
-void Painter::setMatrix(const QMatrix& matrix, bool combine)
-{
-    m_provider->setMatrix(matrix, combine);
-}
-
 void Painter::scale(qreal sx, qreal sy)
 {
     m_provider->scale(sx, sy);
+    if (extended) {
+        extended->scale(sx, sy);
+    }
 }
 
-void Painter::rotate(qreal a)
+void Painter::rotate(qreal angle)
 {
-    m_provider->rotate(a);
+    m_provider->rotate(angle);
+    if (extended) {
+        extended->rotate(angle);
+    }
 }
 
 void Painter::translate(const QPointF& offset)
 {
     m_provider->translate(offset);
+    if (extended) {
+        extended->translate(offset);
+    }
 }
 
 QRect Painter::window() const
@@ -153,6 +214,9 @@ QRect Painter::window() const
 void Painter::setWindow(const QRect& window)
 {
     m_provider->setWindow(window);
+    if (extended) {
+        extended->setWindow(window);
+    }
 }
 
 QRect Painter::viewport() const
@@ -163,6 +227,9 @@ QRect Painter::viewport() const
 void Painter::setViewport(const QRect& viewport)
 {
     m_provider->setViewport(viewport);
+    if (extended) {
+        extended->setViewport(viewport);
+    }
 }
 
 // drawing functions
@@ -170,84 +237,150 @@ void Painter::setViewport(const QRect& viewport)
 void Painter::fillPath(const QPainterPath& path, const QBrush& brush)
 {
     m_provider->fillPath(path, brush);
+    if (extended) {
+        extended->fillPath(path, brush);
+    }
 }
 
 void Painter::drawPath(const QPainterPath& path)
 {
     m_provider->drawPath(path);
+    if (extended) {
+        extended->drawPath(path);
+    }
+}
+
+void Painter::strokePath(const QPainterPath& path, const QPen& pen)
+{
+    m_provider->strokePath(path, pen);
+    if (extended) {
+        extended->strokePath(path, pen);
+    }
 }
 
 void Painter::drawLines(const QLineF* lines, int lineCount)
 {
     m_provider->drawLines(lines, lineCount);
+    if (extended) {
+        extended->drawLines(lines, lineCount);
+    }
 }
 
 void Painter::drawLines(const QPointF* pointPairs, int lineCount)
 {
-    m_provider->drawLines(pointPairs, lineCount);
+    Q_ASSERT(sizeof(QLineF) == 2 * sizeof(QPointF));
+
+    drawLines((const QLineF*)pointPairs, lineCount);
 }
 
 void Painter::drawRects(const QRectF* rects, int rectCount)
 {
     m_provider->drawRects(rects, rectCount);
+    if (extended) {
+        extended->drawRects(rects, rectCount);
+    }
 }
 
-void Painter::drawEllipse(const QRectF& r)
+void Painter::drawEllipse(const QRectF& rect)
 {
-    m_provider->drawEllipse(r);
+    m_provider->drawEllipse(rect);
+    if (extended) {
+        extended->drawEllipse(rect);
+    }
 }
 
 void Painter::drawPolyline(const QPointF* points, int pointCount)
 {
     m_provider->drawPolyline(points, pointCount);
+    if (extended) {
+        extended->drawPolyline(points, pointCount);
+    }
 }
 
 void Painter::drawPolygon(const QPointF* points, int pointCount, Qt::FillRule fillRule)
 {
     m_provider->drawPolygon(points, pointCount, fillRule);
+    if (extended) {
+        extended->drawPolygon(points, pointCount, fillRule);
+    }
 }
 
 void Painter::drawConvexPolygon(const QPointF* points, int pointCount)
 {
     m_provider->drawConvexPolygon(points, pointCount);
+    if (extended) {
+        extended->drawConvexPolygon(points, pointCount);
+    }
 }
 
-void Painter::drawArc(const QRectF& rect, int a, int alen)
+void Painter::drawArc(const QRectF& r, int a, int alen)
 {
-    m_provider->drawArc(rect, a, alen);
+    //! NOTE Copied from QPainter source code
+
+    QRectF rect = r.normalized();
+
+    QPainterPath path;
+    path.arcMoveTo(rect, a / 16.0);
+    path.arcTo(rect, a / 16.0, alen / 16.0);
+    strokePath(path, pen());
 }
 
 void Painter::drawRoundedRect(const QRectF& rect, qreal xRadius, qreal yRadius, Qt::SizeMode mode)
 {
-    m_provider->drawRoundedRect(rect, xRadius, yRadius, mode);
+    if (xRadius <= 0 || yRadius <= 0) {             // draw normal rectangle
+        drawRect(rect);
+        return;
+    }
+
+    QPainterPath path;
+    path.addRoundedRect(rect, xRadius, yRadius, mode);
+    drawPath(path);
 }
 
-void Painter::drawText(const QPointF& p, const QString& s)
+void Painter::drawText(const QPointF& point, const QString& text)
 {
-    m_provider->drawText(p, s);
+    m_provider->drawText(point, text);
+    if (extended) {
+        extended->drawText(point, text);
+    }
 }
 
-void Painter::drawText(const QRectF& r, int flags, const QString& text, QRectF* br)
+void Painter::drawText(const QRectF& rect, int flags, const QString& text)
 {
-    m_provider->drawText(r, flags, text, br);
+    m_provider->drawText(rect, flags, text);
+    if (extended) {
+        extended->drawText(rect, flags, text);
+    }
 }
 
 void Painter::drawGlyphRun(const QPointF& position, const QGlyphRun& glyphRun)
 {
     m_provider->drawGlyphRun(position, glyphRun);
+    if (extended) {
+        extended->drawGlyphRun(position, glyphRun);
+    }
 }
 
-void Painter::fillRect(const QRectF& r, const QColor& color)
+void Painter::fillRect(const QRectF& rect, const QBrush& brush)
 {
-    m_provider->fillRect(r, color);
+    m_provider->fillRect(rect, brush);
+    if (extended) {
+        extended->fillRect(rect, brush);
+    }
 }
 
-void Painter::drawPixmap(const QPointF& p, const QPixmap& pm)
+void Painter::drawPixmap(const QPointF& point, const QPixmap& pm)
 {
-    m_provider->drawPixmap(p, pm);
+    m_provider->drawPixmap(point, pm);
+    if (extended) {
+        extended->drawPixmap(point, pm);
+    }
 }
 
 void Painter::drawTiledPixmap(const QRectF& rect, const QPixmap& pm, const QPointF& offset)
 {
     m_provider->drawTiledPixmap(rect, pm, offset);
+    if (extended) {
+        extended->drawTiledPixmap(rect, pm, offset);
+    }
 }

@@ -39,16 +39,16 @@ public:
     virtual QPaintDevice* device() const = 0;
     virtual QPainter* qpainter() const = 0;
 
-    virtual bool end() = 0;
+    virtual void begin(const std::string& name) = 0;
+    virtual bool end(const std::string& name) = 0;
     virtual bool isActive() const = 0;
 
     virtual void setAntialiasing(bool arg) = 0;
     virtual void setCompositionMode(CompositionMode mode) = 0;
 
-    virtual void setFont(const QFont& f) = 0;
+    virtual void setFont(const QFont& font) = 0;
     virtual const QFont& font() const = 0;
 
-    virtual void setPen(const QColor& color) = 0;
     virtual void setPen(const QPen& pen) = 0;
     virtual void setNoPen() = 0;
     virtual const QPen& pen() const = 0;
@@ -65,10 +65,8 @@ public:
     virtual void setTransform(const QTransform& transform, bool combine = false) = 0;
     virtual const QTransform& transform() const = 0;
 
-    virtual void setMatrix(const QMatrix& matrix, bool combine = false) = 0;
-
     virtual void scale(qreal sx, qreal sy) = 0;
-    virtual void rotate(qreal a) = 0;
+    virtual void rotate(qreal angle) = 0;
 
     virtual void translate(const QPointF& offset) = 0;
 
@@ -80,30 +78,27 @@ public:
     // drawing functions
     virtual void fillPath(const QPainterPath& path, const QBrush& brush) = 0;
     virtual void drawPath(const QPainterPath& path) = 0;
+    virtual void strokePath(const QPainterPath& path, const QPen& pen) = 0;
 
     virtual void drawLines(const QLineF* lines, int lineCount) = 0;
-    virtual void drawLines(const QPointF* pointPairs, int lineCount) = 0;
 
     virtual void drawRects(const QRectF* rects, int rectCount) = 0;
-    virtual void drawRoundedRect(const QRectF& rect, qreal xRadius, qreal yRadius, Qt::SizeMode mode = Qt::AbsoluteSize) = 0;
 
-    virtual void drawEllipse(const QRectF& r) = 0;
+    virtual void drawEllipse(const QRectF& rect) = 0;
 
     virtual void drawPolyline(const QPointF* points, int pointCount) = 0;
 
     virtual void drawPolygon(const QPointF* points, int pointCount, Qt::FillRule fillRule = Qt::OddEvenFill) = 0;
     virtual void drawConvexPolygon(const QPointF* points, int pointCount) = 0;
 
-    virtual void drawArc(const QRectF& rect, int a, int alen) = 0;
-
-    virtual void drawText(const QPointF& p, const QString& s) = 0;
-    virtual void drawText(const QRectF& r, int flags, const QString& text, QRectF* br = nullptr) = 0;
+    virtual void drawText(const QPointF& point, const QString& text) = 0;
+    virtual void drawText(const QRectF& rect, int flags, const QString& text) = 0;
 
     virtual void drawGlyphRun(const QPointF& position, const QGlyphRun& glyphRun) = 0;
 
-    virtual void fillRect(const QRectF& r, const QColor& color) = 0;
+    virtual void fillRect(const QRectF& rect, const QBrush& brush) = 0;
 
-    virtual void drawPixmap(const QPointF& p, const QPixmap& pm) = 0;
+    virtual void drawPixmap(const QPointF& point, const QPixmap& pm) = 0;
     virtual void drawTiledPixmap(const QRectF& rect, const QPixmap& pm, const QPointF& offset = QPointF()) = 0;
 };
 

@@ -105,7 +105,7 @@ void KeyCanvas::clear()
 
 void KeyCanvas::paintEvent(QPaintEvent*)
 {
-    mu::draw::Painter painter(mu::draw::QPainterProvider::make(this));
+    mu::draw::Painter painter(this, "keycanvas");
     painter.setAntialiasing(true);
     qreal wh = double(height());
     qreal ww = double(width());
