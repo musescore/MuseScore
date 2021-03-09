@@ -165,6 +165,7 @@ struct InstrumentTemplate
     QString id;
     Transposition transposition;
     Instrument instrument;
+    int sequenceOrder = 0;
 
     bool isValid() const { return !id.isEmpty(); }
 };

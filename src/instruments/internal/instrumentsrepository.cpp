@@ -91,8 +91,9 @@ void InstrumentsRepository::load()
             continue;
         }
 
-        const InstrumentTemplateMap& templates = metaInstrument.val.instrumentTemplates;
-        for (auto it = templates.cbegin(); it != templates.cend(); ++it) {
+        InstrumentTemplateMap& templates = metaInstrument.val.instrumentTemplates;
+        for (auto it = templates.begin(); it != templates.end(); ++it) {
+            it.value().transposition = transposition(it.value().id);
             m_instrumentsMeta.instrumentTemplates.insert(it.key(), it.value());
         }
 
@@ -114,10 +115,6 @@ void InstrumentsRepository::load()
         globalGroupsSequenceOrder += groups.size();
 
         Ms::loadInstrumentTemplates(filePath.toQString());
-    }
-
-    for (InstrumentTemplate& instrumentTemplate: m_instrumentsMeta.instrumentTemplates) {
-        instrumentTemplate.transposition = transposition(instrumentTemplate.id);
     }
 
     m_instrumentsMetaChannel.send(m_instrumentsMeta);

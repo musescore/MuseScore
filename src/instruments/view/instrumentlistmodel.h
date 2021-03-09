@@ -85,6 +85,7 @@ private:
     void setInstrumentsMeta(const InstrumentsMeta& meta);
     QVariantMap allInstrumentsItem() const;
     InstrumentGroupList sortedGroupList() const;
+    InstrumentTemplateList sortedTemplateList() const;
 
     QVariantMap defaultInstrumentTranspositionItem() const;
 

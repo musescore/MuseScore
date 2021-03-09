@@ -144,7 +144,7 @@ QVariantList InstrumentListModel::instruments() const
 {
     QVariantMap availableInstruments;
 
-    for (const InstrumentTemplate& templ: m_instrumentsMeta.instrumentTemplates) {
+    for (const InstrumentTemplate& templ: sortedTemplateList()) {
         const Instrument& instrument = templ.instrument;
 
         if (!isInstrumentAccepted(instrument)) {
@@ -180,7 +180,7 @@ QVariantList InstrumentListModel::instruments() const
         instrumentObj[NAME_KEY] = instrumentName;
         instrumentObj[TRANSPOSITIONS_KEY] = instrumentTranspositions;
         instrumentObj[GROUP_ID] = instrument.groupId;
-        availableInstruments.insert(instrumentId, instrumentObj);
+        availableInstruments[instrumentId] = instrumentObj;
     }
 
     QVariantList result = availableInstruments.values();
@@ -358,6 +358,17 @@ InstrumentGroupList InstrumentListModel::sortedGroupList() const
 
     std::sort(result.begin(), result.end(), [](const InstrumentGroup& group1, const InstrumentGroup& group2) {
         return group1.sequenceOrder < group2.sequenceOrder;
+    });
+
+    return result;
+}
+
+InstrumentTemplateList InstrumentListModel::sortedTemplateList() const
+{
+    InstrumentTemplateList result = m_instrumentsMeta.instrumentTemplates.values();
+
+    std::sort(result.begin(), result.end(), [](const InstrumentTemplate& templ1, const InstrumentTemplate& templ2) {
+        return templ1.sequenceOrder < templ2.sequenceOrder;
     });
 
     return result;

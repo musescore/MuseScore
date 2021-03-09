@@ -461,6 +461,20 @@
                   </Channel>
                   <genre>world</genre>
             </Instrument>
+            <Instrument id="g-dizi">
+                  <longName>G Dizi</longName>
+                  <shortName>G Di.</shortName>
+                  <description>G Dizi</description>
+                  <musicXMLid>wind.flutes.di-zi</musicXMLid>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>74-100</aPitchRange>
+                  <pPitchRange>74-105</pPitchRange>
+                  <Channel>
+                        <program value="72"/> <!--Piccolo-->
+                  </Channel>
+                  <genre>world</genre>
+            </Instrument>
             <Instrument id="d-dizi">
                   <longName>Dizi</longName>
                   <shortName>Di.</shortName>
@@ -498,20 +512,6 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>76-102</aPitchRange>
                   <pPitchRange>76-107</pPitchRange>
-                  <Channel>
-                        <program value="72"/> <!--Piccolo-->
-                  </Channel>
-                  <genre>world</genre>
-            </Instrument>
-            <Instrument id="g-dizi">
-                  <longName>G Dizi</longName>
-                  <shortName>G Di.</shortName>
-                  <description>G Dizi</description>
-                  <musicXMLid>wind.flutes.di-zi</musicXMLid>
-                  <clef>G</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>74-100</aPitchRange>
-                  <pPitchRange>74-105</pPitchRange>
                   <Channel>
                         <program value="72"/> <!--Piccolo-->
                   </Channel>
@@ -697,6 +697,20 @@
                   </Channel>
                   <genre>world</genre>
             </Instrument>
+            <Instrument id="c-soprano-ocarina">
+                  <longName>C Soprano Ocarina</longName>
+                  <shortName>C S. Oc.</shortName>
+                  <description>C Soprano Ocarina</description>
+                  <musicXMLid>wind.flutes.ocarina</musicXMLid>
+                  <clef>G8va</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>72-86</aPitchRange>
+                  <pPitchRange>72-88</pPitchRange>
+                  <Channel>
+                        <program value="79"/> <!--Ocarina-->
+                  </Channel>
+                  <genre>world</genre>
+            </Instrument>
             <Instrument id="g-soprano-ocarina">
                   <longName>G Soprano Ocarina</longName>
                   <shortName>G S. Oc.</shortName>
@@ -725,20 +739,6 @@
                   </Channel>
                   <genre>world</genre>
             </Instrument>
-            <Instrument id="c-soprano-ocarina">
-                  <longName>C Soprano Ocarina</longName>
-                  <shortName>C S. Oc.</shortName>
-                  <description>C Soprano Ocarina</description>
-                  <musicXMLid>wind.flutes.ocarina</musicXMLid>
-                  <clef>G8va</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>72-86</aPitchRange>
-                  <pPitchRange>72-88</pPitchRange>
-                  <Channel>
-                        <program value="79"/> <!--Ocarina-->
-                  </Channel>
-                  <genre>world</genre>
-            </Instrument>
             <Instrument id="bb-soprano-ocarina">
                   <longName>B♭ Soprano Ocarina</longName>
                   <shortName>B♭ S. Oc.</shortName>
@@ -748,6 +748,20 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>70-84</aPitchRange>
                   <pPitchRange>70-86</pPitchRange>
+                  <Channel>
+                        <program value="79"/> <!--Ocarina-->
+                  </Channel>
+                  <genre>world</genre>
+            </Instrument>
+            <Instrument id="c-alto-ocarina">
+                  <longName>C Alto Ocarina</longName>
+                  <shortName>C A. Oc.</shortName>
+                  <description>C Alto Ocarina</description>
+                  <musicXMLid>wind.flutes.ocarina</musicXMLid>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>60-74</aPitchRange>
+                  <pPitchRange>60-76</pPitchRange>
                   <Channel>
                         <program value="79"/> <!--Ocarina-->
                   </Channel>
@@ -776,20 +790,6 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>65-79</aPitchRange>
                   <pPitchRange>65-81</pPitchRange>
-                  <Channel>
-                        <program value="79"/> <!--Ocarina-->
-                  </Channel>
-                  <genre>world</genre>
-            </Instrument>
-            <Instrument id="c-alto-ocarina">
-                  <longName>C Alto Ocarina</longName>
-                  <shortName>C A. Oc.</shortName>
-                  <description>C Alto Ocarina</description>
-                  <musicXMLid>wind.flutes.ocarina</musicXMLid>
-                  <clef>G</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>60-74</aPitchRange>
-                  <pPitchRange>60-76</pPitchRange>
                   <Channel>
                         <program value="79"/> <!--Ocarina-->
                   </Channel>
@@ -1056,6 +1056,19 @@
                         <program value="79"/> <!--Ocarina-->
                   </Channel>
             </Instrument>
+            <Instrument id="d-tin-whistle">
+                  <longName>D Tin Whistle</longName>
+                  <shortName>D Tin Wh.</shortName>
+                  <description>same as 6 hole Flageolet but metal construction</description>
+                  <musicXMLid>wind.flutes.whistle.tin.d</musicXMLid>
+                  <clef>G8va</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>74-98</aPitchRange>
+                  <pPitchRange>74-104</pPitchRange>
+                  <Channel>
+                        <program value="78"/> <!--Whistle-->
+                  </Channel>
+            </Instrument>
             <Instrument id="bflat-tin-whistle">
                   <longName>B♭ Tin Whistle</longName>
                   <shortName>B♭ Tin Wh.</shortName>
@@ -1082,19 +1095,6 @@
                         <program value="78"/> <!--Whistle-->
                   </Channel>
                   <genre>classroom</genre>
-            </Instrument>
-            <Instrument id="d-tin-whistle">
-                  <longName>D Tin Whistle</longName>
-                  <shortName>D Tin Wh.</shortName>
-                  <description>same as 6 hole Flageolet but metal construction</description>
-                  <musicXMLid>wind.flutes.whistle.tin.d</musicXMLid>
-                  <clef>G8va</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>74-98</aPitchRange>
-                  <pPitchRange>74-104</pPitchRange>
-                  <Channel>
-                        <program value="78"/> <!--Whistle-->
-                  </Channel>
             </Instrument>
             <Instrument id="piccolo-oboe">
                   <family>oboes</family>
@@ -2018,24 +2018,6 @@
                   <genre>concertband</genre>
                   <genre>marching</genre>
             </Instrument>
-            <Instrument id="bb-bass-clarinet-bass-clef">
-                  <family>clarinets</family>
-                  <trackName>B♭ Bass Clarinet (Bass Clef)</trackName>
-                  <longName>B♭ Bass Clarinet</longName>
-                  <shortName>B♭ B. Cl.</shortName>
-                  <description>B♭ Bass Clarinet (Bass Clef)</description>
-                  <musicXMLid>wind.reed.clarinet.bass</musicXMLid>
-                  <transposingClef>F</transposingClef>
-                  <concertClef>F</concertClef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>37-75</aPitchRange>
-                  <pPitchRange>34-82</pPitchRange>
-                  <transposeDiatonic>-1</transposeDiatonic>
-                  <transposeChromatic>-2</transposeChromatic>
-                  <Channel>
-                        <program value="71"/> <!--Clarinet-->
-                  </Channel>
-            </Instrument>
             <Instrument id="a-bass-clarinet">
                   <family>clarinets</family>
                   <longName>A Bass Clarinet</longName>
@@ -2054,7 +2036,25 @@
                   </Channel>
                   <genre>orchestra</genre>
             </Instrument>
-            <Instrument id="a-bass-clarinet-bass-clef)">
+            <Instrument id="bb-bass-clarinet-bass-clef">
+                  <family>clarinets</family>
+                  <trackName>B♭ Bass Clarinet (Bass Clef)</trackName>
+                  <longName>B♭ Bass Clarinet</longName>
+                  <shortName>B♭ B. Cl.</shortName>
+                  <description>B♭ Bass Clarinet (Bass Clef)</description>
+                  <musicXMLid>wind.reed.clarinet.bass</musicXMLid>
+                  <transposingClef>F</transposingClef>
+                  <concertClef>F</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>37-75</aPitchRange>
+                  <pPitchRange>34-82</pPitchRange>
+                  <transposeDiatonic>-1</transposeDiatonic>
+                  <transposeChromatic>-2</transposeChromatic>
+                  <Channel>
+                        <program value="71"/> <!--Clarinet-->
+                  </Channel>
+            </Instrument>
+            <Instrument id="a-bass-clarinet-bass-clef">
                   <family>clarinets</family>
                   <trackName>A Bass Clarinet (Bass Clef)</trackName>
                   <longName>A Bass Clarinet</longName>
@@ -3382,6 +3382,28 @@
                         <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
             </Instrument>
+            <Instrument id="bb-cornet">
+                  <family>cornets</family>
+                  <longName>B♭ Cornet</longName>
+                  <shortName>B♭ Cnt.</shortName>
+                  <description>B♭ Cornet</description>
+                  <musicXMLid>brass.cornet</musicXMLid>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>52-79</aPitchRange>
+                  <pPitchRange>52-82</pPitchRange>
+                  <transposeDiatonic>-1</transposeDiatonic>
+                  <transposeChromatic>-2</transposeChromatic>
+                  <Channel name="open">
+                        <program value="56"/> <!--Trumpet-->
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/> <!--Muted Trumpet-->
+                  </Channel>
+                  <genre>common</genre>
+                  <genre>jazz</genre>
+                  <genre>concertband</genre>
+            </Instrument>
             <Instrument id="eb-cornet">
                   <family>cornets</family>
                   <longName>E♭ Cornet</longName>
@@ -3418,28 +3440,6 @@
                   <Channel name="mute">
                         <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
-            </Instrument>
-            <Instrument id="bb-cornet">
-                  <family>cornets</family>
-                  <longName>B♭ Cornet</longName>
-                  <shortName>B♭ Cnt.</shortName>
-                  <description>B♭ Cornet</description>
-                  <musicXMLid>brass.cornet</musicXMLid>
-                  <clef>G</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>52-79</aPitchRange>
-                  <pPitchRange>52-82</pPitchRange>
-                  <transposeDiatonic>-1</transposeDiatonic>
-                  <transposeChromatic>-2</transposeChromatic>
-                  <Channel name="open">
-                        <program value="56"/> <!--Trumpet-->
-                  </Channel>
-                  <Channel name="mute">
-                        <program value="59"/> <!--Muted Trumpet-->
-                  </Channel>
-                  <genre>common</genre>
-                  <genre>jazz</genre>
-                  <genre>concertband</genre>
             </Instrument>
             <Instrument id="a-cornet">
                   <family>cornets</family>
@@ -3478,25 +3478,6 @@
                         <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
             </Instrument>
-            <Instrument id="f-alto-horn">
-                  <family>alto-horns</family>
-                  <longName>F Alto Horn</longName>
-                  <shortName>F A. Hn.</shortName>
-                  <description>F Alto Horn</description>
-                  <musicXMLid>brass.alto-horn</musicXMLid>
-                  <clef>G</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>47-74</aPitchRange>
-                  <pPitchRange>47-77</pPitchRange>
-                  <transposeDiatonic>-4</transposeDiatonic>
-                  <transposeChromatic>-7</transposeChromatic>
-                  <Channel name="open">
-                        <program value="60"/> <!--French Horn-->
-                  </Channel>
-                  <Channel name="mute">
-                        <program value="59"/> <!--Muted Trumpet-->
-                  </Channel>
-            </Instrument>
             <Instrument id="eb-alto-horn">
                   <family>alto-horns</family>
                   <longName>E♭ Alto Horn</longName>
@@ -3509,6 +3490,25 @@
                   <pPitchRange>45-75</pPitchRange>
                   <transposeDiatonic>-5</transposeDiatonic>
                   <transposeChromatic>-9</transposeChromatic>
+                  <Channel name="open">
+                        <program value="60"/> <!--French Horn-->
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/> <!--Muted Trumpet-->
+                  </Channel>
+            </Instrument>
+            <Instrument id="f-alto-horn">
+                  <family>alto-horns</family>
+                  <longName>F Alto Horn</longName>
+                  <shortName>F A. Hn.</shortName>
+                  <description>F Alto Horn</description>
+                  <musicXMLid>brass.alto-horn</musicXMLid>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>47-74</aPitchRange>
+                  <pPitchRange>47-77</pPitchRange>
+                  <transposeDiatonic>-4</transposeDiatonic>
+                  <transposeChromatic>-7</transposeChromatic>
                   <Channel name="open">
                         <program value="60"/> <!--French Horn-->
                   </Channel>
@@ -4308,19 +4308,6 @@
                         <program value="56"/> <!--Trumpet-->
                   </Channel>
             </Instrument>
-            <Instrument id="f-alto-ophicleide">
-                  <longName>F Alto Ophicleide</longName>
-                  <shortName>F A. Oph.</shortName>
-                  <description>F Alto Ophicleide</description>
-                  <musicXMLid>brass.ophicleide</musicXMLid>
-                  <clef>G</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>52-81</aPitchRange>
-                  <pPitchRange>52-84</pPitchRange>
-                  <Channel>
-                        <program value="56"/> <!--Trumpet-->
-                  </Channel>
-            </Instrument>
             <Instrument id="eb-alto-ophicleide">
                   <longName>E♭ Alto Ophicleide</longName>
                   <shortName>E♭ A. Oph.</shortName>
@@ -4330,6 +4317,19 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>51-79</aPitchRange>
                   <pPitchRange>51-82</pPitchRange>
+                  <Channel>
+                        <program value="56"/> <!--Trumpet-->
+                  </Channel>
+            </Instrument>
+            <Instrument id="f-alto-ophicleide">
+                  <longName>F Alto Ophicleide</longName>
+                  <shortName>F A. Oph.</shortName>
+                  <description>F Alto Ophicleide</description>
+                  <musicXMLid>brass.ophicleide</musicXMLid>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>52-81</aPitchRange>
+                  <pPitchRange>52-84</pPitchRange>
                   <Channel>
                         <program value="56"/> <!--Trumpet-->
                   </Channel>

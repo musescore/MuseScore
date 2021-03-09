@@ -78,15 +78,23 @@ void InstrumentsReader::loadGroupMeta(Ms::XmlReader& reader, InstrumentsMeta& ge
     group.extended = reader.attributes().value("extended").toInt();
     group.sequenceOrder = groupIndex;
 
+    int sequenceOrder = 0;
+
+    auto addTemplate = [&sequenceOrder, &generalMeta](InstrumentTemplate& templ) {
+        templ.sequenceOrder = sequenceOrder;
+        ++sequenceOrder;
+        generalMeta.instrumentTemplates.insert(templ.id, templ);
+    };
+
     while (reader.readNextStartElement()) {
         if (reader.name().toString().toLower() == "instrument") {
             InstrumentTemplate _template = readInstrumentTemplate(reader, generalMeta);
             _template.instrument.groupId = group.id;
-            generalMeta.instrumentTemplates.insert(_template.id, _template);
+            addTemplate(_template);
         } else if (reader.name() == "ref") {
             QString templateId = reader.readElementText();
             InstrumentTemplate newTemplate = generalMeta.instrumentTemplates[templateId];
-            generalMeta.instrumentTemplates.insert(newTemplate.id, newTemplate);
+            addTemplate(newTemplate);
         } else if (reader.name() == "name") {
             group.name = qApp->translate("InstrumentsXML", reader.readElementText().toUtf8().data()); // TODO: translate
         } else if (reader.name() == "extended") {
