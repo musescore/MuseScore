@@ -463,15 +463,16 @@ void Ambitus::layout()
 //   draw
 //---------------------------------------------------------
 
-void Ambitus::draw(mu::draw::Painter* p) const
+void Ambitus::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
     qreal _spatium = spatium();
     qreal lw = lineWidth().val() * _spatium;
-    p->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::FlatCap));
-    drawSymbol(noteHead(), p, _topPos);
-    drawSymbol(noteHead(), p, _bottomPos);
+    painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::FlatCap));
+    drawSymbol(noteHead(), painter, _topPos);
+    drawSymbol(noteHead(), painter, _bottomPos);
     if (_hasLine) {
-        p->drawLine(_line);
+        painter->drawLine(_line);
     }
 
     // draw ledger lines (if not in a palette)
@@ -484,13 +485,13 @@ void Ambitus::draw(mu::draw::Painter* p) const
         qreal stepTolerance    = step * 0.1;
         qreal ledgerLineLength = score()->styleS(Sid::ledgerLineLength).val() * _spatium;
         qreal ledgerLineWidth  = score()->styleS(Sid::ledgerLineWidth).val() * _spatium;
-        p->setPen(QPen(curColor(), ledgerLineWidth, Qt::SolidLine, Qt::FlatCap));
+        painter->setPen(QPen(curColor(), ledgerLineWidth, Qt::SolidLine, Qt::FlatCap));
 
         if (_topPos.y() - stepTolerance <= -step) {
             qreal xMin = _topPos.x() - ledgerLineLength;
             qreal xMax = _topPos.x() + headWidth() + ledgerLineLength;
             for (qreal y = -step; y >= _topPos.y() - stepTolerance; y -= step) {
-                p->drawLine(QPointF(xMin, y), QPointF(xMax, y));
+                painter->drawLine(QPointF(xMin, y), QPointF(xMax, y));
             }
         }
 
@@ -498,7 +499,7 @@ void Ambitus::draw(mu::draw::Painter* p) const
             qreal xMin = _bottomPos.x() - ledgerLineLength;
             qreal xMax = _bottomPos.x() + headWidth() + ledgerLineLength;
             for (qreal y = numOfLines * step; y <= _bottomPos.y() + stepTolerance; y += step) {
-                p->drawLine(QPointF(xMin, y), QPointF(xMax, y));
+                painter->drawLine(QPointF(xMin, y), QPointF(xMax, y));
             }
         }
     }

@@ -469,6 +469,7 @@ void HairpinSegment::editDrag(EditData& ed)
 
 void HairpinSegment::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
     TextLineBaseSegment::draw(painter);
 
 #if 0

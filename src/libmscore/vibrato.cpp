@@ -48,6 +48,7 @@ int vibratoTableSize()
 
 void VibratoSegment::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
     painter->setPen(spanner()->curColor());
     drawSymbols(_symbols, painter);
 }

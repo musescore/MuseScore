@@ -694,6 +694,7 @@ void Tuplet::layout()
 
 void Tuplet::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
     // if in a TAB without stems, tuplets are not shown
     const StaffType* stt = staffType();
     if (stt && stt->isTabStaff() && stt->stemless()) {

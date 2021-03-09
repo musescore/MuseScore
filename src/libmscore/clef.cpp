@@ -256,6 +256,7 @@ void Clef::layout()
 
 void Clef::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
     if (symId == SymId::noSym || (staff() && !const_cast<const Staff*>(staff())->staffType(tick())->genClef())) {
         return;
     }

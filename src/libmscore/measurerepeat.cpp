@@ -44,6 +44,7 @@ MeasureRepeat::MeasureRepeat(Score* score)
 
 void MeasureRepeat::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
     painter->setPen(curColor());
     drawSymbol(symId(), painter);
 

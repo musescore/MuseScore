@@ -118,6 +118,7 @@ QSizeF Image::imageSize() const
 
 void Image::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
     bool emptyImage = false;
     if (imageType == ImageType::SVG) {
         if (!svgDoc) {

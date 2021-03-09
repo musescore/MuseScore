@@ -31,6 +31,7 @@ namespace Ms {
 
 void SlurSegment::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
     QPen pen(curColor());
     qreal mag = staff() ? staff()->staffMag(slur()->tick()) : 1.0;
 

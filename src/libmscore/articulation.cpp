@@ -208,6 +208,7 @@ QString Articulation::userName() const
 
 void Articulation::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
 #if 0 //TODO
     SymId sym = symId();
     ArticulationShowIn flags = articulationList[int(articulationType())].flags;
@@ -223,6 +224,7 @@ void Articulation::draw(mu::draw::Painter* painter) const
         }
     }
 #endif
+
     painter->setPen(curColor());
     drawSymbol(_symId, painter, QPointF(-0.5 * width(), 0.0));
 }

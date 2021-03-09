@@ -85,6 +85,7 @@ void LedgerLine::layout()
 
 void LedgerLine::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
     if (chord()->crossMeasure() == CrossMeasure::SECOND) {
         return;
     }

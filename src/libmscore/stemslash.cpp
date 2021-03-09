@@ -21,6 +21,7 @@ namespace Ms {
 
 void StemSlash::draw(mu::draw::Painter* painter) const
 {
+    TRACE_OBJ_DRAW;
     qreal lw = score()->styleP(Sid::stemWidth);
     painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::FlatCap));
     painter->drawLine(line);
