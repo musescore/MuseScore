@@ -320,6 +320,7 @@ void NotationPaintView::showContextMenu(const ElementType& elementType, const QP
 
 void NotationPaintView::paint(QPainter* qp)
 {
+    TRACEFUNC;
     if (!notation()) {
         return;
     }
@@ -330,7 +331,7 @@ void NotationPaintView::paint(QPainter* qp)
     QRect rect(0, 0, width(), height());
     painter->fillRect(rect, m_backgroundColor);
 
-    painter->setTransform(m_matrix);
+    painter->setWorldTransform(m_matrix);
 
     notation()->paint(painter, toLogical(rect));
 

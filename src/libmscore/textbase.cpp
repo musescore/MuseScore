@@ -905,7 +905,7 @@ void TextBase::drawTextWorkaround(mu::draw::Painter* p, QFont& f, const QPointF 
         qreal dx = p->worldTransform().dx();
         qreal dy = p->worldTransform().dy();
         // diagonal elements will now be changed to 1.0
-        p->setTransform(QTransform(1.0, 0.0, 0.0, 1.0, dx, dy));
+        p->setWorldTransform(QTransform(1.0, 0.0, 0.0, 1.0, dx, dy));
 
         // correction factor for bold text drawing, due to the change of the diagonal elements
         qreal factor = 1.0 / mm;
@@ -955,7 +955,7 @@ void TextBase::drawTextWorkaround(mu::draw::Painter* p, QFont& f, const QPointF 
             positions2.clear();
         }
         // Restore the QPainter to its former state
-        p->setTransform(QTransform(mm, 0.0, 0.0, mm, dx, dy));
+        p->setWorldTransform(QTransform(mm, 0.0, 0.0, mm, dx, dy));
         p->restore();
     } else {
         p->setFont(f);

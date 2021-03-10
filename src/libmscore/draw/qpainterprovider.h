@@ -38,8 +38,8 @@ public:
     QPaintDevice* device() const override;
     QPainter* qpainter() const override;
 
-    void begin(const std::string& name) override;
-    bool end(const std::string& name) override;
+    void beginTarget(const std::string& name) override;
+    bool endTarget(const std::string& name, bool endDraw = false) override;
     bool isActive() const override;
 
     void beginObject(const std::string& name, const QPointF& pagePos) override;
@@ -61,44 +61,17 @@ public:
     void save() override;
     void restore() override;
 
-    void setWorldTransform(const QTransform& matrix, bool combine = false) override;
-    const QTransform& worldTransform() const override;
-
-    void setTransform(const QTransform& transform, bool combine = false) override;
+    void setTransform(const QTransform& transform) override;
     const QTransform& transform() const override;
 
-    void scale(qreal sx, qreal sy) override;
-    void rotate(qreal angle) override;
-
-    void translate(const QPointF& offset) override;
-
-    QRect window() const override;
-    void setWindow(const QRect& window) override;
-    QRect viewport() const override;
-    void setViewport(const QRect& viewport) override;
-
     // drawing functions
-    void fillPath(const QPainterPath& path, const QBrush& brush) override;
     void drawPath(const QPainterPath& path) override;
-    void strokePath(const QPainterPath& path, const QPen& pen) override;
-
-    void drawLines(const QLineF* lines, int lineCount) override;
-
-    void drawRects(const QRectF* rects, int rectCount) override;
-
-    void drawEllipse(const QRectF& rect) override;
-
-    void drawPolyline(const QPointF* points, int pointCount) override;
-
-    void drawPolygon(const QPointF* points, int pointCount, Qt::FillRule fillRule = Qt::OddEvenFill) override;
-    void drawConvexPolygon(const QPointF* points, int pointCount) override;
+    void drawPolygon(const QPointF* points, int pointCount, PolygonMode mode) override;
 
     void drawText(const QPointF& point, const QString& text) override;
     void drawText(const QRectF& rect, int flags, const QString& text) override;
 
     void drawGlyphRun(const QPointF& position, const QGlyphRun& glyphRun) override;
-
-    void fillRect(const QRectF& rect, const QBrush& brush) override;
 
     void drawPixmap(const QPointF& point, const QPixmap& pm) override;
     void drawTiledPixmap(const QRectF& rect, const QPixmap& pm, const QPointF& offset = QPointF()) override;

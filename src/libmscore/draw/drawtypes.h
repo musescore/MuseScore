@@ -30,31 +30,41 @@ enum class CompositionMode {
     HardLight
 };
 
+enum class DrawMode {
+    Stroke = 0,
+    Fill,
+    StrokeAndFill
+};
+
+enum class PolygonMode {
+    OddEven,
+    Winding,
+    Convex,
+    Polyline
+};
+
 struct Scale {
     double x = 0.0;
     double y = 0.0;
 };
 
-struct FillPath {
-    QPainterPath path;
-    QBrush brush;
-};
-
-struct FillRect {
-    QRectF rect;
-    QBrush brush;
-};
-
-struct FillPolygon {
-    QPolygonF polygon;
-    Qt::FillRule fillRule = Qt::OddEvenFill;
-    bool convexMode = false;
-};
-
 struct DrawPath {
     QPainterPath path;
     QPen pen;
-    bool stroke = false;
+    QBrush brush;
+    DrawMode mode = DrawMode::StrokeAndFill;
+};
+
+struct DrawRect {
+    QRectF rect;
+    QPen pen;
+    QBrush brush;
+    DrawMode mode = DrawMode::StrokeAndFill;
+};
+
+struct DrawPolygon {
+    QPolygonF polygon;
+    PolygonMode mode = PolygonMode::OddEven;
 };
 
 struct DrawText {
