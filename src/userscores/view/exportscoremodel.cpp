@@ -87,7 +87,19 @@ QHash<int, QByteArray> ExportScoreModel::roleNames() const
     return roles;
 }
 
-void ExportScoreModel::toggleSelection(int scoreIndex)
+void ExportScoreModel::setSelected(int scoreIndex, bool selected)
+{
+    if (!isNotationIndexValid(scoreIndex)) {
+        return;
+    }
+
+    QModelIndex modelIndex = index(scoreIndex);
+    m_selectionModel->QItemSelectionModel::select(modelIndex, selected ? QItemSelectionModel::Select : QItemSelectionModel::Deselect);
+
+    emit dataChanged(modelIndex, modelIndex);
+}
+
+void ExportScoreModel::toggleSelected(int scoreIndex)
 {
     if (!isNotationIndexValid(scoreIndex)) {
         return;
@@ -99,11 +111,11 @@ void ExportScoreModel::toggleSelection(int scoreIndex)
     emit dataChanged(modelIndex, modelIndex);
 }
 
-void ExportScoreModel::toggleAllSelections(bool select)
+void ExportScoreModel::setAllSelected(bool selected)
 {
     QModelIndexList previousSelectedIndexes = m_selectionModel->selectedIndexes();
     m_selectionModel->QItemSelectionModel::select(QItemSelection(index(0), index(m_notations.size() - 1)),
-                                                  select ? QItemSelectionModel::Select : QItemSelectionModel::Deselect);
+                                                  selected ? QItemSelectionModel::Select : QItemSelectionModel::Deselect);
     QModelIndexList newSelectedIndexes = m_selectionModel->selectedIndexes();
 
     QSet<QModelIndex> indexesToUpdate(previousSelectedIndexes.begin(), previousSelectedIndexes.end());
@@ -111,6 +123,13 @@ void ExportScoreModel::toggleAllSelections(bool select)
 
     for (const QModelIndex& indexToUpdate : indexesToUpdate) {
         emit dataChanged(indexToUpdate, indexToUpdate);
+    }
+}
+
+void ExportScoreModel::selectCurrentNotation()
+{
+    for (int i = 0; i < m_notations.size(); i++) {
+        setSelected(i, m_notations[i] == context()->currentNotation());
     }
 }
 
@@ -142,7 +161,7 @@ QList<int> ExportScoreModel::selectedRows() const
 
 int ExportScoreModel::selectionLength() const
 {
-    return selectedRows().size();
+    return m_selectionModel->selectedIndexes().size();
 }
 
 QString ExportScoreModel::exportPath() const

@@ -45,6 +45,7 @@ class ExportScoreModel : public QAbstractListModel
     INJECT(userscores, iex::imagesexport::IImagesExportConfiguration, imageExportConfiguration)
     INJECT(userscores, IExportScoreService, exportScoreService)
 
+    Q_PROPERTY(int selectionLength READ selectionLength NOTIFY selectionChanged)
     Q_PROPERTY(int pdfResolution READ pdfResolution WRITE setPdfResolution)
     Q_PROPERTY(int pngResolution READ pngResolution WRITE setPngResolution)
     Q_PROPERTY(bool pngTransparentBackground READ pngTransparentBackground WRITE setPngTransparentBackground)
@@ -58,9 +59,11 @@ public:
 
     Q_INVOKABLE void load();
 
-    Q_INVOKABLE void toggleSelection(int scoreIndex);
-    Q_INVOKABLE void toggleAllSelections(bool select);
-    Q_INVOKABLE int selectionLength() const;
+    Q_INVOKABLE void setSelected(int scoreIndex, bool selected = true);
+    Q_INVOKABLE void toggleSelected(int scoreIndex);
+    Q_INVOKABLE void setAllSelected(bool selected);
+    Q_INVOKABLE void selectCurrentNotation();
+    int selectionLength() const;
 
     Q_INVOKABLE QString exportPath() const;
     Q_INVOKABLE void setExportPath(QString path);
