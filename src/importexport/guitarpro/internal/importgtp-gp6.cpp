@@ -141,7 +141,7 @@ const std::map<QString, QString> GuitarPro6::instrumentMapping = {
     { "n-gtr8",          "guitar-nylon-treble-clef" },
     { "oboe",            "oboe" },
     { "ocrn",            "ocarina" },
-    { "pccl",            "piccolo" },
+    { "pccl",            "c-piccolo" },
     { "pedalhihat",      "hi-hat" },
     { "pnflt",           "pan-flute" },
     { "ptt",             "cymbal" },        //piatti is cymbal in italian

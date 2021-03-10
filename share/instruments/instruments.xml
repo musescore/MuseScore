@@ -194,7 +194,7 @@
                         <program value="73"/> <!--Flute-->
                   </Channel>
             </Instrument>
-            <Instrument id="piccolo">
+            <Instrument id="c-piccolo">
                   <family>flutes</family>
                   <longName>Piccolo</longName>
                   <shortName>Picc.</shortName>
@@ -1749,22 +1749,6 @@
                   </Channel>
                   <genre>world</genre>
             </Instrument>
-            <Instrument id="clarinet">
-                  <family>clarinets</family>
-                  <longName>Clarinet</longName>
-                  <shortName>Cl.</shortName>
-                  <description>B♭ Clarinet (generic)</description>
-                  <musicXMLid>wind.reed.clarinet</musicXMLid>
-                  <clef>G</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>50-89</aPitchRange>
-                  <pPitchRange>50-94</pPitchRange>
-                  <transposeDiatonic>-1</transposeDiatonic>
-                  <transposeChromatic>-2</transposeChromatic>
-                  <Channel>
-                        <program value="71"/> <!--Clarinet-->
-                  </Channel>
-            </Instrument>
             <Instrument id="piccolo-clarinet">
                   <family>clarinets</family>
                   <longName>Piccolo Clarinet</longName>
@@ -1797,6 +1781,43 @@
                         <program value="71"/> <!--Clarinet-->
                   </Channel>
                   <genre>concertband</genre>
+            </Instrument>
+            <Instrument id="clarinet">
+                  <family>clarinets</family>
+                  <longName>Clarinet</longName>
+                  <shortName>Cl.</shortName>
+                  <description>B♭ Clarinet (generic)</description>
+                  <musicXMLid>wind.reed.clarinet</musicXMLid>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>50-89</aPitchRange>
+                  <pPitchRange>50-94</pPitchRange>
+                  <transposeDiatonic>-1</transposeDiatonic>
+                  <transposeChromatic>-2</transposeChromatic>
+                  <Channel>
+                        <program value="71"/> <!--Clarinet-->
+                  </Channel>
+            </Instrument>
+            <Instrument id="bb-clarinet">
+                  <family>clarinets</family>
+                  <longName>B♭ Clarinet</longName>
+                  <shortName>B♭ Cl.</shortName>
+                  <description>B♭ Clarinet (same as clarinet, added for MusicXML 3 compatibility)</description>
+                  <musicXMLid>wind.reed.clarinet.bflat</musicXMLid>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>50-89</aPitchRange>
+                  <pPitchRange>50-94</pPitchRange>
+                  <transposeDiatonic>-1</transposeDiatonic>
+                  <transposeChromatic>-2</transposeChromatic>
+                  <Channel>
+                        <program value="71"/> <!--Clarinet-->
+                  </Channel>
+                  <genre>common</genre>
+                  <genre>orchestra</genre>
+                  <genre>concertband</genre>
+                  <genre>jazz</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="c-clarinet">
                   <family>clarinets</family>
@@ -1862,27 +1883,6 @@
                   <Channel>
                         <program value="71"/> <!--Clarinet-->
                   </Channel>
-            </Instrument>
-            <Instrument id="bb-clarinet">
-                  <family>clarinets</family>
-                  <longName>B♭ Clarinet</longName>
-                  <shortName>B♭ Cl.</shortName>
-                  <description>B♭ Clarinet (same as clarinet, added for MusicXML 3 compatibility)</description>
-                  <musicXMLid>wind.reed.clarinet.bflat</musicXMLid>
-                  <clef>G</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>50-89</aPitchRange>
-                  <pPitchRange>50-94</pPitchRange>
-                  <transposeDiatonic>-1</transposeDiatonic>
-                  <transposeChromatic>-2</transposeChromatic>
-                  <Channel>
-                        <program value="71"/> <!--Clarinet-->
-                  </Channel>
-                  <genre>common</genre>
-                  <genre>orchestra</genre>
-                  <genre>concertband</genre>
-                  <genre>jazz</genre>
-                  <genre>marching</genre>
             </Instrument>
             <Instrument id="a-clarinet">
                   <family>clarinets</family>
@@ -2065,7 +2065,7 @@
                   <genre>orchestra</genre>
                   <genre>concertband</genre>
             </Instrument>
-            <Instrument id="xaphoon">
+            <Instrument id="c-xaphoon">
                   <longName>Pocket Sax in C</longName>
                   <shortName>C Pkt. Sax</shortName>
                   <description>Xaphoon/Pocket Sax in C</description>
@@ -11792,7 +11792,7 @@
                   </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
-            <Instrument id="violone">
+            <Instrument id="g-violone">
                   <longName>Violone</longName>
                   <shortName>Vne.</shortName>
                   <description>Violone</description>
