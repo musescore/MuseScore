@@ -22,8 +22,7 @@
         <file>qml/MuseScore/UserScores/internal/ChooseInstrumentsAndTemplatesPage.qml</file>
         <file>qml/MuseScore/UserScores/internal/ChooseTemplatePage.qml</file>
         <file>qml/MuseScore/UserScores/internal/ScoreInfoPage.qml</file>
-        <file>qml/MuseScore/UserScores/internal/ExportFilePages.qml</file>
         <file>qml/MuseScore/UserScores/internal/ExportScoresListView.qml</file>
-        <file>qml/MuseScore/UserScores/internal/ExportScoreListDelegate.qml</file>
+        <file>qml/MuseScore/UserScores/internal/ExportOptionsView.qml</file>
     </qresource>
 </RCC>
