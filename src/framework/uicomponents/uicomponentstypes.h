@@ -45,6 +45,9 @@ struct MenuItem : public actions::ActionItem
     bool checkable = false;
     bool checked = false;
 
+    bool selectable = false;
+    bool selected = false;
+
     actions::ActionData args;
 
     QList<MenuItem> subitems;
@@ -71,6 +74,8 @@ struct MenuItem : public actions::ActionItem
             { "enabled", enabled },
             { "checkable", checkable },
             { "checked", checked },
+            { "selectable", selectable },
+            { "selected", selected },
             { "subitems", subitemsVariantList }
         };
     }
@@ -87,6 +92,8 @@ struct MenuItem : public actions::ActionItem
         item.enabled = map.value("enabled").toBool();
         item.checkable = map.value("checkable").toBool();
         item.checked = map.value("checked").toBool();
+        item.selectable = map.value("selectable").toBool();
+        item.selected = map.value("selected").toBool();
 
         for (const QVariant& subitem: map.value("subitems").toList()) {
             item.subitems << fromMap(subitem.toMap());

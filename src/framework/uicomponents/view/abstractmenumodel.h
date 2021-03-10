@@ -30,24 +30,15 @@
 #include "../uicomponentstypes.h"
 
 namespace mu::uicomponents {
-class AbstractMenuModel : public QObject
+class AbstractMenuModel
 {
-    Q_OBJECT
-
     INJECT(appshell, actions::IActionsRegister, actionsRegister)
     INJECT(appshell, shortcuts::IShortcutsRegister, shortcutsRegister)
 
-    Q_PROPERTY(QVariantList items READ items NOTIFY itemsChanged)
-
 public:
-    explicit AbstractMenuModel(QObject* parent = nullptr);
-
     QVariantList items() const;
 
     virtual ActionState actionState(const actions::ActionCode& actionCode) const;
-
-signals:
-    void itemsChanged();
 
 protected:
     void clear();

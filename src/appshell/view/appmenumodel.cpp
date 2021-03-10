@@ -29,7 +29,7 @@ using namespace mu::workspace;
 using namespace mu::actions;
 
 AppMenuModel::AppMenuModel(QObject* parent)
-    : AbstractMenuModel(parent)
+    : QObject(parent)
 {
 }
 
@@ -76,6 +76,7 @@ void AppMenuModel::setupConnections()
     for (IMenuControllerPtr controller: menuControllersRegister()->controllers()) {
         controller->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
             updateItemsState(actionCodes);
+            emit itemsChanged();
         });
     }
 
@@ -488,8 +489,8 @@ MenuItemList AppMenuModel::workspacesItems() const
         item.args = ActionData::make_arg1<std::string>(workspace->name());
 
         bool isCurrentWorkspace = workspace == currentWorkspace;
-        item.checked = isCurrentWorkspace;
-        item.checkable = true;
+        item.selectable = true;
+        item.selected = isCurrentWorkspace;
         item.enabled = true;
 
         items << item;

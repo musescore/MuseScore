@@ -9,7 +9,7 @@ StyledPopupView {
     id: root
 
     arrowVisible: false
-    positionDisplacementX: 0
+    positionDisplacementX: -padding / 2
     padding: 0
     margins: 0
 
@@ -30,7 +30,7 @@ StyledPopupView {
         items.push(itemAction)
     }
 
-    signal handleAction(string actionCode)
+    signal handleAction(string actionCode, int actionIndex)
 
     property var items: []
 
@@ -40,12 +40,13 @@ StyledPopupView {
     Column {
         id: content
 
+        spacing: 2
         Repeater {
             id: view
 
             Loader {
                 id: loader
-                sourceComponent: Boolean(modelData.code) ? menuItemComp : separatorComp
+                sourceComponent: Boolean(modelData.title) ? menuItemComp : separatorComp
                 onLoaded: {
                     loader.item.modelData = modelData
                 }
@@ -60,8 +61,14 @@ StyledPopupView {
                         property bool hasSubMenu: Boolean(modelData) && modelData.subitems.length > 0
                         property var showedSubMenu: undefined
 
+                        property bool isCheckable: Boolean(modelData) && Boolean(modelData.checkable)
+                        property bool isChecked: isCheckable && Boolean(modelData.checked)
+
+                        property bool isSelectable: Boolean(modelData) && Boolean(modelData.selectable)
+                        isSelected: showedSubMenu != undefined || (isSelectable && Boolean(modelData.selected))
+
                         defaultColor: ui.theme.accentColor
-                        isSelected: showedSubMenu != undefined
+                        enabled: Boolean(modelData) && modelData.enabled
 
                         width: 300
 
@@ -79,8 +86,8 @@ StyledPopupView {
                                 menu.addMenuItem(modelData.subitems[i])
                             }
 
-                            menu.handleAction.connect(function(actionCode){
-                                root.handleAction(actionCode)
+                            menu.handleAction.connect(function(actionCode, actionIndex){
+                                root.handleAction(actionCode, actionIndex)
                                 if (Boolean(root)) {
                                     root.close()
                                 }
@@ -110,7 +117,13 @@ StyledPopupView {
                             StyledIconLabel {
                                 Layout.alignment: Qt.AlignLeft
                                 width: 16
-                                iconCode: Boolean(modelData) && Boolean(modelData.icon) ? modelData.icon : IconCode.NONE
+                                iconCode: {
+                                    if (isCheckable) {
+                                        return isChecked ? IconCode.TICK_RIGHT_ANGLE : IconCode.NONE
+                                    } else {
+                                        return Boolean(modelData) && Boolean(modelData.icon) ? modelData.icon : IconCode.NONE
+                                    }
+                                }
                             }
 
                             StyledTextLabel {
@@ -159,7 +172,7 @@ StyledPopupView {
                                 return
                             }
 
-                            root.handleAction(modelData.code)
+                            root.handleAction(modelData.code, isSelectable ? index : -1)
                             if (Boolean(root)) {
                                 root.close()
                             }
@@ -170,8 +183,11 @@ StyledPopupView {
                 Component {
                     id: separatorComp
 
-                    SeparatorLine {
+                    Rectangle {
                         width: 300
+                        height: 1
+                        color: ui.theme.strokeColor
+
                         property var modelData
                     }
                 }

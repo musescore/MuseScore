@@ -19,6 +19,7 @@ FocusableItem {
     property int orientation: Qt.Vertical
 
     signal clicked()
+    signal pressAndHold()
 
     QtObject {
         id: privateProperties
@@ -112,8 +113,12 @@ FocusableItem {
 
         hoverEnabled: true
 
-        onReleased: {
+        onClicked: {
             root.clicked()
+        }
+
+        onPressAndHold: {
+            root.pressAndHold()
         }
 
         onContainsMouseChanged: {
