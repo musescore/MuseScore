@@ -1700,10 +1700,10 @@ static void distributeStaves(Page* page)
                 Spacer* activeSpacer { nextSpacer };
                 nextSpacer = nullptr;
                 for (MeasureBase* mb : system->measures()) {
-                    Measure* m = toMeasure(mb);
-                    if (!mb->isMeasure()) {
+                    if (!(mb && mb->isMeasure())) {
                         continue;
                     }
+                    Measure* m = toMeasure(mb);
                     Spacer* sp = m->vspacerUp(staff->idx());
                     if (sp) {
                         if (!activeSpacer || ((activeSpacer->spacerType() == SpacerType::UP) && (sp->gap() > activeSpacer->gap()))) {
