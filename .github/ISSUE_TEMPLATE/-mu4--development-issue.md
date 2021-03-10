@@ -1,6 +1,6 @@
 ---
 name: "[MU4] Development issue"
-about: Internal development issues that could be encounterd in MU4
+about: Internal development issues that could be encountered in MU4
 title: "[MU4 Issue]"
 labels: ''
 assignees: ''
