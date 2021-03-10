@@ -70,7 +70,7 @@ private:
     void addArticulation(SymbolId articulationSymbolId);
 
     void putTuplet(int tupletCount);
-    void addBeatToSelectedChordRests(BeamMode mode);
+    void addBeamToSelectedChordRests(BeamMode mode);
     void addBracketsToSelection(BracketsType type);
 
     void moveAction(const actions::ActionCode& actionCode);

@@ -20,6 +20,9 @@
 #define MU_DRAW_DRAWOBJECTSLOGGER_H
 
 #include <stack>
+#include <string>
+
+class QPointF;
 
 namespace mu::draw {
 class DrawObjectsLogger
