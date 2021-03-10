@@ -1579,8 +1579,6 @@ void EditStyle::enableStyleWidget(const StyleId idx, bool enable)
 void EditStyle::enableVerticalSpreadClicked(bool checked)
 {
     disableVerticalSpread->setChecked(!checked);
-    NOT_IMPLEMENTED;
-//    cs->setLayoutAll(); // TODO
 }
 
 //---------------------------------------------------------
@@ -1590,9 +1588,7 @@ void EditStyle::enableVerticalSpreadClicked(bool checked)
 void EditStyle::disableVerticalSpreadClicked(bool checked)
 {
     setStyleValue(StyleId::enableVerticalSpread, !checked);
-    NOT_IMPLEMENTED;
     enableVerticalSpread->setChecked(!checked);
-//    cs->setLayoutAll(); // TODO
 }
 
 //---------------------------------------------------------
