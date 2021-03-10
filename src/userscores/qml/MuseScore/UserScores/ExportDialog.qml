@@ -140,8 +140,9 @@ QmlDialog {
                         enabled: scoresModel.selectionLength > 0;
                         accentButton: enabled
                         onClicked: {
-                            scoresModel.exportScores();
-                            root.hide();
+                            if (scoresModel.exportScores()) {
+                                root.hide();
+                            }
                         }
                     }
                 }
