@@ -6,122 +6,54 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.UserScores 1.0
 
-Item {
-    id:root
+Rectangle {
+    property alias scoresModel: listView.model
 
-    property var model
+    color: ui.theme.backgroundSecondaryColor
+    border.width: 1
+    border.color: ui.theme.strokeColor
 
-    QtObject {
-        id: privateProperties
+    ListView {
+        id: listView
+        anchors.fill: parent
 
-        property var leftMargin: 12
-    }
+        boundsBehavior: Flickable.StopAtBounds
+        clip: true
 
-    Column {
-        id: header
+        ScrollBar.vertical: StyledScrollBar {
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+        }
 
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.leftMargin: privateProperties.leftMargin
-
-        spacing: 16
-
-        Row {
-            width:parent.width
-            height:childrenRect.height
-
+        delegate: ListItemBlank {
             CheckBox {
-                id: selectAllScores
-
-                onClicked: {
-                    checked = !checked
-                    isIndeterminate = false
-
-                    root.model.toggleAllSelections(checked);
-                }
-
-                width: parent.width * 1 / 6
-                height:checkBoxHeight
-
-                anchors.left: parent.left
-                anchors.leftMargin: (width - checkBoxWidth) / 2
+                id: scoreCheckBox
                 anchors.verticalCenter: parent.verticalCenter
+                anchors.left: parent.left
+                anchors.leftMargin: 7
+
+                checked: model.isSelected
+                onClicked: {
+                    scoresModel.toggleSelection(model.index)
+                }
             }
 
             StyledTextLabel {
-                text: "Scores to export"
-
-                width: parent.width * 5 / 6
-
-                font.family: ui.theme.bodyBoldFont
-                horizontalAlignment: Qt.AlignLeft
-                font.capitalization: Font.AllUppercase
-
-                anchors.left:  selectAllScores.right
-            }
-        }
-    }
-
-    RoundedRectangle {
-        anchors.top: header.bottom
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.leftMargin: privateProperties.leftMargin
-        anchors.rightMargin: 8
-        anchors.topMargin: 6
-
-        color: ui.theme.backgroundPrimaryColor
-
-        ListView {
-            id: scoresButtonGroup
-
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            width: parent.width
-
-            spacing: 0
-
-            model: root.model
-
-            boundsBehavior: Flickable.StopAtBounds
-            interactive: height < contentHeight
-            clip: true
-
-            ScrollBar.vertical: StyledScrollBar {
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: scoreCheckBox.right
+                anchors.leftMargin: 14
                 anchors.right: parent.right
-                anchors.rightMargin: 8
+                anchors.rightMargin: 7
+
+                text: model.isMain ? qsTrc("userscores", "Main Score") : model.title
+                font: model.isMain ? ui.theme.bodyBoldFont : ui.theme.bodyFont
+                horizontalAlignment: Qt.AlignLeft
             }
 
-
-            Connections {
-                target: root.model
-
-                function onSelectionChanged() {
-                    var selections = root.model.getSelectionLength();
-
-                    selectAllScores.checked = selections === root.model.rowCount();
-                    selectAllScores.isIndeterminate = selections > 0 && !selectAllScores.checked;
-                }
+            onClicked: {
+                scoresModel.toggleSelection(model.index)
             }
-
-            delegate: ExportScoreListDelegate {
-                title: model.title
-                isSelected: model.isSelected
-                isMain: model.isMain
-
-                onScoreClicked: {
-                    root.model.toggleSelection(model.index);
-                }
-            }
-
         }
-
-
     }
-
-
 }

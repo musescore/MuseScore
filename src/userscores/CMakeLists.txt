@@ -43,12 +43,12 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/templatesmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/templatepaintview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/templatepaintview.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/exportscoremodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/exportscoremodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/exportscoresuffixmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/exportscoremodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/exportscoresuffixmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/exportscoresettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/exportscoresuffixmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/exportscoresettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/exportscoresettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/filescorecontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/filescorecontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/userscoresconfiguration.cpp
