@@ -35,7 +35,7 @@ Rectangle {
 
                 checked: model.isSelected
                 onClicked: {
-                    scoresModel.toggleSelection(model.index)
+                    scoresModel.toggleSelected(model.index)
                 }
             }
 
@@ -52,7 +52,7 @@ Rectangle {
             }
 
             onClicked: {
-                scoresModel.toggleSelection(model.index)
+                scoresModel.toggleSelected(model.index)
             }
         }
     }
