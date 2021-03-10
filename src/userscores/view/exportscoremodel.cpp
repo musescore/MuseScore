@@ -190,7 +190,7 @@ void ExportScoreModel::setExportSuffix(QString suffix)
     m_exportPath = dirpath(m_exportPath) + "/" + basename(m_exportPath) + "." + suffix;
 }
 
-void ExportScoreModel::exportScores()
+bool ExportScoreModel::exportScores()
 {
     INotationPtrList notations;
 
@@ -198,7 +198,12 @@ void ExportScoreModel::exportScores()
         notations.push_back(m_notations[i]);
     }
 
+    IF_ASSERT_FAILED(!notations.empty()) {
+        return false;
+    }
+
     exportScoreService()->exportScores(notations, m_exportPath);
+    return true; // TODO: return false on error/cancel
 }
 
 int ExportScoreModel::pdfResolution() const
