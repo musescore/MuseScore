@@ -27,6 +27,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/uicomponentsmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/uicomponentsmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/uicomponentstypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/imenucontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/view/sampleobject.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/sampleobject.h
     ${CMAKE_CURRENT_LIST_DIR}/view/validators/doubleinputvalidator.cpp

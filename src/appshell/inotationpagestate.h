@@ -33,7 +33,7 @@ public:
 
     virtual bool isPanelVisible(PanelType type) const = 0;
     virtual void setIsPanelsVisible(const std::map<PanelType, bool>& panelsVisible) = 0;
-    virtual async::Channel<std::vector<PanelType> > panelsVisibleChanged() const = 0;
+    virtual async::Channel<PanelTypeList> panelsVisibleChanged() const = 0;
 };
 }
 

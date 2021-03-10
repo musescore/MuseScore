@@ -32,22 +32,19 @@
 #include "iappshellconfiguration.h"
 #include "userscores/iuserscoresservice.h"
 #include "iapplicationactioncontroller.h"
-#include "iinteractive.h"
 #include "inotationpagestate.h"
+
+#include "ifilemenucontroller.h"
+#include "ieditmenucontroller.h"
+#include "iviewmenucontroller.h"
+#include "notation/iaddmenucontroller.h"
+#include "iformatmenucontroller.h"
+#include "itoolsmenucontroller.h"
+#include "ihelpmenucontroller.h"
 
 #include "uicomponents/view/abstractmenumodel.h"
 
-namespace mu::notation {
-class AddMenuController;
-}
-
 namespace mu::appshell {
-class FileMenuController;
-class EditMenuController;
-class ViewMenuController;
-class FormatMenuController;
-class ToolsMenuController;
-class HelpMenuController;
 class AppMenuModel : public uicomponents::AbstractMenuModel, public async::Asyncable
 {
     Q_OBJECT
@@ -59,64 +56,55 @@ class AppMenuModel : public uicomponents::AbstractMenuModel, public async::Async
     INJECT(appshell, IAppShellConfiguration, configuration)
     INJECT(appshell, userscores::IUserScoresService, userScoresService)
     INJECT(appshell, IApplicationActionController, controller)
-    INJECT(appshell, framework::IInteractive, interactive)
     INJECT(appshell, INotationPageState, notationPageState)
+
+    INJECT(appshell, IFileMenuController, fileMenuController)
+    INJECT(appshell, IEditMenuController, editMenuController)
+    INJECT(appshell, IViewMenuController, viewMenuController)
+    INJECT(appshell, notation::IAddMenuController, addMenuController)
+    INJECT(appshell, IFormatMenuController, formatMenuController)
+    INJECT(appshell, IToolsMenuController, toolsMenuController)
+    INJECT(appshell, IHelpMenuController, helpMenuController)
 
 public:
     explicit AppMenuModel(QObject* parent = nullptr);
-    ~AppMenuModel();
 
     Q_INVOKABLE void load();
     Q_INVOKABLE void handleAction(const QString& actionCodeStr, int actionIndex);
+
+    bool actionEnabled(const actions::ActionCode& actionCode) const override;
 
 private:
     notation::IMasterNotationPtr currentMasterNotation() const;
     notation::INotationPtr currentNotation() const;
     notation::INotationInteractionPtr notationInteraction() const;
-    notation::INotationSelectionPtr notationSelection() const;
+    notation::INotationNoteInputPtr notationNoteInput() const;
 
     void setupConnections();
 
-    uicomponents::MenuItem fileItem();
-    uicomponents::MenuItem editItem();
-    uicomponents::MenuItem viewItem();
-    uicomponents::MenuItem addItem();
-    uicomponents::MenuItem formatItem();
-    uicomponents::MenuItem toolsItem();
-    uicomponents::MenuItem helpItem();
+    uicomponents::MenuItem fileItem() const;
+    uicomponents::MenuItem editItem() const;
+    uicomponents::MenuItem viewItem() const;
+    uicomponents::MenuItem addItem() const;
+    uicomponents::MenuItem formatItem() const;
+    uicomponents::MenuItem toolsItem() const;
+    uicomponents::MenuItem helpItem() const;
 
-    uicomponents::MenuItemList recentScores();
-    uicomponents::MenuItemList notesItems();
-    uicomponents::MenuItemList intervalsItems();
-    uicomponents::MenuItemList tupletsItems();
-    uicomponents::MenuItemList measuresItems();
-    uicomponents::MenuItemList framesItems();
-    uicomponents::MenuItemList textItems();
-    uicomponents::MenuItemList linesItems();
-    uicomponents::MenuItemList toolbarsItems();
-    uicomponents::MenuItemList workspacesItems();
+    uicomponents::MenuItemList recentScores() const;
+    uicomponents::MenuItemList notesItems() const;
+    uicomponents::MenuItemList intervalsItems() const;
+    uicomponents::MenuItemList tupletsItems() const;
+    uicomponents::MenuItemList measuresItems() const;
+    uicomponents::MenuItemList framesItems() const;
+    uicomponents::MenuItemList textItems() const;
+    uicomponents::MenuItemList linesItems() const;
+    uicomponents::MenuItemList toolbarsItems() const;
+    uicomponents::MenuItemList workspacesItems() const;
 
     bool isPanelVisible(PanelType type) const;
-
-    bool needSaveScore() const;
-    bool scoreOpened() const;
-    bool canUndo() const;
-    bool canRedo() const;
-    bool selectedElementOnScore() const;
-    bool selectedRangeOnScore() const;
-    bool hasSelectionOnScore() const;
     bool isNoteInputMode() const;
-    bool isNotationPage() const;
 
     notation::ScoreConfig scoreConfig() const;
-
-    notation::AddMenuController* m_addMenuController = nullptr;
-    FileMenuController* m_fileMenuController = nullptr;
-    EditMenuController* m_editMenuController = nullptr;
-    ViewMenuController* m_viewMenuController = nullptr;
-    FormatMenuController* m_formatMenuController = nullptr;
-    ToolsMenuController* m_toolsMenuController = nullptr;
-    HelpMenuController* m_helpMenuController = nullptr;
 };
 }
 

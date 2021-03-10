@@ -22,17 +22,57 @@
 
 using namespace mu::appshell;
 using namespace mu::notation;
+using namespace mu::actions;
 
-EditMenuController::EditMenuController()
+void EditMenuController::init()
 {
     controller()->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
         m_actionsReceiveAvailableChanged.send(actionCodes);
     });
 }
 
-mu::async::Channel<std::vector<mu::actions::ActionCode> > EditMenuController::actionsAvailableChanged() const
+bool EditMenuController::contains(const mu::actions::ActionCode& actionCode) const
+{
+    std::map<ActionCode, AvailableCallback> actions = this->actions();
+    return actions.find(actionCode) != actions.end();
+}
+
+bool EditMenuController::actionAvailable(const mu::actions::ActionCode& actionCode) const
+{
+    std::map<ActionCode, AvailableCallback> actions = this->actions();
+
+    if (actions.find(actionCode) == actions.end()) {
+        return false;
+    }
+
+    return actions[actionCode]();
+}
+
+mu::async::Channel<mu::actions::ActionCodeList> EditMenuController::actionsAvailableChanged() const
 {
     return m_actionsReceiveAvailableChanged;
+}
+
+std::map<mu::actions::ActionCode, EditMenuController::AvailableCallback> EditMenuController::actions() const
+{
+    static std::map<ActionCode, AvailableCallback> _actions = {
+        { "undo", std::bind(&EditMenuController::isUndoAvailable, this) },
+        { "redo", std::bind(&EditMenuController::isRedoAvailable, this) },
+        { "cut", std::bind(&EditMenuController::isCutAvailable, this) },
+        { "copy", std::bind(&EditMenuController::isCopyAvailable, this) },
+        { "paste", std::bind(&EditMenuController::isPasteAvailable, this, PastingType::Default) },
+        { "paste-half", std::bind(&EditMenuController::isPasteAvailable, this, PastingType::Half) },
+        { "paste-double", std::bind(&EditMenuController::isPasteAvailable, this, PastingType::Double) },
+        { "paste-special", std::bind(&EditMenuController::isPasteAvailable, this, PastingType::Special) },
+        { "swap", std::bind(&EditMenuController::isSwapAvailable, this) },
+        { "delete", std::bind(&EditMenuController::isDeleteAvailable, this) },
+        { "select-all", std::bind(&EditMenuController::isSelectAllAvailable, this) },
+        { "select-similar", std::bind(&EditMenuController::isSelectSimilarAvailable, this) },
+        { "find", std::bind(&EditMenuController::isFindAvailable, this) },
+        { "preference-dialog", std::bind(&EditMenuController::isPreferenceDialogAvailable, this) }
+    };
+
+    return _actions;
 }
 
 bool EditMenuController::isUndoAvailable() const

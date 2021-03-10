@@ -22,17 +22,54 @@
 
 using namespace mu::appshell;
 using namespace mu::notation;
+using namespace mu::actions;
 
-FormatMenuController::FormatMenuController()
+void FormatMenuController::init()
 {
     controller()->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
         m_actionsReceiveAvailableChanged.send(actionCodes);
     });
 }
 
-mu::async::Channel<std::vector<mu::actions::ActionCode> > FormatMenuController::actionsAvailableChanged() const
+bool FormatMenuController::contains(const ActionCode& actionCode) const
+{
+    std::map<ActionCode, AvailableCallback> actions = this->actions();
+    return actions.find(actionCode) != actions.end();
+}
+
+bool FormatMenuController::actionAvailable(const ActionCode& actionCode) const
+{
+    std::map<ActionCode, AvailableCallback> actions = this->actions();
+
+    if (actions.find(actionCode) == actions.end()) {
+        return false;
+    }
+
+    return actions[actionCode]();
+}
+
+mu::async::Channel<ActionCodeList> FormatMenuController::actionsAvailableChanged() const
 {
     return m_actionsReceiveAvailableChanged;
+}
+
+std::map<mu::actions::ActionCode, FormatMenuController::AvailableCallback> FormatMenuController::actions() const
+{
+    static std::map<ActionCode, AvailableCallback> _actions = {
+        { "stretch+", std::bind(&FormatMenuController::isStretchIncreaseAvailable, this) },
+        { "stretch-", std::bind(&FormatMenuController::isStretchDecreaseAvailable, this) },
+        { "reset-stretch", std::bind(&FormatMenuController::isResetAvailable, this, ResettableValueType::Stretch) },
+        { "edit-style", std::bind(&FormatMenuController::isEditStyleAvailable, this) },
+        { "page-settings", std::bind(&FormatMenuController::isPageSettingsAvailable, this) },
+        { "reset-text-style-overrides",
+          std::bind(&FormatMenuController::isResetAvailable, this, ResettableValueType::TextStyleOverriders) },
+        { "reset-beammode", std::bind(&FormatMenuController::isResetAvailable, this, ResettableValueType::BeamMode) },
+        { "reset", std::bind(&FormatMenuController::isResetAvailable, this, ResettableValueType::ShapesAndPosition) },
+        { "load-style", std::bind(&FormatMenuController::isLoadStyleAvailable, this) },
+        { "save-style", std::bind(&FormatMenuController::isSaveStyleAvailable, this) }
+    };
+
+    return _actions;
 }
 
 bool FormatMenuController::isEditStyleAvailable() const

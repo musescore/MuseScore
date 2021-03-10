@@ -23,15 +23,24 @@
 #include "async/asyncable.h"
 #include "notation/inotationactionscontroller.h"
 
+#include "itoolsmenucontroller.h"
+
 namespace mu::appshell {
-class ToolsMenuController : public async::Asyncable
+class ToolsMenuController : public IToolsMenuController, public async::Asyncable
 {
     INJECT(appshell, notation::INotationActionsController, controller)
 
 public:
-    ToolsMenuController();
+    void init();
 
-    async::Channel<std::vector<actions::ActionCode> > actionsAvailableChanged() const;
+    bool contains(const actions::ActionCode& actionCode) const override;
+
+    bool actionAvailable(const actions::ActionCode& actionCode) const override;
+    async::Channel<actions::ActionCodeList> actionsAvailableChanged() const override;
+
+private:
+    using AvailableCallback = std::function<bool ()>;
+    std::map<actions::ActionCode, AvailableCallback> actions() const;
 
     bool isVoiceAvailable(int voiceIndex1, int voiceIndex2) const;
     bool isSplitMeasureAvailable() const;
@@ -51,8 +60,7 @@ public:
     bool isCopyLyricsAvailable() const;
     bool isFotomodeAvailable() const;
 
-private:
-    async::Channel<std::vector<actions::ActionCode> > m_actionsReceiveAvailableChanged;
+    async::Channel<actions::ActionCodeList> m_actionsReceiveAvailableChanged;
 };
 }
 

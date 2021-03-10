@@ -28,6 +28,7 @@
 #include "internal/notationactioncontroller.h"
 #include "internal/notationconfiguration.h"
 #include "internal/midiinputcontroller.h"
+#include "internal/addmenucontroller.h"
 
 #include "actions/iactionsregister.h"
 #include "internal/notationactions.h"
@@ -73,6 +74,7 @@ using namespace mu::actions;
 static std::shared_ptr<NotationConfiguration> s_configuration = std::make_shared<NotationConfiguration>();
 static std::shared_ptr<NotationActionController> s_actionController = std::make_shared<NotationActionController>();
 static std::shared_ptr<MidiInputController> s_midiInputController = std::make_shared<MidiInputController>();
+static std::shared_ptr<AddMenuController> s_addMenuController = std::make_shared<AddMenuController>();
 
 static void notationscene_init_qrc()
 {
@@ -91,6 +93,7 @@ void NotationModule::registerExports()
     ioc()->registerExport<IMsczMetaReader>(moduleName(), new MsczMetaReader());
     ioc()->registerExport<INotationContextMenu>(moduleName(), new NotationContextMenu());
     ioc()->registerExport<INotationActionsController>(moduleName(), s_actionController);
+    ioc()->registerExport<IAddMenuController>(moduleName(), s_addMenuController);
 
     std::shared_ptr<INotationReadersRegister> readers = std::make_shared<NotationReadersRegister>();
     readers->reg({ "mscz", "mscx" }, std::make_shared<MsczNotationReader>());
@@ -185,6 +188,7 @@ void NotationModule::onInit(const IApplication::RunMode&)
     s_configuration->init();
     s_actionController->init();
     s_midiInputController->init();
+    s_addMenuController->init();
 
     Notation::init();
 }

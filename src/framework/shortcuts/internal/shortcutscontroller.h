@@ -22,7 +22,6 @@
 #include "../ishortcutscontroller.h"
 #include "modularity/ioc.h"
 #include "ishortcutsregister.h"
-#include "ishortcutcontextresolver.h"
 #include "actions/iactionsdispatcher.h"
 #include "actions/iactionsregister.h"
 
@@ -30,7 +29,6 @@ namespace mu::shortcuts {
 class ShortcutsController : public IShortcutsController
 {
     INJECT(shortcuts, IShortcutsRegister, shortcutsRegister)
-    INJECT(shortcuts, IShortcutContextResolver, contextResolver)
     INJECT(shortcuts, actions::IActionsDispatcher, dispatcher)
     INJECT(shortcuts, actions::IActionsRegister, aregister)
 

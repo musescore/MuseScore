@@ -37,6 +37,11 @@ QVariantList AbstractMenuModel::items() const
     return menuItems;
 }
 
+bool AbstractMenuModel::actionEnabled(const actions::ActionCode&) const
+{
+    return true;
+}
+
 void AbstractMenuModel::clear()
 {
     m_items.clear();
@@ -71,7 +76,8 @@ MenuItem& AbstractMenuModel::findMenu(const ActionCode& subitemsActionCode)
     return menu(m_items, subitemsActionCode);
 }
 
-MenuItem AbstractMenuModel::makeMenu(const std::string& title, const MenuItemList& actions, bool enabled, const ActionCode& menuActionCode)
+MenuItem AbstractMenuModel::makeMenu(const std::string& title, const MenuItemList& actions, bool enabled,
+                                     const ActionCode& menuActionCode) const
 {
     MenuItem item;
     item.code = menuActionCode;
@@ -81,7 +87,7 @@ MenuItem AbstractMenuModel::makeMenu(const std::string& title, const MenuItemLis
     return item;
 }
 
-MenuItem AbstractMenuModel::makeAction(const ActionCode& actionCode, const std::optional<EnabledCallBack>& enabledCallBack)
+MenuItem AbstractMenuModel::makeAction(const ActionCode& actionCode) const
 {
     ActionItem action = actionsRegister()->action(actionCode);
     if (!action.isValid()) {
@@ -89,13 +95,7 @@ MenuItem AbstractMenuModel::makeAction(const ActionCode& actionCode, const std::
     }
 
     MenuItem item = action;
-    if (enabledCallBack) {
-        item.enabled = (*enabledCallBack)();
-        m_actionEnabledMap[item.code] = *enabledCallBack;
-    } else {
-        item.enabled = enabledTrue();
-        m_actionEnabledMap[item.code] = enabledTrue;
-    }
+    item.enabled = actionEnabled(actionCode);
 
     shortcuts::Shortcut shortcut = shortcutsRegister()->shortcut(action.code);
     if (shortcut.isValid()) {
@@ -105,10 +105,9 @@ MenuItem AbstractMenuModel::makeAction(const ActionCode& actionCode, const std::
     return item;
 }
 
-MenuItem AbstractMenuModel::makeAction(const ActionCode& actionCode, bool checked,
-                                       const std::optional<EnabledCallBack>& enabledCallBack)
+MenuItem AbstractMenuModel::makeAction(const ActionCode& actionCode, bool checked) const
 {
-    MenuItem item = makeAction(actionCode, enabledCallBack);
+    MenuItem item = makeAction(actionCode);
     if (!item.isValid()) {
         return item;
     }
@@ -135,7 +134,7 @@ void AbstractMenuModel::updateItemsEnabled(const std::vector<ActionCode>& action
     for (const ActionCode& actionCode: actionCodes) {
         MenuItem& actionItem = findItem(actionCode);
         if (actionItem.isValid()) {
-            actionItem.enabled = m_actionEnabledMap[actionCode]();
+            actionItem.enabled = actionEnabled(actionCode);
         }
     }
 

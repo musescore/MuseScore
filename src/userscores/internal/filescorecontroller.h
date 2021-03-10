@@ -46,7 +46,7 @@ public:
     Ret openScore(const io::path& scorePath) override;
 
     bool actionAvailable(const actions::ActionCode& actionCode) const override;
-    async::Channel<std::vector<actions::ActionCode> > actionsAvailableChanged() const override;
+    async::Channel<actions::ActionCodeList> actionsAvailableChanged() const override;
 
 private:
     void setupConnections();
@@ -82,7 +82,7 @@ private:
     bool isNeedSaveScore() const;
     bool hasSelection() const;
 
-    async::Channel<std::vector<actions::ActionCode> > m_actionsReceiveAvailableChanged;
+    async::Channel<actions::ActionCodeList> m_actionsReceiveAvailableChanged;
 };
 }
 

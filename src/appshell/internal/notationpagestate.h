@@ -34,13 +34,13 @@ public:
 
     bool isPanelVisible(PanelType type) const override;
     void setIsPanelsVisible(const std::map<PanelType, bool>& panelsVisible) override;
-    mu::async::Channel<std::vector<PanelType> > panelsVisibleChanged() const override;
+    mu::async::Channel<PanelTypeList> panelsVisibleChanged() const override;
 
 private:
     void setIsPanelVisible(PanelType type, bool visible);
 
     mutable std::map<PanelType, bool> m_panelVisibleMap;
-    async::Channel<std::vector<PanelType> > m_panelsVisibleChanged;
+    async::Channel<PanelTypeList> m_panelsVisibleChanged;
 };
 }
 

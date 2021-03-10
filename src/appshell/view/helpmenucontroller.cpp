@@ -21,17 +21,54 @@
 #include "log.h"
 
 using namespace mu::appshell;
+using namespace mu::actions;
 
-HelpMenuController::HelpMenuController()
+void HelpMenuController::init()
 {
     controller()->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
         m_actionsReceiveAvailableChanged.send(actionCodes);
     });
 }
 
-mu::async::Channel<std::vector<mu::actions::ActionCode> > HelpMenuController::actionsAvailableChanged() const
+bool HelpMenuController::contains(const ActionCode& actionCode) const
+{
+    std::map<ActionCode, AvailableCallback> actions = this->actions();
+    return actions.find(actionCode) != actions.end();
+}
+
+bool HelpMenuController::actionAvailable(const ActionCode& actionCode) const
+{
+    std::map<ActionCode, AvailableCallback> actions = this->actions();
+
+    if (actions.find(actionCode) == actions.end()) {
+        return false;
+    }
+
+    return actions[actionCode]();
+}
+
+mu::async::Channel<mu::actions::ActionCodeList> HelpMenuController::actionsAvailableChanged() const
 {
     return m_actionsReceiveAvailableChanged;
+}
+
+std::map<ActionCode, HelpMenuController::AvailableCallback> HelpMenuController::actions() const
+{
+    static std::map<ActionCode, AvailableCallback> _actions = {
+        { "show-tours", std::bind(&HelpMenuController::isShowToursAvailable, this) },
+        { "reset-tours", std::bind(&HelpMenuController::isResetToursAvailable, this) },
+        { "online-handbook", std::bind(&HelpMenuController::isOnlineHandbookAvailable, this) },
+        { "about", std::bind(&HelpMenuController::isAboutAvailable, this) },
+        { "about-qt", std::bind(&HelpMenuController::isAboutQtAvailable, this) },
+        { "about-musicxml", std::bind(&HelpMenuController::isAboutMusicXMLAVailable, this) },
+        { "check-update", std::bind(&HelpMenuController::isCheckUpdateAvailable, this) },
+        { "ask-help", std::bind(&HelpMenuController::isAskForHelpAvailable, this) },
+        { "report-bug", std::bind(&HelpMenuController::isBugReportAvailable, this) },
+        { "leave-feedback", std::bind(&HelpMenuController::isLeaveFeedbackAvailable, this) },
+        { "revert-factory", std::bind(&HelpMenuController::isRevertToFactorySettingsAvailable, this) }
+    };
+
+    return _actions;
 }
 
 bool HelpMenuController::isShowToursAvailable() const

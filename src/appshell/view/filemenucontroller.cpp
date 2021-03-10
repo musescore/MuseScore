@@ -20,8 +20,9 @@
 
 using namespace mu::appshell;
 using namespace mu::notation;
+using namespace mu::actions;
 
-FileMenuController::FileMenuController()
+void FileMenuController::init()
 {
     fileController()->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
         m_actionsReceiveAvailableChanged.send(actionCodes);
@@ -32,9 +33,49 @@ FileMenuController::FileMenuController()
     });
 }
 
-mu::async::Channel<std::vector<mu::actions::ActionCode> > FileMenuController::actionsAvailableChanged() const
+bool FileMenuController::contains(const ActionCode& actionCode) const
+{
+    std::map<ActionCode, AvailableCallback> actions = this->actions();
+    return actions.find(actionCode) != actions.end();
+}
+
+bool FileMenuController::actionAvailable(const ActionCode& actionCode) const
+{
+    std::map<ActionCode, AvailableCallback> actions = this->actions();
+
+    if (actions.find(actionCode) == actions.end()) {
+        return false;
+    }
+
+    return actions[actionCode]();
+}
+
+mu::async::Channel<ActionCodeList> FileMenuController::actionsAvailableChanged() const
 {
     return m_actionsReceiveAvailableChanged;
+}
+
+std::map<ActionCode, FileMenuController::AvailableCallback> FileMenuController::actions() const
+{
+    static std::map<ActionCode, AvailableCallback> _actions = {
+        { "file-new", std::bind(&FileMenuController::isNewAvailable, this) },
+        { "file-open", std::bind(&FileMenuController::isOpenAvailable, this) },
+        { "clear-recent", std::bind(&FileMenuController::isClearRecentAvailable, this) },
+        { "file-close", std::bind(&FileMenuController::isCloseAvailable, this) },
+        { "file-save", std::bind(&FileMenuController::isSaveAvailable, this) },
+        { "file-save-as", std::bind(&FileMenuController::isSaveAsAvailable, this) },
+        { "file-save-a-copy", std::bind(&FileMenuController::isSaveCopyAvailable, this) },
+        { "file-save-selection", std::bind(&FileMenuController::isSaveSelectionAvailable, this) },
+        { "file-save-online", std::bind(&FileMenuController::isSaveOnlineAvailable, this) },
+        { "file-import-pdf", std::bind(&FileMenuController::isImportAvailable, this) },
+        { "file-export", std::bind(&FileMenuController::isExportAvailable, this) },
+        { "edit-info", std::bind(&FileMenuController::isEditInfoAvailable, this) },
+        { "parts", std::bind(&FileMenuController::isPartsAvailable, this) },
+        { "print", std::bind(&FileMenuController::isPrintAvailable, this) },
+        { "quit", std::bind(&FileMenuController::isQuitAvailable, this) }
+    };
+
+    return _actions;
 }
 
 bool FileMenuController::isNewAvailable() const
@@ -47,14 +88,39 @@ bool FileMenuController::isOpenAvailable() const
     return fileController()->actionAvailable("file-open");
 }
 
+bool FileMenuController::isClearRecentAvailable() const
+{
+    return fileController()->actionAvailable("clear-recent");
+}
+
 bool FileMenuController::isCloseAvailable() const
 {
     return fileController()->actionAvailable("file-close");
 }
 
-bool FileMenuController::isSaveAvailable(mu::notation::SaveMode saveMode) const
+bool FileMenuController::isSaveAvailable() const
 {
-    return fileController()->actionAvailable(saveModeActionCode(saveMode));
+    return fileController()->actionAvailable("file-save");
+}
+
+bool FileMenuController::isSaveAsAvailable() const
+{
+    return fileController()->actionAvailable("file-save-as");
+}
+
+bool FileMenuController::isSaveCopyAvailable() const
+{
+    return fileController()->actionAvailable("file-save-a-copy");
+}
+
+bool FileMenuController::isSaveSelectionAvailable() const
+{
+    return fileController()->actionAvailable("file-save-selection");
+}
+
+bool FileMenuController::isSaveOnlineAvailable() const
+{
+    return fileController()->actionAvailable("file-save-online");
 }
 
 bool FileMenuController::isImportAvailable() const

@@ -24,22 +24,35 @@
 #include "userscores/ifilescorecontroller.h"
 #include "notation/inotationactionscontroller.h"
 #include "notation/notationtypes.h"
+#include "ifilemenucontroller.h"
 
 namespace mu::appshell {
-class FileMenuController : public async::Asyncable
+class FileMenuController : public IFileMenuController, public async::Asyncable
 {
     INJECT(appshell, userscores::IFileScoreController, fileController)
     INJECT(appshell, notation::INotationActionsController, notationController)
 
 public:
-    FileMenuController();
+    void init();
 
-    async::Channel<std::vector<actions::ActionCode> > actionsAvailableChanged() const;
+    bool contains(const actions::ActionCode& actionCode) const override;
+
+    bool actionAvailable(const actions::ActionCode& actionCode) const override;
+    async::Channel<actions::ActionCodeList> actionsAvailableChanged() const override;
+
+private:
+    using AvailableCallback = std::function<bool ()>;
+    std::map<actions::ActionCode, AvailableCallback> actions() const;
 
     bool isNewAvailable() const;
     bool isOpenAvailable() const;
+    bool isClearRecentAvailable() const;
     bool isCloseAvailable() const;
-    bool isSaveAvailable(notation::SaveMode saveMode) const;
+    bool isSaveAvailable() const;
+    bool isSaveAsAvailable() const;
+    bool isSaveCopyAvailable() const;
+    bool isSaveSelectionAvailable() const;
+    bool isSaveOnlineAvailable() const;
     bool isImportAvailable() const;
     bool isExportAvailable() const;
     bool isEditInfoAvailable() const;
@@ -47,8 +60,7 @@ public:
     bool isPrintAvailable() const;
     bool isQuitAvailable() const;
 
-private:
-    async::Channel<std::vector<actions::ActionCode> > m_actionsReceiveAvailableChanged;
+    async::Channel<actions::ActionCodeList> m_actionsReceiveAvailableChanged;
 };
 }
 

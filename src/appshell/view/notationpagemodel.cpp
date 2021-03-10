@@ -29,7 +29,7 @@ NotationPageModel::NotationPageModel(QObject* parent)
 
 void NotationPageModel::init()
 {
-    pageState()->panelsVisibleChanged().onReceive(this, [this](const std::vector<PanelType>& panels) {
+    pageState()->panelsVisibleChanged().onReceive(this, [this](const PanelTypeList& panels) {
         for (PanelType panelType: panels) {
             notifyAboutPanelChanged(panelType);
         }
