@@ -29,7 +29,7 @@ class IExportScoreService : MODULE_EXPORT_INTERFACE
     INTERFACE_ID(IExportScoreService)
 
 public:
-    virtual void exportScores(QList<notation::INotationPtr> notations, io::path basePath) = 0;
+    virtual void exportScores(std::list<notation::INotationPtr> notations, io::path basePath) = 0;
 };
 }
 

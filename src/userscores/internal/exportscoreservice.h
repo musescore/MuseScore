@@ -39,31 +39,27 @@ class ExportScoreService : public IExportScoreService
     INJECT(userscores, notation::INotationWritersRegister, writers)
     INJECT(userscores, iex::imagesexport::IImagesExportConfiguration, imagesExportConfiguration)
     INJECT(userscores, context::IGlobalContext, context)
-    INJECT(usersores, system::IFileSystem, fileSystem)
+    INJECT(userscores, system::IFileSystem, fileSystem)
 
 public:
-    void exportScores(QList<notation::INotationPtr> notations, io::path exportPath) override;
+    void exportScores(std::list<notation::INotationPtr> notations, io::path exportPath) override;
 
 private:
-    enum FileConflictPolicy {
-        Replace,
-        ReplaceAll,
-        Skip,
-        SkipAll
+    enum class FileConflictPolicy {
+        Undefined,
+        SkipAll,
+        ReplaceAll
     };
 
     bool isMainNotation(notation::INotationPtr notation) const;
 
-    FileConflictPolicy getConflictPolicy(std::string filename);
-    FileConflictPolicy getEffectivePolicy(FileConflictPolicy policy) const;
-    void askConflictPolicy(std::string filename);
-
+    bool shouldReplaceFile(std::string filename);
     bool askForRetry(std::string filename) const;
 
     bool exportSingleScore(notation::INotationWriterPtr writer, io::path exportPath, notation::INotationPtr score, int page = 0);
     bool shouldExportIndividualPage(io::path type) const;
 
-    FileConflictPolicy m_currentConflictPolicy;
+    FileConflictPolicy m_fileConflictPolicy;
 };
 }
 

@@ -27,7 +27,7 @@ using namespace mu::userscores;
 using namespace mu::notation;
 using namespace mu::framework;
 
-void ExportScoreService::exportScores(QList<INotationPtr> notations, io::path exportPath)
+void ExportScoreService::exportScores(std::list<INotationPtr> notations, io::path exportPath)
 {
     std::string suffix = io::syffix(exportPath);
 
@@ -47,17 +47,6 @@ void ExportScoreService::exportScores(QList<INotationPtr> notations, io::path ex
     }
 }
 
-ExportScoreService::FileConflictPolicy ExportScoreService::getConflictPolicy(std::string filename)
-{
-    switch (m_currentConflictPolicy) {
-    case Replace:
-    case Skip:
-        askConflictPolicy(filename);
-    }
-
-    return getEffectivePolicy(m_currentConflictPolicy);
-}
-
 bool ExportScoreService::askForRetry(std::string filename) const
 {
     int btn = interactive()->question("Error", "An error occured while exporting the file " + filename, {
@@ -68,48 +57,53 @@ bool ExportScoreService::askForRetry(std::string filename) const
     return btn == static_cast<int>(IInteractive::Button::Retry);
 }
 
-ExportScoreService::FileConflictPolicy ExportScoreService::getEffectivePolicy(ExportScoreService::FileConflictPolicy policy) const
+bool ExportScoreService::shouldReplaceFile(std::string filename)
 {
-    switch (policy) {
-    case ReplaceAll:
-        return FileConflictPolicy::Replace;
-    case SkipAll:
-        return FileConflictPolicy::Skip;
-    default:
-        return policy;
+    switch (m_fileConflictPolicy) {
+    case FileConflictPolicy::ReplaceAll:
+        return true;
+    case FileConflictPolicy::SkipAll:
+        return false;
+    case FileConflictPolicy::Undefined: {
+        static const int Replace = static_cast<int>(IInteractive::Button::CustomButton) + 1;
+        static const int ReplaceAll = static_cast<int>(IInteractive::Button::CustomButton) + 2;
+        static const int Skip = static_cast<int>(IInteractive::Button::CustomButton) + 3;
+        static const int SkipAll = static_cast<int>(IInteractive::Button::CustomButton) + 4;
+
+        int btn = interactive()->question("File already exists", "A file already exists with the filename " + filename, {
+            IInteractive::ButtonData(Replace, "Replace"),
+            IInteractive::ButtonData(ReplaceAll, "Replace All"),
+            IInteractive::ButtonData(Skip, "Skip"),
+            IInteractive::ButtonData(SkipAll, "Skip All")
+        });
+
+        switch (btn) {
+        case ReplaceAll:
+            m_fileConflictPolicy = FileConflictPolicy::ReplaceAll; // fallthrough
+        case Replace:
+            return true;
+        case SkipAll:
+            m_fileConflictPolicy = FileConflictPolicy::SkipAll; // fallthrough
+        case Skip:
+        default:
+            return false;
+        }
+    } break;
     }
-}
-
-void ExportScoreService::askConflictPolicy(std::string filename)
-{
-    int replace = static_cast<int>(IInteractive::Button::CustomButton) + 1;
-    int replaceAll = static_cast<int>(IInteractive::Button::CustomButton) + 2;
-    int skip = static_cast<int>(IInteractive::Button::CustomButton) + 3;
-    int skipAll = static_cast<int>(IInteractive::Button::CustomButton) + 4;
-
-    int btn = interactive()->question("File already exists", "A file already exists with the filename " + filename, {
-        IInteractive::ButtonData(replace, "Replace"),
-        IInteractive::ButtonData(replaceAll, "Replace All"),
-        IInteractive::ButtonData(skip, "Skip"),
-        IInteractive::ButtonData(skipAll, "Skip All")
-    });
-
-    m_currentConflictPolicy = static_cast<FileConflictPolicy>(btn - replace);
 }
 
 bool ExportScoreService::exportSingleScore(INotationWriterPtr writer, io::path exportPath, INotationPtr notation, int page)
 {
-    io::path outPath
-        = configuration()->completeExportPath(exportPath, notation, isMainNotation(notation), shouldExportIndividualPage(io::syffix(
-                                                                                                                             exportPath)),
-                                              page);
-    QString outPathString = outPath.toQString();
+    io::path outPath = configuration()->completeExportPath(exportPath,
+                                                           notation,
+                                                           isMainNotation(notation),
+                                                           shouldExportIndividualPage(io::syffix(exportPath)),
+                                                           page);
+
     std::string completeFileName = io::filename(outPath).toStdString();
 
-    if (fileSystem()->exists(outPathString)) {
-        if (getConflictPolicy(completeFileName)) {
-            return false;
-        }
+    if (fileSystem()->exists(outPath) && !shouldReplaceFile(completeFileName)) {
+        return false;
     }
 
     INotationWriter::Options options({

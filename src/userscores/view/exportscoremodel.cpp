@@ -194,15 +194,20 @@ void ExportScoreModel::setExportSuffix(QString suffix)
     m_exportPath = dirpath(m_exportPath) + "/" + basename(m_exportPath) + "." + suffix;
 }
 
-void ExportScoreModel::exportScores()
+bool ExportScoreModel::exportScores()
 {
-    QList<INotationPtr> notations;
+    std::list<INotationPtr> notations;
 
     for (int i : selectedRows()) {
-        notations << m_notations[i];
+        notations.push_back(m_notations[i]);
+    }
+
+    IF_ASSERT_FAILED(!notations.empty()) {
+        return false;
     }
 
     exportScoreService()->exportScores(notations, m_exportPath);
+    return true; // TODO: return false on error/cancel
 }
 
 int ExportScoreModel::pdfResolution() const
