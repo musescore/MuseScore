@@ -995,7 +995,7 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
     qreal mag      = magS / _spatium;
     gscore->setSpatium(SPATIUM20);
 
-    mu::draw::Painter painter(mu::draw::QPainterProvider::make(this));
+    mu::draw::Painter painter(mu::draw::QPainterProvider::make(this), "palette");
     painter.setAntialiasing(true);
 
     painter.setPen(configuration()->gridColor());
@@ -1170,7 +1170,7 @@ QPixmap Palette::pixmap(int paletteIdx) const
     QPixmap pm(w, h);
     pm.fill(configuration()->elementsBackgroundColor());
 
-    mu::draw::Painter painter(mu::draw::QPainterProvider::make(&pm));
+    mu::draw::Painter painter(mu::draw::QPainterProvider::make(&pm), "palette");
     painter.setAntialiasing(true);
 
     if (element->isIcon()) {

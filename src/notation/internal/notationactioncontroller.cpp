@@ -236,12 +236,12 @@ void NotationActionController::init()
     dispatcher()->reg(this, "grace16after", [this]() { addGraceNotesToSelectedNotes(GraceNoteType::GRACE16_AFTER); });
     dispatcher()->reg(this, "grace32after", [this]() { addGraceNotesToSelectedNotes(GraceNoteType::GRACE32_AFTER); });
 
-    dispatcher()->reg(this, "beam-start", [this]() { addBeatToSelectedChordRests(BeamMode::BEGIN); });
-    dispatcher()->reg(this, "beam-mid", [this]() { addBeatToSelectedChordRests(BeamMode::MID); });
-    dispatcher()->reg(this, "no-beam", [this]() { addBeatToSelectedChordRests(BeamMode::NONE); });
-    dispatcher()->reg(this, "beam-32", [this]() { addBeatToSelectedChordRests(BeamMode::BEGIN32); });
-    dispatcher()->reg(this, "beam-64", [this]() { addBeatToSelectedChordRests(BeamMode::BEGIN64); });
-    dispatcher()->reg(this, "auto-beam", [this]() { addBeatToSelectedChordRests(BeamMode::AUTO); });
+    dispatcher()->reg(this, "beam-start", [this]() { addBeamToSelectedChordRests(BeamMode::BEGIN); });
+    dispatcher()->reg(this, "beam-mid", [this]() { addBeamToSelectedChordRests(BeamMode::MID); });
+    dispatcher()->reg(this, "no-beam", [this]() { addBeamToSelectedChordRests(BeamMode::NONE); });
+    dispatcher()->reg(this, "beam-32", [this]() { addBeamToSelectedChordRests(BeamMode::BEGIN32); });
+    dispatcher()->reg(this, "beam-64", [this]() { addBeamToSelectedChordRests(BeamMode::BEGIN64); });
+    dispatcher()->reg(this, "auto-beam", [this]() { addBeamToSelectedChordRests(BeamMode::AUTO); });
 
     dispatcher()->reg(this, "add-brackets", [this]() { addBracketsToSelection(BracketsType::Brackets); });
     dispatcher()->reg(this, "add-parentheses", [this]() { addBracketsToSelection(BracketsType::Parentheses); });
@@ -560,7 +560,7 @@ void NotationActionController::putTuplet(int tupletCount)
     }
 }
 
-void NotationActionController::addBeatToSelectedChordRests(BeamMode mode)
+void NotationActionController::addBeamToSelectedChordRests(BeamMode mode)
 {
     auto interaction = currentNotationInteraction();
     if (!interaction) {
