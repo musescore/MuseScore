@@ -298,8 +298,10 @@ set(MODULE_SRC
     style.h
     symbol.cpp
     symbol.h
+    symid.h
     sym.cpp
     sym.h
+    symnames.cpp
     synthesizerstate.cpp
     synthesizerstate.h
     system.cpp
