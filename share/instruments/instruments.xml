@@ -837,15 +837,15 @@
                   </Channel>
                   <genre>world</genre>
             </Instrument>
-            <Instrument id="quena">
-                  <longName>Quena</longName>
-                  <shortName>Qn.</shortName>
-                  <description>Quena</description>
+            <Instrument id="g-quena">
+                  <longName>G Quena</longName>
+                  <shortName>G Qn.</shortName>
+                  <description>G Quena</description>
                   <musicXMLid>wind.flutes.quena</musicXMLid>
-                  <clef>G8va</clef>
+                  <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>72-92</aPitchRange>
-                  <pPitchRange>72-96</pPitchRange>
+                  <aPitchRange>67-87</aPitchRange>
+                  <pPitchRange>67-91</pPitchRange>
                   <Channel>
                         <program value="67"/> <!--Baritone Sax-->
                   </Channel>
@@ -860,20 +860,6 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>72-92</aPitchRange>
                   <pPitchRange>72-96</pPitchRange>
-                  <Channel>
-                        <program value="67"/> <!--Baritone Sax-->
-                  </Channel>
-                  <genre>world</genre>
-            </Instrument>
-            <Instrument id="g-quena">
-                  <longName>G Quena</longName>
-                  <shortName>G Qn.</shortName>
-                  <description>G Quena</description>
-                  <musicXMLid>wind.flutes.quena</musicXMLid>
-                  <clef>G</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>67-87</aPitchRange>
-                  <pPitchRange>67-91</pPitchRange>
                   <Channel>
                         <program value="67"/> <!--Baritone Sax-->
                   </Channel>
@@ -1516,10 +1502,10 @@
                         <program value="67"/> <!--Baritone Sax-->
                   </Channel>
             </Instrument>
-            <Instrument id="duduk">
-                  <longName>Duduk</longName>
-                  <shortName>Du.</shortName>
-                  <description>Duduk</description>
+            <Instrument id="a-duduk">
+                  <longName>A Duduk</longName>
+                  <shortName>A Du.</shortName>
+                  <description>A Duduk</description>
                   <musicXMLid>wind.reed.duduk</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
@@ -1609,20 +1595,6 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>67-82</aPitchRange>
                   <pPitchRange>65-85</pPitchRange>
-                  <Channel>
-                        <program value="71"/> <!--Clarinet-->
-                  </Channel>
-                  <genre>world</genre>
-            </Instrument>
-            <Instrument id="a-duduk">
-                  <longName>A Duduk</longName>
-                  <shortName>A Du.</shortName>
-                  <description>A Duduk</description>
-                  <musicXMLid>wind.reed.duduk</musicXMLid>
-                  <clef>G</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>66-81</aPitchRange>
-                  <pPitchRange>64-84</pPitchRange>
                   <Channel>
                         <program value="71"/> <!--Clarinet-->
                   </Channel>
@@ -1978,23 +1950,6 @@
                         <program value="71"/> <!--Clarinet-->
                   </Channel>
                   <genre>orchestra</genre>
-            </Instrument>
-            <Instrument id="bass-clarinet">
-                  <family>clarinets</family>
-                  <longName>Bass Clarinet</longName>
-                  <shortName>B. Cl.</shortName>
-                  <description>Bass Clarinet</description>
-                  <musicXMLid>wind.reed.clarinet.bass</musicXMLid>
-                  <transposingClef>G</transposingClef>
-                  <concertClef>G8vb</concertClef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>37-75</aPitchRange>
-                  <pPitchRange>34-82</pPitchRange>
-                  <transposeDiatonic>-8</transposeDiatonic>
-                  <transposeChromatic>-14</transposeChromatic>
-                  <Channel>
-                        <program value="71"/> <!--Clarinet-->
-                  </Channel>
             </Instrument>
             <Instrument id="bb-bass-clarinet">
                   <family>clarinets</family>
@@ -3630,44 +3585,6 @@
                         <program value="60"/> <!--French Horn-->
                   </Channel>
             </Instrument>
-            <Instrument id="trumpet">
-                  <family>trumpets</family>
-                  <longName>Trumpet</longName>
-                  <shortName>Tpt.</shortName>
-                  <description>B♭ Trumpet (generic)</description>
-                  <musicXMLid>brass.trumpet</musicXMLid>
-                  <clef>G</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>52-80</aPitchRange>
-                  <pPitchRange>52-85</pPitchRange>
-                  <transposeDiatonic>-1</transposeDiatonic>
-                  <transposeChromatic>-2</transposeChromatic>
-                  <Channel name="open">
-                        <program value="56"/> <!--Trumpet-->
-                  </Channel>
-                  <Channel name="mute">
-                        <program value="59"/> <!--Muted Trumpet-->
-                  </Channel>
-            </Instrument>
-            <Instrument id="piccolo-trumpet">
-                  <family>trumpets</family>
-                  <longName>Piccolo Trumpet</longName>
-                  <shortName>P. Tpt.</shortName>
-                  <description>Piccolo Trumpet in B♭ (generic)</description>
-                  <musicXMLid>brass.trumpet.piccolo</musicXMLid>
-                  <clef>G</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>59-86</aPitchRange>
-                  <pPitchRange>59-89</pPitchRange>
-                  <transposeDiatonic>6</transposeDiatonic>
-                  <transposeChromatic>10</transposeChromatic>
-                  <Channel name="open">
-                        <program value="56"/> <!--Trumpet-->
-                  </Channel>
-                  <Channel name="mute">
-                        <program value="59"/> <!--Muted Trumpet-->
-                  </Channel>
-            </Instrument>
             <Instrument id="bb-piccolo-trumpet">
                   <family>trumpets</family>
                   <longName>Piccolo Trumpet in B♭</longName>
@@ -3705,6 +3622,24 @@
                   <Channel name="mute">
                         <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
+            </Instrument>
+            <Instrument id="c-trumpet">
+                  <family>trumpets</family>
+                  <longName>C Trumpet</longName>
+                  <shortName>C Tpt.</shortName>
+                  <description>C Trumpet</description>
+                  <musicXMLid>brass.trumpet.c</musicXMLid>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>54-82</aPitchRange>
+                  <pPitchRange>54-85</pPitchRange>
+                  <Channel name="open">
+                        <program value="56"/> <!--Trumpet-->
+                  </Channel>
+                  <Channel name="mute">
+                        <program value="59"/> <!--Muted Trumpet-->
+                  </Channel>
+                  <genre>orchestra</genre>
             </Instrument>
             <Instrument id="f-trumpet">
                   <family>trumpets</family>
@@ -3781,24 +3716,6 @@
                   <Channel name="mute">
                         <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
-            </Instrument>
-            <Instrument id="c-trumpet">
-                  <family>trumpets</family>
-                  <longName>C Trumpet</longName>
-                  <shortName>C Tpt.</shortName>
-                  <description>C Trumpet</description>
-                  <musicXMLid>brass.trumpet.c</musicXMLid>
-                  <clef>G</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>54-82</aPitchRange>
-                  <pPitchRange>54-85</pPitchRange>
-                  <Channel name="open">
-                        <program value="56"/> <!--Trumpet-->
-                  </Channel>
-                  <Channel name="mute">
-                        <program value="59"/> <!--Muted Trumpet-->
-                  </Channel>
-                  <genre>orchestra</genre>
             </Instrument>
             <Instrument id="bb-trumpet">
                   <family>trumpets</family>
@@ -3901,19 +3818,19 @@
                         <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
             </Instrument>
-            <Instrument id="bass-trumpet">
+            <Instrument id="c-bass-trumpet">
                   <family>trumpets</family>
-                  <longName>Bass Trumpet</longName>
-                  <shortName>B. Tpt.</shortName>
-                  <description>Bass Trumpet in B♭ (generic)</description>
+                  <longName>Bass Trumpet in C</longName>
+                  <shortName>B. Tpt. C</shortName>
+                  <description>Bass Trumpet in C</description>
                   <musicXMLid>brass.trumpet.bass</musicXMLid>
                   <transposingClef>G</transposingClef>
                   <concertClef>G8vb</concertClef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>39-66</aPitchRange>
                   <pPitchRange>39-69</pPitchRange>
-                  <transposeDiatonic>-8</transposeDiatonic>
-                  <transposeChromatic>-14</transposeChromatic>
+                  <transposeDiatonic>-7</transposeDiatonic>
+                  <transposeChromatic>-12</transposeChromatic>
                   <Channel name="open">
                         <program value="56"/> <!--Trumpet-->
                   </Channel>
@@ -3941,26 +3858,6 @@
                   </Channel>
                   <genre>orchestra</genre>
             </Instrument>
-            <Instrument id="c-bass-trumpet">
-                  <family>trumpets</family>
-                  <longName>Bass Trumpet in C</longName>
-                  <shortName>B. Tpt. C</shortName>
-                  <description>Bass Trumpet in C</description>
-                  <musicXMLid>brass.trumpet.bass</musicXMLid>
-                  <transposingClef>G</transposingClef>
-                  <concertClef>G8vb</concertClef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>39-66</aPitchRange>
-                  <pPitchRange>39-69</pPitchRange>
-                  <transposeDiatonic>-7</transposeDiatonic>
-                  <transposeChromatic>-12</transposeChromatic>
-                  <Channel name="open">
-                        <program value="56"/> <!--Trumpet-->
-                  </Channel>
-                  <Channel name="mute">
-                        <program value="59"/> <!--Muted Trumpet-->
-                  </Channel>
-            </Instrument>
             <Instrument id="bb-bass-trumpet">
                   <family>trumpets</family>
                   <longName>B♭ Bass Trumpet</longName>
@@ -3982,18 +3879,18 @@
                   </Channel>
                   <genre>orchestra</genre>
             </Instrument>
-            <Instrument id="baroque-trumpet">
+            <Instrument id="d-baroque-trumpet">
                   <family>trumpets</family>
-                  <longName>Baroque Trumpet</longName>
-                  <shortName>Bq. Tpt.</shortName>
-                  <description>Baroque Trumpet in B♭ (generic)</description>
+                  <longName>Baroque Trumpet in D</longName>
+                  <shortName>Bq. Tpt. D</shortName>
+                  <description>Baroque Trumpet in D</description>
                   <musicXMLid>brass.trumpet.baroque</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>58-79</aPitchRange>
-                  <pPitchRange>58-83</pPitchRange>
-                  <transposeDiatonic>-1</transposeDiatonic>
-                  <transposeChromatic>-2</transposeChromatic>
+                  <aPitchRange>62-83</aPitchRange>
+                  <pPitchRange>62-87</pPitchRange>
+                  <transposeDiatonic>1</transposeDiatonic>
+                  <transposeChromatic>2</transposeChromatic>
                   <Channel name="open">
                         <program value="56"/> <!--Trumpet-->
                   </Channel>
@@ -4034,26 +3931,6 @@
                   <pPitchRange>63-88</pPitchRange>
                   <transposeDiatonic>2</transposeDiatonic>
                   <transposeChromatic>3</transposeChromatic>
-                  <Channel name="open">
-                        <program value="56"/> <!--Trumpet-->
-                  </Channel>
-                  <Channel name="mute">
-                        <program value="59"/> <!--Muted Trumpet-->
-                  </Channel>
-                  <genre>earlymusic</genre>
-            </Instrument>
-            <Instrument id="d-baroque-trumpet">
-                  <family>trumpets</family>
-                  <longName>Baroque Trumpet in D</longName>
-                  <shortName>Bq. Tpt. D</shortName>
-                  <description>Baroque Trumpet in D</description>
-                  <musicXMLid>brass.trumpet.baroque</musicXMLid>
-                  <clef>G</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>62-83</aPitchRange>
-                  <pPitchRange>62-87</pPitchRange>
-                  <transposeDiatonic>1</transposeDiatonic>
-                  <transposeChromatic>2</transposeChromatic>
                   <Channel name="open">
                         <program value="56"/> <!--Trumpet-->
                   </Channel>
@@ -4294,19 +4171,6 @@
                   </Channel>
                   <genre>jazz</genre>
                   <genre>marching</genre>
-            </Instrument>
-            <Instrument id="ophicleide">
-                  <longName>Ophicleide</longName>
-                  <shortName>Oph.</shortName>
-                  <description>C Bass Ophicleide (generic)</description>
-                  <musicXMLid>brass.ophicleide</musicXMLid>
-                  <clef>F</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>35-63</aPitchRange>
-                  <pPitchRange>35-67</pPitchRange>
-                  <Channel>
-                        <program value="56"/> <!--Trumpet-->
-                  </Channel>
             </Instrument>
             <Instrument id="eb-alto-ophicleide">
                   <longName>E♭ Alto Ophicleide</longName>
@@ -4684,24 +4548,19 @@
                   <genre>concertband</genre>
                   <genre>marching</genre>
             </Instrument>
-            <Instrument id="tuba">
+            <Instrument id="c-tuba">
                   <family>tubas</family>
-                  <longName>Tuba</longName>
-                  <shortName>Tba.</shortName>
-                  <description>Tuba (generic)</description>
+                  <longName>C Tuba</longName>
+                  <shortName>C Tb.</shortName>
+                  <description>C Tuba</description>
                   <musicXMLid>brass.tuba</musicXMLid>
                   <clef>F</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>28-58</aPitchRange>
-                  <pPitchRange>22-72</pPitchRange>
+                  <aPitchRange>26-60</aPitchRange>
+                  <pPitchRange>24-72</pPitchRange>
                   <Channel>
                         <program value="58"/> <!--Tuba-->
                   </Channel>
-                  <genre>common</genre>
-                  <genre>jazz</genre>
-                  <genre>orchestra</genre>
-                  <genre>concertband</genre>
-                  <genre>marching</genre>
             </Instrument>
             <Instrument id="f-tuba">
                   <family>tubas</family>
@@ -4732,38 +4591,6 @@
                         <program value="58"/> <!--Tuba-->
                   </Channel>
             </Instrument>
-            <Instrument id="eb-tuba-treble">
-                  <family>tubas</family>
-                  <trackName>E♭ Tuba (treble clef)</trackName>
-                  <longName>E♭ Tuba</longName>
-                  <shortName>E♭ Tb.</shortName>
-                  <description>E♭ Tuba</description>
-                  <musicXMLid>brass.tuba</musicXMLid>
-                  <transposingClef>G</transposingClef>
-                  <concertClef>F</concertClef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>26-64</aPitchRange>
-                  <pPitchRange>24-72</pPitchRange>
-                  <transposeDiatonic>-12</transposeDiatonic>
-                  <transposeChromatic>-21</transposeChromatic>
-                  <Channel>
-                        <program value="58"/> <!--Tuba-->
-                  </Channel>
-            </Instrument>
-            <Instrument id="c-tuba">
-                  <family>tubas</family>
-                  <longName>C Tuba</longName>
-                  <shortName>C Tb.</shortName>
-                  <description>C Tuba</description>
-                  <musicXMLid>brass.tuba</musicXMLid>
-                  <clef>F</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>26-60</aPitchRange>
-                  <pPitchRange>24-72</pPitchRange>
-                  <Channel>
-                        <program value="58"/> <!--Tuba-->
-                  </Channel>
-            </Instrument>
             <Instrument id="bb-tuba">
                   <family>tubas</family>
                   <longName>B♭ Tuba</longName>
@@ -4777,7 +4604,11 @@
                   <Channel>
                         <program value="58"/> <!--Tuba-->
                   </Channel>
+                  <genre>common</genre>
+                  <genre>jazz</genre>
                   <genre>orchestra</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
             </Instrument>
             <Instrument id="bb-tuba-treble">
                   <family>tubas</family>
@@ -4793,6 +4624,24 @@
                   <pPitchRange>22-72</pPitchRange>
                   <transposeDiatonic>-15</transposeDiatonic>
                   <transposeChromatic>-26</transposeChromatic>
+                  <Channel>
+                        <program value="58"/> <!--Tuba-->
+                  </Channel>
+            </Instrument>
+            <Instrument id="eb-tuba-treble">
+                  <family>tubas</family>
+                  <trackName>E♭ Tuba (treble clef)</trackName>
+                  <longName>E♭ Tuba</longName>
+                  <shortName>E♭ Tb.</shortName>
+                  <description>E♭ Tuba</description>
+                  <musicXMLid>brass.tuba</musicXMLid>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>F</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>26-64</aPitchRange>
+                  <pPitchRange>24-72</pPitchRange>
+                  <transposeDiatonic>-12</transposeDiatonic>
+                  <transposeChromatic>-21</transposeChromatic>
                   <Channel>
                         <program value="58"/> <!--Tuba-->
                   </Channel>
@@ -4884,11 +4733,11 @@
                   <genre>jazz</genre>
                   <genre>marching</genre>
             </Instrument>
-            <Instrument id="wagner-tuba">
+            <Instrument id="f-wagner-tuba">
                   <family>horns</family>
-                  <longName>Wagner Tuba</longName>
-                  <shortName>Wag. Tb.</shortName>
-                  <description>F Wagner Tuba (generic)</description>
+                  <longName>F Wagner Tuba</longName>
+                  <shortName>F Wag. Tb.</shortName>
+                  <description>F Wagner Tuba</description>
                   <musicXMLid>brass.wagner-tuba</musicXMLid>
                   <clef>F</clef>
                   <barlineSpan>1</barlineSpan>
@@ -4914,22 +4763,6 @@
                   <transposeChromatic>-2</transposeChromatic>
                   <Channel>
                         <program value="60"/> <!--French Horn-->
-                  </Channel>
-            </Instrument>
-            <Instrument id="f-wagner-tuba">
-                  <family>horns</family>
-                  <longName>F Wagner Tuba</longName>
-                  <shortName>F Wag. Tb.</shortName>
-                  <description>F Wagner Tuba</description>
-                  <musicXMLid>brass.wagner-tuba</musicXMLid>
-                  <clef>F</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>35-74</aPitchRange>
-                  <pPitchRange>35-77</pPitchRange>
-                  <transposeDiatonic>-4</transposeDiatonic>
-                  <transposeChromatic>-7</transposeChromatic>
-                  <Channel>
-                        <program value="56"/> <!--Trumpet-->
                   </Channel>
             </Instrument>
             <Instrument id="conch">

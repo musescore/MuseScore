@@ -90,7 +90,7 @@ const std::map<QString, QString> GuitarPro6::instrumentMapping = {
     { "cello",           "violoncello" },
     { "china",           "chinese-tom-toms" },
     { "clrnt-a",         "a-clarinet" },
-    { "clrnt-bb-bass",   "bass-clarinet" },
+    { "clrnt-bb-bass",   "bb-bass-clarinet" },
     { "clrnt-bb",        "bb-clarinet" },
     { "clrnt-c",         "c-clarinet" },
     { "clrnt-d",         "d-clarinet" },
