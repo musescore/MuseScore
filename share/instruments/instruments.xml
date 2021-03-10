@@ -195,6 +195,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="c-piccolo">
+                  <transpositionName>(C)</transpositionName>
                   <family>flutes</family>
                   <longName>Piccolo</longName>
                   <shortName>Picc.</shortName>
@@ -217,6 +218,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="db-piccolo">
+                  <transpositionName>D♭</transpositionName>
                   <family>flutes</family>
                   <longName>D♭ Piccolo</longName>
                   <shortName>D♭ Picc.</shortName>
@@ -234,6 +236,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="eb-piccolo">
+                  <transpositionName>E♭</transpositionName>
                   <family>flutes</family>
                   <longName>E♭ Piccolo</longName>
                   <shortName>E♭ Picc.</shortName>
@@ -462,6 +465,7 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="g-dizi">
+                  <transpositionName>G</transpositionName>
                   <longName>G Dizi</longName>
                   <shortName>G Di.</shortName>
                   <description>G Dizi</description>
@@ -476,6 +480,7 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="d-dizi">
+                  <transpositionName>D</transpositionName>
                   <longName>Dizi</longName>
                   <shortName>Di.</shortName>
                   <description>Dizi</description>
@@ -490,6 +495,7 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="c-dizi">
+                  <transpositionName>C</transpositionName>
                   <longName>C Dizi</longName>
                   <shortName>C Di.</shortName>
                   <description>C Dizi</description>
@@ -504,6 +510,7 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="a-dizi">
+                  <transpositionName>A</transpositionName>
                   <longName>A Dizi</longName>
                   <shortName>A Di.</shortName>
                   <description>A Dizi</description>
@@ -518,6 +525,7 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="f-dizi">
+                  <transpositionName>F</transpositionName>
                   <longName>F Dizi</longName>
                   <shortName>F Di.</shortName>
                   <description>F Dizi</description>
@@ -532,6 +540,7 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="e-dizi">
+                  <transpositionName>E</transpositionName>
                   <longName>E Dizi</longName>
                   <shortName>E Di.</shortName>
                   <description>E Dizi</description>
@@ -698,6 +707,7 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="c-soprano-ocarina">
+                  <transpositionName>C</transpositionName>
                   <longName>C Soprano Ocarina</longName>
                   <shortName>C S. Oc.</shortName>
                   <description>C Soprano Ocarina</description>
@@ -712,6 +722,7 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="g-soprano-ocarina">
+                  <transpositionName>G</transpositionName>
                   <longName>G Soprano Ocarina</longName>
                   <shortName>G S. Oc.</shortName>
                   <description>G Soprano Ocarina</description>
@@ -726,6 +737,7 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="f-soprano-ocarina">
+                  <transpositionName>F</transpositionName>
                   <longName>F Soprano Ocarina</longName>
                   <shortName>F S. Oc.</shortName>
                   <description>F Soprano Ocarina</description>
@@ -740,6 +752,7 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="bb-soprano-ocarina">
+                  <transpositionName>B♭</transpositionName>
                   <longName>B♭ Soprano Ocarina</longName>
                   <shortName>B♭ S. Oc.</shortName>
                   <description>B♭ Soprano Ocarina</description>
@@ -754,6 +767,7 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="c-alto-ocarina">
+                  <transpositionName>C</transpositionName>
                   <longName>C Alto Ocarina</longName>
                   <shortName>C A. Oc.</shortName>
                   <description>C Alto Ocarina</description>
@@ -768,6 +782,7 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="g-alto-ocarina">
+                  <transpositionName>G</transpositionName>
                   <longName>G Alto Ocarina</longName>
                   <shortName>G A. Oc.</shortName>
                   <description>G Alto Ocarina</description>
@@ -782,6 +797,7 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="f-alto-ocarina">
+                  <transpositionName>F</transpositionName>
                   <longName>F Alto Ocarina</longName>
                   <shortName>F A. Oc.</shortName>
                   <description>F Alto Ocarina</description>
@@ -796,6 +812,7 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="bb-alto-ocarina">
+                  <transpositionName>B♭</transpositionName>
                   <longName>B♭ Alto Ocarina</longName>
                   <shortName>B♭ A. Oc.</shortName>
                   <description>B♭ Alto Ocarina</description>
@@ -810,6 +827,7 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="c-bass-ocarina">
+                  <transpositionName>C</transpositionName>
                   <longName>C Bass Ocarina</longName>
                   <shortName>C B. Oc.</shortName>
                   <description>C Bass Ocarina</description>
@@ -838,6 +856,7 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="g-quena">
+                  <transpositionName>G</transpositionName>
                   <longName>G Quena</longName>
                   <shortName>G Qn.</shortName>
                   <description>G Quena</description>
@@ -852,6 +871,7 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="c-quena">
+                  <transpositionName>C</transpositionName>
                   <longName>C Quena</longName>
                   <shortName>C Qn.</shortName>
                   <description>C Quena</description>
@@ -866,6 +886,7 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="f-quena">
+                  <transpositionName>F</transpositionName>
                   <longName>F Quena</longName>
                   <shortName>F Qn.</shortName>
                   <description>F Quena</description>
@@ -880,6 +901,7 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="d-quena">
+                  <transpositionName>D</transpositionName>
                   <longName>Quena</longName>
                   <shortName>Qn.</shortName>
                   <description>Quena</description>
@@ -1043,6 +1065,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="d-tin-whistle">
+                  <transpositionName>D</transpositionName>
                   <longName>D Tin Whistle</longName>
                   <shortName>D Tin Wh.</shortName>
                   <description>same as 6 hole Flageolet but metal construction</description>
@@ -1056,6 +1079,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="bflat-tin-whistle">
+                  <transpositionName>B♭</transpositionName>
                   <longName>B♭ Tin Whistle</longName>
                   <shortName>B♭ Tin Wh.</shortName>
                   <description>same as 6 hole Flageolet but metal construction</description>
@@ -1069,6 +1093,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="c-tin-whistle">
+                  <transpositionName>C</transpositionName>
                   <longName>C Tin Whistle</longName>
                   <shortName>C Tin Wh.</shortName>
                   <description>same as 6 hole Flageolet but metal construction</description>
@@ -1503,6 +1528,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="a-duduk">
+                  <transpositionName>A</transpositionName>
                   <longName>A Duduk</longName>
                   <shortName>A Du.</shortName>
                   <description>A Duduk</description>
@@ -1517,6 +1543,7 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="f-duduk">
+                  <transpositionName>F</transpositionName>
                   <longName>F Duduk</longName>
                   <shortName>F Du.</shortName>
                   <description>F Duduk</description>
@@ -1531,6 +1558,7 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="e-duduk">
+                  <transpositionName>E</transpositionName>
                   <longName>E Duduk</longName>
                   <shortName>E Du.</shortName>
                   <description>E Duduk</description>
@@ -1545,6 +1573,7 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="d-duduk">
+                  <transpositionName>D</transpositionName>
                   <longName>Duduk</longName>
                   <shortName>Du.</shortName>
                   <description>Duduk</description>
@@ -1559,6 +1588,7 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="c-duduk">
+                  <transpositionName>C</transpositionName>
                   <longName>C Duduk</longName>
                   <shortName>C Du.</shortName>
                   <description>C Duduk</description>
@@ -1573,6 +1603,7 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="b-duduk">
+                  <transpositionName>B</transpositionName>
                   <longName>B Duduk</longName>
                   <shortName>B Du.</shortName>
                   <description>B Duduk</description>
@@ -1587,6 +1618,7 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="bb-duduk">
+                  <transpositionName>B♭</transpositionName>
                   <longName>B♭ Duduk</longName>
                   <shortName>B♭ Du.</shortName>
                   <description>B♭ Duduk</description>
@@ -1601,6 +1633,7 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="g-duduk">
+                  <transpositionName>G</transpositionName>
                   <longName>G Duduk</longName>
                   <shortName>G Du.</shortName>
                   <description>G Duduk</description>
@@ -1615,6 +1648,7 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="a-bass-duduk">
+                  <transpositionName>A</transpositionName>
                   <longName>A Bass Duduk</longName>
                   <shortName>A B. Du.</shortName>
                   <description>A Bass Duduk</description>
@@ -1783,6 +1817,7 @@
                   <genre>concertband</genre>
             </Instrument>
             <Instrument id="clarinet">
+                  <transpositionName>B♭</transpositionName>
                   <family>clarinets</family>
                   <longName>Clarinet</longName>
                   <shortName>Cl.</shortName>
@@ -1799,6 +1834,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="bb-clarinet">
+                  <transpositionName>B♭</transpositionName>
                   <family>clarinets</family>
                   <longName>B♭ Clarinet</longName>
                   <shortName>B♭ Cl.</shortName>
@@ -1820,6 +1856,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="c-clarinet">
+                  <transpositionName>C</transpositionName>
                   <family>clarinets</family>
                   <longName>C Clarinet</longName>
                   <shortName>C Cl.</shortName>
@@ -1834,6 +1871,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="d-clarinet">
+                  <transpositionName>D</transpositionName>
                   <family>clarinets</family>
                   <longName>D Clarinet</longName>
                   <shortName>D Cl.</shortName>
@@ -1850,6 +1888,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="eb-clarinet">
+                  <transpositionName>E♭</transpositionName>
                   <family>clarinets</family>
                   <longName>E♭ Clarinet</longName>
                   <shortName>E♭ Cl.</shortName>
@@ -1869,6 +1908,7 @@
                   <genre>concertband</genre>
             </Instrument>
             <Instrument id="g-clarinet">
+                  <transpositionName>G</transpositionName>
                   <family>clarinets</family>
                   <longName>G Clarinet</longName>
                   <shortName>G Cl.</shortName>
@@ -1885,6 +1925,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="a-clarinet">
+                  <transpositionName>A</transpositionName>
                   <family>clarinets</family>
                   <longName>A Clarinet</longName>
                   <shortName>A Cl.</shortName>
@@ -1952,6 +1993,7 @@
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="bb-bass-clarinet">
+                  <transpositionName>(B♭)</transpositionName>
                   <family>clarinets</family>
                   <longName>B♭ Bass Clarinet</longName>
                   <shortName>B♭ B. Cl.</shortName>
@@ -1974,6 +2016,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="a-bass-clarinet">
+                  <transpositionName>A</transpositionName>
                   <family>clarinets</family>
                   <longName>A Bass Clarinet</longName>
                   <shortName>A B. Cl.</shortName>
@@ -1992,6 +2035,7 @@
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="bb-bass-clarinet-bass-clef">
+                  <transpositionName>(B♭)</transpositionName>
                   <family>clarinets</family>
                   <trackName>B♭ Bass Clarinet (bass clef)</trackName>
                   <longName>B♭ Bass Clarinet</longName>
@@ -2010,6 +2054,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="a-bass-clarinet-bass-clef">
+                  <transpositionName>A</transpositionName>
                   <family>clarinets</family>
                   <trackName>A Bass Clarinet (bass clef)</trackName>
                   <longName>A Bass Clarinet</longName>
@@ -2066,6 +2111,7 @@
                   <genre>concertband</genre>
             </Instrument>
             <Instrument id="c-xaphoon">
+                  <transpositionName>C</transpositionName>
                   <longName>Pocket Sax in C</longName>
                   <shortName>C Pkt. Sax</shortName>
                   <description>Xaphoon/Pocket Sax in C</description>
@@ -2082,6 +2128,7 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="bb-xaphoon">
+                  <transpositionName>B♭</transpositionName>
                   <longName>Pocket Sax in B♭</longName>
                   <shortName>B♭ Pkt. Sax</shortName>
                   <description>Xaphoon/Pocket Sax in B♭</description>
@@ -2100,6 +2147,7 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="d-xaphoon">
+                  <transpositionName>D</transpositionName>
                   <longName>Pocket Sax in D</longName>
                   <shortName>D Pkt. Sax</shortName>
                   <description>Xaphoon/Pocket Sax in D</description>
@@ -2118,6 +2166,7 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="g-xaphoon">
+                  <transpositionName>G</transpositionName>
                   <longName>Pocket Sax in G</longName>
                   <shortName>G Pkt. Sax</shortName>
                   <description>Xaphoon/Pocket Sax in G</description>
@@ -2724,6 +2773,7 @@
                   <genre>popular</genre>
             </Instrument>
             <Instrument id="harmonica-c12c">
+                  <transpositionName>C</transpositionName>
                   <longName>12 Hole C Chromatic Harmonica</longName>
                   <shortName>Harm.</shortName>
                   <description>12 Hole Chromatic Harmonica in C</description>
@@ -2737,6 +2787,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="harmonica-c14c">
+                  <transpositionName>C</transpositionName>
                   <longName>14 Hole C Chromatic Harmonica</longName>
                   <shortName>Harm.</shortName>
                   <description>14 Hole Chromatic Harmonica in C</description>
@@ -2750,6 +2801,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="harmonica-c12g">
+                  <transpositionName>G</transpositionName>
                   <longName>12 Hole G Chromatic Harmonica</longName>
                   <shortName>Harm.</shortName>
                   <description>12 Hole Chromatic Harmonica in G</description>
@@ -2763,6 +2815,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="harmonica-c16c">
+                  <transpositionName>C</transpositionName>
                   <longName>16 Hole C Chromatic Harmonica</longName>
                   <shortName>Harm.</shortName>
                   <description>16 Hole Chromatic Harmonica in C</description>
@@ -2776,6 +2829,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="harmonica-c12tenor-c">
+                  <transpositionName>Tenor C</transpositionName>
                   <longName>12 Hole Tenor C Chromatic Harmonica</longName>
                   <shortName>Harm.</shortName>
                   <description>12 Hole Chromatic Harmonica in Tenor C</description>
@@ -2789,6 +2843,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="harmonica-d12high-g">
+                  <transpositionName>High G</transpositionName>
                   <longName>10 Hole High G Diatonic Harmonica</longName>
                   <shortName>Harm.</shortName>
                   <description>10 Hole Diatonic Harmonica in High G</description>
@@ -2802,6 +2857,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="harmonica-d12f">
+                  <transpositionName>F</transpositionName>
                   <longName>10 Hole F Diatonic Harmonica</longName>
                   <shortName>Harm.</shortName>
                   <description>10 Hole Diatonic Harmonica in F</description>
@@ -2815,6 +2871,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="harmonica-d12d">
+                  <transpositionName>D</transpositionName>
                   <longName>10 Hole D Diatonic Harmonica</longName>
                   <shortName>Harm.</shortName>
                   <description>10 Hole Diatonic Harmonica in D</description>
@@ -2828,6 +2885,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="harmonica-d12c">
+                  <transpositionName>C</transpositionName>
                   <longName>10 Hole C Diatonic Harmonica</longName>
                   <shortName>Harm.</shortName>
                   <description>10 Hole Diatonic Harmonica in C</description>
@@ -2841,6 +2899,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="harmonica-d12a">
+                  <transpositionName>A</transpositionName>
                   <longName>10 Hole A Diatonic Harmonica</longName>
                   <shortName>Harm.</shortName>
                   <description>10 Hole Diatonic Harmonica in A</description>
@@ -2854,6 +2913,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="harmonica-d12-g">
+                  <transpositionName>G</transpositionName>
                   <longName>10 Hole G Diatonic Harmonica</longName>
                   <shortName>Harm.</shortName>
                   <description>10 Hole Diatonic Harmonica in G</description>
@@ -2867,6 +2927,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="harmonica-d10low-d">
+                  <transpositionName>Low D</transpositionName>
                   <longName>10 Hole Low D Diatonic Harmonica</longName>
                   <shortName>Harm.</shortName>
                   <description>10 Hole Diatonic Harmonica in Low D</description>
@@ -3112,6 +3173,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="c-horn-alto">
+                  <transpositionName>C</transpositionName>
                   <family>horns</family>
                   <longName>Horn in C alto</longName>
                   <shortName>C Hn.</shortName>
@@ -3129,6 +3191,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="bb-horn-alto">
+                  <transpositionName>B♭</transpositionName>
                   <family>horns</family>
                   <longName>Horn in B♭ alto</longName>
                   <shortName>B♭ Hn.</shortName>
@@ -3148,6 +3211,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="a-horn">
+                  <transpositionName>A</transpositionName>
                   <family>horns</family>
                   <longName>Horn in A</longName>
                   <shortName>A Hn.</shortName>
@@ -3167,6 +3231,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="ab-horn">
+                  <transpositionName>A♭</transpositionName>
                   <family>horns</family>
                   <longName>Horn in A♭</longName>
                   <shortName>A♭ Hn.</shortName>
@@ -3186,6 +3251,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="g-horn">
+                  <transpositionName>G</transpositionName>
                   <family>horns</family>
                   <longName>Horn in G</longName>
                   <shortName>G Hn.</shortName>
@@ -3205,6 +3271,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="e-horn">
+                  <transpositionName>E</transpositionName>
                   <family>horns</family>
                   <longName>Horn in E</longName>
                   <shortName>E Hn.</shortName>
@@ -3224,6 +3291,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="eb-horn">
+                  <transpositionName>E♭</transpositionName>
                   <family>horns</family>
                   <longName>Horn in E♭</longName>
                   <shortName>E♭ Hn.</shortName>
@@ -3243,6 +3311,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="d-horn">
+                  <transpositionName>D</transpositionName>
                   <family>horns</family>
                   <longName>Horn in D</longName>
                   <shortName>D Hn.</shortName>
@@ -3262,6 +3331,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="c-horn">
+                  <transpositionName>C</transpositionName>
                   <family>horns</family>
                   <longName>Horn in C</longName>
                   <shortName>C Hn.</shortName>
@@ -3282,6 +3352,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="c-horn-bass">
+                  <transpositionName>C</transpositionName>
                   <family>horns</family>
                   <trackName>Horn in C (bass clef)</trackName>
                   <longName>Horn in C</longName>
@@ -3300,6 +3371,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="bb-horn-basso">
+                  <transpositionName>B♭</transpositionName>
                   <family>horns</family>
                   <longName>Horn in B♭ basso</longName>
                   <shortName>B♭ Hn.</shortName>
@@ -3338,6 +3410,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="bb-cornet">
+                  <transpositionName>B♭</transpositionName>
                   <family>cornets</family>
                   <longName>B♭ Cornet</longName>
                   <shortName>B♭ Cnt.</shortName>
@@ -3360,6 +3433,7 @@
                   <genre>concertband</genre>
             </Instrument>
             <Instrument id="eb-cornet">
+                  <transpositionName>E♭</transpositionName>
                   <family>cornets</family>
                   <longName>E♭ Cornet</longName>
                   <shortName>E♭ Cnt.</shortName>
@@ -3380,6 +3454,7 @@
                   <genre>concertband</genre>
             </Instrument>
             <Instrument id="c-cornet">
+                  <transpositionName>C</transpositionName>
                   <family>cornets</family>
                   <longName>C Cornet</longName>
                   <shortName>C Cnt.</shortName>
@@ -3397,6 +3472,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="a-cornet">
+                  <transpositionName>A</transpositionName>
                   <family>cornets</family>
                   <longName>A Cornet</longName>
                   <shortName>A Cnt.</shortName>
@@ -3434,6 +3510,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="eb-alto-horn">
+                  <transpositionName>E♭</transpositionName>
                   <family>alto-horns</family>
                   <longName>E♭ Alto Horn</longName>
                   <shortName>E♭ A. Hn.</shortName>
@@ -3453,6 +3530,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="f-alto-horn">
+                  <transpositionName>F</transpositionName>
                   <family>alto-horns</family>
                   <longName>F Alto Horn</longName>
                   <shortName>F A. Hn.</shortName>
@@ -3586,6 +3664,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="bb-piccolo-trumpet">
+                  <transpositionName>B♭</transpositionName>
                   <family>trumpets</family>
                   <longName>Piccolo Trumpet in B♭</longName>
                   <shortName>P. Tpt. B♭</shortName>
@@ -3605,6 +3684,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="a-piccolo-trumpet">
+                  <transpositionName>A</transpositionName>
                   <family>trumpets</family>
                   <longName>Piccolo Trumpet in A</longName>
                   <shortName>P. Tpt. A</shortName>
@@ -3624,6 +3704,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="c-trumpet">
+                  <transpositionName>C</transpositionName>
                   <family>trumpets</family>
                   <longName>C Trumpet</longName>
                   <shortName>C Tpt.</shortName>
@@ -3642,6 +3723,7 @@
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="f-trumpet">
+                  <transpositionName>F</transpositionName>
                   <family>trumpets</family>
                   <longName>F Trumpet</longName>
                   <shortName>F Tpt.</shortName>
@@ -3661,6 +3743,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="e-trumpet">
+                  <transpositionName>E</transpositionName>
                   <family>trumpets</family>
                   <longName>E Trumpet</longName>
                   <shortName>E Tpt.</shortName>
@@ -3680,6 +3763,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="eb-trumpet">
+                  <transpositionName>E♭</transpositionName>
                   <family>trumpets</family>
                   <longName>E♭ Trumpet</longName>
                   <shortName>E♭ Tpt.</shortName>
@@ -3699,6 +3783,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="d-trumpet">
+                  <transpositionName>D</transpositionName>
                   <family>trumpets</family>
                   <longName>D Trumpet</longName>
                   <shortName>D Tpt.</shortName>
@@ -3718,6 +3803,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="bb-trumpet">
+                  <transpositionName>B♭</transpositionName>
                   <family>trumpets</family>
                   <longName>B♭ Trumpet</longName>
                   <shortName>B♭ Tpt.</shortName>
@@ -3743,6 +3829,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="a-trumpet">
+                  <transpositionName>A</transpositionName>
                   <family>trumpets</family>
                   <longName>A Trumpet</longName>
                   <shortName>A Tpt.</shortName>
@@ -3819,6 +3906,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="c-bass-trumpet">
+                  <transpositionName>C</transpositionName>
                   <family>trumpets</family>
                   <longName>Bass Trumpet in C</longName>
                   <shortName>B. Tpt. C</shortName>
@@ -3839,6 +3927,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="eb-bass-trumpet">
+                  <transpositionName>E♭</transpositionName>
                   <family>trumpets</family>
                   <longName>E♭ Bass Trumpet</longName>
                   <shortName>E♭ B. Tpt.</shortName>
@@ -3859,6 +3948,7 @@
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="bb-bass-trumpet">
+                  <transpositionName>B♭</transpositionName>
                   <family>trumpets</family>
                   <longName>B♭ Bass Trumpet</longName>
                   <shortName>B♭ B. Tpt.</shortName>
@@ -3880,6 +3970,7 @@
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="d-baroque-trumpet">
+                  <transpositionName>D</transpositionName>
                   <family>trumpets</family>
                   <longName>Baroque Trumpet in D</longName>
                   <shortName>Bq. Tpt. D</shortName>
@@ -3900,6 +3991,7 @@
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="f-baroque-trumpet">
+                  <transpositionName>F</transpositionName>
                   <family>trumpets</family>
                   <longName>Baroque Trumpet in F</longName>
                   <shortName>Bq. Tpt. F</shortName>
@@ -3920,6 +4012,7 @@
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="eb-baroque-trumpet">
+                  <transpositionName>E♭</transpositionName>
                   <family>trumpets</family>
                   <longName>Baroque Trumpet in E♭</longName>
                   <shortName>Bq. Tpt. E♭</shortName>
@@ -3940,6 +4033,7 @@
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="c-baroque-trumpet">
+                  <transpositionName>C</transpositionName>
                   <family>trumpets</family>
                   <longName>Baroque Trumpet in C</longName>
                   <shortName>Bq. Tpt. C</shortName>
@@ -3958,6 +4052,7 @@
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="bb-baroque-trumpet">
+                  <transpositionName>B♭</transpositionName>
                   <family>trumpets</family>
                   <longName>Baroque Trumpet in B♭</longName>
                   <shortName>Bq. Tpt. B♭</shortName>
@@ -4173,6 +4268,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="eb-alto-ophicleide">
+                  <transpositionName>E♭</transpositionName>
                   <longName>E♭ Alto Ophicleide</longName>
                   <shortName>E♭ A. Oph.</shortName>
                   <description>E♭ Alto Ophicleide</description>
@@ -4186,6 +4282,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="f-alto-ophicleide">
+                  <transpositionName>F</transpositionName>
                   <longName>F Alto Ophicleide</longName>
                   <shortName>F A. Oph.</shortName>
                   <description>F Alto Ophicleide</description>
@@ -4199,6 +4296,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="c-bass-ophicleide">
+                  <transpositionName>C</transpositionName>
                   <longName>C Bass Ophicleide</longName>
                   <shortName>C B. Oph.</shortName>
                   <description>C Bass Ophicleide</description>
@@ -4212,6 +4310,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="bb-bass-ophicleide">
+                  <transpositionName>B♭</transpositionName>
                   <longName>B♭ Bass Ophicleide</longName>
                   <shortName>B♭ B. Oph.</shortName>
                   <description>B♭ Bass Ophicleide</description>
@@ -4225,6 +4324,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="eb-contrabass-ophicleide">
+                  <transpositionName>E♭</transpositionName>
                   <longName>E♭ Contrabass Ophicleide</longName>
                   <shortName>E♭ Cb. Oph.</shortName>
                   <description>E♭ Contrabass Ophicleide</description>
@@ -4549,6 +4649,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="c-tuba">
+                  <transpositionName>(C)</transpositionName>
                   <family>tubas</family>
                   <longName>C Tuba</longName>
                   <shortName>C Tb.</shortName>
@@ -4563,6 +4664,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="f-tuba">
+                  <transpositionName>F</transpositionName>
                   <family>tubas</family>
                   <longName>F Tuba</longName>
                   <shortName>F Tb.</shortName>
@@ -4578,6 +4680,7 @@
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="eb-tuba">
+                  <transpositionName>E♭</transpositionName>
                   <family>tubas</family>
                   <longName>E♭ Tuba</longName>
                   <shortName>E♭ Tb.</shortName>
@@ -4592,6 +4695,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="bb-tuba">
+                  <transpositionName>B♭</transpositionName>
                   <family>tubas</family>
                   <longName>B♭ Tuba</longName>
                   <shortName>B♭ Tb.</shortName>
@@ -4611,6 +4715,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="bb-tuba-treble">
+                  <transpositionName>B♭</transpositionName>
                   <family>tubas</family>
                   <trackName>B♭ Tuba (treble clef)</trackName>
                   <longName>B♭ Tuba</longName>
@@ -4629,6 +4734,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="eb-tuba-treble">
+                  <transpositionName>E♭</transpositionName>
                   <family>tubas</family>
                   <trackName>E♭ Tuba (treble clef)</trackName>
                   <longName>E♭ Tuba</longName>
@@ -4647,6 +4753,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="bass-f-tuba">
+                  <transpositionName>F</transpositionName>
                   <family>tubas</family>
                   <longName>Bass Tuba in F</longName>
                   <shortName>Ba. Tb. F</shortName>
@@ -4661,6 +4768,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="bass-eb-tuba">
+                  <transpositionName>E♭</transpositionName>
                   <family>tubas</family>
                   <longName>Bass Tuba in E♭</longName>
                   <shortName>Ba. Tb. E♭</shortName>
@@ -4717,6 +4825,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="bb-sousaphone">
+                  <transpositionName>(B♭)</transpositionName>
                   <longName>B♭ Sousaphone</longName>
                   <shortName>B♭ Sphn.</shortName>
                   <description>B♭ Sousaphone</description>
@@ -4734,6 +4843,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="f-wagner-tuba">
+                  <transpositionName>F</transpositionName>
                   <family>horns</family>
                   <longName>F Wagner Tuba</longName>
                   <shortName>F Wag. Tb.</shortName>
@@ -4750,6 +4860,7 @@
                   </Channel>
             </Instrument>
             <Instrument id="bb-wagner-tuba">
+                  <transpositionName>B♭</transpositionName>
                   <family>horns</family>
                   <longName>B♭ Wagner Tuba</longName>
                   <shortName>B♭ Wag. Tb.</shortName>
@@ -10768,6 +10879,7 @@
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="ukulele-low-g">
+                  <transpositionName>Low G</transpositionName>
                   <family>plucked-strings</family>
                   <longName>Ukulele (low G)</longName>
                   <shortName>Uk.</shortName>
@@ -11793,6 +11905,7 @@
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="g-violone">
+                 <transpositionName>G</transpositionName>
                   <longName>Violone</longName>
                   <shortName>Vne.</shortName>
                   <description>Violone</description>
@@ -11822,6 +11935,7 @@
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="d-violone">
+                  <transpositionName>D</transpositionName>
                   <longName>D Violone</longName>
                   <shortName>D Vne.</shortName>
                   <description>Violone</description>
