@@ -59,6 +59,7 @@ private:
     INotationNoteInputPtr currentNotationNoteInput() const;
     INotationUndoStackPtr currentNotationUndoStack() const;
 
+    void toggleNoteInput();
     void toggleNoteInputMethod(NoteInputMethod method);
     void addNote(NoteName note, NoteAddingMode addingMode);
     void addText(TextType type);
