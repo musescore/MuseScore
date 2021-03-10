@@ -16,7 +16,7 @@ QmlDialog {
 
     modal: true
 
-    title: qsTrc("userscores", "Export Score")
+    title: qsTrc("userscores", "Export")
 
     Rectangle {
         id: content
@@ -47,6 +47,8 @@ QmlDialog {
             scoresModel.load();
             suffixModel.load();
             settingsModel.load();
+
+            scoresModel.selectCurrentNotation()
         }
 
         RowLayout {
@@ -82,7 +84,7 @@ QmlDialog {
                         text: qsTrc("userscores", "Select all")
 
                         onClicked: {
-                            scoresModel.toggleAllSelections(true)
+                            scoresModel.setAllSelected(true)
                         }
                     }
 
@@ -92,7 +94,7 @@ QmlDialog {
                         text: qsTrc("userscores", "Clear selection")
 
                         onClicked: {
-                            scoresModel.toggleAllSelections(false)
+                            scoresModel.setAllSelected(false)
                         }
                     }
                 }
@@ -124,6 +126,7 @@ QmlDialog {
 
                     FlatButton {
                         text: qsTrc("global", "Cancel")
+                        accentButton: !exportButton.enabled
 
                         onClicked: {
                             root.hide()
@@ -134,7 +137,8 @@ QmlDialog {
                         id: exportButton
 
                         text: qsTrc("userscores", "Export…")
-                        accentButton: true
+                        enabled: scoresModel.selectionLength > 0;
+                        accentButton: enabled
                         onClicked: {
                             scoresModel.exportScores();
                             root.hide();
