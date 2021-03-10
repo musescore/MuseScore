@@ -71,7 +71,7 @@ public:
 
     Q_INVOKABLE void setExportSuffix(QString suffix);
 
-    Q_INVOKABLE void exportScores();
+    Q_INVOKABLE bool exportScores();
 
     int pdfResolution() const;
     void setPdfResolution(const int& resolution);

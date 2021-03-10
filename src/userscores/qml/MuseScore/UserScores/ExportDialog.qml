@@ -126,7 +126,6 @@ QmlDialog {
 
                     FlatButton {
                         text: qsTrc("global", "Close")
-                        accentButton: !exportButton.enabled
 
                         onClicked: {
                             root.hide()
@@ -140,8 +139,9 @@ QmlDialog {
                         enabled: scoresModel.selectionLength > 0;
                         accentButton: enabled
                         onClicked: {
-                            scoresModel.exportScores();
-                            root.hide();
+                            if (scoresModel.exportScores()) {
+                                root.hide();
+                            }
                         }
                     }
                 }
