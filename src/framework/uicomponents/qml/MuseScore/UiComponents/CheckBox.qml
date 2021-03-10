@@ -32,10 +32,6 @@ FocusScope {
     property alias text: label.text
     property alias font: label.font
     property alias wrapMode: label.wrapMode
-    property alias font: label.font
-
-    property alias checkBoxWidth: box.width
-    property alias checkBoxHeight: box.height
 
     property alias navigation: navCtrl
 
