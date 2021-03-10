@@ -46,7 +46,44 @@ Rectangle {
             height: gridView.cellWidth
 
             onClicked: {
-                noteInputModel.handleAction(item.codeRole)
+                if (menu.isOpened) {
+                    menu.toggleOpened()
+                    return
+                }
+
+                if (item.showSubitemsByClickRole) {
+                    showSubitemsMenu()
+                    return
+                }
+
+                noteInputModel.handleAction(item.codeRole, -1)
+            }
+
+            onPressAndHold: {
+                if (menu.isOpened || item.subitemsRole.length === 0) {
+                    return
+                }
+
+                showSubitemsMenu()
+            }
+
+            function showSubitemsMenu() {
+                menu.clear()
+
+                for (var i in item.subitemsRole) {
+                    menu.addMenuItem(item.subitemsRole[i])
+                }
+
+                menu.toggleOpened()
+            }
+
+            StyledMenu {
+                id: menu
+
+                onHandleAction: {
+                    noteInputModel.handleAction(actionCode, actionIndex)
+                    menu.close()
+                }
             }
         }
     }
