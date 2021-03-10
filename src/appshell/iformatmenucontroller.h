@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2020 MuseScore BVBA and others
+//  Copyright (C) 2021 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -16,29 +16,17 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "shortcutscontroller.h"
+#ifndef MU_APPSHELL_IFORMATMENUCONTROLLER_H
+#define MU_APPSHELL_IFORMATMENUCONTROLLER_H
 
-#include "log.h"
+#include "modularity/imoduleexport.h"
+#include "uicomponents/imenucontroller.h"
 
-using namespace mu::shortcuts;
-using namespace mu::actions;
-
-void ShortcutsController::activate(const std::string& sequence)
+namespace mu::appshell {
+class IFormatMenuController : public uicomponents::IMenuController, MODULE_EXPORT_INTERFACE
 {
-    LOGD() << "activate: " << sequence;
-
-    ShortcutList shortcuts = shortcutsRegister()->shortcutsForSequence(sequence);
-    IF_ASSERT_FAILED(!shortcuts.empty()) {
-        return;
-    }
-
-    for (const Shortcut& sc: shortcuts) {
-        const ActionItem& a = aregister()->action(sc.action);
-        if (!a.isValid()) {
-            LOGE() << "not found action: " << sc.action;
-            continue;
-        }
-
-        dispatcher()->dispatch(sc.action);
-    }
+    INTERFACE_ID(IFormatMenuController)
+};
 }
+
+#endif // MU_APPSHELL_IFORMATMENUCONTROLLER_H

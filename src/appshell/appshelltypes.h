@@ -39,28 +39,29 @@ enum class PanelType
     Piano,
     ComparisonTool
 };
+using PanelTypeList = std::vector<PanelType>;
 
 inline std::string panelActionCode(PanelType panelType)
 {
-    std::map<PanelType, std::string> panelTypeStrings {
-        { PanelType::Palette, "toggle-palette" },
-        { PanelType::Instruments, "toggle-instruments" },
-        { PanelType::Inspector, "inspector" },
-        { PanelType::NotationToolBar, "toggle-notationtoolbar" },
-        { PanelType::NoteInputBar, "toggle-noteinput" },
-        { PanelType::UndoRedoToolBar, "toggle-undoredo" },
-        { PanelType::NotationNavigator, "toggle-navigator" },
-        { PanelType::NotationStatusBar, "toggle-statusbar" },
-        { PanelType::PlaybackToolBar, "toggle-transport" },
-        { PanelType::Mixer, "toggle-mixer" },
-        { PanelType::TimeLine, "toggle-timeline" },
-        { PanelType::Synthesizer, "synth-control" },
-        { PanelType::SelectionFilter, "toggle-selection-window" },
-        { PanelType::Piano, "toggle-piano" },
-        { PanelType::ComparisonTool, "toggle-scorecmp-tool" }
-    };
+    switch (panelType) {
+    case PanelType::Palette: return "toggle-palette";
+    case PanelType::Instruments: return "toggle-instruments";
+    case PanelType::Inspector: return "inspector";
+    case PanelType::NotationToolBar: return "toggle-notationtoolbar";
+    case PanelType::NoteInputBar: return "toggle-noteinput";
+    case PanelType::UndoRedoToolBar: return "toggle-undoredo";
+    case PanelType::NotationNavigator: return "toggle-navigator";
+    case PanelType::NotationStatusBar: return "toggle-statusbar";
+    case PanelType::PlaybackToolBar: return "toggle-transport";
+    case PanelType::Mixer: return "toggle-mixer";
+    case PanelType::TimeLine: return "toggle-timeline";
+    case PanelType::Synthesizer: return "synth-control";
+    case PanelType::SelectionFilter: return "toggle-selection-window";
+    case PanelType::Piano: return "toggle-piano";
+    case PanelType::ComparisonTool: return "toggle-scorecmp-tool";
+    }
 
-    return panelTypeStrings[panelType];
+    return "";
 }
 }
 

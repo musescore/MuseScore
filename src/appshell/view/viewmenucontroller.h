@@ -29,17 +29,26 @@
 #include "globaltypes.h"
 #include "notation/notationtypes.h"
 
+#include "iviewmenucontroller.h"
+
 namespace mu::appshell {
-class ViewMenuController : public async::Asyncable
+class ViewMenuController : public IViewMenuController, public async::Asyncable
 {
     INJECT(appshell, notation::INotationActionsController, notationController)
     INJECT(appshell, palette::IPaletteActionsController, paletteController)
     INJECT(appshell, IApplicationActionController, applicationController)
 
 public:
-    ViewMenuController();
+    void init();
 
-    async::Channel<std::vector<actions::ActionCode> > actionsAvailableChanged() const;
+    bool contains(const actions::ActionCode& actionCode) const override;
+
+    bool actionAvailable(const actions::ActionCode& actionCode) const override;
+    async::Channel<actions::ActionCodeList> actionsAvailableChanged() const override;
+
+private:
+    using AvailableCallback = std::function<bool ()>;
+    std::map<actions::ActionCode, AvailableCallback> actions() const;
 
     bool isPanelAvailable(PanelType panelType) const;
     bool isMasterPaletteAvailable() const;
@@ -49,10 +58,9 @@ public:
     bool isScoreConfigAvailable(notation::ScoreConfigType configType) const;
     bool isFullScreenAvailable() const;
 
-private:
     std::string scoreConfigActionCode(notation::ScoreConfigType configType) const;
 
-    async::Channel<std::vector<actions::ActionCode> > m_actionsReceiveAvailableChanged;
+    async::Channel<actions::ActionCodeList> m_actionsReceiveAvailableChanged;
 };
 }
 

@@ -24,15 +24,24 @@
 #include "notation/inotationactionscontroller.h"
 #include "notation/notationtypes.h"
 
+#include "iformatmenucontroller.h"
+
 namespace mu::appshell {
-class FormatMenuController : public async::Asyncable
+class FormatMenuController : public IFormatMenuController, public async::Asyncable
 {
     INJECT(appshell, notation::INotationActionsController, controller)
 
 public:
-    FormatMenuController();
+    void init();
 
-    async::Channel<std::vector<actions::ActionCode> > actionsAvailableChanged() const;
+    bool contains(const actions::ActionCode& actionCode) const override;
+
+    bool actionAvailable(const actions::ActionCode& actionCode) const override;
+    async::Channel<actions::ActionCodeList> actionsAvailableChanged() const override;
+
+private:
+    using AvailableCallback = std::function<bool ()>;
+    std::map<actions::ActionCode, AvailableCallback> actions() const;
 
     bool isEditStyleAvailable() const;
     bool isPageSettingsAvailable() const;
@@ -42,10 +51,9 @@ public:
     bool isLoadStyleAvailable() const;
     bool isSaveStyleAvailable() const;
 
-private:
     std::string resetableValueTypeActionCode(notation::ResettableValueType valueType) const;
 
-    async::Channel<std::vector<actions::ActionCode> > m_actionsReceiveAvailableChanged;
+    async::Channel<actions::ActionCodeList> m_actionsReceiveAvailableChanged;
 };
 }
 

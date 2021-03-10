@@ -54,6 +54,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/inotationplayback.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationelements.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationparts.h
+    ${CMAKE_CURRENT_LIST_DIR}/iaddmenucontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationactions.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationactions.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/igetscore.h

@@ -24,15 +24,24 @@
 #include "notation/inotationactionscontroller.h"
 #include "notation/notationtypes.h"
 
+#include "ieditmenucontroller.h"
+
 namespace mu::appshell {
-class EditMenuController : public async::Asyncable
+class EditMenuController : public IEditMenuController, public async::Asyncable
 {
     INJECT(appshell, notation::INotationActionsController, controller)
 
 public:
-    EditMenuController();
+    void init();
 
-    async::Channel<std::vector<actions::ActionCode> > actionsAvailableChanged() const;
+    bool contains(const actions::ActionCode& actionCode) const override;
+
+    bool actionAvailable(const actions::ActionCode& actionCode) const override;
+    async::Channel<actions::ActionCodeList> actionsAvailableChanged() const override;
+
+private:
+    using AvailableCallback = std::function<bool ()>;
+    std::map<actions::ActionCode, AvailableCallback> actions() const;
 
     bool isUndoAvailable() const;
     bool isRedoAvailable() const;
@@ -46,10 +55,9 @@ public:
     bool isFindAvailable() const;
     bool isPreferenceDialogAvailable() const;
 
-private:
     std::string pastingActionCode(notation::PastingType type) const;
 
-    async::Channel<std::vector<actions::ActionCode> > m_actionsReceiveAvailableChanged;
+    async::Channel<actions::ActionCodeList> m_actionsReceiveAvailableChanged;
 };
 }
 

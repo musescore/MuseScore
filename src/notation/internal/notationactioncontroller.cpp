@@ -269,7 +269,7 @@ bool NotationActionController::actionAvailable(const ActionCode& actionCode) con
     return true;
 }
 
-mu::async::Channel<std::vector<ActionCode> > NotationActionController::actionsAvailableChanged() const
+mu::async::Channel<ActionCodeList> NotationActionController::actionsAvailableChanged() const
 {
     return m_actionsReceiveAvailableChanged;
 }

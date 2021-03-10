@@ -58,7 +58,7 @@ bool NotationPageState::isPanelVisible(PanelType type) const
 
 void NotationPageState::setIsPanelsVisible(const std::map<PanelType, bool>& panelsVisible)
 {
-    std::vector<PanelType> changedTypes;
+    PanelTypeList changedTypes;
     for (const auto& type: panelsVisible) {
         setIsPanelVisible(type.first, type.second);
         changedTypes.push_back(type.first);
@@ -67,7 +67,7 @@ void NotationPageState::setIsPanelsVisible(const std::map<PanelType, bool>& pane
     m_panelsVisibleChanged.send(changedTypes);
 }
 
-mu::async::Channel<std::vector<PanelType> > NotationPageState::panelsVisibleChanged() const
+mu::async::Channel<PanelTypeList> NotationPageState::panelsVisibleChanged() const
 {
     return m_panelsVisibleChanged;
 }

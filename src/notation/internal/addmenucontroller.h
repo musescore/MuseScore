@@ -23,16 +23,24 @@
 #include "async/asyncable.h"
 #include "../inotationactionscontroller.h"
 #include "../notationtypes.h"
+#include "../iaddmenucontroller.h"
 
 namespace mu::notation {
-class AddMenuController : public async::Asyncable
+class AddMenuController : public IAddMenuController, public async::Asyncable
 {
     INJECT(notation, INotationActionsController, controller)
 
 public:
-    AddMenuController();
+    void init();
 
-    async::Channel<std::vector<actions::ActionCode> > actionsAvailableChanged() const;
+    bool contains(const actions::ActionCode& actionCode) const override;
+
+    bool actionAvailable(const actions::ActionCode& actionCode) const override;
+    async::Channel<actions::ActionCodeList> actionsAvailableChanged() const override;
+
+private:
+    using AvailableCallback = std::function<bool ()>;
+    std::map<actions::ActionCode, AvailableCallback> actions() const;
 
     bool isNoteInputAvailable() const;
     bool isNoteAvailable(NoteName noteName, NoteAddingMode addingMode) const;
@@ -48,12 +56,11 @@ public:
     bool isOttavaAvailable(OttavaType ottavaType) const;
     bool isNoteLineAvailable() const;
 
-private:
     std::string noteAddingModeActionCode(NoteAddingMode mode) const;
     std::string intervalTypeActionCode(IntervalType type) const;
     std::string measuresActionCode(int count) const;
 
-    async::Channel<std::vector<actions::ActionCode> > m_actionsReceiveAvailableChanged;
+    async::Channel<actions::ActionCodeList> m_actionsReceiveAvailableChanged;
 };
 }
 

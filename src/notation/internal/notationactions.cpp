@@ -175,7 +175,7 @@ const ActionList NotationActions::m_actions = {
                QT_TRANSLATE_NOOP("action","Load style")
                ),
     ActionItem("transpose",
-               ShortcutContext::NotationHasSelection,
+               ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "&Transpose..."),
                QT_TRANSLATE_NOOP("action", "Transpose")
                ),

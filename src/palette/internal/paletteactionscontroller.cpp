@@ -63,7 +63,7 @@ bool PaletteActionsController::actionAvailable(const ActionCode& actionCode) con
     return true;
 }
 
-mu::async::Channel<std::vector<ActionCode> > PaletteActionsController::actionsAvailableChanged() const
+mu::async::Channel<ActionCodeList> PaletteActionsController::actionsAvailableChanged() const
 {
     return m_actionsReceiveAvailableChanged;
 }

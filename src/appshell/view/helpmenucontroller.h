@@ -23,15 +23,24 @@
 #include "async/asyncable.h"
 #include "../iapplicationactioncontroller.h"
 
+#include "ihelpmenucontroller.h"
+
 namespace mu::appshell {
-class HelpMenuController : public async::Asyncable
+class HelpMenuController : public IHelpMenuController, public async::Asyncable
 {
     INJECT(appshell, IApplicationActionController, controller)
 
 public:
-    HelpMenuController();
+    void init();
 
-    async::Channel<std::vector<actions::ActionCode> > actionsAvailableChanged() const;
+    bool contains(const actions::ActionCode& actionCode) const override;
+
+    bool actionAvailable(const actions::ActionCode& actionCode) const override;
+    async::Channel<actions::ActionCodeList> actionsAvailableChanged() const override;
+
+private:
+    using AvailableCallback = std::function<bool ()>;
+    std::map<actions::ActionCode, AvailableCallback> actions() const;
 
     bool isShowToursAvailable() const;
     bool isResetToursAvailable()const;
@@ -46,7 +55,7 @@ public:
     bool isRevertToFactorySettingsAvailable() const;
 
 private:
-    async::Channel<std::vector<actions::ActionCode> > m_actionsReceiveAvailableChanged;
+    async::Channel<actions::ActionCodeList> m_actionsReceiveAvailableChanged;
 };
 }
 

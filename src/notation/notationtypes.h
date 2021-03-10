@@ -471,119 +471,122 @@ inline bool isVoiceIndexValid(int voiceIndex)
 
 inline std::string noteNameToString(NoteName noteName)
 {
-    std::map<NoteName, std::string> noteNameStrings {
-        { NoteName::A, "a" },
-        { NoteName::B, "b" },
-        { NoteName::C, "c" },
-        { NoteName::D, "d" },
-        { NoteName::E, "e" },
-        { NoteName::F, "f" },
-        { NoteName::G, "g" }
-    };
+    switch (noteName) {
+    case NoteName::A: return "a";
+    case NoteName::B: return "b";
+    case NoteName::C: return "c";
+    case NoteName::D: return "d";
+    case NoteName::E: return "e";
+    case NoteName::F: return "f";
+    case NoteName::G: return "g";
+    }
 
-    return noteNameStrings[noteName];
+    return "";
 }
 
 inline std::string tupletToString(TupletType tuplet)
 {
-    std::map<TupletType, std::string> tupletStrings {
-        { TupletType::Duplet, "duplet" },
-        { TupletType::Triplet, "triplet" },
-        { TupletType::Quadruplet, "quadruplet" },
-        { TupletType::Quintuplet, "quintuplet" },
-        { TupletType::Sextuplet, "sextuplet" },
-        { TupletType::Septuplet, "septuplet" },
-        { TupletType::Octuplet, "octuplet" },
-        { TupletType::Nonuplet, "nonuplet" }
-    };
+    switch (tuplet) {
+    case TupletType::Duplet: return "duplet";
+    case TupletType::Triplet: return "triplet";
+    case TupletType::Quadruplet: return "quadruplet";
+    case TupletType::Quintuplet: return "quintuplet";
+    case TupletType::Sextuplet: return "sextuplet";
+    case TupletType::Septuplet: return "septuplet";
+    case TupletType::Octuplet: return "octuplet";
+    case TupletType::Nonuplet: return "nonuplet";
+    }
 
-    return tupletStrings[tuplet];
+    return "";
 }
 
 inline std::string elementChangeOperationToString(ElementChangeOperation operation)
 {
-    std::map<ElementChangeOperation, std::string> operationStrings {
-        { ElementChangeOperation::Insert, "insert" },
-        { ElementChangeOperation::Append, "append" }
-    };
+    switch (operation) {
+    case ElementChangeOperation::Insert: return "insert";
+    case ElementChangeOperation::Append: return "append";
+    }
 
-    return operationStrings[operation];
+    return "";
 }
 
 inline std::string boxTypeToString(BoxType type)
 {
-    std::map<BoxType, std::string> boxTypeStrings {
-        { BoxType::Vertical, "vbox" },
-        { BoxType::Horizontal, "hbox" },
-        { BoxType::Measure, "measure" },
-        { BoxType::Text, "textframe" }
-    };
+    switch (type) {
+    case BoxType::Unknown: return "";
+    case BoxType::Vertical: return "vbox";
+    case BoxType::Horizontal: return "hbox";
+    case BoxType::Measure: return "measure";
+    case BoxType::Text: return "textframe";
+    }
 
-    return boxTypeStrings[type];
+    return "";
 }
 
 inline std::string textTypeToString(TextType type)
 {
-    std::map<TextType, std::string> textTypeStrings {
-        { TextType::TITLE, "title-text" },
-        { TextType::SUBTITLE, "subtitle-text" },
-        { TextType::COMPOSER, "composer-text" },
-        { TextType::POET, "poet-text" },
-        { TextType::INSTRUMENT_EXCERPT, "part-text" },
-        { TextType::SYSTEM, "system-text" },
-        { TextType::STAFF, "staff-text" },
-        { TextType::EXPRESSION, "expression-text" },
-        { TextType::REHEARSAL_MARK, "rehearsalmark-text" },
-        { TextType::INSTRUMENT_CHANGE, "instrument-change-text" },
-        { TextType::FINGERING, "fingering-text" },
-        { TextType::STICKING, "sticking-text" },
-        { TextType::HARMONY_A, "chord-text" },
-        { TextType::HARMONY_ROMAN, "roman-numeral-text" },
-        { TextType::HARMONY_NASHVILLE, "nashville-number-text" },
-        { TextType::LYRICS_ODD, "lyrics" },
-        { TextType::TEMPO, "tempo" }
-    };
+    switch (type) {
+    case TextType::TITLE: return "title-text";
+    case TextType::SUBTITLE: return "subtitle-text";
+    case TextType::COMPOSER: return "composer-text";
+    case TextType::POET: return "poet-text";
+    case TextType::INSTRUMENT_EXCERPT: return "part-text";
+    case TextType::SYSTEM: return "system-text";
+    case TextType::STAFF: return "staff-text";
+    case TextType::EXPRESSION: return "expression-text";
+    case TextType::REHEARSAL_MARK: return "rehearsalmark-text";
+    case TextType::INSTRUMENT_CHANGE: return "instrument-change-text";
+    case TextType::FINGERING: return "fingering-text";
+    case TextType::STICKING: return "sticking-text";
+    case TextType::HARMONY_A: return "chord-text";
+    case TextType::HARMONY_ROMAN: return "roman-numeral-text";
+    case TextType::HARMONY_NASHVILLE: return "nashville-number-text";
+    case TextType::LYRICS_ODD: return "lyrics";
+    case TextType::TEMPO: return "tempo";
+    default: return "";
+    }
 
-    return textTypeStrings[type];
+    return "";
 }
 
 inline std::string hairpinTypeToString(HairpinType type)
 {
-    std::map<HairpinType, std::string> hairpinTypeStrings {
-        { HairpinType::CRESC_HAIRPIN, "hairpin" },
-        { HairpinType::DECRESC_HAIRPIN, "hairpin-reverse" },
-        { HairpinType::CRESC_LINE, "line" },
-        { HairpinType::DECRESC_LINE, "line-reverse" }
-    };
+    switch (type) {
+    case HairpinType::INVALID: return "";
+    case HairpinType::CRESC_HAIRPIN: return "hairpin";
+    case HairpinType::DECRESC_HAIRPIN: return "hairpin-reverse";
+    case HairpinType::CRESC_LINE: return "line";
+    case HairpinType::DECRESC_LINE: return "line-reverse";
+    }
 
-    return hairpinTypeStrings[type];
+    return "";
 }
 
 inline std::string ottavaTypeToString(OttavaType type)
 {
-    std::map<OttavaType, std::string> ottavaTypeStrings {
-        { OttavaType::OTTAVA_8VA, "8va" },
-        { OttavaType::OTTAVA_8VB, "8vb" },
-        { OttavaType::OTTAVA_15MA, "15ma" },
-        { OttavaType::OTTAVA_15MB, "15mb" },
-        { OttavaType::OTTAVA_22MA, "22ma" },
-        { OttavaType::OTTAVA_22MB, "22mb" }
-    };
+    switch (type) {
+    case OttavaType::OTTAVA_8VA: return "8va";
+    case OttavaType::OTTAVA_8VB: return "8vb";
+    case OttavaType::OTTAVA_15MA: return "15ma";
+    case OttavaType::OTTAVA_15MB: return "15mb";
+    case OttavaType::OTTAVA_22MA: return "22ma";
+    case OttavaType::OTTAVA_22MB: return "22mb";
+    }
 
-    return ottavaTypeStrings[type];
+    return "";
 }
 
 inline std::string saveModeActionCode(SaveMode mode)
 {
-    std::map<SaveMode, std::string> saveModeStrings {
-        { SaveMode::Save, "file-save" },
-        { SaveMode::SaveAs, "file-save-as" },
-        { SaveMode::SaveCopy, "file-save-a-copy" },
-        { SaveMode::SaveSelection, "file-save-selection" },
-        { SaveMode::SaveOnline, "file-save-online" },
-    };
+    switch (mode) {
+    case SaveMode::Save: return "file-save";
+    case SaveMode::SaveAs: return "file-save-as";
+    case SaveMode::SaveCopy: return "file-save-a-copy";
+    case SaveMode::SaveSelection: return "file-save-selection";
+    case SaveMode::SaveOnline: return "file-save-online";
+    }
 
-    return saveModeStrings[mode];
+    return "";
 }
 }
 

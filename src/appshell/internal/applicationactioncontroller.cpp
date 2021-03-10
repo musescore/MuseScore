@@ -78,7 +78,7 @@ bool ApplicationActionController::actionAvailable(const mu::actions::ActionCode&
     return true;
 }
 
-mu::async::Channel<std::vector<mu::actions::ActionCode> > ApplicationActionController::actionsAvailableChanged() const
+mu::async::Channel<mu::actions::ActionCodeList> ApplicationActionController::actionsAvailableChanged() const
 {
     return m_actionsReceiveAvailableChanged;
 }

@@ -44,6 +44,8 @@ public:
 
     QVariantList items() const;
 
+    virtual bool actionEnabled(const actions::ActionCode& actionCode) const;
+
 signals:
     void itemsChanged();
 
@@ -55,26 +57,19 @@ protected:
     MenuItem& findItemByIndex(const actions::ActionCode& menuActionCode, int actionIndex);
     MenuItem& findMenu(const actions::ActionCode& subitemsActionCode);
 
-    using EnabledCallBack = std::function<bool ()>;
-
     MenuItem makeMenu(const std::string& title, const MenuItemList& actions, bool enabled = true,
-                      const actions::ActionCode& menuActionCode = "");
-    MenuItem makeAction(const actions::ActionCode& actionCode,const std::optional<EnabledCallBack>& enabledCallBack = std::nullopt);
-    MenuItem makeAction(const actions::ActionCode& actionCode, bool checked,
-                        const std::optional<EnabledCallBack>& enabledCallBack = std::nullopt);
+                      const actions::ActionCode& menuActionCode = "") const;
+    MenuItem makeAction(const actions::ActionCode& actionCode) const;
+    MenuItem makeAction(const actions::ActionCode& actionCode, bool checked) const;
     MenuItem makeSeparator() const;
 
     void updateItemsEnabled(const std::vector<actions::ActionCode>& actionCodes);
 
 private:
-    static bool enabledTrue() { return true; }
-
     MenuItem& item(MenuItemList& items, const actions::ActionCode& actionCode);
     MenuItem& menu(MenuItemList& items, const actions::ActionCode& subitemsActionCode);
 
     MenuItemList m_items;
-
-    std::map<actions::ActionCode, EnabledCallBack> m_actionEnabledMap;
 };
 }
 

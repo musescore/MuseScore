@@ -36,6 +36,13 @@
 #include "view/notationpagemodel.h"
 #include "view/aboutmodel.h"
 
+#include "view/filemenucontroller.h"
+#include "view/editmenucontroller.h"
+#include "view/viewmenucontroller.h"
+#include "view/formatmenucontroller.h"
+#include "view/toolsmenucontroller.h"
+#include "view/helpmenucontroller.h"
+
 using namespace mu::appshell;
 using namespace mu::framework;
 using namespace mu::ui;
@@ -43,6 +50,13 @@ using namespace mu::ui;
 static std::shared_ptr<ApplicationActionController> s_applicationActionController = std::make_shared<ApplicationActionController>();
 static std::shared_ptr<AppShellConfiguration> s_appShellConfiguration = std::make_shared<AppShellConfiguration>();
 static std::shared_ptr<NotationPageState> s_notationPageState = std::make_shared<NotationPageState>();
+
+static std::shared_ptr<FileMenuController> s_fileMenuController = std::make_shared<FileMenuController>();
+static std::shared_ptr<EditMenuController> s_editMenuController = std::make_shared<EditMenuController>();
+static std::shared_ptr<ViewMenuController> s_viewMenuController = std::make_shared<ViewMenuController>();
+static std::shared_ptr<FormatMenuController> s_formatMenuController = std::make_shared<FormatMenuController>();
+static std::shared_ptr<ToolsMenuController> s_toolsMenuController = std::make_shared<ToolsMenuController>();
+static std::shared_ptr<HelpMenuController> s_helpMenuController = std::make_shared<HelpMenuController>();
 
 static void appshell_init_qrc()
 {
@@ -63,6 +77,13 @@ void AppShellModule::registerExports()
     ioc()->registerExport<IAppShellConfiguration>(moduleName(), s_appShellConfiguration);
     ioc()->registerExport<IApplicationActionController>(moduleName(), s_applicationActionController);
     ioc()->registerExport<INotationPageState>(moduleName(), s_notationPageState);
+
+    ioc()->registerExport<IFileMenuController>(moduleName(), s_fileMenuController);
+    ioc()->registerExport<IEditMenuController>(moduleName(), s_editMenuController);
+    ioc()->registerExport<IViewMenuController>(moduleName(), s_viewMenuController);
+    ioc()->registerExport<IFormatMenuController>(moduleName(), s_formatMenuController);
+    ioc()->registerExport<IToolsMenuController>(moduleName(), s_toolsMenuController);
+    ioc()->registerExport<IHelpMenuController>(moduleName(), s_helpMenuController);
 }
 
 void AppShellModule::resolveImports()
@@ -104,4 +125,11 @@ void AppShellModule::onInit(const IApplication::RunMode&)
     s_appShellConfiguration->init();
     s_applicationActionController->init();
     s_notationPageState->init();
+
+    s_fileMenuController->init();
+    s_editMenuController->init();
+    s_viewMenuController->init();
+    s_formatMenuController->init();
+    s_toolsMenuController->init();
+    s_helpMenuController->init();
 }

@@ -22,17 +22,65 @@
 
 using namespace mu::appshell;
 using namespace mu::notation;
+using namespace mu::actions;
 
-ToolsMenuController::ToolsMenuController()
+void ToolsMenuController::init()
 {
-    controller()->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
+    controller()->actionsAvailableChanged().onReceive(this, [this](const std::vector<ActionCode>& actionCodes) {
         m_actionsReceiveAvailableChanged.send(actionCodes);
     });
 }
 
-mu::async::Channel<std::vector<mu::actions::ActionCode> > ToolsMenuController::actionsAvailableChanged() const
+bool ToolsMenuController::contains(const ActionCode& actionCode) const
+{
+    std::map<ActionCode, AvailableCallback> actions = this->actions();
+    return actions.find(actionCode) != actions.end();
+}
+
+bool ToolsMenuController::actionAvailable(const ActionCode& actionCode) const
+{
+    std::map<ActionCode, AvailableCallback> actions = this->actions();
+
+    if (actions.find(actionCode) == actions.end()) {
+        return false;
+    }
+
+    return actions[actionCode]();
+}
+
+mu::async::Channel<ActionCodeList> ToolsMenuController::actionsAvailableChanged() const
 {
     return m_actionsReceiveAvailableChanged;
+}
+
+std::map<ActionCode, ToolsMenuController::AvailableCallback> ToolsMenuController::actions() const
+{
+    static std::map<ActionCode, AvailableCallback> _actions = {
+        { "voice-x12", std::bind(&ToolsMenuController::isVoiceAvailable, this, 1, 2) },
+        { "voice-x13", std::bind(&ToolsMenuController::isVoiceAvailable, this, 1, 3) },
+        { "voice-x14", std::bind(&ToolsMenuController::isVoiceAvailable, this, 1, 4) },
+        { "voice-x23", std::bind(&ToolsMenuController::isVoiceAvailable, this, 2, 3) },
+        { "voice-x24", std::bind(&ToolsMenuController::isVoiceAvailable, this, 2, 4) },
+        { "voice-x34", std::bind(&ToolsMenuController::isVoiceAvailable, this, 3, 4) },
+        { "split-measure", std::bind(&ToolsMenuController::isSplitMeasureAvailable, this) },
+        { "join-measures", std::bind(&ToolsMenuController::isJoinMeasuresAvailable, this) },
+        { "transpose", std::bind(&ToolsMenuController::isTransposeAvailable, this) },
+        { "explode", std::bind(&ToolsMenuController::isExplodeAvailable, this) },
+        { "implode", std::bind(&ToolsMenuController::isImplodeAvailable, this) },
+        { "realize-chord-symbols", std::bind(&ToolsMenuController::isRealizeSelectedChordSymbolsAvailable, this) },
+        { "time-delete", std::bind(&ToolsMenuController::isRemoveSelectedRangeAvailable, this) },
+        { "slash-fill", std::bind(&ToolsMenuController::isFillSelectionWithSlashesAvailable, this) },
+        { "slash-rhythm", std::bind(&ToolsMenuController::isReplaceSelectedNotesWithSlashesAvailable, this) },
+        { "pitch-spell", std::bind(&ToolsMenuController::isSpellPitchesAvailable, this) },
+        { "reset-groupings", std::bind(&ToolsMenuController::isRegroupNotesAndRestsAvailable, this) },
+        { "resequence-rehearsal-marks", std::bind(&ToolsMenuController::isResequenceRehearsalMarksAvailable, this) },
+        { "unroll-repeats", std::bind(&ToolsMenuController::isUnrollRepeatsAvailable, this) },
+        { "copy-lyrics-to-clipboard", std::bind(&ToolsMenuController::isCopyLyricsAvailable, this) },
+        { "fotomode", std::bind(&ToolsMenuController::isFotomodeAvailable, this) },
+        { "del-empty-measures", std::bind(&ToolsMenuController::isRemoveEmptyTrailingMeasuresAvailable, this) },
+    };
+
+    return _actions;
 }
 
 bool ToolsMenuController::isVoiceAvailable(int voiceIndex1, int voiceIndex2) const
