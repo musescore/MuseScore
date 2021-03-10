@@ -142,7 +142,7 @@ void Image::draw(mu::draw::Painter* painter) const
                 painter->scale(s.width() / rasterDoc->width(), s.height() / rasterDoc->height());
                 painter->drawPixmap(QPointF(0, 0), QPixmap::fromImage(*rasterDoc));
             } else {
-                QTransform t = painter->transform();
+                QTransform t = painter->worldTransform();
                 QSize ss = QSizeF(s.width() * t.m11(), s.height() * t.m22()).toSize();
                 t.setMatrix(1.0, t.m12(), t.m13(), t.m21(), 1.0, t.m23(), t.m31(), t.m32(), t.m33());
                 painter->setWorldTransform(t);

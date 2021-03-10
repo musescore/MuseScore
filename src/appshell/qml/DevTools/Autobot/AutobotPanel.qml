@@ -15,14 +15,17 @@ Rectangle {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.margins: 32
-        height: contentRect.height
+        height: 24
+        spacing: 8
 
         FlatButton {
+            width: 64
             text: "Run"
             onClicked: autobot.run()
         }
 
         FlatButton {
+            width: 64
             text: "Stop"
             onClicked: autobot.stop()
         }

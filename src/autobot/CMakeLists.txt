@@ -52,6 +52,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abscoreclosestep.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abscorezoom.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abscorezoom.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abdrawserializationstep.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abdrawserializationstep.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/draw/abpaintprovider.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/draw/abpaintprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/view/autobotmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/autobotmodel.h
     )

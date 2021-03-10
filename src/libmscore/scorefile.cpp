@@ -572,7 +572,7 @@ QImage Score::createThumbnail()
     p.setAntialiasing(true);
     p.scale(mag, mag);
     print(&p, 0);
-    p.end();
+    p.endDraw();
 
     MScore::pixelRatio = pr;
 

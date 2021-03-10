@@ -18,10 +18,13 @@
 //=============================================================================
 #include "abscoreloadstep.h"
 
+#include "../draw/abpaintprovider.h"
+
 using namespace mu::autobot;
 
 void AbScoreLoadStep::doRun(AbContext ctx)
 {
+    AbPaintProvider::instance()->clear();
     ctx.ret = fileScoreController()->openScore(ctx.val<io::path>(AbContext::Key::ScoreFile));
     doFinish(ctx);
 }

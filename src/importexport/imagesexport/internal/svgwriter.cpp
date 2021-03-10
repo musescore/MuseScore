@@ -205,7 +205,7 @@ mu::Ret SvgWriter::write(const notation::INotationPtr notation, IODevice& destin
         }
     }
 
-    painter.end(); // Writes MuseScore SVG file to disk, finally
+    painter.endDraw(); // Writes MuseScore SVG file to disk, finally
 
     // Clean up and return
     Ms::MScore::pixelRatio = pixelRationBackup;

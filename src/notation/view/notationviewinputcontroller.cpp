@@ -43,6 +43,7 @@ NotationViewInputController::NotationViewInputController(IControlledView* view)
         dispatcher()->reg(this, "zoomout", this, &NotationViewInputController::zoomOut);
         dispatcher()->reg(this, "zoom-page-width", this, &NotationViewInputController::zoomToPageWidth);
         dispatcher()->reg(this, "zoom100", [this]() { setZoom(100); });
+        dispatcher()->reg(this, "zoom-x-percent", [this](const ActionData& args) { setZoom(args.arg<int>(0)); });
 
         dispatcher()->reg(this, "view-mode-page", [this]() {
             setViewMode(ViewMode::PAGE);

@@ -18,6 +18,8 @@
 //=============================================================================
 #include "painter.h"
 
+#include "log.h"
+
 #ifndef NO_QT_SUPPORT
 #include "qpainterprovider.h"
 #endif
@@ -29,10 +31,7 @@ IPaintProviderPtr Painter::extended;
 Painter::Painter(IPaintProviderPtr provider, const std::string& name)
     : m_provider(provider), m_name(name)
 {
-    m_provider->begin(name);
-    if (extended) {
-        extended->begin(name);
-    }
+    init();
 }
 
 #ifndef NO_QT_SUPPORT
@@ -40,26 +39,29 @@ Painter::Painter(QPaintDevice* dp, const std::string& name)
     : m_name(name)
 {
     m_provider = QPainterProvider::make(dp);
-    m_provider->begin(name);
-    if (extended) {
-        extended->begin(name);
-    }
+    init();
 }
 
 Painter::Painter(QPainter* qp, const std::string& name, bool overship)
     : m_name(name)
 {
     m_provider = QPainterProvider::make(qp, overship);
-    m_provider->begin(name);
-    if (extended) {
-        extended->begin(name);
-    }
+    init();
 }
 
 #endif
 
 Painter::~Painter()
 {
+}
+
+void Painter::init()
+{
+    m_states.push(State());
+    m_provider->beginTarget(m_name);
+    if (extended) {
+        extended->beginTarget(m_name);
+    }
 }
 
 QPaintDevice* Painter::device() const
@@ -72,11 +74,11 @@ QPainter* Painter::qpainter() const
     return m_provider->qpainter();
 }
 
-bool Painter::end()
+bool Painter::endDraw()
 {
-    bool ok = m_provider->end(m_name);
+    bool ok = m_provider->endTarget(m_name, true);
     if (extended) {
-        extended->end(m_name);
+        extended->endTarget(m_name, true);
     }
     return ok;
 }
@@ -164,98 +166,120 @@ const QBrush& Painter::brush() const
 
 void Painter::save()
 {
+    State newSt = m_states.top();
+    m_states.push(newSt);
+
     m_provider->save();
+    if (extended) {
+        extended->save();
+    }
 }
 
 void Painter::restore()
 {
+    if (m_states.size() > 0) {
+        m_states.pop();
+    }
+
     m_provider->restore();
+    if (extended) {
+        extended->restore();
+    }
 }
 
 void Painter::setWorldTransform(const QTransform& matrix, bool combine)
 {
-    m_provider->setWorldTransform(matrix, combine);
-    if (extended) {
-        extended->setWorldTransform(matrix, combine);
+    State& st = editableState();
+    if (combine) {
+        st.worldTransform = matrix * st.worldTransform;                        // combines
+    } else {
+        st.worldTransform = matrix;                                // set new matrix
     }
+    st.isWxF = true;
+    updateMatrix();
 }
 
 const QTransform& Painter::worldTransform() const
 {
-    return m_provider->worldTransform();
-}
-
-void Painter::setTransform(const QTransform& transform, bool combine)
-{
-    m_provider->setTransform(transform, combine);
-    if (extended) {
-        extended->setTransform(transform, combine);
-    }
-}
-
-const QTransform& Painter::transform() const
-{
-    return m_provider->transform();
+    return state().worldTransform;
 }
 
 void Painter::scale(qreal sx, qreal sy)
 {
-    m_provider->scale(sx, sy);
-    if (extended) {
-        extended->scale(sx, sy);
-    }
+    State& st = editableState();
+    st.worldTransform.scale(sx,sy);
+    st.isWxF = true;
+    updateMatrix();
 }
 
 void Painter::rotate(qreal angle)
 {
-    m_provider->rotate(angle);
-    if (extended) {
-        extended->rotate(angle);
-    }
+    State& st = editableState();
+    st.worldTransform.rotate(angle);
+    st.isWxF = true;
+    updateMatrix();
 }
 
-void Painter::translate(const QPointF& offset)
+void Painter::translate(qreal dx, qreal dy)
 {
-    m_provider->translate(offset);
-    if (extended) {
-        extended->translate(offset);
-    }
+    State& st = editableState();
+    st.worldTransform.translate(dx, dy);
+    st.isWxF = true;
+    updateMatrix();
 }
 
 QRect Painter::window() const
 {
-    return m_provider->window();
+    return state().window;
 }
 
 void Painter::setWindow(const QRect& window)
 {
-    m_provider->setWindow(window);
-    if (extended) {
-        extended->setWindow(window);
-    }
+    State& st = editableState();
+    st.window = window;
+    st.isVxF = true;
+    st.viewTransform = makeViewTransform();
 }
 
 QRect Painter::viewport() const
 {
-    return m_provider->viewport();
+    return state().viewport;
 }
 
 void Painter::setViewport(const QRect& viewport)
 {
-    m_provider->setViewport(viewport);
-    if (extended) {
-        extended->setViewport(viewport);
-    }
+    State& st = editableState();
+    st.viewport = viewport;
+    st.isVxF = true;
+    st.viewTransform = makeViewTransform();
 }
 
 // drawing functions
 
 void Painter::fillPath(const QPainterPath& path, const QBrush& brush)
 {
-    m_provider->fillPath(path, brush);
-    if (extended) {
-        extended->fillPath(path, brush);
-    }
+    QPen oldPen = this->pen();
+    QBrush oldBrush = this->brush();
+    setPen(QPen(Qt::NoPen));
+    setBrush(brush);
+
+    drawPath(path);
+
+    setPen(oldPen);
+    setBrush(oldBrush);
+}
+
+void Painter::strokePath(const QPainterPath& path, const QPen& pen)
+{
+    QPen oldPen = this->pen();
+    QBrush oldBrush = this->brush();
+    setPen(pen);
+    setBrush(Qt::NoBrush);
+
+    drawPath(path);
+
+    setPen(oldPen);
+    setBrush(oldBrush);
 }
 
 void Painter::drawPath(const QPainterPath& path)
@@ -266,19 +290,14 @@ void Painter::drawPath(const QPainterPath& path)
     }
 }
 
-void Painter::strokePath(const QPainterPath& path, const QPen& pen)
-{
-    m_provider->strokePath(path, pen);
-    if (extended) {
-        extended->strokePath(path, pen);
-    }
-}
-
 void Painter::drawLines(const QLineF* lines, int lineCount)
 {
-    m_provider->drawLines(lines, lineCount);
-    if (extended) {
-        extended->drawLines(lines, lineCount);
+    for (int i = 0; i < lineCount; ++i) {
+        QPointF pts[2] = { lines[i].p1(), lines[i].p2() };
+        IF_ASSERT_FAILED(pts[0] != pts[1]) {
+            LOGE() << "draw point not implemented";
+        }
+        drawPolyline(pts, 2);
     }
 }
 
@@ -291,41 +310,48 @@ void Painter::drawLines(const QPointF* pointPairs, int lineCount)
 
 void Painter::drawRects(const QRectF* rects, int rectCount)
 {
-    m_provider->drawRects(rects, rectCount);
-    if (extended) {
-        extended->drawRects(rects, rectCount);
+    for (int i = 0; i < rectCount; ++i) {
+        QPainterPath path;
+        path.addRect(rects[i]);
+        if (path.isEmpty()) {
+            continue;
+        }
+        drawPath(path);
     }
 }
 
 void Painter::drawEllipse(const QRectF& rect)
 {
-    m_provider->drawEllipse(rect);
+    QPainterPath path;
+    path.addEllipse(rect);
+    m_provider->drawPath(path);
     if (extended) {
-        extended->drawEllipse(rect);
+        extended->drawPath(path);
     }
 }
 
 void Painter::drawPolyline(const QPointF* points, int pointCount)
 {
-    m_provider->drawPolyline(points, pointCount);
+    m_provider->drawPolygon(points, pointCount, PolygonMode::Polyline);
     if (extended) {
-        extended->drawPolyline(points, pointCount);
+        extended->drawPolygon(points, pointCount, PolygonMode::Polyline);
     }
 }
 
 void Painter::drawPolygon(const QPointF* points, int pointCount, Qt::FillRule fillRule)
 {
-    m_provider->drawPolygon(points, pointCount, fillRule);
+    PolygonMode mode = (fillRule == Qt::OddEvenFill) ? PolygonMode::OddEven : PolygonMode::Winding;
+    m_provider->drawPolygon(points, pointCount, mode);
     if (extended) {
-        extended->drawPolygon(points, pointCount, fillRule);
+        extended->drawPolygon(points, pointCount, mode);
     }
 }
 
 void Painter::drawConvexPolygon(const QPointF* points, int pointCount)
 {
-    m_provider->drawConvexPolygon(points, pointCount);
+    m_provider->drawPolygon(points, pointCount, PolygonMode::Convex);
     if (extended) {
-        extended->drawConvexPolygon(points, pointCount);
+        extended->drawPolygon(points, pointCount, PolygonMode::Convex);
     }
 }
 
@@ -379,10 +405,15 @@ void Painter::drawGlyphRun(const QPointF& position, const QGlyphRun& glyphRun)
 
 void Painter::fillRect(const QRectF& rect, const QBrush& brush)
 {
-    m_provider->fillRect(rect, brush);
-    if (extended) {
-        extended->fillRect(rect, brush);
-    }
+    QPen oldPen = this->pen();
+    QBrush oldBrush = this->brush();
+    setPen(QPen(Qt::NoPen));
+    setBrush(brush);
+
+    drawRect(rect);
+
+    setBrush(oldBrush);
+    setPen(oldPen);
 }
 
 void Painter::drawPixmap(const QPointF& point, const QPixmap& pm)
@@ -399,4 +430,33 @@ void Painter::drawTiledPixmap(const QRectF& rect, const QPixmap& pm, const QPoin
     if (extended) {
         extended->drawTiledPixmap(rect, pm, offset);
     }
+}
+
+Painter::State& Painter::editableState()
+{
+    return m_states.top();
+}
+
+const Painter::State& Painter::state() const
+{
+    return m_states.top();
+}
+
+QTransform Painter::makeViewTransform() const
+{
+    const State& st = state();
+    qreal scaleW = qreal(st.viewport.width()) / qreal(st.window.width());
+    qreal scaleH = qreal(st.viewport.height()) / qreal(st.window.height());
+    return QTransform(scaleW, 0, 0, scaleH, st.viewport.x() - st.window.x() * scaleW, st.viewport.y() - st.window.y() * scaleH);
+}
+
+void Painter::updateMatrix()
+{
+    Painter::State& st = editableState();
+    st.transform = st.isWxF ? st.worldTransform : QTransform();
+    if (st.isVxF) {
+        st.transform *= st.viewTransform;
+    }
+
+    m_provider->setTransform(st.transform);
 }
