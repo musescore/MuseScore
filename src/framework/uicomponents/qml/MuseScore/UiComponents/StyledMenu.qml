@@ -9,33 +9,39 @@ StyledPopupView {
     id: root
 
     arrowVisible: false
-    positionDisplacementX: -padding / 2
+    positionDisplacementX: 0
     padding: 0
     margins: 0
 
+    property bool reserveSpaceForInvisibleItems: true
+
+    property int itemWidth: 300
+
+    width: content.width
+    height: content.height
+
     onAboutToShow: {
-        view.model = items
+        view.model = privateProperties.items
     }
 
     onAboutToHide: {
-        items = []
+        privateProperties.items = []
         view.model = []
     }
 
     function clear() {
-        items = []
+        privateProperties.items = []
     }
 
     function addMenuItem(itemAction) {
-        items.push(itemAction)
+        privateProperties.items.push(itemAction)
     }
 
     signal handleAction(string actionCode, int actionIndex)
 
-    property var items: []
-
-    width: content.width
-    height: content.height
+    property QtObject privateProperties: QtObject {
+        property var items: []
+    }
 
     Column {
         id: content
@@ -49,6 +55,7 @@ StyledPopupView {
                 sourceComponent: Boolean(modelData.title) ? menuItemComp : separatorComp
                 onLoaded: {
                     loader.item.modelData = modelData
+                    loader.item.width = root.itemWidth
                 }
 
                 Component {
@@ -58,7 +65,7 @@ StyledPopupView {
                         id: item
 
                         property var modelData
-                        property bool hasSubMenu: Boolean(modelData) && modelData.subitems.length > 0
+                        property bool hasSubMenu: Boolean(modelData) && Boolean(modelData.subitems) && modelData.subitems.length > 0
                         property var showedSubMenu: undefined
 
                         property bool isCheckable: Boolean(modelData) && Boolean(modelData.checkable)
@@ -68,9 +75,7 @@ StyledPopupView {
                         isSelected: showedSubMenu != undefined || (isSelectable && Boolean(modelData.selected))
 
                         defaultColor: ui.theme.accentColor
-                        enabled: Boolean(modelData) && modelData.enabled
-
-                        width: 300
+                        enabled: Boolean(modelData) && Boolean(modelData.enabled)
 
                         function showSubMenu() {
                             if (showedSubMenu) {
@@ -87,10 +92,8 @@ StyledPopupView {
                             }
 
                             menu.handleAction.connect(function(actionCode, actionIndex){
-                                root.handleAction(actionCode, actionIndex)
-                                if (Boolean(root)) {
-                                    root.close()
-                                }
+                                Qt.callLater(root.handleAction, actionCode, actionIndex)
+                                menu.close()
                             })
 
                             menu.closed.connect(function() {
@@ -124,24 +127,32 @@ StyledPopupView {
                                         return Boolean(modelData) && Boolean(modelData.icon) ? modelData.icon : IconCode.NONE
                                     }
                                 }
+
+                                visible: !isEmpty || reserveSpaceForInvisibleItems
                             }
 
                             StyledTextLabel {
                                 Layout.fillWidth: true
-                                text: Boolean(modelData) ? modelData.title : ""
+                                text: Boolean(modelData) && Boolean(modelData.title) ? modelData.title : ""
                                 horizontalAlignment: Text.AlignLeft
+
+                                visible: Boolean(text) || reserveSpaceForInvisibleItems
                             }
 
                             StyledTextLabel {
                                 Layout.alignment: Qt.AlignRight
-                                text: Boolean(modelData) ? modelData.shortcut : ""
+                                text: Boolean(modelData) && Boolean(modelData.shortcut) ? modelData.shortcut : ""
                                 horizontalAlignment: Text.AlignRight
+
+                                visible: Boolean(text) || reserveSpaceForInvisibleItems
                             }
 
                             StyledIconLabel {
                                 Layout.alignment: Qt.AlignRight
                                 width: 16
                                 iconCode: hasSubMenu ? IconCode.SMALL_ARROW_RIGHT : IconCode.NONE
+
+                                visible: !isEmpty || reserveSpaceForInvisibleItems
                             }
                         }
 
@@ -173,9 +184,6 @@ StyledPopupView {
                             }
 
                             root.handleAction(modelData.code, isSelectable ? index : -1)
-                            if (Boolean(root)) {
-                                root.close()
-                            }
                         }
                     }
                 }
@@ -184,7 +192,6 @@ StyledPopupView {
                     id: separatorComp
 
                     Rectangle {
-                        width: 300
                         height: 1
                         color: ui.theme.strokeColor
 
