@@ -201,7 +201,7 @@ void ExampleView::paintEvent(QPaintEvent* ev)
 
         drawBackground(&p, r);
 
-        p.setTransform(_matrix);
+        p.setWorldTransform(_matrix);
         QRectF fr = imatrix.mapRect(QRectF(r));
 
         QRegion r1(r);

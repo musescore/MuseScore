@@ -129,6 +129,29 @@ DockPage {
             InspectorForm {
                 anchors.fill: parent
             }
+        },
+
+        DockPanel {
+            id: autobotPanel
+            objectName: "autobotPanel"
+
+            title: "Autobot"
+
+            width: defaultPanelWidth
+            minimumWidth: minimumPanelWidth
+
+            color: notationPage.color
+            borderColor: notationPage.borderColor
+
+            tabifyObjectName: "autobotPanel"
+            area: Qt.RightDockWidgetArea
+            floatable: true
+            closable: true
+
+            Loader {
+                anchors.fill: parent
+                source: "qrc:/qml/DevTools/Autobot/AutobotPanel.qml"
+            }
         }
     ]
 

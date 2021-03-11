@@ -33,6 +33,7 @@ public:
 
     using ActionCallBack = std::function<void ()>;
     using ActionCallBackWithName = std::function<void (const ActionCode&)>;
+    using ActionCallBackWithData = std::function<void (const ActionData& data)>;
     using ActionCallBackWithNameAndData = std::function<void (const ActionCode&, const ActionData& data)>;
 
     virtual void dispatch(const ActionCode& actionCode) = 0;
@@ -49,6 +50,11 @@ public:
     void reg(Actionable* client, const ActionCode& action, const ActionCallBackWithName& call)
     {
         reg(client, action, [call](const ActionCode& action, const ActionData&) { call(action); });
+    }
+
+    void reg(Actionable* client, const ActionCode& action, const ActionCallBackWithData& call)
+    {
+        reg(client, action, [call](const ActionCode&, const ActionData& data) { call(data); });
     }
 
     template<typename T>

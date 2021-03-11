@@ -20,18 +20,17 @@
 #include "../abinvoker.h"
 
 using namespace mu::autobot;
+using namespace mu::actions;
+
+AbScoreZoom::AbScoreZoom(int percent)
+    : m_percent(percent)
+{
+}
 
 void AbScoreZoom::doRun(AbContext ctx)
 {
-    dispatcher()->dispatch("zoomout");
-
-    AbInvoker::invoke(500, [this, ctx]() {
-        dispatcher()->dispatch("zoomin");
-
-        AbInvoker::invoke(500, [this, ctx]() {
-            AbContext newCtx = ctx;
-            newCtx.ret = make_ret(Ret::Code::Ok);
-            doFinish(newCtx);
-        });
-    });
+    dispatcher()->dispatch("zoom-x-percent", ActionData::make_arg1<int>(m_percent));
+    ctx.setVal<int>(AbContext::Key::ViewZoom, m_percent);
+    ctx.ret = make_ret(Ret::Code::Ok);
+    doFinish(ctx);
 }

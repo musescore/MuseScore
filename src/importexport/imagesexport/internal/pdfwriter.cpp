@@ -71,7 +71,7 @@ mu::Ret PdfWriter::write(const notation::INotationPtr notation, IODevice& destin
         score->print(&painter, pageNumber);
     }
 
-    painter.end();
+    painter.endDraw();
     score->setPrinting(false);
     MScore::pixelRatio = pixelRationBackup;
     MScore::pdfPrinting = false;
