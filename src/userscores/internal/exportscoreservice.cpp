@@ -45,9 +45,10 @@ void ExportScoreService::exportScores(INotationPtrList& notations, io::path& exp
     }
 }
 
-bool ExportScoreService::askForRetry(std::string filename) const
+bool ExportScoreService::askForRetry(QString filename) const
 {
-    int btn = interactive()->question("Error", "An error occured while exporting the file " + filename, {
+    int btn = interactive()->question(trc("userscores", "Error"),
+                                      qtrc("userscores", "An error occured while writing the file %1. Do you want to retry?").arg(filename).toStdString(), {
         interactive()->buttonData(IInteractive::Button::Retry),
         interactive()->buttonData(IInteractive::Button::Abort)
     });
@@ -55,7 +56,7 @@ bool ExportScoreService::askForRetry(std::string filename) const
     return btn == static_cast<int>(IInteractive::Button::Retry);
 }
 
-bool ExportScoreService::shouldReplaceFile(std::string filename)
+bool ExportScoreService::shouldReplaceFile(QString filename)
 {
     switch (m_fileConflictPolicy) {
     case FileConflictPolicy::ReplaceAll:
@@ -68,11 +69,12 @@ bool ExportScoreService::shouldReplaceFile(std::string filename)
         static const int Skip = static_cast<int>(IInteractive::Button::CustomButton) + 3;
         static const int SkipAll = static_cast<int>(IInteractive::Button::CustomButton) + 4;
 
-        int btn = interactive()->question("File already exists", "A file already exists with the filename " + filename, {
-                IInteractive::ButtonData(Replace, "Replace"),
-                IInteractive::ButtonData(ReplaceAll, "Replace All"),
-                IInteractive::ButtonData(Skip, "Skip"),
-                IInteractive::ButtonData(SkipAll, "Skip All")
+        int btn = interactive()->question(trc("userscores", "File already exists"),
+                                          qtrc("userscores", "A file already exists with the filename %1. Do you want to replace it?").arg(filename).toStdString(), {
+                IInteractive::ButtonData(Replace, trc("userscores", "Replace")),
+                IInteractive::ButtonData(ReplaceAll, trc("userscores", "Replace All")),
+                IInteractive::ButtonData(Skip, trc("userscores", "Skip")),
+                IInteractive::ButtonData(SkipAll, trc("userscores", "Skip All"))
             });
 
         switch (btn) {
@@ -98,7 +100,7 @@ bool ExportScoreService::exportSingleScore(INotationWriterPtr writer, io::path e
                                                            shouldExportIndividualPage(io::syffix(exportPath)),
                                                            page);
 
-    std::string completeFileName = io::filename(outPath).toStdString();
+    QString completeFileName = io::filename(outPath).toQString();
 
     if (fileSystem()->exists(outPath) && !shouldReplaceFile(completeFileName)) {
         return false;

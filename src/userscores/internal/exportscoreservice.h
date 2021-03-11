@@ -53,8 +53,8 @@ private:
 
     bool isMainNotation(notation::INotationPtr notation) const;
 
-    bool shouldReplaceFile(std::string filename);
-    bool askForRetry(std::string filename) const;
+    bool shouldReplaceFile(QString filename);
+    bool askForRetry(QString filename) const;
 
     bool exportSingleScore(notation::INotationWriterPtr writer, io::path exportPath, notation::INotationPtr score, int page = 0);
     bool shouldExportIndividualPage(io::path suffix) const;
