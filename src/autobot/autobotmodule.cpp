@@ -41,7 +41,7 @@ void AutobotModule::registerExports()
 {
     framework::ioc()->registerExport<IAutobot>(moduleName(), s_autobot);
 
-    //draw::Painter::extended = AbPaintProvider::instance();
+    draw::Painter::extended = AbPaintProvider::instance();
 }
 
 void AutobotModule::registerUiTypes()

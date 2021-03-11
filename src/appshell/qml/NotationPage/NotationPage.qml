@@ -31,6 +31,8 @@ DockPage {
         pageModel.isNoteInputBarVisible = notationNoteInputBar.visible
         notationNoteInputBar.visible = Qt.binding(function() { return pageModel.isNoteInputBarVisible })
 
+        autobotPanel.visible = Qt.binding(function() { return pageModel.isInspectorPanelVisible })
+
         pageModel.init()
     }
 

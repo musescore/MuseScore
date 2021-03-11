@@ -53,6 +53,10 @@ Painter::Painter(QPainter* qp, const std::string& name, bool overship)
 
 Painter::~Painter()
 {
+    m_provider->endTarget();
+    if (extended) {
+        extended->endTarget();
+    }
 }
 
 void Painter::init()
@@ -76,9 +80,9 @@ QPainter* Painter::qpainter() const
 
 bool Painter::endDraw()
 {
-    bool ok = m_provider->endTarget(m_name, true);
+    bool ok = m_provider->endTarget(true);
     if (extended) {
-        extended->endTarget(m_name, true);
+        extended->endTarget(true);
     }
     return ok;
 }
@@ -96,11 +100,11 @@ void Painter::beginObject(const std::string& name, const QPointF& pagePos)
     }
 }
 
-void Painter::endObject(const std::string& name, const QPointF& pagePos)
+void Painter::endObject()
 {
-    m_provider->endObject(name, pagePos);
+    m_provider->endObject();
     if (extended) {
-        extended->endObject(name, pagePos);
+        extended->endObject();
     }
 }
 
