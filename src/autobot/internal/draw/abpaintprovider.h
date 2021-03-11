@@ -16,40 +16,27 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "autobotmodule.h"
+#ifndef MU_AUTOBOT_ABPAINTPROVIDER_H
+#define MU_AUTOBOT_ABPAINTPROVIDER_H
 
-#include <QQmlEngine>
+#include <memory>
+#include "libmscore/draw/bufferedpaintprovider.h"
 
-#include "modularity/ioc.h"
-
-#include "internal/autobot.h"
-#include "view/autobotmodel.h"
-
-#include "libmscore/draw/painter.h"
-#include "internal/draw/abpaintprovider.h"
-
-using namespace mu::autobot;
-
-static const std::shared_ptr<Autobot> s_autobot = std::make_shared<Autobot>();
-
-std::string AutobotModule::moduleName() const
+namespace mu::autobot {
+class AbPaintProvider : public draw::BufferedPaintProvider
 {
-    return "autobot";
+public:
+
+    static const std::shared_ptr<AbPaintProvider>& instance();
+
+    void beginTarget(const std::string& name) override;
+    bool endTarget(const std::string& name, bool endDraw = false) override;
+
+    void serialize(std::string& out);
+
+private:
+    AbPaintProvider();
+};
 }
 
-void AutobotModule::registerExports()
-{
-    framework::ioc()->registerExport<IAutobot>(moduleName(), s_autobot);
-
-    //draw::Painter::extended = AbPaintProvider::instance();
-}
-
-void AutobotModule::registerUiTypes()
-{
-    qmlRegisterType<AutobotModel>("MuseScore.Autobot", 1, 0, "AutobotModel");
-}
-
-void AutobotModule::onInit(const framework::IApplication::RunMode&)
-{
-    s_autobot->init();
-}
+#endif // MU_AUTOBOT_ABPAINTPROVIDER_H

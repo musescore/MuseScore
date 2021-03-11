@@ -35,7 +35,7 @@ void Lasso::draw(mu::draw::Painter* painter) const
     TRACE_OBJ_DRAW;
     painter->setBrush(QBrush(QColor(0, 0, 50, 50)));
     // always 2 pixel width
-    qreal w = 2.0 / painter->transform().m11();
+    qreal w = 2.0 / painter->worldTransform().m11();
     painter->setPen(QPen(MScore::selectColor[0], w));
     painter->drawRect(bbox());
 }

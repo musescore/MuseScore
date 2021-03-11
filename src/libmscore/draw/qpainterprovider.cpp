@@ -55,13 +55,16 @@ QPainter* QPainterProvider::qpainter() const
     return m_painter;
 }
 
-void QPainterProvider::begin(const std::string&)
+void QPainterProvider::beginTarget(const std::string&)
 {
 }
 
-bool QPainterProvider::end(const std::string&)
+bool QPainterProvider::endTarget(const std::string&, bool endDraw)
 {
-    return m_painter->end();
+    if (endDraw) {
+        return m_painter->end();
+    }
+    return true;
 }
 
 bool QPainterProvider::isActive() const
@@ -142,19 +145,9 @@ void QPainterProvider::restore()
     m_painter->restore();
 }
 
-void QPainterProvider::setWorldTransform(const QTransform& matrix, bool combine)
+void QPainterProvider::setTransform(const QTransform& transform)
 {
-    m_painter->setWorldTransform(matrix, combine);
-}
-
-const QTransform& QPainterProvider::worldTransform() const
-{
-    return m_painter->worldTransform();
-}
-
-void QPainterProvider::setTransform(const QTransform& transform, bool combine)
-{
-    m_painter->setTransform(transform, combine);
+    m_painter->setTransform(transform);
 }
 
 const QTransform& QPainterProvider::transform() const
@@ -162,86 +155,29 @@ const QTransform& QPainterProvider::transform() const
     return m_painter->transform();
 }
 
-void QPainterProvider::scale(qreal sx, qreal sy)
-{
-    m_painter->scale(sx, sy);
-}
-
-void QPainterProvider::rotate(qreal angle)
-{
-    m_painter->rotate(angle);
-}
-
-void QPainterProvider::translate(const QPointF& offset)
-{
-    m_painter->translate(offset);
-}
-
-QRect QPainterProvider::window() const
-{
-    return m_painter->window();
-}
-
-void QPainterProvider::setWindow(const QRect& window)
-{
-    m_painter->setWindow(window);
-}
-
-QRect QPainterProvider::viewport() const
-{
-    return m_painter->viewport();
-}
-
-void QPainterProvider::setViewport(const QRect& viewport)
-{
-    m_painter->setViewport(viewport);
-}
-
 // drawing functions
-
-void QPainterProvider::fillPath(const QPainterPath& path, const QBrush& brush)
-{
-    m_painter->fillPath(path, brush);
-}
 
 void QPainterProvider::drawPath(const QPainterPath& path)
 {
     m_painter->drawPath(path);
 }
 
-void QPainterProvider::strokePath(const QPainterPath& path, const QPen& pen)
+void QPainterProvider::drawPolygon(const QPointF* points, int pointCount, PolygonMode mode)
 {
-    m_painter->strokePath(path, pen);
-}
-
-void QPainterProvider::drawLines(const QLineF* lines, int lineCount)
-{
-    m_painter->drawLines(lines, lineCount);
-}
-
-void QPainterProvider::drawRects(const QRectF* rects, int rectCount)
-{
-    m_painter->drawRects(rects, rectCount);
-}
-
-void QPainterProvider::drawEllipse(const QRectF& rect)
-{
-    m_painter->drawEllipse(rect);
-}
-
-void QPainterProvider::drawPolyline(const QPointF* points, int pointCount)
-{
-    m_painter->drawPolyline(points, pointCount);
-}
-
-void QPainterProvider::drawPolygon(const QPointF* points, int pointCount, Qt::FillRule fillRule)
-{
-    m_painter->drawPolygon(points, pointCount, fillRule);
-}
-
-void QPainterProvider::drawConvexPolygon(const QPointF* points, int pointCount)
-{
-    m_painter->drawConvexPolygon(points, pointCount);
+    switch (mode) {
+    case PolygonMode::OddEven: {
+        m_painter->drawPolygon(points, pointCount, Qt::OddEvenFill);
+    } break;
+    case PolygonMode::Winding: {
+        m_painter->drawPolygon(points, pointCount, Qt::WindingFill);
+    } break;
+    case PolygonMode::Convex: {
+        m_painter->drawConvexPolygon(points, pointCount);
+    } break;
+    case PolygonMode::Polyline: {
+        m_painter->drawPolyline(points, pointCount);
+    } break;
+    }
 }
 
 void QPainterProvider::drawText(const QPointF& point, const QString& text)
@@ -257,11 +193,6 @@ void QPainterProvider::drawText(const QRectF& rect, int flags, const QString& te
 void QPainterProvider::drawGlyphRun(const QPointF& position, const QGlyphRun& glyphRun)
 {
     m_painter->drawGlyphRun(position, glyphRun);
-}
-
-void QPainterProvider::fillRect(const QRectF& rect, const QBrush& brush)
-{
-    m_painter->fillRect(rect, brush);
 }
 
 void QPainterProvider::drawPixmap(const QPointF& point, const QPixmap& pm)

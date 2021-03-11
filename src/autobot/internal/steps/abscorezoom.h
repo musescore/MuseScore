@@ -29,10 +29,14 @@ class AbScoreZoom : public AbBaseStep
 {
     INJECT(autobot, actions::IActionsDispatcher, dispatcher)
 public:
-    AbScoreZoom() = default;
+    AbScoreZoom(int percent);
 
 protected:
     void doRun(AbContext ctx) override;
+
+private:
+
+    int m_percent = 100;
 };
 }
 

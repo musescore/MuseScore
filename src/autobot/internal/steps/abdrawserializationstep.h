@@ -16,40 +16,20 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "autobotmodule.h"
+#ifndef MU_AUTOBOT_ABDRAWSERIALIZATIONSTEP_H
+#define MU_AUTOBOT_ABDRAWSERIALIZATIONSTEP_H
 
-#include <QQmlEngine>
+#include "../abbasestep.h"
 
-#include "modularity/ioc.h"
-
-#include "internal/autobot.h"
-#include "view/autobotmodel.h"
-
-#include "libmscore/draw/painter.h"
-#include "internal/draw/abpaintprovider.h"
-
-using namespace mu::autobot;
-
-static const std::shared_ptr<Autobot> s_autobot = std::make_shared<Autobot>();
-
-std::string AutobotModule::moduleName() const
+namespace mu::autobot {
+class AbDrawSerializationStep : public AbBaseStep
 {
-    return "autobot";
+public:
+    AbDrawSerializationStep() = default;
+
+protected:
+    void doRun(AbContext ctx) override;
+};
 }
 
-void AutobotModule::registerExports()
-{
-    framework::ioc()->registerExport<IAutobot>(moduleName(), s_autobot);
-
-    //draw::Painter::extended = AbPaintProvider::instance();
-}
-
-void AutobotModule::registerUiTypes()
-{
-    qmlRegisterType<AutobotModel>("MuseScore.Autobot", 1, 0, "AutobotModel");
-}
-
-void AutobotModule::onInit(const framework::IApplication::RunMode&)
-{
-    s_autobot->init();
-}
+#endif // MU_AUTOBOT_ABDRAWSERIALIZATIONSTEP_H

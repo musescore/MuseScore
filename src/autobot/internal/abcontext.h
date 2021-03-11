@@ -29,7 +29,8 @@ struct AbContext
 {
     enum class Key {
         Undefined = 0,
-        ScoreFile
+        ScoreFile,
+        ViewZoom
     };
 
     Ret ret;
