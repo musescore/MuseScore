@@ -1370,8 +1370,11 @@ bool ChordRest::isBefore(const ChordRest* o) const
             bool oGrace      = o->isGrace();
             bool grace       = isGrace();
             // normal note are initialized at graceIndex 0 and graceIndex is 0 based
-            int oGraceIndex  = oGrace ? toChord(o)->graceIndex() +  1 : 0;
-            int graceIndex   = grace ? toChord(this)->graceIndex() + 1 : 0;
+            int oGraceIndex  = toChord(o)->graceIndex();
+            int graceIndex   = toChord(this)->graceIndex();
+            // Smaller indexes are further away from the note, and larger indexes are closer to the note.
+            // We want to reverse that. Subtracting a 0-based index from the size results in a 1-based index,
+            // which is exactly what we want.
             if (oGrace)
                   oGraceIndex = toChord(o->parent())->graceNotes().size() - oGraceIndex;
             if (grace)
