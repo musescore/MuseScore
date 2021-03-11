@@ -87,7 +87,7 @@ class Measure final : public MeasureBase {
       void push_back(Segment* e);
       void push_front(Segment* e);
 
-      void fillGap(const Fraction& pos, const Fraction& len, int track, const Fraction& stretch);
+      void fillGap(const Fraction& pos, const Fraction& len, int track, const Fraction& stretch, bool useGapRests = true);
       void computeMinWidth(Segment* s, qreal x, bool isSystemHeader);
 
       void readVoice(XmlReader& e, int staffIdx, bool irregular);
@@ -110,7 +110,7 @@ class Measure final : public MeasureBase {
       void writeBox(XmlWriter&) const;
       void readBox(XmlReader&);
       bool isEditable() const override { return false; }
-      void checkMeasure(int idx);
+      void checkMeasure(int idx, bool useGapRests = true);
 
       void add(Element*) override;
       void remove(Element*) override;
