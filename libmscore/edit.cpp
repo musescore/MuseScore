@@ -1262,7 +1262,10 @@ void Score::cmdAddTie(bool addToChord)
       for (Note* note : noteList) {
             if (note->tieFor()) {
                   qDebug("cmdAddTie: note %p has already tie? noteFor: %p", note, note->tieFor());
-                  continue;
+                  if (addToChord)
+                        continue;
+                  else
+                        undoRemoveElement(note->tieFor());
                   }
 
             if (noteEntryMode()) {
