@@ -632,16 +632,34 @@
           <gateTime>67</gateTime>
           </Articulation>
         <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
-          <controller ctrl="0" value="0"/>
+        <Channel name="open">
           <controller ctrl="32" value="17"/>
           <program value="60"/>
           <synti>Fluid</synti>
           <midiPort>0</midiPort>
           <midiChannel>8</midiChannel>
+          </Channel>
+        <Channel name="mute">
+          <controller ctrl="32" value="17"/>
+          <program value="59"/>
+          <synti>Fluid</synti>
+          <midiPort>2</midiPort>
+          <midiChannel>6</midiChannel>
           </Channel>
         </Instrument>
       </Part>
@@ -689,16 +707,34 @@
           <gateTime>67</gateTime>
           </Articulation>
         <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
-          <controller ctrl="0" value="0"/>
+        <Channel name="open">
           <controller ctrl="32" value="17"/>
           <program value="60"/>
           <synti>Fluid</synti>
           <midiPort>0</midiPort>
           <midiChannel>10</midiChannel>
+          </Channel>
+        <Channel name="mute">
+          <controller ctrl="32" value="17"/>
+          <program value="59"/>
+          <synti>Fluid</synti>
+          <midiPort>2</midiPort>
+          <midiChannel>7</midiChannel>
           </Channel>
         </Instrument>
       </Part>
@@ -847,10 +883,10 @@
         <longName>Trombone 1</longName>
         <shortName>Tbn. 1</shortName>
         <trackName>Trombone</trackName>
-        <minPitchP>35</minPitchP>
+        <minPitchP>36</minPitchP>
         <maxPitchP>74</maxPitchP>
-        <minPitchA>35</minPitchA>
-        <maxPitchA>70</maxPitchA>
+        <minPitchA>40</minPitchA>
+        <maxPitchA>71</maxPitchA>
         <instrumentId>brass.trombone</instrumentId>
         <clef>F</clef>
         <Articulation>
@@ -878,16 +914,34 @@
           <gateTime>67</gateTime>
           </Articulation>
         <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
-          <controller ctrl="0" value="0"/>
+        <Channel name="open">
           <controller ctrl="32" value="17"/>
           <program value="57"/>
           <synti>Fluid</synti>
           <midiPort>0</midiPort>
           <midiChannel>15</midiChannel>
+          </Channel>
+        <Channel name="mute">
+          <controller ctrl="32" value="17"/>
+          <program value="59"/>
+          <synti>Fluid</synti>
+          <midiPort>1</midiPort>
+          <midiChannel>1</midiChannel>
           </Channel>
         </Instrument>
       </Part>
@@ -904,10 +958,10 @@
         <longName>Trombone 2</longName>
         <shortName>Tbn. 2</shortName>
         <trackName>Trombone</trackName>
-        <minPitchP>35</minPitchP>
+        <minPitchP>36</minPitchP>
         <maxPitchP>74</maxPitchP>
-        <minPitchA>35</minPitchA>
-        <maxPitchA>70</maxPitchA>
+        <minPitchA>40</minPitchA>
+        <maxPitchA>71</maxPitchA>
         <instrumentId>brass.trombone</instrumentId>
         <clef>F</clef>
         <Articulation>
@@ -935,16 +989,34 @@
           <gateTime>67</gateTime>
           </Articulation>
         <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
-          <controller ctrl="0" value="0"/>
+        <Channel name="open">
           <controller ctrl="32" value="17"/>
           <program value="57"/>
           <synti>Fluid</synti>
           <midiPort>1</midiPort>
           <midiChannel>0</midiChannel>
+          </Channel>
+        <Channel name="mute">
+          <controller ctrl="32" value="17"/>
+          <program value="59"/>
+          <synti>Fluid</synti>
+          <midiPort>2</midiPort>
+          <midiChannel>8</midiChannel>
           </Channel>
         </Instrument>
       </Part>
@@ -1000,7 +1072,7 @@
           <program value="58"/>
           <synti>Fluid</synti>
           <midiPort>1</midiPort>
-          <midiChannel>1</midiChannel>
+          <midiChannel>2</midiChannel>
           </Channel>
         </Instrument>
       </Part>
@@ -1054,7 +1126,7 @@
           <program value="47"/>
           <synti>Fluid</synti>
           <midiPort>1</midiPort>
-          <midiChannel>2</midiChannel>
+          <midiChannel>3</midiChannel>
           </Channel>
         </Instrument>
       </Part>
