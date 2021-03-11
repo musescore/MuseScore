@@ -176,7 +176,7 @@ ColumnLayout {
 
             ColorDialog {
                 id: colorDialog
-                title: "Please choose a color"
+                title: qsTrc("userscores", "Please choose a color")
                 onAccepted: colorControl.changed(colorDialog.color)
             }
 
