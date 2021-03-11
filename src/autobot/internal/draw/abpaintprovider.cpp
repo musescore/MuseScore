@@ -47,4 +47,5 @@ bool AbPaintProvider::endTarget(const std::string& name, bool endDraw)
 
 void AbPaintProvider::serialize(std::string& out)
 {
+    UNUSED(out);
 }

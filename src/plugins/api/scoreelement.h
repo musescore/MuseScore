@@ -149,9 +149,9 @@ public:
         // for the requested type, use it for wrapping.
         if constexpr (std::is_same<T*, decltype(wrap(el, Ownership::SCORE))>::value) {
             return static_cast<T*>(wrap(el, Ownership::SCORE));
+        } else { // Otherwise, wrap directly to the requested wrapper type.
+            return wrap<T>(el, Ownership::SCORE);
         }
-        // Otherwise, wrap directly to the requested wrapper type.
-        return wrap<T>(el, Ownership::SCORE);
     }
 
     /// \endcond
