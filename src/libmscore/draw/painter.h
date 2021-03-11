@@ -29,6 +29,7 @@
 #include <QFont>
 #include <QPainter>
 
+#include "config.h"
 #include "drawtypes.h"
 #include "ipaintprovider.h"
 
@@ -60,7 +61,7 @@ public:
 
     //! NOTE These are methods for debugging and automated testing.
     void beginObject(const std::string& name, const QPointF& pagePos);
-    void endObject(const std::string& name, const QPointF& pagePos);
+    void endObject();
 
     // state
     void setAntialiasing(bool arg);
@@ -247,14 +248,14 @@ class PainterObjMarker
 {
 public:
     PainterObjMarker(Painter* p, const std::string& name, const QPointF& objPagePos)
-        : m_painter(p), m_name(name), m_objPagePos(objPagePos)
+        : m_painter(p)
     {
         p->beginObject(name, objPagePos);
     }
 
     ~PainterObjMarker()
     {
-        m_painter->endObject(m_name, m_objPagePos);
+        m_painter->endObject();
     }
 
 private:
@@ -263,7 +264,7 @@ private:
     QPointF m_objPagePos;
 };
 
-#ifdef TRACE_OBJ_DRAW_ENABLED
+#ifdef TRACE_DRAW_OBJ_ENABLED
     #define TRACE_OBJ_DRAW \
     mu::draw::PainterObjMarker __drawObjMarker(painter, name(), pagePos())
 

@@ -59,7 +59,7 @@ void QPainterProvider::beginTarget(const std::string&)
 {
 }
 
-bool QPainterProvider::endTarget(const std::string&, bool endDraw)
+bool QPainterProvider::endTarget(bool endDraw)
 {
     if (endDraw) {
         return m_painter->end();
@@ -77,9 +77,9 @@ void QPainterProvider::beginObject(const std::string& name, const QPointF& pageP
     m_drawObjectsLogger.beginObject(name, pagePos);
 }
 
-void QPainterProvider::endObject(const std::string& name, const QPointF& pagePos)
+void QPainterProvider::endObject()
 {
-    m_drawObjectsLogger.endObject(name, pagePos);
+    m_drawObjectsLogger.endObject();
 }
 
 void QPainterProvider::setAntialiasing(bool arg)

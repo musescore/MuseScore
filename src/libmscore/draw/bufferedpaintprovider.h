@@ -51,11 +51,33 @@ struct DrawBuffer
         std::vector<DrawGlyphRun> glyphs;
         std::vector<DrawPixmap> pixmaps;
         std::vector<DrawTiledPixmap> tiledPixmap;
+
+        bool empty() const
+        {
+            return paths.empty()
+                   && polygons.empty()
+                   && texts.empty()
+                   && rectTexts.empty()
+                   && glyphs.empty()
+                   && pixmaps.empty()
+                   && tiledPixmap.empty();
+        }
     };
 
-    QRect window;
-    QRect viewport;
-    std::vector<Data> datas;
+    struct Object {
+        std::string name;
+        QPointF pagePos;
+        std::vector<Data> datas;
+
+        Object(const std::string& n, const QPointF& p)
+            : name(n), pagePos(p)
+        {
+            //! NOTE Make data with default state
+            datas.push_back(DrawBuffer::Data());
+        }
+    };
+
+    std::vector<Object> objects;
 };
 
 class BufferedPaintProvider : public IPaintProvider
@@ -68,10 +90,10 @@ public:
 
     bool isActive() const override;
     void beginTarget(const std::string& name) override;
-    bool endTarget(const std::string& name, bool endDraw = false) override;
+    bool endTarget(bool endDraw = false) override;
 
     void beginObject(const std::string& name, const QPointF& pagePos) override;
-    void endObject(const std::string& name, const QPointF& pagePos) override;
+    void endObject() override;
 
     void setAntialiasing(bool arg) override;
     void setCompositionMode(CompositionMode mode) override;
@@ -110,12 +132,14 @@ public:
 
 private:
 
-    const DrawBuffer::State& currentState() const;
-    DrawBuffer::State& editableState();
+    const DrawBuffer::Data& currentData() const;
     DrawBuffer::Data& editableData();
 
+    const DrawBuffer::State& currentState() const;
+    DrawBuffer::State& editableState();
+
     DrawBuffer m_buf;
-    bool m_isCurDataEmpty = true;
+    std::stack<DrawBuffer::Object> m_currentObjects;
     bool m_isActive = false;
     DrawObjectsLogger m_drawObjectsLogger;
 };

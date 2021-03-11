@@ -57,6 +57,7 @@
 #cmakedefine BUILD_PALETTE_MODULE
 #cmakedefine BUILD_INSTRUMENTS_MODULE
 #cmakedefine BUILD_INSPECTOR_MODULE
+#cmakedefine BUILD_VST
 
 #cmakedefine WIN_SPARKLE_ENABLED
 #cmakedefine MAC_SPARKLE_ENABLED
@@ -65,7 +66,7 @@
 #cmakedefine WIN_PORTABLE
 
 #cmakedefine QML_LOAD_FROM_SOURCE
-#cmakedefine BUILD_VST
+#cmakedefine TRACE_DRAW_OBJ_ENABLED
 
 #cmakedefine Q_WS_UIKIT
 

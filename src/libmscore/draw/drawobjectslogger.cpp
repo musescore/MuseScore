@@ -32,18 +32,15 @@ void DrawObjectsLogger::beginObject(const std::string& name, const QPointF& page
     LOG_STREAM(haw::logger::Logger::DEBG, DRAW_OBJ_TAG) << "Begin: " << gap << name << "{" << pagePos.x() << "," << pagePos.y() << "}";
 }
 
-void DrawObjectsLogger::endObject(const std::string& name, const QPointF& pagePos)
+void DrawObjectsLogger::endObject()
 {
-    std::string gap;
-    gap.resize(m_objects.size());
-    LOG_STREAM(haw::logger::Logger::DEBG, DRAW_OBJ_TAG) << "End:   " << gap << name << "{" << pagePos.x() << "," << pagePos.y() << "}";
     IF_ASSERT_FAILED(!m_objects.empty()) {
         return;
     }
 
-    IF_ASSERT_FAILED(m_objects.top() == name) {
-        return;
-    }
+    std::string gap;
+    gap.resize(m_objects.size());
+    LOG_STREAM(haw::logger::Logger::DEBG, DRAW_OBJ_TAG) << "End:   " << gap << m_objects.top();
 
     m_objects.pop();
 }

@@ -38,11 +38,10 @@ void AbPaintProvider::beginTarget(const std::string& name)
     BufferedPaintProvider::beginTarget(name);
 }
 
-bool AbPaintProvider::endTarget(const std::string& name, bool endDraw)
+bool AbPaintProvider::endTarget(bool endDraw)
 {
     UNUSED(endDraw);
-    LOGI() << name;
-    return BufferedPaintProvider::endTarget(name, endDraw);
+    return BufferedPaintProvider::endTarget(endDraw);
 }
 
 void AbPaintProvider::serialize(std::string& out)

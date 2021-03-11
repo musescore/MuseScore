@@ -30,7 +30,7 @@ public:
     static const std::shared_ptr<AbPaintProvider>& instance();
 
     void beginTarget(const std::string& name) override;
-    bool endTarget(const std::string& name, bool endDraw = false) override;
+    bool endTarget(bool endDraw = false) override;
 
     void serialize(std::string& out);
 

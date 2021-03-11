@@ -37,16 +37,18 @@ QPainter* BufferedPaintProvider::qpainter() const
     return nullptr;
 }
 
-void BufferedPaintProvider::beginTarget(const std::string&)
+void BufferedPaintProvider::beginTarget(const std::string& name)
 {
     clear();
+    beginObject(name + "_default", QPointF());
     m_isActive = true;
 }
 
-bool BufferedPaintProvider::endTarget(const std::string&, bool endDraw)
+bool BufferedPaintProvider::endTarget(bool endDraw)
 {
     UNUSED(endDraw);
     m_isActive = false;
+    endObject();
     return true;
 }
 
@@ -58,38 +60,48 @@ bool BufferedPaintProvider::isActive() const
 void BufferedPaintProvider::beginObject(const std::string& name, const QPointF& pagePos)
 {
     m_drawObjectsLogger.beginObject(name, pagePos);
+    // add new object
+    m_currentObjects.push(DrawBuffer::Object(name, pagePos));
 }
 
-void BufferedPaintProvider::endObject(const std::string& name, const QPointF& pagePos)
+void BufferedPaintProvider::endObject()
 {
-    m_drawObjectsLogger.endObject(name, pagePos);
+    TRACEFUNC;
+    m_drawObjectsLogger.endObject();
+    // move object to buffer
+    m_buf.objects.push_back(m_currentObjects.top());
+    // remove obj
+    m_currentObjects.pop();
+}
+
+const DrawBuffer::Data& BufferedPaintProvider::currentData() const
+{
+    return m_currentObjects.top().datas.back();
 }
 
 const DrawBuffer::State& BufferedPaintProvider::currentState() const
 {
-    return m_buf.datas.back().state;
+    return currentData().state;
+}
+
+DrawBuffer::Data& BufferedPaintProvider::editableData()
+{
+    return m_currentObjects.top().datas.back();
 }
 
 DrawBuffer::State& BufferedPaintProvider::editableState()
 {
-    DrawBuffer::Data& data = m_buf.datas.back();
-    if (m_isCurDataEmpty) {
+    DrawBuffer::Data& data = m_currentObjects.top().datas.back();
+    if (data.empty()) {
         return data.state;
     }
 
     {
         DrawBuffer::Data newData;
         newData.state = data.state;
-        m_buf.datas.push_back(std::move(newData));
-        m_isCurDataEmpty = true;
+        m_currentObjects.top().datas.push_back(std::move(newData));
     }
-    return m_buf.datas.back().state;
-}
-
-DrawBuffer::Data& BufferedPaintProvider::editableData()
-{
-    m_isCurDataEmpty = false;
-    return m_buf.datas.back();
+    return m_currentObjects.top().datas.back().state;
 }
 
 void BufferedPaintProvider::setAntialiasing(bool arg)
@@ -215,7 +227,6 @@ const DrawBuffer& BufferedPaintProvider::buffer() const
 void BufferedPaintProvider::clear()
 {
     m_buf = DrawBuffer();
-    //! NOTE Make data with default state
-    m_buf.datas.push_back(DrawBuffer::Data());
-    m_isCurDataEmpty = true;
+    std::stack<DrawBuffer::Object> empty;
+    m_currentObjects.swap(empty);
 }
