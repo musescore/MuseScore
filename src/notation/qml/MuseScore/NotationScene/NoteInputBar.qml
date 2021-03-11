@@ -81,7 +81,7 @@ Rectangle {
                 id: menu
 
                 onHandleAction: {
-                    noteInputModel.handleAction(actionCode, actionIndex)
+                    Qt.callLater(noteInputModel.handleAction, actionCode, actionIndex)
                     menu.close()
                 }
             }
