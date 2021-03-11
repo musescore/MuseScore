@@ -25,8 +25,6 @@ using namespace mu::instruments;
 using namespace mu::notation;
 
 static const QString ALL_INSTRUMENTS_GENRE_ID("ALL_INSTRUMENTS");
-static const QString INSTRUMENT_EMPTY_TRANSPOSITION_ID("EMPTY_KEY");
-static const QString INSTRUMENT_EMPTY_TRANSPOSITION_NAME("--");
 
 static const QString ID_KEY("id");
 static const QString NAME_KEY("name");
@@ -71,12 +69,7 @@ void InstrumentListModel::initSelectedInstruments(const IDList& selectedInstrume
             continue;
         }
 
-        InstrumentTemplate templ = instrumentTemplate(instrumentId);
-
-        SelectedInstrumentInfo info;
-        info.id = templ.id;
-        info.config = templ.instrument;
-        m_selectedInstruments << info;
+        m_selectedInstruments << instrumentTemplate(instrumentId);
     }
 
     emit selectedInstrumentsChanged();
@@ -92,11 +85,11 @@ QVariantList InstrumentListModel::families() const
     };
 
     QVariantList result;
-    result << toMap(m_instrumentsMeta.genres[COMMON_GENRE_ID]);
     result << allInstrumentsItem();
 
     for (const InstrumentGenre& genre: m_instrumentsMeta.genres) {
         if (genre.id == COMMON_GENRE_ID) {
+            result.prepend(toMap(genre));
             continue;
         }
 
@@ -110,7 +103,7 @@ QVariantList InstrumentListModel::groups() const
 {
     QStringList availableGroups;
 
-    for (const InstrumentTemplate& templ: m_instrumentsMeta.instrumentTemplates) {
+    for (const InstrumentTemplate& templ: m_instrumentsMeta.templates) {
         const Instrument& instrument = templ.instrument;
 
         constexpr bool compareWithSelectedGroup = false;
@@ -142,45 +135,36 @@ QVariantList InstrumentListModel::groups() const
 
 QVariantList InstrumentListModel::instruments() const
 {
+    QHash<QString, QStringList> transpositions;
     QVariantMap availableInstruments;
 
-    for (const InstrumentTemplate& templ: sortedTemplateList()) {
+    for (const InstrumentTemplate& templ: m_instrumentsMeta.templates) {
         const Instrument& instrument = templ.instrument;
 
         if (!isInstrumentAccepted(instrument)) {
             continue;
         }
 
-        QVariantList instrumentTranspositions;
-        QString instrumentId = templ.id;
+        if (!templ.transpositionName.isEmpty()) {
+            transpositions[instrument.id] << templ.transpositionName;
+        }
+
         QString instrumentName = instrument.name;
-
-        Transposition _transposition = templ.transposition;
-        if (_transposition.isValid()) {
-            instrumentId = instrumentId.replace(_transposition.id, "");
-            instrumentName = instrumentName.replace(_transposition.name + " ", "")
-                             .replace(" in " + _transposition.name, "");
-
-            if (availableInstruments.contains(instrumentId)) {
-                instrumentTranspositions = availableInstruments[instrumentId].toMap().value(TRANSPOSITIONS_KEY).toList();
-            }
-
-            QVariantMap obj;
-            obj[ID_KEY] = _transposition.id;
-            obj[NAME_KEY] = _transposition.name;
-
-            instrumentTranspositions << obj;
-        } else {
-            instrumentTranspositions = availableInstruments[instrumentId].toMap().value(TRANSPOSITIONS_KEY).toList();
-            instrumentTranspositions.prepend(defaultInstrumentTranspositionItem());
+        if (!templ.transpositionName.isEmpty()) {
+            instrumentName = instrumentName.replace(templ.transpositionName + " ", "")
+                    .replace("in " + templ.transpositionName, "");
         }
 
         QVariantMap instrumentObj;
-        instrumentObj[ID_KEY] = instrumentId;
+        instrumentObj[ID_KEY] = instrument.id;
         instrumentObj[NAME_KEY] = instrumentName;
-        instrumentObj[TRANSPOSITIONS_KEY] = instrumentTranspositions;
         instrumentObj[GROUP_ID] = instrument.groupId;
-        availableInstruments[instrumentId] = instrumentObj;
+
+        if (transpositions.contains(instrument.id)) {
+            instrumentObj[TRANSPOSITIONS_KEY] = transpositions[instrument.id];
+        }
+
+        availableInstruments[instrument.id] = instrumentObj;
     }
 
     QVariantList result = availableInstruments.values();
@@ -231,28 +215,29 @@ void InstrumentListModel::selectGroup(const QString& groupId)
     emit selectedGroupChanged(groupId);
 }
 
-void InstrumentListModel::selectInstrument(const QString& instrumentId, const QString& transpositionId)
+void InstrumentListModel::selectInstrument(const QString& instrumentId, const QString& transpositionName)
 {
-    QString codeKey = instrumentId;
-    if (transpositionId != INSTRUMENT_EMPTY_TRANSPOSITION_ID) {
-        codeKey = transpositionId + instrumentId;
+    InstrumentTemplate suitedTemplate;
+
+    for (const InstrumentTemplate& templ : m_instrumentsMeta.templates) {
+        if (templ.instrument.id == instrumentId && templ.transpositionName == transpositionName) {
+            suitedTemplate = templ;
+            break;
+        }
     }
 
-    InstrumentTemplate templ = m_instrumentsMeta.instrumentTemplates[codeKey];
-    if (!templ.isValid()) {
-        LOGW() << QString("Instrument template %1 does not exist").arg(codeKey);
+    if (!suitedTemplate.isValid()) {
+        LOGE() << QString("Template of instrument %1 with transposition %2 does not exist")
+                  .arg(instrumentId)
+                  .arg(transpositionName);
+        return;
     }
-
-    SelectedInstrumentInfo info;
-    info.id = codeKey;
-    info.transposition = templ.transposition;
-    info.config = templ.instrument;
 
     if (!m_canSelectMultipleInstruments) {
         m_selectedInstruments.clear();
     }
 
-    m_selectedInstruments << info;
+    m_selectedInstruments << suitedTemplate;
     emit selectedInstrumentsChanged();
 }
 
@@ -313,22 +298,17 @@ QVariantList InstrumentListModel::selectedInstruments() const
 {
     QVariantList result;
 
-    for (const SelectedInstrumentInfo& instrument: m_selectedInstruments) {
-        QString instrumentId = instrument.id;
-        QString instrumentName = instrument.config.name;
+    for (const InstrumentTemplate& templ: m_selectedInstruments) {
+        QString instrumentName = templ.instrument.name;
 
-        Transposition _transposition = instrument.transposition;
-        if (_transposition.isValid()) {
-            instrumentName = instrumentName.replace(_transposition.name + " ", "")
-                             .replace(" in " + _transposition.name, "");
-
-            instrumentName = QString("%1 (%2)").arg(instrumentName, _transposition.name);
+        if (templ.transpositionName.isEmpty()) {
+            instrumentName += " " + templ.transpositionName;
         }
 
         QVariantMap obj;
-        obj[ID_KEY] = instrumentId;
+        obj[ID_KEY] = templ.instrument.id;
         obj[NAME_KEY] = instrumentName;
-        obj[CONFIG_KEY] = QVariant::fromValue(instrument.config);
+        obj[CONFIG_KEY] = QVariant::fromValue(templ.instrument);
 
         result << obj;
     }
@@ -354,21 +334,10 @@ void InstrumentListModel::setInstrumentsMeta(const InstrumentsMeta& meta)
 
 InstrumentGroupList InstrumentListModel::sortedGroupList() const
 {
-    InstrumentGroupList result = m_instrumentsMeta.groups.values();
+    InstrumentGroupList result = m_instrumentsMeta.groups;
 
     std::sort(result.begin(), result.end(), [](const InstrumentGroup& group1, const InstrumentGroup& group2) {
         return group1.sequenceOrder < group2.sequenceOrder;
-    });
-
-    return result;
-}
-
-InstrumentTemplateList InstrumentListModel::sortedTemplateList() const
-{
-    InstrumentTemplateList result = m_instrumentsMeta.instrumentTemplates.values();
-
-    std::sort(result.begin(), result.end(), [](const InstrumentTemplate& templ1, const InstrumentTemplate& templ2) {
-        return templ1.sequenceOrder < templ2.sequenceOrder;
     });
 
     return result;
@@ -379,15 +348,6 @@ QVariantMap InstrumentListModel::allInstrumentsItem() const
     QVariantMap obj;
     obj[ID_KEY] = ALL_INSTRUMENTS_GENRE_ID;
     obj[NAME_KEY] = qtrc("instruments", "All instruments");
-    return obj;
-}
-
-QVariantMap InstrumentListModel::defaultInstrumentTranspositionItem() const
-{
-    QVariantMap obj;
-    obj[ID_KEY] = INSTRUMENT_EMPTY_TRANSPOSITION_ID;
-    obj[NAME_KEY] = INSTRUMENT_EMPTY_TRANSPOSITION_NAME;
-
     return obj;
 }
 
@@ -428,7 +388,7 @@ bool InstrumentListModel::isInstrumentAccepted(const Instrument& instrument, boo
 
 InstrumentTemplate InstrumentListModel::instrumentTemplate(const QString& instrumentId) const
 {
-    for (const InstrumentTemplate& instrumentTemplate: m_instrumentsMeta.instrumentTemplates) {
+    for (const InstrumentTemplate& instrumentTemplate: m_instrumentsMeta.templates) {
         if (instrumentTemplate.instrument.id == instrumentId) {
             return instrumentTemplate;
         }

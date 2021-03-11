@@ -28,6 +28,17 @@ using namespace mu;
 using namespace mu::instruments;
 using namespace mu::midi;
 
+InstrumentTemplate findInstrumentTemplate(const InstrumentTemplateList& templates, const QString& templateId)
+{
+    for (const InstrumentTemplate& templ : templates) {
+        if (templ.id == templateId) {
+            return templ;
+        }
+    }
+
+    return InstrumentTemplate();
+}
+
 RetVal<InstrumentsMeta> InstrumentsReader::readMeta(const io::path& path) const
 {
     RetVal<InstrumentsMeta> result;
@@ -53,11 +64,9 @@ RetVal<InstrumentsMeta> InstrumentsReader::readMeta(const io::path& path) const
             if (reader.name() == "instrument-group" || reader.name() == "InstrumentGroup") {
                 loadGroupMeta(reader, meta, groupIndex++);
             } else if (reader.name() == "Articulation") {
-                MidiArticulation articulation = readArticulation(reader);
-                meta.articulations.insert(articulation.name, articulation); // TODO: name?
+                meta.articulations << readArticulation(reader);
             } else if (reader.name() == "Genre") {
-                InstrumentGenre genre = readGenre(reader);
-                meta.genres.insert(genre.id, genre);
+                meta.genres << readGenre(reader);
             } else {
                 reader.skipCurrentElement();
             }
@@ -78,23 +87,14 @@ void InstrumentsReader::loadGroupMeta(Ms::XmlReader& reader, InstrumentsMeta& ge
     group.extended = reader.attributes().value("extended").toInt();
     group.sequenceOrder = groupIndex;
 
-    int sequenceOrder = 0;
-
-    auto addTemplate = [&sequenceOrder, &generalMeta](InstrumentTemplate& templ) {
-        templ.sequenceOrder = sequenceOrder;
-        ++sequenceOrder;
-        generalMeta.instrumentTemplates.insert(templ.id, templ);
-    };
-
     while (reader.readNextStartElement()) {
         if (reader.name().toString().toLower() == "instrument") {
-            InstrumentTemplate _template = readInstrumentTemplate(reader, generalMeta);
-            _template.instrument.groupId = group.id;
-            addTemplate(_template);
+            InstrumentTemplate templ = readInstrumentTemplate(reader, generalMeta);
+            templ.instrument.groupId = group.id;
+            generalMeta.templates << templ;
         } else if (reader.name() == "ref") {
             QString templateId = reader.readElementText();
-            InstrumentTemplate newTemplate = generalMeta.instrumentTemplates[templateId];
-            addTemplate(newTemplate);
+            generalMeta.templates << findInstrumentTemplate(generalMeta.templates, templateId);
         } else if (reader.name() == "name") {
             group.name = qApp->translate("InstrumentsXML", reader.readElementText().toUtf8().data()); // TODO: translate
         } else if (reader.name() == "extended") {
@@ -108,7 +108,7 @@ void InstrumentsReader::loadGroupMeta(Ms::XmlReader& reader, InstrumentsMeta& ge
         group.id = group.name.toLower().replace(" ", "-");
     }
 
-    generalMeta.groups.insert(group.id, group);
+    generalMeta.groups << group;
 }
 
 MidiArticulation InstrumentsReader::readArticulation(Ms::XmlReader& reader) const
@@ -187,6 +187,8 @@ InstrumentTemplate InstrumentsReader::readInstrumentTemplate(Ms::XmlReader& read
             instrument.name = qApp->translate("InstrumentsXML", reader.readElementText().toUtf8().data());
         } else if (reader.name() == "description") {
             instrument.description = qApp->translate("InstrumentsXML", reader.readElementText().toUtf8().data());
+        } else if (reader.name() == "transpositionName") {
+            instrumentTemplate.transpositionName = qApp->translate("InstrumentsXML", reader.readElementText().toUtf8().data());
         } else if (reader.name() == "extended") {
             instrument.extended = reader.readElementText().toInt();
         } else if (reader.name() == "staves") {
@@ -273,8 +275,7 @@ InstrumentTemplate InstrumentsReader::readInstrumentTemplate(Ms::XmlReader& read
             channel.read(reader, nullptr);
             instrument.channels << channel;
         } else if (reader.name() == "Articulation") {
-            MidiArticulation articulation = readArticulation(reader);
-            generalMeta.articulations.insert(articulation.name, articulation);
+            generalMeta.articulations << readArticulation(reader);
         } else if (reader.name() == "stafftype") {
             int staffIndex = readStaffIndex(reader);
 
@@ -299,7 +300,8 @@ InstrumentTemplate InstrumentsReader::readInstrumentTemplate(Ms::XmlReader& read
             }
         } else if (reader.name() == "init") {
             QString templateId = reader.readElementText();
-            initInstrument(instrument, generalMeta.instrumentTemplates[templateId].instrument);
+            InstrumentTemplate templ = findInstrumentTemplate(generalMeta.templates, templateId);
+            initInstrument(instrument, templ.instrument);
         } else if (reader.name() == "musicXMLid") {
             instrument.id = reader.readElementText();
         } else if (reader.name() == "genre") {

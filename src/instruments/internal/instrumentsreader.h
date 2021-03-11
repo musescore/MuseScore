@@ -39,12 +39,6 @@ public:
     RetVal<InstrumentsMeta> readMeta(const io::path& path) const override;
 
 private:
-    struct GroupMeta
-    {
-        InstrumentGroup group;
-        InstrumentTemplateMap templates;
-    };
-
     void loadGroupMeta(Ms::XmlReader& reader, InstrumentsMeta& generalMeta, int groupIndex) const;
     MidiArticulation readArticulation(Ms::XmlReader& reader) const;
     InstrumentGenre readGenre(Ms::XmlReader& reader) const;

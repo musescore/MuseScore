@@ -151,7 +151,8 @@ Item {
                     }
 
                     for (var i = 0; i < _transpositions.length; ++i) {
-                        resultList.push({"text" : _transpositions[i].name, "value" : _transpositions[i].id})
+                        var transposition = _transpositions[i]
+                        resultList.push({"text" : transposition, "value" : transposition})
                     }
 
                     return resultList
@@ -167,7 +168,7 @@ Item {
             function resetCurrentInstrument() {
                 privateProperties.currentInstrument = {
                     "instrument": modelData,
-                    "transposition": transpositionsBox.value
+                    "transpositionName": transpositionsBox.value
                 }
 
                 root.instrumentClicked()

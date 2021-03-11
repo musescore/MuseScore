@@ -408,6 +408,8 @@ void InstrumentTemplate::read(XmlReader& e)
             trackName = qApp->translate("InstrumentsXML", e.readElementText().toUtf8().data());
         } else if (tag == "description") {
             description = e.readElementText();
+        } else if (tag == "transpositionName") {
+            transpositionName = qApp->translate("InstrumentsXML", e.readElementText().toUtf8().data());
         } else if (tag == "extended") {
             extended = e.readInt();
         } else if (tag == "staves") {

@@ -54,7 +54,7 @@ public:
     Q_INVOKABLE void selectFamily(const QString& familyId);
     Q_INVOKABLE void selectGroup(const QString& groupId);
 
-    Q_INVOKABLE void selectInstrument(const QString& instrumentId, const QString& transpositionId = QString());
+    Q_INVOKABLE void selectInstrument(const QString& instrumentId, const QString& transpositionName = QString());
     Q_INVOKABLE void unselectInstrument(const QString& instrumentId);
     Q_INVOKABLE void swapSelectedInstruments(int firstIndex, int secondIndex);
     Q_INVOKABLE void makeSoloist(const QString& instrumentId);
@@ -85,9 +85,6 @@ private:
     void setInstrumentsMeta(const InstrumentsMeta& meta);
     QVariantMap allInstrumentsItem() const;
     InstrumentGroupList sortedGroupList() const;
-    InstrumentTemplateList sortedTemplateList() const;
-
-    QVariantMap defaultInstrumentTranspositionItem() const;
 
     void updateFamilyStateBySearch();
 
@@ -104,16 +101,7 @@ private:
     InstrumentsMeta m_instrumentsMeta;
     QString m_searchText;
 
-    struct SelectedInstrumentInfo
-    {
-        QString id;
-        Transposition transposition;
-        Instrument config;
-
-        bool operator==(const SelectedInstrumentInfo& info) const { return id == info.id; }
-    };
-
-    QList<SelectedInstrumentInfo> m_selectedInstruments;
+    InstrumentTemplateList m_selectedInstruments;
 };
 }
 

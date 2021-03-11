@@ -72,6 +72,7 @@ public:
     StaffNameList shortNames;    ///< shown on followup systems
     QString musicXMLid;          ///< used in MusicXML 3.0
     QString description;         ///< a longer description of the instrument
+    QString transpositionName;
 
     char minPitchA;           // pitch range playable by an amateur
     char maxPitchA;

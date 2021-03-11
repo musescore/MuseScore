@@ -141,7 +141,7 @@ Rectangle {
 
             onClicked: {
                 var currentSelect = instrumentsView.currentInstrument()
-                instrumentsModel.selectInstrument(currentSelect.instrument.id, currentSelect.transposition)
+                instrumentsModel.selectInstrument(currentSelect.instrument.id, currentSelect.transpositionName)
             }
         }
 

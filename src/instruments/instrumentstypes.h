@@ -83,7 +83,7 @@ struct MidiAction
 };
 using MidiActionList = QList<MidiAction>;
 
-using MidiArticulationMap = QMap<QString /*id*/, MidiArticulation>;
+using MidiActiculationList = QList<MidiArticulation>;
 
 struct InstrumentGroup
 {
@@ -94,24 +94,15 @@ struct InstrumentGroup
 };
 
 using InstrumentGroupList = QList<InstrumentGroup>;
-using InstrumentGroupMap = QMap<QString /*id*/, InstrumentGroup>;
 
 struct InstrumentGenre
 {
     QString id;
     QString name;
 };
-using InstrumentGenreMap = QMap<QString /*id*/, InstrumentGenre>;
+using InstrumentGenreList = QList<InstrumentGenre>;
 
 static const QString COMMON_GENRE_ID("common");
-
-struct Transposition
-{
-    QString id;
-    QString name;
-
-    bool isValid() const { return !id.isEmpty(); }
-};
 
 struct Instrument
 {
@@ -163,22 +154,20 @@ using InstrumentList = QList<Instrument>;
 struct InstrumentTemplate
 {
     QString id;
-    Transposition transposition;
     Instrument instrument;
-    int sequenceOrder = 0;
+    QString transpositionName;
 
     bool isValid() const { return !id.isEmpty(); }
 };
 
-using InstrumentTemplateMap = QMap<QString /*id*/, InstrumentTemplate>;
 using InstrumentTemplateList = QList<InstrumentTemplate>;
 
 struct InstrumentsMeta
 {
-    InstrumentTemplateMap instrumentTemplates;
-    InstrumentGroupMap groups;
-    InstrumentGenreMap genres;
-    MidiArticulationMap articulations;
+    InstrumentTemplateList templates;
+    InstrumentGroupList groups;
+    InstrumentGenreList genres;
+    MidiActiculationList articulations;
 };
 
 class InstrumentTreeItemType
