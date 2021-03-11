@@ -3997,9 +3997,9 @@ void ScoreView::cmdAddSlur(const Slur* slurTemplate)
                         if (!e->isChord())
                               continue;
                         ChordRest* cr = toChordRest(e);
-                        if (!cr1 || cr1->tick() > cr->tick())
+                        if (!cr1 || cr->isBefore(cr1))
                               cr1 = cr;
-                        if (!cr2 || cr2->tick() < cr->tick())
+                        if (!cr2 || cr2->isBefore(cr))
                               cr2 = cr;
                         }
                   if (cr1 && (cr1 != cr2))
@@ -4065,7 +4065,7 @@ void ScoreView::addSlur(ChordRest* cr1, ChordRest* cr2, const Slur* slurTemplate
             _score->inputState().setSlur(slur);
             ss->setSelected(true);
             }
-      else if (switchToSlur) {
+      else if (switchToSlur && score()->selection().isSingle()) {
             startEditMode(ss);
             }
       }

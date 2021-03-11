@@ -589,7 +589,7 @@ bool Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
                   LayoutBreak* breakElement = toLayoutBreak(element);
                   score->cmdToggleLayoutBreak(breakElement->layoutBreakType());
                   }
-            else if (element->isSlur() && addSingle) {
+            else if (element->isSlur()) {
                   viewer->cmdAddSlur(toSlur(element));
                   }
             else if (element->isSLine() && !element->isGlissando() && addSingle) {
