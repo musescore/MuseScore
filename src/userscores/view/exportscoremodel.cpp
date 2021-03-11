@@ -243,15 +243,25 @@ QString ExportScoreModel::exportFliter() const
     QString filter;
 
     if (suffix == "pdf") {
-        filter = QObject::tr("PDF files") + " (*.pdf)";
+        filter = qtrc("userscores", "PDF Files") + " (*.pdf)";
     } else if (suffix == "png") {
-        filter = QObject::tr("PNG images") + " (*.png)";
+        filter = qtrc("userscores", "PNG Images") + " (*.png)";
     } else if (suffix == "svg") {
-        filter = QObject::tr("SVG images") + " (*.svg)";
+        filter = qtrc("userscores", "SVG Images") + " (*.svg)";
     } else if (suffix == "mp3") {
-        filter = QObject::tr("mp3 audio") + " (*.mp3)";
-    } else if (suffix == "midi") {
-        filter = QObject::tr("midi file") + " (*.mid, *.midi)";
+        filter = qtrc("userscores", "MP3 Audio Files") + " (*.mp3)";
+    } else if (suffix == "wav") {
+        filter = qtrc("userscores", "WAV Audio Files") + " (*.wav)";
+    } else if (suffix == "ogg") {
+        filter = qtrc("userscores", "OGG Audio Files") + " (*.ogg)";
+    } else if (suffix == "flac") {
+        filter = qtrc("userscores", "FLAC Audio Files") + " (*.flac)";
+    } else if (suffix == "mid" || suffix == "midi" || suffix == "kar") {
+        filter = qtrc("userscores", "MIDI Files") + " (*.mid, *.midi, *.kar)";
+    } else if (suffix == "mxl") {
+        filter = qtrc("userscores", "Compressed MusicXML Files") + " (*.mxl)";
+    } else if (suffix == "musicxml" || suffix == "xml") {
+        filter = qtrc("userscores", "Uncompressed MusicXML Files") + " (*.musicxml, *.xml)";
     }
 
     return filter;
