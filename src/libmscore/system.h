@@ -194,6 +194,8 @@ public:
     qreal minTop() const;
     qreal minBottom() const;
     qreal spacerDistance(bool up) const;
+    Spacer* upSpacer(int staffIdx, Spacer* prevDownSpacer) const;
+    Spacer* downSpacer(int staffIdx) const;
 
     qreal firstNoteRestSegmentX(bool leading = false);
 

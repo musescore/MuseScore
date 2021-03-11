@@ -1697,33 +1697,8 @@ static void distributeStaves(Page* page)
                     continue;
                 }
 
-                Spacer* activeSpacer { nextSpacer };
-                nextSpacer = nullptr;
-                for (MeasureBase* mb : system->measures()) {
-                    if (!(mb && mb->isMeasure())) {
-                        continue;
-                    }
-                    Measure* m = toMeasure(mb);
-                    Spacer* sp = m->vspacerUp(staff->idx());
-                    if (sp) {
-                        if (!activeSpacer || ((activeSpacer->spacerType() == SpacerType::UP) && (sp->gap() > activeSpacer->gap()))) {
-                            activeSpacer = sp;
-                        }
-                        continue;
-                    }
-                    sp = m->vspacerDown(staff->idx());
-                    if (sp) {
-                        if (sp->spacerType() == SpacerType::FIXED) {
-                            nextSpacer = sp;
-                        } else {
-                            if (!nextSpacer || (sp->gap() > nextSpacer->gap())) {
-                                nextSpacer = sp;
-                            }
-                        }
-                    }
-                }
-
-                VerticalGapData* vgd = new VerticalGapData(!ngaps++, system, staff, sysStaff, activeSpacer, prevYBottom);
+                VerticalGapData* vgd = new VerticalGapData(!ngaps++, system, staff, sysStaff, nextSpacer, prevYBottom);
+                nextSpacer = system->downSpacer(staff->idx());
 
                 if (newSystem) {
                     vgd->addSpaceBetweenSections();
@@ -5458,7 +5433,7 @@ LayoutContext::~LayoutContext()
 //      defines a gap ABOVE the staff.
 //---------------------------------------------------------
 
-VerticalGapData::VerticalGapData(bool first, System* sys, Staff* st, SysStaff* sst, const Spacer* spacer, qreal y)
+VerticalGapData::VerticalGapData(bool first, System* sys, Staff* st, SysStaff* sst, Spacer* nextSpacer, qreal y)
     : _fixedHeight(first), system(sys), sysStaff(sst), staff(st)
 {
     if (_fixedHeight) {
@@ -5467,8 +5442,10 @@ VerticalGapData::VerticalGapData(bool first, System* sys, Staff* st, SysStaff* s
     } else {
         _normalisedSpacing = system->y() + (sysStaff ? sysStaff->y() : 0.0) - y;
         _maxActualSpacing = system->score()->styleP(Sid::maxStaffSpread);
+
+        Spacer* spacer { sys->upSpacer(st->idx(), nextSpacer) };
+
         if (spacer) {
-            _hasSpacer = true;
             _fixedSpacer = spacer->spacerType() == SpacerType::FIXED;
             _normalisedSpacing = qMax(_normalisedSpacing, spacer->gap());
             if (_fixedSpacer) {
