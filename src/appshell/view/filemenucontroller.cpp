@@ -19,35 +19,31 @@
 #include "filemenucontroller.h"
 
 using namespace mu::appshell;
-using namespace mu::notation;
 using namespace mu::actions;
+using namespace mu::uicomponents;
 
 void FileMenuController::init()
 {
-    fileController()->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
+    fileController()->actionsAvailableChanged().onReceive(this, [this](const ActionCodeList& actionCodes) {
         m_actionsReceiveAvailableChanged.send(actionCodes);
     });
 
-    notationController()->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
+    notationController()->actionsAvailableChanged().onReceive(this, [this](const ActionCodeList& actionCodes) {
         m_actionsReceiveAvailableChanged.send(actionCodes);
     });
 }
 
 bool FileMenuController::contains(const ActionCode& actionCode) const
 {
-    std::map<ActionCode, AvailableCallback> actions = this->actions();
-    return actions.find(actionCode) != actions.end();
+    return fileControllerContains(actionCode) || notationControllerContains(actionCode);
 }
 
-bool FileMenuController::actionAvailable(const ActionCode& actionCode) const
+ActionState FileMenuController::actionState(const ActionCode& actionCode) const
 {
-    std::map<ActionCode, AvailableCallback> actions = this->actions();
+    ActionState state;
+    state.enabled = actionEnabled(actionCode);
 
-    if (actions.find(actionCode) == actions.end()) {
-        return false;
-    }
-
-    return actions[actionCode]();
+    return state;
 }
 
 mu::async::Channel<ActionCodeList> FileMenuController::actionsAvailableChanged() const
@@ -55,100 +51,58 @@ mu::async::Channel<ActionCodeList> FileMenuController::actionsAvailableChanged()
     return m_actionsReceiveAvailableChanged;
 }
 
-std::map<ActionCode, FileMenuController::AvailableCallback> FileMenuController::actions() const
+ActionCodeList FileMenuController::fileControllerActions() const
 {
-    static std::map<ActionCode, AvailableCallback> _actions = {
-        { "file-new", std::bind(&FileMenuController::isNewAvailable, this) },
-        { "file-open", std::bind(&FileMenuController::isOpenAvailable, this) },
-        { "clear-recent", std::bind(&FileMenuController::isClearRecentAvailable, this) },
-        { "file-close", std::bind(&FileMenuController::isCloseAvailable, this) },
-        { "file-save", std::bind(&FileMenuController::isSaveAvailable, this) },
-        { "file-save-as", std::bind(&FileMenuController::isSaveAsAvailable, this) },
-        { "file-save-a-copy", std::bind(&FileMenuController::isSaveCopyAvailable, this) },
-        { "file-save-selection", std::bind(&FileMenuController::isSaveSelectionAvailable, this) },
-        { "file-save-online", std::bind(&FileMenuController::isSaveOnlineAvailable, this) },
-        { "file-import-pdf", std::bind(&FileMenuController::isImportAvailable, this) },
-        { "file-export", std::bind(&FileMenuController::isExportAvailable, this) },
-        { "edit-info", std::bind(&FileMenuController::isEditInfoAvailable, this) },
-        { "parts", std::bind(&FileMenuController::isPartsAvailable, this) },
-        { "print", std::bind(&FileMenuController::isPrintAvailable, this) },
-        { "quit", std::bind(&FileMenuController::isQuitAvailable, this) }
+    static ActionCodeList actions = {
+        "file-new",
+        "file-open",
+        "clear-recent",
+        "file-close",
+        "file-save",
+        "file-save-as",
+        "file-save-a-copy",
+        "file-save-selection",
+        "file-save-online",
+        "file-import-pdf",
+        "file-export",
+        "parts",
+        "print",
+        "quit"
     };
 
-    return _actions;
+    return actions;
 }
 
-bool FileMenuController::isNewAvailable() const
+ActionCodeList FileMenuController::notationControllerActions() const
 {
-    return fileController()->actionAvailable("file-new");
+    static ActionCodeList actions = {
+        "edit-info"
+    };
+
+    return actions;
 }
 
-bool FileMenuController::isOpenAvailable() const
+bool FileMenuController::fileControllerContains(const ActionCode& actionCode) const
 {
-    return fileController()->actionAvailable("file-open");
+    ActionCodeList fileActions = fileControllerActions();
+    return std::find(fileActions.begin(), fileActions.end(), actionCode) != fileActions.end();
 }
 
-bool FileMenuController::isClearRecentAvailable() const
+bool FileMenuController::notationControllerContains(const ActionCode& actionCode) const
 {
-    return fileController()->actionAvailable("clear-recent");
+    ActionCodeList notationActions = notationControllerActions();
+    return std::find(notationActions.begin(), notationActions.end(), actionCode) != notationActions.end();
 }
 
-bool FileMenuController::isCloseAvailable() const
+bool FileMenuController::actionEnabled(const ActionCode& actionCode) const
 {
-    return fileController()->actionAvailable("file-close");
-}
+    if (fileControllerContains(actionCode)) {
+        return fileController()->actionAvailable(actionCode);
+    }
 
-bool FileMenuController::isSaveAvailable() const
-{
-    return fileController()->actionAvailable("file-save");
-}
+    if (notationControllerContains(actionCode)) {
+        return notationController()->actionAvailable(actionCode);
+    }
 
-bool FileMenuController::isSaveAsAvailable() const
-{
-    return fileController()->actionAvailable("file-save-as");
-}
-
-bool FileMenuController::isSaveCopyAvailable() const
-{
-    return fileController()->actionAvailable("file-save-a-copy");
-}
-
-bool FileMenuController::isSaveSelectionAvailable() const
-{
-    return fileController()->actionAvailable("file-save-selection");
-}
-
-bool FileMenuController::isSaveOnlineAvailable() const
-{
-    return fileController()->actionAvailable("file-save-online");
-}
-
-bool FileMenuController::isImportAvailable() const
-{
-    return fileController()->actionAvailable("file-import-pdf");
-}
-
-bool FileMenuController::isExportAvailable() const
-{
-    return fileController()->actionAvailable("file-export");
-}
-
-bool FileMenuController::isEditInfoAvailable() const
-{
-    return notationController()->actionAvailable("edit-info");
-}
-
-bool FileMenuController::isPartsAvailable() const
-{
-    return fileController()->actionAvailable("parts");
-}
-
-bool FileMenuController::isPrintAvailable() const
-{
-    return fileController()->actionAvailable("print");
-}
-
-bool FileMenuController::isQuitAvailable() const
-{
-    return fileController()->actionAvailable("quit");
+    return false;
 }

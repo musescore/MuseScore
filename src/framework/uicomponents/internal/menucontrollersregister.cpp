@@ -16,17 +16,32 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_APPSHELL_IFILEMENUCONTROLLER_H
-#define MU_APPSHELL_IFILEMENUCONTROLLER_H
+#include "menucontrollersregister.h"
 
-#include "modularity/imoduleexport.h"
-#include "uicomponents/imenucontroller.h"
+using namespace mu::uicomponents;
 
-namespace mu::appshell {
-class IFileMenuController : public uicomponents::IMenuController, MODULE_EXPORT_INTERFACE
+void MenuControllersRegister::registerController(MenuType menuType, IMenuControllerPtr controller)
 {
-    INTERFACE_ID(IFileMenuController)
-};
+    m_controllers[menuType] = controller;
 }
 
-#endif // MU_APPSHELL_IFILEMENUCONTROLLER_H
+IMenuControllerPtr MenuControllersRegister::controller(MenuType menuType) const
+{
+    auto it = m_controllers.find(menuType);
+    if (it != m_controllers.end()) {
+        return it->second;
+    }
+
+    return nullptr;
+}
+
+IMenuControllerPtrList MenuControllersRegister::controllers() const
+{
+    IMenuControllerPtrList result;
+
+    for (auto it = m_controllers.begin(); it != m_controllers.end(); ++it) {
+        result.push_back(it->second);
+    }
+
+    return result;
+}

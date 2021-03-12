@@ -22,12 +22,11 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "notation/inotationactionscontroller.h"
-#include "notation/notationtypes.h"
 
-#include "iformatmenucontroller.h"
+#include "uicomponents/imenucontroller.h"
 
 namespace mu::appshell {
-class FormatMenuController : public IFormatMenuController, public async::Asyncable
+class FormatMenuController : public uicomponents::IMenuController, public async::Asyncable
 {
     INJECT(appshell, notation::INotationActionsController, controller)
 
@@ -35,23 +34,14 @@ public:
     void init();
 
     bool contains(const actions::ActionCode& actionCode) const override;
+    uicomponents::ActionState actionState(const actions::ActionCode& actionCode) const override;
 
-    bool actionAvailable(const actions::ActionCode& actionCode) const override;
     async::Channel<actions::ActionCodeList> actionsAvailableChanged() const override;
 
 private:
-    using AvailableCallback = std::function<bool ()>;
-    std::map<actions::ActionCode, AvailableCallback> actions() const;
+    actions::ActionCodeList actions() const;
 
-    bool isEditStyleAvailable() const;
-    bool isPageSettingsAvailable() const;
-    bool isStretchIncreaseAvailable() const;
-    bool isStretchDecreaseAvailable() const;
-    bool isResetAvailable(notation::ResettableValueType resettableValueType) const;
-    bool isLoadStyleAvailable() const;
-    bool isSaveStyleAvailable() const;
-
-    std::string resetableValueTypeActionCode(notation::ResettableValueType valueType) const;
+    bool actionEnabled(const actions::ActionCode& actionCode) const;
 
     async::Channel<actions::ActionCodeList> m_actionsReceiveAvailableChanged;
 };

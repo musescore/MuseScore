@@ -25,6 +25,7 @@
 
 #include "actions/iactionsregister.h"
 #include "ui/iinteractiveuriregister.h"
+#include "uicomponents/imenucontrollersregister.h"
 
 #include "internal/applicationactions.h"
 #include "internal/applicationactioncontroller.h"
@@ -46,6 +47,7 @@
 using namespace mu::appshell;
 using namespace mu::framework;
 using namespace mu::ui;
+using namespace mu::uicomponents;
 
 static std::shared_ptr<ApplicationActionController> s_applicationActionController = std::make_shared<ApplicationActionController>();
 static std::shared_ptr<AppShellConfiguration> s_appShellConfiguration = std::make_shared<AppShellConfiguration>();
@@ -77,13 +79,6 @@ void AppShellModule::registerExports()
     ioc()->registerExport<IAppShellConfiguration>(moduleName(), s_appShellConfiguration);
     ioc()->registerExport<IApplicationActionController>(moduleName(), s_applicationActionController);
     ioc()->registerExport<INotationPageState>(moduleName(), s_notationPageState);
-
-    ioc()->registerExport<IFileMenuController>(moduleName(), s_fileMenuController);
-    ioc()->registerExport<IEditMenuController>(moduleName(), s_editMenuController);
-    ioc()->registerExport<IViewMenuController>(moduleName(), s_viewMenuController);
-    ioc()->registerExport<IFormatMenuController>(moduleName(), s_formatMenuController);
-    ioc()->registerExport<IToolsMenuController>(moduleName(), s_toolsMenuController);
-    ioc()->registerExport<IHelpMenuController>(moduleName(), s_helpMenuController);
 }
 
 void AppShellModule::resolveImports()
@@ -102,6 +97,16 @@ void AppShellModule::resolveImports()
         ir->registerUri(Uri("musescore://devtools"), ContainerMeta(ContainerType::PrimaryPage));
         ir->registerUri(Uri("musescore://about/musescore"), ContainerMeta(ContainerType::QmlDialog, "AboutDialog.qml"));
         ir->registerUri(Uri("musescore://about/musicxml"), ContainerMeta(ContainerType::QmlDialog, "AboutMusicXMLDialog.qml"));
+    }
+
+    auto mcr = ioc()->resolve<IMenuControllersRegister>(moduleName());
+    if (mcr) {
+        mcr->registerController(MenuType::File, s_fileMenuController);
+        mcr->registerController(MenuType::Edit, s_editMenuController);
+        mcr->registerController(MenuType::View, s_viewMenuController);
+        mcr->registerController(MenuType::Format, s_formatMenuController);
+        mcr->registerController(MenuType::Tools, s_toolsMenuController);
+        mcr->registerController(MenuType::Help, s_helpMenuController);
     }
 }
 

@@ -24,10 +24,10 @@
 #include "notation/inotationactionscontroller.h"
 #include "notation/notationtypes.h"
 
-#include "ieditmenucontroller.h"
+#include "uicomponents/imenucontroller.h"
 
 namespace mu::appshell {
-class EditMenuController : public IEditMenuController, public async::Asyncable
+class EditMenuController : public uicomponents::IMenuController, public async::Asyncable
 {
     INJECT(appshell, notation::INotationActionsController, controller)
 
@@ -35,27 +35,14 @@ public:
     void init();
 
     bool contains(const actions::ActionCode& actionCode) const override;
+    uicomponents::ActionState actionState(const actions::ActionCode& actionCode) const override;
 
-    bool actionAvailable(const actions::ActionCode& actionCode) const override;
     async::Channel<actions::ActionCodeList> actionsAvailableChanged() const override;
 
 private:
-    using AvailableCallback = std::function<bool ()>;
-    std::map<actions::ActionCode, AvailableCallback> actions() const;
+    actions::ActionCodeList actions() const;
 
-    bool isUndoAvailable() const;
-    bool isRedoAvailable() const;
-    bool isCutAvailable() const;
-    bool isCopyAvailable() const;
-    bool isPasteAvailable(notation::PastingType pastingType) const;
-    bool isSwapAvailable() const;
-    bool isDeleteAvailable() const;
-    bool isSelectSimilarAvailable() const;
-    bool isSelectAllAvailable() const;
-    bool isFindAvailable() const;
-    bool isPreferenceDialogAvailable() const;
-
-    std::string pastingActionCode(notation::PastingType type) const;
+    bool actionEnabled(const actions::ActionCode& actionCode) const;
 
     async::Channel<actions::ActionCodeList> m_actionsReceiveAvailableChanged;
 };

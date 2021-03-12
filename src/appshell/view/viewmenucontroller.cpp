@@ -18,43 +18,91 @@
 //=============================================================================
 #include "viewmenucontroller.h"
 
-#include "log.h"
-
 using namespace mu::appshell;
 using namespace mu::notation;
-using namespace mu::framework;
 using namespace mu::actions;
+using namespace mu::uicomponents;
+
+static ActionCodeList panelsActionCodes = {
+    "toggle-palette",
+    "toggle-instruments",
+    "inspector",
+    "toggle-navigator",
+    "toggle-timeline",
+    "toggle-mixer",
+    "synth-control",
+    "toggle-selection-window",
+    "toggle-piano",
+    "toggle-scorecmp-tool",
+    "toggle-transport",
+    "toggle-noteinput",
+    "toggle-notationtoolbar",
+    "toggle-undoredo",
+    "toggle-statusbar",
+};
+
+static ActionCodeList scoreConfigActionCodes = {
+    "show-invisible",
+    "show-unprintable",
+    "show-frames",
+    "show-pageborders",
+    "mark-irregular"
+};
+
+static ActionCodeList zoomActionCodes = {
+    "zoomin",
+    "zoomout"
+};
+
+static ActionCode FULLSCREEN_ACTION_CODE("fullscreen");
+static ActionCode MASTER_PALETTE_ACTION_CODE("masterpalette");
 
 void ViewMenuController::init()
 {
-    notationController()->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
+    notationController()->actionsAvailableChanged().onReceive(this, [this](const actions::ActionCodeList& actionCodes) {
         m_actionsReceiveAvailableChanged.send(actionCodes);
     });
 
-    paletteController()->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
+    paletteController()->actionsAvailableChanged().onReceive(this, [this](const actions::ActionCodeList& actionCodes) {
         m_actionsReceiveAvailableChanged.send(actionCodes);
     });
 
-    applicationController()->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
+    applicationController()->actionsAvailableChanged().onReceive(this, [this](const actions::ActionCodeList& actionCodes) {
         m_actionsReceiveAvailableChanged.send(actionCodes);
+    });
+
+    paletteController()->isMasterPaletteOpened().ch.onReceive(this, [this](bool) {
+        m_actionsReceiveAvailableChanged.send({ MASTER_PALETTE_ACTION_CODE });
+    });
+
+    notationPageState()->panelsVisibleChanged().onReceive(this, [this](const PanelTypeList& panels) {
+        ActionCodeList changedCodes;
+        for (PanelType panelType: panels) {
+            changedCodes.push_back(panelTypeActionCode(panelType));
+        }
+        m_actionsReceiveAvailableChanged.send(changedCodes);
+    });
+
+    applicationController()->isFullScreen().ch.onReceive(this, [this](bool) {
+        m_actionsReceiveAvailableChanged.send({ FULLSCREEN_ACTION_CODE });
     });
 }
 
 bool ViewMenuController::contains(const ActionCode& actionCode) const
 {
-    std::map<ActionCode, AvailableCallback> actions = this->actions();
-    return actions.find(actionCode) != actions.end();
+    return notationControllerContains(actionCode)
+           || paletteControllerContains(actionCode)
+           || applicationControllerContains(actionCode);
 }
 
-bool ViewMenuController::actionAvailable(const ActionCode& actionCode) const
+ActionState ViewMenuController::actionState(const ActionCode& actionCode) const
 {
-    std::map<ActionCode, AvailableCallback> actions = this->actions();
+    ActionState state;
+    state.enabled = actionEnabled(actionCode);
+    state.checkable = actionCheckable(actionCode);
+    state.checked = actionChecked(actionCode);
 
-    if (actions.find(actionCode) == actions.end()) {
-        return false;
-    }
-
-    return actions[actionCode]();
+    return state;
 }
 
 mu::async::Channel<ActionCodeList> ViewMenuController::actionsAvailableChanged() const
@@ -62,85 +110,214 @@ mu::async::Channel<ActionCodeList> ViewMenuController::actionsAvailableChanged()
     return m_actionsReceiveAvailableChanged;
 }
 
-std::map<ActionCode, ViewMenuController::AvailableCallback> ViewMenuController::actions() const
+IMasterNotationPtr ViewMenuController::currentMasterNotation() const
 {
-    static std::map<ActionCode, AvailableCallback> _actions = {
-        { "toggle-palette", std::bind(&ViewMenuController::isPanelAvailable, this, PanelType::Palette) },
-        { "toggle-instruments", std::bind(&ViewMenuController::isPanelAvailable, this, PanelType::Instruments) },
-        { "masterpalette", std::bind(&ViewMenuController::isMasterPaletteAvailable, this) },
-        { "inspector", std::bind(&ViewMenuController::isPanelAvailable, this, PanelType::Inspector) },
-        { "toggle-navigator", std::bind(&ViewMenuController::isPanelAvailable, this, PanelType::NotationNavigator) },
-        { "toggle-timeline", std::bind(&ViewMenuController::isPanelAvailable, this, PanelType::TimeLine) },
-        { "toggle-mixer", std::bind(&ViewMenuController::isPanelAvailable, this, PanelType::Mixer) },
-        { "synth-control", std::bind(&ViewMenuController::isPanelAvailable, this, PanelType::Synthesizer) },
-        { "toggle-selection-window", std::bind(&ViewMenuController::isPanelAvailable, this, PanelType::SelectionFilter) },
-        { "toggle-piano", std::bind(&ViewMenuController::isPanelAvailable, this, PanelType::Piano) },
-        { "toggle-scorecmp-tool", std::bind(&ViewMenuController::isPanelAvailable, this, PanelType::ComparisonTool) },
-        { "zoomin", std::bind(&ViewMenuController::isZoomInAvailable, this) },
-        { "zoomout", std::bind(&ViewMenuController::isZoomInAvailable, this) },
-        { "toggle-transport", std::bind(&ViewMenuController::isPanelAvailable, this, PanelType::PlaybackToolBar) },
-        { "toggle-noteinput", std::bind(&ViewMenuController::isPanelAvailable, this, PanelType::NoteInputBar) },
-        { "toggle-notationtoolbar", std::bind(&ViewMenuController::isPanelAvailable, this, PanelType::NotationToolBar) },
-        { "toggle-undoredo", std::bind(&ViewMenuController::isPanelAvailable, this, PanelType::UndoRedoToolBar) },
-        { "toggle-statusbar", std::bind(&ViewMenuController::isPanelAvailable, this, PanelType::NotationStatusBar) },
-        { "split-h", std::bind(&ViewMenuController::isSplitAvailable, this, framework::Orientation::Horizontal) },
-        { "split-v", std::bind(&ViewMenuController::isSplitAvailable, this, framework::Orientation::Vertical) },
-        { "show-invisible", std::bind(&ViewMenuController::isScoreConfigAvailable, this,ScoreConfigType::ShowInvisibleElements) },
-        { "show-unprintable", std::bind(&ViewMenuController::isScoreConfigAvailable, this, ScoreConfigType::ShowUnprintableElements) },
-        { "show-frames", std::bind(&ViewMenuController::isScoreConfigAvailable, this,ScoreConfigType::ShowFrames) },
-        { "show-pageborders", std::bind(&ViewMenuController::isScoreConfigAvailable, this,ScoreConfigType::ShowPageMargins) },
-        { "mark-irregular", std::bind(&ViewMenuController::isScoreConfigAvailable, this,ScoreConfigType::MarkIrregularMeasures) },
-        { "fullscreen", std::bind(&ViewMenuController::isFullScreenAvailable, this) }
+    return globalContext()->currentMasterNotation();
+}
+
+INotationPtr ViewMenuController::currentNotation() const
+{
+    return currentMasterNotation() ? currentMasterNotation()->notation() : nullptr;
+}
+
+INotationInteractionPtr ViewMenuController::notationInteraction() const
+{
+    return currentNotation() ? currentNotation()->interaction() : nullptr;
+}
+
+ActionCodeList ViewMenuController::notationControllerActions() const
+{
+    ActionCodeList actions = zoomActionCodes;
+    actions.insert(actions.end(), scoreConfigActionCodes.begin(), scoreConfigActionCodes.end());
+
+    return actions;
+}
+
+ActionCodeList ViewMenuController::paletteControllerActions() const
+{
+    static ActionCodeList actions = {
+        MASTER_PALETTE_ACTION_CODE
     };
 
-    return _actions;
+    return actions;
 }
 
-bool ViewMenuController::isPanelAvailable(PanelType panelType) const
+ActionCodeList ViewMenuController::applicationControllerActions() const
 {
-    return applicationController()->actionAvailable(panelActionCode(panelType));
+    ActionCodeList actions = {
+        "split-h",
+        "split-v",
+        FULLSCREEN_ACTION_CODE
+    };
+
+    actions.insert(actions.end(), panelsActionCodes.begin(), panelsActionCodes.end());
+
+    return actions;
 }
 
-bool ViewMenuController::isMasterPaletteAvailable() const
+bool ViewMenuController::notationControllerContains(const ActionCode& actionCode) const
 {
-    return paletteController()->actionAvailable("masterpalette");
+    ActionCodeList notationActions = notationControllerActions();
+    return std::find(notationActions.begin(), notationActions.end(), actionCode) != notationActions.end();
 }
 
-bool ViewMenuController::isZoomInAvailable() const
+bool ViewMenuController::paletteControllerContains(const ActionCode& actionCode) const
 {
-    return notationController()->actionAvailable("zoomin");
+    ActionCodeList paletteActions = paletteControllerActions();
+    return std::find(paletteActions.begin(), paletteActions.end(), actionCode) != paletteActions.end();
 }
 
-bool ViewMenuController::isZoomOutAvailable() const
+bool ViewMenuController::applicationControllerContains(const ActionCode& actionCode) const
 {
-    return notationController()->actionAvailable("zoomout");
+    ActionCodeList applicationActions = applicationControllerActions();
+    return std::find(applicationActions.begin(), applicationActions.end(), actionCode) != applicationActions.end();
 }
 
-bool ViewMenuController::isSplitAvailable(Orientation) const
+bool ViewMenuController::actionEnabled(const ActionCode& actionCode) const
 {
-    NOT_IMPLEMENTED;
+    if (notationControllerContains(actionCode)) {
+        return notationController()->actionAvailable(actionCode);
+    }
+
+    if (paletteControllerContains(actionCode)) {
+        return paletteController()->actionAvailable(actionCode);
+    }
+
+    if (applicationControllerContains(actionCode)) {
+        return applicationController()->actionAvailable(actionCode);
+    }
+
     return false;
 }
 
-bool ViewMenuController::isScoreConfigAvailable(ScoreConfigType configType) const
+bool ViewMenuController::actionCheckable(const ActionCode& actionCode) const
 {
-    return notationController()->actionAvailable(scoreConfigActionCode(configType));
-}
-
-bool ViewMenuController::isFullScreenAvailable() const
-{
-    return applicationController()->actionAvailable("fullscreen");
-}
-
-std::string ViewMenuController::scoreConfigActionCode(ScoreConfigType configType) const
-{
-    std::map<ScoreConfigType, std::string> scoreConfigStrings {
-        { ScoreConfigType::ShowInvisibleElements, "show-invisible" },
-        { ScoreConfigType::ShowUnprintableElements,"show-unprintable" },
-        { ScoreConfigType::ShowFrames,"show-frames" },
-        { ScoreConfigType::ShowPageMargins,"show-pageborders" },
-        { ScoreConfigType::MarkIrregularMeasures, "show-irregular" }
+    static ActionCodeList uncheckableActions = {
+        "configure-workspaces"
     };
 
-    return scoreConfigStrings[configType];
+    uncheckableActions.insert(uncheckableActions.end(), zoomActionCodes.begin(), zoomActionCodes.end());
+
+    return std::find(uncheckableActions.begin(), uncheckableActions.end(), actionCode) == uncheckableActions.end();
+}
+
+bool ViewMenuController::actionChecked(const ActionCode& actionCode) const
+{
+    auto panelActionCodeIt = std::find(panelsActionCodes.begin(), panelsActionCodes.end(), actionCode);
+    if (panelActionCodeIt != panelsActionCodes.end()) {
+        return isPanelVisible(panelType(actionCode));
+    }
+
+    auto scoreConfigActionCodeIt = std::find(scoreConfigActionCodes.begin(), scoreConfigActionCodes.end(), actionCode);
+    if (scoreConfigActionCodeIt != scoreConfigActionCodes.end()) {
+        return isScoreConfigChecked(scoreConfigType(actionCode));
+    }
+
+    if (FULLSCREEN_ACTION_CODE == actionCode) {
+        return isFullScreen();
+    }
+
+    if (MASTER_PALETTE_ACTION_CODE == actionCode) {
+        return isMasterPaletteOpened();
+    }
+
+    return false;
+}
+
+PanelType ViewMenuController::panelType(const ActionCode& actionCode) const
+{
+    std::map<std::string, PanelType> panelTypes {
+        { "toggle-palette", PanelType::Palette },
+        { "toggle-instruments", PanelType::Instruments },
+        { "inspector", PanelType::Inspector },
+        { "toggle-notationtoolbar", PanelType::NotationToolBar },
+        { "toggle-noteinput", PanelType::NoteInputBar },
+        { "toggle-undoredo", PanelType::UndoRedoToolBar },
+        { "toggle-navigator", PanelType::NotationNavigator },
+        { "toggle-statusbar", PanelType::NotationStatusBar },
+        { "toggle-transport", PanelType::PlaybackToolBar },
+        { "toggle-mixer", PanelType::Mixer },
+        { "toggle-timeline", PanelType::TimeLine },
+        { "synth-control", PanelType::Synthesizer },
+        { "toggle-selection-window", PanelType::SelectionFilter },
+        { "toggle-piano", PanelType::Piano },
+        { "toggle-scorecmp-tool", PanelType::ComparisonTool }
+    };
+
+    return panelTypes[actionCode];
+}
+
+ActionCode ViewMenuController::panelTypeActionCode(PanelType type) const
+{
+    switch (type) {
+    case PanelType::Palette: return "toggle-palette";
+    case PanelType::Instruments: return "toggle-instruments";
+    case PanelType::Inspector: return "inspector";
+    case PanelType::NotationToolBar: return "toggle-notationtoolbar";
+    case PanelType::NoteInputBar: return "toggle-noteinput";
+    case PanelType::UndoRedoToolBar: return "toggle-undoredo";
+    case PanelType::NotationNavigator: return "toggle-navigator";
+    case PanelType::NotationStatusBar: return "toggle-statusbar";
+    case PanelType::PlaybackToolBar: return "toggle-transport";
+    case PanelType::Mixer: return "toggle-mixer";
+    case PanelType::TimeLine: return "toggle-timeline";
+    case PanelType::Synthesizer: return "synth-control";
+    case PanelType::SelectionFilter: return "toggle-selection-window";
+    case PanelType::Piano: return "toggle-piano";
+    case PanelType::ComparisonTool: return "toggle-scorecmp-tool";
+    }
+
+    return "";
+}
+
+bool ViewMenuController::isPanelVisible(PanelType panelType) const
+{
+    return notationPageState()->isPanelVisible(panelType);
+}
+
+ScoreConfigType ViewMenuController::scoreConfigType(const ActionCode& actionCode) const
+{
+    std::map<std::string, ScoreConfigType> scoreConfigTypes {
+        { "show-invisible", ScoreConfigType::ShowInvisibleElements },
+        { "show-unprintable", ScoreConfigType::ShowUnprintableElements },
+        { "show-frames", ScoreConfigType::ShowFrames },
+        { "show-pageborders", ScoreConfigType::ShowPageMargins },
+        { "mark-irregular", ScoreConfigType::MarkIrregularMeasures },
+    };
+
+    return scoreConfigTypes[actionCode];
+}
+
+bool ViewMenuController::isScoreConfigChecked(ScoreConfigType configType) const
+{
+    auto interaction = notationInteraction();
+    if (!interaction) {
+        return false;
+    }
+
+    ScoreConfig scoreConfig = interaction->scoreConfig();
+    switch (configType) {
+    case ScoreConfigType::ShowInvisibleElements:
+        return scoreConfig.isShowInvisibleElements;
+    case ScoreConfigType::ShowUnprintableElements:
+        return scoreConfig.isShowUnprintableElements;
+    case ScoreConfigType::ShowFrames:
+        return scoreConfig.isShowFrames;
+    case ScoreConfigType::ShowPageMargins:
+        return scoreConfig.isShowPageMargins;
+    case ScoreConfigType::MarkIrregularMeasures:
+        return scoreConfig.isMarkIrregularMeasures;
+    }
+
+    return false;
+}
+
+bool ViewMenuController::isFullScreen() const
+{
+    return applicationController()->isFullScreen().val;
+}
+
+bool ViewMenuController::isMasterPaletteOpened() const
+{
+    return paletteController()->isMasterPaletteOpened().val;
 }

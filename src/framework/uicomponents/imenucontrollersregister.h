@@ -16,17 +16,25 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_APPSHELL_IEDITMENUCONTROLLER_H
-#define MU_APPSHELL_IEDITMENUCONTROLLER_H
+#ifndef MU_UICOMPONENTS_IMENUCONTROLLERSREGISTER_H
+#define MU_UICOMPONENTS_IMENUCONTROLLERSREGISTER_H
 
 #include "modularity/imoduleexport.h"
-#include "uicomponents/imenucontroller.h"
+#include "uicomponentstypes.h"
+#include "imenucontroller.h"
 
-namespace mu::appshell {
-class IEditMenuController : public uicomponents::IMenuController, MODULE_EXPORT_INTERFACE
+namespace mu::uicomponents {
+class IMenuControllersRegister : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IEditMenuController)
+    INTERFACE_ID(IMenuControllersRegister)
+
+public:
+    virtual ~IMenuControllersRegister() = default;
+
+    virtual void registerController(MenuType menuType, IMenuControllerPtr controller) = 0;
+    virtual IMenuControllerPtr controller(MenuType menuType) const = 0;
+    virtual IMenuControllerPtrList controllers() const = 0;
 };
 }
 
-#endif // MU_APPSHELL_IEDITMENUCONTROLLER_H
+#endif // MU_UICOMPONENTS_IMENUCONTROLLERSREGISTER_H

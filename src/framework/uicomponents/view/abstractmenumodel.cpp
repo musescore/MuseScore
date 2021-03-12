@@ -37,9 +37,9 @@ QVariantList AbstractMenuModel::items() const
     return menuItems;
 }
 
-bool AbstractMenuModel::actionEnabled(const actions::ActionCode&) const
+ActionState AbstractMenuModel::actionState(const ActionCode&) const
 {
-    return true;
+    return ActionState();
 }
 
 void AbstractMenuModel::clear()
@@ -95,25 +95,16 @@ MenuItem AbstractMenuModel::makeAction(const ActionCode& actionCode) const
     }
 
     MenuItem item = action;
-    item.enabled = actionEnabled(actionCode);
+
+    ActionState actionState = this->actionState(actionCode);
+    item.enabled = actionState.enabled;
+    item.checkable = actionState.checkable;
+    item.checked = actionState.checked;
 
     shortcuts::Shortcut shortcut = shortcutsRegister()->shortcut(action.code);
     if (shortcut.isValid()) {
         item.shortcut = shortcut.sequence;
     }
-
-    return item;
-}
-
-MenuItem AbstractMenuModel::makeAction(const ActionCode& actionCode, bool checked) const
-{
-    MenuItem item = makeAction(actionCode);
-    if (!item.isValid()) {
-        return item;
-    }
-
-    item.checkable = true;
-    item.checked = checked;
 
     return item;
 }
@@ -125,7 +116,7 @@ MenuItem AbstractMenuModel::makeSeparator() const
     return item;
 }
 
-void AbstractMenuModel::updateItemsEnabled(const std::vector<ActionCode>& actionCodes)
+void AbstractMenuModel::updateItemsState(const ActionCodeList& actionCodes)
 {
     if (actionCodes.empty()) {
         return;
@@ -134,7 +125,10 @@ void AbstractMenuModel::updateItemsEnabled(const std::vector<ActionCode>& action
     for (const ActionCode& actionCode: actionCodes) {
         MenuItem& actionItem = findItem(actionCode);
         if (actionItem.isValid()) {
-            actionItem.enabled = actionEnabled(actionCode);
+            ActionState actionState = this->actionState(actionCode);
+            actionItem.enabled = actionState.enabled;
+            actionItem.checkable = actionState.checkable;
+            actionItem.checked = actionState.checked;
         }
     }
 

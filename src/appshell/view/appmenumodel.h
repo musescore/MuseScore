@@ -26,23 +26,12 @@
 #include "async/asyncable.h"
 #include "actions/iactionsdispatcher.h"
 #include "uicomponents/uicomponentstypes.h"
-#include "context/iglobalcontext.h"
 #include "workspace/iworkspacemanager.h"
-#include "palette/ipaletteactionscontroller.h"
 #include "iappshellconfiguration.h"
 #include "userscores/iuserscoresservice.h"
-#include "iapplicationactioncontroller.h"
-#include "inotationpagestate.h"
-
-#include "ifilemenucontroller.h"
-#include "ieditmenucontroller.h"
-#include "iviewmenucontroller.h"
-#include "notation/iaddmenucontroller.h"
-#include "iformatmenucontroller.h"
-#include "itoolsmenucontroller.h"
-#include "ihelpmenucontroller.h"
 
 #include "uicomponents/view/abstractmenumodel.h"
+#include "uicomponents/imenucontrollersregister.h"
 
 namespace mu::appshell {
 class AppMenuModel : public uicomponents::AbstractMenuModel, public async::Asyncable
@@ -50,21 +39,11 @@ class AppMenuModel : public uicomponents::AbstractMenuModel, public async::Async
     Q_OBJECT
 
     INJECT(appshell, actions::IActionsDispatcher, actionsDispatcher)
-    INJECT(appshell, context::IGlobalContext, globalContext)
     INJECT(appshell, workspace::IWorkspaceManager, workspacesManager)
-    INJECT(appshell, palette::IPaletteActionsController, paletteController)
     INJECT(appshell, IAppShellConfiguration, configuration)
     INJECT(appshell, userscores::IUserScoresService, userScoresService)
-    INJECT(appshell, IApplicationActionController, controller)
-    INJECT(appshell, INotationPageState, notationPageState)
 
-    INJECT(appshell, IFileMenuController, fileMenuController)
-    INJECT(appshell, IEditMenuController, editMenuController)
-    INJECT(appshell, IViewMenuController, viewMenuController)
-    INJECT(appshell, notation::IAddMenuController, addMenuController)
-    INJECT(appshell, IFormatMenuController, formatMenuController)
-    INJECT(appshell, IToolsMenuController, toolsMenuController)
-    INJECT(appshell, IHelpMenuController, helpMenuController)
+    INJECT(appshell, uicomponents::IMenuControllersRegister, menuControllersRegister)
 
 public:
     explicit AppMenuModel(QObject* parent = nullptr);
@@ -72,14 +51,9 @@ public:
     Q_INVOKABLE void load();
     Q_INVOKABLE void handleAction(const QString& actionCodeStr, int actionIndex);
 
-    bool actionEnabled(const actions::ActionCode& actionCode) const override;
+    uicomponents::ActionState actionState(const actions::ActionCode& actionCode) const override;
 
 private:
-    notation::IMasterNotationPtr currentMasterNotation() const;
-    notation::INotationPtr currentNotation() const;
-    notation::INotationInteractionPtr notationInteraction() const;
-    notation::INotationNoteInputPtr notationNoteInput() const;
-
     void setupConnections();
 
     uicomponents::MenuItem fileItem() const;
@@ -100,11 +74,6 @@ private:
     uicomponents::MenuItemList linesItems() const;
     uicomponents::MenuItemList toolbarsItems() const;
     uicomponents::MenuItemList workspacesItems() const;
-
-    bool isPanelVisible(PanelType type) const;
-    bool isNoteInputMode() const;
-
-    notation::ScoreConfig scoreConfig() const;
 };
 }
 

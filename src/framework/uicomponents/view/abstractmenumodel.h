@@ -44,7 +44,7 @@ public:
 
     QVariantList items() const;
 
-    virtual bool actionEnabled(const actions::ActionCode& actionCode) const;
+    virtual ActionState actionState(const actions::ActionCode& actionCode) const;
 
 signals:
     void itemsChanged();
@@ -60,10 +60,9 @@ protected:
     MenuItem makeMenu(const std::string& title, const MenuItemList& actions, bool enabled = true,
                       const actions::ActionCode& menuActionCode = "") const;
     MenuItem makeAction(const actions::ActionCode& actionCode) const;
-    MenuItem makeAction(const actions::ActionCode& actionCode, bool checked) const;
     MenuItem makeSeparator() const;
 
-    void updateItemsEnabled(const std::vector<actions::ActionCode>& actionCodes);
+    void updateItemsState(const actions::ActionCodeList& actionCodes);
 
 private:
     MenuItem& item(MenuItemList& items, const actions::ActionCode& actionCode);
