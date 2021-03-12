@@ -282,7 +282,7 @@ ScoreConfigType ViewMenuController::scoreConfigType(const ActionCode& actionCode
         { "show-unprintable", ScoreConfigType::ShowUnprintableElements },
         { "show-frames", ScoreConfigType::ShowFrames },
         { "show-pageborders", ScoreConfigType::ShowPageMargins },
-        { "mark-irregular", ScoreConfigType::MarkIrregularMeasures },
+        { "show-irregular", ScoreConfigType::MarkIrregularMeasures },
     };
 
     return scoreConfigTypes[actionCode];
