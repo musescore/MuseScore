@@ -22,6 +22,7 @@
 #include "modularity/imoduleexport.h"
 #include "actions/actiontypes.h"
 #include "async/channel.h"
+#include "uicomponentstypes.h"
 
 namespace mu::uicomponents {
 class IMenuController
@@ -30,10 +31,13 @@ public:
     virtual ~IMenuController() = default;
 
     virtual bool contains(const actions::ActionCode& actionCode) const = 0;
+    virtual ActionState actionState(const actions::ActionCode& actionCode) const = 0;
 
-    virtual bool actionAvailable(const actions::ActionCode& actionCode) const = 0;
     virtual async::Channel<actions::ActionCodeList> actionsAvailableChanged() const = 0;
 };
+
+using IMenuControllerPtr = std::shared_ptr<IMenuController>;
+using IMenuControllerPtrList = std::vector<IMenuControllerPtr>;
 }
 
 #endif // MU_UICOMPONENTS_IMENUCONTROLLER_H

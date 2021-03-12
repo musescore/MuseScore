@@ -66,10 +66,13 @@
 #include "view/notationcontextmenu.h"
 #include "view/internal/undoredomodel.h"
 
+#include "uicomponents/imenucontrollersregister.h"
+
 using namespace mu::notation;
 using namespace mu::framework;
 using namespace mu::ui;
 using namespace mu::actions;
+using namespace mu::uicomponents;
 
 static std::shared_ptr<NotationConfiguration> s_configuration = std::make_shared<NotationConfiguration>();
 static std::shared_ptr<NotationActionController> s_actionController = std::make_shared<NotationActionController>();
@@ -93,7 +96,6 @@ void NotationModule::registerExports()
     ioc()->registerExport<IMsczMetaReader>(moduleName(), new MsczMetaReader());
     ioc()->registerExport<INotationContextMenu>(moduleName(), new NotationContextMenu());
     ioc()->registerExport<INotationActionsController>(moduleName(), s_actionController);
-    ioc()->registerExport<IAddMenuController>(moduleName(), s_addMenuController);
 
     std::shared_ptr<INotationReadersRegister> readers = std::make_shared<NotationReadersRegister>();
     readers->reg({ "mscz", "mscx" }, std::make_shared<MsczNotationReader>());
@@ -145,6 +147,11 @@ void NotationModule::resolveImports()
 
         ir->registerUri(Uri("musescore://notation/selectmeasurescount"),
                         ContainerMeta(ContainerType::QmlDialog, "MuseScore/NotationScene/SelectMeasuresCountDialog.qml"));
+    }
+
+    auto mcr = ioc()->resolve<IMenuControllersRegister>(moduleName());
+    if (mcr) {
+        mcr->registerController(MenuType::Add, s_addMenuController);
     }
 }
 

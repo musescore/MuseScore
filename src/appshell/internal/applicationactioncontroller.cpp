@@ -53,7 +53,8 @@ mu::ValCh<bool> ApplicationActionController::isFullScreen() const
 {
     ValCh<bool> result;
     result.ch = m_fullScreenChannel;
-    result.val = mainWindow()->qMainWindow() ? mainWindow()->qMainWindow()->isFullScreen() : false;
+    // todo
+//    result.val = mainWindow()->qMainWindow() ? mainWindow()->qMainWindow()->isFullScreen() : false;
     return result;
 }
 

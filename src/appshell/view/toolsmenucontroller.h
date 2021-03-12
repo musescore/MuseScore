@@ -23,10 +23,10 @@
 #include "async/asyncable.h"
 #include "notation/inotationactionscontroller.h"
 
-#include "itoolsmenucontroller.h"
+#include "uicomponents/imenucontroller.h"
 
 namespace mu::appshell {
-class ToolsMenuController : public IToolsMenuController, public async::Asyncable
+class ToolsMenuController : public uicomponents::IMenuController, public async::Asyncable
 {
     INJECT(appshell, notation::INotationActionsController, controller)
 
@@ -34,31 +34,14 @@ public:
     void init();
 
     bool contains(const actions::ActionCode& actionCode) const override;
+    uicomponents::ActionState actionState(const actions::ActionCode& actionCode) const override;
 
-    bool actionAvailable(const actions::ActionCode& actionCode) const override;
     async::Channel<actions::ActionCodeList> actionsAvailableChanged() const override;
 
 private:
-    using AvailableCallback = std::function<bool ()>;
-    std::map<actions::ActionCode, AvailableCallback> actions() const;
+    actions::ActionCodeList actions() const;
 
-    bool isVoiceAvailable(int voiceIndex1, int voiceIndex2) const;
-    bool isSplitMeasureAvailable() const;
-    bool isJoinMeasuresAvailable() const;
-    bool isTransposeAvailable() const;
-    bool isExplodeAvailable() const;
-    bool isImplodeAvailable() const;
-    bool isRealizeSelectedChordSymbolsAvailable() const;
-    bool isRemoveSelectedRangeAvailable() const;
-    bool isRemoveEmptyTrailingMeasuresAvailable() const;
-    bool isFillSelectionWithSlashesAvailable() const;
-    bool isReplaceSelectedNotesWithSlashesAvailable() const;
-    bool isSpellPitchesAvailable() const;
-    bool isRegroupNotesAndRestsAvailable() const;
-    bool isResequenceRehearsalMarksAvailable() const;
-    bool isUnrollRepeatsAvailable() const;
-    bool isCopyLyricsAvailable() const;
-    bool isFotomodeAvailable() const;
+    bool actionEnabled(const actions::ActionCode& actionCode) const;
 
     async::Channel<actions::ActionCodeList> m_actionsReceiveAvailableChanged;
 };

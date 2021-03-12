@@ -60,88 +60,24 @@ void AppMenuModel::handleAction(const QString& actionCodeStr, int actionIndex)
     actionsDispatcher()->dispatch(actionCode, menuItem.args);
 }
 
-bool AppMenuModel::actionEnabled(const ActionCode& actionCode) const
+ActionState AppMenuModel::actionState(const ActionCode& actionCode) const
 {
-    if (fileMenuController()->contains(actionCode)) {
-        return fileMenuController()->actionAvailable(actionCode);
+    for (IMenuControllerPtr controller: menuControllersRegister()->controllers()) {
+        if (controller->contains(actionCode)) {
+            return controller->actionState(actionCode);
+        }
     }
 
-    if (editMenuController()->contains(actionCode)) {
-        return editMenuController()->actionAvailable(actionCode);
-    }
-
-    if (viewMenuController()->contains(actionCode)) {
-        return viewMenuController()->actionAvailable(actionCode);
-    }
-
-    if (addMenuController()->contains(actionCode)) {
-        return addMenuController()->actionAvailable(actionCode);
-    }
-
-    if (formatMenuController()->contains(actionCode)) {
-        return formatMenuController()->actionAvailable(actionCode);
-    }
-
-    if (toolsMenuController()->contains(actionCode)) {
-        return toolsMenuController()->actionAvailable(actionCode);
-    }
-
-    if (helpMenuController()->contains(actionCode)) {
-        return helpMenuController()->actionAvailable(actionCode);
-    }
-
-    return false;
-}
-
-IMasterNotationPtr AppMenuModel::currentMasterNotation() const
-{
-    return globalContext()->currentMasterNotation();
-}
-
-INotationPtr AppMenuModel::currentNotation() const
-{
-    return currentMasterNotation() ? currentMasterNotation()->notation() : nullptr;
-}
-
-INotationInteractionPtr AppMenuModel::notationInteraction() const
-{
-    return currentNotation() ? currentNotation()->interaction() : nullptr;
-}
-
-INotationNoteInputPtr AppMenuModel::notationNoteInput() const
-{
-    return notationInteraction() ? notationInteraction()->noteInput() : nullptr;
+    return ActionState();
 }
 
 void AppMenuModel::setupConnections()
 {
-    fileMenuController()->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
-        updateItemsEnabled(actionCodes);
-    });
-
-    editMenuController()->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
-        updateItemsEnabled(actionCodes);
-    });
-
-    viewMenuController()->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
-        updateItemsEnabled(actionCodes);
-    });
-
-    addMenuController()->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
-        updateItemsEnabled(actionCodes);
-    });
-
-    formatMenuController()->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
-        updateItemsEnabled(actionCodes);
-    });
-
-    toolsMenuController()->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
-        updateItemsEnabled(actionCodes);
-    });
-
-    helpMenuController()->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
-        updateItemsEnabled(actionCodes);
-    });
+    for (IMenuControllerPtr controller: menuControllersRegister()->controllers()) {
+        controller->actionsAvailableChanged().onReceive(this, [this](const std::vector<actions::ActionCode>& actionCodes) {
+            updateItemsState(actionCodes);
+        });
+    }
 
     userScoresService()->recentScoreList().ch.onReceive(this, [this](const MetaList&) {
         MenuItem& recentScoreListItem = findMenu("file-open");
@@ -149,42 +85,10 @@ void AppMenuModel::setupConnections()
         emit itemsChanged();
     });
 
-    paletteController()->isMasterPaletteOpened().ch.onReceive(this, [this](bool openned) {
-        MenuItem& menuItem = findItem("masterpalette");
-        menuItem.checked = openned;
-        emit itemsChanged();
-    });
-
-    notationPageState()->panelsVisibleChanged().onReceive(this, [this](const PanelTypeList& panels) {
-        for (PanelType panelType: panels) {
-            MenuItem& menuItem = findItem(panelActionCode(panelType));
-            menuItem.checked = isPanelVisible(panelType);
-        }
-        emit itemsChanged();
-    });
-
-    controller()->isFullScreen().ch.onReceive(this, [this](bool isfullScreen) {
-        MenuItem& menuItem = findItem("fullscreen");
-        menuItem.checked = isfullScreen;
-        emit itemsChanged();
-    });
-
     workspacesManager()->currentWorkspace().ch.onReceive(this, [this](const IWorkspacePtr&) {
         MenuItem& workspacesItem = findMenu("select-workspace");
         workspacesItem.subitems = workspacesItems();
         emit itemsChanged();
-    });
-
-    globalContext()->currentNotationChanged().onNotify(this, [this]() {
-        if (!notationNoteInput()) {
-            return;
-        }
-
-        notationNoteInput()->stateChanged().onNotify(this, [this]() {
-            MenuItem& menuItem = findItem("note-input");
-            menuItem.checked = isNoteInputMode();
-            emit itemsChanged();
-        });
     });
 }
 
@@ -246,35 +150,35 @@ MenuItem AppMenuModel::editItem() const
 MenuItem AppMenuModel::viewItem() const
 {
     MenuItemList viewItems {
-        makeAction("toggle-palette", isPanelVisible(PanelType::Palette)),
-        makeAction("toggle-instruments", isPanelVisible(PanelType::Instruments)),
-        makeAction("masterpalette", paletteController()->isMasterPaletteOpened().val),
-        makeAction("inspector", isPanelVisible(PanelType::Inspector)),
-        makeAction("toggle-navigator", isPanelVisible(PanelType::NotationNavigator)),
-        makeAction("toggle-timeline", isPanelVisible(PanelType::TimeLine)), // need implement
-        makeAction("toggle-mixer", isPanelVisible(PanelType::Mixer)), // need implement
-        makeAction("synth-control", isPanelVisible(PanelType::Synthesizer)), // need implement
-        makeAction("toggle-selection-window", isPanelVisible(PanelType::SelectionFilter)), // need implement
-        makeAction("toggle-piano", isPanelVisible(PanelType::Piano)), // need implement
-        makeAction("toggle-scorecmp-tool", isPanelVisible(PanelType::ComparisonTool)), // need implement
+        makeAction("toggle-palette"),
+        makeAction("toggle-instruments"),
+        makeAction("masterpalette"),
+        makeAction("inspector"),
+        makeAction("toggle-navigator"),
+        makeAction("toggle-timeline"), // need implement
+        makeAction("toggle-mixer"), // need implement
+        makeAction("synth-control"), // need implement
+        makeAction("toggle-selection-window"), // need implement
+        makeAction("toggle-piano"), // need implement
+        makeAction("toggle-scorecmp-tool"), // need implement
         makeSeparator(),
         makeAction("zoomin"),
         makeAction("zoomout"),
         makeSeparator(),
         makeMenu(trc("appshell", "&Toolbars"), toolbarsItems()),
         makeMenu(trc("appshell", "W&orkspaces"), workspacesItems(), true, "select-workspace"),
-        makeAction("toggle-statusbar", isPanelVisible(PanelType::NotationStatusBar)),
+        makeAction("toggle-statusbar"),
         makeSeparator(),
-        makeAction("split-h", false), // need implement
-        makeAction("split-v", false), // need implement
+        makeAction("split-h"), // need implement
+        makeAction("split-v"), // need implement
         makeSeparator(),
-        makeAction("show-invisible", scoreConfig().isShowInvisibleElements),
-        makeAction("show-unprintable", scoreConfig().isShowUnprintableElements),
-        makeAction("show-frames", scoreConfig().isShowFrames),
-        makeAction("show-pageborders", scoreConfig().isShowPageMargins),
-        makeAction("mark-irregular", scoreConfig().isMarkIrregularMeasures),
+        makeAction("show-invisible"),
+        makeAction("show-unprintable"),
+        makeAction("show-frames"),
+        makeAction("show-pageborders"),
+        makeAction("mark-irregular"),
         makeSeparator(),
-        makeAction("fullscreen", controller()->isFullScreen().val)
+        makeAction("fullscreen")
     };
 
     return makeMenu(trc("appshell", "&View"), viewItems);
@@ -416,7 +320,7 @@ MenuItemList AppMenuModel::recentScores() const
 MenuItemList AppMenuModel::notesItems() const
 {
     MenuItemList items {
-        makeAction("note-input", isNoteInputMode()),
+        makeAction("note-input"),
         makeSeparator(),
         makeAction("note-c"),
         makeAction("note-d"),
@@ -554,10 +458,10 @@ MenuItemList AppMenuModel::linesItems() const
 MenuItemList AppMenuModel::toolbarsItems() const
 {
     MenuItemList items {
-        makeAction("toggle-transport", isPanelVisible(PanelType::PlaybackToolBar)),
-        makeAction("toggle-noteinput", isPanelVisible(PanelType::NoteInputBar)),
-        makeAction("toggle-notationtoolbar", isPanelVisible(PanelType::NotationToolBar)),
-        makeAction("toggle-undoredo", isPanelVisible(PanelType::UndoRedoToolBar))
+        makeAction("toggle-transport"),
+        makeAction("toggle-noteinput"),
+        makeAction("toggle-notationtoolbar"),
+        makeAction("toggle-undoredo")
     };
 
     return items;
@@ -595,19 +499,4 @@ MenuItemList AppMenuModel::workspacesItems() const
           << makeAction("configure-workspaces");
 
     return items;
-}
-
-bool AppMenuModel::isPanelVisible(PanelType type) const
-{
-    return notationPageState()->isPanelVisible(type);
-}
-
-bool AppMenuModel::isNoteInputMode() const
-{
-    return notationNoteInput() ? notationNoteInput()->isNoteInputMode() : false;
-}
-
-ScoreConfig AppMenuModel::scoreConfig() const
-{
-    return currentNotation() ? currentNotation()->interaction()->scoreConfig() : ScoreConfig();
 }

@@ -23,10 +23,10 @@
 #include "async/asyncable.h"
 #include "../iapplicationactioncontroller.h"
 
-#include "ihelpmenucontroller.h"
+#include "uicomponents/imenucontroller.h"
 
 namespace mu::appshell {
-class HelpMenuController : public IHelpMenuController, public async::Asyncable
+class HelpMenuController : public uicomponents::IMenuController, public async::Asyncable
 {
     INJECT(appshell, IApplicationActionController, controller)
 
@@ -34,27 +34,15 @@ public:
     void init();
 
     bool contains(const actions::ActionCode& actionCode) const override;
+    uicomponents::ActionState actionState(const actions::ActionCode& actionCode) const override;
 
-    bool actionAvailable(const actions::ActionCode& actionCode) const override;
     async::Channel<actions::ActionCodeList> actionsAvailableChanged() const override;
 
 private:
-    using AvailableCallback = std::function<bool ()>;
-    std::map<actions::ActionCode, AvailableCallback> actions() const;
+    actions::ActionCodeList actions() const;
 
-    bool isShowToursAvailable() const;
-    bool isResetToursAvailable()const;
-    bool isOnlineHandbookAvailable() const;
-    bool isAboutAvailable() const;
-    bool isAboutQtAvailable() const;
-    bool isAboutMusicXMLAVailable() const;
-    bool isCheckUpdateAvailable() const;
-    bool isAskForHelpAvailable() const;
-    bool isBugReportAvailable() const;
-    bool isLeaveFeedbackAvailable() const;
-    bool isRevertToFactorySettingsAvailable() const;
+    bool actionEnabled(const actions::ActionCode& actionCode) const;
 
-private:
     async::Channel<actions::ActionCodeList> m_actionsReceiveAvailableChanged;
 };
 }

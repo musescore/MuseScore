@@ -18,10 +18,9 @@
 //=============================================================================
 #include "helpmenucontroller.h"
 
-#include "log.h"
-
 using namespace mu::appshell;
 using namespace mu::actions;
+using namespace mu::uicomponents;
 
 void HelpMenuController::init()
 {
@@ -32,19 +31,16 @@ void HelpMenuController::init()
 
 bool HelpMenuController::contains(const ActionCode& actionCode) const
 {
-    std::map<ActionCode, AvailableCallback> actions = this->actions();
-    return actions.find(actionCode) != actions.end();
+    ActionCodeList actions = this->actions();
+    return std::find(actions.begin(), actions.end(), actionCode) != actions.end();
 }
 
-bool HelpMenuController::actionAvailable(const ActionCode& actionCode) const
+ActionState HelpMenuController::actionState(const ActionCode& actionCode) const
 {
-    std::map<ActionCode, AvailableCallback> actions = this->actions();
+    ActionState state;
+    state.enabled = actionEnabled(actionCode);
 
-    if (actions.find(actionCode) == actions.end()) {
-        return false;
-    }
-
-    return actions[actionCode]();
+    return state;
 }
 
 mu::async::Channel<mu::actions::ActionCodeList> HelpMenuController::actionsAvailableChanged() const
@@ -52,76 +48,26 @@ mu::async::Channel<mu::actions::ActionCodeList> HelpMenuController::actionsAvail
     return m_actionsReceiveAvailableChanged;
 }
 
-std::map<ActionCode, HelpMenuController::AvailableCallback> HelpMenuController::actions() const
+ActionCodeList HelpMenuController::actions() const
 {
-    static std::map<ActionCode, AvailableCallback> _actions = {
-        { "show-tours", std::bind(&HelpMenuController::isShowToursAvailable, this) },
-        { "reset-tours", std::bind(&HelpMenuController::isResetToursAvailable, this) },
-        { "online-handbook", std::bind(&HelpMenuController::isOnlineHandbookAvailable, this) },
-        { "about", std::bind(&HelpMenuController::isAboutAvailable, this) },
-        { "about-qt", std::bind(&HelpMenuController::isAboutQtAvailable, this) },
-        { "about-musicxml", std::bind(&HelpMenuController::isAboutMusicXMLAVailable, this) },
-        { "check-update", std::bind(&HelpMenuController::isCheckUpdateAvailable, this) },
-        { "ask-help", std::bind(&HelpMenuController::isAskForHelpAvailable, this) },
-        { "report-bug", std::bind(&HelpMenuController::isBugReportAvailable, this) },
-        { "leave-feedback", std::bind(&HelpMenuController::isLeaveFeedbackAvailable, this) },
-        { "revert-factory", std::bind(&HelpMenuController::isRevertToFactorySettingsAvailable, this) }
+    static ActionCodeList actions = {
+        "show-tours",
+        "reset-tours",
+        "online-handbook",
+        "about",
+        "about-qt",
+        "about-musicxml",
+        "check-update",
+        "ask-help",
+        "report-bug",
+        "leave-feedback",
+        "revert-factory"
     };
 
-    return _actions;
+    return actions;
 }
 
-bool HelpMenuController::isShowToursAvailable() const
+bool HelpMenuController::actionEnabled(const ActionCode& actionCode) const
 {
-    return controller()->actionAvailable("show-tours");
-}
-
-bool HelpMenuController::isResetToursAvailable() const
-{
-    return controller()->actionAvailable("reset-tours");
-}
-
-bool HelpMenuController::isOnlineHandbookAvailable() const
-{
-    return controller()->actionAvailable("online-handbook");
-}
-
-bool HelpMenuController::isAboutAvailable() const
-{
-    return controller()->actionAvailable("about");
-}
-
-bool HelpMenuController::isAboutQtAvailable() const
-{
-    return controller()->actionAvailable("about-qt");
-}
-
-bool HelpMenuController::isAboutMusicXMLAVailable() const
-{
-    return controller()->actionAvailable("about-musicxml");
-}
-
-bool HelpMenuController::isCheckUpdateAvailable() const
-{
-    return controller()->actionAvailable("check-update");
-}
-
-bool HelpMenuController::isAskForHelpAvailable() const
-{
-    return controller()->actionAvailable("ask-help");
-}
-
-bool HelpMenuController::isBugReportAvailable() const
-{
-    return controller()->actionAvailable("report-bug");
-}
-
-bool HelpMenuController::isLeaveFeedbackAvailable() const
-{
-    return controller()->actionAvailable("leave-feedback");
-}
-
-bool HelpMenuController::isRevertToFactorySettingsAvailable() const
-{
-    return controller()->actionAvailable("revert-factory");
+    return controller()->actionAvailable(actionCode);
 }

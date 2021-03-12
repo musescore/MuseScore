@@ -40,29 +40,6 @@ enum class PanelType
     ComparisonTool
 };
 using PanelTypeList = std::vector<PanelType>;
-
-inline std::string panelActionCode(PanelType panelType)
-{
-    switch (panelType) {
-    case PanelType::Palette: return "toggle-palette";
-    case PanelType::Instruments: return "toggle-instruments";
-    case PanelType::Inspector: return "inspector";
-    case PanelType::NotationToolBar: return "toggle-notationtoolbar";
-    case PanelType::NoteInputBar: return "toggle-noteinput";
-    case PanelType::UndoRedoToolBar: return "toggle-undoredo";
-    case PanelType::NotationNavigator: return "toggle-navigator";
-    case PanelType::NotationStatusBar: return "toggle-statusbar";
-    case PanelType::PlaybackToolBar: return "toggle-transport";
-    case PanelType::Mixer: return "toggle-mixer";
-    case PanelType::TimeLine: return "toggle-timeline";
-    case PanelType::Synthesizer: return "synth-control";
-    case PanelType::SelectionFilter: return "toggle-selection-window";
-    case PanelType::Piano: return "toggle-piano";
-    case PanelType::ComparisonTool: return "toggle-scorecmp-tool";
-    }
-
-    return "";
-}
 }
 
 #endif // MU_APPSHELL_APPSHELLTYPES_H

@@ -22,43 +22,35 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "../inotationactionscontroller.h"
-#include "../notationtypes.h"
-#include "../iaddmenucontroller.h"
+#include "context/iglobalcontext.h"
+
+#include "uicomponents/imenucontroller.h"
 
 namespace mu::notation {
-class AddMenuController : public IAddMenuController, public async::Asyncable
+class AddMenuController : public uicomponents::IMenuController, public async::Asyncable
 {
     INJECT(notation, INotationActionsController, controller)
+    INJECT(notation, context::IGlobalContext, globalContext)
 
 public:
     void init();
 
     bool contains(const actions::ActionCode& actionCode) const override;
+    uicomponents::ActionState actionState(const actions::ActionCode& actionCode) const override;
 
-    bool actionAvailable(const actions::ActionCode& actionCode) const override;
     async::Channel<actions::ActionCodeList> actionsAvailableChanged() const override;
 
 private:
-    using AvailableCallback = std::function<bool ()>;
-    std::map<actions::ActionCode, AvailableCallback> actions() const;
+    IMasterNotationPtr currentMasterNotation() const;
+    INotationPtr currentNotation() const;
+    INotationInteractionPtr notationInteraction() const;
+    INotationNoteInputPtr notationNoteInput() const;
 
-    bool isNoteInputAvailable() const;
-    bool isNoteAvailable(NoteName noteName, NoteAddingMode addingMode) const;
-    bool isIntervalAvailable(int interval, IntervalType intervalType) const;
-    bool isTupletAvailable(TupletType tupletType) const;
-    bool isTupletDialogAvailable() const;
-    bool isMeasuresAvailable(ElementChangeOperation operation, int count) const;
-    bool isBoxAvailable(ElementChangeOperation operation, BoxType boxType) const;
-    bool isTextAvailable(TextType textType) const;
-    bool isFiguredBassAvailable() const;
-    bool isSlurAvailable() const;
-    bool isHarpinAvailable(HairpinType hairpinType) const;
-    bool isOttavaAvailable(OttavaType ottavaType) const;
-    bool isNoteLineAvailable() const;
+    actions::ActionCodeList actions() const;
 
-    std::string noteAddingModeActionCode(NoteAddingMode mode) const;
-    std::string intervalTypeActionCode(IntervalType type) const;
-    std::string measuresActionCode(int count) const;
+    bool actionEnabled(const actions::ActionCode& actionCode) const;
+    bool actionCheckable(const actions::ActionCode& actionCode) const;
+    bool actionChecked(const actions::ActionCode& actionCode) const;
 
     async::Channel<actions::ActionCodeList> m_actionsReceiveAvailableChanged;
 };

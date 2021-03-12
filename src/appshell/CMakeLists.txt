@@ -31,12 +31,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/appshell.h
     ${CMAKE_CURRENT_LIST_DIR}/iapplicationactioncontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationpagestate.h
-    ${CMAKE_CURRENT_LIST_DIR}/ifilemenucontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/ieditmenucontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/iviewmenucontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/iformatmenucontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/itoolsmenucontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/ihelpmenucontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/commandlinecontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/commandlinecontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/iappshellconfiguration.h

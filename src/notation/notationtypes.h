@@ -187,12 +187,6 @@ enum class TupletType
     Nonuplet
 };
 
-enum class ElementChangeOperation
-{
-    Insert,
-    Append
-};
-
 enum class PastingType {
     Default,
     Half,
@@ -467,126 +461,6 @@ inline bool isNotesIntervalValid(int interval)
 inline bool isVoiceIndexValid(int voiceIndex)
 {
     return 0 <= voiceIndex && voiceIndex < VOICES;
-}
-
-inline std::string noteNameToString(NoteName noteName)
-{
-    switch (noteName) {
-    case NoteName::A: return "a";
-    case NoteName::B: return "b";
-    case NoteName::C: return "c";
-    case NoteName::D: return "d";
-    case NoteName::E: return "e";
-    case NoteName::F: return "f";
-    case NoteName::G: return "g";
-    }
-
-    return "";
-}
-
-inline std::string tupletToString(TupletType tuplet)
-{
-    switch (tuplet) {
-    case TupletType::Duplet: return "duplet";
-    case TupletType::Triplet: return "triplet";
-    case TupletType::Quadruplet: return "quadruplet";
-    case TupletType::Quintuplet: return "quintuplet";
-    case TupletType::Sextuplet: return "sextuplet";
-    case TupletType::Septuplet: return "septuplet";
-    case TupletType::Octuplet: return "octuplet";
-    case TupletType::Nonuplet: return "nonuplet";
-    }
-
-    return "";
-}
-
-inline std::string elementChangeOperationToString(ElementChangeOperation operation)
-{
-    switch (operation) {
-    case ElementChangeOperation::Insert: return "insert";
-    case ElementChangeOperation::Append: return "append";
-    }
-
-    return "";
-}
-
-inline std::string boxTypeToString(BoxType type)
-{
-    switch (type) {
-    case BoxType::Unknown: return "";
-    case BoxType::Vertical: return "vbox";
-    case BoxType::Horizontal: return "hbox";
-    case BoxType::Measure: return "measure";
-    case BoxType::Text: return "textframe";
-    }
-
-    return "";
-}
-
-inline std::string textTypeToString(TextType type)
-{
-    switch (type) {
-    case TextType::TITLE: return "title-text";
-    case TextType::SUBTITLE: return "subtitle-text";
-    case TextType::COMPOSER: return "composer-text";
-    case TextType::POET: return "poet-text";
-    case TextType::INSTRUMENT_EXCERPT: return "part-text";
-    case TextType::SYSTEM: return "system-text";
-    case TextType::STAFF: return "staff-text";
-    case TextType::EXPRESSION: return "expression-text";
-    case TextType::REHEARSAL_MARK: return "rehearsalmark-text";
-    case TextType::INSTRUMENT_CHANGE: return "instrument-change-text";
-    case TextType::FINGERING: return "fingering-text";
-    case TextType::STICKING: return "sticking-text";
-    case TextType::HARMONY_A: return "chord-text";
-    case TextType::HARMONY_ROMAN: return "roman-numeral-text";
-    case TextType::HARMONY_NASHVILLE: return "nashville-number-text";
-    case TextType::LYRICS_ODD: return "lyrics";
-    case TextType::TEMPO: return "tempo";
-    default: return "";
-    }
-
-    return "";
-}
-
-inline std::string hairpinTypeToString(HairpinType type)
-{
-    switch (type) {
-    case HairpinType::INVALID: return "";
-    case HairpinType::CRESC_HAIRPIN: return "hairpin";
-    case HairpinType::DECRESC_HAIRPIN: return "hairpin-reverse";
-    case HairpinType::CRESC_LINE: return "line";
-    case HairpinType::DECRESC_LINE: return "line-reverse";
-    }
-
-    return "";
-}
-
-inline std::string ottavaTypeToString(OttavaType type)
-{
-    switch (type) {
-    case OttavaType::OTTAVA_8VA: return "8va";
-    case OttavaType::OTTAVA_8VB: return "8vb";
-    case OttavaType::OTTAVA_15MA: return "15ma";
-    case OttavaType::OTTAVA_15MB: return "15mb";
-    case OttavaType::OTTAVA_22MA: return "22ma";
-    case OttavaType::OTTAVA_22MB: return "22mb";
-    }
-
-    return "";
-}
-
-inline std::string saveModeActionCode(SaveMode mode)
-{
-    switch (mode) {
-    case SaveMode::Save: return "file-save";
-    case SaveMode::SaveAs: return "file-save-as";
-    case SaveMode::SaveCopy: return "file-save-a-copy";
-    case SaveMode::SaveSelection: return "file-save-selection";
-    case SaveMode::SaveOnline: return "file-save-online";
-    }
-
-    return "";
 }
 }
 

@@ -23,11 +23,11 @@
 #include "async/asyncable.h"
 #include "userscores/ifilescorecontroller.h"
 #include "notation/inotationactionscontroller.h"
-#include "notation/notationtypes.h"
-#include "ifilemenucontroller.h"
+
+#include "uicomponents/imenucontroller.h"
 
 namespace mu::appshell {
-class FileMenuController : public IFileMenuController, public async::Asyncable
+class FileMenuController : public uicomponents::IMenuController, public async::Asyncable
 {
     INJECT(appshell, userscores::IFileScoreController, fileController)
     INJECT(appshell, notation::INotationActionsController, notationController)
@@ -36,29 +36,18 @@ public:
     void init();
 
     bool contains(const actions::ActionCode& actionCode) const override;
+    uicomponents::ActionState actionState(const actions::ActionCode& actionCode) const override;
 
-    bool actionAvailable(const actions::ActionCode& actionCode) const override;
     async::Channel<actions::ActionCodeList> actionsAvailableChanged() const override;
 
 private:
-    using AvailableCallback = std::function<bool ()>;
-    std::map<actions::ActionCode, AvailableCallback> actions() const;
+    actions::ActionCodeList fileControllerActions() const;
+    actions::ActionCodeList notationControllerActions() const;
 
-    bool isNewAvailable() const;
-    bool isOpenAvailable() const;
-    bool isClearRecentAvailable() const;
-    bool isCloseAvailable() const;
-    bool isSaveAvailable() const;
-    bool isSaveAsAvailable() const;
-    bool isSaveCopyAvailable() const;
-    bool isSaveSelectionAvailable() const;
-    bool isSaveOnlineAvailable() const;
-    bool isImportAvailable() const;
-    bool isExportAvailable() const;
-    bool isEditInfoAvailable() const;
-    bool isPartsAvailable() const;
-    bool isPrintAvailable() const;
-    bool isQuitAvailable() const;
+    bool fileControllerContains(const actions::ActionCode& actionCode) const;
+    bool notationControllerContains(const actions::ActionCode& actionCode) const;
+
+    bool actionEnabled(const actions::ActionCode& actionCode) const;
 
     async::Channel<actions::ActionCodeList> m_actionsReceiveAvailableChanged;
 };
